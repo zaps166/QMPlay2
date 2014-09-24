@@ -162,6 +162,14 @@ bool FFDemux::set()
 
 bool FFDemux::metadataChanged() const
 {
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+	if ( formatCtx->event_flags & AVFMT_EVENT_FLAG_METADATA_UPDATED )
+	{
+		formatCtx->event_flags = 0;
+		isMetadataChanged = false;
+		return true;
+	}
+#endif
 	if ( isMetadataChanged )
 	{
 		isMetadataChanged = false;
@@ -402,6 +410,11 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 	}
 
 #if LIBAVFORMAT_VERSION_MAJOR > 55
+	if ( streams[ ff_idx ]->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED )
+	{
+		streams[ ff_idx ]->event_flags = 0;
+		isMetadataChanged = true;
+	}
 	if ( fix_mkv_ass && streams[ ff_idx ]->codec->codec_id == AV_CODEC_ID_ASS )
 		matroska_fix_ass_packet( streams[ ff_idx ]->time_base, &packet );
 #endif
@@ -508,12 +521,12 @@ bool FFDemux::open( const QString &_url )
 			index_map[ i ] = streams_info.count();
 			streams_info += streamInfo;
 		}
-		streams += formatCtx->streams[ i ];
-
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 		if ( !fix_mkv_ass && formatCtx->streams[ i ]->codec->codec_id == AV_CODEC_ID_ASS && !strncasecmp( formatCtx->iformat->name, "matroska", 8 ) )
 			fix_mkv_ass = true;
+		formatCtx->streams[ i ]->event_flags = 0;
 #endif
+		streams += formatCtx->streams[ i ];
 	}
 
 	if ( isStreamed && _url.left( 5 ) == "http:" )
@@ -522,6 +535,10 @@ bool FFDemux::open( const QString &_url )
 		connect( &netInfoTimer, SIGNAL( timeout() ), this, SLOT( netInfoTimeout() ) );
 		netInfoTimer.start( 0 );
 	}
+
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+	formatCtx->event_flags = 0;
+#endif
 
 	return true;
 }
