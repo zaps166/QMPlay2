@@ -17,6 +17,49 @@ extern "C"
 
 /**/
 
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+static void matroska_fix_ass_packet( AVRational stream_timebase, AVPacket *pkt )
+{
+	AVBufferRef *line;
+	char *layer, *ptr = ( char * )pkt->data, *end = ptr + pkt->size;
+	for ( ; *ptr != ',' && ptr < end - 1 ; ptr++ );
+	if ( *ptr == ',' )
+		ptr++;
+	layer = ptr;
+	for ( ; *ptr != ',' && ptr < end - 1 ; ptr++ );
+	if ( *ptr == ',' )
+	{
+		int64_t end_pts = pkt->pts + pkt->duration;
+		int sc = pkt->pts * stream_timebase.num * 100 / stream_timebase.den;
+		int ec = end_pts  * stream_timebase.num * 100 / stream_timebase.den;
+		int sh, sm, ss, eh, em, es, len;
+		sh     = sc / 360000;
+		sc    -= 360000 * sh;
+		sm     = sc / 6000;
+		sc    -= 6000 * sm;
+		ss     = sc / 100;
+		sc    -= 100 * ss;
+		eh     = ec / 360000;
+		ec    -= 360000 * eh;
+		em     = ec / 6000;
+		ec    -= 6000 * em;
+		es     = ec / 100;
+		ec    -= 100 * es;
+		*ptr++ = '\0';
+		len    = 50 + end - ptr + FF_INPUT_BUFFER_PADDING_SIZE;
+		if ( !( line = av_buffer_alloc( len ) ) )
+			return;
+		snprintf( ( char * )line->data, len, "Dialogue: %s,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,%s\r\n", layer, sh, sm, ss, sc, eh, em, es, ec, ptr );
+		av_buffer_unref( &pkt->buf );
+		pkt->buf  = line;
+		pkt->data = line->data;
+		pkt->size = strlen( ( char * )line->data );
+	}
+}
+#endif
+
+/**/
+
 static int q_read( void *ptr, unsigned char *buf, int buf_size )
 {
 	Reader *reader = ( Reader * )ptr;
@@ -68,7 +111,7 @@ static QString getTag( const QString &page, const QString &tag )
 FFDemux::FFDemux( QMutex &avcodec_mutex, Module &module ) :
 	avcodec_mutex( avcodec_mutex )
 {
-	paused = isMetadataChanged = aborted = false;
+	paused = isMetadataChanged = aborted = fix_mkv_ass = false;
 	formatCtx = NULL;
 	reader = NULL;
 	lastTime = 0.0;
@@ -358,6 +401,11 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 		return true;
 	}
 
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+	if ( fix_mkv_ass && streams[ ff_idx ]->codec->codec_id == AV_CODEC_ID_ASS )
+		matroska_fix_ass_packet( streams[ ff_idx ]->time_base, &packet );
+#endif
+
 	encoded.clear();
 	encoded.reserve( packet.size + FF_INPUT_BUFFER_PADDING_SIZE );
 	encoded.resize( packet.size );
@@ -461,6 +509,11 @@ bool FFDemux::open( const QString &_url )
 			streams_info += streamInfo;
 		}
 		streams += formatCtx->streams[ i ];
+
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+		if ( !fix_mkv_ass && formatCtx->streams[ i ]->codec->codec_id == AV_CODEC_ID_ASS && !strncasecmp( formatCtx->iformat->name, "matroska", 8 ) )
+			fix_mkv_ass = true;
+#endif
 	}
 
 	if ( isStreamed && _url.left( 5 ) == "http:" )

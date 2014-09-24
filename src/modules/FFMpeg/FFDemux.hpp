@@ -54,7 +54,7 @@ private:
 	AVFormatContext *formatCtx;
 
 	Reader *reader;
-	bool seekByByte, paused, isStreamed, aborted;
+	bool seekByByte, paused, isStreamed, aborted, fix_mkv_ass;
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
 

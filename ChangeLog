@@ -1,4 +1,5 @@
 Zmiany w QMPlay2 build 14.09.24:
+	- przywrócone działanie napisów ASS z kontenera Matroska w FFMpeg 2.4.x,
 	- możliwość pamiętania ustawień korektora wideo,
 	- poprawa działania YouTube,
 	- dodana obsługa pleer.com,
