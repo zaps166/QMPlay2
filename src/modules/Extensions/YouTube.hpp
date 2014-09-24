@@ -2,7 +2,6 @@
 
 #include <QNetworkAccessManager>
 #include <QTreeWidget>
-#include <QThread>
 #include <QMenu>
 #include <QMap>
 
@@ -16,11 +15,11 @@ class QLabel;
 
 /**/
 
-class ResultsTree : public QTreeWidget
+class ResultsYoutube : public QTreeWidget
 {
 	Q_OBJECT
 public:
-	ResultsTree();
+	ResultsYoutube();
 
 	QList< int > itags;
 private:
@@ -76,12 +75,13 @@ private slots:
 
 	void netFinished( QNetworkReply *reply );
 
-	void searchFromMenu();
+	void searchMenu();
 private:
 	void deleteReplies();
 
 	void setAutocomplete( const QByteArray &data );
 
+	void youtube_dl_addr( const QString &url, const QString &param, QString *stream_url, QString *name, QString *extension );
 	QStringList youtube_dl_exec( const QString &url, const QStringList &args = QStringList() );
 
 	QString getDataFromXML( const QString &html, const QString &begin, const QString &end );
@@ -93,7 +93,7 @@ private:
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
-	ResultsTree *resultsW;
+	ResultsYoutube *resultsW;
 	QProgressBar *progressB;
 	PageSwitcher *pageSwitcher;
 
@@ -125,7 +125,7 @@ public:
 	DockWidget *getDockWidget();
 
 	QList< AddressPrefix > addressPrefixList( bool );
-	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, bool, Reader *&, QMutex * );
+	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, Reader *&, QMutex * );
 
 	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
 private:

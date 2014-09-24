@@ -589,10 +589,6 @@
         <translation>Video kann durch GPU nicht zu RGB konvertiert werden</translation>
     </message>
     <message>
-        <source>Nie można ustawić VSync</source>
-        <translation>VSync konnte nicht gesetzt werden</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>
 Hardware-Konvertierung YUV-&gt; RGB</translation>
@@ -620,6 +616,10 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     <message>
         <source>Problem z kompilacją fragment shader</source>
         <translation>Problem mit Fragment-Shader Zusammenstellung</translation>
+    </message>
+    <message>
+        <source>Wydajność będzie niska</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1323,13 +1323,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     </message>
 </context>
 <context>
-    <name>OpenGLWriter</name>
-    <message>
-        <source>Nie można tworzyć tekstur o rozmiarach innych niż potęga liczby 2, OpenGL wyłączony...</source>
-        <translation>Kann Texturen von verschiedenen Größen, als Potenz von 2 nicht erstellen, OpenGL wird deaktiviert ...</translation>
-    </message>
-</context>
-<context>
     <name>Options</name>
     <message>
         <source>Op&amp;cje</source>
@@ -1683,6 +1676,29 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     </message>
 </context>
 <context>
+    <name>ProstoPleerW</name>
+    <message>
+        <source>Wyszukaj</source>
+        <translation>Suchen</translation>
+    </message>
+    <message>
+        <source>Następna strona</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd połączenia</source>
+        <translation>Fehler beim verbinden</translation>
+    </message>
+    <message>
+        <source>Spróbuj ponownie później</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wyszukaj w Prostopleer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
@@ -1828,7 +1844,42 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     </message>
 </context>
 <context>
-    <name>ResultsTree</name>
+    <name>ResultsPleer</name>
+    <message>
+        <source>Tytuł</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Wykonawca</source>
+        <translation>Artist</translation>
+    </message>
+    <message>
+        <source>Długość</source>
+        <translation>Länge</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation>Bitrate</translation>
+    </message>
+    <message>
+        <source>Kolejkuj</source>
+        <translation>Warteschlange</translation>
+    </message>
+    <message>
+        <source>Odtwórz</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Otwórz stronę w przeglądarce</source>
+        <translation>Seite öffnen im Browser</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strony</source>
+        <translation>Kopiere Seiten Adresse</translation>
+    </message>
+</context>
+<context>
+    <name>ResultsYoutube</name>
     <message>
         <source>Tytuł</source>
         <translation>Titel</translation>
@@ -1842,6 +1893,10 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Benutzer</translation>
     </message>
     <message>
+        <source>Ilość wyświetleń</source>
+        <translation>Anzahl der Wiedergabe</translation>
+    </message>
+    <message>
         <source>Kolejkuj</source>
         <translation>Warteschlange</translation>
     </message>
@@ -1850,20 +1905,16 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Wiedergabe</translation>
     </message>
     <message>
-        <source>Kopiuj adres strumienia</source>
-        <translation>Kopiere Stream Adresse</translation>
-    </message>
-    <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Anzahl der Wiedergabe</translation>
-    </message>
-    <message>
         <source>Otwórz stronę w przeglądarce</source>
         <translation>Seite öffnen im Browser</translation>
     </message>
     <message>
         <source>Kopiuj adres strony</source>
         <translation>Kopiere Seiten Adresse</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strumienia</source>
+        <translation>Kopiere Stream Adresse</translation>
     </message>
 </context>
 <context>
@@ -2160,6 +2211,10 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     <message>
         <source>Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!</source>
         <translation>starten Sie jetzt neu, um die neuen Symbole zu nutzen!</translation>
+    </message>
+    <message>
+        <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

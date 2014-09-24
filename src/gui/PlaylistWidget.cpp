@@ -94,6 +94,7 @@ void UpdateEntryThr::run()
 	}
 	if ( timeChanged )
 		pLW.ref( PlaylistWidget::REFRESH_GROUPS_TIME );
+	pLW.viewport()->update();
 }
 void UpdateEntryThr::stop()
 {

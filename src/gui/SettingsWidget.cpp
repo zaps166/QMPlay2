@@ -72,7 +72,7 @@ public:
 	QLabel *shortSeekL, *longSeekL, *bufferLocalL, *bufferNetworkL, *playIfBufferedL, *maxVolL;
 	QSpinBox *shortSeekB, *longSeekB, *bufferLocalB, *bufferNetworkB, *samplerateB, *channelsB, *maxVolB;
 	QDoubleSpinBox *playIfBufferedB;
-	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek;
+	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek, *restoreVideoEq;
 
 	QGroupBox *replayGain;
 	QVBoxLayout *replayGainL;
@@ -182,6 +182,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init( "SyncVtoA", true );
 	QMPSettings.init( "Silence", true );
 	QMPSettings.init( "ScrollSeek", false );
+	QMPSettings.init( "RestoreVideoEqualizer", false );
 	QMPSettings.init( "ApplyToASS/ColorsAndBorders", true );
 	QMPSettings.init( "ApplyToASS/MarginsAndAlignment", false );
 	QMPSettings.init( "ApplyToASS/FontsAndSpacing", false );
@@ -435,7 +436,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 
 	page2->maxVolL = new QLabel( tr( "Maksymalna głośność" ) );
 	page2->maxVolB = new QSpinBox;
-	page2->maxVolB->setRange( 100, 225 );
+	page2->maxVolB->setRange( 100, 1000 );
 	page2->maxVolB->setSingleStep( 50 );
 	page2->maxVolB->setSuffix( " %" );
 	page2->maxVolB->setValue( QMPSettings.getInt( "MaxVol" ) );
@@ -513,6 +514,9 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page2->scrollSeek = new QCheckBox( tr( "Kółko myszki przewija muzykę/film" ) );
 	page2->scrollSeek->setChecked( QMPSettings.getBool( "ScrollSeek" ) );
 
+	page2->restoreVideoEq = new QCheckBox( tr( "Pamiętaj ustawienia korektora wideo" ) );
+	page2->restoreVideoEq->setChecked( QMPSettings.getBool( "RestoreVideoEqualizer" ) );
+
 	for ( int m = 0 ; m < 3 ; ++m )
 	{
 		page2->modulesList[ m ] = new QListWidget;
@@ -556,6 +560,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page2->layout2->addWidget( page2->syncVtoA, layout_row++, 0, 1, 3 );
 	page2->layout2->addWidget( page2->silence, layout_row++, 0, 1, 3 );
 	page2->layout2->addWidget( page2->scrollSeek, layout_row++, 0, 1, 3 );
+	page2->layout2->addWidget( page2->restoreVideoEq, layout_row++, 0, 1, 3 );
 	page2->layout2->setMargin( 0 );
 
 	page2->scrollA = new QScrollArea;
@@ -785,6 +790,7 @@ void SettingsWidget::apply()
 			QMPSettings.set( "SyncVtoA", page2->syncVtoA->isChecked() );
 			QMPSettings.set( "Silence", page2->silence->isChecked() );
 			QMPSettings.set( "ScrollSeek", page2->scrollSeek->isChecked() );
+			QMPSettings.set( "RestoreVideoEqualizer", page2->restoreVideoEq->isChecked() );
 
 			QStringList videoWriters, audioWriters, decoders;
 			foreach ( QListWidgetItem *wI, page2->modulesList[ 0 ]->findItems( QString(), Qt::MatchContains ) )

@@ -7,6 +7,7 @@
 #include <QStringListModel>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QTextDocument>
 #include <QProgressBar>
 #include <QApplication>
 #include <QHeaderView>
@@ -26,11 +27,11 @@
 
 static QMap< int, QString > itag_arr;
 
-static inline QUrl getGdataLink( const QString &title, const int resultsPerPage, const int start_page )
+static inline QUrl getGdataUrl( const QString &title, const int resultsPerPage, const int start_page )
 {
 	return QString( "http://gdata.youtube.com/feeds/api/videos?max-results=%1&start-index=%2&q=%3" ).arg( resultsPerPage ).arg( ( start_page - 1 ) * resultsPerPage + 1 ).arg( title );
 }
-static inline QUrl getAutocompleteLink( const QString &text )
+static inline QUrl getAutocompleteUrl( const QString &text )
 {
 	return QString( "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=%1" ).arg( text );
 }
@@ -44,7 +45,7 @@ static inline QString getFileExtension( const QString &ItagName )
 	return ".unknown";
 }
 
-static inline QString getQMPlay2Link( const QTreeWidgetItem *tWI )
+static inline QString getQMPlay2Url( const QTreeWidgetItem *tWI )
 {
 	if ( tWI->parent() )
 		return "YouTube://{" + tWI->parent()->data( 0, Qt::UserRole ).toString() + "}" + tWI->data( 0, Qt::UserRole + 1 ).toString();
@@ -79,31 +80,33 @@ static QString fromU( QString s )
 
 /**/
 
-ResultsTree::ResultsTree()
+ResultsYoutube::ResultsYoutube()
 {
 	setAnimated( true );
 	setIndentation( 12 );
 	setExpandsOnDoubleClick( false );
 	setEditTriggers( QAbstractItemView::NoEditTriggers );
 
-	header()->setStretchLastSection( false );
-#if QT_VERSION < 0x050000
-	header()->setResizeMode( 0, QHeaderView::Stretch );
-#else
-	header()->setSectionResizeMode( 0, QHeaderView::Stretch );
-#endif
-
 	headerItem()->setText( 0, tr( "Tytuł" ) );
 	headerItem()->setText( 1, tr( "Długość" ) );
 	headerItem()->setText( 2, tr( "Użytkownik" ) );
 	headerItem()->setText( 3, tr( "Ilość wyświetleń" ) );
+
+	header()->setStretchLastSection( false );
+#if QT_VERSION < 0x050000
+	header()->setResizeMode( 0, QHeaderView::Stretch );
+	header()->setResizeMode( 1, QHeaderView::ResizeToContents );
+#else
+	header()->setSectionResizeMode( 0, QHeaderView::Stretch );
+	header()->setSectionResizeMode( 1, QHeaderView::ResizeToContents );
+#endif
 
 	connect( this, SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ), this, SLOT( playEntry( QTreeWidgetItem * ) ) );
 	connect( this, SIGNAL( customContextMenuRequested( const QPoint & ) ), this, SLOT( contextMenu( const QPoint & ) ) );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 }
 
-QTreeWidgetItem *ResultsTree::getDefaultQuality( const QTreeWidgetItem *tWI )
+QTreeWidgetItem *ResultsYoutube::getDefaultQuality( const QTreeWidgetItem *tWI )
 {
 	if ( !tWI->childCount() )
 		return NULL;
@@ -114,14 +117,14 @@ QTreeWidgetItem *ResultsTree::getDefaultQuality( const QTreeWidgetItem *tWI )
 	return tWI->child( 0 );
 }
 
-void ResultsTree::mouseMoveEvent( QMouseEvent *e )
+void ResultsYoutube::mouseMoveEvent( QMouseEvent *e )
 {
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
 	{
 		QString url;
 		if ( e->buttons() & Qt::LeftButton )
-			url = getQMPlay2Link( tWI );
+			url = getQMPlay2Url( tWI );
 		else if ( e->buttons() & Qt::MiddleButton ) //Link do strumienia
 		{
 			QTreeWidgetItem *tWI2 = tWI->parent() ? tWI : getDefaultQuality( tWI );
@@ -149,17 +152,17 @@ void ResultsTree::mouseMoveEvent( QMouseEvent *e )
 	QTreeWidget::mouseMoveEvent( e );
 }
 
-void ResultsTree::enqueue()
+void ResultsYoutube::enqueue()
 {
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
-		emit QMPlay2Core.processParam( "enqueue", getQMPlay2Link( tWI ) );
+		emit QMPlay2Core.processParam( "enqueue", getQMPlay2Url( tWI ) );
 }
-void ResultsTree::playCurrentEntry()
+void ResultsYoutube::playCurrentEntry()
 {
 	playEntry( currentItem() );
 }
-void ResultsTree::openPage()
+void ResultsYoutube::openPage()
 {
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
@@ -169,7 +172,7 @@ void ResultsTree::openPage()
 		QMPlay2Core.run( tWI->data( 0, Qt::UserRole ).toString() );
 	}
 }
-void ResultsTree::copyPageURL()
+void ResultsYoutube::copyPageURL()
 {
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
@@ -181,7 +184,7 @@ void ResultsTree::copyPageURL()
 		qApp->clipboard()->setMimeData( mimeData );
 	}
 }
-void ResultsTree::copyStreamURL()
+void ResultsYoutube::copyStreamURL()
 {
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
@@ -190,20 +193,24 @@ void ResultsTree::copyStreamURL()
 			tWI = getDefaultQuality( tWI );
 		if ( tWI )
 		{
-			QMimeData *mimeData = new QMimeData;
-			mimeData->setText( tWI->data( 0, Qt::UserRole ).toString() );
-			qApp->clipboard()->setMimeData( mimeData );
+			QString stream_url = tWI->data( 0, Qt::UserRole ).toString();
+			if ( !stream_url.isEmpty() )
+			{
+				QMimeData *mimeData = new QMimeData;
+				mimeData->setText( stream_url );
+				qApp->clipboard()->setMimeData( mimeData );
+			}
 		}
 	}
 }
 
-void ResultsTree::playEntry( QTreeWidgetItem *tWI )
+void ResultsYoutube::playEntry( QTreeWidgetItem *tWI )
 {
 	if ( tWI )
-		emit QMPlay2Core.processParam( "open", getQMPlay2Link( tWI ) );
+		emit QMPlay2Core.processParam( "open", getQMPlay2Url( tWI ) );
 }
 
-void ResultsTree::contextMenu( const QPoint &point )
+void ResultsYoutube::contextMenu( const QPoint &point )
 {
 	menu.clear();
 	QTreeWidgetItem *tWI = currentItem();
@@ -217,21 +224,21 @@ void ResultsTree::contextMenu( const QPoint &point )
 			menu.addSeparator();
 		}
 		menu.addAction( tr( "Otwórz stronę w przeglądarce" ), this, SLOT( openPage() ) );
-		menu.addSeparator();
 		menu.addAction( tr( "Kopiuj adres strony" ), this, SLOT( copyPageURL() ) );
+		menu.addSeparator();
 		if ( isOK )
 		{
 			menu.addAction( tr( "Kopiuj adres strumienia" ), this, SLOT( copyStreamURL() ) );
+			menu.addSeparator();
 			const QString name = tWI->parent() ? tWI->parent()->text( 0 ) : tWI->text( 0 );
 			foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 				if ( !dynamic_cast< YouTube * >( QMPlay2Ext ) )
 				{
 					QString addressPrefixName, url, param;
-					if ( Functions::splitPrefixAndUrlIfHasPluginPrefix( getQMPlay2Link( tWI ), &addressPrefixName, &url, &param ) )
+					if ( Functions::splitPrefixAndUrlIfHasPluginPrefix( getQMPlay2Url( tWI ), &addressPrefixName, &url, &param ) )
 						if ( QAction *act = QMPlay2Ext->getAction( name, -2, url, addressPrefixName, param ) )
 						{
 							act->setParent( &menu );
-							menu.addSeparator();
 							menu.addAction( act );
 						}
 				}
@@ -278,7 +285,6 @@ YouTubeW::YouTubeW( QWidget *parent ) :
 	autocompleteReply( NULL ), searchReply( NULL ),
 	net( this )
 {
-
 	dw = new DockWidget;
 	connect( dw, SIGNAL( visibilityChanged( bool ) ), this, SLOT( setEnabled( bool ) ) );
 	dw->setWindowTitle( "YouTube" );
@@ -305,7 +311,7 @@ YouTubeW::YouTubeW( QWidget *parent ) :
 	showSettingsB->setToolTip( tr( "Ustawienia" ) );
 	showSettingsB->setAutoRaise( true );
 
-	resultsW = new ResultsTree;
+	resultsW = new ResultsYoutube;
 
 	progressB = new QProgressBar;
 	progressB->hide();
@@ -351,37 +357,43 @@ void YouTubeW::chPage()
 
 void YouTubeW::searchTextEdited( const QString &text )
 {
-	delete autocompleteReply;
-	if ( !text.isEmpty() )
-		autocompleteReply = net.get( QNetworkRequest( getAutocompleteLink( text ) ) );
-	else
+	if ( autocompleteReply )
 	{
-		( ( QStringListModel * )completer->model() )->setStringList( QStringList() );
+		autocompleteReply->deleteLater();
 		autocompleteReply = NULL;
 	}
+	if ( text.isEmpty() )
+		( ( QStringListModel * )completer->model() )->setStringList( QStringList() );
+	else
+		autocompleteReply = net.get( QNetworkRequest( getAutocompleteUrl( text ) ) );
 }
 void YouTubeW::search()
 {
+	const QString title = searchE->text();
 	deleteReplies();
+	if ( autocompleteReply )
+	{
+		autocompleteReply->deleteLater();
+		autocompleteReply = NULL;
+	}
 	if ( searchReply )
 	{
-		delete searchReply;
+		searchReply->deleteLater();
 		searchReply = NULL;
 	}
 	resultsW->clear();
-	const QString title = searchE->text();
 	if ( !title.isEmpty() )
 	{
-		if ( lastTitle != title )
+		if ( lastTitle != title || sender() == searchE || sender() == searchB )
 			currPage = 1;
-		searchReply = net.get( QNetworkRequest( getGdataLink( title, resultsPerPage, currPage ) ) );
+		searchReply = net.get( QNetworkRequest( getGdataUrl( title, resultsPerPage, currPage ) ) );
 		progressB->setRange( 0, 0 );
 		progressB->show();
 	}
 	else
 	{
-		progressB->hide();
 		pageSwitcher->hide();
+		progressB->hide();
 	}
 	lastTitle = title;
 }
@@ -436,7 +448,7 @@ void YouTubeW::netFinished( QNetworkReply *reply )
 	reply->deleteLater();
 }
 
-void YouTubeW::searchFromMenu()
+void YouTubeW::searchMenu()
 {
 	const QString name = sender()->property( "name" ).toString();
 	if ( !name.isEmpty() )
@@ -450,17 +462,6 @@ void YouTubeW::searchFromMenu()
 	}
 }
 
-void YouTubeW::setAutocomplete( const QByteArray &data )
-{
-	QStringList suggestions = fromU( QString( data ).remove( '"' ).remove( '[' ).remove( ']' ) ).split( ',' );
-	if ( suggestions.size() > 1 )
-	{
-		suggestions.removeFirst();
-		( ( QStringListModel * )completer->model() )->setStringList( suggestions );
-		completer->complete();
-	}
-}
-
 void YouTubeW::deleteReplies()
 {
 	while ( !linkReplies.isEmpty() )
@@ -469,6 +470,51 @@ void YouTubeW::deleteReplies()
 		delete imageReplies.takeFirst();
 }
 
+void YouTubeW::setAutocomplete( const QByteArray &data )
+{
+	QStringList suggestions = fromU( QString( data ).remove( '"' ).remove( '[' ).remove( ']' ) ).split( ',' );
+	if ( suggestions.size() > 1 )
+	{
+		suggestions.removeFirst();
+		( ( QStringListModel * )completer->model() )->setStringList( suggestions );
+		if ( searchE->hasFocus() )
+			completer->complete();
+	}
+}
+
+void YouTubeW::youtube_dl_addr( const QString &url, const QString &param, QString *stream_url, QString *name, QString *extension )
+{
+	if ( stream_url || name )
+	{
+		QStringList paramList = QStringList() << "-e";
+		if ( !param.isEmpty() )
+			paramList << "-f" << param;
+		const QStringList ytdl_stdout = youtube_dl_exec( url, paramList );
+		if ( !ytdl_stdout.isEmpty() )
+		{
+			QString tmp_url = ytdl_stdout.size() == 1 ? ytdl_stdout[ 0 ] : ytdl_stdout[ 1 ];
+			if ( stream_url )
+				*stream_url = tmp_url;
+			if ( name && ytdl_stdout.size() > 1 )
+				*name = ytdl_stdout[ 0 ];
+			if ( extension )
+			{
+				if ( tmp_url.contains( ".mp4" ) )
+					*extension = ".mp4";
+				else if ( tmp_url.contains( ".webm" ) )
+					*extension = ".webm";
+				else if ( tmp_url.contains( ".mkv" ) )
+					*extension = ".mkv";
+				else if ( tmp_url.contains( ".3gp" ) )
+					*extension = ".3gp";
+				else if ( tmp_url.contains( ".mpg" ) )
+					*extension = ".mpg";
+				else if ( tmp_url.contains( ".mpeg" ) )
+					*extension = ".mpeg";
+			}
+		}
+	}
+}
 QStringList YouTubeW::youtube_dl_exec( const QString &url, const QStringList &args )
 {
 	QProcess youtube_dl;
@@ -553,8 +599,11 @@ void YouTubeW::setSearchResults( const QByteArray &data )
 			QTreeWidgetItem *tWI = new QTreeWidgetItem( resultsW );
 			tWI->setDisabled( true );
 
-			tWI->setText( 0, title );
-			tWI->setToolTip( 0, title );
+			QTextDocument txtDoc;
+			txtDoc.setHtml( title );
+
+			tWI->setText( 0, txtDoc.toPlainText() );
+			tWI->setToolTip( 0, txtDoc.toPlainText() );
 			tWI->setText( 1, duration );
 			tWI->setText( 2, user );
 			tWI->setText( 3, viewCount );
@@ -662,17 +711,16 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 							QTreeWidgetItem *ch = new QTreeWidgetItem( tWI );
 							ch->setText( 0, itag_arr[ itag ] ); //Tekst widoczny, informacje o jakości
 							if ( !URL.contains( "ENCRYPTED" ) ) //youtube-dl działa za wolno, żeby go tu wykonać
-							{
 								ch->setData( 0, Qt::UserRole + 0, URL ); //Adres do pliku
-								ch->setData( 0, Qt::UserRole + 1, ITAG ); //Dodatkowy parametr
-								ch->setData( 0, Qt::UserRole + 2, itag ); //Dodatkowy parametr (liczba)
-							}
+							ch->setData( 0, Qt::UserRole + 1, ITAG ); //Dodatkowy parametr
+							ch->setData( 0, Qt::UserRole + 2, itag ); //Dodatkowy parametr (jako liczba)
 						}
 					}
 				}
 			}
 		}
 	}
+
 	if ( PARAM.isEmpty() && ret.count() >= 3 ) //Wyszukiwanie domyślnej jakości
 	{
 		foreach ( int itag, resultsW->itags )
@@ -694,10 +742,12 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 		}
 		ret.erase( ret.begin()+2, ret.end() );
 	}
+
 	if ( tWI ) //Włącza item
 		tWI->setDisabled( false );
 	else if ( ret.count() == 2 ) //Pobiera tytuł
 	{
+		QString title;
 		int ytplayerIdx = data.indexOf( "ytplayer.config" );
 		if ( ytplayerIdx > -1 )
 		{
@@ -713,19 +763,27 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			ret << "Can't find title";
 	}
 
-	for ( int i = 0 ; i < ret.count() ; ++i )
+	if ( ret.count() == 3 && ret[ 0 ].contains( "ENCRYPTED" ) )
 	{
-		if ( ret[ i ].contains( "ENCRYPTED" ) )
+		int itag_idx = ret[ 0 ].indexOf( "itag=" );
+		if ( itag_idx > -1 )
 		{
-			int itag_idx = ret[ i ].indexOf( "itag=" );
-			if ( itag_idx > -1 )
-			{
-				QStringList ytdl_stdout = youtube_dl_exec( url, QStringList() << "-f" << QString::number( atoi( ret[ i ].mid( itag_idx + 5 ).toLatin1() ) ) );
-				if ( !ytdl_stdout.isEmpty() && !ytdl_stdout[ 0 ].isEmpty() )
-					ret[ i ] = ytdl_stdout[ 0 ];
-				else
-					ret.clear();
-			}
+			QStringList ytdl_stdout = youtube_dl_exec( url, QStringList() << "-f" << QString::number( atoi( ret[ 0 ].mid( itag_idx + 5 ).toLatin1() ) ) );
+			if ( !ytdl_stdout.isEmpty() && !ytdl_stdout[ 0 ].isEmpty() )
+				ret[ 0 ] = ytdl_stdout[ 0 ];
+			else
+				ret.clear();
+		}
+	}
+	else if ( !tWI && ret.isEmpty() ) //ex. 18+
+	{
+		QString stream_url, name, extension;
+		youtube_dl_addr( url, PARAM.right( PARAM.length() - 5 ), &stream_url, &name, &extension ); //extension doesn't work on youtube in this function
+		if ( !stream_url.isEmpty() )
+		{
+			if ( name.isEmpty() )
+				name = "Can't find title";
+			ret << stream_url << extension << name;
 		}
 	}
 
@@ -800,7 +858,7 @@ QList< YouTube::AddressPrefix > YouTube::addressPrefixList( bool img )
 {
 	return QList< AddressPrefix >() << AddressPrefix( "YouTube", img ? QImage( ":/youtube" ) : QImage() ) << AddressPrefix( "youtube-dl", img ? QImage( ":/video" ) : QImage() );
 }
-void YouTube::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, bool extension, Reader *&reader, QMutex *abortMutex )
+void YouTube::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, Reader *&reader, QMutex *abortMutex )
 {
 	if ( !stream_url && !name && !img )
 		return;
@@ -826,11 +884,9 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 				if ( stream_url )
 					*stream_url = youTubeVideo[ 0 ];
 				if ( name )
-				{
 					*name = youTubeVideo[ 2 ];
-					if ( extension )
-						*name += youTubeVideo[ 1 ];
-				}
+				if ( extension )
+					*extension = youTubeVideo[ 1 ];
 			}
 		}
 	}
@@ -838,37 +894,7 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 	{
 		if ( img )
 			*img = QImage( ":/video" );
-		if ( stream_url || name )
-		{
-			QStringList paramList = QStringList() << "-e";
-			if ( !param.isEmpty() )
-				paramList << "-f" << param;
-			const QStringList ytdl_stdout = w.youtube_dl_exec( url, paramList );
-			if ( !ytdl_stdout.isEmpty() )
-			{
-				if ( stream_url )
-					*stream_url = ytdl_stdout.size() == 1 ? ytdl_stdout[ 0 ] : ytdl_stdout[ 1 ];
-				if ( name && ytdl_stdout.size() > 1 )
-				{
-					*name = ytdl_stdout[ 0 ];
-					if ( extension )
-					{
-						if ( stream_url->contains( ".mp4" ) )
-							*name += ".mp4";
-						else if ( stream_url->contains( ".webm" ) )
-							*name += ".webm";
-						else if ( stream_url->contains( ".mkv" ) )
-							*name += ".mkv";
-						else if ( stream_url->contains( ".3gp" ) )
-							*name += ".3gp";
-						else if ( stream_url->contains( ".mpg" ) )
-							*name += ".mpg";
-						else if ( stream_url->contains( ".mpeg" ) )
-							*name += ".mpeg";
-					}
-				}
-			}
-		}
+		w.youtube_dl_addr( url, param, stream_url, name, extension );
 	}
 }
 
@@ -877,7 +903,7 @@ QAction *YouTube::getAction( const QString &name, int, const QString &url, const
 	if ( name != url )
 	{
 		QAction *act = new QAction( YouTubeW::tr( "Wyszukaj w YouTube" ), NULL );
-		act->connect( act, SIGNAL( triggered() ), &w, SLOT( searchFromMenu() ) );
+		act->connect( act, SIGNAL( triggered() ), &w, SLOT( searchMenu() ) );
 		act->setIcon( QIcon( ":/youtube" ) );
 		act->setProperty( "name", name );
 		return act;

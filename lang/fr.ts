@@ -585,10 +585,6 @@
         <translation>La vidéo n&apos;a pas pu être convertie en RVB par le processeur</translation>
     </message>
     <message>
-        <source>Nie można ustawić VSync</source>
-        <translation>Impossible de paramétrer VSync</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>Matériel YUV-&gt;RVB conversion</translation>
     </message>
@@ -615,6 +611,10 @@
     <message>
         <source>Problem z kompilacją fragment shader</source>
         <translation>Problème avec la compilation du fragment shader</translation>
+    </message>
+    <message>
+        <source>Wydajność będzie niska</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1312,13 +1312,6 @@
     </message>
 </context>
 <context>
-    <name>OpenGLWriter</name>
-    <message>
-        <source>Nie można tworzyć tekstur o rozmiarach innych niż potęga liczby 2, OpenGL wyłączony...</source>
-        <translation>Impossible de créer des textures dont les tailles sont différentes d&apos;une puissance de 2, OpenGL est désactivé...</translation>
-    </message>
-</context>
-<context>
     <name>Options</name>
     <message>
         <source>Op&amp;cje</source>
@@ -1672,6 +1665,29 @@
     </message>
 </context>
 <context>
+    <name>ProstoPleerW</name>
+    <message>
+        <source>Wyszukaj</source>
+        <translation>Chercher</translation>
+    </message>
+    <message>
+        <source>Następna strona</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd połączenia</source>
+        <translation>Erreur de connexion</translation>
+    </message>
+    <message>
+        <source>Spróbuj ponownie później</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wyszukaj w Prostopleer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
@@ -1816,7 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>ResultsTree</name>
+    <name>ResultsPleer</name>
+    <message>
+        <source>Tytuł</source>
+        <translation>Titre</translation>
+    </message>
+    <message>
+        <source>Wykonawca</source>
+        <translation>Artiste</translation>
+    </message>
+    <message>
+        <source>Długość</source>
+        <translation>Durée</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation>Bitrate</translation>
+    </message>
+    <message>
+        <source>Kolejkuj</source>
+        <translation>Mettre dans la file d&apos;attente</translation>
+    </message>
+    <message>
+        <source>Odtwórz</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Otwórz stronę w przeglądarce</source>
+        <translation>Ouvrir la page dans le navigateur</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strony</source>
+        <translation>Copier l&apos;adresse de la page</translation>
+    </message>
+</context>
+<context>
+    <name>ResultsYoutube</name>
     <message>
         <source>Tytuł</source>
         <translation>Titre</translation>
@@ -1830,6 +1881,10 @@
         <translation>Utilisateur</translation>
     </message>
     <message>
+        <source>Ilość wyświetleń</source>
+        <translation>Nombre de vues</translation>
+    </message>
+    <message>
         <source>Kolejkuj</source>
         <translation>Mettre dans la file d&apos;attente</translation>
     </message>
@@ -1838,20 +1893,16 @@
         <translation>Lecture</translation>
     </message>
     <message>
-        <source>Kopiuj adres strumienia</source>
-        <translation>Copier l&apos;adresse du flux</translation>
-    </message>
-    <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Nombre de vues</translation>
-    </message>
-    <message>
         <source>Otwórz stronę w przeglądarce</source>
         <translation>Ouvrir la page dans le navigateur</translation>
     </message>
     <message>
         <source>Kopiuj adres strony</source>
         <translation>Copier l&apos;adresse de la page</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strumienia</source>
+        <translation>Copier l&apos;adresse du flux</translation>
     </message>
 </context>
 <context>
@@ -2147,6 +2198,10 @@
     <message>
         <source>Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!</source>
         <translation>Appliquer les icônes va redémarrer le programme!</translation>
+    </message>
+    <message>
+        <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -13,8 +13,11 @@ class VideoEqualizer : public QWidget
 	Q_OBJECT
 public:
 	VideoEqualizer();
+
+	void restoreValues();
+	void saveValues();
 signals:
-	void valuesChanged( int, int, int, int );
+	void valuesChanged( int b, int s, int c, int h );
 private slots:
 	void setValue( int );
 	void reset();

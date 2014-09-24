@@ -20,10 +20,10 @@ RESOURCES += icons.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH  += . ../../qmplay2/headers
 
-HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp LastFM.hpp
-SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp LastFM.cpp
+HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp LastFM.hpp ProstoPleer.hpp
+SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp LastFM.cpp ProstoPleer.cpp
 
-unix:!max {
+unix:!mac {
 	QT += dbus
 	HEADERS += MPRIS2.hpp
 	SOURCES += MPRIS2.cpp

@@ -24,7 +24,6 @@ public:
 	~Drawable();
 
 	void clr();
-	void dock();
 
 	void resizeEvent( QResizeEvent * );
 
@@ -35,24 +34,25 @@ public:
 	QMutex osd_mutex;
 private:
 #ifndef QtVSync
-	void VSync( bool );
+	void VSync();
 #endif
 
 	void initializeGL();
 	void resizeGL( int, int );
 	void paintGL();
 
-	typedef void ( APIENTRY *_glActiveTexture )( GLenum texture );
-	_glActiveTexture glActiveTexture;
+	typedef void ( APIENTRY *GLActiveTexture )( GLenum texture );
+	GLActiveTexture glActiveTexture;
 
 	QList< QByteArray > osd_checksums;
 	QImage osdImg;
 
 	OpenGLWriter &writer;
 	QGLShaderProgram *program;
-	int W, H, X, Y;
+	float tex_w;
 	ImgScaler imgScaler;
-	bool noShaders, hasImage;
+	int W, H, X, Y, maxTextureSize;
+	bool noShaders, hasImage, canCreateTexturesNonPowerOf2;
 #ifndef QtVSync
 	bool lastVSyncState;
 #endif
@@ -87,7 +87,7 @@ private:
 
 	int outW, outH, W, flip;
 	double aspect_ratio, zoom;
-	bool VSync, useShaders, useHUE;
+	bool VSync, useShaders;
 
 	Drawable *drawable;
 };

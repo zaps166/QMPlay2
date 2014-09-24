@@ -585,10 +585,6 @@
         <translation>Видео не может быть преобразовано в RGB GPU</translation>
     </message>
     <message>
-        <source>Nie można ustawić VSync</source>
-        <translation>Не удается установить VSync</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>Аппаратные средства преобразования YUV-&gt;RGB</translation>
     </message>
@@ -615,6 +611,10 @@
     <message>
         <source>Problem z kompilacją fragment shader</source>
         <translation>Ошибка компиляции шейдеров фрагмента</translation>
+    </message>
+    <message>
+        <source>Wydajność będzie niska</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1312,13 +1312,6 @@
     </message>
 </context>
 <context>
-    <name>OpenGLWriter</name>
-    <message>
-        <source>Nie można tworzyć tekstur o rozmiarach innych niż potęga liczby 2, OpenGL wyłączony...</source>
-        <translation>Не удается создать текстуру с размерами, отличными от степени 2, OpenGL отключен...</translation>
-    </message>
-</context>
-<context>
     <name>Options</name>
     <message>
         <source>Op&amp;cje</source>
@@ -1672,6 +1665,29 @@
     </message>
 </context>
 <context>
+    <name>ProstoPleerW</name>
+    <message>
+        <source>Wyszukaj</source>
+        <translation>Поиск</translation>
+    </message>
+    <message>
+        <source>Następna strona</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd połączenia</source>
+        <translation>Ошибка соединения</translation>
+    </message>
+    <message>
+        <source>Spróbuj ponownie później</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wyszukaj w Prostopleer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
@@ -1816,7 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>ResultsTree</name>
+    <name>ResultsPleer</name>
+    <message>
+        <source>Tytuł</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <source>Wykonawca</source>
+        <translation>Исполнитель</translation>
+    </message>
+    <message>
+        <source>Długość</source>
+        <translation>Продолжительность</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation>Битрейт</translation>
+    </message>
+    <message>
+        <source>Kolejkuj</source>
+        <translation>Очередь</translation>
+    </message>
+    <message>
+        <source>Odtwórz</source>
+        <translation>Воспроизведение</translation>
+    </message>
+    <message>
+        <source>Otwórz stronę w przeglądarce</source>
+        <translation>Открыть страницу в браузере</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strony</source>
+        <translation>Скопировать адрес страницы</translation>
+    </message>
+</context>
+<context>
+    <name>ResultsYoutube</name>
     <message>
         <source>Tytuł</source>
         <translation>Название</translation>
@@ -1830,6 +1881,10 @@
         <translation>Пользователь</translation>
     </message>
     <message>
+        <source>Ilość wyświetleń</source>
+        <translation>Количество просмотров</translation>
+    </message>
+    <message>
         <source>Kolejkuj</source>
         <translation>Очередь</translation>
     </message>
@@ -1838,20 +1893,16 @@
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <source>Kopiuj adres strumienia</source>
-        <translation>Копировать адрес потока</translation>
-    </message>
-    <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Количество просмотров</translation>
-    </message>
-    <message>
         <source>Otwórz stronę w przeglądarce</source>
         <translation>Открыть страницу в браузере</translation>
     </message>
     <message>
         <source>Kopiuj adres strony</source>
         <translation>Скопировать адрес страницы</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strumienia</source>
+        <translation>Копировать адрес потока</translation>
     </message>
 </context>
 <context>
@@ -2147,6 +2198,10 @@
     <message>
         <source>Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!</source>
         <translation>Чтобы применить изменение значков, программа запустится снова!</translation>
+    </message>
+    <message>
+        <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

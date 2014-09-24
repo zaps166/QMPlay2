@@ -48,7 +48,7 @@ public:
 		Q_UNUSED( img )
 		return QList< AddressPrefix >();
 	}
-	virtual void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, bool extension, Reader *&reader, QMutex *abortMutex = NULL )
+	virtual void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, Reader *&reader, QMutex *abortMutex = NULL )
 	{
 		Q_UNUSED( extension )
 		Q_UNUSED( reader )

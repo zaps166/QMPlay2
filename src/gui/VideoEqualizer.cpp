@@ -1,5 +1,7 @@
 #include <VideoEqualizer.hpp>
 
+#include <QMPlay2Core.hpp>
+#include <Settings.hpp>
 #include <Slider.hpp>
 
 #include <QGridLayout>
@@ -58,6 +60,21 @@ VideoEqualizer::VideoEqualizer()
 	layout->addItem( new QSpacerItem( 40, 0, QSizePolicy::Expanding, QSizePolicy::Minimum ), i, 2 );
 
 	setLayout( layout );
+}
+
+void VideoEqualizer::restoreValues()
+{
+	controls[ BRIGHTNESS ].slider->setValue( QMPlay2Core.getSettings().getInt( "VideoEqualizer/Brightness" ) );
+	controls[ SATURATION ].slider->setValue( QMPlay2Core.getSettings().getInt( "VideoEqualizer/Saturation" ) );
+	controls[ CONTRAST ].slider->setValue( QMPlay2Core.getSettings().getInt( "VideoEqualizer/Contrast" ) );
+	controls[ HUE ].slider->setValue( QMPlay2Core.getSettings().getInt( "VideoEqualizer/Hue" ) );
+}
+void VideoEqualizer::saveValues()
+{
+	QMPlay2Core.getSettings().set( "VideoEqualizer/Brightness", controls[ BRIGHTNESS ].slider->value() );
+	QMPlay2Core.getSettings().set( "VideoEqualizer/Saturation", controls[ SATURATION ].slider->value() );
+	QMPlay2Core.getSettings().set( "VideoEqualizer/Contrast", controls[ CONTRAST ].slider->value() );
+	QMPlay2Core.getSettings().set( "VideoEqualizer/Hue", controls[ HUE ].slider->value() );
 }
 
 void VideoEqualizer::setValue( int v )

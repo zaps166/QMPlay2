@@ -83,7 +83,7 @@ private:
 
 	qint32 maxTimeout;
 	qint64 _size, _pos;
-	int toChunkSize;
+	int chunkSize;
 	const quint8 followLocation;
 	bool _abort, _canSeek, chunked;
 	mutable bool paused;

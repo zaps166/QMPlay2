@@ -4,18 +4,20 @@
 #include <YouTube.hpp>
 #include <LastFM.hpp>
 #include <Radio.hpp>
+#include <ProstoPleer.hpp>
 #ifdef USE_MPRIS2
 	#include <MPRIS2.hpp>
 #endif
 
 Extensions::Extensions() :
 	Module( "Extensions" ),
-	downloader( QImage( ":/downloader" ) ), youtube( QImage( ":/youtube" ) ), radio( QImage( ":/radio" ) ), lastfm( QImage( ":/lastfm" ) )
+	downloader( QImage( ":/downloader" ) ), youtube( QImage( ":/youtube" ) ), radio( QImage( ":/radio" ) ), lastfm( QImage( ":/lastfm" ) ), prostopleer( QImage( ":/prostopleer" ) )
 {
 	downloader.setText( "Path", ":/downloader" );
 	youtube.setText( "Path", ":/youtube" );
 	radio.setText( "Path", ":/radio" );
 	lastfm.setText( "Path", ":/lastfm" );
+	prostopleer.setText( "Path", ":/prostopleer" );
 
 	init( "YouTube/ShowAdditionalInfo", false );
 	init( "YouTube/youtubedl", QString() );
@@ -38,8 +40,9 @@ QList< Extensions::Info > Extensions::getModulesInfo( const bool ) const
 	QList< Info > modulesInfo;
 	modulesInfo += Info( DownloaderName, QMPLAY2EXTENSION, downloader );
 	modulesInfo += Info( YouTubeName, QMPLAY2EXTENSION, youtube );
-	modulesInfo += Info( RadioName, QMPLAY2EXTENSION, radio );
 	modulesInfo += Info( LastFMName, QMPLAY2EXTENSION, lastfm );
+	modulesInfo += Info( RadioName, QMPLAY2EXTENSION, radio );
+	modulesInfo += Info( ProstoPleerName, QMPLAY2EXTENSION, prostopleer );
 #if USE_MPRIS2
 	modulesInfo += Info( MPRIS2Name, QMPLAY2EXTENSION );
 #endif
@@ -51,10 +54,12 @@ void *Extensions::createInstance( const QString &name )
 		return new Downloader( *this );
 	else if ( name == YouTubeName )
 		return new YouTube( *this );
-	else if ( name == RadioName )
-		return dynamic_cast< QMPlay2Extensions * >( new Radio( *this ) );
 	else if ( name == LastFMName )
 		return dynamic_cast< QMPlay2Extensions * >( new LastFM( *this ) );
+	else if ( name == RadioName )
+		return dynamic_cast< QMPlay2Extensions * >( new Radio( *this ) );
+	else if ( name == ProstoPleerName )
+		return dynamic_cast< QMPlay2Extensions * >( new ProstoPleer( *this ) );
 #ifdef USE_MPRIS2
 	else if ( name == MPRIS2Name )
 		return dynamic_cast< QMPlay2Extensions * >( new MPRIS2( *this ) );

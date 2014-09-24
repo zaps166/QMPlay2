@@ -311,13 +311,14 @@ void DownloaderThread::run()
 	emit listSig( ADD_ENTRY );
 
 	QString newUrl = url;
+	QString extension;
 
 	if ( !prefix.isEmpty() )
 		foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( prefix ) )
 			{
 				newUrl.clear();
-				QMPlay2Ext->convertAddress( prefix, url, param, &newUrl, &name, NULL, true, reader, &readerMutex );
+				QMPlay2Ext->convertAddress( prefix, url, param, &newUrl, &name, NULL, &extension, reader, &readerMutex );
 				break;
 			}
 
@@ -328,6 +329,8 @@ void DownloaderThread::run()
 		if ( idx > -1 )
 			name.remove( idx, name.size() - idx );
 	}
+	if ( !name.isEmpty() && !extension.isEmpty() )
+		name += extension;
 
 	emit listSig( NAME );
 

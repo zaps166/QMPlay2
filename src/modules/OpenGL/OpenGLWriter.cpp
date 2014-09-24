@@ -9,10 +9,15 @@ using Functions::aligned;
 #include <QDebug>
 
 #include <GL/glext.h>
-#ifndef GL_TEXTURE_RECTANGLE_ARB
-	#define GL_TEXTURE_RECTANGLE_ARB 0x84F5
-#endif
 
+static inline unsigned getPowerOf2( unsigned n )
+{
+	if ( !( n & ( n - 1 ) ) )
+		return n;
+	while ( n & ( n - 1 ) )
+		n = n & ( n-1 );
+	return n << 1;
+}
 static inline void vertex( int v, int flip )
 {
 	if ( flip & Qt::Horizontal )
@@ -50,6 +55,8 @@ Drawable::Drawable( OpenGLWriter &writer ) :
 	videoFrame( NULL ),
 	writer( writer ),
 	program( NULL ),
+	tex_w( 1.0f ),
+	maxTextureSize( 0 ),
 	noShaders( false ), hasImage( false )
 {
 	setMouseTracking( true );
@@ -79,51 +86,53 @@ void Drawable::resizeEvent( QResizeEvent *e )
 }
 
 #ifndef QtVSync
-void Drawable::VSync( bool vsync )
+void Drawable::VSync()
 {
 #if defined Q_WS_X11 || defined Q_OS_LINUX || defined Q_OS_FREEBSD
-	typedef int ( *_glXSwapIntervalSGI )( int interval );
-	_glXSwapIntervalSGI glXSwapIntervalSGI = ( _glXSwapIntervalSGI )context()->getProcAddress( "glXSwapIntervalSGI" );
+	typedef int ( *GLXSwapIntervalSGI )( int interval );
+	GLXSwapIntervalSGI glXSwapIntervalSGI = ( GLXSwapIntervalSGI )context()->getProcAddress( "glXSwapIntervalSGI" );
 	if ( glXSwapIntervalSGI )
-		glXSwapIntervalSGI( vsync );
-	else
+		glXSwapIntervalSGI( writer.VSync );
 #elif defined Q_OS_WIN
-	typedef BOOL ( APIENTRY *_wglSwapIntervalEXT )( int interval );
-	_wglSwapIntervalEXT wglSwapIntervalEXT = ( _wglSwapIntervalEXT )context()->getProcAddress( "wglSwapIntervalEXT" );
+	typedef BOOL ( APIENTRY *WGLSwapIntervalEXT )( int interval );
+	WGLSwapIntervalEXT wglSwapIntervalEXT = ( WGLSwapIntervalEXT )context()->getProcAddress( "wglSwapIntervalEXT" );
 	if ( wglSwapIntervalEXT )
-		wglSwapIntervalEXT( vsync );
-	else
+		wglSwapIntervalEXT( writer.VSync );
 #endif
-		QMPlay2Core.logError( "OpenGL :: " + tr( "Nie można ustawić VSync" ) );
-	lastVSyncState = vsync;
+	lastVSyncState = writer.VSync;
 }
 #endif
 
 void Drawable::initializeGL()
 {
-#ifdef QtVSync
-	if ( format().swapInterval() != writer.VSync )
-		QMPlay2Core.logError( "OpenGL :: " + tr( "Nie można ustawić VSync" ) );
-#else
-	VSync( writer.VSync );
+#ifndef QtVSync
+	VSync();
 #endif
 
-	glEnable( GL_TEXTURE_2D );
-	glClearColor( 0.0, 0.0, 0.0, 0.0 );
+	bool useHUE = format().openGLVersionFlags() >= QGLFormat::OpenGL_Version_3_0 || !strstr( ( const char * )glGetString( GL_RENDERER ), "Intel" );
+	canCreateTexturesNonPowerOf2 = !!strstr( ( const char * )glGetString( GL_EXTENSIONS ), "GL_ARB_texture_non_power_of_two" );
+
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glClearColor( 0.0, 0.0, 0.0, 0.0 );
+	glEnable( GL_TEXTURE_2D );
+	glDisable( GL_DITHER );
 
 	QString error;
-	if ( !QGLShader::hasOpenGLShaders( QGLShader::Fragment ) )
+	if ( !canCreateTexturesNonPowerOf2 )
+	{
+		glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
+		error = tr( "Sterownik grafiki nie obsługuje" ) + "\"GL_ARB_texture_non_power_of_two\". " + tr( "Wydajność będzie niska" ) + ". ";
+	}
+	else if ( !QGLShader::hasOpenGLShaders( QGLShader::Fragment ) )
 		error = tr( "Sterownik nie obsługuje fragment shader (pixel shader)" ) + ". ";
 	else if ( writer.useShaders )
 	{
-		const bool hasGL_ARB_texture_rectangle = QString( ( char * )glGetString( GL_EXTENSIONS ) ).contains( "GL_ARB_texture_rectangle" );
-		glActiveTexture = ( _glActiveTexture )context()->getProcAddress( "glActiveTexture" );
-		if ( glActiveTexture && hasGL_ARB_texture_rectangle )
+		glActiveTexture = ( GLActiveTexture )context()->getProcAddress( "glActiveTexture" );
+		if ( glActiveTexture )
 		{
 			if ( !program )
 			{
-				const char *shaderHUE = !writer.useHUE ? "" : //Workaround because of BUG in Mesa i915 driver
+				const char *shaderHUE = !useHUE ? "" : //Workaround because of BUG in Mesa i915 driver
 				"if ( Hue != 0.0 ) {"
 					"float HUE = atan( YCbCr[2], YCbCr[1] ) + Hue;"
 					"float CHROMA = sqrt( YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2] );"
@@ -131,14 +140,13 @@ void Drawable::initializeGL()
 					"YCbCr[2] = CHROMA * sin( HUE );"
 				"}";
 				const QString FProgram = QString(
-				"#extension GL_ARB_texture_rectangle : enable\n"
 				"uniform float Brightness, Contrast, Saturation, Hue;"
-				"uniform sampler2DRect Ytex, Utex, Vtex;"
+				"uniform sampler2D Ytex, Utex, Vtex;"
 				"void main() {"
 					"vec3 YCbCr = vec3("
-						"texture2DRect( Ytex, vec2( gl_TexCoord[0].xy       ) )[0] - 0.0625,"
-						"texture2DRect( Utex, vec2( gl_TexCoord[0].xy / 2.0 ) )[0] - 0.5,"
-						"texture2DRect( Vtex, vec2( gl_TexCoord[0].xy / 2.0 ) )[0] - 0.5"
+						"texture2D( Ytex, vec2( gl_TexCoord[0].st ) )[0] - 0.0625,"
+						"texture2D( Utex, vec2( gl_TexCoord[0].st ) )[0] - 0.5,"
+						"texture2D( Vtex, vec2( gl_TexCoord[0].st ) )[0] - 0.5"
 					");"
 					"%1"
 					"YCbCr.yz *= Saturation;"
@@ -166,19 +174,27 @@ void Drawable::initializeGL()
 
 		if ( !glActiveTexture )
 			error += tr( "Nie można odnaleźć funkcji" ) + ": \"glActiveTexture\". ";
-		if ( !hasGL_ARB_texture_rectangle )
-			error += tr( "Sterownik grafiki nie obsługuje" ) + ": \"GL_ARB_texture_rectangle\". ";
-		if ( glActiveTexture && hasGL_ARB_texture_rectangle && !program )
+		if ( glActiveTexture && !program )
 			error += tr( "Problem z kompilacją fragment shader" ) + ". ";
 	}
 
 	if ( !writer.useShaders || !error.isEmpty() )
 	{
 		if ( writer.useShaders )
-			QMPlay2Core.logError( "OpenGL :: " + error + tr( "Obraz nie będzie konwertowany do RGB poprzez GPU" ) );
+			QMPlay2Core.logError( "OpenGL :: " + error + tr( "Obraz nie będzie konwertowany do RGB poprzez GPU" ), true, true );
 		else
-			QMPlay2Core.logError( "OpenGL :: " + tr( "Shadery wyłączone w opcjach" ) + ". " + tr( "Obraz nie będzie konwertowany do RGB poprzez GPU" ) );
+			QMPlay2Core.logError( "OpenGL :: " + tr( "Shadery wyłączone w opcjach" ) + ". " + tr( "Obraz nie będzie konwertowany do RGB poprzez GPU" ), true, true );
 		noShaders = true;
+	}
+
+	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+	for ( int i = 1 ; i <= ( noShaders ? 2 : 4 ) ; ++i )
+	{
+		glBindTexture( GL_TEXTURE_2D, i );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 	}
 }
 void Drawable::resizeGL( int w, int h )
@@ -189,7 +205,7 @@ void Drawable::paintGL()
 {
 #ifndef QtVSync
 	if ( lastVSyncState != writer.VSync )
-		VSync( writer.VSync );
+		VSync();
 #endif
 
 	glClear( GL_COLOR_BUFFER_BIT );
@@ -200,7 +216,7 @@ void Drawable::paintGL()
 	if ( videoFrame )
 		hasImage = true;
 
-	glPushMatrix();
+	glLoadIdentity();
 	glScalef( W / ( float )width(), H / ( float )height(), 1.0f );
 	if ( !noShaders )
 	{
@@ -213,73 +229,87 @@ void Drawable::paintGL()
 			program->setUniformValue( "Hue", Hue );
 			setVideoEQ = false;
 		}
-		if ( videoFrame )
+		if ( !videoFrame )
+			glBindTexture( GL_TEXTURE_2D, 4 );
+		else
 		{
 			/* Select texture unit 1 as the active unit and bind the U texture. */
 			glActiveTexture( GL_TEXTURE1 );
-			glBindTexture( GL_TEXTURE_RECTANGLE_ARB, 1 );
-			glTexImage2D( GL_TEXTURE_RECTANGLE_ARB, 0, GL_LUMINANCE, videoFrame->linesize[ 1 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 1 ] );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			glBindTexture( GL_TEXTURE_2D, 2 );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 1 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 1 ] );
 
 			/* Select texture unit 2 as the active unit and bind the V texture. */
 			glActiveTexture( GL_TEXTURE2 );
-			glBindTexture( GL_TEXTURE_RECTANGLE_ARB, 2 );
-			glTexImage2D( GL_TEXTURE_RECTANGLE_ARB, 0, GL_LUMINANCE, videoFrame->linesize[ 2 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			glBindTexture( GL_TEXTURE_2D, 3 );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 2 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
 
 			/* Select texture unit 0 as the active unit and bind the Y texture. */
 			glActiveTexture( GL_TEXTURE0 );
-			glBindTexture( GL_TEXTURE_RECTANGLE_ARB, 3 );
-			glTexImage2D( GL_TEXTURE_RECTANGLE_ARB, 0, GL_LUMINANCE, videoFrame->linesize[ 0 ], writer.outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 0 ] );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			glBindTexture( GL_TEXTURE_2D, 4 );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 0 ], writer.outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 0 ] );
+
+			if ( writer.outW == videoFrame->linesize[ 0 ] )
+				tex_w = 1.0f;
+			else
+				tex_w = writer.outW / ( videoFrame->linesize[ 0 ] + 1.0f );
 		}
 		glBegin( GL_QUADS ); {
-			glTexCoord2i( 0,        0           ); vertex( 0, writer.flip );
-			glTexCoord2i( writer.W, 0           ); vertex( 1, writer.flip );
-			glTexCoord2i( writer.W, writer.outH ); vertex( 2, writer.flip );
-			glTexCoord2i( 0,        writer.outH ); vertex( 3, writer.flip );
+			glTexCoord2f( 0.0f,  0.0f  ); vertex( 0, writer.flip );
+			glTexCoord2f( tex_w, 0.0f  ); vertex( 1, writer.flip );
+			glTexCoord2f( tex_w, tex_w ); vertex( 2, writer.flip );
+			glTexCoord2f( 0.0f,  tex_w ); vertex( 3, writer.flip );
 		} glEnd();
 		program->release();
 	}
 	else
 	{
-		glBindTexture( GL_TEXTURE_2D, 4 );
+		glBindTexture( GL_TEXTURE_2D, 2 );
 		if ( videoFrame )
 		{
-			const int aligned8W = aligned( writer.outW, 8 );
-			if ( !imgScaler.array() )
-				imgScaler.createArray( aligned8W * writer.outH << 2 );
-			if ( imgScaler.create( writer.outW, writer.outH, aligned8W, writer.outH ) )
+			if ( canCreateTexturesNonPowerOf2 )
 			{
-				imgScaler.scale( videoFrame );
-				if ( Contrast != 1.0f || Brightness != 0.0f )
-					Functions::ImageEQ( Contrast * 100, Brightness * 256, ( quint8 * )imgScaler.array(), aligned8W * writer.outH << 2 );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-				glTexImage2D( GL_TEXTURE_2D, 0, 4, aligned8W, writer.outH, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
+				const int aligned8W = aligned( writer.outW, 8 );
+				if ( !imgScaler.array() )
+					imgScaler.createArray( aligned8W * writer.outH << 2 );
+				if ( imgScaler.create( writer.outW, writer.outH, aligned8W, writer.outH ) )
+				{
+					imgScaler.scale( videoFrame );
+					if ( Contrast != 1.0f || Brightness != 0.0f )
+						Functions::ImageEQ( Contrast * 100, Brightness * 256, ( quint8 * )imgScaler.array(), aligned8W * writer.outH << 2 );
+					glTexImage2D( GL_TEXTURE_2D, 0, 4, aligned8W, writer.outH, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
+				}
+			}
+			else
+			{
+				int w2 = getPowerOf2( writer.outW ), h2 = ( writer.outH > 1024 && writer.outH < 1100 ) ? 1024 : getPowerOf2( writer.outH );
+				if ( w2 > maxTextureSize )
+					w2 = maxTextureSize;
+				if ( h2 > maxTextureSize )
+					h2 = maxTextureSize;
+				if ( !imgScaler.array() )
+					imgScaler.createArray( w2 * h2 << 2 );
+				if ( imgScaler.create( writer.outW, writer.outH, w2, h2 ) )
+				{
+					imgScaler.scale( videoFrame );
+					if ( Contrast != 1.0f || Brightness != 0.0f )
+						Functions::ImageEQ( Contrast * 100, Brightness * 256, ( quint8 * )imgScaler.array(), w2 * h2 << 2 );
+					glTexImage2D( GL_TEXTURE_2D, 0, 4, w2, h2, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
+				}
 			}
 		}
 		glBegin( GL_QUADS ); {
-			glTexCoord2i( -1, -1 ); vertex( 0, writer.flip );
-			glTexCoord2i(  0, -1 ); vertex( 1, writer.flip );
-			glTexCoord2i(  0,  0 ); vertex( 2, writer.flip );
-			glTexCoord2i( -1,  0 ); vertex( 3, writer.flip );
+			glTexCoord2i( 0, 0 ); vertex( 0, writer.flip );
+			glTexCoord2i( 1, 0 ); vertex( 1, writer.flip );
+			glTexCoord2i( 1, 1 ); vertex( 2, writer.flip );
+			glTexCoord2i( 0, 1 ); vertex( 3, writer.flip );
 		} glEnd();
 	}
-	glPopMatrix();
 
 	/* OSD */
 	osd_mutex.lock();
 	if ( !osd_list.isEmpty() )
 	{
-		glPushMatrix();
-		glOrtho( 0, width(), height(), 0, -1, 1 );
-		glTranslatef( X, Y, 0 );
-		glBindTexture( GL_TEXTURE_2D, 5 );
-		glEnable( GL_BLEND );
+		glBindTexture( GL_TEXTURE_2D, 1 );
 
 		QRect bounds;
 		const qreal scaleW = ( qreal )W / writer.outW, scaleH = ( qreal )H / writer.outH;
@@ -294,50 +324,30 @@ void Drawable::paintGL()
 			QPainter p( &osdImg );
 			p.translate( -bounds.topLeft() );
 			Functions::paintOSD( osd_list, scaleW, scaleH, p, &osd_checksums );
-			glTexImage2D( GL_TEXTURE_2D, 0, 4, bounds.width(), bounds.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, osdImg.bits() );
-		}
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-		glBegin( GL_QUADS ); {
-			glTexCoord2i( -1, -1 ); glVertex2i( bounds.left(),      bounds.top()        );
-			glTexCoord2i(  0, -1 ); glVertex2i( bounds.right() + 1, bounds.top()        );
-			glTexCoord2i(  0,  0 ); glVertex2i( bounds.right() + 1, bounds.bottom() + 1 );
-			glTexCoord2i( -1,  0 ); glVertex2i( bounds.left(),      bounds.bottom() + 1 );
-		} glEnd();
-#if 0
-		foreach ( const QMPlay2_OSD *osd, osd_list )
-		{
-			osd->lock();
-			if ( osd->needsRescale() )
-			{
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-				glPushMatrix();
-				glScalef( ( float )W / writer.outW, ( float )H / writer.outH, 1.0f );
-			}
+			if ( canCreateTexturesNonPowerOf2 )
+				glTexImage2D( GL_TEXTURE_2D, 0, 4, bounds.width(), bounds.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, osdImg.bits() );
 			else
 			{
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+				int w2 = getPowerOf2( bounds.width() ), h2 = getPowerOf2( bounds.height() );
+				if ( w2 > maxTextureSize )
+					w2 = maxTextureSize;
+				if ( h2 > maxTextureSize )
+					h2 = maxTextureSize;
+				glTexImage2D( GL_TEXTURE_2D, 0, 4, w2, h2, 0, GL_BGRA, GL_UNSIGNED_BYTE, osdImg.scaled( w2, h2, Qt::IgnoreAspectRatio, Qt::FastTransformation ).bits() );
 			}
-			for ( int j = 0 ; j < osd->imageCount() ; j++ )
-			{
-				const QMPlay2_OSD::Image &img = osd->getImage( j );
-				glTexImage2D( GL_TEXTURE_2D, 0, 4, img.rect.width(), img.rect.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, ( uchar * )img.data.data() );
-				glBegin( GL_QUADS ); {
-					glTexCoord2i( -1, -1 ); glVertex2i( img.rect.left(),      img.rect.top()        );
-					glTexCoord2i(  0, -1 ); glVertex2i( img.rect.right() + 1, img.rect.top()        );
-					glTexCoord2i(  0,  0 ); glVertex2i( img.rect.right() + 1, img.rect.bottom() + 1 );
-					glTexCoord2i( -1,  0 ); glVertex2i( img.rect.left(),      img.rect.bottom() + 1 );
-				} glEnd();
-			}
-			if ( osd->needsRescale() )
-				glPopMatrix();
-			osd->unlock();
 		}
-#endif
+
+		glLoadIdentity();
+		glOrtho( 0, width(), height(), 0, -1, 1 );
+		glTranslatef( X, Y, 0 );
+		glEnable( GL_BLEND );
+		glBegin( GL_QUADS ); {
+			glTexCoord2i( 0, 0 ); glVertex2i( bounds.left(),      bounds.top()        );
+			glTexCoord2i( 1, 0 ); glVertex2i( bounds.right() + 1, bounds.top()        );
+			glTexCoord2i( 1, 1 ); glVertex2i( bounds.right() + 1, bounds.bottom() + 1 );
+			glTexCoord2i( 0, 1 ); glVertex2i( bounds.left(),      bounds.bottom() + 1 );
+		} glEnd();
 		glDisable( GL_BLEND );
-		glPopMatrix();
 	}
 	osd_mutex.unlock();
 }
@@ -461,7 +471,6 @@ bool OpenGLWriter::open()
 {
 	if ( QGLFormat::openGLVersionFlags() == QGLFormat::OpenGL_Version_None )
 		return false;
-	useHUE = QGLFormat::openGLVersionFlags() >= QGLFormat::OpenGL_Version_3_0;
 #ifdef QtVSync
 	QGLFormat fmt;
 	fmt.setSwapInterval( VSync );
@@ -469,12 +478,5 @@ bool OpenGLWriter::open()
 #else
 	drawable = new Drawable( *this );
 #endif
-	if ( !drawable->context()->isValid() )
-		return false;
-	drawable->makeCurrent();
-	const char *extensions_str = ( const char * )glGetString( GL_EXTENSIONS );
-	bool isOK = extensions_str && strstr( extensions_str, "GL_ARB_texture_non_power_of_two" );
-	if ( !isOK )
-		QMPlay2Core.logError( "OpenGL :: " + tr( "Nie można tworzyć tekstur o rozmiarach innych niż potęga liczby 2, OpenGL wyłączony..." ), true, false );
-	return isOK;
+	return drawable->context()->isValid();
 }

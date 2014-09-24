@@ -371,7 +371,7 @@ QStringList Functions::getUrlsFromMimeData( const QMimeData *mimeData )
 	{
 		foreach ( QUrl url, mimeData->urls() )
 		{
-			QString u = url.toString();
+			QString u = url.toLocalFile();
 			if ( u.right( 1 ) == "/" )
 				u.chop( 1 );
 			urls += u;
@@ -417,7 +417,7 @@ void Functions::getDataIfHasPluginPrefix( const QString &whole_url, QString *url
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( addressPrefixName ) )
 			{
 				Reader *tmpReader;
-				QMPlay2Ext->convertAddress( addressPrefixName, real_url, param, url, name, img, false, reader ? *reader : tmpReader, abortMutex );
+				QMPlay2Ext->convertAddress( addressPrefixName, real_url, param, url, name, img, NULL, reader ? *reader : tmpReader, abortMutex );
 				break;
 			}
 	}

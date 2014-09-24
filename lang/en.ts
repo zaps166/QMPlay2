@@ -585,10 +585,6 @@
         <translation>Video can not be converted to RGB by GPU</translation>
     </message>
     <message>
-        <source>Nie można ustawić VSync</source>
-        <translation>Cannot set VSync</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>Hardware YUV-&gt;RGB conversion</translation>
     </message>
@@ -615,6 +611,10 @@
     <message>
         <source>Problem z kompilacją fragment shader</source>
         <translation>Problem with fragment shader compilation</translation>
+    </message>
+    <message>
+        <source>Wydajność będzie niska</source>
+        <translation>Performance will be low</translation>
     </message>
 </context>
 <context>
@@ -1312,13 +1312,6 @@
     </message>
 </context>
 <context>
-    <name>OpenGLWriter</name>
-    <message>
-        <source>Nie można tworzyć tekstur o rozmiarach innych niż potęga liczby 2, OpenGL wyłączony...</source>
-        <translation>Cannot create textures with different sizes than power of 2, OpenGL is disabled...</translation>
-    </message>
-</context>
-<context>
     <name>Options</name>
     <message>
         <source>Op&amp;cje</source>
@@ -1672,6 +1665,29 @@
     </message>
 </context>
 <context>
+    <name>ProstoPleerW</name>
+    <message>
+        <source>Wyszukaj</source>
+        <translation>Search</translation>
+    </message>
+    <message>
+        <source>Następna strona</source>
+        <translation>Next page</translation>
+    </message>
+    <message>
+        <source>Błąd połączenia</source>
+        <translation>Connection error</translation>
+    </message>
+    <message>
+        <source>Spróbuj ponownie później</source>
+        <translation>Try again later</translation>
+    </message>
+    <message>
+        <source>Wyszukaj w Prostopleer</source>
+        <translation>Search on Prostopleer</translation>
+    </message>
+</context>
+<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
@@ -1816,7 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>ResultsTree</name>
+    <name>ResultsPleer</name>
+    <message>
+        <source>Tytuł</source>
+        <translation>Title</translation>
+    </message>
+    <message>
+        <source>Wykonawca</source>
+        <translation>Artist</translation>
+    </message>
+    <message>
+        <source>Długość</source>
+        <translation>Length</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation>Bitrate</translation>
+    </message>
+    <message>
+        <source>Kolejkuj</source>
+        <translation>Enqueue</translation>
+    </message>
+    <message>
+        <source>Odtwórz</source>
+        <translation>Play</translation>
+    </message>
+    <message>
+        <source>Otwórz stronę w przeglądarce</source>
+        <translation>Open the page in the browser</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strony</source>
+        <translation>Copy page address</translation>
+    </message>
+</context>
+<context>
+    <name>ResultsYoutube</name>
     <message>
         <source>Tytuł</source>
         <translation>Title</translation>
@@ -1830,6 +1881,10 @@
         <translation>User</translation>
     </message>
     <message>
+        <source>Ilość wyświetleń</source>
+        <translation>Number of views</translation>
+    </message>
+    <message>
         <source>Kolejkuj</source>
         <translation>Enqueue</translation>
     </message>
@@ -1838,20 +1893,16 @@
         <translation>Play</translation>
     </message>
     <message>
-        <source>Kopiuj adres strumienia</source>
-        <translation>Copy stream address</translation>
-    </message>
-    <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Number of views</translation>
-    </message>
-    <message>
         <source>Otwórz stronę w przeglądarce</source>
         <translation>Open the page in the browser</translation>
     </message>
     <message>
         <source>Kopiuj adres strony</source>
         <translation>Copy page address</translation>
+    </message>
+    <message>
+        <source>Kopiuj adres strumienia</source>
+        <translation>Copy stream address</translation>
     </message>
 </context>
 <context>
@@ -2147,6 +2198,10 @@
     <message>
         <source>Ustaw wygląd</source>
         <translation>Set appearance</translation>
+    </message>
+    <message>
+        <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation>Remember video equalizer settings</translation>
     </message>
 </context>
 <context>

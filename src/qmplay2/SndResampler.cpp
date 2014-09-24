@@ -57,7 +57,7 @@ bool SndResampler::create( int _src_samplerate, int _src_channels, int _dst_samp
 	{
 		if ( dst_channels > src_channels )
 		{
-			channel_map.fill( -1, SWR_CH_MAX );
+			channel_map.fill( -1, dst_channels /*SWR_CH_MAX*/ );
 			for ( int i = 0, c = 0 ; i < dst_channels ; ++i )
 			{
 				channel_map[ i ] = c;

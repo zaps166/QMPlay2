@@ -1,3 +1,10 @@
+Zmiany w QMPlay2 build 14.09.24:
+	- możliwość pamiętania ustawień korektora wideo,
+	- poprawa działania YouTube,
+	- dodana obsługa pleer.com,
+	- poprawa działania OpenGL,
+	- poprawki błędów,
+
 Zmiany w QMPlay2 build 14.07.27:
 	- ikony mogą być wczytywane z systemowego zestawu ikon (opcja domyślna, Linux, BSD), dodane zostały też nowe ikony,
 	- obsługa dowolnego serwisu wideo poprzez program "youtube-dl" (w menu dodawania adresu),

@@ -220,6 +220,8 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments ) :
 
 	if ( QMPlay2Core.getSettings().getInt( "Volume" ) != 100 )
 		volS->setValue( QMPlay2Core.getSettings().getInt( "Volume" ) );
+	if ( QMPlay2Core.getSettings().getBool( "RestoreVideoEqualizer" ) )
+		menuBar->playing->videoFilters->videoEqualizer->restoreValues();
 
 	bool noplay = false;
 	while ( QMPArguments.first.count() )
@@ -1070,6 +1072,7 @@ void MainWidget::closeEvent( QCloseEvent *e )
 	QMPlay2Core.getSettings().set( "MainWidget/isVisible", isVisible() );
 	QMPlay2Core.getSettings().set( "TrayVisible", tray->isVisible() );
 	QMPlay2Core.getSettings().set( "Volume", volS->value() );
+	menuBar->playing->videoFilters->videoEqualizer->saveValues();
 
 	hide();
 

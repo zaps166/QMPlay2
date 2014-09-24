@@ -28,11 +28,15 @@ QList< PLS::Entry > PLS::_read()
 
 		int number_idx = -1;
 		for ( int i = 0 ; i < line.length() ; ++i )
+		{
+			if ( line[ i ] == '=' )
+				break;
 			if ( line[ i ] >= '0' && line[ i ] <= '9' )
 			{
 				number_idx = i;
 				break;
 			}
+		}
 		if ( number_idx == -1 )
 			continue;
 

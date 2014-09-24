@@ -81,36 +81,33 @@ QByteArray HttpReader::read( qint64 len )
 	if ( _abort )
 		return QByteArray();
 	QByteArray arr = sock.read( len );
+	_pos += arr.size();
 	if ( chunked )
 	{
-		int chunk, pos = toChunkSize;
-		for ( ;; )
+		QByteArray arr_ret;
+		do
 		{
-			chunk = 0;
-			int idx1 = 0;
-			int idx2;
-			if ( _pos )
+			if ( !chunkSize )
 			{
-				idx1 = arr.indexOf( "\r\n", pos );
-				if ( idx1 > -1 )
-					idx1 += 2;
+				int rnIdx = arr.indexOf( "\r\n" );
+				if ( rnIdx > -1 )
+				{
+					chunkSize = arr.mid( 0, rnIdx ).toInt( NULL, 16 );
+					arr.remove( 0, rnIdx + 2 );
+				}
 			}
-			idx2 = arr.indexOf( "\r\n", idx1 ? idx1 : pos );
-			if ( idx2 > -1 )
+			if ( chunkSize >= arr.size() )
 			{
-				chunk = arr.mid( idx1, idx2-idx1 ).toInt( NULL, 16 );
-				int from = idx1 ? idx1-2 : 0;
-				arr.remove( from, idx2+2-from );
-			}
-			pos += chunk;
-			if ( chunk <= 0 || pos > arr.size() )
+				chunkSize -= arr.size();
+				arr_ret += arr;
 				break;
-		}
-		toChunkSize = pos - arr.size();
-		if ( toChunkSize < 0 )
-			toChunkSize = 0;
+			}
+			arr_ret += arr.left( chunkSize );
+			arr.remove( 0, chunkSize + 2 );
+			chunkSize = 0;
+		} while ( !arr.isEmpty() );
+		return arr_ret;
 	}
-	_pos += arr.size();
 	return arr;
 }
 void HttpReader::pause()
@@ -233,7 +230,7 @@ bool HttpReader::conn( quint8 followLocation, qint64 range )
 		return false;
 
 	chunked = headerLower.contains( "transfer-encoding: chunked" );
-	toChunkSize = 0;
+	chunkSize = 0;
 
 	if ( followLocation )
 	{
