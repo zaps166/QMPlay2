@@ -1,0 +1,19 @@
+Open with QMPlay2 and Enqueue files - improve
+Slow seeking on some network streams
+
+Filters:
+	Video filters - YADIF
+	Add audio "Tempo" and LADSPA filters
+
+HWAccel: DXVA2
+MKV - ordered chapters
+Users can resume downloading
+Improve catalog synchronization
+Users can introduce aspect ratio and zoom
+
+Qt5 - Q_WS_X11 defines,
+
+MIDI - ?
+Direct3D output- ?
+Exporting audio during playback - ?
+Decoding and playing video in diffrent threads - ?

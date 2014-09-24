@@ -1,0 +1,276 @@
+#include <HttpReader.hpp>
+
+#include <Functions.hpp>
+
+#include <QCoreApplication>
+#include <QUrl>
+
+HttpReader::HttpReader( Module &module ) :
+	_size( 0 ), _pos( 0 ),
+	followLocation( 5 ),
+	_abort( false )
+{
+	SetModule( module );
+	sock.setReadBufferSize( 0x200000 ); //2MiB
+}
+
+HttpReader::~HttpReader()
+{
+	close();
+}
+
+bool HttpReader::set()
+{
+	maxTimeout = sets().getInt( "Http/TCPTimeout" ) * 1000;
+	return sets().getBool( "Http/ReaderEnabled" );
+}
+
+bool HttpReader::readyRead() const
+{
+	return !_abort && ( sock.state() == QAbstractSocket::ConnectedState || sock.size() );
+}
+bool HttpReader::canSeek() const
+{
+	return _size > 0 && _canSeek;
+}
+
+bool HttpReader::seek( qint64 position, int wh )
+{
+	if ( !canSeek() )
+		return false;
+	switch ( wh )
+	{
+		case SEEK_SET:
+			position = qAbs( position );
+			break;
+		case SEEK_CUR:
+			position = _pos + position;
+			break;
+		case SEEK_END:
+			position = _size - qAbs( position );
+			break;
+		default:
+			return false;
+	}
+	if ( position == _pos )
+		return true;
+	if ( !conn( followLocation, position ) )
+	{
+		close();
+		return false;
+	}
+	return true;
+}
+QByteArray HttpReader::read( qint64 len )
+{
+	if ( len <= 0 )
+		return QByteArray();
+	if ( sock.isTimerActive() )
+		sock.killTimer();
+	if ( sock.readBufferSize() < len )
+		sock.setReadBufferSize( len );
+	int wd = maxTimeout;
+	while ( sock.size() < len && !( _size > -1 && _pos + sock.size() >= _size ) )
+	{
+		while ( !_abort && wd > 0 && !sock.waitForReadyRead( 100 ) )
+			wd -= 100;
+		if ( _abort || wd <= 0 )
+			break;
+		wd = maxTimeout;
+	}
+	if ( _abort )
+		return QByteArray();
+	QByteArray arr = sock.read( len );
+	if ( chunked )
+	{
+		int chunk, pos = toChunkSize;
+		for ( ;; )
+		{
+			chunk = 0;
+			int idx1 = 0;
+			int idx2;
+			if ( _pos )
+			{
+				idx1 = arr.indexOf( "\r\n", pos );
+				if ( idx1 > -1 )
+					idx1 += 2;
+			}
+			idx2 = arr.indexOf( "\r\n", idx1 ? idx1 : pos );
+			if ( idx2 > -1 )
+			{
+				chunk = arr.mid( idx1, idx2-idx1 ).toInt( NULL, 16 );
+				int from = idx1 ? idx1-2 : 0;
+				arr.remove( from, idx2+2-from );
+			}
+			pos += chunk;
+			if ( chunk <= 0 || pos > arr.size() )
+				break;
+		}
+		toChunkSize = pos - arr.size();
+		if ( toChunkSize < 0 )
+			toChunkSize = 0;
+	}
+	_pos += arr.size();
+	return arr;
+}
+void HttpReader::pause()
+{
+	sock.startTimer( maxTimeout );
+}
+bool HttpReader::atEnd() const
+{
+	return _pos == _size;
+}
+void HttpReader::abort()
+{
+	_abort = true;
+}
+
+qint64 HttpReader::size() const
+{
+	return _size;
+}
+qint64 HttpReader::pos() const
+{
+	return _pos;
+}
+QString HttpReader::name() const
+{
+	return HttpReaderName;
+}
+
+bool HttpReader::open()
+{
+	return conn( followLocation );
+}
+
+/**/
+
+void HttpReader::close()
+{
+	disconn();
+	_size = 0;
+}
+
+bool HttpReader::conn( quint8 followLocation, qint64 range )
+{
+	disconn();
+
+	bool isHttps =
+#ifdef QT_NO_OPENSSL
+			false;
+#else
+			_url.left( 6 ) == "https:";
+#endif
+	if ( _url.left( 5 ) != "http:" && !isHttps )
+		return false;
+
+	if ( _url.right( 1 ) == "/" )
+		_url.chop( 1 );
+
+	QUrl url = _url;
+	quint16 port = url.port() == -1 ? ( isHttps ? 443 : 80 ) : url.port();
+#ifndef QT_NO_OPENSSL
+	if ( isHttps )
+		sock.connectToHostEncrypted( url.host(), port );
+	else
+#endif
+		sock.connectToHost( url.host(), port );
+
+	qint32 tmpTimeout = maxTimeout;
+	while ( !_abort && tmpTimeout > 0 && sock.state() != QAbstractSocket::UnconnectedState && sock.state() != QAbstractSocket::ConnectedState )
+	{
+		qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+		Functions::s_wait( 0.01 );
+		tmpTimeout -= 10;
+	}
+	if ( _abort || sock.state() != QAbstractSocket::ConnectedState )
+		return false;
+
+	QString path;
+	if ( url.path().isEmpty() )
+		path = "/";
+	else
+		path = _url.mid( _url.indexOf( url.path(), _url.indexOf( url.host() ) ), -1 );
+	QByteArray query;
+	query += "GET " + path + " HTTP/1.1\r\n";
+	query += "Host: " + url.host() + ( port == 80 ? "" : ":" + QString::number( port ) ) + "\r\n";
+	if ( range )
+		query += "Range: bytes=" + QString::number( range ) + "-\r\n";
+	query += "Connection: close\r\n";
+	query += "\r\n";
+	sock.write( query );
+
+	QByteArray header, headerLower;
+	while ( !_abort )
+	{
+		if ( !sock.waitForReadyRead( maxTimeout ) )
+			return false;
+		bool br = false;
+		while ( sock.canReadLine() )
+		{
+			QByteArray arr = sock.readLine();
+			if ( arr == "\r\n" || arr == "\n" || arr == "\n\r" )
+			{
+				br = true;
+				break;
+			}
+			else
+			{
+				header += arr;
+				headerLower += arr.toLower();
+			}
+		}
+		if ( br )
+			break;
+
+		if ( sock.readBufferSize() <= sock.size() ) //zabezpieczenie przed za małym buforem
+			sock.setReadBufferSize( sock.size()+1 );
+	}
+
+	_canSeek = headerLower.contains( "accept-ranges: bytes" ) || headerLower.contains( "content-range: bytes" );
+	if ( !_canSeek && range )
+		return false;
+
+	chunked = headerLower.contains( "transfer-encoding: chunked" );
+	toChunkSize = 0;
+
+	if ( followLocation )
+	{
+		int idx = headerLower.indexOf( "location: " );
+		if ( idx > -1 )
+		{
+			idx += 10;
+			int idx2 = header.indexOf( '\n', idx );
+			if ( idx2 > -1 )
+			{
+				_url = header.mid( idx, idx2 - idx );
+				_url.remove( '\r' );
+				return conn( followLocation - 1, range );
+			}
+		}
+	}
+
+	int idx = headerLower.indexOf( "content-length: " );
+	if ( idx > -1 )
+	{
+		if ( _size <= 0 )
+		{
+			idx += 16;
+			int idx2 = header.indexOf( '\n', idx );
+			if ( idx2 > -1 )
+				_size = QString( header.mid( idx, idx2 - idx ) ).remove( '\r' ).toLongLong();
+		}
+	}
+	else
+		_size = -1;
+
+	_pos = range;
+
+	return true;
+}
+void HttpReader::disconn()
+{
+	sock.close();
+	_pos = 0;
+}

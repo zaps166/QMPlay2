@@ -1,0 +1,93 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+if [ -z $NOTERM ] || [ $NOTERM == 0 ]; then
+	if [ -z $inKonsole ]; then
+		if [ ! -z "`xterm -help 2> /dev/null`" ] && [ ! -z $DISPLAY ]; then
+			inKonsole=true xterm -e "./$(basename $0)" "$@" &
+			exit
+		fi
+		if [ ! -z $KDE_FULL_SESSION ]; then
+			inKonsole=true konsole -e "./$(basename $0)" "$@" &
+			exit
+		fi
+	fi
+fi
+
+if [ -z $QT_SUFFIX ]; then
+	if hash qmake-qt4 2> /dev/null; then
+		QT_SUFFIX=-qt4
+	elif hash qmake-qt5 2> /dev/null; then
+		QT_SUFFIX=-qt5
+	fi
+fi
+
+# lupdate$QT_SUFFIX -locations none QMPlay2.pro
+
+lrelease$QT_SUFFIX QMPlay2.pro
+
+mkdir -p app/share/qmplay2/lang
+mv lang/*.qm app/share/qmplay2/lang
+
+if [ ! -z $1 ]; then
+	Threads=$1
+else
+	if [ `uname` == "Linux" ]; then
+		Threads=$(grep -c processor /proc/cpuinfo 2> /dev/null)
+	fi
+	if [ -z $Threads ] || [ $Threads == 0 ]; then
+		Threads=1
+	fi
+fi
+
+if [ $Threads == 0 ]; then
+	qmake$QT_SUFFIX && time make
+else
+	qmake$QT_SUFFIX && time make -j$Threads
+fi
+
+BUILD_ERROR=$?
+
+if [ $BUILD_ERROR != 0 ]; then
+	echo Build failed!
+else
+	if [ -d /usr/share/kde4/apps/solid/actions ]; then
+		SOLID_ACTIONS=app/share/kde4/apps/solid/actions
+	elif [ -d /usr/share/apps/solid/actions ]; then
+		SOLID_ACTIONS=app/share/apps/solid/actions
+	fi
+	SedQMPlay2Path=$(echo -n "$PWD" | sed 's/\//\\\//g')
+
+	mkdir -p app/share/applications
+	cp src/gui/Unix/QMPlay2*.desktop app/share/applications
+	if [ -z $SYSTEM_BUILD ] || [ $SYSTEM_BUILD == 0 ]; then
+		sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" app/share/applications/*.desktop
+	fi
+
+	if [ ! -z $SOLID_ACTIONS ]; then
+		mkdir -p $SOLID_ACTIONS
+		cp src/gui/KDE4/qmplay2-opencda.desktop $SOLID_ACTIONS
+		if [ -z $SYSTEM_BUILD ] || [ $SYSTEM_BUILD == 0 ]; then
+			sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" $SOLID_ACTIONS/*.desktop
+		fi
+	fi
+
+	mkdir -p app/share/icons/hicolor/128x128/apps
+	cp src/gui/Icons/QMPlay2.png app/share/icons
+	rm -f app/share/icons/hicolor/128x128/apps/QMPlay2.png
+	ln -s ../../../QMPlay2.png app/share/icons/hicolor/128x128/apps
+	touch app/share/qmplay2/noautoupdates
+	cp ChangeLog app/share/qmplay2
+	mkdir -p app/include/QMPlay2
+	cp src/qmplay2/headers/* app/include/QMPlay2
+
+	echo Build complete!
+fi
+
+if [ ! -z $inKonsole ]; then
+	echo Press enter to exit
+	read
+fi
+
+exit $BUILD_ERROR

@@ -1,0 +1,35 @@
+<RCC>
+	<qresource>
+		<file alias="QMPlay2">Icons/QMPlay2.png</file>
+
+		<file>Icons/media-playback-start.png</file>
+		<file>Icons/media-playback-stop.png</file>
+		<file>Icons/media-skip-backward.png</file>
+		<file>Icons/media-skip-forward.png</file>
+		<file>Icons/media-playback-pause.png</file>
+
+		<file>Icons/folder-orange.png</file>
+		<file>Icons/folder.png</file>
+		<file>Icons/folder-new.png</file>
+		<file>Icons/applications-multimedia.png</file>
+		<file>Icons/archive-remove.png</file>
+		<file>Icons/list-remove.png</file>
+		<file>Icons/list-add.png</file>
+		<file>Icons/edit-clear.png</file>
+		<file>Icons/folder-open.png</file>
+		<file>Icons/view-refresh.png</file>
+		<file>Icons/audio-volume-muted.png</file>
+		<file>Icons/view-fullscreen.png</file>
+		<file>Icons/configure.png</file>
+		<file>Icons/application-exit.png</file>
+		<file>Icons/process-stop.png</file>
+		<file>Icons/edit-copy.png</file>
+		<file>Icons/edit-paste.png</file>
+		<file>Icons/edit-find.png</file>
+		<file>Icons/document-properties.png</file>
+		<file>Icons/application-x-mswinurl.png</file>
+
+
+		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
+	</qresource>
+</RCC>

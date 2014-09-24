@@ -1,0 +1,123 @@
+#include <InDockW.hpp>
+
+#include <QMPlay2Core.hpp>
+
+#include <QDragEnterEvent>
+#include <QPainter>
+
+InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt ) :
+	grad1( grad1 ), grad2( grad2 ), qmpTxt( qmpTxt ),
+	qmp2Pixmap( qmp2Pixmap ),
+	hasWallpaper( false )
+{
+	connect( &QMPlay2Core, SIGNAL( wallpaperChanged( bool, double ) ), this, SLOT( wallpaperChanged( bool, double ) ) );
+	loseHeight = 0;
+	setFocusPolicy( Qt::StrongFocus );
+	setAutoFillBackground( true );
+	setMouseTracking( true );
+	setPalette( Qt::black );
+	w = NULL;
+}
+
+void InDockW::wallpaperChanged( bool hasWallpaper, double alpha )
+{
+	QColor c = Qt::black;
+	if ( ( this->hasWallpaper = hasWallpaper ) && hasWallpaper )
+		c.setAlphaF( alpha );
+	setPalette( c );
+}
+void InDockW::setWidget( QWidget *_w )
+{
+	if ( w == _w )
+		return;
+// 	if ( _w && w )
+// 	{
+// 		_w->setParent( NULL );
+// 		_w->show();
+// 		return;
+// 	}
+	if ( w )
+	{
+		disconnect( w, SIGNAL( destroyed() ), this, SLOT( nullWidget() ) );
+		w->setParent( NULL );
+	}
+	w = _w;
+	if ( w )
+	{
+		w->setMinimumSize( 2, 2 );
+		w->setParent( this );
+		resizeEvent( NULL );
+		w->show();
+		connect( w, SIGNAL( destroyed() ), this, SLOT( nullWidget() ) );
+	}
+}
+
+void InDockW::nullWidget()
+{
+	w = NULL;
+}
+
+void InDockW::resizeEvent( QResizeEvent * )
+{
+	if ( w )
+	{
+		int mappedY = mapToParent( QPoint( 0, 0 ) ).y();
+		int Y = 0;
+		int W = width();
+		int H = height() + loseHeight;
+		if ( mappedY < 0 )
+		{
+			H += mappedY;
+			Y -= mappedY;
+		}
+		if ( w->geometry() != QRect( 0, Y, W, H ) )
+		{
+			w->setGeometry( 0, Y, W, H );
+			emit resized( W, H );
+		}
+	}
+}
+void InDockW::paintEvent( QPaintEvent * )
+{
+	if ( !w )
+	{
+		QPainter p( this );
+
+		int fullHeight = height() + loseHeight;
+
+		if ( !hasWallpaper )
+		{
+			if ( grad1 == grad2 )
+				p.fillRect( rect(), grad1 );
+			else
+			{
+				QLinearGradient lgrad( width() / 2, 0, width() / 2, fullHeight );
+				lgrad.setColorAt( 0.0, grad1 );
+				lgrad.setColorAt( 0.5, grad2 );
+				lgrad.setColorAt( 1.0, grad1 );
+				p.fillRect( rect(), lgrad );
+			}
+		}
+
+		if ( customPixmap.isNull() )
+		{
+			p.drawPixmap( width() / 2 - qmp2Pixmap.width() / 2, fullHeight / 2 - qmp2Pixmap.height() / 2, qmp2Pixmap );
+
+			QFont font = p.font();
+			font.setPointSize( 22 );
+			font.setItalic( true );
+			p.setFont( font );
+			p.setPen( qmpTxt );
+			p.drawText( 0, fullHeight / 2 + qmp2Pixmap.height() / 2, width(), 100, Qt::AlignHCenter | Qt::AlignTop, "QMPlay2" );
+		}
+		else
+		{
+			QPixmap pixmapToDraw;
+			if ( customPixmap.width() > width() || customPixmap.height() > fullHeight )
+				pixmapToDraw = customPixmap.scaled( width(), fullHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+			else
+				pixmapToDraw = customPixmap;
+			p.drawPixmap( width() / 2 - pixmapToDraw.width() / 2, fullHeight / 2 - pixmapToDraw.height() / 2, pixmapToDraw );
+		}
+	}
+}

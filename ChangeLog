@@ -1,0 +1,609 @@
+Zmiany w QMPlay2 build 14.07.27:
+	- ikony mogą być wczytywane z systemowego zestawu ikon (opcja domyślna, Linux, BSD), dodane zostały też nowe ikony,
+	- obsługa dowolnego serwisu wideo poprzez program "youtube-dl" (w menu dodawania adresu),
+	- obsługa filtrów redukcji szumów, ostrości i poziomów skalowania obrazu w VDPAU,
+	- możliwość blokowania widgetów (usuwa pasek tytułu oraz blokuje pasek narzędzi),
+	- możliwość wczytywania modułów z katalogu ustawień (~/.qmplay2/Modules),
+	- możliwość ustawiania kolorów i tapety (podobnie jak w QMPlay1),
+	- usprawnienia w odczycie/zapisie playlisty,
+	- obsługa ReplayGain (domyślnie wyłączone),
+	- zmiana sposobu zapisu pozycji okna,
+	- usprawnione przełączanie strumieni,
+	- obsługa MPRIS2 (tylko Linux/BSD),
+	- poprawiona obsługa "youtube-dl",
+	- obsługa obrazków w plikach OGG,
+	- drobne poprawki w HttpReader,
+	- poprawa działania VDPAU,
+	- poprawa obsługi HTTPS,
+	- inne drobne zmiany,
+	- poprawki błędów,
+
+Zmiany w QMPlay2 build 14.03.05:
+	- poprawione działanie YouTube - obsługa poprzez program "youtube-dl" (wymagane podanie ścieżki w opcjach),
+	- tytuł płyty AudioCD wyświetlany jako album,
+	- poprawiony błąd z odświeżaniem OSD,
+	- poprawione błędy w edycji tagów,
+
+Zmiany w QMPlay2 build 14.02.17:
+	- poprawiony problem z kompilacją z taglib1.8,
+
+Zmiany w QMPlay2 build 14.02.16:
+	- dodana obsługa bazy danych CDDB (freedb.org, freedb.musicbrainz.org),
+	- dodana możliwość edycji tagów (użyta biblioteka taglib),
+	- poprawione różne błędy związane z VAApi,
+	- szybsze przełączanie ścieżek w AudioCD,
+	- poprawione drobne błędy w FFDecSW,
+	- dodany efekt echa,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 14.01.10:
+	- dodana obsługa algorytmów usuwających przeplot dla kart Intela w VAApi (VAEntrypointVideoProc),
+	- poprawa wielu błędów w VAApi,
+	- drobne poprawki w kodzie,
+
+Zmiany w QMPlay2 build 14.01.05:
+	- możliwość dekodowania poprzez VDPAU wydobywając klatkę obrazu (opcjonalne, zobacz "FFMpeg.pro"),
+	- poprawa kompilacji z starszą wersją alsa-lib,
+	- możliwość odtwarzania losowego w grupie,
+	- poprawa działania i stabilności VAApi,
+	- drobne poprawki w "VDPAU Writer",
+
+Zmiany w QMPlay2 build 14.01.03:
+	- poprawa błędu związanego ze zmianą parametrów metody "processParams()" w "PrepareForHWBobDeint",
+
+Zmiany w QMPlay2 build 14.01.02:
+	- automatyczne wyszukiwanie poprawnych parametrów dla dźwięku (kanały, próbkowanie),
+	- możliwość dodawania własnych stacji radiowych,
+	- poprawa modułu ALSA i PortAudio,
+
+Zmiany w QMPlay2 build 13.12.31:
+	- poprawiony błąd modułu ALSA - program sie sypał przy braku kart dźwiękowych,
+	- dodane niemieckie tłumaczenie (Daniel Meiß-Wilhelm),
+	- poprawa menu "Ustawienia odtwarzania",
+	- możliwość zapisywania okładek,
+	- poprawki w kodzie,
+
+Zmiany w QMPlay2 build 13.12.15:
+	- dodana możliwość ustawiania kart w górnej części okna głównego,
+	- dodana możliwość wyboru kanałów audio w menu "Odtwarzanie",
+	- przywrócenie działania HWAccel z FFMpeg 1.2,
+	- poprawa drobnych błędów,
+
+Zmiany w QMPlay2 build 13.12.07:
+	- możliwość automatycznego otwieranie okienka z filmem podczas otwierania filmu,
+	- przywrócenie komunikacji z sourceforge.net (w tym aktualizacji),
+	- losowe odtwarzanie utworów bez powtórzeń,
+	- zezwolenie na tylko jedną instancję,
+	- poprawki błędów,
+
+Zmiany w QMPlay2 build 13.10.24:
+	- pokazywanie rzeczywistej ilości klatek na sekundę,
+	- drobne poprawki w module "ALSA",
+	- poprawa regulacji głośności,
+	- poprawa OSD w DirectDraw,
+	- inne poprawki błędów,
+
+Zmiany w QMPlay2 build 13.09.20:
+	- wprowadzona obsługa LastFM oraz wczytywanie okładek z LastFM,
+	- obsługa połączeń internetowych przez serwer proxy,
+	- poprawa wyświetlania OSD w XVideo i DirectDraw,
+	- dodane dekodowanie sprzętowe przez VDPAU,
+	- optymalizacja wyświetlania OSD,
+	- poprawa modułu ALSA,
+	- poprawki błędów,
+
+Zmiany w QMPlay2 build 13.09.08:
+	- poprawa błędu z podawaniem złego indeksu strumienia,
+	- dodana obsługa tytułów z SHOUTcast,
+	- dodany moduł wyjścia dźwięku ALSA,
+	- poprawa odtwarzania dźwięku WMA,
+
+Zmiany w QMPlay2 build 13.09.01:
+	- poprawki wyświetlania filmów w OpenGL i XVideo (tylko niektóre rozmiary klatek nie działały poprawnie),
+	- dodane francuskie tłumaczenie (Alex Thierry, athierry.pro@gmail.com),
+	- możliwość wybrania kolejności otwierania dekoderów (w tym VAApi),
+	- więcej informacji o strumieniach (jaki dekoder i writer używany),
+	- usuwanie przeplotu przeniesione do nowej karty w oknie ustawień,
+	- filtry obrazu w osobnych modułach, możliwość wyboru filtrów,
+	- pytanie o zamknięcie programu podczas ściągania plików,
+	- nowy filtr dźwiękowy - odwracanie fazy,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 13.08.18:
+	- wiele zmian w kodzie programu, które umożliwiły filtrowanie obrazu (np. klasy: VideoFrame, VideoFilters, VideoFilter, DeintFilter),
+	- tooltip dla tytułu w wyszukiwarce YouTube, poprawa działania oraz możliwość otwierania tylko dźwięku,
+	- dodane filtrowanie obrazu (obecnie tylko usuwanie przeplotu: Discard, Blend, Bob),
+	- możliwość zmiany skali w widmie FFT oraz drobne poprawki,
+	- dodana obsługa equalizera obrazu do OpenGL i QPainter,
+	- możliwość kompilacji z AVResample zamiast SWResample,
+	- możliwość wyboru formatu pliku dla zrzutów ekranu,
+	- skróty klawiszowe dla regulacji głośności,
+	- poprawione działanie equalizera dźwięku,
+	- uniezależnienie dekodera od demuxera,
+	- zmiana numeracji wersji na YY.MM.DD,
+	- pozbycie się funkcji getYV12Size(),
+	- dodane rosyjskie tlumaczenie,
+	- poprawa synchronizacji A/V,
+	- poprawa działania VAApi:
+		- usuwanie przeplotu z podwojoną liczbą klatek na sekundę,
+		- działający equalizer obrazu, obsługa napisów,
+		- możliwość tworzenia zrzutów ekranu,
+		- mniej błędów dekodowania,
+	- wiele drobnych poprawek,
+
+Zmiany w QMPlay2 build 12VII2013:
+	- "File" i "Network" zostały połączone w "Readers",
+	- "BrowserEngine" zastąpiony dodatkiem "YouTube",
+	- poprawa odczytu czcionek OTF z plików MKV,
+	- możliwość odtwarzania klatka po klatce,
+	- dodana szybkość pobierania plików,
+	- poprawa drobnych błędów,
+
+Zmiany w QMPlay2 build 25V2013:
+	- początek wsparcia dla Qt5 (Q_WS_X11 w środowisku X11 należy zdefiniować ręcznie, XVideo ma problemy z odtwarzaniem),
+	- wklejony wpis do playlisty pojawia się na końcu, jeżeli żaden inny wpis nie jest zaznaczony,
+	- poprawiony błąd uniemożliwiający kontrolowanie programu spoza GUI,
+	- drobne poprawki w DirectDraw XVideo, OpenGL,
+	- opcja "Zawsze usuwaj przeplot" już działa,
+	- poprawa wczytywania obrazków okładek,
+	- przywrócenie serwisu Wrzuta.pl,
+
+Zmiany w QMPlay2 build 19V2013:
+	- możliwość automatycznego pomijania niektórych klatek filmu (jeżeli procesor okaże się za słaby),
+	- poprawa zatrzymania odtwarzania podczas otwierania strumienia internetowego,
+	- możliwość pobierania filmów bezpośrednio z wyszukiwarki YouTube,
+	- dodane ikonki oraz kilka drobnych zmian w GUI,
+	- ładowanie pluginów niezależne od wersji Qt,
+	- poprawione błędy,
+
+Zmiany w QMPlay2 build 17II2013:
+	- poprawiona płynność filmów w niektórych przypadkach (zły odczyt pts/dts),
+	- dodany nowy współczynnik proporcji - zależny od rozmiaru klatki,
+	- odczyt większej ilości tagów (w tym obrazki w oknie filmów),
+	- nowa opcja - scroll myszki przewija muzykę/film,
+	- poprawione drobne błędy,
+
+Zmiany w QMPlay2 build 04II2013:
+	- możliwość ustawienia jako domyślny odtwarzacz AudioCD w Windows,
+	- możliwość otwierania AudioCD (wybór akcji odtwarzania) w KDE,
+	- domyślnie wybierany jest pierwszy strumień, a nie ostatni,
+	- odczyt protokołu MMS jako "mms://" zamiast "mmsh://"
+	- poprawiona zmiana szybkości odtwarzania w Windows,
+	- nowy sygnał - usuwanie wpisów z playlisty,
+	- poprawiona jakość resamplingu,
+	- poprawione drobne błędy,
+
+Zmiany w QMPlay2 build 20I2013:
+	- plannar audio support in new FFMpeg,
+
+Zmiany w QMPlay2 build 23XII2012:
+	- poprawiona obsługa napisów pgssub, dvdsub,
+	- przywrócenie działania YouTube,
+
+Zmiany w QMPlay2 build 01XII2012:
+	- wizualizacja pokazuje rzeczywisty odtwarzany dźwięk po zmiksowaniu kanałów lub zmanie częstotliwości próbkowania,
+	- poprawione błędne skróty klawiszowe dla Windows uniemożliwiające pisanie polskich znaków,
+	- przewijanie do przodu nie kasuje zbuforowanego fragmentu podczas odtwarzania z Internetu,
+	- widoczne widgety w trybie pełnoekranowym są takie same jak w trybie okinkowym,
+	- "Prosta wizualizacja" ma możliwość ustawiania długości wyświetlanego dźwięku,
+	- wprowadzone wyjście obrazu DirectDraw dla Windows (domyślne dla Windows XP),
+	- domyślna ścieżka dla zrzutów ekranu jest teraz w "Moich obrazach",
+	- poprawiona obsługa OSD w OpenGL,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 03XI2012:
+	- informace lub błędy wyświetlane w dzienniku lub na standardowym wyjściu są wyświetlane także na pasku stanu,
+	- domyślny katalog w Windows dla pobieranych plików oraz zrzutów ekranu jest teraz w "Moich dokumentach",
+	- poprawione drobne błędy,
+	- dodana obsługa AudioCD,
+
+Zmiany w QMPlay2 build 29X2012:
+	- poprawiony odczyt napisów innych niż ASS/SSA w nowych wersjach FFMpeg i libASS,
+	- dodana możliwość skojarzenia plików z QMPlay2 w systemie Windows,
+	- okienko dialogowe zmiany szybkości odtwarzania,
+	- poprawa przechodzenia z/do pełnego ekranu,
+	- drobne poprawki błędów i udoskonalenia,
+	- dodana nowa wizualizacja - WidmoFFT,
+
+Zmiany w QMPlay2 build 22X2012:
+	- usunięcie "_gui" z nazw plików,
+	- poprawione błędy, inne zmiany,
+	- automatyczne aktualizacje,
+	- nowy parametr "--quit",
+
+Zmiany w QMPlay2 build 13X2012:
+	- poprawione odtwarzanie filmów FPS < 1 (np. nagrania z pulpitu, odtwarzanie filmów wymaga testów!),
+	- poprawione drobne błędy,
+
+Zmiany w QMPlay2 build 06X2012:
+	- poprawiona stabilność programu podczas używania wyciszania po zakończeniu odtwarzania,
+	- dodana opcja zachowywania szybkości odtwarzania między plikami,
+	- poprawiony błąd w Prostej Wizualizacji,
+
+Zmiany w QMPlay2 build 02X2012:
+	- dodane losowe odtwarzanie oraz skróty klawiszowe dla zapętlania odtwarzania,
+	- drobne poprawki w interfejsie graficznym,
+	- drobna poprawa odtwarzania filmów,
+
+Zmiany w QMPlay2 build 01X2012:
+	- dodana obsługi formatu muzycznego z gry Rayman2 (*.apm),
+	- dadana obsługa nieskompresowanych plików PCM i float,
+	- poprawione wybieranie jakości filmów na YouTube,
+	- nowości w generatorze częstotliwości,
+	- radia internetowe (znane z QMPlay1),
+	- poprawki w wizualizacji,
+	- inne zmiany i poprawki,
+
+Zmiany w QMPlay2 build 27IX2012:
+	- przywrócenie do działania serwisu YouTube,
+
+Zmiany w QMPlay2 build 26IX2012:
+	- obsługa "transfer-encoding: chunked" w "HttpReader" (poprawa działania YouTube),
+	- menu "Widgety" wyprowadzone na główny pasek,
+	- dodany generator częstotliwości,
+	- dodany equalizer dźwięku,
+	- wiele poprawek i nowości,
+
+Zmiany w QMPlay2 build 16IX2012:
+	- porządki w kodzie oraz poprawiona stabilność programu podczas wyłączania,
+	- dodana obsługa filtrów dźwięku (w tym testowe - usuwanie wokalu),
+	- przywrócenie działania serwisu YouTube,
+	- poprawki w wizualizacji,
+	- poprawki w odtwarzaniu,
+
+Zmiany w QMPlay2 build 12IX2012:
+	- klawisze strzałek nie przewijają muzyki/filmu kiedy lista odtwarzania jest wybrana,
+	- poprawione okna ustawień dla modułów (usunięcie klasy "SettingsObjects"),
+	- dodawane są rozszerzenia do pobranych plików z Wrzuty/YouTube,
+	- możliwość przywrócenia domyślnych ustawień w QMPlay2,
+	- przeglądanie dziennika zmian w programie,
+	- poprawki błędów oraz porządki w kodzie,
+
+Zmiany w QMPlay2 build 06IX2012:
+	- poprawa "Prostej Wizualizacji" (obciążenie procesora przy wyłączonej wizualizacji),
+	- możliwość pobierania plików z Internetu (np. z YouTube),
+	- poprawa błądów i drobne zmiany,
+	- poprawiony moduł HttpReader,
+
+Zmiany w QMPlay2 build 02IX2012:
+	- podmenu "Rozszerzenia" a w nim możliwość wyszukania zaznaczonego utworu przez moduł "BrowserEngine"
+	- wizualizacja "Prosta wizulaizacja" znana z programu QMPlay1,
+	- poprawione niektóre błędy,
+
+Zmiany w QMPlay2 build 31VIII2012:
+	- okno dialogowe podczas uaktualniania pamięci podręcznej czcionek w systemue Windows,
+	- możliwość zapamiętywania opóźnienia obrazu względem dźwięku po przełączeniu plików,
+	- po odświeżeniu listy aktualnie odtwarzany element zostanie zaznaczony ponownie,
+	- uaktualnianie danych typu tytuł jeżeli zostanie zmieniony podczas odtwarzania,
+	- rozszerzenia playlisty podczas wczytania/zapisywania,
+	- ustawianie opóźnienia obrazu w oknie dialogowym,
+	- wyciszanie podczas zatrzymywania odtwarzania,
+	- uaktualnianie tytułu okna,
+	- różne zmiany i poprawki,
+
+Zmiany w QMPlay2 build 29VIII2012:
+	- poprawa wybudzenia wątku "DemuxerThr" przez wątki klasy "AVThread" (w systemie Windows były wyraźne przerwy w dźwięku podczas pracy z innymi oknami),
+	- drobne poprawki z informacjami o zbuforowanych danych,
+
+Zmiany w QMPlay2 build 28VIII2012:
+	- możliwość buforowania paczek A/V dla strumieni internetowych (także informace o ilości dnych w buforze w formie bajtów i sekund),
+	- wątek "DemuxerThr" obsługuje zdarzenia z Qt, użyte są zdarzenia do wybudzenia wątku zamiast "bufferFullCond",
+	- przeglądarka YouTube korzysta ze strony "gdata.youtube.com",
+	- możliwość przewijania przy odtwarzaniu strumienia "rtsp",
+	- dodana obsługa formatu Amiga SoundFX (.sfx),
+	- dodany przycisk "Wyszukaj" w BrowserEngine,
+	- zmiana kursora na zajęty podczas pracy,
+	- możliwość pogłośnienia > 100%,
+	- wiele innych zmian i poprawek,
+
+Zmiany w QMPlay2 build 23VIII2012:
+	- drobne poprawki i ulepszenia,
+
+Zmiany w QMPlay2 build 22VIII2012:
+	- nowe skróty klawiszowe myszki (zoom, współczynnik proporcji),
+	- dodana możliwość odrwacania obrazu pionowo i poziomo,
+	- poprawa blokady wygaszacza ekranu w środowisku X11,
+	- poprawa stabilności,
+
+Zmiany w QMPlay2 build 13VIII2012:
+	- poprawa działania VSync w OpenGL (szczególnie dotyczy sterownika fglrx),
+	- dźwięk nie "przycina" w Windows podczas pracy z innymi oknami,
+	- poprawa synchronizacji obrazu z dźwiękiem po przewijaniu,
+	- mała poprawa wydajności dekodowania dźwięku,
+	- stosowanie ustawień podczas odtwarzania,
+	- poprawa działania YouTube,
+	- poprawa stabilności,
+
+Zmiany w QMPlay2 build 02VIII2012:
+	- wbudowanie libmodplug wraz z obsługą formatu J2B,
+
+Zmiany w QMPlay2 build 24VII2012:
+	- możliwość znajdowanie demuxera po rozszerzeniu pliku (jeżeli demuxer wymaga rozszerzeń pliku),
+	- poprawa stabilności programu,
+
+Zmiany w QMPlay2 build 23VII2012:
+	- wyłączone działanie OpenGL tylko wtedy, kiedy nie ma rozszerzenia "GL_ARB_texture_non_power_of_two",
+
+Zmiany w QMPlay2 build 22VII2012:
+	- zmiana szybkości dźwięku przy zmienionej szybkości odtwarzania,
+	- miksowanie kanałów i zmiana częstotliwości próbkowania,
+	- wybór różnych jakości dla YouTube,
+
+Zmiany w QMPlay2 build 21VII2012:
+	- obsługa muzyki w formacie MOD,
+	- poprawki w kodzie,
+
+Zmiany w QMPlay2 build 20VII2012:
+	- dokładniejsze ustawienie timera dla Windows - płynniejsze odtwarzanie,
+	- zmieny w kodzie - FFDemuxer i FFDecoder na Demuxer i Decoder,
+	- blokada wygaszacza ekranu w Windows,
+	- poprawiona Wrzuta.pl,
+	- poprawa błędów,
+
+Zmiany w QMPlay2 build 11VII2012:
+	- przystosowanie QMPlay2 do nowego FFMpeg (np. poprawne odtwarzanie MP3, poprawne przewijanie w długich filmach),
+	- poprawa działania YouTube,
+
+Zmiany w QMPlay2 build 04V2012:
+	- dodane OSD kiedy wyłączone zostaną napisy lub dźwięk,
+	- dodany krektor wideo (na razie działa tylko z XVideo),
+
+Zmiany w QMPlay2 build 27IV2012:
+	- poprawiłem wczytanie napisów przez wtyczkę "Classic Subtitles",
+	- drobne poprawy błędów,
+
+Zmiany w QMPlay2 build 21IV2012:
+	- poprawiona obsługa formatu APE,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 08IV2012:
+	- dodana obsługa napisów MicroDVD, TMP, MPL2 dla plików z rozszerzeniami (*.sub, *.txt),
+
+Zmiany w QMPlay2 build 07IV2012:
+	- jednakowa wielkość napisów dla wszystkich rozmiarów filmów ( nie obowiązuje ASS, chyba że wymuszono w opcjach ),
+	- poprawiona szybkość skalowania w QPainter dla niektórych wartości ZOOM'a,
+	- automatyczny odczyt czcionek zawartych w kontenerach filmów ( np. MKV ),
+	- lepsze wykrywanie napisów UTF-8 ( użycie BOM ),
+	- uaktualnione tłumaczenie,
+
+Zmiany w QMPlay2 build 06IV2012:
+	- poprawione drobne błędy,
+	- dodałem obsługe pluginów dekodowania napisów,
+	- dodałem obsługę napisów SRT ( jako plugin ),
+	- aktualizacja działania YouTube,
+
+Zmiany w QMPlay2 build 10III2012:
+	- poprawione drobne błędy,
+	- dodane nowe sygnały: toggle( play/stop ), next, prev, stop,
+
+Zmiany w QMPlay2 build 05II2012:
+	- możliwość dodawania utworów do listy poprzez sygnał,
+	- bardziej rozbudowane okno właściwości,
+	- poprawione działanie pluginu OpenGL,
+	- możliwość tworzenia zrzutów ekranu,
+	- menu kontekstowe w BrowserEngine,
+	- poprawione drobne błędy,
+
+Zmiany w QMPlay2 build 03II2012:
+	- możliwość dodawania adresu bezpośrednio np. z Wrzuty i YouTube, trochę bardziej rozbudowane okno dialogowe dodawania adresu,
+	- klikanie środkowym przyciskiem myszki w obszarze Wideo powoduje wciśnięcie przycisku play/pause.
+	- szybsze wczytywanie strumieni, które odtwarzają się zaraz po dodaniu do listy,
+	- odczyt tytułu i ikonek z YouTube i Wrzuty,
+	- poprawione drobne błędy,
+
+Zmiany w QMPlay2 build 23I2012:
+	- poprawa działania YouTube,
+	- drobne zmiany,
+
+Zmiany w QMPlay2 build 25XII2011:
+	- dodane skróty klawiszowe dla czyszczenia playlisty,
+	- poprawione odtwarzanie niektórych filmów ( błędne PTS/DTS ),
+	- usunięta kolumna "Rozmiar" w BrowserEngine,
+
+Zmiany w QMPlay2 build 24XII2011:
+	- użyłem nowej funkcji avcodec_decode_audio4(),
+	- pliki, które nie były obsługiwane przez FFMpeg są zamykane po próbie ich odtworzenia,
+
+Zmiany w QMPlay2 build 16XII2011:
+	- proprawa wykrywania długości muzyki/filmu dla nowego FFMpeg 0.9,
+	- poprawa błędu z aktualizacją skryptów w BrowserEngine ( np. podwójne wpisy ),
+
+Zmiany w QMPlay2 build 04XII2011:
+	- poprawa wyszukiwania na YouTube,
+	- możliwość ustawienia wielkości bufora dla strumieni internetowych ( domyślnie teraz jest 64KiB ),
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 12XI2011:
+	- wstępna obsługa YouTube,
+
+Zmiany w QMPlay2 build 09XI2011:
+	- drobne przyspieszenia w OpenGL,
+	- modyfikacja ikonki podczas odtwarzania utworu,
+
+Zmiany w QMPlay2 build 06X2011:
+	- poprawnie wyświetlany bitrate dźwięku,
+	- dokładniej pokazywany bitrate,
+	- w informacjach pokazywana jest nazwa pliku i ścieżka do pliku osobno,
+
+Zmiany w QMPlay2 build 02X2011:
+	- konwersja tagów napisów zwykłych z HTML do ASS przywrócona,
+	- poprawa płynności niektórych filmów ze złym PTS/DTS,
+
+Zmiany w QMPlay2 build 29IX2011:
+	- możliwość wyłączenia OSD,
+	- możliwość wyboru kodowania napisów,
+	- autowyszukiwanie napisów w katalogu,
+	- nieco poprawione wyświetlanie napisów w XVideo,
+
+Zmiany w QMPlay2 build 28IX2011:
+	- jest obsługa napisów w XVideo, ale nie nadaje się jeszcze do użytku,
+	- poprawiona natychmiastowa zamiana stylów ASS/SSA dla wczytanych napisów z pliku,
+	- drag 'n drop na okno "Wideo" pozwala no odtworzenie przeciąganego filmu lub wczytanie napisów,
+	- poprawione stosowanie własnych stylów dla napisów ASS/SSA,
+	- poprawione przyciski wybierania kolorów ( gorszy wygląd, lepsze działanie ),
+
+Zmiany w QMPlay2 build 27IX2011:
+	- opóźnienia napisów można wpisać w oknie dialogowym,
+	- zmiana skrótów klawiszowych dla zmiany opóźnień napisów,
+	- pozostawienie opóźnienia i wielkości napisów między plikami,
+	- poprawiona synchronizacja A/V i dekodowanie dźwięku w niektórych plikach,
+	- usunięte "StandardSubtitles" z klasy libASS ( oznacza to mniej kodu i lepsze wyświetlanie napisów innych niż ASS/SSA ),
+	- możliwość ustaiwienia wielkości odtwarzanego filmu jeżeli używane są napisy ASS/SSA,
+	- drobne poprawki,
+	- opcje napisów i OSD,
+
+Zmiany w QMPlay2 build 25IX2011:
+	- odczyt napisów ASS/SSA z osobnego pliku,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 23IX2011:
+	- odczytu napisów innych niż ASS,
+	- poprawa odczytu współczynnika proporcji,
+	- drobne poprawki w odświeżaniu "Informacji",
+
+Zmiany w QMPlay2 build 22IX2011:
+	- możliwość zmiany sposobu dekodowania wielowątkowego,
+	- pokazywany jest bitrate aktualnie odtwarzanego dźwięku i obrazu,
+	- poprawa odczytu napisów ASS,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 21IX2011:
+	- wyższa jakość napisów,
+	- OSD podczas przewijania filmu za pomocą strzałek w trybie pełnoekranowym,
+	- zmiana rozmiaru napisów,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 20IX2011:
+	- poprawione napisy ASS/SSA podczas przewijania do tyłu,
+	- filmy, których szerokość nie jest podzielna na 8 nie są już przycinane,
+	- poprawne wyświetlanie w czasie napisów typu pgssub,
+	 - poprawione drobne bugi w GUI w trybie pełnoekranowym,
+
+Zmiany w QMPlay2 build 19IX2011:
+	- obsługa napisów wzbogacona o np. pgssub i ASS/SSA,
+	- obsługa napisów w QPainter,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 16IX2011:
+	- podstawowa obsługa napisów ( nie ma np. obsługi napisów ASS, napisy odczytywane ) tylko we wtyczce OpenGL,
+	- poprawa działania pluginu OpenGL ( może nieprawidłowo działać z filmami w wysokich rozdzielczościach jeżeli w systemie jest jego stara wersja ),
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 13IX2011:
+	- zmieniony uchwyt okna z obrazem ( mniej błędów, np. ze sterownikami fglrx, łatwiejsze programowanie ),
+	- drobne poprawki błędów playlisty,
+	- w oknie "Wideo" widać czarno-niebieski gradient,
+	- głośność działa,
+
+Zmiany w QMPlay2 build 8IX2011:
+	- poprawione odtwarzanie filmów o nietypowych rozdzelczościach,
+	- wtyczka XVideo nie uruchamia się jeżei nie obsługuje tego sterownik,
+	- wtyczka PulseAudio nie uruchamia się jeżei nie jest ma uruchomionego serwera PA,
+
+Zmiany w QMPlay2 build 4IX2011:
+	- poprawiony błąd w opcjach OpenGL,
+	- poprawiona płynność filmów ( złe zaokrąglanie wartości PTS/DTS ),
+	- funkcja pomijania klatek ustawiana ręcznie zamiast automatycznie ( większa stabilność ),
+
+Zmiany w QMPlay2 build 23VIII2011:
+	- poprawiona zmiana strumienia video ( jeżeli w pliku jest ich więcej niż jeden ),
+	- wykrywanie domyślnego strumienia,
+	- poprawiona obsługa formatu APE,
+
+Zmiany w QMPlay2 build 20VIII2011:
+	- nowe podmenu ( Okno->Widgety ),
+	- klawisz "Escape" wychodzi z pełnego ekranu,
+	- dodałem nowe opcje dla pluginów,
+	- dodałem możliwość ustawiania kolejności ładowania modułów wyjścia obrazu,
+	- poprawiłem stabilność podczas przełączania plików,
+	- możliwość zatrzymania ładowania playlisty,
+	- poprawione przełączanie plików przy zwiniętym katalogu w playliście,
+	- podczas wychodzenia z pełnego ekranu ustawienie trybu kompaktowego jest pamiętane,
+
+Zmiany w QMPlay2 build 12VIII2011:
+	- każdy moduł wymaga teraz QtGui ( łatwiejsze programowanie, mniejsza możliwość rozbudowy np. o interfejs konsolowy ),
+	- poprawy w działaniu wtyczek wyjściowych video ( szczególnie XVideo i HWAccel-VAApi ),
+	- duże zmiany we wtyczkach wyjściowych ( np. inne zarządzanie oknem ),
+	- logo QMPlay2 w oknie video,
+	- poprawa przełączania plików ( teraz pluginy się już nie wyłączaniu po zakończeniu odtwarzania {bug} ),
+	- rozpoczęcie wprowadzania OSD ( np. napisy do filmów ),
+	- poprawa synchronizacji A/V - pomijania klatek ( błąd występował w poprzedniej wersji ),
+	- poprawna synchronizacja A/V podczas wielowątkowego dekodowania,
+
+Zmiany w QMPlay2 build 17VII2011:
+	- drobne poprawy błędów,
+	- nowa ikonka,
+
+Zmiany w QMPlay2 build 13VII2011:
+	- zmiana współczynnika proporcji na "A",
+	- tworzenie nowej grupy na "F7" ( nowy skrót klawiszowy ),
+	- resetowanie ustawień obrazu na "R",
+	- poprawy GUI i VAApi dla X11,
+	- możliwość resetowania HWAccel za każdym przełączeniem filmu ( przydatne np. dla vaapi-xvba ),
+	- poprawne zaznaczanie proporcji obrazu w menu po przełączeniu filmu,
+	- możliwość dekodowania w niskiej rozdzielczości ( nie działa z wszystkimi kodekami ),
+
+Zmiany w QMPlay2 build 05VII2011:
+	- wyrzucenie MSleep( int ), teraz jest Functions::s_wait( double ) ( w sekundach ),
+	- poprawki błędów, stabilności ( OpenGL, GUI, etc... ),
+	- troche dokładniejsze odmierzanie czasu dla Windows,
+
+Zmiany w QMPlay2 build 04VII2011:
+	- poprawione działanie OpenGL,
+	- lepsze pomijanie klatek,
+	- tymczasowo brak niektórych opcji FFMpeg ( są one wykrywane automatycznie ),
+	- możliwość wyłączenia pomijania klatek,
+	- usunięty wyciek pamięci podczas zamykania FFDemuxer ( występował w wersji 30VI2011 ),
+
+Zmiany w QMPlay2 build 30VI2011:
+	- nowa ikonka dla FFMpeg,
+	- QMPlay2 działa teraz tylko z wersją FFMpeg 0.7 lub nowszą,
+	- wtyczka wyjściowa dla PulseAudio,
+	- opcje: zapamiętywanie zoom i współczynnika proporcji między plikami wideo,
+
+Zmiany w QMPlay2 build 21VI2011:
+	- poprawione "Idź do odtwarzanego",
+	- poprawione czyszczenie filtra na playliście ( zaznaczony wpis jest widoczny po wyczyszczeniu ),
+	- poprawione wyszukiwanie domyślnego urządzenia w PortAudio,
+	- więcej opcji dla FFMpeg,
+	- drobne poprawki,
+
+Zmiany w QMPlay2 build 05VI2011:
+	- włączanie / wyłączanie dźwięku / obrazu,
+	- poprawki błędów i stabilności,
+	- możliwość wyłączenia wymuszania VSync w OpenGL,
+	- uaktualnione tłumaczenia,
+	- zajęta myszka podczas ładowania listy,
+
+Zmiany w QMPlay2 build 03VI2011:
+	- poprawa drobnych błędów,
+	- możliwość przeglądania wielu stron z wrzuty,
+	- pasek postępu ładowania wrzuty,
+
+Zmiany w QMPlay2 build 29V2011:
+	- automatyczne wykrywanie zmian proporcji,
+	- nowe rozszerzenie interfejsu: GUIExtensions,
+	- wstępna obsługa serwisu wrzuta.pl,
+
+Zmiany w QMPlay2 build 22V2011:
+	- drobne błędy poprawione,
+	- program pokazuje tytuł pliku,
+
+Zmiany w QMPlay2 build 21V2011:
+	- VAApi przeniesiony do osobnego modułu FFMpeg: VAApiWriter - nie zamyka teraz się za każdym otwarciem nowego pliku o tych samych parametrach,
+	- poprawione drobne błędy związane z wątkami, GUI i zamykaniem programu,
+	- VSync w OpenGL zawsze włączony dla wszystkich systemów,
+
+Zmiany w QMPlay2 build 17V2011:
+	- wiele poprawionych błędów w wątkach,
+	- poprawione wykrywanie istniejącego wpisu,
+	- poprawione przycinanie dźwięku w Windows,
+	- możliwość kolejkowania w trybie pełnoekranowym,
+
+Zmiany w QMPlay2 build 13V2011:
+	- nowe klasy i lepsze zarządzanie wątkami i przełączaniem plików/strumieni ( zamiast PlayThr: PlayClass, DemuxerThr, VideoThr, AudioThr ),
+	- możliwość włączenia / wyłączenia okienka CMD w Windows,
+	- Windows Vista i Windows 7 mają teraz domyślnie natywny styl,
+	- poprawne przełączanie plików na playliście,
+
+15 VIII 2010 - Rozpoczęcie prac nad QMPlay2

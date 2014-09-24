@@ -1,0 +1,10 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=[ StorageVolume.ignored == false AND OpticalDisc.availableContent & 'Audio' ]
+Type=Service
+Actions=open;
+
+[Desktop Action open]
+Name=Open with QMPlay2
+Name[pl]=Otwórz w QMPlay2
+Exec=QMPlay2 AudioCD://%d
+Icon=QMPlay2

@@ -1,0 +1,34 @@
+QMPlay2 compilation tutorial.
+
+You need (devel packages):
+	- qt4 or qt5 (including QtOpenGL and QtDBus on Linux/BSD)
+	- portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro")
+	- libasound (for ALSA module on Linux)
+	- pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro")
+	- ffmpeg >= 1.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample*)
+	- libva (vaapi) and libvdpau - only on X11
+	- DirectDraw SDK - only on Windows
+	- taglib >= 1.7 (>= 1.9 recommended) (you can disable it in "src/gui/gui.pro")
+	- libcdio and libcddb
+	- libass
+	- libxv
+
+*libavresample:
+	Uncomment last three lines in "src/qmplay2/qmplay2.pro"
+
+Running compilation script:
+	Windows:
+		- install MinGW, download and unpack libraries and headers needed to compilation,
+		- install Qt4,
+		- set environment PATH to qmake and gcc,
+		- run compile_win.bat
+	Linux/BSD:
+		- if you don't want to open Xterm or Konsole - "export NOTERM=1",
+		- if you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1",
+		- if you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5",
+		- run compile_unix,
+		- QMPlay2 is in "app" directory, you can move its contents into /usr directory if $SYSTEM_BUILD == 1
+
+Building package RPM, DEB or any other - look at ArchLinux PKGBUILD: http://aur.archlinux.org/packages/qm/qmplay2/PKGBUILD
+
+QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.

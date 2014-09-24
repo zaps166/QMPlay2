@@ -1,0 +1,188 @@
+#include <QMPlay2Core.hpp>
+
+#include <VideoFilters.hpp>
+#include <Functions.hpp>
+#include <Module.hpp>
+
+#include <QApplication>
+#include <QDateTime>
+#include <QLibrary>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
+#ifdef Q_OS_WIN
+	#include <QSettings>
+	#include <windows.h>
+	#include <shlwapi.h>
+#endif
+
+QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
+
+QMPlay2CoreClass::QMPlay2CoreClass()
+{
+	qmplay2Core = this;
+#ifdef Q_OS_WIN
+	logFilePath = QDir::tempPath() + "/QMPlay2.log";
+#else
+	logFilePath = QDir::tempPath() + "/QMPlay2." + QString( getenv( "USER" ) ) + ".log";
+#endif
+#ifdef Q_OS_UNIX
+	if ( getenv( "KDE_FULL_SESSION" ) )
+		UnixOpenCommand = "kfmclient exec ";
+	else if ( getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+		UnixOpenCommand = "gnome-open ";
+	else
+		UnixOpenCommand = "xdg-open ";
+#endif
+#ifdef Q_OS_MAC
+	UnixOpenCommand = "open ";
+#endif
+}
+
+void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir )
+{
+	if ( !settingsDir.isEmpty() )
+		return;
+
+	qmplay2Dir = Functions::cleanPath( _qmplay2Dir );
+	if ( _settingsDir.isEmpty() )
+	{
+#ifdef Q_OS_WIN
+		settingsDir = QFileInfo( QSettings( QSettings::IniFormat, QSettings::UserScope, QString() ).fileName() ).absolutePath() + "/QMPlay2/";
+#else
+		settingsDir = QDir::homePath() + "/.qmplay2/";
+#endif
+	}
+	else
+		settingsDir = Functions::cleanPath( _settingsDir );
+	QDir( settingsDir ).mkpath( "." );
+
+#ifdef Q_OS_WIN
+	timeBeginPeriod( 1 ); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
+#endif
+
+	if ( loadModules )
+	{
+		QStringList pluginsName;
+		QFileInfoList pluginsList;
+		QDir( settingsDir ).mkdir( "Modules" );
+		pluginsList += QDir( settingsDir + "Modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+		pluginsList += QDir( qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+		foreach ( QFileInfo fInfo, pluginsList )
+			if ( QLibrary::isLibrary( fInfo.filePath() ) )
+			{
+				QLibrary lib( fInfo.filePath() );
+				if ( !lib.load() )
+					log( lib.errorString(), AddTimeToLog | ErrorLog | SaveLog );
+				else
+				{
+					typedef Module *( *QMPlay2PluginInstance )();
+					QMPlay2PluginInstance qmplay2PluginInstance = ( QMPlay2PluginInstance )lib.resolve( "qmplay2PluginInstance" );
+					if ( !qmplay2PluginInstance )
+						log( fInfo.fileName() + " - " + tr( "nieprawidłowa biblioteka QMPlay2" ), AddTimeToLog | ErrorLog | SaveLog );
+					else
+					{
+						Module *pluginInstance = qmplay2PluginInstance();
+						if ( pluginInstance && !pluginsName.contains( pluginInstance->name() ) )
+						{
+							pluginsName += pluginInstance->name();
+							pluginsInstance += pluginInstance;
+						}
+					}
+				}
+			}
+	}
+
+	VideoFilters::init();
+
+	settings = new Settings( "QMPlay2" );
+
+	connect( this, SIGNAL( restoreCursor() ), this, SLOT( restoreCursorSlot() ) );
+	connect( this, SIGNAL( waitCursor() ), this, SLOT( waitCursorSlot() ) );
+	connect( this, SIGNAL( busyCursor() ), this, SLOT( busyCursorSlot() ) );
+}
+void QMPlay2CoreClass::quit()
+{
+	if ( settingsDir.isEmpty() )
+		return;
+	while ( !pluginsInstance.isEmpty() )
+		delete pluginsInstance.takeFirst();
+	qmplay2Dir.clear();
+	settingsDir.clear();
+#ifdef Q_OS_WIN
+	timeEndPeriod( 1 );
+#endif
+	delete settings;
+}
+
+QIcon QMPlay2CoreClass::getIconFromTheme( const QString &icon )
+{
+	return settings->getBool( "IconsFromTheme", true ) ? QIcon::fromTheme( icon, QIcon( ":/Icons/" + icon ) ) : QIcon( ":/Icons/" + icon );
+}
+
+bool QMPlay2CoreClass::run( const QString &command, const QString &args )
+{
+#ifdef Q_WS_WIN
+	if ( !command.isEmpty() )
+		return ( long )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
+#else
+	if ( !command.isEmpty() )
+	{
+		if ( args.isEmpty() && !UnixOpenCommand.isEmpty() )
+			return !system( QString( UnixOpenCommand + "\"" + command + "\" &" ).toLocal8Bit() );
+		else if ( !args.isEmpty() )
+			return !system( QString( "\"" + command + "\" " + args + " &" ).toLocal8Bit() );
+	}
+#endif
+	return false;
+}
+
+void QMPlay2CoreClass::log( const QString &txt, int logFlags )
+{
+	QString date;
+	if ( logFlags & LogOnce )
+	{
+		if ( logs.contains( txt ) )
+			return;
+		else
+			logs.append( txt );
+	}
+	if ( logFlags & AddTimeToLog )
+		date = "[" + QDateTime::currentDateTime().toString( "dd MMM yyyy hh:mm:ss" ) + "] ";
+	if ( logFlags & InfoLog )
+	{
+		fprintf( stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data() );
+		fflush( stdout );
+	}
+	else if ( logFlags & ErrorLog )
+	{
+		fprintf( stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data() );
+		fflush( stderr );
+	}
+	if ( logFlags & SaveLog )
+	{
+		QFile logFile( logFilePath );
+		if ( logFile.open( QFile::Append ) )
+		{
+			logFile.write( date.toUtf8() + txt.toUtf8() + '\n' );
+			logFile.close();
+		}
+		else
+			log( tr( "Nie można otworzyć pliku dziennika" ), ErrorLog | AddTimeToLog );
+	}
+	if ( !( logFlags & DontShowInGUI ) )
+		emit logSignal( txt );
+}
+
+void QMPlay2CoreClass::restoreCursorSlot()
+{
+	qApp->restoreOverrideCursor();
+}
+void QMPlay2CoreClass::waitCursorSlot()
+{
+	qApp->setOverrideCursor( QCursor( Qt::WaitCursor ) );
+}
+void QMPlay2CoreClass::busyCursorSlot()
+{
+	qApp->setOverrideCursor( QCursor( Qt::BusyCursor ) );
+}
