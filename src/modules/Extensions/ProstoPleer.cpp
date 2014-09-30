@@ -288,10 +288,14 @@ void ProstoPleerW::netFinished( QNetworkReply *reply )
 						if ( fSize > 0.0f )
 						{
 							fSize *= 8.0f * 1024.0f;
-							bitrate = QString::number( ( int )( fSize / time ) ) + "kbps";
+							bitrate = QString( "%1kbps" ).arg( ( int )( fSize / time ), 3 );
 						}
 					}
 				}
+				else if ( bitrate.length() == 6 )
+					bitrate.prepend( " " );
+				else if ( bitrate.length() == 5 )
+					bitrate.prepend( "  " );
 				tWI->setText( 3, bitrate );
 
 				offset += regexp.matchedLength();

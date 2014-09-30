@@ -1,4 +1,4 @@
-Zmiany w QMPlay2 build 14.09.24:
+Zmiany w QMPlay2 build 14.09.30:
 	- przywrócone działanie napisów ASS z kontenera Matroska w FFMpeg 2.4.x,
 	- obsługa zmiany metadanych przy użyciu FFMpeg 2.4.x,
 	- możliwość pamiętania ustawień korektora wideo,
