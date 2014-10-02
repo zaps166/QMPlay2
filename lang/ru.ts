@@ -614,7 +614,7 @@
     </message>
     <message>
         <source>Wydajność będzie niska</source>
-        <translation type="unfinished"></translation>
+        <translation>Производительность будет низкой</translation>
     </message>
 </context>
 <context>
@@ -1672,7 +1672,7 @@
     </message>
     <message>
         <source>Następna strona</source>
-        <translation type="unfinished"></translation>
+        <translation>Следующая страница</translation>
     </message>
     <message>
         <source>Błąd połączenia</source>
@@ -1680,11 +1680,11 @@
     </message>
     <message>
         <source>Spróbuj ponownie później</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторите попытку позже</translation>
     </message>
     <message>
         <source>Wyszukaj w Prostopleer</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск на prostopleer</translation>
     </message>
 </context>
 <context>
@@ -2045,7 +2045,7 @@
     </message>
     <message>
         <source>Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Локальный размер буфера (минимальное количество пакетов А/В)</translation>
+        <translation>Размер локального буфера (минимальное количество пакетов А/В)</translation>
     </message>
     <message>
         <source>Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)</source>
@@ -2201,7 +2201,7 @@
     </message>
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить настройки видео эквалайзера</translation>
     </message>
 </context>
 <context>
