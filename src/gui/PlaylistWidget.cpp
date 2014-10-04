@@ -563,7 +563,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 					QMPlay2GUI.setCurrentPth( dUrl );
 					saveCurrPth = true;
 				}
-				QStringList d_urls = QDir( dUrl ).entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
+				QStringList d_urls = QDir( dUrl ).entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst );
 				if ( d_urls.size() )
 				{
 					url = Functions::cleanPath( url );

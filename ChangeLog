@@ -1,7 +1,8 @@
-Zmiany w QMPlay2 build 14.10.02:
+Zmiany w QMPlay2 build 14.10.04:
 	- przywrócone działanie napisów ASS z kontenera Matroska w FFMpeg 2.4.x,
 	- obsługa zmiany metadanych przy użyciu FFMpeg 2.4.x,
 	- możliwość pamiętania ustawień korektora wideo,
+	- sortowanie dodawanych katalogów do playlisty,
 	- poprawa działania YouTube,
 	- dodana obsługa pleer.com,
 	- poprawa działania OpenGL,
