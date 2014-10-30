@@ -99,11 +99,11 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 
 		close();
 
-		QString choosedDevName = devName;
+		QString chosenDevName = devName;
 		if ( autoFindMultichannelDevice && channels > 2 )
 		{
 			bool mustAutoFind = true, forceStereo = false;
-			if ( !snd_pcm_open( &snd, choosedDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 ) )
+			if ( !snd_pcm_open( &snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 ) )
 			{
 				if ( snd_pcm_type( snd ) == SND_PCM_TYPE_HW )
 				{
@@ -133,10 +133,10 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 					newDevName = "surround51";
 				else
 					newDevName = "surround71";
-				if ( !newDevName.isEmpty() && newDevName != choosedDevName )
+				if ( !newDevName.isEmpty() && newDevName != chosenDevName )
 				{
 					if ( ALSACommon::getDevices().first.contains( newDevName ) )
-						choosedDevName = newDevName;
+						chosenDevName = newDevName;
 					else if ( forceStereo )
 					{
 						channels = 2;
@@ -145,17 +145,17 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 				}
 			}
 		}
-		if ( !choosedDevName.isEmpty() )
+		if ( !chosenDevName.isEmpty() )
 		{
-			bool sndOpen = !snd_pcm_open( &snd, choosedDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 );
-			if ( devName != choosedDevName )
+			bool sndOpen = !snd_pcm_open( &snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 );
+			if ( devName != chosenDevName )
 			{
 				if ( sndOpen )
-					QMPlay2Core.logInfo( "ALSA :: " + devName + "\" -> \"" + choosedDevName + "\"" );
+					QMPlay2Core.logInfo( "ALSA :: " + devName + "\" -> \"" + chosenDevName + "\"" );
 				else
 				{
 					sndOpen = !snd_pcm_open( &snd, devName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 );
-					QMPlay2Core.logInfo( "ALSA :: " + tr( "Nie można otworzyć" ) + " \"" + choosedDevName + "\", " + tr( "powrót do" ) + " \"" + devName + "\"" );
+					QMPlay2Core.logInfo( "ALSA :: " + tr( "Nie można otworzyć" ) + " \"" + chosenDevName + "\", " + tr( "powrót do" ) + " \"" + devName + "\"" );
 				}
 			}
 			if ( sndOpen )

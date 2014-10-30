@@ -151,7 +151,7 @@ void AddThr::setData( const QStringList &_urls, QTreeWidgetItem *_par, bool _loa
 }
 void AddThr::setData( const QString &pth, QTreeWidgetItem *par ) //dla synchronizacji
 {
-	QStringList d_urls = QDir( pth ).entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
+	QStringList d_urls = QDir( pth ).entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst );
 	for ( int i = d_urls.size() - 1 ; i >= 0 ; --i )
 		d_urls[ i ] = pth + d_urls[ i ];
 	setData( d_urls, par, false, true );

@@ -1,3 +1,6 @@
+Zmiany w QMPlay2 build 14.10.30:
+	- drobne poprawy błędów,
+
 Zmiany w QMPlay2 build 14.10.07:
 	- przywrócone działanie napisów ASS z kontenera Matroska w FFMpeg 2.4.x,
 	- obsługa zmiany metadanych przy użyciu FFMpeg 2.4.x,

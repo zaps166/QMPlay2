@@ -66,7 +66,12 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	devicesB = new QComboBox;
 	for ( int i = 0 ; i < devicesList.first.count() ; ++i )
 	{
-		devicesB->addItem( devicesList.second[ i ] + " (" + devicesList.first[ i ] + ")", devicesList.first[ i ] );
+		QString itemText = devicesList.second[ i ];
+		if ( itemText.isEmpty() )
+			itemText += devicesList.first[ i ];
+		else
+			itemText += " (" + devicesList.first[ i ] + ")";
+		devicesB->addItem( itemText, devicesList.first[ i ] );
 		if ( devName == devicesList.first[ i ] )
 			devicesB->setCurrentIndex( i );
 	}
