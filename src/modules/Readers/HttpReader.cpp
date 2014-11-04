@@ -192,6 +192,7 @@ bool HttpReader::conn( quint8 followLocation, qint64 range )
 	QByteArray query;
 	query += "GET " + path + " HTTP/1.1\r\n";
 	query += "Host: " + url.host() + ( port == 80 ? "" : ":" + QString::number( port ) ) + "\r\n";
+	query += "User-Agent: QMPlay2\r\n";
 	if ( range )
 		query += "Range: bytes=" + QString::number( range ) + "-\r\n";
 	query += "Connection: close\r\n";
