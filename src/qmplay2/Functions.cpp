@@ -68,7 +68,7 @@ QString Functions::Url( QString url, const QString &pth )
 QString Functions::getUrlScheme( const QString &url )
 {
 	int idx = url.indexOf( ':' );
-	if ( idx > -1 )
+	if ( idx > -1 && url[ 0 ] != '/' )
 		return url.left( idx );
 	return QString();
 }
@@ -329,14 +329,11 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 
 void Functions::ImageEQ( int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount )
 {
-	for ( unsigned i = 0 ; i < bitsCount ; ++i )
+	for ( unsigned i = 0 ; i < bitsCount ; i += 4 )
 	{
-		int c = imageBits[ i ] * Contrast / 100 + Brightness;
-		if ( c > 255 )
-			c = 255;
-		else if ( c < 0 )
-			c = 0;
-		imageBits[ i ] = c;
+		imageBits[ i+0 ] = clip8( imageBits[ i+0 ] * Contrast / 100 + Brightness );
+		imageBits[ i+1 ] = clip8( imageBits[ i+1 ] * Contrast / 100 + Brightness );
+		imageBits[ i+2 ] = clip8( imageBits[ i+2 ] * Contrast / 100 + Brightness );
 	}
 }
 int Functions::scaleEQValue( int val, int min, int max )

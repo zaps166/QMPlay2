@@ -73,6 +73,10 @@ namespace Functions
 	{
 		return ( val + alignment - 1 ) & ~( alignment - 1 );
 	}
+	static inline quint8 clip8( int val )
+	{
+		return val > 255 ? ( quint8 )255 : ( val < 0 ? ( quint8 )0 : val );
+	}
 
 	void getImageSize( const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = NULL, int *Y = NULL, QRect *dstRect = NULL, const int *vidW = NULL, const int *vidH = NULL, QRect *srcRect = NULL );
 
