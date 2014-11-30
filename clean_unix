@@ -23,7 +23,7 @@ if [ ! -z $wybor ]; then
 		rm -rf `find . | grep .Release`
 		rm -rf `find . | grep .Debug`
 		rm -rf `find . | grep build`
-		rm -rf app
+		rm -rf app x86_64-w64-mingw32 i686-w64-mingw32
 
 		echo Cleaned!
 		if [ ! -z $inKonsole ]; then

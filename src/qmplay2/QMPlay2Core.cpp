@@ -124,7 +124,7 @@ bool QMPlay2CoreClass::run( const QString &command, const QString &args )
 {
 #ifdef Q_WS_WIN
 	if ( !command.isEmpty() )
-		return ( long )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
+		return ( quintptr )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
 #else
 	if ( !command.isEmpty() )
 	{

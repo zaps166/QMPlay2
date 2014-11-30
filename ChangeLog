@@ -1,5 +1,6 @@
 Zmiany w QMPlay2 build 14.11.30:
-	- Dodany "User-Agent" dla połączeń HTTP (ProstoPleer znowu działa),
+	- dodany "User-Agent" dla połączeń HTTP (ProstoPleer znowu działa),
+	- poprawa kompilacji dla Windows x86-64,
 	- drobne poprawy błędów,
 
 Zmiany w QMPlay2 build 14.10.07:

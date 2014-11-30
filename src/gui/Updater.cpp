@@ -106,7 +106,10 @@ void Updater::infoFinished()
 			{
 				QString FileURL;
 #if defined Q_OS_WIN && defined QMPLAY2_CPU_X86
-				FileURL = info.value( "Win32" ).toString();
+				if ( sizeof( void * ) == 8 )
+					FileURL = info.value( "Win64" ).toString();
+				if ( FileURL.isEmpty() ) //32bit or 64bit does not exists on server
+					FileURL = info.value( "Win32" ).toString();
 #elif defined Q_OS_LINUX && defined QMPLAY2_CPU_X86
 				if ( sizeof( void * ) == 8 )
 					FileURL = info.value( "Linux64" ).toString();

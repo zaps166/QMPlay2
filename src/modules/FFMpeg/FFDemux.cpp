@@ -128,7 +128,7 @@ FFDemux::~FFDemux()
 		{
 			AVStream *stream = streams[ i ];
 			if ( stream->codec )
-				switch ( ( unsigned long )stream->codec->opaque )
+				switch ( ( quintptr )stream->codec->opaque )
 				{
 					case 1:
 						stream->codec->extradata = NULL;

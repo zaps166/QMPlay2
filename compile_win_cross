@@ -1,9 +1,16 @@
 #!/bin/bash
 
-i686-w64-mingw32-lrelease QMPlay2.pro &&
-mkdir -p app/lang &&
-mv lang/*.qm app/lang &&
-i686-w64-mingw32-qmake && 
-make -j8 && 
-rm app/*.a && 
-rm app/modules/*.a
+_architectures="i686-w64-mingw32 x86_64-w64-mingw32"
+
+for _arch in ${_architectures}; do
+	$_arch-lrelease QMPlay2.pro &&
+	mkdir -p app/lang &&
+	mv lang/*.qm app/lang &&
+	$_arch-qmake && 
+	make -j8 && 
+	rm app/*.a && 
+	rm app/modules/*.a &&
+	$_arch-strip -s `find app`;true
+	mv app $_arch &&
+	make distclean
+done
