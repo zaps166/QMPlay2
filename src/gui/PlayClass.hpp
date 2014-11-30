@@ -131,7 +131,7 @@ private:
 		inline void enqueue( const Packet &packet )
 		{
 			lock();
-			QLinkedList< Packet >::append( packet );
+			append( packet );
 			_size += packet.data.size();
 			_duration += packet.duration;
 			unlock();
@@ -139,7 +139,7 @@ private:
 
 		inline Packet dequeue()
 		{
-			Packet packet = QLinkedList< Packet >::takeFirst();
+			Packet packet = takeFirst();
 			_size -= packet.data.size();
 			_duration -= packet.duration;
 			return packet;

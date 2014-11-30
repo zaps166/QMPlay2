@@ -232,10 +232,9 @@ BOOL CSoundFile::ReadMod(const BYTE *lpStream, DWORD dwMemLength)
 		if (psmp->nLength < 4) psmp->nLength = 0;
 		if (psmp->nLength)
 		{
-			UINT derr = 0;
-			if (psmp->nLoopStart >= psmp->nLength) { psmp->nLoopStart = psmp->nLength-1; derr|=1; }
-			if (psmp->nLoopEnd > psmp->nLength) { psmp->nLoopEnd = psmp->nLength; derr |= 1; }
-			if (psmp->nLoopStart > psmp->nLoopEnd) derr |= 1;
+			if (psmp->nLoopStart >= psmp->nLength) { psmp->nLoopStart = psmp->nLength-1; }
+			if (psmp->nLoopEnd > psmp->nLength) { psmp->nLoopEnd = psmp->nLength; }
+
 			if ((psmp->nLoopStart > psmp->nLoopEnd) || (psmp->nLoopEnd <= 8)
 			 || (psmp->nLoopEnd - psmp->nLoopStart <= 4))
 			{

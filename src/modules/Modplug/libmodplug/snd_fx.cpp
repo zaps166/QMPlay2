@@ -19,7 +19,7 @@
 DWORD CSoundFile::GetLength(BOOL bAdjust, BOOL bTotal)
 //----------------------------------------------------
 {
-	UINT dwElapsedTime=0, nRow=0, nCurrentPattern=0, nNextPattern=0, nPattern=Order[0];
+	UINT dwElapsedTime=0, nRow=0, nCurrentPattern=0, nNextPattern=0, nPattern=0;
 	UINT nMusicSpeed=m_nDefaultSpeed, nMusicTempo=m_nDefaultTempo, nNextRow=0;
 	UINT nMaxRow = 0, nMaxPattern = 0;
 	LONG nGlbVol = m_nDefaultGlobalVolume, nOldGlbVolSlide = 0;
@@ -38,12 +38,10 @@ DWORD CSoundFile::GetLength(BOOL bAdjust, BOOL bTotal)
 	memset(oldparam, 0, sizeof(oldparam));
 	memset(chnvols, 64, sizeof(chnvols));
 	memset(samples, 0, sizeof(samples));
-	for (UINT icv=0; icv<m_nChannels; icv++) chnvols[icv] = ChnSettings[icv].nVolume;
+	for (UINT icv=0; icv<m_nChannels; icv++)
+		chnvols[icv] = ChnSettings[icv].nVolume;
 	nMaxRow = m_nNextRow;
 	nMaxPattern = m_nNextPattern;
-	nCurrentPattern = nNextPattern = 0;
-	nPattern = Order[0];
-	nRow = nNextRow = 0;
 	for (;;)
 	{
 		UINT nSpeedCount = 0;

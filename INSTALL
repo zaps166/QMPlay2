@@ -1,7 +1,7 @@
 QMPlay2 compilation tutorial.
 
 You need (devel packages):
-	- qt4 or qt5 (including QtOpenGL and QtDBus on Linux/BSD)
+	- qt4 or qt5 (including QtOpenGL, OpenSSL(for https) and QtDBus on Linux/BSD)
 	- portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro")
 	- libasound (for ALSA module on Linux)
 	- pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro")
@@ -12,16 +12,18 @@ You need (devel packages):
 	- libcdio and libcddb
 	- libass
 	- libxv
-
 *libavresample:
 	Uncomment last three lines in "src/qmplay2/qmplay2.pro"
 
 Running compilation script:
-	Windows:
-		- install MinGW, download and unpack libraries and headers needed to compilation,
-		- install Qt4,
-		- set environment PATH to qmake and gcc,
-		- run compile_win.bat
+	Windows (Cross-compile):
+		- install all required MinGW packages (I recommend ArchLinux unofficial MinGW repository),
+		- some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own,
+		- notice that QMPlay2 uses static linking for some libraries,
+		- run compile_win_cross
+		You can also compile it on Windows, but you must build toolchain for your own!
+		I'm using my own PKGBUILDs for many MinGW libraries.
+		Visual Studio can't compile QMPlay2.
 	Linux/BSD:
 		- if you don't want to open Xterm or Konsole - "export NOTERM=1",
 		- if you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1",

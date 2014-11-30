@@ -1,0 +1,9 @@
+#!/bin/bash
+
+i686-w64-mingw32-lrelease QMPlay2.pro &&
+mkdir -p app/lang &&
+mv lang/*.qm app/lang &&
+i686-w64-mingw32-qmake && 
+make -j8 && 
+rm app/*.a && 
+rm app/modules/*.a

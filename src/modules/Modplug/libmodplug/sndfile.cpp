@@ -768,11 +768,11 @@ UINT CSoundFile::GetSaveFormats() const
 {
 	UINT n = 0;
 	if ((!m_nSamples) || (!m_nChannels) || (m_nType == MOD_TYPE_NONE)) return 0;
-	switch(m_nType)
-	{
-	case MOD_TYPE_MOD:	n |= MOD_TYPE_MOD;
-	case MOD_TYPE_S3M:	n |= MOD_TYPE_S3M;
-	}
+	if (m_nType & MOD_TYPE_MOD)
+		n |= MOD_TYPE_MOD;
+	if (m_nType & MOD_TYPE_S3M)
+		n |= MOD_TYPE_S3M;
+	// Can always save to XM & IT
 	n |= MOD_TYPE_XM | MOD_TYPE_IT;
 	if (!m_nInstruments)
 	{
@@ -787,7 +787,8 @@ UINT CSoundFile::GetSampleName(UINT nSample,LPSTR s) const
 //--------------------------------------------------------
 {
         char sztmp[40] = "";      // changed from CHAR
-	memcpy(sztmp, m_szNames[nSample],32);
+	if (nSample < MAX_SAMPLES)
+		memcpy(sztmp, m_szNames[nSample], 32);
 	sztmp[31] = 0;
 	if (s) strcpy(s, sztmp);
 	return strlen(sztmp);
@@ -1759,8 +1760,11 @@ void CSoundFile::CheckCPUUsage(UINT nCPU)
 BOOL CSoundFile::SetPatternName(UINT nPat, LPCSTR lpszName)
 //---------------------------------------------------------
 {
-        char szName[MAX_PATTERNNAME] = "";   // changed from CHAR
+        char szName[MAX_PATTERNNAME] = "";
+	// check input arguments
 	if (nPat >= MAX_PATTERNS) return FALSE;
+	if (lpszName == NULL) return(FALSE);
+
 	if (lpszName) lstrcpyn(szName, lpszName, MAX_PATTERNNAME);
 	szName[MAX_PATTERNNAME-1] = 0;
 	if (!m_lpszPatternNames) m_nPatternNames = 0;
@@ -1768,7 +1772,7 @@ BOOL CSoundFile::SetPatternName(UINT nPat, LPCSTR lpszName)
 	{
 		if (!lpszName[0]) return TRUE;
 		UINT len = (nPat+1)*MAX_PATTERNNAME;
-		char *p = new char[len];   // changed from CHAR
+		char *p = new char[len];
 		if (!p) return FALSE;
 		memset(p, 0, len);
 		if (m_lpszPatternNames)

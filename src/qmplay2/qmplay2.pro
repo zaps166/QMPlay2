@@ -7,8 +7,9 @@ TARGET = qmplay2
 win32: DESTDIR = ../../app
 else: DESTDIR = ../../app/lib
 
-LIBS += -lass -lswscale -lswresample -lavutil
-win32: LIBS += -lwinmm -lshell32
+LIBS += -lswscale -lswresample -lavutil
+win32: LIBS += -Wl,-Bstatic -lass -lfontconfig -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
+else: LIBS += -lass
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

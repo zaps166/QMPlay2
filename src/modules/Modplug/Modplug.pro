@@ -9,6 +9,7 @@ else: DESTDIR = ../../../app/share/qmplay2/modules
 win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
 LIBS += -lqmplay2
+win32: LIBS += -lz
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

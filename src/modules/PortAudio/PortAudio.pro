@@ -8,8 +8,9 @@ else: DESTDIR = ../../../app/share/qmplay2/modules
 
 win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
-LIBS += -lqmplay2 -lportaudio
-win32: LIBS += -lwinmm -luuid
+LIBS += -lqmplay2
+win32: LIBS += -Wl,-Bstatic -lportaudio -Wl,-Bdynamic -lwinmm -luuid
+else: LIBS += -lportaudio
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

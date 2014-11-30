@@ -291,7 +291,12 @@ BOOL CSoundFile::ReadS3M(const BYTE *lpStream, DWORD dwMemLength)
 	for (UINT iSmp=1; iSmp<=insnum; iSmp++)
 	{
 		UINT nInd = ((DWORD)ptr[iSmp-1])*16;
-		if ((!nInd) || (nInd + 0x50 > dwMemLength)) continue;
+		if ((!nInd) || (nInd + 0x50 > dwMemLength)) {
+			// initialize basic variables.
+			insflags[iSmp-1] = 0;
+			inspack[iSmp-1] = 0;
+			continue;
+		}
 		S3MSAMPLESTRUCT pSmp;
 		memcpy(&pSmp, lpStream+nInd, 0x50);
 		memcpy(Ins[iSmp].name, &pSmp.dosname, 12);

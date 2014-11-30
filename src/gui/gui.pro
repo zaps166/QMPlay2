@@ -36,4 +36,8 @@ SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp Info
 DEFINES += QMPlay2_TagEditor
 HEADERS += TagEditor.hpp
 SOURCES += TagEditor.cpp
-LIBS += -ltag
+win32 {
+	DEFINES += TAGLIB_STATIC
+	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
+}
+else: LIBS += -ltag

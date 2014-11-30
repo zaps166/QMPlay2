@@ -20,6 +20,8 @@ read wybor
 if [ ! -z $wybor ]; then
 	if [ $wybor == 'Y' ] || [ $wybor == 'y' ]; then
 		rm -rf `find . | grep Makefile`
+		rm -rf `find . | grep .Release`
+		rm -rf `find . | grep .Debug`
 		rm -rf `find . | grep build`
 		rm -rf app
 

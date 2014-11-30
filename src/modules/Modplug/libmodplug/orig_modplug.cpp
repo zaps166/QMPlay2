@@ -240,7 +240,7 @@ unsigned int ModPlug_InstrumentName(ModPlugFile* file,unsigned int qual,char* bu
 }
 
 ModPlugNote* ModPlug_GetPattern(ModPlugFile* file,int pattern,unsigned int* numrows) {
-	if ( pattern<MAX_PATTERNS ) {
+	if ( pattern<MAX_PATTERNS && pattern >= 0) {
 		if (file->mSoundFile.Patterns[pattern]) {
 			if (numrows) *numrows=(unsigned int)file->mSoundFile.PatternSize[pattern];
 			return (ModPlugNote*)file->mSoundFile.Patterns[pattern];
@@ -258,7 +258,9 @@ void ModPlug_Seek(ModPlugFile* file, int millisecond)
 	if(millisecond > maxtime)
 		millisecond = maxtime;
 	maxpos = file->mSoundFile.GetMaxPosition();
-	postime = (float)maxpos / (float)maxtime;
+	postime = 0.0f;
+	if (maxtime != 0.0f)
+		postime = (float)maxpos / (float)maxtime;
 
 	file->mSoundFile.SetCurrentPos((int)(millisecond * postime));
 }

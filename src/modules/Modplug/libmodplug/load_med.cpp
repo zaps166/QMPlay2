@@ -100,7 +100,7 @@ typedef struct tagMMD0SAMPLE
 typedef struct tagMMDSAMPLEHEADER
 {
 	DWORD length;     // length of *one* *unpacked* channel in *bytes*
-	WORD type;   
+	WORD type;
 				// if non-negative
 					// bits 0-3 reserved for multi-octave instruments, not supported on the PC
 					// 0x10: 16 bit (otherwise 8 bit)
@@ -172,7 +172,7 @@ typedef struct tagMMD2SONGHEADER
 	BYTE numsamples;	// # of samples (max 63)
 } MMD2SONGHEADER;
 
-// For MMD0 the note information is held in 3 bytes, byte0, byte1, byte2.  For reference we 
+// For MMD0 the note information is held in 3 bytes, byte0, byte1, byte2.  For reference we
 // number the bits in each byte 0..7, where 0 is the low bit.
 // The note is held as bits 5..0 of byte0
 // The instrument is encoded in 6 bits,  bits 7 and 6 of byte0 and bits 7,6,5,4 of byte1
@@ -245,7 +245,7 @@ typedef struct tagMMD0EXP
 	DWORD annotxt;
 	DWORD annolen;
 	DWORD iinfo;			// Instrument names
-	WORD i_ext_entries;	
+	WORD i_ext_entries;
 	WORD i_ext_entrsz;
 	DWORD jumpmask;
 	DWORD rgbtable;
@@ -661,7 +661,7 @@ BOOL CSoundFile::ReadMed(const BYTE *lpStream, DWORD dwMemLength)
 				nSections = 0;
 			}
 			UINT pseq = 0;
-			
+
 			if ((playseqtable) && (playseqtable < dwMemLength) && (nplayseq*4 < dwMemLength - playseqtable))
 			{
 				pseq = bswapBE32(((LPDWORD)(lpStream+playseqtable))[nplayseq]);
@@ -691,7 +691,7 @@ BOOL CSoundFile::ReadMed(const BYTE *lpStream, DWORD dwMemLength)
 	if (pmex)
 	{
 		// Channel Split
-		if ((m_nChannels == 4) && (pmsh->flags & 0x40))
+		if ((m_nChannels == 4) && (pmsh->flags & MMD_FLAG_8CHANNEL))
 		{
 			for (UINT i8ch=0; i8ch<4; i8ch++)
 			{
@@ -726,8 +726,8 @@ BOOL CSoundFile::ReadMed(const BYTE *lpStream, DWORD dwMemLength)
 			UINT ientries = bswapBE16(pmex->i_ext_entries);
 			UINT ientrysz = bswapBE16(pmex->i_ext_entrsz);
 
-			if ((iinfoptr) && (ientrysz < 256) && 
-			 (ientries*ientrysz < dwMemLength) && 
+			if ((iinfoptr) && (ientrysz < 256) &&
+			 (ientries*ientrysz < dwMemLength) &&
 			 (iinfoptr < dwMemLength - (ientries*ientrysz)))
 			{
 				LPCSTR psznames = (LPCSTR)(lpStream + iinfoptr);

@@ -56,12 +56,12 @@ BOOL CSoundFile::ReadMTM(LPCBYTE lpStream, DWORD dwMemLength)
 	if ((strncmp(pmh->id, "MTM", 3)) || (pmh->numchannels > 32)
 	 || (pmh->numsamples >= MAX_SAMPLES) || (!pmh->numsamples)
 	 || (!pmh->numtracks) || (!pmh->numchannels)
-	 || (!pmh->lastpattern) || (pmh->lastpattern > MAX_PATTERNS)) 
+	 || (!pmh->lastpattern) || (pmh->lastpattern >= MAX_PATTERNS))
 		return FALSE;
 	strncpy(m_szNames[0], pmh->songname, 20);
 	m_szNames[0][20] = 0;
 	if (dwMemPos + 37*pmh->numsamples + 128 + 192*pmh->numtracks
-	 + 64 * (pmh->lastpattern+1) + pmh->commentsize >= dwMemLength) 
+	 + 64 * (pmh->lastpattern+1) + pmh->commentsize >= dwMemLength)
 		return FALSE;
 	m_nType = MOD_TYPE_MTM;
 	m_nSamples = pmh->numsamples;
@@ -80,9 +80,9 @@ BOOL CSoundFile::ReadMTM(LPCBYTE lpStream, DWORD dwMemLength)
 			Ins[i].nLength = len;
 			Ins[i].nLoopStart = pms->reppos;
 			Ins[i].nLoopEnd = pms->repend;
-			if (Ins[i].nLoopEnd > Ins[i].nLength) 
+			if (Ins[i].nLoopEnd > Ins[i].nLength)
 				Ins[i].nLoopEnd = Ins[i].nLength;
-			if (Ins[i].nLoopStart + 4 >= Ins[i].nLoopEnd) 
+			if (Ins[i].nLoopStart + 4 >= Ins[i].nLoopEnd)
 				Ins[i].nLoopStart = Ins[i].nLoopEnd = 0;
 			if (Ins[i].nLoopEnd) Ins[i].uFlags |= CHN_LOOP;
 			Ins[i].nFineTune = MOD2XMFineTune(pms->finetune);
