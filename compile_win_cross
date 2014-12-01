@@ -10,7 +10,7 @@ for _arch in ${_architectures}; do
 	make -j8 && 
 	rm app/*.a && 
 	rm app/modules/*.a &&
-	$_arch-strip -s `find app`;true
+	$_arch-strip -s `find app` 2> /dev/null ; true
 	mv app $_arch &&
 	make distclean
 done
