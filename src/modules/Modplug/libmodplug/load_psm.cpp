@@ -100,7 +100,7 @@ BOOL CSoundFile::ReadPSM(LPCBYTE lpStream, DWORD dwMemLength)
 {
 	PSMCHUNK *pfh = (PSMCHUNK *)lpStream;
 	DWORD dwMemPos, dwSongPos;
-	DWORD smpnames[MAX_SAMPLES];
+//	DWORD smpnames[MAX_SAMPLES];
 	DWORD patptrs[MAX_PATTERNS];
 	BYTE samplemap[MAX_SAMPLES];
 	UINT nPatterns;
@@ -167,7 +167,7 @@ BOOL CSoundFile::ReadPSM(LPCBYTE lpStream, DWORD dwMemLength)
 				MODINSTRUMENT *pins = &Ins[m_nSamples];
 				PSMSAMPLE *psmp = (PSMSAMPLE *)pdata;
 				swap_PSMSAMPLE(psmp);
-				smpnames[m_nSamples] = psmp->smpid;
+//				smpnames[m_nSamples] = psmp->smpid;
 				memcpy(m_szNames[m_nSamples], psmp->samplename, 31);
 				m_szNames[m_nSamples][31] = 0;
 				samplemap[m_nSamples-1] = (BYTE)m_nSamples;
@@ -289,7 +289,7 @@ BOOL CSoundFile::ReadPSM(LPCBYTE lpStream, DWORD dwMemLength)
 		UINT pos = 0;
 		UINT row = 0;
 		UINT oldch = 0;
-		BOOL bNewRow = FALSE;
+//		BOOL bNewRow = FALSE;
 	#ifdef PSM_LOG
 		Log("Pattern %d at offset 0x%04X\n", nPat, (DWORD)(p - (BYTE *)lpStream));
 	#endif
@@ -322,11 +322,11 @@ BOOL CSoundFile::ReadPSM(LPCBYTE lpStream, DWORD dwMemLength)
 			#endif
 				row++;
 				m += m_nChannels;
-				bNewRow = TRUE;
+//				bNewRow = TRUE;
 				oldch = ch;
 				continue;
 			}
-			bNewRow = FALSE;
+//			bNewRow = FALSE;
 			if (ch >= m_nChannels)
 			{
 			#ifdef PSM_LOG

@@ -165,7 +165,7 @@ BOOL CSoundFile::ReadIT(const BYTE *lpStream, DWORD dwMemLength)
 	DWORD inspos[MAX_INSTRUMENTS];
 	DWORD smppos[MAX_SAMPLES];
 	DWORD patpos[MAX_PATTERNS];
-	BYTE chnmask[64], channels_used[64];
+	BYTE chnmask[64]/*, channels_used[64]*/;
 	MODCOMMAND lastvalue[64];
 
 	if ((!lpStream) || (dwMemLength < sizeof(ITFILEHEADER))) return FALSE;
@@ -516,7 +516,7 @@ BOOL CSoundFile::ReadIT(const BYTE *lpStream, DWORD dwMemLength)
 					if (note < 0x80) note++;
 					m[ch].note = note;
 					lastvalue[ch].note = note;
-					channels_used[ch] = TRUE;
+//					channels_used[ch] = TRUE;
 				}
 			}
 			if (chnmask[ch] & 2)
@@ -1215,7 +1215,7 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 {
 	signed char *pDst = pSample;
 	LPBYTE pSrc = lpMemFile;
-	DWORD wHdr = 0;
+//	DWORD wHdr = 0;
 	DWORD wCount = 0;
 	DWORD bitbuf = 0;
 	UINT bitnum = 0;
@@ -1226,7 +1226,7 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 		if (!wCount)
 		{
 			wCount = 0x8000;
-			wHdr = bswapLE16(*((LPWORD)pSrc));
+//			wHdr = bswapLE16(*((LPWORD)pSrc));
 			pSrc += 2;
 			bLeft = 9;
 			bTemp = bTemp2 = 0;
@@ -1297,7 +1297,7 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 {
 	signed short *pDst = (signed short *)pSample;
 	LPBYTE pSrc = lpMemFile;
-	DWORD wHdr = 0;
+//	DWORD wHdr = 0;
 	DWORD wCount = 0;
 	DWORD bitbuf = 0;
 	UINT bitnum = 0;
@@ -1309,7 +1309,7 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 		if (!wCount)
 		{
 			wCount = 0x4000;
-			wHdr = bswapLE16(*((LPWORD)pSrc));
+//			wHdr = bswapLE16(*((LPWORD)pSrc));
 			pSrc += 2;
 			bLeft = 17;
 			wTemp = wTemp2 = 0;
