@@ -20,7 +20,7 @@ void ColorButton::setColor( const QColor &_color )
 void ColorButton::paintEvent( QPaintEvent * )
 {
 	QPainter p( this );
-	p.fillRect( 0, 0, width(), height(), color );
+	p.fillRect( rect(), color );
 }
 
 void ColorButton::openColorDialog()

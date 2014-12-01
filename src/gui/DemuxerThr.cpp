@@ -236,14 +236,14 @@ void DemuxerThr::run()
 	{
 		AVThread *aThr = ( AVThread * )playC.aThr, *vThr = ( AVThread * )playC.vThr;
 
-		if ( playC.seekTo >= 0 || playC.seekTo == -2 )
+		if ( playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD )
 		{
 			emit playC.chText( tr( "Przewijanie" ) );
 			emit playC.updateBufferedSeconds( 0 );
 			playC.canUpdatePos = false;
 
 			bool noSeekInBuffer = false;
-			if ( playC.seekTo == -2 ) //po otwarciu lub zmianie strumienia audio, wideo lub napisów
+			if ( playC.seekTo == SEEK_STREAM_RELOAD ) //po otwarciu lub zmianie strumienia audio, wideo lub napisów
 			{
 				playC.seekTo = playC.pos;
 				noSeekInBuffer = true;
@@ -302,7 +302,7 @@ void DemuxerThr::run()
 			}
 
 			playC.canUpdatePos = true;
-			playC.seekTo = -1;
+			playC.seekTo = SEEK_NOWHERE;
 			if ( !playC.paused )
 				emit playC.chText( tr( "Odtwarzanie" ) );
 			else
@@ -389,7 +389,7 @@ void DemuxerThr::run()
 						loadError = true;
 						break;
 					}
-					if ( playC.seekTo == -2 )
+					if ( playC.seekTo == SEEK_STREAM_RELOAD )
 						break;
 				}
 			}
@@ -408,7 +408,7 @@ void DemuxerThr::run()
 			if ( mustReloadStreams() && !load() )
 				break;
 
-			if ( streamIdx < 0 || playC.seekTo == -2 )
+			if ( streamIdx < 0 || playC.seekTo == SEEK_STREAM_RELOAD )
 				continue;
 
 			if ( streamIdx == playC.audioStream )

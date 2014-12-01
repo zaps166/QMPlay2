@@ -2081,6 +2081,9 @@ interleaveloop:
 // Multichannel not supported.
 void MPPASMCALL X86_InterleaveFrontRear(int *pFrontBuf, int *pRearBuf, DWORD nSamples)
 {
+	(void)pFrontBuf;
+	(void)pRearBuf;
+	(void)nSamples;
 }
 #endif
 

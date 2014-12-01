@@ -22,7 +22,9 @@ class DemuxerThr;
 class VideoThr;
 class AudioThr;
 class Demuxer;
-class libASS;
+class LibASS;
+
+enum { SEEK_NOWHERE = -1, SEEK_STREAM_RELOAD = -2 /* Seeks to current position after stream reload */ };
 
 class PlayClass : public QObject
 {
@@ -194,7 +196,7 @@ private:
 #ifdef Q_OS_WIN
 	bool firsttimeUpdateCache;
 #endif
-	libASS *ass;
+	LibASS *ass;
 
 	QMutex osd_mutex;
 	QMPlay2_OSD *osd;

@@ -1,5 +1,5 @@
 #include <Classic.hpp>
-#include <libASS.hpp>
+#include <LibASS.hpp>
 
 #include <QStringList>
 #include <QRegExp>
@@ -49,7 +49,7 @@ public:
 Classic::Classic( bool Use_mDVD_FPS, double Sub_max_s ) :
 	Use_mDVD_FPS( Use_mDVD_FPS ), Sub_max_s( Sub_max_s ) {}
 
-bool Classic::toASS( const QByteArray &txt, libASS *ass, double fps )
+bool Classic::toASS( const QByteArray &txt, LibASS *ass, double fps )
 {
 	if ( !ass )
 		return false;

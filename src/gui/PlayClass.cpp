@@ -1,7 +1,7 @@
 #include <PlayClass.hpp>
 
 #include <Main.hpp>
-#include <libASS.hpp>
+#include <LibASS.hpp>
 #include <QMPlay2_OSD.hpp>
 #include <DemuxerThr.hpp>
 #include <VideoThr.hpp>
@@ -84,7 +84,7 @@ PlayClass::PlayClass() :
 	speed = subtitlesScale = zoom = 1.0;
 	flip = 0;
 
-	restartSeekTo = -1.0;
+	restartSeekTo = SEEK_NOWHERE;
 
 	subtitlesStream = -1;
 	videoSync = subtitlesSync = 0.0;
@@ -131,13 +131,13 @@ void PlayClass::play( const QString &_url )
 
 			canUpdatePos = true;
 			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
-			lastSeekTo = seekTo = pos = -1;
+			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
 
 			if ( restartSeekTo >= 0.0 ) //jeżeli restart odtwarzania
 			{
 				seekTo = restartSeekTo;
-				restartSeekTo = -1.0;
+				restartSeekTo = SEEK_NOWHERE;
 			}
 			else
 				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
@@ -193,7 +193,7 @@ void PlayClass::chPos( double _pos, bool updateGUI )
 	if ( ( updateGUI || pos == -1 ) && ( ( int )_pos != ( int )pos ) )
 		emit updatePos( _pos );
 	pos = _pos;
-	lastSeekTo = -1;
+	lastSeekTo = SEEK_NOWHERE;
 }
 
 void PlayClass::togglePause()
@@ -284,6 +284,7 @@ void PlayClass::loadSubsFile( const QString &fileName )
 			QString fileExt = Functions::fileExt( fileName ).toLower();
 			if ( fileExt == "ass" || fileExt == "ssa" )
 			{
+				ass->setAdditionalFontsDir( Functions::filePath( fileName.mid( 7 ) ).toLocal8Bit() ); /* Ustawianie katalogu z czcionkami dla aktualnego pliku */
 				ass->initASS( fileData );
 				loaded = true;
 			}
@@ -962,7 +963,7 @@ void PlayClass::load( Demuxer *demuxer )
 				else
 				{
 					fps = streams[ videoStream ]->FPS;
-					ass = new libASS( QMPlay2Core.getSettings() );
+					ass = new LibASS( QMPlay2Core.getSettings() );
 					ass->setWindowSize( videoWinW, videoWinH );
 					ass->setFontScale( subtitlesScale );
 					ass->setARatio( getARatio() );
@@ -982,7 +983,7 @@ void PlayClass::load( Demuxer *demuxer )
 						emit videoStarted();
 
 					if ( reload )
-						seekTo = -2;
+						seekTo = SEEK_STREAM_RELOAD;
 				}
 				vThr->unlock();
 			}
@@ -1024,7 +1025,7 @@ void PlayClass::load( Demuxer *demuxer )
 				if ( !aThr->setParams( streams[ audioStream ]->channels, streams[ audioStream ]->sample_rate, chn, srate ) )
 					dec = NULL;
 				else if ( reload )
-					seekTo = -2;
+					seekTo = SEEK_STREAM_RELOAD;
 				if ( doSilenceOnStart )
 				{
 					aThr->silence( true );
@@ -1094,7 +1095,7 @@ void PlayClass::load( Demuxer *demuxer )
 						assHeader.clear();
 					ass->initASS( assHeader );
 					if ( reload )
-						seekTo = -2;
+						seekTo = SEEK_STREAM_RELOAD;
 					sPackets.unlock();
 				}
 				else

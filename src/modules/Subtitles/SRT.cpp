@@ -1,13 +1,13 @@
 #include <SRT.hpp>
 #include <Functions.hpp>
-#include <libASS.hpp>
+#include <LibASS.hpp>
 
 #include <QStringList>
 #include <QRegExp>
 
 #include <stdio.h>
 
-bool SRT::toASS( const QByteArray &srt, libASS *ass, double )
+bool SRT::toASS( const QByteArray &srt, LibASS *ass, double )
 {
 	if ( !ass )
 		return false;

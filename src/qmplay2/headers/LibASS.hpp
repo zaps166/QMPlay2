@@ -12,11 +12,11 @@ struct ass_track;
 struct ass_event;
 struct ass_renderer;
 
-class libASS
+class LibASS
 {
 public:
-	libASS( Settings & );
-	~libASS();
+	LibASS( Settings & );
+	~LibASS();
 
 	void setWindowSize( int, int );
 	void setARatio( double );
@@ -24,6 +24,7 @@ public:
 	void setFontScale( double );
 
 	void addFont( const QByteArray &, const QByteArray & );
+	void setAdditionalFontsDir( const QByteArray &dir );
 	void clearFonts();
 
 	void initOSD();

@@ -1,4 +1,4 @@
-#include <libASS.hpp>
+#include <LibASS.hpp>
 
 #include <QMPlay2_OSD.hpp>
 #include <Settings.hpp>
@@ -9,7 +9,7 @@ extern "C"
 {
 	#include <ass/ass.h>
 }
-#include <malloc.h>
+#include <string.h>
 
 static void addImgs( ASS_Image *img, QMPlay2_OSD *osd )
 {
@@ -73,7 +73,7 @@ static inline int toASSAlignment( int align )
 
 /**/
 
-libASS::libASS( Settings &settings ) :
+LibASS::LibASS( Settings &settings ) :
 	settings( settings )
 {
 	ass = ass_library_init();
@@ -87,7 +87,7 @@ libASS::libASS( Settings &settings ) :
 	osd_event = NULL;
 	osd_renderer = ass_sub_renderer = NULL;
 }
-libASS::~libASS()
+LibASS::~LibASS()
 {
 	closeASS();
 	closeOSD();
@@ -95,37 +95,42 @@ libASS::~libASS()
 	ass_library_done( ass );
 }
 
-void libASS::setWindowSize( int _winW, int _winH )
+void LibASS::setWindowSize( int _winW, int _winH )
 {
 	winW = _winW;
 	winH = _winH;
 	calcSize();
 }
-void libASS::setARatio( double _aspect_ratio )
+void LibASS::setARatio( double _aspect_ratio )
 {
 	aspect_ratio = _aspect_ratio;
 	calcSize();
 }
-void libASS::setZoom( double _zoom )
+void LibASS::setZoom( double _zoom )
 {
 	zoom = _zoom;
 	calcSize();
 }
-void libASS::setFontScale( double fs )
+void LibASS::setFontScale( double fs )
 {
 	fontScale = fs;
 }
 
-void libASS::addFont( const QByteArray &name, const QByteArray &data )
+void LibASS::addFont( const QByteArray &name, const QByteArray &data )
 {
 	ass_add_font( ass, ( char * )name.data(), ( char * )data.data(), data.size() );
 }
-void libASS::clearFonts()
+void LibASS::setAdditionalFontsDir( const QByteArray &dir )
+{
+	ass_set_fonts_dir( ass, dir );
+}
+void LibASS::clearFonts()
 {
 	ass_clear_fonts( ass );
+	ass_set_fonts_dir( ass, NULL );
 }
 
-void libASS::initOSD()
+void LibASS::initOSD()
 {
 	if ( osd_track && osd_style && osd_event && osd_renderer )
 		return;
@@ -146,14 +151,14 @@ void libASS::initOSD()
 	osd_renderer = ass_renderer_init( ass );
 	ass_set_fonts( osd_renderer, NULL, NULL, 1, NULL, 1 );
 }
-void libASS::setOSDStyle()
+void LibASS::setOSDStyle()
 {
 	if ( !osd_style )
 		return;
 	osd_style->ScaleX = osd_style->ScaleY = 1;
 	readStyle( "OSD", osd_style );
 }
-bool libASS::getOSD( QMPlay2_OSD *&osd, const QByteArray &txt, double duration )
+bool LibASS::getOSD( QMPlay2_OSD *&osd, const QByteArray &txt, double duration )
 {
 	if ( !osd_track || !osd_style || !osd_event || !osd_renderer || !W || !H )
 		return false;
@@ -189,7 +194,7 @@ bool libASS::getOSD( QMPlay2_OSD *&osd, const QByteArray &txt, double duration )
 	osd->start();
 	return true;
 }
-void libASS::closeOSD()
+void LibASS::closeOSD()
 {
 	if ( osd_renderer )
 		ass_renderer_done( osd_renderer );
@@ -201,7 +206,7 @@ void libASS::closeOSD()
 	osd_renderer = NULL;
 }
 
-void libASS::initASS( const QByteArray &ass_data )
+void LibASS::initASS( const QByteArray &ass_data )
 {
 	if ( ass_sub_track && ass_sub_renderer )
 		return;
@@ -225,7 +230,7 @@ void libASS::initASS( const QByteArray &ass_data )
 	ass_sub_renderer = ass_renderer_init( ass );
 	ass_set_fonts( ass_sub_renderer, NULL, NULL, 1, NULL, 1 );
 }
-void libASS::setASSStyle()
+void LibASS::setASSStyle()
 {
 	if ( !ass_sub_track )
 		return;
@@ -332,13 +337,13 @@ void libASS::setASSStyle()
 		}
 	}
 }
-void libASS::addASSEvent( const QByteArray &event )
+void LibASS::addASSEvent( const QByteArray &event )
 {
 	if ( !ass_sub_track || !ass_sub_renderer || event.isEmpty() )
 		return;
 	ass_process_data( ass_sub_track, ( char * )event.data(), event.size() );
 }
-void libASS::addASSEvent( const QByteArray &text, double Start, double Duration )
+void LibASS::addASSEvent( const QByteArray &text, double Start, double Duration )
 {
 	if ( !ass_sub_track || !ass_sub_renderer || text.isEmpty() || Start < 0 || Duration < 0 )
 		return;
@@ -350,13 +355,13 @@ void libASS::addASSEvent( const QByteArray &text, double Start, double Duration 
 	event->Style = 0;
 	event->ReadOrder = eventID;
 }
-void libASS::flushASSEvents()
+void LibASS::flushASSEvents()
 {
 	if ( !ass_sub_track || !ass_sub_renderer )
 		return;
 	ass_flush_events( ass_sub_track );
 }
-bool libASS::getASS( QMPlay2_OSD *&osd, double pos )
+bool LibASS::getASS( QMPlay2_OSD *&osd, double pos )
 {
 	if ( !ass_sub_track || !ass_sub_renderer || !W || !H )
 		return false;
@@ -424,7 +429,7 @@ bool libASS::getASS( QMPlay2_OSD *&osd, double pos )
 		osd->unlock();
 	return true;
 }
-void libASS::closeASS()
+void LibASS::closeASS()
 {
 	while ( ass_sub_styles_copy.size() )
 	{
@@ -441,7 +446,7 @@ void libASS::closeASS()
 	ass_sub_renderer = NULL;
 }
 
-void libASS::readStyle( const QString &prefix, ASS_Style *style )
+void LibASS::readStyle( const QString &prefix, ASS_Style *style )
 {
 	if ( style->FontName )
 		free( style->FontName );
@@ -459,7 +464,7 @@ void libASS::readStyle( const QString &prefix, ASS_Style *style )
 	style->MarginR = settings.get( prefix + "/RightMargin" ).toInt();
 	style->MarginV = settings.get( prefix + "/VMargin" ).toInt();
 }
-void libASS::calcSize()
+void LibASS::calcSize()
 {
 	if ( !winW || !winH || zoom <= 0.0 || aspect_ratio < 0.0 )
 		return;

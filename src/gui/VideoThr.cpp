@@ -8,7 +8,7 @@
 #include <VideoFrame.hpp>
 #include <Settings.hpp>
 #include <Decoder.hpp>
-#include <libASS.hpp>
+#include <LibASS.hpp>
 
 #include <ImgScaler.hpp>
 #include <Functions.hpp>

@@ -156,7 +156,7 @@ void Updater::writeToFile()
 #if defined Q_OS_WIN
 		err = arr.left( 2 ) != "MZ";
 #elif defined Q_OS_LINUX
-		err = arr.left( 4 ) != "\177ELF" && arr.left( 2 ) != "#!";
+		err = arr.left( 4 ) != "\x7F""ELF" && arr.left( 2 ) != "#!";
 #endif
 		firstChunk = false;
 	}

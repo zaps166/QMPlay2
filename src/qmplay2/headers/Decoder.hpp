@@ -10,7 +10,7 @@
 class QMPlay2_OSD;
 class StreamInfo;
 class Writer;
-class libASS;
+class LibASS;
 
 class Decoder : public ModuleCommon
 {

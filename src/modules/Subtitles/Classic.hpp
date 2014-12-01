@@ -5,7 +5,7 @@ class Classic : public SubsDec
 public:
 	Classic( bool, double );
 private:
-	bool toASS( const QByteArray &, class libASS *, double );
+	bool toASS( const QByteArray &, class LibASS *, double );
 
 	~Classic() {}
 

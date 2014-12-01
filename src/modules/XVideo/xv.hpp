@@ -3,8 +3,8 @@
 #include <QList>
 
 class QRect;
+class VideoFrame;
 class QMPlay2_OSD;
-struct VideoFrame;
 struct XVideoPrivate;
 
 class XVIDEO

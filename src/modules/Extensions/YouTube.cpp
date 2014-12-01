@@ -465,9 +465,9 @@ void YouTubeW::searchMenu()
 void YouTubeW::deleteReplies()
 {
 	while ( !linkReplies.isEmpty() )
-		delete linkReplies.takeFirst();
+		linkReplies.takeFirst()->deleteLater();
 	while ( !imageReplies.isEmpty() )
-		delete imageReplies.takeFirst();
+		imageReplies.takeFirst()->deleteLater();
 }
 
 void YouTubeW::setAutocomplete( const QByteArray &data )

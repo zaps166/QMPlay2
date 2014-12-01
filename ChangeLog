@@ -1,4 +1,5 @@
-Zmiany w QMPlay2 build 14.11.30:
+Zmiany w QMPlay2 build 14.12.01:
+	- wczytywanie czcionek napisów z katalogu, w którym znajdują się napisy ASS/SSA,
 	- dodany "User-Agent" dla połączeń HTTP (ProstoPleer znowu działa),
 	- poprawa kompilacji dla Windows x86-64,
 	- drobne poprawy błędów,
