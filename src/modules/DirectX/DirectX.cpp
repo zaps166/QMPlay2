@@ -6,8 +6,7 @@ DirectX::DirectX() :
 {
 	moduleImg = QImage( ":/DirectX" );
 
-	init( "DirectDraw", true );
-// 	init( "Direct3D", true );
+	init( "DirectDraw", QSysInfo::windowsVersion() < QSysInfo::WV_6_0 ); //domyślnie włączonny dla starszych systemów od Visty
 	init( "DirectDraw/OnlyOverlay", true );
 }
 
