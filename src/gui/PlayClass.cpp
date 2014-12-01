@@ -32,7 +32,7 @@
 	class UpdateFC : public QThread
 	{
 	public:
-		inline UpdateFC( libASS *ass ) :
+		inline UpdateFC( LibASS *ass ) :
 			ass( ass )
 		{
 			start();
@@ -61,7 +61,7 @@
 			SetFileAttributesW( ( WCHAR * )QString( QDir::homePath() + "/fontconfig" ).utf16(), FILE_ATTRIBUTE_HIDDEN );
 			el.wakeUp();
 		}
-		libASS *ass;
+		LibASS *ass;
 		QEventLoop el;
 	};
 #endif
