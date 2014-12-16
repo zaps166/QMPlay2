@@ -4,7 +4,6 @@
 #include <Functions.hpp>
 using Functions::getImageSize;
 
-#include <QPainter>
 #include <QDebug>
 
 /**/

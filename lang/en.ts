@@ -2044,14 +2044,6 @@
         <translation>sec</translation>
     </message>
     <message>
-        <source>Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Local buffer size (minimal A/V packets count)</translation>
-    </message>
-    <message>
-        <source>Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Network buffer size (minimal A/V packets count)</translation>
-    </message>
-    <message>
         <source>Maksymalna głośność</source>
         <translation>Maximum volume</translation>
     </message>
@@ -2202,6 +2194,18 @@
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
         <translation>Remember video equalizer settings</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
+        <translation>Local buffer size (A/V packages count)</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</source>
+        <translation>Network buffer size (A/V packages count)</translation>
+    </message>
+    <message>
+        <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
+        <translation>Percent of packages for backwards rewinding</translation>
     </message>
 </context>
 <context>

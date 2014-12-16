@@ -2,10 +2,9 @@
 #define PLAYCLASS_HPP
 
 #define MUTEXWAIT_TIMEOUT 1250
-#define TERMINATE_TIMEOUT MUTEXWAIT_TIMEOUT*2
+#define TERMINATE_TIMEOUT (MUTEXWAIT_TIMEOUT*2)
 
-#include <TimeStamp.hpp>
-#include <Packet.hpp>
+#include <PacketBuffer.hpp>
 
 #include <QSize>
 #include <QDebug>
@@ -14,7 +13,6 @@
 #include <QImage>
 #include <QObject>
 #include <QStringList>
-#include <QLinkedList>
 #include <QWaitCondition>
 
 class QMPlay2_OSD;
@@ -98,82 +96,7 @@ private:
 	volatile bool fullBufferB, doSilenceBreak;
 	QMutex loadMutex, stopPauseMutex;
 
-	class PacketQueue : private QLinkedList< Packet >
-	{
-	public:
-		inline PacketQueue() :
-			mutex( QMutex::Recursive ),
-			_size( 0 ), _duration( 0.0 )
-		{}
-
-		inline bool clipTo( const double pos )
-		{
-			double duration_to_reduce = 0.0;
-			for ( QLinkedList< Packet >::iterator it = begin() ; it != end() ; ++it )
-				if ( it->ts >= pos )
-				{
-					erase( begin(), it );
-					_duration -= duration_to_reduce;
-					return true;
-				}
-				else
-					duration_to_reduce += it->duration;
-			return isEmpty();
-		}
-
-		inline void clear()
-		{
-			lock();
-			QLinkedList< Packet >::clear();
-			_size = 0;
-			_duration = 0.0;
-			unlock();
-		}
-
-		inline void enqueue( const Packet &packet )
-		{
-			lock();
-			append( packet );
-			_size += packet.data.size();
-			_duration += packet.duration;
-			unlock();
-		}
-
-		inline Packet dequeue()
-		{
-			Packet packet = takeFirst();
-			_size -= packet.data.size();
-			_duration -= packet.duration;
-			return packet;
-		}
-
-		inline int packetCount() const
-		{
-			return QLinkedList< Packet >::size();
-		}
-		inline qint64 size() const
-		{
-			return _size;
-		}
-		inline double duration() const
-		{
-			return _duration;
-		}
-
-		inline void lock()
-		{
-			mutex.lock();
-		}
-		inline void unlock()
-		{
-			mutex.unlock();
-		}
-	private:
-		QMutex mutex;
-		qint64 _size;
-		double _duration;
-	};
-	PacketQueue aPackets, vPackets, sPackets;
+	PacketBuffer aPackets, vPackets, sPackets;
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
 	bool canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream;
@@ -188,7 +111,7 @@ private:
 
 	int Brightness, Saturation, Contrast, Hue;
 
-	double MAX_THRESHOLD, fps;
+	double maxThreshold, fps;
 
 	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled;
 	QTimer timTerminate;
@@ -257,7 +180,7 @@ signals:
 	void resetARatio();
 	void updateBitrate( int, int, double );
 	void updateBuffered( qint64, double );
-	void updateBufferedSeconds( int );
+	void updateBufferedRange( int, int );
 	void updateWindowTitle( const QString &t = QString() );
 	void updateImage( const QImage &img = QImage() );
 	void videoStarted();

@@ -1,7 +1,7 @@
 QMPlay2 compilation tutorial.
 
 You need (devel packages):
-	- qt4 or qt5 (including QtOpenGL, OpenSSL(for https) and QtDBus on Linux/BSD)
+	- Qt4 or Qt5 (including QtOpenGL, OpenSSL(for https) and QtDBus on Linux/BSD)
 	- portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro")
 	- libasound (for ALSA module on Linux)
 	- pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro")

@@ -2044,14 +2044,6 @@
         <translation>сек</translation>
     </message>
     <message>
-        <source>Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Размер локального буфера (минимальное количество пакетов А/В)</translation>
-    </message>
-    <message>
-        <source>Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Размер сетевого буфера (минимальное количество пакетов А/В)</translation>
-    </message>
-    <message>
         <source>Maksymalna głośność</source>
         <translation>Максимальная громкость</translation>
     </message>
@@ -2202,6 +2194,18 @@
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
         <translation>Запомнить настройки видео эквалайзера</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
+        <translation>Размер локального буфера (количество пакетов А/V)</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</source>
+        <translation>Размер сетевого буфера (количество пакетов А/V)</translation>
+    </message>
+    <message>
+        <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

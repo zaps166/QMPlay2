@@ -210,7 +210,6 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 							}
 
 							canPause = snd_pcm_hw_params_can_pause( params ) && snd_pcm_hw_params_can_resume( params );
-							dontShowUnderrun = false;
 
 							mustSwapChn = channels == 6 || channels == 8;
 #ifdef HAVE_CHMAP
@@ -276,10 +275,6 @@ qint64 ALSAWriter::write( const QByteArray &arr )
 		case SND_PCM_STATE_XRUN:
 			if ( !snd_pcm_prepare( snd ) )
 			{
-				if ( dontShowUnderrun )
-					dontShowUnderrun = false;
-				else
-					QMPlay2Core.log( "ALSA :: underrun occurred", ErrorLog | DontShowInGUI );
 				const int silence = snd_pcm_avail( snd ) - to_write;
 				if ( silence > 0 )
 				{
@@ -308,8 +303,6 @@ void ALSAWriter::pause()
 {
 	if ( canPause )
 		snd_pcm_pause( snd, true );
-	else
-		dontShowUnderrun = true;
 }
 
 qint64 ALSAWriter::size() const

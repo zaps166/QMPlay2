@@ -15,7 +15,7 @@ class QMPlay2DummyDecoder : public Decoder
 	{
 		Q_UNUSED( flush )
 		Q_UNUSED( hurry_up )
-		return ( dest = packet.data ).size();
+		return ( dest = packet ).size();
 	}
 
 	bool open( StreamInfo *_streamInfo, Writer * )

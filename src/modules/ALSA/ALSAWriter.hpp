@@ -37,7 +37,7 @@ private:
 	_snd_pcm *snd;
 
 	double delay;
-	unsigned sample_rate, channels, dontShowUnderrun;
+	unsigned sample_rate, channels;
 	bool autoFindMultichannelDevice, err, mustSwapChn, canPause;
 };
 

@@ -14,8 +14,8 @@ using Functions::aligned;
 Drawable::Drawable( QPainterWriter &writer ) :
 	writer( writer )
 {
-	setMouseTracking( true );
 	setAutoFillBackground( true );
+	setMouseTracking( true );
 }
 Drawable::~Drawable()
 {

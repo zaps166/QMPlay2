@@ -1,3 +1,6 @@
+Zmiany w QMPlay2 build 14.12.16:
+	- możliwość przewijania do tyłu w strumieniach sieciowych bez ponownego łączenia się z serwerem,
+
 Zmiany w QMPlay2 build 14.12.01:
 	- wczytywanie czcionek napisów z katalogu, w którym znajdują się napisy ASS/SSA,
 	- dodany "User-Agent" dla połączeń HTTP (ProstoPleer znowu działa),

@@ -75,7 +75,7 @@ PlayClass::PlayClass() :
 {
 	doSilenceBreak = doSilenceOnStart = false;
 
-	MAX_THRESHOLD = 60.0;
+	maxThreshold = 60.0;
 	vol = 1.0;
 
 	quitApp = muted = reload = false;
@@ -651,7 +651,7 @@ void PlayClass::toggleMute()
 }
 void PlayClass::slowDownVideo()
 {
-	if ( videoSync <= -MAX_THRESHOLD )
+	if ( videoSync <= -maxThreshold )
 		return;
 	videoSync -= 0.1;
 	if ( videoSync < 0.1 && videoSync > -0.1 )
@@ -660,7 +660,7 @@ void PlayClass::slowDownVideo()
 }
 void PlayClass::speedUpVideo()
 {
-	if ( videoSync >= MAX_THRESHOLD )
+	if ( videoSync >= maxThreshold )
 		return;
 	videoSync += 0.1;
 	if ( videoSync < 0.1 && videoSync > -0.1 )
@@ -670,7 +670,7 @@ void PlayClass::speedUpVideo()
 void PlayClass::setVideoSync()
 {
 	bool ok;
-	double vs = QInputDialog::getDouble( NULL, tr( "Opóźnienie obrazu" ), tr( "Ustaw opóźnienie obrazu (sek.)" ), videoSync, -MAX_THRESHOLD, MAX_THRESHOLD, 1, &ok );
+	double vs = QInputDialog::getDouble( NULL, tr( "Opóźnienie obrazu" ), tr( "Ustaw opóźnienie obrazu (sek.)" ), videoSync, -maxThreshold, maxThreshold, 1, &ok );
 	if ( !ok )
 		return;
 	videoSync = vs;
@@ -709,7 +709,7 @@ void PlayClass::biggerSubs()
 {
 	if ( ass )
 	{
-		if ( subtitlesScale > MAX_THRESHOLD - 0.05 )
+		if ( subtitlesScale > maxThreshold - 0.05 )
 			return;
 		subtitlesScale += 0.05;
 		ass->setFontScale( subtitlesScale );
@@ -831,7 +831,7 @@ void PlayClass::demuxThrFinished()
 	url.clear();
 	pos = -1.0;
 
-	emit updateBufferedSeconds( 0 );
+	emit updateBufferedRange( 0, 0 );
 	emit updateLength( 0 );
 	emit updatePos( 0 );
 

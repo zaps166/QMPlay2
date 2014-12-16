@@ -41,7 +41,7 @@ private:
 	bool bufferedPackets( int, int, int );
 	bool emptyBuffers( int, int );
 	bool canBreak( const AVThread *avThr1, const AVThread *avThr2 );
-	void getAVBuffersSize( int &, int &, qint64 *buffered = NULL, double *bufferedTime = NULL );
+	void getAVBuffersSize( int &vS, int &aS, qint64 *buffered = NULL, double *backwardTime = NULL, double *bufferedTime = NULL );
 	void clearBuffers();
 
 	PlayClass &playC;

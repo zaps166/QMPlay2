@@ -223,13 +223,31 @@ void DemuxerThr::run()
 	connect( &QMPlay2Core, SIGNAL( updateCover( const QString &, const QString &, const QString &, const QByteArray & ) ), this, SLOT( updateCover( const QString &, const QString &, const QString &, const QByteArray & ) ) );
 
 	const bool localStream = demuxer->localStream();
-	const int MIN_BUF_SIZE = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork );
+	int forwardPackets = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork ), backwardPackets;
+	double wfd_t = playIfBuffered > 0.25 ? 0.25 : playIfBuffered;
+	double bufferedTime = 0.0, backwardTime = 0.0;
 	bool paused = false, demuxerPaused = false;
 	double time = localStream ? 0.0 : gettime();
 	qint64 buffered = 0, last_buffered = 0;
-	double wfd_t = playIfBuffered > 0.25 ? 0.25 : playIfBuffered;
-	double bufferedTime = 0.0;
 	int vS, aS;
+
+	if ( forwardPackets == 1 || localStream || unknownLength )
+		PacketBuffer::setBackwardPackets( ( backwardPackets = 0 ) );
+	else
+	{
+		int percent = 25;
+		switch ( QMPlay2Core.getSettings().getUInt( "BackwardBuffer" ) )
+		{
+			case 0:
+				percent = 0;
+				break;
+			case 2:
+				percent = 50;
+				break;
+		}
+		PacketBuffer::setBackwardPackets( ( backwardPackets = forwardPackets * percent / 100 ) );
+		forwardPackets -= backwardPackets;
+	}
 
 	setPriority( QThread::HighPriority );
 	while ( !br )
@@ -239,41 +257,49 @@ void DemuxerThr::run()
 		if ( playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD )
 		{
 			emit playC.chText( tr( "Przewijanie" ) );
-			emit playC.updateBufferedSeconds( 0 );
 			playC.canUpdatePos = false;
 
-			bool noSeekInBuffer = false;
-			if ( playC.seekTo == SEEK_STREAM_RELOAD ) //po otwarciu lub zmianie strumienia audio, wideo lub napisów
+			bool seekInBuffer = true;
+			if ( playC.seekTo == SEEK_STREAM_RELOAD ) //po zmianie strumienia audio, wideo lub napisów lub po ponownym uruchomieniu odtwarzania
 			{
 				playC.seekTo = playC.pos;
-				noSeekInBuffer = true;
+				seekInBuffer = false;
 			}
 
 			const bool backwards = playC.seekTo < ( int )playC.pos;
 			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
 
-			//przewijanie do przodu na strumieniu sieciowym, szuka czy skok do zbuforowanego fragmentu i usuwa niepotrzebne paczki
-			if ( !backwards && !localStream && !noSeekInBuffer )
+			//przewijanie na strumieniu sieciowym - szuka, czy skok do zbuforowanego fragmentu
+			if ( !localStream && seekInBuffer )
 			{
 				playC.vPackets.lock();
 				playC.aPackets.lock();
 				playC.sPackets.lock();
 				if
 				(
-					( playC.vPackets.packetCount() || playC.aPackets.packetCount() ) &&
-					playC.vPackets.clipTo( playC.seekTo ) && playC.aPackets.clipTo( playC.seekTo ) && playC.sPackets.clipTo( playC.seekTo )
+					( playC.vPackets.packetsCount() || playC.aPackets.packetsCount() ) &&
+					playC.vPackets.seekTo( playC.seekTo, backwards ) &&
+					playC.aPackets.seekTo( playC.seekTo, backwards ) &&
+					playC.sPackets.seekTo( playC.seekTo, backwards )
 				)
 				{
-					flush = true;
 					mustSeek = false;
-					if ( !( bufferedTime = playC.vPackets.duration() ) )
-						bufferedTime = playC.aPackets.duration();
-					emit playC.updateBufferedSeconds( bufferedTime );
+					flush = true;
+					if ( ( bufferedTime = playC.vPackets.remainingDuration() ) )
+						backwardTime = backwardPackets ? playC.vPackets.backwardDuration() : 0.0;
+					else
+					{
+						bufferedTime = playC.aPackets.remainingDuration();
+						backwardTime = backwardPackets ? playC.aPackets.backwardDuration() : 0.0;
+					}
+					emit playC.updateBufferedRange( floor( backwardTime ), ceil( bufferedTime ) );
 					if ( aThr )
 						aLocked = aThr->lock();
 					if ( vThr )
 						vLocked = vThr->lock();
 				}
+				else
+					emit playC.updateBufferedRange( 0, 0 );
 				playC.vPackets.unlock();
 				playC.aPackets.unlock();
 				playC.sPackets.unlock();
@@ -295,6 +321,8 @@ void DemuxerThr::run()
 					vLocked = vThr->lock();
 				playC.skipAudioFrame = playC.audio_current_pts = 0.0;
 				playC.flushVideo = playC.flushAudio = true;
+				if ( playC.pos < 0.0 ) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
+					emit playC.updatePos( playC.seekTo ); //uaktualnia suwak na pasku do wskazanej pozycji
 				if ( aLocked )
 					aThr->unlock();
 				if ( vLocked )
@@ -332,7 +360,7 @@ void DemuxerThr::run()
 		}
 
 		bool updateBuffered = localStream ? false : ( gettime() - time >= ( playC.waitForData ? wfd_t : 1.25 ) );
-		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &buffered : NULL, &bufferedTime );
+		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &buffered : NULL, &backwardTime, &bufferedTime );
 		if ( playC.endOfStream && !vS && !aS && canBreak( aThr, vThr ) )
 			break;
 		if ( updateBuffered )
@@ -340,7 +368,7 @@ void DemuxerThr::run()
 			if ( last_buffered != buffered )
 			{
 				if ( updateBufferedSeconds )
-					emit playC.updateBufferedSeconds( round( bufferedTime ) );
+					emit playC.updateBufferedRange( floor( backwardTime ), ceil( bufferedTime ) );
 				emit playC.updateBuffered( last_buffered = buffered, bufferedTime );
 				if ( demuxer->metadataChanged() )
 					updateCoverAndPlaying();
@@ -356,9 +384,9 @@ void DemuxerThr::run()
 		(
 			playC.waitForData &&
 			(
-				playC.endOfStream                       ||
-				bufferedPackets( vS, aS, MIN_BUF_SIZE ) ||
-				( bufferedTime >= playIfBuffered )      ||
+				playC.endOfStream                          ||
+				bufferedPackets( vS, aS, forwardPackets )  ||
+				( bufferedTime >= playIfBuffered )         ||
 				( !bufferedTime && bufferedPackets( vS, aS, 1 ) )
 			)
 		)
@@ -368,7 +396,7 @@ void DemuxerThr::run()
 				playC.emptyBufferCond.wakeAll();
 		}
 
-		if ( playC.endOfStream || bufferedPackets( vS, aS, MIN_BUF_SIZE ) )
+		if ( playC.endOfStream || bufferedPackets( vS, aS, forwardPackets ) )
 		{
 			if ( paused && !demuxerPaused )
 			{
@@ -401,7 +429,7 @@ void DemuxerThr::run()
 
 		Packet packet;
 		int streamIdx = -1;
-		if ( demuxer->read( packet.data, streamIdx, packet.ts, packet.duration ) )
+		if ( demuxer->read( packet, streamIdx, packet.ts, packet.duration ) )
 		{
 			qApp->processEvents();
 
@@ -412,11 +440,11 @@ void DemuxerThr::run()
 				continue;
 
 			if ( streamIdx == playC.audioStream )
-				playC.aPackets.enqueue( packet );
+				playC.aPackets.put( packet );
 			else if ( streamIdx == playC.videoStream )
-				playC.vPackets.enqueue( packet );
+				playC.vPackets.put( packet );
 			else if ( streamIdx == playC.subtitlesStream )
-				playC.sPackets.enqueue( packet );
+				playC.sPackets.put( packet );
 
 			if ( !paused && !playC.waitForData )
 				playC.emptyBufferCond.wakeAll();
@@ -686,37 +714,45 @@ bool DemuxerThr::canBreak( const AVThread *avThr1, const AVThread *avThr2 )
 {
 	return ( !avThr1 || avThr1->isWaiting() ) && ( !avThr2 || avThr2->isWaiting() );
 }
-void DemuxerThr::getAVBuffersSize( int &vS, int &aS, qint64 *buffered, double *bufferedTime )
+void DemuxerThr::getAVBuffersSize( int &vS, int &aS, qint64 *buffered, double *backwardTime, double *bufferedTime )
 {
-	double aTime = 0.0, vTime = 0.0;
+	double aTime = 0.0, vTime = 0.0, backwardATime = 0.0, backwardVTime = 0.0;
 
 	if ( buffered )
 		*buffered = 0;
 
 	playC.vPackets.lock();
-	vS = playC.vPackets.packetCount();
+	vS = playC.vPackets.remainingPacketsCount();
 	if ( buffered )
 	{
-		*buffered += playC.vPackets.size();
-		vTime = playC.vPackets.duration();
+		*buffered += playC.vPackets.remainingBytes();
+		vTime = playC.vPackets.remainingDuration();
+		backwardVTime = playC.vPackets.backwardDuration();
 	}
 	playC.vPackets.unlock();
 
 	playC.aPackets.lock();
-	aS = playC.aPackets.packetCount();
+	aS = playC.aPackets.remainingPacketsCount();
 	if ( buffered )
 	{
-		*buffered += playC.aPackets.size();
-		aTime = playC.aPackets.duration();
+		*buffered += playC.aPackets.remainingBytes();
+		aTime = playC.aPackets.remainingDuration();
+		backwardATime = playC.aPackets.backwardDuration();
 	}
 	playC.aPackets.unlock();
 
-	if ( buffered && bufferedTime )
+	if ( buffered && backwardTime && bufferedTime )
 	{
 		if ( vS && vTime )
+		{
 			*bufferedTime = vTime;
+			*backwardTime = backwardVTime;
+		}
 		else
+		{
 			*bufferedTime = aTime;
+			*backwardTime = backwardATime;
+		}
 	}
 }
 void DemuxerThr::clearBuffers()
@@ -735,7 +771,7 @@ void DemuxerThr::stopVADecSlot()
 
 	stopVAMutex.unlock();
 
-	endMutex.lock(); //Czeka do czasu zniszczenia demuxer'a, jeżeli wcześniej mutex był zablokowany (wykonał się z wątku)
+	endMutex.lock(); //Czeka do czasu zniszczenia demuxer'a - jeżeli wcześniej mutex był zablokowany (wykonał się z wątku)
 	endMutex.unlock(); //odblokowywuje mutex
 }
 void DemuxerThr::updateCover( const QString &title, const QString &artist, const QString &album, const QByteArray &cover )

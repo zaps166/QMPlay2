@@ -14,6 +14,11 @@ private:
 	void resizeEvent( QResizeEvent * );
 	void paintEvent( QPaintEvent * );
 
+	QPaintEngine *paintEngine() const
+	{
+		return NULL;
+	}
+
 	int X, Y, W, H;
 	QRect dstRect, srcRect;
 	XVideoWriter &writer;

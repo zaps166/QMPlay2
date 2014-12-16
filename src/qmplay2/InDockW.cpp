@@ -8,15 +8,14 @@
 InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt ) :
 	grad1( grad1 ), grad2( grad2 ), qmpTxt( qmpTxt ),
 	qmp2Pixmap( qmp2Pixmap ),
-	hasWallpaper( false )
+	hasWallpaper( false ),
+	loseHeight( 0 ),
+	w( NULL )
 {
 	connect( &QMPlay2Core, SIGNAL( wallpaperChanged( bool, double ) ), this, SLOT( wallpaperChanged( bool, double ) ) );
-	loseHeight = 0;
 	setFocusPolicy( Qt::StrongFocus );
-	setAutoFillBackground( true );
 	setMouseTracking( true );
 	setPalette( Qt::black );
-	w = NULL;
 }
 
 void InDockW::wallpaperChanged( bool hasWallpaper, double alpha )
@@ -30,19 +29,12 @@ void InDockW::setWidget( QWidget *_w )
 {
 	if ( w == _w )
 		return;
-// 	if ( _w && w )
-// 	{
-// 		_w->setParent( NULL );
-// 		_w->show();
-// 		return;
-// 	}
 	if ( w )
 	{
 		disconnect( w, SIGNAL( destroyed() ), this, SLOT( nullWidget() ) );
 		w->setParent( NULL );
 	}
-	w = _w;
-	if ( w )
+	if ( ( w = _w ) )
 	{
 		w->setMinimumSize( 2, 2 );
 		w->setParent( this );

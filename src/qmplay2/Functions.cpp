@@ -194,7 +194,7 @@ void Functions::getImageSize( const double aspect_ratio, const double zoom, cons
 					*vidH - ( *Y + H - 1 - dstRect->bottom() ) * *vidH / H - 1
 				);
 			else
-				memset( srcRect, 0, sizeof *srcRect );
+				srcRect->setCoords( 0, 0, 0, 0 );
 		}
 	}
 }

@@ -202,7 +202,7 @@ void VideoThr::run()
 
 		const bool getNewPacket = !filters.readyToRead();
 		playC.vPackets.lock();
-		const bool hasVPackets = playC.vPackets.packetCount();
+		const bool hasVPackets = playC.vPackets.canFetch();
 		if ( ( playC.paused && !oneFrame ) || ( !hasVPackets && getNewPacket ) || playC.waitForData )
 		{
 			if ( playC.paused && !paused )
@@ -237,7 +237,7 @@ void VideoThr::run()
 		waiting = false;
 		Packet packet;
 		if ( hasVPackets && getNewPacket )
-			packet = playC.vPackets.dequeue();
+			packet = playC.vPackets.fetch();
 		else
 			packet.ts.setInvalid();
 		playC.vPackets.unlock();
@@ -263,9 +263,9 @@ void VideoThr::run()
 		if ( sDec ) //image subs (pgssub, dvdsub)
 		{
 			Packet sPacket;
-			if ( playC.sPackets.packetCount() )
-				sPacket = playC.sPackets.dequeue();
-			if ( !sDec->decodeSubtitle( sPacket.data, sPacket.ts, pts, napisy, W, H ) )
+			if ( playC.sPackets.canFetch() )
+				sPacket = playC.sPackets.fetch();
+			if ( !sDec->decodeSubtitle( sPacket, sPacket.ts, pts, napisy, W, H ) )
 			{
 				osd_list_to_delete += napisy;
 				napisy = NULL;
@@ -273,13 +273,13 @@ void VideoThr::run()
 		}
 		else
 		{
-			if ( playC.sPackets.packetCount() )
+			if ( playC.sPackets.canFetch() )
 			{
-				Packet sPacket = playC.sPackets.dequeue();
+				Packet sPacket = playC.sPackets.fetch();
 				if ( playC.ass->isASS() )
-					playC.ass->addASSEvent( sPacket.data );
+					playC.ass->addASSEvent( sPacket );
 				else
-					playC.ass->addASSEvent( convertToASS( sPacket.data ), sPacket.ts, sPacket.duration );
+					playC.ass->addASSEvent( convertToASS( sPacket ), sPacket.ts, sPacket.duration );
 			}
 			if ( !playC.ass->getASS( napisy, pts ) )
 			{
@@ -328,7 +328,7 @@ void VideoThr::run()
 		if ( playC.flushVideo )
 			filters.clearBuffers();
 
-		if ( !packet.data.isEmpty() )
+		if ( !packet.isEmpty() )
 		{
 			QByteArray decoded;
 			const int bytes_consumed = dec->decode( packet, decoded, playC.flushVideo, skip ? ~0 : ( fast > 1 ? fast - 1 : 0 ) );

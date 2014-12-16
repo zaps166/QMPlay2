@@ -5,9 +5,13 @@
 
 #include <QByteArray>
 
-struct Packet
+struct Packet : public QByteArray
 {
-	QByteArray data;
+	inline void reset()
+	{
+		*this = Packet();
+	}
+
 	TimeStamp ts;
 	double duration;
 };

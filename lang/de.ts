@@ -2057,14 +2057,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>sek</translation>
     </message>
     <message>
-        <source>Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Lokale Puffergröße (minimale A/V-Paketzählung)</translation>
-    </message>
-    <message>
-        <source>Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Netzwerk Puffergröße (minimale A/V-Paketzählung)</translation>
-    </message>
-    <message>
         <source>Maksymalna głośność</source>
         <translation>Maximale Lautstärke</translation>
     </message>
@@ -2214,6 +2206,18 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     </message>
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
+        <translation>Lokale Puffergröße (A/V-Paketzählung)</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</source>
+        <translation>Netzwerk Puffergröße (A/V-Paketzählung)</translation>
+    </message>
+    <message>
+        <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -69,8 +69,9 @@ public:
 	QScrollArea *scrollA;
 	QGridLayout *layout1;
 	QGridLayout *layout2;
-	QLabel *shortSeekL, *longSeekL, *bufferLocalL, *bufferNetworkL, *playIfBufferedL, *maxVolL;
+	QLabel *shortSeekL, *longSeekL, *bufferLocalL, *bufferNetworkL, *backwardBufferNetworkL, *playIfBufferedL, *maxVolL;
 	QSpinBox *shortSeekB, *longSeekB, *bufferLocalB, *bufferNetworkB, *samplerateB, *channelsB, *maxVolB;
+	QComboBox *backwardBufferNetworkB;
 	QDoubleSpinBox *playIfBufferedB;
 	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek, *restoreVideoEq;
 
@@ -159,7 +160,8 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init( "ShortSeek", 5 );
 	QMPSettings.init( "LongSeek", 30 );
 	QMPSettings.init( "AVBufferLocal", 75 );
-	QMPSettings.init( "AVBufferNetwork", 7500 );
+	QMPSettings.init( "AVBufferNetwork", 10000 );
+	QMPSettings.init( "BackwardBuffer", 1 );
 	QMPSettings.init( "PlayIfBuffered", 1.75 );
 	QMPSettings.init( "MaxVol", 100 );
 	QMPSettings.init( "Volume", 100 );
@@ -417,15 +419,20 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page2->longSeekB->setSuffix( " " + tr( "sek" ) );
 	page2->longSeekB->setValue( QMPSettings.getInt( "LongSeek" ) );
 
-	page2->bufferLocalL = new QLabel( tr( "Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)" ) + ": " );
+	page2->bufferLocalL = new QLabel( tr( "Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)" ) + ": " );
 	page2->bufferLocalB = new QSpinBox;
 	page2->bufferLocalB->setRange( 1, 1000 );
 	page2->bufferLocalB->setValue( QMPSettings.getInt( "AVBufferLocal" ) );
 
-	page2->bufferNetworkL = new QLabel( tr( "Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)" ) + ": " );
+	page2->bufferNetworkL = new QLabel( tr( "Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)" ) + ": " );
 	page2->bufferNetworkB = new QSpinBox;
-	page2->bufferNetworkB->setRange( 100, 100000 );
+	page2->bufferNetworkB->setRange( 100, 1000000 );
 	page2->bufferNetworkB->setValue( QMPSettings.getInt( "AVBufferNetwork" ) );
+
+	page2->backwardBufferNetworkL = new QLabel( tr( "Ilość procent przeznaczonych paczek A/V dla przewijania w tył" ) + ": " );
+	page2->backwardBufferNetworkB = new QComboBox;
+	page2->backwardBufferNetworkB->addItems( QStringList() << "0%" << "25%" << "50%" );
+	page2->backwardBufferNetworkB->setCurrentIndex( QMPSettings.getUInt( "BackwardBuffer" ) );
 
 	page2->playIfBufferedL = new QLabel( tr( "Rozpocznij odtwarzanie strumienia internetowego jeżeli zostanie zbuforowane" ) + ": " );
 	page2->playIfBufferedB = new QDoubleSpinBox;
@@ -540,6 +547,8 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page2->layout2->addWidget( page2->bufferLocalB, layout_row++, 1, 1, 1 );
 	page2->layout2->addWidget( page2->bufferNetworkL, layout_row, 0, 1, 1 );
 	page2->layout2->addWidget( page2->bufferNetworkB, layout_row++, 1, 1, 1 );
+	page2->layout2->addWidget( page2->backwardBufferNetworkL, layout_row, 0, 1, 1 );
+	page2->layout2->addWidget( page2->backwardBufferNetworkB, layout_row++, 1, 1, 1 );
 	page2->layout2->addWidget( page2->playIfBufferedL, layout_row, 0, 1, 1 );
 	page2->layout2->addWidget( page2->playIfBufferedB, layout_row++, 1, 1, 1 );
 	page2->layout2->addWidget( page2->maxVolL, layout_row, 0, 1, 1 );
@@ -769,6 +778,7 @@ void SettingsWidget::apply()
 			QMPSettings.set( "LongSeek", page2->longSeekB->value() );
 			QMPSettings.set( "AVBufferLocal", page2->bufferLocalB->value() );
 			QMPSettings.set( "AVBufferNetwork", page2->bufferNetworkB->value() );
+			QMPSettings.set( "BackwardBuffer", page2->backwardBufferNetworkB->currentIndex() );
 			QMPSettings.set( "PlayIfBuffered", page2->playIfBufferedB->value() );
 			QMPSettings.set( "ForceSamplerate", page2->forceSamplerate->isChecked() );
 			QMPSettings.set( "Samplerate", page2->samplerateB->value() );

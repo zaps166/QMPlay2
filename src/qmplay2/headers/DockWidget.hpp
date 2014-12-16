@@ -6,7 +6,7 @@
 class DockWidget : public QDockWidget
 {
 public:
-	DockWidget() :
+	inline DockWidget() :
 		titleBarVisible( true ), globalTitleBarVisible( true )
 	{}
 	inline void setTitleBarVisible( bool v = true )

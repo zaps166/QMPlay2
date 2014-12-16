@@ -90,8 +90,8 @@ bool FFDec::openCodec( AVCodec *codec )
 void FFDec::decodeFirstStep( AVPacket &packet, Packet &encodedPacket, bool flush )
 {
 	av_init_packet( &packet );
-	packet.data = ( quint8 * )encodedPacket.data.data();
-	packet.size = encodedPacket.data.size();
+	packet.data = ( quint8 * )encodedPacket.data();
+	packet.size = encodedPacket.size();
 	packet.dts = round( encodedPacket.ts.dts() / time_base );
 	packet.pts = round( encodedPacket.ts.pts() / time_base );
 	if ( flush )

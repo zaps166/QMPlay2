@@ -78,6 +78,11 @@ private:
 	void resizeEvent( QResizeEvent * );
 	void paintEvent( QPaintEvent * );
 
+	QPaintEngine *paintEngine() const
+	{
+		return NULL;
+	}
+
 	void clearRGBImage();
 	void clr_vpp();
 	void clr();

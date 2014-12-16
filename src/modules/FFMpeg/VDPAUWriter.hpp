@@ -64,6 +64,11 @@ private:
 	void resizeEvent( QResizeEvent * );
 	void paintEvent( QPaintEvent * );
 
+	QPaintEngine *paintEngine() const
+	{
+		return NULL;
+	}
+
 	void destroyOutputSurfaces();
 	void clr();
 

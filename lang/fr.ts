@@ -2044,14 +2044,6 @@
         <translation>sec</translation>
     </message>
     <message>
-        <source>Rozmiar bufora dla lokalnych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Taille de la mémoire tampon locale (nombre de paquets A/V minimal)</translation>
-    </message>
-    <message>
-        <source>Rozmiar bufora dla internetowych strumieni (minimalna ilość paczek A/V)</source>
-        <translation>Taille de la mémoire tampon réseau (nombre de paquets A/V minimal)</translation>
-    </message>
-    <message>
         <source>Maksymalna głośność</source>
         <translation>Volume maxmimum</translation>
     </message>
@@ -2201,6 +2193,18 @@
     </message>
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
+        <translation>Taille de la mémoire tampon locale (nombre de paquets A/V)</translation>
+    </message>
+    <message>
+        <source>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</source>
+        <translation>Taille de la mémoire tampon réseau (nombre de paquets A/V)</translation>
+    </message>
+    <message>
+        <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

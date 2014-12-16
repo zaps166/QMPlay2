@@ -138,7 +138,7 @@ void AudioThr::run()
 		while ( !br && dec == last_dec )
 		{
 			playC.aPackets.lock();
-			const bool hasAPackets = playC.aPackets.packetCount();
+			const bool hasAPackets = playC.aPackets.canFetch();
 			bool hasBufferedSamples = false;
 			if ( playC.endOfStream && !hasAPackets )
 				foreach ( AudioFilter *filter, filters )
@@ -179,7 +179,7 @@ void AudioThr::run()
 			const bool flushAudio = playC.flushAudio;
 
 			if ( !hasBufferedSamples && ( bytes_consumed < 0 || flushAudio ) )
-				packet = playC.aPackets.dequeue();
+				packet = playC.aPackets.fetch();
 			else if ( hasBufferedSamples )
 				packet.ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
 			playC.aPackets.unlock();
@@ -315,13 +315,13 @@ void AudioThr::run()
 
 			mutex.unlock();
 
-			if ( playC.flushAudio || packet.data.size() == bytes_consumed || ( !bytes_consumed && !decoded.size() ) )
+			if ( playC.flushAudio || packet.size() == bytes_consumed || ( !bytes_consumed && !decoded.size() ) )
 			{
 				bytes_consumed = -1;
-				packet = Packet();
+				packet.reset();
 			}
-			else if ( bytes_consumed != packet.data.size() )
-				packet.data.remove( 0, bytes_consumed );
+			else if ( bytes_consumed != packet.size() )
+				packet.remove( 0, bytes_consumed );
 		}
 	}
 }

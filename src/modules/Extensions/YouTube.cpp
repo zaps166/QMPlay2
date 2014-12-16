@@ -747,7 +747,6 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 		tWI->setDisabled( false );
 	else if ( ret.count() == 2 ) //Pobiera tytuł
 	{
-		QString title;
 		int ytplayerIdx = data.indexOf( "ytplayer.config" );
 		if ( ytplayerIdx > -1 )
 		{

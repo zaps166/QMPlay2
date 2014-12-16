@@ -6,64 +6,71 @@
 #include <QStyle>
 
 Slider::Slider() :
-	QSlider( Qt::Horizontal )
+	QSlider( Qt::Horizontal ),
+	canSetValue( true ), _ignoreValueChanged( false ),
+	wheelStep( 5 ), firstLine( -1 ), secondLine( -1 )
 {
-	wheelStep = 5;
-	_drawLineTo = 0;
-	canSetValue = true;
-	_ignoreValueChanged = false;
 	setMouseTracking( true );
 }
 
-void Slider::setValue( int v )
+void Slider::setValue( int val )
 {
 	if ( canSetValue )
 	{
 		_ignoreValueChanged = true;
-		QSlider::setValue( v );
+		QSlider::setValue( val );
 		_ignoreValueChanged = false;
 	}
 }
 
-void Slider::drawLineTo( int i )
+void Slider::drawRange( int first, int second )
 {
-	_drawLineTo = i;
+	firstLine  = first  > 0 ? value() - first  : -1;
+	secondLine = second > 0 ? value() + second : -1;
 	repaint();
 }
 
 void Slider::paintEvent( QPaintEvent *e )
 {
+	int max, o, firstX, secondX;
 	QSlider::paintEvent( e );
-	if ( _drawLineTo > 0 && maximum() )
+	if ( ( firstLine > -1 || secondLine > -1 ) && ( max = maximum() ) > 0 )
 	{
-		if ( _drawLineTo + value() > maximum() )
-			_drawLineTo = maximum() - value();
+		if ( secondLine > max )
+			secondLine = max;
+		if ( firstLine > secondLine )
+			firstLine = -1;
 
 		QPainter p( this );
 
 		QStyleOptionSlider opt;
 		initStyleOption( &opt );
 
-		const int o = style()->pixelMetric( QStyle::PM_SliderLength ) - 1;
-		const int X = QStyle::sliderPositionFromValue( minimum(), maximum(), value()+_drawLineTo, width()-o, false ) + o/2;
 		QRect handle = style()->subControlRect( QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this );
 
-		p.drawLine( X, handle.y(), X, handle.height() );
+		o = style()->pixelMetric( QStyle::PM_SliderLength ) - 1;
+		if ( firstLine > -1 )
+		{
+			firstX  = QStyle::sliderPositionFromValue( minimum(), max, firstLine,  width() - o, false ) + o / 2;
+			p.drawLine( firstX, handle.y(), firstX, handle.height() );
+		}
+		if ( secondLine > -1 )
+		{
+			secondX = QStyle::sliderPositionFromValue( minimum(), max, secondLine, width() - o, false ) + o / 2;
+			p.drawLine( secondX, handle.y(), secondX, handle.height() );
+		}
 	}
 }
 void Slider::mousePressEvent( QMouseEvent *e )
 {
 	canSetValue = false;
-	int v = value();
-	if ( e->buttons() == Qt::LeftButton )
+	if ( e->buttons() != Qt::LeftButton )
+		QSlider::mousePressEvent( e );
+	else
 	{
 		QMouseEvent ev( e->type(), e->pos(), Qt::MidButton, Qt::MidButton, e->modifiers() );
 		QSlider::mousePressEvent( &ev );
 	}
-	else
-		QSlider::mousePressEvent( e );
-	if ( v != value() )
-		_drawLineTo = 0;
 }
 void Slider::mouseReleaseEvent( QMouseEvent *e )
 {
@@ -104,5 +111,5 @@ void Slider::enterEvent( QEvent *e )
 int Slider::getMousePos( int X )
 {
 	const int o = style()->pixelMetric( QStyle::PM_SliderLength ) - 1;
-	return QStyle::sliderValueFromPosition( minimum(), maximum(), X - o/2, width() - o, false );
+	return QStyle::sliderValueFromPosition( minimum(), maximum(), X - o / 2, width() - o, false );
 }
