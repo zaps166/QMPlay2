@@ -8,7 +8,6 @@
 
 #include <QX11Info>
 #include <QPainter>
-#include <QDebug>
 
 #include <va/va_x11.h>
 

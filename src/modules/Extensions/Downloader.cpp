@@ -6,7 +6,6 @@
 #include <QMPlay2Core.hpp>
 
 #include <QTime>
-#include <QDebug>
 #include <QTimer>
 #include <QLabel>
 #include <QAction>

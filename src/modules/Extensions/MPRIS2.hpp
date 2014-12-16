@@ -102,7 +102,7 @@ public slots:
 signals:
 	void Seeked( qint64 Position );
 private slots:
-	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool );
+	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName );
 	void coverDataFromMediaFile( const QByteArray &cover );
 	void playStateChanged( const QString &plState );
 	void coverFile( const QString &filePath );

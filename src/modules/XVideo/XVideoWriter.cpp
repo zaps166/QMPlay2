@@ -4,8 +4,6 @@
 #include <Functions.hpp>
 using Functions::getImageSize;
 
-#include <QDebug>
-
 /**/
 
 Drawable::Drawable( XVideoWriter &writer ) :

@@ -7,7 +7,6 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QLibrary>
-#include <QDebug>
 #include <QFile>
 #include <QDir>
 #ifdef Q_OS_WIN

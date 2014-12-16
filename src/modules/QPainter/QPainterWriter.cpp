@@ -7,7 +7,6 @@ using Functions::getImageSize;
 using Functions::aligned;
 
 #include <QPainter>
-#include <QDebug>
 
 /**/
 

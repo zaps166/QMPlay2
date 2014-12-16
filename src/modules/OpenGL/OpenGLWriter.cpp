@@ -6,7 +6,6 @@ using Functions::getImageSize;
 using Functions::aligned;
 
 #include <QGLShaderProgram>
-#include <QDebug>
 
 #include <GL/glext.h>
 

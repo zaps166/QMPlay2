@@ -111,6 +111,6 @@ namespace Functions
 		if ( mutex )
 			mutex->unlock();
 	}
-};
+}
 
 #endif

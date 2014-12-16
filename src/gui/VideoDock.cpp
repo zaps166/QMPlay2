@@ -15,7 +15,6 @@ using Functions::Url;
 #include <QFileInfo>
 #include <QMimeData>
 #include <QPainter>
-#include <QDebug>
 #include <QMenu>
 
 VideoDock::VideoDock() :

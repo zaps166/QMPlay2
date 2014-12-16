@@ -6,7 +6,6 @@
 using Functions::getImageSize;
 
 #include <QPainter>
-#include <QDebug>
 
 #include <math.h>
 

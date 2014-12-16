@@ -5,7 +5,6 @@
 #include <StreamInfo.hpp>
 #include <VideoFrame.hpp>
 
-#include <QDebug>
 #include <QQueue>
 
 extern "C"

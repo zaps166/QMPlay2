@@ -1,8 +1,6 @@
 #include <FFDec.hpp>
 #include <StreamInfo.hpp>
 
-#include <QDebug>
-
 extern "C"
 {
 	#include <libavformat/avformat.h>

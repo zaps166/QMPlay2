@@ -4,7 +4,6 @@
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QDebug>
 #include <QDir>
 
 static void propertyChanged( const QString &name, const QVariant &value )
@@ -94,7 +93,7 @@ MediaPlayer2Player::MediaPlayer2Player( QObject *p ) :
 {
 	clearMetaData();
 	m_data[ "mpris:trackid" ] = QVariant::fromValue< QDBusObjectPath >( trackID );
-	connect( &QMPlay2Core, SIGNAL( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool ) ), this, SLOT( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool ) ) );
+	connect( &QMPlay2Core, SIGNAL( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool, const QString & ) ), this, SLOT( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool, const QString & ) ) );
 	connect( &QMPlay2Core, SIGNAL( coverDataFromMediaFile( const QByteArray & ) ), this, SLOT( coverDataFromMediaFile( const QByteArray & ) ) );
 	connect( &QMPlay2Core, SIGNAL( playStateChanged( const QString & ) ), this, SLOT( playStateChanged( const QString & ) ) );
 	connect( &QMPlay2Core, SIGNAL( coverFile( const QString & ) ), this, SLOT( coverFile( const QString & ) ) );
@@ -215,8 +214,9 @@ void MediaPlayer2Player::OpenUri( const QString &Uri )
 	QMPlay2Core.processParam( "open", Uri );
 }
 
-void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool )
+void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName )
 {
+	Q_UNUSED( needCover )
 	bool tmp = play && length > 0;
 	if ( tmp != can_seek )
 		propertyChanged( "CanSeek", can_seek = tmp );
@@ -225,8 +225,13 @@ void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const Q
 	else
 	{
 		m_data[ "mpris:length" ] = len = length * 1000000LL;
-		m_data[ "xesam:title" ] = title;
-		m_data[ "xesam:artist" ] = artist;
+		if ( title.isEmpty() && artist.isEmpty() )
+			m_data[ "xesam:title" ] = fileName;
+		else
+		{
+			m_data[ "xesam:title" ] = title;
+			m_data[ "xesam:artist" ] = artist;
+		}
 		m_data[ "xesam:album" ] = album;
 	}
 	propertyChanged( "Metadata", m_data );

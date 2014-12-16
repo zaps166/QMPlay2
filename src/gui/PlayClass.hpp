@@ -7,7 +7,6 @@
 #include <PacketBuffer.hpp>
 
 #include <QSize>
-#include <QDebug>
 #include <QTimer>
 #include <QMutex>
 #include <QImage>

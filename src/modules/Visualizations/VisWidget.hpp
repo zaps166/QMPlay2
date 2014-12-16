@@ -5,8 +5,6 @@
 #include <QTimer>
 #include <QTime>
 
-#include <QDebug>
-
 class DockWidget;
 
 class VisWidget : public QWidget

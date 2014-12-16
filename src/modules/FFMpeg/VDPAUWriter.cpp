@@ -9,7 +9,6 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QPainter>
-#include <QDebug>
 
 #include <vdpau/vdpau_x11.h>
 

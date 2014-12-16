@@ -6,7 +6,6 @@
 
 #include <QWidgetAction>
 #include <QMainWindow>
-#include <QDebug>
 
 static QAction *newAction( const QString &txt, QMenu *parent, const QKeySequence &keySequence, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable )
 {

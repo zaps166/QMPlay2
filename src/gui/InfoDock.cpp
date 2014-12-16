@@ -3,7 +3,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QLabel>
-#include <QDebug>
 
 void TextEdit::mouseMoveEvent( QMouseEvent *e )
 {

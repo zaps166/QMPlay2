@@ -2,65 +2,55 @@
 #define SETTINGS_HPP
 
 #include <QMPlay2Core.hpp>
+
 #include <QSettings>
+#include <QMutex>
+#include <QMap>
 
-class Settings
+class Settings : protected QSettings
 {
+	typedef QMap< QString, QVariant > SettingsMap;
 public:
-	inline Settings( const QString &name ) :
-		settings( QMPlay2Core.getSettingsDir() + name + ".ini", QSettings::IniFormat ) {}
+	Settings( const QString &name );
+	~Settings();
 
-	inline bool contains( const QString &key ) const
-	{
-		return settings.contains( key );
-	}
+	void init( const QString &key, const QVariant &val );
+	void set( const QString &key, const QVariant &val );
+	bool contains( const QString &key ) const;
+	void remove( const QString &key );
 
-	inline void init( const QString &key, const QVariant &val )
-	{
-		if ( !contains( key ) )
-			settings.setValue( key, val );
-	}
-
-	inline void set( const QString &key, const QVariant &val )
-	{
-		settings.setValue( key, val );
-	}
-
-	inline QVariant get( const QString &key, const QVariant &def = QVariant() ) const
-	{
-		return settings.value( key, def );
-	}
 	inline bool getBool( const QString &key, const bool def = bool() ) const
 	{
-		return settings.value( key, def ).toBool();
+		return get( key, def ).toBool();
 	}
 	inline int getInt( const QString &key, const int def = int() ) const
 	{
-		return settings.value( key, def ).toInt();
+		return get( key, def ).toInt();
 	}
 	inline uint getUInt( const QString &key, const uint def = uint() ) const
 	{
-		return settings.value( key, def ).toUInt();
+		return get( key, def ).toUInt();
 	}
 	inline double getDouble( const QString &key, const double def = double() ) const
 	{
-		return settings.value( key, def ).toDouble();
+		return get( key, def ).toDouble();
 	}
 	inline QByteArray getByteArray( const QString &key, const QByteArray &def = QByteArray() ) const
 	{
-		return settings.value( key, def ).toByteArray();
+		return get( key, def ).toByteArray();
 	}
 	inline QString getString( const QString &key, const QString &def = QString() ) const
 	{
-		return settings.value( key, def ).toString();
+		return get( key, def ).toString();
 	}
-
-	inline void remove( const QString &key )
-	{
-		settings.remove( key );
-	}
+	QVariant get( const QString &key, const QVariant &def = QVariant() ) const;
 private:
-	QSettings settings;
+	void timerEvent( QTimerEvent * );
+	void flushCache();
+
+	mutable QMutex mutex;
+	SettingsMap cache;
+	int timerID;
 };
 
 #endif

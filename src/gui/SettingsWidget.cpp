@@ -1,8 +1,8 @@
 #include <SettingsWidget.hpp>
 
-#include <OSDSettingsW.hpp>
 #include <DeintSettingsW.hpp>
 #include <OtherVFiltersW.hpp>
+#include <OSDSettingsW.hpp>
 #include <Main.hpp>
 
 #if QT_VERSION < 0x050000
@@ -30,7 +30,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QLabel>
-#include <QDebug>
 #include <QDir>
 
 #include <Appearance.hpp>

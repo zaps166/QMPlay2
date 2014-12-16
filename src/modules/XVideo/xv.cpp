@@ -62,7 +62,6 @@ static void vflip_image( char *data, int linesize, int height )
 
 #include <QPainter>
 #include <QX11Info>
-#include <QDebug>
 
 #include <math.h>
 

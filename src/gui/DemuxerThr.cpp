@@ -191,6 +191,8 @@ void DemuxerThr::run()
 	if ( err || br )
 		return end();
 
+	updatePlayingName = name.isEmpty() ? fileName( url, false ) : name;
+
 	if ( playC.videoStream > -1 )
 		playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[ playC.videoStream ]->FPS;
 
@@ -463,7 +465,7 @@ void DemuxerThr::run()
 		}
 	}
 
-	emit QMPlay2Core.updatePlaying( false, title, artist, album, demuxer->length(), false );
+	emit QMPlay2Core.updatePlaying( false, title, artist, album, demuxer->length(), false, updatePlayingName );
 
 	playC.endOfStream = playC.canUpdatePos = false; //to musi tu być!
 	end();
@@ -493,7 +495,7 @@ void DemuxerThr::updateCoverAndPlaying()
 	if ( showCovers )
 		loadImage();
 	emitInfo();
-	emit QMPlay2Core.updatePlaying( true, title, artist, album, demuxer->length(), showCovers && !hasCover );
+	emit QMPlay2Core.updatePlaying( true, title, artist, album, demuxer->length(), showCovers && !hasCover, updatePlayingName );
 }
 
 static void printOtherInfo( const QList< QMPlay2Tag > &other_info, QString &str )

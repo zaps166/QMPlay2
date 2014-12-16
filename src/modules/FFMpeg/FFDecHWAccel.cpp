@@ -4,8 +4,6 @@
 #include <VideoFrame.hpp>
 #include <StreamInfo.hpp>
 
-#include <QDebug>
-
 extern "C"
 {
 	#include <libavformat/avformat.h>

@@ -26,7 +26,7 @@ LastFM::LastFM( Module &module ) :
 	loginTimer.setSingleShot( true );
 	connect( &updateTim, SIGNAL( timeout() ), this, SLOT( processScrobbleQueue() ) );
 	connect( &loginTimer, SIGNAL( timeout() ), this, SLOT( login() ) );
-	connect( &QMPlay2Core, SIGNAL( updatePlaying( bool, QString, QString, QString, int, bool ) ), this, SLOT( updatePlaying( bool, QString, QString, QString, int, bool ) ) );
+	connect( &QMPlay2Core, SIGNAL( updatePlaying( bool, QString, QString, QString, int, bool, QString ) ), this, SLOT( updatePlaying( bool, QString, QString, QString, int, bool, QString ) ) );
 }
 
 bool LastFM::set()
@@ -146,8 +146,9 @@ void LastFM::clear()
 	dontShowLoginError = false;
 }
 
-void LastFM::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover )
+void LastFM::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName )
 {
+	Q_UNUSED( fileName )
 	if ( !artist.isEmpty() && ( !title.isEmpty() || !album.isEmpty() ) )
 	{
 		if ( !user.isEmpty() && !md5pass.isEmpty() )

@@ -6,7 +6,6 @@
 #include <StreamInfo.hpp>
 
 #include <QThread> //to detect number of CPUs or CPU cores
-#include <QDebug>
 
 extern "C"
 {

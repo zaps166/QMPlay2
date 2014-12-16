@@ -41,7 +41,7 @@ private:
 
 	void clear();
 private slots:
-	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover );
+	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName );
 
 	void albumFinished();
 	void loginFinished();

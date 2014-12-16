@@ -162,11 +162,11 @@ bool EqualizerGUI::set()
 	for ( int i = 0 ; i < slidersCount ; ++i )
 	{
 		QSlider *slider = new QSlider;
-		slider->setValue( sets().getInt( "Equalizer/" + QString::number( i ) ) );
-		slider->setTickPosition( QSlider::TicksBelow );
-		slider->setProperty( "idx", i );
-		slider->setTickInterval( 50 );
 		slider->setMaximum( 100 );
+		slider->setTickInterval( 50 );
+		slider->setProperty( "idx", i );
+		slider->setTickPosition( QSlider::TicksBelow );
+		slider->setValue( sets().getInt( "Equalizer/" + QString::number( i ) ) );
 		connect( slider, SIGNAL( valueChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 
 		graph.setValue( i, slider->value() / 100.0f );

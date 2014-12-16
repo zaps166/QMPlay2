@@ -22,8 +22,6 @@
 #include <QLabel>
 #include <QFile>
 
-#include <QDebug>
-
 void WallpaperW::paintEvent( QPaintEvent * )
 {
 	if ( !pixmap.isNull() )

@@ -2,7 +2,7 @@
 
 class CDIODestroyTimer;
 
-class Inputs : public QObject, public Module
+class Inputs : public Module
 {
 	Q_OBJECT
 public:

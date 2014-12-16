@@ -5,8 +5,6 @@
 #include <TimeStamp.hpp>
 #include <Module.hpp>
 
-#include <QDebug>
-
 extern "C"
 {
 	#include <libavutil/cpu.h>

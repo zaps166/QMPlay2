@@ -47,7 +47,7 @@ private:
 	PlayClass &playC;
 	Demuxer *demuxer;
 
-	QString name, url;
+	QString name, url, updatePlayingName;
 
 	int minBuffSizeLocal, minBuffSizeNetwork;
 	bool err, updateBufferedSeconds, br, demuxerReady, hasCover;
