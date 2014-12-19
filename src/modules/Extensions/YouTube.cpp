@@ -186,21 +186,12 @@ void ResultsYoutube::copyPageURL()
 }
 void ResultsYoutube::copyStreamURL()
 {
-	QTreeWidgetItem *tWI = currentItem();
-	if ( tWI )
+	const QString streamUrl = sender()->property( "StreamUrl" ).toString();
+	if ( !streamUrl.isEmpty() )
 	{
-		if ( !tWI->parent() )
-			tWI = getDefaultQuality( tWI );
-		if ( tWI )
-		{
-			QString stream_url = tWI->data( 0, Qt::UserRole ).toString();
-			if ( !stream_url.isEmpty() )
-			{
-				QMimeData *mimeData = new QMimeData;
-				mimeData->setText( stream_url );
-				qApp->clipboard()->setMimeData( mimeData );
-			}
-		}
+		QMimeData *mimeData = new QMimeData;
+		mimeData->setText( streamUrl );
+		qApp->clipboard()->setMimeData( mimeData );
 	}
 }
 
@@ -216,7 +207,7 @@ void ResultsYoutube::contextMenu( const QPoint &point )
 	QTreeWidgetItem *tWI = currentItem();
 	if ( tWI )
 	{
-		const bool isOK = tWI->parent() || tWI->childCount();
+		const bool isOK = !tWI->isDisabled();
 		if ( isOK )
 		{
 			menu.addAction( tr( "Kolejkuj" ), this, SLOT( enqueue() ) );
@@ -228,8 +219,19 @@ void ResultsYoutube::contextMenu( const QPoint &point )
 		menu.addSeparator();
 		if ( isOK )
 		{
-			menu.addAction( tr( "Kopiuj adres strumienia" ), this, SLOT( copyStreamURL() ) );
-			menu.addSeparator();
+			QVariant streamUrl;
+			QTreeWidgetItem *tWI_2 = tWI;
+			if ( !tWI_2->parent() )
+				tWI_2 = getDefaultQuality( tWI_2 );
+			if ( tWI_2 )
+				streamUrl = tWI_2->data( 0, Qt::UserRole );
+
+			if ( !streamUrl.isNull() )
+			{
+				menu.addAction( tr( "Kopiuj adres strumienia" ), this, SLOT( copyStreamURL() ) )->setProperty( "StreamUrl", streamUrl );
+				menu.addSeparator();
+			}
+
 			const QString name = tWI->parent() ? tWI->parent()->text( 0 ) : tWI->text( 0 );
 			foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 				if ( !dynamic_cast< YouTube * >( QMPlay2Ext ) )
@@ -400,6 +402,14 @@ void YouTubeW::search()
 
 void YouTubeW::netFinished( QNetworkReply *reply )
 {
+	const QUrl redirected = reply->property( "Redirected" ).toBool() ? QUrl() : reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
+	QNetworkReply *redirectedReply = ( !reply->error() && redirected.isValid() ) ? net.get( QNetworkRequest( redirected ) ) : NULL;
+	if ( redirectedReply )
+	{
+		redirectedReply->setProperty( "tWI", reply->property( "tWI" ) );
+		redirectedReply->setProperty( "Redirected", true );
+	}
+
 	if ( reply->error() )
 	{
 		if ( reply == searchReply )
@@ -412,7 +422,7 @@ void YouTubeW::netFinished( QNetworkReply *reply )
 			emit QMPlay2Core.sendMessage( tr( "Błąd połączenia" ), YouTubeName, 3 );
 		}
 	}
-	else
+	else if ( !redirectedReply )
 	{
 		const QByteArray replyData = reply->readAll();
 		if ( reply == autocompleteReply )
@@ -427,24 +437,32 @@ void YouTubeW::netFinished( QNetworkReply *reply )
 			if ( p.loadFromData( replyData ) )
 				( ( QTreeWidgetItem * )reply->property( "tWI" ).value< void * >() )->setData( 0, Qt::DecorationRole, p.scaled( imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 		}
-
 	}
+
 	if ( reply == autocompleteReply )
-		autocompleteReply = NULL;
+		autocompleteReply = redirectedReply;
 	else if ( reply == searchReply )
-		searchReply = NULL;
+		searchReply = redirectedReply;
 	else if ( linkReplies.contains( reply ) )
 	{
 		linkReplies.removeOne( reply );
-		progressB->setValue( progressB->value() + 1 );
+		if ( !redirectedReply )
+			progressB->setValue( progressB->value() + 1 );
+		else
+			linkReplies += redirectedReply;
 	}
 	else if ( imageReplies.contains( reply ) )
 	{
 		imageReplies.removeOne( reply );
-		progressB->setValue( progressB->value() + 1 );
+		if ( !redirectedReply )
+			progressB->setValue( progressB->value() + 1 );
+		else
+			imageReplies += redirectedReply;
 	}
+
 	if ( progressB->isVisible() && linkReplies.isEmpty() && imageReplies.isEmpty() )
 		progressB->hide();
+
 	reply->deleteLater();
 }
 
@@ -816,10 +834,8 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 		itag_arr[ 139 ] = "Audio MP4 (AAC 48kbps)";
 	}
 	ItagNames itagPair;
-	QMapIterator< int, QString > it( itag_arr );
-	while ( it.hasNext() )
+	for ( QMap< int, QString >::const_iterator it = itag_arr.begin(), it_end = itag_arr.end() ; it != it_end ; ++it )
 	{
-		it.next();
 		itagPair.first += it.value();
 		itagPair.second += it.key();
 	}
