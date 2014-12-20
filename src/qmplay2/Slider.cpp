@@ -25,15 +25,16 @@ void Slider::setValue( int val )
 
 void Slider::drawRange( int first, int second )
 {
-	firstLine  = first;
-	secondLine = second;
-
-	if ( secondLine > maximum() )
-		secondLine = maximum();
-	if ( firstLine > secondLine )
-		firstLine = -1;
-
-	repaint();
+	if ( second > maximum() )
+		second = maximum();
+	if ( first > second )
+		first = -1;
+	if ( first != firstLine || second != secondLine )
+	{
+		firstLine  = first;
+		secondLine = second;
+		repaint();
+	}
 }
 
 void Slider::paintEvent( QPaintEvent *e )
@@ -53,16 +54,16 @@ void Slider::paintEvent( QPaintEvent *e )
 		if ( firstLine > -1 )
 		{
 			int X  = QStyle::sliderPositionFromValue( minimum(), maximum(), firstLine,  width() - o, false ) + o / 2 - handleW_2;
-			p.drawLine( X, handle.y(), X + handleW_2, handle.y() );
-			p.drawLine( X, handle.y(), X, handle.height()-1 );
-			p.drawLine( X, handle.height()-1, X + handleW_2, handle.height()-1 );
+			p.drawLine( X, 0, X + handleW_2, 0 );
+			p.drawLine( X, 0, X, height()-1 );
+			p.drawLine( X, height()-1, X + handleW_2, height()-1 );
 		}
 		if ( secondLine > -1 )
 		{
 			int X = QStyle::sliderPositionFromValue( minimum(), maximum(), secondLine, width() - o, false ) + o / 2 + handleW_2 - 1;
-			p.drawLine( X, handle.y(), X - handleW_2, handle.y() );
-			p.drawLine( X, handle.y(), X, handle.height()-1 );
-			p.drawLine( X, handle.height()-1, X - handleW_2, handle.height()-1 );
+			p.drawLine( X, 0, X - handleW_2, 0 );
+			p.drawLine( X, 0, X, height()-1 );
+			p.drawLine( X, height()-1, X - handleW_2, height()-1 );
 		}
 	}
 }

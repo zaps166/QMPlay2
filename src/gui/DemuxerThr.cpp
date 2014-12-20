@@ -64,12 +64,6 @@ public:
 	qint64 remainingBytes, backwardBytes;
 };
 
-static const double updateBufferedTime = 1.25;
-static inline double ensureUpdateBuffered()
-{
-	return gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true"
-}
-
 /**/
 
 DemuxerThr::DemuxerThr( PlayClass &playC ) :
@@ -253,8 +247,7 @@ void DemuxerThr::run()
 	const bool localStream = demuxer->localStream();
 	int forwardPackets = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork ), backwardPackets;
 	bool paused = false, demuxerPaused = false, waitingForFillBufferB = false;
-	double wfd_t = playIfBuffered > 0.25 ? 0.25 : playIfBuffered;
-	double time = localStream ? 0.0 : gettime();
+	double time = localStream ? 0.0 : gettime(), updateBufferedTime = 0.0;
 	BufferInfo bufferInfo;
 	int vS, aS;
 
@@ -311,14 +304,17 @@ void DemuxerThr::run()
 				{
 					mustSeek = false;
 					flush = true;
-					time = ensureUpdateBuffered();
+					time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 					if ( aThr )
 						aLocked = aThr->lock();
 					if ( vThr )
 						vLocked = vThr->lock();
 				}
 				else
+				{
 					emit playC.updateBufferedRange( -1, -1 );
+					updateBufferedTime = 0.0;
+				}
 				playC.vPackets.unlock();
 				playC.aPackets.unlock();
 				playC.sPackets.unlock();
@@ -378,7 +374,7 @@ void DemuxerThr::run()
 			playC.emptyBufferCond.wakeAll();
 		}
 
-		bool updateBuffered = localStream ? false : ( gettime() - time >= ( playC.waitForData ? wfd_t : updateBufferedTime ) );
+		bool updateBuffered = localStream ? false : ( gettime() - time >= updateBufferedTime );
 		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &bufferInfo : NULL );
 		if ( playC.endOfStream && !vS && !aS && canBreak( aThr, vThr ) )
 			break;
@@ -390,13 +386,18 @@ void DemuxerThr::run()
 			if ( demuxer->metadataChanged() )
 				updateCoverAndPlaying();
 			waitingForFillBufferB = true;
+			if ( updateBufferedTime < 1.0 )
+				updateBufferedTime += 0.25;
 			time = gettime();
 		}
 		else if ( localStream && demuxer->metadataChanged() )
 			updateCoverAndPlaying();
 
 		if ( !localStream && !playC.waitForData && !playC.endOfStream && playIfBuffered > 0.0 && emptyBuffers( vS, aS ) )
+		{
 			playC.waitForData = true;
+			updateBufferedTime = 0.0;
+		}
 		else if
 		(
 			playC.waitForData &&
@@ -424,7 +425,7 @@ void DemuxerThr::run()
 			//po zakończeniu buforowania należy odświeżyć informacje o buforowaniu
 			if ( paused && !waitingForFillBufferB && !playC.fillBufferB )
 			{
-				time = ensureUpdateBuffered();
+				time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 				waitingForFillBufferB = true;
 				continue;
 			}
@@ -484,7 +485,7 @@ void DemuxerThr::run()
 			{
 				playC.endOfStream = true;
 				if ( !localStream )
-					time = ensureUpdateBuffered();
+					time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 			}
 			else
 				break;
