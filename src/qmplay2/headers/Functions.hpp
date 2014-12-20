@@ -24,7 +24,6 @@ namespace Functions
 	typedef QList< QByteArray > ChecksumList;
 
 	QString Url( QString, const QString &pth = QString() );
-
 	QString getUrlScheme( const QString &url );
 
 	static inline void getHMS( int t, int &H, int &M, int &S )

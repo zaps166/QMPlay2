@@ -42,6 +42,7 @@ void TextEdit::mousePressEvent( QMouseEvent *e )
 #include <Functions.hpp>
 
 #include <QGridLayout>
+#include <QDebug>
 
 InfoDock::InfoDock()
 {
@@ -99,23 +100,27 @@ void InfoDock::updateBitrate( int a, int v, double fps )
 	if ( visibleRegion() != QRegion() )
 		setBRLabels();
 }
-void InfoDock::updateBuffered( qint64 bs, double bt )
+void InfoDock::updateBuffered( qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds )
 {
-	if ( bs < 0 )
+	if ( backwardBytes < 0 || remainingBytes < 0 )
 	{
 		if ( buffer->isVisible() )
 		{
 			buffer->clear();
 			buffer->close();
 		}
-		return;
 	}
-	if ( !buffer->isVisible() )
-		buffer->show();
-	this->bs = bs;
-	this->bt = bt;
-	if ( visibleRegion() != QRegion() )
-		setBufferLabel();
+	else
+	{
+		bytes1 = backwardBytes;
+		bytes2 = remainingBytes;
+		seconds1 = backwardSeconds;
+		seconds2 = remainingSeconds;
+		if ( !buffer->isVisible() )
+			buffer->show();
+		if ( visibleRegion() != QRegion() )
+			setBufferLabel();
+	}
 }
 void InfoDock::clear()
 {
@@ -150,8 +155,8 @@ void InfoDock::setBRLabels()
 }
 void InfoDock::setBufferLabel()
 {
-	QString txt = tr( "Dane zbuforowane" ) + ": " + Functions::sizeString( bs );
-	if ( bt > 0.0 )
-		txt += ", " + QString::number( bt, 'f', 2 ) + " " + tr( "sek" );
+	QString txt = tr( "Dane zbuforowane" ) + ": [" + Functions::sizeString( bytes1 ) + ", " + Functions::sizeString( bytes2 ) + "]";
+	if ( seconds1 >= 0.0 && seconds2 >= 0.0 )
+		txt += ", [" + QString::number( seconds1, 'f', 1 ) + " " + tr( "sek" ) + ", " + QString::number( seconds2, 'f', 1 ) + " " + tr( "sek" ) + "]";
 	buffer->setText( txt );
 }

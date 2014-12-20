@@ -201,7 +201,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments ) :
 	connect( &playC, SIGNAL( quit() ), this, SLOT( deleteLater() ) );
 	connect( &playC, SIGNAL( resetARatio() ), this, SLOT( resetARatio() ) );
 	connect( &playC, SIGNAL( updateBitrate( int, int, double ) ), infoDock, SLOT( updateBitrate( int, int, double ) ) );
-	connect( &playC, SIGNAL( updateBuffered( qint64, double ) ), infoDock, SLOT( updateBuffered( qint64, double ) ) );
+	connect( &playC, SIGNAL( updateBuffered( qint64, qint64, double, double ) ), infoDock, SLOT( updateBuffered( qint64, qint64, double, double ) ) );
 	connect( &playC, SIGNAL( updateBufferedRange( int, int ) ), seekS, SLOT( drawRange( int, int ) ) );
 	connect( &playC, SIGNAL( updateWindowTitle( const QString & ) ), this, SLOT( updateWindowTitle( const QString & ) ) );
 	connect( &playC, SIGNAL( updateImage( const QImage & ) ), videoDock, SLOT( updateImage( const QImage & ) ) );

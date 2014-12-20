@@ -64,7 +64,6 @@ QString Functions::Url( QString url, const QString &pth )
 	}
 	return url;
 }
-
 QString Functions::getUrlScheme( const QString &url )
 {
 	int idx = url.indexOf( ':' );

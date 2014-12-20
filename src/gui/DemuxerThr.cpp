@@ -19,6 +19,7 @@ using Functions::sizeString;
 
 #include <QCryptographicHash>
 #include <QCoreApplication>
+#include <QDebug>
 #include <QDir>
 
 #include <math.h>
@@ -42,6 +43,26 @@ static inline QString getWriterName( AVThread *avThr )
 static inline QString getCoverFile( const QString &title, const QString &artist, const QString &album )
 {
 	return QMPlay2Core.getSettingsDir() + "Covers/" + QCryptographicHash::hash( ( album.isEmpty() ? title.toUtf8() : album.toUtf8() ) + artist.toUtf8(), QCryptographicHash::Md5 ).toHex();
+}
+
+class BufferInfo
+{
+public:
+	inline BufferInfo() :
+		remainingDuration( 0.0 ), backwardDuration( 0.0 ),
+		firstPacketTime( -1 ), lastPacketTime( -1 ),
+		remainingBytes( 0 ), backwardBytes( 0 )
+	{}
+
+	double remainingDuration, backwardDuration;
+	qint32 firstPacketTime, lastPacketTime;
+	qint64 remainingBytes, backwardBytes;
+};
+
+static const double updateBufferedTime = 1.25;
+static inline double ensureUpdateBuffered()
+{
+	return gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true"
 }
 
 /**/
@@ -227,10 +248,9 @@ void DemuxerThr::run()
 	const bool localStream = demuxer->localStream();
 	int forwardPackets = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork ), backwardPackets;
 	double wfd_t = playIfBuffered > 0.25 ? 0.25 : playIfBuffered;
-	double bufferedTime = 0.0, backwardTime = 0.0;
 	bool paused = false, demuxerPaused = false;
 	double time = localStream ? 0.0 : gettime();
-	qint64 buffered = 0, last_buffered = 0;
+	BufferInfo bufferInfo;
 	int vS, aS;
 
 	if ( forwardPackets == 1 || localStream || unknownLength )
@@ -287,21 +307,14 @@ void DemuxerThr::run()
 				{
 					mustSeek = false;
 					flush = true;
-					if ( ( bufferedTime = playC.vPackets.remainingDuration() ) )
-						backwardTime = backwardPackets ? playC.vPackets.backwardDuration() : 0.0;
-					else
-					{
-						bufferedTime = playC.aPackets.remainingDuration();
-						backwardTime = backwardPackets ? playC.aPackets.backwardDuration() : 0.0;
-					}
-					emit playC.updateBufferedRange( floor( backwardTime ), ceil( bufferedTime ) );
+					time = ensureUpdateBuffered();
 					if ( aThr )
 						aLocked = aThr->lock();
 					if ( vThr )
 						vLocked = vThr->lock();
 				}
 				else
-					emit playC.updateBufferedRange( 0, 0 );
+					emit playC.updateBufferedRange( -1, -1 );
 				playC.vPackets.unlock();
 				playC.aPackets.unlock();
 				playC.sPackets.unlock();
@@ -361,20 +374,17 @@ void DemuxerThr::run()
 			playC.emptyBufferCond.wakeAll();
 		}
 
-		bool updateBuffered = localStream ? false : ( gettime() - time >= ( playC.waitForData ? wfd_t : 1.25 ) );
-		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &buffered : NULL, &backwardTime, &bufferedTime );
+		bool updateBuffered = localStream ? false : ( gettime() - time >= ( playC.waitForData ? wfd_t : updateBufferedTime ) );
+		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &bufferInfo : NULL );
 		if ( playC.endOfStream && !vS && !aS && canBreak( aThr, vThr ) )
 			break;
 		if ( updateBuffered )
 		{
-			if ( last_buffered != buffered )
-			{
-				if ( updateBufferedSeconds )
-					emit playC.updateBufferedRange( floor( backwardTime ), ceil( bufferedTime ) );
-				emit playC.updateBuffered( last_buffered = buffered, bufferedTime );
-				if ( demuxer->metadataChanged() )
-					updateCoverAndPlaying();
-			}
+			if ( updateBufferedSeconds )
+				emit playC.updateBufferedRange( bufferInfo.firstPacketTime, bufferInfo.lastPacketTime );
+			emit playC.updateBuffered( bufferInfo.backwardBytes, bufferInfo.remainingBytes, bufferInfo.backwardDuration, bufferInfo.remainingDuration );
+			if ( demuxer->metadataChanged() )
+				updateCoverAndPlaying();
 			time = gettime();
 		}
 		else if ( localStream && demuxer->metadataChanged() )
@@ -386,10 +396,10 @@ void DemuxerThr::run()
 		(
 			playC.waitForData &&
 			(
-				playC.endOfStream                          ||
-				bufferedPackets( vS, aS, forwardPackets )  ||
-				( bufferedTime >= playIfBuffered )         ||
-				( !bufferedTime && bufferedPackets( vS, aS, 1 ) )
+				playC.endOfStream                                  ||
+				bufferedPackets( vS, aS, forwardPackets )          ||
+				( bufferInfo.remainingDuration >= playIfBuffered ) ||
+				( !bufferInfo.remainingDuration && bufferedPackets( vS, aS, 1 ) )
 			)
 		)
 		{
@@ -458,7 +468,7 @@ void DemuxerThr::run()
 			{
 				playC.endOfStream = true;
 				if ( !localStream )
-					time = gettime() - 1.25; //zapewni, że updateBuffered będzie na "true"
+					time = ensureUpdateBuffered();
 			}
 			else
 				break;
@@ -716,46 +726,59 @@ bool DemuxerThr::canBreak( const AVThread *avThr1, const AVThread *avThr2 )
 {
 	return ( !avThr1 || avThr1->isWaiting() ) && ( !avThr2 || avThr2->isWaiting() );
 }
-void DemuxerThr::getAVBuffersSize( int &vS, int &aS, qint64 *buffered, double *backwardTime, double *bufferedTime )
+void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 {
-	double aTime = 0.0, vTime = 0.0, backwardATime = 0.0, backwardVTime = 0.0;
-
-	if ( buffered )
-		*buffered = 0;
+	if ( bufferInfo )
+	{
+		bufferInfo->remainingDuration = bufferInfo->backwardDuration = 0;
+		bufferInfo->firstPacketTime = bufferInfo->lastPacketTime = -1;
+		bufferInfo->remainingBytes = bufferInfo->backwardBytes = 0;
+	}
 
 	playC.vPackets.lock();
-	vS = playC.vPackets.remainingPacketsCount();
-	if ( buffered )
+	if ( playC.vPackets.isEmpty() )
+		vS = 0;
+	else
 	{
-		*buffered += playC.vPackets.remainingBytes();
-		vTime = playC.vPackets.remainingDuration();
-		backwardVTime = playC.vPackets.backwardDuration();
+		vS = playC.vPackets.remainingPacketsCount();
+		if ( bufferInfo )
+		{
+			bufferInfo->remainingBytes += playC.vPackets.remainingBytes();
+			bufferInfo->backwardBytes += playC.vPackets.backwardBytes();
+			bufferInfo->remainingDuration = playC.vPackets.remainingDuration();
+			bufferInfo->backwardDuration = playC.vPackets.backwardDuration();
+			if ( bufferInfo->remainingDuration || bufferInfo->backwardDuration )
+			{
+				bufferInfo->firstPacketTime = floor( playC.vPackets.firstPacketTime() );
+				bufferInfo->lastPacketTime = ceil( playC.vPackets.lastPacketTime() );
+			}
+		}
 	}
 	playC.vPackets.unlock();
 
 	playC.aPackets.lock();
-	aS = playC.aPackets.remainingPacketsCount();
-	if ( buffered )
+	if ( playC.aPackets.isEmpty() )
+		aS = 0;
+	else
 	{
-		*buffered += playC.aPackets.remainingBytes();
-		aTime = playC.aPackets.remainingDuration();
-		backwardATime = playC.aPackets.backwardDuration();
+		aS = playC.aPackets.remainingPacketsCount();
+		if ( bufferInfo )
+		{
+			bufferInfo->remainingBytes += playC.aPackets.remainingBytes();
+			bufferInfo->backwardBytes += playC.aPackets.backwardBytes();
+			if ( !bufferInfo->remainingDuration && !bufferInfo->backwardDuration )
+			{
+				bufferInfo->remainingDuration = playC.aPackets.remainingDuration();
+				bufferInfo->backwardDuration = playC.aPackets.backwardDuration();
+				if ( bufferInfo->remainingDuration || bufferInfo->backwardDuration )
+				{
+					bufferInfo->firstPacketTime = floor( playC.aPackets.firstPacketTime() );
+					bufferInfo->lastPacketTime = ceil( playC.aPackets.lastPacketTime() );
+				}
+			}
+		}
 	}
 	playC.aPackets.unlock();
-
-	if ( buffered && backwardTime && bufferedTime )
-	{
-		if ( vS && vTime )
-		{
-			*bufferedTime = vTime;
-			*backwardTime = backwardVTime;
-		}
-		else
-		{
-			*bufferedTime = aTime;
-			*backwardTime = backwardATime;
-		}
-	}
 }
 void DemuxerThr::clearBuffers()
 {

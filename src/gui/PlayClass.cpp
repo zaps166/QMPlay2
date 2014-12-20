@@ -831,7 +831,7 @@ void PlayClass::demuxThrFinished()
 	url.clear();
 	pos = -1.0;
 
-	emit updateBufferedRange( 0, 0 );
+	emit updateBufferedRange( -1, -1 );
 	emit updateLength( 0 );
 	emit updatePos( 0 );
 
@@ -869,7 +869,7 @@ void PlayClass::demuxThrFinished()
 	if ( clr )
 		clearPlayInfo();
 	else
-		emit updateBuffered( -1, 0.0 );
+		emit updateBuffered( -1, -1, 0.0, 0.0 );
 
 	if ( quitApp )
 	{

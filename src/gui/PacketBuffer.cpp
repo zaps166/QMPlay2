@@ -29,6 +29,7 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 				remaining_duration -= durationToChange;
 				backward_duration += durationToChange;
 				remaining_bytes -= sizeToChange;
+				backward_bytes += sizeToChange;
 				pos = i;
 				return true;
 			}
@@ -47,6 +48,7 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 			remaining_duration += durationToChange;
 			backward_duration -= durationToChange;
 			remaining_bytes += sizeToChange;
+			backward_bytes -= sizeToChange;
 			pos = i;
 			return true;
 		}
@@ -59,7 +61,7 @@ void PacketBuffer::clear()
 	lock();
 	QList< Packet >::clear();
 	remaining_duration = backward_duration = 0.0;
-	remaining_bytes = 0;
+	remaining_bytes = backward_bytes = 0;
 	pos = 0;
 	unlock();
 }
@@ -84,5 +86,6 @@ Packet PacketBuffer::fetch()
 	remaining_duration -= pkt.duration;
 	backward_duration += pkt.duration;
 	remaining_bytes -= pkt.size();
+	backward_bytes += pkt.size();
 	return pkt;
 }

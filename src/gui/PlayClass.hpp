@@ -178,7 +178,7 @@ signals:
 	void quit();
 	void resetARatio();
 	void updateBitrate( int, int, double );
-	void updateBuffered( qint64, double );
+	void updateBuffered( qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds );
 	void updateBufferedRange( int, int );
 	void updateWindowTitle( const QString &t = QString() );
 	void updateImage( const QImage &img = QImage() );

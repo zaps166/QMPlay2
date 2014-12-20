@@ -24,7 +24,7 @@ public:
 public slots:
 	void setInfo( const QString &, bool, bool );
 	void updateBitrate( int, int, double );
-	void updateBuffered( qint64, double );
+	void updateBuffered( qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds );
 	void clear();
 	void visibilityChanged( bool );
 private:
@@ -39,8 +39,8 @@ private:
 	bool videoPlaying, audioPlaying;
 	int audioBR, videoBR;
 	double videoFPS;
-	qint64 bs;
-	double bt;
+	qint64 bytes1, bytes2;
+	double seconds1, seconds2;
 signals:
 	void seek( int );
 	void chStream( const QString & );
