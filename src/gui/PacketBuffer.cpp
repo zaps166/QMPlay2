@@ -1,5 +1,7 @@
 #include <PacketBuffer.hpp>
 
+#include <math.h>
+
 int PacketBuffer::backwardPackets;
 
 bool PacketBuffer::seekTo( double seek_pos, bool backwards )
@@ -8,14 +10,18 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 		return true;
 
 	if ( backwards && at( 0 ).ts > seek_pos )
-		return false; //Brak paczek do skoku w tył
+	{
+		if ( floor( at( 0 ).ts ) > seek_pos )
+			return false; //Brak paczek do skoku w tył
+		seek_pos = at( 0 ).ts;
+	}
 
 	double durationToChange = 0.0;
 	qint64 sizeToChange = 0;
 
 	if ( !backwards ) //Skok do przodu
 	{
-		int count = packetsCount();
+		const int count = packetsCount();
 		for ( int i = pos ; i < count ; ++i )
 		{
 			const Packet &pkt = at( i );
@@ -35,7 +41,7 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 			}
 		}
 	}
-	else for ( int i = pos ; i >= 0 ; --i ) //Skok do tyłu
+	else for ( int i = pos - 1 ; i >= 0 ; --i ) //Skok do tyłu
 	{
 		const Packet &pkt = at( i );
 		if ( pkt.ts > seek_pos )
@@ -72,6 +78,7 @@ void PacketBuffer::put( const Packet &packet )
 	while ( pos > backwardPackets )
 	{
 		backward_duration -= first().duration;
+		backward_bytes -= first().size();
 		removeFirst();
 		--pos;
 	}

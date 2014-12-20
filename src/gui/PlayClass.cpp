@@ -164,7 +164,7 @@ void PlayClass::stop( bool _quitApp )
 			{
 				timTerminate.start( TERMINATE_TIMEOUT );
 				demuxThr->stop();
-				fullBufferB = true;
+				fillBufferB = true;
 			}
 		}
 		else
@@ -203,7 +203,7 @@ void PlayClass::togglePause()
 		if ( aThr && !paused )
 			aThr->silence();
 		paused = !paused;
-		fullBufferB = true;
+		fillBufferB = true;
 		if ( aThr && !paused )
 			aThr->silence( true );
 		stopPauseMutex.unlock();
@@ -216,7 +216,7 @@ void PlayClass::seek( int pos )
 	if ( lastSeekTo == pos )
 		return;
 	QMPlay2Core.seeked( lastSeekTo = seekTo = pos );
-	fullBufferB = true;
+	fillBufferB = true;
 	if ( aThr && paused )
 		aThr->silence( true );
 }
@@ -789,7 +789,7 @@ void PlayClass::nextFrame()
 	if ( videoStream > -1 && stopPauseMutex.tryLock() )
 	{
 		paused = false;
-		nextFrameB = fullBufferB = true;
+		nextFrameB = fillBufferB = true;
 		stopPauseMutex.unlock();
 	}
 }

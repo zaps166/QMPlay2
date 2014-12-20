@@ -92,7 +92,7 @@ private:
 	AudioThr *aThr;
 
 	QWaitCondition emptyBufferCond;
-	volatile bool fullBufferB, doSilenceBreak;
+	volatile bool fillBufferB, doSilenceBreak;
 	QMutex loadMutex, stopPauseMutex;
 
 	PacketBuffer aPackets, vPackets, sPackets;

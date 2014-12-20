@@ -163,7 +163,7 @@ void AudioThr::run()
 				playC.aPackets.unlock();
 
 				if ( !playC.paused )
-					waiting = playC.fullBufferB = true;
+					waiting = playC.fillBufferB = true;
 
 				playC.emptyBufferCond.wait( &emptyBufferMutex, MUTEXWAIT_TIMEOUT );
 				emptyBufferMutex.unlock();
@@ -183,7 +183,7 @@ void AudioThr::run()
 			else if ( hasBufferedSamples )
 				packet.ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
 			playC.aPackets.unlock();
-			playC.fullBufferB = true;
+			playC.fillBufferB = true;
 
 			mutex.lock();
 			if ( br )

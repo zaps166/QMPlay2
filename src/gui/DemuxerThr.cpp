@@ -54,6 +54,11 @@ public:
 		remainingBytes( 0 ), backwardBytes( 0 )
 	{}
 
+	inline void reset()
+	{
+		*this = BufferInfo();
+	}
+
 	double remainingDuration, backwardDuration;
 	qint32 firstPacketTime, lastPacketTime;
 	qint64 remainingBytes, backwardBytes;
@@ -247,8 +252,8 @@ void DemuxerThr::run()
 
 	const bool localStream = demuxer->localStream();
 	int forwardPackets = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork ), backwardPackets;
+	bool paused = false, demuxerPaused = false, waitingForFillBufferB = false;
 	double wfd_t = playIfBuffered > 0.25 ? 0.25 : playIfBuffered;
-	bool paused = false, demuxerPaused = false;
 	double time = localStream ? 0.0 : gettime();
 	BufferInfo bufferInfo;
 	int vS, aS;
@@ -261,7 +266,7 @@ void DemuxerThr::run()
 		switch ( QMPlay2Core.getSettings().getUInt( "BackwardBuffer" ) )
 		{
 			case 0:
-				percent = 0;
+				percent = 10;
 				break;
 			case 2:
 				percent = 50;
@@ -291,8 +296,7 @@ void DemuxerThr::run()
 			const bool backwards = playC.seekTo < ( int )playC.pos;
 			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
 
-			//przewijanie na strumieniu sieciowym - szuka, czy skok do zbuforowanego fragmentu
-			if ( !localStream && seekInBuffer )
+			if ( seekInBuffer && ( !localStream || !backwards ) )
 			{
 				playC.vPackets.lock();
 				playC.aPackets.lock();
@@ -385,6 +389,7 @@ void DemuxerThr::run()
 			emit playC.updateBuffered( bufferInfo.backwardBytes, bufferInfo.remainingBytes, bufferInfo.backwardDuration, bufferInfo.remainingDuration );
 			if ( demuxer->metadataChanged() )
 				updateCoverAndPlaying();
+			waitingForFillBufferB = true;
 			time = gettime();
 		}
 		else if ( localStream && demuxer->metadataChanged() )
@@ -397,9 +402,9 @@ void DemuxerThr::run()
 			playC.waitForData &&
 			(
 				playC.endOfStream                                  ||
-				bufferedPackets( vS, aS, forwardPackets )          ||
+				bufferedAllPackets( vS, aS, forwardPackets )       ||
 				( bufferInfo.remainingDuration >= playIfBuffered ) ||
-				( !bufferInfo.remainingDuration && bufferedPackets( vS, aS, 1 ) )
+				( !bufferInfo.remainingDuration && bufferedAllPackets( vS, aS, 1 ) )
 			)
 		)
 		{
@@ -408,7 +413,7 @@ void DemuxerThr::run()
 				playC.emptyBufferCond.wakeAll();
 		}
 
-		if ( playC.endOfStream || bufferedPackets( vS, aS, forwardPackets ) )
+		if ( playC.endOfStream || bufferedAllPackets( vS, aS, forwardPackets ) )
 		{
 			if ( paused && !demuxerPaused )
 			{
@@ -416,28 +421,39 @@ void DemuxerThr::run()
 				demuxer->pause();
 			}
 
-			bool loadError = false;
-			while ( !playC.fullBufferB )
+			//po zakończeniu buforowania należy odświeżyć informacje o buforowaniu
+			if ( paused && !waitingForFillBufferB && !playC.fillBufferB )
 			{
-				if ( qApp->hasPendingEvents() )
-					qApp->processEvents();
+				time = ensureUpdateBuffered();
+				waitingForFillBufferB = true;
+				continue;
+			}
+
+			bool loadError = false, first = true;
+			while ( !playC.fillBufferB )
+			{
+				qApp->processEvents();
+				if ( mustReloadStreams() && !load() )
+				{
+					loadError = true;
+					break;
+				}
+				if ( playC.seekTo == SEEK_STREAM_RELOAD )
+					break;
+				if ( !first )
+					msleep( 15 );
 				else
 				{
-					msleep( 15 );
-					if ( mustReloadStreams() && !load() )
-					{
-						loadError = true;
-						break;
-					}
-					if ( playC.seekTo == SEEK_STREAM_RELOAD )
-						break;
+					msleep( 1 );
+					first = false;
 				}
 			}
 			if ( loadError )
 				break;
-			playC.fullBufferB = false;
+			playC.fillBufferB = false;
 			continue;
 		}
+		waitingForFillBufferB = false;
 
 		Packet packet;
 		int streamIdx = -1;
@@ -709,7 +725,7 @@ bool DemuxerThr::mustReloadStreams()
 	}
 	return false;
 }
-bool DemuxerThr::bufferedPackets( int vS, int aS, int p )
+bool DemuxerThr::bufferedAllPackets( int vS, int aS, int p )
 {
 	return
 	(
@@ -729,11 +745,7 @@ bool DemuxerThr::canBreak( const AVThread *avThr1, const AVThread *avThr2 )
 void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 {
 	if ( bufferInfo )
-	{
-		bufferInfo->remainingDuration = bufferInfo->backwardDuration = 0;
-		bufferInfo->firstPacketTime = bufferInfo->lastPacketTime = -1;
-		bufferInfo->remainingBytes = bufferInfo->backwardBytes = 0;
-	}
+		bufferInfo->reset();
 
 	playC.vPackets.lock();
 	if ( playC.vPackets.isEmpty() )
@@ -743,15 +755,14 @@ void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 		vS = playC.vPackets.remainingPacketsCount();
 		if ( bufferInfo )
 		{
+			bufferInfo->backwardBytes  += playC.vPackets.backwardBytes();
 			bufferInfo->remainingBytes += playC.vPackets.remainingBytes();
-			bufferInfo->backwardBytes += playC.vPackets.backwardBytes();
+
+			bufferInfo->backwardDuration  = playC.vPackets.backwardDuration();
 			bufferInfo->remainingDuration = playC.vPackets.remainingDuration();
-			bufferInfo->backwardDuration = playC.vPackets.backwardDuration();
-			if ( bufferInfo->remainingDuration || bufferInfo->backwardDuration )
-			{
-				bufferInfo->firstPacketTime = floor( playC.vPackets.firstPacketTime() );
-				bufferInfo->lastPacketTime = ceil( playC.vPackets.lastPacketTime() );
-			}
+
+			bufferInfo->firstPacketTime = floor( playC.vPackets.firstPacketTime() );
+			bufferInfo->lastPacketTime  = ceil ( playC.vPackets.lastPacketTime()  );
 		}
 	}
 	playC.vPackets.unlock();
@@ -764,18 +775,16 @@ void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 		aS = playC.aPackets.remainingPacketsCount();
 		if ( bufferInfo )
 		{
+			const qint32 firstAPacketTime = floor( playC.aPackets.firstPacketTime() ), lastAPacketTime = ceil( playC.aPackets.lastPacketTime() );
+
+			bufferInfo->backwardBytes  += playC.aPackets.backwardBytes();
 			bufferInfo->remainingBytes += playC.aPackets.remainingBytes();
-			bufferInfo->backwardBytes += playC.aPackets.backwardBytes();
-			if ( !bufferInfo->remainingDuration && !bufferInfo->backwardDuration )
-			{
-				bufferInfo->remainingDuration = playC.aPackets.remainingDuration();
-				bufferInfo->backwardDuration = playC.aPackets.backwardDuration();
-				if ( bufferInfo->remainingDuration || bufferInfo->backwardDuration )
-				{
-					bufferInfo->firstPacketTime = floor( playC.aPackets.firstPacketTime() );
-					bufferInfo->lastPacketTime = ceil( playC.aPackets.lastPacketTime() );
-				}
-			}
+
+			bufferInfo->backwardDuration  = bufferInfo->backwardDuration  > 0.0 ? qMax( bufferInfo->backwardDuration,  playC.aPackets.backwardDuration()  ) : playC.aPackets.backwardDuration();
+			bufferInfo->remainingDuration = bufferInfo->remainingDuration > 0.0 ? qMin( bufferInfo->remainingDuration, playC.aPackets.remainingDuration() ) : playC.aPackets.remainingDuration();
+
+			bufferInfo->firstPacketTime = bufferInfo->firstPacketTime >= 0 ? qMax( bufferInfo->firstPacketTime, firstAPacketTime ) : firstAPacketTime;
+			bufferInfo->lastPacketTime  = bufferInfo->lastPacketTime  >= 0 ? qMin( bufferInfo->lastPacketTime,  lastAPacketTime  ) : lastAPacketTime;
 		}
 	}
 	playC.aPackets.unlock();

@@ -134,6 +134,7 @@ OSDSettingsW::OSDSettingsW( const QString &prefix ) :
 
 	//Widget layout
 	layout = new QGridLayout( this );
+	layout->setMargin( 1 );
 	layout->addWidget( fontGB, 0, 0, 1, 2 );
 	layout->addWidget( marginsGB, 0, 2, 1, 3 );
 	layout->addWidget( alignGB, 1, 0, 1, 1 );

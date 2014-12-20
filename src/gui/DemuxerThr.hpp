@@ -39,7 +39,7 @@ private:
 	void addSubtitleStream( bool, QString &, int, int, const QString &, const QString &, const QString &, const QList< QMPlay2Tag > &other_info = QList< QMPlay2Tag >() );
 
 	bool mustReloadStreams();
-	bool bufferedPackets( int, int, int );
+	bool bufferedAllPackets( int, int, int );
 	bool emptyBuffers( int, int );
 	bool canBreak( const AVThread *avThr1, const AVThread *avThr2 );
 	void getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo = NULL );

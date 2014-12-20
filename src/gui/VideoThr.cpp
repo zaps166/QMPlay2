@@ -220,7 +220,7 @@ void VideoThr::run()
 			fast = 0;
 
 			if ( !playC.paused )
-				waiting = playC.fullBufferB = true;
+				waiting = playC.fillBufferB = true;
 
 			playC.emptyBufferCond.wait( &emptyBufferMutex, MUTEXWAIT_TIMEOUT );
 			emptyBufferMutex.unlock();
@@ -247,7 +247,7 @@ void VideoThr::run()
 			oneFrame = playC.paused = true;
 			fast = 0;
 		}
-		playC.fullBufferB = true;
+		playC.fillBufferB = true;
 
 		mutex.lock();
 		if ( br )

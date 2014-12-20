@@ -257,7 +257,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	layout->addWidget( tabW, 0, 0, 1, 3 );
 	layout->addWidget( applyB, 1, 1, 1, 1 );
 	layout->addWidget( closeB, 1, 2, 1, 1 );
-	layout->setMargin( 3 );
+	layout->setMargin( 2 );
 
 	/* Strona 1 */
 	page1->langL = new QLabel;
@@ -379,6 +379,8 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 
 	layout_row = 0;
 	page1->layout = new QGridLayout( page1 );
+	page1->layout->setMargin( 3 );
+	page1->layout->setSpacing( 1 );
 	page1->layout->addWidget( page1->langL, layout_row, 0, 1, 1 );
 	page1->layout->addWidget( page1->langBox, layout_row++, 1, 1, 3 );
 	page1->layout->addWidget( page1->styleL, layout_row, 0, 1, 1 );
@@ -430,7 +432,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 
 	page2->backwardBufferNetworkL = new QLabel( tr( "Ilość procent przeznaczonych paczek A/V dla przewijania w tył" ) + ": " );
 	page2->backwardBufferNetworkB = new QComboBox;
-	page2->backwardBufferNetworkB->addItems( QStringList() << "0%" << "25%" << "50%" );
+	page2->backwardBufferNetworkB->addItems( QStringList() << "10%" << "25%" << "50%" );
 	page2->backwardBufferNetworkB->setCurrentIndex( QMPSettings.getUInt( "BackwardBuffer" ) );
 
 	page2->playIfBufferedL = new QLabel( tr( "Rozpocznij odtwarzanie strumienia internetowego jeżeli zostanie zbuforowane" ) + ": " );
@@ -570,12 +572,15 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page2->layout2->addWidget( page2->scrollSeek, layout_row++, 0, 1, 3 );
 	page2->layout2->addWidget( page2->restoreVideoEq, layout_row++, 0, 1, 3 );
 	page2->layout2->setMargin( 0 );
+	page2->layout2->setSpacing( 2 );
 
 	page2->scrollA = new QScrollArea;
 	page2->scrollA->setFrameShape( QFrame::NoFrame );
 	page2->scrollA->setWidget( page2->w );
 
 	page2->layout1 = new QGridLayout( page2 );
+	page2->layout1->setMargin( 2 );
+	page2->layout1->setSpacing( 3 );
 	page2->layout1->addWidget( page2->scrollA, 0, 0, 1, 3 );
 	page2->layout1->addWidget( page2->modulesList[ 0 ], 1, 0 );
 	page2->layout1->addWidget( page2->modulesList[ 1 ], 1, 1 );
@@ -614,6 +619,8 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page3->scrollA->setFrameShape( QFrame::NoFrame );
 
 	page3->layout = new QHBoxLayout( page3 );
+	page3->layout->setMargin( 1 );
+	page3->layout->setSpacing( 1 );
 	page3->layout->addWidget( page3->listW );
 	page3->layout->addWidget( page3->scrollA );
 	connect( page3->listW, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ), this, SLOT( chModule( QListWidgetItem * ) ) );
@@ -636,6 +643,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page4->toASSGB->setChecked( QMPSettings.getBool( "ApplyToASS/ApplyToASS" ) );
 
 	page4->layout2 = new QGridLayout( page4->toASSGB );
+//	page4->layout2->setMargin( 0 );
 	page4->layout2->addWidget( page4->colorsAndBordersB, 0, 0, 1, 1 );
 	page4->layout2->addWidget( page4->marginsAndAlignmentB, 1, 0, 1, 1 );
 	page4->layout2->addWidget( page4->fontsB, 0, 1, 1, 1 );
@@ -659,6 +667,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	connect( page6->otherVFiltersW, SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), this, SLOT( openModuleSettings( QListWidgetItem * ) ) );
 
 	page6->layout = new QGridLayout( page6 );
+	page6->layout->setMargin( 1 );
 	page6->layout->addWidget( page6->deintSettingsW, 0, 0, 1, 1 );
 	page6->layout->addWidget( page6->otherVFiltersL, 1, 0, 1, 1 );
 	page6->layout->addWidget( page6->otherVFiltersW, 2, 0, 1, 1 );
