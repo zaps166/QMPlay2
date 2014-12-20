@@ -789,6 +789,9 @@ void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 		}
 	}
 	playC.aPackets.unlock();
+
+	if ( bufferInfo && bufferInfo->backwardDuration < 0.0 ) //niedokładność double
+		bufferInfo->backwardDuration = 0.0;
 }
 void DemuxerThr::clearBuffers()
 {
