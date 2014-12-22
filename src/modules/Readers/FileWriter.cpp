@@ -26,6 +26,6 @@ FileWriter::~FileWriter()
 
 bool FileWriter::open()
 {
-	f.setFileName( url().mid( 7, -1 ) );
+	f.setFileName( getUrl().mid( 7, -1 ) );
 	return f.open( QIODevice::WriteOnly );
 }

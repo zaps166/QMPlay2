@@ -3,15 +3,16 @@
 
 #include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
+#include <IOController.hpp>
 
 #include <QStringList>
 
-class Writer : public ModuleCommon, public ModuleParams
+class Writer : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
 	static Writer *create( const QString &, const QStringList &modNames = QStringList() );
 
-	inline QString url() const
+	inline QString getUrl() const
 	{
 		return _url;
 	}
@@ -19,7 +20,6 @@ public:
 	virtual bool readyWrite() const = 0;
 
 	virtual qint64 write( const QByteArray & ) = 0;
-	virtual void pause() {}
 
 	virtual qint64 size() const
 	{

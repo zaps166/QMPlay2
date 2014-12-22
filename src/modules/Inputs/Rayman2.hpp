@@ -1,5 +1,7 @@
 #include <Demuxer.hpp>
 
+#include <IOController.hpp>
+
 class Reader;
 
 class Rayman2 : public Demuxer
@@ -7,8 +9,6 @@ class Rayman2 : public Demuxer
 public:
 	Rayman2( Module & );
 private:
-	~Rayman2();
-
 	bool set();
 
 	QString name() const;
@@ -26,10 +26,7 @@ private:
 
 	void readHeader( const char *data );
 
-	Reader *reader;
-	QMutex readerMutex;
-
-	bool aborted;
+	IOController< Reader > reader;
 
 	double len;
 	unsigned srate;

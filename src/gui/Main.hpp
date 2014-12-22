@@ -1,6 +1,9 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
+#define MUTEXWAIT_TIMEOUT 1250
+#define TERMINATE_TIMEOUT (MUTEXWAIT_TIMEOUT*2)
+
 #include <QMPlay2Core.hpp>
 
 class QLocalServer;

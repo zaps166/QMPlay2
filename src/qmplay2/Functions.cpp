@@ -404,23 +404,22 @@ bool Functions::splitPrefixAndUrlIfHasPluginPrefix( const QString &whole_url, QS
 	}
 	return false;
 }
-void Functions::getDataIfHasPluginPrefix( const QString &whole_url, QString *url, QString *name, QImage *img, Reader **reader, QMutex *abortMutex )
+void Functions::getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl )
 {
-	QString addressPrefixName, real_url, param;
-	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( whole_url, &addressPrefixName, &real_url, &param ) )
+	QString addressPrefixName, realUrl, param;
+	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( wholeUrl, &addressPrefixName, &realUrl, &param ) )
 	{
 		foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( addressPrefixName ) )
 			{
-				Reader *tmpReader;
-				QMPlay2Ext->convertAddress( addressPrefixName, real_url, param, url, name, img, NULL, reader ? *reader : tmpReader, abortMutex );
+				QMPlay2Ext->convertAddress( addressPrefixName, realUrl, param, url, name, img, NULL, ioCtrl );
 				break;
 			}
 	}
 	else if ( img )
 	{
-		QString scheme = getUrlScheme( whole_url );
-		QString extension = fileExt( whole_url ).toLower();
+		QString scheme = getUrlScheme( wholeUrl );
+		QString extension = fileExt( wholeUrl ).toLower();
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 			foreach ( Module::Info mod, module->getModulesInfo() )
 				if ( mod.type == Module::DEMUXER && ( mod.extensions.contains( extension ) || mod.name == scheme ) )

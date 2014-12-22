@@ -126,7 +126,11 @@ public:
 		Q_DECLARE_TR_FUNCTIONS( Help )
 	public:
 		Help( MenuBar *parent, const QString &name = tr( "Po&moc" ) );
-		QAction *about, *updates, *aboutQt;
+		QAction *about,
+#ifdef UPDATER
+		*updates,
+#endif
+		*aboutQt;
 	};
 
 	Window *window;

@@ -216,7 +216,7 @@ void DownloadItemW::downloadStop( bool ok )
 /**/
 
 DownloaderThread::DownloaderThread( QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name, const QString &prefix, const QString &param ) :
-	url( url ), name( name ), prefix( prefix ), param( param ), downloadItemW( NULL ), downloadLW( downloadLW ), item( NULL ), br( false ), reader( NULL )
+	url( url ), name( name ), prefix( prefix ), param( param ), downloadItemW( NULL ), downloadLW( downloadLW ), item( NULL )
 {
 	connect( this, SIGNAL( listSig( int, qint64, const QString & ) ), this, SLOT( listSlot( int, qint64, const QString & ) ) );
 	connect( this, SIGNAL( finished() ), this, SLOT( finished() ) );
@@ -280,11 +280,7 @@ void DownloaderThread::listSlot( int param, qint64 val, const QString &filePath 
 }
 void DownloaderThread::stop()
 {
-	br = true;
-	readerMutex.lock();
-	if ( reader )
-		reader->abort();
-	readerMutex.unlock();
+	ioCtrl.abort();
 }
 void DownloaderThread::finished()
 {
@@ -294,7 +290,7 @@ void DownloaderThread::finished()
 
 void DownloaderThread::run()
 {
-	br = false;
+	ioCtrl.resetAbort();
 
 	QString scheme = Functions::getUrlScheme( url );
 	if ( scheme.isEmpty() )
@@ -317,7 +313,7 @@ void DownloaderThread::run()
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( prefix ) )
 			{
 				newUrl.clear();
-				QMPlay2Ext->convertAddress( prefix, url, param, &newUrl, &name, NULL, &extension, reader, &readerMutex );
+				QMPlay2Ext->convertAddress( prefix, url, param, &newUrl, &name, NULL, &extension, &ioCtrl );
 				break;
 			}
 
@@ -333,15 +329,16 @@ void DownloaderThread::run()
 
 	emit listSig( NAME );
 
-	if ( br )
+	if ( ioCtrl.isAborted() )
 		return;
 
 	bool err = true;
 
 	QMPlay2Core.setWorking( true );
 
+	IOController< Reader > &reader = ioCtrl.toRef< Reader >();
 	if ( !newUrl.isEmpty() )
-		Reader::create( newUrl, reader, br, &readerMutex );
+		Reader::create( newUrl, reader );
 	if ( reader && reader->readyRead() && !reader->atEnd() )
 	{
 		QString filePath;
@@ -362,7 +359,7 @@ void DownloaderThread::run()
 
 			emit listSig( SET, reader->size(), filePath );
 			speedT.start();
-			while ( !br && !( err = !reader->readyRead() ) && !reader->atEnd() )
+			while ( !reader.isAborted() && !( err = !reader->readyRead() ) && !reader->atEnd() )
 			{
 				QByteArray arr = reader->read( 16384 );
 				if ( arr.size() )
@@ -375,7 +372,7 @@ void DownloaderThread::run()
 				}
 				else
 				{
-					if ( !br && ( ( reader->size() < 0 && !file.size() ) || ( reader->size() > -1 && !reader->atEnd() ) ) )
+					if ( !reader.isAborted() && ( ( reader->size() < 0 && !file.size() ) || ( reader->size() > -1 && !reader->atEnd() ) ) )
 						err = true;
 					break;
 				}
@@ -400,7 +397,7 @@ void DownloaderThread::run()
 			}
 		}
 		file.close();
-		Functions::deleteThreadSafe( reader, readerMutex );
+		reader.clear();
 	}
 	emit listSig( err ? DOWNLOADERROR : FINISH );
 

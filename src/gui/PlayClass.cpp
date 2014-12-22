@@ -1,25 +1,25 @@
 #include <PlayClass.hpp>
 
-#include <Main.hpp>
-#include <LibASS.hpp>
 #include <QMPlay2_OSD.hpp>
-#include <DemuxerThr.hpp>
 #include <VideoThr.hpp>
 #include <AudioThr.hpp>
+#include <DemuxerThr.hpp>
+#include <LibASS.hpp>
+#include <Main.hpp>
 
-#include <Reader.hpp>
-#include <SubsDec.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
+#include <Settings.hpp>
+#include <SubsDec.hpp>
 #include <Demuxer.hpp>
 #include <Decoder.hpp>
-#include <Settings.hpp>
+#include <Reader.hpp>
 
-#include <QAction>
-#include <QTextCodec>
-#include <QMessageBox>
-#include <QInputDialog>
 #include <QCoreApplication>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QTextCodec>
+#include <QAction>
 
 #include <math.h>
 
@@ -254,11 +254,10 @@ void PlayClass::loadSubsFile( const QString &fileName )
 	bool subsLoaded = false;
 	if ( demuxThr && vThr && ass )
 	{
-		Reader *reader;
+		IOController< Reader > reader;
 		if ( Reader::create( fileName, reader ) && reader->size() > 0 )
 		{
 			QByteArray fileData = reader->read( reader->size() );
-			delete reader;
 
 			QTextCodec *codec = QTextCodec::codecForName( QMPlay2Core.getSettings().getByteArray( "SubtitlesEncoding" ) );
 			if ( codec && codec->name() != "UTF-8" )
@@ -817,8 +816,7 @@ void PlayClass::demuxThrFinished()
 	if ( demuxThr->demuxer ) //Jeżeli wątek się zakończył po upływie czasu timera (nieprawidłowo zakończony), to demuxer nadal jest
 		demuxThr->end();
 
-	bool br  = demuxThr->br;
-	bool err = demuxThr->err;
+	bool br  = demuxThr->demuxer.isAborted(), err = demuxThr->err;
 	delete demuxThr;
 	demuxThr = NULL;
 

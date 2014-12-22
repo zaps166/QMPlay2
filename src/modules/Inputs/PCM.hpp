@@ -1,5 +1,7 @@
 #include <Demuxer.hpp>
 
+#include <IOController.hpp>
+
 class Reader;
 
 class PCM : public Demuxer
@@ -9,8 +11,6 @@ public:
 
 	PCM( Module & );
 private:
-	~PCM();
-
 	bool set();
 
 	QString name() const;
@@ -26,10 +26,7 @@ private:
 
 	/**/
 
-	Reader *reader;
-	QMutex readerMutex;
-
-	bool aborted;
+	IOController< Reader > reader;
 
 	double len;
 	FORMAT fmt;

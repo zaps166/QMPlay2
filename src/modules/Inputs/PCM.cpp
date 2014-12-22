@@ -12,15 +12,9 @@ static const unsigned char bytes[ PCM::FORMAT_COUNT ] =
 
 /**/
 
-PCM::PCM( Module &module ) :
-	reader( NULL ), aborted( false )
+PCM::PCM( Module &module )
 {
 	SetModule( module );
-}
-
-PCM::~PCM()
-{
-	delete reader;
 }
 
 bool PCM::set()
@@ -69,7 +63,7 @@ bool PCM::seek( int s, bool )
 }
 bool PCM::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
 {
-	if ( aborted )
+	if ( reader.isAborted() )
 		return false;
 
 	ts = ( reader->pos() - offset ) / ( double )bytes[ fmt ] / chn / srate;
@@ -116,15 +110,12 @@ bool PCM::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
 }
 void PCM::abort()
 {
-	aborted = true;
-	readerMutex.lock();
-	reader->abort();
-	readerMutex.unlock();
+	reader.abort();
 }
 
 bool PCM::open( const QString &url )
 {
-	if ( Reader::create( url, reader, aborted, &readerMutex ) && ( !offset || reader->seek( offset ) ) )
+	if ( Reader::create( url, reader ) && ( !offset || reader->seek( offset ) ) )
 	{
 		if ( reader->size() >= 0 )
 			len = ( double )reader->size() / srate / chn / bytes[ fmt ];

@@ -1,11 +1,11 @@
 #include <QMPlay2Extensions.hpp>
+#include <IOController.hpp>
 
 #include <QTreeWidget>
 #include <QToolButton>
 #include <QThread>
 #include <QMutex>
 
-class Reader;
 class QLabel;
 class QGridLayout;
 class QProgressBar;
@@ -111,9 +111,7 @@ private:
 	DownloadItemW *downloadItemW;
 	DownloadListW *downloadLW;
 	QTreeWidgetItem *item;
-	bool br;
-	Reader *reader;
-	QMutex readerMutex;
+	IOController<> ioCtrl;
 };
 
 /**/

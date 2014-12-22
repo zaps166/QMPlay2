@@ -52,7 +52,11 @@ public:
 #ifdef ICONS_FROM_THEME
 	QCheckBox *iconsFromTheme;
 #endif
-	QCheckBox *showCoversB, *showDirCoversB, *autoOpenVideoWindowB, *autoUpdatesB, *tabsNorths, *allowOnlyOneInstance;
+	QCheckBox *showCoversB, *showDirCoversB, *autoOpenVideoWindowB,
+#ifdef UPDATER
+	*autoUpdatesB,
+#endif
+	*tabsNorths, *allowOnlyOneInstance;
 	QToolButton *screenshotB;
 	QPushButton *clearCoversCache, *resetSettingsB;
 	QGroupBox *proxyB, *proxyLoginB;
@@ -324,8 +328,10 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page1->autoOpenVideoWindowB = new QCheckBox( tr( "Automatyczne otwieranie okienka z filmem" ) );
 	page1->autoOpenVideoWindowB->setChecked( QMPSettings.getBool( "AutoOpenVideoWindow" ) );
 
+#ifdef UPDATER
 	page1->autoUpdatesB = new QCheckBox( tr( "Automatycznie sprawdzaj i pobieraj aktualizacje" ) );
 	page1->autoUpdatesB->setChecked( QMPSettings.getBool( "AutoUpdates" ) );
+#endif
 
 	page1->tabsNorths = new QCheckBox( tr( "Pokazuj karty w górnej części okna głównego" ) );
 	page1->tabsNorths->setChecked( QMPSettings.getBool( "MainWidget/TabPositionNorth" ) );
@@ -399,7 +405,9 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page1->layout->addWidget( page1->showCoversB, layout_row++, 0, 1, 4 );
 	page1->layout->addWidget( page1->showDirCoversB, layout_row++, 0, 1, 4 );
 	page1->layout->addWidget( page1->autoOpenVideoWindowB, layout_row++, 0, 1, 4 );
+#ifdef UPDATER
 	page1->layout->addWidget( page1->autoUpdatesB, layout_row++, 0, 1, 4 );
+#endif
 	page1->layout->addWidget( page1->tabsNorths, layout_row++, 0, 1, 4 );
 	page1->layout->addWidget( page1->allowOnlyOneInstance, layout_row++, 0, 1, 4 );
 	page1->layout->addWidget( page1->proxyB, layout_row++, 0, 1, 4 );
@@ -643,7 +651,6 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page4->toASSGB->setChecked( QMPSettings.getBool( "ApplyToASS/ApplyToASS" ) );
 
 	page4->layout2 = new QGridLayout( page4->toASSGB );
-//	page4->layout2->setMargin( 0 );
 	page4->layout2->addWidget( page4->colorsAndBordersB, 0, 0, 1, 1 );
 	page4->layout2->addWidget( page4->marginsAndAlignmentB, 1, 0, 1, 1 );
 	page4->layout2->addWidget( page4->fontsB, 0, 1, 1, 1 );
@@ -766,7 +773,9 @@ void SettingsWidget::apply()
 			QMPSettings.set( "ShowCovers", page1->showCoversB->isChecked() );
 			QMPSettings.set( "ShowDirCovers", page1->showDirCoversB->isChecked() );
 			QMPSettings.set( "AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked() );
+#ifdef UPDATER
 			QMPSettings.set( "AutoUpdates", page1->autoUpdatesB->isChecked() );
+#endif
 			QMPSettings.set( "MainWidget/TabPositionNorth", page1->tabsNorths->isChecked() );
 			QMPSettings.set( "AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked() );
 			QMPSettings.set( "Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty() );
@@ -939,8 +948,7 @@ void SettingsWidget::page2EnableOrDisable()
 }
 void SettingsWidget::setAppearance()
 {
-	Appearance appearance( this );
-	appearance.exec();
+	Appearance( this ).exec();
 }
 void SettingsWidget::clearCoversCache()
 {

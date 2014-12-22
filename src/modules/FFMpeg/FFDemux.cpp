@@ -109,14 +109,13 @@ static QString getTag( const QString &page, const QString &tag )
 /**/
 
 FFDemux::FFDemux( QMutex &avcodec_mutex, Module &module ) :
+	formatCtx( NULL ),
+	paused( false ), aborted( false ), fix_mkv_ass( false ),
+	isMetadataChanged( false ),
+	lastTime( 0.0 ),
+	lastErr( 0 ),
 	avcodec_mutex( avcodec_mutex )
 {
-	paused = isMetadataChanged = aborted = fix_mkv_ass = false;
-	formatCtx = NULL;
-	reader = NULL;
-	lastTime = 0.0;
-	lastErr = 0;
-
 	SetModule( module );
 }
 
@@ -146,13 +145,10 @@ FFDemux::~FFDemux()
 			avformat_close_input( &formatCtx );
 			av_free( pb->buffer );
 			av_free( pb );
-			delete reader;
 		}
 		else
 			avformat_close_input( &formatCtx );
 	}
-	else if ( reader )
-		delete reader;
 }
 
 bool FFDemux::set()
@@ -376,11 +372,11 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 	class Packet : public AVPacket
 	{
 	public:
-		Packet()
+		inline Packet()
 		{
 			data = NULL;
 		}
-		~Packet()
+		inline ~Packet()
 		{
 			if ( data )
 				av_free_packet( this );
@@ -454,20 +450,17 @@ void FFDemux::pause()
 void FFDemux::abort()
 {
 	aborted = true;
-	readerMutex.lock();
-	if ( reader )
-		reader->abort();
-	readerMutex.unlock();
+	reader.abort();
 	if ( formatCtx && formatCtx->pb )
 		formatCtx->pb->eof_reached = true;
 }
 
 bool FFDemux::open( const QString &_url )
 {
-	if ( Reader::create( _url, reader, aborted, &readerMutex ) )
+	if ( Reader::create( _url, reader ) )
 	{
 		formatCtx = avformat_alloc_context();
-		AVIOContext *pb = formatCtx->pb = avio_alloc_context( ( uchar * )av_malloc( 16384 ), 16384, 0, reader, q_read, NULL, q_seek );
+		AVIOContext *pb = formatCtx->pb = avio_alloc_context( ( uchar * )av_malloc( 16384 ), 16384, 0, reader.rawPtr(), q_read, NULL, q_seek );
 		pb->seekable = reader->canSeek();
 		pb->read_pause = q_read_pause;
 		if ( avformat_open_input( &formatCtx, "", NULL, NULL ) )
@@ -570,7 +563,8 @@ StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 	streamInfo->bitrate = stream->codec->bit_rate;
 	streamInfo->bpcs = stream->codec->bits_per_coded_sample;
 	streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
-	streamInfo->time_base = ( quint64 )stream->time_base.num << 32 | stream->time_base.den;
+	streamInfo->time_base.num = stream->time_base.num;
+	streamInfo->time_base.den = stream->time_base.den;
 	streamInfo->type = ( QMPlay2MediaType )stream->codec->codec_type; //Enumy są takie same
 
 	if ( streamInfo->type != QMPLAY2_TYPE_SUBTITLE && stream->codec->extradata_size )

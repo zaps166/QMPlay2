@@ -1,11 +1,10 @@
 #ifndef PLAYLIST_HPP
 #define PLAYLIST_HPP
 
+#include <IOController.hpp>
+
 #include <QString>
 #include <QList>
-
-class Reader;
-class Writer;
 
 class Playlist
 {
@@ -14,7 +13,9 @@ public:
 	{
 	public:
 		inline Entry() :
-			selected( false ), length( -1 ), queue( 0 ), GID( 0 ), parent( 0 ) {}
+			selected( false ),
+			length( -1 ), queue( 0 ), GID( 0 ), parent( 0 )
+		{}
 
 		QString name, url;
 		bool selected;
@@ -30,12 +31,11 @@ public:
 	virtual QList< Entry > _read() = 0;
 	virtual bool _write( const QList< Entry > & ) = 0;
 
-	virtual ~Playlist();
+	virtual ~Playlist() {}
 private:
 	static Playlist *create( const QString &, OpenMode, QString *name = NULL );
 protected:
-	Writer *writer;
-	Reader *reader;
+	IOController<> ioCtrl;
 };
 
 #endif

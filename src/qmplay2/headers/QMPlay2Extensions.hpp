@@ -1,13 +1,12 @@
 #ifndef QMPLAY2EXTENSIONS_HPP
 #define QMPLAY2EXTENSIONS_HPP
 
+#include <IOController.hpp>
 #include <ModuleCommon.hpp>
 #include <DockWidget.hpp>
 
 #include <QString>
 #include <QImage>
-
-class Reader;
 
 class QMPlay2Extensions : public ModuleCommon
 {
@@ -48,11 +47,10 @@ public:
 		Q_UNUSED( img )
 		return QList< AddressPrefix >();
 	}
-	virtual void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, Reader *&reader, QMutex *abortMutex = NULL )
+	virtual void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl )
 	{
 		Q_UNUSED( extension )
-		Q_UNUSED( reader )
-		Q_UNUSED( abortMutex )
+		Q_UNUSED( ioCtrl )
 	}
 
 	virtual QAction *getAction( const QString &, int, const QString &, const QString &prefix = QString(), const QString &param = QString() )

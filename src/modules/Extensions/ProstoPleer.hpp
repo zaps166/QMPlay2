@@ -74,7 +74,7 @@ public:
 	DockWidget *getDockWidget();
 
 	QList< AddressPrefix > addressPrefixList( bool );
-	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, Reader *&, QMutex * );
+	void convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl );
 
 	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
 private:

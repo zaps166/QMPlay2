@@ -2,12 +2,13 @@
 #define DEMUXER_HPP
 
 #include <ModuleCommon.hpp>
+#include <IOController.hpp>
 #include <StreamInfo.hpp>
 #include <TimeStamp.hpp>
 
 #include <QString>
 
-class Demuxer : public ModuleCommon
+class Demuxer : protected ModuleCommon, public BasicIO
 {
 public:
 	class ChapterInfo
@@ -21,7 +22,7 @@ public:
 		double start, end;
 	};
 
-	static bool create( const QString &, Demuxer *&, const bool &br = false, QMutex *demuxerMutex = NULL );
+	static bool create( const QString &url, IOController< Demuxer > &demuxer );
 
 	virtual bool metadataChanged() const
 	{
@@ -70,8 +71,6 @@ public:
 
 	virtual bool seek( int, bool backward = false ) = 0;
 	virtual bool read( QByteArray &, int &, TimeStamp &, double & ) = 0;
-	virtual void pause() {}
-	virtual void abort() {} //must be thread-safe!
 
 	virtual ~Demuxer() {}
 private:

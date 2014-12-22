@@ -1,18 +1,18 @@
 #ifndef DEMUXERTHR_HPP
 #define DEMUXERTHR_HPP
 
+#include <IOController.hpp>
 #include <StreamInfo.hpp>
 
 #include <QString>
 #include <QThread>
 #include <QMutex>
-#include <QImage>
 
 class BufferInfo;
 class PlayClass;
 class AVThread;
 class Demuxer;
-class Reader;
+class BasicIO;
 
 class DemuxerThr : public QThread
 {
@@ -46,14 +46,14 @@ private:
 	void clearBuffers();
 
 	PlayClass &playC;
-	Demuxer *demuxer;
 
 	QString name, url, updatePlayingName;
 
 	int minBuffSizeLocal, minBuffSizeNetwork;
-	bool err, updateBufferedSeconds, br, demuxerReady, hasCover;
-	QMutex stopVAMutex, endMutex, abortMutex;
-	Reader *convertAddressReader;
+	bool err, updateBufferedSeconds, demuxerReady, hasCover;
+	QMutex stopVAMutex, endMutex;
+	IOController<> ioCtrl;
+	IOController< Demuxer > demuxer;
 	QString title, artist, album;
 	double playIfBuffered;
 private slots:

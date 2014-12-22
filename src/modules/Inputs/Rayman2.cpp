@@ -55,15 +55,9 @@ static inline void writeSample( QByteArray &decoded, float sample )
 
 /**/
 
-Rayman2::Rayman2( Module &module ) :
-	aborted( false )
+Rayman2::Rayman2( Module &module )
 {
 	SetModule( module );
-}
-
-Rayman2::~Rayman2()
-{
-	delete reader;
 }
 
 bool Rayman2::set()
@@ -100,7 +94,7 @@ bool Rayman2::seek( int s, bool )
 	QByteArray sampleCodes = reader->read( filePos - reader->pos() );
 	if ( filePos - reader->pos() != 0 )
 		return false;
-	for ( int i = 0 ; !aborted && i < sampleCodes.size() ; i += chn )
+	for ( int i = 0 ; !reader.isAborted() && i < sampleCodes.size() ; i += chn )
 	{
 		for ( int c = 0 ; c < chn ; ++c )
 		{
@@ -112,13 +106,13 @@ bool Rayman2::seek( int s, bool )
 }
 bool Rayman2::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
 {
-	if ( aborted )
+	if ( reader.isAborted() )
 		return false;
 
 	ts = ( reader->pos() - 0x64 ) * 2.0 / chn / srate;
 
 	QByteArray sampleCodes = reader->read( chn * 256 );
-	for ( int i = 0 ; !aborted && i + chn <= sampleCodes.size() ; i += chn )
+	for ( int i = 0 ; !reader.isAborted() && i + chn <= sampleCodes.size() ; i += chn )
 	{
 		for ( int c = 0 ; c < chn ; ++c )
 			writeSample( decoded, decode( sampleCodes[ i+c ] >> 4, stepIndex[ c ], predictor[ c ] ) );
@@ -132,19 +126,16 @@ bool Rayman2::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 	idx = 0;
 	duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
 
-	return !aborted;
+	return !reader.isAborted();
 }
 void Rayman2::abort()
 {
-	aborted = true;
-	readerMutex.lock();
-	reader->abort();
-	readerMutex.unlock();
+	reader.abort();
 }
 
 bool Rayman2::open( const QString &url )
 {
-	if ( Reader::create( url, reader, aborted, &readerMutex ) )
+	if ( Reader::create( url, reader ) )
 	{
 		QByteArray header = reader->read( 0x64 );
 		if ( header.size() == 0x64 )

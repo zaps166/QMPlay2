@@ -52,7 +52,7 @@ void *AudioFilters::createInstance( const QString &name )
 	if ( name == EqualizerName )
 		return new Equalizer( *this );
 	else if ( name == EqualizerGUIName )
-		return dynamic_cast< QMPlay2Extensions * >( new EqualizerGUI( *this ) );
+		return static_cast< QMPlay2Extensions * >( new EqualizerGUI( *this ) );
 	else if ( name == VoiceRemovalName )
 		return new VoiceRemoval( *this );
 	else if ( name == PhaseReverseName )

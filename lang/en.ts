@@ -707,7 +707,7 @@
     <name>InfoDock</name>
     <message>
         <source>Informacje</source>
-        <translation>Informations</translation>
+        <translation>Information</translation>
     </message>
     <message>
         <source>Bitrate obrazu</source>
@@ -1121,7 +1121,7 @@
     </message>
     <message>
         <source>Pokazuj dodatkowe informacje wyszukiwania</source>
-        <translation>Show additional search informations</translation>
+        <translation>Show additional search information</translation>
     </message>
     <message>
         <source>Kolejność wybierania domyślnej jakości filmu</source>

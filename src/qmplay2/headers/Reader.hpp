@@ -13,13 +13,14 @@
 
 #include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
+#include <IOController.hpp>
 
-class Reader : public ModuleCommon, public ModuleParams
+class Reader : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-	static bool create( const QString &, Reader *&, const bool &br = false, QMutex *readerMutex = NULL, const QString &plugName = QString() );
+	static bool create( const QString &url, IOController< Reader > &reader, const QString &plugName = QString() );
 
-	inline QString url() const
+	inline QString getUrl() const
 	{
 		return _url;
 	}
@@ -30,9 +31,7 @@ public:
 	virtual bool seek( qint64, int wh = SEEK_SET ) = 0;
 	virtual QByteArray read( qint64 ) = 0;
 	virtual QByteArray readLine();
-	virtual void pause() {}
 	virtual bool atEnd() const = 0;
-	virtual void abort() {} //must be thread-safe!
 
 	virtual qint64 size() const = 0;
 	virtual qint64 pos() const = 0;

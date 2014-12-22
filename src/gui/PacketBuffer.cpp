@@ -44,12 +44,9 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 	else for ( int i = pos - 1 ; i >= 0 ; --i ) //Skok do tyłu
 	{
 		const Packet &pkt = at( i );
-		if ( pkt.ts > seek_pos )
-		{
-			durationToChange += pkt.duration;
-			sizeToChange += pkt.size();
-		}
-		else
+		durationToChange += pkt.duration;
+		sizeToChange += pkt.size();
+		if ( pkt.ts <= seek_pos )
 		{
 			remaining_duration += durationToChange;
 			backward_duration -= durationToChange;
@@ -77,8 +74,9 @@ void PacketBuffer::put( const Packet &packet )
 	lock();
 	while ( pos > backwardPackets )
 	{
-		backward_duration -= first().duration;
-		backward_bytes -= first().size();
+		const Packet &tmpPacket = first();
+		backward_duration -= tmpPacket.duration;
+		backward_bytes -= tmpPacket.size();
 		removeFirst();
 		--pos;
 	}
@@ -89,10 +87,10 @@ void PacketBuffer::put( const Packet &packet )
 }
 Packet PacketBuffer::fetch()
 {
-	const Packet &pkt = at( pos++ );
-	remaining_duration -= pkt.duration;
-	backward_duration += pkt.duration;
-	remaining_bytes -= pkt.size();
-	backward_bytes += pkt.size();
-	return pkt;
+	const Packet &packet = at( pos++ );
+	remaining_duration -= packet.duration;
+	backward_duration += packet.duration;
+	remaining_bytes -= packet.size();
+	backward_bytes += packet.size();
+	return packet;
 }

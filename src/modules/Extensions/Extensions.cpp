@@ -55,14 +55,14 @@ void *Extensions::createInstance( const QString &name )
 	else if ( name == YouTubeName )
 		return new YouTube( *this );
 	else if ( name == LastFMName )
-		return dynamic_cast< QMPlay2Extensions * >( new LastFM( *this ) );
+		return static_cast< QMPlay2Extensions * >( new LastFM( *this ) );
 	else if ( name == RadioName )
-		return dynamic_cast< QMPlay2Extensions * >( new Radio( *this ) );
+		return static_cast< QMPlay2Extensions * >( new Radio( *this ) );
 	else if ( name == ProstoPleerName )
-		return dynamic_cast< QMPlay2Extensions * >( new ProstoPleer( *this ) );
+		return static_cast< QMPlay2Extensions * >( new ProstoPleer( *this ) );
 #ifdef USE_MPRIS2
 	else if ( name == MPRIS2Name )
-		return dynamic_cast< QMPlay2Extensions * >( new MPRIS2( *this ) );
+		return static_cast< QMPlay2Extensions * >( new MPRIS2( *this ) );
 #endif
 	return NULL;
 }

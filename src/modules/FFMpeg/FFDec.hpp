@@ -25,7 +25,7 @@ protected:
 	AVCodec *init( StreamInfo *streamInfo );
 	bool openCodec( AVCodec *codec );
 
-	void decodeFirstStep( AVPacket &packet, Packet &encodedPacket, bool flush );
+	void decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool flush );
 
 	AVCodecContext *codec_ctx;
 	AVFrame *frame;

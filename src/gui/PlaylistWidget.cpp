@@ -1,26 +1,25 @@
 #include <PlaylistWidget.hpp>
-#include <MenuBar.hpp>
-#include <Main.hpp>
 
 #include <QMPlay2Extensions.hpp>
 #include <Functions.hpp>
+#include <MenuBar.hpp>
 #include <Demuxer.hpp>
 #include <Reader.hpp>
+#include <Main.hpp>
 
 using Functions::chkMimeData;
 using Functions::getUrlsFromMimeData;
-using Functions::getDataIfHasPluginPrefix;
 using Functions::splitPrefixAndUrlIfHasPluginPrefix;
 
-#include <QPainter>
-#include <QFileInfo>
-#include <QDir>
 #include <QResizeEvent>
 #include <QHeaderView>
-#include <QMenu>
-#include <QDrag>
+#include <QFileInfo>
+#include <QPainter>
 #include <QMimeData>
 #include <QDebug>
+#include <QDrag>
+#include <QMenu>
+#include <QDir>
 
 #define playlistMenu ( ( MenuBar::Playlist * )QMPlay2GUI.menubar->playlist )
 
@@ -35,7 +34,7 @@ void UpdateEntryThr::updateEntry( QTreeWidgetItem *item, const QString &name, in
 	mutex.lock();
 	if ( !isRunning() )
 	{
-		br = false;
+		ioCtrl.resetAbort();
 		start();
 	}
 	itemsToUpdate += ( ItemToUpdate ){ item, name, length };
@@ -44,7 +43,7 @@ void UpdateEntryThr::updateEntry( QTreeWidgetItem *item, const QString &name, in
 void UpdateEntryThr::run()
 {
 	bool timeChanged = false;
-	while ( !br )
+	while ( !ioCtrl.isAborted() )
 	{
 		mutex.lock();
 		if ( !itemsToUpdate.size() )
@@ -69,15 +68,16 @@ void UpdateEntryThr::run()
 		if ( name.isNull() && length == -2 )
 		{
 			QImage img;
-			getDataIfHasPluginPrefix( url, &url, &name, &img, &convertAddressReader, &abortMutex );
+			Functions::getDataIfHasPluginPrefix( url, &url, &name, &img, &ioCtrl );
 			pLW.setEntryIcon( img, tWI );
 
-			if ( Demuxer::create( url, demuxer, br, &abortMutex ) )
+			IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
+			if ( Demuxer::create( url, demuxer ) )
 			{
 				if ( name.isEmpty() )
 					name = demuxer->title();
 				length = demuxer->length();
-				Functions::deleteThreadSafe( demuxer, abortMutex );
+				demuxer.clear();
 			}
 			else
 				updateTitle = false;
@@ -98,27 +98,20 @@ void UpdateEntryThr::run()
 }
 void UpdateEntryThr::stop()
 {
-	br = true;
-	abortMutex.lock();
-	if ( convertAddressReader )
-		convertAddressReader->abort();
-	if ( demuxer )
-		demuxer->abort();
-	abortMutex.unlock();
-	wait( 2500 );
+	ioCtrl.abort();
+	wait( TERMINATE_TIMEOUT );
 	if ( isRunning() )
 	{
 		terminate();
 		wait( 1000 );
-		convertAddressReader = NULL;
-		demuxer = NULL;
+		ioCtrl.clear();
 	}
 }
 
 /* AddThr class */
 void AddThr::setData( const QStringList &_urls, QTreeWidgetItem *_par, bool _loadList, bool sync )
 {
-	br = false;
+	ioCtrl.resetAbort();
 
 	urls = _urls;
 	par = _par;
@@ -158,31 +151,28 @@ void AddThr::setData( const QString &pth, QTreeWidgetItem *par ) //dla synchroni
 }
 void AddThr::stop()
 {
-	br = true;
-	abortMutex.lock();
-	if ( convertAddressReader )
-		convertAddressReader->abort();
-	if ( demuxer )
-		demuxer->abort();
-	abortMutex.unlock();
-	wait( 2500 );
+	ioCtrl.abort();
+	wait( TERMINATE_TIMEOUT );
 	if ( isRunning() )
 	{
 		terminate();
 		wait( 1000 );
-		convertAddressReader = NULL;
-		demuxer = NULL;
+		ioCtrl.clear();
 	}
 }
 void AddThr::run()
 {
-	pLW.saveCurrPth = false;
 	pLW._add( urls, par, &firstI, loadList );
 	if ( currentThread() == pLW.thread() ) //jeżeli funkcja działa w głównym wątku
 		finished();
 }
 void AddThr::finished()
 {
+	if ( !pLW.currPthToSave.isNull() )
+	{
+		QMPlay2GUI.setCurrentPth( pLW.currPthToSave );
+		pLW.currPthToSave.clear();
+	}
 	pLW.animationTimer.stop();
 	pLW.viewport()->repaint();
 	pLW.setAnimated( false );
@@ -375,7 +365,7 @@ QTreeWidgetItem *PlaylistWidget::newEntry( const Playlist::Entry &entry, QTreeWi
 	QTreeWidgetItem *tWI = new QTreeWidgetItem;
 
 	QImage img;
-	getDataIfHasPluginPrefix( entry.url, NULL, NULL, &img );
+	Functions::getDataIfHasPluginPrefix( entry.url, NULL, NULL, &img );
 	setEntryIcon( img, tWI );
 
 	tWI->setFlags( tWI->flags() &~ Qt::ItemIsDropEnabled );
@@ -512,7 +502,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 	int size = urls.size();
 	for ( int i = 0 ; i < size ; i++ )
 	{
-		if ( addThr.br )
+		if ( addThr.ioCtrl.isAborted() )
 			break;
 		QTreeWidgetItem *tWI = parent;
 		QString url = Functions::Url( urls[ i ] ), name;
@@ -558,11 +548,8 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 			QString dUrl = ( url.left( 7 ) == "file://" ) ? url.mid( 7 ) : QString();
 			if ( QFileInfo( dUrl ).isDir() ) //dodawanie podkatalogu
 			{
-				if ( !saveCurrPth )
-				{
-					QMPlay2GUI.setCurrentPth( dUrl );
-					saveCurrPth = true;
-				}
+				if ( currPthToSave.isNull() )
+					currPthToSave = dUrl;
 				QStringList d_urls = QDir( dUrl ).entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst );
 				if ( d_urls.size() )
 				{
@@ -591,18 +578,16 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				}
 				else
 				{
-					getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &addThr.convertAddressReader, &addThr.abortMutex );
-					if ( Demuxer::create( url, addThr.demuxer, addThr.br, &addThr.abortMutex ) )
+					Functions::getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &addThr.ioCtrl );
+					IOController< Demuxer > &demuxer = addThr.ioCtrl.toRef< Demuxer >();
+					if ( Demuxer::create( url, demuxer ) )
 					{
-						if ( !saveCurrPth && QFileInfo( dUrl ).isFile() )
-						{
-							QMPlay2GUI.setCurrentPth( Functions::filePath( dUrl ) );
-							saveCurrPth = true;
-						}
+						if ( currPthToSave.isNull() && QFileInfo( dUrl ).isFile() )
+							currPthToSave = Functions::filePath( dUrl );
 						if ( entry.name.isEmpty() )
-							entry.name = addThr.demuxer->title();
-						entry.length = addThr.demuxer->length();
-						Functions::deleteThreadSafe( addThr.demuxer, addThr.abortMutex );
+							entry.name = demuxer->title();
+						entry.length = demuxer->length();
+						demuxer.clear();
 						ok = true;
 					}
 				}

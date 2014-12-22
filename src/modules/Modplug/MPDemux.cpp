@@ -5,7 +5,7 @@
 #include <libmodplug/modplug.h>
 
 MPDemux::MPDemux( Module &module ) :
-	reader( NULL ), aborted( false ), pos( 0.0 ), mpfile( NULL )
+	aborted( false ), pos( 0.0 ), mpfile( NULL )
 {
 	SetModule( module );
 }
@@ -135,19 +135,16 @@ bool MPDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 void MPDemux::abort()
 {
 	aborted = true;
-	readerMutex.lock();
-	if ( reader )
-		reader->abort();
-	readerMutex.unlock();
+	reader.abort();
 }
 
 bool MPDemux::open( const QString &url )
 {
-	if ( Reader::create( url, reader, aborted, &readerMutex ) )
+	if ( Reader::create( url, reader ) )
 	{
 		if ( reader->size() > 0 )
 			mpfile = ModPlug_Load( reader->read( reader->size() ), reader->size() );
-		Functions::deleteThreadSafe( reader, readerMutex );
+		reader.clear();
 		if ( mpfile && ModPlug_GetModuleType( mpfile ) )
 		{
 			StreamInfo *streamInfo = new StreamInfo;

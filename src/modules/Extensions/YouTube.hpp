@@ -9,6 +9,7 @@ class QNetworkReply;
 class QProgressBar;
 class QToolButton;
 class QCompleter;
+class YouTubeDL;
 class QSpinBox;
 class LineEdit;
 class QLabel;
@@ -81,15 +82,12 @@ private:
 
 	void setAutocomplete( const QByteArray &data );
 
-	void youtube_dl_addr( const QString &url, const QString &param, QString *stream_url, QString *name, QString *extension );
-	QStringList youtube_dl_exec( const QString &url, const QStringList &args = QStringList() );
-
 	QString getDataFromXML( const QString &html, const QString &begin, const QString &end );
 	QString IntToStr2( const int i );
 	void setSearchResults( const QByteArray &data );
 
 	QString convertLink( const QString &ytPageLink );
-	QStringList getYouTubeVideo( const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString() ); //jeżeli ( tWI == NULL ) to zwraca {URL, file_extension, TITLE}
+	QStringList getYouTubeVideo( const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL ); //jeżeli ( tWI == NULL ) to zwraca {URL, file_extension, TITLE}
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
@@ -125,7 +123,7 @@ public:
 	DockWidget *getDockWidget();
 
 	QList< AddressPrefix > addressPrefixList( bool );
-	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, Reader *&, QMutex * );
+	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl );
 
 	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
 private:

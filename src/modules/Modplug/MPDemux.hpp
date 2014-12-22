@@ -1,9 +1,11 @@
 #include <Demuxer.hpp>
 
+#include <IOController.hpp>
+
 #include <QCoreApplication>
 
-class Reader;
 struct _ModPlugFile;
+class Reader;
 
 class MPDemux : public Demuxer
 {
@@ -28,11 +30,10 @@ private:
 
 	/**/
 
-	Reader *reader;
-	QMutex readerMutex;
 	bool aborted;
 	double pos;
 	_ModPlugFile *mpfile;
+	IOController< Reader > reader;
 };
 
 #define DemuxerName "Modplug Demuxer"

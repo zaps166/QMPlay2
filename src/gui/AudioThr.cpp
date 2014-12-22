@@ -25,7 +25,7 @@ AudioThr::AudioThr( PlayClass &playC, const QStringList &pluginsName ) :
 
 	connect( this, SIGNAL( pauseVisSig( bool ) ), this, SLOT( pauseVis( bool ) ) );
 #ifdef Q_OS_WIN
-	startTimer( 1000 );
+	startTimer( 500 );
 #endif
 }
 

@@ -1,14 +1,14 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 
+#include <IOController.hpp>
+
 #include <QString>
 #include <QVector>
-#include <QMutex>
 
 class QMPlay2_OSD;
 class QMimeData;
 class QPainter;
-class Reader;
 class QImage;
 class QRect;
 
@@ -92,24 +92,7 @@ namespace Functions
 	QStringList getUrlsFromMimeData( const QMimeData * );
 
 	bool splitPrefixAndUrlIfHasPluginPrefix( const QString &, QString *, QString *, QString *param = NULL );
-	void getDataIfHasPluginPrefix( const QString &, QString *url = NULL, QString *name = NULL, QImage *img = NULL, Reader **reader = NULL, QMutex *abortMutex = NULL );
-
-	template < typename T > static inline void deleteThreadSafe( T &t, QMutex &mutex )
-	{
-		mutex.lock();
-		delete t;
-		t = NULL;
-		mutex.unlock();
-	}
-	template < typename T > static inline void deleteThreadSafe( T &t, QMutex *mutex )
-	{
-		if ( mutex )
-			mutex->lock();
-		delete t;
-		t = NULL;
-		if ( mutex )
-			mutex->unlock();
-	}
+	void getDataIfHasPluginPrefix( const QString &, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL );
 }
 
 #endif

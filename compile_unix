@@ -77,7 +77,7 @@ else
 	cp src/gui/Icons/QMPlay2.png app/share/icons
 	rm -f app/share/icons/hicolor/128x128/apps/QMPlay2.png
 	ln -s ../../../QMPlay2.png app/share/icons/hicolor/128x128/apps
-	touch app/share/qmplay2/noautoupdates
+# 	touch app/share/qmplay2/noautoupdates
 	cp ChangeLog app/share/qmplay2
 	mkdir -p app/include/QMPlay2
 	cp src/qmplay2/headers/* app/include/QMPlay2

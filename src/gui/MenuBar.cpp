@@ -293,7 +293,9 @@ MenuBar::Options::Options( MenuBar *parent, const QString &name ) : QMenu( name,
 MenuBar::Help::Help( MenuBar *parent, const QString &name ) : QMenu( name, parent )
 {
 	newAction( Help::tr( "&O QMPlay2" ), this, QKeySequence( "F1" ), about, false, QIcon(), false );
+#ifdef UPDATER
 	newAction( Help::tr( "&Aktualizacje" ), this, QKeySequence( "F12" ), updates, false, QIcon(), false );
+#endif
 	addSeparator();
 	newAction( Help::tr( "O &Qt" ), this, QKeySequence(), aboutQt, false, QIcon(), false );
 }

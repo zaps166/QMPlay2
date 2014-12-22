@@ -62,20 +62,18 @@ Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name
 				Playlist *playlist = ( Playlist * )module->createInstance( mod.name );
 				if ( !playlist )
 					continue;
-				playlist->reader = NULL;
-				playlist->writer = NULL;
 				switch ( openMode )
 				{
 					case ReadOnly:
-						Reader::create( url, playlist->reader ); //TODO przerywanie
+						Reader::create( url, playlist->ioCtrl.toRef< Reader >() ); //TODO przerywanie (po co?)
 						break;
 					case WriteOnly:
-						playlist->writer = Writer::create( url );
+						playlist->ioCtrl.assign( Writer::create( url ) );
 						break;
 					default:
 						break;
 				}
-				if ( playlist->reader || playlist->writer )
+				if ( playlist->ioCtrl )
 				{
 					if ( name )
 						*name = mod.name;
@@ -84,12 +82,4 @@ Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name
 				delete playlist;
 			}
 	return NULL;
-}
-
-Playlist::~Playlist()
-{
-	delete reader;
-	delete writer;
-	reader = NULL;
-	writer = NULL;
 }

@@ -5,7 +5,9 @@
 #include <QSystemTrayIcon>
 
 #include <PlayClass.hpp>
-#include <Updater.hpp>
+#ifdef UPDATER
+	#include <Updater.hpp>
+#endif
 
 class QFrame;
 class QLabel;
@@ -117,7 +119,9 @@ private:
 	AboutWidget *aboutW;
 	bool isCompactView, wasShow, fullScreen;
 
+#ifdef UPDATER
 	Updater updater;
+#endif
 };
 
 #endif //MAINWIDGET_HPP

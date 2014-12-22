@@ -80,6 +80,89 @@ static QString fromU( QString s )
 
 /**/
 
+class YouTubeDL : public BasicIO
+{
+public:
+	inline YouTubeDL( const QString &youtubedl ) :
+		youtubedl( youtubedl )
+	{}
+
+	void addr( const QString &url, const QString &param, QString *stream_url, QString *name, QString *extension )
+	{
+		if ( stream_url || name )
+		{
+			QStringList paramList = QStringList() << "-e";
+			if ( !param.isEmpty() )
+				paramList << "-f" << param;
+			const QStringList ytdl_stdout = exec( url, paramList );
+			if ( !ytdl_stdout.isEmpty() )
+			{
+				QString tmp_url = ytdl_stdout.size() == 1 ? ytdl_stdout[ 0 ] : ytdl_stdout[ 1 ];
+				if ( stream_url )
+					*stream_url = tmp_url;
+				if ( name && ytdl_stdout.size() > 1 )
+					*name = ytdl_stdout[ 0 ];
+				if ( extension )
+				{
+					if ( tmp_url.contains( ".mp4" ) )
+						*extension = ".mp4";
+					else if ( tmp_url.contains( ".webm" ) )
+						*extension = ".webm";
+					else if ( tmp_url.contains( ".mkv" ) )
+						*extension = ".mkv";
+					else if ( tmp_url.contains( ".3gp" ) )
+						*extension = ".3gp";
+					else if ( tmp_url.contains( ".mpg" ) )
+						*extension = ".mpg";
+					else if ( tmp_url.contains( ".mpeg" ) )
+						*extension = ".mpeg";
+				}
+			}
+		}
+	}
+
+	QStringList exec( const QString &url, const QStringList &args )
+	{
+#ifndef Q_OS_WIN
+		QFile youtube_dl_file( youtubedl );
+		if ( youtube_dl_file.exists() )
+		{
+			QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
+			if ( ( youtube_dl_file.permissions() & exeFlags ) != exeFlags )
+				youtube_dl_file.setPermissions( youtube_dl_file.permissions() | exeFlags );
+		}
+#endif
+		youtubedl_process.start( youtubedl, QStringList() << url << "-g" << args );
+		if ( youtubedl_process.waitForFinished() )
+		{
+			if ( youtubedl_process.exitCode() )
+			{
+				QString error = youtubedl_process.readAllStandardError();
+				int idx = error.indexOf( "ERROR:" );
+				if ( idx > -1 )
+					error.remove( 0, idx );
+				emit QMPlay2Core.sendMessage( error, YouTubeName + QString( " (%1)" ).arg( Functions::fileName( youtubedl ) ), 3, 0 );
+				return QStringList();
+			}
+			return QString( youtubedl_process.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
+		}
+		else if ( youtubedl_process.error() == QProcess::FailedToStart )
+			emit QMPlay2Core.sendMessage( /*tr*/( "Brakuje zewnętrznego programu - 'youtube-dl'. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube." ), YouTubeName, 2, 0 );
+		return QStringList();
+	}
+private:
+	void abort()
+	{
+		youtubedl_process.kill();
+	}
+
+	QProcess youtubedl_process;
+	QString youtubedl;
+
+};
+
+/**/
+
 ResultsYoutube::ResultsYoutube()
 {
 	setAnimated( true );
@@ -500,70 +583,6 @@ void YouTubeW::setAutocomplete( const QByteArray &data )
 	}
 }
 
-void YouTubeW::youtube_dl_addr( const QString &url, const QString &param, QString *stream_url, QString *name, QString *extension )
-{
-	if ( stream_url || name )
-	{
-		QStringList paramList = QStringList() << "-e";
-		if ( !param.isEmpty() )
-			paramList << "-f" << param;
-		const QStringList ytdl_stdout = youtube_dl_exec( url, paramList );
-		if ( !ytdl_stdout.isEmpty() )
-		{
-			QString tmp_url = ytdl_stdout.size() == 1 ? ytdl_stdout[ 0 ] : ytdl_stdout[ 1 ];
-			if ( stream_url )
-				*stream_url = tmp_url;
-			if ( name && ytdl_stdout.size() > 1 )
-				*name = ytdl_stdout[ 0 ];
-			if ( extension )
-			{
-				if ( tmp_url.contains( ".mp4" ) )
-					*extension = ".mp4";
-				else if ( tmp_url.contains( ".webm" ) )
-					*extension = ".webm";
-				else if ( tmp_url.contains( ".mkv" ) )
-					*extension = ".mkv";
-				else if ( tmp_url.contains( ".3gp" ) )
-					*extension = ".3gp";
-				else if ( tmp_url.contains( ".mpg" ) )
-					*extension = ".mpg";
-				else if ( tmp_url.contains( ".mpeg" ) )
-					*extension = ".mpeg";
-			}
-		}
-	}
-}
-QStringList YouTubeW::youtube_dl_exec( const QString &url, const QStringList &args )
-{
-	QProcess youtube_dl;
-#ifndef Q_OS_WIN
-	QFile youtube_dl_file( youtubedl );
-	if ( youtube_dl_file.exists() )
-	{
-		QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
-		if ( ( youtube_dl_file.permissions() & exeFlags ) != exeFlags )
-			youtube_dl_file.setPermissions( youtube_dl_file.permissions() | exeFlags );
-	}
-#endif
-	youtube_dl.start( youtubedl, QStringList() << url << "-g" << args );
-	if ( youtube_dl.waitForFinished() )
-	{
-		if ( youtube_dl.exitCode() )
-		{
-			QString error = youtube_dl.readAllStandardError();
-			int idx = error.indexOf( "ERROR:" );
-			if ( idx > -1 )
-				error.remove( 0, idx );
-			emit QMPlay2Core.sendMessage( error, YouTubeName + QString( " (%1)" ).arg( Functions::fileName( youtubedl ) ), 3, 0 );
-			return QStringList();
-		}
-		return QString( youtube_dl.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
-	}
-	else if ( youtube_dl.error() == QProcess::FailedToStart )
-		emit QMPlay2Core.sendMessage( tr( "Brakuje zewnętrznego programu - 'youtube-dl'. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube." ), YouTubeName, 2, 0 );
-	return QStringList();
-}
-
 QString YouTubeW::getDataFromXML( const QString &html, const QString &begin, const QString &end )
 {
 	int idx = html.indexOf( begin );
@@ -674,7 +693,7 @@ QString YouTubeW::convertLink( const QString &ytPageLink )
 	}
 	return QString();
 }
-QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url )
+QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController< YouTubeDL > *youtube_dl )
 {
 	QStringList ret;
 	for ( int i = 0 ; i <= 1 ; ++i )
@@ -783,25 +802,27 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 	if ( ret.count() == 3 && ret[ 0 ].contains( "ENCRYPTED" ) )
 	{
 		int itag_idx = ret[ 0 ].indexOf( "itag=" );
-		if ( itag_idx > -1 )
+		if ( itag_idx > -1 && youtube_dl->assign( new YouTubeDL( youtubedl ) ) )
 		{
-			QStringList ytdl_stdout = youtube_dl_exec( url, QStringList() << "-f" << QString::number( atoi( ret[ 0 ].mid( itag_idx + 5 ).toLatin1() ) ) );
+			QStringList ytdl_stdout = ( *youtube_dl )->exec( url, QStringList() << "-f" << QString::number( atoi( ret[ 0 ].mid( itag_idx + 5 ).toLatin1() ) ) );
 			if ( !ytdl_stdout.isEmpty() && !ytdl_stdout[ 0 ].isEmpty() )
 				ret[ 0 ] = ytdl_stdout[ 0 ];
 			else
 				ret.clear();
+			youtube_dl->clear();
 		}
 	}
-	else if ( !tWI && ret.isEmpty() ) //ex. 18+
+	else if ( !tWI && ret.isEmpty() && youtube_dl->assign( new YouTubeDL( youtubedl ) ) ) //ex. 18+
 	{
 		QString stream_url, name, extension;
-		youtube_dl_addr( url, PARAM.right( PARAM.length() - 5 ), &stream_url, &name, &extension ); //extension doesn't work on youtube in this function
+		( *youtube_dl )->addr( url, PARAM.right( PARAM.length() - 5 ), &stream_url, &name, &extension ); //extension doesn't work on youtube in this function
 		if ( !stream_url.isEmpty() )
 		{
 			if ( name.isEmpty() )
 				name = "Can't find title";
 			ret << stream_url << extension << name;
 		}
+		youtube_dl->clear();
 	}
 
 	return ret;
@@ -873,7 +894,7 @@ QList< YouTube::AddressPrefix > YouTube::addressPrefixList( bool img )
 {
 	return QList< AddressPrefix >() << AddressPrefix( "YouTube", img ? QImage( ":/youtube" ) : QImage() ) << AddressPrefix( "youtube-dl", img ? QImage( ":/video" ) : QImage() );
 }
-void YouTube::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, Reader *&reader, QMutex *abortMutex )
+void YouTube::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl )
 {
 	if ( !stream_url && !name && !img )
 		return;
@@ -881,27 +902,31 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 	{
 		if ( img )
 			*img = QImage( ":/youtube" );
-		if ( ( stream_url || name ) && Reader::create( w.convertLink( url ), reader, false, abortMutex ) )
+		if ( ioCtrl && ( stream_url || name ) )
 		{
-			QByteArray replyData;
-			while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000/*2MiB*/ )
+			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
+			if ( Reader::create( w.convertLink( url ), reader ) )
 			{
-				QByteArray arr = reader->read( 4096 );
-				if ( !arr.size() )
-					break;
-				replyData += arr;
-			}
-			Functions::deleteThreadSafe( reader, abortMutex );
+				QByteArray replyData;
+				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /*2MiB*/ )
+				{
+					QByteArray arr = reader->read( 4096 );
+					if ( !arr.size() )
+						break;
+					replyData += arr;
+				}
+				reader.clear();
 
-			const QStringList youTubeVideo = w.getYouTubeVideo( replyData, param, NULL, url );
-			if ( youTubeVideo.count() == 3 )
-			{
-				if ( stream_url )
-					*stream_url = youTubeVideo[ 0 ];
-				if ( name )
-					*name = youTubeVideo[ 2 ];
-				if ( extension )
-					*extension = youTubeVideo[ 1 ];
+				const QStringList youTubeVideo = w.getYouTubeVideo( replyData, param, NULL, url, ioCtrl->toPtr< YouTubeDL >() );
+				if ( youTubeVideo.count() == 3 )
+				{
+					if ( stream_url )
+						*stream_url = youTubeVideo[ 0 ];
+					if ( name )
+						*name = youTubeVideo[ 2 ];
+					if ( extension )
+						*extension = youTubeVideo[ 1 ];
+				}
 			}
 		}
 	}
@@ -909,7 +934,15 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 	{
 		if ( img )
 			*img = QImage( ":/video" );
-		w.youtube_dl_addr( url, param, stream_url, name, extension );
+		if ( ioCtrl )
+		{
+			IOController< YouTubeDL > &youtube_dl = ioCtrl->toRef< YouTubeDL >();
+			if ( ioCtrl->assign( new YouTubeDL( w.youtubedl ) ) )
+			{
+				youtube_dl->addr( url, param, stream_url, name, extension );
+				ioCtrl->clear();
+			}
+		}
 	}
 }
 

@@ -1,6 +1,8 @@
-Zmiany w QMPlay2 build 14.12.20:
+Zmiany w QMPlay2 build 14.12.22:
 	- możliwość przewijania do tyłu w strumieniach sieciowych bez ponownego łączenia się z serwerem,
 	- MPRIS2 obsługuje już nazwy utworów nawet gdy nie zawierają one tytułu,
+	- usunięta możliwość aktualizacji w systemach innych niż Windows,
+	- poprawione przerywanie odtwarzania podczas pracy "youtube-dl",
 	- drobne poprawki wyszukiwania w YouTube,
 	- dodany cache do klasy ustawień,
 

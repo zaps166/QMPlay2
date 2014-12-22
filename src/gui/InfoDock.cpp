@@ -7,9 +7,9 @@
 void TextEdit::mouseMoveEvent( QMouseEvent *e )
 {
 	if ( !anchorAt( e->pos() ).isEmpty() )
-		viewport()->setProperty( "cursor", QVariant( QCursor( Qt::PointingHandCursor ) ) );
+		viewport()->setProperty( "cursor", QCursor( Qt::PointingHandCursor ) );
 	else
-		viewport()->setProperty( "cursor", QVariant( QCursor( Qt::ArrowCursor ) ) );
+		viewport()->setProperty( "cursor", QCursor( Qt::ArrowCursor ) );
 	QTextEdit::mouseMoveEvent( e );
 }
 void TextEdit::mousePressEvent( QMouseEvent *e )

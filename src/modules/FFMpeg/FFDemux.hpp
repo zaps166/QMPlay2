@@ -1,4 +1,5 @@
 #include <Demuxer.hpp>
+#include <IOController.hpp>
 
 #include <QNetworkAccessManager>
 #include <QTimer>
@@ -53,7 +54,7 @@ private:
 	QList< AVStream * > streams;
 	AVFormatContext *formatCtx;
 
-	Reader *reader;
+	IOController< Reader > reader;
 	bool seekByByte, paused, isStreamed, aborted, fix_mkv_ass;
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
@@ -64,5 +65,5 @@ private:
 	QTimer netInfoTimer;
 	QNetworkAccessManager net;
 
-	QMutex &avcodec_mutex, readerMutex;
+	QMutex &avcodec_mutex;
 };

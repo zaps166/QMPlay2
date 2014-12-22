@@ -1,6 +1,6 @@
 #include <Settings.hpp>
 
-Settings::Settings(const QString &name) :
+Settings::Settings( const QString &name ) :
 	QSettings( QMPlay2Core.getSettingsDir() + name + ".ini", QSettings::IniFormat ),
 	timerID( 0 )
 {}

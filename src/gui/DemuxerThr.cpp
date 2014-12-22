@@ -68,13 +68,9 @@ public:
 
 DemuxerThr::DemuxerThr( PlayClass &playC ) :
 	playC( playC ),
-	hasCover( false )
+	url( playC.url ),
+	err( false ), demuxerReady( false ), hasCover( false )
 {
-	demuxerReady = br = err = false;
-	convertAddressReader = NULL;
-	demuxer = NULL;
-	url = playC.url;
-
 	connect( this, SIGNAL( stopVADec() ), this, SLOT( stopVADecSlot() ) );
 }
 
@@ -123,13 +119,8 @@ void DemuxerThr::loadImage()
 
 void DemuxerThr::stop()
 {
-	br = true;
-	abortMutex.lock();
-	if ( convertAddressReader )
-		convertAddressReader->abort();
-	if ( demuxer )
-		demuxer->abort();
-	abortMutex.unlock();
+	ioCtrl.abort();
+	demuxer.abort();
 }
 void DemuxerThr::end()
 {
@@ -147,8 +138,7 @@ void DemuxerThr::end()
 	else //wywołane z głównego wątku
 		stopVADecSlot();
 
-	delete demuxer;
-	demuxer = NULL;
+	demuxer.clear();
 
 	if ( endMutexLocked )
 		endMutex.unlock(); //Jeżeli był zablokowany, odblokuje mutex
@@ -157,7 +147,7 @@ void DemuxerThr::end()
 bool DemuxerThr::load( bool canEmitInfo )
 {
 	playC.loadMutex.lock();
-	emit load( demuxer ); //to wykonuje się w głównym wątku
+	emit load( demuxer.rawPtr() ); //to wykonuje się w głównym wątku
 	playC.loadMutex.lock(); //i czeka na koniec wykonywania
 	playC.loadMutex.unlock();
 	if ( canEmitInfo )
@@ -171,13 +161,14 @@ void DemuxerThr::run()
 	emit playC.setCurrentPlaying();
 
 	emit QMPlay2Core.busyCursor();
-	Functions::getDataIfHasPluginPrefix( url, &url, &name, NULL, &convertAddressReader, &abortMutex );
+	Functions::getDataIfHasPluginPrefix( url, &url, &name, NULL, &ioCtrl );
 	emit QMPlay2Core.restoreCursor();
+	if ( ioCtrl.isAborted() )
+		return end();
 
-	Demuxer::create( url, demuxer, br, &abortMutex );
-	if ( !demuxer || br )
+	if ( !Demuxer::create( url, demuxer ) || demuxer.isAborted() )
 	{
-		if ( !br && !demuxer )
+		if ( !demuxer.isAborted() && !demuxer )
 		{
 			QMPlay2Core.logError( tr( "Nie można otworzyć" ) + ": " + url.remove( "file://" ) );
 			emit playC.updateCurrentEntry( QString(), -1 );
@@ -208,7 +199,7 @@ void DemuxerThr::run()
 		}
 
 	err = !load( false );
-	if ( err || br )
+	if ( err || demuxer.isAborted() )
 		return end();
 
 	updatePlayingName = name.isEmpty() ? fileName( url, false ) : name;
@@ -270,7 +261,7 @@ void DemuxerThr::run()
 	}
 
 	setPriority( QThread::HighPriority );
-	while ( !br )
+	while ( !demuxer.isAborted() )
 	{
 		AVThread *aThr = ( AVThread * )playC.aThr, *vThr = ( AVThread * )playC.vThr;
 
@@ -353,7 +344,7 @@ void DemuxerThr::run()
 		}
 
 		err = ( aThr && aThr->writer && !aThr->writer->readyWrite() ) || ( vThr && vThr->writer && !vThr->writer->readyWrite() );
-		if ( br || err )
+		if ( demuxer.isAborted() || err )
 			break;
 
 		if ( playC.paused )
@@ -790,8 +781,14 @@ void DemuxerThr::getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo )
 	}
 	playC.aPackets.unlock();
 
-	if ( bufferInfo && bufferInfo->backwardDuration < 0.0 ) //niedokładność double
-		bufferInfo->backwardDuration = 0.0;
+	if ( bufferInfo )
+	{
+		//niedokładność double
+		if ( bufferInfo->backwardDuration < 0.0 )
+			bufferInfo->backwardDuration = 0.0;
+		if ( bufferInfo->remainingDuration < 0.0 )
+			bufferInfo->remainingDuration = 0.0;
+	}
 }
 void DemuxerThr::clearBuffers()
 {

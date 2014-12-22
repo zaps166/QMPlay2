@@ -9,10 +9,11 @@ using Functions::Url;
 
 QList< M3U::Entry > M3U::_read()
 {
+	Reader *reader = ioCtrl.rawPtr< Reader >();
 	QList< Entry > list;
 
 	QByteArray line;
-	QString playlistPath = filePath( reader->url() );
+	QString playlistPath = filePath( reader->getUrl() );
 	if ( playlistPath.left( 7 ) == "file://" )
 		playlistPath.remove( "file://" );
 	else
@@ -57,6 +58,7 @@ QList< M3U::Entry > M3U::_read()
 }
 bool M3U::_write( const QList< Entry > &list )
 {
+	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( "#EXTM3U\r\n" );
 	for ( int i = 0 ; i < list.size() ; i++ )
 	{

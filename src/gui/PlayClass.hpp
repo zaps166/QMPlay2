@@ -1,9 +1,6 @@
 #ifndef PLAYCLASS_HPP
 #define PLAYCLASS_HPP
 
-#define MUTEXWAIT_TIMEOUT 1250
-#define TERMINATE_TIMEOUT (MUTEXWAIT_TIMEOUT*2)
-
 #include <PacketBuffer.hpp>
 
 #include <QSize>

@@ -70,17 +70,18 @@ public:
 	inline StreamInfo() :
 		type( QMPLAY2_TYPE_UNKNOWN ),
 		is_default( true ), must_decode( false ),
-		time_base( 0 ),
 		bitrate( 0 ), bpcs( 0 ),
 		sample_rate( 0 ), block_align( 0 ),
 		channels( 0 ),
 		aspect_ratio( 0.0 ), FPS( 0.0 ),
 		img_fmt( 0 ), W( 0 ), H( 0 )
-	{}
+	{
+		time_base.num = time_base.den = 0;
+	}
 
 	inline double getTimeBase() const
 	{
-		return ( double )( time_base >> 32 ) / ( double )( time_base & 0xFFFFFFFF );
+		return ( double )time_base.num / ( double )time_base.den;
 	}
 
 	QMPlay2MediaType type;
@@ -88,7 +89,7 @@ public:
 	QList< QMPlay2Tag > other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
 	bool is_default, must_decode;
-	quint64 time_base;
+	struct { int num, den; } time_base;
 	int bitrate, bpcs;
 	/* audio only */
 	quint32 sample_rate, block_align;

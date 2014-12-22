@@ -348,7 +348,7 @@ QList< ProstoPleer::AddressPrefix > ProstoPleer::addressPrefixList( bool img )
 {
 	return QList< AddressPrefix >() << AddressPrefix( ProstoPleerName, img ? QImage( ":/prostopleer" ) : QImage() );
 }
-void ProstoPleer::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, Reader *&reader, QMutex *abortMutex )
+void ProstoPleer::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl )
 {
 	Q_UNUSED( param )
 	Q_UNUSED( name )
@@ -360,18 +360,20 @@ void ProstoPleer::convertAddress( const QString &prefix, const QString &url, con
 			*img = QImage( ":/prostopleer" );
 		if ( extension )
 			*extension = ".mp3";
-		if ( stream_url )
+		if ( ioCtrl && stream_url )
 		{
 			QString fileId = url;
 			while ( fileId.endsWith( '/' ) )
 				fileId.truncate( 1 );
 			int idx = url.lastIndexOf( '/' );
-			if ( idx > -1 && Reader::create( ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid( idx + 1 ), reader, false, abortMutex ) )
+
+			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
+			if ( idx > -1 && Reader::create( ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid( idx + 1 ), reader ) )
 			{
 				QByteArray replyData;
 				while ( reader->readyRead() )
 					replyData = reader->read( 4096 );
-				Functions::deleteThreadSafe( reader, abortMutex );
+				reader.clear();
 
 				replyData.replace( '"', QByteArray() );
 				int idx = replyData.indexOf( "track_link:" );

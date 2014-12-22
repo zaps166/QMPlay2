@@ -56,7 +56,7 @@ FileReader::~FileReader()
 
 bool FileReader::open()
 {
-	f.setFileName( url().mid( 7, -1 ) );
+	f.setFileName( getUrl().mid( 7, -1 ) );
 	bool OK = f.open( QIODevice::ReadOnly );
 	if ( OK )
 	{

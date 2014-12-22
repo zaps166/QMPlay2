@@ -9,17 +9,17 @@ using Functions::Url;
 
 QList< PLS::Entry > PLS::_read()
 {
+	Reader *reader = ioCtrl.rawPtr< Reader >();
 	QList< Entry > list;
 
-	QByteArray line;
-	QString playlistPath = filePath( reader->url() );
+	QString playlistPath = filePath( reader->getUrl() );
 	if ( playlistPath.left( 7 ) == "file://" )
 		playlistPath.remove( "file://" );
 	else
 		playlistPath.clear();
 	while ( !reader->atEnd() )
 	{
-		line = reader->readLine();
+		QByteArray line = reader->readLine();
 		if ( line.isEmpty() )
 			continue;
 		int idx = line.indexOf( '=' );
@@ -68,6 +68,7 @@ QList< PLS::Entry > PLS::_read()
 }
 bool PLS::_write( const QList< Entry > &list )
 {
+	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( QString( "[playlist]\r\nNumberOfEntries=" + QString::number( list.size() ) + "\r\n" ).toUtf8() );
 	for ( int i = 0 ; i < list.size() ; i++ )
 	{

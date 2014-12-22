@@ -5,6 +5,9 @@ extern "C"
 {
 	#include <libavformat/avformat.h>
 }
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
+	#define av_frame_alloc avcodec_alloc_frame
+#endif
 
 FFDec::FFDec( QMutex &avcodec_mutex ) :
 	codec_ctx( NULL ),
@@ -77,7 +80,7 @@ bool FFDec::openCodec( AVCodec *codec )
 		case AVMEDIA_TYPE_VIDEO:
 			last_aspect_ratio = av_q2d( codec_ctx->sample_aspect_ratio ) * 1000.0;
 		case AVMEDIA_TYPE_AUDIO:
-			frame = avcodec_alloc_frame();
+			frame = av_frame_alloc();
 			break;
 		default:
 			break;
@@ -85,7 +88,7 @@ bool FFDec::openCodec( AVCodec *codec )
 	return ( codecIsOpen = true );
 }
 
-void FFDec::decodeFirstStep( AVPacket &packet, Packet &encodedPacket, bool flush )
+void FFDec::decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool flush )
 {
 	av_init_packet( &packet );
 	packet.data = ( quint8 * )encodedPacket.data();

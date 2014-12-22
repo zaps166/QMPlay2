@@ -1,6 +1,7 @@
 #ifndef PLAYLISTWIDGET_HPP
 #define PLAYLISTWIDGET_HPP
 
+#include <IOController.hpp>
 #include <Playlist.hpp>
 
 #include <QTreeWidget>
@@ -18,9 +19,7 @@ class UpdateEntryThr : public QThread
 {
 	friend class PlaylistWidget;
 public:
-	UpdateEntryThr( PlaylistWidget &pLW ) :
-		convertAddressReader( NULL ),
-		demuxer( NULL ),
+	inline UpdateEntryThr( PlaylistWidget &pLW ) :
 		pLW( pLW )
 	{}
 
@@ -30,10 +29,8 @@ public:
 private:
 	void run();
 
-	bool br;
-	QMutex mutex, abortMutex;
-	Reader *convertAddressReader;
-	Demuxer *demuxer;
+	IOController<> ioCtrl;
+	QMutex mutex;
 
 	struct ItemToUpdate
 	{
@@ -51,10 +48,8 @@ class AddThr : public QThread
 	friend class PlaylistWidget;
 	Q_OBJECT
 public:
-	AddThr( PlaylistWidget &pLW ) :
-		pLW( pLW ),
-		convertAddressReader( NULL ),
-		demuxer( NULL )
+	inline AddThr( PlaylistWidget &pLW ) :
+		pLW( pLW )
 	{
 		connect( this, SIGNAL( finished() ), this, SLOT( finished() ) );
 	}
@@ -69,10 +64,8 @@ private:
 	PlaylistWidget &pLW;
 	QStringList urls;
 	QTreeWidgetItem *par;
-	bool loadList, br;
-	Reader *convertAddressReader;
-	Demuxer *demuxer;
-	QMutex abortMutex;
+	bool loadList;
+	IOController<> ioCtrl;
 	QTreeWidgetItem *firstI, *lastI;
 private slots:
 	void finished();
@@ -157,7 +150,8 @@ private:
 
 	QRect getArcRect( int size );
 
-	bool Modifier, internalDrag, selectAfterAdd, _useThread, hasHiddenItems, saveCurrPth;
+	bool Modifier, internalDrag, selectAfterAdd, _useThread, hasHiddenItems;
+	QString currPthToSave;
 	struct AddData
 	{
 		QStringList urls;

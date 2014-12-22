@@ -46,8 +46,10 @@ using Functions::timeToStr;
 #include <math.h>
 
 /* MainWidget */
-MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments ) :
-	updater( this )
+MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
+#ifdef UPDATER
+	: updater( this )
+#endif
 {
 	QMPlay2GUI.mainW = this;
 
@@ -246,8 +248,10 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments ) :
 			playStateChanged( false );
 	}
 
+#ifdef UPDATER
 	if ( QMPlay2Core.getSettings().getBool( "AutoUpdates" ) )
 		updater.downloadUpdate();
+#endif
 }
 MainWidget::~MainWidget()
 {
@@ -567,7 +571,9 @@ void MainWidget::createMenuBar()
 	connect( menuBar->options->trayVisible, SIGNAL( triggered( bool ) ), tray, SLOT( setVisible( bool ) ) );
 
 	connect( menuBar->help->about, SIGNAL( triggered() ), this, SLOT( about() ) );
+#ifdef UPDATER
 	connect( menuBar->help->updates, SIGNAL( triggered() ), &updater, SLOT( exec() ) );
+#endif
 	connect( menuBar->help->aboutQt, SIGNAL( triggered() ), qApp, SLOT( aboutQt() ) );
 
 	menuBar->window->toggleCompactView->setChecked( isCompactView );
@@ -1050,8 +1056,10 @@ void MainWidget::closeEvent( QCloseEvent *e )
 	const QString quitMsg = tr( "Czy na pewno chcesz zamknąć program?" );
 	if
 	(
-		( QMPlay2Core.isWorking() && QMessageBox::question( this, QString(), tr( "QMPlay2 wykonuje pracę w tle." ) + " " + quitMsg, QMessageBox::Yes, QMessageBox::No ) == QMessageBox::No ) ||
-		( updater.downloading() && QMessageBox::question( this, QString(), tr( "Aktualizacja jest teraz pobierana." ) + " " + quitMsg, QMessageBox::Yes, QMessageBox::No ) == QMessageBox::No )
+		( QMPlay2Core.isWorking() && QMessageBox::question( this, QString(), tr( "QMPlay2 wykonuje pracę w tle." ) + " " + quitMsg, QMessageBox::Yes, QMessageBox::No ) == QMessageBox::No )
+#ifdef UPDATER
+		|| ( updater.downloading() && QMessageBox::question( this, QString(), tr( "Aktualizacja jest teraz pobierana." ) + " " + quitMsg, QMessageBox::Yes, QMessageBox::No ) == QMessageBox::No )
+#endif
 	)
 	{
 		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
