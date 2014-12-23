@@ -150,8 +150,10 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init( "ShowCovers", true );
 	QMPSettings.init( "ShowDirCovers", true );
 	QMPSettings.init( "AutoOpenVideoWindow", true );
+#ifdef UPDATER
 	if ( !QMPSettings.contains( "AutoUpdates" ) )
 		QMPSettings.init( "AutoUpdates", !QFile::exists( QMPlay2Core.getQMPlay2Dir() + "noautoupdates" ) );
+#endif
 	QMPSettings.init( "MainWidget/TabPositionNorth", false );
 	QMPSettings.init( "AllowOnlyOneInstance", false );
 	QMPSettings.init( "Proxy/Use", false );
