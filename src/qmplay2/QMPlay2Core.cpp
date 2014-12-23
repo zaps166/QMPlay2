@@ -121,11 +121,10 @@ QIcon QMPlay2CoreClass::getIconFromTheme( const QString &icon )
 
 bool QMPlay2CoreClass::run( const QString &command, const QString &args )
 {
-#ifdef Q_WS_WIN
 	if ( !command.isEmpty() )
+#ifdef Q_WS_WIN
 		return ( quintptr )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
 #else
-	if ( !command.isEmpty() )
 	{
 		if ( args.isEmpty() && !UnixOpenCommand.isEmpty() )
 			return !system( QString( UnixOpenCommand + "\"" + command + "\" &" ).toLocal8Bit() );
