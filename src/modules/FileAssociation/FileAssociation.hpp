@@ -1,6 +1,6 @@
 #include <Module.hpp>
 
-class FileAssociation : public QObject, public Module
+class FileAssociation : public Module
 {
 	Q_OBJECT
 public:
