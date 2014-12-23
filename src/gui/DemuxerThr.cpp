@@ -220,10 +220,7 @@ void DemuxerThr::run()
 
 	bool unknownLength = demuxer->length() < 0.0;
 	if ( unknownLength )
-	{
-		playIfBuffered = 0.0;
 		updateBufferedSeconds = false;
-	}
 
 	emit playC.updateLength( unknownLength ? 0.0 : demuxer->length() );
 	emit playC.chText( tr( "Odtwarzanie" ) );
@@ -394,9 +391,9 @@ void DemuxerThr::run()
 			playC.waitForData &&
 			(
 				playC.endOfStream                                  ||
-				bufferedAllPackets( vS, aS, forwardPackets )       ||
+				bufferedAllPackets( vS, aS, forwardPackets )       || //bufor pełny
 				( bufferInfo.remainingDuration >= playIfBuffered ) ||
-				( !bufferInfo.remainingDuration && bufferedAllPackets( vS, aS, 1 ) )
+				( bufferInfo.remainingDuration == 0.0 && bufferedAllPackets( vS, aS, 2 ) ) //bufor ma conajmniej 2 paczki, a nadal bez informacji o długości w [s]
 			)
 		)
 		{
@@ -728,7 +725,7 @@ bool DemuxerThr::bufferedAllPackets( int vS, int aS, int p )
 }
 bool DemuxerThr::emptyBuffers( int vS, int aS )
 {
-	return ( playC.vThr && playC.aThr && ( !vS || !aS ) ) || ( !playC.vThr && playC.aThr && !aS ) || ( playC.vThr && !playC.aThr && !vS );
+	return ( playC.vThr && playC.aThr && ( vS <= 1 || aS <= 1 ) ) || ( !playC.vThr && playC.aThr && aS <= 1 ) || ( playC.vThr && !playC.aThr && vS <= 1 );
 }
 bool DemuxerThr::canBreak( const AVThread *avThr1, const AVThread *avThr2 )
 {

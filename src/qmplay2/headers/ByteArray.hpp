@@ -104,7 +104,7 @@ public:
 		return ret.flt;
 	}
 
-	inline ByteArray & operator = ( const uint32_t pos )
+	inline ByteArray & operator =( const uint32_t pos )
 	{
 		if ( dataStart + pos < dataEnd )
 			data = dataStart + pos;
@@ -112,7 +112,7 @@ public:
 			data = dataEnd;
 		return *this;
 	}
-	inline ByteArray & operator += ( const uint32_t pos )
+	inline ByteArray & operator +=( const uint32_t pos )
 	{
 		if ( data + pos < dataEnd )
 			data += pos;
@@ -120,7 +120,7 @@ public:
 			data = dataEnd;
 		return *this;
 	}
-	inline ByteArray & operator -= ( const uint32_t pos )
+	inline ByteArray & operator -=( const uint32_t pos )
 	{
 		if ( data - pos > dataStart )
 			data -= pos;
@@ -128,47 +128,47 @@ public:
 			data = dataStart;
 		return *this;
 	}
-	inline void operator ++ ()
+	inline void operator ++()
 	{
 		if ( !atEnd() )
 			++data;
 	}
 
-	inline ByteArray operator + ( const uint32_t bytes ) const
+	inline ByteArray operator +( const uint32_t bytes ) const
 	{
 		return ByteArray( *this ) += bytes;
 	}
-	inline ByteArray operator - ( const uint32_t bytes ) const
+	inline ByteArray operator -( const uint32_t bytes ) const
 	{
 		return ByteArray( *this ) -= bytes;
 	}
 
-	inline uint8_t operator * () const
+	inline uint8_t operator *() const
 	{
 		if ( atEnd() )
 			return 0;
 		return *data;
 	}
-	inline uint8_t operator [] ( const uint32_t idx ) const
+	inline uint8_t operator []( const uint32_t idx ) const
 	{
 		if ( atEnd() )
 			return 0;
 		return data[ idx ];
 	}
 
-	inline operator const void * () const
+	inline operator const void *() const
 	{
 		if ( atEnd() )
 			return NULL;
 		return data;
 	}
-	inline operator const char * () const
+	inline operator const char *() const
 	{
 		if ( atEnd() )
 			return NULL;
 		return ( const char * )data;
 	}
-	inline operator const uint8_t * () const
+	inline operator const uint8_t *() const
 	{
 		if ( atEnd() )
 			return NULL;

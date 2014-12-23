@@ -24,7 +24,7 @@ public:
 		inline AddressPrefix( const QString &prefix, const QImage &img = QImage() ) :
 			prefix( prefix ), img( img ) {}
 
-		inline bool operator == ( const AddressPrefix &other )
+		inline bool operator ==( const AddressPrefix &other )
 		{
 			return other.prefix == prefix;
 		}

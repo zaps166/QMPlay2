@@ -19,16 +19,16 @@ public:
 		_dts = _pts = 0.0 / 0.0;
 	}
 
-	inline double operator = ( double t )
+	inline double operator =( double t )
 	{
 		return ( _pts = _dts = t );
 	}
-	inline void operator += ( double t )
+	inline void operator +=( double t )
 	{
 		_dts += t;
 		_pts += t;
 	}
-	inline operator double () const
+	inline operator double() const
 	{
 		if ( _dts < 0.0 )
 		{

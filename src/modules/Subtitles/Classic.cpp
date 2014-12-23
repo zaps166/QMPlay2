@@ -25,11 +25,11 @@ public:
 			this->duration = duration;
 	}
 
-	void operator += ( const Sub_Without_End &other )
+	void operator +=( const Sub_Without_End &other )
 	{
 		sub += '\n' + other.sub;
 	}
-	operator unsigned () const
+	operator unsigned() const
 	{
 		return start;
 	}

@@ -60,6 +60,11 @@ static void matroska_fix_ass_packet( AVRational stream_timebase, AVPacket *pkt )
 
 /**/
 
+static int interruptCB( bool &aborted )
+{
+	return aborted;
+}
+
 static int q_read( void *ptr, unsigned char *buf, int buf_size )
 {
 	Reader *reader = ( Reader * )ptr;
@@ -116,6 +121,7 @@ FFDemux::FFDemux( QMutex &avcodec_mutex, Module &module ) :
 	lastErr( 0 ),
 	avcodec_mutex( avcodec_mutex )
 {
+	lastTS.set( 0.0, 0.0 );
 	SetModule( module );
 }
 
@@ -435,8 +441,9 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 
 	if ( packet.duration > 0 )
 		duration = packet.duration * time_base;
-	else
+	else if ( !ts || ( duration = ts - lastTS ) < 0.0 /* Calculate packet duration if doesn't exists */ )
 		duration = 0.0;
+	lastTS = ts;
 
 	idx = index_map[ ff_idx ];
 
@@ -451,8 +458,6 @@ void FFDemux::abort()
 {
 	aborted = true;
 	reader.abort();
-	if ( formatCtx && formatCtx->pb )
-		formatCtx->pb->eof_reached = true;
 }
 
 bool FFDemux::open( const QString &_url )
@@ -476,10 +481,16 @@ bool FFDemux::open( const QString &_url )
 	else
 	{
 		QString url = _url;
-		if ( url.left( 4 ) == "mms:" )
-			url.insert( 3, 'h' ); //FFMpeg wymaga mmsh://
-		if ( url.left( 5 ) != "http:" && url.left( 6 ) != "https:" && url.left( 5 ) != "file:" && avformat_open_input( &formatCtx, url.toLocal8Bit(), NULL, NULL ) )
-			return false;
+		if ( url.left( 5 ) != "http:" && url.left( 6 ) != "https:" && url.left( 5 ) != "file:" )
+		{
+			if ( url.left( 4 ) == "mms:" )
+				url.insert( 3, 'h' );
+			formatCtx = avformat_alloc_context();
+			formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
+			formatCtx->interrupt_callback.opaque = &aborted;
+			if ( avformat_open_input( &formatCtx, url.toLocal8Bit(), NULL, NULL ) )
+				return false;
+		}
 	}
 	if ( !formatCtx )
 		return false;

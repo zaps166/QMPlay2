@@ -39,8 +39,8 @@ private:
 	void addSubtitleStream( bool, QString &, int, int, const QString &, const QString &, const QString &, const QList< QMPlay2Tag > &other_info = QList< QMPlay2Tag >() );
 
 	bool mustReloadStreams();
-	bool bufferedAllPackets( int, int, int );
-	bool emptyBuffers( int, int );
+	bool bufferedAllPackets( int vS, int aS, int p );
+	bool emptyBuffers( int vS, int aS );
 	bool canBreak( const AVThread *avThr1, const AVThread *avThr2 );
 	void getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo = NULL );
 	void clearBuffers();

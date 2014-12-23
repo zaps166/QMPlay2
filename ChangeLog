@@ -1,10 +1,11 @@
-Zmiany w QMPlay2 build 14.12.22:
+Zmiany w QMPlay2 build 14.12.23:
+	- poprawione przerywanie odtwarzania podczas pracy "youtube-dl" oraz z protokołami innymi niż HTTP i HTTPS,
 	- możliwość przewijania do tyłu w strumieniach sieciowych bez ponownego łączenia się z serwerem,
 	- MPRIS2 obsługuje już nazwy utworów nawet gdy nie zawierają one tytułu,
 	- usunięta możliwość aktualizacji w systemach innych niż Windows,
-	- poprawione przerywanie odtwarzania podczas pracy "youtube-dl",
 	- drobne poprawki wyszukiwania w YouTube,
 	- dodany cache do klasy ustawień,
+	- usprawnienie buforowania,
 
 Zmiany w QMPlay2 build 14.12.01:
 	- wczytywanie czcionek napisów z katalogu, w którym znajdują się napisy ASS/SSA,

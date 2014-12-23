@@ -53,6 +53,7 @@ private:
 	QVector< int > index_map;
 	QList< AVStream * > streams;
 	AVFormatContext *formatCtx;
+	TimeStamp lastTS;
 
 	IOController< Reader > reader;
 	bool seekByByte, paused, isStreamed, aborted, fix_mkv_ass;

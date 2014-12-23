@@ -156,7 +156,7 @@ public:
 	{
 		return riff_count;
 	}
-	RIFF & operator [] ( DWORD idx )
+	RIFF &operator []( DWORD idx )
 	{
 		return riff_arr[ idx ];
 	}
