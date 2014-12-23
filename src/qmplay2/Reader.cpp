@@ -4,6 +4,8 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
+#include <string.h>
+
 bool Reader::create( const QString &url, IOController< Reader > &reader, const QString &plugName )
 {
 	QString scheme = Functions::getUrlScheme( url );
@@ -24,6 +26,13 @@ bool Reader::create( const QString &url, IOController< Reader > &reader, const Q
 					break;
 			}
 	return false;
+}
+
+qint64 Reader::read( quint8 *buffer, qint64 maxLen )
+{
+	const QByteArray arr = read( maxLen );
+	memcpy( buffer, arr.data(), arr.size() );
+	return arr.size();
 }
 
 QByteArray Reader::readLine()

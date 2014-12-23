@@ -30,6 +30,7 @@ public:
 
 	virtual bool seek( qint64, int wh = SEEK_SET ) = 0;
 	virtual QByteArray read( qint64 ) = 0;
+	virtual qint64 read( quint8 *buffer, qint64 maxLen );
 	virtual QByteArray readLine();
 	virtual bool atEnd() const = 0;
 

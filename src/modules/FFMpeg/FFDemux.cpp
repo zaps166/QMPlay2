@@ -68,11 +68,9 @@ static int interruptCB( bool &aborted )
 static int q_read( void *ptr, unsigned char *buf, int buf_size )
 {
 	Reader *reader = ( Reader * )ptr;
-	if ( !reader->readyRead() )
-		return -1;
-	const QByteArray arr = reader->read( buf_size );
-	memcpy( buf, arr.data(), arr.size() );
-	return arr.size();
+	if ( reader->readyRead() )
+		return reader->read( buf, buf_size );
+	return AVERROR_EOF;
 }
 static int64_t q_seek( void *ptr, int64_t offset, int wh )
 {

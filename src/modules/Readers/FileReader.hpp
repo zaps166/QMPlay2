@@ -9,6 +9,7 @@ class FileReader : public Reader
 
 	bool seek( qint64, int wh = SEEK_SET );
 	QByteArray read( qint64 );
+	qint64 read( quint8 *buffer, qint64 maxLen );
 	QByteArray readLine();
 	bool atEnd() const;
 

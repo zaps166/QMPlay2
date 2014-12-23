@@ -26,6 +26,10 @@ QByteArray FileReader::read( qint64 len )
 {
 	return f.read( len );
 }
+qint64 FileReader::read( quint8 *buffer, qint64 maxLen )
+{
+	return f.read( ( char * )buffer, maxLen );
+}
 QByteArray FileReader::readLine()
 {
 	QByteArray line = f.readLine();
