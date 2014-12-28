@@ -13,7 +13,6 @@ HttpReader::HttpReader( Module &module ) :
 	SetModule( module );
 	sock.setReadBufferSize( 0x200000 ); //2MiB
 }
-
 HttpReader::~HttpReader()
 {
 	close();
@@ -69,15 +68,9 @@ QByteArray HttpReader::read( qint64 len )
 		sock.killTimer();
 	if ( sock.readBufferSize() < len )
 		sock.setReadBufferSize( len );
-	int wd = maxTimeout;
 	while ( sock.size() < len && !( _size > -1 && _pos + sock.size() >= _size ) )
-	{
-		while ( !_abort && wd > 0 && !sock.waitForReadyRead( 100 ) )
-			wd -= 100;
-		if ( _abort || wd <= 0 )
+		if ( !waitForSocketReadyRead( maxTimeout ) )
 			break;
-		wd = maxTimeout;
-	}
 	if ( _abort )
 		return QByteArray();
 	QByteArray arr = sock.read( len );
@@ -149,6 +142,13 @@ void HttpReader::close()
 	_size = 0;
 }
 
+bool HttpReader::waitForSocketReadyRead( int wd )
+{
+	while ( !_abort && wd > 0 && !sock.waitForReadyRead( 100 ) )
+		wd -= 100;
+	return !( _abort || wd <= 0 );
+}
+
 bool HttpReader::conn( quint8 followLocation, qint64 range )
 {
 	disconn();
@@ -202,8 +202,8 @@ bool HttpReader::conn( quint8 followLocation, qint64 range )
 	QByteArray header, headerLower;
 	while ( !_abort )
 	{
-		if ( !sock.waitForReadyRead( maxTimeout ) )
-			return false;
+		if ( !waitForSocketReadyRead( maxTimeout ) )
+			break;
 		bool br = false;
 		while ( sock.canReadLine() )
 		{
@@ -221,7 +221,6 @@ bool HttpReader::conn( quint8 followLocation, qint64 range )
 		}
 		if ( br )
 			break;
-
 		if ( sock.readBufferSize() <= sock.size() ) //zabezpieczenie przed za małym buforem
 			sock.setReadBufferSize( sock.size()+1 );
 	}

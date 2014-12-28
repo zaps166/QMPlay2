@@ -75,6 +75,8 @@ private:
 
 	void close();
 
+	bool waitForSocketReadyRead( int wd );
+
 	bool conn( quint8, qint64 range = 0 );
 	QByteArray read( bool, qint64 ) const;
 	void disconn();
@@ -86,7 +88,6 @@ private:
 	int chunkSize;
 	const quint8 followLocation;
 	bool _abort, _canSeek, chunked;
-	mutable bool paused;
 };
 
 #define HttpReaderName "Http Reader"
