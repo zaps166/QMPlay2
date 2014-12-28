@@ -2,6 +2,7 @@ Zmiany w QMPlay2 build 14.12.28:
 	- poprawione wczytywanie czcionek z katalogu z napisami (nie sa przeszkiwane rekursywnie),
 	- główny pasek narzędzi może być oddokowany od głównego okna,
 	- poprawiony crash programu skompilowanego z AVResample,
+	- poprawione wyświetlanie tytułów YouTube na playliście,
 
 Zmiany w QMPlay2 build 14.12.23:
 	- poprawione przerywanie odtwarzania podczas pracy "youtube-dl" oraz z protokołami innymi niż HTTP i HTTPS,

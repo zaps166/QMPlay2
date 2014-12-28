@@ -825,13 +825,20 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			int titleIdx = data.indexOf( "title\": \"", ytplayerIdx );
 			if ( titleIdx > -1 )
 			{
-				int titleEndIdx = data.indexOf( '"', titleIdx += 9 );
+				int titleEndIdx = titleIdx += 9;
+				for ( ;; ) //szukanie końca tytułu
+				{
+					titleEndIdx = data.indexOf( '"', titleEndIdx );
+					if ( titleEndIdx < 0 || data[ titleEndIdx-1 ] != '\\' )
+						break;
+					++titleEndIdx;
+				}
 				if ( titleEndIdx > -1 )
-					ret << fromU( data.mid( titleIdx, titleEndIdx - titleIdx ) );
+					ret << fromU( data.mid( titleIdx, titleEndIdx - titleIdx ).replace( "\\\"", "\"" ).replace( "\\/", "/" ) );
 			}
 		}
 		if ( ret.count() == 2 )
-			ret << "Can't find title";
+			ret << "(Can not find the title)";
 	}
 
 	if ( ret.count() == 3 && ret[ 0 ].contains( "ENCRYPTED" ) )
