@@ -1,13 +1,12 @@
 #include <PulseAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
-PulseAudioWriter::PulseAudioWriter( Module &module )
+PulseAudioWriter::PulseAudioWriter( Module &module ) :
+	err( false )
 {
 	addParam( "delay" );
 	addParam( "chn" );
 	addParam( "rate" );
-
-	err = false;
 
 	SetModule( module );
 }

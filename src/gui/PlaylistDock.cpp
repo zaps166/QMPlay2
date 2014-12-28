@@ -23,12 +23,11 @@ using Functions::chkMimeData;
 #include <QMessageBox>
 #include <QDebug>
 
-PlaylistDock::PlaylistDock()
+PlaylistDock::PlaylistDock() :
+	repeatMode( Normal ),
+	lastPlaying( NULL )
 {
 	setWindowTitle( tr( "Playlista" ) );
-
-	lastPlaying = NULL;
-
 	setWidget( &mainW );
 
 	list = new PlaylistWidget;

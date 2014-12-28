@@ -1,5 +1,5 @@
 #include <Writer.hpp>
-#include <pulse.hpp>
+#include <Pulse.hpp>
 
 #include <QCoreApplication>
 

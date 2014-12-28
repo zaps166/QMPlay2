@@ -78,9 +78,9 @@ LibASS::LibASS( Settings &settings ) :
 {
 	ass = ass_library_init();
 	winW = winH = W = H = 0;
-	zoom = 0.;
-	aspect_ratio = -1.;
-	fontScale = 1.;
+	zoom = 0.0;
+	aspect_ratio = -1.0;
+	fontScale = 1.0;
 
 	osd_track = ass_sub_track = NULL;
 	osd_style = NULL;
@@ -224,7 +224,7 @@ void LibASS::initASS( const QByteArray &ass_data )
 	}
 
 	ass_sub_renderer = ass_renderer_init( ass );
-	ass_set_fonts( ass_sub_renderer, NULL, NULL, 1, NULL, 1 );
+	ass_set_fonts( ass_sub_renderer, NULL, NULL, true, NULL, true );
 }
 void LibASS::setASSStyle()
 {

@@ -26,7 +26,12 @@ void Drawable::paintEvent( QPaintEvent * )
 
 /**/
 
-XVideoWriter::XVideoWriter( Module &module )
+XVideoWriter::XVideoWriter( Module &module ) :
+	outW( -1 ), outH( -1 ), Hue( 0 ), Saturation( 0 ), Brightness( 0 ), Contrast( 0 ),
+	aspect_ratio( 0.0 ), zoom( 0.0 ),
+	useSHM( false ),
+	drawable( NULL ),
+	xv( NULL )
 {
 	addParam( "W" );
 	addParam( "H" );
@@ -38,14 +43,8 @@ XVideoWriter::XVideoWriter( Module &module )
 	addParam( "Contrast" );
 	addParam( "Hue" );
 
-	xv = NULL;
-	drawable = NULL;
-	outW = outH = -1;
-	Hue = Saturation = Brightness = Contrast = 0;
-
 	SetModule( module );
 }
-
 XVideoWriter::~XVideoWriter()
 {
 	delete drawable;

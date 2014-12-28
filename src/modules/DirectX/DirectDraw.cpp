@@ -346,7 +346,11 @@ void Drawable::releaseSecondary()
 
 /**/
 
-DirectDrawWriter::DirectDrawWriter( Module &module )
+DirectDrawWriter::DirectDrawWriter( Module &module ) :
+	outW( -1 ), outH( -1 ), flip( 0 ), Hue( 0 ), Saturation( 0 ), Brightness( 0 ), Contrast( 0 ),
+	aspect_ratio( 0.0 ), zoom( 0.0 ),
+	onlyOverlay( true ),
+	drawable( NULL )
 {
 	addParam( "W" );
 	addParam( "H" );
@@ -358,13 +362,8 @@ DirectDrawWriter::DirectDrawWriter( Module &module )
 	addParam( "Contrast" );
 	addParam( "Flip" );
 
-	drawable = NULL;
-	outW = outH = -1;
-	Hue = Saturation = Brightness = Contrast = 0;
-
 	SetModule( module );
 }
-
 DirectDrawWriter::~DirectDrawWriter()
 {
 	delete drawable;

@@ -17,5 +17,5 @@ RESOURCES += icon.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += PulseAudio.hpp PulseAudioWriter.hpp pulse.hpp
-SOURCES += PulseAudio.cpp PulseAudioWriter.cpp pulse.cpp
+HEADERS += PulseAudio.hpp PulseAudioWriter.hpp Pulse.hpp
+SOURCES += PulseAudio.cpp PulseAudioWriter.cpp Pulse.cpp

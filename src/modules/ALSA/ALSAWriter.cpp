@@ -49,20 +49,18 @@ static bool set_snd_pcm_hw_params( snd_pcm_t *snd, snd_pcm_hw_params_t *params, 
 
 /**/
 
-ALSAWriter::ALSAWriter( Module &module )
+ALSAWriter::ALSAWriter( Module &module ) :
+	snd( NULL ),
+	delay( 0.0 ),
+	sample_rate( 0 ), channels( 0 ),
+	autoFindMultichannelDevice( false ), err( false )
 {
 	addParam( "delay" );
 	addParam( "rate" );
 	addParam( "chn" );
 
-	snd = NULL;
-	delay = 0.0;
-	sample_rate = channels = 0;
-	autoFindMultichannelDevice = err = false;
-
 	SetModule( module );
 }
-
 ALSAWriter::~ALSAWriter()
 {
 	close();

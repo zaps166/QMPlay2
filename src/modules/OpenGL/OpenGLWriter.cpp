@@ -353,7 +353,11 @@ void Drawable::paintGL()
 
 /**/
 
-OpenGLWriter::OpenGLWriter( Module &module )
+OpenGLWriter::OpenGLWriter( Module &module ) :
+	outW( -1 ), outH( -1 ), W( -1 ), flip( 0 ),
+	aspect_ratio( 0.0 ), zoom( 0.0 ),
+	VSync( true ), useShaders( true ),
+	drawable( NULL )
 {
 	addParam( "W" );
 	addParam( "H" );
@@ -365,12 +369,8 @@ OpenGLWriter::OpenGLWriter( Module &module )
 	addParam( "Contrast" );
 	addParam( "Hue" );
 
-	drawable = NULL;
-	W = outW = outH = -1;
-
 	SetModule( module );
 }
-
 OpenGLWriter::~OpenGLWriter()
 {
 	delete drawable;

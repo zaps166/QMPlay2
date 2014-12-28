@@ -1,4 +1,4 @@
-#include <pulse.hpp>
+#include <Pulse.hpp>
 
 static void context_state_cb( pa_context *c, void *userdata )
 {
@@ -20,11 +20,13 @@ static void context_state_cb( pa_context *c, void *userdata )
 
 /**/
 
-Pulse::Pulse()
+Pulse::Pulse() :
+	delay( 0.0 ),
+	channels( 0 ),
+	sample_rate( 0 ),
+	_isOK( false ),
+	pulse( NULL )
 {
-	pulse = NULL;
-	channels = sample_rate = delay = 0;
-	_isOK = false;
 	ss.format = PA_SAMPLE_FLOAT32NE;
 
 	/* test */

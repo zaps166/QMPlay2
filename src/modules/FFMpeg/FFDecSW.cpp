@@ -15,6 +15,8 @@ extern "C"
 
 FFDecSW::FFDecSW( QMutex &avcodec_mutex, Module &module ) :
 	FFDec( avcodec_mutex ),
+	threads( 0 ), lowres( 0 ),
+	thread_type_slice( false ),
 	sws_ctx( NULL )
 {
 	SetModule( module );

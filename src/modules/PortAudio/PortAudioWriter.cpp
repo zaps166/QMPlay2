@@ -1,22 +1,21 @@
 #include <PortAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
-PortAudioWriter::PortAudioWriter( Module &module )
+PortAudioWriter::PortAudioWriter( Module &module ) :
+	stream( NULL ),
+	sample_rate( 0 ),
+	err( false )
 {
 	addParam( "delay" );
 	addParam( "chn" );
 	addParam( "rate" );
 
-	err = false;
-	stream = NULL;
-	sample_rate = 0;
 	memset( &outputParameters, 0, sizeof( outputParameters ) );
 	outputParameters.sampleFormat = paFloat32;
 	outputParameters.hostApiSpecificStreamInfo = NULL;
 
 	SetModule( module );
 }
-
 PortAudioWriter::~PortAudioWriter()
 {
 	close();

@@ -19,6 +19,9 @@ using Functions::Url;
 
 VideoDock::VideoDock() :
 	iDW( QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt ),
+#ifndef Q_OS_MAC
+	pixels( 0 ),
+#endif
 	cantpopup( false ), is_floating( false )
 {
 	setWindowTitle( tr( "Wideo" ) );

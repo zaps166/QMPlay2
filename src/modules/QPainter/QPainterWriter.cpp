@@ -80,7 +80,10 @@ void Drawable::paintEvent( QPaintEvent * )
 
 /**/
 
-QPainterWriter::QPainterWriter( Module &module )
+QPainterWriter::QPainterWriter( Module &module ) :
+	outW( -1 ), outH( -1 ), flip( 0 ),
+	aspect_ratio( 0.0 ), zoom( 0.0 ),
+	drawable( NULL )
 {
 	addParam( "W" );
 	addParam( "H" );
@@ -90,12 +93,8 @@ QPainterWriter::QPainterWriter( Module &module )
 	addParam( "Brightness" );
 	addParam( "Contrast" );
 
-	drawable = NULL;
-	outW = outH = -1;
-
 	SetModule( module );
 }
-
 QPainterWriter::~QPainterWriter()
 {
 	delete drawable;
