@@ -1,9 +1,6 @@
 #ifndef SNDRESAMPLER_HPP
 #define SNDRESAMPLER_HPP
 
-#ifndef QMPLAY2_AVRESAMPLE
-	#include <QVector>
-#endif
 #include <stddef.h>
 
 class QByteArray;
@@ -20,18 +17,11 @@ public:
 		destroy();
 	}
 
-	inline const char *name() const
-	{
-#ifdef QMPLAY2_AVRESAMPLE
-		return "AVResample";
-#else
-		return "SWResample";
-#endif
-	}
+	const char *name() const;
 
 	inline bool isOpen() const
 	{
-		return snd_convert_ctx;
+		return snd_convert_ctx != NULL;
 	}
 
 	bool create( int _src_samplerate, int _src_channels, int _dst_samplerate, int _dst_channels );
@@ -42,7 +32,6 @@ private:
 	struct AVAudioResampleContext *snd_convert_ctx;
 #else
 	struct SwrContext *snd_convert_ctx;
-	QVector< int > channel_map;
 #endif
 	int src_samplerate, src_channels, dst_samplerate, dst_channels;
 };

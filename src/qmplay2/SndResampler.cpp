@@ -9,11 +9,22 @@ extern "C"
 #ifdef QMPLAY2_AVRESAMPLE
 	#include <libavresample/avresample.h>
 	#include <libavutil/samplefmt.h>
+	#define set_matrix avresample_set_matrix
 #else
 	#include <libswresample/swresample.h>
 	#include <libavutil/audioconvert.h>
+	#define set_matrix swr_set_matrix
 #endif
 	#include <libavutil/opt.h>
+}
+
+const char *SndResampler::name() const
+{
+#ifdef QMPLAY2_AVRESAMPLE
+	return "AVResample";
+#else
+	return "SWResample";
+#endif
 }
 
 bool SndResampler::create( int _src_samplerate, int _src_channels, int _dst_samplerate, int _dst_channels )
@@ -37,6 +48,10 @@ bool SndResampler::create( int _src_samplerate, int _src_channels, int _dst_samp
 	av_opt_set_int( snd_convert_ctx, "out_sample_rate",    dst_samplerate,    0 );
 	av_opt_set_int( snd_convert_ctx, "in_sample_fmt",      AV_SAMPLE_FMT_FLT, 0 );
 	av_opt_set_int( snd_convert_ctx, "out_sample_fmt",     AV_SAMPLE_FMT_FLT, 0 );
+#else
+	if ( !( snd_convert_ctx = swr_alloc_set_opts( NULL, dst_chn_layout, AV_SAMPLE_FMT_FLT, dst_samplerate, src_chn_layout, AV_SAMPLE_FMT_FLT, src_samplerate, 0, NULL ) ) )
+		return false;
+#endif
 	av_opt_set_int( snd_convert_ctx, "linear_interp",      true,              0 );
 	if ( dst_channels > src_channels )
 	{
@@ -47,33 +62,18 @@ bool SndResampler::create( int _src_samplerate, int _src_channels, int _dst_samp
 			matrix[ i ][ c ] = 1.0;
 			c = ( c + 1 ) % src_channels;
 		}
-		avresample_set_matrix( snd_convert_ctx, ( const double * )matrix, src_channels );
+		set_matrix( snd_convert_ctx, ( const double * )matrix, src_channels );
 	}
+#ifdef QMPLAY2_AVRESAMPLE
 	if ( avresample_open( snd_convert_ctx ) )
-		destroy();
 #else
-	snd_convert_ctx = swr_alloc_set_opts( NULL, dst_chn_layout, AV_SAMPLE_FMT_FLT, dst_samplerate, src_chn_layout, AV_SAMPLE_FMT_FLT, src_samplerate, 0, NULL );
-	if ( snd_convert_ctx )
-	{
-		if ( dst_channels > src_channels )
-		{
-			channel_map.fill( -1, dst_channels /*SWR_CH_MAX*/ );
-			for ( int i = 0, c = 0 ; i < dst_channels ; ++i )
-			{
-				channel_map[ i ] = c;
-				c = ( c + 1 ) % src_channels;
-			}
-			av_opt_set_int( snd_convert_ctx, "icl", dst_chn_layout, 0 ); //Input Channel Layout na takie samo jak Output, ale ilość jest różna
-			av_opt_set_int( snd_convert_ctx, "uch", dst_channels,  0 ); //Used Channel Count
-			swr_set_channel_mapping( snd_convert_ctx, channel_map.data() );
-		}
-		av_opt_set_int( snd_convert_ctx, "linear_interp", true, 0 );
-		if ( swr_init( snd_convert_ctx ) )
-			destroy();
-	}
+	if ( swr_init( snd_convert_ctx ) )
 #endif
-
-	return isOpen();
+	{
+		destroy();
+		return false;
+	}
+	return true;
 }
 void SndResampler::convert( const QByteArray &src, QByteArray &dst )
 {
@@ -82,13 +82,13 @@ void SndResampler::convert( const QByteArray &src, QByteArray &dst )
 
 	dst.reserve( out_size * sizeof( float ) * dst_channels );
 
-	uint8_t *in[]  = { ( uint8_t * )src.data() };
-	uint8_t *out[] = { ( uint8_t * )dst.data() };
+	quint8 *in[]  = { ( quint8 * )src.data() };
+	quint8 *out[] = { ( quint8 * )dst.data() };
 
 #ifdef QMPLAY2_AVRESAMPLE
 	const int converted = avresample_convert( snd_convert_ctx, out, 1, out_size, in, 1, in_size );
 #else
-	const int converted = swr_convert( snd_convert_ctx, out, out_size, ( const uint8_t ** )in, in_size );
+	const int converted = swr_convert( snd_convert_ctx, out, out_size, ( const quint8 ** )in, in_size );
 #endif
 	if ( converted > 0 )
 		dst.resize( converted * sizeof( float ) * dst_channels );
@@ -103,3 +103,14 @@ void SndResampler::destroy()
 	swr_free( &snd_convert_ctx );
 #endif
 }
+
+#if 0 //old code
+	for ( int i = 0, c = 0 ; i < dst_channels ; ++i )
+	{
+		channel_map[ i ] = c;
+		c = ( c + 1 ) % src_channels;
+	}
+	av_opt_set_int( snd_convert_ctx, "icl", dst_chn_layout, 0 ); //Input Channel Layout na takie samo jak Output, ale ilość jest różna
+	av_opt_set_int( snd_convert_ctx, "uch", dst_channels,  0 ); //Used Channel Count
+	swr_set_channel_mapping( snd_convert_ctx, channel_map );
+#endif

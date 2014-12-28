@@ -120,10 +120,6 @@ void LibASS::addFont( const QByteArray &name, const QByteArray &data )
 {
 	ass_add_font( ass, ( char * )name.data(), ( char * )data.data(), data.size() );
 }
-void LibASS::setAdditionalFontsDir( const QByteArray &dir )
-{
-	ass_set_fonts_dir( ass, dir );
-}
 void LibASS::clearFonts()
 {
 	ass_clear_fonts( ass );

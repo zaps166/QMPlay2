@@ -23,8 +23,7 @@ public:
 	void setZoom( double );
 	void setFontScale( double );
 
-	void addFont( const QByteArray &, const QByteArray & );
-	void setAdditionalFontsDir( const QByteArray &dir );
+	void addFont( const QByteArray &name, const QByteArray &data );
 	void clearFonts();
 
 	void initOSD();

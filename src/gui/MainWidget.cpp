@@ -130,7 +130,6 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	mainTB = new QToolBar;
 	mainTB->setObjectName( "mainTB" );
 	mainTB->setWindowTitle( tr( "Główny pasek narzędzi" ) );
-	mainTB->setFloatable( false );
 	mainTB->setAllowedAreas( Qt::BottomToolBarArea | Qt::TopToolBarArea );
 	addToolBar( Qt::BottomToolBarArea, mainTB );
 

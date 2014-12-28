@@ -15,11 +15,22 @@
 #include <Decoder.hpp>
 #include <Reader.hpp>
 
+#if QT_VERSION >= 0x040800
+	#define USE_QRAWFONT
+#endif
+
 #include <QCoreApplication>
+#ifdef USE_QRAWFONT
+	#include <QRawFont>
+#else
+	#include <QFontDatabase>
+#endif
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QAction>
+#include <QDebug>
+#include <QDir>
 
 #include <math.h>
 
@@ -27,12 +38,11 @@
 	#include <QProgressBar>
 	#include <QVBoxLayout>
 	#include <QLabel>
-	#include <QDir>
 
 	class UpdateFC : public QThread
 	{
 	public:
-		inline UpdateFC( LibASS *ass ) :
+		UpdateFC( LibASS *ass ) :
 			ass( ass )
 		{
 			start();
@@ -283,7 +293,32 @@ void PlayClass::loadSubsFile( const QString &fileName )
 			QString fileExt = Functions::fileExt( fileName ).toLower();
 			if ( fileExt == "ass" || fileExt == "ssa" )
 			{
-				ass->setAdditionalFontsDir( Functions::filePath( fileName.mid( 7 ) ).toLocal8Bit() ); /* Ustawianie katalogu z czcionkami dla aktualnego pliku */
+				/* Wczytywanie katalogu z czcionkami dla wybranego pliku napisów */
+				const QString fontPath = Functions::filePath( fileName.mid( 7 ) );
+				foreach ( QString fontFile, QDir( fontPath ).entryList( QStringList() << "*.ttf" << "*.otf", QDir::Files ) )
+				{
+					QFile f( fontPath + fontFile );
+					if ( f.size() <= 0xA00000 /* 10MiB max */ && f.open( QFile::ReadOnly ) )
+					{
+						const QByteArray fontData = f.readAll();
+						f.close();
+#ifdef USE_QRAWFONT
+						const QString fontName = QRawFont( fontData, 0.0 ).familyName();
+						if ( !fontName.isEmpty() )
+							ass->addFont( fontName.toUtf8(), fontData );
+#else //For Qt older than 4.8
+						const int fontID = QFontDatabase::addApplicationFontFromData( fontData );
+						if ( fontID != -1 )
+						{
+							const QStringList fontFamilies = QFontDatabase::applicationFontFamilies( fontID );
+							QFontDatabase::removeApplicationFont( fontID );
+							if ( !fontFamilies.isEmpty() )
+								ass->addFont( fontFamilies.first().toUtf8(), fontData );
+						}
+#endif
+					}
+				}
+
 				ass->initASS( fileData );
 				loaded = true;
 			}
