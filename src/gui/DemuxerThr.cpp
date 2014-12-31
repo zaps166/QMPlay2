@@ -544,34 +544,51 @@ void DemuxerThr::addSubtitleStream( bool currentPlaying, QString &subtitlesStrea
 void DemuxerThr::emitInfo()
 {
 	QString info;
-	if ( url.left( 7 ) == "file://" )
+
+	QString formatTitle = demuxer->title();
+	if ( formatTitle.isEmpty() )
+	{
+		if ( !name.isEmpty() )
+			info += "<b>" + tr( "Tytuł" ) + ":</b> " + name;
+		formatTitle = name;
+	}
+
+	bool nameOrDescr = false;
+	foreach ( QMPlay2Tag tag, demuxer->tags() )
+		if ( !tag.first.isEmpty() )
+		{
+			if ( tag.first == "0" || tag.first == "1" )
+			{
+				info += "<b>" + tag.second + "</b><br/>";
+				nameOrDescr = true;
+			}
+			else
+			{
+				if ( nameOrDescr )
+				{
+					info += "<br/>";
+					nameOrDescr = false;
+				}
+				info += "<b>" + StreamInfo::getTagName( tag.first ) + ":</b> " + tag.second + "<br/>";
+			}
+		}
+
+	if ( !info.isEmpty() )
+		info += "<br/>";
+	if ( url.left( 5 ) != "file:" )
+		info += "<b>" + tr( "Adres" ) + ":</b> " + url + "<br>";
+	else
 	{
 		const QString pth = url.right( url.length() - 7 );
 		info += "<b>" + tr( "Ścieżka do pliku" ) + ": </b> " + filePath( pth ) + "<br/>";
 		info += "<b>" + tr( "Nazwa pliku" ) + ": </b> " + fileName( pth ) + "<br/>";
 	}
-	else
-		info = "<b>" + tr( "Adres" ) + ":</b> " + url + "<br>";
 	if ( demuxer->bitrate() > 0 )
 		info += "<b>" + tr( "Bitrate" ) + ":</b> " + QString::number( demuxer->bitrate() ) + "kbps<br/>";
 	info += "<b>" + tr( "Format" ) + ":</b> " + demuxer->name();
 
 	if ( !demuxer->image().isNull() )
 		info += "<br/><br/><a href='save_cover'>" + tr( "Zapisz okładkę" ) + "</a>";
-
-	const QList< QMPlay2Tag > tags = demuxer->tags();
-	if ( !tags.isEmpty() )
-		info += "<br/>";
-	QString formatTitle = demuxer->title();
-	if ( formatTitle.isEmpty() )
-	{
-		if ( !name.isEmpty() )
-			info += "<br/><b>" + tr( "Tytuł" ) + ":</b> " + name;
-		formatTitle = name;
-	}
-	foreach ( QMPlay2Tag tag, demuxer->tags() )
-		if ( !tag.first.isEmpty() )
-			info += "<br/><b>" + StreamInfo::getTagName( tag.first ) + ":</b> " + tag.second;
 
 	bool once = false;
 	int chapterCount = 0;

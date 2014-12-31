@@ -10,6 +10,13 @@ Settings::~Settings()
 	flushCache();
 }
 
+void Settings::flush()
+{
+	QMutexLocker mL( &mutex );
+	flushCache();
+	sync();
+}
+
 void Settings::init( const QString &key, const QVariant &val )
 {
 	QMutexLocker mL( &mutex );

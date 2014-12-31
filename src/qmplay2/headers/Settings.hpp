@@ -14,6 +14,8 @@ public:
 	Settings( const QString &name );
 	~Settings();
 
+	void flush();
+
 	void init( const QString &key, const QVariant &val );
 	void set( const QString &key, const QVariant &val );
 	bool contains( const QString &key ) const;

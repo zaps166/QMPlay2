@@ -1,18 +1,13 @@
 #include <Demuxer.hpp>
-#include <IOController.hpp>
 
-#include <QNetworkAccessManager>
-#include <QTimer>
-
-class QMutex;
-class Reader;
-struct AVStream;
-struct AVDictionary;
 struct AVFormatContext;
+struct AVDictionary;
+struct AVStream;
+class QMutex;
 
-class FFDemux : public QObject, public Demuxer
+class FFDemux : public Demuxer
 {
-	Q_OBJECT
+	Q_DECLARE_TR_FUNCTIONS( FFDemux )
 public:
 	FFDemux( QMutex &, Module & );
 private:
@@ -27,7 +22,7 @@ private:
 	QString name() const;
 	QString title() const;
 	QList< QMPlay2Tag > tags() const;
-	bool getReplayGain( bool album, float &gain_db, float &peak );
+	bool getReplayGain( bool album, float &gain_db, float &peak ) const;
 	double length() const;
 	int bitrate() const;
 	QByteArray image( bool ) const;
@@ -45,26 +40,17 @@ private:
 
 	StreamInfo *getStreamInfo( AVStream *stream ) const;
 	AVDictionary *getMetadata() const;
-private slots:
-	void netInfoTimeout();
-	void netDLProgress( qint64 bytesReceived, qint64 bytesTotal );
-	void netFinished();
 private:
 	QVector< int > index_map;
 	QList< AVStream * > streams;
 	AVFormatContext *formatCtx;
 	TimeStamp lastTS;
 
-	IOController< Reader > reader;
-	bool seekByByte, paused, isStreamed, aborted, fix_mkv_ass;
+	bool isLocal, seekByByte, paused, isStreamed, aborted, fix_mkv_ass;
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
 
 	int lastErr;
-
-	QString netInfoURL, streamTitle, streamGenre, songTitle;
-	QTimer netInfoTimer;
-	QNetworkAccessManager net;
 
 	QMutex &avcodec_mutex;
 };

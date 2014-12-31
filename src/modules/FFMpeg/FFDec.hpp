@@ -18,7 +18,7 @@ protected:
 	FFDec( QMutex & );
 	virtual ~FFDec();
 
-	bool aspect_ratio_changed() const;
+	bool aspectRatioChanged() const;
 
 	/**/
 

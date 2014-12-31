@@ -1,3 +1,8 @@
+Zmiany w QMPlay2 build 14.12.31:
+	- zmiany w domyślnym układzie okienek,
+	- FFMpeg nie używa już HttpReader,
+	- zmiany w oknie "Informacje",
+
 Zmiany w QMPlay2 build 14.12.28:
 	- poprawione wczytywanie czcionek z katalogu z napisami (nie sa przeszkiwane rekursywnie),
 	- główny pasek narzędzi może być oddokowany od głównego okna,
@@ -225,7 +230,7 @@ Zmiany w QMPlay2 build 01XII2012:
 	- drobne poprawki,
 
 Zmiany w QMPlay2 build 03XI2012:
-	- informace lub błędy wyświetlane w dzienniku lub na standardowym wyjściu są wyświetlane także na pasku stanu,
+	- informacje lub błędy wyświetlane w dzienniku lub na standardowym wyjściu są wyświetlane także na pasku stanu,
 	- domyślny katalog w Windows dla pobieranych plików oraz zrzutów ekranu jest teraz w "Moich dokumentach",
 	- poprawione drobne błędy,
 	- dodana obsługa AudioCD,
@@ -319,7 +324,7 @@ Zmiany w QMPlay2 build 29VIII2012:
 	- drobne poprawki z informacjami o zbuforowanych danych,
 
 Zmiany w QMPlay2 build 28VIII2012:
-	- możliwość buforowania paczek A/V dla strumieni internetowych (także informace o ilości dnych w buforze w formie bajtów i sekund),
+	- możliwość buforowania paczek A/V dla strumieni internetowych (także informacje o ilości dnych w buforze w formie bajtów i sekund),
 	- wątek "DemuxerThr" obsługuje zdarzenia z Qt, użyte są zdarzenia do wybudzenia wątku zamiast "bufferFullCond",
 	- przeglądarka YouTube korzysta ze strony "gdata.youtube.com",
 	- możliwość przewijania przy odtwarzaniu strumienia "rtsp",

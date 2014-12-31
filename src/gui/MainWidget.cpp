@@ -99,6 +99,8 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	QMPlay2Extensions::openExtensions();
 
 	addDockWidget( Qt::LeftDockWidgetArea, videoDock );
+	addDockWidget( Qt::RightDockWidgetArea, infoDock );
+	addDockWidget( Qt::RightDockWidgetArea, playlistDock );
 	DockWidget *firstVisualization = NULL;
 	foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() ) //GUI Extensions
 		if ( DockWidget *dw = QMPlay2Ext->getDockWidget() )
@@ -108,20 +110,17 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 			{
 				dw->setMinimumSize( 125, 125 );
 				QMPlay2Ext->connectDoubleClick( this, SLOT( visualizationFullScreen() ) );
-				if ( !firstVisualization )
-				{
-					firstVisualization = dw;
-					addDockWidget( Qt::RightDockWidgetArea, dw );
-				}
-				else
+				if ( firstVisualization )
 					tabifyDockWidget( firstVisualization, dw );
+				else
+					addDockWidget( Qt::LeftDockWidgetArea, firstVisualization = dw );
 			}
-			else
+			else if ( QMPlay2Ext->addressPrefixList( false ).isEmpty() )
 				tabifyDockWidget( videoDock, dw );
+			else
+				tabifyDockWidget( playlistDock, dw );
 			dw->setVisible( true );
 		}
-	addDockWidget( Qt::RightDockWidgetArea, playlistDock );
-	tabifyDockWidget( playlistDock, infoDock );
 	infoDock->show();
 
 	/* ToolBar and MenuBar */
@@ -1108,7 +1107,7 @@ void MainWidget::showEvent( QShowEvent * )
 {
 	if ( !wasShow )
 	{
-		QMPlay2GUI.restoreGeometry( "MainWidget/Geometry", this, QSize( 640, 470 ) );
+		QMPlay2GUI.restoreGeometry( "MainWidget/Geometry", this, size() );
 		savedGeo = geometry();
 		if ( QMPlay2Core.getSettings().getBool( "MainWidget/isMaximized" ) )
 			showMaximized();

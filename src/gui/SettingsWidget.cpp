@@ -698,7 +698,15 @@ void SettingsWidget::applyProxy()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	QNetworkProxy proxy;
-	if ( QMPSettings.getBool( "Proxy/Use" ) )
+	if ( !QMPSettings.getBool( "Proxy/Use" ) )
+	{
+#ifdef Q_OS_WIN
+		_putenv_s( "http_proxy", "" );
+#else
+		unsetenv( "http_proxy" );
+#endif
+	}
+	else
 	{
 		proxy.setType( QNetworkProxy::Socks5Proxy );
 		proxy.setHostName( QMPSettings.getString( "Proxy/Host" ) );
@@ -708,6 +716,22 @@ void SettingsWidget::applyProxy()
 			proxy.setUser( QMPSettings.getString( "Proxy/User" ) );
 			proxy.setPassword( QByteArray::fromBase64( QMPSettings.getString( "Proxy/Password" ).toLatin1() ) );
 		}
+
+		/* Proxy env for FFMpeg */
+		QString proxyEnv = QString( "http://" + proxy.hostName() + ':' + QString::number( proxy.port() ) );
+		if ( !proxy.user().isEmpty() )
+		{
+			QString auth = proxy.user();
+			if ( !proxy.password().isEmpty() )
+				auth += ':' + proxy.password();
+			auth += '@';
+			proxyEnv.insert( 7, auth );
+		}
+#ifdef Q_OS_WIN
+		_putenv_s( "http_proxy", proxyEnv.toLocal8Bit() );
+#else
+		setenv( "http_proxy", proxyEnv.toLocal8Bit(), true );
+#endif
 	}
 	QNetworkProxy::setApplicationProxy( proxy );
 }
@@ -788,6 +812,7 @@ void SettingsWidget::apply()
 			QMPSettings.set( "Proxy/Password", page1->proxyPasswordE->text().toUtf8().toBase64() );
 			page1->proxyB->setChecked( QMPSettings.getBool( "Proxy/Use" ) );
 			page1->proxyLoginB->setChecked( QMPSettings.getBool( "Proxy/Login" ) );
+			QMPSettings.flush();
 			( ( QMainWindow * )QMPlay2GUI.mainW )->setTabPosition( Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South );
 			applyProxy();
 		} break;

@@ -14,8 +14,8 @@ Visualizations::Visualizations() :
 QList< Visualizations::Info > Visualizations::getModulesInfo( const bool ) const
 {
 	QList< Info > modulesInfo;
-	modulesInfo += Info( FFTSpectrumName, QMPLAY2EXTENSION );
 	modulesInfo += Info( SimpleVisName, QMPLAY2EXTENSION );
+	modulesInfo += Info( FFTSpectrumName, QMPLAY2EXTENSION );
 	return modulesInfo;
 }
 void *Visualizations::createInstance( const QString &name )

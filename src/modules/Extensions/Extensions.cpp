@@ -198,7 +198,6 @@ void ModuleSettingsWidget::browseYoutubedl()
 	const QString filePath = QFileDialog::getOpenFileName( this, tr( "Wybierz program 'youtube-dl'" ), QMPlay2Core.getQMPlay2Dir() );
 	if ( !filePath.isEmpty() )
 		youtubedlE->setText( filePath );
-
 }
 void ModuleSettingsWidget::loginPasswordEnable( bool checked )
 {

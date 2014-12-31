@@ -1,11 +1,6 @@
 #include <FFDemux.hpp>
 #include <FFCommon.hpp>
 
-#include <Reader.hpp>
-
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QTextCodec>
 #include <QMutex>
 #include <QDebug>
 
@@ -13,9 +8,10 @@ extern "C"
 {
 	#include <libavformat/avformat.h>
 	#include <libavutil/pixdesc.h>
+#if LIBAVFORMAT_VERSION_MAJOR <= 55
+	#include <libavutil/opt.h>
+#endif
 }
-
-/**/
 
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 static void matroska_fix_ass_packet( AVRational stream_timebase, AVPacket *pkt )
@@ -58,55 +54,9 @@ static void matroska_fix_ass_packet( AVRational stream_timebase, AVPacket *pkt )
 }
 #endif
 
-/**/
-
 static int interruptCB( bool &aborted )
 {
 	return aborted;
-}
-
-static int q_read( void *ptr, unsigned char *buf, int buf_size )
-{
-	Reader *reader = ( Reader * )ptr;
-	if ( reader->readyRead() )
-		return reader->read( buf, buf_size );
-	return AVERROR_EOF;
-}
-static int64_t q_seek( void *ptr, int64_t offset, int wh )
-{
-	Reader *reader = ( Reader * )ptr;
-	if ( wh == AVSEEK_SIZE )
-	{
-		const int64_t s = reader->size();
-		return s > 0 ? s : 0;
-	}
-	if ( ( wh == 0 && offset < 0 ) || !reader->seek( offset, wh ) )
-		return -1;
-	return reader->pos();
-}
-static int q_read_pause( void *ptr, int pause )
-{
-	if ( pause )
-		( ( Reader * )ptr )->pause();
-	return 0;
-}
-
-static QString getTag( const QString &page, const QString &tag )
-{
-	int idx = page.indexOf( tag );
-	if ( idx > -1 )
-	{
-		idx += tag.length();
-		int start_idx = page.indexOf( "<b>", idx );
-		if ( start_idx > -1 )
-		{
-			start_idx += 3;
-			int end_idx = page.indexOf( "</b>", start_idx );
-			if ( end_idx > -1 )
-				return page.mid( start_idx, end_idx - start_idx );
-		}
-	}
-	return QString();
 }
 
 /**/
@@ -122,7 +72,6 @@ FFDemux::FFDemux( QMutex &avcodec_mutex, Module &module ) :
 	lastTS.set( 0.0, 0.0 );
 	SetModule( module );
 }
-
 FFDemux::~FFDemux()
 {
 	if ( formatCtx )
@@ -143,15 +92,7 @@ FFDemux::~FFDemux()
 						break;
 				}
 		}
-		if ( reader )
-		{
-			AVIOContext *pb = formatCtx->pb;
-			avformat_close_input( &formatCtx );
-			av_free( pb->buffer );
-			av_free( pb );
-		}
-		else
-			avformat_close_input( &formatCtx );
+		avformat_close_input( &formatCtx );
 	}
 }
 
@@ -184,11 +125,8 @@ QList< FFDemux::ChapterInfo > FFDemux::getChapters() const
 	for ( unsigned i = 0 ; i < formatCtx->nb_chapters ; i++ )
 	{
 		AVChapter &chapter = *formatCtx->chapters[ i ];
-		ChapterInfo chapterInfo;
-		chapterInfo.start = ( double )chapter.start / ( double )( chapter.time_base.num * chapter.time_base.den );
-		chapterInfo.end = ( double )chapter.end / ( double )( chapter.time_base.num * chapter.time_base.den );
-		AVDictionaryEntry *avtag = av_dict_get( chapter.metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX );
-		if ( avtag )
+		ChapterInfo chapterInfo( chapter.start * chapter.time_base.num / ( double )chapter.time_base.den, chapter.end * chapter.time_base.num / ( double )chapter.time_base.den );
+		if ( AVDictionaryEntry *avtag = av_dict_get( chapter.metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX ) )
 			chapterInfo.title = avtag->value;
 		chapters += chapterInfo;
 	}
@@ -201,75 +139,68 @@ QString FFDemux::name() const
 }
 QString FFDemux::title() const
 {
-	if ( !streamTitle.isNull() )
-		return streamTitle;
-	else
+	AVDictionaryEntry *avtag;
+	if ( isStreamed && ( avtag = av_dict_get( formatCtx->metadata, "icy-name", NULL, AV_DICT_IGNORE_SUFFIX ) ) )
+		return avtag->value;
+	if ( AVDictionary *dict = getMetadata() )
 	{
-		AVDictionary *dict = ( !formatCtx->metadata && streams.count() == 1 ) ? streams[ 0 ]->metadata : formatCtx->metadata;
-		if ( dict )
-		{
-			QString title, artist;
-			AVDictionaryEntry *avtag;
-			if ( ( avtag = av_dict_get( dict, "title", NULL, AV_DICT_IGNORE_SUFFIX ) ) )
-				title = avtag->value;
-			if ( ( avtag = av_dict_get( dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX ) ) )
-				artist = avtag->value;
-			if ( !title.simplified().isEmpty() && !artist.simplified().isEmpty() )
-				return artist + " - " + title;
-			else if ( title.simplified().isEmpty() && !artist.simplified().isEmpty() )
-				return artist;
-			else if ( !title.simplified().isEmpty() && artist.simplified().isEmpty() )
-				return title;
-		}
-		return QString();
+		QString title, artist;
+		if ( ( avtag = av_dict_get( dict, "title", NULL, AV_DICT_IGNORE_SUFFIX ) ) )
+			title = avtag->value;
+		if ( ( avtag = av_dict_get( dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX ) ) )
+			artist = avtag->value;
+		if ( !title.simplified().isEmpty() && !artist.simplified().isEmpty() )
+			return artist + " - " + title;
+		else if ( title.simplified().isEmpty() && !artist.simplified().isEmpty() )
+			return artist;
+		else if ( !title.simplified().isEmpty() && artist.simplified().isEmpty() )
+			return title;
 	}
+	return QString();
 }
 QList< QMPlay2Tag > FFDemux::tags() const
 {
 	QList< QMPlay2Tag > tagList;
-	if ( !songTitle.isNull() && !streamGenre.isNull() )
+	AVDictionaryEntry *avtag;
+	QString value;
+	if ( isStreamed )
 	{
-		if ( !songTitle.isEmpty() )
-		{
-			int idx = songTitle.indexOf( " - " );
-			if ( idx < 0 )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), songTitle );
-			else
-			{
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), songTitle.mid( idx + 3 ) );
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), songTitle.mid( 0, idx ) );
-			}
-		}
-		if ( !streamGenre.isEmpty() )
-			tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), streamGenre );
+		if ( ( avtag = av_dict_get( formatCtx->metadata, "icy-name", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_NAME ), value );
+		if ( ( avtag = av_dict_get( formatCtx->metadata, "icy-description", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_DESCRIPTION ), value );
 	}
-	else
+	if ( isStreamed && ( avtag = av_dict_get( formatCtx->metadata, "StreamTitle", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
 	{
-		AVDictionary *dict = getMetadata();
-		if ( dict )
+		int idx = value.indexOf( " - " );
+		if ( idx < 0 )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), value );
+		else
 		{
-			AVDictionaryEntry *avtag;
-			QString value;
-			if ( ( avtag = av_dict_get( dict, "title", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), value );
-			if ( ( avtag = av_dict_get( dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), value );
-			if ( ( avtag = av_dict_get( dict, "album", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_ALBUM ), value );
-			if ( ( avtag = av_dict_get( dict, "genre", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), value );
-			if ( ( avtag = av_dict_get( dict, "date", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_DATE ), value );
-			if ( ( avtag = av_dict_get( dict, "comment", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
-				tagList << qMakePair( QString::number( QMPLAY2_TAG_COMMENT ), value );
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), value.mid( idx + 3 ) );
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), value.mid( 0, idx ) );
 		}
+	}
+	else if ( AVDictionary *dict = getMetadata() )
+	{
+		if ( ( avtag = av_dict_get( dict, "title", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), value );
+		if ( ( avtag = av_dict_get( dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), value );
+		if ( ( avtag = av_dict_get( dict, "album", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_ALBUM ), value );
+		if ( ( avtag = av_dict_get( dict, "genre", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), value );
+		if ( ( avtag = av_dict_get( dict, "date", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_DATE ), value );
+		if ( ( avtag = av_dict_get( dict, "comment", NULL, AV_DICT_IGNORE_SUFFIX ) ) && !( value = avtag->value ).simplified().isEmpty() )
+			tagList << qMakePair( QString::number( QMPLAY2_TAG_COMMENT ), value );
 	}
 	return tagList;
 }
-bool FFDemux::getReplayGain( bool album, float &gain_db, float &peak )
+bool FFDemux::getReplayGain( bool album, float &gain_db, float &peak ) const
 {
-	AVDictionary *dict = getMetadata();
-	if ( dict )
+	if ( AVDictionary *dict = getMetadata() )
 	{
 		AVDictionaryEntry *avtag;
 		QString album_gain_db, album_peak, track_gain_db, track_peak;
@@ -340,7 +271,7 @@ QByteArray FFDemux::image( bool forceCopy ) const
 
 bool FFDemux::localStream() const
 {
-	return reader && reader->getParam( "Local" ).toBool();
+	return isLocal;
 }
 
 bool FFDemux::seek( int val, bool backward )
@@ -417,6 +348,37 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 	}
 	if ( fix_mkv_ass && streams[ ff_idx ]->codec->codec_id == AV_CODEC_ID_ASS )
 		matroska_fix_ass_packet( streams[ ff_idx ]->time_base, &packet );
+#else
+	if ( isStreamed )
+	{
+		char *value = NULL;
+		av_opt_get( formatCtx, "icy_metadata_packet", AV_OPT_SEARCH_CHILDREN, ( quint8 ** )&value );
+		QString icyPacket = value;
+		av_free( value );
+		int idx = icyPacket.indexOf( "StreamTitle='" );
+		if ( idx > -1 )
+		{
+			int idx2 = icyPacket.indexOf( "';", idx += 13 );
+			if ( idx2 > -1 )
+			{
+				AVDictionaryEntry *e = av_dict_get( formatCtx->metadata, "StreamTitle", NULL, AV_DICT_IGNORE_SUFFIX );
+				icyPacket = icyPacket.mid( idx, idx2-idx );
+				if ( !e || QString( e->value ) != icyPacket )
+				{
+					av_dict_set( &formatCtx->metadata, "StreamTitle", icyPacket.toUtf8(), 0 );
+					isMetadataChanged = true;
+				}
+			}
+		}
+		else if ( AVDictionary *dict = getMetadata() )
+		{
+			if ( formatCtx->opaque != dict )
+			{
+				formatCtx->opaque = dict;
+				isMetadataChanged = true;
+			}
+		}
+	}
 #endif
 
 	encoded.clear();
@@ -426,16 +388,12 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 
 	const double time_base = av_q2d( streams[ ff_idx ]->time_base );
 
-	ts = 0.0;
-	if ( seekByByte )
-	{
-		if ( packet.pos > -1 && length() > 0.0 )
-			lastTime = ts = ( ( packet.pos - formatCtx->data_offset ) * length() ) / ( avio_size( formatCtx->pb ) - formatCtx->data_offset );
-		else
-			ts = lastTime;
-	}
-	else
+	if ( !seekByByte )
 		ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
+	else if ( packet.pos > -1 && length() > 0.0 )
+		lastTime = ts = ( ( packet.pos - formatCtx->data_offset ) * length() ) / ( avio_size( formatCtx->pb ) - formatCtx->data_offset );
+	else
+		ts = lastTime;
 
 	if ( packet.duration > 0 )
 		duration = packet.duration * time_base;
@@ -443,7 +401,13 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 		duration = 0.0;
 	lastTS = ts;
 
-	idx = index_map[ ff_idx ];
+	if ( isStreamed )
+	{
+		ts = lastTime;
+		lastTime += duration;
+	}
+
+	idx = index_map.at( ff_idx );
 
 	return true;
 }
@@ -455,42 +419,28 @@ void FFDemux::pause()
 void FFDemux::abort()
 {
 	aborted = true;
-	reader.abort();
 }
 
 bool FFDemux::open( const QString &_url )
 {
-	if ( Reader::create( _url, reader ) )
+	QString url = _url;
+	isLocal = url.left( 5 ) == "file:" ;
+	if ( url.left( 4 ) == "mms:" )
+		url.insert( 3, 'h' );
+	formatCtx = avformat_alloc_context();
+	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
+	formatCtx->interrupt_callback.opaque = &aborted;
+
+	AVDictionary *options = NULL;
+	if ( !isLocal )
 	{
-		formatCtx = avformat_alloc_context();
-		AVIOContext *pb = formatCtx->pb = avio_alloc_context( ( uchar * )av_malloc( 16384 ), 16384, 0, reader.rawPtr(), q_read, NULL, q_seek );
-		pb->seekable = reader->canSeek();
-		pb->read_pause = q_read_pause;
-		if ( avformat_open_input( &formatCtx, "", NULL, NULL ) )
-		{
-			if ( !formatCtx )
-			{
-				av_free( pb->buffer );
-				av_free( pb );
-			}
-			return false;
-		}
+#if LIBAVFORMAT_VERSION_MAJOR <= 55
+		if ( url.left( 4 ) == "http" )
+			av_dict_set( &options, "icy", "1", 0 );
+#endif
+		av_dict_set( &options, "user-agent", "QMPlay2/"QMPlay2Version, 0 );
 	}
-	else
-	{
-		QString url = _url;
-		if ( url.left( 5 ) != "http:" && url.left( 6 ) != "https:" && url.left( 5 ) != "file:" )
-		{
-			if ( url.left( 4 ) == "mms:" )
-				url.insert( 3, 'h' );
-			formatCtx = avformat_alloc_context();
-			formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
-			formatCtx->interrupt_callback.opaque = &aborted;
-			if ( avformat_open_input( &formatCtx, url.toLocal8Bit(), NULL, NULL ) )
-				return false;
-		}
-	}
-	if ( !formatCtx )
+	if ( avformat_open_input( &formatCtx, url.toLocal8Bit(), NULL, &options ) || !formatCtx )
 		return false;
 
 	formatCtx->flags |= AVFMT_FLAG_GENPTS;
@@ -502,14 +452,11 @@ bool FFDemux::open( const QString &_url )
 		return false;
 	}
 	avcodec_mutex.unlock();
-	if ( reader && formatCtx->pb )
-		isStreamed = avio_size( formatCtx->pb ) <= 0;
-	else
-		isStreamed = formatCtx->duration == QMPLAY2_NOPTS_VALUE;
-	seekByByte = name() == "mp3" && !isStreamed;
 
-	start_time = formatCtx->start_time / ( double )AV_TIME_BASE;
-	if ( start_time < 0.0 )
+	isStreamed = !isLocal && formatCtx->duration == QMPLAY2_NOPTS_VALUE;
+	seekByByte = !isStreamed && name() == "mp3";
+
+	if ( ( start_time = formatCtx->start_time / ( double )AV_TIME_BASE ) < 0.0 )
 		start_time = 0.0;
 
 	index_map.resize( formatCtx->nb_streams );
@@ -531,24 +478,34 @@ bool FFDemux::open( const QString &_url )
 		streams += formatCtx->streams[ i ];
 	}
 
-	if ( isStreamed && _url.left( 5 ) == "http:" )
-	{
-		netInfoURL = _url;
-		connect( &netInfoTimer, SIGNAL( timeout() ), this, SLOT( netInfoTimeout() ) );
-		netInfoTimer.start( 0 );
-	}
-
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 	formatCtx->event_flags = 0;
+#else
+	if ( isStreamed )
+	{
+		char *value = NULL;
+		av_opt_get( formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, ( quint8 ** )&value );
+		QStringList icyHeaders = QString( value ).split( "\n", QString::SkipEmptyParts );
+		av_free( value );
+		foreach ( const QString icy, icyHeaders )
+		{
+			if ( icy.left( 10 ) == "icy-name: " )
+				av_dict_set( &formatCtx->metadata, "icy-name", icy.mid( 10 ).toUtf8(), 0 );
+			else if ( icy.left( 17 ) == "icy-description: " )
+				av_dict_set( &formatCtx->metadata, "icy-description", icy.mid( 17 ).toUtf8(), 0 );
+		}
+		formatCtx->opaque = getMetadata();
+	}
 #endif
 
 	return true;
 }
 
+/**/
 
 AVDictionary *FFDemux::getMetadata() const
 {
-	return ( !formatCtx->metadata && streams_info.count() == 1 ) ? streams[ 0 ]->metadata : formatCtx->metadata;
+	return ( isStreamed || ( !formatCtx->metadata && streams_info.count() == 1 ) ) ? streams[ 0 ]->metadata : formatCtx->metadata;
 }
 StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 {
@@ -565,10 +522,7 @@ StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 
 	if ( AVCodec *codec = avcodec_find_decoder( codecID ) )
 		streamInfo->codec_name = codec->name;
-	streamInfo->must_decode = codecID != AV_CODEC_ID_SSA && codecID != AV_CODEC_ID_SUBRIP && codecID != AV_CODEC_ID_SRT;
-#if LIBAVCODEC_VERSION_MAJOR > 54
-	streamInfo->must_decode &= codecID != AV_CODEC_ID_ASS;
-#endif
+	streamInfo->must_decode = codecID != AV_CODEC_ID_ASS && codecID != AV_CODEC_ID_SSA && codecID != AV_CODEC_ID_SUBRIP && codecID != AV_CODEC_ID_SRT;
 	streamInfo->bitrate = stream->codec->bit_rate;
 	streamInfo->bpcs = stream->codec->bits_per_coded_sample;
 	streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
@@ -665,57 +619,4 @@ StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 	}
 
 	return streamInfo;
-}
-
-void FFDemux::netInfoTimeout()
-{
-	netInfoTimer.stop();
-	QNetworkReply *reply = net.get( QNetworkRequest( netInfoURL ) );
-	connect( reply, SIGNAL( finished() ), SLOT( netFinished() ) );
-	connect( reply, SIGNAL( downloadProgress( qint64, qint64 ) ), SLOT( netDLProgress( qint64, qint64 ) ) );
-}
-void FFDemux::netDLProgress( qint64 bytesReceived, qint64 )
-{
-	if ( bytesReceived > 0x10000 )
-		sender()->deleteLater();
-}
-void FFDemux::netFinished()
-{
-	QNetworkReply *reply = ( QNetworkReply * )sender();
-	if ( !reply->error() )
-	{
-		const QByteArray pageArr = reply->readAll();
-		QString page;
-
-		int charset_idx = pageArr.indexOf( "charset=" );
-		if ( charset_idx > -1 )
-		{
-			charset_idx += 8;
-			int charset_end_idx = pageArr.indexOf( '"', charset_idx );
-			if ( charset_end_idx > -1 )
-			{
-				const QTextCodec *txtCodec = QTextCodec::codecForName( pageArr.mid( charset_idx, charset_end_idx - charset_idx ) );
-				if ( txtCodec )
-					page = txtCodec->toUnicode( pageArr );
-			}
-		}
-		if ( page.isNull() )
-			page = pageArr;
-
-		const QString _streamTitle = getTag( page, "Stream Title" );
-		const QString _streamGenre = getTag( page, "Stream Genre" );
-		const QString _songTitle = getTag( page, "Current Song" );
-
-		if ( !_streamTitle.isNull() && !_streamGenre.isNull() && !_songTitle.isNull() )
-		{
-			if ( ( isMetadataChanged = _streamTitle != streamTitle || _streamGenre != streamGenre || _songTitle != songTitle ) )
-			{
-				streamTitle = _streamTitle;
-				streamGenre = _streamGenre;
-				songTitle = _songTitle;
-			}
-			netInfoTimer.start( 10000 );
-		}
-	}
-	reply->deleteLater();
 }

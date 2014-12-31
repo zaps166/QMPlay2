@@ -5,9 +5,6 @@ extern "C"
 {
 	#include <libavformat/avformat.h>
 }
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
-	#define av_frame_alloc avcodec_alloc_frame
-#endif
 
 FFDec::FFDec( QMutex &avcodec_mutex ) :
 	codec_ctx( NULL ),
@@ -17,7 +14,7 @@ FFDec::FFDec( QMutex &avcodec_mutex ) :
 {}
 FFDec::~FFDec()
 {
-	av_free( frame );
+	av_frame_free( &frame );
 	if ( codecIsOpen )
 	{
 		avcodec_mutex.lock();
@@ -27,7 +24,7 @@ FFDec::~FFDec()
 	av_free( codec_ctx );
 }
 
-bool FFDec::aspect_ratio_changed() const
+bool FFDec::aspectRatioChanged() const
 {
 	if ( codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO )
 	{

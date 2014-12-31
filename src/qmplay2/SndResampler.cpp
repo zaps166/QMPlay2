@@ -103,14 +103,3 @@ void SndResampler::destroy()
 	swr_free( &snd_convert_ctx );
 #endif
 }
-
-#if 0 //old code
-	for ( int i = 0, c = 0 ; i < dst_channels ; ++i )
-	{
-		channel_map[ i ] = c;
-		c = ( c + 1 ) % src_channels;
-	}
-	av_opt_set_int( snd_convert_ctx, "icl", dst_chn_layout, 0 ); //Input Channel Layout na takie samo jak Output, ale ilość jest różna
-	av_opt_set_int( snd_convert_ctx, "uch", dst_channels,  0 ); //Used Channel Count
-	swr_set_channel_mapping( snd_convert_ctx, channel_map );
-#endif

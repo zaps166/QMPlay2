@@ -21,6 +21,8 @@ enum QMPlay2MediaType
 enum QMPlay2Tags
 {
 	QMPLAY2_TAG_UNKNOWN = -1,
+	QMPLAY2_TAG_NAME, //should be as first
+	QMPLAY2_TAG_DESCRIPTION, //should be as second
 	QMPLAY2_TAG_LANGUAGE,
 	QMPLAY2_TAG_TITLE,
 	QMPLAY2_TAG_ARTIST,

@@ -14,8 +14,8 @@ public:
 	class ChapterInfo
 	{
 	public:
-		inline ChapterInfo() :
-			start( 0.0 ), end( 0.0 )
+		inline ChapterInfo( double start, double end ) :
+			start( start ), end( end )
 		{}
 
 		QString title;
@@ -45,7 +45,7 @@ public:
 	{
 		return QList< QMPlay2Tag >();
 	}
-	virtual bool getReplayGain( bool album, float &gain_db, float &peak )
+	virtual bool getReplayGain( bool album, float &gain_db, float &peak ) const
 	{
 		Q_UNUSED( album )
 		Q_UNUSED( gain_db )

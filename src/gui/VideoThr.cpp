@@ -347,7 +347,7 @@ void VideoThr::run()
 		const bool ptsIsValid = filters.getFrame( frame, packet.ts );
 		if ( packet.ts.isValid() )
 		{
-			if ( dec->aspect_ratio_changed() )
+			if ( dec->aspectRatioChanged() )
 				emit playC.aRatioUpdate();
 			if ( ptsIsValid || packet.ts > playC.pos )
 				playC.chPos( packet.ts );
