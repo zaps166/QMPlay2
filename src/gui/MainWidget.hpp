@@ -82,12 +82,17 @@ private slots:
 	void console( bool );
 #endif
 	void lockWidgets( bool );
+
+	void hideDocksSlot();
 private:
 	QMenu *createPopupMenu();
 
 	void showToolBar( bool );
 
+	void hideDocks();
+
 	void mouseMoveEvent( QMouseEvent * );
+	void leaveEvent( QEvent * );
 	void closeEvent( QCloseEvent * );
 	void moveEvent( QMoveEvent * );
 	void showEvent( QShowEvent * );

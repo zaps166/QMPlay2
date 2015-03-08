@@ -946,6 +946,14 @@ void MainWidget::lockWidgets( bool l )
 	QMPlay2Core.getSettings().set( "MainWidget/WidgetsLocked", l );
 }
 
+void MainWidget::hideDocksSlot()
+{
+	if ( !playlistDock->isVisible() )
+		showToolBar( false );
+	else
+		hideDocks();
+}
+
 QMenu *MainWidget::createPopupMenu()
 {
 	QMenu *popupMenu = QMainWindow::createPopupMenu();
@@ -977,23 +985,32 @@ void MainWidget::showToolBar( bool showTB )
 	}
 }
 
+void MainWidget::hideDocks()
+{
+	fullScreenDockWidgetState = saveState();
+	showToolBar( false );
+	playlistDock->hide();
+	infoDock->hide();
+	hideAllExtensions();
+}
+
 void MainWidget::mouseMoveEvent( QMouseEvent *e )
 {
 	if ( fullScreen )
 	{
-		int xTrigger = qMax( 3,  ( int )ceil( 0.002 * width() ) );
-		int yTrigger = qMax( 15, ( int )ceil( 0.015 * width() ) );
+		int trigger1 = qMax( 3,  ( int )ceil( 0.002 * width() ) );
+		int trigger2 = qMax( 15, ( int )ceil( 0.015 * width() ) );
 
 		int mPosX = 0;
 		if ( videoDock->x() >= 0 )
 			mPosX = videoDock->mapFromGlobal( e->globalPos() ).x();
 
 		/* ToolBar */
-		if ( !playlistDock->isVisible() && mPosX > xTrigger )
+		if ( !playlistDock->isVisible() && mPosX > trigger1 )
 			showToolBar( e->pos().y() >= height() - mainTB->height() - statusBar->height() + 10 );
 
 		/* DockWidgets */
-		if ( !playlistDock->isVisible() && mPosX <= xTrigger )
+		if ( !playlistDock->isVisible() && mPosX <= trigger1 )
 		{
 			showToolBar( true ); //Before restoring dock widgets - show toolbar and status bar
 			restoreState( fullScreenDockWidgetState );
@@ -1038,16 +1055,16 @@ void MainWidget::mouseMoveEvent( QMouseEvent *e )
 			}
 			showToolBar( true ); //Ensures that status bar is visible
 		}
-		else if ( playlistDock->isVisible() && mPosX > yTrigger )
-		{
-			fullScreenDockWidgetState = saveState();
-			showToolBar( false );
-			playlistDock->hide();
-			infoDock->hide();
-			hideAllExtensions();
-		}
+		else if ( playlistDock->isVisible() && mPosX > trigger2 )
+			hideDocks();
 	}
 	QMainWindow::mouseMoveEvent( e );
+}
+void MainWidget::leaveEvent( QEvent *e )
+{
+	if ( fullScreen )
+		QTimer::singleShot( 0, this, SLOT( hideDocksSlot() ) ); //Qt5 can't do it directly (Qt5 has too many bugs...)
+	QMainWindow::leaveEvent( e );
 }
 void MainWidget::closeEvent( QCloseEvent *e )
 {
