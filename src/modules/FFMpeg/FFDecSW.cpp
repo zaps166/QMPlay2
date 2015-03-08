@@ -215,27 +215,31 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 		bytes_consumed = 0;
 	return bytes_consumed;
 }
-bool FFDecSW::decodeSubtitle( const QByteArray &encoded, double pts, double pos, QMPlay2_OSD *&osd, int w, int h )
+bool FFDecSW::decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h )
 {
 	if ( codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE )
 		return false;
 
-	if ( encoded.isEmpty() )
-	{
-		getFromBitmapSubsBuffer( osd, pos );
-		return true;
-	}
+	if ( encodedPacket.isEmpty() )
+		return getFromBitmapSubsBuffer( osd, pos );
 
 	AVPacket packet;
-	av_new_packet( &packet, encoded.size() );
-	memcpy( packet.data, encoded.data(), encoded.size() );
+	decodeFirstStep( packet, encodedPacket, false );
 
 	bool ret = true;
 	int got_sub_ptr;
 	AVSubtitle subtitle;
 	if ( avcodec_decode_subtitle2( codec_ctx, &subtitle, &got_sub_ptr, &packet ) && got_sub_ptr )
 	{
-		for ( unsigned i = 0 ; i < subtitle.num_rects ; i++ )
+		if ( !subtitle.num_rects )
+		{
+			BitmapSubBuffer *buff = new BitmapSubBuffer;
+			buff->x = buff->y = buff->w = buff->h = 0;
+			buff->pts = subtitle.start_display_time + encodedPacket.ts;
+			buff->duration = 0.0;
+			bitmapSubBuffer += buff;
+		}
+		else for ( unsigned i = 0 ; i < subtitle.num_rects ; i++ )
 		{
 			AVSubtitleRect *rect = subtitle.rects[ i ];
 			switch ( rect->type )
@@ -244,19 +248,18 @@ bool FFDecSW::decodeSubtitle( const QByteArray &encoded, double pts, double pos,
 				{
 					BitmapSubBuffer *buff = new BitmapSubBuffer;
 					buff->duration = ( subtitle.end_display_time - subtitle.start_display_time ) / 1000.0;
-					buff->pts = subtitle.start_display_time ? subtitle.start_display_time / 1000.0 : ( pts < 0.0 ? 0.0 : pts );
+					buff->pts = subtitle.start_display_time + encodedPacket.ts;
 					buff->w = av_clip( rect->w, 0, w );
 					buff->h = av_clip( rect->h, 0, h );
 					buff->x = av_clip( rect->x, 0, w - buff->w );
 					buff->y = av_clip( rect->y, 0, h - buff->h );
 					buff->bitmap.resize( ( buff->w * buff->h ) << 2 );
 
-					uint8_t  *source  = ( uint8_t * )rect->pict.data[ 0 ];
-					uint32_t *palette = ( uint32_t * )rect->pict.data[ 1 ];
-					uint32_t *dest    = ( uint32_t * )buff->bitmap.data();
-
-					for ( int y = 0 ; y < buff->h ; y++ )
-						for ( int x = 0 ; x < buff->w ; x++ )
+					const uint8_t  *source  = ( uint8_t  * )rect->pict.data[ 0 ];
+					const uint32_t *palette = ( uint32_t * )rect->pict.data[ 1 ];
+					uint32_t       *dest    = ( uint32_t * )buff->bitmap.data();
+					for ( int y = 0 ; y < buff->h ; ++y )
+						for ( int x = 0 ; x < buff->w ; ++x )
 							dest[ y * buff->w + x ] = palette[ source[ y * rect->pict.linesize[ 0 ] + x ] ];
 
 					if ( buff->pts <= pos )
@@ -272,8 +275,6 @@ bool FFDecSW::decodeSubtitle( const QByteArray &encoded, double pts, double pos,
 		}
 		avsubtitle_free( &subtitle );
 	}
-
-	av_free_packet( &packet );
 
 	return ret;
 }
@@ -314,12 +315,13 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 }
 
 
-void FFDecSW::getFromBitmapSubsBuffer( QMPlay2_OSD *&osd, double pos )
+bool FFDecSW::getFromBitmapSubsBuffer( QMPlay2_OSD *&osd, double pos )
 {
-	for ( int i = bitmapSubBuffer.size() - 1 ; i >= 0  ; i-- )
+	bool cantDelete = true;
+	for ( int i = bitmapSubBuffer.size() - 1 ; i >= 0  ; --i )
 	{
 		BitmapSubBuffer *buff = bitmapSubBuffer[ i ];
-		if ( buff->pts + buff->duration < pos )
+		if ( !buff->bitmap.isEmpty() && buff->pts + buff->duration < pos )
 		{
 			delete buff;
 			bitmapSubBuffer.removeAt( i );
@@ -327,23 +329,30 @@ void FFDecSW::getFromBitmapSubsBuffer( QMPlay2_OSD *&osd, double pos )
 		}
 		if ( buff->pts <= pos )
 		{
-			const bool old_osd = osd;
-			if ( !old_osd )
-				osd = new QMPlay2_OSD;
+			if ( buff->bitmap.isEmpty() )
+				cantDelete = false;
 			else
 			{
-				osd->lock();
-				osd->clear();
+				const bool old_osd = osd;
+				if ( !old_osd )
+					osd = new QMPlay2_OSD;
+				else
+				{
+					osd->lock();
+					osd->clear();
+				}
+				osd->setDuration( buff->duration );
+				osd->setPTS( buff->pts );
+				osd->addImage( QRect( buff->x, buff->y, buff->w, buff->h ), buff->bitmap );
+				osd->setNeedsRescale();
+				osd->genChecksum();
+				if ( old_osd )
+					osd->unlock();
+				cantDelete = true;
 			}
-			osd->setDuration( buff->duration );
-			osd->setPTS( buff->pts );
-			osd->addImage( QRect( buff->x, buff->y, buff->w, buff->h ), buff->bitmap );
-			osd->setNeedsRescale();
-			osd->genChecksum();
-			if ( old_osd )
-				osd->unlock();
 			delete buff;
 			bitmapSubBuffer.removeAt( i );
 		}
 	}
+	return cantDelete;
 }

@@ -46,9 +46,10 @@ private:
 	AVFormatContext *formatCtx;
 	TimeStamp lastTS;
 
-	bool isLocal, seekByByte, paused, isStreamed, aborted, fix_mkv_ass;
+	bool isLocal, paused, isStreamed, aborted, fix_mkv_ass;
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
+	qint64 seekByByteOffset;
 
 	int lastErr;
 

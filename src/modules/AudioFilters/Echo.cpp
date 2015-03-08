@@ -40,6 +40,7 @@ double Echo::filter( QByteArray &data, bool )
 	{
 		const int size = data.size() / sizeof( float );
 		const int sampleBufferSize = sampleBuffer.size();
+		float *sampleBufferData = sampleBuffer.data();
 		const int repeat_div = echo_surround ? 200 : 100;
 		float *samples = ( float * )data.data();
 		int r_ofs = w_ofs - ( srate * echo_delay / 1000 ) * chn;
@@ -47,15 +48,15 @@ double Echo::filter( QByteArray &data, bool )
 			r_ofs += sampleBufferSize;
 		for ( int i = 0 ; i < size ; i++ )
 		{
-			float sample = sampleBuffer[ r_ofs ];
+			float sample = sampleBufferData[ r_ofs ];
 			if ( echo_surround && chn >= 2 )
 			{
 				if ( i & 1 )
-					sample -= sampleBuffer[ r_ofs - 1 ];
+					sample -= sampleBufferData[ r_ofs - 1 ];
 				else
-					sample -= sampleBuffer[ r_ofs + 1 ];
+					sample -= sampleBufferData[ r_ofs + 1 ];
 			}
-			sampleBuffer[ w_ofs ] = samples[ i ] + sample * echo_repeat / repeat_div;
+			sampleBufferData[ w_ofs ] = samples[ i ] + sample * echo_repeat / repeat_div;
 			samples[ i ] += sample * echo_volume / 100;
 			if ( ++r_ofs >= sampleBufferSize )
 				r_ofs -= sampleBufferSize;

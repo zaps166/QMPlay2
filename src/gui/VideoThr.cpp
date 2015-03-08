@@ -257,17 +257,17 @@ void VideoThr::run()
 		}
 
 		/* napisy */
-		const double pts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
-		QList< const QMPlay2_OSD * > osd_list, osd_list_to_delete;
+		const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
+		QList< const QMPlay2_OSD * > osdList, osdListToDelete;
 		playC.sPackets.lock();
 		if ( sDec ) //image subs (pgssub, dvdsub)
 		{
 			Packet sPacket;
 			if ( playC.sPackets.canFetch() )
 				sPacket = playC.sPackets.fetch();
-			if ( !sDec->decodeSubtitle( sPacket, sPacket.ts, pts, napisy, W, H ) )
+			if ( !sDec->decodeSubtitle( sPacket, subsPts, napisy, W, H ) )
 			{
-				osd_list_to_delete += napisy;
+				osdListToDelete += napisy;
 				napisy = NULL;
 			}
 		}
@@ -281,24 +281,24 @@ void VideoThr::run()
 				else
 					playC.ass->addASSEvent( convertToASS( sPacket ), sPacket.ts, sPacket.duration );
 			}
-			if ( !playC.ass->getASS( napisy, pts ) )
+			if ( !playC.ass->getASS( napisy, subsPts ) )
 			{
-				osd_list_to_delete += napisy;
+				osdListToDelete += napisy;
 				napisy = NULL;
 			}
 		}
 		if ( napisy )
 		{
 			bool hasDuration = napisy->duration() >= 0.0;
-			if ( deleteSubs || ( napisy->isStarted() && pts < napisy->pts() ) || ( hasDuration && pts > napisy->pts() + napisy->duration() ) )
+			if ( deleteSubs || ( napisy->isStarted() && subsPts < napisy->pts() ) || ( hasDuration && subsPts > napisy->pts() + napisy->duration() ) )
 			{
-				osd_list_to_delete += napisy;
+				osdListToDelete += napisy;
 				napisy = NULL;
 			}
-			else if ( pts >= napisy->pts() )
+			else if ( subsPts >= napisy->pts() )
 			{
 				napisy->start();
-				osd_list += napisy;
+				osdList += napisy;
 			}
 		}
 		playC.sPackets.unlock();
@@ -307,21 +307,21 @@ void VideoThr::run()
 		{
 			if ( deleteOSD || playC.osd->left_duration() < 0 )
 			{
-				osd_list_to_delete += playC.osd;
+				osdListToDelete += playC.osd;
 				playC.osd = NULL;
 			}
 			else
-				osd_list += playC.osd;
+				osdList += playC.osd;
 		}
 		playC.osd_mutex.unlock();
 
-		if ( ( !lastOSDListEmpty || !osd_list.isEmpty() ) && writer && writer->readyWrite() )
+		if ( ( !lastOSDListEmpty || !osdList.isEmpty() ) && writer && writer->readyWrite() )
 		{
-			( ( VideoWriter * )writer )->writeOSD( osd_list );
-			lastOSDListEmpty = osd_list.isEmpty();
+			( ( VideoWriter * )writer )->writeOSD( osdList );
+			lastOSDListEmpty = osdList.isEmpty();
 		}
-		while ( osd_list_to_delete.size() )
-			delete osd_list_to_delete.takeFirst();
+		while ( osdListToDelete.size() )
+			delete osdListToDelete.takeFirst();
 		deleteSubs = deleteOSD = false;
 		/**/
 

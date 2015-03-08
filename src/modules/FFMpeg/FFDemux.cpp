@@ -286,10 +286,10 @@ bool FFDemux::seek( int val, bool backward )
 			return true;
 		}
 		val += start_time;
-		if ( !seekByByte )
+		if ( seekByByteOffset < 0 )
 			return av_seek_frame( formatCtx, -1, ( int64_t )val * AV_TIME_BASE, backward ? AVSEEK_FLAG_BACKWARD : 0 ) >= 0;
 		else if ( length() > 0 )
-			return av_seek_frame( formatCtx, -1, ( int64_t )val * ( avio_size( formatCtx->pb ) - formatCtx->data_offset ) / length() + formatCtx->data_offset, AVSEEK_FLAG_BYTE | ( backward ? AVSEEK_FLAG_BACKWARD : 0 ) ) >= 0;
+			return av_seek_frame( formatCtx, -1, ( int64_t )val * ( avio_size( formatCtx->pb ) - seekByByteOffset ) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | ( backward ? AVSEEK_FLAG_BACKWARD : 0 ) ) >= 0;
 	}
 	return false;
 }
@@ -388,10 +388,10 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 
 	const double time_base = av_q2d( streams[ ff_idx ]->time_base );
 
-	if ( !seekByByte )
+	if ( seekByByteOffset < 0 )
 		ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
 	else if ( packet.pos > -1 && length() > 0.0 )
-		lastTime = ts = ( ( packet.pos - formatCtx->data_offset ) * length() ) / ( avio_size( formatCtx->pb ) - formatCtx->data_offset );
+		lastTime = ts = ( ( packet.pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
 	else
 		ts = lastTime;
 
@@ -444,6 +444,7 @@ bool FFDemux::open( const QString &_url )
 		return false;
 
 	formatCtx->flags |= AVFMT_FLAG_GENPTS;
+	seekByByteOffset = formatCtx->pb ? avio_tell( formatCtx->pb ) : -1; //formatCtx->data_offset, moved to private since ffmpeg 2.6
 
 	avcodec_mutex.lock();
 	if ( avformat_find_stream_info( formatCtx, NULL ) < 0 )
@@ -454,7 +455,8 @@ bool FFDemux::open( const QString &_url )
 	avcodec_mutex.unlock();
 
 	isStreamed = !isLocal && formatCtx->duration == QMPLAY2_NOPTS_VALUE;
-	seekByByte = !isStreamed && name() == "mp3";
+	if ( seekByByteOffset > -1 && ( isStreamed || name() != "mp3" ) )
+		seekByByteOffset = -1;
 
 	if ( ( start_time = formatCtx->start_time / ( double )AV_TIME_BASE ) < 0.0 )
 		start_time = 0.0;

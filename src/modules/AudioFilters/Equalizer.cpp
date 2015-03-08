@@ -89,7 +89,7 @@ int Equalizer::bufferedSamples() const
 	if ( canFilter )
 	{
 		mutex.lock();
-		int bufferedSamples = input[ 0 ].size();
+		int bufferedSamples = input.at( 0 ).size();
 		mutex.unlock();
 		return bufferedSamples;
 	}
@@ -125,7 +125,7 @@ double Equalizer::filter( QByteArray &data, bool flush )
 			input[ c ].resize( FFT_SIZE );
 
 		data.clear();
-		const int chunks = input[ 0 ].size() / FFT_SIZE_2 - 1;
+		const int chunks = input.at( 0 ).size() / FFT_SIZE_2 - 1;
 		if ( chunks > 0 ) //Jeżeli jest wystarczająca ilość danych
 		{
 			data.resize( chn * sizeof( float ) * FFT_SIZE_2 * chunks );
@@ -133,10 +133,10 @@ double Equalizer::filter( QByteArray &data, bool flush )
 			for ( int c = 0 ; c < chn ; ++c )
 			{
 				int pos = c;
-				while ( input[ c ].size() >= FFT_SIZE )
+				while ( input.at( c ).size() >= FFT_SIZE )
 				{
 					for ( int i = 0 ; i < FFT_SIZE ; ++i )
-						complex[ i ] = ( FFTComplex ){ input[ c ][ i ], 0.0f };
+						complex[ i ] = ( FFTComplex ){ input.at( c ).at( i ), 0.0f };
 					if ( !flush )
 						input[ c ].remove( 0, FFT_SIZE_2 );
 					else
@@ -145,24 +145,24 @@ double Equalizer::filter( QByteArray &data, bool flush )
 					fft_calc( fftIn, complex );
 					for ( int i = 0 ; i < FFT_SIZE_2 ; ++i )
 					{
-						complex[            i ].re *= f[ i ];
-						complex[            i ].im *= f[ i ];
-						complex[ FFT_SIZE-1-i ].re *= f[ i ];
-						complex[ FFT_SIZE-1-i ].im *= f[ i ];
+						complex[            i ].re *= f.at( i );
+						complex[            i ].im *= f.at( i );
+						complex[ FFT_SIZE-1-i ].re *= f.at( i );
+						complex[ FFT_SIZE-1-i ].im *= f.at( i );
 					}
 					fft_calc( fftOut, complex );
 
-					if ( last_samples[ c ].isEmpty() )
+					if ( last_samples.at( c ).isEmpty() )
 					{
 						for ( int i = 0 ; i < FFT_SIZE_2 ; ++i, pos += chn )
 							samples[ pos ] = complex[ i ].re / FFT_SIZE;
 						last_samples[ c ].resize( FFT_SIZE_2 );
 					}
 					else for ( int i = 0 ; i < FFT_SIZE_2 ; ++i, pos += chn )
-						samples[ pos ] = ( complex[ i ].re / FFT_SIZE ) * wind_f[ i ] + last_samples[ c ][ i ];
+						samples[ pos ] = ( complex[ i ].re / FFT_SIZE ) * wind_f.at( i ) + last_samples.at( c ).at( i );
 
 					for ( int i = FFT_SIZE_2 ; i < FFT_SIZE ; ++i )
-						last_samples[ c ][ i-FFT_SIZE_2 ] = ( complex[ i ].re / FFT_SIZE ) * wind_f[ i ];
+						last_samples[ c ][ i-FFT_SIZE_2 ] = ( complex[ i ].re / FFT_SIZE ) * wind_f.at( i );
 				}
 			}
 		}
