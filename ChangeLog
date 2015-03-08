@@ -1,7 +1,9 @@
-Zmiany w QMPlay2 build 14.12.31:
+Zmiany w QMPlay2 build 15.03.08:
 	- zmiany w domyślnym układzie okienek,
 	- FFMpeg nie używa już HttpReader,
 	- zmiany w oknie "Informacje",
+	- poprawki w napisach pgssub,
+	- zgodność z FFMpeg 2.6,
 
 Zmiany w QMPlay2 build 14.12.28:
 	- poprawione wczytywanie czcionek z katalogu z napisami (nie sa przeszkiwane rekursywnie),
