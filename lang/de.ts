@@ -2220,6 +2220,18 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Domyślny język dla dźwięku</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Domyślny język dla napisów</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Domyślna lub pierwsza ścieżka</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

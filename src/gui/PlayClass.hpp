@@ -104,6 +104,7 @@ private:
 
 	int audioStream, videoStream, subtitlesStream;
 	int choosenAudioStream, choosenVideoStream, choosenSubtitlesStream;
+	QString choosenAudioLang, choosenSubtitlesLang;
 
 	int Brightness, Saturation, Contrast, Hue;
 

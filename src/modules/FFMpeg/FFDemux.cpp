@@ -524,7 +524,7 @@ StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 
 	if ( AVCodec *codec = avcodec_find_decoder( codecID ) )
 		streamInfo->codec_name = codec->name;
-	streamInfo->must_decode = codecID != AV_CODEC_ID_ASS && codecID != AV_CODEC_ID_SSA && codecID != AV_CODEC_ID_SUBRIP && codecID != AV_CODEC_ID_SRT;
+	streamInfo->subs_to_decode = codecID != AV_CODEC_ID_ASS && codecID != AV_CODEC_ID_SSA && codecID != AV_CODEC_ID_SUBRIP && codecID != AV_CODEC_ID_SRT;
 	streamInfo->bitrate = stream->codec->bit_rate;
 	streamInfo->bpcs = stream->codec->bits_per_coded_sample;
 	streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;

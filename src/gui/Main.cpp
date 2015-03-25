@@ -66,7 +66,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 			if ( ( moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains( moduleType ) ) || ( moduleInfo.type == Module::DECODER && moduleType == "decoder" ) )
 				availableModules += moduleInfo.name;
 	QStringList modules;
-	foreach ( QString module, QMPlay2GUI.settings->get( type, defaultModules ).toStringList() )
+	foreach ( const QString &module, QMPlay2GUI.settings->get( type, defaultModules ).toStringList() )
 	{
 		const int idx = availableModules.indexOf( module );
 		if ( idx > -1 )
@@ -222,6 +222,16 @@ QMPlay2GUIClass::QMPlay2GUIClass() :
 #endif
 	mainW( NULL )
 {
+	QFile f( ":/Languages.csv" );
+	if ( f.open( QFile::ReadOnly ) )
+	{
+		foreach ( const QByteArray &line, f.readAll().split( '\n' ) )
+		{
+			const QList< QByteArray > lineSplitted = line.split( ',' );
+			if ( lineSplitted.count() == 2 )
+				languages[ lineSplitted[ 0 ] ] = lineSplitted[ 1 ];
+		}
+	}
 	qmp2Pixmap = useGui ? new QPixmap( ":/QMPlay2" ) : NULL;
 }
 QMPlay2GUIClass::~QMPlay2GUIClass()
@@ -526,7 +536,7 @@ int main( int argc, char *argv[] )
 		QString settingsDir = QMPlay2Core.getSettingsDir();
 		QMPlay2Core.quit();
 		if ( QMPlay2GUI.removeSettings )
-			foreach ( QString fName, QDir( settingsDir ).entryList( QStringList( "*.ini" ) ) )
+			foreach ( const QString &fName, QDir( settingsDir ).entryList( QStringList( "*.ini" ) ) )
 				QFile::remove( settingsDir + fName );
 
 		delete QMPlay2GUI.pipe;

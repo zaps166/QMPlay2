@@ -144,6 +144,9 @@ void PlayClass::play( const QString &_url )
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
 
+			choosenAudioLang = QMPlay2GUI.languages.key( QMPlay2Core.getSettings().getString( "AudioLanguage" ) );
+			choosenSubtitlesLang = QMPlay2GUI.languages.key( QMPlay2Core.getSettings().getString( "SubtitlesLanguage" ) );
+
 			if ( restartSeekTo >= 0.0 ) //jeżeli restart odtwarzania
 			{
 				seekTo = restartSeekTo;
@@ -295,7 +298,7 @@ void PlayClass::loadSubsFile( const QString &fileName )
 			{
 				/* Wczytywanie katalogu z czcionkami dla wybranego pliku napisów */
 				const QString fontPath = Functions::filePath( fileName.mid( 7 ) );
-				foreach ( QString fontFile, QDir( fontPath ).entryList( QStringList() << "*.ttf" << "*.otf", QDir::Files ) )
+				foreach ( const QString &fontFile, QDir( fontPath ).entryList( QStringList() << "*.ttf" << "*.otf", QDir::Files ) )
 				{
 					QFile f( fontPath + fontFile );
 					if ( f.size() <= 0xA00000 /* 10MiB max */ && f.open( QFile::ReadOnly ) )
@@ -919,34 +922,48 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream( QList< StreamInfo * > &streams, const int choosenStream, int &stream, const int type, Writer *writer = NULL )
+static Decoder *loadStream( const QList< StreamInfo * > &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, Writer *writer = NULL )
 {
 	Decoder *dec = NULL;
 	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;
 	if ( choosenStream >= 0 && choosenStream < streams.count() && streams[ choosenStream ]->type == type )
 	{
-		if ( streams[ choosenStream ]->must_decode || !subtitles )
+		if ( streams[ choosenStream ]->subs_to_decode || !subtitles )
 			dec = Decoder::create( streams[ choosenStream ], writer, QMPlay2GUI.getModules( "decoders", 7 ) );
 		if ( dec || subtitles )
 			stream = choosenStream;
 	}
 	else
 	{
-		int default_stream = -1;
+		int defaultStream = -1, choosenLangStream = -1;
 		for ( int i = 0 ; i < streams.count() ; ++i )
 		{
-			if ( streams[ i ]->type == type && streams[ i ]->is_default )
+			if ( streams[ i ]->type == type )
 			{
-				default_stream = i;
-				break;
+				if ( defaultStream < 0 && streams[ i ]->is_default )
+					defaultStream = i;
+				if ( !lang.isEmpty() && choosenLangStream < 0 )
+				{
+					foreach ( const QMPlay2Tag &tag, streams[ i ]->other_info )
+					{
+						if ( tag.first.toInt() == QMPLAY2_TAG_LANGUAGE )
+						{
+							if ( tag.second == lang )
+								choosenLangStream = i;
+							break;
+						}
+					}
+				}
 			}
 		}
+		if ( choosenLangStream > -1 )
+			defaultStream = choosenLangStream;
 		for ( int i = 0 ; i < streams.count() ; ++i )
 		{
 			StreamInfo *streamInfo = streams[ i ];
-			if ( streamInfo->type == type && ( default_stream == -1 || i == default_stream ) )
+			if ( streamInfo->type == type && ( defaultStream == -1 || i == defaultStream ) )
 			{
-				if ( streamInfo->must_decode || !subtitles )
+				if ( streamInfo->subs_to_decode || !subtitles )
 					dec = Decoder::create( streamInfo, writer, QMPlay2GUI.getModules( "decoders", 7 ) );
 				if ( dec || subtitles )
 				{
@@ -968,7 +985,7 @@ void PlayClass::load( Demuxer *demuxer )
 		vPackets.clear();
 		stopVDec(); //lock
 		if ( videoEnabled )
-			dec = loadStream( streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, ( vThr && vThr->isHWAccel() ) ? vThr->writer : NULL );
+			dec = loadStream( streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), ( vThr && vThr->isHWAccel() ) ? vThr->writer : NULL );
 		else
 			dec = NULL;
 		if ( dec )
@@ -1038,7 +1055,7 @@ void PlayClass::load( Demuxer *demuxer )
 		aPackets.clear();
 		stopADec(); //lock
 		if ( audioEnabled )
-			dec = loadStream( streams, choosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO );
+			dec = loadStream( streams, choosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO, choosenAudioLang );
 		else
 			dec = NULL;
 		if ( dec )
@@ -1104,7 +1121,13 @@ void PlayClass::load( Demuxer *demuxer )
 			else
 			{
 				if ( subtitlesEnabled )
-					dec = loadStream( streams, choosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE );
+				{
+					if ( choosenSubtitlesStream < 0 && subtitlesStream == -1 )
+					{
+
+					}
+					dec = loadStream( streams, choosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, choosenSubtitlesLang );
+				}
 				else
 				{
 					subtitlesStream = -1;

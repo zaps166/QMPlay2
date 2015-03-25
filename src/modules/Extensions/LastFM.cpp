@@ -188,7 +188,7 @@ void LastFM::albumFinished()
 			const QStringList taa = coverReply->property( "taa" ).toStringList();
 			emit QMPlay2Core.updateCover( taa[ 0 ], taa[ 1 ], taa[ 2 ], reply );
 		}
-		else foreach ( QString size, imageSizes )
+		else foreach ( const QString &size, imageSizes )
 		{
 			int idx = reply.indexOf( size );
 			if ( idx > -1 )

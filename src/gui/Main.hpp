@@ -6,6 +6,8 @@
 
 #include <QMPlay2Core.hpp>
 
+#include <QMap>
+
 class QLocalServer;
 class VideoDock;
 class MenuBar;
@@ -45,6 +47,8 @@ public:
 	void updateInDockW();
 
 	QString lang, langPath;
+	QMap< QString, QString > languages;
+
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;
 

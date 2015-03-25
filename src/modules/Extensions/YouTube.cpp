@@ -740,11 +740,11 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			int streamsEndIdx = data.indexOf( '"', streamsIdx );
 			if ( streamsEndIdx > -1 )
 			{
-				foreach ( QString stream, data.mid( streamsIdx, streamsEndIdx - streamsIdx ).split( ',' ) )
+				foreach ( const QString &stream, data.mid( streamsIdx, streamsEndIdx - streamsIdx ).split( ',' ) )
 				{
 					int itag = -1;
 					QString ITAG, URL, Signature;
-					foreach ( QString streamParams, stream.split( "\\u0026" ) )
+					foreach ( const QString &streamParams, stream.split( "\\u0026" ) )
 					{
 						const QStringList paramL = streamParams.split( '=' );
 						if ( paramL.count() == 2 )

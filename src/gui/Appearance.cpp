@@ -499,12 +499,12 @@ void Appearance::reloadSchemes()
 	schemesB->clear();
 	schemesB->addItems( QStringList() << tr( "Aktualny schemat kolorów" ) << tr( "Domyślny schemat kolorów" ) );
 	rwSchemesIdx = 2;
-	foreach ( QString fName, QDir( ":/Colors" ).entryList() )
+	foreach ( const QString &fName, QDir( ":/Colors" ).entryList() )
 	{
 		schemesB->addItem( fName.left( fName.length() - QMPlay2ColorExtension.length() ) );
 		++rwSchemesIdx;
 	}
-	foreach ( QString fName, QDir( colorsDir ).entryList( QStringList() << "*" + QMPlay2ColorExtension, QDir::Files, QDir::Name ) )
+	foreach ( const QString &fName, QDir( colorsDir ).entryList( QStringList() << "*" + QMPlay2ColorExtension, QDir::Files, QDir::Name ) )
 		schemesB->addItem( fName.left( fName.length() - QMPlay2ColorExtension.length() ) );
 	connect( schemesB, SIGNAL( currentIndexChanged( int ) ), this, SLOT( schemesIndexChanged( int ) ) );
 }

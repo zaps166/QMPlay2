@@ -27,7 +27,7 @@ class QMPlay2DummyDecoder : public Decoder
 
 Decoder *Decoder::create( StreamInfo *streamInfo, Writer *writer, const QStringList &modNames )
 {
-	if ( !streamInfo->must_decode )
+	if ( !streamInfo->subs_to_decode )
 	{
 		Decoder *decoder = new QMPlay2DummyDecoder;
 		decoder->open( streamInfo );

@@ -10,7 +10,7 @@ OtherVFiltersW::OtherVFiltersW()
 	setDragDropMode( QAbstractItemView::InternalMove );
 
 	QPair< QStringList, QList< bool > > videoFilters;
-	foreach ( QString filter, QMPlay2Core.getSettings().get( "VideoFilters" ).toStringList() )
+	foreach ( const QString &filter, QMPlay2Core.getSettings().get( "VideoFilters" ).toStringList() )
 	{
 		videoFilters.first += filter.mid( 1 );
 		videoFilters.second += filter.left( 1 ).toInt();

@@ -93,7 +93,7 @@ void DemuxerThr::loadImage()
 			{
 				const QString directory = filePath( url.mid( 7 ) );
 				if ( directory != "://" )
-					foreach ( QString cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
+					foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
 					{
 						QString coverPath = directory + cover;
 						img = QImage( coverPath );
@@ -179,14 +179,14 @@ void DemuxerThr::run()
 
 	QStringList filter;
 	filter << "*.ass" << "*.ssa";
-	foreach ( QString ext, SubsDec::extensions() )
+	foreach ( const QString &ext, SubsDec::extensions() )
 		filter << "*." + ext;
 	foreach ( StreamInfo *streamInfo, demuxer->streamsInfo() )
 		if ( streamInfo->type == QMPLAY2_TYPE_VIDEO ) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
 		{
 			QString directory = filePath( url.mid( 7 ) );
 			QString fName = fileName( url, false ).replace( '_', ' ' );
-			foreach ( QString subsFile, QDir( directory ).entryList( filter, QDir::Files ) )
+			foreach ( const QString &subsFile, QDir( directory ).entryList( filter, QDir::Files ) )
 			{
 				if ( fileName( subsFile, false ).replace( '_', ' ' ).contains( fName, Qt::CaseInsensitive ) )
 				{
@@ -517,7 +517,12 @@ static void printOtherInfo( const QList< QMPlay2Tag > &other_info, QString &str 
 {
 	foreach ( QMPlay2Tag tag, other_info )
 		if ( !tag.second.isEmpty() )
-			str += "<li><b>" + StreamInfo::getTagName( tag.first ).toLower() + ":</b> " + tag.second + "</li>";
+		{
+			QString value = tag.second;
+			if ( tag.first.toInt() == QMPLAY2_TAG_LANGUAGE )
+				value = QMPlay2GUI.languages.value( value, tag.second ).toLower();
+			str += "<li><b>" + StreamInfo::getTagName( tag.first ).toLower() + ":</b> " + value + "</li>";
+		}
 }
 void DemuxerThr::addSubtitleStream( bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QList< QMPlay2Tag > &other_info )
 {
@@ -697,7 +702,7 @@ void DemuxerThr::emitInfo()
 		++i;
 	}
 	i = 0;
-	foreach ( QString fName, playC.fileSubsList )
+	foreach ( const QString &fName, playC.fileSubsList )
 		addSubtitleStream( fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), fileName( fName ) );
 
 	if ( !videoStreams.isEmpty() )

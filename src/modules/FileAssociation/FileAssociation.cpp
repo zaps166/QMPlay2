@@ -130,7 +130,7 @@ static void RemoveQMPlay2Keys()
 	SHDeleteKeyW( HKEY_CURRENT_USER, L"Software\\Classes\\QMPlay2Playlist" );
 	SHDeleteKeyW( HKEY_CURRENT_USER, L"Software\\Classes\\Drive\\shell\\QMPlay2" );
 	SHDeleteKeyW( HKEY_CURRENT_USER, L"Software\\Classes\\Directory\\shell\\QMPlay2" );
-	foreach ( QString extension, EnumExtensionKeys() )
+	foreach ( const QString &extension, EnumExtensionKeys() )
 		SHDeleteKeyW( HKEY_CURRENT_USER, ( WCHAR * )QString( "Software\\Classes\\" + extension ).utf16() );
 }
 
@@ -166,7 +166,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	static const size_t defaultVideoCount = sizeof defaultVideoExtensions / sizeof *defaultVideoExtensions;
 	static const size_t defaultAudioCount = sizeof defaultAudioExtensions / sizeof *defaultAudioExtensions;
 
-	foreach ( QString extension, EnumExtensionKeys() )
+	foreach ( const QString &extension, EnumExtensionKeys() )
 		addExtension( extension.right( extension.length() - 1 ), true );
 	for ( size_t s = 0 ; s < defaultAudioCount ; ++s )
 		addExtension( defaultAudioExtensions[ s ], false );
@@ -175,7 +175,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 			foreach ( Module::Info mod, module->getModulesInfo() )
 				if ( mod.type == Module::PLAYLIST || mod.type == Module::DEMUXER )
-					foreach ( QString extension, mod.extensions )
+					foreach ( const QString &extension, mod.extensions )
 						addExtension( extension, false, mod.type == Module::PLAYLIST );
 
 	addDirB = new QCheckBox( tr( "Dodaj wpis do menu kontekstowego z katalogami" ) );

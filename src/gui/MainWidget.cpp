@@ -784,7 +784,7 @@ void MainWidget::openDir()
 void MainWidget::loadPlist()
 {
 	QString filter = tr( "Playlisty" ) + " (";
-	foreach ( QString e, Playlist::extensions() )
+	foreach ( const QString &e, Playlist::extensions() )
 		filter += "*." + e + " ";
 	filter.chop( 1 );
 	filter += ")";
@@ -795,7 +795,7 @@ void MainWidget::loadPlist()
 void MainWidget::savePlist()
 {
 	QString filter;
-	foreach ( QString e, Playlist::extensions() )
+	foreach ( const QString &e, Playlist::extensions() )
 		filter += e.toUpper() + " (*." + e + ");;";
 	filter.chop( 2 );
 	if ( filter.isEmpty() )
@@ -850,7 +850,7 @@ void MainWidget::browseSubsFile()
 		dir = QMPlay2GUI.getCurrentPth( playlistDock->getUrl() );
 
 	QString filter = tr( "Napisy" ) + " ASS/SSA (*.ass *.ssa)";
-	foreach ( QString ext, SubsDec::extensions() )
+	foreach ( const QString &ext, SubsDec::extensions() )
 		filter += ";;" + tr( "Napisy" ) + " " + ext.toUpper() + " (*." + ext + ")";
 
 	QString f = QFileDialog::getOpenFileName( this, tr( "Wybierz napisy do filmu" ), dir, filter );
@@ -886,7 +886,7 @@ void MainWidget::readSocket()
 {
 	QLocalSocket *socket = ( QLocalSocket * )sender();
 	disconnect( socket, SIGNAL( disconnected() ), socket, SLOT( deleteLater() ) );
-	foreach ( QByteArray arr, socket->readAll().split( '\0' ) )
+	foreach ( const QByteArray &arr, socket->readAll().split( '\0' ) )
 	{
 		int idx = arr.indexOf( '\t' );
 		if ( idx > -1 )

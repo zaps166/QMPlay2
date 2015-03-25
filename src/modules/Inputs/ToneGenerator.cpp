@@ -119,7 +119,7 @@ bool ToneGenerator::open( const QString &_url )
 		srate = 44100;
 
 	freqs.clear();
-	foreach ( QString freq, QUrlQuery( url ).queryItemValue( "freqs" ).split( ',', QString::SkipEmptyParts ) )
+	foreach ( const QString &freq, QUrlQuery( url ).queryItemValue( "freqs" ).split( ',', QString::SkipEmptyParts ) )
 		freqs += freq.toInt();
 	if ( freqs.isEmpty() )
 	{

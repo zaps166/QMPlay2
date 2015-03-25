@@ -506,7 +506,7 @@ void VideoThr::screenshot_slot( const QByteArray &frame )
 			const QString ext = QMPlay2Core.getSettings().getString( "screenshotFormat" );
 			const QString dir = QMPlay2Core.getSettings().getString( "screenshotPth" );
 			quint16 num = 0;
-			foreach ( QString f, QDir( dir ).entryList( QStringList( "QMPlay2_snap_?????" + ext ), QDir::Files, QDir::Name ) )
+			foreach ( const QString &f, QDir( dir ).entryList( QStringList( "QMPlay2_snap_?????" + ext ), QDir::Files, QDir::Name ) )
 			{
 				const quint16 n = f.mid( 13, 5 ).toUShort();
 				if ( n > num )

@@ -333,7 +333,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 
 	pcmExtsE = new QLineEdit;
 	QString exts;
-	foreach ( QString ext, sets().get( "PCM/extensions" ).toStringList() )
+	foreach ( const QString &ext, sets().get( "PCM/extensions" ).toStringList() )
 		exts += ext + ";";
 	pcmExtsE->setText( exts );
 

@@ -45,8 +45,8 @@ class Page1 : public QWidget
 {
 public:
 	QGridLayout *layout;
-	QLabel *langL, *styleL, *encodingL, *screenshotL;
-	QComboBox *langBox, *styleBox, *encodingB, *screenshotFormatB;
+	QLabel *langL, *styleL, *encodingL, *audioLangL, *subsLangL, *screenshotL;
+	QComboBox *langBox, *styleBox, *encodingB, *audioLangB, *subsLangB, *screenshotFormatB;
 	QLineEdit *screenshotE;
 	QPushButton *setAppearanceB;
 #ifdef ICONS_FROM_THEME
@@ -132,6 +132,8 @@ void SettingsWidget::InitSettings()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	QMPSettings.init( "SubtitlesEncoding", "UTF-8" );
+	QMPSettings.init( "AudioLanguage", QString() );
+	QMPSettings.init( "SubtitlesLanguage", QString() );
 #if QT_VERSION < 0x050000
 	QMPSettings.init( "screenshotPth", QDesktopServices::storageLocation( QDesktopServices::PicturesLocation ) );
 #else
@@ -291,13 +293,31 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page1->encodingL = new QLabel( tr( "Kodowanie napisów" ) + ": " );
 	page1->encodingB = new QComboBox;
 	QStringList encodings;
-	foreach ( QByteArray item, QTextCodec::availableCodecs() )
+	foreach ( const QByteArray &item, QTextCodec::availableCodecs() )
 		encodings += QTextCodec::codecForName( item )->name();
 	encodings.removeDuplicates();
 	page1->encodingB->addItems( encodings );
 	idx = page1->encodingB->findText( QMPSettings.getByteArray( "SubtitlesEncoding" ) );
 	if ( idx > -1 )
 		page1->encodingB->setCurrentIndex( idx );
+
+	const QString audioLang = QMPSettings.getString( "AudioLanguage" );
+	const QString subsLang = QMPSettings.getString( "SubtitlesLanguage" );
+	page1->audioLangL = new QLabel( tr( "Domyślny język dla dźwięku" ) + ": " );
+	page1->subsLangL = new QLabel( tr( "Domyślny język dla napisów" ) + ": " );
+	page1->audioLangB = new QComboBox;
+	page1->subsLangB = new QComboBox;
+	page1->audioLangB->addItem( tr( "Domyślna lub pierwsza ścieżka" ) );
+	page1->subsLangB->addItem( tr( "Domyślna lub pierwsza ścieżka" ) );
+	foreach ( const QString &lang, QMPlay2GUI.languages )
+	{
+		page1->audioLangB->addItem( lang );
+		page1->subsLangB->addItem( lang );
+		if ( lang == audioLang )
+			page1->audioLangB->setCurrentIndex( page1->audioLangB->count() - 1 );
+		if ( lang == subsLang )
+			page1->subsLangB->setCurrentIndex( page1->subsLangB->count() - 1 );
+	}
 
 	page1->screenshotL = new QLabel( tr( "Ścieżka do zrzutów ekranu" ) + ": " );
 	page1->screenshotE = new QLineEdit;
@@ -395,6 +415,10 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 	page1->layout->addWidget( page1->styleBox, layout_row++, 1, 1, 3 );
 	page1->layout->addWidget( page1->encodingL, layout_row, 0, 1, 1 );
 	page1->layout->addWidget( page1->encodingB, layout_row++, 1, 1, 3 );
+	page1->layout->addWidget( page1->audioLangL, layout_row, 0, 1, 1 );
+	page1->layout->addWidget( page1->audioLangB, layout_row++, 1, 1, 3 );
+	page1->layout->addWidget( page1->subsLangL, layout_row, 0, 1, 1 );
+	page1->layout->addWidget( page1->subsLangB, layout_row++, 1, 1, 3 );
 	page1->layout->addWidget( page1->screenshotL, layout_row, 0, 1, 1 );
 	page1->layout->addWidget( page1->screenshotE, layout_row, 1, 1, 1 );
 	page1->layout->addWidget( page1->screenshotFormatB, layout_row, 2, 1, 1 );
@@ -794,6 +818,8 @@ void SettingsWidget::apply()
 			}
 #endif
 			QMPSettings.set( "SubtitlesEncoding", page1->encodingB->currentText().toUtf8() );
+			QMPSettings.set( "AudioLanguage", page1->audioLangB->currentIndex() > 0 ? page1->audioLangB->currentText() : QString() );
+			QMPSettings.set( "SubtitlesLanguage", page1->subsLangB->currentIndex() > 0 ? page1->subsLangB->currentText() : QString() );
 			QMPSettings.set( "screenshotPth", page1->screenshotE->text() );
 			QMPSettings.set( "screenshotFormat", page1->screenshotFormatB->currentText() );
 			QMPSettings.set( "ShowCovers", page1->showCoversB->isChecked() );
@@ -984,7 +1010,7 @@ void SettingsWidget::clearCoversCache()
 		QDir dir( QMPlay2Core.getSettingsDir() );
 		if ( dir.cd( "Covers" ) )
 		{
-			foreach ( QString fileName, dir.entryList( QDir::Files ) )
+			foreach ( const QString &fileName, dir.entryList( QDir::Files ) )
 				QFile::remove( dir.absolutePath() + "/" + fileName );
 			if ( dir.cdUp() )
 				dir.rmdir( "Covers" );

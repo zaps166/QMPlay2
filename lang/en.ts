@@ -2207,6 +2207,18 @@
         <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
         <translation>Percent of packages for backwards rewinding</translation>
     </message>
+    <message>
+        <source>Domyślny język dla dźwięku</source>
+        <translation>Default audio language</translation>
+    </message>
+    <message>
+        <source>Domyślny język dla napisów</source>
+        <translation>Default subtitles language</translation>
+    </message>
+    <message>
+        <source>Domyślna lub pierwsza ścieżka</source>
+        <translation>Default or first stream</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

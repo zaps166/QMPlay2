@@ -13,7 +13,7 @@ bool SRT::toASS( const QByteArray &srt, LibASS *ass, double )
 		return false;
 	bool ok = false;
 
-	foreach ( QString entry, QString( QString( "\n\n" ) + srt ).remove( '\r' ).split( QRegExp( "\n\n\\d+\n" ), QString::SkipEmptyParts ) )
+	foreach ( const QString &entry, QString( QString( "\n\n" ) + srt ).remove( '\r' ).split( QRegExp( "\n\n\\d+\n" ), QString::SkipEmptyParts ) )
 	{
 		int idx = entry.indexOf( '\n' );
 		if ( idx > -1 )

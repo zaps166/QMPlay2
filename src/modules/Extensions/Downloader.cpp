@@ -406,12 +406,12 @@ void DownloaderThread::run()
 
 QImage DownloaderThread::getImage()
 {
-	if ( !this->prefix.isEmpty() )
+	if ( !prefix.isEmpty() )
 	{
 		foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 		{
 			QList< QMPlay2Extensions::AddressPrefix > addressPrefixList = QMPlay2Ext->addressPrefixList();
-			int idx = addressPrefixList.indexOf( this->prefix );
+			int idx = addressPrefixList.indexOf( prefix );
 			if ( idx > -1 )
 				return addressPrefixList[ idx ].img;
 		}
