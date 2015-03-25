@@ -144,7 +144,7 @@ void EntryProperties::accept()
 {
 	if ( catalogCB )
 	{
-		bool isDir = QFileInfo( dirPthE->text() ).isDir();
+		const bool isDir = QFileInfo( dirPthE->text() ).isDir();
 		if ( catalogCB->isChecked() && !isDir )
 		{
 			QMessageBox::information( this, tr( "Zła ścieżka" ), tr( "Podaj ścieżkę do istniejącego katalogu" ) );
@@ -152,6 +152,8 @@ void EntryProperties::accept()
 		}
 		else if ( catalogCB->isChecked() && isDir )
 		{
+			if ( nameE->text().isEmpty() )
+				nameE->setText( Functions::fileName( dirPthE->text() ) );
 			tWI->setData( 0, Qt::UserRole, "file://" + dirPthE->text() );
 			tWI->setIcon( 0, *QMPlay2GUI.folderIcon );
 			sync = true;

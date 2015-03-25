@@ -868,6 +868,14 @@
         <source>&amp;Zablokuj widgety</source>
         <translation>&amp;Verrouiller les widgets</translation>
     </message>
+    <message>
+        <source>Zapisz grupę</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd podczas zapisu playlisty</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -928,14 +936,6 @@
         <translation>Méthode de rééchantillonnage</translation>
     </message>
     <message>
-        <source>Odczyt plików</source>
-        <translation>Fichiers en lecture</translation>
-    </message>
-    <message>
-        <source>Zapis plików</source>
-        <translation>Ecriture de fichiers</translation>
-    </message>
-    <message>
         <source>Synchronizacja pionowa</source>
         <translation>Synchronisation verticale</translation>
     </message>
@@ -966,10 +966,6 @@
     <message>
         <source>Kawałki</source>
         <translation>Tranches</translation>
-    </message>
-    <message>
-        <source>Czas oczekiwania dla TCP</source>
-        <translation>Pause TCP</translation>
     </message>
     <message>
         <source>Opóźnienie</source>
@@ -1624,6 +1620,10 @@
     <message>
         <source>&amp;Rozszerzenia</source>
         <translation>&amp;Extensions</translation>
+    </message>
+    <message>
+        <source>Zapisz &amp;grupę</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -868,6 +868,14 @@
         <source>&amp;Zablokuj widgety</source>
         <translation>&amp;Lock widgets</translation>
     </message>
+    <message>
+        <source>Zapisz grupę</source>
+        <translation>Save group</translation>
+    </message>
+    <message>
+        <source>Błąd podczas zapisu playlisty</source>
+        <translation>Error while saving playlist</translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -928,14 +936,6 @@
         <translation>Resampling method</translation>
     </message>
     <message>
-        <source>Odczyt plików</source>
-        <translation>Reading files</translation>
-    </message>
-    <message>
-        <source>Zapis plików</source>
-        <translation>Writing files</translation>
-    </message>
-    <message>
         <source>Synchronizacja pionowa</source>
         <translation>Vertical sync</translation>
     </message>
@@ -966,10 +966,6 @@
     <message>
         <source>Kawałki</source>
         <translation>Slices</translation>
-    </message>
-    <message>
-        <source>Czas oczekiwania dla TCP</source>
-        <translation>TCP timeout</translation>
     </message>
     <message>
         <source>Opóźnienie</source>
@@ -1624,6 +1620,10 @@
     <message>
         <source>&amp;Rozszerzenia</source>
         <translation>&amp;Extensions</translation>
+    </message>
+    <message>
+        <source>Zapisz &amp;grupę</source>
+        <translation>Save &amp;group</translation>
     </message>
 </context>
 <context>

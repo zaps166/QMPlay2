@@ -873,6 +873,14 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <source>&amp;Zablokuj widgety</source>
         <translation>&amp;Widgets sperren</translation>
     </message>
+    <message>
+        <source>Zapisz grupę</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd podczas zapisu playlisty</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -933,14 +941,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Resampling Methode</translation>
     </message>
     <message>
-        <source>Odczyt plików</source>
-        <translation>Lese Dateien</translation>
-    </message>
-    <message>
-        <source>Zapis plików</source>
-        <translation>Schreibe Dateien</translation>
-    </message>
-    <message>
         <source>Synchronizacja pionowa</source>
         <translation>Vertical sync</translation>
     </message>
@@ -972,10 +972,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <source>Kawałki</source>
         <translatorcomment>Was auch immer gemeint ist</translatorcomment>
         <translation>Scheiben</translation>
-    </message>
-    <message>
-        <source>Czas oczekiwania dla TCP</source>
-        <translation>TCP Timeout</translation>
     </message>
     <message>
         <source>Opóźnienie</source>
@@ -1635,6 +1631,10 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     <message>
         <source>&amp;Rozszerzenia</source>
         <translation>E&amp;rweiterungen</translation>
+    </message>
+    <message>
+        <source>Zapisz &amp;grupę</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

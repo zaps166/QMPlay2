@@ -14,8 +14,8 @@ using Functions::splitPrefixAndUrlIfHasPluginPrefix;
 #include <QResizeEvent>
 #include <QHeaderView>
 #include <QFileInfo>
-#include <QPainter>
 #include <QMimeData>
+#include <QPainter>
 #include <QDebug>
 #include <QDrag>
 #include <QMenu>
@@ -235,9 +235,6 @@ PlaylistWidget::PlaylistWidget() :
 	connect( this, SIGNAL( setItemIcon( QTreeWidgetItem *, const QImage & ) ), this, SLOT( setItemIconSlot( QTreeWidgetItem *, const QImage & ) ) );
 	connect( &animationTimer, SIGNAL( timeout() ), this, SLOT( animationUpdate() ) );
 	connect( &addTimer, SIGNAL( timeout() ), this, SLOT( addTimerElapsed() ) );
-
-//	rotation = 0;
-//	animationTimer.start( 50 );
 }
 
 void PlaylistWidget::setItemsResizeToContents( bool b )
@@ -499,8 +496,7 @@ void PlaylistWidget::processItems( QList< QTreeWidgetItem * > *itemsToShow, bool
 
 void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, bool loadList )
 {
-	int size = urls.size();
-	for ( int i = 0 ; i < size ; i++ )
+	for ( int i = 0 ; i < urls.size() ; ++i )
 	{
 		if ( addThr.ioCtrl.isAborted() )
 			break;
@@ -554,7 +550,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				if ( d_urls.size() )
 				{
 					url = Functions::cleanPath( url );
-					QTreeWidgetItem *p = newGroup( Functions::fileName( url ), QString(), tWI );
+					QTreeWidgetItem *p = newGroup( Functions::fileName( url ), url, tWI );
 					for ( int j = d_urls.size() - 1 ; j >= 0 ; j-- )
 					{
 						d_urls[ j ].prepend( url );
