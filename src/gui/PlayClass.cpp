@@ -928,7 +928,7 @@ static Decoder *loadStream( const QList< StreamInfo * > &streams, const int choo
 	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;
 	if ( choosenStream >= 0 && choosenStream < streams.count() && streams[ choosenStream ]->type == type )
 	{
-		if ( streams[ choosenStream ]->subs_to_decode || !subtitles )
+		if ( streams[ choosenStream ]->must_decode || !subtitles )
 			dec = Decoder::create( streams[ choosenStream ], writer, QMPlay2GUI.getModules( "decoders", 7 ) );
 		if ( dec || subtitles )
 			stream = choosenStream;
@@ -963,7 +963,7 @@ static Decoder *loadStream( const QList< StreamInfo * > &streams, const int choo
 			StreamInfo *streamInfo = streams[ i ];
 			if ( streamInfo->type == type && ( defaultStream == -1 || i == defaultStream ) )
 			{
-				if ( streamInfo->subs_to_decode || !subtitles )
+				if ( streamInfo->must_decode || !subtitles )
 					dec = Decoder::create( streamInfo, writer, QMPlay2GUI.getModules( "decoders", 7 ) );
 				if ( dec || subtitles )
 				{

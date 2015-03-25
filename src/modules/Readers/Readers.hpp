@@ -26,6 +26,6 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *fileReaderEB, *fileWriterEB, *httpReaderEB;
+	QCheckBox *fileReaderEB, *httpReaderEB;
 	QSpinBox *tcpTimeoutB;
 };

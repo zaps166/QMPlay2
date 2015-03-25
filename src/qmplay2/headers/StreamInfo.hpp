@@ -71,7 +71,7 @@ public:
 
 	inline StreamInfo() :
 		type( QMPLAY2_TYPE_UNKNOWN ),
-		is_default( true ), subs_to_decode( false ),
+		is_default( true ), must_decode( false ),
 		bitrate( 0 ), bpcs( 0 ),
 		sample_rate( 0 ), block_align( 0 ),
 		channels( 0 ),
@@ -90,7 +90,7 @@ public:
 	QByteArray codec_name, title, artist;
 	QList< QMPlay2Tag > other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
-	bool is_default, subs_to_decode;
+	bool is_default, must_decode;
 	struct { int num, den; } time_base;
 	int bitrate, bpcs;
 	/* audio only */

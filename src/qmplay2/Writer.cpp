@@ -4,11 +4,60 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
+#include <QFile>
+
+class QMPlay2FileWriter : public Writer
+{
+	bool readyWrite() const
+	{
+		return f.isOpen();
+	}
+
+	qint64 write( const QByteArray &arr )
+	{
+		return f.write( arr );
+	}
+
+	qint64 size() const
+	{
+		return f.size();
+	}
+	QString name() const
+	{
+		return "File Writer";
+	}
+
+	~QMPlay2FileWriter()
+	{
+		f.close();
+	}
+
+	bool open()
+	{
+		f.setFileName( getUrl().mid( 7, -1 ) );
+		return f.open( QIODevice::WriteOnly );
+	}
+
+	/**/
+
+	QFile f;
+};
+
 Writer *Writer::create( const QString &url, const QStringList &modNames )
 {
-	QString scheme = Functions::getUrlScheme( url );
+	const QString scheme = Functions::getUrlScheme( url );
 	if ( url.isEmpty() || scheme.isEmpty() )
 		return NULL;
+	Writer *writer = NULL;
+	if ( modNames.isEmpty() && scheme == "file" )
+	{
+		writer = new QMPlay2FileWriter;
+		writer->_url = url;
+		if ( writer->open() )
+			return writer;
+		delete writer;
+		return NULL;
+	}
 	QVector< QPair< Module *, Module::Info > > pluginsInstances( modNames.count() );
 	foreach ( Module *pluginInstance, QMPlay2Core.getPluginsInstance() )
 		foreach ( Module::Info mod, pluginInstance->getModulesInfo() )
@@ -29,7 +78,7 @@ Writer *Writer::create( const QString &url, const QStringList &modNames )
 		Module::Info &moduleInfo = pluginsInstances[ i ].second;
 		if ( !module || moduleInfo.name.isEmpty() )
 			continue;
-		Writer *writer = ( Writer * )module->createInstance( moduleInfo.name );
+		writer = ( Writer * )module->createInstance( moduleInfo.name );
 		if ( !writer )
 			continue;
 		writer->_url = url;

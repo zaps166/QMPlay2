@@ -17,5 +17,5 @@ MOC_DIR = build/moc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += FileReader.hpp FileWriter.hpp HttpReader.hpp Readers.hpp
-SOURCES += FileReader.cpp FileWriter.cpp HttpReader.cpp Readers.cpp
+HEADERS += FileReader.hpp HttpReader.hpp Readers.hpp
+SOURCES += FileReader.cpp HttpReader.cpp Readers.cpp
