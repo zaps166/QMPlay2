@@ -23,8 +23,8 @@ RESOURCES += icons.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += FFMpeg.hpp FFDemux.hpp FFDec.hpp FFDecSW.hpp FFCommon.hpp
-SOURCES += FFMpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFCommon.cpp
+HEADERS += FFMpeg.hpp FFDemux.hpp FFDec.hpp FFDecSW.hpp FFReader.hpp FFCommon.hpp
+SOURCES += FFMpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFReader.cpp FFCommon.cpp
 
 unix:!macx {
 #Common HWAccel

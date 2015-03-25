@@ -1,6 +1,7 @@
 Zmiany w QMPlay2 build 15.03.25:
 	- opuszczenie okna przez mysz w trybie pełnoekranowym powoduje zamknięcie wszystkich widgetów,
 	- możliwość wybrania domyślnego języka dla napisów i dźwięku,
+	- HttpReader i FileReader zastąpiony przez FFReader,
 	- zmiany w domyślnym układzie okienek,
 	- FFMpeg nie używa już HttpReader,
 	- zmiany w oknie "Informacje",

@@ -295,7 +295,7 @@ void DownloaderThread::run()
 	QString scheme = Functions::getUrlScheme( url );
 	if ( scheme.isEmpty() )
 		url.prepend( "http://" );
-	else if ( scheme != "http" && scheme != "https" )
+	else if ( scheme.toLower() == "file" )
 	{
 		if ( !item )
 			deleteLater();
@@ -566,7 +566,7 @@ DockWidget *Downloader::getDockWidget()
 
 QAction *Downloader::getAction( const QString &name, int, const QString &url, const QString &prefix, const QString &param )
 {
-	if ( url.left( 7 ).toLower() != "http://" && url.left( 8 ).toLower() != "https://" )
+	if ( url.left( 7 ).toLower() == "file://" )
 		return NULL;
 	QAction *act = new QAction( DownloaderW::tr( "Pobierz" ), NULL );
 	act->setIcon( QIcon( ":/downloader" ) );

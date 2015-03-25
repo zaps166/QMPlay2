@@ -35,6 +35,8 @@ public:
 private:
 	static Playlist *create( const QString &, OpenMode, QString *name = NULL );
 protected:
+	QList< QByteArray > readLines();
+
 	IOController<> ioCtrl;
 };
 

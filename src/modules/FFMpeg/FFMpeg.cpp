@@ -12,6 +12,7 @@
 	#endif
 	#include <VDPAUWriter.hpp>
 #endif
+#include <FFReader.hpp>
 #include <FFCommon.hpp>
 
 extern "C"
@@ -86,6 +87,7 @@ QList< FFMpeg::Info > FFMpeg::getModulesInfo( const bool showDisabled ) const
 		modulesInfo += Info( VAApiWriterName, WRITER );
 	}
 #endif
+	modulesInfo += Info( FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp" );
 	return modulesInfo;
 }
 void *FFMpeg::createInstance( const QString &name )
@@ -105,6 +107,8 @@ void *FFMpeg::createInstance( const QString &name )
 #ifdef QMPlay2_VAAPI
 	else if ( name == DecoderVAAPIName && getBool( "DecoderVAAPIEnabled" ) )
 		return new FFDecVAAPI( mutex, *this );
+	else if ( name == FFReaderName )
+		return new FFReader( *this );
 #endif
 	return NULL;
 }

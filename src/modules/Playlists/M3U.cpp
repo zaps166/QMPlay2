@@ -12,20 +12,24 @@ QList< M3U::Entry > M3U::_read()
 	Reader *reader = ioCtrl.rawPtr< Reader >();
 	QList< Entry > list;
 
-	QByteArray line;
 	QString playlistPath = filePath( reader->getUrl() );
 	if ( playlistPath.left( 7 ) == "file://" )
 		playlistPath.remove( "file://" );
 	else
 		playlistPath.clear();
 	bool noReadLine = false;
-	while ( !reader->atEnd() )
+
+	QByteArray line;
+	QList< QByteArray > playlistLines = readLines();
+	while ( !playlistLines.isEmpty() )
 	{
 		QStringList splitLine;
-		if ( !noReadLine )
-			line = reader->readLine();
-		else
+
+		if ( noReadLine )
 			noReadLine = false;
+		else
+			line = playlistLines.takeFirst();
+
 		if ( line.isEmpty() )
 			continue;
 
@@ -38,7 +42,7 @@ QList< M3U::Entry > M3U::_read()
 			splitLine += line.left( idx );
 			line.remove( 0, idx+1 );
 			splitLine += line;
-			line = reader->readLine();
+			line = playlistLines.takeFirst();
 			if ( line.isEmpty() )
 				continue;
 			if ( line.left( 8 ) == "#EXTINF:" )

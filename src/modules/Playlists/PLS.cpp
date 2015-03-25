@@ -17,9 +17,11 @@ QList< PLS::Entry > PLS::_read()
 		playlistPath.remove( "file://" );
 	else
 		playlistPath.clear();
-	while ( !reader->atEnd() )
+
+	const QList< QByteArray > playlistLines = readLines();
+	for ( int i = 0 ; i < playlistLines.count() ; ++i )
 	{
-		QByteArray line = reader->readLine();
+		const QByteArray &line = playlistLines[ i ];
 		if ( line.isEmpty() )
 			continue;
 		int idx = line.indexOf( '=' );

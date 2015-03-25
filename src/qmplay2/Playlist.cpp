@@ -65,8 +65,12 @@ Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name
 				switch ( openMode )
 				{
 					case ReadOnly:
-						Reader::create( url, playlist->ioCtrl.toRef< Reader >() ); //TODO przerywanie (po co?)
-						break;
+					{
+						IOController< Reader > &reader = playlist->ioCtrl.toRef< Reader >();
+						Reader::create( url, reader ); //TODO przerywanie (po co?)
+						if ( reader && reader->size() <= 0 )
+							reader.clear();
+					} break;
 					case WriteOnly:
 						playlist->ioCtrl.assign( Writer::create( url ) );
 						break;
@@ -82,4 +86,10 @@ Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name
 				delete playlist;
 			}
 	return NULL;
+}
+
+QList< QByteArray > Playlist::readLines()
+{
+	IOController< Reader > &reader = ioCtrl.toRef< Reader >();
+	return reader->read( reader->size() ).replace( '\r', QByteArray() ).split( '\n' );
 }
