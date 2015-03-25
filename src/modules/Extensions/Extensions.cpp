@@ -21,7 +21,7 @@ Extensions::Extensions() :
 
 	init( "YouTube/ShowAdditionalInfo", false );
 	init( "YouTube/youtubedl", QString() );
-	init( "YouTube/ItagList", QStringList() << "22" << "45" << "44" << "43" << "18" );
+	init( "YouTube/ItagList", QStringList() << "22" << "43" << "18" );
 
 	init( "LastFM/DownloadCovers", true );
 	init( "LastFM/AllowBigCovers", false );

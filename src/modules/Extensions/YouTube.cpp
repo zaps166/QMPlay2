@@ -25,6 +25,7 @@
 #include <QDrag>
 #include <QFile>
 
+static const char cantFindTheTitle[] = "(Can't find the title)";
 static QMap< int, QString > itag_arr;
 
 static inline QUrl getGdataUrl( const QString &title, const int resultsPerPage, const int start_page )
@@ -401,7 +402,7 @@ YouTubeW::YouTubeW( QWidget *parent ) :
 	QWidget( parent ),
 	imgSize( QSize( 56, 56 ) ),
 	completer( new QCompleter( new QStringListModel, this ) ),
-	resultsPerPage( 25 ), currPage( 1 ),
+	resultsPerPage( 50 ), currPage( 1 ),
 	autocompleteReply( NULL ), searchReply( NULL ),
 	net( this )
 {
@@ -724,19 +725,21 @@ QString YouTubeW::convertLink( const QString &ytPageLink )
 		int end_idx = ytPageLink.indexOf( "&", start_idx );
 		if ( end_idx == -1 )
 			end_idx = ytPageLink.length();
-		return "http://www.youtube.com/watch?v=" + ytPageLink.mid( start_idx, end_idx - start_idx ) + "&gl=US&hl=en&has_verified=1";
+		return "http://www.youtube.com/watch?v=" + ytPageLink.mid( start_idx, end_idx - start_idx );
 	}
 	return QString();
 }
 QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController< YouTubeDL > *youtube_dl )
 {
 	QStringList ret;
+
 	for ( int i = 0 ; i <= 1 ; ++i )
 	{
-		int streamsIdx = data.indexOf( QString( i ? "adaptive_fmts" : "url_encoded_fmt_stream_map" ) + "\": \"" ); //"adaptive_fmts" contains audio or video urls
+		const QString fmts = QString( i ? "adaptive_fmts" : "url_encoded_fmt_stream_map" ) + "\":\""; //"adaptive_fmts" contains audio or video urls
+		int streamsIdx = data.indexOf( fmts );
 		if ( streamsIdx > -1 )
 		{
-			streamsIdx += 30;
+			streamsIdx += fmts.length();
 			int streamsEndIdx = data.indexOf( '"', streamsIdx );
 			if ( streamsEndIdx > -1 )
 			{
@@ -822,10 +825,10 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 		int ytplayerIdx = data.indexOf( "ytplayer.config" );
 		if ( ytplayerIdx > -1 )
 		{
-			int titleIdx = data.indexOf( "title\": \"", ytplayerIdx );
+			int titleIdx = data.indexOf( "title\":\"", ytplayerIdx );
 			if ( titleIdx > -1 )
 			{
-				int titleEndIdx = titleIdx += 9;
+				int titleEndIdx = titleIdx += 8;
 				for ( ;; ) //szukanie końca tytułu
 				{
 					titleEndIdx = data.indexOf( '"', titleEndIdx );
@@ -838,7 +841,7 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			}
 		}
 		if ( ret.count() == 2 )
-			ret << "(Can not find the title)";
+			ret << cantFindTheTitle;
 	}
 
 	if ( ret.count() == 3 && ret[ 0 ].contains( "ENCRYPTED" ) )
@@ -854,14 +857,14 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			youtube_dl->clear();
 		}
 	}
-	else if ( !tWI && ret.isEmpty() && !youtubedl_updating && youtube_dl->assign( new YouTubeDL( youtubedl ) ) ) //ex. 18+
+	else if ( !tWI && ret.isEmpty() && !youtubedl_updating && youtube_dl->assign( new YouTubeDL( youtubedl ) ) ) //cannot find URL at normal way
 	{
 		QString stream_url, name, extension;
 		( *youtube_dl )->addr( url, PARAM.right( PARAM.length() - 5 ), &stream_url, &name, &extension ); //extension doesn't work on youtube in this function
 		if ( !stream_url.isEmpty() )
 		{
 			if ( name.isEmpty() )
-				name = "Can't find title";
+				name = cantFindTheTitle;
 			ret << stream_url << extension << name;
 		}
 		youtube_dl->clear();
@@ -881,20 +884,28 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 {
 	if ( itag_arr.isEmpty() )
 	{
-		/* Dane z Wikipedii */
-		itag_arr[ 18 ] = "270p/360p MP4 (H.264 + AAC 96kbps)";
-		itag_arr[ 22 ] = "720p MP4 (H.264 + AAC 192kbps)";
-		itag_arr[ 37 ] = "1080p MP4 (H.264 + AAC 192kbps)";
-		itag_arr[ 38 ] = "3072p MP4 (H.264 + AAC 192kbps)";
+		/* Video + Audio */
 		itag_arr[ 43 ] = "360p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[ 44 ] = "480p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[ 45 ] = "720p WebM (VP8 + Vorbis 192kbps)";
-		itag_arr[ 46 ] = "1080p WebM (VP8 + Vorbis 192kbps)";
+		itag_arr[ 36 ] = "240p 3GP (MPEG4 + AAC 32kbps)";
+		itag_arr[ 22 ] = "720p MP4 (H.264 + AAC 192kbps)"; //default
+		itag_arr[ 18 ] = "360p MP4 (H.264 + AAC 96kbps)";
+		itag_arr[  5 ] = "240p FLV (FLV + MP3 64kbps)";
 
-		/* Moje dane */
-		itag_arr[ 141 ] = "Audio MP4 (AAC 256kbps)";
-		itag_arr[ 140 ] = "Audio MP4 (AAC 128kbps)";
-		itag_arr[ 139 ] = "Audio MP4 (AAC 48kbps)";
+		/* Video */
+		itag_arr[ 302 ] = "Video 60fps 720p (VP9 2743kbps)";
+		itag_arr[ 298 ] = "Video 60fps 720p (H.264 3365kbps)";
+		itag_arr[ 247 ] = "Video 720p (VP9 1650kbps)";
+		itag_arr[ 136 ] = "Video 720p (H.264 2230kbps)";
+
+		itag_arr[ 137 ] = "Video 60fps 1080p (H.264 4203kbps)";
+		itag_arr[ 248 ] = "Video 60fps 1080p (H.264 2738kbps)";
+		itag_arr[ 299 ] = "Video 60fps 1080p (H.264 5517kbps)";
+		itag_arr[ 303 ] = "Video 60fps 1080p (VP9 4633kbps)";
+
+		/* Audio */
+		itag_arr[ 140 ] = "Audio (AAC 128kbps)";
+		itag_arr[ 141 ] = "Audio (AAC 256kbps)";
+		itag_arr[ 171 ] = "Audio (Vorbis 128kbps)";
 	}
 	ItagNames itagPair;
 	for ( QMap< int, QString >::const_iterator it = itag_arr.begin(), it_end = itag_arr.end() ; it != it_end ; ++it )
