@@ -6,6 +6,7 @@ Zmiany w QMPlay2 build 15.03.25:
 	- FFMpeg nie używa już HttpReader,
 	- zmiany w oknie "Informacje",
 	- poprawki w napisach pgssub,
+	- możliwość zapisania grupy,
 	- zgodność z FFMpeg 2.6,
 
 Zmiany w QMPlay2 build 14.12.28:

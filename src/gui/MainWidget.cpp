@@ -490,6 +490,7 @@ void MainWidget::createMenuBar()
 	connect( menuBar->playlist->sync, SIGNAL( triggered() ), playlistDock, SLOT( syncCurrentFolder() ) );
 	connect( menuBar->playlist->loadPlist, SIGNAL( triggered() ), this, SLOT( loadPlist() ) );
 	connect( menuBar->playlist->savePlist, SIGNAL( triggered() ), this, SLOT( savePlist() ) );
+	connect( menuBar->playlist->saveGroup, SIGNAL( triggered() ), this, SLOT( saveGroup() ) );
 	connect( menuBar->playlist->newGroup, SIGNAL( triggered() ), playlistDock, SLOT( newGroup() ) );
 	connect( menuBar->playlist->renameGroup, SIGNAL( triggered() ), playlistDock, SLOT( renameGroup() ) );
 	connect( menuBar->playlist->delEntries, SIGNAL( triggered() ), playlistDock, SLOT( delEntries() ) );
@@ -794,21 +795,11 @@ void MainWidget::loadPlist()
 }
 void MainWidget::savePlist()
 {
-	QString filter;
-	foreach ( const QString &e, Playlist::extensions() )
-		filter += e.toUpper() + " (*." + e + ");;";
-	filter.chop( 2 );
-	if ( filter.isEmpty() )
-		return;
-	QString selectedFilter;
-	QString plistFile = QFileDialog::getSaveFileName( this, tr( "Zapisz playlistę" ), QMPlay2GUI.getCurrentPth( playlistDock->getUrl() ), filter, &selectedFilter );
-	if ( !selectedFilter.isEmpty() )
-	{
-		selectedFilter = "." + selectedFilter.mid( 0, selectedFilter.indexOf( ' ' ) ).toLower();
-		if ( plistFile.right( selectedFilter.length() ).toLower() != selectedFilter )
-			plistFile += selectedFilter;
-		playlistDock->save( plistFile );
-	}
+	savePlistHelper( tr( "Zapisz playlistę" ), QMPlay2GUI.getCurrentPth( playlistDock->getUrl() ), false );
+}
+void MainWidget::saveGroup()
+{
+	savePlistHelper( tr( "Zapisz grupę" ), QMPlay2GUI.getCurrentPth( playlistDock->getUrl() ) + playlistDock->getCurrentItemName(), true );
 }
 void MainWidget::showSettings( const QString &moduleName )
 {
@@ -952,6 +943,28 @@ void MainWidget::hideDocksSlot()
 		showToolBar( false );
 	else
 		hideDocks();
+}
+
+void MainWidget::savePlistHelper( const QString &title, const QString &fPth, bool saveCurrentGroup )
+{
+	QString filter;
+	foreach ( const QString &e, Playlist::extensions() )
+		filter += e.toUpper() + " (*." + e + ");;";
+	filter.chop( 2 );
+	if ( filter.isEmpty() )
+		return;
+	QString selectedFilter;
+	QString plistFile = QFileDialog::getSaveFileName( this, title, fPth, filter, &selectedFilter );
+	if ( !selectedFilter.isEmpty() )
+	{
+		selectedFilter = "." + selectedFilter.mid( 0, selectedFilter.indexOf( ' ' ) ).toLower();
+		if ( plistFile.right( selectedFilter.length() ).toLower() != selectedFilter )
+			plistFile += selectedFilter;
+		if ( playlistDock->save( plistFile, saveCurrentGroup ) )
+			QMPlay2GUI.setCurrentPth( Functions::filePath( plistFile ) );
+		else
+			QMessageBox::critical( this, title, tr( "Błąd podczas zapisu playlisty" ) );
+	}
 }
 
 QMenu *MainWidget::createPopupMenu()

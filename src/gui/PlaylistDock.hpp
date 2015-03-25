@@ -15,9 +15,10 @@ public:
 	void stopThreads();
 
 	QString getUrl( QTreeWidgetItem *tWI = NULL ) const;
+	QString getCurrentItemName() const;
 
 	void load( const QString & );
-	bool save( const QString & );
+	bool save( const QString &, bool saveCurrentGroup = false );
 
 	void add( const QStringList & );
 	void addAndPlay( const QStringList & );

@@ -56,7 +56,7 @@ public:
 		Add *add;
 		QMenu *extensions;
 		Sort *sort;
-		QAction *stopLoading, *sync, *loadPlist, *savePlist, *delEntries, *delNonGroupEntries, *clear, *copy, *paste, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlaying, *queue, *entryProperties;
+		QAction *stopLoading, *sync, *loadPlist, *savePlist, *saveGroup, *delEntries, *delNonGroupEntries, *clear, *copy, *paste, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlaying, *queue, *entryProperties;
 	};
 
 	class Player : public QMenu

@@ -1562,11 +1562,11 @@
         <translation>&amp;Synchroniser le dossier</translation>
     </message>
     <message>
-        <source>Załaduj l&amp;istę</source>
+        <source>Załaduj playl&amp;istę</source>
         <translation>Charger la &amp;liste</translation>
     </message>
     <message>
-        <source>Zapisz &amp;listę</source>
+        <source>Zapisz play&amp;listę</source>
         <translation>Enregistrer le &amp;liste</translation>
     </message>
     <message>

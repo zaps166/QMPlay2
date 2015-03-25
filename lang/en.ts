@@ -1562,11 +1562,11 @@
         <translation>&amp;Sync directory</translation>
     </message>
     <message>
-        <source>Załaduj l&amp;istę</source>
+        <source>Załaduj playl&amp;istę</source>
         <translation>Load &amp;list</translation>
     </message>
     <message>
-        <source>Zapisz &amp;listę</source>
+        <source>Zapisz play&amp;listę</source>
         <translation>Save &amp;list</translation>
     </message>
     <message>

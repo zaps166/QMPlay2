@@ -64,6 +64,7 @@ private slots:
 	void openDir();
 	void loadPlist();
 	void savePlist();
+	void saveGroup();
 	void showSettings( const QString & );
 	void showSettings();
 
@@ -85,6 +86,8 @@ private slots:
 
 	void hideDocksSlot();
 private:
+	void savePlistHelper( const QString &, const QString &, bool );
+
 	QMenu *createPopupMenu();
 
 	void showToolBar( bool );

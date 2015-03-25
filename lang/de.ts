@@ -1573,11 +1573,11 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>&amp;Verzeichnis synchronisieren</translation>
     </message>
     <message>
-        <source>Załaduj l&amp;istę</source>
+        <source>Załaduj playl&amp;istę</source>
         <translation>&amp;Liste laden</translation>
     </message>
     <message>
-        <source>Zapisz &amp;listę</source>
+        <source>Zapisz play&amp;listę</source>
         <translation>L&amp;iste speichern</translation>
     </message>
     <message>

@@ -819,6 +819,7 @@ void PlaylistWidget::modifyMenu()
 		entryLength = currentItem()->data( 2, Qt::UserRole ).toInt();
 	}
 
+	playlistMenu->saveGroup->setVisible( currentItem() && isGroup( currentItem() ) );
 	playlistMenu->sync->setVisible( currentItem() && isGroup( currentItem() ) && !entryUrl.isEmpty() );
 	playlistMenu->renameGroup->setVisible( currentItem() && isGroup( currentItem() ) );
 	playlistMenu->entryProperties->setVisible( currentItem() );

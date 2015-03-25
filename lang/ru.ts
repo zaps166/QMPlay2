@@ -1562,11 +1562,11 @@
         <translation>&amp;Синхронизировать каталог</translation>
     </message>
     <message>
-        <source>Załaduj l&amp;istę</source>
+        <source>Załaduj playl&amp;istę</source>
         <translation>Загрузить с&amp;писок</translation>
     </message>
     <message>
-        <source>Zapisz &amp;listę</source>
+        <source>Zapisz play&amp;listę</source>
         <translation>Сохранить &amp;список</translation>
     </message>
     <message>

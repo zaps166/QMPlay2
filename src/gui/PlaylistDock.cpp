@@ -65,18 +65,24 @@ QString PlaylistDock::getUrl( QTreeWidgetItem *tWI ) const
 {
 	return list->getUrl( tWI );
 }
+QString PlaylistDock::getCurrentItemName() const
+{
+	if ( !list->currentItem() )
+		return QString();
+	return list->currentItem()->text( 0 );
+}
 
 void PlaylistDock::load( const QString &url )
 {
 	if ( !url.isEmpty() )
 		list->add( QStringList( url ), NULL, true );
 }
-bool PlaylistDock::save( const QString &_url )
+bool PlaylistDock::save( const QString &_url, bool saveCurrentGroup )
 {
-	QString url = Functions::Url( _url );
+	const QString url = Functions::Url( _url );
 	QList< QTreeWidgetItem * > parents;
 	QList< Playlist::Entry > entries;
-	foreach ( QTreeWidgetItem *tWI, list->getChildren() )
+	foreach ( QTreeWidgetItem *tWI, list->getChildren( PlaylistWidget::ALL_CHILDREN, saveCurrentGroup ? list->currentItem() : NULL ) )
 	{
 		Playlist::Entry entry;
 		if ( PlaylistWidget::isGroup( tWI ) )

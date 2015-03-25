@@ -74,8 +74,9 @@ MenuBar::Playlist::Playlist( MenuBar *parent, const QString &name ) : QMenu( nam
 	addSeparator();
 	newAction( Playlist::tr( "&Synchronizuj katalog" ), this, QKeySequence( "F5" ), sync, false, QMPlay2Core.getIconFromTheme( "view-refresh" ), false );
 	addSeparator();
-	newAction( Playlist::tr( "Załaduj l&istę" ), this, QKeySequence( "Ctrl+L" ), loadPlist, false, QIcon(), false );
-	newAction( Playlist::tr( "Zapisz &listę" ), this, QKeySequence( "Ctrl+S" ), savePlist, false, QIcon(), false );
+	newAction( Playlist::tr( "Załaduj playl&istę" ), this, QKeySequence( "Ctrl+L" ), loadPlist, false, QIcon(), false );
+	newAction( Playlist::tr( "Zapisz play&listę" ), this, QKeySequence( "Ctrl+S" ), savePlist, false, QIcon(), false );
+	newAction( Playlist::tr( "Zapisz &grupę" ), this, QKeySequence( "Ctrl+Shift+S" ), saveGroup, false, QIcon(), false );
 	addSeparator();
 	newAction( Playlist::tr( "&Usuń zaznaczone wpisy" ), this, QKeySequence( "Del" ), delEntries, true, QMPlay2Core.getIconFromTheme( "list-remove" ), false );
 	newAction( Playlist::tr( "U&suń wpisy bez grupy" ), this, QKeySequence( "Ctrl+Del" ), delNonGroupEntries, false, QMPlay2Core.getIconFromTheme( "list-remove" ), false );
