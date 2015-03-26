@@ -371,8 +371,13 @@ void ProstoPleer::convertAddress( const QString &prefix, const QString &url, con
 			if ( idx > -1 && Reader::create( ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid( idx + 1 ), reader ) )
 			{
 				QByteArray replyData;
-				while ( reader->readyRead() )
-					replyData = reader->read( 4096 );
+				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */ )
+				{
+					QByteArray arr =  reader->read( 4096 );;
+					if ( arr.isEmpty() )
+						break;
+					replyData += arr;
+				}
 				reader.clear();
 
 				replyData.replace( '"', QByteArray() );

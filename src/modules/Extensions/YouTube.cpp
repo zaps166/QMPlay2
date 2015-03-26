@@ -964,7 +964,7 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 			if ( Reader::create( w.convertLink( url ), reader ) )
 			{
 				QByteArray replyData;
-				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /*2MiB*/ )
+				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* < 2 MiB */ )
 				{
 					QByteArray arr = reader->read( 4096 );
 					if ( !arr.size() )
