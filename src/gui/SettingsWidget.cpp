@@ -37,8 +37,11 @@
 #include <MenuBar.hpp>
 #include <Module.hpp>
 
-#if !defined( Q_OS_WIN ) && !defined( Q_OS_MAC )
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
 	#define ICONS_FROM_THEME
+#endif
+#ifdef Q_OS_WIN
+	#include <windows.h>
 #endif
 
 class Page1 : public QWidget
@@ -725,7 +728,7 @@ void SettingsWidget::applyProxy()
 	if ( !QMPSettings.getBool( "Proxy/Use" ) )
 	{
 #ifdef Q_OS_WIN
-		_putenv_s( "http_proxy", "" );
+		SetEnvironmentVariable( "http_proxy", NULL );
 #else
 		unsetenv( "http_proxy" );
 #endif
@@ -752,7 +755,7 @@ void SettingsWidget::applyProxy()
 			proxyEnv.insert( 7, auth );
 		}
 #ifdef Q_OS_WIN
-		_putenv_s( "http_proxy", proxyEnv.toLocal8Bit() );
+		SetEnvironmentVariable( "http_proxy", proxyEnv.toLocal8Bit() );
 #else
 		setenv( "http_proxy", proxyEnv.toLocal8Bit(), true );
 #endif

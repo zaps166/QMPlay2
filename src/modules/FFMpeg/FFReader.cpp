@@ -88,10 +88,12 @@ QString FFReader::name() const
 bool FFReader::open()
 {
 	QString url = getUrl();
-	if ( url.left( 4 ).toLower() == "mms:" )
+	if ( url.left( 5 ) == "file:" )
+		url.remove( 0, 7 );
+	else if ( url.left( 4 ) == "mms:" )
 		url.insert( 3, 'h' );
 	AVIOInterruptCB interruptCB = { (int(*)(void*))::interruptCB, &aborted };
-	if ( avio_open2( &avioCtx, url.toLocal8Bit(), AVIO_FLAG_READ, &interruptCB, NULL ) >= 0 )
+	if ( avio_open2( &avioCtx, url.toUtf8(), AVIO_FLAG_READ, &interruptCB, NULL ) >= 0 )
 		return ( canRead = true );
 	return false;
 }

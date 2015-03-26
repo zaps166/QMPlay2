@@ -107,9 +107,9 @@ void *FFMpeg::createInstance( const QString &name )
 #ifdef QMPlay2_VAAPI
 	else if ( name == DecoderVAAPIName && getBool( "DecoderVAAPIEnabled" ) )
 		return new FFDecVAAPI( mutex, *this );
+#endif
 	else if ( name == FFReaderName )
 		return new FFReader( *this );
-#endif
 	return NULL;
 }
 

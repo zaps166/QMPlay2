@@ -34,7 +34,7 @@ class QMPlay2FileWriter : public Writer
 
 	bool open()
 	{
-		f.setFileName( getUrl().mid( 7, -1 ) );
+		f.setFileName( getUrl().mid( 7 ) );
 		return f.open( QIODevice::WriteOnly );
 	}
 

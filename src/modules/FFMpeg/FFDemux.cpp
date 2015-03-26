@@ -424,8 +424,9 @@ void FFDemux::abort()
 bool FFDemux::open( const QString &_url )
 {
 	QString url = _url;
-	isLocal = url.left( 5 ) == "file:" ;
-	if ( url.left( 4 ) == "mms:" )
+	if ( ( isLocal = url.left( 5 ) == "file:" ) )
+		url.remove( 0, 7 );
+	else if ( url.left( 4 ) == "mms:" )
 		url.insert( 3, 'h' );
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
@@ -440,7 +441,7 @@ bool FFDemux::open( const QString &_url )
 #endif
 		av_dict_set( &options, "user-agent", "QMPlay2/"QMPlay2Version, 0 );
 	}
-	if ( avformat_open_input( &formatCtx, url.toLocal8Bit(), NULL, &options ) || !formatCtx )
+	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx )
 		return false;
 
 	formatCtx->flags |= AVFMT_FLAG_GENPTS;
