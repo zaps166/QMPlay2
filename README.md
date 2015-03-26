@@ -1,6 +1,6 @@
 #QMPlay2 - QT Media Player 2
 
->QMPlay2 is a video player, it can plays all formats and stream supported by ffmpeg and libmodplug (including J2B). It has integrated Youtube browser.
+>QMPlay2 is a video and audio player. It can play all formats supported by ffmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files and Rayman 2 music. It contains YouTube and Prostopleer browser.
 
 ##Compilation and instalation
 
@@ -18,7 +18,7 @@
 - libxv - only on X11,
 - libass.
 
-*\*libavresample: uncomment last three lines in "src/qmplay2/qmplay2.pro"*
+\*libavresample: uncomment last three lines in "src/qmplay2/qmplay2.pro"
 
 ##Running compilation script:
 
