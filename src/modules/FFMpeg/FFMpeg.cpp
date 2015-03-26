@@ -54,8 +54,13 @@ FFMpeg::FFMpeg() :
 	init( "LowresValue", 0 );
 	init( "ThreadTypeSlice", false );
 
-	av_log_set_level( AV_LOG_FATAL );
-	av_register_all();
+	static bool firstTime = true;
+	if ( firstTime )
+	{
+		av_log_set_level( AV_LOG_FATAL );
+		av_register_all();
+		firstTime = false;
+	}
 	avformat_network_init();
 }
 FFMpeg::~FFMpeg()

@@ -381,7 +381,6 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 	}
 #endif
 
-	encoded.clear();
 	encoded.reserve( packet.size + FF_INPUT_BUFFER_PADDING_SIZE );
 	encoded.resize( packet.size );
 	memcpy( encoded.data(), packet.data, encoded.capacity() );
@@ -423,11 +422,29 @@ void FFDemux::abort()
 
 bool FFDemux::open( const QString &_url )
 {
+	static const QStringList disabledDemuxers = QStringList()
+		<< "bmp_pipe"
+		<< "dxp_pipe"
+		<< "exr_pipe"
+		<< "j2k_pipe"
+		<< "jpeg_pipe"
+		<< "jpegls_pipe"
+		<< "pictor_pipe"
+		<< "png_pipe"
+		<< "sgi_pipe"
+		<< "sunrast_pipe"
+		<< "tiff_pipe"
+		<< "webp_pipe"
+		<< "image2"
+		<< "tty" //txt files as movie :D
+	;
+
 	QString url = _url;
 	if ( ( isLocal = url.left( 5 ) == "file:" ) )
 		url.remove( 0, 7 );
 	else if ( url.left( 4 ) == "mms:" )
 		url.insert( 3, 'h' );
+
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
 	formatCtx->interrupt_callback.opaque = &aborted;
@@ -441,7 +458,7 @@ bool FFDemux::open( const QString &_url )
 #endif
 		av_dict_set( &options, "user-agent", "QMPlay2/"QMPlay2Version, 0 );
 	}
-	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx )
+	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
 		return false;
 
 	formatCtx->flags |= AVFMT_FLAG_GENPTS;
@@ -480,6 +497,8 @@ bool FFDemux::open( const QString &_url )
 #endif
 		streams += formatCtx->streams[ i ];
 	}
+	if ( streams_info.isEmpty() )
+		return false;
 
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 	formatCtx->event_flags = 0;
