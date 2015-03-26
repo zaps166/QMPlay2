@@ -1,13 +1,15 @@
-GrooveShark
+GrooveShark, YouTube playlists
+Support for multiple streams
 
 Open with QMPlay2 and Enqueue files - improve
 Slow seeking on some network streams
 
 Filters:
 	Video filters - YADIF
-	Add audio "Tempo" and LADSPA filters
+	Add audio "Tempo" and LADSPA/LV2 filters
 
 HWAccel: DXVA2
+Simple touchscreen support
 Users can resume downloading
 Users can introduce aspect ratio and zoom
 
