@@ -33,6 +33,4 @@ private:
 	bool aborted, paused, canRead;
 };
 
-#define FFReaderName "FFMpeg Reader"
-
 #endif // FFREADER_HPP

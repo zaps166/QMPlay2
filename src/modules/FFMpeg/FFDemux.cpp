@@ -436,28 +436,16 @@ bool FFDemux::open( const QString &_url )
 		<< "tiff_pipe"
 		<< "webp_pipe"
 		<< "image2"
-		<< "tty" //txt files as movie :D
+		<< "tty" //txt files
 	;
 
-	QString url = _url;
-	if ( ( isLocal = url.left( 5 ) == "file:" ) )
-		url.remove( 0, 7 );
-	else if ( url.left( 4 ) == "mms:" )
-		url.insert( 3, 'h' );
+	AVDictionary *options = NULL;
+	const QString url = FFCommon::prepareUrl( _url, options, &isLocal );
 
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
 	formatCtx->interrupt_callback.opaque = &aborted;
 
-	AVDictionary *options = NULL;
-	if ( !isLocal )
-	{
-#if LIBAVFORMAT_VERSION_MAJOR <= 55
-		if ( url.left( 4 ) == "http" )
-			av_dict_set( &options, "icy", "1", 0 );
-#endif
-		av_dict_set( &options, "user-agent", "QMPlay2/"QMPlay2Version, 0 );
-	}
 	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
 		return false;
 
