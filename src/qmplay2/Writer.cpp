@@ -27,11 +27,6 @@ class QMPlay2FileWriter : public Writer
 		return "File Writer";
 	}
 
-	~QMPlay2FileWriter()
-	{
-		f.close();
-	}
-
 	bool open()
 	{
 		f.setFileName( getUrl().mid( 7 ) );
