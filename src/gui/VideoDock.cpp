@@ -161,6 +161,7 @@ void VideoDock::wheelEvent( QWheelEvent *e )
 		else if ( e->buttons() == Qt::NoButton && QMPlay2Core.getSettings().getBool( "ScrollSeek" ) )
 			e->delta() > 0 ? QMPlay2GUI.menubar->player->seekF->trigger() : QMPlay2GUI.menubar->player->seekB->trigger();
 	}
+	DockWidget::wheelEvent( e );
 }
 void VideoDock::leaveEvent( QEvent *e )
 {

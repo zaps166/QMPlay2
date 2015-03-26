@@ -939,10 +939,13 @@ void MainWidget::lockWidgets( bool l )
 
 void MainWidget::hideDocksSlot()
 {
-	if ( !playlistDock->isVisible() )
-		showToolBar( false );
-	else
-		hideDocks();
+	if ( !geometry().contains( QCursor::pos() ) )
+	{
+		if ( !playlistDock->isVisible() )
+			showToolBar( false );
+		else
+			hideDocks();
+	}
 }
 
 void MainWidget::savePlistHelper( const QString &title, const QString &fPth, bool saveCurrentGroup )
@@ -1076,7 +1079,7 @@ void MainWidget::mouseMoveEvent( QMouseEvent *e )
 void MainWidget::leaveEvent( QEvent *e )
 {
 	if ( fullScreen )
-		QTimer::singleShot( 0, this, SLOT( hideDocksSlot() ) ); //Qt5 can't do it directly (Qt5 has too many bugs...)
+		QTimer::singleShot( 0, this, SLOT( hideDocksSlot() ) ); //Qt5 can't hide docks correctly here
 	QMainWindow::leaveEvent( e );
 }
 void MainWidget::closeEvent( QCloseEvent *e )

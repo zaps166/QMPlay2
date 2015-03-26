@@ -21,10 +21,9 @@ public:
 private:
 	class EmptyW : public QWidget
 	{
-		QSize sizeHint() const
-		{
-			return QSize( 0, 0 );
-		}
+		void showEvent( QShowEvent * );
+
+		QSize sizeHint() const;
 	} emptyW;
 	bool titleBarVisible, globalTitleBarVisible;
 };
