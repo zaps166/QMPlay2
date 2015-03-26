@@ -165,6 +165,7 @@ void AudioThr::run()
 				if ( !playC.paused )
 					waiting = playC.fillBufferB = true;
 
+				emptyBufferMutex.lock();
 				playC.emptyBufferCond.wait( &emptyBufferMutex, MUTEXWAIT_TIMEOUT );
 				emptyBufferMutex.unlock();
 				continue;
