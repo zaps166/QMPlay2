@@ -14,6 +14,5 @@ Users can introduce aspect ratio and zoom
 MIDI - ?
 SID files - ?
 MKV - ordered chapters - ?
-Qt5 - Q_WS_X11 defines - ?
 Exporting audio during playback - ?
 Decoding and playing video in diffrent threads - ?

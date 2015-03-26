@@ -6,7 +6,6 @@
 #include <Functions.hpp>
 #include <ImgScaler.hpp>
 
-#include <QX11Info>
 #include <QPainter>
 
 #include <va/va_x11.h>
@@ -20,6 +19,7 @@ VAApiWriter::VAApiWriter( Module &module ) :
 	ok( false ),
 	VADisp( NULL ),
 	rgbImgFmt( NULL ),
+	display( NULL ),
 	aspect_ratio( 0.0 ), zoom( 0.0 ),
 	outW( 0 ), outH( 0 ), Hue( 0 ), Saturation( 0 ), Brightness( 0 ), Contrast( 0 )
 #ifdef HAVE_VPP
@@ -40,6 +40,8 @@ VAApiWriter::~VAApiWriter()
 	clr();
 	if ( VADisp )
 		vaTerminate( VADisp );
+	if ( display )
+		XCloseDisplay( display );
 }
 
 bool VAApiWriter::set()
@@ -265,7 +267,7 @@ bool VAApiWriter::open()
 
 	clr();
 
-	VADisp = vaGetDisplay( QX11Info::display() );
+	VADisp = vaGetDisplay( ( display = XOpenDisplay( NULL ) ) );
 	int minor, major;
 	if ( vaInitialize( VADisp, &minor, &major ) == VA_STATUS_SUCCESS )
 	{

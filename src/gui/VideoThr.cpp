@@ -470,15 +470,18 @@ void VideoThr::run()
 	VideoFrame::unref( frame );
 }
 
-#ifdef Q_WS_X11
+#if defined(Q_WS_X11) || defined(X11_EXTRAS)
 	#include <QX11Info>
 	#include <X11/Xlib.h>
 #endif
 
 void VideoThr::write_slot( const QByteArray &frame )
 {
-#ifdef Q_WS_X11
-	XResetScreenSaver( QX11Info::display() );
+#ifdef X11_EXTRAS
+	if ( QX11Info::isPlatformX11() )
+#endif
+#if defined(Q_WS_X11) || defined(X11_EXTRAS)
+		XResetScreenSaver( QX11Info::display() );
 #endif
 	canWrite = true;
 	if ( writer && writer->readyWrite() )

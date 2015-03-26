@@ -33,7 +33,6 @@ unix:!macx {
 
 #VAAPI
 	LIBS += -lva -lva-x11
-	greaterThan(QT_MAJOR_VERSION, 4): QT += x11extras
 	HEADERS += FFDecVAAPI.hpp VAApiWriter.hpp
 	SOURCES += FFDecVAAPI.cpp VAApiWriter.cpp
 	DEFINES += QMPlay2_VAAPI

@@ -16,6 +16,7 @@
 	#define HAVE_VPP
 #endif
 
+struct _XDisplay;
 
 class VAApiWriter : public HWAccelHelper, public VideoWriter, public QWidget
 {
@@ -94,6 +95,7 @@ private:
 	VAConfigID config;
 	VAProfile profile;
 	VAImageFormat *rgbImgFmt;
+	_XDisplay *display;
 
 	QList< VAProfile > profileList;
 
