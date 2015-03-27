@@ -93,7 +93,7 @@ void UpdateEntryThr::run()
 		}
 	}
 	if ( timeChanged )
-		pLW.ref( PlaylistWidget::REFRESH_GROUPS_TIME );
+		pLW.refresh( PlaylistWidget::REFRESH_GROUPS_TIME );
 	pLW.viewport()->update();
 }
 void UpdateEntryThr::stop()
@@ -128,7 +128,7 @@ void AddThr::setData( const QStringList &_urls, QTreeWidgetItem *_par, bool _loa
 	{
 		while ( par->childCount() )
 			delete par->child( 0 );
-		pLW.ref( PlaylistWidget::REFRESH_CURRPLAYING );
+		pLW.refresh( PlaylistWidget::REFRESH_CURRPLAYING );
 	}
 
 	emit QMPlay2Core.busyCursor();
@@ -176,7 +176,7 @@ void AddThr::finished()
 	pLW.animationTimer.stop();
 	pLW.viewport()->repaint();
 	pLW.setAnimated( false );
-	pLW.ref();
+	pLW.refresh();
 	pLW.setItemsResizeToContents( true );
 	if ( firstI && ( ( pLW.selectAfterAdd && pLW.currentItem() != firstI && pLW.currentItem() == lastI ) || !pLW.currentItem() ) )
 		pLW.setCurrentItem( firstI );
@@ -224,7 +224,7 @@ PlaylistWidget::PlaylistWidget() :
 	setIconSize( QSize( IconSize, IconSize ) );
 
 	currentPlaying = NULL;
-	Modifier = selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
+	modifier = selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
 
 	connect( this, SIGNAL( insertItem( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ), this, SLOT( insertItemSlot( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ) );
 
@@ -268,9 +268,8 @@ bool PlaylistWidget::add( const QStringList &urls, bool atEndOfList )
 }
 void PlaylistWidget::sync( const QString &pth, QTreeWidgetItem *par )
 {
-	if ( !canModify() )
-		return;
-	addThr.setData( pth, par );
+	if ( canModify() )
+		addThr.setData( pth, par );
 }
 
 void PlaylistWidget::setCurrentPlaying( QTreeWidgetItem *tWI )
@@ -399,7 +398,7 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren( CHILDREN children, const
 
 bool PlaylistWidget::canModify( bool all ) const
 {
-	return !( addThr.isRunning() || ( all ? QAbstractItemView::state() != 0 : false ) || updateEntryThr.isRunning() );
+	return !( addThr.isRunning() || ( all ? ( QAbstractItemView::state() != QAbstractItemView::NoState || updateEntryThr.isRunning() ) : false ) );
 }
 
 void PlaylistWidget::queue()
@@ -416,9 +415,9 @@ void PlaylistWidget::queue()
 		else
 			_queue += tWI;
 	}
-	ref( REFRESH_QUEUE );
+	refresh( REFRESH_QUEUE );
 }
-void PlaylistWidget::ref( REFRESH Refresh )
+void PlaylistWidget::refresh( REFRESH Refresh )
 {
 	QList< QTreeWidgetItem * > items = getChildren( ONLY_NON_GROUPS );
 	if ( Refresh & REFRESH_QUEUE )
@@ -627,34 +626,34 @@ void PlaylistWidget::setEntryIcon( QImage &img, QTreeWidgetItem *tWI )
 
 void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( e->buttons() & Qt::MidButton || ( ( e->buttons() & Qt::LeftButton ) && Modifier ) )
+	if ( e->buttons() & Qt::MidButton || ( ( e->buttons() & Qt::LeftButton ) && modifier ) )
 	{
-		QMimeData *mimeData = new QMimeData;
-		mimeData->setUrls( getUrls() );
-		if ( mimeData->urls().isEmpty() )
+		const QList< QUrl > urls = getUrls();
+		if ( !urls.isEmpty() )
 		{
-			delete mimeData;
-			return;
+			QMimeData *mimeData = new QMimeData;
+			mimeData->setUrls( urls );
+
+			QDrag *drag = new QDrag( this );
+			drag->setMimeData( mimeData );
+
+			QPixmap pix;
+			QTreeWidgetItem *currI = currentItem();
+			if ( currI && currI != currentPlaying )
+				pix = currI->icon( 0 ).pixmap( IconSize, IconSize );
+			if ( pix.isNull() )
+				pix = QMPlay2Core.getIconFromTheme( "applications-multimedia" ).pixmap( IconSize, IconSize );
+			drag->setPixmap( pix );
+
+			drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction );
 		}
-		QDrag *drag = new QDrag( this );
-		drag->setMimeData( mimeData );
-
-		QPixmap pix;
-		QTreeWidgetItem *currI = currentItem();
-		if ( currI && currI != currentPlaying )
-			pix = currI->icon( 0 ).pixmap( IconSize, IconSize );
-		if ( pix.isNull() )
-			pix = QMPlay2Core.getIconFromTheme( "applications-multimedia" ).pixmap( IconSize, IconSize );
-		drag->setPixmap( pix );
-
-		drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction );
 	}
 	else if ( canModify( false ) && !hasHiddenItems )
 	{
 		internalDrag = false;
 		QTreeWidget::mouseMoveEvent( e );
 		if ( internalDrag )
-			ref();
+			refresh();
 	}
 }
 void PlaylistWidget::dragEnterEvent( QDragEnterEvent *e )
@@ -698,12 +697,12 @@ void PlaylistWidget::dropEvent( QDropEvent *e )
 }
 void PlaylistWidget::keyPressEvent( QKeyEvent *e )
 {
-	Modifier = e->modifiers() == Qt::MetaModifier || e->modifiers() == Qt::AltModifier;
+	modifier = e->modifiers() == Qt::MetaModifier || e->modifiers() == Qt::AltModifier;
 	QTreeWidget::keyPressEvent( e );
 }
 void PlaylistWidget::keyReleaseEvent( QKeyEvent *e )
 {
-	Modifier = false;
+	modifier = false;
 	QTreeWidget::keyReleaseEvent( e );
 }
 void PlaylistWidget::paintEvent( QPaintEvent *e )

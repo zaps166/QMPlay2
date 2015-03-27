@@ -156,7 +156,7 @@ void PlaylistDock::delEntries( const QStringList &entries )
 				delete tWI;
 			}
 		}
-		list->ref();
+		list->refresh();
 		list->setItemsResizeToContents( true );
 		list->processItems();
 	}
@@ -190,7 +190,7 @@ void PlaylistDock::itemDoubleClicked( QTreeWidgetItem *tWI )
 	{
 		tWI->setText( 1, QString() );
 		list->_queue.removeOne( tWI );
-		list->ref( PlaylistWidget::REFRESH_QUEUE );
+		list->refresh( PlaylistWidget::REFRESH_QUEUE );
 	}
 
 	emit play( tWI->data( 0, Qt::UserRole ).toString() );
@@ -342,7 +342,7 @@ void PlaylistDock::delEntries()
 				randomPlayedItems.removeOne( tWI );
 				delete tWI;
 			}
-		list->ref();
+		list->refresh();
 		if ( list->currentItem() )
 			par = list->currentItem();
 		else if ( !list->getChildren().contains( par ) )
@@ -366,7 +366,7 @@ void PlaylistDock::delNonGroupEntries()
 			randomPlayedItems.removeOne( tWI );
 			delete tWI;
 		}
-		list->ref();
+		list->refresh();
 		list->setItemsResizeToContents( true );
 		list->processItems();
 	}

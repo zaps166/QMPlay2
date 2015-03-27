@@ -115,7 +115,7 @@ public:
 	bool canModify( bool all = true ) const;
 
 	void queue();
-	void ref( REFRESH Refresh = REFRESH_ALL );
+	void refresh( REFRESH Refresh = REFRESH_ALL );
 
 	void processItems( QList< QTreeWidgetItem * > *itemsToShow = NULL, bool hideGroups = false );
 
@@ -150,7 +150,7 @@ private:
 
 	QRect getArcRect( int size );
 
-	bool Modifier, internalDrag, selectAfterAdd, _useThread, hasHiddenItems;
+	bool modifier, internalDrag, selectAfterAdd, hasHiddenItems;
 	QString currPthToSave;
 	struct AddData
 	{
