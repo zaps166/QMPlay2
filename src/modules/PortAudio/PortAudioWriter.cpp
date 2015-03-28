@@ -83,6 +83,10 @@ bool PortAudioWriter::processParams( bool *paramsCorrected )
 		else
 			QMPlay2Core.logError( "PortAudio :: " + tr( "Nie można otworzyć strumienia wyjścia dźwięku" ) );
 	}
+#ifdef Q_OS_WIN
+	else
+		Pa_AbortStream( stream );
+#endif
 
 	return readyWrite();
 }
@@ -97,12 +101,7 @@ qint64 PortAudioWriter::write( const QByteArray &arr )
 #ifndef Q_OS_MAC //?
 	int diff = Pa_GetStreamWriteAvailable( stream ) - outputLatency * sample_rate;
 	if ( diff > 0 )
-	{
-		int newsize = diff * outputParameters.channelCount * sizeof( float );
-		char a[ newsize ];
-		memset( a, 0, newsize );
-		Pa_WriteStream( stream, a, diff );
-	}
+		Pa_WriteStream( stream, QByteArray( diff * outputParameters.channelCount * sizeof( float ), 0 ).data(), diff );
 #endif
 
 #ifdef Q_OS_LINUX
@@ -135,13 +134,9 @@ qint64 PortAudioWriter::write( const QByteArray &arr )
 void PortAudioWriter::pause()
 {
 	if ( stream )
-		Pa_AbortStream( stream );
+		Pa_StopStream( stream );
 }
 
-qint64 PortAudioWriter::size() const
-{
-	return -1;
-}
 QString PortAudioWriter::name() const
 {
 	return PortAudioWriterName;

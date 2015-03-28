@@ -401,7 +401,7 @@ PageSwitcher::PageSwitcher( QWidget *youTubeW )
 YouTubeW::YouTubeW( QWidget *parent ) :
 	QWidget( parent ),
 	imgSize( QSize( 56, 56 ) ),
-	completer( new QCompleter( new QStringListModel, this ) ),
+	completer( new QCompleter( new QStringListModel( this ), this ) ),
 	resultsPerPage( 50 ), currPage( 1 ),
 	autocompleteReply( NULL ), searchReply( NULL ),
 	net( this )

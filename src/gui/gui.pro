@@ -33,7 +33,7 @@ DEPENDPATH  += . ../qmplay2/headers
 HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoEqualizer.hpp Appearance.hpp PacketBuffer.hpp
 SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoEqualizer.cpp Appearance.cpp PacketBuffer.cpp
 
-qtHaveModule(x11extras) {
+greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(x11extras) {
 	DEFINES += X11_EXTRAS
 	QT += x11extras
 	LIBS += -lX11

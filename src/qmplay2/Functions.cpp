@@ -58,9 +58,9 @@ QString Functions::Url( QString url, const QString &pth )
 			QString addPth = pth.isEmpty() ? QDir::currentPath() : pth;
 			if ( addPth.right( 1 ) != "/" )
 				addPth += '/';
-			url = addPth + url;
+			url.prepend( addPth );
 		}
-		url = "file://" + url;
+		url.prepend( "file://" );
 	}
 	return url;
 }

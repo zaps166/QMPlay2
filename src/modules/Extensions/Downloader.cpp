@@ -509,9 +509,10 @@ void DownloaderW::setDownloadsDir()
 }
 void DownloaderW::clearFinished()
 {
-	foreach ( QTreeWidgetItem *item, downloadLW->findItems( QString(), Qt::MatchContains ) )
-		if ( ( ( DownloadItemW * )downloadLW->itemWidget( item, 0 ) )->isFinished() )
-			delete item;
+	const QList< QTreeWidgetItem * > items = downloadLW->findItems( QString(), Qt::MatchContains );
+	for ( int i = items.count() - 1 ; i >= 0 ; --i )
+		if ( ( ( DownloadItemW * )downloadLW->itemWidget( items[ i ], 0 ) )->isFinished() )
+			delete items[ i ];
 }
 void DownloaderW::addUrl()
 {

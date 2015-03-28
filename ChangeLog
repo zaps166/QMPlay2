@@ -1,4 +1,4 @@
-Zmiany w QMPlay2 build 15.03.27:
+Zmiany w QMPlay2 build 15.03.28:
 	- opuszczenie okna przez mysz w trybie pełnoekranowym powoduje zamknięcie wszystkich widgetów,
 	- możliwość wybrania domyślnego języka dla napisów i dźwięku,
 	- HttpReader i FileReader zastąpiony przez FFReader,
@@ -9,6 +9,7 @@ Zmiany w QMPlay2 build 15.03.27:
 	- poprawki w napisach pgssub,
 	- możliwość zapisania grupy,
 	- zgodność z FFMpeg 2.6,
+	- poprawa błędów,
 
 Zmiany w QMPlay2 build 14.12.28:
 	- poprawione wczytywanie czcionek z katalogu z napisami (nie sa przeszkiwane rekursywnie),

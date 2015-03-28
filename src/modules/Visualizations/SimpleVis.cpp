@@ -58,54 +58,54 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 	QPainter p( this );
 
 	const int size = soundData.size() / sizeof( float );
-	const float *samples = ( const float * )soundData.data();
-
-	p.translate( 0.0, fullScreen );
-	p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
-	p.translate( 0.055, 0.0 );
-	for ( int c = 0 ; c < chn ; ++c )
+	if ( size >= chn )
 	{
-		p.setPen( QPen( QColor( 102, 51, 128 ), 0.0 ) );
-		p.drawLine( QLineF( 0.0, 1.0, 1.0, 1.0 ) );
+		const float *samples = ( const float * )soundData.data();
 
-		p.setPen( QPen( QColor( 102, 179, 102 ), 0.0 ) );
-		QPainterPath path( QPointF( 0.0, 1.0-samples[ c ] ) );
-		for ( int i = chn ; i < size ; i += chn )
-			path.lineTo( i / ( qreal )( size - chn ), 1.0-samples[ i + c ] );
-		p.drawPath( path );
+		p.translate( 0.0, fullScreen );
+		p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
+		p.translate( 0.055, 0.0 );
+		for ( int c = 0 ; c < chn ; ++c )
+		{
+			p.setPen( QPen( QColor( 102, 51, 128 ), 0.0 ) );
+			p.drawLine( QLineF( 0.0, 1.0, 1.0, 1.0 ) );
 
-		p.translate( 0.0, 2.0 );
+			p.setPen( QPen( QColor( 102, 179, 102 ), 0.0 ) );
+			QPainterPath path( QPointF( 0.0, 1.0-samples[ c ] ) );
+			for ( int i = chn ; i < size ; i += chn )
+				path.lineTo( i / ( qreal )( size - chn ), 1.0-samples[ i + c ] );
+			p.drawPath( path );
+
+			p.translate( 0.0, 2.0 );
+		}
+
+		p.resetTransform();
+		p.scale( width()-1, height()-1 );
+		float l = fabs( samples[ 0 ] ), r;
+		if ( chn >= 2 )
+			r = fabs( samples[ 1 ] );
+		else
+			r = l;
+
+		const int realInterval = timInterval.restart();
+
+		/* Paski */
+		::setValue( L, l, realInterval, 500.0f );
+		::setValue( R, r, realInterval, 500.0f );
+		p.fillRect( QRectF( 0.005, 1.0, 0.035, -L ), linearGrad );
+		p.fillRect( QRectF( 0.960, 1.0, 0.035, -R ), linearGrad );
+
+		/* Kreski */
+		::setValue( Lk, l, realInterval, 1500.0f );
+		::setValue( Rk, r, realInterval, 1500.0f );
+
+		p.setPen( QPen( linearGrad, 0.0 ) );
+		p.drawLine( QLineF( 0.005, -Lk+1.0, 0.040, -Lk+1.0 ) );
+		p.drawLine( QLineF( 0.960, -Rk+1.0, 0.995, -Rk+1.0 ) );
+
+		if ( stopped && tim.isActive() && Rk == r && Lk == l )
+			tim.stop();
 	}
-
-	if ( size < chn )
-		return;
-
-	p.resetTransform();
-	p.scale( width()-1, height()-1 );
-	float l = fabs( samples[ 0 ] ), r;
-	if ( chn >= 2 )
-		r = fabs( samples[ 1 ] );
-	else
-		r = l;
-
-	const int realInterval = timInterval.restart();
-
-	/* Paski */
-	::setValue( L, l, realInterval, 500.0f );
-	::setValue( R, r, realInterval, 500.0f );
-	p.fillRect( QRectF( 0.005, 1.0, 0.035, -L ), linearGrad );
-	p.fillRect( QRectF( 0.960, 1.0, 0.035, -R ), linearGrad );
-
-	/* Kreski */
-	::setValue( Lk, l, realInterval, 1500.0f );
-	::setValue( Rk, r, realInterval, 1500.0f );
-
-	p.setPen( QPen( linearGrad, 0.0 ) );
-	p.drawLine( QLineF( 0.005, -Lk+1.0, 0.040, -Lk+1.0 ) );
-	p.drawLine( QLineF( 0.960, -Rk+1.0, 0.995, -Rk+1.0 ) );
-
-	if ( stopped && tim.isActive() && Rk == r && Lk == l )
-		tim.stop();
 }
 void SimpleVisW::resizeEvent( QResizeEvent * )
 {

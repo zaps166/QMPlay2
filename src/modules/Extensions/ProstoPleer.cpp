@@ -122,7 +122,7 @@ void ResultsPleer::contextMenu( const QPoint &point )
 /**/
 
 ProstoPleerW::ProstoPleerW() :
-	completer( new QCompleter( new QStringListModel, this ) ),
+	completer( new QCompleter( new QStringListModel( this ), this ) ),
 	currPage( 1 ),
 	autocompleteReply( NULL ), searchReply( NULL ),
 	net( this )

@@ -251,7 +251,7 @@ MenuBar::Playing::Playing( MenuBar *parent, const QString &name ) : QMenu( name,
 MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent, const QString &name ) : QMenu( name, parent )
 {
 	/** Korektor wideo */
-	QMenu *videoEqualizerMenu = new QMenu( VideoFilters::tr( "&Korektor wideo" ) );
+	QMenu *videoEqualizerMenu = new QMenu( VideoFilters::tr( "&Korektor wideo" ), this );
 	addMenu( videoEqualizerMenu );
 	QWidgetAction *widgetAction = new QWidgetAction( this );
 	widgetAction->setDefaultWidget( videoEqualizer = new VideoEqualizer );

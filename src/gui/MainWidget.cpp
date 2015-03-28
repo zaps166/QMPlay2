@@ -905,19 +905,30 @@ void MainWidget::about()
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+static BOOL WINAPI consoleCtrlHandler( DWORD dwCtrlType )
+{
+	Q_UNUSED( dwCtrlType )
+	qApp->postEvent( QMPlay2GUI.mainW, new QEvent( QEvent::Close ) );
+	return true;
+}
 void MainWidget::console( bool checked )
 {
-	if ( checked )
+	if ( !checked )
+		FreeConsole();
+	else
 	{
-		AllocConsole();
+		if ( !AllocConsole() )
+		{
+			( ( QAction * )sender() )->setChecked( false );
+			return;
+		}
+		SetConsoleCtrlHandler( consoleCtrlHandler, true );
 		SetConsoleTitle( qApp->applicationName().toLocal8Bit().data() );
 		freopen( "conin$", "r", stdin );
 		freopen( "conout$", "w", stdout );
 		freopen( "conout$", "w", stderr );
 		printf( "QMPlay2 console\n" );
 	}
-	else
-		FreeConsole();
 }
 #endif
 

@@ -3,7 +3,7 @@ SUBDIRS = FFMpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualiz
 linux*: SUBDIRS += ALSA
 else: SUBDIRS += PortAudio
 unix:!macx {
-	qtHaveModule(x11extras)|!greaterThan(QT_MAJOR_VERSION, 4): SUBDIRS += XVideo
+	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo
 	SUBDIRS += PulseAudio
 }
 win32: SUBDIRS += FileAssociation DirectX
