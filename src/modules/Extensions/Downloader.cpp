@@ -252,7 +252,7 @@ void DownloaderThread::listSlot( int param, qint64 val, const QString &filePath 
 			if ( downloadItemW )
 			{
 				downloadItemW->dontDeleteDownloadThr = true;
-				delete downloadItemW;
+				downloadItemW->deleteLater();
 			}
 			downloadLW->setItemWidget( item, 0, ( downloadItemW = new DownloadItemW( this, name.isEmpty() ? url : name, getImage() ) ) );
 			connect( downloadItemW, SIGNAL( start() ), this, SLOT( start() ) );
