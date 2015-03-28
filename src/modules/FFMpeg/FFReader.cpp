@@ -1,9 +1,6 @@
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
-#include <QDebug>
-#include <string.h>
-
 extern "C"
 {
 	#include <libavformat/avio.h>
