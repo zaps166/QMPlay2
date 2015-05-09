@@ -18,6 +18,8 @@ fi
 if [ -z $QT_SUFFIX ]; then
 	if hash qmake-qt4 2> /dev/null; then
 		QT_SUFFIX=-qt4
+	elif hash qmake 2> /dev/null; then
+		QT_SUFFIX=
 	elif hash qmake-qt5 2> /dev/null; then
 		QT_SUFFIX=-qt5
 	fi
