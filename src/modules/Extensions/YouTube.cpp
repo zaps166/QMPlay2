@@ -28,9 +28,9 @@
 static const char cantFindTheTitle[] = "(Can't find the title)";
 static QMap< int, QString > itag_arr;
 
-static inline QUrl getGdataUrl( const QString &title, const int resultsPerPage, const int start_page )
+static inline QUrl getYtUrl( const QString &title, const int page )
 {
-	return QString( "http://gdata.youtube.com/feeds/api/videos?max-results=%1&start-index=%2&q=%3" ).arg( resultsPerPage ).arg( ( start_page - 1 ) * resultsPerPage + 1 ).arg( title );
+	return QString( "https://www.youtube.com/results?search_query=%1&page=%2" ).arg( title ).arg( page );
 }
 static inline QUrl getAutocompleteUrl( const QString &text )
 {
@@ -205,11 +205,11 @@ ResultsYoutube::ResultsYoutube()
 	setIndentation( 12 );
 	setExpandsOnDoubleClick( false );
 	setEditTriggers( QAbstractItemView::NoEditTriggers );
+	setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
 	headerItem()->setText( 0, tr( "Tytuł" ) );
 	headerItem()->setText( 1, tr( "Długość" ) );
 	headerItem()->setText( 2, tr( "Użytkownik" ) );
-	headerItem()->setText( 3, tr( "Ilość wyświetleń" ) );
 
 	header()->setStretchLastSection( false );
 #if QT_VERSION < 0x050000
@@ -380,8 +380,7 @@ PageSwitcher::PageSwitcher( QWidget *youTubeW )
 	currPageB = new QSpinBox;
 	connect( currPageB, SIGNAL( editingFinished() ), youTubeW, SLOT( chPage() ) );
 	currPageB->setMinimum( 1 );
-
-	pagesL = new QLabel;
+	currPageB->setMaximum( 50 ); //1000 wyników, po 20 wyników na stronę
 
 	nextB = new QToolButton;
 	connect( nextB, SIGNAL( clicked() ), youTubeW, SLOT( next() ) );
@@ -392,7 +391,6 @@ PageSwitcher::PageSwitcher( QWidget *youTubeW )
 	hLayout->setContentsMargins( 0, 0, 0, 0 );
 	hLayout->addWidget( prevB );
 	hLayout->addWidget( currPageB );
-	hLayout->addWidget( pagesL );
 	hLayout->addWidget( nextB );
 }
 
@@ -400,9 +398,9 @@ PageSwitcher::PageSwitcher( QWidget *youTubeW )
 
 YouTubeW::YouTubeW( QWidget *parent ) :
 	QWidget( parent ),
-	imgSize( QSize( 56, 56 ) ),
+	imgSize( QSize( 100, 100 ) ),
 	completer( new QCompleter( new QStringListModel( this ), this ) ),
-	resultsPerPage( 50 ), currPage( 1 ),
+	currPage( 1 ),
 	autocompleteReply( NULL ), searchReply( NULL ),
 	net( this )
 {
@@ -507,7 +505,7 @@ void YouTubeW::search()
 	{
 		if ( lastTitle != title || sender() == searchE || sender() == searchB )
 			currPage = 1;
-		searchReply = net.get( QNetworkRequest( getGdataUrl( title, resultsPerPage, currPage ) ) );
+		searchReply = net.get( QNetworkRequest( getYtUrl( title, currPage ) ) );
 		progressB->setRange( 0, 0 );
 		progressB->show();
 	}
@@ -618,55 +616,95 @@ void YouTubeW::setAutocomplete( const QByteArray &data )
 			completer->complete();
 	}
 }
-
-QString YouTubeW::getDataFromXML( const QString &html, const QString &begin, const QString &end )
+void YouTubeW::setSearchResults( QString data )
 {
-	int idx = html.indexOf( begin );
-	if ( idx > -1 )
+	/* Usuwanie komentarzy HTML */
+	for ( int commentIdx = 0 ;; )
 	{
-		idx += begin.length();
-		int end_idx = html.indexOf( end, idx );
-		if ( end_idx > -1 )
-			return html.mid( idx, end_idx - idx );
-	}
-	return QString();
-}
-QString YouTubeW::IntToStr2( const int i )
-{
-	if ( i < 10 )
-		return "0" + QString::number( i );
-	return QString::number( i );
-}
-void YouTubeW::setSearchResults( const QByteArray &data )
-{
-	int i;
-	bool ok;
-	QStringList splitted = QString( data ).split( "<entry>" );
-	for ( i = 1 ; i < splitted.count() ; i++ )
-	{
-		QString title = getDataFromXML( splitted[ i ], "<title type='text'>", "</title>" );
-		QString user = getDataFromXML( splitted[ i ], "<name>", "</name>" );
-		QString duration = getDataFromXML( splitted[ i ], "<yt:duration seconds='", "'/>" );
-		QString viewCount = getDataFromXML( splitted[ i ], "viewCount='", "'" );
-		QString ytPagelink = getDataFromXML( splitted[ i ], "<media:player url='", "'/>" );
-		QString image = getDataFromXML( splitted[ i ], "<media:thumbnail url='", "' " );
-
-		const int t = duration.toInt( &ok );
-		if ( ok )
+		if ( ( commentIdx = data.indexOf( "<!--", commentIdx ) ) < 0 )
+			break;
+		int commentEndIdx = data.indexOf( "-->", commentIdx );
+		if ( commentEndIdx >= 0 ) //Jeżeli jest koniec komentarza
+			data.remove( commentIdx, commentEndIdx - commentIdx + 3 ); //Wyrzuć zakomentowany fragment
+		else
 		{
-			int H, M, S;
-			Functions::getHMS( t, H, M, S );
-			duration.clear();
-			if ( H > 0 )
-				duration = IntToStr2( H ) + ":";
-			duration += IntToStr2( M ) + ":" + IntToStr2( S );
+			data.remove( commentIdx, data.length() - commentIdx ); //Wyrzuć cały tekst do końca
+			break;
+		}
+	}
+
+	int i;
+	const QStringList splitted = data.split( "yt-lockup " );
+	for ( i = 1 ; i < splitted.count() ; ++i )
+	{
+		QString title, videoInfoLink, duration, image, user;
+		const QString &entry = splitted[ i ];
+		int idx;
+
+		if ( entry.contains( "yt-lockup-playlist" ) ) //Ominąć playlisty (kiedyś trzeba zrobić obsługę playlist)
+			continue;
+
+		if ( ( idx = entry.indexOf( "yt-lockup-title" ) ) > -1 )
+		{
+			int urlIdx = entry.indexOf( "href=\"", idx );
+			int titleIdx = entry.indexOf( "title=\"", idx );
+			if ( titleIdx > -1 && urlIdx > -1 && titleIdx > urlIdx )
+			{
+				int endUrlIdx = entry.indexOf( "\"", urlIdx += 6 );
+				int endTitleIdx = entry.indexOf( "\"", titleIdx += 7 );
+				if ( endTitleIdx > -1 && endUrlIdx > -1 && endTitleIdx > endUrlIdx )
+				{
+					videoInfoLink = entry.mid( urlIdx, endUrlIdx - urlIdx );
+					if ( !videoInfoLink.isEmpty() && videoInfoLink.startsWith( '/' ) )
+						videoInfoLink.prepend( "https://www.youtube.com" );
+					title = entry.mid( titleIdx, endTitleIdx - titleIdx );
+				}
+			}
+		}
+		if ( ( idx = entry.indexOf( "video-thumb" ) ) > -1 )
+		{
+			int skip = 0;
+			int imgIdx = entry.indexOf( "data-thumb=\"", idx );
+			if ( imgIdx > -1 )
+				skip = 12;
+			else
+			{
+				imgIdx = entry.indexOf( "src=\"", idx );
+				skip = 5;
+			}
+			if ( imgIdx > -1 )
+			{
+				int imgEndIdx = entry.indexOf( "\"", imgIdx += skip );
+				if ( imgEndIdx > -1 )
+				{
+					image = entry.mid( imgIdx, imgEndIdx - imgIdx );
+					if ( image.endsWith( ".gif" ) ) //GIF nie jest miniaturką - jest to pojedynczy piksel :D
+						image.clear();
+					else if ( image.startsWith( "//" ) )
+						image.prepend( "https:" );
+				}
+			}
+		}
+		if ( ( idx = entry.indexOf( "video-time" ) ) > -1 && ( idx = entry.indexOf( ">", idx ) ) > -1 )
+		{
+			int endIdx = entry.indexOf( "<", idx += 1 );
+			if ( endIdx > -1 )
+			{
+				duration = entry.mid( idx, endIdx - idx );
+				if ( !duration.startsWith( "0" ) && duration.indexOf( ":" ) == 1 && duration.count( ":" ) == 1 )
+					duration.prepend( "0" );
+			}
+		}
+		if ( ( idx = entry.indexOf( "yt-lockup-byline" ) ) > -1 )
+		{
+			int endIdx = entry.indexOf( "</a>", idx );
+			if ( endIdx > -1 && ( idx = entry.lastIndexOf( ">", endIdx ) ) > -1 )
+			{
+				++idx;
+				user = entry.mid( idx, endIdx - idx );
+			}
 		}
 
-		int ampIdx = ytPagelink.indexOf( '&' );
-		if ( ampIdx > -1 )
-			ytPagelink.remove( ampIdx, ytPagelink.length() - ampIdx );
-
-		const QString videoInfoLink = convertLink( ytPagelink );
 		if ( !title.isEmpty() && !videoInfoLink.isEmpty() )
 		{
 			QTreeWidgetItem *tWI = new QTreeWidgetItem( resultsW );
@@ -676,12 +714,15 @@ void YouTubeW::setSearchResults( const QByteArray &data )
 			txtDoc.setHtml( title );
 
 			tWI->setText( 0, txtDoc.toPlainText() );
-			tWI->setToolTip( 0, txtDoc.toPlainText() );
 			tWI->setText( 1, duration );
 			tWI->setText( 2, user );
-			tWI->setText( 3, viewCount );
 
-			tWI->setData( 0, Qt::UserRole, ytPagelink );
+			tWI->setToolTip( 0, QString( "%1: %2\n%3: %4\n%5: %6" )
+				.arg( resultsW->headerItem()->text( 0 ) ).arg( tWI->text( 0 ) )
+				.arg( resultsW->headerItem()->text( 1 ) ).arg( tWI->text( 1 ) )
+				.arg( resultsW->headerItem()->text( 2 ) ).arg( tWI->text( 2 ) )
+			);
+			tWI->setData( 0, Qt::UserRole, videoInfoLink );
 
 			QNetworkReply *linkReply = net.get( QNetworkRequest( videoInfoLink ) );
 			QNetworkReply *imageReply = net.get( QNetworkRequest( image ) );
@@ -691,18 +732,12 @@ void YouTubeW::setSearchResults( const QByteArray &data )
 			imageReplies += imageReply;
 		}
 	}
+
 	if ( i == 1 )
 		resultsW->clear();
 	else
 	{
-		int pageCount = getDataFromXML( splitted[ 0 ], "<openSearch:totalResults>", "</openSearch:totalResults>" ).toInt() / resultsPerPage;
-		currPage = ( getDataFromXML( splitted[ 0 ], "<openSearch:startIndex>", "</openSearch:startIndex>" ).toInt() - 1 ) / resultsPerPage + 1;
-		if ( pageCount * resultsPerPage > 999 ) //max 999 wyników
-			pageCount = 999 / resultsPerPage;
-
-		pageSwitcher->currPageB->setMaximum( pageCount );
 		pageSwitcher->currPageB->setValue( currPage );
-		pageSwitcher->pagesL->setText( "/ " + QString::number( pageCount ) );
 		pageSwitcher->show();
 
 		progressB->setMaximum( linkReplies.count() + imageReplies.count() );
@@ -710,25 +745,6 @@ void YouTubeW::setSearchResults( const QByteArray &data )
 	}
 }
 
-QString YouTubeW::convertLink( const QString &ytPageLink )
-{
-	int toAdd = 0;
-	int start_idx = ytPageLink.indexOf( "watch?v=" );
-	if ( start_idx == -1 )
-	{
-		start_idx = ytPageLink.indexOf( "video_id=" );
-		toAdd = 1;
-	}
-	if ( start_idx > -1 )
-	{
-		start_idx += 8 + toAdd;
-		int end_idx = ytPageLink.indexOf( "&", start_idx );
-		if ( end_idx == -1 )
-			end_idx = ytPageLink.length();
-		return "http://www.youtube.com/watch?v=" + ytPageLink.mid( start_idx, end_idx - start_idx );
-	}
-	return QString();
-}
 QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController< YouTubeDL > *youtube_dl )
 {
 	QStringList ret;
@@ -930,7 +946,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 
 bool YouTube::set()
 {
-	w.resultsW->setColumnCount( sets().get( "YouTube/ShowAdditionalInfo" ).toBool() ? 4 : 2 );
+	w.resultsW->setColumnCount( sets().get( "YouTube/ShowAdditionalInfo" ).toBool() ? 3 : 1 );
 	w.resultsW->itags = getItagNames( sets().get( "YouTube/ItagList" ).toStringList() ).second;
 	w.youtubedl = sets().getString( "YouTube/youtubedl" );
 	if ( w.youtubedl.isEmpty() )
@@ -961,7 +977,7 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 		if ( ioCtrl && ( stream_url || name ) )
 		{
 			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
-			if ( Reader::create( w.convertLink( url ), reader ) )
+			if ( Reader::create( url, reader ) )
 			{
 				QByteArray replyData;
 				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* < 2 MiB */ )

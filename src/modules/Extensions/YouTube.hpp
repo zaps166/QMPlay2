@@ -51,7 +51,6 @@ public:
 
 	QToolButton *prevB, *nextB;
 	QSpinBox *currPageB;
-	QLabel *pagesL;
 };
 
 /**/
@@ -81,12 +80,8 @@ private:
 	void deleteReplies();
 
 	void setAutocomplete( const QByteArray &data );
+	void setSearchResults( QString data );
 
-	QString getDataFromXML( const QString &html, const QString &begin, const QString &end );
-	QString IntToStr2( const int i );
-	void setSearchResults( const QByteArray &data );
-
-	QString convertLink( const QString &ytPageLink );
 	QStringList getYouTubeVideo( const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL ); //jeżeli ( tWI == NULL ) to zwraca {URL, file_extension, TITLE}
 
 	LineEdit *searchE;
@@ -98,7 +93,7 @@ private:
 	QString lastTitle;
 	const QSize imgSize;
 	QCompleter *completer;
-	int resultsPerPage, currPage;
+	int currPage;
 
 	QNetworkReply *autocompleteReply, *searchReply;
 	QList< QNetworkReply * > linkReplies, imageReplies;

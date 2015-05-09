@@ -1893,10 +1893,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Anzahl der Wiedergabe</translation>
-    </message>
-    <message>
         <source>Kolejkuj</source>
         <translation>Warteschlange</translation>
     </message>

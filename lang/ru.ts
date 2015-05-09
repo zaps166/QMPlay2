@@ -1881,10 +1881,6 @@
         <translation>Пользователь</translation>
     </message>
     <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Количество просмотров</translation>
-    </message>
-    <message>
         <source>Kolejkuj</source>
         <translation>Очередь</translation>
     </message>

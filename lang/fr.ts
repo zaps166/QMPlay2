@@ -1881,10 +1881,6 @@
         <translation>Utilisateur</translation>
     </message>
     <message>
-        <source>Ilość wyświetleń</source>
-        <translation>Nombre de vues</translation>
-    </message>
-    <message>
         <source>Kolejkuj</source>
         <translation>Mettre dans la file d&apos;attente</translation>
     </message>
