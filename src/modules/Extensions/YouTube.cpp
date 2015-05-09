@@ -641,7 +641,7 @@ void YouTubeW::setSearchResults( QString data )
 		const QString &entry = splitted[ i ];
 		int idx;
 
-		if ( entry.contains( "yt-lockup-playlist" ) ) //Ominąć playlisty (kiedyś trzeba zrobić obsługę playlist)
+		if ( entry.contains( "yt-lockup-playlist" ) || entry.contains( "yt-lockup-channel" ) ) //Ominąć playlisty (kiedyś trzeba zrobić obsługę playlist) i kanały
 			continue;
 
 		if ( ( idx = entry.indexOf( "yt-lockup-title" ) ) > -1 )
