@@ -47,3 +47,17 @@ Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
 >http://aur.archlinux.org/packages/qm/qmplay2-git/PKGBUILD
 
 QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
+
+####Easy Installation on Ubuntu
+
+- Just run the following commands
+```sh
+$ sudo add-apt-repository ppa:samrog131/ppa
+$ sudo apt-get update
+$ sudo apt-get install qmplay2
+```
+- If you get dependency issues, do:
+```sh
+$ sudo apt-get install -f
+$ sudo apt-get install qmplay2
+```
