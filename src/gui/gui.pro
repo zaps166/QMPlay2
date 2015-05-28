@@ -1,12 +1,10 @@
 TEMPLATE = app
 CONFIG -= app_bundle
+!win32: CONFIG += link_pkgconfig
 
 QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-else:unix:!macx {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += x11
-}
+else:unix:!macx: PKGCONFIG += x11
 
 TARGET = QMPlay2
 
@@ -39,7 +37,6 @@ SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp Info
 greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(x11extras) {
 	DEFINES += X11_EXTRAS
 	QT += x11extras
-	CONFIG += link_pkgconfig
 	PKGCONFIG += x11
 }
 
@@ -54,4 +51,4 @@ win32 {
 	DEFINES += TAGLIB_STATIC
 	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
 }
-else: LIBS += -ltag
+else: PKGCONFIG += taglib
