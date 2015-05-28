@@ -7,9 +7,11 @@ TARGET = qmplay2
 win32: DESTDIR = ../../app
 else: DESTDIR = ../../app/lib
 
-LIBS += -lswscale -lswresample -lavutil
-win32: LIBS += -Wl,-Bstatic -lass -lfontconfig -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
-else: LIBS += -lass
+win32: LIBS += -lswscale -lswresample -lavutil -Wl,-Bstatic -lass -lfontconfig -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
+else {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += libswscale libswresample libavutil libass
+}
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
@@ -21,9 +23,13 @@ HEADERS += headers/QMPlay2Core.hpp headers/Functions.hpp headers/Settings.hpp he
 SOURCES +=         QMPlay2Core.cpp         Functions.cpp         Settings.cpp         Module.cpp                                                           Playlist.cpp         Reader.cpp         Demuxer.cpp         Decoder.cpp         VideoFilters.cpp         VideoFilter.cpp         DeintFilter.cpp         AudioFilter.cpp         Writer.cpp         QMPlay2Extensions.cpp         LineEdit.cpp         Slider.cpp         QMPlay2_OSD.cpp         InDockW.cpp         LibASS.cpp         ColorButton.cpp         ImgScaler.cpp         SndResampler.cpp                                 SubsDec.cpp                                                                        VideoFrame.cpp                                DockWidget.cpp
 
 DEFINES += __STDC_CONSTANT_MACROS
-# QMAKE_CXXFLAGS += -ftree-vectorize
 
 # Uncomment below lines for avresample:
 # DEFINES += QMPLAY2_AVRESAMPLE
-# LIBS -= -lswresample
-# LIBS += -lavresample
+# win32 {
+#	LIBS -= -lswresample
+#	LIBS += -lavresample
+# } else {
+#	PKGCONFIG -= libswresample
+#	PKGCONFIG += libavresample
+# }

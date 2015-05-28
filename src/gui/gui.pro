@@ -3,7 +3,10 @@ CONFIG -= app_bundle
 
 QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-else:unix:!macx: LIBS += -lX11
+else:unix:!macx {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += x11
+}
 
 TARGET = QMPlay2
 
@@ -36,7 +39,8 @@ SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp Info
 greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(x11extras) {
 	DEFINES += X11_EXTRAS
 	QT += x11extras
-	LIBS += -lX11
+	CONFIG += link_pkgconfig
+	PKGCONFIG += x11
 }
 
 DEFINES += QMPlay2_TagEditor

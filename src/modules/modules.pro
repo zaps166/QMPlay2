@@ -4,6 +4,6 @@ linux*: SUBDIRS += ALSA
 else: SUBDIRS += PortAudio
 unix:!macx {
 	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo
-	SUBDIRS += PulseAudio
+	packagesExist(libpulse-simple):	SUBDIRS += PulseAudio
 }
 win32: SUBDIRS += FileAssociation DirectX

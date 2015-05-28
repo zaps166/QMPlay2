@@ -8,7 +8,12 @@ else: DESTDIR = ../../../app/share/qmplay2/modules
 
 win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
-LIBS += -lqmplay2 -lavcodec -lavutil
+LIBS += -lqmplay2
+win32: LIBS += -lavcodec -lavutil
+else {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += libavcodec libavutil
+}
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

@@ -9,8 +9,12 @@ else: DESTDIR = ../../../app/share/qmplay2/modules
 
 win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
-LIBS += -lqmplay2 -lavformat -lavcodec -lswscale -lavutil
-win32: LIBS += -lws2_32
+LIBS += -lqmplay2
+win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil
+else {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += libavformat libavcodec libswscale libavutil
+}
 
 DEFINES += __STDC_CONSTANT_MACROS
 
@@ -28,21 +32,21 @@ SOURCES += FFMpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFReader.cpp FFCommon.cp
 
 unix:!macx {
 #Common HWAccel
-	HEADERS += FFDecHWAccel.hpp HWAccelHelper.hpp
-	SOURCES += FFDecHWAccel.cpp HWAccelHelper.cpp
+	HEADERS   += FFDecHWAccel.hpp HWAccelHelper.hpp
+	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
 
 #VAAPI
-	LIBS += -lva -lva-x11
-	HEADERS += FFDecVAAPI.hpp VAApiWriter.hpp
-	SOURCES += FFDecVAAPI.cpp VAApiWriter.cpp
-	DEFINES += QMPlay2_VAAPI
+	PKGCONFIG += libva libva-x11
+	HEADERS   += FFDecVAAPI.hpp VAApiWriter.hpp
+	SOURCES   += FFDecVAAPI.cpp VAApiWriter.cpp
+	DEFINES   += QMPlay2_VAAPI
 
 #VDPAU
-	LIBS += -lvdpau
-	HEADERS += FFDecVDPAU.hpp VDPAUWriter.hpp
-	SOURCES += FFDecVDPAU.cpp VDPAUWriter.cpp
-	DEFINES += QMPlay2_VDPAU
-# 	HEADERS += FFDecVDPAU_NW.hpp
-# 	SOURCES += FFDecVDPAU_NW.cpp
-# 	DEFINES += QMPlay2_VDPAU_NW
+	PKGCONFIG += vdpau
+	HEADERS   += FFDecVDPAU.hpp VDPAUWriter.hpp
+	SOURCES   += FFDecVDPAU.cpp VDPAUWriter.cpp
+	DEFINES   += QMPlay2_VDPAU
+# 	HEADERS   += FFDecVDPAU_NW.hpp
+# 	SOURCES   += FFDecVDPAU_NW.cpp
+# 	DEFINES   += QMPlay2_VDPAU_NW
 }

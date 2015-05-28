@@ -10,7 +10,10 @@ win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
 LIBS += -lqmplay2
 win32: LIBS += -Wl,-Bstatic -lportaudio -Wl,-Bdynamic -lwinmm -luuid
-else: LIBS += -lportaudio
+else {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += portaudio-2.0
+}
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

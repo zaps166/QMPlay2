@@ -1,12 +1,13 @@
 TEMPLATE = lib
-CONFIG += plugin
+CONFIG += plugin link_pkgconfig
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 DESTDIR = ../../../app/share/qmplay2/modules
 
 QMAKE_LIBDIR += ../../../app/lib
-LIBS += -lqmplay2 -lpulse-simple
+LIBS += -lqmplay2
+PKGCONFIG += libpulse-simple
 
 RCC_DIR = build/rcc
 OBJECTS_DIR = build/obj

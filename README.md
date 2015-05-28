@@ -18,7 +18,7 @@
 - libxv - only on X11,
 - libass.
 
-\*libavresample: uncomment last three lines in "src/qmplay2/qmplay2.pro"
+\*libavresample: uncomment last eight lines in "src/qmplay2/qmplay2.pro"
 
 ##Running compilation script:
 
