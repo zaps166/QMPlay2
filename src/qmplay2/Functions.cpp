@@ -105,6 +105,10 @@ QString Functions::fileName( QString f, bool extension )
 	if ( splitPrefixAndUrlIfHasPluginPrefix( f, NULL, &real_url ) )
 		return real_url;
 	/**/
+#ifndef Q_OS_WIN
+	if ( f == "file:///" )
+		return "/";
+#endif
 	while ( f.right( 1 ) == "/" )
 		f.chop( 1 );
 	QString n = f.right( f.length() - f.lastIndexOf( '/' ) - 1 );
@@ -122,6 +126,10 @@ QString Functions::fileExt( const QString &f )
 
 QString Functions::cleanPath( QString p )
 {
+#ifndef Q_OS_WIN
+	if ( p == "file:///" )
+		return p;
+#endif
 	if ( p.right( 1 ) != "/" )
 		return p + "/";
 	while ( p.right( 2 ) == "//" )
@@ -368,16 +376,14 @@ QStringList Functions::getUrlsFromMimeData( const QMimeData *mimeData )
 		foreach ( QUrl url, mimeData->urls() )
 		{
 			QString u = url.toLocalFile();
-			if ( u.right( 1 ) == "/" )
+			if ( u.length() > 1 && u.right( 1 ) == "/" )
 				u.chop( 1 );
-			urls += u;
+			if ( !u.isEmpty() )
+				urls += u;
 		}
 	}
 	else if ( mimeData->hasText() )
-	{
-		urls = mimeData->text().split( '\n', QString::SkipEmptyParts );
-		urls.removeAll( "\r" );
-	}
+		urls = mimeData->text().remove( '\r' ).split( '\n', QString::SkipEmptyParts );
 	return urls;
 }
 
