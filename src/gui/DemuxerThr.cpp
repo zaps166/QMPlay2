@@ -89,20 +89,19 @@ void DemuxerThr::loadImage()
 			emit QMPlay2Core.coverDataFromMediaFile( demuxerImage );
 		else
 		{
-			if ( img.isNull() && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
+			if ( img.isNull() && url.left( 5 ) == "file" && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
 			{
 				const QString directory = filePath( url.mid( 7 ) );
-				if ( directory != "://" )
-					foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
+				foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
+				{
+					const QString coverPath = directory + cover;
+					img = QImage( coverPath );
+					if ( !img.isNull() )
 					{
-						QString coverPath = directory + cover;
-						img = QImage( coverPath );
-						if ( !img.isNull() )
-						{
-							emit QMPlay2Core.coverFile( coverPath );
-							break;
-						}
+						emit QMPlay2Core.coverFile( coverPath );
+						break;
 					}
+				}
 			}
 			if ( img.isNull() && !artist.isEmpty() && ( !title.isEmpty() || !album.isEmpty() ) ) //Ładowanie okładki z cache
 			{
