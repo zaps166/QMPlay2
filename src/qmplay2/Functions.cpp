@@ -37,7 +37,7 @@ QString Functions::Url( QString url, const QString &pth )
 
 	QStringList drives;
 	QFileInfoList fIL = QDir::drives();
-	foreach ( QFileInfo fI, fIL )
+	foreach ( const QFileInfo &fI, fIL )
 		drives += getUrlScheme( fI.path() );
 	if ( drives.contains( scheme ) )
 	{
@@ -373,7 +373,7 @@ QStringList Functions::getUrlsFromMimeData( const QMimeData *mimeData )
 	QStringList urls;
 	if ( mimeData->hasUrls() )
 	{
-		foreach ( QUrl url, mimeData->urls() )
+		foreach ( const QUrl &url, mimeData->urls() )
 		{
 			QString u = url.toLocalFile();
 			if ( u.length() > 1 && u.right( 1 ) == "/" )
@@ -427,7 +427,7 @@ void Functions::getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url,
 		QString scheme = getUrlScheme( wholeUrl );
 		QString extension = fileExt( wholeUrl ).toLower();
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-			foreach ( Module::Info mod, module->getModulesInfo() )
+			foreach ( const Module::Info &mod, module->getModulesInfo() )
 				if ( mod.type == Module::DEMUXER && ( mod.extensions.contains( extension ) || mod.name == scheme ) )
 				{
 					*img = !mod.img.isNull() ? mod.img : module->image();

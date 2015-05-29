@@ -12,7 +12,7 @@ AddressBox::AddressBox( Qt::Orientation o, QString url )
 	pB.addItem( QMPlay2Core.getQMPlay2Pixmap(), tr( "Bezpośredni adres" ), DIRECT );
 
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, module->getModulesInfo() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
 			if ( mod.type == Module::DEMUXER && !mod.name.contains( ' ' ) )
 			{
 				QIcon icon;
@@ -26,7 +26,7 @@ AddressBox::AddressBox( Qt::Orientation o, QString url )
 			}
 
 	foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
-		foreach ( QMPlay2Extensions::AddressPrefix addressPrefix, QMPlay2Ext->addressPrefixList() )
+		foreach ( const QMPlay2Extensions::AddressPrefix &addressPrefix, QMPlay2Ext->addressPrefixList() )
 			pB.addItem( QPixmap::fromImage( addressPrefix.img ), addressPrefix, GUI_EXT );
 
 	if ( !url.isEmpty() )

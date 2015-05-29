@@ -67,7 +67,7 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 		QDir( settingsDir ).mkdir( "Modules" );
 		pluginsList += QDir( settingsDir + "Modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
 		pluginsList += QDir( qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
-		foreach ( QFileInfo fInfo, pluginsList )
+		foreach ( const QFileInfo &fInfo, pluginsList )
 			if ( QLibrary::isLibrary( fInfo.filePath() ) )
 			{
 				QLibrary lib( fInfo.filePath() );

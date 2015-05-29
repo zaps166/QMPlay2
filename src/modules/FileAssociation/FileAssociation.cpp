@@ -173,7 +173,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	for ( size_t s = 0 ; s < defaultVideoCount ; ++s )
 		addExtension( defaultVideoExtensions[ s ], false );
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-			foreach ( Module::Info mod, module->getModulesInfo() )
+			foreach ( const Module::Info &mod, module->getModulesInfo() )
 				if ( mod.type == Module::PLAYLIST || mod.type == Module::DEMUXER )
 					foreach ( const QString &extension, mod.extensions )
 						addExtension( extension, false, mod.type == Module::PLAYLIST );

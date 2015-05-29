@@ -487,7 +487,7 @@ void DemuxerThr::run()
 
 void DemuxerThr::updateCoverAndPlaying()
 {
-	foreach ( QMPlay2Tag tag, demuxer->tags() ) //wczytywanie tytuły, artysty i albumu
+	foreach ( const QMPlay2Tag &tag, demuxer->tags() ) //wczytywanie tytuły, artysty i albumu
 	{
 		const QMPlay2Tags tagID = StreamInfo::getTag( tag.first );
 		switch ( tagID )
@@ -514,7 +514,7 @@ void DemuxerThr::updateCoverAndPlaying()
 
 static void printOtherInfo( const QList< QMPlay2Tag > &other_info, QString &str )
 {
-	foreach ( QMPlay2Tag tag, other_info )
+	foreach ( const QMPlay2Tag &tag, other_info )
 		if ( !tag.second.isEmpty() )
 		{
 			QString value = tag.second;
@@ -558,7 +558,7 @@ void DemuxerThr::emitInfo()
 	}
 
 	bool nameOrDescr = false;
-	foreach ( QMPlay2Tag tag, demuxer->tags() )
+	foreach ( const QMPlay2Tag &tag, demuxer->tags() )
 		if ( !tag.first.isEmpty() )
 		{
 			if ( tag.first == "0" || tag.first == "1" )
@@ -596,7 +596,7 @@ void DemuxerThr::emitInfo()
 
 	bool once = false;
 	int chapterCount = 0;
-	foreach ( Demuxer::ChapterInfo chapter, demuxer->getChapters() )
+	foreach ( const Demuxer::ChapterInfo &chapter, demuxer->getChapters() )
 	{
 		if ( !once )
 		{

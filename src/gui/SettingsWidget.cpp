@@ -952,7 +952,7 @@ void SettingsWidget::tabCh( int idx )
 		for ( int m = 0 ; m < 3 ; ++m )
 			pluginsInstances[ m ].fill( QPair< Module *, Module::Info >(), writers[ m ].size() );
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-			foreach ( Module::Info moduleInfo, module->getModulesInfo() )
+			foreach ( const Module::Info &moduleInfo, module->getModulesInfo() )
 				for ( int m = 0 ; m < 3 ; ++m )
 				{
 					const int mIdx = writers[ m ].indexOf( moduleInfo.name );

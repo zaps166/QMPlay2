@@ -140,7 +140,7 @@ bool Classic::toASS( const QByteArray &txt, LibASS *ass, double fps )
 		}
 
 		initOnce();
-		foreach ( Sub_Without_End sub, subs_without_end )
+		foreach ( const Sub_Without_End &sub, subs_without_end )
 			ass->addASSEvent( sub.sub, sub.start, sub.duration );
 	}
 

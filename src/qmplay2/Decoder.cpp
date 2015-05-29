@@ -35,7 +35,7 @@ Decoder *Decoder::create( StreamInfo *streamInfo, Writer *writer, const QStringL
 	}
 	QVector< QPair< Module *, Module::Info > > pluginsInstances( modNames.count() );
 	foreach ( Module *pluginInstance, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, pluginInstance->getModulesInfo() )
+		foreach ( const Module::Info &mod, pluginInstance->getModulesInfo() )
 			if ( mod.type == Module::DECODER )
 			{
 				if ( modNames.isEmpty() )

@@ -129,7 +129,7 @@ VideoFilter *VideoFilters::on( const QString &filterName )
 	if ( filterName == "PrepareForHWBobDeint" )
 		filter = new PrepareForHWBobDeint;
 	else foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, module->getModulesInfo() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
 			if ( ( mod.type & 0xF ) == Module::VIDEOFILTER && mod.name == filterName )
 			{
 				filter = ( VideoFilter * )module->createInstance( mod.name );

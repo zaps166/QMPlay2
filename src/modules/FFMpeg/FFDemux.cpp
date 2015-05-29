@@ -497,7 +497,7 @@ bool FFDemux::open( const QString &_url )
 		av_opt_get( formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, ( quint8 ** )&value );
 		QStringList icyHeaders = QString( value ).split( "\n", QString::SkipEmptyParts );
 		av_free( value );
-		foreach ( const QString icy, icyHeaders )
+		foreach ( const QString &icy, icyHeaders )
 		{
 			if ( icy.left( 10 ) == "icy-name: " )
 				av_dict_set( &formatCtx->metadata, "icy-name", icy.mid( 10 ).toUtf8(), 0 );

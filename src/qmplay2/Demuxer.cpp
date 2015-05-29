@@ -12,7 +12,7 @@ bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer )
 	QString extension = Functions::fileExt( url ).toLower();
 	for ( int i = 0 ; i <= 1 ; ++i )
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-			foreach ( Module::Info mod, module->getModulesInfo() )
+			foreach ( const Module::Info &mod, module->getModulesInfo() )
 				if ( mod.type == Module::DEMUXER && ( mod.name == scheme || ( !i ? mod.extensions.contains( extension ) : mod.extensions.isEmpty() ) ) )
 				{
 					if ( !demuxer.assign( ( Demuxer * )module->createInstance( mod.name ) ) )

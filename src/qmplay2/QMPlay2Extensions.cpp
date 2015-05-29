@@ -10,7 +10,7 @@ void QMPlay2Extensions::openExtensions()
 	if ( !guiExtensionsList.isEmpty() )
 		return;
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, module->getModulesInfo() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
 			if ( mod.type == Module::QMPLAY2EXTENSION )
 			{
 				QMPlay2Extensions *QMPlay2Ext = ( QMPlay2Extensions * )module->createInstance( mod.name );

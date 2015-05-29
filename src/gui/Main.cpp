@@ -62,7 +62,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 	QStringList availableModules;
 	const QString moduleType = type.mid( 0, typeLen );
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info moduleInfo, module->getModulesInfo() )
+		foreach ( const Module::Info &moduleInfo, module->getModulesInfo() )
 			if ( ( moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains( moduleType ) ) || ( moduleInfo.type == Module::DECODER && moduleType == "decoder" ) )
 				availableModules += moduleInfo.name;
 	QStringList modules;

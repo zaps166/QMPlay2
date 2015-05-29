@@ -10,7 +10,7 @@ bool Reader::create( const QString &url, IOController< Reader > &reader, const Q
 	if ( reader.isAborted() || url.isEmpty() || scheme.isEmpty() )
 		return false;
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, module->getModulesInfo() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
 			if ( mod.type == Module::READER && mod.extensions.contains( scheme ) && ( plugName.isEmpty() || mod.name == plugName ) )
 			{
 				if ( reader.assign( ( Reader * )module->createInstance( mod.name ) ) )

@@ -510,7 +510,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				clear(); //wykonać można tylko z głównego wątku!
 			QList< QTreeWidgetItem * > groupList;
 			int queueSize = _queue.size();
-			foreach ( Playlist::Entry entry, entries )
+			foreach ( const Playlist::Entry &entry, entries )
 			{
 				QTreeWidgetItem *I = NULL, *par = NULL;
 				int idx = entry.parent - 1;

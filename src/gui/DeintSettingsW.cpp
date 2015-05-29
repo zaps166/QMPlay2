@@ -79,7 +79,7 @@ void DeintSettingsW::softwareMethods( bool doubler )
 {
 	softwareMethodsCB->clear();
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, module->getModulesInfo() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
 			if ( ( mod.type & 0xF ) == Module::VIDEOFILTER && ( mod.type & Module::DEINTERLACE ) && ( doubler == ( bool )( mod.type & Module::DOUBLER ) ) )
 				softwareMethodsCB->addItem( mod.name );
 	const int idx = softwareMethodsCB->findText( QMPlay2Core.getSettings().getString( "Deinterlace/SoftwareMethod" ) );

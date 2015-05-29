@@ -55,7 +55,7 @@ Writer *Writer::create( const QString &url, const QStringList &modNames )
 	}
 	QVector< QPair< Module *, Module::Info > > pluginsInstances( modNames.count() );
 	foreach ( Module *pluginInstance, QMPlay2Core.getPluginsInstance() )
-		foreach ( Module::Info mod, pluginInstance->getModulesInfo() )
+		foreach ( const Module::Info &mod, pluginInstance->getModulesInfo() )
 			if ( mod.type == Module::WRITER && mod.extensions.contains( scheme ) )
 			{
 				if ( modNames.isEmpty() )
