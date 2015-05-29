@@ -324,18 +324,30 @@ QList< QTreeWidgetItem * > PlaylistWidget::topLevelNonGroupsItems() const
 QList< QUrl > PlaylistWidget::getUrls() const
 {
 	QList< QUrl > urls;
+
+	QStringList protocolsToAvoid;
+	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
+			if ( mod.type == Module::DEMUXER && !mod.name.contains( ' ' ) )
+				protocolsToAvoid += mod.name;
+
 	foreach ( QTreeWidgetItem *tWI, selectedItems() )
 	{
 		QString url = getUrl( tWI );
 		if ( !url.isEmpty() && !url.contains( "://{" ) )
 		{
+			const int idx = url.indexOf( ':' );
+			if ( idx > -1 && !protocolsToAvoid.contains( url.left( idx ) ) )
+			{
 #ifdef Q_OS_WIN
-			if ( url.mid( 4, 5 ) != ":////" )
-				url.replace( "file://", "file:///" );
+				if ( url.mid( 4, 5 ) != ":////" )
+					url.replace( "file://", "file:///" );
 #endif
-			urls += url;
+				urls += url;
+			}
 		}
 	}
+
 	return urls;
 }
 
