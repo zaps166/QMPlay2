@@ -139,6 +139,7 @@ private:
 
 	void setEntryIcon( QImage &, QTreeWidgetItem * );
 
+	void focusOutEvent( QFocusEvent * );
 	void mouseMoveEvent( QMouseEvent * );
 	void dragEnterEvent( QDragEnterEvent * );
 	void dragMoveEvent( QDragMoveEvent * );

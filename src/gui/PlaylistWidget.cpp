@@ -624,9 +624,14 @@ void PlaylistWidget::setEntryIcon( QImage &img, QTreeWidgetItem *tWI )
 	}
 }
 
+void PlaylistWidget::focusOutEvent( QFocusEvent *e )
+{
+	modifier = false;
+	QTreeWidget::focusOutEvent( e );
+}
 void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( e->buttons() & Qt::MidButton || ( ( e->buttons() & Qt::LeftButton ) && modifier ) )
+	if ( ( e->buttons() & Qt::MidButton ) || ( ( e->buttons() & Qt::LeftButton ) && modifier ) )
 	{
 		const QList< QUrl > urls = getUrls();
 		if ( !urls.isEmpty() )
@@ -646,6 +651,8 @@ void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 			drag->setPixmap( pix );
 
 			drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction );
+
+			modifier = false;
 		}
 	}
 	else if ( canModify( false ) && !hasHiddenItems )
