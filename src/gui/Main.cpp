@@ -289,7 +289,7 @@ static void parseArguments( QStringList &arguments )
 		}
 	}
 }
-static int showHelp( const QByteArray &ver )
+static void showHelp( const QByteArray &ver )
 {
 	QFile f;
 	f.open( stdout, QFile::WriteOnly );
@@ -310,7 +310,6 @@ static int showHelp( const QByteArray &ver )
 "    -prev       - odtwarza poprzedni na liście\n"
 "    -quit       - zakańcza działanie aplikacji"
 	).toUtf8() + "\n" );
-	return 0;
 }
 static bool writeToSocket( QLocalSocket &socket )
 {
@@ -425,6 +424,7 @@ int main( int argc, char *argv[] )
 	QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 #endif
 	qApp->setApplicationName( "QMPlay2" );
+	QDir::setCurrent( qApp->applicationDirPath() );
 
 	QStringList arguments = qApp->arguments();
 	arguments.removeAt( 0 );
@@ -457,7 +457,8 @@ int main( int argc, char *argv[] )
 	}
 
 	qApp->installTranslator( &translator );
-	qApp->setQuitOnLastWindowClosed( false );
+	if ( useGui )
+		qApp->setQuitOnLastWindowClosed( false );
 	QMPlay2GUI.langPath = qApp->applicationDirPath() + unixPath + "/lang/";
 
 	qsrand( time( NULL ) );
@@ -475,7 +476,10 @@ int main( int argc, char *argv[] )
 		QMPlay2GUI.setLanguage();
 
 		if ( help )
-			return showHelp( ver.toUtf8() );
+		{
+			showHelp( ver.toUtf8() );
+			break;
+		}
 
 		QMPlay2GUI.loadIcons();
 
@@ -506,6 +510,7 @@ int main( int argc, char *argv[] )
 		qApp->setWindowIcon( QMPlay2Core.getQMPlay2Pixmap() );
 		QMPlay2GUI.setStyle();
 
+#ifdef UPDATER
 		QString UpdateFile = settings.getString( "UpdateFile" );
 		if ( UpdateFile.left( 7 ) == "remove:" )
 		{
@@ -526,6 +531,7 @@ int main( int argc, char *argv[] )
 			break;
 		}
 		UpdateFile.clear();
+#endif
 		ver.clear();
 
 		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
