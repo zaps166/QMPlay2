@@ -26,7 +26,9 @@ public:
 
 	static void drawPixmap( QPainter &p, QWidget *w, QPixmap pixmap );
 
+#ifdef UPDATER
 	void runUpdate( const QString & );
+#endif
 
 	QStringList getLanguages();
 	void setLanguage();

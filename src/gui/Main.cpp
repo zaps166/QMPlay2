@@ -124,11 +124,13 @@ void QMPlay2GUIClass::drawPixmap( QPainter &p, QWidget *w, QPixmap pixmap )
 	p.drawPixmap( w->width() / 2 - pixmap.width() / 2, w->height() / 2 - pixmap.height() / 2, pixmap );
 }
 
+#ifdef UPDATER
 void QMPlay2GUIClass::runUpdate( const QString &UpdateFile )
 {
 	settings->set( "UpdateFile", "remove:" + UpdateFile );
 	QMPlay2Core.run( UpdateFile, "--Auto" );
 }
+#endif
 
 QStringList QMPlay2GUIClass::getLanguages()
 {
