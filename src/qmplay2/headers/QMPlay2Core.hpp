@@ -29,7 +29,7 @@ public:
 	void init( bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir = QString() );
 	void quit();
 
-	inline QList< Module * > getPluginsInstance()
+	inline QList< Module * > getPluginsInstance() const
 	{
 		return pluginsInstance;
 	}
@@ -130,7 +130,7 @@ private:
 	QString UnixOpenCommand;
 #endif
 	QAtomicInt working;
-	QList< QString > logs;
+	QStringList logs;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

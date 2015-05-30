@@ -1,7 +1,6 @@
 #include <PlaylistWidget.hpp>
 
 #include <QMPlay2Extensions.hpp>
-#include <Functions.hpp>
 #include <MenuBar.hpp>
 #include <Demuxer.hpp>
 #include <Reader.hpp>
@@ -46,7 +45,7 @@ void UpdateEntryThr::run()
 	while ( !ioCtrl.isAborted() )
 	{
 		mutex.lock();
-		if ( !itemsToUpdate.size() )
+		if ( itemsToUpdate.isEmpty() )
 		{
 			mutex.unlock();
 			break;
@@ -162,7 +161,12 @@ void AddThr::stop()
 }
 void AddThr::run()
 {
-	pLW._add( urls, par, &firstI, loadList );
+	Functions::DemuxersInfo demuxersInfo;
+	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
+			if ( mod.type == Module::DEMUXER )
+				demuxersInfo += ( Functions::DemuxerInfo ){ mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions };
+	pLW._add( urls, par, &firstI, demuxersInfo, loadList );
 	if ( currentThread() == pLW.thread() ) //jeżeli funkcja działa w głównym wątku
 		finished();
 }
@@ -368,12 +372,12 @@ QTreeWidgetItem *PlaylistWidget::newGroup()
 	return newGroup( QString(), QString(), !selectedItems().count() ? NULL : currentItem(), true );
 }
 
-QTreeWidgetItem *PlaylistWidget::newEntry( const Playlist::Entry &entry, QTreeWidgetItem *parent )
+QTreeWidgetItem *PlaylistWidget::newEntry( const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo )
 {
 	QTreeWidgetItem *tWI = new QTreeWidgetItem;
 
 	QImage img;
-	Functions::getDataIfHasPluginPrefix( entry.url, NULL, NULL, &img );
+	Functions::getDataIfHasPluginPrefix( entry.url, NULL, NULL, &img, NULL, demuxersInfo );
 	setEntryIcon( img, tWI );
 
 	tWI->setFlags( tWI->flags() &~ Qt::ItemIsDropEnabled );
@@ -505,7 +509,7 @@ void PlaylistWidget::processItems( QList< QTreeWidgetItem * > *itemsToShow, bool
 	}
 }
 
-void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, bool loadList )
+void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, const Functions::DemuxersInfo &demuxersInfo, bool loadList )
 {
 	for ( int i = 0 ; i < urls.size() ; ++i )
 	{
@@ -534,7 +538,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 					groupList += newGroup( entry.name, entry.url, par );
 				else
 				{
-					I = newEntry( entry, par );
+					I = newEntry( entry, par, demuxersInfo );
 					if ( entry.queue ) //odbudowywanie kolejki
 					{
 						for ( int j = _queue.size() ; j <= queueSize + entry.queue - 1 ; j++ )
@@ -569,7 +573,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 						d_urls[ j ].replace( "file://", "file:///" );
 #endif
 					}
-					_add( d_urls, p, firstI );
+					_add( d_urls, p, firstI, demuxersInfo );
 				}
 			}
 			else
@@ -585,7 +589,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				}
 				else
 				{
-					Functions::getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &addThr.ioCtrl );
+					Functions::getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &addThr.ioCtrl, demuxersInfo );
 					IOController< Demuxer > &demuxer = addThr.ioCtrl.toRef< Demuxer >();
 					if ( Demuxer::create( url, demuxer ) )
 					{
@@ -602,8 +606,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				{
 					if ( entry.name.isEmpty() )
 						entry.name = Functions::fileName( url, false );
-
-					tWI = newEntry( entry, tWI );
+					tWI = newEntry( entry, tWI, demuxersInfo );
 					if ( firstI && !*firstI )
 						*firstI = tWI;
 				}

@@ -4,12 +4,11 @@
 #include <IOController.hpp>
 
 #include <QString>
-#include <QVector>
+#include <QImage>
 
 class QMPlay2_OSD;
 class QMimeData;
 class QPainter;
-class QImage;
 class QRect;
 
 #ifndef Q_OS_WIN
@@ -21,6 +20,13 @@ class QRect;
 
 namespace Functions
 {
+	struct DemuxerInfo
+	{
+		QString name;
+		QImage img;
+		QStringList extensions;
+	};
+	typedef QVector< DemuxerInfo > DemuxersInfo;
 	typedef QList< QByteArray > ChecksumList;
 
 	QString Url( QString, const QString &pth = QString() );
@@ -92,7 +98,7 @@ namespace Functions
 	QStringList getUrlsFromMimeData( const QMimeData * );
 
 	bool splitPrefixAndUrlIfHasPluginPrefix( const QString &, QString *, QString *, QString *param = NULL );
-	void getDataIfHasPluginPrefix( const QString &, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL );
+	void getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo() );
 }
 
 #endif

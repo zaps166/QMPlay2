@@ -2,7 +2,6 @@
 #include <PlaylistWidget.hpp>
 
 #include <EntryProperties.hpp>
-#include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Main.hpp>
 

@@ -23,6 +23,6 @@ void QMPlay2Extensions::openExtensions()
 
 void QMPlay2Extensions::closeExtensions()
 {
-	while ( guiExtensionsList.size() )
+	while ( !guiExtensionsList.isEmpty() )
 		delete guiExtensionsList.takeFirst();
 }

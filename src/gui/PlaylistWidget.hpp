@@ -2,6 +2,7 @@
 #define PLAYLISTWIDGET_HPP
 
 #include <IOController.hpp>
+#include <Functions.hpp>
 #include <Playlist.hpp>
 
 #include <QTreeWidget>
@@ -108,7 +109,7 @@ public:
 	QTreeWidgetItem *newGroup( const QString &name, const QString &url = QString(), QTreeWidgetItem *parent = NULL, bool insertChildAt0Idx = false );
 	QTreeWidgetItem *newGroup();
 
-	QTreeWidgetItem *newEntry( const Playlist::Entry &, QTreeWidgetItem * );
+	QTreeWidgetItem *newEntry( const Playlist::Entry &, QTreeWidgetItem *, const Functions::DemuxersInfo & );
 
 	QList< QTreeWidgetItem * > getChildren( CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL ) const;
 
@@ -135,7 +136,7 @@ public:
 		return tWI ? ( bool )( tWI->flags() & Qt::ItemIsDropEnabled ) : false;
 	}
 private:
-	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, bool loadList = false );
+	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
 
 	void setEntryIcon( QImage &, QTreeWidgetItem * );
 

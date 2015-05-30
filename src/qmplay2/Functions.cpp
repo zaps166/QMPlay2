@@ -410,7 +410,7 @@ bool Functions::splitPrefixAndUrlIfHasPluginPrefix( const QString &whole_url, QS
 	}
 	return false;
 }
-void Functions::getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl )
+void Functions::getDataIfHasPluginPrefix(const QString &wholeUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo )
 {
 	QString addressPrefixName, realUrl, param;
 	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( wholeUrl, &addressPrefixName, &realUrl, &param ) )
@@ -426,12 +426,24 @@ void Functions::getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url,
 	{
 		QString scheme = getUrlScheme( wholeUrl );
 		QString extension = fileExt( wholeUrl ).toLower();
-		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-			foreach ( const Module::Info &mod, module->getModulesInfo() )
-				if ( mod.type == Module::DEMUXER && ( mod.extensions.contains( extension ) || mod.name == scheme ) )
+		if ( demuxersInfo.isEmpty() )
+		{
+			foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
+				foreach ( const Module::Info &mod, module->getModulesInfo() )
+					if ( mod.type == Module::DEMUXER && ( mod.extensions.contains( extension ) || mod.name == scheme ) )
+					{
+						*img = !mod.img.isNull() ? mod.img : module->image();
+						return;
+					}
+		}
+		else
+		{
+			foreach ( const DemuxerInfo &demuxerInfo, demuxersInfo )
+				if ( demuxerInfo.extensions.contains( extension ) || demuxerInfo.name == scheme )
 				{
-					*img = !mod.img.isNull() ? mod.img : module->image();
+					*img = demuxerInfo.img;
 					return;
 				}
+		}
 	}
 }
