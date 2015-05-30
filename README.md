@@ -48,9 +48,17 @@ Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
 
 QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
 
-####Easy Installation on Ubuntu
+####Easy installation on openSUSE
 
-- Just run the following commands
+- Just run the following commands:
+```sh
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
+$ sudo zypper in QMPlay2 QMPlay2-kde-integration
+```
+
+####Easy installation on Ubuntu
+
+- Just run the following commands:
 ```sh
 $ sudo add-apt-repository ppa:samrog131/ppa
 $ sudo apt-get update
