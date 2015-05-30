@@ -1,5 +1,6 @@
 Zmiany w QMPlay2 build 15.05.30:
 	- poprawa drag and drop na playliście,
+	- przyspieszenie ładowania playlisty,
 	- poprawa operacji na katalogach,
 	- poprawa drobnych błędów,
 
