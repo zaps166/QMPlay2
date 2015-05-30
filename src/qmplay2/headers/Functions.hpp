@@ -3,7 +3,7 @@
 
 #include <IOController.hpp>
 
-#include <QString>
+#include <QStringList>
 #include <QImage>
 
 class QMPlay2_OSD;
