@@ -28,7 +28,7 @@ static inline bool getCurrentPlaying( int stream, const QList< StreamInfo * > &s
 {
 	return ( stream > -1 && streamsInfo.count() > stream ) && streamsInfo[ stream ] == streamInfo;
 }
-static inline QString getWriterName( AVThread *avThr )
+static QString getWriterName( AVThread *avThr )
 {
 	QString decName;
 	if ( avThr )
@@ -89,7 +89,7 @@ void DemuxerThr::loadImage()
 			emit QMPlay2Core.coverDataFromMediaFile( demuxerImage );
 		else
 		{
-			if ( img.isNull() && url.left( 5 ) == "file" && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
+			if ( img.isNull() && url.left( 5 ) == "file:" && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
 			{
 				const QString directory = filePath( url.mid( 7 ) );
 				foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
