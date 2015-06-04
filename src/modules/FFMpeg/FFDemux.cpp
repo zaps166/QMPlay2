@@ -372,9 +372,9 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 		}
 		else if ( AVDictionary *dict = getMetadata() )
 		{
-			if ( formatCtx->opaque != dict )
+			if ( metadata != dict )
 			{
-				formatCtx->opaque = dict;
+				metadata = dict;
 				isMetadataChanged = true;
 			}
 		}
@@ -491,7 +491,9 @@ bool FFDemux::open( const QString &_url )
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 	formatCtx->event_flags = 0;
 #else
-	if ( isStreamed )
+	if ( !isStreamed )
+		metadata = NULL;
+	else
 	{
 		char *value = NULL;
 		av_opt_get( formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, ( quint8 ** )&value );
@@ -504,7 +506,7 @@ bool FFDemux::open( const QString &_url )
 			else if ( icy.left( 17 ) == "icy-description: " )
 				av_dict_set( &formatCtx->metadata, "icy-description", icy.mid( 17 ).toUtf8(), 0 );
 		}
-		formatCtx->opaque = getMetadata();
+		metadata = getMetadata();
 	}
 #endif
 
