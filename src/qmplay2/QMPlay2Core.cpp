@@ -122,7 +122,7 @@ QIcon QMPlay2CoreClass::getIconFromTheme( const QString &icon )
 bool QMPlay2CoreClass::run( const QString &command, const QString &args )
 {
 	if ( !command.isEmpty() )
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 		return ( quintptr )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
 #else
 	{

@@ -133,7 +133,7 @@ void Drawable::dock()
 {
 	QMPlay2Core.dockVideo( this );
 	if ( DDClipper )
-		DDClipper->SetHWnd( 0, winId() );
+		DDClipper->SetHWnd( 0, ( HWND )winId() );
 }
 bool Drawable::draw( const QByteArray &videoFrameData )
 {

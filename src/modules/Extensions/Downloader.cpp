@@ -20,8 +20,10 @@
 #include <QInputDialog>
 #include <QProgressBar>
 #include <QApplication>
-#ifdef Q_OS_WIN
+#if QT_VERSION < 0x050000
 	#include <QDesktopServices>
+#else
+	#include <QStandardPaths>
 #endif
 
 /**/
@@ -459,10 +461,19 @@ DownloaderW::DownloaderW()
 	layout->addWidget( addUrlB, 1, 3, 1, 1 );
 
 	Settings sets( "Downloader" );
-#ifdef Q_OS_WIN
-	const QString defDownloadPath = QDesktopServices::storageLocation( QDesktopServices::DocumentsLocation ).replace( '\\', '/' );
+
+	QString defDownloadPath;
+#if QT_VERSION < 0x050000
+	#ifdef Q_OS_WIN
+		defDownloadPath = QDesktopServices::storageLocation( QDesktopServices::DocumentsLocation );
+		if ( defDownloadPath.isEmpty() )
+	#endif
+			defDownloadPath = QDir::homePath();
 #else
-	const QString defDownloadPath = QDir::homePath();
+	defDownloadPath = QStandardPaths::standardLocations( QStandardPaths::DownloadLocation ).value( 0, QDir::homePath() );
+#endif
+#ifdef Q_OS_WIN
+	defDownloadPath.replace( '\\', '/' );
 #endif
 	downloadLW->downloadsDirPath = Functions::cleanPath( sets.getString( "DownloadsDirPath", defDownloadPath ) );
 

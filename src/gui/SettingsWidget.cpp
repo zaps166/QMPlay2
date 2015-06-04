@@ -140,7 +140,7 @@ void SettingsWidget::InitSettings()
 #if QT_VERSION < 0x050000
 	QMPSettings.init( "screenshotPth", QDesktopServices::storageLocation( QDesktopServices::PicturesLocation ) );
 #else
-	QMPSettings.init( "screenshotPth", QStandardPaths::standardLocations( QStandardPaths::PicturesLocation ) );
+	QMPSettings.init( "screenshotPth", QStandardPaths::standardLocations( QStandardPaths::PicturesLocation ).value( 0, QDir::homePath() ) );
 #endif
 #ifdef Q_OS_WIN
 	QMPSettings.init( "screenshotFormat", ".bmp" );

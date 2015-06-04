@@ -351,7 +351,7 @@ static void signal_handler( int s )
 #endif
 	switch ( s )
 	{
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 		case SIGTSTP:
 			raise( SC );
 			break;
@@ -405,7 +405,7 @@ int main( int argc, char *argv[] )
 #endif
 
 	signal( SIGINT, signal_handler );
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 	signal( SIGTSTP, signal_handler );
 #endif
 	signal( SIGFPE, signal_handler );
