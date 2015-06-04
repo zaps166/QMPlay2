@@ -228,7 +228,7 @@ PlaylistWidget::PlaylistWidget() :
 	setIconSize( QSize( IconSize, IconSize ) );
 
 	currentPlaying = NULL;
-	modifier = selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
+	selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
 
 	connect( this, SIGNAL( insertItem( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ), this, SLOT( insertItemSlot( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ) );
 
@@ -639,13 +639,9 @@ void PlaylistWidget::setEntryIcon( QImage &img, QTreeWidgetItem *tWI )
 	}
 }
 
-void PlaylistWidget::focusOutEvent( QFocusEvent *e )
-{
-	modifier = false;
-	QTreeWidget::focusOutEvent( e );
-}
 void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 {
+	const bool modifier = ( e->modifiers() == Qt::MetaModifier ) || ( e->modifiers() == Qt::AltModifier );
 	if ( ( e->buttons() & Qt::MidButton ) || ( ( e->buttons() & Qt::LeftButton ) && modifier ) )
 	{
 		const QList< QUrl > urls = getUrls();
@@ -666,8 +662,6 @@ void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 			drag->setPixmap( pix );
 
 			drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction );
-
-			modifier = false;
 		}
 	}
 	else if ( canModify( false ) && !hasHiddenItems )
@@ -716,16 +710,6 @@ void PlaylistWidget::dropEvent( QDropEvent *e )
 		selectAfterAdd = true;
 		add( getUrlsFromMimeData( e->mimeData() ), itemAt( e->pos() ) );
 	}
-}
-void PlaylistWidget::keyPressEvent( QKeyEvent *e )
-{
-	modifier = e->modifiers() == Qt::MetaModifier || e->modifiers() == Qt::AltModifier;
-	QTreeWidget::keyPressEvent( e );
-}
-void PlaylistWidget::keyReleaseEvent( QKeyEvent *e )
-{
-	modifier = false;
-	QTreeWidget::keyReleaseEvent( e );
 }
 void PlaylistWidget::paintEvent( QPaintEvent *e )
 {

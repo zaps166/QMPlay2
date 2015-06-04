@@ -140,19 +140,16 @@ private:
 
 	void setEntryIcon( QImage &, QTreeWidgetItem * );
 
-	void focusOutEvent( QFocusEvent * );
 	void mouseMoveEvent( QMouseEvent * );
 	void dragEnterEvent( QDragEnterEvent * );
 	void dragMoveEvent( QDragMoveEvent * );
 	void dropEvent( QDropEvent * );
-	void keyPressEvent( QKeyEvent * );
-	void keyReleaseEvent( QKeyEvent * );
 	void paintEvent( QPaintEvent * );
 	void scrollContentsBy( int dx, int dy );
 
 	QRect getArcRect( int size );
 
-	bool modifier, internalDrag, selectAfterAdd, hasHiddenItems;
+	bool internalDrag, selectAfterAdd, hasHiddenItems;
 	QString currPthToSave;
 	struct AddData
 	{
