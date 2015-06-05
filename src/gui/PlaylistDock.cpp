@@ -11,7 +11,6 @@ using Functions::chkMimeData;
 #include <QFileInfo>
 #include <QLabel>
 #include <QBuffer>
-#include <QUrl>
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QClipboard>

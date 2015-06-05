@@ -10,7 +10,6 @@
 #include <QInputDialog>
 #include <QDebug>
 #include <QLabel>
-#include <QUrl>
 #include <QShortcut>
 #include <QFileDialog>
 #include <QLocalServer>

@@ -198,9 +198,9 @@ bool AudioCDDemux::open( const QString &_url )
 	{
 		if ( _url.left( 10 ) != "AudioCD://" )
 			return false;
-		QUrl url( _url );
+		QUrl url( _url.mid( 10 ) );
 		device = QUrlQuery( url ).queryItemValue( "device" );
-		trackNo = url.host().toUInt();
+		trackNo = url.path().toUInt();
 	}
 	if ( trackNo > 0 && trackNo < CDIO_INVALID_TRACK )
 	{
