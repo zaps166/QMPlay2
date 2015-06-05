@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en" sourcelanguage="pl_PL">
+<TS version="2.0" language="ru_RU" sourcelanguage="pl_PL">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
