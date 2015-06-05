@@ -23,6 +23,11 @@ public:
 		iDW.update();
 	}
 private:
+	inline QWidget *internalWidget()
+	{
+		return ( widget() == &iDW ) ? iDW.widget() : widget();
+	}
+
 	void dragEnterEvent( QDragEnterEvent * );
 	void dropEvent( QDropEvent * );
 	void mouseMoveEvent( QMouseEvent * );

@@ -67,6 +67,17 @@ void VideoDock::fullScreen( bool b )
 	}
 	else
 	{
+		/* Visualizations on full screen */
+		if ( widget() != &iDW )
+		{
+			if ( widget() )
+			{
+				widget()->unsetCursor();
+				widget()->setParent( NULL );
+			}
+			setWidget( &iDW );
+		}
+
 		setTitleBarVisible();
 		setFeatures( DockWidget::AllDockWidgetFeatures );
 		setFloating( is_floating );
@@ -117,12 +128,12 @@ void VideoDock::dropEvent( QDropEvent *e )
 }
 void VideoDock::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( iDW.widget() )
+	if ( internalWidget() )
 	{
 #ifndef Q_OS_MAC
 		if ( ++pixels == 25 )
 #endif
-			iDW.widget()->unsetCursor();
+			internalWidget()->unsetCursor();
 		hideCursorTim.start( 750 );
 	}
 	if ( e )
@@ -161,8 +172,8 @@ void VideoDock::wheelEvent( QWheelEvent *e )
 void VideoDock::leaveEvent( QEvent *e )
 {
 	hideCursorTim.stop();
-	if ( iDW.widget() )
-		iDW.widget()->unsetCursor();
+	if ( internalWidget() )
+		internalWidget()->unsetCursor();
 #ifndef Q_OS_MAC
 	pixels = 0;
 #endif
@@ -209,8 +220,8 @@ void VideoDock::popup( const QPoint &p )
 void VideoDock::hideCursor()
 {
 	hideCursorTim.stop();
-	if ( iDW.widget() )
-		iDW.widget()->setCursor( Qt::BlankCursor );
+	if ( internalWidget() )
+		internalWidget()->setCursor( Qt::BlankCursor );
 #ifndef Q_OS_MAC
 	pixels = 0;
 #endif
