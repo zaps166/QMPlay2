@@ -25,7 +25,7 @@
 ###Windows (Cross-compile):
 
 - Install all required MinGW packages (I recommend ArchLinux unofficial MinGW repository).
-- some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
+- Some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
 - Notice that QMPlay2 uses static linking for some libraries.
 - Run "./compile_win_cross".
 

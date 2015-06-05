@@ -10,7 +10,7 @@ Filters:
 	Add audio "Tempo" and LADSPA/LV2 filters
 
 HWAccel: DXVA2
-Simple touchscreen support
+Basic touch screen support
 Users can resume downloading
 Users can introduce aspect ratio and zoom
 

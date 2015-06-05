@@ -1,4 +1,5 @@
 Zmiany w QMPlay2 build 15.06.05:
+	- poprawiony odczyt okładek płyt z katalogu,
 	- kompatybilność z FFMpeg 2.0 oraz 2.1,
 
 Zmiany w QMPlay2 build 15.05.30:

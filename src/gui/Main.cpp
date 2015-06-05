@@ -162,15 +162,16 @@ void QMPlay2GUIClass::setStyle()
 #ifdef Q_OS_WIN
 	if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_0 )
 	{
-		QStringList styles = QStyleFactory::keys();
-		if ( styles.contains( "qtcurve", Qt::CaseInsensitive ) )
-			defaultStyle = "qtcurve";
-		else if ( styles.contains( "cleanlooks", Qt::CaseInsensitive ) )
+		const QStringList styles = QStyleFactory::keys();
+#if QT_VERSION < 0x050000
+		if ( styles.contains( "cleanlooks", Qt::CaseInsensitive ) )
 			defaultStyle = "cleanlooks";
 		else if ( styles.contains( "plastique", Qt::CaseInsensitive ) )
 			defaultStyle = "plastique";
-		else if ( styles.contains( "fusion", Qt::CaseInsensitive ) )
+#else
+		if ( styles.contains( "fusion", Qt::CaseInsensitive ) )
 			defaultStyle = "fusion";
+#endif
 	}
 #endif
 	qApp->setStyle( settings->get( "Style", defaultStyle ).toString() );
