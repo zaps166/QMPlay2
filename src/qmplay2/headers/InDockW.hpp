@@ -36,6 +36,7 @@ private slots:
 protected:
 	void resizeEvent( QResizeEvent * );
 	void paintEvent( QPaintEvent * );
+	bool event( QEvent * );
 signals:
 	void resized( int, int );
 	void itemDropped( const QString & );

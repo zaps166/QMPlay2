@@ -6,6 +6,7 @@
 #include <Functions.hpp>
 #include <ImgScaler.hpp>
 
+#include <QCoreApplication>
 #include <QPainter>
 
 #include <va/va_x11.h>
@@ -31,6 +32,7 @@ VAApiWriter::VAApiWriter( Module &module ) :
 
 	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
+	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 
 	SetModule( module );
@@ -122,7 +124,7 @@ bool VAApiWriter::processParams( bool * )
 	}
 
 	if ( !isVisible() )
-		QMPlay2Core.dockVideo( this );
+		emit QMPlay2Core.dockVideo( this );
 	else
 	{
 		resizeEvent( NULL );
@@ -656,6 +658,13 @@ void VAApiWriter::resizeEvent( QResizeEvent * )
 void VAApiWriter::paintEvent( QPaintEvent * )
 {
 	draw();
+}
+bool VAApiWriter::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }
 
 void VAApiWriter::clearRGBImage()

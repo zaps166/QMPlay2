@@ -78,6 +78,7 @@ private:
 
 	void resizeEvent( QResizeEvent * );
 	void paintEvent( QPaintEvent * );
+	bool event( QEvent * );
 
 	QPaintEngine *paintEngine() const
 	{

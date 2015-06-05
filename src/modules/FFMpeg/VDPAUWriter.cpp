@@ -29,6 +29,7 @@ VDPAUWriter::VDPAUWriter( Module &module ) :
 {
 	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
+	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 
 	features[ 0 ] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL;
@@ -130,7 +131,7 @@ bool VDPAUWriter::processParams( bool * )
 	}
 
 	if ( !isVisible() )
-		QMPlay2Core.dockVideo( this );
+		emit QMPlay2Core.dockVideo( this );
 	else
 	{
 		resizeEvent( NULL );
@@ -579,6 +580,13 @@ void VDPAUWriter::resizeEvent( QResizeEvent * )
 void VDPAUWriter::paintEvent( QPaintEvent * )
 {
 	draw();
+}
+bool VDPAUWriter::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }
 
 void VDPAUWriter::destroyOutputSurfaces()

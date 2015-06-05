@@ -24,6 +24,7 @@ public:
 	QMutex osd_mutex;
 private:
 	void paintEvent( QPaintEvent * );
+	bool event( QEvent * );
 
 	int X, Y, W, H;
 	QPainterWriter &writer;

@@ -23,11 +23,6 @@ public:
 		iDW.update();
 	}
 private:
-	inline QWidget *internalWidget()
-	{
-		return ( widget() == &iDW ) ? iDW.widget() : widget();
-	}
-
 	void dragEnterEvent( QDragEnterEvent * );
 	void dropEvent( QDropEvent * );
 	void mouseMoveEvent( QMouseEvent * );
@@ -36,6 +31,7 @@ private:
 	void wheelEvent( QWheelEvent * );
 	void leaveEvent( QEvent * );
 	void enterEvent( QEvent * );
+	bool event( QEvent * );
 
 	QTimer hideCursorTim;
 	InDockW iDW;
@@ -45,6 +41,7 @@ private:
 	int pixels;
 #endif
 	bool cantpopup, is_floating;
+	double touchZoom;
 private slots:
 	void popup( const QPoint & );
 	void hideCursor();

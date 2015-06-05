@@ -5,6 +5,7 @@
 #include <Functions.hpp>
 using Functions::getImageSize;
 
+#include <QCoreApplication>
 #include <QPainter>
 
 #include <math.h>
@@ -20,6 +21,7 @@ Drawable::Drawable( DirectDrawWriter &writer ) :
 {
 	setMouseTracking( true );
 	setAutoFillBackground( true );
+	grabGesture( Qt::PinchGesture );
 	if ( DirectDrawCreate( NULL, &DDraw, NULL ) == DD_OK && DDraw->SetCooperativeLevel( NULL, DDSCL_NORMAL ) == DD_OK )
 	{
 		DDSURFACEDESC ddsd_primary = { sizeof ddsd_primary };
@@ -131,7 +133,7 @@ Drawable::~Drawable()
 
 void Drawable::dock()
 {
-	QMPlay2Core.dockVideo( this );
+	emit QMPlay2Core.dockVideo( this );
 	if ( DDClipper )
 		DDClipper->SetHWnd( 0, ( HWND )winId() );
 }
@@ -342,6 +344,14 @@ void Drawable::releaseSecondary()
 		DDSSecondary = NULL;
 		DDSBackBuffer = NULL;
 	}
+}
+
+bool Drawable::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }
 
 /**/

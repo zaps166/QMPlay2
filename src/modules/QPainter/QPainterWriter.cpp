@@ -6,6 +6,7 @@
 using Functions::getImageSize;
 using Functions::aligned;
 
+#include <QCoreApplication>
 #include <QPainter>
 
 /**/
@@ -13,6 +14,7 @@ using Functions::aligned;
 Drawable::Drawable( QPainterWriter &writer ) :
 	writer( writer )
 {
+	grabGesture( Qt::PinchGesture );
 	setAutoFillBackground( true );
 	setMouseTracking( true );
 }
@@ -76,6 +78,13 @@ void Drawable::paintEvent( QPaintEvent * )
 		Functions::paintOSD( osd_list, ( qreal )W / writer.outW, ( qreal )H / writer.outH, p );
 	}
 	osd_mutex.unlock();
+}
+bool Drawable::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }
 
 /**/
@@ -141,7 +150,7 @@ bool QPainterWriter::processParams( bool * )
 		outW = _outW;
 		outH = _outH;
 
-		QMPlay2Core.dockVideo( drawable );
+		emit QMPlay2Core.dockVideo( drawable );
 	}
 
 	if ( doResizeEvent )

@@ -60,6 +60,8 @@ private:
 		return false;
 	}
 
+	bool event( QEvent * );
+
 	QImage osdImg;
 	QList< QByteArray > osd_checksums;
 

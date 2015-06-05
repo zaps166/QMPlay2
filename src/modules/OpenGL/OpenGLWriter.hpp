@@ -41,6 +41,8 @@ private:
 	void resizeGL( int, int );
 	void paintGL();
 
+	bool event( QEvent * );
+
 	typedef void ( APIENTRY *GLActiveTexture )( GLenum texture );
 	GLActiveTexture glActiveTexture;
 

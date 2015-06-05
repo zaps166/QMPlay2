@@ -4,6 +4,8 @@
 #include <Functions.hpp>
 using Functions::getImageSize;
 
+#include <QCoreApplication>
+
 /**/
 
 Drawable::Drawable( XVideoWriter &writer ) :
@@ -11,6 +13,7 @@ Drawable::Drawable( XVideoWriter &writer ) :
 {
 	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
+	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 }
 
@@ -22,6 +25,13 @@ void Drawable::resizeEvent( QResizeEvent * )
 void Drawable::paintEvent( QPaintEvent * )
 {
 	writer.xv->redraw( srcRect, dstRect, X, Y, W, H, width(), height() );
+}
+bool Drawable::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }
 
 /**/
@@ -112,7 +122,7 @@ bool XVideoWriter::processParams( bool * )
 		outH = _outH;
 		setEQ = true;
 
-		QMPlay2Core.dockVideo( drawable );
+		emit QMPlay2Core.dockVideo( drawable );
 		xv->open( outW, outH, drawable->winId(), adaptorName, useSHM );
 	}
 

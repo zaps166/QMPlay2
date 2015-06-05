@@ -58,6 +58,7 @@ Drawable::Drawable( OpenGLWriter &writer ) :
 	maxTextureSize( 0 ),
 	noShaders( false ), hasImage( false )
 {
+	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 }
 Drawable::~Drawable()
@@ -351,6 +352,17 @@ void Drawable::paintGL()
 	osd_mutex.unlock();
 }
 
+bool Drawable::event( QEvent *e )
+{
+	/*
+	 * QGLWidget blocks this event forever (tested on Windows 8.1, Qt 4.8.7)
+	 * This is workaround: pass gesture event to the parent.
+	*/
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QGLWidget::event( e );
+}
+
 /**/
 
 OpenGLWriter::OpenGLWriter( Module &module ) :
@@ -437,7 +449,7 @@ bool OpenGLWriter::processParams( bool * )
 		W = ( outW % 8 ) ? outW-1 : outW;
 
 		drawable->clr();
-		QMPlay2Core.dockVideo( drawable );
+		emit QMPlay2Core.dockVideo( drawable );
 	}
 
 	if ( doResizeEvent )

@@ -2,7 +2,7 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QDragEnterEvent>
+#include <QCoreApplication>
 #include <QPainter>
 
 InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt ) :
@@ -14,6 +14,7 @@ InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &
 {
 	connect( &QMPlay2Core, SIGNAL( wallpaperChanged( bool, double ) ), this, SLOT( wallpaperChanged( bool, double ) ) );
 	setFocusPolicy( Qt::StrongFocus );
+	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 	setPalette( Qt::black );
 }
@@ -112,4 +113,12 @@ void InDockW::paintEvent( QPaintEvent * )
 			p.drawPixmap( width() / 2 - pixmapToDraw.width() / 2, fullHeight / 2 - pixmapToDraw.height() / 2, pixmapToDraw );
 		}
 	}
+}
+
+bool InDockW::event( QEvent *e )
+{
+	/* Pass gesture event to the parent */
+	if ( e->type() == QEvent::Gesture )
+		return qApp->notify( parent(), e );
+	return QWidget::event( e );
 }

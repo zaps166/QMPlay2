@@ -15,14 +15,18 @@ using Functions::Url;
 #include <QFileInfo>
 #include <QMimeData>
 #include <QPainter>
+#include <QGesture>
 #include <QMenu>
+
+#include <math.h>
 
 VideoDock::VideoDock() :
 	iDW( QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt ),
 #ifndef Q_OS_MAC
 	pixels( 0 ),
 #endif
-	cantpopup( false ), is_floating( false )
+	cantpopup( false ), is_floating( false ),
+	touchZoom( 0.0 )
 {
 	setWindowTitle( tr( "Wideo" ) );
 
@@ -37,6 +41,7 @@ VideoDock::VideoDock() :
 
 	setMouseTracking( true );
 	setAcceptDrops( true );
+	grabGesture( Qt::PinchGesture );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 
 	setWidget( &iDW );
@@ -62,16 +67,6 @@ void VideoDock::fullScreen( bool b )
 	}
 	else
 	{
-		if ( widget() != &iDW )
-		{
-			if ( widget() )
-			{
-				widget()->unsetCursor();
-				widget()->setParent( NULL );
-			}
-			setWidget( &iDW );
-		}
-
 		setTitleBarVisible();
 		setFeatures( DockWidget::AllDockWidgetFeatures );
 		setFloating( is_floating );
@@ -122,12 +117,12 @@ void VideoDock::dropEvent( QDropEvent *e )
 }
 void VideoDock::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( internalWidget() )
+	if ( iDW.widget() )
 	{
 #ifndef Q_OS_MAC
 		if ( ++pixels == 25 )
 #endif
-			internalWidget()->unsetCursor();
+			iDW.widget()->unsetCursor();
 		hideCursorTim.start( 750 );
 	}
 	if ( e )
@@ -166,8 +161,8 @@ void VideoDock::wheelEvent( QWheelEvent *e )
 void VideoDock::leaveEvent( QEvent *e )
 {
 	hideCursorTim.stop();
-	if ( internalWidget() )
-		internalWidget()->unsetCursor();
+	if ( iDW.widget() )
+		iDW.widget()->unsetCursor();
 #ifndef Q_OS_MAC
 	pixels = 0;
 #endif
@@ -177,6 +172,31 @@ void VideoDock::enterEvent( QEvent *e )
 {
 	mouseMoveEvent( NULL );
 	DockWidget::enterEvent( e );
+}
+bool VideoDock::event( QEvent *e )
+{
+	if ( e->type() == QEvent::Gesture )
+	{
+		QPinchGesture *pinch = ( QPinchGesture * )( ( QGestureEvent * )e )->gesture( Qt::PinchGesture );
+		if ( pinch )
+		{
+			if ( pinch->state() == Qt::GestureStarted )
+				touchZoom = 0.0;
+			else if ( pinch->state() == Qt::GestureUpdated )
+			{
+				touchZoom += pinch->scaleFactor() - 1.0;
+				if ( fabs( touchZoom ) >= 0.05 )
+				{
+					if ( touchZoom > 0.00 )
+						QMPlay2GUI.menubar->player->zoomIn->trigger();
+					else if ( touchZoom < 0.00 )
+						QMPlay2GUI.menubar->player->zoomOut->trigger();
+					touchZoom = 0.0;
+				}
+			}
+		}
+	}
+	return DockWidget::event( e );
 }
 
 void VideoDock::popup( const QPoint &p )
@@ -189,8 +209,8 @@ void VideoDock::popup( const QPoint &p )
 void VideoDock::hideCursor()
 {
 	hideCursorTim.stop();
-	if ( internalWidget() )
-		internalWidget()->setCursor( Qt::BlankCursor );
+	if ( iDW.widget() )
+		iDW.widget()->setCursor( Qt::BlankCursor );
 #ifndef Q_OS_MAC
 	pixels = 0;
 #endif
