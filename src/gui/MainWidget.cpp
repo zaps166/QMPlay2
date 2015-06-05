@@ -44,6 +44,24 @@ using Functions::timeToStr;
 
 #include <math.h>
 
+/* Qt5 or Qt4 in Windows */
+#define UseMainWidgetTmpStyle (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
+
+#if UseMainWidgetTmpStyle
+/* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
+class MainWidgetTmpStyle : public QCommonStyle
+{
+public:
+	int pixelMetric( PixelMetric metric, const QStyleOption *option, const QWidget *widget ) const
+	{
+		const int pM = QCommonStyle::pixelMetric( metric, option, widget );
+		if ( metric == QStyle::PM_DockWidgetSeparatorExtent )
+			return pM * 5 / 2;
+		return pM;
+	}
+};
+#endif
+
 /* MainWidget */
 MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 #ifdef UPDATER
@@ -51,6 +69,26 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 #endif
 {
 	QMPlay2GUI.mainW = this;
+
+#if UseMainWidgetTmpStyle
+	#if QT_VERSION >= 0x050000
+		bool createTmpStyle = false;
+		/* Looking for touch screen */
+		foreach ( const QTouchDevice *touchDev, QTouchDevice::devices() )
+		{
+			/* Touchscreen found */
+			if ( touchDev->type() == QTouchDevice::TouchScreen )
+			{
+				createTmpStyle = true;
+				break;
+			}
+		}
+		if ( createTmpStyle )
+	#elif defined Q_OS_WIN
+		if ( QSysInfo::windowsVersion() > QSysInfo::WV_6_1 ) //Qt4 can't detect touchscreen, so MainWidgetTmpStyle will be used only with Windows >= 8.0
+	#endif
+			setStyle( QScopedPointer< MainWidgetTmpStyle >( new MainWidgetTmpStyle ).data() ); //Is it always OK?
+#endif
 
 	setObjectName( "MainWidget" );
 
@@ -1024,8 +1062,8 @@ void MainWidget::mouseMoveEvent( QMouseEvent *e )
 {
 	if ( fullScreen )
 	{
-		int trigger1 = qMax( 3,  ( int )ceil( 0.002 * width() ) );
-		int trigger2 = qMax( 15, ( int )ceil( 0.015 * width() ) );
+		int trigger1 = qMax< int >( 3,  ceil( 0.002 * width() ) );
+		int trigger2 = qMax< int >( 15, ceil( 0.025 * width() ) );
 
 		int mPosX = 0;
 		if ( videoDock->x() >= 0 )
