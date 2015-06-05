@@ -1,23 +1,15 @@
 #include <Inputs.hpp>
-#include <AudioCD.hpp>
 #include <ToneGenerator.hpp>
 #include <PCM.hpp>
 #include <Rayman2.hpp>
 
-#include <QMPlay2Core.hpp>
-
 #include <QDialogButtonBox>
-#include <QToolButton>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <QGridLayout>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QDialog>
 #include <QAction>
 #include <QLabel>
-#include <QFile>
-#include <QDir>
 
 static const QString standartExts = "pcm;raw";
 static const char *formatName[ PCM::FORMAT_COUNT ] =
@@ -34,16 +26,11 @@ static const char *formatName[ PCM::FORMAT_COUNT ] =
 
 Inputs::Inputs() :
 	Module( "Inputs" ),
-	cdioDestroyTimer( new CDIODestroyTimer ),
-	AudioCDPlaylist( QDir::tempPath() + "/"AudioCDName".pls" ),
-	cd( QImage( ":/cd" ) ), sine( QImage( ":/sine" ) ), ray2( QImage( ":/ray2" ) )
+	sine( QImage( ":/sine" ) ), ray2( QImage( ":/ray2" ) )
 {
-	cd.setText( "Path", ":/cd" );
 	sine.setText( "Path", ":/sine" );
 	ray2.setText( "Path", ":/ray2" );
 
-	init( "AudioCD/CDDB", true );
-	init( "AudioCD/CDTEXT", true );
 	init( "ToneGenerator/srate", 48000 );
 	init( "ToneGenerator/freqs", 440 );
 	init( "PCM", true );
@@ -57,21 +44,10 @@ Inputs::Inputs() :
 	init( "PCM/BE", false );
 	init( "Rayman2", true );
 }
-Inputs::~Inputs()
-{
-	QFile::remove( AudioCDPlaylist );
-	delete cdioDestroyTimer;
-	libcddb_shutdown();
-}
 
 QList< Inputs::Info > Inputs::getModulesInfo( const bool showDisabled ) const
 {
 	QList< Info > modulesInfo;
-#ifdef Q_OS_WIN
-	modulesInfo += Info( AudioCDName, DEMUXER, QStringList( "cda" ), cd );
-#else
-	modulesInfo += Info( AudioCDName, DEMUXER, cd );
-#endif
 	modulesInfo += Info( ToneGeneratorName, DEMUXER, sine );
 	if ( showDisabled || getBool( "PCM" ) )
 		modulesInfo += Info( PCMName, DEMUXER, get( "PCM/extensions" ).toStringList() );
@@ -81,9 +57,7 @@ QList< Inputs::Info > Inputs::getModulesInfo( const bool showDisabled ) const
 }
 void *Inputs::createInstance( const QString &name )
 {
-	if ( name == AudioCDName )
-		return new AudioCD( *this, *cdioDestroyTimer, AudioCDPlaylist );
-	else if ( name == ToneGeneratorName )
+	if ( name == ToneGeneratorName )
 		return new ToneGenerator( *this );
 	else if ( name == PCMName )
 		return new PCM( *this );
@@ -94,19 +68,11 @@ void *Inputs::createInstance( const QString &name )
 
 QList< QAction * > Inputs::getAddActions()
 {
-	QAction *actCD = new QAction( NULL );
-	actCD->setObjectName( "actCD" );
-	actCD->setIcon( QIcon( ":/cd" ) );
-	actCD->setText( tr( "Płyta AudioCD" ) );
-	actCD->connect( actCD, SIGNAL( triggered() ), this, SLOT( add() ) );
-
 	QAction *actTone = new QAction( NULL );
-	actTone->setObjectName( "actTone" );
 	actTone->setIcon( QIcon( ":/sine" ) );
 	actTone->setText( tr( "Generator częstotliwości" ) );
 	actTone->connect( actTone, SIGNAL( triggered() ), this, SLOT( add() ) );
-
-	return QList< QAction * >() << actCD << actTone;
+	return QList< QAction * >() << actTone;
 }
 
 Inputs::SettingsWidget *Inputs::getSettingsWidget()
@@ -117,70 +83,10 @@ Inputs::SettingsWidget *Inputs::getSettingsWidget()
 void Inputs::add()
 {
 	QWidget *parent = qobject_cast< QWidget * >( sender()->parent() );
-	if ( sender()->objectName() == "actCD" )
-	{
-		AudioCD audioCD( *this, *cdioDestroyTimer );
-		QStringList drives = audioCD.getDevices();
-		if ( !drives.isEmpty() )
-		{
-			QDialog chooseCD( parent );
-			chooseCD.setWindowIcon( QIcon( ":/cd" ) );
-			chooseCD.setWindowTitle( "Wybierz napęd" );
-			QLabel drvL( tr( "Ścieżka" ) + ":" );
-			drvL.setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) );
-			QComboBox drvB;
-			QLineEdit drvE;
-			connect( &drvB, SIGNAL( currentIndexChanged( const QString & ) ), &drvE, SLOT( setText( const QString & ) ) );
-			drvB.addItems( drives );
-			QToolButton browseB;
-			connect( &browseB, SIGNAL( clicked() ), this, SLOT( browseCDImage() ) );
-			browseB.setIcon( QMPlay2Core.getIconFromTheme( "folder-open" ) );
-			QDialogButtonBox bb( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal );
-			connect( &bb, SIGNAL( accepted() ), &chooseCD, SLOT( accept() ) );
-			connect( &bb, SIGNAL( rejected() ), &chooseCD, SLOT( reject() ) );
-			QGridLayout layout( &chooseCD );
-			layout.addWidget( &drvB, 0, 0, 1, 3 );
-			layout.addWidget( &drvL, 1, 0, 1, 1 );
-			layout.addWidget( &drvE, 1, 1, 1, 1 );
-			layout.addWidget( &browseB, 1, 2, 1, 1 );
-			layout.addWidget( &bb, 2, 0, 1, 3 );
-			layout.setMargin( 2 );
-			chooseCD.resize( 400, 0 );
-			if ( chooseCD.exec() == QDialog::Accepted )
-			{
-				emit QMPlay2Core.waitCursor();
-				QList< Playlist::Entry > entries = audioCD.getTracks( drvE.text() );
-				emit QMPlay2Core.restoreCursor();
-				if ( !entries.isEmpty() )
-				{
-					if ( Playlist::write( entries, "file://" + AudioCDPlaylist ) )
-						emit QMPlay2Core.processParam( "open", AudioCDPlaylist );
-				}
-				else
-					QMessageBox::information( parent, AudioCDName, tr( "Brak płyty AudioCD w napędzie!" ) );
-			}
-		}
-		else
-			QMessageBox::information( parent, AudioCDName, tr( "Nie znaleziono napędów CD/DVD!" ) );
-	}
-	else if ( sender()->objectName() == "actTone" )
-	{
-		AddD d( *this, parent );
-		QString params = d.execAndGet();
-		if ( !params.isEmpty() )
-			emit QMPlay2Core.processParam( "open", ToneGeneratorName"://" + params );
-	}
-}
-void Inputs::browseCDImage()
-{
-	QWidget *parent = ( QWidget * )sender()->parent();
-	QString path = QFileDialog::getOpenFileName( parent, tr( "Wybierz obraz AudioCD" ), QString(), tr( "Obsługiwane obrazy AudioCD" ) + " (*.cue *.nrg *.toc)" );
-	if ( !path.isEmpty() )
-	{
-		QComboBox &drvB = *parent->findChild< QComboBox * >();
-		drvB.addItem( path );
-		drvB.setCurrentIndex( drvB.count() - 1 );
-	}
+	AddD d( *this, parent );
+	QString params = d.execAndGet();
+	if ( !params.isEmpty() )
+		emit QMPlay2Core.processParam( "open", ToneGeneratorName"://" + params );
 }
 
 QMPLAY2_EXPORT_PLUGIN( Inputs )
@@ -311,18 +217,6 @@ void AddD::add()
 ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	Module::SettingsWidget( module )
 {
-	audioCDB = new QGroupBox( tr( "AudioCD" ) );
-
-	useCDDB = new QCheckBox( tr( "Używaj CDDB, jeżeli CD-TEXT jest niedostępny" ) );
-	useCDDB->setChecked( sets().getBool( "AudioCD/CDDB" ) );
-
-	useCDTEXT = new QCheckBox( tr( "Używaj CD-TEXT" ) );
-	useCDTEXT->setChecked( sets().getBool( "AudioCD/CDTEXT" ) );
-
-	QVBoxLayout *audioCDBLayout = new QVBoxLayout( audioCDB );
-	audioCDBLayout->addWidget( useCDDB );
-	audioCDBLayout->addWidget( useCDTEXT );
-
 	toneGenerator = new AddD( sets(), NULL, this );
 
 	pcmB = new QGroupBox( tr( "Dźwięk nieskompresowany PCM" ) );
@@ -391,7 +285,6 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	rayman2EB->setChecked( sets().getBool( "Rayman2" ) );
 
 	QGridLayout *layout = new QGridLayout( this );
-	layout->addWidget( audioCDB );
 	layout->addWidget( toneGenerator );
 	layout->addWidget( pcmB );
 	layout->addWidget( rayman2EB );
@@ -408,8 +301,6 @@ void ModuleSettingsWidget::saveSettings()
 	toneGenerator->save();
 	if ( pcmExtsE->text().isEmpty() )
 		pcmExtsE->setText( standartExts );
-	sets().set( "AudioCD/CDDB", useCDDB->isChecked() );
-	sets().set( "AudioCD/CDTEXT", useCDTEXT->isChecked() );
 	sets().set( "PCM", pcmB->isChecked() );
 	sets().set( "PCM/extensions", pcmExtsE->text().split( ';', QString::SkipEmptyParts ) );
 	for ( int i = 0 ; i < formatB.size() ; ++i )

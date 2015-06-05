@@ -1,13 +1,10 @@
 #include <Module.hpp>
 
-class CDIODestroyTimer;
-
 class Inputs : public Module
 {
 	Q_OBJECT
 public:
 	Inputs();
-	~Inputs();
 private:
 	QList< Info > getModulesInfo( const bool ) const;
 	void *createInstance( const QString & );
@@ -16,12 +13,9 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
-	CDIODestroyTimer *cdioDestroyTimer;
-	QString AudioCDPlaylist;
-	QImage cd, sine, ray2;
+	QImage sine, ray2;
 private slots:
 	void add();
-	void browseCDImage();
 };
 
 /**/
@@ -90,9 +84,6 @@ private slots:
 	void applyFreqs();
 private:
 	void saveSettings();
-
-	QGroupBox *audioCDB;
-	QCheckBox *useCDDB, *useCDTEXT;
 
 	AddD *toneGenerator;
 	QGroupBox *pcmB;

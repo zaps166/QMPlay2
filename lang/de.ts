@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE" sourcelanguage="pl_PL">
+<TS version="2.0" language="en" sourcelanguage="pl_PL">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
@@ -270,6 +270,41 @@
     <name>AudioCD</name>
     <message>
         <source>Ścieżka</source>
+        <translation>Pfad</translation>
+    </message>
+    <message>
+        <source>Płyta AudioCD</source>
+        <translation>AudioCD</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>Keine AudioCD gefunden!</translation>
+    </message>
+    <message>
+        <source>Nie znaleziono napędów CD/DVD!</source>
+        <translation>Kein CD/DVD Laufwerk gefunden!</translation>
+    </message>
+    <message>
+        <source>Wybierz obraz AudioCD</source>
+        <translation>AudioCD Image wählen</translation>
+    </message>
+    <message>
+        <source>Obsługiwane obrazy AudioCD</source>
+        <translation>Unterstützte AudioCD Image</translation>
+    </message>
+    <message>
+        <source>Wybierz napęd</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AudioCDDemux</name>
+    <message>
+        <source>Dane</source>
+        <translation>Daten</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
         <translation>Titel</translation>
     </message>
     <message>
@@ -283,10 +318,6 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Ungültige Pfad zum CD-Laufwerk</translation>
-    </message>
-    <message>
-        <source>Dane</source>
-        <translation>Daten</translation>
     </message>
 </context>
 <context>
@@ -736,30 +767,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     <message>
         <source>Generator częstotliwości</source>
         <translation>Frequenzgenerator</translation>
-    </message>
-    <message>
-        <source>Płyta AudioCD</source>
-        <translation>AudioCD</translation>
-    </message>
-    <message>
-        <source>Nie znaleziono napędów CD/DVD!</source>
-        <translation>Kein CD/DVD Laufwerk gefunden!</translation>
-    </message>
-    <message>
-        <source>Ścieżka</source>
-        <translation>Pfad</translation>
-    </message>
-    <message>
-        <source>Wybierz obraz AudioCD</source>
-        <translation>AudioCD Image wählen</translation>
-    </message>
-    <message>
-        <source>Obsługiwane obrazy AudioCD</source>
-        <translation>Unterstützte AudioCD Image</translation>
-    </message>
-    <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>Keine AudioCD gefunden!</translation>
     </message>
 </context>
 <context>

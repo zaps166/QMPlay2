@@ -266,6 +266,41 @@
     <name>AudioCD</name>
     <message>
         <source>Ścieżka</source>
+        <translation>Path</translation>
+    </message>
+    <message>
+        <source>Płyta AudioCD</source>
+        <translation>AudioCD</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>No AudioCD found!</translation>
+    </message>
+    <message>
+        <source>Nie znaleziono napędów CD/DVD!</source>
+        <translation>No CD/DVD drives found!</translation>
+    </message>
+    <message>
+        <source>Wybierz obraz AudioCD</source>
+        <translation>Choose AudioCD image</translation>
+    </message>
+    <message>
+        <source>Obsługiwane obrazy AudioCD</source>
+        <translation>Supported AudioCD images</translation>
+    </message>
+    <message>
+        <source>Wybierz napęd</source>
+        <translation>Choose the drive</translation>
+    </message>
+</context>
+<context>
+    <name>AudioCDDemux</name>
+    <message>
+        <source>Dane</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
         <translation>Track</translation>
     </message>
     <message>
@@ -279,10 +314,6 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Invalid path to CD drive</translation>
-    </message>
-    <message>
-        <source>Dane</source>
-        <translation>Data</translation>
     </message>
 </context>
 <context>
@@ -731,30 +762,6 @@
     <message>
         <source>Generator częstotliwości</source>
         <translation>Tone generator</translation>
-    </message>
-    <message>
-        <source>Płyta AudioCD</source>
-        <translation>AudioCD</translation>
-    </message>
-    <message>
-        <source>Nie znaleziono napędów CD/DVD!</source>
-        <translation>No CD/DVD drives found!</translation>
-    </message>
-    <message>
-        <source>Ścieżka</source>
-        <translation>Path</translation>
-    </message>
-    <message>
-        <source>Wybierz obraz AudioCD</source>
-        <translation>Choose AudioCD image</translation>
-    </message>
-    <message>
-        <source>Obsługiwane obrazy AudioCD</source>
-        <translation>Supported AudioCD images</translation>
-    </message>
-    <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>No AudioCD found!</translation>
     </message>
 </context>
 <context>

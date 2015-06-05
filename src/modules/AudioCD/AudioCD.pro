@@ -9,15 +9,20 @@ else: DESTDIR = ../../../app/share/qmplay2/modules
 win32: QMAKE_LIBDIR += ../../../app
 else: QMAKE_LIBDIR += ../../../app/lib
 LIBS += -lqmplay2
+win32: LIBS += -Wl,-Bstatic -lcdio -lcddb -lregex -Wl,-Bdynamic -lwinmm -lws2_32
+else {
+	CONFIG += link_pkgconfig
+	PKGCONFIG += libcdio libcddb
+}
 
 OBJECTS_DIR = build/obj
 RCC_DIR = build/rcc
 MOC_DIR = build/moc
 
-RESOURCES += icons.qrc
+RESOURCES += icon.qrc
 
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += Inputs.hpp ToneGenerator.hpp PCM.hpp Rayman2.hpp
-SOURCES += Inputs.cpp ToneGenerator.cpp PCM.cpp Rayman2.cpp
+HEADERS += AudioCD.hpp AudioCDDemux.hpp
+SOURCES += AudioCD.cpp AudioCDDemux.cpp

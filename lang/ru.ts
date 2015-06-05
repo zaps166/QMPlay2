@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU" sourcelanguage="pl_PL">
+<TS version="2.0" language="en" sourcelanguage="pl_PL">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
@@ -266,6 +266,41 @@
     <name>AudioCD</name>
     <message>
         <source>Ścieżka</source>
+        <translation>Путь</translation>
+    </message>
+    <message>
+        <source>Płyta AudioCD</source>
+        <translation>Аудио диск</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>CD диска нет в приводе!</translation>
+    </message>
+    <message>
+        <source>Nie znaleziono napędów CD/DVD!</source>
+        <translation>CD/DVD диск не найден!</translation>
+    </message>
+    <message>
+        <source>Wybierz obraz AudioCD</source>
+        <translation>Выбрать образ AudioCD</translation>
+    </message>
+    <message>
+        <source>Obsługiwane obrazy AudioCD</source>
+        <translation>Поддерживаемый образ AudioCD</translation>
+    </message>
+    <message>
+        <source>Wybierz napęd</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AudioCDDemux</name>
+    <message>
+        <source>Dane</source>
+        <translation>Данные</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
         <translation>Дорожка</translation>
     </message>
     <message>
@@ -279,10 +314,6 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Неверный путь к дисководу</translation>
-    </message>
-    <message>
-        <source>Dane</source>
-        <translation>Данные</translation>
     </message>
 </context>
 <context>
@@ -731,30 +762,6 @@
     <message>
         <source>Generator częstotliwości</source>
         <translation>Тональный генератор</translation>
-    </message>
-    <message>
-        <source>Płyta AudioCD</source>
-        <translation>Аудио диск</translation>
-    </message>
-    <message>
-        <source>Nie znaleziono napędów CD/DVD!</source>
-        <translation>CD/DVD диск не найден!</translation>
-    </message>
-    <message>
-        <source>Ścieżka</source>
-        <translation>Путь</translation>
-    </message>
-    <message>
-        <source>Wybierz obraz AudioCD</source>
-        <translation>Выбрать образ AudioCD</translation>
-    </message>
-    <message>
-        <source>Obsługiwane obrazy AudioCD</source>
-        <translation>Поддерживаемый образ AudioCD</translation>
-    </message>
-    <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>CD диска нет в приводе!</translation>
     </message>
 </context>
 <context>

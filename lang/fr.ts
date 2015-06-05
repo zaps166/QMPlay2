@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr" sourcelanguage="pl_PL">
+<TS version="2.0" language="en" sourcelanguage="pl_PL">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
@@ -266,6 +266,41 @@
     <name>AudioCD</name>
     <message>
         <source>Ścieżka</source>
+        <translation>Chemin</translation>
+    </message>
+    <message>
+        <source>Płyta AudioCD</source>
+        <translation>CD Audio</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>CD Audio non trouvé!</translation>
+    </message>
+    <message>
+        <source>Nie znaleziono napędów CD/DVD!</source>
+        <translation>Pas de lecteur CD/DVD trouvé!</translation>
+    </message>
+    <message>
+        <source>Wybierz obraz AudioCD</source>
+        <translation>Choisir une image de CD Audio</translation>
+    </message>
+    <message>
+        <source>Obsługiwane obrazy AudioCD</source>
+        <translation>Images de CD Audio supportées</translation>
+    </message>
+    <message>
+        <source>Wybierz napęd</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AudioCDDemux</name>
+    <message>
+        <source>Dane</source>
+        <translation>Données</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
         <translation>Piste</translation>
     </message>
     <message>
@@ -279,10 +314,6 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Chemin vers le lecteur de CD incorrect</translation>
-    </message>
-    <message>
-        <source>Dane</source>
-        <translation>Données</translation>
     </message>
 </context>
 <context>
@@ -731,30 +762,6 @@
     <message>
         <source>Generator częstotliwości</source>
         <translation>Générateur de tonalités</translation>
-    </message>
-    <message>
-        <source>Płyta AudioCD</source>
-        <translation>CD Audio</translation>
-    </message>
-    <message>
-        <source>Nie znaleziono napędów CD/DVD!</source>
-        <translation>Pas de lecteur CD/DVD trouvé!</translation>
-    </message>
-    <message>
-        <source>Ścieżka</source>
-        <translation>Chemin</translation>
-    </message>
-    <message>
-        <source>Wybierz obraz AudioCD</source>
-        <translation>Choisir une image de CD Audio</translation>
-    </message>
-    <message>
-        <source>Obsługiwane obrazy AudioCD</source>
-        <translation>Images de CD Audio supportées</translation>
-    </message>
-    <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>CD Audio non trouvé!</translation>
     </message>
 </context>
 <context>

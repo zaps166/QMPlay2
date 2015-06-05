@@ -33,14 +33,14 @@ private:
 
 /**/
 
-class AudioCD : public Demuxer
+class AudioCDDemux : public Demuxer
 {
-	friend class Inputs;
-	Q_DECLARE_TR_FUNCTIONS( AudioCD )
+	friend class AudioCD;
+	Q_DECLARE_TR_FUNCTIONS( AudioCDDemux )
 public:
-	AudioCD( Module &, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist = QString() );
+	AudioCDDemux( Module &, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist = QString() );
 private:
-	~AudioCD();
+	~AudioCDDemux();
 
 	bool set();
 

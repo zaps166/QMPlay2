@@ -1,4 +1,4 @@
-#include <AudioCD.hpp>
+#include <AudioCDDemux.hpp>
 
 #ifdef Q_OS_WIN
 	#include <QDir>
@@ -87,26 +87,26 @@ void CDIODestroyTimer::timerEvent( QTimerEvent *e )
 
 /**/
 
-AudioCD::AudioCD( Module &module, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist ) :
+AudioCDDemux::AudioCDDemux( Module &module, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist ) :
 	AudioCDPlaylist( AudioCDPlaylist ), destroyTimer( destroyTimer ), cdio( NULL ), sector( 0 ), aborted( false ), discID( 0 )
 {
 	SetModule( module );
 }
 
-AudioCD::~AudioCD()
+AudioCDDemux::~AudioCDDemux()
 {
 	if ( cdio )
 		destroyTimer.setInstance( cdio, device, discID );
 }
 
-bool AudioCD::set()
+bool AudioCDDemux::set()
 {
 	useCDDB   = sets().getBool( "AudioCD/CDDB" );
 	useCDTEXT = sets().getBool( "AudioCD/CDTEXT" );
 	return true;
 }
 
-QString AudioCD::name() const
+QString AudioCDDemux::name() const
 {
 	if ( !cdTitle.isEmpty() && !cdArtist.isEmpty() )
 		return AudioCDName" [" + cdArtist + " - " + cdTitle + "]";
@@ -116,7 +116,7 @@ QString AudioCD::name() const
 		return AudioCDName" [" + cdArtist + "]";
 	return AudioCDName;
 }
-QString AudioCD::title() const
+QString AudioCDDemux::title() const
 {
 	QString prefix, suffix;
 	if ( isData )
@@ -129,7 +129,7 @@ QString AudioCD::title() const
 		prefix = Artist + " - ";
 	return prefix + tr( "Ścieżka" ) + " " + QString::number( trackNo ) + suffix;
 }
-QList< QMPlay2Tag > AudioCD::tags() const
+QList< QMPlay2Tag > AudioCDDemux::tags() const
 {
 	QList< QMPlay2Tag > tagList;
 	if ( !Title.isEmpty() )
@@ -142,20 +142,20 @@ QList< QMPlay2Tag > AudioCD::tags() const
 		tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), Genre );
 	return tagList;
 }
-double AudioCD::length() const
+double AudioCDDemux::length() const
 {
 	return numSectors * duration;
 }
-int AudioCD::bitrate() const
+int AudioCDDemux::bitrate() const
 {
 	return 8 * ( srate * chn * 2 ) / 1000;
 }
 
-bool AudioCD::seek( int s, bool )
+bool AudioCDDemux::seek( int s, bool )
 {
 	return ( sector = s / duration ) < numSectors;
 }
-bool AudioCD::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool AudioCDDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
 {
 	if ( aborted || numSectors <= sector || isData )
 		return false;
@@ -178,12 +178,12 @@ bool AudioCD::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 
 	return false;
 }
-void AudioCD::abort()
+void AudioCDDemux::abort()
 {
 	aborted = true;
 }
 
-bool AudioCD::open( const QString &_url )
+bool AudioCDDemux::open( const QString &_url )
 {
 #ifdef Q_OS_WIN
 	if ( _url.toLower().contains( QRegExp( "file://\\D:/track\\d\\d.cda" ) ) )
@@ -278,7 +278,7 @@ bool AudioCD::open( const QString &_url )
 	return false;
 }
 
-void AudioCD::readCDText( track_t trackNo )
+void AudioCDDemux::readCDText( track_t trackNo )
 {
 #if LIBCDIO_VERSION_NUM >= 84
 	if ( cdtext_t *cdtext = cdio_get_cdtext( cdio ) )
@@ -313,7 +313,7 @@ void AudioCD::readCDText( track_t trackNo )
 #endif
 }
 
-bool AudioCD::freedb_query( cddb_disc_t *&cddb_disc )
+bool AudioCDDemux::freedb_query( cddb_disc_t *&cddb_disc )
 {
 #ifdef Q_OS_WIN
 	bool hasHomeEnv = getenv( "HOME" );
@@ -390,7 +390,7 @@ bool AudioCD::freedb_query( cddb_disc_t *&cddb_disc )
 	cddb_disc = NULL;
 	return false;
 }
-void AudioCD::freedb_get_disc_info( cddb_disc_t *cddb_disc )
+void AudioCDDemux::freedb_get_disc_info( cddb_disc_t *cddb_disc )
 {
 	if ( cddb_disc )
 	{
@@ -398,7 +398,7 @@ void AudioCD::freedb_get_disc_info( cddb_disc_t *cddb_disc )
 		cdArtist = cddb_disc_get_artist( cddb_disc );
 	}
 }
-void AudioCD::freedb_get_track_info( cddb_disc_t *cddb_disc )
+void AudioCDDemux::freedb_get_track_info( cddb_disc_t *cddb_disc )
 {
 	cddb_track_t *cddb_track;
 	if ( cddb_disc && ( cddb_track = cddb_disc_get_track( cddb_disc, trackNo - 1 ) ) )
@@ -408,7 +408,7 @@ void AudioCD::freedb_get_track_info( cddb_disc_t *cddb_disc )
 	}
 }
 
-QList< Playlist::Entry > AudioCD::getTracks( const QString &_device )
+QList< Playlist::Entry > AudioCDDemux::getTracks( const QString &_device )
 {
 	QList< Playlist::Entry > tracks;
 	Playlist::Entry entry;
@@ -447,7 +447,7 @@ QList< Playlist::Entry > AudioCD::getTracks( const QString &_device )
 	}
 	return tracks;
 }
-QStringList AudioCD::getDevices()
+QStringList AudioCDDemux::getDevices()
 {
 	QStringList devicesList;
 	if ( char **devices = cdio_get_devices( DRIVER_DEVICE ) )
