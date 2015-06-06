@@ -102,8 +102,8 @@ EntryProperties::EntryProperties( QWidget *p, QTreeWidgetItem *_tWI, bool &sync,
 		layout.addWidget( browseB, row, 1, 1, 1 );
 #ifdef QMPlay2_TagEditor
 	if ( !tagEditor )
-		layout.addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), ++row, 0, 1, 2 ); //vSpacer
 #endif
+		layout.addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), ++row, 0, 1, 2 ); //vSpacer
 	layout.addWidget( buttonBox, ++row, 0, 1, browseB ? 2 : 1 );
 	layout.setMargin( 3 );
 
