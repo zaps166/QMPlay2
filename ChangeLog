@@ -1,5 +1,5 @@
 Zmiany w QMPlay2 build 15.06.06:
-	- większy pasek zmiany rozmiatu okien dla ekranów dotykowych,
+	- większy pasek zmiany rozmiaru okien dla ekranów dotykowych,
 	- zoom na ekranie dotykowym (pinch gesture),
 	- poprawiony odczyt okładek płyt z katalogu,
 	- kompatybilność z FFMpeg 2.0 oraz 2.1,
