@@ -484,8 +484,8 @@ void VAApiWriter::init_vpp()
 #ifdef HAVE_VPP
 	use_vpp = true;
 	if
-			(
-			 vaCreateConfig( VADisp, ( VAProfile )-1, VAEntrypointVideoProc, NULL, 0, &config_vpp ) == VA_STATUS_SUCCESS &&
+	(
+		vaCreateConfig( VADisp, ( VAProfile )-1, VAEntrypointVideoProc, NULL, 0, &config_vpp ) == VA_STATUS_SUCCESS &&
 		vaCreateContext( VADisp, config_vpp, 0, 0, 0, NULL, 0, &context_vpp ) == VA_STATUS_SUCCESS &&
 		vaCreateSurfaces( &id_vpp, 1 )
 	)
