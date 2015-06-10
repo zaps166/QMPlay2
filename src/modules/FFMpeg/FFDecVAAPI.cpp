@@ -50,8 +50,7 @@ bool FFDecVAAPI::open( StreamInfo *streamInfo, Writer *writer )
 				( ( vaapi_context * )codec_ctx->hwaccel_context )->context_id = ( ( VAApiWriter * )hwAccelWriter )->getVAContext();
 				( ( vaapi_context * )codec_ctx->hwaccel_context )->config_id  = ( ( VAApiWriter * )hwAccelWriter )->getVAConfig();
 				codec_ctx->thread_count   = 1;
-				codec_ctx->get_buffer     = HWAccelHelper::get_buffer;
-				codec_ctx->release_buffer = HWAccelHelper::release_buffer;
+				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
 				codec_ctx->get_format     = get_format;
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
 				codec_ctx->opaque         = dynamic_cast< HWAccelHelper * >( hwAccelWriter );

@@ -49,8 +49,7 @@ bool FFDecVDPAU::open( StreamInfo *streamInfo, Writer *writer )
 				( ( AVVDPAUContext * )codec_ctx->hwaccel_context )->decoder = ( ( VDPAUWriter * )hwAccelWriter )->getVdpDecoder();
 				( ( AVVDPAUContext * )codec_ctx->hwaccel_context )->render  = ( ( VDPAUWriter * )hwAccelWriter )->getVdpDecoderRender();
 				codec_ctx->thread_count   = 1;
-				codec_ctx->get_buffer     = HWAccelHelper::get_buffer;
-				codec_ctx->release_buffer = HWAccelHelper::release_buffer;
+				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
 				codec_ctx->get_format     = get_format;
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
 				codec_ctx->opaque         = dynamic_cast< HWAccelHelper * >( hwAccelWriter );

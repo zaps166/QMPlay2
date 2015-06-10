@@ -34,6 +34,11 @@ bool Drawable::event( QEvent *e )
 	return QWidget::event( e );
 }
 
+QPaintEngine *Drawable::paintEngine() const
+{
+	return NULL;
+}
+
 /**/
 
 XVideoWriter::XVideoWriter( Module &module ) :

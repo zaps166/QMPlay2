@@ -46,7 +46,7 @@ unix:!macx {
 	HEADERS   += FFDecVDPAU.hpp VDPAUWriter.hpp
 	SOURCES   += FFDecVDPAU.cpp VDPAUWriter.cpp
 	DEFINES   += QMPlay2_VDPAU
-# 	HEADERS   += FFDecVDPAU_NW.hpp
-# 	SOURCES   += FFDecVDPAU_NW.cpp
-# 	DEFINES   += QMPlay2_VDPAU_NW
+#	HEADERS   += FFDecVDPAU_NW.hpp
+#	SOURCES   += FFDecVDPAU_NW.cpp
+#	DEFINES   += QMPlay2_VDPAU_NW
 }

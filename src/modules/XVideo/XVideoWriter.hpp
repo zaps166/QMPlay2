@@ -15,10 +15,7 @@ private:
 	void paintEvent( QPaintEvent * );
 	bool event( QEvent * );
 
-	QPaintEngine *paintEngine() const
-	{
-		return NULL;
-	}
+	QPaintEngine *paintEngine() const;
 
 	int X, Y, W, H;
 	QRect dstRect, srcRect;

@@ -361,6 +361,15 @@ bool VDPAUWriter::HWAccellInit( int W, int H, const char *codec_name )
 	return ok;
 }
 
+QMPlay2SurfaceID VDPAUWriter::getSurface()
+{
+	return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
+}
+void VDPAUWriter::putSurface( QMPlay2SurfaceID id )
+{
+	surfacesQueue.enqueue( id );
+}
+
 void VDPAUWriter::preemption_callback( VdpDevice, void *context )
 {
 	( ( VDPAUWriter * )context )->mustRestartPlaying = true;
@@ -587,6 +596,11 @@ bool VDPAUWriter::event( QEvent *e )
 	if ( e->type() == QEvent::Gesture )
 		return qApp->notify( parent(), e );
 	return QWidget::event( e );
+}
+
+QPaintEngine *VDPAUWriter::paintEngine() const
+{
+	return NULL;
 }
 
 void VDPAUWriter::destroyOutputSurfaces()

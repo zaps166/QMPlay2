@@ -40,19 +40,13 @@ public:
 	{
 		return decoder;
 	}
-	VdpDecoderRender *getVdpDecoderRender() const
+	inline VdpDecoderRender *getVdpDecoderRender() const
 	{
 		return vpd_decoder_render;
 	}
 
-	QMPlay2SurfaceID getSurface()
-	{
-		return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
-	}
-	void putSurface( QMPlay2SurfaceID id )
-	{
-		surfacesQueue.enqueue( id );
-	}
+	QMPlay2SurfaceID getSurface();
+	void putSurface( QMPlay2SurfaceID id );
 private:
 	static void preemption_callback( VdpDevice device, void *context );
 
@@ -65,10 +59,7 @@ private:
 	void paintEvent( QPaintEvent * );
 	bool event( QEvent * );
 
-	QPaintEngine *paintEngine() const
-	{
-		return NULL;
-	}
+	QPaintEngine *paintEngine() const;
 
 	void destroyOutputSurfaces();
 	void clr();

@@ -470,13 +470,22 @@ bool VAApiWriter::HWAccellInit( int W, int H, const char *codec_name )
 	return ok;
 }
 
+QMPlay2SurfaceID VAApiWriter::getSurface()
+{
+	return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
+}
+void VAApiWriter::putSurface( QMPlay2SurfaceID id )
+{
+	surfacesQueue.enqueue( id );
+}
+
 void VAApiWriter::init_vpp()
 {
 #ifdef HAVE_VPP
 	use_vpp = true;
 	if
-	(
-		vaCreateConfig( VADisp, ( VAProfile )-1, VAEntrypointVideoProc, NULL, 0, &config_vpp ) == VA_STATUS_SUCCESS &&
+			(
+			 vaCreateConfig( VADisp, ( VAProfile )-1, VAEntrypointVideoProc, NULL, 0, &config_vpp ) == VA_STATUS_SUCCESS &&
 		vaCreateContext( VADisp, config_vpp, 0, 0, 0, NULL, 0, &context_vpp ) == VA_STATUS_SUCCESS &&
 		vaCreateSurfaces( &id_vpp, 1 )
 	)
@@ -665,6 +674,11 @@ bool VAApiWriter::event( QEvent *e )
 	if ( e->type() == QEvent::Gesture )
 		return qApp->notify( parent(), e );
 	return QWidget::event( e );
+}
+
+QPaintEngine *VAApiWriter::paintEngine() const
+{
+	return NULL;
 }
 
 void VAApiWriter::clearRGBImage()

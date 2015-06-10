@@ -40,6 +40,7 @@ public:
 	bool open();
 
 /**/
+
 	quint8 *getImage( VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt ) const;
 	bool getRGB32Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest ) const;
 	bool getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const;
@@ -60,14 +61,8 @@ public:
 		return config;
 	}
 
-	QMPlay2SurfaceID getSurface()
-	{
-		return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
-	}
-	void putSurface( QMPlay2SurfaceID id )
-	{
-		surfacesQueue.enqueue( id );
-	}
+	QMPlay2SurfaceID getSurface();
+	void putSurface( QMPlay2SurfaceID id );
 private:
 	void init_vpp();
 
@@ -80,10 +75,7 @@ private:
 	void paintEvent( QPaintEvent * );
 	bool event( QEvent * );
 
-	QPaintEngine *paintEngine() const
-	{
-		return NULL;
-	}
+	QPaintEngine *paintEngine() const;
 
 	void clearRGBImage();
 	void clr_vpp();
