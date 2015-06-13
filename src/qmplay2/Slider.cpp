@@ -47,8 +47,7 @@ void Slider::paintEvent( QPaintEvent *e )
 		QStyleOptionSlider opt;
 		initStyleOption( &opt );
 
-		QRect handle = style()->subControlRect( QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this );
-		const int handleW_2 = handle.width() / 2;
+		const int handleW_2 = style()->subControlRect( QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this ).width() / 2;
 
 		const int o = style()->pixelMetric( QStyle::PM_SliderLength ) - 1;
 		if ( firstLine > -1 )
@@ -112,6 +111,11 @@ void Slider::enterEvent( QEvent *e )
 {
 	lastMousePos = -1;
 	QSlider::enterEvent( e );
+}
+void Slider::leaveEvent( QEvent *e )
+{
+	canSetValue = true;
+	QSlider::leaveEvent( e );
 }
 
 int Slider::getMousePos( int X )
