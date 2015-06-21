@@ -327,11 +327,12 @@ bool VAApiWriter::getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, v
 	{
 		QByteArray yv12;
 		yv12.resize( outW * outH * 3 << 1 );
-		memcpy( yv12.data(), data + image.offsets[ 0 ], outW * outH );
-		memcpy( yv12.data() + outW * outH, data + image.offsets[ 1 ], outW/2 * outH/2 );
-		memcpy( yv12.data() + outW * outH + outW/2 * outH/2, data + image.offsets[ 2 ], outW/2 * outH/2 );
+		char *yv12Data = yv12.data();
+		memcpy( yv12Data, data + image.offsets[ 0 ], outW * outH );
+		memcpy( yv12Data + outW * outH, data + image.offsets[ 1 ], outW/2 * outH/2 );
+		memcpy( yv12Data + outW * outH + outW/2 * outH/2, data + image.offsets[ 2 ], outW/2 * outH/2 );
 		vaUnmapBuffer( VADisp, image.buf );
-		yv12ToRGB32->scale( yv12.data(), dest );
+		yv12ToRGB32->scale( yv12Data, dest );
 		vaDestroyImage( VADisp, image.image_id );
 		return true;
 	}
@@ -345,8 +346,9 @@ bool VAApiWriter::getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, v
 	{
 		QByteArray yv12;
 		yv12.resize( outW * outH * 3 << 1 );
-		memcpy( yv12.data(), data + image.offsets[ 0 ], outW * outH );
-		quint8 *yv12data_cb = ( quint8 * )yv12.data() + outW * outH;
+		char *yv12Data = yv12.data();
+		memcpy( yv12Data, data + image.offsets[ 0 ], outW * outH );
+		quint8 *yv12data_cb = ( quint8 * )yv12Data + outW * outH;
 		quint8 *yv12data_cr = yv12data_cb + outW/2 * outH/2;
 		const unsigned second_plane_size = outW * outH / 2;
 		data += image.offsets[ 1 ];

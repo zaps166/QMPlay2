@@ -117,13 +117,14 @@ bool MPDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 
 	decoded.resize( 1024*2*4 ); //BASE_SIZE * CHN * BITS/8
 	decoded.resize( ModPlug_Read( mpfile, decoded.data(), decoded.size() ) );
-
 	if ( !decoded.size() )
 		return false;
 
 	//Konwersja 32bit-int na 32bit-float
+	float *decodedFloat = ( float * )decoded.data();
+	const int *decodedInt = ( const int * )decodedFloat;
 	for ( unsigned i = 0 ; i < decoded.size() / sizeof( float ) ; ++i )
-		( ( float * )decoded.data() )[ i ] = ( ( int * )decoded.data() )[ i ]/2147483648.0;
+		decodedFloat[ i ] = decodedInt[ i ] / 2147483648.0;
 
 	idx = 0;
 	ts = pos;

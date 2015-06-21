@@ -170,7 +170,7 @@ void Radio::finished()
 				RadioList.remove( 0, nazwa.toUtf8().length() + 1 );
 				QString URL = RadioList;
 				RadioList.remove( 0, URL.toUtf8().length() + 1 );
-				int imgSize = *( int * )RadioList.data();
+				int imgSize = *( const int * )RadioList.constData();
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 				quint8 *imgSizeArr = ( quint8 * )&imgSize;
 				imgSize = imgSizeArr[ 0 ] << 24 | imgSizeArr[ 1 ] << 16 | imgSizeArr[ 2 ] << 8 | imgSizeArr[ 3 ];

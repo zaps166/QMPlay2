@@ -101,7 +101,7 @@ qint64 PortAudioWriter::write( const QByteArray &arr )
 #ifndef Q_OS_MAC //?
 	int diff = Pa_GetStreamWriteAvailable( stream ) - outputLatency * sample_rate;
 	if ( diff > 0 )
-		Pa_WriteStream( stream, QByteArray( diff * outputParameters.channelCount * sizeof( float ), 0 ).data(), diff );
+		Pa_WriteStream( stream, QByteArray( diff * outputParameters.channelCount * sizeof( float ), 0 ).constData(), diff );
 #endif
 
 #ifdef Q_OS_LINUX
@@ -121,7 +121,7 @@ qint64 PortAudioWriter::write( const QByteArray &arr )
 	}
 #endif
 
-	int e = Pa_WriteStream( stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof( float ) );
+	int e = Pa_WriteStream( stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof( float ) );
 	if ( e == paUnanticipatedHostError )
 	{
 		QMPlay2Core.logError( "PortAudio :: " + tr( "Błąd podczas odtwarzania" ) );

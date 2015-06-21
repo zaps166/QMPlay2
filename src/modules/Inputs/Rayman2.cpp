@@ -140,7 +140,7 @@ bool Rayman2::open( const QString &url )
 		QByteArray header = reader->read( 0x64 );
 		if ( header.size() == 0x64 )
 		{
-			const char *data = header.data();
+			const char *data = header.constData();
 			readHeader( data );
 			if ( srate && ( chn == 1 || chn == 2 ) && !strncmp( data + 0x14, "vs12", 4 ) && !strncmp( data + 0x60, "DATA", 4 ) )
 			{

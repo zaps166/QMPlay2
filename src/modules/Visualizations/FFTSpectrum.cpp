@@ -66,7 +66,7 @@ void FFTSpectrumW::paintEvent( QPaintEvent * )
 		p.scale( ( width()-1.0 ) / size, height()-1.0 );
 
 		const int realInterval = timInterval.restart();
-		const float *spectrum = spectrumData.data();
+		const float *spectrum = spectrumData.constData();
 		QPainterPath path( QPointF( 0.0, 1.0 ) );
 		for ( int x = 0 ; x < size ; ++x )
 		{

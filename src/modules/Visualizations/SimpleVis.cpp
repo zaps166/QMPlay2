@@ -60,7 +60,7 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 	const int size = soundData.size() / sizeof( float );
 	if ( size >= chn )
 	{
-		const float *samples = ( const float * )soundData.data();
+		const float *samples = ( const float * )soundData.constData();
 
 		p.translate( 0.0, fullScreen );
 		p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
@@ -217,7 +217,7 @@ void SimpleVis::sendSoundData( const QByteArray &data )
 		tmpDataPos += size;
 		if ( tmpDataPos == tmpData.size() )
 		{
-			memcpy( w.soundData.data(), tmpData.data(), tmpDataPos );
+			memcpy( w.soundData.data(), tmpData.constData(), tmpDataPos );
 			tmpDataPos = 0;
 		}
 	}

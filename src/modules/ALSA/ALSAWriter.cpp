@@ -259,13 +259,13 @@ qint64 ALSAWriter::write( const QByteArray &arr )
 	switch ( sample_size )
 	{
 		case 4:
-			convert_samples( ( float * )arr.data(), samples, ( qint32 * )int_samples.data(), mustSwapChn ? channels : 0 );
+			convert_samples( ( const float * )arr.constData(), samples, ( qint32 * )int_samples.constData(), mustSwapChn ? channels : 0 );
 			break;
 		case 2:
-			convert_samples( ( float * )arr.data(), samples, ( qint16 * )int_samples.data(), mustSwapChn ? channels : 0 );
+			convert_samples( ( const float * )arr.constData(), samples, ( qint16 * )int_samples.constData(), mustSwapChn ? channels : 0 );
 			break;
 		case 1:
-			convert_samples( ( float * )arr.data(), samples, ( qint8 * )int_samples.data(), mustSwapChn ? channels : 0 );
+			convert_samples( ( const float * )arr.constData(), samples, ( qint8 * )int_samples.constData(), mustSwapChn ? channels : 0 );
 			break;
 	}
 	switch ( snd_pcm_state( snd ) )
@@ -277,7 +277,7 @@ qint64 ALSAWriter::write( const QByteArray &arr )
 				if ( silence > 0 )
 				{
 					QByteArray silenceArr( silence * channels * sample_size, 0 );
-					snd_pcm_writei( snd, silenceArr.data(), silence );
+					snd_pcm_writei( snd, silenceArr.constData(), silence );
 				}
 			}
 			break;
@@ -287,7 +287,7 @@ qint64 ALSAWriter::write( const QByteArray &arr )
 		default:
 			break;
 	}
-	int ret = snd_pcm_writei( snd, int_samples.data(), to_write );
+	int ret = snd_pcm_writei( snd, int_samples.constData(), to_write );
 	if ( ret < 0 && ret != -EPIPE && snd_pcm_recover( snd, ret, false ) )
 	{
 		QMPlay2Core.logError( "ALSA :: " + tr( "Błąd podczas odtwarzania" ) );
