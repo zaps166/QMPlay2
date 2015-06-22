@@ -3,24 +3,16 @@
 #include <ImgScaler.hpp>
 
 #include <QGLWidget>
-#include <QMutex>
 
 class QGLShaderProgram;
 class OpenGLWriter;
 class QMPlay2_OSD;
 
-#if !defined Q_WS_X11 && !defined Q_OS_WIN && !defined Q_OS_LINUX && !defined Q_OS_FREEBSD
-	#define QtVSync
-#endif
-
 class Drawable : public QGLWidget
 {
+	typedef void (APIENTRY *GLActiveTexture)(GLenum);
 public:
-#ifdef QtVSync
-	Drawable( OpenGLWriter &, const QGLFormat & );
-#else
 	Drawable( OpenGLWriter & );
-#endif
 	~Drawable();
 
 	void clr();
@@ -33,9 +25,7 @@ public:
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
 private:
-#ifndef QtVSync
-	void VSync();
-#endif
+	bool VSync();
 
 	void initializeGL();
 	void resizeGL( int, int );
@@ -43,7 +33,6 @@ private:
 
 	bool event( QEvent * );
 
-	typedef void ( APIENTRY *GLActiveTexture )( GLenum texture );
 	GLActiveTexture glActiveTexture;
 
 	QList< QByteArray > osd_checksums;
@@ -54,10 +43,7 @@ private:
 	float tex_w;
 	ImgScaler imgScaler;
 	int W, H, X, Y, maxTextureSize;
-	bool noShaders, hasImage, canCreateTexturesNonPowerOf2;
-#ifndef QtVSync
-	bool lastVSyncState;
-#endif
+	bool noShaders, hasImage, canCreateTexturesNonPowerOf2, lastVSyncState;
 };
 
 /**/

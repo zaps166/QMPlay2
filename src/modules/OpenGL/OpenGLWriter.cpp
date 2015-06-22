@@ -2,12 +2,12 @@
 
 #include <QMPlay2_OSD.hpp>
 #include <Functions.hpp>
-using Functions::getImageSize;
-using Functions::aligned;
 
 #include <QGLShaderProgram>
 
-#include <GL/glext.h>
+#ifndef Q_OS_MAC
+	#include <GL/glext.h>
+#endif
 
 static inline unsigned getPowerOf2( unsigned n )
 {
@@ -45,12 +45,7 @@ static inline void vertex( int v, int flip )
 	}
 }
 
-#ifdef QtVSync
-Drawable::Drawable( OpenGLWriter &writer, const QGLFormat &format ) :
-	QGLWidget( format ),
-#else
 Drawable::Drawable( OpenGLWriter &writer ) :
-#endif
 	videoFrame( NULL ),
 	writer( writer ),
 	program( NULL ),
@@ -78,38 +73,35 @@ void Drawable::clr()
 
 void Drawable::resizeEvent( QResizeEvent *e )
 {
-	getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
+	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
 	if ( !e )
 		updateGL();
 	else
 		QGLWidget::resizeEvent( e );
 }
 
-#ifndef QtVSync
-void Drawable::VSync()
+bool Drawable::VSync()
 {
-#if defined Q_WS_X11 || defined Q_OS_LINUX || defined Q_OS_FREEBSD
-	typedef int ( *GLXSwapIntervalSGI )( int interval );
-	GLXSwapIntervalSGI glXSwapIntervalSGI = ( GLXSwapIntervalSGI )context()->getProcAddress( "glXSwapIntervalSGI" );
-	if ( glXSwapIntervalSGI )
-		glXSwapIntervalSGI( writer.VSync );
-#elif defined Q_OS_WIN
-	typedef BOOL ( APIENTRY *WGLSwapIntervalEXT )( int interval );
-	WGLSwapIntervalEXT wglSwapIntervalEXT = ( WGLSwapIntervalEXT )context()->getProcAddress( "wglSwapIntervalEXT" );
-	if ( wglSwapIntervalEXT )
-		wglSwapIntervalEXT( writer.VSync );
+	typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
+	SwapInterval swapInterval = NULL;
+#if defined Q_OS_WIN
+	swapInterval = ( SwapInterval )context()->getProcAddress( "wglSwapIntervalEXT" );
+#elif defined Q_OS_MAC
+	//TODO
+#else
+	swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalMESA" );
+	if ( !swapInterval )
+		swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalSGI" );
 #endif
 	lastVSyncState = writer.VSync;
+	if ( swapInterval )
+		return !swapInterval( writer.VSync );
+	return false;
 }
-#endif
 
 void Drawable::initializeGL()
 {
-#ifndef QtVSync
-	VSync();
-#endif
-
-	bool useHUE = format().openGLVersionFlags() >= QGLFormat::OpenGL_Version_3_0 || !strstr( ( const char * )glGetString( GL_RENDERER ), "Intel" );
+	const bool useHUE = format().openGLVersionFlags() >= QGLFormat::OpenGL_Version_3_0 || !strstr( ( const char * )glGetString( GL_RENDERER ), "Intel" );
 	canCreateTexturesNonPowerOf2 = !!strstr( ( const char * )glGetString( GL_EXTENSIONS ), "GL_ARB_texture_non_power_of_two" );
 
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -196,6 +188,8 @@ void Drawable::initializeGL()
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 	}
+
+	lastVSyncState = !writer.VSync; //Ensures to set VSync on first repaint
 }
 void Drawable::resizeGL( int w, int h )
 {
@@ -203,10 +197,8 @@ void Drawable::resizeGL( int w, int h )
 }
 void Drawable::paintGL()
 {
-#ifndef QtVSync
 	if ( lastVSyncState != writer.VSync )
 		VSync();
-#endif
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -268,7 +260,7 @@ void Drawable::paintGL()
 		{
 			if ( canCreateTexturesNonPowerOf2 )
 			{
-				const int aligned8W = aligned( writer.outW, 8 );
+				const int aligned8W = Functions::aligned( writer.outW, 8 );
 				if ( !imgScaler.array() )
 					imgScaler.createArray( aligned8W * writer.outH << 2 );
 				if ( imgScaler.create( writer.outW, writer.outH, aligned8W, writer.outH ) )
@@ -391,23 +383,13 @@ OpenGLWriter::~OpenGLWriter()
 bool OpenGLWriter::set()
 {
 	bool restartPlaying = false;
-
-	bool _VSync = sets().getBool( "VSync" );
 	bool _useShaders = sets().getBool( "Use_shaders" );
-
-	if ( _VSync != VSync )
-	{
-		VSync = _VSync;
-#ifdef QtVSync
-		restartPlaying = true;
-#endif
-	}
 	if ( _useShaders != useShaders )
 	{
 		useShaders = _useShaders;
 		restartPlaying = true;
 	}
-
+	VSync = sets().getBool( "VSync" );
 	return !restartPlaying && sets().getBool( "Enabled" );
 }
 
@@ -482,12 +464,6 @@ bool OpenGLWriter::open()
 {
 	if ( QGLFormat::openGLVersionFlags() == QGLFormat::OpenGL_Version_None )
 		return false;
-#ifdef QtVSync
-	QGLFormat fmt;
-	fmt.setSwapInterval( VSync );
-	drawable = new Drawable( *this, fmt );
-#else
 	drawable = new Drawable( *this );
-#endif
 	return drawable->context()->isValid();
 }
