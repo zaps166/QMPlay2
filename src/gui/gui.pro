@@ -8,13 +8,14 @@ else:unix:!macx: PKGCONFIG += x11
 
 TARGET = QMPlay2
 
-win32: DESTDIR = ../../app
-else: DESTDIR = ../../app/bin
-
-win32: QMAKE_LIBDIR += ../../app
+win32|macx {
+	QMAKE_LIBDIR += ../../app
+	DESTDIR = ../../app
+}
 else {
 	QMAKE_LIBDIR += ../../app/lib
-	LIBS += -lrt
+	DESTDIR = ../../app/bin
+	LIBS += -lrt #For older OS
 }
 LIBS += -lqmplay2
 
@@ -48,7 +49,10 @@ win32 {
 	HEADERS += Updater.hpp
 	SOURCES += Updater.cpp
 
-	DEFINES += TAGLIB_STATIC
+	DEFINES += TAGLIB_STATIC TAGLIB_FULL_INCLUDE_PATH
 	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
 }
-else: PKGCONFIG += taglib
+else {
+	macx: QT_CONFIG -= no-pkg-config
+	PKGCONFIG += taglib
+}

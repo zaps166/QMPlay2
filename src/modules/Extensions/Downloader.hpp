@@ -4,7 +4,6 @@
 #include <QTreeWidget>
 #include <QToolButton>
 #include <QThread>
-#include <QMutex>
 
 class QLabel;
 class QGridLayout;

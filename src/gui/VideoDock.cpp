@@ -22,9 +22,7 @@ using Functions::Url;
 
 VideoDock::VideoDock() :
 	iDW( QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt ),
-#ifndef Q_OS_MAC
 	pixels( 0 ),
-#endif
 	cantpopup( false ), is_floating( false ),
 	touchZoom( 0.0 )
 {
@@ -130,9 +128,7 @@ void VideoDock::mouseMoveEvent( QMouseEvent *e )
 {
 	if ( internalWidget() )
 	{
-#ifndef Q_OS_MAC
 		if ( ++pixels == 25 )
-#endif
 			internalWidget()->unsetCursor();
 		hideCursorTim.start( 750 );
 	}
@@ -174,9 +170,7 @@ void VideoDock::leaveEvent( QEvent *e )
 	hideCursorTim.stop();
 	if ( internalWidget() )
 		internalWidget()->unsetCursor();
-#ifndef Q_OS_MAC
 	pixels = 0;
-#endif
 	DockWidget::leaveEvent( e );
 }
 void VideoDock::enterEvent( QEvent *e )
@@ -222,9 +216,7 @@ void VideoDock::hideCursor()
 	hideCursorTim.stop();
 	if ( internalWidget() )
 		internalWidget()->setCursor( Qt::BlankCursor );
-#ifndef Q_OS_MAC
 	pixels = 0;
-#endif
 }
 void VideoDock::resizedIDW( int w, int h )
 {

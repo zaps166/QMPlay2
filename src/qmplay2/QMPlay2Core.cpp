@@ -25,16 +25,15 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 #else
 	logFilePath = QDir::tempPath() + "/QMPlay2." + QString( getenv( "USER" ) ) + ".log";
 #endif
-#ifdef Q_OS_UNIX
+#if defined Q_OS_MAC
+	UnixOpenCommand = "open ";
+#elif defined Q_OS_UNIX
 	if ( getenv( "KDE_FULL_SESSION" ) )
 		UnixOpenCommand = "kfmclient exec ";
 	else if ( getenv( "GNOME_DESKTOP_SESSION_ID" ) )
 		UnixOpenCommand = "gnome-open ";
 	else
 		UnixOpenCommand = "xdg-open ";
-#endif
-#ifdef Q_OS_MAC
-	UnixOpenCommand = "open ";
 #endif
 }
 
@@ -66,7 +65,7 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 		QFileInfoList pluginsList;
 		QDir( settingsDir ).mkdir( "Modules" );
 		pluginsList += QDir( settingsDir + "Modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
-		pluginsList += QDir( qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+		pluginsList += QDir(  qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
 		foreach ( const QFileInfo &fInfo, pluginsList )
 			if ( QLibrary::isLibrary( fInfo.filePath() ) )
 			{
@@ -75,7 +74,7 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 					log( lib.errorString(), AddTimeToLog | ErrorLog | SaveLog );
 				else
 				{
-					typedef Module *( *QMPlay2PluginInstance )();
+					typedef Module *(*QMPlay2PluginInstance)();
 					QMPlay2PluginInstance qmplay2PluginInstance = ( QMPlay2PluginInstance )lib.resolve( "qmplay2PluginInstance" );
 					if ( !qmplay2PluginInstance )
 						log( fInfo.fileName() + " - " + tr( "nieprawidłowa biblioteka QMPlay2" ), AddTimeToLog | ErrorLog | SaveLog );

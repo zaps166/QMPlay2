@@ -2,7 +2,6 @@
 #include <VideoWriter.hpp>
 
 #include <QWidget>
-#include <QMutex>
 
 #include <ddraw.h>
 

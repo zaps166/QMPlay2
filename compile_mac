@@ -1,0 +1,26 @@
+#!/bin/bash
+
+lrelease QMPlay2.pro
+
+Threads=4
+if [ ! -e $1 ]; then
+	Threads=$1
+fi
+
+qmake && time make -j$Threads
+
+BUILD_ERROR=$?
+
+if [ $BUILD_ERROR != 0 ]; then
+	echo Build failed!
+else
+	QMPlay2Dir=app #/QMPlay2.app/Contents/MacOS
+	#mv app/libqmplay2.dylib $QMPlay2Dir
+	#mv app/modules $QMPlay2Dir
+	mkdir -p $QMPlay2Dir/lang
+	mv lang/*.qm $QMPlay2Dir/lang
+	cp ChangeLog $QMPlay2Dir
+	echo Build complete!
+fi
+
+exit $BUILD_ERROR

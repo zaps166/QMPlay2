@@ -24,7 +24,7 @@
 
 ###Windows (Cross-compile):
 
-- Install all required MinGW packages (I recommend ArchLinux unofficial MinGW repository).
+- Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
 - Some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
 - Notice that QMPlay2 uses static linking for some libraries.
 - Run "./compile_win_cross".
@@ -37,16 +37,30 @@
 
 ###Linux/BSD:
 
+- Install all dependencies using package manager (in devel version) or compile it from sources.
 - If you don't want to open Xterm or Konsole - "export NOTERM=1".
 - If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
 - If you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5".
 - Run "./compile_unix".
 - QMPlay2 is in "app" directory, you can move its contents into /usr directory if $SYSTEM_BUILD == 1.
 
+###OS X:
+
+- Download and install Xcode.
+- Download and install the newest Qt for Mac.
+- Download, compile and install "pkg-config".
+- Download and install CMake for Mac (for taglib).
+- Download, compile and install all dependencies from sources.
+- Run "./compile_mac n" where "n" is number of threads (4 by default).
+
 Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
 >http://aur.archlinux.org/packages/qm/qmplay2-git/PKGBUILD
 
 QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
+
+####Easy installation on Windows
+
+- Download the newest "*.exe" file from http://sourceforge.net/projects/zaps166/files/QMPlay2 for your CPU architecture and install it.
 
 ####Easy installation on openSUSE
 

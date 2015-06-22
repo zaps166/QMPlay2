@@ -3,13 +3,16 @@ CONFIG += plugin
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-win32: DESTDIR = ../../../app/modules
-else: DESTDIR = ../../../app/share/qmplay2/modules
-
-win32: QMAKE_LIBDIR += ../../../app
-else: QMAKE_LIBDIR += ../../../app/lib
+win32|macx {
+	DESTDIR = ../../../app/modules
+	QMAKE_LIBDIR += ../../../app
+	LIBS += -lz
+}
+else {
+	DESTDIR = ../../../app/share/qmplay2/modules
+	QMAKE_LIBDIR += ../../../app/lib
+}
 LIBS += -lqmplay2
-win32: LIBS += -lz
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc

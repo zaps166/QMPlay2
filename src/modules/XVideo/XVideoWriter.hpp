@@ -2,7 +2,6 @@
 
 #include <xv.hpp>
 
-#include <QMutex>
 #include <QWidget>
 
 class Drawable : public QWidget

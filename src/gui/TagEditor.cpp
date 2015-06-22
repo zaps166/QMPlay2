@@ -6,34 +6,64 @@
 #define TAGLIB18 ( TAGLIB_VERSION >= 0x108 )
 #define TAGLIB19 ( TAGLIB_VERSION >= 0x109 )
 
-#include <taglib/taglib.h>
+#ifdef TAGLIB_FULL_INCLUDE_PATH
+	#include <taglib/taglib.h>
+#else
+	#include <taglib.h>
+#endif
 
 #if TAGLIB_VERSION < 0x107
 	#error Taglib 1.7 or newer is needed! You can also remove taglib from "gui.pro".
 #endif
 
-#include <taglib/trueaudiofile.h>
-#include <taglib/oggflacfile.h>
-#include <taglib/wavpackfile.h>
-#include <taglib/vorbisfile.h>
-#include <taglib/speexfile.h>
-#include <taglib/aifffile.h>
-#include <taglib/mpegfile.h>
-#include <taglib/flacfile.h>
-#include <taglib/asffile.h>
-#include <taglib/mpcfile.h>
-#include <taglib/mp4file.h>
-#include <taglib/wavfile.h>
-#include <taglib/apefile.h>
-#include <taglib/fileref.h>
-#if TAGLIB18
-	#include <taglib/modfile.h>
-	#include <taglib/s3mfile.h>
-	#include <taglib/itfile.h>
-	#include <taglib/xmfile.h>
-#endif
-#if TAGLIB19
-	#include <taglib/opusfile.h>
+#ifdef TAGLIB_FULL_INCLUDE_PATH
+	#include <taglib/trueaudiofile.h>
+	#include <taglib/oggflacfile.h>
+	#include <taglib/wavpackfile.h>
+	#include <taglib/vorbisfile.h>
+	#include <taglib/speexfile.h>
+	#include <taglib/aifffile.h>
+	#include <taglib/mpegfile.h>
+	#include <taglib/flacfile.h>
+	#include <taglib/asffile.h>
+	#include <taglib/mpcfile.h>
+	#include <taglib/mp4file.h>
+	#include <taglib/wavfile.h>
+	#include <taglib/apefile.h>
+	#include <taglib/fileref.h>
+	#if TAGLIB18
+		#include <taglib/modfile.h>
+		#include <taglib/s3mfile.h>
+		#include <taglib/itfile.h>
+		#include <taglib/xmfile.h>
+	#endif
+	#if TAGLIB19
+		#include <taglib/opusfile.h>
+	#endif
+#else
+	#include <trueaudiofile.h>
+	#include <oggflacfile.h>
+	#include <wavpackfile.h>
+	#include <vorbisfile.h>
+	#include <speexfile.h>
+	#include <aifffile.h>
+	#include <mpegfile.h>
+	#include <flacfile.h>
+	#include <asffile.h>
+	#include <mpcfile.h>
+	#include <mp4file.h>
+	#include <wavfile.h>
+	#include <apefile.h>
+	#include <fileref.h>
+	#if TAGLIB18
+		#include <modfile.h>
+		#include <s3mfile.h>
+		#include <itfile.h>
+		#include <xmfile.h>
+	#endif
+	#if TAGLIB19
+		#include <opusfile.h>
+	#endif
 #endif
 using namespace TagLib;
 

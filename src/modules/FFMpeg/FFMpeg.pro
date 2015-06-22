@@ -4,17 +4,22 @@ CONFIG += plugin
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT += network
 
-win32: DESTDIR = ../../../app/modules
-else: DESTDIR = ../../../app/share/qmplay2/modules
+win32|macx {
+	DESTDIR = ../../../app/modules
+	QMAKE_LIBDIR += ../../../app
+}
+else {
+	DESTDIR = ../../../app/share/qmplay2/modules
+	QMAKE_LIBDIR += ../../../app/lib
+}
 
-win32: QMAKE_LIBDIR += ../../../app
-else: QMAKE_LIBDIR += ../../../app/lib
-LIBS += -lqmplay2
 win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil
 else {
+	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavformat libavcodec libswscale libavutil
 }
+LIBS += -lqmplay2
 
 DEFINES += __STDC_CONSTANT_MACROS
 

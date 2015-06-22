@@ -1,14 +1,16 @@
 TEMPLATE = lib
+CONFIG += plugin #Creates only one file
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qmplay2
 
-win32: DESTDIR = ../../app
+win32|macx: DESTDIR = ../../app
 else: DESTDIR = ../../app/lib
 
 win32: LIBS += -lswscale -lswresample -lavutil -Wl,-Bstatic -lass -lfontconfig -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
 else {
+	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libswscale libswresample libavutil libass
 }

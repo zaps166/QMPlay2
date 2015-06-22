@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 SUBDIRS = FFMpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters OpenGL AudioCD
-linux*: SUBDIRS += ALSA
+linux*: SUBDIRS += ALSA #OpenSLES
 else: SUBDIRS += PortAudio
 unix:!macx {
 	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo

@@ -30,6 +30,9 @@ MenuBar::MenuBar()
 	addMenu( options = new Options( this ) );
 	addMenu( help = new Help( this ) );
 	connect( widgets, SIGNAL( aboutToShow() ), this, SLOT( widgetsMenuShow() ) );
+#ifdef Q_OS_MAC
+	widgets->addAction( QString() ); //Mac must have any item inside menu, otherwise the menu is not shown
+#endif
 }
 
 MenuBar::Window::Window( MenuBar *parent ) :

@@ -2,7 +2,6 @@
 #include <VisWidget.hpp>
 
 #include <QLinearGradient>
-#include <QMutex>
 
 class FFTSpectrum;
 

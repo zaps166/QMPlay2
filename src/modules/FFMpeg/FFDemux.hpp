@@ -1,9 +1,13 @@
 #include <Demuxer.hpp>
 
+extern "C"
+{
+	#include <libavformat/version.h>
+}
+
 struct AVFormatContext;
 struct AVDictionary;
 struct AVStream;
-class QMutex;
 
 class FFDemux : public Demuxer
 {

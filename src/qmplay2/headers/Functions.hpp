@@ -11,11 +11,15 @@ class QMimeData;
 class QPainter;
 class QRect;
 
-#ifndef Q_OS_WIN
-	#include <unistd.h>
-	#include <time.h>
-#else
+#ifdef Q_OS_WIN
 	#include <windows.h>
+#else
+	#ifdef Q_OS_MAC
+		#include <mach/mach_time.h>
+	#else
+		#include <time.h>
+	#endif
+	#include <unistd.h>
 #endif
 
 namespace Functions
@@ -51,15 +55,26 @@ namespace Functions
 
 	static inline double gettime()
 	{
-#ifndef Q_OS_WIN
-		timespec now;
-		clock_gettime( CLOCK_MONOTONIC, &now );
-		return now.tv_sec + ( now.tv_nsec / 1000000000.0 );
-#else
+#if defined Q_OS_WIN
 		LARGE_INTEGER Frequency, Counter;
 		QueryPerformanceFrequency( &Frequency );
 		QueryPerformanceCounter( &Counter );
 		return ( double )Counter.QuadPart / ( double )Frequency.QuadPart;
+#elif defined Q_OS_MAC
+		mach_timebase_info_data_t mach_base_info;
+		mach_timebase_info( &mach_base_info );
+		return ( ( double )mach_absolute_time() * ( double )mach_base_info.numer ) / ( 1000000000.0 * ( double )mach_base_info.denom );
+#else
+		timespec now;
+		clock_gettime(
+		#ifdef CLOCK_MONOTONIC_RAW
+			CLOCK_MONOTONIC_RAW,
+		#else
+			CLOCK_MONOTONIC,
+		#endif
+			&now
+		);
+		return now.tv_sec + ( now.tv_nsec / 1000000000.0 );
 #endif
 	}
 	static inline void s_wait( const double s )

@@ -399,10 +399,10 @@ static void signal_handler( int s )
 
 int main( int argc, char *argv[] )
 {
-#ifndef Q_OS_WIN
-	const QString unixPath = "/../share/qmplay2";
-#else
+#if defined Q_OS_WIN || defined Q_OS_MAC
 	const QString unixPath;
+#else
+	const QString unixPath = "/../share/qmplay2";
 #endif
 
 	signal( SIGINT, signal_handler );
@@ -487,11 +487,13 @@ int main( int argc, char *argv[] )
 		QMPlay2GUI.loadIcons();
 
 		QMPlay2GUI.pipe = new QLocalServer;
-#ifndef Q_OS_WIN
-		if ( !QMPlay2GUI.pipe->listen( QMPlay2GUI.getPipe() ) )
-#else
-		if ( WaitNamedPipeA( QMPlay2GUI.getPipe().toLatin1(), NMPWAIT_USE_DEFAULT_WAIT ) || !QMPlay2GUI.pipe->listen( QMPlay2GUI.getPipe() ) )
+		if
+		(
+#ifdef Q_OS_WIN
+			WaitNamedPipeA( QMPlay2GUI.getPipe().toLocal8Bit(), NMPWAIT_USE_DEFAULT_WAIT ) ||
 #endif
+			!QMPlay2GUI.pipe->listen( QMPlay2GUI.getPipe() )
+		)
 		{
 			delete QMPlay2GUI.pipe;
 			QMPlay2GUI.pipe = NULL;

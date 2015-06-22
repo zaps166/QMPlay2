@@ -1,7 +1,6 @@
 #include <FFDemux.hpp>
 #include <FFCommon.hpp>
 
-#include <QMutex>
 #include <QDebug>
 
 extern "C"

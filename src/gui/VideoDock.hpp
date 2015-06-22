@@ -42,9 +42,7 @@ private:
 	InDockW iDW;
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
-#ifndef Q_OS_MAC
 	int pixels;
-#endif
 	bool cantpopup, is_floating;
 	double touchZoom;
 private slots:

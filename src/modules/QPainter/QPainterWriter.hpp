@@ -2,7 +2,6 @@
 #include <ImgScaler.hpp>
 
 #include <QWidget>
-#include <QMutex>
 
 class QPainterWriter;
 class QMPlay2_OSD;
