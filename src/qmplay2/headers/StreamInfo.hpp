@@ -32,42 +32,12 @@ enum QMPlay2Tags
 	QMPLAY2_TAG_COMMENT
 };
 
-
 class StreamInfo
 {
 	Q_DECLARE_TR_FUNCTIONS( StreamInfo )
 public:
-	static inline QMPlay2Tags getTag( const QString &tag )
-	{
-		bool ok;
-		const int tagID = tag.toInt( &ok );
-		if ( ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_COMMENT )
-			return ( QMPlay2Tags )tagID;
-		return QMPLAY2_TAG_UNKNOWN;
-	}
-	static QString getTagName( const QString &tag )
-	{
-		const QMPlay2Tags tagID = getTag( tag );
-		switch ( tagID )
-		{
-			case QMPLAY2_TAG_LANGUAGE:
-				return tr( "Język" );
-			case QMPLAY2_TAG_TITLE:
-				return tr( "Tytuł" );
-			case QMPLAY2_TAG_ARTIST:
-				return tr( "Artysta" );
-			case QMPLAY2_TAG_ALBUM:
-				return tr( "Album" );
-			case QMPLAY2_TAG_GENRE:
-				return tr( "Gatunek" );
-			case QMPLAY2_TAG_DATE:
-				return tr( "Data" );
-			case QMPLAY2_TAG_COMMENT:
-				return tr( "Komentarz" );
-			default:
-				return tag;
-		}
-	}
+	static QMPlay2Tags getTag( const QString &tag );
+	static QString getTagName( const QString &tag );
 
 	inline StreamInfo() :
 		type( QMPLAY2_TYPE_UNKNOWN ),

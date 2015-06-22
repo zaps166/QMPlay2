@@ -80,7 +80,7 @@ void Drawable::resizeEvent( QResizeEvent *e )
 		QGLWidget::resizeEvent( e );
 }
 
-bool Drawable::VSync()
+void Drawable::VSync()
 {
 	typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
 	SwapInterval swapInterval = NULL;
@@ -95,8 +95,7 @@ bool Drawable::VSync()
 #endif
 	lastVSyncState = writer.VSync;
 	if ( swapInterval )
-		return !swapInterval( writer.VSync );
-	return false;
+		swapInterval( writer.VSync );
 }
 
 void Drawable::initializeGL()
@@ -225,17 +224,17 @@ void Drawable::paintGL()
 			glBindTexture( GL_TEXTURE_2D, 4 );
 		else
 		{
-			/* Select texture unit 1 as the active unit and bind the U texture. */
+			/* Select texture unit 1 as the active unit and bind the Cb texture */
 			glActiveTexture( GL_TEXTURE1 );
 			glBindTexture( GL_TEXTURE_2D, 2 );
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 1 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 1 ] );
 
-			/* Select texture unit 2 as the active unit and bind the V texture. */
+			/* Select texture unit 2 as the active unit and bind the Cr texture */
 			glActiveTexture( GL_TEXTURE2 );
 			glBindTexture( GL_TEXTURE_2D, 3 );
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 2 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
 
-			/* Select texture unit 0 as the active unit and bind the Y texture. */
+			/* Select texture unit 0 as the active unit and bind the Y texture */
 			glActiveTexture( GL_TEXTURE0 );
 			glBindTexture( GL_TEXTURE_2D, 4 );
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 0 ], writer.outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 0 ] );

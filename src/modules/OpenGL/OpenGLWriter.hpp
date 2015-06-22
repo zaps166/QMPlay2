@@ -25,7 +25,7 @@ public:
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
 private:
-	bool VSync();
+	void VSync();
 
 	void initializeGL();
 	void resizeGL( int, int );

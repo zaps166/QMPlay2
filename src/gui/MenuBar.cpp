@@ -32,7 +32,8 @@ MenuBar::MenuBar()
 	connect( widgets, SIGNAL( aboutToShow() ), this, SLOT( widgetsMenuShow() ) );
 }
 
-MenuBar::Window::Window( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Window::Window( MenuBar *parent ) :
+	QMenu( Window::tr( "&Okno" ), parent )
 {
 #ifdef Q_OS_WIN
 	newAction( Window::tr( "&Konsola" ), this, QKeySequence( "Ctlr+Shift+C" ), console, false, QIcon(), true );
@@ -45,8 +46,8 @@ MenuBar::Window::Window( MenuBar *parent, const QString &name ) : QMenu( name, p
 	newAction( Window::tr( "&Zamknij" ), this, QKeySequence( "Alt+F4" ), close, false, QMPlay2Core.getIconFromTheme( "application-exit" ), false );
 }
 
-MenuBar::Widgets::Widgets( MenuBar *parent, const QString &name ) :
-	QMenu( name, parent )
+MenuBar::Widgets::Widgets( MenuBar *parent ) :
+	QMenu( Widgets::tr( "&Widgety" ), parent )
 {}
 void MenuBar::Widgets::menuShow()
 {
@@ -64,7 +65,8 @@ void MenuBar::Widgets::menuShow()
 	}
 }
 
-MenuBar::Playlist::Playlist( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playlist::Playlist( MenuBar *parent ) :
+	QMenu( Playlist::tr( "&Lista odtwarzania" ), parent )
 {
 	add = new Add( this );
 	addMenu( add );
@@ -110,7 +112,8 @@ MenuBar::Playlist::Playlist( MenuBar *parent, const QString &name ) : QMenu( nam
 	addSeparator();
 	newAction( Playlist::tr( "&Właściwości" ), this, QKeySequence( "Alt+Return" ), entryProperties, false, QMPlay2Core.getIconFromTheme( "document-properties" ), false );
 }
-MenuBar::Playlist::Add::Add( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playlist::Add::Add( QMenu *parent ) :
+	QMenu( Add::tr( "&Dodaj" ), parent )
 {
 	setIcon( QMPlay2Core.getIconFromTheme( "list-add" ) );
 	newAction( Add::tr( "&Pliki" ), this, QKeySequence( "Ctrl+I" ), file, false, QMPlay2Core.getIconFromTheme( "applications-multimedia" ), false );
@@ -118,7 +121,8 @@ MenuBar::Playlist::Add::Add( QMenu *parent, const QString &name ) : QMenu( name,
 	newAction( Add::tr( "&Adres" ), this, QKeySequence( "Ctrl+U" ), address, false, QMPlay2Core.getIconFromTheme( "application-x-mswinurl" ), false );
 	addSeparator();
 }
-MenuBar::Playlist::Sort::Sort( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playlist::Sort::Sort( QMenu *parent ) :
+	QMenu( Sort::tr( "S&ortuj" ), parent )
 {
 	newAction( Sort::tr( "&Od najkrótszej do najdłuższej" ), this, QKeySequence(), timeSort1, false, QIcon(), false );
 	newAction( Sort::tr( "O&d najdłuższej do najkrótszej" ), this, QKeySequence(), timeSort2, false, QIcon(), false );
@@ -127,7 +131,8 @@ MenuBar::Playlist::Sort::Sort( QMenu *parent, const QString &name ) : QMenu( nam
 	newAction( Sort::tr( "&Z-A" ), this, QKeySequence(), titleSort2, false, QIcon(), false );
 }
 
-MenuBar::Player::Player( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Player::Player( MenuBar *parent ) :
+	QMenu( Player::tr( "O&dtwarzacz" ), parent )
 {
 	newAction( QString(), this, QKeySequence( "Space" ), togglePlay, false, QMPlay2Core.getIconFromTheme( "media-playback-start" ), false );
 	newAction( Player::tr( "&Zatrzymaj" ), this, QKeySequence( "V" ), stop, false, QMPlay2Core.getIconFromTheme( "media-playback-stop" ), false );
@@ -163,7 +168,8 @@ MenuBar::Player::Player( MenuBar *parent, const QString &name ) : QMenu( name, p
 	newAction( Player::tr( "&Ciszej" ), this, QKeySequence( "/" ), volDown, true, QIcon(), false );
 	newAction( Player::tr( "&Wyciszenie" ), this, QKeySequence( "M" ), toggleMute, false, QMPlay2Core.getIconFromTheme( "audio-volume-muted" ), true );
 }
-MenuBar::Player::Repeat::Repeat( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Player::Repeat::Repeat( QMenu *parent ) :
+	QMenu( Repeat::tr( "Zapętlenie &odtwarzania" ), parent )
 {
 	choice = new QActionGroup( this );
 	choice->addAction( newAction( Repeat::tr( "&Bez zapętlenia" ), this, QKeySequence( "Alt+0" ), normal, false, QIcon(), true ) );
@@ -181,7 +187,8 @@ MenuBar::Player::Repeat::Repeat( QMenu *parent, const QString &name ) : QMenu( n
 	random->setObjectName( "random" );
 	randomGroup->setObjectName( "randomGroup" );
 }
-MenuBar::Player::AspectRatio::AspectRatio( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Player::AspectRatio::AspectRatio( QMenu *parent ) :
+	QMenu( AspectRatio::tr( "W&spółczynnik proporcji" ), parent )
 {
 	choice = new QActionGroup( this );
 	choice->addAction( newAction( AspectRatio::tr( "&Auto" ), this, QKeySequence(), _auto, false, QIcon(), true ) );
@@ -215,7 +222,8 @@ void MenuBar::Player::seekActionsEnable( bool e )
 	lSeekB->setShortcutContext( ctx );
 }
 
-MenuBar::Playing::Playing( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playing::Playing( MenuBar *parent ) :
+	QMenu( Playing::tr( "Od&twarzanie" ), parent )
 {
 	newAction( Playing::tr( "&Dźwięk włączony" ), this, QKeySequence( "D" ), toggleAudio, false, QIcon(), true )->setObjectName( "toggleAudio" );
 	toggleAudio->setChecked( true );
@@ -248,7 +256,8 @@ MenuBar::Playing::Playing( MenuBar *parent, const QString &name ) : QMenu( name,
 	addSeparator();
 	newAction( Playing::tr( "&Zrzut ekranu" ), this, QKeySequence( "Alt+S" ), screenShot, true, QIcon(), false );
 }
-MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent ) :
+	QMenu( VideoFilters::tr( "Filtry wid&eo" ), parent )
 {
 	/** Korektor wideo */
 	QMenu *videoEqualizerMenu = new QMenu( VideoFilters::tr( "&Korektor wideo" ), this );
@@ -261,7 +270,8 @@ MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent, const QString &name
 	newAction( VideoFilters::tr( "Odbicie &lustrzane" ), this, QKeySequence( "Ctrl+M" ), hFlip, true, QIcon(), true );
 	newAction( VideoFilters::tr( "Odbicie &pionowe" ), this, QKeySequence( "Ctrl+R" ), vFlip, true, QIcon(), true );
 }
-MenuBar::Playing::AudioChannels::AudioChannels( QMenu *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Playing::AudioChannels::AudioChannels( QMenu *parent ) :
+	QMenu( AudioChannels::tr( "&Kanały" ) , parent )
 {
 	choice = new QActionGroup( this );
 	choice->addAction( newAction( AudioChannels::tr( "&Automatycznie" ), this, QKeySequence(), _auto, false, QIcon(), true ) );
@@ -283,7 +293,8 @@ MenuBar::Playing::AudioChannels::AudioChannels( QMenu *parent, const QString &na
 	other->setEnabled( false );
 }
 
-MenuBar::Options::Options( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Options::Options( MenuBar *parent ) :
+	QMenu( Options::tr( "Op&cje" ), parent )
 {
 	newAction( Options::tr( "&Ustawienia" ), this, QKeySequence( "Ctrl+O" ), settings, false, QMPlay2Core.getIconFromTheme( "configure" ), false );
 	newAction( Options::tr( "Ustawienia &modułów" ), this, QKeySequence( "Ctrl+Shift+O" ), modulesSettings, false, QMPlay2Core.getIconFromTheme( "configure" ), false );
@@ -291,7 +302,8 @@ MenuBar::Options::Options( MenuBar *parent, const QString &name ) : QMenu( name,
 	newAction( Options::tr( "&Pokaż ikonkę w tray'u" ), this, QKeySequence( "Ctrl+T" ), trayVisible, false, QIcon(), true );
 }
 
-MenuBar::Help::Help( MenuBar *parent, const QString &name ) : QMenu( name, parent )
+MenuBar::Help::Help( MenuBar *parent ) :
+	QMenu( Help::tr( "Po&moc" ), parent )
 {
 	newAction( Help::tr( "&O QMPlay2" ), this, QKeySequence( "F1" ), about, false, QIcon(), false );
 #ifdef UPDATER

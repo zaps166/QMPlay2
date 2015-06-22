@@ -1,10 +1,9 @@
 #ifndef MENUBAR_HPP
 #define MENUBAR_HPP
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QMenuBar>
 
-class QWidgetAction;
 class VideoEqualizer;
 
 class MenuBar : public QMenuBar
@@ -17,7 +16,7 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Window )
 	public:
-		Window( MenuBar *parent, const QString &name = tr( "&Okno" ) );
+		Window( MenuBar *parent );
 #ifdef Q_OS_WIN
 		QAction *console;
 #endif
@@ -29,7 +28,7 @@ public:
 		Q_DECLARE_TR_FUNCTIONS( Widgets )
 		friend class MenuBar;
 	public:
-		Widgets( MenuBar *parent, const QString &name = tr( "&Widgety" ) );
+		Widgets( MenuBar *parent );
 	private:
 		void menuShow();
 	};
@@ -38,19 +37,19 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Playlist )
 	public:
-		Playlist( MenuBar *parent, const QString &name = tr( "&Lista odtwarzania" ) );
+		Playlist( MenuBar *parent );
 		class Add : public QMenu
 		{
 			Q_DECLARE_TR_FUNCTIONS( Add )
 		public:
-			Add( QMenu *, const QString &name = tr( "&Dodaj" ) );
+			Add( QMenu *parent );
 			QAction *address, *file, *dir;
 		};
 		class Sort : public QMenu
 		{
 			Q_DECLARE_TR_FUNCTIONS( Sort )
 		public:
-			Sort( QMenu *, const QString &name = tr( "S&ortuj" ) );
+			Sort( QMenu *parent );
 			QAction *timeSort1, *timeSort2, *titleSort1, *titleSort2;
 		};
 		Add *add;
@@ -63,12 +62,12 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Player )
 	public:
-		Player( MenuBar *parent, const QString &name = tr( "O&dtwarzacz" ) );
+		Player( MenuBar *parent );
 		class Repeat : public QMenu
 		{
 			Q_DECLARE_TR_FUNCTIONS( Repeat )
 		public:
-			Repeat( QMenu *, const QString &name = tr( "Zapętlenie &odtwarzania" ) );
+			Repeat( QMenu *parent );
 			QActionGroup *choice;
 			QAction *normal, *repeatEntry, *repeatGroup, *repeatList, *random, *randomGroup;
 		};
@@ -76,7 +75,7 @@ public:
 		{
 			Q_DECLARE_TR_FUNCTIONS( AspectRatio )
 		public:
-			AspectRatio( QMenu *, const QString &name = tr( "W&spółczynnik proporcji" ) );
+			AspectRatio( QMenu *parent );
 			QActionGroup *choice;
 			QAction *_auto, *_1x1, *_4x3, *_5x4, *_16x9, *_3x2, *_21x9, *sizeDep, *off;
 		};
@@ -90,13 +89,13 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Playing )
 	public:
-		Playing( MenuBar *parent, const QString &name = tr( "Od&twarzanie" ) );
+		Playing( MenuBar *parent );
 
 		class VideoFilters : public QMenu
 		{
 			Q_DECLARE_TR_FUNCTIONS( VideoFilters )
 		public:
-			VideoFilters( QMenu *, const QString &name = tr( "Filtry wid&eo" ) );
+			VideoFilters( QMenu *parent );
 			VideoEqualizer *videoEqualizer;
 			QAction *more, *hFlip, *vFlip;
 		};
@@ -104,7 +103,7 @@ public:
 		{
 			Q_DECLARE_TR_FUNCTIONS( AudioChannels )
 		public:
-			AudioChannels( QMenu *, const QString &name = tr( "&Kanały" ) );
+			AudioChannels( QMenu *parent );
 			QAction *_auto, *_1, *_2, *_4, *_6, *_8, *other;
 			QActionGroup *choice;
 		};
@@ -117,7 +116,7 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Options )
 	public:
-		Options( MenuBar *parent, const QString &name = tr( "Op&cje" ) );
+		Options( MenuBar *parent );
 		QAction *settings, *modulesSettings, *trayVisible;
 	};
 
@@ -125,7 +124,7 @@ public:
 	{
 		Q_DECLARE_TR_FUNCTIONS( Help )
 	public:
-		Help( MenuBar *parent, const QString &name = tr( "Po&moc" ) );
+		Help( MenuBar *parent );
 		QAction *about,
 #ifdef UPDATER
 		*updates,
