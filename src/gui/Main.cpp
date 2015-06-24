@@ -220,9 +220,6 @@ void QMPlay2GUIClass::updateInDockW()
 
 QMPlay2GUIClass::QMPlay2GUIClass() :
 	groupIcon( NULL ), mediaIcon( NULL ), folderIcon( NULL ),
-#ifdef Q_OS_WIN
-	forbid_screensaver( false ),
-#endif
 	mainW( NULL )
 {
 	QFile f( ":/Languages.csv" );
@@ -399,7 +396,7 @@ static void signal_handler( int s )
 
 int main( int argc, char *argv[] )
 {
-#if defined Q_OS_WIN || defined Q_OS_MAC
+#if defined Q_OS_WIN || defined Q_OS_MAC || defined Q_OS_ANDROID
 	const QString unixPath;
 #else
 	const QString unixPath = "/../share/qmplay2";
@@ -456,7 +453,10 @@ int main( int argc, char *argv[] )
 		}
 #endif
 		if ( !useGui )
+		{
+			delete qApp;
 			return 0;
+		}
 	}
 
 	qApp->installTranslator( &translator );
@@ -468,7 +468,7 @@ int main( int argc, char *argv[] )
 
 	do
 	{
-		/* QMPlay2GUI musi być wywołane już wcześniej */
+		/* QMPlay2GUI musi być stworzone już wcześniej */
 		QMPlay2Core.init( !help, qApp->applicationDirPath() + unixPath );
 
 		Settings &settings = QMPlay2Core.getSettings();
@@ -542,9 +542,8 @@ int main( int argc, char *argv[] )
 		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
 		new MainWidget( QMPArguments );
 		qApp->exec();
-		QMPlay2GUI.mainW = NULL;
 
-		QString settingsDir = QMPlay2Core.getSettingsDir();
+		const QString settingsDir = QMPlay2Core.getSettingsDir();
 		QMPlay2Core.quit();
 		if ( QMPlay2GUI.removeSettings )
 			foreach ( const QString &fName, QDir( settingsDir ).entryList( QStringList( "*.ini" ) ) )

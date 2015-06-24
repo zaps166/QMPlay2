@@ -1,8 +1,8 @@
-Changes in QMPlay2 build 15.06.23:
+Changes in QMPlay2 build 15.06.24:
 	- better VSync support for OpenGL video output,
 	- OpenSLES audio output (for Android),
 	- basic OS X support,
-	- minor slider fixes,
+	- minor bug fixes,
 
 Zmiany w QMPlay2 build 15.06.06:
 	- większy pasek zmiany rozmiaru okien dla ekranów dotykowych,

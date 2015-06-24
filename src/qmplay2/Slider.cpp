@@ -68,7 +68,8 @@ void Slider::paintEvent( QPaintEvent *e )
 }
 void Slider::mousePressEvent( QMouseEvent *e )
 {
-	canSetValue = false;
+	if ( e->buttons() != Qt::RightButton ) //Usually context menu or nothing
+		canSetValue = false;
 	if ( e->buttons() != Qt::LeftButton )
 		QSlider::mousePressEvent( e );
 	else
@@ -111,11 +112,6 @@ void Slider::enterEvent( QEvent *e )
 {
 	lastMousePos = -1;
 	QSlider::enterEvent( e );
-}
-void Slider::leaveEvent( QEvent *e )
-{
-	canSetValue = true;
-	QSlider::leaveEvent( e );
 }
 
 int Slider::getMousePos( int X )

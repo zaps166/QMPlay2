@@ -31,7 +31,6 @@ protected:
 	void mouseMoveEvent( QMouseEvent * );
 	void wheelEvent( QWheelEvent * );
 	void enterEvent( QEvent * );
-	void leaveEvent( QEvent * );
 private:
 	int getMousePos( int X );
 

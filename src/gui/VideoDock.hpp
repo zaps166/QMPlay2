@@ -31,7 +31,9 @@ private:
 	void dragEnterEvent( QDragEnterEvent * );
 	void dropEvent( QDropEvent * );
 	void mouseMoveEvent( QMouseEvent * );
+#ifndef Q_OS_MAC
 	void mouseDoubleClickEvent( QMouseEvent * );
+#endif
 	void mousePressEvent( QMouseEvent * );
 	void wheelEvent( QWheelEvent * );
 	void leaveEvent( QEvent * );

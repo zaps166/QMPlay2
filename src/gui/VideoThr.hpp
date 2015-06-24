@@ -5,9 +5,6 @@
 #include <VideoFilters.hpp>
 
 class QMPlay2_OSD;
-class PlayClass;
-class Decoder;
-class Writer;
 
 class VideoThr : public AVThread
 {
@@ -15,11 +12,24 @@ class VideoThr : public AVThread
 public:
 	VideoThr( PlayClass &, Writer *, const QStringList &pluginsName = QStringList() );
 
-	void stop( bool terminate = false );
-
 	inline bool isHWAccel() const
 	{
 		return HWAccel;
+	}
+
+	inline void setDoScreenshot()
+	{
+		doScreenshot = true;
+	}
+	inline void setSyncVtoA( bool b )
+	{
+		syncVtoA = b;
+	}
+
+	void destroySubtitlesDecoder();
+	inline void setSubtitlesDecoder( Decoder *dec )
+	{
+		sDec = dec;
 	}
 
 	bool setFlip();
@@ -34,16 +44,15 @@ public:
 
 	void updateSubs();
 
-	Decoder *sDec;
-	bool deleteSubs, syncVtoA, do_screenshot;
 private:
 	~VideoThr();
 
 	void run();
 
-	bool canWrite, HWAccel, deleteOSD, deleteFrame;
+	bool deleteSubs, syncVtoA, doScreenshot, canWrite, HWAccel, deleteOSD, deleteFrame;
 	int W, H;
 
+	Decoder *sDec;
 	QMPlay2_OSD *napisy;
 	VideoFilters filters;
 private slots:

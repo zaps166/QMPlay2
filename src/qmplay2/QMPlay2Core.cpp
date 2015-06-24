@@ -63,9 +63,13 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 	{
 		QStringList pluginsName;
 		QFileInfoList pluginsList;
+#ifndef Q_OS_ANDROID
 		QDir( settingsDir ).mkdir( "Modules" );
 		pluginsList += QDir( settingsDir + "Modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
 		pluginsList += QDir(  qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+#else
+		pluginsList += QDir( qmplay2Dir ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+#endif
 		foreach ( const QFileInfo &fInfo, pluginsList )
 			if ( QLibrary::isLibrary( fInfo.filePath() ) )
 			{
@@ -77,7 +81,11 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 					typedef Module *(*QMPlay2PluginInstance)();
 					QMPlay2PluginInstance qmplay2PluginInstance = ( QMPlay2PluginInstance )lib.resolve( "qmplay2PluginInstance" );
 					if ( !qmplay2PluginInstance )
+					{
+#ifndef Q_OS_ANDROID
 						log( fInfo.fileName() + " - " + tr( "nieprawidłowa biblioteka QMPlay2" ), AddTimeToLog | ErrorLog | SaveLog );
+#endif
+					}
 					else
 					{
 						Module *pluginInstance = qmplay2PluginInstance();

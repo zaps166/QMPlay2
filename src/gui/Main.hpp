@@ -54,10 +54,7 @@ public:
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;
 
-	MenuBar *menubar;
-#ifdef Q_OS_WIN
-	bool forbid_screensaver;
-#endif
+	MenuBar *menuBar;
 	QWidget *mainW;
 	QLocalServer *pipe;
 	bool restartApp, removeSettings;

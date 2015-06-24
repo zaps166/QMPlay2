@@ -7,10 +7,6 @@
 #include <Functions.hpp>
 #include <SubsDec.hpp>
 
-using Functions::chkMimeData;
-using Functions::getUrlsFromMimeData;
-using Functions::Url;
-
 #include <QMouseEvent>
 #include <QFileInfo>
 #include <QMimeData>
@@ -29,13 +25,28 @@ VideoDock::VideoDock() :
 	setWindowTitle( tr( "Wideo" ) );
 
 	popupMenu = new QMenu( this );
-	popupMenu->addMenu( QMPlay2GUI.menubar->window );
-	popupMenu->addMenu( QMPlay2GUI.menubar->widgets );
-	popupMenu->addMenu( QMPlay2GUI.menubar->playlist );
-	popupMenu->addMenu( QMPlay2GUI.menubar->player );
-	popupMenu->addMenu( QMPlay2GUI.menubar->playing );
-	popupMenu->addMenu( QMPlay2GUI.menubar->options );
-	popupMenu->addMenu( QMPlay2GUI.menubar->help );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->window );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->widgets );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->playlist );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->player );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->playing );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->options );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->help );
+
+	/* Menu actions which will be available in fullscreen or compact mode */
+	addAction( QMPlay2GUI.menuBar->window->toggleFullScreen );
+	addAction( QMPlay2GUI.menuBar->window->toggleCompactView );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->playlist->actions() )
+		addAction( act );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->player->actions() )
+		addAction( act );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->playing->actions() )
+		addAction( act );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->options->actions() )
+		addAction( act );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->help->actions() )
+		addAction( act );
+	/**/
 
 	setMouseTracking( true );
 	setAcceptDrops( true );
@@ -97,12 +108,12 @@ void VideoDock::dropEvent( QDropEvent *e )
 	if ( e )
 	{
 		const QMimeData *mimeData = e->mimeData();
-		if ( chkMimeData( mimeData ) )
+		if ( Functions::chkMimeData( mimeData ) )
 		{
-			QStringList urls = getUrlsFromMimeData( mimeData );
+			QStringList urls = Functions::getUrlsFromMimeData( mimeData );
 			if ( urls.size() == 1 )
 			{
-				QString url = Url( urls[ 0 ] );
+				QString url = Functions::Url( urls[ 0 ] );
 #ifdef Q_OS_WIN
 				if ( url.left( 7 ) == "file://" )
 					url.remove( 0, 7 );
@@ -135,21 +146,23 @@ void VideoDock::mouseMoveEvent( QMouseEvent *e )
 	if ( e )
 		DockWidget::mouseMoveEvent( e );
 }
+#ifndef Q_OS_MAC
 void VideoDock::mouseDoubleClickEvent( QMouseEvent *e )
 {
 	if ( e->buttons() == Qt::LeftButton )
-		QMPlay2GUI.menubar->window->toggleFullScreen->trigger();
+		QMPlay2GUI.menuBar->window->toggleFullScreen->trigger();
 	DockWidget::mouseDoubleClickEvent( e );
 }
+#endif
 void VideoDock::mousePressEvent( QMouseEvent *e )
 {
 	if ( e->buttons() == Qt::MiddleButton )
-		QMPlay2GUI.menubar->player->togglePlay->trigger();
+		QMPlay2GUI.menuBar->player->togglePlay->trigger();
 	else if ( ( e->buttons() & ( Qt::LeftButton | Qt::MiddleButton ) ) == ( Qt::LeftButton | Qt::MiddleButton ) )
-		QMPlay2GUI.menubar->player->reset->trigger();
+		QMPlay2GUI.menuBar->player->reset->trigger();
 	else if ( ( e->buttons() & ( Qt::LeftButton | Qt::RightButton ) ) == ( Qt::LeftButton | Qt::RightButton ) )
 	{
-		QMPlay2GUI.menubar->player->switchARatio->trigger();
+		QMPlay2GUI.menuBar->player->switchARatio->trigger();
 		cantpopup = true;
 	}
 	DockWidget::mousePressEvent( e );
@@ -159,9 +172,9 @@ void VideoDock::wheelEvent( QWheelEvent *e )
 	if ( e->orientation() == Qt::Vertical )
 	{
 		if ( e->buttons() & Qt::LeftButton )
-			e->delta() > 0 ? QMPlay2GUI.menubar->player->zoomIn->trigger() : QMPlay2GUI.menubar->player->zoomOut->trigger();
+			e->delta() > 0 ? QMPlay2GUI.menuBar->player->zoomIn->trigger() : QMPlay2GUI.menuBar->player->zoomOut->trigger();
 		else if ( e->buttons() == Qt::NoButton && QMPlay2Core.getSettings().getBool( "ScrollSeek" ) )
-			e->delta() > 0 ? QMPlay2GUI.menubar->player->seekF->trigger() : QMPlay2GUI.menubar->player->seekB->trigger();
+			e->delta() > 0 ? QMPlay2GUI.menuBar->player->seekF->trigger() : QMPlay2GUI.menuBar->player->seekB->trigger();
 	}
 	DockWidget::wheelEvent( e );
 }
@@ -193,9 +206,9 @@ bool VideoDock::event( QEvent *e )
 				if ( fabs( touchZoom ) >= 0.05 )
 				{
 					if ( touchZoom > 0.00 )
-						QMPlay2GUI.menubar->player->zoomIn->trigger();
+						QMPlay2GUI.menuBar->player->zoomIn->trigger();
 					else if ( touchZoom < 0.00 )
-						QMPlay2GUI.menubar->player->zoomOut->trigger();
+						QMPlay2GUI.menuBar->player->zoomOut->trigger();
 					touchZoom = 0.0;
 				}
 			}

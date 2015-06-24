@@ -261,6 +261,12 @@ bool PlayClass::isPlaying() const
 {
 	return demuxThr && demuxThr->isRunning();
 }
+#ifdef Q_OS_WIN
+bool PlayClass::isNowPlayingVideo() const
+{
+	return !paused && vThr && vThr->isRunning();
+}
+#endif
 
 void PlayClass::loadSubsFile( const QString &fileName )
 {
@@ -282,11 +288,7 @@ void PlayClass::loadSubsFile( const QString &fileName )
 
 			sPackets.lock();
 
-			if ( vThr->sDec )
-			{
-				delete vThr->sDec;
-				vThr->sDec = NULL;
-			}
+			vThr->destroySubtitlesDecoder();
 			if ( !QMPlay2Core.getSettings().getBool( "KeepSubtitlesDelay" ) )
 				subtitlesSync = 0.0;
 			ass->closeASS();
@@ -429,11 +431,7 @@ void PlayClass::stopVDec()
 		if ( vThr->lock() )
 		{
 			vThr->destroyDec();
-			if ( vThr->sDec )
-			{
-				delete vThr->sDec;
-				vThr->sDec = NULL;
-			}
+			vThr->destroySubtitlesDecoder();
 		}
 		else
 		{
@@ -817,7 +815,7 @@ void PlayClass::screenShot()
 {
 	if ( vThr )
 	{
-		vThr->do_screenshot = true;
+		vThr->setDoScreenshot();
 		emptyBufferCond.wakeAll();
 	}
 }
@@ -996,7 +994,7 @@ void PlayClass::load( Demuxer *demuxer )
 			if ( !vThr )
 			{
 				vThr = new VideoThr( *this, dec->HWAccel(), QMPlay2GUI.getModules( "videoWriters", 5 ) );
-				vThr->syncVtoA = QMPlay2Core.getSettings().getBool( "SyncVtoA" );
+				vThr->setSyncVtoA( QMPlay2Core.getSettings().getBool( "SyncVtoA" ) );
 			}
 			if ( vThr->isRunning() )
 			{
@@ -1105,13 +1103,8 @@ void PlayClass::load( Demuxer *demuxer )
 		clearSubtitlesBuffer();
 		if ( videoStream >= 0 && vThr )
 		{
-			vThr->deleteSubs = true;
 			sPackets.lock();
-			if ( vThr->sDec )
-			{
-				delete vThr->sDec;
-				vThr->sDec = NULL;
-			}
+			vThr->destroySubtitlesDecoder();
 			ass->closeASS();
 			ass->clearFonts();
 			sPackets.unlock();
@@ -1121,13 +1114,7 @@ void PlayClass::load( Demuxer *demuxer )
 			else
 			{
 				if ( subtitlesEnabled )
-				{
-					if ( choosenSubtitlesStream < 0 && subtitlesStream == -1 )
-					{
-
-					}
 					dec = loadStream( streams, choosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, choosenSubtitlesLang );
-				}
 				else
 				{
 					subtitlesStream = -1;
@@ -1139,7 +1126,7 @@ void PlayClass::load( Demuxer *demuxer )
 						subtitlesSync = 0.0;
 					sPackets.lock();
 					if ( dec )
-						vThr->sDec = dec;
+						vThr->setSubtitlesDecoder( dec );
 					QByteArray assHeader = streams[ subtitlesStream ]->data;
 					if ( !assHeader.isEmpty() && ( streams[ subtitlesStream ]->codec_name == "ssa" || streams[ subtitlesStream ]->codec_name == "ass" ) )
 					{

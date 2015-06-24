@@ -51,6 +51,7 @@
 - Download, compile and install "pkg-config".
 - Download and install CMake for Mac (for taglib).
 - Download, compile and install all dependencies from sources.
+- Add directory containing "qmake" to "PATH".
 - Run "./compile_mac n" where "n" is number of threads (4 by default).
 
 Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:

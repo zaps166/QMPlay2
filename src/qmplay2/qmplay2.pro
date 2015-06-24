@@ -1,5 +1,5 @@
 TEMPLATE = lib
-CONFIG += plugin #Creates only one file
+!win32: CONFIG += plugin #Don't create symlinks to library
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

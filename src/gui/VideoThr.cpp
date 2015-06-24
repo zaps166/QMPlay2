@@ -12,23 +12,21 @@
 
 #include <ImgScaler.hpp>
 #include <Functions.hpp>
-using Functions::convertToASS;
 using Functions::gettime;
 using Functions::s_wait;
-using Functions::aligned;
 
-#include <QDir>
 #include <QImage>
+#include <QDir>
 
 #include <math.h>
 
 VideoThr::VideoThr( PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName ) :
 	AVThread( playC, "video:", HWAccelWriter, pluginsName ),
-	sDec( NULL ),
-	do_screenshot( false ),
+	doScreenshot( false ),
 	HWAccel( HWAccelWriter ),
 	deleteOSD( false ), deleteFrame( false ),
 	W( 0 ), H( 0 ),
+	sDec( NULL ),
 	napisy( NULL )
 {
 	connect( this, SIGNAL( write( const QByteArray & ) ), this, SLOT( write_slot( const QByteArray & ) ) );
@@ -43,12 +41,14 @@ VideoThr::~VideoThr()
 	delete sDec;
 }
 
-void VideoThr::stop( bool terminate )
+void VideoThr::destroySubtitlesDecoder()
 {
-#ifdef Q_OS_WIN
-	QMPlay2GUI.forbid_screensaver = false;
-#endif
-	AVThread::stop( terminate );
+	deleteSubs = true;
+	if ( sDec )
+	{
+		delete sDec;
+		sDec = NULL;
+	}
 }
 
 bool VideoThr::setFlip()
@@ -173,10 +173,6 @@ void VideoThr::updateSubs()
 
 void VideoThr::run()
 {
-#ifdef Q_OS_WIN
-	QMPlay2GUI.forbid_screensaver = true;
-#endif
-
 	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = 0.0, sync_timer = 0.0;
 	QMutex emptyBufferMutex;
@@ -193,11 +189,11 @@ void VideoThr::run()
 			deleteFrame = false;
 		}
 
-		if ( do_screenshot && !frame.isEmpty() )
+		if ( doScreenshot && !frame.isEmpty() )
 		{
 			VideoFrame::ref( frame );
 			emit screenshot( frame );
-			do_screenshot = false;
+			doScreenshot = false;
 		}
 
 		const bool getNewPacket = !filters.readyToRead();
@@ -208,9 +204,6 @@ void VideoThr::run()
 			if ( playC.paused && !paused )
 			{
 				emit pause();
-#ifdef Q_OS_WIN
-				QMPlay2GUI.forbid_screensaver = false;
-#endif
 				paused = true;
 			}
 			playC.vPackets.unlock();
@@ -228,14 +221,7 @@ void VideoThr::run()
 			frame_timer = gettime();
 			continue;
 		}
-		if ( paused )
-		{
-#ifdef Q_OS_WIN
-			QMPlay2GUI.forbid_screensaver = true;
-#endif
-			paused = false;
-		}
-		waiting = false;
+		paused = waiting = false;
 		Packet packet;
 		if ( hasVPackets && getNewPacket )
 			packet = playC.vPackets.fetch();
@@ -280,7 +266,7 @@ void VideoThr::run()
 				if ( playC.ass->isASS() )
 					playC.ass->addASSEvent( sPacket );
 				else
-					playC.ass->addASSEvent( convertToASS( sPacket ), sPacket.ts, sPacket.duration );
+					playC.ass->addASSEvent( Functions::convertToASS( sPacket ), sPacket.ts, sPacket.duration );
 			}
 			if ( !playC.ass->getASS( napisy, subsPts ) )
 			{
@@ -321,7 +307,7 @@ void VideoThr::run()
 			( ( VideoWriter * )writer )->writeOSD( osdList );
 			lastOSDListEmpty = osdList.isEmpty();
 		}
-		while ( osdListToDelete.size() )
+		while ( !osdListToDelete.isEmpty() )
 			delete osdListToDelete.takeFirst();
 		deleteSubs = deleteOSD = false;
 		/**/
@@ -493,7 +479,7 @@ void VideoThr::write_slot( const QByteArray &frame )
 void VideoThr::screenshot_slot( const QByteArray &frame )
 {
 	ImgScaler imgScaler;
-	const int aligned8W = aligned( W, 8 );
+	const int aligned8W = Functions::aligned( W, 8 );
 	if ( writer && imgScaler.create( W, H, aligned8W, H ) )
 	{
 		QImage img( aligned8W, H, QImage::Format_RGB32 );

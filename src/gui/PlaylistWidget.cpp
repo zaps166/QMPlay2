@@ -20,7 +20,7 @@ using Functions::splitPrefixAndUrlIfHasPluginPrefix;
 #include <QMenu>
 #include <QDir>
 
-#define playlistMenu ( ( MenuBar::Playlist * )QMPlay2GUI.menubar->playlist )
+#define playlistMenu ( ( MenuBar::Playlist * )QMPlay2GUI.menuBar->playlist )
 
 static const int IconSize = 22;
 static const int IconSize_2 = IconSize / 2;

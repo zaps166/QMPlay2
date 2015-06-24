@@ -14,7 +14,6 @@
 #include <QFileDialog>
 #include <QLocalServer>
 #include <QLocalSocket>
-
 #include <QTreeWidget>
 #include <QListWidget>
 
@@ -33,7 +32,6 @@
 #include <AddressDialog.hpp>
 #include <VideoEqualizer.hpp>
 
-using Functions::gettime;
 using Functions::timeToStr;
 
 /* QMPlay2 lib */
@@ -103,13 +101,10 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	SettingsWidget::InitSettings();
 	QMPlay2Core.getSettings().init( "MainWidget/WidgetsLocked", false );
 
-	QMPlay2GUI.menubar = new MenuBar;
+	QMPlay2GUI.menuBar = new MenuBar;
 
 	tray = new QSystemTrayIcon( this );
 	tray->setIcon( QMPlay2Core.getQMPlay2Pixmap() );
-#ifndef Q_OS_MAC
-	tray->setContextMenu( new QMenu( this ) );
-#endif
 	tray->setVisible( QMPlay2Core.getSettings().getBool( "TrayVisible", true ) );
 
 	setDockOptions( AllowNestedDocks | AnimatedDocks | AllowTabbedDocks );
@@ -195,11 +190,11 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	volS->setValue( 100 );
 	volS->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Fixed ) );
 	mainTB->addWidget( volS );
+	/**/
 
 	Appearance::init();
 
-	/* --- */
-
+	/* Connects */
 	connect( qApp, SIGNAL( focusChanged( QWidget *, QWidget * ) ), this, SLOT( focusChanged( QWidget *, QWidget * ) ) );
 
 	connect( infoDock, SIGNAL( seek( int ) ), this, SLOT( seek( int ) ) );
@@ -243,7 +238,6 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	connect( &playC, SIGNAL( updateWindowTitle( const QString & ) ), this, SLOT( updateWindowTitle( const QString & ) ) );
 	connect( &playC, SIGNAL( updateImage( const QImage & ) ), videoDock, SLOT( updateImage( const QImage & ) ) );
 	connect( &playC, SIGNAL( videoStarted() ), this, SLOT( videoStarted() ) );
-
 	/**/
 
 	if ( QMPlay2Core.getSettings().getBool( "MainWidget/TabPositionNorth" ) )
@@ -251,7 +245,11 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	lockWidgets( QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false ) );
 
 	fullScreenDockWidgetState = QMPlay2Core.getSettings().getByteArray( "MainWidget/FullScreenDockWidgetState" );
+#if defined Q_OS_MAC || defined Q_OS_ANDROID
+	show();
+#else
 	setVisible( QMPlay2Core.getSettings().getBool( "MainWidget/isVisible", true ) ? true : !( QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible() ) );
+#endif
 
 	playlistDock->load( QMPlay2Core.getSettingsDir() + "Playlist.pls" );
 
@@ -287,11 +285,15 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	if ( QMPlay2Core.getSettings().getBool( "AutoUpdates" ) )
 		updater.downloadUpdate();
 #endif
+#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
+	qApp->installNativeEventFilter( this );
+#endif
 }
 MainWidget::~MainWidget()
 {
 	QMPlay2Extensions::closeExtensions();
 	emit QMPlay2Core.restoreCursor();
+	QMPlay2GUI.mainW = NULL;
 	qApp->quit();
 }
 
@@ -486,23 +488,33 @@ void MainWidget::hideAllExtensions()
 }
 void MainWidget::toggleVisibility()
 {
-	const bool isTray = tray->isVisible() && QSystemTrayIcon::isSystemTrayAvailable();
+	const bool isTray = QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible();
 	if ( isVisible() )
 	{
-		menuBar->options->trayVisible->setEnabled( false );
 		if ( fullScreen )
 			toggleFullScreen();
-		isTray ? hide() : showMinimized();
+		if ( !isTray )
+			showMinimized();
+		else
+		{
+			menuBar->options->trayVisible->setEnabled( false );
+			hide();
+		}
 	}
 	else if ( !isVisible() )
 	{
-		menuBar->options->trayVisible->setEnabled( true );
-		isTray ? show() : showNormal();
+		if ( !isTray )
+			showNormal();
+		else
+		{
+			menuBar->options->trayVisible->setEnabled( true );
+			show();
+		}
 	}
 }
 void MainWidget::createMenuBar()
 {
-	menuBar = QMPlay2GUI.menubar;
+	menuBar = QMPlay2GUI.menuBar;
 
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 		foreach ( QAction *act, module->getAddActions() )
@@ -617,37 +629,36 @@ void MainWidget::createMenuBar()
 
 	setMenuBar( menuBar );
 
-	if ( tray->contextMenu() )
-	{
-		tray->contextMenu()->addMenu( menuBar->help );
-		tray->contextMenu()->addMenu( menuBar->options );
-		tray->contextMenu()->addMenu( menuBar->playing );
-		tray->contextMenu()->addMenu( menuBar->player );
-		tray->contextMenu()->addMenu( menuBar->playlist );
-		tray->contextMenu()->addMenu( menuBar->widgets );
-		tray->contextMenu()->addMenu( menuBar->window );
-	}
-
-	//Akcje, które będą dostępne po ukryciu menu ( pełny ekran, tryb kompaktowy )
-	addAction( menuBar->window->toggleFullScreen );
-	addAction( menuBar->window->toggleCompactView );
-	foreach ( QAction *act, menuBar->playlist->actions() )
-		addAction( act );
-	foreach ( QAction *act, menuBar->player->actions() )
-		addAction( act );
-	foreach ( QAction *act, menuBar->playing->actions() )
-		addAction( act );
-	foreach ( QAction *act, menuBar->options->actions() )
-		addAction( act );
-	foreach ( QAction *act, menuBar->help->actions() )
-		addAction( act );
+	QMenu *secondMenu = new QMenu( this );
+#ifndef Q_OS_MAC
+	secondMenu->addMenu( menuBar->window );
+	secondMenu->addMenu( menuBar->widgets );
+	secondMenu->addMenu( menuBar->playlist );
+	secondMenu->addMenu( menuBar->player );
+	secondMenu->addMenu( menuBar->playing );
+	secondMenu->addMenu( menuBar->options );
+	secondMenu->addMenu( menuBar->help );
+	tray->setContextMenu( secondMenu );
+#else //On OS X add only the most important menu actions to dock menu
+	secondMenu->addAction( menuBar->player->togglePlay );
+	secondMenu->addAction( menuBar->player->stop );
+	secondMenu->addAction( menuBar->player->next );
+	secondMenu->addAction( menuBar->player->prev );
+	secondMenu->addSeparator();
+	secondMenu->addAction( menuBar->player->toggleMute );
+	secondMenu->addSeparator();
+	secondMenu->addAction( menuBar->options->settings );
+	qt_mac_set_dock_menu( secondMenu );
+#endif
 }
 void MainWidget::trayIconClicked( QSystemTrayIcon::ActivationReason reason )
 {
 	switch ( reason )
 	{
 		case QSystemTrayIcon::Trigger:
+#ifndef Q_OS_MAC
 		case QSystemTrayIcon::DoubleClick:
+#endif
 			toggleVisibility();
 			break;
 		case QSystemTrayIcon::MiddleClick:
@@ -659,21 +670,18 @@ void MainWidget::trayIconClicked( QSystemTrayIcon::ActivationReason reason )
 }
 void MainWidget::toggleCompactView()
 {
-	if ( fullScreen )
-		return;
-
 	if ( !isCompactView )
 	{
 		dockWidgetState = saveState();
 
 		hideAllExtensions();
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->hide();
+#endif
 		mainTB->hide();
 		infoDock->hide();
-		infoDock->setFeatures( DockWidget::NoDockWidgetFeatures );
 		playlistDock->hide();
-		playlistDock->setFeatures( DockWidget::NoDockWidgetFeatures );
 		statusBar->hide();
 		videoDock->show();
 
@@ -683,13 +691,12 @@ void MainWidget::toggleCompactView()
 	}
 	else
 	{
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->show();
+#endif
 		statusBar->show();
 
 		videoDock->fullScreen( false );
-
-		infoDock->setFeatures( DockWidget::AllDockWidgetFeatures );
-		playlistDock->setFeatures( DockWidget::AllDockWidgetFeatures );
 
 		restoreState( dockWidgetState );
 		dockWidgetState.clear();
@@ -699,9 +706,6 @@ void MainWidget::toggleCompactView()
 }
 void MainWidget::toggleFullScreen()
 {
-	static double t = 0.0;
-	if ( gettime() - t < 0.1 )
-		return;
 	static bool visible, compact_view, maximized, tb_movable;
 	if ( !fullScreen )
 	{
@@ -717,7 +721,9 @@ void MainWidget::toggleFullScreen()
 		if ( !( maximized = isMaximized() ) )
 			savedGeo = geometry();
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->hide();
+#endif
 		statusBar->hide();
 
 		mainTB->hide();
@@ -744,12 +750,20 @@ void MainWidget::toggleFullScreen()
 		videoDock->fullScreen( true );
 		videoDock->show();
 
+#ifdef Q_OS_MAC
+		menuBar->window->toggleVisibility->setEnabled( false );
+#endif
+		menuBar->window->toggleCompactView->setEnabled( false );
 		menuBar->window->toggleFullScreen->setShortcuts( QList< QKeySequence >() << QKeySequence( "F" ) << QKeySequence( "ESC" ) );
 		fullScreen = true;
 		showFullScreen();
 	}
 	else
 	{
+#ifdef Q_OS_MAC
+		menuBar->window->toggleVisibility->setEnabled( true );
+#endif
+		menuBar->window->toggleCompactView->setEnabled( true );
 		menuBar->window->toggleFullScreen->setShortcuts( QList< QKeySequence >() << QKeySequence( "F" ) );
 
 		videoDock->setLoseHeight( 0 );
@@ -763,7 +777,7 @@ void MainWidget::toggleFullScreen()
 		restoreState( dockWidgetState );
 		dockWidgetState.clear();
 
-		if ( !visible ) //jeżeli okno było wcześniej ukryte to ma je znowu ukryć
+		if ( !visible ) //jeżeli okno było wcześniej ukryte, to ma je znowu ukryć
 			toggleVisibility();
 
 		videoDock->fullScreen( false );
@@ -774,7 +788,9 @@ void MainWidget::toggleFullScreen()
 			if ( QDockWidget *dw = QMPlay2Ext->getDockWidget() )
 				dw->setFeatures( QDockWidget::AllDockWidgetFeatures );
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->show();
+#endif
 		statusBar->show();
 
 		mainTB->setMovable( tb_movable );
@@ -785,7 +801,6 @@ void MainWidget::toggleFullScreen()
 		visibleQMPlay2Extensions.clear();
 	}
 	QMPlay2Core.fullScreenChanged( fullScreen );
-	t = gettime();
 }
 void MainWidget::showMessage( const QString &msg, const QString &title, int messageIcon, int ms )
 {
@@ -1027,7 +1042,7 @@ QMenu *MainWidget::createPopupMenu()
 	act->setChecked( QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked" ) );
 	connect( act, SIGNAL( triggered( bool ) ), this, SLOT( lockWidgets( bool ) ) );
 	foreach ( act, popupMenu->actions() )
-		act->setEnabled( !isFullScreen() );
+		act->setEnabled( isVisible() && !fullScreen && !isCompactView );
 	return popupMenu;
 }
 
@@ -1048,7 +1063,6 @@ void MainWidget::showToolBar( bool showTB )
 		statusBar->hide();
 	}
 }
-
 void MainWidget::hideDocks()
 {
 	fullScreenDockWidgetState = saveState();
@@ -1062,8 +1076,8 @@ void MainWidget::mouseMoveEvent( QMouseEvent *e )
 {
 	if ( fullScreen )
 	{
-		int trigger1 = qMax< int >( 3,  ceil( 0.002 * width() ) );
-		int trigger2 = qMax< int >( 15, ceil( 0.025 * width() ) );
+		const int trigger1 = qMax< int >( 5,  ceil( 0.003 * width() ) );
+		const int trigger2 = qMax< int >( 15, ceil( 0.025 * width() ) );
 
 		int mPosX = 0;
 		if ( videoDock->x() >= 0 )
@@ -1156,7 +1170,9 @@ void MainWidget::closeEvent( QCloseEvent *e )
 	else
 		QMPlay2Core.getSettings().set( "MainWidget/DockWidgetState", dockWidgetState );
 	QMPlay2Core.getSettings().set( "MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState );
+#ifndef Q_OS_MAC
 	QMPlay2Core.getSettings().set( "MainWidget/isVisible", isVisible() );
+#endif
 	QMPlay2Core.getSettings().set( "TrayVisible", tray->isVisible() );
 	QMPlay2Core.getSettings().set( "Volume", volS->value() );
 	menuBar->playing->videoFilters->videoEqualizer->saveValues();
@@ -1188,9 +1204,11 @@ void MainWidget::showEvent( QShowEvent * )
 {
 	if ( !wasShow )
 	{
+#ifndef Q_OS_ANDROID
 		QMPlay2GUI.restoreGeometry( "MainWidget/Geometry", this, size() );
 		savedGeo = geometry();
 		if ( QMPlay2Core.getSettings().getBool( "MainWidget/isMaximized" ) )
+#endif
 			showMaximized();
 		restoreState( QMPlay2Core.getSettings().getByteArray( "MainWidget/DockWidgetState" ) );
 		wasShow = true;
@@ -1199,25 +1217,26 @@ void MainWidget::showEvent( QShowEvent * )
 }
 void MainWidget::hideEvent( QHideEvent * )
 {
+#ifndef Q_OS_ANDROID
 	if ( wasShow )
 	{
 		QMPlay2Core.getSettings().set( "MainWidget/Geometry", ( !fullScreen && !isMaximized() ) ? geometry() : savedGeo );
 		QMPlay2Core.getSettings().set( "MainWidget/isMaximized", isMaximized() );
 	}
+#endif
 	menuBar->window->toggleVisibility->setText( tr( "&Pokaż" ) );
 }
 #ifdef Q_OS_WIN
-bool MainWidget::winEvent( MSG *m, long *result )
+#define blockScreenSaver(m) ( (m)->message == WM_SYSCOMMAND && ( ( (m)->wParam & 0xFFF0 ) == SC_SCREENSAVE || ( (m)->wParam & 0xFFF0 ) == SC_MONITORPOWER ) && playC.isNowPlayingVideo() )
+#if QT_VERSION < 0x050000
+bool MainWidget::winEvent( MSG *m, long * )
 {
-	if
-	(
-		QMPlay2GUI.forbid_screensaver && m->message == WM_SYSCOMMAND &&
-		( ( m->wParam & 0xFFF0 ) == SC_SCREENSAVE || ( m->wParam & 0xFFF0 ) == SC_MONITORPOWER )
-	)
-	{
-		*result = 0;
-		return true;
-	}
-	return false;
+	return blockScreenSaver( m );
 }
+#else
+bool MainWidget::nativeEventFilter( const QByteArray &, void *m, long * )
+{
+	return blockScreenSaver( ( MSG * )m );
+}
+#endif
 #endif
