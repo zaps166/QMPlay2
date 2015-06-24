@@ -754,12 +754,8 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Audio Bitrate</translation>
     </message>
     <message>
-        <source>Dane zbuforowane</source>
-        <translation>Cache-Daten</translation>
-    </message>
-    <message>
-        <source>sek</source>
-        <translation>sek</translation>
+        <source>Bufor</source>
+        <translation>Cache</translation>
     </message>
 </context>
 <context>

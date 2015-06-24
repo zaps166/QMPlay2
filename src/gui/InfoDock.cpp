@@ -148,15 +148,15 @@ void InfoDock::setBRLabels()
 	if ( videoBR > -1 )
 		vbr = tr( "Bitrate obrazu" ) + ": " + QString::number( videoBR ) + "kbps";
 	if ( videoFPS > -1.0 )
-		fps = QString::number( videoFPS ) + "FPS";
+		fps = QString::number( videoFPS ) + " FPS";
 	if ( audioBR > -1 )
 		abr = tr( "Bitrate dźwięku" ) + ": " + QString::number( audioBR ) + "kbps";
 	bitrate->setText( abr + "\n" + vbr + ( !fps.isEmpty() ? ( !vbr.isEmpty() ? ", " : "" ) + fps : "" ) );
 }
 void InfoDock::setBufferLabel()
 {
-	QString txt = tr( "Dane zbuforowane" ) + ": [" + Functions::sizeString( bytes1 ) + ", " + Functions::sizeString( bytes2 ) + "]";
+	QString txt = tr( "Bufor" ) + ": [" + Functions::sizeString( bytes1 ) + ", " + Functions::sizeString( bytes2 ) + "]";
 	if ( seconds1 >= 0.0 && seconds2 >= 0.0 )
-		txt += ", [" + QString::number( seconds1, 'f', 1 ) + " " + tr( "sek" ) + ", " + QString::number( seconds2, 'f', 1 ) + " " + tr( "sek" ) + "]";
+		txt += ", [" + QString::number( seconds1, 'f', 1 ) + " s" + ", " + QString::number( seconds2, 'f', 1 ) + " s" + "]";
 	buffer->setText( txt );
 }

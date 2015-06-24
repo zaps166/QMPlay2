@@ -159,7 +159,7 @@ void QMPlay2GUIClass::setLanguage()
 void QMPlay2GUIClass::setStyle()
 {
 	QString defaultStyle;
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
 	if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_0 )
 	{
 		const QStringList styles = QStyleFactory::keys();
@@ -173,6 +173,8 @@ void QMPlay2GUIClass::setStyle()
 			defaultStyle = "fusion";
 #endif
 	}
+#elif defined Q_OS_ANDROID
+	defaultStyle = "fusion"; //Android style is awful in Qt (tested on Qt 5.4 and Qt 5.5)
 #endif
 	qApp->setStyle( settings->get( "Style", defaultStyle ).toString() );
 }

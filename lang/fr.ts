@@ -749,12 +749,8 @@
         <translation>Bitrate audio</translation>
     </message>
     <message>
-        <source>Dane zbuforowane</source>
-        <translation>Données mises en mémoire tampon</translation>
-    </message>
-    <message>
-        <source>sek</source>
-        <translation>sec</translation>
+        <source>Bufor</source>
+        <translation>Tampon</translation>
     </message>
 </context>
 <context>

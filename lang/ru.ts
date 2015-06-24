@@ -749,12 +749,8 @@
         <translation>Битрейт аудио</translation>
     </message>
     <message>
-        <source>Dane zbuforowane</source>
-        <translation>Буферизованные данные</translation>
-    </message>
-    <message>
-        <source>sek</source>
-        <translation>сек</translation>
+        <source>Bufor</source>
+        <translation>буфер</translation>
     </message>
 </context>
 <context>

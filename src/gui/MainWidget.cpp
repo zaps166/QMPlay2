@@ -130,6 +130,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 
 	QMPlay2Extensions::openExtensions();
 
+#ifndef Q_OS_ANDROID
 	addDockWidget( Qt::LeftDockWidgetArea, videoDock );
 	addDockWidget( Qt::RightDockWidgetArea, infoDock );
 	addDockWidget( Qt::RightDockWidgetArea, playlistDock );
@@ -153,6 +154,22 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 				tabifyDockWidget( playlistDock, dw );
 			dw->setVisible( true );
 		}
+#else //On Android tabify docks (usually screen is too small)
+	addDockWidget( Qt::TopDockWidgetArea, videoDock );
+	addDockWidget( Qt::BottomDockWidgetArea, playlistDock );
+	tabifyDockWidget( playlistDock, infoDock );
+	foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() ) //GUI Extensions
+		if ( DockWidget *dw = QMPlay2Ext->getDockWidget() )
+		{
+			dw->setVisible( false );
+			if ( QMPlay2Ext->isVisualization() )
+			{
+				dw->setMinimumSize( 125, 125 );
+				QMPlay2Ext->connectDoubleClick( this, SLOT( visualizationFullScreen() ) );
+			}
+			tabifyDockWidget( infoDock, dw );
+		}
+#endif
 	infoDock->show();
 
 	/* ToolBar and MenuBar */
@@ -1208,8 +1225,10 @@ void MainWidget::showEvent( QShowEvent * )
 		QMPlay2GUI.restoreGeometry( "MainWidget/Geometry", this, size() );
 		savedGeo = geometry();
 		if ( QMPlay2Core.getSettings().getBool( "MainWidget/isMaximized" ) )
-#endif
 			showMaximized();
+#else
+		showFullScreen(); //Always fullscreen on Android
+#endif
 		restoreState( QMPlay2Core.getSettings().getByteArray( "MainWidget/DockWidgetState" ) );
 		wasShow = true;
 	}

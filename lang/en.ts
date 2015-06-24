@@ -749,12 +749,8 @@
         <translation>Audio bitrate</translation>
     </message>
     <message>
-        <source>Dane zbuforowane</source>
-        <translation>Buffered data</translation>
-    </message>
-    <message>
-        <source>sek</source>
-        <translation>sec</translation>
+        <source>Bufor</source>
+        <translation>Buffer</translation>
     </message>
 </context>
 <context>
