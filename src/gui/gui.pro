@@ -1,5 +1,4 @@
 TEMPLATE = app
-CONFIG -= app_bundle
 !win32: CONFIG += link_pkgconfig
 
 QT += network
