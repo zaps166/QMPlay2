@@ -442,7 +442,7 @@ void PlayClass::stopVDec()
 	frame_last_pts = frame_last_delay = 0.0;
 	subtitlesStream = -1;
 	nextFrameB = false;
-	delete ass; //wywołuje też closeASS(), sMutex nie potrzebny, bo vThr jest zablokowany ( mutex przed sMutex )
+	delete ass; //wywołuje też closeASS(), sMutex nie potrzebny, bo vThr jest zablokowany (mutex przed sMutex)
 	ass = NULL;
 	fps = 0.0;
 }

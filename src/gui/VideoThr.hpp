@@ -53,7 +53,7 @@ private:
 	int W, H;
 
 	Decoder *sDec;
-	QMPlay2_OSD *napisy;
+	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
 private slots:
 	void write_slot( const QByteArray & );

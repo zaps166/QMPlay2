@@ -27,7 +27,7 @@ VideoThr::VideoThr( PlayClass &playC, Writer *HWAccelWriter, const QStringList &
 	deleteOSD( false ), deleteFrame( false ),
 	W( 0 ), H( 0 ),
 	sDec( NULL ),
-	napisy( NULL )
+	subtitles( NULL )
 {
 	connect( this, SIGNAL( write( const QByteArray & ) ), this, SLOT( write_slot( const QByteArray & ) ) );
 	connect( this, SIGNAL( screenshot( const QByteArray & ) ), this, SLOT( screenshot_slot( const QByteArray & ) ) );
@@ -37,7 +37,7 @@ VideoThr::~VideoThr()
 {
 	delete playC.osd;
 	playC.osd = NULL;
-	delete napisy;
+	delete subtitles;
 	delete sDec;
 }
 
@@ -165,8 +165,8 @@ void VideoThr::updateSubs()
 	if ( writer && playC.ass )
 	{
 		playC.sPackets.lock();
-		if ( napisy )
-			playC.ass->getASS( napisy, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync );
+		if ( subtitles )
+			playC.ass->getASS( subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync );
 		playC.sPackets.unlock();
 	}
 }
@@ -243,7 +243,7 @@ void VideoThr::run()
 			break;
 		}
 
-		/* napisy */
+		/* Subtitles */
 		const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
 		QList< const QMPlay2_OSD * > osdList, osdListToDelete;
 		playC.sPackets.lock();
@@ -252,10 +252,10 @@ void VideoThr::run()
 			Packet sPacket;
 			if ( playC.sPackets.canFetch() )
 				sPacket = playC.sPackets.fetch();
-			if ( !sDec->decodeSubtitle( sPacket, subsPts, napisy, W, H ) )
+			if ( !sDec->decodeSubtitle( sPacket, subsPts, subtitles, W, H ) )
 			{
-				osdListToDelete += napisy;
-				napisy = NULL;
+				osdListToDelete += subtitles;
+				subtitles = NULL;
 			}
 		}
 		else
@@ -268,24 +268,24 @@ void VideoThr::run()
 				else
 					playC.ass->addASSEvent( Functions::convertToASS( sPacket ), sPacket.ts, sPacket.duration );
 			}
-			if ( !playC.ass->getASS( napisy, subsPts ) )
+			if ( !playC.ass->getASS( subtitles, subsPts ) )
 			{
-				osdListToDelete += napisy;
-				napisy = NULL;
+				osdListToDelete += subtitles;
+				subtitles = NULL;
 			}
 		}
-		if ( napisy )
+		if ( subtitles )
 		{
-			bool hasDuration = napisy->duration() >= 0.0;
-			if ( deleteSubs || ( napisy->isStarted() && subsPts < napisy->pts() ) || ( hasDuration && subsPts > napisy->pts() + napisy->duration() ) )
+			bool hasDuration = subtitles->duration() >= 0.0;
+			if ( deleteSubs || ( subtitles->isStarted() && subsPts < subtitles->pts() ) || ( hasDuration && subsPts > subtitles->pts() + subtitles->duration() ) )
 			{
-				osdListToDelete += napisy;
-				napisy = NULL;
+				osdListToDelete += subtitles;
+				subtitles = NULL;
 			}
-			else if ( subsPts >= napisy->pts() )
+			else if ( subsPts >= subtitles->pts() )
 			{
-				napisy->start();
-				osdList += napisy;
+				subtitles->start();
+				osdList += subtitles;
 			}
 		}
 		playC.sPackets.unlock();

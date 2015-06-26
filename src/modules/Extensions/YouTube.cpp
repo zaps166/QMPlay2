@@ -924,7 +924,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 		itag_arr[ 171 ] = "Audio (Vorbis 128kbps)";
 	}
 	ItagNames itagPair;
-	for ( QMap< int, QString >::const_iterator it = itag_arr.begin(), it_end = itag_arr.end() ; it != it_end ; ++it )
+	for ( QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd() ; it != it_end ; ++it )
 	{
 		itagPair.first += it.value();
 		itagPair.second += it.key();

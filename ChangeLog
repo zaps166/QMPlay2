@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 15.06.25:
+Changes in QMPlay2 build 15.06.26:
 	- better VSync support for OpenGL video output,
 	- OpenSLES audio output (for Android),
 	- basic OS X support,

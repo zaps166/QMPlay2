@@ -19,7 +19,7 @@
 VideoDock::VideoDock() :
 	iDW( QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt ),
 	pixels( 0 ),
-	cantpopup( false ), is_floating( false ),
+	canPopup( true ), is_floating( false ),
 	touchZoom( 0.0 )
 {
 	setWindowTitle( tr( "Wideo" ) );
@@ -156,16 +156,21 @@ void VideoDock::mouseDoubleClickEvent( QMouseEvent *e )
 #endif
 void VideoDock::mousePressEvent( QMouseEvent *e )
 {
+	if ( e->button() == Qt::LeftButton )
+		canPopup = false;
 	if ( e->buttons() == Qt::MiddleButton )
 		QMPlay2GUI.menuBar->player->togglePlay->trigger();
 	else if ( ( e->buttons() & ( Qt::LeftButton | Qt::MiddleButton ) ) == ( Qt::LeftButton | Qt::MiddleButton ) )
 		QMPlay2GUI.menuBar->player->reset->trigger();
 	else if ( ( e->buttons() & ( Qt::LeftButton | Qt::RightButton ) ) == ( Qt::LeftButton | Qt::RightButton ) )
-	{
 		QMPlay2GUI.menuBar->player->switchARatio->trigger();
-		cantpopup = true;
-	}
 	DockWidget::mousePressEvent( e );
+}
+void VideoDock::mouseReleaseEvent( QMouseEvent *e )
+{
+	if ( e->button() == Qt::LeftButton )
+		canPopup = true;
+	DockWidget::mouseReleaseEvent( e );
 }
 void VideoDock::wheelEvent( QWheelEvent *e )
 {
@@ -219,9 +224,7 @@ bool VideoDock::event( QEvent *e )
 
 void VideoDock::popup( const QPoint &p )
 {
-	if ( cantpopup )
-		cantpopup = false;
-	else
+	if ( canPopup )
 		popupMenu->popup( mapToGlobal( p ) );
 }
 void VideoDock::hideCursor()

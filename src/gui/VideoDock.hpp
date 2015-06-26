@@ -35,6 +35,7 @@ private:
 	void mouseDoubleClickEvent( QMouseEvent * );
 #endif
 	void mousePressEvent( QMouseEvent * );
+	void mouseReleaseEvent( QMouseEvent * );
 	void wheelEvent( QWheelEvent * );
 	void leaveEvent( QEvent * );
 	void enterEvent( QEvent * );
@@ -45,7 +46,7 @@ private:
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
-	bool cantpopup, is_floating;
+	bool canPopup, is_floating;
 	double touchZoom;
 private slots:
 	void popup( const QPoint & );
