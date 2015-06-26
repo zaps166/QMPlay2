@@ -1,8 +1,39 @@
 #QMPlay2 - QT Media Player 2
 
->QMPlay2 is a video and audio player. It can play all formats supported by ffmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files and Rayman 2 music. It contains YouTube and Prostopleer browser.
+>QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files and Rayman 2 music. It contains YouTube and Prostopleer browser.
 
-##Compilation and instalation
+##Instalation
+
+####Easy installation on Windows (XP or higher)
+
+- Download the newest "*.exe" file from http://sourceforge.net/projects/zaps166/files/QMPlay2 for your CPU architecture and install it:
+	- 64-bit Windows: http://zaps166.sf.net/?QMPlay2Download=Win64Installer
+	- 32-bit Windows: http://zaps166.sf.net/?QMPlay2Download=Win32Installer
+- If you want to watch YouTube videos and use "youtube-dl", watch this video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
+
+####Easy installation on openSUSE
+
+- Just run the following commands:
+```sh
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
+$ sudo zypper in QMPlay2 QMPlay2-kde-integration
+```
+
+####Easy installation on Ubuntu
+
+- Just run the following commands:
+```sh
+$ sudo add-apt-repository ppa:samrog131/ppa
+$ sudo apt-get update
+$ sudo apt-get install qmplay2
+```
+- If you get dependency issues, do:
+```sh
+$ sudo apt-get install -f
+$ sudo apt-get install qmplay2
+```
+
+##Compilation from sources
 
 ###You need (devel packages):
 
@@ -58,29 +89,3 @@ Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
 >http://aur.archlinux.org/packages/qm/qmplay2-git/PKGBUILD
 
 QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
-
-####Easy installation on Windows
-
-- Download the newest "*.exe" file from http://sourceforge.net/projects/zaps166/files/QMPlay2 for your CPU architecture and install it.
-
-####Easy installation on openSUSE
-
-- Just run the following commands:
-```sh
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
-$ sudo zypper in QMPlay2 QMPlay2-kde-integration
-```
-
-####Easy installation on Ubuntu
-
-- Just run the following commands:
-```sh
-$ sudo add-apt-repository ppa:samrog131/ppa
-$ sudo apt-get update
-$ sudo apt-get install qmplay2
-```
-- If you get dependency issues, do:
-```sh
-$ sudo apt-get install -f
-$ sudo apt-get install qmplay2
-```
