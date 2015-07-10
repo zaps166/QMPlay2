@@ -14,6 +14,7 @@ struct Packet : public QByteArray
 
 	TimeStamp ts;
 	double duration;
+	bool hasKeyFrame;
 };
 
 #endif

@@ -57,7 +57,9 @@ FFMpeg::FFMpeg() :
 	static bool firstTime = true;
 	if ( firstTime )
 	{
+#ifndef QT_DEBUG
 		av_log_set_level( AV_LOG_FATAL );
+#endif
 		av_register_all();
 		firstTime = false;
 	}

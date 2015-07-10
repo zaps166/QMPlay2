@@ -1,6 +1,8 @@
 #include <MPDemux.hpp>
-#include <Reader.hpp>
+
 #include <Functions.hpp>
+#include <Packet.hpp>
+#include <Reader.hpp>
 
 #include <libmodplug/modplug.h>
 
@@ -110,7 +112,7 @@ bool MPDemux::seek( int val, bool backward )
 	pos = val;
 	return true;
 }
-bool MPDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool MPDemux::read( Packet &decoded, int &idx )
 {
 	if ( aborted )
 		return false;
@@ -127,9 +129,10 @@ bool MPDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 		decodedFloat[ i ] = decodedInt[ i ] / 2147483648.0;
 
 	idx = 0;
-	ts = pos;
-	duration = ( double )decoded.size() / ( 44100*2*4 ); //SRATE * CHN * BITS/8
-	pos += duration;
+	decoded.ts = pos;
+	decoded.duration = ( double )decoded.size() / ( 44100*2*4 ); //SRATE * CHN * BITS/8
+	decoded.hasKeyFrame = true;
+	pos += decoded.duration;
 
 	return true;
 }

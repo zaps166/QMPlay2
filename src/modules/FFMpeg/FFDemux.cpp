@@ -1,6 +1,8 @@
 #include <FFDemux.hpp>
 #include <FFCommon.hpp>
 
+#include <Packet.hpp>
+
 #include <QDebug>
 
 extern "C"
@@ -292,7 +294,7 @@ bool FFDemux::seek( int val, bool backward )
 	}
 	return false;
 }
-bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &duration )
+bool FFDemux::read( Packet &encoded, int &idx )
 {
 	if ( aborted )
 		return false;
@@ -303,14 +305,14 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 		av_read_play( formatCtx );
 	}
 
-	class Packet : public AVPacket
+	class AvQMPlay2Packet : public AVPacket
 	{
 	public:
-		inline Packet()
+		inline AvQMPlay2Packet()
 		{
 			data = NULL;
 		}
-		inline ~Packet()
+		inline ~AvQMPlay2Packet()
 		{
 			if ( data )
 				av_free_packet( this );
@@ -387,23 +389,25 @@ bool FFDemux::read( QByteArray &encoded, int &idx, TimeStamp &ts, double &durati
 	const double time_base = av_q2d( streams[ ff_idx ]->time_base );
 
 	if ( seekByByteOffset < 0 )
-		ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
+		encoded.ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
 	else if ( packet.pos > -1 && length() > 0.0 )
-		lastTime = ts = ( ( packet.pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
+		lastTime = encoded.ts = ( ( packet.pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
 	else
-		ts = lastTime;
+		encoded.ts = lastTime;
 
 	if ( packet.duration > 0 )
-		duration = packet.duration * time_base;
-	else if ( !ts || ( duration = ts - lastTS ) < 0.0 /* Calculate packet duration if doesn't exists */ )
-		duration = 0.0;
-	lastTS = ts;
+		encoded.duration = packet.duration * time_base;
+	else if ( !encoded.ts || ( encoded.duration = encoded.ts - lastTS ) < 0.0 /* Calculate packet duration if doesn't exists */ )
+		encoded.duration = 0.0;
+	lastTS = encoded.ts;
 
-	if ( isStreamed )
+	if ( isStreamed && isOneStreamOgg )
 	{
-		ts = lastTime;
-		lastTime += duration;
+		encoded.ts = lastTime;
+		lastTime += encoded.duration;
 	}
+
+	encoded.hasKeyFrame = packet.flags & AV_PKT_FLAG_KEY;
 
 	idx = index_map.at( ff_idx );
 
@@ -462,6 +466,8 @@ bool FFDemux::open( const QString &_url )
 	isStreamed = !isLocal && formatCtx->duration == QMPLAY2_NOPTS_VALUE;
 	if ( seekByByteOffset > -1 && ( isStreamed || name() != "mp3" ) )
 		seekByByteOffset = -1;
+
+	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1;
 
 	if ( ( start_time = formatCtx->start_time / ( double )AV_TIME_BASE ) < 0.0 )
 		start_time = 0.0;
@@ -523,7 +529,6 @@ StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 	const AVCodecID codecID = stream->codec->codec_id;
 	if
 	(
-		!stream ||
 		( stream->disposition & AV_DISPOSITION_ATTACHED_PIC ) ||
 		( stream->codec->codec_type == AVMEDIA_TYPE_DATA )    ||
 		( stream->codec->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecID != AV_CODEC_ID_TTF && codecID != AV_CODEC_ID_OTF )

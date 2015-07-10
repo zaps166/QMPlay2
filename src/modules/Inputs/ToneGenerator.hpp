@@ -20,7 +20,7 @@ private:
 	bool dontUseBuffer() const;
 
 	bool seek( int, bool );
-	bool read( QByteArray &, int &, TimeStamp &, double & );
+	bool read( Packet &, int & );
 	void abort();
 
 	bool open( const QString & );

@@ -5,8 +5,6 @@
 #include <VideoFrame.hpp>
 #include <StreamInfo.hpp>
 
-#include <QThread> //to detect number of CPUs or CPU cores
-
 extern "C"
 {
 	#include <libavformat/avformat.h>
@@ -55,13 +53,9 @@ bool FFDecSW::set()
 	}
 
 	int _threads = sets().getInt( "Threads" );
-	if ( _threads <= 0 )
-	{
-		_threads = QThread::idealThreadCount();
-		if ( _threads < 1 )
-			_threads = 1;
-	}
-	if ( _threads > 16 )
+	if ( _threads < 0 )
+		_threads = 0; //Autodetect by FFMpeg
+	else if ( _threads > 16 )
 		_threads = 16;
 	if ( threads != _threads )
 	{
@@ -289,8 +283,8 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 		if ( codec_ctx->pix_fmt == AV_PIX_FMT_NONE || streamInfo->W <= 0 || streamInfo->H <= 0 )
 			return false;
 		if ( codec->capabilities & CODEC_CAP_DR1 )
-			codec_ctx->flags |= CODEC_FLAG_EMU_EDGE;
-		if ( ( codec_ctx->thread_count = threads ) > 1 )
+			codec_ctx->flags |= CODEC_FLAG_EMU_EDGE; //Does nothing since FFMpeg 2.2
+		if ( ( codec_ctx->thread_count = threads ) != 1 )
 		{
 			if ( !thread_type_slice )
 				codec_ctx->thread_type = FF_THREAD_FRAME;

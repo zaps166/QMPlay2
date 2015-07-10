@@ -1,6 +1,7 @@
 #include <PCM.hpp>
 
 #include <ByteArray.hpp>
+#include <Packet.hpp>
 #include <Reader.hpp>
 
 /**/
@@ -61,12 +62,12 @@ bool PCM::seek( int s, bool )
 	int filePos = offset + s * srate * chn * bytes[ fmt ];
 	return reader->seek( filePos );
 }
-bool PCM::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool PCM::read( Packet &decoded, int &idx )
 {
 	if ( reader.isAborted() )
 		return false;
 
-	ts = ( reader->pos() - offset ) / ( double )bytes[ fmt ] / chn / srate;
+	decoded.ts = ( reader->pos() - offset ) / ( double )bytes[ fmt ] / chn / srate;
 
 	QByteArray dataBA = reader->read( chn * bytes[ fmt ] * 256 );
 	const int samples_with_channels = dataBA.size() / bytes[ fmt ];
@@ -104,7 +105,8 @@ bool PCM::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
 	}
 
 	idx = 0;
-	duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
+	decoded.duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
+	decoded.hasKeyFrame = true;
 
 	return decoded.size();
 }

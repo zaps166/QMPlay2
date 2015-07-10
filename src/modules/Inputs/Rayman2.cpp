@@ -1,6 +1,7 @@
 #include <Rayman2.hpp>
 
 #include <ByteArray.hpp>
+#include <Packet.hpp>
 #include <Reader.hpp>
 
 /**/
@@ -104,12 +105,12 @@ bool Rayman2::seek( int s, bool )
 	}
 	return true;
 }
-bool Rayman2::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool Rayman2::read( Packet &decoded, int &idx )
 {
 	if ( reader.isAborted() )
 		return false;
 
-	ts = ( reader->pos() - 0x64 ) * 2.0 / chn / srate;
+	decoded.ts = ( reader->pos() - 0x64 ) * 2.0 / chn / srate;
 
 	QByteArray sampleCodes = reader->read( chn * 256 );
 	for ( int i = 0 ; !reader.isAborted() && i + chn <= sampleCodes.size() ; i += chn )
@@ -124,7 +125,8 @@ bool Rayman2::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &durati
 		return false;
 
 	idx = 0;
-	duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
+	decoded.duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
+	decoded.hasKeyFrame = true;
 
 	return !reader.isAborted();
 }

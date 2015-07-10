@@ -1,5 +1,7 @@
 #include <AudioCDDemux.hpp>
 
+#include <Packet.hpp>
+
 #ifdef Q_OS_WIN
 	#include <QDir>
 #else
@@ -155,7 +157,7 @@ bool AudioCDDemux::seek( int s, bool )
 {
 	return ( sector = s / duration ) < numSectors;
 }
-bool AudioCDDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool AudioCDDemux::read( Packet &decoded, int &idx )
 {
 	if ( aborted || numSectors <= sector || isData )
 		return false;
@@ -169,8 +171,9 @@ bool AudioCDDemux::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &d
 			decoded_data[ i ] = cd_samples[ i ] / 32768.0f;
 
 		idx = 0;
-		duration = this->duration;
-		ts = sector * duration;
+		decoded.ts = sector * duration;
+		decoded.duration = duration;
+		decoded.hasKeyFrame = true;
 
 		++sector;
 		return true;

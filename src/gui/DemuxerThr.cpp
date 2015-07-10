@@ -276,7 +276,7 @@ void DemuxerThr::run()
 			const bool backwards = playC.seekTo < ( int )playC.pos;
 			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
 
-			if ( seekInBuffer && ( !localStream || !backwards ) )
+			if ( seekInBuffer )
 			{
 				playC.vPackets.lock();
 				playC.aPackets.lock();
@@ -445,7 +445,7 @@ void DemuxerThr::run()
 
 		Packet packet;
 		int streamIdx = -1;
-		if ( demuxer->read( packet, streamIdx, packet.ts, packet.duration ) )
+		if ( demuxer->read( packet, streamIdx ) )
 		{
 			qApp->processEvents();
 

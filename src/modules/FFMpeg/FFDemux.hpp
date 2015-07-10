@@ -1,5 +1,7 @@
 #include <Demuxer.hpp>
 
+#include <TimeStamp.hpp>
+
 extern "C"
 {
 	#include <libavformat/version.h>
@@ -34,7 +36,7 @@ private:
 	bool localStream() const;
 
 	bool seek( int, bool );
-	bool read( QByteArray &, int &, TimeStamp &, double & );
+	bool read( Packet &, int & );
 	void pause();
 	void abort();
 
@@ -54,6 +56,7 @@ private:
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
 	qint64 seekByByteOffset;
+	bool isOneStreamOgg;
 
 	int lastErr;
 

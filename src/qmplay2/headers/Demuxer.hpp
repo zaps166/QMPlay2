@@ -4,9 +4,10 @@
 #include <ModuleCommon.hpp>
 #include <IOController.hpp>
 #include <StreamInfo.hpp>
-#include <TimeStamp.hpp>
 
 #include <QString>
+
+struct Packet;
 
 class Demuxer : protected ModuleCommon, public BasicIO
 {
@@ -70,7 +71,7 @@ public:
 	}
 
 	virtual bool seek( int, bool backward = false ) = 0;
-	virtual bool read( QByteArray &, int &, TimeStamp &, double & ) = 0;
+	virtual bool read( Packet &, int & ) = 0;
 
 	virtual ~Demuxer() {}
 private:

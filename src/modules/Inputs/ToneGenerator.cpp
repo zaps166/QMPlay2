@@ -1,5 +1,7 @@
 #include <ToneGenerator.hpp>
 
+#include <Packet.hpp>
+
 #include <QUrl>
 #if QT_VERSION < 0x050000
 	#define QUrlQuery( url ) url
@@ -76,7 +78,7 @@ bool ToneGenerator::seek( int, bool )
 {
 	return false;
 }
-bool ToneGenerator::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &duration )
+bool ToneGenerator::read( Packet &decoded, int &idx )
 {
 	if ( aborted )
 		return false;
@@ -91,9 +93,10 @@ bool ToneGenerator::read( QByteArray &decoded, int &idx, TimeStamp &ts, double &
 			samples[ i+c ] = sin( 2.0 * M_PI * freqs[ c ] * i / srate / chn ); //don't use sinf()!
 
 	idx = 0;
-	ts = pos;
-	duration = 1.0;
-	pos += duration;
+	decoded.ts = pos;
+	decoded.duration = 1.0;
+	decoded.hasKeyFrame = true;
+	pos += decoded.duration;
 
 	return true;
 }
