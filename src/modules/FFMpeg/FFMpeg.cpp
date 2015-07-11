@@ -100,7 +100,7 @@ QList< FFMpeg::Info > FFMpeg::getModulesInfo( const bool showDisabled ) const
 void *FFMpeg::createInstance( const QString &name )
 {
 	if ( name == DemuxerName && getBool( "DemuxerEnabled" ) )
-		return static_cast< Demuxer * >( new FFDemux( mutex, *this ) );
+		return new FFDemux( mutex, *this );
 	else if ( name == DecoderName && getBool( "DecoderEnabled" ) )
 		return new FFDecSW( mutex, *this );
 #ifdef QMPlay2_VDPAU

@@ -2400,8 +2400,8 @@
         <translation>Not supported deinterlacing algorithm</translation>
     </message>
     <message>
-        <source>Nie można otworzyć filtrów usuwających przeplot</source>
-        <translation>Cannot open deinterlacing filters</translation>
+        <source>Nie można otworzyć filtrów obrazu</source>
+        <translation>Cannot open video filters</translation>
     </message>
 </context>
 <context>

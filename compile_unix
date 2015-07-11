@@ -25,7 +25,7 @@ if [ -z $QT_SUFFIX ]; then
 	fi
 fi
 
-# lupdate$QT_SUFFIX -locations none QMPlay2.pro
+# lupdate-qt4 -locations none QMPlay2.pro
 
 lrelease$QT_SUFFIX QMPlay2.pro
 

@@ -2400,8 +2400,8 @@
         <translation>Алгоритм деинтерлейсинга не поддерживается</translation>
     </message>
     <message>
-        <source>Nie można otworzyć filtrów usuwających przeplot</source>
-        <translation>Не удалось открыть фильтры деинтерлейсинга</translation>
+        <source>Nie można otworzyć filtrów obrazu</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

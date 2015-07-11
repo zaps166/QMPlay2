@@ -2400,8 +2400,8 @@
         <translation>Algorithme de désentrelacement non supporté</translation>
     </message>
     <message>
-        <source>Nie można otworzyć filtrów usuwających przeplot</source>
-        <translation>Ne peut ouvrir les filtres de désentrelacement</translation>
+        <source>Nie można otworzyć filtrów obrazu</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

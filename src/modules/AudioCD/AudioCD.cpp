@@ -17,7 +17,7 @@
 AudioCD::AudioCD() :
 	Module( "AudioCD" ),
 	cdioDestroyTimer( new CDIODestroyTimer ),
-	AudioCDPlaylist( QDir::tempPath() + "/"AudioCDName".pls" )
+	AudioCDPlaylist( QDir::tempPath() + "/" AudioCDName".pls" )
 {
 	moduleImg = QImage( ":/AudioCD" );
 

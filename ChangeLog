@@ -1,6 +1,7 @@
 Changes in QMPlay2 build 15.07.11:
 	- fixed seeking by searching key frames in buffer,
 	- fixed playback in live streams,
+	- VAApi bugfix,
 
 Changes in QMPlay2 build 15.06.26:
 	- better VSync support for OpenGL video output,

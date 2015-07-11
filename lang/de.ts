@@ -2414,8 +2414,8 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
     </message>
     <message>
-        <source>Nie można otworzyć filtrów usuwających przeplot</source>
-        <translation>Kann den Filter zum Entfernen von Zeilensprung nicht öffnen</translation>
+        <source>Nie można otworzyć filtrów obrazu</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

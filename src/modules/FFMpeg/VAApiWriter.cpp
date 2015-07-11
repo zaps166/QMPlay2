@@ -142,7 +142,7 @@ qint64 VAApiWriter::write( const QByteArray &data )
 #ifdef HAVE_VPP
 	if ( use_vpp )
 	{
-		const bool do_vpp_deint = field != 0 && vpp_deint != VA_INVALID_ID;
+		const bool do_vpp_deint = field != 0 && vpp_buffers[ VAProcFilterDeinterlacing ] != VA_INVALID_ID;
 		bool vpp_ok = false;
 
 		if ( !do_vpp_deint )
@@ -159,10 +159,10 @@ qint64 VAApiWriter::write( const QByteArray &data )
 		if ( do_vpp_deint && !vpp_second )
 		{
 			VAProcFilterParameterBufferDeinterlacing *deint_params = NULL;
-			if ( vaMapBuffer( VADisp, vpp_deint, ( void ** )&deint_params ) == VA_STATUS_SUCCESS )
+			if ( vaMapBuffer( VADisp, vpp_buffers[ VAProcFilterDeinterlacing ], ( void ** )&deint_params ) == VA_STATUS_SUCCESS )
 			{
 				deint_params->flags = field == VA_TOP_FIELD ? VPP_TFF : VPP_BFF;
-				vaUnmapBuffer( VADisp, vpp_deint );
+				vaUnmapBuffer( VADisp, vpp_buffers[ VAProcFilterDeinterlacing ] );
 			}
 		}
 
@@ -175,13 +175,17 @@ qint64 VAApiWriter::write( const QByteArray &data )
 				memset( pipeline_param, 0, sizeof *pipeline_param );
 				pipeline_param->surface = curr_id;
 				pipeline_param->output_background_color = 0xFF000000;
-				if ( do_vpp_deint )
+
+				pipeline_param->num_filters = 1;
+				if ( !do_vpp_deint )
+					pipeline_param->filters = &vpp_buffers[ VAProcFilterNone ];
+				else
 				{
-					pipeline_param->num_filters = 1;
-					pipeline_param->filters = &vpp_deint;
+					pipeline_param->filters = &vpp_buffers[ VAProcFilterDeinterlacing ];
 					pipeline_param->num_forward_references = 1;
 					pipeline_param->forward_references = &forward_reference;
 				}
+
 				vaUnmapBuffer( VADisp, pipeline_buf );
 				if ( vaBeginPicture( VADisp, context_vpp, id_vpp ) == VA_STATUS_SUCCESS )
 				{
@@ -498,6 +502,11 @@ void VAApiWriter::init_vpp()
 			num_filters = 0;
 		if ( num_filters )
 		{
+			/* Creating dummy filter (some drivers/api versions crashes without any filter) */
+			VAProcFilterParameterBufferBase none_params = { VAProcFilterNone };
+			if ( vaCreateBuffer( VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof none_params, 1, &none_params, &vpp_buffers[ VAProcFilterNone ] ) != VA_STATUS_SUCCESS )
+				vpp_buffers[ VAProcFilterNone ] = VA_INVALID_ID;
+			/* Searching deinterlacing filter */
 			if ( vpp_deint_type != VAProcDeinterlacingNone )
 				for ( unsigned i = 0 ; i < num_filters ; ++i )
 					if ( filters[ i ] == VAProcFilterDeinterlacing )
@@ -534,16 +543,16 @@ void VAApiWriter::init_vpp()
 						if ( vpp_deint_type != VAProcDeinterlacingNone )
 						{
 							VAProcFilterParameterBufferDeinterlacing deint_params = { VAProcFilterDeinterlacing, vpp_deint_type, VPP_TFF };
-							if ( vaCreateBuffer( VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_deint ) != VA_STATUS_SUCCESS )
-								vpp_deint = VA_INVALID_ID;
+							if ( vaCreateBuffer( VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_buffers[ VAProcFilterDeinterlacing ] ) != VA_STATUS_SUCCESS )
+								vpp_buffers[ VAProcFilterDeinterlacing ] = VA_INVALID_ID;
 						}
 						break;
 					}
 			return;
 		}
 	}
-	if ( vpp_deint_type != VAProcDeinterlacingNone )
-		QMPlay2Core.log( tr( "Nie można otworzyć filtrów usuwających przeplot" ), ErrorLog | LogOnce );
+	if ( vpp_deint_type != VAProcDeinterlacingNone ) //Show error only when filter is required
+		QMPlay2Core.log( "VA-API :: " + tr( "Nie można otworzyć filtrów obrazu" ), ErrorLog | LogOnce );
 	clr_vpp();
 #endif
 }
@@ -696,8 +705,9 @@ void VAApiWriter::clr_vpp()
 #ifdef HAVE_VPP
 	if ( use_vpp )
 	{
-		if ( vpp_deint != VA_INVALID_ID )
-			vaDestroyBuffer( VADisp, vpp_deint );
+		for ( int i = 0 ; i < VAProcFilterCount ; ++i )
+			if ( vpp_buffers[ i ] != VA_INVALID_ID )
+				vaDestroyBuffer( VADisp, vpp_buffers[ i ] );
 		if ( id_vpp != VA_INVALID_SURFACE )
 			vaDestroySurfaces( VADisp, &id_vpp, 1 );
 		if ( context_vpp )
@@ -707,7 +717,8 @@ void VAApiWriter::clr_vpp()
 		use_vpp = false;
 	}
 	id_vpp = forward_reference = VA_INVALID_SURFACE;
-	vpp_deint = VA_INVALID_ID;
+	for ( int i = 0 ; i < VAProcFilterCount ; ++i )
+		vpp_buffers[ i ] = VA_INVALID_ID;
 	vpp_second = false;
 	context_vpp = 0;
 	config_vpp = 0;

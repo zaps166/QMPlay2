@@ -25,7 +25,7 @@ QString FFCommon::prepareUrl( QString url, AVDictionary *&options, bool *isLocal
 		if ( url.left( 4 ) == "http" )
 			av_dict_set( &options, "icy", "1", 0 );
 #endif
-		av_dict_set( &options, "user-agent", "QMPlay2/"QMPlay2Version, 0 );
+		av_dict_set( &options, "user-agent", "QMPlay2/" QMPlay2Version, 0 );
 		if ( isLocal )
 			*isLocal = false;
 	}

@@ -113,7 +113,7 @@ private:
 #ifdef HAVE_VPP //Postprocessing
 	VAContextID context_vpp;
 	VAConfigID config_vpp;
-	VABufferID vpp_deint;
+	VABufferID vpp_buffers[ VAProcFilterCount ]; //TODO implement all filters
 	VAProcDeinterlacingType vpp_deint_type;
 	VASurfaceID id_vpp, forward_reference;
 	bool use_vpp, vpp_second;
