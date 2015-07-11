@@ -1,7 +1,8 @@
-Changes in QMPlay2 build 15.07.11:
+Changes in QMPlay2 build 15.07.12:
 	- fixed seeking by searching key frames in buffer,
 	- aspect ratio is now correctly updated,
 	- fixed playback in live streams,
+	- small fixes in video playback,
 	- VAApi bugfix,
 
 Changes in QMPlay2 build 15.06.26:

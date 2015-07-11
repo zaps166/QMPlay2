@@ -526,7 +526,7 @@ AVDictionary *FFDemux::getMetadata() const
 {
 	return ( isStreamed || ( !formatCtx->metadata && streams_info.count() == 1 ) ) ? streams[ 0 ]->metadata : formatCtx->metadata;
 }
-StreamInfo *FFDemux::getStreamInfo( AVStream *stream )
+StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
 {
 	const AVCodecID codecID = stream->codec->codec_id;
 	if

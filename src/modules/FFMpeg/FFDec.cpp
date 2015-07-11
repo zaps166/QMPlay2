@@ -43,7 +43,7 @@ AVCodec *FFDec::init( StreamInfo *_streamInfo )
 		codec_ctx->pix_fmt = ( AVPixelFormat )streamInfo->img_fmt;
 		codec_ctx->coded_width = codec_ctx->width = streamInfo->W;
 		codec_ctx->coded_height = codec_ctx->height = streamInfo->H;
-	//	codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR || FF_DEBUG_VIS_MV_B_BACK;
+//		codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR || FF_DEBUG_VIS_MV_B_BACK;
 		if ( codec->type != AVMEDIA_TYPE_SUBTITLE && !streamInfo->data.isEmpty() )
 		{
 			codec_ctx->extradata = ( uint8_t * )streamInfo->data.data();
@@ -87,8 +87,9 @@ void FFDec::decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool
 }
 void FFDec::decodeLastStep( Packet &encodedPacket, AVFrame *frame )
 {
-	if ( frame->best_effort_timestamp != QMPLAY2_NOPTS_VALUE )
-		encodedPacket.ts = frame->best_effort_timestamp * time_base;
+	const int64_t ts = av_frame_get_best_effort_timestamp( frame );
+	if ( ts != QMPLAY2_NOPTS_VALUE )
+		encodedPacket.ts = ts * time_base;
 	if ( codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO )
 	{
 		double &sampleAspectRatio = ( double & )frame->reordered_opaque;

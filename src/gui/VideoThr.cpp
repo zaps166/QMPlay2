@@ -15,6 +15,7 @@
 using Functions::gettime;
 using Functions::s_wait;
 
+#include <QDebug>
 #include <QImage>
 #include <QDir>
 
@@ -179,7 +180,7 @@ void VideoThr::updateSubs()
 void VideoThr::run()
 {
 	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true;
-	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = 0.0, sync_timer = 0.0;
+	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0;
 	QMutex emptyBufferMutex;
 	QByteArray frame;
 	unsigned fast = 0;
@@ -188,6 +189,8 @@ void VideoThr::run()
 
 	while ( !br )
 	{
+		br2 = false;
+
 		if ( deleteFrame )
 		{
 			VideoFrame::unref( frame );
@@ -223,7 +226,7 @@ void VideoThr::run()
 			emptyBufferMutex.lock();
 			playC.emptyBufferCond.wait( &emptyBufferMutex, MUTEXWAIT_TIMEOUT );
 			emptyBufferMutex.unlock();
-			frame_timer = gettime();
+			frame_timer = -1.0;
 			continue;
 		}
 		paused = waiting = false;
@@ -430,10 +433,26 @@ void VideoThr::run()
 				fast = 0;
 			}
 
-			mutex.unlock();
-
 			if ( !frame.isEmpty() )
 			{
+				if ( frame_timer != -1.0 )
+				{
+					const double delay_diff = gettime() - frame_timer;
+					if ( syncVtoA && true_delay > 0.0 && delay_diff > true_delay )
+						++fast;
+
+					delay -= delay_diff;
+					while ( delay > 0.1 )
+					{
+						s_wait( 0.1 );
+						if ( br || playC.flushVideo || br2 )
+							delay = 0.0;
+						else
+							delay -= 0.1;
+					}
+					s_wait( delay );
+				}
+
 				if ( !skip && canWrite )
 				{
 					oneFrame = canWrite = false;
@@ -441,25 +460,13 @@ void VideoThr::run()
 					emit write( frame );
 				}
 
-				const double delay_diff = gettime() - frame_timer;
-				if ( syncVtoA && true_delay > 0.0 && delay_diff > true_delay )
-					++fast;
-
-				delay -= delay_diff;
-				while ( delay > 0.25 )
-				{
-					s_wait( 0.25 );
-					if ( br || playC.flushVideo || br2 )
-						delay = 0.0;
-					else
-						delay -= 0.25;
-				}
-				s_wait( delay );
+				frame_timer = gettime();
 			}
-			frame_timer = gettime();
+			else if ( frame_timer != -1.0 )
+				frame_timer = gettime();
 		}
-		else
-			mutex.unlock();
+
+		mutex.unlock();
 	}
 
 	VideoFrame::unref( frame );
