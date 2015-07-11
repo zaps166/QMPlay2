@@ -19,7 +19,6 @@ public:
 
 	virtual QString name() const = 0;
 
-	virtual bool aspectRatioChanged() const { return false; }
 	virtual Writer *HWAccel() const { return NULL; }
 
 	/*

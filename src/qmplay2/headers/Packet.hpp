@@ -7,13 +7,18 @@
 
 struct Packet : public QByteArray
 {
+	inline Packet() :
+		sampleAspectRatio( 0.0 ),
+		hasKeyFrame( true )
+	{}
+
 	inline void reset()
 	{
 		*this = Packet();
 	}
 
 	TimeStamp ts;
-	double duration;
+	double duration, sampleAspectRatio;
 	bool hasKeyFrame;
 };
 

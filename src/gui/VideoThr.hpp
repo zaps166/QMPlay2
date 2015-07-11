@@ -25,6 +25,10 @@ public:
 	{
 		syncVtoA = b;
 	}
+	inline void setDeleteOSD()
+	{
+		deleteOSD = true;
+	}
 
 	void destroySubtitlesDecoder();
 	inline void setSubtitlesDecoder( Decoder *dec )
@@ -50,6 +54,7 @@ private:
 	void run();
 
 	bool deleteSubs, syncVtoA, doScreenshot, canWrite, HWAccel, deleteOSD, deleteFrame;
+	double lastSampleAspectRatio;
 	int W, H;
 
 	Decoder *sDec;

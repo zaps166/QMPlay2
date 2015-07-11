@@ -198,10 +198,7 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 	}
 
 	if ( frameFinished )
-	{
-		if ( frame->best_effort_timestamp != QMPLAY2_NOPTS_VALUE )
-			encodedPacket.ts = frame->best_effort_timestamp * time_base;
-	}
+		decodeLastStep( encodedPacket, frame );
 	else
 		encodedPacket.ts.setInvalid();
 

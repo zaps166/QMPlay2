@@ -8,7 +8,7 @@ struct AVIOContext;
 class FFReader : public Reader
 {
 public:
-	FFReader( Module &module );
+	FFReader();
 private:
 	bool readyRead() const;
 	bool canSeek() const;

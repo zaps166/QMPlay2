@@ -157,7 +157,12 @@ void VideoThr::initFilters( bool processParams )
 
 bool VideoThr::processParams()
 {
-	return writer ? writer->processParams() : false;
+	if ( writer )
+	{
+		lastSampleAspectRatio = writer->getParam( "AspectRatio" ).toDouble() / ( double )W * ( double )H;
+		return writer->processParams();
+	}
+	return false;
 }
 
 void VideoThr::updateSubs()
@@ -334,8 +339,11 @@ void VideoThr::run()
 		const bool ptsIsValid = filters.getFrame( frame, packet.ts );
 		if ( packet.ts.isValid() )
 		{
-			if ( dec->aspectRatioChanged() )
-				emit playC.aRatioUpdate();
+			if ( packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && fabs( lastSampleAspectRatio - packet.sampleAspectRatio ) >= 0.000001 ) //zmiana współczynnika proporcji
+			{
+				lastSampleAspectRatio = -1.0; //Needs to be updated later
+				emit playC.aRatioUpdate( packet.sampleAspectRatio * ( double )W / ( double )H ); //Sets lastSampleAspectRatio because it calls processParams()
+			}
 			if ( ptsIsValid || packet.ts > playC.pos )
 				playC.chPos( packet.ts );
 

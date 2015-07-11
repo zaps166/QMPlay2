@@ -126,7 +126,6 @@ bool Rayman2::read( Packet &decoded, int &idx )
 
 	idx = 0;
 	decoded.duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
-	decoded.hasKeyFrame = true;
 
 	return !reader.isAborted();
 }

@@ -173,7 +173,6 @@ bool AudioCDDemux::read( Packet &decoded, int &idx )
 		idx = 0;
 		decoded.ts = sector * duration;
 		decoded.duration = duration;
-		decoded.hasKeyFrame = true;
 
 		++sector;
 		return true;

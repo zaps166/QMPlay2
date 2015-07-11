@@ -131,7 +131,6 @@ bool MPDemux::read( Packet &decoded, int &idx )
 	idx = 0;
 	decoded.ts = pos;
 	decoded.duration = ( double )decoded.size() / ( 44100*2*4 ); //SRATE * CHN * BITS/8
-	decoded.hasKeyFrame = true;
 	pos += decoded.duration;
 
 	return true;

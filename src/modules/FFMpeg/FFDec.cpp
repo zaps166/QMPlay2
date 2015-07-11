@@ -1,4 +1,6 @@
 #include <FFDec.hpp>
+#include <FFCommon.hpp>
+
 #include <StreamInfo.hpp>
 
 extern "C"
@@ -22,18 +24,6 @@ FFDec::~FFDec()
 		avcodec_mutex.unlock();
 	}
 	av_free( codec_ctx );
-}
-
-bool FFDec::aspectRatioChanged() const
-{
-	if ( codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO )
-	{
-		const int aspect_ratio = av_q2d( codec_ctx->sample_aspect_ratio ) * 1000;
-		const bool b = last_aspect_ratio != aspect_ratio;
-		last_aspect_ratio = aspect_ratio;
-		return b;
-	}
-	return false;
 }
 
 
@@ -75,7 +65,6 @@ bool FFDec::openCodec( AVCodec *codec )
 	switch ( codec_ctx->codec_type )
 	{
 		case AVMEDIA_TYPE_VIDEO:
-			last_aspect_ratio = av_q2d( codec_ctx->sample_aspect_ratio ) * 1000.0;
 		case AVMEDIA_TYPE_AUDIO:
 			frame = av_frame_alloc();
 			break;
@@ -94,4 +83,16 @@ void FFDec::decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool
 	packet.pts = round( encodedPacket.ts.pts() / time_base );
 	if ( flush )
 		avcodec_flush_buffers( codec_ctx );
+	codec_ctx->reordered_opaque = ( int64_t & )encodedPacket.sampleAspectRatio;
+}
+void FFDec::decodeLastStep( Packet &encodedPacket, AVFrame *frame )
+{
+	if ( frame->best_effort_timestamp != QMPLAY2_NOPTS_VALUE )
+		encodedPacket.ts = frame->best_effort_timestamp * time_base;
+	if ( codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO )
+	{
+		double &sampleAspectRatio = ( double & )frame->reordered_opaque;
+		if ( !sampleAspectRatio && frame->sample_aspect_ratio.num )
+			encodedPacket.sampleAspectRatio = av_q2d( frame->sample_aspect_ratio );
+	}
 }

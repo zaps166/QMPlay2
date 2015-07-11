@@ -116,7 +116,7 @@ void *FFMpeg::createInstance( const QString &name )
 		return new FFDecVAAPI( mutex, *this );
 #endif
 	else if ( name == FFReaderName )
-		return new FFReader( *this );
+		return new FFReader;
 	return NULL;
 }
 

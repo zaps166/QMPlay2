@@ -13,12 +13,10 @@ static int interruptCB( bool &aborted )
 
 /**/
 
-FFReader::FFReader( Module &module ) :
+FFReader::FFReader() :
 	avioCtx( NULL ),
 	aborted( false ), paused( false ), canRead( false )
-{
-	SetModule( module );
-}
+{}
 
 bool FFReader::readyRead() const
 {

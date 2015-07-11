@@ -408,6 +408,8 @@ bool FFDemux::read( Packet &encoded, int &idx )
 	}
 
 	encoded.hasKeyFrame = packet.flags & AV_PKT_FLAG_KEY;
+	if ( streams[ ff_idx ]->sample_aspect_ratio.num )
+		encoded.sampleAspectRatio = av_q2d( streams[ ff_idx ]->sample_aspect_ratio );
 
 	idx = index_map.at( ff_idx );
 
@@ -524,7 +526,7 @@ AVDictionary *FFDemux::getMetadata() const
 {
 	return ( isStreamed || ( !formatCtx->metadata && streams_info.count() == 1 ) ) ? streams[ 0 ]->metadata : formatCtx->metadata;
 }
-StreamInfo *FFDemux::getStreamInfo( AVStream *stream ) const
+StreamInfo *FFDemux::getStreamInfo( AVStream *stream )
 {
 	const AVCodecID codecID = stream->codec->codec_id;
 	if

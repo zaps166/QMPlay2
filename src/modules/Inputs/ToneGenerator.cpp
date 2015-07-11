@@ -95,7 +95,6 @@ bool ToneGenerator::read( Packet &decoded, int &idx )
 	idx = 0;
 	decoded.ts = pos;
 	decoded.duration = 1.0;
-	decoded.hasKeyFrame = true;
 	pos += decoded.duration;
 
 	return true;

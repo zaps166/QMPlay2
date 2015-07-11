@@ -18,19 +18,17 @@ protected:
 	FFDec( QMutex & );
 	virtual ~FFDec();
 
-	bool aspectRatioChanged() const;
-
 	/**/
 
 	AVCodec *init( StreamInfo *streamInfo );
 	bool openCodec( AVCodec *codec );
 
 	void decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool flush );
+	void decodeLastStep( Packet &encodedPacket, AVFrame *frame );
 
 	AVCodecContext *codec_ctx;
 	AVFrame *frame;
 	double time_base;
-	mutable int last_aspect_ratio;
 	bool codecIsOpen;
 
 	QMutex &avcodec_mutex;

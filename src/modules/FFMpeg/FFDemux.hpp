@@ -44,9 +44,9 @@ private:
 
 	/**/
 
-	StreamInfo *getStreamInfo( AVStream *stream ) const;
+	StreamInfo *getStreamInfo( AVStream *stream );
 	AVDictionary *getMetadata() const;
-private:
+
 	QVector< int > index_map;
 	QList< AVStream * > streams;
 	AVFormatContext *formatCtx;

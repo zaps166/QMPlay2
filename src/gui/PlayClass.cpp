@@ -103,7 +103,7 @@ PlayClass::PlayClass() :
 	Brightness = Saturation = Contrast = Hue = 0;
 
 	connect( &timTerminate, SIGNAL( timeout() ), this, SLOT( timTerminateFinished() ) );
-	connect( this, SIGNAL( aRatioUpdate() ), this, SLOT( aRatioUpdated() ) );
+	connect( this, SIGNAL( aRatioUpdate( double ) ), this, SLOT( aRatioUpdated( double ) ) );
 }
 
 void PlayClass::play( const QString &_url )
@@ -829,13 +829,15 @@ void PlayClass::nextFrame()
 	}
 }
 
-void PlayClass::aRatioUpdated() //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
+void PlayClass::aRatioUpdated( double aRatio ) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {
 	if ( aRatioName == "auto" && vThr && demuxThr && demuxThr->demuxer && videoStream > -1 )
 	{
+		demuxThr->demuxer->streamsInfo()[ videoStream ]->aspect_ratio = aRatio;
 		double aspect_ratio = getARatio();
 		if ( ass )
 			ass->setARatio( aspect_ratio );
+		vThr->setDeleteOSD();
 		vThr->setARatio( aspect_ratio );
 		vThr->processParams();
 		demuxThr->emitInfo();
