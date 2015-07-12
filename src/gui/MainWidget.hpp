@@ -137,6 +137,8 @@ private:
 	AboutWidget *aboutW;
 	bool isCompactView, wasShow, fullScreen;
 
+	QAction *lockWidgetsAct;
+
 #ifdef UPDATER
 	Updater updater;
 #endif

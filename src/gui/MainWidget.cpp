@@ -259,7 +259,16 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 
 	if ( QMPlay2Core.getSettings().getBool( "MainWidget/TabPositionNorth" ) )
 		setTabPosition( Qt::AllDockWidgetAreas, QTabWidget::North );
-	lockWidgets( QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false ) );
+
+	const bool widgetsLocked = QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false ) ;
+	lockWidgets( widgetsLocked );
+	lockWidgetsAct = new QAction( tr( "&Zablokuj widgety" ), menuBar );
+	lockWidgetsAct->setCheckable( true );
+	lockWidgetsAct->setAutoRepeat( false );
+	lockWidgetsAct->setChecked( widgetsLocked );
+	lockWidgetsAct->setShortcut( QKeySequence( "Shift+L" ) );
+	connect( lockWidgetsAct, SIGNAL( triggered( bool ) ), this, SLOT( lockWidgets( bool ) ) );
+	addAction( lockWidgetsAct );
 
 	fullScreenDockWidgetState = QMPlay2Core.getSettings().getByteArray( "MainWidget/FullScreenDockWidgetState" );
 #if defined Q_OS_MAC || defined Q_OS_ANDROID
@@ -1003,18 +1012,23 @@ void MainWidget::console( bool checked )
 
 void MainWidget::lockWidgets( bool l )
 {
-	foreach ( QObject *o, children() )
+	if ( fullScreen || isCompactView )
+		qobject_cast< QAction * >( sender() )->setChecked( !l );
+	else
 	{
-		DockWidget *dW = dynamic_cast< DockWidget * >( o );
-		if ( dW )
+		foreach ( QObject *o, children() )
 		{
-			if ( dW->isFloating() )
-				dW->setFloating( false );
-			dW->setGlobalTitleBarVisible( !l );
+			DockWidget *dW = dynamic_cast< DockWidget * >( o );
+			if ( dW )
+			{
+				if ( dW->isFloating() )
+					dW->setFloating( false );
+				dW->setGlobalTitleBarVisible( !l );
+			}
 		}
+		mainTB->setMovable( !l );
+		QMPlay2Core.getSettings().set( "MainWidget/WidgetsLocked", l );
 	}
-	mainTB->setMovable( !l );
-	QMPlay2Core.getSettings().set( "MainWidget/WidgetsLocked", l );
 }
 
 void MainWidget::hideDocksSlot()
@@ -1053,12 +1067,12 @@ void MainWidget::savePlistHelper( const QString &title, const QString &fPth, boo
 QMenu *MainWidget::createPopupMenu()
 {
 	QMenu *popupMenu = QMainWindow::createPopupMenu();
-	popupMenu->addSeparator();
-	QAction *act = popupMenu->addAction( tr( "&Zablokuj widgety" ) );
-	act->setCheckable( true );
-	act->setChecked( QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked" ) );
-	connect( act, SIGNAL( triggered( bool ) ), this, SLOT( lockWidgets( bool ) ) );
-	foreach ( act, popupMenu->actions() )
+	if ( !fullScreen && !isCompactView )
+	{
+		popupMenu->addSeparator();
+		popupMenu->addAction( lockWidgetsAct );
+	}
+	foreach ( QAction *act, popupMenu->actions() )
 		act->setEnabled( isVisible() && !fullScreen && !isCompactView );
 	return popupMenu;
 }
