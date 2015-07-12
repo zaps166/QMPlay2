@@ -60,6 +60,7 @@ private:
 	Decoder *sDec;
 	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
+	QMutex filtersMutex;
 private slots:
 	void write_slot( const QByteArray & );
 	void screenshot_slot( const QByteArray & );

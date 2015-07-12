@@ -39,11 +39,20 @@ bool AVThread::lock()
 	if ( !mutex.tryLock( MUTEXWAIT_TIMEOUT ) )
 	{
 		emit QMPlay2Core.waitCursor();
-		bool ret = mutex.tryLock( MUTEXWAIT_TIMEOUT );
+		const bool ret = mutex.tryLock( MUTEXWAIT_TIMEOUT );
 		emit QMPlay2Core.restoreCursor();
-		return ret;
+		if ( !ret )
+		{
+			br2 = false;
+			return false;
+		}
 	}
 	return true;
+}
+void AVThread::unlock()
+{
+	br2 = false;
+	mutex.unlock();
 }
 
 void AVThread::stop( bool _terminate )
@@ -51,7 +60,7 @@ void AVThread::stop( bool _terminate )
 	if ( _terminate )
 		return terminate();
 
-	br = br2 = true;
+	br = true;
 	mutex.unlock();
 	playC.emptyBufferCond.wakeAll();
 

@@ -95,7 +95,7 @@ void VideoThr::initFilters( bool processParams )
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 
 	if ( processParams )
-		lock();
+		filtersMutex.lock();
 
 	filters.clear();
 
@@ -150,7 +150,7 @@ void VideoThr::initFilters( bool processParams )
 
 	if ( processParams )
 	{
-		unlock();
+		filtersMutex.unlock();
 		if ( writer && writer->hasParam( "Deinterlace" ) )
 			writer->processParams();
 	}
@@ -189,8 +189,6 @@ void VideoThr::run()
 
 	while ( !br )
 	{
-		br2 = false;
-
 		if ( deleteFrame )
 		{
 			VideoFrame::unref( frame );
@@ -320,6 +318,7 @@ void VideoThr::run()
 		deleteSubs = deleteOSD = false;
 		/**/
 
+		filtersMutex.lock();
 		if ( playC.flushVideo )
 			filters.clearBuffers();
 
@@ -340,6 +339,8 @@ void VideoThr::run()
 		}
 
 		const bool ptsIsValid = filters.getFrame( frame, packet.ts );
+		filtersMutex.unlock();
+
 		if ( packet.ts.isValid() )
 		{
 			if ( packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && fabs( lastSampleAspectRatio - packet.sampleAspectRatio ) >= 0.000001 ) //zmiana współczynnika proporcji
@@ -440,26 +441,20 @@ void VideoThr::run()
 					const double delay_diff = gettime() - frame_timer;
 					if ( syncVtoA && true_delay > 0.0 && delay_diff > true_delay )
 						++fast;
-
 					delay -= delay_diff;
-					while ( delay > 0.1 )
+					while ( delay > 0.0 && !playC.paused && !br && !br2 )
 					{
-						s_wait( 0.1 );
-						if ( br || playC.flushVideo || br2 )
-							delay = 0.0;
-						else
-							delay -= 0.1;
+						const double sleepTime = qMin( delay, 0.1 );
+						s_wait( sleepTime );
+						delay -= sleepTime;
 					}
-					s_wait( delay );
 				}
-
 				if ( !skip && canWrite )
 				{
 					oneFrame = canWrite = false;
 					VideoFrame::ref( frame );
 					emit write( frame );
 				}
-
 				frame_timer = gettime();
 			}
 			else if ( frame_timer != -1.0 )

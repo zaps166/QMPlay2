@@ -20,10 +20,7 @@ public:
 	}
 
 	bool lock();
-	inline void unlock()
-	{
-		mutex.unlock();
-	}
+	void unlock();
 
 	inline bool isWaiting() const
 	{

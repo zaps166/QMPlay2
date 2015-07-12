@@ -221,7 +221,6 @@ void AudioThr::run()
 
 			int decodedSize = decoded.size();
 			int decodedPos = 0;
-			br2 = false;
 			while ( decodedSize > 0 && !playC.paused && !br && !br2 )
 			{
 				const double max_len = 0.02; //TODO: zrobić opcje?
