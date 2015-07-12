@@ -276,7 +276,7 @@ void DemuxerThr::run()
 			const bool backwards = playC.seekTo < ( int )playC.pos;
 			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
 
-			if ( seekInBuffer )
+			if ( seekInBuffer && ( !localStream || !backwards ) )
 			{
 				playC.vPackets.lock();
 				playC.aPackets.lock();
