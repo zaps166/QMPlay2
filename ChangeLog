@@ -1,5 +1,5 @@
 Changes in QMPlay2 build 15.07.12:
-	- keyboard shortcur (Shift+L) for locking widgets,
+	- keyboard shortcut (Shift+L) for locking widgets,
 	- fixed seeking by searching key frames in buffer,
 	- aspect ratio is now correctly updated,
 	- fixed playback in live streams,
