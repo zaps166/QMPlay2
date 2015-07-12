@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 15.07.13:
+	- fixed problem from previous release with playing video (sometimes video plays at maximum speed),
+
 Changes in QMPlay2 build 15.07.12:
 	- keyboard shortcut (Shift+L) for locking widgets,
 	- fixed seeking by searching key frames in buffer,

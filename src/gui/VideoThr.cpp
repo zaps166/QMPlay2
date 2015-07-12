@@ -192,6 +192,7 @@ void VideoThr::run()
 		if ( deleteFrame )
 		{
 			VideoFrame::unref( frame );
+			frame_timer = -1.0;
 			deleteFrame = false;
 		}
 
@@ -211,6 +212,7 @@ void VideoThr::run()
 			{
 				emit pause();
 				paused = true;
+				frame_timer = -1.0;
 			}
 			playC.vPackets.unlock();
 
@@ -224,7 +226,10 @@ void VideoThr::run()
 			emptyBufferMutex.lock();
 			playC.emptyBufferCond.wait( &emptyBufferMutex, MUTEXWAIT_TIMEOUT );
 			emptyBufferMutex.unlock();
-			frame_timer = -1.0;
+
+			if ( frame_timer != -1.0 )
+				frame_timer = gettime();
+
 			continue;
 		}
 		paused = waiting = false;
@@ -320,7 +325,10 @@ void VideoThr::run()
 
 		filtersMutex.lock();
 		if ( playC.flushVideo )
+		{
 			filters.clearBuffers();
+			frame_timer = -1.0;
+		}
 
 		if ( !packet.isEmpty() )
 		{
