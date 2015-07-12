@@ -19,20 +19,6 @@ $ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
 $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ```
 
-####Easy installation on Ubuntu
-
-- Just run the following commands:
-```sh
-$ sudo add-apt-repository ppa:samrog131/ppa
-$ sudo apt-get update
-$ sudo apt-get install qmplay2
-```
-- If you get dependency issues, do:
-```sh
-$ sudo apt-get install -f
-$ sudo apt-get install qmplay2
-```
-
 ##Compilation from sources
 
 ###You need (devel packages):
