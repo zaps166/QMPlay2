@@ -127,7 +127,7 @@ void AudioThr::run()
 	bool paused = false;
 	tmp_br = tmp_time = 0;
 #ifdef Q_OS_WIN
-	canRefresh = false;
+	canUpdatePos = canUpdateBitrate = false;
 #endif
 	while ( !br )
 	{
@@ -150,7 +150,7 @@ void AudioThr::run()
 			if ( playC.paused || ( !hasAPackets && !hasBufferedSamples ) || playC.waitForData )
 			{
 #ifdef Q_OS_WIN
-				canRefresh = false;
+				canUpdatePos = canUpdateBitrate = false;
 #endif
 				tmp_br = tmp_time = 0;
 				if ( playC.paused && !paused )
@@ -200,13 +200,15 @@ void AudioThr::run()
 				tmp_br += bytes_consumed;
 			}
 
-#ifndef Q_OS_WIN
 			if ( tmp_time >= 1000.0 )
 			{
+#ifdef Q_OS_WIN
+				canUpdateBitrate = true;
+#else
 				emit playC.updateBitrate( round( ( tmp_br << 3 ) / tmp_time ), -1, -1.0 );
 				tmp_br = tmp_time = 0;
-			}
 #endif
+			}
 
 			delay = writer->getParam( "delay" ).toDouble();
 			foreach ( AudioFilter *filter, filters )
@@ -254,7 +256,7 @@ void AudioThr::run()
 				packet.ts += playC.audio_last_delay;
 
 #ifdef Q_OS_WIN
-				canRefresh = true;
+				canUpdatePos = true;
 #endif
 
 				if ( playC.skipAudioFrame <= 0.0 )
@@ -343,13 +345,20 @@ bool AudioThr::resampler_create()
 #ifdef Q_OS_WIN
 void AudioThr::timerEvent( QTimerEvent * )
 {
-	if ( !canRefresh || br || !isRunning() )
+	if ( br || !isRunning() )
 		return;
-	canRefresh = false;
-	if ( !playC.vThr && playC.canUpdatePos )
-		emit playC.updatePos( round( playC.pos ) );
-	emit playC.updateBitrate( round( ( tmp_br << 3 ) / tmp_time ), -1, -1.0 );
-	tmp_br = tmp_time = 0;
+	if ( canUpdatePos )
+	{
+		if ( !playC.vThr && playC.canUpdatePos )
+			emit playC.updatePos( round( playC.pos ) );
+		canUpdatePos = false;
+	}
+	if ( canUpdateBitrate )
+	{
+		emit playC.updateBitrate( round( ( tmp_br << 3 ) / tmp_time ), -1, -1.0 );
+		canUpdateBitrate = false;
+		tmp_time = tmp_br = 0;
+	}
 }
 #endif
 

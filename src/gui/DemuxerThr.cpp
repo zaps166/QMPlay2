@@ -256,7 +256,9 @@ void DemuxerThr::run()
 		forwardPackets -= backwardPackets;
 	}
 
-	setPriority( QThread::HighPriority );
+	if ( !localStream )
+		setPriority( QThread::LowPriority ); //Network streams should have low priority, because slow CPUs have problems with smooth video playing during buffering
+
 	while ( !demuxer.isAborted() )
 	{
 		AVThread *aThr = ( AVThread * )playC.aThr, *vThr = ( AVThread * )playC.vThr;

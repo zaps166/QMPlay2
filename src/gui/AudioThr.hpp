@@ -41,7 +41,7 @@ private:
 	volatile double doSilence;
 	QMutex silenceChMutex;
 #ifdef Q_OS_WIN
-	bool canRefresh;
+	bool canUpdatePos, canUpdateBitrate;
 #endif
 
 	QVector< QMPlay2Extensions * > visualizations;
