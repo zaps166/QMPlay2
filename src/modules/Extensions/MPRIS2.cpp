@@ -85,11 +85,11 @@ void MediaPlayer2Root::fullScreenChanged( bool fs )
 MediaPlayer2Player::MediaPlayer2Player( QObject *p ) :
 	QDBusAbstractAdaptor( p ),
 	exportCovers( false ), removeCover( false ),
-	trackID( QDBusObjectPath( QString( "/org/qmplay2/MediaPlayer2/Track/%1" ).arg( qrand() ) ) ), //is it OK?
+	trackID( QDBusObjectPath( QString( "/org/qmplay2/MediaPlayer2/Track/0" ) ) ), //I don't use TrackID in QMPlay2
 	playState( "Stopped" ),
 	can_seek( false ),
 	vol( 1.0 ), r( 1.0 ),
-	len( 0 ), pos( 0 )
+	pos( 0 )
 {
 	clearMetaData();
 	m_data[ "mpris:trackid" ] = QVariant::fromValue< QDBusObjectPath >( trackID );
@@ -201,13 +201,16 @@ void MediaPlayer2Player::Play()
 }
 void MediaPlayer2Player::Seek( qint64 Offset )
 {
-	if ( Offset != position() && Offset >= 0 && Offset <= m_data[ "mpris:length" ].toLongLong() )
-		QMPlay2Core.processParam( "seek", QString::number( Offset / 1000000LL ) );
+	if ( Offset != 0 )
+	{
+		const qint64 Position = position() + Offset;
+		SetPosition( trackID, Position < 0 ? 0 : Position );
+	}
 }
 void MediaPlayer2Player::SetPosition( const QDBusObjectPath &TrackId, qint64 Position )
 {
-	if ( trackID == TrackId )
-		Seek( Position );
+	if ( trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data[ "mpris:length" ].toLongLong() )
+		QMPlay2Core.processParam( "seek", QString::number( Position / 1000000LL ) );
 }
 void MediaPlayer2Player::OpenUri( const QString &Uri )
 {
@@ -217,20 +220,20 @@ void MediaPlayer2Player::OpenUri( const QString &Uri )
 void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName )
 {
 	Q_UNUSED( needCover )
-	bool tmp = play && length > 0;
+	const bool tmp = play && length > 0;
 	if ( tmp != can_seek )
 		propertyChanged( "CanSeek", can_seek = tmp );
 	if ( !play )
 		clearMetaData();
 	else
 	{
-		m_data[ "mpris:length" ] = len = length * 1000000LL;
+		m_data[ "mpris:length" ] = length < 0 ? -1 : length * 1000000LL;
 		if ( title.isEmpty() && artist.isEmpty() )
 			m_data[ "xesam:title" ] = fileName;
 		else
 		{
 			m_data[ "xesam:title" ] = title;
-			m_data[ "xesam:artist" ] = artist;
+			m_data[ "xesam:artist" ] = QStringList() << artist;
 		}
 		m_data[ "xesam:album" ] = album;
 	}
@@ -286,7 +289,8 @@ void MediaPlayer2Player::clearMetaData()
 		QFile::remove( m_data[ "mpris:artUrl" ].toString() );
 		removeCover = false;
 	}
-	m_data[ "mpris:artUrl" ] = m_data[ "xesam:title" ] = m_data[ "xesam:artist" ] = m_data[ "xesam:album" ] = QString();
+	m_data[ "mpris:artUrl" ] = m_data[ "xesam:title" ] = m_data[ "xesam:album" ] = QString();
+	m_data[ "xesam:artist" ] = QStringList() << QString();
 	m_data[ "mpris:length" ] = qint64();
 }
 

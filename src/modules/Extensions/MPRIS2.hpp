@@ -120,7 +120,7 @@ private:
 	QString playState;
 	bool can_seek;
 	double vol, r;
-	qint64 len, pos;
+	qint64 pos;
 };
 
 /**/
