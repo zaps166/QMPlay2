@@ -42,9 +42,8 @@ if [ -z $1 ] || ( [ $1 != 'install' ] && [ $1 != 'uninstall' ] ); then
 	exit 1
 fi
 
-./compile_unix || exit $?
-
 if [ $1 == 'install' ]; then
+	./compile_unix || exit $?
 	copy_files
 else
 	remove_files
