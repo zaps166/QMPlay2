@@ -156,7 +156,7 @@ qint64 VAApiWriter::write( const QByteArray &data )
 		if ( !vpp_second && forward_reference == curr_id )
 			return data.size();
 
-		if ( do_vpp_deint && !vpp_second )
+		if ( do_vpp_deint /*&& !vpp_second*/ )
 		{
 			VAProcFilterParameterBufferDeinterlacing *deint_params = NULL;
 			if ( vaMapBuffer( VADisp, vpp_buffers[ VAProcFilterDeinterlacing ], ( void ** )&deint_params ) == VA_STATUS_SUCCESS )

@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 15.08.11:
-	- small fixes for Windows,
+	- deinterlacing fixes in VAApi,
+	- minor fixes for Windows,
 	- MPRIS2 bugfix,
 
 Changes in QMPlay2 build 15.07.13:
