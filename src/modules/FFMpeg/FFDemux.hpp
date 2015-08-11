@@ -7,6 +7,10 @@ extern "C"
 	#include <libavformat/version.h>
 }
 
+#if LIBAVFORMAT_VERSION_MAJOR >= 56 && LIBAVFORMAT_VERSION_MINOR >= 36
+	#define MP3_FAST_SEEK
+#endif
+
 struct AVFormatContext;
 struct AVDictionary;
 struct AVStream;
@@ -55,7 +59,9 @@ private:
 	bool isLocal, paused, isStreamed, aborted, fix_mkv_ass;
 	mutable bool isMetadataChanged;
 	double lastTime, start_time;
+#ifndef MP3_FAST_SEEK
 	qint64 seekByByteOffset;
+#endif
 	bool isOneStreamOgg;
 
 	int lastErr;

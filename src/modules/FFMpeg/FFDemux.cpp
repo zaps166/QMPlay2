@@ -287,10 +287,14 @@ bool FFDemux::seek( int val, bool backward )
 			return true;
 		}
 		val += start_time;
+#ifndef MP3_FAST_SEEK
 		if ( seekByByteOffset < 0 )
+#endif
 			return av_seek_frame( formatCtx, -1, ( int64_t )val * AV_TIME_BASE, backward ? AVSEEK_FLAG_BACKWARD : 0 ) >= 0;
+#ifndef MP3_FAST_SEEK
 		else if ( length() > 0 )
 			return av_seek_frame( formatCtx, -1, ( int64_t )val * ( avio_size( formatCtx->pb ) - seekByByteOffset ) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | ( backward ? AVSEEK_FLAG_BACKWARD : 0 ) ) >= 0;
+#endif
 	}
 	return false;
 }
@@ -388,12 +392,16 @@ bool FFDemux::read( Packet &encoded, int &idx )
 
 	const double time_base = av_q2d( streams[ ff_idx ]->time_base );
 
+#ifndef MP3_FAST_SEEK
 	if ( seekByByteOffset < 0 )
+#endif
 		encoded.ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
+#ifndef MP3_FAST_SEEK
 	else if ( packet.pos > -1 && length() > 0.0 )
 		lastTime = encoded.ts = ( ( packet.pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
 	else
 		encoded.ts = lastTime;
+#endif
 
 	if ( packet.duration > 0 )
 		encoded.duration = packet.duration * time_base;
@@ -451,11 +459,17 @@ bool FFDemux::open( const QString &_url )
 	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
 	formatCtx->interrupt_callback.opaque = &aborted;
 
+//	formatCtx->flags |= AVFMT_FLAG_GENPTS; //Is it necessary (it can slow down demuxing)?
+#ifdef MP3_FAST_SEEK
+	formatCtx->flags |= AVFMT_FLAG_FAST_SEEK;
+#endif
+
 	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
 		return false;
 
-	formatCtx->flags |= AVFMT_FLAG_GENPTS;
+#ifndef MP3_FAST_SEEK
 	seekByByteOffset = formatCtx->pb ? avio_tell( formatCtx->pb ) : -1; //formatCtx->data_offset, moved to private since ffmpeg 2.6
+#endif
 
 	avcodec_mutex.lock();
 	if ( avformat_find_stream_info( formatCtx, NULL ) < 0 )
@@ -466,10 +480,12 @@ bool FFDemux::open( const QString &_url )
 	avcodec_mutex.unlock();
 
 	isStreamed = !isLocal && formatCtx->duration == QMPLAY2_NOPTS_VALUE;
+#ifndef MP3_FAST_SEEK
 	if ( seekByByteOffset > -1 && ( isStreamed || name() != "mp3" ) )
 		seekByByteOffset = -1;
+#endif
 
-	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1;
+	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1; //Workaround for some OGG network streams
 
 	if ( ( start_time = formatCtx->start_time / ( double )AV_TIME_BASE ) < 0.0 )
 		start_time = 0.0;
