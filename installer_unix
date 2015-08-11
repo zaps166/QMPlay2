@@ -1,0 +1,51 @@
+#!/bin/bash
+
+arch=`uname -m`
+if [ -z $arch ] || [ $arch != 'x86_64' ] || [ ! -e /usr/lib64 ]; then
+	libdir=lib
+else
+	libdir=lib64
+fi
+
+function copy_files
+{
+	sudo cp --remove-destination -v    app/bin/QMPlay2 /usr/bin
+	sudo cp --remove-destination -v    app/lib/libqmplay2.so /usr/$libdir
+	sudo cp --remove-destination -v -r app/include /usr
+	sudo cp --remove-destination -v -r app/share /usr
+
+	sudo strip /usr/bin/QMPlay2
+	sudo strip /usr/share/qmplay2/modules/*.so
+}
+
+function remove_files
+{
+	sudo rm -v    /usr/bin/QMPlay2
+	sudo rm -v    /usr/$libdir/libqmplay2.so
+	sudo rm -v -r /usr/include/QMPlay2
+	sudo rm -v    /usr/share/applications/QMPlay2*.desktop
+	sudo rm -v    /usr/share/icons/QMPlay2.png
+	sudo rm -v    /usr/share/icons/hicolor/128x128/apps/QMPlay2.png
+	if [ -d /usr/share/kde4/apps/solid/actions ]; then
+		sudo rm -v    /usr/share/kde4/apps/solid/actions/qmplay2-opencda.desktop
+	elif [ -d /usr/share/apps/solid/actions ]; then
+		sudo rm -v    /usr/share/apps/solid/actions/qmplay2-opencda.desktop
+	fi
+	sudo rm -v -r /usr/share/qmplay2
+}
+
+export SYSTEM_BUILD=1
+export NOTERM=1
+
+if [ -z $1 ] || ( [ $1 != 'install' ] && [ $1 != 'uninstall' ] ); then
+	echo "You must specify 'install' or 'uninstall'"
+	exit 1
+fi
+
+./compile_unix || exit $?
+
+if [ $1 == 'install' ]; then
+	copy_files
+else
+	remove_files
+fi

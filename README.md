@@ -55,11 +55,15 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ###Linux/BSD:
 
 - Install all dependencies using package manager (in devel version) or compile it from sources.
-- If you don't want to open Xterm or Konsole - "export NOTERM=1".
-- If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
 - If you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5".
-- Run "./compile_unix".
-- QMPlay2 is in "app" directory, you can move its contents into /usr directory if $SYSTEM_BUILD == 1.
+- Compilation only:
+	- If you don't want to open Xterm or Konsole - "export NOTERM=1".
+	- If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
+	- Run "./compile_unix".
+	- QMPlay2 is in "app" directory, you can move its contents into /usr directory if "$SYSTEM_BUILD == 1".
+- Compilation and installation:
+	- Run "./installer_unix install" (it compiles and uses "sudo" to copy files to "/usr").
+	- If you want to uninstall, run "./installer_unix uninstall" (it also uses "sudo").
 
 ###OS X:
 
