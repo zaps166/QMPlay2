@@ -44,7 +44,9 @@ fi
 
 if [ $1 == 'install' ]; then
 	./compile_unix || exit $?
-	copy_files
+	copy_files && echo "Installation complete!" && exit
+	echo "Installation failed!"
+	exit 1
 else
 	remove_files
 fi

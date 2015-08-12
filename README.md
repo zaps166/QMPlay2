@@ -60,7 +60,7 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 	- If you don't want to open Xterm or Konsole - "export NOTERM=1".
 	- If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
 	- Run "./compile_unix".
-	- QMPlay2 is in "app" directory, you can move its contents into /usr directory if "$SYSTEM_BUILD == 1".
+	- QMPlay2 is in "app" directory, you can move its contents into "/usr" directory if "$SYSTEM_BUILD == 1".
 - Compilation and installation:
 	- Run "./installer_unix install" (it compiles and uses "sudo" to copy files to "/usr").
 	- If you want to uninstall, run "./installer_unix uninstall" (it also uses "sudo").
@@ -76,6 +76,6 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 - Run "./compile_mac n" where "n" is number of threads (4 by default).
 
 Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
->http://aur.archlinux.org/packages/qm/qmplay2-git/PKGBUILD
+>https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2
 
 QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
