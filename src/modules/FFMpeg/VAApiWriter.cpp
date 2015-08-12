@@ -11,11 +11,6 @@
 
 #include <va/va_x11.h>
 
-#ifdef HAVE_VPP
-	#define VPP_TFF 0
-	#define VPP_BFF ( VA_DEINTERLACING_BOTTOM_FIELD | VA_DEINTERLACING_BOTTOM_FIELD_FIRST )
-#endif
-
 VAApiWriter::VAApiWriter( Module &module ) :
 	ok( false ),
 	VADisp( NULL ),
@@ -156,12 +151,13 @@ qint64 VAApiWriter::write( const QByteArray &data )
 		if ( !vpp_second && forward_reference == curr_id )
 			return data.size();
 
-		if ( do_vpp_deint /*&& !vpp_second*/ )
+		if ( do_vpp_deint )
 		{
 			VAProcFilterParameterBufferDeinterlacing *deint_params = NULL;
 			if ( vaMapBuffer( VADisp, vpp_buffers[ VAProcFilterDeinterlacing ], ( void ** )&deint_params ) == VA_STATUS_SUCCESS )
 			{
-				deint_params->flags = field == VA_TOP_FIELD ? VPP_TFF : VPP_BFF;
+				if ( ( major >= 0 && minor > 37 ) || !vpp_second )
+					deint_params->flags = field == VA_TOP_FIELD ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
 				vaUnmapBuffer( VADisp, vpp_buffers[ VAProcFilterDeinterlacing ] );
 			}
 		}
@@ -274,8 +270,7 @@ bool VAApiWriter::open()
 	clr();
 
 	VADisp = vaGetDisplay( ( display = XOpenDisplay( NULL ) ) );
-	int minor, major;
-	if ( vaInitialize( VADisp, &minor, &major ) == VA_STATUS_SUCCESS )
+	if ( vaInitialize( VADisp, &major, &minor ) == VA_STATUS_SUCCESS )
 	{
 		const QString vendor = vaQueryVendorString( VADisp );
 		isVDPAU = vendor.contains( "VDPAU" );
@@ -542,7 +537,7 @@ void VAApiWriter::init_vpp()
 						}
 						if ( vpp_deint_type != VAProcDeinterlacingNone )
 						{
-							VAProcFilterParameterBufferDeinterlacing deint_params = { VAProcFilterDeinterlacing, vpp_deint_type, VPP_TFF };
+							VAProcFilterParameterBufferDeinterlacing deint_params = { VAProcFilterDeinterlacing, vpp_deint_type, 0 };
 							if ( vaCreateBuffer( VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_buffers[ VAProcFilterDeinterlacing ] ) != VA_STATUS_SUCCESS )
 								vpp_buffers[ VAProcFilterDeinterlacing ] = VA_INVALID_ID;
 						}

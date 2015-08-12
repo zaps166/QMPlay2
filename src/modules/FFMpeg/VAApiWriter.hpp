@@ -109,6 +109,7 @@ private:
 	double aspect_ratio, zoom;
 	VASurfaceID id;
 	int field, X, Y, W, H, outW, outH, deinterlace, Hue, Saturation, Brightness, Contrast;
+	int minor, major;
 
 #ifdef HAVE_VPP //Postprocessing
 	VAContextID context_vpp;
