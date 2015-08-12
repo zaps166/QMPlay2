@@ -9,13 +9,13 @@ fi
 
 function copy_files
 {
-	sudo cp --remove-destination -v    app/bin/QMPlay2 /usr/bin
-	sudo cp --remove-destination -v    app/lib/libqmplay2.so /usr/$libdir
-	sudo cp --remove-destination -v -r app/include /usr
-	sudo cp --remove-destination -v -r app/share /usr
+	sudo cp --remove-destination -v    app/bin/QMPlay2 /usr/bin || exit 1
+	sudo cp --remove-destination -v    app/lib/libqmplay2.so /usr/$libdir || exit 1
+	sudo cp --remove-destination -v -r app/include /usr || exit 1
+	sudo cp --remove-destination -v -r app/share /usr || exit 1
 
-	sudo strip /usr/bin/QMPlay2
-	sudo strip /usr/share/qmplay2/modules/*.so
+	sudo strip /usr/bin/QMPlay2 || exit 1
+	sudo strip /usr/share/qmplay2/modules/*.so || exit 1
 }
 
 function remove_files
