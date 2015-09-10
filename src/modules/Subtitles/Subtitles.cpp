@@ -16,7 +16,7 @@ QList< Subtitles::Info > Subtitles::getModulesInfo( const bool showDisabled ) co
 {
 	QList< Info > modulesInfo;
 	if ( showDisabled || getBool( "SRT_enabled" ) )
-		modulesInfo += Info( SRTSubsName, SUBSDEC, QStringList() << "srt" );
+		modulesInfo += Info( SRTSubsName, SUBSDEC, QStringList() << "srt" << "vtt" );
 	if ( showDisabled || getBool( "Classic_enabled" ) )
 		modulesInfo += Info( ClassicSubsName, SUBSDEC, QStringList() << "sub" << "txt" << "tmp" );
 	return modulesInfo;
