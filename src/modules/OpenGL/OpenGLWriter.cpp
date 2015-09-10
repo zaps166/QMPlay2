@@ -245,10 +245,10 @@ void Drawable::paintGL()
 				tex_w = writer.outW / ( videoFrame->linesize[ 0 ] + 1.0f );
 		}
 		glBegin( GL_QUADS ); {
-			glTexCoord2f( 0.0f,  0.0f  ); vertex( 0, writer.flip );
-			glTexCoord2f( tex_w, 0.0f  ); vertex( 1, writer.flip );
-			glTexCoord2f( tex_w, tex_w ); vertex( 2, writer.flip );
-			glTexCoord2f( 0.0f,  tex_w ); vertex( 3, writer.flip );
+			glTexCoord2f( 0.0f,  0.0f ); vertex( 0, writer.flip );
+			glTexCoord2f( tex_w, 0.0f ); vertex( 1, writer.flip );
+			glTexCoord2f( tex_w, 1.0f ); vertex( 2, writer.flip );
+			glTexCoord2f( 0.0f,  1.0f ); vertex( 3, writer.flip );
 		} glEnd();
 		program->release();
 	}

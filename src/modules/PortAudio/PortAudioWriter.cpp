@@ -74,7 +74,7 @@ bool PortAudioWriter::processParams( bool *paramsCorrected )
 	if ( resetAudio || err )
 	{
 		close();
-		err = Pa_OpenStream( &stream, NULL, &outputParameters, sample_rate, 0, 0, NULL, NULL );
+		err = Pa_OpenStream( &stream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL );
 		if ( !err )
 		{
 			outputLatency = Pa_GetStreamInfo( stream )->outputLatency;
