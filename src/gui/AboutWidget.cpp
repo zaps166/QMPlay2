@@ -111,7 +111,7 @@ void AboutWidget::showEvent( QShowEvent * )
 			"<tr>"
 				"<td width='0' valign='middle' align='center'><a href='http://qt-apps.org/usermanager/search.php?username=zaps166'></a><B>Błażej Szczygieł</B></td>"
 				"<td valign='middle'>" + tr( "Twórca i programista" ) + "</td>"
-				"<td valign='middle'><B>E-Mail</B>: <a href='mailto:spaz16@wp.pl'>spaz16@wp.pl</a><BR/><B>Web page</B>: <a href='http://zaps166.sf.net/'>http://zaps166.sourceforge.net/</a><BR/><B>Kadu</B>: 4556056</td>"
+				"<td valign='middle'><B>E-Mail</B>: <a href='mailto:spaz16@wp.pl'>spaz16@wp.pl</a><BR/><B>Web page</B>: <a href='http://zaps166.sf.net/'>http://zaps166.sourceforge.net/</a></td>"
 			"</tr>"
 		"</table>"
 	);
