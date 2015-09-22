@@ -995,10 +995,6 @@
         <translation>Voice removal</translation>
     </message>
     <message>
-        <source>Ilość suwaków w korektorze dźwięku</source>
-        <translation>Slider count in sound equalizer</translation>
-    </message>
-    <message>
         <source>Jakość korektora dźwięku</source>
         <translation>Sound equalizer quality</translation>
     </message>
@@ -1253,6 +1249,18 @@
     <message>
         <source>Wybierz program &apos;youtube-dl&apos;</source>
         <translation>Choose &apos;youtube-dl&apos; application</translation>
+    </message>
+    <message>
+        <source>Liczba suwaków w korektorze dźwięku</source>
+        <translation>Slider count in sound equalizer</translation>
+    </message>
+    <message>
+        <source>Minimalna częstotliwość</source>
+        <translation>Minimum frequency</translation>
+    </message>
+    <message>
+        <source>Maksymalna częstotliwość</source>
+        <translation>Maximum frequency</translation>
     </message>
 </context>
 <context>

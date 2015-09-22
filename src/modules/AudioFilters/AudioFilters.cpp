@@ -17,6 +17,12 @@ AudioFilters::AudioFilters() :
 	int count = getInt( "Equalizer/count" );
 	if ( count < 2 || count > 20 )
 		set( "Equalizer/count", ( count = 8 ) );
+	int minFreq = getInt( "Equalizer/minFreq" );
+	if ( minFreq < 10 || minFreq > 300 )
+		set( "Equalizer/minFreq", ( minFreq = 200 ) );
+	int maxFreq = getInt( "Equalizer/maxFreq" );
+	if ( maxFreq < 10000 || maxFreq > 96000 )
+		set( "Equalizer/maxFreq", ( maxFreq = 18000 ) );
 	for ( int i = 0 ; i < count ; ++i )
 		init( "Equalizer/" + QString::number( i ), 50 );
 	init( "VoiceRemoval", false );
@@ -151,11 +157,23 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	);
 	eqQualityB->setCurrentIndex( sets().getInt( "Equalizer/nbits" ) - 8 );
 
-	QLabel *eqSlidersL = new QLabel( tr( "Ilość suwaków w korektorze dźwięku" ) + ": " );
+	QLabel *eqSlidersL = new QLabel( tr( "Liczba suwaków w korektorze dźwięku" ) + ": " );
 
 	eqSlidersB = new QSpinBox;
 	eqSlidersB->setRange( 2, 20 );
 	eqSlidersB->setValue( sets().getInt( "Equalizer/count" ) );
+
+	eqMinFreqB = new QSpinBox;
+	eqMinFreqB->setPrefix( tr( "Minimalna częstotliwość" ) + ": " );
+	eqMinFreqB->setSuffix( " Hz" );
+	eqMinFreqB->setRange( 10, 300 );
+	eqMinFreqB->setValue( sets().getInt( "Equalizer/minFreq" ) );
+
+	eqMaxFreqB = new QSpinBox;
+	eqMaxFreqB->setPrefix( tr( "Maksymalna częstotliwość" ) + ": " );
+	eqMaxFreqB->setSuffix( " Hz" );
+	eqMaxFreqB->setRange( 10000, 96000 );
+	eqMaxFreqB->setValue( sets().getInt( "Equalizer/maxFreq" ) );
 
 	QGridLayout *layout = new QGridLayout( this );
 	layout->addWidget( voiceRemovalEB, 0, 0, 1, 2 );
@@ -166,6 +184,8 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	layout->addWidget( eqQualityB, 4, 1, 1, 1 );
 	layout->addWidget( eqSlidersL, 5, 0, 1, 1 );
 	layout->addWidget( eqSlidersB, 5, 1, 1, 1 );
+	layout->addWidget( eqMinFreqB, 6, 0, 1, 1 );
+	layout->addWidget( eqMaxFreqB, 6, 1, 1, 1 );
 }
 
 void ModuleSettingsWidget::voiceRemovalToggle()
@@ -194,4 +214,6 @@ void ModuleSettingsWidget::saveSettings()
 {
 	sets().set( "Equalizer/nbits", eqQualityB->currentIndex() + 8 );
 	sets().set( "Equalizer/count", eqSlidersB->value() );
+	sets().set( "Equalizer/minFreq", eqMinFreqB->value() );
+	sets().set( "Equalizer/maxFreq", eqMaxFreqB->value() );
 }

@@ -995,10 +995,6 @@
         <translation>Suppression de voix</translation>
     </message>
     <message>
-        <source>Ilość suwaków w korektorze dźwięku</source>
-        <translation>Nombre de projections dans l&apos;égaliseur</translation>
-    </message>
-    <message>
         <source>Jakość korektora dźwięku</source>
         <translation>Qualité de l&apos;égaliseur de son</translation>
     </message>
@@ -1253,6 +1249,18 @@
     <message>
         <source>Wybierz program &apos;youtube-dl&apos;</source>
         <translation>Choisir l&apos;application &apos;youtube-dl&apos;</translation>
+    </message>
+    <message>
+        <source>Liczba suwaków w korektorze dźwięku</source>
+        <translation>Nombre de projections dans l&apos;égaliseur</translation>
+    </message>
+    <message>
+        <source>Minimalna częstotliwość</source>
+        <translation>Fréquence minimale</translation>
+    </message>
+    <message>
+        <source>Maksymalna częstotliwość</source>
+        <translation>Fréquence maximale</translation>
     </message>
 </context>
 <context>

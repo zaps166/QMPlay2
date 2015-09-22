@@ -154,12 +154,9 @@ bool EqualizerGUI::set()
 	slidersW->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 	QGridLayout *slidersLayout = new QGridLayout( slidersW );
 
-	int slidersCount = sets().getInt( "Equalizer/count" );
-	QVector< float > freqs = Equalizer::freqs( slidersCount );
-
-	graph.setValues( slidersCount );
-
-	for ( int i = 0 ; i < slidersCount ; ++i )
+	QVector< float > freqs = Equalizer::freqs( sets() );
+	graph.setValues( freqs.count() );
+	for ( int i = 0 ; i < freqs.count() ; ++i )
 	{
 		QSlider *slider = new QSlider;
 		slider->setMaximum( 100 );

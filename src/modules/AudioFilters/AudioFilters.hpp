@@ -38,5 +38,5 @@ private:
 	QCheckBox *echoSurroundB;
 
 	QComboBox *eqQualityB;
-	QSpinBox *eqSlidersB;
+	QSpinBox *eqSlidersB, *eqMinFreqB, *eqMaxFreqB;
 };

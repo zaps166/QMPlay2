@@ -1001,10 +1001,6 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Stimme entfernen</translation>
     </message>
     <message>
-        <source>Ilość suwaków w korektorze dźwięku</source>
-        <translation>Anzahl der Schieberegler im Equalizer</translation>
-    </message>
-    <message>
         <source>Jakość korektora dźwięku</source>
         <translation>Ton Qualität des Equalizer</translation>
     </message>
@@ -1263,6 +1259,18 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
     <message>
         <source>Wybierz program &apos;youtube-dl&apos;</source>
         <translation>Das Programm &quot;youtube-dl&quot; auswählen</translation>
+    </message>
+    <message>
+        <source>Liczba suwaków w korektorze dźwięku</source>
+        <translation>Anzahl der Schieberegler im Equalizer</translation>
+    </message>
+    <message>
+        <source>Minimalna częstotliwość</source>
+        <translation>Minimalfrequenz</translation>
+    </message>
+    <message>
+        <source>Maksymalna częstotliwość</source>
+        <translation>Maximale Frequenz</translation>
     </message>
 </context>
 <context>

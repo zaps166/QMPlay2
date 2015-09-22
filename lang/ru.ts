@@ -995,10 +995,6 @@
         <translation>Удаление голоса</translation>
     </message>
     <message>
-        <source>Ilość suwaków w korektorze dźwięku</source>
-        <translation>Количество ползунков в эквалайзере звука</translation>
-    </message>
-    <message>
         <source>Jakość korektora dźwięku</source>
         <translation>Качество звука эквалайзера</translation>
     </message>
@@ -1253,6 +1249,18 @@
     <message>
         <source>Wybierz program &apos;youtube-dl&apos;</source>
         <translation>Выберите приложение &apos;youtube-dl&apos;</translation>
+    </message>
+    <message>
+        <source>Liczba suwaków w korektorze dźwięku</source>
+        <translation>Количество ползунков в эквалайзере звука</translation>
+    </message>
+    <message>
+        <source>Minimalna częstotliwość</source>
+        <translation>Минимальная частота</translation>
+    </message>
+    <message>
+        <source>Maksymalna częstotliwość</source>
+        <translation>Максимальная частота</translation>
     </message>
 </context>
 <context>

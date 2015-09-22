@@ -7,7 +7,7 @@ class Equalizer : public AudioFilter
 {
 public:
 	static QVector< float > interpolate( const QVector< float > &, const int );
-	static QVector< float > freqs( const int );
+	static QVector< float > freqs( Settings & );
 
 	Equalizer( Module & );
 	~Equalizer();
