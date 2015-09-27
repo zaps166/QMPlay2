@@ -143,10 +143,10 @@ double Equalizer::filter( QByteArray &data, bool flush )
 					fft_calc( fftIn, complex );
 					for ( int i = 0 ; i < FFT_SIZE_2 ; ++i )
 					{
-						complex[            i ].re *= f.at( i );
-						complex[            i ].im *= f.at( i );
-						complex[ FFT_SIZE-1-i ].re *= f.at( i );
-						complex[ FFT_SIZE-1-i ].im *= f.at( i );
+						complex[            i ].re *= f.at( i ) * preamp;
+						complex[            i ].im *= f.at( i ) * preamp;
+						complex[ FFT_SIZE-1-i ].re *= f.at( i ) * preamp;
+						complex[ FFT_SIZE-1-i ].im *= f.at( i ) * preamp;
 					}
 					fft_calc( fftOut, complex );
 
@@ -213,6 +213,7 @@ void Equalizer::alloc( bool b )
 void Equalizer::interpolateFilterCurve()
 {
 	const int size = sets().getInt( "Equalizer/count" );
+	preamp = sets().getInt( "Equalizer/-1" ) / 50.0f;
 	QVector< float > src( size );
 	for ( int i = 0 ; i < size ; ++i )
 		src[ i ] = sets().getInt( "Equalizer/" + QString::number( i ) ) / 50.0f;

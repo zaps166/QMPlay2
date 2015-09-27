@@ -689,6 +689,11 @@
         <source>Włączony</source>
         <translation>Включен</translation>
     </message>
+    <message>
+        <source>Pre
+amp</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFDemux</name>

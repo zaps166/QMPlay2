@@ -694,6 +694,11 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <source>Włączony</source>
         <translation>AN</translation>
     </message>
+    <message>
+        <source>Pre
+amp</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFDemux</name>

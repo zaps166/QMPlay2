@@ -35,6 +35,7 @@ private:
 	FFTComplex *complex;
 	QVector< QVector< float > > input, last_samples;
 	QVector< float > wind_f, f;
+	float preamp;
 };
 
 #define EqualizerName "Audio Equalizer"

@@ -2,6 +2,7 @@ Changes in QMPlay2 build 15.09.27:
 	- user can hide menu bar by pressing Alt+Ctrl+M or from "Widgets" context menu,
 	- minimum and maximum frequency in equalizer can be changed,
 	- basic WebVTT subtitles support (SRT module),
+	- added preamp to equalizer,
 	- small bugfix,
 
 Changes in QMPlay2 build 15.08.12:

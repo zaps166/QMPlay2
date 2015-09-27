@@ -689,6 +689,12 @@
         <source>Włączony</source>
         <translation>ON</translation>
     </message>
+    <message>
+        <source>Pre
+amp</source>
+        <translation>Pre
+amp</translation>
+    </message>
 </context>
 <context>
     <name>FFDemux</name>

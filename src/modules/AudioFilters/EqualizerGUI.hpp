@@ -14,6 +14,7 @@ private:
 	void paintEvent( QPaintEvent * );
 
 	QVector< float > values;
+	float preamp;
 };
 
 /**/
@@ -34,8 +35,6 @@ private slots:
 	void setSliders();
 private:
 	bool set();
-
-	void resizeEvent( QResizeEvent * );
 
 	DockWidget *dw;
 	GraphW graph;
