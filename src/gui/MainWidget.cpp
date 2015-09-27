@@ -728,7 +728,7 @@ void MainWidget::toggleCompactView()
 	else
 	{
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
-		menuBar->show();
+		menuBar->setVisible( !hideMenuAct->isChecked() );
 #endif
 		statusBar->show();
 
@@ -825,7 +825,7 @@ void MainWidget::toggleFullScreen()
 				dw->setFeatures( QDockWidget::AllDockWidgetFeatures );
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
-		menuBar->show();
+		menuBar->setVisible( !hideMenuAct->isChecked() );
 #endif
 		statusBar->show();
 
@@ -1022,8 +1022,13 @@ void MainWidget::console( bool checked )
 
 void MainWidget::hideMenu( bool h )
 {
-	menuBar->setVisible( !h );
-	QMPlay2Core.getSettings().set( "MainWidget/MenuHidden", h );
+	if ( fullScreen || isCompactView )
+		qobject_cast< QAction * >( sender() )->setChecked( !h );
+	else
+	{
+		menuBar->setVisible( !h );
+		QMPlay2Core.getSettings().set( "MainWidget/MenuHidden", h );
+	}
 }
 void MainWidget::lockWidgets( bool l )
 {
