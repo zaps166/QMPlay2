@@ -468,7 +468,7 @@ bool FFDemux::open( const QString &_url )
 		return false;
 
 #ifndef MP3_FAST_SEEK
-	seekByByteOffset = formatCtx->pb ? avio_tell( formatCtx->pb ) : -1; //formatCtx->data_offset, moved to private since ffmpeg 2.6
+	seekByByteOffset = formatCtx->pb ? avio_tell( formatCtx->pb ) : -1; //formatCtx->data_offset, moved to private since FFmpeg 2.6
 #endif
 
 	avcodec_mutex.lock();
