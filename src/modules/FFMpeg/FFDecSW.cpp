@@ -300,7 +300,7 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 			streamInfo->W = codec_ctx->width;
 			streamInfo->H = codec_ctx->height;
 		}
-		sws_ctx = sws_getCachedContext( NULL, streamInfo->W, streamInfo->H, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL );
+		sws_ctx = sws_getCachedContext( NULL, streamInfo->W, streamInfo->H, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL );
 	}
 	return true;
 }

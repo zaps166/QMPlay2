@@ -14,7 +14,7 @@ bool ImgScaler::create( int _Wsrc, int _Hsrc, int _Wdst, int _Hdst )
 	Hsrc = _Hsrc;
 	Wdst = _Wdst;
 	Hdst = _Hdst;
-	return ( img_convert_ctx = sws_getCachedContext( img_convert_ctx, Wsrc, Hsrc, PIX_FMT_YUV420P, Wdst, Hdst, PIX_FMT_RGB32, ( Wsrc == Wdst && Hsrc == Hdst ) ? SWS_POINT : SWS_FAST_BILINEAR, NULL, NULL, NULL ) );
+	return ( img_convert_ctx = sws_getCachedContext( img_convert_ctx, Wsrc, Hsrc, PIX_FMT_YUV420P, Wdst, Hdst, PIX_FMT_RGB32, SWS_BILINEAR, NULL, NULL, NULL ) );
 }
 bool ImgScaler::createArray( const size_t bytes )
 {
