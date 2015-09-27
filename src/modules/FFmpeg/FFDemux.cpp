@@ -309,14 +309,14 @@ bool FFDemux::read( Packet &encoded, int &idx )
 		av_read_play( formatCtx );
 	}
 
-	class AvQMPlay2Packet : public AVPacket
+	class AVQMPlay2Packet : public AVPacket
 	{
 	public:
-		inline AvQMPlay2Packet()
+		inline AVQMPlay2Packet()
 		{
 			data = NULL;
 		}
-		inline ~AvQMPlay2Packet()
+		inline ~AVQMPlay2Packet()
 		{
 			if ( data )
 				av_free_packet( this );

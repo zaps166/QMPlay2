@@ -10,7 +10,6 @@
 #include <QFile>
 #include <QDir>
 #ifdef Q_OS_WIN
-	#include <QSettings>
 	#include <windows.h>
 	#include <shlwapi.h>
 #endif
@@ -54,6 +53,14 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 	else
 		settingsDir = Functions::cleanPath( _settingsDir );
 	QDir( settingsDir ).mkpath( "." );
+
+	/* Rename config file */
+	{
+		const QString oldFFmpegConfig = settingsDir + "FFMpeg.ini";
+		const QString newFFmpegConfig = settingsDir + "FFmpeg.ini";
+		if ( !QFile::exists( newFFmpegConfig ) && QFile::exists( oldFFmpegConfig ) )
+			QFile::rename( oldFFmpegConfig, newFFmpegConfig );
+	}
 
 #ifdef Q_OS_WIN
 	timeBeginPeriod( 1 ); //ustawianie rozdzielczości timera na 1ms (dla Sleep())

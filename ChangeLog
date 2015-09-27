@@ -31,7 +31,7 @@ Zmiany w QMPlay2 build 15.06.06:
 	- większy pasek zmiany rozmiaru okien dla ekranów dotykowych,
 	- zoom na ekranie dotykowym (pinch gesture),
 	- poprawiony odczyt okładek płyt z katalogu,
-	- kompatybilność z FFMpeg 2.0 oraz 2.1,
+	- kompatybilność z FFmpeg 2.0 oraz 2.1,
 	- AudioCD jako osobny moduł,
 
 Zmiany w QMPlay2 build 15.05.30:
@@ -49,11 +49,11 @@ Zmiany w QMPlay2 build 15.03.28:
 	- HttpReader i FileReader zastąpiony przez FFReader,
 	- obsługa większej liczby formatów w YouTube,
 	- zmiany w domyślnym układzie okienek,
-	- FFMpeg nie używa już HttpReader,
+	- FFmpeg nie używa już HttpReader,
 	- zmiany w oknie "Informacje",
 	- poprawki w napisach pgssub,
 	- możliwość zapisania grupy,
-	- zgodność z FFMpeg 2.6,
+	- zgodność z FFmpeg 2.6,
 	- poprawa błędów,
 
 Zmiany w QMPlay2 build 14.12.28:
@@ -80,8 +80,8 @@ Zmiany w QMPlay2 build 14.12.01:
 	- drobne poprawy błędów,
 
 Zmiany w QMPlay2 build 14.10.07:
-	- przywrócone działanie napisów ASS z kontenera Matroska w FFMpeg 2.4.x,
-	- obsługa zmiany metadanych przy użyciu FFMpeg 2.4.x,
+	- przywrócone działanie napisów ASS z kontenera Matroska w FFmpeg 2.4.x,
+	- obsługa zmiany metadanych przy użyciu FFmpeg 2.4.x,
 	- możliwość pamiętania ustawień korektora wideo,
 	- sortowanie dodawanych katalogów do playlisty,
 	- poprawa działania YouTube,
@@ -133,7 +133,7 @@ Zmiany w QMPlay2 build 14.01.10:
 	- drobne poprawki w kodzie,
 
 Zmiany w QMPlay2 build 14.01.05:
-	- możliwość dekodowania poprzez VDPAU wydobywając klatkę obrazu (opcjonalne, zobacz "FFMpeg.pro"),
+	- możliwość dekodowania poprzez VDPAU wydobywając klatkę obrazu (opcjonalne, zobacz "FFmpeg.pro"),
 	- poprawa kompilacji z starszą wersją alsa-lib,
 	- możliwość odtwarzania losowego w grupie,
 	- poprawa działania i stabilności VAApi,
@@ -157,7 +157,7 @@ Zmiany w QMPlay2 build 13.12.31:
 Zmiany w QMPlay2 build 13.12.15:
 	- dodana możliwość ustawiania kart w górnej części okna głównego,
 	- dodana możliwość wyboru kanałów audio w menu "Odtwarzanie",
-	- przywrócenie działania HWAccel z FFMpeg 1.2,
+	- przywrócenie działania HWAccel z FFmpeg 1.2,
 	- poprawa drobnych błędów,
 
 Zmiany w QMPlay2 build 13.12.07:
@@ -265,7 +265,7 @@ Zmiany w QMPlay2 build 04II2013:
 	- poprawione drobne błędy,
 
 Zmiany w QMPlay2 build 20I2013:
-	- plannar audio support in new FFMpeg,
+	- plannar audio support in new FFmpeg,
 
 Zmiany w QMPlay2 build 23XII2012:
 	- poprawiona obsługa napisów pgssub, dvdsub,
@@ -289,7 +289,7 @@ Zmiany w QMPlay2 build 03XI2012:
 	- dodana obsługa AudioCD,
 
 Zmiany w QMPlay2 build 29X2012:
-	- poprawiony odczyt napisów innych niż ASS/SSA w nowych wersjach FFMpeg i libASS,
+	- poprawiony odczyt napisów innych niż ASS/SSA w nowych wersjach FFmpeg i libASS,
 	- dodana możliwość skojarzenia plików z QMPlay2 w systemie Windows,
 	- okienko dialogowe zmiany szybkości odtwarzania,
 	- poprawa przechodzenia z/do pełnego ekranu,
@@ -432,7 +432,7 @@ Zmiany w QMPlay2 build 20VII2012:
 	- poprawa błędów,
 
 Zmiany w QMPlay2 build 11VII2012:
-	- przystosowanie QMPlay2 do nowego FFMpeg (np. poprawne odtwarzanie MP3, poprawne przewijanie w długich filmach),
+	- przystosowanie QMPlay2 do nowego FFmpeg (np. poprawne odtwarzanie MP3, poprawne przewijanie w długich filmach),
 	- poprawa działania YouTube,
 
 Zmiany w QMPlay2 build 04V2012:
@@ -493,10 +493,10 @@ Zmiany w QMPlay2 build 25XII2011:
 
 Zmiany w QMPlay2 build 24XII2011:
 	- użyłem nowej funkcji avcodec_decode_audio4(),
-	- pliki, które nie były obsługiwane przez FFMpeg są zamykane po próbie ich odtworzenia,
+	- pliki, które nie były obsługiwane przez FFmpeg są zamykane po próbie ich odtworzenia,
 
 Zmiany w QMPlay2 build 16XII2011:
-	- proprawa wykrywania długości muzyki/filmu dla nowego FFMpeg 0.9,
+	- proprawa wykrywania długości muzyki/filmu dla nowego FFmpeg 0.9,
 	- poprawa błędu z aktualizacją skryptów w BrowserEngine ( np. podwójne wpisy ),
 
 Zmiany w QMPlay2 build 04XII2011:
@@ -642,13 +642,13 @@ Zmiany w QMPlay2 build 05VII2011:
 Zmiany w QMPlay2 build 04VII2011:
 	- poprawione działanie OpenGL,
 	- lepsze pomijanie klatek,
-	- tymczasowo brak niektórych opcji FFMpeg ( są one wykrywane automatycznie ),
+	- tymczasowo brak niektórych opcji FFmpeg ( są one wykrywane automatycznie ),
 	- możliwość wyłączenia pomijania klatek,
 	- usunięty wyciek pamięci podczas zamykania FFDemuxer ( występował w wersji 30VI2011 ),
 
 Zmiany w QMPlay2 build 30VI2011:
-	- nowa ikonka dla FFMpeg,
-	- QMPlay2 działa teraz tylko z wersją FFMpeg 0.7 lub nowszą,
+	- nowa ikonka dla FFmpeg,
+	- QMPlay2 działa teraz tylko z wersją FFmpeg 0.7 lub nowszą,
 	- wtyczka wyjściowa dla PulseAudio,
 	- opcje: zapamiętywanie zoom i współczynnika proporcji między plikami wideo,
 
@@ -656,7 +656,7 @@ Zmiany w QMPlay2 build 21VI2011:
 	- poprawione "Idź do odtwarzanego",
 	- poprawione czyszczenie filtra na playliście ( zaznaczony wpis jest widoczny po wyczyszczeniu ),
 	- poprawione wyszukiwanie domyślnego urządzenia w PortAudio,
-	- więcej opcji dla FFMpeg,
+	- więcej opcji dla FFmpeg,
 	- drobne poprawki,
 
 Zmiany w QMPlay2 build 05VI2011:
@@ -681,7 +681,7 @@ Zmiany w QMPlay2 build 22V2011:
 	- program pokazuje tytuł pliku,
 
 Zmiany w QMPlay2 build 21V2011:
-	- VAApi przeniesiony do osobnego modułu FFMpeg: VAApiWriter - nie zamyka teraz się za każdym otwarciem nowego pliku o tych samych parametrach,
+	- VAApi przeniesiony do osobnego modułu FFmpeg: VAApiWriter - nie zamyka teraz się za każdym otwarciem nowego pliku o tych samych parametrach,
 	- poprawione drobne błędy związane z wątkami, GUI i zamykaniem programu,
 	- VSync w OpenGL zawsze włączony dla wszystkich systemów,
 

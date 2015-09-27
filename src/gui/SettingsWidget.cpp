@@ -744,7 +744,7 @@ void SettingsWidget::applyProxy()
 			proxy.setPassword( QByteArray::fromBase64( QMPSettings.getString( "Proxy/Password" ).toLatin1() ) );
 		}
 
-		/* Proxy env for FFMpeg */
+		/* Proxy env for FFmpeg */
 		QString proxyEnv = QString( "http://" + proxy.hostName() + ':' + QString::number( proxy.port() ) );
 		if ( !proxy.user().isEmpty() )
 		{

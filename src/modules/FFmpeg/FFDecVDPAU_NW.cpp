@@ -179,7 +179,7 @@ bool FFDecVDPAU_NW::set()
 
 QString FFDecVDPAU_NW::name() const
 {
-	return "FFMpeg/VDPAU";
+	return "FFmpeg/VDPAU";
 }
 
 int FFDecVDPAU_NW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned hurry_up )

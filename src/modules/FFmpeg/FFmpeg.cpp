@@ -1,4 +1,4 @@
-#include <FFMpeg.hpp>
+#include <FFmpeg.hpp>
 #include <FFDemux.hpp>
 #include <FFDecSW.hpp>
 #ifdef QMPlay2_VAAPI
@@ -20,10 +20,10 @@ extern "C"
 	#include <libavformat/avformat.h>
 }
 
-FFMpeg::FFMpeg() :
-	Module( "FFMpeg" )
+FFmpeg::FFmpeg() :
+	Module( "FFmpeg" )
 {
-	moduleImg = QImage( ":/ffmpeg" );
+	moduleImg = QImage( ":/FFmpeg" );
 
 	init( "DemuxerEnabled", true );
 	init( "DecoderEnabled", true );
@@ -65,12 +65,12 @@ FFMpeg::FFMpeg() :
 	}
 	avformat_network_init();
 }
-FFMpeg::~FFMpeg()
+FFmpeg::~FFmpeg()
 {
 	avformat_network_deinit();
 }
 
-QList< FFMpeg::Info > FFMpeg::getModulesInfo( const bool showDisabled ) const
+QList< FFmpeg::Info > FFmpeg::getModulesInfo( const bool showDisabled ) const
 {
 	QList< Info > modulesInfo;
 	if ( showDisabled || getBool( "DemuxerEnabled" ) )
@@ -97,7 +97,7 @@ QList< FFMpeg::Info > FFMpeg::getModulesInfo( const bool showDisabled ) const
 	modulesInfo += Info( FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp" );
 	return modulesInfo;
 }
-void *FFMpeg::createInstance( const QString &name )
+void *FFmpeg::createInstance( const QString &name )
 {
 	if ( name == DemuxerName && getBool( "DemuxerEnabled" ) )
 		return new FFDemux( mutex, *this );
@@ -120,12 +120,12 @@ void *FFMpeg::createInstance( const QString &name )
 	return NULL;
 }
 
-FFMpeg::SettingsWidget *FFMpeg::getSettingsWidget()
+FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
 	return new ModuleSettingsWidget( *this );
 }
 
-QMPLAY2_EXPORT_PLUGIN( FFMpeg )
+QMPLAY2_EXPORT_PLUGIN( FFmpeg )
 
 /**/
 

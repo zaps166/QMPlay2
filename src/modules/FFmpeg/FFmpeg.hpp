@@ -1,10 +1,10 @@
 #include <Module.hpp>
 
-class FFMpeg : public Module
+class FFmpeg : public Module
 {
 public:
-	FFMpeg();
-	~FFMpeg();
+	FFmpeg();
+	~FFmpeg();
 private:
 	QList< Info > getModulesInfo( const bool ) const;
 	void *createInstance( const QString & );

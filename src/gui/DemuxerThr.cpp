@@ -257,7 +257,7 @@ void DemuxerThr::run()
 	}
 
 	if ( !localStream )
-		setPriority( QThread::LowPriority ); //Network streams should have low priority, because slow CPUs have problems with smooth video playing during buffering
+		setPriority( QThread::LowPriority ); //Network streams should have low priority, because slow single core CPUs have problems with smooth video playing during buffering
 
 	while ( !demuxer.isAborted() )
 	{
