@@ -517,7 +517,7 @@ SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName 
 
 	page2->replayGainPreamp = new QDoubleSpinBox;
 	page2->replayGainPreamp->setRange( -15.0, 15.0 );
-	page2->replayGainPreamp->setPrefix( "Wzmocnienie: " );
+	page2->replayGainPreamp->setPrefix( tr( "Wzmocnienie" ) + ": " );
 	page2->replayGainPreamp->setSuffix( " dB" );
 	page2->replayGainPreamp->setValue( QMPSettings.getDouble( "ReplayGain/Preamp" ) );
 

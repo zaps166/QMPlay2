@@ -879,6 +879,10 @@
         <source>Błąd podczas zapisu playlisty</source>
         <translation>Error while saving playlist</translation>
     </message>
+    <message>
+        <source>&amp;Ukryj pasek menu</source>
+        <translation>&amp;Hide menu bar</translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -2225,6 +2229,10 @@
     <message>
         <source>Domyślna lub pierwsza ścieżka</source>
         <translation>Default or first stream</translation>
+    </message>
+    <message>
+        <source>Wzmocnienie</source>
+        <translation>Amplify</translation>
     </message>
 </context>
 <context>

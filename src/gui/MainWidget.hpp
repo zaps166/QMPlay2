@@ -88,6 +88,7 @@ private slots:
 #ifdef Q_OS_WIN
 	void console( bool );
 #endif
+	void hideMenu( bool );
 	void lockWidgets( bool );
 
 	void hideDocksSlot();
@@ -137,7 +138,7 @@ private:
 	AboutWidget *aboutW;
 	bool isCompactView, wasShow, fullScreen;
 
-	QAction *lockWidgetsAct;
+	QAction *hideMenuAct, *lockWidgetsAct;
 
 #ifdef UPDATER
 	Updater updater;

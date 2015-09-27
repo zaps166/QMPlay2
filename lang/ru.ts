@@ -879,6 +879,10 @@
         <source>Błąd podczas zapisu playlisty</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Ukryj pasek menu</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -2224,6 +2228,10 @@
     </message>
     <message>
         <source>Domyślna lub pierwsza ścieżka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wzmocnienie</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

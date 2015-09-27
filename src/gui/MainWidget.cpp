@@ -42,7 +42,7 @@ using Functions::timeToStr;
 
 #include <math.h>
 
-/* Qt5 or Qt4 in Windows */
+/* Qt5 or (Qt4 in Windows) */
 #define UseMainWidgetTmpStyle (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
 
 #if UseMainWidgetTmpStyle
@@ -260,7 +260,17 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	if ( QMPlay2Core.getSettings().getBool( "MainWidget/TabPositionNorth" ) )
 		setTabPosition( Qt::AllDockWidgetAreas, QTabWidget::North );
 
-	const bool widgetsLocked = QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false ) ;
+	const bool menuHidden = QMPlay2Core.getSettings().getBool( "MainWidget/MenuHidden", false );
+	menuBar->setVisible( !menuHidden );
+	hideMenuAct = new QAction( tr( "&Ukryj pasek menu" ), menuBar );
+	hideMenuAct->setCheckable( true );
+	hideMenuAct->setAutoRepeat( false );
+	hideMenuAct->setChecked( menuHidden );
+	hideMenuAct->setShortcut( QKeySequence( "Alt+Ctrl+M" ) );
+	connect( hideMenuAct, SIGNAL( triggered( bool ) ), this, SLOT( hideMenu( bool ) ) );
+	addAction( hideMenuAct );
+
+	const bool widgetsLocked = QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false );
 	lockWidgets( widgetsLocked );
 	lockWidgetsAct = new QAction( tr( "&Zablokuj widgety" ), menuBar );
 	lockWidgetsAct->setCheckable( true );
@@ -1010,6 +1020,11 @@ void MainWidget::console( bool checked )
 }
 #endif
 
+void MainWidget::hideMenu( bool h )
+{
+	menuBar->setVisible( !h );
+	QMPlay2Core.getSettings().set( "MainWidget/MenuHidden", h );
+}
 void MainWidget::lockWidgets( bool l )
 {
 	if ( fullScreen || isCompactView )
@@ -1069,6 +1084,8 @@ QMenu *MainWidget::createPopupMenu()
 	QMenu *popupMenu = QMainWindow::createPopupMenu();
 	if ( !fullScreen && !isCompactView )
 	{
+		popupMenu->insertAction( popupMenu->actions().value( 0 ), hideMenuAct );
+		popupMenu->insertSeparator( popupMenu->actions().value( 1 ) );
 		popupMenu->addSeparator();
 		popupMenu->addAction( lockWidgetsAct );
 	}
