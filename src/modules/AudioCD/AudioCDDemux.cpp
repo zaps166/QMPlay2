@@ -17,74 +17,51 @@
 #define CD_BLOCKSIZE 2352/2
 #define srate 44100
 
-CDIODestroyTimer::CDIODestroyTimer() :
-	QMutex( QMutex::Recursive ),
-	timerID( 0 ),
-	discID( 0 )
+CDIODestroyTimer::CDIODestroyTimer()
 {
-	connect( this, SIGNAL( startTimerSig( CdIo_t *, const QString &, unsigned ) ), this, SLOT( startTimerSlot( CdIo_t *, const QString &, unsigned ) ) );
+	connect( this, SIGNAL( setInstance( CdIo_t *, const QString &, unsigned ) ), this, SLOT( setInstanceSlot( CdIo_t *, const QString &, unsigned ) ) );
 }
 CDIODestroyTimer::~CDIODestroyTimer()
 {
-	lock();
-	if ( timerID )
+	if ( timerId.fetchAndStoreRelaxed( 0 ) )
 		cdio_destroy( cdio );
-	unlock();
 }
 
-void CDIODestroyTimer::setInstance( CdIo_t *cdio, const QString &device, unsigned discID )
+CdIo_t *CDIODestroyTimer::getInstance( const QString &_device, unsigned &_discID )
 {
-	if ( tryLock() )
-		emit startTimerSig( cdio, device, discID );
-	else
-		cdio_destroy( cdio );
-}
-CdIo_t *CDIODestroyTimer::getInstance( const QString &device, unsigned &discID )
-{
-	lock();
-	if ( timerID )
+	if ( timerId.fetchAndStoreRelaxed( 0 ) )
 	{
-		timerID = 0;
-		if ( device == this->device )
+		if ( _device == device )
 		{
-			discID = this->discID;
-			unlock();
+			_discID = discID;
 			return cdio;
 		}
 		cdio_destroy( cdio );
 	}
-	unlock();
 	return NULL;
 }
 
-void CDIODestroyTimer::startTimerSlot( CdIo_t *cdio, const QString &device, unsigned discID )
+void CDIODestroyTimer::setInstanceSlot( CdIo_t *_cdio, const QString &_device, unsigned _discID )
 {
-	if ( timerID )
-	{
-		cdio_destroy( this->cdio );
-		timerID = 0;
-	}
-	if ( !( timerID = startTimer( 2500 ) ) )
-		cdio_destroy( cdio );
+	const int newTimerId = startTimer( 2500 );
+	CdIo_t *oldCdIo = cdio;
+	if ( !newTimerId )
+		cdio_destroy( _cdio );
 	else
 	{
-		this->cdio = cdio;
-		this->device = device;
-		this->discID = discID;
+		cdio = _cdio;
+		device = _device;
+		discID = _discID;
 	}
-	unlock();
+	if ( timerId.fetchAndStoreRelaxed( newTimerId ) )
+		cdio_destroy( oldCdIo );
 }
 
 void CDIODestroyTimer::timerEvent( QTimerEvent *e )
 {
-	lock();
-	if ( e->timerId() == timerID )
-	{
+	if ( timerId.testAndSetRelaxed( e->timerId(), 0 ) )
 		cdio_destroy( cdio );
-		timerID = 0;
-	}
 	killTimer( e->timerId() );
-	unlock();
 }
 
 /**/
@@ -98,7 +75,7 @@ AudioCDDemux::AudioCDDemux( Module &module, CDIODestroyTimer &destroyTimer, cons
 AudioCDDemux::~AudioCDDemux()
 {
 	if ( cdio )
-		destroyTimer.setInstance( cdio, device, discID );
+		emit destroyTimer.setInstance( cdio, device, discID );
 }
 
 bool AudioCDDemux::set()

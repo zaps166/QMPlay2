@@ -5,27 +5,26 @@
 #include <Playlist.hpp>
 
 #include <QCoreApplication>
+#include <QAtomicInt>
 
 #include <cdio/cdio.h>
 #include <cddb/cddb.h>
 
-class CDIODestroyTimer : public QObject, private QMutex
+class CDIODestroyTimer : public QObject
 {
 	Q_OBJECT
 public:
 	CDIODestroyTimer();
 	~CDIODestroyTimer();
 
-	void setInstance( CdIo_t *cdio, const QString &device, unsigned discID );
-	CdIo_t *getInstance( const QString &device, unsigned &discID );
-signals:
-	void startTimerSig( CdIo_t *cdio, const QString &device, unsigned discID );
+	Q_SIGNAL void setInstance( CdIo_t *_cdio, const QString &_device, unsigned _discID );
+	CdIo_t *getInstance( const QString &_device, unsigned &_discID );
 private slots:
-	void startTimerSlot( CdIo_t *cdio, const QString &device, unsigned discID );
+	void setInstanceSlot( CdIo_t *_cdio, const QString &_device, unsigned _discID );
 private:
 	void timerEvent( QTimerEvent *e );
 
-	int timerID;
+	QAtomicInt timerId;
 	CdIo_t *cdio;
 	QString device;
 	unsigned discID;
