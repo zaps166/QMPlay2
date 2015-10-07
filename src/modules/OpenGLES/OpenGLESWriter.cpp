@@ -149,7 +149,7 @@ GLDrawable::GLDrawable( OpenGLESWriter &writer ) :
 	videoFrame( NULL ),
 	p( new GLPrivate ),
 	writer( writer ),
-	hasImage( false ), hasCurrentContext( false ), doReset( true ),
+	hasImage( false ), hasCurrentContext( false ),
 	shaderProgramYCbCr( 0 ), shaderProgramOSD( 0 )
 {
 	const qint32 configAttribs[] =
@@ -553,6 +553,8 @@ bool OpenGLESWriter::processParams( bool * )
 
 	if ( doResizeEvent )
 		drawable->resizeEvent( NULL );
+	else
+		drawable->doReset = true;
 
 	return readyWrite();
 }

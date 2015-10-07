@@ -19,7 +19,7 @@ public:
 
 	void paintGL();
 
-	bool isOK;
+	bool isOK, doReset;
 	const VideoFrame *videoFrame;
 	float Contrast, Saturation, Brightness, Hue;
 	QList< const QMPlay2_OSD * > osd_list;
@@ -39,7 +39,7 @@ private:
 
 	OpenGLESWriter &writer;
 	int W, H, X, Y;
-	bool hasImage, lastVSyncState, hasCurrentContext, doReset;
+	bool hasImage, lastVSyncState, hasCurrentContext;
 
 	EGLConfig eglConfig;
 	float texCoordYCbCr[ 8 ];
