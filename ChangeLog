@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 15.10.08:
+	- new OpenGL|ES 2.0 module,
+
 Changes in QMPlay2 build 15.10.03:
 	- user can hide menu bar by pressing Alt+Ctrl+M or from "Widgets" context menu,
 	- minimum and maximum frequency in equalizer can be changed,

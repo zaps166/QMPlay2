@@ -170,7 +170,7 @@ bool Drawable::draw( const QByteArray &videoFrameData )
 				QPainter p( &osdImg );
 				p.setRenderHint( QPainter::SmoothPixmapTransform );
 				p.scale( ( qreal )( ddsd.lPitch >> 2 ) / W, ( qreal )ddsd.dwHeight / H );
-				Functions::paintOSD( osd_list, ( qreal )W / ( ddsd.lPitch >> 2 ), ( qreal )H / ddsd.dwHeight, p );
+				Functions::paintOSD( true, osd_list, ( qreal )W / ( ddsd.lPitch >> 2 ), ( qreal )H / ddsd.dwHeight, p );
 			}
 			osd_mutex.unlock();
 		}

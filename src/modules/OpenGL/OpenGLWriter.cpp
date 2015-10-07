@@ -267,7 +267,7 @@ void Drawable::paintGL()
 					imgScaler.scale( videoFrame );
 					if ( Contrast != 1.0f || Brightness != 0.0f )
 						Functions::ImageEQ( Contrast * 100, Brightness * 256, ( quint8 * )imgScaler.array(), aligned8W * writer.outH << 2 );
-					glTexImage2D( GL_TEXTURE_2D, 0, 4, aligned8W, writer.outH, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
+					glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aligned8W, writer.outH, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
 				}
 			}
 			else
@@ -284,7 +284,7 @@ void Drawable::paintGL()
 					imgScaler.scale( videoFrame );
 					if ( Contrast != 1.0f || Brightness != 0.0f )
 						Functions::ImageEQ( Contrast * 100, Brightness * 256, ( quint8 * )imgScaler.array(), w2 * h2 << 2 );
-					glTexImage2D( GL_TEXTURE_2D, 0, 4, w2, h2, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
+					glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, w2, h2, 0, GL_BGRA, GL_UNSIGNED_BYTE, imgScaler.array() );
 				}
 			}
 		}
@@ -314,9 +314,9 @@ void Drawable::paintGL()
 			osdImg.fill( 0 );
 			QPainter p( &osdImg );
 			p.translate( -bounds.topLeft() );
-			Functions::paintOSD( osd_list, scaleW, scaleH, p, &osd_checksums );
+			Functions::paintOSD( false, osd_list, scaleW, scaleH, p, &osd_checksums );
 			if ( canCreateTexturesNonPowerOf2 )
-				glTexImage2D( GL_TEXTURE_2D, 0, 4, bounds.width(), bounds.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, osdImg.bits() );
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.bits() );
 			else
 			{
 				int w2 = getPowerOf2( bounds.width() ), h2 = getPowerOf2( bounds.height() );
@@ -324,7 +324,7 @@ void Drawable::paintGL()
 					w2 = maxTextureSize;
 				if ( h2 > maxTextureSize )
 					h2 = maxTextureSize;
-				glTexImage2D( GL_TEXTURE_2D, 0, 4, w2, h2, 0, GL_BGRA, GL_UNSIGNED_BYTE, osdImg.scaled( w2, h2, Qt::IgnoreAspectRatio, Qt::FastTransformation ).bits() );
+				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, w2, h2, 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.scaled( w2, h2, Qt::IgnoreAspectRatio, Qt::FastTransformation ).bits() );
 			}
 		}
 

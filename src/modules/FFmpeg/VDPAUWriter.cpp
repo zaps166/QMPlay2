@@ -500,12 +500,12 @@ void VDPAUWriter::draw( VdpVideoSurface surface_id )
 						osdImg.fill( 0 );
 						QPainter p( &osdImg );
 						p.translate( -bounds.topLeft() );
-						Functions::paintOSD( osd_list, scaleW, scaleH, p, &osd_checksums );
+						Functions::paintOSD( false, osd_list, scaleW, scaleH, p, &osd_checksums );
 						if ( bitmapSurfaceSize != bounds.size() )
 						{
 							if ( bitmapSurface != VDP_INVALID_HANDLE )
 								vdp_bitmap_surface_destroy( bitmapSurface );
-							if ( vdp_bitmap_surface_create( device, VDP_RGBA_FORMAT_B8G8R8A8, bounds.width(), bounds.height(), VDP_TRUE, &bitmapSurface ) == VDP_STATUS_OK )
+							if ( vdp_bitmap_surface_create( device, VDP_RGBA_FORMAT_R8G8B8A8, bounds.width(), bounds.height(), VDP_TRUE, &bitmapSurface ) == VDP_STATUS_OK )
 								bitmapSurfaceSize = bounds.size();
 							else
 							{

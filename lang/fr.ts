@@ -721,6 +721,17 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>GLDrawable</name>
+    <message>
+        <source>Błąd podczas kompilacji shaderów</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Błąd podczas linkowania shaderów</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Help</name>
     <message>
         <source>Po&amp;moc</source>

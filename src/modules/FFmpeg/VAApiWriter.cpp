@@ -427,7 +427,7 @@ bool VAApiWriter::HWAccellInit( int W, int H, const char *codec_name )
 		if ( vaQuerySubpictureFormats( VADisp, subpicFmtList, subpic_flags, &numSubpicFmts ) == VA_STATUS_SUCCESS )
 		{
 			for ( unsigned i = 0 ; i < numSubpicFmts ; ++i )
-				if ( !qstrncmp( ( const char * )&subpicFmtList[ i ].fourcc, "BGRA", 4 ) )
+				if ( !qstrncmp( ( const char * )&subpicFmtList[ i ].fourcc, "RGBA", 4 ) )
 				{
 					subpict_dest_is_screen_coord = subpic_flags[ i ] & VA_SUBPICTURE_DESTINATION_IS_SCREEN_COORD;
 					rgbImgFmt = new VAImageFormat( subpicFmtList[ i ] );
@@ -611,7 +611,7 @@ void VAApiWriter::draw( VASurfaceID _id, int _field )
 					osdImg.fill( 0 );
 					QPainter p( &osdImg );
 					p.translate( -bounds.topLeft() );
-					Functions::paintOSD( osd_list, scaleW, scaleH, p, &osd_checksums );
+					Functions::paintOSD( false, osd_list, scaleW, scaleH, p, &osd_checksums );
 					vaUnmapBuffer( VADisp, vaImg.buf );
 					canAssociate = true;
 				}

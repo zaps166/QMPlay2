@@ -30,7 +30,7 @@ static void addImgs( ASS_Image *img, QMPlay2_OSD *osd )
 			const int offsetI = y * img->stride;
 			const int offsetB = y * img->w;
 			for ( int x = 0 ; x < img->w ; x++ )
-				bitmap_ptr[ offsetB + x ] = ( a * img->bitmap[ offsetI + x ] / 0xFF ) << 24 | r << 16 | g << 8 | b;
+				bitmap_ptr[ offsetB + x ] = ( a * img->bitmap[ offsetI + x ] / 0xFF ) << 24 | b << 16 | g << 8 | r;
 		}
 
 		osd->addImage( QRect( img->dst_x, img->dst_y, img->w, img->h ), bitmap );

@@ -75,7 +75,7 @@ void Drawable::paintEvent( QPaintEvent * )
 	if ( !osd_list.isEmpty() )
 	{
 		p.setClipRect( 0, 0, W, H );
-		Functions::paintOSD( osd_list, ( qreal )W / writer.outW, ( qreal )H / writer.outH, p );
+		Functions::paintOSD( true, osd_list, ( qreal )W / writer.outW, ( qreal )H / writer.outH, p );
 	}
 	osd_mutex.unlock();
 }

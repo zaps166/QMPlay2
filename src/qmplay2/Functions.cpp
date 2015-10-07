@@ -233,7 +233,7 @@ bool Functions::mustRepaintOSD( const QList< const QMPlay2_OSD * > &osd_list, co
 	}
 	return mustRepaint;
 }
-void Functions::paintOSD( const QList< const QMPlay2_OSD * > &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums )
+void Functions::paintOSD( bool rgbSwapped, const QList< const QMPlay2_OSD * > &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums )
 {
 	if ( osd_checksums )
 		osd_checksums->clear();
@@ -251,7 +251,8 @@ void Functions::paintOSD( const QList< const QMPlay2_OSD * > &osd_list, const qr
 		for ( int j = 0 ; j < osd->imageCount() ; j++ )
 		{
 			const QMPlay2_OSD::Image &img = osd->getImage( j );
-			painter.drawImage( img.rect.topLeft(), QImage( ( uchar * )img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32 ) );
+			const QImage qImg = QImage( ( uchar * )img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32 );
+			painter.drawImage( img.rect.topLeft(), rgbSwapped ? qImg.rgbSwapped() : qImg );
 		}
 		if ( osd->needsRescale() )
 			painter.restore();
@@ -275,7 +276,7 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 		QPainter p( &osdImg );
 		p.setRenderHint( QPainter::SmoothPixmapTransform );
 		p.scale( iScaleW, iScaleH );
-		Functions::paintOSD( osd_list, scaleW, scaleH, p, &osd_checksums );
+		Functions::paintOSD( false, osd_list, scaleW, scaleH, p, &osd_checksums );
 	}
 
 	quint8 *data[ 3 ] = { ( quint8 * )imageData };
@@ -302,9 +303,9 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 			if ( A )
 			{
 				const quint8 iA = ~A & 0xFF;
-				const quint8  R = ( pixel >> 16 ) & 0xFF;
+				const quint8  B = ( pixel >> 16 ) & 0xFF;
 				const quint8  G = ( pixel >> 8 ) & 0xFF;
-				const quint8  B = pixel & 0xFF;
+				const quint8  R = pixel & 0xFF;
 
 				const quint8 Y = ( ( R * 66 ) >> 8 ) + ( G >> 1 ) + ( ( B * 25 ) >> 8 ) + 16;
 				if ( A == 0xFF )

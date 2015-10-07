@@ -1,9 +1,20 @@
 TEMPLATE = subdirs
-SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters OpenGL AudioCD
-linux*: SUBDIRS += ALSA #OpenSLES
-else: SUBDIRS += PortAudio
+SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters
+!android: SUBDIRS += AudioCD
+linux*: {
+	!android: SUBDIRS += ALSA
+	else: SUBDIRS += OpenSLES
+}
+else {
+	SUBDIRS += PortAudio
+}
 unix:!macx {
 	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo
 	packagesExist(libpulse-simple):	SUBDIRS += PulseAudio
+	!contains(QT_CONFIG, opengles1):!contains(QT_CONFIG, opengles2): SUBDIRS += OpenGL
+	packagesExist(egl):packagesExist(glesv2): SUBDIRS += OpenGLES
+}
+else {
+	SUBDIRS += OpenGL
 }
 win32: SUBDIRS += FileAssociation DirectX

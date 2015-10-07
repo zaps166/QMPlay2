@@ -47,7 +47,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 	QStringList defaultModules;
 #if defined Q_OS_LINUX
 	if ( type == "videoWriters" )
-		defaultModules << "XVideo Writer" << "OpenGL Writer";
+		defaultModules << "OpenGLES Writer" << "XVideo Writer" << "OpenGL Writer";
 	else if ( type == "audioWriters" )
 		defaultModules << "PulseAudio Writer" << "ALSA Writer";
 #elif defined Q_OS_WIN
