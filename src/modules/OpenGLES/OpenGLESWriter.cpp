@@ -369,6 +369,7 @@ void GLDrawable::paintGL()
 
 bool GLDrawable::initializeGL()
 {
+	 /* Workaround because of BUG in Mesa i915 driver */
 	const bool useHUE = !strstr( ( const char * )glGetString( GL_VERSION ), "OpenGL ES 2.0 Mesa" ) || !strstr( ( const char * )glGetString( GL_RENDERER ), "Intel" );
 
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -378,6 +379,7 @@ bool GLDrawable::initializeGL()
 	quint32 vertexShader, fragmentShader;
 	shaderProgramYCbCr = glCreateProgram();
 	shaderProgramOSD = glCreateProgram();
+
 
 	/* YCbCr shader */
 	vertexShader = loadShader( GL_VERTEX_SHADER, vShaderYCbCrSrc );

@@ -135,14 +135,14 @@ void Drawable::initializeGL()
 				"uniform sampler2D Ytex, Utex, Vtex;"
 				"void main() {"
 					"vec3 YCbCr = vec3("
-						"texture2D( Ytex, vec2( gl_TexCoord[0].st ) )[0] - 0.0625,"
-						"texture2D( Utex, vec2( gl_TexCoord[0].st ) )[0] - 0.5,"
-						"texture2D( Vtex, vec2( gl_TexCoord[0].st ) )[0] - 0.5"
+						"texture2D( Ytex, vec2( gl_TexCoord[0] ) )[0] - 0.0625,"
+						"texture2D( Utex, vec2( gl_TexCoord[0] ) )[0] - 0.5,"
+						"texture2D( Vtex, vec2( gl_TexCoord[0] ) )[0] - 0.5"
 					");"
 					"%1"
 					"YCbCr.yz *= Saturation;"
-					"vec3 RGB = mat3( 1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0 ) * YCbCr * Contrast + Brightness;"
-					"gl_FragColor = vec4( RGB, 1.0 );"
+					"vec3 rgb = mat3( 1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0 ) * YCbCr * Contrast + Brightness;"
+					"gl_FragColor = vec4( rgb, 1.0 );"
 				"}" ).arg( shaderHUE );
 
 				program = new QGLShaderProgram( this );
