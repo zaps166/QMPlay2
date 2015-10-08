@@ -1,9 +1,9 @@
 #include <Module.hpp>
 
-class OpenGLES : public Module
+class OpenGL2 : public Module
 {
 public:
-	OpenGLES();
+	OpenGL2();
 private:
 	QList< Info > getModulesInfo( const bool ) const;
 	void *createInstance( const QString & );
@@ -25,5 +25,8 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *enabledB, *vsyncB;
+	QCheckBox *enabledB;
+#ifdef VSYNC_SETTINGS
+	QCheckBox *vsyncB;
+#endif
 };

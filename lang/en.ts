@@ -604,18 +604,6 @@
 <context>
     <name>Drawable</name>
     <message>
-        <source>Sterownik grafiki nie obsługuje</source>
-        <translation>Graphics driver doesn&apos;t support</translation>
-    </message>
-    <message>
-        <source>Nie można odnaleźć funkcji</source>
-        <translation>Cannot find function</translation>
-    </message>
-    <message>
-        <source>Obraz nie będzie konwertowany do RGB poprzez GPU</source>
-        <translation>Video can not be converted to RGB by GPU</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>Hardware YUV-&gt;RGB conversion</translation>
     </message>
@@ -632,20 +620,16 @@
         <translation>Overlay disabled, DirectDraw doesn&apos;t work...</translation>
     </message>
     <message>
-        <source>Sterownik nie obsługuje fragment shader (pixel shader)</source>
-        <translation>Graphics driver doesn&apos;t support fragment shader (pixel shader)</translation>
+        <source>Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
+        <translation>OpenGL driver must support multitexturing, shaders and Non-Power-Of-Two texture size</translation>
     </message>
     <message>
-        <source>Shadery wyłączone w opcjach</source>
-        <translation>Shaders are disabled in options</translation>
+        <source>Błąd podczas kompilacji/linkowania shaderów</source>
+        <translation>Shader compile/link error</translation>
     </message>
     <message>
-        <source>Problem z kompilacją fragment shader</source>
-        <translation>Problem with fragment shader compilation</translation>
-    </message>
-    <message>
-        <source>Wydajność będzie niska</source>
-        <translation>Performance will be low</translation>
+        <source>Zarządzanie VSync jest nieobsługiwane</source>
+        <translation>VSync management is not supported</translation>
     </message>
 </context>
 <context>
@@ -719,17 +703,6 @@ amp</translation>
     <message>
         <source>Czy chcesz skojarzyć pliki z programem QMPlay2</source>
         <translation>Do you want to associate files with QMPlay2</translation>
-    </message>
-</context>
-<context>
-    <name>GLDrawable</name>
-    <message>
-        <source>Błąd podczas kompilacji shaderów</source>
-        <translation>Shaders compile error</translation>
-    </message>
-    <message>
-        <source>Błąd podczas linkowania shaderów</source>
-        <translation>Shaders link error</translation>
     </message>
 </context>
 <context>
@@ -1130,10 +1103,6 @@ amp</translation>
     <message>
         <source>Ilość wątków użytych do dekodowania wideo</source>
         <translation>Number of threads used to decode video</translation>
-    </message>
-    <message>
-        <source>Używaj shaderów do konwersji YUV-&gt;RGB</source>
-        <translation>Use shaders to YUV-&gt;RGB conversion</translation>
     </message>
     <message>
         <source>Pokazuj dodatkowe informacje wyszukiwania</source>

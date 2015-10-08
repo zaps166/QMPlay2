@@ -1,15 +1,13 @@
-#include <OpenGLESWriter.hpp>
+#include <OpenGL2Writer.hpp>
 
 #include <QMPlay2_OSD.hpp>
 #include <Functions.hpp>
 
 #include <QPainter>
-
-#include <GLES2/gl2.h>
-#include <EGL/egl.h>
+//#include <QDebug>
 
 static const char vShaderYCbCrSrc[] =
-	"precision lowp float;"
+	"%1"
 	"attribute vec4 vPosition;"
 	"attribute vec2 aTexCoord;"
 	"varying vec2 vTexCoord;"
@@ -19,7 +17,7 @@ static const char vShaderYCbCrSrc[] =
 		"gl_Position = vPosition * vec4(scale.xy, 1, 1);"
 	"}";
 static const char fShaderYCbCrSrc[] =
-	"precision lowp float;"
+	"%1"
 	"varying vec2 vTexCoord;"
 	"uniform vec4 videoEq;"
 	"uniform sampler2D Ytex, Utex, Vtex;"
@@ -33,7 +31,7 @@ static const char fShaderYCbCrSrc[] =
 			"texture2D(Utex, vTexCoord)[0] - 0.5,"
 			"texture2D(Vtex, vTexCoord)[0] - 0.5"
 		");"
-		"%1"
+		"%2"
 		"if (saturation != 1.0)"
 			"YCbCr.yz *= saturation;"
 		"vec3 rgb = mat3(1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0) * YCbCr;"
@@ -43,7 +41,7 @@ static const char fShaderYCbCrSrc[] =
 			"rgb += brightness;"
 		"gl_FragColor = vec4(rgb, 1.0);"
 	"}";
-static const char fShaderYCbCrHUESrc[] =
+static const char fShaderYCbCrHueSrc[] =
 	"if (hueAdj != 0.0) {"
 		"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
 		"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
@@ -52,7 +50,7 @@ static const char fShaderYCbCrHUESrc[] =
 	"}";
 
 static const char vShaderOSDSrc[] =
-	"precision lowp float;"
+	"%1"
 	"attribute vec4 vPosition;"
 	"attribute vec2 aTexCoord;"
 	"varying vec2 vTexCoord;"
@@ -61,7 +59,7 @@ static const char vShaderOSDSrc[] =
 		"gl_Position = vPosition;"
 	"}";
 static const char fShaderOSDSrc[] =
-	"precision lowp float;"
+	"%1"
 	"varying vec2 vTexCoord;"
 	"uniform sampler2D tex;"
 	"void main() {"
@@ -105,159 +103,160 @@ static const float texCoordOSD[ 8 ] = {
 	1.0f, 0.0f,
 };
 
-struct GLPrivate
-{
-	EGLDisplay display;
-	EGLSurface surface;
-	EGLContext context;
-};
-
-static quint32 loadShader( quint32 type, const char shaderSrc[] )
-{
-	quint32 shader = glCreateShader( type );
-
-	glShaderSource( shader, 1, &shaderSrc, NULL );
-	glCompileShader( shader );
-
-	qint32 compiled;
-	glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
-	if ( !compiled )
-	{
-		glDeleteShader( shader );
-		return 0;
-	}
-	return shader;
-}
-static bool linkShader( quint32 shaderProgram )
-{
-	glLinkProgram( shaderProgram );
-
-	qint32 linked;
-	glGetProgramiv( shaderProgram, GL_LINK_STATUS, &linked );
-	if ( !linked )
-	{
-		glDeleteProgram( shaderProgram );
-		return false;
-	}
-	return true;
-}
-
 /**/
 
-GLDrawable::GLDrawable( OpenGLESWriter &writer ) :
+Drawable::Drawable( OpenGL2Writer &writer ) :
 	isOK( true ),
 	videoFrame( NULL ),
-	p( new GLPrivate ),
 	writer( writer ),
-	hasImage( false ), hasCurrentContext( false ),
-	shaderProgramYCbCr( 0 ), shaderProgramOSD( 0 )
+	hasImage( false )
 {
-	const qint32 configAttribs[] =
-	{
-		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-		EGL_RED_SIZE, 8,
-		EGL_GREEN_SIZE, 8,
-		EGL_BLUE_SIZE, 8,
-		EGL_NONE
-	};
-	const qint32 contextAttribs[] =
-	{
-		EGL_CONTEXT_CLIENT_VERSION, 2,
-		EGL_NONE,
-	};
-
-	/* Widget attributes */
-	setAttribute( Qt::WA_OpaquePaintEvent );
-	setAttribute( Qt::WA_PaintOnScreen );
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
-
-	/* Initialize EGL */
-	p->surface = EGL_NO_SURFACE;
-	p->context = EGL_NO_CONTEXT;
-
-	p->display = eglGetDisplay( EGL_DEFAULT_DISPLAY );
-	if ( !eglInitialize( p->display, NULL, NULL ) )
-		return;
-
-	qint32 numConfigs;
-	eglChooseConfig( p->display, configAttribs, &eglConfig, 1, &numConfigs );
-	if ( numConfigs != 1 )
-		return;
-
-	qint32 format;
-	eglGetConfigAttrib( p->display, eglConfig, EGL_NATIVE_VISUAL_ID, &format );
-
-	p->context = eglCreateContext( p->display, eglConfig, EGL_NO_CONTEXT, contextAttribs );
 
 	/* Initialize texCoord array */
 	texCoordYCbCr[ 0 ] = texCoordYCbCr[ 4 ] = texCoordYCbCr[ 5 ] = texCoordYCbCr[ 7 ] = 0.0f;
 	texCoordYCbCr[ 1 ] = texCoordYCbCr[ 3 ] = 1.0f;
 }
-GLDrawable::~GLDrawable()
-{
-	if ( p->context != EGL_NO_CONTEXT )
-	{
-		if ( shaderProgramYCbCr )
-			glDeleteProgram( shaderProgramYCbCr );
-		if ( shaderProgramOSD )
-			glDeleteProgram( shaderProgramOSD );
-		eglMakeCurrent( p->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT );
-		eglDestroyContext( p->display, p->context );
-	}
-	if ( p->surface != EGL_NO_SURFACE )
-		eglDestroySurface( p->display, p->surface );
-	if ( p->display != EGL_NO_DISPLAY )
-		eglTerminate( p->display );
-	delete p;
-}
 
-void GLDrawable::resizeEvent( QResizeEvent *e )
+bool Drawable::init()
 {
-	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
-	doReset = true;
-	if ( !e )
-		paintGL();
-	else
-	{
-		if ( hasCurrentContext )
-			glViewport( 0, 0, width(), height() );
-		QWidget::resizeEvent( e );
-	}
+	makeCurrent();
+	if ( ( isOK = isValid() ) )
+		glInit();
+	doneCurrent();
+	return isOK;
 }
-bool GLDrawable::isContextValid() const
-{
-	return p->context;
-}
-bool GLDrawable::makeCurrent()
-{
-	if ( p->surface == EGL_NO_SURFACE )
-		p->surface = eglCreateWindowSurface( p->display, eglConfig, winId(), NULL );
-	if ( eglMakeCurrent( p->display, p->surface, p->surface, p->context ) )
-	{
-		if ( !hasCurrentContext )
-		{
-			hasCurrentContext = true;
-			return isOK = initializeGL();
-		}
-	}
-	return false;
-}
-void GLDrawable::clr()
+void Drawable::clr()
 {
 	hasImage = false;
 	osdImg = QImage();
 	osd_checksums.clear();
 }
 
-void GLDrawable::paintGL()
+void Drawable::resizeEvent( QResizeEvent *e )
 {
-	if ( !hasCurrentContext && !makeCurrent() )
-		return;
+	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
+	doReset = true;
+	if ( !e )
+		updateGL();
+	else
+		QGLWidget::resizeEvent( e );
+}
 
-	if ( lastVSyncState != writer.VSync )
-		eglSwapInterval( p->display, lastVSyncState = writer.VSync );
+void Drawable::initializeGL()
+{
+	initializeGLFunctions();
+
+	if
+	(
+		!hasOpenGLFeature( QGLFunctions::Multitexture ) ||
+		!hasOpenGLFeature( QGLFunctions::Shaders )      ||
+		!hasOpenGLFeature( QGLFunctions::NPOTTextures )
+	)
+	{
+		QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
+		isOK = false;
+		return;
+	}
+
+	 /* Workaround because of BUG in Mesa i915 driver */
+	const char *glVersionStr = ( const char * )glGetString( GL_VERSION );
+	const char *glRendererStr = ( const char * )glGetString( GL_RENDERER );
+	bool useHUE = true;
+	if ( glVersionStr && glRendererStr )
+		useHUE = ( !strstr( glVersionStr, "2.0 Mesa" ) && !strstr( glVersionStr, "2.1 Mesa" ) ) || !strstr( glRendererStr, "Intel" );
+
+	const char *precisionStr = ( QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0 ) ? "precision lowp float;" : "";
+
+	/* YCbCr shader */
+	shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
+	shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHUE ? fShaderYCbCrHueSrc : "" ) );
+	shaderProgramYCbCr.bindAttributeLocation( "vPosition", 0 );
+	shaderProgramYCbCr.bindAttributeLocation( "aTexCoord", 1 );
+	if ( shaderProgramYCbCr.bind() )
+	{
+		texCoordYCbCrLoc = shaderProgramYCbCr.attributeLocation( "aTexCoord" );
+		positionYCbCrLoc = shaderProgramYCbCr.attributeLocation( "vPosition" );
+
+		shaderProgramYCbCr.setUniformValue( "Ytex", 0 );
+		shaderProgramYCbCr.setUniformValue( "Utex", 1 );
+		shaderProgramYCbCr.setUniformValue( "Vtex", 2 );
+
+		shaderProgramYCbCr.release();
+	}
+	else
+	{
+		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ), true, true );
+		isOK = false;
+		return;
+	}
+
+	/* OSD shader */
+	shaderProgramOSD.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderOSDSrc ).arg( precisionStr ) );
+	shaderProgramOSD.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderOSDSrc ).arg( precisionStr ) );
+	shaderProgramOSD.bindAttributeLocation( "vPosition", 0 );
+	shaderProgramOSD.bindAttributeLocation( "aTexCoord", 1 );
+	if ( shaderProgramOSD.bind() )
+	{
+		texCoordOSDLoc = shaderProgramOSD.attributeLocation( "aTexCoord" );
+		positionOSDLoc = shaderProgramOSD.attributeLocation( "vPosition" );
+
+		shaderProgramOSD.setUniformValue( "tex", 3 );
+
+		shaderProgramOSD.release();
+	}
+	else
+	{
+		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ), true, true );
+		isOK = false;
+		return;
+	}
+
+	/* Set OpenGL parameters */
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glClearColor( 0.0, 0.0, 0.0, 1.0 );
+	glClear( GL_COLOR_BUFFER_BIT );
+	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_CULL_FACE );
+	glDisable( GL_DITHER );
+
+	/* Prepare textures */
+	for ( int i = 1 ; i <= 4 ; ++i )
+	{
+		glBindTexture( GL_TEXTURE_2D, i );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+	}
+
+#ifdef VSYNC_SETTINGS
+	/* Ensures to set VSync on first repaint */
+	lastVSyncState = !writer.vSync;
+#endif
+}
+void Drawable::paintGL()
+{
+#ifdef VSYNC_SETTINGS
+	if ( lastVSyncState != writer.vSync )
+	{
+		typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
+		SwapInterval swapInterval = NULL;
+#ifdef Q_OS_WIN
+		swapInterval = ( SwapInterval )context()->getProcAddress( "wglSwapIntervalEXT" );
+#else
+		swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalMESA" );
+		if ( !swapInterval )
+			swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalSGI" );
+#endif
+		if ( swapInterval )
+			swapInterval( writer.vSync );
+		else
+			QMPlay2Core.logError( tr( "Zarządzanie VSync jest nieobsługiwane" ), true, true );
+		lastVSyncState = writer.vSync;
+	}
+#endif
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -302,14 +301,15 @@ void GLDrawable::paintGL()
 	glEnableVertexAttribArray( positionYCbCrLoc );
 	glEnableVertexAttribArray( texCoordYCbCrLoc );
 
-	glUseProgram( shaderProgramYCbCr );
+	shaderProgramYCbCr.bind();
 	if ( doReset )
 	{
-		glUniform2f( scaleLoc, W / ( float )width(), H / ( float )height() );
-		glUniform4f( videoEqLoc, Brightness, Contrast, Saturation, Hue );
+		shaderProgramYCbCr.setUniformValue( "scale", W / ( float )width(), H / ( float )height() );
+		shaderProgramYCbCr.setUniformValue( "videoEq", Brightness, Contrast, Saturation, Hue );
 		doReset = false;
 	}
 	glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
+	shaderProgramYCbCr.release();
 
 	glDisableVertexAttribArray( texCoordYCbCrLoc );
 	glDisableVertexAttribArray( positionYCbCrLoc );
@@ -348,146 +348,46 @@ void GLDrawable::paintGL()
 			right - 1.0f, -top    + 1.0f,
 		};
 
-		glEnableVertexAttribArray( texCoordYCbCrLoc );
-		glEnableVertexAttribArray( positionYCbCrLoc );
+		glEnableVertexAttribArray( texCoordOSDLoc );
+		glEnableVertexAttribArray( positionOSDLoc );
 		glVertexAttribPointer( positionOSDLoc, 2, GL_FLOAT, false, 0, verticesOSD );
 		glVertexAttribPointer( texCoordOSDLoc, 2, GL_FLOAT, false, 0, texCoordOSD );
 
 		glEnable( GL_BLEND );
-		glUseProgram( shaderProgramOSD );
+		shaderProgramOSD.bind();
 		glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
+		shaderProgramOSD.release();
 		glDisable( GL_BLEND );
 
 		glDisableVertexAttribArray( texCoordOSDLoc );
 		glDisableVertexAttribArray( positionOSDLoc );
 	}
 	osd_mutex.unlock();
-
-	glUseProgram( 0 );
-	eglSwapBuffers( p->display, p->surface );
+}
+void Drawable::resizeGL( int w, int h )
+{
+	glViewport( 0, 0, w, h );
 }
 
-bool GLDrawable::initializeGL()
+bool Drawable::event( QEvent *e )
 {
-	 /* Workaround because of BUG in Mesa i915 driver */
-	const bool useHUE = !strstr( ( const char * )glGetString( GL_VERSION ), "OpenGL ES 2.0 Mesa" ) || !strstr( ( const char * )glGetString( GL_RENDERER ), "Intel" );
-
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glClearColor( 0.0, 0.0, 0.0, 0.0 );
-	glDisable( GL_DITHER );
-
-	quint32 vertexShader, fragmentShader;
-	shaderProgramYCbCr = glCreateProgram();
-	shaderProgramOSD = glCreateProgram();
-
-
-	/* YCbCr shader */
-	vertexShader = loadShader( GL_VERTEX_SHADER, vShaderYCbCrSrc );
-	fragmentShader = loadShader( GL_FRAGMENT_SHADER, QString( fShaderYCbCrSrc ).arg( useHUE ? fShaderYCbCrHUESrc : "" ).toLatin1() );
-	if ( !vertexShader || !fragmentShader )
-	{
-		QMPlay2Core.logError( "OpenGLES :: " + tr( "Błąd podczas kompilacji shaderów" ) );
-		return false;
-	}
-
-	glAttachShader( shaderProgramYCbCr, vertexShader );
-	glAttachShader( shaderProgramYCbCr, fragmentShader );
-	glDeleteShader( vertexShader );
-	glDeleteShader( fragmentShader );
-
-	glBindAttribLocation( shaderProgramYCbCr, 0, "vPosition" );
-	glBindAttribLocation( shaderProgramYCbCr, 1, "aTexCoord" );
-
-	if ( !linkShader( shaderProgramYCbCr ) )
-	{
-		QMPlay2Core.logError( "OpenGLES :: " + tr( "Błąd podczas linkowania shaderów" ) );
-		return false;
-	}
-
-	scaleLoc = glGetUniformLocation( shaderProgramYCbCr, "scale" );
-	videoEqLoc = glGetUniformLocation( shaderProgramYCbCr, "videoEq" );
-	texCoordYCbCrLoc = glGetAttribLocation( shaderProgramYCbCr, "aTexCoord" );
-	positionYCbCrLoc = glGetAttribLocation( shaderProgramYCbCr, "vPosition" );
-
-	/* Set the texture unit for every plane */
-	glUseProgram( shaderProgramYCbCr );
-	glUniform1i( glGetUniformLocation( shaderProgramYCbCr, "Ytex" ), 0 );
-	glUniform1i( glGetUniformLocation( shaderProgramYCbCr, "Utex" ), 1 );
-	glUniform1i( glGetUniformLocation( shaderProgramYCbCr, "Vtex" ), 2 );
-	glUseProgram( 0 );
-
-
-	/* OSD shader */
-	vertexShader = loadShader( GL_VERTEX_SHADER, vShaderOSDSrc );
-	fragmentShader = loadShader( GL_FRAGMENT_SHADER, fShaderOSDSrc );
-	if ( !vertexShader || !fragmentShader )
-	{
-		QMPlay2Core.logError( "OpenGLES :: " + tr( "Błąd podczas kompilacji shaderów" ) );
-		return false;
-	}
-
-	glAttachShader( shaderProgramOSD, vertexShader );
-	glAttachShader( shaderProgramOSD, fragmentShader );
-	glDeleteShader( vertexShader );
-	glDeleteShader( fragmentShader );
-
-	glBindAttribLocation( shaderProgramOSD, 0, "vPosition" );
-	glBindAttribLocation( shaderProgramOSD, 1, "aTexCoord" );
-
-	if ( !linkShader( shaderProgramOSD ) )
-	{
-		QMPlay2Core.logError( "OpenGLES :: " + tr( "Błąd podczas linkowania shaderów" ) );
-		return false;
-	}
-
-	texCoordOSDLoc = glGetAttribLocation( shaderProgramOSD, "aTexCoord" );
-	positionOSDLoc = glGetAttribLocation( shaderProgramOSD, "vPosition" );
-
-	/* Set the texture unit */
-	glUseProgram( shaderProgramOSD );
-	glUniform1i( glGetUniformLocation( shaderProgramOSD, "tex" ), 3 );
-	glUseProgram( 0 );
-
-
-	/* Prepare textures */
-	for ( int i = 1 ; i <= 4 ; ++i )
-	{
-		glBindTexture( GL_TEXTURE_2D, i );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-	}
-
-	/* Ensures to set VSync on first repaint */
-	lastVSyncState = !writer.VSync;
-
-	return true;
-}
-
-QPaintEngine *GLDrawable::paintEngine() const
-{
-	return NULL;
-}
-
-void GLDrawable::paintEvent( QPaintEvent * )
-{
-	paintGL();
-}
-bool GLDrawable::event( QEvent *e )
-{
-	/* Pass gesture event to the parent */
+	/*
+	 * QGLWidget blocks this event forever (tested on Windows 8.1, Qt 4.8.7)
+	 * This is workaround: pass gesture event to the parent.
+	*/
 	if ( e->type() == QEvent::Gesture )
 		return qApp->notify( parent(), e );
-	return QWidget::event( e );
+	return QGLWidget::event( e );
 }
 
 /**/
 
-OpenGLESWriter::OpenGLESWriter( Module &module ) :
+OpenGL2Writer::OpenGL2Writer( Module &module ) :
 	outW( -1 ), outH( -1 ), W( -1 ), flip( 0 ),
 	aspect_ratio( 0.0 ), zoom( 0.0 ),
-	VSync( true ),
+#ifdef VSYNC_SETTINGS
+	vSync( true ),
+#endif
 	drawable( NULL )
 {
 	addParam( "W" );
@@ -502,23 +402,25 @@ OpenGLESWriter::OpenGLESWriter( Module &module ) :
 
 	SetModule( module );
 }
-OpenGLESWriter::~OpenGLESWriter()
+OpenGL2Writer::~OpenGL2Writer()
 {
 	delete drawable;
 }
 
-bool OpenGLESWriter::set()
+bool OpenGL2Writer::set()
 {
-	VSync = sets().getBool( "VSync" );
+#ifdef VSYNC_SETTINGS
+	vSync = sets().getBool( "VSync" );
+#endif
 	return sets().getBool( "Enabled" );
 }
 
-bool OpenGLESWriter::readyWrite() const
+bool OpenGL2Writer::readyWrite() const
 {
 	return drawable && drawable->isOK;
 }
 
-bool OpenGLESWriter::processParams( bool * )
+bool OpenGL2Writer::processParams( bool * )
 {
 	bool doResizeEvent = false;
 
@@ -561,28 +463,28 @@ bool OpenGLESWriter::processParams( bool * )
 	return readyWrite();
 }
 
-qint64 OpenGLESWriter::write( const QByteArray &arr )
+qint64 OpenGL2Writer::write( const QByteArray &arr )
 {
 	drawable->videoFrame = VideoFrame::fromData( arr );
-	drawable->paintGL();
+	drawable->updateGL();
 	drawable->videoFrame = NULL;
 	VideoFrame::unref( arr );
 	return arr.size();
 }
-void OpenGLESWriter::writeOSD( const QList< const QMPlay2_OSD * > &osds )
+void OpenGL2Writer::writeOSD( const QList< const QMPlay2_OSD * > &osds )
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;
 	drawable->osd_mutex.unlock();
 }
 
-QString OpenGLESWriter::name() const
+QString OpenGL2Writer::name() const
 {
-	return OpenGLESWriterName;
+	return OpenGL2WriterName;
 }
 
-bool OpenGLESWriter::open()
+bool OpenGL2Writer::open()
 {
-	drawable = new GLDrawable( *this );
-	return drawable->isContextValid();
+	drawable = new Drawable( *this );
+	return drawable->init();
 }

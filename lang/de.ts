@@ -608,18 +608,6 @@
 <context>
     <name>Drawable</name>
     <message>
-        <source>Sterownik grafiki nie obsługuje</source>
-        <translation>Viedeotreiber wird nicht unterstützt</translation>
-    </message>
-    <message>
-        <source>Nie można odnaleźć funkcji</source>
-        <translation>Keine Funktion gefunden</translation>
-    </message>
-    <message>
-        <source>Obraz nie będzie konwertowany do RGB poprzez GPU</source>
-        <translation>Video kann durch GPU nicht zu RGB konvertiert werden</translation>
-    </message>
-    <message>
         <source>Sprzętowa konwersja YUV-&gt;RGB</source>
         <translation>
 Hardware-Konvertierung YUV-&gt; RGB</translation>
@@ -637,19 +625,15 @@ Hardware-Konvertierung YUV-&gt; RGB</translation>
         <translation>Overlay deaktiviert, DirectDraw funktioniert nicht...</translation>
     </message>
     <message>
-        <source>Sterownik nie obsługuje fragment shader (pixel shader)</source>
-        <translation>Videotreiber unterstützt nicht Fragment Shader (pixel shader)</translation>
+        <source>Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Shadery wyłączone w opcjach</source>
-        <translation>Shader Optionen deaktiviert</translation>
+        <source>Błąd podczas kompilacji/linkowania shaderów</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Problem z kompilacją fragment shader</source>
-        <translation>Problem mit Fragment-Shader Zusammenstellung</translation>
-    </message>
-    <message>
-        <source>Wydajność będzie niska</source>
+        <source>Zarządzanie VSync jest nieobsługiwane</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -723,17 +707,6 @@ amp</source>
     <message>
         <source>Czy chcesz skojarzyć pliki z programem QMPlay2</source>
         <translation>Möchten Sie die Dateien mit QMPlay2 verknüpfen</translation>
-    </message>
-</context>
-<context>
-    <name>GLDrawable</name>
-    <message>
-        <source>Błąd podczas kompilacji shaderów</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Błąd podczas linkowania shaderów</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1138,10 +1111,6 @@ amp</source>
     <message>
         <source>Ilość wątków użytych do dekodowania wideo</source>
         <translation>Anzahl der Threads die verwendet werden, um das Video zu decodieren</translation>
-    </message>
-    <message>
-        <source>Używaj shaderów do konwersji YUV-&gt;RGB</source>
-        <translation>Benutze Shaders zur YUV-&gt;RGB Konvertierung</translation>
     </message>
     <message>
         <source>Pokazuj dodatkowe informacje wyszukiwania</source>
