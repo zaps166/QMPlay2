@@ -41,4 +41,4 @@ private:
 	bool autoFindMultichannelDevice, err, mustSwapChn, canPause;
 };
 
-#define ALSAWriterName "ALSA Writer"
+#define ALSAWriterName "ALSA"

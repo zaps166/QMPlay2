@@ -253,7 +253,7 @@ bool VAApiWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgS
 
 QString VAApiWriter::name() const
 {
-	return VAApiWriterName;
+	return VAAPIWriterName;
 }
 
 bool VAApiWriter::open()

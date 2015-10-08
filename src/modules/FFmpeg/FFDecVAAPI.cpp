@@ -40,7 +40,7 @@ bool FFDecVAAPI::open( StreamInfo *streamInfo, Writer *writer )
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vaapi" ) )
 		{
-			if ( writer && writer->name() != VAApiWriterName )
+			if ( writer && writer->name() != VAAPIWriterName )
 				writer = NULL;
 			hwAccelWriter = writer ? ( VideoWriter * )writer : new VAApiWriter( getModule() );
 			if ( ( writer || hwAccelWriter->open() ) && hwAccelWriter->HWAccellInit( codec_ctx->width, codec_ctx->height, avcodec_get_name( codec_ctx->codec_id ) ) )

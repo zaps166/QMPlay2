@@ -61,4 +61,4 @@ private:
 	Drawable *drawable;
 };
 
-#define QPainterWriterName "QPainter Writer"
+#define QPainterWriterName "QPainter"

@@ -10,8 +10,8 @@
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
 #define DecoderVDPAU_NWName "FFmpeg VDPAU Decoder (no writer)"
 #define DemuxerName "FFmpeg Demuxer"
-#define VAApiWriterName "VAApi Writer"
-#define VDPAUWriterName "VDPAU Writer"
+#define VAAPIWriterName "VAAPI"
+#define VDPAUWriterName "VDPAU"
 #define FFReaderName "FFmpeg Reader"
 
 struct AVDictionary;

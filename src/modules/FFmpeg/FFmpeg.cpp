@@ -91,7 +91,7 @@ QList< FFmpeg::Info > FFmpeg::getModulesInfo( const bool showDisabled ) const
 	if ( showDisabled || getBool( "DecoderVAAPIEnabled" ) )
 	{
 		modulesInfo += Info( DecoderVAAPIName, DECODER );
-		modulesInfo += Info( VAApiWriterName, WRITER );
+		modulesInfo += Info( VAAPIWriterName, WRITER );
 	}
 #endif
 	modulesInfo += Info( FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp" );

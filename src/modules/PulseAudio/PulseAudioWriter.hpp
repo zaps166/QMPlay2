@@ -27,4 +27,4 @@ private:
 	bool err;
 };
 
-#define PulseAudioWriterName "PulseAudio Writer"
+#define PulseAudioWriterName "PulseAudio"

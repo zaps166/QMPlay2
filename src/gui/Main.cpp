@@ -47,17 +47,17 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 	QStringList defaultModules;
 #if defined Q_OS_LINUX
 	if ( type == "videoWriters" )
-		defaultModules << "OpenGLES Writer" << "XVideo Writer" << "OpenGL Writer";
+		defaultModules << "OpenGL|ES" << "XVideo" << "OpenGL";
 	else if ( type == "audioWriters" )
-		defaultModules << "PulseAudio Writer" << "ALSA Writer";
+		defaultModules << "PulseAudio" << "ALSA";
 #elif defined Q_OS_WIN
 	if ( type == "videoWriters" )
 	{
 		if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_0 ) //dla starszych systemów od Visty
-			defaultModules << "DirectDraw Writer";
+			defaultModules << "DirectDraw";
 		else
-			defaultModules << "OpenGL Writer";
-	}
+			defaultModules << "OpenGL";
+
 #endif
 	QStringList availableModules;
 	const QString moduleType = type.mid( 0, typeLen );

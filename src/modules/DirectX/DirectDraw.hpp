@@ -111,4 +111,4 @@ private:
 	Drawable *drawable;
 };
 
-#define DirectDrawWriterName "DirectDraw Writer"
+#define DirectDrawWriterName "DirectDraw"

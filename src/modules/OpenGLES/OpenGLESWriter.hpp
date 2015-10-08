@@ -81,4 +81,4 @@ private:
 	GLDrawable *drawable;
 };
 
-#define OpenGLESWriterName "OpenGL|ES Writer"
+#define OpenGLESWriterName "OpenGL|ES"

@@ -36,4 +36,4 @@ private:
 	bool err;
 };
 
-#define PortAudioWriterName "PortAudio Writer"
+#define PortAudioWriterName "PortAudio"

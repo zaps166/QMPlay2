@@ -59,4 +59,4 @@ private:
 	QMutex osd_mutex;
 };
 
-#define XVideoWriterName "XVideo Writer"
+#define XVideoWriterName "XVideo"

@@ -80,4 +80,4 @@ private:
 	Drawable *drawable;
 };
 
-#define OpenGLWriterName "OpenGL Writer"
+#define OpenGLWriterName "OpenGL"
