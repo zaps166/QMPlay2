@@ -8,13 +8,13 @@ linux*: {
 else {
 	SUBDIRS += PortAudio
 }
-unix:!macx {
+unix:!macx:!android {
 	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo
 	packagesExist(libpulse-simple):	SUBDIRS += PulseAudio
 	!contains(QT_CONFIG, opengles1):!contains(QT_CONFIG, opengles2): SUBDIRS += OpenGL
 	packagesExist(egl):packagesExist(glesv2): SUBDIRS += OpenGLES
 }
 else {
-	SUBDIRS += OpenGL
+	!android: SUBDIRS += OpenGL
 }
 win32: SUBDIRS += FileAssociation DirectX

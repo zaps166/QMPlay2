@@ -6,9 +6,9 @@ for _arch in ${_architectures}; do
 	$_arch-lrelease QMPlay2.pro &&
 	mkdir -p app/lang &&
 	mv lang/*.qm app/lang &&
-	$_arch-qmake && 
-	make -j8 && 
-	rm app/*.a && 
+	$_arch-qmake &&
+	make -j8 &&
+	rm app/*.a &&
 	rm app/modules/*.a &&
 	cp ChangeLog app
 	cp COPYING app

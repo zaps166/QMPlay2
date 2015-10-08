@@ -43,4 +43,4 @@ private:
 	bool paused;
 };
 
-#define OpenSLESWriterName "OpenSL ES"
+#define OpenSLESWriterName "OpenSL|ES"

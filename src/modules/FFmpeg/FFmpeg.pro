@@ -35,7 +35,7 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += FFmpeg.hpp FFDemux.hpp FFDec.hpp FFDecSW.hpp FFReader.hpp FFCommon.hpp
 SOURCES += FFmpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFReader.cpp FFCommon.cpp
 
-unix:!macx {
+unix:!macx:!android {
 #Common HWAccel
 	HEADERS   += FFDecHWAccel.hpp HWAccelHelper.hpp
 	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
