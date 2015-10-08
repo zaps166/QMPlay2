@@ -57,7 +57,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 			defaultModules << "DirectDraw";
 		else
 			defaultModules << "OpenGL";
-
+	}
 #endif
 	QStringList availableModules;
 	const QString moduleType = type.mid( 0, typeLen );
