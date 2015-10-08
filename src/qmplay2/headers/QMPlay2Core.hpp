@@ -103,11 +103,7 @@ public:
 	}
 	inline bool isWorking()
 	{
-#if QT_VERSION < 0x050000
 		return working > 0;
-#else
-		return working.load();
-#endif
 	}
 private slots:
 	void restoreCursorSlot();

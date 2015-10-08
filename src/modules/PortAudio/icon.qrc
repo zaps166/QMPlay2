@@ -1,3 +1,5 @@
-<RCC><qresource>
-	<file alias="PortAudio">PortAudio.png</file>
-</qresource></RCC>
+<RCC>
+	<qresource>
+		<file alias="PortAudio">PortAudio.png</file>
+	</qresource>
+</RCC>

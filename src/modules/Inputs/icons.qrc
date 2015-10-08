@@ -1,4 +1,6 @@
-<RCC><qresource>
-	<file alias="sine">sine.png</file>
-	<file alias="ray2">ray2.png</file>
-</qresource></RCC>
+<RCC>
+	<qresource>
+		<file alias="sine">sine.png</file>
+		<file alias="ray2">ray2.png</file>
+	</qresource>
+</RCC>

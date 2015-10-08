@@ -1,3 +1,5 @@
-<RCC><qresource>
-	<file alias="OpenGL">OpenGL.png</file>
-</qresource></RCC>
+<RCC>
+	<qresource>
+		<file alias="OpenGL">OpenGL.png</file>
+	</qresource>
+</RCC>

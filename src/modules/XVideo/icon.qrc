@@ -1,3 +1,5 @@
-<RCC><qresource>
-	<file alias="Xorg">Xorg.png</file>
-</qresource></RCC>
+<RCC>
+	<qresource>
+		<file alias="Xorg">Xorg.png</file>
+	</qresource>
+</RCC>
