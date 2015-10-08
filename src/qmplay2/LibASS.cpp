@@ -73,6 +73,13 @@ static inline int toASSAlignment( int align )
 
 /**/
 
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
+bool LibASS::slowFontCacheUpdate()
+{
+	return ass_library_version() < 0x01300000 || QSysInfo::windowsVersion() < QSysInfo::WV_6_0;
+}
+#endif
+
 LibASS::LibASS( Settings &settings ) :
 	settings( settings )
 {

@@ -12,7 +12,7 @@ else {
 	QMAKE_LIBDIR += ../../../app/lib
 }
 
-win32: LIBS += -Wl,-Bstatic -lcdio -liconv -lcddb -lregex -Wl,-Bdynamic -lwinmm -lws2_32
+win32: LIBS += -Wl,-Bstatic -lcdio -lcddb -lregex -Wl,-Bdynamic -lwinmm -lws2_32
 else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig

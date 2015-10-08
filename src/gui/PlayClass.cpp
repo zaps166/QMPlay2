@@ -34,7 +34,7 @@
 
 #include <math.h>
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
 	#include <QProgressBar>
 	#include <QVBoxLayout>
 	#include <QLabel>
@@ -78,7 +78,7 @@
 
 PlayClass::PlayClass() :
 	demuxThr( NULL ), vThr( NULL ), aThr( NULL ),
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
 	firsttimeUpdateCache( true ),
 #endif
 	ass( NULL ), osd( NULL )
@@ -1019,8 +1019,8 @@ void PlayClass::load( Demuxer *demuxer )
 					ass->setARatio( getARatio() );
 					ass->setZoom( zoom );
 
-#ifdef Q_OS_WIN
-					if ( firsttimeUpdateCache )
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
+					if ( LibASS::slowFontCacheUpdate() && firsttimeUpdateCache )
 					{
 						UpdateFC updateFC( ass );
 						firsttimeUpdateCache = false;

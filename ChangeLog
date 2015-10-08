@@ -1,4 +1,5 @@
 Changes in QMPlay2 build 15.10.08:
+	- due to new libASS 0.13.x FontConfig is used only on 32-bit Windows XP,
 	- new OpenGL|ES 2.0 module,
 
 Changes in QMPlay2 build 15.10.03:

@@ -15,6 +15,10 @@ struct ass_renderer;
 class LibASS
 {
 public:
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
+	static bool slowFontCacheUpdate();
+#endif
+
 	LibASS( Settings & );
 	~LibASS();
 

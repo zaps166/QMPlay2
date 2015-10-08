@@ -8,7 +8,11 @@ TARGET = qmplay2
 win32|macx: DESTDIR = ../../app
 else: DESTDIR = ../../app/lib
 
-win32: LIBS += -lswscale -lswresample -lavutil -Wl,-Bstatic -lass -lfontconfig -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
+win32 {
+	LIBS += -lswscale -lswresample -lavutil -Wl,-Bstatic -lass
+	!contains(QMAKE_CXX, x86_64-w64-mingw32-g++): LIBS += -lfontconfig
+	LIBS += -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
+}
 else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig

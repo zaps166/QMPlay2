@@ -116,7 +116,7 @@ private:
 	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled;
 	QTimer timTerminate;
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
 	bool firsttimeUpdateCache;
 #endif
 	LibASS *ass;
