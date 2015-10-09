@@ -36,13 +36,8 @@ static const char fShaderYCbCrSrc[] =
 			"texture2D(Vtex, vTexCoord)[0] - 0.5"
 		");"
 		"%2"
-		"if (saturation != 1.0)"
-			"YCbCr.yz *= saturation;"
-		"vec3 rgb = mat3(1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0) * YCbCr;"
-		"if (contrast != 1.0)"
-			"rgb *= contrast;"
-		"if (brightness != 0.0)"
-			"rgb += brightness;"
+		"YCbCr.yz *= saturation;"
+		"vec3 rgb = mat3(1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0) * YCbCr * contrast + brightness;"
 		"gl_FragColor = vec4(rgb, 1.0);"
 	"}";
 static const char fShaderYCbCrHueSrc[] =
