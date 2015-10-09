@@ -21,3 +21,5 @@ DEPENDPATH += . ../../qmplay2/headers
 
 HEADERS +=  OpenSLES.hpp OpenSLESWriter.hpp
 SOURCES +=  OpenSLES.cpp OpenSLESWriter.cpp
+
+android: QT += androidextras

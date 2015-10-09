@@ -2,7 +2,7 @@
 
 #include <QSemaphore>
 
-#include <SLES/OpenSLES_Android.h>
+#include <SLES/OpenSLES.h>
 
 class OpenSLESWriter : public Writer
 {
@@ -32,7 +32,7 @@ private:
 	SLObjectItf outputMixObject;
 	SLObjectItf bqPlayerObject;
 	SLPlayItf bqPlayerPlay;
-	SLAndroidSimpleBufferQueueItf bqPlayerBufferQueue;
+	SLBufferQueueItf bqPlayerBufferQueue;
 
 	QVector< QVector< qint16 > > buffers;
 	QVector< qint16 > tmpBuffer;

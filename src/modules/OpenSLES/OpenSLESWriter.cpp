@@ -1,5 +1,20 @@
 #include <OpenSLESWriter.hpp>
 
+#ifdef Q_OS_ANDROID
+	#include <QAndroidJniEnvironment>
+	static int getNativeOutputSampleRate()
+	{
+		enum AudioManager
+		{
+			STREAM_MUSIC = 3
+		};
+		QAndroidJniEnvironment jniEnv;
+		jclass clazz = jniEnv->FindClass( "android/media/AudioTrack" );
+		jmethodID method = jniEnv->GetStaticMethodID( clazz, "getNativeOutputSampleRate", "(I)I" );
+		return jniEnv->CallStaticIntMethod( clazz, method, STREAM_MUSIC );
+	}
+#endif
+
 static inline qint16 toInt16( float sample )
 {
 	if ( sample <= -1.0f )
@@ -9,7 +24,7 @@ static inline qint16 toInt16( float sample )
 	return sample * 32767;
 }
 
-static void bqPlayerCallback( SLAndroidSimpleBufferQueueItf bq, QSemaphore *sem )
+static void bqPlayerCallback( SLBufferQueueItf bq, QSemaphore *sem )
 {
 	Q_UNUSED( bq )
 	sem->release();
@@ -62,17 +77,26 @@ bool OpenSLESWriter::processParams( bool *paramsCorrected )
 	}
 
 	int rate = getParam( "rate" ).toInt();
+#ifdef Q_OS_ANDROID
+	const int nativeSampleRate = getNativeOutputSampleRate();
+	if ( rate != nativeSampleRate )
+#else
 	if ( rate != 8000 && rate != 11025 && rate != 12000 && rate != 16000 && rate != 22050 && rate != 24000 && rate != 32000 && rate != 44100 && rate != 48000 )
+#endif
 	{
 		if ( !paramsCorrected )
 			return false;
 		else
 		{
+#ifdef Q_OS_ANDROID
+			modParam( "rate", rate = nativeSampleRate );
+#else
 			if ( !( 44100 % rate ) )
 				rate = 44100;
 			else
 				rate = 48000;
 			modParam( "rate", rate );
+#endif
 			*paramsCorrected = true;
 		}
 	}
@@ -101,10 +125,10 @@ bool OpenSLESWriter::processParams( bool *paramsCorrected )
 			return false;
 
 		/* Buffer queue */
-		SLDataLocator_AndroidSimpleBufferQueue loc_bufq = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, ( SLuint32 )buffers.size() };
+		SLDataLocator_BufferQueue loc_bufq = { SL_DATALOCATOR_BUFFERQUEUE, ( SLuint32 )buffers.size() };
 		SLDataFormat_PCM format_pcm =
 		{
-			SL_DATAFORMAT_PCM, ( SLuint32 )channels, ( SLuint32 )( sample_rate * 1000 ),
+			SL_DATAFORMAT_PCM, ( SLuint32 )channels, sample_rate * 1000U,
 			SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
 			channels == 2 ? (SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT) : SL_SPEAKER_FRONT_CENTER, SL_BYTEORDER_LITTLEENDIAN
 		};
@@ -123,10 +147,10 @@ bool OpenSLESWriter::processParams( bool *paramsCorrected )
 			return false;
 		if ( (*bqPlayerObject)->GetInterface( bqPlayerObject, SL_IID_PLAY, &bqPlayerPlay ) != SL_RESULT_SUCCESS ) //Get player interface
 			return false;
-		if ( (*bqPlayerObject)->GetInterface( bqPlayerObject, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &bqPlayerBufferQueue ) ) //Get the buffer queue interface
+		if ( (*bqPlayerObject)->GetInterface( bqPlayerObject, SL_IID_BUFFERQUEUE, &bqPlayerBufferQueue ) ) //Get the buffer queue interface
 			return false;
 
-		if ( (*bqPlayerBufferQueue)->RegisterCallback( bqPlayerBufferQueue, ( slAndroidSimpleBufferQueueCallback )bqPlayerCallback, &sem ) ) //Register callback on the buffer queue
+		if ( (*bqPlayerBufferQueue)->RegisterCallback( bqPlayerBufferQueue, ( slBufferQueueCallback )bqPlayerCallback, &sem ) ) //Register callback on the buffer queue
 			return false;
 
 		/* Set the audio latency */
