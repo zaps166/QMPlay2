@@ -26,4 +26,5 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += OpenGL2Writer.hpp OpenGL2.hpp
 SOURCES += OpenGL2Writer.cpp OpenGL2.cpp
 
-win32|unix:!macx:!android:!contains(QT_CONFIG, opengles1):!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
+win32|unix:!macx:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
+contains(QT_CONFIG, opengles2): DEFINES += OPENGL_ES2

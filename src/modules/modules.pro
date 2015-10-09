@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
-SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters OpenGL2
+SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters
+!contains(QT_CONFIG, opengles1): SUBDIRS += OpenGL2
 !android: SUBDIRS += AudioCD
 linux*: {
 	!android: SUBDIRS += ALSA

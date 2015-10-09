@@ -3,8 +3,12 @@
 #include <QMPlay2_OSD.hpp>
 #include <Functions.hpp>
 
+#include <QGLShaderProgram>
 #include <QPainter>
-//#include <QDebug>
+
+#if !defined OPENGL_ES2 && !defined Q_OS_MAC
+	#include <GL/glext.h>
+#endif
 
 static const char vShaderYCbCrSrc[] =
 	"%1"
@@ -108,6 +112,10 @@ static const float texCoordOSD[ 8 ] = {
 Drawable::Drawable( OpenGL2Writer &writer ) :
 	isOK( true ),
 	videoFrame( NULL ),
+	shaderProgramYCbCr( NULL ), shaderProgramOSD( NULL ),
+#ifndef OPENGL_ES2
+	glActiveTexture( NULL ),
+#endif
 	writer( writer ),
 	hasImage( false )
 {
@@ -117,6 +125,11 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 	/* Initialize texCoord array */
 	texCoordYCbCr[ 0 ] = texCoordYCbCr[ 4 ] = texCoordYCbCr[ 5 ] = texCoordYCbCr[ 7 ] = 0.0f;
 	texCoordYCbCr[ 1 ] = texCoordYCbCr[ 3 ] = 1.0f;
+}
+Drawable::~Drawable()
+{
+	delete shaderProgramYCbCr;
+	delete shaderProgramOSD;
 }
 
 bool Drawable::init()
@@ -146,19 +159,23 @@ void Drawable::resizeEvent( QResizeEvent *e )
 
 void Drawable::initializeGL()
 {
-	initializeGLFunctions();
+#ifndef OPENGL_ES2
+	const bool canCreateNonPowerOfTwoTextures = !!strstr( ( const char * )glGetString( GL_EXTENSIONS ), "GL_ARB_texture_non_power_of_two" );
+	const bool supportShaders = QGLShader::hasOpenGLShaders( QGLShader::Vertex, context() ) && QGLShader::hasOpenGLShaders( QGLShader::Fragment, context() );
+	glActiveTexture = ( GLActiveTexture )context()->getProcAddress( "glActiveTexture" );
 
 	if
 	(
-		!hasOpenGLFeature( QGLFunctions::Multitexture ) ||
-		!hasOpenGLFeature( QGLFunctions::Shaders )      ||
-		!hasOpenGLFeature( QGLFunctions::NPOTTextures )
+		!canCreateNonPowerOfTwoTextures ||
+		!supportShaders                 ||
+		!glActiveTexture
 	)
 	{
 		QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
 		isOK = false;
 		return;
 	}
+#endif
 
 	 /* Workaround because of BUG in Mesa i915 driver */
 	const char *glVersionStr = ( const char * )glGetString( GL_VERSION );
@@ -169,21 +186,27 @@ void Drawable::initializeGL()
 
 	const char *precisionStr = ( QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0 ) ? "precision lowp float;" : "";
 
+	delete shaderProgramYCbCr;
+	delete shaderProgramOSD;
+	shaderProgramYCbCr = new QGLShaderProgram;
+	shaderProgramOSD = new QGLShaderProgram;
+
 	/* YCbCr shader */
-	shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
-	shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHUE ? fShaderYCbCrHueSrc : "" ) );
-	shaderProgramYCbCr.bindAttributeLocation( "vPosition", 0 );
-	shaderProgramYCbCr.bindAttributeLocation( "aTexCoord", 1 );
-	if ( shaderProgramYCbCr.bind() )
+	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
+	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHUE ? fShaderYCbCrHueSrc : "" ) );
+	shaderProgramYCbCr->bindAttributeLocation( "vPosition", 0 );
+	shaderProgramYCbCr->bindAttributeLocation( "aTexCoord", 1 );
+
+	if ( shaderProgramYCbCr->bind() )
 	{
-		texCoordYCbCrLoc = shaderProgramYCbCr.attributeLocation( "aTexCoord" );
-		positionYCbCrLoc = shaderProgramYCbCr.attributeLocation( "vPosition" );
+		texCoordYCbCrLoc = shaderProgramYCbCr->attributeLocation( "aTexCoord" );
+		positionYCbCrLoc = shaderProgramYCbCr->attributeLocation( "vPosition" );
 
-		shaderProgramYCbCr.setUniformValue( "Ytex", 0 );
-		shaderProgramYCbCr.setUniformValue( "Utex", 1 );
-		shaderProgramYCbCr.setUniformValue( "Vtex", 2 );
+		shaderProgramYCbCr->setUniformValue( "Ytex", 0 );
+		shaderProgramYCbCr->setUniformValue( "Utex", 1 );
+		shaderProgramYCbCr->setUniformValue( "Vtex", 2 );
 
-		shaderProgramYCbCr.release();
+		shaderProgramYCbCr->release();
 	}
 	else
 	{
@@ -193,18 +216,18 @@ void Drawable::initializeGL()
 	}
 
 	/* OSD shader */
-	shaderProgramOSD.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderOSDSrc ).arg( precisionStr ) );
-	shaderProgramOSD.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderOSDSrc ).arg( precisionStr ) );
-	shaderProgramOSD.bindAttributeLocation( "vPosition", 0 );
-	shaderProgramOSD.bindAttributeLocation( "aTexCoord", 1 );
-	if ( shaderProgramOSD.bind() )
+	shaderProgramOSD->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderOSDSrc ).arg( precisionStr ) );
+	shaderProgramOSD->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderOSDSrc ).arg( precisionStr ) );
+	shaderProgramOSD->bindAttributeLocation( "vPosition", 0 );
+	shaderProgramOSD->bindAttributeLocation( "aTexCoord", 1 );
+	if ( shaderProgramOSD->bind() )
 	{
-		texCoordOSDLoc = shaderProgramOSD.attributeLocation( "aTexCoord" );
-		positionOSDLoc = shaderProgramOSD.attributeLocation( "vPosition" );
+		texCoordOSDLoc = shaderProgramOSD->attributeLocation( "aTexCoord" );
+		positionOSDLoc = shaderProgramOSD->attributeLocation( "vPosition" );
 
-		shaderProgramOSD.setUniformValue( "tex", 3 );
+		shaderProgramOSD->setUniformValue( "tex", 3 );
 
-		shaderProgramOSD.release();
+		shaderProgramOSD->release();
 	}
 	else
 	{
@@ -296,23 +319,23 @@ void Drawable::paintGL()
 		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 2 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
 	}
 
-	glVertexAttribPointer( positionYCbCrLoc, 2, GL_FLOAT, false, 0, verticesYCbCr[ writer.flip ] );
-	glVertexAttribPointer( texCoordYCbCrLoc, 2, GL_FLOAT, false, 0, texCoordYCbCr );
-	glEnableVertexAttribArray( positionYCbCrLoc );
-	glEnableVertexAttribArray( texCoordYCbCrLoc );
+	shaderProgramYCbCr->setAttributeArray( positionYCbCrLoc, verticesYCbCr[ writer.flip ], 2 );
+	shaderProgramYCbCr->setAttributeArray( texCoordYCbCrLoc, texCoordYCbCr, 2 );
+	shaderProgramYCbCr->enableAttributeArray( positionYCbCrLoc );
+	shaderProgramYCbCr->enableAttributeArray( texCoordYCbCrLoc );
 
-	shaderProgramYCbCr.bind();
+	shaderProgramYCbCr->bind();
 	if ( doReset )
 	{
-		shaderProgramYCbCr.setUniformValue( "scale", W / ( float )width(), H / ( float )height() );
-		shaderProgramYCbCr.setUniformValue( "videoEq", Brightness, Contrast, Saturation, Hue );
+		shaderProgramYCbCr->setUniformValue( "scale", W / ( float )width(), H / ( float )height() );
+		shaderProgramYCbCr->setUniformValue( "videoEq", Brightness, Contrast, Saturation, Hue );
 		doReset = false;
 	}
 	glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
-	shaderProgramYCbCr.release();
+	shaderProgramYCbCr->release();
 
-	glDisableVertexAttribArray( texCoordYCbCrLoc );
-	glDisableVertexAttribArray( positionYCbCrLoc );
+	shaderProgramYCbCr->disableAttributeArray( texCoordYCbCrLoc );
+	shaderProgramYCbCr->disableAttributeArray( positionYCbCrLoc );
 
 	/* OSD */
 	osd_mutex.lock();
@@ -348,19 +371,19 @@ void Drawable::paintGL()
 			right - 1.0f, -top    + 1.0f,
 		};
 
-		glEnableVertexAttribArray( texCoordOSDLoc );
-		glEnableVertexAttribArray( positionOSDLoc );
-		glVertexAttribPointer( positionOSDLoc, 2, GL_FLOAT, false, 0, verticesOSD );
-		glVertexAttribPointer( texCoordOSDLoc, 2, GL_FLOAT, false, 0, texCoordOSD );
+		shaderProgramOSD->setAttributeArray( positionOSDLoc, verticesOSD, 2 );
+		shaderProgramOSD->setAttributeArray( texCoordOSDLoc, texCoordOSD, 2 );
+		shaderProgramOSD->enableAttributeArray( positionOSDLoc );
+		shaderProgramOSD->enableAttributeArray( texCoordOSDLoc );
 
 		glEnable( GL_BLEND );
-		shaderProgramOSD.bind();
+		shaderProgramOSD->bind();
 		glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
-		shaderProgramOSD.release();
+		shaderProgramOSD->release();
 		glDisable( GL_BLEND );
 
-		glDisableVertexAttribArray( texCoordOSDLoc );
-		glDisableVertexAttribArray( positionOSDLoc );
+		shaderProgramOSD->disableAttributeArray( texCoordOSDLoc );
+		shaderProgramOSD->disableAttributeArray( positionOSDLoc );
 	}
 	osd_mutex.unlock();
 }

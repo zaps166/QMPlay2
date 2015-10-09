@@ -2,16 +2,19 @@
 #include <VideoFrame.hpp>
 
 #include <QGLWidget>
-#include <QGLFunctions>
-#include <QGLShaderProgram>
 
+class QGLShaderProgram;
 class OpenGL2Writer;
 class QMPlay2_OSD;
 
-class Drawable : public QGLWidget, private QGLFunctions
+class Drawable : public QGLWidget
 {
+#ifndef OPENGL_ES2
+	typedef void (APIENTRY *GLActiveTexture)(GLenum);
+#endif
 public:
 	Drawable( OpenGL2Writer & );
+	~Drawable();
 
 	bool init();
 	void clr();
@@ -30,7 +33,10 @@ private:
 
 	bool event( QEvent * );
 
-	QGLShaderProgram shaderProgramYCbCr, shaderProgramOSD;
+	QGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
+#ifndef OPENGL_ES2
+	GLActiveTexture glActiveTexture;
+#endif
 
 	QList< QByteArray > osd_checksums;
 	QImage osdImg;
