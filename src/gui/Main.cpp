@@ -47,7 +47,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 	QStringList defaultModules;
 #if defined Q_OS_LINUX
 	if ( type == "videoWriters" )
-		defaultModules << "OpenGL" << "XVideo";
+		defaultModules << "OpenGL 2" << "XVideo";
 	else if ( type == "audioWriters" )
 		defaultModules << "PulseAudio" << "ALSA";
 #elif defined Q_OS_WIN
@@ -55,8 +55,11 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 	{
 		if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_0 ) //Windows XP and Windows 2003 Server
 			defaultModules << "DirectDraw";
-		defaultModules << "OpenGL";
+		defaultModules << "OpenGL 2";
 	}
+#elif defined Q_OS_ANDROID
+	if ( type == "videoWriters" )
+		defaultModules << "QPainter";
 #endif
 	QStringList availableModules;
 	const QString moduleType = type.mid( 0, typeLen );
