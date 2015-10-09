@@ -68,7 +68,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 			if ( ( moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains( moduleType ) ) || ( moduleInfo.type == Module::DECODER && moduleType == "decoder" ) )
 				availableModules += moduleInfo.name;
 	QStringList modules;
-	foreach ( const QString &module, QMPlay2GUI.settings->get( type, defaultModules ).toStringList() )
+	foreach ( const QString &module, QMPlay2Core.getSettings().get( type, defaultModules ).toStringList() )
 	{
 		const int idx = availableModules.indexOf( module );
 		if ( idx > -1 )
@@ -476,15 +476,22 @@ int main( int argc, char *argv[] )
 		QMPlay2Core.init( !help, qApp->applicationDirPath() + unixPath );
 
 		Settings &settings = QMPlay2Core.getSettings();
-		QString ver = settings.getString( "Version", QMPlay2Version );
+		QString lastVer = settings.getString( "Version", QMPlay2Version );
 		settings.set( "Version", QMPlay2Version );
 		settings.set( "LastQMPlay2Path", qApp->applicationDirPath() );
+
+		if ( Functions::parseVersion( lastVer ) < QDate( 2015, 10, 9 ) )
+		{
+			QFile::remove( QMPlay2Core.getSettingsDir() + "OpenGL.ini" );
+			settings.remove( "audioWriters" );
+			settings.remove( "videoWriters" );
+		}
 
 		QMPlay2GUI.setLanguage();
 
 		if ( help )
 		{
-			showHelp( ver.toUtf8() );
+			showHelp( QMPlay2Version );
 			break;
 		}
 
@@ -524,7 +531,7 @@ int main( int argc, char *argv[] )
 		if ( UpdateFile.left( 7 ) == "remove:" )
 		{
 			UpdateFile.remove( 0, 7 );
-			if ( ver != QMPlay2Version )
+			if ( lastVer != QMPlay2Version )
 			{
 				QString updateString = QObject::tr( "QMPlay2 został zaktualizowany do wersji" ) + " " + QMPlay2Version;
 				QMPlay2Core.logInfo( updateString );
@@ -541,7 +548,8 @@ int main( int argc, char *argv[] )
 		}
 		UpdateFile.clear();
 #endif
-		ver.clear();
+
+		lastVer.clear();
 
 		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
 		new MainWidget( QMPArguments );

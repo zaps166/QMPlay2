@@ -1,5 +1,6 @@
 #include <Updater.hpp>
 
+#include <Functions.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
 
@@ -10,25 +11,7 @@
 #include <QVBoxLayout>
 #include <QSettings>
 #include <QLabel>
-#include <QDate>
 #include <QDir>
-
-static QDate ParseVersion( const QString &dateTxt )
-{
-	QStringList l = dateTxt.split( '.' );
-	int y = 0, m = 0, d = 0;
-	if ( l.count() == 3 )
-	{
-		y = l[ 0 ].toInt() + 2000;
-		m = l[ 1 ].toInt();
-		d = l[ 2 ].toInt();
-	}
-	if ( y < 2000 || m < 1 || m > 12 || d < 1 || d > 31 )
-		y = m = d = 0;
-	return QDate( y, m, d );
-}
-
-/**/
 
 Updater::Updater( QWidget *parent ) :
 	QDialog( parent ),
@@ -99,10 +82,10 @@ void Updater::infoFinished()
 		QString ThisVersion = QMPlay2Core.getSettings().getString( "Version" );
 		QString NewVersion  = info.value( "Version" ).toString();
 
-		QDate NewVersionDate = ParseVersion( NewVersion );
+		QDate NewVersionDate = Functions::parseVersion( NewVersion );
 		if ( NewVersionDate.isValid() )
 		{
-			if ( NewVersionDate > ParseVersion( ThisVersion ) )
+			if ( NewVersionDate > Functions::parseVersion( ThisVersion ) )
 			{
 				QString FileURL;
 #if defined Q_OS_WIN && defined QMPLAY2_CPU_X86

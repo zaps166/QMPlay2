@@ -12,6 +12,21 @@
 
 #include <math.h>
 
+QDate Functions::parseVersion( const QString &dateTxt )
+{
+	QStringList l = dateTxt.split( '.' );
+	int y = 0, m = 0, d = 0;
+	if ( l.count() == 3 )
+	{
+		y = l[ 0 ].toInt() + 2000;
+		m = l[ 1 ].toInt();
+		d = l[ 2 ].toInt();
+	}
+	if ( y < 2000 || m < 1 || m > 12 || d < 1 || d > 31 )
+		y = m = d = 0;
+	return QDate( y, m, d );
+}
+
 QString Functions::Url( QString url, const QString &pth )
 {
 #ifdef Q_OS_WIN

@@ -5,6 +5,7 @@
 
 #include <QStringList>
 #include <QImage>
+#include <QDate>
 
 class QMPlay2_OSD;
 class QMimeData;
@@ -32,6 +33,8 @@ namespace Functions
 	};
 	typedef QVector< DemuxerInfo > DemuxersInfo;
 	typedef QList< QByteArray > ChecksumList;
+
+	QDate parseVersion( const QString &dateTxt );
 
 	QString Url( QString, const QString &pth = QString() );
 	QString getUrlScheme( const QString &url );
