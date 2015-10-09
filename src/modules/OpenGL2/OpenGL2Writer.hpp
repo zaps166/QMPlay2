@@ -1,7 +1,11 @@
 #include <VideoWriter.hpp>
 #include <VideoFrame.hpp>
 
-#include <QGLWidget>
+#ifndef USE_NEW_OPENGL_API
+	#include <QGLWidget>
+#else
+	#include <QOpenGLWidget>
+#endif
 
 class QGLShaderProgram;
 class OpenGL2Writer;
@@ -16,19 +20,23 @@ public:
 	Drawable( OpenGL2Writer & );
 	~Drawable();
 
+#ifndef USE_NEW_OPENGL_API
 	bool init();
+#endif
 	void clr();
 
 	void resizeEvent( QResizeEvent * );
 
-	bool isOK, doReset;
+	bool isOK, doReset, paused;
 	const VideoFrame *videoFrame;
 	float Contrast, Saturation, Brightness, Hue;
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
 private:
 	void initializeGL();
+#ifndef USE_NEW_OPENGL_API
 	void resizeGL( int w, int h );
+#endif
 	void paintGL();
 
 	bool event( QEvent * );
@@ -72,6 +80,8 @@ private:
 	bool processParams( bool *paramsCorrected );
 	qint64 write( const QByteArray & );
 	void writeOSD( const QList< const QMPlay2_OSD * > & );
+
+	void pause();
 
 	QString name() const;
 

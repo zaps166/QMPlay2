@@ -3,11 +3,22 @@
 #include <QMPlay2_OSD.hpp>
 #include <Functions.hpp>
 
-#include <QGLShaderProgram>
+#ifndef USE_NEW_OPENGL_API
+	#include <QGLShaderProgram>
+#else
+	#include <QOpenGLShaderProgram>
+	#include <QOpenGLContext>
+#endif
 #include <QPainter>
 
 #if !defined OPENGL_ES2 && !defined Q_OS_MAC
 	#include <GL/glext.h>
+#endif
+
+#ifdef OPENGL_ES2
+	static const char precisionStr[] = "precision lowp float;";
+#else
+	static const char precisionStr[] = "";
 #endif
 
 static const char vShaderYCbCrSrc[] =
@@ -105,7 +116,7 @@ static const float texCoordOSD[ 8 ] = {
 /**/
 
 Drawable::Drawable( OpenGL2Writer &writer ) :
-	isOK( true ),
+	isOK( true ), paused( false ),
 	videoFrame( NULL ),
 	shaderProgramYCbCr( NULL ), shaderProgramOSD( NULL ),
 #ifndef OPENGL_ES2
@@ -127,6 +138,7 @@ Drawable::~Drawable()
 	delete shaderProgramOSD;
 }
 
+#ifndef USE_NEW_OPENGL_API
 bool Drawable::init()
 {
 	makeCurrent();
@@ -135,6 +147,7 @@ bool Drawable::init()
 	doneCurrent();
 	return isOK;
 }
+#endif
 void Drawable::clr()
 {
 	hasImage = false;
@@ -146,10 +159,16 @@ void Drawable::resizeEvent( QResizeEvent *e )
 {
 	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
 	doReset = true;
-	if ( !e )
-		updateGL();
-	else
+	if ( e )
 		QGLWidget::resizeEvent( e );
+	else if ( paused )
+	{
+#ifndef USE_NEW_OPENGL_API
+		updateGL();
+#else
+		repaint();
+#endif
+	}
 }
 
 void Drawable::initializeGL()
@@ -178,8 +197,6 @@ void Drawable::initializeGL()
 	bool useHUE = true;
 	if ( glVersionStr && glRendererStr )
 		useHUE = ( !strstr( glVersionStr, "2.0 Mesa" ) && !strstr( glVersionStr, "2.1 Mesa" ) ) || !strstr( glRendererStr, "Intel" );
-
-	const char *precisionStr = ( QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0 ) ? "precision lowp float;" : "";
 
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
@@ -332,11 +349,12 @@ void Drawable::paintGL()
 	shaderProgramYCbCr->disableAttributeArray( texCoordYCbCrLoc );
 	shaderProgramYCbCr->disableAttributeArray( positionYCbCrLoc );
 
+	glActiveTexture( GL_TEXTURE3 );
+
 	/* OSD */
 	osd_mutex.lock();
 	if ( !osd_list.isEmpty() )
 	{
-		glActiveTexture( GL_TEXTURE3 );
 		glBindTexture( GL_TEXTURE_2D, 1 );
 
 		QRect bounds;
@@ -381,11 +399,15 @@ void Drawable::paintGL()
 		shaderProgramOSD->disableAttributeArray( positionOSDLoc );
 	}
 	osd_mutex.unlock();
+
+	glBindTexture( GL_TEXTURE_2D, 0 );
 }
+#ifndef USE_NEW_OPENGL_API
 void Drawable::resizeGL( int w, int h )
 {
 	glViewport( 0, 0, w, h );
 }
+#endif
 
 bool Drawable::event( QEvent *e )
 {
@@ -435,7 +457,7 @@ bool OpenGL2Writer::set()
 
 bool OpenGL2Writer::readyWrite() const
 {
-	return drawable && drawable->isOK;
+	return drawable->isOK;
 }
 
 bool OpenGL2Writer::processParams( bool * )
@@ -483,8 +505,13 @@ bool OpenGL2Writer::processParams( bool * )
 
 qint64 OpenGL2Writer::write( const QByteArray &arr )
 {
+	drawable->paused = false;
 	drawable->videoFrame = VideoFrame::fromData( arr );
+#ifndef USE_NEW_OPENGL_API
 	drawable->updateGL();
+#else
+	drawable->repaint();
+#endif
 	drawable->videoFrame = NULL;
 	VideoFrame::unref( arr );
 	return arr.size();
@@ -496,6 +523,11 @@ void OpenGL2Writer::writeOSD( const QList< const QMPlay2_OSD * > &osds )
 	drawable->osd_mutex.unlock();
 }
 
+void OpenGL2Writer::pause()
+{
+	drawable->paused = true;
+}
+
 QString OpenGL2Writer::name() const
 {
 	return OpenGL2WriterName;
@@ -504,5 +536,9 @@ QString OpenGL2Writer::name() const
 bool OpenGL2Writer::open()
 {
 	drawable = new Drawable( *this );
+#ifndef USE_NEW_OPENGL_API
 	return drawable->init();
+#else
+	return true;
+#endif
 }

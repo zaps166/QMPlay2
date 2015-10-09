@@ -1,7 +1,6 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-QT += opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 win32|macx {
@@ -26,5 +25,13 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += OpenGL2Writer.hpp OpenGL2.hpp
 SOURCES += OpenGL2Writer.cpp OpenGL2.cpp
 
-win32|unix:!macx:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
+#If you want to use QOpenGLWidget instead of QGLWidget (only Qt5, recommended for Wayland), replace first ":" by "|".
+#It is not recommended for Windows and X11!
+greaterThan(QT_MAJOR_VERSION, 4):android: {
+	DEFINES += USE_NEW_OPENGL_API
+	DEFINES += QGLWidget=QOpenGLWidget QGLShaderProgram=QOpenGLShaderProgram QGLShader=QOpenGLShader
+} else {
+	QT += opengl
+	win32|unix:!macx:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
+}
 contains(QT_CONFIG, opengles2): DEFINES += OPENGL_ES2
