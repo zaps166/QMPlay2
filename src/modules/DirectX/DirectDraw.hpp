@@ -1,4 +1,3 @@
-#include <ImgScaler.hpp>
 #include <VideoWriter.hpp>
 
 #include <QWidget>
@@ -15,69 +14,51 @@ public:
 	Drawable( DirectDrawWriter & );
 	~Drawable();
 
-	inline bool isOK() const
-	{
-		return mode != NONE;
-	}
 	inline bool canDraw() const
 	{
 		return DDSSecondary;
 	}
-	inline bool isOverlay() const
-	{
-		return mode == OVERLAY;
-	}
 
 	void dock();
-	bool draw( const QByteArray &videoFrameData );
 	bool createSecondary();
-	void colorSet( int, int, int, int );
+	void videoEqSet();
+	void setFlip();
+
+	bool draw( const QByteArray &videoFrameData );
 
 	void resizeEvent( QResizeEvent * );
 
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
+	bool isOK, isOverlay, paused;
 private:
 	void getRects( RECT &, RECT & );
+	void fillRects();
 
 	Q_SLOT void updateOverlay();
 	Q_SLOT void overlayVisible( bool );
 	void blit();
 
 	void releaseSecondary();
+	bool restoreLostSurface();
 
-	inline bool restoreLostSurface()
-	{
-		if ( DDSPrimary->IsLost() || DDSSecondary->IsLost() || DDSBackBuffer->IsLost() )
-		{
-			DDSPrimary->Restore();
-			DDSSecondary->Restore();
-			if ( DDSSecondary != DDSBackBuffer )
-				DDSBackBuffer->Restore();
-			return true;
-		}
-		return false;
-	}
-
+	void paintEvent( QPaintEvent * );
 	bool event( QEvent * );
+
+	QPaintEngine *paintEngine() const;
 
 	QImage osdImg;
 	QList< QByteArray > osd_checksums;
 
 	DirectDrawWriter &writer;
-	ImgScaler imgScaler;
 
-	int X, Y, W, H;
-	bool lastHasSubs;
+	int X, Y, W, H, flip;
 
+	HBRUSH blackBrush;
 	LPDIRECTDRAW DDraw;
 	LPDIRECTDRAWCLIPPER DDClipper;
 	LPDIRECTDRAWSURFACE DDSPrimary, DDSSecondary, DDSBackBuffer;
 	LPDIRECTDRAWCOLORCONTROL DDrawColorCtrl;
-
-	enum MODE { NONE, OVERLAY, YV12, RGB32 };
-	DWORD MemoryFlag;
-	MODE mode;
 };
 
 /**/
@@ -98,6 +79,8 @@ private:
 	qint64 write( const QByteArray & );
 	void writeOSD( const QList< const QMPlay2_OSD * > & );
 
+	void pause();
+
 	QString name() const;
 
 	bool open();
@@ -106,7 +89,6 @@ private:
 
 	int outW, outH, flip, Hue, Saturation, Brightness, Contrast;
 	double aspect_ratio, zoom;
-	bool onlyOverlay;
 
 	Drawable *drawable;
 };

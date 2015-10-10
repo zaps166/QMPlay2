@@ -22,5 +22,5 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *ddrawB, *ddrawOnlyOverlayB;
+	QCheckBox *ddrawB;
 };

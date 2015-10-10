@@ -6,7 +6,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DESTDIR = ../../../app/modules
 
 QMAKE_LIBDIR += ../../../app
-LIBS += -lddraw -ldxguid -lqmplay2
+LIBS += -lgdi32 -lddraw -ldxguid -lqmplay2
+
+QMAKE_CXXFLAGS_WARN_ON += -Wno-missing-field-initializers
 
 RCC_DIR = build/rcc
 OBJECTS_DIR = build/obj
