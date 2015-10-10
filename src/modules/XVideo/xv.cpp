@@ -1,61 +1,5 @@
 #include <xv.hpp>
 
-static inline void swap( char &a, char &b )
-{
-	const char t = a;
-	a = b;
-	b = t;
-}
-static void hflip_image( char *data, int linesize, int height, int width )
-{
-	int h, w, width_div_2 = width/2, linesize_div_2 = linesize/2, width_div_4 = width/4, offset = 0;
-	for ( h = 0 ; h < height ; ++h )
-	{
-		for ( w = 0 ; w < width_div_2 ; ++w )
-			swap( data[ offset + w ], data[ offset + width-1-w ] );
-		offset += linesize;
-	}
-	for ( h = 0 ; h < height ; ++h )
-	{
-		for ( w = 0 ; w < width_div_4 ; ++w )
-			swap( data[ offset + w ], data[ offset + width_div_2-1-w ] );
-		offset += linesize_div_2;
-	}
-}
-
-static inline void swap( char *a, char *b, int size )
-{
-	char t[ size ];
-	memcpy( t, a, size );
-	memcpy( a, b, size );
-	memcpy( b, t, size );
-}
-static void vflip_image( char *data, int linesize, int height )
-{
-	int size = linesize*height, chroma_size = linesize*height/4, chroma_width = linesize/2;
-	char *data_s;
-
-	for ( data_s = data + size ; data_s > data ; )
-	{
-		swap( data, data_s -= linesize, linesize );
-		data += linesize;
-	}
-	data += size/2;
-
-	for ( data_s = data + chroma_size ; data_s > data ; )
-	{
-		swap( data, data_s -= chroma_width, chroma_width );
-		data += chroma_width;
-	}
-	data += chroma_size/2;
-
-	for ( data_s = data + chroma_size ; data_s > data ; )
-	{
-		swap( data, data_s -= chroma_width, chroma_width );
-		data += chroma_width;
-	}
-}
-
 #include <QMPlay2_OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
@@ -264,6 +208,11 @@ void XVIDEO::draw( const QByteArray &_videoFrameData, const QRect &srcRect, cons
 	const int linesize1_2 = image->pitches[ 1 ];
 	const int imageHeight = image->height;
 
+	if ( _flip & Qt::Horizontal )
+		Functions::hFlip( *( char ** )VideoFrame::fromData( _videoFrameData )->data, linesize, imageHeight, width );
+	if ( _flip & Qt::Vertical )
+		Functions::vFlip( *( char ** )VideoFrame::fromData( _videoFrameData )->data, linesize, imageHeight );
+
 	if ( mustCopy )
 	{
 		VideoFrame::copyYV12( image->data, _videoFrameData, linesize, linesize1_2, imageHeight );
@@ -274,10 +223,6 @@ void XVIDEO::draw( const QByteArray &_videoFrameData, const QRect &srcRect, cons
 		VideoFrame::unref( videoFrameData );
 		image->data = ( char * )*VideoFrame::fromData( videoFrameData = _videoFrameData )->data;
 	}
-	if ( _flip & Qt::Horizontal )
-		hflip_image( image->data, linesize, imageHeight, width );
-	if ( _flip & Qt::Vertical )
-		vflip_image( image->data, linesize, imageHeight );
 
 	osd_mutex.lock();
 	if ( !osd_list.isEmpty() )
@@ -327,9 +272,9 @@ void XVIDEO::setFlip( int f )
 	if ( isOpen() && hasImage )
 	{
 		if ( ( f & Qt::Horizontal ) != ( _flip & Qt::Horizontal ) )
-			hflip_image( image->data, image->pitches[ 0 ], height, width );
+			Functions::hFlip( image->data, image->pitches[ 0 ], height, width );
 		if ( ( f & Qt::Vertical ) != ( _flip & Qt::Vertical ) )
-			vflip_image( image->data, image->pitches[ 0 ], height );
+			Functions::vFlip( image->data, image->pitches[ 0 ], height );
 	}
 	_flip = f;
 }

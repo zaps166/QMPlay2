@@ -88,7 +88,9 @@ private slots:
 #ifdef Q_OS_WIN
 	void console( bool );
 #endif
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	void hideMenu( bool );
+#endif
 	void lockWidgets( bool );
 
 	void hideDocksSlot();
@@ -103,6 +105,7 @@ private:
 	void mouseMoveEvent( QMouseEvent * );
 	void leaveEvent( QEvent * );
 	void closeEvent( QCloseEvent * );
+	void changeEvent( QEvent * );
 	void moveEvent( QMoveEvent * );
 	void showEvent( QShowEvent * );
 	void hideEvent( QHideEvent * );
@@ -138,7 +141,10 @@ private:
 	AboutWidget *aboutW;
 	bool isCompactView, wasShow, fullScreen;
 
-	QAction *hideMenuAct, *lockWidgetsAct;
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+	QAction *hideMenuAct;
+#endif
+	QAction *lockWidgetsAct;
 
 #ifdef UPDATER
 	Updater updater;

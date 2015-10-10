@@ -34,8 +34,8 @@ VideoDock::VideoDock() :
 	popupMenu->addMenu( QMPlay2GUI.menuBar->help );
 
 	/* Menu actions which will be available in fullscreen or compact mode */
-	addAction( QMPlay2GUI.menuBar->window->toggleFullScreen );
-	addAction( QMPlay2GUI.menuBar->window->toggleCompactView );
+	foreach ( QAction *act, QMPlay2GUI.menuBar->window->actions() )
+		addAction( act );
 	foreach ( QAction *act, QMPlay2GUI.menuBar->playlist->actions() )
 		addAction( act );
 	foreach ( QAction *act, QMPlay2GUI.menuBar->player->actions() )

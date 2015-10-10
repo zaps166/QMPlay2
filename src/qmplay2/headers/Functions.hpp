@@ -117,6 +117,9 @@ namespace Functions
 
 	bool splitPrefixAndUrlIfHasPluginPrefix( const QString &, QString *, QString *, QString *param = NULL );
 	void getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo() );
+
+	void hFlip( char *data, int linesize, int height, int width );
+	void vFlip( char *data, int linesize, int height );
 }
 
 #endif

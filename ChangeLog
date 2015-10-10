@@ -1,6 +1,8 @@
-Changes in QMPlay2 build 15.10.09:
+Changes in QMPlay2 build 15.10.10:
 	- new OpenGL 2 module (with OpenGL|ES 2.0 support) replaces the old OpenGL module,
 	- due to new libASS 0.13.x FontConfig is used only on 32-bit Windows XP,
+	- DirectDraw improvements,
+	- minor fixes,
 
 Changes in QMPlay2 build 15.10.03:
 	- user can hide menu bar by pressing Alt+Ctrl+M or from "Widgets" context menu,

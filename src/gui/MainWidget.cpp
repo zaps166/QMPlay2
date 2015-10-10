@@ -260,6 +260,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	if ( QMPlay2Core.getSettings().getBool( "MainWidget/TabPositionNorth" ) )
 		setTabPosition( Qt::AllDockWidgetAreas, QTabWidget::North );
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	const bool menuHidden = QMPlay2Core.getSettings().getBool( "MainWidget/MenuHidden", false );
 	menuBar->setVisible( !menuHidden );
 	hideMenuAct = new QAction( tr( "&Ukryj pasek menu" ), menuBar );
@@ -269,6 +270,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	hideMenuAct->setShortcut( QKeySequence( "Alt+Ctrl+M" ) );
 	connect( hideMenuAct, SIGNAL( triggered( bool ) ), this, SLOT( hideMenu( bool ) ) );
 	addAction( hideMenuAct );
+#endif
 
 	const bool widgetsLocked = QMPlay2Core.getSettings().getBool( "MainWidget/WidgetsLocked", false );
 	lockWidgets( widgetsLocked );
@@ -539,13 +541,9 @@ void MainWidget::toggleVisibility()
 	}
 	else if ( !isVisible() )
 	{
-		if ( !isTray )
-			showNormal();
-		else
-		{
+		if ( isTray )
 			menuBar->options->trayVisible->setEnabled( true );
-			show();
-		}
+		showNormal();
 	}
 }
 void MainWidget::createMenuBar()
@@ -1020,6 +1018,7 @@ void MainWidget::console( bool checked )
 }
 #endif
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 void MainWidget::hideMenu( bool h )
 {
 	if ( fullScreen || isCompactView )
@@ -1030,6 +1029,7 @@ void MainWidget::hideMenu( bool h )
 		QMPlay2Core.getSettings().set( "MainWidget/MenuHidden", h );
 	}
 }
+#endif
 void MainWidget::lockWidgets( bool l )
 {
 	if ( fullScreen || isCompactView )
@@ -1089,9 +1089,11 @@ QMenu *MainWidget::createPopupMenu()
 	QMenu *popupMenu = QMainWindow::createPopupMenu();
 	if ( !fullScreen && !isCompactView )
 	{
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		popupMenu->insertAction( popupMenu->actions().value( 0 ), hideMenuAct );
 		popupMenu->insertSeparator( popupMenu->actions().value( 1 ) );
 		popupMenu->addSeparator();
+#endif
 		popupMenu->addAction( lockWidgetsAct );
 	}
 	foreach ( QAction *act, popupMenu->actions() )
@@ -1247,6 +1249,12 @@ void MainWidget::closeEvent( QCloseEvent *e )
 	playlistDock->save( QMPlay2Core.getSettingsDir() + "Playlist.pls" );
 
 	playC.stop( true );
+}
+void MainWidget::changeEvent( QEvent *e )
+{
+	if ( e->type() == QEvent::WindowStateChange )
+		emit QMPlay2Core.mainWidgetNotMinimized( !windowState().testFlag( Qt::WindowMinimized ) );
+	QMainWindow::changeEvent( e );
 }
 void MainWidget::moveEvent( QMoveEvent *e )
 {

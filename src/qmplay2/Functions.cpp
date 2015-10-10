@@ -12,6 +12,16 @@
 
 #include <math.h>
 
+static inline void swapArray( char *a, char *b, int size )
+{
+	char t[ size ];
+	memcpy( t, a, size );
+	memcpy( a, b, size );
+	memcpy( b, t, size );
+}
+
+/**/
+
 QDate Functions::parseVersion( const QString &dateTxt )
 {
 	QStringList l = dateTxt.split( '.' );
@@ -461,5 +471,47 @@ void Functions::getDataIfHasPluginPrefix(const QString &wholeUrl, QString *url, 
 					return;
 				}
 		}
+	}
+}
+
+void Functions::hFlip( char *data, int linesize, int height, int width )
+{
+	int h, w, width_div_2 = width/2, linesize_div_2 = linesize/2, width_div_4 = width/4, offset = 0;
+	for ( h = 0 ; h < height ; ++h )
+	{
+		for ( w = 0 ; w < width_div_2 ; ++w )
+			qSwap( data[ offset + w ], data[ offset + width-1-w ] );
+		offset += linesize;
+	}
+	for ( h = 0 ; h < height ; ++h )
+	{
+		for ( w = 0 ; w < width_div_4 ; ++w )
+			qSwap( data[ offset + w ], data[ offset + width_div_2-1-w ] );
+		offset += linesize_div_2;
+	}
+}
+void Functions::vFlip( char *data, int linesize, int height )
+{
+	int size = linesize*height, chroma_size = linesize*height/4, chroma_width = linesize/2;
+	char *data_s;
+
+	for ( data_s = data + size ; data_s > data ; )
+	{
+		swapArray( data, data_s -= linesize, linesize );
+		data += linesize;
+	}
+	data += size/2;
+
+	for ( data_s = data + chroma_size ; data_s > data ; )
+	{
+		swapArray( data, data_s -= chroma_width, chroma_width );
+		data += chroma_width;
+	}
+	data += chroma_size/2;
+
+	for ( data_s = data + chroma_size ; data_s > data ; )
+	{
+		swapArray( data, data_s -= chroma_width, chroma_width );
+		data += chroma_width;
 	}
 }
