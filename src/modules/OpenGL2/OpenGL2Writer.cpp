@@ -530,7 +530,11 @@ void OpenGL2Writer::pause()
 
 QString OpenGL2Writer::name() const
 {
+#ifdef OPENGL_ES2
+	return "OpenGL|ES 2";
+#else
 	return OpenGL2WriterName;
+#endif
 }
 
 bool OpenGL2Writer::open()
