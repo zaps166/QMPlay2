@@ -11,6 +11,10 @@
 #endif
 #include <QPainter>
 
+#ifdef Q_OS_WIN
+	typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
+#endif
+
 #if !defined OPENGL_ES2 && !defined Q_OS_MAC
 	#include <GL/glext.h>
 #endif
@@ -127,6 +131,30 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 {
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
+
+#ifdef Q_OS_WIN
+	/*
+	 * Windows Vista and newer can use compositing (DWM) which is enabled by default.
+	 * It prevents tearing, so if the DWM is enabled, use single buffer. Otherwise on
+	 * AMD and nVidia GPU on fullscreen the toolbar and context menu are invisible.
+	 *
+	 * VSync doesn't work when single buffer is chosen, so DWM must prevents tearing.
+	 * This is not 3D game, so it should be enough.
+	 *
+	 * Since Windows 8, the DWM is probably always enabled.
+	*/
+	if ( QSysInfo::windowsVersion() >= QSysInfo::WV_6_0 )
+	{
+		DwmIsCompositionEnabledProc DwmIsCompositionEnabled = ( DwmIsCompositionEnabledProc )GetProcAddress( GetModuleHandleA( "dwmapi.dll" ), "DwmIsCompositionEnabled" );
+		BOOL compositionEnabled = false;
+		if ( DwmIsCompositionEnabled && DwmIsCompositionEnabled( &compositionEnabled ) == S_OK && compositionEnabled )
+		{
+			QGLFormat fmt;
+			fmt.setDoubleBuffer( false );
+			setFormat( fmt );
+		}
+	}
+#endif
 
 	/* Initialize texCoord array */
 	texCoordYCbCr[ 0 ] = texCoordYCbCr[ 4 ] = texCoordYCbCr[ 5 ] = texCoordYCbCr[ 7 ] = 0.0f;
