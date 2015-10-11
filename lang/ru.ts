@@ -604,22 +604,6 @@
 <context>
     <name>Drawable</name>
     <message>
-        <source>Sprzętowa konwersja YUV-&gt;RGB</source>
-        <translation>Аппаратные средства преобразования YUV-&gt;RGB</translation>
-    </message>
-    <message>
-        <source>Programowa konwersja YUV-&gt;RGB, pamięć karty grafiki</source>
-        <translation>Аппаратные средства преобразования YUV-&gt;RGB, видеопамять</translation>
-    </message>
-    <message>
-        <source>Programowa konwersja YUV-&gt;RGB, pamięć systemowa</source>
-        <translation>Аппаратные средства преобразования YUV-&gt;RGB, системная память</translation>
-    </message>
-    <message>
-        <source>Nakładka wyłączona, DirectDraw nie działa...</source>
-        <translation>Наложение отключено, DirectDraw не работает...</translation>
-    </message>
-    <message>
         <source>Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,14 +1054,6 @@ amp</source>
     <message>
         <source>Długość wyświetlanego dźwięku</source>
         <translation>Выводить на экран продолжительность звука</translation>
-    </message>
-    <message>
-        <source>Użyj DirectDraw tylko w trybie nakładki</source>
-        <translation>Использовать DirectDraw только в режиме наложения</translation>
-    </message>
-    <message>
-        <source>Jeżeli wyłączysz tę opcję to DirectDraw zostanie użyty jeżeli nakładka nie będzie obsługiwana. Na razie działa to nieprawidłowo!</source>
-        <translation>Если вы отключите эту опцию, DirectDraw будет использоваться без поддержки наложения. На данный момент он работает неправильно!</translation>
     </message>
     <message>
         <source>Ustaw jako domyślny odtwarzacz AudioCD</source>
