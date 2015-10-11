@@ -11,7 +11,7 @@
 #endif
 #include <QPainter>
 
-#ifdef Q_OS_WIN
+#if 0
 	typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
 #endif
 
@@ -132,7 +132,7 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 
-#ifdef Q_OS_WIN
+#if 0
 	/*
 	 * Windows Vista and newer can use compositing (DWM) which is enabled by default.
 	 * It prevents tearing, so if the DWM is enabled, use single buffer. Otherwise on
