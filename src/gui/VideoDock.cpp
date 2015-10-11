@@ -172,6 +172,12 @@ void VideoDock::mouseReleaseEvent( QMouseEvent *e )
 		canPopup = true;
 	DockWidget::mouseReleaseEvent( e );
 }
+void VideoDock::moveEvent( QMoveEvent *e )
+{
+	if ( isFloating() )
+		emit QMPlay2Core.videoDockMoved();
+	DockWidget::moveEvent( e );
+}
 void VideoDock::wheelEvent( QWheelEvent *e )
 {
 	if ( e->orientation() == Qt::Vertical )

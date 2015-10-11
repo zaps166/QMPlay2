@@ -36,6 +36,7 @@ private:
 #endif
 	void mousePressEvent( QMouseEvent * );
 	void mouseReleaseEvent( QMouseEvent * );
+	void moveEvent( QMoveEvent * );
 	void wheelEvent( QWheelEvent * );
 	void leaveEvent( QEvent * );
 	void enterEvent( QEvent * );

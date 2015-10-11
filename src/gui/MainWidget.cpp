@@ -544,6 +544,7 @@ void MainWidget::toggleVisibility()
 		if ( isTray )
 			menuBar->options->trayVisible->setEnabled( true );
 		showNormal();
+		activateWindow();
 	}
 }
 void MainWidget::createMenuBar()
@@ -1258,7 +1259,8 @@ void MainWidget::changeEvent( QEvent *e )
 }
 void MainWidget::moveEvent( QMoveEvent *e )
 {
-	emit QMPlay2Core.mainWidgetMoved();
+	if ( videoDock->isVisible() && !videoDock->isFloating() )
+		emit QMPlay2Core.videoDockMoved();
 	QMainWindow::moveEvent( e );
 }
 void MainWidget::showEvent( QShowEvent * )

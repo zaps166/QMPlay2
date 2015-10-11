@@ -1,7 +1,7 @@
 #ifndef QMPLAY2CORE_HPP
 #define QMPLAY2CORE_HPP
 
-#define QMPlay2Version "15.10.10"
+#define QMPlay2Version "15.10.11"
 
 #if defined(__i386) || defined(__i386__) || defined(_M_IX86) || (__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
 	#define QMPLAY2_CPU_X86
@@ -59,7 +59,7 @@ public:
 
 	Q_SIGNAL void showSettings( const QString &moduleName );
 
-	Q_SIGNAL void mainWidgetMoved();
+	Q_SIGNAL void videoDockMoved();
 	Q_SIGNAL void mainWidgetNotMinimized( bool );
 	Q_SIGNAL void videoDockVisible( bool );
 
