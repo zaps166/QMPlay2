@@ -10,6 +10,7 @@ class QMPlay2_OSD;
 class Drawable : public QWidget
 {
 	Q_OBJECT
+	typedef HRESULT (WINAPI *DwmEnableCompositionProc)(UINT uCompositionAction);
 public:
 	Drawable( DirectDrawWriter & );
 	~Drawable();
@@ -59,6 +60,8 @@ private:
 	LPDIRECTDRAWCLIPPER DDClipper;
 	LPDIRECTDRAWSURFACE DDSPrimary, DDSSecondary, DDSBackBuffer;
 	LPDIRECTDRAWCOLORCONTROL DDrawColorCtrl;
+
+	DwmEnableCompositionProc DwmEnableComposition;
 };
 
 /**/

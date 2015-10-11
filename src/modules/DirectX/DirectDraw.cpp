@@ -7,6 +7,9 @@
 #include <QCoreApplication>
 #include <QPainter>
 
+#define DWM_EC_DISABLECOMPOSITION 0
+#define DWM_EC_ENABLECOMPOSITION  1
+
 #define ColorKEY 0x00000001
 
 /**/
@@ -14,8 +17,9 @@
 Drawable::Drawable( DirectDrawWriter &writer ) :
 	isOK( false ), isOverlay( false ), paused( false ),
 	writer( writer ),
+	flip( 0 ),
 	DDraw( NULL ), DDClipper( NULL ), DDSPrimary( NULL ), DDSSecondary( NULL ), DDSBackBuffer( NULL ), DDrawColorCtrl( NULL ),
-	flip( 0 )
+	DwmEnableComposition( NULL )
 {
 	setMouseTracking( true );
 	grabGesture( Qt::PinchGesture );
@@ -36,27 +40,43 @@ Drawable::Drawable( DirectDrawWriter &writer ) :
 			ddsd_test.ddpfPixelFormat.dwFourCC = MAKEFOURCC( 'Y', 'V', '1', '2' );
 
 			/* Overlay YV12 test */
-			DDCAPS ddCaps = { sizeof ddCaps };
-			DDraw->GetCaps( &ddCaps, NULL );
-			if ( ddCaps.dwCaps & ( DDCAPS_OVERLAY | DDCAPS_OVERLAYFOURCC | DDCAPS_OVERLAYSTRETCH ) )
+			if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_2 ) //Windows 8 and 10 can't disable DWM, so overlay won't work
 			{
-				ddsd_test.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
-				if ( DDraw->CreateSurface( &ddsd_test, &DDrawTestSurface, NULL ) == DD_OK )
+				DDCAPS ddCaps = { sizeof ddCaps };
+				DDraw->GetCaps( &ddCaps, NULL );
+				if ( ddCaps.dwCaps & ( DDCAPS_OVERLAY | DDCAPS_OVERLAYFOURCC | DDCAPS_OVERLAYSTRETCH ) )
 				{
-					RECT destRect = { 0, 0, 1, 1 };
-					if ( DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL ) == DD_OK )
+					ddsd_test.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
+					if ( DDraw->CreateSurface( &ddsd_test, &DDrawTestSurface, NULL ) == DD_OK )
 					{
-						DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL );
+						RECT destRect = { 0, 0, 1, 1 };
+						HRESULT res = DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL );
+						if ( res == DDERR_OUTOFCAPS && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0 )
+						{
+							/* Disable DWM to use overlay */
+							DwmEnableComposition = ( DwmEnableCompositionProc )GetProcAddress( GetModuleHandleA( "dwmapi.dll" ), "DwmEnableComposition" );
+							if ( DwmEnableComposition )
+							{
+								if ( DwmEnableComposition( DWM_EC_DISABLECOMPOSITION ) == S_OK )
+									res = DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL );
+								else
+									DwmEnableComposition = NULL;
+							}
+						}
+						if ( res == DD_OK )
+						{
+							DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL );
 
-						setAutoFillBackground( true );
-						setPalette( QColor( ColorKEY ) );
-						connect( &QMPlay2Core, SIGNAL( mainWidgetMoved() ), this, SLOT( updateOverlay() ) );
-						connect( &QMPlay2Core, SIGNAL( videoDockVisible( bool ) ), this, SLOT( overlayVisible( bool ) ) );
-						connect( &QMPlay2Core, SIGNAL( mainWidgetNotMinimized( bool ) ), this, SLOT( overlayVisible( bool ) ) );
+							setAutoFillBackground( true );
+							setPalette( QColor( ColorKEY ) );
+							connect( &QMPlay2Core, SIGNAL( videoDockMoved() ), this, SLOT( updateOverlay() ) );
+							connect( &QMPlay2Core, SIGNAL( videoDockVisible( bool ) ), this, SLOT( overlayVisible( bool ) ) );
+							connect( &QMPlay2Core, SIGNAL( mainWidgetNotMinimized( bool ) ), this, SLOT( overlayVisible( bool ) ) );
 
-						isOK = isOverlay = true;
+							isOK = isOverlay = true;
+						}
+						DDrawTestSurface->Release();
 					}
-					DDrawTestSurface->Release();
 				}
 			}
 
@@ -89,6 +109,8 @@ Drawable::~Drawable()
 	if ( DDraw )
 		DDraw->Release();
 	DeleteObject( blackBrush );
+	if ( DwmEnableComposition )
+		DwmEnableComposition( DWM_EC_ENABLECOMPOSITION );
 }
 
 void Drawable::dock()
@@ -124,8 +146,8 @@ bool Drawable::createSecondary()
 		{
 			DDSCAPS ddsCaps = { sizeof ddsCaps };
 			ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
-			DDSSecondary->QueryInterface( IID_IDirectDrawColorControl, ( LPVOID * )&DDrawColorCtrl );
 			DDSSecondary->GetAttachedSurface( &ddsCaps, &DDSBackBuffer );
+			DDSSecondary->QueryInterface( IID_IDirectDrawColorControl, ( LPVOID * )&DDrawColorCtrl );
 		}
 		if ( !DDSBackBuffer )
 			DDSBackBuffer = DDSSecondary;
@@ -217,7 +239,7 @@ bool Drawable::draw( const QByteArray &videoFrameData )
 				DDSSecondary->Flip( NULL, DDFLIP_WAIT );
 			else
 			{
-				DDraw->WaitForVerticalBlank( DDWAITVB_BLOCKBEGIN, NULL );
+				DDraw->WaitForVerticalBlank( DDWAITVB_BLOCKBEGIN, NULL ); //Sometimes it works :D
 				blit();
 			}
 			return true;
@@ -329,11 +351,14 @@ bool Drawable::restoreLostSurface()
 {
 	if ( DDSPrimary->IsLost() || DDSSecondary->IsLost() || DDSBackBuffer->IsLost() )
 	{
-		DDSPrimary->Restore();
-		DDSSecondary->Restore();
+		bool restored = true;
+		restored &= DDSPrimary->Restore() == DD_OK;
+		restored &= DDSSecondary->Restore() == DD_OK;
 		if ( DDSSecondary != DDSBackBuffer )
-			DDSBackBuffer->Restore();
-		return true;
+			restored &= DDSBackBuffer->Restore() == DD_OK;
+		if ( restored )
+			return true;
+		QMPlay2Core.processParam( "RestartPlaying" );
 	}
 	return false;
 }
