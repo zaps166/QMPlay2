@@ -193,7 +193,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init( "KeepSpeed", false );
 	QMPSettings.init( "SyncVtoA", true );
 	QMPSettings.init( "Silence", true );
-	QMPSettings.init( "ScrollSeek", false );
+	QMPSettings.init( "ScrollSeek", true );
 	QMPSettings.init( "RestoreVideoEqualizer", false );
 	QMPSettings.init( "ApplyToASS/ColorsAndBorders", true );
 	QMPSettings.init( "ApplyToASS/MarginsAndAlignment", false );
