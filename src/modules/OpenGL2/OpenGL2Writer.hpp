@@ -18,7 +18,6 @@ class Drawable : public QGLWidget
 #endif
 public:
 	Drawable( OpenGL2Writer & );
-	~Drawable();
 
 #ifndef USE_NEW_OPENGL_API
 	bool init();

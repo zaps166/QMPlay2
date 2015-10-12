@@ -160,11 +160,6 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 	texCoordYCbCr[ 0 ] = texCoordYCbCr[ 4 ] = texCoordYCbCr[ 5 ] = texCoordYCbCr[ 7 ] = 0.0f;
 	texCoordYCbCr[ 1 ] = texCoordYCbCr[ 3 ] = 1.0f;
 }
-Drawable::~Drawable()
-{
-	delete shaderProgramYCbCr;
-	delete shaderProgramOSD;
-}
 
 #ifndef USE_NEW_OPENGL_API
 bool Drawable::init()
@@ -202,24 +197,38 @@ void Drawable::resizeEvent( QResizeEvent *e )
 void Drawable::initializeGL()
 {
 #ifndef OPENGL_ES2
-	const bool canCreateNonPowerOfTwoTextures = !!strstr( ( const char * )glGetString( GL_EXTENSIONS ), "GL_ARB_texture_non_power_of_two" );
-	const bool supportShaders = QGLShader::hasOpenGLShaders( QGLShader::Vertex, context() ) && QGLShader::hasOpenGLShaders( QGLShader::Fragment, context() );
+	bool supportsShaders = false, canCreateNonPowerOfTwoTextures = false;
+	const char *glExtensions = ( const char * )glGetString( GL_EXTENSIONS );
+	if ( glExtensions )
+	{
+		supportsShaders = !!strstr( glExtensions, "GL_ARB_vertex_shader" ) && !!strstr( glExtensions, "GL_ARB_fragment_shader" ) && !!strstr( glExtensions, "GL_ARB_shader_objects" );
+		canCreateNonPowerOfTwoTextures = !!strstr( glExtensions, "GL_ARB_texture_non_power_of_two" );
+	}
 	glActiveTexture = ( GLActiveTexture )context()->getProcAddress( "glActiveTexture" );
 
 	if
 	(
 		!canCreateNonPowerOfTwoTextures ||
-		!supportShaders                 ||
+		!supportsShaders                ||
 		!glActiveTexture
 	)
 	{
-		QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
-		isOK = false;
+		/*
+		 * If shader programs are already exists, new context was created without shaders support...
+		 * So the GPU/driver supports this feature and this is workaround for this strange behaviour.
+		*/
+		if ( shaderProgramYCbCr && shaderProgramOSD )
+			qDebug() << "Shaders are already created and now they are not supported... Initialization is ignored.";
+		else
+		{
+			QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
+			isOK = false;
+		}
 		return;
 	}
 #endif
 
-	 /* Workaround because of BUG in Mesa i915 driver */
+	/* Workaround because of BUG in Mesa i915 driver */
 	const char *glVersionStr = ( const char * )glGetString( GL_VERSION );
 	const char *glRendererStr = ( const char * )glGetString( GL_RENDERER );
 	bool useHUE = true;
@@ -228,15 +237,12 @@ void Drawable::initializeGL()
 
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
-	shaderProgramYCbCr = new QGLShaderProgram;
-	shaderProgramOSD = new QGLShaderProgram;
+	shaderProgramYCbCr = new QGLShaderProgram( this );
+	shaderProgramOSD = new QGLShaderProgram( this );
 
 	/* YCbCr shader */
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHUE ? fShaderYCbCrHueSrc : "" ) );
-	shaderProgramYCbCr->bindAttributeLocation( "vPosition", 0 );
-	shaderProgramYCbCr->bindAttributeLocation( "aTexCoord", 1 );
-
 	if ( shaderProgramYCbCr->bind() )
 	{
 		texCoordYCbCrLoc = shaderProgramYCbCr->attributeLocation( "aTexCoord" );
@@ -250,7 +256,7 @@ void Drawable::initializeGL()
 	}
 	else
 	{
-		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ), true, true );
+		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ) );
 		isOK = false;
 		return;
 	}
@@ -258,8 +264,6 @@ void Drawable::initializeGL()
 	/* OSD shader */
 	shaderProgramOSD->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderOSDSrc ).arg( precisionStr ) );
 	shaderProgramOSD->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderOSDSrc ).arg( precisionStr ) );
-	shaderProgramOSD->bindAttributeLocation( "vPosition", 0 );
-	shaderProgramOSD->bindAttributeLocation( "aTexCoord", 1 );
 	if ( shaderProgramOSD->bind() )
 	{
 		texCoordOSDLoc = shaderProgramOSD->attributeLocation( "aTexCoord" );
@@ -271,7 +275,7 @@ void Drawable::initializeGL()
 	}
 	else
 	{
-		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ), true, true );
+		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ) );
 		isOK = false;
 		return;
 	}
