@@ -59,6 +59,7 @@ private:
 
 	float texCoordYCbCr[ 8 ];
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
+	quint32 doClear;
 };
 
 /**/

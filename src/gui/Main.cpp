@@ -52,11 +52,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 		defaultModules << "PulseAudio" << "ALSA";
 #elif defined Q_OS_WIN
 	if ( type == "videoWriters" )
-	{
-		if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_0 ) //Windows XP and Windows 2003 Server
-			defaultModules << "DirectDraw";
-		defaultModules << "OpenGL 2";
-	}
+		defaultModules << "OpenGL 2" << "DirectDraw";
 #elif defined Q_OS_ANDROID
 	if ( type == "videoWriters" )
 		defaultModules << "QPainter";

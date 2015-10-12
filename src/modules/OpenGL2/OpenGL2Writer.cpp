@@ -56,10 +56,12 @@ static const char fShaderYCbCrSrc[] =
 	"}";
 static const char fShaderYCbCrHueSrc[] =
 	"float hueAdj = videoEq[3];"
-	"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
-	"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
-	"YCbCr[1] = chroma * cos(hue);"
-	"YCbCr[2] = chroma * sin(hue);";
+	"if (hueAdj != 0.0) {"
+		"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
+		"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
+		"YCbCr[1] = chroma * cos(hue);"
+		"YCbCr[2] = chroma * sin(hue);"
+	"}";
 
 static const char vShaderOSDSrc[] =
 	"%1"
@@ -247,12 +249,11 @@ void Drawable::initializeGL()
 	shaderProgramOSD = new QGLShaderProgram( this );
 
 	/* YCbCr shader */
-
-	/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and may increase CPU usage! */
 	const char *glslVersionStr = ( const char * )glGetString( GL_SHADING_LANGUAGE_VERSION );
 	bool useHue = false;
 	if ( glslVersionStr )
 	{
+		/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and may increase CPU usage! */
 		const float glslVersion = QString( glslVersionStr ).left( 4 ).toFloat();
 #ifndef OPENGL_ES2
 		useHue = glslVersion >= 1.3f;
@@ -260,7 +261,6 @@ void Drawable::initializeGL()
 		useHue = glslVersion >= 3.0f;
 #endif
 	}
-
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHue ? fShaderYCbCrHueSrc : "" ) );
 	if ( shaderProgramYCbCr->bind() )
@@ -308,7 +308,6 @@ void Drawable::initializeGL()
 	glDisable( GL_DEPTH_TEST );
 	glDisable( GL_DITHER );
 
-
 	/* Prepare textures */
 	for ( int i = 1 ; i <= 4 ; ++i )
 	{
@@ -320,9 +319,11 @@ void Drawable::initializeGL()
 	}
 
 #ifdef VSYNC_SETTINGS
-	/* Ensures to set VSync on first repaint */
+	/* Ensures that the VSync will be set on paintGL() */
 	lastVSyncState = !writer.vSync;
 #endif
+
+	doClear = 0;
 }
 void Drawable::paintGL()
 {
@@ -346,7 +347,13 @@ void Drawable::paintGL()
 	}
 #endif
 
-	glClear( GL_COLOR_BUFFER_BIT );
+	if ( doReset )
+		doClear = 3; //3 buffers must be cleared when triple-buffer is used
+	if ( doClear > 0 )
+	{
+		glClear( GL_COLOR_BUFFER_BIT );
+		--doClear;
+	}
 
 	if ( !videoFrame && !hasImage )
 		return;

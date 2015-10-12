@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 15.10.11:
+Changes in QMPlay2 build 15.10.12:
 	- new OpenGL 2 module (with OpenGL|ES 2.0 support) replaces the old OpenGL module,
 	- due to new libASS 0.13.x FontConfig is used only on 32-bit Windows XP,
 	- DirectDraw improvements,
