@@ -117,6 +117,10 @@ static const float texCoordOSD[ 8 ] = {
 	1.0f, 0.0f,
 };
 
+#ifndef USE_NEW_OPENGL_API
+	#define NUM_BUFFERS_TO_CLEAR 3 //3 buffers must be cleared when triple-buffer is used
+#endif
+
 /**/
 
 #ifndef USE_NEW_OPENGL_API
@@ -253,7 +257,7 @@ void Drawable::initializeGL()
 	bool useHue = false;
 	if ( glslVersionStr )
 	{
-		/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and may increase CPU usage! */
+		/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
 		const float glslVersion = QString( glslVersionStr ).left( 4 ).toFloat();
 #ifndef OPENGL_ES2
 		useHue = glslVersion >= 1.3f;
@@ -323,7 +327,9 @@ void Drawable::initializeGL()
 	lastVSyncState = !writer.vSync;
 #endif
 
+#ifndef USE_NEW_OPENGL_API
 	doClear = 0;
+#endif
 }
 void Drawable::paintGL()
 {
@@ -347,13 +353,18 @@ void Drawable::paintGL()
 	}
 #endif
 
+#ifndef USE_NEW_OPENGL_API
 	if ( doReset )
-		doClear = 3; //3 buffers must be cleared when triple-buffer is used
+		doClear = NUM_BUFFERS_TO_CLEAR;
 	if ( doClear > 0 )
 	{
+		qDebug() << "C";
 		glClear( GL_COLOR_BUFFER_BIT );
 		--doClear;
 	}
+#else
+	glClear( GL_COLOR_BUFFER_BIT );
+#endif
 
 	if ( !videoFrame && !hasImage )
 		return;
@@ -469,6 +480,14 @@ void Drawable::resizeGL( int w, int h )
 }
 #endif
 
+#ifndef USE_NEW_OPENGL_API
+void Drawable::paintEvent( QPaintEvent *e )
+{
+	if ( !doClear )
+		doClear = NUM_BUFFERS_TO_CLEAR;
+	QGLWidget::paintEvent( e );
+}
+#endif
 bool Drawable::event( QEvent *e )
 {
 	/*

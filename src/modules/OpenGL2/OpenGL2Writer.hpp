@@ -40,6 +40,9 @@ private:
 #endif
 	void paintGL();
 
+#ifndef USE_NEW_OPENGL_API
+	void paintEvent( QPaintEvent * );
+#endif
 	bool event( QEvent * );
 
 	QGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
@@ -59,7 +62,9 @@ private:
 
 	float texCoordYCbCr[ 8 ];
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
+#ifndef USE_NEW_OPENGL_API
 	quint32 doClear;
+#endif
 };
 
 /**/
