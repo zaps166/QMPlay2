@@ -218,9 +218,19 @@ void Drawable::initializeGL()
 		 * So the GPU/driver supports this feature and this is workaround for this strange behaviour.
 		*/
 		if ( shaderProgramYCbCr && shaderProgramOSD )
-			qDebug() << "Shaders are already created and now they are not supported... Initialization is ignored.";
+			fprintf( stderr, "Shaders are already created and now they are not supported... Initialization is ignored.\n" );
 		else
 		{
+			fprintf
+			(
+				stderr,
+				"GL_ARB_texture_non_power_of_two : %s\n"
+				"Vertex & fragment shader: %s\n"
+				"glActiveTexture: %s\n",
+				canCreateNonPowerOfTwoTextures ? "yes" : "no",
+				supportsShaders ? "yes" : "no",
+				glActiveTexture ? "yes" : "no"
+			);
 			QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
 			isOK = false;
 		}
