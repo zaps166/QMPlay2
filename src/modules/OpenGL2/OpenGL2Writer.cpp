@@ -358,7 +358,6 @@ void Drawable::paintGL()
 		doClear = NUM_BUFFERS_TO_CLEAR;
 	if ( doClear > 0 )
 	{
-		qDebug() << "C";
 		glClear( GL_COLOR_BUFFER_BIT );
 		--doClear;
 	}
