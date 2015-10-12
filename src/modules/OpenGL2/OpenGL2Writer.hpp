@@ -17,11 +17,13 @@ class Drawable : public QGLWidget
 	typedef void (APIENTRY *GLActiveTexture)(GLenum);
 #endif
 public:
-	Drawable( OpenGL2Writer & );
-
 #ifndef USE_NEW_OPENGL_API
+	Drawable( OpenGL2Writer &, const QGLFormat & );
 	bool init();
+#else
+	Drawable( OpenGL2Writer & );
 #endif
+
 	void clr();
 
 	void resizeEvent( QResizeEvent * );

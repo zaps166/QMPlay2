@@ -44,7 +44,6 @@ static const char fShaderYCbCrSrc[] =
 		"float brightness = videoEq[0];"
 		"float contrast = videoEq[1];"
 		"float saturation = videoEq[2];"
-		"float hueAdj = videoEq[3];"
 		"vec3 YCbCr = vec3("
 			"texture2D(Ytex, vTexCoord)[0] - 0.0625,"
 			"texture2D(Utex, vTexCoord)[0] - 0.5,"
@@ -56,12 +55,11 @@ static const char fShaderYCbCrSrc[] =
 		"gl_FragColor = vec4(rgb, 1.0);"
 	"}";
 static const char fShaderYCbCrHueSrc[] =
-	"if (hueAdj != 0.0) {"
-		"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
-		"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
-		"YCbCr[1] = chroma * cos(hue);"
-		"YCbCr[2] = chroma * sin(hue);"
-	"}";
+	"float hueAdj = videoEq[3];"
+	"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
+	"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
+	"YCbCr[1] = chroma * cos(hue);"
+	"YCbCr[2] = chroma * sin(hue);";
 
 static const char vShaderOSDSrc[] =
 	"%1"
@@ -119,7 +117,12 @@ static const float texCoordOSD[ 8 ] = {
 
 /**/
 
+#ifndef USE_NEW_OPENGL_API
+Drawable::Drawable( OpenGL2Writer &writer, const QGLFormat &fmt ) :
+	QGLWidget( fmt ),
+#else
 Drawable::Drawable( OpenGL2Writer &writer ) :
+#endif
 	isOK( true ), paused( false ),
 	videoFrame( NULL ),
 	shaderProgramYCbCr( NULL ), shaderProgramOSD( NULL ),
@@ -238,21 +241,28 @@ void Drawable::initializeGL()
 	}
 #endif
 
-	/* Workaround because of BUG in Mesa i915 driver */
-	const char *glVersionStr = ( const char * )glGetString( GL_VERSION );
-	const char *glRendererStr = ( const char * )glGetString( GL_RENDERER );
-	bool useHUE = true;
-	if ( glVersionStr && glRendererStr )
-		useHUE = ( !strstr( glVersionStr, "2.0 Mesa" ) && !strstr( glVersionStr, "2.1 Mesa" ) ) || !strstr( glRendererStr, "Intel" );
-
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
 	shaderProgramYCbCr = new QGLShaderProgram( this );
 	shaderProgramOSD = new QGLShaderProgram( this );
 
 	/* YCbCr shader */
+
+	/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and may increase CPU usage! */
+	const char *glslVersionStr = ( const char * )glGetString( GL_SHADING_LANGUAGE_VERSION );
+	bool useHue = false;
+	if ( glslVersionStr )
+	{
+		const float glslVersion = QString( glslVersionStr ).left( 4 ).toFloat();
+#ifndef OPENGL_ES2
+		useHue = glslVersion >= 1.3f;
+#else
+		useHue = glslVersion >= 3.0f;
+#endif
+	}
+
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
-	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHUE ? fShaderYCbCrHueSrc : "" ) );
+	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHue ? fShaderYCbCrHueSrc : "" ) );
 	if ( shaderProgramYCbCr->bind() )
 	{
 		texCoordYCbCrLoc = shaderProgramYCbCr->attributeLocation( "aTexCoord" );
@@ -294,9 +304,10 @@ void Drawable::initializeGL()
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
 	glClear( GL_COLOR_BUFFER_BIT );
+	glDisable( GL_STENCIL_TEST );
 	glDisable( GL_DEPTH_TEST );
-	glEnable( GL_CULL_FACE );
 	glDisable( GL_DITHER );
+
 
 	/* Prepare textures */
 	for ( int i = 1 ; i <= 4 ; ++i )
@@ -581,10 +592,14 @@ QString OpenGL2Writer::name() const
 
 bool OpenGL2Writer::open()
 {
-	drawable = new Drawable( *this );
 #ifndef USE_NEW_OPENGL_API
+	QGLFormat fmt;
+	fmt.setDepth( false );
+	fmt.setStencil( false );
+	drawable = new Drawable( *this, fmt );
 	return drawable->init();
 #else
+	drawable = new Drawable( *this );
 	return true;
 #endif
 }
