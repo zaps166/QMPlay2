@@ -604,16 +604,16 @@
 <context>
     <name>Drawable</name>
     <message>
-        <source>Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
-        <translation>OpenGL driver must support multitexturing, shaders and Non-Power-Of-Two texture size</translation>
-    </message>
-    <message>
         <source>Błąd podczas kompilacji/linkowania shaderów</source>
         <translation>Shader compile/link error</translation>
     </message>
     <message>
         <source>Zarządzanie VSync jest nieobsługiwane</source>
         <translation>VSync management is not supported</translation>
+    </message>
+    <message>
+        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
+        <translation>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</translation>
     </message>
 </context>
 <context>

@@ -231,7 +231,7 @@ void Drawable::initializeGL()
 				supportsShaders ? "yes" : "no",
 				glActiveTexture ? "yes" : "no"
 			);
-			QMPlay2Core.logError( tr( "Sterownik OpenGL musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
+			QMPlay2Core.logError( "OpenGL 2 :: " + tr( "Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
 			isOK = false;
 		}
 		return;
