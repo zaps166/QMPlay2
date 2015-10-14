@@ -25,7 +25,6 @@ VAApiWriter::VAApiWriter( Module &module ) :
 {
 	vaImg.image_id = vaSubpicID = 0;
 
-	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );

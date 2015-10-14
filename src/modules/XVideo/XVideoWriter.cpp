@@ -11,7 +11,6 @@ using Functions::getImageSize;
 Drawable::Drawable( XVideoWriter &writer ) :
 	writer( writer )
 {
-	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );

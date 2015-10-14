@@ -27,7 +27,6 @@ VDPAUWriter::VDPAUWriter( Module &module ) :
 	aspect_ratio( 0.0 ), zoom( 0.0 ),
 	flip( 0 ), outW( 0 ), outH( 0 ), Hue( 0 ), Saturation( 0 ), Brightness( 0 ), Contrast( 0 )
 {
-	setAttribute( Qt::WA_OpaquePaintEvent );
 	setAttribute( Qt::WA_PaintOnScreen );
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
