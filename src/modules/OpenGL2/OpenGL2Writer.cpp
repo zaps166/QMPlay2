@@ -187,8 +187,21 @@ void Drawable::resizeEvent( QResizeEvent *e )
 void Drawable::initializeGL()
 {
 	int glMajor = 0, glMinor = 0;
+#ifndef OPENGL_ES2
 	glGetIntegerv( GL_MAJOR_VERSION, &glMajor );
 	glGetIntegerv( GL_MINOR_VERSION, &glMinor );
+#endif
+	if ( !glMajor )
+	{
+		const QString glVersionStr = ( const char * )glGetString( GL_VERSION );
+		const int dotIdx = glVersionStr.indexOf( '.' );
+		if ( dotIdx > 0 )
+		{
+			const int vIdx = glVersionStr.lastIndexOf( ' ', dotIdx );
+			if ( sscanf( glVersionStr.mid( vIdx < 0 ? 0 : vIdx ).toLatin1().data(), "%d.%d", &glMajor, &glMinor ) != 2 )
+				glMajor = glMinor = 0;
+		}
+	}
 	if ( glMajor )
 		glVer = QString( "%1.%2" ).arg( glMajor ).arg( glMinor );
 	else
