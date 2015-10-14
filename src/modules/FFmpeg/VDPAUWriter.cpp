@@ -551,8 +551,16 @@ void VDPAUWriter::resizeEvent( QResizeEvent * )
 	QRect dstQRect, srcQRect;
 	Functions::getImageSize( aspect_ratio, zoom, width(), height(), W, H, &X, &Y, &dstQRect, &outW, &outH, &srcQRect );
 
-	dstQRect.getCoords( ( int * )&dstRect.x0, ( int * )&dstRect.y0, ( int * )&dstRect.x1, ( int * )&dstRect.y1 );
-	srcQRect.getCoords( ( int * )&srcRect.x0, ( int * )&srcRect.y0, ( int * )&srcRect.x1, ( int * )&srcRect.y1 );
+	srcRect.x0 = srcQRect.left();
+	srcRect.y0 = srcQRect.top();
+	srcRect.x1 = srcQRect.right() + 1;
+	srcRect.y1 = srcQRect.bottom() + 1;
+
+	dstRect.x0 = dstQRect.left();
+	dstRect.y0 = dstQRect.top();
+	dstRect.x1 = dstQRect.right() + 1;
+	dstRect.y1 = dstQRect.bottom() + 1;
+
 	if ( flip & Qt::Horizontal )
 		qSwap( srcRect.x0, srcRect.x1 );
 	if ( flip & Qt::Vertical )
