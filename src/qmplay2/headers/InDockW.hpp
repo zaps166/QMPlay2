@@ -17,11 +17,7 @@ public:
 	{
 		loseHeight = lh;
 	}
-	inline void setCustomPixmap( const QPixmap &pix = QPixmap() )
-	{
-		customPixmap = pix;
-		repaint();
-	}
+	void setCustomPixmap( const QPixmap &pix = QPixmap() );
 private:
 	const QColor &grad1, &grad2, &qmpTxt;
 	const QPixmap &qmp2Pixmap;

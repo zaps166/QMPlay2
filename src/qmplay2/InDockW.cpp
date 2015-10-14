@@ -4,6 +4,7 @@
 
 #include <QCoreApplication>
 #include <QPainter>
+#include <QVariant>
 
 InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt ) :
 	grad1( grad1 ), grad2( grad2 ), qmpTxt( qmpTxt ),
@@ -15,8 +16,15 @@ InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &
 	connect( &QMPlay2Core, SIGNAL( wallpaperChanged( bool, double ) ), this, SLOT( wallpaperChanged( bool, double ) ) );
 	setFocusPolicy( Qt::StrongFocus );
 	grabGesture( Qt::PinchGesture );
+	setAutoFillBackground( true );
 	setMouseTracking( true );
 	setPalette( Qt::black );
+}
+
+void InDockW::setCustomPixmap(const QPixmap &pix)
+{
+	customPixmap = pix;
+	repaint();
 }
 
 void InDockW::wallpaperChanged( bool hasWallpaper, double alpha )
@@ -54,7 +62,7 @@ void InDockW::resizeEvent( QResizeEvent * )
 {
 	if ( w )
 	{
-		int mappedY = mapToParent( QPoint( 0, 0 ) ).y();
+		int mappedY = mapToParent( QPoint() ).y();
 		int Y = 0;
 		int W = width();
 		int H = height() + loseHeight;
@@ -62,6 +70,11 @@ void InDockW::resizeEvent( QResizeEvent * )
 		{
 			H += mappedY;
 			Y -= mappedY;
+		}
+		if ( loseHeight && w->property( "PreventFullscreen" ).toBool() )
+		{
+			Y -= 1;
+			H += 2;
 		}
 		if ( w->geometry() != QRect( 0, Y, W, H ) )
 		{

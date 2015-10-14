@@ -11,10 +11,6 @@
 #endif
 #include <QPainter>
 
-#if 0
-	typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
-#endif
-
 #if !defined OPENGL_ES2 && !defined Q_OS_MAC
 	#include <GL/glext.h>
 #endif
@@ -141,28 +137,13 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 	grabGesture( Qt::PinchGesture );
 	setMouseTracking( true );
 
-#if 0
+#ifdef Q_OS_WIN
 	/*
-	 * Windows Vista and newer can use compositing (DWM) which is enabled by default.
-	 * It prevents tearing, so if the DWM is enabled, use single buffer. Otherwise on
-	 * AMD and nVidia GPU on fullscreen the toolbar and context menu are invisible.
-	 *
-	 * VSync doesn't work when single buffer is chosen, so DWM must prevents tearing.
-	 * This is not 3D game, so it should be enough.
-	 *
-	 * Since Windows 8, the DWM is probably always enabled.
+	 * This property is read by QMPlay2 and it ensures that toolbar will be visible
+	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
 	if ( QSysInfo::windowsVersion() >= QSysInfo::WV_6_0 )
-	{
-		DwmIsCompositionEnabledProc DwmIsCompositionEnabled = ( DwmIsCompositionEnabledProc )GetProcAddress( GetModuleHandleA( "dwmapi.dll" ), "DwmIsCompositionEnabled" );
-		BOOL compositionEnabled = false;
-		if ( DwmIsCompositionEnabled && DwmIsCompositionEnabled( &compositionEnabled ) == S_OK && compositionEnabled )
-		{
-			QGLFormat fmt;
-			fmt.setDoubleBuffer( false );
-			setFormat( fmt );
-		}
-	}
+		setProperty( "PreventFullscreen", true );
 #endif
 
 	/* Initialize texCoord array */
@@ -205,6 +186,14 @@ void Drawable::resizeEvent( QResizeEvent *e )
 
 void Drawable::initializeGL()
 {
+	int glMajor = 0, glMinor = 0;
+	glGetIntegerv( GL_MAJOR_VERSION, &glMajor );
+	glGetIntegerv( GL_MINOR_VERSION, &glMinor );
+	if ( glMajor )
+		glVer = QString( "%1.%2" ).arg( glMajor ).arg( glMinor );
+	else
+		glVer = "2";
+
 #ifndef OPENGL_ES2
 	bool supportsShaders = false, canCreateNonPowerOfTwoTextures = false;
 	const char *glExtensions = ( const char * )glGetString( GL_EXTENSIONS );
@@ -226,7 +215,7 @@ void Drawable::initializeGL()
 		 * If shader programs are already exists, new context was created without shaders support...
 		 * So the GPU/driver supports this feature and this is workaround for this strange behaviour.
 		*/
-		if ( shaderProgramYCbCr && shaderProgramOSD )
+		if ( shaderProgramYCbCr && shaderProgramOSD && !supportsShaders )
 			fprintf( stderr, "Shaders are already created and now they are not supported... Initialization is ignored.\n" );
 		else
 		{
@@ -252,21 +241,9 @@ void Drawable::initializeGL()
 	shaderProgramYCbCr = new QGLShaderProgram( this );
 	shaderProgramOSD = new QGLShaderProgram( this );
 
-	/* YCbCr shader */
-	const char *glslVersionStr = ( const char * )glGetString( GL_SHADING_LANGUAGE_VERSION );
-	bool useHue = false;
-	if ( glslVersionStr )
-	{
-		/* Don't use hue if GLSL is lower than 1.3, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
-		const float glslVersion = QString( glslVersionStr ).left( 4 ).toFloat();
-#ifndef OPENGL_ES2
-		useHue = glslVersion >= 1.3f;
-#else
-		useHue = glslVersion >= 3.0f;
-#endif
-	}
+	/* YCbCr shader, use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
 	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
-	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( useHue ? fShaderYCbCrHueSrc : "" ) );
+	shaderProgramYCbCr->addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( (glMajor * 10 + glMinor >= 30) ? fShaderYCbCrHueSrc : "" ) );
 	if ( shaderProgramYCbCr->bind() )
 	{
 		texCoordYCbCrLoc = shaderProgramYCbCr->attributeLocation( "aTexCoord" );
@@ -609,9 +586,9 @@ void OpenGL2Writer::pause()
 QString OpenGL2Writer::name() const
 {
 #ifdef OPENGL_ES2
-	return "OpenGL|ES 2";
+	return "OpenGL|ES " + drawable->glVer;
 #else
-	return OpenGL2WriterName;
+	return "OpenGL " + drawable->glVer;
 #endif
 }
 

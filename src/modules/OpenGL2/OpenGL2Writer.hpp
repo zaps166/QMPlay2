@@ -33,6 +33,7 @@ public:
 	float Contrast, Saturation, Brightness, Hue;
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
+	QString glVer;
 private:
 	void initializeGL();
 #ifndef USE_NEW_OPENGL_API
