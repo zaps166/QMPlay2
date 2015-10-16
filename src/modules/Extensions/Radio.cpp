@@ -160,15 +160,15 @@ void Radio::finished()
 				if ( RadioList.left( 4 ) == "NXRL" )
 				{
 					RadioList.remove( 0, 4 );
-					GroupName = RadioList;
+					GroupName = RadioList.data();
 					RadioList.remove( 0, GroupName.toUtf8().length() + 1 );
 					addGroup( GroupName );
 					++separators;
 				}
 
-				QString nazwa = RadioList;
+				QString nazwa = RadioList.data();
 				RadioList.remove( 0, nazwa.toUtf8().length() + 1 );
-				QString URL = RadioList;
+				QString URL = RadioList.data();
 				RadioList.remove( 0, URL.toUtf8().length() + 1 );
 				int imgSize = *( const int * )RadioList.constData();
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
