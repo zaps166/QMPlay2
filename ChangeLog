@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 15.10.14:
+Changes in QMPlay2 build 15.10.17:
 	- new OpenGL 2 module (with OpenGL|ES 2.0 support) replaces the old OpenGL module,
-	- due to new libASS 0.13.x FontConfig is used only on 32-bit Windows XP,
+	- due to new libass 0.13.0, FontConfig is used only on 32-bit Windows XP,
+	- correct display information about buffered time and size,
 	- DirectDraw improvements,
 	- many minor fixes,
 

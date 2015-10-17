@@ -25,12 +25,12 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 		for ( int i = pos ; i < count ; ++i )
 		{
 			const Packet &pkt = at( i );
-			if ( pkt.ts < seek_pos )
+			if ( pkt.ts < seek_pos || !pkt.hasKeyFrame )
 			{
 				durationToChange += pkt.duration;
 				sizeToChange += pkt.size();
 			}
-			else if ( pkt.hasKeyFrame )
+			else
 			{
 				remaining_duration -= durationToChange;
 				backward_duration += durationToChange;
