@@ -80,6 +80,8 @@ private slots:
 	void updatePos( int );
 	void mousePositionOnSlider( int );
 
+	void volume( int );
+
 	void newConnection();
 	void readSocket();
 

@@ -1,21 +1,14 @@
 #include <EqualizerGUI.hpp>
 #include <Equalizer.hpp>
 
+#include <Functions.hpp>
+
 #include <QLabel>
 #include <QSlider>
 #include <QPainter>
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QToolButton>
-
-#include <math.h>
-
-static inline QString dBStr( int a )
-{
-	return ( !a ? "-∞" : QString::number( 20.0 * log10( a / 50.0 ), 'g', 2 ) ) + " dB";
-}
-
-/**/
 
 GraphW::GraphW() :
 	preamp( 0.5f )
@@ -141,7 +134,7 @@ void EqualizerGUI::valueChanged( int v )
 	{
 		graph.setValue( slider->property( "idx" ).toInt(), v / 100.0f );
 		sets().set( "Equalizer/" + slider->property( "idx" ).toString(), v );
-		slider->setToolTip( dBStr( v ) );
+		slider->setToolTip( Functions::dBStr( v / 50.0 ) );
 		SetInstance< Equalizer >();
 	}
 }
@@ -183,7 +176,7 @@ bool EqualizerGUI::set()
 		slider->setProperty( "idx", i );
 		slider->setTickPosition( QSlider::TicksBelow );
 		slider->setValue( sets().getInt( "Equalizer/" + QString::number( i ) ) );
-		slider->setToolTip( dBStr( slider->value() ) );
+		slider->setToolTip( Functions::dBStr( slider->value() / 50.0 ) );
 		connect( slider, SIGNAL( valueChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 
 		graph.setValue( i, slider->value() / 100.0f );

@@ -515,3 +515,8 @@ void Functions::vFlip( char *data, int linesize, int height )
 		data += chroma_width;
 	}
 }
+
+QString Functions::dBStr( double a )
+{
+	return ( !a ? "-∞" : QString::number( 20.0 * log10( a ), 'g', 3 ) ) + " dB";
+}

@@ -227,10 +227,10 @@ void AudioThr::run()
 			{
 				const double max_len = 0.02; //TODO: zrobić opcje?
 				const int chunk = qMin( decodedSize, ( int )( ceil( realSample_rate * max_len ) * realChannels * sizeof( float ) ) );
-				const float vol = ( playC.muted || playC.vol == 0.0 ) ? 0.0 : playC.replayGain * ( playC.vol == 1.0 ? 1.0 : playC.vol * playC.vol );
+				const float vol = ( playC.muted || playC.vol == 0.0 ) ? 0.0f : playC.replayGain * ( playC.vol == 1.0 ? 1.0f : playC.vol * playC.vol );
 
 				QByteArray decodedChunk;
-				if ( vol == 0.0 )
+				if ( vol == 0.0f )
 					decodedChunk.fill( 0, chunk );
 				else
 					decodedChunk = QByteArray::fromRawData( decoded.data() + decodedPos, chunk );
@@ -268,7 +268,7 @@ void AudioThr::run()
 						lastSpeed = speed;
 					}
 
-					if ( vol != 1.0 && vol > 0.0 )
+					if ( vol != 1.0f && vol > 0.0f )
 					{
 						const int size = decodedChunk.size() / sizeof( float );
 						float *data = ( float * )decodedChunk.data();
@@ -285,7 +285,7 @@ void AudioThr::run()
 					else
 						dataToWrite = decodedChunk;
 
-					if ( doSilence >= 0.0 && vol > 0.0 )
+					if ( doSilence >= 0.0 && vol > 0.0f )
 					{
 						silenceChMutex.lock();
 						if ( doSilence >= 0.0 )

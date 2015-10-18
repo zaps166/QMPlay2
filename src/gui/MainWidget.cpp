@@ -228,6 +228,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	connect( seekS, SIGNAL( mousePosition( int ) ), this, SLOT( mousePositionOnSlider( int ) ) );
 
 	connect( volS, SIGNAL( valueChanged( int ) ), &playC, SLOT( volume( int ) ) );
+	connect( volS, SIGNAL( valueChanged( int ) ), this, SLOT( volume( int ) ) );
 
 	connect( tray, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), this, SLOT( trayIconClicked( QSystemTrayIcon::ActivationReason ) ) );
 
@@ -293,6 +294,8 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 
 	if ( QMPlay2Core.getSettings().getInt( "Volume" ) != 100 )
 		volS->setValue( QMPlay2Core.getSettings().getInt( "Volume" ) );
+	else
+		volume( 100 ); //Sets the tooltip
 	if ( QMPlay2Core.getSettings().getBool( "RestoreVideoEqualizer" ) )
 		menuBar->playing->videoFilters->videoEqualizer->restoreValues();
 
@@ -946,6 +949,12 @@ void MainWidget::updatePos( int pos )
 void MainWidget::mousePositionOnSlider( int pos )
 {
 	statusBar->showMessage( tr( "Wskazana pozycja" ) + ": " + timeToStr( pos ), 750 );
+}
+
+void MainWidget::volume( int v )
+{
+	const double vol = v / 100.0;
+	volS->setToolTip( Functions::dBStr( vol * vol ) );
 }
 
 void MainWidget::newConnection()

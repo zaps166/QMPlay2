@@ -120,6 +120,8 @@ namespace Functions
 
 	void hFlip( char *data, int linesize, int height, int width );
 	void vFlip( char *data, int linesize, int height );
+
+	QString dBStr( double a );
 }
 
 #endif
