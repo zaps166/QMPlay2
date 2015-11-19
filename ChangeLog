@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 15.11.19:
+    - HEVC decoding in VDPAU,
+
 Changes in QMPlay2 build 15.10.18:
 	- new OpenGL 2 module (with OpenGL|ES 2.0 support) replaces the old OpenGL module,
 	- due to new libass 0.13.0, FontConfig is used only on 32-bit Windows XP,

@@ -240,9 +240,21 @@ bool VDPAUWriter::open()
 		{
 			VdpBool isSupported;
 			quint32 out[ 4 ];
-			for ( VdpDecoderProfile p = VDP_DECODER_PROFILE_MPEG1 ; p <= VDP_DECODER_PROFILE_MPEG4_PART2_ASP ; ++p )
-				if ( vdp_decoder_query_capabilities( device, p, &isSupported, out + 0, out + 1, out + 2, out + 3 ) == VDP_STATUS_OK && isSupported )
-					profileList.push_back( p );
+			profileList = QList< VdpDecoderProfile >()
+				<< VDP_DECODER_PROFILE_H264_HIGH << VDP_DECODER_PROFILE_H264_MAIN << VDP_DECODER_PROFILE_H264_BASELINE
+#ifdef VDP_DECODER_PROFILE_HEVC_MAIN
+				<< VDP_DECODER_PROFILE_HEVC_MAIN
+#endif
+				<< VDP_DECODER_PROFILE_MPEG2_MAIN << VDP_DECODER_PROFILE_MPEG2_SIMPLE
+				<< VDP_DECODER_PROFILE_MPEG4_PART2_ASP << VDP_DECODER_PROFILE_MPEG4_PART2_SP
+				<< VDP_DECODER_PROFILE_VC1_ADVANCED << VDP_DECODER_PROFILE_VC1_MAIN << VDP_DECODER_PROFILE_VC1_SIMPLE
+				<< VDP_DECODER_PROFILE_MPEG1
+			;
+			for ( int i = profileList.count() - 1 ; i >= 0 ; --i )
+			{
+				if ( vdp_decoder_query_capabilities( device, profileList[ i ], &isSupported, out + 0, out + 1, out + 2, out + 3 ) != VDP_STATUS_OK || !isSupported )
+					profileList.removeAt( i );
+			}
 			if ( !profileList.isEmpty() )
 			{
 				vdp_preemption_callback_register( device, preemption_callback, this );
@@ -269,6 +281,13 @@ bool VDPAUWriter::HWAccellInit( int W, int H, const char *codec_name )
 		else if ( profileList.contains( VDP_DECODER_PROFILE_H264_BASELINE ) )
 			p = VDP_DECODER_PROFILE_H264_BASELINE;
 	}
+#ifdef VDP_DECODER_PROFILE_HEVC_MAIN
+	else if ( !qstrcmp( codec_name, "hevc" ) )
+	{
+		if ( profileList.contains( VDP_DECODER_PROFILE_HEVC_MAIN ) )
+			p = VDP_DECODER_PROFILE_HEVC_MAIN;
+	}
+#endif
 	else if ( !qstrcmp( codec_name, "mpeg2video" ) )
 	{
 		if ( profileList.contains( VDP_DECODER_PROFILE_MPEG2_MAIN ) )
@@ -292,8 +311,11 @@ bool VDPAUWriter::HWAccellInit( int W, int H, const char *codec_name )
 		else if ( profileList.contains( VDP_DECODER_PROFILE_VC1_SIMPLE ) )
 			p = VDP_DECODER_PROFILE_VC1_SIMPLE;
 	}
-	else if ( !qstrcmp( codec_name, "mpeg1video" ) && profileList.contains( VDP_DECODER_PROFILE_MPEG1 ) )
-		p = VDP_DECODER_PROFILE_MPEG1;
+	else if ( !qstrcmp( codec_name, "mpeg1video" ) )
+	{
+		if ( profileList.contains( VDP_DECODER_PROFILE_MPEG1 ) )
+			p = VDP_DECODER_PROFILE_MPEG1;
+	}
 
 	if ( !ok || profile != p || outW != W || outH != H )
 	{
