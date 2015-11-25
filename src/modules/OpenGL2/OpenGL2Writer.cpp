@@ -319,6 +319,7 @@ void Drawable::initializeGL()
 #ifndef USE_NEW_OPENGL_API
 	doClear = 0;
 #endif
+	doReset = true;
 }
 void Drawable::paintGL()
 {
@@ -357,6 +358,8 @@ void Drawable::paintGL()
 	if ( videoFrameArr.isEmpty() && !hasImage )
 		return;
 
+	bool resetDone = false;
+
 	if ( !videoFrameArr.isEmpty() )
 	{
 		const VideoFrame *videoFrame = VideoFrame::fromData( videoFrameArr );
@@ -375,6 +378,8 @@ void Drawable::paintGL()
 
 			/* Prepare texture coordinates */
 			texCoordYCbCr[ 2 ] = texCoordYCbCr[ 6 ] = (videoFrame->linesize[ 0 ] == writer.outW) ? 1.0f : (writer.outW / (videoFrame->linesize[ 0 ] + 1.0f));
+
+			resetDone = true;
 		}
 
 		glActiveTexture( GL_TEXTURE0 );
@@ -403,7 +408,7 @@ void Drawable::paintGL()
 	{
 		shaderProgramYCbCr->setUniformValue( "scale", W / ( float )width(), H / ( float )height() );
 		shaderProgramYCbCr->setUniformValue( "videoEq", Brightness, Contrast, Saturation, Hue );
-		doReset = false;
+		doReset = !resetDone;
 	}
 	glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
 	shaderProgramYCbCr->release();
