@@ -228,8 +228,7 @@ void SettingsWidget::SetAudioChannels( int chn )
 	QMPlay2Core.getSettings().set( "ForceChannels", forceChannels );
 }
 
-SettingsWidget::SettingsWidget( QWidget *p, int page, const QString &moduleName ) :
-	QWidget( p ),
+SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	wasShow( false ),
 	moduleIndex( 0 )
 {

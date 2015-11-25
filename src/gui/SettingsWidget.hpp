@@ -22,7 +22,7 @@ public:
 	static void SetAudioChannelsMenu();
 	static void SetAudioChannels( int chn );
 
-	SettingsWidget( QWidget *p, int page = 0, const QString &module = QString() );
+	SettingsWidget( int page = 0, const QString &module = QString() );
 
 	void setAudioChannels();
 private:
