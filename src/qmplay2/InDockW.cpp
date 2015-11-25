@@ -24,7 +24,7 @@ InDockW::InDockW( const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &
 void InDockW::setCustomPixmap(const QPixmap &pix)
 {
 	customPixmap = pix;
-	repaint();
+	update();
 }
 
 void InDockW::wallpaperChanged( bool hasWallpaper, double alpha )

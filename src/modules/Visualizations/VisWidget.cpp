@@ -15,7 +15,7 @@ VisWidget::VisWidget() :
 	setMouseTracking( true );
 	setPalette( Qt::black );
 
-	connect( &tim, SIGNAL( timeout() ), this, SLOT( repaint() ) );
+	connect( &tim, SIGNAL( timeout() ), this, SLOT( update() ) );
 	connect( dw, SIGNAL( visibilityChanged( bool ) ), this, SLOT( visibilityChanged( bool ) ) );
 	connect( &QMPlay2Core, SIGNAL( wallpaperChanged( bool, double ) ), this, SLOT( wallpaperChanged( bool, double ) ) );
 	connect( this, SIGNAL( customContextMenuRequested( const QPoint & ) ), this, SLOT( contextMenu( const QPoint & ) ) );

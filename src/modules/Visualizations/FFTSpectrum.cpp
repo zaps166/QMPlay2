@@ -182,7 +182,7 @@ void FFTSpectrum::visState( bool playing, uchar chn, uint srate )
 			w.stop();
 		}
 		w.stopped = true;
-		w.repaint();
+		w.update();
 	}
 }
 void FFTSpectrum::sendSoundData( const QByteArray &data )

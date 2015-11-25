@@ -33,7 +33,7 @@ void Slider::drawRange( int first, int second )
 	{
 		firstLine  = first;
 		secondLine = second;
-		repaint();
+		update();
 	}
 }
 

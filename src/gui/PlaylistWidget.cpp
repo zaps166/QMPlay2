@@ -178,7 +178,7 @@ void AddThr::finished()
 		pLW.currPthToSave.clear();
 	}
 	pLW.animationTimer.stop();
-	pLW.viewport()->repaint();
+	pLW.viewport()->update();
 	pLW.setAnimated( false );
 	pLW.refresh();
 	pLW.setItemsResizeToContents( true );
@@ -791,10 +791,10 @@ void PlaylistWidget::animationUpdate()
 {
 	rotation -= 6;
 	if ( !repaintAll )
-		viewport()->repaint( getArcRect( 50 ) );
+		viewport()->update( getArcRect( 50 ) );
 	else
 	{
-		viewport()->repaint();
+		viewport()->update();
 		repaintAll = false;
 	}
 }

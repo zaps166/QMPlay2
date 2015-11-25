@@ -255,7 +255,7 @@ void Drawable::resizeEvent( QResizeEvent *e )
 	if ( isOverlay )
 		updateOverlay();
 	else if ( !e )
-		repaint();
+		update();
 
 	if ( e )
 		QWidget::resizeEvent( e );

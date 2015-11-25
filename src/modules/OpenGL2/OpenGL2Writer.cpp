@@ -126,7 +126,6 @@ Drawable::Drawable( OpenGL2Writer &writer, const QGLFormat &fmt ) :
 Drawable::Drawable( OpenGL2Writer &writer ) :
 #endif
 	isOK( true ), paused( false ),
-	videoFrame( NULL ),
 	shaderProgramYCbCr( NULL ), shaderProgramOSD( NULL ),
 #ifndef OPENGL_ES2
 	glActiveTexture( NULL ),
@@ -179,7 +178,7 @@ void Drawable::resizeEvent( QResizeEvent *e )
 #ifndef USE_NEW_OPENGL_API
 		updateGL();
 #else
-		repaint();
+		update();
 #endif
 	}
 }
@@ -343,7 +342,7 @@ void Drawable::paintGL()
 	}
 #endif
 
-#ifndef USE_NEW_OPENGL_API
+#if !defined USE_NEW_OPENGL_API
 	if ( doReset )
 		doClear = NUM_BUFFERS_TO_CLEAR;
 	if ( doClear > 0 )
@@ -351,16 +350,16 @@ void Drawable::paintGL()
 		glClear( GL_COLOR_BUFFER_BIT );
 		--doClear;
 	}
-#else
+#elif QT_VERSION < 0x050500
 	glClear( GL_COLOR_BUFFER_BIT );
 #endif
 
-	if ( !videoFrame && !hasImage )
+	if ( videoFrameArr.isEmpty() && !hasImage )
 		return;
 
-	if ( videoFrame )
+	if ( !videoFrameArr.isEmpty() )
 	{
-		hasImage = true;
+		const VideoFrame *videoFrame = VideoFrame::fromData( videoFrameArr );
 
 		if ( doReset )
 		{
@@ -389,6 +388,9 @@ void Drawable::paintGL()
 		glActiveTexture( GL_TEXTURE2 );
 		glBindTexture( GL_TEXTURE_2D, 4 );
 		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 2 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
+
+		videoFrameArr.clear();
+		hasImage = true;
 	}
 
 	shaderProgramYCbCr->setAttributeArray( positionYCbCrLoc, verticesYCbCr[ writer.flip ], 2 );
@@ -574,14 +576,13 @@ bool OpenGL2Writer::processParams( bool * )
 qint64 OpenGL2Writer::write( const QByteArray &arr )
 {
 	drawable->paused = false;
-	drawable->videoFrame = VideoFrame::fromData( arr );
+	drawable->videoFrameArr = arr;
+	VideoFrame::unref( arr );
 #ifndef USE_NEW_OPENGL_API
 	drawable->updateGL();
 #else
-	drawable->repaint();
+	drawable->update();
 #endif
-	drawable->videoFrame = NULL;
-	VideoFrame::unref( arr );
 	return arr.size();
 }
 void OpenGL2Writer::writeOSD( const QList< const QMPlay2_OSD * > &osds )

@@ -29,7 +29,7 @@ public:
 	void resizeEvent( QResizeEvent * );
 
 	bool isOK, doReset, paused;
-	const VideoFrame *videoFrame;
+	QByteArray videoFrameArr;
 	float Contrast, Saturation, Brightness, Hue;
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;

@@ -33,7 +33,7 @@ void Drawable::draw( const QByteArray &arr, bool canRepaint, bool wholeScreen )
 	}
 	else if ( videoFrameData.isEmpty() )
 	{
-		repaint();
+		update();
 		return;
 	}
 	if ( imgScaler.create( writer.outW, writer.outH, W, H ) )
@@ -47,9 +47,9 @@ void Drawable::draw( const QByteArray &arr, bool canRepaint, bool wholeScreen )
 			Functions::ImageEQ( Contrast, Brightness, img.bits(), W * H << 2 );
 	}
 	if ( canRepaint && !wholeScreen )
-		repaint( X, Y, W, H );
+		update( X, Y, W, H );
 	else if ( canRepaint && wholeScreen )
-		repaint();
+		update();
 }
 void Drawable::clr()
 {

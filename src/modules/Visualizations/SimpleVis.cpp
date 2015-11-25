@@ -198,7 +198,7 @@ void SimpleVis::visState( bool playing, uchar chn, uint srate )
 			w.stop();
 		}
 		w.stopped = true;
-		w.repaint();
+		w.update();
 	}
 }
 void SimpleVis::sendSoundData( const QByteArray &data )

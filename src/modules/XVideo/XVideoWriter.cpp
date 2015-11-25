@@ -19,7 +19,7 @@ Drawable::Drawable( XVideoWriter &writer ) :
 void Drawable::resizeEvent( QResizeEvent * )
 {
 	getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y, &dstRect, &writer.outW, &writer.outH, &srcRect );
-	repaint();
+	update();
 }
 void Drawable::paintEvent( QPaintEvent * )
 {
