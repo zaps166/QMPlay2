@@ -18,11 +18,11 @@
 
 struct _XDisplay;
 
-class VAApiWriter : public HWAccelHelper, public VideoWriter, public QWidget
+class VAAPIWriter : public HWAccelHelper, public VideoWriter, public QWidget
 {
 public:
-	VAApiWriter( Module &module );
-	~VAApiWriter();
+	VAAPIWriter( Module &module );
+	~VAAPIWriter();
 
 	bool set();
 

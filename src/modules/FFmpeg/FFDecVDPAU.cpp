@@ -30,12 +30,12 @@ bool FFDecVDPAU::set()
 
 QString FFDecVDPAU::name() const
 {
-	return "FFmpeg/VDPAU";
+	return "FFmpeg/" VDPAUWriterName;
 }
 
 bool FFDecVDPAU::open( StreamInfo *streamInfo, Writer *writer )
 {
-	if ( canUseHWAccel( streamInfo ) )
+	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P ) //AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU
 	{
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vdpau" ) )

@@ -1,4 +1,4 @@
-#include <VAApiWriter.hpp>
+#include <VAAPIWriter.hpp>
 #include <FFCommon.hpp>
 
 #include <QMPlay2_OSD.hpp>
@@ -11,7 +11,7 @@
 
 #include <va/va_x11.h>
 
-VAApiWriter::VAApiWriter( Module &module ) :
+VAAPIWriter::VAAPIWriter( Module &module ) :
 	ok( false ),
 	VADisp( NULL ),
 	rgbImgFmt( NULL ),
@@ -31,7 +31,7 @@ VAApiWriter::VAApiWriter( Module &module ) :
 
 	SetModule( module );
 }
-VAApiWriter::~VAApiWriter()
+VAAPIWriter::~VAAPIWriter()
 {
 	clr();
 	if ( VADisp )
@@ -40,7 +40,7 @@ VAApiWriter::~VAApiWriter()
 		XCloseDisplay( display );
 }
 
-bool VAApiWriter::set()
+bool VAAPIWriter::set()
 {
 #ifdef HAVE_VPP
 	allowVDPAU = sets().getBool( "AllowVDPAUinVAAPI" );
@@ -67,12 +67,12 @@ bool VAApiWriter::set()
 	return true;
 }
 
-bool VAApiWriter::readyWrite() const
+bool VAAPIWriter::readyWrite() const
 {
 	return ok;
 }
 
-bool VAApiWriter::processParams( bool * )
+bool VAAPIWriter::processParams( bool * )
 {
 	zoom = getParam( "Zoom" ).toDouble();
 	deinterlace = getParam( "Deinterlace" ).toInt();
@@ -128,7 +128,7 @@ bool VAApiWriter::processParams( bool * )
 
 	return readyWrite();
 }
-qint64 VAApiWriter::write( const QByteArray &data )
+qint64 VAAPIWriter::write( const QByteArray &data )
 {
 	VideoFrame *videoFrame = ( VideoFrame * )data.data();
 	const VASurfaceID curr_id = ( unsigned long )videoFrame->data[ 3 ];
@@ -206,11 +206,11 @@ qint64 VAApiWriter::write( const QByteArray &data )
 	paused = false;
 	return data.size();
 }
-void VAApiWriter::pause()
+void VAAPIWriter::pause()
 {
 	paused = true;
 }
-void VAApiWriter::writeOSD( const QList< const QMPlay2_OSD * > &osds )
+void VAAPIWriter::writeOSD( const QList< const QMPlay2_OSD * > &osds )
 {
 	if ( rgbImgFmt )
 	{
@@ -220,7 +220,7 @@ void VAApiWriter::writeOSD( const QList< const QMPlay2_OSD * > &osds )
 	}
 }
 
-bool VAApiWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32 ) const
+bool VAAPIWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32 ) const
 {
 	if ( dest && !( outH & 1 ) && !( outW % 4 ) )
 	{
@@ -250,12 +250,12 @@ bool VAApiWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgS
 	return false;
 }
 
-QString VAApiWriter::name() const
+QString VAAPIWriter::name() const
 {
 	return VAAPIWriterName;
 }
 
-bool VAApiWriter::open()
+bool VAAPIWriter::open()
 {
 	addParam( "Zoom" );
 	addParam( "AspectRatio" );
@@ -289,7 +289,7 @@ bool VAApiWriter::open()
 	return false;
 }
 
-quint8 *VAApiWriter::getImage( VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt ) const
+quint8 *VAAPIWriter::getImage( VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt ) const
 {
 	if ( vaCreateImage( VADisp, img_fmt, outW, outH, &image ) == VA_STATUS_SUCCESS )
 	{
@@ -304,7 +304,7 @@ quint8 *VAApiWriter::getImage( VAImage &image, VASurfaceID surfaceID, VAImageFor
 	}
 	return NULL;
 }
-bool VAApiWriter::getRGB32Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest ) const
+bool VAAPIWriter::getRGB32Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest ) const
 {
 	VAImage image;
 	quint8 *data = getImage( image, surfaceID, img_fmt );
@@ -317,7 +317,7 @@ bool VAApiWriter::getRGB32Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, 
 	}
 	return false;
 }
-bool VAApiWriter::getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const
+bool VAAPIWriter::getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const
 {
 	VAImage image;
 	quint8 *data = getImage( image, surfaceID, img_fmt );
@@ -336,7 +336,7 @@ bool VAApiWriter::getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, v
 	}
 	return false;
 }
-bool VAApiWriter::getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const
+bool VAAPIWriter::getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const
 {
 	VAImage image;
 	quint8 *data = getImage( image, surfaceID, img_fmt );
@@ -363,7 +363,7 @@ bool VAApiWriter::getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, v
 	return false;
 }
 
-bool VAApiWriter::HWAccellInit( int W, int H, const char *codec_name )
+bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 {
 	VAProfile p = ( VAProfile )-1; //VAProfileNone
 	if ( !qstrcmp( codec_name, "h264" ) )
@@ -470,16 +470,16 @@ bool VAApiWriter::HWAccellInit( int W, int H, const char *codec_name )
 	return ok;
 }
 
-QMPlay2SurfaceID VAApiWriter::getSurface()
+QMPlay2SurfaceID VAAPIWriter::getSurface()
 {
 	return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
 }
-void VAApiWriter::putSurface( QMPlay2SurfaceID id )
+void VAAPIWriter::putSurface( QMPlay2SurfaceID id )
 {
 	surfacesQueue.enqueue( id );
 }
 
-void VAApiWriter::init_vpp()
+void VAAPIWriter::init_vpp()
 {
 #ifdef HAVE_VPP
 	use_vpp = true;
@@ -551,11 +551,11 @@ void VAApiWriter::init_vpp()
 #endif
 }
 
-bool VAApiWriter::vaCreateConfigAndContext()
+bool VAAPIWriter::vaCreateConfigAndContext()
 {
 	return vaCreateConfig( VADisp, profile, VAEntrypointVLD, NULL, 0, &config ) == VA_STATUS_SUCCESS && vaCreateContext( VADisp, config, outW, outH, VA_PROGRESSIVE, surfaces, surfacesCount, &context ) == VA_STATUS_SUCCESS;
 }
-bool VAApiWriter::vaCreateSurfaces( VASurfaceID *surfaces, int num_surfaces )
+bool VAAPIWriter::vaCreateSurfaces( VASurfaceID *surfaces, int num_surfaces )
 {
 #ifdef NEW_CREATESURFACES
 	return ::vaCreateSurfaces( VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, num_surfaces, NULL, 0 ) == VA_STATUS_SUCCESS;
@@ -564,7 +564,7 @@ bool VAApiWriter::vaCreateSurfaces( VASurfaceID *surfaces, int num_surfaces )
 #endif
 }
 
-void VAApiWriter::draw( VASurfaceID _id, int _field )
+void VAAPIWriter::draw( VASurfaceID _id, int _field )
 {
 	if ( _id != VA_INVALID_SURFACE && _field > -1 )
 	{
@@ -665,15 +665,15 @@ void VAApiWriter::draw( VASurfaceID _id, int _field )
 		vaDeassociateSubpicture( VADisp, vaSubpicID, &id, 1 );
 }
 
-void VAApiWriter::resizeEvent( QResizeEvent * )
+void VAAPIWriter::resizeEvent( QResizeEvent * )
 {
 	Functions::getImageSize( aspect_ratio, zoom, width(), height(), W, H, &X, &Y, &dstQRect, &outW, &outH, &srcQRect );
 }
-void VAApiWriter::paintEvent( QPaintEvent * )
+void VAAPIWriter::paintEvent( QPaintEvent * )
 {
 	draw();
 }
-bool VAApiWriter::event( QEvent *e )
+bool VAAPIWriter::event( QEvent *e )
 {
 	/* Pass gesture event to the parent */
 	if ( e->type() == QEvent::Gesture )
@@ -681,12 +681,12 @@ bool VAApiWriter::event( QEvent *e )
 	return QWidget::event( e );
 }
 
-QPaintEngine *VAApiWriter::paintEngine() const
+QPaintEngine *VAAPIWriter::paintEngine() const
 {
 	return NULL;
 }
 
-void VAApiWriter::clearRGBImage()
+void VAAPIWriter::clearRGBImage()
 {
 	if ( vaSubpicID )
 		vaDestroySubpicture( VADisp, vaSubpicID );
@@ -694,7 +694,7 @@ void VAApiWriter::clearRGBImage()
 		vaDestroyImage( VADisp, vaImg.image_id );
 	vaImg.image_id = vaSubpicID = 0;
 }
-void VAApiWriter::clr_vpp()
+void VAAPIWriter::clr_vpp()
 {
 #ifdef HAVE_VPP
 	if ( use_vpp )
@@ -718,7 +718,7 @@ void VAApiWriter::clr_vpp()
 	config_vpp = 0;
 #endif
 }
-void VAApiWriter::clr()
+void VAAPIWriter::clr()
 {
 	clearRGBImage();
 	clr_vpp();

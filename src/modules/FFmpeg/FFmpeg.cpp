@@ -3,7 +3,7 @@
 #include <FFDecSW.hpp>
 #ifdef QMPlay2_VAAPI
 	#include <FFDecVAAPI.hpp>
-	#include <VAApiWriter.hpp>
+	#include <VAAPIWriter.hpp>
 #endif
 #ifdef QMPlay2_VDPAU
 	#include <FFDecVDPAU.hpp>

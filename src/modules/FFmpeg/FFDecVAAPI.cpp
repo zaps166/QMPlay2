@@ -1,5 +1,5 @@
 #include <FFDecVAAPI.hpp>
-#include <VAApiWriter.hpp>
+#include <VAAPIWriter.hpp>
 #include <FFCommon.hpp>
 
 #include <StreamInfo.hpp>
@@ -30,25 +30,25 @@ bool FFDecVAAPI::set()
 
 QString FFDecVAAPI::name() const
 {
-	return "FFmpeg/VAApi";
+	return "FFmpeg/" VAAPIWriterName;
 }
 
 bool FFDecVAAPI::open( StreamInfo *streamInfo, Writer *writer )
 {
-	if ( canUseHWAccel( streamInfo ) )
+	if ( ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P || streamInfo->img_fmt == AV_PIX_FMT_YUVJ420P ) )
 	{
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vaapi" ) )
 		{
 			if ( writer && writer->name() != VAAPIWriterName )
 				writer = NULL;
-			hwAccelWriter = writer ? ( VideoWriter * )writer : new VAApiWriter( getModule() );
+			hwAccelWriter = writer ? ( VideoWriter * )writer : new VAAPIWriter( getModule() );
 			if ( ( writer || hwAccelWriter->open() ) && hwAccelWriter->HWAccellInit( codec_ctx->width, codec_ctx->height, avcodec_get_name( codec_ctx->codec_id ) ) )
 			{
 				codec_ctx->hwaccel_context = av_mallocz( sizeof( vaapi_context ) );
-				( ( vaapi_context * )codec_ctx->hwaccel_context )->display    = ( ( VAApiWriter * )hwAccelWriter )->getVADisplay();
-				( ( vaapi_context * )codec_ctx->hwaccel_context )->context_id = ( ( VAApiWriter * )hwAccelWriter )->getVAContext();
-				( ( vaapi_context * )codec_ctx->hwaccel_context )->config_id  = ( ( VAApiWriter * )hwAccelWriter )->getVAConfig();
+				( ( vaapi_context * )codec_ctx->hwaccel_context )->display    = ( ( VAAPIWriter * )hwAccelWriter )->getVADisplay();
+				( ( vaapi_context * )codec_ctx->hwaccel_context )->context_id = ( ( VAAPIWriter * )hwAccelWriter )->getVAContext();
+				( ( vaapi_context * )codec_ctx->hwaccel_context )->config_id  = ( ( VAAPIWriter * )hwAccelWriter )->getVAConfig();
 				codec_ctx->thread_count   = 1;
 				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
 				codec_ctx->get_format     = get_format;

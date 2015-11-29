@@ -24,15 +24,11 @@ Writer *FFDecHWAccel::HWAccel() const
 	return ( Writer * )hwAccelWriter;
 }
 
-bool FFDecHWAccel::canUseHWAccel( const StreamInfo *streamInfo )
-{
-	return streamInfo->type == QMPLAY2_TYPE_VIDEO && ( streamInfo->img_fmt == PIX_FMT_YUV420P || streamInfo->img_fmt == PIX_FMT_YUVJ420P );
-}
-bool FFDecHWAccel::hasHWAccel( const char *name )
+bool FFDecHWAccel::hasHWAccel( const char *hwaccelName )
 {
 	AVHWAccel *avHWAccel = NULL;
 	while ( ( avHWAccel = av_hwaccel_next( avHWAccel ) ) )
-		if ( avHWAccel->id == codec_ctx->codec_id && strstr( avHWAccel->name, name ) )
+		if ( avHWAccel->id == codec_ctx->codec_id && strstr( avHWAccel->name, hwaccelName ) )
 			break;
 	return avHWAccel;
 }

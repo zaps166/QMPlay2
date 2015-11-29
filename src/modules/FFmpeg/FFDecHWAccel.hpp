@@ -13,8 +13,7 @@ protected:
 
 	Writer *HWAccel() const;
 
-	bool canUseHWAccel( const StreamInfo *streamInfo );
-	bool hasHWAccel( const char *name );
+	bool hasHWAccel( const char *hwaccelName );
 
 	virtual int decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned );
 

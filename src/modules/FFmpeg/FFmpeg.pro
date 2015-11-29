@@ -42,8 +42,8 @@ unix:!macx:!android {
 
 #VAAPI
 	PKGCONFIG += libva libva-x11
-	HEADERS   += FFDecVAAPI.hpp VAApiWriter.hpp
-	SOURCES   += FFDecVAAPI.cpp VAApiWriter.cpp
+	HEADERS   += FFDecVAAPI.hpp VAAPIWriter.hpp
+	SOURCES   += FFDecVAAPI.cpp VAAPIWriter.cpp
 	DEFINES   += QMPlay2_VAAPI
 
 #VDPAU
