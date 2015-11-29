@@ -1388,6 +1388,69 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>Playback</name>
+    <message>
+        <source>Od&amp;twarzanie</source>
+        <translation>Wieder&amp;gabe</translation>
+    </message>
+    <message>
+        <source>&amp;Dźwięk włączony</source>
+        <translation>&amp;Audio aktivieren</translation>
+    </message>
+    <message>
+        <source>O&amp;braz włączony</source>
+        <translation>&amp;Video aktivieren</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie obrazu</source>
+        <translation>Vi&amp;deo Verzögerung angeben</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij obraz</source>
+        <translation>&amp;Video verzögern</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz obraz</source>
+        <translation>V&amp;ideo Abspielgeschwindigkeit erhöhen</translation>
+    </message>
+    <message>
+        <source>&amp;Napisy włączone</source>
+        <translation>&amp;Untertitel aktivieren</translation>
+    </message>
+    <message>
+        <source>Dodaj n&amp;apisy z pliku</source>
+        <translation>Unter&amp;titel Datei hinzufügen</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie napisów</source>
+        <translation>Untert&amp;itel Verzögerung angeben</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij napisy</source>
+        <translation>U&amp;ntertitel verzögern</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz napisy</source>
+        <translation>Un&amp;tertitel Anzeigegeschwindigkeit erhöhen</translation>
+    </message>
+    <message>
+        <source>Po&amp;większ napisy</source>
+        <translation>Unt&amp;ertitel vergrößern</translation>
+    </message>
+    <message>
+        <source>Po&amp;mniejsz napisy</source>
+        <translation>Unte&amp;rtitel verkleinern</translation>
+    </message>
+    <message>
+        <source>&amp;Ustawienia odtwarzania</source>
+        <translation>&amp;Wiedergabe Einstellungen</translation>
+    </message>
+    <message>
+        <source>&amp;Zrzut ekranu</source>
+        <translation>&amp;Bildschirmfoto</translation>
+    </message>
+</context>
+<context>
     <name>Player</name>
     <message>
         <source>O&amp;dtwarzacz</source>
@@ -1464,69 +1527,6 @@ amp</source>
     <message>
         <source>&amp;Ciszej</source>
         <translation>Lautstärke a&amp;bsenken</translation>
-    </message>
-</context>
-<context>
-    <name>Playing</name>
-    <message>
-        <source>Od&amp;twarzanie</source>
-        <translation>Wieder&amp;gabe</translation>
-    </message>
-    <message>
-        <source>&amp;Dźwięk włączony</source>
-        <translation>&amp;Audio aktivieren</translation>
-    </message>
-    <message>
-        <source>O&amp;braz włączony</source>
-        <translation>&amp;Video aktivieren</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij obraz</source>
-        <translation>&amp;Video verzögern</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz obraz</source>
-        <translation>V&amp;ideo Abspielgeschwindigkeit erhöhen</translation>
-    </message>
-    <message>
-        <source>&amp;Napisy włączone</source>
-        <translation>&amp;Untertitel aktivieren</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij napisy</source>
-        <translation>U&amp;ntertitel verzögern</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz napisy</source>
-        <translation>Un&amp;tertitel Anzeigegeschwindigkeit erhöhen</translation>
-    </message>
-    <message>
-        <source>Po&amp;większ napisy</source>
-        <translation>Unt&amp;ertitel vergrößern</translation>
-    </message>
-    <message>
-        <source>Po&amp;mniejsz napisy</source>
-        <translation>Unte&amp;rtitel verkleinern</translation>
-    </message>
-    <message>
-        <source>Dodaj n&amp;apisy z pliku</source>
-        <translation>Unter&amp;titel Datei hinzufügen</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie napisów</source>
-        <translation>Untert&amp;itel Verzögerung angeben</translation>
-    </message>
-    <message>
-        <source>&amp;Zrzut ekranu</source>
-        <translation>&amp;Bildschirmfoto</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie obrazu</source>
-        <translation>Vi&amp;deo Verzögerung angeben</translation>
-    </message>
-    <message>
-        <source>&amp;Ustawienia odtwarzania</source>
-        <translation>&amp;Wiedergabe Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -1736,9 +1736,9 @@ amp</source>
     -show       - ensures that the window will be visible if the application is running
     -fullscreen - toggles fullscreen
     -volume     - sets volume [0..100]
-    -speed      - sets playing speed [0.05..100.0]
+    -speed      - sets playback speed [0.05..100.0]
     -seek       - seeks to the specified value [s]
-    -stop       - stops playing
+    -stop       - stops playback
     -next       - plays next on the list
     -prev       - plays previous on the list
     -quit       - terminates the application</translation>

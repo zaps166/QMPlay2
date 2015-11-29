@@ -29,7 +29,7 @@ VideoDock::VideoDock() :
 	popupMenu->addMenu( QMPlay2GUI.menuBar->widgets );
 	popupMenu->addMenu( QMPlay2GUI.menuBar->playlist );
 	popupMenu->addMenu( QMPlay2GUI.menuBar->player );
-	popupMenu->addMenu( QMPlay2GUI.menuBar->playing );
+	popupMenu->addMenu( QMPlay2GUI.menuBar->playback );
 	popupMenu->addMenu( QMPlay2GUI.menuBar->options );
 	popupMenu->addMenu( QMPlay2GUI.menuBar->help );
 
@@ -40,7 +40,7 @@ VideoDock::VideoDock() :
 		addAction( act );
 	foreach ( QAction *act, QMPlay2GUI.menuBar->player->actions() )
 		addAction( act );
-	foreach ( QAction *act, QMPlay2GUI.menuBar->playing->actions() )
+	foreach ( QAction *act, QMPlay2GUI.menuBar->playback->actions() )
 		addAction( act );
 	foreach ( QAction *act, QMPlay2GUI.menuBar->options->actions() )
 		addAction( act );

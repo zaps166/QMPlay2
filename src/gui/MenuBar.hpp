@@ -52,7 +52,7 @@ public:
 		Add *add;
 		QMenu *extensions;
 		Sort *sort;
-		QAction *stopLoading, *sync, *loadPlist, *savePlist, *saveGroup, *delEntries, *delNonGroupEntries, *clear, *copy, *paste, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlaying, *queue, *entryProperties;
+		QAction *stopLoading, *sync, *loadPlist, *savePlist, *saveGroup, *delEntries, *delNonGroupEntries, *clear, *copy, *paste, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlayback, *queue, *entryProperties;
 	};
 
 	class Player : public QMenu
@@ -82,11 +82,11 @@ public:
 		QAction *togglePlay, *stop, *next, *prev, *nextFrame, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute;
 	};
 
-	class Playing : public QMenu
+	class Playback : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Playing )
+		Q_DECLARE_TR_FUNCTIONS( Playback )
 	public:
-		Playing( MenuBar *parent );
+		Playback( MenuBar *parent );
 
 		class VideoFilters : public QMenu
 		{
@@ -106,7 +106,7 @@ public:
 		};
 		AudioChannels *audioChannels;
 		VideoFilters *videoFilters;
-		QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *playingSettings, *screenShot;
+		QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *playbackSettings, *screenShot;
 	};
 
 	class Options : public QMenu
@@ -133,7 +133,7 @@ public:
 	Widgets *widgets;
 	Playlist *playlist;
 	Player *player;
-	Playing *playing;
+	Playback *playback;
 	Options *options;
 	Help *help;
 private slots:

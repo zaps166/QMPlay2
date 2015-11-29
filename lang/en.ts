@@ -10,7 +10,7 @@
     </message>
     <message>
         <source>Błąd podczas odtwarzania</source>
-        <translation>Error while playing</translation>
+        <translation>Playback error</translation>
     </message>
     <message>
         <source>Nie można otworzyć</source>
@@ -401,7 +401,7 @@
     </message>
     <message>
         <source>Odtwarzanie</source>
-        <translation>Playing</translation>
+        <translation>Playback</translation>
     </message>
     <message>
         <source>Przewijanie</source>
@@ -910,7 +910,7 @@ amp</translation>
     </message>
     <message>
         <source>Urządzenia odtwarzające</source>
-        <translation>Playing device</translation>
+        <translation>Playback device</translation>
     </message>
     <message>
         <source>Metoda resamplingu</source>
@@ -1375,7 +1375,70 @@ amp</translation>
     </message>
     <message>
         <source>Ustaw szybkość odtwarzania (sek.)</source>
-        <translation>Set playing speed (sec.)</translation>
+        <translation>Set playback speed (sec.)</translation>
+    </message>
+</context>
+<context>
+    <name>Playback</name>
+    <message>
+        <source>Od&amp;twarzanie</source>
+        <translation>&amp;Playback</translation>
+    </message>
+    <message>
+        <source>&amp;Dźwięk włączony</source>
+        <translation>&amp;Audio enabled</translation>
+    </message>
+    <message>
+        <source>O&amp;braz włączony</source>
+        <translation>&amp;Video enabled</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij obraz</source>
+        <translation>&amp;Delay video</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz obraz</source>
+        <translation>&amp;Speed up video</translation>
+    </message>
+    <message>
+        <source>&amp;Napisy włączone</source>
+        <translation>&amp;Subtitles enabled</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij napisy</source>
+        <translation>&amp;Delay subtitiles</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz napisy</source>
+        <translation>&amp;Speed up subtitles</translation>
+    </message>
+    <message>
+        <source>Po&amp;większ napisy</source>
+        <translation>Scale up subt&amp;itles</translation>
+    </message>
+    <message>
+        <source>Po&amp;mniejsz napisy</source>
+        <translation>Scale down sub&amp;titles</translation>
+    </message>
+    <message>
+        <source>Dodaj n&amp;apisy z pliku</source>
+        <translation>Add &amp;subtities from file</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie napisów</source>
+        <translation>Set &amp;subtitles delay</translation>
+    </message>
+    <message>
+        <source>&amp;Zrzut ekranu</source>
+        <translation>&amp;Screen shot</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie obrazu</source>
+        <translation>Set &amp;video delay</translation>
+    </message>
+    <message>
+        <source>&amp;Ustawienia odtwarzania</source>
+        <translation>&amp;Playback settings</translation>
     </message>
 </context>
 <context>
@@ -1458,69 +1521,6 @@ amp</translation>
     </message>
 </context>
 <context>
-    <name>Playing</name>
-    <message>
-        <source>Od&amp;twarzanie</source>
-        <translation>&amp;Playing</translation>
-    </message>
-    <message>
-        <source>&amp;Dźwięk włączony</source>
-        <translation>&amp;Audio enabled</translation>
-    </message>
-    <message>
-        <source>O&amp;braz włączony</source>
-        <translation>&amp;Video enabled</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij obraz</source>
-        <translation>&amp;Delay video</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz obraz</source>
-        <translation>&amp;Speed up video</translation>
-    </message>
-    <message>
-        <source>&amp;Napisy włączone</source>
-        <translation>&amp;Subtitles enabled</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij napisy</source>
-        <translation>&amp;Delay subtitiles</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz napisy</source>
-        <translation>&amp;Speed up subtitles</translation>
-    </message>
-    <message>
-        <source>Po&amp;większ napisy</source>
-        <translation>Scale up subt&amp;itles</translation>
-    </message>
-    <message>
-        <source>Po&amp;mniejsz napisy</source>
-        <translation>Scale down sub&amp;titles</translation>
-    </message>
-    <message>
-        <source>Dodaj n&amp;apisy z pliku</source>
-        <translation>Add &amp;subtities from file</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie napisów</source>
-        <translation>Set &amp;subtitles delay</translation>
-    </message>
-    <message>
-        <source>&amp;Zrzut ekranu</source>
-        <translation>&amp;Screen shot</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie obrazu</source>
-        <translation>Set &amp;video delay</translation>
-    </message>
-    <message>
-        <source>&amp;Ustawienia odtwarzania</source>
-        <translation>&amp;Playing settings</translation>
-    </message>
-</context>
-<context>
     <name>Playlist</name>
     <message>
         <source>&amp;Lista odtwarzania</source>
@@ -1584,7 +1584,7 @@ amp</translation>
     </message>
     <message>
         <source>&amp;Idź do odtwarzanego</source>
-        <translation>&amp;Go to playing</translation>
+        <translation>&amp;Go to the playback</translation>
     </message>
     <message>
         <source>&amp;Kolejkuj</source>
@@ -1638,7 +1638,7 @@ amp</translation>
     </message>
     <message>
         <source>Błąd podczas odtwarzania</source>
-        <translation>Error while playing</translation>
+        <translation>Playback error</translation>
     </message>
 </context>
 <context>
@@ -1672,7 +1672,7 @@ amp</translation>
     </message>
     <message>
         <source>Błąd podczas odtwarzania</source>
-        <translation>Playing error</translation>
+        <translation>Playback error</translation>
     </message>
 </context>
 <context>
@@ -1726,9 +1726,9 @@ amp</translation>
     -show       - ensures that the window will be visible if the application is running
     -fullscreen - toggles fullscreen
     -volume     - sets volume [0..100]
-    -speed      - sets playing speed [0.05..100.0]
+    -speed      - sets playback speed [0.05..100.0]
     -seek       - seeks to the specified value [s]
-    -stop       - stops playing
+    -stop       - stops playback
     -next       - plays next on the list
     -prev       - plays previous on the list
     -quit       - terminates the application</translation>
@@ -1886,7 +1886,7 @@ amp</translation>
     </message>
     <message>
         <source>Ustawienia odtwarzania</source>
-        <translation>Playing settings</translation>
+        <translation>Playback settings</translation>
     </message>
     <message>
         <source>Moduły</source>
@@ -2014,7 +2014,7 @@ amp</translation>
     </message>
     <message>
         <source>Rozpocznij odtwarzanie strumienia internetowego jeżeli zostanie zbuforowane</source>
-        <translation>Start playing internet stream if it is buffered</translation>
+        <translation>Start playback internet stream if it is buffered</translation>
     </message>
     <message>
         <source>Pokazuj wskaźnik zbuforowanych danych na pasku przewijania</source>

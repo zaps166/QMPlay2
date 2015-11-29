@@ -1378,6 +1378,69 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>Playback</name>
+    <message>
+        <source>Od&amp;twarzanie</source>
+        <translation>&amp;Lecture en cours</translation>
+    </message>
+    <message>
+        <source>&amp;Dźwięk włączony</source>
+        <translation>&amp;Audio activé</translation>
+    </message>
+    <message>
+        <source>O&amp;braz włączony</source>
+        <translation>&amp;Vidéo activée</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie obrazu</source>
+        <translation>Régler &amp;écart entre les video</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij obraz</source>
+        <translation>&amp;Retarder la vidéo</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz obraz</source>
+        <translation>&amp;Accélérer la vidéo</translation>
+    </message>
+    <message>
+        <source>&amp;Napisy włączone</source>
+        <translation>&amp;Sous-titres activés</translation>
+    </message>
+    <message>
+        <source>Dodaj n&amp;apisy z pliku</source>
+        <translation>Ajouter &amp;sous-titres depuis le fichier</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie napisów</source>
+        <translation>Régler les &amp;écarts entre les sous-titres</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij napisy</source>
+        <translation>&amp;Durée des sous-titres</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz napisy</source>
+        <translation>&amp;Accélérer les sous-titres</translation>
+    </message>
+    <message>
+        <source>Po&amp;większ napisy</source>
+        <translation>Augmenter proportions des des sous-&amp;titres</translation>
+    </message>
+    <message>
+        <source>Po&amp;mniejsz napisy</source>
+        <translation>Réduire proportions des sous-&amp;titres</translation>
+    </message>
+    <message>
+        <source>&amp;Ustawienia odtwarzania</source>
+        <translation>&amp;Paramètres de lecture</translation>
+    </message>
+    <message>
+        <source>&amp;Zrzut ekranu</source>
+        <translation>&amp;Capture d&apos;écran</translation>
+    </message>
+</context>
+<context>
     <name>Player</name>
     <message>
         <source>O&amp;dtwarzacz</source>
@@ -1454,69 +1517,6 @@ amp</source>
     <message>
         <source>&amp;Ciszej</source>
         <translation>&amp;Descendre le volume</translation>
-    </message>
-</context>
-<context>
-    <name>Playing</name>
-    <message>
-        <source>Od&amp;twarzanie</source>
-        <translation>&amp;Lecture en cours</translation>
-    </message>
-    <message>
-        <source>&amp;Dźwięk włączony</source>
-        <translation>&amp;Audio activé</translation>
-    </message>
-    <message>
-        <source>O&amp;braz włączony</source>
-        <translation>&amp;Vidéo activée</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij obraz</source>
-        <translation>&amp;Retarder la vidéo</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz obraz</source>
-        <translation>&amp;Accélérer la vidéo</translation>
-    </message>
-    <message>
-        <source>&amp;Napisy włączone</source>
-        <translation>&amp;Sous-titres activés</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij napisy</source>
-        <translation>&amp;Durée des sous-titres</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz napisy</source>
-        <translation>&amp;Accélérer les sous-titres</translation>
-    </message>
-    <message>
-        <source>Po&amp;większ napisy</source>
-        <translation>Augmenter proportions des des sous-&amp;titres</translation>
-    </message>
-    <message>
-        <source>Po&amp;mniejsz napisy</source>
-        <translation>Réduire proportions des sous-&amp;titres</translation>
-    </message>
-    <message>
-        <source>Dodaj n&amp;apisy z pliku</source>
-        <translation>Ajouter &amp;sous-titres depuis le fichier</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie napisów</source>
-        <translation>Régler les &amp;écarts entre les sous-titres</translation>
-    </message>
-    <message>
-        <source>&amp;Zrzut ekranu</source>
-        <translation>&amp;Capture d&apos;écran</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie obrazu</source>
-        <translation>Régler &amp;écart entre les video</translation>
-    </message>
-    <message>
-        <source>&amp;Ustawienia odtwarzania</source>
-        <translation>&amp;Paramètres de lecture</translation>
     </message>
 </context>
 <context>

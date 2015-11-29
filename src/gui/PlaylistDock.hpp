@@ -70,7 +70,7 @@ public slots:
 	void titleSort2();
 	void collapseAll();
 	void expandAll();
-	void goToPlaying();
+	void goToPlayback();
 	void queue();
 	void findItems( const QString & );
 	void findNext();

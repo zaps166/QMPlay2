@@ -442,7 +442,7 @@ void PlaylistDock::expandAll()
 {
 	list->expandAll();
 }
-void PlaylistDock::goToPlaying()
+void PlaylistDock::goToPlayback()
 {
 	if ( list->currentPlaying )
 	{

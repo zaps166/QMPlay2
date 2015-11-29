@@ -26,7 +26,7 @@ MenuBar::MenuBar()
 	addMenu( widgets = new Widgets( this ) );
 	addMenu( playlist = new Playlist( this ) );
 	addMenu( player = new Player( this ) );
-	addMenu( playing = new Playing( this ) );
+	addMenu( playback = new Playback( this ) );
 	addMenu( options = new Options( this ) );
 	addMenu( help = new Help( this ) );
 	connect( widgets, SIGNAL( aboutToShow() ), this, SLOT( widgetsMenuShow() ) );
@@ -105,7 +105,7 @@ MenuBar::Playlist::Playlist( MenuBar *parent ) :
 	newAction( Playlist::tr( "&Zwiń wszystkie" ), this, QKeySequence(), collapseAll, false, QIcon(), false );
 	newAction( Playlist::tr( "&Rozwiń wszystkie" ), this, QKeySequence(), expandAll, false, QIcon(), false );
 	addSeparator();
-	newAction( Playlist::tr( "&Idź do odtwarzanego" ), this, QKeySequence( "Ctrl+P" ), goToPlaying, false, QIcon(), false );
+	newAction( Playlist::tr( "&Idź do odtwarzanego" ), this, QKeySequence( "Ctrl+P" ), goToPlayback, false, QIcon(), false );
 	addSeparator();
 	newAction( Playlist::tr( "&Kolejkuj" ), this, QKeySequence( "Q" ), queue, false, QIcon(), false );
 	addSeparator();
@@ -221,10 +221,10 @@ void MenuBar::Player::seekActionsEnable( bool e )
 	lSeekB->setShortcutContext( ctx );
 }
 
-MenuBar::Playing::Playing( MenuBar *parent ) :
-	QMenu( Playing::tr( "Od&twarzanie" ), parent )
+MenuBar::Playback::Playback( MenuBar *parent ) :
+	QMenu( Playback::tr( "Od&twarzanie" ), parent )
 {
-	newAction( Playing::tr( "&Dźwięk włączony" ), this, QKeySequence( "D" ), toggleAudio, false, QIcon(), true )->setObjectName( "toggleAudio" );
+	newAction( Playback::tr( "&Dźwięk włączony" ), this, QKeySequence( "D" ), toggleAudio, false, QIcon(), true )->setObjectName( "toggleAudio" );
 	toggleAudio->setChecked( true );
 
 	audioChannels = new AudioChannels( this );
@@ -232,30 +232,30 @@ MenuBar::Playing::Playing( MenuBar *parent ) :
 
 	addSeparator();
 
-	newAction( Playing::tr( "O&braz włączony" ), this, QKeySequence( "O" ), toggleVideo, false, QIcon(), true )->setObjectName( "toggleVideo" );
+	newAction( Playback::tr( "O&braz włączony" ), this, QKeySequence( "O" ), toggleVideo, false, QIcon(), true )->setObjectName( "toggleVideo" );
 	toggleVideo->setChecked( true );
 
 	videoFilters = new VideoFilters( this );
 	addMenu( videoFilters );
 
-	newAction( Playing::tr( "Ustaw opóźn&ienie obrazu" ), this, QKeySequence( "Shift+O" ), videoSync, false, QIcon(), false );
-	newAction( Playing::tr( "&Opóźnij obraz" ) + " (100ms)", this, QKeySequence( "-" ), slowDownVideo, true, QIcon(), false );
-	newAction( Playing::tr( "&Przyspiesz obraz" ) + " (100ms)", this, QKeySequence( "+" ), speedUpVideo, true, QIcon(), false );
+	newAction( Playback::tr( "Ustaw opóźn&ienie obrazu" ), this, QKeySequence( "Shift+O" ), videoSync, false, QIcon(), false );
+	newAction( Playback::tr( "&Opóźnij obraz" ) + " (100ms)", this, QKeySequence( "-" ), slowDownVideo, true, QIcon(), false );
+	newAction( Playback::tr( "&Przyspiesz obraz" ) + " (100ms)", this, QKeySequence( "+" ), speedUpVideo, true, QIcon(), false );
 	addSeparator();
-	newAction( Playing::tr( "&Napisy włączone" ), this, QKeySequence( "N" ), toggleSubtitles, false, QIcon(), true )->setObjectName( "toggleSubtitles" );
+	newAction( Playback::tr( "&Napisy włączone" ), this, QKeySequence( "N" ), toggleSubtitles, false, QIcon(), true )->setObjectName( "toggleSubtitles" );
 	toggleSubtitles->setChecked( true );
-	newAction( Playing::tr( "Dodaj n&apisy z pliku" ), this, QKeySequence( "Alt+I" ), subsFromFile, false, QIcon(), false );
-	newAction( Playing::tr( "Ustaw opóźn&ienie napisów" ), this, QKeySequence( "Shift+N" ), subtitlesSync, true, QIcon(), false );
-	newAction( Playing::tr( "&Opóźnij napisy" ) + " (100ms)", this, QKeySequence( "Shift+Z" ), slowDownSubtitles, true, QIcon(), false );
-	newAction( Playing::tr( "&Przyspiesz napisy" ) + " (100ms)", this, QKeySequence( "Shift+X" ), speedUpSubtitles, true, QIcon(), false );
-	newAction( Playing::tr( "Po&większ napisy" ), this, QKeySequence( "Shift+R" ), biggerSubtitles, true, QIcon(), false );
-	newAction( Playing::tr( "Po&mniejsz napisy" ), this, QKeySequence( "Shift+T" ), smallerSubtitles, true, QIcon(), false );
+	newAction( Playback::tr( "Dodaj n&apisy z pliku" ), this, QKeySequence( "Alt+I" ), subsFromFile, false, QIcon(), false );
+	newAction( Playback::tr( "Ustaw opóźn&ienie napisów" ), this, QKeySequence( "Shift+N" ), subtitlesSync, true, QIcon(), false );
+	newAction( Playback::tr( "&Opóźnij napisy" ) + " (100ms)", this, QKeySequence( "Shift+Z" ), slowDownSubtitles, true, QIcon(), false );
+	newAction( Playback::tr( "&Przyspiesz napisy" ) + " (100ms)", this, QKeySequence( "Shift+X" ), speedUpSubtitles, true, QIcon(), false );
+	newAction( Playback::tr( "Po&większ napisy" ), this, QKeySequence( "Shift+R" ), biggerSubtitles, true, QIcon(), false );
+	newAction( Playback::tr( "Po&mniejsz napisy" ), this, QKeySequence( "Shift+T" ), smallerSubtitles, true, QIcon(), false );
 	addSeparator();
-	newAction( Playing::tr( "&Ustawienia odtwarzania" ), this, QKeySequence( "Ctrl+Shift+P" ), playingSettings, true, QMPlay2Core.getIconFromTheme( "configure" ), false );
+	newAction( Playback::tr( "&Ustawienia odtwarzania" ), this, QKeySequence( "Ctrl+Shift+P" ), playbackSettings, true, QMPlay2Core.getIconFromTheme( "configure" ), false );
 	addSeparator();
-	newAction( Playing::tr( "&Zrzut ekranu" ), this, QKeySequence( "Alt+S" ), screenShot, true, QIcon(), false );
+	newAction( Playback::tr( "&Zrzut ekranu" ), this, QKeySequence( "Alt+S" ), screenShot, true, QIcon(), false );
 }
-MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent ) :
+MenuBar::Playback::VideoFilters::VideoFilters( QMenu *parent ) :
 	QMenu( VideoFilters::tr( "Filtry wid&eo" ), parent )
 {
 	/** Korektor wideo */
@@ -269,7 +269,7 @@ MenuBar::Playing::VideoFilters::VideoFilters( QMenu *parent ) :
 	newAction( VideoFilters::tr( "Odbicie &lustrzane" ), this, QKeySequence( "Ctrl+M" ), hFlip, true, QIcon(), true );
 	newAction( VideoFilters::tr( "Odbicie &pionowe" ), this, QKeySequence( "Ctrl+R" ), vFlip, true, QIcon(), true );
 }
-MenuBar::Playing::AudioChannels::AudioChannels( QMenu *parent ) :
+MenuBar::Playback::AudioChannels::AudioChannels( QMenu *parent ) :
 	QMenu( AudioChannels::tr( "&Kanały" ) , parent )
 {
 	choice = new QActionGroup( this );

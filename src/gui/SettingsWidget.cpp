@@ -220,14 +220,14 @@ void SettingsWidget::SetAudioChannelsMenu()
 	const bool forceChn = QMPlay2Core.getSettings().getBool( "ForceChannels" );
 	const int chn = QMPlay2Core.getSettings().getInt( "Channels" );
 	bool audioChannelsChecked = false;
-	foreach ( QAction *act, QMPlay2GUI.menuBar->playing->audioChannels->actions() )
+	foreach ( QAction *act, QMPlay2GUI.menuBar->playback->audioChannels->actions() )
 		if ( ( !forceChn && act->objectName() == "auto" ) || ( forceChn && chn == act->objectName().toInt() ) )
 		{
 			act->setChecked( true );
 			audioChannelsChecked = true;
 		}
 	if ( !audioChannelsChecked )
-		QMPlay2GUI.menuBar->playing->audioChannels->other->setChecked( true );
+		QMPlay2GUI.menuBar->playback->audioChannels->other->setChecked( true );
 }
 void SettingsWidget::SetAudioChannels( int chn )
 {

@@ -1378,6 +1378,69 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>Playback</name>
+    <message>
+        <source>Od&amp;twarzanie</source>
+        <translation>&amp;Воспроизведение</translation>
+    </message>
+    <message>
+        <source>&amp;Dźwięk włączony</source>
+        <translation>&amp;Аудио включено</translation>
+    </message>
+    <message>
+        <source>O&amp;braz włączony</source>
+        <translation>&amp;Видео включено</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie obrazu</source>
+        <translation>Установить з&amp;адержку видео</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij obraz</source>
+        <translation>&amp;Задержка видео</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz obraz</source>
+        <translation>&amp;Ускорение видео</translation>
+    </message>
+    <message>
+        <source>&amp;Napisy włączone</source>
+        <translation>&amp;Субтитры включены</translation>
+    </message>
+    <message>
+        <source>Dodaj n&amp;apisy z pliku</source>
+        <translation>Добавить &amp;субтитры из файла</translation>
+    </message>
+    <message>
+        <source>Ustaw opóźn&amp;ienie napisów</source>
+        <translation>Установить за&amp;держку субтитров</translation>
+    </message>
+    <message>
+        <source>&amp;Opóźnij napisy</source>
+        <translation>&amp;Задержка субтитров</translation>
+    </message>
+    <message>
+        <source>&amp;Przyspiesz napisy</source>
+        <translation>&amp;Ускорение субтитров</translation>
+    </message>
+    <message>
+        <source>Po&amp;większ napisy</source>
+        <translation>Увеличить субти&amp;тры</translation>
+    </message>
+    <message>
+        <source>Po&amp;mniejsz napisy</source>
+        <translation>Умень&amp;шить субтитры</translation>
+    </message>
+    <message>
+        <source>&amp;Ustawienia odtwarzania</source>
+        <translation>&amp;Настройка воспроизведения</translation>
+    </message>
+    <message>
+        <source>&amp;Zrzut ekranu</source>
+        <translation>&amp;Cнимок экрана</translation>
+    </message>
+</context>
+<context>
     <name>Player</name>
     <message>
         <source>O&amp;dtwarzacz</source>
@@ -1454,69 +1517,6 @@ amp</source>
     <message>
         <source>&amp;Ciszej</source>
         <translation>&amp;Уменьшить громкость</translation>
-    </message>
-</context>
-<context>
-    <name>Playing</name>
-    <message>
-        <source>Od&amp;twarzanie</source>
-        <translation>&amp;Воспроизведение</translation>
-    </message>
-    <message>
-        <source>&amp;Dźwięk włączony</source>
-        <translation>&amp;Аудио включено</translation>
-    </message>
-    <message>
-        <source>O&amp;braz włączony</source>
-        <translation>&amp;Видео включено</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij obraz</source>
-        <translation>&amp;Задержка видео</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz obraz</source>
-        <translation>&amp;Ускорение видео</translation>
-    </message>
-    <message>
-        <source>&amp;Napisy włączone</source>
-        <translation>&amp;Субтитры включены</translation>
-    </message>
-    <message>
-        <source>&amp;Opóźnij napisy</source>
-        <translation>&amp;Задержка субтитров</translation>
-    </message>
-    <message>
-        <source>&amp;Przyspiesz napisy</source>
-        <translation>&amp;Ускорение субтитров</translation>
-    </message>
-    <message>
-        <source>Po&amp;większ napisy</source>
-        <translation>Увеличить субти&amp;тры</translation>
-    </message>
-    <message>
-        <source>Po&amp;mniejsz napisy</source>
-        <translation>Умень&amp;шить субтитры</translation>
-    </message>
-    <message>
-        <source>Dodaj n&amp;apisy z pliku</source>
-        <translation>Добавить &amp;субтитры из файла</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie napisów</source>
-        <translation>Установить за&amp;держку субтитров</translation>
-    </message>
-    <message>
-        <source>&amp;Zrzut ekranu</source>
-        <translation>&amp;Cнимок экрана</translation>
-    </message>
-    <message>
-        <source>Ustaw opóźn&amp;ienie obrazu</source>
-        <translation>Установить з&amp;адержку видео</translation>
-    </message>
-    <message>
-        <source>&amp;Ustawienia odtwarzania</source>
-        <translation>&amp;Настройка воспроизведения</translation>
     </message>
 </context>
 <context>

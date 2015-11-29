@@ -297,7 +297,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	else
 		volume( 100 ); //Sets the tooltip
 	if ( QMPlay2Core.getSettings().getBool( "RestoreVideoEqualizer" ) )
-		menuBar->playing->videoFilters->videoEqualizer->restoreValues();
+		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
 
 	bool noplay = false;
 	while ( QMPArguments.first.count() )
@@ -507,10 +507,10 @@ void MainWidget::resetARatio()
 }
 void MainWidget::resetFlip()
 {
-	if ( menuBar->playing->videoFilters->hFlip->isChecked() )
-		menuBar->playing->videoFilters->hFlip->trigger();
-	if ( menuBar->playing->videoFilters->vFlip->isChecked() )
-		menuBar->playing->videoFilters->vFlip->trigger();
+	if ( menuBar->playback->videoFilters->hFlip->isChecked() )
+		menuBar->playback->videoFilters->hFlip->trigger();
+	if ( menuBar->playback->videoFilters->vFlip->isChecked() )
+		menuBar->playback->videoFilters->vFlip->trigger();
 }
 
 void MainWidget::visualizationFullScreen()
@@ -589,7 +589,7 @@ void MainWidget::createMenuBar()
 	connect( menuBar->playlist->sort->titleSort2, SIGNAL( triggered() ), playlistDock, SLOT( titleSort2() ) );
 	connect( menuBar->playlist->collapseAll, SIGNAL( triggered() ), playlistDock, SLOT( collapseAll() ) );
 	connect( menuBar->playlist->expandAll, SIGNAL( triggered() ), playlistDock, SLOT( expandAll() ) );
-	connect( menuBar->playlist->goToPlaying, SIGNAL( triggered() ), playlistDock, SLOT( goToPlaying() ) );
+	connect( menuBar->playlist->goToPlayback, SIGNAL( triggered() ), playlistDock, SLOT( goToPlayback() ) );
 	connect( menuBar->playlist->queue, SIGNAL( triggered() ), playlistDock, SLOT( queue() ) );
 	connect( menuBar->playlist->entryProperties, SIGNAL( triggered() ), playlistDock, SLOT( entryProperties() ) );
 
@@ -627,25 +627,25 @@ void MainWidget::createMenuBar()
 	connect( menuBar->player->volDown, SIGNAL( triggered() ), this, SLOT( volUpDown() ) );
 	connect( menuBar->player->toggleMute, SIGNAL( triggered() ), &playC, SLOT( toggleMute() ) );
 
-	connect( menuBar->playing->toggleAudio, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
-	connect( menuBar->playing->toggleVideo, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
-	connect( menuBar->playing->toggleSubtitles, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
-	connect( menuBar->playing->videoSync, SIGNAL( triggered() ), &playC, SLOT( setVideoSync() ) );
-	connect( menuBar->playing->slowDownVideo, SIGNAL( triggered() ), &playC, SLOT( slowDownVideo() ) );
-	connect( menuBar->playing->speedUpVideo, SIGNAL( triggered() ), &playC, SLOT( speedUpVideo() ) );
-	connect( menuBar->playing->slowDownSubtitles, SIGNAL( triggered() ), &playC, SLOT( slowDownSubs() ) );
-	connect( menuBar->playing->speedUpSubtitles, SIGNAL( triggered() ), &playC, SLOT( speedUpSubs() ) );
-	connect( menuBar->playing->biggerSubtitles, SIGNAL( triggered() ), &playC, SLOT( biggerSubs() ) );
-	connect( menuBar->playing->smallerSubtitles, SIGNAL( triggered() ), &playC, SLOT( smallerSubs() ) );
-	connect( menuBar->playing->playingSettings, SIGNAL( triggered() ), this, SLOT( showSettings() ) );
-	connect( menuBar->playing->screenShot, SIGNAL( triggered() ), &playC, SLOT( screenShot() ) );
-	connect( menuBar->playing->subsFromFile, SIGNAL( triggered() ), this, SLOT( browseSubsFile() ) );
-	connect( menuBar->playing->subtitlesSync, SIGNAL( triggered() ), &playC, SLOT( setSubtitlesSync() ) );
-	connect( menuBar->playing->videoFilters->videoEqualizer, SIGNAL( valuesChanged( int, int, int, int ) ), &playC, SLOT( setVideoEqualizer( int, int, int, int ) ) );
-	connect( menuBar->playing->videoFilters->more, SIGNAL( triggered( bool ) ), this, SLOT( showSettings() ) );
-	connect( menuBar->playing->videoFilters->hFlip, SIGNAL( triggered( bool ) ), &playC, SLOT( setHFlip( bool ) ) );
-	connect( menuBar->playing->videoFilters->vFlip, SIGNAL( triggered( bool ) ), &playC, SLOT( setVFlip( bool ) ) );
-	foreach ( QAction *act, menuBar->playing->audioChannels->actions() )
+	connect( menuBar->playback->toggleAudio, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
+	connect( menuBar->playback->toggleVideo, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
+	connect( menuBar->playback->toggleSubtitles, SIGNAL( triggered( bool ) ), &playC, SLOT( toggleAVS( bool ) ) );
+	connect( menuBar->playback->videoSync, SIGNAL( triggered() ), &playC, SLOT( setVideoSync() ) );
+	connect( menuBar->playback->slowDownVideo, SIGNAL( triggered() ), &playC, SLOT( slowDownVideo() ) );
+	connect( menuBar->playback->speedUpVideo, SIGNAL( triggered() ), &playC, SLOT( speedUpVideo() ) );
+	connect( menuBar->playback->slowDownSubtitles, SIGNAL( triggered() ), &playC, SLOT( slowDownSubs() ) );
+	connect( menuBar->playback->speedUpSubtitles, SIGNAL( triggered() ), &playC, SLOT( speedUpSubs() ) );
+	connect( menuBar->playback->biggerSubtitles, SIGNAL( triggered() ), &playC, SLOT( biggerSubs() ) );
+	connect( menuBar->playback->smallerSubtitles, SIGNAL( triggered() ), &playC, SLOT( smallerSubs() ) );
+	connect( menuBar->playback->playbackSettings, SIGNAL( triggered() ), this, SLOT( showSettings() ) );
+	connect( menuBar->playback->screenShot, SIGNAL( triggered() ), &playC, SLOT( screenShot() ) );
+	connect( menuBar->playback->subsFromFile, SIGNAL( triggered() ), this, SLOT( browseSubsFile() ) );
+	connect( menuBar->playback->subtitlesSync, SIGNAL( triggered() ), &playC, SLOT( setSubtitlesSync() ) );
+	connect( menuBar->playback->videoFilters->videoEqualizer, SIGNAL( valuesChanged( int, int, int, int ) ), &playC, SLOT( setVideoEqualizer( int, int, int, int ) ) );
+	connect( menuBar->playback->videoFilters->more, SIGNAL( triggered( bool ) ), this, SLOT( showSettings() ) );
+	connect( menuBar->playback->videoFilters->hFlip, SIGNAL( triggered( bool ) ), &playC, SLOT( setHFlip( bool ) ) );
+	connect( menuBar->playback->videoFilters->vFlip, SIGNAL( triggered( bool ) ), &playC, SLOT( setVFlip( bool ) ) );
+	foreach ( QAction *act, menuBar->playback->audioChannels->actions() )
 		connect( act, SIGNAL( triggered() ), this, SLOT( audioChannelsChanged() ) );
 	SettingsWidget::SetAudioChannelsMenu();
 
@@ -670,7 +670,7 @@ void MainWidget::createMenuBar()
 	secondMenu->addMenu( menuBar->widgets );
 	secondMenu->addMenu( menuBar->playlist );
 	secondMenu->addMenu( menuBar->player );
-	secondMenu->addMenu( menuBar->playing );
+	secondMenu->addMenu( menuBar->playback );
 	secondMenu->addMenu( menuBar->options );
 	secondMenu->addMenu( menuBar->help );
 	tray->setContextMenu( secondMenu );
@@ -892,7 +892,7 @@ void MainWidget::showSettings( const QString &moduleName )
 {
 	if ( !settingsW )
 	{
-		settingsW = new SettingsWidget( sender() == menuBar->playing->playingSettings ? 1 : ( ( sender() == menuBar->options->modulesSettings || !moduleName.isEmpty() ) ? 2 : ( sender() == menuBar->playing->videoFilters->more ? 5 : 0 ) ), moduleName );
+		settingsW = new SettingsWidget( sender() == menuBar->playback->playbackSettings ? 1 : ( ( sender() == menuBar->options->modulesSettings || !moduleName.isEmpty() ) ? 2 : ( sender() == menuBar->playback->videoFilters->more ? 5 : 0 ) ), moduleName );
 		connect( settingsW, SIGNAL( settingsChanged( int, bool ) ), &playC, SLOT( settingsChanged( int, bool ) ) );
 		connect( settingsW, SIGNAL( setWheelStep( int ) ), seekS, SLOT( setWheelStep( int ) ) );
 		connect( settingsW, SIGNAL( setVolMax( int ) ), volS, SLOT( setMaximum( int ) ) );
@@ -1208,7 +1208,7 @@ void MainWidget::closeEvent( QCloseEvent *e )
 #endif
 	QMPlay2Core.getSettings().set( "TrayVisible", tray->isVisible() );
 	QMPlay2Core.getSettings().set( "Volume", volS->value() );
-	menuBar->playing->videoFilters->videoEqualizer->saveValues();
+	menuBar->playback->videoFilters->videoEqualizer->saveValues();
 
 	hide();
 

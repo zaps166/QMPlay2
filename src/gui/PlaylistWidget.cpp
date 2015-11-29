@@ -825,7 +825,7 @@ void PlaylistWidget::modifyMenu()
 	playlistMenu->renameGroup->setVisible( currentItem() && isGroup( currentItem() ) );
 	playlistMenu->entryProperties->setVisible( currentItem() );
 	playlistMenu->queue->setVisible( currentItem() );
-	playlistMenu->goToPlaying->setVisible( currentPlaying );
+	playlistMenu->goToPlayback->setVisible( currentPlaying );
 	playlistMenu->copy->setVisible( selectedItems().count() );
 
 	playlistMenu->extensions->clear();

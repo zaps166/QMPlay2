@@ -18,4 +18,4 @@ MIDI - ?
 SID files - ?
 MKV - ordered chapters - ?
 Exporting audio during playback - ?
-Decoding and playing video in diffrent threads - ?
+Decoding and video playback in separate threads - ?
