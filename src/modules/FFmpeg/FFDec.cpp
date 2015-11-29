@@ -35,6 +35,7 @@ AVCodec *FFDec::init( StreamInfo *_streamInfo )
 	{
 		codec_ctx = avcodec_alloc_context3( codec );
 		codec_ctx->codec_id = codec->id;
+		codec_ctx->codec_tag = streamInfo->codec_tag;
 		codec_ctx->bit_rate = streamInfo->bitrate;
 		codec_ctx->channels = streamInfo->channels;
 		codec_ctx->sample_rate = streamInfo->sample_rate;

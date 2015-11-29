@@ -43,6 +43,7 @@ public:
 		type( QMPLAY2_TYPE_UNKNOWN ),
 		is_default( true ), must_decode( false ),
 		bitrate( 0 ), bpcs( 0 ),
+		codec_tag( 0 ),
 		sample_rate( 0 ), block_align( 0 ),
 		channels( 0 ),
 		aspect_ratio( 0.0 ), FPS( 0.0 ),
@@ -63,6 +64,7 @@ public:
 	bool is_default, must_decode;
 	struct { int num, den; } time_base;
 	int bitrate, bpcs;
+	unsigned codec_tag;
 	/* audio only */
 	quint32 sample_rate, block_align;
 	quint8 channels;
