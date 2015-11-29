@@ -15,6 +15,7 @@ FFDecSW::FFDecSW( QMutex &avcodec_mutex, Module &module ) :
 	FFDec( avcodec_mutex ),
 	threads( 0 ), lowres( 0 ),
 	thread_type_slice( false ),
+	lastFrameW( -1 ), lastFrameH( -1 ),
 	sws_ctx( NULL )
 {
 	SetModule( module );
@@ -190,6 +191,12 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 			if ( frameFinished && ~hurry_up )
 			{
 				VideoFrame *videoFrame = VideoFrame::create( decoded, streamInfo->W, streamInfo->H, frame->interlaced_frame, frame->top_field_first );
+				if ( frame->width != lastFrameW || frame->height != lastFrameH )
+				{
+					sws_ctx = sws_getCachedContext( sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL );
+					lastFrameW = frame->width;
+					lastFrameH = frame->height;
+				}
 				sws_scale( sws_ctx, frame->data, frame->linesize, 0, frame->height, videoFrame->data, videoFrame->linesize );
 			}
 		} break;
@@ -301,7 +308,6 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 			streamInfo->W = codec_ctx->width;
 			streamInfo->H = codec_ctx->height;
 		}
-		sws_ctx = sws_getCachedContext( NULL, streamInfo->W, streamInfo->H, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL );
 	}
 	return true;
 }
