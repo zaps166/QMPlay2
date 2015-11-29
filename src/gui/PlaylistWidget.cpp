@@ -661,7 +661,7 @@ void PlaylistWidget::mouseMoveEvent( QMouseEvent *e )
 				pix = QMPlay2Core.getIconFromTheme( "applications-multimedia" ).pixmap( IconSize, IconSize );
 			drag->setPixmap( pix );
 
-			drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction );
+			drag->exec( Qt::CopyAction | Qt::MoveAction | Qt::LinkAction, Qt::CopyAction );
 		}
 	}
 	else if ( canModify( false ) && !hasHiddenItems )
