@@ -79,7 +79,7 @@ public:
 	QSpinBox *shortSeekB, *longSeekB, *bufferLocalB, *bufferNetworkB, *samplerateB, *channelsB, *maxVolB;
 	QComboBox *backwardBufferNetworkB;
 	QDoubleSpinBox *playIfBufferedB;
-	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek, *restoreVideoEq;
+	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek, *restoreVideoEq, *ignorePlaybackError;
 
 	QGroupBox *replayGain;
 	QVBoxLayout *replayGainL;
@@ -203,6 +203,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init( "Silence", true );
 	QMPSettings.init( "ScrollSeek", true );
 	QMPSettings.init( "RestoreVideoEqualizer", false );
+	QMPSettings.init( "IgnorePlaybackError", true );
 	QMPSettings.init( "ApplyToASS/ColorsAndBorders", true );
 	QMPSettings.init( "ApplyToASS/MarginsAndAlignment", false );
 	QMPSettings.init( "ApplyToASS/FontsAndSpacing", false );
@@ -569,6 +570,9 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page2->restoreVideoEq = new QCheckBox( tr( "Pamiętaj ustawienia korektora wideo" ) );
 	page2->restoreVideoEq->setChecked( QMPSettings.getBool( "RestoreVideoEqualizer" ) );
 
+	page2->ignorePlaybackError = new QCheckBox( tr( "Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania" ) );
+	page2->ignorePlaybackError->setChecked( QMPSettings.getBool( "IgnorePlaybackError" ) );
+
 	for ( int m = 0 ; m < 3 ; ++m )
 	{
 		Page2::ModulesList *&mL = page2->modulesList[ m ];
@@ -644,6 +648,7 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page2->layout2->addWidget( page2->silence, layout_row++, 0, 1, 3 );
 	page2->layout2->addWidget( page2->scrollSeek, layout_row++, 0, 1, 3 );
 	page2->layout2->addWidget( page2->restoreVideoEq, layout_row++, 0, 1, 3 );
+	page2->layout2->addWidget( page2->ignorePlaybackError, layout_row++, 0, 1, 3 );
 	page2->layout2->setMargin( 0 );
 	page2->layout2->setSpacing( 2 );
 
@@ -909,6 +914,7 @@ void SettingsWidget::apply()
 			QMPSettings.set( "Silence", page2->silence->isChecked() );
 			QMPSettings.set( "ScrollSeek", page2->scrollSeek->isChecked() );
 			QMPSettings.set( "RestoreVideoEqualizer", page2->restoreVideoEq->isChecked() );
+			QMPSettings.set( "IgnorePlaybackError", page2->ignorePlaybackError->isChecked() );
 
 			QStringList videoWriters, audioWriters, decoders;
 			foreach ( QListWidgetItem *wI, page2->modulesList[ 0 ]->list->findItems( QString(), Qt::MatchContains ) )

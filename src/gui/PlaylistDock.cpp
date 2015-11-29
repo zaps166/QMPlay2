@@ -206,7 +206,7 @@ void PlaylistDock::stopLoading()
 {
 	list->addThr.stop();
 }
-void PlaylistDock::next()
+void PlaylistDock::next( bool playingError )
 {
 	QList< QTreeWidgetItem * > l = list->getChildren( PlaylistWidget::ONLY_NON_GROUPS );
 	if ( !l.contains( lastPlaying ) )
@@ -279,7 +279,10 @@ void PlaylistDock::next()
 			}
 		}
 	}
-	itemDoubleClicked( tWI );
+	if ( playingError && tWI == list->currentItem() ) //nie ponawiaj odtwarzania tego samego utworu, jeżeli wystąpił błąd przy jego odtwarzaniu
+		emit stop();
+	else
+		itemDoubleClicked( tWI );
 }
 void PlaylistDock::prev()
 {

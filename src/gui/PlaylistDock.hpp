@@ -51,7 +51,7 @@ private slots:
 	void addAndPlay( QTreeWidgetItem * );
 public slots:
 	void stopLoading();
-	void next();
+	void next( bool playingError = false );
 	void prev();
 	void start();
 	void clearCurrentPlaying();

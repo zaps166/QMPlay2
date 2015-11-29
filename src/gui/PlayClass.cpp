@@ -144,6 +144,8 @@ void PlayClass::play( const QString &_url )
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
 
+			ignorePlaybackError = QMPlay2Core.getSettings().getBool( "IgnorePlaybackError" );
+
 			choosenAudioLang = QMPlay2GUI.languages.key( QMPlay2Core.getSettings().getString( "AudioLanguage" ) );
 			choosenSubtitlesLang = QMPlay2GUI.languages.key( QMPlay2Core.getSettings().getString( "SubtitlesLanguage" ) );
 
@@ -851,7 +853,7 @@ void PlayClass::demuxThrFinished()
 	if ( !stopPauseMutex.tryLock() )
 		doSilenceBreak = true; //jeżeli ta funkcja jest wywołana spod "processEvents()" z "silence()", po tym wywołaniu ma się natychmiast zakończyć
 
-	if ( demuxThr->demuxer ) //Jeżeli wątek się zakończył po upływie czasu timera (nieprawidłowo zakończony), to demuxer nadal jest
+	if ( demuxThr->demuxer ) //Jeżeli wątek się zakończył po upływie czasu timera (nieprawidłowo zakończony), to demuxer nadal istnieje
 		demuxThr->end();
 
 	bool br  = demuxThr->demuxer.isAborted(), err = demuxThr->err;
@@ -889,11 +891,11 @@ void PlayClass::demuxThrFinished()
 
 		if ( !br && !quitApp )
 		{
-			if ( err ) //Jeżeli wystąpił błąd
+			if ( err && !ignorePlaybackError ) //Jeżeli wystąpił błąd i nie jest on ignorowany
 				stopAVThr();
 			else
 			{
-				emit playNext();
+				emit playNext( err );
 				clr = false;
 			}
 			emit clearCurrentPlaying();

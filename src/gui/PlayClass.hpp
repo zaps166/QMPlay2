@@ -98,7 +98,7 @@ private:
 	PacketBuffer aPackets, vPackets, sPackets;
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
-	bool canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream;
+	bool canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
 	int seekTo, lastSeekTo, restartSeekTo;
 	double vol, replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
@@ -172,7 +172,7 @@ signals:
 	void setCurrentPlaying();
 	void setInfo( const QString &, bool, bool );
 	void updateCurrentEntry( const QString &, int );
-	void playNext();
+	void playNext( bool playingError );
 	void message( const QString &, int ms );
 	void clearCurrentPlaying();
 	void clearInfo();

@@ -244,7 +244,7 @@ MainWidget::MainWidget( QPair< QStringList, QStringList > &QMPArguments )
 	connect( &playC, SIGNAL( setCurrentPlaying() ), playlistDock, SLOT( setCurrentPlaying() ) );
 	connect( &playC, SIGNAL( setInfo( const QString &, bool, bool ) ), infoDock, SLOT( setInfo( const QString &, bool, bool ) ) );
 	connect( &playC, SIGNAL( updateCurrentEntry( const QString &, int ) ), playlistDock, SLOT( updateCurrentEntry( const QString &, int ) ) );
-	connect( &playC, SIGNAL( playNext() ), playlistDock, SLOT( next() ) );
+	connect( &playC, SIGNAL( playNext( bool ) ), playlistDock, SLOT( next( bool ) ) );
 	connect( &playC, SIGNAL( message( const QString &, int ) ), statusBar, SLOT( showMessage( const QString &, int ) ) );
 	connect( &playC, SIGNAL( clearCurrentPlaying() ), playlistDock, SLOT( clearCurrentPlaying() ) );
 	connect( &playC, SIGNAL( clearInfo() ), infoDock, SLOT( clear() ) );

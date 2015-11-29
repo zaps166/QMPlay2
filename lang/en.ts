@@ -2204,6 +2204,10 @@ amp</translation>
         <source>Priorytet dekoderów</source>
         <translation>Decoders priority</translation>
     </message>
+    <message>
+        <source>Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania</source>
+        <translation>Play next entry after playback error</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>
