@@ -13,6 +13,7 @@ class QMPlay2_OSD;
 
 class Drawable : public QGLWidget
 {
+	Q_OBJECT
 #ifndef OPENGL_ES2
 	typedef void (APIENTRY *GLActiveTexture)(GLenum);
 #endif
@@ -34,6 +35,10 @@ public:
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
 	QString glVer;
+#ifndef USE_NEW_OPENGL_API
+private slots:
+	void resetClearCounter();
+#endif
 private:
 	void initializeGL();
 #ifndef USE_NEW_OPENGL_API

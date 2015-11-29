@@ -145,6 +145,10 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 		setProperty( "PreventFullscreen", true );
 #endif
 
+#ifndef USE_NEW_OPENGL_API
+	connect( &QMPlay2Core, SIGNAL( videoDockMoved() ), this, SLOT( resetClearCounter() ) );
+#endif
+
 	/* Initialize texCoord array */
 	texCoordYCbCr[ 0 ] = texCoordYCbCr[ 4 ] = texCoordYCbCr[ 5 ] = texCoordYCbCr[ 7 ] = 0.0f;
 	texCoordYCbCr[ 1 ] = texCoordYCbCr[ 3 ] = 1.0f;
@@ -182,6 +186,13 @@ void Drawable::resizeEvent( QResizeEvent *e )
 #endif
 	}
 }
+
+#ifndef USE_NEW_OPENGL_API
+void Drawable::resetClearCounter()
+{
+	doClear = NUM_BUFFERS_TO_CLEAR;
+}
+#endif
 
 void Drawable::initializeGL()
 {
@@ -479,8 +490,7 @@ void Drawable::resizeGL( int w, int h )
 #ifndef USE_NEW_OPENGL_API
 void Drawable::paintEvent( QPaintEvent *e )
 {
-	if ( !doClear )
-		doClear = NUM_BUFFERS_TO_CLEAR;
+	doClear = NUM_BUFFERS_TO_CLEAR;
 	QGLWidget::paintEvent( e );
 }
 #endif
