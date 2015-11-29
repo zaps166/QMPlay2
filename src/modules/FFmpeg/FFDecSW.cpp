@@ -288,8 +288,9 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 			else
 				codec_ctx->thread_type = FF_THREAD_SLICE;
 		}
-		if ( codec_ctx->codec_id != CODEC_ID_H264 && codec_ctx->codec_id != CODEC_ID_VP8 )
-			codec_ctx->lowres = lowres;
+		codec_ctx->lowres = lowres;
+		if ( codec_ctx->lowres > codec_ctx->codec->max_lowres )
+			codec_ctx->lowres = codec_ctx->codec->max_lowres;
 	}
 	if ( !FFDec::openCodec( codec ) )
 		return false;
