@@ -9,7 +9,7 @@
 
 #include <va/va.h>
 
-#if VA_VERSION_HEX >= 0x220000
+#if VA_VERSION_HEX >= 0x220000 // 1.2.0
 	#include <va/va_vpp.h>
 
 	#define NEW_CREATESURFACES

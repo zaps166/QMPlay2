@@ -375,6 +375,27 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 		else if ( profileList.contains( VAProfileH264Baseline ) )
 			p = VAProfileH264Baseline;
 	}
+#if VA_VERSION_HEX >= 0x230000 // 1.3.0
+	else if ( !qstrcmp( codec_name, "vp8" ) )
+	{
+		if ( profileList.contains( VAProfileVP8Version0_3 ) )
+			p = VAProfileVP8Version0_3;
+	}
+#endif
+#if VA_VERSION_HEX >= 0x250000 // 1.5.0
+	else if ( !qstrcmp( codec_name, "hevc" ) )
+	{
+		if ( profileList.contains( VAProfileHEVCMain ) )
+			p = VAProfileHEVCMain;
+	}
+#endif
+#if VA_VERSION_HEX >= 0x260000 // 1.6.0
+	else if ( !qstrcmp( codec_name, "vp9" ) )
+	{
+		if ( profileList.contains( VAProfileVP9Profile0 ) )
+			p = VAProfileVP9Profile0;
+	}
+#endif
 	else if ( !qstrcmp( codec_name, "mpeg2video" ) )
 	{
 		if ( profileList.contains( VAProfileMPEG2Main ) )
@@ -398,8 +419,11 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 		else if ( profileList.contains( VAProfileVC1Simple ) )
 			p = VAProfileVC1Simple;
 	}
-	else if ( !qstrcmp( codec_name, "h263" ) && profileList.contains( VAProfileH263Baseline ) )
-		p = VAProfileH263Baseline;
+	else if ( !qstrcmp( codec_name, "h263" ) )
+	{
+		if ( profileList.contains( VAProfileH263Baseline ) )
+			p = VAProfileH263Baseline;
+	}
 
 	if ( !ok || profile != p || outW != W || outH != H )
 	{

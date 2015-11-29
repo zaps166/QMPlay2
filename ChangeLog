@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 15.11.29:
 	- improve QOpenGLWidget performance (Qt5 only, not used by default),
+	- support for HEVC, VP8 and VP9 decoding in VA-API (not tested!),
 	- support for HEVC decoding in VDPAU,
 	- removed console for Windows,
 	- fix decoding BINK Video,
