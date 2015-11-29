@@ -43,6 +43,7 @@ private:
 	QGridLayout *layout;
 	QTabWidget *tabW;
 	QPushButton *applyB, *closeB;
+	QString lastM[ 3 ];
 
 	bool wasShow;
 	int moduleIndex;
@@ -52,6 +53,7 @@ private slots:
 	void chModule( QListWidgetItem * );
 	void tabCh( int );
 	void openModuleSettings( QListWidgetItem * );
+	void moveModule();
 	void chooseScreenshotDir();
 	void page2EnableOrDisable();
 	void setAppearance();

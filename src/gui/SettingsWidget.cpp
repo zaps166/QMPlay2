@@ -86,7 +86,15 @@ public:
 	QCheckBox *replayGainAlbum, *replayGainPreventClipping;
 	QDoubleSpinBox *replayGainPreamp;
 
-	QListWidget *modulesList[ 3 ];
+	class ModulesList : public QGroupBox
+	{
+	public:
+		QListWidget *list;
+		QWidget *buttonsW;
+		QToolButton *moveUp, *moveDown;
+		QVBoxLayout *layout1;
+		QHBoxLayout *layout2;
+	} *modulesList[ 3 ];
 };
 class Page3 : public QWidget
 {
@@ -563,15 +571,44 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 
 	for ( int m = 0 ; m < 3 ; ++m )
 	{
-		page2->modulesList[ m ] = new QListWidget;
-		connect( page2->modulesList[ m ], SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), this, SLOT( openModuleSettings( QListWidgetItem * ) ) );
-		page2->modulesList[ m ]->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum ) );
-		page2->modulesList[ m ]->setSelectionMode( QAbstractItemView::ExtendedSelection );
-		page2->modulesList[ m ]->setDragDropMode( QAbstractItemView::InternalMove );
+		Page2::ModulesList *&mL = page2->modulesList[ m ];
+		mL = new Page2::ModulesList;
+
+		mL->list = new QListWidget;
+		mL->list->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) );
+		connect( mL->list, SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), this, SLOT( openModuleSettings( QListWidgetItem * ) ) );
+		mL->list->setSelectionMode( QAbstractItemView::ExtendedSelection );
+		mL->list->setDragDropMode( QAbstractItemView::InternalMove );
+
+		mL->buttonsW = new QWidget;
+
+		mL->moveUp = new QToolButton;
+		mL->moveUp->setArrowType( Qt::UpArrow );
+		mL->moveUp->setToolTip( tr( "Przenieś wyżej" ) );
+		connect( mL->moveUp, SIGNAL( clicked() ), this, SLOT( moveModule() ) );
+		mL->moveUp->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) );
+
+		mL->moveDown = new QToolButton;
+		mL->moveDown->setArrowType( Qt::DownArrow );
+		mL->moveDown->setToolTip( tr( "Przenieś niżej" ) );
+		connect( mL->moveDown, SIGNAL( clicked() ), this, SLOT( moveModule() ) );
+		mL->moveDown->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) );
+
+		mL->layout1 = new QVBoxLayout( mL->buttonsW );
+		mL->layout1->addWidget( mL->moveUp );
+		mL->layout1->addWidget( mL->moveDown );
+		mL->layout1->setSpacing( 2 );
+		mL->layout1->setMargin( 0 );
+
+		mL->layout2 = new QHBoxLayout( mL );
+		mL->layout2->addWidget( mL->list );
+		mL->layout2->addWidget( mL->buttonsW );
+		mL->layout2->setSpacing( 2 );
+		mL->layout2->setMargin( 0 );
 	}
-	page2->modulesList[ 0 ]->setToolTip( tr( "Kolejność otwierania wyjścia obrazu" ) );
-	page2->modulesList[ 1 ]->setToolTip( tr( "Kolejność otwierania wyjścia dźwięku" ) );
-	page2->modulesList[ 2 ]->setToolTip( tr( "Kolejność otwierania dekoderów" ) );
+	page2->modulesList[ 0 ]->setTitle( tr( "Priorytet wyjścia obrazu" ) );
+	page2->modulesList[ 1 ]->setTitle( tr( "Priorytet wyjścia dźwięku" ) );
+	page2->modulesList[ 2 ]->setTitle( tr( "Priorytet dekoderów" ) );
 
 	layout_row = 0;
 	page2->w = new QWidget;
@@ -618,9 +655,8 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page2->layout1->setMargin( 2 );
 	page2->layout1->setSpacing( 3 );
 	page2->layout1->addWidget( page2->scrollA, 0, 0, 1, 3 );
-	page2->layout1->addWidget( page2->modulesList[ 0 ], 1, 0 );
-	page2->layout1->addWidget( page2->modulesList[ 1 ], 1, 1 );
-	page2->layout1->addWidget( page2->modulesList[ 2 ], 1, 2 );
+	for ( int m = 0 ; m < 3 ; ++m )
+		page2->layout1->addWidget( page2->modulesList[ m ], 1, m );
 
 	/* Strona 3 */
 	page3->module = NULL;
@@ -875,11 +911,11 @@ void SettingsWidget::apply()
 			QMPSettings.set( "RestoreVideoEqualizer", page2->restoreVideoEq->isChecked() );
 
 			QStringList videoWriters, audioWriters, decoders;
-			foreach ( QListWidgetItem *wI, page2->modulesList[ 0 ]->findItems( QString(), Qt::MatchContains ) )
+			foreach ( QListWidgetItem *wI, page2->modulesList[ 0 ]->list->findItems( QString(), Qt::MatchContains ) )
 				videoWriters += wI->text();
-			foreach ( QListWidgetItem *wI, page2->modulesList[ 1 ]->findItems( QString(), Qt::MatchContains ) )
+			foreach ( QListWidgetItem *wI, page2->modulesList[ 1 ]->list->findItems( QString(), Qt::MatchContains ) )
 				audioWriters += wI->text();
-			foreach ( QListWidgetItem *wI, page2->modulesList[ 2 ]->findItems( QString(), Qt::MatchContains ) )
+			foreach ( QListWidgetItem *wI, page2->modulesList[ 2 ]->list->findItems( QString(), Qt::MatchContains ) )
 				decoders += wI->text();
 			QMPSettings.set( "videoWriters", videoWriters );
 			QMPSettings.set( "audioWriters", audioWriters );
@@ -943,8 +979,7 @@ void SettingsWidget::chModule( QListWidgetItem *w )
 }
 void SettingsWidget::tabCh( int idx )
 {
-	static QString lastM[ 3 ];
-	if ( idx == 1 && !page2->modulesList[ 0 ]->count() && !page2->modulesList[ 1 ]->count() && !page2->modulesList[ 2 ]->count() )
+	if ( idx == 1 && !page2->modulesList[ 0 ]->list->count() && !page2->modulesList[ 1 ]->list->count() && !page2->modulesList[ 2 ]->list->count() )
 	{
 		QStringList writers[ 3 ] = { QMPlay2GUI.getModules( "videoWriters", 5 ), QMPlay2GUI.getModules( "audioWriters", 5 ), QMPlay2GUI.getModules( "decoders", 7 ) };
 		QVector< QPair< Module *, Module::Info > > pluginsInstances[ 3 ];
@@ -964,21 +999,21 @@ void SettingsWidget::tabCh( int idx )
 				QListWidgetItem *wI = new QListWidgetItem( writers[ m ][ i ] );
 				wI->setData( Qt::UserRole, pluginsInstances[ m ][ i ].first->name() );
 				wI->setIcon( QMPlay2GUI.getIcon( pluginsInstances[ m ][ i ].second.img.isNull() ? pluginsInstances[ m ][ i ].first->image() : pluginsInstances[ m ][ i ].second.img ) );
-				page2->modulesList[ m ]->addItem( wI );
+				page2->modulesList[ m ]->list->addItem( wI );
 				if ( writers[ m ][ i ] == lastM[ m ] )
-					page2->modulesList[ m ]->setCurrentItem( wI );
+					page2->modulesList[ m ]->list->setCurrentItem( wI );
 			}
 		for ( int m = 0 ; m < 3 ; ++m )
-			if ( page2->modulesList[ m ]->currentRow() < 0 )
-				page2->modulesList[ m ]->setCurrentRow( 0 );
+			if ( page2->modulesList[ m ]->list->currentRow() < 0 )
+				page2->modulesList[ m ]->list->setCurrentRow( 0 );
 	}
 	else if ( idx == 2 )
 		for ( int m = 0 ; m < 3 ; ++m )
 		{
-			QListWidgetItem *currI = page2->modulesList[ m ]->currentItem();
+			QListWidgetItem *currI = page2->modulesList[ m ]->list->currentItem();
 			if ( currI )
 				lastM[ m ] = currI->text();
-			page2->modulesList[ m ]->clear();
+			page2->modulesList[ m ]->list->clear();
 		}
 }
 void SettingsWidget::openModuleSettings( QListWidgetItem *wI )
@@ -988,6 +1023,36 @@ void SettingsWidget::openModuleSettings( QListWidgetItem *wI )
 	{
 		page3->listW->setCurrentItem( items[ 0 ] );
 		tabW->setCurrentIndex( 2 );
+	}
+}
+void SettingsWidget::moveModule()
+{
+	QToolButton *tB = qobject_cast< QToolButton * >( sender() );
+	if ( tB )
+	{
+		const bool moveDown = tB->arrowType() == Qt::DownArrow;
+		QListWidget *mL = NULL;
+		if ( tB->parent() == page2->modulesList[ 0 ]->buttonsW )
+			mL = page2->modulesList[ 0 ]->list;
+		else if ( tB->parent() == page2->modulesList[ 1 ]->buttonsW )
+			mL = page2->modulesList[ 1 ]->list;
+		else if ( tB->parent() == page2->modulesList[ 2 ]->buttonsW )
+			mL = page2->modulesList[ 2 ]->list;
+		if ( mL )
+		{
+			int row = mL->currentRow();
+			if ( row > -1 )
+			{
+				QListWidgetItem *item = mL->takeItem( row );
+				mL->clearSelection();
+				if ( moveDown )
+					++row;
+				else
+					--row;
+				mL->insertItem( row, item );
+				mL->setCurrentItem( item );
+			}
+		}
 	}
 }
 void SettingsWidget::chooseScreenshotDir()
