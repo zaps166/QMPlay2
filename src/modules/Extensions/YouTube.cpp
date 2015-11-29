@@ -902,26 +902,47 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 	{
 		/* Video + Audio */
 		itag_arr[ 43 ] = "360p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[ 36 ] = "240p 3GP (MPEG4 + AAC 32kbps)";
+		itag_arr[ 36 ] = "180p 3GP (MPEG4 + AAC 32kbps)";
 		itag_arr[ 22 ] = "720p MP4 (H.264 + AAC 192kbps)"; //default
 		itag_arr[ 18 ] = "360p MP4 (H.264 + AAC 96kbps)";
 		itag_arr[  5 ] = "240p FLV (FLV + MP3 64kbps)";
 
 		/* Video */
-		itag_arr[ 302 ] = "Video 60fps 720p (VP9 2743kbps)";
-		itag_arr[ 298 ] = "Video 60fps 720p (H.264 3365kbps)";
-		itag_arr[ 247 ] = "Video 720p (VP9 1650kbps)";
-		itag_arr[ 136 ] = "Video 720p (H.264 2230kbps)";
+		itag_arr[ 247 ] = "Video  720p (VP9)";
+		itag_arr[ 248 ] = "Video 1080p (VP9)";
+		itag_arr[ 271 ] = "Video 1440p (VP9)";
+		itag_arr[ 313 ] = "Video 2160p (VP9)";
+		itag_arr[ 272 ] = "Video 4320p (VP9)";
 
-		itag_arr[ 137 ] = "Video 60fps 1080p (H.264 4203kbps)";
-		itag_arr[ 248 ] = "Video 60fps 1080p (H.264 2738kbps)";
-		itag_arr[ 299 ] = "Video 60fps 1080p (H.264 5517kbps)";
-		itag_arr[ 303 ] = "Video 60fps 1080p (VP9 4633kbps)";
+		itag_arr[ 302 ] = "Video  720p 60fps (VP9)";
+		itag_arr[ 303 ] = "Video 1080p 60fps (VP9)";
+		itag_arr[ 308 ] = "Video 1440p 60fps (VP9)";
+		itag_arr[ 315 ] = "Video 2160p 60fps (VP9)";
+
+		itag_arr[ 298 ] = "Video  720p 60fps (H.264)";
+		itag_arr[ 299 ] = "Video 1080p 60fps (H.264)";
+
+		itag_arr[ 135 ] = "Video  480p (H.264)";
+		itag_arr[ 136 ] = "Video  720p (H.264)";
+		itag_arr[ 137 ] = "Video 1080p (H.264)";
+		itag_arr[ 264 ] = "Video 1440p (H.264)";
+		itag_arr[ 266 ] = "Video 2160p (H.264)";
+
+		itag_arr[ 170 ] = "Video  480p (VP8)";
+		itag_arr[ 168 ] = "Video  720p (VP8)";
+		itag_arr[ 170 ] = "Video 1080p (VP8)";
 
 		/* Audio */
+		itag_arr[ 139 ] = "Audio (AAC 48kbps)";
 		itag_arr[ 140 ] = "Audio (AAC 128kbps)";
 		itag_arr[ 141 ] = "Audio (AAC 256kbps)";
+
 		itag_arr[ 171 ] = "Audio (Vorbis 128kbps)";
+		itag_arr[ 172 ] = "Audio (Vorbis 256kbps)";
+
+		itag_arr[ 249 ] = "Audio (Opus 50kbps)";
+		itag_arr[ 250 ] = "Audio (Opus 70kbps)";
+		itag_arr[ 251 ] = "Audio (Opus 160kbps)";
 	}
 	ItagNames itagPair;
 	for ( QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd() ; it != it_end ; ++it )
