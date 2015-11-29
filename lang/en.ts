@@ -1929,14 +1929,6 @@ amp</translation>
         <translation>Video to audio sync (frame skipping)</translation>
     </message>
     <message>
-        <source>Kolejność otwierania wyjścia obrazu</source>
-        <translation>Sequence of loading video plugins</translation>
-    </message>
-    <message>
-        <source>Kolejność otwierania wyjścia dźwięku</source>
-        <translation>Sequence of loading audio plugins</translation>
-    </message>
-    <message>
         <source>Napisy</source>
         <translation>Subtitles</translation>
     </message>
@@ -2081,10 +2073,6 @@ amp</translation>
         <translation>Video filters</translation>
     </message>
     <message>
-        <source>Kolejność otwierania dekoderów</source>
-        <translation>Sequence of loading decoders</translation>
-    </message>
-    <message>
         <source>Programowe filtry wideo</source>
         <translation>Software video filters</translation>
     </message>
@@ -2195,6 +2183,26 @@ amp</translation>
     <message>
         <source>Wzmocnienie</source>
         <translation>Amplify</translation>
+    </message>
+    <message>
+        <source>Przenieś wyżej</source>
+        <translation>Move up</translation>
+    </message>
+    <message>
+        <source>Przenieś niżej</source>
+        <translation>Move down</translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia obrazu</source>
+        <translation>Video output priority</translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia dźwięku</source>
+        <translation>Audio output priority</translation>
+    </message>
+    <message>
+        <source>Priorytet dekoderów</source>
+        <translation>Decoders priority</translation>
     </message>
 </context>
 <context>
@@ -2372,7 +2380,7 @@ amp</translation>
     </message>
 </context>
 <context>
-    <name>VAApiWriter</name>
+    <name>VAAPIWriter</name>
     <message>
         <source>Nie obsługiwany algorytm usuwania przeplotu</source>
         <translation>Not supported deinterlacing algorithm</translation>
@@ -2495,10 +2503,6 @@ amp</translation>
     <message>
         <source>&amp;Okno</source>
         <translation>&amp;Window</translation>
-    </message>
-    <message>
-        <source>&amp;Konsola</source>
-        <translation>C&amp;onsole</translation>
     </message>
     <message>
         <source>&amp;Pełny ekran</source>

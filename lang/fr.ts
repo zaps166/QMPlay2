@@ -1928,14 +1928,6 @@ amp</source>
         <translation>Synchronisation audio/video (saut de trames)</translation>
     </message>
     <message>
-        <source>Kolejność otwierania wyjścia obrazu</source>
-        <translation>Séquence de chargement des plugin video</translation>
-    </message>
-    <message>
-        <source>Kolejność otwierania wyjścia dźwięku</source>
-        <translation>Séquence de chargement des plugin audio</translation>
-    </message>
-    <message>
         <source>Napisy</source>
         <translation>Sous-titres</translation>
     </message>
@@ -2080,10 +2072,6 @@ amp</source>
         <translation>Filtres vidéos</translation>
     </message>
     <message>
-        <source>Kolejność otwierania dekoderów</source>
-        <translation>Séquence de chargement des décodeurs</translation>
-    </message>
-    <message>
         <source>Programowe filtry wideo</source>
         <translation>Programme de filtres vidéos</translation>
     </message>
@@ -2193,6 +2181,26 @@ amp</source>
     </message>
     <message>
         <source>Wzmocnienie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Przenieś wyżej</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Przenieś niżej</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia obrazu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia dźwięku</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet dekoderów</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2371,7 +2379,7 @@ amp</source>
     </message>
 </context>
 <context>
-    <name>VAApiWriter</name>
+    <name>VAAPIWriter</name>
     <message>
         <source>Nie obsługiwany algorytm usuwania przeplotu</source>
         <translation>Algorithme de désentrelacement non supporté</translation>
@@ -2494,10 +2502,6 @@ amp</source>
     <message>
         <source>&amp;Okno</source>
         <translation>&amp;Fenêtre</translation>
-    </message>
-    <message>
-        <source>&amp;Konsola</source>
-        <translation>C&amp;onsole</translation>
     </message>
     <message>
         <source>&amp;Pełny ekran</source>

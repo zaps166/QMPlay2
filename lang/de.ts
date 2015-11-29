@@ -1939,14 +1939,6 @@ amp</source>
         <translation>Video zu Audio synchronisieren (Frame Skipping)</translation>
     </message>
     <message>
-        <source>Kolejność otwierania wyjścia obrazu</source>
-        <translation>Reihenfolge der geladenen Video Plugins</translation>
-    </message>
-    <message>
-        <source>Kolejność otwierania wyjścia dźwięku</source>
-        <translation>Reihenfolge der geladenen Audio Plugins</translation>
-    </message>
-    <message>
         <source>Napisy</source>
         <translation>Untertitel</translation>
     </message>
@@ -2092,10 +2084,6 @@ amp</source>
         <translation>Video Filter</translation>
     </message>
     <message>
-        <source>Kolejność otwierania dekoderów</source>
-        <translation>Reihenfolge der geladene Decoder</translation>
-    </message>
-    <message>
         <source>Programowe filtry wideo</source>
         <translation>Software Video Filter</translation>
     </message>
@@ -2205,6 +2193,26 @@ amp</source>
     </message>
     <message>
         <source>Wzmocnienie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Przenieś wyżej</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Przenieś niżej</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia obrazu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet wyjścia dźwięku</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priorytet dekoderów</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2384,7 +2392,7 @@ amp</source>
     </message>
 </context>
 <context>
-    <name>VAApiWriter</name>
+    <name>VAAPIWriter</name>
     <message>
         <source>Nie obsługiwany algorytm usuwania przeplotu</source>
         <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
@@ -2507,10 +2515,6 @@ amp</source>
     <message>
         <source>&amp;Okno</source>
         <translation>&amp;Fenster</translation>
-    </message>
-    <message>
-        <source>&amp;Konsola</source>
-        <translation>&amp;Konsole</translation>
     </message>
     <message>
         <source>&amp;Pełny ekran</source>
