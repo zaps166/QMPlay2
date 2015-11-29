@@ -12,9 +12,9 @@ class VideoThr : public AVThread
 public:
 	VideoThr( PlayClass &, Writer *, const QStringList &pluginsName = QStringList() );
 
-	inline bool isHWAccel() const
+	inline Writer *getHWAccelWriter() const
 	{
-		return HWAccel;
+		return HWAccelWriter;
 	}
 
 	inline void setDoScreenshot()
@@ -53,11 +53,12 @@ private:
 
 	void run();
 
-	bool deleteSubs, syncVtoA, doScreenshot, canWrite, HWAccel, deleteOSD, deleteFrame;
+	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame;
 	double lastSampleAspectRatio;
 	int W, H;
 
 	Decoder *sDec;
+	Writer *HWAccelWriter;
 	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
 	QMutex filtersMutex;

@@ -1,8 +1,9 @@
 Changes in QMPlay2 build 15.11.29:
-    - improve QOpenGLWidget performance (Qt5 only, not used by default),
-    - support for HEVC decoding in VDPAU,
-    - removed console for Windows,
-    - fix decoding BINK Video,
+	- improve QOpenGLWidget performance (Qt5 only, not used by default),
+	- support for HEVC decoding in VDPAU,
+	- removed console for Windows,
+	- fix decoding BINK Video,
+	- bugfix,
 
 Changes in QMPlay2 build 15.10.18:
 	- new OpenGL 2 module (with OpenGL|ES 2.0 support) replaces the old OpenGL module,

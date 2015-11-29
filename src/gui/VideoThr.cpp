@@ -24,10 +24,10 @@ using Functions::s_wait;
 VideoThr::VideoThr( PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName ) :
 	AVThread( playC, "video:", HWAccelWriter, pluginsName ),
 	doScreenshot( false ),
-	HWAccel( HWAccelWriter ),
 	deleteOSD( false ), deleteFrame( false ),
 	W( 0 ), H( 0 ),
 	sDec( NULL ),
+	HWAccelWriter( HWAccelWriter ),
 	subtitles( NULL )
 {
 	connect( this, SIGNAL( write( const QByteArray & ) ), this, SLOT( write_slot( const QByteArray & ) ) );
@@ -131,7 +131,7 @@ void VideoThr::initFilters( bool processParams )
 	else if ( writer )
 		writer->modParam( "Deinterlace", 0 );
 
-	if ( !isHWAccel() )
+	if ( !HWAccelWriter )
 		foreach ( QString filterName, QMPSettings.get( "VideoFilters" ).toStringList() )
 			if ( filterName.left( 1 ).toInt() ) //if filter is enabled
 			{
@@ -503,7 +503,7 @@ void VideoThr::screenshot_slot( const QByteArray &frame )
 		QImage img( aligned8W, H, QImage::Format_RGB32 );
 		VideoFrame *videoFrame = ( VideoFrame * )frame.data();
 		bool ok = true;
-		if ( !isHWAccel() )
+		if ( !HWAccelWriter )
 			imgScaler.scale( videoFrame, img.bits() );
 		else
 			ok = ( ( VideoWriter * )writer )->HWAccellGetImg( videoFrame, img.bits(), &imgScaler );

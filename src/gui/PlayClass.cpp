@@ -985,13 +985,13 @@ void PlayClass::load( Demuxer *demuxer )
 		vPackets.clear();
 		stopVDec(); //lock
 		if ( videoEnabled )
-			dec = loadStream( streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), ( vThr && vThr->isHWAccel() ) ? vThr->writer : NULL );
+			dec = loadStream( streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), vThr ? vThr->getHWAccelWriter() : NULL );
 		else
 			dec = NULL;
 		if ( dec )
 		{
 			const bool canEmitVideoStarted = !vThr;
-			if ( vThr && ( vThr->isHWAccel() == !dec->HWAccel() ) )
+			if ( vThr && ( vThr->getHWAccelWriter() != dec->HWAccel() ) )
 				stopVThr();
 			if ( !vThr )
 			{
