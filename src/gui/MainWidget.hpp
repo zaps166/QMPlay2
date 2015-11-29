@@ -87,9 +87,6 @@ private slots:
 
 	void about();
 
-#ifdef Q_OS_WIN
-	void console( bool );
-#endif
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	void hideMenu( bool );
 #else

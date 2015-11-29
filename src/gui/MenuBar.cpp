@@ -38,10 +38,6 @@ MenuBar::MenuBar()
 MenuBar::Window::Window( MenuBar *parent ) :
 	QMenu( Window::tr( "&Okno" ), parent )
 {
-#ifdef Q_OS_WIN
-	newAction( Window::tr( "&Konsola" ), this, QKeySequence( "Ctlr+Shift+C" ), console, false, QIcon(), true );
-	addSeparator();
-#endif
 	newAction( QString(), this, QKeySequence( "`" ), toggleVisibility, false, QIcon(), false );
 	newAction( Window::tr( "&Pełny ekran" ), this, QKeySequence( "F" ), toggleFullScreen, false, QMPlay2Core.getIconFromTheme( "view-fullscreen" ), false );
 	newAction( Window::tr( "&Tryb kompaktowy" ), this, QKeySequence( "Alt+V" ), toggleCompactView, false, QIcon(), true  );

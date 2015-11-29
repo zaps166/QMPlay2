@@ -17,9 +17,6 @@ public:
 		Q_DECLARE_TR_FUNCTIONS( Window )
 	public:
 		Window( MenuBar *parent );
-#ifdef Q_OS_WIN
-		QAction *console;
-#endif
 		QAction *toggleVisibility, *toggleFullScreen, *toggleCompactView, *close;
 	};
 

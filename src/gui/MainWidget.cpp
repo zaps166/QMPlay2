@@ -562,9 +562,6 @@ void MainWidget::createMenuBar()
 		}
 	menuBar->playlist->add->setEnabled( menuBar->playlist->add->actions().count() );
 
-#ifdef Q_OS_WIN
-	connect( menuBar->window->console, SIGNAL( triggered( bool ) ), this, SLOT( console( bool ) ) );
-#endif
 	connect( menuBar->window->toggleVisibility, SIGNAL( triggered() ), this, SLOT( toggleVisibility() ) );
 	connect( menuBar->window->toggleFullScreen, SIGNAL( triggered() ), this, SLOT( toggleFullScreen() ) );
 	connect( menuBar->window->toggleCompactView, SIGNAL( triggered() ), this, SLOT( toggleCompactView() ) );
@@ -998,35 +995,6 @@ void MainWidget::about()
 		aboutW = NULL;
 	}
 }
-
-#ifdef Q_OS_WIN
-#include <windows.h>
-static BOOL WINAPI consoleCtrlHandler( DWORD dwCtrlType )
-{
-	Q_UNUSED( dwCtrlType )
-	qApp->postEvent( QMPlay2GUI.mainW, new QEvent( QEvent::Close ) );
-	return true;
-}
-void MainWidget::console( bool checked )
-{
-	if ( !checked )
-		FreeConsole();
-	else
-	{
-		if ( !AllocConsole() )
-		{
-			( ( QAction * )sender() )->setChecked( false );
-			return;
-		}
-		SetConsoleCtrlHandler( consoleCtrlHandler, true );
-		SetConsoleTitle( qApp->applicationName().toLocal8Bit().data() );
-		freopen( "conin$", "r", stdin );
-		freopen( "conout$", "w", stdout );
-		freopen( "conout$", "w", stderr );
-		printf( "QMPlay2 console\n" );
-	}
-}
-#endif
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 void MainWidget::hideMenu( bool h )
