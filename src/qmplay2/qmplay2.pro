@@ -10,8 +10,8 @@ else: DESTDIR = ../../app/lib
 
 win32 {
 	LIBS += -lswscale -lswresample -lavutil -Wl,-Bstatic -lass
-	!contains(QMAKE_CXX, x86_64-w64-mingw32-g++): LIBS += -lfontconfig
-	LIBS += -lexpat -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
+	!contains(QMAKE_CXX, x86_64-w64-mingw32-g++): LIBS += -lfontconfig -lexpat
+	LIBS += -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lshell32
 }
 else {
 	macx: QT_CONFIG -= no-pkg-config
