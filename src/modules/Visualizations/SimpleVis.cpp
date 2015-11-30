@@ -71,7 +71,7 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 				path.lineTo( i / ( qreal )( size - chn ), 1.0 - samples[ i + c ] );
 			p.drawPath( path );
 
-			if ( c <= 2 )
+			if ( c < 2 )
 			{
 				const int numSamples = size / chn;
 				for ( int i = 0 ; i < size ; i += chn )
