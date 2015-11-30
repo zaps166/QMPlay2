@@ -8,6 +8,7 @@ Changes in QMPlay2 build 15.11.30:
 	- support for HEVC decoding in VDPAU,
 	- removed console for Windows,
 	- fix decoding BINK Video,
+	- added chiptune playback,
 	- bugfix,
 
 Changes in QMPlay2 build 15.10.18:

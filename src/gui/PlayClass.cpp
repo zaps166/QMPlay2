@@ -230,7 +230,7 @@ void PlayClass::seek( int pos )
 		pos = 0;
 	if ( lastSeekTo == pos )
 		return;
-	QMPlay2Core.seeked( lastSeekTo = seekTo = pos );
+	emit QMPlay2Core.seeked( lastSeekTo = seekTo = pos );
 	fillBufferB = true;
 	if ( aThr && paused )
 		aThr->silence( true );

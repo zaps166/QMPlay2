@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
-#define VER 2
+#define VER 3
 
 FileAssociation::FileAssociation() :
 	Module( "FileAssociation" )
