@@ -912,7 +912,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 		itag_arr[ 248 ] = "Video 1080p (VP9)";
 		itag_arr[ 271 ] = "Video 1440p (VP9)";
 		itag_arr[ 313 ] = "Video 2160p (VP9)";
-		itag_arr[ 272 ] = "Video 4320p (VP9)";
+		itag_arr[ 272 ] = "Video 4320p/2160p (VP9)";
 
 		itag_arr[ 302 ] = "Video  720p 60fps (VP9)";
 		itag_arr[ 303 ] = "Video 1080p 60fps (VP9)";
