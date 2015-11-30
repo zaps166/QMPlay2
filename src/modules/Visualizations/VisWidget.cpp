@@ -1,9 +1,30 @@
 #include <VisWidget.hpp>
 #include <QMPlay2Core.hpp>
 #include <DockWidget.hpp>
+#include <Functions.hpp>
 
 #include <QMouseEvent>
 #include <QMenu>
+
+#include <math.h>
+
+void VisWidget::setValue( qreal &out, qreal in, qreal tDiffScaled )
+{
+	if ( in < out )
+		out -= sqrt( out ) * tDiffScaled;
+	else
+		out = in;
+}
+void VisWidget::setValue( QPair< qreal, double > &out, qreal in, qreal tDiffScaled )
+{
+	if ( in < out.first )
+		out.first -= ( Functions::gettime() - out.second ) * tDiffScaled;
+	else
+	{
+		out.first = in;
+		out.second = Functions::gettime();
+	}
+}
 
 VisWidget::VisWidget() :
 	stopped( true ),

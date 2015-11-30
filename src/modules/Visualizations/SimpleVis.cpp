@@ -1,17 +1,10 @@
 #include <SimpleVis.hpp>
+#include <Functions.hpp>
 
 #include <QPainter>
 #include <QMenu>
 
 #include <math.h>
-
-static inline void setValue( qreal &outV, qreal inV, int interval, qreal dz )
-{
-	if ( inV >= outV )
-		outV = inV;
-	else
-		outV -= sqrt( outV ) * ( interval / dz );
-}
 
 static inline float fltclip( float f )
 {
@@ -42,7 +35,7 @@ SimpleVisW::SimpleVisW( SimpleVis &simpleVis ) :
 
 	chn = 2;
 	srate = 0;
-	L = R = Lk = Rk = 0.0;
+	leftBar = rightBar = leftLine.first = rightLine.first = 0.0;
 	interval = -1;
 
 	linearGrad.setStart( 0, 1 );
@@ -73,9 +66,9 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 			p.drawLine( QLineF( 0.0, 1.0, 1.0, 1.0 ) );
 
 			p.setPen( QPen( QColor( 102, 179, 102 ), 0.0 ) );
-			QPainterPath path( QPointF( 0.0, 1.0-samples[ c ] ) );
+			QPainterPath path( QPointF( 0.0, 1.0 - samples[ c ] ) );
 			for ( int i = chn ; i < size ; i += chn )
-				path.lineTo( i / ( qreal )( size - chn ), 1.0-samples[ i + c ] );
+				path.lineTo( i / ( qreal )( size - chn ), 1.0 - samples[ i + c ] );
 			p.drawPath( path );
 
 			if ( c <= 2 )
@@ -95,22 +88,24 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 		if ( chn == 1 )
 			lr[ 1 ] = lr[ 0 ];
 
-		const int realInterval = timInterval.restart();
+		const double currTime = Functions::gettime();
+		const double realInterval = currTime - time;
+		time = currTime;
 
-		/* Paski */
-		::setValue( L, lr[ 0 ], realInterval, 500.0 );
-		::setValue( R, lr[ 1 ], realInterval, 500.0 );
-		p.fillRect( QRectF( 0.005, 1.0, 0.035, -L ), linearGrad );
-		p.fillRect( QRectF( 0.960, 1.0, 0.035, -R ), linearGrad );
+		/* Bars */
+		setValue( leftBar,  lr[ 0 ], realInterval * 2.0 );
+		setValue( rightBar, lr[ 1 ], realInterval * 2.0 );
+		p.fillRect( QRectF( 0.005, 1.0, 0.035, -leftBar  ), linearGrad );
+		p.fillRect( QRectF( 0.960, 1.0, 0.035, -rightBar ), linearGrad );
 
-		/* Kreski */
-		::setValue( Lk, lr[ 0 ], realInterval, 1500.0 );
-		::setValue( Rk, lr[ 1 ], realInterval, 1500.0 );
+		/* Horizontal lines over side bars */
+		setValue( leftLine,  lr[ 0 ], realInterval * 0.5 );
+		setValue( rightLine, lr[ 1 ], realInterval * 0.5 );
 		p.setPen( QPen( linearGrad, 0.0 ) );
-		p.drawLine( QLineF( 0.005, -Lk+1.0, 0.040, -Lk+1.0 ) );
-		p.drawLine( QLineF( 0.960, -Rk+1.0, 0.995, -Rk+1.0 ) );
+		p.drawLine( QLineF( 0.005, -leftLine.first  + 1.0, 0.040, -leftLine.first  + 1.0 ) );
+		p.drawLine( QLineF( 0.960, -rightLine.first + 1.0, 0.995, -rightLine.first + 1.0 ) );
 
-		if ( stopped && tim.isActive() && Lk == lr[ 0 ] && Rk == lr[ 1 ] )
+		if ( stopped && tim.isActive() && leftLine.first == lr[ 0 ] && rightLine.first == lr[ 1 ] )
 			tim.stop();
 	}
 }
@@ -125,14 +120,14 @@ void SimpleVisW::start( bool v )
 	{
 		simpleVis.soundBuffer( true );
 		tim.start( interval );
-		timInterval.start();
+		time = Functions::gettime();
 	}
 }
 void SimpleVisW::stop()
 {
 	tim.stop();
 	simpleVis.soundBuffer( false );
-	L = R = Lk = Rk = 0.0f;
+	leftBar = rightBar = leftLine.first = rightLine.first = 0.0f;
 }
 
 /**/

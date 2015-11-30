@@ -18,7 +18,7 @@ private:
 	void stop();
 
 	QVector< float > spectrumData;
-	QVector< QPair< float, float > > lastData;
+	QVector< QPair< qreal, QPair< qreal, double > > > lastData;
 	uchar chn;
 	uint srate;
 	int interval, fftSize;

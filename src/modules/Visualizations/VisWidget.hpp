@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QTime>
 
 class DockWidget;
 
@@ -13,13 +12,16 @@ class VisWidget : public QWidget
 protected:
 	VisWidget();
 
+	static void setValue( qreal &out, qreal in, qreal tDiffScaled );
+	static void setValue( QPair< qreal, double > &out, qreal in, qreal tDiffScaled );
+
 	virtual void start( bool v = false ) = 0;
 	virtual void stop() = 0;
 
 	QTimer tim;
 	bool stopped;
 	DockWidget *dw;
-	QTime timInterval;
+	double time;
 private:
 	void changeEvent( QEvent * );
 	void mouseDoubleClickEvent( QMouseEvent * );

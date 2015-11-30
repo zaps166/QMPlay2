@@ -1,21 +1,12 @@
 #include <FFTSpectrum.hpp>
+#include <Functions.hpp>
 
 #include <QPainter>
-
-#include <math.h>
 
 extern "C"
 {
 	#include <libavutil/mem.h>
 	#include <libavcodec/avfft.h>
-}
-
-static inline void setValue( float &outV, float inV, int interval, float dz )
-{
-	if ( inV >= outV )
-		outV = inV;
-	else
-		outV -= sqrtf( outV ) * ( interval / dz );
 }
 
 static inline void fltmix( FFTComplex *dest, const float *src, const int size, const uchar chn )
@@ -63,23 +54,26 @@ void FFTSpectrumW::paintEvent( QPaintEvent * )
 	if ( size )
 	{
 		p.setPen( QPen( linearGrad, 0.0 ) );
-		p.scale( ( width()-1.0 ) / size, height()-1.0 );
+		p.scale( ( width() - 1.0 ) / size, height() - 1.0 );
 
-		const int realInterval = timInterval.restart();
+		const double currTime = Functions::gettime();
+		const double realInterval = currTime - time;
+		time = currTime;
+
 		const float *spectrum = spectrumData.constData();
 		QPainterPath path( QPointF( 0.0, 1.0 ) );
 		for ( int x = 0 ; x < size ; ++x )
 		{
-			/* Paski */
-			::setValue( lastData[ x ].first, spectrum[ x ], realInterval, 500.0f );
-			path.lineTo( x, 1.0-lastData[ x ].first );
-			path.lineTo( x + 1.0, 1.0-lastData[ x ].first );
+			/* Bars */
+			setValue( lastData[ x ].first, spectrum[ x ], realInterval * 2.0 );
+			path.lineTo( x, 1.0 - lastData[ x ].first );
+			path.lineTo( x + 1.0, 1.0 - lastData[ x ].first );
 
-			/* Kreski */
-			::setValue( lastData[ x ].second, spectrum[ x ], realInterval, 1500.0f );
-			p.drawLine( QLineF( x, 1.0-lastData[ x ].second, x + 1.0, 1.0-lastData[ x ].second ) );
+			/* Horizontal lines over bars */
+			setValue( lastData[ x ].second, spectrum[ x ], realInterval * 0.5 );
+			p.drawLine( QLineF( x, 1.0 - lastData[ x ].second.first, x + 1.0, 1.0 - lastData[ x ].second.first ) );
 
-			canStop &= lastData[ x ].second == spectrum[ x ];
+			canStop &= lastData[ x ].second.first == spectrum[ x ];
 		}
 		path.lineTo( size, 1.0 );
 		p.fillPath( path, linearGrad );
@@ -95,7 +89,7 @@ void FFTSpectrumW::start( bool v )
 	{
 		fftSpectrum.soundBuffer( true );
 		tim.start( interval );
-		timInterval.start();
+		time = Functions::gettime();
 	}
 }
 void FFTSpectrumW::stop()

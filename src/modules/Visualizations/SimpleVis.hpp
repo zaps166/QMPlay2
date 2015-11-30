@@ -19,10 +19,11 @@ private:
 	void stop();
 
 	QByteArray soundData;
-	uchar chn;
-	uint srate;
+	quint8 chn;
+	quint32 srate;
 	int interval;
-	qreal L, R, Lk, Rk;
+	qreal leftBar, rightBar;
+	QPair< qreal, double > leftLine, rightLine;
 	SimpleVis &simpleVis;
 	QLinearGradient linearGrad;
 	bool fullScreen;
