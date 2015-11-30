@@ -5,12 +5,12 @@
 
 #include <math.h>
 
-static inline void setValue( float &V, float v, int interval, float dz )
+static inline void setValue( qreal &outV, qreal inV, int interval, qreal dz )
 {
-	if ( v >= V )
-		V = v;
+	if ( inV >= outV )
+		outV = inV;
 	else
-		V -= sqrtf( V ) * ( interval / dz );
+		outV -= sqrt( outV ) * ( interval / dz );
 }
 
 static inline float fltclip( float f )
@@ -42,7 +42,7 @@ SimpleVisW::SimpleVisW( SimpleVis &simpleVis ) :
 
 	chn = 2;
 	srate = 0;
-	L = R = Lk = Rk = 0.0f;
+	L = R = Lk = Rk = 0.0;
 	interval = -1;
 
 	linearGrad.setStart( 0, 1 );
@@ -62,6 +62,8 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 	{
 		const float *samples = ( const float * )soundData.constData();
 
+		qreal lr[ 2 ] = { 0.0f, 0.0f };
+
 		p.translate( 0.0, fullScreen );
 		p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
 		p.translate( 0.055, 0.0 );
@@ -76,34 +78,39 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 				path.lineTo( i / ( qreal )( size - chn ), 1.0-samples[ i + c ] );
 			p.drawPath( path );
 
+			if ( c <= 2 )
+			{
+				const int numSamples = size / chn;
+				for ( int i = 0 ; i < size ; i += chn )
+					lr[ c ] += samples[ i + c ] * samples[ i + c ];
+				lr[ c ] = sqrt( lr[ c ] / numSamples );
+			}
+
 			p.translate( 0.0, 2.0 );
 		}
 
 		p.resetTransform();
 		p.scale( width()-1, height()-1 );
-		float l = fabs( samples[ 0 ] ), r;
-		if ( chn >= 2 )
-			r = fabs( samples[ 1 ] );
-		else
-			r = l;
+
+		if ( chn == 1 )
+			lr[ 1 ] = lr[ 0 ];
 
 		const int realInterval = timInterval.restart();
 
 		/* Paski */
-		::setValue( L, l, realInterval, 500.0f );
-		::setValue( R, r, realInterval, 500.0f );
+		::setValue( L, lr[ 0 ], realInterval, 500.0 );
+		::setValue( R, lr[ 1 ], realInterval, 500.0 );
 		p.fillRect( QRectF( 0.005, 1.0, 0.035, -L ), linearGrad );
 		p.fillRect( QRectF( 0.960, 1.0, 0.035, -R ), linearGrad );
 
 		/* Kreski */
-		::setValue( Lk, l, realInterval, 1500.0f );
-		::setValue( Rk, r, realInterval, 1500.0f );
-
+		::setValue( Lk, lr[ 0 ], realInterval, 1500.0 );
+		::setValue( Rk, lr[ 1 ], realInterval, 1500.0 );
 		p.setPen( QPen( linearGrad, 0.0 ) );
 		p.drawLine( QLineF( 0.005, -Lk+1.0, 0.040, -Lk+1.0 ) );
 		p.drawLine( QLineF( 0.960, -Rk+1.0, 0.995, -Rk+1.0 ) );
 
-		if ( stopped && tim.isActive() && Rk == r && Lk == l )
+		if ( stopped && tim.isActive() && Lk == lr[ 0 ] && Rk == lr[ 1 ] )
 			tim.stop();
 	}
 }

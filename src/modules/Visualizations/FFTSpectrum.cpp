@@ -10,12 +10,12 @@ extern "C"
 	#include <libavcodec/avfft.h>
 }
 
-static inline void setValue( float &V, float v, int interval, float dz )
+static inline void setValue( float &outV, float inV, int interval, float dz )
 {
-	if ( v >= V )
-		V = v;
+	if ( inV >= outV )
+		outV = inV;
 	else
-		V -= sqrtf( V ) * ( interval / dz );
+		outV -= sqrtf( outV ) * ( interval / dz );
 }
 
 static inline void fltmix( FFTComplex *dest, const float *src, const int size, const uchar chn )

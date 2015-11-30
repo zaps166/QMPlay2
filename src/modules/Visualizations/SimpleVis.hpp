@@ -22,7 +22,7 @@ private:
 	uchar chn;
 	uint srate;
 	int interval;
-	float L, R, Lk, Rk;
+	qreal L, R, Lk, Rk;
 	SimpleVis &simpleVis;
 	QLinearGradient linearGrad;
 	bool fullScreen;

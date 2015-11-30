@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 15.11.29:
+Changes in QMPlay2 build 15.11.30:
 	- setting priorities of decoders and A/V outputs is now more convenient,
 	- improve QOpenGLWidget performance (Qt5 only, not used by default),
+	- simple visualization shows RMS of displayed signal in side bars,
 	- support for HEVC, VP8 and VP9 decoding in VA-API (not tested!),
 	- play next entry after playback error (as default),
 	- support for HEVC decoding in VDPAU,

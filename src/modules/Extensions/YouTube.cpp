@@ -935,10 +935,10 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 		/* Audio */
 		itag_arr[ 139 ] = "Audio (AAC 48kbps)";
 		itag_arr[ 140 ] = "Audio (AAC 128kbps)";
-		itag_arr[ 141 ] = "Audio (AAC 256kbps)";
+		itag_arr[ 141 ] = "Audio (AAC 256kbps)"; //?
 
 		itag_arr[ 171 ] = "Audio (Vorbis 128kbps)";
-		itag_arr[ 172 ] = "Audio (Vorbis 256kbps)";
+		itag_arr[ 172 ] = "Audio (Vorbis 256kbps)"; //?
 
 		itag_arr[ 249 ] = "Audio (Opus 50kbps)";
 		itag_arr[ 250 ] = "Audio (Opus 70kbps)";
