@@ -76,7 +76,8 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 - Add directory containing "qmake" to "PATH".
 - Run "./compile_mac n" where "n" is number of threads (4 by default).
 
-Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
->https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2
+##Building package RPM, DEB or any other
 
-QMPlay2 uses the external software for some YouTube videos - "youtube-dl", so it should be as optional package in package manager.
+- Look at "installer_unix" script or Arch Linux PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/?h=qmplay2-git
+- QMPlay2 sometimes uses the external software - "youtube-dl", so it should be added as optional package.
+- QMPlay2 has non-standard MIME types in "src/gui/Unix/x-*.xml", so they should be registered during installing from package.
