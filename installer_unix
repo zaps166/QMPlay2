@@ -10,16 +10,17 @@ fi
 function do_mime_type
 {
 	cd src/gui/Unix || exit 1
+	FILE_LIST=`ls x-*.xml` || exit 1
 
 	MIME_PACKAGES='/usr/share/mime/packages'
-	for MIME in x-*.xml
+	for MIME in $FILE_LIST
 	do
 		if [ $1 == 'install' ]
 		then
 			sudo cp --remove-destination -v $MIME $MIME_PACKAGES || exit 1
 		elif [ $1 == 'uninstall' ]
 		then
-			sudo rm -v $MIME_PACKAGES/$MIME || exit 1
+			sudo rm -v $MIME_PACKAGES/$MIME
 		fi
 	done
 
