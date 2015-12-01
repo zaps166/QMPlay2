@@ -7,6 +7,27 @@ else
 	libdir=lib64
 fi
 
+function do_mime_type
+{
+	cd src/gui/Unix || exit 1
+
+	MIME_PACKAGES='/usr/share/mime/packages'
+	for MIME in x-*.xml
+	do
+		if [ $1 == 'install' ]
+		then
+			sudo cp --remove-destination -v $MIME $MIME_PACKAGES || exit 1
+		elif [ $1 == 'uninstall' ]
+		then
+			sudo rm -v $MIME_PACKAGES/$MIME || exit 1
+		fi
+	done
+
+	echo "Updating MIME and desktop database"
+	sudo update-desktop-database /usr/share/applications
+	sudo update-mime-database /usr/share/mime
+}
+
 function copy_files
 {
 	sudo cp --remove-destination -v    app/bin/QMPlay2 /usr/bin || exit 1
@@ -16,6 +37,8 @@ function copy_files
 
 	sudo strip /usr/bin/QMPlay2 || exit 1
 	sudo strip /usr/share/qmplay2/modules/*.so || exit 1
+
+	do_mime_type install
 }
 
 function remove_files
@@ -32,6 +55,8 @@ function remove_files
 		sudo rm -v    /usr/share/apps/solid/actions/qmplay2-opencda.desktop
 	fi
 	sudo rm -v -r /usr/share/qmplay2
+
+	do_mime_type uninstall
 }
 
 export SYSTEM_BUILD=1

@@ -28,6 +28,7 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 - pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro"),
 - qt4 or qt5 (including QtOpenGL, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
 - taglib >= 1.7 (>= 1.9 recommended) (you can disable it in "src/gui/gui.pro"),
+- libgme and libsidplayfp - for Chiptune module,
 - libva (vaapi) and libvdpau - only on X11,
 - libasound (for ALSA module on Linux),
 - DirectDraw SDK - only on Windows,
@@ -78,4 +79,4 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 Building package RPM, DEB or any other - look at Arch Linux PKGBUILD:
 >https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2
 
-QMPlay2 uses the external software - "youtube-dl", so "youtube-dl" should be as optional package in package manager.
+QMPlay2 uses the external software for some YouTube videos - "youtube-dl", so it should be as optional package in package manager.

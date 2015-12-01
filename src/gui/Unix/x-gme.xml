@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="audio/x-umx">
+		<comment>Game Music Engine files</comment>
+		<glob pattern="*.ay"/>
+		<glob pattern="*.gbs"/>
+		<glob pattern="*.gym"/>
+		<glob pattern="*.hes"/>
+		<glob pattern="*.kss"/>
+		<glob pattern="*.nsf"/>
+		<glob pattern="*.nsfe"/>
+		<glob pattern="*.sap"/>
+		<glob pattern="*.spc"/>
+		<glob pattern="*.vgm"/>
+		<glob pattern="*.vgz"/>
+	</mime-type>
+</mime-info>
