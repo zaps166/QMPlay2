@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
 	<mime-type type="audio/x-j2b">
-		<comment>Jazz Jackrabit 2 Music</comment>
+		<comment>Jazz Jackrabbit 2 Music</comment>
 		<glob pattern="*.j2b"/>
 	</mime-type>
 </mime-info>
