@@ -47,7 +47,12 @@ static const char fShaderYCbCrSrc[] =
 		");"
 		"%2"
 		"YCbCr.yz *= saturation;"
-		"vec3 rgb = mat3(1.1643, 1.1643, 1.1643, 0.0, -0.39173, 2.017, 1.5958, -0.8129, 0.0) * YCbCr * contrast + brightness;"
+		"vec3 rgb = mat3"
+		"("
+			"1.16430,  1.16430, 1.16430,"
+			"0.00000, -0.39173, 2.01700,"
+			"1.59580, -0.81290, 0.00000"
+		") * YCbCr * contrast + brightness;"
 		"gl_FragColor = vec4(rgb, 1.0);"
 	"}";
 static const char fShaderYCbCrHueSrc[] =
