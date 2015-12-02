@@ -91,11 +91,21 @@ QString MPDemux::name() const
 		case 0x1000000:
 			return "Amiga SoundFX";
 	}
-	return "";
+	return "?";
 }
 QString MPDemux::title() const
 {
 	return ModPlug_GetName( mpfile );
+}
+
+QList<QMPlay2Tag> MPDemux::tags() const
+{
+	QList< QMPlay2Tag > tags;
+	tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), ModPlug_GetName( mpfile ) );
+	tags += qMakePair( tr( "Próbki" ), QString::number( ModPlug_NumSamples( mpfile ) ) );
+	tags += qMakePair( tr( "Wzorce" ), QString::number( ModPlug_NumPatterns( mpfile ) ) );
+	tags += qMakePair( tr( "Kanały" ), QString::number( ModPlug_NumChannels( mpfile ) ) );
+	return tags;
 }
 double MPDemux::length() const
 {
@@ -153,17 +163,8 @@ bool MPDemux::open( const QString &url )
 		reader.clear();
 		if ( mpfile && ModPlug_GetModuleType( mpfile ) )
 		{
-			StreamInfo *streamInfo = new StreamInfo;
-			streamInfo->type = QMPLAY2_TYPE_AUDIO;
-			streamInfo->is_default = true;
-			streamInfo->sample_rate = srate;
-			streamInfo->channels = 2;
-			streamInfo->other_info += qMakePair( tr( "próbki" ), QString::number( ModPlug_NumSamples( mpfile ) ) );
-			streamInfo->other_info += qMakePair( tr( "wzorce" ), QString::number( ModPlug_NumPatterns( mpfile ) ) );
-			streamInfo->other_info += qMakePair( tr( "kanały" ), QString::number( ModPlug_NumChannels( mpfile ) ) );
-			streams_info += streamInfo;
-
-			ModPlug_SetMasterVolume( mpfile, 256 ); //?
+			streams_info += new StreamInfo( srate, 2 );
+			ModPlug_SetMasterVolume( mpfile, 256 ); //OK?
 			return true;
 		}
 	}

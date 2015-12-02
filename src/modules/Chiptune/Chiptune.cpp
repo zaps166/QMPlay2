@@ -17,6 +17,7 @@ Chiptune::Chiptune() :
 #ifdef USE_SIDPLAY
 	init( "SIDPlay", true );
 #endif
+	init( "DefaultLength", 180 );
 }
 
 QList< Chiptune::Info > Chiptune::getModulesInfo( const bool showDisabled ) const
@@ -56,6 +57,7 @@ QMPLAY2_EXPORT_PLUGIN( Chiptune )
 
 #include <QGridLayout>
 #include <QCheckBox>
+#include <QSpinBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	Module::SettingsWidget( module )
@@ -66,13 +68,21 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	sidB = new QCheckBox( "SID " + tr( "włączony" ) );
 	sidB->setChecked( sets().getBool( "SIDPlay" ) );
 
+	lengthB = new QSpinBox;
+	lengthB->setRange( 30, 600 );
+	lengthB->setPrefix( tr( "Domyślna długość" ) + ": " );
+	lengthB->setSuffix( " " + tr( "sek" ) );
+	lengthB->setValue( sets().getInt( "DefaultLength" ) );
+
 	QGridLayout *layout = new QGridLayout( this );
 	layout->addWidget( gmeB );
 	layout->addWidget( sidB );
+	layout->addWidget( lengthB );
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
 	sets().set( "GME", gmeB->isChecked() );
 	sets().set( "SIDPlay", sidB->isChecked() );
+	sets().set( "DefaultLength", lengthB->value() );
 }

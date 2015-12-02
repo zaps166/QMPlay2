@@ -22,6 +22,7 @@ GME::~GME()
 
 bool GME::set()
 {
+	len = sets().getInt( "DefaultLength" );
 	return sets().getBool( "GME" );
 }
 
@@ -33,9 +34,13 @@ QString GME::title() const
 {
 	return QString();
 }
+QList<QMPlay2Tag> GME::tags() const
+{
+	return m_tags;
+}
 double GME::length() const
 {
-	return -1;
+	return len;
 }
 int GME::bitrate() const
 {
@@ -44,30 +49,31 @@ int GME::bitrate() const
 
 bool GME::seek( int s, bool )
 {
-	Q_UNUSED( s )
-	return false;
+	return !gme_seek( gme, s * 1000 );
 }
 bool GME::read( Packet &decoded, int &idx )
 {
-	if ( aborted )
+	if ( aborted || gme_track_ended( gme ) )
 		return false;
 
-	const int chunkSize = 1024 * 2;
+	const int chunkSize = 1024 * 2; //Always stereo
 
 	decoded.resize( chunkSize * sizeof( float ) );
 	int16_t *srcData = ( int16_t * )decoded.data();
 	float *dstData = ( float * )decoded.data();
 
-	gme_play( gme, chunkSize, srcData );
+	if ( gme_play( gme, chunkSize, srcData ) != NULL )
+		return false;
+
 	for ( int i = chunkSize - 1 ; i >= 0 ; --i )
 		dstData[ i ] = srcData[ i ] / 32768.0;
 
-	decoded.ts = 0.0;
-	decoded.duration = decoded.size() / 2 / sizeof( float ) / ( double )srate;
+	decoded.ts = gme_tell( gme ) / 1000.0;
+	decoded.duration = chunkSize / 2 / ( double )srate;
 
 	idx = 0;
 
-	return !gme_track_ended( gme );
+	return true;
 }
 void GME::abort()
 {
@@ -86,16 +92,32 @@ bool GME::open( const QString &url )
 		if ( !gme )
 			return false;
 
-		gme_start_track( gme, 0 );
 
-		StreamInfo *streamInfo = new StreamInfo;
-		streamInfo->type = QMPLAY2_TYPE_AUDIO;
-		streamInfo->is_default = true;
-		streamInfo->sample_rate = srate;
-		streamInfo->channels = 2;
-		streams_info += streamInfo;
+		gme_info_t *info = NULL;
+		if ( !gme_track_info( gme, &info, 0 ) && info )
+		{
+			if ( info->length > -1 )
+				len = info->play_length / 1000.0;
+			else if ( info->intro_length > -1 && info->loop_length > -1 )
+				len = ( info->intro_length * info->loop_length * 2 ) / 1000.0;
 
-		return true;
+			if ( *info->game )
+				m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), info->game );
+			if ( *info->author )
+				m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), info->author );
+			if ( *info->system )
+				m_tags += qMakePair( tr( "System" ), info->system );
+			if ( *info->copyright )
+				m_tags += qMakePair( tr( "Prawo autorskie" ), info->copyright );
+			if ( *info->comment )
+				m_tags += qMakePair( tr( "Komentarz" ), info->comment );
+
+			gme_free_info( info );
+		}
+
+		streams_info += new StreamInfo( srate, 2 );
+
+		return !gme_start_track( gme, 0 );
 	}
 	return false;
 }

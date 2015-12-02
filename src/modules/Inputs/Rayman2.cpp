@@ -145,12 +145,7 @@ bool Rayman2::open( const QString &url )
 			readHeader( data );
 			if ( srate && ( chn == 1 || chn == 2 ) && !strncmp( data + 0x14, "vs12", 4 ) && !strncmp( data + 0x60, "DATA", 4 ) )
 			{
-				StreamInfo *streamInfo = new StreamInfo;
-				streamInfo->type = QMPLAY2_TYPE_AUDIO;
-				streamInfo->is_default = true;
-				streamInfo->sample_rate = srate;
-				streamInfo->channels = chn;
-				streams_info += streamInfo;
+				streams_info += new StreamInfo( srate, chn );
 				return true;
 			}
 		}

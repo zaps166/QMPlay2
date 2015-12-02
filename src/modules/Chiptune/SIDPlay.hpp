@@ -7,7 +7,6 @@ class Reader;
 
 class SIDPlay : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( SIDPlay )
 public:
 	SIDPlay( Module & );
 	~SIDPlay();
@@ -16,10 +15,9 @@ private:
 
 	QString name() const;
 	QString title() const;
+	QList< QMPlay2Tag > tags() const;
 	double length() const;
 	int bitrate() const;
-
-	bool dontUseBuffer() const;
 
 	bool seek( int, bool );
 	bool read( Packet &, int & );
@@ -32,6 +30,7 @@ private:
 	quint8 chn;
 
 	bool aborted;
+	int len;
 
 	ReSIDfpBuilder rs;
 	sidplayfp sidplay;

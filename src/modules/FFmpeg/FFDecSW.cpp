@@ -190,6 +190,7 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 
 			if ( frameFinished && ~hurry_up )
 			{
+				//TODO: get rid of VideoFrame and use FFmpeg reference-counted buffers to save memory bandwidth - don't do unnecessary copies!
 				VideoFrame *videoFrame = VideoFrame::create( decoded, streamInfo->W, streamInfo->H, frame->interlaced_frame, frame->top_field_first );
 				if ( frame->width != lastFrameW || frame->height != lastFrameH )
 				{

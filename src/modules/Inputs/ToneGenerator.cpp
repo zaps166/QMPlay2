@@ -112,7 +112,7 @@ bool ToneGenerator::open( const QString &_url )
 
 	if ( !( fromUrl = url.toString() != "?" ) )
 	{
-		createStreamInfo();
+		streams_info += new StreamInfo( srate, freqs.size() );
 		return true;
 	}
 
@@ -135,19 +135,8 @@ bool ToneGenerator::open( const QString &_url )
 
 	if ( freqs.size() <= 8 )
 	{
-		createStreamInfo();
+		streams_info += new StreamInfo( srate, freqs.size() );
 		return true;
 	}
 	return false;
-}
-
-
-void ToneGenerator::createStreamInfo()
-{
-	StreamInfo *streamInfo = new StreamInfo;
-	streamInfo->type = QMPLAY2_TYPE_AUDIO;
-	streamInfo->is_default = true;
-	streamInfo->sample_rate = srate;
-	streamInfo->channels = freqs.size();
-	streams_info += streamInfo;
 }

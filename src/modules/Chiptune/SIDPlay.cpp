@@ -26,6 +26,7 @@ SIDPlay::~SIDPlay()
 
 bool SIDPlay::set()
 {
+	len = sets().getInt( "DefaultLength" );
 	return sets().getBool( "SIDPlay" );
 }
 
@@ -36,35 +37,64 @@ QString SIDPlay::name() const
 QString SIDPlay::title() const
 {
 	const SidTuneInfo *info = tune->getInfo();
-	const QString title  = info->infoString(0);
-	const QString author = info->infoString(1);
-	return author + " - " + title;
+	const QString title  = info->infoString( 0 );
+	const QString author = info->infoString( 1 );
+	if ( !author.isEmpty() && !title.isEmpty() )
+		return author + " - " + title;
+	return title;
+}
+QList<QMPlay2Tag> SIDPlay::tags() const
+{
+	QList<QMPlay2Tag> tags;
+	const SidTuneInfo *info = tune->getInfo();
+	const QString title    = info->infoString( 0 );
+	const QString author   = info->infoString( 1 );
+	const QString released = info->infoString( 2 );
+	if ( !title.isEmpty() )
+		tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
+	if ( !author.isEmpty() )
+		tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
+	if ( !released.isEmpty() )
+		tags += qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
+	return tags;
 }
 double SIDPlay::length() const
 {
-	return tune->getInfo()->songs() - 1;
+	return len;
 }
 int SIDPlay::bitrate() const
 {
 	return -1;
 }
 
-bool SIDPlay::dontUseBuffer() const
+bool SIDPlay::seek( int s, bool backwards )
 {
-	return true; //Allow seek backwards (seeking changes the song...)
-}
+	if ( backwards && !sidplay.load( tune ) )
+		return false;
 
-bool SIDPlay::seek( int s, bool )
-{
-	++s;
-	return ( ( int )tune->selectSong( s ) == s ) && sidplay.load( tune );
+	//TODO: optimizations!
+
+	if ( s > 0 )
+	{
+		const int bufferSize = chn * srate;
+		qint16 *secondBuff = new qint16[ bufferSize ];
+		for ( int i = sidplay.time() ; i <= s && !aborted ; ++i )
+			sidplay.play( secondBuff, bufferSize );
+		delete[] secondBuff;
+	}
+
+	return true;
 }
 bool SIDPlay::read( Packet &decoded, int &idx )
 {
 	if ( aborted )
 		return false;
 
-	const int chunkSize = 1024 * chn;
+	const int t = sidplay.time();
+	if ( t > len )
+		return false;
+
+	int chunkSize = 1024 * chn;
 
 	decoded.resize( chunkSize * sizeof( float ) );
 
@@ -72,11 +102,12 @@ bool SIDPlay::read( Packet &decoded, int &idx )
 	float *dstData = ( float * )decoded.data();
 
 	sidplay.play( srcData, chunkSize );
+
 	for ( int i = chunkSize - 1 ; i >= 0 ; --i )
 		dstData[ i ] = srcData[ i ] / 16384.0;
 
-	decoded.ts = tune->getInfo()->currentSong() - 1.0; //sidplay.time();
-	decoded.duration = decoded.size() / chn / sizeof( float ) / ( double )srate;
+	decoded.ts = t;
+	decoded.duration = chunkSize / chn / ( double )srate;
 
 	idx = 0;
 
@@ -115,15 +146,8 @@ bool SIDPlay::open( const QString &url )
 		if ( !sidplay.config( cfg ) )
 			return false;
 
-		StreamInfo *streamInfo = new StreamInfo;
-		streamInfo->type = QMPLAY2_TYPE_AUDIO;
-		streamInfo->is_default = true;
-		streamInfo->sample_rate = srate;
-		chn = streamInfo->channels = isStereo ? 2 : 1;
-		const QString released = info->infoString( 2 );
-		if ( !released.isEmpty() )
-			streamInfo->other_info += qMakePair( tr( "Wydano" ), released );
-		streams_info += streamInfo;
+		chn = isStereo ? 2 : 1;
+		streams_info += new StreamInfo( srate, chn );
 
 		tune->selectSong( 1 );
 		return sidplay.load( tune );

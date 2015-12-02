@@ -16,6 +16,7 @@ private:
 #include <QCoreApplication>
 
 class QCheckBox;
+class QSpinBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {
@@ -26,4 +27,5 @@ private:
 	void saveSettings();
 
 	QCheckBox *gmeB, *sidB;
+	QSpinBox *lengthB;
 };

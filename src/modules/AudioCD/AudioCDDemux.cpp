@@ -215,13 +215,7 @@ bool AudioCDDemux::open( const QString &_url )
 						}
 					}
 
-					StreamInfo *streamInfo = new StreamInfo;
-					streamInfo->type = QMPLAY2_TYPE_AUDIO;
-					streamInfo->is_default = true;
-					streamInfo->sample_rate = srate;
-					streamInfo->channels = chn;
-					streams_info += streamInfo;
-
+					streams_info += new StreamInfo( srate, chn );
 					return true;
 				}
 				else

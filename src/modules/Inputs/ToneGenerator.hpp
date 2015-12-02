@@ -27,8 +27,6 @@ private:
 
 	/**/
 
-	void createStreamInfo();
-
 	volatile bool aborted;
 	mutable volatile bool metadata_changed;
 	bool fromUrl;

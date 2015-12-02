@@ -689,6 +689,21 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>GME</name>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prawo autorskie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Komentarz</source>
+        <translation>Commentaire</translation>
+    </message>
+</context>
+<context>
     <name>Help</name>
     <message>
         <source>Po&amp;moc</source>
@@ -758,16 +773,16 @@ amp</source>
 <context>
     <name>MPDemux</name>
     <message>
-        <source>próbki</source>
-        <translation>échantillons</translation>
+        <source>Próbki</source>
+        <translation>Échantillons</translation>
     </message>
     <message>
-        <source>wzorce</source>
-        <translation>motifs</translation>
+        <source>Wzorce</source>
+        <translation>Motifs</translation>
     </message>
     <message>
-        <source>kanały</source>
-        <translation>canaux</translation>
+        <source>Kanały</source>
+        <translation>Canaux</translation>
     </message>
 </context>
 <context>
@@ -1226,6 +1241,10 @@ amp</source>
     <message>
         <source>Maksymalna częstotliwość</source>
         <translation>Fréquence maximale</translation>
+    </message>
+    <message>
+        <source>Domyślna długość</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

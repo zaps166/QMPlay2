@@ -51,6 +51,18 @@ public:
 	{
 		time_base.num = time_base.den = 0;
 	}
+	inline StreamInfo( quint32 sample_rate, quint8 channels ) :
+		type( QMPLAY2_TYPE_AUDIO ),
+		is_default( true ), must_decode( false ),
+		bitrate( 0 ), bpcs( 0 ),
+		codec_tag( 0 ),
+		sample_rate( sample_rate ), block_align( 0 ),
+		channels( channels ),
+		aspect_ratio( 0.0 ), FPS( 0.0 ),
+		img_fmt( 0 ), W( 0 ), H( 0 )
+	{
+		time_base.num = time_base.den = 0;
+	}
 
 	inline double getTimeBase() const
 	{

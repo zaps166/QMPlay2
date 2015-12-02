@@ -563,9 +563,11 @@ void DemuxerThr::emitInfo()
 	foreach ( const QMPlay2Tag &tag, demuxer->tags() )
 		if ( !tag.first.isEmpty() )
 		{
-			if ( tag.first == "0" || tag.first == "1" )
+			QString txt = tag.second;
+			txt.replace( "<", "&#60;" ); //Don't recognize as HTML tag
+			if ( tag.first == "0" || tag.first == "1" ) //Name and description
 			{
-				info += "<b>" + tag.second + "</b><br/>";
+				info += "<b>" + txt + "</b><br/>";
 				nameOrDescr = true;
 			}
 			else
@@ -575,7 +577,7 @@ void DemuxerThr::emitInfo()
 					info += "<br/>";
 					nameOrDescr = false;
 				}
-				info += "<b>" + StreamInfo::getTagName( tag.first ) + ":</b> " + tag.second + "<br/>";
+				info += "<b>" + StreamInfo::getTagName( tag.first ) + ":</b> " + txt + "<br/>";
 			}
 		}
 
