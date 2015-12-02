@@ -32,6 +32,7 @@ private:
 
 	bool aborted;
 	double pos;
+	quint32 srate;
 	_ModPlugFile *mpfile;
 	IOController< Reader > reader;
 };

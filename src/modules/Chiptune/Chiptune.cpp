@@ -54,11 +54,25 @@ QMPLAY2_EXPORT_PLUGIN( Chiptune )
 
 /**/
 
+#include <QGridLayout>
+#include <QCheckBox>
+
 ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	Module::SettingsWidget( module )
 {
+	gmeB = new QCheckBox( "Game-Music-Emu " + tr( "włączony" ) );
+	gmeB->setChecked( sets().getBool( "GME" ) );
+
+	sidB = new QCheckBox( "SID " + tr( "włączony" ) );
+	sidB->setChecked( sets().getBool( "SIDPlay" ) );
+
+	QGridLayout *layout = new QGridLayout( this );
+	layout->addWidget( gmeB );
+	layout->addWidget( sidB );
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
+	sets().set( "GME", gmeB->isChecked() );
+	sets().set( "SIDPlay", sidB->isChecked() );
 }

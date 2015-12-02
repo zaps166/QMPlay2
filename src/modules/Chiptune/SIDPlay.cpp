@@ -1,5 +1,6 @@
 #include <SIDPlay.hpp>
 
+#include <Functions.hpp>
 #include <Reader.hpp>
 #include <Packet.hpp>
 
@@ -11,6 +12,7 @@
 #include <QDebug>
 
 SIDPlay::SIDPlay( Module &module ) :
+	srate( Functions::getBestSampleRate() ),
 	aborted( false ),
 	rs( NULL ),
 	tune( NULL )
@@ -106,10 +108,7 @@ bool SIDPlay::open( const QString &url )
 		const bool isStereo = info->sidChips() > 1 ? true : false;
 
 		SidConfig cfg;
-		if ( QMPlay2Core.getSettings().getBool( "ForceSamplerate" ) )
-			cfg.frequency = QMPlay2Core.getSettings().getInt( "Samplerate" );
-		else
-			cfg.frequency = 48000; //Use 48kHz as default
+		cfg.frequency = srate;
 		cfg.sidEmulation = &rs;
 		if ( isStereo )
 			cfg.playback = SidConfig::STEREO;
@@ -119,7 +118,7 @@ bool SIDPlay::open( const QString &url )
 		StreamInfo *streamInfo = new StreamInfo;
 		streamInfo->type = QMPLAY2_TYPE_AUDIO;
 		streamInfo->is_default = true;
-		srate = streamInfo->sample_rate = cfg.frequency;
+		streamInfo->sample_rate = srate;
 		chn = streamInfo->channels = isStereo ? 2 : 1;
 		const QString released = info->infoString( 2 );
 		if ( !released.isEmpty() )

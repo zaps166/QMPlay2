@@ -1,5 +1,6 @@
 #include <GME.hpp>
 
+#include <Functions.hpp>
 #include <Reader.hpp>
 #include <Packet.hpp>
 
@@ -8,6 +9,7 @@
 #include <gme/gme.h>
 
 GME::GME( Module &module ) :
+	srate( Functions::getBestSampleRate() ),
 	aborted( false ),
 	gme( NULL )
 {
@@ -79,11 +81,6 @@ bool GME::open( const QString &url )
 	{
 		const QByteArray data = reader->read( reader->size() );
 		reader.clear();
-
-		if ( QMPlay2Core.getSettings().getBool( "ForceSamplerate" ) )
-			srate = QMPlay2Core.getSettings().getInt( "Samplerate" );
-		else
-			srate = 48000; //Use 48kHz as default
 
 		gme_open_data( data.data(), data.size(), &gme, srate );
 		if ( !gme )

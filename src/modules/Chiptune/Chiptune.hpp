@@ -1,7 +1,5 @@
 #include <Module.hpp>
 
-#include <QCoreApplication>
-
 class Chiptune : public Module
 {
 public:
@@ -15,6 +13,10 @@ private:
 
 /**/
 
+#include <QCoreApplication>
+
+class QCheckBox;
+
 class ModuleSettingsWidget : public Module::SettingsWidget
 {
 	Q_DECLARE_TR_FUNCTIONS( ModuleSettingsWidget )
@@ -22,4 +24,6 @@ public:
 	ModuleSettingsWidget( Module & );
 private:
 	void saveSettings();
+
+	QCheckBox *gmeB, *sidB;
 };

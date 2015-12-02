@@ -7,7 +7,10 @@
 #include <libmodplug/modplug.h>
 
 MPDemux::MPDemux( Module &module ) :
-	aborted( false ), pos( 0.0 ), mpfile( NULL )
+	aborted( false ),
+	pos( 0.0 ),
+	srate( Functions::getBestSampleRate() ),
+	mpfile( NULL )
 {
 	SetModule( module );
 }
@@ -32,7 +35,7 @@ bool MPDemux::set()
 	settings.mFlags = MODPLUG_ENABLE_OVERSAMPLING;
 	settings.mChannels = 2;
 	settings.mBits = 32;
-	settings.mFrequency = 44100;
+	settings.mFrequency = srate;
 	ModPlug_SetSettings( &settings );
 
 	return !restartPlaying && sets().getBool( "ModplugEnabled" );
@@ -117,7 +120,7 @@ bool MPDemux::read( Packet &decoded, int &idx )
 	if ( aborted )
 		return false;
 
-	decoded.resize( 1024*2*4 ); //BASE_SIZE * CHN * BITS/8
+	decoded.resize( 1024 * 2 * 4 ); //BASE_SIZE * CHN * BITS/8
 	decoded.resize( ModPlug_Read( mpfile, decoded.data(), decoded.size() ) );
 	if ( !decoded.size() )
 		return false;
@@ -130,7 +133,7 @@ bool MPDemux::read( Packet &decoded, int &idx )
 
 	idx = 0;
 	decoded.ts = pos;
-	decoded.duration = ( double )decoded.size() / ( 44100*2*4 ); //SRATE * CHN * BITS/8
+	decoded.duration = ( double )decoded.size() / ( srate * 2 * 4 ); //SRATE * CHN * BITS/8
 	pos += decoded.duration;
 
 	return true;
@@ -153,7 +156,7 @@ bool MPDemux::open( const QString &url )
 			StreamInfo *streamInfo = new StreamInfo;
 			streamInfo->type = QMPLAY2_TYPE_AUDIO;
 			streamInfo->is_default = true;
-			streamInfo->sample_rate = 44100;
+			streamInfo->sample_rate = srate;
 			streamInfo->channels = 2;
 			streamInfo->other_info += qMakePair( tr( "próbki" ), QString::number( ModPlug_NumSamples( mpfile ) ) );
 			streamInfo->other_info += qMakePair( tr( "wzorce" ), QString::number( ModPlug_NumPatterns( mpfile ) ) );

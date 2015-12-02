@@ -122,6 +122,8 @@ namespace Functions
 	void vFlip( char *data, int linesize, int height );
 
 	QString dBStr( double a );
+
+	quint32 getBestSampleRate();
 }
 
 #endif

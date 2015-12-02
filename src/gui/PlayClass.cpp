@@ -1067,12 +1067,12 @@ void PlayClass::load( Demuxer *demuxer )
 			if ( aThr->isRunning() )
 			{
 				aThr->setDec( dec );
-				uint srate = 0;
-				uchar chn = 0;
+				quint32 srate = 0;
+				quint8 chn = 0;
 				if ( QMPlay2Core.getSettings().getBool( "ForceSamplerate" ) )
-					srate = QMPlay2Core.getSettings().getInt( "Samplerate" );
+					srate = QMPlay2Core.getSettings().getUInt( "Samplerate" );
 				if ( QMPlay2Core.getSettings().getBool( "ForceChannels" ) )
-					chn = QMPlay2Core.getSettings().getInt( "Channels" );
+					chn = QMPlay2Core.getSettings().getUInt( "Channels" );
 
 				if ( !aThr->setParams( streams[ audioStream ]->channels, streams[ audioStream ]->sample_rate, chn, srate ) )
 					dec = NULL;
