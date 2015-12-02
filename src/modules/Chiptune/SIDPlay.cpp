@@ -72,15 +72,13 @@ bool SIDPlay::seek( int s, bool backwards )
 	if ( backwards && !sidplay.load( tune ) )
 		return false;
 
-	//TODO: optimizations!
-
 	if ( s > 0 )
 	{
 		const int bufferSize = chn * srate;
-		qint16 *secondBuff = new qint16[ bufferSize ];
+		qint16 *buff1sec = new qint16[ bufferSize ];
 		for ( int i = sidplay.time() ; i <= s && !aborted ; ++i )
-			sidplay.play( secondBuff, bufferSize );
-		delete[] secondBuff;
+			sidplay.play( buff1sec, bufferSize );
+		delete[] buff1sec;
 	}
 
 	return true;
@@ -94,7 +92,7 @@ bool SIDPlay::read( Packet &decoded, int &idx )
 	if ( t > len )
 		return false;
 
-	int chunkSize = 1024 * chn;
+	const int chunkSize = 1024 * chn;
 
 	decoded.resize( chunkSize * sizeof( float ) );
 
@@ -135,6 +133,7 @@ bool SIDPlay::open( const QString &url )
 		rs.create( sidplay.info().maxsids() );
 		if ( !rs.getStatus() )
 			return false;
+		rs.filter( true );
 
 		const bool isStereo = info->sidChips() > 1 ? true : false;
 
@@ -143,6 +142,7 @@ bool SIDPlay::open( const QString &url )
 		cfg.sidEmulation = &rs;
 		if ( isStereo )
 			cfg.playback = SidConfig::STEREO;
+		cfg.samplingMethod = SidConfig::INTERPOLATE;
 		if ( !sidplay.config( cfg ) )
 			return false;
 

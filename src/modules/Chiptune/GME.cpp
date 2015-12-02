@@ -56,6 +56,8 @@ bool GME::read( Packet &decoded, int &idx )
 	if ( aborted || gme_track_ended( gme ) )
 		return false;
 
+	gme_set_fade( gme, ( len - 8 ) * 1000 ); //Set every time to avoid problems
+
 	const int chunkSize = 1024 * 2; //Always stereo
 
 	decoded.resize( chunkSize * sizeof( float ) );
@@ -91,7 +93,6 @@ bool GME::open( const QString &url )
 		gme_open_data( data.data(), data.size(), &gme, srate );
 		if ( !gme )
 			return false;
-
 
 		gme_info_t *info = NULL;
 		if ( !gme_track_info( gme, &info, 0 ) && info )
