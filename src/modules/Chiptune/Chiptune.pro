@@ -22,13 +22,13 @@ win32 {
 		PKGCONFIG += libsidplayfp
 		DEFINES += USE_SIDPLAY
 	} else {
-		message("SID will not be compiled, because libsidplayfp don't exist")
+		message("SID will not be compiled, because libsidplayfp doesn't exist")
 	}
 	packagesExist(libgme) {
 		PKGCONFIG += libgme
 		DEFINES += USE_GME
 	} else {
-		message("Game-Music-Emu will not be compiled, because libgme don't exist")
+		message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
 	}
 }
 LIBS += -lqmplay2
