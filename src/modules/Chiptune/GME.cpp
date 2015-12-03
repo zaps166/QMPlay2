@@ -174,13 +174,28 @@ bool GME::open( const QString &_url, bool tracksOnly )
 			if ( *info->copyright )
 				m_tags += qMakePair( tr( "Prawo autorskie" ), QString( info->copyright ) );
 			if ( *info->comment )
-				m_tags += qMakePair( tr( "Komentarz" ),QString(  info->comment ) );
+				m_tags += qMakePair( tr( "Komentarz" ), QString( info->comment ) );
 
 			gme_free_info( info );
 		}
 
+		QString voices;
+		const int numVoices = gme_voice_count( m_gme );
+		for ( int i = 0 ; i < numVoices ; ++i )
+		{
+			voices += gme_voice_name( m_gme, i );
+			voices += ", ";
+		}
+		voices.chop( 2 );
+		m_tags += qMakePair( tr( "Głosy" ), voices );
+
+		m_tags += qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
+//		gme_mute_voice( m_gme, 3, true );
+
 		streams_info += new StreamInfo( m_srate, 2 );
 
+		gme_set_stereo_depth( m_gme, 0.5 );
+		gme_enable_accuracy( m_gme, true );
 		return !gme_start_track( m_gme, track );
 	}
 

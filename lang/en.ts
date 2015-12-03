@@ -707,6 +707,10 @@ amp</translation>
         <source>Ścieżka</source>
         <translation>Track</translation>
     </message>
+    <message>
+        <source>Głosy</source>
+        <translation>Voices</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

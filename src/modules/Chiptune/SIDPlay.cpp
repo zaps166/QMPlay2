@@ -40,18 +40,7 @@ QString SIDPlay::title() const
 }
 QList<QMPlay2Tag> SIDPlay::tags() const
 {
-	QList<QMPlay2Tag> tags;
-	const SidTuneInfo *info = m_tune->getInfo();
-	const QString title    = info->infoString( 0 );
-	const QString author   = info->infoString( 1 );
-	const QString released = info->infoString( 2 );
-	if ( !title.isEmpty() )
-		tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
-	if ( !author.isEmpty() )
-		tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
-	if ( !released.isEmpty() )
-		tags += qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
-	return tags;
+	return m_tags;
 }
 double SIDPlay::length() const
 {
@@ -189,8 +178,6 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 		if ( !ok || track < 0 || track >= ( int )info->songs() )
 			return false;
 
-		m_title = getTitle( info, track );
-
 		m_rs.create( m_sidplay.info().maxsids() );
 		if ( !m_rs.getStatus() )
 			return false;
@@ -207,10 +194,24 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 		if ( !m_sidplay.config( cfg ) )
 			return false;
 
+		m_tune->selectSong( track + 1 );
+
+		m_title = getTitle( info, track );
 		m_chn = isStereo ? 2 : 1;
+
+		const QString title    = info->infoString( 0 );
+		const QString author   = info->infoString( 1 );
+		const QString released = info->infoString( 2 );
+		if ( !title.isEmpty() )
+			m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
+		if ( !author.isEmpty() )
+			m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
+		if ( !released.isEmpty() )
+			m_tags += qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
+		m_tags += qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
+
 		streams_info += new StreamInfo( m_srate, m_chn );
 
-		m_tune->selectSong( track + 1 );
 		return m_sidplay.load( m_tune );
 	}
 

@@ -41,6 +41,7 @@ private:
 	int m_length;
 	quint8 m_chn;
 
+	QList< QMPlay2Tag > m_tags;
 	QString m_url, m_title;
 
 	ReSIDfpBuilder m_rs;

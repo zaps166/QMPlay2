@@ -710,6 +710,10 @@ amp</source>
         <source>Ścieżka</source>
         <translation>Pfad</translation>
     </message>
+    <message>
+        <source>Głosy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
