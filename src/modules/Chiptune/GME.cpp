@@ -123,15 +123,15 @@ bool GME::open( const QString &_url )
 			m_length = getLength( info );
 
 			if ( *info->game )
-				m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), info->game );
+				m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), QString( info->game ) );
 			if ( *info->author )
-				m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), info->author );
+				m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), QString( info->author ) );
 			if ( *info->system )
-				m_tags += qMakePair( tr( "System" ), info->system );
+				m_tags += qMakePair( tr( "System" ), QString( info->system ) );
 			if ( *info->copyright )
-				m_tags += qMakePair( tr( "Prawo autorskie" ), info->copyright );
+				m_tags += qMakePair( tr( "Prawo autorskie" ), QString( info->copyright ) );
 			if ( *info->comment )
-				m_tags += qMakePair( tr( "Komentarz" ), info->comment );
+				m_tags += qMakePair( tr( "Komentarz" ),QString(  info->comment ) );
 
 			gme_free_info( info );
 		}

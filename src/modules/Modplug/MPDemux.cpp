@@ -101,7 +101,7 @@ QString MPDemux::title() const
 QList<QMPlay2Tag> MPDemux::tags() const
 {
 	QList< QMPlay2Tag > tags;
-	tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), ModPlug_GetName( mpfile ) );
+	tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), QString( ModPlug_GetName( mpfile ) ) );
 	tags += qMakePair( tr( "Próbki" ), QString::number( ModPlug_NumSamples( mpfile ) ) );
 	tags += qMakePair( tr( "Wzorce" ), QString::number( ModPlug_NumPatterns( mpfile ) ) );
 	tags += qMakePair( tr( "Kanały" ), QString::number( ModPlug_NumChannels( mpfile ) ) );
