@@ -16,7 +16,10 @@
 #include <QMenu>
 #include <QDir>
 
-#define playlistMenu ( ( MenuBar::Playlist * )QMPlay2GUI.menuBar->playlist )
+static inline MenuBar::Playlist *playlistMenu()
+{
+	return QMPlay2GUI.menuBar->playlist;
+}
 
 static const int IconSize = 22;
 static const int IconSizeDiv2 = IconSize / 2;
@@ -160,7 +163,7 @@ void AddThr::setData( const QStringList &_urls, QTreeWidgetItem *_par, bool _loa
 	{
 		pLW.rotation = 0;
 		pLW.animationTimer.start( 50 );
-		playlistMenu->stopLoading->setVisible( true );
+		playlistMenu()->stopLoading->setVisible( true );
 		start();
 	}
 	else
@@ -214,7 +217,7 @@ void AddThr::finished()
 	pLW.processItems();
 	emit pLW.returnItem( firstI );
 	urls.clear();
-	playlistMenu->stopLoading->setVisible( false );
+	playlistMenu()->stopLoading->setVisible( false );
 	if ( !pLW.currentPlaying && !pLW.currentPlayingUrl.isEmpty() )
 	{
 		foreach ( QTreeWidgetItem *tWI, pLW.findItems( QString(), Qt::MatchRecursive | Qt::MatchContains ) )
@@ -815,7 +818,7 @@ void PlaylistWidget::insertItemSlot( QTreeWidgetItem *tWI, QTreeWidgetItem *pare
 }
 void PlaylistWidget::popupContextMenu( const QPoint &p )
 {
-	playlistMenu->popup( mapToGlobal( p ) );
+	playlistMenu()->popup( mapToGlobal( p ) );
 }
 void PlaylistWidget::setItemIconSlot( QTreeWidgetItem *tWI, const QImage &img )
 {
@@ -872,15 +875,15 @@ void PlaylistWidget::modifyMenu()
 		entryLength = currentItem()->data( 2, Qt::UserRole ).toInt();
 	}
 
-	playlistMenu->saveGroup->setVisible( currentItem() && isGroup( currentItem() ) );
-	playlistMenu->sync->setVisible( currentItem() && isGroup( currentItem() ) && !entryUrl.isEmpty() );
-	playlistMenu->renameGroup->setVisible( currentItem() && isGroup( currentItem() ) );
-	playlistMenu->entryProperties->setVisible( currentItem() );
-	playlistMenu->queue->setVisible( currentItem() );
-	playlistMenu->goToPlayback->setVisible( currentPlaying );
-	playlistMenu->copy->setVisible( selectedItems().count() );
+	playlistMenu()->saveGroup->setVisible( currentItem() && isGroup( currentItem() ) );
+	playlistMenu()->sync->setVisible( currentItem() && isGroup( currentItem() ) && !entryUrl.isEmpty() );
+	playlistMenu()->renameGroup->setVisible( currentItem() && isGroup( currentItem() ) );
+	playlistMenu()->entryProperties->setVisible( currentItem() );
+	playlistMenu()->queue->setVisible( currentItem() );
+	playlistMenu()->goToPlayback->setVisible( currentPlaying );
+	playlistMenu()->copy->setVisible( selectedItems().count() );
 
-	playlistMenu->extensions->clear();
+	playlistMenu()->extensions->clear();
 	foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 	{
 		QString addressPrefixName, url, param;
@@ -891,9 +894,9 @@ void PlaylistWidget::modifyMenu()
 			act = QMPlay2Ext->getAction( entryName, entryLength, entryUrl );
 		if ( act )
 		{
-			act->setParent( playlistMenu->extensions );
-			playlistMenu->extensions->addAction( act );
+			act->setParent( playlistMenu()->extensions );
+			playlistMenu()->extensions->addAction( act );
 		}
 	}
-	playlistMenu->extensions->setEnabled( playlistMenu->extensions->actions().count() );
+	playlistMenu()->extensions->setEnabled( playlistMenu()->extensions->actions().count() );
 }
