@@ -6,10 +6,6 @@
 #include <Reader.hpp>
 #include <Main.hpp>
 
-using Functions::chkMimeData;
-using Functions::getUrlsFromMimeData;
-using Functions::splitPrefixAndUrlIfHasPluginPrefix;
-
 #include <QResizeEvent>
 #include <QHeaderView>
 #include <QFileInfo>
@@ -23,25 +19,33 @@ using Functions::splitPrefixAndUrlIfHasPluginPrefix;
 #define playlistMenu ( ( MenuBar::Playlist * )QMPlay2GUI.menuBar->playlist )
 
 static const int IconSize = 22;
-static const int IconSize_2 = IconSize / 2;
+static const int IconSizeDiv2 = IconSize / 2;
 
 /* UpdateEntryThr class */
+UpdateEntryThr::UpdateEntryThr( PlaylistWidget &pLW ) :
+	pLW( pLW ),
+	timeChanged( false )
+{
+	qRegisterMetaType< ItemUpdated >( "ItemUpdated" );
+	connect( this, SIGNAL( updateItem( const ItemUpdated & ) ), this, SLOT( updateItemSlot( const ItemUpdated & ) ) );
+	connect( this, SIGNAL( finished() ), this, SLOT( finished() ) );
+}
+
 void UpdateEntryThr::updateEntry( QTreeWidgetItem *item, const QString &name, int length )
 {
-	if ( !item )
+	if ( !item || !pLW.getChildren( PlaylistWidget::ONLY_NON_GROUPS ).contains( item ) )
 		return;
 	mutex.lock();
+	itemsToUpdate += ( ItemToUpdate ){ item, pLW.getUrl( item ), item->data( 2, Qt::UserRole ).toInt(), name, length };
+	mutex.unlock();
 	if ( !isRunning() )
 	{
 		ioCtrl.resetAbort();
 		start();
 	}
-	itemsToUpdate += ( ItemToUpdate ){ item, name, length };
-	mutex.unlock();
 }
 void UpdateEntryThr::run()
 {
-	bool timeChanged = false;
 	while ( !ioCtrl.isAborted() )
 	{
 		mutex.lock();
@@ -53,47 +57,41 @@ void UpdateEntryThr::run()
 		ItemToUpdate itu = itemsToUpdate.dequeue();
 		mutex.unlock();
 
-		QTreeWidgetItem *tWI = itu.tWI;
-
-		if ( !pLW.getChildren( PlaylistWidget::ONLY_NON_GROUPS ).contains( tWI ) )
-			continue;
-
-		QString url = pLW.getUrl( tWI );
-
-		QString name = itu.name;
-		int length = itu.length;
-
 		bool updateTitle = true;
-		if ( name.isNull() && length == -2 )
+		QString url = itu.url;
+
+		ItemUpdated iu;
+		iu.item = itu.item;
+
+		if ( itu.name.isNull() && itu.length == -2 )
 		{
-			QImage img;
-			Functions::getDataIfHasPluginPrefix( url, &url, &name, &img, &ioCtrl );
-			pLW.setEntryIcon( img, tWI );
+			Functions::getDataIfHasPluginPrefix( url, &url, &itu.name, &iu.img, &ioCtrl );
 
 			IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
 			if ( Demuxer::create( url, demuxer ) ) //TODO: tracks
 			{
-				if ( name.isEmpty() )
-					name = demuxer->title();
-				length = demuxer->length();
+				if ( itu.name.isEmpty() )
+					itu.name = demuxer->title();
+				itu.length = demuxer->length();
 				demuxer.clear();
 			}
 			else
 				updateTitle = false;
 		}
-
 		if ( updateTitle )
-			tWI->setText( 0, name.isEmpty() ? Functions::fileName( url, false ) : name );
-		if ( length != tWI->data( 2, Qt::UserRole ).toInt() )
+			iu.name = itu.name.isEmpty() ? Functions::fileName( url, false ) : itu.name;
+
+		if ( itu.length == itu.oldLength )
+			iu.updateLength = false;
+		else
 		{
-			tWI->setText( 2, Functions::timeToStr( length ) );
-			tWI->setData( 2, Qt::UserRole, QString::number( length ) );
+			iu.updateLength = true;
+			iu.length = itu.length;
 			timeChanged = true;
 		}
+
+		emit updateItem( iu );
 	}
-	if ( timeChanged )
-		pLW.refresh( PlaylistWidget::REFRESH_GROUPS_TIME );
-	pLW.viewport()->update();
 }
 void UpdateEntryThr::stop()
 {
@@ -107,7 +105,35 @@ void UpdateEntryThr::stop()
 	}
 }
 
+void UpdateEntryThr::updateItemSlot( const ItemUpdated &iu )
+{
+	pLW.setEntryIcon( iu.img, iu.item );
+	if ( !iu.name.isNull() )
+		iu.item->setText( 0, iu.name );
+	if ( iu.updateLength )
+	{
+		iu.item->setText( 2, Functions::timeToStr( iu.length ) );
+		iu.item->setData( 2, Qt::UserRole, QString::number( iu.length ) );
+	}
+}
+void UpdateEntryThr::finished()
+{
+	if ( timeChanged )
+	{
+		pLW.refresh( PlaylistWidget::REFRESH_GROUPS_TIME );
+		qDebug() << "timeChanged";
+		timeChanged = false;
+	}
+	pLW.modifyMenu();
+}
+
 /* AddThr class */
+AddThr::AddThr( PlaylistWidget &pLW ) :
+	pLW( pLW )
+{
+	connect( this, SIGNAL( finished() ), this, SLOT( finished() ) );
+}
+
 void AddThr::setData( const QStringList &_urls, QTreeWidgetItem *_par, bool _loadList, bool sync )
 {
 	ioCtrl.resetAbort();
@@ -233,12 +259,18 @@ PlaylistWidget::PlaylistWidget() :
 	connect( this, SIGNAL( insertItem( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ), this, SLOT( insertItemSlot( QTreeWidgetItem *, QTreeWidgetItem *, bool ) ) );
 
 	connect( this, SIGNAL( itemSelectionChanged() ), this, SLOT( modifyMenu() ) );
-	connect( &updateEntryThr, SIGNAL( finished() ), this, SLOT( modifyMenu() ) );
 
 	connect( this, SIGNAL( customContextMenuRequested( const QPoint & ) ), this, SLOT( popupContextMenu( const QPoint & ) ) );
 	connect( this, SIGNAL( setItemIcon( QTreeWidgetItem *, const QImage & ) ), this, SLOT( setItemIconSlot( QTreeWidgetItem *, const QImage & ) ) );
 	connect( &animationTimer, SIGNAL( timeout() ), this, SLOT( animationUpdate() ) );
 	connect( &addTimer, SIGNAL( timeout() ), this, SLOT( addTimerElapsed() ) );
+}
+
+QString PlaylistWidget::getUrl( QTreeWidgetItem *tWI ) const
+{
+	if ( !tWI )
+		tWI = currentItem();
+	return tWI ? tWI->data( 0, Qt::UserRole ).toString() : QString();
 }
 
 void PlaylistWidget::setItemsResizeToContents( bool b )
@@ -290,7 +322,7 @@ void PlaylistWidget::setCurrentPlaying( QTreeWidgetItem *tWI )
 		QPixmap playPix = play_icon.pixmap( play_icon.availableSizes()[ 0 ] );
 		pix.fill( Qt::transparent );
 		QPainter p( &pix );
-		p.drawPixmap( IconSize_2- playPix.width() / 2, IconSize_2 - playPix.height() / 2, playPix );
+		p.drawPixmap( IconSizeDiv2- playPix.width() / 2, IconSizeDiv2 - playPix.height() / 2, playPix );
 		play_icon = QIcon( pix );
 	}
 	currentPlaying->setIcon( 0, play_icon );
@@ -635,8 +667,9 @@ QTreeWidgetItem *PlaylistWidget::insertPlaylistEntries( const Playlist::Entries 
 	return firstItem;
 }
 
-void PlaylistWidget::setEntryIcon( QImage &img, QTreeWidgetItem *tWI )
+void PlaylistWidget::setEntryIcon( const QImage &origImg, QTreeWidgetItem *tWI )
 {
+	QImage img = origImg;
 	if ( img.isNull() )
 	{
 		if ( tWI == currentPlaying )
@@ -696,7 +729,7 @@ void PlaylistWidget::dragEnterEvent( QDragEnterEvent *e )
 {
 	if ( addThr.isRunning() || !e )
 		return;
-	if ( chkMimeData( e->mimeData() ) )
+	if ( Functions::chkMimeData( e->mimeData() ) )
 		e->accept();
 	else
 	{
@@ -728,7 +761,7 @@ void PlaylistWidget::dropEvent( QDropEvent *e )
 	else if ( e->mimeData() )
 	{
 		selectAfterAdd = true;
-		add( getUrlsFromMimeData( e->mimeData() ), itemAt( e->pos() ) );
+		add( Functions::getUrlsFromMimeData( e->mimeData() ), itemAt( e->pos() ) );
 	}
 }
 void PlaylistWidget::paintEvent( QPaintEvent *e )
@@ -799,7 +832,7 @@ void PlaylistWidget::setItemIconSlot( QTreeWidgetItem *tWI, const QImage &img )
 		QPixmap canvas( IconSize, IconSize );
 		canvas.fill( QColor( 0, 0, 0, 0 ) );
 		QPainter p( &canvas );
-		p.drawImage( IconSize_2 - img.width() / 2, IconSize_2 - img.height() / 2, img );
+		p.drawImage( IconSizeDiv2 - img.width() / 2, IconSizeDiv2 - img.height() / 2, img );
 		p.end();
 		if ( tWI )
 			tWI->setIcon( 0, canvas );
@@ -853,7 +886,7 @@ void PlaylistWidget::modifyMenu()
 	{
 		QString addressPrefixName, url, param;
 		QAction *act;
-		if ( splitPrefixAndUrlIfHasPluginPrefix( entryUrl, &addressPrefixName, &url, &param ) )
+		if ( Functions::splitPrefixAndUrlIfHasPluginPrefix( entryUrl, &addressPrefixName, &url, &param ) )
 			act = QMPlay2Ext->getAction( entryName, entryLength, url, addressPrefixName, param );
 		else
 			act = QMPlay2Ext->getAction( entryName, entryLength, entryUrl );

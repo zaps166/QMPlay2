@@ -19,29 +19,46 @@ class Demuxer;
 class UpdateEntryThr : public QThread
 {
 	friend class PlaylistWidget;
+	Q_OBJECT
 public:
-	inline UpdateEntryThr( PlaylistWidget &pLW ) :
-		pLW( pLW )
-	{}
+	UpdateEntryThr( PlaylistWidget &pLW );
 
-	void updateEntry( QTreeWidgetItem *, const QString &name = QString(), int length = -2 );
+	void updateEntry( QTreeWidgetItem *item, const QString &name = QString(), int length = -2 );
 
 	void stop();
 private:
 	void run();
 
 	IOController<> ioCtrl;
+	PlaylistWidget &pLW;
+	bool timeChanged;
 	QMutex mutex;
 
 	struct ItemToUpdate
 	{
-		QTreeWidgetItem *tWI;
+		QTreeWidgetItem *item;
+		QString url;
+		int oldLength;
+
 		QString name;
 		int length;
 	};
 	QQueue< ItemToUpdate > itemsToUpdate;
 
-	PlaylistWidget &pLW;
+	struct ItemUpdated
+	{
+		QTreeWidgetItem *item;
+		QString name;
+		QImage img;
+
+		bool updateLength;
+		int length;
+	};
+private slots:
+	void updateItemSlot( const ItemUpdated &iu );
+	void finished();
+signals:
+	void updateItem( const ItemUpdated &iu );
 };
 
 class AddThr : public QThread
@@ -49,11 +66,7 @@ class AddThr : public QThread
 	friend class PlaylistWidget;
 	Q_OBJECT
 public:
-	inline AddThr( PlaylistWidget &pLW ) :
-		pLW( pLW )
-	{
-		connect( this, SIGNAL( finished() ), this, SLOT( finished() ) );
-	}
+	AddThr( PlaylistWidget &pLW );
 
 	void setData( const QStringList &, QTreeWidgetItem *, bool, bool sync = false );
 	void setData( const QString &, QTreeWidgetItem * );
@@ -83,12 +96,7 @@ public:
 
 	PlaylistWidget();
 
-	inline QString getUrl( QTreeWidgetItem *tWI = NULL ) const
-	{
-		if ( !tWI )
-			tWI = currentItem();
-		return tWI ? tWI->data( 0, Qt::UserRole ).toString() : QString();
-	}
+	QString getUrl( QTreeWidgetItem *tWI = NULL ) const;
 
 	void setItemsResizeToContents( bool );
 
@@ -139,7 +147,7 @@ private:
 	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstItem, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
 	QTreeWidgetItem *insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo );
 
-	void setEntryIcon( QImage &, QTreeWidgetItem * );
+	void setEntryIcon( const QImage &, QTreeWidgetItem * );
 
 	void mouseMoveEvent( QMouseEvent * );
 	void dragEnterEvent( QDragEnterEvent * );
