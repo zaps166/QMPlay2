@@ -436,7 +436,7 @@ bool Functions::splitPrefixAndUrlIfHasPluginPrefix( const QString &entireUrl, QS
 	}
 	return false;
 }
-void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo )
+void Functions::getDataIfHasPluginPrefix( const QString &entireUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo )
 {
 	QString addressPrefixName, realUrl, param;
 	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( entireUrl, &addressPrefixName, &realUrl, &param ) )
