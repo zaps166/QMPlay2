@@ -18,7 +18,6 @@ class Demuxer;
 
 class UpdateEntryThr : public QThread
 {
-	friend class PlaylistWidget;
 	Q_OBJECT
 public:
 	UpdateEntryThr( PlaylistWidget &pLW );
@@ -63,7 +62,6 @@ signals:
 
 class AddThr : public QThread
 {
-	friend class PlaylistWidget;
 	Q_OBJECT
 public:
 	AddThr( PlaylistWidget &pLW );
@@ -75,12 +73,15 @@ public:
 private:
 	void run();
 
+	void add( const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
+	QTreeWidgetItem *insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo );
+
 	PlaylistWidget &pLW;
 	QStringList urls;
 	QTreeWidgetItem *par;
 	bool loadList;
 	IOController<> ioCtrl;
-	QTreeWidgetItem *firstI, *lastI;
+	QTreeWidgetItem *firstItem, *lastItem;
 private slots:
 	void finished();
 };
@@ -144,9 +145,6 @@ public:
 		return tWI ? ( bool )( tWI->flags() & Qt::ItemIsDropEnabled ) : false;
 	}
 private:
-	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstItem, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
-	QTreeWidgetItem *insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo );
-
 	void setEntryIcon( const QImage &, QTreeWidgetItem * );
 
 	void mouseMoveEvent( QMouseEvent * );

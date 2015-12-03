@@ -4,9 +4,9 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
-bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks )
+bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks, bool onlyTracks )
 {
-	QString scheme = Functions::getUrlScheme( url );
+	const QString scheme = Functions::getUrlScheme( url );
 	if ( demuxer.isAborted() || url.isEmpty() || scheme.isEmpty() )
 		return false;
 	QString extension = Functions::fileExt( url ).toLower();
@@ -17,15 +17,17 @@ bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Play
 				{
 					if ( !demuxer.assign( ( Demuxer * )module->createInstance( mod.name ) ) )
 						continue;
-					if ( demuxer->open( url ) )
+					if ( tracks )
 					{
-						if ( tracks && demuxer->hasTracks() )
+						*tracks = demuxer->fetchTracks( url );
+						if ( !tracks->isEmpty() )
 						{
-							*tracks = demuxer->fetchTracks();
 							demuxer.clear();
+							return true;
 						}
-						return true;
 					}
+					if ( !onlyTracks && demuxer->open( url ) )
+						return true;
 					demuxer.clear();
 					if ( mod.name == scheme || demuxer.isAborted() )
 						return false;

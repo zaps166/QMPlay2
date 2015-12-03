@@ -112,10 +112,51 @@ void SIDPlay::abort()
 	m_aborted = true;
 }
 
-bool SIDPlay::open( const QString &_url )
+bool SIDPlay::open( const QString &url )
+{
+	return open( url, false );
+}
+
+Playlist::Entries SIDPlay::fetchTracks( const QString &url )
+{
+	Playlist::Entries entries;
+	if ( open( url, true ) )
+	{
+		const int tracks = m_tune->getInfo()->songs();
+		for ( int i = 0 ; i < tracks ; ++i )
+		{
+			const SidTuneInfo *info = m_tune->getInfo( i );
+			if ( info )
+			{
+				Playlist::Entry entry;
+				entry.url = SIDPlayName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
+				entry.name = getTitle( info, i );
+				entry.length = m_length;
+				entries.append( entry );
+			}
+		}
+		if ( entries.length() > 1 )
+		{
+			for ( int i = 0 ; i < entries.length() ; ++i )
+				entries[ i ].parent = 1;
+			Playlist::Entry entry;
+			entry.name = Functions::fileName( m_url, false );
+			entry.GID = 1;
+			entries.prepend( entry );
+		}
+	}
+	return entries;
+}
+
+
+bool SIDPlay::open( const QString &_url, bool tracksOnly )
 {
 	QString prefix, url, param;
 	const bool hasPluginPrefix = Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &url, &param );
+
+	if ( tracksOnly == hasPluginPrefix )
+		return false;
+
 	if ( !hasPluginPrefix )
 	{
 		if ( url.startsWith( SIDPlayName "://" ) )
@@ -124,6 +165,7 @@ bool SIDPlay::open( const QString &_url )
 	}
 	else if ( prefix != SIDPlayName || !param.startsWith( "track=" ) )
 		return false;
+
 	if ( Reader::create( url, m_reader ) )
 	{
 		const QByteArray data = m_reader->read( m_reader->size() );
@@ -171,41 +213,9 @@ bool SIDPlay::open( const QString &_url )
 		m_tune->selectSong( track + 1 );
 		return m_sidplay.load( m_tune );
 	}
+
 	return false;
 }
-
-bool SIDPlay::hasTracks() const
-{
-	return true;
-}
-Playlist::Entries SIDPlay::fetchTracks()
-{
-	const int tracks = m_tune->getInfo()->songs();
-	Playlist::Entries entries;
-	for ( int i = 0 ; i < tracks ; ++i )
-	{
-		const SidTuneInfo *info = m_tune->getInfo( i );
-		if ( info )
-		{
-			Playlist::Entry entry;
-			entry.url = SIDPlayName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
-			entry.name = getTitle( info, i );
-			entry.length = m_length;
-			entries.append( entry );
-		}
-	}
-	if ( entries.length() > 1 )
-	{
-		for ( int i = 0 ; i < entries.length() ; ++i )
-			entries[ i ].parent = 1;
-		Playlist::Entry entry;
-		entry.name = Functions::fileName( m_url, false );
-		entry.GID = 1;
-		entries.prepend( entry );
-	}
-	return entries;
-}
-
 
 QString SIDPlay::getTitle( const SidTuneInfo *info, int track ) const
 {

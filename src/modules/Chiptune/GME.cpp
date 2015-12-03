@@ -83,10 +83,52 @@ void GME::abort()
 	m_aborted = true;
 }
 
-bool GME::open( const QString &_url )
+bool GME::open( const QString &url )
+{
+	return open( url, false );
+}
+
+Playlist::Entries GME::fetchTracks( const QString &url )
+{
+	Playlist::Entries entries;
+	if ( open( url, true ) )
+	{
+		const int tracks = gme_track_count( m_gme );
+		for ( int i = 0 ; i < tracks ; ++i )
+		{
+			gme_info_t *info = NULL;
+			if ( !gme_track_info( m_gme, &info, i ) && info )
+			{
+				Playlist::Entry entry;
+				entry.url = GMEName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
+				entry.name = getTitle( info, i );
+				entry.length = getLength( info );
+				gme_free_info( info );
+				entries.append( entry );
+			}
+		}
+		if ( entries.length() > 1 )
+		{
+			for ( int i = 0 ; i < entries.length() ; ++i )
+				entries[ i ].parent = 1;
+			Playlist::Entry entry;
+			entry.name = Functions::fileName( m_url, false );
+			entry.GID = 1;
+			entries.prepend( entry );
+		}
+	}
+	return entries;
+}
+
+
+bool GME::open( const QString &_url, bool tracksOnly )
 {
 	QString prefix, url, param;
 	const bool hasPluginPrefix = Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &url, &param );
+
+	if ( tracksOnly == hasPluginPrefix )
+		return false;
+
 	if ( !hasPluginPrefix )
 	{
 		if ( url.startsWith( GMEName "://" ) )
@@ -95,6 +137,7 @@ bool GME::open( const QString &_url )
 	}
 	else if ( prefix != GMEName || !param.startsWith( "track=" ) )
 		return false;
+
 	if ( Reader::create( url, m_reader ) )
 	{
 		const QByteArray data = m_reader->read( m_reader->size() );
@@ -140,42 +183,9 @@ bool GME::open( const QString &_url )
 
 		return !gme_start_track( m_gme, track );
 	}
+
 	return false;
 }
-
-bool GME::hasTracks() const
-{
-	return true;
-}
-Playlist::Entries GME::fetchTracks()
-{
-	const int tracks = gme_track_count( m_gme );
-	Playlist::Entries entries;
-	for ( int i = 0 ; i < tracks ; ++i )
-	{
-		gme_info_t *info = NULL;
-		if ( !gme_track_info( m_gme, &info, i ) && info )
-		{
-			Playlist::Entry entry;
-			entry.url = GMEName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
-			entry.name = getTitle( info, i );
-			entry.length = getLength( info );
-			gme_free_info( info );
-			entries.append( entry );
-		}
-	}
-	if ( entries.length() > 1 )
-	{
-		for ( int i = 0 ; i < entries.length() ; ++i )
-			entries[ i ].parent = 1;
-		Playlist::Entry entry;
-		entry.name = Functions::fileName( m_url, false );
-		entry.GID = 1;
-		entries.prepend( entry );
-	}
-	return entries;
-}
-
 
 QString GME::getTitle( gme_info_t *info, int track ) const
 {

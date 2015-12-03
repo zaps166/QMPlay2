@@ -25,9 +25,10 @@ private:
 
 	bool open( const QString & );
 
-	bool hasTracks() const;
-	Playlist::Entries fetchTracks();
+	Playlist::Entries fetchTracks( const QString &url );
 
+
+	bool open( const QString &url, bool tracksOnly );
 
 	QString getTitle( gme_info_t *info, int track ) const;
 	int getLength( gme_info_t *info ) const;
