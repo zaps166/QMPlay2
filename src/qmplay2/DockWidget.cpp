@@ -2,7 +2,7 @@
 
 #include <QTimer>
 
-void DockWidget::EmptyW::showEvent( QShowEvent * ) //This should fix some issues on Qt5
+void DockWidget::EmptyW::showEvent( QShowEvent * ) //This should fix some issues on Qt5 (QTBUG-49445)
 {
 	QTimer::singleShot( 0, this, SLOT( hide() ) );
 }
