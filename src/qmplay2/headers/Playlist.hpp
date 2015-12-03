@@ -21,15 +21,17 @@ public:
 		bool selected;
 		int length, queue, GID, parent;
 	};
+	typedef QList< Entry > Entries;
+
 	enum OpenMode { NoOpen, ReadOnly, WriteOnly };
 
-	static QList< Entry > read( const QString &, QString *name = NULL );
-	static bool write( const QList< Entry > &, const QString &, QString *name = NULL );
+	static Entries read( const QString &, QString *name = NULL );
+	static bool write( const Entries &, const QString &, QString *name = NULL );
 	static QString name( const QString & );
 	static QStringList extensions();
 
-	virtual QList< Entry > _read() = 0;
-	virtual bool _write( const QList< Entry > & ) = 0;
+	virtual Entries _read() = 0;
+	virtual bool _write( const Entries & ) = 0;
 
 	virtual ~Playlist() {}
 private:

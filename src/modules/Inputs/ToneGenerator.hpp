@@ -1,7 +1,5 @@
 #include <Demuxer.hpp>
 
-#include <QCoreApplication>
-
 class ToneGenerator : public Demuxer
 {
 	Q_DECLARE_TR_FUNCTIONS( ToneGenerator )

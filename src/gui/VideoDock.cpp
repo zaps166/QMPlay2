@@ -115,7 +115,7 @@ void VideoDock::dropEvent( QDropEvent *e )
 			{
 				QString url = Functions::Url( urls[ 0 ] );
 #ifdef Q_OS_WIN
-				if ( url.left( 7 ) == "file://" )
+				if ( url.startsWith( "file://" ) )
 					url.remove( 0, 7 );
 #endif
 				if ( !QFileInfo( url.mid( 7 ) ).isDir() )

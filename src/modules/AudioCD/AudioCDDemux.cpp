@@ -175,7 +175,7 @@ bool AudioCDDemux::open( const QString &_url )
 	else
 #endif
 	{
-		if ( _url.left( 10 ) != "AudioCD://" )
+		if ( !_url.startsWith( AudioCDName "://" ) )
 			return false;
 		QUrl url( _url.mid( 10 ) );
 		device = QUrlQuery( url ).queryItemValue( "device" );
@@ -240,7 +240,7 @@ bool AudioCDDemux::open( const QString &_url )
 			if ( !device.isEmpty() )
 			{
 				emit QMPlay2Core.processParam( "DelPlaylistEntries", _url );
-				QList< Playlist::Entry > entries = getTracks( device );
+				Playlist::Entries entries = getTracks( device );
 				if ( !entries.isEmpty() && Playlist::write( entries, "file://" + AudioCDPlaylist ) )
 				{
 					emit QMPlay2Core.processParam( "open", AudioCDPlaylist );
@@ -381,9 +381,9 @@ void AudioCDDemux::freedb_get_track_info( cddb_disc_t *cddb_disc )
 	}
 }
 
-QList< Playlist::Entry > AudioCDDemux::getTracks( const QString &_device )
+Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 {
-	QList< Playlist::Entry > tracks;
+	Playlist::Entries tracks;
 	Playlist::Entry entry;
 	device = _device;
 	cdio_close_tray( device.toLocal8Bit(), NULL );

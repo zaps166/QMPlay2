@@ -109,8 +109,8 @@
         <translation>Direct address</translation>
     </message>
     <message>
-        <source>Dodatkowy parametr dla plugina</source>
-        <translation>Additional plugin parameter</translation>
+        <source>Dodatkowy parametr dla modułu</source>
+        <translation>Additional module parameter</translation>
     </message>
 </context>
 <context>
@@ -702,6 +702,10 @@ amp</translation>
     <message>
         <source>Komentarz</source>
         <translation>Comment</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Track</translation>
     </message>
 </context>
 <context>
@@ -1895,6 +1899,13 @@ amp</translation>
     <message>
         <source>Kopiuj adres strumienia</source>
         <translation>Copy stream address</translation>
+    </message>
+</context>
+<context>
+    <name>SIDPlay</name>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Track</translation>
     </message>
 </context>
 <context>

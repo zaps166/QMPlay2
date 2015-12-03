@@ -89,7 +89,7 @@ void DemuxerThr::loadImage()
 			emit QMPlay2Core.coverDataFromMediaFile( demuxerImage );
 		else
 		{
-			if ( img.isNull() && url.left( 5 ) == "file:" && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
+			if ( img.isNull() && url.startsWith( "file://" ) && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
 			{
 				const QString directory = filePath( url.mid( 7 ) );
 				foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
@@ -583,7 +583,9 @@ void DemuxerThr::emitInfo()
 
 	if ( !info.isEmpty() )
 		info += "<br/>";
-	if ( url.left( 5 ) != "file:" )
+
+	Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, &url, NULL );
+	if ( !url.startsWith( "file://" ) )
 		info += "<b>" + tr( "Adres" ) + ":</b> " + url + "<br>";
 	else
 	{
@@ -591,6 +593,7 @@ void DemuxerThr::emitInfo()
 		info += "<b>" + tr( "Ścieżka do pliku" ) + ": </b> " + filePath( pth ) + "<br/>";
 		info += "<b>" + tr( "Nazwa pliku" ) + ": </b> " + fileName( pth ) + "<br/>";
 	}
+
 	if ( demuxer->bitrate() > 0 )
 		info += "<b>" + tr( "Bitrate" ) + ":</b> " + QString::number( demuxer->bitrate() ) + "kbps<br/>";
 	info += "<b>" + tr( "Format" ) + ":</b> " + demuxer->name();

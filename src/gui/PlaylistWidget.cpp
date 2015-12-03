@@ -71,7 +71,7 @@ void UpdateEntryThr::run()
 			pLW.setEntryIcon( img, tWI );
 
 			IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
-			if ( Demuxer::create( url, demuxer ) )
+			if ( Demuxer::create( url, demuxer ) ) //TODO: tracks
 			{
 				if ( name.isEmpty() )
 					name = demuxer->title();
@@ -300,7 +300,7 @@ void PlaylistWidget::clear()
 {
 	if ( !canModify() )
 		return;
-	_queue.clear();
+	queue.clear();
 	clearCurrentPlaying();
 	QTreeWidget::clear();
 }
@@ -417,19 +417,19 @@ bool PlaylistWidget::canModify( bool all ) const
 	return !( addThr.isRunning() || ( all ? ( QAbstractItemView::state() != QAbstractItemView::NoState || updateEntryThr.isRunning() ) : false ) );
 }
 
-void PlaylistWidget::queue()
+void PlaylistWidget::enqueue()
 {
 	foreach ( QTreeWidgetItem *tWI, selectedItems() )
 	{
 		if ( isGroup( tWI ) )
 			continue;
-		if ( _queue.contains( tWI ) )
+		if ( queue.contains( tWI ) )
 		{
 			tWI->setText( 1, QString() );
-			_queue.removeOne( tWI );
+			queue.removeOne( tWI );
 		}
 		else
-			_queue += tWI;
+			queue += tWI;
 	}
 	refresh( REFRESH_QUEUE );
 }
@@ -438,14 +438,14 @@ void PlaylistWidget::refresh( REFRESH Refresh )
 	QList< QTreeWidgetItem * > items = getChildren( ONLY_NON_GROUPS );
 	if ( Refresh & REFRESH_QUEUE )
 	{
-		for ( int i = 0 ; i < _queue.size() ; i++ )
+		for ( int i = 0 ; i < queue.size() ; i++ )
 		{
-			if ( !items.contains( _queue[ i ] ) )
-				_queue.removeAt( i-- );
+			if ( !items.contains( queue[ i ] ) )
+				queue.removeAt( i-- );
 			else
-				_queue[ i ]->setText( 1, QString::number( i + 1 ) );
+				queue[ i ]->setText( 1, QString::number( i + 1 ) );
 		}
-		_queue.size() ? header()->showSection( 1 ) : header()->hideSection( 1 );
+		queue.size() ? header()->showSection( 1 ) : header()->hideSection( 1 );
 	}
 	if ( Refresh & REFRESH_GROUPS_TIME )
 	{
@@ -509,54 +509,30 @@ void PlaylistWidget::processItems( QList< QTreeWidgetItem * > *itemsToShow, bool
 	}
 }
 
-void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, const Functions::DemuxersInfo &demuxersInfo, bool loadList )
+void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTreeWidgetItem **firstItem, const Functions::DemuxersInfo &demuxersInfo, bool loadList )
 {
 	for ( int i = 0 ; i < urls.size() ; ++i )
 	{
 		if ( addThr.ioCtrl.isAborted() )
 			break;
-		QTreeWidgetItem *tWI = parent;
+		QTreeWidgetItem *currentItem = parent;
 		QString url = Functions::Url( urls[ i ] ), name;
-		QList< Playlist::Entry > entries = Playlist::read( url, &name );
+		const Playlist::Entries entries = Playlist::read( url, &name );
 		if ( !name.isEmpty() ) //ładowanie playlisty
 		{
 			if ( !loadList )
-				tWI = newGroup( Functions::fileName( url, false ), QString(), tWI ); //dodawanie grupy playlisty, jeżeli jest dodawana, a nie ładowana
+				currentItem = newGroup( Functions::fileName( url, false ), QString(), currentItem ); //dodawanie grupy playlisty, jeżeli jest dodawana, a nie ładowana
 			else
 				clear(); //wykonać można tylko z głównego wątku!
-			QList< QTreeWidgetItem * > groupList;
-			int queueSize = _queue.size();
-			foreach ( const Playlist::Entry &entry, entries )
-			{
-				QTreeWidgetItem *I = NULL, *par = NULL;
-				int idx = entry.parent - 1;
-				if ( idx >= 0 && groupList.size() > idx )
-					par = groupList[ idx ];
-				else
-					par = tWI;
-				if ( entry.GID )
-					groupList += newGroup( entry.name, entry.url, par );
-				else
-				{
-					I = newEntry( entry, par, demuxersInfo );
-					if ( entry.queue ) //odbudowywanie kolejki
-					{
-						for ( int j = _queue.size() ; j <= queueSize + entry.queue - 1 ; j++ )
-							_queue += NULL;
-						_queue[ queueSize + entry.queue - 1 ] = I;
-					}
-					if ( firstI && !*firstI )
-						*firstI = I;
-				}
-				if ( entry.selected && firstI )
-					*firstI = entry.GID ? groupList.last() : I;
-			}
+			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries( entries, currentItem, demuxersInfo );
+			if ( firstItem && !*firstItem )
+				*firstItem = tmpFirstItem;
 			if ( loadList )
 				break;
 		}
 		else if ( !loadList )
 		{
-			QString dUrl = ( url.left( 7 ) == "file://" ) ? url.mid( 7 ) : QString();
+			QString dUrl = url.startsWith( "file://" ) ? url.mid( 7 ) : QString();
 			if ( QFileInfo( dUrl ).isDir() ) //dodawanie podkatalogu
 			{
 				if ( currPthToSave.isNull() )
@@ -565,7 +541,7 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 				if ( d_urls.size() )
 				{
 					url = Functions::cleanPath( url );
-					QTreeWidgetItem *p = newGroup( Functions::fileName( url ), url, tWI );
+					QTreeWidgetItem *p = newGroup( Functions::fileName( url ), url, currentItem );
 					for ( int j = d_urls.size() - 1 ; j >= 0 ; j-- )
 					{
 						d_urls[ j ].prepend( url );
@@ -573,46 +549,90 @@ void PlaylistWidget::_add( const QStringList &urls, QTreeWidgetItem *parent, QTr
 						d_urls[ j ].replace( "file://", "file:///" );
 #endif
 					}
-					_add( d_urls, p, firstI, demuxersInfo );
+					_add( d_urls, p, firstItem, demuxersInfo );
 				}
 			}
 			else
 			{
+				bool hasOneEntry = false;
+
 				Playlist::Entry entry;
 				entry.url = url;
 
-				bool ok = false;
 				if ( dontUpdateAfterAdd )
 				{
 					dontUpdateAfterAdd = false;
-					ok = true;
+					hasOneEntry = true;
 				}
 				else
 				{
 					Functions::getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &addThr.ioCtrl, demuxersInfo );
 					IOController< Demuxer > &demuxer = addThr.ioCtrl.toRef< Demuxer >();
-					if ( Demuxer::create( url, demuxer ) )
+					Playlist::Entries tracks;
+					if ( Demuxer::create( url, demuxer, &tracks ) )
 					{
 						if ( currPthToSave.isNull() && QFileInfo( dUrl ).isFile() )
 							currPthToSave = Functions::filePath( dUrl );
-						if ( entry.name.isEmpty() )
-							entry.name = demuxer->title();
-						entry.length = demuxer->length();
-						demuxer.clear();
-						ok = true;
+						if ( tracks.isEmpty() && demuxer )
+						{
+							if ( entry.name.isEmpty() )
+								entry.name = demuxer->title();
+							entry.length = demuxer->length();
+							hasOneEntry = true;
+							demuxer.clear();
+						}
+						else
+						{
+							currentItem = insertPlaylistEntries( tracks, currentItem, demuxersInfo );
+							if ( firstItem && !*firstItem )
+								*firstItem = currentItem;
+						}
 					}
 				}
-				if ( ok )
+
+				if ( hasOneEntry )
 				{
 					if ( entry.name.isEmpty() )
 						entry.name = Functions::fileName( url, false );
-					tWI = newEntry( entry, tWI, demuxersInfo );
-					if ( firstI && !*firstI )
-						*firstI = tWI;
+					currentItem = newEntry( entry, currentItem, demuxersInfo );
+					if ( firstItem && !*firstItem )
+						*firstItem = currentItem;
 				}
 			}
 		}
 	}
+}
+QTreeWidgetItem *PlaylistWidget::insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo )
+{
+	QList< QTreeWidgetItem * > groupList;
+	const int queueSize = queue.size();
+	QTreeWidgetItem *firstItem = NULL;
+	foreach ( const Playlist::Entry &entry, entries )
+	{
+		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL;
+		int idx = entry.parent - 1;
+		if ( idx >= 0 && groupList.size() > idx )
+			tmpParent = groupList[ idx ];
+		else
+			tmpParent = parent;
+		if ( entry.GID )
+			groupList += newGroup( entry.name, entry.url, tmpParent );
+		else
+		{
+			currentItem = newEntry( entry, tmpParent, demuxersInfo );
+			if ( entry.queue ) //Rebuild queue
+			{
+				for ( int j = queue.size() ; j <= queueSize + entry.queue - 1 ; j++ )
+					queue += NULL;
+				queue[ queueSize + entry.queue - 1 ] = currentItem;
+			}
+			if ( !firstItem )
+				firstItem = currentItem;
+		}
+		if ( entry.selected )
+			firstItem = entry.GID ? groupList.last() : currentItem;
+	}
+	return firstItem;
 }
 
 void PlaylistWidget::setEntryIcon( QImage &img, QTreeWidgetItem *tWI )

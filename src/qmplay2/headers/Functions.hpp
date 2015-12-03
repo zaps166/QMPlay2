@@ -115,8 +115,8 @@ namespace Functions
 	bool chkMimeData( const QMimeData * );
 	QStringList getUrlsFromMimeData( const QMimeData * );
 
-	bool splitPrefixAndUrlIfHasPluginPrefix( const QString &, QString *, QString *, QString *param = NULL );
-	void getDataIfHasPluginPrefix( const QString &wholeUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo() );
+	bool splitPrefixAndUrlIfHasPluginPrefix( const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = NULL );
+	void getDataIfHasPluginPrefix( const QString &entireUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo() );
 
 	void hFlip( char *data, int linesize, int height, int width );
 	void vFlip( char *data, int linesize, int height );

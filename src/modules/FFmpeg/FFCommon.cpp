@@ -11,7 +11,7 @@ extern "C"
 
 QString FFCommon::prepareUrl( QString url, AVDictionary *&options, bool *isLocal )
 {
-	if ( url.left( 5 ) == "file:" )
+	if ( url.startsWith( "file://" ) )
 	{
 		url.remove( 0, 7 );
 		if ( isLocal )

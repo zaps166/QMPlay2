@@ -79,7 +79,7 @@ bool PlaylistDock::save( const QString &_url, bool saveCurrentGroup )
 {
 	const QString url = Functions::Url( _url );
 	QList< QTreeWidgetItem * > parents;
-	QList< Playlist::Entry > entries;
+	Playlist::Entries entries;
 	foreach ( QTreeWidgetItem *tWI, list->getChildren( PlaylistWidget::ALL_CHILDREN, saveCurrentGroup ? list->currentItem() : NULL ) )
 	{
 		Playlist::Entry entry;
@@ -183,11 +183,11 @@ void PlaylistDock::itemDoubleClicked( QTreeWidgetItem *tWI )
 	lastPlaying = tWI;
 
 	//Jeżeli jest w kolejce, usuń z kolejki
-	int idx = list->_queue.indexOf( tWI );
+	int idx = list->queue.indexOf( tWI );
 	if ( idx >= 0 )
 	{
 		tWI->setText( 1, QString() );
-		list->_queue.removeOne( tWI );
+		list->queue.removeOne( tWI );
 		list->refresh( PlaylistWidget::REFRESH_QUEUE );
 	}
 
@@ -248,7 +248,7 @@ void PlaylistDock::next( bool playingError )
 			else
 			{
 				QTreeWidgetItem *P = NULL;
-				if ( !list->_queue.size() )
+				if ( !list->queue.size() )
 				{
 					tWI = list->currentPlaying ? list->currentPlaying : list->currentItem();
 					P = tWI ? tWI->parent() : NULL;
@@ -273,7 +273,7 @@ void PlaylistDock::next( bool playingError )
 					}
 				}
 				else
-					tWI = list->_queue.first();
+					tWI = list->queue.first();
 				if ( canRepeat && ( repeatMode == RepeatList || repeatMode == RepeatGroup ) && !tWI && !l.isEmpty() ) //zapętlenie listy
 					tWI = l[ 0 ];
 			}
@@ -453,7 +453,7 @@ void PlaylistDock::goToPlayback()
 }
 void PlaylistDock::queue()
 {
-	list->queue();
+	list->enqueue();
 }
 void PlaylistDock::findItems( const QString &txt )
 {
@@ -508,7 +508,8 @@ void PlaylistDock::syncCurrentFolder()
 	QString pth = tWI->data( 0, Qt::UserRole ).toString();
 	if ( pth.isEmpty() )
 		return;
-	pth.remove( "file://" );
+	if ( pth.startsWith( "file://" ) )
+		pth.remove( 0, 7 );
 	if ( pth.right( 1 ) != "/" )
 		pth += "/";
 	if ( !QFileInfo( pth ).isDir() )

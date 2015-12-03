@@ -86,7 +86,7 @@ void Inputs::add()
 	AddD d( *this, parent );
 	QString params = d.execAndGet();
 	if ( !params.isEmpty() )
-		emit QMPlay2Core.processParam( "open", ToneGeneratorName"://" + params );
+		emit QMPlay2Core.processParam( "open", ToneGeneratorName "://" + params );
 }
 
 QMPLAY2_EXPORT_PLUGIN( Inputs )

@@ -4,7 +4,7 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
-bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer )
+bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks )
 {
 	QString scheme = Functions::getUrlScheme( url );
 	if ( demuxer.isAborted() || url.isEmpty() || scheme.isEmpty() )
@@ -18,7 +18,14 @@ bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer )
 					if ( !demuxer.assign( ( Demuxer * )module->createInstance( mod.name ) ) )
 						continue;
 					if ( demuxer->open( url ) )
+					{
+						if ( tracks && demuxer->hasTracks() )
+						{
+							*tracks = demuxer->fetchTracks();
+							demuxer.clear();
+						}
 						return true;
+					}
 					demuxer.clear();
 					if ( mod.name == scheme || demuxer.isAborted() )
 						return false;

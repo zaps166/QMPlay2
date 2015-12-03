@@ -172,7 +172,7 @@ void QMPlay2GUIClass::loadIcons()
 
 QString QMPlay2GUIClass::getCurrentPth( QString pth, bool leaveFilename )
 {
-	if ( pth.left( 7 ) == "file://" )
+	if ( pth.startsWith( "file://" ) )
 		pth.remove( 0, 7 );
 	if ( !leaveFilename )
 		pth = Functions::filePath( pth );

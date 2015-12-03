@@ -95,7 +95,7 @@ void AudioCD::add()
 		if ( chooseCD.exec() == QDialog::Accepted )
 		{
 			emit QMPlay2Core.waitCursor();
-			QList< Playlist::Entry > entries = audioCD.getTracks( drvE.text() );
+			Playlist::Entries entries = audioCD.getTracks( drvE.text() );
 			emit QMPlay2Core.restoreCursor();
 			if ( !entries.isEmpty() )
 			{

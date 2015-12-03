@@ -27,6 +27,7 @@ public:
 		return ( PrefixType )pB.itemData( pB.currentIndex() ).toInt();
 	}
 	QString url() const;
+	QString cleanUrl() const;
 signals:
 	void directAddressChanged();
 private slots:
@@ -35,6 +36,7 @@ private slots:
 private:
 	QComboBox pB;
 	QLineEdit aE, pE;
+	QString filePrefix;
 };
 
 #endif //ADDRCOMBOBOX_HPP

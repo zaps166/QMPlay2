@@ -109,8 +109,8 @@
         <translation>Прямой адрес</translation>
     </message>
     <message>
-        <source>Dodatkowy parametr dla plugina</source>
-        <translation>Дополнительный параметр плагина</translation>
+        <source>Dodatkowy parametr dla modułu</source>
+        <translation>Дополнительный параметр модуль</translation>
     </message>
 </context>
 <context>
@@ -701,6 +701,10 @@ amp</source>
     <message>
         <source>Komentarz</source>
         <translation>Коментарий</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Путь</translation>
     </message>
 </context>
 <context>
@@ -1894,6 +1898,13 @@ amp</source>
     <message>
         <source>Kopiuj adres strumienia</source>
         <translation>Копировать адрес потока</translation>
+    </message>
+</context>
+<context>
+    <name>SIDPlay</name>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Путь</translation>
     </message>
 </context>
 <context>

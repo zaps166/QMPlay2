@@ -2,8 +2,8 @@
 
 class M3U : public Playlist
 {
-	QList< Entry > _read();
-	bool _write( const QList< Entry > & );
+	Entries _read();
+	bool _write( const Entries & );
 
 	~M3U() {}
 };

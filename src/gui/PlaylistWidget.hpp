@@ -115,7 +115,7 @@ public:
 
 	bool canModify( bool all = true ) const;
 
-	void queue();
+	void enqueue();
 	void refresh( REFRESH Refresh = REFRESH_ALL );
 
 	void processItems( QList< QTreeWidgetItem * > *itemsToShow = NULL, bool hideGroups = false );
@@ -124,7 +124,7 @@ public:
 	QTreeWidgetItem *currentPlaying;
 	QIcon currentPlayingItemIcon;
 
-	QList< QTreeWidgetItem * > _queue;
+	QList< QTreeWidgetItem * > queue;
 
 	AddThr addThr;
 	UpdateEntryThr updateEntryThr;
@@ -136,7 +136,8 @@ public:
 		return tWI ? ( bool )( tWI->flags() & Qt::ItemIsDropEnabled ) : false;
 	}
 private:
-	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstI, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
+	void _add( const QStringList &, QTreeWidgetItem *parent, QTreeWidgetItem **firstItem, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
+	QTreeWidgetItem *insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo );
 
 	void setEntryIcon( QImage &, QTreeWidgetItem * );
 

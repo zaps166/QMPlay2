@@ -42,7 +42,9 @@ EntryProperties::EntryProperties( QWidget *p, QTreeWidgetItem *_tWI, bool &sync,
 	nameE = new QLineEdit;
 	nameE->setText( tWI->text( 0 ) );
 
-	QString url = tWI->data( 0, Qt::UserRole ).toString().remove( "file://" );
+	QString url = tWI->data( 0, Qt::UserRole ).toString();
+	if ( url.startsWith( "file://" ) )
+		url.remove( 0, 7 );
 
 	if ( PlaylistWidget::isGroup( tWI ) )
 	{
@@ -72,7 +74,7 @@ EntryProperties::EntryProperties( QWidget *p, QTreeWidgetItem *_tWI, bool &sync,
 		directAddressChanged();
 #endif
 
-		QFileInfo fi( url );
+		QFileInfo fi( addrB->cleanUrl() );
 		if ( fi.isFile() )
 			fileSizeL = new QLabel( tr( "Rozmiar pliku" ) + ": " + Functions::sizeString( fi.size() ) );
 

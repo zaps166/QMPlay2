@@ -137,7 +137,7 @@ QString Functions::fileName( QString f, bool extension )
 	while ( f.right( 1 ) == "/" )
 		f.chop( 1 );
 	QString n = f.right( f.length() - f.lastIndexOf( '/' ) - 1 );
-	if ( extension || f.left( 5 ) != "file:" )
+	if ( extension || !f.startsWith( "file://" ) )
 		return n;
 	return n.mid( 0, n.lastIndexOf( '.' ) );
 }
@@ -413,33 +413,33 @@ QStringList Functions::getUrlsFromMimeData( const QMimeData *mimeData )
 	return urls;
 }
 
-bool Functions::splitPrefixAndUrlIfHasPluginPrefix( const QString &whole_url, QString *addressPrefixName, QString *url, QString *param )
+bool Functions::splitPrefixAndUrlIfHasPluginPrefix( const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param )
 {
-	int idx = whole_url.indexOf( "://{" );
+	int idx = entireUrl.indexOf( "://{" );
 	if ( idx > -1 )
 	{
 		if ( addressPrefixName )
-			*addressPrefixName = whole_url.mid( 0, idx );
+			*addressPrefixName = entireUrl.mid( 0, idx );
 		if ( url || param )
 		{
 			idx += 4;
-			int idx2 = whole_url.indexOf( "}", idx );
+			int idx2 = entireUrl.indexOf( "}", idx );
 			if ( idx2 > -1 )
 			{
 				if ( param )
-					*param = whole_url.mid( idx2+1, whole_url.length()-(idx2+1) );
+					*param = entireUrl.mid( idx2+1, entireUrl.length()-(idx2+1) );
 				if ( url )
-					*url = whole_url.mid( idx, idx2-idx );
+					*url = entireUrl.mid( idx, idx2-idx );
 			}
 		}
 		return ( !addressPrefixName || !addressPrefixName->isEmpty() ) && ( !url || !url->isNull() );
 	}
 	return false;
 }
-void Functions::getDataIfHasPluginPrefix(const QString &wholeUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo )
+void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo )
 {
 	QString addressPrefixName, realUrl, param;
-	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( wholeUrl, &addressPrefixName, &realUrl, &param ) )
+	if ( ( url || img ) && splitPrefixAndUrlIfHasPluginPrefix( entireUrl, &addressPrefixName, &realUrl, &param ) )
 	{
 		foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( addressPrefixName ) )
@@ -450,8 +450,8 @@ void Functions::getDataIfHasPluginPrefix(const QString &wholeUrl, QString *url, 
 	}
 	else if ( img )
 	{
-		QString scheme = getUrlScheme( wholeUrl );
-		QString extension = fileExt( wholeUrl ).toLower();
+		QString scheme = getUrlScheme( entireUrl );
+		QString extension = fileExt( entireUrl ).toLower();
 		if ( demuxersInfo.isEmpty() )
 		{
 			foreach ( Module *module, QMPlay2Core.getPluginsInstance() )

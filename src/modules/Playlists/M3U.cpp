@@ -7,14 +7,14 @@ using Functions::Url;
 #include <Reader.hpp>
 #include <Writer.hpp>
 
-QList< M3U::Entry > M3U::_read()
+Playlist::Entries M3U::_read()
 {
 	Reader *reader = ioCtrl.rawPtr< Reader >();
-	QList< Entry > list;
+	Entries list;
 
 	QString playlistPath = filePath( reader->getUrl() );
-	if ( playlistPath.left( 7 ) == "file://" )
-		playlistPath.remove( "file://" );
+	if ( playlistPath.startsWith( "file://" ) )
+		playlistPath.remove( 0, 7 );
 	else
 		playlistPath.clear();
 	bool noReadLine = false;
@@ -60,7 +60,7 @@ QList< M3U::Entry > M3U::_read()
 
 	return list;
 }
-bool M3U::_write( const QList< Entry > &list )
+bool M3U::_write( const Entries &list )
 {
 	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( "#EXTM3U\r\n" );
@@ -71,10 +71,9 @@ bool M3U::_write( const QList< Entry > &list )
 		{
 			QString length = QString::number( entry.length );
 			QString url = entry.url;
-#ifdef Q_OS_WIN
-			bool isFile = url.left( 5 ) == "file:";
-#endif
-			url.remove( "file://" );
+			const bool isFile = url.startsWith( "file://" );
+			if ( isFile )
+				url.remove( 0, 7 );
 #ifdef Q_OS_WIN
 			if ( isFile )
 				url.replace( "/", "\\" );

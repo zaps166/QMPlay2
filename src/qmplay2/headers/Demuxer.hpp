@@ -2,8 +2,8 @@
 #define DEMUXER_HPP
 
 #include <ModuleCommon.hpp>
-#include <IOController.hpp>
 #include <StreamInfo.hpp>
+#include <Playlist.hpp>
 
 #include <QString>
 
@@ -23,7 +23,7 @@ public:
 		double start, end;
 	};
 
-	static bool create( const QString &url, IOController< Demuxer > &demuxer );
+	static bool create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks = NULL );
 
 	virtual bool metadataChanged() const
 	{
@@ -76,6 +76,15 @@ public:
 	virtual ~Demuxer() {}
 private:
 	virtual bool open( const QString & ) = 0;
+
+	virtual bool hasTracks() const
+	{
+		return false;
+	}
+	virtual Playlist::Entries fetchTracks()
+	{
+		return Playlist::Entries();
+	}
 protected:
 	class StreamsInfo : public QList< StreamInfo  * >
 	{

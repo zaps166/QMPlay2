@@ -7,14 +7,14 @@ using Functions::Url;
 #include <Reader.hpp>
 #include <Writer.hpp>
 
-QList< PLS::Entry > PLS::_read()
+Playlist::Entries PLS::_read()
 {
 	Reader *reader = ioCtrl.rawPtr< Reader >();
-	QList< Entry > list;
+	Entries list;
 
 	QString playlistPath = filePath( reader->getUrl() );
-	if ( playlistPath.left( 7 ) == "file://" )
-		playlistPath.remove( "file://" );
+	if ( playlistPath.startsWith( "file://" ) )
+		playlistPath.remove( 0, 7 );
 	else
 		playlistPath.clear();
 
@@ -68,7 +68,7 @@ QList< PLS::Entry > PLS::_read()
 
 	return list;
 }
-bool PLS::_write( const QList< Entry > &list )
+bool PLS::_write( const Entries &list )
 {
 	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( QString( "[playlist]\r\nNumberOfEntries=" + QString::number( list.size() ) + "\r\n" ).toUtf8() );
@@ -77,10 +77,9 @@ bool PLS::_write( const QList< Entry > &list )
 		const Playlist::Entry &entry = list[ i ];
 		QString idx = QString::number( i+1 );
 		QString url = entry.url;
-#ifdef Q_OS_WIN
-		bool isFile = url.left( 5 ) == "file:";
-#endif
-		url.remove( "file://" );
+		const bool isFile = url.startsWith( "file://" );
+		if ( isFile )
+			url.remove( 0, 7 );
 #ifdef Q_OS_WIN
 		if ( isFile )
 			url.replace( "/", "\\" );
@@ -105,7 +104,7 @@ bool PLS::_write( const QList< Entry > &list )
 
 /**/
 
-void PLS::prepareList( QList< Entry > *list, int idx )
+void PLS::prepareList( Playlist::Entries *list, int idx )
 {
 	if ( !list || idx <= list->size() - 1 )
 		return;

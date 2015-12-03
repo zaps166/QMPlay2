@@ -2,12 +2,12 @@
 
 class PLS : public Playlist
 {
-	QList< Entry > _read();
-	bool _write( const QList< Entry > & );
+	Entries _read();
+	bool _write( const Entries & );
 
 	~PLS() {}
 
-	void prepareList( class QList< Playlist::Entry > *, int );
+	void prepareList( Entries *, int );
 };
 
 #define PLSName "PLS"

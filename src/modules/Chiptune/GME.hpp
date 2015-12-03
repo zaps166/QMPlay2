@@ -1,5 +1,6 @@
 #include <Demuxer.hpp>
 
+struct gme_info_t;
 struct Music_Emu;
 class Reader;
 
@@ -24,14 +25,23 @@ private:
 
 	bool open( const QString & );
 
-	IOController< Reader > reader;
-	quint32 srate;
-	bool aborted;
-	int len;
+	bool hasTracks() const;
+	Playlist::Entries fetchTracks();
+
+
+	QString getTitle( gme_info_t *info, int track ) const;
+	int getLength( gme_info_t *info ) const;
+
+
+	IOController< Reader > m_reader;
+	quint32 m_srate;
+	bool m_aborted;
+	int m_length;
 
 	QList< QMPlay2Tag > m_tags;
+	QString m_url, m_title;
 
-	Music_Emu *gme;
+	Music_Emu *m_gme;
 };
 
 #define GMEName "Game-Music-Emu"

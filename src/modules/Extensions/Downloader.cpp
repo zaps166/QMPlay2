@@ -578,7 +578,7 @@ DockWidget *Downloader::getDockWidget()
 
 QAction *Downloader::getAction( const QString &name, int, const QString &url, const QString &prefix, const QString &param )
 {
-	if ( url.left( 7 ) == "file://" )
+	if ( url.startsWith( "file://" ) )
 		return NULL;
 	QAction *act = new QAction( DownloaderW::tr( "Pobierz" ), NULL );
 	act->setIcon( QIcon( ":/downloader" ) );

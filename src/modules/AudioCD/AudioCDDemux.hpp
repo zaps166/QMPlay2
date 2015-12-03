@@ -4,7 +4,6 @@
 #include <Demuxer.hpp>
 #include <Playlist.hpp>
 
-#include <QCoreApplication>
 #include <QAtomicInt>
 
 #include <cdio/cdio.h>
@@ -66,7 +65,7 @@ private:
 	const QString &AudioCDPlaylist;
 	CDIODestroyTimer &destroyTimer;
 
-	QList< Playlist::Entry > getTracks( const QString &device );
+	Playlist::Entries getTracks( const QString &device );
 	QStringList getDevices();
 
 	QString Title, Artist, Genre, cdTitle, cdArtist, device;

@@ -47,13 +47,18 @@ AddressBox::AddressBox( Qt::Orientation o, QString url )
 				url.remove( scheme + "://" );
 			}
 		}
+		if ( url.startsWith( "file://" ) )
+		{
+			url.remove( 0, 7 );
+			filePrefix = "file://";
+		}
 		aE.setText( url );
 	}
 
 	connect( &pB, SIGNAL( currentIndexChanged( int ) ), this, SLOT( pBIdxChanged() ) );
 	connect( &aE, SIGNAL( textEdited( const QString & ) ), this, SLOT( aETextChanged() ) );
 
-	pE.setToolTip( tr( "Dodatkowy parametr dla plugina" ) );
+	pE.setToolTip( tr( "Dodatkowy parametr dla modułu" ) );
 	pE.setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Fixed );
 
 	QGridLayout *layout = new QGridLayout( this );
@@ -80,18 +85,24 @@ QString AddressBox::url() const
 	switch ( currentPrefixType() )
 	{
 		case AddressBox::DIRECT:
-			return aE.text();
+			return filePrefix + cleanUrl();
 		case AddressBox::DEMUXER:
-			return pB.currentText() + "://" + aE.text();
+			if ( pE.text().isEmpty() )
+				return pB.currentText() + "://" + filePrefix + cleanUrl();
+			//don't break!
 		case AddressBox::GUI_EXT:
-			return pB.currentText() + "://{" + aE.text() + "}" + pE.text();
+			return pB.currentText() + "://{" + filePrefix + cleanUrl() + "}" + pE.text();
 	}
 	return QString();
+}
+QString AddressBox::cleanUrl() const
+{
+	return aE.text();
 }
 
 void AddressBox::pBIdxChanged()
 {
-	pE.setVisible( currentPrefixType() == GUI_EXT );
+	pE.setVisible( currentPrefixType() != DIRECT );
 	emit directAddressChanged();
 }
 void AddressBox::aETextChanged()

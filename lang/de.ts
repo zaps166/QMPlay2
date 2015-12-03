@@ -109,8 +109,8 @@
         <translation>Eingabe-hinzufügen</translation>
     </message>
     <message>
-        <source>Dodatkowy parametr dla plugina</source>
-        <translation>Erweiterte Parameter für das Plugin</translation>
+        <source>Dodatkowy parametr dla modułu</source>
+        <translation>Erweiterte Parameter für das Module</translation>
     </message>
 </context>
 <context>
@@ -705,6 +705,10 @@ amp</source>
     <message>
         <source>Komentarz</source>
         <translation>Kommentar</translation>
+    </message>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Pfad</translation>
     </message>
 </context>
 <context>
@@ -1905,6 +1909,13 @@ amp</source>
     <message>
         <source>Kopiuj adres strumienia</source>
         <translation>Kopiere Stream Adresse</translation>
+    </message>
+</context>
+<context>
+    <name>SIDPlay</name>
+    <message>
+        <source>Ścieżka</source>
+        <translation>Pfad</translation>
     </message>
 </context>
 <context>

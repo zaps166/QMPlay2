@@ -2,8 +2,6 @@
 
 #include <IOController.hpp>
 
-#include <QCoreApplication>
-
 struct _ModPlugFile;
 class Reader;
 

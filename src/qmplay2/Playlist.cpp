@@ -6,9 +6,9 @@
 #include <Writer.hpp>
 #include <Reader.hpp>
 
-QList< Playlist::Entry > Playlist::read( const QString &url, QString *name )
+Playlist::Entries Playlist::read( const QString &url, QString *name )
 {
-	QList< Entry > list;
+	Entries list;
 	Playlist *playlist = create( url, ReadOnly, name );
 	if ( playlist )
 	{
@@ -17,7 +17,7 @@ QList< Playlist::Entry > Playlist::read( const QString &url, QString *name )
 	}
 	return list;
 }
-bool Playlist::write( const QList< Entry > &list, const QString &url, QString *name )
+bool Playlist::write( const Entries &list, const QString &url, QString *name )
 {
 	bool OK = false;
 	Playlist *playlist = create( url, WriteOnly, name );
