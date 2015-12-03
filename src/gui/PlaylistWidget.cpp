@@ -121,7 +121,6 @@ void UpdateEntryThr::finished()
 	if ( timeChanged )
 	{
 		pLW.refresh( PlaylistWidget::REFRESH_GROUPS_TIME );
-		qDebug() << "timeChanged";
 		timeChanged = false;
 	}
 	pLW.modifyMenu();
