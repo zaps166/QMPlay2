@@ -264,6 +264,7 @@ void AddThr::add( const QStringList &urls, QTreeWidgetItem *parent, const Functi
 							entry.name = demuxer->title();
 						entry.length = demuxer->length();
 						demuxer.clear();
+						hasOneEntry = true;
 					}
 					else
 					{
