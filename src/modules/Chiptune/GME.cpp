@@ -128,7 +128,7 @@ bool GME::open( const QString &_url, bool tracksOnly )
 	if ( tracksOnly == hasPluginPrefix )
 		return false;
 
-	int track;
+	int track = 0;
 	if ( !hasPluginPrefix )
 	{
 		if ( url.startsWith( GMEName "://" ) )

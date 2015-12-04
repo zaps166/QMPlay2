@@ -26,6 +26,11 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *gmeB, *sidB;
+#ifdef USE_GME
+	QCheckBox *gmeB;
+#endif
+#ifdef USE_SIDPLAY
+	QCheckBox *sidB;
+#endif
 	QSpinBox *lengthB;
 };

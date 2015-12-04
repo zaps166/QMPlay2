@@ -62,11 +62,15 @@ QMPLAY2_EXPORT_PLUGIN( Chiptune )
 ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	Module::SettingsWidget( module )
 {
+#ifdef USE_GME
 	gmeB = new QCheckBox( "Game-Music-Emu " + tr( "włączony" ) );
 	gmeB->setChecked( sets().getBool( "GME" ) );
+#endif
 
+#ifdef USE_SIDPLAY
 	sidB = new QCheckBox( "SIDPlay " + tr( "włączony" ) );
 	sidB->setChecked( sets().getBool( "SIDPlay" ) );
+#endif
 
 	lengthB = new QSpinBox;
 	lengthB->setRange( 30, 600 );
@@ -75,14 +79,22 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	lengthB->setValue( sets().getInt( "DefaultLength" ) );
 
 	QGridLayout *layout = new QGridLayout( this );
+#ifdef USE_GME
 	layout->addWidget( gmeB );
+#endif
+#ifdef USE_SIDPLAY
 	layout->addWidget( sidB );
+#endif
 	layout->addWidget( lengthB );
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
+#ifdef USE_GME
 	sets().set( "GME", gmeB->isChecked() );
+#endif
+#ifdef USE_SIDPLAY
 	sets().set( "SIDPlay", sidB->isChecked() );
+#endif
 	sets().set( "DefaultLength", lengthB->value() );
 }

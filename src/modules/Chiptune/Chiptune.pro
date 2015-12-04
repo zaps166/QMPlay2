@@ -14,21 +14,21 @@ else {
 
 win32 {
 	LIBS += -Wl,-Bstatic -lgme -lsidplayfp -Wl,-Bdynamic
-	DEFINES += USE_SIDPLAY USE_GME
+	DEFINES += USE_GME USE_SIDPLAY
 } else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
-	packagesExist(libsidplayfp) {
-		PKGCONFIG += libsidplayfp
-		DEFINES += USE_SIDPLAY
-	} else {
-		message("SID will not be compiled, because libsidplayfp doesn't exist")
-	}
 	packagesExist(libgme) {
 		PKGCONFIG += libgme
 		DEFINES += USE_GME
 	} else {
 		message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
+	}
+	packagesExist(libsidplayfp) {
+		PKGCONFIG += libsidplayfp
+		DEFINES += USE_SIDPLAY
+	} else {
+		message("SID will not be compiled, because libsidplayfp doesn't exist")
 	}
 }
 LIBS += -lqmplay2
