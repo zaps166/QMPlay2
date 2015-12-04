@@ -270,6 +270,12 @@ static void parseArguments( QStringList &arguments )
 		else if ( !QMPArguments.first.contains( "open" ) )
 		{
 			param = "open";
+			if ( !arg.contains( "://" ) )
+			{
+				QFileInfo argInfo( arg );
+				if ( !argInfo.isAbsolute() )
+					arg = argInfo.absoluteFilePath();
+			}
 			QMPArguments.first += param;
 			QMPArguments.second += arg;
 		}
@@ -279,7 +285,7 @@ static void showHelp( const QByteArray &ver )
 {
 	QFile f;
 	f.open( stdout, QFile::WriteOnly );
-	f.write( "QMPlay2 - QT Media Player 2 (" + ver + ")\n" );
+	f.write( "QMPlay2 - Qt Media Player 2 (" + ver + ")\n" );
 	f.write( QObject::tr(
 "  Lista parametrów:\n"
 "    -open      \"adres\"\n"
@@ -324,6 +330,7 @@ static bool writeToSocket( QLocalSocket &socket )
 	#include <setjmp.h>
 	static jmp_buf env;
 	static bool qAppOK;
+	static bool canDeleteApp = true;
 #endif
 #include <signal.h>
 static void signal_handler( int s )
@@ -361,7 +368,7 @@ static void signal_handler( int s )
 #ifdef QT5_NOT_WIN
 			if ( !qAppOK && useGui )
 			{
-				useGui = false;
+				canDeleteApp = useGui = false;
 				longjmp( env, 1 );
 			}
 #endif
@@ -410,7 +417,6 @@ int main( int argc, char *argv[] )
 	QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
 #endif
 	qApp->setApplicationName( "QMPlay2" );
-	QDir::setCurrent( qApp->applicationDirPath() );
 
 	QStringList arguments = qApp->arguments();
 	arguments.removeAt( 0 );
@@ -440,10 +446,15 @@ int main( int argc, char *argv[] )
 #endif
 		if ( !useGui )
 		{
-			delete qApp;
+#ifdef QT5_NOT_WIN
+			if ( canDeleteApp )
+#endif
+				delete qApp;
 			return 0;
 		}
 	}
+
+	QDir::setCurrent( qApp->applicationDirPath() ); //Is it really needed?
 
 	qApp->installTranslator( &translator );
 	if ( useGui )
@@ -546,6 +557,9 @@ int main( int argc, char *argv[] )
 		delete QMPlay2GUI.pipe;
 	} while ( QMPlay2GUI.restartApp );
 
-	delete qApp;
+#ifdef QT5_NOT_WIN
+	if ( canDeleteApp )
+#endif
+		delete qApp;
 	return 0;
 }
