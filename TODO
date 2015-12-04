@@ -1,5 +1,5 @@
+Replace VideoFrame class with new, similar which will be compatible with FFmpeg ref. buffers
 Support for multiple streams (mainly YouTube A/V streams together)
-Touch screen support: scrolling
 Better radio stations
 YouTube playlists
 
@@ -16,5 +16,6 @@ Users can introduce aspect ratio and zoom
 
 MIDI - ?
 MKV - ordered chapters - ?
+Touch screen support: scrolling - ?
 Exporting audio during playback - ?
 Decoding and video playback in separate threads - ?
