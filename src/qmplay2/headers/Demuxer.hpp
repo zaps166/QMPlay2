@@ -23,7 +23,19 @@ public:
 		double start, end;
 	};
 
-	static bool create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks = NULL, bool onlyTracks = false );
+	class FetchTracks
+	{
+	public:
+		inline FetchTracks( bool onlyTracks ) :
+			onlyTracks( onlyTracks ),
+			isOK( true )
+		{}
+
+		Playlist::Entries tracks;
+		bool onlyTracks, isOK;
+	};
+
+	static bool create( const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks = NULL );
 
 	virtual bool metadataChanged() const
 	{
@@ -77,9 +89,10 @@ public:
 private:
 	virtual bool open( const QString &url ) = 0;
 
-	virtual Playlist::Entries fetchTracks( const QString &url )
+	virtual Playlist::Entries fetchTracks( const QString &url, bool &ok )
 	{
 		Q_UNUSED( url )
+		Q_UNUSED( ok )
 		return Playlist::Entries();
 	}
 protected:

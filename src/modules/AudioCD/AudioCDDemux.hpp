@@ -33,10 +33,11 @@ private:
 
 class AudioCDDemux : public Demuxer
 {
-	friend class AudioCD;
 	Q_DECLARE_TR_FUNCTIONS( AudioCDDemux )
 public:
-	AudioCDDemux( Module &, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist = QString() );
+	static QStringList getDevices();
+
+	AudioCDDemux( Module &, CDIODestroyTimer &destroyTimer );
 private:
 	~AudioCDDemux();
 
@@ -54,6 +55,8 @@ private:
 
 	bool open( const QString & );
 
+	Playlist::Entries fetchTracks( const QString &url, bool &ok );
+
 	/**/
 
 	void readCDText( track_t trackNo );
@@ -62,11 +65,9 @@ private:
 	void freedb_get_disc_info( cddb_disc_t *cddb_disc );
 	void freedb_get_track_info( cddb_disc_t *cddb_disc );
 
-	const QString &AudioCDPlaylist;
 	CDIODestroyTimer &destroyTimer;
 
 	Playlist::Entries getTracks( const QString &device );
-	QStringList getDevices();
 
 	QString Title, Artist, Genre, cdTitle, cdArtist, device;
 	CdIo_t *cdio;

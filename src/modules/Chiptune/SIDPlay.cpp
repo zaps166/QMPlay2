@@ -9,8 +9,6 @@
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/SidInfo.h>
 
-#include <QDebug>
-
 SIDPlay::SIDPlay( Module &module ) :
 	m_srate( Functions::getBestSampleRate() ),
 	m_aborted( false ),
@@ -106,7 +104,7 @@ bool SIDPlay::open( const QString &url )
 	return open( url, false );
 }
 
-Playlist::Entries SIDPlay::fetchTracks( const QString &url )
+Playlist::Entries SIDPlay::fetchTracks( const QString &url, bool &ok )
 {
 	Playlist::Entries entries;
 	if ( open( url, true ) )
@@ -118,7 +116,7 @@ Playlist::Entries SIDPlay::fetchTracks( const QString &url )
 			if ( info )
 			{
 				Playlist::Entry entry;
-				entry.url = SIDPlayName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
+				entry.url = SIDPlayName + QString( "://{%1}%2" ).arg( m_url ).arg( i );
 				entry.name = getTitle( info, i );
 				entry.length = m_length;
 				entries.append( entry );
@@ -134,6 +132,7 @@ Playlist::Entries SIDPlay::fetchTracks( const QString &url )
 			entries.prepend( entry );
 		}
 	}
+	ok = !entries.isEmpty();
 	return entries;
 }
 
@@ -146,14 +145,22 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 	if ( tracksOnly == hasPluginPrefix )
 		return false;
 
+	int track;
 	if ( !hasPluginPrefix )
 	{
 		if ( url.startsWith( SIDPlayName "://" ) )
 			return false;
 		url = _url;
 	}
-	else if ( prefix != SIDPlayName || !param.startsWith( "track=" ) )
-		return false;
+	else
+	{
+		if ( prefix != SIDPlayName )
+			return false;
+		bool ok;
+		track = param.toInt( &ok );
+		if ( track < 0 || !ok )
+			return false;
+	}
 
 	if ( Reader::create( url, m_reader ) )
 	{
@@ -173,9 +180,7 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 
 		const SidTuneInfo *info = m_tune->getInfo();
 
-		bool ok;
-		int track = param.right( param.length() - 6 ).toInt( &ok );
-		if ( !ok || track < 0 || track >= ( int )info->songs() )
+		if ( track >= ( int )info->songs() )
 			return false;
 
 		m_rs.create( m_sidplay.info().maxsids() );

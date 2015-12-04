@@ -4,8 +4,6 @@
 #include <Reader.hpp>
 #include <Packet.hpp>
 
-#include <QDebug>
-
 #include <gme/gme.h>
 
 GME::GME( Module &module ) :
@@ -88,7 +86,7 @@ bool GME::open( const QString &url )
 	return open( url, false );
 }
 
-Playlist::Entries GME::fetchTracks( const QString &url )
+Playlist::Entries GME::fetchTracks( const QString &url, bool &ok )
 {
 	Playlist::Entries entries;
 	if ( open( url, true ) )
@@ -100,7 +98,7 @@ Playlist::Entries GME::fetchTracks( const QString &url )
 			if ( !gme_track_info( m_gme, &info, i ) && info )
 			{
 				Playlist::Entry entry;
-				entry.url = GMEName + QString( "://{%1}track=%2" ).arg( m_url ).arg( i );
+				entry.url = GMEName + QString( "://{%1}%2" ).arg( m_url ).arg( i );
 				entry.name = getTitle( info, i );
 				entry.length = getLength( info );
 				gme_free_info( info );
@@ -117,6 +115,7 @@ Playlist::Entries GME::fetchTracks( const QString &url )
 			entries.prepend( entry );
 		}
 	}
+	ok = !entries.isEmpty();
 	return entries;
 }
 
@@ -129,14 +128,22 @@ bool GME::open( const QString &_url, bool tracksOnly )
 	if ( tracksOnly == hasPluginPrefix )
 		return false;
 
+	int track;
 	if ( !hasPluginPrefix )
 	{
 		if ( url.startsWith( GMEName "://" ) )
 			return false;
 		url = _url;
 	}
-	else if ( prefix != GMEName || !param.startsWith( "track=" ) )
-		return false;
+	else
+	{
+		if ( prefix != GMEName )
+			return false;
+		bool ok;
+		track = param.toInt( &ok );
+		if ( track < 0 || !ok )
+			return false;
+	}
 
 	if ( Reader::create( url, m_reader ) )
 	{
@@ -154,9 +161,7 @@ bool GME::open( const QString &_url, bool tracksOnly )
 			return true;
 		}
 
-		bool ok;
-		int track = param.right( param.length() - 6 ).toInt( &ok );
-		if ( !ok || track < 0 || track >= gme_track_count( m_gme ) )
+		if ( track >= gme_track_count( m_gme ) )
 			return false;
 
 		gme_info_t *info = NULL;
@@ -190,12 +195,10 @@ bool GME::open( const QString &_url, bool tracksOnly )
 		m_tags += qMakePair( tr( "Głosy" ), voices );
 
 		m_tags += qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
-//		gme_mute_voice( m_gme, 3, true );
 
 		streams_info += new StreamInfo( m_srate, 2 );
 
 		gme_set_stereo_depth( m_gme, 0.5 );
-		gme_enable_accuracy( m_gme, true );
 		return !gme_start_track( m_gme, track );
 	}
 

@@ -19,7 +19,6 @@ private:
 	SettingsWidget *getSettingsWidget();
 
 	CDIODestroyTimer *cdioDestroyTimer;
-	QString AudioCDPlaylist;
 private slots:
 	void add();
 	void browseCDImage();

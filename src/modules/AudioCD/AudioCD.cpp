@@ -11,13 +11,10 @@
 #include <QDialog>
 #include <QAction>
 #include <QLabel>
-#include <QFile>
-#include <QDir>
 
 AudioCD::AudioCD() :
 	Module( "AudioCD" ),
-	cdioDestroyTimer( new CDIODestroyTimer ),
-	AudioCDPlaylist( QDir::tempPath() + "/" AudioCDName".pls" )
+	cdioDestroyTimer( new CDIODestroyTimer )
 {
 	moduleImg = QImage( ":/AudioCD" );
 
@@ -26,7 +23,6 @@ AudioCD::AudioCD() :
 }
 AudioCD::~AudioCD()
 {
-	QFile::remove( AudioCDPlaylist );
 	delete cdioDestroyTimer;
 	libcddb_shutdown();
 }
@@ -44,7 +40,7 @@ QList< AudioCD::Info > AudioCD::getModulesInfo( const bool ) const
 void *AudioCD::createInstance( const QString &name )
 {
 	if ( name == AudioCDName )
-		return new AudioCDDemux( *this, *cdioDestroyTimer, AudioCDPlaylist );
+		return new AudioCDDemux( *this, *cdioDestroyTimer );
 	return NULL;
 }
 
@@ -65,8 +61,7 @@ AudioCD::SettingsWidget *AudioCD::getSettingsWidget()
 void AudioCD::add()
 {
 	QWidget *parent = qobject_cast< QWidget * >( sender()->parent() );
-	AudioCDDemux audioCD( *this, *cdioDestroyTimer );
-	QStringList drives = audioCD.getDevices();
+	QStringList drives = AudioCDDemux::getDevices();
 	if ( !drives.isEmpty() )
 	{
 		QDialog chooseCD( parent );
@@ -93,18 +88,7 @@ void AudioCD::add()
 		layout.setMargin( 2 );
 		chooseCD.resize( 400, 0 );
 		if ( chooseCD.exec() == QDialog::Accepted )
-		{
-			emit QMPlay2Core.waitCursor();
-			Playlist::Entries entries = audioCD.getTracks( drvE.text() );
-			emit QMPlay2Core.restoreCursor();
-			if ( !entries.isEmpty() )
-			{
-				if ( Playlist::write( entries, "file://" + AudioCDPlaylist ) )
-					emit QMPlay2Core.processParam( "open", AudioCDPlaylist );
-			}
-			else
-				QMessageBox::information( parent, AudioCDName, tr( "Brak płyty AudioCD w napędzie!" ) );
-		}
+			emit QMPlay2Core.processParam( "open", AudioCDName "://" + drvE.text() );
 	}
 	else
 		QMessageBox::information( parent, AudioCDName, tr( "Nie znaleziono napędów CD/DVD!" ) );

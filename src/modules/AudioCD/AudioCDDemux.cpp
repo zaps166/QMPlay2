@@ -1,17 +1,10 @@
 #include <AudioCDDemux.hpp>
 
+#include <Functions.hpp>
 #include <Packet.hpp>
 
 #ifdef Q_OS_WIN
 	#include <QDir>
-#else
-	#include <QFileInfo>
-#endif
-#include <QUrl>
-#if QT_VERSION < 0x050000
-	#define QUrlQuery( url ) url
-#else
-	#include <QUrlQuery>
 #endif
 
 #define CD_BLOCKSIZE 2352/2
@@ -66,8 +59,29 @@ void CDIODestroyTimer::timerEvent( QTimerEvent *e )
 
 /**/
 
-AudioCDDemux::AudioCDDemux( Module &module, CDIODestroyTimer &destroyTimer, const QString &AudioCDPlaylist ) :
-	AudioCDPlaylist( AudioCDPlaylist ), destroyTimer( destroyTimer ), cdio( NULL ), sector( 0 ), aborted( false ), discID( 0 )
+QStringList AudioCDDemux::getDevices()
+{
+	QStringList devicesList;
+	if ( char **devices = cdio_get_devices( DRIVER_DEVICE ) )
+	{
+		for ( size_t i = 0 ; char *device = devices[ i ] ; ++i )
+		{
+			devicesList += device;
+#ifdef Q_OS_WIN
+			devicesList.last().remove( 0, 4 );
+#endif
+		}
+		cdio_free_device_list( devices );
+	}
+	return devicesList;
+}
+
+AudioCDDemux::AudioCDDemux( Module &module, CDIODestroyTimer &destroyTimer ) :
+	destroyTimer( destroyTimer ),
+	cdio( NULL ),
+	sector( 0 ),
+	aborted( false ),
+	discID( 0 )
 {
 	SetModule( module );
 }
@@ -88,11 +102,11 @@ bool AudioCDDemux::set()
 QString AudioCDDemux::name() const
 {
 	if ( !cdTitle.isEmpty() && !cdArtist.isEmpty() )
-		return AudioCDName" [" + cdArtist + " - " + cdTitle + "]";
+		return AudioCDName " [" + cdArtist + " - " + cdTitle + "]";
 	else if ( !cdTitle.isEmpty() )
-		return AudioCDName" [" + cdTitle + "]";
+		return AudioCDName " [" + cdTitle + "]";
 	else if ( !cdArtist.isEmpty() )
-		return AudioCDName" [" + cdArtist + "]";
+		return AudioCDName " [" + cdArtist + "]";
 	return AudioCDName;
 }
 QString AudioCDDemux::title() const
@@ -175,11 +189,13 @@ bool AudioCDDemux::open( const QString &_url )
 	else
 #endif
 	{
-		if ( !_url.startsWith( AudioCDName "://" ) )
+		QString prefix, param;
+		if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &device, &param ) || prefix != AudioCDName )
 			return false;
-		QUrl url( _url.mid( 10 ) );
-		device = QUrlQuery( url ).queryItemValue( "device" );
-		trackNo = url.path().toUInt();
+		bool ok;
+		trackNo = param.toInt( &ok );
+		if ( !ok )
+			return false;
 	}
 	if ( trackNo > 0 && trackNo < CDIO_INVALID_TRACK )
 	{
@@ -227,28 +243,29 @@ bool AudioCDDemux::open( const QString &_url )
 		else
 			QMPlay2Core.log( tr( "Nieprawidłowa ścieżka do napędu CD" ) );
 	}
-	else //dodawanie do listy ścieżek AudioCD
-	{
-#ifndef Q_OS_WIN
-		device = QUrl( _url ).path();
-#else
-		device = _url.mid( strlen( AudioCDName"://" ), 2 );
-#endif
-#ifndef Q_OS_WIN
-		if ( !QFileInfo( device ).isDir() )
-#endif
-			if ( !device.isEmpty() )
-			{
-				emit QMPlay2Core.processParam( "DelPlaylistEntries", _url );
-				Playlist::Entries entries = getTracks( device );
-				if ( !entries.isEmpty() && Playlist::write( entries, "file://" + AudioCDPlaylist ) )
-				{
-					emit QMPlay2Core.processParam( "open", AudioCDPlaylist );
-					return true;
-				}
-			}
-	}
 	return false;
+}
+
+Playlist::Entries AudioCDDemux::fetchTracks( const QString &url, bool &ok )
+{
+	Playlist::Entries entries;
+	if ( url.startsWith( AudioCDName "://" ) )
+	{
+		entries = getTracks( url.mid( strlen( AudioCDName ) + 3 ) );
+		if ( entries.isEmpty() )
+			emit QMPlay2Core.sendMessage( tr( "Brak płyty AudioCD w napędzie!" ), AudioCDName, 2, 0 );
+		ok = !entries.isEmpty();
+	}
+	if ( !entries.isEmpty() )
+	{
+		for ( int i = 0 ; i < entries.length() ; ++i )
+			entries[ i ].parent = 1;
+		Playlist::Entry entry;
+		entry.name = "Audio CD";
+		entry.GID = 1;
+		entries.prepend( entry );
+	}
+	return entries;
 }
 
 void AudioCDDemux::readCDText( track_t trackNo )
@@ -384,7 +401,6 @@ void AudioCDDemux::freedb_get_track_info( cddb_disc_t *cddb_disc )
 Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 {
 	Playlist::Entries tracks;
-	Playlist::Entry entry;
 	device = _device;
 	cdio_close_tray( device.toLocal8Bit(), NULL );
 	if ( ( cdio = cdio_open( device.toLocal8Bit(), DRIVER_UNKNOWN ) ) )
@@ -409,30 +425,14 @@ Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 				if ( cddb_ok && ( cddb_disc || ( Title.isEmpty() && ( cddb_ok = freedb_query( cddb_disc ) ) ) ) )
 					freedb_get_track_info( cddb_disc );
 
+				Playlist::Entry entry;
 				entry.name = title();
-				entry.url = AudioCDName"://" + QString::number( trackNo ) + "?device=" + device;
+				entry.url = AudioCDName "://{" + device + "}" + QString::number( trackNo );
 				entry.length = length();
-
 				tracks += entry;
 			}
 			cddb_disc_destroy( cddb_disc );
 		}
 	}
 	return tracks;
-}
-QStringList AudioCDDemux::getDevices()
-{
-	QStringList devicesList;
-	if ( char **devices = cdio_get_devices( DRIVER_DEVICE ) )
-	{
-		for ( size_t i = 0 ; char *device = devices[ i ] ; ++i )
-		{
-			devicesList += device;
-#ifdef Q_OS_WIN
-			devicesList.last().remove( 0, 4 );
-#endif
-		}
-		cdio_free_device_list( devices );
-	}
-	return devicesList;
 }

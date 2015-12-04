@@ -236,7 +236,7 @@ void AddThr::add( const QStringList &urls, QTreeWidgetItem *parent, const Functi
 		}
 		else if ( !loadList )
 		{
-			QString dUrl = url.startsWith( "file://" ) ? url.mid( 7 ) : QString();
+			const QString dUrl = url.startsWith( "file://" ) ? url.mid( 7 ) : QString();
 			if ( QFileInfo( dUrl ).isDir() ) //dodawanie podkatalogu
 			{
 				if ( pLW.currPthToSave.isNull() )
@@ -259,18 +259,17 @@ void AddThr::add( const QStringList &urls, QTreeWidgetItem *parent, const Functi
 			else
 			{
 				bool hasOneEntry = pLW.dontUpdateAfterAdd;
+				bool tracksAdded = false;
 
 				Playlist::Entry entry;
 				entry.url = url;
 
 				Functions::getDataIfHasPluginPrefix( url, &url, &entry.name, NULL, &ioCtrl, demuxersInfo );
 				IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
-				Playlist::Entries tracks;
-				if ( Demuxer::create( url, demuxer, &tracks, pLW.dontUpdateAfterAdd ) )
+				Demuxer::FetchTracks fetchTracks( pLW.dontUpdateAfterAdd );
+				if ( Demuxer::create( url, demuxer, &fetchTracks ) )
 				{
-					if ( pLW.currPthToSave.isNull() && QFileInfo( dUrl ).isFile() )
-						pLW.currPthToSave = Functions::filePath( dUrl );
-					if ( tracks.isEmpty() )
+					if ( fetchTracks.tracks.isEmpty() )
 					{
 						if ( entry.name.isEmpty() )
 							entry.name = demuxer->title();
@@ -280,11 +279,16 @@ void AddThr::add( const QStringList &urls, QTreeWidgetItem *parent, const Functi
 					}
 					else
 					{
-						currentItem = insertPlaylistEntries( tracks, currentItem, demuxersInfo );
+						currentItem = insertPlaylistEntries( fetchTracks.tracks, currentItem, demuxersInfo );
 						if ( !firstItem )
 							firstItem = currentItem;
 						hasOneEntry = false;
+						tracksAdded = true;
 					}
+				}
+				else if ( !fetchTracks.isOK )
+				{
+					hasOneEntry = false; //Don't add entry to list if error occured
 				}
 
 				if ( hasOneEntry )
@@ -294,6 +298,12 @@ void AddThr::add( const QStringList &urls, QTreeWidgetItem *parent, const Functi
 					currentItem = pLW.newEntry( entry, currentItem, demuxersInfo );
 					if ( !firstItem )
 						firstItem = currentItem;
+				}
+
+				if ( hasOneEntry || tracksAdded )
+				{
+					if ( pLW.currPthToSave.isNull() && QFileInfo( dUrl ).isFile() )
+						pLW.currPthToSave = Functions::filePath( dUrl );
 				}
 
 				pLW.dontUpdateAfterAdd = false;

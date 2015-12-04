@@ -277,10 +277,6 @@
         <translation>AudioCD</translation>
     </message>
     <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>Keine AudioCD gefunden!</translation>
-    </message>
-    <message>
         <source>Nie znaleziono napędów CD/DVD!</source>
         <translation>Kein CD/DVD Laufwerk gefunden!</translation>
     </message>
@@ -318,6 +314,10 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Ungültige Pfad zum CD-Laufwerk</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>Keine AudioCD gefunden!</translation>
     </message>
 </context>
 <context>

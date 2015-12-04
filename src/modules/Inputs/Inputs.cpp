@@ -206,7 +206,7 @@ void AddD::channelsChanged( int c )
 void AddD::add()
 {
 	save();
-	emit QMPlay2Core.processParam( "open", ToneGeneratorName"://" );
+	emit QMPlay2Core.processParam( "open", ToneGeneratorName "://" );
 }
 
 /**/

@@ -273,10 +273,6 @@
         <translation>Аудио диск</translation>
     </message>
     <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>CD диска нет в приводе!</translation>
-    </message>
-    <message>
         <source>Nie znaleziono napędów CD/DVD!</source>
         <translation>CD/DVD диск не найден!</translation>
     </message>
@@ -314,6 +310,10 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Неверный путь к дисководу</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>CD диска нет в приводе!</translation>
     </message>
 </context>
 <context>

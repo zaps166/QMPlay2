@@ -25,8 +25,6 @@ public:
 	void add( const QString & );
 	void addAndPlay( const QString & );
 
-	void delEntries( const QStringList & );
-
 	inline QWidget *findEdit() const
 	{
 		return ( QWidget * )findE;

@@ -138,28 +138,6 @@ void PlaylistDock::addAndPlay( const QString &url )
 	addAndPlay( QStringList( url ) );
 }
 
-void PlaylistDock::delEntries( const QStringList &entries )
-{
-	if ( entries.isEmpty() || !list->canModify() ) //jeżeli jest np. drag and drop to nie wolno usuwać
-		return;
-	QList< QTreeWidgetItem * > allItems = list->getChildren( PlaylistWidget::ONLY_NON_GROUPS );
-	if ( !allItems.isEmpty() )
-	{
-		list->setItemsResizeToContents( false );
-		foreach ( QTreeWidgetItem *tWI, allItems )
-		{
-			if ( entries.contains( tWI->data( 0, Qt::UserRole ).toString() ) )
-			{
-				randomPlayedItems.removeOne( tWI );
-				delete tWI;
-			}
-		}
-		list->refresh();
-		list->setItemsResizeToContents( true );
-		list->processItems();
-	}
-}
-
 void PlaylistDock::expandTree( QTreeWidgetItem *i )
 {
 	while ( i )

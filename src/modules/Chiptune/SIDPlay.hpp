@@ -27,7 +27,7 @@ private:
 
 	bool open( const QString & );
 
-	Playlist::Entries fetchTracks( const QString &url );
+	Playlist::Entries fetchTracks( const QString &url, bool &ok );
 
 
 	bool open( const QString &url, bool tracksOnly );

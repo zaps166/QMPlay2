@@ -391,8 +391,6 @@ void MainWidget::processParam( const QString &param, const QString &data )
 		playC.setSpeed( data.toDouble() );
 	else if ( param == "seek" )
 		seek( data.toInt() );
-	else if ( param == "DelPlaylistEntries" )
-		playlistDock->delEntries( data.split( '\n', QString::SkipEmptyParts ) );
 	else if ( param == "RestartPlaying" )
 		playC.restart();
 }

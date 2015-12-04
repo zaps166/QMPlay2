@@ -4,7 +4,7 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
-bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Playlist::Entries *tracks, bool onlyTracks )
+bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks )
 {
 	const QString scheme = Functions::getUrlScheme( url );
 	if ( demuxer.isAborted() || url.isEmpty() || scheme.isEmpty() )
@@ -17,16 +17,31 @@ bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Play
 				{
 					if ( !demuxer.assign( ( Demuxer * )module->createInstance( mod.name ) ) )
 						continue;
-					if ( tracks )
+					bool canDoOpen = true;
+					if ( fetchTracks )
 					{
-						*tracks = demuxer->fetchTracks( url );
-						if ( !tracks->isEmpty() )
+						fetchTracks->isOK = true;
+						fetchTracks->tracks = demuxer->fetchTracks( url, fetchTracks->isOK );
+						if ( fetchTracks->isOK ) //If tracks are fetched correctly (even if track list is empty)
 						{
-							demuxer.clear();
-							return true;
+							if ( !fetchTracks->tracks.isEmpty() ) //Return tracks list
+							{
+								demuxer.clear();
+								return true;
+							}
+							if ( fetchTracks->onlyTracks ) //If there are no tracks and we want only track list - return false
+							{
+								demuxer.clear();
+								return false;
+							}
+						}
+						else //Tracks can't be fetched - an error occured
+						{
+							fetchTracks->tracks.clear(); //Clear if list is not empty
+							canDoOpen = false;
 						}
 					}
-					if ( !onlyTracks && demuxer->open( url ) )
+					if ( canDoOpen && demuxer->open( url ) )
 						return true;
 					demuxer.clear();
 					if ( mod.name == scheme || demuxer.isAborted() )

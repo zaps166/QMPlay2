@@ -273,10 +273,6 @@
         <translation>CD Audio</translation>
     </message>
     <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
-        <translation>CD Audio non trouvé!</translation>
-    </message>
-    <message>
         <source>Nie znaleziono napędów CD/DVD!</source>
         <translation>Pas de lecteur CD/DVD trouvé!</translation>
     </message>
@@ -314,6 +310,10 @@
     <message>
         <source>Nieprawidłowa ścieżka do napędu CD</source>
         <translation>Chemin vers le lecteur de CD incorrect</translation>
+    </message>
+    <message>
+        <source>Brak płyty AudioCD w napędzie!</source>
+        <translation>CD Audio non trouvé!</translation>
     </message>
 </context>
 <context>

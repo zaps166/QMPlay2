@@ -106,7 +106,7 @@ void ToneGenerator::abort()
 
 bool ToneGenerator::open( const QString &_url )
 {
-	if ( _url.indexOf( ToneGeneratorName"://" ) != 0 )
+	if ( _url.indexOf( ToneGeneratorName "://" ) != 0 )
 		return false;
 	QUrl url( "?" + QString( _url ).remove( 0, QString( ToneGeneratorName "://" ).length() ) );
 
