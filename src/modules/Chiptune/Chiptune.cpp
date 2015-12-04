@@ -65,7 +65,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	gmeB = new QCheckBox( "Game-Music-Emu " + tr( "włączony" ) );
 	gmeB->setChecked( sets().getBool( "GME" ) );
 
-	sidB = new QCheckBox( "SID " + tr( "włączony" ) );
+	sidB = new QCheckBox( "SIDPlay " + tr( "włączony" ) );
 	sidB->setChecked( sets().getBool( "SIDPlay" ) );
 
 	lengthB = new QSpinBox;
