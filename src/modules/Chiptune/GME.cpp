@@ -59,7 +59,7 @@ bool GME::read( Packet &decoded, int &idx )
 	const int chunkSize = 1024 * 2; //Always stereo
 
 	decoded.resize( chunkSize * sizeof( float ) );
-	int16_t *srcData = ( int16_t * )decoded.data();
+	qint16 *srcData = ( qint16 * )decoded.data();
 	float *dstData = ( float * )decoded.data();
 
 	if ( gme_play( m_gme, chunkSize, srcData ) != NULL )

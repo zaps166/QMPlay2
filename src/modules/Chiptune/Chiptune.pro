@@ -13,7 +13,7 @@ else {
 }
 
 win32 {
-	LIBS += -Wl,-Bstatic -lsidplayfp -Wl,-Bdynamic
+	LIBS += -Wl,-Bstatic -lgme -lsidplayfp -Wl,-Bdynamic
 	DEFINES += USE_SIDPLAY USE_GME
 } else {
 	macx: QT_CONFIG -= no-pkg-config
