@@ -45,10 +45,21 @@ public:
 			{
 				quint32 out[ 4 ];
 				VdpBool isSupported;
-				QList< VdpDecoderProfile > profileList;
-				for ( VdpDecoderProfile p = VDP_DECODER_PROFILE_MPEG1 ; p <= VDP_DECODER_PROFILE_MPEG4_PART2_ASP ; ++p )
-					if ( vdp_decoder_query_capabilities( device, p, &isSupported, out + 0, out + 1, out + 2, out + 3 ) == VDP_STATUS_OK && isSupported )
-						profileList.push_back( p );
+				QList< VdpDecoderProfile > profileList = QList< VdpDecoderProfile >()
+					<< VDP_DECODER_PROFILE_H264_HIGH << VDP_DECODER_PROFILE_H264_MAIN << VDP_DECODER_PROFILE_H264_BASELINE
+#ifdef VDP_DECODER_PROFILE_HEVC_MAIN
+					<< VDP_DECODER_PROFILE_HEVC_MAIN
+#endif
+					<< VDP_DECODER_PROFILE_MPEG2_MAIN << VDP_DECODER_PROFILE_MPEG2_SIMPLE
+					<< VDP_DECODER_PROFILE_MPEG4_PART2_ASP << VDP_DECODER_PROFILE_MPEG4_PART2_SP
+					<< VDP_DECODER_PROFILE_VC1_ADVANCED << VDP_DECODER_PROFILE_VC1_MAIN << VDP_DECODER_PROFILE_VC1_SIMPLE
+					<< VDP_DECODER_PROFILE_MPEG1
+				;
+				for ( int i = profileList.count() - 1 ; i >= 0 ; --i )
+				{
+					if ( vdp_decoder_query_capabilities( device, profileList[ i ], &isSupported, out + 0, out + 1, out + 2, out + 3 ) != VDP_STATUS_OK || !isSupported )
+						profileList.removeAt( i );
+				}
 				if ( !profileList.isEmpty() )
 				{
 					VdpDecoderProfile p = -1;
@@ -61,6 +72,13 @@ public:
 						else if ( profileList.contains( VDP_DECODER_PROFILE_H264_BASELINE ) )
 							p = VDP_DECODER_PROFILE_H264_BASELINE;
 					}
+#ifdef VDP_DECODER_PROFILE_HEVC_MAIN
+					else if ( !qstrcmp( codec_name, "hevc" ) )
+					{
+						if ( profileList.contains( VDP_DECODER_PROFILE_HEVC_MAIN ) )
+							p = VDP_DECODER_PROFILE_HEVC_MAIN;
+					}
+#endif
 					else if ( !qstrcmp( codec_name, "mpeg2video" ) )
 					{
 						if ( profileList.contains( VDP_DECODER_PROFILE_MPEG2_MAIN ) )
@@ -84,8 +102,12 @@ public:
 						else if ( profileList.contains( VDP_DECODER_PROFILE_VC1_SIMPLE ) )
 							p = VDP_DECODER_PROFILE_VC1_SIMPLE;
 					}
-					else if ( !qstrcmp( codec_name, "mpeg1video" ) && profileList.contains( VDP_DECODER_PROFILE_MPEG1 ) )
-						p = VDP_DECODER_PROFILE_MPEG1;
+					else if ( !qstrcmp( codec_name, "mpeg1video" ) )
+					{
+						if ( profileList.contains( VDP_DECODER_PROFILE_MPEG1 ) )
+							p = VDP_DECODER_PROFILE_MPEG1;
+					}
+
 					if ( vdp_decoder_create( device, p, w, h, 16, &decoder ) == VDP_STATUS_OK )
 					{
 						for ( int i = 0 ; i < surfacesCount ; ++i )
@@ -212,7 +234,7 @@ int FFDecVDPAU_NW::decode( Packet &encodedPacket, QByteArray &decoded, bool flus
 
 bool FFDecVDPAU_NW::open( StreamInfo *streamInfo, Writer * )
 {
-	if ( canUseHWAccel( streamInfo ) )
+	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P ) //AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU
 	{
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vdpau" ) )
