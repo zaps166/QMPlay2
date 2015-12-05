@@ -50,6 +50,7 @@ EntryProperties::EntryProperties( QWidget *p, QTreeWidgetItem *_tWI, bool &sync,
 	{
 		dirPthE = new QLineEdit;
 		dirPthE->setText( url );
+		origDirPth = url;
 
 		nameE->selectAll();
 
@@ -148,19 +149,22 @@ void EntryProperties::accept()
 {
 	if ( catalogCB )
 	{
-		const bool isDir = QFileInfo( dirPthE->text() ).isDir();
-		if ( catalogCB->isChecked() && !isDir )
+		const QString newDirPth = dirPthE->text();
+		const QFileInfo dirPthInfo = ( newDirPth );
+		const bool isFile = dirPthInfo.isFile();
+		const bool isDir  = dirPthInfo.isDir();
+		if ( catalogCB->isChecked() && ( ( !isDir && !isFile ) || ( isFile && origDirPth != newDirPth ) ) )
 		{
 			QMessageBox::information( this, tr( "Zła ścieżka" ), tr( "Podaj ścieżkę do istniejącego katalogu" ) );
 			return;
 		}
-		else if ( catalogCB->isChecked() && isDir )
+		else if ( catalogCB->isChecked() && ( isDir || isFile ) )
 		{
 			if ( nameE->text().isEmpty() )
 				nameE->setText( Functions::fileName( dirPthE->text() ) );
 			tWI->setData( 0, Qt::UserRole, "file://" + dirPthE->text() );
 			tWI->setIcon( 0, *QMPlay2GUI.folderIcon );
-			sync = true;
+			sync = isDir;
 		}
 		else if ( !catalogCB->isChecked() )
 		{

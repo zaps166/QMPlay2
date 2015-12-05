@@ -569,7 +569,7 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren( CHILDREN children, const
 	QList <QTreeWidgetItem * > list;
 	if ( !parent )
 		parent = invisibleRootItem();
-	int count = parent->childCount();
+	const int count = parent->childCount();
 	for ( int i = 0 ; i < count ; i++ )
 	{
 		QTreeWidgetItem *tWI = parent->child( i );
@@ -609,7 +609,7 @@ void PlaylistWidget::enqueue()
 }
 void PlaylistWidget::refresh( REFRESH Refresh )
 {
-	QList< QTreeWidgetItem * > items = getChildren( ONLY_NON_GROUPS );
+	const QList< QTreeWidgetItem * > items = getChildren( ONLY_NON_GROUPS );
 	if ( Refresh & REFRESH_QUEUE )
 	{
 		for ( int i = 0 ; i < queue.size() ; i++ )
@@ -623,7 +623,7 @@ void PlaylistWidget::refresh( REFRESH Refresh )
 	}
 	if ( Refresh & REFRESH_GROUPS_TIME )
 	{
-		QList< QTreeWidgetItem * > groups = getChildren( ONLY_GROUPS );
+		const QList< QTreeWidgetItem * > groups = getChildren( ONLY_GROUPS );
 		for ( int i = groups.size() - 1 ; i >= 0 ; i-- )
 		{
 			int length = 0;
@@ -662,7 +662,7 @@ void PlaylistWidget::processItems( QList< QTreeWidgetItem * > *itemsToShow, bool
 		return;
 
 	//ukrywanie pustych grup
-	QList< QTreeWidgetItem * > groups = getChildren( ONLY_GROUPS );
+	const QList< QTreeWidgetItem * > groups = getChildren( ONLY_GROUPS );
 	for ( int i = groups.size() - 1 ; i >= 0 ; i-- )
 	{
 		if ( hideGroups )

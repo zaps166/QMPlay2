@@ -1665,6 +1665,10 @@ amp</source>
         <source>Czy na pewno chcesz usunąć niepogrupowane wpisy?</source>
         <translation>Sind Sie sicher das Sie nicht gruppierte Einträge löschen wollen?</translation>
     </message>
+    <message>
+        <source>Synchronizowanie z plikiem nie jest obsługiwane</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PortAudioWriter</name>

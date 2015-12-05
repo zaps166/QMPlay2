@@ -111,6 +111,7 @@ Playlist::Entries GME::fetchTracks( const QString &url, bool &ok )
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
 			entry.name = Functions::fileName( m_url, false );
+			entry.url = m_url;
 			entry.GID = 1;
 			entries.prepend( entry );
 		}

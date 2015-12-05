@@ -28,6 +28,7 @@ private:
 	QCheckBox *catalogCB;
 	QToolButton *browseB;
 	AddressBox *addrB;
+	QString origDirPth;
 	bool &sync;
 private slots:
 	void setDirPthEEnabled( int );

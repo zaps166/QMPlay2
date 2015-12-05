@@ -1655,6 +1655,10 @@ amp</source>
         <source>Czy na pewno chcesz usunąć niepogrupowane wpisy?</source>
         <translation>Вы уверены, что хотите удалить записи без группы?</translation>
     </message>
+    <message>
+        <source>Synchronizowanie z plikiem nie jest obsługiwane</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PortAudioWriter</name>

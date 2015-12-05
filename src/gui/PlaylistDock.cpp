@@ -118,20 +118,30 @@ void PlaylistDock::add( const QString &url )
 	if ( !url.isEmpty() )
 		add( QStringList( url ) );
 }
-void PlaylistDock::addAndPlay( const QString &url )
+void PlaylistDock::addAndPlay( const QString &_url )
 {
-	if ( url.isEmpty() )
+	if ( _url.isEmpty() )
 		return;
 	/* Jeżeli wpis istnieje, znajdzie go i zacznie odtwarzać */
-	QList< QTreeWidgetItem * > items = list->getChildren( PlaylistWidget::ONLY_NON_GROUPS );
-	QString tmpUrl = Functions::Url( url );
+	const QList< QTreeWidgetItem * > items = list->getChildren( PlaylistWidget::ALL_CHILDREN );
+	const QString url = Functions::Url( _url );
 	foreach ( QTreeWidgetItem *item, items )
 	{
-		if ( item->data( 0, Qt::UserRole ).toString() == tmpUrl )
+		if ( item->data( 0, Qt::UserRole ).toString() == url )
 		{
-			playAfterAdd = true;
-			addAndPlay( item );
-			return;
+			while ( list->isGroup( item ) )
+			{
+				if ( item->childCount() > 0 )
+					item = item->child( 0 );
+				else
+					item = NULL;
+			}
+			if ( item )
+			{
+				playAfterAdd = true;
+				addAndPlay( item );
+				return;
+			}
 		}
 	}
 	/**/
@@ -236,7 +246,7 @@ void PlaylistDock::next( bool playingError )
 						tWI = list->itemBelow( tWI );
 						if ( canRepeat && repeatMode == RepeatGroup && P && ( !tWI || tWI->parent() != P ) ) //zapętlenie grupy
 						{
-							QList< QTreeWidgetItem * > l = list->getChildren( PlaylistWidget::ONLY_NON_GROUPS, P );
+							const QList< QTreeWidgetItem * > l = list->getChildren( PlaylistWidget::ONLY_NON_GROUPS, P );
 							if ( !l.isEmpty() )
 								tWI = l[ 0 ];
 							break;
@@ -488,14 +498,20 @@ void PlaylistDock::syncCurrentFolder()
 		return;
 	if ( pth.startsWith( "file://" ) )
 		pth.remove( 0, 7 );
-	if ( pth.right( 1 ) != "/" )
-		pth += "/";
-	if ( !QFileInfo( pth ).isDir() )
+	const QFileInfo pthInfo( pth );
+	if ( pthInfo.isFile() )
+	{
+		QMessageBox::information( this, tr( "Playlista" ), tr( "Synchronizowanie z plikiem nie jest obsługiwane" ) );
+		return;
+	}
+	if ( !pthInfo.isDir() )
 	{
 		tWI->setData( 0, Qt::UserRole, QString() );
 		tWI->setIcon( 0, *QMPlay2GUI.groupIcon );
 		return;
 	}
+	if ( pth.right( 1 ) != "/" )
+		pth += "/";
 	findE->clear();
 	list->sync( pth, tWI );
 }
