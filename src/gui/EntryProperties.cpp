@@ -177,7 +177,7 @@ void EntryProperties::accept()
 	else
 	{
 		QString url = addrB->url();
-		QString scheme = Functions::getUrlScheme( url );
+		const QString scheme = Functions::getUrlScheme( url );
 		if ( addrB->currentPrefixType() == AddressBox::DIRECT && ( scheme.isEmpty() || scheme.length() == 1 /*Drive letter in Windows*/ ) )
 			url.prepend( "file://" );
 		tWI->setData( 0, Qt::UserRole, url );

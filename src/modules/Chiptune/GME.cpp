@@ -172,15 +172,15 @@ bool GME::open( const QString &_url, bool tracksOnly )
 			m_length = getLength( info );
 
 			if ( *info->game )
-				m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), QString( info->game ) );
+				m_tags << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), QString( info->game ) );
 			if ( *info->author )
-				m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), QString( info->author ) );
+				m_tags << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), QString( info->author ) );
 			if ( *info->system )
-				m_tags += qMakePair( tr( "System" ), QString( info->system ) );
+				m_tags << qMakePair( tr( "System" ), QString( info->system ) );
 			if ( *info->copyright )
-				m_tags += qMakePair( tr( "Prawo autorskie" ), QString( info->copyright ) );
+				m_tags << qMakePair( tr( "Prawo autorskie" ), QString( info->copyright ) );
 			if ( *info->comment )
-				m_tags += qMakePair( tr( "Komentarz" ), QString( info->comment ) );
+				m_tags << qMakePair( tr( "Komentarz" ), QString( info->comment ) );
 
 			gme_free_info( info );
 		}
@@ -193,9 +193,9 @@ bool GME::open( const QString &_url, bool tracksOnly )
 			voices += ", ";
 		}
 		voices.chop( 2 );
-		m_tags += qMakePair( tr( "Głosy" ), voices );
+		m_tags << qMakePair( tr( "Głosy" ), voices );
 
-		m_tags += qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
+		m_tags << qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
 
 		streams_info += new StreamInfo( m_srate, 2 );
 

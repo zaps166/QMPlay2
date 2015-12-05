@@ -88,7 +88,14 @@ void AudioCD::add()
 		layout.setMargin( 2 );
 		chooseCD.resize( 400, 0 );
 		if ( chooseCD.exec() == QDialog::Accepted )
-			emit QMPlay2Core.processParam( "open", AudioCDName "://" + drvE.text() );
+		{
+			QString drvPth = drvE.text();
+#ifdef Q_OS_WIN
+			if ( drvPth.length() == 2 && !drvPth.endsWith( "/" ) )
+				drvPth += "/";
+#endif
+			emit QMPlay2Core.processParam( "open", AudioCDName "://" + drvPth );
+		}
 	}
 	else
 		QMessageBox::information( parent, AudioCDName, tr( "Nie znaleziono napędów CD/DVD!" ) );

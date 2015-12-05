@@ -209,12 +209,12 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 		const QString author   = info->infoString( 1 );
 		const QString released = info->infoString( 2 );
 		if ( !title.isEmpty() )
-			m_tags += qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
+			m_tags << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
 		if ( !author.isEmpty() )
-			m_tags += qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
+			m_tags << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
 		if ( !released.isEmpty() )
-			m_tags += qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
-		m_tags += qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
+			m_tags << qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
+		m_tags << qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
 
 		streams_info += new StreamInfo( m_srate, m_chn );
 

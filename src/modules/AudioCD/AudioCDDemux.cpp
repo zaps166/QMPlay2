@@ -133,6 +133,7 @@ QList< QMPlay2Tag > AudioCDDemux::tags() const
 		tagList << qMakePair( QString::number( QMPLAY2_TAG_ALBUM ), cdTitle );
 	if ( !Genre.isEmpty() )
 		tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), Genre );
+	tagList << qMakePair( tr( "Ścieżka" ), QString::number( trackNo ) );
 	return tagList;
 }
 double AudioCDDemux::length() const
@@ -192,6 +193,10 @@ bool AudioCDDemux::open( const QString &_url )
 		QString prefix, param;
 		if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &device, &param ) || prefix != AudioCDName )
 			return false;
+#ifdef Q_OS_WIN
+		if ( device.endsWith( "/" ) )
+			device.chop( 1 );
+#endif
 		bool ok;
 		trackNo = param.toInt( &ok );
 		if ( !ok )
@@ -207,6 +212,8 @@ bool AudioCDDemux::open( const QString &_url )
 			if ( cdio_get_discmode( cdio ) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK )
 			{
 				chn = cdio_get_track_channels( cdio, trackNo );
+				if ( !chn ) //NRG format returns 0 - why ?
+					chn = 2;
 				if ( numTracks >= trackNo && ( chn == 2 || chn == 4 ) )
 				{
 					if ( useCDTEXT )
@@ -249,21 +256,24 @@ bool AudioCDDemux::open( const QString &_url )
 Playlist::Entries AudioCDDemux::fetchTracks( const QString &url, bool &ok )
 {
 	Playlist::Entries entries;
-	if ( url.startsWith( AudioCDName "://" ) )
+	if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, NULL, NULL ) )
 	{
-		entries = getTracks( url.mid( strlen( AudioCDName ) + 3 ) );
-		if ( entries.isEmpty() )
-			emit QMPlay2Core.sendMessage( tr( "Brak płyty AudioCD w napędzie!" ), AudioCDName, 2, 0 );
-		ok = !entries.isEmpty();
-	}
-	if ( !entries.isEmpty() )
-	{
-		for ( int i = 0 ; i < entries.length() ; ++i )
-			entries[ i ].parent = 1;
-		Playlist::Entry entry;
-		entry.name = "Audio CD";
-		entry.GID = 1;
-		entries.prepend( entry );
+		if ( url.startsWith( AudioCDName "://" ) )
+		{
+			entries = getTracks( url.mid( strlen( AudioCDName ) + 3 ) );
+			if ( entries.isEmpty() )
+				emit QMPlay2Core.sendMessage( tr( "Brak płyty AudioCD w napędzie!" ), AudioCDName, 2, 0 );
+			ok = !entries.isEmpty();
+		}
+		if ( !entries.isEmpty() )
+		{
+			for ( int i = 0 ; i < entries.length() ; ++i )
+				entries[ i ].parent = 1;
+			Playlist::Entry entry;
+			entry.name = "Audio CD";
+			entry.GID = 1;
+			entries.prepend( entry );
+		}
 	}
 	return entries;
 }
@@ -402,6 +412,10 @@ Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 {
 	Playlist::Entries tracks;
 	device = _device;
+#ifdef Q_OS_WIN
+	if ( device.endsWith( "/" ) )
+		device.chop( 1 );
+#endif
 	cdio_close_tray( device.toLocal8Bit(), NULL );
 	if ( ( cdio = cdio_open( device.toLocal8Bit(), DRIVER_UNKNOWN ) ) )
 	{
@@ -413,6 +427,8 @@ Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 			for ( trackNo = 1 ; trackNo <= numTracks ; ++trackNo )
 			{
 				chn = cdio_get_track_channels( cdio, trackNo );
+				if ( !chn ) //NRG format returns 0 - why ?
+					chn = 2;
 				if ( chn != 2 && chn != 4 )
 					continue;
 
