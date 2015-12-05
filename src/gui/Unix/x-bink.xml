@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="video/x-bink">
+		<comment>Bink Video</comment>
+		<glob pattern="*.bik"/>
+	</mime-type>
+</mime-info>

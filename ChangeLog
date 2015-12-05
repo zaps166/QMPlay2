@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 15.12.04:
+Changes in QMPlay2 build 15.12.05:
 	- setting priorities of decoders and A/V outputs is now more convenient,
 	- improve QOpenGLWidget performance (Qt5 only, not used by default),
 	- simple visualization shows RMS of displayed signal in side bars,
@@ -9,7 +9,7 @@ Changes in QMPlay2 build 15.12.04:
 	- support for HEVC decoding in VDPAU,
 	- removed console for Windows,
 	- added chiptune playback,
-	- fix decoding BINK Video,
+	- fix decoding Bink Video,
 	- bugfix,
 
 Changes in QMPlay2 build 15.10.18:
