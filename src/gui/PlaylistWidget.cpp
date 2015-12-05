@@ -62,7 +62,6 @@ void UpdateEntryThr::run()
 
 		bool updateTitle = true;
 		QString url = itu.url;
-		bool hasProperUrl = false;
 
 		ItemUpdated iu;
 		iu.item = itu.item;
@@ -70,7 +69,6 @@ void UpdateEntryThr::run()
 		if ( itu.name.isNull() && itu.length == -2 )
 		{
 			Functions::getDataIfHasPluginPrefix( url, &url, &itu.name, &iu.img, &ioCtrl );
-			hasProperUrl = true;
 
 			IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
 			if ( Demuxer::create( url, demuxer ) )
@@ -88,11 +86,7 @@ void UpdateEntryThr::run()
 		{
 			iu.name = itu.name;
 			if ( iu.name.isEmpty() )
-			{
-				if ( !hasProperUrl )
-					Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, &url );
 				iu.name = Functions::fileName( url, false ) ;
-			}
 		}
 
 		if ( itu.length == itu.oldLength )

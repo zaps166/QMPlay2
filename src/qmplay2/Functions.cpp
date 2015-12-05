@@ -128,7 +128,11 @@ QString Functions::fileName( QString f, bool extension )
 	/* Tylko dla adresów do przekonwertowania */
 	QString real_url;
 	if ( splitPrefixAndUrlIfHasPluginPrefix( f, NULL, &real_url ) )
+	{
+		if ( real_url.startsWith( "file://" ) )
+			return fileName( real_url, extension );
 		return real_url;
+	}
 	/**/
 #ifndef Q_OS_WIN
 	if ( f == "file:///" )
