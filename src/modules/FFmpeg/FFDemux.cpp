@@ -60,10 +60,25 @@ static int interruptCB( bool &aborted )
 	return aborted;
 }
 
+class AVPacketRAII
+{
+public:
+	inline AVPacketRAII( AVPacket *packet ) :
+		packet( packet )
+	{}
+	inline ~AVPacketRAII()
+	{
+		av_packet_unref( packet );
+	}
+private:
+	AVPacket *packet;
+};
+
 /**/
 
 FFDemux::FFDemux( QMutex &avcodec_mutex, Module &module ) :
 	formatCtx( NULL ),
+	packet( NULL ),
 	paused( false ), aborted( false ), fix_mkv_ass( false ),
 	isMetadataChanged( false ),
 	lastTime( 0.0 ),
@@ -94,6 +109,7 @@ FFDemux::~FFDemux()
 				}
 		}
 		avformat_close_input( &formatCtx );
+		FFCommon::freeAVPacket( packet );
 	}
 }
 
@@ -309,20 +325,9 @@ bool FFDemux::read( Packet &encoded, int &idx )
 		av_read_play( formatCtx );
 	}
 
-	class AVQMPlay2Packet : public AVPacket
-	{
-	public:
-		inline AVQMPlay2Packet()
-		{
-			data = NULL;
-		}
-		inline ~AVQMPlay2Packet()
-		{
-			if ( data )
-				av_free_packet( this );
-		}
-	} packet;
-	const int ret = av_read_frame( formatCtx, &packet );
+	AVPacketRAII avPacketRAII( packet );
+
+	const int ret = av_read_frame( formatCtx, packet );
 	if ( ret == AVERROR_INVALIDDATA )
 	{
 		if ( lastErr != AVERROR_INVALIDDATA )
@@ -338,7 +343,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 		return true;
 	else if ( ret )
 		return false;
-	const int ff_idx = packet.stream_index;
+	const int ff_idx = packet->stream_index;
 	if ( ff_idx >= streams.count() )
 	{
 		QMPlay2Core.log( "Stream index out of range: " + QString::number( ff_idx ), ErrorLog | LogOnce | DontShowInGUI );
@@ -352,7 +357,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 		isMetadataChanged = true;
 	}
 	if ( fix_mkv_ass && streams[ ff_idx ]->codec->codec_id == AV_CODEC_ID_ASS )
-		matroska_fix_ass_packet( streams[ ff_idx ]->time_base, &packet );
+		matroska_fix_ass_packet( streams[ ff_idx ]->time_base, packet );
 #else
 	if ( isStreamed )
 	{
@@ -386,25 +391,25 @@ bool FFDemux::read( Packet &encoded, int &idx )
 	}
 #endif
 
-	encoded.reserve( packet.size + FF_INPUT_BUFFER_PADDING_SIZE );
-	encoded.resize( packet.size );
-	memcpy( encoded.data(), packet.data, encoded.capacity() );
+	encoded.reserve( packet->size + FF_INPUT_BUFFER_PADDING_SIZE );
+	encoded.resize( packet->size );
+	memcpy( encoded.data(), packet->data, encoded.capacity() );
 
 	const double time_base = av_q2d( streams[ ff_idx ]->time_base );
 
 #ifndef MP3_FAST_SEEK
 	if ( seekByByteOffset < 0 )
 #endif
-		encoded.ts.set( packet.dts * time_base, packet.pts * time_base, start_time );
+		encoded.ts.set( packet->dts * time_base, packet->pts * time_base, start_time );
 #ifndef MP3_FAST_SEEK
-	else if ( packet.pos > -1 && length() > 0.0 )
-		lastTime = encoded.ts = ( ( packet.pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
+	else if ( packet->pos > -1 && length() > 0.0 )
+		lastTime = encoded.ts = ( ( packet->pos - seekByByteOffset ) * length() ) / ( avio_size( formatCtx->pb ) - seekByByteOffset );
 	else
 		encoded.ts = lastTime;
 #endif
 
-	if ( packet.duration > 0 )
-		encoded.duration = packet.duration * time_base;
+	if ( packet->duration > 0 )
+		encoded.duration = packet->duration * time_base;
 	else if ( !encoded.ts || ( encoded.duration = encoded.ts - lastTS ) < 0.0 /* Calculate packet duration if doesn't exists */ )
 		encoded.duration = 0.0;
 	lastTS = encoded.ts;
@@ -415,7 +420,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 		lastTime += encoded.duration;
 	}
 
-	encoded.hasKeyFrame = packet.flags & AV_PKT_FLAG_KEY;
+	encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
 	if ( streams[ ff_idx ]->sample_aspect_ratio.num )
 		encoded.sampleAspectRatio = av_q2d( streams[ ff_idx ]->sample_aspect_ratio );
 
@@ -532,6 +537,8 @@ bool FFDemux::open( const QString &_url )
 		metadata = getMetadata();
 	}
 #endif
+
+	packet = FFCommon::createAVPacket();
 
 	return true;
 }

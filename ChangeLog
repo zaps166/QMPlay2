@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 15.12.05:
+Changes in QMPlay2 build 15.12.06:
 	- setting priorities of decoders and A/V outputs is now more convenient,
 	- improve QOpenGLWidget performance (Qt5 only, not used by default),
 	- simple visualization shows RMS of displayed signal in side bars,

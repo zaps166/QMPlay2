@@ -32,10 +32,14 @@ QString FFDecVDPAU::name() const
 {
 	return "FFmpeg/" VDPAUWriterName;
 }
-
 bool FFDecVDPAU::open( StreamInfo *streamInfo, Writer *writer )
 {
-	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P ) //AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU
+	/*
+	 * AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU.
+	 * I tested FFmpeg 2.7 and it works, but crashes (assertion failed) in FFmpeg >= 2.8.
+	*/
+	const bool canUseYUVJ420P = avcodec_version() < 0x383C64;
+	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P || ( canUseYUVJ420P && streamInfo->img_fmt == AV_PIX_FMT_YUVJ420P ) )
 	{
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vdpau" ) )

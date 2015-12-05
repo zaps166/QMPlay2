@@ -14,6 +14,7 @@ extern "C"
 struct AVFormatContext;
 struct AVDictionary;
 struct AVStream;
+struct AVPacket;
 
 class FFDemux : public Demuxer
 {
@@ -54,6 +55,7 @@ private:
 	QVector< int > index_map;
 	QList< AVStream * > streams;
 	AVFormatContext *formatCtx;
+	AVPacket *packet;
 	TimeStamp lastTS;
 
 	bool isLocal, paused, isStreamed, aborted, fix_mkv_ass;

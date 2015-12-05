@@ -11,7 +11,15 @@
 	- 32-bit Windows: http://zaps166.sf.net/?QMPlay2Download=Win32Installer
 - If you want to watch YouTube videos and use "youtube-dl", watch this video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
 
-####Easy installation on openSUSE
+####Easy installation on Arch Linux / Manjaro Linux
+
+- Install AUR client (e.g. yaourt),
+- run the following command:
+```sh
+$ yaourt -S qmplay2
+```
+
+####Easy installation on openSUSE 13.2
 
 - Just run the following commands:
 ```sh
@@ -23,10 +31,10 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 
 ###You need (devel packages):
 
-- ffmpeg >= 2.0 (>= 2.4 recommended) (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*, OpenSSL for https),
+- Qt4 or Qt5 (including QtOpenGL, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
+- FFmpeg >= 2.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*, OpenSSL for https),
 - portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro"),
 - pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro"),
-- qt4 or qt5 (including QtOpenGL, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
 - taglib >= 1.7 (>= 1.9 recommended) (you can disable it in "src/gui/gui.pro"),
 - libgme and libsidplayfp - for Chiptune module,
 - libva (vaapi) and libvdpau - only on X11,

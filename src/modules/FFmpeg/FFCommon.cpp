@@ -6,6 +6,7 @@
 extern "C"
 {
 	#include <libavformat/version.h>
+	#include <libavcodec/avcodec.h>
 	#include <libavutil/dict.h>
 }
 
@@ -48,4 +49,25 @@ int FFCommon::getField( const VideoFrame *videoFrame, int deinterlace, int fullF
 		}
 	}
 	return fullFrame;
+}
+
+AVPacket *FFCommon::createAVPacket()
+{
+	AVPacket *packet;
+#if LIBAVCODEC_VERSION_MAJOR >= 57
+	packet = av_packet_alloc();
+#else
+	packet = ( AVPacket * )av_malloc( sizeof( AVPacket ) );
+	av_init_packet( packet );
+#endif
+	return packet;
+}
+void FFCommon::freeAVPacket( AVPacket *&packet )
+{
+#if LIBAVCODEC_VERSION_MAJOR >= 57
+	av_packet_free( &packet );
+#else
+	// Packet buffer is always NULL here, so no need to unref!
+	av_freep( &packet );
+#endif
 }

@@ -31,11 +31,11 @@ SOURCES +=         QMPlay2Core.cpp         Functions.cpp         Settings.cpp   
 DEFINES += __STDC_CONSTANT_MACROS
 
 # Uncomment below lines for avresample:
-# DEFINES += QMPLAY2_AVRESAMPLE
-# win32 {
+#DEFINES += QMPLAY2_AVRESAMPLE
+#win32 {
 #	LIBS -= -lswresample
 #	LIBS += -lavresample
-# } else {
+#} else {
 #	PKGCONFIG -= libswresample
 #	PKGCONFIG += libavresample
-# }
+#}

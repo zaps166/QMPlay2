@@ -23,10 +23,11 @@ protected:
 	AVCodec *init( StreamInfo *streamInfo );
 	bool openCodec( AVCodec *codec );
 
-	void decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool flush );
+	void decodeFirstStep( const Packet &encodedPacket, bool flush );
 	void decodeLastStep( Packet &encodedPacket, AVFrame *frame );
 
 	AVCodecContext *codec_ctx;
+	AVPacket *packet;
 	AVFrame *frame;
 	double time_base;
 	bool codecIsOpen;

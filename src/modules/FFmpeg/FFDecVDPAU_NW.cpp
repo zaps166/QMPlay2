@@ -234,7 +234,7 @@ int FFDecVDPAU_NW::decode( Packet &encodedPacket, QByteArray &decoded, bool flus
 
 bool FFDecVDPAU_NW::open( StreamInfo *streamInfo, Writer * )
 {
-	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P ) //AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU
+	if ( streamInfo->img_fmt == AV_PIX_FMT_YUV420P ) //Read comment in FFDecVDPAU::open()
 	{
 		AVCodec *codec = init( streamInfo );
 		if ( codec && hasHWAccel( "vdpau" ) )

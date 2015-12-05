@@ -12,7 +12,7 @@ extern "C"
 	#define set_matrix avresample_set_matrix
 #else
 	#include <libswresample/swresample.h>
-	#include <libavutil/audioconvert.h>
+	#include <libavutil/channel_layout.h>
 	#define set_matrix swr_set_matrix
 #endif
 	#include <libavutil/opt.h>

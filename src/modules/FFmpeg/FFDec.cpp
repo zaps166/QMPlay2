@@ -10,6 +10,7 @@ extern "C"
 
 FFDec::FFDec( QMutex &avcodec_mutex ) :
 	codec_ctx( NULL ),
+	packet( NULL ),
 	frame( NULL ),
 	codecIsOpen( false ),
 	avcodec_mutex( avcodec_mutex )
@@ -17,6 +18,7 @@ FFDec::FFDec( QMutex &avcodec_mutex ) :
 FFDec::~FFDec()
 {
 	av_frame_free( &frame );
+	FFCommon::freeAVPacket( packet );
 	if ( codecIsOpen )
 	{
 		avcodec_mutex.lock();
@@ -63,6 +65,7 @@ bool FFDec::openCodec( AVCodec *codec )
 	}
 	avcodec_mutex.unlock();
 	time_base = streamInfo->getTimeBase();
+	packet = FFCommon::createAVPacket();
 	switch ( codec_ctx->codec_type )
 	{
 		case AVMEDIA_TYPE_VIDEO:
@@ -75,13 +78,12 @@ bool FFDec::openCodec( AVCodec *codec )
 	return ( codecIsOpen = true );
 }
 
-void FFDec::decodeFirstStep( AVPacket &packet, const Packet &encodedPacket, bool flush )
+void FFDec::decodeFirstStep( const Packet &encodedPacket, bool flush )
 {
-	av_init_packet( &packet );
-	packet.data = ( quint8 * )encodedPacket.data();
-	packet.size = encodedPacket.size();
-	packet.dts = round( encodedPacket.ts.dts() / time_base );
-	packet.pts = round( encodedPacket.ts.pts() / time_base );
+	packet->data = ( quint8 * )encodedPacket.data();
+	packet->size = encodedPacket.size();
+	packet->dts = round( encodedPacket.ts.dts() / time_base );
+	packet->pts = round( encodedPacket.ts.pts() / time_base );
 	if ( flush )
 		avcodec_flush_buffers( codec_ctx );
 	codec_ctx->reordered_opaque = ( int64_t & )encodedPacket.sampleAspectRatio;

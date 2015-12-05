@@ -35,10 +35,9 @@ bool FFDecHWAccel::hasHWAccel( const char *hwaccelName )
 
 int FFDecHWAccel::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned )
 {
-	AVPacket packet;
 	int frameFinished = 0;
-	decodeFirstStep( packet, encodedPacket, flush );
-	const int bytes_consumed = avcodec_decode_video2( codec_ctx, frame, &frameFinished, &packet );
+	decodeFirstStep( encodedPacket, flush );
+	const int bytes_consumed = avcodec_decode_video2( codec_ctx, frame, &frameFinished, packet );
 	if ( frameFinished )
 	{
 		VideoFrame::create( decoded, frame->data, frame->linesize, frame->interlaced_frame, frame->top_field_first );

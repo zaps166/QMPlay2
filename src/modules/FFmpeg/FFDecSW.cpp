@@ -76,13 +76,12 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 {
 	int bytes_consumed = 0, frameFinished = 0;
 
-	AVPacket packet;
-	decodeFirstStep( packet, encodedPacket, flush );
+	decodeFirstStep( encodedPacket, flush );
 
 	switch ( codec_ctx->codec_type )
 	{
 		case AVMEDIA_TYPE_AUDIO:
-			bytes_consumed = avcodec_decode_audio4( codec_ctx, frame, &frameFinished, &packet );
+			bytes_consumed = avcodec_decode_audio4( codec_ctx, frame, &frameFinished, packet );
 			if ( frameFinished )
 			{
 				const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
@@ -183,7 +182,7 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 				codec_ctx->flags2 &= ~CODEC_FLAG2_FAST;
 			}
 
-			bytes_consumed = avcodec_decode_video2( codec_ctx, frame, &frameFinished, &packet );
+			bytes_consumed = avcodec_decode_video2( codec_ctx, frame, &frameFinished, packet );
 
 			if ( forceSkipFrames ) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
 				codec_ctx->skip_frame = AVDISCARD_NONREF;
@@ -222,13 +221,12 @@ bool FFDecSW::decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_O
 	if ( encodedPacket.isEmpty() )
 		return getFromBitmapSubsBuffer( osd, pos );
 
-	AVPacket packet;
-	decodeFirstStep( packet, encodedPacket, false );
+	decodeFirstStep( encodedPacket, false );
 
 	bool ret = true;
 	int got_sub_ptr;
 	AVSubtitle subtitle;
-	if ( avcodec_decode_subtitle2( codec_ctx, &subtitle, &got_sub_ptr, &packet ) && got_sub_ptr )
+	if ( avcodec_decode_subtitle2( codec_ctx, &subtitle, &got_sub_ptr, packet ) && got_sub_ptr )
 	{
 		if ( !subtitle.num_rects )
 		{
@@ -254,12 +252,20 @@ bool FFDecSW::decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_O
 					buff->y = av_clip( rect->y, 0, h - buff->h );
 					buff->bitmap.resize( ( buff->w * buff->h ) << 2 );
 
-					const uint8_t  *source  = ( uint8_t  * )rect->pict.data[ 0 ];
-					const uint32_t *palette = ( uint32_t * )rect->pict.data[ 1 ];
-					uint32_t       *dest    = ( uint32_t * )buff->bitmap.data();
+#if LIBAVCODEC_VERSION_MAJOR >= 57
+					const uint8_t  *source   = ( uint8_t  * )rect->data[ 0 ];
+					const uint32_t *palette  = ( uint32_t * )rect->data[ 1 ];
+					const int       linesize = rect->linesize[ 0 ];
+#else
+					const uint8_t  *source   = ( uint8_t  * )rect->pict.data[ 0 ];
+					const uint32_t *palette  = ( uint32_t * )rect->pict.data[ 1 ];
+					const int       linesize = rect->pict.linesize[ 0 ];
+
+#endif
+					uint32_t       *dest     = ( uint32_t * )buff->bitmap.data();
 					for ( int y = 0 ; y < buff->h ; ++y )
 						for ( int x = 0 ; x < buff->w ; ++x )
-							dest[ y * buff->w + x ] = palette[ source[ y * rect->pict.linesize[ 0 ] + x ] ];
+							dest[ y * buff->w + x ] = palette[ source[ y * linesize + x ] ];
 
 					if ( buff->pts <= pos )
 						while ( bitmapSubBuffer.size() )
@@ -296,9 +302,7 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 			else
 				codec_ctx->thread_type = FF_THREAD_SLICE;
 		}
-		codec_ctx->lowres = lowres;
-		if ( codec_ctx->lowres > codec_ctx->codec->max_lowres )
-			codec_ctx->lowres = codec_ctx->codec->max_lowres;
+		av_codec_set_lowres( codec_ctx, qMin( av_codec_get_max_lowres( codec ), lowres ) );
 	}
 	if ( !FFDec::openCodec( codec ) )
 		return false;

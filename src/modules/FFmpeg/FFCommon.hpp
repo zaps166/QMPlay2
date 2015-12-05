@@ -15,6 +15,7 @@
 #define FFReaderName "FFmpeg Reader"
 
 struct AVDictionary;
+struct AVPacket;
 class VideoFrame;
 
 namespace FFCommon
@@ -22,6 +23,9 @@ namespace FFCommon
 	QString prepareUrl( QString url, AVDictionary *&options, bool *isLocal = NULL );
 
 	int getField( const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField );
+
+	AVPacket *createAVPacket();
+	void freeAVPacket( AVPacket *&packet );
 }
 
 #endif
