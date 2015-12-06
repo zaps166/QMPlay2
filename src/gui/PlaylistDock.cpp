@@ -149,7 +149,7 @@ void PlaylistDock::addAndPlay( const QString &_url )
 		}
 	}
 	/**/
-	addAndPlay( QStringList( url ) );
+	addAndPlay( QStringList( _url ) );
 }
 
 void PlaylistDock::expandTree( QTreeWidgetItem *i )
