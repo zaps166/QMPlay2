@@ -127,7 +127,11 @@ void PlaylistDock::addAndPlay( const QString &_url )
 	const QString url = Functions::Url( _url );
 	foreach ( QTreeWidgetItem *item, items )
 	{
-		if ( item->data( 0, Qt::UserRole ).toString() == url )
+		QString itemUrl = item->data( 0, Qt::UserRole ).toString();
+		bool urlMatches = itemUrl == url;
+		if ( !urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix( itemUrl, NULL, &itemUrl, NULL ) )
+			urlMatches = itemUrl == url;
+		if ( urlMatches )
 		{
 			while ( list->isGroup( item ) )
 			{

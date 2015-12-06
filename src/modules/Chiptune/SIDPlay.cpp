@@ -233,5 +233,7 @@ QString SIDPlay::getTitle( const SidTuneInfo *info, int track ) const
 		ret = author + " - " + title;
 	else
 		ret = title;
-	return tr( "Ścieżka" ) + QString( " %1%2" ).arg( track + 1 ).arg( ret.isEmpty() ? QString() : ( " - " + ret ) );
+	if ( info->songs() > 1 )
+		return tr( "Ścieżka" ) + QString( " %1%2" ).arg( track + 1 ).arg( ret.isEmpty() ? QString() : ( " - " + ret ) );
+	return ret;
 }

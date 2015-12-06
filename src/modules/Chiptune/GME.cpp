@@ -215,7 +215,9 @@ QString GME::getTitle( gme_info_t *info, int track ) const
 		ret = author + " - " + title;
 	else
 		ret = title;
-	return tr( "Ścieżka" ) + QString( " %1%2" ).arg( track + 1 ).arg( ret.isEmpty() ? QString() : ( " - " + ret ) );
+	if ( gme_track_count( m_gme ) > 1 )
+		return tr( "Ścieżka" ) + QString( " %1%2" ).arg( track + 1 ).arg( ret.isEmpty() ? QString() : ( " - " + ret ) );
+	return ret;
 }
 int GME::getLength( gme_info_t *info ) const
 {
