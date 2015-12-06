@@ -189,7 +189,11 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 			return false;
 		m_rs.filter( true );
 
+#if ((LIBSIDPLAYFP_VERSION_MAJ << 16 | LIBSIDPLAYFP_VERSION_MIN << 8 | LIBSIDPLAYFP_VERSION_LEV) > 0x010800)
 		const bool isStereo = info->sidChips() > 1 ? true : false;
+#else
+		const bool isStereo = info->isStereo();
+#endif
 
 		SidConfig cfg;
 		cfg.frequency = m_srate;
