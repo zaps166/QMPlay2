@@ -924,6 +924,8 @@ void MainWidget::browseSubsFile()
 	QString dir = Functions::filePath( playC.getUrl() );
 	if ( dir.isEmpty() )
 		dir = QMPlay2GUI.getCurrentPth( playlistDock->getUrl() );
+	if ( dir.startsWith( "file://" ) )
+		dir.remove( 0, 7 );
 
 	QString filter = tr( "Napisy" ) + " ASS/SSA (*.ass *.ssa)";
 	foreach ( const QString &ext, SubsDec::extensions() )
