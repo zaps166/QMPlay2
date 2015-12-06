@@ -131,19 +131,18 @@ bool VAAPIWriter::processParams( bool * )
 qint64 VAAPIWriter::write( const QByteArray &data )
 {
 	VideoFrame *videoFrame = ( VideoFrame * )data.data();
-	const VASurfaceID curr_id = ( unsigned long )videoFrame->data[ 3 ];
+	const VASurfaceID curr_id = ( quintptr )videoFrame->data[ 3 ];
 	const int field = FFCommon::getField( videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD );
 #ifdef HAVE_VPP
-	if ( use_vpp )
+	const bool do_vpp_deint = field != 0 && vpp_buffers[ VAProcFilterDeinterlacing ] != VA_INVALID_ID;
+	if ( use_vpp && !do_vpp_deint )
 	{
-		const bool do_vpp_deint = field != 0 && vpp_buffers[ VAProcFilterDeinterlacing ] != VA_INVALID_ID;
+		forward_reference = VA_INVALID_SURFACE;
+		vpp_second = false;
+	}
+	if ( use_vpp && ( do_vpp_deint || minor <= 35 ) )
+	{
 		bool vpp_ok = false;
-
-		if ( !do_vpp_deint )
-		{
-			forward_reference = VA_INVALID_SURFACE;
-			vpp_second = false;
-		}
 
 		if ( do_vpp_deint && forward_reference == VA_INVALID_SURFACE )
 			forward_reference = curr_id;
@@ -173,7 +172,7 @@ qint64 VAAPIWriter::write( const QByteArray &data )
 
 				pipeline_param->num_filters = 1;
 				if ( !do_vpp_deint )
-					pipeline_param->filters = &vpp_buffers[ VAProcFilterNone ];
+					pipeline_param->filters = &vpp_buffers[ VAProcFilterNone ]; //Sometimes it can prevent crash, but sometimes it can produce green image, so it is disabled for never VA-API versions which don't crash without VPP
 				else
 				{
 					pipeline_param->filters = &vpp_buffers[ VAProcFilterDeinterlacing ];
@@ -228,7 +227,7 @@ bool VAAPIWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgS
 		VAImageFormat img_fmt[ fmt_count ];
 		if ( vaQueryImageFormats( VADisp, img_fmt, &fmt_count ) == VA_STATUS_SUCCESS )
 		{
-			const VASurfaceID surfaceID = ( unsigned long )videoFrame->data[ 3 ];
+			const VASurfaceID surfaceID = ( quintptr )videoFrame->data[ 3 ];
 			int img_fmt_idx[ 3 ] = { -1, -1, -1 };
 			for ( int i = 0 ; i < fmt_count ; ++i )
 			{
@@ -376,7 +375,7 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 			p = VAProfileH264Baseline;
 	}
 #if VA_VERSION_HEX >= 0x230000 // 1.3.0
-	else if ( !qstrcmp( codec_name, "vp8" ) )
+	else if ( !qstrcmp( codec_name, "vp8" ) ) //Not supported in FFmpeg (06.12.2015)
 	{
 		if ( profileList.contains( VAProfileVP8Version0_3 ) )
 			p = VAProfileVP8Version0_3;
@@ -390,7 +389,7 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 	}
 #endif
 #if VA_VERSION_HEX >= 0x260000 // 1.6.0
-	else if ( !qstrcmp( codec_name, "vp9" ) )
+	else if ( !qstrcmp( codec_name, "vp9" ) ) //Not supported in FFmpeg (06.12.2015)
 	{
 		if ( profileList.contains( VAProfileVP9Profile0 ) )
 			p = VAProfileVP9Profile0;
@@ -520,7 +519,7 @@ void VAAPIWriter::init_vpp()
 			num_filters = 0;
 		if ( num_filters )
 		{
-			/* Creating dummy filter (some drivers/api versions crashes without any filter) */
+			/* Creating dummy filter (some drivers/api versions (1.6.x and Ivy Bridge) crashes without any filter) - this is unreachable now */
 			VAProcFilterParameterBufferBase none_params = { VAProcFilterNone };
 			if ( vaCreateBuffer( VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof none_params, 1, &none_params, &vpp_buffers[ VAProcFilterNone ] ) != VA_STATUS_SUCCESS )
 				vpp_buffers[ VAProcFilterNone ] = VA_INVALID_ID;
@@ -695,7 +694,8 @@ void VAAPIWriter::resizeEvent( QResizeEvent * )
 }
 void VAAPIWriter::paintEvent( QPaintEvent * )
 {
-	draw();
+	if ( paused )
+		draw();
 }
 bool VAAPIWriter::event( QEvent *e )
 {
