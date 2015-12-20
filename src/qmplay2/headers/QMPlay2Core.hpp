@@ -1,7 +1,7 @@
 #ifndef QMPLAY2CORE_HPP
 #define QMPLAY2CORE_HPP
 
-#define QMPlay2Version "15.12.06"
+#define QMPlay2Version "15.12.20"
 
 #if defined(__i386) || defined(__i386__) || defined(_M_IX86) || (__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
 	#define QMPLAY2_CPU_X86
@@ -104,7 +104,11 @@ public:
 	}
 	inline bool isWorking()
 	{
+#if QT_VERSION < 0x050000
 		return working > 0;
+#else
+		return working.load() > 0; //For Qt5 <= 5.2
+#endif
 	}
 private slots:
 	void restoreCursorSlot();
