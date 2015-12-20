@@ -70,11 +70,7 @@ namespace Functions
 #else
 		timespec now;
 		clock_gettime(
-		#ifdef CLOCK_MONOTONIC_RAW
-			CLOCK_MONOTONIC_RAW,
-		#else
 			CLOCK_MONOTONIC,
-		#endif
 			&now
 		);
 		return now.tv_sec + ( now.tv_nsec / 1000000000.0 );
