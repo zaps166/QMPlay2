@@ -7,6 +7,7 @@
 #include <Functions.hpp>
 #include <SubsDec.hpp>
 
+#include <QApplication>
 #include <QMouseEvent>
 #include <QFileInfo>
 #include <QMimeData>
@@ -60,6 +61,9 @@ VideoDock::VideoDock() :
 	connect( &iDW, SIGNAL( resized( int, int ) ), this, SLOT( resizedIDW( int, int ) ) );
 	connect( this, SIGNAL( visibilityChanged( bool ) ), this, SLOT( visibilityChanged( bool ) ) );
 	connect( &QMPlay2Core, SIGNAL( dockVideo( QWidget * ) ), &iDW, SLOT( setWidget( QWidget * ) ) );
+
+	if ( ( isBreeze = qApp->style()->objectName() == "breeze" ) )
+		setStyle( &commonStyle );
 }
 
 void VideoDock::fullScreen( bool b )
@@ -72,7 +76,8 @@ void VideoDock::fullScreen( bool b )
 		setFeatures( DockWidget::NoDockWidgetFeatures );
 		setFloating( false );
 
-		setStyle( &commonStyle );
+		if ( !isBreeze )
+			setStyle( &commonStyle );
 	}
 	else
 	{
@@ -91,7 +96,8 @@ void VideoDock::fullScreen( bool b )
 		setFeatures( DockWidget::AllDockWidgetFeatures );
 		setFloating( is_floating );
 
-		setStyle( NULL );
+		if ( !isBreeze )
+			setStyle( NULL );
 	}
 }
 

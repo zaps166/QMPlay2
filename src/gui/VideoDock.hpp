@@ -47,7 +47,7 @@ private:
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
-	bool canPopup, is_floating;
+	bool canPopup, is_floating, isBreeze;
 	double touchZoom;
 private slots:
 	void popup( const QPoint & );
