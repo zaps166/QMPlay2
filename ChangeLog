@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 15.12.25:
+    - Qt5 <= 5.2 compilation fixes,
+    - OpenGL 2 bugfix,
+
 Changes in QMPlay2 build 15.12.06:
 	- support for HEVC, VP8 and VP9 decoding in VA-API (depending on FFmpeg version),
 	- setting priorities of decoders and A/V outputs is now more convenient,

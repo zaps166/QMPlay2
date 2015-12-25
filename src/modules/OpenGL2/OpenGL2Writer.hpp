@@ -3,11 +3,12 @@
 
 #ifndef USE_NEW_OPENGL_API
 	#include <QGLWidget>
+	#include <QGLShaderProgram>
 #else
 	#include <QOpenGLWidget>
+	#include <QOpenGLShaderProgram>
 #endif
 
-class QGLShaderProgram;
 class OpenGL2Writer;
 class QMPlay2_OSD;
 
@@ -20,9 +21,13 @@ class Drawable : public QGLWidget
 public:
 #ifndef USE_NEW_OPENGL_API
 	Drawable( OpenGL2Writer &, const QGLFormat & );
-	bool init();
+	bool testGL();
 #else
 	Drawable( OpenGL2Writer & );
+#endif
+
+#ifndef OPENGL_ES2
+	void initGLProc();
 #endif
 
 	void clr();
@@ -40,6 +45,10 @@ private slots:
 	void resetClearCounter();
 #endif
 private:
+#ifndef OPENGL_ES2
+	void showOpenGLMissingFeaturesMessage();
+#endif
+
 	void initializeGL();
 #ifndef USE_NEW_OPENGL_API
 	void resizeGL( int w, int h );
@@ -51,8 +60,9 @@ private:
 #endif
 	bool event( QEvent * );
 
-	QGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
+	QGLShaderProgram shaderProgramYCbCr, shaderProgramOSD;
 #ifndef OPENGL_ES2
+	bool supportsShaders, canCreateNonPowerOfTwoTextures;
 	GLActiveTexture glActiveTexture;
 #endif
 

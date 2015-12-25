@@ -55,7 +55,7 @@ QStringList QMPlay2GUIClass::getModules( const QString &type, int typeLen )
 		defaultModules << "OpenGL 2" << "DirectDraw";
 #elif defined Q_OS_ANDROID
 	if ( type == "videoWriters" )
-		defaultModules << "QPainter";
+		defaultModules << "QPainter" << "OpenGL 2";
 #endif
 	QStringList availableModules;
 	const QString moduleType = type.mid( 0, typeLen );
