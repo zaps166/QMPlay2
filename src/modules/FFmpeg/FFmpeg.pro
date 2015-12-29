@@ -13,15 +13,15 @@ else {
 	QMAKE_LIBDIR += ../../../app/lib
 }
 
-win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil
+win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil -lavdevice
 else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
-	PKGCONFIG += libavformat libavcodec libswscale libavutil
+	PKGCONFIG += libavformat libavcodec libswscale libavutil libavdevice
 }
 LIBS += -lqmplay2
 
-DEFINES += __STDC_CONSTANT_MACROS
+DEFINES += __STDC_CONSTANT_MACROS USE_AVDEVICE
 
 RCC_DIR = build/rcc
 OBJECTS_DIR = build/obj

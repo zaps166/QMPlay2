@@ -18,6 +18,9 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
+#ifdef USE_AVDEVICE
+	#include <libavdevice/avdevice.h>
+#endif
 }
 
 FFmpeg::FFmpeg() :
@@ -61,6 +64,9 @@ FFmpeg::FFmpeg() :
 		av_log_set_level( AV_LOG_FATAL );
 #endif
 		av_register_all();
+#ifdef USE_AVDEVICE
+		avdevice_register_all();
+#endif
 		firstTime = false;
 	}
 	avformat_network_init();
