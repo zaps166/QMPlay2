@@ -506,7 +506,10 @@ bool FFDemux::open( const QString &_url )
 #endif
 
 	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
+	{
+		formatCtxList.removeLast();
 		return false;
+	}
 
 #ifndef MP3_FAST_SEEK
 	seekByByteOffset = formatCtx->pb ? avio_tell( formatCtx->pb ) : -1; //formatCtx->data_offset, moved to private since FFmpeg 2.6
