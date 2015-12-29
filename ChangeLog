@@ -1,3 +1,6 @@
+Changes in QMPlay2 build ??.??.??:
+	- updated German translation (Daniel Meiß-Wilhelm),
+
 Changes in QMPlay2 build 15.12.25:
 	- KF5 Breeze style fixes in full screen,
 	- Qt5 <= 5.2 compilation fixes,

@@ -290,7 +290,7 @@
     </message>
     <message>
         <source>Wybierz napęd</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie ein Laufwerk</translation>
     </message>
 </context>
 <context>
@@ -609,15 +609,16 @@
     <name>Drawable</name>
     <message>
         <source>Błąd podczas kompilacji/linkowania shaderów</source>
-        <translation type="unfinished"></translation>
+        <translation>Shader Compiler/Link-Fehler</translation>
     </message>
     <message>
         <source>Zarządzanie VSync jest nieobsługiwane</source>
-        <translation type="unfinished"></translation>
+        <translation>VSync Management ist nicht unterstützt</translation>
     </message>
     <message>
         <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Keine Ahnung was genau damit gemeint ist</translatorcomment>
+        <translation>Treiber sollte Multitexturing, Shader und Non-Potenz von Zwei Texturgröße unterstützen</translation>
     </message>
 </context>
 <context>
@@ -664,7 +665,8 @@
     <message>
         <source>Pre
 amp</source>
-        <translation type="unfinished"></translation>
+        <translation>Pre
+amp</translation>
     </message>
 </context>
 <context>
@@ -696,11 +698,11 @@ amp</source>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>System</translation>
     </message>
     <message>
         <source>Prawo autorskie</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright</translation>
     </message>
     <message>
         <source>Komentarz</source>
@@ -712,7 +714,7 @@ amp</source>
     </message>
     <message>
         <source>Głosy</source>
-        <translation type="unfinished"></translation>
+        <translation>Glossen</translation>
     </message>
 </context>
 <context>
@@ -873,15 +875,15 @@ amp</source>
     </message>
     <message>
         <source>Zapisz grupę</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe speichern</translation>
     </message>
     <message>
         <source>Błąd podczas zapisu playlisty</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim speichern der Wiedergabeliste</translation>
     </message>
     <message>
         <source>&amp;Ukryj pasek menu</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verstecke Menubar</translation>
     </message>
 </context>
 <context>
@@ -1261,7 +1263,7 @@ amp</source>
     </message>
     <message>
         <source>Domyślna długość</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Länge</translation>
     </message>
 </context>
 <context>
@@ -1636,7 +1638,7 @@ amp</source>
     </message>
     <message>
         <source>Zapisz &amp;grupę</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gruppe speichern</translation>
     </message>
 </context>
 <context>
@@ -1667,7 +1669,7 @@ amp</source>
     </message>
     <message>
         <source>Synchronizowanie z plikiem nie jest obsługiwane</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronisierung mit der Datei wird nicht unterstützt</translation>
     </message>
 </context>
 <context>
@@ -1689,7 +1691,7 @@ amp</source>
     </message>
     <message>
         <source>Następna strona</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Seite</translation>
     </message>
     <message>
         <source>Błąd połączenia</source>
@@ -1697,11 +1699,11 @@ amp</source>
     </message>
     <message>
         <source>Spróbuj ponownie później</source>
-        <translation type="unfinished"></translation>
+        <translation>Versuchen Sie es später erneut</translation>
     </message>
     <message>
         <source>Wyszukaj w Prostopleer</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchen bei Prostopleer</translation>
     </message>
 </context>
 <context>
@@ -2203,7 +2205,7 @@ amp</source>
     </message>
     <message>
         <source>Pamiętaj ustawienia korektora wideo</source>
-        <translation type="unfinished"></translation>
+        <translation>Beibehalten der Video Equalizer Einstellungen</translation>
     </message>
     <message>
         <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
@@ -2215,47 +2217,49 @@ amp</source>
     </message>
     <message>
         <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>?</translatorcomment>
+        <translation>Prozentuales Zurückspulen</translation>
     </message>
     <message>
         <source>Domyślny język dla dźwięku</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Audio Sprache</translation>
     </message>
     <message>
         <source>Domyślny język dla napisów</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Untertitel Sprache</translation>
     </message>
     <message>
         <source>Domyślna lub pierwsza ścieżka</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>?</translatorcomment>
+        <translation>Standard oder ersten Stream</translation>
     </message>
     <message>
         <source>Wzmocnienie</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstärken</translation>
     </message>
     <message>
         <source>Przenieś wyżej</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhöhen</translation>
     </message>
     <message>
         <source>Przenieś niżej</source>
-        <translation type="unfinished"></translation>
+        <translation>Absenken</translation>
     </message>
     <message>
         <source>Priorytet wyjścia obrazu</source>
-        <translation type="unfinished"></translation>
+        <translation>Video-Ausgang Priorität</translation>
     </message>
     <message>
         <source>Priorytet wyjścia dźwięku</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Ausgang Priorität</translation>
     </message>
     <message>
         <source>Priorytet dekoderów</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekoder Priorität</translation>
     </message>
     <message>
         <source>Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielen nächsten Titel nach einem Wiedergabefehler</translation>
     </message>
 </context>
 <context>
@@ -2441,7 +2445,7 @@ amp</source>
     </message>
     <message>
         <source>Nie można otworzyć filtrów obrazu</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann den Videofilter nicht öffnen</translation>
     </message>
 </context>
 <context>
