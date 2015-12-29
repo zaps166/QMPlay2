@@ -39,10 +39,14 @@ static inline QUrl getAutocompleteUrl( const QString &text )
 
 static inline QString getFileExtension( const QString &ItagName )
 {
-	if ( ItagName.contains( "WebM" ) )
+	if ( ItagName.contains( "WebM" ) || ItagName.contains( "VP9" ) || ItagName.contains( "VP8" ) || ItagName.contains( "Vorbis" ) )
 		return ".webm";
-	else if ( ItagName.contains( "MP4" ) )
+	else if ( ItagName.contains( "AAC" ) || ItagName.contains( "H.264" ) )
 		return ".mp4";
+	else if ( ItagName.contains( "FLV" ) )
+		return ".flv";
+	else if ( ItagName.contains( "3GP" ) )
+		return ".3gp";
 	return ".unknown";
 }
 
