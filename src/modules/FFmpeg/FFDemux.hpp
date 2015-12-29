@@ -54,7 +54,7 @@ private:
 
 	QVector< int > index_map;
 	QList< AVStream * > streams;
-	AVFormatContext *formatCtx;
+	QList< AVFormatContext * > formatCtxList;
 	AVPacket *packet;
 	TimeStamp lastTS;
 
@@ -66,7 +66,7 @@ private:
 #endif
 	bool isOneStreamOgg;
 
-	int lastErr;
+	int lastErr, currFmtIdx;
 
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
 	AVDictionary *metadata;
