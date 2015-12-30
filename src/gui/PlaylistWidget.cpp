@@ -325,7 +325,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries( const Playlist::Entries &entries
 			currentItem = pLW.newEntry( entry, tmpParent, demuxersInfo );
 			if ( entry.queue ) //Rebuild queue
 			{
-				for ( int j = pLW.queue.size() ; j <= queueSize + entry.queue - 1 ; j++ )
+				for ( int j = pLW.queue.size() ; j <= queueSize + entry.queue - 1 ; ++j )
 					pLW.queue += NULL;
 				pLW.queue[ queueSize + entry.queue - 1 ] = currentItem;
 			}

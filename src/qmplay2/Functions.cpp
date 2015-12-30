@@ -449,18 +449,18 @@ void Functions::getDataIfHasPluginPrefix( const QString &entireUrl, QString *url
 			if ( QMPlay2Ext->addressPrefixList( false ).contains( addressPrefixName ) )
 			{
 				QMPlay2Ext->convertAddress( addressPrefixName, realUrl, param, url, name, img, NULL, ioCtrl );
-				break;
+				return;
 			}
 	}
-	else if ( img )
+	if ( img )
 	{
-		QString scheme = getUrlScheme( entireUrl );
-		QString extension = fileExt( entireUrl ).toLower();
+		const QString scheme = getUrlScheme( entireUrl );
+		const QString extension = fileExt( entireUrl ).toLower();
 		if ( demuxersInfo.isEmpty() )
 		{
 			foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 				foreach ( const Module::Info &mod, module->getModulesInfo() )
-					if ( mod.type == Module::DEMUXER && ( mod.extensions.contains( extension ) || mod.name == scheme ) )
+					if ( mod.type == Module::DEMUXER && ( mod.name == scheme || mod.extensions.contains( extension ) ) )
 					{
 						*img = !mod.img.isNull() ? mod.img : module->image();
 						return;
@@ -469,7 +469,7 @@ void Functions::getDataIfHasPluginPrefix( const QString &entireUrl, QString *url
 		else
 		{
 			foreach ( const DemuxerInfo &demuxerInfo, demuxersInfo )
-				if ( demuxerInfo.extensions.contains( extension ) || demuxerInfo.name == scheme )
+				if ( demuxerInfo.name == scheme || demuxerInfo.extensions.contains( extension ) )
 				{
 					*img = demuxerInfo.img;
 					return;
