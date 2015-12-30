@@ -1,20 +1,6 @@
 #include <Demuxer.hpp>
 
-#include <TimeStamp.hpp>
-
-extern "C"
-{
-	#include <libavformat/version.h>
-}
-
-#if LIBAVFORMAT_VERSION_MAJOR >= 56 && LIBAVFORMAT_VERSION_MINOR >= 36
-	#define MP3_FAST_SEEK
-#endif
-
-struct AVFormatContext;
-struct AVDictionary;
-struct AVStream;
-struct AVPacket;
+class FormatContext;
 
 class FFDemux : public Demuxer
 {
@@ -40,7 +26,7 @@ private:
 
 	bool localStream() const;
 
-	bool seek( int, bool );
+	bool seek( int );
 	bool read( Packet &, int & );
 	void pause();
 	void abort();
@@ -49,28 +35,7 @@ private:
 
 	/**/
 
-	StreamInfo *getStreamInfo( AVStream *stream ) const;
-	AVDictionary *getMetadata() const;
-
-	QVector< int > index_map;
-	QList< AVStream * > streams;
-	QList< AVFormatContext * > formatCtxList;
-	AVPacket *packet;
-	TimeStamp lastTS;
-
-	bool isLocal, paused, isStreamed, aborted, fix_mkv_ass;
-	mutable bool isMetadataChanged;
-	double lastTime, start_time;
-#ifndef MP3_FAST_SEEK
-	qint64 seekByByteOffset;
-#endif
-	bool isOneStreamOgg;
-
-	int lastErr, currFmtIdx;
-
-#if LIBAVFORMAT_VERSION_MAJOR <= 55
-	AVDictionary *metadata;
-#endif
+	QVector< FormatContext * > formatContexts;
 
 	QMutex &avcodec_mutex;
 };

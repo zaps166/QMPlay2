@@ -85,4 +85,17 @@ public:
 	int img_fmt, W, H;
 };
 
+class StreamsInfo : public QList< StreamInfo  * >
+{
+	Q_DISABLE_COPY( StreamsInfo )
+public:
+	inline StreamsInfo()
+	{}
+	inline ~StreamsInfo()
+	{
+		for ( int i = 0 ; i < count() ; ++i )
+			delete at( i );
+	}
+};
+
 #endif // STREAMINFO_HPP

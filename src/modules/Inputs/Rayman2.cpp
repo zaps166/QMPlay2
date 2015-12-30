@@ -83,7 +83,7 @@ int Rayman2::bitrate() const
 	return 8 * ( srate * chn / 2 ) / 1000;
 }
 
-bool Rayman2::seek( int s, bool )
+bool Rayman2::seek( int s )
 {
 	int filePos = 0x64 + s * srate * chn / 2;
 	if ( reader->pos() > filePos ) //backward

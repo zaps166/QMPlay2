@@ -116,9 +116,8 @@ int MPDemux::bitrate() const
 	return -1;
 }
 
-bool MPDemux::seek( int val, bool backward )
+bool MPDemux::seek( int val )
 {
-	Q_UNUSED( backward )
 	if ( val >= length() )
 		val = length()-1;
 	ModPlug_Seek( mpfile, val * 1000 );

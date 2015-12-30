@@ -309,7 +309,7 @@ void DemuxerThr::run()
 				playC.sPackets.unlock();
 			}
 
-			if ( mustSeek && demuxer->seek( playC.seekTo, backwards ) )
+			if ( mustSeek && demuxer->seek( playC.seekTo ) )
 				flush = true;
 
 			if ( flush )
@@ -603,7 +603,7 @@ void DemuxerThr::emitInfo()
 
 	bool once = false;
 	int chapterCount = 0;
-	foreach ( const Demuxer::ChapterInfo &chapter, demuxer->getChapters() )
+	foreach ( const ChapterInfo &chapter, demuxer->getChapters() )
 	{
 		if ( !once )
 		{

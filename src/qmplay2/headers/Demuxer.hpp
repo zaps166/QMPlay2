@@ -2,6 +2,7 @@
 #define DEMUXER_HPP
 
 #include <ModuleCommon.hpp>
+#include <ChapterInfo.hpp>
 #include <StreamInfo.hpp>
 #include <Playlist.hpp>
 
@@ -12,17 +13,6 @@ struct Packet;
 class Demuxer : protected ModuleCommon, public BasicIO
 {
 public:
-	class ChapterInfo
-	{
-	public:
-		inline ChapterInfo( double start, double end ) :
-			start( start ), end( end )
-		{}
-
-		QString title;
-		double start, end;
-	};
-
 	class FetchTracks
 	{
 	public:
@@ -82,7 +72,7 @@ public:
 		return false;
 	}
 
-	virtual bool seek( int, bool backward = false ) = 0;
+	virtual bool seek( int ) = 0;
 	virtual bool read( Packet &, int & ) = 0;
 
 	virtual ~Demuxer() {}
@@ -96,15 +86,7 @@ private:
 		return Playlist::Entries();
 	}
 protected:
-	class StreamsInfo : public QList< StreamInfo  * >
-	{
-	public:
-		inline ~StreamsInfo()
-		{
-			for ( int i = 0 ; i < count() ; ++i )
-				delete at( i );
-		}
-	} streams_info;
+	StreamsInfo streams_info;
 };
 
 #endif

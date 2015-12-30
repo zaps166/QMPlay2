@@ -17,7 +17,7 @@ private:
 
 	bool dontUseBuffer() const;
 
-	bool seek( int, bool );
+	bool seek( int );
 	bool read( Packet &, int & );
 	void abort();
 

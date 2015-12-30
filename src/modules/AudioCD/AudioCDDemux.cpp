@@ -145,7 +145,7 @@ int AudioCDDemux::bitrate() const
 	return 8 * ( srate * chn * 2 ) / 1000;
 }
 
-bool AudioCDDemux::seek( int s, bool )
+bool AudioCDDemux::seek( int s )
 {
 	return ( sector = s / duration ) < numSectors;
 }
