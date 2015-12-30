@@ -474,13 +474,9 @@ bool FormatContext::open( const QString &_url )
 	else
 	{
 		inputFmt = av_find_input_format( protocol );
-		if ( !inputFmt )
-			isLocal = false;
-		else
-		{
+		if ( inputFmt )
 			url = _url.right( _url.length() - protocol.length() - 3 );
-			isLocal = true;
-		}
+		isLocal = false;
 	}
 
 	AVDictionary *options = NULL;
