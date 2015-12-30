@@ -10,14 +10,10 @@ extern "C"
 	#include <libavutil/dict.h>
 }
 
-QString FFCommon::prepareUrl( QString url, AVDictionary *&options, bool *isLocal )
+QString FFCommon::prepareUrl( QString url, AVDictionary *&options )
 {
 	if ( url.startsWith( "file://" ) )
-	{
 		url.remove( 0, 7 );
-		if ( isLocal )
-			*isLocal = true;
-	}
 	else
 	{
 		if ( url.left( 4 ) == "mms:" )
@@ -27,8 +23,6 @@ QString FFCommon::prepareUrl( QString url, AVDictionary *&options, bool *isLocal
 			av_dict_set( &options, "icy", "1", 0 );
 #endif
 		av_dict_set( &options, "user-agent", "QMPlay2/" QMPlay2Version, 0 );
-		if ( isLocal )
-			*isLocal = false;
 	}
 	return url;
 }

@@ -40,12 +40,13 @@ QList< ChapterInfo > FFDemux::getChapters() const
 
 QString FFDemux::name() const
 {
-	QSet< QString > names;
-	foreach ( FormatContext *fmtCtx, formatContexts )
-		names += fmtCtx->name();
 	QString name;
-	foreach ( const QString &fmtName, names )
-		name += fmtName + ";";
+	foreach ( FormatContext *fmtCtx, formatContexts )
+	{
+		const QString fmtCtxName = fmtCtx->name();
+		if ( !name.contains( fmtCtxName ) )
+			name += fmtCtxName + ";";
+	}
 	name.chop( 1 );
 	return name;
 }
@@ -99,6 +100,9 @@ bool FFDemux::localStream() const
 
 bool FFDemux::seek( int val )
 {
+	foreach ( FormatContext *fmtCtx, formatContexts )
+		if ( fmtCtx->isStreamed )
+			return false;
 	bool seeked = false;
 	foreach ( FormatContext *fmtCtx, formatContexts )
 		seeked |= fmtCtx->seek( val );
@@ -148,16 +152,36 @@ void FFDemux::abort()
 		fmtCtx->abort();
 }
 
-bool FFDemux::open( const QString &_url )
+bool FFDemux::open( const QString &url )
 {
-	FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
-	if ( !fmtCtx->open( _url ) )
-		delete fmtCtx;
+	const int idx = url.indexOf( "://" );
+	if ( idx > -1 && url.left( idx ) == DemuxerName )
+	{
+		const QStringList streams = url.right( url.length() - idx - 3 ).split( "][", QString::SkipEmptyParts );
+		foreach ( QString stream, streams )
+		{
+			FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
+			stream.remove( '[' );
+			stream.remove( ']' );
+			if ( !fmtCtx->open( stream ) )
+				delete fmtCtx;
+			else
+			{
+				formatContexts += fmtCtx;
+				streams_info += fmtCtx->streamsInfo;
+			}
+		}
+	}
 	else
 	{
-		formatContexts += fmtCtx;
-		streams_info += fmtCtx->streamsInfo;
+		FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
+		if ( !fmtCtx->open( url ) )
+			delete fmtCtx;
+		else
+		{
+			formatContexts += fmtCtx;
+			streams_info += fmtCtx->streamsInfo;
+		}
 	}
-
 	return !formatContexts.isEmpty();
 }

@@ -461,8 +461,31 @@ bool FormatContext::open( const QString &_url )
 		<< "tty" //txt files
 	;
 
+	const int idx = _url.indexOf( "://" );
+	if ( idx < 0 )
+		return false;
+
+	const QByteArray protocol = _url.left( idx ).toLower().toUtf8();
+	QString url;
+
+	AVInputFormat *inputFmt = NULL;
+	if ( protocol == "file" )
+		isLocal = true;
+	else
+	{
+		inputFmt = av_find_input_format( protocol );
+		if ( !inputFmt )
+			isLocal = false;
+		else
+		{
+			url = _url.right( _url.length() - protocol.length() - 3 );
+			isLocal = true;
+		}
+	}
+
 	AVDictionary *options = NULL;
-	const QString url = FFCommon::prepareUrl( _url, options, &isLocal );
+	if ( !inputFmt )
+		url = FFCommon::prepareUrl( _url, options );
 
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = ( int( * )( void * ) )interruptCB;
@@ -472,7 +495,7 @@ bool FormatContext::open( const QString &_url )
 	formatCtx->flags |= AVFMT_FLAG_FAST_SEEK;
 #endif
 
-	if ( avformat_open_input( &formatCtx, url.toUtf8(), NULL, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
+	if ( avformat_open_input( &formatCtx, url.toUtf8(), inputFmt, &options ) || !formatCtx || disabledDemuxers.contains( name() ) )
 		return false;
 
 #ifndef MP3_FAST_SEEK

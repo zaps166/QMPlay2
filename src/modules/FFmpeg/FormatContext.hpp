@@ -50,8 +50,8 @@ public:
 
 	bool open( const QString &_url );
 
+	bool isLocal, isStreamed, isError;
 	StreamsInfo streamsInfo;
-	bool isLocal, isError;
 	TimeStamp lastTS;
 private:
 	StreamInfo *getStreamInfo( AVStream *stream ) const;
@@ -62,7 +62,7 @@ private:
 	AVFormatContext *formatCtx;
 	AVPacket *packet;
 
-	bool isStreamed, isPaused, isAborted, fixMkvAss;
+	bool isPaused, isAborted, fixMkvAss;
 	mutable bool isMetadataChanged;
 	double lastTime, startTime;
 #ifndef MP3_FAST_SEEK

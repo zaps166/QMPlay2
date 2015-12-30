@@ -9,7 +9,7 @@
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
 #define DecoderVDPAU_NWName "FFmpeg VDPAU Decoder (no writer)"
-#define DemuxerName "FFmpeg Demuxer"
+#define DemuxerName "FFmpeg"
 #define VAAPIWriterName "VA-API"
 #define VDPAUWriterName "VDPAU"
 #define FFReaderName "FFmpeg Reader"
@@ -20,7 +20,7 @@ class VideoFrame;
 
 namespace FFCommon
 {
-	QString prepareUrl( QString url, AVDictionary *&options, bool *isLocal = NULL );
+	QString prepareUrl( QString url, AVDictionary *&options );
 
 	int getField( const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField );
 
