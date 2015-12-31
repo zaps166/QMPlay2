@@ -465,17 +465,17 @@ bool FormatContext::open( const QString &_url )
 	if ( idx < 0 )
 		return false;
 
-	const QByteArray protocol = _url.left( idx ).toLower().toUtf8();
+	const QByteArray scheme = _url.left( idx ).toLower().toUtf8();
 	QString url;
 
 	AVInputFormat *inputFmt = NULL;
-	if ( protocol == "file" )
+	if ( scheme == "file" )
 		isLocal = true;
 	else
 	{
-		inputFmt = av_find_input_format( protocol );
+		inputFmt = av_find_input_format( scheme );
 		if ( inputFmt )
-			url = _url.right( _url.length() - protocol.length() - 3 );
+			url = _url.right( _url.length() - scheme.length() - 3 );
 		isLocal = false;
 	}
 
