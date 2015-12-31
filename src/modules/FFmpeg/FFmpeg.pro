@@ -13,15 +13,15 @@ else {
 	QMAKE_LIBDIR += ../../../app/lib
 }
 
-win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil -lavdevice
+win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil
 else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
-	PKGCONFIG += libavformat libavcodec libswscale libavutil libavdevice
+	PKGCONFIG += libavformat libavcodec libswscale libavutil
 }
 LIBS += -lqmplay2
 
-DEFINES += __STDC_CONSTANT_MACROS USE_AVDEVICE
+DEFINES += __STDC_CONSTANT_MACROS
 
 RCC_DIR = build/rcc
 OBJECTS_DIR = build/obj
@@ -36,6 +36,9 @@ HEADERS += FFmpeg.hpp FFDemux.hpp FFDec.hpp FFDecSW.hpp FFReader.hpp FFCommon.hp
 SOURCES += FFmpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFReader.cpp FFCommon.cpp FormatContext.cpp
 
 unix:!macx:!android {
+	PKGCONFIG += libavdevice
+	DEFINES   += QMPlay2_libavdevice
+
 #Common HWAccel
 	HEADERS   += FFDecHWAccel.hpp HWAccelHelper.hpp
 	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp

@@ -18,7 +18,7 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
-#ifdef USE_AVDEVICE
+#ifdef QMPlay2_libavdevice
 	#include <libavdevice/avdevice.h>
 #endif
 }
@@ -64,7 +64,7 @@ FFmpeg::FFmpeg() :
 		av_log_set_level( AV_LOG_FATAL );
 #endif
 		av_register_all();
-#ifdef USE_AVDEVICE
+#ifdef QMPlay2_libavdevice
 		avdevice_register_all();
 #endif
 		firstTime = false;
