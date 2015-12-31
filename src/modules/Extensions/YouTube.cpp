@@ -39,14 +39,12 @@ static inline QUrl getAutocompleteUrl( const QString &text )
 
 static inline QString getFileExtension( const QString &ItagName )
 {
-	if ( ItagName.contains( "WebM" ) || ItagName.contains( "VP9" ) || ItagName.contains( "VP8" ) || ItagName.contains( "Vorbis" ) )
+	if ( ItagName.contains( "WebM" ) || ItagName.contains( "VP9" ) || ItagName.contains( "VP8" ) || ItagName.contains( "Vorbis" ) || ItagName.contains( "Opus" ) )
 		return ".webm";
 	else if ( ItagName.contains( "AAC" ) || ItagName.contains( "H.264" ) )
 		return ".mp4";
 	else if ( ItagName.contains( "FLV" ) )
 		return ".flv";
-	else if ( ItagName.contains( "3GP" ) )
-		return ".3gp";
 	return ".unknown";
 }
 
@@ -118,8 +116,6 @@ public:
 						*extension = ".webm";
 					else if ( tmp_url.contains( ".mkv" ) )
 						*extension = ".mkv";
-					else if ( tmp_url.contains( ".3gp" ) )
-						*extension = ".3gp";
 					else if ( tmp_url.contains( ".mpg" ) )
 						*extension = ".mpg";
 					else if ( tmp_url.contains( ".mpeg" ) )
@@ -906,7 +902,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 	{
 		/* Video + Audio */
 		itag_arr[ 43 ] = "360p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[ 36 ] = "180p 3GP (MPEG4 + AAC 32kbps)";
+		itag_arr[ 36 ] = "180p MP4 (MPEG4 + AAC 32kbps)";
 		itag_arr[ 22 ] = "720p MP4 (H.264 + AAC 192kbps)"; //default
 		itag_arr[ 18 ] = "360p MP4 (H.264 + AAC 96kbps)";
 		itag_arr[  5 ] = "240p FLV (FLV + MP3 64kbps)";
