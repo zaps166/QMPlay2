@@ -38,4 +38,5 @@ private:
 	QVector< FormatContext * > formatContexts;
 
 	QMutex &avcodec_mutex;
+	QMutex mutex;
 };

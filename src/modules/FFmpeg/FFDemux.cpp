@@ -148,6 +148,7 @@ void FFDemux::pause()
 }
 void FFDemux::abort()
 {
+	QMutexLocker mL( &mutex );
 	foreach ( FormatContext *fmtCtx, formatContexts )
 		fmtCtx->abort();
 }
@@ -163,24 +164,38 @@ bool FFDemux::open( const QString &url )
 			FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
 			stream.remove( '[' );
 			stream.remove( ']' );
-			if ( !fmtCtx->open( stream ) )
-				delete fmtCtx;
+			{
+				QMutexLocker mL( &mutex );
+				formatContexts.append( fmtCtx );
+			}
+			if ( fmtCtx->open( stream ) )
+				streams_info.append( fmtCtx->streamsInfo );
 			else
 			{
-				formatContexts += fmtCtx;
-				streams_info += fmtCtx->streamsInfo;
+				{
+					QMutexLocker mL( &mutex );
+					formatContexts.erase( formatContexts.end() );
+				}
+				delete fmtCtx;
 			}
 		}
 	}
 	else
 	{
 		FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
-		if ( !fmtCtx->open( url ) )
-			delete fmtCtx;
+		{
+			QMutexLocker mL( &mutex );
+			formatContexts.append( fmtCtx );
+		}
+		if ( fmtCtx->open( url ) )
+			streams_info.append( fmtCtx->streamsInfo );
 		else
 		{
-			formatContexts += fmtCtx;
-			streams_info += fmtCtx->streamsInfo;
+			{
+				QMutexLocker mL( &mutex );
+				formatContexts.clear();
+			}
+			delete fmtCtx;
 		}
 	}
 	return !formatContexts.isEmpty();
