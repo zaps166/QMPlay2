@@ -1,4 +1,7 @@
-Changes in QMPlay2 build ??.??.??:
+Changes in QMPlay2 build 15.12.31:
+	- play multiple streams in FFmpeg, YouTube can plays different audio/video streams together,
+	- YouTube can plays different audio/video streams together,
+	- display icons on playlist for AudioCD and Chiptines,
 	- updated German translation (Daniel Meiß-Wilhelm),
 
 Changes in QMPlay2 build 15.12.25:
