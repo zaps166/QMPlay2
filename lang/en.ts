@@ -665,13 +665,6 @@ amp</translation>
     </message>
 </context>
 <context>
-    <name>FFDemux</name>
-    <message>
-        <source>format</source>
-        <translation>format</translation>
-    </message>
-</context>
-<context>
     <name>FFTSpectrumW</name>
     <message>
         <source>Widmo FFT</source>
@@ -687,6 +680,13 @@ amp</translation>
     <message>
         <source>Czy chcesz skojarzyć pliki z programem QMPlay2</source>
         <translation>Do you want to associate files with QMPlay2</translation>
+    </message>
+</context>
+<context>
+    <name>FormatContext</name>
+    <message>
+        <source>format</source>
+        <translation>format</translation>
     </message>
 </context>
 <context>
@@ -1108,10 +1108,6 @@ amp</translation>
         <translation>Show additional search information</translation>
     </message>
     <message>
-        <source>Kolejność wybierania domyślnej jakości filmu</source>
-        <translation>The order of selecting default video quality</translation>
-    </message>
-    <message>
         <source>Skala widma FFT</source>
         <translation>FFT spectrum scale</translation>
     </message>
@@ -1254,6 +1250,22 @@ amp</translation>
     <message>
         <source>Domyślna długość</source>
         <translation>Default length</translation>
+    </message>
+    <message>
+        <source>Użyj różnych strumieni obrazu i dźwięku</source>
+        <translation>Use different audio and video streams</translation>
+    </message>
+    <message>
+        <source>Priorytet domyślnej jakości obrazu/dźwięku</source>
+        <translation>Priority of default video/audio quality</translation>
+    </message>
+    <message>
+        <source>Priorytet domyślnej jakości obrazu</source>
+        <translation>Priority of default video quality</translation>
+    </message>
+    <message>
+        <source>Priorytet domyślnej jakości dźwięku</source>
+        <translation>Priority of default audio quality</translation>
     </message>
 </context>
 <context>

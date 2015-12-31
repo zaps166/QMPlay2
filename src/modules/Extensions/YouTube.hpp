@@ -22,7 +22,7 @@ class ResultsYoutube : public QTreeWidget
 public:
 	ResultsYoutube();
 
-	QList< int > itags;
+	QList< int > itags, itagsVideo, itagsAudio;
 private:
 	QTreeWidgetItem *getDefaultQuality( const QTreeWidgetItem *tWI );
 
@@ -83,6 +83,7 @@ private:
 	void setSearchResults( QString data );
 
 	QStringList getYouTubeVideo( const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL ); //jeżeli ( tWI == NULL ) to zwraca {URL, file_extension, TITLE}
+	QStringList getUrlByItagPriority( const QList< int > &itags, QStringList ret );
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
@@ -111,7 +112,8 @@ class YouTube : public QMPlay2Extensions
 public:
 	YouTube( Module &module );
 
-	static ItagNames getItagNames( const QStringList &itagList = QStringList() );
+	enum MediaType { MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO };
+	static ItagNames getItagNames( const QStringList &itagList, MediaType mediaType );
 
 	bool set();
 

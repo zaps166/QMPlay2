@@ -27,6 +27,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget( Module & );
 private slots:
+	void enableItagLists( bool b );
 	void browseYoutubedl();
 	void loginPasswordEnable( bool checked );
 	void passwordEdited();
@@ -38,10 +39,10 @@ private:
 	QCheckBox *exportCoversB;
 #endif
 
-	QCheckBox *additionalInfoB;
+	QCheckBox *additionalInfoB, *multiStreamB;
 	LineEdit *youtubedlE;
 	QToolButton *youtubedlBrowseB;
-	QListWidget *itagLW;
+	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
 
 	QCheckBox *downloadCoversB, *allowBigCovers, *updateNowPlayingAndScrobbleB;
 	LineEdit *loginE, *passwordE;

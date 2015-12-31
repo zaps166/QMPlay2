@@ -1,5 +1,4 @@
 Replace VideoFrame class with new, similar which will be compatible with FFmpeg ref. buffers
-Support for multiple streams (mainly YouTube A/V streams together)
 Better radio stations
 YouTube playlists
 

@@ -791,7 +791,7 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 							if ( ITAG == PARAM )
 							{
 								ret << URL << getFileExtension( itag_arr[ itag ] );
-								++i; //ensures end of loop
+								++i; //ensures end of the loop
 								break;
 							}
 							else if ( PARAM.isEmpty() )
@@ -814,24 +814,14 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 
 	if ( PARAM.isEmpty() && ret.count() >= 3 ) //Wyszukiwanie domyślnej jakości
 	{
-		foreach ( int itag, resultsW->itags )
+		if ( !resultsW->itags.isEmpty() )
+			ret = getUrlByItagPriority( resultsW->itags, ret );
+		else
 		{
-			bool br = false;
-			for ( int i = 2 ; i < ret.count() ; i += 3 )
-				if ( ret[ i ].toInt() == itag )
-				{
-					if ( i != 2 )
-					{
-						ret[ 0 ] = ret[ i-2 ];
-						ret[ 1 ] = ret[ i-1 ];
-					}
-					br = true;
-					break;
-				}
-			if ( br )
-				break;
+			const QStringList video = getUrlByItagPriority( resultsW->itagsVideo, ret );
+			const QStringList audio = getUrlByItagPriority( resultsW->itagsAudio, ret );
+			ret = QStringList() << "FFmpeg://{[" + video[ 0 ] + "][" + audio[ 0 ] + "]}" << "[" + video[ 1 ] + "][" + audio[ 1 ] + "]";
 		}
-		ret.erase( ret.begin()+2, ret.end() );
 	}
 
 	if ( tWI ) //Włącza item
@@ -860,16 +850,38 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 			ret << cantFindTheTitle;
 	}
 
-	if ( ret.count() == 3 && ret[ 0 ].contains( "ENCRYPTED" ) )
+	if ( ret.count() == 3 && ret.at( 0 ).contains( "ENCRYPTED" ) )
 	{
-		int itag_idx = ret[ 0 ].indexOf( "itag=" );
-		if ( itag_idx > -1 && !youtubedl_updating && youtube_dl->assign( new YouTubeDL( youtubedl ) ) )
+		if ( ret.at( 0 ).contains( "itag=" ) && !youtubedl_updating && youtube_dl->assign( new YouTubeDL( youtubedl ) ) )
 		{
-			QStringList ytdl_stdout = ( *youtube_dl )->exec( url, QStringList() << "-f" << QString::number( atoi( ret[ 0 ].mid( itag_idx + 5 ).toLatin1() ) ) );
-			if ( !ytdl_stdout.isEmpty() && !ytdl_stdout[ 0 ].isEmpty() )
-				ret[ 0 ] = ytdl_stdout[ 0 ];
-			else
+			int itagsCount = 0;
+			QString itags;
+			foreach ( const QString &ITAG, ret.at( 0 ).split( "itag=", QString::SkipEmptyParts ) )
+			{
+				const int itag = atoi( ITAG.toLatin1() );
+				if ( itag > 0 )
+				{
+					itags += QString::number( itag ) + ",";
+					++itagsCount;
+				}
+			}
+			itags.chop( 1 );
+
+			const QStringList ytdl_stdout = ( *youtube_dl )->exec( url, QStringList() << "-f" << itags );
+			if ( ytdl_stdout.count() != itagsCount )
 				ret.clear();
+			else
+			{
+				if ( itagsCount == 1 )
+					ret[ 0 ] = ytdl_stdout[ 0 ];
+				else
+				{
+					ret[ 0 ] = "FFmpeg://{";
+					foreach ( const QString &url, ytdl_stdout )
+						ret[ 0 ] += "[" + url + "]";
+					ret[ 0 ] += "}";
+				}
+			}
 			youtube_dl->clear();
 		}
 	}
@@ -888,6 +900,28 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 
 	return ret;
 }
+QStringList YouTubeW::getUrlByItagPriority( const QList< int > &itags, QStringList ret )
+{
+	foreach ( int itag, itags )
+	{
+		bool br = false;
+		for ( int i = 2 ; i < ret.count() ; i += 3 )
+			if ( ret[ i ].toInt() == itag )
+			{
+				if ( i != 2 )
+				{
+					ret[ 0 ] = ret[ i-2 ];
+					ret[ 1 ] = ret[ i-1 ];
+				}
+				br = true;
+				break;
+			}
+		if ( br )
+			break;
+	}
+	ret.erase( ret.begin()+2, ret.end() );
+	return ret;
+}
 
 /**/
 
@@ -896,7 +930,7 @@ YouTube::YouTube( Module &module )
 	SetModule( module );
 }
 
-ItagNames YouTube::getItagNames( const QStringList &itagList )
+ItagNames YouTube::getItagNames( const QStringList &itagList, MediaType mediaType )
 {
 	if ( itag_arr.isEmpty() )
 	{
@@ -944,14 +978,28 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 		itag_arr[ 250 ] = "Audio (Opus 70kbps)";
 		itag_arr[ 251 ] = "Audio (Opus 160kbps)";
 	}
+
 	ItagNames itagPair;
 	for ( QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd() ; it != it_end ; ++it )
 	{
+		switch ( mediaType )
+		{
+			case MEDIA_AV:
+				if ( it.value().startsWith( "Video" ) || it.value().startsWith( "Audio" ) )
+					continue;
+				break;
+			case MEDIA_VIDEO:
+				if ( !it.value().startsWith( "Video" ) )
+					continue;
+				break;
+			case MEDIA_AUDIO:
+				if ( !it.value().startsWith( "Audio" ) )
+					continue;
+				break;
+		}
 		itagPair.first += it.value();
 		itagPair.second += it.key();
 	}
-	itagPair.first.swap( itagPair.first.count() - 1, itagPair.first.count() - 3 );
-	itagPair.second.swap( itagPair.second.count() - 1, itagPair.second.count() - 3 );
 	for ( int i = 0, j = 0 ; i < itagList.count() ; ++i )
 	{
 		const int idx = itagPair.second.indexOf( itagList[ i ].toInt() );
@@ -967,8 +1015,19 @@ ItagNames YouTube::getItagNames( const QStringList &itagList )
 
 bool YouTube::set()
 {
-	w.resultsW->setColumnCount( sets().get( "YouTube/ShowAdditionalInfo" ).toBool() ? 3 : 1 );
-	w.resultsW->itags = getItagNames( sets().get( "YouTube/ItagList" ).toStringList() ).second;
+	w.resultsW->setColumnCount( sets().getBool( "YouTube/ShowAdditionalInfo" ) ? 3 : 1 );
+	if ( sets().getBool( "YouTube/MultiStream" ) )
+	{
+		w.resultsW->itagsVideo = getItagNames( sets().get( "YouTube/ItagVideoList" ).toStringList(), MEDIA_VIDEO ).second;
+		w.resultsW->itagsAudio = getItagNames( sets().get( "YouTube/ItagAudioList" ).toStringList(), MEDIA_AUDIO ).second;
+		w.resultsW->itags.clear();
+	}
+	else
+	{
+		w.resultsW->itagsVideo.clear();
+		w.resultsW->itagsAudio.clear();
+		w.resultsW->itags = getItagNames( sets().get( "YouTube/ItagList" ).toStringList(), MEDIA_AV ).second;
+	}
 	w.youtubedl = sets().getString( "YouTube/youtubedl" );
 	if ( w.youtubedl.isEmpty() )
 		w.youtubedl = "youtube-dl";
@@ -1003,7 +1062,7 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 				QByteArray replyData;
 				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* < 2 MiB */ )
 				{
-					QByteArray arr = reader->read( 4096 );
+					const QByteArray arr = reader->read( 4096 );
 					if ( !arr.size() )
 						break;
 					replyData += arr;

@@ -20,7 +20,10 @@ Extensions::Extensions() :
 	prostopleer.setText( "Path", ":/prostopleer" );
 
 	init( "YouTube/ShowAdditionalInfo", false );
+	init( "YouTube/MultiStream", true );
 	init( "YouTube/youtubedl", QString() );
+	init( "YouTube/ItagVideoList", QStringList() << "299" << "298" << "137" << "136" << "135" );
+	init( "YouTube/ItagAudioList", QStringList() << "251" << "171" << "141" );
 	init( "YouTube/ItagList", QStringList() << "22" << "43" << "18" );
 
 	init( "LastFM/DownloadCovers", true );
@@ -107,10 +110,18 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 
 	/**/
 
+	const ItagNames itagVideoNames = YouTube::getItagNames( sets().get( "YouTube/ItagVideoList" ).toStringList(), YouTube::MEDIA_VIDEO );
+	const ItagNames itagAudioNames = YouTube::getItagNames( sets().get( "YouTube/ItagAudioList" ).toStringList(), YouTube::MEDIA_AUDIO );
+	const ItagNames itagNames = YouTube::getItagNames( sets().get( "YouTube/ItagList" ).toStringList(), YouTube::MEDIA_AV );
+
 	QGroupBox *youTubeB = new QGroupBox( "YouTube" );
 
 	additionalInfoB = new QCheckBox( tr( "Pokazuj dodatkowe informacje wyszukiwania" ) );
 	additionalInfoB->setChecked( sets().getBool( "YouTube/ShowAdditionalInfo" ) );
+
+	multiStreamB = new QCheckBox( tr( "Użyj różnych strumieni obrazu i dźwięku" ) );
+	multiStreamB->setChecked( sets().getBool( "YouTube/MultiStream" ) );
+	connect( multiStreamB, SIGNAL( clicked( bool ) ), this, SLOT( enableItagLists( bool ) ) );
 
 	QLabel *youtubedlL = new QLabel( tr( "Ścieżka do programu 'youtube-dl'" ) + ": " );
 
@@ -123,26 +134,65 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	youtubedlBrowseB->setToolTip( tr( "Przeglądaj" ) );
 	connect( youtubedlBrowseB, SIGNAL( clicked() ), this, SLOT( browseYoutubedl() ) );
 
-	QLabel *itagL = new QLabel( tr( "Kolejność wybierania domyślnej jakości filmu" ) + ": " );
+
+	QWidget *itagW = new QWidget;
+
+	QLabel *itagL = new QLabel( tr( "Priorytet domyślnej jakości obrazu/dźwięku" ) + ": " );
 
 	itagLW = new QListWidget;
 	itagLW->setDragDropMode( QListWidget::InternalMove );
 	itagLW->setSelectionMode( QListWidget::ExtendedSelection );
-	ItagNames itagNames = YouTube::getItagNames( sets().get( "YouTube/ItagList" ).toStringList() );
-	while ( !itagNames.first.isEmpty() )
+
+	QLabel *itagVideoL = new QLabel( tr( "Priorytet domyślnej jakości obrazu" ) + ": " );
+
+	itagVideoLW = new QListWidget;
+	itagVideoLW->setDragDropMode( QListWidget::InternalMove );
+	itagVideoLW->setSelectionMode( QListWidget::ExtendedSelection );
+
+	QLabel *itagAudioL = new QLabel( tr( "Priorytet domyślnej jakości dźwięku" ) + ": " );
+
+	itagAudioLW = new QListWidget;
+	itagAudioLW->setDragDropMode( QListWidget::InternalMove );
+	itagAudioLW->setSelectionMode( QListWidget::ExtendedSelection );
+
+	for ( int i = 0 ; i < itagVideoNames.first.count() ; ++i )
+	{
+		QListWidgetItem *lWI = new QListWidgetItem( itagVideoLW );
+		lWI->setText( itagVideoNames.first[ i ] );
+		lWI->setData( Qt::UserRole, itagVideoNames.second[ i ] );
+	}
+	for ( int i = 0 ; i < itagAudioNames.first.count() ; ++i )
+	{
+		QListWidgetItem *lWI = new QListWidgetItem( itagAudioLW );
+		lWI->setText( itagAudioNames.first[ i ] );
+		lWI->setData( Qt::UserRole, itagAudioNames.second[ i ] );
+	}
+	for ( int i = 0 ; i < itagNames.first.count() ; ++i )
 	{
 		QListWidgetItem *lWI = new QListWidgetItem( itagLW );
-		lWI->setText( itagNames.first.takeFirst() );
-		lWI->setData( Qt::UserRole, itagNames.second.takeFirst() );
+		lWI->setText( itagNames.first[ i ] );
+		lWI->setData( Qt::UserRole, itagNames.second[ i ] );
 	}
+
+	enableItagLists( multiStreamB->isChecked() );
+
+	QGridLayout *itagLayout = new QGridLayout( itagW );
+	itagLayout->addWidget( itagVideoL, 0, 0, 1, 1 );
+	itagLayout->addWidget( itagVideoLW, 1, 0, 1, 1 );
+	itagLayout->addWidget( itagAudioL, 0, 1, 1, 1 );
+	itagLayout->addWidget( itagAudioLW, 1, 1, 1, 1 );
+	itagLayout->addWidget( itagL, 0, 2, 1, 1 );
+	itagLayout->addWidget( itagLW, 1, 2, 1, 1 );
+	itagLayout->setMargin( 0 );
+
 
 	layout = new QGridLayout( youTubeB );
 	layout->addWidget( additionalInfoB, 0, 0, 1, 3 );
-	layout->addWidget( youtubedlL, 1, 0, 1, 1 );
-	layout->addWidget( youtubedlE, 1, 1, 1, 1 );
-	layout->addWidget( youtubedlBrowseB, 1, 2, 1, 1 );
-	layout->addWidget( itagL, 2, 0, 1, 3 );
-	layout->addWidget( itagLW, 3, 0, 1, 3 );
+	layout->addWidget( multiStreamB, 1, 0, 1, 3 );
+	layout->addWidget( youtubedlL, 2, 0, 1, 1 );
+	layout->addWidget( youtubedlE, 2, 1, 1, 1 );
+	layout->addWidget( youtubedlBrowseB, 2, 2, 1, 1 );
+	layout->addWidget( itagW, 3, 0, 1, 3 );
 	layout->setMargin( 2 );
 
 	/**/
@@ -183,7 +233,6 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 
 	/**/
 
-
 	QGridLayout *mainLayout = new QGridLayout( this );
 	mainLayout->setProperty( "NoVHSpacer", true );
 #ifdef USE_MPRIS2
@@ -193,6 +242,12 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	mainLayout->addWidget( lastFMB );
 }
 
+void ModuleSettingsWidget::enableItagLists( bool b )
+{
+	itagVideoLW->setEnabled( b );
+	itagAudioLW->setEnabled( b );
+	itagLW->setDisabled( b );
+}
 void ModuleSettingsWidget::browseYoutubedl()
 {
 	const QString filePath = QFileDialog::getOpenFileName( this, tr( "Wybierz program 'youtube-dl'" ), QMPlay2Core.getQMPlay2Dir() );
@@ -217,10 +272,18 @@ void ModuleSettingsWidget::saveSettings()
 #endif
 
 	sets().set( "YouTube/ShowAdditionalInfo", additionalInfoB->isChecked() );
+	sets().set( "YouTube/MultiStream", multiStreamB->isChecked() );
 	sets().set( "YouTube/youtubedl", youtubedlE->text() );
-	QStringList itags;
+
+	QStringList itagsVideo, itagsAudio, itags;
+	for ( int i = 0 ; i < itagVideoLW->count() ; ++i )
+		itagsVideo += itagVideoLW->item( i )->data( Qt::UserRole ).toString();
+	for ( int i = 0 ; i < itagAudioLW->count() ; ++i )
+		itagsAudio += itagAudioLW->item( i )->data( Qt::UserRole ).toString();
 	for ( int i = 0 ; i < itagLW->count() ; ++i )
 		itags += itagLW->item( i )->data( Qt::UserRole ).toString();
+	sets().set( "YouTube/ItagVideoList", itagsVideo );
+	sets().set( "YouTube/ItagAudioList", itagsAudio );
 	sets().set( "YouTube/ItagList", itags );
 
 	sets().set( "LastFM/DownloadCovers", downloadCoversB->isChecked() );
