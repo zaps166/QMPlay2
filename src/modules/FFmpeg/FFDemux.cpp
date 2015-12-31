@@ -182,7 +182,7 @@ void FFDemux::addFormatContext( const QString &url )
 	{
 		{
 			QMutexLocker mL( &mutex );
-			formatContexts.erase( formatContexts.end() );
+			formatContexts.erase( formatContexts.end() - 1 );
 		}
 		delete fmtCtx;
 	}
