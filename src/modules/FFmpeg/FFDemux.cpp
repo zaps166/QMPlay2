@@ -2,6 +2,7 @@
 #include <FFCommon.hpp>
 #include <FormatContext.hpp>
 
+#include <Functions.hpp>
 #include <Packet.hpp>
 
 #include <QDebug>
@@ -153,18 +154,19 @@ void FFDemux::abort()
 		fmtCtx->abort();
 }
 
-bool FFDemux::open( const QString &url )
+bool FFDemux::open( const QString &entireUrl )
 {
-	const int idx = url.indexOf( "://" );
-	if ( idx < 0 )
-		return false;
-	if ( url.left( idx ) != DemuxerName )
-		addFormatContext( url );
-	else foreach ( QString stream, url.right( url.length() - idx - 3 ).split( "][", QString::SkipEmptyParts ) )
+	QString prefix, url;
+	if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( entireUrl, &prefix, &url ) )
+		addFormatContext( entireUrl );
+	else if ( prefix == DemuxerName )
 	{
-		stream.remove( '[' );
-		stream.remove( ']' );
-		addFormatContext( stream );
+		foreach ( QString stream, url.split( "][", QString::SkipEmptyParts ) )
+		{
+			stream.remove( '[' );
+			stream.remove( ']' );
+			addFormatContext( stream );
+		}
 	}
 	return !formatContexts.isEmpty();
 }

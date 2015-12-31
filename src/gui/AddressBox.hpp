@@ -8,7 +8,7 @@ class AddressBox : public QWidget
 {
 	Q_OBJECT
 public:
-	enum PrefixType { DIRECT = 'A', DEMUXER = 'D', GUI_EXT = 'G' };
+	enum PrefixType { DIRECT = 'A', MODULE = 'M' };
 
 	AddressBox( Qt::Orientation, QString url = QString() );
 

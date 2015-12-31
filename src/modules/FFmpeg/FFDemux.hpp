@@ -35,7 +35,7 @@ private:
 
 	/**/
 
-	void addFormatContext( const QString &url );
+	void addFormatContext( const QString &entireUrl );
 
 	QVector< FormatContext * > formatContexts;
 

@@ -1,5 +1,6 @@
 #include <ToneGenerator.hpp>
 
+#include <Functions.hpp>
 #include <Packet.hpp>
 
 #include <QUrl>
@@ -90,7 +91,7 @@ bool ToneGenerator::read( Packet &decoded, int &idx )
 
 	for ( uint i = 0 ; i < srate * chn ; i += chn )
 		for ( int c = 0 ; c < chn ; ++c )
-			samples[ i+c ] = sin( 2.0 * M_PI * freqs[ c ] * i / srate / chn ); //don't use sinf()!
+			samples[ i + c ] = sin( 2.0 * M_PI * freqs[ c ] * i / srate / chn ); //don't use sinf()!
 
 	idx = 0;
 	decoded.ts = pos;
@@ -104,11 +105,13 @@ void ToneGenerator::abort()
 	aborted = true;
 }
 
-bool ToneGenerator::open( const QString &_url )
+bool ToneGenerator::open( const QString &entireUrl )
 {
-	if ( _url.indexOf( ToneGeneratorName "://" ) != 0 )
+	QString prefix, _url;
+	if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( entireUrl, &prefix, &_url ) || prefix != ToneGeneratorName )
 		return false;
-	QUrl url( "?" + QString( _url ).remove( 0, QString( ToneGeneratorName "://" ).length() ) );
+
+	const QUrl url( "?" + _url );
 
 	if ( !( fromUrl = url.toString() != "?" ) )
 	{

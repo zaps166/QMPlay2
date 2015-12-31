@@ -22,12 +22,12 @@ AddressBox::AddressBox( Qt::Orientation o, QString url )
 					icon = QPixmap::fromImage( module->image() );
 				else
 					icon = QMPlay2Core.getQMPlay2Pixmap();
-				pB.addItem( icon, mod.name, DEMUXER );
+				pB.addItem( icon, mod.name, MODULE );
 			}
 
 	foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
 		foreach ( const QMPlay2Extensions::AddressPrefix &addressPrefix, QMPlay2Ext->addressPrefixList() )
-			pB.addItem( QPixmap::fromImage( addressPrefix.img ), addressPrefix, GUI_EXT );
+			pB.addItem( QPixmap::fromImage( addressPrefix.img ), addressPrefix, MODULE );
 
 	if ( !url.isEmpty() )
 	{
@@ -86,11 +86,7 @@ QString AddressBox::url() const
 	{
 		case AddressBox::DIRECT:
 			return filePrefix + cleanUrl();
-		case AddressBox::DEMUXER:
-			if ( pE.text().isEmpty() )
-				return pB.currentText() + "://" + filePrefix + cleanUrl();
-			//don't break!
-		case AddressBox::GUI_EXT:
+		case AddressBox::MODULE:
 			return pB.currentText() + "://{" + filePrefix + cleanUrl() + "}" + pE.text();
 	}
 	return QString();
