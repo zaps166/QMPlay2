@@ -35,6 +35,8 @@ private:
 
 	/**/
 
+	void addFormatContext( const QString &url );
+
 	QVector< FormatContext * > formatContexts;
 
 	QMutex &avcodec_mutex;
