@@ -272,7 +272,7 @@ void DownloaderThread::listSlot( int param, qint64 val, const QString &filePath 
 		case SET_SPEED:
 			downloadItemW->setSpeed( val );
 			break;
-		case DOWNLOADERROR:
+		case DOWNLOAD_ERROR:
 			downloadItemW->error();
 			break;
 		case FINISH:
@@ -363,7 +363,7 @@ void DownloaderThread::run()
 			speedT.start();
 			while ( !reader.isAborted() && !( err = !reader->readyRead() ) && !reader->atEnd() )
 			{
-				QByteArray arr = reader->read( 16384 );
+				const QByteArray arr = reader->read( 16384 );
 				if ( arr.size() )
 				{
 					if ( file.write( arr ) != arr.size() )
@@ -401,7 +401,7 @@ void DownloaderThread::run()
 		file.close();
 		reader.clear();
 	}
-	emit listSig( err ? DOWNLOADERROR : FINISH );
+	emit listSig( err ? DOWNLOAD_ERROR : FINISH );
 
 	QMPlay2Core.setWorking( false );
 }

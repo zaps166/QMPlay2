@@ -814,7 +814,7 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 
 	if ( PARAM.isEmpty() && ret.count() >= 3 ) //Wyszukiwanie domyślnej jakości
 	{
-		if ( !resultsW->itags.isEmpty() )
+		if ( !multiStream )
 			ret = getUrlByItagPriority( resultsW->itags, ret );
 		else
 		{
@@ -1016,18 +1016,10 @@ ItagNames YouTube::getItagNames( const QStringList &itagList, MediaType mediaTyp
 bool YouTube::set()
 {
 	w.resultsW->setColumnCount( sets().getBool( "YouTube/ShowAdditionalInfo" ) ? 3 : 1 );
-	if ( sets().getBool( "YouTube/MultiStream" ) )
-	{
-		w.resultsW->itagsVideo = getItagNames( sets().get( "YouTube/ItagVideoList" ).toStringList(), MEDIA_VIDEO ).second;
-		w.resultsW->itagsAudio = getItagNames( sets().get( "YouTube/ItagAudioList" ).toStringList(), MEDIA_AUDIO ).second;
-		w.resultsW->itags.clear();
-	}
-	else
-	{
-		w.resultsW->itagsVideo.clear();
-		w.resultsW->itagsAudio.clear();
-		w.resultsW->itags = getItagNames( sets().get( "YouTube/ItagList" ).toStringList(), MEDIA_AV ).second;
-	}
+	w.resultsW->itagsVideo = getItagNames( sets().get( "YouTube/ItagVideoList" ).toStringList(), MEDIA_VIDEO ).second;
+	w.resultsW->itagsAudio = getItagNames( sets().get( "YouTube/ItagAudioList" ).toStringList(), MEDIA_AUDIO ).second;
+	w.resultsW->itags = getItagNames( sets().get( "YouTube/ItagList" ).toStringList(), MEDIA_AV ).second;
+	w.multiStream = sets().getBool( "YouTube/MultiStream" );
 	w.youtubedl = sets().getString( "YouTube/youtubedl" );
 	if ( w.youtubedl.isEmpty() )
 		w.youtubedl = "youtube-dl";
@@ -1069,7 +1061,11 @@ void YouTube::convertAddress( const QString &prefix, const QString &url, const Q
 				}
 				reader.clear();
 
+				const bool multiStream = w.multiStream;
+				if ( extension ) //Don't use multi stream when downloading
+					w.multiStream = false;
 				const QStringList youTubeVideo = w.getYouTubeVideo( replyData, param, NULL, url, ioCtrl->toPtr< YouTubeDL >() );
+				w.multiStream = multiStream;
 				if ( youTubeVideo.count() == 3 )
 				{
 					if ( stream_url )
