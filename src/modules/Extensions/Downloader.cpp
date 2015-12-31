@@ -580,6 +580,10 @@ QAction *Downloader::getAction( const QString &name, int, const QString &url, co
 {
 	if ( url.startsWith( "file://" ) )
 		return NULL;
+	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
+		foreach ( const Module::Info &mod, module->getModulesInfo() )
+			if ( mod.type == Module::DEMUXER && mod.name == prefix )
+				return NULL;
 	QAction *act = new QAction( DownloaderW::tr( "Pobierz" ), NULL );
 	act->setIcon( QIcon( ":/downloader" ) );
 	act->connect( act, SIGNAL( triggered() ), w, SLOT( download() ) );
