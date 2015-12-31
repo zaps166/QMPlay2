@@ -84,7 +84,7 @@ void Inputs::add()
 {
 	QWidget *parent = qobject_cast< QWidget * >( sender()->parent() );
 	AddD d( *this, parent );
-	QString params = d.execAndGet();
+	const QString params = d.execAndGet();
 	if ( !params.isEmpty() )
 		emit QMPlay2Core.processParam( "open", ToneGeneratorName "://" + params );
 }
@@ -191,7 +191,7 @@ void AddD::save()
 QString AddD::execAndGet()
 {
 	if ( exec() == QDialog::Accepted )
-		return "samplerate=" + QString::number( getSampleRate() ) + "&freqs=" + getFreqs();
+		return "{samplerate=" + QString::number( getSampleRate() ) + "&freqs=" + getFreqs() + "}";
 	return QString();
 }
 
@@ -206,7 +206,7 @@ void AddD::channelsChanged( int c )
 void AddD::add()
 {
 	save();
-	emit QMPlay2Core.processParam( "open", ToneGeneratorName "://" );
+	emit QMPlay2Core.processParam( "open", ToneGeneratorName "://{}" );
 }
 
 /**/
