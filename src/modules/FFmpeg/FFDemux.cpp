@@ -175,13 +175,15 @@ bool FFDemux::open( const QString &entireUrl )
 	return !formatContexts.isEmpty();
 }
 
-void FFDemux::addFormatContext( const QString &url )
+void FFDemux::addFormatContext( QString url )
 {
 	FormatContext *fmtCtx = new FormatContext( avcodec_mutex );
 	{
 		QMutexLocker mL( &mutex );
 		formatContexts.append( fmtCtx );
 	}
+	if ( !url.contains( "://" ) )
+		url.prepend( "file://" );
 	if ( fmtCtx->open( url ) )
 		streams_info.append( fmtCtx->streamsInfo );
 	else
