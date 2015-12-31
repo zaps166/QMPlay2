@@ -287,10 +287,11 @@ bool FormatContext::seek( int pos )
 	{
 		if ( pos < 0 )
 			pos = 0;
-		else if ( length() > 0 && pos >= length() )
+		else
 		{
-			abort();
-			return true;
+			const double len = length();
+			if ( len > 0 && pos > len )
+				pos = len;
 		}
 		pos += startTime;
 		const bool backward = pos < currPos;
