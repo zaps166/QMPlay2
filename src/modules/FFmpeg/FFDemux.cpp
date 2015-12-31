@@ -92,21 +92,25 @@ QByteArray FFDemux::image( bool forceCopy ) const
 
 bool FFDemux::localStream() const
 {
-//	return false; //For testing
 	foreach ( FormatContext *fmtCtx, formatContexts )
 		if ( !fmtCtx->isLocal )
 			return false;
 	return true;
 }
 
-bool FFDemux::seek( int val )
+bool FFDemux::seek( int pos )
 {
-	foreach ( FormatContext *fmtCtx, formatContexts )
-		if ( fmtCtx->isStreamed )
-			return false;
 	bool seeked = false;
 	foreach ( FormatContext *fmtCtx, formatContexts )
-		seeked |= fmtCtx->seek( val );
+	{
+		if ( fmtCtx->seek( pos ) )
+			seeked |= true;
+		else if ( fmtCtx->isStreamed && formatContexts.count() > 1 )
+		{
+			fmtCtx->setStreamOffset( pos );
+			seeked |= true;
+		}
+	}
 	return seeked;
 }
 bool FFDemux::read( Packet &encoded, int &idx )
@@ -114,7 +118,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 	int fmtCtxIdx = -1;
 	int numErrors = 0;
 
-	TimeStamp ts;
+	double ts;
 	for ( int i = 0 ; i < formatContexts.count() ; ++i )
 	{
 		FormatContext *fmtCtx = formatContexts.at( i );
@@ -123,9 +127,9 @@ bool FFDemux::read( Packet &encoded, int &idx )
 			++numErrors;
 			continue;
 		}
-		if ( fmtCtxIdx < 0 || fmtCtx->lastTS < ts )
+		if ( fmtCtxIdx < 0 || fmtCtx->currPos < ts )
 		{
-			ts = fmtCtx->lastTS;
+			ts = fmtCtx->currPos;
 			fmtCtxIdx = i;
 		}
 	}

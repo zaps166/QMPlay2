@@ -22,16 +22,16 @@ private:
 	bool getReplayGain( bool album, float &gain_db, float &peak ) const;
 	double length() const;
 	int bitrate() const;
-	QByteArray image( bool ) const;
+	QByteArray image( bool forceCopy ) const;
 
 	bool localStream() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek( int pos );
+	bool read( Packet &encoded, int &idx );
 	void pause();
 	void abort();
 
-	bool open( const QString & );
+	bool open( const QString &entireUrl );
 
 	/**/
 

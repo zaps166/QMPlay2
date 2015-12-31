@@ -50,15 +50,19 @@ public:
 
 	bool open( const QString &_url );
 
+	void setStreamOffset( double offset );
+
 	bool isLocal, isStreamed, isError;
 	StreamsInfo streamsInfo;
-	TimeStamp lastTS;
+	double currPos;
 private:
 	StreamInfo *getStreamInfo( AVStream *stream ) const;
 	AVDictionary *getMetadata() const;
 
 	QVector< int > index_map;
-	QList< AVStream * > streams;
+	QVector< AVStream * > streams;
+	QVector< TimeStamp > streamsTS;
+	QVector< double > streamsOffset;
 	AVFormatContext *formatCtx;
 	AVPacket *packet;
 

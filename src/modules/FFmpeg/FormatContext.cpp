@@ -79,6 +79,7 @@ private:
 
 FormatContext::FormatContext( QMutex &avcodec_mutex ) :
 	isError( false ),
+	currPos( 0.0 ),
 	formatCtx( NULL ),
 	packet( NULL ),
 	isPaused( false ), isAborted( false ), fixMkvAss( false ),
@@ -86,9 +87,7 @@ FormatContext::FormatContext( QMutex &avcodec_mutex ) :
 	lastTime( 0.0 ),
 	lastErr( 0 ),
 	avcodec_mutex( avcodec_mutex )
-{
-	lastTS.set( 0.0, 0.0 );
-}
+{}
 FormatContext::~FormatContext()
 {
 	if ( formatCtx )
@@ -294,7 +293,7 @@ bool FormatContext::seek( int pos )
 			return true;
 		}
 		pos += startTime;
-		const bool backward = pos < lastTS;
+		const bool backward = pos < currPos;
 #ifndef MP3_FAST_SEEK
 		if ( seekByByteOffset < 0 )
 #endif
@@ -305,7 +304,9 @@ bool FormatContext::seek( int pos )
 #endif
 		if ( isOk )
 		{
-			lastTS = pos;
+			for ( int i = 0 ; i < streamsTS.count() ; ++i )
+				streamsTS[ i ] = pos;
+			currPos = pos;
 			isError = false;
 		}
 	}
@@ -414,15 +415,22 @@ bool FormatContext::read( Packet &encoded, int &idx )
 
 	if ( packet->duration > 0 )
 		encoded.duration = packet->duration * time_base;
-	else if ( !encoded.ts || ( encoded.duration = encoded.ts - lastTS ) < 0.0 /* Calculate packet duration if doesn't exists */ )
+	else if ( !encoded.ts || ( encoded.duration = encoded.ts - streamsTS[ ff_idx ] ) < 0.0 /* Calculate packet duration if doesn't exists */ )
 		encoded.duration = 0.0;
-	lastTS = encoded.ts;
+	streamsTS[ ff_idx ] = encoded.ts;
 
-	if ( isStreamed && isOneStreamOgg )
+	if ( isStreamed )
 	{
-		encoded.ts = lastTime;
-		lastTime += encoded.duration;
+		if ( !isOneStreamOgg )
+			encoded.ts += streamsOffset.at( ff_idx );
+		else
+		{
+			encoded.ts = lastTime;
+			lastTime += encoded.duration;
+		}
 	}
+
+	currPos = encoded.ts;
 
 	encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
 	if ( streams[ ff_idx ]->sample_aspect_ratio.num )
@@ -518,6 +526,8 @@ bool FormatContext::open( const QString &_url )
 		startTime = 0.0;
 
 	index_map.resize( formatCtx->nb_streams );
+	streamsTS.resize( formatCtx->nb_streams );
+	streamsOffset.resize( formatCtx->nb_streams );
 	for ( unsigned i = 0 ; i < formatCtx->nb_streams ; ++i )
 	{
 		StreamInfo *streamInfo = getStreamInfo( formatCtx->streams[ i ] );
@@ -534,6 +544,10 @@ bool FormatContext::open( const QString &_url )
 		formatCtx->streams[ i ]->event_flags = 0;
 #endif
 		streams += formatCtx->streams[ i ];
+
+		TimeStamp ts;
+		ts.set( 0.0, 0.0 );
+		streamsTS[ i ] = ts;
 	}
 	if ( streamsInfo.isEmpty() )
 		return false;
@@ -563,6 +577,14 @@ bool FormatContext::open( const QString &_url )
 	packet = FFCommon::createAVPacket();
 
 	return true;
+}
+
+void FormatContext::setStreamOffset( double offset )
+{
+	if ( isOneStreamOgg )
+		lastTime = offset;
+	else for ( int i = 0 ; i < streamsOffset.count() ; ++i )
+		streamsOffset[ i ] = offset - streamsTS.at( i );
 }
 
 /**/
