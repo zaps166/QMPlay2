@@ -5,17 +5,11 @@
 #include <Writer.hpp>
 #include <Main.hpp>
 
+#include <Functions.hpp>
 #include <SubsDec.hpp>
 #include <Demuxer.hpp>
 #include <Decoder.hpp>
 #include <Reader.hpp>
-
-#include <Functions.hpp>
-using Functions::Url;
-using Functions::gettime;
-using Functions::filePath;
-using Functions::fileName;
-using Functions::sizeString;
 
 #include <QCryptographicHash>
 #include <QCoreApplication>
@@ -91,7 +85,7 @@ void DemuxerThr::loadImage()
 		{
 			if ( img.isNull() && url.startsWith( "file://" ) && QMPlay2Core.getSettings().getBool( "ShowDirCovers" ) ) //Ładowanie okładki z katalogu
 			{
-				const QString directory = filePath( url.mid( 7 ) );
+				const QString directory = Functions::filePath( url.mid( 7 ) );
 				foreach ( const QString &cover, QDir( directory ).entryList( QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files ) )
 				{
 					const QString coverPath = directory + cover;
@@ -183,13 +177,13 @@ void DemuxerThr::run()
 	foreach ( StreamInfo *streamInfo, demuxer->streamsInfo() )
 		if ( streamInfo->type == QMPLAY2_TYPE_VIDEO ) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
 		{
-			QString directory = filePath( url.mid( 7 ) );
-			QString fName = fileName( url, false ).replace( '_', ' ' );
+			QString directory = Functions::filePath( url.mid( 7 ) );
+			QString fName = Functions::fileName( url, false ).replace( '_', ' ' );
 			foreach ( const QString &subsFile, QDir( directory ).entryList( filter, QDir::Files ) )
 			{
-				if ( fileName( subsFile, false ).replace( '_', ' ' ).contains( fName, Qt::CaseInsensitive ) )
+				if ( Functions::fileName( subsFile, false ).replace( '_', ' ' ).contains( fName, Qt::CaseInsensitive ) )
 				{
-					QString fileSubsUrl = Url( directory + subsFile );
+					const QString fileSubsUrl = Functions::Url( directory + subsFile );
 					if ( !playC.fileSubsList.contains( fileSubsUrl ) )
 						playC.fileSubsList += fileSubsUrl;
 				}
@@ -201,7 +195,7 @@ void DemuxerThr::run()
 	if ( err || demuxer.isAborted() )
 		return end();
 
-	updatePlayingName = name.isEmpty() ? fileName( url, false ) : name;
+	updatePlayingName = name.isEmpty() ? Functions::fileName( url, false ) : name;
 
 	if ( playC.videoStream > -1 )
 		playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[ playC.videoStream ]->FPS;
@@ -234,7 +228,7 @@ void DemuxerThr::run()
 	const bool localStream = demuxer->localStream();
 	int forwardPackets = demuxer->dontUseBuffer() ? 1 : ( localStream ? minBuffSizeLocal : minBuffSizeNetwork ), backwardPackets;
 	bool paused = false, demuxerPaused = false, waitingForFillBufferB = false;
-	double time = localStream ? 0.0 : gettime(), updateBufferedTime = 0.0;
+	double time = localStream ? 0.0 : Functions::gettime(), updateBufferedTime = 0.0;
 	BufferInfo bufferInfo;
 	int vS, aS;
 
@@ -293,7 +287,7 @@ void DemuxerThr::run()
 				{
 					mustSeek = false;
 					flush = true;
-					time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
+					time = Functions::gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 					if ( aThr )
 						aLocked = aThr->lock();
 					if ( vThr )
@@ -363,7 +357,7 @@ void DemuxerThr::run()
 			playC.emptyBufferCond.wakeAll();
 		}
 
-		bool updateBuffered = localStream ? false : ( gettime() - time >= updateBufferedTime );
+		bool updateBuffered = localStream ? false : ( Functions::gettime() - time >= updateBufferedTime );
 		getAVBuffersSize( vS, aS, ( updateBuffered || playC.waitForData ) ? &bufferInfo : NULL );
 		if ( playC.endOfStream && !vS && !aS && canBreak( aThr, vThr ) )
 			break;
@@ -377,7 +371,7 @@ void DemuxerThr::run()
 			waitingForFillBufferB = true;
 			if ( updateBufferedTime < 1.0 )
 				updateBufferedTime += 0.25;
-			time = gettime();
+			time = Functions::gettime();
 		}
 		else if ( localStream && demuxer->metadataChanged() )
 			updateCoverAndPlaying();
@@ -414,7 +408,7 @@ void DemuxerThr::run()
 			//po zakończeniu buforowania należy odświeżyć informacje o buforowaniu
 			if ( paused && !waitingForFillBufferB && !playC.fillBufferB )
 			{
-				time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
+				time = Functions::gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 				waitingForFillBufferB = true;
 				continue;
 			}
@@ -474,7 +468,7 @@ void DemuxerThr::run()
 			{
 				playC.endOfStream = true;
 				if ( !localStream )
-					time = gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
+					time = Functions::gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
 			}
 			else
 				break;
@@ -590,8 +584,8 @@ void DemuxerThr::emitInfo()
 	else
 	{
 		const QString pth = url.right( url.length() - 7 );
-		info += "<b>" + tr( "Ścieżka do pliku" ) + ": </b> " + filePath( pth ) + "<br/>";
-		info += "<b>" + tr( "Nazwa pliku" ) + ": </b> " + fileName( pth ) + "<br/>";
+		info += "<b>" + tr( "Ścieżka do pliku" ) + ": </b> " + Functions::filePath( pth ) + "<br/>";
+		info += "<b>" + tr( "Nazwa pliku" ) + ": </b> " + Functions::fileName( pth ) + "<br/>";
 	}
 
 	if ( demuxer->bitrate() > 0 )
@@ -699,7 +693,7 @@ void DemuxerThr::emitInfo()
 			case QMPLAY2_TYPE_ATTACHMENT:
 			{
 				attachmentStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-				attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + sizeString( streamInfo->data.size() ) + "</li>";
+				attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + Functions::sizeString( streamInfo->data.size() ) + "</li>";
 				attachmentStreams += "</ul>";
 			} break;
 			default:
@@ -709,7 +703,7 @@ void DemuxerThr::emitInfo()
 	}
 	i = 0;
 	foreach ( const QString &fName, playC.fileSubsList )
-		addSubtitleStream( fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), fileName( fName ) );
+		addSubtitleStream( fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName( fName ) );
 
 	if ( !videoStreams.isEmpty() )
 		info += "<p style='margin-bottom: 0px;'><b><big>" + tr( "Strumienie obrazu" ) + ":</big></b></p>" + videoStreams;
@@ -722,7 +716,7 @@ void DemuxerThr::emitInfo()
 
 	emit playC.setInfo( info, videoPlaying, audioPlaying );
 	emit playC.updateCurrentEntry( formatTitle, demuxer->length() );
-	emit playC.updateWindowTitle( formatTitle.isEmpty() ? fileName( url, false ) : formatTitle );
+	emit playC.updateWindowTitle( formatTitle.isEmpty() ? Functions::fileName( url, false ) : formatTitle );
 }
 
 bool DemuxerThr::mustReloadStreams()
