@@ -578,12 +578,14 @@ void DemuxerThr::emitInfo()
 	if ( !info.isEmpty() )
 		info += "<br/>";
 
-	Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, &url, NULL );
-	if ( !url.startsWith( "file://" ) )
-		info += "<b>" + tr( "Adres" ) + ":</b> " + url + "<br>";
+	QString realUrl;
+	if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, &realUrl, NULL ) )
+		realUrl = url;
+	if ( !realUrl.startsWith( "file://" ) )
+		info += "<b>" + tr( "Adres" ) + ":</b> " + realUrl + "<br>";
 	else
 	{
-		const QString pth = url.right( url.length() - 7 );
+		const QString pth = realUrl.right( realUrl.length() - 7 );
 		info += "<b>" + tr( "Ścieżka do pliku" ) + ": </b> " + Functions::filePath( pth ) + "<br/>";
 		info += "<b>" + tr( "Nazwa pliku" ) + ": </b> " + Functions::fileName( pth ) + "<br/>";
 	}
