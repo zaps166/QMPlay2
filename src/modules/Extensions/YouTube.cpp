@@ -100,26 +100,48 @@ public:
 			QStringList paramList = QStringList() << "-e";
 			if ( !param.isEmpty() )
 				paramList << "-f" << param;
-			const QStringList ytdl_stdout = exec( url, paramList );
+			QStringList ytdl_stdout = exec( url, paramList );
 			if ( !ytdl_stdout.isEmpty() )
 			{
-				QString tmp_url = ytdl_stdout.size() == 1 ? ytdl_stdout[ 0 ] : ytdl_stdout[ 1 ];
+				QString title;
+				if ( ytdl_stdout.count() > 1 && !ytdl_stdout.at( 0 ).contains( "://" ) )
+					title = ytdl_stdout.takeFirst();
 				if ( stream_url )
-					*stream_url = tmp_url;
-				if ( name && ytdl_stdout.size() > 1 )
-					*name = ytdl_stdout[ 0 ];
+				{
+					if ( ytdl_stdout.count() == 1 )
+						*stream_url = ytdl_stdout.at( 0 );
+					else
+					{
+						*stream_url = "FFmpeg://{";
+						foreach ( const QString &tmpUrl, ytdl_stdout )
+							*stream_url += "[" + tmpUrl + "]";
+						*stream_url += "}";
+					}
+				}
+				if ( name && !title.isEmpty() )
+					*name = title;
 				if ( extension )
 				{
-					if ( tmp_url.contains( ".mp4" ) )
-						*extension = ".mp4";
-					else if ( tmp_url.contains( ".webm" ) )
-						*extension = ".webm";
-					else if ( tmp_url.contains( ".mkv" ) )
-						*extension = ".mkv";
-					else if ( tmp_url.contains( ".mpg" ) )
-						*extension = ".mpg";
-					else if ( tmp_url.contains( ".mpeg" ) )
-						*extension = ".mpeg";
+					QStringList extensions;
+					foreach ( const QString &tmpUrl, ytdl_stdout )
+					{
+						if ( tmpUrl.contains( "mp4" ) )
+							extensions += ".mp4";
+						else if ( tmpUrl.contains( "webm" ) )
+							extensions += ".webm";
+						else if ( tmpUrl.contains( "mkv" ) )
+							extensions += ".mkv";
+						else if ( tmpUrl.contains( "mpg" ) )
+							extensions += ".mpg";
+						else if ( tmpUrl.contains( "mpeg" ) )
+							extensions += ".mpeg";
+						else if ( tmpUrl.contains( "flv" ) )
+							extensions += ".flv";
+					}
+					if ( extensions.count() == 1 )
+						*extension = extensions.at( 0 );
+					else foreach ( const QString &tmpExt, extensions )
+						*extension += "[" + tmpExt + "]";
 				}
 			}
 		}
