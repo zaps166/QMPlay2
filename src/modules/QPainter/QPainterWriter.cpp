@@ -14,8 +14,8 @@ using Functions::aligned;
 Drawable::Drawable(QPainterWriter &writer) :
 	writer(writer)
 {
+	setAttribute(Qt::WA_OpaquePaintEvent);
 	grabGesture(Qt::PinchGesture);
-	setAutoFillBackground(true);
 	setMouseTracking(true);
 }
 Drawable::~Drawable()
