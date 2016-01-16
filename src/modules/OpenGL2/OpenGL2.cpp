@@ -7,6 +7,9 @@ OpenGL2::OpenGL2() :
 	moduleImg = QImage(":/OpenGL2");
 
 	init("Enabled", true);
+#ifdef OPENGL_NEW_API
+	init("ForceRtt", false);
+#endif
 #ifdef VSYNC_SETTINGS
 	init("VSync", true);
 #endif
@@ -44,6 +47,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB = new QCheckBox(tr("Włączony"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
+#ifdef OPENGL_NEW_API
+	forceRttB = new QCheckBox(tr("Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)"));
+	forceRttB->setChecked(sets().getBool("ForceRtt"));
+#endif
+
 #ifdef VSYNC_SETTINGS
 	vsyncB = new QCheckBox(tr("Synchronizacja pionowa") +  " (VSync)");
 	vsyncB->setChecked(sets().getBool("VSync"));
@@ -51,6 +59,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(enabledB);
+#ifdef OPENGL_NEW_API
+	layout->addWidget(forceRttB);
+#endif
 #ifdef VSYNC_SETTINGS
 	layout->addWidget(vsyncB);
 #endif
@@ -59,6 +70,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", enabledB->isChecked());
+#ifdef OPENGL_NEW_API
+	sets().set("ForceRtt", forceRttB->isChecked());
+#endif
 #ifdef VSYNC_SETTINGS
 	sets().set("VSync", vsyncB->isChecked());
 #endif

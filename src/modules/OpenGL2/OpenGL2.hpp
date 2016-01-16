@@ -26,6 +26,9 @@ private:
 	void saveSettings();
 
 	QCheckBox *enabledB;
+#ifdef OPENGL_NEW_API
+	QCheckBox *forceRttB;
+#endif
 #ifdef VSYNC_SETTINGS
 	QCheckBox *vsyncB;
 #endif

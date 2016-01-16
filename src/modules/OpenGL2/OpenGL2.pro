@@ -22,16 +22,18 @@ RESOURCES += icon.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += OpenGL2Writer.hpp OpenGL2.hpp
-SOURCES += OpenGL2Writer.cpp OpenGL2.cpp
+HEADERS += OpenGL2.hpp OpenGL2Writer.hpp OpenGL2Common.hpp
+SOURCES += OpenGL2.cpp OpenGL2Writer.cpp OpenGL2Common.cpp
 
-#If you want to use QOpenGLWidget instead of QGLWidget (only Qt5, recommended for Wayland), replace first ":" by "|".
-#It is not recommended for Windows and X11, but it works quite good since Qt 5.6.
-greaterThan(QT_MAJOR_VERSION, 4):android: {
-	DEFINES += USE_NEW_OPENGL_API
-	DEFINES += QGLWidget=QOpenGLWidget QGLShaderProgram=QOpenGLShaderProgram QGLShader=QOpenGLShader
+greaterThan(QT_VERSION, 5.5.2) { #At least Qt 5.6.0
+	DEFINES += OPENGL_NEW_API VSYNC_SETTINGS
+	HEADERS += OpenGL2Window.hpp OpenGL2Widget.hpp OpenGL2CommonQt5.hpp
+	SOURCES += OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp
 } else {
 	QT += opengl
+	HEADERS += OpenGL2OldWidget.hpp
+	SOURCES += OpenGL2OldWidget.cpp
 	win32|unix:!macx:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
 }
+
 contains(QT_CONFIG, opengles2): DEFINES += OPENGL_ES2
