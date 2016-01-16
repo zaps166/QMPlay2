@@ -602,21 +602,6 @@
     </message>
 </context>
 <context>
-    <name>Drawable</name>
-    <message>
-        <source>Błąd podczas kompilacji/linkowania shaderów</source>
-        <translation>Shader compile/link error</translation>
-    </message>
-    <message>
-        <source>Zarządzanie VSync jest nieobsługiwane</source>
-        <translation>VSync management is not supported</translation>
-    </message>
-    <message>
-        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
-        <translation>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</translation>
-    </message>
-</context>
-<context>
     <name>EntryProperties</name>
     <message>
         <source>Właściwości</source>
@@ -1267,6 +1252,10 @@ amp</translation>
         <source>Priorytet domyślnej jakości dźwięku</source>
         <translation>Priority of default audio quality</translation>
     </message>
+    <message>
+        <source>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</source>
+        <translation>Force render to texture if possible (not recommended)</translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
@@ -1321,6 +1310,17 @@ amp</translation>
     <message>
         <source>Rozmieszczenie napisów</source>
         <translation>Subtitles alignment</translation>
+    </message>
+</context>
+<context>
+    <name>OpenGL2Common</name>
+    <message>
+        <source>Błąd podczas kompilacji/linkowania shaderów</source>
+        <translation>Shader compile/link error</translation>
+    </message>
+    <message>
+        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
+        <translation>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</translation>
     </message>
 </context>
 <context>

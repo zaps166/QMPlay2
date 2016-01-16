@@ -10,7 +10,7 @@ bool OpenGL2Widget::VSync(bool enable)
 	QSurfaceFormat fmt = format();
 	if (!isValid())
 	{
-		fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't works
+		fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't work
 		fmt.setSwapInterval(enable); //Does it work on QOpenGLWidget?
 		setFormat(fmt);
 		return true;

@@ -602,21 +602,6 @@
     </message>
 </context>
 <context>
-    <name>Drawable</name>
-    <message>
-        <source>Błąd podczas kompilacji/linkowania shaderów</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Zarządzanie VSync jest nieobsługiwane</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>EntryProperties</name>
     <message>
         <source>Właściwości</source>
@@ -1266,6 +1251,10 @@ amp</source>
         <source>Priorytet domyślnej jakości dźwięku</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
@@ -1320,6 +1309,17 @@ amp</source>
     <message>
         <source>Rozmieszczenie napisów</source>
         <translation>Выравнивание субтитров</translation>
+    </message>
+</context>
+<context>
+    <name>OpenGL2Common</name>
+    <message>
+        <source>Błąd podczas kompilacji/linkowania shaderów</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

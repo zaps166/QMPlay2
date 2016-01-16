@@ -28,7 +28,7 @@ bool OpenGL2Window::VSync(bool enable)
 	QSurfaceFormat fmt = format();
 	if (!handle())
 	{
-		fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't works
+		fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't work
 		fmt.setSwapInterval(enable);
 		setFormat(fmt);
 	}
