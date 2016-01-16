@@ -35,7 +35,7 @@ bool Settings::contains(const QString &key) const
 void Settings::set(const QString &key, const QVariant &val)
 {
 	QMutexLocker mL(&mutex);
-	cache[ key ] = val;
+	cache[key] = val;
 	if (timerID)
 		killTimer(timerID);
 	timerID = startTimer(2000);
@@ -52,7 +52,7 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 {
 	QMutexLocker mL(&mutex);
 	if (!cache.isEmpty() && cache.contains(key))
-		return cache[ key ];
+		return cache[key];
 	return QSettings::value(key, def);
 }
 

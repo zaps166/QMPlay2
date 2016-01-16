@@ -16,14 +16,14 @@ static QMutex buffersMutex;
 
 /**/
 
-VideoFrame *VideoFrame::create(QByteArray &videoFrameData, quint8 *data[ 4 ], const int linesize[ 4 ], bool interlaced, bool top_field_first, int ref_c, int data_size)
+VideoFrame *VideoFrame::create(QByteArray &videoFrameData, quint8 *data[4], const int linesize[4], bool interlaced, bool top_field_first, int ref_c, int data_size)
 {
 	videoFrameData.resize(sizeof(VideoFrame));
 	VideoFrame *videoFrame = fromData(videoFrameData);
 	for (int i = 0; i < 4; ++i)
 	{
-		videoFrame->data[ i ] = data[ i ];
-		videoFrame->linesize[ i ] = linesize[ i ];
+		videoFrame->data[i] = data[i];
+		videoFrame->linesize[i] = linesize[i];
 	}
 	videoFrame->data_size = data_size;
 	videoFrame->interlaced = interlaced;
@@ -37,31 +37,31 @@ VideoFrame *VideoFrame::create(QByteArray &videoFrameData, quint8 *data[ 4 ], co
 VideoFrame *VideoFrame::create(QByteArray &videoFrameData, int width, int height, bool interlaced, bool top_field_first)
 {
 	const int aligned8W = Functions::aligned(width, 8);
-	const int linesize[ 4 ] = { aligned8W, aligned8W >> 1, aligned8W >> 1 };
-	const int data_size = linesize[ 0 ] * height + linesize[ 1 ] * height;
+	const int linesize[4] = { aligned8W, aligned8W >> 1, aligned8W >> 1 };
+	const int data_size = linesize[0] * height + linesize[1] * height;
 
 	buffersMutex.lock();
 
 	while (!buffers.isEmpty() && buffers.first().data_size != data_size) //Usuwanie buforów, które są innego rozmiaru niż wymagany
 		delete[] buffers.takeFirst().data;
 
-	quint8 *data[ 4 ] = { buffers.isEmpty() ? new quint8[ data_size ] : buffers.takeFirst().data };
+	quint8 *data[4] = { buffers.isEmpty() ? new quint8[data_size] : buffers.takeFirst().data };
 
 	if (!buffers.isEmpty() && !--buffers.last().age) //Usuwanie starych, nieużywanych od jakiegoś czasu buforów
 		delete[] buffers.takeLast().data;
 
 	buffersMutex.unlock();
 
-	data[ 2 ] = data[ 0 ] + linesize[ 0 ] * height;
-	data[ 1 ] = data[ 2 ] + linesize[ 1 ] * (height >> 1);
+	data[2] = data[0] + linesize[0] * height;
+	data[1] = data[2] + linesize[1] * (height >> 1);
 
 	return create(videoFrameData, data, linesize, interlaced, top_field_first, 1, data_size);
 }
 
-bool VideoFrame::testLinesize(int width, const int linesize[ 4 ])
+bool VideoFrame::testLinesize(int width, const int linesize[4])
 {
 	const int aligned8W = Functions::aligned(width, 8);
-	return aligned8W == linesize[ 0 ] && aligned8W >> 1 == linesize[ 1 ] && linesize[ 1 ] == linesize[ 2 ];
+	return aligned8W == linesize[0] && aligned8W >> 1 == linesize[1] && linesize[1] == linesize[2];
 }
 
 void VideoFrame::copyYV12(void *dest, const QByteArray &videoFrameData, unsigned luma_width, unsigned chroma_width, unsigned height)
@@ -71,8 +71,8 @@ void VideoFrame::copyYV12(void *dest, const QByteArray &videoFrameData, unsigned
 	unsigned char *dest_data = (unsigned char *)dest;
 	for (unsigned i = 0; i < height; ++i)
 	{
-		memcpy(dest_data, videoFrame->data[ 0 ] + offset, luma_width);
-		offset += videoFrame->linesize[ 0 ];
+		memcpy(dest_data, videoFrame->data[0] + offset, luma_width);
+		offset += videoFrame->linesize[0];
 		dest_data += luma_width;
 	}
 	offset = 0;
@@ -80,9 +80,9 @@ void VideoFrame::copyYV12(void *dest, const QByteArray &videoFrameData, unsigned
 	const unsigned wh = chroma_width * height;
 	for (unsigned i = 0; i < height; ++i)
 	{
-		memcpy(dest_data, videoFrame->data[ 2 ] + offset, chroma_width);
-		memcpy(dest_data + wh, videoFrame->data[ 1 ] + offset, chroma_width);
-		offset += videoFrame->linesize[ 1 ];
+		memcpy(dest_data, videoFrame->data[2] + offset, chroma_width);
+		memcpy(dest_data + wh, videoFrame->data[1] + offset, chroma_width);
+		offset += videoFrame->linesize[1];
 		dest_data += chroma_width;
 	}
 }

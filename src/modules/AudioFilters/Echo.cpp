@@ -48,16 +48,16 @@ double Echo::filter(QByteArray &data, bool)
 			r_ofs += sampleBufferSize;
 		for (int i = 0; i < size; i++)
 		{
-			float sample = sampleBufferData[ r_ofs ];
+			float sample = sampleBufferData[r_ofs];
 			if (echo_surround && chn >= 2)
 			{
 				if (i & 1)
-					sample -= sampleBufferData[ r_ofs - 1 ];
+					sample -= sampleBufferData[r_ofs - 1];
 				else
-					sample -= sampleBufferData[ r_ofs + 1 ];
+					sample -= sampleBufferData[r_ofs + 1];
 			}
-			sampleBufferData[ w_ofs ] = samples[ i ] + sample * echo_repeat / repeat_div;
-			samples[ i ] += sample * echo_volume / 100;
+			sampleBufferData[w_ofs] = samples[i] + sample * echo_repeat / repeat_div;
+			samples[i] += sample * echo_volume / 100;
 			if (++r_ofs >= sampleBufferSize)
 				r_ofs -= sampleBufferSize;
 			if (++w_ofs >= sampleBufferSize)

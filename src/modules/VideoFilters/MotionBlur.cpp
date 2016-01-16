@@ -24,10 +24,10 @@ void MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
 
 		for (int p = 0; p < 3; ++p)
 		{
-			quint8 *src1 = videoFrame1->data[ p ];
-			quint8 *src2 = videoFrame3->data[ p ];
-			quint8 *dest = videoFrame2->data[ p ];
-			const int linesize = videoFrame1->linesize[ p ];
+			quint8 *src1 = videoFrame1->data[p];
+			quint8 *src2 = videoFrame3->data[p];
+			quint8 *dest = videoFrame2->data[p];
+			const int linesize = videoFrame1->linesize[p];
 			const int H = p ? h >> 1 : h;
 			for (int i = 0; i < H; ++i)
 			{

@@ -78,14 +78,14 @@ bool Pulse::start()
 	{
 		chn_map = new pa_channel_map;
 		chn_map->channels = channels;
-		chn_map->map[ 0 ] = PA_CHANNEL_POSITION_FRONT_LEFT;
-		chn_map->map[ 1 ] = PA_CHANNEL_POSITION_FRONT_RIGHT;
-		chn_map->map[ 2 ] = PA_CHANNEL_POSITION_FRONT_CENTER;
-		chn_map->map[ 3 ] = PA_CHANNEL_POSITION_LFE;
-		chn_map->map[ 4 ] = PA_CHANNEL_POSITION_REAR_LEFT;
-		chn_map->map[ 5 ] = PA_CHANNEL_POSITION_REAR_RIGHT;
-		chn_map->map[ 6 ] = PA_CHANNEL_POSITION_SIDE_LEFT;
-		chn_map->map[ 7 ] = PA_CHANNEL_POSITION_SIDE_RIGHT;
+		chn_map->map[0] = PA_CHANNEL_POSITION_FRONT_LEFT;
+		chn_map->map[1] = PA_CHANNEL_POSITION_FRONT_RIGHT;
+		chn_map->map[2] = PA_CHANNEL_POSITION_FRONT_CENTER;
+		chn_map->map[3] = PA_CHANNEL_POSITION_LFE;
+		chn_map->map[4] = PA_CHANNEL_POSITION_REAR_LEFT;
+		chn_map->map[5] = PA_CHANNEL_POSITION_REAR_RIGHT;
+		chn_map->map[6] = PA_CHANNEL_POSITION_SIDE_LEFT;
+		chn_map->map[7] = PA_CHANNEL_POSITION_SIDE_RIGHT;
 	}
 
 	pulse = pa_simple_new(NULL, "QMPlay2", PA_STREAM_PLAYBACK, NULL, "Output", &ss, chn_map, &attr, NULL);

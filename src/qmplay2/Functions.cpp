@@ -14,7 +14,7 @@
 
 static inline void swapArray(char *a, char *b, int size)
 {
-	char t[ size ];
+	char t[size];
 	memcpy(t, a, size);
 	memcpy(a, b, size);
 	memcpy(b, t, size);
@@ -28,9 +28,9 @@ QDate Functions::parseVersion(const QString &dateTxt)
 	int y = 0, m = 0, d = 0;
 	if (l.count() == 3)
 	{
-		y = l[ 0 ].toInt() + 2000;
-		m = l[ 1 ].toInt();
-		d = l[ 2 ].toInt();
+		y = l[0].toInt() + 2000;
+		m = l[1].toInt();
+		d = l[2].toInt();
 	}
 	if (y < 2000 || m < 1 || m > 12 || d < 1 || d > 31)
 		y = m = d = 0;
@@ -92,7 +92,7 @@ QString Functions::Url(QString url, const QString &pth)
 QString Functions::getUrlScheme(const QString &url)
 {
 	int idx = url.indexOf(':');
-	if (idx > -1 && url[ 0 ] != '/')
+	if (idx > -1 && url[0] != '/')
 		return url.left(idx);
 	return QString();
 }
@@ -308,13 +308,13 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 		Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
 	}
 
-	quint8 *data[ 3 ] = { (quint8 *)imageData };
-	data[ 2 ] = data[ 0 ] + linesizeLuma * imgH;
-	data[ 1 ] = data[ 2 ] + linesizeChroma * (imgH >> 1);
+	quint8 *data[3] = { (quint8 *)imageData };
+	data[2] = data[0] + linesizeLuma * imgH;
+	data[1] = data[2] + linesizeChroma * (imgH >> 1);
 
 	const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
-	const int alphaLinesizeLuma = videoFrame->linesize[ 0 ], alphaLinesizeChroma = videoFrame->linesize[ 1 ];
-	const quint8 *dataForAlpha[ 3 ] = { videoFrame->data[ 0 ], videoFrame->data[ 1 ], videoFrame->data[ 2 ] };
+	const int alphaLinesizeLuma = videoFrame->linesize[0], alphaLinesizeChroma = videoFrame->linesize[1];
+	const quint8 *dataForAlpha[3] = { videoFrame->data[0], videoFrame->data[1], videoFrame->data[2] };
 
 	for (int h = bounds.top(); h <= bounds.bottom(); ++h)
 	{
@@ -327,7 +327,7 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 		for (int w = bounds.left(); w <= bounds.right(); ++w)
 		{
 			const int pixelPos = fullLine + w;
-			const quint32 pixel = osdImgData[ line + w ];
+			const quint32 pixel = osdImgData[line + w];
 			const quint8 A = (pixel >> 24) & 0xFF;
 			if (A)
 			{
@@ -338,9 +338,9 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 
 				const quint8 Y = ((R * 66) >> 8) + (G >> 1) + ((B * 25) >> 8) + 16;
 				if (A == 0xFF)
-					data[ 0 ][ pixelPos ] = Y;
+					data[0][pixelPos] = Y;
 				else
-					data[ 0 ][ pixelPos ] = dataForAlpha[ 0 ][ alphaFullLine + w ] * iA / 255 + Y * A / 255;
+					data[0][pixelPos] = dataForAlpha[0][alphaFullLine + w] * iA / 255 + Y * A / 255;
 
 				if (!(w & 1) && !(h & 1))
 				{
@@ -349,14 +349,14 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 					const quint8 cR =  ((R * 112) >> 8) - ((G * 94) >> 8) - ((B * 18 ) >> 8) + 128;
 					if (A == 0xFF)
 					{
-						data[ 1 ][ pixelPos ] = cB;
-						data[ 2 ][ pixelPos ] = cR;
+						data[1][pixelPos] = cB;
+						data[2][pixelPos] = cR;
 					}
 					else
 					{
 						const int pixelPosAlpha = alphaHalfLine + (w >> 1);
-						data[ 1 ][ pixelPos ] = dataForAlpha[ 1 ][ pixelPosAlpha ] * iA / 255 + cB * A / 255;
-						data[ 2 ][ pixelPos ] = dataForAlpha[ 2 ][ pixelPosAlpha ] * iA / 255 + cR * A / 255;
+						data[1][pixelPos] = dataForAlpha[1][pixelPosAlpha] * iA / 255 + cB * A / 255;
+						data[2][pixelPos] = dataForAlpha[2][pixelPosAlpha] * iA / 255 + cR * A / 255;
 					}
 				}
 			}
@@ -368,9 +368,9 @@ void Functions::ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigne
 {
 	for (unsigned i = 0; i < bitsCount; i += 4)
 	{
-		imageBits[ i+0 ] = clip8(imageBits[ i+0 ] * Contrast / 100 + Brightness);
-		imageBits[ i+1 ] = clip8(imageBits[ i+1 ] * Contrast / 100 + Brightness);
-		imageBits[ i+2 ] = clip8(imageBits[ i+2 ] * Contrast / 100 + Brightness);
+		imageBits[i+0] = clip8(imageBits[i+0] * Contrast / 100 + Brightness);
+		imageBits[i+1] = clip8(imageBits[i+1] * Contrast / 100 + Brightness);
+		imageBits[i+2] = clip8(imageBits[i+2] * Contrast / 100 + Brightness);
 	}
 }
 int Functions::scaleEQValue(int val, int min, int max)
@@ -484,13 +484,13 @@ void Functions::hFlip(char *data, int linesize, int height, int width)
 	for (h = 0; h < height; ++h)
 	{
 		for (w = 0; w < width_div_2; ++w)
-			qSwap(data[ offset + w ], data[ offset + width-1-w ]);
+			qSwap(data[offset + w], data[offset + width-1-w]);
 		offset += linesize;
 	}
 	for (h = 0; h < height; ++h)
 	{
 		for (w = 0; w < width_div_4; ++w)
-			qSwap(data[ offset + w ], data[ offset + width_div_2-1-w ]);
+			qSwap(data[offset + w], data[offset + width_div_2-1-w]);
 		offset += linesize_div_2;
 	}
 }

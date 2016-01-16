@@ -138,7 +138,7 @@ bool MPDemux::read(Packet &decoded, int &idx)
 	float *decodedFloat = (float *)decoded.data();
 	const int *decodedInt = (const int *)decodedFloat;
 	for (unsigned i = 0; i < decoded.size() / sizeof(float); ++i)
-		decodedFloat[ i ] = decodedInt[ i ] / 2147483648.0;
+		decodedFloat[i] = decodedInt[i] / 2147483648.0;
 
 	idx = 0;
 	decoded.ts = pos;

@@ -39,14 +39,14 @@ void ImgScaler::scale(const void *src, void *dst)
 		if (!dst)
 			dst = arr;
 
-		uint8_t *srcData[ 3 ];
-		int srcLinesize[ 3 ];
-		srcData[ 0 ] = (uint8_t *)src;
-		srcData[ 2 ] = (uint8_t *)srcData[ 0 ] + (Wsrc * Hsrc);
-		srcData[ 1 ] = (uint8_t *)srcData[ 2 ] + ((Wsrc >> 1) * (Hsrc >> 1));
-		srcLinesize[ 0 ] = Wsrc;
-		srcLinesize[ 1 ] = Wsrc >> 1;
-		srcLinesize[ 2 ] = Wsrc >> 1;
+		uint8_t *srcData[3];
+		int srcLinesize[3];
+		srcData[0] = (uint8_t *)src;
+		srcData[2] = (uint8_t *)srcData[0] + (Wsrc * Hsrc);
+		srcData[1] = (uint8_t *)srcData[2] + ((Wsrc >> 1) * (Hsrc >> 1));
+		srcLinesize[0] = Wsrc;
+		srcLinesize[1] = Wsrc >> 1;
+		srcLinesize[2] = Wsrc >> 1;
 
 		const int linesize = Wdst << 2;
 		sws_scale(img_convert_ctx, srcData, srcLinesize, 0, Hsrc, (uint8_t **)&dst, &linesize);

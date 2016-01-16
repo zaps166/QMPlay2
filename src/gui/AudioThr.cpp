@@ -273,7 +273,7 @@ void AudioThr::run()
 						const int size = decodedChunk.size() / sizeof(float);
 						float *data = (float *)decodedChunk.data();
 						for (int i = 0; i < size; ++i)
-							data[ i ] *= vol;
+							data[i] *= vol;
 					}
 
 					foreach (QMPlay2Extensions *vis, visualizations)
@@ -295,7 +295,7 @@ void AudioThr::run()
 							for (int i = 0; i < s; i += channels)
 							{
 								for (int j = 0; j < channels; ++j)
-									data[ i+j ] *= doSilence;
+									data[i+j] *= doSilence;
 								doSilence -= silence_step;
 								if (doSilence < 0.0)
 									doSilence = 0.0;

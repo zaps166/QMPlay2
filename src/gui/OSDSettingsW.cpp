@@ -87,8 +87,8 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
 	alignL = new QGridLayout(alignGB);
 	for (int align = 0; align < 9; align++)
 	{
-		alignB[ align ] = new QRadioButton;
-		alignL->addWidget(alignB[ align ], align/3, align%3);
+		alignB[align] = new QRadioButton;
+		alignL->addWidget(alignB[align], align/3, align%3);
 	}
 
 	//Frame GroupBox
@@ -154,7 +154,7 @@ void OSDSettingsW::writeSettings()
 	QMPSettings.set(prefix + "/RightMargin", rightMarginB->value());
 	QMPSettings.set(prefix + "/VMargin", vMarginB->value());
 	for (int align = 0; align < 9; ++align)
-		if (alignB[ align ]->isChecked())
+		if (alignB[align]->isChecked())
 		{
 			QMPSettings.set(prefix + "/Alignment", align);
 			break;
@@ -178,7 +178,7 @@ void OSDSettingsW::readSettings()
 	rightMarginB->setValue(QMPSettings.getInt(prefix + "/RightMargin"));
 	vMarginB->setValue(QMPSettings.getInt(prefix + "/VMargin"));
 	int align = QMPSettings.getInt(prefix + "/Alignment");
-	alignB[ align ]->setChecked(true);
+	alignB[align]->setChecked(true);
 	outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
 	shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
 	textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value< QColor >());

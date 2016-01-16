@@ -179,7 +179,7 @@ void AddThr::setData(const QString &pth, QTreeWidgetItem *par) //dla synchroniza
 {
 	QStringList d_urls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
 	for (int i = d_urls.size() - 1; i >= 0; --i)
-		d_urls[ i ] = pth + d_urls[ i ];
+		d_urls[i] = pth + d_urls[i];
 	setData(d_urls, par, false, true);
 }
 
@@ -214,7 +214,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		if (ioCtrl.isAborted())
 			break;
 		QTreeWidgetItem *currentItem = parent;
-		QString url = Functions::Url(urls[ i ]), name;
+		QString url = Functions::Url(urls[i]), name;
 		const Playlist::Entries entries = Playlist::read(url, &name);
 		if (!name.isEmpty()) //ładowanie playlisty
 		{
@@ -242,9 +242,9 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					QTreeWidgetItem *p = pLW.newGroup(Functions::fileName(url), url, currentItem);
 					for (int j = d_urls.size() - 1; j >= 0; j--)
 					{
-						d_urls[ j ].prepend(url);
+						d_urls[j].prepend(url);
 #ifdef Q_OS_WIN
-						d_urls[ j ].replace("file://", "file:///");
+						d_urls[j].replace("file://", "file:///");
 #endif
 					}
 					add(d_urls, p, demuxersInfo);
@@ -315,7 +315,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL;
 		int idx = entry.parent - 1;
 		if (idx >= 0 && groupList.size() > idx)
-			tmpParent = groupList[ idx ];
+			tmpParent = groupList[idx];
 		else
 			tmpParent = parent;
 		if (entry.GID)
@@ -327,7 +327,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 			{
 				for (int j = pLW.queue.size(); j <= queueSize + entry.queue - 1; ++j)
 					pLW.queue += NULL;
-				pLW.queue[ queueSize + entry.queue - 1 ] = currentItem;
+				pLW.queue[queueSize + entry.queue - 1] = currentItem;
 			}
 			if (!firstItem)
 				firstItem = currentItem;
@@ -461,7 +461,7 @@ void PlaylistWidget::setCurrentPlaying(QTreeWidgetItem *tWI)
 	if (!play_icon.availableSizes().isEmpty() && !play_icon.availableSizes().contains(QSize(IconSize, IconSize)))
 	{
 		QPixmap pix(IconSize, IconSize);
-		QPixmap playPix = play_icon.pixmap(play_icon.availableSizes()[ 0 ]);
+		QPixmap playPix = play_icon.pixmap(play_icon.availableSizes()[0]);
 		pix.fill(Qt::transparent);
 		QPainter p(&pix);
 		p.drawPixmap(IconSizeDiv2- playPix.width() / 2, IconSizeDiv2 - playPix.height() / 2, playPix);
@@ -614,10 +614,10 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 	{
 		for (int i = 0; i < queue.size(); i++)
 		{
-			if (!items.contains(queue[ i ]))
+			if (!items.contains(queue[i]))
 				queue.removeAt(i--);
 			else
-				queue[ i ]->setText(1, QString::number(i + 1));
+				queue[i]->setText(1, QString::number(i + 1));
 		}
 		queue.size() ? header()->showSection(1) : header()->hideSection(1);
 	}
@@ -627,16 +627,16 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 		for (int i = groups.size() - 1; i >= 0; i--)
 		{
 			int length = 0;
-			foreach (QTreeWidgetItem *tWI, getChildren(ALL_CHILDREN, groups[ i ]))
+			foreach (QTreeWidgetItem *tWI, getChildren(ALL_CHILDREN, groups[i]))
 			{
-				if (tWI->parent() != groups[ i ])
+				if (tWI->parent() != groups[i])
 					continue;
 				int l = tWI->data(2, Qt::UserRole).toInt();
 				if (l > 0)
 					length += l;
 			}
-			groups[ i ]->setText(2, length ? Functions::timeToStr(length) : QString());
-			groups[ i ]->setData(2, Qt::UserRole, length ? QString::number(length) : QVariant());
+			groups[i]->setText(2, length ? Functions::timeToStr(length) : QString());
+			groups[i]->setData(2, Qt::UserRole, length ? QString::number(length) : QVariant());
 		}
 	}
 	if ((Refresh & REFRESH_CURRPLAYING) && !items.contains(currentPlaying))
@@ -668,7 +668,7 @@ void PlaylistWidget::processItems(QList< QTreeWidgetItem * > *itemsToShow, bool 
 		if (hideGroups)
 		{
 			bool hasVisibleItems = false;
-			foreach (QTreeWidgetItem *tWI, getChildren(ONLY_NON_GROUPS, groups[ i ]))
+			foreach (QTreeWidgetItem *tWI, getChildren(ONLY_NON_GROUPS, groups[i]))
 			{
 				if (!tWI->isHidden())
 				{
@@ -676,10 +676,10 @@ void PlaylistWidget::processItems(QList< QTreeWidgetItem * > *itemsToShow, bool 
 					break;
 				}
 			}
-			groups[ i ]->setHidden(!hasVisibleItems);
+			groups[i]->setHidden(!hasVisibleItems);
 		}
 		else
-			groups[ i ]->setHidden(false);
+			groups[i]->setHidden(false);
 	}
 }
 

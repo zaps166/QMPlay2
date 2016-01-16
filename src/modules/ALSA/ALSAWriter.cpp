@@ -14,24 +14,24 @@ template< typename T > static void convert_samples(const float *src, const int s
 	const unsigned max = min - 1;
 	for (int i = 0; i < samples; ++i)
 	{
-		if (src[ i ] >= 1.0f)
-			int_samples[ i ] = max;
-		else if (src[ i ] <= -1.0f)
-			int_samples[ i ] = min;
+		if (src[i] >= 1.0f)
+			int_samples[i] = max;
+		else if (src[i] <= -1.0f)
+			int_samples[i] = min;
 		else
-			int_samples[ i ] = src[ i ] * max;
+			int_samples[i] = src[i] * max;
 	}
 	if (channels == 6 || channels == 8)
 	{
 		T tmp;
 		for (int i = 0; i < samples; i += channels)
 		{
-			tmp = int_samples[ i+2 ];
-			int_samples[ i+2 ] = int_samples[ i+4 ];
-			int_samples[ i+4 ] = tmp;
-			tmp = int_samples[ i+3 ];
-			int_samples[ i+3 ] = int_samples[ i+5 ];
-			int_samples[ i+5 ] = tmp;
+			tmp = int_samples[i+2];
+			int_samples[i+2] = int_samples[i+4];
+			int_samples[i+4] = tmp;
+			tmp = int_samples[i+3];
+			int_samples[i+3] = int_samples[i+5];
+			int_samples[i+5] = tmp;
 		}
 	}
 }
@@ -216,13 +216,13 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
 								snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps(snd);
 								if (chmaps)
 								{
-									for (int i = 0; chmaps[ i ]; ++i)
+									for (int i = 0; chmaps[i]; ++i)
 									{
-										if (chmaps[ i ]->map.channels >= channels)
+										if (chmaps[i]->map.channels >= channels)
 										{
 											for (uint j = 0; j < channels; ++j)
 											{
-												mustSwapChn &= chmaps[ i ]->map.pos[ j ] == j + SND_CHMAP_FL;
+												mustSwapChn &= chmaps[i]->map.pos[j] == j + SND_CHMAP_FL;
 												if (!mustSwapChn)
 													break;
 											}

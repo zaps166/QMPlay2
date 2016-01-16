@@ -6,7 +6,7 @@
 
 /**/
 
-static const unsigned char bytes[ PCM::FORMAT_COUNT ] =
+static const unsigned char bytes[PCM::FORMAT_COUNT] =
 {
 	1, 1, 2, 3, 4, 4
 };
@@ -54,12 +54,12 @@ double PCM::length() const
 }
 int PCM::bitrate() const
 {
-	return 8 * (srate * chn * bytes[ fmt ]) / 1000;
+	return 8 * (srate * chn * bytes[fmt]) / 1000;
 }
 
 bool PCM::seek(int s)
 {
-	int filePos = offset + s * srate * chn * bytes[ fmt ];
+	int filePos = offset + s * srate * chn * bytes[fmt];
 	return reader->seek(filePos);
 }
 bool PCM::read(Packet &decoded, int &idx)
@@ -67,10 +67,10 @@ bool PCM::read(Packet &decoded, int &idx)
 	if (reader.isAborted())
 		return false;
 
-	decoded.ts = (reader->pos() - offset) / (double)bytes[ fmt ] / chn / srate;
+	decoded.ts = (reader->pos() - offset) / (double)bytes[fmt] / chn / srate;
 
-	QByteArray dataBA = reader->read(chn * bytes[ fmt ] * 256);
-	const int samples_with_channels = dataBA.size() / bytes[ fmt ];
+	QByteArray dataBA = reader->read(chn * bytes[fmt] * 256);
+	const int samples_with_channels = dataBA.size() / bytes[fmt];
 	decoded.resize(samples_with_channels * sizeof(float));
 	float *decoded_data = (float *)decoded.data();
 	ByteArray data(dataBA.data(), dataBA.size(), bigEndian);
@@ -78,27 +78,27 @@ bool PCM::read(Packet &decoded, int &idx)
 	{
 		case PCM_U8:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = (data.getBYTE() - 0x7F) / 128.0f;
+				decoded_data[i] = (data.getBYTE() - 0x7F) / 128.0f;
 			break;
 		case PCM_S8:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = (qint8)data.getBYTE() / 128.0f;
+				decoded_data[i] = (qint8)data.getBYTE() / 128.0f;
 			break;
 		case PCM_S16:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = (qint16)data.getWORD() / 32768.0f;
+				decoded_data[i] = (qint16)data.getWORD() / 32768.0f;
 			break;
 		case PCM_S24:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = (qint32)data.get24bAs32b() / 2147483648.0f;
+				decoded_data[i] = (qint32)data.get24bAs32b() / 2147483648.0f;
 			break;
 		case PCM_S32:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = (qint32)data.getDWORD() / 2147483648.0f;
+				decoded_data[i] = (qint32)data.getDWORD() / 2147483648.0f;
 			break;
 		case PCM_FLT:
 			for (int i = 0; i < samples_with_channels; i++)
-				decoded_data[ i ] = data.getFloat();
+				decoded_data[i] = data.getFloat();
 			break;
 		default:
 			break;
@@ -119,7 +119,7 @@ bool PCM::open(const QString &url)
 	if (Reader::create(url, reader) && (!offset || reader->seek(offset)))
 	{
 		if (reader->size() >= 0)
-			len = (double)reader->size() / srate / chn / bytes[ fmt ];
+			len = (double)reader->size() / srate / chn / bytes[fmt];
 		else
 			len = -1.0;
 

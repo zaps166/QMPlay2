@@ -47,7 +47,7 @@ public:
 
 	inline const Image &getImage(int idx) const
 	{
-		return images[ idx ];
+		return images[idx];
 	}
 	inline int imageCount() const
 	{

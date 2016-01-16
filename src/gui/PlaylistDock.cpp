@@ -213,7 +213,7 @@ void PlaylistDock::next(bool playingError)
 				QTreeWidgetItem *P = list->currentPlaying ? list->currentPlaying->parent() : (list->currentItem() ? list->currentItem()->parent() : NULL);
 				expandTree(P);
 				l = P ? list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P) : list->topLevelNonGroupsItems();
-				if (l.isEmpty() || (!randomPlayedItems.isEmpty() && randomPlayedItems[ 0 ]->parent() != P))
+				if (l.isEmpty() || (!randomPlayedItems.isEmpty() && randomPlayedItems[0]->parent() != P))
 					randomPlayedItems.clear();
 			}
 			if (randomPlayedItems.count() == l.count()) //odtworzono całą playlistę
@@ -227,9 +227,9 @@ void PlaylistDock::next(bool playingError)
 				{
 					do
 						r = qrand() % l.count();
-					while (lastPlaying == l[ r ] || randomPlayedItems.contains(l[ r ]));
+					while (lastPlaying == l[r] || randomPlayedItems.contains(l[r]));
 				}
-				randomPlayedItems.append((tWI = l[ r ]));
+				randomPlayedItems.append((tWI = l[r]));
 			}
 		}
 		else
@@ -252,7 +252,7 @@ void PlaylistDock::next(bool playingError)
 						{
 							const QList< QTreeWidgetItem * > l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P);
 							if (!l.isEmpty())
-								tWI = l[ 0 ];
+								tWI = l[0];
 							break;
 						}
 						if (PlaylistWidget::isGroup(tWI)) //grupa
@@ -267,7 +267,7 @@ void PlaylistDock::next(bool playingError)
 				else
 					tWI = list->queue.first();
 				if (canRepeat && (repeatMode == RepeatList || repeatMode == RepeatGroup) && !tWI && !l.isEmpty()) //zapętlenie listy
-					tWI = l[ 0 ];
+					tWI = l[0];
 			}
 		}
 	}
@@ -455,7 +455,7 @@ void PlaylistDock::findItems(const QString &txt)
 	{
 		QList< QTreeWidgetItem * > selectedItems = list->selectedItems();
 		if (selectedItems.count())
-			list->scrollToItem(selectedItems[ 0 ]);
+			list->scrollToItem(selectedItems[0]);
 		else if (list->currentPlaying)
 			list->scrollToItem(list->currentPlaying);
 	}

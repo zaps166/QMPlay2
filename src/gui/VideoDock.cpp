@@ -119,7 +119,7 @@ void VideoDock::dropEvent(QDropEvent *e)
 			QStringList urls = Functions::getUrlsFromMimeData(mimeData);
 			if (urls.size() == 1)
 			{
-				QString url = Functions::Url(urls[ 0 ]);
+				QString url = Functions::Url(urls[0]);
 #ifdef Q_OS_WIN
 				if (url.startsWith("file://"))
 					url.remove(0, 7);

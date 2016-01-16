@@ -660,7 +660,7 @@ void YouTubeW::setSearchResults(QString data)
 	for (i = 1; i < splitted.count(); ++i)
 	{
 		QString title, videoInfoLink, duration, image, user;
-		const QString &entry = splitted[ i ];
+		const QString &entry = splitted[i];
 		int idx;
 
 		if (entry.contains("yt-lockup-playlist") || entry.contains("yt-lockup-channel")) //Ominąć playlisty (kiedyś trzeba zrobić obsługę playlist) i kanały
@@ -790,16 +790,16 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 						const QStringList paramL = streamParams.split('=');
 						if (paramL.count() == 2)
 						{
-							if (paramL[ 0 ] == "itag")
+							if (paramL[0] == "itag")
 							{
-								ITAG = "itag=" + paramL[ 1 ];
-								itag = paramL[ 1 ].toInt();
+								ITAG = "itag=" + paramL[1];
+								itag = paramL[1].toInt();
 							}
-							else if (paramL[ 0 ] == "url")
-								URL = unescape(paramL[ 1 ]);
-							else if (paramL[ 0 ] == "sig")
-								Signature = paramL[ 1 ];
-							else if (paramL[ 0 ] == "s")
+							else if (paramL[0] == "url")
+								URL = unescape(paramL[1]);
+							else if (paramL[0] == "sig")
+								Signature = paramL[1];
+							else if (paramL[0] == "s")
 								Signature = "ENCRYPTED";
 						}
 					}
@@ -812,17 +812,17 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 						{
 							if (ITAG == PARAM)
 							{
-								ret << URL << getFileExtension(itag_arr[ itag ]);
+								ret << URL << getFileExtension(itag_arr[itag]);
 								++i; //ensures end of the loop
 								break;
 							}
 							else if (PARAM.isEmpty())
-								ret << URL << getFileExtension(itag_arr[ itag ]) << QString::number(itag);
+								ret << URL << getFileExtension(itag_arr[itag]) << QString::number(itag);
 						}
 						else
 						{
 							QTreeWidgetItem *ch = new QTreeWidgetItem(tWI);
-							ch->setText(0, itag_arr[ itag ]); //Tekst widoczny, informacje o jakości
+							ch->setText(0, itag_arr[itag]); //Tekst widoczny, informacje o jakości
 							if (!URL.contains("ENCRYPTED")) //youtube-dl działa za wolno, żeby go tu wykonać
 								ch->setData(0, Qt::UserRole + 0, URL); //Adres do pliku
 							ch->setData(0, Qt::UserRole + 1, ITAG); //Dodatkowy parametr
@@ -842,7 +842,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 		{
 			const QStringList video = getUrlByItagPriority(resultsW->itagsVideo, ret);
             const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
-			ret = QStringList() << "FFmpeg://{[" + video[ 0 ] + "][" + audio[ 0 ] + "]}" << "[" + video[ 1 ] + "][" + audio[ 1 ] + "]";
+			ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]}" << "[" + video[1] + "][" + audio[1] + "]";
 		}
 	}
 
@@ -860,7 +860,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 				for (;;) //szukanie końca tytułu
 				{
 					titleEndIdx = data.indexOf('"', titleEndIdx);
-					if (titleEndIdx < 0 || data[ titleEndIdx-1 ] != '\\')
+					if (titleEndIdx < 0 || data[titleEndIdx-1] != '\\')
 						break;
 					++titleEndIdx;
 				}
@@ -895,13 +895,13 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			else
 			{
 				if (itagsCount == 1)
-					ret[ 0 ] = ytdl_stdout[ 0 ];
+					ret[0] = ytdl_stdout[0];
 				else
 				{
-					ret[ 0 ] = "FFmpeg://{";
+					ret[0] = "FFmpeg://{";
 					foreach (const QString &url, ytdl_stdout)
-						ret[ 0 ] += "[" + url + "]";
-					ret[ 0 ] += "}";
+						ret[0] += "[" + url + "]";
+					ret[0] += "}";
 				}
 			}
 			youtube_dl->clear();
@@ -928,12 +928,12 @@ QStringList YouTubeW::getUrlByItagPriority(const QList< int > &itags, QStringLis
 	{
 		bool br = false;
 		for (int i = 2; i < ret.count(); i += 3)
-			if (ret[ i ].toInt() == itag)
+			if (ret[i].toInt() == itag)
 			{
 				if (i != 2)
 				{
-					ret[ 0 ] = ret[ i-2 ];
-					ret[ 1 ] = ret[ i-1 ];
+					ret[0] = ret[i-2];
+					ret[1] = ret[i-1];
 				}
 				br = true;
 				break;
@@ -957,48 +957,48 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 	if (itag_arr.isEmpty())
 	{
 		/* Video + Audio */
-		itag_arr[ 43 ] = "360p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[ 36 ] = "180p MP4 (MPEG4 + AAC 32kbps)";
-		itag_arr[ 22 ] = "720p MP4 (H.264 + AAC 192kbps)"; //default
-		itag_arr[ 18 ] = "360p MP4 (H.264 + AAC 96kbps)";
-		itag_arr[  5 ] = "240p FLV (FLV + MP3 64kbps)";
+		itag_arr[43] = "360p WebM (VP8 + Vorbis 128kbps)";
+		itag_arr[36] = "180p MP4 (MPEG4 + AAC 32kbps)";
+		itag_arr[22] = "720p MP4 (H.264 + AAC 192kbps)"; //default
+		itag_arr[18] = "360p MP4 (H.264 + AAC 96kbps)";
+		itag_arr[ 5] = "240p FLV (FLV + MP3 64kbps)";
 
 		/* Video */
-		itag_arr[ 247 ] = "Video  720p (VP9)";
-		itag_arr[ 248 ] = "Video 1080p (VP9)";
-		itag_arr[ 271 ] = "Video 1440p (VP9)";
-		itag_arr[ 313 ] = "Video 2160p (VP9)";
-		itag_arr[ 272 ] = "Video 4320p/2160p (VP9)";
+		itag_arr[247] = "Video  720p (VP9)";
+		itag_arr[248] = "Video 1080p (VP9)";
+		itag_arr[271] = "Video 1440p (VP9)";
+		itag_arr[313] = "Video 2160p (VP9)";
+		itag_arr[272] = "Video 4320p/2160p (VP9)";
 
-		itag_arr[ 302 ] = "Video  720p 60fps (VP9)";
-		itag_arr[ 303 ] = "Video 1080p 60fps (VP9)";
-		itag_arr[ 308 ] = "Video 1440p 60fps (VP9)";
-		itag_arr[ 315 ] = "Video 2160p 60fps (VP9)";
+		itag_arr[302] = "Video  720p 60fps (VP9)";
+		itag_arr[303] = "Video 1080p 60fps (VP9)";
+		itag_arr[308] = "Video 1440p 60fps (VP9)";
+		itag_arr[315] = "Video 2160p 60fps (VP9)";
 
-		itag_arr[ 298 ] = "Video  720p 60fps (H.264)";
-		itag_arr[ 299 ] = "Video 1080p 60fps (H.264)";
+		itag_arr[298] = "Video  720p 60fps (H.264)";
+		itag_arr[299] = "Video 1080p 60fps (H.264)";
 
-		itag_arr[ 135 ] = "Video  480p (H.264)";
-		itag_arr[ 136 ] = "Video  720p (H.264)";
-		itag_arr[ 137 ] = "Video 1080p (H.264)";
-		itag_arr[ 264 ] = "Video 1440p (H.264)";
-		itag_arr[ 266 ] = "Video 2160p (H.264)";
+		itag_arr[135] = "Video  480p (H.264)";
+		itag_arr[136] = "Video  720p (H.264)";
+		itag_arr[137] = "Video 1080p (H.264)";
+		itag_arr[264] = "Video 1440p (H.264)";
+		itag_arr[266] = "Video 2160p (H.264)";
 
-		itag_arr[ 170 ] = "Video  480p (VP8)";
-		itag_arr[ 168 ] = "Video  720p (VP8)";
-		itag_arr[ 170 ] = "Video 1080p (VP8)";
+		itag_arr[170] = "Video  480p (VP8)";
+		itag_arr[168] = "Video  720p (VP8)";
+		itag_arr[170] = "Video 1080p (VP8)";
 
 		/* Audio */
-		itag_arr[ 139 ] = "Audio (AAC 48kbps)";
-		itag_arr[ 140 ] = "Audio (AAC 128kbps)";
-		itag_arr[ 141 ] = "Audio (AAC 256kbps)"; //?
+		itag_arr[139] = "Audio (AAC 48kbps)";
+		itag_arr[140] = "Audio (AAC 128kbps)";
+		itag_arr[141] = "Audio (AAC 256kbps)"; //?
 
-		itag_arr[ 171 ] = "Audio (Vorbis 128kbps)";
-		itag_arr[ 172 ] = "Audio (Vorbis 256kbps)"; //?
+		itag_arr[171] = "Audio (Vorbis 128kbps)";
+		itag_arr[172] = "Audio (Vorbis 256kbps)"; //?
 
-		itag_arr[ 249 ] = "Audio (Opus 50kbps)";
-		itag_arr[ 250 ] = "Audio (Opus 70kbps)";
-		itag_arr[ 251 ] = "Audio (Opus 160kbps)";
+		itag_arr[249] = "Audio (Opus 50kbps)";
+		itag_arr[250] = "Audio (Opus 70kbps)";
+		itag_arr[251] = "Audio (Opus 160kbps)";
 	}
 
 	ItagNames itagPair;
@@ -1024,7 +1024,7 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 	}
 	for (int i = 0, j = 0; i < itagList.count(); ++i)
 	{
-		const int idx = itagPair.second.indexOf(itagList[ i ].toInt());
+		const int idx = itagPair.second.indexOf(itagList[i].toInt());
 		if (idx > -1)
 		{
 			itagPair.first.swap(j, idx);
@@ -1091,11 +1091,11 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 				if (youTubeVideo.count() == 3)
 				{
 					if (stream_url)
-						*stream_url = youTubeVideo[ 0 ];
+						*stream_url = youTubeVideo[0];
 					if (name)
-						*name = youTubeVideo[ 2 ];
+						*name = youTubeVideo[2];
 					if (extension)
-						*extension = youTubeVideo[ 1 ];
+						*extension = youTubeVideo[1];
 				}
 			}
 		}

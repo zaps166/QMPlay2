@@ -31,8 +31,8 @@ private:
 	double len;
 	unsigned srate;
 	unsigned short chn;
-	int predictor[ 2 ];
-	short stepIndex[ 2 ];
+	int predictor[2];
+	short stepIndex[2];
 };
 
 #define Rayman2Name "Rayman2 Audio"

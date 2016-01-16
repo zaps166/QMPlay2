@@ -135,9 +135,9 @@ QStringList QMPlay2GUIClass::getLanguages()
 	QStringList langs = QDir(langPath).entryList(QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
 	for (int i = 0; i < langs.size(); i++)
 	{
-		int idx = langs[ i ].indexOf('.');
+		int idx = langs[i].indexOf('.');
 		if (idx > 0)
-			langs[ i ].remove(idx, langs[ i ].size() - idx);
+			langs[i].remove(idx, langs[i].size() - idx);
 	}
 	return langs;
 }
@@ -215,7 +215,7 @@ QMPlay2GUIClass::QMPlay2GUIClass() :
 		{
 			const QList< QByteArray > lineSplitted = line.split(',');
 			if (lineSplitted.count() == 2)
-				languages[ lineSplitted[ 0 ] ] = lineSplitted[ 1 ];
+				languages[lineSplitted[0]] = lineSplitted[1];
 		}
 	}
 	qmp2Pixmap = useGui ? new QPixmap(":/QMPlay2") : NULL;
@@ -250,7 +250,7 @@ static void parseArguments(QStringList &arguments)
 		if (arg.left(1) == "-")
 		{
 			param = arg;
-			while (param[ 0 ] == '-')
+			while (param[0] == '-')
 				param.remove(0, 1);
 			if (!param.isEmpty() && !QMPArguments.first.contains(param))
 			{
@@ -262,7 +262,7 @@ static void parseArguments(QStringList &arguments)
 		}
 		else if (!param.isEmpty())
 		{
-			QString &data = QMPArguments.second[ QMPArguments.second.count() - 1 ];
+			QString &data = QMPArguments.second[QMPArguments.second.count() - 1];
 			if (!data.isEmpty())
 				data += " ";
 			data += arg;
@@ -308,18 +308,18 @@ static bool writeToSocket(QLocalSocket &socket)
 	bool ret = false;
 	for (int i = QMPArguments.first.count() - 1; i >= 0; i--)
 	{
-		if (QMPArguments.first[ i ] == "noplay")
+		if (QMPArguments.first[i] == "noplay")
 			continue;
-		else if (QMPArguments.first[ i ] == "open" || QMPArguments.first[ i ] == "enqueue")
+		else if (QMPArguments.first[i] == "open" || QMPArguments.first[i] == "enqueue")
 		{
-			if (!QMPArguments.second[ i ].isEmpty())
-				QMPArguments.second[ i ] = Functions::Url(QMPArguments.second[ i ]);
+			if (!QMPArguments.second[i].isEmpty())
+				QMPArguments.second[i] = Functions::Url(QMPArguments.second[i]);
 #ifdef Q_OS_WIN
-			if (QMPArguments.second[ i ].left(7) == "file://")
-				QMPArguments.second[ i ].remove(0, 7);
+			if (QMPArguments.second[i].left(7) == "file://")
+				QMPArguments.second[i].remove(0, 7);
 #endif
 		}
-		socket.write(QString(QMPArguments.first[ i ] + '\t' + QMPArguments.second[ i ]).toUtf8() + '\0');
+		socket.write(QString(QMPArguments.first[i] + '\t' + QMPArguments.second[i]).toUtf8() + '\0');
 		ret = true;
 	}
 	return ret;

@@ -92,7 +92,7 @@ MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
 	pos(0)
 {
 	clearMetaData();
-	m_data[ "mpris:trackid" ] = QVariant::fromValue< QDBusObjectPath >(trackID);
+	m_data["mpris:trackid"] = QVariant::fromValue< QDBusObjectPath >(trackID);
 	connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)), this, SLOT(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)));
 	connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(const QByteArray &)), this, SLOT(coverDataFromMediaFile(const QByteArray &)));
 	connect(&QMPlay2Core, SIGNAL(playStateChanged(const QString &)), this, SLOT(playStateChanged(const QString &)));
@@ -105,7 +105,7 @@ MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
 MediaPlayer2Player::~MediaPlayer2Player()
 {
 	if (removeCover)
-		QFile::remove(m_data[ "mpris:artUrl" ].toString());
+		QFile::remove(m_data["mpris:artUrl"].toString());
 }
 
 bool MediaPlayer2Player::canControl() const
@@ -209,7 +209,7 @@ void MediaPlayer2Player::Seek(qint64 Offset)
 }
 void MediaPlayer2Player::SetPosition(const QDBusObjectPath &TrackId, qint64 Position)
 {
-	if (trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data[ "mpris:length" ].toLongLong())
+	if (trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data["mpris:length"].toLongLong())
 		QMPlay2Core.processParam("seek", QString::number(Position / 1000000LL));
 }
 void MediaPlayer2Player::OpenUri(const QString &Uri)
@@ -227,15 +227,15 @@ void MediaPlayer2Player::updatePlaying(bool play, const QString &title, const QS
 		clearMetaData();
 	else
 	{
-		m_data[ "mpris:length" ] = length < 0 ? -1 : length * 1000000LL;
+		m_data["mpris:length"] = length < 0 ? -1 : length * 1000000LL;
 		if (title.isEmpty() && artist.isEmpty())
-			m_data[ "xesam:title" ] = fileName;
+			m_data["xesam:title"] = fileName;
 		else
 		{
-			m_data[ "xesam:title" ] = title;
-			m_data[ "xesam:artist" ] = QStringList() << artist;
+			m_data["xesam:title"] = title;
+			m_data["xesam:artist"] = QStringList() << artist;
 		}
-		m_data[ "xesam:album" ] = album;
+		m_data["xesam:album"] = album;
 	}
 	propertyChanged("Metadata", m_data);
 }
@@ -248,7 +248,7 @@ void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 		{
 			coverF.write(cover);
 			coverF.close();
-			m_data[ "mpris:artUrl" ] = coverF.fileName();
+			m_data["mpris:artUrl"] = coverF.fileName();
 			propertyChanged("Metadata", m_data);
 			removeCover = true;
 		}
@@ -260,7 +260,7 @@ void MediaPlayer2Player::playStateChanged(const QString &plState)
 }
 void MediaPlayer2Player::coverFile(const QString &filePath)
 {
-	m_data[ "mpris:artUrl" ] = filePath;
+	m_data["mpris:artUrl"] = filePath;
 	propertyChanged("Metadata", m_data);
 	removeCover = false;
 }
@@ -286,12 +286,12 @@ void MediaPlayer2Player::clearMetaData()
 {
 	if (removeCover)
 	{
-		QFile::remove(m_data[ "mpris:artUrl" ].toString());
+		QFile::remove(m_data["mpris:artUrl"].toString());
 		removeCover = false;
 	}
-	m_data[ "mpris:artUrl" ] = m_data[ "xesam:title" ] = m_data[ "xesam:album" ] = QString();
-	m_data[ "xesam:artist" ] = QStringList() << QString();
-	m_data[ "mpris:length" ] = qint64();
+	m_data["mpris:artUrl"] = m_data["xesam:title"] = m_data["xesam:album"] = QString();
+	m_data["xesam:artist"] = QStringList() << QString();
+	m_data["mpris:length"] = qint64();
 }
 
 /**/

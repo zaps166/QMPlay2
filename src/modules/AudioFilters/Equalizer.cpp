@@ -31,7 +31,7 @@ QVector< float > Equalizer::interpolate(const QVector< float > &src, const int l
 		{
 			int   x = i * mn;
 			float p = i * mn - x;
-			dest[ i ] = cosI(src[ x ], src[ x + 1 ], p);
+			dest[i] = cosI(src[x], src[x + 1], p);
 		}
 	}
 	return dest;
@@ -43,7 +43,7 @@ QVector< float > Equalizer::freqs(Settings &sets)
 	const int minFreq = sets.getInt("Equalizer/minFreq"), maxFreq = sets.getInt("Equalizer/maxFreq");
 	const float l = powf(maxFreq / minFreq, 1.0f / (freqs.count() - 1));
 	for (int i = 0; i < freqs.count(); ++i)
-		freqs[ i ] = minFreq * powf(l, i);
+		freqs[i] = minFreq * powf(l, i);
 	return freqs;
 }
 
@@ -117,10 +117,10 @@ double Equalizer::filter(QByteArray &data, bool flush)
 			const int size = data.size() / sizeof(float);
 			for (int c = 0; c < chn; ++c) //Buforowanie danych
 				for (int i = 0; i < size; i += chn)
-					input[ c ].append(samples[ c+i ]);
+					input[c].append(samples[c+i]);
 		}
 		else for (int c = 0; c < chn; ++c) //Dokładanie ciszy
-			input[ c ].resize(FFT_SIZE);
+			input[c].resize(FFT_SIZE);
 
 		data.clear();
 		const int chunks = input.at(0).size() / FFT_SIZE_2 - 1;
@@ -134,33 +134,33 @@ double Equalizer::filter(QByteArray &data, bool flush)
 				while (input.at(c).size() >= FFT_SIZE)
 				{
 					for (int i = 0; i < FFT_SIZE; ++i)
-						complex[ i ] = (FFTComplex){ input.at(c).at(i), 0.0f };
+						complex[i] = (FFTComplex){ input.at(c).at(i), 0.0f };
 					if (!flush)
-						input[ c ].remove(0, FFT_SIZE_2);
+						input[c].remove(0, FFT_SIZE_2);
 					else
-						input[ c ].clear();
+						input[c].clear();
 
 					fft_calc(fftIn, complex);
 					for (int i = 0; i < FFT_SIZE_2; ++i)
 					{
-						complex[            i ].re *= f.at(i) * preamp;
-						complex[            i ].im *= f.at(i) * preamp;
-						complex[ FFT_SIZE-1-i ].re *= f.at(i) * preamp;
-						complex[ FFT_SIZE-1-i ].im *= f.at(i) * preamp;
+						complex[           i].re *= f.at(i) * preamp;
+						complex[           i].im *= f.at(i) * preamp;
+						complex[FFT_SIZE-1-i].re *= f.at(i) * preamp;
+						complex[FFT_SIZE-1-i].im *= f.at(i) * preamp;
 					}
 					fft_calc(fftOut, complex);
 
 					if (last_samples.at(c).isEmpty())
 					{
 						for (int i = 0; i < FFT_SIZE_2; ++i, pos += chn)
-							samples[ pos ] = complex[ i ].re / FFT_SIZE;
-						last_samples[ c ].resize(FFT_SIZE_2);
+							samples[pos] = complex[i].re / FFT_SIZE;
+						last_samples[c].resize(FFT_SIZE_2);
 					}
 					else for (int i = 0; i < FFT_SIZE_2; ++i, pos += chn)
-						samples[ pos ] = (complex[ i ].re / FFT_SIZE) * wind_f.at(i) + last_samples.at(c).at(i);
+						samples[pos] = (complex[i].re / FFT_SIZE) * wind_f.at(i) + last_samples.at(c).at(i);
 
 					for (int i = FFT_SIZE_2; i < FFT_SIZE; ++i)
-						last_samples[ c ][ i-FFT_SIZE_2 ] = (complex[ i ].re / FFT_SIZE) * wind_f.at(i);
+						last_samples[c][i-FFT_SIZE_2] = (complex[i].re / FFT_SIZE) * wind_f.at(i);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ void Equalizer::alloc(bool b)
 			last_samples.resize(chn);
 			wind_f.resize(FFT_SIZE);
 			for (int i = 0; i < FFT_SIZE; ++i)
-				wind_f[ i ] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (FFT_SIZE - 1));
+				wind_f[i] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (FFT_SIZE - 1));
 		}
 		interpolateFilterCurve();
 		canFilter = true;
@@ -216,7 +216,7 @@ void Equalizer::interpolateFilterCurve()
 	preamp = sets().getInt("Equalizer/-1") / 50.0f;
 	QVector< float > src(size);
 	for (int i = 0; i < size; ++i)
-		src[ i ] = sets().getInt("Equalizer/" + QString::number(i)) / 50.0f;
+		src[i] = sets().getInt("Equalizer/" + QString::number(i)) / 50.0f;
 	const int len = FFT_SIZE_2;
 	if (f.size() != len)
 		f.resize(len);
@@ -230,7 +230,7 @@ void Equalizer::interpolateFilterCurve()
 			const int hz = (i+1) * maxHz / len;
 			for (int j = x; j < size; ++j)
 			{
-				if (freqs[ j ] >= hz)
+				if (freqs[j] >= hz)
 					break;
 				if (x != j)
 				{
@@ -239,9 +239,9 @@ void Equalizer::interpolateFilterCurve()
 				}
 			}
 			if (x+1 < size)
-				f[ i ] = cosI(src[ x ], src[ x + 1 ], (i - start) / (len * freqs[ x + 1 ] / maxHz - 1 - start)); /* start / end */
+				f[i] = cosI(src[x], src[x + 1], (i - start) / (len * freqs[x + 1] / maxHz - 1 - start)); /* start / end */
 			else
-				f[ i ] = src[ x ];
+				f[i] = src[x];
 		}
 	}
 }

@@ -108,7 +108,7 @@ bool OpenSLESWriter::processParams(bool *paramsCorrected)
 		sample_rate = rate;
 		buffers.resize(10);
 		for (int i = 0; i < buffers.size(); ++i)
-			buffers[ i ].resize(10 * channels * sample_rate / 1000);
+			buffers[i].resize(10 * channels * sample_rate / 1000);
 
 		/* Engine, output mix */
 		if (slCreateEngine(&engineObject, 0, NULL, 0, NULL, NULL) != SL_RESULT_SUCCESS)
@@ -203,7 +203,7 @@ qint64 OpenSLESWriter::write(const QByteArray &arr)
 			const int toCopy = BUFFER_SIZE - samplesCopiedFromTmp;
 			dest += samplesCopiedFromTmp;
 			for (int i = 0; i < toCopy; ++i)
-				dest[ i ] = toInt16(flt[ i ]);
+				dest[i] = toInt16(flt[i]);
 			flt += toCopy;
 			numSamples -= toCopy;
 		}
@@ -220,7 +220,7 @@ qint64 OpenSLESWriter::write(const QByteArray &arr)
 		tmpBuffer.resize(tmpBufferSamples + numSamples);
 		qint16 *dest = (qint16 *)tmpBuffer.constData() + tmpBufferSamples;
 		for (int i = 0; i < numSamples; ++i)
-			dest[ i ] = toInt16(flt[ i ]);
+			dest[i] = toInt16(flt[i]);
 	}
 
 	return arr.size();

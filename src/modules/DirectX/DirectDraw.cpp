@@ -215,9 +215,9 @@ bool Drawable::draw(const QByteArray &videoFrameData)
 		{
 			const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
 			if (flip & Qt::Horizontal)
-				Functions::hFlip(*(char **)videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight, ddsd.dwWidth);
+				Functions::hFlip(*(char **)videoFrame->data, videoFrame->linesize[0], ddsd.dwHeight, ddsd.dwWidth);
 			if (flip & Qt::Vertical)
-				Functions::vFlip(*(char **)videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight);
+				Functions::vFlip(*(char **)videoFrame->data, videoFrame->linesize[0], ddsd.dwHeight);
 		}
 		VideoFrame::copyYV12(surface, videoFrameData, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight);
 

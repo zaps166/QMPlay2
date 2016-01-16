@@ -43,7 +43,7 @@ private:
 	QGridLayout *layout;
 	QTabWidget *tabW;
 	QPushButton *applyB, *closeB;
-	QString lastM[ 3 ];
+	QString lastM[3];
 
 	bool wasShow;
 	int moduleIndex;

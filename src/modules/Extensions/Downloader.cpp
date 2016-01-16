@@ -415,7 +415,7 @@ QImage DownloaderThread::getImage()
 			QList< QMPlay2Extensions::AddressPrefix > addressPrefixList = QMPlay2Ext->addressPrefixList();
 			int idx = addressPrefixList.indexOf(prefix);
 			if (idx > -1)
-				return addressPrefixList[ idx ].img;
+				return addressPrefixList[idx].img;
 		}
 	}
 	return QImage();
@@ -522,8 +522,8 @@ void DownloaderW::clearFinished()
 {
 	const QList< QTreeWidgetItem * > items = downloadLW->findItems(QString(), Qt::MatchContains);
 	for (int i = items.count() - 1; i >= 0; --i)
-		if (((DownloadItemW *)downloadLW->itemWidget(items[ i ], 0))->isFinished())
-			delete items[ i ];
+		if (((DownloadItemW *)downloadLW->itemWidget(items[i], 0))->isFinished())
+			delete items[i];
 }
 void DownloaderW::addUrl()
 {

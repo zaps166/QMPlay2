@@ -44,13 +44,13 @@ Decoder *Decoder::create(StreamInfo *streamInfo, Writer *writer, const QStringLi
 				{
 					const int idx = modNames.indexOf(mod.name);
 					if (idx > -1)
-						pluginsInstances[ idx ] = qMakePair(pluginInstance, mod);
+						pluginsInstances[idx] = qMakePair(pluginInstance, mod);
 				}
 			}
 	for (int i = 0; i < pluginsInstances.count(); i++)
 	{
-		Module *module = pluginsInstances[ i ].first;
-		Module::Info &moduleInfo = pluginsInstances[ i ].second;
+		Module *module = pluginsInstances[i].first;
+		Module::Info &moduleInfo = pluginsInstances[i].second;
 		if (!module || moduleInfo.name.isEmpty())
 			continue;
 		Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);

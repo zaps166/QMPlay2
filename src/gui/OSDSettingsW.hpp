@@ -35,7 +35,7 @@ private:
 	QSpinBox *fontSizeB, *spacingB, *leftMarginB, *rightMarginB, *vMarginB;
 	QDoubleSpinBox *outlineB, *shadowB;
 	ColorButton *textColorB, *outlineColorB, *shadowColorB;
-	QRadioButton *alignB[ 9 ];
+	QRadioButton *alignB[9];
 
 };
 

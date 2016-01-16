@@ -164,7 +164,7 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
 				scrobbleQueue.enqueue(scrobble);
 			}
 			else for (int i = 0; i < scrobbleQueue.count(); ++i)
-				if (scrobbleQueue[ i ] == scrobble && currTime - scrobbleQueue[ i ].startTime < scrobbleSec)
+				if (scrobbleQueue[i] == scrobble && currTime - scrobbleQueue[i].startTime < scrobbleSec)
 					scrobbleQueue.removeAt(i);
 			if (scrobbleQueue.isEmpty())
 				updateTim.stop();
@@ -186,7 +186,7 @@ void LastFM::albumFinished()
 		if (!coverReply->url().toString().contains("api_key"))
 		{
 			const QStringList taa = coverReply->property("taa").toStringList();
-			emit QMPlay2Core.updateCover(taa[ 0 ], taa[ 1 ], taa[ 2 ], reply);
+			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
 		}
 		else foreach (const QString &size, imageSizes)
 		{

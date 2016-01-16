@@ -94,7 +94,7 @@ FormatContext::~FormatContext()
 	{
 		for (int i = 0; i < streams.count(); ++i)
 		{
-			AVStream *stream = streams[ i ];
+			AVStream *stream = streams[i];
 			if (stream->codec)
 				switch ((quintptr)stream->codec->opaque)
 				{
@@ -135,7 +135,7 @@ QList< ChapterInfo > FormatContext::getChapters() const
 	QList< ChapterInfo > chapters;
 	for (unsigned i = 0; i < formatCtx->nb_chapters; i++)
 	{
-		AVChapter &chapter = *formatCtx->chapters[ i ];
+		AVChapter &chapter = *formatCtx->chapters[i];
 		ChapterInfo chapterInfo(chapter.start * chapter.time_base.num / (double)chapter.time_base.den, chapter.end * chapter.time_base.num / (double)chapter.time_base.den);
 		if (AVDictionaryEntry *avtag = av_dict_get(chapter.metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX))
 			chapterInfo.title = avtag->value;
@@ -306,7 +306,7 @@ bool FormatContext::seek(int pos)
 		if (isOk)
 		{
 			for (int i = 0; i < streamsTS.count(); ++i)
-				streamsTS[ i ] = pos;
+				streamsTS[i] = pos;
 			currPos = pos;
 			isError = false;
 		}
@@ -357,13 +357,13 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	}
 
 #if LIBAVFORMAT_VERSION_MAJOR > 55
-	if (streams[ ff_idx ]->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
+	if (streams[ff_idx]->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
 	{
-		streams[ ff_idx ]->event_flags = 0;
+		streams[ff_idx]->event_flags = 0;
 		isMetadataChanged = true;
 	}
-	if (fixMkvAss && streams[ ff_idx ]->codec->codec_id == AV_CODEC_ID_ASS)
-		matroska_fix_ass_packet(streams[ ff_idx ]->time_base, packet);
+	if (fixMkvAss && streams[ff_idx]->codec->codec_id == AV_CODEC_ID_ASS)
+		matroska_fix_ass_packet(streams[ff_idx]->time_base, packet);
 #else
 	if (isStreamed)
 	{
@@ -401,7 +401,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	encoded.resize(packet->size);
 	memcpy(encoded.data(), packet->data, encoded.capacity());
 
-	const double time_base = av_q2d(streams[ ff_idx ]->time_base);
+	const double time_base = av_q2d(streams[ff_idx]->time_base);
 
 #ifndef MP3_FAST_SEEK
 	if (seekByByteOffset < 0)
@@ -416,9 +416,9 @@ bool FormatContext::read(Packet &encoded, int &idx)
 
 	if (packet->duration > 0)
 		encoded.duration = packet->duration * time_base;
-	else if (!encoded.ts || (encoded.duration = encoded.ts - streamsTS[ ff_idx ]) < 0.0 /* Calculate packet duration if doesn't exists */)
+	else if (!encoded.ts || (encoded.duration = encoded.ts - streamsTS[ff_idx]) < 0.0 /* Calculate packet duration if doesn't exists */)
 		encoded.duration = 0.0;
-	streamsTS[ ff_idx ] = encoded.ts;
+	streamsTS[ff_idx] = encoded.ts;
 
 	if (isStreamed)
 	{
@@ -434,8 +434,8 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	currPos = encoded.ts;
 
 	encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
-	if (streams[ ff_idx ]->sample_aspect_ratio.num)
-		encoded.sampleAspectRatio = av_q2d(streams[ ff_idx ]->sample_aspect_ratio);
+	if (streams[ff_idx]->sample_aspect_ratio.num)
+		encoded.sampleAspectRatio = av_q2d(streams[ff_idx]->sample_aspect_ratio);
 
 	idx = index_map.at(ff_idx);
 
@@ -531,24 +531,24 @@ bool FormatContext::open(const QString &_url)
 	streamsOffset.resize(formatCtx->nb_streams);
 	for (unsigned i = 0; i < formatCtx->nb_streams; ++i)
 	{
-		StreamInfo *streamInfo = getStreamInfo(formatCtx->streams[ i ]);
+		StreamInfo *streamInfo = getStreamInfo(formatCtx->streams[i]);
 		if (!streamInfo)
-			index_map[ i ] = -1;
+			index_map[i] = -1;
 		else
 		{
-			index_map[ i ] = streamsInfo.count();
+			index_map[i] = streamsInfo.count();
 			streamsInfo += streamInfo;
 		}
 #if LIBAVFORMAT_VERSION_MAJOR > 55
-		if (!fixMkvAss && formatCtx->streams[ i ]->codec->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
+		if (!fixMkvAss && formatCtx->streams[i]->codec->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
 			fixMkvAss = true;
-		formatCtx->streams[ i ]->event_flags = 0;
+		formatCtx->streams[i]->event_flags = 0;
 #endif
-		streams += formatCtx->streams[ i ];
+		streams += formatCtx->streams[i];
 
 		TimeStamp ts;
 		ts.set(0.0, 0.0);
-		streamsTS[ i ] = ts;
+		streamsTS[i] = ts;
 	}
 	if (streamsInfo.isEmpty())
 		return false;
@@ -585,14 +585,14 @@ void FormatContext::setStreamOffset(double offset)
 	if (isOneStreamOgg)
 		lastTime = offset;
 	else for (int i = 0; i < streamsOffset.count(); ++i)
-		streamsOffset[ i ] = offset - streamsTS.at(i);
+		streamsOffset[i] = offset - streamsTS.at(i);
 }
 
 /**/
 
 AVDictionary *FormatContext::getMetadata() const
 {
-	return (isStreamed || (!formatCtx->metadata && streamsInfo.count() == 1)) ? streams[ 0 ]->metadata : formatCtx->metadata;
+	return (isStreamed || (!formatCtx->metadata && streamsInfo.count() == 1)) ? streams[0]->metadata : formatCtx->metadata;
 }
 StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 {

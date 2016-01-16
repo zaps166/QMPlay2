@@ -27,9 +27,9 @@ OtherVFiltersW::OtherVFiltersW()
 				const int idx = videoFilters.first.indexOf(moduleInfo.name);
 				if (idx > -1)
 				{
-					if (videoFilters.second[ idx ])
+					if (videoFilters.second[idx])
 						moduleInfo.type |= Module::USERFLAG;
-					pluginsInstances[ idx ] = qMakePair(pluginInstance, moduleInfo);
+					pluginsInstances[idx] = qMakePair(pluginInstance, moduleInfo);
 				}
 				else
 					pluginsInstances += qMakePair(pluginInstance, moduleInfo);
@@ -37,8 +37,8 @@ OtherVFiltersW::OtherVFiltersW()
 
 	for (int i = 0; i < pluginsInstances.count(); i++)
 	{
-		Module *module = pluginsInstances[ i ].first;
-		Module::Info &moduleInfo = pluginsInstances[ i ].second;
+		Module *module = pluginsInstances[i].first;
+		Module::Info &moduleInfo = pluginsInstances[i].second;
 		if (!module || moduleInfo.name.isEmpty())
 			continue;
 		QListWidgetItem *item = new QListWidgetItem(this);

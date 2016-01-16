@@ -18,9 +18,9 @@ void DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
 		videoFrame->setNoInterlaced();
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame->linesize[ p ];
-			quint8 *src = videoFrame->data[ p ];
-			quint8 *dst = videoFrame->data[ p ];
+			const int linesize = videoFrame->linesize[p];
+			quint8 *src = videoFrame->data[p];
+			quint8 *dst = videoFrame->data[p];
 			const int lines = (p ? h >> 2 : h >> 1) - 1;
 			if (!TFF)
 			{

@@ -110,10 +110,10 @@ static QStringList EnumExtensionKeys()
 	QStringList keys;
 	if (!RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\Classes", &key))
 	{
-		WCHAR name[ 256 ];
+		WCHAR name[256];
 		for (DWORD d = 0; !RegEnumKeyW(key, d, name, sizeof name / sizeof *name); ++d)
 		{
-			WCHAR value[ 16 ];
+			WCHAR value[16];
 			DWORD valueLen = sizeof value;
 			QString keyName = QString::fromUtf16((const ushort *)name);
 			if (!SHGetValue(HKEY_CURRENT_USER, (WCHAR *)QString("Software\\Classes\\" + keyName).utf16(), NULL, NULL, value, &valueLen) && !wcsncmp(value, L"QMPlay2", 7))
@@ -169,9 +169,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	foreach (const QString &extension, EnumExtensionKeys())
 		addExtension(extension.right(extension.length() - 1), true);
 	for (size_t s = 0; s < defaultAudioCount; ++s)
-		addExtension(defaultAudioExtensions[ s ], false);
+		addExtension(defaultAudioExtensions[s], false);
 	for (size_t s = 0; s < defaultVideoCount; ++s)
-		addExtension(defaultVideoExtensions[ s ], false);
+		addExtension(defaultVideoExtensions[s], false);
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
 			foreach (const Module::Info &mod, module->getModulesInfo())
 				if (mod.type == Module::PLAYLIST || mod.type == Module::DEMUXER)
@@ -235,7 +235,7 @@ void ModuleSettingsWidget::addExtension(const QString &extension, const bool isC
 		lWI->setData(Qt::UserRole, isPlaylist);
 	}
 	else
-		items[ 0 ]->setData(Qt::UserRole, isPlaylist);
+		items[0]->setData(Qt::UserRole, isPlaylist);
 }
 
 void ModuleSettingsWidget::selectAll()

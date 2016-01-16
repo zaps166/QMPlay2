@@ -21,7 +21,7 @@ Playlist::Entries PLS::_read()
 	const QList< QByteArray > playlistLines = readLines();
 	for (int i = 0; i < playlistLines.count(); ++i)
 	{
-		const QByteArray &line = playlistLines[ i ];
+		const QByteArray &line = playlistLines[i];
 		if (line.isEmpty())
 			continue;
 		int idx = line.indexOf('=');
@@ -31,9 +31,9 @@ Playlist::Entries PLS::_read()
 		int number_idx = -1;
 		for (int i = 0; i < line.length(); ++i)
 		{
-			if (line[ i ] == '=')
+			if (line[i] == '=')
 				break;
-			if (line[ i ] >= '0' && line[ i ] <= '9')
+			if (line[i] >= '0' && line[i] <= '9')
 			{
 				number_idx = i;
 				break;
@@ -51,19 +51,19 @@ Playlist::Entries PLS::_read()
 			continue;
 
 		if (key == "File")
-			list[ entry_idx ].url = Url(value, playlistPath);
+			list[entry_idx].url = Url(value, playlistPath);
 		else if (key == "Title")
-			list[ entry_idx ].name = value.replace('\001', '\n');
+			list[entry_idx].name = value.replace('\001', '\n');
 		else if (key == "Length")
-			list[ entry_idx ].length = value.toInt();
+			list[entry_idx].length = value.toInt();
 		else if (key == "QMPlay_sel")
-			list[ entry_idx ].selected = value.toInt();
+			list[entry_idx].selected = value.toInt();
 		else if (key == "QMPlay_queue")
-			list[ entry_idx ].queue = value.toInt();
+			list[entry_idx].queue = value.toInt();
 		else if (key == "QMPlay_GID")
-			list[ entry_idx ].GID = value.toInt();
+			list[entry_idx].GID = value.toInt();
 		else if (key == "QMPlay_parent")
-			list[ entry_idx ].parent = value.toInt();
+			list[entry_idx].parent = value.toInt();
 	}
 
 	return list;
@@ -74,7 +74,7 @@ bool PLS::_write(const Entries &list)
 	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
 	for (int i = 0; i < list.size(); i++)
 	{
-		const Playlist::Entry &entry = list[ i ];
+		const Playlist::Entry &entry = list[i];
 		QString idx = QString::number(i+1);
 		QString url = entry.url;
 		const bool isFile = url.startsWith("file://");

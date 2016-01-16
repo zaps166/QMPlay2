@@ -66,7 +66,7 @@ bool GME::read(Packet &decoded, int &idx)
 		return false;
 
 	for (int i = chunkSize - 1; i >= 0; --i)
-		dstData[ i ] = srcData[ i ] / 32768.0;
+		dstData[i] = srcData[i] / 32768.0;
 
 	decoded.ts = gme_tell(m_gme) / 1000.0;
 	decoded.duration = chunkSize / 2 / (double)m_srate;
@@ -108,7 +108,7 @@ Playlist::Entries GME::fetchTracks(const QString &url, bool &ok)
 		if (entries.length() > 1)
 		{
 			for (int i = 0; i < entries.length(); ++i)
-				entries[ i ].parent = 1;
+				entries[i].parent = 1;
 			Playlist::Entry entry;
 			entry.name = Functions::fileName(m_url, false);
 			entry.url = m_url;

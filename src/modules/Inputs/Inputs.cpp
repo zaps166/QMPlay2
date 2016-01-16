@@ -12,7 +12,7 @@
 #include <QLabel>
 
 static const QString standartExts = "pcm;raw";
-static const char *formatName[ PCM::FORMAT_COUNT ] =
+static const char *formatName[PCM::FORMAT_COUNT] =
 {
 	"Unsigned 8bit PCM",
 	"Signed 8bit PCM",
@@ -105,7 +105,7 @@ HzW::HzW(int c, const QStringList &freqs)
 		sB->setRange(0, 96000);
 		sB->setSuffix(" Hz");
 		if (freqs.count() > i)
-			sB->setValue(freqs[ i ].toInt());
+			sB->setValue(freqs[i].toInt());
 		else
 			sB->setValue(440);
 		hzB.append(sB);
@@ -236,7 +236,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	int checked = sets().getInt("PCM/format");
 	for (int i = 0; i < PCM::FORMAT_COUNT; ++i)
 	{
-		QRadioButton *rB = new QRadioButton(formatName[ i ]);
+		QRadioButton *rB = new QRadioButton(formatName[i]);
 		if (i == checked)
 			rB->setChecked(true);
 		fmtLayout->addWidget(rB);
@@ -304,7 +304,7 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("PCM", pcmB->isChecked());
 	sets().set("PCM/extensions", pcmExtsE->text().split(';', QString::SkipEmptyParts));
 	for (int i = 0; i < formatB.size(); ++i)
-		if (formatB[ i ]->isChecked())
+		if (formatB[i]->isChecked())
 		{
 			sets().set("PCM/format", i);
 			break;

@@ -61,7 +61,7 @@ ALSACommon::DevicesList ALSACommon::getDevices()
 						else
 						{
 							const QStringList descL = QString(desc).split(',');
-							devices.second += descL.count() > 1 ? descL[ 1 ].simplified() : descL[ 0 ].simplified();
+							devices.second += descL.count() > 1 ? descL[1].simplified() : descL[0].simplified();
 							free(desc);
 						}
 					}
@@ -87,5 +87,5 @@ QString ALSACommon::getDeviceName(const ALSACommon::DevicesList &devicesList, co
 		if (devIdx < 0 && !devicesList.first.isEmpty())
 			devIdx = 0;
 	}
-	return devIdx > -1 ? devicesList.first[ devIdx ] : QString();
+	return devIdx > -1 ? devicesList.first[devIdx] : QString();
 }

@@ -61,7 +61,7 @@ Radio::Radio(Module &module) :
 	{
 		const QStringList nazwa_i_adres = entry.split('\n');
 		if (nazwa_i_adres.count() == 2)
-			addStation(nazwa_i_adres[ 0 ], nazwa_i_adres[ 1 ], wlasneStacje);
+			addStation(nazwa_i_adres[0], nazwa_i_adres[1], wlasneStacje);
 	}
 }
 Radio::~Radio()
@@ -173,7 +173,7 @@ void Radio::finished()
 				int imgSize = *(const int *)RadioList.constData();
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
 				quint8 *imgSizeArr = (quint8 *)&imgSize;
-				imgSize = imgSizeArr[ 0 ] << 24 | imgSizeArr[ 1 ] << 16 | imgSizeArr[ 2 ] << 8 | imgSizeArr[ 3 ];
+				imgSize = imgSizeArr[0] << 24 | imgSizeArr[1] << 16 | imgSizeArr[2] << 8 | imgSizeArr[3];
 #endif
 				RadioList.remove(0, sizeof(int));
 				QByteArray img = RadioList.mid(0, imgSize);

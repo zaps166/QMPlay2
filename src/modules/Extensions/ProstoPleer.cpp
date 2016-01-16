@@ -282,9 +282,9 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 				if (bitrate == "vbr" && time > 0)
 				{
 					QStringList fSizeList = regexp.cap(7).toLower().split(' ');
-					if (fSizeList.count() >= 2 && fSizeList[ 1 ] == "mb")
+					if (fSizeList.count() >= 2 && fSizeList[1] == "mb")
 					{
-						float fSize = fSizeList[ 0 ].toFloat();
+						float fSize = fSizeList[0].toFloat();
 						if (fSize > 0.0f)
 						{
 							fSize *= 8.0f * 1024.0f;

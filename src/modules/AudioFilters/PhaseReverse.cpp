@@ -30,7 +30,7 @@ double PhaseReverse::filter(QByteArray &data, bool)
 		float *samples = (float *)data.data();
 
 		for (int i = reverseRight; i < size; i += chn)
-			samples[ i ] = -samples[ i ];
+			samples[i] = -samples[i];
 	}
 	return 0.0;
 }

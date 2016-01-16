@@ -28,7 +28,7 @@ private:
 	{
 		QLabel *titleL, *valueL;
 		Slider *slider;
-	} controls[ CONTROLS_COUNT ];
+	} controls[CONTROLS_COUNT];
 	QPushButton *resetB;
 };
 

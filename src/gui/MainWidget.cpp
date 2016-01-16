@@ -496,12 +496,12 @@ void MainWidget::switchARatio()
 	int count = menuBar->player->aRatio->choice->actions().count();
 	int idx = menuBar->player->aRatio->choice->actions().indexOf(checked);
 	int checkNewIdx = (idx == count - 1) ? 0 : (idx+1);
-	menuBar->player->aRatio->choice->actions()[ checkNewIdx ]->trigger();
+	menuBar->player->aRatio->choice->actions()[checkNewIdx]->trigger();
 }
 void MainWidget::resetARatio()
 {
-	if (menuBar->player->aRatio->choice->checkedAction() != menuBar->player->aRatio->choice->actions()[ 0 ])
-		menuBar->player->aRatio->choice->actions()[ 0 ]->trigger();
+	if (menuBar->player->aRatio->choice->checkedAction() != menuBar->player->aRatio->choice->actions()[0])
+		menuBar->player->aRatio->choice->actions()[0]->trigger();
 }
 void MainWidget::resetFlip()
 {

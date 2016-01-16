@@ -21,7 +21,7 @@ static bool Inflate(const BYTE *data, DWORD size, BYTE *&out_arr, const DWORD ou
 {
 	const DWORD CHUNK = 16384;
 	DWORD bytes_done = 0;
-	Bytef out[ CHUNK ];
+	Bytef out[CHUNK];
 	int err;
 
 	out_arr = NULL;
@@ -114,7 +114,7 @@ public:
 
 			riff_arr = (RIFF *)realloc(riff_arr, ++riff_count * sizeof(RIFF));
 
-			RIFF &riff = riff_arr[ riff_count-1 ];
+			RIFF &riff = riff_arr[riff_count-1];
 			riff.type = data.getDWORD();
 			riff.chunk_count = 0;
 			riff.chunk_arr = NULL;
@@ -141,14 +141,14 @@ public:
 					++data;
 
 				riff.chunk_arr = (CHUNK *)realloc(riff.chunk_arr, ++riff.chunk_count * sizeof(CHUNK));
-				riff.chunk_arr[ riff.chunk_count-1 ] = chunk;
+				riff.chunk_arr[riff.chunk_count-1] = chunk;
 			}
 		}
 	}
 	~RIFFList()
 	{
 		for (DWORD i = 0; i < riff_count; ++i)
-			free(riff_arr[ i ].chunk_arr);
+			free(riff_arr[i].chunk_arr);
 		free(riff_arr);
 	}
 
@@ -158,7 +158,7 @@ public:
 	}
 	RIFF &operator [](DWORD idx)
 	{
-		return riff_arr[ idx ];
+		return riff_arr[idx];
 	}
 private:
 	RIFF *riff_arr;
@@ -176,16 +176,16 @@ static void LoadSample(CSoundFile &c, const BYTE *const chunk_data, const DWORD 
 	DWORD header_length = isAM ? data.getDWORD() : 56;
 	if (data.remaining() < header_length)
 		return;
-	MODINSTRUMENT &sample = c.Ins[ c.m_nSamples ];
+	MODINSTRUMENT &sample = c.Ins[c.m_nSamples];
 
 	if (isAM)
 	{
-		memcpy(c.m_szNames[ c.m_nSamples ], data, 31);
+		memcpy(c.m_szNames[c.m_nSamples], data, 31);
 		data += 32;
 	}
 	else
 	{
-		memcpy(c.m_szNames[ c.m_nSamples ], data, 28);
+		memcpy(c.m_szNames[c.m_nSamples], data, 28);
 		data += 28;
 	}
 
@@ -212,7 +212,7 @@ static void LoadSample(CSoundFile &c, const BYTE *const chunk_data, const DWORD 
 }
 static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const chunk_data, const DWORD chunk_size, const bool isAM)
 {
-	INSTRUMENTHEADER *&instrument = c.Headers[ inst_idx ];
+	INSTRUMENTHEADER *&instrument = c.Headers[inst_idx];
 
 	instrument = new INSTRUMENTHEADER;
 	memset(instrument, 0, sizeof(INSTRUMENTHEADER));
@@ -228,8 +228,8 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 	for (BYTE i = 0; i < NOTE_MAX; i++)
 	{
 		WORD sample_map = c.m_nSamples + data.getBYTE();
-		instrument->Keyboard[ i ] = sample_map >= MAX_SAMPLES ? 0 : sample_map;
-		instrument->NoteMap[ i ] = i + 1;
+		instrument->Keyboard[i] = sample_map >= MAX_SAMPLES ? 0 : sample_map;
+		instrument->NoteMap[i] = i + 1;
 	}
 
 	if (isAM)
@@ -278,25 +278,25 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 			}
 			for (BYTE i = 0; i < J2B_MAX_ENVPOINTS; ++i)
 			{
-				Points[ i ] = data.getWORD() >> 4; //X, 16bit
+				Points[i] = data.getWORD() >> 4; //X, 16bit
 				const WORD Y = data.getWORD(); //Y, 8bit
 				switch (t)
 				{
 					case J2B_AM_ENV_VOL:
-						Env[ i ] = Y / 511;
+						Env[i] = Y / 511;
 						break;
 					case J2B_AM_ENV_PITCH:
 						if (Y <= 0xFFF) //Dodatnie
-							Env[ i ] = Y / 127 + 0x20;
+							Env[i] = Y / 127 + 0x20;
 						else if (Y >= 0x6FFF && Y <= 0x7FFE) //Ujemne
-							Env[ i ] = (Y - 0x6FFF) / 128;
+							Env[i] = (Y - 0x6FFF) / 128;
 						else if (Y >= 0x0FFF && Y <= 0x6FFE)
-							Env[ i ] = 0x40;
+							Env[i] = 0x40;
 						else if (Y >= 0x7FFF)
-							Env[ i ] = 0x20;
+							Env[i] = 0x20;
 						break;
 					case J2B_AM_ENV_PAN:
-						Env[ i ] = (Y ^ 0x8000) / 1023; //zamiana signed na unsigned (prawie tak jak w 8bit PCM)
+						Env[i] = (Y ^ 0x8000) / 1023; //zamiana signed na unsigned (prawie tak jak w 8bit PCM)
 						break;
 				}
 			}
@@ -340,12 +340,12 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 				switch (t)
 				{
 					case J2B_AMFF_ENV_VOL:
-						instrument->VolPoints[ i ] = X;
-						instrument->VolEnv[ i ] = Y;
+						instrument->VolPoints[i] = X;
+						instrument->VolEnv[i] = Y;
 						break;
 					case J2B_AMFF_ENV_PAN:
-						instrument->PanPoints[ i ] = X;
-						instrument->PanEnv[ i ] = Y;
+						instrument->PanPoints[i] = X;
+						instrument->PanEnv[i] = Y;
 						break;
 				}
 			}
@@ -393,14 +393,14 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 	RIFFList riff_list(uncompressed_arr ? uncompressed_arr : lpStream, uncompressed_arr ? uncompressed_size : dwMemLength, isAM);
 	for (DWORD i = 0; i < riff_list.count(); ++i)
 	{
-		for (DWORD j = 0; j < riff_list[ i ].chunk_count; ++j)
+		for (DWORD j = 0; j < riff_list[i].chunk_count; ++j)
 		{
-			CHUNK &chunk = riff_list[ i ].chunk_arr[ j ];
+			CHUNK &chunk = riff_list[i].chunk_arr[j];
 			ByteArray data(chunk.data, chunk.size);
 
 			if ((isAM && chunk.type == FourCC("INIT")) || (!isAM && chunk.type == FourCC("MAIN")))
 			{
-				memcpy(m_szNames[ 0 ], data, 31); //Name
+				memcpy(m_szNames[0], data, 31); //Name
 				data += 64; //Name length in J2B
 
 				BYTE flags = data.getBYTE();
@@ -423,16 +423,16 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 					if (isAM)
 					{
 						if (c <= 0x80)
-							ChnSettings[ i ].nPan = c * 2;
+							ChnSettings[i].nPan = c * 2;
 						else
-							ChnSettings[ i ].dwFlags |= CHN_MUTE;
+							ChnSettings[i].dwFlags |= CHN_MUTE;
 					}
 					else
 					{
 						if (c >= 0x80)
-							ChnSettings[ i ].dwFlags |= CHN_MUTE;
+							ChnSettings[i].dwFlags |= CHN_MUTE;
 						else
-							ChnSettings[ i ].nPan = c * 4;
+							ChnSettings[i].nPan = c * 4;
 					}
 				}
 			}
@@ -452,8 +452,8 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 						m_nPattern = pattern_idx + 1;
 
 					DWORD rows = data.getBYTE() + 1;
-					PatternSize[ pattern_idx ] = rows;
-					MODCOMMAND *&pattern = Patterns[ pattern_idx ];
+					PatternSize[pattern_idx] = rows;
+					MODCOMMAND *&pattern = Patterns[pattern_idx];
 					pattern = AllocatePattern(rows, m_nChannels);
 
 					for (DWORD row = 0; row < rows && !data.atEnd();)
@@ -468,7 +468,7 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 							continue;
 						}
 
-						MODCOMMAND &m = pattern[ m_nChannels*row+channel ];
+						MODCOMMAND &m = pattern[m_nChannels*row+channel];
 						if (command & 0x8)
 						{
 							m.param   = data.getBYTE(); //Effect parameter
@@ -509,9 +509,9 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 						RIFFList riff_samp(data+size, data.remaining()-size, isAM);
 						++data;
 						BYTE inst_idx = data.getBYTE() + 1;
-						if (inst_idx < MAX_INSTRUMENTS && riff_samp.count() == 1 && riff_samp[ 0 ].chunk_count == 1)
+						if (inst_idx < MAX_INSTRUMENTS && riff_samp.count() == 1 && riff_samp[0].chunk_count == 1)
 						{
-							CHUNK &chunk = riff_samp[ 0 ].chunk_arr[ 0 ];
+							CHUNK &chunk = riff_samp[0].chunk_arr[0];
 							if (chunk.type == FourCC("SAMP"))
 							{
 								if (inst_idx > m_nInstruments)

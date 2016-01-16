@@ -30,7 +30,7 @@ static void addImgs(ASS_Image *img, QMPlay2_OSD *osd)
 			const int offsetI = y * img->stride;
 			const int offsetB = y * img->w;
 			for (int x = 0; x < img->w; x++)
-				bitmap_ptr[ offsetB + x ] = (a * img->bitmap[ offsetI + x ] / 0xFF) << 24 | b << 16 | g << 8 | r;
+				bitmap_ptr[offsetB + x] = (a * img->bitmap[offsetI + x] / 0xFF) << 24 | b << 16 | g << 8 | r;
 		}
 
 		osd->addImage(QRect(img->dst_x, img->dst_y, img->w, img->h), bitmap);
@@ -141,11 +141,11 @@ void LibASS::initOSD()
 	osd_track = ass_new_track(ass);
 
 	int styleID = ass_alloc_style(osd_track);
-	osd_style = &osd_track->styles[ styleID ];
+	osd_style = &osd_track->styles[styleID];
 	setOSDStyle();
 
 	int eventID = ass_alloc_event(osd_track);
-	osd_event = &osd_track->events[ eventID ];
+	osd_event = &osd_track->events[eventID];
 	osd_event->Start = 0;
 	osd_event->Duration = 1;
 	osd_event->Style = styleID;
@@ -224,7 +224,7 @@ void LibASS::initASS(const QByteArray &ass_data)
 	else
 	{
 		ass_alloc_style(ass_sub_track);
-		ass_sub_track->styles[ 0 ].ScaleX = ass_sub_track->styles[ 0 ].ScaleY = 1;
+		ass_sub_track->styles[0].ScaleX = ass_sub_track->styles[0].ScaleY = 1;
 		overridePlayRes = true;
 		hasASSData = false;
 		setASSStyle();
@@ -240,7 +240,7 @@ void LibASS::setASSStyle()
 
 	if (!hasASSData)
 	{
-		readStyle("Subtitles", &ass_sub_track->styles[ 0 ]);
+		readStyle("Subtitles", &ass_sub_track->styles[0]);
 		return;
 	}
 
@@ -262,10 +262,10 @@ void LibASS::setASSStyle()
 		for (int i = 0; i < ass_sub_track->n_styles; i++)
 		{
 			ASS_Style *style = new ASS_Style;
-			memcpy(style, &ass_sub_track->styles[ i ], sizeof(ASS_Style));
+			memcpy(style, &ass_sub_track->styles[i], sizeof(ASS_Style));
 			style->Name = NULL;
-			if (ass_sub_track->styles[ i ].FontName)
-				style->FontName = strdup(ass_sub_track->styles[ i ].FontName);
+			if (ass_sub_track->styles[i].FontName)
+				style->FontName = strdup(ass_sub_track->styles[i].FontName);
 			else
 				style->FontName = NULL;
 			ass_sub_styles_copy += style;
@@ -276,7 +276,7 @@ void LibASS::setASSStyle()
 
 	for (int i = 0; i < ass_sub_track->n_styles; i++)
 	{
-		ASS_Style &style = ass_sub_track->styles[ i ];
+		ASS_Style &style = ass_sub_track->styles[i];
 		if (colorsAndBorders)
 		{
 			style.PrimaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value< QColor >());
@@ -289,13 +289,13 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			style.PrimaryColour = ass_sub_styles_copy[ i ]->PrimaryColour;
-			style.SecondaryColour = ass_sub_styles_copy[ i ]->SecondaryColour;
-			style.OutlineColour = ass_sub_styles_copy[ i ]->OutlineColour;
-			style.BackColour = ass_sub_styles_copy[ i ]->BackColour;
-			style.BorderStyle = ass_sub_styles_copy[ i ]->BorderStyle;
-			style.Outline = ass_sub_styles_copy[ i ]->Outline;
-			style.Shadow = ass_sub_styles_copy[ i ]->Shadow;
+			style.PrimaryColour = ass_sub_styles_copy[i]->PrimaryColour;
+			style.SecondaryColour = ass_sub_styles_copy[i]->SecondaryColour;
+			style.OutlineColour = ass_sub_styles_copy[i]->OutlineColour;
+			style.BackColour = ass_sub_styles_copy[i]->BackColour;
+			style.BorderStyle = ass_sub_styles_copy[i]->BorderStyle;
+			style.Outline = ass_sub_styles_copy[i]->Outline;
+			style.Shadow = ass_sub_styles_copy[i]->Shadow;
 		}
 		if (marginsAndAlignment)
 		{
@@ -307,11 +307,11 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			style.MarginL = ass_sub_styles_copy[ i ]->MarginL;
-			style.MarginR = ass_sub_styles_copy[ i ]->MarginR;
-			style.MarginV = ass_sub_styles_copy[ i ]->MarginV;
-			style.Alignment = ass_sub_styles_copy[ i ]->Alignment;
-			style.Angle = ass_sub_styles_copy[ i ]->Angle;
+			style.MarginL = ass_sub_styles_copy[i]->MarginL;
+			style.MarginR = ass_sub_styles_copy[i]->MarginR;
+			style.MarginV = ass_sub_styles_copy[i]->MarginV;
+			style.Alignment = ass_sub_styles_copy[i]->Alignment;
+			style.Angle = ass_sub_styles_copy[i]->Angle;
 		}
 		if (style.FontName)
 			free(style.FontName);
@@ -325,18 +325,18 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			if (ass_sub_styles_copy[ i ]->FontName)
-				style.FontName = strdup(ass_sub_styles_copy[ i ]->FontName);
+			if (ass_sub_styles_copy[i]->FontName)
+				style.FontName = strdup(ass_sub_styles_copy[i]->FontName);
 			else
 				style.FontName = NULL;
-			style.FontSize = ass_sub_styles_copy[ i ]->FontSize;
-			style.Spacing = ass_sub_styles_copy[ i ]->Spacing;
-			style.ScaleX = ass_sub_styles_copy[ i ]->ScaleX;
-			style.ScaleY = ass_sub_styles_copy[ i ]->ScaleY;
-			style.Bold = ass_sub_styles_copy[ i ]->Bold;
-			style.Italic = ass_sub_styles_copy[ i ]->Italic;
-			style.Underline = ass_sub_styles_copy[ i ]->Underline;
-			style.StrikeOut = ass_sub_styles_copy[ i ]->StrikeOut;
+			style.FontSize = ass_sub_styles_copy[i]->FontSize;
+			style.Spacing = ass_sub_styles_copy[i]->Spacing;
+			style.ScaleX = ass_sub_styles_copy[i]->ScaleX;
+			style.ScaleY = ass_sub_styles_copy[i]->ScaleY;
+			style.Bold = ass_sub_styles_copy[i]->Bold;
+			style.Italic = ass_sub_styles_copy[i]->Italic;
+			style.Underline = ass_sub_styles_copy[i]->Underline;
+			style.StrikeOut = ass_sub_styles_copy[i]->StrikeOut;
 		}
 	}
 }
@@ -351,7 +351,7 @@ void LibASS::addASSEvent(const QByteArray &text, double Start, double Duration)
 	if (!ass_sub_track || !ass_sub_renderer || text.isEmpty() || Start < 0 || Duration < 0)
 		return;
 	int eventID = ass_alloc_event(ass_sub_track);
-	ASS_Event *event = &ass_sub_track->events[ eventID ];
+	ASS_Event *event = &ass_sub_track->events[eventID];
 	event->Text = strdup(text.data());
 	event->Start = Start * 1000;
 	event->Duration = Duration * 1000;
@@ -383,10 +383,10 @@ bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
 	{
 		for (int i = 0; i < ass_sub_track->n_styles; i++)
 		{
-			ass_sub_track->styles[ i ].ScaleX  *= _fontScale;
-			ass_sub_track->styles[ i ].ScaleY  *= _fontScale;
-			ass_sub_track->styles[ i ].Shadow  *= _fontScale;
-			ass_sub_track->styles[ i ].Outline *= _fontScale;
+			ass_sub_track->styles[i].ScaleX  *= _fontScale;
+			ass_sub_track->styles[i].ScaleY  *= _fontScale;
+			ass_sub_track->styles[i].Shadow  *= _fontScale;
+			ass_sub_track->styles[i].Outline *= _fontScale;
 		}
 	}
 
@@ -398,10 +398,10 @@ bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
 	{
 		for (int i = 0; i < ass_sub_track->n_styles; i++)
 		{
-			ass_sub_track->styles[ i ].ScaleX  /= _fontScale;
-			ass_sub_track->styles[ i ].ScaleY  /= _fontScale;
-			ass_sub_track->styles[ i ].Shadow  /= _fontScale;
-			ass_sub_track->styles[ i ].Outline /= _fontScale;
+			ass_sub_track->styles[i].ScaleX  /= _fontScale;
+			ass_sub_track->styles[i].ScaleY  /= _fontScale;
+			ass_sub_track->styles[i].Shadow  /= _fontScale;
+			ass_sub_track->styles[i].Outline /= _fontScale;
 		}
 	}
 

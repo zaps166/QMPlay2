@@ -93,7 +93,7 @@ private:
 	QList< VAProfile > profileList;
 
 	static const int surfacesCount = 20;
-	VASurfaceID surfaces[ surfacesCount ];
+	VASurfaceID surfaces[surfacesCount];
 	QQueue< VASurfaceID > surfacesQueue;
 	bool surfacesCreated, paused;
 
@@ -114,7 +114,7 @@ private:
 #ifdef HAVE_VPP //Postprocessing
 	VAContextID context_vpp;
 	VAConfigID config_vpp;
-	VABufferID vpp_buffers[ VAProcFilterCount ]; //TODO implement all filters
+	VABufferID vpp_buffers[VAProcFilterCount]; //TODO implement all filters
 	VAProcDeinterlacingType vpp_deint_type;
 	VASurfaceID id_vpp, forward_reference;
 	bool use_vpp, vpp_second;

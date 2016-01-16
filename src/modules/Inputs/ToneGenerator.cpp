@@ -33,7 +33,7 @@ bool ToneGenerator::set()
 			else
 				metadata_changed = true;
 			for (int i = 0; i < freqs.size(); ++i)
-				freqs[ i ] = newFreqs[ i ].toInt();
+				freqs[i] = newFreqs[i].toInt();
 		}
 	}
 	return !restartPlaying;
@@ -91,7 +91,7 @@ bool ToneGenerator::read(Packet &decoded, int &idx)
 
 	for (uint i = 0; i < srate * chn; i += chn)
 		for (int c = 0; c < chn; ++c)
-			samples[ i + c ] = sin(2.0 * M_PI * freqs[ c ] * i / srate / chn); //don't use sinf()!
+			samples[i + c] = sin(2.0 * M_PI * freqs[c] * i / srate / chn); //don't use sinf()!
 
 	idx = 0;
 	decoded.ts = pos;

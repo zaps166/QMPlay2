@@ -158,20 +158,20 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	for (int i = 0; i < itagVideoNames.first.count(); ++i)
 	{
 		QListWidgetItem *lWI = new QListWidgetItem(itagVideoLW);
-		lWI->setText(itagVideoNames.first[ i ]);
-		lWI->setData(Qt::UserRole, itagVideoNames.second[ i ]);
+		lWI->setText(itagVideoNames.first[i]);
+		lWI->setData(Qt::UserRole, itagVideoNames.second[i]);
 	}
 	for (int i = 0; i < itagAudioNames.first.count(); ++i)
 	{
 		QListWidgetItem *lWI = new QListWidgetItem(itagAudioLW);
-		lWI->setText(itagAudioNames.first[ i ]);
-		lWI->setData(Qt::UserRole, itagAudioNames.second[ i ]);
+		lWI->setText(itagAudioNames.first[i]);
+		lWI->setData(Qt::UserRole, itagAudioNames.second[i]);
 	}
 	for (int i = 0; i < itagNames.first.count(); ++i)
 	{
 		QListWidgetItem *lWI = new QListWidgetItem(itagLW);
-		lWI->setText(itagNames.first[ i ]);
-		lWI->setData(Qt::UserRole, itagNames.second[ i ]);
+		lWI->setText(itagNames.first[i]);
+		lWI->setData(Qt::UserRole, itagNames.second[i]);
 	}
 
 	enableItagLists(multiStreamB->isChecked());

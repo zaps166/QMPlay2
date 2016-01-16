@@ -51,8 +51,8 @@ Playlist::Entries M3U::_read()
 				continue;
 			}
 			Entry entry;
-			entry.length = splitLine[ 0 ].toInt();
-			entry.name = splitLine[ 1 ].replace('\001', '\n');
+			entry.length = splitLine[0].toInt();
+			entry.name = splitLine[1].replace('\001', '\n');
 			entry.url = Url(line, playlistPath);
 			list += entry;
 		}
@@ -66,7 +66,7 @@ bool M3U::_write(const Entries &list)
 	writer->write("#EXTM3U\r\n");
 	for (int i = 0; i < list.size(); i++)
 	{
-		const Entry &entry = list[ i ];
+		const Entry &entry = list[i];
 		if (!entry.GID)
 		{
 			QString length = QString::number(entry.length);

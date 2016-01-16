@@ -20,10 +20,10 @@ void BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
 
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame1->linesize[ p ];
-			quint8 *src  = videoFrame1->data[ p ] + linesize;
-			quint8 *dst1 = videoFrame1->data[ p ];
-			quint8 *dst2 = videoFrame2->data[ p ];
+			const int linesize = videoFrame1->linesize[p];
+			quint8 *src  = videoFrame1->data[p] + linesize;
+			quint8 *dst1 = videoFrame1->data[p];
+			quint8 *dst2 = videoFrame2->data[p];
 
 			memcpy(dst2, src, linesize); //Copy second line into new frame (duplicate first line in new frame, simple deshake)
 			dst2 += linesize;

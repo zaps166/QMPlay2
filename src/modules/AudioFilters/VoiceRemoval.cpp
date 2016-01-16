@@ -29,7 +29,7 @@ double VoiceRemoval::filter(QByteArray &data, bool)
 		float *samples = (float *)data.data();
 
 		for (int i = 0; i < size; i += chn)
-			samples[ i ] = samples[ i+1 ] = samples[ i ] - samples[ i+1 ];
+			samples[i] = samples[i+1] = samples[i] - samples[i+1];
 	}
 	return 0.0;
 }

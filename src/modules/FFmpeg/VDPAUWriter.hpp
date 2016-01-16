@@ -108,14 +108,14 @@ private:
 	VdpVideoMixerQueryFeatureSupport *vdp_video_mixer_query_feature_support;
 
 	static const int surfacesCount = 20, outputSurfacesCount = 2;
-	VdpOutputSurface outputSurfaces[ outputSurfacesCount ];
-	VdpVideoSurface surfaces[ surfacesCount ], renderSurfaces[ 3 ];
+	VdpOutputSurface outputSurfaces[outputSurfacesCount];
+	VdpVideoSurface surfaces[surfacesCount], renderSurfaces[3];
 	QQueue< VdpVideoSurface > surfacesQueue;
 	QSize outputSurfacesSize;
 
 	static const int featuresCount = 13, scalingLevelsIdx = 4, scalingLevelsCount = 9;
-	VdpVideoMixerFeature features[ featuresCount ];
-	VdpBool featureEnables[ featuresCount ];
+	VdpVideoMixerFeature features[featuresCount];
+	VdpBool featureEnables[featuresCount];
 	float noisereduction_lvl, sharpness_lvl;
 	int featuresCountCreated;
 

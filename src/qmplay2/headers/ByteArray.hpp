@@ -48,9 +48,9 @@ public:
 		}
 		uint16_t ret;
 		if (data_bigendian)
-			ret = data[ 1 ] | data[ 0 ] << 8;
+			ret = data[1] | data[0] << 8;
 		else
-			ret = data[ 0 ] | data[ 1 ] << 8;
+			ret = data[0] | data[1] << 8;
 		data += sizeof ret;
 		return ret;
 	}
@@ -63,9 +63,9 @@ public:
 		}
 		uint32_t ret;
 		if (data_bigendian)
-			ret = data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
+			ret = data[2] << 8 | data[1] << 16 | data[0] << 24;
 		else
-			ret = data[ 0 ] << 8 | data[ 1 ] << 16 | data[ 2 ] << 24;
+			ret = data[0] << 8 | data[1] << 16 | data[2] << 24;
 		data += 3;
 		return ret;
 	}
@@ -78,9 +78,9 @@ public:
 		}
 		uint32_t ret;
 		if (data_bigendian)
-			ret = data[ 3 ] | data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
+			ret = data[3] | data[2] << 8 | data[1] << 16 | data[0] << 24;
 		else
-			ret = data[ 0 ] | data[ 1 ] << 8 | data[ 2 ] << 16 | data[ 3 ] << 24;
+			ret = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
 		data += sizeof ret;
 		return ret;
 	}
@@ -97,9 +97,9 @@ public:
 			float flt;
 		} ret;
 		if (data_bigendian)
-			ret.u32 = data[ 3 ] | data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
+			ret.u32 = data[3] | data[2] << 8 | data[1] << 16 | data[0] << 24;
 		else
-			ret.u32 = data[ 0 ] | data[ 1 ] << 8 | data[ 2 ] << 16 | data[ 3 ] << 24;
+			ret.u32 = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
 		data += sizeof ret;
 		return ret.flt;
 	}
@@ -153,7 +153,7 @@ public:
 	{
 		if (atEnd())
 			return 0;
-		return data[ idx ];
+		return data[idx];
 	}
 
 	inline operator const void *() const
@@ -179,12 +179,12 @@ private:
 	const bool data_bigendian;
 };
 
-static inline uint32_t FourCC(const char str[ 5 ], const bool data_bigendian = false)
+static inline uint32_t FourCC(const char str[5], const bool data_bigendian = false)
 {
 	if (data_bigendian)
-		return str[ 3 ] | str[ 2 ] << 8 | str[ 1 ] << 16 | str[ 0 ] << 24;
+		return str[3] | str[2] << 8 | str[1] << 16 | str[0] << 24;
 	else
-		return str[ 0 ] | str[ 1 ] << 8 | str[ 2 ] << 16 | str[ 3 ] << 24;
+		return str[0] | str[1] << 8 | str[2] << 16 | str[3] << 24;
 }
 
 #endif

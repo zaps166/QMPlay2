@@ -18,9 +18,9 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 	}
 	data = 0;
 
-	DWORD sample_size[ m_nSamples ];
+	DWORD sample_size[m_nSamples];
 	for (BYTE i = 0; i < m_nSamples; ++i)
-		sample_size[ i ] = data.getDWORD();
+		sample_size[i] = data.getDWORD();
 
 	data += 4; //"SONG"
 
@@ -29,9 +29,9 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 
 	for (BYTE i = 1; i <= m_nSamples; ++i)
 	{
-		MODINSTRUMENT &sample = Ins[ i ];
+		MODINSTRUMENT &sample = Ins[i];
 
-		memcpy(m_szNames[ i ], data, 22);
+		memcpy(m_szNames[i], data, 22);
 		data += 22;
 
 		sample.nGlobalVol = 64;
@@ -56,22 +56,22 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 
 	m_nPattern = 0;
 	for (BYTE i = 0; i < len; ++i)
-		if (Order[ i ] > m_nPattern)
-			m_nPattern = Order[ i ];
+		if (Order[i] > m_nPattern)
+			m_nPattern = Order[i];
 	++m_nPattern;
 
 	m_dwSongFlags |= SONG_AMIGALIMITS;
 	m_nType = MOD_TYPE_SFX;
 	m_nDefaultSpeed = 6;
 	m_nChannels = 4;
-	ChnSettings[ 0 ].nPan = ChnSettings[ 3 ].nPan = 0x00;
-	ChnSettings[ 1 ].nPan = ChnSettings[ 2 ].nPan = 0xFF;
+	ChnSettings[0].nPan = ChnSettings[3].nPan = 0x00;
+	ChnSettings[1].nPan = ChnSettings[2].nPan = 0xFF;
 
 	const BYTE rows = 64;
 	for (BYTE i = 0; i < m_nPattern; ++i) //Reading patterns
 	{
-		PatternSize[ i ] = rows;
-		MODCOMMAND *&pattern = Patterns[ i ];
+		PatternSize[i] = rows;
+		MODCOMMAND *&pattern = Patterns[i];
 		pattern = AllocatePattern(rows, m_nChannels);
 		for (WORD j = 0; j < rows * m_nChannels; ++j)
 		{
@@ -79,15 +79,15 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 				break;
 			const BYTE channel = j % m_nChannels;
 			const BYTE row = j / m_nChannels;
-			MODCOMMAND &m = pattern[ m_nChannels*row+channel ];
-			BYTE entry[ 4 ];
+			MODCOMMAND &m = pattern[m_nChannels*row+channel];
+			BYTE entry[4];
 			memcpy(entry, data, 4);
 			data += 4;
 
-			m.note  = GetNoteFromPeriod(((entry[ 0 ] & 0x0F) << 8 | entry[ 1 ]) << 2);
-			m.instr = ((entry[ 0 ] & 0xF0) | (entry[ 2 ] & 0xF0) >> 4);
-			m.param = entry[ 3 ];
-			switch (entry[ 2 ] & 0x0F) //is it OK?
+			m.note  = GetNoteFromPeriod(((entry[0] & 0x0F) << 8 | entry[1]) << 2);
+			m.instr = ((entry[0] & 0xF0) | (entry[2] & 0xF0) >> 4);
+			m.param = entry[3];
+			switch (entry[2] & 0x0F) //is it OK?
 			{
 				case 0x1:
 					m.command = CMD_ARPEGGIO;
@@ -119,12 +119,12 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 	{
 		if (data.atEnd())
 			break;
-		DWORD size = sample_size[ i ];
+		DWORD size = sample_size[i];
 		if (size)
 		{
 			if (data.remaining() < size)
 				size = data.remaining();
-			ReadSample(&Ins[ i+1 ], RS_PCM8S, data, size);
+			ReadSample(&Ins[i+1], RS_PCM8S, data, size);
 			data += size;
 		}
 	}

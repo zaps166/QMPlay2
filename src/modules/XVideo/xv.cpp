@@ -76,11 +76,11 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 
 	for (uint i = 0; i < adaptors; i++)
 	{
-		if ((ai[ i ].type & (XvInputMask | XvImageMask)) == (XvInputMask | XvImageMask))
+		if ((ai[i].type & (XvInputMask | XvImageMask)) == (XvInputMask | XvImageMask))
 		{
-			if (!adaptorName.isEmpty() && adaptorName != ai[ i ].name)
+			if (!adaptorName.isEmpty() && adaptorName != ai[i].name)
 				continue;
-			for (XvPortID _p = ai[ i ].base_id; _p < ai[ i ].base_id + ai[ i ].num_ports; _p++)
+			for (XvPortID _p = ai[i].base_id; _p < ai[i].base_id + ai[i].num_ports; _p++)
 			{
 				if (!XvGrabPort(disp, _p, CurrentTime))
 				{
@@ -109,9 +109,9 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	int format_id = 0;
 	for (int i = 0; i < formats; i++)
 	{
-		if (!qstrncmp(fo[ i ].guid, "YV12", 4))
+		if (!qstrncmp(fo[i].guid, "YV12", 4))
 		{
-			format_id = fo[ i ].id;
+			format_id = fo[i].id;
 			break;
 		};
 	};
@@ -133,7 +133,7 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 		image = XvCreateImage(disp, port, format_id, NULL, width, height);
 		if (!VideoFrame::testLinesize(width, image->pitches))
 		{
-			image->data = new char[ image->data_size ];
+			image->data = new char[image->data_size];
 			mustCopy = true;
 		}
 	}
@@ -204,8 +204,8 @@ void XVIDEO::close()
 
 void XVIDEO::draw(const QByteArray &_videoFrameData, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList< const QMPlay2_OSD * > &osd_list, QMutex &osd_mutex)
 {
-	const int linesize = image->pitches[ 0 ];
-	const int linesize1_2 = image->pitches[ 1 ];
+	const int linesize = image->pitches[0];
+	const int linesize1_2 = image->pitches[1];
 	const int imageHeight = image->height;
 
 	if (_flip & Qt::Horizontal)
@@ -272,9 +272,9 @@ void XVIDEO::setFlip(int f)
 	if (isOpen() && hasImage)
 	{
 		if ((f & Qt::Horizontal) != (_flip & Qt::Horizontal))
-			Functions::hFlip(image->data, image->pitches[ 0 ], height, width);
+			Functions::hFlip(image->data, image->pitches[0], height, width);
 		if ((f & Qt::Vertical) != (_flip & Qt::Vertical))
-			Functions::vFlip(image->data, image->pitches[ 0 ], height);
+			Functions::vFlip(image->data, image->pitches[0], height);
 	}
 	_flip = f;
 }
@@ -286,8 +286,8 @@ QList< QString > XVIDEO::adaptorsList()
 	if  (xv->isOK())
 	{
 		for (unsigned i = 0; i < xv->adaptors; i++)
-			if ((xv->ai[ i ].type & (XvInputMask | XvImageMask)) == (XvInputMask | XvImageMask))
-				_adaptorsList += xv->ai[ i ].name;
+			if ((xv->ai[i].type & (XvInputMask | XvImageMask)) == (XvInputMask | XvImageMask))
+				_adaptorsList += xv->ai[i].name;
 	}
 	delete xv;
 	return _adaptorsList;
@@ -297,7 +297,7 @@ void XVIDEO::XvSetPortAttributeIfExists(void *attributes, int attrib_count, cons
 {
 	for (int i = 0; i < attrib_count; ++i)
 	{
-		const XvAttribute &attribute = ((XvAttribute *)attributes)[ i ];
+		const XvAttribute &attribute = ((XvAttribute *)attributes)[i];
 		if (!qstrcmp(attribute.name, k) && (attribute.flags & XvSettable))
 		{
 			XvSetPortAttribute(disp, port, XInternAtom(disp, k, false), Functions::scaleEQValue(v, attribute.min_value, attribute.max_value));

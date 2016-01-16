@@ -22,7 +22,7 @@ void GraphW::setValue(int idx, float val)
 	if (idx == -1) //Preamp
 		preamp = val;
 	else if (values.size() > idx)
-		values[ idx ] = val;
+		values[idx] = val;
 	update();
 }
 
@@ -36,9 +36,9 @@ void GraphW::paintEvent(QPaintEvent *)
 		p.scale(1.0, height()-1.0);
 
 		QPainterPath path;
-		path.moveTo(QPointF(0.0, 1.0 - graph[ 0 ]));
+		path.moveTo(QPointF(0.0, 1.0 - graph[0]));
 		for (int i = 1; i < graph.count(); ++i)
-			path.lineTo(i, 1.0 - graph[ i ]);
+			path.lineTo(i, 1.0 - graph[i]);
 
 		p.setPen(QPen(QColor(102, 51, 128), 0.0));
 		p.drawLine(QLineF(0, preamp, width(), preamp));
@@ -189,10 +189,10 @@ bool EqualizerGUI::set()
 			descrL->setText(tr("Pre\namp"));
 			slider->setProperty("preamp", true);
 		}
-		else if (freqs[ i ] < 1000.0f)
-			descrL->setText(QString::number(freqs[ i ], 'f', 0) + "\nHz");
+		else if (freqs[i] < 1000.0f)
+			descrL->setText(QString::number(freqs[i], 'f', 0) + "\nHz");
 		else
-			descrL->setText(QString::number(freqs[ i ] / 1000.0f, 'g', 2) + "k\nHz");
+			descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + "k\nHz");
 
 		slidersLayout->addWidget(slider, 0, i+1);
 		slidersLayout->addWidget(descrL, 1, i+1);

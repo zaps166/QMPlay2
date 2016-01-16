@@ -8,7 +8,7 @@
 
 static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 {
-	static const unsigned short ima_step_table[ 89 ] =
+	static const unsigned short ima_step_table[89] =
 	{
 		7,     8,     9,     10,    11,    12,    13,    14,    16,    17,
 		19,    21,    23,    25,    28,    31,    34,    37,    41,    45,
@@ -20,9 +20,9 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 		5894,  6484,  7132,  7845,  8630,  9493,  10442, 11487, 12635, 13899,
 		15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
 	};
-	static const char ima_index_table[ 8 ] = { -1, -1, -1, -1, 2, 4, 6, 8 };
+	static const char ima_index_table[8] = { -1, -1, -1, -1, 2, 4, 6, 8 };
 
-	int step = ima_step_table[ stepIndex ];
+	int step = ima_step_table[stepIndex];
 	int diff = step >> 3;
 
 	if (nibble & 1)
@@ -40,7 +40,7 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 	else if (predictor < -32768)
 		predictor = -32768;
 
-	stepIndex += ima_index_table[ nibble & 7 ];
+	stepIndex += ima_index_table[nibble & 7];
 	if (stepIndex > 88)
 		stepIndex = 88;
 	else if (stepIndex < 0)
@@ -99,8 +99,8 @@ bool Rayman2::seek(int s)
 	{
 		for (int c = 0; c < chn; ++c)
 		{
-			decode(sampleCodes[ i+c ] >> 4, stepIndex[ c ], predictor[ c ]);
-			decode(sampleCodes[ i+c ], stepIndex[ c ], predictor[ c ]);
+			decode(sampleCodes[i+c] >> 4, stepIndex[c], predictor[c]);
+			decode(sampleCodes[i+c], stepIndex[c], predictor[c]);
 		}
 	}
 	return true;
@@ -116,9 +116,9 @@ bool Rayman2::read(Packet &decoded, int &idx)
 	for (int i = 0; !reader.isAborted() && i + chn <= sampleCodes.size(); i += chn)
 	{
 		for (int c = 0; c < chn; ++c)
-			writeSample(decoded, decode(sampleCodes[ i+c ] >> 4, stepIndex[ c ], predictor[ c ]));
+			writeSample(decoded, decode(sampleCodes[i+c] >> 4, stepIndex[c], predictor[c]));
 		for (int c = 0; c < chn; ++c)
-			writeSample(decoded, decode(sampleCodes[ i+c ], stepIndex[ c ], predictor[ c ]));
+			writeSample(decoded, decode(sampleCodes[i+c], stepIndex[c], predictor[c]));
 	}
 
 	if (!decoded.size())
@@ -164,10 +164,10 @@ void Rayman2::readHeader(const char *_data)
 	data = 0x2C;
 	if (chn == 2)
 	{
-		predictor[ 1 ] = data.getDWORD();
-		stepIndex[ 1 ] = data.getWORD();
+		predictor[1] = data.getDWORD();
+		stepIndex[1] = data.getWORD();
 		data += 0x06;
 	}
-	predictor[ 0 ] = data.getDWORD();
-	stepIndex[ 0 ] = data.getWORD();
+	predictor[0] = data.getDWORD();
+	stepIndex[0] = data.getWORD();
 }

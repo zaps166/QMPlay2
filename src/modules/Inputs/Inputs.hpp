@@ -32,7 +32,7 @@ public:
 	inline void connectFreqs(const QObject *receiver, const char *method)
 	{
 		for (int i = 0; i < hzB.count(); ++i)
-			hzB[ i ]->connect(hzB[ i ], SIGNAL(valueChanged(int)), receiver, method);
+			hzB[i]->connect(hzB[i], SIGNAL(valueChanged(int)), receiver, method);
 	}
 private:
 	QList< QSpinBox * > hzB;

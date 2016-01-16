@@ -128,15 +128,15 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
 		for (int i = 0; i < subs_without_end.size()-1; ++i)
 		{
-			unsigned diff = subs_without_end[ i+1 ] - subs_without_end[ i ];
+			unsigned diff = subs_without_end[i+1] - subs_without_end[i];
 			if (!diff)
 			{
-				subs_without_end[ i+1 ] += subs_without_end[ i ];
+				subs_without_end[i+1] += subs_without_end[i];
 				subs_without_end.removeAt(i);
 				--i;
 			}
 			else
-				subs_without_end[ i ].setDuration(diff);
+				subs_without_end[i].setDuration(diff);
 		}
 
 		initOnce();

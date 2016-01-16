@@ -64,17 +64,17 @@ VideoEqualizer::VideoEqualizer()
 
 void VideoEqualizer::restoreValues()
 {
-	controls[ BRIGHTNESS ].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Brightness"));
-	controls[ SATURATION ].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Saturation"));
-	controls[ CONTRAST ].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Contrast"));
-	controls[ HUE ].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Hue"));
+	controls[BRIGHTNESS].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Brightness"));
+	controls[SATURATION].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Saturation"));
+	controls[CONTRAST].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Contrast"));
+	controls[HUE].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Hue"));
 }
 void VideoEqualizer::saveValues()
 {
-	QMPlay2Core.getSettings().set("VideoEqualizer/Brightness", controls[ BRIGHTNESS ].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Saturation", controls[ SATURATION ].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Contrast", controls[ CONTRAST ].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Hue", controls[ HUE ].slider->value());
+	QMPlay2Core.getSettings().set("VideoEqualizer/Brightness", controls[BRIGHTNESS].slider->value());
+	QMPlay2Core.getSettings().set("VideoEqualizer/Saturation", controls[SATURATION].slider->value());
+	QMPlay2Core.getSettings().set("VideoEqualizer/Contrast", controls[CONTRAST].slider->value());
+	QMPlay2Core.getSettings().set("VideoEqualizer/Hue", controls[HUE].slider->value());
 }
 
 void VideoEqualizer::setValue(int v)
@@ -82,14 +82,14 @@ void VideoEqualizer::setValue(int v)
 	((QLabel *)sender()->property("valueL").value< void * >())->setText(QString::number(v) + "");
 	emit valuesChanged
 	(
-		controls[ BRIGHTNESS ].slider->value(),
-		controls[ SATURATION ].slider->value(),
-		controls[ CONTRAST ].slider->value(),
-		controls[ HUE ].slider->value()
+		controls[BRIGHTNESS].slider->value(),
+		controls[SATURATION].slider->value(),
+		controls[CONTRAST].slider->value(),
+		controls[HUE].slider->value()
 	);
 }
 void VideoEqualizer::reset()
 {
 	for (int i = BRIGHTNESS; i < CONTROLS_COUNT; ++i)
-		controls[ i ].slider->setValue(0);
+		controls[i].slider->setValue(0);
 }

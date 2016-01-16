@@ -20,7 +20,7 @@
 
 static inline bool getCurrentPlaying(int stream, const QList< StreamInfo * > &streamsInfo, const StreamInfo *streamInfo)
 {
-	return (stream > -1 && streamsInfo.count() > stream) && streamsInfo[ stream ] == streamInfo;
+	return (stream > -1 && streamsInfo.count() > stream) && streamsInfo[stream] == streamInfo;
 }
 static QString getWriterName(AVThread *avThr)
 {
@@ -198,7 +198,7 @@ void DemuxerThr::run()
 	updatePlayingName = name.isEmpty() ? Functions::fileName(url, false) : name;
 
 	if (playC.videoStream > -1)
-		playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[ playC.videoStream ]->FPS;
+		playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[playC.videoStream]->FPS;
 
 	/* ReplayGain */
 	float gain_db = 0.0f, peak = 1.0f;
@@ -732,7 +732,7 @@ bool DemuxerThr::mustReloadStreams()
 	)
 	{
 		if (playC.frame_last_delay <= 0.0 && playC.videoStream > -1)
-			playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[ playC.videoStream ]->FPS;
+			playC.frame_last_delay = 1.0 / demuxer->streamsInfo()[playC.videoStream]->FPS;
 		playC.reload = true;
 		return true;
 	}

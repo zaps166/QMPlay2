@@ -64,7 +64,7 @@ QStringList AudioCDDemux::getDevices()
 	QStringList devicesList;
 	if (char **devices = cdio_get_devices(DRIVER_DEVICE))
 	{
-		for (size_t i = 0; char *device = devices[ i ]; ++i)
+		for (size_t i = 0; char *device = devices[i]; ++i)
 		{
 			devicesList += device;
 #ifdef Q_OS_WIN
@@ -154,13 +154,13 @@ bool AudioCDDemux::read(Packet &decoded, int &idx)
 	if (aborted || numSectors <= sector || isData)
 		return false;
 
-	short cd_samples[ CD_BLOCKSIZE ];
+	short cd_samples[CD_BLOCKSIZE];
 	if (cdio_read_audio_sector(cdio, cd_samples, startSector + sector) == DRIVER_OP_SUCCESS)
 	{
 		decoded.resize(CD_BLOCKSIZE * sizeof(float));
 		float *decoded_data = (float *)decoded.data();
 		for (int i = 0; i < CD_BLOCKSIZE; ++i)
-			decoded_data[ i ] = cd_samples[ i ] / 32768.0f;
+			decoded_data[i] = cd_samples[i] / 32768.0f;
 
 		idx = 0;
 		decoded.ts = sector * duration;
@@ -268,7 +268,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 		if (!entries.isEmpty())
 		{
 			for (int i = 0; i < entries.length(); ++i)
-				entries[ i ].parent = 1;
+				entries[i].parent = 1;
 			Playlist::Entry entry;
 			entry.name = "Audio CD";
 			entry.GID = 1;

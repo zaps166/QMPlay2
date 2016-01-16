@@ -31,12 +31,12 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	grabGesture(Qt::PinchGesture);
 	setMouseTracking(true);
 
-	features[ 0 ] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL;
-	features[ 1 ] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL_SPATIAL;
-	features[ 2 ] = VDP_VIDEO_MIXER_FEATURE_NOISE_REDUCTION;
-	features[ 3 ] = VDP_VIDEO_MIXER_FEATURE_SHARPNESS;
+	features[0] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL;
+	features[1] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL_SPATIAL;
+	features[2] = VDP_VIDEO_MIXER_FEATURE_NOISE_REDUCTION;
+	features[3] = VDP_VIDEO_MIXER_FEATURE_SHARPNESS;
 	for (int i = 0; i < scalingLevelsCount; ++i)
-		features[ i + scalingLevelsIdx ] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
+		features[i + scalingLevelsIdx] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
 
 	SetModule(module);
 }
@@ -61,18 +61,18 @@ bool VDPAUWriter::set()
 	switch (sets().getInt("VDPAUDeintMethod"))
 	{
 		case 0:
-			featureEnables[ 0 ] = featureEnables[ 1 ] = false;
+			featureEnables[0] = featureEnables[1] = false;
 			break;
 		case 2:
-			featureEnables[ 0 ] = false;
-			featureEnables[ 1 ] = true;
+			featureEnables[0] = false;
+			featureEnables[1] = true;
 			break;
 		default:
-			featureEnables[ 0 ] = true;
-			featureEnables[ 1 ] = false;
+			featureEnables[0] = true;
+			featureEnables[1] = false;
 	}
-	featureEnables[ 2 ] = sets().getBool("VDPAUNoiseReductionEnabled");
-	featureEnables[ 3 ] = sets().getBool("VDPAUSharpnessEnabled");
+	featureEnables[2] = sets().getBool("VDPAUNoiseReductionEnabled");
+	featureEnables[3] = sets().getBool("VDPAUSharpnessEnabled");
 	noisereduction_lvl = sets().getDouble("VDPAUNoiseReductionLvl");
 	sharpness_lvl = sets().getDouble("VDPAUSharpnessLvl");
 	if (noisereduction_lvl < 0.0f || noisereduction_lvl > 1.0f)
@@ -83,7 +83,7 @@ bool VDPAUWriter::set()
 	if (scalingLvl > scalingLevelsCount)
 		scalingLvl = 0;
 	for (int i = 0; i < scalingLevelsCount; ++i)
-		featureEnables[ i + scalingLevelsIdx ] = (int)scalingLvl > i;
+		featureEnables[i + scalingLevelsIdx] = (int)scalingLvl > i;
 	if (ok)
 	{
 		setFeatures();
@@ -147,7 +147,7 @@ qint64 VDPAUWriter::write(const QByteArray &data)
 {
 	VideoFrame *videoFrame = (VideoFrame *)data.data();
 	field = (VdpVideoMixerPictureStructure)FFCommon::getField(videoFrame, deinterlace, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD);
-	draw((quintptr)videoFrame->data[ 3 ]);
+	draw((quintptr)videoFrame->data[3]);
 	paused = false;
 	return data.size();
 }
@@ -174,9 +174,9 @@ bool VDPAUWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgSc
 		QByteArray yv12;
 		yv12.resize(outW * outH * 3 << 1);
 		char *yv12Data = yv12.data();
-		void *data[ 3 ] = { yv12Data, yv12Data + (outW * outH), yv12Data + (outW * outH) + ((outW >> 1) * (outH >> 1)) };
-		const quint32 linesize[ 3 ] = { (quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1 };
-		if (vdp_surface_get_bits((quintptr)videoFrame->data[ 3 ], VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
+		void *data[3] = { yv12Data, yv12Data + (outW * outH), yv12Data + (outW * outH) + ((outW >> 1) * (outH >> 1)) };
+		const quint32 linesize[3] = { (quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1 };
+		if (vdp_surface_get_bits((quintptr)videoFrame->data[3], VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
 		{
 			yv12ToRGB32->scale(yv12Data, dest);
 			return true;
@@ -239,7 +239,7 @@ bool VDPAUWriter::open()
 		if (getProcAddressOK)
 		{
 			VdpBool isSupported;
-			quint32 out[ 4 ];
+			quint32 out[4];
 			profileList = QList< VdpDecoderProfile >()
 				<< VDP_DECODER_PROFILE_H264_HIGH << VDP_DECODER_PROFILE_H264_MAIN << VDP_DECODER_PROFILE_H264_BASELINE
 #ifdef VDP_DECODER_PROFILE_HEVC_MAIN
@@ -252,7 +252,7 @@ bool VDPAUWriter::open()
 			;
 			for (int i = profileList.count() - 1; i >= 0; --i)
 			{
-				if (vdp_decoder_query_capabilities(device, profileList[ i ], &isSupported, out + 0, out + 1, out + 2, out + 3) != VDP_STATUS_OK || !isSupported)
+				if (vdp_decoder_query_capabilities(device, profileList[i], &isSupported, out + 0, out + 1, out + 2, out + 3) != VDP_STATUS_OK || !isSupported)
 					profileList.removeAt(i);
 			}
 			if (!profileList.isEmpty())
@@ -329,26 +329,26 @@ bool VDPAUWriter::HWAccellInit(int W, int H, const char *codec_name)
 		{
 			for (int i = 0; i < surfacesCount; ++i)
 			{
-				if (vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, outW, outH, &surfaces[ i ]) != VDP_STATUS_OK)
+				if (vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, outW, outH, &surfaces[i]) != VDP_STATUS_OK)
 				{
 					for (int j = 0; j < i; ++j)
-						vdp_video_surface_destroy(surfacesQueue[ j ]);
+						vdp_video_surface_destroy(surfacesQueue[j]);
 					surfacesQueue.clear();
 					return false;
 				}
-				surfacesQueue.enqueue(surfaces[ i ]);
+				surfacesQueue.enqueue(surfaces[i]);
 			}
 			surfacesCreated = true;
 
 			static const int parametersCount = 3;
-			static const VdpVideoMixerParameter parameters[ parametersCount ] =
+			static const VdpVideoMixerParameter parameters[parametersCount] =
 			{
 				VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_WIDTH,
 				VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_HEIGHT,
 				VDP_VIDEO_MIXER_PARAMETER_CHROMA_TYPE
 			};
 			static const VdpChromaType vdp_chroma_type = VDP_CHROMA_TYPE_420;
-			const void *const parameterValues[ parametersCount ] =
+			const void *const parameterValues[parametersCount] =
 			{
 				&outW,
 				&outH,
@@ -360,7 +360,7 @@ bool VDPAUWriter::HWAccellInit(int W, int H, const char *codec_name)
 			for (int i = 0; i < scalingLevelsCount; ++i)
 			{
 				VdpBool fs = false;
-				vdp_video_mixer_query_feature_support(device, features[ i + scalingLevelsIdx ], &fs);
+				vdp_video_mixer_query_feature_support(device, features[i + scalingLevelsIdx], &fs);
 				if (!fs)
 					break;
 				++featuresCountCreated;
@@ -399,35 +399,35 @@ void VDPAUWriter::preemption_callback(VdpDevice, void *context)
 
 void VDPAUWriter::setFeatures()
 {
-	VdpBool featuresSupport[ featuresCount ] = { false };
+	VdpBool featuresSupport[featuresCount] = { false };
 	for (int i = 0; i < featuresCount; ++i)
-		vdp_video_mixer_query_feature_support(device, features[ i ], featuresSupport + i);
-	if (!featuresSupport[ 1 ] && featureEnables[ 1 ])
+		vdp_video_mixer_query_feature_support(device, features[i], featuresSupport + i);
+	if (!featuresSupport[1] && featureEnables[1])
 	{
 		QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Temporal-spatial", ErrorLog | LogOnce);
-		featureEnables[ 1 ] = false;
-		featureEnables[ 0 ] = true;
+		featureEnables[1] = false;
+		featureEnables[0] = true;
 	}
-	if (!featuresSupport[ 0 ] && featureEnables[ 0 ])
+	if (!featuresSupport[0] && featureEnables[0])
 	{
 		QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Temporal", ErrorLog | LogOnce);
-		featureEnables[ 0 ] = false;
+		featureEnables[0] = false;
 	}
 	vdp_video_mixer_set_feature_enables(mixer, featuresCountCreated, features, featureEnables);
-	if (!featuresSupport[ 2 ] && featureEnables[ 2 ])
+	if (!featuresSupport[2] && featureEnables[2])
 		QMPlay2Core.log(tr("Nie obsługiwany filtr redukcji szumów"), ErrorLog | LogOnce);
-	if (!featuresSupport[ 3 ] && featureEnables[ 3 ])
+	if (!featuresSupport[3] && featureEnables[3])
 		QMPlay2Core.log(tr("Nie obsługiwany filtr ostrości obrazu"), ErrorLog | LogOnce);
-	if (featuresSupport[ 2 ] || featuresSupport[ 3 ])
+	if (featuresSupport[2] || featuresSupport[3])
 	{
 		static const VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL, VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL };
 		const void *attributeValues[] = { &noisereduction_lvl, &sharpness_lvl };
 		vdp_video_mixer_set_attribute_values(mixer, 2, attributes, attributeValues);
 	}
 	for (int i = scalingLevelsCount - 1; i >= 0; --i)
-		if (featureEnables[ i + scalingLevelsIdx ])
+		if (featureEnables[i + scalingLevelsIdx])
 		{
-			if (!featuresSupport[ scalingLevelsIdx + i ])
+			if (!featuresSupport[scalingLevelsIdx + i])
 				QMPlay2Core.log(tr("Nieobsługiwany poziom skalowania obrazu") + QString(" (L%1)").arg(i+1), ErrorLog | LogOnce);
 			break;
 		}
@@ -435,13 +435,13 @@ void VDPAUWriter::setFeatures()
 
 void VDPAUWriter::draw(VdpVideoSurface surface_id)
 {
-	if (surface_id != VDP_INVALID_HANDLE && renderSurfaces[ 0 ] != surface_id)
+	if (surface_id != VDP_INVALID_HANDLE && renderSurfaces[0] != surface_id)
 	{
-		renderSurfaces[ 2 ] = renderSurfaces[ 1 ];
-		renderSurfaces[ 1 ] = renderSurfaces[ 0 ];
-		renderSurfaces[ 0 ] = surface_id;
+		renderSurfaces[2] = renderSurfaces[1];
+		renderSurfaces[1] = renderSurfaces[0];
+		renderSurfaces[0] = surface_id;
 	}
-	if (renderSurfaces[ 0 ] != VDP_INVALID_HANDLE)
+	if (renderSurfaces[0] != VDP_INVALID_HANDLE)
 	{
 		const WId currWinId = winId();
 		if (currWinId != lastWinId)
@@ -480,7 +480,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 					outputSurfaceIdx = 0;
 			}
 
-			if (vdp_presentation_queue_block_until_surface_idle(presentationQueue, outputSurfaces[ outputSurfaceIdx ], &time) != VDP_STATUS_INVALID_HANDLE)
+			if (vdp_presentation_queue_block_until_surface_idle(presentationQueue, outputSurfaces[outputSurfaceIdx], &time) != VDP_STATUS_INVALID_HANDLE)
 			{
 				vdp_video_mixer_render
 				(
@@ -488,10 +488,10 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 					VDP_INVALID_HANDLE, NULL,
 					field,
 					2, renderSurfaces + 1,
-					renderSurfaces[ 0 ],
-					1, &renderSurfaces[ 0 ], //is it OK?
+					renderSurfaces[0],
+					1, &renderSurfaces[0], //is it OK?
 					&srcRect,
-					outputSurfaces[ outputSurfaceIdx ], NULL, &dstRect,
+					outputSurfaces[outputSurfaceIdx], NULL, &dstRect,
 					0, NULL
 				);
 
@@ -545,7 +545,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 						}
 						const VdpRect bitmapDstRect = { (quint32)bounds.left() + X, (quint32)bounds.top() + Y, (quint32)bounds.right() + X + 1, (quint32)bounds.bottom() + Y + 1 };
 						const quint32 rotate = (flip & Qt::Vertical) ? VDP_OUTPUT_SURFACE_RENDER_ROTATE_180 : VDP_OUTPUT_SURFACE_RENDER_ROTATE_0;
-						vdp_output_surface_render_bitmap_surface(outputSurfaces[ outputSurfaceIdx ], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, rotate);
+						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, rotate);
 					}
 				}
 				osd_mutex.unlock();
@@ -565,7 +565,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 }
 void VDPAUWriter::vdpau_display()
 {
-	vdp_presentation_queue_display(presentationQueue, outputSurfaces[ outputSurfaceIdx ], 0, 0, 0);
+	vdp_presentation_queue_display(presentationQueue, outputSurfaces[outputSurfaceIdx], 0, 0, 0);
 }
 
 void VDPAUWriter::resizeEvent(QResizeEvent *)
@@ -606,10 +606,10 @@ void VDPAUWriter::resizeEvent(QResizeEvent *)
 			outputSurfacesSize = QSize();
 		}
 		for (int i = 0; i < outputSurfacesCount; ++i)
-			if (vdp_output_surface_create(device, VDP_RGBA_FORMAT_B8G8R8A8, newOutputSurfacesSize.width(), newOutputSurfacesSize.height(), &outputSurfaces[ i ]) != VDP_STATUS_OK)
+			if (vdp_output_surface_create(device, VDP_RGBA_FORMAT_B8G8R8A8, newOutputSurfacesSize.width(), newOutputSurfacesSize.height(), &outputSurfaces[i]) != VDP_STATUS_OK)
 			{
 				for (int j = 0; j < i; ++j)
-					vdp_output_surface_destroy(outputSurfaces[ j ]);
+					vdp_output_surface_destroy(outputSurfaces[j]);
 				return;
 			}
 		outputSurfacesSize = newOutputSurfacesSize;
@@ -637,7 +637,7 @@ QPaintEngine *VDPAUWriter::paintEngine() const
 void VDPAUWriter::destroyOutputSurfaces()
 {
 	for (int i = 0; i < outputSurfacesCount; ++i)
-		vdp_output_surface_destroy(outputSurfaces[ i ]);
+		vdp_output_surface_destroy(outputSurfaces[i]);
 }
 void VDPAUWriter::clr()
 {
@@ -647,7 +647,7 @@ void VDPAUWriter::clr()
 			vdp_bitmap_surface_destroy(bitmapSurface);
 		if (surfacesCreated)
 			for (int i = 0; i < surfacesCount; ++i)
-				vdp_video_surface_destroy(surfaces[ i ]);
+				vdp_video_surface_destroy(surfaces[i]);
 		if (outputSurfacesCreated)
 			destroyOutputSurfaces();
 		if (mixer)
@@ -656,7 +656,7 @@ void VDPAUWriter::clr()
 			vdp_decoder_destroy(decoder);
 	}
 	for (int i = 0; i < 3; ++i)
-		renderSurfaces[ i ] = VDP_INVALID_HANDLE;
+		renderSurfaces[i] = VDP_INVALID_HANDLE;
 	bitmapSurface = VDP_INVALID_HANDLE;
 	bitmapSurfaceSize = QSize();
 	outputSurfacesSize = QSize();

@@ -13,11 +13,11 @@ static inline void fltmix(FFTComplex *dest, const float *src, const int size, co
 {
 	for (int i = 0, j = 0; i < size; i += chn)
 	{
-		dest[ j ].re = dest[ j ].im = 0.0;
+		dest[j].re = dest[j].im = 0.0;
 		for (uchar c = 0; c < chn; ++c)
 		{
-			if (src[ i+c ] == src[ i+c ]) //not NaN
-				dest[ j ].re += src[ i+c ];
+			if (src[i+c] == src[i+c]) //not NaN
+				dest[j].re += src[i+c];
 		}
 		++j;
 	}
@@ -65,15 +65,15 @@ void FFTSpectrumW::paintEvent(QPaintEvent *)
 		for (int x = 0; x < size; ++x)
 		{
 			/* Bars */
-			setValue(lastData[ x ].first, spectrum[ x ], realInterval * 2.0);
-			path.lineTo(x, 1.0 - lastData[ x ].first);
-			path.lineTo(x + 1.0, 1.0 - lastData[ x ].first);
+			setValue(lastData[x].first, spectrum[x], realInterval * 2.0);
+			path.lineTo(x, 1.0 - lastData[x].first);
+			path.lineTo(x + 1.0, 1.0 - lastData[x].first);
 
 			/* Horizontal lines over bars */
-			setValue(lastData[ x ].second, spectrum[ x ], realInterval * 0.5);
-			p.drawLine(QLineF(x, 1.0 - lastData[ x ].second.first, x + 1.0, 1.0 - lastData[ x ].second.first));
+			setValue(lastData[x].second, spectrum[x], realInterval * 0.5);
+			p.drawLine(QLineF(x, 1.0 - lastData[x].second.first, x + 1.0, 1.0 - lastData[x].second.first));
 
-			canStop &= lastData[ x ].second.first == spectrum[ x ];
+			canStop &= lastData[x].second.first == spectrum[x];
 		}
 		path.lineTo(size, 1.0);
 		p.fillPath(path, linearGrad);
@@ -201,9 +201,9 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
 			float *spectrumData = w.spectrumData.data();
 			for (int i = 0; i < tmpDataPos; ++i)
 			{
-				spectrumData[ i ] = sqrt(tmpData[ i ].re * tmpData[ i ].re + tmpData[ i ].im * tmpData[ i ].im) / tmpDataPos * scale;
-				if (spectrumData[ i ] > 1.0)
-					spectrumData[ i ] = 1.0;
+				spectrumData[i] = sqrt(tmpData[i].re * tmpData[i].re + tmpData[i].im * tmpData[i].im) / tmpDataPos * scale;
+				if (spectrumData[i] > 1.0)
+					spectrumData[i] = 1.0;
 			}
 			tmpDataPos = 0;
 		}

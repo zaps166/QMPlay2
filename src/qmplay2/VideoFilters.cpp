@@ -63,7 +63,7 @@ extern "C"
 static void averageTwoLines_C(quint8 *dest, quint8 *src1, quint8 *src2, int linesize)
 {
 	for (int i = 0; i < linesize; ++i)
-		dest[ i ] = (src1[ i ] + src2[ i ]) >> 1;
+		dest[i] = (src1[i] + src2[i]) >> 1;
 }
 
 void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, quint8 *src1, quint8 *src2, int linesize);
@@ -167,7 +167,7 @@ void VideoFilters::removeLastFromInputBuffer()
 {
 	if (hasFilters)
 		for (int i = videoFilters.count() - 1; i >= 0; --i)
-			if (videoFilters[ i ]->removeLastFromInternalBuffer())
+			if (videoFilters[i]->removeLastFromInternalBuffer())
 				break;
 }
 

@@ -17,9 +17,9 @@ void BlendDeint::filter(QQueue< FrameBuffer > &framesQueue)
 		videoFrame->setNoInterlaced();
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame->linesize[ p ];
-			quint8 *src = videoFrame->data[ p ] + linesize;
-			quint8 *dst = videoFrame->data[ p ] + linesize;
+			const int linesize = videoFrame->linesize[p];
+			quint8 *src = videoFrame->data[p] + linesize;
+			quint8 *dst = videoFrame->data[p] + linesize;
 			const int H = (p ? h >> 1 : h >> 0) - 2;
 			for (int i = 0; i < H; ++i)
 			{
