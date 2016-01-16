@@ -273,7 +273,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	addAction(hideMenuAct);
 #endif
 
-	const bool widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked", false);
+	widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked");
 	lockWidgets(widgetsLocked);
 	lockWidgetsAct = new QAction(tr("&Zablokuj widgety"), menuBar);
 	lockWidgetsAct->setCheckable(true);
@@ -1025,7 +1025,7 @@ void MainWidget::lockWidgets(bool l)
 			}
 		}
 		mainTB->setMovable(!l);
-		QMPlay2Core.getSettings().set("MainWidget/WidgetsLocked", l);
+		widgetsLocked = l;
 	}
 }
 
@@ -1222,6 +1222,8 @@ void MainWidget::closeEvent(QCloseEvent *e)
 		QMPlay2Core.getSettings().remove("Pos");
 		QMPlay2Core.getSettings().remove("Url");
 	}
+
+	QMPlay2Core.getSettings().set("MainWidget/WidgetsLocked", widgetsLocked);
 
 	playlistDock->stopThreads();
 	playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
