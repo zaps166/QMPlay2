@@ -17,6 +17,10 @@
 #include <QPainter>
 #include <QWidget>
 
+#if !defined OPENGL_ES2 && !defined Q_OS_MAC
+	#include <GL/glext.h>
+#endif
+
 static const char vShaderYCbCrSrc[] =
 #ifdef OPENGL_ES2
 	"precision lowp float;"
