@@ -4,6 +4,7 @@
 #include <Functions.hpp>
 
 #ifdef USE_NEW_OPENGL_API
+	#include <QOffscreenSurface>
 	#include <QOpenGLContext>
 #endif
 
@@ -158,12 +159,21 @@ Drawable::Drawable(OpenGL2Writer &writer) :
 	texCoordYCbCr[ 1 ] = texCoordYCbCr[ 3 ] = 1.0f;
 }
 
-#ifndef USE_NEW_OPENGL_API
 bool Drawable::testGL()
 {
+#ifndef USE_NEW_OPENGL_API
 	makeCurrent();
 	if ((isOK = isValid()))
+#else
+	QOpenGLContext glCtx;
+	if ((isOK = glCtx.create()))
+#endif
 	{
+#ifdef USE_NEW_OPENGL_API
+		QOffscreenSurface offscreenSurface;
+		offscreenSurface.create();
+		glCtx.makeCurrent(&offscreenSurface);
+#endif
 #ifndef OPENGL_ES2
 		initGLProc();
 		if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
@@ -176,21 +186,27 @@ bool Drawable::testGL()
 		glActiveTexture = NULL;
 #endif
 	}
+#ifndef USE_NEW_OPENGL_API
 	doneCurrent();
+#endif
 	return isOK;
 }
-#endif
 
 #ifndef OPENGL_ES2
 void Drawable::initGLProc()
 {
+#ifndef USE_NEW_OPENGL_API
+	const QGLContext *glCtx = QGLContext::currentContext();
+#else
+	QOpenGLContext *glCtx = QOpenGLContext::currentContext();
+#endif
 	const char *glExtensions = (const char *)glGetString(GL_EXTENSIONS);
 	if (glExtensions)
 	{
 		supportsShaders = !!strstr(glExtensions, "GL_ARB_vertex_shader") && !!strstr(glExtensions, "GL_ARB_fragment_shader") && !!strstr(glExtensions, "GL_ARB_shader_objects");
 		canCreateNonPowerOfTwoTextures = !!strstr(glExtensions, "GL_ARB_texture_non_power_of_two");
 	}
-	glActiveTexture = (GLActiveTexture)context()->getProcAddress("glActiveTexture");
+	glActiveTexture = (GLActiveTexture)glCtx->getProcAddress("glActiveTexture");
 }
 #endif
 
@@ -266,11 +282,7 @@ void Drawable::initializeGL()
 
 #ifndef OPENGL_ES2
 	initGLProc();
-#ifndef USE_NEW_OPENGL_API
 	if (!glActiveTexture) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
-#else
-	if (!glActiveTexture || !canCreateNonPowerOfTwoTextures || !supportsShaders) //"testGL()" doesn't work with "USE_NEW_OPENGL_API", so check features here!
-#endif
 	{
 		showOpenGLMissingFeaturesMessage();
 		isOK = false;
@@ -655,9 +667,8 @@ bool OpenGL2Writer::open()
 	fmt.setDepth(false);
 	fmt.setStencil(false);
 	drawable = new Drawable(*this, fmt);
-	return drawable->testGL();
 #else
 	drawable = new Drawable(*this);
-	return true;
 #endif
+	return drawable->testGL();
 }

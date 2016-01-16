@@ -21,10 +21,11 @@ class Drawable : public QGLWidget
 public:
 #ifndef USE_NEW_OPENGL_API
 	Drawable(OpenGL2Writer &, const QGLFormat &);
-	bool testGL();
 #else
 	Drawable(OpenGL2Writer &);
 #endif
+
+	bool testGL();
 
 #ifndef OPENGL_ES2
 	void initGLProc();
