@@ -7,9 +7,9 @@
 
 class PortAudioWriter : public Writer
 {
-	Q_DECLARE_TR_FUNCTIONS( PortAudioWriter )
+	Q_DECLARE_TR_FUNCTIONS(PortAudioWriter)
 public:
-	PortAudioWriter( Module & );
+	PortAudioWriter(Module &);
 private:
 	~PortAudioWriter();
 
@@ -17,8 +17,8 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
 	void pause();
 
 	QString name() const;

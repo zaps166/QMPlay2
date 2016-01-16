@@ -22,14 +22,14 @@ public:
 		return _isOpen;
 	}
 
-	bool open( int, int, unsigned long, const QString &adaptorName, bool );
+	bool open(int, int, unsigned long, const QString &adaptorName, bool);
 	void close();
 
-	void draw( const QByteArray &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex & );
-	void redraw( const QRect &, const QRect &, int, int, int, int, int, int );
+	void draw(const QByteArray &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex &);
+	void redraw(const QRect &, const QRect &, int, int, int, int, int, int);
 
-	void setVideoEqualizer( int, int, int, int );
-	void setFlip( int );
+	void setVideoEqualizer(int, int, int, int);
+	void setFlip(int);
 	inline int flip()
 	{
 		return _flip;
@@ -37,7 +37,7 @@ public:
 
 	static QList< QString > adaptorsList();
 private:
-	void XvSetPortAttributeIfExists( void *attributes, int attrib_count, const char *k, int v );
+	void XvSetPortAttributeIfExists(void *attributes, int attrib_count, const char *k, int v);
 	void clrVars();
 
 	bool _isOK, _isOpen, hasImage, useSHM, mustCopy;

@@ -4,28 +4,28 @@
 
 int PacketBuffer::backwardPackets;
 
-bool PacketBuffer::seekTo( double seek_pos, bool backwards )
+bool PacketBuffer::seekTo(double seek_pos, bool backwards)
 {
-	if ( isEmpty() )
+	if (isEmpty())
 		return true;
 
-	if ( backwards && at( 0 ).ts > seek_pos )
+	if (backwards && at(0).ts > seek_pos)
 	{
-		if ( floor( at( 0 ).ts ) > seek_pos )
+		if (floor(at(0).ts) > seek_pos)
 			return false; //Brak paczek do skoku w tył
-		seek_pos = at( 0 ).ts;
+		seek_pos = at(0).ts;
 	}
 
 	double durationToChange = 0.0;
 	qint64 sizeToChange = 0;
 
-	if ( !backwards ) //Skok do przodu
+	if (!backwards) //Skok do przodu
 	{
 		const int count = packetsCount();
-		for ( int i = pos; i < count; ++i )
+		for (int i = pos; i < count; ++i)
 		{
-			const Packet &pkt = at( i );
-			if ( pkt.ts < seek_pos || !pkt.hasKeyFrame )
+			const Packet &pkt = at(i);
+			if (pkt.ts < seek_pos || !pkt.hasKeyFrame)
 			{
 				durationToChange += pkt.duration;
 				sizeToChange += pkt.size();
@@ -41,12 +41,12 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 			}
 		}
 	}
-	else for ( int i = pos - 1; i >= 0; --i ) //Skok do tyłu
+	else for (int i = pos - 1; i >= 0; --i) //Skok do tyłu
 	{
-		const Packet &pkt = at( i );
+		const Packet &pkt = at(i);
 		durationToChange += pkt.duration;
 		sizeToChange += pkt.size();
-		if ( pkt.hasKeyFrame && pkt.ts <= seek_pos )
+		if (pkt.hasKeyFrame && pkt.ts <= seek_pos)
 		{
 			remaining_duration += durationToChange;
 			backward_duration -= durationToChange;
@@ -69,10 +69,10 @@ void PacketBuffer::clear()
 	unlock();
 }
 
-void PacketBuffer::put( const Packet &packet )
+void PacketBuffer::put(const Packet &packet)
 {
 	lock();
-	while ( pos > backwardPackets )
+	while (pos > backwardPackets)
 	{
 		const Packet &tmpPacket = first();
 		backward_duration -= tmpPacket.duration;
@@ -80,14 +80,14 @@ void PacketBuffer::put( const Packet &packet )
 		removeFirst();
 		--pos;
 	}
-	append( packet );
+	append(packet);
 	remaining_bytes += packet.size();
 	remaining_duration += packet.duration;
 	unlock();
 }
 Packet PacketBuffer::fetch()
 {
-	const Packet &packet = at( pos++ );
+	const Packet &packet = at(pos++);
 	remaining_duration -= packet.duration;
 	backward_duration += packet.duration;
 	remaining_bytes -= packet.size();

@@ -7,15 +7,15 @@ class ColorButton : public QPushButton
 {
 	Q_OBJECT
 public:
-	ColorButton( bool showAlphaChannel = true );
+	ColorButton(bool showAlphaChannel = true);
 
-	void setColor( const QColor & );
+	void setColor(const QColor &);
 	inline QColor getColor() const
 	{
 		return color;
 	}
 protected:
-	void paintEvent( QPaintEvent * );
+	void paintEvent(QPaintEvent *);
 private:
 	QColor color;
 	bool showAlphaChannel;

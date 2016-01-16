@@ -22,81 +22,81 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 #ifdef Q_OS_WIN
 	logFilePath = QDir::tempPath() + "/QMPlay2.log";
 #else
-	logFilePath = QDir::tempPath() + "/QMPlay2." + QString( getenv( "USER" ) ) + ".log";
+	logFilePath = QDir::tempPath() + "/QMPlay2." + QString(getenv("USER")) + ".log";
 #endif
 #if defined Q_OS_MAC
 	UnixOpenCommand = "open ";
 #elif defined Q_OS_UNIX
-	if ( getenv( "KDE_FULL_SESSION" ) )
+	if (getenv("KDE_FULL_SESSION"))
 		UnixOpenCommand = "kfmclient exec ";
-	else if ( getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+	else if (getenv("GNOME_DESKTOP_SESSION_ID"))
 		UnixOpenCommand = "gnome-open ";
 	else
 		UnixOpenCommand = "xdg-open ";
 #endif
 }
 
-void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir )
+void QMPlay2CoreClass::init(bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir)
 {
-	if ( !settingsDir.isEmpty() )
+	if (!settingsDir.isEmpty())
 		return;
 
-	qmplay2Dir = Functions::cleanPath( _qmplay2Dir );
-	if ( _settingsDir.isEmpty() )
+	qmplay2Dir = Functions::cleanPath(_qmplay2Dir);
+	if (_settingsDir.isEmpty())
 	{
 #ifdef Q_OS_WIN
-		settingsDir = QFileInfo( QSettings( QSettings::IniFormat, QSettings::UserScope, QString() ).fileName() ).absolutePath() + "/QMPlay2/";
+		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
 #else
 		settingsDir = QDir::homePath() + "/.qmplay2/";
 #endif
 	}
 	else
-		settingsDir = Functions::cleanPath( _settingsDir );
-	QDir( settingsDir ).mkpath( "." );
+		settingsDir = Functions::cleanPath(_settingsDir);
+	QDir(settingsDir).mkpath(".");
 
 	/* Rename config file */
 	{
 		const QString oldFFmpegConfig = settingsDir + "FFMpeg.ini";
 		const QString newFFmpegConfig = settingsDir + "FFmpeg.ini";
-		if ( !QFile::exists( newFFmpegConfig ) && QFile::exists( oldFFmpegConfig ) )
-			QFile::rename( oldFFmpegConfig, newFFmpegConfig );
+		if (!QFile::exists(newFFmpegConfig) && QFile::exists(oldFFmpegConfig))
+			QFile::rename(oldFFmpegConfig, newFFmpegConfig);
 	}
 
 #ifdef Q_OS_WIN
-	timeBeginPeriod( 1 ); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
+	timeBeginPeriod(1); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
 #endif
 
-	if ( loadModules )
+	if (loadModules)
 	{
 		QStringList pluginsName;
 		QFileInfoList pluginsList;
 #ifndef Q_OS_ANDROID
-		QDir( settingsDir ).mkdir( "Modules" );
-		pluginsList += QDir( settingsDir + "Modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
-		pluginsList += QDir(  qmplay2Dir + "modules/" ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+		QDir(settingsDir).mkdir("Modules");
+		pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
+		pluginsList += QDir( qmplay2Dir + "modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
 #else
-		pluginsList += QDir( qmplay2Dir ).entryInfoList( QDir::Files | QDir::NoSymLinks );
+		pluginsList += QDir(qmplay2Dir).entryInfoList(QDir::Files | QDir::NoSymLinks);
 #endif
-		foreach ( const QFileInfo &fInfo, pluginsList )
-			if ( QLibrary::isLibrary( fInfo.filePath() ) )
+		foreach (const QFileInfo &fInfo, pluginsList)
+			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
-				QLibrary lib( fInfo.filePath() );
-				if ( !lib.load() )
-					log( lib.errorString(), AddTimeToLog | ErrorLog | SaveLog );
+				QLibrary lib(fInfo.filePath());
+				if (!lib.load())
+					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else
 				{
 					typedef Module *(*QMPlay2PluginInstance)();
-					QMPlay2PluginInstance qmplay2PluginInstance = ( QMPlay2PluginInstance )lib.resolve( "qmplay2PluginInstance" );
-					if ( !qmplay2PluginInstance )
+					QMPlay2PluginInstance qmplay2PluginInstance = (QMPlay2PluginInstance)lib.resolve("qmplay2PluginInstance");
+					if (!qmplay2PluginInstance)
 					{
 #ifndef Q_OS_ANDROID
-						log( fInfo.fileName() + " - " + tr( "nieprawidłowa biblioteka QMPlay2" ), AddTimeToLog | ErrorLog | SaveLog );
+						log(fInfo.fileName() + " - " + tr("nieprawidłowa biblioteka QMPlay2"), AddTimeToLog | ErrorLog | SaveLog);
 #endif
 					}
 					else
 					{
 						Module *pluginInstance = qmplay2PluginInstance();
-						if ( pluginInstance && !pluginsName.contains( pluginInstance->name() ) )
+						if (pluginInstance && !pluginsName.contains(pluginInstance->name()))
 						{
 							pluginsName += pluginInstance->name();
 							pluginsInstance += pluginInstance;
@@ -108,82 +108,82 @@ void QMPlay2CoreClass::init( bool loadModules, const QString &_qmplay2Dir, const
 
 	VideoFilters::init();
 
-	settings = new Settings( "QMPlay2" );
+	settings = new Settings("QMPlay2");
 
-	connect( this, SIGNAL( restoreCursor() ), this, SLOT( restoreCursorSlot() ) );
-	connect( this, SIGNAL( waitCursor() ), this, SLOT( waitCursorSlot() ) );
-	connect( this, SIGNAL( busyCursor() ), this, SLOT( busyCursorSlot() ) );
+	connect(this, SIGNAL(restoreCursor()), this, SLOT(restoreCursorSlot()));
+	connect(this, SIGNAL(waitCursor()), this, SLOT(waitCursorSlot()));
+	connect(this, SIGNAL(busyCursor()), this, SLOT(busyCursorSlot()));
 }
 void QMPlay2CoreClass::quit()
 {
-	if ( settingsDir.isEmpty() )
+	if (settingsDir.isEmpty())
 		return;
-	while ( !pluginsInstance.isEmpty() )
+	while (!pluginsInstance.isEmpty())
 		delete pluginsInstance.takeFirst();
 	qmplay2Dir.clear();
 	settingsDir.clear();
 #ifdef Q_OS_WIN
-	timeEndPeriod( 1 );
+	timeEndPeriod(1);
 #endif
 	delete settings;
 }
 
-QIcon QMPlay2CoreClass::getIconFromTheme( const QString &icon )
+QIcon QMPlay2CoreClass::getIconFromTheme(const QString &icon)
 {
-	return settings->getBool( "IconsFromTheme", true ) ? QIcon::fromTheme( icon, QIcon( ":/Icons/" + icon ) ) : QIcon( ":/Icons/" + icon );
+	return settings->getBool("IconsFromTheme", true) ? QIcon::fromTheme(icon, QIcon(":/Icons/" + icon)) : QIcon(":/Icons/" + icon);
 }
 
-bool QMPlay2CoreClass::run( const QString &command, const QString &args )
+bool QMPlay2CoreClass::run(const QString &command, const QString &args)
 {
-	if ( !command.isEmpty() )
+	if (!command.isEmpty())
 #ifdef Q_OS_WIN
-		return ( quintptr )ShellExecuteW( NULL, L"open", ( WCHAR * )command.utf16(), ( WCHAR * )args.utf16(), NULL, SW_SHOWNORMAL ) > 32;
+		return (quintptr)ShellExecuteW(NULL, L"open", (WCHAR *)command.utf16(), (WCHAR *)args.utf16(), NULL, SW_SHOWNORMAL) > 32;
 #else
 	{
-		if ( args.isEmpty() && !UnixOpenCommand.isEmpty() )
-			return !system( QString( UnixOpenCommand + "\"" + command + "\" &" ).toLocal8Bit() );
-		else if ( !args.isEmpty() )
-			return !system( QString( "\"" + command + "\" " + args + " &" ).toLocal8Bit() );
+		if (args.isEmpty() && !UnixOpenCommand.isEmpty())
+			return !system(QString(UnixOpenCommand + "\"" + command + "\" &").toLocal8Bit());
+		else if (!args.isEmpty())
+			return !system(QString("\"" + command + "\" " + args + " &").toLocal8Bit());
 	}
 #endif
 	return false;
 }
 
-void QMPlay2CoreClass::log( const QString &txt, int logFlags )
+void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 {
 	QString date;
-	if ( logFlags & LogOnce )
+	if (logFlags & LogOnce)
 	{
-		if ( logs.contains( txt ) )
+		if (logs.contains(txt))
 			return;
 		else
-			logs.append( txt );
+			logs.append(txt);
 	}
-	if ( logFlags & AddTimeToLog )
-		date = "[" + QDateTime::currentDateTime().toString( "dd MMM yyyy hh:mm:ss" ) + "] ";
-	if ( logFlags & InfoLog )
+	if (logFlags & AddTimeToLog)
+		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss") + "] ";
+	if (logFlags & InfoLog)
 	{
-		fprintf( stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data() );
-		fflush( stdout );
+		fprintf(stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fflush(stdout);
 	}
-	else if ( logFlags & ErrorLog )
+	else if (logFlags & ErrorLog)
 	{
-		fprintf( stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data() );
-		fflush( stderr );
+		fprintf(stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fflush(stderr);
 	}
-	if ( logFlags & SaveLog )
+	if (logFlags & SaveLog)
 	{
-		QFile logFile( logFilePath );
-		if ( logFile.open( QFile::Append ) )
+		QFile logFile(logFilePath);
+		if (logFile.open(QFile::Append))
 		{
-			logFile.write( date.toUtf8() + txt.toUtf8() + '\n' );
+			logFile.write(date.toUtf8() + txt.toUtf8() + '\n');
 			logFile.close();
 		}
 		else
-			log( tr( "Nie można otworzyć pliku dziennika" ), ErrorLog | AddTimeToLog );
+			log(tr("Nie można otworzyć pliku dziennika"), ErrorLog | AddTimeToLog);
 	}
-	if ( !( logFlags & DontShowInGUI ) )
-		emit logSignal( txt );
+	if (!(logFlags & DontShowInGUI))
+		emit logSignal(txt);
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()
@@ -192,9 +192,9 @@ void QMPlay2CoreClass::restoreCursorSlot()
 }
 void QMPlay2CoreClass::waitCursorSlot()
 {
-	qApp->setOverrideCursor( QCursor( Qt::WaitCursor ) );
+	qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 void QMPlay2CoreClass::busyCursorSlot()
 {
-	qApp->setOverrideCursor( QCursor( Qt::BusyCursor ) );
+	qApp->setOverrideCursor(QCursor(Qt::BusyCursor));
 }

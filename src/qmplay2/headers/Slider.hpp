@@ -14,30 +14,30 @@ public:
 		return _ignoreValueChanged;
 	}
 public slots:
-	void setValue( int val );
-	inline void setMaximum( int max )
+	void setValue(int val);
+	inline void setMaximum(int max)
 	{
-		QAbstractSlider::setMaximum( max );
+		QAbstractSlider::setMaximum(max);
 	}
-	inline void setWheelStep( int ws )
+	inline void setWheelStep(int ws)
 	{
 		wheelStep = ws;
 	}
-	void drawRange( int first, int second );
+	void drawRange(int first, int second);
 protected:
-	void paintEvent( QPaintEvent * );
-	void mousePressEvent( QMouseEvent * );
-	void mouseReleaseEvent( QMouseEvent * );
-	void mouseMoveEvent( QMouseEvent * );
-	void wheelEvent( QWheelEvent * );
-	void enterEvent( QEvent * );
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void mouseMoveEvent(QMouseEvent *);
+	void wheelEvent(QWheelEvent *);
+	void enterEvent(QEvent *);
 private:
-	int getMousePos( int X );
+	int getMousePos(int X);
 
 	bool canSetValue, _ignoreValueChanged;
 	int lastMousePos, wheelStep, firstLine, secondLine;
 signals:
-	void mousePosition( int xPos );
+	void mousePosition(int xPos);
 };
 
 #endif

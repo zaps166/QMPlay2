@@ -6,19 +6,19 @@
 #include <Writer.hpp>
 #include <Decoder.hpp>
 
-AVThread::AVThread( PlayClass &playC, const QString &writer_type, Writer *_writer, const QStringList &pluginsName ) :
-	dec( NULL ), playC( playC ), br( false ), br2( false ), waiting( false )
+AVThread::AVThread(PlayClass &playC, const QString &writer_type, Writer *_writer, const QStringList &pluginsName) :
+	dec(NULL), playC(playC), br(false), br2(false), waiting(false)
 {
-	connect( this, SIGNAL( finished() ), this, SLOT( deleteLater() ) );
+	connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 
-	if ( _writer )
+	if (_writer)
 		writer = _writer;
 	else
-		writer = Writer::create( writer_type, pluginsName );
+		writer = Writer::create(writer_type, pluginsName);
 
 	mutex.lock();
 
-	if ( writer )
+	if (writer)
 		start();
 }
 AVThread::~AVThread()
@@ -36,12 +36,12 @@ void AVThread::destroyDec()
 bool AVThread::lock()
 {
 	br2 = true;
-	if ( !mutex.tryLock( MUTEXWAIT_TIMEOUT ) )
+	if (!mutex.tryLock(MUTEXWAIT_TIMEOUT))
 	{
 		emit QMPlay2Core.waitCursor();
-		const bool ret = mutex.tryLock( MUTEXWAIT_TIMEOUT );
+		const bool ret = mutex.tryLock(MUTEXWAIT_TIMEOUT);
 		emit QMPlay2Core.restoreCursor();
-		if ( !ret )
+		if (!ret)
 		{
 			br2 = false;
 			return false;
@@ -55,22 +55,22 @@ void AVThread::unlock()
 	mutex.unlock();
 }
 
-void AVThread::stop( bool _terminate )
+void AVThread::stop(bool _terminate)
 {
-	if ( _terminate )
+	if (_terminate)
 		return terminate();
 
 	br = true;
 	mutex.unlock();
 	playC.emptyBufferCond.wakeAll();
 
-	if ( !wait( TERMINATE_TIMEOUT ) )
+	if (!wait(TERMINATE_TIMEOUT))
 		terminate();
 }
 
 void AVThread::terminate()
 {
-	disconnect( this, SIGNAL( finished() ), this, SLOT( deleteLater() ) );
+	disconnect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 	QThread::terminate();
 	delete this;
 }

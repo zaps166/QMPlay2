@@ -367,7 +367,7 @@ VOID PP20_DoUnpack(const BYTE *pSrc, UINT nSrcLen, BYTE *pDst, UINT nDstLen)
 			UINT nofs;
 			if (n==4)
 			{
-				nofs = BitBuffer.GetBits( (BitBuffer.GetBits(1)) ? nbits : 7 );
+				nofs = BitBuffer.GetBits((BitBuffer.GetBits(1)) ? nbits : 7);
 				while (n < nBytesLeft)
 				{
 					UINT code = BitBuffer.GetBits(3);

@@ -16,7 +16,7 @@ public:
 
 	void writeSettings();
 private slots:
-	void softwareMethods( bool doubler );
+	void softwareMethods(bool doubler);
 private:
 	QCheckBox *autoDeintB, *doublerB, *autoParityB;
 	QComboBox *softwareMethodsCB, *parityCB;

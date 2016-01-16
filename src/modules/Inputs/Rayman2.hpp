@@ -7,7 +7,7 @@ class Reader;
 class Rayman2 : public Demuxer
 {
 public:
-	Rayman2( Module & );
+	Rayman2(Module &);
 private:
 	bool set();
 
@@ -16,15 +16,15 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
 	/**/
 
-	void readHeader( const char *data );
+	void readHeader(const char *data);
 
 	IOController< Reader > reader;
 

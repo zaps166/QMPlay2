@@ -14,7 +14,7 @@ class Updater : public QDialog
 {
 	Q_OBJECT
 public:
-	Updater( QWidget * );
+	Updater(QWidget *);
 	~Updater();
 
 	inline bool downloading() const
@@ -27,13 +27,13 @@ private slots:
 	void infoFinished();
 	void headerChanged();
 	void writeToFile();
-	void downloadprogress( qint64, qint64 );
+	void downloadprogress(qint64, qint64);
 	void downloadFinished();
 
 	void applyUpdate();
 private:
-	void getFile( const QUrl & );
-	void endWork( const QString & );
+	void getFile(const QUrl &);
+	void endWork(const QString &);
 
 	QFile infoFile, updateFile;
 	QNetworkAccessManager net;

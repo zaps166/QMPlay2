@@ -14,19 +14,19 @@ struct _XDisplay;
 class VDPAUWriter : public HWAccelHelper, public VideoWriter, public QWidget
 {
 public:
-	VDPAUWriter( Module &module );
+	VDPAUWriter(Module &module);
 	~VDPAUWriter();
 
 	bool set();
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
-	void writeOSD( const QList< const QMPlay2_OSD * > &osd );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
+	void writeOSD(const QList< const QMPlay2_OSD * > &osd);
 	void pause();
 
-	bool HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32 ) const;
+	bool HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
 
 	QString name() const;
 
@@ -34,7 +34,7 @@ public:
 
 /**/
 
-	bool HWAccellInit( int W, int H, const char *codec_name );
+	bool HWAccellInit(int W, int H, const char *codec_name);
 
 	inline VdpDecoder getVdpDecoder() const
 	{
@@ -46,18 +46,18 @@ public:
 	}
 
 	QMPlay2SurfaceID getSurface();
-	void putSurface( QMPlay2SurfaceID id );
+	void putSurface(QMPlay2SurfaceID id);
 private:
-	static void preemption_callback( VdpDevice device, void *context );
+	static void preemption_callback(VdpDevice device, void *context);
 
 	void setFeatures();
 
-	void draw( VdpVideoSurface surface_id = VDP_INVALID_HANDLE );
+	void draw(VdpVideoSurface surface_id = VDP_INVALID_HANDLE);
 	void vdpau_display();
 
-	void resizeEvent( QResizeEvent * );
-	void paintEvent( QPaintEvent * );
-	bool event( QEvent * );
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
+	bool event(QEvent *);
 
 	QPaintEngine *paintEngine() const;
 

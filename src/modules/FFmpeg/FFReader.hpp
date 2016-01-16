@@ -13,8 +13,8 @@ private:
 	bool readyRead() const;
 	bool canSeek() const;
 
-	bool seek( qint64, int wh );
-	QByteArray read( qint64 );
+	bool seek(qint64, int wh);
+	QByteArray read(qint64);
 	void pause();
 	bool atEnd() const;
 	void abort();

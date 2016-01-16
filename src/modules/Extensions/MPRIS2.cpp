@@ -6,22 +6,22 @@
 #include <QDBusMessage>
 #include <QDir>
 
-static void propertyChanged( const QString &name, const QVariant &value )
+static void propertyChanged(const QString &name, const QVariant &value)
 {
 	QVariantMap map;
-	map.insert( name, value );
-	QDBusMessage msg = QDBusMessage::createSignal( "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", "PropertiesChanged" );
+	map.insert(name, value);
+	QDBusMessage msg = QDBusMessage::createSignal("/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", "PropertiesChanged");
 	msg << "org.mpris.MediaPlayer2.Player" << map << QStringList();
-	QDBusConnection::sessionBus().send( msg );
+	QDBusConnection::sessionBus().send(msg);
 }
 
 /**/
 
-MediaPlayer2Root::MediaPlayer2Root( QObject *p ) :
-	QDBusAbstractAdaptor( p ),
-	fullScreen( false )
+MediaPlayer2Root::MediaPlayer2Root(QObject *p) :
+	QDBusAbstractAdaptor(p),
+	fullScreen(false)
 {
-	connect( &QMPlay2Core, SIGNAL( fullScreenChanged( bool ) ), this, SLOT( fullScreenChanged( bool ) ) );
+	connect(&QMPlay2Core, SIGNAL(fullScreenChanged(bool)), this, SLOT(fullScreenChanged(bool)));
 }
 
 bool MediaPlayer2Root::canQuit() const
@@ -40,11 +40,11 @@ bool MediaPlayer2Root::isFullscreen() const
 {
 	return fullScreen;
 }
-void MediaPlayer2Root::setFullscreen( bool fs )
+void MediaPlayer2Root::setFullscreen(bool fs)
 {
-	if ( fullScreen != fs )
+	if (fullScreen != fs)
 	{
-		QMPlay2Core.processParam( "fullscreen" );
+		QMPlay2Core.processParam("fullscreen");
 		fullScreen = fs;
 	}
 }
@@ -67,45 +67,45 @@ QStringList MediaPlayer2Root::supportedUriSchemes() const
 
 void MediaPlayer2Root::Quit()
 {
-	QMPlay2Core.processParam( "quit" );
+	QMPlay2Core.processParam("quit");
 }
 void MediaPlayer2Root::Raise()
 {
-	QMPlay2Core.processParam( "show" );
+	QMPlay2Core.processParam("show");
 }
 
-void MediaPlayer2Root::fullScreenChanged( bool fs )
+void MediaPlayer2Root::fullScreenChanged(bool fs)
 {
-	propertyChanged( "Fullscreen", fullScreen = fs );
+	propertyChanged("Fullscreen", fullScreen = fs);
 
 }
 
 /**/
 
-MediaPlayer2Player::MediaPlayer2Player( QObject *p ) :
-	QDBusAbstractAdaptor( p ),
-	exportCovers( false ), removeCover( false ),
-	trackID( QDBusObjectPath( QString( "/org/qmplay2/MediaPlayer2/Track/0" ) ) ), //I don't use TrackID in QMPlay2
-	playState( "Stopped" ),
-	can_seek( false ),
-	vol( 1.0 ), r( 1.0 ),
-	pos( 0 )
+MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
+	QDBusAbstractAdaptor(p),
+	exportCovers(false), removeCover(false),
+	trackID(QDBusObjectPath(QString("/org/qmplay2/MediaPlayer2/Track/0"))), //I don't use TrackID in QMPlay2
+	playState("Stopped"),
+	can_seek(false),
+	vol(1.0), r(1.0),
+	pos(0)
 {
 	clearMetaData();
-	m_data[ "mpris:trackid" ] = QVariant::fromValue< QDBusObjectPath >( trackID );
-	connect( &QMPlay2Core, SIGNAL( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool, const QString & ) ), this, SLOT( updatePlaying( bool, const QString &, const QString &, const QString &, int, bool, const QString & ) ) );
-	connect( &QMPlay2Core, SIGNAL( coverDataFromMediaFile( const QByteArray & ) ), this, SLOT( coverDataFromMediaFile( const QByteArray & ) ) );
-	connect( &QMPlay2Core, SIGNAL( playStateChanged( const QString & ) ), this, SLOT( playStateChanged( const QString & ) ) );
-	connect( &QMPlay2Core, SIGNAL( coverFile( const QString & ) ), this, SLOT( coverFile( const QString & ) ) );
-	connect( &QMPlay2Core, SIGNAL( speedChanged( double ) ), this, SLOT( speedChanged( double ) ) );
-	connect( &QMPlay2Core, SIGNAL( volumeChanged( double ) ), this, SLOT( volumeChanged( double ) ) );
-	connect( &QMPlay2Core, SIGNAL( posChanged( int ) ), this, SLOT( posChanged( int ) ) );
-	connect( &QMPlay2Core, SIGNAL( seeked( int ) ), this, SLOT( seeked( int ) ) );
+	m_data[ "mpris:trackid" ] = QVariant::fromValue< QDBusObjectPath >(trackID);
+	connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)), this, SLOT(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)));
+	connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(const QByteArray &)), this, SLOT(coverDataFromMediaFile(const QByteArray &)));
+	connect(&QMPlay2Core, SIGNAL(playStateChanged(const QString &)), this, SLOT(playStateChanged(const QString &)));
+	connect(&QMPlay2Core, SIGNAL(coverFile(const QString &)), this, SLOT(coverFile(const QString &)));
+	connect(&QMPlay2Core, SIGNAL(speedChanged(double)), this, SLOT(speedChanged(double)));
+	connect(&QMPlay2Core, SIGNAL(volumeChanged(double)), this, SLOT(volumeChanged(double)));
+	connect(&QMPlay2Core, SIGNAL(posChanged(int)), this, SLOT(posChanged(int)));
+	connect(&QMPlay2Core, SIGNAL(seeked(int)), this, SLOT(seeked(int)));
 }
 MediaPlayer2Player::~MediaPlayer2Player()
 {
-	if ( removeCover )
-		QFile::remove( m_data[ "mpris:artUrl" ].toString() );
+	if (removeCover)
+		QFile::remove(m_data[ "mpris:artUrl" ].toString());
 }
 
 bool MediaPlayer2Player::canControl() const
@@ -158,77 +158,77 @@ double MediaPlayer2Player::rate() const
 {
 	return r;
 }
-void MediaPlayer2Player::setRate( double rate )
+void MediaPlayer2Player::setRate(double rate)
 {
-	if ( rate >= minimumRate() && rate <= maximumRate() )
-		QMPlay2Core.processParam( "speed", QString::number( rate ) );
+	if (rate >= minimumRate() && rate <= maximumRate())
+		QMPlay2Core.processParam("speed", QString::number(rate));
 }
 
 double MediaPlayer2Player::volume() const
 {
 	return vol;
 }
-void MediaPlayer2Player::setVolume( double value )
+void MediaPlayer2Player::setVolume(double value)
 {
-	QMPlay2Core.processParam( "volume", QString::number( ( int )( value * 100 ) ) );
+	QMPlay2Core.processParam("volume", QString::number((int)(value * 100)));
 }
 
 void MediaPlayer2Player::Next()
 {
-	QMPlay2Core.processParam( "next" );
+	QMPlay2Core.processParam("next");
 }
 void MediaPlayer2Player::Previous()
 {
-	QMPlay2Core.processParam( "prev" );
+	QMPlay2Core.processParam("prev");
 }
 void MediaPlayer2Player::Pause()
 {
-	if ( playState == "Playing" )
-		QMPlay2Core.processParam( "toggle" );
+	if (playState == "Playing")
+		QMPlay2Core.processParam("toggle");
 }
 void MediaPlayer2Player::PlayPause()
 {
-	QMPlay2Core.processParam( "toggle" );
+	QMPlay2Core.processParam("toggle");
 }
 void MediaPlayer2Player::Stop()
 {
-	QMPlay2Core.processParam( "stop" );
+	QMPlay2Core.processParam("stop");
 }
 void MediaPlayer2Player::Play()
 {
-	if ( playState != "Playing" )
-		QMPlay2Core.processParam( "toggle" );
+	if (playState != "Playing")
+		QMPlay2Core.processParam("toggle");
 }
-void MediaPlayer2Player::Seek( qint64 Offset )
+void MediaPlayer2Player::Seek(qint64 Offset)
 {
-	if ( Offset != 0 )
+	if (Offset != 0)
 	{
 		const qint64 Position = position() + Offset;
-		SetPosition( trackID, Position < 0 ? 0 : Position );
+		SetPosition(trackID, Position < 0 ? 0 : Position);
 	}
 }
-void MediaPlayer2Player::SetPosition( const QDBusObjectPath &TrackId, qint64 Position )
+void MediaPlayer2Player::SetPosition(const QDBusObjectPath &TrackId, qint64 Position)
 {
-	if ( trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data[ "mpris:length" ].toLongLong() )
-		QMPlay2Core.processParam( "seek", QString::number( Position / 1000000LL ) );
+	if (trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data[ "mpris:length" ].toLongLong())
+		QMPlay2Core.processParam("seek", QString::number(Position / 1000000LL));
 }
-void MediaPlayer2Player::OpenUri( const QString &Uri )
+void MediaPlayer2Player::OpenUri(const QString &Uri)
 {
-	QMPlay2Core.processParam( "open", Uri );
+	QMPlay2Core.processParam("open", Uri);
 }
 
-void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName )
+void MediaPlayer2Player::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName)
 {
-	Q_UNUSED( needCover )
+	Q_UNUSED(needCover)
 	const bool tmp = play && length > 0;
-	if ( tmp != can_seek )
-		propertyChanged( "CanSeek", can_seek = tmp );
-	if ( !play )
+	if (tmp != can_seek)
+		propertyChanged("CanSeek", can_seek = tmp);
+	if (!play)
 		clearMetaData();
 	else
 	{
 		m_data[ "mpris:length" ] = length < 0 ? -1 : length * 1000000LL;
-		if ( title.isEmpty() && artist.isEmpty() )
+		if (title.isEmpty() && artist.isEmpty())
 			m_data[ "xesam:title" ] = fileName;
 		else
 		{
@@ -237,56 +237,56 @@ void MediaPlayer2Player::updatePlaying( bool play, const QString &title, const Q
 		}
 		m_data[ "xesam:album" ] = album;
 	}
-	propertyChanged( "Metadata", m_data );
+	propertyChanged("Metadata", m_data);
 }
-void MediaPlayer2Player::coverDataFromMediaFile( const QByteArray &cover )
+void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 {
-	if ( exportCovers )
+	if (exportCovers)
 	{
-		QFile coverF( QDir::tempPath() + "/QMPlay2." + QString( "%1.%2.mpris2cover" ).arg( getenv( "USER" ) ).arg( time( NULL ) ) );
-		if ( coverF.open( QFile::WriteOnly ) )
+		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(time(NULL)));
+		if (coverF.open(QFile::WriteOnly))
 		{
-			coverF.write( cover );
+			coverF.write(cover);
 			coverF.close();
 			m_data[ "mpris:artUrl" ] = coverF.fileName();
-			propertyChanged( "Metadata", m_data );
+			propertyChanged("Metadata", m_data);
 			removeCover = true;
 		}
 	}
 }
-void MediaPlayer2Player::playStateChanged( const QString &plState )
+void MediaPlayer2Player::playStateChanged(const QString &plState)
 {
-	propertyChanged( "PlaybackStatus", playState = plState );
+	propertyChanged("PlaybackStatus", playState = plState);
 }
-void MediaPlayer2Player::coverFile( const QString &filePath )
+void MediaPlayer2Player::coverFile(const QString &filePath)
 {
 	m_data[ "mpris:artUrl" ] = filePath;
-	propertyChanged( "Metadata", m_data );
+	propertyChanged("Metadata", m_data);
 	removeCover = false;
 }
-void MediaPlayer2Player::speedChanged( double speed )
+void MediaPlayer2Player::speedChanged(double speed)
 {
-	propertyChanged( "Rate", r = speed );
+	propertyChanged("Rate", r = speed);
 }
-void MediaPlayer2Player::volumeChanged( double v )
+void MediaPlayer2Player::volumeChanged(double v)
 {
-	propertyChanged( "Volume", vol = v );
+	propertyChanged("Volume", vol = v);
 }
-void MediaPlayer2Player::posChanged( int p )
+void MediaPlayer2Player::posChanged(int p)
 {
 	pos = p * 1000000LL;
-	propertyChanged( "Position", pos );
+	propertyChanged("Position", pos);
 }
-void MediaPlayer2Player::seeked( int pos )
+void MediaPlayer2Player::seeked(int pos)
 {
-	emit Seeked( pos * 1000000LL );
+	emit Seeked(pos * 1000000LL);
 }
 
 void MediaPlayer2Player::clearMetaData()
 {
-	if ( removeCover )
+	if (removeCover)
 	{
-		QFile::remove( m_data[ "mpris:artUrl" ].toString() );
+		QFile::remove(m_data[ "mpris:artUrl" ].toString());
 		removeCover = false;
 	}
 	m_data[ "mpris:artUrl" ] = m_data[ "xesam:title" ] = m_data[ "xesam:album" ] = QString();
@@ -296,27 +296,27 @@ void MediaPlayer2Player::clearMetaData()
 
 /**/
 
-MPRIS2Interface::MPRIS2Interface( time_t instance_val ) :
-	service( QString( "org.mpris.MediaPlayer2.QMPlay2.instance%1" ).arg( instance_val ) ),
-	mediaPlayer2Root( this ),
-	mediaPlayer2Player( this )
+MPRIS2Interface::MPRIS2Interface(time_t instance_val) :
+	service(QString("org.mpris.MediaPlayer2.QMPlay2.instance%1").arg(instance_val)),
+	mediaPlayer2Root(this),
+	mediaPlayer2Player(this)
 {
-	QDBusConnection::sessionBus().registerObject( "/org/mpris/MediaPlayer2", this );
-	QDBusConnection::sessionBus().registerService( service );
+	QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
+	QDBusConnection::sessionBus().registerService(service);
 }
 MPRIS2Interface::~MPRIS2Interface()
 {
-	QDBusConnection::sessionBus().unregisterService( service );
-	QDBusConnection::sessionBus().unregisterObject( "/org/mpris/MediaPlayer2" );
+	QDBusConnection::sessionBus().unregisterService(service);
+	QDBusConnection::sessionBus().unregisterObject("/org/mpris/MediaPlayer2");
 }
 
 /**/
 
-MPRIS2::MPRIS2( Module &module ) :
-	mpris2Interface( NULL ),
-	instance_val( time( NULL ) )
+MPRIS2::MPRIS2(Module &module) :
+	mpris2Interface(NULL),
+	instance_val(time(NULL))
 {
-	SetModule( module );
+	SetModule(module);
 }
 MPRIS2::~MPRIS2()
 {
@@ -325,14 +325,14 @@ MPRIS2::~MPRIS2()
 
 bool MPRIS2::set()
 {
-	if ( !sets().getBool( "MPRIS2/Enabled" ) )
+	if (!sets().getBool("MPRIS2/Enabled"))
 	{
 		delete mpris2Interface;
 		mpris2Interface = NULL;
 	}
-	else if ( !mpris2Interface )
-		mpris2Interface = new MPRIS2Interface( instance_val );
-	if ( mpris2Interface )
-		mpris2Interface->setExportCovers( sets().getBool( "MPRIS2/ExportCovers" ) );
+	else if (!mpris2Interface)
+		mpris2Interface = new MPRIS2Interface(instance_val);
+	if (mpris2Interface)
+		mpris2Interface->setExportCovers(sets().getBool("MPRIS2/ExportCovers"));
 	return true;
 }

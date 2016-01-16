@@ -2,7 +2,7 @@
 
 class SRT : public SubsDec
 {
-	bool toASS( const QByteArray &, class LibASS *, double );
+	bool toASS(const QByteArray &, class LibASS *, double);
 
 	~SRT() {}
 };

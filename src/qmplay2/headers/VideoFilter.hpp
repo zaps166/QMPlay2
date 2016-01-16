@@ -11,8 +11,8 @@ public:
 	class FrameBuffer
 	{
 	public:
-		inline FrameBuffer( const QByteArray &data, double ts ) :
-			data( data ), ts( ts )
+		inline FrameBuffer(const QByteArray &data, double ts) :
+			data(data), ts(ts)
 		{}
 
 		QByteArray data;
@@ -27,13 +27,13 @@ public:
 	void clearBuffer();
 	bool removeLastFromInternalBuffer();
 
-	virtual void filter( QQueue< FrameBuffer > &framesQueue ) = 0;
+	virtual void filter(QQueue< FrameBuffer > &framesQueue) = 0;
 protected:
-	int addFramesToInternalQueue( QQueue< FrameBuffer > &framesQueue );
+	int addFramesToInternalQueue(QQueue< FrameBuffer > &framesQueue);
 
-	inline double halfDelay( const FrameBuffer &f1, const FrameBuffer &f2 ) const
+	inline double halfDelay(const FrameBuffer &f1, const FrameBuffer &f2) const
 	{
-		return ( f1.ts - f2.ts ) / 2.0;
+		return (f1.ts - f2.ts) / 2.0;
 	}
 
 	QQueue< FrameBuffer > internalQueue;

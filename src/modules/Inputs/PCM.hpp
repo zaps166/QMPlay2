@@ -9,7 +9,7 @@ class PCM : public Demuxer
 public:
 	enum FORMAT { PCM_U8, PCM_S8, PCM_S16, PCM_S24, PCM_S32, PCM_FLT, FORMAT_COUNT };
 
-	PCM( Module & );
+	PCM(Module &);
 private:
 	bool set();
 
@@ -18,11 +18,11 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
 	/**/
 

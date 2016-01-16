@@ -15,20 +15,20 @@ class AudioThr : public AVThread
 {
 	Q_OBJECT
 public:
-	AudioThr( PlayClass &, const QStringList &pluginsName = QStringList() );
+	AudioThr(PlayClass &, const QStringList &pluginsName = QStringList());
 
-	void stop( bool terminate = false );
+	void stop(bool terminate = false);
 
-	bool setParams( uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0 );
+	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
 
-	void silence( bool invert = false );
+	void silence(bool invert = false);
 private:
 	void run();
 
 	bool resampler_create();
 
 #ifdef Q_OS_WIN
-	void timerEvent( QTimerEvent * );
+	void timerEvent(QTimerEvent *);
 #endif
 
 	SndResampler sndResampler;
@@ -47,9 +47,9 @@ private:
 	QVector< QMPlay2Extensions * > visualizations;
 	QVector< AudioFilter * > filters;
 private slots:
-	void pauseVis( bool );
+	void pauseVis(bool);
 signals:
-	void pauseVisSig( bool );
+	void pauseVisSig(bool);
 };
 
 #endif //AUDIOTHR_HPP

@@ -6,8 +6,8 @@ class Inputs : public Module
 public:
 	Inputs();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	QList< QAction * > getAddActions();
 
@@ -26,13 +26,13 @@ private slots:
 class HzW : public QWidget
 {
 public:
-	HzW( int, const QStringList & );
+	HzW(int, const QStringList &);
 
 	QString getFreqs() const;
-	inline void connectFreqs( const QObject *receiver, const char *method )
+	inline void connectFreqs(const QObject *receiver, const char *method)
 	{
-		for ( int i = 0; i < hzB.count(); ++i )
-			hzB[ i ]->connect( hzB[ i ], SIGNAL( valueChanged( int ) ), receiver, method );
+		for (int i = 0; i < hzB.count(); ++i)
+			hzB[ i ]->connect(hzB[ i ], SIGNAL(valueChanged(int)), receiver, method);
 	}
 private:
 	QList< QSpinBox * > hzB;
@@ -44,7 +44,7 @@ class AddD : public QDialog
 {
 	Q_OBJECT
 public:
-	AddD( Settings &, QWidget *parent = NULL, QObject *moduleSetsW = NULL );
+	AddD(Settings &, QWidget *parent = NULL, QObject *moduleSetsW = NULL);
 
 	inline int getSampleRate() const
 	{
@@ -59,7 +59,7 @@ public:
 
 	QString execAndGet();
 private slots:
-	void channelsChanged( int );
+	void channelsChanged(int);
 	void add();
 private:
 	QObject *moduleSetsW;
@@ -79,7 +79,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 {
 	Q_OBJECT
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 private slots:
 	void applyFreqs();
 private:

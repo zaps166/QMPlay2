@@ -17,7 +17,7 @@ class EntryProperties : public QDialog
 {
 	Q_OBJECT
 public:
-	EntryProperties( QWidget *, QTreeWidgetItem *, bool &, bool & );
+	EntryProperties(QWidget *, QTreeWidgetItem *, bool &, bool &);
 private:
 	QTreeWidgetItem *tWI;
 	QLineEdit *nameE, *dirPthE;
@@ -31,7 +31,7 @@ private:
 	QString origDirPth;
 	bool &sync;
 private slots:
-	void setDirPthEEnabled( int );
+	void setDirPthEEnabled(int);
 #ifdef QMPlay2_TagEditor
 	void directAddressChanged();
 #endif

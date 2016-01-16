@@ -6,8 +6,8 @@ public:
 	FFmpeg();
 	~FFmpeg();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
 
@@ -31,10 +31,10 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 #ifdef QMPlay2_VDPAU
 	Q_OBJECT
 #else
-	Q_DECLARE_TR_FUNCTIONS( ModuleSettingsWidget )
+	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 #endif
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 #ifdef QMPlay2_VDPAU
 private slots:
 	void setVDPAU();

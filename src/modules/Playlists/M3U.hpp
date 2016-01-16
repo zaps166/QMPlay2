@@ -3,7 +3,7 @@
 class M3U : public Playlist
 {
 	Entries _read();
-	bool _write( const Entries & );
+	bool _write(const Entries &);
 
 	~M3U() {}
 };

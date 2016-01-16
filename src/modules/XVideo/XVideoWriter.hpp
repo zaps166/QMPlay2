@@ -8,11 +8,11 @@ class Drawable : public QWidget
 {
 	friend class XVideoWriter;
 public:
-	Drawable( class XVideoWriter & );
+	Drawable(class XVideoWriter &);
 private:
-	void resizeEvent( QResizeEvent * );
-	void paintEvent( QPaintEvent * );
-	bool event( QEvent * );
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
+	bool event(QEvent *);
 
 	QPaintEngine *paintEngine() const;
 
@@ -29,7 +29,7 @@ class XVideoWriter : public VideoWriter
 {
 	friend class Drawable;
 public:
-	XVideoWriter( Module & );
+	XVideoWriter(Module &);
 private:
 	~XVideoWriter();
 
@@ -37,9 +37,9 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
-	void writeOSD( const QList< const QMPlay2_OSD * > & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
+	void writeOSD(const QList< const QMPlay2_OSD * > &);
 
 	QString name() const;
 

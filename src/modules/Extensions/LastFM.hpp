@@ -18,7 +18,7 @@ public:
 	class Scrobble
 	{
 	public:
-		inline bool operator ==( const Scrobble &other )
+		inline bool operator ==(const Scrobble &other)
 		{
 			return title == other.title && artist == other.artist && album == other.album && duration == other.duration;
 		}
@@ -28,20 +28,20 @@ public:
 		int duration;
 	};
 
-	LastFM( Module &module );
+	LastFM(Module &module);
 private:
 	bool set();
 
-	void getAlbumCover( const QString &title, const QString &artist, const QString &album );
+	void getAlbumCover(const QString &title, const QString &artist, const QString &album);
 
 	Q_SLOT void login();
-	void logout( bool canClear = true );
+	void logout(bool canClear = true);
 
-	void updateNowPlayingAndScrobble( const Scrobble &scrobble );
+	void updateNowPlayingAndScrobble(const Scrobble &scrobble);
 
 	void clear();
 private slots:
-	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName );
+	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
 
 	void albumFinished();
 	void loginFinished();

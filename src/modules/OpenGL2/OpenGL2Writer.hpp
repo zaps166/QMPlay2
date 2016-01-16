@@ -20,10 +20,10 @@ class Drawable : public QGLWidget
 #endif
 public:
 #ifndef USE_NEW_OPENGL_API
-	Drawable( OpenGL2Writer &, const QGLFormat & );
+	Drawable(OpenGL2Writer &, const QGLFormat &);
 	bool testGL();
 #else
-	Drawable( OpenGL2Writer & );
+	Drawable(OpenGL2Writer &);
 #endif
 
 #ifndef OPENGL_ES2
@@ -32,7 +32,7 @@ public:
 
 	void clr();
 
-	void resizeEvent( QResizeEvent * );
+	void resizeEvent(QResizeEvent *);
 
 	bool isOK, doReset, paused;
 	QByteArray videoFrameArr;
@@ -51,14 +51,14 @@ private:
 
 	void initializeGL();
 #ifndef USE_NEW_OPENGL_API
-	void resizeGL( int w, int h );
+	void resizeGL(int w, int h);
 #endif
 	void paintGL();
 
 #ifndef USE_NEW_OPENGL_API
-	void paintEvent( QPaintEvent * );
+	void paintEvent(QPaintEvent *);
 #endif
-	bool event( QEvent * );
+	bool event(QEvent *);
 
 	QGLShaderProgram shaderProgramYCbCr, shaderProgramOSD;
 #ifndef OPENGL_ES2
@@ -89,10 +89,10 @@ private:
 
 class OpenGL2Writer : public VideoWriter
 {
-	Q_DECLARE_TR_FUNCTIONS( OpenGL2Writer )
+	Q_DECLARE_TR_FUNCTIONS(OpenGL2Writer)
 	friend class Drawable;
 public:
-	OpenGL2Writer( Module & );
+	OpenGL2Writer(Module &);
 private:
 	~OpenGL2Writer();
 
@@ -100,9 +100,9 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
-	void writeOSD( const QList< const QMPlay2_OSD * > & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
+	void writeOSD(const QList< const QMPlay2_OSD * > &);
 
 	void pause();
 

@@ -7,21 +7,21 @@ class DockWidget : public QDockWidget
 {
 public:
 	inline DockWidget() :
-		titleBarVisible( true ), globalTitleBarVisible( true )
+		titleBarVisible(true), globalTitleBarVisible(true)
 	{}
-	inline void setTitleBarVisible( bool v = true )
+	inline void setTitleBarVisible(bool v = true)
 	{
-		setTitleBarWidget( ( titleBarVisible = v ) && globalTitleBarVisible ? NULL : &emptyW );
+		setTitleBarWidget((titleBarVisible = v) && globalTitleBarVisible ? NULL : &emptyW);
 	}
-	inline void setGlobalTitleBarVisible( bool v )
+	inline void setGlobalTitleBarVisible(bool v)
 	{
 		globalTitleBarVisible = v;
-		setTitleBarVisible( titleBarVisible );
+		setTitleBarVisible(titleBarVisible);
 	}
 private:
 	class EmptyW : public QWidget
 	{
-		void showEvent( QShowEvent * );
+		void showEvent(QShowEvent *);
 
 		QSize sizeHint() const;
 	} emptyW;

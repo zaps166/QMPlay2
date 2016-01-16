@@ -15,9 +15,9 @@ class QLabel;
 class PictureW : public QWidget
 {
 public:
-	PictureW( TagLib::ByteVector &picture );
+	PictureW(TagLib::ByteVector &picture);
 private:
-	void paintEvent( QPaintEvent * );
+	void paintEvent(QPaintEvent *);
 
 	TagLib::ByteVector &picture;
 };
@@ -29,7 +29,7 @@ public:
 	TagEditor();
 	~TagEditor();
 
-	bool open( const QString &fileName );
+	bool open(const QString &fileName);
 	void clear();
 	bool save();
 private slots:

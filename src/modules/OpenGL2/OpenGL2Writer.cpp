@@ -123,34 +123,34 @@ static const float texCoordOSD[ 8 ] = {
 /**/
 
 #ifndef USE_NEW_OPENGL_API
-Drawable::Drawable( OpenGL2Writer &writer, const QGLFormat &fmt ) :
-	QGLWidget( fmt ),
+Drawable::Drawable(OpenGL2Writer &writer, const QGLFormat &fmt) :
+	QGLWidget(fmt),
 #else
-Drawable::Drawable( OpenGL2Writer &writer ) :
+Drawable::Drawable(OpenGL2Writer &writer) :
 #endif
-	isOK( true ), paused( false ),
+	isOK(true), paused(false),
 #ifndef OPENGL_ES2
-	supportsShaders( false ), canCreateNonPowerOfTwoTextures( false ),
-	glActiveTexture( NULL ),
+	supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
+	glActiveTexture(NULL),
 #endif
-	writer( writer ),
-	hasImage( false ),
-	texCoordYCbCrLoc( -1 ), positionYCbCrLoc( -1 ), texCoordOSDLoc( -1 ), positionOSDLoc( -1 )
+	writer(writer),
+	hasImage(false),
+	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1)
 {
-	grabGesture( Qt::PinchGesture );
-	setMouseTracking( true );
+	grabGesture(Qt::PinchGesture);
+	setMouseTracking(true);
 
 #ifdef Q_OS_WIN
 	/*
 	 * This property is read by QMPlay2 and it ensures that toolbar will be visible
 	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
-	if ( QSysInfo::windowsVersion() >= QSysInfo::WV_6_0 )
-		setProperty( "PreventFullscreen", true );
+	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+		setProperty("PreventFullscreen", true);
 #endif
 
 #ifndef USE_NEW_OPENGL_API
-	connect( &QMPlay2Core, SIGNAL( videoDockMoved() ), this, SLOT( resetClearCounter() ) );
+	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 #endif
 
 	/* Initialize texCoord array */
@@ -162,11 +162,11 @@ Drawable::Drawable( OpenGL2Writer &writer ) :
 bool Drawable::testGL()
 {
 	makeCurrent();
-	if ( ( isOK = isValid() ) )
+	if ((isOK = isValid()))
 	{
 #ifndef OPENGL_ES2
 		initGLProc();
-		if ( !canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture )
+		if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
 		{
 			showOpenGLMissingFeaturesMessage();
 			isOK = false;
@@ -184,13 +184,13 @@ bool Drawable::testGL()
 #ifndef OPENGL_ES2
 void Drawable::initGLProc()
 {
-	const char *glExtensions = ( const char * )glGetString( GL_EXTENSIONS );
-	if ( glExtensions )
+	const char *glExtensions = (const char *)glGetString(GL_EXTENSIONS);
+	if (glExtensions)
 	{
-		supportsShaders = !!strstr( glExtensions, "GL_ARB_vertex_shader" ) && !!strstr( glExtensions, "GL_ARB_fragment_shader" ) && !!strstr( glExtensions, "GL_ARB_shader_objects" );
-		canCreateNonPowerOfTwoTextures = !!strstr( glExtensions, "GL_ARB_texture_non_power_of_two" );
+		supportsShaders = !!strstr(glExtensions, "GL_ARB_vertex_shader") && !!strstr(glExtensions, "GL_ARB_fragment_shader") && !!strstr(glExtensions, "GL_ARB_shader_objects");
+		canCreateNonPowerOfTwoTextures = !!strstr(glExtensions, "GL_ARB_texture_non_power_of_two");
 	}
-	glActiveTexture = ( GLActiveTexture )context()->getProcAddress( "glActiveTexture" );
+	glActiveTexture = (GLActiveTexture)context()->getProcAddress("glActiveTexture");
 }
 #endif
 
@@ -201,13 +201,13 @@ void Drawable::clr()
 	osd_checksums.clear();
 }
 
-void Drawable::resizeEvent( QResizeEvent *e )
+void Drawable::resizeEvent(QResizeEvent *e)
 {
-	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
+	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
 	doReset = true;
-	if ( e )
-		QGLWidget::resizeEvent( e );
-	else if ( paused )
+	if (e)
+		QGLWidget::resizeEvent(e);
+	else if (paused)
 	{
 #ifndef USE_NEW_OPENGL_API
 		updateGL();
@@ -237,7 +237,7 @@ void Drawable::showOpenGLMissingFeaturesMessage()
 		supportsShaders ? "yes" : "no",
 		glActiveTexture ? "yes" : "no"
 	);
-	QMPlay2Core.logError( "OpenGL 2 :: " + tr( "Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze" ), true, true );
+	QMPlay2Core.logError("OpenGL 2 :: " + tr("Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze"), true, true);
 }
 #endif
 
@@ -245,31 +245,31 @@ void Drawable::initializeGL()
 {
 	int glMajor = 0, glMinor = 0;
 #ifndef OPENGL_ES2
-	glGetIntegerv( GL_MAJOR_VERSION, &glMajor );
-	glGetIntegerv( GL_MINOR_VERSION, &glMinor );
+	glGetIntegerv(GL_MAJOR_VERSION, &glMajor);
+	glGetIntegerv(GL_MINOR_VERSION, &glMinor);
 #endif
-	if ( !glMajor )
+	if (!glMajor)
 	{
-		const QString glVersionStr = ( const char * )glGetString( GL_VERSION );
-		const int dotIdx = glVersionStr.indexOf( '.' );
-		if ( dotIdx > 0 )
+		const QString glVersionStr = (const char *)glGetString(GL_VERSION);
+		const int dotIdx = glVersionStr.indexOf('.');
+		if (dotIdx > 0)
 		{
-			const int vIdx = glVersionStr.lastIndexOf( ' ', dotIdx );
-			if ( sscanf( glVersionStr.mid( vIdx < 0 ? 0 : vIdx ).toLatin1().data(), "%d.%d", &glMajor, &glMinor ) != 2 )
+			const int vIdx = glVersionStr.lastIndexOf(' ', dotIdx);
+			if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().data(), "%d.%d", &glMajor, &glMinor) != 2)
 				glMajor = glMinor = 0;
 		}
 	}
-	if ( glMajor )
-		glVer = QString( "%1.%2" ).arg( glMajor ).arg( glMinor );
+	if (glMajor)
+		glVer = QString("%1.%2").arg(glMajor).arg(glMinor);
 	else
 		glVer = "2";
 
 #ifndef OPENGL_ES2
 	initGLProc();
 #ifndef USE_NEW_OPENGL_API
-	if ( !glActiveTexture ) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
+	if (!glActiveTexture) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
 #else
-	if ( !glActiveTexture || !canCreateNonPowerOfTwoTextures || !supportsShaders ) //"testGL()" doesn't work with "USE_NEW_OPENGL_API", so check features here!
+	if (!glActiveTexture || !canCreateNonPowerOfTwoTextures || !supportsShaders) //"testGL()" doesn't work with "USE_NEW_OPENGL_API", so check features here!
 #endif
 	{
 		showOpenGLMissingFeaturesMessage();
@@ -279,74 +279,74 @@ void Drawable::initializeGL()
 #endif
 
 	/* YCbCr shader */
-	if ( shaderProgramYCbCr.shaders().isEmpty() )
+	if (shaderProgramYCbCr.shaders().isEmpty())
 	{
-		shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderYCbCrSrc ).arg( precisionStr ) );
+		shaderProgramYCbCr.addShaderFromSourceCode(QGLShader::Vertex, QString(vShaderYCbCrSrc).arg(precisionStr));
 		/* Use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
-		shaderProgramYCbCr.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderYCbCrSrc ).arg( precisionStr ).arg( (glMajor * 10 + glMinor >= 30) ? fShaderYCbCrHueSrc : "" ) );
+		shaderProgramYCbCr.addShaderFromSourceCode(QGLShader::Fragment, QString(fShaderYCbCrSrc).arg(precisionStr).arg((glMajor * 10 + glMinor >= 30) ? fShaderYCbCrHueSrc : ""));
 	}
-	if ( shaderProgramYCbCr.bind() )
+	if (shaderProgramYCbCr.bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation( "aTexCoord" );
-		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation( "vPosition" );
-		if ( newTexCoordLoc != newPositionLoc ) //If new locations are invalid, just leave them untouched...
+		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation("aTexCoord");
+		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation("vPosition");
+		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordYCbCrLoc = newTexCoordLoc;
 			positionYCbCrLoc = newPositionLoc;
 		}
-		shaderProgramYCbCr.setUniformValue( "Ytex", 0 );
-		shaderProgramYCbCr.setUniformValue( "Utex", 1 );
-		shaderProgramYCbCr.setUniformValue( "Vtex", 2 );
+		shaderProgramYCbCr.setUniformValue("Ytex", 0);
+		shaderProgramYCbCr.setUniformValue("Utex", 1);
+		shaderProgramYCbCr.setUniformValue("Vtex", 2);
 		shaderProgramYCbCr.release();
 	}
 	else
 	{
-		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ) );
+		QMPlay2Core.logError(tr("Błąd podczas kompilacji/linkowania shaderów"));
 		isOK = false;
 		return;
 	}
 
 	/* OSD shader */
-	if ( shaderProgramOSD.shaders().isEmpty() )
+	if (shaderProgramOSD.shaders().isEmpty())
 	{
-		shaderProgramOSD.addShaderFromSourceCode( QGLShader::Vertex, QString( vShaderOSDSrc ).arg( precisionStr ) );
-		shaderProgramOSD.addShaderFromSourceCode( QGLShader::Fragment, QString( fShaderOSDSrc ).arg( precisionStr ) );
+		shaderProgramOSD.addShaderFromSourceCode(QGLShader::Vertex, QString(vShaderOSDSrc).arg(precisionStr));
+		shaderProgramOSD.addShaderFromSourceCode(QGLShader::Fragment, QString(fShaderOSDSrc).arg(precisionStr));
 	}
-	if ( shaderProgramOSD.bind() )
+	if (shaderProgramOSD.bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation( "aTexCoord" );
-		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation( "vPosition" );
-		if ( newTexCoordLoc != newPositionLoc ) //If new locations are invalid, just leave them untouched...
+		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation("aTexCoord");
+		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation("vPosition");
+		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordOSDLoc = newTexCoordLoc;
 			positionOSDLoc = newPositionLoc;
 		}
-		shaderProgramOSD.setUniformValue( "tex", 3 );
+		shaderProgramOSD.setUniformValue("tex", 3);
 		shaderProgramOSD.release();
 	}
 	else
 	{
-		QMPlay2Core.logError( tr( "Błąd podczas kompilacji/linkowania shaderów" ) );
+		QMPlay2Core.logError(tr("Błąd podczas kompilacji/linkowania shaderów"));
 		isOK = false;
 		return;
 	}
 
 	/* Set OpenGL parameters */
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glClearColor( 0.0, 0.0, 0.0, 1.0 );
-	glClear( GL_COLOR_BUFFER_BIT );
-	glDisable( GL_STENCIL_TEST );
-	glDisable( GL_DEPTH_TEST );
-	glDisable( GL_DITHER );
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DITHER);
 
 	/* Prepare textures */
-	for ( int i = 1; i <= 4; ++i )
+	for (int i = 1; i <= 4; ++i)
 	{
-		glBindTexture( GL_TEXTURE_2D, i );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		glBindTexture(GL_TEXTURE_2D, i);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
 #ifdef VSYNC_SETTINGS
@@ -362,57 +362,57 @@ void Drawable::initializeGL()
 void Drawable::paintGL()
 {
 #ifdef VSYNC_SETTINGS
-	if ( lastVSyncState != writer.vSync )
+	if (lastVSyncState != writer.vSync)
 	{
 		typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
 		SwapInterval swapInterval = NULL;
 #ifdef Q_OS_WIN
-		swapInterval = ( SwapInterval )context()->getProcAddress( "wglSwapIntervalEXT" );
+		swapInterval = (SwapInterval)context()->getProcAddress("wglSwapIntervalEXT");
 #else
-		swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalMESA" );
-		if ( !swapInterval )
-			swapInterval = ( SwapInterval )context()->getProcAddress( "glXSwapIntervalSGI" );
+		swapInterval = (SwapInterval)context()->getProcAddress("glXSwapIntervalMESA");
+		if (!swapInterval)
+			swapInterval = (SwapInterval)context()->getProcAddress("glXSwapIntervalSGI");
 #endif
-		if ( swapInterval )
-			swapInterval( writer.vSync );
+		if (swapInterval)
+			swapInterval(writer.vSync);
 		else
-			QMPlay2Core.logError( tr( "Zarządzanie VSync jest nieobsługiwane" ), true, true );
+			QMPlay2Core.logError(tr("Zarządzanie VSync jest nieobsługiwane"), true, true);
 		lastVSyncState = writer.vSync;
 	}
 #endif
 
 #if !defined USE_NEW_OPENGL_API
-	if ( doReset )
+	if (doReset)
 		doClear = NUM_BUFFERS_TO_CLEAR;
-	if ( doClear > 0 )
+	if (doClear > 0)
 	{
-		glClear( GL_COLOR_BUFFER_BIT );
+		glClear(GL_COLOR_BUFFER_BIT);
 		--doClear;
 	}
 #elif QT_VERSION < 0x050500
-	glClear( GL_COLOR_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT);
 #endif
 
-	if ( videoFrameArr.isEmpty() && !hasImage )
+	if (videoFrameArr.isEmpty() && !hasImage)
 		return;
 
 	bool resetDone = false;
 
-	if ( !videoFrameArr.isEmpty() )
+	if (!videoFrameArr.isEmpty())
 	{
-		const VideoFrame *videoFrame = VideoFrame::fromData( videoFrameArr );
+		const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameArr);
 
-		if ( doReset )
+		if (doReset)
 		{
 			/* Prepare textures */
-			glBindTexture( GL_TEXTURE_2D, 2 );
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 0 ], writer.outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL );
+			glBindTexture(GL_TEXTURE_2D, 2);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 0 ], writer.outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
-			glBindTexture( GL_TEXTURE_2D, 3 );
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 1 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL );
+			glBindTexture(GL_TEXTURE_2D, 3);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 1 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
-			glBindTexture( GL_TEXTURE_2D, 4 );
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 2 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL );
+			glBindTexture(GL_TEXTURE_2D, 4);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[ 2 ], writer.outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
 			/* Prepare texture coordinates */
 			texCoordYCbCr[ 2 ] = texCoordYCbCr[ 6 ] = (videoFrame->linesize[ 0 ] == writer.outW) ? 1.0f : (writer.outW / (videoFrame->linesize[ 0 ] + 1.0f));
@@ -420,68 +420,68 @@ void Drawable::paintGL()
 			resetDone = true;
 		}
 
-		glActiveTexture( GL_TEXTURE0 );
-		glBindTexture( GL_TEXTURE_2D, 2 );
-		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 0 ], writer.outH, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 0 ] );
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 2);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 0 ], writer.outH, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 0 ]);
 
-		glActiveTexture( GL_TEXTURE1 );
-		glBindTexture( GL_TEXTURE_2D, 3 );
-		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 1 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 1 ] );
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, 3);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 1 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 1 ]);
 
-		glActiveTexture( GL_TEXTURE2 );
-		glBindTexture( GL_TEXTURE_2D, 4 );
-		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 2 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ] );
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, 4);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[ 2 ], writer.outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[ 2 ]);
 
 		videoFrameArr.clear();
 		hasImage = true;
 	}
 
-	shaderProgramYCbCr.setAttributeArray( positionYCbCrLoc, verticesYCbCr[ writer.flip ], 2 );
-	shaderProgramYCbCr.setAttributeArray( texCoordYCbCrLoc, texCoordYCbCr, 2 );
-	shaderProgramYCbCr.enableAttributeArray( positionYCbCrLoc );
-	shaderProgramYCbCr.enableAttributeArray( texCoordYCbCrLoc );
+	shaderProgramYCbCr.setAttributeArray(positionYCbCrLoc, verticesYCbCr[ writer.flip ], 2);
+	shaderProgramYCbCr.setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
+	shaderProgramYCbCr.enableAttributeArray(positionYCbCrLoc);
+	shaderProgramYCbCr.enableAttributeArray(texCoordYCbCrLoc);
 
 	shaderProgramYCbCr.bind();
-	if ( doReset )
+	if (doReset)
 	{
-		shaderProgramYCbCr.setUniformValue( "scale", W / ( float )width(), H / ( float )height() );
-		shaderProgramYCbCr.setUniformValue( "videoEq", Brightness, Contrast, Saturation, Hue );
+		shaderProgramYCbCr.setUniformValue("scale", W / (float)width(), H / (float)height());
+		shaderProgramYCbCr.setUniformValue("videoEq", Brightness, Contrast, Saturation, Hue);
 		doReset = !resetDone;
 	}
-	glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	shaderProgramYCbCr.release();
 
-	shaderProgramYCbCr.disableAttributeArray( texCoordYCbCrLoc );
-	shaderProgramYCbCr.disableAttributeArray( positionYCbCrLoc );
+	shaderProgramYCbCr.disableAttributeArray(texCoordYCbCrLoc);
+	shaderProgramYCbCr.disableAttributeArray(positionYCbCrLoc);
 
-	glActiveTexture( GL_TEXTURE3 );
+	glActiveTexture(GL_TEXTURE3);
 
 	/* OSD */
 	osd_mutex.lock();
-	if ( !osd_list.isEmpty() )
+	if (!osd_list.isEmpty())
 	{
-		glBindTexture( GL_TEXTURE_2D, 1 );
+		glBindTexture(GL_TEXTURE_2D, 1);
 
 		QRect bounds;
-		const qreal scaleW = ( qreal )W / writer.outW, scaleH = ( qreal )H / writer.outH;
-		bool mustRepaint = Functions::mustRepaintOSD( osd_list, osd_checksums, &scaleW, &scaleH, &bounds );
-		if ( !mustRepaint )
+		const qreal scaleW = (qreal)W / writer.outW, scaleH = (qreal)H / writer.outH;
+		bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_checksums, &scaleW, &scaleH, &bounds);
+		if (!mustRepaint)
 			mustRepaint = osdImg.size() != bounds.size();
-		if ( mustRepaint )
+		if (mustRepaint)
 		{
-			if ( osdImg.size() != bounds.size() )
-				osdImg = QImage( bounds.size(), QImage::Format_ARGB32 );
-			osdImg.fill( 0 );
-			QPainter p( &osdImg );
-			p.translate( -bounds.topLeft() );
-			Functions::paintOSD( false, osd_list, scaleW, scaleH, p, &osd_checksums );
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.bits() );
+			if (osdImg.size() != bounds.size())
+				osdImg = QImage(bounds.size(), QImage::Format_ARGB32);
+			osdImg.fill(0);
+			QPainter p(&osdImg);
+			p.translate(-bounds.topLeft());
+			Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.bits());
 		}
 
-		const float left   = ( bounds.left() + X ) * 2.0f / width();
-		const float right  = ( bounds.right() + X + 1 ) * 2.0f / width();
-		const float top    = ( bounds.top() + Y ) * 2.0f / height();
-		const float bottom = ( bounds.bottom() + Y + 1 ) * 2.0f / height();
+		const float left   = (bounds.left() + X) * 2.0f / width();
+		const float right  = (bounds.right() + X + 1) * 2.0f / width();
+		const float top    = (bounds.top() + Y) * 2.0f / height();
+		const float bottom = (bounds.bottom() + Y + 1) * 2.0f / height();
 		const float verticesOSD[ 8 ] = {
 			left  - 1.0f, -bottom + 1.0f,
 			right - 1.0f, -bottom + 1.0f,
@@ -489,70 +489,70 @@ void Drawable::paintGL()
 			right - 1.0f, -top    + 1.0f,
 		};
 
-		shaderProgramOSD.setAttributeArray( positionOSDLoc, verticesOSD, 2 );
-		shaderProgramOSD.setAttributeArray( texCoordOSDLoc, texCoordOSD, 2 );
-		shaderProgramOSD.enableAttributeArray( positionOSDLoc );
-		shaderProgramOSD.enableAttributeArray( texCoordOSDLoc );
+		shaderProgramOSD.setAttributeArray(positionOSDLoc, verticesOSD, 2);
+		shaderProgramOSD.setAttributeArray(texCoordOSDLoc, texCoordOSD, 2);
+		shaderProgramOSD.enableAttributeArray(positionOSDLoc);
+		shaderProgramOSD.enableAttributeArray(texCoordOSDLoc);
 
-		glEnable( GL_BLEND );
+		glEnable(GL_BLEND);
 		shaderProgramOSD.bind();
-		glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		shaderProgramOSD.release();
-		glDisable( GL_BLEND );
+		glDisable(GL_BLEND);
 
-		shaderProgramOSD.disableAttributeArray( texCoordOSDLoc );
-		shaderProgramOSD.disableAttributeArray( positionOSDLoc );
+		shaderProgramOSD.disableAttributeArray(texCoordOSDLoc);
+		shaderProgramOSD.disableAttributeArray(positionOSDLoc);
 	}
 	osd_mutex.unlock();
 
-	glBindTexture( GL_TEXTURE_2D, 0 );
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 #ifndef USE_NEW_OPENGL_API
-void Drawable::resizeGL( int w, int h )
+void Drawable::resizeGL(int w, int h)
 {
-	glViewport( 0, 0, w, h );
+	glViewport(0, 0, w, h);
 }
 #endif
 
 #ifndef USE_NEW_OPENGL_API
-void Drawable::paintEvent( QPaintEvent *e )
+void Drawable::paintEvent(QPaintEvent *e)
 {
 	doClear = NUM_BUFFERS_TO_CLEAR;
-	QGLWidget::paintEvent( e );
+	QGLWidget::paintEvent(e);
 }
 #endif
-bool Drawable::event( QEvent *e )
+bool Drawable::event(QEvent *e)
 {
 	/*
 	 * QGLWidget blocks this event forever (tested on Windows 8.1, Qt 4.8.7)
 	 * This is workaround: pass gesture event to the parent.
 	*/
-	if ( e->type() == QEvent::Gesture )
-		return qApp->notify( parent(), e );
-	return QGLWidget::event( e );
+	if (e->type() == QEvent::Gesture)
+		return qApp->notify(parent(), e);
+	return QGLWidget::event(e);
 }
 
 /**/
 
-OpenGL2Writer::OpenGL2Writer( Module &module ) :
-	outW( -1 ), outH( -1 ), W( -1 ), flip( 0 ),
-	aspect_ratio( 0.0 ), zoom( 0.0 ),
+OpenGL2Writer::OpenGL2Writer(Module &module) :
+	outW(-1), outH(-1), W(-1), flip(0),
+	aspect_ratio(0.0), zoom(0.0),
 #ifdef VSYNC_SETTINGS
-	vSync( true ),
+	vSync(true),
 #endif
-	drawable( NULL )
+	drawable(NULL)
 {
-	addParam( "W" );
-	addParam( "H" );
-	addParam( "AspectRatio" );
-	addParam( "Zoom" );
-	addParam( "Flip" );
-	addParam( "Saturation" );
-	addParam( "Brightness" );
-	addParam( "Contrast" );
-	addParam( "Hue" );
+	addParam("W");
+	addParam("H");
+	addParam("AspectRatio");
+	addParam("Zoom");
+	addParam("Flip");
+	addParam("Saturation");
+	addParam("Brightness");
+	addParam("Contrast");
+	addParam("Hue");
 
-	SetModule( module );
+	SetModule(module);
 }
 OpenGL2Writer::~OpenGL2Writer()
 {
@@ -562,9 +562,9 @@ OpenGL2Writer::~OpenGL2Writer()
 bool OpenGL2Writer::set()
 {
 #ifdef VSYNC_SETTINGS
-	vSync = sets().getBool( "VSync" );
+	vSync = sets().getBool("VSync");
 #endif
-	return sets().getBool( "Enabled" );
+	return sets().getBool("Enabled");
 }
 
 bool OpenGL2Writer::readyWrite() const
@@ -572,18 +572,18 @@ bool OpenGL2Writer::readyWrite() const
 	return drawable->isOK;
 }
 
-bool OpenGL2Writer::processParams( bool * )
+bool OpenGL2Writer::processParams(bool *)
 {
 	bool doResizeEvent = false;
 
-	const double _aspect_ratio = getParam( "AspectRatio" ).toDouble();
-	const double _zoom = getParam( "Zoom" ).toDouble();
-	const int _flip = getParam( "Flip" ).toInt();
-	const float Contrast = ( getParam( "Contrast" ).toInt() + 100 ) / 100.0f;
-	const float Saturation = ( getParam( "Saturation" ).toInt() + 100 ) / 100.0f;
-	const float Brightness = getParam( "Brightness" ).toInt() / 100.0f;
-	const float Hue = getParam( "Hue" ).toInt() / -31.831f;
-	if ( _aspect_ratio != aspect_ratio || _zoom != zoom || _flip != flip || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue )
+	const double _aspect_ratio = getParam("AspectRatio").toDouble();
+	const double _zoom = getParam("Zoom").toDouble();
+	const int _flip = getParam("Flip").toInt();
+	const float Contrast = (getParam("Contrast").toInt() + 100) / 100.0f;
+	const float Saturation = (getParam("Saturation").toInt() + 100) / 100.0f;
+	const float Brightness = getParam("Brightness").toInt() / 100.0f;
+	const float Hue = getParam("Hue").toInt() / -31.831f;
+	if (_aspect_ratio != aspect_ratio || _zoom != zoom || _flip != flip || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
 	{
 		zoom = _zoom;
 		aspect_ratio = _aspect_ratio;
@@ -595,31 +595,31 @@ bool OpenGL2Writer::processParams( bool * )
 		doResizeEvent = drawable->isVisible();
 	}
 
-	const int _outW = getParam( "W" ).toInt();
-	const int _outH = getParam( "H" ).toInt();
-	if ( _outW > 0 && _outH > 0 && ( _outW != outW || _outH != outH ) )
+	const int _outW = getParam("W").toInt();
+	const int _outH = getParam("H").toInt();
+	if (_outW > 0 && _outH > 0 && (_outW != outW || _outH != outH))
 	{
 		outW = _outW;
 		outH = _outH;
-		W = ( outW % 8 ) ? outW-1 : outW;
+		W = (outW % 8) ? outW-1 : outW;
 
 		drawable->clr();
-		emit QMPlay2Core.dockVideo( drawable );
+		emit QMPlay2Core.dockVideo(drawable);
 	}
 
-	if ( doResizeEvent )
-		drawable->resizeEvent( NULL );
+	if (doResizeEvent)
+		drawable->resizeEvent(NULL);
 	else
 		drawable->doReset = true;
 
 	return readyWrite();
 }
 
-qint64 OpenGL2Writer::write( const QByteArray &arr )
+qint64 OpenGL2Writer::write(const QByteArray &arr)
 {
 	drawable->paused = false;
 	drawable->videoFrameArr = arr;
-	VideoFrame::unref( arr );
+	VideoFrame::unref(arr);
 #ifndef USE_NEW_OPENGL_API
 	drawable->updateGL();
 #else
@@ -627,7 +627,7 @@ qint64 OpenGL2Writer::write( const QByteArray &arr )
 #endif
 	return arr.size();
 }
-void OpenGL2Writer::writeOSD( const QList< const QMPlay2_OSD * > &osds )
+void OpenGL2Writer::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;
@@ -652,12 +652,12 @@ bool OpenGL2Writer::open()
 {
 #ifndef USE_NEW_OPENGL_API
 	QGLFormat fmt;
-	fmt.setDepth( false );
-	fmt.setStencil( false );
-	drawable = new Drawable( *this, fmt );
+	fmt.setDepth(false);
+	fmt.setStencil(false);
+	drawable = new Drawable(*this, fmt);
 	return drawable->testGL();
 #else
-	drawable = new Drawable( *this );
+	drawable = new Drawable(*this);
 	return true;
 #endif
 }

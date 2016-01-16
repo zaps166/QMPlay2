@@ -3,26 +3,26 @@
 
 void VideoFilter::clearBuffer()
 {
-	while ( !internalQueue.isEmpty() )
-		VideoFrame::unref( internalQueue.dequeue().data );
+	while (!internalQueue.isEmpty())
+		VideoFrame::unref(internalQueue.dequeue().data);
 }
 bool VideoFilter::removeLastFromInternalBuffer()
 {
-	if ( !internalQueue.isEmpty() )
+	if (!internalQueue.isEmpty())
 	{
-		VideoFrame::unref( internalQueue.takeLast().data );
+		VideoFrame::unref(internalQueue.takeLast().data);
 		return true;
 	}
 	return false;
 }
 
-int VideoFilter::addFramesToInternalQueue( QQueue<VideoFilter::FrameBuffer> &framesQueue )
+int VideoFilter::addFramesToInternalQueue(QQueue<VideoFilter::FrameBuffer> &framesQueue)
 {
-	while ( !framesQueue.isEmpty() )
+	while (!framesQueue.isEmpty())
 	{
-		if ( !VideoFrame::fromData( framesQueue.first().data )->data_size )
+		if (!VideoFrame::fromData(framesQueue.first().data)->data_size)
 			break;
-		internalQueue.enqueue( framesQueue.dequeue() );
+		internalQueue.enqueue(framesQueue.dequeue());
 	}
 	return framesQueue.count();
 }

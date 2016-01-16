@@ -16,9 +16,9 @@ public:
 	enum TYPE { NONE, DEMUXER, DECODER, READER, WRITER, PLAYLIST, QMPLAY2EXTENSION, SUBSDEC, AUDIOFILTER, VIDEOFILTER };
 	enum FILTERTYPE { DEINTERLACE = 0x400000, DOUBLER = 0x800000, USERFLAG = 0x80000000 };
 
-	inline Module( const QString &mName ) :
-		Settings( mName ),
-		mName( mName )
+	inline Module(const QString &mName) :
+		Settings(mName),
+		mName(mName)
 	{}
 	virtual ~Module() {}
 
@@ -31,17 +31,17 @@ public:
 	{
 	public:
 		inline Info() :
-			type( NONE ) {}
-		inline Info( const QString &name, const quint32 type, const QImage &img = QImage(), const QString &description = QString() ) :
-			name( name ), description( description ), type( type ), img( img ) {}
-		inline Info( const QString &name, const quint32 type, const QString &description ) :
-			name( name ), description( description ), type( type ) {}
-		inline Info( const QString &name, const quint32 type, const QStringList &extensions, const QImage &img = QImage(), const QString &description = QString() ) :
-			name( name ), description( description ), type( type ), img( img ), extensions( extensions ) {}
+			type(NONE) {}
+		inline Info(const QString &name, const quint32 type, const QImage &img = QImage(), const QString &description = QString()) :
+			name(name), description(description), type(type), img(img) {}
+		inline Info(const QString &name, const quint32 type, const QString &description) :
+			name(name), description(description), type(type) {}
+		inline Info(const QString &name, const quint32 type, const QStringList &extensions, const QImage &img = QImage(), const QString &description = QString()) :
+			name(name), description(description), type(type), img(img), extensions(extensions) {}
 
 		inline QString imgPath() const
 		{
-			return img.text( "Path" );
+			return img.text("Path");
 		}
 
 		QString name, description;
@@ -49,8 +49,8 @@ public:
 		QImage img;
 		QStringList extensions;
 	};
-	virtual QList< Info > getModulesInfo( const bool showDisabled = false ) const = 0;
-	virtual void *createInstance( const QString & ) = 0;
+	virtual QList< Info > getModulesInfo(const bool showDisabled = false) const = 0;
+	virtual void *createInstance(const QString &) = 0;
 
 	virtual QList< QAction * > getAddActions()
 	{
@@ -62,10 +62,10 @@ public:
 	public:
 		virtual void saveSettings() = 0;
 	protected:
-		inline SettingsWidget( Module &module ) :
-			module( module )
+		inline SettingsWidget(Module &module) :
+			module(module)
 		{
-			setAttribute( Qt::WA_DeleteOnClose );
+			setAttribute(Qt::WA_DeleteOnClose);
 		}
 
 		inline Settings &sets()
@@ -90,7 +90,7 @@ public:
 		return moduleImg;
 	}
 
-	void SetInstances( bool & );
+	void SetInstances(bool &);
 	template < typename T > void SetInstance();
 protected:
 	QImage moduleImg;
@@ -103,15 +103,15 @@ private:
 template < typename T > void Module::SetInstance()
 {
 	mutex.lock();
-	foreach ( ModuleCommon *mc, instances )
+	foreach (ModuleCommon *mc, instances)
 	{
-		T *t = dynamic_cast< T * >( mc );
-		if ( t )
+		T *t = dynamic_cast< T * >(mc);
+		if (t)
 			t->set();
 	}
 	mutex.unlock();
 }
 
-#define QMPLAY2_EXPORT_PLUGIN( ModuleClass ) extern "C" Module *qmplay2PluginInstance() { return new ModuleClass; }
+#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) extern "C" Module *qmplay2PluginInstance() { return new ModuleClass; }
 
 #endif

@@ -10,24 +10,24 @@ class MediaPlayer2Root : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
 
-	Q_CLASSINFO( "D-Bus Interface", "org.mpris.MediaPlayer2" )
+	Q_CLASSINFO("D-Bus Interface", "org.mpris.MediaPlayer2")
 
-	Q_PROPERTY( bool CanQuit READ canQuit )
-	Q_PROPERTY( bool CanRaise READ canRaise )
-	Q_PROPERTY( bool CanSetFullscreen READ canSetFullscreen )
-	Q_PROPERTY( bool Fullscreen READ isFullscreen WRITE setFullscreen )
-	Q_PROPERTY( bool HasTrackList READ hasTrackList )
-	Q_PROPERTY( QString Identity READ identity )
-	Q_PROPERTY( QStringList SupportedMimeTypes READ supportedMimeTypes )
-	Q_PROPERTY( QStringList SupportedUriSchemes READ supportedUriSchemes )
+	Q_PROPERTY(bool CanQuit READ canQuit)
+	Q_PROPERTY(bool CanRaise READ canRaise)
+	Q_PROPERTY(bool CanSetFullscreen READ canSetFullscreen)
+	Q_PROPERTY(bool Fullscreen READ isFullscreen WRITE setFullscreen)
+	Q_PROPERTY(bool HasTrackList READ hasTrackList)
+	Q_PROPERTY(QString Identity READ identity)
+	Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes)
+	Q_PROPERTY(QStringList SupportedUriSchemes READ supportedUriSchemes)
 public:
-	MediaPlayer2Root( QObject *p );
+	MediaPlayer2Root(QObject *p);
 
 	bool canQuit() const;
 	bool canRaise() const;
 	bool canSetFullscreen() const;
 	bool isFullscreen() const;
-	void setFullscreen( bool fs );
+	void setFullscreen(bool fs);
 	bool hasTrackList() const;
 	QString identity() const;
 	QStringList supportedMimeTypes() const;
@@ -36,7 +36,7 @@ public slots:
 	void Quit();
 	void Raise();
 private slots:
-	void fullScreenChanged( bool fs );
+	void fullScreenChanged(bool fs);
 private:
 	bool fullScreen;
 };
@@ -47,26 +47,26 @@ class MediaPlayer2Player : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
 
-	Q_CLASSINFO( "D-Bus Interface", "org.mpris.MediaPlayer2.Player" )
+	Q_CLASSINFO("D-Bus Interface", "org.mpris.MediaPlayer2.Player")
 
-	Q_PROPERTY( bool CanControl READ canControl )
-	Q_PROPERTY( bool CanGoNext READ canGoNext )
-	Q_PROPERTY( bool CanGoPrevious READ canGoPrevious )
-	Q_PROPERTY( bool CanPause READ canPause )
-	Q_PROPERTY( bool CanPlay READ canPlay )
-	Q_PROPERTY( bool CanSeek READ canSeek )
-	Q_PROPERTY( QVariantMap Metadata READ metadata )
-	Q_PROPERTY( QString PlaybackStatus READ playbackStatus )
-	Q_PROPERTY( qint64 Position READ position )
-	Q_PROPERTY( double MinimumRate READ minimumRate )
-	Q_PROPERTY( double MaximumRate READ maximumRate )
-	Q_PROPERTY( double Rate READ rate WRITE setRate )
-	Q_PROPERTY( double Volume READ volume WRITE setVolume )
+	Q_PROPERTY(bool CanControl READ canControl)
+	Q_PROPERTY(bool CanGoNext READ canGoNext)
+	Q_PROPERTY(bool CanGoPrevious READ canGoPrevious)
+	Q_PROPERTY(bool CanPause READ canPause)
+	Q_PROPERTY(bool CanPlay READ canPlay)
+	Q_PROPERTY(bool CanSeek READ canSeek)
+	Q_PROPERTY(QVariantMap Metadata READ metadata)
+	Q_PROPERTY(QString PlaybackStatus READ playbackStatus)
+	Q_PROPERTY(qint64 Position READ position)
+	Q_PROPERTY(double MinimumRate READ minimumRate)
+	Q_PROPERTY(double MaximumRate READ maximumRate)
+	Q_PROPERTY(double Rate READ rate WRITE setRate)
+	Q_PROPERTY(double Volume READ volume WRITE setVolume)
 public:
-	MediaPlayer2Player( QObject *p );
+	MediaPlayer2Player(QObject *p);
 	~MediaPlayer2Player();
 
-	inline void setExportCovers( bool e )
+	inline void setExportCovers(bool e)
 	{
 		exportCovers = e;
 	}
@@ -85,10 +85,10 @@ public:
 	double minimumRate() const;
 	double maximumRate() const;
 	double rate() const;
-	void setRate( double rate );
+	void setRate(double rate);
 
 	double volume() const;
-	void setVolume( double value );
+	void setVolume(double value);
 public slots:
 	void Next();
 	void Previous();
@@ -96,20 +96,20 @@ public slots:
 	void PlayPause();
 	void Stop();
 	void Play();
-	void Seek( qint64 Offset );
-	void SetPosition( const QDBusObjectPath &TrackId, qint64 Position );
-	void OpenUri( const QString &Uri );
+	void Seek(qint64 Offset);
+	void SetPosition(const QDBusObjectPath &TrackId, qint64 Position);
+	void OpenUri(const QString &Uri);
 signals:
-	void Seeked( qint64 Position );
+	void Seeked(qint64 Position);
 private slots:
-	void updatePlaying( bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName );
-	void coverDataFromMediaFile( const QByteArray &cover );
-	void playStateChanged( const QString &plState );
-	void coverFile( const QString &filePath );
-	void speedChanged( double speed );
-	void volumeChanged( double v );
-	void posChanged( int p );
-	void seeked( int pos );
+	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
+	void coverDataFromMediaFile(const QByteArray &cover);
+	void playStateChanged(const QString &plState);
+	void coverFile(const QString &filePath);
+	void speedChanged(double speed);
+	void volumeChanged(double v);
+	void posChanged(int p);
+	void seeked(int pos);
 private:
 	void clearMetaData();
 
@@ -128,12 +128,12 @@ private:
 class MPRIS2Interface : public QObject
 {
 public:
-	MPRIS2Interface( time_t instance_val );
+	MPRIS2Interface(time_t instance_val);
 	~MPRIS2Interface();
 
-	inline void setExportCovers( bool e )
+	inline void setExportCovers(bool e)
 	{
-		mediaPlayer2Player.setExportCovers( e );
+		mediaPlayer2Player.setExportCovers(e);
 	}
 private:
 	QString service;
@@ -148,7 +148,7 @@ private:
 class MPRIS2 : public QMPlay2Extensions
 {
 public:
-	MPRIS2( Module &module );
+	MPRIS2(Module &module);
 	~MPRIS2();
 private:
 	bool set();

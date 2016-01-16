@@ -67,7 +67,7 @@ BOOL CSoundFile::ReadFAR(const BYTE *lpStream, DWORD dwMemLength)
 	if ((!lpStream) || (dwMemLength < 1024) || (bswapLE32(pmh1->id) != FARFILEMAGIC)
 	 || (pmh1->magic2[0] != 13) || (pmh1->magic2[1] != 10) || (pmh1->magic2[2] != 26)) return FALSE;
 	headerlen = bswapLE16(pmh1->headerlen);
-	stlen = bswapLE16( pmh1->stlen );
+	stlen = bswapLE16(pmh1->stlen);
 	if ((headerlen >= dwMemLength) || (dwMemPos + stlen + sizeof(FARHEADER2) >= dwMemLength)) return FALSE;
 	// Globals
 	m_nType = MOD_TYPE_FAR;
@@ -236,7 +236,7 @@ BOOL CSoundFile::ReadFAR(const BYTE *lpStream, DWORD dwMemLength)
 		dwMemPos += sizeof(FARSAMPLE);
 		m_nSamples = ismp + 1;
 		memcpy(m_szNames[ismp+1], pfs->samplename, 32);
-		const DWORD length = bswapLE32( pfs->length ); /* endian fix - Toad */
+		const DWORD length = bswapLE32(pfs->length); /* endian fix - Toad */
 		pins->nLength = length ;
 		pins->nLoopStart = bswapLE32(pfs->reppos) ;
 		pins->nLoopEnd = bswapLE32(pfs->repend) ;

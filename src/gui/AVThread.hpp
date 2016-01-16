@@ -14,7 +14,7 @@ class AVThread : public QThread
 	Q_OBJECT
 public:
 	void destroyDec();
-	inline void setDec( Decoder *_dec )
+	inline void setDec(Decoder *_dec)
 	{
 		dec = _dec;
 	}
@@ -27,12 +27,12 @@ public:
 		return waiting;
 	}
 
-	virtual void stop( bool terminate = false );
+	virtual void stop(bool terminate = false);
 
 	Decoder *dec;
 	Writer *writer;
 protected:
-	AVThread( PlayClass &, const QString &, Writer *writer = NULL, const QStringList &pluginsName = QStringList() );
+	AVThread(PlayClass &, const QString &, Writer *writer = NULL, const QStringList &pluginsName = QStringList());
 	virtual ~AVThread();
 
 	void terminate();

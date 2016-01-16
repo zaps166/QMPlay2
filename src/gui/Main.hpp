@@ -18,16 +18,16 @@ class QMPlay2GUIClass : private QMPlay2CoreClass
 public:
 	static QMPlay2GUIClass &instance();
 
-	static QString getLongFromShortLanguage( const QString & );
-	static QStringList getModules( const QString &, int typeLen );
+	static QString getLongFromShortLanguage(const QString &);
+	static QStringList getModules(const QString &, int typeLen);
 	static QString getPipe();
 
-	static void saveCover( QByteArray cover );
+	static void saveCover(QByteArray cover);
 
-	static void drawPixmap( QPainter &p, QWidget *w, QPixmap pixmap );
+	static void drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap);
 
 #ifdef UPDATER
-	void runUpdate( const QString & );
+	void runUpdate(const QString &);
 #endif
 
 	QStringList getLanguages();
@@ -36,14 +36,14 @@ public:
 	void setStyle();
 	void loadIcons();
 
-	QString getCurrentPth( QString pth = QString(), bool leaveFilename = false );
-	void setCurrentPth( const QString & );
+	QString getCurrentPth(QString pth = QString(), bool leaveFilename = false);
+	void setCurrentPth(const QString &);
 
-	void restoreGeometry( const QString &pth, QWidget *w, const QSize &def_size );
+	void restoreGeometry(const QString &pth, QWidget *w, const QSize &def_size);
 
-	inline QIcon getIcon( const QImage &img )
+	inline QIcon getIcon(const QImage &img)
 	{
-		return img.isNull() ? *qmp2Pixmap : QPixmap::fromImage( img );
+		return img.isNull() ? *qmp2Pixmap : QPixmap::fromImage(img);
 	}
 
 	void updateInDockW();

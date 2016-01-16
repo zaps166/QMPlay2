@@ -5,9 +5,9 @@ class BlendDeint : public DeintFilter
 public:
 	BlendDeint();
 
-	void filter( QQueue< FrameBuffer > &framesQueue );
+	void filter(QQueue< FrameBuffer > &framesQueue);
 
-	bool processParams( bool *paramsCorrected );
+	bool processParams(bool *paramsCorrected);
 private:
 	int w, h;
 };

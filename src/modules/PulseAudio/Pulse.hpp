@@ -27,7 +27,7 @@ public:
 	bool start();
 	void stop();
 
-	bool write( const QByteArray & );
+	bool write(const QByteArray &);
 
 	double delay;
 	uchar channels;

@@ -58,7 +58,7 @@ BOOL CSoundFile::Read669(const BYTE *lpStream, DWORD dwMemLength)
 //	b669Ext = (bswapLE16(pfh->sig) == 0x4E4A) ? TRUE : FALSE;
 	if ((!pfh->samples) || (pfh->samples > 64) || (pfh->restartpos >= 128)
 	 || (!pfh->patterns) || (pfh->patterns > 128)) return FALSE;
-	if ( 0x1F1 + pfh->samples * 25U + pfh->patterns * 0x600 > dwMemLength ) return FALSE;
+	if (0x1F1 + pfh->samples * 25U + pfh->patterns * 0x600 > dwMemLength) return FALSE;
 	// That should be enough checking: this must be a 669 module.
 	m_nType = MOD_TYPE_669;
 	m_dwSongFlags |= SONG_LINEARSLIDES;

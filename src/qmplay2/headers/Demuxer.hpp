@@ -16,16 +16,16 @@ public:
 	class FetchTracks
 	{
 	public:
-		inline FetchTracks( bool onlyTracks ) :
-			onlyTracks( onlyTracks ),
-			isOK( true )
+		inline FetchTracks(bool onlyTracks) :
+			onlyTracks(onlyTracks),
+			isOK(true)
 		{}
 
 		Playlist::Entries tracks;
 		bool onlyTracks, isOK;
 	};
 
-	static bool create( const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks = NULL );
+	static bool create(const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks = NULL);
 
 	virtual bool metadataChanged() const
 	{
@@ -48,18 +48,18 @@ public:
 	{
 		return QList< QMPlay2Tag >();
 	}
-	virtual bool getReplayGain( bool album, float &gain_db, float &peak ) const
+	virtual bool getReplayGain(bool album, float &gain_db, float &peak) const
 	{
-		Q_UNUSED( album )
-		Q_UNUSED( gain_db )
-		Q_UNUSED( peak )
+		Q_UNUSED(album)
+		Q_UNUSED(gain_db)
+		Q_UNUSED(peak)
 		return false;
 	}
 	virtual double length() const = 0;
 	virtual int bitrate() const = 0;
-	virtual QByteArray image( bool forceCopy = false ) const
+	virtual QByteArray image(bool forceCopy = false) const
 	{
-		Q_UNUSED( forceCopy )
+		Q_UNUSED(forceCopy)
 		return QByteArray();
 	}
 
@@ -72,17 +72,17 @@ public:
 		return false;
 	}
 
-	virtual bool seek( int ) = 0;
-	virtual bool read( Packet &, int & ) = 0;
+	virtual bool seek(int) = 0;
+	virtual bool read(Packet &, int &) = 0;
 
 	virtual ~Demuxer() {}
 private:
-	virtual bool open( const QString &url ) = 0;
+	virtual bool open(const QString &url) = 0;
 
-	virtual Playlist::Entries fetchTracks( const QString &url, bool &ok )
+	virtual Playlist::Entries fetchTracks(const QString &url, bool &ok)
 	{
-		Q_UNUSED( url )
-		Q_UNUSED( ok )
+		Q_UNUSED(url)
+		Q_UNUSED(ok)
 		return Playlist::Entries();
 	}
 protected:

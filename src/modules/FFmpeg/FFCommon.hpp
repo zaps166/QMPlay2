@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#define QMPLAY2_NOPTS_VALUE ( int64_t )AV_NOPTS_VALUE
+#define QMPLAY2_NOPTS_VALUE (int64_t)AV_NOPTS_VALUE
 
 #define DecoderName "FFmpeg Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
@@ -20,12 +20,12 @@ class VideoFrame;
 
 namespace FFCommon
 {
-	QString prepareUrl( QString url, AVDictionary *&options );
+	QString prepareUrl(QString url, AVDictionary *&options);
 
-	int getField( const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField );
+	int getField(const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
 
 	AVPacket *createAVPacket();
-	void freeAVPacket( AVPacket *&packet );
+	void freeAVPacket(AVPacket *&packet);
 }
 
 #endif

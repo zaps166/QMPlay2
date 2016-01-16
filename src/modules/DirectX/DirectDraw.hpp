@@ -12,7 +12,7 @@ class Drawable : public QWidget
 	Q_OBJECT
 	typedef HRESULT (WINAPI *DwmEnableCompositionProc)(UINT uCompositionAction);
 public:
-	Drawable( DirectDrawWriter & );
+	Drawable(DirectDrawWriter &);
 	~Drawable();
 
 	inline bool canDraw() const
@@ -25,26 +25,26 @@ public:
 	void videoEqSet();
 	void setFlip();
 
-	bool draw( const QByteArray &videoFrameData );
+	bool draw(const QByteArray &videoFrameData);
 
-	void resizeEvent( QResizeEvent * );
+	void resizeEvent(QResizeEvent *);
 
 	QList< const QMPlay2_OSD * > osd_list;
 	QMutex osd_mutex;
 	bool isOK, isOverlay, paused;
 private:
-	void getRects( RECT &, RECT & );
+	void getRects(RECT &, RECT &);
 	void fillRects();
 
 	Q_SLOT void updateOverlay();
-	Q_SLOT void overlayVisible( bool );
+	Q_SLOT void overlayVisible(bool);
 	void blit();
 
 	void releaseSecondary();
 	bool restoreLostSurface();
 
-	void paintEvent( QPaintEvent * );
-	bool event( QEvent * );
+	void paintEvent(QPaintEvent *);
+	bool event(QEvent *);
 
 	QPaintEngine *paintEngine() const;
 
@@ -70,7 +70,7 @@ class DirectDrawWriter : public VideoWriter
 {
 	friend class Drawable;
 public:
-	DirectDrawWriter( Module & );
+	DirectDrawWriter(Module &);
 private:
 	~DirectDrawWriter();
 
@@ -78,9 +78,9 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
-	void writeOSD( const QList< const QMPlay2_OSD * > & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
+	void writeOSD(const QList< const QMPlay2_OSD * > &);
 
 	void pause();
 

@@ -6,80 +6,80 @@
 #include <Writer.hpp>
 #include <Reader.hpp>
 
-Playlist::Entries Playlist::read( const QString &url, QString *name )
+Playlist::Entries Playlist::read(const QString &url, QString *name)
 {
 	Entries list;
-	Playlist *playlist = create( url, ReadOnly, name );
-	if ( playlist )
+	Playlist *playlist = create(url, ReadOnly, name);
+	if (playlist)
 	{
 		list = playlist->_read();
 		delete playlist;
 	}
 	return list;
 }
-bool Playlist::write( const Entries &list, const QString &url, QString *name )
+bool Playlist::write(const Entries &list, const QString &url, QString *name)
 {
 	bool OK = false;
-	Playlist *playlist = create( url, WriteOnly, name );
-	if ( playlist )
+	Playlist *playlist = create(url, WriteOnly, name);
+	if (playlist)
 	{
-		OK = playlist->_write( list );
+		OK = playlist->_write(list);
 		delete playlist;
 	}
 	return OK;
 }
-QString Playlist::name( const QString &url )
+QString Playlist::name(const QString &url)
 {
 	QString name;
-	create( url, NoOpen, &name );
+	create(url, NoOpen, &name);
 	return name;
 }
 QStringList Playlist::extensions()
 {
 	QStringList extensions;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::PLAYLIST )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::PLAYLIST)
 				extensions += mod.extensions;
 	return extensions;
 }
 
-Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name )
+Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
-	QString extension = Functions::fileExt( url ).toLower();
-	if ( extension.isEmpty() )
+	QString extension = Functions::fileExt(url).toLower();
+	if (extension.isEmpty())
 		return NULL;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::PLAYLIST && mod.extensions.contains( extension ) )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::PLAYLIST && mod.extensions.contains(extension))
 			{
-				if ( openMode == NoOpen )
+				if (openMode == NoOpen)
 				{
-					if ( name )
+					if (name)
 						*name = mod.name;
 					return NULL;
 				}
-				Playlist *playlist = ( Playlist * )module->createInstance( mod.name );
-				if ( !playlist )
+				Playlist *playlist = (Playlist *)module->createInstance(mod.name);
+				if (!playlist)
 					continue;
-				switch ( openMode )
+				switch (openMode)
 				{
 					case ReadOnly:
 					{
 						IOController< Reader > &reader = playlist->ioCtrl.toRef< Reader >();
-						Reader::create( url, reader ); //TODO przerywanie (po co?)
-						if ( reader && reader->size() <= 0 )
+						Reader::create(url, reader); //TODO przerywanie (po co?)
+						if (reader && reader->size() <= 0)
 							reader.clear();
 					} break;
 					case WriteOnly:
-						playlist->ioCtrl.assign( Writer::create( url ) );
+						playlist->ioCtrl.assign(Writer::create(url));
 						break;
 					default:
 						break;
 				}
-				if ( playlist->ioCtrl )
+				if (playlist->ioCtrl)
 				{
-					if ( name )
+					if (name)
 						*name = mod.name;
 					return playlist;
 				}
@@ -91,5 +91,5 @@ Playlist *Playlist::create( const QString &url, OpenMode openMode, QString *name
 QList< QByteArray > Playlist::readLines()
 {
 	IOController< Reader > &reader = ioCtrl.toRef< Reader >();
-	return reader->read( reader->size() ).replace( '\r', QByteArray() ).split( '\n' );
+	return reader->read(reader->size()).replace('\r', QByteArray()).split('\n');
 }

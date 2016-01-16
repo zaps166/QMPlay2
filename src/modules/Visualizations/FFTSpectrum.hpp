@@ -10,11 +10,11 @@ class FFTSpectrumW : public VisWidget
 	friend class FFTSpectrum;
 	Q_OBJECT
 public:
-	FFTSpectrumW( FFTSpectrum & );
+	FFTSpectrumW(FFTSpectrum &);
 private:
-	void paintEvent( QPaintEvent * );
+	void paintEvent(QPaintEvent *);
 
-	void start( bool v = false );
+	void start(bool v = false);
 	void stop();
 
 	QVector< float > spectrumData;
@@ -34,18 +34,18 @@ struct FFTComplex;
 class FFTSpectrum : public QMPlay2Extensions
 {
 public:
-	FFTSpectrum( Module & );
+	FFTSpectrum(Module &);
 
-	void soundBuffer( const bool );
+	void soundBuffer(const bool);
 
 	bool set();
 private:
 	DockWidget *getDockWidget();
 
 	bool isVisualization() const;
-	void connectDoubleClick( const QObject *, const char * );
-	void visState( bool, uchar, uint );
-	void sendSoundData( const QByteArray & );
+	void connectDoubleClick(const QObject *, const char *);
+	void visState(bool, uchar, uint);
+	void sendSoundData(const QByteArray &);
 
 	/**/
 

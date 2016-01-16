@@ -14,7 +14,7 @@ class QSettings;
 class WallpaperW : public QWidget
 {
 public:
-	void setPixmap( const QPixmap &pix )
+	void setPixmap(const QPixmap &pix)
 	{
 		pixmap = pix;
 		update();
@@ -24,7 +24,7 @@ public:
 		return pixmap;
 	}
 private:
-	void paintEvent( QPaintEvent * );
+	void paintEvent(QPaintEvent *);
 
 	QPixmap pixmap;
 };
@@ -34,18 +34,18 @@ class Appearance : public QDialog
 	Q_OBJECT
 public:
 	static void init();
-	static void applyPalette( const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal );
+	static void applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal);
 
-	Appearance( QWidget *p );
+	Appearance(QWidget *p);
 private slots:
-	void schemesIndexChanged( int idx );
+	void schemesIndexChanged(int idx);
 	void newScheme();
 	void saveScheme();
 	void deleteScheme();
 	void chooseWallpaper();
-	void buttonBoxClicked( QAbstractButton *b );
+	void buttonBoxClicked(QAbstractButton *b);
 private:
-	void saveScheme( QSettings &colorScheme );
+	void saveScheme(QSettings &colorScheme);
 	void reloadSchemes();
 	void loadCurrentPalette();
 	void loadDefaultPalette();

@@ -7,22 +7,22 @@ QList< QMPlay2Extensions * > QMPlay2Extensions::guiExtensionsList;
 
 void QMPlay2Extensions::openExtensions()
 {
-	if ( !guiExtensionsList.isEmpty() )
+	if (!guiExtensionsList.isEmpty())
 		return;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::QMPLAY2EXTENSION )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::QMPLAY2EXTENSION)
 			{
-				QMPlay2Extensions *QMPlay2Ext = ( QMPlay2Extensions * )module->createInstance( mod.name );
-				if ( QMPlay2Ext )
-					guiExtensionsList.append( QMPlay2Ext );
+				QMPlay2Extensions *QMPlay2Ext = (QMPlay2Extensions *)module->createInstance(mod.name);
+				if (QMPlay2Ext)
+					guiExtensionsList.append(QMPlay2Ext);
 			}
-	foreach ( QMPlay2Extensions *QMPlay2Ext, guiExtensionsList )
+	foreach (QMPlay2Extensions *QMPlay2Ext, guiExtensionsList)
 		QMPlay2Ext->init();
 }
 
 void QMPlay2Extensions::closeExtensions()
 {
-	while ( !guiExtensionsList.isEmpty() )
+	while (!guiExtensionsList.isEmpty())
 		delete guiExtensionsList.takeFirst();
 }

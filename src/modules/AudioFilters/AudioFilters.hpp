@@ -5,8 +5,8 @@ class AudioFilters : public Module
 public:
 	AudioFilters();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
 };
@@ -23,7 +23,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 {
 	Q_OBJECT
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 private slots:
 	void voiceRemovalToggle();
 	void phaseReverse();

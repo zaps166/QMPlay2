@@ -2321,7 +2321,7 @@ UINT CSoundFile::GetPeriodFromNote(UINT note, int nFineTune, UINT nC4Speed) cons
 			if (i < 0) i = 0;
 			if (i >= 104) i = 103;
 			UINT per1 = XMPeriodTable[i];
-			if ( finetune < 0 )
+			if (finetune < 0)
 			{
 				rfine--;
 				finetune = -finetune;

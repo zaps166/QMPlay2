@@ -11,52 +11,52 @@ class QMPlay2DummyDecoder : public Decoder
 		return QString();
 	}
 
-	int decode( Packet &packet, QByteArray &dest, bool flush, unsigned hurry_up )
+	int decode(Packet &packet, QByteArray &dest, bool flush, unsigned hurry_up)
 	{
-		Q_UNUSED( flush )
-		Q_UNUSED( hurry_up )
-		return ( dest = packet ).size();
+		Q_UNUSED(flush)
+		Q_UNUSED(hurry_up)
+		return (dest = packet).size();
 	}
 
-	bool open( StreamInfo *_streamInfo, Writer * )
+	bool open(StreamInfo *_streamInfo, Writer *)
 	{
 		streamInfo = _streamInfo;
 		return true;
 	}
 };
 
-Decoder *Decoder::create( StreamInfo *streamInfo, Writer *writer, const QStringList &modNames )
+Decoder *Decoder::create(StreamInfo *streamInfo, Writer *writer, const QStringList &modNames)
 {
-	if ( !streamInfo->must_decode )
+	if (!streamInfo->must_decode)
 	{
 		Decoder *decoder = new QMPlay2DummyDecoder;
-		decoder->open( streamInfo );
+		decoder->open(streamInfo);
 		return decoder;
 	}
-	QVector< QPair< Module *, Module::Info > > pluginsInstances( modNames.count() );
-	foreach ( Module *pluginInstance, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, pluginInstance->getModulesInfo() )
-			if ( mod.type == Module::DECODER )
+	QVector< QPair< Module *, Module::Info > > pluginsInstances(modNames.count());
+	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
+			if (mod.type == Module::DECODER)
 			{
-				if ( modNames.isEmpty() )
-					pluginsInstances += qMakePair( pluginInstance, mod );
+				if (modNames.isEmpty())
+					pluginsInstances += qMakePair(pluginInstance, mod);
 				else
 				{
-					const int idx = modNames.indexOf( mod.name );
-					if ( idx > -1 )
-						pluginsInstances[ idx ] = qMakePair( pluginInstance, mod );
+					const int idx = modNames.indexOf(mod.name);
+					if (idx > -1)
+						pluginsInstances[ idx ] = qMakePair(pluginInstance, mod);
 				}
 			}
-	for ( int i = 0; i < pluginsInstances.count(); i++ )
+	for (int i = 0; i < pluginsInstances.count(); i++)
 	{
 		Module *module = pluginsInstances[ i ].first;
 		Module::Info &moduleInfo = pluginsInstances[ i ].second;
-		if ( !module || moduleInfo.name.isEmpty() )
+		if (!module || moduleInfo.name.isEmpty())
 			continue;
-		Decoder *decoder = ( Decoder * )module->createInstance( moduleInfo.name );
-		if ( !decoder )
+		Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);
+		if (!decoder)
 			continue;
-		if ( decoder->open( streamInfo, writer ) )
+		if (decoder->open(streamInfo, writer))
 			return decoder;
 		delete decoder;
 	}

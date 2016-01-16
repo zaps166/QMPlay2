@@ -1,75 +1,75 @@
 #include <Settings.hpp>
 
-Settings::Settings( const QString &name ) :
-	QSettings( QMPlay2Core.getSettingsDir() + name + ".ini", QSettings::IniFormat ),
-	timerID( 0 )
+Settings::Settings(const QString &name) :
+	QSettings(QMPlay2Core.getSettingsDir() + name + ".ini", QSettings::IniFormat),
+	timerID(0)
 {}
 Settings::~Settings()
 {
-	QMutexLocker mL( &mutex );
+	QMutexLocker mL(&mutex);
 	flushCache();
 }
 
 void Settings::flush()
 {
-	QMutexLocker mL( &mutex );
+	QMutexLocker mL(&mutex);
 	flushCache();
 	sync();
 }
 
-void Settings::init( const QString &key, const QVariant &val )
+void Settings::init(const QString &key, const QVariant &val)
 {
-	QMutexLocker mL( &mutex );
-	if ( !cache.isEmpty() )
+	QMutexLocker mL(&mutex);
+	if (!cache.isEmpty())
 		flushCache();
-	if ( !QSettings::contains( key ) )
-		QSettings::setValue( key, val );
+	if (!QSettings::contains(key))
+		QSettings::setValue(key, val);
 }
-bool Settings::contains( const QString &key ) const
+bool Settings::contains(const QString &key) const
 {
-	QMutexLocker mL( &mutex );
-	if ( !cache.isEmpty() && cache.contains( key ) )
+	QMutexLocker mL(&mutex);
+	if (!cache.isEmpty() && cache.contains(key))
 		return true;
-	return QSettings::contains( key );
+	return QSettings::contains(key);
 }
-void Settings::set( const QString &key, const QVariant &val )
+void Settings::set(const QString &key, const QVariant &val)
 {
-	QMutexLocker mL( &mutex );
+	QMutexLocker mL(&mutex);
 	cache[ key ] = val;
-	if ( timerID )
-		killTimer( timerID );
-	timerID = startTimer( 2000 );
+	if (timerID)
+		killTimer(timerID);
+	timerID = startTimer(2000);
 }
-void Settings::remove( const QString &key )
+void Settings::remove(const QString &key)
 {
-	QMutexLocker mL( &mutex );
-	if ( !cache.isEmpty() )
+	QMutexLocker mL(&mutex);
+	if (!cache.isEmpty())
 		flushCache();
-	QSettings::remove( key );
+	QSettings::remove(key);
 }
 
-QVariant Settings::get( const QString &key, const QVariant &def ) const
+QVariant Settings::get(const QString &key, const QVariant &def) const
 {
-	QMutexLocker mL( &mutex );
-	if ( !cache.isEmpty() && cache.contains( key ) )
+	QMutexLocker mL(&mutex);
+	if (!cache.isEmpty() && cache.contains(key))
 		return cache[ key ];
-	return QSettings::value( key, def );
+	return QSettings::value(key, def);
 }
 
-void Settings::timerEvent( QTimerEvent * )
+void Settings::timerEvent(QTimerEvent *)
 {
-	QMutexLocker mL( &mutex );
-	if ( timerID )
+	QMutexLocker mL(&mutex);
+	if (timerID)
 		flushCache();
 }
 void Settings::flushCache()
 {
-	if ( timerID )
+	if (timerID)
 	{
-		killTimer( timerID );
+		killTimer(timerID);
 		timerID = 0;
 	}
-	for ( SettingsMap::const_iterator it = cache.begin(), end_it = cache.end(); it != end_it; ++it )
-		QSettings::setValue( it.key(), it.value() );
+	for (SettingsMap::const_iterator it = cache.begin(), end_it = cache.end(); it != end_it; ++it)
+		QSettings::setValue(it.key(), it.value());
 	cache.clear();
 }

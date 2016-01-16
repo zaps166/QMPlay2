@@ -12,102 +12,102 @@ Playlist::Entries PLS::_read()
 	Reader *reader = ioCtrl.rawPtr< Reader >();
 	Entries list;
 
-	QString playlistPath = filePath( reader->getUrl() );
-	if ( playlistPath.startsWith( "file://" ) )
-		playlistPath.remove( 0, 7 );
+	QString playlistPath = filePath(reader->getUrl());
+	if (playlistPath.startsWith("file://"))
+		playlistPath.remove(0, 7);
 	else
 		playlistPath.clear();
 
 	const QList< QByteArray > playlistLines = readLines();
-	for ( int i = 0; i < playlistLines.count(); ++i )
+	for (int i = 0; i < playlistLines.count(); ++i)
 	{
 		const QByteArray &line = playlistLines[ i ];
-		if ( line.isEmpty() )
+		if (line.isEmpty())
 			continue;
-		int idx = line.indexOf( '=' );
-		if ( idx < 0 )
+		int idx = line.indexOf('=');
+		if (idx < 0)
 			continue;
 
 		int number_idx = -1;
-		for ( int i = 0; i < line.length(); ++i )
+		for (int i = 0; i < line.length(); ++i)
 		{
-			if ( line[ i ] == '=' )
+			if (line[ i ] == '=')
 				break;
-			if ( line[ i ] >= '0' && line[ i ] <= '9' )
+			if (line[ i ] >= '0' && line[ i ] <= '9')
 			{
 				number_idx = i;
 				break;
 			}
 		}
-		if ( number_idx == -1 )
+		if (number_idx == -1)
 			continue;
 
-		QByteArray key = line.left( number_idx );
-		QByteArray value = line.mid( idx+1 );
-		int entry_idx = line.mid( number_idx, idx - number_idx ).toInt() - 1;
+		QByteArray key = line.left(number_idx);
+		QByteArray value = line.mid(idx+1);
+		int entry_idx = line.mid(number_idx, idx - number_idx).toInt() - 1;
 
-		prepareList( &list, entry_idx );
-		if ( entry_idx < 0 || entry_idx > list.size() - 1 )
+		prepareList(&list, entry_idx);
+		if (entry_idx < 0 || entry_idx > list.size() - 1)
 			continue;
 
-		if ( key == "File" )
-			list[ entry_idx ].url = Url( value, playlistPath );
-		else if ( key == "Title" )
-			list[ entry_idx ].name = value.replace( '\001', '\n' );
-		else if ( key == "Length" )
+		if (key == "File")
+			list[ entry_idx ].url = Url(value, playlistPath);
+		else if (key == "Title")
+			list[ entry_idx ].name = value.replace('\001', '\n');
+		else if (key == "Length")
 			list[ entry_idx ].length = value.toInt();
-		else if ( key == "QMPlay_sel" )
+		else if (key == "QMPlay_sel")
 			list[ entry_idx ].selected = value.toInt();
-		else if ( key == "QMPlay_queue" )
+		else if (key == "QMPlay_queue")
 			list[ entry_idx ].queue = value.toInt();
-		else if ( key == "QMPlay_GID" )
+		else if (key == "QMPlay_GID")
 			list[ entry_idx ].GID = value.toInt();
-		else if ( key == "QMPlay_parent" )
+		else if (key == "QMPlay_parent")
 			list[ entry_idx ].parent = value.toInt();
 	}
 
 	return list;
 }
-bool PLS::_write( const Entries &list )
+bool PLS::_write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr< Writer >();
-	writer->write( QString( "[playlist]\r\nNumberOfEntries=" + QString::number( list.size() ) + "\r\n" ).toUtf8() );
-	for ( int i = 0; i < list.size(); i++ )
+	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
+	for (int i = 0; i < list.size(); i++)
 	{
 		const Playlist::Entry &entry = list[ i ];
-		QString idx = QString::number( i+1 );
+		QString idx = QString::number(i+1);
 		QString url = entry.url;
-		const bool isFile = url.startsWith( "file://" );
-		if ( isFile )
-			url.remove( 0, 7 );
+		const bool isFile = url.startsWith("file://");
+		if (isFile)
+			url.remove(0, 7);
 #ifdef Q_OS_WIN
-		if ( isFile )
-			url.replace( "/", "\\" );
+		if (isFile)
+			url.replace("/", "\\");
 #endif
-		if ( !url.isEmpty() )
-			writer->write( QString( "File" + idx + "=" + url + "\r\n" ).toUtf8() );
-		if ( !entry.name.isEmpty() )
-			writer->write( QString( "Title" + idx + "=" + QString( entry.name ).replace( '\n', '\001' ) + "\r\n" ).toUtf8() );
-		if ( entry.length >= 0 )
-			writer->write( QString( "Length" + idx + "=" + QString::number( entry.length ) + "\r\n" ).toUtf8() );
-		if ( entry.selected )
-			writer->write( QString( "QMPlay_sel" + idx + "=" + QString::number( entry.selected ) + "\r\n" ).toUtf8() );
-		if ( entry.queue )
-			writer->write( QString( "QMPlay_queue" + idx + "=" + QString::number( entry.queue ) + "\r\n" ).toUtf8() );
-		if ( entry.GID )
-			writer->write( QString( "QMPlay_GID" + idx + "=" + QString::number( entry.GID ) + "\r\n" ).toUtf8() );
-		if ( entry.parent )
-			writer->write( QString( "QMPlay_parent" + idx + "=" + QString::number( entry.parent ) + "\r\n" ).toUtf8() );
+		if (!url.isEmpty())
+			writer->write(QString("File" + idx + "=" + url + "\r\n").toUtf8());
+		if (!entry.name.isEmpty())
+			writer->write(QString("Title" + idx + "=" + QString(entry.name).replace('\n', '\001') + "\r\n").toUtf8());
+		if (entry.length >= 0)
+			writer->write(QString("Length" + idx + "=" + QString::number(entry.length) + "\r\n").toUtf8());
+		if (entry.selected)
+			writer->write(QString("QMPlay_sel" + idx + "=" + QString::number(entry.selected) + "\r\n").toUtf8());
+		if (entry.queue)
+			writer->write(QString("QMPlay_queue" + idx + "=" + QString::number(entry.queue) + "\r\n").toUtf8());
+		if (entry.GID)
+			writer->write(QString("QMPlay_GID" + idx + "=" + QString::number(entry.GID) + "\r\n").toUtf8());
+		if (entry.parent)
+			writer->write(QString("QMPlay_parent" + idx + "=" + QString::number(entry.parent) + "\r\n").toUtf8());
 	}
 	return true;
 }
 
 /**/
 
-void PLS::prepareList( Playlist::Entries *list, int idx )
+void PLS::prepareList(Playlist::Entries *list, int idx)
 {
-	if ( !list || idx <= list->size() - 1 )
+	if (!list || idx <= list->size() - 1)
 		return;
-	for ( int i = list->size(); i <= idx; i++ )
+	for (int i = list->size(); i <= idx; i++)
 		*list += Entry();
 }

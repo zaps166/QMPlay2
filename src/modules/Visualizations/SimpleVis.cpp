@@ -6,86 +6,86 @@
 
 #include <math.h>
 
-static inline float fltclip( float f )
+static inline float fltclip(float f)
 {
-	if ( f > 1.0f )
+	if (f > 1.0f)
 		f = 1.0f;
-	else if ( f < -1.0f )
+	else if (f < -1.0f)
 		f = -1.0f;
-	else if ( f != f ) //NaN
+	else if (f != f) //NaN
 		f = 0.0f;
 	return f;
 }
-static inline void fltcpy( float *dest, const float *src, int size )
+static inline void fltcpy(float *dest, const float *src, int size)
 {
-	size /= sizeof( float );
-	for ( int i = 0; i < size; ++i )
-		dest[ i ] = fltclip( src[ i ] );
+	size /= sizeof(float);
+	for (int i = 0; i < size; ++i)
+		dest[ i ] = fltclip(src[ i ]);
 }
 
 /**/
 
-SimpleVisW::SimpleVisW( SimpleVis &simpleVis ) :
-	simpleVis( simpleVis ),
-	fullScreen( false )
+SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
+	simpleVis(simpleVis),
+	fullScreen(false)
 {
-	dw->setObjectName( SimpleVisName );
-	dw->setWindowTitle( tr( "Prosta wizualizacja" ) );
-	dw->setWidget( this );
+	dw->setObjectName(SimpleVisName);
+	dw->setWindowTitle(tr("Prosta wizualizacja"));
+	dw->setWidget(this);
 
 	chn = 2;
 	srate = 0;
 	leftBar = rightBar = leftLine.first = rightLine.first = 0.0;
 	interval = -1;
 
-	linearGrad.setStart( 0, 1 );
-	linearGrad.setFinalStop( 0, 0 );
-	linearGrad.setColorAt( 0.0, Qt::blue );
-	linearGrad.setColorAt( 0.1, Qt::green );
-	linearGrad.setColorAt( 0.5, Qt::yellow );
-	linearGrad.setColorAt( 0.8, Qt::red );
+	linearGrad.setStart(0, 1);
+	linearGrad.setFinalStop(0, 0);
+	linearGrad.setColorAt(0.0, Qt::blue);
+	linearGrad.setColorAt(0.1, Qt::green);
+	linearGrad.setColorAt(0.5, Qt::yellow);
+	linearGrad.setColorAt(0.8, Qt::red);
 }
 
-void SimpleVisW::paintEvent( QPaintEvent * )
+void SimpleVisW::paintEvent(QPaintEvent *)
 {
-	QPainter p( this );
+	QPainter p(this);
 
-	const int size = soundData.size() / sizeof( float );
-	if ( size >= chn )
+	const int size = soundData.size() / sizeof(float);
+	if (size >= chn)
 	{
-		const float *samples = ( const float * )soundData.constData();
+		const float *samples = (const float *)soundData.constData();
 
 		qreal lr[ 2 ] = { 0.0f, 0.0f };
 
-		p.translate( 0.0, fullScreen );
-		p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
-		p.translate( 0.055, 0.0 );
-		for ( int c = 0; c < chn; ++c )
+		p.translate(0.0, fullScreen);
+		p.scale((width() - 1) * 0.9, (height() - 1 - fullScreen) / 2.0 / chn);
+		p.translate(0.055, 0.0);
+		for (int c = 0; c < chn; ++c)
 		{
-			p.setPen( QPen( QColor( 102, 51, 128 ), 0.0 ) );
-			p.drawLine( QLineF( 0.0, 1.0, 1.0, 1.0 ) );
+			p.setPen(QPen(QColor(102, 51, 128), 0.0));
+			p.drawLine(QLineF(0.0, 1.0, 1.0, 1.0));
 
-			p.setPen( QPen( QColor( 102, 179, 102 ), 0.0 ) );
-			QPainterPath path( QPointF( 0.0, 1.0 - samples[ c ] ) );
-			for ( int i = chn; i < size; i += chn )
-				path.lineTo( i / ( qreal )( size - chn ), 1.0 - samples[ i + c ] );
-			p.drawPath( path );
+			p.setPen(QPen(QColor(102, 179, 102), 0.0));
+			QPainterPath path(QPointF(0.0, 1.0 - samples[ c ]));
+			for (int i = chn; i < size; i += chn)
+				path.lineTo(i / (qreal)(size - chn), 1.0 - samples[ i + c ]);
+			p.drawPath(path);
 
-			if ( c < 2 )
+			if (c < 2)
 			{
 				const int numSamples = size / chn;
-				for ( int i = 0; i < size; i += chn )
+				for (int i = 0; i < size; i += chn)
 					lr[ c ] += samples[ i + c ] * samples[ i + c ];
-				lr[ c ] = sqrt( lr[ c ] / numSamples );
+				lr[ c ] = sqrt(lr[ c ] / numSamples);
 			}
 
-			p.translate( 0.0, 2.0 );
+			p.translate(0.0, 2.0);
 		}
 
 		p.resetTransform();
-		p.scale( width()-1, height()-1 );
+		p.scale(width()-1, height()-1);
 
-		if ( chn == 1 )
+		if (chn == 1)
 			lr[ 1 ] = lr[ 0 ];
 
 		const double currTime = Functions::gettime();
@@ -93,66 +93,66 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 		time = currTime;
 
 		/* Bars */
-		setValue( leftBar,  lr[ 0 ], realInterval * 2.0 );
-		setValue( rightBar, lr[ 1 ], realInterval * 2.0 );
-		p.fillRect( QRectF( 0.005, 1.0, 0.035, -leftBar  ), linearGrad );
-		p.fillRect( QRectF( 0.960, 1.0, 0.035, -rightBar ), linearGrad );
+		setValue(leftBar,  lr[ 0 ], realInterval * 2.0);
+		setValue(rightBar, lr[ 1 ], realInterval * 2.0);
+		p.fillRect(QRectF(0.005, 1.0, 0.035, -leftBar ), linearGrad);
+		p.fillRect(QRectF(0.960, 1.0, 0.035, -rightBar), linearGrad);
 
 		/* Horizontal lines over side bars */
-		setValue( leftLine,  lr[ 0 ], realInterval * 0.5 );
-		setValue( rightLine, lr[ 1 ], realInterval * 0.5 );
-		p.setPen( QPen( linearGrad, 0.0 ) );
-		p.drawLine( QLineF( 0.005, -leftLine.first  + 1.0, 0.040, -leftLine.first  + 1.0 ) );
-		p.drawLine( QLineF( 0.960, -rightLine.first + 1.0, 0.995, -rightLine.first + 1.0 ) );
+		setValue(leftLine,  lr[ 0 ], realInterval * 0.5);
+		setValue(rightLine, lr[ 1 ], realInterval * 0.5);
+		p.setPen(QPen(linearGrad, 0.0));
+		p.drawLine(QLineF(0.005, -leftLine.first  + 1.0, 0.040, -leftLine.first  + 1.0));
+		p.drawLine(QLineF(0.960, -rightLine.first + 1.0, 0.995, -rightLine.first + 1.0));
 
-		if ( stopped && tim.isActive() && leftLine.first == lr[ 0 ] && rightLine.first == lr[ 1 ] )
+		if (stopped && tim.isActive() && leftLine.first == lr[ 0 ] && rightLine.first == lr[ 1 ])
 			tim.stop();
 	}
 }
-void SimpleVisW::resizeEvent( QResizeEvent * )
+void SimpleVisW::resizeEvent(QResizeEvent *)
 {
 	fullScreen = parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->isFullScreen();
 }
 
-void SimpleVisW::start( bool v )
+void SimpleVisW::start(bool v)
 {
-	if ( v || dw->visibleRegion() != QRegion() || visibleRegion() != QRegion() )
+	if (v || dw->visibleRegion() != QRegion() || visibleRegion() != QRegion())
 	{
-		simpleVis.soundBuffer( true );
-		tim.start( interval );
+		simpleVis.soundBuffer(true);
+		tim.start(interval);
 		time = Functions::gettime();
 	}
 }
 void SimpleVisW::stop()
 {
 	tim.stop();
-	simpleVis.soundBuffer( false );
+	simpleVis.soundBuffer(false);
 	leftBar = rightBar = leftLine.first = rightLine.first = 0.0f;
 }
 
 /**/
 
-SimpleVis::SimpleVis( Module &module ) :
-	w( *this ), tmpDataPos( 0 )
+SimpleVis::SimpleVis(Module &module) :
+	w(*this), tmpDataPos(0)
 {
-	SetModule( module );
+	SetModule(module);
 }
 
-void SimpleVis::soundBuffer( const bool enable )
+void SimpleVis::soundBuffer(const bool enable)
 {
-	QMutexLocker mL( &mutex );
-	const int arrSize = enable ? ( ceil( sndLen * w.srate ) * w.chn * sizeof( float ) ) : 0;
-	if ( arrSize != tmpData.size() || arrSize != w.soundData.size() )
+	QMutexLocker mL(&mutex);
+	const int arrSize = enable ? (ceil(sndLen * w.srate) * w.chn * sizeof(float)) : 0;
+	if (arrSize != tmpData.size() || arrSize != w.soundData.size())
 	{
 		tmpDataPos = 0;
 		tmpData.clear();
-		if ( arrSize )
+		if (arrSize)
 		{
-			tmpData.resize( arrSize );
+			tmpData.resize(arrSize);
 			const int oldSize = w.soundData.size();
-			w.soundData.resize( arrSize );
-			if ( arrSize > oldSize )
-				memset( w.soundData.data() + oldSize, 0, arrSize - oldSize );
+			w.soundData.resize(arrSize);
+			if (arrSize > oldSize)
+				memset(w.soundData.data() + oldSize, 0, arrSize - oldSize);
 		}
 		else
 			w.soundData.clear();
@@ -161,9 +161,9 @@ void SimpleVis::soundBuffer( const bool enable )
 
 bool SimpleVis::set()
 {
-	w.interval = sets().getInt( "RefreshTime" );
-	sndLen = sets().getInt( "SimpleVis/SoundLength" ) / 1000.0f;
-	if ( w.tim.isActive() )
+	w.interval = sets().getInt("RefreshTime");
+	sndLen = sets().getInt("SimpleVis/SoundLength") / 1000.0f;
+	if (w.tim.isActive())
 		w.start();
 	return true;
 }
@@ -177,15 +177,15 @@ bool SimpleVis::isVisualization() const
 {
 	return true;
 }
-void SimpleVis::connectDoubleClick( const QObject *receiver, const char *method )
+void SimpleVis::connectDoubleClick(const QObject *receiver, const char *method)
 {
-	w.connect( &w, SIGNAL( doubleClicked() ), receiver, method );
+	w.connect(&w, SIGNAL(doubleClicked()), receiver, method);
 }
-void SimpleVis::visState( bool playing, uchar chn, uint srate )
+void SimpleVis::visState(bool playing, uchar chn, uint srate)
 {
-	if ( playing )
+	if (playing)
 	{
-		if ( !chn || !srate )
+		if (!chn || !srate)
 			return;
 		w.chn = chn;
 		w.srate = srate;
@@ -194,7 +194,7 @@ void SimpleVis::visState( bool playing, uchar chn, uint srate )
 	}
 	else
 	{
-		if ( !chn && !srate )
+		if (!chn && !srate)
 		{
 			w.srate = 0;
 			w.stop();
@@ -203,23 +203,23 @@ void SimpleVis::visState( bool playing, uchar chn, uint srate )
 		w.update();
 	}
 }
-void SimpleVis::sendSoundData( const QByteArray &data )
+void SimpleVis::sendSoundData(const QByteArray &data)
 {
-	if ( !w.tim.isActive() || !data.size() )
+	if (!w.tim.isActive() || !data.size())
 		return;
-	QMutexLocker mL( &mutex );
-	if ( !tmpData.size() )
+	QMutexLocker mL(&mutex);
+	if (!tmpData.size())
 		return;
 	int newDataPos = 0;
-	while ( newDataPos < data.size() )
+	while (newDataPos < data.size())
 	{
-		const int size = qMin( data.size() - newDataPos, tmpData.size() - tmpDataPos );
-		fltcpy( ( float * )( tmpData.data() + tmpDataPos ), ( const float * )( data.data() + newDataPos ), size );
+		const int size = qMin(data.size() - newDataPos, tmpData.size() - tmpDataPos);
+		fltcpy((float *)(tmpData.data() + tmpDataPos), (const float *)(data.data() + newDataPos), size);
 		newDataPos += size;
 		tmpDataPos += size;
-		if ( tmpDataPos == tmpData.size() )
+		if (tmpDataPos == tmpData.size())
 		{
-			memcpy( w.soundData.data(), tmpData.constData(), tmpDataPos );
+			memcpy(w.soundData.data(), tmpData.constData(), tmpDataPos);
 			tmpDataPos = 0;
 		}
 	}

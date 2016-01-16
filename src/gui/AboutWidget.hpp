@@ -9,8 +9,8 @@ class CommunityEdit : public QTextEdit
 {
 	Q_OBJECT
 private:
-	void mouseMoveEvent( QMouseEvent * );
-	void mousePressEvent( QMouseEvent * );
+	void mouseMoveEvent(QMouseEvent *);
+	void mousePressEvent(QMouseEvent *);
 };
 
 /**/
@@ -23,8 +23,8 @@ class AboutWidget : public QWidget
 public:
 	AboutWidget();
 private:
-	void showEvent( QShowEvent * );
-	void closeEvent( QCloseEvent * );
+	void showEvent(QShowEvent *);
+	void closeEvent(QCloseEvent *);
 
 	CommunityEdit *dE;
 	QTextEdit *logE, *clE;
@@ -33,7 +33,7 @@ private:
 private slots:
 	void refreshLog();
 	void clrLog();
-	void currentTabChanged( int );
+	void currentTabChanged(int);
 };
 
 #endif //ABOUTWIDGET_HPP

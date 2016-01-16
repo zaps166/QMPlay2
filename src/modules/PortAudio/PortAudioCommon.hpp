@@ -6,9 +6,9 @@
 namespace PortAudioCommon
 {
 	QStringList getOutputDeviceNames();
-	int getDeviceIndexForOutput( const QString & );
+	int getDeviceIndexForOutput(const QString &);
 	int getDefaultOutputDevice();
-	int deviceIndexToOutputIndex( int );
+	int deviceIndexToOutputIndex(int);
 }
 
 #endif

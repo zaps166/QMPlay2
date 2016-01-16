@@ -24,9 +24,9 @@ public:
 
 	QList< int > itags, itagsVideo, itagsAudio;
 private:
-	QTreeWidgetItem *getDefaultQuality( const QTreeWidgetItem *tWI );
+	QTreeWidgetItem *getDefaultQuality(const QTreeWidgetItem *tWI);
 
-	void mouseMoveEvent( QMouseEvent * );
+	void mouseMoveEvent(QMouseEvent *);
 
 	QMenu menu;
 private slots:
@@ -36,9 +36,9 @@ private slots:
 	void copyPageURL();
 	void copyStreamURL();
 
-	void playEntry( QTreeWidgetItem *tWI );
+	void playEntry(QTreeWidgetItem *tWI);
 
-	void contextMenu( const QPoint &p );
+	void contextMenu(const QPoint &p);
 };
 
 /**/
@@ -47,7 +47,7 @@ class PageSwitcher : public QWidget
 {
 	Q_OBJECT
 public:
-	PageSwitcher( QWidget *youTubeW );
+	PageSwitcher(QWidget *youTubeW);
 
 	QToolButton *prevB, *nextB;
 	QSpinBox *currPageB;
@@ -60,7 +60,7 @@ class YouTubeW : public QWidget
 	friend class YouTube;
 	Q_OBJECT
 public:
-	YouTubeW( QWidget *parent = NULL );
+	YouTubeW(QWidget *parent = NULL);
 
 	DockWidget *dw;
 private slots:
@@ -70,20 +70,20 @@ private slots:
 	void prev();
 	void chPage();
 
-	void searchTextEdited( const QString &text );
+	void searchTextEdited(const QString &text);
 	void search();
 
-	void netFinished( QNetworkReply *reply );
+	void netFinished(QNetworkReply *reply);
 
 	void searchMenu();
 private:
 	void deleteReplies();
 
-	void setAutocomplete( const QByteArray &data );
-	void setSearchResults( QString data );
+	void setAutocomplete(const QByteArray &data);
+	void setSearchResults(QString data);
 
-	QStringList getYouTubeVideo( const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL ); //jeżeli ( tWI == NULL ) to zwraca {URL, file_extension, TITLE}
-	QStringList getUrlByItagPriority( const QList< int > &itags, QStringList ret );
+	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL); //jeżeli (tWI == NULL) to zwraca {URL, file_extension, TITLE}
+	QStringList getUrlByItagPriority(const QList< int > &itags, QStringList ret);
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
@@ -111,19 +111,19 @@ typedef QPair< QStringList, QList< int > > ItagNames;
 class YouTube : public QMPlay2Extensions
 {
 public:
-	YouTube( Module &module );
+	YouTube(Module &module);
 
 	enum MediaType { MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO };
-	static ItagNames getItagNames( const QStringList &itagList, MediaType mediaType );
+	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
 
 	bool set();
 
 	DockWidget *getDockWidget();
 
-	QList< AddressPrefix > addressPrefixList( bool );
-	void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl );
+	QList< AddressPrefix > addressPrefixList(bool);
+	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl);
 
-	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
+	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);
 private:
 	YouTubeW w;
 };

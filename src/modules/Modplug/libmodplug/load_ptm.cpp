@@ -149,7 +149,7 @@ BOOL CSoundFile::ReadPTM(const BYTE *lpStream, DWORD dwMemLength)
 		if ((Patterns[ipat] = AllocatePattern(64, m_nChannels)) == NULL) break;
 		//
 		MODCOMMAND *m = Patterns[ipat];
-		for (UINT row=0; ((row < 64) && (dwMemPos < dwMemLength)); )
+		for (UINT row=0; ((row < 64) && (dwMemPos < dwMemLength));)
 		{
 			UINT b = lpStream[dwMemPos++];
 

@@ -20,9 +20,9 @@ class SettingsWidget : public QWidget
 public:
 	static void InitSettings();
 	static void SetAudioChannelsMenu();
-	static void SetAudioChannels( int chn );
+	static void SetAudioChannels(int chn);
 
-	SettingsWidget( int page = 0, const QString &module = QString() );
+	SettingsWidget(int page = 0, const QString &module = QString());
 
 	void setAudioChannels();
 private:
@@ -30,8 +30,8 @@ private:
 
 	void restartApp();
 
-	void showEvent( QShowEvent * );
-	void closeEvent( QCloseEvent * );
+	void showEvent(QShowEvent *);
+	void closeEvent(QCloseEvent *);
 
 	Page1 *page1;
 	Page2 *page2;
@@ -50,9 +50,9 @@ private:
 private slots:
 	void chStyle();
 	void apply();
-	void chModule( QListWidgetItem * );
-	void tabCh( int );
-	void openModuleSettings( QListWidgetItem * );
+	void chModule(QListWidgetItem *);
+	void tabCh(int);
+	void openModuleSettings(QListWidgetItem *);
 	void moveModule();
 	void chooseScreenshotDir();
 	void page2EnableOrDisable();
@@ -60,9 +60,9 @@ private slots:
 	void clearCoversCache();
 	void resetSettings();
 signals:
-	void settingsChanged( int, bool );
-	void setWheelStep( int );
-	void setVolMax( int );
+	void settingsChanged(int, bool);
+	void setWheelStep(int);
+	void setVolMax(int);
 };
 
 #endif // SETTINGSWIDHET_HPP

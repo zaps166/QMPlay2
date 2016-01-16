@@ -21,10 +21,10 @@ public:
 	class AddressPrefix
 	{
 	public:
-		inline AddressPrefix( const QString &prefix, const QImage &img = QImage() ) :
-			prefix( prefix ), img( img ) {}
+		inline AddressPrefix(const QString &prefix, const QImage &img = QImage()) :
+			prefix(prefix), img(img) {}
 
-		inline bool operator ==( const AddressPrefix &other )
+		inline bool operator ==(const AddressPrefix &other)
 		{
 			return other.prefix == prefix;
 		}
@@ -42,21 +42,21 @@ public:
 		return NULL;
 	}
 
-	virtual QList< AddressPrefix > addressPrefixList( bool img = true )
+	virtual QList< AddressPrefix > addressPrefixList(bool img = true)
 	{
-		Q_UNUSED( img )
+		Q_UNUSED(img)
 		return QList< AddressPrefix >();
 	}
-	virtual void convertAddress( const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl )
+	virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl)
 	{
-		Q_UNUSED( extension )
-		Q_UNUSED( ioCtrl )
+		Q_UNUSED(extension)
+		Q_UNUSED(ioCtrl)
 	}
 
-	virtual QAction *getAction( const QString &, int, const QString &, const QString &prefix = QString(), const QString &param = QString() )
+	virtual QAction *getAction(const QString &, int, const QString &, const QString &prefix = QString(), const QString &param = QString())
 	{
-		Q_UNUSED( prefix )
-		Q_UNUSED( param )
+		Q_UNUSED(prefix)
+		Q_UNUSED(param)
 		return NULL;
 	}
 
@@ -64,14 +64,14 @@ public:
 	{
 		return false;
 	}
-	virtual void connectDoubleClick( const QObject *, const char * )
+	virtual void connectDoubleClick(const QObject *, const char *)
 	{}
-	virtual void visState( bool, uchar chn = 0, uint srate = 0 )
+	virtual void visState(bool, uchar chn = 0, uint srate = 0)
 	{
-		Q_UNUSED( chn )
-		Q_UNUSED( srate )
+		Q_UNUSED(chn)
+		Q_UNUSED(srate)
 	}
-	virtual void sendSoundData( const QByteArray & )
+	virtual void sendSoundData(const QByteArray &)
 	{}
 protected:
 	virtual ~QMPlay2Extensions() {}

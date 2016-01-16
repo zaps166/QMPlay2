@@ -8,10 +8,10 @@ class LibASS;
 class SubsDec
 {
 public:
-	static SubsDec *create( const QString & );
+	static SubsDec *create(const QString &);
 	static QStringList extensions();
 
-	virtual bool toASS( const QByteArray &, LibASS *, double ) = 0;
+	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
 
 	virtual ~SubsDec() {}
 };

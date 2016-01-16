@@ -10,7 +10,7 @@
 class Writer : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-	static Writer *create( const QString &, const QStringList &modNames = QStringList() );
+	static Writer *create(const QString &, const QStringList &modNames = QStringList());
 
 	inline QString getUrl() const
 	{
@@ -19,7 +19,7 @@ public:
 
 	virtual bool readyWrite() const = 0;
 
-	virtual qint64 write( const QByteArray & ) = 0;
+	virtual qint64 write(const QByteArray &) = 0;
 
 	virtual qint64 size() const
 	{

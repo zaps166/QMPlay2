@@ -15,16 +15,16 @@ struct AVFrame;
 class FFDec : public Decoder
 {
 protected:
-	FFDec( QMutex & );
+	FFDec(QMutex &);
 	virtual ~FFDec();
 
 	/**/
 
-	AVCodec *init( StreamInfo *streamInfo );
-	bool openCodec( AVCodec *codec );
+	AVCodec *init(StreamInfo *streamInfo);
+	bool openCodec(AVCodec *codec);
 
-	void decodeFirstStep( const Packet &encodedPacket, bool flush );
-	void decodeLastStep( Packet &encodedPacket, AVFrame *frame );
+	void decodeFirstStep(const Packet &encodedPacket, bool flush);
+	void decodeLastStep(Packet &encodedPacket, AVFrame *frame);
 
 	AVCodecContext *codec_ctx;
 	AVPacket *packet;

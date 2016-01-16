@@ -9,13 +9,13 @@
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/SidInfo.h>
 
-SIDPlay::SIDPlay( Module &module ) :
-	m_srate( Functions::getBestSampleRate() ),
-	m_aborted( false ),
-	m_rs( NULL ),
-	m_tune( NULL )
+SIDPlay::SIDPlay(Module &module) :
+	m_srate(Functions::getBestSampleRate()),
+	m_aborted(false),
+	m_rs(NULL),
+	m_tune(NULL)
 {
-	SetModule( module );
+	SetModule(module);
 }
 SIDPlay::~SIDPlay()
 {
@@ -24,8 +24,8 @@ SIDPlay::~SIDPlay()
 
 bool SIDPlay::set()
 {
-	m_length = sets().getInt( "DefaultLength" );
-	return sets().getBool( "SIDPlay" );
+	m_length = sets().getInt("DefaultLength");
+	return sets().getBool("SIDPlay");
 }
 
 QString SIDPlay::name() const
@@ -49,45 +49,45 @@ int SIDPlay::bitrate() const
 	return -1;
 }
 
-bool SIDPlay::seek( int s )
+bool SIDPlay::seek(int s)
 {
-	if ( ( int )m_sidplay.time() > s && !m_sidplay.load( m_tune ) ) //backward
+	if ((int)m_sidplay.time() > s && !m_sidplay.load(m_tune)) //backward
 		return false;
 
-	if ( s > 0 )
+	if (s > 0)
 	{
 		const int bufferSize = m_chn * m_srate;
 		qint16 *buff1sec = new qint16[ bufferSize ];
-		for ( int i = m_sidplay.time(); i <= s && !m_aborted; ++i )
-			m_sidplay.play( buff1sec, bufferSize );
+		for (int i = m_sidplay.time(); i <= s && !m_aborted; ++i)
+			m_sidplay.play(buff1sec, bufferSize);
 		delete[] buff1sec;
 	}
 
 	return true;
 }
-bool SIDPlay::read( Packet &decoded, int &idx )
+bool SIDPlay::read(Packet &decoded, int &idx)
 {
-	if ( m_aborted )
+	if (m_aborted)
 		return false;
 
 	const int t = m_sidplay.time();
-	if ( t > m_length )
+	if (t > m_length)
 		return false;
 
 	const int chunkSize = 1024 * m_chn;
 
-	decoded.resize( chunkSize * sizeof( float ) );
+	decoded.resize(chunkSize * sizeof(float));
 
-	int16_t *srcData = ( int16_t * )decoded.data();
-	float *dstData = ( float * )decoded.data();
+	int16_t *srcData = (int16_t *)decoded.data();
+	float *dstData = (float *)decoded.data();
 
-	m_sidplay.play( srcData, chunkSize );
+	m_sidplay.play(srcData, chunkSize);
 
-	for ( int i = chunkSize - 1; i >= 0; --i )
+	for (int i = chunkSize - 1; i >= 0; --i)
 		dstData[ i ] = srcData[ i ] / 16384.0;
 
 	decoded.ts = t;
-	decoded.duration = chunkSize / m_chn / ( double )m_srate;
+	decoded.duration = chunkSize / m_chn / (double)m_srate;
 
 	idx = 0;
 
@@ -99,38 +99,38 @@ void SIDPlay::abort()
 	m_aborted = true;
 }
 
-bool SIDPlay::open( const QString &url )
+bool SIDPlay::open(const QString &url)
 {
-	return open( url, false );
+	return open(url, false);
 }
 
-Playlist::Entries SIDPlay::fetchTracks( const QString &url, bool &ok )
+Playlist::Entries SIDPlay::fetchTracks(const QString &url, bool &ok)
 {
 	Playlist::Entries entries;
-	if ( open( url, true ) )
+	if (open(url, true))
 	{
 		const int tracks = m_tune->getInfo()->songs();
-		for ( int i = 0; i < tracks; ++i )
+		for (int i = 0; i < tracks; ++i)
 		{
-			const SidTuneInfo *info = m_tune->getInfo( i );
-			if ( info )
+			const SidTuneInfo *info = m_tune->getInfo(i);
+			if (info)
 			{
 				Playlist::Entry entry;
-				entry.url = SIDPlayName + QString( "://{%1}%2" ).arg( m_url ).arg( i );
-				entry.name = getTitle( info, i );
+				entry.url = SIDPlayName + QString("://{%1}%2").arg(m_url).arg(i);
+				entry.name = getTitle(info, i);
 				entry.length = m_length;
-				entries.append( entry );
+				entries.append(entry);
 			}
 		}
-		if ( entries.length() > 1 )
+		if (entries.length() > 1)
 		{
-			for ( int i = 0; i < entries.length(); ++i )
+			for (int i = 0; i < entries.length(); ++i)
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
-			entry.name = Functions::fileName( m_url, false );
+			entry.name = Functions::fileName(m_url, false);
 			entry.url = m_url;
 			entry.GID = 1;
-			entries.prepend( entry );
+			entries.prepend(entry);
 		}
 	}
 	ok = !entries.isEmpty();
@@ -138,41 +138,41 @@ Playlist::Entries SIDPlay::fetchTracks( const QString &url, bool &ok )
 }
 
 
-bool SIDPlay::open( const QString &_url, bool tracksOnly )
+bool SIDPlay::open(const QString &_url, bool tracksOnly)
 {
 	QString prefix, url, param;
-	const bool hasPluginPrefix = Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &url, &param );
+	const bool hasPluginPrefix = Functions::splitPrefixAndUrlIfHasPluginPrefix(_url, &prefix, &url, &param);
 
-	if ( tracksOnly == hasPluginPrefix )
+	if (tracksOnly == hasPluginPrefix)
 		return false;
 
 	int track = 0;
-	if ( !hasPluginPrefix )
+	if (!hasPluginPrefix)
 	{
-		if ( url.startsWith( SIDPlayName "://" ) )
+		if (url.startsWith(SIDPlayName "://"))
 			return false;
 		url = _url;
 	}
 	else
 	{
-		if ( prefix != SIDPlayName )
+		if (prefix != SIDPlayName)
 			return false;
 		bool ok;
-		track = param.toInt( &ok );
-		if ( track < 0 || !ok )
+		track = param.toInt(&ok);
+		if (track < 0 || !ok)
 			return false;
 	}
 
-	if ( Reader::create( url, m_reader ) )
+	if (Reader::create(url, m_reader))
 	{
-		const QByteArray data = m_reader->read( m_reader->size() );
+		const QByteArray data = m_reader->read(m_reader->size());
 		m_reader.clear();
 
-		m_tune = new SidTune( ( const quint8 * )data.data(), data.length() );
-		if ( !m_tune->getStatus() )
+		m_tune = new SidTune((const quint8 *)data.data(), data.length());
+		if (!m_tune->getStatus())
 			return false;
 
-		if ( !hasPluginPrefix )
+		if (!hasPluginPrefix)
 		{
 			m_aborted = true;
 			m_url = url;
@@ -181,13 +181,13 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 
 		const SidTuneInfo *info = m_tune->getInfo();
 
-		if ( track >= ( int )info->songs() )
+		if (track >= (int)info->songs())
 			return false;
 
-		m_rs.create( m_sidplay.info().maxsids() );
-		if ( !m_rs.getStatus() )
+		m_rs.create(m_sidplay.info().maxsids());
+		if (!m_rs.getStatus())
 			return false;
-		m_rs.filter( true );
+		m_rs.filter(true);
 
 #if ((LIBSIDPLAYFP_VERSION_MAJ << 16 | LIBSIDPLAYFP_VERSION_MIN << 8 | LIBSIDPLAYFP_VERSION_LEV) > 0x010800)
 		const bool isStereo = info->sidChips() > 1 ? true : false;
@@ -198,46 +198,46 @@ bool SIDPlay::open( const QString &_url, bool tracksOnly )
 		SidConfig cfg;
 		cfg.frequency = m_srate;
 		cfg.sidEmulation = &m_rs;
-		if ( isStereo )
+		if (isStereo)
 			cfg.playback = SidConfig::STEREO;
 		cfg.samplingMethod = SidConfig::INTERPOLATE;
-		if ( !m_sidplay.config( cfg ) )
+		if (!m_sidplay.config(cfg))
 			return false;
 
-		m_tune->selectSong( track + 1 );
+		m_tune->selectSong(track + 1);
 
-		m_title = getTitle( info, track );
+		m_title = getTitle(info, track);
 		m_chn = isStereo ? 2 : 1;
 
-		const QString title    = info->infoString( 0 );
-		const QString author   = info->infoString( 1 );
-		const QString released = info->infoString( 2 );
-		if ( !title.isEmpty() )
-			m_tags << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), title );
-		if ( !author.isEmpty() )
-			m_tags << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), author );
-		if ( !released.isEmpty() )
-			m_tags << qMakePair( QString::number( QMPLAY2_TAG_DATE ), released );
-		m_tags << qMakePair( tr( "Ścieżka" ), QString::number( track + 1 ) );
+		const QString title    = info->infoString(0);
+		const QString author   = info->infoString(1);
+		const QString released = info->infoString(2);
+		if (!title.isEmpty())
+			m_tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), title);
+		if (!author.isEmpty())
+			m_tags << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), author);
+		if (!released.isEmpty())
+			m_tags << qMakePair(QString::number(QMPLAY2_TAG_DATE), released);
+		m_tags << qMakePair(tr("Ścieżka"), QString::number(track + 1));
 
-		streams_info += new StreamInfo( m_srate, m_chn );
+		streams_info += new StreamInfo(m_srate, m_chn);
 
-		return m_sidplay.load( m_tune );
+		return m_sidplay.load(m_tune);
 	}
 
 	return false;
 }
 
-QString SIDPlay::getTitle( const SidTuneInfo *info, int track ) const
+QString SIDPlay::getTitle(const SidTuneInfo *info, int track) const
 {
-	const QString title  = info->infoString( 0 );
-	const QString author = info->infoString( 1 );
+	const QString title  = info->infoString(0);
+	const QString author = info->infoString(1);
 	QString ret;
-	if ( !author.isEmpty() && !title.isEmpty() )
+	if (!author.isEmpty() && !title.isEmpty())
 		ret = author + " - " + title;
 	else
 		ret = title;
-	if ( info->songs() > 1 )
-		return tr( "Ścieżka" ) + QString( " %1%2" ).arg( track + 1 ).arg( ret.isEmpty() ? QString() : ( " - " + ret ) );
+	if (info->songs() > 1)
+		return tr("Ścieżka") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
 	return ret;
 }

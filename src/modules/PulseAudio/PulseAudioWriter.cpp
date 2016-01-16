@@ -1,24 +1,24 @@
 #include <PulseAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
-PulseAudioWriter::PulseAudioWriter( Module &module ) :
-	err( false )
+PulseAudioWriter::PulseAudioWriter(Module &module) :
+	err(false)
 {
-	addParam( "delay" );
-	addParam( "chn" );
-	addParam( "rate" );
+	addParam("delay");
+	addParam("chn");
+	addParam("rate");
 
-	SetModule( module );
+	SetModule(module);
 }
 
 bool PulseAudioWriter::set()
 {
-	if ( pulse.delay != sets().getDouble( "Delay" ) )
+	if (pulse.delay != sets().getDouble("Delay"))
 	{
-		pulse.delay = sets().getDouble( "Delay" );
+		pulse.delay = sets().getDouble("Delay");
 		return false;
 	}
-	return sets().getBool( "WriterEnabled" );
+	return sets().getBool("WriterEnabled");
 }
 
 bool PulseAudioWriter::readyWrite() const
@@ -26,44 +26,44 @@ bool PulseAudioWriter::readyWrite() const
 	return !err && pulse.isOpen();
 }
 
-bool PulseAudioWriter::processParams( bool * )
+bool PulseAudioWriter::processParams(bool *)
 {
 	bool resetAudio = false;
 
-	uchar chn = getParam( "chn" ).toUInt();
-	if ( pulse.channels != chn )
+	uchar chn = getParam("chn").toUInt();
+	if (pulse.channels != chn)
 	{
 		resetAudio = true;
 		pulse.channels = chn;
 	}
-	uint rate = getParam( "rate" ).toUInt();
-	if ( pulse.sample_rate != rate )
+	uint rate = getParam("rate").toUInt();
+	if (pulse.sample_rate != rate)
 	{
 		resetAudio = true;
 		pulse.sample_rate = rate;
 	}
 
-	if ( resetAudio || err )
+	if (resetAudio || err)
 	{
 		pulse.stop();
 		err = !pulse.start();
-		if ( !err )
-			modParam( "delay", pulse.delay );
+		if (!err)
+			modParam("delay", pulse.delay);
 		else
-			QMPlay2Core.logError( "PulseAudio :: " + tr ( "Nie można otworzyć strumienia wyjścia dźwięku" ) );
+			QMPlay2Core.logError("PulseAudio :: " + tr ("Nie można otworzyć strumienia wyjścia dźwięku"));
 	}
 
 	return readyWrite();
 }
-qint64 PulseAudioWriter::write( const QByteArray &arr )
+qint64 PulseAudioWriter::write(const QByteArray &arr)
 {
-	if ( !arr.size() || !readyWrite() )
+	if (!arr.size() || !readyWrite())
 		return 0;
 
-	err = !pulse.write( arr );
-	if ( err )
+	err = !pulse.write(arr);
+	if (err)
 	{
-		QMPlay2Core.logError( "PulseAudio :: " + tr ( "Błąd podczas odtwarzania" ) );
+		QMPlay2Core.logError("PulseAudio :: " + tr ("Błąd podczas odtwarzania"));
 		return 0;
 	}
 

@@ -16,9 +16,9 @@ class OSDSettingsW : public QWidget
 {
 	Q_OBJECT
 public:
-	static void init( const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor & );
+	static void init(const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor &);
 
-	OSDSettingsW( const QString & );
+	OSDSettingsW(const QString &);
 
 	void writeSettings();
 

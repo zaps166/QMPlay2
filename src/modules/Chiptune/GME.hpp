@@ -6,9 +6,9 @@ class Reader;
 
 class GME : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( GME )
+	Q_DECLARE_TR_FUNCTIONS(GME)
 public:
-	GME( Module & );
+	GME(Module &);
 	~GME();
 private:
 	bool set();
@@ -19,19 +19,19 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
-	Playlist::Entries fetchTracks( const QString &url, bool &ok );
+	Playlist::Entries fetchTracks(const QString &url, bool &ok);
 
 
-	bool open( const QString &url, bool tracksOnly );
+	bool open(const QString &url, bool tracksOnly);
 
-	QString getTitle( gme_info_t *info, int track ) const;
-	int getLength( gme_info_t *info ) const;
+	QString getTitle(gme_info_t *info, int track) const;
+	int getLength(gme_info_t *info) const;
 
 
 	IOController< Reader > m_reader;

@@ -10,7 +10,7 @@ class AddressBox : public QWidget
 public:
 	enum PrefixType { DIRECT = 'A', MODULE = 'M' };
 
-	AddressBox( Qt::Orientation, QString url = QString() );
+	AddressBox(Qt::Orientation, QString url = QString());
 
 	inline void setFocus()
 	{
@@ -24,7 +24,7 @@ public:
 
 	inline PrefixType currentPrefixType() const
 	{
-		return ( PrefixType )pB.itemData( pB.currentIndex() ).toInt();
+		return (PrefixType)pB.itemData(pB.currentIndex()).toInt();
 	}
 	QString url() const;
 	QString cleanUrl() const;

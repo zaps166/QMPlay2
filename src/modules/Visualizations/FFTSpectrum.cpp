@@ -9,14 +9,14 @@ extern "C"
 	#include <libavcodec/avfft.h>
 }
 
-static inline void fltmix( FFTComplex *dest, const float *src, const int size, const uchar chn )
+static inline void fltmix(FFTComplex *dest, const float *src, const int size, const uchar chn)
 {
-	for ( int i = 0, j = 0; i < size; i += chn )
+	for (int i = 0, j = 0; i < size; i += chn)
 	{
 		dest[ j ].re = dest[ j ].im = 0.0;
-		for ( uchar c = 0; c < chn; ++c )
+		for (uchar c = 0; c < chn; ++c)
 		{
-			if ( src[ i+c ] == src[ i+c ] ) //not NaN
+			if (src[ i+c ] == src[ i+c ]) //not NaN
 				dest[ j ].re += src[ i+c ];
 		}
 		++j;
@@ -25,121 +25,121 @@ static inline void fltmix( FFTComplex *dest, const float *src, const int size, c
 
 /**/
 
-FFTSpectrumW::FFTSpectrumW( FFTSpectrum &fftSpectrum ) :
-	fftSpectrum( fftSpectrum )
+FFTSpectrumW::FFTSpectrumW(FFTSpectrum &fftSpectrum) :
+	fftSpectrum(fftSpectrum)
 {
-	dw->setObjectName( FFTSpectrumName );
-	dw->setWindowTitle( tr( "Widmo FFT" ) );
-	dw->setWidget( this );
+	dw->setObjectName(FFTSpectrumName);
+	dw->setWindowTitle(tr("Widmo FFT"));
+	dw->setWidget(this);
 
 	chn = 0;
 	srate = 0;
 	interval = -1;
 	fftSize = 0;
 
-	linearGrad.setStart( 0.0, 0.0 );
-	linearGrad.setColorAt( 0.0, Qt::red );
-	linearGrad.setColorAt( 0.1, Qt::yellow );
-	linearGrad.setColorAt( 0.4, Qt::green );
-	linearGrad.setColorAt( 0.9, Qt::blue );
+	linearGrad.setStart(0.0, 0.0);
+	linearGrad.setColorAt(0.0, Qt::red);
+	linearGrad.setColorAt(0.1, Qt::yellow);
+	linearGrad.setColorAt(0.4, Qt::green);
+	linearGrad.setColorAt(0.9, Qt::blue);
 }
 
-void FFTSpectrumW::paintEvent( QPaintEvent * )
+void FFTSpectrumW::paintEvent(QPaintEvent *)
 {
-	QPainter p( this );
+	QPainter p(this);
 
 	bool canStop = true;
 
 	const int size = spectrumData.size();
-	if ( size )
+	if (size)
 	{
-		p.setPen( QPen( linearGrad, 0.0 ) );
-		p.scale( ( width() - 1.0 ) / size, height() - 1.0 );
+		p.setPen(QPen(linearGrad, 0.0));
+		p.scale((width() - 1.0) / size, height() - 1.0);
 
 		const double currTime = Functions::gettime();
 		const double realInterval = currTime - time;
 		time = currTime;
 
 		const float *spectrum = spectrumData.constData();
-		QPainterPath path( QPointF( 0.0, 1.0 ) );
-		for ( int x = 0; x < size; ++x )
+		QPainterPath path(QPointF(0.0, 1.0));
+		for (int x = 0; x < size; ++x)
 		{
 			/* Bars */
-			setValue( lastData[ x ].first, spectrum[ x ], realInterval * 2.0 );
-			path.lineTo( x, 1.0 - lastData[ x ].first );
-			path.lineTo( x + 1.0, 1.0 - lastData[ x ].first );
+			setValue(lastData[ x ].first, spectrum[ x ], realInterval * 2.0);
+			path.lineTo(x, 1.0 - lastData[ x ].first);
+			path.lineTo(x + 1.0, 1.0 - lastData[ x ].first);
 
 			/* Horizontal lines over bars */
-			setValue( lastData[ x ].second, spectrum[ x ], realInterval * 0.5 );
-			p.drawLine( QLineF( x, 1.0 - lastData[ x ].second.first, x + 1.0, 1.0 - lastData[ x ].second.first ) );
+			setValue(lastData[ x ].second, spectrum[ x ], realInterval * 0.5);
+			p.drawLine(QLineF(x, 1.0 - lastData[ x ].second.first, x + 1.0, 1.0 - lastData[ x ].second.first));
 
 			canStop &= lastData[ x ].second.first == spectrum[ x ];
 		}
-		path.lineTo( size, 1.0 );
-		p.fillPath( path, linearGrad );
+		path.lineTo(size, 1.0);
+		p.fillPath(path, linearGrad);
 	}
 
-	if ( stopped && tim.isActive() && canStop )
+	if (stopped && tim.isActive() && canStop)
 		tim.stop();
 }
 
-void FFTSpectrumW::start( bool v )
+void FFTSpectrumW::start(bool v)
 {
-	if ( v || dw->visibleRegion() != QRegion() || visibleRegion() != QRegion() )
+	if (v || dw->visibleRegion() != QRegion() || visibleRegion() != QRegion())
 	{
-		fftSpectrum.soundBuffer( true );
-		tim.start( interval );
+		fftSpectrum.soundBuffer(true);
+		tim.start(interval);
 		time = Functions::gettime();
 	}
 }
 void FFTSpectrumW::stop()
 {
 	tim.stop();
-	fftSpectrum.soundBuffer( false );
+	fftSpectrum.soundBuffer(false);
 }
 
 /**/
 
-FFTSpectrum::FFTSpectrum( Module &module ) :
-	w( *this ), fft_ctx( NULL ), tmpData( NULL ), tmpDataSize( 0 ), tmpDataPos( 0 )
+FFTSpectrum::FFTSpectrum(Module &module) :
+	w(*this), fft_ctx(NULL), tmpData(NULL), tmpDataSize(0), tmpDataPos(0)
 {
-	SetModule( module );
+	SetModule(module);
 }
 
-void FFTSpectrum::soundBuffer( const bool enable )
+void FFTSpectrum::soundBuffer(const bool enable)
 {
-	QMutexLocker mL( &mutex );
-	const int arrSize = enable ? ( 1 << w.fftSize ) : 0;
-	if ( arrSize != tmpDataSize )
+	QMutexLocker mL(&mutex);
+	const int arrSize = enable ? (1 << w.fftSize) : 0;
+	if (arrSize != tmpDataSize)
 	{
 		tmpDataPos = 0;
-		av_free( tmpData );
+		av_free(tmpData);
 		tmpData = NULL;
 		w.spectrumData.clear();
 		w.lastData.clear();
-		av_fft_end( fft_ctx );
+		av_fft_end(fft_ctx);
 		fft_ctx = NULL;
-		if ( ( tmpDataSize = arrSize ) )
+		if ((tmpDataSize = arrSize))
 		{
-			fft_ctx = av_fft_init( w.fftSize, false );
-			tmpData = ( FFTComplex * )av_malloc( tmpDataSize * sizeof( FFTComplex ) );
-			w.linearGrad.setFinalStop( tmpDataSize / 2, 0.0 );
-			w.spectrumData.resize( tmpDataSize / 2 );
-			w.lastData.resize( tmpDataSize / 2 );
+			fft_ctx = av_fft_init(w.fftSize, false);
+			tmpData = (FFTComplex *)av_malloc(tmpDataSize * sizeof(FFTComplex));
+			w.linearGrad.setFinalStop(tmpDataSize / 2, 0.0);
+			w.spectrumData.resize(tmpDataSize / 2);
+			w.lastData.resize(tmpDataSize / 2);
 		}
 	}
 }
 
 bool FFTSpectrum::set()
 {
-	w.fftSize = sets().getInt( "FFTSpectrum/Size" );
-	if ( w.fftSize > 16 )
+	w.fftSize = sets().getInt("FFTSpectrum/Size");
+	if (w.fftSize > 16)
 		w.fftSize = 16;
-	else if ( w.fftSize < 3 )
+	else if (w.fftSize < 3)
 		w.fftSize = 3;
-	w.interval = sets().getInt( "RefreshTime" );
-	scale = sets().getInt( "FFTSpectrum/Scale" );
-	if ( w.tim.isActive() )
+	w.interval = sets().getInt("RefreshTime");
+	scale = sets().getInt("FFTSpectrum/Scale");
+	if (w.tim.isActive())
 		w.start();
 	return true;
 }
@@ -153,15 +153,15 @@ bool FFTSpectrum::isVisualization() const
 {
 	return true;
 }
-void FFTSpectrum::connectDoubleClick( const QObject *receiver, const char *method )
+void FFTSpectrum::connectDoubleClick(const QObject *receiver, const char *method)
 {
-	w.connect( &w, SIGNAL( doubleClicked() ), receiver, method );
+	w.connect(&w, SIGNAL(doubleClicked()), receiver, method);
 }
-void FFTSpectrum::visState( bool playing, uchar chn, uint srate )
+void FFTSpectrum::visState(bool playing, uchar chn, uint srate)
 {
-	if ( playing )
+	if (playing)
 	{
-		if ( !chn || !srate )
+		if (!chn || !srate)
 			return;
 		w.chn = chn;
 		w.srate = srate;
@@ -170,7 +170,7 @@ void FFTSpectrum::visState( bool playing, uchar chn, uint srate )
 	}
 	else
 	{
-		if ( !chn && !srate )
+		if (!chn && !srate)
 		{
 			w.srate = 0;
 			w.stop();
@@ -179,30 +179,30 @@ void FFTSpectrum::visState( bool playing, uchar chn, uint srate )
 		w.update();
 	}
 }
-void FFTSpectrum::sendSoundData( const QByteArray &data )
+void FFTSpectrum::sendSoundData(const QByteArray &data)
 {
-	if ( !w.tim.isActive() || !data.size() )
+	if (!w.tim.isActive() || !data.size())
 		return;
-	QMutexLocker mL( &mutex );
-	if ( !tmpDataSize )
+	QMutexLocker mL(&mutex);
+	if (!tmpDataSize)
 		return;
 	int newDataPos = 0;
-	while ( newDataPos < data.size() )
+	while (newDataPos < data.size())
 	{
-		const int size = qMin( ( data.size() - newDataPos ) / ( int )sizeof( float ), ( tmpDataSize - tmpDataPos ) * w.chn );
-		fltmix( tmpData + tmpDataPos, ( const float * )( data.data() + newDataPos ), size, w.chn );
-		newDataPos += size * sizeof( float );
+		const int size = qMin((data.size() - newDataPos) / (int)sizeof(float), (tmpDataSize - tmpDataPos) * w.chn);
+		fltmix(tmpData + tmpDataPos, (const float *)(data.data() + newDataPos), size, w.chn);
+		newDataPos += size * sizeof(float);
 		tmpDataPos += size / w.chn;
-		if ( tmpDataPos == tmpDataSize )
+		if (tmpDataPos == tmpDataSize)
 		{
-			av_fft_permute( fft_ctx, tmpData );
-			av_fft_calc( fft_ctx, tmpData );
+			av_fft_permute(fft_ctx, tmpData);
+			av_fft_calc(fft_ctx, tmpData);
 			tmpDataPos /= 2;
 			float *spectrumData = w.spectrumData.data();
-			for ( int i = 0; i < tmpDataPos; ++i )
+			for (int i = 0; i < tmpDataPos; ++i)
 			{
-				spectrumData[ i ] = sqrt( tmpData[ i ].re * tmpData[ i ].re + tmpData[ i ].im * tmpData[ i ].im ) / tmpDataPos * scale;
-				if ( spectrumData[ i ] > 1.0 )
+				spectrumData[ i ] = sqrt(tmpData[ i ].re * tmpData[ i ].re + tmpData[ i ].im * tmpData[ i ].im) / tmpDataPos * scale;
+				if (spectrumData[ i ] > 1.0)
 					spectrumData[ i ] = 1.0;
 			}
 			tmpDataPos = 0;

@@ -6,17 +6,17 @@
 class ByteArray
 {
 public:
-	inline ByteArray( const char *data, const uint32_t len, const bool data_bigendian = false ) :
-		data( ( const uint8_t * )data ),
-		dataStart( ( const uint8_t * )data ),
-		dataEnd( ( const uint8_t * )data+len ),
-		data_bigendian( data_bigendian )
+	inline ByteArray(const char *data, const uint32_t len, const bool data_bigendian = false) :
+		data((const uint8_t *)data),
+		dataStart((const uint8_t *)data),
+		dataEnd((const uint8_t *)data+len),
+		data_bigendian(data_bigendian)
 	{}
-	inline ByteArray( const uint8_t *data, const uint32_t len, const bool data_bigendian = false ) :
-		data( data ),
-		dataStart( data ),
-		dataEnd( data+len ),
-		data_bigendian( data_bigendian )
+	inline ByteArray(const uint8_t *data, const uint32_t len, const bool data_bigendian = false) :
+		data(data),
+		dataStart(data),
+		dataEnd(data+len),
+		data_bigendian(data_bigendian)
 	{}
 
 	inline bool atEnd() const
@@ -35,19 +35,19 @@ public:
 
 	inline uint8_t getBYTE()
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return 0;
 		return *(data++);
 	}
 	inline uint16_t getWORD()
 	{
-		if ( data + 2 > dataEnd )
+		if (data + 2 > dataEnd)
 		{
 			data = dataEnd;
 			return 0;
 		}
 		uint16_t ret;
-		if ( data_bigendian )
+		if (data_bigendian)
 			ret = data[ 1 ] | data[ 0 ] << 8;
 		else
 			ret = data[ 0 ] | data[ 1 ] << 8;
@@ -56,13 +56,13 @@ public:
 	}
 	inline uint32_t get24bAs32b()
 	{
-		if ( data + 3 > dataEnd )
+		if (data + 3 > dataEnd)
 		{
 			data = dataEnd;
 			return 0;
 		}
 		uint32_t ret;
-		if ( data_bigendian )
+		if (data_bigendian)
 			ret = data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
 		else
 			ret = data[ 0 ] << 8 | data[ 1 ] << 16 | data[ 2 ] << 24;
@@ -71,13 +71,13 @@ public:
 	}
 	inline uint32_t getDWORD()
 	{
-		if ( data + 4 > dataEnd )
+		if (data + 4 > dataEnd)
 		{
 			data = dataEnd;
 			return 0;
 		}
 		uint32_t ret;
-		if ( data_bigendian )
+		if (data_bigendian)
 			ret = data[ 3 ] | data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
 		else
 			ret = data[ 0 ] | data[ 1 ] << 8 | data[ 2 ] << 16 | data[ 3 ] << 24;
@@ -86,7 +86,7 @@ public:
 	}
 	inline float getFloat()
 	{
-		if ( data + 4 > dataEnd )
+		if (data + 4 > dataEnd)
 		{
 			data = dataEnd;
 			return 0;
@@ -96,7 +96,7 @@ public:
 			uint32_t u32;
 			float flt;
 		} ret;
-		if ( data_bigendian )
+		if (data_bigendian)
 			ret.u32 = data[ 3 ] | data[ 2 ] << 8 | data[ 1 ] << 16 | data[ 0 ] << 24;
 		else
 			ret.u32 = data[ 0 ] | data[ 1 ] << 8 | data[ 2 ] << 16 | data[ 3 ] << 24;
@@ -104,25 +104,25 @@ public:
 		return ret.flt;
 	}
 
-	inline ByteArray & operator =( const uint32_t pos )
+	inline ByteArray & operator =(const uint32_t pos)
 	{
-		if ( dataStart + pos < dataEnd )
+		if (dataStart + pos < dataEnd)
 			data = dataStart + pos;
 		else
 			data = dataEnd;
 		return *this;
 	}
-	inline ByteArray & operator +=( const uint32_t pos )
+	inline ByteArray & operator +=(const uint32_t pos)
 	{
-		if ( data + pos < dataEnd )
+		if (data + pos < dataEnd)
 			data += pos;
 		else
 			data = dataEnd;
 		return *this;
 	}
-	inline ByteArray & operator -=( const uint32_t pos )
+	inline ByteArray & operator -=(const uint32_t pos)
 	{
-		if ( data - pos > dataStart )
+		if (data - pos > dataStart)
 			data -= pos;
 		else
 			data = dataStart;
@@ -130,47 +130,47 @@ public:
 	}
 	inline void operator ++()
 	{
-		if ( !atEnd() )
+		if (!atEnd())
 			++data;
 	}
 
-	inline ByteArray operator +( const uint32_t bytes ) const
+	inline ByteArray operator +(const uint32_t bytes) const
 	{
-		return ByteArray( *this ) += bytes;
+		return ByteArray(*this) += bytes;
 	}
-	inline ByteArray operator -( const uint32_t bytes ) const
+	inline ByteArray operator -(const uint32_t bytes) const
 	{
-		return ByteArray( *this ) -= bytes;
+		return ByteArray(*this) -= bytes;
 	}
 
 	inline uint8_t operator *() const
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return 0;
 		return *data;
 	}
-	inline uint8_t operator []( const uint32_t idx ) const
+	inline uint8_t operator [](const uint32_t idx) const
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return 0;
 		return data[ idx ];
 	}
 
 	inline operator const void *() const
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return NULL;
 		return data;
 	}
 	inline operator const char *() const
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return NULL;
-		return ( const char * )data;
+		return (const char *)data;
 	}
 	inline operator const uint8_t *() const
 	{
-		if ( atEnd() )
+		if (atEnd())
 			return NULL;
 		return data;
 	}
@@ -179,9 +179,9 @@ private:
 	const bool data_bigendian;
 };
 
-static inline uint32_t FourCC( const char str[ 5 ], const bool data_bigendian = false )
+static inline uint32_t FourCC(const char str[ 5 ], const bool data_bigendian = false)
 {
-	if ( data_bigendian )
+	if (data_bigendian)
 		return str[ 3 ] | str[ 2 ] << 8 | str[ 1 ] << 16 | str[ 0 ] << 24;
 	else
 		return str[ 0 ] | str[ 1 ] << 8 | str[ 2 ] << 16 | str[ 3 ] << 24;

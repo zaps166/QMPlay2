@@ -15,10 +15,10 @@ class HWAccelHelper
 public:
 	virtual ~HWAccelHelper() {}
 
-	static int get_buffer( AVCodecContext *codec_ctx, AVFrame *frame, int flags );
+	static int get_buffer(AVCodecContext *codec_ctx, AVFrame *frame, int flags);
 
 	virtual QMPlay2SurfaceID getSurface() = 0;
-	virtual void putSurface( QMPlay2SurfaceID id ) = 0;
+	virtual void putSurface(QMPlay2SurfaceID id) = 0;
 };
 
 #endif // HWACCELHELPER_HPP

@@ -16,12 +16,12 @@ public:
 	CDIODestroyTimer();
 	~CDIODestroyTimer();
 
-	Q_SIGNAL void setInstance( CdIo_t *_cdio, const QString &_device, unsigned _discID );
-	CdIo_t *getInstance( const QString &_device, unsigned &_discID );
+	Q_SIGNAL void setInstance(CdIo_t *_cdio, const QString &_device, unsigned _discID);
+	CdIo_t *getInstance(const QString &_device, unsigned &_discID);
 private slots:
-	void setInstanceSlot( CdIo_t *_cdio, const QString &_device, unsigned _discID );
+	void setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 private:
-	void timerEvent( QTimerEvent *e );
+	void timerEvent(QTimerEvent *e);
 
 	QAtomicInt timerId;
 	CdIo_t *cdio;
@@ -33,11 +33,11 @@ private:
 
 class AudioCDDemux : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( AudioCDDemux )
+	Q_DECLARE_TR_FUNCTIONS(AudioCDDemux)
 public:
 	static QStringList getDevices();
 
-	AudioCDDemux( Module &, CDIODestroyTimer &destroyTimer );
+	AudioCDDemux(Module &, CDIODestroyTimer &destroyTimer);
 private:
 	~AudioCDDemux();
 
@@ -49,25 +49,25 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int &  );
+	bool seek(int);
+	bool read(Packet &, int & );
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
-	Playlist::Entries fetchTracks( const QString &url, bool &ok );
+	Playlist::Entries fetchTracks(const QString &url, bool &ok);
 
 	/**/
 
-	void readCDText( track_t trackNo );
+	void readCDText(track_t trackNo);
 
-	bool freedb_query( cddb_disc_t *&cddb_disc );
-	void freedb_get_disc_info( cddb_disc_t *cddb_disc );
-	void freedb_get_track_info( cddb_disc_t *cddb_disc );
+	bool freedb_query(cddb_disc_t *&cddb_disc);
+	void freedb_get_disc_info(cddb_disc_t *cddb_disc);
+	void freedb_get_track_info(cddb_disc_t *cddb_disc);
 
 	CDIODestroyTimer &destroyTimer;
 
-	Playlist::Entries getTracks( const QString &device );
+	Playlist::Entries getTracks(const QString &device);
 
 	QString Title, Artist, Genre, cdTitle, cdArtist, device;
 	CdIo_t *cdio;

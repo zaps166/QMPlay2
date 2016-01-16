@@ -9,8 +9,8 @@ class SndResampler
 {
 public:
 	inline SndResampler() :
-		snd_convert_ctx( NULL ),
-		src_samplerate( 0 ), src_channels( 0 ), dst_samplerate( 0 ), dst_channels( 0 )
+		snd_convert_ctx(NULL),
+		src_samplerate(0), src_channels(0), dst_samplerate(0), dst_channels(0)
 	{}
 	inline ~SndResampler()
 	{
@@ -24,8 +24,8 @@ public:
 		return snd_convert_ctx != NULL;
 	}
 
-	bool create( int _src_samplerate, int _src_channels, int _dst_samplerate, int _dst_channels );
-	void convert( const QByteArray &src, QByteArray &dst );
+	bool create(int _src_samplerate, int _src_channels, int _dst_samplerate, int _dst_channels);
+	void convert(const QByteArray &src, QByteArray &dst);
 	void destroy();
 private:
 #ifdef QMPLAY2_AVRESAMPLE

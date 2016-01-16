@@ -7,7 +7,7 @@
 class OpenSLESWriter : public Writer
 {
 public:
-	OpenSLESWriter( Module & );
+	OpenSLESWriter(Module &);
 private:
 	~OpenSLESWriter();
 
@@ -15,8 +15,8 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
 	void pause();
 
 	QString name() const;

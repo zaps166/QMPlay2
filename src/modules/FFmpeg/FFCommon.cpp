@@ -10,32 +10,32 @@ extern "C"
 	#include <libavutil/dict.h>
 }
 
-QString FFCommon::prepareUrl( QString url, AVDictionary *&options )
+QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 {
-	if ( url.startsWith( "file://" ) )
-		url.remove( 0, 7 );
+	if (url.startsWith("file://"))
+		url.remove(0, 7);
 	else
 	{
-		if ( url.left( 4 ) == "mms:" )
-			url.insert( 3, 'h' );
+		if (url.left(4) == "mms:")
+			url.insert(3, 'h');
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
-		if ( url.left( 4 ) == "http" )
-			av_dict_set( &options, "icy", "1", 0 );
+		if (url.left(4) == "http")
+			av_dict_set(&options, "icy", "1", 0);
 #endif
-		av_dict_set( &options, "user-agent", "QMPlay2/" QMPlay2Version, 0 );
+		av_dict_set(&options, "user-agent", "QMPlay2/" QMPlay2Version, 0);
 	}
 	return url;
 }
 
-int FFCommon::getField( const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField )
+int FFCommon::getField(const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField)
 {
-	if ( deinterlace )
+	if (deinterlace)
 	{
 		const quint8 deintFlags = deinterlace >> 1;
-		if ( videoFrame->interlaced || !( deintFlags & DeintFilter::AutoDeinterlace ) )
+		if (videoFrame->interlaced || !(deintFlags & DeintFilter::AutoDeinterlace))
 		{
 			bool topFieldFirst;
-			if ( ( deintFlags & DeintFilter::DoubleFramerate ) || ( ( deintFlags & DeintFilter::AutoParity ) && videoFrame->interlaced ) )
+			if ((deintFlags & DeintFilter::DoubleFramerate) || ((deintFlags & DeintFilter::AutoParity) && videoFrame->interlaced))
 				topFieldFirst = videoFrame->top_field_first;
 			else
 				topFieldFirst = deintFlags & DeintFilter::TopFieldFirst;
@@ -51,17 +51,17 @@ AVPacket *FFCommon::createAVPacket()
 #if LIBAVCODEC_VERSION_MAJOR >= 57
 	packet = av_packet_alloc();
 #else
-	packet = ( AVPacket * )av_malloc( sizeof( AVPacket ) );
-	av_init_packet( packet );
+	packet = (AVPacket *)av_malloc(sizeof(AVPacket));
+	av_init_packet(packet);
 #endif
 	return packet;
 }
-void FFCommon::freeAVPacket( AVPacket *&packet )
+void FFCommon::freeAVPacket(AVPacket *&packet)
 {
 #if LIBAVCODEC_VERSION_MAJOR >= 57
-	av_packet_free( &packet );
+	av_packet_free(&packet);
 #else
 	// Packet buffer is always NULL here, so no need to unref!
-	av_freep( &packet );
+	av_freep(&packet);
 #endif
 }

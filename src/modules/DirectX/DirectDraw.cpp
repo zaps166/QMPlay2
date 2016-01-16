@@ -14,21 +14,21 @@
 
 /**/
 
-Drawable::Drawable( DirectDrawWriter &writer ) :
-	isOK( false ), isOverlay( false ), paused( false ),
-	writer( writer ),
-	flip( 0 ),
-	DDraw( NULL ), DDClipper( NULL ), DDSPrimary( NULL ), DDSSecondary( NULL ), DDSBackBuffer( NULL ), DDrawColorCtrl( NULL ),
-	DwmEnableComposition( NULL )
+Drawable::Drawable(DirectDrawWriter &writer) :
+	isOK(false), isOverlay(false), paused(false),
+	writer(writer),
+	flip(0),
+	DDraw(NULL), DDClipper(NULL), DDSPrimary(NULL), DDSSecondary(NULL), DDSBackBuffer(NULL), DDrawColorCtrl(NULL),
+	DwmEnableComposition(NULL)
 {
-	setMouseTracking( true );
-	grabGesture( Qt::PinchGesture );
-	if ( DirectDrawCreate( NULL, &DDraw, NULL ) == DD_OK && DDraw->SetCooperativeLevel( NULL, DDSCL_NORMAL ) == DD_OK )
+	setMouseTracking(true);
+	grabGesture(Qt::PinchGesture);
+	if (DirectDrawCreate(NULL, &DDraw, NULL) == DD_OK && DDraw->SetCooperativeLevel(NULL, DDSCL_NORMAL) == DD_OK)
 	{
 		DDSURFACEDESC ddsd_primary = { sizeof ddsd_primary };
 		ddsd_primary.dwFlags = DDSD_CAPS;
 		ddsd_primary.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-		if ( DDraw->CreateSurface( &ddsd_primary, &DDSPrimary, NULL ) == DD_OK )
+		if (DDraw->CreateSurface(&ddsd_primary, &DDSPrimary, NULL) == DD_OK)
 		{
 			LPDIRECTDRAWSURFACE DDrawTestSurface;
 			DDSURFACEDESC ddsd_test = { sizeof ddsd_test };
@@ -37,41 +37,41 @@ Drawable::Drawable( DirectDrawWriter &writer ) :
 			ddsd_test.dwHeight = 2;
 			ddsd_test.ddpfPixelFormat.dwSize = sizeof ddsd_test.ddpfPixelFormat;
 			ddsd_test.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
-			ddsd_test.ddpfPixelFormat.dwFourCC = MAKEFOURCC( 'Y', 'V', '1', '2' );
+			ddsd_test.ddpfPixelFormat.dwFourCC = MAKEFOURCC('Y', 'V', '1', '2');
 
 			/* Overlay YV12 test */
-			if ( QSysInfo::windowsVersion() < QSysInfo::WV_6_2 ) //Windows 8 and 10 can't disable DWM, so overlay won't work
+			if (QSysInfo::windowsVersion() < QSysInfo::WV_6_2) //Windows 8 and 10 can't disable DWM, so overlay won't work
 			{
 				DDCAPS ddCaps = { sizeof ddCaps };
-				DDraw->GetCaps( &ddCaps, NULL );
-				if ( ddCaps.dwCaps & ( DDCAPS_OVERLAY | DDCAPS_OVERLAYFOURCC | DDCAPS_OVERLAYSTRETCH ) )
+				DDraw->GetCaps(&ddCaps, NULL);
+				if (ddCaps.dwCaps & (DDCAPS_OVERLAY | DDCAPS_OVERLAYFOURCC | DDCAPS_OVERLAYSTRETCH))
 				{
 					ddsd_test.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
-					if ( DDraw->CreateSurface( &ddsd_test, &DDrawTestSurface, NULL ) == DD_OK )
+					if (DDraw->CreateSurface(&ddsd_test, &DDrawTestSurface, NULL) == DD_OK)
 					{
 						RECT destRect = { 0, 0, 1, 1 };
-						HRESULT res = DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL );
-						if ( res == DDERR_OUTOFCAPS && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0 )
+						HRESULT res = DDrawTestSurface->UpdateOverlay(NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL);
+						if (res == DDERR_OUTOFCAPS && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 						{
 							/* Disable DWM to use overlay */
-							DwmEnableComposition = ( DwmEnableCompositionProc )GetProcAddress( GetModuleHandleA( "dwmapi.dll" ), "DwmEnableComposition" );
-							if ( DwmEnableComposition )
+							DwmEnableComposition = (DwmEnableCompositionProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmEnableComposition");
+							if (DwmEnableComposition)
 							{
-								if ( DwmEnableComposition( DWM_EC_DISABLECOMPOSITION ) == S_OK )
-									res = DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL );
+								if (DwmEnableComposition(DWM_EC_DISABLECOMPOSITION) == S_OK)
+									res = DDrawTestSurface->UpdateOverlay(NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL);
 								else
 									DwmEnableComposition = NULL;
 							}
 						}
-						if ( res == DD_OK )
+						if (res == DD_OK)
 						{
-							DDrawTestSurface->UpdateOverlay( NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL );
+							DDrawTestSurface->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
 
-							setAutoFillBackground( true );
-							setPalette( QColor( ColorKEY ) );
-							connect( &QMPlay2Core, SIGNAL( videoDockMoved() ), this, SLOT( updateOverlay() ) );
-							connect( &QMPlay2Core, SIGNAL( videoDockVisible( bool ) ), this, SLOT( overlayVisible( bool ) ) );
-							connect( &QMPlay2Core, SIGNAL( mainWidgetNotMinimized( bool ) ), this, SLOT( overlayVisible( bool ) ) );
+							setAutoFillBackground(true);
+							setPalette(QColor(ColorKEY));
+							connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(updateOverlay()));
+							connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(overlayVisible(bool)));
+							connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(overlayVisible(bool)));
 
 							isOK = isOverlay = true;
 						}
@@ -81,15 +81,15 @@ Drawable::Drawable( DirectDrawWriter &writer ) :
 			}
 
 			/* YV12 test */
-			if ( !isOverlay )
+			if (!isOverlay)
 			{
 				ddsd_test.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY;
-				if ( DDraw->CreateSurface( &ddsd_test, &DDrawTestSurface, NULL ) == DD_OK )
+				if (DDraw->CreateSurface(&ddsd_test, &DDrawTestSurface, NULL) == DD_OK)
 				{
-					setAttribute( Qt::WA_PaintOnScreen );
-					blackBrush = CreateSolidBrush( 0x00000000 );
-					if ( DDraw->CreateClipper( 0, &DDClipper, NULL ) == DD_OK )
-						DDSPrimary->SetClipper( DDClipper );
+					setAttribute(Qt::WA_PaintOnScreen);
+					blackBrush = CreateSolidBrush(0x00000000);
+					if (DDraw->CreateClipper(0, &DDClipper, NULL) == DD_OK)
+						DDSPrimary->SetClipper(DDClipper);
 
 					isOK = true;
 
@@ -102,22 +102,22 @@ Drawable::Drawable( DirectDrawWriter &writer ) :
 Drawable::~Drawable()
 {
 	releaseSecondary();
-	if ( DDSPrimary )
+	if (DDSPrimary)
 		DDSPrimary->Release();
-	if ( DDClipper )
+	if (DDClipper)
 		DDClipper->Release();
-	if ( DDraw )
+	if (DDraw)
 		DDraw->Release();
-	DeleteObject( blackBrush );
-	if ( DwmEnableComposition )
-		DwmEnableComposition( DWM_EC_ENABLECOMPOSITION );
+	DeleteObject(blackBrush);
+	if (DwmEnableComposition)
+		DwmEnableComposition(DWM_EC_ENABLECOMPOSITION);
 }
 
 void Drawable::dock()
 {
-	emit QMPlay2Core.dockVideo( this );
-	if ( DDClipper )
-		DDClipper->SetHWnd( 0, ( HWND )winId() );
+	emit QMPlay2Core.dockVideo(this);
+	if (DDClipper)
+		DDClipper->SetHWnd(0, (HWND)winId());
 }
 bool Drawable::createSecondary()
 {
@@ -128,7 +128,7 @@ bool Drawable::createSecondary()
 	ddsd.dwWidth = writer.outW;
 	ddsd.dwHeight = writer.outH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY;
-	if ( !isOverlay )
+	if (!isOverlay)
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_OFFSCREENPLAIN;
 	else
 	{
@@ -138,28 +138,28 @@ bool Drawable::createSecondary()
 	}
 	ddsd.ddpfPixelFormat.dwSize = sizeof ddsd.ddpfPixelFormat;
 	ddsd.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
-	ddsd.ddpfPixelFormat.dwFourCC = MAKEFOURCC( 'Y', 'V', '1', '2' );
+	ddsd.ddpfPixelFormat.dwFourCC = MAKEFOURCC('Y', 'V', '1', '2');
 
-	if ( DDraw->CreateSurface( &ddsd, &DDSSecondary, NULL ) == DD_OK )
+	if (DDraw->CreateSurface(&ddsd, &DDSSecondary, NULL) == DD_OK)
 	{
-		if ( isOverlay )
+		if (isOverlay)
 		{
 			DDSCAPS ddsCaps = { sizeof ddsCaps };
 			ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
-			DDSSecondary->GetAttachedSurface( &ddsCaps, &DDSBackBuffer );
-			DDSSecondary->QueryInterface( IID_IDirectDrawColorControl, ( LPVOID * )&DDrawColorCtrl );
+			DDSSecondary->GetAttachedSurface(&ddsCaps, &DDSBackBuffer);
+			DDSSecondary->QueryInterface(IID_IDirectDrawColorControl, (LPVOID *)&DDrawColorCtrl);
 		}
-		if ( !DDSBackBuffer )
+		if (!DDSBackBuffer)
 			DDSBackBuffer = DDSSecondary;
-		if ( DDSBackBuffer->Lock( NULL, &ddsd, DDLOCK_WAIT, NULL ) == DD_OK ) //Black on start
+		if (DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) == DD_OK) //Black on start
 		{
 			const DWORD size = ddsd.lPitch * ddsd.dwHeight;
-			memset( ( BYTE * )ddsd.lpSurface, 0x00, size );
-			memset( ( BYTE * )ddsd.lpSurface + size, 0x7F, size / 2 );
-			if ( DDSBackBuffer->Unlock( NULL ) == DD_OK )
+			memset((BYTE *)ddsd.lpSurface, 0x00, size);
+			memset((BYTE *)ddsd.lpSurface + size, 0x7F, size / 2);
+			if (DDSBackBuffer->Unlock(NULL) == DD_OK)
 			{
-				if ( isOverlay )
-					DDSSecondary->Flip( NULL, DDFLIP_WAIT );
+				if (isOverlay)
+					DDSSecondary->Flip(NULL, DDFLIP_WAIT);
 				return true;
 			}
 		}
@@ -169,77 +169,77 @@ bool Drawable::createSecondary()
 }
 void Drawable::videoEqSet()
 {
-	if ( DDrawColorCtrl )
+	if (DDrawColorCtrl)
 	{
 		DDCOLORCONTROL DDCC =
 		{
 			sizeof DDCC,
 			DDCOLOR_HUE | DDCOLOR_SATURATION | DDCOLOR_BRIGHTNESS | DDCOLOR_CONTRAST,
-			Functions::scaleEQValue( writer.Brightness, 0, 1500 ),
-			Functions::scaleEQValue( writer.Contrast, 0, 20000 ),
-			Functions::scaleEQValue( writer.Hue, -180, 180 ),
-			Functions::scaleEQValue( writer.Saturation, 0, 20000 )
+			Functions::scaleEQValue(writer.Brightness, 0, 1500),
+			Functions::scaleEQValue(writer.Contrast, 0, 20000),
+			Functions::scaleEQValue(writer.Hue, -180, 180),
+			Functions::scaleEQValue(writer.Saturation, 0, 20000)
 		};
-		DDrawColorCtrl->SetColorControls( &DDCC );
+		DDrawColorCtrl->SetColorControls(&DDCC);
 	}
 }
 void Drawable::setFlip()
 {
-	const bool doHFlip = ( writer.flip & Qt::Horizontal ) != ( flip & Qt::Horizontal );
-	const bool doVFlip = ( writer.flip & Qt::Vertical ) != ( flip & Qt::Vertical );
-	if ( doHFlip || doVFlip )
+	const bool doHFlip = (writer.flip & Qt::Horizontal) != (flip & Qt::Horizontal);
+	const bool doVFlip = (writer.flip & Qt::Vertical) != (flip & Qt::Vertical);
+	if (doHFlip || doVFlip)
 	{
 		DDSURFACEDESC ddsd = { sizeof ddsd };
-		if ( paused && !isOverlay && canDraw() && DDSBackBuffer->Lock( NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL ) == DD_OK )
+		if (paused && !isOverlay && canDraw() && DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
 		{
-			if ( doHFlip )
-				Functions::hFlip( ( char * )ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight, ddsd.dwWidth );
-			if ( doVFlip )
-				Functions::vFlip( ( char * )ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight );
-			DDSBackBuffer->Unlock( NULL );
+			if (doHFlip)
+				Functions::hFlip((char *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight, ddsd.dwWidth);
+			if (doVFlip)
+				Functions::vFlip((char *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight);
+			DDSBackBuffer->Unlock(NULL);
 		}
 		flip = writer.flip;
 	}
 }
 
-bool Drawable::draw( const QByteArray &videoFrameData )
+bool Drawable::draw(const QByteArray &videoFrameData)
 {
 	DDSURFACEDESC ddsd = { sizeof ddsd };
-	if ( restoreLostSurface() && isOverlay )
+	if (restoreLostSurface() && isOverlay)
 		updateOverlay();
-	if ( DDSBackBuffer->Lock( NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL ) == DD_OK )
+	if (DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
 	{
-		BYTE *surface = ( BYTE * )ddsd.lpSurface;
+		BYTE *surface = (BYTE *)ddsd.lpSurface;
 
-		if ( !isOverlay )
+		if (!isOverlay)
 		{
-			const VideoFrame *videoFrame = VideoFrame::fromData( videoFrameData );
-			if ( flip & Qt::Horizontal )
-				Functions::hFlip( *( char ** )videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight, ddsd.dwWidth );
-			if ( flip & Qt::Vertical )
-				Functions::vFlip( *( char ** )videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight );
+			const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
+			if (flip & Qt::Horizontal)
+				Functions::hFlip(*(char **)videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight, ddsd.dwWidth);
+			if (flip & Qt::Vertical)
+				Functions::vFlip(*(char **)videoFrame->data, videoFrame->linesize[ 0 ], ddsd.dwHeight);
 		}
-		VideoFrame::copyYV12( surface, videoFrameData, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight );
+		VideoFrame::copyYV12(surface, videoFrameData, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight);
 
 		osd_mutex.lock();
-		if ( !osd_list.isEmpty() )
+		if (!osd_list.isEmpty())
 		{
-			if ( osdImg.size() != QSize( ddsd.dwWidth, ddsd.dwHeight ) )
+			if (osdImg.size() != QSize(ddsd.dwWidth, ddsd.dwHeight))
 			{
-				osdImg = QImage( ddsd.dwWidth, ddsd.dwHeight, QImage::Format_ARGB32 );
-				osdImg.fill( 0 );
+				osdImg = QImage(ddsd.dwWidth, ddsd.dwHeight, QImage::Format_ARGB32);
+				osdImg.fill(0);
 			}
-			Functions::paintOSDtoYV12( surface, videoFrameData, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_checksums );
+			Functions::paintOSDtoYV12(surface, videoFrameData, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_checksums);
 		}
 		osd_mutex.unlock();
 
-		if ( DDSBackBuffer->Unlock( NULL ) == DD_OK )
+		if (DDSBackBuffer->Unlock(NULL) == DD_OK)
 		{
-			if ( isOverlay )
-				DDSSecondary->Flip( NULL, DDFLIP_WAIT );
+			if (isOverlay)
+				DDSSecondary->Flip(NULL, DDFLIP_WAIT);
 			else
 			{
-				DDraw->WaitForVerticalBlank( DDWAITVB_BLOCKBEGIN, NULL ); //Sometimes it works :D
+				DDraw->WaitForVerticalBlank(DDWAITVB_BLOCKBEGIN, NULL); //Sometimes it works :D
 				blit();
 			}
 			return true;
@@ -248,100 +248,100 @@ bool Drawable::draw( const QByteArray &videoFrameData )
 	return false;
 }
 
-void Drawable::resizeEvent( QResizeEvent *e )
+void Drawable::resizeEvent(QResizeEvent *e)
 {
-	Functions::getImageSize( writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y );
+	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
 
-	if ( isOverlay )
+	if (isOverlay)
 		updateOverlay();
-	else if ( !e )
+	else if (!e)
 		update();
 
-	if ( e )
-		QWidget::resizeEvent( e );
+	if (e)
+		QWidget::resizeEvent(e);
 }
 
-void Drawable::getRects( RECT &srcRect, RECT &dstRect )
+void Drawable::getRects(RECT &srcRect, RECT &dstRect)
 {
-	const QPoint point = mapToGlobal( QPoint( X, Y ) );
+	const QPoint point = mapToGlobal(QPoint(X, Y));
 	const RECT videoRect = { point.x(), point.y(), point.x() + W + 1, point.y() + H + 1 };
-	const RECT screenRect = { 0, 0, GetSystemMetrics( SM_CXSCREEN ), GetSystemMetrics( SM_CYSCREEN ) };
+	const RECT screenRect = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 
-	IntersectRect( &dstRect, &videoRect, &screenRect );
+	IntersectRect(&dstRect, &videoRect, &screenRect);
 
-	if ( videoRect.right - videoRect.left && videoRect.bottom - videoRect.top )
+	if (videoRect.right - videoRect.left && videoRect.bottom - videoRect.top)
 	{
-		srcRect.left   = ( dstRect.left - videoRect.left ) * writer.outW / ( videoRect.right - videoRect.left );
-		srcRect.top    = ( dstRect.top - videoRect.top )   * writer.outH / ( videoRect.bottom - videoRect.top );
-		srcRect.right  = writer.outW - ( videoRect.right - dstRect.right   ) * writer.outW / ( videoRect.right - videoRect.left );
-		srcRect.bottom = writer.outH - ( videoRect.bottom - dstRect.bottom ) * writer.outH / ( videoRect.bottom - videoRect.top );
+		srcRect.left   = (dstRect.left - videoRect.left) * writer.outW / (videoRect.right - videoRect.left);
+		srcRect.top    = (dstRect.top - videoRect.top)   * writer.outH / (videoRect.bottom - videoRect.top);
+		srcRect.right  = writer.outW - (videoRect.right - dstRect.right  ) * writer.outW / (videoRect.right - videoRect.left);
+		srcRect.bottom = writer.outH - (videoRect.bottom - dstRect.bottom) * writer.outH / (videoRect.bottom - videoRect.top);
 	}
 	else
-		memset( &srcRect, 0, sizeof srcRect );
+		memset(&srcRect, 0, sizeof srcRect);
 }
 void Drawable::fillRects()
 {
-	HWND hwnd = ( HWND )winId();
-	HDC hdc = GetDC( hwnd );
+	HWND hwnd = (HWND)winId();
+	HDC hdc = GetDC(hwnd);
 	RECT rect;
-	if ( Y > 0 )
+	if (Y > 0)
 	{
-		SetRect( &rect, 0, 0, width(), Y );
-		FillRect( hdc, &rect, blackBrush );
-		SetRect( &rect, 0, Y + H, width(), 2 * Y + H + 1 );
-		FillRect( hdc, &rect, blackBrush );
+		SetRect(&rect, 0, 0, width(), Y);
+		FillRect(hdc, &rect, blackBrush);
+		SetRect(&rect, 0, Y + H, width(), 2 * Y + H + 1);
+		FillRect(hdc, &rect, blackBrush);
 	}
-	if ( X > 0 )
+	if (X > 0)
 	{
-		SetRect( &rect, 0, 0, X, height() );
-		FillRect( hdc, &rect, blackBrush );
-		SetRect( &rect, X + W, 0, 2 * X + W + 1, height() );
-		FillRect( hdc, &rect, blackBrush );
+		SetRect(&rect, 0, 0, X, height());
+		FillRect(hdc, &rect, blackBrush);
+		SetRect(&rect, X + W, 0, 2 * X + W + 1, height());
+		FillRect(hdc, &rect, blackBrush);
 	}
-	ReleaseDC( hwnd, hdc );
+	ReleaseDC(hwnd, hdc);
 }
 
 void Drawable::updateOverlay()
 {
 	RECT srcRect, dstRect;
-	getRects( srcRect, dstRect );
+	getRects(srcRect, dstRect);
 
 	restoreLostSurface();
 
 	DDOVERLAYFX ovfx = { sizeof ovfx };
 	ovfx.dckDestColorkey.dwColorSpaceHighValue = ovfx.dckDestColorkey.dwColorSpaceLowValue = ColorKEY;
-	if ( flip & Qt::Horizontal )
+	if (flip & Qt::Horizontal)
 		ovfx.dwDDFX |= DDOVERFX_MIRRORLEFTRIGHT;
-	if ( flip & Qt::Vertical )
+	if (flip & Qt::Vertical)
 		ovfx.dwDDFX |= DDOVERFX_MIRRORUPDOWN;
-	DDSSecondary->UpdateOverlay( &srcRect, DDSPrimary, &dstRect, DDOVER_SHOW | DDOVER_KEYDESTOVERRIDE | DDOVER_DDFX, &ovfx );
+	DDSSecondary->UpdateOverlay(&srcRect, DDSPrimary, &dstRect, DDOVER_SHOW | DDOVER_KEYDESTOVERRIDE | DDOVER_DDFX, &ovfx);
 }
-void Drawable::overlayVisible( bool v )
+void Drawable::overlayVisible(bool v)
 {
-	if ( v )
+	if (v)
 		updateOverlay();
 	else
-		DDSSecondary->UpdateOverlay( NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL );
+		DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
 }
 void Drawable::blit()
 {
 	RECT srcRect, dstRect;
-	getRects( srcRect, dstRect );
+	getRects(srcRect, dstRect);
 
-	DDSPrimary->Blt( &dstRect, DDSSecondary, &srcRect, DDBLT_WAIT, NULL );
+	DDSPrimary->Blt(&dstRect, DDSSecondary, &srcRect, DDBLT_WAIT, NULL);
 }
 
 void Drawable::releaseSecondary()
 {
-	if ( DDSSecondary )
+	if (DDSSecondary)
 	{
-		if ( DDrawColorCtrl )
+		if (DDrawColorCtrl)
 		{
 			DDrawColorCtrl->Release();
 			DDrawColorCtrl = NULL;
 		}
-		if ( isOverlay )
-			DDSSecondary->UpdateOverlay( NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL );
+		if (isOverlay)
+			DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
 		DDSSecondary->Release();
 		DDSSecondary = NULL;
 		DDSBackBuffer = NULL;
@@ -349,35 +349,35 @@ void Drawable::releaseSecondary()
 }
 bool Drawable::restoreLostSurface()
 {
-	if ( DDSPrimary->IsLost() || DDSSecondary->IsLost() || DDSBackBuffer->IsLost() )
+	if (DDSPrimary->IsLost() || DDSSecondary->IsLost() || DDSBackBuffer->IsLost())
 	{
 		bool restored = true;
 		restored &= DDSPrimary->Restore() == DD_OK;
 		restored &= DDSSecondary->Restore() == DD_OK;
-		if ( DDSSecondary != DDSBackBuffer )
+		if (DDSSecondary != DDSBackBuffer)
 			restored &= DDSBackBuffer->Restore() == DD_OK;
-		if ( restored )
+		if (restored)
 			return true;
-		QMPlay2Core.processParam( "RestartPlaying" );
+		QMPlay2Core.processParam("RestartPlaying");
 	}
 	return false;
 }
 
-void Drawable::paintEvent( QPaintEvent * )
+void Drawable::paintEvent(QPaintEvent *)
 {
-	if ( !isOverlay )
+	if (!isOverlay)
 	{
 		restoreLostSurface();
 		fillRects();
 		blit();
 	}
 }
-bool Drawable::event( QEvent *e )
+bool Drawable::event(QEvent *e)
 {
 	/* Pass gesture event to the parent */
-	if ( e->type() == QEvent::Gesture )
-		return qApp->notify( parent(), e );
-	return QWidget::event( e );
+	if (e->type() == QEvent::Gesture)
+		return qApp->notify(parent(), e);
+	return QWidget::event(e);
 }
 
 QPaintEngine *Drawable::paintEngine() const
@@ -387,22 +387,22 @@ QPaintEngine *Drawable::paintEngine() const
 
 /**/
 
-DirectDrawWriter::DirectDrawWriter( Module &module ) :
-	outW( -1 ), outH( -1 ), flip( 0 ), Hue( 0 ), Saturation( 0 ), Brightness( 0 ), Contrast( 0 ),
-	aspect_ratio( 0.0 ), zoom( 0.0 ),
-	drawable( NULL )
+DirectDrawWriter::DirectDrawWriter(Module &module) :
+	outW(-1), outH(-1), flip(0), Hue(0), Saturation(0), Brightness(0), Contrast(0),
+	aspect_ratio(0.0), zoom(0.0),
+	drawable(NULL)
 {
-	addParam( "W" );
-	addParam( "H" );
-	addParam( "AspectRatio" );
-	addParam( "Zoom" );
-	addParam( "Hue" );
-	addParam( "Saturation" );
-	addParam( "Brightness" );
-	addParam( "Contrast" );
-	addParam( "Flip" );
+	addParam("W");
+	addParam("H");
+	addParam("AspectRatio");
+	addParam("Zoom");
+	addParam("Hue");
+	addParam("Saturation");
+	addParam("Brightness");
+	addParam("Contrast");
+	addParam("Flip");
 
-	SetModule( module );
+	SetModule(module);
 }
 DirectDrawWriter::~DirectDrawWriter()
 {
@@ -411,7 +411,7 @@ DirectDrawWriter::~DirectDrawWriter()
 
 bool DirectDrawWriter::set()
 {
-	return sets().getBool( "DirectDrawEnabled" );
+	return sets().getBool("DirectDrawEnabled");
 }
 
 bool DirectDrawWriter::readyWrite() const
@@ -419,14 +419,14 @@ bool DirectDrawWriter::readyWrite() const
 	return drawable && drawable->canDraw();
 }
 
-bool DirectDrawWriter::processParams( bool * )
+bool DirectDrawWriter::processParams(bool *)
 {
 	bool doResizeEvent = drawable->isVisible();
 
-	const double _aspect_ratio = getParam( "AspectRatio" ).toDouble();
-	const double _zoom = getParam( "Zoom" ).toDouble();
-	const int _flip = getParam( "Flip" ).toInt();
-	if ( _aspect_ratio != aspect_ratio || _zoom != zoom || _flip != flip )
+	const double _aspect_ratio = getParam("AspectRatio").toDouble();
+	const double _zoom = getParam("Zoom").toDouble();
+	const int _flip = getParam("Flip").toInt();
+	if (_aspect_ratio != aspect_ratio || _zoom != zoom || _flip != flip)
 	{
 		zoom = _zoom;
 		aspect_ratio = _aspect_ratio;
@@ -434,22 +434,22 @@ bool DirectDrawWriter::processParams( bool * )
 		drawable->setFlip();
 	}
 
-	const int _outW = getParam( "W" ).toInt();
-	const int _outH = getParam( "H" ).toInt();
-	if ( _outW > 0 && _outH > 0 && ( _outW != outW || _outH != outH ) )
+	const int _outW = getParam("W").toInt();
+	const int _outH = getParam("H").toInt();
+	if (_outW > 0 && _outH > 0 && (_outW != outW || _outH != outH))
 	{
 		outW = _outW;
 		outH = _outH;
 
-		if ( drawable->createSecondary() )
+		if (drawable->createSecondary())
 			drawable->dock();
 	}
 
-	const int _Hue = getParam( "Hue" ).toInt();
-	const int _Saturation = getParam( "Saturation" ).toInt();
-	const int _Brightness = getParam( "Brightness" ).toInt();
-	const int _Contrast = getParam( "Contrast" ).toInt();
-	if ( _Hue != Hue || _Saturation != Saturation || _Brightness != Brightness || _Contrast != Contrast )
+	const int _Hue = getParam("Hue").toInt();
+	const int _Saturation = getParam("Saturation").toInt();
+	const int _Brightness = getParam("Brightness").toInt();
+	const int _Contrast = getParam("Contrast").toInt();
+	if (_Hue != Hue || _Saturation != Saturation || _Brightness != Brightness || _Contrast != Contrast)
 	{
 		Hue = _Hue;
 		Saturation = _Saturation;
@@ -458,22 +458,22 @@ bool DirectDrawWriter::processParams( bool * )
 		drawable->videoEqSet();
 	}
 
-	if ( doResizeEvent )
-		drawable->resizeEvent( NULL );
+	if (doResizeEvent)
+		drawable->resizeEvent(NULL);
 
 	return readyWrite();
 }
 
-qint64 DirectDrawWriter::write( const QByteArray &arr )
+qint64 DirectDrawWriter::write(const QByteArray &arr)
 {
 	int ret = 0;
 	drawable->paused = false;
-	if ( drawable->draw( arr ) )
+	if (drawable->draw(arr))
 		ret = arr.size();
-	VideoFrame::unref( arr );
+	VideoFrame::unref(arr);
 	return ret;
 }
-void DirectDrawWriter::writeOSD( const QList< const QMPlay2_OSD * > &osds )
+void DirectDrawWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;
@@ -487,11 +487,11 @@ void DirectDrawWriter::pause()
 
 QString DirectDrawWriter::name() const
 {
-	return QString( DirectDrawWriterName ) + ( drawable->isOverlay ? "/Overlay" : "" );
+	return QString(DirectDrawWriterName) + (drawable->isOverlay ? "/Overlay" : "");
 }
 
 bool DirectDrawWriter::open()
 {
-	drawable = new Drawable( *this );
+	drawable = new Drawable(*this);
 	return drawable->isOK;
 }

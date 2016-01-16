@@ -21,19 +21,19 @@ struct _XDisplay;
 class VAAPIWriter : public HWAccelHelper, public VideoWriter, public QWidget
 {
 public:
-	VAAPIWriter( Module &module );
+	VAAPIWriter(Module &module);
 	~VAAPIWriter();
 
 	bool set();
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
 	void pause();
-	void writeOSD( const QList< const QMPlay2_OSD * > &osd );
+	void writeOSD(const QList< const QMPlay2_OSD * > &osd);
 
-	bool HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32 ) const;
+	bool HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
 
 	QString name() const;
 
@@ -41,12 +41,12 @@ public:
 
 /**/
 
-	quint8 *getImage( VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt ) const;
-	bool getRGB32Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest ) const;
-	bool getYV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const;
-	bool getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32 ) const;
+	quint8 *getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt) const;
+	bool getRGB32Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest) const;
+	bool getYV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
+	bool getNV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
 
-	bool HWAccellInit( int W, int H, const char *codec_name );
+	bool HWAccellInit(int W, int H, const char *codec_name);
 
 	inline VADisplay getVADisplay() const
 	{
@@ -62,18 +62,18 @@ public:
 	}
 
 	QMPlay2SurfaceID getSurface();
-	void putSurface( QMPlay2SurfaceID id );
+	void putSurface(QMPlay2SurfaceID id);
 private:
 	void init_vpp();
 
 	bool vaCreateConfigAndContext();
-	bool vaCreateSurfaces( VASurfaceID *surfaces, int num_surfaces );
+	bool vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces);
 
-	void draw( VASurfaceID _id = -1, int _field = -1 );
+	void draw(VASurfaceID _id = -1, int _field = -1);
 
-	void resizeEvent( QResizeEvent * );
-	void paintEvent( QPaintEvent * );
-	bool event( QEvent * );
+	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *);
+	bool event(QEvent *);
 
 	QPaintEngine *paintEngine() const;
 

@@ -7,9 +7,9 @@ struct _snd_pcm;
 
 class ALSAWriter : public Writer
 {
-	Q_DECLARE_TR_FUNCTIONS( ALSAWriter )
+	Q_DECLARE_TR_FUNCTIONS(ALSAWriter)
 public:
-	ALSAWriter( Module & );
+	ALSAWriter(Module &);
 private:
 	~ALSAWriter();
 
@@ -17,8 +17,8 @@ private:
 
 	bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
+	bool processParams(bool *paramsCorrected);
+	qint64 write(const QByteArray &);
 	void pause();
 
 	qint64 size() const;

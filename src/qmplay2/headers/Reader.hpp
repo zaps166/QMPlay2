@@ -18,7 +18,7 @@
 class Reader : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-	static bool create( const QString &url, IOController< Reader > &reader, const QString &plugName = QString() );
+	static bool create(const QString &url, IOController< Reader > &reader, const QString &plugName = QString());
 
 	inline QString getUrl() const
 	{
@@ -28,8 +28,8 @@ public:
 	virtual bool readyRead() const = 0;
 	virtual bool canSeek() const = 0;
 
-	virtual bool seek( qint64, int wh = SEEK_SET ) = 0;
-	virtual QByteArray read( qint64 ) = 0;
+	virtual bool seek(qint64, int wh = SEEK_SET) = 0;
+	virtual QByteArray read(qint64) = 0;
 	virtual bool atEnd() const = 0;
 
 	virtual qint64 size() const = 0;

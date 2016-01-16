@@ -19,35 +19,35 @@ public:
 	static bool slowFontCacheUpdate();
 #endif
 
-	LibASS( Settings & );
+	LibASS(Settings &);
 	~LibASS();
 
-	void setWindowSize( int, int );
-	void setARatio( double );
-	void setZoom( double );
-	void setFontScale( double );
+	void setWindowSize(int, int);
+	void setARatio(double);
+	void setZoom(double);
+	void setFontScale(double);
 
-	void addFont( const QByteArray &name, const QByteArray &data );
+	void addFont(const QByteArray &name, const QByteArray &data);
 	void clearFonts();
 
 	void initOSD();
 	void setOSDStyle();
-	bool getOSD( QMPlay2_OSD *&, const QByteArray &, double );
+	bool getOSD(QMPlay2_OSD *&, const QByteArray &, double);
 	void closeOSD();
 
-	void initASS( const QByteArray &header = QByteArray() );
+	void initASS(const QByteArray &header = QByteArray());
 	inline bool isASS()
 	{
 		return hasASSData && ass_sub_track && ass_sub_renderer;
 	}
 	void setASSStyle();
-	void addASSEvent( const QByteArray & );
-	void addASSEvent( const QByteArray &, double, double );
+	void addASSEvent(const QByteArray &);
+	void addASSEvent(const QByteArray &, double, double);
 	void flushASSEvents();
-	bool getASS( QMPlay2_OSD *&, double );
+	bool getASS(QMPlay2_OSD *&, double);
 	void closeASS();
 private:
-	void readStyle( const QString &, ass_style * );
+	void readStyle(const QString &, ass_style *);
 	void calcSize();
 
 	Settings &settings;

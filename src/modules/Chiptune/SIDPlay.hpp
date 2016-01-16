@@ -8,9 +8,9 @@ class Reader;
 
 class SIDPlay : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( SIDPlay )
+	Q_DECLARE_TR_FUNCTIONS(SIDPlay)
 public:
-	SIDPlay( Module & );
+	SIDPlay(Module &);
 	~SIDPlay();
 private:
 	bool set();
@@ -21,18 +21,18 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
-	Playlist::Entries fetchTracks( const QString &url, bool &ok );
+	Playlist::Entries fetchTracks(const QString &url, bool &ok);
 
 
-	bool open( const QString &url, bool tracksOnly );
+	bool open(const QString &url, bool tracksOnly);
 
-	QString getTitle( const SidTuneInfo *info, int track ) const;
+	QString getTitle(const SidTuneInfo *info, int track) const;
 
 
 	IOController< Reader > m_reader;

@@ -5,8 +5,8 @@ class Playlists : public Module
 public:
 	Playlists();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
 };
@@ -19,9 +19,9 @@ class QCheckBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {
-	Q_DECLARE_TR_FUNCTIONS( ModuleSettingsWidget )
+	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 private:
 	void saveSettings();
 

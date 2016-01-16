@@ -98,14 +98,14 @@ extern short int gKaiserSinc[]; // 8-taps polyphase
 
 class CzCUBICSPLINE
 {	public:
-		CzCUBICSPLINE( );
-		~CzCUBICSPLINE( );
+		CzCUBICSPLINE();
+		~CzCUBICSPLINE();
 		static signed short lut[4*(1L<<SPLINE_FRACBITS)];
 };
 
 signed short CzCUBICSPLINE::lut[4*(1L<<SPLINE_FRACBITS)];
 
-CzCUBICSPLINE::CzCUBICSPLINE( )
+CzCUBICSPLINE::CzCUBICSPLINE()
 {	int _LIi;
 	int _LLen		= (1L<<SPLINE_FRACBITS);
 	float _LFlen	= 1.0f / (float)_LLen;
@@ -114,28 +114,28 @@ CzCUBICSPLINE::CzCUBICSPLINE( )
 	{	float _LCm1, _LC0, _LC1, _LC2;
 		float _LX = ((float)_LIi)*_LFlen;
 		int _LSum,_LIdx	= _LIi<<2;
-		_LCm1 = (float)floor( 0.5 + _LScale*(-0.5*_LX*_LX*_LX + 1.0*_LX*_LX - 0.5*_LX ) );
-		_LC0 = (float)floor( 0.5 + _LScale*( 1.5*_LX*_LX*_LX - 2.5*_LX*_LX + 1.0 ) );
-		_LC1 = (float)floor( 0.5 + _LScale*(-1.5*_LX*_LX*_LX + 2.0*_LX*_LX + 0.5*_LX ) );
-		_LC2 = (float)floor( 0.5 + _LScale*( 0.5*_LX*_LX*_LX - 0.5*_LX*_LX) );
-		lut[_LIdx+0] = (signed short)( (_LCm1 < -_LScale) ? -_LScale : ((_LCm1 > _LScale) ? _LScale : _LCm1) );
-		lut[_LIdx+1] = (signed short)( (_LC0  < -_LScale) ? -_LScale : ((_LC0  > _LScale) ? _LScale : _LC0 ) );
-		lut[_LIdx+2] = (signed short)( (_LC1  < -_LScale) ? -_LScale : ((_LC1  > _LScale) ? _LScale : _LC1 ) );
-		lut[_LIdx+3] = (signed short)( (_LC2  < -_LScale) ? -_LScale : ((_LC2  > _LScale) ? _LScale : _LC2 ) );
+		_LCm1 = (float)floor(0.5 + _LScale*(-0.5*_LX*_LX*_LX + 1.0*_LX*_LX - 0.5*_LX));
+		_LC0 = (float)floor(0.5 + _LScale*(1.5*_LX*_LX*_LX - 2.5*_LX*_LX + 1.0));
+		_LC1 = (float)floor(0.5 + _LScale*(-1.5*_LX*_LX*_LX + 2.0*_LX*_LX + 0.5*_LX));
+		_LC2 = (float)floor(0.5 + _LScale*(0.5*_LX*_LX*_LX - 0.5*_LX*_LX));
+		lut[_LIdx+0] = (signed short)((_LCm1 < -_LScale) ? -_LScale : ((_LCm1 > _LScale) ? _LScale : _LCm1));
+		lut[_LIdx+1] = (signed short)((_LC0  < -_LScale) ? -_LScale : ((_LC0  > _LScale) ? _LScale : _LC0));
+		lut[_LIdx+2] = (signed short)((_LC1  < -_LScale) ? -_LScale : ((_LC1  > _LScale) ? _LScale : _LC1));
+		lut[_LIdx+3] = (signed short)((_LC2  < -_LScale) ? -_LScale : ((_LC2  > _LScale) ? _LScale : _LC2));
 #ifdef SPLINE_CLAMPFORUNITY
 		_LSum = lut[_LIdx+0]+lut[_LIdx+1]+lut[_LIdx+2]+lut[_LIdx+3];
-		if( _LSum != SPLINE_QUANTSCALE )
+		if(_LSum != SPLINE_QUANTSCALE)
 		{	int _LMax = _LIdx;
-			if( lut[_LIdx+1]>lut[_LMax] ) _LMax = _LIdx+1;
-			if( lut[_LIdx+2]>lut[_LMax] ) _LMax = _LIdx+2;
-			if( lut[_LIdx+3]>lut[_LMax] ) _LMax = _LIdx+3;
+			if(lut[_LIdx+1]>lut[_LMax]) _LMax = _LIdx+1;
+			if(lut[_LIdx+2]>lut[_LMax]) _LMax = _LIdx+2;
+			if(lut[_LIdx+3]>lut[_LMax]) _LMax = _LIdx+3;
 			lut[_LMax] += ((signed short)SPLINE_QUANTSCALE-_LSum);
 		}
 #endif
 	}
 }
 
-CzCUBICSPLINE::~CzCUBICSPLINE( )
+CzCUBICSPLINE::~CzCUBICSPLINE()
 {	// nothing todo
 }
 
@@ -191,10 +191,10 @@ CzCUBICSPLINE sspline;
 class CzWINDOWEDFIR
 {
 public:
-	CzWINDOWEDFIR( );
-	~CzWINDOWEDFIR( );
-	float coef( int _PCnr, float _POfs, float _PCut, int _PWidth, int _PType )
-//OLD args to coef: float _PPos, float _PFc, int _PLen )
+	CzWINDOWEDFIR();
+	~CzWINDOWEDFIR();
+	float coef(int _PCnr, float _POfs, float _PCut, int _PWidth, int _PType)
+//OLD args to coef: float _PPos, float _PFc, int _PLen)
 	{
 		double	_LWidthM1       = _PWidth-1;
 		double	_LWidthM1Half   = 0.5*_LWidthM1;
@@ -202,11 +202,11 @@ public:
 		double	_LPos           = _LPosU-_LWidthM1Half;
 		double	_LPIdl          = 2.0*M_zPI/_LWidthM1;
 		double	_LWc,_LSi;
-		if( fabs(_LPos)<M_zEPS ) {
+		if(fabs(_LPos)<M_zEPS) {
 			_LWc	= 1.0;
 			_LSi	= _PCut;
 		} else {
-			switch( _PType )
+			switch(_PType)
 			{
 			case WFIR_HANN:
 				_LWc = 0.50 - 0.50 * cos(_LPIdl*_LPosU);
@@ -262,18 +262,18 @@ CzWINDOWEDFIR::CzWINDOWEDFIR()
 	float _LNorm	= 1.0f / (float)(2.0f * _LPcllen);
 	float _LCut		= WFIR_CUTOFF;
 	float _LScale	= (float)WFIR_QUANTSCALE;
-	for( _LPcl=0;_LPcl<WFIR_LUTLEN;_LPcl++ )
+	for(_LPcl=0;_LPcl<WFIR_LUTLEN;_LPcl++)
 	{
 		float _LGain,_LCoefs[WFIR_WIDTH];
 		float _LOfs		= ((float)_LPcl-_LPcllen)*_LNorm;
 		int _LCc,_LIdx	= _LPcl<<WFIR_LOG2WIDTH;
-		for( _LCc=0,_LGain=0.0f;_LCc<WFIR_WIDTH;_LCc++ )
-		{	_LGain	+= (_LCoefs[_LCc] = coef( _LCc, _LOfs, _LCut, WFIR_WIDTH, WFIR_TYPE ));
+		for(_LCc=0,_LGain=0.0f;_LCc<WFIR_WIDTH;_LCc++)
+		{	_LGain	+= (_LCoefs[_LCc] = coef(_LCc, _LOfs, _LCut, WFIR_WIDTH, WFIR_TYPE));
 		}
 		_LGain = 1.0f/_LGain;
-		for( _LCc=0;_LCc<WFIR_WIDTH;_LCc++ )
-		{	float _LCoef = (float)floor( 0.5 + _LScale*_LCoefs[_LCc]*_LGain );
-		lut[_LIdx+_LCc] = (signed short)( (_LCoef<-_LScale)?-_LScale:((_LCoef>_LScale)?_LScale:_LCoef) );
+		for(_LCc=0;_LCc<WFIR_WIDTH;_LCc++)
+		{	float _LCoef = (float)floor(0.5 + _LScale*_LCoefs[_LCc]*_LGain);
+		lut[_LIdx+_LCc] = (signed short)((_LCoef<-_LScale)?-_LScale:((_LCoef>_LScale)?_LScale:_LCoef));
 		}
 	}
 }
@@ -425,11 +425,11 @@ CzWINDOWEDFIR sfir;
 	int poshi	= nPos >> 16; \
 	int poslo	= (nPos >> SPLINE_FRACSHIFT) & SPLINE_FRACMASK; \
 	int vol_l	= (CzCUBICSPLINE::lut[poslo  ]*(int)p[(poshi-1)*2  ] + \
-			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi  )*2  ] + \
+			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi )*2  ] + \
 			   CzCUBICSPLINE::lut[poslo+2]*(int)p[(poshi+1)*2  ] + \
 			   CzCUBICSPLINE::lut[poslo+3]*(int)p[(poshi+2)*2  ]) >> SPLINE_8SHIFT; \
 	int vol_r	= (CzCUBICSPLINE::lut[poslo  ]*(int)p[(poshi-1)*2+1] + \
-			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi  )*2+1] + \
+			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi )*2+1] + \
 			   CzCUBICSPLINE::lut[poslo+2]*(int)p[(poshi+1)*2+1] + \
 			   CzCUBICSPLINE::lut[poslo+3]*(int)p[(poshi+2)*2+1]) >> SPLINE_8SHIFT;
 
@@ -437,11 +437,11 @@ CzWINDOWEDFIR sfir;
 	int poshi	= nPos >> 16; \
 	int poslo	= (nPos >> SPLINE_FRACSHIFT) & SPLINE_FRACMASK; \
 	int vol_l	= (CzCUBICSPLINE::lut[poslo  ]*(int)p[(poshi-1)*2  ] + \
-			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi  )*2  ] + \
+			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi )*2  ] + \
 			   CzCUBICSPLINE::lut[poslo+2]*(int)p[(poshi+1)*2  ] + \
 			   CzCUBICSPLINE::lut[poslo+3]*(int)p[(poshi+2)*2  ]) >> SPLINE_16SHIFT; \
 	int vol_r	= (CzCUBICSPLINE::lut[poslo  ]*(int)p[(poshi-1)*2+1] + \
-			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi  )*2+1] + \
+			   CzCUBICSPLINE::lut[poslo+1]*(int)p[(poshi )*2+1] + \
 			   CzCUBICSPLINE::lut[poslo+2]*(int)p[(poshi+1)*2+1] + \
 			   CzCUBICSPLINE::lut[poslo+3]*(int)p[(poshi+2)*2+1]) >> SPLINE_16SHIFT;
 
@@ -1503,10 +1503,10 @@ UINT CSoundFile::CreateStereoMix(int count)
 		if (!(pChannel->dwFlags & CHN_NOIDO))
 		{
 			// use hq-fir mixer?
-			if( (gdwSoundSetup & (SNDMIX_HQRESAMPLER|SNDMIX_ULTRAHQSRCMODE)) ==
-				(SNDMIX_HQRESAMPLER|SNDMIX_ULTRAHQSRCMODE) )
+			if((gdwSoundSetup & (SNDMIX_HQRESAMPLER|SNDMIX_ULTRAHQSRCMODE)) ==
+				(SNDMIX_HQRESAMPLER|SNDMIX_ULTRAHQSRCMODE))
 				nFlags += MIXNDX_FIRSRC;
-			else if( (gdwSoundSetup & (SNDMIX_HQRESAMPLER)) == SNDMIX_HQRESAMPLER )
+			else if((gdwSoundSetup & (SNDMIX_HQRESAMPLER)) == SNDMIX_HQRESAMPLER)
 				nFlags += MIXNDX_SPLINESRC;
 			else
 				nFlags += MIXNDX_LINEARSRC; // use
@@ -1874,7 +1874,7 @@ DWORD MPPASMCALL X86_Convert32To24(LPVOID lp16, int *pBuffer, DWORD lSampleCount
 	int n,p ;
 	unsigned char* buf = (unsigned char*)lp16 ;
 
-	for ( i=0; i<lSampleCount; i++)
+	for (i=0; i<lSampleCount; i++)
 	{
 		n = pBuffer[i];
 		if (n < MIXING_CLIPMIN)
@@ -1888,8 +1888,8 @@ DWORD MPPASMCALL X86_Convert32To24(LPVOID lp16, int *pBuffer, DWORD lSampleCount
 		p = n >> (8-MIXING_ATTENUATION); // 24-bit signed
 
 		static unsigned short test = 0xBE00;
-		static unsigned char test_c = *( unsigned char * )&test;
-		if ( test_c == 0xBE ) //Big endian
+		static unsigned char test_c = *(unsigned char *)&test;
+		if (test_c == 0xBE) //Big endian
 		{
 			buf[i*3+0] = p & 0xFF0000 >> 24;
 			buf[i*3+1] = p & 0x00FF00 >> 16 ;
@@ -1978,7 +1978,7 @@ DWORD MPPASMCALL X86_Convert32To32(LPVOID lp16, int *pBuffer, DWORD lSampleCount
 	int vumin = *lpMin, vumax = *lpMax;
 	int32_t *p = (int32_t *)lp16;
 
-	for ( i=0; i<lSampleCount; i++)
+	for (i=0; i<lSampleCount; i++)
 	{
 		int n = pBuffer[i];
 		if (n < MIXING_CLIPMIN)
@@ -2369,7 +2369,7 @@ void CSoundFile::ProcessAGC(int count)
 	// Some kind custom law, so that the AGC stays quite stable, but slowly
 	// goes back up if the sound level stays below a level inversely
 	// proportional to the AGC level. (J'me comprends)
-	if ((agc >= gnAGC) && (gnAGC < AGC_UNITY) && (gnVUMeter < (0xFF - (gnAGC >> (AGC_PRECISION-7))) ))
+	if ((agc >= gnAGC) && (gnAGC < AGC_UNITY) && (gnVUMeter < (0xFF - (gnAGC >> (AGC_PRECISION-7)))))
 	{
 		gAGCRecoverCount += count;
 		UINT agctimeout = gdwMixingFreq + gnAGC;

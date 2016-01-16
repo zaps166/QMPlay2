@@ -12,9 +12,9 @@ class ImgScaler
 {
 public:
 	inline ImgScaler() :
-		img_convert_ctx( 0 ),
-		Wsrc( 0 ), Hsrc( 0 ), Wdst( 0 ), Hdst( 0 ),
-		arr( NULL )
+		img_convert_ctx(0),
+		Wsrc(0), Hsrc(0), Wdst(0), Hdst(0),
+		arr(NULL)
 	{}
 	inline ~ImgScaler()
 	{
@@ -26,10 +26,10 @@ public:
 		return arr;
 	}
 
-	bool create( int _Wsrc, int _Hsrc, int _Wdst, int _Hdst );
-	bool createArray( const size_t bytes );
-	void scale( const VideoFrame *videoFrame, void *dst = NULL );
-	void scale( const void *src, void *dst = NULL );
+	bool create(int _Wsrc, int _Hsrc, int _Wdst, int _Hdst);
+	bool createArray(const size_t bytes);
+	void scale(const VideoFrame *videoFrame, void *dst = NULL);
+	void scale(const void *src, void *dst = NULL);
 	void destroy();
 private:
 	SwsContext *img_convert_ctx;

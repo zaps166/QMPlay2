@@ -10,7 +10,7 @@ class AddressDialog : public QDialog
 {
 	Q_OBJECT
 public:
-	AddressDialog( QWidget * );
+	AddressDialog(QWidget *);
 	~AddressDialog();
 
 	inline bool addAndPlay() const

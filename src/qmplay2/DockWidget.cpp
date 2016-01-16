@@ -2,12 +2,12 @@
 
 #include <QTimer>
 
-void DockWidget::EmptyW::showEvent( QShowEvent * ) //This should fix some issues on Qt5 (QTBUG-49445)
+void DockWidget::EmptyW::showEvent(QShowEvent *) //This should fix some issues on Qt5 (QTBUG-49445)
 {
-	QTimer::singleShot( 0, this, SLOT( hide() ) );
+	QTimer::singleShot(0, this, SLOT(hide()));
 }
 
 QSize DockWidget::EmptyW::sizeHint() const
 {
-	return QSize( 0, 0 );
+	return QSize(0, 0);
 }

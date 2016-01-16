@@ -15,8 +15,8 @@ public:
 	{
 	public:
 		inline Image() {}
-		inline Image( const QRect &rect, const QByteArray &data ) :
-			rect( rect ), data( data ) {}
+		inline Image(const QRect &rect, const QByteArray &data) :
+			rect(rect), data(data) {}
 
 		QRect rect;
 		QByteArray data;
@@ -27,16 +27,16 @@ public:
 		clear();
 	}
 
-	inline void setText( const QByteArray &txt )
+	inline void setText(const QByteArray &txt)
 	{
 		_text = txt;
 	}
-	inline void setDuration( double d )
+	inline void setDuration(double d)
 	{
 		_duration = d;
 	}
 	//for subtitles only, not for OSD
-	inline void setPTS( double p )
+	inline void setPTS(double p)
 	{
 		_pts = p;
 	}
@@ -45,7 +45,7 @@ public:
 		_needsRescale = true;
 	}
 
-	inline const Image &getImage( int idx ) const
+	inline const Image &getImage(int idx) const
 	{
 		return images[ idx ];
 	}
@@ -53,14 +53,14 @@ public:
 	{
 		return images.count();
 	}
-	inline void addImage( const QRect &rect, const QByteArray &data )
+	inline void addImage(const QRect &rect, const QByteArray &data)
 	{
-		images.push_back( Image( rect, data ) );
+		images.push_back(Image(rect, data));
 	}
 
 	void genChecksum();
 
-	void clear( bool all = true );
+	void clear(bool all = true);
 
 	inline void lock() const
 	{

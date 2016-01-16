@@ -11,14 +11,14 @@ public:
 
 	inline DeintFilter()
 	{
-		addParam( "DeinterlaceFlags" );
+		addParam("DeinterlaceFlags");
 	}
 protected:
-	int addFramesToDeinterlace( QQueue< FrameBuffer > &framesQueue, bool checkSize = true );
+	int addFramesToDeinterlace(QQueue< FrameBuffer > &framesQueue, bool checkSize = true);
 
-	inline bool isTopFieldFirst( const VideoFrame *videoFrame ) const
+	inline bool isTopFieldFirst(const VideoFrame *videoFrame) const
 	{
-		return ( ( deintFlags & AutoParity ) && videoFrame->interlaced ) ? videoFrame->top_field_first : deintFlags & TopFieldFirst;
+		return ((deintFlags & AutoParity) && videoFrame->interlaced) ? videoFrame->top_field_first : deintFlags & TopFieldFirst;
 	}
 
 	quint8 deintFlags;

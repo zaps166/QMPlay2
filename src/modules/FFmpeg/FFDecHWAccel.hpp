@@ -8,14 +8,14 @@ class VideoWriter;
 class FFDecHWAccel : public FFDec
 {
 protected:
-	FFDecHWAccel( QMutex &mutex );
+	FFDecHWAccel(QMutex &mutex);
 	virtual ~FFDecHWAccel();
 
 	Writer *HWAccel() const;
 
-	bool hasHWAccel( const char *hwaccelName );
+	bool hasHWAccel(const char *hwaccelName);
 
-	virtual int decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned );
+	virtual int decode(Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned);
 
 	/**/
 

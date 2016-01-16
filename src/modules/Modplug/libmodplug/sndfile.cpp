@@ -1177,7 +1177,7 @@ UINT CSoundFile::ReadSample(MODINSTRUMENT *pIns, UINT nFlags, LPCSTR lpMemFile, 
 			for (UINT j=0; j<len; j+=2)
 			{
 				delta16 += bswapLE16(*p++);
-				*pSample++ = (int16_t )delta16;
+				*pSample++ = (int16_t)delta16;
 			}
 		}
 		break;

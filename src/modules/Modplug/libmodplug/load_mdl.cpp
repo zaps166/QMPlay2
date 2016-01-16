@@ -489,7 +489,7 @@ BOOL CSoundFile::ReadMDL(const BYTE *lpStream, DWORD dwMemLength)
 WORD MDLReadBits(DWORD &bitbuf, UINT &bitnum, LPBYTE &ibuf, CHAR n)
 //-----------------------------------------------------------------
 {
-	WORD v = (WORD)(bitbuf & ((1 << n) - 1) );
+	WORD v = (WORD)(bitbuf & ((1 << n) - 1));
 	bitbuf >>= n;
 	bitnum -= n;
 	if (bitnum <= 24)

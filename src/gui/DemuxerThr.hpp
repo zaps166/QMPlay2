@@ -19,7 +19,7 @@ class DemuxerThr : public QThread
 	friend class PlayClass;
 	Q_OBJECT
 public:
-	DemuxerThr( PlayClass & );
+	DemuxerThr(PlayClass &);
 
 	QByteArray getCoverFromStream() const;
 
@@ -30,19 +30,19 @@ public:
 
 	void emitInfo();
 private:
-	bool load( bool canEmitInfo = true );
+	bool load(bool canEmitInfo = true);
 
 	void run();
 
 	void updateCoverAndPlaying();
 
-	void addSubtitleStream( bool, QString &, int, int, const QString &, const QString &, const QString &, const QList< QMPlay2Tag > &other_info = QList< QMPlay2Tag >() );
+	void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QList< QMPlay2Tag > &other_info = QList< QMPlay2Tag >());
 
 	bool mustReloadStreams();
-	bool bufferedAllPackets( int vS, int aS, int p );
-	bool emptyBuffers( int vS, int aS );
-	bool canBreak( const AVThread *avThr1, const AVThread *avThr2 );
-	void getAVBuffersSize( int &vS, int &aS, BufferInfo *bufferInfo = NULL );
+	bool bufferedAllPackets(int vS, int aS, int p);
+	bool emptyBuffers(int vS, int aS);
+	bool canBreak(const AVThread *avThr1, const AVThread *avThr2);
+	void getAVBuffersSize(int &vS, int &aS, BufferInfo *bufferInfo = NULL);
 	void clearBuffers();
 
 	PlayClass &playC;
@@ -58,9 +58,9 @@ private:
 	double playIfBuffered;
 private slots:
 	void stopVADecSlot();
-	void updateCover( const QString &title, const QString &artist, const QString &album, const QByteArray &cover );
+	void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
 signals:
-	void load( Demuxer * );
+	void load(Demuxer *);
 	void stopVADec();
 };
 

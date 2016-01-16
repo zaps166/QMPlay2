@@ -12,24 +12,24 @@ public:
 	}
 protected:
 	inline ModuleCommon() :
-		module( NULL ) {}
+		module(NULL) {}
 	inline ~ModuleCommon()
 	{
-		if ( module )
+		if (module)
 		{
 			module->mutex.lock();
-			module->instances.removeOne( this );
+			module->instances.removeOne(this);
 			module->mutex.unlock();
 		}
 	}
 
-	inline void SetModule( Module &m )
+	inline void SetModule(Module &m)
 	{
-		if ( !module )
+		if (!module)
 		{
 			module = &m;
 			module->mutex.lock();
-			module->instances.append( this );
+			module->instances.append(this);
 			module->mutex.unlock();
 			set();
 		}

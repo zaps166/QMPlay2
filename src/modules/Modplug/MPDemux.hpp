@@ -7,9 +7,9 @@ class Reader;
 
 class MPDemux : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( MPDemux )
+	Q_DECLARE_TR_FUNCTIONS(MPDemux)
 public:
-	MPDemux( Module & );
+	MPDemux(Module &);
 private:
 	~MPDemux();
 
@@ -21,11 +21,11 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
 	/**/
 

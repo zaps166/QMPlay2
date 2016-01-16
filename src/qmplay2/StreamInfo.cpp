@@ -1,32 +1,32 @@
 #include <StreamInfo.hpp>
 
-QMPlay2Tags StreamInfo::getTag( const QString &tag )
+QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
 	bool ok;
-	const int tagID = tag.toInt( &ok );
-	if ( ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_COMMENT )
-		return ( QMPlay2Tags )tagID;
+	const int tagID = tag.toInt(&ok);
+	if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_COMMENT)
+		return (QMPlay2Tags)tagID;
 	return QMPLAY2_TAG_UNKNOWN;
 }
-QString StreamInfo::getTagName( const QString &tag )
+QString StreamInfo::getTagName(const QString &tag)
 {
-	const QMPlay2Tags tagID = getTag( tag );
-	switch ( tagID )
+	const QMPlay2Tags tagID = getTag(tag);
+	switch (tagID)
 	{
 		case QMPLAY2_TAG_LANGUAGE:
-			return tr( "Język" );
+			return tr("Język");
 		case QMPLAY2_TAG_TITLE:
-			return tr( "Tytuł" );
+			return tr("Tytuł");
 		case QMPLAY2_TAG_ARTIST:
-			return tr( "Artysta" );
+			return tr("Artysta");
 		case QMPLAY2_TAG_ALBUM:
-			return tr( "Album" );
+			return tr("Album");
 		case QMPLAY2_TAG_GENRE:
-			return tr( "Gatunek" );
+			return tr("Gatunek");
 		case QMPLAY2_TAG_DATE:
-			return tr( "Data" );
+			return tr("Data");
 		case QMPLAY2_TAG_COMMENT:
-			return tr( "Komentarz" );
+			return tr("Komentarz");
 		default:
 			return tag;
 	}

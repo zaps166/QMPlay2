@@ -10,7 +10,7 @@ class VideoThr : public AVThread
 {
 	Q_OBJECT
 public:
-	VideoThr( PlayClass &, Writer *, const QStringList &pluginsName = QStringList() );
+	VideoThr(PlayClass &, Writer *, const QStringList &pluginsName = QStringList());
 
 	inline Writer *getHWAccelWriter() const
 	{
@@ -21,7 +21,7 @@ public:
 	{
 		doScreenshot = true;
 	}
-	inline void setSyncVtoA( bool b )
+	inline void setSyncVtoA(bool b)
 	{
 		syncVtoA = b;
 	}
@@ -31,18 +31,18 @@ public:
 	}
 
 	void destroySubtitlesDecoder();
-	inline void setSubtitlesDecoder( Decoder *dec )
+	inline void setSubtitlesDecoder(Decoder *dec)
 	{
 		sDec = dec;
 	}
 
 	bool setFlip();
 	void setVideoEqualizer();
-	void setFrameSize( int w, int h );
-	void setARatio( double );
+	void setFrameSize(int w, int h);
+	void setARatio(double);
 	void setZoom();
 
-	void initFilters( bool processParams = true );
+	void initFilters(bool processParams = true);
 
 	bool processParams();
 
@@ -63,12 +63,12 @@ private:
 	VideoFilters filters;
 	QMutex filtersMutex;
 private slots:
-	void write_slot( const QByteArray & );
-	void screenshot_slot( const QByteArray & );
+	void write_slot(const QByteArray &);
+	void screenshot_slot(const QByteArray &);
 	void pause_slot();
 signals:
-	void write( const QByteArray & );
-	void screenshot( const QByteArray & );
+	void write(const QByteArray &);
+	void screenshot(const QByteArray &);
 	void pause();
 };
 

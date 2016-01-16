@@ -2,16 +2,16 @@
 #include <QMPlay2Core.hpp>
 #include <Module.hpp>
 
-SubsDec *SubsDec::create( const QString &type )
+SubsDec *SubsDec::create(const QString &type)
 {
-	if ( type.isEmpty() )
+	if (type.isEmpty())
 		return NULL;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::SUBSDEC && mod.extensions.contains( type ) )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::SUBSDEC && mod.extensions.contains(type))
 			{
-				SubsDec *subsdec = ( SubsDec * )module->createInstance( mod.name );
-				if ( !subsdec )
+				SubsDec *subsdec = (SubsDec *)module->createInstance(mod.name);
+				if (!subsdec)
 					continue;
 				return subsdec;
 			}
@@ -20,9 +20,9 @@ SubsDec *SubsDec::create( const QString &type )
 QStringList SubsDec::extensions()
 {
 	QStringList extensions;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::SUBSDEC )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::SUBSDEC)
 				extensions << mod.extensions;
 	return extensions;
 }

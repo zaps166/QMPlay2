@@ -119,7 +119,7 @@ rneg:
 	}
 	return result;
 #else
-	return ((uint64_t) a * (uint64_t) b ) / c;
+	return ((uint64_t) a * (uint64_t) b) / c;
 #endif
 }
 
@@ -692,7 +692,7 @@ BOOL CSoundFile::ReadNote()
 			if (vol)
 			{
 				// IMPORTANT: pChn->nRealVolume is 14 bits !!!
-				// -> _muldiv( 14+8, 6+6, 18); => RealVolume: 14-bit result (22+12-20)
+				// -> _muldiv(14+8, 6+6, 18); => RealVolume: 14-bit result (22+12-20)
 				pChn->nRealVolume = _muldiv(vol * m_nGlobalVolume, pChn->nGlobalVol * pChn->nInsVol, 1 << 20);
 			}
 			if (pChn->nPeriod < m_nMinPeriod) pChn->nPeriod = m_nMinPeriod;
@@ -1131,11 +1131,11 @@ BOOL CSoundFile::ReadNote()
 			} else
 			{
 				pChn->dwFlags &= ~(CHN_NOIDO|CHN_HQSRC);
-				if( pChn->nInc == 0x10000 )
+				if(pChn->nInc == 0x10000)
 				{	pChn->dwFlags |= CHN_NOIDO;
 				}
 				else
-				{	if( ((gdwSoundSetup & SNDMIX_HQRESAMPLER) == 0) && ((gdwSoundSetup & SNDMIX_ULTRAHQSRCMODE) == 0) )
+				{	if(((gdwSoundSetup & SNDMIX_HQRESAMPLER) == 0) && ((gdwSoundSetup & SNDMIX_ULTRAHQSRCMODE) == 0))
 					{	if (pChn->nInc >= 0xFF00) pChn->dwFlags |= CHN_NOIDO;
 					}
 				}

@@ -10,7 +10,7 @@ namespace ALSACommon
 
 	DevicesList getDevices();
 
-	QString getDeviceName( const DevicesList &devicesList, const QString &deviceName );
+	QString getDeviceName(const DevicesList &devicesList, const QString &deviceName);
 }
 
 #endif

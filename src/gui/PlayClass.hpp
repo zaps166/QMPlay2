@@ -30,16 +30,16 @@ class PlayClass : public QObject
 public:
 	PlayClass();
 
-	Q_SLOT void play( const QString & );
-	Q_SLOT void stop( bool quitApp = false );
+	Q_SLOT void play(const QString &);
+	Q_SLOT void stop(bool quitApp = false);
 	Q_SLOT void restart();
 
-	void chPos( double, bool updateGUI = true );
+	void chPos(double, bool updateGUI = true);
 
 	void togglePause();
-	void seek( int );
-	void chStream( const QString & );
-	void setSpeed( double );
+	void seek(int);
+	void chStream(const QString &);
+	void setSpeed(double);
 
 	bool isPlaying() const;
 #ifdef Q_OS_WIN
@@ -55,9 +55,9 @@ public:
 		return pos;
 	}
 
-	void loadSubsFile( const QString & );
+	void loadSubsFile(const QString &);
 
-	void messageAndOSD( const QString &, bool onStatusBar = true, double duration = 1.0 );
+	void messageAndOSD(const QString &, bool onStatusBar = true, double duration = 1.0);
 
 	bool doSilenceOnStart;
 private:
@@ -128,10 +128,10 @@ private:
 	QString fileSubs;
 private slots:
 	void saveCover();
-	void settingsChanged( int, bool );
-	void videoResized( int, int );
+	void settingsChanged(int, bool);
+	void videoResized(int, int);
 
-	void setVideoEqualizer( int, int, int, int );
+	void setVideoEqualizer(int, int, int, int);
 
 	void speedUp();
 	void slowDown();
@@ -140,7 +140,7 @@ private slots:
 	void zoomOut();
 	void zoomReset();
 	void aRatio();
-	void volume( int );
+	void volume(int);
 	void toggleMute();
 	void slowDownVideo();
 	void speedUpVideo();
@@ -150,39 +150,39 @@ private slots:
 	void setSubtitlesSync();
 	void biggerSubs();
 	void smallerSubs();
-	void toggleAVS( bool );
-	void setHFlip( bool );
-	void setVFlip( bool );
+	void toggleAVS(bool);
+	void setHFlip(bool);
+	void setVFlip(bool);
 	void screenShot();
 	void nextFrame();
 
-	void aRatioUpdated( double aRatio );
+	void aRatioUpdated(double aRatio);
 
 	void demuxThrFinished();
 
 	void timTerminateFinished();
 
-	void load( Demuxer * );
+	void load(Demuxer *);
 signals:
-	void aRatioUpdate( double aRatio );
-	void chText( const QString & );
-	void updateLength( int );
-	void updatePos( int );
-	void playStateChanged( bool );
+	void aRatioUpdate(double aRatio);
+	void chText(const QString &);
+	void updateLength(int);
+	void updatePos(int);
+	void playStateChanged(bool);
 	void setCurrentPlaying();
-	void setInfo( const QString &, bool, bool );
-	void updateCurrentEntry( const QString &, int );
-	void playNext( bool playingError );
-	void message( const QString &, int ms );
+	void setInfo(const QString &, bool, bool);
+	void updateCurrentEntry(const QString &, int);
+	void playNext(bool playingError);
+	void message(const QString &, int ms);
 	void clearCurrentPlaying();
 	void clearInfo();
 	void quit();
 	void resetARatio();
-	void updateBitrate( int, int, double );
-	void updateBuffered( qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds );
-	void updateBufferedRange( int, int );
-	void updateWindowTitle( const QString &t = QString() );
-	void updateImage( const QImage &img = QImage() );
+	void updateBitrate(int, int, double);
+	void updateBuffered(qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds);
+	void updateBufferedRange(int, int);
+	void updateWindowTitle(const QString &t = QString());
+	void updateImage(const QImage &img = QImage());
 	void videoStarted();
 };
 

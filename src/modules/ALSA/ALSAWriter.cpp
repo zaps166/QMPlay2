@@ -8,23 +8,23 @@
 	#define HAVE_CHMAP
 #endif
 
-template< typename T > static void convert_samples( const float *src, const int samples, T *int_samples, unsigned channels )
+template< typename T > static void convert_samples(const float *src, const int samples, T *int_samples, unsigned channels)
 {
-	const unsigned min = 1 << ( ( sizeof( T ) << 3 ) - 1 );
+	const unsigned min = 1 << ((sizeof(T) << 3) - 1);
 	const unsigned max = min - 1;
-	for ( int i = 0; i < samples; ++i )
+	for (int i = 0; i < samples; ++i)
 	{
-		if ( src[ i ] >= 1.0f )
+		if (src[ i ] >= 1.0f)
 			int_samples[ i ] = max;
-		else if ( src[ i ] <= -1.0f )
+		else if (src[ i ] <= -1.0f)
 			int_samples[ i ] = min;
 		else
 			int_samples[ i ] = src[ i ] * max;
 	}
-	if ( channels == 6 || channels == 8 )
+	if (channels == 6 || channels == 8)
 	{
 		T tmp;
-		for ( int i = 0; i < samples; i += channels )
+		for (int i = 0; i < samples; i += channels)
 		{
 			tmp = int_samples[ i+2 ];
 			int_samples[ i+2 ] = int_samples[ i+4 ];
@@ -36,30 +36,30 @@ template< typename T > static void convert_samples( const float *src, const int 
 	}
 }
 
-static bool set_snd_pcm_hw_params( snd_pcm_t *snd, snd_pcm_hw_params_t *params, snd_pcm_format_t fmt, unsigned &channels, unsigned &sample_rate, unsigned &delay_us )
+static bool set_snd_pcm_hw_params(snd_pcm_t *snd, snd_pcm_hw_params_t *params, snd_pcm_format_t fmt, unsigned &channels, unsigned &sample_rate, unsigned &delay_us)
 {
-	const bool ok = !snd_pcm_hw_params_set_access( snd, params, SND_PCM_ACCESS_RW_INTERLEAVED ) && !snd_pcm_hw_params_set_format( snd, params, fmt ) && !snd_pcm_hw_params_set_channels_near( snd, params, &channels ) && !snd_pcm_hw_params_set_rate_near( snd, params, &sample_rate, NULL );
-	if ( ok )
+	const bool ok = !snd_pcm_hw_params_set_access(snd, params, SND_PCM_ACCESS_RW_INTERLEAVED) && !snd_pcm_hw_params_set_format(snd, params, fmt) && !snd_pcm_hw_params_set_channels_near(snd, params, &channels) && !snd_pcm_hw_params_set_rate_near(snd, params, &sample_rate, NULL);
+	if (ok)
 	{
 		unsigned period_us = delay_us >> 2;
-		return ( !snd_pcm_hw_params_set_buffer_time_near( snd, params, &delay_us, NULL ) && !snd_pcm_hw_params_set_period_time_near( snd, params, &period_us, NULL ) ) || ( !snd_pcm_hw_params_set_period_time_near( snd, params, &period_us, NULL ) && !snd_pcm_hw_params_set_buffer_time_near( snd, params, &delay_us, NULL ) );
+		return (!snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, NULL) && !snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, NULL)) || (!snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, NULL) && !snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, NULL));
 	}
 	return false;
 }
 
 /**/
 
-ALSAWriter::ALSAWriter( Module &module ) :
-	snd( NULL ),
-	delay( 0.0 ),
-	sample_rate( 0 ), channels( 0 ),
-	autoFindMultichannelDevice( false ), err( false )
+ALSAWriter::ALSAWriter(Module &module) :
+	snd(NULL),
+	delay(0.0),
+	sample_rate(0), channels(0),
+	autoFindMultichannelDevice(false), err(false)
 {
-	addParam( "delay" );
-	addParam( "rate" );
-	addParam( "chn" );
+	addParam("delay");
+	addParam("rate");
+	addParam("chn");
 
-	SetModule( module );
+	SetModule(module);
 }
 ALSAWriter::~ALSAWriter()
 {
@@ -68,14 +68,14 @@ ALSAWriter::~ALSAWriter()
 
 bool ALSAWriter::set()
 {
-	const double _delay = sets().getDouble( "Delay" );
-	const QString _devName = ALSACommon::getDeviceName( ALSACommon::getDevices(), sets().getString( "OutputDevice" ) );
-	const bool _autoFindMultichannelDevice = sets().getBool( "AutoFindMultichnDev" );
+	const double _delay = sets().getDouble("Delay");
+	const QString _devName = ALSACommon::getDeviceName(ALSACommon::getDevices(), sets().getString("OutputDevice"));
+	const bool _autoFindMultichannelDevice = sets().getBool("AutoFindMultichnDev");
 	const bool restartPlaying = _delay != delay || _devName != devName || _autoFindMultichannelDevice != autoFindMultichannelDevice;
 	delay = _delay;
 	devName = _devName;
 	autoFindMultichannelDevice = _autoFindMultichannelDevice;
-	return !restartPlaying && sets().getBool( "WriterEnabled" );
+	return !restartPlaying && sets().getBool("WriterEnabled");
 }
 
 bool ALSAWriter::readyWrite() const
@@ -83,59 +83,59 @@ bool ALSAWriter::readyWrite() const
 	return snd && !err;
 }
 
-bool ALSAWriter::processParams( bool *paramsCorrected )
+bool ALSAWriter::processParams(bool *paramsCorrected)
 {
-	const unsigned chn = getParam( "chn" ).toUInt();
-	const unsigned rate = getParam( "rate" ).toUInt();
+	const unsigned chn = getParam("chn").toUInt();
+	const unsigned rate = getParam("rate").toUInt();
 	const bool resetAudio = channels != chn || sample_rate != rate;
 	channels = chn;
 	sample_rate = rate;
-	if ( resetAudio || err )
+	if (resetAudio || err)
 	{
 		snd_pcm_hw_params_t *params;
-		snd_pcm_hw_params_alloca( &params );
+		snd_pcm_hw_params_alloca(&params);
 
 		close();
 
 		QString chosenDevName = devName;
-		if ( autoFindMultichannelDevice && channels > 2 )
+		if (autoFindMultichannelDevice && channels > 2)
 		{
 			bool mustAutoFind = true, forceStereo = false;
-			if ( !snd_pcm_open( &snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 ) )
+			if (!snd_pcm_open(&snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0))
 			{
-				if ( snd_pcm_type( snd ) == SND_PCM_TYPE_HW )
+				if (snd_pcm_type(snd) == SND_PCM_TYPE_HW)
 				{
 					unsigned max_chn = 0;
-					snd_pcm_hw_params_any( snd, params );
-					mustAutoFind = snd_pcm_hw_params_get_channels_max( params, &max_chn ) || max_chn < channels;
+					snd_pcm_hw_params_any(snd, params);
+					mustAutoFind = snd_pcm_hw_params_get_channels_max(params, &max_chn) || max_chn < channels;
 				}
 #ifdef HAVE_CHMAP
-				else if ( paramsCorrected )
+				else if (paramsCorrected)
 				{
-					snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps( snd );
-					if ( chmaps )
-						snd_pcm_free_chmaps( chmaps );
+					snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps(snd);
+					if (chmaps)
+						snd_pcm_free_chmaps(chmaps);
 					else
 						forceStereo = true;
 				}
 #endif
-				snd_pcm_close( snd );
+				snd_pcm_close(snd);
 				snd = NULL;
 			}
-			if ( mustAutoFind )
+			if (mustAutoFind)
 			{
 				QString newDevName;
-				if ( channels <= 4 )
+				if (channels <= 4)
 					newDevName = "surround40";
-				else if ( channels <= 6 )
+				else if (channels <= 6)
 					newDevName = "surround51";
 				else
 					newDevName = "surround71";
-				if ( !newDevName.isEmpty() && newDevName != chosenDevName )
+				if (!newDevName.isEmpty() && newDevName != chosenDevName)
 				{
-					if ( ALSACommon::getDevices().first.contains( newDevName ) )
+					if (ALSACommon::getDevices().first.contains(newDevName))
 						chosenDevName = newDevName;
-					else if ( forceStereo )
+					else if (forceStereo)
 					{
 						channels = 2;
 						*paramsCorrected = true;
@@ -143,93 +143,93 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 				}
 			}
 		}
-		if ( !chosenDevName.isEmpty() )
+		if (!chosenDevName.isEmpty())
 		{
-			bool sndOpen = !snd_pcm_open( &snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 );
-			if ( devName != chosenDevName )
+			bool sndOpen = !snd_pcm_open(&snd, chosenDevName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0);
+			if (devName != chosenDevName)
 			{
-				if ( sndOpen )
-					QMPlay2Core.logInfo( "ALSA :: " + devName + "\" -> \"" + chosenDevName + "\"" );
+				if (sndOpen)
+					QMPlay2Core.logInfo("ALSA :: " + devName + "\" -> \"" + chosenDevName + "\"");
 				else
 				{
-					sndOpen = !snd_pcm_open( &snd, devName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0 );
-					QMPlay2Core.logInfo( "ALSA :: " + tr( "Nie można otworzyć" ) + " \"" + chosenDevName + "\", " + tr( "powrót do" ) + " \"" + devName + "\"" );
+					sndOpen = !snd_pcm_open(&snd, devName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0);
+					QMPlay2Core.logInfo("ALSA :: " + tr("Nie można otworzyć") + " \"" + chosenDevName + "\", " + tr("powrót do") + " \"" + devName + "\"");
 				}
 			}
-			if ( sndOpen )
+			if (sndOpen)
 			{
-				snd_pcm_hw_params_any( snd, params );
+				snd_pcm_hw_params_any(snd, params);
 
 				snd_pcm_format_t fmt = SND_PCM_FORMAT_UNKNOWN;
-				if ( !snd_pcm_hw_params_test_format( snd, params, SND_PCM_FORMAT_S32 ) )
+				if (!snd_pcm_hw_params_test_format(snd, params, SND_PCM_FORMAT_S32))
 				{
 					fmt = SND_PCM_FORMAT_S32;
 					sample_size = 4;
 				}
-				else if ( !snd_pcm_hw_params_test_format( snd, params, SND_PCM_FORMAT_S16 ) )
+				else if (!snd_pcm_hw_params_test_format(snd, params, SND_PCM_FORMAT_S16))
 				{
 					fmt = SND_PCM_FORMAT_S16;
 					sample_size = 2;
 				}
-				else if ( !snd_pcm_hw_params_test_format( snd, params, SND_PCM_FORMAT_S8 ) )
+				else if (!snd_pcm_hw_params_test_format(snd, params, SND_PCM_FORMAT_S8))
 				{
 					fmt = SND_PCM_FORMAT_S8;
 					sample_size = 1;
 				}
 
-				unsigned delay_us = round( delay * 1000000.0 );
-				if ( fmt != SND_PCM_FORMAT_UNKNOWN && set_snd_pcm_hw_params( snd, params, fmt, channels, sample_rate, delay_us ) )
+				unsigned delay_us = round(delay * 1000000.0);
+				if (fmt != SND_PCM_FORMAT_UNKNOWN && set_snd_pcm_hw_params(snd, params, fmt, channels, sample_rate, delay_us))
 				{
 					bool err2 = false;
-					if ( channels != chn || sample_rate != rate )
+					if (channels != chn || sample_rate != rate)
 					{
-						if ( paramsCorrected )
+						if (paramsCorrected)
 							*paramsCorrected = true;
 						else
 							err2 = true;
 					}
-					if ( !err2 )
+					if (!err2)
 					{
-						err2 = snd_pcm_hw_params( snd, params );
-						if ( err2 && paramsCorrected ) //jakiś błąd, próba zmiany sample_rate
+						err2 = snd_pcm_hw_params(snd, params);
+						if (err2 && paramsCorrected) //jakiś błąd, próba zmiany sample_rate
 						{
-							snd_pcm_hw_params_any( snd, params );
-							err2 = snd_pcm_hw_params_set_rate_resample( snd, params, false ) || !set_snd_pcm_hw_params( snd, params, fmt, channels, sample_rate, delay_us ) || snd_pcm_hw_params( snd, params );
-							if ( !err2 )
+							snd_pcm_hw_params_any(snd, params);
+							err2 = snd_pcm_hw_params_set_rate_resample(snd, params, false) || !set_snd_pcm_hw_params(snd, params, fmt, channels, sample_rate, delay_us) || snd_pcm_hw_params(snd, params);
+							if (!err2)
 								*paramsCorrected = true;
 						}
-						if ( !err2 )
+						if (!err2)
 						{
-							modParam( "delay", delay_us / 1000000.0 );
-							if ( paramsCorrected && *paramsCorrected )
+							modParam("delay", delay_us / 1000000.0);
+							if (paramsCorrected && *paramsCorrected)
 							{
-								modParam( "chn", channels );
-								modParam( "rate", sample_rate );
+								modParam("chn", channels);
+								modParam("rate", sample_rate);
 							}
 
-							canPause = snd_pcm_hw_params_can_pause( params ) && snd_pcm_hw_params_can_resume( params );
+							canPause = snd_pcm_hw_params_can_pause(params) && snd_pcm_hw_params_can_resume(params);
 
 							mustSwapChn = channels == 6 || channels == 8;
 #ifdef HAVE_CHMAP
-							if ( mustSwapChn )
+							if (mustSwapChn)
 							{
-								snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps( snd );
-								if ( chmaps )
+								snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps(snd);
+								if (chmaps)
 								{
-									for ( int i = 0; chmaps[ i ]; ++i )
+									for (int i = 0; chmaps[ i ]; ++i)
 									{
-										if ( chmaps[ i ]->map.channels >= channels )
+										if (chmaps[ i ]->map.channels >= channels)
 										{
-											for ( uint j = 0; j < channels; ++j )
+											for (uint j = 0; j < channels; ++j)
 											{
 												mustSwapChn &= chmaps[ i ]->map.pos[ j ] == j + SND_CHMAP_FL;
-												if ( !mustSwapChn )
+												if (!mustSwapChn)
 													break;
 											}
 											break;
 										}
 									}
-									snd_pcm_free_chmaps( chmaps );
+									snd_pcm_free_chmaps(chmaps);
 								}
 							}
 #endif
@@ -240,57 +240,57 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 			}
 		}
 		err = true;
-		QMPlay2Core.logError( "ALSA :: " + tr( "Nie można otworzyć strumienia wyjścia dźwięku" ) );
+		QMPlay2Core.logError("ALSA :: " + tr("Nie można otworzyć strumienia wyjścia dźwięku"));
 	}
 
 	return readyWrite();
 }
-qint64 ALSAWriter::write( const QByteArray &arr )
+qint64 ALSAWriter::write(const QByteArray &arr)
 {
-	if ( !readyWrite() )
+	if (!readyWrite())
 		return 0;
 
-	const int samples = arr.size() / sizeof( float );
+	const int samples = arr.size() / sizeof(float);
 	const int to_write = samples / channels;
 
 	const int bytes = samples * sample_size;
-	if ( int_samples.size() < bytes )
-		int_samples.resize( bytes );
-	switch ( sample_size )
+	if (int_samples.size() < bytes)
+		int_samples.resize(bytes);
+	switch (sample_size)
 	{
 		case 4:
-			convert_samples( ( const float * )arr.constData(), samples, ( qint32 * )int_samples.constData(), mustSwapChn ? channels : 0 );
+			convert_samples((const float *)arr.constData(), samples, (qint32 *)int_samples.constData(), mustSwapChn ? channels : 0);
 			break;
 		case 2:
-			convert_samples( ( const float * )arr.constData(), samples, ( qint16 * )int_samples.constData(), mustSwapChn ? channels : 0 );
+			convert_samples((const float *)arr.constData(), samples, (qint16 *)int_samples.constData(), mustSwapChn ? channels : 0);
 			break;
 		case 1:
-			convert_samples( ( const float * )arr.constData(), samples, ( qint8 * )int_samples.constData(), mustSwapChn ? channels : 0 );
+			convert_samples((const float *)arr.constData(), samples, (qint8 *)int_samples.constData(), mustSwapChn ? channels : 0);
 			break;
 	}
-	switch ( snd_pcm_state( snd ) )
+	switch (snd_pcm_state(snd))
 	{
 		case SND_PCM_STATE_XRUN:
-			if ( !snd_pcm_prepare( snd ) )
+			if (!snd_pcm_prepare(snd))
 			{
-				const int silence = snd_pcm_avail( snd ) - to_write;
-				if ( silence > 0 )
+				const int silence = snd_pcm_avail(snd) - to_write;
+				if (silence > 0)
 				{
-					QByteArray silenceArr( silence * channels * sample_size, 0 );
-					snd_pcm_writei( snd, silenceArr.constData(), silence );
+					QByteArray silenceArr(silence * channels * sample_size, 0);
+					snd_pcm_writei(snd, silenceArr.constData(), silence);
 				}
 			}
 			break;
 		case SND_PCM_STATE_PAUSED:
-			snd_pcm_pause( snd, false );
+			snd_pcm_pause(snd, false);
 			break;
 		default:
 			break;
 	}
-	int ret = snd_pcm_writei( snd, int_samples.constData(), to_write );
-	if ( ret < 0 && ret != -EPIPE && snd_pcm_recover( snd, ret, false ) )
+	int ret = snd_pcm_writei(snd, int_samples.constData(), to_write);
+	if (ret < 0 && ret != -EPIPE && snd_pcm_recover(snd, ret, false))
 	{
-		QMPlay2Core.logError( "ALSA :: " + tr( "Błąd podczas odtwarzania" ) );
+		QMPlay2Core.logError("ALSA :: " + tr("Błąd podczas odtwarzania"));
 		err = true;
 		return 0;
 	}
@@ -299,8 +299,8 @@ qint64 ALSAWriter::write( const QByteArray &arr )
 }
 void ALSAWriter::pause()
 {
-	if ( canPause )
-		snd_pcm_pause( snd, true );
+	if (canPause)
+		snd_pcm_pause(snd, true);
 }
 
 qint64 ALSAWriter::size() const
@@ -321,10 +321,10 @@ bool ALSAWriter::open()
 
 void ALSAWriter::close()
 {
-	if ( snd )
+	if (snd)
 	{
-		snd_pcm_drop( snd );
-		snd_pcm_close( snd );
+		snd_pcm_drop(snd);
+		snd_pcm_close(snd);
 		snd = NULL;
 	}
 	err = false;

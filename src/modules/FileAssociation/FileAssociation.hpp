@@ -6,8 +6,8 @@ class FileAssociation : public Module
 public:
 	FileAssociation();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
 
@@ -28,10 +28,10 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 	Q_OBJECT
 	friend class FileAssociation;
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 private:
 	void saveSettings();
-	void addExtension( const QString &, const bool, const bool isPlaylist = false );
+	void addExtension(const QString &, const bool, const bool isPlaylist = false);
 private slots:
 	void selectAll();
 	void checkSelected();

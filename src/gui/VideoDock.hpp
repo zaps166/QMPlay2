@@ -12,10 +12,10 @@ class VideoDock : public DockWidget
 public:
 	VideoDock();
 
-	void fullScreen( bool );
-	inline void setLoseHeight( int lh )
+	void fullScreen(bool);
+	inline void setLoseHeight(int lh)
 	{
-		iDW.setLoseHeight( lh );
+		iDW.setLoseHeight(lh);
 	}
 
 	inline void updateIDW()
@@ -25,22 +25,22 @@ public:
 private:
 	inline QWidget *internalWidget()
 	{
-		return ( widget() == &iDW ) ? iDW.widget() : widget();
+		return (widget() == &iDW) ? iDW.widget() : widget();
 	}
 
-	void dragEnterEvent( QDragEnterEvent * );
-	void dropEvent( QDropEvent * );
-	void mouseMoveEvent( QMouseEvent * );
+	void dragEnterEvent(QDragEnterEvent *);
+	void dropEvent(QDropEvent *);
+	void mouseMoveEvent(QMouseEvent *);
 #ifndef Q_OS_MAC
-	void mouseDoubleClickEvent( QMouseEvent * );
+	void mouseDoubleClickEvent(QMouseEvent *);
 #endif
-	void mousePressEvent( QMouseEvent * );
-	void mouseReleaseEvent( QMouseEvent * );
-	void moveEvent( QMoveEvent * );
-	void wheelEvent( QWheelEvent * );
-	void leaveEvent( QEvent * );
-	void enterEvent( QEvent * );
-	bool event( QEvent * );
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent *);
+	void moveEvent(QMoveEvent *);
+	void wheelEvent(QWheelEvent *);
+	void leaveEvent(QEvent *);
+	void enterEvent(QEvent *);
+	bool event(QEvent *);
 
 	QTimer hideCursorTim;
 	InDockW iDW;
@@ -50,12 +50,12 @@ private:
 	bool canPopup, is_floating, isBreeze;
 	double touchZoom;
 private slots:
-	void popup( const QPoint & );
+	void popup(const QPoint &);
 	void hideCursor();
-	void resizedIDW( int, int );
-	void updateImage( const QImage & );
-	void visibilityChanged( bool );
+	void resizedIDW(int, int);
+	void updateImage(const QImage &);
+	void visibilityChanged(bool);
 signals:
-	void resized( int, int );
-	void itemDropped( const QString &, bool );
+	void resized(int, int);
+	void itemDropped(const QString &, bool);
 };

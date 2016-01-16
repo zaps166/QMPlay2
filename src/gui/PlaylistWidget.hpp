@@ -20,9 +20,9 @@ class UpdateEntryThr : public QThread
 {
 	Q_OBJECT
 public:
-	UpdateEntryThr( PlaylistWidget &pLW );
+	UpdateEntryThr(PlaylistWidget &pLW);
 
-	void updateEntry( QTreeWidgetItem *item, const QString &name = QString(), int length = -2 );
+	void updateEntry(QTreeWidgetItem *item, const QString &name = QString(), int length = -2);
 
 	void stop();
 private:
@@ -54,27 +54,27 @@ private:
 		int length;
 	};
 private slots:
-	void updateItemSlot( const ItemUpdated &iu );
+	void updateItemSlot(const ItemUpdated &iu);
 	void finished();
 signals:
-	void updateItem( const ItemUpdated &iu );
+	void updateItem(const ItemUpdated &iu);
 };
 
 class AddThr : public QThread
 {
 	Q_OBJECT
 public:
-	AddThr( PlaylistWidget &pLW );
+	AddThr(PlaylistWidget &pLW);
 
-	void setData( const QStringList &, QTreeWidgetItem *, bool, bool sync = false );
-	void setData( const QString &, QTreeWidgetItem * );
+	void setData(const QStringList &, QTreeWidgetItem *, bool, bool sync = false);
+	void setData(const QString &, QTreeWidgetItem *);
 
 	void stop();
 private:
 	void run();
 
-	void add( const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false );
-	QTreeWidgetItem *insertPlaylistEntries( const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo );
+	void add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList = false);
+	QTreeWidgetItem *insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo);
 
 	PlaylistWidget &pLW;
 	QStringList urls;
@@ -97,37 +97,37 @@ public:
 
 	PlaylistWidget();
 
-	QString getUrl( QTreeWidgetItem *tWI = NULL ) const;
+	QString getUrl(QTreeWidgetItem *tWI = NULL) const;
 
-	void setItemsResizeToContents( bool );
+	void setItemsResizeToContents(bool);
 
-	bool add( const QStringList &, QTreeWidgetItem *par, bool loadList = false );
-	bool add( const QStringList &, bool atEndOfList = false );
-	void sync( const QString &, QTreeWidgetItem * );
+	bool add(const QStringList &, QTreeWidgetItem *par, bool loadList = false);
+	bool add(const QStringList &, bool atEndOfList = false);
+	void sync(const QString &, QTreeWidgetItem *);
 
-	void setCurrentPlaying( QTreeWidgetItem *tWI );
+	void setCurrentPlaying(QTreeWidgetItem *tWI);
 
 	void clear();
-	void clearCurrentPlaying( bool url = true );
+	void clearCurrentPlaying(bool url = true);
 
 	void stopLoading();
 
 	QList< QTreeWidgetItem * > topLevelNonGroupsItems() const;
 	QList< QUrl > getUrls() const;
 
-	QTreeWidgetItem *newGroup( const QString &name, const QString &url = QString(), QTreeWidgetItem *parent = NULL, bool insertChildAt0Idx = false );
+	QTreeWidgetItem *newGroup(const QString &name, const QString &url = QString(), QTreeWidgetItem *parent = NULL, bool insertChildAt0Idx = false);
 	QTreeWidgetItem *newGroup();
 
-	QTreeWidgetItem *newEntry( const Playlist::Entry &, QTreeWidgetItem *, const Functions::DemuxersInfo & );
+	QTreeWidgetItem *newEntry(const Playlist::Entry &, QTreeWidgetItem *, const Functions::DemuxersInfo &);
 
-	QList< QTreeWidgetItem * > getChildren( CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL ) const;
+	QList< QTreeWidgetItem * > getChildren(CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL) const;
 
-	bool canModify( bool all = true ) const;
+	bool canModify(bool all = true) const;
 
 	void enqueue();
-	void refresh( REFRESH Refresh = REFRESH_ALL );
+	void refresh(REFRESH Refresh = REFRESH_ALL);
 
-	void processItems( QList< QTreeWidgetItem * > *itemsToShow = NULL, bool hideGroups = false );
+	void processItems(QList< QTreeWidgetItem * > *itemsToShow = NULL, bool hideGroups = false);
 
 	QString currentPlayingUrl;
 	QTreeWidgetItem *currentPlaying;
@@ -140,21 +140,21 @@ public:
 
 	bool dontUpdateAfterAdd;
 
-	static inline bool isGroup( QTreeWidgetItem *tWI )
+	static inline bool isGroup(QTreeWidgetItem *tWI)
 	{
-		return tWI ? ( bool )( tWI->flags() & Qt::ItemIsDropEnabled ) : false;
+		return tWI ? (bool)(tWI->flags() & Qt::ItemIsDropEnabled) : false;
 	}
 private:
-	void setEntryIcon( const QImage &, QTreeWidgetItem * );
+	void setEntryIcon(const QImage &, QTreeWidgetItem *);
 
-	void mouseMoveEvent( QMouseEvent * );
-	void dragEnterEvent( QDragEnterEvent * );
-	void dragMoveEvent( QDragMoveEvent * );
-	void dropEvent( QDropEvent * );
-	void paintEvent( QPaintEvent * );
-	void scrollContentsBy( int dx, int dy );
+	void mouseMoveEvent(QMouseEvent *);
+	void dragEnterEvent(QDragEnterEvent *);
+	void dragMoveEvent(QDragMoveEvent *);
+	void dropEvent(QDropEvent *);
+	void paintEvent(QPaintEvent *);
+	void scrollContentsBy(int dx, int dy);
 
-	QRect getArcRect( int size );
+	QRect getArcRect(int size);
 
 	bool internalDrag, selectAfterAdd, hasHiddenItems;
 	QString currPthToSave;
@@ -169,18 +169,18 @@ private:
 	bool repaintAll;
 	int rotation;
 private slots:
-	void insertItemSlot( QTreeWidgetItem *, QTreeWidgetItem *, bool );
-	void popupContextMenu( const QPoint & );
-	void setItemIconSlot( QTreeWidgetItem *, const QImage & );
+	void insertItemSlot(QTreeWidgetItem *, QTreeWidgetItem *, bool);
+	void popupContextMenu(const QPoint &);
+	void setItemIconSlot(QTreeWidgetItem *, const QImage &);
 	void animationUpdate();
 	void addTimerElapsed();
 public slots:
 	void modifyMenu();
 signals:
-	void returnItem( QTreeWidgetItem * );
-	void setItemIcon( QTreeWidgetItem *, const QImage & );
-	void visibleItemsCount( int );
-	void insertItem( QTreeWidgetItem *, QTreeWidgetItem *, bool );
+	void returnItem(QTreeWidgetItem *);
+	void setItemIcon(QTreeWidgetItem *, const QImage &);
+	void visibleItemsCount(int);
+	void insertItem(QTreeWidgetItem *, QTreeWidgetItem *, bool);
 };
 
 #endif

@@ -10,21 +10,21 @@ class PacketBuffer : private QList< Packet >
 {
 	static int backwardPackets;
 public:
-	static void setBackwardPackets( int backwardPackets )
+	static void setBackwardPackets(int backwardPackets)
 	{
 		PacketBuffer::backwardPackets = backwardPackets;
 	}
 
 	inline PacketBuffer() :
-		remaining_duration( 0.0 ), backward_duration( 0.0 ),
-		remaining_bytes( 0 ), backward_bytes( 0 ),
-		pos( 0 )
+		remaining_duration(0.0), backward_duration(0.0),
+		remaining_bytes(0), backward_bytes(0),
+		pos(0)
 	{}
 
-	bool seekTo( double seek_pos, bool backwards );
+	bool seekTo(double seek_pos, bool backwards);
 	void clear(); //Thread-safe
 
-	void put( const Packet &packet ); //Thread-safe
+	void put(const Packet &packet); //Thread-safe
 	Packet fetch();
 
 	inline bool isEmpty() const
@@ -51,7 +51,7 @@ public:
 	}
 	inline double lastPacketTime() const
 	{
-		return ( --end() )->ts;
+		return (--end())->ts;
 	}
 
 	inline double remainingDuration() const

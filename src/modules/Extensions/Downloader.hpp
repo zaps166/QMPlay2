@@ -15,14 +15,14 @@ class DownloadItemW : public QWidget
 {
 	Q_OBJECT
 public:
-	DownloadItemW( DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = NULL );
+	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = NULL);
 	~DownloadItemW();
 
-	void setName( const QString & );
-	void setSizeAndFilePath( qint64, const QString & );
-	void setPos( int );
-	void setSpeed( int );
-	void finish( bool f = true );
+	void setName(const QString &);
+	void setSizeAndFilePath(qint64, const QString &);
+	void setPos(int);
+	void setSpeed(int);
+	void finish(bool f = true);
 	void error();
 
 	inline QString getFilePath() const
@@ -37,10 +37,10 @@ public:
 
 	inline void ssBEnable()
 	{
-		ssB->setEnabled( true );
+		ssB->setEnabled(true);
 	}
 
-	void write( QDataStream & );
+	void write(QDataStream &);
 
 	bool dontDeleteDownloadThr;
 signals:
@@ -49,7 +49,7 @@ signals:
 private slots:
 	void toggleStartStop();
 private:
-	void downloadStop( bool );
+	void downloadStop(bool);
 
 	DownloaderThread *downloaderThr;
 
@@ -88,17 +88,17 @@ class DownloaderThread : public QThread
 	Q_OBJECT
 	enum { ADD_ENTRY, NAME, SET, SET_POS, SET_SPEED, DOWNLOAD_ERROR, FINISH };
 public:
-	DownloaderThread( QDataStream *, const QString &, DownloadListW *, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString() );
+	DownloaderThread(QDataStream *, const QString &, DownloadListW *, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString());
 	~DownloaderThread();
 
-	void write( QDataStream &stream )
+	void write(QDataStream &stream)
 	{
 		stream << url << prefix << param;
 	}
 signals:
-	void listSig( int, qint64 val = 0, const QString &filePath = QString() );
+	void listSig(int, qint64 val = 0, const QString &filePath = QString());
 private slots:
-	void listSlot( int, qint64, const QString & );
+	void listSlot(int, qint64, const QString &);
 	void stop();
 	void finished();
 private:
@@ -127,7 +127,7 @@ private slots:
 	void clearFinished();
 	void addUrl();
 	void download();
-	void itemDoubleClicked( QTreeWidgetItem * );
+	void itemDoubleClicked(QTreeWidgetItem *);
 private:
 	DockWidget *dw;
 
@@ -141,9 +141,9 @@ private:
 class Downloader : public QMPlay2Extensions
 {
 public:
-	inline Downloader( Module &module )
+	inline Downloader(Module &module)
 	{
-		SetModule( module );
+		SetModule(module);
 	}
 	~Downloader();
 
@@ -151,7 +151,7 @@ public:
 
 	DockWidget *getDockWidget();
 
-	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
+	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);
 
 	/**/
 

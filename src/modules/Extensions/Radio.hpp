@@ -13,22 +13,22 @@ class Radio : public QWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
 public:
-	Radio( Module & );
+	Radio(Module &);
 	~Radio();
 
 	DockWidget *getDockWidget();
 private slots:
-	void visibilityChanged( bool );
-	void popup( const QPoint & );
+	void visibilityChanged(bool);
+	void popup(const QPoint &);
 	void removeStation();
 
 	void openLink();
 
-	void downloadProgress( qint64, qint64 );
+	void downloadProgress(qint64, qint64);
 	void finished();
 private:
-	void addGroup( const QString & );
-	void addStation( const QString &nazwa, const QString &URL, const QString &groupName, const QByteArray &img = QByteArray() );
+	void addGroup(const QString &);
+	void addStation(const QString &nazwa, const QString &URL, const QString &groupName, const QByteArray &img = QByteArray());
 
 	DockWidget *dw;
 

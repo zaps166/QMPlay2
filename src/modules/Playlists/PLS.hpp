@@ -3,11 +3,11 @@
 class PLS : public Playlist
 {
 	Entries _read();
-	bool _write( const Entries & );
+	bool _write(const Entries &);
 
 	~PLS() {}
 
-	void prepareList( Entries *, int );
+	void prepareList(Entries *, int);
 };
 
 #define PLSName "PLS"

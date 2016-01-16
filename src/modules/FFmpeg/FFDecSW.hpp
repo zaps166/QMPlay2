@@ -8,7 +8,7 @@ struct SwsContext;
 class FFDecSW : public FFDec
 {
 public:
-	FFDecSW( QMutex &, Module & );
+	FFDecSW(QMutex &, Module &);
 private:
 	~FFDecSW();
 
@@ -16,14 +16,14 @@ private:
 
 	QString name() const;
 
-	int  decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned hurry_up );
-	bool decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h );
+	int  decode(Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned hurry_up);
+	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
 
-	bool open( StreamInfo *, Writer * );
+	bool open(StreamInfo *, Writer *);
 
 	/**/
 
-	bool getFromBitmapSubsBuffer( QMPlay2_OSD *&, double pts );
+	bool getFromBitmapSubsBuffer(QMPlay2_OSD *&, double pts);
 
 	int threads, lowres;
 	bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;

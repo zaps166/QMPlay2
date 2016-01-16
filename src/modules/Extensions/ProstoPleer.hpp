@@ -19,9 +19,9 @@ private slots:
 	void openPage();
 	void copyPageURL();
 
-	void playEntry( QTreeWidgetItem *tWI );
+	void playEntry(QTreeWidgetItem *tWI);
 
-	void contextMenu( const QPoint &p );
+	void contextMenu(const QPoint &p);
 };
 
 /**/
@@ -40,10 +40,10 @@ public:
 private slots:
 	void next();
 
-	void searchTextEdited( const QString &text );
+	void searchTextEdited(const QString &text);
 	void search();
 
-	void netFinished( QNetworkReply *reply );
+	void netFinished(QNetworkReply *reply);
 
 	void searchMenu();
 private:
@@ -67,16 +67,16 @@ private:
 class ProstoPleer : public QMPlay2Extensions
 {
 public:
-	ProstoPleer( Module &module );
+	ProstoPleer(Module &module);
 
 	bool set();
 
 	DockWidget *getDockWidget();
 
-	QList< AddressPrefix > addressPrefixList( bool );
-	void convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl );
+	QList< AddressPrefix > addressPrefixList(bool);
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl);
 
-	QAction *getAction( const QString &, int, const QString &, const QString &, const QString & );
+	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);
 private:
 	ProstoPleerW w;
 };

@@ -17,9 +17,9 @@ public:
 	void restoreValues();
 	void saveValues();
 signals:
-	void valuesChanged( int b, int s, int c, int h );
+	void valuesChanged(int b, int s, int c, int h);
 private slots:
-	void setValue( int );
+	void setValue(int);
 	void reset();
 private:
 	QGridLayout *layout;

@@ -2,9 +2,9 @@
 
 class ToneGenerator : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS( ToneGenerator )
+	Q_DECLARE_TR_FUNCTIONS(ToneGenerator)
 public:
-	ToneGenerator( Module & );
+	ToneGenerator(Module &);
 
 	bool set();
 private:
@@ -17,11 +17,11 @@ private:
 
 	bool dontUseBuffer() const;
 
-	bool seek( int );
-	bool read( Packet &, int & );
+	bool seek(int);
+	bool read(Packet &, int &);
 	void abort();
 
-	bool open( const QString & );
+	bool open(const QString &);
 
 	/**/
 

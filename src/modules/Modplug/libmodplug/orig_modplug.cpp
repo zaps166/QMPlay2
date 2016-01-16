@@ -137,8 +137,8 @@ unsigned int ModPlug_GetMasterVolume(ModPlugFile* file)
 
 void ModPlug_SetMasterVolume(ModPlugFile* file,unsigned int cvol)
 {
-	(void)file->mSoundFile.SetMasterVolume( (UINT)cvol,
-						FALSE );
+	(void)file->mSoundFile.SetMasterVolume((UINT)cvol,
+						FALSE);
 	return ;
 }
 
@@ -169,7 +169,7 @@ int ModPlug_GetCurrentRow(ModPlugFile* file)
 
 int ModPlug_GetPlayingChannels(ModPlugFile* file)
 {
-	return ( file->mSoundFile.m_nMixChannels < file->mSoundFile.m_nMaxMixChannels ? file->mSoundFile.m_nMixChannels : file->mSoundFile.m_nMaxMixChannels );
+	return (file->mSoundFile.m_nMixChannels < file->mSoundFile.m_nMaxMixChannels ? file->mSoundFile.m_nMixChannels : file->mSoundFile.m_nMaxMixChannels);
 }
 
 void ModPlug_SeekOrder(ModPlugFile* file,int order)
@@ -240,7 +240,7 @@ unsigned int ModPlug_InstrumentName(ModPlugFile* file,unsigned int qual,char* bu
 }
 
 ModPlugNote* ModPlug_GetPattern(ModPlugFile* file,int pattern,unsigned int* numrows) {
-	if ( pattern<MAX_PATTERNS && pattern >= 0) {
+	if (pattern<MAX_PATTERNS && pattern >= 0) {
 		if (file->mSoundFile.Patterns[pattern]) {
 			if (numrows) *numrows=(unsigned int)file->mSoundFile.PatternSize[pattern];
 			return (ModPlugNote*)file->mSoundFile.Patterns[pattern];

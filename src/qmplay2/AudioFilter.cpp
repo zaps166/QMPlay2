@@ -6,13 +6,13 @@
 QVector< AudioFilter * > AudioFilter::open()
 {
 	QVector< AudioFilter * > filterList;
-	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
-		foreach ( const Module::Info &mod, module->getModulesInfo() )
-			if ( mod.type == Module::AUDIOFILTER )
+	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, module->getModulesInfo())
+			if (mod.type == Module::AUDIOFILTER)
 			{
-				AudioFilter *filter = ( AudioFilter * )module->createInstance( mod.name );
-				if ( filter )
-					filterList.append( filter );
+				AudioFilter *filter = (AudioFilter *)module->createInstance(mod.name);
+				if (filter)
+					filterList.append(filter);
 			}
 	filterList.squeeze();
 	return filterList;

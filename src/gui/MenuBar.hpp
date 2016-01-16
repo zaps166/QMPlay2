@@ -14,39 +14,39 @@ public:
 
 	class Window : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Window )
+		Q_DECLARE_TR_FUNCTIONS(Window)
 	public:
-		Window( MenuBar *parent );
+		Window(MenuBar *parent);
 		QAction *toggleVisibility, *toggleFullScreen, *toggleCompactView, *close;
 	};
 
 	class Widgets : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Widgets )
+		Q_DECLARE_TR_FUNCTIONS(Widgets)
 		friend class MenuBar;
 	public:
-		Widgets( MenuBar *parent );
+		Widgets(MenuBar *parent);
 	private:
 		void menuShow();
 	};
 
 	class Playlist : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Playlist )
+		Q_DECLARE_TR_FUNCTIONS(Playlist)
 	public:
-		Playlist( MenuBar *parent );
+		Playlist(MenuBar *parent);
 		class Add : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( Add )
+			Q_DECLARE_TR_FUNCTIONS(Add)
 		public:
-			Add( QMenu *parent );
+			Add(QMenu *parent);
 			QAction *address, *file, *dir;
 		};
 		class Sort : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( Sort )
+			Q_DECLARE_TR_FUNCTIONS(Sort)
 		public:
-			Sort( QMenu *parent );
+			Sort(QMenu *parent);
 			QAction *timeSort1, *timeSort2, *titleSort1, *titleSort2;
 		};
 		Add *add;
@@ -57,26 +57,26 @@ public:
 
 	class Player : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Player )
+		Q_DECLARE_TR_FUNCTIONS(Player)
 	public:
-		Player( MenuBar *parent );
+		Player(MenuBar *parent);
 		class Repeat : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( Repeat )
+			Q_DECLARE_TR_FUNCTIONS(Repeat)
 		public:
-			Repeat( QMenu *parent );
+			Repeat(QMenu *parent);
 			QActionGroup *choice;
 			QAction *normal, *repeatEntry, *repeatGroup, *repeatList, *random, *randomGroup;
 		};
 		class AspectRatio : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( AspectRatio )
+			Q_DECLARE_TR_FUNCTIONS(AspectRatio)
 		public:
-			AspectRatio( QMenu *parent );
+			AspectRatio(QMenu *parent);
 			QActionGroup *choice;
 			QAction *_auto, *_1x1, *_4x3, *_5x4, *_16x9, *_3x2, *_21x9, *sizeDep, *off;
 		};
-		void seekActionsEnable( bool );
+		void seekActionsEnable(bool);
 		Repeat *repeat;
 		AspectRatio *aRatio;
 		QAction *togglePlay, *stop, *next, *prev, *nextFrame, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute;
@@ -84,23 +84,23 @@ public:
 
 	class Playback : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Playback )
+		Q_DECLARE_TR_FUNCTIONS(Playback)
 	public:
-		Playback( MenuBar *parent );
+		Playback(MenuBar *parent);
 
 		class VideoFilters : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( VideoFilters )
+			Q_DECLARE_TR_FUNCTIONS(VideoFilters)
 		public:
-			VideoFilters( QMenu *parent );
+			VideoFilters(QMenu *parent);
 			VideoEqualizer *videoEqualizer;
 			QAction *more, *hFlip, *vFlip;
 		};
 		class AudioChannels : public QMenu
 		{
-			Q_DECLARE_TR_FUNCTIONS( AudioChannels )
+			Q_DECLARE_TR_FUNCTIONS(AudioChannels)
 		public:
-			AudioChannels( QMenu *parent );
+			AudioChannels(QMenu *parent);
 			QAction *_auto, *_1, *_2, *_4, *_6, *_8, *other;
 			QActionGroup *choice;
 		};
@@ -111,17 +111,17 @@ public:
 
 	class Options : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Options )
+		Q_DECLARE_TR_FUNCTIONS(Options)
 	public:
-		Options( MenuBar *parent );
+		Options(MenuBar *parent);
 		QAction *settings, *modulesSettings, *trayVisible;
 	};
 
 	class Help : public QMenu
 	{
-		Q_DECLARE_TR_FUNCTIONS( Help )
+		Q_DECLARE_TR_FUNCTIONS(Help)
 	public:
-		Help( MenuBar *parent );
+		Help(MenuBar *parent);
 		QAction *about,
 #ifdef UPDATER
 		*updates,

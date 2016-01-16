@@ -6,22 +6,22 @@ struct FFTComplex;
 class Equalizer : public AudioFilter
 {
 public:
-	static QVector< float > interpolate( const QVector< float > &, const int );
-	static QVector< float > freqs( Settings & );
+	static QVector< float > interpolate(const QVector< float > &, const int);
+	static QVector< float > freqs(Settings &);
 
-	Equalizer( Module & );
+	Equalizer(Module &);
 	~Equalizer();
 
 	bool set();
 private:
-	bool setAudioParameters( uchar, uint );
+	bool setAudioParameters(uchar, uint);
 	int bufferedSamples() const;
 	void clearBuffers();
-	double filter( QByteArray &data, bool flush );
+	double filter(QByteArray &data, bool flush);
 
 	/**/
 
-	void alloc( bool );
+	void alloc(bool);
 	void interpolateFilterCurve();
 
 	int FFT_NBITS, FFT_SIZE, FFT_SIZE_2;

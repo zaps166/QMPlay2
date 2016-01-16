@@ -5,8 +5,8 @@ class Extensions : public Module
 public:
 	Extensions();
 private:
-	QList< Info > getModulesInfo( const bool ) const;
-	void *createInstance( const QString & );
+	QList< Info > getModulesInfo(const bool) const;
+	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
 
@@ -25,11 +25,11 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 {
 	Q_OBJECT
 public:
-	ModuleSettingsWidget( Module & );
+	ModuleSettingsWidget(Module &);
 private slots:
-	void enableItagLists( bool b );
+	void enableItagLists(bool b);
 	void browseYoutubedl();
-	void loginPasswordEnable( bool checked );
+	void loginPasswordEnable(bool checked);
 	void passwordEdited();
 private:
 	void saveSettings();

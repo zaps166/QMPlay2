@@ -17,158 +17,158 @@
 #include <QClipboard>
 #include <QMimeData>
 
-static QString ProstoPleerURL( "http://pleer.com" );
+static QString ProstoPleerURL("http://pleer.com");
 
-static inline QString getQMPlay2Url( const QTreeWidgetItem *tWI )
+static inline QString getQMPlay2Url(const QTreeWidgetItem *tWI)
 {
-	return ProstoPleerName"://{" + ProstoPleerURL + "/en/tracks/" + tWI->data( 0, Qt::UserRole ).toString() + "}";
+	return ProstoPleerName"://{" + ProstoPleerURL + "/en/tracks/" + tWI->data(0, Qt::UserRole).toString() + "}";
 }
-static inline QString getPageUrl( const QTreeWidgetItem *tWI )
+static inline QString getPageUrl(const QTreeWidgetItem *tWI)
 {
-	return ProstoPleerURL + "/en/tracks/" + tWI->data( 0, Qt::UserRole ).toString();
+	return ProstoPleerURL + "/en/tracks/" + tWI->data(0, Qt::UserRole).toString();
 }
 
 /**/
 
 ResultsPleer::ResultsPleer()
 {
-	setEditTriggers( QAbstractItemView::NoEditTriggers );
-	setIconSize( QSize( 22, 22 ) );
-	setSortingEnabled( true );
-	setIndentation( 0 );
+	setEditTriggers(QAbstractItemView::NoEditTriggers);
+	setIconSize(QSize(22, 22));
+	setSortingEnabled(true);
+	setIndentation(0);
 
-	headerItem()->setText( 0, tr( "Tytuł" ) );
-	headerItem()->setText( 1, tr( "Wykonawca" ) );
-	headerItem()->setText( 2, tr( "Długość" ) );
-	headerItem()->setText( 3, tr( "Bitrate" ) );
+	headerItem()->setText(0, tr("Tytuł"));
+	headerItem()->setText(1, tr("Wykonawca"));
+	headerItem()->setText(2, tr("Długość"));
+	headerItem()->setText(3, tr("Bitrate"));
 
-	header()->setStretchLastSection( false );
+	header()->setStretchLastSection(false);
 #if QT_VERSION < 0x050000
-	header()->setResizeMode( 0, QHeaderView::Stretch );
-	header()->setResizeMode( 2, QHeaderView::ResizeToContents );
-	header()->setResizeMode( 3, QHeaderView::ResizeToContents );
+	header()->setResizeMode(0, QHeaderView::Stretch);
+	header()->setResizeMode(2, QHeaderView::ResizeToContents);
+	header()->setResizeMode(3, QHeaderView::ResizeToContents);
 #else
-	header()->setSectionResizeMode( 0, QHeaderView::Stretch );
-	header()->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
-	header()->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
+	header()->setSectionResizeMode(0, QHeaderView::Stretch);
+	header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+	header()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
 #endif
 
-	connect( this, SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ), this, SLOT( playEntry( QTreeWidgetItem * ) ) );
-	connect( this, SIGNAL( customContextMenuRequested( const QPoint & ) ), this, SLOT( contextMenu( const QPoint & ) ) );
-	setContextMenuPolicy( Qt::CustomContextMenu );
+	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(playEntry(QTreeWidgetItem *)));
+	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
+	setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 void ResultsPleer::enqueue()
 {
 	QTreeWidgetItem *tWI = currentItem();
-	if ( tWI )
-		emit QMPlay2Core.processParam( "enqueue", getQMPlay2Url( tWI ) );
+	if (tWI)
+		emit QMPlay2Core.processParam("enqueue", getQMPlay2Url(tWI));
 }
 void ResultsPleer::playCurrentEntry()
 {
-	playEntry( currentItem() );
+	playEntry(currentItem());
 }
 void ResultsPleer::openPage()
 {
 	QTreeWidgetItem *tWI = currentItem();
-	if ( tWI )
-		QMPlay2Core.run( getPageUrl( tWI ) );
+	if (tWI)
+		QMPlay2Core.run(getPageUrl(tWI));
 }
 void ResultsPleer::copyPageURL()
 {
 	QTreeWidgetItem *tWI = currentItem();
-	if ( tWI )
+	if (tWI)
 	{
 		QMimeData *mimeData = new QMimeData;
-		mimeData->setText( getPageUrl( tWI ) );
-		qApp->clipboard()->setMimeData( mimeData );
+		mimeData->setText(getPageUrl(tWI));
+		qApp->clipboard()->setMimeData(mimeData);
 	}
 }
 
-void ResultsPleer::playEntry( QTreeWidgetItem *tWI )
+void ResultsPleer::playEntry(QTreeWidgetItem *tWI)
 {
-	if ( tWI )
-		emit QMPlay2Core.processParam( "open", getQMPlay2Url( tWI ) );
+	if (tWI)
+		emit QMPlay2Core.processParam("open", getQMPlay2Url(tWI));
 }
 
-void ResultsPleer::contextMenu( const QPoint &point )
+void ResultsPleer::contextMenu(const QPoint &point)
 {
 	menu.clear();
 	QTreeWidgetItem *tWI = currentItem();
-	if ( tWI )
+	if (tWI)
 	{
-		menu.addAction( tr( "Kolejkuj" ), this, SLOT( enqueue() ) );
-		menu.addAction( tr( "Odtwórz" ), this, SLOT( playCurrentEntry() ) );
+		menu.addAction(tr("Kolejkuj"), this, SLOT(enqueue()));
+		menu.addAction(tr("Odtwórz"), this, SLOT(playCurrentEntry()));
 		menu.addSeparator();
-		menu.addAction( tr( "Otwórz stronę w przeglądarce" ), this, SLOT( openPage() ) );
-		menu.addAction( tr( "Kopiuj adres strony" ), this, SLOT( copyPageURL() ) );
+		menu.addAction(tr("Otwórz stronę w przeglądarce"), this, SLOT(openPage()));
+		menu.addAction(tr("Kopiuj adres strony"), this, SLOT(copyPageURL()));
 		menu.addSeparator();
-		const QString name = tWI->text( 0 );
-		foreach ( QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList() )
-			if ( !dynamic_cast< ProstoPleer * >( QMPlay2Ext ) )
+		const QString name = tWI->text(0);
+		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+			if (!dynamic_cast< ProstoPleer * >(QMPlay2Ext))
 			{
 				QString addressPrefixName, url, param;
-				if ( Functions::splitPrefixAndUrlIfHasPluginPrefix( getQMPlay2Url( tWI ), &addressPrefixName, &url, &param ) )
-					if ( QAction *act = QMPlay2Ext->getAction( name, -2, url, addressPrefixName, param ) )
+				if (Functions::splitPrefixAndUrlIfHasPluginPrefix(getQMPlay2Url(tWI), &addressPrefixName, &url, &param))
+					if (QAction *act = QMPlay2Ext->getAction(name, -2, url, addressPrefixName, param))
 					{
-						act->setParent( &menu );
-						menu.addAction( act );
+						act->setParent(&menu);
+						menu.addAction(act);
 					}
 			}
-		menu.popup( viewport()->mapToGlobal( point ) );
+		menu.popup(viewport()->mapToGlobal(point));
 	}
 }
 
 /**/
 
 ProstoPleerW::ProstoPleerW() :
-	completer( new QCompleter( new QStringListModel( this ), this ) ),
-	currPage( 1 ),
-	autocompleteReply( NULL ), searchReply( NULL ),
-	net( this )
+	completer(new QCompleter(new QStringListModel(this), this)),
+	currPage(1),
+	autocompleteReply(NULL), searchReply(NULL),
+	net(this)
 {
 	dw = new DockWidget;
-	connect( dw, SIGNAL( visibilityChanged( bool ) ), this, SLOT( setEnabled( bool ) ) );
-	dw->setWindowTitle( ProstoPleerName );
-	dw->setObjectName( ProstoPleerName );
-	dw->setWidget( this );
+	connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(setEnabled(bool)));
+	dw->setWindowTitle(ProstoPleerName);
+	dw->setObjectName(ProstoPleerName);
+	dw->setWidget(this);
 
-	completer->setCaseSensitivity( Qt::CaseInsensitive );
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	searchE = new LineEdit;
-	connect( searchE, SIGNAL( textEdited( const QString & ) ), this, SLOT( searchTextEdited( const QString & ) ) );
-	connect( searchE, SIGNAL( clearButtonClicked() ), this, SLOT( search() ) );
-	connect( searchE, SIGNAL( returnPressed() ), this, SLOT( search() ) );
-	searchE->setCompleter( completer );
+	connect(searchE, SIGNAL(textEdited(const QString &)), this, SLOT(searchTextEdited(const QString &)));
+	connect(searchE, SIGNAL(clearButtonClicked()), this, SLOT(search()));
+	connect(searchE, SIGNAL(returnPressed()), this, SLOT(search()));
+	searchE->setCompleter(completer);
 
 	searchB = new QToolButton;
-	connect( searchB, SIGNAL( clicked() ), this, SLOT( search() ) );
-	searchB->setIcon( QIcon( ":/browserengine" ) );
-	searchB->setToolTip( tr( "Wyszukaj" ) );
-	searchB->setAutoRaise( true );
+	connect(searchB, SIGNAL(clicked()), this, SLOT(search()));
+	searchB->setIcon(QIcon(":/browserengine"));
+	searchB->setToolTip(tr("Wyszukaj"));
+	searchB->setAutoRaise(true);
 
 	nextPageB = new QToolButton;
-	connect( nextPageB, SIGNAL( clicked() ), this, SLOT( next() ) );
-	nextPageB->setAutoRaise( true );
-	nextPageB->setArrowType( Qt::RightArrow );
-	nextPageB->setToolTip( tr( "Następna strona" ) );
+	connect(nextPageB, SIGNAL(clicked()), this, SLOT(next()));
+	nextPageB->setAutoRaise(true);
+	nextPageB->setArrowType(Qt::RightArrow);
+	nextPageB->setToolTip(tr("Następna strona"));
 	nextPageB->hide();
 
 	progressB = new QProgressBar;
-	progressB->setRange( 0, 0 );
+	progressB->setRange(0, 0);
 	progressB->hide();
 
 	resultsW = new ResultsPleer;
 
-	connect( &net, SIGNAL( finished( QNetworkReply * ) ), this, SLOT( netFinished( QNetworkReply * ) ) );
+	connect(&net, SIGNAL(finished(QNetworkReply *)), this, SLOT(netFinished(QNetworkReply *)));
 
 	QGridLayout *layout = new QGridLayout;
-	layout->addWidget( searchE, 0, 0, 1, 1 );
-	layout->addWidget( searchB, 0, 1, 1, 1 );
-	layout->addWidget( nextPageB, 0, 2, 1, 1 );
-	layout->addWidget( resultsW, 1, 0, 1, 3 );
-	layout->addWidget( progressB, 2, 0, 1, 3 );
-	setLayout( layout );
+	layout->addWidget(searchE, 0, 0, 1, 1);
+	layout->addWidget(searchB, 0, 1, 1, 1);
+	layout->addWidget(nextPageB, 0, 2, 1, 1);
+	layout->addWidget(resultsW, 1, 0, 1, 3);
+	layout->addWidget(progressB, 2, 0, 1, 3);
+	setLayout(layout);
 }
 
 void ProstoPleerW::next()
@@ -177,41 +177,41 @@ void ProstoPleerW::next()
 	search();
 }
 
-void ProstoPleerW::searchTextEdited( const QString &text )
+void ProstoPleerW::searchTextEdited(const QString &text)
 {
-	if ( autocompleteReply )
+	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
 		autocompleteReply = NULL;
 	}
-	if ( text.isEmpty() )
-		( ( QStringListModel * )completer->model() )->setStringList( QStringList() );
+	if (text.isEmpty())
+		((QStringListModel *)completer->model())->setStringList(QStringList());
 	else
 	{
-		QNetworkRequest request( ProstoPleerURL + "/search_suggest" );
-		request.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
-		autocompleteReply = net.post( request, QByteArray( "part=" + text.toUtf8() ) );
+		QNetworkRequest request(ProstoPleerURL + "/search_suggest");
+		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+		autocompleteReply = net.post(request, QByteArray("part=" + text.toUtf8()));
 	}
 }
 void ProstoPleerW::search()
 {
 	const QString name = searchE->text();
-	if ( autocompleteReply )
+	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
 		autocompleteReply = NULL;
 	}
-	if ( searchReply )
+	if (searchReply)
 	{
 		searchReply->deleteLater();
 		searchReply = NULL;
 	}
 	resultsW->clear();
-	if ( !name.isEmpty() )
+	if (!name.isEmpty())
 	{
-		if ( lastName != name || sender() == searchE || sender() == searchB )
+		if (lastName != name || sender() == searchE || sender() == searchB)
 			currPage = 1;
-		searchReply = net.get( QNetworkRequest( ProstoPleerURL + QString( "/search?q=%1&page=%2" ).arg( name ).arg( currPage ) ) );
+		searchReply = net.get(QNetworkRequest(ProstoPleerURL + QString("/search?q=%1&page=%2").arg(name).arg(currPage)));
 		progressB->show();
 	}
 	else
@@ -222,90 +222,90 @@ void ProstoPleerW::search()
 	lastName = name;
 }
 
-void ProstoPleerW::netFinished( QNetworkReply *reply )
+void ProstoPleerW::netFinished(QNetworkReply *reply)
 {
-	if ( reply->error() )
+	if (reply->error())
 	{
-		if ( reply == searchReply )
+		if (reply == searchReply)
 		{
 			lastName.clear();
 			nextPageB->hide();
 			progressB->hide();
-			emit QMPlay2Core.sendMessage( tr( "Błąd połączenia" ), ProstoPleerName, 3 );
+			emit QMPlay2Core.sendMessage(tr("Błąd połączenia"), ProstoPleerName, 3);
 		}
 	}
 	else
 	{
 		const QString replyData = reply->readAll();
-		if ( reply == autocompleteReply )
+		if (reply == autocompleteReply)
 		{
-			int idx1 = replyData.indexOf( "[" );
-			int idx2 = replyData.lastIndexOf( "]" );
-			if ( idx1 > -1 && idx2 > idx1 )
+			int idx1 = replyData.indexOf("[");
+			int idx2 = replyData.lastIndexOf("]");
+			if (idx1 > -1 && idx2 > idx1)
 			{
 				QTextDocument txtDoc;
-				txtDoc.setHtml( replyData.mid( idx1 + 1, idx2 - idx1 - 1 ) );
-				QStringList suggestions = txtDoc.toPlainText().remove( '"' ).split( ',' );
-				if ( !suggestions.isEmpty() )
+				txtDoc.setHtml(replyData.mid(idx1 + 1, idx2 - idx1 - 1));
+				QStringList suggestions = txtDoc.toPlainText().remove('"').split(',');
+				if (!suggestions.isEmpty())
 				{
-					( ( QStringListModel * )completer->model() )->setStringList( suggestions );
-					if ( searchE->hasFocus() )
+					((QStringListModel *)completer->model())->setStringList(suggestions);
+					if (searchE->hasFocus())
 						completer->complete();
 				}
 			}
 		}
-		else if ( reply == searchReply )
+		else if (reply == searchReply)
 		{
-			QRegExp regexp( "<li duration=\"([\\d]+)\"\\s+file_id=\"([^\"]+)\"\\s+singer=\"([^\"]+)\"\\s+song=\"([^\"]+)\"\\s+link=\"([^\"]+)\"\\s+rate=\"([^\"]+)\"\\s+size=\"([^\"]+)\"" );
-			QIcon prostopleerIcon( ":/prostopleer" );
-			regexp.setMinimal( true );
+			QRegExp regexp("<li duration=\"([\\d]+)\"\\s+file_id=\"([^\"]+)\"\\s+singer=\"([^\"]+)\"\\s+song=\"([^\"]+)\"\\s+link=\"([^\"]+)\"\\s+rate=\"([^\"]+)\"\\s+size=\"([^\"]+)\"");
+			QIcon prostopleerIcon(":/prostopleer");
+			regexp.setMinimal(true);
 			QTextDocument txtDoc;
 			int offset = 0;
-			while ( ( offset = regexp.indexIn( replyData, offset ) ) != -1 )
+			while ((offset = regexp.indexIn(replyData, offset)) != -1)
 			{
-				QTreeWidgetItem *tWI = new QTreeWidgetItem( resultsW );
-				tWI->setData( 0, Qt::UserRole, regexp.cap( 5 ) ); //file_id
-				tWI->setIcon( 0, prostopleerIcon );
+				QTreeWidgetItem *tWI = new QTreeWidgetItem(resultsW);
+				tWI->setData(0, Qt::UserRole, regexp.cap(5)); //file_id
+				tWI->setIcon(0, prostopleerIcon);
 
-				txtDoc.setHtml( regexp.cap( 4 ) );
-				tWI->setText( 0, txtDoc.toPlainText() );
-				tWI->setToolTip( 0, txtDoc.toPlainText() );
+				txtDoc.setHtml(regexp.cap(4));
+				tWI->setText(0, txtDoc.toPlainText());
+				tWI->setToolTip(0, txtDoc.toPlainText());
 
-				txtDoc.setHtml( regexp.cap( 3 ) );
-				tWI->setText( 1, txtDoc.toPlainText() );
-				tWI->setToolTip( 1, txtDoc.toPlainText() );
+				txtDoc.setHtml(regexp.cap(3));
+				tWI->setText(1, txtDoc.toPlainText());
+				tWI->setToolTip(1, txtDoc.toPlainText());
 
-				int time = regexp.cap( 1 ).toInt();
-				tWI->setText( 2, Functions::timeToStr( time ) );
+				int time = regexp.cap(1).toInt();
+				tWI->setText(2, Functions::timeToStr(time));
 
-				QString bitrate = regexp.cap( 6 ).toLower().remove( ' ' ).replace( '/', 'p' );
-				if ( bitrate == "vbr" && time > 0 )
+				QString bitrate = regexp.cap(6).toLower().remove(' ').replace('/', 'p');
+				if (bitrate == "vbr" && time > 0)
 				{
-					QStringList fSizeList = regexp.cap( 7 ).toLower().split( ' ' );
-					if ( fSizeList.count() >= 2 && fSizeList[ 1 ] == "mb" )
+					QStringList fSizeList = regexp.cap(7).toLower().split(' ');
+					if (fSizeList.count() >= 2 && fSizeList[ 1 ] == "mb")
 					{
 						float fSize = fSizeList[ 0 ].toFloat();
-						if ( fSize > 0.0f )
+						if (fSize > 0.0f)
 						{
 							fSize *= 8.0f * 1024.0f;
-							bitrate = QString( "%1kbps" ).arg( ( int )( fSize / time ), 3 );
+							bitrate = QString("%1kbps").arg((int)(fSize / time), 3);
 						}
 					}
 				}
-				else if ( bitrate.length() == 6 )
-					bitrate.prepend( " " );
-				else if ( bitrate.length() == 5 )
-					bitrate.prepend( "  " );
-				tWI->setText( 3, bitrate );
+				else if (bitrate.length() == 6)
+					bitrate.prepend(" ");
+				else if (bitrate.length() == 5)
+					bitrate.prepend("  ");
+				tWI->setText(3, bitrate);
 
 				offset += regexp.matchedLength();
 			}
-			nextPageB->setVisible( resultsW->topLevelItemCount() );
+			nextPageB->setVisible(resultsW->topLevelItemCount());
 		}
 	}
-	if ( reply == autocompleteReply )
+	if (reply == autocompleteReply)
 		autocompleteReply = NULL;
-	else if ( reply == searchReply )
+	else if (reply == searchReply)
 	{
 		searchReply = NULL;
 		progressB->hide();
@@ -315,23 +315,23 @@ void ProstoPleerW::netFinished( QNetworkReply *reply )
 
 void ProstoPleerW::searchMenu()
 {
-	const QString name = sender()->property( "name" ).toString();
-	if ( !name.isEmpty() )
+	const QString name = sender()->property("name").toString();
+	if (!name.isEmpty())
 	{
-		if ( !dw->isVisible() )
+		if (!dw->isVisible())
 			dw->show();
 		dw->raise();
-		sender()->setProperty( "name", QVariant() );
-		searchE->setText( name );
+		sender()->setProperty("name", QVariant());
+		searchE->setText(name);
 		search();
 	}
 }
 
 /**/
 
-ProstoPleer::ProstoPleer( Module &module )
+ProstoPleer::ProstoPleer(Module &module)
 {
-	SetModule( module );
+	SetModule(module);
 }
 
 bool ProstoPleer::set()
@@ -344,70 +344,70 @@ DockWidget *ProstoPleer::getDockWidget()
 	return w.dw;
 }
 
-QList< ProstoPleer::AddressPrefix > ProstoPleer::addressPrefixList( bool img )
+QList< ProstoPleer::AddressPrefix > ProstoPleer::addressPrefixList(bool img)
 {
-	return QList< AddressPrefix >() << AddressPrefix( ProstoPleerName, img ? QImage( ":/prostopleer" ) : QImage() );
+	return QList< AddressPrefix >() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
 }
-void ProstoPleer::convertAddress( const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl )
+void ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
-	Q_UNUSED( param )
-	Q_UNUSED( name )
-	if ( !stream_url && !img )
+	Q_UNUSED(param)
+	Q_UNUSED(name)
+	if (!stream_url && !img)
 		return;
-	if ( prefix == ProstoPleerName )
+	if (prefix == ProstoPleerName)
 	{
-		if ( img )
-			*img = QImage( ":/prostopleer" );
-		if ( extension )
+		if (img)
+			*img = QImage(":/prostopleer");
+		if (extension)
 			*extension = ".mp3";
-		if ( ioCtrl && stream_url )
+		if (ioCtrl && stream_url)
 		{
 			QString fileId = url;
-			while ( fileId.endsWith( '/' ) )
-				fileId.truncate( 1 );
-			int idx = url.lastIndexOf( '/' );
+			while (fileId.endsWith('/'))
+				fileId.truncate(1);
+			int idx = url.lastIndexOf('/');
 
 			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
-			if ( idx > -1 && Reader::create( ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid( idx + 1 ), reader ) )
+			if (idx > -1 && Reader::create(ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1), reader))
 			{
 				QByteArray replyData;
-				while ( reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */ )
+				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
 				{
-					QByteArray arr =  reader->read( 4096 );;
-					if ( arr.isEmpty() )
+					QByteArray arr =  reader->read(4096);;
+					if (arr.isEmpty())
 						break;
 					replyData += arr;
 				}
 				reader.clear();
 
-				replyData.replace( '"', QByteArray() );
-				int idx = replyData.indexOf( "track_link:" );
-				if ( idx > -1 )
+				replyData.replace('"', QByteArray());
+				int idx = replyData.indexOf("track_link:");
+				if (idx > -1)
 				{
 					idx += 11;
-					int idx2 = replyData.indexOf( '}', idx );
-					if ( idx2 > -1 )
+					int idx2 = replyData.indexOf('}', idx);
+					if (idx2 > -1)
 					{
-						*stream_url = replyData.mid( idx, idx2 - idx );
+						*stream_url = replyData.mid(idx, idx2 - idx);
 						return;
 					}
 				}
 
-				if ( !replyData.isEmpty() )
-					QMPlay2Core.sendMessage( ProstoPleerW::tr( "Spróbuj ponownie później" ), ProstoPleerName );
+				if (!replyData.isEmpty())
+					QMPlay2Core.sendMessage(ProstoPleerW::tr("Spróbuj ponownie później"), ProstoPleerName);
 			}
 		}
 	}
 }
 
-QAction *ProstoPleer::getAction( const QString &name, int, const QString &url, const QString &, const QString & )
+QAction *ProstoPleer::getAction(const QString &name, int, const QString &url, const QString &, const QString &)
 {
-	if ( name != url )
+	if (name != url)
 	{
-		QAction *act = new QAction( ProstoPleerW::tr( "Wyszukaj w Prostopleer" ), NULL );
-		act->connect( act, SIGNAL( triggered() ), &w, SLOT( searchMenu() ) );
-		act->setIcon( QIcon( ":/prostopleer" ) );
-		act->setProperty( "name", name );
+		QAction *act = new QAction(ProstoPleerW::tr("Wyszukaj w Prostopleer"), NULL);
+		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
+		act->setIcon(QIcon(":/prostopleer"));
+		act->setProperty("name", name);
 		return act;
 	}
 	return NULL;

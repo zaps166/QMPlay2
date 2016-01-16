@@ -12,49 +12,49 @@
 
 CDIODestroyTimer::CDIODestroyTimer()
 {
-	connect( this, SIGNAL( setInstance( CdIo_t *, const QString &, unsigned ) ), this, SLOT( setInstanceSlot( CdIo_t *, const QString &, unsigned ) ) );
+	connect(this, SIGNAL(setInstance(CdIo_t *, const QString &, unsigned)), this, SLOT(setInstanceSlot(CdIo_t *, const QString &, unsigned)));
 }
 CDIODestroyTimer::~CDIODestroyTimer()
 {
-	if ( timerId.fetchAndStoreRelaxed( 0 ) )
-		cdio_destroy( cdio );
+	if (timerId.fetchAndStoreRelaxed(0))
+		cdio_destroy(cdio);
 }
 
-CdIo_t *CDIODestroyTimer::getInstance( const QString &_device, unsigned &_discID )
+CdIo_t *CDIODestroyTimer::getInstance(const QString &_device, unsigned &_discID)
 {
-	if ( timerId.fetchAndStoreRelaxed( 0 ) )
+	if (timerId.fetchAndStoreRelaxed(0))
 	{
-		if ( _device == device )
+		if (_device == device)
 		{
 			_discID = discID;
 			return cdio;
 		}
-		cdio_destroy( cdio );
+		cdio_destroy(cdio);
 	}
 	return NULL;
 }
 
-void CDIODestroyTimer::setInstanceSlot( CdIo_t *_cdio, const QString &_device, unsigned _discID )
+void CDIODestroyTimer::setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID)
 {
-	const int newTimerId = startTimer( 2500 );
+	const int newTimerId = startTimer(2500);
 	CdIo_t *oldCdIo = cdio;
-	if ( !newTimerId )
-		cdio_destroy( _cdio );
+	if (!newTimerId)
+		cdio_destroy(_cdio);
 	else
 	{
 		cdio = _cdio;
 		device = _device;
 		discID = _discID;
 	}
-	if ( timerId.fetchAndStoreRelaxed( newTimerId ) )
-		cdio_destroy( oldCdIo );
+	if (timerId.fetchAndStoreRelaxed(newTimerId))
+		cdio_destroy(oldCdIo);
 }
 
-void CDIODestroyTimer::timerEvent( QTimerEvent *e )
+void CDIODestroyTimer::timerEvent(QTimerEvent *e)
 {
-	if ( timerId.testAndSetRelaxed( e->timerId(), 0 ) )
-		cdio_destroy( cdio );
-	killTimer( e->timerId() );
+	if (timerId.testAndSetRelaxed(e->timerId(), 0))
+		cdio_destroy(cdio);
+	killTimer(e->timerId());
 }
 
 /**/
@@ -62,78 +62,78 @@ void CDIODestroyTimer::timerEvent( QTimerEvent *e )
 QStringList AudioCDDemux::getDevices()
 {
 	QStringList devicesList;
-	if ( char **devices = cdio_get_devices( DRIVER_DEVICE ) )
+	if (char **devices = cdio_get_devices(DRIVER_DEVICE))
 	{
-		for ( size_t i = 0; char *device = devices[ i ]; ++i )
+		for (size_t i = 0; char *device = devices[ i ]; ++i)
 		{
 			devicesList += device;
 #ifdef Q_OS_WIN
-			devicesList.last().remove( 0, 4 );
+			devicesList.last().remove(0, 4);
 #endif
 		}
-		cdio_free_device_list( devices );
+		cdio_free_device_list(devices);
 	}
 	return devicesList;
 }
 
-AudioCDDemux::AudioCDDemux( Module &module, CDIODestroyTimer &destroyTimer ) :
-	destroyTimer( destroyTimer ),
-	cdio( NULL ),
-	sector( 0 ),
-	aborted( false ),
-	discID( 0 )
+AudioCDDemux::AudioCDDemux(Module &module, CDIODestroyTimer &destroyTimer) :
+	destroyTimer(destroyTimer),
+	cdio(NULL),
+	sector(0),
+	aborted(false),
+	discID(0)
 {
-	SetModule( module );
+	SetModule(module);
 }
 
 AudioCDDemux::~AudioCDDemux()
 {
-	if ( cdio )
-		emit destroyTimer.setInstance( cdio, device, discID );
+	if (cdio)
+		emit destroyTimer.setInstance(cdio, device, discID);
 }
 
 bool AudioCDDemux::set()
 {
-	useCDDB   = sets().getBool( "AudioCD/CDDB" );
-	useCDTEXT = sets().getBool( "AudioCD/CDTEXT" );
+	useCDDB   = sets().getBool("AudioCD/CDDB");
+	useCDTEXT = sets().getBool("AudioCD/CDTEXT");
 	return true;
 }
 
 QString AudioCDDemux::name() const
 {
-	if ( !cdTitle.isEmpty() && !cdArtist.isEmpty() )
+	if (!cdTitle.isEmpty() && !cdArtist.isEmpty())
 		return AudioCDName " [" + cdArtist + " - " + cdTitle + "]";
-	else if ( !cdTitle.isEmpty() )
+	else if (!cdTitle.isEmpty())
 		return AudioCDName " [" + cdTitle + "]";
-	else if ( !cdArtist.isEmpty() )
+	else if (!cdArtist.isEmpty())
 		return AudioCDName " [" + cdArtist + "]";
 	return AudioCDName;
 }
 QString AudioCDDemux::title() const
 {
 	QString prefix, suffix;
-	if ( isData )
-		suffix = " - " + tr( "Dane" );
-	else if ( !Title.isEmpty() && !Artist.isEmpty() )
+	if (isData)
+		suffix = " - " + tr("Dane");
+	else if (!Title.isEmpty() && !Artist.isEmpty())
 		return Artist + " - " + Title;
-	else if ( !Title.isEmpty() )
+	else if (!Title.isEmpty())
 		return Title;
-	else if ( !Artist.isEmpty() )
+	else if (!Artist.isEmpty())
 		prefix = Artist + " - ";
-	return prefix + tr( "Ścieżka" ) + " " + QString::number( trackNo ) + suffix;
+	return prefix + tr("Ścieżka") + " " + QString::number(trackNo) + suffix;
 }
 QList< QMPlay2Tag > AudioCDDemux::tags() const
 {
 	QList< QMPlay2Tag > tagList;
-	if ( !Title.isEmpty() )
-		tagList << qMakePair( QString::number( QMPLAY2_TAG_TITLE ), Title );
-	if ( !Artist.isEmpty() )
-		tagList << qMakePair( QString::number( QMPLAY2_TAG_ARTIST ), Artist );
-	if ( !cdTitle.isEmpty() )
-		tagList << qMakePair( QString::number( QMPLAY2_TAG_ALBUM ), cdTitle );
-	if ( !Genre.isEmpty() )
-		tagList << qMakePair( QString::number( QMPLAY2_TAG_GENRE ), Genre );
-	tagList << qMakePair( tr( "Ścieżka" ), QString::number( trackNo ) );
+	if (!Title.isEmpty())
+		tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), Title);
+	if (!Artist.isEmpty())
+		tagList << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), Artist);
+	if (!cdTitle.isEmpty())
+		tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), cdTitle);
+	if (!Genre.isEmpty())
+		tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), Genre);
+	tagList << qMakePair(tr("Ścieżka"), QString::number(trackNo));
 	return tagList;
 }
 double AudioCDDemux::length() const
@@ -142,24 +142,24 @@ double AudioCDDemux::length() const
 }
 int AudioCDDemux::bitrate() const
 {
-	return 8 * ( srate * chn * 2 ) / 1000;
+	return 8 * (srate * chn * 2) / 1000;
 }
 
-bool AudioCDDemux::seek( int s )
+bool AudioCDDemux::seek(int s)
 {
-	return ( sector = s / duration ) < numSectors;
+	return (sector = s / duration) < numSectors;
 }
-bool AudioCDDemux::read( Packet &decoded, int &idx )
+bool AudioCDDemux::read(Packet &decoded, int &idx)
 {
-	if ( aborted || numSectors <= sector || isData )
+	if (aborted || numSectors <= sector || isData)
 		return false;
 
 	short cd_samples[ CD_BLOCKSIZE ];
-	if ( cdio_read_audio_sector( cdio, cd_samples, startSector + sector ) == DRIVER_OP_SUCCESS )
+	if (cdio_read_audio_sector(cdio, cd_samples, startSector + sector) == DRIVER_OP_SUCCESS)
 	{
-		decoded.resize( CD_BLOCKSIZE * sizeof( float ) );
-		float *decoded_data = ( float * )decoded.data();
-		for ( int i = 0; i < CD_BLOCKSIZE; ++i )
+		decoded.resize(CD_BLOCKSIZE * sizeof(float));
+		float *decoded_data = (float *)decoded.data();
+		for (int i = 0; i < CD_BLOCKSIZE; ++i)
 			decoded_data[ i ] = cd_samples[ i ] / 32768.0f;
 
 		idx = 0;
@@ -177,277 +177,277 @@ void AudioCDDemux::abort()
 	aborted = true;
 }
 
-bool AudioCDDemux::open( const QString &_url )
+bool AudioCDDemux::open(const QString &_url)
 {
 #ifdef Q_OS_WIN
-	if ( _url.toLower().contains( QRegExp( "file://\\D:/track\\d\\d.cda" ) ) )
+	if (_url.toLower().contains(QRegExp("file://\\D:/track\\d\\d.cda")))
 	{
 		QString url = _url;
-		url.remove( "file://" );
-		device = url.mid( 0, url.indexOf( '/' ) );
-		trackNo = url.mid( url.toLower().indexOf( "track" ) + 5, 2 ).toUInt();
+		url.remove("file://");
+		device = url.mid(0, url.indexOf('/'));
+		trackNo = url.mid(url.toLower().indexOf("track") + 5, 2).toUInt();
 	}
 	else
 #endif
 	{
 		QString prefix, param;
-		if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( _url, &prefix, &device, &param ) || prefix != AudioCDName )
+		if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(_url, &prefix, &device, &param) || prefix != AudioCDName)
 			return false;
 #ifdef Q_OS_WIN
-		if ( device.endsWith( "/" ) )
-			device.chop( 1 );
+		if (device.endsWith("/"))
+			device.chop(1);
 #endif
 		bool ok;
-		trackNo = param.toInt( &ok );
-		if ( !ok )
+		trackNo = param.toInt(&ok);
+		if (!ok)
 			return false;
 	}
-	if ( trackNo > 0 && trackNo < CDIO_INVALID_TRACK )
+	if (trackNo > 0 && trackNo < CDIO_INVALID_TRACK)
 	{
-		cdio = destroyTimer.getInstance( device, discID );
-		if ( cdio || ( cdio = cdio_open( device.toLocal8Bit(), DRIVER_UNKNOWN ) ) )
+		cdio = destroyTimer.getInstance(device, discID);
+		if (cdio || (cdio = cdio_open(device.toLocal8Bit(), DRIVER_UNKNOWN)))
 		{
-			cdio_set_speed( cdio, 1 );
-			numTracks = cdio_get_num_tracks( cdio );
-			if ( cdio_get_discmode( cdio ) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK )
+			cdio_set_speed(cdio, 1);
+			numTracks = cdio_get_num_tracks(cdio);
+			if (cdio_get_discmode(cdio) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK)
 			{
-				chn = cdio_get_track_channels( cdio, trackNo );
-				if ( !chn ) //NRG format returns 0 - why ?
+				chn = cdio_get_track_channels(cdio, trackNo);
+				if (!chn) //NRG format returns 0 - why ?
 					chn = 2;
-				if ( numTracks >= trackNo && ( chn == 2 || chn == 4 ) )
+				if (numTracks >= trackNo && (chn == 2 || chn == 4))
 				{
-					if ( useCDTEXT )
+					if (useCDTEXT)
 					{
-						readCDText( 0 );
-						readCDText( trackNo );
+						readCDText(0);
+						readCDText(trackNo);
 					}
-					isData = cdio_get_track_format( cdio, trackNo ) != TRACK_FORMAT_AUDIO;
-					duration = CD_BLOCKSIZE / chn / ( double )srate;
-					startSector = cdio_get_track_lsn( cdio, trackNo );
-					numSectors = cdio_get_track_last_lsn( cdio, trackNo ) - startSector;
+					isData = cdio_get_track_format(cdio, trackNo) != TRACK_FORMAT_AUDIO;
+					duration = CD_BLOCKSIZE / chn / (double)srate;
+					startSector = cdio_get_track_lsn(cdio, trackNo);
+					numSectors = cdio_get_track_last_lsn(cdio, trackNo) - startSector;
 
-					if ( useCDDB && Title.isEmpty() )
+					if (useCDDB && Title.isEmpty())
 					{
 						cddb_disc_t *cddb_disc;
-						if ( freedb_query( cddb_disc ) )
+						if (freedb_query(cddb_disc))
 						{
-							if ( cdTitle.isEmpty() && cdArtist.isEmpty() )
-								freedb_get_disc_info( cddb_disc );
-							freedb_get_track_info( cddb_disc );
-							cddb_disc_destroy( cddb_disc );
+							if (cdTitle.isEmpty() && cdArtist.isEmpty())
+								freedb_get_disc_info(cddb_disc);
+							freedb_get_track_info(cddb_disc);
+							cddb_disc_destroy(cddb_disc);
 						}
 					}
 
-					streams_info += new StreamInfo( srate, chn );
+					streams_info += new StreamInfo(srate, chn);
 					return true;
 				}
 				else
-					QMPlay2Core.log( tr( "Błąd odczytu ścieżki" ) );
+					QMPlay2Core.log(tr("Błąd odczytu ścieżki"));
 			}
 			else
-				QMPlay2Core.log( tr( "Brak płyty w napędzie" ) );
+				QMPlay2Core.log(tr("Brak płyty w napędzie"));
 		}
 		else
-			QMPlay2Core.log( tr( "Nieprawidłowa ścieżka do napędu CD" ) );
+			QMPlay2Core.log(tr("Nieprawidłowa ścieżka do napędu CD"));
 	}
 	return false;
 }
 
-Playlist::Entries AudioCDDemux::fetchTracks( const QString &url, bool &ok )
+Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 {
 	Playlist::Entries entries;
-	if ( !Functions::splitPrefixAndUrlIfHasPluginPrefix( url, NULL, NULL, NULL ) )
+	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, NULL, NULL, NULL))
 	{
-		if ( url.startsWith( AudioCDName "://" ) )
+		if (url.startsWith(AudioCDName "://"))
 		{
-			entries = getTracks( url.mid( strlen( AudioCDName ) + 3 ) );
-			if ( entries.isEmpty() )
-				emit QMPlay2Core.sendMessage( tr( "Brak płyty AudioCD w napędzie!" ), AudioCDName, 2, 0 );
+			entries = getTracks(url.mid(strlen(AudioCDName) + 3));
+			if (entries.isEmpty())
+				emit QMPlay2Core.sendMessage(tr("Brak płyty AudioCD w napędzie!"), AudioCDName, 2, 0);
 			ok = !entries.isEmpty();
 		}
-		if ( !entries.isEmpty() )
+		if (!entries.isEmpty())
 		{
-			for ( int i = 0; i < entries.length(); ++i )
+			for (int i = 0; i < entries.length(); ++i)
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
 			entry.name = "Audio CD";
 			entry.GID = 1;
-			entries.prepend( entry );
+			entries.prepend(entry);
 		}
 	}
 	return entries;
 }
 
-void AudioCDDemux::readCDText( track_t trackNo )
+void AudioCDDemux::readCDText(track_t trackNo)
 {
 #if LIBCDIO_VERSION_NUM >= 84
-	if ( cdtext_t *cdtext = cdio_get_cdtext( cdio ) )
+	if (cdtext_t *cdtext = cdio_get_cdtext(cdio))
 	{
-		if ( trackNo == 0 )
+		if (trackNo == 0)
 		{
-			cdTitle  = cdtext_get_const( cdtext, CDTEXT_FIELD_TITLE, 0 );
-			cdArtist = cdtext_get_const( cdtext, CDTEXT_FIELD_PERFORMER, 0 );
+			cdTitle  = cdtext_get_const(cdtext, CDTEXT_FIELD_TITLE, 0);
+			cdArtist = cdtext_get_const(cdtext, CDTEXT_FIELD_PERFORMER, 0);
 		}
 		else
 		{
-			Title  = cdtext_get_const( cdtext, CDTEXT_FIELD_TITLE, trackNo );
-			Artist = cdtext_get_const( cdtext, CDTEXT_FIELD_PERFORMER, trackNo );
-			Genre  = cdtext_get_const( cdtext, CDTEXT_FIELD_GENRE, trackNo );
+			Title  = cdtext_get_const(cdtext, CDTEXT_FIELD_TITLE, trackNo);
+			Artist = cdtext_get_const(cdtext, CDTEXT_FIELD_PERFORMER, trackNo);
+			Genre  = cdtext_get_const(cdtext, CDTEXT_FIELD_GENRE, trackNo);
 		}
 	}
 #else
-	if ( cdtext_t *cdtext = cdio_get_cdtext( cdio, trackNo ) )
+	if (cdtext_t *cdtext = cdio_get_cdtext(cdio, trackNo))
 	{
-		if ( trackNo == 0 )
+		if (trackNo == 0)
 		{
-			cdTitle  = cdtext_get_const( CDTEXT_TITLE, cdtext );
-			cdArtist = cdtext_get_const( CDTEXT_PERFORMER, cdtext );
+			cdTitle  = cdtext_get_const(CDTEXT_TITLE, cdtext);
+			cdArtist = cdtext_get_const(CDTEXT_PERFORMER, cdtext);
 		}
 		else
 		{
-			Title  = cdtext_get_const( CDTEXT_TITLE, cdtext );
-			Artist = cdtext_get_const( CDTEXT_PERFORMER, cdtext );
-			Genre  = cdtext_get_const( CDTEXT_GENRE, cdtext );
+			Title  = cdtext_get_const(CDTEXT_TITLE, cdtext);
+			Artist = cdtext_get_const(CDTEXT_PERFORMER, cdtext);
+			Genre  = cdtext_get_const(CDTEXT_GENRE, cdtext);
 		}
 	}
 #endif
 }
 
-bool AudioCDDemux::freedb_query( cddb_disc_t *&cddb_disc )
+bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
 {
 #ifdef Q_OS_WIN
-	bool hasHomeEnv = getenv( "HOME" );
-	if ( !hasHomeEnv )
-		putenv( "HOME=" + QDir::homePath().toLocal8Bit() );
+	bool hasHomeEnv = getenv("HOME");
+	if (!hasHomeEnv)
+		putenv("HOME=" + QDir::homePath().toLocal8Bit());
 #endif
 	cddb_conn_t *cddb = cddb_new();
 #ifdef Q_OS_WIN
-	if ( !hasHomeEnv )
-		putenv( "HOME=" );
+	if (!hasHomeEnv)
+		putenv("HOME=");
 #endif
 	cddb_disc = cddb_disc_new();
 
 #ifdef Q_OS_WIN
 	const QString cddbDir = QMPlay2Core.getSettingsDir() + "CDDB";
-	if ( QDir( cddbDir ).exists() || QDir( QMPlay2Core.getSettingsDir() ).mkdir( "CDDB" ) )
-		cddb_cache_set_dir( cddb, cddbDir.toLocal8Bit() );
+	if (QDir(cddbDir).exists() || QDir(QMPlay2Core.getSettingsDir()).mkdir("CDDB"))
+		cddb_cache_set_dir(cddb, cddbDir.toLocal8Bit());
 #endif
 
-	cddb_disc_set_length( cddb_disc, FRAMES_TO_SECONDS( cdio_get_track_lba( cdio, CDIO_CDROM_LEADOUT_TRACK ) ) );
-	for ( int trackno = 1; trackno <= numTracks; ++trackno )
+	cddb_disc_set_length(cddb_disc, FRAMES_TO_SECONDS(cdio_get_track_lba(cdio, CDIO_CDROM_LEADOUT_TRACK)));
+	for (int trackno = 1; trackno <= numTracks; ++trackno)
 	{
 		cddb_track_t *pcddb_track = cddb_track_new();
-		cddb_track_set_frame_offset( pcddb_track, cdio_get_track_lba( cdio, trackno ) );
-		cddb_disc_add_track( cddb_disc, pcddb_track );
+		cddb_track_set_frame_offset(pcddb_track, cdio_get_track_lba(cdio, trackno));
+		cddb_disc_add_track(cddb_disc, pcddb_track);
 	}
 
 	bool useNetwork = false;
 
-	cddb_disc_calc_discid( cddb_disc );
-	if ( cddb_disc_get_discid( cddb_disc ) == discID )
-		cddb_cache_only( cddb );
+	cddb_disc_calc_discid(cddb_disc);
+	if (cddb_disc_get_discid(cddb_disc) == discID)
+		cddb_cache_only(cddb);
 	else
 	{
-		discID = cddb_disc_get_discid( cddb_disc );
+		discID = cddb_disc_get_discid(cddb_disc);
 
-		cddb_set_timeout( cddb, 3 );
-		cddb_http_enable( cddb );
-		cddb_set_server_port( cddb, 80 );
+		cddb_set_timeout(cddb, 3);
+		cddb_http_enable(cddb);
+		cddb_set_server_port(cddb, 80);
 
-		Settings sets( "QMPlay2" );
-		if ( sets.getBool( "Proxy/Use" ) )
+		Settings sets("QMPlay2");
+		if (sets.getBool("Proxy/Use"))
 		{
-			cddb_http_proxy_enable( cddb );
-			cddb_set_http_proxy_server_name( cddb, sets.getString( "Proxy/Host" ).toLocal8Bit() );
-			cddb_set_http_proxy_server_port( cddb, sets.getUInt( "Proxy/Port" ) );
-			if ( sets.getBool( "Proxy/Login" ) )
+			cddb_http_proxy_enable(cddb);
+			cddb_set_http_proxy_server_name(cddb, sets.getString("Proxy/Host").toLocal8Bit());
+			cddb_set_http_proxy_server_port(cddb, sets.getUInt("Proxy/Port"));
+			if (sets.getBool("Proxy/Login"))
 			{
-				cddb_set_http_proxy_username( cddb, sets.getString( "Proxy/User" ).toLocal8Bit() );
-				cddb_set_http_proxy_password( cddb, QString( QByteArray::fromBase64( sets.getByteArray( "Proxy/Password" ) ) ).toLocal8Bit() );
+				cddb_set_http_proxy_username(cddb, sets.getString("Proxy/User").toLocal8Bit());
+				cddb_set_http_proxy_password(cddb, QString(QByteArray::fromBase64(sets.getByteArray("Proxy/Password"))).toLocal8Bit());
 			}
 		}
 
 		useNetwork = true;
 	}
 
-	for ( int i = 0; i <= useNetwork; ++i )
+	for (int i = 0; i <= useNetwork; ++i)
 	{
-		if ( cddb_query( cddb, cddb_disc ) > 0 )
+		if (cddb_query(cddb, cddb_disc) > 0)
 		{
-			do if ( cddb_disc_get_discid( cddb_disc ) == discID )
+			do if (cddb_disc_get_discid(cddb_disc) == discID)
 			{
-				cddb_read( cddb, cddb_disc );
-				cddb_destroy( cddb );
+				cddb_read(cddb, cddb_disc);
+				cddb_destroy(cddb);
 				return true;
-			} while ( cddb_query_next( cddb, cddb_disc ) );
+			} while (cddb_query_next(cddb, cddb_disc));
 		}
-		if ( useNetwork && !i )
-			cddb_set_server_name( cddb, "freedb.musicbrainz.org" );
+		if (useNetwork && !i)
+			cddb_set_server_name(cddb, "freedb.musicbrainz.org");
 	}
 
-	cddb_disc_destroy( cddb_disc );
-	cddb_destroy( cddb );
+	cddb_disc_destroy(cddb_disc);
+	cddb_destroy(cddb);
 	cddb_disc = NULL;
 	return false;
 }
-void AudioCDDemux::freedb_get_disc_info( cddb_disc_t *cddb_disc )
+void AudioCDDemux::freedb_get_disc_info(cddb_disc_t *cddb_disc)
 {
-	if ( cddb_disc )
+	if (cddb_disc)
 	{
-		cdTitle  = cddb_disc_get_title( cddb_disc );
-		cdArtist = cddb_disc_get_artist( cddb_disc );
+		cdTitle  = cddb_disc_get_title(cddb_disc);
+		cdArtist = cddb_disc_get_artist(cddb_disc);
 	}
 }
-void AudioCDDemux::freedb_get_track_info( cddb_disc_t *cddb_disc )
+void AudioCDDemux::freedb_get_track_info(cddb_disc_t *cddb_disc)
 {
 	cddb_track_t *cddb_track;
-	if ( cddb_disc && ( cddb_track = cddb_disc_get_track( cddb_disc, trackNo - 1 ) ) )
+	if (cddb_disc && (cddb_track = cddb_disc_get_track(cddb_disc, trackNo - 1)))
 	{
-		Title  = cddb_track_get_title( cddb_track );
-		Artist = cddb_track_get_artist( cddb_track );
+		Title  = cddb_track_get_title(cddb_track);
+		Artist = cddb_track_get_artist(cddb_track);
 	}
 }
 
-Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
+Playlist::Entries AudioCDDemux::getTracks(const QString &_device)
 {
 	Playlist::Entries tracks;
 	device = _device;
 #ifdef Q_OS_WIN
-	if ( device.endsWith( "/" ) )
-		device.chop( 1 );
+	if (device.endsWith("/"))
+		device.chop(1);
 #endif
-	cdio_close_tray( device.toLocal8Bit(), NULL );
-	if ( ( cdio = cdio_open( device.toLocal8Bit(), DRIVER_UNKNOWN ) ) )
+	cdio_close_tray(device.toLocal8Bit(), NULL);
+	if ((cdio = cdio_open(device.toLocal8Bit(), DRIVER_UNKNOWN)))
 	{
-		numTracks = cdio_get_num_tracks( cdio );
-		if ( cdio_get_discmode( cdio ) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK )
+		numTracks = cdio_get_num_tracks(cdio);
+		if (cdio_get_discmode(cdio) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK)
 		{
 			cddb_disc_t *cddb_disc = NULL;
 			bool cddb_ok = useCDDB;
-			for ( trackNo = 1; trackNo <= numTracks; ++trackNo )
+			for (trackNo = 1; trackNo <= numTracks; ++trackNo)
 			{
-				chn = cdio_get_track_channels( cdio, trackNo );
-				if ( !chn ) //NRG format returns 0 - why ?
+				chn = cdio_get_track_channels(cdio, trackNo);
+				if (!chn) //NRG format returns 0 - why ?
 					chn = 2;
-				if ( chn != 2 && chn != 4 )
+				if (chn != 2 && chn != 4)
 					continue;
 
-				if ( useCDTEXT )
-					readCDText( trackNo );
-				isData = cdio_get_track_format( cdio, trackNo ) != TRACK_FORMAT_AUDIO;
-				duration = CD_BLOCKSIZE / chn / ( double )srate;
-				numSectors = cdio_get_track_last_lsn( cdio, trackNo ) - cdio_get_track_lsn( cdio, trackNo );
+				if (useCDTEXT)
+					readCDText(trackNo);
+				isData = cdio_get_track_format(cdio, trackNo) != TRACK_FORMAT_AUDIO;
+				duration = CD_BLOCKSIZE / chn / (double)srate;
+				numSectors = cdio_get_track_last_lsn(cdio, trackNo) - cdio_get_track_lsn(cdio, trackNo);
 
-				if ( cddb_ok && ( cddb_disc || ( Title.isEmpty() && ( cddb_ok = freedb_query( cddb_disc ) ) ) ) )
-					freedb_get_track_info( cddb_disc );
+				if (cddb_ok && (cddb_disc || (Title.isEmpty() && (cddb_ok = freedb_query(cddb_disc)))))
+					freedb_get_track_info(cddb_disc);
 
 				Playlist::Entry entry;
 				entry.name = title();
-				entry.url = AudioCDName "://{" + device + "}" + QString::number( trackNo );
+				entry.url = AudioCDName "://{" + device + "}" + QString::number(trackNo);
 				entry.length = length();
 				tracks += entry;
 			}
-			cddb_disc_destroy( cddb_disc );
+			cddb_disc_destroy(cddb_disc);
 		}
 	}
 	return tracks;

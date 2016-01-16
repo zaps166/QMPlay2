@@ -3,14 +3,14 @@
 class Echo : public AudioFilter
 {
 public:
-	Echo( Module & );
+	Echo(Module &);
 
 	bool set();
 private:
-	bool setAudioParameters( uchar, uint );
-	double filter( QByteArray &, bool );
+	bool setAudioParameters(uchar, uint);
+	double filter(QByteArray &, bool);
 
-	void alloc( bool );
+	void alloc(bool);
 
 	bool enabled, hasParameters, canFilter;
 

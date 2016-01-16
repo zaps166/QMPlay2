@@ -13,8 +13,8 @@ public:
 	{
 	public:
 		inline Entry() :
-			selected( false ),
-			length( -1 ), queue( 0 ), GID( 0 ), parent( 0 )
+			selected(false),
+			length(-1), queue(0), GID(0), parent(0)
 		{}
 
 		QString name, url;
@@ -25,17 +25,17 @@ public:
 
 	enum OpenMode { NoOpen, ReadOnly, WriteOnly };
 
-	static Entries read( const QString &, QString *name = NULL );
-	static bool write( const Entries &, const QString &, QString *name = NULL );
-	static QString name( const QString & );
+	static Entries read(const QString &, QString *name = NULL);
+	static bool write(const Entries &, const QString &, QString *name = NULL);
+	static QString name(const QString &);
 	static QStringList extensions();
 
 	virtual Entries _read() = 0;
-	virtual bool _write( const Entries & ) = 0;
+	virtual bool _write(const Entries &) = 0;
 
 	virtual ~Playlist() {}
 private:
-	static Playlist *create( const QString &, OpenMode, QString *name = NULL );
+	static Playlist *create(const QString &, OpenMode, QString *name = NULL);
 protected:
 	QList< QByteArray > readLines();
 

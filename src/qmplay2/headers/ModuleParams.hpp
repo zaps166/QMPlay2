@@ -8,37 +8,37 @@
 class ModuleParams
 {
 public:
-	inline bool modParam( const QString &key, const QVariant &val )
+	inline bool modParam(const QString &key, const QVariant &val)
 	{
-		if ( hasParam( key ) )
+		if (hasParam(key))
 		{
-			paramList.insert( key, val );
+			paramList.insert(key, val);
 			return true;
 		}
 		return false;
 	}
-	inline QVariant getParam( const QString &key ) const
+	inline QVariant getParam(const QString &key) const
 	{
-		return paramList.value( key );
+		return paramList.value(key);
 	}
-	inline bool hasParam( const QString &key ) const
+	inline bool hasParam(const QString &key) const
 	{
-		return paramList.contains( key );
+		return paramList.contains(key);
 	}
 
-	virtual bool processParams( bool *paramsCorrected = NULL )
+	virtual bool processParams(bool *paramsCorrected = NULL)
 	{
-		Q_UNUSED( paramsCorrected )
+		Q_UNUSED(paramsCorrected)
 		return true;
 	}
 protected:
 	ModuleParams() {}
-	ModuleParams( const ModuleParams & ) {}
+	ModuleParams(const ModuleParams &) {}
 	~ModuleParams() {}
 
-	inline void addParam( const QString &key, const QVariant &val = QVariant() )
+	inline void addParam(const QString &key, const QVariant &val = QVariant())
 	{
-		paramList.insert( key, val );
+		paramList.insert(key, val);
 	}
 private:
 	QHash< QString, QVariant > paramList;

@@ -14,23 +14,23 @@ public:
 
 	void stopThreads();
 
-	QString getUrl( QTreeWidgetItem *tWI = NULL ) const;
+	QString getUrl(QTreeWidgetItem *tWI = NULL) const;
 	QString getCurrentItemName() const;
 
-	void load( const QString & );
-	bool save( const QString &, bool saveCurrentGroup = false );
+	void load(const QString &);
+	bool save(const QString &, bool saveCurrentGroup = false);
 
-	void add( const QStringList & );
-	void addAndPlay( const QStringList & );
-	void add( const QString & );
-	void addAndPlay( const QString & );
+	void add(const QStringList &);
+	void addAndPlay(const QStringList &);
+	void add(const QString &);
+	void addAndPlay(const QString &);
 
 	inline QWidget *findEdit() const
 	{
-		return ( QWidget * )findE;
+		return (QWidget *)findE;
 	}
 private:
-	void expandTree( QTreeWidgetItem * );
+	void expandTree(QTreeWidgetItem *);
 
 	QWidget mainW;
 	QGridLayout *layout;
@@ -45,11 +45,11 @@ private:
 	QTreeWidgetItem *lastPlaying;
 	QList< QTreeWidgetItem * > randomPlayedItems;
 private slots:
-	void itemDoubleClicked( QTreeWidgetItem * );
-	void addAndPlay( QTreeWidgetItem * );
+	void itemDoubleClicked(QTreeWidgetItem *);
+	void addAndPlay(QTreeWidgetItem *);
 public slots:
 	void stopLoading();
-	void next( bool playingError = false );
+	void next(bool playingError = false);
 	void prev();
 	void start();
 	void clearCurrentPlaying();
@@ -70,13 +70,13 @@ public slots:
 	void expandAll();
 	void goToPlayback();
 	void queue();
-	void findItems( const QString & );
+	void findItems(const QString &);
 	void findNext();
-	void visibleItemsCount( int );
+	void visibleItemsCount(int);
 	void syncCurrentFolder();
 	void repeat();
-	void updateCurrentEntry( const QString &, int );
+	void updateCurrentEntry(const QString &, int);
 signals:
-	void play( const QString & );
+	void play(const QString &);
 	void stop();
 };
