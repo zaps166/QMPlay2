@@ -14,7 +14,7 @@ VideoEqualizer::VideoEqualizer()
 	layout = new QGridLayout;
 
 	int i;
-	for ( i = BRIGHTNESS ; i < CONTROLS_COUNT ; ++i )
+	for ( i = BRIGHTNESS; i < CONTROLS_COUNT; ++i )
 	{
 		QLabel *&titleL = controls[i].titleL;
 		QLabel *&valueL = controls[i].valueL;
@@ -90,6 +90,6 @@ void VideoEqualizer::setValue( int v )
 }
 void VideoEqualizer::reset()
 {
-	for ( int i = BRIGHTNESS ; i < CONTROLS_COUNT ; ++i )
+	for ( int i = BRIGHTNESS; i < CONTROLS_COUNT; ++i )
 		controls[ i ].slider->setValue( 0 );
 }

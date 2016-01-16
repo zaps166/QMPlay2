@@ -57,7 +57,7 @@ bool SndResampler::create( int _src_samplerate, int _src_channels, int _dst_samp
 	{
 		double matrix[ dst_channels ][ src_channels ];
 		memset( matrix, 0, sizeof matrix );
-		for ( int i = 0, c = 0 ; i < dst_channels ; i++ )
+		for ( int i = 0, c = 0; i < dst_channels; i++ )
 		{
 			matrix[ i ][ c ] = 1.0;
 			c = ( c + 1 ) % src_channels;

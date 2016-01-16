@@ -236,7 +236,7 @@ BOOL CSoundFile::ReadFAR(const BYTE *lpStream, DWORD dwMemLength)
 		dwMemPos += sizeof(FARSAMPLE);
 		m_nSamples = ismp + 1;
 		memcpy(m_szNames[ismp+1], pfs->samplename, 32);
-		const DWORD length = bswapLE32( pfs->length ) ; /* endian fix - Toad */
+		const DWORD length = bswapLE32( pfs->length ); /* endian fix - Toad */
 		pins->nLength = length ;
 		pins->nLoopStart = bswapLE32(pfs->reppos) ;
 		pins->nLoopEnd = bswapLE32(pfs->repend) ;

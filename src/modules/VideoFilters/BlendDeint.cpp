@@ -15,13 +15,13 @@ void BlendDeint::filter( QQueue< FrameBuffer > &framesQueue )
 		FrameBuffer dequeued = internalQueue.dequeue();
 		VideoFrame *videoFrame = VideoFrame::fromData( dequeued.data );
 		videoFrame->setNoInterlaced();
-		for ( int p = 0 ; p < 3 ; ++p )
+		for ( int p = 0; p < 3; ++p )
 		{
 			const int linesize = videoFrame->linesize[ p ];
 			quint8 *src = videoFrame->data[ p ] + linesize;
 			quint8 *dst = videoFrame->data[ p ] + linesize;
 			const int H = ( p ? h >> 1 : h >> 0 ) - 2;
-			for ( int i = 0 ; i < H ; ++i )
+			for ( int i = 0; i < H; ++i )
 			{
 				VideoFilters::averageTwoLines( dst, src, src + linesize, linesize );
 				src += linesize;

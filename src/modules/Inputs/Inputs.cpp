@@ -99,7 +99,7 @@ QMPLAY2_EXPORT_PLUGIN( Inputs )
 HzW::HzW( int c, const QStringList &freqs )
 {
 	QGridLayout *layout = new QGridLayout( this );
-	for ( int i = 0 ; i < c ; ++i )
+	for ( int i = 0; i < c; ++i )
 	{
 		QSpinBox *sB = new QSpinBox;
 		sB->setRange( 0, 96000 );
@@ -234,7 +234,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	QGroupBox *fmtB = new QGroupBox( tr( "Format" ) );
 	QVBoxLayout *fmtLayout = new QVBoxLayout( fmtB );
 	int checked = sets().getInt( "PCM/format" );
-	for ( int i = 0 ; i < PCM::FORMAT_COUNT ; ++i )
+	for ( int i = 0; i < PCM::FORMAT_COUNT; ++i )
 	{
 		QRadioButton *rB = new QRadioButton( formatName[ i ] );
 		if ( i == checked )
@@ -303,7 +303,7 @@ void ModuleSettingsWidget::saveSettings()
 		pcmExtsE->setText( standartExts );
 	sets().set( "PCM", pcmB->isChecked() );
 	sets().set( "PCM/extensions", pcmExtsE->text().split( ';', QString::SkipEmptyParts ) );
-	for ( int i = 0 ; i < formatB.size() ; ++i )
+	for ( int i = 0; i < formatB.size(); ++i )
 		if ( formatB[ i ]->isChecked() )
 		{
 			sets().set( "PCM/format", i );

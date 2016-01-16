@@ -74,13 +74,13 @@ bool XVIDEO::open( int W, int H, unsigned long _handle, const QString &adaptorNa
 	handle = _handle;
 	useSHM = _useSHM;
 
-	for ( uint i = 0 ; i < adaptors ; i++ )
+	for ( uint i = 0; i < adaptors; i++ )
 	{
 		if ( ( ai[ i ].type & ( XvInputMask | XvImageMask ) ) == ( XvInputMask | XvImageMask ) )
 		{
 			if ( !adaptorName.isEmpty() && adaptorName != ai[ i ].name )
 				continue;
-			for ( XvPortID _p = ai[ i ].base_id ; _p < ai[ i ].base_id + ai[ i ].num_ports ; _p++ )
+			for ( XvPortID _p = ai[ i ].base_id; _p < ai[ i ].base_id + ai[ i ].num_ports; _p++ )
 			{
 				if ( !XvGrabPort( disp, _p, CurrentTime ) )
 				{
@@ -107,7 +107,7 @@ bool XVIDEO::open( int W, int H, unsigned long _handle, const QString &adaptorNa
 	}
 
 	int format_id = 0;
-	for ( int i = 0 ; i < formats ; i++ )
+	for ( int i = 0; i < formats; i++ )
 	{
 		if ( !qstrncmp( fo[ i ].guid, "YV12", 4 ) )
 		{
@@ -285,7 +285,7 @@ QList< QString > XVIDEO::adaptorsList()
 	XVIDEO *xv = new XVIDEO;
 	if  ( xv->isOK() )
 	{
-		for ( unsigned i = 0 ; i < xv->adaptors ; i++ )
+		for ( unsigned i = 0; i < xv->adaptors; i++ )
 			if ( ( xv->ai[ i ].type & ( XvInputMask | XvImageMask ) ) == ( XvInputMask | XvImageMask ) )
 				_adaptorsList += xv->ai[ i ].name;
 	}
@@ -295,7 +295,7 @@ QList< QString > XVIDEO::adaptorsList()
 
 void XVIDEO::XvSetPortAttributeIfExists( void *attributes, int attrib_count, const char *k, int v )
 {
-	for ( int i = 0 ; i < attrib_count ; ++i )
+	for ( int i = 0; i < attrib_count; ++i )
 	{
 		const XvAttribute &attribute = ( ( XvAttribute * )attributes )[ i ];
 		if ( !qstrcmp( attribute.name, k ) && ( attribute.flags & XvSettable ) )

@@ -155,19 +155,19 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	itagAudioLW->setDragDropMode( QListWidget::InternalMove );
 	itagAudioLW->setSelectionMode( QListWidget::ExtendedSelection );
 
-	for ( int i = 0 ; i < itagVideoNames.first.count() ; ++i )
+	for ( int i = 0; i < itagVideoNames.first.count(); ++i )
 	{
 		QListWidgetItem *lWI = new QListWidgetItem( itagVideoLW );
 		lWI->setText( itagVideoNames.first[ i ] );
 		lWI->setData( Qt::UserRole, itagVideoNames.second[ i ] );
 	}
-	for ( int i = 0 ; i < itagAudioNames.first.count() ; ++i )
+	for ( int i = 0; i < itagAudioNames.first.count(); ++i )
 	{
 		QListWidgetItem *lWI = new QListWidgetItem( itagAudioLW );
 		lWI->setText( itagAudioNames.first[ i ] );
 		lWI->setData( Qt::UserRole, itagAudioNames.second[ i ] );
 	}
-	for ( int i = 0 ; i < itagNames.first.count() ; ++i )
+	for ( int i = 0; i < itagNames.first.count(); ++i )
 	{
 		QListWidgetItem *lWI = new QListWidgetItem( itagLW );
 		lWI->setText( itagNames.first[ i ] );
@@ -276,11 +276,11 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set( "YouTube/youtubedl", youtubedlE->text() );
 
 	QStringList itagsVideo, itagsAudio, itags;
-	for ( int i = 0 ; i < itagVideoLW->count() ; ++i )
+	for ( int i = 0; i < itagVideoLW->count(); ++i )
 		itagsVideo += itagVideoLW->item( i )->data( Qt::UserRole ).toString();
-	for ( int i = 0 ; i < itagAudioLW->count() ; ++i )
+	for ( int i = 0; i < itagAudioLW->count(); ++i )
 		itagsAudio += itagAudioLW->item( i )->data( Qt::UserRole ).toString();
-	for ( int i = 0 ; i < itagLW->count() ; ++i )
+	for ( int i = 0; i < itagLW->count(); ++i )
 		itags += itagLW->item( i )->data( Qt::UserRole ).toString();
 	sets().set( "YouTube/ItagVideoList", itagsVideo );
 	sets().set( "YouTube/ItagAudioList", itagsAudio );

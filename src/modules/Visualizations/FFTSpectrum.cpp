@@ -11,10 +11,10 @@ extern "C"
 
 static inline void fltmix( FFTComplex *dest, const float *src, const int size, const uchar chn )
 {
-	for ( int i = 0, j = 0 ; i < size ; i += chn )
+	for ( int i = 0, j = 0; i < size; i += chn )
 	{
 		dest[ j ].re = dest[ j ].im = 0.0;
-		for ( uchar c = 0 ; c < chn ; ++c )
+		for ( uchar c = 0; c < chn; ++c )
 		{
 			if ( src[ i+c ] == src[ i+c ] ) //not NaN
 				dest[ j ].re += src[ i+c ];
@@ -62,7 +62,7 @@ void FFTSpectrumW::paintEvent( QPaintEvent * )
 
 		const float *spectrum = spectrumData.constData();
 		QPainterPath path( QPointF( 0.0, 1.0 ) );
-		for ( int x = 0 ; x < size ; ++x )
+		for ( int x = 0; x < size; ++x )
 		{
 			/* Bars */
 			setValue( lastData[ x ].first, spectrum[ x ], realInterval * 2.0 );
@@ -199,7 +199,7 @@ void FFTSpectrum::sendSoundData( const QByteArray &data )
 			av_fft_calc( fft_ctx, tmpData );
 			tmpDataPos /= 2;
 			float *spectrumData = w.spectrumData.data();
-			for ( int i = 0 ; i < tmpDataPos ; ++i )
+			for ( int i = 0; i < tmpDataPos; ++i )
 			{
 				spectrumData[ i ] = sqrt( tmpData[ i ].re * tmpData[ i ].re + tmpData[ i ].im * tmpData[ i ].im ) / tmpDataPos * scale;
 				if ( spectrumData[ i ] > 1.0 )

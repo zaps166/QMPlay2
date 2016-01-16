@@ -163,7 +163,7 @@ void LastFM::updatePlaying( bool play, const QString &title, const QString &arti
 					length = 0;
 				scrobbleQueue.enqueue( scrobble );
 			}
-			else for ( int i = 0 ; i < scrobbleQueue.count() ; ++i )
+			else for ( int i = 0; i < scrobbleQueue.count(); ++i )
 				if ( scrobbleQueue[ i ] == scrobble && currTime - scrobbleQueue[ i ].startTime < scrobbleSec )
 					scrobbleQueue.removeAt( i );
 			if ( scrobbleQueue.isEmpty() )

@@ -22,7 +22,7 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 	if ( !backwards ) //Skok do przodu
 	{
 		const int count = packetsCount();
-		for ( int i = pos ; i < count ; ++i )
+		for ( int i = pos; i < count; ++i )
 		{
 			const Packet &pkt = at( i );
 			if ( pkt.ts < seek_pos || !pkt.hasKeyFrame )
@@ -41,7 +41,7 @@ bool PacketBuffer::seekTo( double seek_pos, bool backwards )
 			}
 		}
 	}
-	else for ( int i = pos - 1 ; i >= 0 ; --i ) //Skok do tyłu
+	else for ( int i = pos - 1; i >= 0; --i ) //Skok do tyłu
 	{
 		const Packet &pkt = at( i );
 		durationToChange += pkt.duration;

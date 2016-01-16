@@ -20,11 +20,11 @@ static void matroska_fix_ass_packet( AVRational stream_timebase, AVPacket *pkt )
 {
 	AVBufferRef *line;
 	char *layer, *ptr = ( char * )pkt->data, *end = ptr + pkt->size;
-	for ( ; *ptr != ',' && ptr < end - 1 ; ptr++ );
+	for (; *ptr != ',' && ptr < end - 1; ptr++ );
 	if ( *ptr == ',' )
 		ptr++;
 	layer = ptr;
-	for ( ; *ptr != ',' && ptr < end - 1 ; ptr++ );
+	for (; *ptr != ',' && ptr < end - 1; ptr++ );
 	if ( *ptr == ',' )
 	{
 		int64_t end_pts = pkt->pts + pkt->duration;
@@ -92,7 +92,7 @@ FormatContext::~FormatContext()
 {
 	if ( formatCtx )
 	{
-		for ( int i = 0 ; i < streams.count() ; ++i )
+		for ( int i = 0; i < streams.count(); ++i )
 		{
 			AVStream *stream = streams[ i ];
 			if ( stream->codec )
@@ -133,7 +133,7 @@ bool FormatContext::metadataChanged() const
 QList< ChapterInfo > FormatContext::getChapters() const
 {
 	QList< ChapterInfo > chapters;
-	for ( unsigned i = 0 ; i < formatCtx->nb_chapters ; i++ )
+	for ( unsigned i = 0; i < formatCtx->nb_chapters; i++ )
 	{
 		AVChapter &chapter = *formatCtx->chapters[ i ];
 		ChapterInfo chapterInfo( chapter.start * chapter.time_base.num / ( double )chapter.time_base.den, chapter.end * chapter.time_base.num / ( double )chapter.time_base.den );
@@ -305,7 +305,7 @@ bool FormatContext::seek( int pos )
 #endif
 		if ( isOk )
 		{
-			for ( int i = 0 ; i < streamsTS.count() ; ++i )
+			for ( int i = 0; i < streamsTS.count(); ++i )
 				streamsTS[ i ] = pos;
 			currPos = pos;
 			isError = false;
@@ -529,7 +529,7 @@ bool FormatContext::open( const QString &_url )
 	index_map.resize( formatCtx->nb_streams );
 	streamsTS.resize( formatCtx->nb_streams );
 	streamsOffset.resize( formatCtx->nb_streams );
-	for ( unsigned i = 0 ; i < formatCtx->nb_streams ; ++i )
+	for ( unsigned i = 0; i < formatCtx->nb_streams; ++i )
 	{
 		StreamInfo *streamInfo = getStreamInfo( formatCtx->streams[ i ] );
 		if ( !streamInfo )
@@ -584,7 +584,7 @@ void FormatContext::setStreamOffset( double offset )
 {
 	if ( isOneStreamOgg )
 		lastTime = offset;
-	else for ( int i = 0 ; i < streamsOffset.count() ; ++i )
+	else for ( int i = 0; i < streamsOffset.count(); ++i )
 		streamsOffset[ i ] = offset - streamsTS.at( i );
 }
 

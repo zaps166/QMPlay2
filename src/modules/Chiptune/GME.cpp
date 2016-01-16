@@ -65,7 +65,7 @@ bool GME::read( Packet &decoded, int &idx )
 	if ( gme_play( m_gme, chunkSize, srcData ) != NULL )
 		return false;
 
-	for ( int i = chunkSize - 1 ; i >= 0 ; --i )
+	for ( int i = chunkSize - 1; i >= 0; --i )
 		dstData[ i ] = srcData[ i ] / 32768.0;
 
 	decoded.ts = gme_tell( m_gme ) / 1000.0;
@@ -92,7 +92,7 @@ Playlist::Entries GME::fetchTracks( const QString &url, bool &ok )
 	if ( open( url, true ) )
 	{
 		const int tracks = gme_track_count( m_gme );
-		for ( int i = 0 ; i < tracks ; ++i )
+		for ( int i = 0; i < tracks; ++i )
 		{
 			gme_info_t *info = NULL;
 			if ( !gme_track_info( m_gme, &info, i ) && info )
@@ -107,7 +107,7 @@ Playlist::Entries GME::fetchTracks( const QString &url, bool &ok )
 		}
 		if ( entries.length() > 1 )
 		{
-			for ( int i = 0 ; i < entries.length() ; ++i )
+			for ( int i = 0; i < entries.length(); ++i )
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
 			entry.name = Functions::fileName( m_url, false );
@@ -187,7 +187,7 @@ bool GME::open( const QString &_url, bool tracksOnly )
 
 		QString voices;
 		const int numVoices = gme_voice_count( m_gme );
-		for ( int i = 0 ; i < numVoices ; ++i )
+		for ( int i = 0; i < numVoices; ++i )
 		{
 			voices += gme_voice_name( m_gme, i );
 			voices += ", ";

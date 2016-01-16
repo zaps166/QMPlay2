@@ -340,7 +340,7 @@ void Drawable::initializeGL()
 	glDisable( GL_DITHER );
 
 	/* Prepare textures */
-	for ( int i = 1 ; i <= 4 ; ++i )
+	for ( int i = 1; i <= 4; ++i )
 	{
 		glBindTexture( GL_TEXTURE_2D, i );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR );

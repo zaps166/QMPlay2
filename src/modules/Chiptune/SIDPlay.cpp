@@ -58,7 +58,7 @@ bool SIDPlay::seek( int s )
 	{
 		const int bufferSize = m_chn * m_srate;
 		qint16 *buff1sec = new qint16[ bufferSize ];
-		for ( int i = m_sidplay.time() ; i <= s && !m_aborted ; ++i )
+		for ( int i = m_sidplay.time(); i <= s && !m_aborted; ++i )
 			m_sidplay.play( buff1sec, bufferSize );
 		delete[] buff1sec;
 	}
@@ -83,7 +83,7 @@ bool SIDPlay::read( Packet &decoded, int &idx )
 
 	m_sidplay.play( srcData, chunkSize );
 
-	for ( int i = chunkSize - 1 ; i >= 0 ; --i )
+	for ( int i = chunkSize - 1; i >= 0; --i )
 		dstData[ i ] = srcData[ i ] / 16384.0;
 
 	decoded.ts = t;
@@ -110,7 +110,7 @@ Playlist::Entries SIDPlay::fetchTracks( const QString &url, bool &ok )
 	if ( open( url, true ) )
 	{
 		const int tracks = m_tune->getInfo()->songs();
-		for ( int i = 0 ; i < tracks ; ++i )
+		for ( int i = 0; i < tracks; ++i )
 		{
 			const SidTuneInfo *info = m_tune->getInfo( i );
 			if ( info )
@@ -124,7 +124,7 @@ Playlist::Entries SIDPlay::fetchTracks( const QString &url, bool &ok )
 		}
 		if ( entries.length() > 1 )
 		{
-			for ( int i = 0 ; i < entries.length() ; ++i )
+			for ( int i = 0; i < entries.length(); ++i )
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
 			entry.name = Functions::fileName( m_url, false );

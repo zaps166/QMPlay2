@@ -16,7 +16,7 @@ void DiscardDeint::filter( QQueue< FrameBuffer > &framesQueue )
 		VideoFrame *videoFrame = VideoFrame::fromData( dequeued.data );
 		const bool TFF = isTopFieldFirst( videoFrame );
 		videoFrame->setNoInterlaced();
-		for ( int p = 0 ; p < 3 ; ++p )
+		for ( int p = 0; p < 3; ++p )
 		{
 			const int linesize = videoFrame->linesize[ p ];
 			quint8 *src = videoFrame->data[ p ];
@@ -30,7 +30,7 @@ void DiscardDeint::filter( QQueue< FrameBuffer > &framesQueue )
 			}
 			dst += linesize;
 			src += linesize;
-			for ( int i = 0 ; i < lines ; ++i )
+			for ( int i = 0; i < lines; ++i )
 			{
 				VideoFilters::averageTwoLines( dst, src - linesize, src + linesize, linesize );
 				src += linesize << 1;

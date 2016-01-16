@@ -10,7 +10,7 @@ bool Demuxer::create( const QString &url, IOController< Demuxer > &demuxer, Fetc
 	if ( demuxer.isAborted() || url.isEmpty() || scheme.isEmpty() )
 		return false;
 	QString extension = Functions::fileExt( url ).toLower();
-	for ( int i = 0 ; i <= 1 ; ++i )
+	for ( int i = 0; i <= 1; ++i )
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 			foreach ( const Module::Info &mod, module->getModulesInfo() )
 				if ( mod.type == Module::DEMUXER && ( mod.name == scheme || ( !i ? mod.extensions.contains( extension ) : mod.extensions.isEmpty() ) ) )

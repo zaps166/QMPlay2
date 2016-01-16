@@ -119,7 +119,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 	int numErrors = 0;
 
 	double ts;
-	for ( int i = 0 ; i < formatContexts.count() ; ++i )
+	for ( int i = 0; i < formatContexts.count(); ++i )
 	{
 		FormatContext *fmtCtx = formatContexts.at( i );
 		if ( fmtCtx->isError )
@@ -139,7 +139,7 @@ bool FFDemux::read( Packet &encoded, int &idx )
 
 	if ( formatContexts.at( fmtCtxIdx )->read( encoded, idx ) )
 	{
-		for ( int i = 0 ; i < fmtCtxIdx ; ++i )
+		for ( int i = 0; i < fmtCtxIdx; ++i )
 			idx += formatContexts.at( i )->streamsInfo.count();
 		return true;
 	}

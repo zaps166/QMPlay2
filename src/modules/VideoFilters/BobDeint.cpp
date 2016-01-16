@@ -18,7 +18,7 @@ void BobDeint::filter( QQueue< FrameBuffer > &framesQueue )
 		VideoFrame *videoFrame1 = VideoFrame::fromData( dequeued.data );
 		VideoFrame *videoFrame2 = VideoFrame::create( videoFrameData2, w, h );
 
-		for ( int p = 0 ; p < 3 ; ++p )
+		for ( int p = 0; p < 3; ++p )
 		{
 			const int linesize = videoFrame1->linesize[ p ];
 			quint8 *src  = videoFrame1->data[ p ] + linesize;
@@ -29,7 +29,7 @@ void BobDeint::filter( QQueue< FrameBuffer > &framesQueue )
 			dst2 += linesize;
 
 			const int H = p ? h >> 2 : h >> 1;
-			for ( int i = 0 ; i < H ; ++i )
+			for ( int i = 0; i < H; ++i )
 			{
 				const bool notLast = i != H-1;
 

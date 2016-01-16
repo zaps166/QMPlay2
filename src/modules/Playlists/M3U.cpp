@@ -64,7 +64,7 @@ bool M3U::_write( const Entries &list )
 {
 	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( "#EXTM3U\r\n" );
-	for ( int i = 0 ; i < list.size() ; i++ )
+	for ( int i = 0; i < list.size(); i++ )
 	{
 		const Entry &entry = list[ i ];
 		if ( !entry.GID )

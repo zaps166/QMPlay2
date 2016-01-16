@@ -252,7 +252,7 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality( const QTreeWidgetItem *tWI )
 	if ( !tWI->childCount() )
 		return NULL;
 	foreach ( int itag, itags )
-		for ( int i = 0 ; i < tWI->childCount() ; ++i )
+		for ( int i = 0; i < tWI->childCount(); ++i )
 			if ( tWI->child( i )->data( 0, Qt::UserRole + 2 ).toInt() == itag )
 				return tWI->child( i );
 	return tWI->child( 0 );
@@ -657,7 +657,7 @@ void YouTubeW::setSearchResults( QString data )
 
 	int i;
 	const QStringList splitted = data.split( "yt-lockup " );
-	for ( i = 1 ; i < splitted.count() ; ++i )
+	for ( i = 1; i < splitted.count(); ++i )
 	{
 		QString title, videoInfoLink, duration, image, user;
 		const QString &entry = splitted[ i ];
@@ -771,7 +771,7 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 {
 	QStringList ret;
 
-	for ( int i = 0 ; i <= 1 ; ++i )
+	for ( int i = 0; i <= 1; ++i )
 	{
 		const QString fmts = QString( i ? "adaptive_fmts" : "url_encoded_fmt_stream_map" ) + "\":\""; //"adaptive_fmts" contains audio or video urls
 		int streamsIdx = data.indexOf( fmts );
@@ -841,7 +841,7 @@ QStringList YouTubeW::getYouTubeVideo( const QString &data, const QString &PARAM
 		else
 		{
 			const QStringList video = getUrlByItagPriority( resultsW->itagsVideo, ret );
-			const QStringList audio = getUrlByItagPriority( resultsW->itagsAudio, ret );
+            const QStringList audio = getUrlByItagPriority( resultsW->itagsAudio, ret );
 			ret = QStringList() << "FFmpeg://{[" + video[ 0 ] + "][" + audio[ 0 ] + "]}" << "[" + video[ 1 ] + "][" + audio[ 1 ] + "]";
 		}
 	}
@@ -927,7 +927,7 @@ QStringList YouTubeW::getUrlByItagPriority( const QList< int > &itags, QStringLi
 	foreach ( int itag, itags )
 	{
 		bool br = false;
-		for ( int i = 2 ; i < ret.count() ; i += 3 )
+		for ( int i = 2; i < ret.count(); i += 3 )
 			if ( ret[ i ].toInt() == itag )
 			{
 				if ( i != 2 )
@@ -1002,7 +1002,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList, MediaType mediaTyp
 	}
 
 	ItagNames itagPair;
-	for ( QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd() ; it != it_end ; ++it )
+	for ( QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it )
 	{
 		switch ( mediaType )
 		{
@@ -1022,7 +1022,7 @@ ItagNames YouTube::getItagNames( const QStringList &itagList, MediaType mediaTyp
 		itagPair.first += it.value();
 		itagPair.second += it.key();
 	}
-	for ( int i = 0, j = 0 ; i < itagList.count() ; ++i )
+	for ( int i = 0, j = 0; i < itagList.count(); ++i )
 	{
 		const int idx = itagPair.second.indexOf( itagList[ i ].toInt() );
 		if ( idx > -1 )

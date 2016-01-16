@@ -170,7 +170,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	QLabel *vdpauHQScalingL = new QLabel( tr( "Poziom skalowania obrazu" ) + ": " );
 
 	vdpauHQScalingB = new QComboBox;
-	for ( int i = 0 ; i <= 9 ; ++i )
+	for ( int i = 0; i <= 9; ++i )
 		vdpauHQScalingB->addItem( QString( "Level %1" ).arg( i ) );
 	vdpauHQScalingB->setCurrentIndex( sets().getUInt( "VDPAUHQScaling" ) );
 

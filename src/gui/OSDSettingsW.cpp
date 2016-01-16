@@ -85,7 +85,7 @@ OSDSettingsW::OSDSettingsW( const QString &prefix ) :
 	alignGB->setTitle( tr( "Rozmieszczenie napisów" ) );
 
 	alignL = new QGridLayout( alignGB );
-	for ( int align = 0 ; align < 9 ; align++ )
+	for ( int align = 0; align < 9; align++ )
 	{
 		alignB[ align ] = new QRadioButton;
 		alignL->addWidget( alignB[ align ], align/3, align%3 );
@@ -153,7 +153,7 @@ void OSDSettingsW::writeSettings()
 	QMPSettings.set( prefix + "/LeftMargin", leftMarginB->value() );
 	QMPSettings.set( prefix + "/RightMargin", rightMarginB->value() );
 	QMPSettings.set( prefix + "/VMargin", vMarginB->value() );
-	for ( int align = 0 ; align < 9 ; ++align )
+	for ( int align = 0; align < 9; ++align )
 		if ( alignB[ align ]->isChecked() )
 		{
 			QMPSettings.set( prefix + "/Alignment", align );

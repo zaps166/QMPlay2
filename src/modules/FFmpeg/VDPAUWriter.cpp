@@ -35,7 +35,7 @@ VDPAUWriter::VDPAUWriter( Module &module ) :
 	features[ 1 ] = VDP_VIDEO_MIXER_FEATURE_DEINTERLACE_TEMPORAL_SPATIAL;
 	features[ 2 ] = VDP_VIDEO_MIXER_FEATURE_NOISE_REDUCTION;
 	features[ 3 ] = VDP_VIDEO_MIXER_FEATURE_SHARPNESS;
-	for ( int i = 0 ; i < scalingLevelsCount ; ++i )
+	for ( int i = 0; i < scalingLevelsCount; ++i )
 		features[ i + scalingLevelsIdx ] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
 
 	SetModule( module );
@@ -82,7 +82,7 @@ bool VDPAUWriter::set()
 	quint32 scalingLvl = sets().getUInt( "VDPAUHQScaling" );
 	if ( scalingLvl > scalingLevelsCount )
 		scalingLvl = 0;
-	for ( int i = 0 ; i < scalingLevelsCount ; ++i )
+	for ( int i = 0; i < scalingLevelsCount; ++i )
 		featureEnables[ i + scalingLevelsIdx ] = ( int )scalingLvl > i;
 	if ( ok )
 	{
@@ -250,7 +250,7 @@ bool VDPAUWriter::open()
 				<< VDP_DECODER_PROFILE_VC1_ADVANCED << VDP_DECODER_PROFILE_VC1_MAIN << VDP_DECODER_PROFILE_VC1_SIMPLE
 				<< VDP_DECODER_PROFILE_MPEG1
 			;
-			for ( int i = profileList.count() - 1 ; i >= 0 ; --i )
+			for ( int i = profileList.count() - 1; i >= 0; --i )
 			{
 				if ( vdp_decoder_query_capabilities( device, profileList[ i ], &isSupported, out + 0, out + 1, out + 2, out + 3 ) != VDP_STATUS_OK || !isSupported )
 					profileList.removeAt( i );
@@ -327,11 +327,11 @@ bool VDPAUWriter::HWAccellInit( int W, int H, const char *codec_name )
 
 		if ( vdp_decoder_create( device, profile, outW, outH, 16, &decoder ) == VDP_STATUS_OK )
 		{
-			for ( int i = 0 ; i < surfacesCount ; ++i )
+			for ( int i = 0; i < surfacesCount; ++i )
 			{
 				if ( vdp_video_surface_create( device, VDP_CHROMA_TYPE_420, outW, outH, &surfaces[ i ] ) != VDP_STATUS_OK )
 				{
-					for ( int j = 0 ; j < i ; ++j )
+					for ( int j = 0; j < i; ++j )
 						vdp_video_surface_destroy( surfacesQueue[ j ] );
 					surfacesQueue.clear();
 					return false;
@@ -357,7 +357,7 @@ bool VDPAUWriter::HWAccellInit( int W, int H, const char *codec_name )
 
 			/* Bywa, że nie można stworzyć video_mixer jeżeli są załączone nieobsługiwane poziomy skalowania oraz nie da się zastosować filtrów */
 			featuresCountCreated = scalingLevelsIdx;
-			for ( int i = 0 ; i < scalingLevelsCount ; ++i )
+			for ( int i = 0; i < scalingLevelsCount; ++i )
 			{
 				VdpBool fs = false;
 				vdp_video_mixer_query_feature_support( device, features[ i + scalingLevelsIdx ], &fs );
@@ -400,7 +400,7 @@ void VDPAUWriter::preemption_callback( VdpDevice, void *context )
 void VDPAUWriter::setFeatures()
 {
 	VdpBool featuresSupport[ featuresCount ] = { false };
-	for ( int i = 0 ; i < featuresCount ; ++i )
+	for ( int i = 0; i < featuresCount; ++i )
 		vdp_video_mixer_query_feature_support( device, features[ i ], featuresSupport + i );
 	if ( !featuresSupport[ 1 ] && featureEnables[ 1 ] )
 	{
@@ -424,7 +424,7 @@ void VDPAUWriter::setFeatures()
 		const void *attributeValues[] = { &noisereduction_lvl, &sharpness_lvl };
 		vdp_video_mixer_set_attribute_values( mixer, 2, attributes, attributeValues );
 	}
-	for ( int i = scalingLevelsCount - 1 ; i >= 0 ; --i )
+	for ( int i = scalingLevelsCount - 1; i >= 0; --i )
 		if ( featureEnables[ i + scalingLevelsIdx ] )
 		{
 			if ( !featuresSupport[ scalingLevelsIdx + i ] )
@@ -605,10 +605,10 @@ void VDPAUWriter::resizeEvent( QResizeEvent * )
 			outputSurfacesCreated = false;
 			outputSurfacesSize = QSize();
 		}
-		for ( int i = 0 ; i < outputSurfacesCount ; ++i )
+		for ( int i = 0; i < outputSurfacesCount; ++i )
 			if ( vdp_output_surface_create( device, VDP_RGBA_FORMAT_B8G8R8A8, newOutputSurfacesSize.width(), newOutputSurfacesSize.height(), &outputSurfaces[ i ] ) != VDP_STATUS_OK )
 			{
-				for ( int j = 0 ; j < i ; ++j )
+				for ( int j = 0; j < i; ++j )
 					vdp_output_surface_destroy( outputSurfaces[ j ] );
 				return;
 			}
@@ -636,7 +636,7 @@ QPaintEngine *VDPAUWriter::paintEngine() const
 
 void VDPAUWriter::destroyOutputSurfaces()
 {
-	for ( int i = 0 ; i < outputSurfacesCount ; ++i )
+	for ( int i = 0; i < outputSurfacesCount; ++i )
 		vdp_output_surface_destroy( outputSurfaces[ i ] );
 }
 void VDPAUWriter::clr()
@@ -646,7 +646,7 @@ void VDPAUWriter::clr()
 		if ( bitmapSurface != VDP_INVALID_HANDLE )
 			vdp_bitmap_surface_destroy( bitmapSurface );
 		if ( surfacesCreated )
-			for ( int i = 0 ; i < surfacesCount ; ++i )
+			for ( int i = 0; i < surfacesCount; ++i )
 				vdp_video_surface_destroy( surfaces[ i ] );
 		if ( outputSurfacesCreated )
 			destroyOutputSurfaces();
@@ -655,7 +655,7 @@ void VDPAUWriter::clr()
 		if ( decoder )
 			vdp_decoder_destroy( decoder );
 	}
-	for ( int i = 0 ; i < 3 ; ++i )
+	for ( int i = 0; i < 3; ++i )
 		renderSurfaces[ i ] = VDP_INVALID_HANDLE;
 	bitmapSurface = VDP_INVALID_HANDLE;
 	bitmapSurfaceSize = QSize();

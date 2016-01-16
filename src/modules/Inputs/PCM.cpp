@@ -77,27 +77,27 @@ bool PCM::read( Packet &decoded, int &idx )
 	switch ( fmt )
 	{
 		case PCM_U8:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = ( data.getBYTE() - 0x7F ) / 128.0f;
 			break;
 		case PCM_S8:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = ( qint8 )data.getBYTE() / 128.0f;
 			break;
 		case PCM_S16:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = ( qint16 )data.getWORD() / 32768.0f;
 			break;
 		case PCM_S24:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = ( qint32 )data.get24bAs32b() / 2147483648.0f;
 			break;
 		case PCM_S32:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = ( qint32 )data.getDWORD() / 2147483648.0f;
 			break;
 		case PCM_FLT:
-			for ( int i = 0 ; i < samples_with_channels ; i++ )
+			for ( int i = 0; i < samples_with_channels; i++ )
 				decoded_data[ i ] = data.getFloat();
 			break;
 		default:

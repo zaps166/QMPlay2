@@ -19,7 +19,7 @@ Playlist::Entries PLS::_read()
 		playlistPath.clear();
 
 	const QList< QByteArray > playlistLines = readLines();
-	for ( int i = 0 ; i < playlistLines.count() ; ++i )
+	for ( int i = 0; i < playlistLines.count(); ++i )
 	{
 		const QByteArray &line = playlistLines[ i ];
 		if ( line.isEmpty() )
@@ -29,7 +29,7 @@ Playlist::Entries PLS::_read()
 			continue;
 
 		int number_idx = -1;
-		for ( int i = 0 ; i < line.length() ; ++i )
+		for ( int i = 0; i < line.length(); ++i )
 		{
 			if ( line[ i ] == '=' )
 				break;
@@ -72,7 +72,7 @@ bool PLS::_write( const Entries &list )
 {
 	Writer *writer = ioCtrl.rawPtr< Writer >();
 	writer->write( QString( "[playlist]\r\nNumberOfEntries=" + QString::number( list.size() ) + "\r\n" ).toUtf8() );
-	for ( int i = 0 ; i < list.size() ; i++ )
+	for ( int i = 0; i < list.size(); i++ )
 	{
 		const Playlist::Entry &entry = list[ i ];
 		QString idx = QString::number( i+1 );
@@ -108,6 +108,6 @@ void PLS::prepareList( Playlist::Entries *list, int idx )
 {
 	if ( !list || idx <= list->size() - 1 )
 		return;
-	for ( int i = list->size() ; i <= idx ; i++ )
+	for ( int i = list->size(); i <= idx; i++ )
 		*list += Entry();
 }

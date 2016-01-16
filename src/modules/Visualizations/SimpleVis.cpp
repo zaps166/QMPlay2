@@ -19,7 +19,7 @@ static inline float fltclip( float f )
 static inline void fltcpy( float *dest, const float *src, int size )
 {
 	size /= sizeof( float );
-	for ( int i = 0 ; i < size ; ++i )
+	for ( int i = 0; i < size; ++i )
 		dest[ i ] = fltclip( src[ i ] );
 }
 
@@ -60,21 +60,21 @@ void SimpleVisW::paintEvent( QPaintEvent * )
 		p.translate( 0.0, fullScreen );
 		p.scale( ( width() - 1 ) * 0.9, ( height() - 1 - fullScreen ) / 2.0 / chn );
 		p.translate( 0.055, 0.0 );
-		for ( int c = 0 ; c < chn ; ++c )
+		for ( int c = 0; c < chn; ++c )
 		{
 			p.setPen( QPen( QColor( 102, 51, 128 ), 0.0 ) );
 			p.drawLine( QLineF( 0.0, 1.0, 1.0, 1.0 ) );
 
 			p.setPen( QPen( QColor( 102, 179, 102 ), 0.0 ) );
 			QPainterPath path( QPointF( 0.0, 1.0 - samples[ c ] ) );
-			for ( int i = chn ; i < size ; i += chn )
+			for ( int i = chn; i < size; i += chn )
 				path.lineTo( i / ( qreal )( size - chn ), 1.0 - samples[ i + c ] );
 			p.drawPath( path );
 
 			if ( c < 2 )
 			{
 				const int numSamples = size / chn;
-				for ( int i = 0 ; i < size ; i += chn )
+				for ( int i = 0; i < size; i += chn )
 					lr[ c ] += samples[ i + c ] * samples[ i + c ];
 				lr[ c ] = sqrt( lr[ c ] / numSamples );
 			}

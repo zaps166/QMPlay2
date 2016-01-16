@@ -27,7 +27,7 @@ QVector< float > Equalizer::interpolate( const QVector< float > &src, const int 
 	if ( size >= 2 )
 	{
 		const float mn = ( size - 1.0f ) / len;
-		for ( int i = 0 ; i < len ; ++i )
+		for ( int i = 0; i < len; ++i )
 		{
 			int   x = i * mn;
 			float p = i * mn - x;
@@ -42,7 +42,7 @@ QVector< float > Equalizer::freqs( Settings &sets )
 	QVector< float > freqs( sets.getInt( "Equalizer/count" ) );
 	const int minFreq = sets.getInt( "Equalizer/minFreq" ), maxFreq = sets.getInt( "Equalizer/maxFreq" );
 	const float l = powf( maxFreq / minFreq, 1.0f / ( freqs.count() - 1 ) );
-	for ( int i = 0 ; i < freqs.count() ; ++i )
+	for ( int i = 0; i < freqs.count(); ++i )
 		freqs[ i ] = minFreq * powf( l, i );
 	return freqs;
 }
@@ -115,11 +115,11 @@ double Equalizer::filter( QByteArray &data, bool flush )
 		{
 			float *samples = ( float * )data.data();
 			const int size = data.size() / sizeof( float );
-			for ( int c = 0 ; c < chn ; ++c ) //Buforowanie danych
-				for ( int i = 0 ; i < size ; i += chn )
+			for ( int c = 0; c < chn; ++c ) //Buforowanie danych
+				for ( int i = 0; i < size; i += chn )
 					input[ c ].append( samples[ c+i ] );
 		}
-		else for ( int c = 0 ; c < chn ; ++c ) //Dokładanie ciszy
+		else for ( int c = 0; c < chn; ++c ) //Dokładanie ciszy
 			input[ c ].resize( FFT_SIZE );
 
 		data.clear();
@@ -128,12 +128,12 @@ double Equalizer::filter( QByteArray &data, bool flush )
 		{
 			data.resize( chn * sizeof( float ) * FFT_SIZE_2 * chunks );
 			float *samples = ( float * )data.data();
-			for ( int c = 0 ; c < chn ; ++c )
+			for ( int c = 0; c < chn; ++c )
 			{
 				int pos = c;
 				while ( input.at( c ).size() >= FFT_SIZE )
 				{
-					for ( int i = 0 ; i < FFT_SIZE ; ++i )
+					for ( int i = 0; i < FFT_SIZE; ++i )
 						complex[ i ] = ( FFTComplex ){ input.at( c ).at( i ), 0.0f };
 					if ( !flush )
 						input[ c ].remove( 0, FFT_SIZE_2 );
@@ -141,7 +141,7 @@ double Equalizer::filter( QByteArray &data, bool flush )
 						input[ c ].clear();
 
 					fft_calc( fftIn, complex );
-					for ( int i = 0 ; i < FFT_SIZE_2 ; ++i )
+					for ( int i = 0; i < FFT_SIZE_2; ++i )
 					{
 						complex[            i ].re *= f.at( i ) * preamp;
 						complex[            i ].im *= f.at( i ) * preamp;
@@ -152,14 +152,14 @@ double Equalizer::filter( QByteArray &data, bool flush )
 
 					if ( last_samples.at( c ).isEmpty() )
 					{
-						for ( int i = 0 ; i < FFT_SIZE_2 ; ++i, pos += chn )
+						for ( int i = 0; i < FFT_SIZE_2; ++i, pos += chn )
 							samples[ pos ] = complex[ i ].re / FFT_SIZE;
 						last_samples[ c ].resize( FFT_SIZE_2 );
 					}
-					else for ( int i = 0 ; i < FFT_SIZE_2 ; ++i, pos += chn )
+					else for ( int i = 0; i < FFT_SIZE_2; ++i, pos += chn )
 						samples[ pos ] = ( complex[ i ].re / FFT_SIZE ) * wind_f.at( i ) + last_samples.at( c ).at( i );
 
-					for ( int i = FFT_SIZE_2 ; i < FFT_SIZE ; ++i )
+					for ( int i = FFT_SIZE_2; i < FFT_SIZE; ++i )
 						last_samples[ c ][ i-FFT_SIZE_2 ] = ( complex[ i ].re / FFT_SIZE ) * wind_f.at( i );
 				}
 			}
@@ -202,7 +202,7 @@ void Equalizer::alloc( bool b )
 			input.resize( chn );
 			last_samples.resize( chn );
 			wind_f.resize( FFT_SIZE );
-			for ( int i = 0 ; i < FFT_SIZE ; ++i )
+			for ( int i = 0; i < FFT_SIZE; ++i )
 				wind_f[ i ] = 0.5f - 0.5f * cos( 2.0f * M_PI * i / ( FFT_SIZE - 1 ) );
 		}
 		interpolateFilterCurve();
@@ -215,7 +215,7 @@ void Equalizer::interpolateFilterCurve()
 	const int size = sets().getInt( "Equalizer/count" );
 	preamp = sets().getInt( "Equalizer/-1" ) / 50.0f;
 	QVector< float > src( size );
-	for ( int i = 0 ; i < size ; ++i )
+	for ( int i = 0; i < size; ++i )
 		src[ i ] = sets().getInt( "Equalizer/" + QString::number( i ) ) / 50.0f;
 	const int len = FFT_SIZE_2;
 	if ( f.size() != len )
@@ -225,10 +225,10 @@ void Equalizer::interpolateFilterCurve()
 		QVector< float > freqs = Equalizer::freqs( sets() );
 		const int maxHz = srate / 2;
 		int x = 0, start = 0;
-		for ( int i = 0 ; i < len ; ++i )
+		for ( int i = 0; i < len; ++i )
 		{
 			const int hz = ( i+1 ) * maxHz / len;
-			for ( int j = x ; j < size ; ++j )
+			for ( int j = x; j < size; ++j )
 			{
 				if ( freqs[ j ] >= hz )
 					break;

@@ -95,9 +95,9 @@ bool Rayman2::seek( int s )
 	QByteArray sampleCodes = reader->read( filePos - reader->pos() );
 	if ( filePos - reader->pos() != 0 )
 		return false;
-	for ( int i = 0 ; !reader.isAborted() && i < sampleCodes.size() ; i += chn )
+	for ( int i = 0; !reader.isAborted() && i < sampleCodes.size(); i += chn )
 	{
-		for ( int c = 0 ; c < chn ; ++c )
+		for ( int c = 0; c < chn; ++c )
 		{
 			decode( sampleCodes[ i+c ] >> 4, stepIndex[ c ], predictor[ c ] );
 			decode( sampleCodes[ i+c ], stepIndex[ c ], predictor[ c ] );
@@ -113,11 +113,11 @@ bool Rayman2::read( Packet &decoded, int &idx )
 	decoded.ts = ( reader->pos() - 0x64 ) * 2.0 / chn / srate;
 
 	QByteArray sampleCodes = reader->read( chn * 256 );
-	for ( int i = 0 ; !reader.isAborted() && i + chn <= sampleCodes.size() ; i += chn )
+	for ( int i = 0; !reader.isAborted() && i + chn <= sampleCodes.size(); i += chn )
 	{
-		for ( int c = 0 ; c < chn ; ++c )
+		for ( int c = 0; c < chn; ++c )
 			writeSample( decoded, decode( sampleCodes[ i+c ] >> 4, stepIndex[ c ], predictor[ c ] ) );
-		for ( int c = 0 ; c < chn ; ++c )
+		for ( int c = 0; c < chn; ++c )
 			writeSample( decoded, decode( sampleCodes[ i+c ], stepIndex[ c ], predictor[ c ] ) );
 	}
 

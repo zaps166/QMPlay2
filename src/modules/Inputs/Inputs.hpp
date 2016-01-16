@@ -31,7 +31,7 @@ public:
 	QString getFreqs() const;
 	inline void connectFreqs( const QObject *receiver, const char *method )
 	{
-		for ( int i = 0 ; i < hzB.count() ; ++i )
+		for ( int i = 0; i < hzB.count(); ++i )
 			hzB[ i ]->connect( hzB[ i ], SIGNAL( valueChanged( int ) ), receiver, method );
 	}
 private:

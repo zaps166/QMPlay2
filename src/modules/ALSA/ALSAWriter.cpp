@@ -12,7 +12,7 @@ template< typename T > static void convert_samples( const float *src, const int 
 {
 	const unsigned min = 1 << ( ( sizeof( T ) << 3 ) - 1 );
 	const unsigned max = min - 1;
-	for ( int i = 0 ; i < samples ; ++i )
+	for ( int i = 0; i < samples; ++i )
 	{
 		if ( src[ i ] >= 1.0f )
 			int_samples[ i ] = max;
@@ -24,7 +24,7 @@ template< typename T > static void convert_samples( const float *src, const int 
 	if ( channels == 6 || channels == 8 )
 	{
 		T tmp;
-		for ( int i = 0 ; i < samples ; i += channels )
+		for ( int i = 0; i < samples; i += channels )
 		{
 			tmp = int_samples[ i+2 ];
 			int_samples[ i+2 ] = int_samples[ i+4 ];
@@ -216,11 +216,11 @@ bool ALSAWriter::processParams( bool *paramsCorrected )
 								snd_pcm_chmap_query_t **chmaps = snd_pcm_query_chmaps( snd );
 								if ( chmaps )
 								{
-									for ( int i = 0 ; chmaps[ i ] ; ++i )
+									for ( int i = 0; chmaps[ i ]; ++i )
 									{
 										if ( chmaps[ i ]->map.channels >= channels )
 										{
-											for ( uint j = 0 ; j < channels ; ++j )
+											for ( uint j = 0; j < channels; ++j )
 											{
 												mustSwapChn &= chmaps[ i ]->map.pos[ j ] == j + SND_CHMAP_FL;
 												if ( !mustSwapChn )

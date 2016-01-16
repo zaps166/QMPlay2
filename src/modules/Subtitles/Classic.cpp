@@ -126,7 +126,7 @@ bool Classic::toASS( const QByteArray &txt, LibASS *ass, double fps )
 	{
 		qSort( subs_without_end );
 
-		for ( int i = 0 ; i < subs_without_end.size()-1 ; ++i )
+		for ( int i = 0; i < subs_without_end.size()-1; ++i )
 		{
 			unsigned diff = subs_without_end[ i+1 ] - subs_without_end[ i ];
 			if ( !diff )

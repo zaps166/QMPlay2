@@ -133,7 +133,7 @@ void QMPlay2GUIClass::runUpdate( const QString &UpdateFile )
 QStringList QMPlay2GUIClass::getLanguages()
 {
 	QStringList langs = QDir( langPath ).entryList( QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks );
-	for ( int i = 0 ; i < langs.size() ; i++ )
+	for ( int i = 0; i < langs.size(); i++ )
 	{
 		int idx = langs[ i ].indexOf( '.' );
 		if ( idx > 0 )
@@ -306,7 +306,7 @@ static void showHelp( const QByteArray &ver )
 static bool writeToSocket( QLocalSocket &socket )
 {
 	bool ret = false;
-	for ( int i = QMPArguments.first.count() - 1 ; i >= 0 ; i-- )
+	for ( int i = QMPArguments.first.count() - 1; i >= 0; i-- )
 	{
 		if ( QMPArguments.first[ i ] == "noplay" )
 			continue;

@@ -111,7 +111,7 @@ static QStringList EnumExtensionKeys()
 	if ( !RegOpenKeyW( HKEY_CURRENT_USER, L"Software\\Classes", &key ) )
 	{
 		WCHAR name[ 256 ];
-		for ( DWORD d = 0 ; !RegEnumKeyW( key, d, name, sizeof name / sizeof *name ) ; ++d )
+		for ( DWORD d = 0; !RegEnumKeyW( key, d, name, sizeof name / sizeof *name ); ++d )
 		{
 			WCHAR value[ 16 ];
 			DWORD valueLen = sizeof value;
@@ -168,9 +168,9 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 
 	foreach ( const QString &extension, EnumExtensionKeys() )
 		addExtension( extension.right( extension.length() - 1 ), true );
-	for ( size_t s = 0 ; s < defaultAudioCount ; ++s )
+	for ( size_t s = 0; s < defaultAudioCount; ++s )
 		addExtension( defaultAudioExtensions[ s ], false );
-	for ( size_t s = 0 ; s < defaultVideoCount ; ++s )
+	for ( size_t s = 0; s < defaultVideoCount; ++s )
 		addExtension( defaultVideoExtensions[ s ], false );
 	foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 			foreach ( const Module::Info &mod, module->getModulesInfo() )
@@ -213,7 +213,7 @@ void ModuleSettingsWidget::saveSettings()
 			CreateShellContextMenu( DRIVE, QMPlay2Path, tr( "Odtwórz w QMPlay2" ) );
 		if ( audioCDB->isChecked() )
 			AddStringToReg( "AudioCD\\shell\\play\\command", "\"" + QMPlay2Path + "\"" + " AudioCD://%L" );
-		for ( int i = 0 ; i < extensionLW->count() ; ++i )
+		for ( int i = 0; i < extensionLW->count(); ++i )
 		{
 			QListWidgetItem *lWI = extensionLW->item( i );
 			if ( lWI->checkState() == Qt::Checked )
@@ -241,7 +241,7 @@ void ModuleSettingsWidget::addExtension( const QString &extension, const bool is
 void ModuleSettingsWidget::selectAll()
 {
 	ignoreCheck = true;
-	for ( int i = 0 ; i < extensionLW->count() ; ++i )
+	for ( int i = 0; i < extensionLW->count(); ++i )
 		extensionLW->item( i )->setCheckState( selectAllB->isChecked() ? Qt::Checked : Qt::Unchecked );
 	ignoreCheck = false;
 }
@@ -249,7 +249,7 @@ void ModuleSettingsWidget::checkSelected()
 {
 	if ( !ignoreCheck )
 	{
-		for ( int i = 0 ; i < extensionLW->count() ; ++i )
+		for ( int i = 0; i < extensionLW->count(); ++i )
 			if ( extensionLW->item( i )->checkState() != Qt::Checked )
 			{
 				selectAllB->setChecked( false );

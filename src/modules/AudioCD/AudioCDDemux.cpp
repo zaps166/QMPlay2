@@ -64,7 +64,7 @@ QStringList AudioCDDemux::getDevices()
 	QStringList devicesList;
 	if ( char **devices = cdio_get_devices( DRIVER_DEVICE ) )
 	{
-		for ( size_t i = 0 ; char *device = devices[ i ] ; ++i )
+		for ( size_t i = 0; char *device = devices[ i ]; ++i )
 		{
 			devicesList += device;
 #ifdef Q_OS_WIN
@@ -159,7 +159,7 @@ bool AudioCDDemux::read( Packet &decoded, int &idx )
 	{
 		decoded.resize( CD_BLOCKSIZE * sizeof( float ) );
 		float *decoded_data = ( float * )decoded.data();
-		for ( int i = 0 ; i < CD_BLOCKSIZE ; ++i )
+		for ( int i = 0; i < CD_BLOCKSIZE; ++i )
 			decoded_data[ i ] = cd_samples[ i ] / 32768.0f;
 
 		idx = 0;
@@ -267,7 +267,7 @@ Playlist::Entries AudioCDDemux::fetchTracks( const QString &url, bool &ok )
 		}
 		if ( !entries.isEmpty() )
 		{
-			for ( int i = 0 ; i < entries.length() ; ++i )
+			for ( int i = 0; i < entries.length(); ++i )
 				entries[ i ].parent = 1;
 			Playlist::Entry entry;
 			entry.name = "Audio CD";
@@ -334,7 +334,7 @@ bool AudioCDDemux::freedb_query( cddb_disc_t *&cddb_disc )
 #endif
 
 	cddb_disc_set_length( cddb_disc, FRAMES_TO_SECONDS( cdio_get_track_lba( cdio, CDIO_CDROM_LEADOUT_TRACK ) ) );
-	for ( int trackno = 1 ; trackno <= numTracks ; ++trackno )
+	for ( int trackno = 1; trackno <= numTracks; ++trackno )
 	{
 		cddb_track_t *pcddb_track = cddb_track_new();
 		cddb_track_set_frame_offset( pcddb_track, cdio_get_track_lba( cdio, trackno ) );
@@ -370,7 +370,7 @@ bool AudioCDDemux::freedb_query( cddb_disc_t *&cddb_disc )
 		useNetwork = true;
 	}
 
-	for ( int i = 0 ; i <= useNetwork ; ++i )
+	for ( int i = 0; i <= useNetwork; ++i )
 	{
 		if ( cddb_query( cddb, cddb_disc ) > 0 )
 		{
@@ -424,7 +424,7 @@ Playlist::Entries AudioCDDemux::getTracks( const QString &_device )
 		{
 			cddb_disc_t *cddb_disc = NULL;
 			bool cddb_ok = useCDDB;
-			for ( trackNo = 1 ; trackNo <= numTracks ; ++trackNo )
+			for ( trackNo = 1; trackNo <= numTracks; ++trackNo )
 			{
 				chn = cdio_get_track_channels( cdio, trackNo );
 				if ( !chn ) //NRG format returns 0 - why ?

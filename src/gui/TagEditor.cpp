@@ -137,7 +137,7 @@ static void removeXiphComment( Ogg::XiphComment *xiphComment )
 	if ( xiphComment )
 	{
 		const Ogg::FieldListMap &fieldListMap = xiphComment->fieldListMap();
-		for ( Ogg::FieldListMap::ConstIterator it = fieldListMap.begin() ; it != fieldListMap.end() ; ++it )
+		for ( Ogg::FieldListMap::ConstIterator it = fieldListMap.begin(); it != fieldListMap.end(); ++it )
 		{
 			if ( xiphComment->contains( it->first ) )
 				xiphComment->removeField( it->first );
@@ -559,7 +559,7 @@ bool TagEditor::save()
 				if ( id3v2 )
 				{
 					ID3v2::FrameList frameList = id3v2->frameList();
-					for ( ID3v2::FrameList::ConstIterator it = frameList.begin() ; it != frameList.end() ; ++it )
+					for ( ID3v2::FrameList::ConstIterator it = frameList.begin(); it != frameList.end(); ++it )
 						id3v2->removeFrame( *it );
 				}
 			}

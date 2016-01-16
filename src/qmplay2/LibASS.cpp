@@ -25,11 +25,11 @@ static void addImgs( ASS_Image *img, QMPlay2_OSD *osd )
 		const quint8 b = img->color >>  8;
 		const quint8 a = ~img->color & 0xFF;
 
-		for ( int y = 0 ; y < img->h ; y++ )
+		for ( int y = 0; y < img->h; y++ )
 		{
 			const int offsetI = y * img->stride;
 			const int offsetB = y * img->w;
-			for ( int x = 0 ; x < img->w ; x++ )
+			for ( int x = 0; x < img->w; x++ )
 				bitmap_ptr[ offsetB + x ] = ( a * img->bitmap[ offsetI + x ] / 0xFF ) << 24 | b << 16 | g << 8 | r;
 		}
 
@@ -259,7 +259,7 @@ void LibASS::setASSStyle()
 	{
 		if ( !colorsAndBorders && !marginsAndAlignment && !fontsAndSpacing ) //nie ma nic do zastosowania
 			return;
-		for ( int i = 0 ; i < ass_sub_track->n_styles ; i++ )
+		for ( int i = 0; i < ass_sub_track->n_styles; i++ )
 		{
 			ASS_Style *style = new ASS_Style;
 			memcpy( style, &ass_sub_track->styles[ i ], sizeof( ASS_Style ) );
@@ -274,7 +274,7 @@ void LibASS::setASSStyle()
 	if ( ass_sub_track->n_styles != ass_sub_styles_copy.size() )
 		return;
 
-	for ( int i = 0 ; i < ass_sub_track->n_styles ; i++ )
+	for ( int i = 0; i < ass_sub_track->n_styles; i++ )
 	{
 		ASS_Style &style = ass_sub_track->styles[ i ];
 		if ( colorsAndBorders )
@@ -381,7 +381,7 @@ bool LibASS::getASS( QMPlay2_OSD *&osd, double pos )
 
 	if ( _fontScale != 1.0 )
 	{
-		for ( int i = 0 ; i < ass_sub_track->n_styles ; i++ )
+		for ( int i = 0; i < ass_sub_track->n_styles; i++ )
 		{
 			ass_sub_track->styles[ i ].ScaleX  *= _fontScale;
 			ass_sub_track->styles[ i ].ScaleY  *= _fontScale;
@@ -396,7 +396,7 @@ bool LibASS::getASS( QMPlay2_OSD *&osd, double pos )
 
 	if ( _fontScale != 1.0 )
 	{
-		for ( int i = 0 ; i < ass_sub_track->n_styles ; i++ )
+		for ( int i = 0; i < ass_sub_track->n_styles; i++ )
 		{
 			ass_sub_track->styles[ i ].ScaleX  /= _fontScale;
 			ass_sub_track->styles[ i ].ScaleY  /= _fontScale;

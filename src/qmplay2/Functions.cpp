@@ -245,7 +245,7 @@ bool Functions::mustRepaintOSD( const QList< const QMPlay2_OSD * > &osd_list, co
 			mustRepaint = !osd_checksums.contains( osd->getChecksum() );
 		if ( scaleW && scaleH && bounds )
 		{
-			for ( int j = 0 ; j < osd->imageCount() ; j++ )
+			for ( int j = 0; j < osd->imageCount(); j++ )
 			{
 				const QMPlay2_OSD::Image &img = osd->getImage( j );
 				if ( !osd->needsRescale() )
@@ -277,7 +277,7 @@ void Functions::paintOSD( bool rgbSwapped, const QList< const QMPlay2_OSD * > &o
 			painter.setRenderHint( QPainter::SmoothPixmapTransform );
 			painter.scale( scaleW, scaleH );
 		}
-		for ( int j = 0 ; j < osd->imageCount() ; j++ )
+		for ( int j = 0; j < osd->imageCount(); j++ )
 		{
 			const QMPlay2_OSD::Image &img = osd->getImage( j );
 			const QImage qImg = QImage( ( uchar * )img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32 );
@@ -300,7 +300,7 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 	quint32 *osdImgData = ( quint32 * )osdImg.bits();
 	if ( mustRepaint )
 	{
-		for ( int h = bounds.top() ; h <= bounds.bottom() ; ++h )
+		for ( int h = bounds.top(); h <= bounds.bottom(); ++h )
 			memset( osdImgData + ( h * osdW + bounds.left() ), 0, bounds.width() << 2 );
 		QPainter p( &osdImg );
 		p.setRenderHint( QPainter::SmoothPixmapTransform );
@@ -316,7 +316,7 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 	const int alphaLinesizeLuma = videoFrame->linesize[ 0 ], alphaLinesizeChroma = videoFrame->linesize[ 1 ];
 	const quint8 *dataForAlpha[ 3 ] = { videoFrame->data[ 0 ], videoFrame->data[ 1 ], videoFrame->data[ 2 ] };
 
-	for ( int h = bounds.top() ; h <= bounds.bottom() ; ++h )
+	for ( int h = bounds.top(); h <= bounds.bottom(); ++h )
 	{
 		const int fullLine = h * linesizeLuma;
 		const int halfLine = ( h >> 1 ) * linesizeChroma;
@@ -324,7 +324,7 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 		const int alphaHalfLine = ( h >> 1 ) * alphaLinesizeChroma;
 		const int line = h * osdW;
 
-		for ( int w = bounds.left() ; w <= bounds.right() ; ++w )
+		for ( int w = bounds.left(); w <= bounds.right(); ++w )
 		{
 			const int pixelPos = fullLine + w;
 			const quint32 pixel = osdImgData[ line + w ];
@@ -366,7 +366,7 @@ void Functions::paintOSDtoYV12( quint8 *imageData, const QByteArray &videoFrameD
 
 void Functions::ImageEQ( int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount )
 {
-	for ( unsigned i = 0 ; i < bitsCount ; i += 4 )
+	for ( unsigned i = 0; i < bitsCount; i += 4 )
 	{
 		imageBits[ i+0 ] = clip8( imageBits[ i+0 ] * Contrast / 100 + Brightness );
 		imageBits[ i+1 ] = clip8( imageBits[ i+1 ] * Contrast / 100 + Brightness );
@@ -481,15 +481,15 @@ void Functions::getDataIfHasPluginPrefix( const QString &entireUrl, QString *url
 void Functions::hFlip( char *data, int linesize, int height, int width )
 {
 	int h, w, width_div_2 = width/2, linesize_div_2 = linesize/2, width_div_4 = width/4, offset = 0;
-	for ( h = 0 ; h < height ; ++h )
+	for ( h = 0; h < height; ++h )
 	{
-		for ( w = 0 ; w < width_div_2 ; ++w )
+		for ( w = 0; w < width_div_2; ++w )
 			qSwap( data[ offset + w ], data[ offset + width-1-w ] );
 		offset += linesize;
 	}
-	for ( h = 0 ; h < height ; ++h )
+	for ( h = 0; h < height; ++h )
 	{
-		for ( w = 0 ; w < width_div_4 ; ++w )
+		for ( w = 0; w < width_div_4; ++w )
 			qSwap( data[ offset + w ], data[ offset + width_div_2-1-w ] );
 		offset += linesize_div_2;
 	}
@@ -499,21 +499,21 @@ void Functions::vFlip( char *data, int linesize, int height )
 	int size = linesize*height, chroma_size = linesize*height/4, chroma_width = linesize/2;
 	char *data_s;
 
-	for ( data_s = data + size ; data_s > data ; )
+	for ( data_s = data + size; data_s > data; )
 	{
 		swapArray( data, data_s -= linesize, linesize );
 		data += linesize;
 	}
 	data += size/2;
 
-	for ( data_s = data + chroma_size ; data_s > data ; )
+	for ( data_s = data + chroma_size; data_s > data; )
 	{
 		swapArray( data, data_s -= chroma_width, chroma_width );
 		data += chroma_width;
 	}
 	data += chroma_size/2;
 
-	for ( data_s = data + chroma_size ; data_s > data ; )
+	for ( data_s = data + chroma_size; data_s > data; )
 	{
 		swapArray( data, data_s -= chroma_width, chroma_width );
 		data += chroma_width;

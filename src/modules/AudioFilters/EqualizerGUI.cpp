@@ -37,7 +37,7 @@ void GraphW::paintEvent( QPaintEvent * )
 
 		QPainterPath path;
 		path.moveTo( QPointF( 0.0, 1.0 - graph[ 0 ] ) );
-		for ( int i = 1 ; i < graph.count() ; ++i )
+		for ( int i = 1; i < graph.count(); ++i )
 			path.lineTo( i, 1.0 - graph[ i ] );
 
 		p.setPen( QPen( QColor( 102, 51, 128 ), 0.0 ) );
@@ -168,7 +168,7 @@ bool EqualizerGUI::set()
 
 	QVector< float > freqs = Equalizer::freqs( sets() );
 	graph.setValues( freqs.count() );
-	for ( int i = -1 ; i < freqs.count() ; ++i )
+	for ( int i = -1; i < freqs.count(); ++i )
 	{
 		QSlider *slider = new QSlider;
 		slider->setMaximum( 100 );

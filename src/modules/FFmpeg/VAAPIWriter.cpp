@@ -93,7 +93,7 @@ bool VAAPIWriter::processParams( bool * )
 		VADisplayAttribute attribs[ num_attribs ];
 		if ( !vaQueryDisplayAttributes( VADisp, attribs, &num_attribs ) )
 		{
-			for ( int i = 0 ; i < num_attribs ; ++i )
+			for ( int i = 0; i < num_attribs; ++i )
 			{
 				switch ( attribs[ i ].type )
 				{
@@ -229,7 +229,7 @@ bool VAAPIWriter::HWAccellGetImg( const VideoFrame *videoFrame, void *dest, ImgS
 		{
 			const VASurfaceID surfaceID = ( quintptr )videoFrame->data[ 3 ];
 			int img_fmt_idx[ 3 ] = { -1, -1, -1 };
-			for ( int i = 0 ; i < fmt_count ; ++i )
+			for ( int i = 0; i < fmt_count; ++i )
 			{
 				if ( !qstrncmp( ( const char * )&img_fmt[ i ].fourcc, "BGR", 3 ) )
 					img_fmt_idx[ 0 ] = i;
@@ -280,7 +280,7 @@ bool VAAPIWriter::open()
 		VAProfile profiles[ numProfiles ];
 		if ( vaQueryConfigProfiles( VADisp, profiles, &numProfiles ) == VA_STATUS_SUCCESS )
 		{
-			for ( int i = 0 ; i < numProfiles ; ++i )
+			for ( int i = 0; i < numProfiles; ++i )
 				profileList.push_back( profiles[ i ] );
 			return true;
 		}
@@ -349,7 +349,7 @@ bool VAAPIWriter::getNV12Image( VAImageFormat *img_fmt, VASurfaceID surfaceID, v
 		quint8 *yv12data_cr = yv12data_cb + outW/2 * outH/2;
 		const unsigned second_plane_size = outW * outH / 2;
 		data += image.offsets[ 1 ];
-		for ( unsigned i = 0 ; i < second_plane_size ; i += 2 )
+		for ( unsigned i = 0; i < second_plane_size; i += 2 )
 		{
 			*( yv12data_cr++ ) = *( data++ );
 			*( yv12data_cb++ ) = *( data++ );
@@ -439,7 +439,7 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 		if ( !vaCreateConfigAndContext() )
 			return false;
 
-		for ( int i = 0 ; i < surfacesCount ; i++ )
+		for ( int i = 0; i < surfacesCount; i++ )
 			surfacesQueue.enqueue( surfaces[ i ] );
 
 
@@ -448,7 +448,7 @@ bool VAAPIWriter::HWAccellInit( int W, int H, const char *codec_name )
 		unsigned subpic_flags[ numSubpicFmts ];
 		if ( vaQuerySubpictureFormats( VADisp, subpicFmtList, subpic_flags, &numSubpicFmts ) == VA_STATUS_SUCCESS )
 		{
-			for ( unsigned i = 0 ; i < numSubpicFmts ; ++i )
+			for ( unsigned i = 0; i < numSubpicFmts; ++i )
 				if ( !qstrncmp( ( const char * )&subpicFmtList[ i ].fourcc, "RGBA", 4 ) )
 				{
 					subpict_dest_is_screen_coord = subpic_flags[ i ] & VA_SUBPICTURE_DESTINATION_IS_SCREEN_COORD;
@@ -525,7 +525,7 @@ void VAAPIWriter::init_vpp()
 				vpp_buffers[ VAProcFilterNone ] = VA_INVALID_ID;
 			/* Searching deinterlacing filter */
 			if ( vpp_deint_type != VAProcDeinterlacingNone )
-				for ( unsigned i = 0 ; i < num_filters ; ++i )
+				for ( unsigned i = 0; i < num_filters; ++i )
 					if ( filters[ i ] == VAProcFilterDeinterlacing )
 					{
 						VAProcFilterCapDeinterlacing deinterlacing_caps[ VAProcDeinterlacingCount ];
@@ -533,7 +533,7 @@ void VAAPIWriter::init_vpp()
 						if ( vaQueryVideoProcFilterCaps( VADisp, context_vpp, VAProcFilterDeinterlacing, &deinterlacing_caps, &num_deinterlacing_caps ) != VA_STATUS_SUCCESS )
 							num_deinterlacing_caps = 0;
 						bool vpp_deint_types[ 2 ] = { false };
-						for ( unsigned j = 0 ; j < num_deinterlacing_caps ; ++j )
+						for ( unsigned j = 0; j < num_deinterlacing_caps; ++j )
 						{
 							switch ( deinterlacing_caps[ j ].type )
 							{
@@ -668,7 +668,7 @@ void VAAPIWriter::draw( VASurfaceID _id, int _field )
 	}
 	osd_mutex.unlock();
 
-	for ( int i = 0 ; i <= 1 ; ++i )
+	for ( int i = 0; i <= 1; ++i )
 	{
 		const int err = vaPutSurface
 		(
@@ -723,7 +723,7 @@ void VAAPIWriter::clr_vpp()
 #ifdef HAVE_VPP
 	if ( use_vpp )
 	{
-		for ( int i = 0 ; i < VAProcFilterCount ; ++i )
+		for ( int i = 0; i < VAProcFilterCount; ++i )
 			if ( vpp_buffers[ i ] != VA_INVALID_ID )
 				vaDestroyBuffer( VADisp, vpp_buffers[ i ] );
 		if ( id_vpp != VA_INVALID_SURFACE )
@@ -735,7 +735,7 @@ void VAAPIWriter::clr_vpp()
 		use_vpp = false;
 	}
 	id_vpp = forward_reference = VA_INVALID_SURFACE;
-	for ( int i = 0 ; i < VAProcFilterCount ; ++i )
+	for ( int i = 0; i < VAProcFilterCount; ++i )
 		vpp_buffers[ i ] = VA_INVALID_ID;
 	vpp_second = false;
 	context_vpp = 0;

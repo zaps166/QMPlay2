@@ -69,7 +69,7 @@ void Settings::flushCache()
 		killTimer( timerID );
 		timerID = 0;
 	}
-	for ( SettingsMap::const_iterator it = cache.begin(), end_it = cache.end() ; it != end_it ; ++it )
+	for ( SettingsMap::const_iterator it = cache.begin(), end_it = cache.end(); it != end_it; ++it )
 		QSettings::setValue( it.key(), it.value() );
 	cache.clear();
 }

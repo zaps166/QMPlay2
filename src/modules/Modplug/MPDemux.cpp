@@ -137,7 +137,7 @@ bool MPDemux::read( Packet &decoded, int &idx )
 	//Konwersja 32bit-int na 32bit-float
 	float *decodedFloat = ( float * )decoded.data();
 	const int *decodedInt = ( const int * )decodedFloat;
-	for ( unsigned i = 0 ; i < decoded.size() / sizeof( float ) ; ++i )
+	for ( unsigned i = 0; i < decoded.size() / sizeof( float ); ++i )
 		decodedFloat[ i ] = decodedInt[ i ] / 2147483648.0;
 
 	idx = 0;

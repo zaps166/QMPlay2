@@ -385,7 +385,7 @@ void Appearance::newScheme()
 	const QString name = Functions::cleanFileName( QInputDialog::getText( this, tr( "Nazwa" ), tr( "Wprowadź nazwę dla schematu kolorów" ), QLineEdit::Normal, QString(), &ok ) );
 	if ( ok && !name.isEmpty() )
 	{
-		for ( int i = 2 ; i < schemesB->count() ; ++i )
+		for ( int i = 2; i < schemesB->count(); ++i )
 			if ( schemesB->itemText( i ) == name )
 			{
 				QMessageBox::warning( this, tr( "Nazwa" ), tr( "Podana nazwa już istnieje!" ) );

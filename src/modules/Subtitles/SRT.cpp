@@ -24,7 +24,7 @@ bool SRT::toASS( const QByteArray &srt, LibASS *ass, double )
 			if ( time.size() == 2 )
 			{
 				double time_double[ 2 ] = { -1.0, -1.0 };
-				for ( int i = 0 ; i < 2 ; ++i )
+				for ( int i = 0; i < 2; ++i )
 				{
 					int h = -1, m = -1, s = -1, ms = -1;
 					sscanf( time[ i ].toLatin1().data(), scanfFmt, &h, &m, &s, &ms );

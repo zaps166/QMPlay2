@@ -24,7 +24,7 @@ AudioFilters::AudioFilters() :
 	if ( maxFreq < 10000 || maxFreq > 96000 )
 		set( "Equalizer/maxFreq", ( maxFreq = 18000 ) );
 	init( "Equalizer/-1", 50 );
-	for ( int i = 0 ; i < count ; ++i )
+	for ( int i = 0; i < count; ++i )
 		init( "Equalizer/" + QString::number( i ), 50 );
 	init( "VoiceRemoval", false );
 	init( "PhaseReverse", false );
@@ -37,7 +37,7 @@ AudioFilters::AudioFilters() :
 	if ( getBool( "Equalizer" ) )
 	{
 		bool disableEQ = true;
-		for ( int i = -1 ; i < count ; ++i )
+		for ( int i = -1; i < count; ++i )
 			disableEQ &= getInt( "Equalizer/" + QString::number( i ) ) == 50;
 		if ( disableEQ )
 			set( "Equalizer", false );

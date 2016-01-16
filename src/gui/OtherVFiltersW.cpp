@@ -17,7 +17,7 @@ OtherVFiltersW::OtherVFiltersW()
 	}
 
 	QList< QPair< Module *, Module::Info > > pluginsInstances;
-	for ( int i = 0 ; i < videoFilters.first.count() ; ++i )
+	for ( int i = 0; i < videoFilters.first.count(); ++i )
 		pluginsInstances += QPair< Module *, Module::Info >();
 
 	foreach ( Module *pluginInstance, QMPlay2Core.getPluginsInstance() )
@@ -35,7 +35,7 @@ OtherVFiltersW::OtherVFiltersW()
 					pluginsInstances += qMakePair( pluginInstance, moduleInfo );
 			}
 
-	for ( int i = 0 ; i < pluginsInstances.count() ; i++ )
+	for ( int i = 0; i < pluginsInstances.count(); i++ )
 	{
 		Module *module = pluginsInstances[ i ].first;
 		Module::Info &moduleInfo = pluginsInstances[ i ].second;
@@ -53,7 +53,7 @@ OtherVFiltersW::OtherVFiltersW()
 void OtherVFiltersW::writeSettings()
 {
 	QStringList filters;
-	for ( int i = 0 ; i < count() ; ++i )
+	for ( int i = 0; i < count(); ++i )
 		filters += ( item( i )->checkState() == Qt::Checked ? '1' : '0' ) + item( i )->text();
 	QMPlay2Core.getSettings().set( "VideoFilters", filters );
 }

@@ -46,7 +46,7 @@ double Echo::filter( QByteArray &data, bool )
 		int r_ofs = w_ofs - ( srate * echo_delay / 1000 ) * chn;
 		if ( r_ofs < 0 )
 			r_ofs += sampleBufferSize;
-		for ( int i = 0 ; i < size ; i++ )
+		for ( int i = 0; i < size; i++ )
 		{
 			float sample = sampleBufferData[ r_ofs ];
 			if ( echo_surround && chn >= 2 )

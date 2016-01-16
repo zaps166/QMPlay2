@@ -94,19 +94,19 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 					case AV_SAMPLE_FMT_U8:
 					{
 						uint8_t *data = ( uint8_t * )*frame->data;
-						for ( int i = 0 ; i < samples_with_channels ; i++ )
+						for ( int i = 0; i < samples_with_channels; i++ )
 							decoded_data[ i ] = ( data[ i ] - 0x7F ) / 128.0f;
 					} break;
 					case AV_SAMPLE_FMT_S16:
 					{
 						int16_t *data = ( int16_t * )*frame->data;
-						for ( int i = 0 ; i < samples_with_channels ; i++ )
+						for ( int i = 0; i < samples_with_channels; i++ )
 							decoded_data[ i ] = data[ i ] / 32768.0f;
 					} break;
 					case AV_SAMPLE_FMT_S32:
 					{
 						int32_t *data = ( int32_t * )*frame->data;
-						for ( int i = 0 ; i < samples_with_channels ; i++ )
+						for ( int i = 0; i < samples_with_channels; i++ )
 							decoded_data[ i ] = data[ i ] / 2147483648.0f;
 					} break;
 					case AV_SAMPLE_FMT_FLT:
@@ -115,7 +115,7 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 					case AV_SAMPLE_FMT_DBL:
 					{
 						double *data = ( double * )*frame->data;
-						for ( int i = 0 ; i < samples_with_channels ; i++ )
+						for ( int i = 0; i < samples_with_channels; i++ )
 							decoded_data[ i ] = data[ i ];
 					} break;
 
@@ -123,36 +123,36 @@ int FFDecSW::decode( Packet &encodedPacket, QByteArray &decoded, bool flush, uns
 					case AV_SAMPLE_FMT_U8P:
 					{
 						uint8_t **data = ( uint8_t ** )frame->extended_data;
-						for ( int i = 0 ; i < frame->nb_samples ; ++i )
+						for ( int i = 0; i < frame->nb_samples; ++i )
 							for ( int ch = 0; ch < codec_ctx->channels; ++ch )
 								*decoded_data++ = ( data[ ch ][ i ] - 0x7F ) / 128.0f;
 					} break;
 					case AV_SAMPLE_FMT_S16P:
 					{
 						int16_t **data = ( int16_t ** )frame->extended_data;
-						for ( int i = 0; i < frame->nb_samples ; ++i )
-							for ( int ch = 0 ; ch < codec_ctx->channels ; ++ch )
+						for ( int i = 0; i < frame->nb_samples; ++i )
+							for ( int ch = 0; ch < codec_ctx->channels; ++ch )
 								*decoded_data++ = data[ ch ][ i ] / 32768.0f;
 					} break;
 					case AV_SAMPLE_FMT_S32P:
 					{
 						int32_t **data = ( int32_t ** )frame->extended_data;
-						for ( int i = 0 ; i < frame->nb_samples ; ++i )
-							for ( int ch = 0 ; ch < codec_ctx->channels ; ++ch )
+						for ( int i = 0; i < frame->nb_samples; ++i )
+							for ( int ch = 0; ch < codec_ctx->channels; ++ch )
 								*decoded_data++ = data[ ch ][ i ] / 2147483648.0f;
 					} break;
 					case AV_SAMPLE_FMT_FLTP:
 					{
 						float **data = ( float ** )frame->extended_data;
-						for ( int i = 0 ; i < frame->nb_samples ; ++i )
-							for ( int ch = 0 ; ch < codec_ctx->channels ; ++ch )
+						for ( int i = 0; i < frame->nb_samples; ++i )
+							for ( int ch = 0; ch < codec_ctx->channels; ++ch )
 								*decoded_data++ = data[ ch ][ i ];
 					} break;
 					case AV_SAMPLE_FMT_DBLP:
 					{
 						double **data = ( double ** )frame->extended_data;
-						for ( int i = 0 ; i < frame->nb_samples ; ++i )
-							for ( int ch = 0 ; ch < codec_ctx->channels ; ++ch )
+						for ( int i = 0; i < frame->nb_samples; ++i )
+							for ( int ch = 0; ch < codec_ctx->channels; ++ch )
 								*decoded_data++ = data[ ch ][ i ];
 					} break;
 					/**/
@@ -236,7 +236,7 @@ bool FFDecSW::decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_O
 			buff->duration = 0.0;
 			bitmapSubBuffer += buff;
 		}
-		else for ( unsigned i = 0 ; i < subtitle.num_rects ; i++ )
+		else for ( unsigned i = 0; i < subtitle.num_rects; i++ )
 		{
 			AVSubtitleRect *rect = subtitle.rects[ i ];
 			switch ( rect->type )
@@ -263,8 +263,8 @@ bool FFDecSW::decodeSubtitle( const Packet &encodedPacket, double pos, QMPlay2_O
 
 #endif
 					uint32_t       *dest     = ( uint32_t * )buff->bitmap.data();
-					for ( int y = 0 ; y < buff->h ; ++y )
-						for ( int x = 0 ; x < buff->w ; ++x )
+					for ( int y = 0; y < buff->h; ++y )
+						for ( int x = 0; x < buff->w; ++x )
 							dest[ y * buff->w + x ] = palette[ source[ y * linesize + x ] ];
 
 					if ( buff->pts <= pos )
@@ -321,7 +321,7 @@ bool FFDecSW::open( StreamInfo *streamInfo, Writer * )
 bool FFDecSW::getFromBitmapSubsBuffer( QMPlay2_OSD *&osd, double pos )
 {
 	bool cantDelete = true;
-	for ( int i = bitmapSubBuffer.size() - 1 ; i >= 0  ; --i )
+	for ( int i = bitmapSubBuffer.size() - 1; i >= 0 ; --i )
 	{
 		BitmapSubBuffer *buff = bitmapSubBuffer[ i ];
 		if ( !buff->bitmap.isEmpty() && buff->pts + buff->duration < pos )

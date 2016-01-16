@@ -147,7 +147,7 @@ public:
 	}
 	~RIFFList()
 	{
-		for ( DWORD i = 0 ; i < riff_count ; ++i )
+		for ( DWORD i = 0; i < riff_count; ++i )
 			free( riff_arr[ i ].chunk_arr );
 		free( riff_arr );
 	}
@@ -225,7 +225,7 @@ static void LoadInstrument( CSoundFile &c, const BYTE inst_idx, const BYTE *cons
 	memcpy( instrument->name, data, isAM ? 31 : 28 );
 	data += isAM ? 32 : 29;
 
-	for ( BYTE i = 0 ; i < NOTE_MAX ; i++ )
+	for ( BYTE i = 0; i < NOTE_MAX; i++ )
 	{
 		WORD sample_map = c.m_nSamples + data.getBYTE();
 		instrument->Keyboard[ i ] = sample_map >= MAX_SAMPLES ? 0 : sample_map;
@@ -242,7 +242,7 @@ static void LoadInstrument( CSoundFile &c, const BYTE inst_idx, const BYTE *cons
 	if ( isAM )
 	{
 		enum { J2B_AM_ENV_VOL, J2B_AM_ENV_PITCH, J2B_AM_ENV_PAN };
-		for ( BYTE t = J2B_AM_ENV_VOL ; t <= J2B_AM_ENV_PAN ; ++t )
+		for ( BYTE t = J2B_AM_ENV_VOL; t <= J2B_AM_ENV_PAN; ++t )
 		{
 			WORD *Points = NULL;
 			BYTE *Env = NULL;
@@ -276,7 +276,7 @@ static void LoadInstrument( CSoundFile &c, const BYTE inst_idx, const BYTE *cons
 					Env = instrument->PanEnv;
 					break;
 			}
-			for ( BYTE i = 0 ; i < J2B_MAX_ENVPOINTS ; ++i )
+			for ( BYTE i = 0; i < J2B_MAX_ENVPOINTS; ++i )
 			{
 				Points[ i ] = data.getWORD() >> 4; //X, 16bit
 				const WORD Y = data.getWORD(); //Y, 8bit
@@ -331,9 +331,9 @@ static void LoadInstrument( CSoundFile &c, const BYTE inst_idx, const BYTE *cons
 		instrument->nPanLoopEnd = loop_end >> 4;
 
 		enum { J2B_AMFF_ENV_VOL, J2B_AMFF_ENV_PAN };
-		for ( BYTE t = J2B_AMFF_ENV_VOL ; t <= J2B_AMFF_ENV_PAN ; ++t )
+		for ( BYTE t = J2B_AMFF_ENV_VOL; t <= J2B_AMFF_ENV_PAN; ++t )
 		{
-			for ( BYTE i = 0 ; i < J2B_MAX_ENVPOINTS ; ++i )
+			for ( BYTE i = 0; i < J2B_MAX_ENVPOINTS; ++i )
 			{
 				const WORD X = data.getWORD() >> 4;
 				const BYTE Y = ClipBYTE( data.getBYTE(), 0x40 );
@@ -391,9 +391,9 @@ BOOL CSoundFile::ReadJ2B( const BYTE *lpStream, DWORD dwMemLength )
 		return false;
 
 	RIFFList riff_list( uncompressed_arr ? uncompressed_arr : lpStream, uncompressed_arr ? uncompressed_size : dwMemLength, isAM );
-	for ( DWORD i = 0 ; i < riff_list.count() ; ++i )
+	for ( DWORD i = 0; i < riff_list.count(); ++i )
 	{
-		for ( DWORD j = 0 ; j < riff_list[ i ].chunk_count ; ++j )
+		for ( DWORD j = 0; j < riff_list[ i ].chunk_count; ++j )
 		{
 			CHUNK &chunk = riff_list[ i ].chunk_arr[ j ];
 			ByteArray data( chunk.data, chunk.size );
@@ -417,7 +417,7 @@ BOOL CSoundFile::ReadJ2B( const BYTE *lpStream, DWORD dwMemLength )
 				m_nDefaultTempo = data.getBYTE();
 				data += 4;
 				m_nDefaultGlobalVolume = data.getBYTE() * 2;
-				for ( DWORD i = 0 ; i < m_nChannels ; ++i )
+				for ( DWORD i = 0; i < m_nChannels; ++i )
 				{
 					BYTE c = data.getBYTE();
 					if ( isAM )
@@ -456,7 +456,7 @@ BOOL CSoundFile::ReadJ2B( const BYTE *lpStream, DWORD dwMemLength )
 					MODCOMMAND *&pattern = Patterns[ pattern_idx ];
 					pattern = AllocatePattern( rows, m_nChannels );
 
-					for ( DWORD row = 0; row < rows && !data.atEnd() ; )
+					for ( DWORD row = 0; row < rows && !data.atEnd(); )
 					{
 						BYTE channel = *data & 0x1F;
 						BYTE command = ( *data & 0xE0 ) >> 4;

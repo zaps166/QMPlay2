@@ -93,7 +93,7 @@ public:
 	{}
 	inline ~StreamsInfo()
 	{
-		for ( int i = 0 ; i < count() ; ++i )
+		for ( int i = 0; i < count(); ++i )
 			delete at( i );
 	}
 };

@@ -109,7 +109,7 @@ qint64 PortAudioWriter::write( const QByteArray &arr )
 	if ( chn == 6 || chn == 8 )
 	{
 		float *audio_buffer = ( float * )arr.data();
-		for ( int i = 0 ; i < arr.size() / 4 ; i += chn )
+		for ( int i = 0; i < arr.size() / 4; i += chn )
 		{
 			float tmp = audio_buffer[i+2];
 			audio_buffer[i+2] = audio_buffer[i+4];

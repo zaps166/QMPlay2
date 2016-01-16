@@ -19,7 +19,7 @@ BOOL CSoundFile::ReadSFX( const BYTE *lpStream, DWORD dwMemLength )
 	data = 0;
 
 	DWORD sample_size[ m_nSamples ];
-	for ( BYTE i = 0 ; i < m_nSamples ; ++i )
+	for ( BYTE i = 0; i < m_nSamples; ++i )
 		sample_size[ i ] = data.getDWORD();
 
 	data += 4; //"SONG"
@@ -27,7 +27,7 @@ BOOL CSoundFile::ReadSFX( const BYTE *lpStream, DWORD dwMemLength )
 	m_nDefaultTempo = 14565 * 122 / data.getWORD();
 	data += 0xE;
 
-	for ( BYTE i = 1 ; i <= m_nSamples ; ++i )
+	for ( BYTE i = 1; i <= m_nSamples; ++i )
 	{
 		MODINSTRUMENT &sample = Ins[ i ];
 
@@ -55,7 +55,7 @@ BOOL CSoundFile::ReadSFX( const BYTE *lpStream, DWORD dwMemLength )
 	data += 0x80;
 
 	m_nPattern = 0;
-	for ( BYTE i = 0 ; i < len ; ++i )
+	for ( BYTE i = 0; i < len; ++i )
 		if ( Order[ i ] > m_nPattern )
 			m_nPattern = Order[ i ];
 	++m_nPattern;
@@ -68,12 +68,12 @@ BOOL CSoundFile::ReadSFX( const BYTE *lpStream, DWORD dwMemLength )
 	ChnSettings[ 1 ].nPan = ChnSettings[ 2 ].nPan = 0xFF;
 
 	const BYTE rows = 64;
-	for ( BYTE i = 0 ; i < m_nPattern ; ++i ) //Reading patterns
+	for ( BYTE i = 0; i < m_nPattern; ++i ) //Reading patterns
 	{
 		PatternSize[ i ] = rows;
 		MODCOMMAND *&pattern = Patterns[ i ];
 		pattern = AllocatePattern( rows, m_nChannels );
-		for ( WORD j = 0 ; j < rows * m_nChannels ; ++j )
+		for ( WORD j = 0; j < rows * m_nChannels; ++j )
 		{
 			if ( data.remaining() < 4 )
 				break;
@@ -115,7 +115,7 @@ BOOL CSoundFile::ReadSFX( const BYTE *lpStream, DWORD dwMemLength )
 		}
 	}
 
-	for ( BYTE i = 0 ; i < m_nSamples ; ++i ) //Reading samples data
+	for ( BYTE i = 0; i < m_nSamples; ++i ) //Reading samples data
 	{
 		if ( data.atEnd() )
 			break;

@@ -285,7 +285,7 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page1->langBox->addItem( "Polski", "pl" );
 	page1->langBox->setCurrentIndex( 0 );
 	QStringList langs = QMPlay2GUI.getLanguages();
-	for ( int i = 0 ; i < langs.count() ; i++ )
+	for ( int i = 0; i < langs.count(); i++ )
 	{
 		page1->langBox->addItem( QMPlay2GUI.getLongFromShortLanguage( langs[ i ] ), langs[ i ] );
 		if ( QMPlay2GUI.lang == langs[ i ] )
@@ -573,7 +573,7 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page2->ignorePlaybackError = new QCheckBox( tr( "Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania" ) );
 	page2->ignorePlaybackError->setChecked( QMPSettings.getBool( "IgnorePlaybackError" ) );
 
-	for ( int m = 0 ; m < 3 ; ++m )
+	for ( int m = 0; m < 3; ++m )
 	{
 		Page2::ModulesList *&mL = page2->modulesList[ m ];
 		mL = new Page2::ModulesList;
@@ -660,7 +660,7 @@ SettingsWidget::SettingsWidget( int page, const QString &moduleName ) :
 	page2->layout1->setMargin( 2 );
 	page2->layout1->setSpacing( 3 );
 	page2->layout1->addWidget( page2->scrollA, 0, 0, 1, 3 );
-	for ( int m = 0 ; m < 3 ; ++m )
+	for ( int m = 0; m < 3; ++m )
 		page2->layout1->addWidget( page2->modulesList[ m ], 1, m );
 
 	/* Strona 3 */
@@ -989,18 +989,18 @@ void SettingsWidget::tabCh( int idx )
 	{
 		QStringList writers[ 3 ] = { QMPlay2GUI.getModules( "videoWriters", 5 ), QMPlay2GUI.getModules( "audioWriters", 5 ), QMPlay2GUI.getModules( "decoders", 7 ) };
 		QVector< QPair< Module *, Module::Info > > pluginsInstances[ 3 ];
-		for ( int m = 0 ; m < 3 ; ++m )
+		for ( int m = 0; m < 3; ++m )
 			pluginsInstances[ m ].fill( QPair< Module *, Module::Info >(), writers[ m ].size() );
 		foreach ( Module *module, QMPlay2Core.getPluginsInstance() )
 			foreach ( const Module::Info &moduleInfo, module->getModulesInfo() )
-				for ( int m = 0 ; m < 3 ; ++m )
+				for ( int m = 0; m < 3; ++m )
 				{
 					const int mIdx = writers[ m ].indexOf( moduleInfo.name );
 					if ( mIdx > -1 )
 						pluginsInstances[ m ][ mIdx ] = qMakePair( module, moduleInfo );
 				}
-		for ( int m = 0 ; m < 3 ; ++m )
-			for ( int i = 0 ; i < pluginsInstances[ m ].size() ; i++ )
+		for ( int m = 0; m < 3; ++m )
+			for ( int i = 0; i < pluginsInstances[ m ].size(); i++ )
 			{
 				QListWidgetItem *wI = new QListWidgetItem( writers[ m ][ i ] );
 				wI->setData( Qt::UserRole, pluginsInstances[ m ][ i ].first->name() );
@@ -1009,12 +1009,12 @@ void SettingsWidget::tabCh( int idx )
 				if ( writers[ m ][ i ] == lastM[ m ] )
 					page2->modulesList[ m ]->list->setCurrentItem( wI );
 			}
-		for ( int m = 0 ; m < 3 ; ++m )
+		for ( int m = 0; m < 3; ++m )
 			if ( page2->modulesList[ m ]->list->currentRow() < 0 )
 				page2->modulesList[ m ]->list->setCurrentRow( 0 );
 	}
 	else if ( idx == 2 )
-		for ( int m = 0 ; m < 3 ; ++m )
+		for ( int m = 0; m < 3; ++m )
 		{
 			QListWidgetItem *currI = page2->modulesList[ m ]->list->currentItem();
 			if ( currI )

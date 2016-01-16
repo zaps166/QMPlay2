@@ -1885,7 +1885,7 @@ DWORD MPPASMCALL X86_Convert32To24(LPVOID lp16, int *pBuffer, DWORD lSampleCount
 			vumin = n;
 		else if (n > vumax)
 			vumax = n;
-		p = n >> (8-MIXING_ATTENUATION) ; // 24-bit signed
+		p = n >> (8-MIXING_ATTENUATION); // 24-bit signed
 
 		static unsigned short test = 0xBE00;
 		static unsigned char test_c = *( unsigned char * )&test;

@@ -32,7 +32,7 @@ bool ToneGenerator::set()
 				freqs.resize( qMin( 8, newFreqs.size() ) );
 			else
 				metadata_changed = true;
-			for ( int i = 0 ; i < freqs.size() ; ++i )
+			for ( int i = 0; i < freqs.size(); ++i )
 				freqs[ i ] = newFreqs[ i ].toInt();
 		}
 	}
@@ -89,8 +89,8 @@ bool ToneGenerator::read( Packet &decoded, int &idx )
 	decoded.resize( sizeof( float ) * chn * srate );
 	float *samples = ( float * )decoded.data();
 
-	for ( uint i = 0 ; i < srate * chn ; i += chn )
-		for ( int c = 0 ; c < chn ; ++c )
+	for ( uint i = 0; i < srate * chn; i += chn )
+		for ( int c = 0; c < chn; ++c )
 			samples[ i + c ] = sin( 2.0 * M_PI * freqs[ c ] * i / srate / chn ); //don't use sinf()!
 
 	idx = 0;

@@ -98,7 +98,7 @@ void AudioThr::silence( bool invert )
 		while ( !invert && doSilence > 0.0 && doSilence < 1.0 && isRunning() )
 		{
 			double lastDoSilence = doSilence;
-			for ( int i = 0 ; i < 7 ; ++i )
+			for ( int i = 0; i < 7; ++i )
 			{
 				qApp->processEvents();
 				if ( playC.doSilenceBreak )
@@ -272,7 +272,7 @@ void AudioThr::run()
 					{
 						const int size = decodedChunk.size() / sizeof( float );
 						float *data = ( float * )decodedChunk.data();
-						for ( int i = 0 ; i < size ; ++i )
+						for ( int i = 0; i < size; ++i )
 							data[ i ] *= vol;
 					}
 
@@ -292,9 +292,9 @@ void AudioThr::run()
 						{
 							float *data = ( float * )dataToWrite.data();
 							const int s = dataToWrite.size() / sizeof( float );
-							for ( int i = 0 ; i < s ; i += channels )
+							for ( int i = 0; i < s; i += channels )
 							{
-								for ( int j = 0 ; j < channels ; ++j )
+								for ( int j = 0; j < channels; ++j )
 									data[ i+j ] *= doSilence;
 								doSilence -= silence_step;
 								if ( doSilence < 0.0 )

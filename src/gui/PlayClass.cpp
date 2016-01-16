@@ -938,7 +938,7 @@ static Decoder *loadStream( const QList< StreamInfo * > &streams, const int choo
 	else
 	{
 		int defaultStream = -1, choosenLangStream = -1;
-		for ( int i = 0 ; i < streams.count() ; ++i )
+		for ( int i = 0; i < streams.count(); ++i )
 		{
 			if ( streams[ i ]->type == type )
 			{
@@ -960,7 +960,7 @@ static Decoder *loadStream( const QList< StreamInfo * > &streams, const int choo
 		}
 		if ( choosenLangStream > -1 )
 			defaultStream = choosenLangStream;
-		for ( int i = 0 ; i < streams.count() ; ++i )
+		for ( int i = 0; i < streams.count(); ++i )
 		{
 			StreamInfo *streamInfo = streams[ i ];
 			if ( streamInfo->type == type && ( defaultStream == -1 || i == defaultStream ) )
@@ -1134,7 +1134,7 @@ void PlayClass::load( Demuxer *demuxer )
 					QByteArray assHeader = streams[ subtitlesStream ]->data;
 					if ( !assHeader.isEmpty() && ( streams[ subtitlesStream ]->codec_name == "ssa" || streams[ subtitlesStream ]->codec_name == "ass" ) )
 					{
-						for ( int i = 0 ; i < streams.count() ; ++i )
+						for ( int i = 0; i < streams.count(); ++i )
 							if ( streams[ i ]->type == QMPLAY2_TYPE_ATTACHMENT && ( streams[ i ]->codec_name == "TTF" || streams[ i ]->codec_name == "OTF" ) && streams[ i ]->data.size() )
 								ass->addFont( streams[ i ]->title, streams[ i ]->data );
 					}

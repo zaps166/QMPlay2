@@ -9,7 +9,7 @@ QStringList PortAudioCommon::getOutputDeviceNames()
 {
 	QStringList outputDeviceNames;
 	int numDevices = Pa_GetDeviceCount();
-	for ( int i = 0 ; i < numDevices ; i++ )
+	for ( int i = 0; i < numDevices; i++ )
 	{
 		const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo( i );
 		if ( deviceInfo )
@@ -24,7 +24,7 @@ QStringList PortAudioCommon::getOutputDeviceNames()
 int PortAudioCommon::getDeviceIndexForOutput( const QString &name )
 {
 	int numDevices = Pa_GetDeviceCount();
-	for ( int i = 0 ; i < numDevices ; i++ )
+	for ( int i = 0; i < numDevices; i++ )
 	{
 		const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo( i );
 		if ( deviceInfo )

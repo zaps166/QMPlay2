@@ -64,7 +64,7 @@ ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
 	QLabel *devicesL = new QLabel( tr( "Urządzenia odtwarzające" ) + ": " );
 
 	devicesB = new QComboBox;
-	for ( int i = 0 ; i < devicesList.first.count() ; ++i )
+	for ( int i = 0; i < devicesList.first.count(); ++i )
 	{
 		QString itemText = devicesList.second[ i ];
 		if ( itemText.isEmpty() )

@@ -20,7 +20,7 @@ VideoFrame *VideoFrame::create( QByteArray &videoFrameData, quint8 *data[ 4 ], c
 {
 	videoFrameData.resize( sizeof( VideoFrame ) );
 	VideoFrame *videoFrame = fromData( videoFrameData );
-	for ( int i = 0 ; i < 4 ; ++i )
+	for ( int i = 0; i < 4; ++i )
 	{
 		videoFrame->data[ i ] = data[ i ];
 		videoFrame->linesize[ i ] = linesize[ i ];
@@ -69,7 +69,7 @@ void VideoFrame::copyYV12( void *dest, const QByteArray &videoFrameData, unsigne
 	const VideoFrame *videoFrame = fromData( videoFrameData );
 	unsigned offset = 0;
 	unsigned char *dest_data = ( unsigned char * )dest;
-	for ( unsigned i = 0 ; i < height ; ++i )
+	for ( unsigned i = 0; i < height; ++i )
 	{
 		memcpy( dest_data, videoFrame->data[ 0 ] + offset, luma_width );
 		offset += videoFrame->linesize[ 0 ];
@@ -78,7 +78,7 @@ void VideoFrame::copyYV12( void *dest, const QByteArray &videoFrameData, unsigne
 	offset = 0;
 	height >>= 1;
 	const unsigned wh = chroma_width * height;
-	for ( unsigned i = 0 ; i < height ; ++i )
+	for ( unsigned i = 0; i < height; ++i )
 	{
 		memcpy( dest_data, videoFrame->data[ 2 ] + offset, chroma_width );
 		memcpy( dest_data + wh, videoFrame->data[ 1 ] + offset, chroma_width );

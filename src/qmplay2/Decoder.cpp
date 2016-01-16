@@ -47,7 +47,7 @@ Decoder *Decoder::create( StreamInfo *streamInfo, Writer *writer, const QStringL
 						pluginsInstances[ idx ] = qMakePair( pluginInstance, mod );
 				}
 			}
-	for ( int i = 0 ; i < pluginsInstances.count() ; i++ )
+	for ( int i = 0; i < pluginsInstances.count(); i++ )
 	{
 		Module *module = pluginsInstances[ i ].first;
 		Module::Info &moduleInfo = pluginsInstances[ i ].second;

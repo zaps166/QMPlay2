@@ -481,7 +481,7 @@ void MainWidget::actionSeek()
 			if ( pos < 0 )
 				pos = 0;
 			QByteArray osd_pos = "[";
-			for ( int i = 0 ; i < ile ; i++ )
+			for ( int i = 0; i < ile; i++ )
 				osd_pos += i == pos ? "|" : "-";
 			osd_pos += "]";
 			playC.messageAndOSD( osd_pos, false );

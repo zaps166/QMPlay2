@@ -67,7 +67,7 @@ Writer *Writer::create( const QString &url, const QStringList &modNames )
 						pluginsInstances[ idx ] = qMakePair( pluginInstance, mod );
 				}
 			}
-	for ( int i = 0 ; i < pluginsInstances.count() ; i++ )
+	for ( int i = 0; i < pluginsInstances.count(); i++ )
 	{
 		Module *module = pluginsInstances[ i ].first;
 		Module::Info &moduleInfo = pluginsInstances[ i ].second;

@@ -482,7 +482,7 @@ DownloaderW::DownloaderW()
 	{
 		const QByteArray arr = sets.getByteArray( "Items" );
 		QDataStream stream( arr );
-		for ( int i = 0 ; i < count ; ++i )
+		for ( int i = 0; i < count; ++i )
 			new DownloaderThread( &stream, QString(), downloadLW );
 		downloadLW->setCurrentItem( downloadLW->invisibleRootItem()->child( 0 ) );
 	}
@@ -521,7 +521,7 @@ void DownloaderW::setDownloadsDir()
 void DownloaderW::clearFinished()
 {
 	const QList< QTreeWidgetItem * > items = downloadLW->findItems( QString(), Qt::MatchContains );
-	for ( int i = items.count() - 1 ; i >= 0 ; --i )
+	for ( int i = items.count() - 1; i >= 0; --i )
 		if ( ( ( DownloadItemW * )downloadLW->itemWidget( items[ i ], 0 ) )->isFinished() )
 			delete items[ i ];
 }
