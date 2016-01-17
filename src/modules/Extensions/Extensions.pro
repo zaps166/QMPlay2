@@ -2,7 +2,10 @@ TEMPLATE = lib
 CONFIG += plugin
 
 QT += network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4) {
+	CONFIG -= c++11
+	QT += widgets
+}
 
 win32|macx {
 	DESTDIR = ../../../app/modules

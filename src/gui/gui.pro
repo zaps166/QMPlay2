@@ -2,7 +2,10 @@ TEMPLATE = app
 !win32: CONFIG += link_pkgconfig
 
 QT += network
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4) {
+	CONFIG -= c++11
+	QT += widgets
+}
 else:unix:!macx: PKGCONFIG += x11
 
 TARGET = QMPlay2
