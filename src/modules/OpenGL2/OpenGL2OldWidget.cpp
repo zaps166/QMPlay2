@@ -72,6 +72,9 @@ void OpenGL2OldWidget::resizeGL(int w, int h)
 
 bool OpenGL2OldWidget::event(QEvent *e)
 {
-	dispatchEvent(e, parent());
+	if (e->type() == QEvent::Paint)
+		resetClearCounter();
+	else
+		dispatchEvent(e, parent());
 	return QGLWidget::event(e);
 }

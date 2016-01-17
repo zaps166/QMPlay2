@@ -57,7 +57,7 @@ void OpenGL2Window::initializeGL()
 void OpenGL2Window::paintGL()
 {
 	if (doReset)
-		doClear = NUM_BUFFERS_TO_CLEAR;
+		resetClearCounter();
 	if (doClear > 0)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -74,6 +74,11 @@ void OpenGL2Window::resetClearCounter()
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 {
 	if (o == container)
-		dispatchEvent(e, parent());
+	{
+		if (e->type() == QEvent::Paint)
+			resetClearCounter();
+		else
+			dispatchEvent(e, parent());
+	}
 	return false;
 }

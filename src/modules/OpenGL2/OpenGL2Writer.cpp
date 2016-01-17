@@ -85,7 +85,6 @@ bool OpenGL2Writer::processParams(bool *)
 	{
 		drawable->outW = outW;
 		drawable->outH = outH;
-		drawable->W = (drawable->outW % 8) ? drawable->outW-1 : drawable->outW;
 
 		drawable->clearImg();
 		emit QMPlay2Core.dockVideo(drawable->widget());
