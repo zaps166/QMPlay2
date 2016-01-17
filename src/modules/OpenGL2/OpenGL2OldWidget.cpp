@@ -36,6 +36,8 @@ bool OpenGL2OldWidget::VSync(bool enable)
 	if (swapInterval)
 		swapInterval(enable);
 	doneCurrent();
+#else
+	Q_UNUSED(enable)
 #endif
 	return true;
 }

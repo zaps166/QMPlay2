@@ -447,6 +447,7 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 			newSize(((QResizeEvent *)e)->size());
 			break;
 		case QEvent::Gesture:
+			/* Pass gesture event to the parent */
 			QCoreApplication::sendEvent(p, e);
 			break;
 		default:

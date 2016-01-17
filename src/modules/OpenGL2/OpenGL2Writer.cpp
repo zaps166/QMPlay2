@@ -134,7 +134,7 @@ QString OpenGL2Writer::name() const
 bool OpenGL2Writer::open()
 {
 #ifdef OPENGL_NEW_API
-	const QString platformName = qApp->platformName();
+	static const QString platformName = qApp->platformName();
 	if (platformName == "wayland" || platformName == "android")
 		useRtt = true;
 	else

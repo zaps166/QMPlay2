@@ -4,7 +4,7 @@
 
 OpenGL2Window::OpenGL2Window()
 {
-#ifndef Q_OS_WIN //QTBUG-50505
+#ifndef PASS_EVENTS_TO_PARENT
 	setFlags(Qt::WindowTransparentForInput);
 #endif
 
@@ -86,7 +86,7 @@ bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 	return false;
 }
 
-#ifdef Q_OS_WIN //QTBUG-50505
+#ifdef PASS_EVENTS_TO_PARENT
 bool OpenGL2Window::event(QEvent *e)
 {
 	switch (e->type())

@@ -6,6 +6,10 @@
 #include <QOpenGLWindow>
 #include <QWidget>
 
+#if defined Q_OS_MAC || defined Q_OS_WIN //QTBUG-50505
+	#define PASS_EVENTS_TO_PARENT
+#endif
+
 class OpenGL2Window : private QOpenGLWindow, public OpenGL2CommonQt5
 {
 	Q_OBJECT
@@ -25,7 +29,7 @@ private slots:
 private:
 	bool eventFilter(QObject *o, QEvent *e);
 
-#ifdef Q_OS_WIN
+#ifdef PASS_EVENTS_TO_PARENT
 	bool event(QEvent *e);
 #endif
 
