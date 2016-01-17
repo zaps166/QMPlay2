@@ -4,7 +4,9 @@
 
 OpenGL2Window::OpenGL2Window()
 {
+#ifndef Q_OS_WIN //QTBUG-50505
 	setFlags(Qt::WindowTransparentForInput);
+#endif
 
 	container = QWidget::createWindowContainer(this);
 	container->setAttribute(Qt::WA_NativeWindow);
@@ -14,6 +16,7 @@ OpenGL2Window::OpenGL2Window()
 }
 OpenGL2Window::~OpenGL2Window()
 {
+	setVisible(false);
 	setParent(NULL); //Container must not take ownership of this
 	delete container;
 }
@@ -38,13 +41,13 @@ bool OpenGL2Window::VSync(bool enable)
 		destroy();
 		setFormat(fmt);
 		create();
-		show();
+		setVisible(true);
 	}
 	return true;
 }
 void OpenGL2Window::updateGL()
 {
-	//Sent event doesn't enqueue the event
+	//sendEvent() doesn't enqueue the event here
 	QEvent updateEvent(QEvent::UpdateRequest);
 	QCoreApplication::sendEvent(this, &updateEvent);
 }
@@ -78,7 +81,40 @@ bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 		if (e->type() == QEvent::Paint)
 			resetClearCounter();
 		else
-			dispatchEvent(e, parent());
+			dispatchEvent(e, container->parent());
 	}
 	return false;
 }
+
+#ifdef Q_OS_WIN //QTBUG-50505
+bool OpenGL2Window::event(QEvent *e)
+{
+	switch (e->type())
+	{
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+		case QEvent::MouseButtonDblClick:
+		case QEvent::MouseMove:
+		case QEvent::FocusIn:
+		case QEvent::FocusOut:
+		case QEvent::FocusAboutToChange:
+		case QEvent::Enter:
+		case QEvent::Leave:
+		case QEvent::Wheel:
+		case QEvent::TabletMove:
+		case QEvent::TabletPress:
+		case QEvent::TabletRelease:
+		case QEvent::TabletEnterProximity:
+		case QEvent::TabletLeaveProximity:
+		case QEvent::TouchBegin:
+		case QEvent::TouchUpdate:
+		case QEvent::TouchEnd:
+		case QEvent::InputMethodQuery:
+		case QEvent::TouchCancel:
+			return QCoreApplication::sendEvent(parent(), e);
+		default:
+			break;
+	}
+	return QOpenGLWindow::event(e);
+}
+#endif

@@ -25,6 +25,10 @@ private slots:
 private:
 	bool eventFilter(QObject *o, QEvent *e);
 
+#ifdef Q_OS_WIN
+	bool event(QEvent *e);
+#endif
+
 	QWidget *container;
 	int doClear;
 };
