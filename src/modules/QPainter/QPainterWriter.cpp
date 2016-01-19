@@ -14,8 +14,8 @@ using Functions::aligned;
 Drawable::Drawable(QPainterWriter &writer) :
 	writer(writer)
 {
-	setAttribute(Qt::WA_OpaquePaintEvent);
 	grabGesture(Qt::PinchGesture);
+	setAutoFillBackground(true);
 	setMouseTracking(true);
 }
 Drawable::~Drawable()
@@ -24,7 +24,7 @@ Drawable::~Drawable()
 	VideoFrame::unref(videoFrameData);
 }
 
-void Drawable::draw(const QByteArray &arr, bool canRepaint, bool wholeScreen)
+void Drawable::draw(const QByteArray &arr, bool canRepaint, bool entireScreen)
 {
 	if (!arr.isEmpty())
 	{
@@ -46,9 +46,9 @@ void Drawable::draw(const QByteArray &arr, bool canRepaint, bool wholeScreen)
 		if (Brightness != 0 || Contrast != 100)
 			Functions::ImageEQ(Contrast, Brightness, img.bits(), W * H << 2);
 	}
-	if (canRepaint && !wholeScreen)
+	if (canRepaint && !entireScreen)
 		update(X, Y, W, H);
-	else if (canRepaint && wholeScreen)
+	else if (canRepaint && entireScreen)
 		update();
 }
 void Drawable::clr()
@@ -68,6 +68,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
 void Drawable::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
+
 	p.translate(X, Y);
 	p.drawImage(0, 0, img);
 
