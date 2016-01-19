@@ -38,7 +38,7 @@ void Settings::set(const QString &key, const QVariant &val)
 	cache[key] = val;
 	if (timerID)
 		killTimer(timerID);
-	timerID = startTimer(2000);
+	timerID = startTimer(1000);
 }
 void Settings::remove(const QString &key)
 {
@@ -69,7 +69,7 @@ void Settings::flushCache()
 		killTimer(timerID);
 		timerID = 0;
 	}
-	for (SettingsMap::const_iterator it = cache.begin(), end_it = cache.end(); it != end_it; ++it)
+	for (SettingsMap::const_iterator it = cache.constBegin(), end_it = cache.constEnd(); it != end_it; ++it)
 		QSettings::setValue(it.key(), it.value());
 	cache.clear();
 }

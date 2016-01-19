@@ -960,6 +960,7 @@ void SettingsWidget::apply()
 			break;
 	}
 	emit settingsChanged(page, page3Restart);
+	QMPSettings.flush();
 }
 void SettingsWidget::chModule(QListWidgetItem *w)
 {
