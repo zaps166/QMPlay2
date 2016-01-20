@@ -72,7 +72,7 @@ public:
 		return false;
 	}
 
-	virtual bool seek(int) = 0;
+	virtual bool seek(int pos, bool backward) = 0;
 	virtual bool read(Packet &, int &) = 0;
 
 	virtual ~Demuxer() {}

@@ -75,7 +75,7 @@ bool ToneGenerator::dontUseBuffer() const
 	return true;
 }
 
-bool ToneGenerator::seek(int)
+bool ToneGenerator::seek(int, bool)
 {
 	return false;
 }

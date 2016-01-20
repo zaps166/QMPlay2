@@ -98,12 +98,12 @@ bool FFDemux::localStream() const
 	return true;
 }
 
-bool FFDemux::seek(int pos)
+bool FFDemux::seek(int pos, bool backward)
 {
 	bool seeked = false;
 	foreach (FormatContext *fmtCtx, formatContexts)
 	{
-		if (fmtCtx->seek(pos))
+		if (fmtCtx->seek(pos, backward))
 			seeked |= true;
 		else if (fmtCtx->isStreamed && formatContexts.count() > 1)
 		{

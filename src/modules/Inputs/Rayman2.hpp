@@ -16,7 +16,7 @@ private:
 	double length() const;
 	int bitrate() const;
 
-	bool seek(int);
+	bool seek(int, bool backward);
 	bool read(Packet &, int &);
 	void abort();
 

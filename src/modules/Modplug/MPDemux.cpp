@@ -116,7 +116,7 @@ int MPDemux::bitrate() const
 	return -1;
 }
 
-bool MPDemux::seek(int val)
+bool MPDemux::seek(int val, bool)
 {
 	if (val >= length())
 		val = length()-1;

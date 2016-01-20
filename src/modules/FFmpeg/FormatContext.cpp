@@ -280,7 +280,7 @@ QByteArray FormatContext::image(bool forceCopy) const
 	return QByteArray();
 }
 
-bool FormatContext::seek(int pos)
+bool FormatContext::seek(int pos, bool backward)
 {
 	bool isOk = false;
 	if (!isStreamed)
@@ -294,7 +294,6 @@ bool FormatContext::seek(int pos)
 				pos = len;
 		}
 		pos += startTime;
-		const bool backward = pos < currPos;
 #ifndef MP3_FAST_SEEK
 		if (seekByByteOffset < 0)
 #endif

@@ -269,10 +269,10 @@ void DemuxerThr::run()
 				seekInBuffer = false;
 			}
 
-			const bool backwards = playC.seekTo < (int)playC.pos;
+			const bool backward = playC.seekTo < (int)playC.pos;
 			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
 
-			if (seekInBuffer && (!localStream || !backwards))
+			if (seekInBuffer && (!localStream || !backward))
 			{
 				playC.vPackets.lock();
 				playC.aPackets.lock();
@@ -280,9 +280,9 @@ void DemuxerThr::run()
 				if
 				(
 					(playC.vPackets.packetsCount() || playC.aPackets.packetsCount()) &&
-					playC.vPackets.seekTo(playC.seekTo, backwards) &&
-					playC.aPackets.seekTo(playC.seekTo, backwards) &&
-					playC.sPackets.seekTo(playC.seekTo, backwards)
+					playC.vPackets.seekTo(playC.seekTo, backward) &&
+					playC.aPackets.seekTo(playC.seekTo, backward) &&
+					playC.sPackets.seekTo(playC.seekTo, backward)
 				)
 				{
 					mustSeek = false;
@@ -303,7 +303,7 @@ void DemuxerThr::run()
 				playC.sPackets.unlock();
 			}
 
-			if (mustSeek && demuxer->seek(playC.seekTo))
+			if (mustSeek && demuxer->seek(playC.seekTo, backward))
 				flush = true;
 
 			if (flush)

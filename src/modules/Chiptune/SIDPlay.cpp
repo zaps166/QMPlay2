@@ -49,9 +49,9 @@ int SIDPlay::bitrate() const
 	return -1;
 }
 
-bool SIDPlay::seek(int s)
+bool SIDPlay::seek(int s, bool backward)
 {
-	if ((int)m_sidplay.time() > s && !m_sidplay.load(m_tune)) //backward
+	if (backward && !m_sidplay.load(m_tune)) //backward
 		return false;
 
 	if (s > 0)

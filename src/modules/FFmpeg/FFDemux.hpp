@@ -26,7 +26,7 @@ private:
 
 	bool localStream() const;
 
-	bool seek(int pos);
+	bool seek(int pos, bool backward);
 	bool read(Packet &encoded, int &idx);
 	void pause();
 	void abort();
