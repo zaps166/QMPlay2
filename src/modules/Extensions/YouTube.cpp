@@ -836,14 +836,18 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 
 	if (PARAM.isEmpty() && ret.count() >= 3) //Wyszukiwanie domyślnej jakości
 	{
-		if (!multiStream)
-			ret = getUrlByItagPriority(resultsW->itags, ret);
-		else
+		bool forceSingleStream = false;
+		if (multiStream)
 		{
 			const QStringList video = getUrlByItagPriority(resultsW->itagsVideo, ret);
-            const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
-			ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]}" << "[" + video[1] + "][" + audio[1] + "]";
+			const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
+			if (video.count() == 2 && audio.count() == 2)
+				ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]}" << "[" + video[1] + "][" + audio[1] + "]";
+			else
+				forceSingleStream = true;
 		}
+		if (!multiStream || forceSingleStream)
+			ret = getUrlByItagPriority(resultsW->itags, ret);
 	}
 
 	if (tWI) //Włącza item
@@ -928,12 +932,13 @@ QStringList YouTubeW::getUrlByItagPriority(const QList< int > &itags, QStringLis
 	{
 		bool br = false;
 		for (int i = 2; i < ret.count(); i += 3)
-			if (ret[i].toInt() == itag)
+			if (ret.at(i).toInt() == itag)
 			{
 				if (i != 2)
 				{
-					ret[0] = ret[i-2];
-					ret[1] = ret[i-1];
+					ret[0] = ret.at(i-2); //URL
+					ret[1] = ret.at(i-1); //Extension
+					ret[2] = ret.at(i-0); //Itag
 				}
 				br = true;
 				break;
@@ -941,6 +946,8 @@ QStringList YouTubeW::getUrlByItagPriority(const QList< int > &itags, QStringLis
 		if (br)
 			break;
 	}
+	if (!itags.contains(ret.at(2).toInt()))
+		return QStringList();
 	ret.erase(ret.begin()+2, ret.end());
 	return ret;
 }
