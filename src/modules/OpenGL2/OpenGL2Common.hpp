@@ -27,7 +27,7 @@ public:
 	typedef void (APIENTRY *GLActiveTexture)(GLenum);
 #endif
 	OpenGL2Common();
-	virtual ~OpenGL2Common() {}
+	virtual ~OpenGL2Common();
 
 	virtual QWidget *widget() = 0;
 
@@ -51,11 +51,15 @@ protected:
 	GLActiveTexture glActiveTexture;
 #endif
 
+#ifdef Q_OS_WIN
+	bool preventFullscreen;
+#endif
+
 	void dispatchEvent(QEvent *e, QObject *p);
 public:
 	QByteArray videoFrameArr;
 
-	QOpenGLShaderProgram shaderProgramYCbCr, shaderProgramOSD;
+	QOpenGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
 
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
 	float Contrast, Saturation, Brightness, Hue;

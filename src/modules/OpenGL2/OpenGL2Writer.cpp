@@ -101,8 +101,8 @@ bool OpenGL2Writer::processParams(bool *)
 qint64 OpenGL2Writer::write(const QByteArray &arr)
 {
 	drawable->isPaused = false;
+	VideoFrame::unref(drawable->videoFrameArr);
 	drawable->videoFrameArr = arr;
-	VideoFrame::unref(arr);
 	drawable->updateGL();
 	return arr.size();
 }
@@ -146,7 +146,7 @@ bool OpenGL2Writer::open()
 			//Don't use rtt when videoDock has native window
 			if (w->objectName() == "videoDock")
 			{
-				useRtt = !w->internalWinId();
+				useRtt = !w->internalWinId() || (w == w->window());
 				break;
 			}
 		}

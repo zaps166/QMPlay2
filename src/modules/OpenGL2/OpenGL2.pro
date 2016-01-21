@@ -34,6 +34,7 @@ greaterThan(QT_VERSION, 5.5.2) { #At least Qt 5.6.0
 	SOURCES += OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp
 } else {
 	QT += opengl
+	DEFINES += DONT_RECREATE_SHADERS
 	HEADERS += OpenGL2OldWidget.hpp
 	SOURCES += OpenGL2OldWidget.cpp
 	win32|unix:!macx:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS

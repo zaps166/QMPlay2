@@ -4,6 +4,9 @@
 
 OpenGL2OldWidget::OpenGL2OldWidget()
 {
+#ifdef Q_OS_WIN
+	preventFullscreen = true;
+#endif
 	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 }
 

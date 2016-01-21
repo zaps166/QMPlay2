@@ -10,8 +10,8 @@
 #else
 	#include <QGLContext>
 	#include <QGLShader>
-	#define QOpenGLShader QGLShader
 	#define QOpenGLContext QGLContext
+	#define QOpenGLShader QGLShader
 #endif
 #include <QResizeEvent>
 #include <QPainter>
@@ -133,6 +133,10 @@ OpenGL2Common::OpenGL2Common() :
 	supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
 	glActiveTexture(NULL),
 #endif
+#ifdef Q_OS_WIN
+	preventFullscreen(false),
+#endif
+	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
 	isPaused(false), isOK(false), hasImage(false), doReset(true),
@@ -143,6 +147,12 @@ OpenGL2Common::OpenGL2Common() :
 	/* Initialize texCoordYCbCr array */
 	texCoordYCbCr[0] = texCoordYCbCr[4] = texCoordYCbCr[5] = texCoordYCbCr[7] = 0.0f;
 	texCoordYCbCr[1] = texCoordYCbCr[3] = 1.0f;
+}
+OpenGL2Common::~OpenGL2Common()
+{
+	VideoFrame::unref(videoFrameArr);
+	delete shaderProgramYCbCr;
+	delete shaderProgramOSD;
 }
 
 void OpenGL2Common::newSize(const QSize &size)
@@ -173,26 +183,36 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
+#ifndef DONT_RECREATE_SHADERS
+	delete shaderProgramYCbCr;
+	delete shaderProgramOSD;
+	shaderProgramYCbCr = shaderProgramOSD = NULL;
+#endif
+	if (!shaderProgramYCbCr)
+		shaderProgramYCbCr = new QOpenGLShaderProgram;
+	if (!shaderProgramOSD)
+		shaderProgramOSD = new QOpenGLShaderProgram;
+
 	/* YCbCr shader */
-	if (shaderProgramYCbCr.shaders().isEmpty())
+	if (shaderProgramYCbCr->shaders().isEmpty())
 	{
-		shaderProgramYCbCr.addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderYCbCrSrc);
+		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderYCbCrSrc);
 		/* Use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
-		shaderProgramYCbCr.addShaderFromSourceCode(QOpenGLShader::Fragment, QString(fShaderYCbCrSrc).arg((glVer >= 30) ? fShaderYCbCrHueSrc : ""));
+		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, QString(fShaderYCbCrSrc).arg((glVer >= 30) ? fShaderYCbCrHueSrc : ""));
 	}
-	if (shaderProgramYCbCr.bind())
+	if (shaderProgramYCbCr->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation("vPosition");
+		const qint32 newTexCoordLoc = shaderProgramYCbCr->attributeLocation("aTexCoord");
+		const qint32 newPositionLoc = shaderProgramYCbCr->attributeLocation("vPosition");
 		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordYCbCrLoc = newTexCoordLoc;
 			positionYCbCrLoc = newPositionLoc;
 		}
-		shaderProgramYCbCr.setUniformValue("Ytex", 0);
-		shaderProgramYCbCr.setUniformValue("Utex", 1);
-		shaderProgramYCbCr.setUniformValue("Vtex", 2);
-		shaderProgramYCbCr.release();
+		shaderProgramYCbCr->setUniformValue("Ytex", 0);
+		shaderProgramYCbCr->setUniformValue("Utex", 1);
+		shaderProgramYCbCr->setUniformValue("Vtex", 2);
+		shaderProgramYCbCr->release();
 	}
 	else
 	{
@@ -202,22 +222,22 @@ void OpenGL2Common::initializeGL()
 	}
 
 	/* OSD shader */
-	if (shaderProgramOSD.shaders().isEmpty())
+	if (shaderProgramOSD->shaders().isEmpty())
 	{
-		shaderProgramOSD.addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderOSDSrc);
-		shaderProgramOSD.addShaderFromSourceCode(QOpenGLShader::Fragment, fShaderOSDSrc);
+		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderOSDSrc);
+		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, fShaderOSDSrc);
 	}
-	if (shaderProgramOSD.bind())
+	if (shaderProgramOSD->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramYCbCr.attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramYCbCr.attributeLocation("vPosition");
+		const qint32 newTexCoordLoc = shaderProgramOSD->attributeLocation("aTexCoord");
+		const qint32 newPositionLoc = shaderProgramOSD->attributeLocation("vPosition");
 		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordOSDLoc = newTexCoordLoc;
 			positionOSDLoc = newPositionLoc;
 		}
-		shaderProgramOSD.setUniformValue("tex", 3);
-		shaderProgramOSD.release();
+		shaderProgramOSD->setUniformValue("tex", 3);
+		shaderProgramOSD->release();
 	}
 	else
 	{
@@ -290,27 +310,27 @@ void OpenGL2Common::paintGL()
 		glBindTexture(GL_TEXTURE_2D, 4);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[2], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[2]);
 
-		videoFrameArr.clear();
+		VideoFrame::unref(videoFrameArr);
 		hasImage = true;
 	}
 
-	shaderProgramYCbCr.setAttributeArray(positionYCbCrLoc, verticesYCbCr[flip], 2);
-	shaderProgramYCbCr.setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
-	shaderProgramYCbCr.enableAttributeArray(positionYCbCrLoc);
-	shaderProgramYCbCr.enableAttributeArray(texCoordYCbCrLoc);
+	shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[flip], 2);
+	shaderProgramYCbCr->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
+	shaderProgramYCbCr->enableAttributeArray(positionYCbCrLoc);
+	shaderProgramYCbCr->enableAttributeArray(texCoordYCbCrLoc);
 
-	shaderProgramYCbCr.bind();
+	shaderProgramYCbCr->bind();
 	if (doReset)
 	{
-		shaderProgramYCbCr.setUniformValue("scale", W / (float)winSize.width(), H / (float)winSize.height());
-		shaderProgramYCbCr.setUniformValue("videoEq", Brightness, Contrast, Saturation, Hue);
+		shaderProgramYCbCr->setUniformValue("scale", W / (float)winSize.width(), H / (float)winSize.height());
+		shaderProgramYCbCr->setUniformValue("videoEq", Brightness, Contrast, Saturation, Hue);
 		doReset = !resetDone;
 	}
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	shaderProgramYCbCr.release();
+	shaderProgramYCbCr->release();
 
-	shaderProgramYCbCr.disableAttributeArray(texCoordYCbCrLoc);
-	shaderProgramYCbCr.disableAttributeArray(positionYCbCrLoc);
+	shaderProgramYCbCr->disableAttributeArray(texCoordYCbCrLoc);
+	shaderProgramYCbCr->disableAttributeArray(positionYCbCrLoc);
 
 	glActiveTexture(GL_TEXTURE3);
 
@@ -347,19 +367,19 @@ void OpenGL2Common::paintGL()
 			right - 1.0f, -top    + 1.0f,
 		};
 
-		shaderProgramOSD.setAttributeArray(positionOSDLoc, verticesOSD, 2);
-		shaderProgramOSD.setAttributeArray(texCoordOSDLoc, texCoordOSD, 2);
-		shaderProgramOSD.enableAttributeArray(positionOSDLoc);
-		shaderProgramOSD.enableAttributeArray(texCoordOSDLoc);
+		shaderProgramOSD->setAttributeArray(positionOSDLoc, verticesOSD, 2);
+		shaderProgramOSD->setAttributeArray(texCoordOSDLoc, texCoordOSD, 2);
+		shaderProgramOSD->enableAttributeArray(positionOSDLoc);
+		shaderProgramOSD->enableAttributeArray(texCoordOSDLoc);
 
 		glEnable(GL_BLEND);
-		shaderProgramOSD.bind();
+		shaderProgramOSD->bind();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		shaderProgramOSD.release();
+		shaderProgramOSD->release();
 		glDisable(GL_BLEND);
 
-		shaderProgramOSD.disableAttributeArray(texCoordOSDLoc);
-		shaderProgramOSD.disableAttributeArray(positionOSDLoc);
+		shaderProgramOSD->disableAttributeArray(texCoordOSDLoc);
+		shaderProgramOSD->disableAttributeArray(positionOSDLoc);
 	}
 	osdMutex.unlock();
 
@@ -407,7 +427,7 @@ void OpenGL2Common::testGLInternal()
 	 * This property is read by QMPlay2 and it ensures that toolbar will be visible
 	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
-	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+	if (preventFullscreen && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 		w->setProperty("PreventFullscreen", true);
 #endif
 }

@@ -7,6 +7,9 @@ OpenGL2Window::OpenGL2Window()
 #ifndef PASS_EVENTS_TO_PARENT
 	setFlags(Qt::WindowTransparentForInput);
 #endif
+#ifdef Q_OS_WIN
+	preventFullscreen = true;
+#endif
 
 	container = QWidget::createWindowContainer(this);
 	container->setAttribute(Qt::WA_NativeWindow);
