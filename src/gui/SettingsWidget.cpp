@@ -881,7 +881,6 @@ void SettingsWidget::apply()
 			QMPSettings.set("Proxy/Password", page1->proxyPasswordE->text().toUtf8().toBase64());
 			page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
 			page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
-			QMPSettings.flush();
 			((QMainWindow *)QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
 			applyProxy();
 		} break;
@@ -959,8 +958,8 @@ void SettingsWidget::apply()
 			page6->otherVFiltersW->writeSettings();
 			break;
 	}
-	emit settingsChanged(page, page3Restart);
 	QMPSettings.flush();
+	emit settingsChanged(page, page3Restart);
 }
 void SettingsWidget::chModule(QListWidgetItem *w)
 {
