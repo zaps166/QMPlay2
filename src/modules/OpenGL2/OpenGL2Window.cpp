@@ -14,6 +14,7 @@ OpenGL2Window::OpenGL2Window()
 	container = QWidget::createWindowContainer(this);
 	container->setAttribute(Qt::WA_NativeWindow);
 	container->installEventFilter(this);
+	container->setAcceptDrops(false);
 
 	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 }
