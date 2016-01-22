@@ -71,7 +71,9 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 							setPalette(QColor(ColorKEY));
 							connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(updateOverlay()));
 							connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(overlayVisible(bool)));
+#if QT_VERSION >= 0x050000
 							connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(overlayVisible(bool)));
+#endif
 
 							isOK = isOverlay = true;
 						}

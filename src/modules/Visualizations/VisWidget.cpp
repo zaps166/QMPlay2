@@ -38,6 +38,9 @@ VisWidget::VisWidget() :
 
 	connect(&tim, SIGNAL(timeout()), this, SLOT(update()));
 	connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+#if QT_VERSION >= 0x050000
+	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(visibilityChanged(bool)));
+#endif
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 }
