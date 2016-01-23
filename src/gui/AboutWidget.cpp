@@ -34,11 +34,11 @@ void CommunityEdit::mousePressEvent(QMouseEvent *e)
 
 AboutWidget::AboutWidget()
 {
-	setWindowTitle(tr("O QMPlay2"));
+	setWindowTitle(tr("About QMPlay2"));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	QLabel *label = new QLabel;
-	QString labelText = "<B>QMPlay2</B> - " + tr("odtwarzacz filmów") + "<BR/><B>" + tr("Wersja") + ":</B> " + QMPlay2Core.getSettings().getString("Version");
+	QString labelText = "<B>QMPlay2</B> - " + tr("video player") + "<BR/><B>" + tr("Version") + ":</B> " + QMPlay2Core.getSettings().getString("Version");
 	label->setText(labelText);
 
 	QLabel *iconL = new QLabel;
@@ -56,7 +56,7 @@ AboutWidget::AboutWidget()
 	logE->setReadOnly(true);
 	logE->setLineWrapMode(QTextEdit::NoWrap);
 	logE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
-	tabW->addTab(logE, tr("Logi"));
+	tabW->addTab(logE, tr("Logs"));
 
 	dE = new CommunityEdit;
 	dE->setMouseTracking(true);
@@ -66,7 +66,7 @@ AboutWidget::AboutWidget()
 	dE->setReadOnly(true);
 	dE->setLineWrapMode(QTextEdit::NoWrap);
 	dE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
-	tabW->addTab(dE, tr("Twórca programu"));
+	tabW->addTab(dE, tr("Software creator"));
 
 	clE = new QTextEdit;
 	clE->setPalette(palette);
@@ -74,14 +74,14 @@ AboutWidget::AboutWidget()
 	clE->setFrameShadow(QFrame::Plain);
 	clE->setReadOnly(true);
 	clE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
-	tabW->addTab(clE, tr("Lista zmian"));
+	tabW->addTab(clE, tr("Change log"));
 
 
 	clrLogB = new QPushButton;
-	clrLogB->setText(tr("Wyczyść log"));
+	clrLogB->setText(tr("Clear log"));
 
 	QPushButton *closeB = new QPushButton;
-	closeB->setText(tr("Zamknij"));
+	closeB->setText(tr("Close"));
 	closeB->setShortcut(QKeySequence("ESC"));
 
 	QGridLayout *layout = new QGridLayout;
@@ -110,7 +110,7 @@ void AboutWidget::showEvent(QShowEvent *)
 		"<table cellpadding='5' border='0' width='100%'>"
 			"<tr>"
 				"<td width='0' valign='middle' align='center'><a href='http://qt-apps.org/usermanager/search.php?username=zaps166'></a><B>Błażej Szczygieł</B></td>"
-				"<td valign='middle'>" + tr("Twórca i programista") + "</td>"
+				"<td valign='middle'>" + tr("Creator and developer") + "</td>"
 				"<td valign='middle'><B>E-Mail</B>: <a href='mailto:spaz16@wp.pl'>spaz16@wp.pl</a><BR/><B>Web page</B>: <a href='http://zaps166.sf.net/'>http://zaps166.sourceforge.net/</a></td>"
 			"</tr>"
 		"</table>"
@@ -158,7 +158,7 @@ void AboutWidget::clrLog()
 		if (f.open(QFile::WriteOnly))
 			f.close();
 		else
-			QMessageBox::warning(this, windowTitle(), tr("Nie udało się wyczyścić loga"));
+			QMessageBox::warning(this, windowTitle(), tr("Can't clear log"));
 	}
 }
 void AboutWidget::currentTabChanged(int idx)

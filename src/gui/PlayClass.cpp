@@ -50,7 +50,7 @@
 			{
 				QDialog d(QMPlay2GUI.mainW);
 				d.setWindowTitle(qApp->applicationName());
-				QLabel l(QObject::tr("Czekaj, trwa aktualizacja pamięci podręcznej czcionek"));
+				QLabel l(QObject::tr("Font cache is updating, please wait"));
 				QProgressBar p;
 				p.setRange(0, 0);
 				QVBoxLayout la(&d);
@@ -361,7 +361,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 	if (demuxThr)
 		demuxThr->emitInfo();
 	if (subsLoaded)
-		messageAndOSD(tr("Załadowane napisy") + ": " + Functions::fileName(fileName), false);
+		messageAndOSD(tr("Loaded subtitles") + ": " + Functions::fileName(fileName), false);
 }
 
 void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double duration)
@@ -378,7 +378,7 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 
 void PlayClass::speedMessageAndOSD()
 {
-	messageAndOSD(tr("Szybkość odtwarzania") + QString(": %1x").arg(speed));
+	messageAndOSD(tr("Play speed") + QString(": %1x").arg(speed));
 	QMPlay2Core.speedChanged(speed);
 }
 
@@ -473,16 +473,16 @@ void PlayClass::setFlip()
 			switch (flip)
 			{
 				case 0:
-					str = tr("Brak odwrócenia obrazu");
+					str = tr("No image rotation");
 					break;
 				case Qt::Horizontal:
-					str = tr("Odbicie lustrzane");
+					str = tr("Horizontal flip");
 					break;
 				case Qt::Vertical:
-					str = tr("Odbicie pionowe");
+					str = tr("Vertical flip");
 					break;
 				case Qt::Horizontal + Qt::Vertical:
-					str = tr("Odwrócenie obrazu");
+					str = tr("Image rotation");
 					break;
 			}
 			messageAndOSD(str, true, 0.75);
@@ -493,7 +493,7 @@ void PlayClass::setFlip()
 
 void PlayClass::clearPlayInfo()
 {
-	emit chText(tr("Zatrzymany"));
+	emit chText(tr("Stopped"));
 	emit playStateChanged(false);
 	emit updateWindowTitle();
 	if (QMPlay2Core.getSettings().getBool("ShowCovers"))
@@ -604,7 +604,7 @@ void PlayClass::slowDown()
 void PlayClass::setSpeed()
 {
 	bool ok;
-	double s = QInputDialog::getDouble(NULL, tr("Szybkość odtwarzania"), tr("Ustaw szybkość odtwarzania (sek.)"), speed, 0.05, 100.0, 2, &ok);
+	double s = QInputDialog::getDouble(NULL, tr("Play speed"), tr("Set playback speed (sec.)"), speed, 0.05, 100.0, 2, &ok);
 	if (ok)
 	{
 		speed = s;
@@ -653,7 +653,7 @@ void PlayClass::zoomReset()
 void PlayClass::aRatio()
 {
 	aRatioName = sender()->objectName();
-	QString msg_txt = tr("Współczynnik proporcji") + ": " + ((QAction *)sender())->text().remove('&');
+	QString msg_txt = tr("Aspect ratio") + ": " + ((QAction *)sender())->text().remove('&');
 	if (vThr && demuxThr && demuxThr->demuxer)
 	{
 		double aspect_ratio = getARatio();
@@ -672,7 +672,7 @@ void PlayClass::volume(int v)
 	if (!muted)
 	{
 		emit QMPlay2Core.volumeChanged(vol);
-		messageAndOSD(tr("Głośność") + ": " + QString::number(v) + "%");
+		messageAndOSD(tr("Volume") + ": " + QString::number(v) + "%");
 	}
 }
 void PlayClass::toggleMute()
@@ -682,7 +682,7 @@ void PlayClass::toggleMute()
 		volume(vol * 100);
 	else
 	{
-		messageAndOSD(tr("Dźwięk wyciszony"));
+		messageAndOSD(tr("Muted sound"));
 		emit QMPlay2Core.volumeChanged(0.0);
 	}
 }
@@ -693,7 +693,7 @@ void PlayClass::slowDownVideo()
 	videoSync -= 0.1;
 	if (videoSync < 0.1 && videoSync > -0.1)
 		videoSync = 0.0;
-	messageAndOSD(tr("Opóźnienie obrazu") + ": " + QString::number(videoSync) + "s");
+	messageAndOSD(tr("Video delay") + ": " + QString::number(videoSync) + "s");
 }
 void PlayClass::speedUpVideo()
 {
@@ -702,16 +702,16 @@ void PlayClass::speedUpVideo()
 	videoSync += 0.1;
 	if (videoSync < 0.1 && videoSync > -0.1)
 		videoSync = 0.0;
-	messageAndOSD(tr("Opóźnienie obrazu") + ": " + QString::number(videoSync) + "s");
+	messageAndOSD(tr("Video delay") + ": " + QString::number(videoSync) + "s");
 }
 void PlayClass::setVideoSync()
 {
 	bool ok;
-	double vs = QInputDialog::getDouble(NULL, tr("Opóźnienie obrazu"), tr("Ustaw opóźnienie obrazu (sek.)"), videoSync, -maxThreshold, maxThreshold, 1, &ok);
+	double vs = QInputDialog::getDouble(NULL, tr("Video delay"), tr("Set video delay (sec.)"), videoSync, -maxThreshold, maxThreshold, 1, &ok);
 	if (!ok)
 		return;
 	videoSync = vs;
-	messageAndOSD(tr("Opóźnienie obrazu") + ": " + QString::number(videoSync) + "s");
+	messageAndOSD(tr("Video delay") + ": " + QString::number(videoSync) + "s");
 }
 void PlayClass::slowDownSubs()
 {
@@ -720,7 +720,7 @@ void PlayClass::slowDownSubs()
 	subtitlesSync -= 0.1;
 	if (subtitlesSync < 0.1 && subtitlesSync > -0.1)
 		subtitlesSync = 0.;
-	messageAndOSD(tr("Opóźnienie napisów") + ": " + QString::number(subtitlesSync) + "s");
+	messageAndOSD(tr("Subtitles delay") + ": " + QString::number(subtitlesSync) + "s");
 }
 void PlayClass::speedUpSubs()
 {
@@ -729,18 +729,18 @@ void PlayClass::speedUpSubs()
 	subtitlesSync += 0.1;
 	if (subtitlesSync < 0.1 && subtitlesSync > -0.1)
 		subtitlesSync = 0.;
-	messageAndOSD(tr("Opóźnienie napisów") + ": " + QString::number(subtitlesSync) + "s");
+	messageAndOSD(tr("Subtitles delay") + ": " + QString::number(subtitlesSync) + "s");
 }
 void PlayClass::setSubtitlesSync()
 {
 	if (subtitlesStream == -1)
 		return;
 	bool ok;
-	double ss = QInputDialog::getDouble(NULL, tr("Opóźnienie napisów"), tr("Ustaw opóźnienie napisów (sek.)"), subtitlesSync, fileSubs.isEmpty() ? 0 : -2147483647, 2147483647, 2, &ok);
+	double ss = QInputDialog::getDouble(NULL, tr("Subtitles delay"), tr("Set subtitles delay (sec.)"), subtitlesSync, fileSubs.isEmpty() ? 0 : -2147483647, 2147483647, 2, &ok);
 	if (!ok)
 		return;
 	subtitlesSync = ss;
-	messageAndOSD(tr("Opóźnienie napisów") + ": " + QString::number(subtitlesSync) + "s");
+	messageAndOSD(tr("Subtitles delay") + ": " + QString::number(subtitlesSync) + "s");
 }
 void PlayClass::biggerSubs()
 {
@@ -750,7 +750,7 @@ void PlayClass::biggerSubs()
 			return;
 		subtitlesScale += 0.05;
 		ass->setFontScale(subtitlesScale);
-		messageAndOSD(tr("Wielkość napisów") + ": " + QString::number(subtitlesScale));
+		messageAndOSD(tr("Subtitles size") + ": " + QString::number(subtitlesScale));
 		if (vThr)
 		{
 			vThr->updateSubs();
@@ -766,7 +766,7 @@ void PlayClass::smallerSubs()
 			return;
 		subtitlesScale -= 0.05;
 		ass->setFontScale(subtitlesScale);
-		messageAndOSD(tr("Wielkość napisów") + ": " + QString::number(subtitlesScale));
+		messageAndOSD(tr("Subtitles size") + ": " + QString::number(subtitlesScale));
 		if (vThr)
 		{
 			vThr->updateSubs();
@@ -781,7 +781,7 @@ void PlayClass::toggleAVS(bool b)
 		audioEnabled = b;
 		audioStream = -1;
 		if (!audioEnabled)
-			messageAndOSD(tr("Dźwięk wyłączony"));
+			messageAndOSD(tr("Sound off"));
 	}
 	else if (sender()->objectName() == "toggleVideo")
 	{
@@ -793,7 +793,7 @@ void PlayClass::toggleAVS(bool b)
 		subtitlesEnabled = b;
 		subtitlesStream = -1;
 		if (!subtitlesEnabled)
-			messageAndOSD(tr("Napisy wyłączone"));
+			messageAndOSD(tr("Subtitles off"));
 	}
 	reload = true;
 }

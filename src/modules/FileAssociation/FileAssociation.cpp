@@ -41,7 +41,7 @@ FileAssociation::SettingsWidget *FileAssociation::getSettingsWidget()
 
 void FileAssociation::firsttime()
 {
-	if (QMessageBox::question(NULL, tr("Skojarzenie plików"), tr("Czy chcesz skojarzyć pliki z programem QMPlay2"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (QMessageBox::question(NULL, tr("File association"), tr("Do you want to associate files with QMPlay2"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		QDialog d;
 		QDialogButtonBox bb;
@@ -146,11 +146,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module),
 	ignoreCheck(false)
 {
-	associateB = new QGroupBox(tr("Skojarz pliki z QMPlay2"));
+	associateB = new QGroupBox(tr("Associate files with QMPlay2"));
 	associateB->setCheckable(true);
 	associateB->setChecked(sets().getBool("Associate"));
 
-	selectAllB = new QPushButton(tr("Wybierz wszystkie"));
+	selectAllB = new QPushButton(tr("Select all"));
 	connect(selectAllB, SIGNAL(clicked()), this, SLOT(selectAll()));
 	selectAllB->setCheckable(true);
 
@@ -178,13 +178,13 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 					foreach (const QString &extension, mod.extensions)
 						addExtension(extension, false, mod.type == Module::PLAYLIST);
 
-	addDirB = new QCheckBox(tr("Dodaj wpis do menu kontekstowego z katalogami"));
+	addDirB = new QCheckBox(tr("Add entry to the directories context menu"));
 	addDirB->setChecked(sets().getBool("Dirs"));
 
-	addDrvB = new QCheckBox(tr("Dodaj wpis do menu kontekstowego z dyskami"));
+	addDrvB = new QCheckBox(tr("Add entry to the drives context menu"));
 	addDrvB->setChecked(sets().getBool("Drvs"));
 
-	audioCDB = new QCheckBox(tr("Ustaw jako domyślny odtwarzacz AudioCD"));
+	audioCDB = new QCheckBox(tr("Set as default AudioCD player"));
 	audioCDB->setChecked(sets().getBool("AudioCD"));
 
 	QVBoxLayout *aLayout = new QVBoxLayout(associateB);
@@ -205,12 +205,12 @@ void ModuleSettingsWidget::saveSettings()
 	if (associateB->isChecked())
 	{
 		const QString QMPlay2Path = qApp->applicationFilePath().replace('/', '\\');
-		CreateQMPlay2Key("QMPlay2", QMPlay2Path, 1, tr("Kolejkuj w QMPlay2"));
-		CreateQMPlay2Key("QMPlay2Playlist", QMPlay2Path, 2, tr("Kolejkuj w QMPlay2"));
+		CreateQMPlay2Key("QMPlay2", QMPlay2Path, 1, tr("Enqueue in QMPlay2"));
+		CreateQMPlay2Key("QMPlay2Playlist", QMPlay2Path, 2, tr("Enqueue in QMPlay2"));
 		if (addDirB->isChecked())
-			CreateShellContextMenu(DIRECTORY, QMPlay2Path, tr("Odtwórz w QMPlay2"));
+			CreateShellContextMenu(DIRECTORY, QMPlay2Path, tr("Play in QMPlay2"));
 		if (addDrvB->isChecked())
-			CreateShellContextMenu(DRIVE, QMPlay2Path, tr("Odtwórz w QMPlay2"));
+			CreateShellContextMenu(DRIVE, QMPlay2Path, tr("Play in QMPlay2"));
 		if (audioCDB->isChecked())
 			AddStringToReg("AudioCD\\shell\\play\\command", "\"" + QMPlay2Path + "\"" + " AudioCD://%L");
 		for (int i = 0; i < extensionLW->count(); ++i)

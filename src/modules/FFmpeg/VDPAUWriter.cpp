@@ -404,20 +404,20 @@ void VDPAUWriter::setFeatures()
 		vdp_video_mixer_query_feature_support(device, features[i], featuresSupport + i);
 	if (!featuresSupport[1] && featureEnables[1])
 	{
-		QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Temporal-spatial", ErrorLog | LogOnce);
+		QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Temporal-spatial", ErrorLog | LogOnce);
 		featureEnables[1] = false;
 		featureEnables[0] = true;
 	}
 	if (!featuresSupport[0] && featureEnables[0])
 	{
-		QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Temporal", ErrorLog | LogOnce);
+		QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Temporal", ErrorLog | LogOnce);
 		featureEnables[0] = false;
 	}
 	vdp_video_mixer_set_feature_enables(mixer, featuresCountCreated, features, featureEnables);
 	if (!featuresSupport[2] && featureEnables[2])
-		QMPlay2Core.log(tr("Nie obsługiwany filtr redukcji szumów"), ErrorLog | LogOnce);
+		QMPlay2Core.log(tr("Unsupported noisy reduction filter"), ErrorLog | LogOnce);
 	if (!featuresSupport[3] && featureEnables[3])
-		QMPlay2Core.log(tr("Nie obsługiwany filtr ostrości obrazu"), ErrorLog | LogOnce);
+		QMPlay2Core.log(tr("Unsupported image sharpness filter"), ErrorLog | LogOnce);
 	if (featuresSupport[2] || featuresSupport[3])
 	{
 		static const VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL, VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL };
@@ -428,7 +428,7 @@ void VDPAUWriter::setFeatures()
 		if (featureEnables[i + scalingLevelsIdx])
 		{
 			if (!featuresSupport[scalingLevelsIdx + i])
-				QMPlay2Core.log(tr("Nieobsługiwany poziom skalowania obrazu") + QString(" (L%1)").arg(i+1), ErrorLog | LogOnce);
+				QMPlay2Core.log(tr("Unsupported image scaling level") + QString(" (L%1)").arg(i+1), ErrorLog | LogOnce);
 			break;
 		}
 }

@@ -246,7 +246,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	int idx, layout_row;
 
-	setWindowTitle(tr("Ustawienia"));
+	setWindowTitle(tr("Settings"));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	tabW = new QTabWidget;
@@ -256,19 +256,19 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page4 = new Page4;
 	page5 = new Page5;
 	page6 = new Page6;
-	tabW->addTab(page1, tr("Ustawienia ogólne"));
-	tabW->addTab(page2, tr("Ustawienia odtwarzania"));
-	tabW->addTab(page3, tr("Moduły"));
-	tabW->addTab(page4, tr("Napisy"));
+	tabW->addTab(page1, tr("General settings"));
+	tabW->addTab(page2, tr("Playback settings"));
+	tabW->addTab(page3, tr("Modules"));
+	tabW->addTab(page4, tr("Subtitles"));
 	tabW->addTab(page5, tr("OSD"));
-	tabW->addTab(page6, tr("Filtry wideo"));
+	tabW->addTab(page6, tr("Video filters"));
 
 	applyB = new QPushButton;
-	applyB->setText(tr("Zastosuj"));
+	applyB->setText(tr("Apply"));
 	connect(applyB, SIGNAL(clicked()), this, SLOT(apply()));
 
 	closeB = new QPushButton;
-	closeB->setText(tr("Zamknij"));
+	closeB->setText(tr("Close"));
 	closeB->setShortcut(QKeySequence("Escape"));
 	connect(closeB, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -280,7 +280,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 	/* Strona 1 */
 	page1->langL = new QLabel;
-	page1->langL->setText(tr("Język") + ": ");
+	page1->langL->setText(tr("Language") + ": ");
 	page1->langBox = new QComboBox;
 	page1->langBox->addItem("Polski", "pl");
 	page1->langBox->setCurrentIndex(0);
@@ -293,7 +293,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	}
 
 	page1->styleL = new QLabel;
-	page1->styleL->setText(tr("Styl") + ": ");
+	page1->styleL->setText(tr("Style") + ": ");
 	page1->styleBox = new QComboBox;
 	page1->styleBox->addItems(QStyleFactory::keys());
 	idx = page1->styleBox->findText(qApp->style()->objectName(), Qt::MatchFixedString);
@@ -301,7 +301,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 		page1->styleBox->setCurrentIndex(idx);
 	connect(page1->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
 
-	page1->encodingL = new QLabel(tr("Kodowanie napisów") + ": ");
+	page1->encodingL = new QLabel(tr("Subtitles encoding") + ": ");
 	page1->encodingB = new QComboBox;
 	QStringList encodings;
 	foreach (const QByteArray &item, QTextCodec::availableCodecs())
@@ -314,12 +314,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 	const QString audioLang = QMPSettings.getString("AudioLanguage");
 	const QString subsLang = QMPSettings.getString("SubtitlesLanguage");
-	page1->audioLangL = new QLabel(tr("Domyślny język dla dźwięku") + ": ");
-	page1->subsLangL = new QLabel(tr("Domyślny język dla napisów") + ": ");
+	page1->audioLangL = new QLabel(tr("Default audio language") + ": ");
+	page1->subsLangL = new QLabel(tr("Default subtitles language") + ": ");
 	page1->audioLangB = new QComboBox;
 	page1->subsLangB = new QComboBox;
-	page1->audioLangB->addItem(tr("Domyślna lub pierwsza ścieżka"));
-	page1->subsLangB->addItem(tr("Domyślna lub pierwsza ścieżka"));
+	page1->audioLangB->addItem(tr("Default or first stream"));
+	page1->subsLangB->addItem(tr("Default or first stream"));
 	foreach (const QString &lang, QMPlay2GUI.languages)
 	{
 		page1->audioLangB->addItem(lang);
@@ -330,7 +330,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 			page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
 	}
 
-	page1->screenshotL = new QLabel(tr("Ścieżka do zrzutów ekranu") + ": ");
+	page1->screenshotL = new QLabel(tr("Screenshots path") + ": ");
 	page1->screenshotE = new QLineEdit;
 	page1->screenshotE->setReadOnly(true);
 	page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
@@ -339,62 +339,62 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->screenshotFormatB->setCurrentIndex(page1->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
 	page1->screenshotB = new QToolButton;
 	page1->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-	page1->screenshotB->setToolTip(tr("Przeglądaj"));
+	page1->screenshotB->setToolTip(tr("Browse"));
 	connect(page1->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
-	page1->setAppearanceB = new QPushButton(tr("Ustaw wygląd"));
+	page1->setAppearanceB = new QPushButton(tr("Set appearance"));
 	connect(page1->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
 
 #ifdef ICONS_FROM_THEME
-	page1->iconsFromTheme = new QCheckBox(tr("Użyj systemowego zestawu ikon"));
+	page1->iconsFromTheme = new QCheckBox(tr("Use system icon set"));
 	page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
 #endif
 
-	page1->showCoversB = new QCheckBox(tr("Wyświetlaj okładki"));
+	page1->showCoversB = new QCheckBox(tr("Show covers"));
 	page1->showCoversB->setChecked(QMPSettings.getBool("ShowCovers"));
 
-	page1->showDirCoversB = new QCheckBox(tr("Wyświetlaj okładki z katalogu jeżeli nie ma ich w pliku muzycznym"));
+	page1->showDirCoversB = new QCheckBox(tr("Show covers from directory if there aren't in the music file"));
 	page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
 	connect(page1->showCoversB, SIGNAL(clicked(bool)), page1->showDirCoversB, SLOT(setEnabled(bool)));
 	page1->showDirCoversB->setEnabled(page1->showCoversB->isChecked());
 
-	page1->autoOpenVideoWindowB = new QCheckBox(tr("Automatyczne otwieranie okienka z filmem"));
+	page1->autoOpenVideoWindowB = new QCheckBox(tr("Automatically opening video window"));
 	page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
 
 #ifdef UPDATER
-	page1->autoUpdatesB = new QCheckBox(tr("Automatycznie sprawdzaj i pobieraj aktualizacje"));
+	page1->autoUpdatesB = new QCheckBox(tr("Automatically check and download updates"));
 	page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
 #endif
 
-	page1->tabsNorths = new QCheckBox(tr("Pokazuj karty w górnej części okna głównego"));
+	page1->tabsNorths = new QCheckBox(tr("Show tabs at the top of the main window"));
 	page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
 
-	page1->allowOnlyOneInstance = new QCheckBox(tr("Zezwalaj na tylko jedną instancję"));
+	page1->allowOnlyOneInstance = new QCheckBox(tr("Allow only one instance"));
 	page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
 
 
-	page1->proxyB = new QGroupBox(tr("Używaj serwera proxy"));
+	page1->proxyB = new QGroupBox(tr("Use proxy server"));
 	page1->proxyB->setCheckable(true);
 	page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
 
 	page1->proxyHostE = new QLineEdit(QMPSettings.getString("Proxy/Host"));
-	page1->proxyHostE->setPlaceholderText(tr("Adres serwera proxy"));
+	page1->proxyHostE->setPlaceholderText(tr("Proxy server address"));
 
 	page1->proxyPortB = new QSpinBox;
 	page1->proxyPortB->setRange(1, 65535);
 	page1->proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
-	page1->proxyPortB->setToolTip(tr("Port serwera proxy"));
+	page1->proxyPortB->setToolTip(tr("Proxy server port"));
 
-	page1->proxyLoginB = new QGroupBox(tr("Serwer proxy wymaga logowania"));
+	page1->proxyLoginB = new QGroupBox(tr("Proxy server needs login"));
 	page1->proxyLoginB->setCheckable(true);
 	page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
 
 	page1->proxyUserE = new QLineEdit(QMPSettings.getString("Proxy/User"));
-	page1->proxyUserE->setPlaceholderText(tr("Nazwa użytkownika"));
+	page1->proxyUserE->setPlaceholderText(tr("User name"));
 
 	page1->proxyPasswordE = new QLineEdit(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 	page1->proxyPasswordE->setEchoMode(QLineEdit::Password);
-	page1->proxyPasswordE->setPlaceholderText(tr("Hasło"));
+	page1->proxyPasswordE->setPlaceholderText(tr("Password"));
 
 	page1->proxyLoginL = new QVBoxLayout(page1->proxyLoginB);
 	page1->proxyLoginL->addWidget(page1->proxyUserE);
@@ -407,12 +407,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 
 	page1->clearCoversCache = new QPushButton;
-	page1->clearCoversCache->setText(tr("Wyczyść pamięć podręczną okładek"));
+	page1->clearCoversCache->setText(tr("Clear covers cache"));
 	page1->clearCoversCache->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
 	connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
 
 	page1->resetSettingsB = new QPushButton;
-	page1->resetSettingsB->setText(tr("Wyczyść ustawienia programu"));
+	page1->resetSettingsB->setText(tr("Reset settings"));
 	page1->resetSettingsB->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
 	connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
 
@@ -453,55 +453,55 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), page1->layout->rowCount(), 0); //vSpacer
 
 	/* Strona 2 */
-	page2->shortSeekL = new QLabel(tr("Krótkie przewijanie (strzałki: w lewo i w prawo)") + ": ");
+	page2->shortSeekL = new QLabel(tr("Short seeking (left and right arrows)") + ": ");
 	page2->shortSeekB = new QSpinBox;
 	page2->shortSeekB->setRange(2, 20);
-	page2->shortSeekB->setSuffix(" " + tr("sek"));
+	page2->shortSeekB->setSuffix(" " + tr("sec"));
 	page2->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
 
-	page2->longSeekL = new QLabel(tr("Długie przewijanie (strzałki: w górę i w dół)") + ": ");
+	page2->longSeekL = new QLabel(tr("Long seeking (up and down arrows)") + ": ");
 	page2->longSeekB = new QSpinBox;
 	page2->longSeekB->setRange(30, 300);
-	page2->longSeekB->setSuffix(" " + tr("sek"));
+	page2->longSeekB->setSuffix(" " + tr("sec"));
 	page2->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
 
-	page2->bufferLocalL = new QLabel(tr("Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)") + ": ");
+	page2->bufferLocalL = new QLabel(tr("Local buffer size (A/V packages count)") + ": ");
 	page2->bufferLocalB = new QSpinBox;
 	page2->bufferLocalB->setRange(1, 1000);
 	page2->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
 
-	page2->bufferNetworkL = new QLabel(tr("Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)") + ": ");
+	page2->bufferNetworkL = new QLabel(tr("Network buffer size (A/V packages count)") + ": ");
 	page2->bufferNetworkB = new QSpinBox;
 	page2->bufferNetworkB->setRange(100, 1000000);
 	page2->bufferNetworkB->setValue(QMPSettings.getInt("AVBufferNetwork"));
 
-	page2->backwardBufferNetworkL = new QLabel(tr("Ilość procent przeznaczonych paczek A/V dla przewijania w tył") + ": ");
+	page2->backwardBufferNetworkL = new QLabel(tr("Percent of packages for backwards rewinding") + ": ");
 	page2->backwardBufferNetworkB = new QComboBox;
 	page2->backwardBufferNetworkB->addItems(QStringList() << "10%" << "25%" << "50%");
 	page2->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
 
-	page2->playIfBufferedL = new QLabel(tr("Rozpocznij odtwarzanie strumienia internetowego jeżeli zostanie zbuforowane") + ": ");
+	page2->playIfBufferedL = new QLabel(tr("Start playback internet stream if it is buffered") + ": ");
 	page2->playIfBufferedB = new QDoubleSpinBox;
 	page2->playIfBufferedB->setRange(0.0, 5.0);
 	page2->playIfBufferedB->setSingleStep(0.25);
-	page2->playIfBufferedB->setSuffix(" " + tr("sek"));
+	page2->playIfBufferedB->setSuffix(" " + tr("sec"));
 	page2->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
 
-	page2->maxVolL = new QLabel(tr("Maksymalna głośność"));
+	page2->maxVolL = new QLabel(tr("Maximum volume"));
 	page2->maxVolB = new QSpinBox;
 	page2->maxVolB->setRange(100, 1000);
 	page2->maxVolB->setSingleStep(50);
 	page2->maxVolB->setSuffix(" %");
 	page2->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
 
-	page2->forceSamplerate = new QCheckBox(tr("Wymuś częstotliwość próbkowania"));
+	page2->forceSamplerate = new QCheckBox(tr("Force samplerate"));
 	page2->forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
 	connect(page2->forceSamplerate, SIGNAL(stateChanged(int)), this, SLOT(page2EnableOrDisable()));
 	page2->samplerateB = new QSpinBox;
 	page2->samplerateB->setRange(4000, 192000);
 	page2->samplerateB->setValue(QMPSettings.getInt("Samplerate"));
 
-	page2->forceChannels = new QCheckBox(tr("Wymuś konwersję kanałów"));
+	page2->forceChannels = new QCheckBox(tr("Force channels conversion"));
 	page2->forceChannels->setChecked(QMPSettings.getBool("ForceChannels"));
 	connect(page2->forceChannels, SIGNAL(stateChanged(int)), this, SLOT(page2EnableOrDisable()));
 	page2->channelsB = new QSpinBox;
@@ -511,21 +511,21 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2EnableOrDisable();
 
 
-	page2->replayGain = new QGroupBox(tr("Użyj wyrównywania głośności, jeżeli dostępne"));
+	page2->replayGain = new QGroupBox(tr("Use replay gain if available"));
 	page2->replayGain->setCheckable(true);
 	page2->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
 
 	page2->replayGainL = new QVBoxLayout(page2->replayGain);
 
-	page2->replayGainAlbum = new QCheckBox(tr("Tryb albumu dla wyrównywania głośności"));
+	page2->replayGainAlbum = new QCheckBox(tr("Album mode for replay gain"));
 	page2->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
 
-	page2->replayGainPreventClipping = new QCheckBox(tr("Zapobiegaj przesterowaniu"));
+	page2->replayGainPreventClipping = new QCheckBox(tr("Prevent clipping"));
 	page2->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
 
 	page2->replayGainPreamp = new QDoubleSpinBox;
 	page2->replayGainPreamp->setRange(-15.0, 15.0);
-	page2->replayGainPreamp->setPrefix(tr("Wzmocnienie") + ": ");
+	page2->replayGainPreamp->setPrefix(tr("Amplify") + ": ");
 	page2->replayGainPreamp->setSuffix(" dB");
 	page2->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
 
@@ -534,43 +534,43 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2->replayGainL->addWidget(page2->replayGainPreamp);
 
 
-	page2->showBufferedTimeOnSlider = new QCheckBox(tr("Pokazuj wskaźnik zbuforowanych danych na pasku przewijania"));
+	page2->showBufferedTimeOnSlider = new QCheckBox(tr("Show buffered data indicator on slider"));
 	page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
 
-	page2->savePos = new QCheckBox(tr("Zapamiętaj pozycję odtwarzania"));
+	page2->savePos = new QCheckBox(tr("Remember play position"));
 	page2->savePos->setChecked(QMPSettings.getBool("SavePos"));
 
-	page2->keepZoom = new QCheckBox(tr("Pozostaw zoom między plikami wideo"));;
+	page2->keepZoom = new QCheckBox(tr("Keep zoom"));;
 	page2->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
 
-	page2->keepARatio = new QCheckBox(tr("Pozostaw współczynnik proporcji między plikami wideo"));
+	page2->keepARatio = new QCheckBox(tr("Keep aspect ratio"));
 	page2->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
 
-	page2->keepSubtitlesDelay = new QCheckBox(tr("Pozostaw opóźnienie napisów między plikami wideo"));
+	page2->keepSubtitlesDelay = new QCheckBox(tr("Keep subtitles delay"));
 	page2->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
 
-	page2->keepSubtitlesScale = new QCheckBox(tr("Pozostaw powiększenie napisów między plikami wideo"));
+	page2->keepSubtitlesScale = new QCheckBox(tr("Keep subtitles scale"));
 	page2->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
 
-	page2->keepVideoDelay = new QCheckBox(tr("Pozostaw opóźnienie obrazu względem dźwięku między plikami wideo"));
+	page2->keepVideoDelay = new QCheckBox(tr("Keep video delay"));
 	page2->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
 
-	page2->keepSpeed = new QCheckBox(tr("Pozostaw szybkość odtwarzania między plikami"));
+	page2->keepSpeed = new QCheckBox(tr("Keep speed"));
 	page2->keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
 
-	page2->syncVtoA = new QCheckBox(tr("Synchronizuj obraz do dźwięku (pomijanie klatek)"));
+	page2->syncVtoA = new QCheckBox(tr("Video to audio sync (frame skipping)"));
 	page2->syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
 
-	page2->silence = new QCheckBox(tr("Wyciszaj podczas zatrzymywania odtwarzania"));
+	page2->silence = new QCheckBox(tr("Fade sound"));
 	page2->silence->setChecked(QMPSettings.getBool("Silence"));
 
-	page2->scrollSeek = new QCheckBox(tr("Kółko myszki przewija muzykę/film"));
+	page2->scrollSeek = new QCheckBox(tr("Mouse wheel scrolls music/movie"));
 	page2->scrollSeek->setChecked(QMPSettings.getBool("ScrollSeek"));
 
-	page2->restoreVideoEq = new QCheckBox(tr("Pamiętaj ustawienia korektora wideo"));
+	page2->restoreVideoEq = new QCheckBox(tr("Remember video equalizer settings"));
 	page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
 
-	page2->ignorePlaybackError = new QCheckBox(tr("Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania"));
+	page2->ignorePlaybackError = new QCheckBox(tr("Play next entry after playback error"));
 	page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
 
 	for (int m = 0; m < 3; ++m)
@@ -588,13 +588,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 		mL->moveUp = new QToolButton;
 		mL->moveUp->setArrowType(Qt::UpArrow);
-		mL->moveUp->setToolTip(tr("Przenieś wyżej"));
+		mL->moveUp->setToolTip(tr("Move up"));
 		connect(mL->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
 		mL->moveUp->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 
 		mL->moveDown = new QToolButton;
 		mL->moveDown->setArrowType(Qt::DownArrow);
-		mL->moveDown->setToolTip(tr("Przenieś niżej"));
+		mL->moveDown->setToolTip(tr("Move down"));
 		connect(mL->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
 		mL->moveDown->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 
@@ -610,9 +610,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 		mL->layout2->setSpacing(2);
 		mL->layout2->setMargin(0);
 	}
-	page2->modulesList[0]->setTitle(tr("Priorytet wyjścia obrazu"));
-	page2->modulesList[1]->setTitle(tr("Priorytet wyjścia dźwięku"));
-	page2->modulesList[2]->setTitle(tr("Priorytet dekoderów"));
+	page2->modulesList[0]->setTitle(tr("Video output priority"));
+	page2->modulesList[1]->setTitle(tr("Audio output priority"));
+	page2->modulesList[2]->setTitle(tr("Decoders priority"));
 
 	layout_row = 0;
 	page2->w = new QWidget;
@@ -674,7 +674,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	{
 		QListWidgetItem *tWI = new QListWidgetItem(module->name());
 		tWI->setData(Qt::UserRole, qVariantFromValue((void *)module));
-		QString toolTip = tr("Zawiera") + ":";
+		QString toolTip = tr("Contains") + ":";
 		foreach (Module::Info mod, module->getModulesInfo(true))
 		{
 			toolTip += "<p>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -703,19 +703,19 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	connect(page3->listW, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(chModule(QListWidgetItem *)));
 
 	/* Strona 4 */
-	page4->colorsAndBordersB = new QCheckBox(tr("Kolory i obramowania"));
+	page4->colorsAndBordersB = new QCheckBox(tr("Colors and borders"));
 	page4->colorsAndBordersB->setChecked(QMPSettings.getBool("ApplyToASS/ColorsAndBorders"));
 
-	page4->marginsAndAlignmentB = new QCheckBox(tr("Marginesy i rozmieszczenie"));
+	page4->marginsAndAlignmentB = new QCheckBox(tr("Margins and alignment"));
 	page4->marginsAndAlignmentB->setChecked(QMPSettings.getBool("ApplyToASS/MarginsAndAlignment"));
 
-	page4->fontsB = new QCheckBox(tr("Czcionki i odstępy"));
+	page4->fontsB = new QCheckBox(tr("Fonts and spacing"));
 	page4->fontsB->setChecked(QMPSettings.getBool("ApplyToASS/FontsAndSpacing"));
 
-	page4->overridePlayResB = new QCheckBox(tr("Użyj jednakowej wielkości"));
+	page4->overridePlayResB = new QCheckBox(tr("Use the same size"));
 	page4->overridePlayResB->setChecked(QMPSettings.getBool("ApplyToASS/OverridePlayRes"));
 
-	page4->toASSGB = new QGroupBox(tr("Zastosuj dla napisów ASS/SSA"));
+	page4->toASSGB = new QGroupBox(tr("Apply for ASS/SSA subtitles"));
 	page4->toASSGB->setCheckable(true);
 	page4->toASSGB->setChecked(QMPSettings.getBool("ApplyToASS/ApplyToASS"));
 
@@ -729,7 +729,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	AddVHSpacer(*page4->layout);
 
 	/* Strona 5 */
-	page5->enabledB = new QCheckBox(tr("OSD włączone"));
+	page5->enabledB = new QCheckBox(tr("OSD enabled"));
 	page5->enabledB->setChecked(QMPSettings.getBool("OSD/Enabled"));
 
 	page5->layout->addWidget(page5->enabledB, 2, 0, 1, 5);
@@ -738,7 +738,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	/* Strona 6 */
 	page6->deintSettingsW = new DeintSettingsW;
 
-	page6->otherVFiltersL = new QLabel(tr("Programowe filtry wideo") + ":");
+	page6->otherVFiltersL = new QLabel(tr("Software video filters") + ":");
 	page6->otherVFiltersW = new OtherVFiltersW;
 	connect(page6->otherVFiltersW, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
 
@@ -846,7 +846,7 @@ void SettingsWidget::apply()
 			{
 				QMPSettings.set("Language", page1->langBox->itemData(page1->langBox->currentIndex()).toString());
 				QMPlay2GUI.setLanguage();
-				QMessageBox::information(this, tr("Nowy język"), tr("Aby zastosować nowy język program zostanie uruchomiony ponownie!"));
+				QMessageBox::information(this, tr("New language"), tr("To set up a new language, the program will start again!"));
 				restartApp();
 			}
 #ifdef ICONS_FROM_THEME
@@ -855,7 +855,7 @@ void SettingsWidget::apply()
 				QMPSettings.set("IconsFromTheme", page1->iconsFromTheme->isChecked());
 				if (!QMPlay2GUI.restartApp)
 				{
-					QMessageBox::information(this, tr("Zmiana ikon"), tr("Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!"));
+					QMessageBox::information(this, tr("Changing icons"), tr("To apply the icons change program will start again!"));
 					restartApp();
 				}
 			}
@@ -1063,7 +1063,7 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog"), page1->screenshotE->text());
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
 	if (!dir.isEmpty())
 		page1->screenshotE->setText(dir);
 }
@@ -1078,7 +1078,7 @@ void SettingsWidget::setAppearance()
 }
 void SettingsWidget::clearCoversCache()
 {
-	if (QMessageBox::question(this, tr("Potwierdź wyczyszczenie pamięci podręcznej okładek"), tr("Czy na pewno chcesz usunąć wszystkie zapamiętane okładki?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (QMessageBox::question(this, tr("Confirm clearing the cache covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		QDir dir(QMPlay2Core.getSettingsDir());
 		if (dir.cd("Covers"))
@@ -1092,7 +1092,7 @@ void SettingsWidget::clearCoversCache()
 }
 void SettingsWidget::resetSettings()
 {
-	if (QMessageBox::question(this, tr("Potwierdź usunięcie ustawień"), tr("Czy na pewno chcesz usunąć wszystkie ustawienia?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (QMessageBox::question(this, tr("Confirm settings deletion"), tr("Do you really want to clear all settings?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		QMPlay2GUI.removeSettings = true;
 		restartApp();

@@ -150,7 +150,7 @@ bool DemuxerThr::load(bool canEmitInfo)
 
 void DemuxerThr::run()
 {
-	emit playC.chText(tr("Otwieranie"));
+	emit playC.chText(tr("Opening"));
 	emit playC.setCurrentPlaying();
 
 	emit QMPlay2Core.busyCursor();
@@ -163,7 +163,7 @@ void DemuxerThr::run()
 	{
 		if (!demuxer.isAborted() && !demuxer)
 		{
-			QMPlay2Core.logError(tr("Nie można otworzyć") + ": " + url.remove("file://"));
+			QMPlay2Core.logError(tr("Cannot open") + ": " + url.remove("file://"));
 			emit playC.updateCurrentEntry(QString(), -1);
 			err = true;
 		}
@@ -216,7 +216,7 @@ void DemuxerThr::run()
 		updateBufferedSeconds = false;
 
 	emit playC.updateLength(unknownLength ? 0.0 : demuxer->length());
-	emit playC.chText(tr("Odtwarzanie"));
+	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
 
 	demuxerReady = true;
@@ -259,7 +259,7 @@ void DemuxerThr::run()
 
 		if (playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD)
 		{
-			emit playC.chText(tr("Przewijanie"));
+			emit playC.chText(tr("Seeking"));
 			playC.canUpdatePos = false;
 
 			bool seekInBuffer = true;
@@ -330,7 +330,7 @@ void DemuxerThr::run()
 			playC.canUpdatePos = true;
 			playC.seekTo = SEEK_NOWHERE;
 			if (!playC.paused)
-				emit playC.chText(tr("Odtwarzanie"));
+				emit playC.chText(tr("Playback"));
 			else
 				playC.paused = false;
 		}
@@ -344,7 +344,7 @@ void DemuxerThr::run()
 			if (!paused)
 			{
 				paused = true;
-				emit playC.chText(tr("Pauza"));
+				emit playC.chText(tr("Paused"));
 				emit playC.playStateChanged(false);
 				playC.emptyBufferCond.wakeAll();
 			}
@@ -352,7 +352,7 @@ void DemuxerThr::run()
 		else if (paused)
 		{
 			paused = demuxerPaused = false;
-			emit playC.chText(tr("Odtwarzanie"));
+			emit playC.chText(tr("Playback"));
 			emit playC.playStateChanged(true);
 			playC.emptyBufferCond.wakeAll();
 		}
@@ -526,16 +526,16 @@ void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStream
 		subtitlesStreams += "<u>";
 	else
 		subtitlesStreams += "<a style='text-decoration: none; color: black;' href='stream:" + streamName + QString::number(i) + "'>";
-	subtitlesStreams += "<li><b>" + tr("Strumień") + " " + QString::number(subtitlesStreamCount) + "</b></li>";
+	subtitlesStreams += "<li><b>" + tr("Stream") + " " + QString::number(subtitlesStreamCount) + "</b></li>";
 	if (currentPlaying)
 		subtitlesStreams += "</u>";
 	else
 		subtitlesStreams += "</a>";
 	subtitlesStreams += "<ul>";
 	if (!title.isEmpty())
-		subtitlesStreams += "<li><b>" + tr("tytuł") + ":</b> " + title + "</li>";
+		subtitlesStreams += "<li><b>" + tr("title") + ":</b> " + title + "</li>";
 	if (streamName == "fileSubs")
-		subtitlesStreams += "<li><b>" + tr("załadowane z pliku") + "</b></li>";
+		subtitlesStreams += "<li><b>" + tr("loaded from file") + "</b></li>";
 	if (!codecName.isEmpty())
 		subtitlesStreams += "<li><b>" + tr("format") + ":</b> " + codecName + "</li>";
 	printOtherInfo(other_info, subtitlesStreams);
@@ -549,7 +549,7 @@ void DemuxerThr::emitInfo()
 	if (formatTitle.isEmpty())
 	{
 		if (!name.isEmpty())
-			info += "<b>" + tr("Tytuł") + ":</b> " + name;
+			info += "<b>" + tr("Title") + ":</b> " + name;
 		formatTitle = name;
 	}
 
@@ -582,12 +582,12 @@ void DemuxerThr::emitInfo()
 	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, NULL, &realUrl, NULL))
 		realUrl = url;
 	if (!realUrl.startsWith("file://"))
-		info += "<b>" + tr("Adres") + ":</b> " + realUrl + "<br>";
+		info += "<b>" + tr("Address") + ":</b> " + realUrl + "<br>";
 	else
 	{
 		const QString pth = realUrl.right(realUrl.length() - 7);
-		info += "<b>" + tr("Ścieżka do pliku") + ": </b> " + Functions::filePath(pth) + "<br/>";
-		info += "<b>" + tr("Nazwa pliku") + ": </b> " + Functions::fileName(pth) + "<br/>";
+		info += "<b>" + tr("File path") + ": </b> " + Functions::filePath(pth) + "<br/>";
+		info += "<b>" + tr("File name") + ": </b> " + Functions::fileName(pth) + "<br/>";
 	}
 
 	if (demuxer->bitrate() > 0)
@@ -595,7 +595,7 @@ void DemuxerThr::emitInfo()
 	info += "<b>" + tr("Format") + ":</b> " + demuxer->name();
 
 	if (!demuxer->image().isNull())
-		info += "<br/><br/><a href='save_cover'>" + tr("Zapisz okładkę") + "</a>";
+		info += "<br/><br/><a href='save_cover'>" + tr("Save cover picture") + "</a>";
 
 	bool once = false;
 	int chapterCount = 0;
@@ -603,11 +603,11 @@ void DemuxerThr::emitInfo()
 	{
 		if (!once)
 		{
-			info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Rozdziały") + ":</big></b></p>";
+			info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Chapters") + ":</big></b></p>";
 			once = true;
 		}
 		info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-		info += "<li><a href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Rozdział") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
+		info += "<li><a href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
 		info += "</ul>";
 	}
 
@@ -631,18 +631,18 @@ void DemuxerThr::emitInfo()
 				}
 				else
 					videoStreams += "<a style='text-decoration: none; color: black;' href='stream:video" + QString::number(i) + "'>";
-				videoStreams += "<b>" + tr("Strumień") + " " + QString::number(++videoStreamCount) + "</b>";
+				videoStreams += "<b>" + tr("Stream") + " " + QString::number(++videoStreamCount) + "</b>";
 				if (currentPlaying)
 					videoStreams += "</u>" + getWriterName((AVThread *)playC.vThr);
 				else
 					videoStreams += "</a>";
 				videoStreams += "</li><ul>";
 				if (!streamInfo->title.isEmpty())
-					videoStreams += "<li><b>" + tr("tytuł") + ":</b> " + streamInfo->title + "</li>";
+					videoStreams += "<li><b>" + tr("title") + ":</b> " + streamInfo->title + "</li>";
 				if (!streamInfo->codec_name.isEmpty())
-					videoStreams += "<li><b>" + tr("kodek") + ":</b> " + streamInfo->codec_name + "</li>";
-				videoStreams += "<li><b>" + tr("wielkość") + ":</b> " + QString::number(streamInfo->W) + "x" + QString::number(streamInfo->H) + "</li>";
-				videoStreams += "<li><b>" + tr("proporcje") + ":</b> " + QString::number(streamInfo->aspect_ratio) + "</li>";
+					videoStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
+				videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->W) + "x" + QString::number(streamInfo->H) + "</li>";
+				videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->aspect_ratio) + "</li>";
 				if (streamInfo->FPS)
 					videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(streamInfo->FPS) + "</li>";
 				if (streamInfo->bitrate)
@@ -661,19 +661,19 @@ void DemuxerThr::emitInfo()
 				}
 				else
 					audioStreams += "<a style='text-decoration: none; color: black;' href='stream:audio" + QString::number(i) + "'>";
-				audioStreams += "<b>" + tr("Strumień") + " " + QString::number(++audioStreamCount) + "</b>";
+				audioStreams += "<b>" + tr("Stream") + " " + QString::number(++audioStreamCount) + "</b>";
 				if (currentPlaying)
 					audioStreams += "</u>" + getWriterName((AVThread *)playC.aThr);
 				else
 					audioStreams += "</a>";
 				audioStreams += "</li><ul>";
 				if (!streamInfo->title.isEmpty())
-					audioStreams += "<li><b>" + tr("tytuł") + ":</b> " + streamInfo->title + "</li>";
+					audioStreams += "<li><b>" + tr("title") + ":</b> " + streamInfo->title + "</li>";
 				if (!streamInfo->artist.isEmpty())
-					audioStreams += "<li><b>" + tr("artysta") + ":</b> " + streamInfo->artist + "</li>";
+					audioStreams += "<li><b>" + tr("artist") + ":</b> " + streamInfo->artist + "</li>";
 				if (!streamInfo->codec_name.isEmpty())
-					audioStreams += "<li><b>" + tr("kodek") + ":</b> " + streamInfo->codec_name + "</li>";
-				audioStreams += "<li><b>" + tr("próbkowanie") + ":</b> " + QString::number(streamInfo->sample_rate) + "Hz</li>";
+					audioStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
+				audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->sample_rate) + "Hz</li>";
 
 				QString channels;
 				if (streamInfo->channels == 1)
@@ -682,7 +682,7 @@ void DemuxerThr::emitInfo()
 					channels = tr("stereo");
 				else
 					channels = QString::number(streamInfo->channels);
-				audioStreams += "<li><b>" + tr("kanały") + ":</b> " + channels + "</li>";
+				audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
 				if (streamInfo->bitrate)
 					audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bitrate / 1000) + "kbps</li>";
@@ -708,11 +708,11 @@ void DemuxerThr::emitInfo()
 		addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
 
 	if (!videoStreams.isEmpty())
-		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Strumienie obrazu") + ":</big></b></p>" + videoStreams;
+		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Video streams") + ":</big></b></p>" + videoStreams;
 	if (!audioStreams.isEmpty())
-		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Strumienie dźwięku") + ":</big></b></p>" + audioStreams;
+		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Audio streams") + ":</big></b></p>" + audioStreams;
 	if (!subtitlesStreams.isEmpty())
-		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Strumienie napisów") + ":</big></b></p>" + subtitlesStreams;
+		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Subtitles streams") + ":</big></b></p>" + subtitlesStreams;
 	if (!attachmentStreams.isEmpty())
 		info += "<p style='margin-bottom: 0px;'><b><big>" + tr ("Dołączone pliki") + ":</big></b></p>" + attachmentStreams;
 

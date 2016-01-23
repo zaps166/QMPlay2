@@ -39,10 +39,10 @@ QMPLAY2_EXPORT_PLUGIN(Modplug)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox("Modplug " + tr("włączony"));
+	enabledB = new QCheckBox("Modplug " + tr("enabled"));
 	enabledB->setChecked(sets().getBool("ModplugEnabled"));
 
-	QLabel *resamplingL = new QLabel(tr("Metoda resamplingu") + ": ");
+	QLabel *resamplingL = new QLabel(tr("Resampling method") + ": ");
 
 	resamplingB = new QComboBox;
 	resamplingB->addItems(QStringList() << "Nearest" << "Linear" << "Spline" << "FIR");

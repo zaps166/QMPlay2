@@ -96,11 +96,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QGridLayout *layout;
 
 #ifdef USE_MPRIS2
-	MPRIS2B = new QGroupBox(tr("Obsługa programu przez interfejs MPRIS2"));
+	MPRIS2B = new QGroupBox(tr("Using the program via MPRIS2 interface"));
 	MPRIS2B->setCheckable(true);
 	MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 
-	exportCoversB = new QCheckBox(tr("Wydobywaj okładki z plików multimedialnych"));
+	exportCoversB = new QCheckBox(tr("Extract the covers from multimedia files"));
 	exportCoversB->setChecked(sets().getBool("MPRIS2/ExportCovers"));
 
 	layout = new QGridLayout(MPRIS2B);
@@ -116,14 +116,14 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGroupBox *youTubeB = new QGroupBox("YouTube");
 
-	additionalInfoB = new QCheckBox(tr("Pokazuj dodatkowe informacje wyszukiwania"));
+	additionalInfoB = new QCheckBox(tr("Show additional search information"));
 	additionalInfoB->setChecked(sets().getBool("YouTube/ShowAdditionalInfo"));
 
-	multiStreamB = new QCheckBox(tr("Użyj różnych strumieni obrazu i dźwięku"));
+	multiStreamB = new QCheckBox(tr("Use different audio and video streams"));
 	multiStreamB->setChecked(sets().getBool("YouTube/MultiStream"));
 	connect(multiStreamB, SIGNAL(clicked(bool)), this, SLOT(enableItagLists(bool)));
 
-	QLabel *youtubedlL = new QLabel(tr("Ścieżka do programu 'youtube-dl'") + ": ");
+	QLabel *youtubedlL = new QLabel(tr("Path to the 'youtube-dl' application") + ": ");
 
 	youtubedlE = new LineEdit;
 	youtubedlE->setPlaceholderText("youtube-dl");
@@ -131,25 +131,25 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	youtubedlBrowseB = new QToolButton;
 	youtubedlBrowseB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-	youtubedlBrowseB->setToolTip(tr("Przeglądaj"));
+	youtubedlBrowseB->setToolTip(tr("Browse"));
 	connect(youtubedlBrowseB, SIGNAL(clicked()), this, SLOT(browseYoutubedl()));
 
 
 	QWidget *itagW = new QWidget;
 
-	QLabel *itagL = new QLabel(tr("Priorytet domyślnej jakości obrazu/dźwięku") + ": ");
+	QLabel *itagL = new QLabel(tr("Priority of default video/audio quality") + ": ");
 
 	itagLW = new QListWidget;
 	itagLW->setDragDropMode(QListWidget::InternalMove);
 	itagLW->setSelectionMode(QListWidget::ExtendedSelection);
 
-	QLabel *itagVideoL = new QLabel(tr("Priorytet domyślnej jakości obrazu") + ": ");
+	QLabel *itagVideoL = new QLabel(tr("Priority of default video quality") + ": ");
 
 	itagVideoLW = new QListWidget;
 	itagVideoLW->setDragDropMode(QListWidget::InternalMove);
 	itagVideoLW->setSelectionMode(QListWidget::ExtendedSelection);
 
-	QLabel *itagAudioL = new QLabel(tr("Priorytet domyślnej jakości dźwięku") + ": ");
+	QLabel *itagAudioL = new QLabel(tr("Priority of default audio quality") + ": ");
 
 	itagAudioLW = new QListWidget;
 	itagAudioLW->setDragDropMode(QListWidget::InternalMove);
@@ -199,22 +199,22 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGroupBox *lastFMB = new QGroupBox("LastFM");
 
-	downloadCoversB = new QCheckBox(tr("Pobieraj okładki"));
+	downloadCoversB = new QCheckBox(tr("Downloads covers"));
 	downloadCoversB->setChecked(sets().getBool("LastFM/DownloadCovers"));
 
-	allowBigCovers = new QCheckBox(tr("Zezwalaj na pobieranie dużych okładek"));
+	allowBigCovers = new QCheckBox(tr("Allow to download big covers"));
 	allowBigCovers->setChecked(sets().getBool("LastFM/AllowBigCovers"));
 
-	updateNowPlayingAndScrobbleB = new QCheckBox(tr("Scrobbluj"));
+	updateNowPlayingAndScrobbleB = new QCheckBox(tr("Scrobble"));
 	updateNowPlayingAndScrobbleB->setChecked(sets().getBool("LastFM/UpdateNowPlayingAndScrobble"));
 
 	loginE = new LineEdit;
-	loginE->setPlaceholderText(tr("Nazwa użytkownika"));
+	loginE->setPlaceholderText(tr("User name"));
 	loginE->setText(sets().getString("LastFM/Login"));
 
 	passwordE = new LineEdit;
 	passwordE->setEchoMode(LineEdit::Password);
-	passwordE->setPlaceholderText(sets().getString("LastFM/Password").isEmpty() ? tr("Hasło") : tr("Poprzednio ustawione hasło"));
+	passwordE->setPlaceholderText(sets().getString("LastFM/Password").isEmpty() ? tr("Password") : tr("Last password"));
 	connect(passwordE, SIGNAL(textEdited(const QString &)), this, SLOT(passwordEdited()));
 
 	allowBigCovers->setEnabled(downloadCoversB->isChecked());
@@ -250,7 +250,7 @@ void ModuleSettingsWidget::enableItagLists(bool b)
 }
 void ModuleSettingsWidget::browseYoutubedl()
 {
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Wybierz program 'youtube-dl'"), QMPlay2Core.getQMPlay2Dir());
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), QMPlay2Core.getQMPlay2Dir());
 	if (!filePath.isEmpty())
 		youtubedlE->setText(filePath);
 }

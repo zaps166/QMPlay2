@@ -38,7 +38,7 @@ QMPLAY2_EXPORT_PLUGIN(QPainter_Qt)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("Włączony"));
+	enabledB = new QCheckBox(tr("ON"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
 	QGridLayout *layout = new QGridLayout(this);

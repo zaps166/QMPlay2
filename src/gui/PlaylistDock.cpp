@@ -25,12 +25,12 @@ PlaylistDock::PlaylistDock() :
 	repeatMode(Normal),
 	lastPlaying(NULL)
 {
-	setWindowTitle(tr("Playlista"));
+	setWindowTitle(tr("Playlist"));
 	setWidget(&mainW);
 
 	list = new PlaylistWidget;
 	findE = new LineEdit;
-	findE->setToolTip(tr("Filtruj wpisy"));
+	findE->setToolTip(tr("Filter entries"));
 	statusL = new QLabel;
 
 	layout = new QGridLayout(&mainW);
@@ -351,7 +351,7 @@ void PlaylistDock::delNonGroupEntries()
 {
 	if (!list->canModify()) //jeżeli jest np. drag and drop to nie wolno usuwać
 		return;
-	if (QMessageBox::question(this, tr("Playlista"), tr("Czy na pewno chcesz usunąć niepogrupowane wpisy?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to delete not grouped entries?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		list->setItemsResizeToContents(false);
 		foreach (QTreeWidgetItem *tWI, list->topLevelNonGroupsItems())
@@ -366,7 +366,7 @@ void PlaylistDock::delNonGroupEntries()
 }
 void PlaylistDock::clear()
 {
-	if (QMessageBox::question(this, tr("Playlista"), tr("Czy na pewno chcesz wyczyścić listę?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to clear the list?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 		list->clear();
 }
 void PlaylistDock::copy()
@@ -488,9 +488,9 @@ void PlaylistDock::findNext()
 void PlaylistDock::visibleItemsCount(int count)
 {
 	if (count < 0)
-		statusL->setText(tr("Lista jest ładowana..."));
+		statusL->setText(tr("Playlist is loading now..."));
 	else
-		statusL->setText(tr("Ilość widocznych wpisów") + ": " + QString::number(count));
+		statusL->setText(tr("Visible entries") + ": " + QString::number(count));
 }
 void PlaylistDock::syncCurrentFolder()
 {
@@ -505,7 +505,7 @@ void PlaylistDock::syncCurrentFolder()
 	const QFileInfo pthInfo(pth);
 	if (pthInfo.isFile())
 	{
-		QMessageBox::information(this, tr("Playlista"), tr("Synchronizowanie z plikiem nie jest obsługiwane"));
+		QMessageBox::information(this, tr("Playlist"), tr("Synchronizing with file is not supported"));
 		return;
 	}
 	if (!pthInfo.isDir())

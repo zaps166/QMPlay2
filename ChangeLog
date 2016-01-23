@@ -5,6 +5,7 @@ Changes in QMPlay2 build 15.01.20:
 	- display icons on playlist for AudioCD and Chiptines,
 	- updated German translation (Daniel Meiß-Wilhelm),
 	- added Spanish translation (Pedro Álamo),
+	- English is now default language,
 
 Changes in QMPlay2 build 15.12.25:
 	- KF5 Breeze style fixes in full screen,

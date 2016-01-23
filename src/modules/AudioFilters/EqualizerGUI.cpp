@@ -98,7 +98,7 @@ EqualizerGUI::EqualizerGUI(Module &module) :
 
 	SetModule(module);
 
-	enabledB->setText(tr("Włączony"));
+	enabledB->setText(tr("ON"));
 	enabledB->setChecked(sets().getBool("Equalizer"));
 	connect(enabledB, SIGNAL(clicked(bool)), this, SLOT(enabled(bool)));
 

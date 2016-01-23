@@ -18,7 +18,7 @@ Updater::Updater(QWidget *parent) :
 	net(this),
 	busy(false)
 {
-	setWindowTitle(tr("Aktualizacje programu QMPlay2"));
+	setWindowTitle(tr("QMPlay2 updates"));
 	infoFile.setFileName(QDir::tempPath() + "/QMPlay2_download_info." + QString::number(qrand()));
 	updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer");
 #ifdef Q_OS_WIN
@@ -27,8 +27,8 @@ Updater::Updater(QWidget *parent) :
 
 	infoL = new QLabel(windowTitle());
 	progressB = new QProgressBar;
-	downloadUpdateB = new QPushButton(tr("Pobierz aktualizacje"));
-	installB = new QPushButton(tr("Zastosuj aktualizację"));
+	downloadUpdateB = new QPushButton(tr("Download update"));
+	installB = new QPushButton(tr("Apply update"));
 	connect(downloadUpdateB, SIGNAL(clicked()), this, SLOT(downloadUpdate()));
 	connect(installB, SIGNAL(clicked()), this, SLOT(applyUpdate()));
 
@@ -61,7 +61,7 @@ void Updater::downloadUpdate()
 		request.setRawHeader("User-Agent", "QMPlay2");
 		QNetworkReply *reply = net.get(request);
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
-		infoL->setText(tr("Sprawdzanie dostępności aktualizacji"));
+		infoL->setText(tr("Checking for updates"));
 		progressB->setRange(0, 0);
 		downloadUpdateB->hide();
 		progressB->show();
@@ -100,20 +100,20 @@ void Updater::infoFinished()
 					FileURL = info.value("Linux32").toString();
 #endif
 				if (FileURL.isEmpty())
-					endWork(tr("Brak dostępnej aktualizacji"));
+					endWork(tr("No update available"));
 				else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
 					getFile(QUrl(FileURL.replace("$Version", NewVersion)));
 				else
-					endWork(tr("Błąd zapisu aktualizacji"));
+					endWork(tr("Error update writing"));
 			}
 			else
-				endWork(tr("Program jest aktualny"));
+				endWork(tr("Application is up-to-date"));
 		}
 		else
-			endWork(tr("Błąd sprawdzania aktualizacji"));
+			endWork(tr("Error checking for updates"));
 	}
 	else
-		endWork(tr("Błąd sprawdzania aktualizacji"));
+		endWork(tr("Error checking for updates"));
 	infoFile.remove();
 	reply->deleteLater();
 }
@@ -161,14 +161,14 @@ void Updater::downloadFinished()
 #endif
 		updateFile.close();
 		QMPlay2Core.getSettings().set("UpdateFile", updateFile.fileName());
-		infoL->setText(tr("Aktualizacja została pobrana"));
+		infoL->setText(tr("The update is downloaded"));
 		installB->show();
 		busy = false;
 	}
 	else
 	{
 		updateFile.remove();
-		endWork(tr("Błąd pobierania aktualizacji"));
+		endWork(tr("Error download the update"));
 	}
 	reply->deleteLater();
 }

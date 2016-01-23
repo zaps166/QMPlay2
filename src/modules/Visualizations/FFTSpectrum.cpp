@@ -29,7 +29,7 @@ FFTSpectrumW::FFTSpectrumW(FFTSpectrum &fftSpectrum) :
 	fftSpectrum(fftSpectrum)
 {
 	dw->setObjectName(FFTSpectrumName);
-	dw->setWindowTitle(tr("Widmo FFT"));
+	dw->setWindowTitle(tr("FFT Spectrum"));
 	dw->setWidget(this);
 
 	chn = 0;

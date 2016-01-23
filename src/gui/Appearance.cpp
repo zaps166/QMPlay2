@@ -195,20 +195,20 @@ void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_
 Appearance::Appearance(QWidget *p) :
 	QDialog(p)
 {
-	setWindowTitle(tr("Ustawienia wyglądu"));
+	setWindowTitle(tr("Appearance settings"));
 
-	colorSchemesB = new QGroupBox(tr("Zarządzaj schematami kolorów"));
+	colorSchemesB = new QGroupBox(tr("Manage color schemes"));
 
 	schemesB = new QComboBox;
 	reloadSchemes();
 
-	newB = new QPushButton(tr("Nowy"));
+	newB = new QPushButton(tr("New"));
 	connect(newB, SIGNAL(clicked()), this, SLOT(newScheme()));
 
-	saveB = new QPushButton(tr("Zapisz"));
+	saveB = new QPushButton(tr("Save"));
 	connect(saveB, SIGNAL(clicked()), this, SLOT(saveScheme()));
 
-	deleteB = new QPushButton(tr("Usuń"));
+	deleteB = new QPushButton(tr("Remove"));
 	connect(deleteB, SIGNAL(clicked()), this, SLOT(deleteScheme()));
 
 	QGridLayout *layout = new QGridLayout(colorSchemesB);
@@ -219,17 +219,17 @@ Appearance::Appearance(QWidget *p) :
 	layout->setMargin(3);
 
 
-	useColorsB = new QGroupBox(tr("Użyj własnych kolorów"));
+	useColorsB = new QGroupBox(tr("Use custom colors"));
 	useColorsB->setCheckable(true);
 
-	QLabel *buttonL = new QLabel(tr("Kolor przycisków") + ":");
-	QLabel *windowL = new QLabel(tr("Kolor okna") + ":");
-	QLabel *shadowL = new QLabel(tr("Kolor obramowania") + ":");
-	QLabel *highlightL = new QLabel(tr("Kolor podświetlenia") + ":");
-	QLabel *baseL = new QLabel(tr("Kolor wnętrza kontrolek") + ":");
-	QLabel *textL = new QLabel(tr("Kolor tekstu") + ":");
-	QLabel *highlightedTextL = new QLabel(tr("Kolor zaznaczonego tekstu") + ":");
-	QLabel *sliderButtonL = new QLabel(tr("Kolor przycisku suwaka") + ":");
+	QLabel *buttonL = new QLabel(tr("Buttons color") + ":");
+	QLabel *windowL = new QLabel(tr("Window color") + ":");
+	QLabel *shadowL = new QLabel(tr("Border color") + ":");
+	QLabel *highlightL = new QLabel(tr("Highlight color") + ":");
+	QLabel *baseL = new QLabel(tr("Base color") + ":");
+	QLabel *textL = new QLabel(tr("Text color") + ":");
+	QLabel *highlightedTextL = new QLabel(tr("Highlighted text color") + ":");
+	QLabel *sliderButtonL = new QLabel(tr("Slider button color") + ":");
 
 	buttonC = new ColorButton(false);
 	windowC = new ColorButton(false);
@@ -261,11 +261,11 @@ Appearance::Appearance(QWidget *p) :
 	layout->setMargin(3);
 
 
-	gradientB = new QGroupBox(tr("Gradient w oknie wideo"));
+	gradientB = new QGroupBox(tr("Gradient in the video window"));
 
-	QLabel *grad1L = new QLabel(tr("Kolor na górze i na dole") + ":");
-	QLabel *grad2L = new QLabel(tr("Kolor w środku") + ":");
-	QLabel *qmpTxtL = new QLabel(tr("Kolor tekstu") + ":");
+	QLabel *grad1L = new QLabel(tr("The color on the top and bottom") + ":");
+	QLabel *grad2L = new QLabel(tr("Color in the middle") + ":");
+	QLabel *qmpTxtL = new QLabel(tr("Text color") + ":");
 
 	grad1C = new ColorButton(false);
 	grad2C = new ColorButton(false);
@@ -280,18 +280,18 @@ Appearance::Appearance(QWidget *p) :
 	layout->addWidget(qmpTxtC, 2, 1, 1, 1);
 
 
-	useWallpaperB = new QGroupBox(tr("Tapeta w głównym oknie"));
+	useWallpaperB = new QGroupBox(tr("Wallpaper in the main window"));
 	useWallpaperB->setCheckable(true);
 
 	wallpaperW = new WallpaperW;
 
 	alphaB = new QDoubleSpinBox;
-	alphaB->setPrefix(tr("Przezroczystość") + ": ");
+	alphaB->setPrefix(tr("Transparency") + ": ");
 	alphaB->setRange(0.0, 1.0);
 	alphaB->setSingleStep(0.1);
 	alphaB->setDecimals(1);
 
-	wallpaperB = new QPushButton(tr("Wybierz tapetę"));
+	wallpaperB = new QPushButton(tr("Select wallpaper"));
 	connect(wallpaperB, SIGNAL(clicked()), this, SLOT(chooseWallpaper()));
 
 	layout = new QGridLayout(useWallpaperB);
@@ -382,13 +382,13 @@ void Appearance::schemesIndexChanged(int idx)
 void Appearance::newScheme()
 {
 	bool ok;
-	const QString name = Functions::cleanFileName(QInputDialog::getText(this, tr("Nazwa"), tr("Wprowadź nazwę dla schematu kolorów"), QLineEdit::Normal, QString(), &ok));
+	const QString name = Functions::cleanFileName(QInputDialog::getText(this, tr("Name"), tr("Enter the name for a color scheme"), QLineEdit::Normal, QString(), &ok));
 	if (ok && !name.isEmpty())
 	{
 		for (int i = 2; i < schemesB->count(); ++i)
 			if (schemesB->itemText(i) == name)
 			{
-				QMessageBox::warning(this, tr("Nazwa"), tr("Podana nazwa już istnieje!"));
+				QMessageBox::warning(this, tr("Name"), tr("The specified name already exists!"));
 				return;
 			}
 		QSettings colorScheme(colorsDir + name + QMPlay2ColorExtension, QSettings::IniFormat);
@@ -417,7 +417,7 @@ void Appearance::saveScheme()
 }
 void Appearance::deleteScheme()
 {
-	if (schemesB->currentIndex() > 1 && QMessageBox::question(this, tr("Usuwanie"), tr("Czy na pewno chcesz usunąć") + ": \"" + schemesB->currentText() + "\"?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (schemesB->currentIndex() > 1 && QMessageBox::question(this, tr("Removing"), tr("Do you want to remove") + ": \"" + schemesB->currentText() + "\"?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		QFile::remove(colorsDir + schemesB->currentText() + QMPlay2ColorExtension);
 		schemesB->removeItem(schemesB->currentIndex());
@@ -425,7 +425,7 @@ void Appearance::deleteScheme()
 }
 void Appearance::chooseWallpaper()
 {
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Wczytywanie tapety"), QMPlay2GUI.getCurrentPth(), tr("Obrazy") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Loading wallpaper"), QMPlay2GUI.getCurrentPth(), tr("Pictures") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
 	if (!filePath.isEmpty())
 	{
 		QFile f(filePath);
@@ -497,7 +497,7 @@ void Appearance::reloadSchemes()
 {
 	disconnect(schemesB, SIGNAL(currentIndexChanged(int)), this, SLOT(schemesIndexChanged(int)));
 	schemesB->clear();
-	schemesB->addItems(QStringList() << tr("Aktualny schemat kolorów") << tr("Domyślny schemat kolorów"));
+	schemesB->addItems(QStringList() << tr("Current color scheme") << tr("Default color scheme"));
 	rwSchemesIdx = 2;
 	foreach (const QString &fName, QDir(":/Colors").entryList())
 	{

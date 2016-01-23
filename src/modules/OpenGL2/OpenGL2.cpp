@@ -44,16 +44,16 @@ QMPLAY2_EXPORT_PLUGIN(OpenGL2)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("Włączony"));
+	enabledB = new QCheckBox(tr("ON"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
 #ifdef OPENGL_NEW_API
-	forceRttB = new QCheckBox(tr("Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)"));
+	forceRttB = new QCheckBox(tr("Force render to texture if possible (not recommended)"));
 	forceRttB->setChecked(sets().getBool("ForceRtt"));
 #endif
 
 #ifdef VSYNC_SETTINGS
-	vsyncB = new QCheckBox(tr("Synchronizacja pionowa") +  " (VSync)");
+	vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
 	vsyncB->setChecked(sets().getBool("VSync"));
 #endif
 

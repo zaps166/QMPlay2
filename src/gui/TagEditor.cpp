@@ -153,42 +153,42 @@ TagEditor::TagEditor() :
 	pictureModificated(false), pictureBChecked(false)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	setTitle(tr("Dodaj tagi"));
+	setTitle(tr("Add tags"));
 	setCheckable(true);
 
-	QLabel *titleL = new QLabel(tr("Tytuł") + ": ");
+	QLabel *titleL = new QLabel(tr("Title") + ": ");
 	titleE = new QLineEdit;
 
-	QLabel *artistL = new QLabel(tr("Artysta") + ": ");
+	QLabel *artistL = new QLabel(tr("Artist") + ": ");
 	artistE = new QLineEdit;
 
 	QLabel *albumL = new QLabel(tr("Album") + ": ");
 	albumE = new QLineEdit;
 
-	QLabel *commentL = new QLabel(tr("Komentarz") + ": ");
+	QLabel *commentL = new QLabel(tr("Comment") + ": ");
 	commentE = new QLineEdit;
 
-	QLabel *genreL = new QLabel(tr("Gatunek") + ": ");
+	QLabel *genreL = new QLabel(tr("Genre") + ": ");
 	genreE = new QLineEdit;
 
-	QLabel *yearL = new QLabel(tr("Rok") + ": ");
+	QLabel *yearL = new QLabel(tr("Year") + ": ");
 	yearB = new QSpinBox;
 	yearB->setRange(0, 32767);
-	yearB->setSpecialValueText(tr("Brak"));
+	yearB->setSpecialValueText(tr("None"));
 
-	QLabel *trackL = new QLabel(tr("Ścieżka") + ": ");
+	QLabel *trackL = new QLabel(tr("Path") + ": ");
 	trackB = new QSpinBox;
 	trackB->setRange(0, 32767);
-	trackB->setSpecialValueText(tr("Brak"));
+	trackB->setSpecialValueText(tr("None"));
 
-	pictureB = new QGroupBox(tr("Okładka"));
+	pictureB = new QGroupBox(tr("Cover"));
 	pictureB->setCheckable(true);
 	pictureW = new PictureW(*picture);
 	loadImgB = new QPushButton;
-	loadImgB->setText(tr("Wczytaj okładkę"));
+	loadImgB->setText(tr("Load cover picture"));
 	loadImgB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	saveImgB = new QPushButton;
-	saveImgB->setText(tr("Zapisz okładkę"));
+	saveImgB->setText(tr("Save cover picture"));
 	saveImgB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	connect(loadImgB, SIGNAL(clicked()), this, SLOT(loadImage()));
@@ -618,7 +618,7 @@ bool TagEditor::save()
 
 void TagEditor::loadImage()
 {
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Wczytywanie okładki"), QMPlay2GUI.getCurrentPth(), tr("Obrazy") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Loading cover picture"), QMPlay2GUI.getCurrentPth(), tr("Pictures") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
 	if (!filePath.isEmpty())
 	{
 		QFile f(filePath);

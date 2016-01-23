@@ -37,9 +37,9 @@ ResultsPleer::ResultsPleer()
 	setSortingEnabled(true);
 	setIndentation(0);
 
-	headerItem()->setText(0, tr("Tytuł"));
-	headerItem()->setText(1, tr("Wykonawca"));
-	headerItem()->setText(2, tr("Długość"));
+	headerItem()->setText(0, tr("Title"));
+	headerItem()->setText(1, tr("Artist"));
+	headerItem()->setText(2, tr("Length"));
 	headerItem()->setText(3, tr("Bitrate"));
 
 	header()->setStretchLastSection(false);
@@ -97,11 +97,11 @@ void ResultsPleer::contextMenu(const QPoint &point)
 	QTreeWidgetItem *tWI = currentItem();
 	if (tWI)
 	{
-		menu.addAction(tr("Kolejkuj"), this, SLOT(enqueue()));
-		menu.addAction(tr("Odtwórz"), this, SLOT(playCurrentEntry()));
+		menu.addAction(tr("Enqueue"), this, SLOT(enqueue()));
+		menu.addAction(tr("Play"), this, SLOT(playCurrentEntry()));
 		menu.addSeparator();
-		menu.addAction(tr("Otwórz stronę w przeglądarce"), this, SLOT(openPage()));
-		menu.addAction(tr("Kopiuj adres strony"), this, SLOT(copyPageURL()));
+		menu.addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
+		menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 		menu.addSeparator();
 		const QString name = tWI->text(0);
 		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
@@ -144,14 +144,14 @@ ProstoPleerW::ProstoPleerW() :
 	searchB = new QToolButton;
 	connect(searchB, SIGNAL(clicked()), this, SLOT(search()));
 	searchB->setIcon(QIcon(":/browserengine"));
-	searchB->setToolTip(tr("Wyszukaj"));
+	searchB->setToolTip(tr("Search"));
 	searchB->setAutoRaise(true);
 
 	nextPageB = new QToolButton;
 	connect(nextPageB, SIGNAL(clicked()), this, SLOT(next()));
 	nextPageB->setAutoRaise(true);
 	nextPageB->setArrowType(Qt::RightArrow);
-	nextPageB->setToolTip(tr("Następna strona"));
+	nextPageB->setToolTip(tr("Next page"));
 	nextPageB->hide();
 
 	progressB = new QProgressBar;
@@ -231,7 +231,7 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 			lastName.clear();
 			nextPageB->hide();
 			progressB->hide();
-			emit QMPlay2Core.sendMessage(tr("Błąd połączenia"), ProstoPleerName, 3);
+			emit QMPlay2Core.sendMessage(tr("Connection error"), ProstoPleerName, 3);
 		}
 	}
 	else
@@ -394,7 +394,7 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 				}
 
 				if (!replyData.isEmpty())
-					QMPlay2Core.sendMessage(ProstoPleerW::tr("Spróbuj ponownie później"), ProstoPleerName);
+					QMPlay2Core.sendMessage(ProstoPleerW::tr("Try again later"), ProstoPleerName);
 			}
 		}
 	}
@@ -404,7 +404,7 @@ QAction *ProstoPleer::getAction(const QString &name, int, const QString &url, co
 {
 	if (name != url)
 	{
-		QAction *act = new QAction(ProstoPleerW::tr("Wyszukaj w Prostopleer"), NULL);
+		QAction *act = new QAction(ProstoPleerW::tr("Search on Prostopleer"), NULL);
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/prostopleer"));
 		act->setProperty("name", name);

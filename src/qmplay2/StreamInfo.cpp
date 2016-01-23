@@ -14,19 +14,19 @@ QString StreamInfo::getTagName(const QString &tag)
 	switch (tagID)
 	{
 		case QMPLAY2_TAG_LANGUAGE:
-			return tr("Język");
+			return tr("Language");
 		case QMPLAY2_TAG_TITLE:
-			return tr("Tytuł");
+			return tr("Title");
 		case QMPLAY2_TAG_ARTIST:
-			return tr("Artysta");
+			return tr("Artist");
 		case QMPLAY2_TAG_ALBUM:
 			return tr("Album");
 		case QMPLAY2_TAG_GENRE:
-			return tr("Gatunek");
+			return tr("Genre");
 		case QMPLAY2_TAG_DATE:
-			return tr("Data");
+			return tr("Date");
 		case QMPLAY2_TAG_COMMENT:
-			return tr("Komentarz");
+			return tr("Comment");
 		default:
 			return tag;
 	}

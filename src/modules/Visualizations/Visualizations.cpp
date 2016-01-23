@@ -43,28 +43,28 @@ QMPLAY2_EXPORT_PLUGIN(Visualizations)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	QLabel *refTimeL = new QLabel(tr("Czas odświeżania") + ": ");
+	QLabel *refTimeL = new QLabel(tr("Refresh time") + ": ");
 
 	refTimeB = new QSpinBox;
 	refTimeB->setRange(1, 500);
 	refTimeB->setSuffix(" " + tr("ms"));
 	refTimeB->setValue(sets().getInt("RefreshTime"));
 
-	QLabel *sndLenL = new QLabel(tr("Długość wyświetlanego dźwięku") + ": ");
+	QLabel *sndLenL = new QLabel(tr("Displayed sound length") + ": ");
 
 	sndLenB = new QSpinBox;
 	sndLenB->setRange(1, 500);
 	sndLenB->setSuffix(" " + tr("ms"));
 	sndLenB->setValue(sets().getInt("SimpleVis/SoundLength"));
 
-	QLabel *fftSizeL = new QLabel(tr("Rozmiar widma FFT") + ": ");
+	QLabel *fftSizeL = new QLabel(tr("FFT spectrum size") + ": ");
 
 	fftSizeB = new QSpinBox;
 	fftSizeB->setRange(5, 10);
 	fftSizeB->setPrefix("2^");
 	fftSizeB->setValue(sets().getInt("FFTSpectrum/Size"));
 
-	QLabel *fftScaleL = new QLabel(tr("Skala widma FFT") + ": ");
+	QLabel *fftScaleL = new QLabel(tr("FFT spectrum scale") + ": ");
 
 	fftScaleB = new QSpinBox;
 	fftScaleB->setRange(1, 20);

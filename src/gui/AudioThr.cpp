@@ -59,10 +59,10 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 			channels = writer->getParam("chn").toUInt();
 			sample_rate = writer->getParam("rate").toUInt();
 			if ((!chn || channels == lastChn) && (!sRate || sample_rate == lastSRate))
-				QMPlay2Core.logInfo(tr("Moduł") + " \"" + writer->name() + "\" " + tr("ustawił parametry na") + ": " + QString::number(channels) + " " + tr("kanały") + ", " + QString::number(sample_rate) + " " + tr("Hz"));
+				QMPlay2Core.logInfo(tr("Module") + " \"" + writer->name() + "\" " + tr("sets the parameters to") + ": " + QString::number(channels) + " " + tr("channels") + ", " + QString::number(sample_rate) + " " + tr("Hz"));
 			else
 			{
-				QMPlay2Core.logError(tr("Moduł") + " \"" + writer->name() + "\" " + tr("wymaga zmiany jednego z wymuszonych parametrów, dźwięk wyłączony..."));
+				QMPlay2Core.logError(tr("Module") + " \"" + writer->name() + "\" " + tr("requires a change in one of the forced parameters, sound disabled ..."));
 				return false;
 			}
 		}
@@ -335,7 +335,7 @@ bool AudioThr::resampler_create()
 	{
 		const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate/speed, channels);
 		if (!OK)
-			QMPlay2Core.logError(tr("Błąd podczas inicjalizacji") + ": " + sndResampler.name());
+			QMPlay2Core.logError(tr("Error during initialization") + ": " + sndResampler.name());
 		return OK;
 	}
 	sndResampler.destroy();

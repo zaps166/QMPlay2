@@ -16,7 +16,7 @@ QList< VFilters::Info > VFilters::getModulesInfo(const bool) const
 	modulesInfo += Info(BobDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER);
 	modulesInfo += Info(BlendDeintName, VIDEOFILTER | DEINTERLACE);
 	modulesInfo += Info(DiscardDeintName, VIDEOFILTER | DEINTERLACE);
-	modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Tworzy jedną dodatkową ramkę, która jest średnią z dwóch sąsiadujących klatek"));
+	modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produces one extra frame which is average of two neighbour frames"));
 	return modulesInfo;
 }
 void *VFilters::createInstance(const QString &name)

@@ -13,15 +13,15 @@
 Radio::Radio(Module &module) :
 	once(false), net(NULL),
 	qmp2Icon(QMPlay2Core.getQMPlay2Pixmap()),
-	wlasneStacje(tr("Własne stacje radiowe"))
+	wlasneStacje(tr("Own radio stations"))
 {
 	SetModule(module);
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
-	popupMenu.addAction(tr("Usuń stację radiową"), this, SLOT(removeStation()));
+	popupMenu.addAction(tr("Remove the radio station"), this, SLOT(removeStation()));
 
 	dw = new DockWidget;
-	dw->setWindowTitle(tr("Radia internetowe"));
+	dw->setWindowTitle(tr("Internet radios"));
 	dw->setObjectName(RadioName);
 	dw->setWidget(this);
 
@@ -53,7 +53,7 @@ Radio::Radio(Module &module) :
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
 
 	addGroup(wlasneStacje);
-	nowaStacjaLWI = new QListWidgetItem("-- " + tr("Dodaj nową stację radiową") + " --", lW);
+	nowaStacjaLWI = new QListWidgetItem("-- " + tr("Add new radio station") + " --", lW);
 	nowaStacjaLWI->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 
 	Settings sets("Radio");
@@ -84,7 +84,7 @@ void Radio::visibilityChanged(bool v)
 	if (v && !once)
 	{
 		once = true;
-		infoL->setText(tr("Pobieranie listy, czekaj..."));
+		infoL->setText(tr("Downloading list, please wait..."));
 		progressB->setMaximum(0);
 		progressB->show();
 
@@ -114,13 +114,13 @@ void Radio::openLink()
 	{
 		if (lWI == nowaStacjaLWI)
 		{
-			const QString newStation = tr("Dodawanie nowej stacji radiowej");
+			const QString newStation = tr("Adding a new radio station");
 			QString nazwa, adres;
 			bool ok;
-			nazwa = QInputDialog::getText(this, newStation, tr("Nazwa"), QLineEdit::Normal, QString(), &ok);
+			nazwa = QInputDialog::getText(this, newStation, tr("Name"), QLineEdit::Normal, QString(), &ok);
 			if (ok && !nazwa.isEmpty())
 			{
-				adres = QInputDialog::getText(this, newStation, tr("Adres"), QLineEdit::Normal, "http://", &ok);
+				adres = QInputDialog::getText(this, newStation, tr("Address"), QLineEdit::Normal, "http://", &ok);
 				if (ok && !adres.isEmpty() && adres != "http://")
 					addStation(nazwa, adres, wlasneStacje);
 			}
@@ -181,14 +181,14 @@ void Radio::finished()
 				addStation(nazwa, URL, GroupName, img);
 			}
 
-			infoL->setText(tr("Liczba stacji radiowych") + ": " + QString::number(lW->count() - separators));
+			infoL->setText(tr("Number of radio stations") + ": " + QString::number(lW->count() - separators));
 		}
 	}
 	else
 		err = true;
 	if (err)
 	{
-		infoL->setText(tr("Błąd podczas pobierania listy"));
+		infoL->setText(tr("Error while downloading list"));
 		progressB->hide();
 		once = false;
 	}

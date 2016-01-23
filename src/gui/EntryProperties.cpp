@@ -35,7 +35,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 #endif
 	fileSizeL = NULL;
 
-	setWindowTitle(tr("Właściwości"));
+	setWindowTitle(tr("Properties"));
 
 	QGridLayout layout(this);
 
@@ -55,7 +55,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		nameE->selectAll();
 
 		catalogCB = new QCheckBox;
-		catalogCB->setText(tr("Synchronizuj z katalogiem"));
+		catalogCB->setText(tr("Sync with directory"));
 		catalogCB->setChecked(!dirPthE->text().isEmpty());
 		connect(catalogCB, SIGNAL(stateChanged(int)), this, SLOT(setDirPthEEnabled(int)));
 
@@ -77,7 +77,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 		QFileInfo fi(addrB->cleanUrl());
 		if (fi.isFile())
-			fileSizeL = new QLabel(tr("Rozmiar pliku") + ": " + Functions::sizeString(fi.size()));
+			fileSizeL = new QLabel(tr("File size") + ": " + Functions::sizeString(fi.size()));
 
 		nameE->setReadOnly(true);
 	}
@@ -137,7 +137,7 @@ void EntryProperties::directAddressChanged()
 #endif
 void EntryProperties::browse()
 {
-	QString s = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog"), dirPthE->text());
+	QString s = QFileDialog::getExistingDirectory(this, tr("Choose directory"), dirPthE->text());
 	if (!s.isEmpty())
 	{
 		if (nameE->text().isEmpty())
@@ -155,7 +155,7 @@ void EntryProperties::accept()
 		const bool isDir  = dirPthInfo.isDir();
 		if (catalogCB->isChecked() && ((!isDir && !isFile) || (isFile && origDirPth != newDirPth)))
 		{
-			QMessageBox::information(this, tr("Zła ścieżka"), tr("Podaj ścieżkę do istniejącego katalogu"));
+			QMessageBox::information(this, tr("Incorrect path"), tr("Enter path to existing directory"));
 			return;
 		}
 		else if (catalogCB->isChecked() && (isDir || isFile))
@@ -183,7 +183,7 @@ void EntryProperties::accept()
 		tWI->setData(0, Qt::UserRole, url);
 #ifdef QMPlay2_TagEditor
 		if (tagEditor->isEnabled() && !tagEditor->save())
-			QMessageBox::critical(this, tagEditor->title(), tr("Błąd podczas zapisu tagów, sprawdź czy masz uprawnienia do modyfikacji pliku!"));
+			QMessageBox::critical(this, tagEditor->title(), tr("Error while writing tags, check that you have permission to modify the file!"));
 #endif
 	}
 	QDialog::accept();

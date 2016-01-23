@@ -223,7 +223,7 @@ void LastFM::loginFinished()
 	{
 		const bool wrongLoginOrPassword = reply.contains("error code=\"4\"");
 		if (!dontShowLoginError || wrongLoginOrPassword)
-			QMPlay2Core.log(tr("Błąd logowania do LastFM.") + (wrongLoginOrPassword ? (" " + tr("Sprawdź login i hasło!")) : QString()), ErrorLog);
+			QMPlay2Core.log(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()), ErrorLog);
 		if (wrongLoginOrPassword)
 			clear();
 		else
@@ -241,7 +241,7 @@ void LastFM::loginFinished()
 			if (end_idx > -1)
 			{
 				session_key = reply.mid(idx, end_idx - idx);
-				QMPlay2Core.log(tr("Zalogowany do LastFM!"), InfoLog);
+				QMPlay2Core.log(tr("Logged in to LastFM!"), InfoLog);
 				if (!scrobbleQueue.isEmpty() && !updateTim.isActive())
 					updateTim.start(scrobbleSec * 1000);
 				dontShowLoginError = false;

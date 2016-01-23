@@ -549,12 +549,12 @@ void VAAPIWriter::init_vpp()
 						}
 						if (vpp_deint_type == VAProcDeinterlacingMotionCompensated && !vpp_deint_types[1])
 						{
-							QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Motion compensated", ErrorLog | LogOnce);
+							QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
 							vpp_deint_type = VAProcDeinterlacingMotionAdaptive;
 						}
 						if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[0])
 						{
-							QMPlay2Core.log(tr("Nie obsługiwany algorytm usuwania przeplotu") + " - Motion adaptive", ErrorLog | LogOnce);
+							QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
 							vpp_deint_type = VAProcDeinterlacingNone;
 						}
 						if (vpp_deint_type != VAProcDeinterlacingNone)
@@ -569,7 +569,7 @@ void VAAPIWriter::init_vpp()
 		}
 	}
 	if (vpp_deint_type != VAProcDeinterlacingNone) //Show error only when filter is required
-		QMPlay2Core.log("VA-API :: " + tr("Nie można otworzyć filtrów obrazu"), ErrorLog | LogOnce);
+		QMPlay2Core.log("VA-API :: " + tr("Cannot open video filters"), ErrorLog | LogOnce);
 	clr_vpp();
 #endif
 }

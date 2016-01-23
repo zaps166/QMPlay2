@@ -124,7 +124,7 @@ void VideoThr::initFilters(bool processParams)
 			{
 				if (deintFilter)
 					filters.off(deintFilter);
-				QMPlay2Core.logError(tr("Błąd inicjalizacji filtru usuwania przeplotu") + " \"" + deintFilterName + '"');
+				QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
 			}
 		}
 	}
@@ -145,7 +145,7 @@ void VideoThr::initFilters(bool processParams)
 						filters.off(filter);
 				}
 				if (!ok)
-					QMPlay2Core.logError(tr("Błąd inicjalizacji filtru") + " \"" + filterName + '"');
+					QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
 			}
 
 	if (processParams)
@@ -511,7 +511,7 @@ void VideoThr::screenshot_slot(const QByteArray &frame)
 		else
 			ok = ((VideoWriter *)writer)->HWAccellGetImg(videoFrame, img.bits(), &imgScaler);
 		if (!ok)
-			QMPlay2Core.logError(tr("Błąd podczas tworzenia zrzutu ekranu"));
+			QMPlay2Core.logError(tr("Cannot create screenshot"));
 		else
 		{
 			const QString ext = QMPlay2Core.getSettings().getString("screenshotFormat");

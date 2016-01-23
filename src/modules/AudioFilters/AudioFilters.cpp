@@ -90,15 +90,15 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	voiceRemovalEB = new QCheckBox(tr("Usuwanie głosu"));
+	voiceRemovalEB = new QCheckBox(tr("Voice removal"));
 	voiceRemovalEB->setChecked(sets().getBool("VoiceRemoval"));
 	connect(voiceRemovalEB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
 
-	phaseReverseEB = new QCheckBox(tr("Odwracanie fazy"));
+	phaseReverseEB = new QCheckBox(tr("Phase reverse"));
 	phaseReverseEB->setChecked(sets().getBool("PhaseReverse"));
 	connect(phaseReverseEB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
 
-	phaseReverseRightB = new QCheckBox(tr("Odwracaj fazę prawego kanału"));
+	phaseReverseRightB = new QCheckBox(tr("Reverse the right channel phase"));
 	phaseReverseRightB->setChecked(sets().getBool("PhaseReverse/ReverseRight"));
 	connect(phaseReverseRightB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
 
@@ -109,28 +109,28 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	echoB->setChecked(sets().getBool("Echo"));
 	connect(echoB, SIGNAL(clicked()), this, SLOT(echo()));
 
-	QLabel *echoDelayL = new QLabel(tr("Opóźnienie echa") + ": ");
+	QLabel *echoDelayL = new QLabel(tr("Echo delay") + ": ");
 
 	echoDelayB = new Slider;
 	echoDelayB->setRange(1, 1000);
 	echoDelayB->setValue(sets().getUInt("Echo/Delay"));
 	connect(echoDelayB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
-	QLabel *echoVolumeL = new QLabel(tr("Głośność echa") + ": ");
+	QLabel *echoVolumeL = new QLabel(tr("Echo volume") + ": ");
 
 	echoVolumeB = new Slider;
 	echoVolumeB->setRange(1, 100);
 	echoVolumeB->setValue(sets().getUInt("Echo/Volume"));
 	connect(echoVolumeB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
-	QLabel *echoFeedbackL = new QLabel(tr("Powtarzanie echa") + ": ");
+	QLabel *echoFeedbackL = new QLabel(tr("Echo repeat") + ": ");
 
 	echoFeedbackB = new Slider;
 	echoFeedbackB->setRange(1, 100);
 	echoFeedbackB->setValue(sets().getUInt("Echo/Feedback"));
 	connect(echoFeedbackB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
-	echoSurroundB = new QCheckBox(tr("Przestrzenny dźwięk echa"));
+	echoSurroundB = new QCheckBox(tr("Echo surround"));
 	connect(echoSurroundB, SIGNAL(clicked()), this, SLOT(echo()));
 
 	QGridLayout *echoBLayout = new QGridLayout(echoB);
@@ -142,36 +142,36 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	echoBLayout->addWidget(echoFeedbackB, 2, 1, 1, 1);
 	echoBLayout->addWidget(echoSurroundB, 3, 0, 1, 2);
 
-	QLabel *eqQualityL = new QLabel(tr("Jakość korektora dźwięku") + ": ");
+	QLabel *eqQualityL = new QLabel(tr("Sound equalizer quality") + ": ");
 
 	eqQualityB = new QComboBox;
 	eqQualityB->addItems(QStringList()
-		<< tr("Niska") + ", " + tr("rozmiar filtra") + ": 256"
-		<< tr("Niska") + ", " + tr("rozmiar filtra") + ": 512"
-		<< tr("Średnia") + ", " + tr("rozmiar filtra") + ": 1024"
-		<< tr("Średnia") + ", " + tr("rozmiar filtra") + ": 2048"
-		<< tr("Wysoka") + ", " + tr("rozmiar filtra") + ": 4096"
-		<< tr("Bardzo wysoka") + ", " + tr("rozmiar filtra") + ": 8192"
-		<< tr("Bardzo wysoka") + ", " + tr("rozmiar filtra") + ": 16384"
-		<< tr("Bardzo wysoka") + ", " + tr("rozmiar filtra") + ": 32768"
-		<< tr("Bardzo wysoka") + ", " + tr("rozmiar filtra") + ": 65536"
+		<< tr("Low") + ", " + tr("filter size") + ": 256"
+		<< tr("Low") + ", " + tr("filter size") + ": 512"
+		<< tr("Medium") + ", " + tr("filter size") + ": 1024"
+		<< tr("Medium") + ", " + tr("filter size") + ": 2048"
+		<< tr("High") + ", " + tr("filter size") + ": 4096"
+		<< tr("Very high") + ", " + tr("filter size") + ": 8192"
+		<< tr("Very high") + ", " + tr("filter size") + ": 16384"
+		<< tr("Very high") + ", " + tr("filter size") + ": 32768"
+		<< tr("Very high") + ", " + tr("filter size") + ": 65536"
 	);
 	eqQualityB->setCurrentIndex(sets().getInt("Equalizer/nbits") - 8);
 
-	QLabel *eqSlidersL = new QLabel(tr("Liczba suwaków w korektorze dźwięku") + ": ");
+	QLabel *eqSlidersL = new QLabel(tr("Slider count in sound equalizer") + ": ");
 
 	eqSlidersB = new QSpinBox;
 	eqSlidersB->setRange(2, 20);
 	eqSlidersB->setValue(sets().getInt("Equalizer/count"));
 
 	eqMinFreqB = new QSpinBox;
-	eqMinFreqB->setPrefix(tr("Minimalna częstotliwość") + ": ");
+	eqMinFreqB->setPrefix(tr("Minimum frequency") + ": ");
 	eqMinFreqB->setSuffix(" Hz");
 	eqMinFreqB->setRange(10, 300);
 	eqMinFreqB->setValue(sets().getInt("Equalizer/minFreq"));
 
 	eqMaxFreqB = new QSpinBox;
-	eqMaxFreqB->setPrefix(tr("Maksymalna częstotliwość") + ": ");
+	eqMaxFreqB->setPrefix(tr("Maximum frequency") + ": ");
 	eqMaxFreqB->setSuffix(" Hz");
 	eqMaxFreqB->setRange(10000, 96000);
 	eqMaxFreqB->setValue(sets().getInt("Equalizer/maxFreq"));

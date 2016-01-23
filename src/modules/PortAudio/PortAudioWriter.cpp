@@ -81,7 +81,7 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 			modParam("delay", outputLatency);
 		}
 		else
-			QMPlay2Core.logError("PortAudio :: " + tr("Nie można otworzyć strumienia wyjścia dźwięku"));
+			QMPlay2Core.logError("PortAudio :: " + tr("Cannot open audio output stream"));
 	}
 #ifdef Q_OS_WIN
 	else
@@ -124,7 +124,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 	int e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e == paUnanticipatedHostError)
 	{
-		QMPlay2Core.logError("PortAudio :: " + tr("Błąd podczas odtwarzania"));
+		QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
 		err = true;
 		return 0;
 	}

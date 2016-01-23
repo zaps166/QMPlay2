@@ -153,7 +153,7 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
 				else
 				{
 					sndOpen = !snd_pcm_open(&snd, devName.toLocal8Bit(), SND_PCM_STREAM_PLAYBACK, 0);
-					QMPlay2Core.logInfo("ALSA :: " + tr("Nie można otworzyć") + " \"" + chosenDevName + "\", " + tr("powrót do") + " \"" + devName + "\"");
+					QMPlay2Core.logInfo("ALSA :: " + tr("Cannot open") + " \"" + chosenDevName + "\", " + tr("back to") + " \"" + devName + "\"");
 				}
 			}
 			if (sndOpen)
@@ -240,7 +240,7 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
 			}
 		}
 		err = true;
-		QMPlay2Core.logError("ALSA :: " + tr("Nie można otworzyć strumienia wyjścia dźwięku"));
+		QMPlay2Core.logError("ALSA :: " + tr("Cannot open audio output stream"));
 	}
 
 	return readyWrite();
@@ -290,7 +290,7 @@ qint64 ALSAWriter::write(const QByteArray &arr)
 	int ret = snd_pcm_writei(snd, int_samples.constData(), to_write);
 	if (ret < 0 && ret != -EPIPE && snd_pcm_recover(snd, ret, false))
 	{
-		QMPlay2Core.logError("ALSA :: " + tr("Błąd podczas odtwarzania"));
+		QMPlay2Core.logError("ALSA :: " + tr("Playback error"));
 		err = true;
 		return 0;
 	}

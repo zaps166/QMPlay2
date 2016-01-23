@@ -47,16 +47,16 @@ QMPLAY2_EXPORT_PLUGIN(Subtitles)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	srtEB = new QCheckBox(tr("Odczyt napisów SRT"));
+	srtEB = new QCheckBox(tr("SRT reading"));
 	srtEB->setChecked(sets().getBool("SRT_enabled"));
 
-	classicEB = new QCheckBox(tr("Odczyt napisów klasycznych"));
+	classicEB = new QCheckBox(tr("Classic subtitles reading"));
 	classicEB->setChecked(sets().getBool("Classic_enabled"));
 
-	mEB = new QCheckBox(tr("Użyj określonego FPS w napisach MicroDVD (jeśli istnieje)"));
+	mEB = new QCheckBox(tr("Use the specified FPS in MicroDVD subtitles (if exists)"));
 	mEB->setChecked(sets().getBool("Use_mDVD_FPS"));
 
-	QLabel *maxLenL = new QLabel(tr("Maksymalny czas trwania napisów bez określonej długości") + ": ");
+	QLabel *maxLenL = new QLabel(tr("The maximum duration of subtitles without a specified length") + ": ");
 
 	maxLenB = new QDoubleSpinBox;
 	maxLenB->setRange(0.5, 9.5);

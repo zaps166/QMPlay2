@@ -28,24 +28,24 @@ DeintSettingsW::DeintSettingsW()
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 
 	setChecked(QMPSettings.getBool("Deinterlace/ON"));
-	setTitle(tr("Usuwaj przeplot"));
+	setTitle(tr("Remove interlacing"));
 
-	autoDeintB = new QCheckBox(tr("Automatycznie wykrywaj film z przeplotem"));
+	autoDeintB = new QCheckBox(tr("Automatically detect interlaced frames"));
 	autoDeintB->setChecked(QMPSettings.getBool("Deinterlace/Auto"));
 
-	doublerB = new QCheckBox(tr("Podwajaj liczbę klatek na sekundę"));
+	doublerB = new QCheckBox(tr("Doubles the the number of frames per second"));
 	doublerB->setChecked(QMPSettings.getBool("Deinterlace/Doubler"));
 	connect(doublerB, SIGNAL(clicked(bool)), this, SLOT(softwareMethods(bool)));
 
-	autoParityB = new QCheckBox(tr("Automatycznie wykryj parzystość"));
+	autoParityB = new QCheckBox(tr("Automatically detect parity"));
 	autoParityB->setChecked(QMPSettings.getBool("Deinterlace/AutoParity"));
 
-	QLabel *methodL = new QLabel(tr("Metoda usuwania przeplotu (dekodowanie programowe)") + ": ");
+	QLabel *methodL = new QLabel(tr("Deinterlacing method (software decoding)") + ": ");
 
 	softwareMethodsCB = new QComboBox;
 	softwareMethodsCB->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 
-	QLabel *parityL = new QLabel(tr("Parzystość (jeżeli nie wykryto automatycznie)") + ": ");
+	QLabel *parityL = new QLabel(tr("Parity (if not detected automatically)") + ": ");
 
 	parityCB = new QComboBox;
 	parityCB->addItems(QStringList() << "Bottom field first" << "Top field first");

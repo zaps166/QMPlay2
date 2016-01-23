@@ -102,9 +102,9 @@ QList<QMPlay2Tag> MPDemux::tags() const
 {
 	QList< QMPlay2Tag > tags;
 	tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), QString(ModPlug_GetName(mpfile)));
-	tags << qMakePair(tr("Próbki"), QString::number(ModPlug_NumSamples(mpfile)));
-	tags << qMakePair(tr("Wzorce"), QString::number(ModPlug_NumPatterns(mpfile)));
-	tags << qMakePair(tr("Kanały"), QString::number(ModPlug_NumChannels(mpfile)));
+	tags << qMakePair(tr("Samples"), QString::number(ModPlug_NumSamples(mpfile)));
+	tags << qMakePair(tr("Patterns"), QString::number(ModPlug_NumPatterns(mpfile)));
+	tags << qMakePair(tr("Channels"), QString::number(ModPlug_NumChannels(mpfile)));
 	return tags;
 }
 double MPDemux::length() const

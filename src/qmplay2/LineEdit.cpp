@@ -5,7 +5,7 @@
 
 LineEditButton::LineEditButton()
 {
-	setToolTip(tr("Wyczyść"));
+	setToolTip(tr("Clear"));
 	setPixmap(QMPlay2Core.getIconFromTheme("edit-clear").pixmap(16, 16));
 	resize(pixmap()->size());
 	setCursor(Qt::ArrowCursor);

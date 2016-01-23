@@ -90,7 +90,7 @@ void QMPlay2CoreClass::init(bool loadModules, const QString &_qmplay2Dir, const 
 					if (!qmplay2PluginInstance)
 					{
 #ifndef Q_OS_ANDROID
-						log(fInfo.fileName() + " - " + tr("nieprawidłowa biblioteka QMPlay2"), AddTimeToLog | ErrorLog | SaveLog);
+						log(fInfo.fileName() + " - " + tr("invalid QMPlay2 library"), AddTimeToLog | ErrorLog | SaveLog);
 #endif
 					}
 					else
@@ -180,7 +180,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 			logFile.close();
 		}
 		else
-			log(tr("Nie można otworzyć pliku dziennika"), ErrorLog | AddTimeToLog);
+			log(tr("Can't open log file"), ErrorLog | AddTimeToLog);
 	}
 	if (!(logFlags & DontShowInGUI))
 		emit logSignal(txt);

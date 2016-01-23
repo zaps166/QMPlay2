@@ -63,19 +63,19 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
 #ifdef USE_GME
-	gmeB = new QCheckBox("Game-Music-Emu " + tr("włączony"));
+	gmeB = new QCheckBox("Game-Music-Emu " + tr("enabled"));
 	gmeB->setChecked(sets().getBool("GME"));
 #endif
 
 #ifdef USE_SIDPLAY
-	sidB = new QCheckBox("SIDPlay " + tr("włączony"));
+	sidB = new QCheckBox("SIDPlay " + tr("enabled"));
 	sidB->setChecked(sets().getBool("SIDPlay"));
 #endif
 
 	lengthB = new QSpinBox;
 	lengthB->setRange(30, 600);
-	lengthB->setPrefix(tr("Domyślna długość") + ": ");
-	lengthB->setSuffix(" " + tr("sek"));
+	lengthB->setPrefix(tr("Default length") + ": ");
+	lengthB->setSuffix(" " + tr("sec"));
 	lengthB->setValue(sets().getInt("DefaultLength"));
 
 	QGridLayout *layout = new QGridLayout(this);

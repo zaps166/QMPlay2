@@ -70,7 +70,7 @@ QList< QAction * > Inputs::getAddActions()
 {
 	QAction *actTone = new QAction(NULL);
 	actTone->setIcon(QIcon(":/sine"));
-	actTone->setText(tr("Generator częstotliwości"));
+	actTone->setText(tr("Tone generator"));
 	actTone->connect(actTone, SIGNAL(triggered()), this, SLOT(add()));
 	return QList< QAction * >() << actTone;
 }
@@ -130,18 +130,18 @@ AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
 	QGroupBox *gB = NULL;
 	if (parent)
 	{
-		setWindowTitle(tr("Generator częstotliwości"));
+		setWindowTitle(tr("Tone generator"));
 		setWindowIcon(QIcon(":/sine"));
 	}
 	else
-		gB = new QGroupBox(tr("Generator częstotliwości"));
+		gB = new QGroupBox(tr("Tone generator"));
 
-	QLabel *channelsL = new QLabel(tr("Ilość kanałów") + ": ");
+	QLabel *channelsL = new QLabel(tr("Channel count") + ": ");
 
 	QSpinBox *channelsB = new QSpinBox;
 	connect(channelsB, SIGNAL(valueChanged(int)), this, SLOT(channelsChanged(int)));
 
-	QLabel *srateL = new QLabel(tr("Częstotliwość próbkowania") + ": ");
+	QLabel *srateL = new QLabel(tr("Sample rate") + ": ");
 
 	srateB = new QSpinBox;
 	srateB->setRange(4, 384000);
@@ -158,7 +158,7 @@ AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
 	}
 	else
 	{
-		addB = new QPushButton(tr("Odtwarzaj"));
+		addB = new QPushButton(tr("Play"));
 		addB->setIcon(QIcon(":/sine"));
 		connect(addB, SIGNAL(clicked()), this, SLOT(add()));
 	}
@@ -219,11 +219,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 {
 	toneGenerator = new AddD(sets(), NULL, this);
 
-	pcmB = new QGroupBox(tr("Dźwięk nieskompresowany PCM"));
+	pcmB = new QGroupBox(tr("Uncompressed PCM sound"));
 	pcmB->setCheckable(true);
 	pcmB->setChecked(sets().getBool("PCM"));
 
-	QLabel *pcmExtsL = new QLabel(tr("Rozszerzenia plików (oddzielone średnikiem)") + ": ");
+	QLabel *pcmExtsL = new QLabel(tr("File extensions (semicolon separated)") + ": ");
 
 	pcmExtsE = new QLineEdit;
 	QString exts;
@@ -243,20 +243,20 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		formatB.append(rB);
 	}
 
-	QLabel *chnL = new QLabel(tr("Ilość kanałów") + ": ");
+	QLabel *chnL = new QLabel(tr("Channel count") + ": ");
 
 	chnB = new QSpinBox;
 	chnB->setRange(1, 8);
 	chnB->setValue(sets().getInt("PCM/chn"));
 
-	QLabel *srateL = new QLabel(tr("Częstotliwość próbkowania") + ": ");
+	QLabel *srateL = new QLabel(tr("Sample rate") + ": ");
 
 	srateB = new QSpinBox;
 	srateB->setSuffix(" Hz");
 	srateB->setRange(2, 1000000000);
 	srateB->setValue(sets().getInt("PCM/srate"));
 
-	QLabel *offsetL = new QLabel(tr("Przesunięcie") + ": ");
+	QLabel *offsetL = new QLabel(tr("Offset") + ": ");
 
 	offsetB = new QSpinBox;
 	offsetB->setSuffix(" B");
@@ -281,7 +281,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	pcmLayout->addWidget(endianB, 4, 1, 1, 2);
 	pcmLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 5, 1, 1, 2);
 
-	rayman2EB = new QCheckBox(tr("Muzyka z gry Rayman2 (*.apm)"));
+	rayman2EB = new QCheckBox(tr("Rayman2 music (*.apm)"));
 	rayman2EB->setChecked(sets().getBool("Rayman2"));
 
 	QGridLayout *layout = new QGridLayout(this);

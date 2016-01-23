@@ -10,7 +10,7 @@
 AddressDialog::AddressDialog(QWidget *p) :
 	QDialog(p), addrB(Qt::Vertical)
 {
-	setWindowTitle(tr("Dodaj adres"));
+	setWindowTitle(tr("Add address"));
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox;
 	buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -22,7 +22,7 @@ AddressDialog::AddressDialog(QWidget *p) :
 	if (idx > -1)
 		pB.setCurrentIndex(idx);
 
-	addAndPlayB.setText(tr("Odtwarzaj"));
+	addAndPlayB.setText(tr("Play"));
 	addAndPlayB.setChecked(QMPlay2Core.getSettings().getBool("AddressDialog/AddAndPlay", true));
 
 	QGridLayout *layout = new QGridLayout(this);

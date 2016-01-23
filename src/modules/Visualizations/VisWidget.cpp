@@ -70,7 +70,7 @@ void VisWidget::contextMenu(const QPoint &point)
 {
 	QMenu *menu = new QMenu(this);
 	connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
-	connect(menu->addAction(tr("Ustawienia")), SIGNAL(triggered()), this, SLOT(showSettings()));
+	connect(menu->addAction(tr("Settings")), SIGNAL(triggered()), this, SLOT(showSettings()));
 	menu->popup(mapToGlobal(point));
 }
 void VisWidget::visibilityChanged(bool v)

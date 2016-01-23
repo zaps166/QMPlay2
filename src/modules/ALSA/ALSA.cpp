@@ -47,21 +47,21 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	const ALSACommon::DevicesList devicesList = ALSACommon::getDevices();
 	const QString devName = ALSACommon::getDeviceName(devicesList, sets().getString("OutputDevice"));
 
-	enabledB = new QCheckBox(tr("Włączony"));
+	enabledB = new QCheckBox(tr("ON"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
-	autoMultichnB = new QCheckBox(tr("Automatycznie znajdź urządzenie dla odtwarzania wielokanałowego"));
+	autoMultichnB = new QCheckBox(tr("Automatic looking for multichannel device"));
 	autoMultichnB->setChecked(sets().getBool("AutoFindMultichnDev"));
 
-	QLabel *delayL = new QLabel(tr("Opóźnienie") + ": ");
+	QLabel *delayL = new QLabel(tr("Delay") + ": ");
 
 	delayB = new QDoubleSpinBox;
 	delayB->setRange(0.01, 1.0);
 	delayB->setSingleStep(0.01);
-	delayB->setSuffix(" " + tr("sek"));
+	delayB->setSuffix(" " + tr("sec"));
 	delayB->setValue(sets().getDouble("Delay"));
 
-	QLabel *devicesL = new QLabel(tr("Urządzenia odtwarzające") + ": ");
+	QLabel *devicesL = new QLabel(tr("Playback device") + ": ");
 
 	devicesB = new QComboBox;
 	for (int i = 0; i < devicesList.first.count(); ++i)

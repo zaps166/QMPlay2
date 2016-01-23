@@ -42,18 +42,18 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 		{
 			case 1:
 				readyToPlay = true;
-				sizeLText = tr("Pobieranie ukończone");
+				sizeLText = tr("Download complete");
 				break;
 			case 2:
-				sizeLText = tr("Pobieranie przerwane");
+				sizeLText = tr("Download aborted");
 				break;
 			case 3:
-				sizeLText = tr("Błąd pobierania");
+				sizeLText = tr("Download error");
 				break;
 		}
 	}
 	else
-		sizeLText = tr("Oczekiwanie na połączenie");
+		sizeLText = tr("Waiting for connection");
 
 	titleL = new QLabel;
 	titleL->setText(name);
@@ -69,17 +69,17 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	if (readyToPlay)
 	{
 		ssB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
-		ssB->setToolTip(tr("Odtwarzaj"));
+		ssB->setToolTip(tr("Play"));
 	}
 	else if (finished)
 	{
 		ssB->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
-		ssB->setToolTip(tr("Pobierz ponownie"));
+		ssB->setToolTip(tr("Download again"));
 	}
 	else
 	{
 		ssB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-stop"));
-		ssB->setToolTip(tr("Zatrzymaj pobieranie"));
+		ssB->setToolTip(tr("Stop downloading"));
 	}
 	connect(ssB, SIGNAL(clicked()), this, SLOT(toggleStartStop()));
 
@@ -123,7 +123,7 @@ void DownloadItemW::setSizeAndFilePath(qint64 size, const QString &filePath)
 {
 	if (!finished)
 	{
-		sizeL->setText(tr("Rozmiar") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
+		sizeL->setText(tr("Size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
 		speedProgressW->progressB->setRange(0, size > -1 ? 100 : 0);
 		this->filePath = filePath;
 	}
@@ -144,9 +144,9 @@ void DownloadItemW::finish(bool f)
 	{
 		delete speedProgressW;
 		if (f)
-			sizeL->setText(tr("Pobieranie ukończone"));
+			sizeL->setText(tr("Download complete"));
 		else
-			sizeL->setText(tr("Pobieranie przerwane"));
+			sizeL->setText(tr("Download aborted"));
 		downloadStop(f);
 	}
 }
@@ -157,7 +157,7 @@ void DownloadItemW::error()
 		if (speedProgressW->progressB->minimum() == speedProgressW->progressB->maximum())
 			speedProgressW->progressB->setRange(-1, 0);
 		speedProgressW->setEnabled(false);
-		sizeL->setText(tr("Błąd pobierania"));
+		sizeL->setText(tr("Download error"));
 		downloadStop(false);
 	}
 }
@@ -168,7 +168,7 @@ void DownloadItemW::write(QDataStream &stream)
 	quint8 type = readyToPlay;
 	if (!type)
 	{
-		if (sizeL->text() == tr("Błąd pobierania"))
+		if (sizeL->text() == tr("Download error"))
 			type = 3;
 		else
 			type = 2;
@@ -202,12 +202,12 @@ void DownloadItemW::downloadStop(bool ok)
 	if (!ok)
 	{
 		ssB->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
-		ssB->setToolTip(tr("Pobierz ponownie"));
+		ssB->setToolTip(tr("Download again"));
 	}
 	else
 	{
 		ssB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
-		ssB->setToolTip(tr("Odtwarzaj"));
+		ssB->setToolTip(tr("Play"));
 		readyToPlay = true;
 	}
 	finished = true;
@@ -301,7 +301,7 @@ void DownloaderThread::run()
 	{
 		if (!item)
 			deleteLater();
-		emit QMPlay2Core.sendMessage(tr("Nieprawidłowy adres"), DownloaderName);
+		emit QMPlay2Core.sendMessage(tr("Invalid address"), DownloaderName);
 		return;
 	}
 
@@ -427,7 +427,7 @@ DownloaderW::DownloaderW()
 {
 	dw = new DockWidget;
 	dw->setObjectName(DownloaderName);
-	dw->setWindowTitle(tr("Pobieranie plików z Internetu"));
+	dw->setWindowTitle(tr("Downloader"));
 	dw->setWidget(this);
 
 	downloadLW = new DownloadListW;
@@ -437,19 +437,19 @@ DownloaderW::DownloaderW()
 
 	setDownloadsDirB = new QToolButton;
 	setDownloadsDirB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-	setDownloadsDirB->setText(tr("Katalog pobierania"));
+	setDownloadsDirB->setText(tr("Download directory"));
 	setDownloadsDirB->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-	setDownloadsDirB->setToolTip(tr("Wybierz katalog dla pobieranych plików"));
+	setDownloadsDirB->setToolTip(tr("Choose directory for downloaded files"));
 	connect(setDownloadsDirB, SIGNAL(clicked()), this, SLOT(setDownloadsDir()));
 
 	clearFinishedB = new QToolButton;
 	clearFinishedB->setIcon(QMPlay2Core.getIconFromTheme("archive-remove"));
-	clearFinishedB->setToolTip(tr("Wyczyść zakończone pobierania"));
+	clearFinishedB->setToolTip(tr("Clear completed downloads"));
 	connect(clearFinishedB, SIGNAL(clicked()), this, SLOT(clearFinished()));
 
 	addUrlB = new QToolButton;
 	addUrlB->setIcon(QMPlay2Core.getIconFromTheme("folder-new"));
-	addUrlB->setToolTip(tr("Wprowadź adres do pobrania"));
+	addUrlB->setToolTip(tr("Enter the address for download"));
 	connect(addUrlB, SIGNAL(clicked()), this, SLOT(addUrl()));
 
 	layout = new QGridLayout(this);
@@ -505,7 +505,7 @@ DownloaderW::~DownloaderW()
 
 void DownloaderW::setDownloadsDir()
 {
-	QFileInfo dir(QFileDialog::getExistingDirectory(this, tr("Wybierz katalog dla pobieranych plików"), downloadLW->downloadsDirPath));
+	QFileInfo dir(QFileDialog::getExistingDirectory(this, tr("Choose directory for downloaded files"), downloadLW->downloadsDirPath));
 #ifndef Q_OS_WIN
 	if (dir.isDir() && dir.isWritable())
 #else
@@ -516,7 +516,7 @@ void DownloaderW::setDownloadsDir()
 		Settings("Downloader").set("DownloadsDirPath", downloadLW->downloadsDirPath);
 	}
 	else if (dir.filePath() != QString())
-		QMessageBox::warning(this, DownloaderName, tr("Nie udało się zmienić katalogu dla pobieranych plików"));
+		QMessageBox::warning(this, DownloaderName, tr("Cannot change downloading files directory"));
 }
 void DownloaderW::clearFinished()
 {
@@ -535,7 +535,7 @@ void DownloaderW::addUrl()
 		if (clipboardUrl.contains('\n') || Functions::getUrlScheme(clipboardUrl) != "http")
 			clipboardUrl.clear();
 	}
-	QString url = QInputDialog::getText(this, DownloaderName, tr("Wprowadź adres"), QLineEdit::Normal, clipboardUrl);
+	QString url = QInputDialog::getText(this, DownloaderName, tr("Enter address"), QLineEdit::Normal, clipboardUrl);
 	if (!url.isEmpty())
 		new DownloaderThread(NULL, url, downloadLW);
 }
@@ -584,7 +584,7 @@ QAction *Downloader::getAction(const QString &name, int, const QString &url, con
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
 				return NULL;
-	QAction *act = new QAction(DownloaderW::tr("Pobierz"), NULL);
+	QAction *act = new QAction(DownloaderW::tr("Download"), NULL);
 	act->setIcon(QIcon(":/downloader"));
 	act->connect(act, SIGNAL(triggered()), w, SLOT(download()));
 	if (!prefix.isEmpty())

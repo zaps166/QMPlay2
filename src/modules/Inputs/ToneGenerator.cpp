@@ -51,7 +51,7 @@ bool ToneGenerator::metadataChanged() const
 
 QString ToneGenerator::name() const
 {
-	return tr("Generator częstotliwości");
+	return tr("Tone generator");
 }
 QString ToneGenerator::title() const
 {
@@ -59,7 +59,7 @@ QString ToneGenerator::title() const
 	foreach (uint hz, freqs)
 		t += "   - " + QString::number(hz) + tr("Hz") + "\n";
 	t.chop(1);
-	return tr("Generator częstotliwości") + " (" + QString::number(srate) + tr("Hz") + "):\n" + t;
+	return tr("Tone generator") + " (" + QString::number(srate) + tr("Hz") + "):\n" + t;
 }
 double ToneGenerator::length() const
 {

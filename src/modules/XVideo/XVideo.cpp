@@ -41,16 +41,16 @@ QMPLAY2_EXPORT_PLUGIN(XVideo)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("Włączony"));
+	enabledB = new QCheckBox(tr("ON"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
-	useSHMB = new QCheckBox(tr("Korzystaj z pamięci współdzielonej"));
+	useSHMB = new QCheckBox(tr("Use shared memory"));
 	useSHMB->setChecked(sets().getBool("UseSHM"));
 
-	QLabel *adaptorsL = new QLabel(tr("Wyjścia dla XVideo") + ": ");
+	QLabel *adaptorsL = new QLabel(tr("XVideo outputs") + ": ");
 
 	adaptorsB = new QComboBox;
-	adaptorsB->addItem(tr("Domyślne"));
+	adaptorsB->addItem(tr("Default"));
 	adaptorsB->addItems(XVIDEO::adaptorsList());
 	int idx = adaptorsB->findText(sets().getString("Adaptor"));
 	adaptorsB->setCurrentIndex(idx < 0 ? 0 : idx);

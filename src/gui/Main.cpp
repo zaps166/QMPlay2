@@ -93,7 +93,7 @@ void QMPlay2GUIClass::saveCover(QByteArray cover)
 		buffer.close();
 		if (!fileExtension.isEmpty())
 		{
-			QString fileName = QFileDialog::getSaveFileName(QMPlay2GUI.mainW, tr("Zapis okładki"), QMPlay2GUI.getCurrentPth(), fileExtension.toUpper() + " (*." + fileExtension + ')');
+			QString fileName = QFileDialog::getSaveFileName(QMPlay2GUI.mainW, tr("Saving cover picture"), QMPlay2GUI.getCurrentPth(), fileExtension.toUpper() + " (*." + fileExtension + ')');
 			if (!fileName.isEmpty())
 			{
 				if (!fileName.endsWith('.' + fileExtension))
@@ -526,7 +526,7 @@ int main(int argc, char *argv[])
 			UpdateFile.remove(0, 7);
 			if (lastVer != QMPlay2Version)
 			{
-				QString updateString = QObject::tr("QMPlay2 został zaktualizowany do wersji") + " " + QMPlay2Version;
+				QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
 				QMPlay2Core.logInfo(updateString);
 				QMessageBox::information(NULL, qApp->applicationName(), updateString);
 			}

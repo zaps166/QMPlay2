@@ -9,7 +9,7 @@
 
 AddressBox::AddressBox(Qt::Orientation o, QString url)
 {
-	pB.addItem(QMPlay2Core.getQMPlay2Pixmap(), tr("Bezpośredni adres"), DIRECT);
+	pB.addItem(QMPlay2Core.getQMPlay2Pixmap(), tr("Direct address"), DIRECT);
 
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, module->getModulesInfo())
@@ -58,7 +58,7 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 	connect(&pB, SIGNAL(currentIndexChanged(int)), this, SLOT(pBIdxChanged()));
 	connect(&aE, SIGNAL(textEdited(const QString &)), this, SLOT(aETextChanged()));
 
-	pE.setToolTip(tr("Dodatkowy parametr dla modułu"));
+	pE.setToolTip(tr("Additional module parameter"));
 	pE.setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
 	QGridLayout *layout = new QGridLayout(this);

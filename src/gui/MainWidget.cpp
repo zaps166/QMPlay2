@@ -115,7 +115,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	statusBar->setSizeGripEnabled(false);
 	timeL = new QLabel;
 	statusBar->addPermanentWidget(timeL);
-	stateL = new QLabel(tr("Zatrzymany"));
+	stateL = new QLabel(tr("Stopped"));
 	statusBar->addWidget(stateL);
 	setStatusBar(statusBar);
 
@@ -177,7 +177,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 
 	mainTB = new QToolBar;
 	mainTB->setObjectName("mainTB");
-	mainTB->setWindowTitle(tr("Główny pasek narzędzi"));
+	mainTB->setWindowTitle(tr("Main toolbar"));
 	mainTB->setAllowedAreas(Qt::BottomToolBarArea | Qt::TopToolBarArea);
 	addToolBar(Qt::BottomToolBarArea, mainTB);
 
@@ -264,7 +264,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	const bool menuHidden = QMPlay2Core.getSettings().getBool("MainWidget/MenuHidden", false);
 	menuBar->setVisible(!menuHidden);
-	hideMenuAct = new QAction(tr("&Ukryj pasek menu"), menuBar);
+	hideMenuAct = new QAction(tr("&Hide menu bar"), menuBar);
 	hideMenuAct->setCheckable(true);
 	hideMenuAct->setAutoRepeat(false);
 	hideMenuAct->setChecked(menuHidden);
@@ -275,7 +275,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 
 	widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked");
 	lockWidgets(widgetsLocked);
-	lockWidgetsAct = new QAction(tr("&Zablokuj widgety"), menuBar);
+	lockWidgetsAct = new QAction(tr("&Lock widgets"), menuBar);
 	lockWidgetsAct->setCheckable(true);
 	lockWidgetsAct->setAutoRepeat(false);
 	lockWidgetsAct->setChecked(widgetsLocked);
@@ -441,12 +441,12 @@ void MainWidget::playStateChanged(bool b)
 	if (b)
 	{
 		menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-pause"));
-		menuBar->player->togglePlay->setText(tr("&Pauza"));
+		menuBar->player->togglePlay->setText(tr("&Paused"));
 	}
 	else
 	{
 		menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
-		menuBar->player->togglePlay->setText(tr("&Odtwarzaj"));
+		menuBar->player->togglePlay->setText(tr("&Play"));
 	}
 	emit QMPlay2Core.playStateChanged(playC.isPlaying() ? (b ? "Playing" : "Paused") : "Stopped");
 }
@@ -861,30 +861,30 @@ void MainWidget::openUrl()
 }
 void MainWidget::openFiles()
 {
-	playlistDock->add(QFileDialog::getOpenFileNames(this, tr("Wybierz pliki"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl(), true)));
+	playlistDock->add(QFileDialog::getOpenFileNames(this, tr("Choose files"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl(), true)));
 }
 void MainWidget::openDir()
 {
-	playlistDock->add(QFileDialog::getExistingDirectory(this, tr("Wybierz katalog"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl())));
+	playlistDock->add(QFileDialog::getExistingDirectory(this, tr("Choose directory"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl())));
 }
 void MainWidget::loadPlist()
 {
-	QString filter = tr("Playlisty") + " (";
+	QString filter = tr("Playlists") + " (";
 	foreach (const QString &e, Playlist::extensions())
 		filter += "*." + e + " ";
 	filter.chop(1);
 	filter += ")";
 	if (filter.isEmpty())
 		return;
-	playlistDock->load(QFileDialog::getOpenFileName(this, tr("Wybierz playlistę"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()), filter));
+	playlistDock->load(QFileDialog::getOpenFileName(this, tr("Choose playlist"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()), filter));
 }
 void MainWidget::savePlist()
 {
-	savePlistHelper(tr("Zapisz playlistę"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()), false);
+	savePlistHelper(tr("Save playlist"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()), false);
 }
 void MainWidget::saveGroup()
 {
-	savePlistHelper(tr("Zapisz grupę"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()) + playlistDock->getCurrentItemName(), true);
+	savePlistHelper(tr("Save group"), QMPlay2GUI.getCurrentPth(playlistDock->getUrl()) + playlistDock->getCurrentItemName(), true);
 }
 void MainWidget::showSettings(const QString &moduleName)
 {
@@ -927,11 +927,11 @@ void MainWidget::browseSubsFile()
 	if (dir.startsWith("file://"))
 		dir.remove(0, 7);
 
-	QString filter = tr("Napisy") + " ASS/SSA (*.ass *.ssa)";
+	QString filter = tr("Subtitles") + " ASS/SSA (*.ass *.ssa)";
 	foreach (const QString &ext, SubsDec::extensions())
-		filter += ";;" + tr("Napisy") + " " + ext.toUpper() + " (*." + ext + ")";
+		filter += ";;" + tr("Subtitles") + " " + ext.toUpper() + " (*." + ext + ")";
 
-	QString f = QFileDialog::getOpenFileName(this, tr("Wybierz napisy do filmu"), dir, filter);
+	QString f = QFileDialog::getOpenFileName(this, tr("Choose subtitles"), dir, filter);
 	if (!f.isEmpty())
 		playC.loadSubsFile(Functions::Url(f));
 }
@@ -945,7 +945,7 @@ void MainWidget::updatePos(int pos)
 }
 void MainWidget::mousePositionOnSlider(int pos)
 {
-	statusBar->showMessage(tr("Wskazana pozycja") + ": " + timeToStr(pos), 750);
+	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos), 750);
 }
 
 void MainWidget::volume(int v)
@@ -1058,7 +1058,7 @@ void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool
 		if (playlistDock->save(plistFile, saveCurrentGroup))
 			QMPlay2GUI.setCurrentPth(Functions::filePath(plistFile));
 		else
-			QMessageBox::critical(this, title, tr("Błąd podczas zapisu playlisty"));
+			QMessageBox::critical(this, title, tr("Error while saving playlist"));
 	}
 }
 
@@ -1179,12 +1179,12 @@ void MainWidget::leaveEvent(QEvent *e)
 }
 void MainWidget::closeEvent(QCloseEvent *e)
 {
-	const QString quitMsg = tr("Czy na pewno chcesz zamknąć program?");
+	const QString quitMsg = tr("Are you sure you want to quit?");
 	if
 	(
-		(QMPlay2Core.isWorking() && QMessageBox::question(this, QString(), tr("QMPlay2 wykonuje pracę w tle.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+		(QMPlay2Core.isWorking() && QMessageBox::question(this, QString(), tr("QMPlay2 is doing something in the background.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
 #ifdef UPDATER
-		|| (updater.downloading() && QMessageBox::question(this, QString(), tr("Aktualizacja jest teraz pobierana.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+		|| (updater.downloading() && QMessageBox::question(this, QString(), tr("The update is downloading now.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
 #endif
 	)
 	{
@@ -1257,7 +1257,7 @@ void MainWidget::showEvent(QShowEvent *)
 		restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
 		wasShow = true;
 	}
-	menuBar->window->toggleVisibility->setText(tr("&Ukryj"));
+	menuBar->window->toggleVisibility->setText(tr("&Hide"));
 }
 void MainWidget::hideEvent(QHideEvent *)
 {
@@ -1268,7 +1268,7 @@ void MainWidget::hideEvent(QHideEvent *)
 		QMPlay2Core.getSettings().set("MainWidget/isMaximized", isMaximized());
 	}
 #endif
-	menuBar->window->toggleVisibility->setText(tr("&Pokaż"));
+	menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
 #ifdef Q_OS_WIN
 #define blockScreenSaver(m) ((m)->message == WM_SYSCOMMAND && (((m)->wParam & 0xFFF0) == SC_SCREENSAVE || ((m)->wParam & 0xFFF0) == SC_MONITORPOWER) && playC.isNowPlayingVideo())

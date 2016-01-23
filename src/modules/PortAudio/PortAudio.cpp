@@ -53,26 +53,26 @@ QMPLAY2_EXPORT_PLUGIN(PortAudio)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("Włączony"));
+	enabledB = new QCheckBox(tr("ON"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
-	QLabel *delayL = new QLabel(tr("Opóźnienie") + ": ");
+	QLabel *delayL = new QLabel(tr("Delay") + ": ");
 
 	delayB = new QDoubleSpinBox;
 	delayB->setRange(0.01, 1.0);
 	delayB->setSingleStep(0.01);
-	delayB->setSuffix(" " + tr("sek"));
+	delayB->setSuffix(" " + tr("sec"));
 	delayB->setValue(sets().getDouble("Delay"));
 
-	QLabel *devicesL = new QLabel(tr("Urządzenia odtwarzające") + ": ");
+	QLabel *devicesL = new QLabel(tr("Playback device") + ": ");
 
 	devicesB = new QComboBox;
-	devicesB->addItems(QStringList(tr("Domyślne")) + PortAudioCommon::getOutputDeviceNames());
+	devicesB->addItems(QStringList(tr("Default")) + PortAudioCommon::getOutputDeviceNames());
 	int idx = devicesB->findText(sets().getString("OutputDevice"));
 	devicesB->setCurrentIndex(idx < 0 ? 0 : idx);
 
 	QPushButton *defaultDevs = new QPushButton;
-	defaultDevs->setText(tr("Znajdź domyślne urządzenie wyjścia dźwięku"));
+	defaultDevs->setText(tr("Find default output device"));
 	connect(defaultDevs, SIGNAL(clicked()), this, SLOT(defaultDevs()));
 
 	QGridLayout *layout = new QGridLayout(this);

@@ -38,7 +38,7 @@ QMPLAY2_EXPORT_PLUGIN(OpenSLES)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	openslesB = new QCheckBox(tr("Włączony"));
+	openslesB = new QCheckBox(tr("ON"));
 	openslesB->setChecked(sets().getBool("WriterEnabled"));
 
 	QGridLayout *layout = new QGridLayout(this);

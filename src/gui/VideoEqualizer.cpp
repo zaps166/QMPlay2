@@ -23,16 +23,16 @@ VideoEqualizer::VideoEqualizer()
 		switch (i)
 		{
 			case BRIGHTNESS:
-				titleL = new QLabel(tr("Jasność") + ": ");
+				titleL = new QLabel(tr("Brightness") + ": ");
 				break;
 			case SATURATION:
-				titleL = new QLabel(tr("Nasycenie") + ": ");
+				titleL = new QLabel(tr("Saturation") + ": ");
 				break;
 			case CONTRAST:
-				titleL = new QLabel(tr("Kontrast") + ": ");
+				titleL = new QLabel(tr("Contrast") + ": ");
 				break;
 			case HUE:
-				titleL = new QLabel(tr("Odcień") + ": ");
+				titleL = new QLabel(tr("Hue") + ": ");
 				break;
 		}
 
@@ -53,7 +53,7 @@ VideoEqualizer::VideoEqualizer()
 		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 	}
 
-	resetB = new QPushButton(tr("Resetuj"));
+	resetB = new QPushButton(tr("Reset"));
 	connect(resetB, SIGNAL(clicked()), this, SLOT(reset()));
 
 	layout->addWidget(resetB, i++, 0, 1, 3);

@@ -150,31 +150,31 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	demuxerEB = new QCheckBox(tr("Demuxer"));
 	demuxerEB->setChecked(sets().getBool("DemuxerEnabled"));
 
-	decoderB = new QGroupBox(tr("Dekoder programowy"));
+	decoderB = new QGroupBox(tr("Software decoder"));
 	decoderB->setCheckable(true);
 	decoderB->setChecked(sets().getBool("DecoderEnabled"));
 
 #ifdef QMPlay2_VDPAU
-	decoderVDPAUB = new QGroupBox(tr("Dekoder") + " VDPAU - " + tr("dekodowanie sprzętowe"));
+	decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
 	decoderVDPAUB->setCheckable(true);
 	decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
 
-	QLabel *vdpauDeintMethodL = new QLabel(tr("Poprawa jakości usuwania przeplotu") + ": ");
+	QLabel *vdpauDeintMethodL = new QLabel(tr("Improving deinterlacing quality") + ": ");
 
 	vdpauDeintMethodB = new QComboBox;
-	vdpauDeintMethodB->addItems(QStringList() << tr("Brak") << "Temporal" << "Temporal-spatial");
+	vdpauDeintMethodB->addItems(QStringList() << tr("None") << "Temporal" << "Temporal-spatial");
 	vdpauDeintMethodB->setCurrentIndex(sets().getInt("VDPAUDeintMethod"));
 	if (vdpauDeintMethodB->currentIndex() < 0)
 		vdpauDeintMethodB->setCurrentIndex(1);
 
-	QLabel *vdpauHQScalingL = new QLabel(tr("Poziom skalowania obrazu") + ": ");
+	QLabel *vdpauHQScalingL = new QLabel(tr("Image scaling level") + ": ");
 
 	vdpauHQScalingB = new QComboBox;
 	for (int i = 0; i <= 9; ++i)
 		vdpauHQScalingB->addItem(QString("Level %1").arg(i));
 	vdpauHQScalingB->setCurrentIndex(sets().getUInt("VDPAUHQScaling"));
 
-	noisereductionVDPAUB = new QCheckBox(tr("Redukcja szumu"));
+	noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
 	noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
 	connect(noisereductionVDPAUB, SIGNAL(clicked()), this, SLOT(checkEnables()));
 	connect(noisereductionVDPAUB, SIGNAL(clicked()), this, SLOT(setVDPAU()));
@@ -185,7 +185,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
 	connect(noisereductionLvlVDPAUS, SIGNAL(valueChanged(int)), this, SLOT(setVDPAU()));
 
-	sharpnessVDPAUB = new QCheckBox(tr("Ostrość"));
+	sharpnessVDPAUB = new QCheckBox(tr("Sharpness"));
 	sharpnessVDPAUB->setChecked(sets().getBool("VDPAUSharpnessEnabled"));
 	connect(sharpnessVDPAUB, SIGNAL(clicked()), this, SLOT(checkEnables()));
 	connect(sharpnessVDPAUB, SIGNAL(clicked()), this, SLOT(setVDPAU()));
@@ -210,17 +210,17 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 
 #ifdef QMPlay2_VAAPI
-	decoderVAAPIEB = new QGroupBox(tr("Dekoder") + " VAAPI - " + tr("dekodowanie sprzętowe"));
+	decoderVAAPIEB = new QGroupBox(tr("Decoder") + " VAAPI - " + tr("hardware decoding"));
 	decoderVAAPIEB->setCheckable(true);
 	decoderVAAPIEB->setChecked(sets().getBool("DecoderVAAPIEnabled"));
 
-	allowVDPAUinVAAPIB = new QCheckBox(tr("Zezwalaj na VDPAU"));
+	allowVDPAUinVAAPIB = new QCheckBox(tr("Allow VDPAU"));
 	allowVDPAUinVAAPIB->setChecked(sets().getBool("AllowVDPAUinVAAPI"));
 
-	QLabel *vaapiDeintMethodL = new QLabel(tr("Poprawa jakości usuwania przeplotu") + ": ");
+	QLabel *vaapiDeintMethodL = new QLabel(tr("Improving deinterlacing quality") + ": ");
 
 	vaapiDeintMethodB = new QComboBox;
-	vaapiDeintMethodB->addItems(QStringList() << tr("Brak") << "Motion adaptive" << "Motion compensated");
+	vaapiDeintMethodB->addItems(QStringList() << tr("None") << "Motion adaptive" << "Motion compensated");
 	vaapiDeintMethodB->setCurrentIndex(sets().getInt("VAAPIDeintMethod"));
 	if (vaapiDeintMethodB->currentIndex() < 0)
 		vaapiDeintMethodB->setCurrentIndex(1);
@@ -237,14 +237,14 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 
 	/* Pospiesz się */
-	hurryUpB = new QGroupBox(tr("Pospiesz się"));
+	hurryUpB = new QGroupBox(tr("Hurry up"));
 	hurryUpB->setCheckable(true);
 	hurryUpB->setChecked(sets().getBool("HurryUP"));
 
-	skipFramesB = new QCheckBox(tr("Pomijaj niektóre klatki"));
+	skipFramesB = new QCheckBox(tr("Skip some frames"));
 	skipFramesB->setChecked(sets().getBool("SkipFrames"));
 
-	forceSkipFramesB = new QCheckBox(tr("Wymuś pomijanie niektórych klatek"));
+	forceSkipFramesB = new QCheckBox(tr("Force frame skipping"));
 	forceSkipFramesB->setChecked(sets().getBool("ForceSkipFrames"));
 
 	QHBoxLayout *hurryUpLayout = new QHBoxLayout(hurryUpB);
@@ -252,17 +252,17 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	hurryUpLayout->addWidget(forceSkipFramesB);
 	/**/
 
-	QLabel *threadsL = new QLabel(tr("Ilość wątków użytych do dekodowania wideo") + ": ");
+	QLabel *threadsL = new QLabel(tr("Number of threads used to decode video") + ": ");
 
 	threadsB = new QSpinBox;
 	threadsB->setRange(0, 16);
-	threadsB->setSpecialValueText(tr("Automatycznie"));
+	threadsB->setSpecialValueText(tr("Autodetect"));
 	threadsB->setValue(sets().getInt("Threads"));
 
-	QLabel *lowresL = new QLabel(tr("Dekodowanie w niskiej rozdzielczości (niektóre kodeki)") + ": ");
+	QLabel *lowresL = new QLabel(tr("Low resolution decoding (only some codecs)") + ": ");
 
 	lowresB = new QComboBox;
-	lowresB->addItems(QStringList() << tr("Normalna wielkość") << tr("4x mniejszy") << tr("16x mniejszy"));
+	lowresB->addItems(QStringList() << tr("Normal size") << tr("4x smaller") << tr("16x smaller"));
 	lowresB->setCurrentIndex(sets().getInt("LowresValue"));
 	if (lowresB->currentIndex() < 0)
 	{
@@ -270,10 +270,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		sets().set("LowresValue", 0);
 	}
 
-	QLabel *thrTypeL = new QLabel(tr("Sposób dekodowania wielowątkowego") + ": ");
+	QLabel *thrTypeL = new QLabel(tr("Method of multithreaded decoding") + ": ");
 
 	thrTypeB = new QComboBox;
-	thrTypeB->addItems(QStringList() << tr("Ramki") << tr("Kawałki"));
+	thrTypeB->addItems(QStringList() << tr("Frames") << tr("Slices"));
 	thrTypeB->setCurrentIndex(sets().getInt("ThreadTypeSlice"));
 	if (thrTypeB->currentIndex() < 0)
 	{

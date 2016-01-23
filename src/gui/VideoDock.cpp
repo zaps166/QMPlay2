@@ -23,7 +23,7 @@ VideoDock::VideoDock() :
 	canPopup(true), is_floating(false),
 	touchZoom(0.0)
 {
-	setWindowTitle(tr("Wideo"));
+	setWindowTitle(tr("Video"));
 
 	popupMenu = new QMenu(this);
 	popupMenu->addMenu(QMPlay2GUI.menuBar->window);

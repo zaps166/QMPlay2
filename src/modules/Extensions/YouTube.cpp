@@ -204,7 +204,7 @@ public:
 			return QString(youtubedl_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
 		}
 		else if (!aborted && youtubedl_process.error() == QProcess::FailedToStart)
-			emit QMPlay2Core.sendMessage(YouTubeW::tr("Brakuje zewnętrznego programu - 'youtube-dl'. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube."), YouTubeName, 2, 0);
+			emit QMPlay2Core.sendMessage(YouTubeW::tr("There is no external program - 'youtube-dl'. Download it, and then set the path to it in the YouTube module options."), YouTubeName, 2, 0);
 		return QStringList();
 	}
 private:
@@ -229,9 +229,9 @@ ResultsYoutube::ResultsYoutube()
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
-	headerItem()->setText(0, tr("Tytuł"));
-	headerItem()->setText(1, tr("Długość"));
-	headerItem()->setText(2, tr("Użytkownik"));
+	headerItem()->setText(0, tr("Title"));
+	headerItem()->setText(1, tr("Length"));
+	headerItem()->setText(2, tr("User"));
 
 	header()->setStretchLastSection(false);
 #if QT_VERSION < 0x050000
@@ -351,12 +351,12 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 		const bool isOK = !tWI->isDisabled();
 		if (isOK)
 		{
-			menu.addAction(tr("Kolejkuj"), this, SLOT(enqueue()));
-			menu.addAction(tr("Odtwórz"), this, SLOT(playCurrentEntry()));
+			menu.addAction(tr("Enqueue"), this, SLOT(enqueue()));
+			menu.addAction(tr("Play"), this, SLOT(playCurrentEntry()));
 			menu.addSeparator();
 		}
-		menu.addAction(tr("Otwórz stronę w przeglądarce"), this, SLOT(openPage()));
-		menu.addAction(tr("Kopiuj adres strony"), this, SLOT(copyPageURL()));
+		menu.addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
+		menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 		menu.addSeparator();
 		if (isOK)
 		{
@@ -369,7 +369,7 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
 			if (!streamUrl.isNull())
 			{
-				menu.addAction(tr("Kopiuj adres strumienia"), this, SLOT(copyStreamURL()))->setProperty("StreamUrl", streamUrl);
+				menu.addAction(tr("Copy stream address"), this, SLOT(copyStreamURL()))->setProperty("StreamUrl", streamUrl);
 				menu.addSeparator();
 			}
 
@@ -443,13 +443,13 @@ YouTubeW::YouTubeW(QWidget *parent) :
 	searchB = new QToolButton;
 	connect(searchB, SIGNAL(clicked()), this, SLOT(search()));
 	searchB->setIcon(QIcon(":/browserengine"));
-	searchB->setToolTip(tr("Wyszukaj"));
+	searchB->setToolTip(tr("Search"));
 	searchB->setAutoRaise(true);
 
 	showSettingsB = new QToolButton;
 	connect(showSettingsB, SIGNAL(clicked()), this, SLOT(showSettings()));
 	showSettingsB->setIcon(QMPlay2Core.getIconFromTheme("configure"));
-	showSettingsB->setToolTip(tr("Ustawienia"));
+	showSettingsB->setToolTip(tr("Settings"));
 	showSettingsB->setAutoRaise(true);
 
 	resultsW = new ResultsYoutube;
@@ -558,7 +558,7 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 			lastTitle.clear();
 			progressB->hide();
 			pageSwitcher->hide();
-			emit QMPlay2Core.sendMessage(tr("Błąd połączenia"), YouTubeName, 3);
+			emit QMPlay2Core.sendMessage(tr("Connection error"), YouTubeName, 3);
 		}
 	}
 	else if (!redirectedReply)
@@ -1127,7 +1127,7 @@ QAction *YouTube::getAction(const QString &name, int, const QString &url, const 
 {
 	if (name != url)
 	{
-		QAction *act = new QAction(YouTubeW::tr("Wyszukaj w YouTube"), NULL);
+		QAction *act = new QAction(YouTubeW::tr("Search on YouTube"), NULL);
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/youtube"));
 		act->setProperty("name", name);

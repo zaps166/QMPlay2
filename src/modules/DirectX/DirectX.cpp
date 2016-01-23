@@ -38,7 +38,7 @@ QMPLAY2_EXPORT_PLUGIN(DirectX)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	ddrawB = new QCheckBox(tr("Włączony"));
+	ddrawB = new QCheckBox(tr("ON"));
 	ddrawB->setChecked(sets().getBool("DirectDrawEnabled"));
 
 	QGridLayout *layout = new QGridLayout(this);

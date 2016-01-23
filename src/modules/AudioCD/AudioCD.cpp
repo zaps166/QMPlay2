@@ -48,7 +48,7 @@ QList< QAction * > AudioCD::getAddActions()
 {
 	QAction *actCD = new QAction(NULL);
 	actCD->setIcon(QIcon(":/AudioCD"));
-	actCD->setText(tr("Płyta AudioCD"));
+	actCD->setText(tr("AudioCD"));
 	actCD->connect(actCD, SIGNAL(triggered()), this, SLOT(add()));
 	return QList< QAction * >() << actCD;
 }
@@ -66,8 +66,8 @@ void AudioCD::add()
 	{
 		QDialog chooseCD(parent);
 		chooseCD.setWindowIcon(QIcon(":/AudioCD"));
-		chooseCD.setWindowTitle(tr("Wybierz napęd"));
-		QLabel drvL(tr("Ścieżka") + ":");
+		chooseCD.setWindowTitle(tr("Choose the drive"));
+		QLabel drvL(tr("Path") + ":");
 		drvL.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
 		QComboBox drvB;
 		QLineEdit drvE;
@@ -98,12 +98,12 @@ void AudioCD::add()
 		}
 	}
 	else
-		QMessageBox::information(parent, AudioCDName, tr("Nie znaleziono napędów CD/DVD!"));
+		QMessageBox::information(parent, AudioCDName, tr("No CD/DVD drives found!"));
 }
 void AudioCD::browseCDImage()
 {
 	QWidget *parent = (QWidget *)sender()->parent();
-	QString path = QFileDialog::getOpenFileName(parent, tr("Wybierz obraz AudioCD"), QString(), tr("Obsługiwane obrazy AudioCD") + " (*.cue *.nrg *.toc)");
+	QString path = QFileDialog::getOpenFileName(parent, tr("Choose AudioCD image"), QString(), tr("Supported AudioCD images") + " (*.cue *.nrg *.toc)");
 	if (!path.isEmpty())
 	{
 		QComboBox &drvB = *parent->findChild< QComboBox * >();
@@ -125,10 +125,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 {
 	audioCDB = new QGroupBox(tr("AudioCD"));
 
-	useCDDB = new QCheckBox(tr("Używaj CDDB, jeżeli CD-TEXT jest niedostępny"));
+	useCDDB = new QCheckBox(tr("Use CDDB if CD-TEXT is not available"));
 	useCDDB->setChecked(sets().getBool("AudioCD/CDDB"));
 
-	useCDTEXT = new QCheckBox(tr("Używaj CD-TEXT"));
+	useCDTEXT = new QCheckBox(tr("Use CD-TEXT"));
 	useCDTEXT->setChecked(sets().getBool("AudioCD/CDTEXT"));
 
 	QVBoxLayout *audioCDBLayout = new QVBoxLayout(audioCDB);

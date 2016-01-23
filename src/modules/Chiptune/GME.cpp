@@ -178,9 +178,9 @@ bool GME::open(const QString &_url, bool tracksOnly)
 			if (*info->system)
 				m_tags << qMakePair(tr("System"), QString(info->system));
 			if (*info->copyright)
-				m_tags << qMakePair(tr("Prawo autorskie"), QString(info->copyright));
+				m_tags << qMakePair(tr("Copyright"), QString(info->copyright));
 			if (*info->comment)
-				m_tags << qMakePair(tr("Komentarz"), QString(info->comment));
+				m_tags << qMakePair(tr("Comment"), QString(info->comment));
 
 			gme_free_info(info);
 		}
@@ -193,9 +193,9 @@ bool GME::open(const QString &_url, bool tracksOnly)
 			voices += ", ";
 		}
 		voices.chop(2);
-		m_tags << qMakePair(tr("Głosy"), voices);
+		m_tags << qMakePair(tr("Voices"), voices);
 
-		m_tags << qMakePair(tr("Ścieżka"), QString::number(track + 1));
+		m_tags << qMakePair(tr("Path"), QString::number(track + 1));
 
 		streams_info += new StreamInfo(m_srate, 2);
 
@@ -216,7 +216,7 @@ QString GME::getTitle(gme_info_t *info, int track) const
 	else
 		ret = title;
 	if (gme_track_count(m_gme) > 1)
-		return tr("Ścieżka") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
+		return tr("Path") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
 	return ret;
 }
 int GME::getLength(gme_info_t *info) const

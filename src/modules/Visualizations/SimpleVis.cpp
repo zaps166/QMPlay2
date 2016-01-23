@@ -30,7 +30,7 @@ SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
 	fullScreen(false)
 {
 	dw->setObjectName(SimpleVisName);
-	dw->setWindowTitle(tr("Prosta wizualizacja"));
+	dw->setWindowTitle(tr("Simple visualization"));
 	dw->setWidget(this);
 
 	chn = 2;

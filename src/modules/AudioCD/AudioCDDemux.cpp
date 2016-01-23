@@ -113,14 +113,14 @@ QString AudioCDDemux::title() const
 {
 	QString prefix, suffix;
 	if (isData)
-		suffix = " - " + tr("Dane");
+		suffix = " - " + tr("Data");
 	else if (!Title.isEmpty() && !Artist.isEmpty())
 		return Artist + " - " + Title;
 	else if (!Title.isEmpty())
 		return Title;
 	else if (!Artist.isEmpty())
 		prefix = Artist + " - ";
-	return prefix + tr("Ścieżka") + " " + QString::number(trackNo) + suffix;
+	return prefix + tr("Path") + " " + QString::number(trackNo) + suffix;
 }
 QList< QMPlay2Tag > AudioCDDemux::tags() const
 {
@@ -133,7 +133,7 @@ QList< QMPlay2Tag > AudioCDDemux::tags() const
 		tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), cdTitle);
 	if (!Genre.isEmpty())
 		tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), Genre);
-	tagList << qMakePair(tr("Ścieżka"), QString::number(trackNo));
+	tagList << qMakePair(tr("Path"), QString::number(trackNo));
 	return tagList;
 }
 double AudioCDDemux::length() const
@@ -242,13 +242,13 @@ bool AudioCDDemux::open(const QString &_url)
 					return true;
 				}
 				else
-					QMPlay2Core.log(tr("Błąd odczytu ścieżki"));
+					QMPlay2Core.log(tr("Error reading track"));
 			}
 			else
-				QMPlay2Core.log(tr("Brak płyty w napędzie"));
+				QMPlay2Core.log(tr("No CD"));
 		}
 		else
-			QMPlay2Core.log(tr("Nieprawidłowa ścieżka do napędu CD"));
+			QMPlay2Core.log(tr("Invalid path to CD drive"));
 	}
 	return false;
 }
@@ -262,7 +262,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 		{
 			entries = getTracks(url.mid(strlen(AudioCDName) + 3));
 			if (entries.isEmpty())
-				emit QMPlay2Core.sendMessage(tr("Brak płyty AudioCD w napędzie!"), AudioCDName, 2, 0);
+				emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
 			ok = !entries.isEmpty();
 		}
 		if (!entries.isEmpty())

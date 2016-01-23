@@ -42,10 +42,10 @@ QMPLAY2_EXPORT_PLUGIN(Playlists)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	plsEnabledB = new QCheckBox(tr("Obsługa formatu PLS"));
+	plsEnabledB = new QCheckBox(tr("PLS support"));
 	plsEnabledB->setChecked(sets().getBool("PLS_enabled"));
 
-	m3uEnabledB = new QCheckBox(tr("Obsługa formatu M3U"));
+	m3uEnabledB = new QCheckBox(tr("M3U support"));
 	m3uEnabledB->setChecked(sets().getBool("M3U_enabled"));
 
 	QGridLayout *layout = new QGridLayout(this);

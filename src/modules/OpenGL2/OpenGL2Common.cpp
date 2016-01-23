@@ -216,7 +216,7 @@ void OpenGL2Common::initializeGL()
 	}
 	else
 	{
-		QMPlay2Core.logError(tr("Błąd podczas kompilacji/linkowania shaderów"));
+		QMPlay2Core.logError(tr("Shader compile/link error"));
 		isOK = false;
 		return;
 	}
@@ -241,7 +241,7 @@ void OpenGL2Common::initializeGL()
 	}
 	else
 	{
-		QMPlay2Core.logError(tr("Błąd podczas kompilacji/linkowania shaderów"));
+		QMPlay2Core.logError(tr("Shader compile/link error"));
 		isOK = false;
 		return;
 	}
@@ -455,7 +455,7 @@ void OpenGL2Common::showOpenGLMissingFeaturesMessage()
 		supportsShaders ? "yes" : "no",
 		glActiveTexture ? "yes" : "no"
 	);
-	QMPlay2Core.logError("OpenGL 2 :: " + tr("Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze"), true, true);
+	QMPlay2Core.logError("OpenGL 2 :: " + tr("Driver must support multitexturing, shaders and Non-Power-Of-Two texture size"), true, true);
 }
 #endif
 
