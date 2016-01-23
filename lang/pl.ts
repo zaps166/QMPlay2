@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="pl_PL" sourcelanguage="en">
+<defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -247,10 +248,6 @@
     <message>
         <source>&amp;Aspect tatio</source>
         <translation>W&amp;spółczynnik proporcji</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation>&amp;Auto</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
@@ -1747,8 +1744,8 @@ amp</translation>
     </message>
     <message>
         <source>  Parameters list:
-    -open      &quot;address&quot;
-    -enqueue   &quot;address&quot;
+    -open         &quot;address&quot;
+    -enqueue      &quot;address&quot;
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2274,14 +2271,6 @@ amp</translation>
     <message>
         <source>&amp;From the longest to the shortest</source>
         <translation>O&amp;d najdłuższej do najkrótszej</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation>&amp;A-Z</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation>&amp;Z-A</translation>
     </message>
     <message>
         <source>&amp;Sort</source>

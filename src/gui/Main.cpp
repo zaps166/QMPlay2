@@ -287,21 +287,21 @@ static void showHelp(const QByteArray &ver)
 	f.open(stdout, QFile::WriteOnly);
 	f.write("QMPlay2 - Qt Media Player 2 (" + ver + ")\n");
 	f.write(QObject::tr(
-"  Lista parametrów:\n"
-"    -open      \"adres\"\n"
-"    -enqueue   \"adres\"\n"
-"    -noplay     - nie odtwarza muzyki po uruchomieniu (omija opcję \"Zapamiętaj pozycję odtwarzania\")\n"
-"    -toggle     - przełącza play/pause\n"
-"    -show       - zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona\n"
-"    -fullscreen - przełącza z/do pełnego ekranu\n"
-"    -volume     - ustawia głośność [0..100]\n"
-"    -speed      - ustawia szybkość odtwarzania [0.05..100.0]\n"
-"    -seek       - przewija do podanej wartości [s]\n"
-"    -stop       - zatrzymuje odtwarzanie\n"
-"    -next       - odtwarza następny na liście\n"
-"    -prev       - odtwarza poprzedni na liście\n"
-"    -quit       - zakańcza działanie aplikacji"
-	).toUtf8() + "\n");
+"  Parameters list:\n"
+"    -open         \"address\"\n"
+"    -enqueue      \"address\"\n"
+"    -noplay     - doesn't play after run (bypass \"Remember play position\" option)\n"
+"    -toggle     - toggles play/pause\n"
+"    -show       - ensures that the window will be visible if the application is running\n"
+"    -fullscreen - toggles fullscreen\n"
+"    -volume     - sets volume [0..100]\n"
+"    -speed      - sets playback speed [0.05..100.0]\n"
+"    -seek       - seeks to the specified value [s]\n"
+"    -stop       - stops playback\n"
+"    -next       - plays next on the list\n"
+"    -prev       - plays previous on the list\n"
+"    -quit       - terminates the application"
+    ).toLatin1() + "\n");
 }
 static bool writeToSocket(QLocalSocket &socket)
 {

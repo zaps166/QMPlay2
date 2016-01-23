@@ -195,7 +195,7 @@ bool GME::open(const QString &_url, bool tracksOnly)
 		voices.chop(2);
 		m_tags << qMakePair(tr("Voices"), voices);
 
-		m_tags << qMakePair(tr("Path"), QString::number(track + 1));
+		m_tags << qMakePair(tr("Track"), QString::number(track + 1));
 
 		streams_info += new StreamInfo(m_srate, 2);
 
@@ -216,7 +216,7 @@ QString GME::getTitle(gme_info_t *info, int track) const
 	else
 		ret = title;
 	if (gme_track_count(m_gme) > 1)
-		return tr("Path") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
+		return tr("Track") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
 	return ret;
 }
 int GME::getLength(gme_info_t *info) const

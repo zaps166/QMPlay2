@@ -47,7 +47,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	const ALSACommon::DevicesList devicesList = ALSACommon::getDevices();
 	const QString devName = ALSACommon::getDeviceName(devicesList, sets().getString("OutputDevice"));
 
-	enabledB = new QCheckBox(tr("ON"));
+	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
 	autoMultichnB = new QCheckBox(tr("Automatic looking for multichannel device"));

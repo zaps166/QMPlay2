@@ -120,7 +120,7 @@ QString AudioCDDemux::title() const
 		return Title;
 	else if (!Artist.isEmpty())
 		prefix = Artist + " - ";
-	return prefix + tr("Path") + " " + QString::number(trackNo) + suffix;
+	return prefix + tr("Track") + " " + QString::number(trackNo) + suffix;
 }
 QList< QMPlay2Tag > AudioCDDemux::tags() const
 {
@@ -133,7 +133,7 @@ QList< QMPlay2Tag > AudioCDDemux::tags() const
 		tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), cdTitle);
 	if (!Genre.isEmpty())
 		tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), Genre);
-	tagList << qMakePair(tr("Path"), QString::number(trackNo));
+	tagList << qMakePair(tr("Track"), QString::number(trackNo));
 	return tagList;
 }
 double AudioCDDemux::length() const

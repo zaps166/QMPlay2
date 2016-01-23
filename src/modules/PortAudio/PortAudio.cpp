@@ -53,7 +53,7 @@ QMPLAY2_EXPORT_PLUGIN(PortAudio)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("ON"));
+	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
 	QLabel *delayL = new QLabel(tr("Delay") + ": ");

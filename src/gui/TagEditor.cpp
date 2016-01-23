@@ -176,7 +176,7 @@ TagEditor::TagEditor() :
 	yearB->setRange(0, 32767);
 	yearB->setSpecialValueText(tr("None"));
 
-	QLabel *trackL = new QLabel(tr("Path") + ": ");
+	QLabel *trackL = new QLabel(tr("Track") + ": ");
 	trackB = new QSpinBox;
 	trackB->setRange(0, 32767);
 	trackB->setSpecialValueText(tr("None"));

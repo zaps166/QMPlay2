@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE" sourcelanguage="en">
+<defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -247,10 +248,6 @@
     <message>
         <source>&amp;Aspect tatio</source>
         <translation>&amp;Seitenverhältnis</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation>&amp;Auto</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
@@ -628,7 +625,8 @@
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EqualizerGUI</name>
@@ -1236,19 +1234,24 @@ amp</translation>
     </message>
     <message>
         <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
@@ -1741,8 +1744,8 @@ amp</translation>
     </message>
     <message>
         <source>  Parameters list:
-    -open      &quot;address&quot;
-    -enqueue   &quot;address&quot;
+    -open         &quot;address&quot;
+    -enqueue      &quot;address&quot;
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2269,12 +2272,6 @@ amp</translation>
         <source>&amp;From the longest to the shortest</source>
         <translation>V&amp;om längsten zum kürzesten</translation>
     </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
     <message>
         <source>&amp;Sort</source>
         <translation>&amp;Sortieren</translation>

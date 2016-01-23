@@ -50,7 +50,7 @@ bool PulseAudioWriter::processParams(bool *)
 		if (!err)
 			modParam("delay", pulse.delay);
 		else
-			QMPlay2Core.logError("PulseAudio :: " + tr ("Nie można otworzyć strumienia wyjścia dźwięku"));
+			QMPlay2Core.logError("PulseAudio :: " + tr("Cannot open audio output stream"));
 	}
 
 	return readyWrite();
@@ -63,7 +63,7 @@ qint64 PulseAudioWriter::write(const QByteArray &arr)
 	err = !pulse.write(arr);
 	if (err)
 	{
-		QMPlay2Core.logError("PulseAudio :: " + tr ("Błąd podczas odtwarzania"));
+		QMPlay2Core.logError("PulseAudio :: " + tr("Playback error"));
 		return 0;
 	}
 

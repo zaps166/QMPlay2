@@ -44,7 +44,7 @@ QMPLAY2_EXPORT_PLUGIN(OpenGL2)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	enabledB = new QCheckBox(tr("ON"));
+	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
 #ifdef OPENGL_NEW_API

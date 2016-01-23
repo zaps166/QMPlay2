@@ -218,7 +218,7 @@ bool SIDPlay::open(const QString &_url, bool tracksOnly)
 			m_tags << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), author);
 		if (!released.isEmpty())
 			m_tags << qMakePair(QString::number(QMPLAY2_TAG_DATE), released);
-		m_tags << qMakePair(tr("Path"), QString::number(track + 1));
+		m_tags << qMakePair(tr("Track"), QString::number(track + 1));
 
 		streams_info += new StreamInfo(m_srate, m_chn);
 
@@ -238,6 +238,6 @@ QString SIDPlay::getTitle(const SidTuneInfo *info, int track) const
 	else
 		ret = title;
 	if (info->songs() > 1)
-		return tr("Path") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
+		return tr("Track") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
 	return ret;
 }

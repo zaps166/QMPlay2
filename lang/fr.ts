@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR" sourcelanguage="en">
+<defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -249,9 +250,6 @@
         <translation>&amp;Radio d&apos;aspect</translation>
     </message>
     <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
-    <message>
         <source>&amp;Disabled</source>
         <translation>&amp;Désactivé</translation>
     </message>
@@ -284,7 +282,8 @@
     </message>
     <message>
         <source>Choose the drive</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioCDDemux</name>
@@ -642,7 +641,8 @@
     <message>
         <source>Pre
 amp</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>
@@ -673,10 +673,12 @@ amp</source>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Copyright</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Comment</source>
         <translation>Commentaire</translation>
@@ -687,7 +689,8 @@ amp</source>
     </message>
     <message>
         <source>Voices</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -847,13 +850,16 @@ amp</source>
     </message>
     <message>
         <source>Save group</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
@@ -1223,22 +1229,28 @@ amp</source>
     </message>
     <message>
         <source>Default length</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
@@ -1299,10 +1311,12 @@ amp</source>
     <name>OpenGL2Common</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Options</name>
@@ -1620,7 +1634,8 @@ amp</source>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1650,7 +1665,8 @@ amp</source>
     </message>
     <message>
         <source>Synchronizing with file is not supported</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PortAudioWriter</name>
@@ -1671,17 +1687,20 @@ amp</source>
     </message>
     <message>
         <source>Next page</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Connection error</source>
         <translation>Erreur de connexion</translation>
     </message>
     <message>
         <source>Try again later</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PulseAudioWriter</name>
@@ -1724,8 +1743,8 @@ amp</source>
     </message>
     <message>
         <source>  Parameters list:
-    -open      &quot;address&quot;
-    -enqueue   &quot;address&quot;
+    -open         &quot;address&quot;
+    -enqueue      &quot;address&quot;
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2180,7 +2199,8 @@ amp</source>
     </message>
     <message>
         <source>Remember video equalizer settings</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
         <translation>Taille de la mémoire tampon locale (nombre de paquets A/V)</translation>
@@ -2191,37 +2211,48 @@ amp</source>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Default audio language</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Default subtitles language</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Default or first stream</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Amplify</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Move up</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Move down</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Video output priority</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Audio output priority</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Decoders priority</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>
@@ -2240,12 +2271,6 @@ amp</source>
         <source>&amp;From the longest to the shortest</source>
         <translation>&amp;De la plus longue à la plus courte</translation>
     </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
     <message>
         <source>&amp;Sort</source>
         <translation>&amp;Trier</translation>
@@ -2403,7 +2428,8 @@ amp</source>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VDPAUWriter</name>

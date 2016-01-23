@@ -714,7 +714,7 @@ void DemuxerThr::emitInfo()
 	if (!subtitlesStreams.isEmpty())
 		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Subtitles streams") + ":</big></b></p>" + subtitlesStreams;
 	if (!attachmentStreams.isEmpty())
-		info += "<p style='margin-bottom: 0px;'><b><big>" + tr ("Dołączone pliki") + ":</big></b></p>" + attachmentStreams;
+		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Attached files") + ":</big></b></p>" + attachmentStreams;
 
 	emit playC.setInfo(info, videoPlaying, audioPlaying);
 	emit playC.updateCurrentEntry(formatTitle, demuxer->length());

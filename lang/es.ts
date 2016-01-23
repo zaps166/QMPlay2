@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="es_ES" sourcelanguage="en">
+<defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -244,10 +245,6 @@
 </context>
 <context>
     <name>AspectRatio</name>
-    <message>
-        <source></source>
-        <translation>&amp;Automático</translation>
-    </message>
     <message>
         <source>&amp;Aspect tatio</source>
         <translation>Relaci&amp;ón de aspecto</translation>
@@ -1237,19 +1234,24 @@ amp</translation>
     </message>
     <message>
         <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>    </message>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
@@ -1738,8 +1740,8 @@ amp</translation>
     </message>
     <message>
         <source>  Parameters list:
-    -open      &quot;address&quot;
-    -enqueue   &quot;address&quot;
+    -open         &quot;address&quot;
+    -enqueue      &quot;address&quot;
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2262,12 +2264,6 @@ amp</translation>
 </context>
 <context>
     <name>Sort</name>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>    </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
         <translation>Desde la más &amp;larga a la más corta</translation>
