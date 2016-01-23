@@ -1758,8 +1758,8 @@ amp</translation>
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
         <translation>  Lista parametrów:
-    -open      &quot;adres&quot;
-    -enqueue   &quot;adres&quot;
+    -open         &quot;adres&quot;
+    -enqueue      &quot;adres&quot;
     -noplay     - nie odtwarza muzyki po uruchomieniu (omija opcję &quot;Zapamiętaj pozycję odtwarzania&quot;)
     -toggle     - przełącza play/pause
     -show       - zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona

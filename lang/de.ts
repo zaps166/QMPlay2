@@ -1758,8 +1758,8 @@ amp</translation>
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
         <translation>  Parameters list:
-    -open      &quot;address&quot;
-    -enqueue   &quot;address&quot;
+    -open         &quot;address&quot;
+    -enqueue      &quot;address&quot;
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running

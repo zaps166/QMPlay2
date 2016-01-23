@@ -1757,8 +1757,8 @@ amp</source>
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
         <translation>  Parameters list:
-    -open      &quot;adresse&quot;
-    -enqueue   &quot;adresse&quot;
+    -open         &quot;adresse&quot;
+    -enqueue      &quot;adresse&quot;
     -noplay     - ne joue p&apos;as après (passer outre l&apos;option &quot;mémoriser la position de lecture&quot;)
     -toggle     - bascule entre lecture/pause
     -show       - Assure que la fenêtre sera visible si l&apos;application tourne

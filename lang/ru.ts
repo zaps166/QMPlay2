@@ -1757,8 +1757,8 @@ amp</source>
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
         <translation>  Список параметров:
-     -open      &quot;адрес&quot;
-     -enqueue   &quot;адрес&quot;
+     -open         &quot;адрес&quot;
+     -enqueue      &quot;адрес&quot;
      -noplay     - не воспроизводить при запуске (обходит &quot;Запоминать позицию воспроизведения&quot;)
      -toggle     - переключение воспроизведение/пауза
      -show       - гарантирует что окно будет видно если приложение работает

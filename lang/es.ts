@@ -1754,8 +1754,8 @@ amp</translation>
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
         <translation>  Lista de parámetros:
-    -open      &quot;añadirress&quot;
-    -enqueue   &quot;direccións&quot;
+    -open         &quot;añadirress&quot;
+    -enqueue      &quot;direccións&quot;
     -noplay     - no se reproduce después de la ejecución (opción derivación &quot;Recordar posición de reproducción&quot;)
     -toggle     - conmuta pausa/reproducción
     -show       - asegura que la ventana será visible si se ejecuta la aplicación
