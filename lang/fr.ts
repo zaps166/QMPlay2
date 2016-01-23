@@ -1,325 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr" sourcelanguage="pl_PL">
-<defaultcodec>UTF-8</defaultcodec>
+<TS version="2.0" language="fr_FR" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
-        <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
+        <source>Cannot open audio output stream</source>
         <translation>Impossible d&apos;ouvrir le flux de sortie audio</translation>
     </message>
     <message>
-        <source>Błąd podczas odtwarzania</source>
+        <source>Playback error</source>
         <translation>Erreur de lecture</translation>
     </message>
     <message>
-        <source>Nie można otworzyć</source>
+        <source>Cannot open</source>
         <translation>Ne peut ouvrir</translation>
     </message>
     <message>
-        <source>powrót do</source>
+        <source>back to</source>
         <translation>Retour vers</translation>
     </message>
 </context>
 <context>
     <name>AboutWidget</name>
     <message>
-        <source>O QMPlay2</source>
+        <source>About QMPlay2</source>
         <translation>A propos de QMPlay2</translation>
     </message>
     <message>
-        <source>odtwarzacz filmów</source>
+        <source>video player</source>
         <translation>Lecteur vidéo</translation>
     </message>
     <message>
-        <source>Logi</source>
+        <source>Logs</source>
         <translation>Logs</translation>
     </message>
     <message>
-        <source>Wyczyść log</source>
+        <source>Clear log</source>
         <translation>Nettoyer les log</translation>
     </message>
     <message>
-        <source>Zamknij</source>
+        <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <source>Nie udało się wyczyścić loga</source>
+        <source>Can&apos;t clear log</source>
         <translation>Impossible de nettoyer le log</translation>
     </message>
     <message>
-        <source>Lista zmian</source>
+        <source>Change log</source>
         <translation>Changer log</translation>
     </message>
     <message>
-        <source>Wersja</source>
+        <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <source>Twórca i programista</source>
+        <source>Creator and developer</source>
         <translation>Créateur et développeur</translation>
     </message>
     <message>
-        <source>Twórca programu</source>
+        <source>Software creator</source>
         <translation>Créateur du logiciel</translation>
     </message>
 </context>
 <context>
     <name>Add</name>
     <message>
-        <source>&amp;Adres</source>
+        <source>&amp;Address</source>
         <translation>&amp;Adresse</translation>
     </message>
     <message>
-        <source>&amp;Pliki</source>
+        <source>&amp;Files</source>
         <translation>&amp;Fichiers</translation>
     </message>
     <message>
-        <source>&amp;Katalog</source>
+        <source>&amp;Directory</source>
         <translation>&amp;Dossier</translation>
     </message>
     <message>
-        <source>&amp;Dodaj</source>
+        <source>&amp;Add</source>
         <translation>&amp;Ajouter</translation>
     </message>
 </context>
 <context>
     <name>AddD</name>
     <message>
-        <source>Generator częstotliwości</source>
+        <source>Tone generator</source>
         <translation>Générateur de tonalités</translation>
     </message>
     <message>
-        <source>Ilość kanałów</source>
+        <source>Channel count</source>
         <translation>Nombre de pistes</translation>
     </message>
     <message>
-        <source>Częstotliwość próbkowania</source>
+        <source>Sample rate</source>
         <translation>Taux d&apos;échantillonnage</translation>
     </message>
     <message>
-        <source>Odtwarzaj</source>
+        <source>Play</source>
         <translation>Lire</translation>
     </message>
 </context>
 <context>
     <name>AddressBox</name>
     <message>
-        <source>Bezpośredni adres</source>
+        <source>Direct address</source>
         <translation>Adresse directe</translation>
     </message>
     <message>
-        <source>Dodatkowy parametr dla modułu</source>
+        <source>Additional module parameter</source>
         <translation>Paramètres du module additionnel</translation>
     </message>
 </context>
 <context>
     <name>AddressDialog</name>
     <message>
-        <source>Dodaj adres</source>
+        <source>Add address</source>
         <translation>Ajouter adresse</translation>
     </message>
     <message>
-        <source>Odtwarzaj</source>
+        <source>Play</source>
         <translation>Lire</translation>
     </message>
 </context>
 <context>
     <name>Appearance</name>
     <message>
-        <source>Ustawienia wyglądu</source>
+        <source>Appearance settings</source>
         <translation>Réglages de l&apos;apparence</translation>
     </message>
     <message>
-        <source>Zarządzaj schematami kolorów</source>
+        <source>Manage color schemes</source>
         <translation>Gérer les palettes de couleurs</translation>
     </message>
     <message>
-        <source>Nowy</source>
+        <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <source>Zapisz</source>
+        <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <source>Usuń</source>
+        <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <source>Użyj własnych kolorów</source>
+        <source>Use custom colors</source>
         <translation>Utiliser des couleurs personnalisées</translation>
     </message>
     <message>
-        <source>Kolor przycisków</source>
+        <source>Buttons color</source>
         <translation>Couleur des boutons</translation>
     </message>
     <message>
-        <source>Kolor okna</source>
+        <source>Window color</source>
         <translation>Couleur de la fenêtre</translation>
     </message>
     <message>
-        <source>Kolor obramowania</source>
+        <source>Border color</source>
         <translation>Couleur de la bordure</translation>
     </message>
     <message>
-        <source>Kolor podświetlenia</source>
+        <source>Highlight color</source>
         <translation>Couleur de surlignage</translation>
     </message>
     <message>
-        <source>Kolor wnętrza kontrolek</source>
+        <source>Base color</source>
         <translation>Couleur de base</translation>
     </message>
     <message>
-        <source>Kolor tekstu</source>
+        <source>Text color</source>
         <translation>Couleur du texte</translation>
     </message>
     <message>
-        <source>Kolor zaznaczonego tekstu</source>
+        <source>Highlighted text color</source>
         <translation>Couleur du texte surligné</translation>
     </message>
     <message>
-        <source>Kolor przycisku suwaka</source>
+        <source>Slider button color</source>
         <translation>Couleur du bouton de la règle</translation>
     </message>
     <message>
-        <source>Gradient w oknie wideo</source>
+        <source>Gradient in the video window</source>
         <translation>Dégradé dans la fenêtre vidéo</translation>
     </message>
     <message>
-        <source>Kolor na górze i na dole</source>
+        <source>The color on the top and bottom</source>
         <translation>La couleur du haut et du bas</translation>
     </message>
     <message>
-        <source>Kolor w środku</source>
+        <source>Color in the middle</source>
         <translation>Couleur au milieu</translation>
     </message>
     <message>
-        <source>Tapeta w głównym oknie</source>
+        <source>Wallpaper in the main window</source>
         <translation>Papier-peint de la fenêtre principale</translation>
     </message>
     <message>
-        <source>Przezroczystość</source>
+        <source>Transparency</source>
         <translation>Transparence</translation>
     </message>
     <message>
-        <source>Wybierz tapetę</source>
+        <source>Select wallpaper</source>
         <translation>Choisir papier-peint</translation>
     </message>
     <message>
-        <source>Nazwa</source>
+        <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <source>Wprowadź nazwę dla schematu kolorów</source>
+        <source>Enter the name for a color scheme</source>
         <translation>Entrer le nom de la palette de couleurs</translation>
     </message>
     <message>
-        <source>Podana nazwa już istnieje!</source>
+        <source>The specified name already exists!</source>
         <translation>Le nom spécifié existe déjà!</translation>
     </message>
     <message>
-        <source>Usuwanie</source>
+        <source>Removing</source>
         <translation>Entrain de supprimer</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz usunąć</source>
+        <source>Do you want to remove</source>
         <translation>Voulez-vous supprimer</translation>
     </message>
     <message>
-        <source>Wczytywanie tapety</source>
+        <source>Loading wallpaper</source>
         <translation>Charge le papier-peint</translation>
     </message>
     <message>
-        <source>Obrazy</source>
+        <source>Pictures</source>
         <translation>Images</translation>
     </message>
     <message>
-        <source>Aktualny schemat kolorów</source>
+        <source>Current color scheme</source>
         <translation>Palette de couleurs actuelle</translation>
     </message>
     <message>
-        <source>Domyślny schemat kolorów</source>
+        <source>Default color scheme</source>
         <translation>Palette de couleurs par défaut</translation>
     </message>
 </context>
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>W&amp;spółczynnik proporcji</source>
+        <source>&amp;Aspect tatio</source>
         <translation>&amp;Radio d&apos;aspect</translation>
     </message>
     <message>
-        <source>&amp;Auto</source>
-        <translation></translation>
-    </message>
+        <source></source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>&amp;Wyłączone</source>
+        <source>&amp;Disabled</source>
         <translation>&amp;Désactivé</translation>
     </message>
     <message>
-        <source>&amp;Zależne od rozmiaru</source>
+        <source>&amp;Depends on size</source>
         <translation>&amp;En fonction de la taille</translation>
     </message>
 </context>
 <context>
     <name>AudioCD</name>
     <message>
-        <source>Ścieżka</source>
+        <source>Path</source>
         <translation>Chemin</translation>
     </message>
     <message>
-        <source>Płyta AudioCD</source>
+        <source>AudioCD</source>
         <translation>CD Audio</translation>
     </message>
     <message>
-        <source>Nie znaleziono napędów CD/DVD!</source>
+        <source>No CD/DVD drives found!</source>
         <translation>Pas de lecteur CD/DVD trouvé!</translation>
     </message>
     <message>
-        <source>Wybierz obraz AudioCD</source>
+        <source>Choose AudioCD image</source>
         <translation>Choisir une image de CD Audio</translation>
     </message>
     <message>
-        <source>Obsługiwane obrazy AudioCD</source>
+        <source>Supported AudioCD images</source>
         <translation>Images de CD Audio supportées</translation>
     </message>
     <message>
-        <source>Wybierz napęd</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Choose the drive</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>AudioCDDemux</name>
     <message>
-        <source>Dane</source>
+        <source>Data</source>
         <translation>Données</translation>
     </message>
     <message>
-        <source>Ścieżka</source>
+        <source>Track</source>
         <translation>Piste</translation>
     </message>
     <message>
-        <source>Błąd odczytu ścieżki</source>
+        <source>Error reading track</source>
         <translation>Erreur lors de la lecture de la piste</translation>
     </message>
     <message>
-        <source>Brak płyty w napędzie</source>
+        <source>No CD</source>
         <translation>Pas de CD</translation>
     </message>
     <message>
-        <source>Nieprawidłowa ścieżka do napędu CD</source>
+        <source>Invalid path to CD drive</source>
         <translation>Chemin vers le lecteur de CD incorrect</translation>
     </message>
     <message>
-        <source>Brak płyty AudioCD w napędzie!</source>
+        <source>No AudioCD found!</source>
         <translation>CD Audio non trouvé!</translation>
     </message>
 </context>
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>&amp;Automatycznie</source>
+        <source>&amp;Autodetect</source>
         <translation>&amp;Détection automatique</translation>
     </message>
     <message>
@@ -331,26 +328,26 @@
         <translation>&amp;Stereo</translation>
     </message>
     <message>
-        <source>&amp;Inne</source>
+        <source>&amp;Other</source>
         <translation>&amp;Autre</translation>
     </message>
     <message>
-        <source>&amp;Kanały</source>
+        <source>&amp;Channels</source>
         <translation>&amp;Chaînes</translation>
     </message>
 </context>
 <context>
     <name>AudioThr</name>
     <message>
-        <source>Błąd podczas inicjalizacji</source>
+        <source>Error during initialization</source>
         <translation>Erreur durant l&apos;initialisation</translation>
     </message>
     <message>
-        <source>Moduł</source>
+        <source>Module</source>
         <translation>Module</translation>
     </message>
     <message>
-        <source>kanały</source>
+        <source>channels</source>
         <translation>chaînes</translation>
     </message>
     <message>
@@ -358,61 +355,61 @@
         <translation>Hz</translation>
     </message>
     <message>
-        <source>wymaga zmiany jednego z wymuszonych parametrów, dźwięk wyłączony...</source>
+        <source>requires a change in one of the forced parameters, sound disabled ...</source>
         <translation>Nécessite un changement dans un des paramètres imposés, son désactivé ...</translation>
     </message>
     <message>
-        <source>ustawił parametry na</source>
+        <source>sets the parameters to</source>
         <translation>règle les paramètres à</translation>
     </message>
 </context>
 <context>
     <name>DeintSettingsW</name>
     <message>
-        <source>Usuwaj przeplot</source>
+        <source>Remove interlacing</source>
         <translation>Supprimer l&apos;entrelacement</translation>
     </message>
     <message>
-        <source>Automatycznie wykrywaj film z przeplotem</source>
+        <source>Automatically detect interlaced frames</source>
         <translation>Détecter automatiquement des images entrelacées</translation>
     </message>
     <message>
-        <source>Podwajaj liczbę klatek na sekundę</source>
+        <source>Doubles the the number of frames per second</source>
         <translation>Double le nombre d&apos;images par seconde</translation>
     </message>
     <message>
-        <source>Automatycznie wykryj parzystość</source>
+        <source>Automatically detect parity</source>
         <translation>Détecter automatiquement la parité</translation>
     </message>
     <message>
-        <source>Metoda usuwania przeplotu (dekodowanie programowe)</source>
+        <source>Deinterlacing method (software decoding)</source>
         <translation>Méthode de désentrelacement (Décodage logiciel)</translation>
     </message>
     <message>
-        <source>Parzystość (jeżeli nie wykryto automatycznie)</source>
+        <source>Parity (if not detected automatically)</source>
         <translation>Parité (si non détecté automatiqement)</translation>
     </message>
 </context>
 <context>
     <name>DemuxerThr</name>
     <message>
-        <source>Otwieranie</source>
+        <source>Opening</source>
         <translation>Ouverture</translation>
     </message>
     <message>
-        <source>Odtwarzanie</source>
+        <source>Playback</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <source>Przewijanie</source>
+        <source>Seeking</source>
         <translation>Recherche</translation>
     </message>
     <message>
-        <source>Pauza</source>
+        <source>Paused</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <source>Adres</source>
+        <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
@@ -424,19 +421,19 @@
         <translation>Format</translation>
     </message>
     <message>
-        <source>Rozdział</source>
+        <source>Chapter</source>
         <translation>Chapitre</translation>
     </message>
     <message>
-        <source>tytuł</source>
+        <source>title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>kodek</source>
+        <source>codec</source>
         <translation>codec</translation>
     </message>
     <message>
-        <source>proporcje</source>
+        <source>aspect ratio</source>
         <translation>ratio d&apos;aspect</translation>
     </message>
     <message>
@@ -444,7 +441,7 @@
         <translation>images/sec</translation>
     </message>
     <message>
-        <source>próbkowanie</source>
+        <source>sample rate</source>
         <translation>taux d&apos;échantillonnage</translation>
     </message>
     <message>
@@ -452,47 +449,47 @@
         <translation>format</translation>
     </message>
     <message>
-        <source>Tytuł</source>
+        <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>artysta</source>
+        <source>artist</source>
         <translation>artiste</translation>
     </message>
     <message>
-        <source>załadowane z pliku</source>
+        <source>loaded from file</source>
         <translation>chargé depuis le fichier</translation>
     </message>
     <message>
-        <source>Ścieżka do pliku</source>
+        <source>File path</source>
         <translation>Chemin de fichier</translation>
     </message>
     <message>
-        <source>Nazwa pliku</source>
+        <source>File name</source>
         <translation>Nom de fichier</translation>
     </message>
     <message>
-        <source>Strumień</source>
+        <source>Stream</source>
         <translation>Flux</translation>
     </message>
     <message>
-        <source>Rozdziały</source>
+        <source>Chapters</source>
         <translation>Chapitres</translation>
     </message>
     <message>
-        <source>Strumienie obrazu</source>
+        <source>Video streams</source>
         <translation>Flux vidéo</translation>
     </message>
     <message>
-        <source>Strumienie dźwięku</source>
+        <source>Audio streams</source>
         <translation>Flux audio</translation>
     </message>
     <message>
-        <source>Strumienie napisów</source>
+        <source>Subtitles streams</source>
         <translation>Flux de sous-titres</translation>
     </message>
     <message>
-        <source>Dołączone pliki</source>
+        <source>Attached files</source>
         <translation>Fichiers attachés</translation>
     </message>
     <message>
@@ -500,7 +497,7 @@
         <translation>bitrate</translation>
     </message>
     <message>
-        <source>kanały</source>
+        <source>channels</source>
         <translation>chaînes</translation>
     </message>
     <message>
@@ -512,123 +509,123 @@
         <translation>stereo</translation>
     </message>
     <message>
-        <source>wielkość</source>
+        <source>size</source>
         <translation>taille</translation>
     </message>
     <message>
-        <source>Nie można otworzyć</source>
+        <source>Cannot open</source>
         <translation>Ne peut ouvrir</translation>
     </message>
     <message>
-        <source>Zapisz okładkę</source>
+        <source>Save cover picture</source>
         <translation>Enregistrer la jaquette</translation>
     </message>
 </context>
 <context>
     <name>DownloadItemW</name>
     <message>
-        <source>Oczekiwanie na połączenie</source>
+        <source>Waiting for connection</source>
         <translation>En attente de connexion</translation>
     </message>
     <message>
-        <source>Zatrzymaj pobieranie</source>
+        <source>Stop downloading</source>
         <translation>Arrêter le téléchargement</translation>
     </message>
     <message>
-        <source>Rozmiar</source>
+        <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <source>Pobieranie ukończone</source>
+        <source>Download complete</source>
         <translation>Téléchargement terminé</translation>
     </message>
     <message>
-        <source>Pobieranie przerwane</source>
+        <source>Download aborted</source>
         <translation>Téléchargement abandonné</translation>
     </message>
     <message>
-        <source>Błąd pobierania</source>
+        <source>Download error</source>
         <translation>Erreur de téléchargement</translation>
     </message>
     <message>
-        <source>Pobierz ponownie</source>
+        <source>Download again</source>
         <translation>Télécharger à nouveau</translation>
     </message>
     <message>
-        <source>Odtwarzaj</source>
+        <source>Play</source>
         <translation>Lire</translation>
     </message>
 </context>
 <context>
     <name>DownloaderThread</name>
     <message>
-        <source>Nieprawidłowy adres</source>
+        <source>Invalid address</source>
         <translation>Adresse invalide</translation>
     </message>
 </context>
 <context>
     <name>DownloaderW</name>
     <message>
-        <source>Pobieranie plików z Internetu</source>
+        <source>Downloader</source>
         <translation>Téléchargeur</translation>
     </message>
     <message>
-        <source>Pobierz</source>
+        <source>Download</source>
         <translation>Télécharger</translation>
     </message>
     <message>
-        <source>Wybierz katalog dla pobieranych plików</source>
+        <source>Choose directory for downloaded files</source>
         <translation>Choisir le dossier pour les fichiers téléchargés</translation>
     </message>
     <message>
-        <source>Wyczyść zakończone pobierania</source>
+        <source>Clear completed downloads</source>
         <translation>Nettoyer les téléchargements terminés</translation>
     </message>
     <message>
-        <source>Nie udało się zmienić katalogu dla pobieranych plików</source>
+        <source>Cannot change downloading files directory</source>
         <translation>Impossible de changer le dossier de téléchargement du fichier</translation>
     </message>
     <message>
-        <source>Wprowadź adres</source>
+        <source>Enter address</source>
         <translation>Entrer une adresse</translation>
     </message>
     <message>
-        <source>Wprowadź adres do pobrania</source>
+        <source>Enter the address for download</source>
         <translation>Entrer l&apos;adresse du téléchargement</translation>
     </message>
     <message>
-        <source>Katalog pobierania</source>
+        <source>Download directory</source>
         <translation>Dossier de téléchargement</translation>
     </message>
 </context>
 <context>
     <name>EntryProperties</name>
     <message>
-        <source>Właściwości</source>
+        <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <source>Synchronizuj z katalogiem</source>
+        <source>Sync with directory</source>
         <translation>Synchroniser le dossier</translation>
     </message>
     <message>
-        <source>Wybierz katalog</source>
+        <source>Choose directory</source>
         <translation>Choisir le dossier</translation>
     </message>
     <message>
-        <source>Zła ścieżka</source>
+        <source>Incorrect path</source>
         <translation>Chemin incorrect</translation>
     </message>
     <message>
-        <source>Podaj ścieżkę do istniejącego katalogu</source>
+        <source>Enter path to existing directory</source>
         <translation>Entrer un chemin vers un dossier existant</translation>
     </message>
     <message>
-        <source>Rozmiar pliku</source>
+        <source>File size</source>
         <translation>Taille du fichier</translation>
     </message>
     <message>
-        <source>Błąd podczas zapisu tagów, sprawdź czy masz uprawnienia do modyfikacji pliku!</source>
+        <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>Erreur lors de l&apos;écriture des tags, vérifiez que vous avez la permission de modifier le fichier!</translation>
     </message>
 </context>
@@ -639,30 +636,29 @@
         <translation>Egaliseur</translation>
     </message>
     <message>
-        <source>Włączony</source>
+        <source>ON</source>
         <translation>ON</translation>
     </message>
     <message>
         <source>Pre
 amp</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>
     <message>
-        <source>Widmo FFT</source>
+        <source>FFT Spectrum</source>
         <translation>Spectre FFT</translation>
     </message>
 </context>
 <context>
     <name>FileAssociation</name>
     <message>
-        <source>Skojarzenie plików</source>
+        <source>File association</source>
         <translation>Association de fichier</translation>
     </message>
     <message>
-        <source>Czy chcesz skojarzyć pliki z programem QMPlay2</source>
+        <source>Do you want to associate files with QMPlay2</source>
         <translation>Voulez-vous associer les fichiers avec QMPlay2</translation>
     </message>
 </context>
@@ -677,294 +673,288 @@ amp</source>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Prawo autorskie</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Copyright</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Komentarz</source>
+        <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <source>Ścieżka</source>
+        <source>Track</source>
         <translation>Chemin</translation>
     </message>
     <message>
-        <source>Głosy</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Voices</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>Help</name>
     <message>
-        <source>Po&amp;moc</source>
+        <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <source>&amp;O QMPlay2</source>
+        <source>&amp;About QMPlay2</source>
         <translation>&amp;A propos de QMPlay2</translation>
     </message>
     <message>
-        <source>O &amp;Qt</source>
+        <source>About &amp;Qt</source>
         <translation>A propos de &amp;Qt</translation>
     </message>
     <message>
-        <source>&amp;Aktualizacje</source>
+        <source>&amp;Updates</source>
         <translation>&amp;Mises à jour</translation>
     </message>
 </context>
 <context>
     <name>InfoDock</name>
     <message>
-        <source>Informacje</source>
+        <source>Information</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <source>Bitrate obrazu</source>
+        <source>Video bitrate</source>
         <translation>Bitrate vidéo</translation>
     </message>
     <message>
-        <source>Bitrate dźwięku</source>
+        <source>Audio bitrate</source>
         <translation>Bitrate audio</translation>
     </message>
     <message>
-        <source>Bufor</source>
+        <source>Buffer</source>
         <translation>Tampon</translation>
     </message>
 </context>
 <context>
     <name>Inputs</name>
     <message>
-        <source>Generator częstotliwości</source>
+        <source>Tone generator</source>
         <translation>Générateur de tonalités</translation>
     </message>
 </context>
 <context>
     <name>LastFM</name>
     <message>
-        <source>Błąd logowania do LastFM.</source>
+        <source>LastFM login error.</source>
         <translation>Erreur de connexion à LastFM.</translation>
     </message>
     <message>
-        <source>Sprawdź login i hasło!</source>
+        <source>Check login and password!</source>
         <translation>Vérifiez votre identifiant et votre mot de passe!</translation>
     </message>
     <message>
-        <source>Zalogowany do LastFM!</source>
+        <source>Logged in to LastFM!</source>
         <translation>Connecté à LastFM!</translation>
     </message>
 </context>
 <context>
     <name>LineEditButton</name>
     <message>
-        <source>Wyczyść</source>
+        <source>Clear</source>
         <translation>Effacer</translation>
     </message>
 </context>
 <context>
     <name>MPDemux</name>
     <message>
-        <source>Próbki</source>
+        <source>Samples</source>
         <translation>Échantillons</translation>
     </message>
     <message>
-        <source>Wzorce</source>
+        <source>Patterns</source>
         <translation>Motifs</translation>
     </message>
     <message>
-        <source>Kanały</source>
+        <source>Channels</source>
         <translation>Canaux</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
-        <source>Główny pasek narzędzi</source>
+        <source>Main toolbar</source>
         <translation>Barre d&apos;outils principale</translation>
     </message>
     <message>
-        <source>&amp;Pauza</source>
+        <source>&amp;Paused</source>
         <translation>&amp;En pause</translation>
     </message>
     <message>
-        <source>&amp;Odtwarzaj</source>
+        <source>&amp;Play</source>
         <translation>&amp;Lecture</translation>
     </message>
     <message>
-        <source>Wybierz pliki</source>
+        <source>Choose files</source>
         <translation>Choisir les fichiers</translation>
     </message>
     <message>
-        <source>Wybierz katalog</source>
+        <source>Choose directory</source>
         <translation>Choisir le dossier</translation>
     </message>
     <message>
-        <source>Wskazana pozycja</source>
+        <source>Pointed position</source>
         <translation>Position pointée</translation>
     </message>
     <message>
-        <source>&amp;Ukryj</source>
+        <source>&amp;Hide</source>
         <translation>&amp;Cacher</translation>
     </message>
     <message>
-        <source>&amp;Pokaż</source>
+        <source>&amp;Show</source>
         <translation>&amp;Montrer</translation>
     </message>
     <message>
-        <source>Zatrzymany</source>
+        <source>Stopped</source>
         <translation>Arrêté</translation>
     </message>
     <message>
-        <source>Wybierz napisy do filmu</source>
+        <source>Choose subtitles</source>
         <translation>Choisir les sous-titres</translation>
     </message>
     <message>
-        <source>Napisy</source>
+        <source>Subtitles</source>
         <translation>Sous-titres</translation>
     </message>
     <message>
-        <source>Playlisty</source>
+        <source>Playlists</source>
         <translation>Listes de lecture</translation>
     </message>
     <message>
-        <source>Wybierz playlistę</source>
+        <source>Choose playlist</source>
         <translation>Choisir une liste de lecture</translation>
     </message>
     <message>
-        <source>Zapisz playlistę</source>
+        <source>Save playlist</source>
         <translation>Sauvegarder la liste de lecture</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz zamknąć program?</source>
+        <source>Are you sure you want to quit?</source>
         <translation>Êtes-vous sûr de vouloir quitter?</translation>
     </message>
     <message>
-        <source>QMPlay2 wykonuje pracę w tle.</source>
+        <source>QMPlay2 is doing something in the background.</source>
         <translation>QMPlay2 est actif en arrière-plan.</translation>
     </message>
     <message>
-        <source>Aktualizacja jest teraz pobierana.</source>
+        <source>The update is downloading now.</source>
         <translation>La mise à jour est en cours de téléchargement.</translation>
     </message>
     <message>
-        <source>&amp;Zablokuj widgety</source>
+        <source>&amp;Lock widgets</source>
         <translation>&amp;Verrouiller les widgets</translation>
     </message>
     <message>
-        <source>Zapisz grupę</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Save group</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Błąd podczas zapisu playlisty</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Error while saving playlist</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>&amp;Ukryj pasek menu</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>&amp;Hide menu bar</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
     <message>
-        <source>włączony</source>
+        <source>enabled</source>
         <translation>Activé</translation>
     </message>
     <message>
-        <source>Obsługa formatu PLS</source>
+        <source>PLS support</source>
         <translation>Support PLS</translation>
     </message>
     <message>
-        <source>Obsługa formatu M3U</source>
+        <source>M3U support</source>
         <translation>Support M3U</translation>
     </message>
     <message>
-        <source>Odczyt napisów SRT</source>
+        <source>SRT reading</source>
         <translation>Lecture SRT</translation>
     </message>
     <message>
-        <source>Odczyt napisów klasycznych</source>
+        <source>Classic subtitles reading</source>
         <translation>Lecture des sous-titres classique</translation>
     </message>
     <message>
-        <source>Użyj określonego FPS w napisach MicroDVD (jeśli istnieje)</source>
+        <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
         <translation>Utiliser le nombre d&apos;images par secondes déterminé dans les sous-titres MicroDVD (si existant)</translation>
     </message>
     <message>
-        <source>Maksymalny czas trwania napisów bez określonej długości</source>
+        <source>The maximum duration of subtitles without a specified length</source>
         <translation>Durée maximale des sous-titres sans durée déterminée</translation>
     </message>
     <message>
-        <source>Włączony</source>
+        <source>Enabled</source>
         <translation>Activé</translation>
     </message>
     <message>
-        <source>Korzystaj z pamięci współdzielonej</source>
+        <source>Use shared memory</source>
         <translation>Utiliser la mémoire partagée</translation>
     </message>
     <message>
-        <source>Wyjścia dla XVideo</source>
+        <source>XVideo outputs</source>
         <translation>Sorties XVideo</translation>
     </message>
     <message>
-        <source>Domyślne</source>
+        <source>Default</source>
         <translation>Par défaut</translation>
     </message>
     <message>
-        <source>Automatycznie znajdź urządzenie dla odtwarzania wielokanałowego</source>
+        <source>Automatic looking for multichannel device</source>
         <translation>Recherche automatique de périphérique multicanal</translation>
     </message>
     <message>
-        <source>Urządzenia odtwarzające</source>
+        <source>Playback device</source>
         <translation>Périphérique de lecture</translation>
     </message>
     <message>
-        <source>Metoda resamplingu</source>
+        <source>Resampling method</source>
         <translation>Méthode de rééchantillonnage</translation>
     </message>
     <message>
-        <source>Synchronizacja pionowa</source>
+        <source>Vertical sync</source>
         <translation>Synchronisation verticale</translation>
     </message>
     <message>
-        <source>Automatycznie</source>
+        <source>Autodetect</source>
         <translation>Détection automatique</translation>
     </message>
     <message>
-        <source>Normalna wielkość</source>
+        <source>Normal size</source>
         <translation>Taille normal</translation>
     </message>
     <message>
-        <source>4x mniejszy</source>
+        <source>4x smaller</source>
         <translation>4x plus petit</translation>
     </message>
     <message>
-        <source>16x mniejszy</source>
+        <source>16x smaller</source>
         <translation>16x plus petit</translation>
     </message>
     <message>
-        <source>Sposób dekodowania wielowątkowego</source>
+        <source>Method of multithreaded decoding</source>
         <translation>Méthode de décodage multifils</translation>
     </message>
     <message>
-        <source>Ramki</source>
+        <source>Frames</source>
         <translation>Trames</translation>
     </message>
     <message>
-        <source>Kawałki</source>
+        <source>Slices</source>
         <translation>Tranches</translation>
     </message>
     <message>
-        <source>Opóźnienie</source>
+        <source>Delay</source>
         <translation>Différer</translation>
     </message>
     <message>
-        <source>Czas odświeżania</source>
+        <source>Refresh time</source>
         <translation>Rafraîchir le temps</translation>
     </message>
     <message>
-        <source>sek</source>
+        <source>sec</source>
         <translation>sec</translation>
     </message>
     <message>
@@ -972,47 +962,47 @@ amp</source>
         <translation>ms</translation>
     </message>
     <message>
-        <source>Znajdź domyślne urządzenie wyjścia dźwięku</source>
+        <source>Find default output device</source>
         <translation>Trouver le périphérique de sortie par défaut</translation>
     </message>
     <message>
-        <source>Usuwanie głosu</source>
+        <source>Voice removal</source>
         <translation>Suppression de voix</translation>
     </message>
     <message>
-        <source>Jakość korektora dźwięku</source>
+        <source>Sound equalizer quality</source>
         <translation>Qualité de l&apos;égaliseur de son</translation>
     </message>
     <message>
-        <source>Niska</source>
+        <source>Low</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <source>rozmiar filtra</source>
+        <source>filter size</source>
         <translation>Taille du filtre</translation>
     </message>
     <message>
-        <source>Średnia</source>
+        <source>Medium</source>
         <translation>Moyen</translation>
     </message>
     <message>
-        <source>Wysoka</source>
+        <source>High</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <source>Bardzo wysoka</source>
+        <source>Very high</source>
         <translation>Très haut</translation>
     </message>
     <message>
-        <source>Muzyka z gry Rayman2 (*.apm)</source>
+        <source>Rayman2 music (*.apm)</source>
         <translation>Musique Rayman2 (*.apm)</translation>
     </message>
     <message>
-        <source>Dźwięk nieskompresowany PCM</source>
+        <source>Uncompressed PCM sound</source>
         <translation>Son PCM décompressé</translation>
     </message>
     <message>
-        <source>Rozszerzenia plików (oddzielone średnikiem)</source>
+        <source>File extensions (semicolon separated)</source>
         <translation>Extensions de fichiers (semicolonne séparée)</translation>
     </message>
     <message>
@@ -1020,79 +1010,79 @@ amp</source>
         <translation>Format</translation>
     </message>
     <message>
-        <source>Ilość kanałów</source>
+        <source>Channel count</source>
         <translation>Nombre de canaux</translation>
     </message>
     <message>
-        <source>Częstotliwość próbkowania</source>
+        <source>Sample rate</source>
         <translation>Taux d&apos;échantillonnage</translation>
     </message>
     <message>
-        <source>Przesunięcie</source>
+        <source>Offset</source>
         <translation>Décalage</translation>
     </message>
     <message>
-        <source>Skojarz pliki z QMPlay2</source>
+        <source>Associate files with QMPlay2</source>
         <translation>Associer les fichiers avec QMPlay2</translation>
     </message>
     <message>
-        <source>Wybierz wszystkie</source>
+        <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
     <message>
-        <source>Dodaj wpis do menu kontekstowego z katalogami</source>
+        <source>Add entry to the directories context menu</source>
         <translation>Ajouter l&apos;entrée au menu contextuel des dossiers</translation>
     </message>
     <message>
-        <source>Dodaj wpis do menu kontekstowego z dyskami</source>
+        <source>Add entry to the drives context menu</source>
         <translation>Ajouter l&apos;entrée au menu contextuel du lecteur</translation>
     </message>
     <message>
-        <source>Kolejkuj w QMPlay2</source>
+        <source>Enqueue in QMPlay2</source>
         <translation>Mettre dans la file d&apos;attente QMPlay2</translation>
     </message>
     <message>
-        <source>Odtwórz w QMPlay2</source>
+        <source>Play in QMPlay2</source>
         <translation>Lire dans QMPlay2</translation>
     </message>
     <message>
-        <source>Rozmiar widma FFT</source>
+        <source>FFT spectrum size</source>
         <translation>Taille du spectre FFT</translation>
     </message>
     <message>
-        <source>Długość wyświetlanego dźwięku</source>
+        <source>Displayed sound length</source>
         <translation>Durée du son joué</translation>
     </message>
     <message>
-        <source>Ustaw jako domyślny odtwarzacz AudioCD</source>
+        <source>Set as default AudioCD player</source>
         <translation>Choisir comme lecteur audio par défaut</translation>
     </message>
     <message>
-        <source>Pomijaj niektóre klatki</source>
+        <source>Skip some frames</source>
         <translation>Sauter quelques trames</translation>
     </message>
     <message>
-        <source>Wymuś pomijanie niektórych klatek</source>
+        <source>Force frame skipping</source>
         <translation>Forcer le saut de trames</translation>
     </message>
     <message>
-        <source>Dekodowanie w niskiej rozdzielczości (niektóre kodeki)</source>
+        <source>Low resolution decoding (only some codecs)</source>
         <translation>Décodage basse résolution (quelques codecs uniquement)</translation>
     </message>
     <message>
-        <source>Pospiesz się</source>
+        <source>Hurry up</source>
         <translation>Plus vite</translation>
     </message>
     <message>
-        <source>Ilość wątków użytych do dekodowania wideo</source>
+        <source>Number of threads used to decode video</source>
         <translation>Nom de fils utilisés pour décoder la vidéo</translation>
     </message>
     <message>
-        <source>Pokazuj dodatkowe informacje wyszukiwania</source>
+        <source>Show additional search information</source>
         <translation>Afficher des informations de recherche supplémentaires</translation>
     </message>
     <message>
-        <source>Skala widma FFT</source>
+        <source>FFT spectrum scale</source>
         <translation>Echelle du spectre FFT</translation>
     </message>
     <message>
@@ -1100,63 +1090,63 @@ amp</source>
         <translation>Demuxer</translation>
     </message>
     <message>
-        <source>Dekoder</source>
+        <source>Decoder</source>
         <translation>Décodeur</translation>
     </message>
     <message>
-        <source>dekodowanie sprzętowe</source>
+        <source>hardware decoding</source>
         <translation>Décodage matériel</translation>
     </message>
     <message>
-        <source>Odwracanie fazy</source>
+        <source>Phase reverse</source>
         <translation>Inverser</translation>
     </message>
     <message>
-        <source>Odwracaj fazę prawego kanału</source>
+        <source>Reverse the right channel phase</source>
         <translation>Inverser la phase du canal de droite</translation>
     </message>
     <message>
-        <source>Pobieraj okładki</source>
+        <source>Downloads covers</source>
         <translation>Télécharge les pochettes</translation>
     </message>
     <message>
-        <source>Scrobbluj</source>
+        <source>Scrobble</source>
         <translation>Publier</translation>
     </message>
     <message>
-        <source>Nazwa użytkownika</source>
+        <source>User name</source>
         <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
-        <source>Hasło</source>
+        <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <source>Poprzednio ustawione hasło</source>
+        <source>Last password</source>
         <translation>Dernier mot de passe</translation>
     </message>
     <message>
-        <source>Zezwalaj na pobieranie dużych okładek</source>
+        <source>Allow to download big covers</source>
         <translation>Autoriser le téléchargement de toutes les pochettes</translation>
     </message>
     <message>
-        <source>Dekoder programowy</source>
+        <source>Software decoder</source>
         <translation>Logiciel d&apos;encodage</translation>
     </message>
     <message>
-        <source>Poprawa jakości usuwania przeplotu</source>
+        <source>Improving deinterlacing quality</source>
         <translation>Amélioration de la qualité de désentrelacement</translation>
     </message>
     <message>
-        <source>Brak</source>
+        <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <source>Zezwalaj na VDPAU</source>
+        <source>Allow VDPAU</source>
         <translation>Autoriser VDPAU</translation>
     </message>
     <message>
-        <source>Używaj CDDB, jeżeli CD-TEXT jest niedostępny</source>
+        <source>Use CDDB if CD-TEXT is not available</source>
         <translation>Utiliser CDDB si CD-TEXT n&apos;est pas disponible</translation>
     </message>
     <message>
@@ -1164,7 +1154,7 @@ amp</source>
         <translation>CD Audio</translation>
     </message>
     <message>
-        <source>Używaj CD-TEXT</source>
+        <source>Use CD-TEXT</source>
         <translation>Utiliser CD-TEXT</translation>
     </message>
     <message>
@@ -1172,594 +1162,581 @@ amp</source>
         <translation>Echo</translation>
     </message>
     <message>
-        <source>Opóźnienie echa</source>
+        <source>Echo delay</source>
         <translation>Délai d&apos;écho</translation>
     </message>
     <message>
-        <source>Głośność echa</source>
+        <source>Echo volume</source>
         <translation>Volume de l&apos;écho</translation>
     </message>
     <message>
-        <source>Powtarzanie echa</source>
+        <source>Echo repeat</source>
         <translation>Répétition de l&apos;écho</translation>
     </message>
     <message>
-        <source>Przestrzenny dźwięk echa</source>
+        <source>Echo surround</source>
         <translation>Echo multicanal</translation>
     </message>
     <message>
-        <source>Poziom skalowania obrazu</source>
+        <source>Image scaling level</source>
         <translation>Niveau de mise à l&apos;échelle de l&apos;image</translation>
     </message>
     <message>
-        <source>Redukcja szumu</source>
+        <source>Noise reduction</source>
         <translation>Réduction du bruit</translation>
     </message>
     <message>
-        <source>Ostrość</source>
+        <source>Sharpness</source>
         <translation>Résolution</translation>
     </message>
     <message>
-        <source>Obsługa programu przez interfejs MPRIS2</source>
+        <source>Using the program via MPRIS2 interface</source>
         <translation>Utilise le programme via l&apos;interface MPRIS2</translation>
     </message>
     <message>
-        <source>Wydobywaj okładki z plików multimedialnych</source>
+        <source>Extract the covers from multimedia files</source>
         <translation>Extraire les jaquettes des fichiers multimédia</translation>
     </message>
     <message>
-        <source>Ścieżka do programu &apos;youtube-dl&apos;</source>
+        <source>Path to the &apos;youtube-dl&apos; application</source>
         <translation>Chemin vers l&apos;application &apos;youtube-dl&apos;</translation>
     </message>
     <message>
-        <source>Przeglądaj</source>
+        <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <source>Wybierz program &apos;youtube-dl&apos;</source>
+        <source>Choose &apos;youtube-dl&apos; application</source>
         <translation>Choisir l&apos;application &apos;youtube-dl&apos;</translation>
     </message>
     <message>
-        <source>Liczba suwaków w korektorze dźwięku</source>
+        <source>Slider count in sound equalizer</source>
         <translation>Nombre de projections dans l&apos;égaliseur</translation>
     </message>
     <message>
-        <source>Minimalna częstotliwość</source>
+        <source>Minimum frequency</source>
         <translation>Fréquence minimale</translation>
     </message>
     <message>
-        <source>Maksymalna częstotliwość</source>
+        <source>Maximum frequency</source>
         <translation>Fréquence maximale</translation>
     </message>
     <message>
-        <source>Domyślna długość</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Default length</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Użyj różnych strumieni obrazu i dźwięku</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Use different audio and video streams</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet domyślnej jakości obrazu/dźwięku</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Priority of default video/audio quality</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet domyślnej jakości obrazu</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Priority of default video quality</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet domyślnej jakości dźwięku</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Priority of default audio quality</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Force render to texture if possible (not recommended)</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
     <message>
-        <source>Rozmiar</source>
+        <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <source>Czcionka</source>
+        <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
-        <source>Lewy</source>
+        <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <source>Prawy</source>
+        <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <source>Pionowy</source>
+        <source>Vertical</source>
         <translation>Vertical</translation>
     </message>
     <message>
-        <source>Marginesy</source>
+        <source>Margins</source>
         <translation>Marges</translation>
     </message>
     <message>
-        <source>Obwódka</source>
+        <source>Outline</source>
         <translation>contour</translation>
     </message>
     <message>
-        <source>Cień</source>
+        <source>Shadow</source>
         <translation>Ombre</translation>
     </message>
     <message>
-        <source>Tekst</source>
+        <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <source>Obramowanie</source>
+        <source>Border</source>
         <translation>Bordures</translation>
     </message>
     <message>
-        <source>Kolory</source>
+        <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <source>Odstępy</source>
+        <source>Spacing</source>
         <translation>Espacement</translation>
     </message>
     <message>
-        <source>Rozmieszczenie napisów</source>
+        <source>Subtitles alignment</source>
         <translation>Alignement des sous-titres</translation>
     </message>
 </context>
 <context>
     <name>OpenGL2Common</name>
     <message>
-        <source>Błąd podczas kompilacji/linkowania shaderów</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Shader compile/link error</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>Options</name>
     <message>
-        <source>Op&amp;cje</source>
+        <source>Op&amp;tions</source>
         <translation>Op&amp;tions</translation>
     </message>
     <message>
-        <source>&amp;Ustawienia</source>
+        <source>&amp;Settings</source>
         <translation>&amp;Réglages</translation>
     </message>
     <message>
-        <source>&amp;Pokaż ikonkę w tray&apos;u</source>
+        <source>&amp;Show tray icon</source>
         <translation>&amp;Montrer l&apos;icône dans la barre des tâches</translation>
     </message>
     <message>
-        <source>Ustawienia &amp;modułów</source>
+        <source>&amp;Modules settings</source>
         <translation>&amp;Réglages des modules</translation>
     </message>
 </context>
 <context>
     <name>PlayClass</name>
     <message>
-        <source>Zatrzymany</source>
+        <source>Stopped</source>
         <translation>Arrêté</translation>
     </message>
     <message>
-        <source>Współczynnik proporcji</source>
+        <source>Aspect ratio</source>
         <translation>Ratio d&apos;aspect</translation>
     </message>
     <message>
-        <source>Szybkość odtwarzania</source>
+        <source>Play speed</source>
         <translation>Vitesse de lecture</translation>
     </message>
     <message>
-        <source>Głośność</source>
+        <source>Volume</source>
         <translation>Volume</translation>
     </message>
     <message>
-        <source>Dźwięk wyciszony</source>
+        <source>Muted sound</source>
         <translation>Son muet</translation>
     </message>
     <message>
-        <source>Opóźnienie obrazu</source>
+        <source>Video delay</source>
         <translation>Intervalle des vidéos</translation>
     </message>
     <message>
-        <source>Opóźnienie napisów</source>
+        <source>Subtitles delay</source>
         <translation>Intervalle des sous-titres</translation>
     </message>
     <message>
-        <source>Wielkość napisów</source>
+        <source>Subtitles size</source>
         <translation>Taille des sous-titres</translation>
     </message>
     <message>
-        <source>Ustaw opóźnienie napisów (sek.)</source>
+        <source>Set subtitles delay (sec.)</source>
         <translation>Régler l&apos;intervalle des sous-titres (sec.)</translation>
     </message>
     <message>
-        <source>Załadowane napisy</source>
+        <source>Loaded subtitles</source>
         <translation>Sous-titres chargés</translation>
     </message>
     <message>
-        <source>Dźwięk wyłączony</source>
+        <source>Sound off</source>
         <translation>Son coupé</translation>
     </message>
     <message>
-        <source>Napisy wyłączone</source>
+        <source>Subtitles off</source>
         <translation>Pas de sous-titres</translation>
     </message>
     <message>
-        <source>Odbicie lustrzane</source>
+        <source>Horizontal flip</source>
         <translation>Retournement horizontal</translation>
     </message>
     <message>
-        <source>Odbicie pionowe</source>
+        <source>Vertical flip</source>
         <translation>Retournement vertical</translation>
     </message>
     <message>
-        <source>Odwrócenie obrazu</source>
+        <source>Image rotation</source>
         <translation>Rotation d&apos;image</translation>
     </message>
     <message>
-        <source>Brak odwrócenia obrazu</source>
+        <source>No image rotation</source>
         <translation>Pas de rotation d&apos;image</translation>
     </message>
     <message>
-        <source>Ustaw opóźnienie obrazu (sek.)</source>
+        <source>Set video delay (sec.)</source>
         <translation>Régler l&apos;intervalle de lecture (sec.)</translation>
     </message>
     <message>
-        <source>Ustaw szybkość odtwarzania (sek.)</source>
+        <source>Set playback speed (sec.)</source>
         <translation>Régler la vitesse de lecture (sec.)</translation>
     </message>
 </context>
 <context>
     <name>Playback</name>
     <message>
-        <source>Od&amp;twarzanie</source>
+        <source>&amp;Playback</source>
         <translation>&amp;Lecture en cours</translation>
     </message>
     <message>
-        <source>&amp;Dźwięk włączony</source>
+        <source>&amp;Audio enabled</source>
         <translation>&amp;Audio activé</translation>
     </message>
     <message>
-        <source>O&amp;braz włączony</source>
+        <source>&amp;Video enabled</source>
         <translation>&amp;Vidéo activée</translation>
     </message>
     <message>
-        <source>Ustaw opóźn&amp;ienie obrazu</source>
+        <source>Set &amp;video delay</source>
         <translation>Régler &amp;écart entre les video</translation>
     </message>
     <message>
-        <source>&amp;Opóźnij obraz</source>
+        <source>&amp;Delay video</source>
         <translation>&amp;Retarder la vidéo</translation>
     </message>
     <message>
-        <source>&amp;Przyspiesz obraz</source>
+        <source>&amp;Speed up video</source>
         <translation>&amp;Accélérer la vidéo</translation>
     </message>
     <message>
-        <source>&amp;Napisy włączone</source>
+        <source>&amp;Subtitles enabled</source>
         <translation>&amp;Sous-titres activés</translation>
     </message>
     <message>
-        <source>Dodaj n&amp;apisy z pliku</source>
+        <source>Add &amp;subtities from file</source>
         <translation>Ajouter &amp;sous-titres depuis le fichier</translation>
     </message>
     <message>
-        <source>Ustaw opóźn&amp;ienie napisów</source>
+        <source>Set &amp;subtitles delay</source>
         <translation>Régler les &amp;écarts entre les sous-titres</translation>
     </message>
     <message>
-        <source>&amp;Opóźnij napisy</source>
+        <source>&amp;Delay subtitiles</source>
         <translation>&amp;Durée des sous-titres</translation>
     </message>
     <message>
-        <source>&amp;Przyspiesz napisy</source>
+        <source>&amp;Speed up subtitles</source>
         <translation>&amp;Accélérer les sous-titres</translation>
     </message>
     <message>
-        <source>Po&amp;większ napisy</source>
+        <source>Scale up subt&amp;itles</source>
         <translation>Augmenter proportions des des sous-&amp;titres</translation>
     </message>
     <message>
-        <source>Po&amp;mniejsz napisy</source>
+        <source>Scale down sub&amp;titles</source>
         <translation>Réduire proportions des sous-&amp;titres</translation>
     </message>
     <message>
-        <source>&amp;Ustawienia odtwarzania</source>
+        <source>&amp;Playback settings</source>
         <translation>&amp;Paramètres de lecture</translation>
     </message>
     <message>
-        <source>&amp;Zrzut ekranu</source>
+        <source>&amp;Screen shot</source>
         <translation>&amp;Capture d&apos;écran</translation>
     </message>
 </context>
 <context>
     <name>Player</name>
     <message>
-        <source>O&amp;dtwarzacz</source>
+        <source>&amp;Player</source>
         <translation>&amp;Lecteur</translation>
     </message>
     <message>
-        <source>&amp;Zatrzymaj</source>
+        <source>&amp;Stop</source>
         <translation>&amp;Stop</translation>
     </message>
     <message>
-        <source>&amp;Następny</source>
+        <source>&amp;Next</source>
         <translation>&amp;Suivant</translation>
     </message>
     <message>
-        <source>&amp;Poprzedni</source>
+        <source>&amp;Previous</source>
         <translation>&amp;Précédent</translation>
     </message>
     <message>
-        <source>Przewiń do p&amp;rzodu</source>
+        <source>Seek &amp;forward</source>
         <translation>Chercher en a&amp;vant</translation>
     </message>
     <message>
-        <source>Przewiń do &amp;tyłu</source>
+        <source>seek &amp;backward</source>
         <translation>Chercher en &amp;arrière</translation>
     </message>
     <message>
-        <source>Przewiń dużo do pr&amp;zodu</source>
+        <source>Long &amp;seek &amp;forward</source>
         <translation>Chercher longtemps en a&amp;vant</translation>
     </message>
     <message>
-        <source>Przewiń dużo do t&amp;yłu</source>
+        <source>Long s&amp;eek backward</source>
         <translation>Chercher longtemps en a&amp;rrière</translation>
     </message>
     <message>
-        <source>Szy&amp;bciej</source>
+        <source>Fa&amp;ster</source>
         <translation>Plus &amp;rapide</translation>
     </message>
     <message>
-        <source>Wo&amp;lniej</source>
+        <source>Slowe&amp;r</source>
         <translation>Plus &amp;lent</translation>
     </message>
     <message>
-        <source>Pow&amp;iększ obraz</source>
+        <source>Zoom i&amp;n</source>
         <translation>&amp;Dézoomer</translation>
     </message>
     <message>
-        <source>Po&amp;mniejsz obraz</source>
+        <source>Zoom ou&amp;t</source>
         <translation>&amp;Zoomer</translation>
     </message>
     <message>
-        <source>&amp;Wyciszenie</source>
+        <source>&amp;Mute</source>
         <translation>&amp;Muet</translation>
     </message>
     <message>
-        <source>Przełącz &amp;współczynnik proporcji</source>
+        <source>Toggle &amp;aspect ratio</source>
         <translation>Basculer le &amp;ratio d&apos;aspect</translation>
     </message>
     <message>
-        <source>Resetuj ustawienia obr&amp;azu</source>
+        <source>Reset image &amp;settings</source>
         <translation>Reset image &amp;Paramètres</translation>
     </message>
     <message>
-        <source>&amp;Ustaw szybkość</source>
+        <source>&amp;Set speed</source>
         <translation>&amp;Régler la vitesse</translation>
     </message>
     <message>
-        <source>Następna &amp;klatka</source>
+        <source>Next &amp;frame</source>
         <translation>Image &amp;suivante</translation>
     </message>
     <message>
-        <source>&amp;Głośniej</source>
+        <source>Volume &amp;up</source>
         <translation>&amp;Monter le volume</translation>
     </message>
     <message>
-        <source>&amp;Ciszej</source>
+        <source>Volume &amp;down</source>
         <translation>&amp;Descendre le volume</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>&amp;Lista odtwarzania</source>
+        <source>&amp;Playlist</source>
         <translation>&amp;Liste de lecture</translation>
     </message>
     <message>
-        <source>&amp;Zatrzymaj ładowanie</source>
+        <source>&amp;Stop loading</source>
         <translation>&amp;Stopper le chargement</translation>
     </message>
     <message>
-        <source>&amp;Synchronizuj katalog</source>
+        <source>&amp;Sync directory</source>
         <translation>&amp;Synchroniser le dossier</translation>
     </message>
     <message>
-        <source>Załaduj playl&amp;istę</source>
+        <source>Load &amp;list</source>
         <translation>Charger la &amp;liste</translation>
     </message>
     <message>
-        <source>Zapisz play&amp;listę</source>
+        <source>Save &amp;list</source>
         <translation>Enregistrer le &amp;liste</translation>
     </message>
     <message>
-        <source>&amp;Usuń zaznaczone wpisy</source>
+        <source>&amp;Remove selected entries</source>
         <translation>&amp;Effacer les entrées sélectionnées</translation>
     </message>
     <message>
-        <source>U&amp;suń wpisy bez grupy</source>
+        <source>Remove entries &amp;without groups</source>
         <translation>Supprimer les entrées &amp;sans groupe</translation>
     </message>
     <message>
-        <source>&amp;Wyczyść listę</source>
+        <source>&amp;Clear list</source>
         <translation>&amp;Effacer la liste</translation>
     </message>
     <message>
-        <source>K&amp;opiuj</source>
+        <source>&amp;Copy</source>
         <translation>&amp;Copier</translation>
     </message>
     <message>
-        <source>Wkl&amp;ej</source>
+        <source>&amp;Paste</source>
         <translation>&amp;Coller</translation>
     </message>
     <message>
-        <source>U&amp;twórz grupę</source>
+        <source>&amp;Create &amp;group</source>
         <translation>&amp;Créer &amp;goupe</translation>
     </message>
     <message>
-        <source>Z&amp;mień nazwę</source>
+        <source>&amp;Rename</source>
         <translation>&amp;Renommer</translation>
     </message>
     <message>
-        <source>Z&amp;najdź wpisy</source>
+        <source>&amp;Find entries</source>
         <translation>&amp;Trouver des entrées</translation>
     </message>
     <message>
-        <source>&amp;Zwiń wszystkie</source>
+        <source>&amp;Collapse all</source>
         <translation>&amp;Réduire tout</translation>
     </message>
     <message>
-        <source>&amp;Rozwiń wszystkie</source>
+        <source>&amp;Expand all</source>
         <translation>&amp;Agrandir tout</translation>
     </message>
     <message>
-        <source>&amp;Idź do odtwarzanego</source>
+        <source>&amp;Go to the playback</source>
         <translation>&amp;Aller à la lecture</translation>
     </message>
     <message>
-        <source>&amp;Kolejkuj</source>
+        <source>&amp;Enqueue</source>
         <translation>&amp;Mettre en liste d&apos;attente</translation>
     </message>
     <message>
-        <source>&amp;Właściwości</source>
+        <source>&amp;Properties</source>
         <translation>&amp;Propriétés</translation>
     </message>
     <message>
-        <source>&amp;Rozszerzenia</source>
+        <source>&amp;Extensions</source>
         <translation>&amp;Extensions</translation>
     </message>
     <message>
-        <source>Zapisz &amp;grupę</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Save &amp;group</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
     <message>
-        <source>Playlista</source>
+        <source>Playlist</source>
         <translation>Liste de lecture</translation>
     </message>
     <message>
-        <source>Filtruj wpisy</source>
+        <source>Filter entries</source>
         <translation>Filtrer les entrées</translation>
     </message>
     <message>
-        <source>Lista jest ładowana...</source>
+        <source>Playlist is loading now...</source>
         <translation>La liste de lecture est en cours de chargement...</translation>
     </message>
     <message>
-        <source>Ilość widocznych wpisów</source>
+        <source>Visible entries</source>
         <translation>Entrées visibles</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz wyczyścić listę?</source>
+        <source>Are you sure you want to clear the list?</source>
         <translation>Êtes-vous sûr de vouloir vider la liste?</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz usunąć niepogrupowane wpisy?</source>
+        <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Êtes vous sûr de vouloir effacer les entrées non groupées?</translation>
     </message>
     <message>
-        <source>Synchronizowanie z plikiem nie jest obsługiwane</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Synchronizing with file is not supported</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>PortAudioWriter</name>
     <message>
-        <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
+        <source>Cannot open audio output stream</source>
         <translation>Impossible d&apos;ouvrir le flux de sortie audio</translation>
     </message>
     <message>
-        <source>Błąd podczas odtwarzania</source>
+        <source>Playback error</source>
         <translation>Erreur de lecture</translation>
     </message>
 </context>
 <context>
     <name>ProstoPleerW</name>
     <message>
-        <source>Wyszukaj</source>
+        <source>Search</source>
         <translation>Chercher</translation>
     </message>
     <message>
-        <source>Następna strona</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Next page</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Błąd połączenia</source>
+        <source>Connection error</source>
         <translation>Erreur de connexion</translation>
     </message>
     <message>
-        <source>Spróbuj ponownie później</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Try again later</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Wyszukaj w Prostopleer</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Search on Prostopleer</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>PulseAudioWriter</name>
     <message>
-        <source>Nie można otworzyć strumienia wyjścia dźwięku</source>
+        <source>Cannot open audio output stream</source>
         <translation>Impossible d&apos;ouvrir le flux de sortie audio</translation>
     </message>
     <message>
-        <source>Błąd podczas odtwarzania</source>
+        <source>Playback error</source>
         <translation>Erreur de lecture</translation>
     </message>
 </context>
 <context>
     <name>QMPlay2CoreClass</name>
     <message>
-        <source>nieprawidłowa biblioteka QMPlay2</source>
+        <source>invalid QMPlay2 library</source>
         <translation>Bibliothèque QMPlay2 invalide</translation>
     </message>
     <message>
-        <source>Nie można otworzyć pliku dziennika</source>
+        <source>Can&apos;t open log file</source>
         <translation>Impossible d&apos;ouvrir le journal du fichier</translation>
     </message>
 </context>
 <context>
     <name>QMPlay2GUIClass</name>
     <message>
-        <source>Zapis okładki</source>
+        <source>Saving cover picture</source>
         <translation>Sauvegarde de l&apos;image de la jaquette</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Czekaj, trwa aktualizacja pamięci podręcznej czcionek</source>
+        <source>Font cache is updating, please wait</source>
         <translation>Mise à jour du cache des polices, veuillez patienter</translation>
     </message>
     <message>
-        <source>QMPlay2 został zaktualizowany do wersji</source>
+        <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 a été mis à jour à la version</translation>
     </message>
     <message>
-        <source>  Lista parametrów:
-    -open      &quot;adres&quot;
-    -enqueue   &quot;adres&quot;
-    -noplay     - nie odtwarza muzyki po uruchomieniu (omija opcję &quot;Zapamiętaj pozycję odtwarzania&quot;)
-    -toggle     - przełącza play/pause
-    -show       - zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona
-    -fullscreen - przełącza z/do pełnego ekranu
-    -volume     - ustawia głośność [0..100]
-    -speed      - ustawia szybkość odtwarzania [0.05..100.0]
-    -seek       - przewija do podanej wartości [s]
-    -stop       - zatrzymuje odtwarzanie
-    -next       - odtwarza następny na liście
-    -prev       - odtwarza poprzedni na liście
-    -quit       - zakańcza działanie aplikacji</source>
+        <source>  Parameters list:
+    -open      &quot;address&quot;
+    -enqueue   &quot;address&quot;
+    -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
+    -toggle     - toggles play/pause
+    -show       - ensures that the window will be visible if the application is running
+    -fullscreen - toggles fullscreen
+    -volume     - sets volume [0..100]
+    -speed      - sets playback speed [0.05..100.0]
+    -seek       - seeks to the specified value [s]
+    -stop       - stops playback
+    -next       - plays next on the list
+    -prev       - plays previous on the list
+    -quit       - terminates the application</source>
         <translation>  Parameters list:
     -open      &quot;adresse&quot;
     -enqueue   &quot;adresse&quot;
@@ -1779,89 +1756,89 @@ amp</source>
 <context>
     <name>Radio</name>
     <message>
-        <source>Radia internetowe</source>
+        <source>Internet radios</source>
         <translation>Radios internet</translation>
     </message>
     <message>
-        <source>Pobieranie listy, czekaj...</source>
+        <source>Downloading list, please wait...</source>
         <translation>Téléchargement de la liste, veuillez patienter...</translation>
     </message>
     <message>
-        <source>Liczba stacji radiowych</source>
+        <source>Number of radio stations</source>
         <translation>Nombre de stations de radio</translation>
     </message>
     <message>
-        <source>Błąd podczas pobierania listy</source>
+        <source>Error while downloading list</source>
         <translation>Erreur pendant le téléchargement de la liste</translation>
     </message>
     <message>
-        <source>Własne stacje radiowe</source>
+        <source>Own radio stations</source>
         <translation>Stations radio personnelles</translation>
     </message>
     <message>
-        <source>Usuń stację radiową</source>
+        <source>Remove the radio station</source>
         <translation>Supprimer la station radio</translation>
     </message>
     <message>
-        <source>Dodawanie nowej stacji radiowej</source>
+        <source>Adding a new radio station</source>
         <translation>Ajout d&apos;une nouvelle station radio</translation>
     </message>
     <message>
-        <source>Dodaj nową stację radiową</source>
+        <source>Add new radio station</source>
         <translation>Ajouter une nouvelle station radio</translation>
     </message>
     <message>
-        <source>Nazwa</source>
+        <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <source>Adres</source>
+        <source>Address</source>
         <translation>Adresse</translation>
     </message>
 </context>
 <context>
     <name>Repeat</name>
     <message>
-        <source>Zapętlenie &amp;odtwarzania</source>
+        <source>&amp;Repeat</source>
         <translation>Ré&amp;péter</translation>
     </message>
     <message>
-        <source>&amp;Bez zapętlenia</source>
+        <source>&amp;No repeating</source>
         <translation>&amp;Pas de répétition</translation>
     </message>
     <message>
-        <source>Zapętlenie &amp;utworu</source>
+        <source>&amp;Entry repeating</source>
         <translation>Répéter l&apos;&amp;entrée</translation>
     </message>
     <message>
-        <source>Zapętlenie &amp;grupy</source>
+        <source>&amp;Group repeating</source>
         <translation>Répéter le &amp;groupe</translation>
     </message>
     <message>
-        <source>Zapętlenie &amp;listy</source>
+        <source>&amp;Playlist repeating</source>
         <translation>&amp;Répéter la liste de lecture</translation>
     </message>
     <message>
-        <source>Losowe &amp;odtwarzanie</source>
+        <source>R&amp;andom</source>
         <translation>A&amp;léatoire</translation>
     </message>
     <message>
-        <source>Losowe odtwarzanie g&amp;rupy</source>
+        <source>Random in &amp;group</source>
         <translation>Au hasard dans le &amp;groupe</translation>
     </message>
 </context>
 <context>
     <name>ResultsPleer</name>
     <message>
-        <source>Tytuł</source>
+        <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>Wykonawca</source>
+        <source>Artist</source>
         <translation>Artiste</translation>
     </message>
     <message>
-        <source>Długość</source>
+        <source>Length</source>
         <translation>Durée</translation>
     </message>
     <message>
@@ -1869,116 +1846,116 @@ amp</source>
         <translation>Bitrate</translation>
     </message>
     <message>
-        <source>Kolejkuj</source>
+        <source>Enqueue</source>
         <translation>Mettre dans la file d&apos;attente</translation>
     </message>
     <message>
-        <source>Odtwórz</source>
+        <source>Play</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <source>Otwórz stronę w przeglądarce</source>
+        <source>Open the page in the browser</source>
         <translation>Ouvrir la page dans le navigateur</translation>
     </message>
     <message>
-        <source>Kopiuj adres strony</source>
+        <source>Copy page address</source>
         <translation>Copier l&apos;adresse de la page</translation>
     </message>
 </context>
 <context>
     <name>ResultsYoutube</name>
     <message>
-        <source>Tytuł</source>
+        <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>Długość</source>
+        <source>Length</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <source>Użytkownik</source>
+        <source>User</source>
         <translation>Utilisateur</translation>
     </message>
     <message>
-        <source>Kolejkuj</source>
+        <source>Enqueue</source>
         <translation>Mettre dans la file d&apos;attente</translation>
     </message>
     <message>
-        <source>Odtwórz</source>
+        <source>Play</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <source>Otwórz stronę w przeglądarce</source>
+        <source>Open the page in the browser</source>
         <translation>Ouvrir la page dans le navigateur</translation>
     </message>
     <message>
-        <source>Kopiuj adres strony</source>
+        <source>Copy page address</source>
         <translation>Copier l&apos;adresse de la page</translation>
     </message>
     <message>
-        <source>Kopiuj adres strumienia</source>
+        <source>Copy stream address</source>
         <translation>Copier l&apos;adresse du flux</translation>
     </message>
 </context>
 <context>
     <name>SIDPlay</name>
     <message>
-        <source>Ścieżka</source>
+        <source>Track</source>
         <translation>Chemin</translation>
     </message>
 </context>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <source>Ustawienia</source>
+        <source>Settings</source>
         <translation>Réglages</translation>
     </message>
     <message>
-        <source>Ustawienia odtwarzania</source>
+        <source>Playback settings</source>
         <translation>Paramètres de lecture</translation>
     </message>
     <message>
-        <source>Moduły</source>
+        <source>Modules</source>
         <translation>Modules</translation>
     </message>
     <message>
-        <source>Zastosuj</source>
+        <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <source>Zamknij</source>
+        <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <source>Krótkie przewijanie (strzałki: w lewo i w prawo)</source>
+        <source>Short seeking (left and right arrows)</source>
         <translation>Recherche rapide (flèches droite/gauche)</translation>
     </message>
     <message>
-        <source>Długie przewijanie (strzałki: w górę i w dół)</source>
+        <source>Long seeking (up and down arrows)</source>
         <translation>Recherche lente (flèches haut/bas)</translation>
     </message>
     <message>
-        <source>Zapamiętaj pozycję odtwarzania</source>
+        <source>Remember play position</source>
         <translation>Mémoriser la position de lecture</translation>
     </message>
     <message>
-        <source>Zawiera</source>
+        <source>Contains</source>
         <translation>Contient</translation>
     </message>
     <message>
-        <source>Pozostaw zoom między plikami wideo</source>
+        <source>Keep zoom</source>
         <translation>Conserver le zoom</translation>
     </message>
     <message>
-        <source>Pozostaw współczynnik proporcji między plikami wideo</source>
+        <source>Keep aspect ratio</source>
         <translation>Conserver le ratio d&apos;aspect</translation>
     </message>
     <message>
-        <source>Synchronizuj obraz do dźwięku (pomijanie klatek)</source>
+        <source>Video to audio sync (frame skipping)</source>
         <translation>Synchronisation audio/video (saut de trames)</translation>
     </message>
     <message>
-        <source>Napisy</source>
+        <source>Subtitles</source>
         <translation>Sous-titres</translation>
     </message>
     <message>
@@ -1986,320 +1963,306 @@ amp</source>
         <translation>Affichage à l&apos;écran</translation>
     </message>
     <message>
-        <source>Język</source>
+        <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <source>Styl</source>
+        <source>Style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <source>Kolory i obramowania</source>
+        <source>Colors and borders</source>
         <translation>Couleurs et bordures</translation>
     </message>
     <message>
-        <source>Zastosuj dla napisów ASS/SSA</source>
+        <source>Apply for ASS/SSA subtitles</source>
         <translation>Appliquer aux sous-titres ASS/SSA</translation>
     </message>
     <message>
-        <source>Pozostaw opóźnienie napisów między plikami wideo</source>
+        <source>Keep subtitles delay</source>
         <translation>Maintenir la durée entre les sous-titres</translation>
     </message>
     <message>
-        <source>Czcionki i odstępy</source>
+        <source>Fonts and spacing</source>
         <translation>Polices et espacements</translation>
     </message>
     <message>
-        <source>Pozostaw powiększenie napisów między plikami wideo</source>
+        <source>Keep subtitles scale</source>
         <translation>Maintenir les proportions des sous-titres</translation>
     </message>
     <message>
-        <source>Marginesy i rozmieszczenie</source>
+        <source>Margins and alignment</source>
         <translation>Marges et alignements</translation>
     </message>
     <message>
-        <source>Ustawienia ogólne</source>
+        <source>General settings</source>
         <translation>Réglages généraux</translation>
     </message>
     <message>
-        <source>Kodowanie napisów</source>
+        <source>Subtitles encoding</source>
         <translation>Encodage des sous-titres</translation>
     </message>
     <message>
-        <source>OSD włączone</source>
+        <source>OSD enabled</source>
         <translation>Affichage à l&apos;écran activé</translation>
     </message>
     <message>
-        <source>Ścieżka do zrzutów ekranu</source>
+        <source>Screenshots path</source>
         <translation>Chemin des captures d&apos;écran</translation>
     </message>
     <message>
-        <source>Przeglądaj</source>
+        <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <source>Wybierz katalog</source>
+        <source>Choose directory</source>
         <translation>Choisir le dossier</translation>
     </message>
     <message>
-        <source>Użyj jednakowej wielkości</source>
+        <source>Use the same size</source>
         <translation>Utiliser la même taille</translation>
     </message>
     <message>
-        <source>Wymuś częstotliwość próbkowania</source>
+        <source>Force samplerate</source>
         <translation>Forcer le taux d&apos;échantillonnage</translation>
     </message>
     <message>
-        <source>Wymuś konwersję kanałów</source>
+        <source>Force channels conversion</source>
         <translation>Forcer la conversion des chaînes</translation>
     </message>
     <message>
-        <source>sek</source>
+        <source>sec</source>
         <translation>sec</translation>
     </message>
     <message>
-        <source>Maksymalna głośność</source>
+        <source>Maximum volume</source>
         <translation>Volume maxmimum</translation>
     </message>
     <message>
-        <source>Rozpocznij odtwarzanie strumienia internetowego jeżeli zostanie zbuforowane</source>
+        <source>Start playback internet stream if it is buffered</source>
         <translation>Démarrer la lecture du flux si mis en mémoire tampon</translation>
     </message>
     <message>
-        <source>Pokazuj wskaźnik zbuforowanych danych na pasku przewijania</source>
+        <source>Show buffered data indicator on slider</source>
         <translation>Montrer l&apos;indicateur de données en mémoire tampon dans la barre latérale</translation>
     </message>
     <message>
-        <source>Pozostaw opóźnienie obrazu względem dźwięku między plikami wideo</source>
+        <source>Keep video delay</source>
         <translation>Maintenir la durée entre les vidéos</translation>
     </message>
     <message>
-        <source>Wyciszaj podczas zatrzymywania odtwarzania</source>
+        <source>Fade sound</source>
         <translation>Fondu du son</translation>
     </message>
     <message>
-        <source>Wyczyść ustawienia programu</source>
+        <source>Reset settings</source>
         <translation>Réinitialiser les réglages</translation>
     </message>
     <message>
-        <source>Potwierdź usunięcie ustawień</source>
+        <source>Confirm settings deletion</source>
         <translation>Suppression des réglages</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz usunąć wszystkie ustawienia?</source>
+        <source>Do you really want to clear all settings?</source>
         <translation>Voulez-vous vraiment nettoyer tous les réglages?</translation>
     </message>
     <message>
-        <source>Nowy język</source>
+        <source>New language</source>
         <translation>Nouvelle langue</translation>
     </message>
     <message>
-        <source>Aby zastosować nowy język program zostanie uruchomiony ponownie!</source>
+        <source>To set up a new language, the program will start again!</source>
         <translation>Afin d&apos;appliquer une autre langue, le logiciel va redémarrer!</translation>
     </message>
     <message>
-        <source>Pozostaw szybkość odtwarzania między plikami</source>
+        <source>Keep speed</source>
         <translation>Maintenir la vitesse</translation>
     </message>
     <message>
-        <source>Automatycznie sprawdzaj i pobieraj aktualizacje</source>
+        <source>Automatically check and download updates</source>
         <translation>Vérifier et télécharger automatiquement les mises à jour</translation>
     </message>
     <message>
-        <source>Kółko myszki przewija muzykę/film</source>
+        <source>Mouse wheel scrolls music/movie</source>
         <translation>La roule de la souris fait défiler la musique/le film</translation>
     </message>
     <message>
-        <source>Wyświetlaj okładki</source>
+        <source>Show covers</source>
         <translation>Montrer les pochettes</translation>
     </message>
     <message>
-        <source>Wyświetlaj okładki z katalogu jeżeli nie ma ich w pliku muzycznym</source>
+        <source>Show covers from directory if there aren&apos;t in the music file</source>
         <translation>Montrer la pochette depuis le dossier s&apos;ils ne sont pas dans le fichier</translation>
     </message>
     <message>
-        <source>Filtry wideo</source>
+        <source>Video filters</source>
         <translation>Filtres vidéos</translation>
     </message>
     <message>
-        <source>Programowe filtry wideo</source>
+        <source>Software video filters</source>
         <translation>Programme de filtres vidéos</translation>
     </message>
     <message>
-        <source>Potwierdź wyczyszczenie pamięci podręcznej okładek</source>
+        <source>Confirm clearing the cache covers</source>
         <translation>Confirmer le nettoyage du cache des pochettes</translation>
     </message>
     <message>
-        <source>Czy na pewno chcesz usunąć wszystkie zapamiętane okładki?</source>
+        <source>Do you want to delete all cached covers?</source>
         <translation>Voulez-vous effacer toutes les pochettes en cache?</translation>
     </message>
     <message>
-        <source>Używaj serwera proxy</source>
+        <source>Use proxy server</source>
         <translation>Utiliser un serveur proxy</translation>
     </message>
     <message>
-        <source>Adres serwera proxy</source>
+        <source>Proxy server address</source>
         <translation>Adresse du serveur proxy</translation>
     </message>
     <message>
-        <source>Port serwera proxy</source>
+        <source>Proxy server port</source>
         <translation>Port du serveur proxy</translation>
     </message>
     <message>
-        <source>Serwer proxy wymaga logowania</source>
+        <source>Proxy server needs login</source>
         <translation>Le serveur proxy nécessite une connexion</translation>
     </message>
     <message>
-        <source>Nazwa użytkownika</source>
+        <source>User name</source>
         <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
-        <source>Hasło</source>
+        <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <source>Wyczyść pamięć podręczną okładek</source>
+        <source>Clear covers cache</source>
         <translation>Nettoie le cache des pochettes</translation>
     </message>
     <message>
-        <source>Automatyczne otwieranie okienka z filmem</source>
+        <source>Automatically opening video window</source>
         <translation>Ouvre automatiquement une fenêtre vidéo</translation>
     </message>
     <message>
-        <source>Zezwalaj na tylko jedną instancję</source>
+        <source>Allow only one instance</source>
         <translation>N&apos;autorise qu&apos;une seule instance</translation>
     </message>
     <message>
-        <source>Pokazuj karty w górnej części okna głównego</source>
+        <source>Show tabs at the top of the main window</source>
         <translation>Montre les onglets en haut de la fenêtre principale</translation>
     </message>
     <message>
-        <source>Ustaw wygląd</source>
+        <source>Set appearance</source>
         <translation>Règle l&apos;apparence</translation>
     </message>
     <message>
-        <source>Użyj systemowego zestawu ikon</source>
+        <source>Use system icon set</source>
         <translation>Utilise le thème d&apos;icônes du système</translation>
     </message>
     <message>
-        <source>Użyj wyrównywania głośności, jeżeli dostępne</source>
+        <source>Use replay gain if available</source>
         <translation>Utilise replay gain si disponible</translation>
     </message>
     <message>
-        <source>Tryb albumu dla wyrównywania głośności</source>
+        <source>Album mode for replay gain</source>
         <translation>Mode album pour replay gain</translation>
     </message>
     <message>
-        <source>Zapobiegaj przesterowaniu</source>
+        <source>Prevent clipping</source>
         <translation>Empêcher les coupures</translation>
     </message>
     <message>
-        <source>Zmiana ikon</source>
+        <source>Changing icons</source>
         <translation>Change les icônes</translation>
     </message>
     <message>
-        <source>Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!</source>
+        <source>To apply the icons change program will start again!</source>
         <translation>Appliquer les icônes va redémarrer le programme!</translation>
     </message>
     <message>
-        <source>Pamiętaj ustawienia korektora wideo</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Remember video equalizer settings</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</source>
+        <source>Local buffer size (A/V packages count)</source>
         <translation>Taille de la mémoire tampon locale (nombre de paquets A/V)</translation>
     </message>
     <message>
-        <source>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</source>
+        <source>Network buffer size (A/V packages count)</source>
         <translation>Taille de la mémoire tampon réseau (nombre de paquets A/V)</translation>
     </message>
     <message>
-        <source>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Percent of packages for backwards rewinding</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Domyślny język dla dźwięku</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Default audio language</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Domyślny język dla napisów</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Default subtitles language</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Domyślna lub pierwsza ścieżka</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Default or first stream</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Wzmocnienie</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Amplify</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Przenieś wyżej</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Move up</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Przenieś niżej</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Move down</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet wyjścia obrazu</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Video output priority</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet wyjścia dźwięku</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Audio output priority</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Priorytet dekoderów</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Decoders priority</source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Play next entry after playback error</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>SimpleVisW</name>
     <message>
-        <source>Prosta wizualizacja</source>
+        <source>Simple visualization</source>
         <translation>Visualisation simple</translation>
     </message>
 </context>
 <context>
     <name>Sort</name>
     <message>
-        <source>&amp;Od najkrótszej do najdłuższej</source>
+        <source>&amp;From the shortest to the longest</source>
         <translation>&amp;De la plus courte à la plus longue</translation>
     </message>
     <message>
-        <source>O&amp;d najdłuższej do najkrótszej</source>
+        <source>&amp;From the longest to the shortest</source>
         <translation>&amp;De la plus longue à la plus courte</translation>
     </message>
     <message>
-        <source>&amp;A-Z</source>
-        <translation></translation>
-    </message>
+        <source></source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>&amp;Z-A</source>
-        <translation></translation>
-    </message>
+        <source></source>
+        <translation type="unfinished"></translation>    </message>
     <message>
-        <source>S&amp;ortuj</source>
+        <source>&amp;Sort</source>
         <translation>&amp;Trier</translation>
     </message>
 </context>
 <context>
     <name>StreamInfo</name>
     <message>
-        <source>Język</source>
+        <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <source>Tytuł</source>
+        <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>Artysta</source>
+        <source>Artist</source>
         <translation>Artiste</translation>
     </message>
     <message>
@@ -2307,30 +2270,30 @@ amp</source>
         <translation>Album</translation>
     </message>
     <message>
-        <source>Gatunek</source>
+        <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <source>Data</source>
+        <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <source>Komentarz</source>
+        <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
 </context>
 <context>
     <name>TagEditor</name>
     <message>
-        <source>Dodaj tagi</source>
+        <source>Add tags</source>
         <translation>Ajouter des tags</translation>
     </message>
     <message>
-        <source>Tytuł</source>
+        <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <source>Artysta</source>
+        <source>Artist</source>
         <translation>Artiste</translation>
     </message>
     <message>
@@ -2338,50 +2301,50 @@ amp</source>
         <translation>Album</translation>
     </message>
     <message>
-        <source>Komentarz</source>
+        <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <source>Gatunek</source>
+        <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <source>Rok</source>
+        <source>Year</source>
         <translation>Année</translation>
     </message>
     <message>
-        <source>Brak</source>
+        <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <source>Ścieżka</source>
+        <source>Track</source>
         <translation>Piste</translation>
     </message>
     <message>
-        <source>Okładka</source>
+        <source>Cover</source>
         <translation>Pochette</translation>
     </message>
     <message>
-        <source>Wczytaj okładkę</source>
+        <source>Load cover picture</source>
         <translation>Charger l&apos;image de la pochette</translation>
     </message>
     <message>
-        <source>Zapisz okładkę</source>
+        <source>Save cover picture</source>
         <translation>Sauvegarder l&apos;image de la pochette</translation>
     </message>
     <message>
-        <source>Obrazy</source>
+        <source>Pictures</source>
         <translation>Images</translation>
     </message>
     <message>
-        <source>Wczytywanie okładki</source>
+        <source>Loading cover picture</source>
         <translation>Chargement de l&apos;image de la pochette</translation>
     </message>
 </context>
 <context>
     <name>ToneGenerator</name>
     <message>
-        <source>Generator częstotliwości</source>
+        <source>Tone generator</source>
         <translation>Générateur de tonalité</translation>
     </message>
     <message>
@@ -2392,204 +2355,203 @@ amp</source>
 <context>
     <name>Updater</name>
     <message>
-        <source>Aktualizacje programu QMPlay2</source>
+        <source>QMPlay2 updates</source>
         <translation>Mises à jour de QMPlay2</translation>
     </message>
     <message>
-        <source>Program jest aktualny</source>
+        <source>Application is up-to-date</source>
         <translation>L&apos;application est à jour</translation>
     </message>
     <message>
-        <source>Pobierz aktualizacje</source>
+        <source>Download update</source>
         <translation>Télécharger la mise à jour</translation>
     </message>
     <message>
-        <source>Zastosuj aktualizację</source>
+        <source>Apply update</source>
         <translation>Appliquer la mise à jour</translation>
     </message>
     <message>
-        <source>Brak dostępnej aktualizacji</source>
+        <source>No update available</source>
         <translation>Pas de mise à jour disponible</translation>
     </message>
     <message>
-        <source>Błąd zapisu aktualizacji</source>
+        <source>Error update writing</source>
         <translation>Erreur d&apos;écriture de la mise à jour</translation>
     </message>
     <message>
-        <source>Błąd sprawdzania aktualizacji</source>
+        <source>Error checking for updates</source>
         <translation>Erreur pendant la vérification des mises à jour</translation>
     </message>
     <message>
-        <source>Błąd pobierania aktualizacji</source>
+        <source>Error download the update</source>
         <translation>Erreur durant le téléchargement de la mise à jour</translation>
     </message>
     <message>
-        <source>Sprawdzanie dostępności aktualizacji</source>
+        <source>Checking for updates</source>
         <translation>Vérification des mises à jour</translation>
     </message>
     <message>
-        <source>Aktualizacja została pobrana</source>
+        <source>The update is downloaded</source>
         <translation>La mise à jour est téléchargée</translation>
     </message>
 </context>
 <context>
     <name>VAAPIWriter</name>
     <message>
-        <source>Nie obsługiwany algorytm usuwania przeplotu</source>
+        <source>Not supported deinterlacing algorithm</source>
         <translation>Algorithme de désentrelacement non supporté</translation>
     </message>
     <message>
-        <source>Nie można otworzyć filtrów obrazu</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <source>Cannot open video filters</source>
+        <translation type="unfinished"></translation>    </message>
 </context>
 <context>
     <name>VDPAUWriter</name>
     <message>
-        <source>Nie obsługiwany algorytm usuwania przeplotu</source>
+        <source>Not supported deinterlacing algorithm</source>
         <translation>Algorithme de désentrelacement non supporté</translation>
     </message>
     <message>
-        <source>Nie obsługiwany filtr redukcji szumów</source>
+        <source>Unsupported noisy reduction filter</source>
         <translation>Filtre de réduction du bruit non supporté</translation>
     </message>
     <message>
-        <source>Nie obsługiwany filtr ostrości obrazu</source>
+        <source>Unsupported image sharpness filter</source>
         <translation>Filtre de résolution d&apos;image non supporté</translation>
     </message>
     <message>
-        <source>Nieobsługiwany poziom skalowania obrazu</source>
+        <source>Unsupported image scaling level</source>
         <translation>Niveau de mise à l&apos;échelle de l&apos;image non supporté</translation>
     </message>
 </context>
 <context>
     <name>VFilters</name>
     <message>
-        <source>Tworzy jedną dodatkową ramkę, która jest średnią z dwóch sąsiadujących klatek</source>
+        <source>Produces one extra frame which is average of two neighbour frames</source>
         <translation>Produit une trame supplémentaire qui est à la moyenne des deux trames voisinnes</translation>
     </message>
 </context>
 <context>
     <name>VideoDock</name>
     <message>
-        <source>Wideo</source>
+        <source>Video</source>
         <translation>Video</translation>
     </message>
 </context>
 <context>
     <name>VideoEqualizer</name>
     <message>
-        <source>Jasność</source>
+        <source>Brightness</source>
         <translation>Brillance</translation>
     </message>
     <message>
-        <source>Nasycenie</source>
+        <source>Saturation</source>
         <translation>Saturation</translation>
     </message>
     <message>
-        <source>Odcień</source>
+        <source>Hue</source>
         <translation>Teinte</translation>
     </message>
     <message>
-        <source>Resetuj</source>
+        <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <source>Kontrast</source>
+        <source>Contrast</source>
         <translation>Contraste</translation>
     </message>
 </context>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>&amp;Korektor wideo</source>
+        <source>Video &amp;equalizer</source>
         <translation>&amp;Egaliseur video</translation>
     </message>
     <message>
-        <source>Filtry wid&amp;eo</source>
+        <source>Video &amp;filters</source>
         <translation>Filtres &amp;video</translation>
     </message>
     <message>
-        <source>Odbicie &amp;lustrzane</source>
+        <source>&amp;Horizontal flip</source>
         <translation>&amp;Retournement horizontal</translation>
     </message>
     <message>
-        <source>Odbicie &amp;pionowe</source>
+        <source>&amp;Vertical flip</source>
         <translation>&amp;Retournement vertical</translation>
     </message>
     <message>
-        <source>&amp;Więcej filtrów</source>
+        <source>&amp;More filters</source>
         <translation>&amp;Plus de filtres</translation>
     </message>
 </context>
 <context>
     <name>VideoThr</name>
     <message>
-        <source>Błąd podczas tworzenia zrzutu ekranu</source>
+        <source>Cannot create screenshot</source>
         <translation>Impossible de créer la capture d&apos;écran</translation>
     </message>
     <message>
-        <source>Błąd inicjalizacji filtru usuwania przeplotu</source>
+        <source>Cannot initialize the deinterlacing filter</source>
         <translation>Impossible de démarrer le filtre de désentrelacement</translation>
     </message>
     <message>
-        <source>Błąd inicjalizacji filtru</source>
+        <source>Error initializing filter</source>
         <translation>Erreur lors de l&apos;initialisation du filtre</translation>
     </message>
 </context>
 <context>
     <name>VisWidget</name>
     <message>
-        <source>Ustawienia</source>
+        <source>Settings</source>
         <translation>Réglages</translation>
     </message>
 </context>
 <context>
     <name>Widgets</name>
     <message>
-        <source>&amp;Widgety</source>
+        <source>&amp;Widgets</source>
         <translation>&amp;Widgets</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>&amp;Okno</source>
+        <source>&amp;Window</source>
         <translation>&amp;Fenêtre</translation>
     </message>
     <message>
-        <source>&amp;Pełny ekran</source>
+        <source>&amp;Full screen</source>
         <translation>&amp;Plein écran</translation>
     </message>
     <message>
-        <source>&amp;Tryb kompaktowy</source>
+        <source>&amp;Compact view</source>
         <translation>&amp;Vue compacte</translation>
     </message>
     <message>
-        <source>&amp;Zamknij</source>
+        <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
 </context>
 <context>
     <name>YouTubeW</name>
     <message>
-        <source>Wyszukaj</source>
+        <source>Search</source>
         <translation>Chercher</translation>
     </message>
     <message>
-        <source>Ustawienia</source>
+        <source>Settings</source>
         <translation>Réglages</translation>
     </message>
     <message>
-        <source>Błąd połączenia</source>
+        <source>Connection error</source>
         <translation>Erreur de connexion</translation>
     </message>
     <message>
-        <source>Wyszukaj w YouTube</source>
+        <source>Search on YouTube</source>
         <translation>Chercher sur YouTube</translation>
     </message>
     <message>
-        <source>Brakuje zewnętrznego programu - &apos;youtube-dl&apos;. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube.</source>
+        <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
         <translation>Il n&apos;y a pas de programme externe - &apos;youtube-dl&apos;. Téléchargez-le, puis paramétrez le chemin qui y mène dans les options du module Youtube.</translation>
     </message>
 </context>

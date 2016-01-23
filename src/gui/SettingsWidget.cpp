@@ -282,7 +282,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->langL = new QLabel;
 	page1->langL->setText(tr("Language") + ": ");
 	page1->langBox = new QComboBox;
-	page1->langBox->addItem("Polski", "pl");
+	page1->langBox->addItem("English", "en");
 	page1->langBox->setCurrentIndex(0);
 	QStringList langs = QMPlay2GUI.getLanguages();
 	for (int i = 0; i < langs.count(); i++)
