@@ -301,7 +301,7 @@ static void showHelp(const QByteArray &ver)
 "    -next       - plays next on the list\n"
 "    -prev       - plays previous on the list\n"
 "    -quit       - terminates the application"
-    ).toLatin1() + "\n");
+	).toUtf8() + "\n");
 }
 static bool writeToSocket(QLocalSocket &socket)
 {
