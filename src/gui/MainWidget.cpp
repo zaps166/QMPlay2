@@ -273,7 +273,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	addAction(hideMenuAct);
 #endif
 
-	widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked");
+	const bool widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked");
 	lockWidgets(widgetsLocked);
 	lockWidgetsAct = new QAction(tr("&Lock widgets"), menuBar);
 	lockWidgetsAct->setCheckable(true);
@@ -1025,7 +1025,7 @@ void MainWidget::lockWidgets(bool l)
 			}
 		}
 		mainTB->setMovable(!l);
-		widgetsLocked = l;
+		QMPlay2Core.getSettings().set("MainWidget/WidgetsLocked", l);
 	}
 }
 
@@ -1198,32 +1198,32 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	if (QMPlay2GUI.pipe)
 		disconnect(QMPlay2GUI.pipe, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
+	Settings &settings = QMPlay2Core.getSettings();
+
 	if (!fullScreen && !isCompactView)
-		QMPlay2Core.getSettings().set("MainWidget/DockWidgetState", saveState());
+		settings.set("MainWidget/DockWidgetState", saveState());
 	else
-		QMPlay2Core.getSettings().set("MainWidget/DockWidgetState", dockWidgetState);
-	QMPlay2Core.getSettings().set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
+		settings.set("MainWidget/DockWidgetState", dockWidgetState);
+	settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
 #ifndef Q_OS_MAC
-	QMPlay2Core.getSettings().set("MainWidget/isVisible", isVisible());
+	settings.set("MainWidget/isVisible", isVisible());
 #endif
-	QMPlay2Core.getSettings().set("TrayVisible", tray->isVisible());
-	QMPlay2Core.getSettings().set("Volume", volS->value());
+	settings.set("TrayVisible", tray->isVisible());
+	settings.set("Volume", volS->value());
 	menuBar->playback->videoFilters->videoEqualizer->saveValues();
 
 	hide();
 
-	if (playC.isPlaying() && QMPlay2Core.getSettings().getBool("SavePos"))
+	if (playC.isPlaying() && settings.getBool("SavePos"))
 	{
-		QMPlay2Core.getSettings().set("Pos", seekS->value());
-		QMPlay2Core.getSettings().set("Url", playC.getUrl());
+		settings.set("Pos", seekS->value());
+		settings.set("Url", playC.getUrl());
 	}
 	else
 	{
-		QMPlay2Core.getSettings().remove("Pos");
-		QMPlay2Core.getSettings().remove("Url");
+		settings.remove("Pos");
+		settings.remove("Url");
 	}
-
-	QMPlay2Core.getSettings().set("MainWidget/WidgetsLocked", widgetsLocked);
 
 	playlistDock->stopThreads();
 	playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");

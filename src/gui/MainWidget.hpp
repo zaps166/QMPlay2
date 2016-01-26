@@ -140,7 +140,7 @@ private:
 	QList< QMPlay2Extensions * > visibleQMPlay2Extensions;
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
-	bool isCompactView, wasShow, fullScreen, widgetsLocked;
+	bool isCompactView, wasShow, fullScreen;
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	QAction *hideMenuAct;

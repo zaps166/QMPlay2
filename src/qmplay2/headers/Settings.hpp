@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QMutex>
 #include <QMap>
+#include <QSet>
 
 class Settings : protected QSettings
 {
@@ -47,12 +48,11 @@ public:
 	}
 	QVariant get(const QString &key, const QVariant &def = QVariant()) const;
 private:
-	void timerEvent(QTimerEvent *);
 	void flushCache();
 
 	mutable QMutex mutex;
+	QSet<QString> toRemove;
 	SettingsMap cache;
-	int timerID;
 };
 
 #endif
