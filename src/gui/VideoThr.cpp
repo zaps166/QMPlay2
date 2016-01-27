@@ -179,7 +179,7 @@ void VideoThr::updateSubs()
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0;
 	QMutex emptyBufferMutex;
 	QByteArray frame;
@@ -203,10 +203,12 @@ void VideoThr::run()
 			doScreenshot = false;
 		}
 
-		const bool getNewPacket = !filters.readyToRead();
+		const bool mustFetchNewPacket = !filters.readyToRead();
 		playC.vPackets.lock();
 		const bool hasVPackets = playC.vPackets.canFetch();
-		if ((playC.paused && !oneFrame) || (!hasVPackets && getNewPacket) || playC.waitForData)
+		if (maybeFlush)
+			maybeFlush = playC.endOfStream;
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData)
 		{
 			if (playC.paused && !paused)
 			{
@@ -234,7 +236,7 @@ void VideoThr::run()
 		}
 		paused = waiting = false;
 		Packet packet;
-		if (hasVPackets && getNewPacket)
+		if (hasVPackets && mustFetchNewPacket)
 			packet = playC.vPackets.fetch();
 		else
 			packet.ts.setInvalid();
@@ -330,7 +332,7 @@ void VideoThr::run()
 			frame_timer = -1.0;
 		}
 
-		if (!packet.isEmpty())
+		if (!packet.isEmpty() || maybeFlush)
 		{
 			QByteArray decoded;
 			const int bytes_consumed = dec->decode(packet, decoded, playC.flushVideo, skip ? ~0 : (fast > 1 ? fast - 1 : 0));
@@ -344,12 +346,13 @@ void VideoThr::run()
 			else if (skip)
 				filters.removeLastFromInputBuffer();
 			tmp_br += bytes_consumed;
+
 		}
 
 		const bool ptsIsValid = filters.getFrame(frame, packet.ts);
 		filtersMutex.unlock();
 
-		if (packet.ts.isValid())
+		if ((maybeFlush = packet.ts.isValid()))
 		{
 			if (packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && fabs(lastSampleAspectRatio - packet.sampleAspectRatio) >= 0.000001) //zmiana współczynnika proporcji
 			{
