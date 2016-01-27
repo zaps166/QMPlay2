@@ -14,9 +14,9 @@ InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &g
 	w(NULL)
 {
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
+	setAttribute(Qt::WA_OpaquePaintEvent);
 	setFocusPolicy(Qt::StrongFocus);
 	grabGesture(Qt::PinchGesture);
-	setAutoFillBackground(true);
 	setMouseTracking(true);
 	setPalette(Qt::black);
 }
