@@ -31,8 +31,8 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 
 ###You need (devel packages):
 
-- Qt4 or Qt5 (including QtOpenGL, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
-- FFmpeg >= 2.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*, OpenSSL for https),
+- Qt4 or Qt5 (including QtOpenGL\*, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
+- FFmpeg >= 2.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*\*, OpenSSL for https),
 - portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro"),
 - pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro"),
 - taglib >= 1.7 (>= 1.9 recommended) (you can disable it in "src/gui/gui.pro"),
@@ -44,7 +44,8 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 - libxv - only on X11,
 - libass.
 
-\*libavresample: uncomment last eight lines in "src/qmplay2/qmplay2.pro"
+\* QtOpenGL is not used on Qt >= 5.6,<br/>
+\*\* libavresample: uncomment last eight lines in "src/qmplay2/qmplay2.pro".
 
 ##Running compilation script:
 
