@@ -1,7 +1,7 @@
-Changes in QMPlay2 build 15.01.28:
-	- play multiple streams in FFmpeg, YouTube can plays different audio/video streams together,
+Changes in QMPlay2 build 15.01.29:
+	- play multiple streams in FFmpeg, YouTube can play different audio/video streams together,
 	- QOpenGLWindow and QOpenGLWidget are used instead of QGLWidget in Qt5 >= 5.6,
-	- YouTube can plays different audio/video streams together,
+	- FFmpeg module can play e.g. from v4l2 on Linux/BSD (needs special address),
 	- display icons on playlist for AudioCD and Chiptines,
 	- updated German translation (Daniel Meiß-Wilhelm),
 	- added Spanish translation (Pedro Álamo),
