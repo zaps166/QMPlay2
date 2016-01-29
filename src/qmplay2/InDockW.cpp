@@ -17,8 +17,8 @@ InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &g
 	setAttribute(Qt::WA_OpaquePaintEvent);
 	setFocusPolicy(Qt::StrongFocus);
 	grabGesture(Qt::PinchGesture);
+	setAutoFillBackground(true);
 	setMouseTracking(true);
-	setPalette(Qt::black);
 }
 
 void InDockW::setCustomPixmap(const QPixmap &pix)
@@ -27,10 +27,12 @@ void InDockW::setCustomPixmap(const QPixmap &pix)
 	update();
 }
 
-void InDockW::wallpaperChanged(bool hasWallpaper, double alpha)
+void InDockW::wallpaperChanged(bool wallpaper, double alpha)
 {
 	QColor c = Qt::black;
-	if ((this->hasWallpaper = hasWallpaper) && hasWallpaper)
+	hasWallpaper = wallpaper;
+	setAttribute(Qt::WA_OpaquePaintEvent, !wallpaper);
+	if (wallpaper)
 		c.setAlphaF(alpha);
 	setPalette(c);
 }
