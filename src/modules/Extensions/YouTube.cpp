@@ -167,7 +167,7 @@ public:
 				int idx = error.indexOf("ERROR:");
 				if (idx > -1)
 					error.remove(0, idx);
-				if (canUpdate && error.contains("youtube-dl -U")) //update needed
+				if (canUpdate && error.contains("youtube-dl -U")) //Update is necessary
 				{
 					youtubedl_updating = true;
 					youtubedl_process.start(youtubedl, QStringList() << "-U");
@@ -183,6 +183,7 @@ public:
 							QFile::remove(Functions::filePath(youtubedl) + "youtube-dl-updater.bat");
 							if (QFile::exists(updatedFile))
 							{
+								Functions::s_wait(0.1); //Wait 100ms to be sure that file is closed
 								QFile::remove(youtubedl);
 								QFile::rename(updatedFile, youtubedl);
 #endif
