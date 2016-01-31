@@ -172,7 +172,7 @@ qint64 VAAPIWriter::write(const QByteArray &data)
 
 				pipeline_param->num_filters = 1;
 				if (!do_vpp_deint)
-					pipeline_param->filters = &vpp_buffers[VAProcFilterNone]; //Sometimes it can prevent crash, but sometimes it can produce green image, so it is disabled for never VA-API versions which don't crash without VPP
+					pipeline_param->filters = &vpp_buffers[VAProcFilterNone]; //Sometimes it can prevent crash, but sometimes it can produce green image, so it is disabled for newer VA-API versions which don't crash without VPP
 				else
 				{
 					pipeline_param->filters = &vpp_buffers[VAProcFilterDeinterlacing];
