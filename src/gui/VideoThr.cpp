@@ -207,7 +207,7 @@ void VideoThr::run()
 		playC.vPackets.lock();
 		const bool hasVPackets = playC.vPackets.canFetch();
 		if (maybeFlush)
-			maybeFlush = playC.endOfStream;
+			maybeFlush = playC.endOfStream && !hasVPackets;
 		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData)
 		{
 			if (playC.paused && !paused)
