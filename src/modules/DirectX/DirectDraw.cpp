@@ -71,9 +71,9 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 							setPalette(QColor(ColorKEY));
 							connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(updateOverlay()));
 							connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(overlayVisible(bool)));
-#if QT_VERSION >= 0x050000
 							connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(overlayVisible(bool)));
-#endif
+							connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doOverlayVisible()));
+							visibleTim.setSingleShot(true);
 
 							isOK = isOverlay = true;
 						}
@@ -320,7 +320,13 @@ void Drawable::updateOverlay()
 }
 void Drawable::overlayVisible(bool v)
 {
-	if (v)
+	const bool visible = v = v && visibleRegion() != QRegion();
+	visibleTim.setProperty("overlayVisible", visible);
+	visibleTim.start(1);
+}
+void Drawable::doOverlayVisible()
+{
+	if (visibleTim.property("overlayVisible").toBool())
 		updateOverlay();
 	else
 		DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);

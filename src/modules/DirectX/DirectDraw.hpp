@@ -1,6 +1,7 @@
 #include <VideoWriter.hpp>
 
 #include <QWidget>
+#include <QTimer>
 
 #include <ddraw.h>
 
@@ -38,6 +39,7 @@ private:
 
 	Q_SLOT void updateOverlay();
 	Q_SLOT void overlayVisible(bool);
+	Q_SLOT void doOverlayVisible();
 	void blit();
 
 	void releaseSecondary();
@@ -50,6 +52,8 @@ private:
 
 	QImage osdImg;
 	QList< QByteArray > osd_checksums;
+
+	QTimer visibleTim;
 
 	DirectDrawWriter &writer;
 
