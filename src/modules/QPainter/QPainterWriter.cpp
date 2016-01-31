@@ -17,6 +17,7 @@ Drawable::Drawable(QPainterWriter &writer) :
 	grabGesture(Qt::PinchGesture);
 	setAutoFillBackground(true);
 	setMouseTracking(true);
+	setPalette(Qt::black);
 }
 Drawable::~Drawable()
 {
