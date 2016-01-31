@@ -142,6 +142,8 @@ void PlaylistDock::addAndPlay(const QString &_url)
 			}
 			if (item)
 			{
+				if (!item->parent())
+					list->addTopLevelItem(list->takeTopLevelItem(list->indexOfTopLevelItem(item)));
 				playAfterAdd = true;
 				addAndPlay(item);
 				return;
