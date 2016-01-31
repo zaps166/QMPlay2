@@ -5,14 +5,16 @@
 #include <VideoWriter.hpp>
 
 #include <QWidget>
+#include <QTimer>
 #include <QQueue>
 
 #include <vdpau/vdpau.h>
 
 struct _XDisplay;
 
-class VDPAUWriter : public HWAccelHelper, public VideoWriter, public QWidget
+class VDPAUWriter : public QWidget, public HWAccelHelper, public VideoWriter
 {
+	Q_OBJECT
 public:
 	VDPAUWriter(Module &module);
 	~VDPAUWriter();
@@ -51,6 +53,11 @@ private:
 	static void preemption_callback(VdpDevice device, void *context);
 
 	void setFeatures();
+
+	Q_SLOT void videoVisible(bool);
+	Q_SLOT void doVideoVisible();
+
+	void presentationQueueCreate(WId winId);
 
 	void draw(VdpVideoSurface surface_id = VDP_INVALID_HANDLE);
 	void vdpau_display();
@@ -127,6 +134,7 @@ private:
 	QList< QByteArray > osd_checksums;
 	VdpBitmapSurface bitmapSurface;
 	QSize bitmapSurfaceSize;
+	QTimer visibleTim;
 	QMutex osd_mutex;
 	QImage osdImg;
 

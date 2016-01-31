@@ -320,7 +320,7 @@ void Drawable::updateOverlay()
 }
 void Drawable::overlayVisible(bool v)
 {
-	const bool visible = v = v && visibleRegion() != QRegion();
+	const bool visible = v && visibleRegion() != QRegion();
 	visibleTim.setProperty("overlayVisible", visible);
 	visibleTim.start(1);
 }

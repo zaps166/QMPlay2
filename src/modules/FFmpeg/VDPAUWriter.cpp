@@ -38,6 +38,11 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	for (int i = 0; i < scalingLevelsCount; ++i)
 		features[i + scalingLevelsIdx] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
 
+	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
+	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible(bool)));
+	connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doVideoVisible()));
+	visibleTim.setSingleShot(true);
+
 	SetModule(module);
 }
 VDPAUWriter::~VDPAUWriter()
@@ -433,6 +438,52 @@ void VDPAUWriter::setFeatures()
 		}
 }
 
+void VDPAUWriter::videoVisible(bool v)
+{
+	const bool visible = v && visibleRegion() != QRegion();
+	visibleTim.setProperty("videoVisible", visible);
+	visibleTim.start(1);
+}
+void VDPAUWriter::doVideoVisible()
+{
+	//This can hide overlay if avilable
+	const bool visible = visibleTim.property("videoVisible").toBool();
+	if (visible != !!presentationQueue) //Only when visibility changes
+	{
+		presentationQueueCreate(visible ? winId() : 0);
+		if (visible && paused)
+			vdpau_display();
+	}
+}
+
+void VDPAUWriter::presentationQueueCreate(WId winId)
+{
+	if (presentationQueue)
+	{
+		vdp_presentation_queue_destroy(presentationQueue);
+		presentationQueue = 0;
+	}
+	if (queueTarget)
+	{
+		vdp_presentation_queue_target_destroy(queueTarget);
+		queueTarget = 0;
+	}
+	if (!winId)
+		return; //Don't change "lastWinId" to 0 because of "draw()" method
+	VdpPresentationQueueTargetCreateX11 *vdp_presentation_queue_target_create_x11;
+	if
+	(
+		vdp_get_proc_address(device, VDP_FUNC_ID_PRESENTATION_QUEUE_TARGET_CREATE_X11, (void **)&vdp_presentation_queue_target_create_x11) == VDP_STATUS_OK &&
+		vdp_presentation_queue_target_create_x11(device, winId, &queueTarget) == VDP_STATUS_OK &&
+		vdp_presentation_queue_create(device, queueTarget, &presentationQueue) == VDP_STATUS_OK
+	)
+	{
+		static const VdpColor vdp_background_color = { 0.000f, 0.000f, 0.004f, 0.000f };
+		vdp_presentation_queue_set_background_color(presentationQueue, (VdpColor *)&vdp_background_color);
+		lastWinId = winId;
+	}
+}
+
 void VDPAUWriter::draw(VdpVideoSurface surface_id)
 {
 	if (surface_id != VDP_INVALID_HANDLE && renderSurfaces[0] != surface_id)
@@ -445,30 +496,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 	{
 		const WId currWinId = winId();
 		if (currWinId != lastWinId)
-		{
-			if (presentationQueue)
-			{
-				vdp_presentation_queue_destroy(presentationQueue);
-				presentationQueue = 0;
-			}
-			if (queueTarget)
-			{
-				vdp_presentation_queue_target_destroy(queueTarget);
-				queueTarget = 0;
-			}
-			VdpPresentationQueueTargetCreateX11 *vdp_presentation_queue_target_create_x11;
-			if
-			(
-				vdp_get_proc_address(device, VDP_FUNC_ID_PRESENTATION_QUEUE_TARGET_CREATE_X11, (void **)&vdp_presentation_queue_target_create_x11) == VDP_STATUS_OK &&
-				vdp_presentation_queue_target_create_x11(device, currWinId, &queueTarget) == VDP_STATUS_OK &&
-				vdp_presentation_queue_create(device, queueTarget, &presentationQueue) == VDP_STATUS_OK
-			)
-			{
-				static const VdpColor vdp_background_color = { 0.000f, 0.000f, 0.004f, 0.000f };
-				vdp_presentation_queue_set_background_color(presentationQueue, (VdpColor *)&vdp_background_color);
-				lastWinId = currWinId;
-			}
-		}
+			presentationQueueCreate(currWinId);
 		if (presentationQueue && outputSurfacesCreated)
 		{
 			VdpTime time;
