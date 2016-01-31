@@ -29,6 +29,8 @@ public:
 	OpenGL2Common();
 	virtual ~OpenGL2Common();
 
+	virtual void deleteMe();
+
 	virtual QWidget *widget() = 0;
 
 	virtual bool testGL() = 0;

@@ -18,10 +18,8 @@ OpenGL2Window::OpenGL2Window()
 
 	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 }
-OpenGL2Window::~OpenGL2Window()
+void OpenGL2Window::deleteMe()
 {
-	setVisible(false);
-	setParent(NULL); //Container must not take ownership of this
 	delete container;
 }
 

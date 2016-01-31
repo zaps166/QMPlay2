@@ -31,7 +31,7 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 }
 OpenGL2Writer::~OpenGL2Writer()
 {
-	delete drawable;
+	drawable->deleteMe();
 }
 
 bool OpenGL2Writer::set()

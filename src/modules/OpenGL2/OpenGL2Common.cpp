@@ -155,6 +155,11 @@ OpenGL2Common::~OpenGL2Common()
 	delete shaderProgramOSD;
 }
 
+void OpenGL2Common::deleteMe()
+{
+	delete this;
+}
+
 void OpenGL2Common::newSize(const QSize &size)
 {
 	const bool canUpdate = !size.isValid();
