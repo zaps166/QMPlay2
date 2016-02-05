@@ -254,7 +254,11 @@
         <translation>&amp;Deaktiviert</translation>
     </message>
     <message>
-        <source>&amp;Depends on size</source>
+        <source>&amp;Auto</source>
+        <translation>&amp;Auto</translation>
+    </message>
+    <message>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Abhängig von der Größe</translation>
     </message>
 </context>
@@ -2275,6 +2279,14 @@ amp</translation>
     <message>
         <source>&amp;Sort</source>
         <translation>&amp;Sortieren</translation>
+    </message>
+    <message>
+        <source>&amp;A-Z</source>
+        <translation>&amp;A-Z</translation>
+    </message>
+    <message>
+        <source>&amp;Z-A</source>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>

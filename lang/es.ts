@@ -250,12 +250,16 @@
         <translation>Relaci&amp;ón de aspecto</translation>
     </message>
     <message>
-        <source>&amp;Depends on size</source>
-        <translation>Depende del &amp;tamaño</translation>
-    </message>
-    <message>
         <source>&amp;Disabled</source>
         <translation>&amp;Desactivado</translation>
+    </message>
+    <message>
+        <source>&amp;Auto</source>
+        <translation>&amp;Automático</translation>
+    </message>
+    <message>
+        <source>D&amp;epends on size</source>
+        <translation>Depende del &amp;tamaño</translation>
     </message>
 </context>
 <context>
@@ -2275,6 +2279,14 @@ amp</translation>
     <message>
         <source>&amp;From the shortest to the longest</source>
         <translation>Desde la más &amp;corta a la más larga</translation>
+    </message>
+    <message>
+        <source>&amp;A-Z</source>
+        <translation>&amp;A-Z</translation>
+    </message>
+    <message>
+        <source>&amp;Z-A</source>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>

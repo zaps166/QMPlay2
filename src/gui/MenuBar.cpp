@@ -126,8 +126,8 @@ MenuBar::Playlist::Sort::Sort(QMenu *parent) :
 	newAction(Sort::tr("&From the shortest to the longest"), this, QKeySequence(), timeSort1, false, QIcon(), false);
 	newAction(Sort::tr("&From the longest to the shortest"), this, QKeySequence(), timeSort2, false, QIcon(), false);
 	addSeparator();
-	newAction(Sort::tr(""), this, QKeySequence(), titleSort1, false, QIcon(), false);
-	newAction(Sort::tr(""), this, QKeySequence(), titleSort2, false, QIcon(), false);
+	newAction(Sort::tr("&A-Z"), this, QKeySequence(), titleSort1, false, QIcon(), false);
+	newAction(Sort::tr("&Z-A"), this, QKeySequence(), titleSort2, false, QIcon(), false);
 }
 
 MenuBar::Player::Player(MenuBar *parent) :
@@ -190,7 +190,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	QMenu(AspectRatio::tr("&Aspect tatio"), parent)
 {
 	choice = new QActionGroup(this);
-	choice->addAction(newAction(AspectRatio::tr(""), this, QKeySequence(), _auto, false, QIcon(), true));
+	choice->addAction(newAction(AspectRatio::tr("&Auto"), this, QKeySequence(), _auto, false, QIcon(), true));
 	addSeparator();
 	choice->addAction(newAction("&1:1", this, QKeySequence(), _1x1, false, QIcon(), true));
 	choice->addAction(newAction("&4:3", this, QKeySequence(), _4x3, false, QIcon(), true));
@@ -199,7 +199,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	choice->addAction(newAction("&3:2", this, QKeySequence(), _3x2, false, QIcon(), true));
 	choice->addAction(newAction("&21:9", this, QKeySequence(), _21x9, false, QIcon(), true));
 	addSeparator();
-	choice->addAction(newAction(AspectRatio::tr("&Depends on size"), this, QKeySequence(), sizeDep, false, QIcon(), true));
+	choice->addAction(newAction(AspectRatio::tr("D&epends on size"), this, QKeySequence(), sizeDep, false, QIcon(), true));
 	choice->addAction(newAction(AspectRatio::tr("&Disabled"), this, QKeySequence(), off, false, QIcon(), true));
 
 	_auto->setObjectName("auto");

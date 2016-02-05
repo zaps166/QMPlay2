@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 15.01.31:
+Changes in QMPlay2 build 15.02.05:
 	- play multiple streams in FFmpeg, YouTube can play different audio/video streams together,
 	- move ungrouped playlist entry to the end of the playlist when the file already exists,
 	- QOpenGLWindow and QOpenGLWidget are used instead of QGLWidget in Qt5 >= 5.6,

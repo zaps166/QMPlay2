@@ -254,7 +254,11 @@
         <translation>&amp;Wyłączone</translation>
     </message>
     <message>
-        <source>&amp;Depends on size</source>
+        <source>&amp;Auto</source>
+        <translation>&amp;Auto</translation>
+    </message>
+    <message>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Zależne od rozmiaru</translation>
     </message>
 </context>
@@ -2275,6 +2279,14 @@ amp</translation>
     <message>
         <source>&amp;Sort</source>
         <translation>S&amp;ortuj</translation>
+    </message>
+    <message>
+        <source>&amp;A-Z</source>
+        <translation>&amp;A-Z</translation>
+    </message>
+    <message>
+        <source>&amp;Z-A</source>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>
