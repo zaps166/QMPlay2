@@ -187,7 +187,7 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	randomGroup->setObjectName("randomGroup");
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
-	QMenu(AspectRatio::tr("&Aspect tatio"), parent)
+	QMenu(AspectRatio::tr("&Aspect ratio"), parent)
 {
 	choice = new QActionGroup(this);
 	choice->addAction(newAction(AspectRatio::tr("&Auto"), this, QKeySequence(), _auto, false, QIcon(), true));

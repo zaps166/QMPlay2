@@ -246,7 +246,7 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect tatio</source>
+        <source>&amp;Aspect ratio</source>
         <translation>&amp;Соотношение сторон</translation>
     </message>
     <message>
