@@ -246,7 +246,7 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect tatio</source>
+        <source>&amp;Aspect ratio</source>
         <translation>Relaci&amp;ón de aspecto</translation>
     </message>
     <message>

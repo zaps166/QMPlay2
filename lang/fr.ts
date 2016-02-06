@@ -246,7 +246,7 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect tatio</source>
+        <source>&amp;Aspect ratio</source>
         <translation>&amp;Radio d&apos;aspect</translation>
     </message>
     <message>
