@@ -454,6 +454,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+
 	QDir::setCurrent(qApp->applicationDirPath()); //Is it really needed?
 
 	qApp->installTranslator(&translator);
