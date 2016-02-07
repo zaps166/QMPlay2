@@ -5,6 +5,7 @@
 #include <VideoWriter.hpp>
 
 #include <QWidget>
+#include <QTimer>
 #include <QQueue>
 
 #include <va/va.h>
@@ -18,8 +19,9 @@
 
 struct _XDisplay;
 
-class VAAPIWriter : public HWAccelHelper, public VideoWriter, public QWidget
+class VAAPIWriter : public QWidget, public HWAccelHelper, public VideoWriter
 {
+	Q_OBJECT
 public:
 	VAAPIWriter(Module &module);
 	~VAAPIWriter();
@@ -69,7 +71,7 @@ private:
 	bool vaCreateConfigAndContext();
 	bool vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces);
 
-	void draw(VASurfaceID _id = -1, int _field = -1);
+	Q_SLOT void draw(VASurfaceID _id = -1, int _field = -1);
 
 	void resizeEvent(QResizeEvent *);
 	void paintEvent(QPaintEvent *);
@@ -97,11 +99,13 @@ private:
 	QQueue< VASurfaceID > surfacesQueue;
 	bool surfacesCreated, paused;
 
+	static const int drawTimeout = 40;
 	QList< const QMPlay2_OSD * > osd_list;
 	bool subpict_dest_is_screen_coord;
 	QList< QByteArray > osd_checksums;
 	VASubpictureID vaSubpicID;
 	QMutex osd_mutex;
+	QTimer drawTim;
 	QSize vaImgSize;
 	VAImage vaImg;
 

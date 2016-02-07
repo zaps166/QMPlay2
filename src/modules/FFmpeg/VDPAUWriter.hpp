@@ -59,7 +59,7 @@ private:
 
 	void presentationQueueCreate(WId winId);
 
-	void draw(VdpVideoSurface surface_id = VDP_INVALID_HANDLE);
+	Q_SLOT void draw(VdpVideoSurface surface_id = VDP_INVALID_HANDLE);
 	void vdpau_display();
 
 	void resizeEvent(QResizeEvent *);
@@ -130,11 +130,12 @@ private:
 	VdpRect srcRect, dstRect;
 	WId lastWinId;
 
+	static const int drawTimeout = 40;
 	QList< const QMPlay2_OSD * > osd_list;
 	QList< QByteArray > osd_checksums;
 	VdpBitmapSurface bitmapSurface;
+	QTimer visibleTim, drawTim;
 	QSize bitmapSurfaceSize;
-	QTimer visibleTim;
 	QMutex osd_mutex;
 	QImage osdImg;
 

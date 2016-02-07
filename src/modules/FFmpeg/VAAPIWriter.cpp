@@ -29,6 +29,9 @@ VAAPIWriter::VAAPIWriter(Module &module) :
 	grabGesture(Qt::PinchGesture);
 	setMouseTracking(true);
 
+	connect(&drawTim, SIGNAL(timeout()), this, SLOT(draw()));
+	drawTim.setSingleShot(true);
+
 	SetModule(module);
 }
 VAAPIWriter::~VAAPIWriter()
@@ -122,8 +125,8 @@ bool VAAPIWriter::processParams(bool *)
 	else
 	{
 		resizeEvent(NULL);
-		if (paused)
-			draw();
+		if (!drawTim.isActive())
+			drawTim.start(paused ? 1 : drawTimeout);
 	}
 
 	return readyWrite();
@@ -686,6 +689,9 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 
 	if (associated)
 		vaDeassociateSubpicture(VADisp, vaSubpicID, &id, 1);
+
+	if (drawTim.isActive())
+		drawTim.stop();
 }
 
 void VAAPIWriter::resizeEvent(QResizeEvent *)
@@ -694,8 +700,8 @@ void VAAPIWriter::resizeEvent(QResizeEvent *)
 }
 void VAAPIWriter::paintEvent(QPaintEvent *)
 {
-	if (paused)
-		draw();
+	if (!drawTim.isActive())
+		drawTim.start(paused ? 1 : drawTimeout);
 }
 bool VAAPIWriter::event(QEvent *e)
 {

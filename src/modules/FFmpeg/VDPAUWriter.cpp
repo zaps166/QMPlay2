@@ -41,7 +41,9 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
 	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible(bool)));
 	connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doVideoVisible()));
+	connect(&drawTim, SIGNAL(timeout()), this, SLOT(draw()));
 	visibleTim.setSingleShot(true);
+	drawTim.setSingleShot(true);
 
 	SetModule(module);
 }
@@ -92,10 +94,16 @@ bool VDPAUWriter::set()
 	if (ok)
 	{
 		setFeatures();
-		if (paused)
+		if (!paused)
+		{
+			if (!drawTim.isActive())
+				drawTim.start(drawTimeout);
+		}
+		else //XXX: Is it really necessary to call 2 functions?
 		{
 			draw();
 			vdpau_display();
+			drawTim.stop();
 		}
 	}
 	return true;
@@ -139,10 +147,16 @@ bool VDPAUWriter::processParams(bool *)
 	else
 	{
 		resizeEvent(NULL);
-		if (paused)
+		if (!paused)
+		{
+			if (!drawTim.isActive())
+				drawTim.start(drawTimeout);
+		}
+		else //XXX: Is it really necessary to call 2 functions?
 		{
 			draw();
 			vdpau_display();
+			drawTim.stop();
 		}
 	}
 
@@ -451,8 +465,10 @@ void VDPAUWriter::doVideoVisible()
 	if (visible != !!presentationQueue) //Only when visibility changes
 	{
 		presentationQueueCreate(visible ? winId() : 0);
-		if (visible && paused)
-			vdpau_display();
+		if (!visible)
+			drawTim.stop();
+		else if (!drawTim.isActive())
+			drawTim.start(paused ? 1 : drawTimeout);
 	}
 }
 
@@ -594,6 +610,8 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 void VDPAUWriter::vdpau_display()
 {
 	vdp_presentation_queue_display(presentationQueue, outputSurfaces[outputSurfaceIdx], 0, 0, 0);
+	if (drawTim.isActive())
+		drawTim.stop();
 }
 
 void VDPAUWriter::resizeEvent(QResizeEvent *)
@@ -646,8 +664,8 @@ void VDPAUWriter::resizeEvent(QResizeEvent *)
 }
 void VDPAUWriter::paintEvent(QPaintEvent *)
 {
-	if (paused)
-		draw();
+	if (!drawTim.isActive())
+		drawTim.start(paused ? 1 : drawTimeout);
 }
 bool VDPAUWriter::event(QEvent *e)
 {
