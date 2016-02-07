@@ -987,7 +987,7 @@ void SettingsWidget::tabCh(int idx)
 {
 	if (idx == 1 && !page2->modulesList[0]->list->count() && !page2->modulesList[1]->list->count() && !page2->modulesList[2]->list->count())
 	{
-		QStringList writers[3] = { QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7) };
+		QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
 		QVector< QPair< Module *, Module::Info > > pluginsInstances[3];
 		for (int m = 0; m < 3; ++m)
 			pluginsInstances[m].fill(QPair< Module *, Module::Info >(), writers[m].size());

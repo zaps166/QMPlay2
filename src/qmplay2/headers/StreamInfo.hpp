@@ -74,7 +74,7 @@ public:
 	QList< QMPlay2Tag > other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
 	bool is_default, must_decode;
-	struct { int num, den; } time_base;
+	struct {int num, den;} time_base;
 	int bitrate, bpcs;
 	unsigned codec_tag;
 	/* audio only */

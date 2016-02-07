@@ -154,7 +154,7 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
 		if (!user.isEmpty() && !md5pass.isEmpty())
 		{
 			const time_t currTime = time(NULL);
-			const Scrobble scrobble = { title, artist, album, currTime, length };
+			const Scrobble scrobble = {title, artist, album, currTime, length};
 			if (play)
 			{
 				if (!scrobbleQueue.isEmpty() && currTime - scrobbleQueue.last().startTime < scrobbleSec)

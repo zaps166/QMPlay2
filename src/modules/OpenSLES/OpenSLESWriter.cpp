@@ -125,17 +125,17 @@ bool OpenSLESWriter::processParams(bool *paramsCorrected)
 			return false;
 
 		/* Buffer queue */
-		SLDataLocator_BufferQueue loc_bufq = { SL_DATALOCATOR_BUFFERQUEUE, (SLuint32)buffers.size() };
+		SLDataLocator_BufferQueue loc_bufq = {SL_DATALOCATOR_BUFFERQUEUE, (SLuint32)buffers.size()};
 		SLDataFormat_PCM format_pcm =
 		{
 			SL_DATAFORMAT_PCM, (SLuint32)channels, sample_rate * 1000U,
 			SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
 			channels == 2 ? (SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT) : SL_SPEAKER_FRONT_CENTER, SL_BYTEORDER_LITTLEENDIAN
 		};
-		SLDataSource audioSrc = { &loc_bufq, &format_pcm };
+		SLDataSource audioSrc = {&loc_bufq, &format_pcm};
 
-		SLDataLocator_OutputMix loc_outmix = { SL_DATALOCATOR_OUTPUTMIX, outputMixObject };
-		SLDataSink audioSink = { &loc_outmix, NULL };
+		SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, outputMixObject};
+		SLDataSink audioSink = {&loc_outmix, NULL};
 
 		/* Audio player */
 		const SLInterfaceID ids = SL_IID_BUFFERQUEUE;

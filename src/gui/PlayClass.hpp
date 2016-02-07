@@ -18,7 +18,7 @@ class AudioThr;
 class Demuxer;
 class LibASS;
 
-enum { SEEK_NOWHERE = -1, SEEK_STREAM_RELOAD = -2 /* Seeks to current position after stream reload */ };
+enum {SEEK_NOWHERE = -1, SEEK_STREAM_RELOAD = -2 /* Seeks to current position after stream reload */};
 
 class PlayClass : public QObject
 {

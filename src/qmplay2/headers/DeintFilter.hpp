@@ -7,7 +7,7 @@
 class DeintFilter : public VideoFilter
 {
 public:
-	enum DeintFlags { AutoDeinterlace = 0x1, DoubleFramerate = 0x2, AutoParity = 0x4, TopFieldFirst = 0x8 };
+	enum DeintFlags {AutoDeinterlace = 0x1, DoubleFramerate = 0x2, AutoParity = 0x4, TopFieldFirst = 0x8};
 
 	inline DeintFilter()
 	{

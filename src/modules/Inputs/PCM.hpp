@@ -7,7 +7,7 @@ class Reader;
 class PCM : public Demuxer
 {
 public:
-	enum FORMAT { PCM_U8, PCM_S8, PCM_S16, PCM_S24, PCM_S32, PCM_FLT, FORMAT_COUNT };
+	enum FORMAT {PCM_U8, PCM_S8, PCM_S16, PCM_S24, PCM_S32, PCM_FLT, FORMAT_COUNT};
 
 	PCM(Module &);
 private:

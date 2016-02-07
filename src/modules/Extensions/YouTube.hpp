@@ -113,7 +113,7 @@ class YouTube : public QMPlay2Extensions
 public:
 	YouTube(Module &module);
 
-	enum MediaType { MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO };
+	enum MediaType {MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO};
 	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
 
 	bool set();

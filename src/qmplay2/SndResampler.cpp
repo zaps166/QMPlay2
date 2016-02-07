@@ -82,8 +82,8 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst)
 
 	dst.reserve(out_size * sizeof(float) * dst_channels);
 
-	quint8 *in[]  = { (quint8 *)src.data() };
-	quint8 *out[] = { (quint8 *)dst.data() };
+	quint8 *in[]  = {(quint8 *)src.data()};
+	quint8 *out[] = {(quint8 *)dst.data()};
 
 #ifdef QMPLAY2_AVRESAMPLE
 	const int converted = avresample_convert(snd_convert_ctx, out, 1, out_size, in, 1, in_size);

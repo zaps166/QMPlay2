@@ -38,7 +38,7 @@ private:
 	QLabel *statusL;
 	LineEdit *findE;
 
-	enum RepeatMode { Normal, RepeatEntry, RepeatGroup, RepeatList, Random, RandomGroup };
+	enum RepeatMode {Normal, RepeatEntry, RepeatGroup, RepeatList, Random, RandomGroup};
 	RepeatMode repeatMode;
 
 	bool playAfterAdd;

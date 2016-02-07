@@ -11,7 +11,7 @@ public:
 	static QVector< AudioFilter * > open();
 
 	virtual bool setAudioParameters(uchar chn, uint srate) = 0;
-	virtual int bufferedSamples() const { return 0; }
+	virtual int bufferedSamples() const {return 0;}
 	virtual void clearBuffers() {}
 	virtual double filter(QByteArray &data, bool flush = false) = 0; //returns delay in [s]
 

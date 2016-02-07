@@ -19,7 +19,7 @@ public:
 
 	virtual QString name() const = 0;
 
-	virtual Writer *HWAccel() const { return NULL; }
+	virtual Writer *HWAccel() const {return NULL;}
 
 	/*
 	 * hurry_up ==  0 -> no frame skipping, normal quality

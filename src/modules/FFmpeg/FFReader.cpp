@@ -85,7 +85,7 @@ bool FFReader::open()
 {
 	AVDictionary *options = NULL;
 	const QString url = FFCommon::prepareUrl(getUrl(), options);
-	AVIOInterruptCB interruptCB = { (int(*)(void*))::interruptCB, &aborted };
+	AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, &aborted};
 	if (avio_open2(&avioCtx, url.toUtf8(), AVIO_FLAG_READ, &interruptCB, &options) >= 0)
 		return (canRead = true);
 	return false;

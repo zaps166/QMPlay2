@@ -37,7 +37,7 @@ VideoFrame *VideoFrame::create(QByteArray &videoFrameData, quint8 *data[4], cons
 VideoFrame *VideoFrame::create(QByteArray &videoFrameData, int width, int height, bool interlaced, bool top_field_first)
 {
 	const int aligned8W = Functions::aligned(width, 8);
-	const int linesize[4] = { aligned8W, aligned8W >> 1, aligned8W >> 1 };
+	const int linesize[4] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
 	const int data_size = linesize[0] * height + linesize[1] * height;
 
 	buffersMutex.lock();
@@ -45,7 +45,7 @@ VideoFrame *VideoFrame::create(QByteArray &videoFrameData, int width, int height
 	while (!buffers.isEmpty() && buffers.first().data_size != data_size) //Usuwanie buforów, które są innego rozmiaru niż wymagany
 		delete[] buffers.takeFirst().data;
 
-	quint8 *data[4] = { buffers.isEmpty() ? new quint8[data_size] : buffers.takeFirst().data };
+	quint8 *data[4] = {buffers.isEmpty() ? new quint8[data_size] : buffers.takeFirst().data};
 
 	if (!buffers.isEmpty() && !--buffers.last().age) //Usuwanie starych, nieużywanych od jakiegoś czasu buforów
 		delete[] buffers.takeLast().data;
@@ -101,7 +101,7 @@ void VideoFrame::do_unref(const QByteArray &videoFrameData)
 	if (videoFrame->ref_c && !videoFrame->ref_c->deref())
 	{
 		buffersMutex.lock();
-		buffers.push_front((FrameBuffer){ *videoFrame->data, videoFrame->data_size, 100 });
+		buffers.push_front((FrameBuffer){*videoFrame->data, videoFrame->data_size, 100});
 		buffersMutex.unlock();
 		delete videoFrame->ref_c;
 	}

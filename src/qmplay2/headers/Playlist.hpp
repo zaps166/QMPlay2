@@ -23,7 +23,7 @@ public:
 	};
 	typedef QList< Entry > Entries;
 
-	enum OpenMode { NoOpen, ReadOnly, WriteOnly };
+	enum OpenMode {NoOpen, ReadOnly, WriteOnly};
 
 	static Entries read(const QString &, QString *name = NULL);
 	static bool write(const Entries &, const QString &, QString *name = NULL);

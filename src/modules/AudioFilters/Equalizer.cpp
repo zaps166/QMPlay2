@@ -134,7 +134,7 @@ double Equalizer::filter(QByteArray &data, bool flush)
 				while (input.at(c).size() >= FFT_SIZE)
 				{
 					for (int i = 0; i < FFT_SIZE; ++i)
-						complex[i] = (FFTComplex){ input.at(c).at(i), 0.0f };
+						complex[i] = (FFTComplex){input.at(c).at(i), 0.0f};
 					if (!flush)
 						input[c].remove(0, FFT_SIZE_2);
 					else

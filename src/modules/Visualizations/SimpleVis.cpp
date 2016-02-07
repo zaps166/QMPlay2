@@ -55,7 +55,7 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 	{
 		const float *samples = (const float *)soundData.constData();
 
-		qreal lr[2] = { 0.0f, 0.0f };
+		qreal lr[2] = {0.0f, 0.0f};
 
 		p.translate(0.0, fullScreen);
 		p.scale((width() - 1) * 0.9, (height() - 1 - fullScreen) / 2.0 / chn);

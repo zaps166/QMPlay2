@@ -25,13 +25,13 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 	grabGesture(Qt::PinchGesture);
 	if (DirectDrawCreate(NULL, &DDraw, NULL) == DD_OK && DDraw->SetCooperativeLevel(NULL, DDSCL_NORMAL) == DD_OK)
 	{
-		DDSURFACEDESC ddsd_primary = { sizeof ddsd_primary };
+		DDSURFACEDESC ddsd_primary = {sizeof ddsd_primary};
 		ddsd_primary.dwFlags = DDSD_CAPS;
 		ddsd_primary.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 		if (DDraw->CreateSurface(&ddsd_primary, &DDSPrimary, NULL) == DD_OK)
 		{
 			LPDIRECTDRAWSURFACE DDrawTestSurface;
-			DDSURFACEDESC ddsd_test = { sizeof ddsd_test };
+			DDSURFACEDESC ddsd_test = {sizeof ddsd_test};
 			ddsd_test.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 			ddsd_test.dwWidth  = 8;
 			ddsd_test.dwHeight = 2;
@@ -42,14 +42,14 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 			/* Overlay YV12 test */
 			if (QSysInfo::windowsVersion() < QSysInfo::WV_6_2) //Windows 8 and 10 can't disable DWM, so overlay won't work
 			{
-				DDCAPS ddCaps = { sizeof ddCaps };
+				DDCAPS ddCaps = {sizeof ddCaps};
 				DDraw->GetCaps(&ddCaps, NULL);
 				if (ddCaps.dwCaps & (DDCAPS_OVERLAY | DDCAPS_OVERLAYFOURCC | DDCAPS_OVERLAYSTRETCH))
 				{
 					ddsd_test.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
 					if (DDraw->CreateSurface(&ddsd_test, &DDrawTestSurface, NULL) == DD_OK)
 					{
-						RECT destRect = { 0, 0, 1, 1 };
+						RECT destRect = {0, 0, 1, 1};
 						HRESULT res = DDrawTestSurface->UpdateOverlay(NULL, DDSPrimary, &destRect, DDOVER_SHOW, NULL);
 						if (res == DDERR_OUTOFCAPS && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 						{
@@ -125,7 +125,7 @@ bool Drawable::createSecondary()
 {
 	releaseSecondary();
 
-	DDSURFACEDESC ddsd = { sizeof ddsd };
+	DDSURFACEDESC ddsd = {sizeof ddsd};
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 	ddsd.dwWidth = writer.outW;
 	ddsd.dwHeight = writer.outH;
@@ -146,7 +146,7 @@ bool Drawable::createSecondary()
 	{
 		if (isOverlay)
 		{
-			DDSCAPS ddsCaps = { sizeof ddsCaps };
+			DDSCAPS ddsCaps = {sizeof ddsCaps};
 			ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
 			DDSSecondary->GetAttachedSurface(&ddsCaps, &DDSBackBuffer);
 			DDSSecondary->QueryInterface(IID_IDirectDrawColorControl, (LPVOID *)&DDrawColorCtrl);
@@ -191,7 +191,7 @@ void Drawable::setFlip()
 	const bool doVFlip = (writer.flip & Qt::Vertical) != (flip & Qt::Vertical);
 	if (doHFlip || doVFlip)
 	{
-		DDSURFACEDESC ddsd = { sizeof ddsd };
+		DDSURFACEDESC ddsd = {sizeof ddsd};
 		if (paused && !isOverlay && canDraw() && DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
 		{
 			if (doHFlip)
@@ -206,7 +206,7 @@ void Drawable::setFlip()
 
 bool Drawable::draw(const QByteArray &videoFrameData)
 {
-	DDSURFACEDESC ddsd = { sizeof ddsd };
+	DDSURFACEDESC ddsd = {sizeof ddsd};
 	if (restoreLostSurface() && isOverlay)
 		updateOverlay();
 	if (DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
@@ -266,8 +266,8 @@ void Drawable::resizeEvent(QResizeEvent *e)
 void Drawable::getRects(RECT &srcRect, RECT &dstRect)
 {
 	const QPoint point = mapToGlobal(QPoint(X, Y));
-	const RECT videoRect = { point.x(), point.y(), point.x() + W + 1, point.y() + H + 1 };
-	const RECT screenRect = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
+	const RECT videoRect = {point.x(), point.y(), point.x() + W + 1, point.y() + H + 1};
+	const RECT screenRect = {0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
 
 	IntersectRect(&dstRect, &videoRect, &screenRect);
 
@@ -310,7 +310,7 @@ void Drawable::updateOverlay()
 
 	restoreLostSurface();
 
-	DDOVERLAYFX ovfx = { sizeof ovfx };
+	DDOVERLAYFX ovfx = {sizeof ovfx};
 	ovfx.dckDestColorkey.dwColorSpaceHighValue = ovfx.dckDestColorkey.dwColorSpaceLowValue = ColorKEY;
 	if (flip & Qt::Horizontal)
 		ovfx.dwDDFX |= DDOVERFX_MIRRORLEFTRIGHT;

@@ -13,8 +13,8 @@ class Module : public Settings
 {
 	friend class ModuleCommon;
 public:
-	enum TYPE { NONE, DEMUXER, DECODER, READER, WRITER, PLAYLIST, QMPLAY2EXTENSION, SUBSDEC, AUDIOFILTER, VIDEOFILTER };
-	enum FILTERTYPE { DEINTERLACE = 0x400000, DOUBLER = 0x800000, USERFLAG = 0x80000000 };
+	enum TYPE {NONE, DEMUXER, DECODER, READER, WRITER, PLAYLIST, QMPLAY2EXTENSION, SUBSDEC, AUDIOFILTER, VIDEOFILTER};
+	enum FILTERTYPE {DEINTERLACE = 0x400000, DOUBLER = 0x800000, USERFLAG = 0x80000000};
 
 	inline Module(const QString &mName) :
 		Settings(mName),
@@ -112,6 +112,6 @@ template < typename T > void Module::SetInstance()
 	mutex.unlock();
 }
 
-#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) extern "C" Module *qmplay2PluginInstance() { return new ModuleClass; }
+#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) extern "C" Module *qmplay2PluginInstance() {return new ModuleClass;}
 
 #endif

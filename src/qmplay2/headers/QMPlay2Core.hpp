@@ -11,7 +11,7 @@
 #include <QObject>
 #include <QIcon>
 
-enum LogFlags { InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20 };
+enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
 class Settings;
 class QPixmap;

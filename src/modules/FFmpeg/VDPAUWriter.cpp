@@ -125,11 +125,11 @@ bool VDPAUWriter::processParams(bool *)
 		Contrast = _Contrast;
 
 		VdpCSCMatrix matrix;
-		VdpProcamp procamp = { VDP_PROCAMP_VERSION, Brightness / 100.0f, (Contrast / 100.0f) + 1.0f, (Saturation / 100.0f) + 1.0f, Hue / 31.830989f };
+		VdpProcamp procamp = {VDP_PROCAMP_VERSION, Brightness / 100.0f, (Contrast / 100.0f) + 1.0f, (Saturation / 100.0f) + 1.0f, Hue / 31.830989f};
 		if (vdp_generate_csc_matrix(&procamp, (outW >= 1280 || outH > 576) ? VDP_COLOR_STANDARD_ITUR_BT_709 : VDP_COLOR_STANDARD_ITUR_BT_601, &matrix) == VDP_STATUS_OK)
 		{
-			static const VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_CSC_MATRIX };
-			const void *attributeValues[] = { &matrix };
+			static const VdpVideoMixerAttribute attributes[] = {VDP_VIDEO_MIXER_ATTRIBUTE_CSC_MATRIX};
+			const void *attributeValues[] = {&matrix};
 			vdp_video_mixer_set_attribute_values(mixer, 1, attributes, attributeValues);
 		}
 	}
@@ -179,8 +179,8 @@ bool VDPAUWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgSc
 		QByteArray yv12;
 		yv12.resize(outW * outH * 3 << 1);
 		char *yv12Data = yv12.data();
-		void *data[3] = { yv12Data, yv12Data + (outW * outH), yv12Data + (outW * outH) + ((outW >> 1) * (outH >> 1)) };
-		const quint32 linesize[3] = { (quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1 };
+		void *data[3] = {yv12Data, yv12Data + (outW * outH), yv12Data + (outW * outH) + ((outW >> 1) * (outH >> 1))};
+		const quint32 linesize[3] = {(quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1};
 		if (vdp_surface_get_bits((quintptr)videoFrame->data[3], VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
 		{
 			yv12ToRGB32->scale(yv12Data, dest);
@@ -404,7 +404,7 @@ void VDPAUWriter::preemption_callback(VdpDevice, void *context)
 
 void VDPAUWriter::setFeatures()
 {
-	VdpBool featuresSupport[featuresCount] = { false };
+	VdpBool featuresSupport[featuresCount] = {false};
 	for (int i = 0; i < featuresCount; ++i)
 		vdp_video_mixer_query_feature_support(device, features[i], featuresSupport + i);
 	if (!featuresSupport[1] && featureEnables[1])
@@ -425,8 +425,8 @@ void VDPAUWriter::setFeatures()
 		QMPlay2Core.log(tr("Unsupported image sharpness filter"), ErrorLog | LogOnce);
 	if (featuresSupport[2] || featuresSupport[3])
 	{
-		static const VdpVideoMixerAttribute attributes[] = { VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL, VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL };
-		const void *attributeValues[] = { &noisereduction_lvl, &sharpness_lvl };
+		static const VdpVideoMixerAttribute attributes[] = {VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL, VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL};
+		const void *attributeValues[] = {&noisereduction_lvl, &sharpness_lvl};
 		vdp_video_mixer_set_attribute_values(mixer, 2, attributes, attributeValues);
 	}
 	for (int i = scalingLevelsCount - 1; i >= 0; --i)
@@ -478,7 +478,7 @@ void VDPAUWriter::presentationQueueCreate(WId winId)
 		vdp_presentation_queue_create(device, queueTarget, &presentationQueue) == VDP_STATUS_OK
 	)
 	{
-		static const VdpColor vdp_background_color = { 0.000f, 0.000f, 0.004f, 0.000f };
+		static const VdpColor vdp_background_color = {0.000f, 0.000f, 0.004f, 0.000f};
 		vdp_presentation_queue_set_background_color(presentationQueue, (VdpColor *)&vdp_background_color);
 		lastWinId = winId;
 	}
@@ -535,7 +535,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 						VDP_OUTPUT_SURFACE_RENDER_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
 						VDP_OUTPUT_SURFACE_RENDER_BLEND_EQUATION_ADD,
 						VDP_OUTPUT_SURFACE_RENDER_BLEND_EQUATION_ADD,
-						(VdpColor){ 0.0f, 0.0f, 0.0f, 0.0f }
+						(VdpColor){0.0f, 0.0f, 0.0f, 0.0f}
 					};
 					QRect bounds;
 					const qreal scaleW = (qreal)W / outW, scaleH = (qreal)H / outH;
@@ -571,7 +571,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 							const quint32 linesize = bounds.width() << 2;
 							vdp_bitmap_surface_put_bits_native(bitmapSurface, &data, &linesize, NULL);
 						}
-						const VdpRect bitmapDstRect = { (quint32)bounds.left() + X, (quint32)bounds.top() + Y, (quint32)bounds.right() + X + 1, (quint32)bounds.bottom() + Y + 1 };
+						const VdpRect bitmapDstRect = {(quint32)bounds.left() + X, (quint32)bounds.top() + Y, (quint32)bounds.right() + X + 1, (quint32)bounds.bottom() + Y + 1};
 						const quint32 rotate = (flip & Qt::Vertical) ? VDP_OUTPUT_SURFACE_RENDER_ROTATE_180 : VDP_OUTPUT_SURFACE_RENDER_ROTATE_0;
 						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, rotate);
 					}

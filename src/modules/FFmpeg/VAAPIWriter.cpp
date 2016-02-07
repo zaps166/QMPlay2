@@ -228,7 +228,7 @@ bool VAAPIWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgSc
 		if (vaQueryImageFormats(VADisp, img_fmt, &fmt_count) == VA_STATUS_SUCCESS)
 		{
 			const VASurfaceID surfaceID = (quintptr)videoFrame->data[3];
-			int img_fmt_idx[3] = { -1, -1, -1 };
+			int img_fmt_idx[3] = {-1, -1, -1};
 			for (int i = 0; i < fmt_count; ++i)
 			{
 				if (!qstrncmp((const char *)&img_fmt[i].fourcc, "BGR", 3))
@@ -520,7 +520,7 @@ void VAAPIWriter::init_vpp()
 		if (num_filters)
 		{
 			/* Creating dummy filter (some drivers/api versions (1.6.x and Ivy Bridge) crashes without any filter) - this is unreachable now */
-			VAProcFilterParameterBufferBase none_params = { VAProcFilterNone };
+			VAProcFilterParameterBufferBase none_params = {VAProcFilterNone};
 			if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof none_params, 1, &none_params, &vpp_buffers[VAProcFilterNone]) != VA_STATUS_SUCCESS)
 				vpp_buffers[VAProcFilterNone] = VA_INVALID_ID;
 			/* Searching deinterlacing filter */
@@ -532,7 +532,7 @@ void VAAPIWriter::init_vpp()
 						unsigned num_deinterlacing_caps = VAProcDeinterlacingCount;
 						if (vaQueryVideoProcFilterCaps(VADisp, context_vpp, VAProcFilterDeinterlacing, &deinterlacing_caps, &num_deinterlacing_caps) != VA_STATUS_SUCCESS)
 							num_deinterlacing_caps = 0;
-						bool vpp_deint_types[2] = { false };
+						bool vpp_deint_types[2] = {false};
 						for (unsigned j = 0; j < num_deinterlacing_caps; ++j)
 						{
 							switch (deinterlacing_caps[j].type)
@@ -559,7 +559,7 @@ void VAAPIWriter::init_vpp()
 						}
 						if (vpp_deint_type != VAProcDeinterlacingNone)
 						{
-							VAProcFilterParameterBufferDeinterlacing deint_params = { VAProcFilterDeinterlacing, vpp_deint_type, 0 };
+							VAProcFilterParameterBufferDeinterlacing deint_params = {VAProcFilterDeinterlacing, vpp_deint_type, 0};
 							if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_buffers[VAProcFilterDeinterlacing]) != VA_STATUS_SUCCESS)
 								vpp_buffers[VAProcFilterDeinterlacing] = VA_INVALID_ID;
 						}

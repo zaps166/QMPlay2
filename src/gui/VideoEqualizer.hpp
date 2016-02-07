@@ -23,7 +23,7 @@ private slots:
 	void reset();
 private:
 	QGridLayout *layout;
-	enum CONTROLS { BRIGHTNESS, SATURATION, CONTRAST, HUE, CONTROLS_COUNT };
+	enum CONTROLS {BRIGHTNESS, SATURATION, CONTRAST, HUE, CONTROLS_COUNT};
 	struct
 	{
 		QLabel *titleL, *valueL;

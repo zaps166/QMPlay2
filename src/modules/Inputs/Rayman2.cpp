@@ -20,7 +20,7 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 		5894,  6484,  7132,  7845,  8630,  9493,  10442, 11487, 12635, 13899,
 		15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
 	};
-	static const char ima_index_table[8] = { -1, -1, -1, -1, 2, 4, 6, 8 };
+	static const char ima_index_table[8] = {-1, -1, -1, -1, 2, 4, 6, 8};
 
 	int step = ima_step_table[stepIndex];
 	int diff = step >> 3;

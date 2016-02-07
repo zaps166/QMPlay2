@@ -308,13 +308,13 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 		Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
 	}
 
-	quint8 *data[3] = { (quint8 *)imageData };
+	quint8 *data[3] = {(quint8 *)imageData};
 	data[2] = data[0] + linesizeLuma * imgH;
 	data[1] = data[2] + linesizeChroma * (imgH >> 1);
 
 	const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
 	const int alphaLinesizeLuma = videoFrame->linesize[0], alphaLinesizeChroma = videoFrame->linesize[1];
-	const quint8 *dataForAlpha[3] = { videoFrame->data[0], videoFrame->data[1], videoFrame->data[2] };
+	const quint8 *dataForAlpha[3] = {videoFrame->data[0], videoFrame->data[1], videoFrame->data[2]};
 
 	for (int h = bounds.top(); h <= bounds.bottom(); ++h)
 	{
