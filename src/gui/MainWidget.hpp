@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
+#if QT_VERSION_MAJOR >= 5 && defined Q_OS_WIN
 	#include <QAbstractNativeEventFilter>
+	#define QT5_WINDOWS
 #endif
 
 #include <PlayClass.hpp>
@@ -25,7 +26,7 @@ class SettingsWidget;
 class QMPlay2Extensions;
 
 class MainWidget : public QMainWindow
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
+#ifdef QT5_WINDOWS
 	, private QAbstractNativeEventFilter
 #endif
 {
@@ -95,6 +96,9 @@ private slots:
 	void lockWidgets(bool);
 
 	void hideDocksSlot();
+#ifdef QT5_WINDOWS
+	void delayedRestore();
+#endif
 private:
 	void savePlistHelper(const QString &, const QString &, bool);
 

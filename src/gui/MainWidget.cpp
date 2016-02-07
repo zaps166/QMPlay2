@@ -326,7 +326,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	if (QMPlay2Core.getSettings().getBool("AutoUpdates"))
 		updater.downloadUpdate();
 #endif
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
+#ifdef QT5_WINDOWS
 	qApp->installNativeEventFilter(this);
 #endif
 }
@@ -747,11 +747,15 @@ void MainWidget::toggleFullScreen()
 		if ((compact_view = isCompactView))
 			toggleCompactView();
 
+		maximized = isMaximized();
+
+#ifndef QT5_WINDOWS
 		if (isFullScreen())
+#endif
 			showNormal();
 
 		dockWidgetState = saveState();
-		if (!(maximized = isMaximized()))
+		if (!maximized)
 			savedGeo = geometry();
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
@@ -807,6 +811,9 @@ void MainWidget::toggleFullScreen()
 			showMaximized();
 		else
 			setGeometry(savedGeo);
+#ifdef QT5_WINDOWS
+		qApp->processEvents();
+#endif
 		restoreState(dockWidgetState);
 		dockWidgetState.clear();
 
@@ -1039,6 +1046,13 @@ void MainWidget::hideDocksSlot()
 			hideDocks();
 	}
 }
+#ifdef QT5_WINDOWS
+void MainWidget::delayedRestore()
+{
+	qApp->processEvents();
+	restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
+}
+#endif
 
 void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool saveCurrentGroup)
 {
@@ -1255,6 +1269,13 @@ void MainWidget::showEvent(QShowEvent *)
 		showFullScreen(); //Always fullscreen on Android
 #endif
 		restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
+#ifdef QT5_WINDOWS
+		if (isMaximized())
+		{
+			//Qt5 can't properly restore docks state on Windows here when window is maximized
+			QTimer::singleShot(0, this, SLOT(delayedRestore()));
+		}
+#endif
 		wasShow = true;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));
