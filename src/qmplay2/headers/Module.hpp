@@ -61,6 +61,10 @@ public:
 	{
 	public:
 		virtual void saveSettings() = 0;
+		inline void flushSettings()
+		{
+			sets().flush();
+		}
 	protected:
 		inline SettingsWidget(Module &module) :
 			module(module)

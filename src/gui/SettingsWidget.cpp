@@ -936,7 +936,9 @@ void SettingsWidget::apply()
 		case 3:
 			if (page3->module && page3->scrollA->widget())
 			{
-				((Module::SettingsWidget *)page3->scrollA->widget())->saveSettings();
+				Module::SettingsWidget *settingsWidget = (Module::SettingsWidget *)page3->scrollA->widget();
+				settingsWidget->saveSettings();
+				settingsWidget->flushSettings();
 				page3->module->SetInstances(page3Restart);
 				chModule(page3->listW->currentItem());
 			}
@@ -958,7 +960,8 @@ void SettingsWidget::apply()
 			page6->otherVFiltersW->writeSettings();
 			break;
 	}
-	QMPSettings.flush();
+	if (page != 3)
+		QMPSettings.flush();
 	emit settingsChanged(page, page3Restart);
 }
 void SettingsWidget::chModule(QListWidgetItem *w)
