@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#if QT_VERSION_MAJOR >= 5 && defined Q_OS_WIN
+#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
 	#include <QAbstractNativeEventFilter>
 	#define QT5_WINDOWS
 #endif
