@@ -12,7 +12,8 @@ win32|macx {
 }
 else {
 	DESTDIR = ../../../app/share/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib}
+	QMAKE_LIBDIR += ../../../app/lib
+}
 
 win32: LIBS += -lavcodec -lavutil
 else {
