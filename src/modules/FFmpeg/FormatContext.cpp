@@ -300,7 +300,7 @@ bool FormatContext::seek(int pos, bool backward)
 			isOk = av_seek_frame(formatCtx, -1, (int64_t)pos * AV_TIME_BASE, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
 #ifndef MP3_FAST_SEEK
 		else if (length() > 0)
-			isOk = av_seek_frame(formatCtx, -1, (int64_t)val * (avio_size(formatCtx->pb) - seekByByteOffset) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | (backward ? AVSEEK_FLAG_BACKWARD : 0)) >= 0;
+			isOk = av_seek_frame(formatCtx, -1, (int64_t)pos * (avio_size(formatCtx->pb) - seekByByteOffset) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | (backward ? AVSEEK_FLAG_BACKWARD : 0)) >= 0;
 #endif
 		if (isOk)
 		{
