@@ -3,7 +3,7 @@ TEMPLATE = app
 
 QT += network
 greaterThan(QT_MAJOR_VERSION, 4) {
-	CONFIG -= c++11
+	lessThan(QT_VERSION, 5.7.0): CONFIG -= c++11
 	QT += widgets
 }
 else:unix:!macx: PKGCONFIG += x11
