@@ -28,7 +28,7 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += OpenGL2.hpp OpenGL2Writer.hpp OpenGL2Common.hpp
 SOURCES += OpenGL2.cpp OpenGL2Writer.cpp OpenGL2Common.cpp
 
-greaterThan(QT_VERSION, 5.5.2) { #At least Qt 5.6.0
+equals(QT_VERSION, 5.6.0)|greaterThan(QT_VERSION, 5.6.0) {
 	DEFINES += OPENGL_NEW_API VSYNC_SETTINGS
 	HEADERS += OpenGL2Window.hpp OpenGL2Widget.hpp OpenGL2CommonQt5.hpp
 	SOURCES += OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp
