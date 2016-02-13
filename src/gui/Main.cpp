@@ -28,7 +28,7 @@
 
 #include <time.h>
 
-static QTranslator translator;
+static QTranslator *translator = NULL;
 static bool useGui = true;
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
@@ -150,7 +150,7 @@ void QMPlay2GUIClass::setLanguage()
 	lang = settings->get("Language", systemLang).toString();
 	if (lang.isEmpty())
 		lang = systemLang;
-	if (!translator.load(lang, langPath) && lang != "pl" && lang != "en" && translator.load("en", langPath))
+	if (!translator->load(lang, langPath) && lang != "pl" && lang != "en" && translator->load("en", langPath))
 		lang = "en";
 }
 
@@ -458,7 +458,8 @@ int main(int argc, char *argv[])
 
 	QDir::setCurrent(qApp->applicationDirPath()); //Is it really needed?
 
-	qApp->installTranslator(&translator);
+	translator = new QTranslator;
+	qApp->installTranslator(translator);
 	if (useGui)
 		qApp->setQuitOnLastWindowClosed(false);
 	QMPlay2GUI.langPath = qApp->applicationDirPath() + unixPath + "/lang/";
@@ -558,6 +559,8 @@ int main(int argc, char *argv[])
 
 		delete QMPlay2GUI.pipe;
 	} while (QMPlay2GUI.restartApp);
+
+	delete translator;
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)
