@@ -408,7 +408,11 @@ int main(int argc, char *argv[])
 #ifdef QT5_NOT_WIN
 	if (!setjmp(env))
 #endif
+#if QT_VERSION < 0x050000
 		new QApplication(argc, argv, useGui);
+#else
+		new QApplication(argc, argv);
+#endif
 #ifdef QT5_NOT_WIN
 	qAppOK = true;
 #endif
