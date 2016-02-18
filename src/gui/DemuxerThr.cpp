@@ -64,7 +64,7 @@ DemuxerThr::DemuxerThr(PlayClass &playC) :
 	playC(playC),
 	url(playC.url),
 	err(false), demuxerReady(false), hasCover(false),
-	skipBufferSeek(false), localStream(true),
+	skipBufferSeek(false), localStream(true), unknownLength(true),
 	updateBufferedTime(0.0)
 {
 	connect(this, SIGNAL(stopVADec()), this, SLOT(stopVADecSlot()));
@@ -173,7 +173,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 		else if (!doDemuxerSeek && !flush)
 		{
 			skipBufferSeek = true;
-			if (!localStream)
+			if (!localStream && !unknownLength)
 				demuxer->abort(); //Abort only the Demuxer, not IOController
 		}
 
@@ -312,8 +312,7 @@ void DemuxerThr::run()
 			playC.replayGain = 1.0 / peak;
 	}
 
-	bool unknownLength = demuxer->length() < 0.0;
-	if (unknownLength)
+	if ((unknownLength = demuxer->length() < 0.0))
 		updateBufferedSeconds = false;
 
 	emit playC.updateLength(unknownLength ? 0.0 : demuxer->length());

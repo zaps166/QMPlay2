@@ -59,7 +59,7 @@ private:
 	QString name, url, updatePlayingName;
 
 	int minBuffSizeLocal, minBuffSizeNetwork;
-	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream;
+	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength;
 	QMutex stopVAMutex, endMutex, seekMutex;
 	IOController<> ioCtrl;
 	IOController< Demuxer > demuxer;
