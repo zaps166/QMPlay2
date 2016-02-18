@@ -1,6 +1,9 @@
 Replace VideoFrame class with new, similar which will be compatible with FFmpeg ref. buffers
+Standby when playback is finished
+Video preview on progress bar
 Better radio stations
 YouTube playlists
+A-B repeat
 
 Open with QMPlay2 and Enqueue files - improve
 Accurate seeking
