@@ -63,7 +63,9 @@ public:
 DemuxerThr::DemuxerThr(PlayClass &playC) :
 	playC(playC),
 	url(playC.url),
-	err(false), demuxerReady(false), hasCover(false)
+	err(false), demuxerReady(false), hasCover(false),
+	skipBufferSeek(false), localStream(true),
+	updateBufferedTime(0.0)
 {
 	connect(this, SIGNAL(stopVADec()), this, SLOT(stopVADecSlot()));
 }
@@ -75,7 +77,7 @@ QByteArray DemuxerThr::getCoverFromStream() const
 
 void DemuxerThr::loadImage()
 {
-	if (demuxerReady)
+	if (isDemuxerReady())
 	{
 		const QByteArray demuxerImage = demuxer->image();
 		QImage img = QImage::fromData(demuxerImage);
@@ -108,6 +110,105 @@ void DemuxerThr::loadImage()
 		hasCover = !img.isNull();
 		emit playC.updateImage(img);
 	}
+}
+
+void DemuxerThr::seek(bool doDemuxerSeek)
+{
+	if (doDemuxerSeek)
+		seekMutex.lock();
+	else if (skipBufferSeek || !seekMutex.tryLock())
+		return;
+	if (playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD)
+	{
+		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
+
+		emit playC.chText(tr("Seeking"));
+		playC.canUpdatePos = false;
+
+		bool seekInBuffer = !skipBufferSeek;
+		if (playC.seekTo == SEEK_STREAM_RELOAD) //po zmianie strumienia audio, wideo lub napisów lub po ponownym uruchomieniu odtwarzania
+		{
+			playC.seekTo = playC.pos;
+			seekInBuffer = false;
+		}
+
+		const bool backward = playC.seekTo < (int)playC.pos;
+		bool flush = false, aLocked = false, vLocked = false;
+
+		skipBufferSeek = false;
+
+		if (seekInBuffer && (!localStream || !backward))
+		{
+			playC.vPackets.lock();
+			playC.aPackets.lock();
+			playC.sPackets.lock();
+			if
+			(
+				(playC.vPackets.packetsCount() || playC.aPackets.packetsCount()) &&
+				playC.vPackets.seekTo(playC.seekTo, backward) &&
+				playC.aPackets.seekTo(playC.seekTo, backward) &&
+				playC.sPackets.seekTo(playC.seekTo, backward)
+			)
+			{
+				doDemuxerSeek = false;
+				flush = true;
+				time = Functions::gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
+				if (aThr)
+					aLocked = aThr->lock();
+				if (vThr)
+					vLocked = vThr->lock();
+			}
+			else
+			{
+				emit playC.updateBufferedRange(-1, -1);
+				updateBufferedTime = 0.0;
+			}
+			playC.vPackets.unlock();
+			playC.aPackets.unlock();
+			playC.sPackets.unlock();
+		}
+
+		if (doDemuxerSeek && demuxer->seek(playC.seekTo, backward))
+			flush = true;
+		else if (!doDemuxerSeek && !flush)
+		{
+			skipBufferSeek = true;
+			if (!localStream)
+				demuxer->abort(); //Abort only the Demuxer, not IOController
+		}
+
+		if (flush)
+		{
+			playC.endOfStream = false;
+			if (doDemuxerSeek)
+				clearBuffers();
+			else
+				playC.flushAssEvents();
+			if (!aLocked && aThr)
+				aLocked = aThr->lock();
+			if (!vLocked && vThr)
+				vLocked = vThr->lock();
+			playC.skipAudioFrame = playC.audio_current_pts = 0.0;
+			playC.flushVideo = playC.flushAudio = true;
+			if (playC.pos < 0.0) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
+				emit playC.updatePos(playC.seekTo); //uaktualnia suwak na pasku do wskazanej pozycji
+			if (aLocked)
+				aThr->unlock();
+			if (vLocked)
+				vThr->unlock();
+		}
+
+		if (!skipBufferSeek)
+		{
+			playC.canUpdatePos = true;
+			playC.seekTo = SEEK_NOWHERE;
+			if (!playC.paused)
+				emit playC.chText(tr("Playback"));
+			else
+				playC.paused = false;
+		}
+	}
+	seekMutex.unlock();
 }
 
 void DemuxerThr::stop()
@@ -219,18 +320,18 @@ void DemuxerThr::run()
 	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
 
+	localStream = demuxer->localStream();
+	time = localStream ? 0.0 : Functions::gettime();
+
+	int forwardPackets = demuxer->dontUseBuffer() ? 1 : (localStream ? minBuffSizeLocal : minBuffSizeNetwork), backwardPackets;
+	bool paused = false, demuxerPaused = false, waitingForFillBufferB = false;
+	BufferInfo bufferInfo;
+	int vS, aS;
+
 	demuxerReady = true;
 
 	updateCoverAndPlaying();
-
 	connect(&QMPlay2Core, SIGNAL(updateCover(const QString &, const QString &, const QString &, const QByteArray &)), this, SLOT(updateCover(const QString &, const QString &, const QString &, const QByteArray &)));
-
-	const bool localStream = demuxer->localStream();
-	int forwardPackets = demuxer->dontUseBuffer() ? 1 : (localStream ? minBuffSizeLocal : minBuffSizeNetwork), backwardPackets;
-	bool paused = false, demuxerPaused = false, waitingForFillBufferB = false;
-	double time = localStream ? 0.0 : Functions::gettime(), updateBufferedTime = 0.0;
-	BufferInfo bufferInfo;
-	int vS, aS;
 
 	if (forwardPackets == 1 || localStream || unknownLength)
 		PacketBuffer::setBackwardPackets((backwardPackets = 0));
@@ -255,86 +356,9 @@ void DemuxerThr::run()
 
 	while (!demuxer.isAborted())
 	{
+		seek();
+
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
-
-		if (playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD)
-		{
-			emit playC.chText(tr("Seeking"));
-			playC.canUpdatePos = false;
-
-			bool seekInBuffer = true;
-			if (playC.seekTo == SEEK_STREAM_RELOAD) //po zmianie strumienia audio, wideo lub napisów lub po ponownym uruchomieniu odtwarzania
-			{
-				playC.seekTo = playC.pos;
-				seekInBuffer = false;
-			}
-
-			const bool backward = playC.seekTo < (int)playC.pos;
-			bool mustSeek = true, flush = false, aLocked = false, vLocked = false;
-
-			if (seekInBuffer && (!localStream || !backward))
-			{
-				playC.vPackets.lock();
-				playC.aPackets.lock();
-				playC.sPackets.lock();
-				if
-				(
-					(playC.vPackets.packetsCount() || playC.aPackets.packetsCount()) &&
-					playC.vPackets.seekTo(playC.seekTo, backward) &&
-					playC.aPackets.seekTo(playC.seekTo, backward) &&
-					playC.sPackets.seekTo(playC.seekTo, backward)
-				)
-				{
-					mustSeek = false;
-					flush = true;
-					time = Functions::gettime() - updateBufferedTime; //zapewni, że updateBuffered będzie na "true";
-					if (aThr)
-						aLocked = aThr->lock();
-					if (vThr)
-						vLocked = vThr->lock();
-				}
-				else
-				{
-					emit playC.updateBufferedRange(-1, -1);
-					updateBufferedTime = 0.0;
-				}
-				playC.vPackets.unlock();
-				playC.aPackets.unlock();
-				playC.sPackets.unlock();
-			}
-
-			if (mustSeek && demuxer->seek(playC.seekTo, backward))
-				flush = true;
-
-			if (flush)
-			{
-				playC.endOfStream = false;
-				if (mustSeek)
-					clearBuffers();
-				else
-					playC.flushAssEvents();
-				if (!aLocked && aThr)
-					aLocked = aThr->lock();
-				if (!vLocked && vThr)
-					vLocked = vThr->lock();
-				playC.skipAudioFrame = playC.audio_current_pts = 0.0;
-				playC.flushVideo = playC.flushAudio = true;
-				if (playC.pos < 0.0) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
-					emit playC.updatePos(playC.seekTo); //uaktualnia suwak na pasku do wskazanej pozycji
-				if (aLocked)
-					aThr->unlock();
-				if (vLocked)
-					vThr->unlock();
-			}
-
-			playC.canUpdatePos = true;
-			playC.seekTo = SEEK_NOWHERE;
-			if (!playC.paused)
-				emit playC.chText(tr("Playback"));
-			else
-				playC.paused = false;
-		}
-
 		err = (aThr && aThr->writer && !aThr->writer->readyWrite()) || (vThr && vThr->writer && !vThr->writer->readyWrite());
 		if (demuxer.isAborted() || err)
 			break;
@@ -461,7 +485,7 @@ void DemuxerThr::run()
 			if (!paused && !playC.waitForData)
 				playC.emptyBufferCond.wakeAll();
 		}
-		else
+		else if (!skipBufferSeek)
 		{
 			getAVBuffersSize(vS, aS);
 			if (vS || aS || !canBreak(aThr, vThr))

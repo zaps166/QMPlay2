@@ -230,7 +230,10 @@ void PlayClass::seek(int pos)
 		pos = 0;
 	if (lastSeekTo == pos)
 		return;
-	emit QMPlay2Core.seeked(lastSeekTo = seekTo = pos);
+	lastSeekTo = seekTo = pos;
+	if (demuxThr && demuxThr->isDemuxerReady())
+		demuxThr->seek(false);
+	emit QMPlay2Core.seeked(pos); //Signal for MPRIS2
 	fillBufferB = true;
 	if (aThr && paused)
 		aThr->silence(true);

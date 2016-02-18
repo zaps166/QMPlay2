@@ -283,6 +283,7 @@ QByteArray FormatContext::image(bool forceCopy) const
 bool FormatContext::seek(int pos, bool backward)
 {
 	bool isOk = false;
+	isAborted = false;
 	if (!isStreamed)
 	{
 		if (pos < 0)

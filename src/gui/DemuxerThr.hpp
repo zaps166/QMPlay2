@@ -23,7 +23,14 @@ public:
 
 	QByteArray getCoverFromStream() const;
 
+	inline bool isDemuxerReady() const
+	{
+		return demuxerReady;
+	}
+
 	void loadImage();
+
+	void seek(bool doDemuxerSeek = true);
 
 	void stop();
 	void end();
@@ -50,12 +57,12 @@ private:
 	QString name, url, updatePlayingName;
 
 	int minBuffSizeLocal, minBuffSizeNetwork;
-	bool err, updateBufferedSeconds, demuxerReady, hasCover;
-	QMutex stopVAMutex, endMutex;
+	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream;
+	QMutex stopVAMutex, endMutex, seekMutex;
 	IOController<> ioCtrl;
 	IOController< Demuxer > demuxer;
 	QString title, artist, album;
-	double playIfBuffered;
+	double playIfBuffered, time, updateBufferedTime;
 private slots:
 	void stopVADecSlot();
 	void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
