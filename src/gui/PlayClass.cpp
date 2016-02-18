@@ -388,9 +388,9 @@ void PlayClass::speedMessageAndOSD()
 double PlayClass::getARatio()
 {
 	if (aRatioName == "auto")
-		return demuxThr->demuxer->streamsInfo()[videoStream]->aspect_ratio;
+		return demuxThr->demuxer->streamsInfo().at(videoStream)->aspect_ratio;
 	if (aRatioName == "sizeDep")
-		return (double)demuxThr->demuxer->streamsInfo()[videoStream]->W / (double)demuxThr->demuxer->streamsInfo()[videoStream]->H;
+		return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->W / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->H;
 	return aRatioName.toDouble();
 }
 
@@ -838,8 +838,8 @@ void PlayClass::aRatioUpdated(double aRatio) //jeżeli współczynnik proporcji 
 {
 	if (aRatioName == "auto" && vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
 	{
-		demuxThr->demuxer->streamsInfo()[videoStream]->aspect_ratio = aRatio;
-		double aspect_ratio = getARatio();
+		demuxThr->demuxer->streamsInfo().at(videoStream)->aspect_ratio = aRatio;
+		const double aspect_ratio = getARatio();
 		if (ass)
 			ass->setARatio(aspect_ratio);
 		vThr->setDeleteOSD();
@@ -982,7 +982,7 @@ static Decoder *loadStream(const QList< StreamInfo * > &streams, const int choos
 }
 void PlayClass::load(Demuxer *demuxer)
 {
-	QList< StreamInfo * > streams = demuxer->streamsInfo();
+	const QList< StreamInfo * > streams = demuxer->streamsInfo();
 	Decoder *dec = NULL;
 
 	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream)) //load video

@@ -52,6 +52,8 @@ private:
 	void getAVBuffersSize(int &vS, int &aS, BufferInfo *bufferInfo = NULL);
 	void clearBuffers();
 
+	double getFrameDelay() const;
+
 	PlayClass &playC;
 
 	QString name, url, updatePlayingName;
