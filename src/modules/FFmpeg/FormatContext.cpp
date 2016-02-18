@@ -515,7 +515,7 @@ bool FormatContext::open(const QString &_url)
 	}
 	avcodec_mutex.unlock();
 
-	isStreamed = !isLocal && formatCtx->duration == QMPLAY2_NOPTS_VALUE;
+	isStreamed = !isLocal && formatCtx->duration <= 0; //QMPLAY2_NOPTS_VALUE is negative
 #ifndef MP3_FAST_SEEK
 	if (seekByByteOffset > -1 && (isStreamed || name() != "mp3"))
 		seekByByteOffset = -1;
