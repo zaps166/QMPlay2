@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.02.18:
-	- Fix slow seeking on some slow network streams,
+Changes in QMPlay2 build 16.02.20:
+	- fix slow seeking on some slow network streams,
+	- zero-copy demuxing and decoding (if possible),
 
 Changes in QMPlay2 build 16.02.08:
 	- play multiple streams in FFmpeg, YouTube can play different audio/video streams together,

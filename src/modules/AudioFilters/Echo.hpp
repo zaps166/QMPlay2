@@ -1,5 +1,7 @@
 #include <AudioFilter.hpp>
 
+class Buffer;
+
 class Echo : public AudioFilter
 {
 public:
@@ -8,7 +10,7 @@ public:
 	bool set();
 private:
 	bool setAudioParameters(uchar, uint);
-	double filter(QByteArray &, bool);
+	double filter(Buffer &, bool);
 
 	void alloc(bool);
 

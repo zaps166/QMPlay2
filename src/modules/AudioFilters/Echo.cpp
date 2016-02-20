@@ -1,4 +1,5 @@
 #include <Echo.hpp>
+#include <Buffer.hpp>
 
 Echo::Echo(Module &module) :
 	hasParameters(false), canFilter(false)
@@ -34,7 +35,7 @@ bool Echo::setAudioParameters(uchar chn, uint srate)
 	alloc(enabled && hasParameters);
 	return hasParameters;
 }
-double Echo::filter(QByteArray &data, bool)
+double Echo::filter(Buffer &data, bool)
 {
 	if (canFilter)
 	{

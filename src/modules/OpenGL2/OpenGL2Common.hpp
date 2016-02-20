@@ -1,6 +1,8 @@
 #ifndef OPENGLCOMMON_HPP
 #define OPENGLCOMMON_HPP
 
+#include <VideoFrame.hpp>
+
 #ifdef OPENGL_NEW_API
 	#include <QOpenGLShaderProgram>
 #else
@@ -9,11 +11,8 @@
 #endif
 
 #include <QCoreApplication>
-#include <QByteArray>
 #include <QImage>
 #include <QMutex>
-
-#include <QDebug>
 
 class QMPlay2_OSD;
 
@@ -57,7 +56,7 @@ protected:
 
 	void dispatchEvent(QEvent *e, QObject *p);
 public:
-	QByteArray videoFrameArr;
+	VideoFrame videoFrame;
 
 	QOpenGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
 

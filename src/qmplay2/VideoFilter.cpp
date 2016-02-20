@@ -1,16 +1,11 @@
 #include <VideoFilter.hpp>
 #include <VideoFrame.hpp>
 
-void VideoFilter::clearBuffer()
-{
-	while (!internalQueue.isEmpty())
-		VideoFrame::unref(internalQueue.dequeue().data);
-}
 bool VideoFilter::removeLastFromInternalBuffer()
 {
 	if (!internalQueue.isEmpty())
 	{
-		VideoFrame::unref(internalQueue.takeLast().data);
+		internalQueue.removeLast();
 		return true;
 	}
 	return false;
@@ -20,7 +15,7 @@ int VideoFilter::addFramesToInternalQueue(QQueue<VideoFilter::FrameBuffer> &fram
 {
 	while (!framesQueue.isEmpty())
 	{
-		if (!VideoFrame::fromData(framesQueue.first().data)->data_size)
+		if (framesQueue.at(0).frame.hasNoData())
 			break;
 		internalQueue.enqueue(framesQueue.dequeue());
 	}

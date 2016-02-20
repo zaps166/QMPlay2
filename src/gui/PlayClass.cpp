@@ -412,7 +412,6 @@ void PlayClass::stopVThr()
 			vThr->stop();
 			vThr = NULL;
 		}
-		VideoFrame::clearBuffers();
 	}
 }
 void PlayClass::stopAThr()

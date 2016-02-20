@@ -15,7 +15,7 @@ protected:
 
 	bool hasHWAccel(const char *hwaccelName);
 
-	virtual int decode(Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned);
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned);
 
 	/**/
 

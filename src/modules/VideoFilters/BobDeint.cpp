@@ -13,17 +13,16 @@ void BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
 	while (internalQueue.count() >= 2)
 	{
 		FrameBuffer dequeued = internalQueue.dequeue();
-		QByteArray videoFrameData2;
 
-		VideoFrame *videoFrame1 = VideoFrame::fromData(dequeued.data);
-		VideoFrame *videoFrame2 = VideoFrame::create(videoFrameData2, w, h);
+		VideoFrame &videoFrame1 = dequeued.frame;
+		VideoFrame videoFrame2(h, h >> 1, videoFrame1.linesize);
 
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame1->linesize[p];
-			quint8 *src  = videoFrame1->data[p] + linesize;
-			quint8 *dst1 = videoFrame1->data[p];
-			quint8 *dst2 = videoFrame2->data[p];
+			const int linesize = videoFrame1.linesize[p];
+			const quint8 *src = videoFrame1.buffer[p].data() + linesize;
+			quint8 *dst1 = videoFrame1.buffer[p].data();
+			quint8 *dst2 = videoFrame2.buffer[p].data();
 
 			memcpy(dst2, src, linesize); //Copy second line into new frame (duplicate first line in new frame, simple deshake)
 			dst2 += linesize;
@@ -56,9 +55,9 @@ void BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
 		}
 
 		const bool TFF = isTopFieldFirst(videoFrame1);
-		videoFrame1->setNoInterlaced();
-		framesQueue.insert(insertAt++, FrameBuffer( TFF ? dequeued.data : videoFrameData2, dequeued.ts));
-		framesQueue.insert(insertAt++, FrameBuffer(!TFF ? dequeued.data : videoFrameData2, dequeued.ts + halfDelay(internalQueue.first(), dequeued)));
+		videoFrame1.setNoInterlaced();
+		framesQueue.insert(insertAt++, FrameBuffer( TFF ? videoFrame1 : videoFrame2, dequeued.ts));
+		framesQueue.insert(insertAt++, FrameBuffer(!TFF ? videoFrame1 : videoFrame2, dequeued.ts + halfDelay(internalQueue.first(), dequeued)));
 	}
 }
 

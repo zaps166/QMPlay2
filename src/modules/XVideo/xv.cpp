@@ -33,13 +33,6 @@ struct XVideoPrivate
 #define shmInfo priv->shmInfo
 #define osdImg priv->osdImg
 
-#define PutImage() { \
-	if (!useSHM) \
-		XvPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height()); \
-	else \
-		XvShmPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height(), false); \
-}
-
 XVIDEO::XVIDEO() :
 	_isOK(false),
 	_flip(0),
@@ -131,11 +124,7 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	if (!useSHM)
 	{
 		image = XvCreateImage(disp, port, format_id, NULL, width, height);
-		if (!VideoFrame::testLinesize(width, image->pitches))
-		{
-			image->data = new char[image->data_size];
-			mustCopy = true;
-		}
+		image->data = new char[image->data_size];
 	}
 	else
 	{
@@ -153,7 +142,6 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 			}
 			XSync(disp, false);
 			shmctl(shmInfo.shmid, IPC_RMID, 0);
-			mustCopy = true;
 		}
 		else
 		{
@@ -185,12 +173,7 @@ void XVIDEO::close()
 			shmdt(shmInfo.shmaddr);
 		}
 		else if (!useSHM)
-		{
-			if (mustCopy)
-				delete[] image->data;
-			else
-				VideoFrame::unref(videoFrameData);
-		}
+			delete[] image->data;
 		XFree(image);
 	}
 	if (gc)
@@ -202,34 +185,25 @@ void XVIDEO::close()
 	clrVars();
 }
 
-void XVIDEO::draw(const QByteArray &_videoFrameData, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList< const QMPlay2_OSD * > &osd_list, QMutex &osd_mutex)
+void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList< const QMPlay2_OSD * > &osd_list, QMutex &osd_mutex)
 {
 	const int linesize = image->pitches[0];
 	const int linesize1_2 = image->pitches[1];
 	const int imageHeight = image->height;
 
-	if (_flip & Qt::Horizontal)
-		Functions::hFlip(*(char **)VideoFrame::fromData(_videoFrameData)->data, linesize, imageHeight, width);
-	if (_flip & Qt::Vertical)
-		Functions::vFlip(*(char **)VideoFrame::fromData(_videoFrameData)->data, linesize, imageHeight);
+	VideoFrame::copyYV12(image->data, videoFrame, linesize, linesize1_2, imageHeight);
 
-	if (mustCopy)
-	{
-		VideoFrame::copyYV12(image->data, _videoFrameData, linesize, linesize1_2, imageHeight);
-		VideoFrame::unref(_videoFrameData);
-	}
-	else
-	{
-		VideoFrame::unref(videoFrameData);
-		image->data = (char *)*VideoFrame::fromData(videoFrameData = _videoFrameData)->data;
-	}
+	if (_flip & Qt::Horizontal)
+		Functions::hFlip((quint8 *)image->data, linesize, imageHeight, width);
+	if (_flip & Qt::Vertical)
+		Functions::vFlip((quint8 *)image->data, linesize, imageHeight);
 
 	osd_mutex.lock();
 	if (!osd_list.isEmpty())
-		Functions::paintOSDtoYV12((quint8 *)image->data, _videoFrameData, osdImg, W, H, linesize, linesize1_2, osd_list, osd_checksums);
+		Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, linesize, linesize1_2, osd_list, osd_checksums);
 	osd_mutex.unlock();
 
-	PutImage();
+	putImage(srcRect, dstRect);
 	hasImage = true;
 }
 void XVIDEO::redraw(const QRect &srcRect, const QRect &dstRect, int X, int Y, int W, int H, int winW, int winH)
@@ -247,7 +221,7 @@ void XVIDEO::redraw(const QRect &srcRect, const QRect &dstRect, int X, int Y, in
 			XFillRectangle(disp, handle, gc, X + W, 0, X+1, winH);
 		}
 		if (hasImage)
-			PutImage();
+			putImage(srcRect, dstRect);
 	}
 }
 
@@ -272,9 +246,9 @@ void XVIDEO::setFlip(int f)
 	if (isOpen() && hasImage)
 	{
 		if ((f & Qt::Horizontal) != (_flip & Qt::Horizontal))
-			Functions::hFlip(image->data, image->pitches[0], height, width);
+			Functions::hFlip((quint8 *)image->data, image->pitches[0], height, width);
 		if ((f & Qt::Vertical) != (_flip & Qt::Vertical))
-			Functions::vFlip(image->data, image->pitches[0], height);
+			Functions::vFlip((quint8 *)image->data, image->pitches[0], height);
 	}
 	_flip = f;
 }
@@ -291,6 +265,14 @@ QList< QString > XVIDEO::adaptorsList()
 	}
 	delete xv;
 	return _adaptorsList;
+}
+
+void XVIDEO::putImage(const QRect &srcRect, const QRect &dstRect)
+{
+	if (!useSHM)
+		XvPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height());
+	else
+		XvShmPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height(), false);
 }
 
 void XVIDEO::XvSetPortAttributeIfExists(void *attributes, int attrib_count, const char *k, int v)
@@ -314,7 +296,7 @@ void XVIDEO::clrVars()
 	width = 0;
 	height = 0;
 	handle = 0;
-	mustCopy = hasImage = false;
+	hasImage = false;
 	fo = NULL;
 	osdImg = QImage();
 	osd_checksums.clear();

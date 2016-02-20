@@ -16,18 +16,16 @@ void MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
 		FrameBuffer dequeued = internalQueue.dequeue();
 		FrameBuffer lookup   = internalQueue.first();
 
-		QByteArray videoFrameData2;
-
-		VideoFrame *videoFrame1 = VideoFrame::fromData(dequeued.data);
-		VideoFrame *videoFrame2 = VideoFrame::create(videoFrameData2, w, h);
-		VideoFrame *videoFrame3 = VideoFrame::fromData(lookup.data);
+		const VideoFrame &videoFrame1 = dequeued.frame;
+		VideoFrame videoFrame2(h, h >> 1, videoFrame1.linesize);
+		const VideoFrame &videoFrame3 = lookup.frame;
 
 		for (int p = 0; p < 3; ++p)
 		{
-			quint8 *src1 = videoFrame1->data[p];
-			quint8 *src2 = videoFrame3->data[p];
-			quint8 *dest = videoFrame2->data[p];
-			const int linesize = videoFrame1->linesize[p];
+			const quint8 *src1 = videoFrame1.buffer[p].data();
+			const quint8 *src2 = videoFrame3.buffer[p].data();
+			quint8 *dest = videoFrame2.buffer[p].data();
+			const int linesize = videoFrame1.linesize[p];
 			const int H = p ? h >> 1 : h;
 			for (int i = 0; i < H; ++i)
 			{
@@ -39,7 +37,7 @@ void MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
 		}
 
 		framesQueue.insert(insertAt++, dequeued);
-		framesQueue.insert(insertAt++, FrameBuffer(videoFrameData2, dequeued.ts + halfDelay(lookup, dequeued)));
+		framesQueue.insert(insertAt++, FrameBuffer(videoFrame2, dequeued.ts + halfDelay(lookup, dequeued)));
 	}
 }
 

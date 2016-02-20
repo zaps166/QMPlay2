@@ -11,62 +11,61 @@ extern "C"
 }
 
 #ifdef QMPLAY2_CPU_X86
-	static void averageTwoLines_MMXEXT(quint8 *dest, quint8 *src1, quint8 *src2, int linesize)
+static void averageTwoLines_MMXEXT(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
+{
+	const int remaining = linesize % 8;
+	quint8 *dest_end = dest + linesize - remaining;
+	while (dest < dest_end)
 	{
-		const int remaining = linesize % 8;
-		quint8 *dest_end = dest + linesize - remaining;
-		while (dest < dest_end)
-		{
-			asm volatile
-			(
-				"movq  %1,    %%mm0;"
-				"movq  %2,    %%mm1;"
-				"pavgb %%mm1, %%mm0;"
-				"movq  %%mm0, %0;"
-				:"=m"(*dest)
-				: "m"(*src1), "m"(*src2)
-			);
-			dest += 8;
-			src1 += 8;
-			src2 += 8;
-		}
-		asm volatile ("emms");
-		dest_end += remaining;
-		while (dest < dest_end)
-			*dest++ = (*(src1++) + *(src2++)) >> 1;
+		asm volatile
+		(
+			"movq  %1,    %%mm0;"
+			"movq  %2,    %%mm1;"
+			"pavgb %%mm1, %%mm0;"
+			"movq  %%mm0, %0;"
+			:"=m"(*dest)
+			: "m"(*src1), "m"(*src2)
+		);
+		dest += 8;
+		src1 += 8;
+		src2 += 8;
 	}
-	static void averageTwoLines_SSE2(quint8 *dest, quint8 *src1, quint8 *src2, int linesize)
+	asm volatile ("emms");
+	dest_end += remaining;
+	while (dest < dest_end)
+		*dest++ = (*(src1++) + *(src2++)) >> 1;
+}
+static void averageTwoLines_SSE2(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
+{
+	const int remaining = linesize % 16;
+	quint8 *dest_end = dest + linesize - remaining;
+	while (dest < dest_end)
 	{
-		const int remaining = linesize % 16;
-		quint8 *dest_end = dest + linesize - remaining;
-		while (dest < dest_end)
-		{
-			asm volatile
-			(
-				"movdqu %1,     %%xmm0;"
-				"movdqu %2,     %%xmm1;"
-				"pavgb  %%xmm1, %%xmm0;"
-				"movdqu %%xmm0, %0;"
-				:"=m"(*dest)
-				: "m"(*src1), "m"(*src2)
-			);
-			dest += 16;
-			src1 += 16;
-			src2 += 16;
-		}
-		dest_end += remaining;
-		while (dest < dest_end)
-			*dest++ = (*(src1++) + *(src2++)) >> 1;
+		asm volatile
+		(
+			"movdqu %1,     %%xmm0;"
+			"movdqu %2,     %%xmm1;"
+			"pavgb  %%xmm1, %%xmm0;"
+			"movdqu %%xmm0, %0;"
+			:"=m"(*dest)
+			: "m"(*src1), "m"(*src2)
+		);
+		dest += 16;
+		src1 += 16;
+		src2 += 16;
 	}
+	dest_end += remaining;
+	while (dest < dest_end)
+		*dest++ = (*(src1++) + *(src2++)) >> 1;
+}
 #endif
-
-static void averageTwoLines_C(quint8 *dest, quint8 *src1, quint8 *src2, int linesize)
+static void averageTwoLines_C(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
 {
 	for (int i = 0; i < linesize; ++i)
 		dest[i] = (src1[i] + src2[i]) >> 1;
 }
 
-void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, quint8 *src1, quint8 *src2, int linesize);
+void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize);
 
 /**/
 
@@ -79,12 +78,11 @@ public:
 		while (internalQueue.count() >= 2)
 		{
 			FrameBuffer dequeued = internalQueue.dequeue();
-			const bool TFF = isTopFieldFirst(VideoFrame::fromData(dequeued.data));
-			VideoFrame::fromData(dequeued.data)->top_field_first = TFF;
+			const bool TFF = isTopFieldFirst(dequeued.frame);
+			dequeued.frame.tff = TFF;
 			framesQueue.insert(insertAt++, dequeued);
-			VideoFrame::fromData(dequeued.data)->top_field_first = !TFF;
-			framesQueue.insert(insertAt++,  FrameBuffer(dequeued.data, dequeued.ts + halfDelay(internalQueue.first(), dequeued)));
-			VideoFrame::ref(dequeued.data);
+			dequeued.frame.tff = !TFF;
+			framesQueue.insert(insertAt++, FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0), dequeued)));
 		}
 	}
 
@@ -159,8 +157,7 @@ void VideoFilters::clearBuffers()
 	if (hasFilters)
 		foreach (VideoFilter *vFilter, videoFilters)
 			vFilter->clearBuffer();
-	while (!outputQueue.isEmpty())
-		VideoFrame::unref(outputQueue.dequeue().data);
+	outputQueue.clear();
 	outputNotEmpty = false;
 }
 void VideoFilters::removeLastFromInputBuffer()
@@ -171,17 +168,17 @@ void VideoFilters::removeLastFromInputBuffer()
 				break;
 }
 
-void VideoFilters::addFrame(const QByteArray &videoFrameData, double ts)
+void VideoFilters::addFrame(const VideoFrame &videoFrame, double ts)
 {
 	if (!hasFilters)
 	{
-		outputQueue.enqueue(VideoFilter::FrameBuffer(videoFrameData, ts));
+		outputQueue.enqueue(VideoFilter::FrameBuffer(videoFrame, ts));
 		outputNotEmpty = true;
 	}
 	else
 	{
 		QQueue< VideoFilter::FrameBuffer > tmpQueue;
-		tmpQueue.enqueue(VideoFilter::FrameBuffer(videoFrameData, ts));
+		tmpQueue.enqueue(VideoFilter::FrameBuffer(videoFrame, ts));
 		foreach (VideoFilter *vFilter, videoFilters)
 		{
 			vFilter->filter(tmpQueue);
@@ -192,13 +189,12 @@ void VideoFilters::addFrame(const QByteArray &videoFrameData, double ts)
 		outputNotEmpty = !outputQueue.isEmpty();
 	}
 }
-bool VideoFilters::getFrame(QByteArray &videoFrameData, TimeStamp &ts)
+bool VideoFilters::getFrame(VideoFrame &videoFrame, TimeStamp &ts)
 {
 	if (!outputQueue.isEmpty())
 	{
-		VideoFrame::unref(videoFrameData);
-		videoFrameData = outputQueue.front().data;
-		ts = outputQueue.front().ts;
+		videoFrame = outputQueue.at(0).frame;
+		ts = outputQueue.at(0).ts;
 		outputQueue.pop_front();
 		outputNotEmpty = !outputQueue.isEmpty();
 		return true;

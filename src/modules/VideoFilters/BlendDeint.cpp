@@ -13,13 +13,13 @@ void BlendDeint::filter(QQueue< FrameBuffer > &framesQueue)
 	while (!internalQueue.isEmpty())
 	{
 		FrameBuffer dequeued = internalQueue.dequeue();
-		VideoFrame *videoFrame = VideoFrame::fromData(dequeued.data);
-		videoFrame->setNoInterlaced();
+		VideoFrame &videoFrame = dequeued.frame;
+		videoFrame.setNoInterlaced();
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame->linesize[p];
-			quint8 *src = videoFrame->data[p] + linesize;
-			quint8 *dst = videoFrame->data[p] + linesize;
+			const int linesize = videoFrame.linesize[p];
+			const quint8 *src = videoFrame.buffer[p].data() + linesize;
+			quint8 *dst = videoFrame.buffer[p].data() + linesize;
 			const int H = (p ? h >> 1 : h >> 0) - 2;
 			for (int i = 0; i < H; ++i)
 			{

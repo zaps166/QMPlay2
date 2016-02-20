@@ -28,7 +28,7 @@ public:
 
 	bool create(int _Wsrc, int _Hsrc, int _Wdst, int _Hdst);
 	bool createArray(const size_t bytes);
-	void scale(const VideoFrame *videoFrame, void *dst = NULL);
+	void scale(const VideoFrame &videoFrame, void *dst = NULL);
 	void scale(const void *src, void *dst = NULL);
 	void destroy();
 private:

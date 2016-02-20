@@ -1,4 +1,5 @@
 #include <Equalizer.hpp>
+#include <Buffer.hpp>
 
 extern "C"
 {
@@ -105,7 +106,7 @@ void Equalizer::clearBuffers()
 	}
 	mutex.unlock();
 }
-double Equalizer::filter(QByteArray &data, bool flush)
+double Equalizer::filter(Buffer &data, bool flush)
 {
 	if (canFilter)
 	{

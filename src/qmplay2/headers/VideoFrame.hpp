@@ -1,67 +1,41 @@
 #ifndef VIDEOFRAME_HPP
 #define VIDEOFRAME_HPP
 
-#include <QByteArray>
-#include <QAtomicInt>
+#include <Buffer.hpp>
 
 class VideoFrame
 {
 public:
-	static VideoFrame *create(QByteArray &videoFrameData, quint8 *data[4], const int linesize[4], bool interlaced = false, bool top_field_first = false, int ref_c = 0, int data_size = 0);
-	static VideoFrame *create(QByteArray &videoFrameData, int width, int height, bool interlaced = false, bool top_field_first = false);
+	static void copyYV12(void *dest, const VideoFrame &videoFrame, int luma_width, int chroma_width, int height); //Use only on YUV420 frames!
 
-	static bool testLinesize(int width, const int linesize[4]);
-
-	static inline void ref(QByteArray &videoFrameData)
+	VideoFrame(int height, int chromaHeight, AVBufferRef *bufferRef[], const int newLinesize[], bool interlaced, bool tff);
+	VideoFrame(int height, int chromaHeight, const int newLinesize[], bool interlaced = false, bool tff = false);
+	VideoFrame(quintptr surfaceId, bool interlaced, bool tff);
+	inline VideoFrame()
 	{
-		VideoFrame *videoFrame = fromData(videoFrameData);
-		if (videoFrame->ref_c)
-			videoFrame->ref_c->ref();
+		clear();
 	}
 
-	static inline void unref(const QByteArray &videoFrameData)
+	bool isEmpty() const
 	{
-		if (!videoFrameData.isEmpty())
-			do_unref(videoFrameData);
+		return buffer[0].isEmpty() && surfaceId == 0;
 	}
-	static inline void unref(QByteArray &videoFrameData)
+	bool hasNoData() const
 	{
-		if (!videoFrameData.isEmpty())
-		{
-			do_unref(videoFrameData);
-			videoFrameData.clear();
-		}
+		return buffer[0].isEmpty();
 	}
-
-	static inline const VideoFrame *fromData(const QByteArray &videoFrameData)
-	{
-		return (const VideoFrame *)videoFrameData.data();
-	}
-	static inline VideoFrame *fromData(QByteArray &videoFrameData)
-	{
-		return (VideoFrame *)videoFrameData.data();
-	}
-
-	static void copyYV12(void *dest, const QByteArray &videoFrameData, unsigned luma_width, unsigned chroma_width, unsigned height); //Use only on YUV420 frames!
-
-	static void clearBuffers();
 
 	inline void setNoInterlaced()
 	{
-		interlaced = top_field_first = false;
+		interlaced = tff = false;
 	}
 
-	quint8 *data[4];
-	int linesize[4], data_size;
-	bool interlaced, top_field_first;
-private:
-	VideoFrame();
-	VideoFrame(const VideoFrame &);
-	~VideoFrame();
+	void clear();
 
-	static void do_unref(const QByteArray &videoFrameData);
-
-	QAtomicInt *ref_c;
+	Buffer buffer[3];
+	int linesize[3];
+	quintptr surfaceId;
+	bool interlaced, tff;
 };
 
 #endif

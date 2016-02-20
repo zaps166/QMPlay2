@@ -49,7 +49,7 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 	return predictor / 32768.0f;
 }
 
-static inline void writeSample(QByteArray &decoded, float sample)
+static inline void writeSample(Buffer &decoded, float sample)
 {
 	decoded.append((const char *)&sample, sizeof sample);
 }

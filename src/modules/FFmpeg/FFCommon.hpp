@@ -22,7 +22,7 @@ namespace FFCommon
 {
 	QString prepareUrl(QString url, AVDictionary *&options);
 
-	int getField(const VideoFrame *videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
+	int getField(const VideoFrame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
 
 	AVPacket *createAVPacket();
 	void freeAVPacket(AVPacket *&packet);

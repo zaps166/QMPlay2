@@ -3,7 +3,7 @@
 class FFDecVDPAU_NW : public FFDecHWAccel
 {
 public:
-	FFDecVDPAU_NW( QMutex &, Module & );
+	FFDecVDPAU_NW(QMutex &, Module &);
 private:
 	~FFDecVDPAU_NW();
 
@@ -11,7 +11,7 @@ private:
 
 	QString name() const;
 
-	int decode( Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned );
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up);
 
-	bool open( StreamInfo *, Writer * );
+	bool open(StreamInfo *, Writer *);
 };

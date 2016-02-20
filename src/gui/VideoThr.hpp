@@ -63,12 +63,12 @@ private:
 	VideoFilters filters;
 	QMutex filtersMutex;
 private slots:
-	void write_slot(const QByteArray &);
-	void screenshot_slot(const QByteArray &);
+	void write_slot(VideoFrame videoFrame);
+	void screenshot_slot(VideoFrame videoFrame);
 	void pause_slot();
 signals:
-	void write(const QByteArray &);
-	void screenshot(const QByteArray &);
+	void write(VideoFrame);
+	void screenshot(VideoFrame);
 	void pause();
 };
 

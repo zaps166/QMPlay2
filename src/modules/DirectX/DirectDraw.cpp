@@ -195,35 +195,37 @@ void Drawable::setFlip()
 		if (paused && !isOverlay && canDraw() && DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
 		{
 			if (doHFlip)
-				Functions::hFlip((char *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight, ddsd.dwWidth);
+				Functions::hFlip((quint8 *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight, ddsd.dwWidth);
 			if (doVFlip)
-				Functions::vFlip((char *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight);
+				Functions::vFlip((quint8 *)ddsd.lpSurface, ddsd.lPitch, ddsd.dwHeight);
 			DDSBackBuffer->Unlock(NULL);
 		}
 		flip = writer.flip;
 	}
 }
 
-bool Drawable::draw(const QByteArray &videoFrameData)
+void Drawable::draw(const VideoFrame &videoFrame)
 {
 	DDSURFACEDESC ddsd = {sizeof ddsd};
 	if (restoreLostSurface() && isOverlay)
 		updateOverlay();
 	if (DDSBackBuffer->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_NOSYSLOCK, NULL) == DD_OK)
 	{
+		const int dataSize = (ddsd.lPitch * ddsd.dwHeight * 3) >> 1;
 		BYTE *surface = (BYTE *)ddsd.lpSurface;
 
+		osd_mutex.lock();
+		BYTE *dest = ((flip && !isOverlay) || !osd_list.isEmpty()) ? new BYTE[dataSize] : surface;
+
+		VideoFrame::copyYV12(dest, videoFrame, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight);
 		if (!isOverlay)
 		{
-			const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
 			if (flip & Qt::Horizontal)
-				Functions::hFlip(*(char **)videoFrame->data, videoFrame->linesize[0], ddsd.dwHeight, ddsd.dwWidth);
+				Functions::hFlip(dest, ddsd.lPitch, ddsd.dwHeight, ddsd.dwWidth);
 			if (flip & Qt::Vertical)
-				Functions::vFlip(*(char **)videoFrame->data, videoFrame->linesize[0], ddsd.dwHeight);
+				Functions::vFlip(dest, ddsd.lPitch, ddsd.dwHeight);
 		}
-		VideoFrame::copyYV12(surface, videoFrameData, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight);
 
-		osd_mutex.lock();
 		if (!osd_list.isEmpty())
 		{
 			if (osdImg.size() != QSize(ddsd.dwWidth, ddsd.dwHeight))
@@ -231,9 +233,15 @@ bool Drawable::draw(const QByteArray &videoFrameData)
 				osdImg = QImage(ddsd.dwWidth, ddsd.dwHeight, QImage::Format_ARGB32);
 				osdImg.fill(0);
 			}
-			Functions::paintOSDtoYV12(surface, videoFrameData, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_checksums);
+			Functions::paintOSDtoYV12(dest, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_checksums);
 		}
 		osd_mutex.unlock();
+
+		if (surface != dest)
+		{
+			memcpy(surface, dest, dataSize);
+			delete[] dest;
+		}
 
 		if (DDSBackBuffer->Unlock(NULL) == DD_OK)
 		{
@@ -244,10 +252,8 @@ bool Drawable::draw(const QByteArray &videoFrameData)
 				DDraw->WaitForVerticalBlank(DDWAITVB_BLOCKBEGIN, NULL); //Sometimes it works :D
 				blit();
 			}
-			return true;
 		}
 	}
-	return false;
 }
 
 void Drawable::resizeEvent(QResizeEvent *e)
@@ -472,14 +478,10 @@ bool DirectDrawWriter::processParams(bool *)
 	return readyWrite();
 }
 
-qint64 DirectDrawWriter::write(const QByteArray &arr)
+void DirectDrawWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	int ret = 0;
 	drawable->paused = false;
-	if (drawable->draw(arr))
-		ret = arr.size();
-	VideoFrame::unref(arr);
-	return ret;
+	drawable->draw(videoFrame);
 }
 void DirectDrawWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {

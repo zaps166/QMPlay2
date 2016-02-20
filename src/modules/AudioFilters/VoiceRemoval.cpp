@@ -1,4 +1,5 @@
 #include <VoiceRemoval.hpp>
+#include <Buffer.hpp>
 
 VoiceRemoval::VoiceRemoval(Module &module) :
 	hasParameters(false), canFilter(false)
@@ -21,7 +22,7 @@ bool VoiceRemoval::setAudioParameters(uchar chn, uint /*srate*/)
 	canFilter = enabled && hasParameters;
 	return hasParameters;
 }
-double VoiceRemoval::filter(QByteArray &data, bool)
+double VoiceRemoval::filter(Buffer &data, bool)
 {
 	if (canFilter)
 	{

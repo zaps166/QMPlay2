@@ -13,13 +13,13 @@
 #include <ImgScaler.hpp>
 #include <Functions.hpp>
 using Functions::gettime;
-using Functions::s_wait;
 
 #include <QDebug>
 #include <QImage>
 #include <QDir>
 
 #include <math.h>
+
 
 VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", HWAccelWriter, pluginsName),
@@ -30,8 +30,8 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 	HWAccelWriter(HWAccelWriter),
 	subtitles(NULL)
 {
-	connect(this, SIGNAL(write(const QByteArray &)), this, SLOT(write_slot(const QByteArray &)));
-	connect(this, SIGNAL(screenshot(const QByteArray &)), this, SLOT(screenshot_slot(const QByteArray &)));
+	connect(this, SIGNAL(write(VideoFrame)), this, SLOT(write_slot(VideoFrame)));
+	connect(this, SIGNAL(screenshot(VideoFrame)), this, SLOT(screenshot_slot(VideoFrame)));
 	connect(this, SIGNAL(pause()), this, SLOT(pause_slot()));
 }
 VideoThr::~VideoThr()
@@ -182,7 +182,7 @@ void VideoThr::run()
 	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0;
 	QMutex emptyBufferMutex;
-	QByteArray frame;
+	VideoFrame videoFrame;
 	unsigned fast = 0;
 	int tmp_br = 0, frames = 0;
 	canWrite = true;
@@ -191,15 +191,14 @@ void VideoThr::run()
 	{
 		if (deleteFrame)
 		{
-			VideoFrame::unref(frame);
+			videoFrame.clear();
 			frame_timer = -1.0;
 			deleteFrame = false;
 		}
 
-		if (doScreenshot && !frame.isEmpty())
+		if (doScreenshot && !videoFrame.isEmpty())
 		{
-			VideoFrame::ref(frame);
-			emit screenshot(frame);
+			emit screenshot(videoFrame);
 			doScreenshot = false;
 		}
 
@@ -275,11 +274,12 @@ void VideoThr::run()
 		{
 			if (playC.sPackets.canFetch())
 			{
-				Packet sPacket = playC.sPackets.fetch();
+				const Packet sPacket = playC.sPackets.fetch();
+				const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
 				if (playC.ass->isASS())
-					playC.ass->addASSEvent(sPacket);
+					playC.ass->addASSEvent(sPacketData);
 				else
-					playC.ass->addASSEvent(Functions::convertToASS(sPacket), sPacket.ts, sPacket.duration);
+					playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts, sPacket.duration);
 			}
 			if (!playC.ass->getASS(subtitles, subsPts))
 			{
@@ -334,8 +334,8 @@ void VideoThr::run()
 
 		if (!packet.isEmpty() || maybeFlush)
 		{
-			QByteArray decoded;
-			const int bytes_consumed = dec->decode(packet, decoded, playC.flushVideo, skip ? ~0 : (fast > 1 ? fast - 1 : 0));
+			VideoFrame decoded;
+			const int bytes_consumed = dec->decodeVideo(packet, decoded, playC.flushVideo, skip ? ~0 : (fast > 1 ? fast - 1 : 0));
 			if (playC.flushVideo)
 			{
 				useLastDelay = true; //if seeking
@@ -349,7 +349,7 @@ void VideoThr::run()
 
 		}
 
-		const bool ptsIsValid = filters.getFrame(frame, packet.ts);
+		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
 		filtersMutex.unlock();
 
 		if ((maybeFlush = packet.ts.isValid()))
@@ -445,7 +445,7 @@ void VideoThr::run()
 				fast = 0;
 			}
 
-			if (!frame.isEmpty())
+			if (!videoFrame.isEmpty())
 			{
 				if (frame_timer != -1.0)
 				{
@@ -456,15 +456,14 @@ void VideoThr::run()
 					while (delay > 0.0 && !playC.paused && !br && !br2)
 					{
 						const double sleepTime = qMin(delay, 0.1);
-						s_wait(sleepTime);
+						Functions::s_wait(sleepTime);
 						delay -= sleepTime;
 					}
 				}
 				if (!skip && canWrite)
 				{
 					oneFrame = canWrite = false;
-					VideoFrame::ref(frame);
-					emit write(frame);
+					emit write(videoFrame);
 				}
 				frame_timer = gettime();
 			}
@@ -474,8 +473,6 @@ void VideoThr::run()
 
 		mutex.unlock();
 	}
-
-	VideoFrame::unref(frame);
 }
 
 #if defined(Q_WS_X11) || defined(X11_EXTRAS)
@@ -486,7 +483,7 @@ void VideoThr::run()
 	#include <X11/Xlib.h>
 #endif
 
-void VideoThr::write_slot(const QByteArray &frame)
+void VideoThr::write_slot(VideoFrame videoFrame)
 {
 #ifdef X11_EXTRAS
 	if (QGuiApplication::platformName() == "xcb")
@@ -496,18 +493,15 @@ void VideoThr::write_slot(const QByteArray &frame)
 #endif
 	canWrite = true;
 	if (writer && writer->readyWrite())
-		writer->write(frame);
-	else
-		VideoFrame::unref(frame);
+		((VideoWriter *)writer)->writeVideo(videoFrame);
 }
-void VideoThr::screenshot_slot(const QByteArray &frame)
+void VideoThr::screenshot_slot(VideoFrame videoFrame)
 {
 	ImgScaler imgScaler;
 	const int aligned8W = Functions::aligned(W, 8);
 	if (writer && imgScaler.create(W, H, aligned8W, H))
 	{
 		QImage img(aligned8W, H, QImage::Format_RGB32);
-		VideoFrame *videoFrame = (VideoFrame *)frame.data();
 		bool ok = true;
 		if (!HWAccelWriter)
 			imgScaler.scale(videoFrame, img.bits());
@@ -529,7 +523,6 @@ void VideoThr::screenshot_slot(const QByteArray &frame)
 			img.save(dir + "/QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext);
 		}
 	}
-	VideoFrame::unref(frame);
 }
 void VideoThr::pause_slot()
 {

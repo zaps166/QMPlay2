@@ -1,9 +1,9 @@
 #ifndef HWACCELHELPER_HPP
 #define HWACCELHELPER_HPP
 
-#include <stdint.h>
+#include <QtGlobal>
 
-typedef uintptr_t QMPlay2SurfaceID;
+typedef quintptr QMPlay2SurfaceID;
 
 #define QMPlay2InvalidSurfaceID ((QMPlay2SurfaceID)-1)
 

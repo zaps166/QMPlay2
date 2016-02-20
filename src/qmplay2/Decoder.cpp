@@ -11,13 +11,6 @@ class QMPlay2DummyDecoder : public Decoder
 		return QString();
 	}
 
-	int decode(Packet &packet, QByteArray &dest, bool flush, unsigned hurry_up)
-	{
-		Q_UNUSED(flush)
-		Q_UNUSED(hurry_up)
-		return (dest = packet).size();
-	}
-
 	bool open(StreamInfo *_streamInfo, Writer *)
 	{
 		streamInfo = _streamInfo;

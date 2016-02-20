@@ -2,6 +2,7 @@
 #define VIDEOFILTER_HPP
 
 #include <ModuleParams.hpp>
+#include <VideoFrame.hpp>
 
 #include <QQueue>
 
@@ -11,20 +12,23 @@ public:
 	class FrameBuffer
 	{
 	public:
-		inline FrameBuffer(const QByteArray &data, double ts) :
-			data(data), ts(ts)
+		inline FrameBuffer(const VideoFrame &frame, double ts) :
+			frame(frame),
+			ts(ts)
 		{}
 
-		QByteArray data;
+		VideoFrame frame;
 		double ts;
 	};
 
 	virtual ~VideoFilter()
+	{}
+
+	inline void clearBuffer()
 	{
-		clearBuffer();
+		internalQueue.clear();
 	}
 
-	void clearBuffer();
 	bool removeLastFromInternalBuffer();
 
 	virtual void filter(QQueue< FrameBuffer > &framesQueue) = 0;

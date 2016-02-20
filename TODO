@@ -1,4 +1,3 @@
-Replace VideoFrame class with new, similar which will be compatible with FFmpeg ref. buffers
 Standby when playback is finished
 Video preview on progress bar
 Video rotation: 90°/270°

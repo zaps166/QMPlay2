@@ -25,7 +25,7 @@ public:
 	bool open(int, int, unsigned long, const QString &adaptorName, bool);
 	void close();
 
-	void draw(const QByteArray &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex &);
+	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex &);
 	void redraw(const QRect &, const QRect &, int, int, int, int, int, int);
 
 	void setVideoEqualizer(int, int, int, int);
@@ -37,10 +37,12 @@ public:
 
 	static QList< QString > adaptorsList();
 private:
+	void putImage(const QRect &srcRect, const QRect &dstRect);
+
 	void XvSetPortAttributeIfExists(void *attributes, int attrib_count, const char *k, int v);
 	void clrVars();
 
-	bool _isOK, _isOpen, hasImage, useSHM, mustCopy;
+	bool _isOK, _isOpen, hasImage, useSHM;
 	int _flip;
 
 	unsigned long handle;
@@ -48,7 +50,6 @@ private:
 
 	unsigned int adaptors;
 
-	QByteArray videoFrameData;
 	QList< QByteArray > osd_checksums;
 
 	XVideoPrivate *priv;

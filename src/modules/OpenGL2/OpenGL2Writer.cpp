@@ -98,13 +98,11 @@ bool OpenGL2Writer::processParams(bool *)
 	return readyWrite();
 }
 
-qint64 OpenGL2Writer::write(const QByteArray &arr)
+void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
 {
 	drawable->isPaused = false;
-	VideoFrame::unref(drawable->videoFrameArr);
-	drawable->videoFrameArr = arr;
+	drawable->videoFrame = videoFrame;
 	drawable->updateGL();
-	return arr.size();
 }
 void OpenGL2Writer::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {

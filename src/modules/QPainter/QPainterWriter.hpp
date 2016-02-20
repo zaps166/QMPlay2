@@ -1,4 +1,5 @@
 #include <VideoWriter.hpp>
+#include <VideoFrame.hpp>
 #include <ImgScaler.hpp>
 
 #include <QWidget>
@@ -12,12 +13,12 @@ public:
 	Drawable(class QPainterWriter &);
 	~Drawable();
 
-	void draw(const QByteArray &, bool, bool);
+	void draw(const VideoFrame &newVideoFrame, bool, bool);
 	void clr();
 
 	void resizeEvent(QResizeEvent *);
 
-	QByteArray videoFrameData;
+	VideoFrame videoFrame;
 	QList< const QMPlay2_OSD * > osd_list;
 	int Brightness, Contrast;
 	QMutex osd_mutex;
@@ -46,7 +47,7 @@ private:
 	bool readyWrite() const;
 
 	bool processParams(bool *paramsCorrected);
-	qint64 write(const QByteArray &);
+	void writeVideo(const VideoFrame &videoFrame);
 	void writeOSD(const QList< const QMPlay2_OSD * > &);
 
 	QString name() const;

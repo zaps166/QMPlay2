@@ -131,10 +131,9 @@ bool VAAPIWriter::processParams(bool *)
 
 	return readyWrite();
 }
-qint64 VAAPIWriter::write(const QByteArray &data)
+void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	VideoFrame *videoFrame = (VideoFrame *)data.data();
-	const VASurfaceID curr_id = (quintptr)videoFrame->data[3];
+	const VASurfaceID curr_id = videoFrame.surfaceId;
 	const int field = FFCommon::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
 #ifdef HAVE_VPP
 	const bool do_vpp_deint = field != 0 && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
@@ -150,7 +149,7 @@ qint64 VAAPIWriter::write(const QByteArray &data)
 		if (do_vpp_deint && forward_reference == VA_INVALID_SURFACE)
 			forward_reference = curr_id;
 		if (!vpp_second && forward_reference == curr_id)
-			return data.size();
+			return;
 
 		if (do_vpp_deint)
 		{
@@ -206,7 +205,6 @@ qint64 VAAPIWriter::write(const QByteArray &data)
 #endif
 		draw(curr_id, field);
 	paused = false;
-	return data.size();
 }
 void VAAPIWriter::pause()
 {
@@ -222,7 +220,7 @@ void VAAPIWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 	}
 }
 
-bool VAAPIWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VAAPIWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
 {
 	if (dest && !(outH & 1) && !(outW % 4))
 	{
@@ -230,7 +228,7 @@ bool VAAPIWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgSc
 		VAImageFormat img_fmt[fmt_count];
 		if (vaQueryImageFormats(VADisp, img_fmt, &fmt_count) == VA_STATUS_SUCCESS)
 		{
-			const VASurfaceID surfaceID = (quintptr)videoFrame->data[3];
+			const VASurfaceID surfaceID = videoFrame.surfaceId;
 			int img_fmt_idx[3] = {-1, -1, -1};
 			for (int i = 0; i < fmt_count; ++i)
 			{

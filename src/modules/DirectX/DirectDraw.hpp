@@ -26,7 +26,7 @@ public:
 	void videoEqSet();
 	void setFlip();
 
-	bool draw(const QByteArray &videoFrameData);
+	void draw(const VideoFrame &videoFrame);
 
 	void resizeEvent(QResizeEvent *);
 
@@ -83,7 +83,7 @@ private:
 	bool readyWrite() const;
 
 	bool processParams(bool *paramsCorrected);
-	qint64 write(const QByteArray &);
+	void writeVideo(const VideoFrame &videoFrame);
 	void writeOSD(const QList< const QMPlay2_OSD * > &);
 
 	void pause();

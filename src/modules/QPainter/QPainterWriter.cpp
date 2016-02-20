@@ -22,17 +22,13 @@ Drawable::Drawable(QPainterWriter &writer) :
 Drawable::~Drawable()
 {
 	clr();
-	VideoFrame::unref(videoFrameData);
 }
 
-void Drawable::draw(const QByteArray &arr, bool canRepaint, bool entireScreen)
+void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entireScreen)
 {
-	if (!arr.isEmpty())
-	{
-		VideoFrame::unref(videoFrameData);
-		videoFrameData = arr;
-	}
-	else if (videoFrameData.isEmpty())
+	if (!newVideoFrame.isEmpty())
+		videoFrame = newVideoFrame;
+	else if (videoFrame.isEmpty())
 	{
 		update();
 		return;
@@ -41,7 +37,7 @@ void Drawable::draw(const QByteArray &arr, bool canRepaint, bool entireScreen)
 	{
 		if (img.isNull())
 			img = QImage(W, H, QImage::Format_RGB32);
-		imgScaler.scale(VideoFrame::fromData(videoFrameData), img.bits());
+		imgScaler.scale(videoFrame, img.bits());
 		if (writer.flip)
 			img = img.mirrored(writer.flip & Qt::Horizontal, writer.flip & Qt::Vertical);
 		if (Brightness != 0 || Contrast != 100)
@@ -64,7 +60,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
 	W = aligned(W, 8);
 
 	clr();
-	draw(QByteArray(), e ? false : true, true);
+	draw(VideoFrame(), e ? false : true, true);
 }
 void Drawable::paintEvent(QPaintEvent *)
 {
@@ -147,7 +143,7 @@ bool QPainterWriter::processParams(bool *)
 	const int _outH = getParam("H").toInt();
 	if (_outW > 0 && _outH > 0 && (_outW != outW || _outH != outH))
 	{
-		VideoFrame::unref(drawable->videoFrameData);
+		drawable->videoFrame.clear();
 
 		outW = _outW;
 		outH = _outH;
@@ -161,10 +157,9 @@ bool QPainterWriter::processParams(bool *)
 	return readyWrite();
 }
 
-qint64 QPainterWriter::write(const QByteArray &arr)
+void QPainterWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	drawable->draw(arr, true, false);
-	return arr.size();
+	drawable->draw(videoFrame, true, false);
 }
 void QPainterWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {

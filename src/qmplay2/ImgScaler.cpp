@@ -22,14 +22,15 @@ bool ImgScaler::createArray(const size_t bytes)
 		return (arr = av_malloc(bytes));
 	return false;
 }
-void ImgScaler::scale(const VideoFrame *src, void *dst)
+void ImgScaler::scale(const VideoFrame &src, void *dst)
 {
 	if (img_convert_ctx)
 	{
 		if (!dst)
 			dst = arr;
+		const quint8 *srcData[3] = {src.buffer[0].data(), src.buffer[1].data(), src.buffer[2].data()};
 		const int linesize = Wdst << 2;
-		sws_scale(img_convert_ctx, src->data, src->linesize, 0, Hsrc, (uint8_t **)&dst, &linesize);
+		sws_scale(img_convert_ctx, srcData, src.linesize, 0, Hsrc, (uint8_t **)&dst, &linesize);
 	}
 }
 void ImgScaler::scale(const void *src, void *dst)

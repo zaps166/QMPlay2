@@ -139,10 +139,9 @@ bool XVideoWriter::processParams(bool *)
 	return readyWrite();
 }
 
-qint64 XVideoWriter::write(const QByteArray &arr)
+void XVideoWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	xv->draw(arr, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list, osd_mutex);
-	return arr.size();
+	xv->draw(videoFrame, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list, osd_mutex);
 }
 void XVideoWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {

@@ -1,5 +1,6 @@
 #include <Main.hpp>
 
+#include <VideoFrame.hpp>
 #include <MainWidget.hpp>
 #include <PlayClass.hpp>
 #include <Functions.hpp>
@@ -457,6 +458,8 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 	}
+
+	qRegisterMetaType<VideoFrame>("VideoFrame");
 
 	qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 

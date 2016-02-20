@@ -397,9 +397,13 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	}
 #endif
 
-	encoded.reserve(packet->size + FF_INPUT_BUFFER_PADDING_SIZE);
-	encoded.resize(packet->size);
-	memcpy(encoded.data(), packet->data, encoded.capacity());
+	if (!packet->buf) //Buffer isn't reference-counted, so copy the data
+		encoded.assign(packet->data, packet->size, packet->size + FF_INPUT_BUFFER_PADDING_SIZE);
+	else
+	{
+		encoded.assign(packet->buf, packet->size);
+		packet->buf = NULL;
+	}
 
 	const double time_base = av_q2d(streams[ff_idx]->time_base);
 

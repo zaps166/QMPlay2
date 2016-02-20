@@ -150,7 +150,6 @@ OpenGL2Common::OpenGL2Common() :
 }
 OpenGL2Common::~OpenGL2Common()
 {
-	VideoFrame::unref(videoFrameArr);
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
 }
@@ -274,48 +273,46 @@ void OpenGL2Common::initializeGL()
 
 void OpenGL2Common::paintGL()
 {
-	if (videoFrameArr.isEmpty() && !hasImage)
+	if (videoFrame.isEmpty() && !hasImage)
 		return;
 
 	const QSize winSize = widget()->size();
 
 	bool resetDone = false;
 
-	if (!videoFrameArr.isEmpty())
+	if (!videoFrame.isEmpty())
 	{
-		const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameArr);
-
 		if (doReset)
 		{
 			/* Prepare textures */
 			glBindTexture(GL_TEXTURE_2D, 2);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[0], outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[0], outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
 			glBindTexture(GL_TEXTURE_2D, 3);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[1], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[1], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
 			glBindTexture(GL_TEXTURE_2D, 4);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame->linesize[2], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[2], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 
 			/* Prepare texture coordinates */
-			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame->linesize[0] == outW) ? 1.0f : (outW / (videoFrame->linesize[0] + 1.0f));
+			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == outW) ? 1.0f : (outW / (videoFrame.linesize[0] + 1.0f));
 
 			resetDone = true;
 		}
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 2);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[0], outH, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[0]);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[0], outH, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[0].constData());
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, 3);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[1], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[1]);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[1], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[1].constData());
 
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, 4);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame->linesize[2], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame->data[2]);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[2], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[2].constData());
 
-		VideoFrame::unref(videoFrameArr);
+		videoFrame.clear();
 		hasImage = true;
 	}
 

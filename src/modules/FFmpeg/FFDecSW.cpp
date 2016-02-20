@@ -72,136 +72,152 @@ QString FFDecSW::name() const
 	return "FFmpeg";
 }
 
-int FFDecSW::decode(Packet &encodedPacket, QByteArray &decoded, bool flush, unsigned hurry_up)
+int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
+{
+	int bytes_consumed = 0, frameFinished = 0;
+
+	decodeFirstStep(encodedPacket, flush);
+	if (codec_ctx->codec_type == AVMEDIA_TYPE_AUDIO)
+	{
+		bytes_consumed = avcodec_decode_audio4(codec_ctx, frame, &frameFinished, packet);
+		if (frameFinished)
+		{
+			const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
+			const int decoded_size = samples_with_channels * sizeof(float);
+			if (decoded.size() != decoded_size)
+				decoded.resize(decoded_size);
+			float *decoded_data = (float *)decoded.data();
+			switch (codec_ctx->sample_fmt)
+			{
+				case AV_SAMPLE_FMT_U8:
+				{
+					uint8_t *data = (uint8_t *)*frame->data;
+					for (int i = 0; i < samples_with_channels; i++)
+						decoded_data[i] = (data[i] - 0x7F) / 128.0f;
+				} break;
+				case AV_SAMPLE_FMT_S16:
+				{
+					int16_t *data = (int16_t *)*frame->data;
+					for (int i = 0; i < samples_with_channels; i++)
+						decoded_data[i] = data[i] / 32768.0f;
+				} break;
+				case AV_SAMPLE_FMT_S32:
+				{
+					int32_t *data = (int32_t *)*frame->data;
+					for (int i = 0; i < samples_with_channels; i++)
+						decoded_data[i] = data[i] / 2147483648.0f;
+				} break;
+				case AV_SAMPLE_FMT_FLT:
+					memcpy(decoded_data, *frame->data, decoded_size);
+					break;
+				case AV_SAMPLE_FMT_DBL:
+				{
+					double *data = (double *)*frame->data;
+					for (int i = 0; i < samples_with_channels; i++)
+						decoded_data[i] = data[i];
+				} break;
+
+				/* Thanks Wang Bin for this patch */
+				case AV_SAMPLE_FMT_U8P:
+				{
+					uint8_t **data = (uint8_t **)frame->extended_data;
+					for (int i = 0; i < frame->nb_samples; ++i)
+						for (int ch = 0; ch < codec_ctx->channels; ++ch)
+							*decoded_data++ = (data[ch][i] - 0x7F) / 128.0f;
+				} break;
+				case AV_SAMPLE_FMT_S16P:
+				{
+					int16_t **data = (int16_t **)frame->extended_data;
+					for (int i = 0; i < frame->nb_samples; ++i)
+						for (int ch = 0; ch < codec_ctx->channels; ++ch)
+							*decoded_data++ = data[ch][i] / 32768.0f;
+				} break;
+				case AV_SAMPLE_FMT_S32P:
+				{
+					int32_t **data = (int32_t **)frame->extended_data;
+					for (int i = 0; i < frame->nb_samples; ++i)
+						for (int ch = 0; ch < codec_ctx->channels; ++ch)
+							*decoded_data++ = data[ch][i] / 2147483648.0f;
+				} break;
+				case AV_SAMPLE_FMT_FLTP:
+				{
+					float **data = (float **)frame->extended_data;
+					for (int i = 0; i < frame->nb_samples; ++i)
+						for (int ch = 0; ch < codec_ctx->channels; ++ch)
+							*decoded_data++ = data[ch][i];
+				} break;
+				case AV_SAMPLE_FMT_DBLP:
+				{
+					double **data = (double **)frame->extended_data;
+					for (int i = 0; i < frame->nb_samples; ++i)
+						for (int ch = 0; ch < codec_ctx->channels; ++ch)
+							*decoded_data++ = data[ch][i];
+				} break;
+				/**/
+
+				default:
+					decoded.clear();
+					break;
+			}
+		}
+	}
+
+	if (frameFinished)
+		decodeLastStep(encodedPacket, frame);
+	else
+		encodedPacket.ts.setInvalid();
+
+	if (bytes_consumed < 0)
+		bytes_consumed = 0;
+	return bytes_consumed;
+}
+int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
 {
 	int bytes_consumed = 0, frameFinished = 0;
 
 	decodeFirstStep(encodedPacket, flush);
 
-	switch (codec_ctx->codec_type)
+	if  (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 	{
-		case AVMEDIA_TYPE_AUDIO:
-			bytes_consumed = avcodec_decode_audio4(codec_ctx, frame, &frameFinished, packet);
-			if (frameFinished)
-			{
-				const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
-				const int decoded_size = samples_with_channels * sizeof(float);
-				if (decoded.size() != decoded_size)
-					decoded.resize(decoded_size);
-				float *decoded_data = (float *)decoded.data();
-				switch (codec_ctx->sample_fmt)
-				{
-					case AV_SAMPLE_FMT_U8:
-					{
-						uint8_t *data = (uint8_t *)*frame->data;
-						for (int i = 0; i < samples_with_channels; i++)
-							decoded_data[i] = (data[i] - 0x7F) / 128.0f;
-					} break;
-					case AV_SAMPLE_FMT_S16:
-					{
-						int16_t *data = (int16_t *)*frame->data;
-						for (int i = 0; i < samples_with_channels; i++)
-							decoded_data[i] = data[i] / 32768.0f;
-					} break;
-					case AV_SAMPLE_FMT_S32:
-					{
-						int32_t *data = (int32_t *)*frame->data;
-						for (int i = 0; i < samples_with_channels; i++)
-							decoded_data[i] = data[i] / 2147483648.0f;
-					} break;
-					case AV_SAMPLE_FMT_FLT:
-						memcpy(decoded_data, *frame->data, decoded_size);
-						break;
-					case AV_SAMPLE_FMT_DBL:
-					{
-						double *data = (double *)*frame->data;
-						for (int i = 0; i < samples_with_channels; i++)
-							decoded_data[i] = data[i];
-					} break;
-
-					/* Thanks Wang Bin for this patch */
-					case AV_SAMPLE_FMT_U8P:
-					{
-						uint8_t **data = (uint8_t **)frame->extended_data;
-						for (int i = 0; i < frame->nb_samples; ++i)
-							for (int ch = 0; ch < codec_ctx->channels; ++ch)
-								*decoded_data++ = (data[ch][i] - 0x7F) / 128.0f;
-					} break;
-					case AV_SAMPLE_FMT_S16P:
-					{
-						int16_t **data = (int16_t **)frame->extended_data;
-						for (int i = 0; i < frame->nb_samples; ++i)
-							for (int ch = 0; ch < codec_ctx->channels; ++ch)
-								*decoded_data++ = data[ch][i] / 32768.0f;
-					} break;
-					case AV_SAMPLE_FMT_S32P:
-					{
-						int32_t **data = (int32_t **)frame->extended_data;
-						for (int i = 0; i < frame->nb_samples; ++i)
-							for (int ch = 0; ch < codec_ctx->channels; ++ch)
-								*decoded_data++ = data[ch][i] / 2147483648.0f;
-					} break;
-					case AV_SAMPLE_FMT_FLTP:
-					{
-						float **data = (float **)frame->extended_data;
-						for (int i = 0; i < frame->nb_samples; ++i)
-							for (int ch = 0; ch < codec_ctx->channels; ++ch)
-								*decoded_data++ = data[ch][i];
-					} break;
-					case AV_SAMPLE_FMT_DBLP:
-					{
-						double **data = (double **)frame->extended_data;
-						for (int i = 0; i < frame->nb_samples; ++i)
-							for (int ch = 0; ch < codec_ctx->channels; ++ch)
-								*decoded_data++ = data[ch][i];
-					} break;
-					/**/
-
-					default:
-						decoded.clear();
-						break;
-				}
-			}
-			break;
-		case AVMEDIA_TYPE_VIDEO:
+		if (respectHurryUP && hurry_up)
 		{
-			if (respectHurryUP && hurry_up)
-			{
-				if (skipFrames && !forceSkipFrames && hurry_up > 1)
-					codec_ctx->skip_frame = AVDISCARD_NONREF;
-				codec_ctx->skip_loop_filter = AVDISCARD_ALL;
-				if (hurry_up > 1)
-					codec_ctx->skip_idct = AVDISCARD_NONREF;
-				codec_ctx->flags2 |= CODEC_FLAG2_FAST;
-			}
+			if (skipFrames && !forceSkipFrames && hurry_up > 1)
+				codec_ctx->skip_frame = AVDISCARD_NONREF;
+			codec_ctx->skip_loop_filter = AVDISCARD_ALL;
+			if (hurry_up > 1)
+				codec_ctx->skip_idct = AVDISCARD_NONREF;
+			codec_ctx->flags2 |= CODEC_FLAG2_FAST;
+		}
+		else
+		{
+			if (!forceSkipFrames)
+				codec_ctx->skip_frame = AVDISCARD_DEFAULT;
+			codec_ctx->skip_loop_filter = codec_ctx->skip_idct = AVDISCARD_DEFAULT;
+			codec_ctx->flags2 &= ~CODEC_FLAG2_FAST;
+		}
+
+		bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
+
+		if (forceSkipFrames) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
+			codec_ctx->skip_frame = AVDISCARD_NONREF;
+
+		if (frameFinished && ~hurry_up)
+		{
+			if (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P && frame->width == streamInfo->W && frame->height == streamInfo->H)
+				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
-				if (!forceSkipFrames)
-					codec_ctx->skip_frame = AVDISCARD_DEFAULT;
-				codec_ctx->skip_loop_filter = codec_ctx->skip_idct = AVDISCARD_DEFAULT;
-				codec_ctx->flags2 &= ~CODEC_FLAG2_FAST;
-			}
-
-			bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
-
-			if (forceSkipFrames) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
-				codec_ctx->skip_frame = AVDISCARD_NONREF;
-
-			if (frameFinished && ~hurry_up)
-			{
-				//TODO: get rid of VideoFrame and use FFmpeg reference-counted buffers to save memory bandwidth - don't do unnecessary copies!
-				VideoFrame *videoFrame = VideoFrame::create(decoded, streamInfo->W, streamInfo->H, frame->interlaced_frame, frame->top_field_first);
+				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 				if (frame->width != lastFrameW || frame->height != lastFrameH)
 				{
 					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
 					lastFrameW = frame->width;
 					lastFrameH = frame->height;
 				}
-				sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, videoFrame->data, videoFrame->linesize);
+				quint8 *decodedData[] = {decoded.buffer[0].data(), decoded.buffer[1].data(), decoded.buffer[2].data()};
+				sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
 			}
-		} break;
-		default:
-			break;
+		}
 	}
 
 	if (frameFinished)
@@ -303,6 +319,7 @@ bool FFDecSW::open(StreamInfo *streamInfo, Writer *)
 				codec_ctx->thread_type = FF_THREAD_SLICE;
 		}
 		av_codec_set_lowres(codec_ctx, qMin(av_codec_get_max_lowres(codec), lowres));
+		codec_ctx->refcounted_frames = true;
 	}
 	if (!FFDec::openCodec(codec))
 		return false;

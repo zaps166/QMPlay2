@@ -193,10 +193,10 @@ void AudioThr::run()
 				break;
 			}
 
-			QByteArray decoded;
+			Buffer decoded;
 			if (!hasBufferedSamples)
 			{
-				bytes_consumed = dec->decode(packet, decoded, flushAudio);
+				bytes_consumed = dec->decodeAudio(packet, decoded, flushAudio);
 				tmp_br += bytes_consumed;
 			}
 
@@ -233,7 +233,7 @@ void AudioThr::run()
 				if (vol == 0.0f)
 					decodedChunk.fill(0, chunk);
 				else
-					decodedChunk = QByteArray::fromRawData(decoded.data() + decodedPos, chunk);
+					decodedChunk = QByteArray::fromRawData((const char *)decoded.constData() + decodedPos, chunk);
 
 				decodedPos += chunk;
 				decodedSize -= chunk;

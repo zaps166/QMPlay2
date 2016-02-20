@@ -2,10 +2,9 @@
 #define PACKET_HPP
 
 #include <TimeStamp.hpp>
+#include <Buffer.hpp>
 
-#include <QByteArray>
-
-struct Packet : public QByteArray
+struct Packet : public Buffer
 {
 	inline Packet() :
 		sampleAspectRatio(0.0),

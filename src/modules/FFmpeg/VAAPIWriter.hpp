@@ -31,11 +31,11 @@ public:
 	bool readyWrite() const;
 
 	bool processParams(bool *paramsCorrected);
-	qint64 write(const QByteArray &);
+	void writeVideo(const VideoFrame &videoFrame);
 	void pause();
 	void writeOSD(const QList< const QMPlay2_OSD * > &osd);
 
-	bool HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
+	bool HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
 
 	QString name() const;
 

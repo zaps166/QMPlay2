@@ -8,6 +8,7 @@
 #include <QDate>
 
 class QMPlay2_OSD;
+class VideoFrame;
 class QMimeData;
 class QPainter;
 class QRect;
@@ -101,7 +102,7 @@ namespace Functions
 
 	bool mustRepaintOSD(const QList< const QMPlay2_OSD * > &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = NULL, const qreal *scaleH = NULL, QRect *bounds = NULL);
 	void paintOSD(bool rgbSwapped, const QList< const QMPlay2_OSD * > &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = NULL);
-	void paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums);
+	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums);
 
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
 	int scaleEQValue(int val, int min, int max);
@@ -114,8 +115,8 @@ namespace Functions
 	bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = NULL);
 	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo());
 
-	void hFlip(char *data, int linesize, int height, int width);
-	void vFlip(char *data, int linesize, int height);
+	void hFlip(quint8 *data, int linesize, int height, int width);
+	void vFlip(quint8 *data, int linesize, int height);
 
 	QString dBStr(double a);
 

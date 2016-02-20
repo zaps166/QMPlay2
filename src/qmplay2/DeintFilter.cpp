@@ -4,8 +4,8 @@ int DeintFilter::addFramesToDeinterlace(QQueue< FrameBuffer > &framesQueue, bool
 {
 	while (!framesQueue.isEmpty())
 	{
-		VideoFrame *videoFrame = VideoFrame::fromData(framesQueue.first().data);
-		if (((deintFlags & AutoDeinterlace) && !videoFrame->interlaced) || (checkSize && !videoFrame->data_size))
+		const VideoFrame &videoFrame = framesQueue.at(0).frame;
+		if (((deintFlags & AutoDeinterlace) && !videoFrame.interlaced) || (checkSize && videoFrame.hasNoData()))
 			break;
 		internalQueue.enqueue(framesQueue.dequeue());
 	}

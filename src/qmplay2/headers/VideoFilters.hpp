@@ -15,7 +15,7 @@ class VideoFilters
 public:
 	static void init();
 
-	static inline void averageTwoLines(quint8 *dest, quint8 *src1, quint8 *src2, int linesize)
+	static inline void averageTwoLines(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
 	{
 		averageTwoLinesPtr(dest, src1, src2, linesize);
 	}
@@ -37,15 +37,15 @@ public:
 	void clearBuffers();
 	void removeLastFromInputBuffer();
 
-	void addFrame(const QByteArray &videoFrameData, double ts);
-	bool getFrame(QByteArray &videoFrameData, TimeStamp &ts);
+	void addFrame(const VideoFrame &videoFrame, double ts);
+	bool getFrame(VideoFrame &videoFrame, TimeStamp &ts);
 
 	inline bool readyToRead() const
 	{
 		return outputNotEmpty;
 	}
 private:
-	static void (*averageTwoLinesPtr)(quint8 *, quint8 *, quint8 *, int);
+	static void (*averageTwoLinesPtr)(quint8 *, const quint8 *, const quint8 *, int);
 
 	QQueue< VideoFilter::FrameBuffer > outputQueue;
 	QVector< VideoFilter * > videoFilters;

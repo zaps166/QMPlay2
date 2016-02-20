@@ -17,7 +17,7 @@ private:
 	bool setAudioParameters(uchar, uint);
 	int bufferedSamples() const;
 	void clearBuffers();
-	double filter(QByteArray &data, bool flush);
+	double filter(Buffer &data, bool flush);
 
 	/**/
 

@@ -13,14 +13,14 @@ void DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
 	while (!internalQueue.isEmpty())
 	{
 		FrameBuffer dequeued = internalQueue.dequeue();
-		VideoFrame *videoFrame = VideoFrame::fromData(dequeued.data);
+		VideoFrame &videoFrame = dequeued.frame;
 		const bool TFF = isTopFieldFirst(videoFrame);
-		videoFrame->setNoInterlaced();
+		videoFrame.setNoInterlaced();
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame->linesize[p];
-			quint8 *src = videoFrame->data[p];
-			quint8 *dst = videoFrame->data[p];
+			const int linesize = videoFrame.linesize[p];
+			const quint8 *src = videoFrame.buffer[p].data();
+			quint8 *dst = videoFrame.buffer[p].data();
 			const int lines = (p ? h >> 2 : h >> 1) - 1;
 			if (!TFF)
 			{

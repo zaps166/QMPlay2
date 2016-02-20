@@ -12,9 +12,9 @@
 
 #include <math.h>
 
-static inline void swapArray(char *a, char *b, int size)
+static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
-	char t[size];
+	quint8 t[size];
 	memcpy(t, a, size);
 	memcpy(a, b, size);
 	memcpy(b, t, size);
@@ -288,7 +288,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList< const QMPlay2_OSD * > &os
 		osd->unlock();
 	}
 }
-void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums)
+void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums)
 {
 	QRect bounds;
 	const int osdW = osdImg.width();
@@ -312,16 +312,10 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 	data[2] = data[0] + linesizeLuma * imgH;
 	data[1] = data[2] + linesizeChroma * (imgH >> 1);
 
-	const VideoFrame *videoFrame = VideoFrame::fromData(videoFrameData);
-	const int alphaLinesizeLuma = videoFrame->linesize[0], alphaLinesizeChroma = videoFrame->linesize[1];
-	const quint8 *dataForAlpha[3] = {videoFrame->data[0], videoFrame->data[1], videoFrame->data[2]};
-
 	for (int h = bounds.top(); h <= bounds.bottom(); ++h)
 	{
 		const int fullLine = h * linesizeLuma;
 		const int halfLine = (h >> 1) * linesizeChroma;
-		const int alphaFullLine = h * alphaLinesizeLuma;
-		const int alphaHalfLine = (h >> 1) * alphaLinesizeChroma;
 		const int line = h * osdW;
 
 		for (int w = bounds.left(); w <= bounds.right(); ++w)
@@ -340,7 +334,7 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 				if (A == 0xFF)
 					data[0][pixelPos] = Y;
 				else
-					data[0][pixelPos] = dataForAlpha[0][alphaFullLine + w] * iA / 255 + Y * A / 255;
+					data[0][pixelPos] = data[0][fullLine + w] * iA / 255 + Y * A / 255;
 
 				if (!(w & 1) && !(h & 1))
 				{
@@ -354,9 +348,9 @@ void Functions::paintOSDtoYV12(quint8 *imageData, const QByteArray &videoFrameDa
 					}
 					else
 					{
-						const int pixelPosAlpha = alphaHalfLine + (w >> 1);
-						data[1][pixelPos] = dataForAlpha[1][pixelPosAlpha] * iA / 255 + cB * A / 255;
-						data[2][pixelPos] = dataForAlpha[2][pixelPosAlpha] * iA / 255 + cR * A / 255;
+						const int pixelPosAlpha = halfLine + (w >> 1);
+						data[1][pixelPos] = data[1][pixelPosAlpha] * iA / 255 + cB * A / 255;
+						data[2][pixelPos] = data[2][pixelPosAlpha] * iA / 255 + cR * A / 255;
 					}
 				}
 			}
@@ -478,7 +472,7 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 	}
 }
 
-void Functions::hFlip(char *data, int linesize, int height, int width)
+void Functions::hFlip(quint8 *data, int linesize, int height, int width)
 {
 	int h, w, width_div_2 = width/2, linesize_div_2 = linesize/2, width_div_4 = width/4, offset = 0;
 	for (h = 0; h < height; ++h)
@@ -494,10 +488,10 @@ void Functions::hFlip(char *data, int linesize, int height, int width)
 		offset += linesize_div_2;
 	}
 }
-void Functions::vFlip(char *data, int linesize, int height)
+void Functions::vFlip(quint8 *data, int linesize, int height)
 {
 	int size = linesize*height, chroma_size = linesize*height/4, chroma_width = linesize/2;
-	char *data_s;
+	quint8 *data_s;
 
 	for (data_s = data + size; data_s > data;)
 	{

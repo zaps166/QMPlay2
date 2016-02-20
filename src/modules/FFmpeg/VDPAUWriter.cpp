@@ -162,13 +162,11 @@ bool VDPAUWriter::processParams(bool *)
 
 	return readyWrite();
 }
-qint64 VDPAUWriter::write(const QByteArray &data)
+void VDPAUWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	VideoFrame *videoFrame = (VideoFrame *)data.data();
 	field = (VdpVideoMixerPictureStructure)FFCommon::getField(videoFrame, deinterlace, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD);
-	draw((quintptr)videoFrame->data[3]);
+	draw(videoFrame.surfaceId);
 	paused = false;
-	return data.size();
 }
 void VDPAUWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {
@@ -186,7 +184,7 @@ void VDPAUWriter::pause()
 	vdpau_display();
 }
 
-bool VDPAUWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VDPAUWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
 {
 	if (dest && !(outH & 1))
 	{
@@ -195,7 +193,7 @@ bool VDPAUWriter::HWAccellGetImg(const VideoFrame *videoFrame, void *dest, ImgSc
 		char *yv12Data = yv12.data();
 		void *data[3] = {yv12Data, yv12Data + (outW * outH), yv12Data + (outW * outH) + ((outW >> 1) * (outH >> 1))};
 		const quint32 linesize[3] = {(quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1};
-		if (vdp_surface_get_bits((quintptr)videoFrame->data[3], VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
+		if (vdp_surface_get_bits(videoFrame.surfaceId, VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
 		{
 			yv12ToRGB32->scale(yv12Data, dest);
 			return true;
