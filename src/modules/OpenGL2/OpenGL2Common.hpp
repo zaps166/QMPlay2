@@ -1,8 +1,6 @@
 #ifndef OPENGLCOMMON_HPP
 #define OPENGLCOMMON_HPP
 
-#define NUM_BUFFERS_TO_CLEAR 3 //3 buffers must be cleared when triple-buffer is used
-
 #ifdef OPENGL_NEW_API
 	#include <QOpenGLShaderProgram>
 #else

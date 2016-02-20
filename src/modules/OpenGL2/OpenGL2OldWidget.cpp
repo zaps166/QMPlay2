@@ -2,7 +2,8 @@
 
 #include <QMPlay2Core.hpp>
 
-OpenGL2OldWidget::OpenGL2OldWidget()
+OpenGL2OldWidget::OpenGL2OldWidget() :
+	doClear(0)
 {
 #ifdef Q_OS_WIN
 	preventFullscreen = true;
@@ -67,7 +68,7 @@ void OpenGL2OldWidget::paintGL()
 
 void OpenGL2OldWidget::resetClearCounter()
 {
-	doClear = NUM_BUFFERS_TO_CLEAR;
+	doClear = 4;
 }
 
 void OpenGL2OldWidget::resizeGL(int w, int h)
