@@ -84,8 +84,7 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
 		{
 			const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
 			const int decoded_size = samples_with_channels * sizeof(float);
-			if (decoded.size() != decoded_size)
-				decoded.resize(decoded_size);
+			decoded.resize(decoded_size);
 			float *decoded_data = (float *)decoded.data();
 			switch (codec_ctx->sample_fmt)
 			{
