@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.02.20:
+Changes in QMPlay2 build 16.02.21:
 	- fix slow seeking on some slow network streams,
 	- zero-copy demuxing and decoding (if possible),
 

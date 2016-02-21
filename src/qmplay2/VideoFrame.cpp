@@ -1,28 +1,6 @@
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
-void VideoFrame::copyYV12(void *dest, const VideoFrame &videoFrame, int luma_width, int chroma_width, int height)
-{
-	int offset = 0;
-	quint8 *dest_data = (quint8 *)dest;
-	for (int i = 0; i < height; ++i)
-	{
-		memcpy(dest_data, videoFrame.buffer[0].data() + offset, luma_width);
-		offset += videoFrame.linesize[0];
-		dest_data += luma_width;
-	}
-	offset = 0;
-	height >>= 1;
-	const int wh = chroma_width * height;
-	for (int i = 0; i < height; ++i)
-	{
-		memcpy(dest_data, videoFrame.buffer[2].data() + offset, chroma_width);
-		memcpy(dest_data + wh, videoFrame.buffer[1].data() + offset, chroma_width);
-		offset += videoFrame.linesize[1];
-		dest_data += chroma_width;
-	}
-}
-
 VideoFrame::VideoFrame(int height, int chromaHeight, AVBufferRef *bufferRef[], const int newLinesize[], bool interlaced, bool tff) :
 	surfaceId(0),
 	interlaced(interlaced),
@@ -64,4 +42,26 @@ void VideoFrame::clear()
 	}
 	setNoInterlaced();
 	surfaceId = 0;
+}
+
+void VideoFrame::copy(void *dest, int luma_width, int chroma_width, int height) const
+{
+	int offset = 0;
+	quint8 *dest_data = (quint8 *)dest;
+	for (int i = 0; i < height; ++i)
+	{
+		memcpy(dest_data, buffer[0].data() + offset, luma_width);
+		offset += linesize[0];
+		dest_data += luma_width;
+	}
+	offset = 0;
+	height >>= 1;
+	const int wh = chroma_width * height;
+	for (int i = 0; i < height; ++i)
+	{
+		memcpy(dest_data, buffer[2].data() + offset, chroma_width);
+		memcpy(dest_data + wh, buffer[1].data() + offset, chroma_width);
+		offset += linesize[1];
+		dest_data += chroma_width;
+	}
 }

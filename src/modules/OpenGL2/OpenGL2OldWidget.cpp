@@ -57,7 +57,7 @@ void OpenGL2OldWidget::initializeGL()
 void OpenGL2OldWidget::paintGL()
 {
 	if (doReset)
-		doClear = NUM_BUFFERS_TO_CLEAR;
+		resetClearCounter();
 	if (doClear > 0)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);

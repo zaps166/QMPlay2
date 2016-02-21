@@ -191,7 +191,7 @@ void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRec
 	const int linesize1_2 = image->pitches[1];
 	const int imageHeight = image->height;
 
-	VideoFrame::copyYV12(image->data, videoFrame, linesize, linesize1_2, imageHeight);
+	videoFrame.copy(image->data, linesize, linesize1_2, imageHeight);
 
 	if (_flip & Qt::Horizontal)
 		Functions::hFlip((quint8 *)image->data, linesize, imageHeight, width);

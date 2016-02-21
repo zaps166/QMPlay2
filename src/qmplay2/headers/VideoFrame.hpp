@@ -6,8 +6,6 @@
 class VideoFrame
 {
 public:
-	static void copyYV12(void *dest, const VideoFrame &videoFrame, int luma_width, int chroma_width, int height); //Use only on YUV420 frames!
-
 	VideoFrame(int height, int chromaHeight, AVBufferRef *bufferRef[], const int newLinesize[], bool interlaced, bool tff);
 	VideoFrame(int height, int chromaHeight, const int newLinesize[], bool interlaced = false, bool tff = false);
 	VideoFrame(quintptr surfaceId, bool interlaced, bool tff);
@@ -16,13 +14,13 @@ public:
 		clear();
 	}
 
-	bool isEmpty() const
-	{
-		return buffer[0].isEmpty() && surfaceId == 0;
-	}
-	bool hasNoData() const
+	inline bool hasNoData() const
 	{
 		return buffer[0].isEmpty();
+	}
+	inline bool isEmpty() const
+	{
+		return hasNoData() && surfaceId == 0;
 	}
 
 	inline void setNoInterlaced()
@@ -31,6 +29,8 @@ public:
 	}
 
 	void clear();
+
+	void copy(void *dest, int luma_width, int chroma_width, int height) const;
 
 	Buffer buffer[3];
 	int linesize[3];
