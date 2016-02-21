@@ -207,7 +207,8 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
-				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, frame->linesize, frame->interlaced_frame, frame->top_field_first);
+				const int linesize[] = {streamInfo->W, streamInfo->W >> 1, streamInfo->W >> 1};
+				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
 				if (frame->width != lastFrameW || frame->height != lastFrameH)
 				{
 					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
