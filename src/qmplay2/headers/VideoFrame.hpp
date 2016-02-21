@@ -9,10 +9,7 @@ public:
 	VideoFrame(int height, int chromaHeight, AVBufferRef *bufferRef[], const int newLinesize[], bool interlaced, bool tff);
 	VideoFrame(int height, int chromaHeight, const int newLinesize[], bool interlaced = false, bool tff = false);
 	VideoFrame(quintptr surfaceId, bool interlaced, bool tff);
-	inline VideoFrame()
-	{
-		clear();
-	}
+	VideoFrame();
 
 	inline bool hasNoData() const
 	{

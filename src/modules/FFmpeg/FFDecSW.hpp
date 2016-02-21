@@ -28,7 +28,7 @@ private:
 
 	int threads, lowres;
 	bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;
-	int lastFrameW, lastFrameH;
+	int lastFrameW, lastFrameH, lastFrameFmt;
 	SwsContext *sws_ctx;
 
 	struct BitmapSubBuffer

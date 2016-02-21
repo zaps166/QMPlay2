@@ -4,6 +4,7 @@
 #include <QMPlay2_OSD.hpp>
 #include <VideoFrame.hpp>
 #include <StreamInfo.hpp>
+#include <Functions.hpp>
 
 extern "C"
 {
@@ -15,7 +16,7 @@ FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
 	FFDec(avcodec_mutex),
 	threads(0), lowres(0),
 	thread_type_slice(false),
-	lastFrameW(-1), lastFrameH(-1),
+	lastFrameW(-1), lastFrameH(-1), lastFrameFmt(-1),
 	sws_ctx(NULL)
 {
 	SetModule(module);
@@ -203,16 +204,18 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 		if (frameFinished && ~hurry_up)
 		{
 			if (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P && frame->width == streamInfo->W && frame->height == streamInfo->H)
-				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
+				decoded = VideoFrame(streamInfo->H, (streamInfo->H + 1) >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
-				const int linesize[] = {streamInfo->W, streamInfo->W >> 1, streamInfo->W >> 1};
-				decoded = VideoFrame(streamInfo->H, streamInfo->H >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
-				if (frame->width != lastFrameW || frame->height != lastFrameH)
+				const int aligned8W = Functions::aligned(streamInfo->W, 8);
+				const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
+				decoded = VideoFrame(streamInfo->H, (streamInfo->H + 1) >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
+				if (frame->width != lastFrameW || frame->height != lastFrameH || codec_ctx->pix_fmt != lastFrameFmt)
 				{
 					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
 					lastFrameW = frame->width;
 					lastFrameH = frame->height;
+					lastFrameFmt = codec_ctx->pix_fmt;
 				}
 				quint8 *decodedData[] = {decoded.buffer[0].data(), decoded.buffer[1].data(), decoded.buffer[2].data()};
 				sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);

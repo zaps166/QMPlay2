@@ -32,6 +32,14 @@ VideoFrame::VideoFrame(quintptr surfaceId, bool interlaced, bool tff) :
 	for (int i = 0; i < 3; ++i)
 		linesize[i] = 0;
 }
+VideoFrame::VideoFrame() :
+	surfaceId(0),
+	interlaced(false),
+	tff(false)
+{
+	for (int i = 0; i < 3; ++i)
+		linesize[i] = 0;
+}
 
 void VideoFrame::clear()
 {
