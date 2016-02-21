@@ -537,7 +537,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2->showBufferedTimeOnSlider = new QCheckBox(tr("Show buffered data indicator on slider"));
 	page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
 
-	page2->savePos = new QCheckBox(tr("Remember play position"));
+	page2->savePos = new QCheckBox(tr("Remember playback position"));
 	page2->savePos->setChecked(QMPSettings.getBool("SavePos"));
 
 	page2->keepZoom = new QCheckBox(tr("Keep zoom"));;

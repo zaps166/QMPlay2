@@ -291,7 +291,7 @@ static void showHelp(const QByteArray &ver)
 "  Parameters list:\n"
 "    -open         \"address\"\n"
 "    -enqueue      \"address\"\n"
-"    -noplay     - doesn't play after run (bypass \"Remember play position\" option)\n"
+"    -noplay     - doesn't play after run (bypass \"Remember playback position\" option)\n"
 "    -toggle     - toggles play/pause\n"
 "    -show       - ensures that the window will be visible if the application is running\n"
 "    -fullscreen - toggles fullscreen\n"

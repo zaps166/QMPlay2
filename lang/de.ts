@@ -1750,7 +1750,7 @@ amp</translation>
         <source>  Parameters list:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
+    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
     -fullscreen - toggles fullscreen
@@ -1764,7 +1764,7 @@ amp</translation>
         <translation>  Parameters list:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember play position&quot; option)
+    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
     -fullscreen - toggles fullscreen
@@ -1959,7 +1959,7 @@ amp</translation>
         <translation>Langes Scrollen (Pfeil: hoch und runter)</translation>
     </message>
     <message>
-        <source>Remember play position</source>
+        <source>Remember playback position</source>
         <translation>Wiedergabeposition merken</translation>
     </message>
     <message>
