@@ -486,7 +486,8 @@ void VideoThr::run()
 void VideoThr::write_slot(VideoFrame videoFrame)
 {
 #ifdef X11_EXTRAS
-	if (QGuiApplication::platformName() == "xcb")
+	static bool isXcb = (QGuiApplication::platformName() == "xcb");
+	if (isXcb)
 #endif
 #if defined(Q_WS_X11) || defined(X11_EXTRAS)
 		XResetScreenSaver(QX11Info::display());
