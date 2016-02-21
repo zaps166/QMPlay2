@@ -411,7 +411,7 @@ void DemuxerThr::run()
 				playC.endOfStream                                ||
 				bufferedAllPackets(vS, aS, forwardPackets)       || //bufor pełny
 				(bufferInfo.remainingDuration >= playIfBuffered) ||
-				(bufferInfo.remainingDuration == 0.0 && bufferedAllPackets(vS, aS, 2)) //bufor ma conajmniej 2 paczki, a nadal bez informacji o długości w [s]
+				(qFuzzyIsNull(bufferInfo.remainingDuration) && bufferedAllPackets(vS, aS, 2)) //bufor ma conajmniej 2 paczki, a nadal bez informacji o długości w [s]
 			)
 		)
 		{

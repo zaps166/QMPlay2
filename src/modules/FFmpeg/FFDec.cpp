@@ -86,7 +86,7 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 	packet->pts = round(encodedPacket.ts.pts() / time_base);
 	if (flush)
 		avcodec_flush_buffers(codec_ctx);
-	codec_ctx->reordered_opaque = (int64_t &)encodedPacket.sampleAspectRatio;
+	memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
 }
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
@@ -95,8 +95,9 @@ void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 		encodedPacket.ts = ts * time_base;
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 	{
-		double &sampleAspectRatio = (double &)frame->reordered_opaque;
-		if (!sampleAspectRatio && frame->sample_aspect_ratio.num)
+		double sampleAspectRatio;
+		memcpy(&sampleAspectRatio, &frame->reordered_opaque, 8);
+		if (qFuzzyIsNull(sampleAspectRatio) && frame->sample_aspect_ratio.num)
 			encodedPacket.sampleAspectRatio = av_q2d(frame->sample_aspect_ratio);
 	}
 }
