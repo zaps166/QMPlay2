@@ -38,13 +38,13 @@ void Buffer::remove(qint32 pos, qint32 len)
 {
 	if (pos < 0 || pos >= m_size || len < 0)
 		return;
-	quint8 *bufferRefData = data();
-	if (bufferRefData)
+	quint8 *bufferData = data();
+	if (bufferData)
 	{
 		if (pos + len > m_size)
 			len = m_size - pos;
-		memmove(bufferRefData + pos, bufferRefData + pos + len, len);
 		m_size -= len;
+		memmove(bufferData + pos, bufferData + pos + len, m_size - pos);
 	}
 }
 
@@ -68,6 +68,7 @@ quint8 *Buffer::data()
 
 void Buffer::assign(AVBufferRef *otherBufferRef, qint32 len)
 {
+	av_buffer_unref(&m_bufferRef);
 	m_bufferRef = otherBufferRef;
 	m_size = (len >= 0 && len <= m_bufferRef->size) ? len : m_bufferRef->size;
 }
@@ -75,13 +76,13 @@ void Buffer::assign(const void *data, qint32 len, qint32 mem)
 {
 	if (mem < len)
 		mem = len;
-
-	if (!isWritable())
+	if (!isWritable() || capacity() < mem)
+	{
 		av_buffer_unref(&m_bufferRef);
-	av_buffer_realloc(&m_bufferRef, mem);
+		av_buffer_realloc(&m_bufferRef, mem);
+	}
 	memcpy(m_bufferRef->data, data, len);
 	memset(m_bufferRef->data + len, 0, mem - len);
-
 	m_size = len;
 }
 
@@ -95,7 +96,8 @@ void Buffer::append(const void *data, qint32 len)
 Buffer &Buffer::operator =(const Buffer &other)
 {
 	av_buffer_unref(&m_bufferRef);
-	m_bufferRef = other.m_bufferRef ? av_buffer_ref(other.m_bufferRef) : NULL;
+	if (other.m_bufferRef)
+		m_bufferRef = av_buffer_ref(other.m_bufferRef);
 	m_size = other.m_size;
 	return *this;
 }
