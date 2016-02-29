@@ -246,12 +246,12 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect ratio</source>
-        <translation>&amp;Соотношение сторон</translation>
-    </message>
-    <message>
         <source>&amp;Disabled</source>
         <translation>&amp;Отключено</translation>
+    </message>
+    <message>
+        <source>&amp;Aspect ratio</source>
+        <translation>&amp;Соотношение сторон</translation>
     </message>
     <message>
         <source>&amp;Auto</source>
@@ -286,7 +286,7 @@
     </message>
     <message>
         <source>Choose the drive</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать диск</translation>
     </message>
 </context>
 <context>
@@ -645,7 +645,8 @@
     <message>
         <source>Pre
 amp</source>
-        <translation type="unfinished"></translation>
+        <translation>Пред.
+усиление</translation>
     </message>
 </context>
 <context>
@@ -681,7 +682,7 @@ amp</source>
     </message>
     <message>
         <source>Copyright</source>
-        <translation type="unfinished"></translation>
+        <translation>Авторские права</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -693,7 +694,7 @@ amp</source>
     </message>
     <message>
         <source>Voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Голоса</translation>
     </message>
 </context>
 <context>
@@ -854,15 +855,15 @@ amp</source>
     </message>
     <message>
         <source>Save group</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить группу</translation>
     </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при сохранении списка воспроизведения</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation type="unfinished"></translation>
+        <translation> &amp;Скрыть меню</translation>
     </message>
 </context>
 <context>
@@ -1233,27 +1234,27 @@ amp</source>
     </message>
     <message>
         <source>Default length</source>
-        <translation type="unfinished"></translation>
+        <translation>Продолжительность по умолчанию</translation>
     </message>
     <message>
         <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать разные потоки аудио и видео</translation>
     </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет качества аудио и видео по умолчанию</translation>
     </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет качества видео по умолчанию</translation>
     </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет качества аудио по умолчанию</translation>
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Принудительный рендеринг текстур если возможно (не рекомендуется)</translation>
     </message>
 </context>
 <context>
@@ -1389,7 +1390,7 @@ amp</source>
     </message>
     <message>
         <source>Subtitles off</source>
-        <translation>Выключить субтитры</translation>
+        <translation>Субтитры выключены</translation>
     </message>
     <message>
         <source>Horizontal flip</source>
@@ -1638,7 +1639,7 @@ amp</source>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить &amp;группу</translation>
     </message>
 </context>
 <context>
@@ -1669,7 +1670,7 @@ amp</source>
     </message>
     <message>
         <source>Synchronizing with file is not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Синхронизация с файлом не поддерживается</translation>
     </message>
 </context>
 <context>
@@ -1958,10 +1959,6 @@ amp</source>
         <translation>Длинный поиск (стрелки вверх и вниз)</translation>
     </message>
     <message>
-        <source>Remember playback position</source>
-        <translation>Запомнить позицию воспроизведения</translation>
-    </message>
-    <message>
         <source>Contains</source>
         <translation>Содержание</translation>
     </message>
@@ -2215,47 +2212,51 @@ amp</source>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество пакетов А/В при обратной перемотке</translation>
     </message>
     <message>
         <source>Default audio language</source>
-        <translation type="unfinished"></translation>
+        <translation>Язык аудио по умолчанию</translation>
     </message>
     <message>
         <source>Default subtitles language</source>
-        <translation type="unfinished"></translation>
+        <translation>Язык субтитров по умолчанию</translation>
     </message>
     <message>
         <source>Default or first stream</source>
-        <translation type="unfinished"></translation>
+        <translation>По умолчанию или первый поток</translation>
     </message>
     <message>
         <source>Amplify</source>
-        <translation type="unfinished"></translation>
+        <translation>Усиление</translation>
     </message>
     <message>
         <source>Move up</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить вверх</translation>
     </message>
     <message>
         <source>Move down</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить вниз</translation>
     </message>
     <message>
         <source>Video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет вывода видео</translation>
     </message>
     <message>
         <source>Audio output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет вывода аудио</translation>
     </message>
     <message>
         <source>Decoders priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Приоритет декодеров</translation>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизводить следующий при ошибке воспроизведения</translation>
+    </message>
+    <message>
+        <source>Remember playback position</source>
+        <translation>Запомнить позицию воспроизведения</translation>
     </message>
 </context>
 <context>
@@ -2281,11 +2282,11 @@ amp</source>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <translation>&amp;А-Я</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <translation>&amp;Я-А</translation>
     </message>
 </context>
 <context>
@@ -2440,7 +2441,7 @@ amp</source>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удается открыть видеофильтры</translation>
     </message>
 </context>
 <context>
