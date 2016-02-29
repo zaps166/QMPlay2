@@ -656,7 +656,7 @@ void PlayClass::aRatio()
 {
 	aRatioName = sender()->objectName();
 	QString msg_txt = tr("Aspect ratio") + ": " + ((QAction *)sender())->text().remove('&');
-	if (vThr && demuxThr && demuxThr->demuxer)
+	if (vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
 	{
 		double aspect_ratio = getARatio();
 		if (ass)
