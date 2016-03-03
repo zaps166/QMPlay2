@@ -1,4 +1,5 @@
 Support for diplaying/filtering yuv422p, yuv444p, yuv411p, ...
+Use VDPAU and VA-API for software decoded video
 Open with QMPlay2 and Enqueue files - improve
 Handle auto channels/samplerate change
 Better handle video size change
