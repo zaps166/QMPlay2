@@ -17,7 +17,7 @@ win32|macx {
 else {
 	QMAKE_LIBDIR += ../../app/lib
 	DESTDIR = ../../app/bin
-	!android: LIBS += -lrt #For older OS
+	!android: LIBS += -lrt #For glibc < 2.17
 }
 LIBS += -lqmplay2
 
