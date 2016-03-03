@@ -11,7 +11,7 @@ class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
 public:
 	QWidget *widget();
 
-	bool VSync(bool enable);
+	bool setVSync(bool enable);
 	void updateGL();
 
 	void initializeGL();

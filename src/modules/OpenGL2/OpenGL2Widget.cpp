@@ -5,9 +5,10 @@ QWidget *OpenGL2Widget::widget()
 	return this;
 }
 
-bool OpenGL2Widget::VSync(bool enable)
+bool OpenGL2Widget::setVSync(bool enable)
 {
 	QSurfaceFormat fmt = format();
+	vSync = enable;
 	if (!isValid())
 	{
 		fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't work

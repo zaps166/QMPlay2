@@ -31,7 +31,7 @@ public:
 	virtual QWidget *widget() = 0;
 
 	virtual bool testGL() = 0;
-	virtual bool VSync(bool enable) = 0;
+	virtual bool setVSync(bool enable) = 0;
 	virtual void updateGL() = 0;
 
 	void newSize(const QSize &size = QSize());
@@ -52,6 +52,10 @@ protected:
 
 #ifdef Q_OS_WIN
 	bool preventFullscreen;
+#endif
+
+#ifdef VSYNC_SETTINGS
+	bool vSync;
 #endif
 
 	void dispatchEvent(QEvent *e, QObject *p);

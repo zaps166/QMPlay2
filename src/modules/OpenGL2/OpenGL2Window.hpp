@@ -20,7 +20,7 @@ public:
 
 	QWidget *widget();
 
-	bool VSync(bool enable);
+	bool setVSync(bool enable);
 	void updateGL();
 
 	void initializeGL();

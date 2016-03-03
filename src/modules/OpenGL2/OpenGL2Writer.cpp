@@ -39,7 +39,7 @@ bool OpenGL2Writer::set()
 	bool doReset = false;
 #ifdef VSYNC_SETTINGS
 	vSync = sets().getBool("VSync");
-	if (drawable && !drawable->VSync(vSync))
+	if (drawable && !drawable->setVSync(vSync))
 		doReset = true;
 #endif
 #ifdef OPENGL_NEW_API
@@ -159,7 +159,7 @@ bool OpenGL2Writer::open()
 	if (drawable->testGL())
 	{
 #ifdef VSYNC_SETTINGS
-		drawable->VSync(vSync);
+		drawable->setVSync(vSync);
 #endif
 		return true;
 	}

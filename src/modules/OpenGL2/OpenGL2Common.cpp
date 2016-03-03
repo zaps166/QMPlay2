@@ -136,6 +136,9 @@ OpenGL2Common::OpenGL2Common() :
 #ifdef Q_OS_WIN
 	preventFullscreen(false),
 #endif
+#ifdef VSYNC_SETTINGS
+	vSync(true),
+#endif
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
@@ -267,6 +270,8 @@ void OpenGL2Common::initializeGL()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
+
+	setVSync(vSync);
 
 	doReset = true;
 }

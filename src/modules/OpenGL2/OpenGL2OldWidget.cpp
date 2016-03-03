@@ -24,10 +24,15 @@ bool OpenGL2OldWidget::testGL()
 	doneCurrent();
 	return isOK;
 }
-bool OpenGL2OldWidget::VSync(bool enable)
+bool OpenGL2OldWidget::setVSync(bool enable)
 {
 #ifdef VSYNC_SETTINGS
-	makeCurrent();
+	bool doDoneCurrent = false;
+	if (QGLContext::currentContext() != context())
+	{
+		makeCurrent();
+		doDoneCurrent = true;
+	}
 	typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
 	SwapInterval swapInterval = NULL;
 #ifdef Q_OS_WIN
@@ -39,7 +44,9 @@ bool OpenGL2OldWidget::VSync(bool enable)
 #endif
 	if (swapInterval)
 		swapInterval(enable);
-	doneCurrent();
+	if (doDoneCurrent)
+		doneCurrent();
+	vSync = enable;
 #else
 	Q_UNUSED(enable)
 #endif
