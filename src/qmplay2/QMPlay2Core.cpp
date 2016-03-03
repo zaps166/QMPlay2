@@ -26,14 +26,9 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 	logFilePath = QDir::tempPath() + "/QMPlay2." + QString(getenv("USER")) + ".log";
 #endif
 #if defined Q_OS_MAC
-	UnixOpenCommand = "open ";
+	unixOpenCommand = "open ";
 #elif defined Q_OS_UNIX
-	if (getenv("KDE_FULL_SESSION"))
-		UnixOpenCommand = "kfmclient exec ";
-	else if (getenv("GNOME_DESKTOP_SESSION_ID"))
-		UnixOpenCommand = "gnome-open ";
-	else
-		UnixOpenCommand = "xdg-open ";
+	unixOpenCommand = "xdg-open ";
 #endif
 }
 
@@ -160,8 +155,8 @@ bool QMPlay2CoreClass::run(const QString &command, const QString &args)
 		return (quintptr)ShellExecuteW(NULL, L"open", (WCHAR *)command.utf16(), (WCHAR *)args.utf16(), NULL, SW_SHOWNORMAL) > 32;
 #else
 	{
-		if (args.isEmpty() && !UnixOpenCommand.isEmpty())
-			return !system(QString(UnixOpenCommand + "\"" + command + "\" &").toLocal8Bit());
+		if (args.isEmpty() && !unixOpenCommand.isEmpty())
+			return !system(QString(unixOpenCommand + "\"" + command + "\" &").toLocal8Bit());
 		else if (!args.isEmpty())
 			return !system(QString("\"" + command + "\" " + args + " &").toLocal8Bit());
 	}

@@ -131,7 +131,7 @@ private:
 	QList< Module * > pluginsInstance;
 	QString qmplay2Dir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
-	QString UnixOpenCommand;
+	QString unixOpenCommand;
 #endif
 	QAtomicInt working;
 	QStringList logs;
