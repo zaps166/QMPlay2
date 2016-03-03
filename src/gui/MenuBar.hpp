@@ -79,7 +79,7 @@ public:
 		void seekActionsEnable(bool);
 		Repeat *repeat;
 		AspectRatio *aRatio;
-		QAction *togglePlay, *stop, *next, *prev, *nextFrame, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute;
+		QAction *togglePlay, *stop, *next, *prev, *nextFrame, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute, *suspend;
 	};
 
 	class Playback : public QMenu

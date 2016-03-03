@@ -99,6 +99,8 @@ private slots:
 #ifdef QT5_WINDOWS
 	void delayedRestore();
 #endif
+
+	void uncheckSuspend();
 private:
 	void savePlistHelper(const QString &, const QString &, bool);
 

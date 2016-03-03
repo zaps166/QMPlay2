@@ -1558,6 +1558,10 @@ amp</translation>
         <source>Long &amp;seek &amp;forward</source>
         <translation>&amp;Desplazamiento largo adelante</translation>
     </message>
+    <message>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

@@ -12,6 +12,7 @@
 #ifdef Q_OS_WIN
 	#include <windows.h>
 	#include <shlwapi.h>
+	#include <powrprof.h>
 #endif
 
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
@@ -33,6 +34,25 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 		UnixOpenCommand = "gnome-open ";
 	else
 		UnixOpenCommand = "xdg-open ";
+#endif
+}
+
+bool QMPlay2CoreClass::canSuspend()
+{
+#if defined Q_OS_LINUX
+	return !system("systemctl --help 2> /dev/null | grep suspend &> /dev/null");
+#elif defined Q_OS_WIN
+	return true;
+#else
+	return false;
+#endif
+}
+void QMPlay2CoreClass::suspend()
+{
+#if defined Q_OS_LINUX
+	system("systemctl suspend &> /dev/null &");
+#elif defined Q_OS_WIN
+	SetSuspendState(false, false, false);
 #endif
 }
 

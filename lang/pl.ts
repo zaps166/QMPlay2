@@ -1558,6 +1558,10 @@ amp</translation>
         <source>Volume &amp;down</source>
         <translation>&amp;Ciszej</translation>
     </message>
+    <message>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation>Uśp&amp;ij po zakończeniu odtwarzania</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

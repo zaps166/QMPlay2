@@ -113,7 +113,7 @@ private:
 
 	double maxThreshold, fps;
 
-	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled;
+	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend;
 	QTimer timTerminate;
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
@@ -127,6 +127,8 @@ private:
 	QStringList fileSubsList;
 	QString fileSubs;
 private slots:
+	void suspendWhenFinished(bool b);
+
 	void saveCover();
 	void settingsChanged(int, bool);
 	void videoResized(int, int);
@@ -184,6 +186,7 @@ signals:
 	void updateWindowTitle(const QString &t = QString());
 	void updateImage(const QImage &img = QImage());
 	void videoStarted();
+	void uncheckSuspend();
 };
 
 #endif //PLAYCLASS_HPP

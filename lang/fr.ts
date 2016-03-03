@@ -1557,6 +1557,10 @@ amp</source>
         <source>Volume &amp;down</source>
         <translation>&amp;Descendre le volume</translation>
     </message>
+    <message>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

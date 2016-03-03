@@ -26,6 +26,9 @@ public:
 		return *qmplay2Core;
 	}
 
+	static bool canSuspend();
+	static void suspend();
+
 	void init(bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir = QString());
 	void quit();
 

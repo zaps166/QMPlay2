@@ -166,6 +166,14 @@ MenuBar::Player::Player(MenuBar *parent) :
 	newAction(Player::tr("Volume &up"), this, QKeySequence("*"), volUp, true, QIcon(), false);
 	newAction(Player::tr("Volume &down"), this, QKeySequence("/"), volDown, true, QIcon(), false);
 	newAction(Player::tr("&Mute"), this, QKeySequence("M"), toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-muted"), true);
+
+	if (!QMPlay2CoreClass::canSuspend())
+		suspend = NULL;
+	else
+	{
+		addSeparator();
+		newAction(Player::tr("Suspend after playbac&k is finished"), this, QKeySequence(), suspend, false, QIcon(), true);
+	}
 }
 MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	QMenu(Repeat::tr("&Repeat"), parent)

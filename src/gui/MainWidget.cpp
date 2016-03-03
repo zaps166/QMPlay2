@@ -256,6 +256,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	connect(&playC, SIGNAL(updateWindowTitle(const QString &)), this, SLOT(updateWindowTitle(const QString &)));
 	connect(&playC, SIGNAL(updateImage(const QImage &)), videoDock, SLOT(updateImage(const QImage &)));
 	connect(&playC, SIGNAL(videoStarted()), this, SLOT(videoStarted()));
+	connect(&playC, SIGNAL(uncheckSuspend()), this, SLOT(uncheckSuspend()));
 	/**/
 
 	if (QMPlay2Core.getSettings().getBool("MainWidget/TabPositionNorth"))
@@ -624,6 +625,8 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));
+	if (menuBar->player->suspend)
+		connect(menuBar->player->suspend, SIGNAL(triggered(bool)), &playC, SLOT(suspendWhenFinished(bool)));
 
 	connect(menuBar->playback->toggleAudio, SIGNAL(triggered(bool)), &playC, SLOT(toggleAVS(bool)));
 	connect(menuBar->playback->toggleVideo, SIGNAL(triggered(bool)), &playC, SLOT(toggleAVS(bool)));
@@ -1046,6 +1049,13 @@ void MainWidget::hideDocksSlot()
 			hideDocks();
 	}
 }
+
+void MainWidget::uncheckSuspend()
+{
+	if (menuBar->player->suspend)
+		menuBar->player->suspend->setChecked(false);
+}
+
 #ifdef QT5_WINDOWS
 void MainWidget::delayedRestore()
 {

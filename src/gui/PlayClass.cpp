@@ -100,6 +100,8 @@ PlayClass::PlayClass() :
 	videoSync = subtitlesSync = 0.0;
 	videoEnabled = audioEnabled = subtitlesEnabled = true;
 
+	doSuspend = false;
+
 	Brightness = Saturation = Contrast = Hue = 0;
 
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
@@ -503,6 +505,11 @@ void PlayClass::clearPlayInfo()
 	emit clearInfo();
 }
 
+void PlayClass::suspendWhenFinished(bool b)
+{
+	doSuspend = b;
+}
+
 void PlayClass::saveCover()
 {
 	if (demuxThr)
@@ -875,13 +882,14 @@ void PlayClass::demuxThrFinished()
 	emit updateLength(0);
 	emit updatePos(0);
 
-	bool clr = true;
+	bool clr = true, canDoSuspend = !br;
 
 	if (!newUrl.isEmpty() && !quitApp)
 	{
 		if (restartSeekTo >= 0.0) //jeżeli restart odtwarzania
 			stopAVThr();
 		emit clearCurrentPlaying();
+		canDoSuspend = false;
 		play(newUrl);
 		newUrl.clear();
 		clr = false;
@@ -893,7 +901,7 @@ void PlayClass::demuxThrFinished()
 
 		if (!br && !quitApp)
 		{
-			if (err && !ignorePlaybackError) //Jeżeli wystąpił błąd i nie jest on ignorowany
+			if ((err && !ignorePlaybackError) || doSuspend) //Jeżeli wystąpił błąd i nie jest on ignorowany lub jeżeli komputer ma być uśpiony
 				stopAVThr();
 			else
 			{
@@ -915,6 +923,13 @@ void PlayClass::demuxThrFinished()
 	{
 		qApp->processEvents();
 		emit quit();
+	}
+	else if (doSuspend)
+	{
+		doSuspend = false;
+		emit uncheckSuspend();
+		if (canDoSuspend)
+			QMPlay2CoreClass::suspend();
 	}
 }
 

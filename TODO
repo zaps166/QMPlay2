@@ -1,7 +1,6 @@
 Support for diplaying/filtering yuv422p, yuv444p, yuv411p, ...
 Open with QMPlay2 and Enqueue files - improve
 Handle auto channels/samplerate change
-Standby when playback is finished
 Better handle video size change
 Video preview on progress bar
 Video rotation: 90°/270°
