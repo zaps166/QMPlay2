@@ -95,6 +95,7 @@ PlayClass::PlayClass() :
 	flip = 0;
 
 	restartSeekTo = SEEK_NOWHERE;
+	seekA = seekB = -1;
 
 	subtitlesStream = -1;
 	videoSync = subtitlesSync = 0.0;
@@ -203,14 +204,16 @@ void PlayClass::restart()
 	}
 }
 
-void PlayClass::chPos(double _pos, bool updateGUI)
+void PlayClass::chPos(double newPos, bool updateGUI)
 {
 	if (!canUpdatePos)
 		return;
-	if ((updateGUI || pos == -1) && ((int)_pos != (int)pos))
-		emit updatePos(_pos);
-	pos = _pos;
+	if ((updateGUI || pos == -1) && ((int)newPos != (int)pos))
+		emit updatePos(newPos);
+	pos = newPos;
 	lastSeekTo = SEEK_NOWHERE;
+	if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
+		seek(seekA);
 }
 
 void PlayClass::togglePause()
@@ -232,6 +235,12 @@ void PlayClass::seek(int pos)
 		pos = 0;
 	if (lastSeekTo == pos)
 		return;
+	if ((seekA > -1 && pos < seekA) || (seekB > -1 && pos > seekB))
+	{
+		const bool showDisabledInfo = (seekA > 0 || seekB > 0);
+		seekA = seekB = -1;
+		updateABRepeatInfo(showDisabledInfo);
+	}
 	lastSeekTo = seekTo = pos;
 	if (demuxThr && demuxThr->isDemuxerReady())
 		demuxThr->seek(false);
@@ -505,6 +514,24 @@ void PlayClass::clearPlayInfo()
 	emit clearInfo();
 }
 
+void PlayClass::updateABRepeatInfo(bool showDisabledInfo)
+{
+	QString abMsg;
+	if (seekA < 0 && seekB < 0)
+	{
+		if (showDisabledInfo)
+			abMsg = tr("disabled");
+	}
+	else
+	{
+		abMsg = tr("from") + " " + Functions::timeToStr(seekA);
+		if (seekB > -1)
+			abMsg += " " + tr("to") + " " + Functions::timeToStr(seekB);
+	}
+	if (!abMsg.isEmpty())
+		emit message(tr("A-B Repeat") + " " + abMsg, 2500);
+}
+
 void PlayClass::suspendWhenFinished(bool b)
 {
 	doSuspend = b;
@@ -594,6 +621,23 @@ void PlayClass::setVideoEqualizer(int b, int s, int c, int h)
 	}
 }
 
+void PlayClass::setAB()
+{
+	if (demuxThr && demuxThr->isDemuxerReady() && demuxThr->canSeek())
+	{
+		const int intPos = pos;
+		if (seekA < 0)
+			seekA = intPos;
+		else if (seekB < 0)
+		{
+			if (seekA != intPos)
+				seekB = intPos;
+		}
+		else
+			seekA = seekB = -1;
+		updateABRepeatInfo(true);
+	}
+}
 void PlayClass::speedUp()
 {
 	speed += 0.05;
@@ -874,6 +918,10 @@ void PlayClass::demuxThrFinished()
 	if (restartSeekTo < 0.0) //jeżeli nie restart odtwarzania
 		fileSubsList.clear(); //czyści listę napisów z pliku
 	fileSubs.clear();
+
+	const bool showDisabledInfo = (seekA > 0 || seekB > 0);
+	seekA = seekB = -1;
+	updateABRepeatInfo(showDisabledInfo);
 
 	url.clear();
 	pos = -1.0;

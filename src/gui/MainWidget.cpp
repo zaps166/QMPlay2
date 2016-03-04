@@ -603,6 +603,7 @@ void MainWidget::createMenuBar()
 		if (act->objectName() == "normal")
 			act->trigger();
 	}
+	connect(menuBar->player->abRepeat, SIGNAL(triggered()), &playC, SLOT(setAB()));
 	connect(menuBar->player->seekF, SIGNAL(triggered()), this, SLOT(actionSeek()));
 	connect(menuBar->player->seekB, SIGNAL(triggered()), this, SLOT(actionSeek()));
 	connect(menuBar->player->lSeekF, SIGNAL(triggered()), this, SLOT(actionSeek()));

@@ -7,7 +7,8 @@
 #include <Decoder.hpp>
 
 AVThread::AVThread(PlayClass &playC, const QString &writer_type, Writer *_writer, const QStringList &pluginsName) :
-	dec(NULL), playC(playC), br(false), br2(false), waiting(false)
+	dec(NULL), playC(playC), br(false), br2(false), waiting(false),
+	mutex(QMutex::Recursive)
 {
 	connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 

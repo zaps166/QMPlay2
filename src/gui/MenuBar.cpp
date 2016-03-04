@@ -143,6 +143,8 @@ MenuBar::Player::Player(MenuBar *parent) :
 	repeat = new Repeat(this);
 	addMenu(repeat);
 
+	newAction(Player::tr("A&-B Repeat"), this, QKeySequence("Ctrl+-"), abRepeat, true, QIcon(), false);
+
 	addSeparator();
 	newAction(Player::tr("Seek &forward"), this, QKeySequence("Right"), seekF, true, QIcon(), false);
 	newAction(Player::tr("seek &backward"), this, QKeySequence("Left"), seekB, true, QIcon(), false);

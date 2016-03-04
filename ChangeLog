@@ -4,6 +4,7 @@ Changes in QMPlay2 build 16.03.03:
 	- zero-copy demuxing and decoding (if possible),
 	- updated Russian translation (victorr2007),
 	- visualization and VDPAU/DDraw bugfix,
+	- feature: A-B Repeat,
 	- OpenGL 2 bugfix,
 
 Changes in QMPlay2 build 16.02.08:

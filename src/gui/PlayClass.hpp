@@ -87,6 +87,8 @@ private:
 
 	void clearPlayInfo();
 
+	void updateABRepeatInfo(bool showDisabledInfo);
+
 	DemuxerThr *demuxThr;
 	VideoThr *vThr;
 	AudioThr *aThr;
@@ -99,7 +101,7 @@ private:
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
 	bool canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
-	int seekTo, lastSeekTo, restartSeekTo;
+	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB;
 	double vol, replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
 
@@ -135,6 +137,7 @@ private slots:
 
 	void setVideoEqualizer(int, int, int, int);
 
+	void setAB();
 	void speedUp();
 	void slowDown();
 	void setSpeed();

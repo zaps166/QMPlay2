@@ -27,6 +27,10 @@ public:
 	{
 		return demuxerReady;
 	}
+	inline bool canSeek() const
+	{
+		return !unknownLength;
+	}
 
 	void loadImage();
 

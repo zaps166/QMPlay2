@@ -1416,6 +1416,22 @@ amp</translation>
         <source>Set playback speed (sec.)</source>
         <translation>Ustaw szybkość odtwarzania (sek.)</translation>
     </message>
+    <message>
+        <source>A-B Repeat</source>
+        <translation>Powtarzanie A-B</translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation>wyłączone</translation>
+    </message>
+    <message>
+        <source>from</source>
+        <translation>od</translation>
+    </message>
+    <message>
+        <source>to</source>
+        <translation>do</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -1561,6 +1577,10 @@ amp</translation>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
         <translation>Uśp&amp;ij po zakończeniu odtwarzania</translation>
+    </message>
+    <message>
+        <source>A&amp;-B Repeat</source>
+        <translation>Powtarzanie A&amp;-B</translation>
     </message>
 </context>
 <context>
