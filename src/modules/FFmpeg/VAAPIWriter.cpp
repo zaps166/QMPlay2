@@ -390,7 +390,7 @@ bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
 	}
 #endif
 #if VA_VERSION_HEX >= 0x260000 // 1.6.0
-	else if (!qstrcmp(codec_name, "vp9")) //Not supported in FFmpeg (06.12.2015)
+	else if (!qstrcmp(codec_name, "vp9")) //Supported in FFmpeg >= 3.0, not tested
 	{
 		if (profileList.contains(VAProfileVP9Profile0))
 			p = VAProfileVP9Profile0;
@@ -460,7 +460,7 @@ bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
 
 		init_vpp();
 
-		if (isXvBA)
+		if (isXvBA) //Not tested for many years...
 		{
 			QWidget::destroy();
 			QWidget::create();

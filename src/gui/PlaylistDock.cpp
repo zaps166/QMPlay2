@@ -19,7 +19,6 @@ using Functions::chkMimeData;
 #include <QPainter>
 #include <QAction>
 #include <QMessageBox>
-#include <QDebug>
 
 PlaylistDock::PlaylistDock() :
 	repeatMode(Normal),

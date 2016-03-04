@@ -42,7 +42,6 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 #include <Functions.hpp>
 
 #include <QGridLayout>
-#include <QDebug>
 
 InfoDock::InfoDock()
 {

@@ -14,7 +14,6 @@
 #include <Functions.hpp>
 using Functions::gettime;
 
-#include <QDebug>
 #include <QImage>
 #include <QDir>
 

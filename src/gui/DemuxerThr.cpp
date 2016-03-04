@@ -13,7 +13,6 @@
 
 #include <QCryptographicHash>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDir>
 
 #include <math.h>

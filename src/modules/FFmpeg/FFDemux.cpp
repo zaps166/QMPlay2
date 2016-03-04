@@ -5,8 +5,6 @@
 #include <Functions.hpp>
 #include <Packet.hpp>
 
-#include <QDebug>
-
 FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
 	avcodec_mutex(avcodec_mutex)
 {

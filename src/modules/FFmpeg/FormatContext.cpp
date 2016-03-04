@@ -4,8 +4,6 @@
 #include <QMPlay2Core.hpp>
 #include <Packet.hpp>
 
-#include <QDebug>
-
 extern "C"
 {
 	#include <libavformat/avformat.h>

@@ -29,7 +29,6 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QAction>
-#include <QDebug>
 #include <QDir>
 
 #include <math.h>

@@ -11,7 +11,6 @@
 #include <QFileInfo>
 #include <QMimeData>
 #include <QPainter>
-#include <QDebug>
 #include <QDrag>
 #include <QMenu>
 #include <QDir>

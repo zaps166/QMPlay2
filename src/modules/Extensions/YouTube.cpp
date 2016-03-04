@@ -21,7 +21,6 @@
 #include <QProcess>
 #include <QAction>
 #include <QLabel>
-#include <QDebug>
 #include <QDrag>
 #include <QFile>
 
