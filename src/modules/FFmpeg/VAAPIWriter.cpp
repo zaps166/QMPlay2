@@ -589,7 +589,7 @@ bool VAAPIWriter::vaCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, boo
 		attrib.type = VASurfaceAttribPixelFormat;
 		attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
 		attrib.value.type = VAGenericValueTypeInteger;
-		attrib.value.value.i = VA_FOURCC_YV12;
+		attrib.value.value.i = VA_FOURCC_NV12;
 		attribs = &attrib;
 	}
 	return ::vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, surfacesCount, attribs, attribs ? 1 : 0) == VA_STATUS_SUCCESS;
