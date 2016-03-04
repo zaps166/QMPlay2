@@ -326,7 +326,7 @@ void Drawable::updateOverlay()
 }
 void Drawable::overlayVisible(bool v)
 {
-	const bool visible = v && visibleRegion() != QRegion();
+	const bool visible = v && (visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
 	visibleTim.setProperty("overlayVisible", visible);
 	visibleTim.start(1);
 }

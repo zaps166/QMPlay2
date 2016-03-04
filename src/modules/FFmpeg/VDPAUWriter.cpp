@@ -39,7 +39,9 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 		features[i + scalingLevelsIdx] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
 
 	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
+#if QT_VERSION >= 0x050000
 	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible(bool)));
+#endif
 	connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doVideoVisible()));
 	connect(&drawTim, SIGNAL(timeout()), this, SLOT(draw()));
 	visibleTim.setSingleShot(true);
@@ -452,7 +454,7 @@ void VDPAUWriter::setFeatures()
 
 void VDPAUWriter::videoVisible(bool v)
 {
-	const bool visible = v && visibleRegion() != QRegion();
+	const bool visible = v && (visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
 	visibleTim.setProperty("videoVisible", visible);
 	visibleTim.start(1);
 }

@@ -48,6 +48,8 @@ public:
 
 	void updateInDockW();
 
+	const QWidget *getVideoDock() const;
+
 	QString lang, langPath;
 	QMap< QString, QString > languages;
 

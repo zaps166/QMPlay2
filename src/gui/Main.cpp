@@ -34,8 +34,8 @@ static bool useGui = true;
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
 {
-	static QMPlay2GUIClass singleton;
-	return singleton;
+	static QMPlay2GUIClass qmplay2Gui;
+	return qmplay2Gui;
 }
 
 QString QMPlay2GUIClass::getLongFromShortLanguage(const QString &lng)
@@ -200,9 +200,12 @@ void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const QSiz
 
 void QMPlay2GUIClass::updateInDockW()
 {
-	VideoDock *videoDock = qobject_cast< MainWidget * >(mainW)->videoDock;
-	if (videoDock)
-		videoDock->updateIDW();
+	qobject_cast< MainWidget * >(mainW)->videoDock->updateIDW();
+}
+
+const QWidget *QMPlay2GUIClass::getVideoDock() const
+{
+	return qobject_cast< MainWidget * >(mainW)->videoDock;
 }
 
 QMPlay2GUIClass::QMPlay2GUIClass() :

@@ -114,9 +114,9 @@ void SimpleVisW::resizeEvent(QResizeEvent *)
 	fullScreen = parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->isFullScreen();
 }
 
-void SimpleVisW::start(bool v)
+void SimpleVisW::start(bool v, bool dontCheckRegion)
 {
-	if (v || dw->visibleRegion() != QRegion() || visibleRegion() != QRegion())
+	if (v || (!dontCheckRegion && regionIsVisible()))
 	{
 		simpleVis.soundBuffer(true);
 		tim.start(interval);

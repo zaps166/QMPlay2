@@ -139,15 +139,10 @@ bool OpenGL2Writer::open()
 		useRtt = forceRtt;
 	if (useRtt)
 	{
-		foreach (QWidget *w, qApp->allWidgets())
-		{
-			//Don't use rtt when videoDock has native window
-			if (w->objectName() == "videoDock")
-			{
-				useRtt = !w->internalWinId() || (w == w->window());
-				break;
-			}
-		}
+		const QWidget *videoDock = QMPlay2Core.getVideoDock();
+		//Don't use rtt when videoDock has native window
+		if (videoDock->objectName() == "videoDock")
+			useRtt = !videoDock->internalWinId() || (videoDock == videoDock->window());
 	}
 	if (useRtt)
 		drawable = new OpenGL2Widget;

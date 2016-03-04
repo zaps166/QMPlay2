@@ -14,6 +14,7 @@
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
 class Settings;
+class QWidget;
 class QPixmap;
 class Module;
 
@@ -113,6 +114,8 @@ public:
 		return working.load() > 0; //For Qt5 <= 5.2
 #endif
 	}
+
+	virtual const QWidget *getVideoDock() const = 0;
 private slots:
 	void restoreCursorSlot();
 	void waitCursorSlot();

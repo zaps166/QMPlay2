@@ -26,6 +26,11 @@ void VisWidget::setValue(QPair< qreal, double > &out, qreal in, qreal tDiffScale
 	}
 }
 
+bool VisWidget::regionIsVisible() const
+{
+	return dw->visibleRegion() != QRegion() || visibleRegion() != QRegion();
+}
+
 VisWidget::VisWidget() :
 	stopped(true),
 	dw(new DockWidget)
@@ -78,7 +83,15 @@ void VisWidget::visibilityChanged(bool v)
 	if (!v && parent() == dw)
 		stop();
 	else if (!stopped)
-		start(v);
+	{
+#if QT_VERSION >= 0x050000
+		//Don't start visualization on Qt5 when it is invisible and main window is not minimized!
+		const bool fromMainWindow = &QMPlay2Core == sender();
+#else
+		const bool fromMainWindow = false;
+#endif
+		start(v && (!fromMainWindow || regionIsVisible()), fromMainWindow);
+	}
 }
 void VisWidget::showSettings()
 {

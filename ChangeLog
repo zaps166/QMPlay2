@@ -1,8 +1,9 @@
 Changes in QMPlay2 build 16.03.03:
-	- feature - suspend the computer after playback is finished,
+	- feature: suspend the computer after playback is finished,
 	- fix slow seeking on some slow network streams,
 	- zero-copy demuxing and decoding (if possible),
-	- updated Russian translation (victorr2007)
+	- updated Russian translation (victorr2007),
+	- visualization and VDPAU/DDraw bugfix,
 	- OpenGL 2 bugfix,
 
 Changes in QMPlay2 build 16.02.08:

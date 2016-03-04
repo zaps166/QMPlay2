@@ -15,7 +15,9 @@ protected:
 	static void setValue(qreal &out, qreal in, qreal tDiffScaled);
 	static void setValue(QPair< qreal, double > &out, qreal in, qreal tDiffScaled);
 
-	virtual void start(bool v = false) = 0;
+	bool regionIsVisible() const;
+
+	virtual void start(bool v, bool dontCheckRegion) = 0;
 	virtual void stop() = 0;
 
 	QTimer tim;
