@@ -183,6 +183,7 @@ void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 				}
 
 				vaUnmapBuffer(VADisp, pipeline_buf);
+
 				if (vaBeginPicture(VADisp, context_vpp, id_vpp) == VA_STATUS_SUCCESS)
 				{
 					vpp_ok = vaRenderPicture(VADisp, context_vpp, &pipeline_buf, 1) == VA_STATUS_SUCCESS;
@@ -582,7 +583,12 @@ bool VAAPIWriter::vaCreateConfigAndContext()
 bool VAAPIWriter::vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces)
 {
 #ifdef NEW_CREATESURFACES
-	return ::vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, num_surfaces, NULL, 0) == VA_STATUS_SUCCESS;
+	VASurfaceAttrib attrib;
+	attrib.type = VASurfaceAttribPixelFormat;
+	attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+	attrib.value.type = VAGenericValueTypeInteger;
+	attrib.value.value.i = VA_FOURCC_YV12;
+	return ::vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, num_surfaces, &attrib, 1) == VA_STATUS_SUCCESS;
 #else
 	return ::vaCreateSurfaces(VADisp, outW, outH, VA_RT_FORMAT_YUV420, num_surfaces, surfaces) == VA_STATUS_SUCCESS;
 #endif
