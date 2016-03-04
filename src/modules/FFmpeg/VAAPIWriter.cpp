@@ -434,7 +434,7 @@ bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
 		outW = W;
 		outH = H;
 
-		if (!vaCreateSurfaces(surfaces, surfacesCount))
+		if (!vaCreateSurfaces(surfaces, surfacesCount, false))
 			return false;
 		surfacesCreated = true;
 
@@ -512,7 +512,7 @@ void VAAPIWriter::init_vpp()
 	(
 		vaCreateConfig(VADisp, (VAProfile)-1, VAEntrypointVideoProc, NULL, 0, &config_vpp) == VA_STATUS_SUCCESS &&
 		vaCreateContext(VADisp, config_vpp, 0, 0, 0, NULL, 0, &context_vpp) == VA_STATUS_SUCCESS &&
-		vaCreateSurfaces(&id_vpp, 1)
+		vaCreateSurfaces(&id_vpp, 1, true)
 	)
 	{
 		unsigned num_filters = VAProcFilterCount;
@@ -580,17 +580,22 @@ bool VAAPIWriter::vaCreateConfigAndContext()
 {
 	return vaCreateConfig(VADisp, profile, VAEntrypointVLD, NULL, 0, &config) == VA_STATUS_SUCCESS && vaCreateContext(VADisp, config, outW, outH, VA_PROGRESSIVE, surfaces, surfacesCount, &context) == VA_STATUS_SUCCESS;
 }
-bool VAAPIWriter::vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces)
+bool VAAPIWriter::vaCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, bool useAttr)
 {
 #ifdef NEW_CREATESURFACES
-	VASurfaceAttrib attrib;
-	attrib.type = VASurfaceAttribPixelFormat;
-	attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
-	attrib.value.type = VAGenericValueTypeInteger;
-	attrib.value.value.i = VA_FOURCC_YV12;
-	return ::vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, num_surfaces, &attrib, 1) == VA_STATUS_SUCCESS;
+	VASurfaceAttrib attrib, *attribs = NULL;
+	if (useAttr)
+	{
+		attrib.type = VASurfaceAttribPixelFormat;
+		attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+		attrib.value.type = VAGenericValueTypeInteger;
+		attrib.value.value.i = VA_FOURCC_YV12;
+		attribs = &attrib;
+	}
+	return ::vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, surfacesCount, attribs, attribs ? 1 : 0) == VA_STATUS_SUCCESS;
 #else
-	return ::vaCreateSurfaces(VADisp, outW, outH, VA_RT_FORMAT_YUV420, num_surfaces, surfaces) == VA_STATUS_SUCCESS;
+	Q_UNUSED(useAttr)
+	return ::vaCreateSurfaces(VADisp, outW, outH, VA_RT_FORMAT_YUV420, surfacesCount, surfaces) == VA_STATUS_SUCCESS;
 #endif
 }
 

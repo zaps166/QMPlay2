@@ -69,7 +69,7 @@ private:
 	void init_vpp();
 
 	bool vaCreateConfigAndContext();
-	bool vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces);
+	bool vaCreateSurfaces(VASurfaceID *surfaces, int num_surfaces, bool useAttr);
 
 	Q_SLOT void draw(VASurfaceID _id = -1, int _field = -1);
 
