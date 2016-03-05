@@ -588,8 +588,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 							vdp_bitmap_surface_put_bits_native(bitmapSurface, &data, &linesize, NULL);
 						}
 						const VdpRect bitmapDstRect = {(quint32)bounds.left() + X, (quint32)bounds.top() + Y, (quint32)bounds.right() + X + 1, (quint32)bounds.bottom() + Y + 1};
-						const quint32 rotate = (flip & Qt::Vertical) ? VDP_OUTPUT_SURFACE_RENDER_ROTATE_180 : VDP_OUTPUT_SURFACE_RENDER_ROTATE_0;
-						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, rotate);
+						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, 0);
 					}
 				}
 				osd_mutex.unlock();
