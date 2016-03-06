@@ -25,8 +25,6 @@ private:
 	void resizeGL(int w, int h);
 
 	bool event(QEvent *e);
-
-	int doClear;
 };
 
 #endif // OPENGL2OLDWIDGET_HPP

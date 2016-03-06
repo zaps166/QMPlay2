@@ -84,6 +84,7 @@ private:
 	void stopADec();
 
 	void setFlip();
+	void flipRotMsg();
 
 	void clearPlayInfo();
 
@@ -104,6 +105,7 @@ private:
 	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB;
 	double vol, replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
+	bool rotate90;
 
 	QString url, newUrl, aRatioName;
 
@@ -158,6 +160,7 @@ private slots:
 	void toggleAVS(bool);
 	void setHFlip(bool);
 	void setVFlip(bool);
+	void setRotate90(bool);
 	void screenShot();
 	void nextFrame();
 

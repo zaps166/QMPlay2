@@ -36,6 +36,13 @@ public:
 
 	void newSize(const QSize &size = QSize());
 	void clearImg();
+
+	inline bool isRotate90() const
+	{
+		return verticesIdx >= 4;
+	}
+
+	virtual void resetClearCounter();
 protected:
 	void initializeGL();
 	void paintGL();
@@ -69,8 +76,8 @@ public:
 	float texCoordYCbCr[8];
 
 	bool isPaused, isOK, hasImage, doReset;
-	int X, Y, W, H, outW, outH, flip;
-	int glVer;
+	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
+	int glVer, doClear;
 
 	double aspectRatio, zoom;
 

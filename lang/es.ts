@@ -1393,10 +1393,6 @@ amp</translation>
         <translation>Relación de aspecto</translation>
     </message>
     <message>
-        <source>Image rotation</source>
-        <translation>Rotación de la imagen</translation>
-    </message>
-    <message>
         <source>Loaded subtitles</source>
         <translation>Subtítulos cargados</translation>
     </message>
@@ -1430,6 +1426,18 @@ amp</translation>
     </message>
     <message>
         <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 270°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 180°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 90°</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2545,6 +2553,10 @@ amp</translation>
     <message>
         <source>Video &amp;filters</source>
         <translation>&amp;Filtros de vídeo</translation>
+    </message>
+    <message>
+        <source>&amp;Rotate 90°</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

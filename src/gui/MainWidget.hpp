@@ -55,6 +55,7 @@ private slots:
 	void switchARatio();
 	void resetARatio();
 	void resetFlip();
+	void resetRotate90();
 
 	void visualizationFullScreen();
 	void hideAllExtensions();

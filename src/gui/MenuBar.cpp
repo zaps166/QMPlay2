@@ -278,6 +278,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 	newAction(VideoFilters::tr("&More filters"), this, QKeySequence("Alt+F"), more, false, QIcon(), false);
 	newAction(VideoFilters::tr("&Horizontal flip"), this, QKeySequence("Ctrl+M"), hFlip, true, QIcon(), true);
 	newAction(VideoFilters::tr("&Vertical flip"), this, QKeySequence("Ctrl+R"), vFlip, true, QIcon(), true);
+	newAction(VideoFilters::tr("&Rotate 90°"), this, QKeySequence("Ctrl+9"), rotate90, true, QIcon(), true);
 }
 MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
 	QMenu(AudioChannels::tr("&Channels") , parent)

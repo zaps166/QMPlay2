@@ -2,8 +2,7 @@
 
 #include <QMPlay2Core.hpp>
 
-OpenGL2Window::OpenGL2Window() :
-	doClear(0)
+OpenGL2Window::OpenGL2Window()
 {
 #ifndef PASS_EVENTS_TO_PARENT
 	setFlags(Qt::WindowTransparentForInput);
@@ -74,7 +73,7 @@ void OpenGL2Window::paintGL()
 
 void OpenGL2Window::resetClearCounter()
 {
-	doClear = 4;
+	OpenGL2Common::resetClearCounter();
 }
 
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)

@@ -55,6 +55,10 @@ bool VideoThr::setFlip()
 {
 	return writer ? writer->modParam("Flip", playC.flip) : false;
 }
+bool VideoThr::setRotate90()
+{
+	return writer ? writer->modParam("Rotate90", playC.rotate90) : false;
+}
 void VideoThr::setVideoEqualizer()
 {
 	if (writer)

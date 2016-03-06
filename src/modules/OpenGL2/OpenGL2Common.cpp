@@ -89,7 +89,7 @@ static const char fShaderOSDSrc[] =
 		"gl_FragColor = texture2D(tex, vTexCoord);"
 	"}";
 
-static const float verticesYCbCr[4][8] = {
+static const float verticesYCbCr[8][8] = {
 	/* Normal */
 	{
 		-1.0f, -1.0f, //0. Left-bottom
@@ -111,13 +111,42 @@ static const float verticesYCbCr[4][8] = {
 		-1.0f, -1.0f, //0. Left-bottom
 		+1.0f, -1.0f, //1. Right-bottom
 	},
-	/* Rotated */
+	/* Rotated 180 */
 	{
 		+1.0f, +1.0f, //3. Right-top
 		-1.0f, +1.0f, //2. Left-top
 		+1.0f, -1.0f, //1. Right-bottom
 		-1.0f, -1.0f, //0. Left-bottom
-	}
+	},
+
+	/* Rotated 90 */
+	{
+		-1.0f, +1.0f, //2. Left-top
+		-1.0f, -1.0f, //0. Left-bottom
+		+1.0f, +1.0f, //3. Right-top
+		+1.0f, -1.0f, //1. Right-bottom
+	},
+	/* Rotated 90 + horizontal flip */
+	{
+		+1.0f, +1.0f, //3. Right-top
+		+1.0f, -1.0f, //1. Right-bottom
+		-1.0f, +1.0f, //2. Left-top
+		-1.0f, -1.0f, //0. Left-bottom
+	},
+	/* Rotated 90 + vertical flip */
+	{
+		-1.0f, -1.0f, //0. Left-bottom
+		-1.0f, +1.0f, //2. Left-top
+		+1.0f, -1.0f, //1. Right-bottom
+		+1.0f, +1.0f, //3. Right-top
+	},
+	/* Rotated 270 */
+	{
+		+1.0f, -1.0f, //1. Right-bottom
+		+1.0f, +1.0f, //3. Right-top
+		-1.0f, -1.0f, //0. Left-bottom
+		-1.0f, +1.0f, //2. Left-top
+	},
 };
 static const float texCoordOSD[8] = {
 	0.0f, 1.0f,
@@ -143,8 +172,8 @@ OpenGL2Common::OpenGL2Common() :
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
 	isPaused(false), isOK(false), hasImage(false), doReset(true),
-	X(-1), Y(-1), W(-1), H(-1), outW(-1), outH(-1), flip(0),
-	glVer(0),
+	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
+	glVer(0), doClear(0),
 	aspectRatio(0.0), zoom(0.0)
 {
 	/* Initialize texCoordYCbCr array */
@@ -166,7 +195,17 @@ void OpenGL2Common::newSize(const QSize &size)
 {
 	const bool canUpdate = !size.isValid();
 	const QSize winSize = canUpdate ? widget()->size() : size;
-	Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &X, &Y);
+	if (verticesIdx < 4)
+	{
+		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &subsX, &subsY);
+		subsW = W;
+		subsH = H;
+	}
+	else
+	{
+		Functions::getImageSize(aspectRatio, zoom, winSize.height(), winSize.width(), H, W);
+		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), subsW, subsH, &subsX, &subsY);
+	}
 	doReset = true;
 	if (canUpdate && isPaused)
 		updateGL();
@@ -176,6 +215,11 @@ void OpenGL2Common::clearImg()
 	hasImage = false;
 	osdImg = QImage();
 	osdChecksums.clear();
+}
+
+void OpenGL2Common::resetClearCounter()
+{
+	doClear = 4;
 }
 
 void OpenGL2Common::initializeGL()
@@ -321,7 +365,7 @@ void OpenGL2Common::paintGL()
 		hasImage = true;
 	}
 
-	shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[flip], 2);
+	shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
 	shaderProgramYCbCr->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
 	shaderProgramYCbCr->enableAttributeArray(positionYCbCrLoc);
 	shaderProgramYCbCr->enableAttributeArray(texCoordYCbCrLoc);
@@ -348,7 +392,7 @@ void OpenGL2Common::paintGL()
 		glBindTexture(GL_TEXTURE_2D, 1);
 
 		QRect bounds;
-		const qreal scaleW = (qreal)W / outW, scaleH = (qreal)H / outH;
+		const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
 		bool mustRepaint = Functions::mustRepaintOSD(osdList, osdChecksums, &scaleW, &scaleH, &bounds);
 		if (!mustRepaint)
 			mustRepaint = osdImg.size() != bounds.size();
@@ -363,10 +407,10 @@ void OpenGL2Common::paintGL()
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.bits());
 		}
 
-		const float left   = (bounds.left() + X) * 2.0f / winSize.width();
-		const float right  = (bounds.right() + X + 1) * 2.0f / winSize.width();
-		const float top    = (bounds.top() + Y) * 2.0f / winSize.height();
-		const float bottom = (bounds.bottom() + Y + 1) * 2.0f / winSize.height();
+		const float left   = (bounds.left() + subsX) * 2.0f / winSize.width();
+		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSize.width();
+		const float top    = (bounds.top() + subsY) * 2.0f / winSize.height();
+		const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSize.height();
 		const float verticesOSD[8] = {
 			left  - 1.0f, -bottom + 1.0f,
 			right - 1.0f, -bottom + 1.0f,

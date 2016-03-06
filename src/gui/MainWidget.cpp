@@ -510,6 +510,11 @@ void MainWidget::resetFlip()
 	if (menuBar->playback->videoFilters->vFlip->isChecked())
 		menuBar->playback->videoFilters->vFlip->trigger();
 }
+void MainWidget::resetRotate90()
+{
+	if (menuBar->playback->videoFilters->rotate90->isChecked())
+		menuBar->playback->videoFilters->rotate90->trigger();
+}
 
 void MainWidget::visualizationFullScreen()
 {
@@ -620,6 +625,7 @@ void MainWidget::createMenuBar()
 			act->trigger();
 	}
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetFlip()));
+	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetRotate90()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetARatio()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(zoomReset()));
 	connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
@@ -646,6 +652,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playback->videoFilters->more, SIGNAL(triggered(bool)), this, SLOT(showSettings()));
 	connect(menuBar->playback->videoFilters->hFlip, SIGNAL(triggered(bool)), &playC, SLOT(setHFlip(bool)));
 	connect(menuBar->playback->videoFilters->vFlip, SIGNAL(triggered(bool)), &playC, SLOT(setVFlip(bool)));
+	connect(menuBar->playback->videoFilters->rotate90, SIGNAL(triggered(bool)), &playC, SLOT(setRotate90(bool)));
 	foreach (QAction *act, menuBar->playback->audioChannels->actions())
 		connect(act, SIGNAL(triggered()), this, SLOT(audioChannelsChanged()));
 	SettingsWidget::SetAudioChannelsMenu();

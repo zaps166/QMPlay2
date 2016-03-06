@@ -94,7 +94,7 @@ public:
 		public:
 			VideoFilters(QMenu *parent);
 			VideoEqualizer *videoEqualizer;
-			QAction *more, *hFlip, *vFlip;
+			QAction *more, *hFlip, *vFlip, *rotate90;
 		};
 		class AudioChannels : public QMenu
 		{

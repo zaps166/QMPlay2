@@ -35,7 +35,6 @@ private:
 #endif
 
 	QWidget *container;
-	int doClear;
 };
 
 #endif // OPENGLWIDGET_HPP

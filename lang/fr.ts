@@ -1400,10 +1400,6 @@ amp</source>
         <translation>Retournement vertical</translation>
     </message>
     <message>
-        <source>Image rotation</source>
-        <translation>Rotation d&apos;image</translation>
-    </message>
-    <message>
         <source>No image rotation</source>
         <translation>Pas de rotation d&apos;image</translation>
     </message>
@@ -1429,6 +1425,18 @@ amp</source>
     </message>
     <message>
         <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 270°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 180°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 90°</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2544,6 +2552,10 @@ amp</source>
     <message>
         <source>&amp;More filters</source>
         <translation>&amp;Plus de filtres</translation>
+    </message>
+    <message>
+        <source>&amp;Rotate 90°</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

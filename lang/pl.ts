@@ -1401,10 +1401,6 @@ amp</translation>
         <translation>Odbicie pionowe</translation>
     </message>
     <message>
-        <source>Image rotation</source>
-        <translation>Odwrócenie obrazu</translation>
-    </message>
-    <message>
         <source>No image rotation</source>
         <translation>Brak odwrócenia obrazu</translation>
     </message>
@@ -1431,6 +1427,18 @@ amp</translation>
     <message>
         <source>to</source>
         <translation>do</translation>
+    </message>
+    <message>
+        <source>Rotation 270°</source>
+        <translation>Obrót o 270°</translation>
+    </message>
+    <message>
+        <source>Rotation 180°</source>
+        <translation>Obrót o 180°</translation>
+    </message>
+    <message>
+        <source>Rotation 90°</source>
+        <translation>Obrót o 90°</translation>
     </message>
 </context>
 <context>
@@ -2545,6 +2553,10 @@ amp</translation>
     <message>
         <source>&amp;More filters</source>
         <translation>&amp;Więcej filtrów</translation>
+    </message>
+    <message>
+        <source>&amp;Rotate 90°</source>
+        <translation>&amp;Obróć o 90°</translation>
     </message>
 </context>
 <context>

@@ -37,6 +37,7 @@ public:
 	}
 
 	bool setFlip();
+	bool setRotate90();
 	void setVideoEqualizer();
 	void setFrameSize(int w, int h);
 	void setARatio(double);
@@ -47,7 +48,6 @@ public:
 	bool processParams();
 
 	void updateSubs();
-
 private:
 	~VideoThr();
 

@@ -92,6 +92,7 @@ PlayClass::PlayClass() :
 	aRatioName = "auto";
 	speed = subtitlesScale = zoom = 1.0;
 	flip = 0;
+	rotate90 = false;
 
 	restartSeekTo = SEEK_NOWHERE;
 	seekA = seekB = -1;
@@ -480,27 +481,43 @@ void PlayClass::setFlip()
 	if (vThr)
 	{
 		if (vThr->setFlip())
-		{
-			QString str;
-			switch (flip)
-			{
-				case 0:
-					str = tr("No image rotation");
-					break;
-				case Qt::Horizontal:
-					str = tr("Horizontal flip");
-					break;
-				case Qt::Vertical:
-					str = tr("Vertical flip");
-					break;
-				case Qt::Horizontal + Qt::Vertical:
-					str = tr("Image rotation");
-					break;
-			}
-			messageAndOSD(str, true, 0.75);
-		}
+			flipRotMsg();
 		vThr->processParams();
 	}
+}
+void PlayClass::flipRotMsg()
+{
+	bool canAddRotate90 = rotate90;
+	QString str;
+	switch (flip)
+	{
+		case 0:
+			if (!rotate90)
+				str += tr("No image rotation");
+			break;
+		case Qt::Horizontal:
+			str = tr("Horizontal flip");
+			break;
+		case Qt::Vertical:
+			str = tr("Vertical flip");
+			break;
+		case Qt::Horizontal + Qt::Vertical:
+			if (rotate90)
+				str = tr("Rotation 270°");
+			else
+				str = tr("Rotation 180°");
+			canAddRotate90 = false;
+			break;
+	}
+	if (canAddRotate90)
+	{
+		const QString rotate90Str = tr("Rotation 90°");
+		if (!str.isEmpty())
+			str.prepend(rotate90Str + "\n");
+		else
+			str = rotate90Str;
+	}
+	messageAndOSD(str, true, 0.75);
 }
 
 void PlayClass::clearPlayInfo()
@@ -689,9 +706,9 @@ void PlayClass::zoomOut()
 }
 void PlayClass::zoomReset()
 {
-	if (zoom != 1.)
+	if (zoom != 1.0)
 	{
-		zoom = 1.;
+		zoom = 1.0;
 		if (vThr)
 		{
 			if (ass)
@@ -864,6 +881,16 @@ void PlayClass::setVFlip(bool b)
 	else
 		flip &= ~Qt::Vertical;
 	setFlip();
+}
+void PlayClass::setRotate90(bool b)
+{
+	rotate90 = b;
+	if (vThr)
+	{
+		if (vThr->setRotate90())
+			flipRotMsg();
+		vThr->processParams();
+	}
 }
 void PlayClass::screenShot()
 {

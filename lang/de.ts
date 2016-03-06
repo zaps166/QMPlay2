@@ -1401,10 +1401,6 @@ amp</translation>
         <translation>Vertikal spiegeln</translation>
     </message>
     <message>
-        <source>Image rotation</source>
-        <translation>Bild drehen</translation>
-    </message>
-    <message>
         <source>No image rotation</source>
         <translation>Keine Bilddrehung</translation>
     </message>
@@ -1430,6 +1426,18 @@ amp</translation>
     </message>
     <message>
         <source>to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 270°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 180°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotation 90°</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2545,6 +2553,10 @@ amp</translation>
     <message>
         <source>&amp;More filters</source>
         <translation>&amp;Weitere Filter</translation>
+    </message>
+    <message>
+        <source>&amp;Rotate 90°</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -22,6 +22,7 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("AspectRatio");
 	addParam("Zoom");
 	addParam("Flip");
+	addParam("Rotate90");
 	addParam("Saturation");
 	addParam("Brightness");
 	addParam("Contrast");
@@ -63,15 +64,17 @@ bool OpenGL2Writer::processParams(bool *)
 	const double aspectRatio = getParam("AspectRatio").toDouble();
 	const double zoom = getParam("Zoom").toDouble();
 	const int flip = getParam("Flip").toInt();
+	const bool rotate90 = getParam("Rotate90").toBool();
 	const float Contrast = (getParam("Contrast").toInt() + 100) / 100.0f;
 	const float Saturation = (getParam("Saturation").toInt() + 100) / 100.0f;
 	const float Brightness = getParam("Brightness").toInt() / 100.0f;
 	const float Hue = getParam("Hue").toInt() / -31.831f;
-	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->flip != flip || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
+	const int verticesIdx = rotate90 * 4 + flip;
+	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
 	{
 		drawable->zoom = zoom;
 		drawable->aspectRatio = aspectRatio;
-		drawable->flip = flip;
+		drawable->verticesIdx = verticesIdx;
 		drawable->Contrast = Contrast;
 		drawable->Brightness = Brightness;
 		drawable->Saturation = Saturation;
@@ -108,6 +111,8 @@ void OpenGL2Writer::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {
 	QMutexLocker mL(&drawable->osdMutex);
 	drawable->osdList = osds;
+	if (drawable->isRotate90()) //OSD may be out of video bounds
+		drawable->resetClearCounter();
 }
 
 void OpenGL2Writer::pause()
