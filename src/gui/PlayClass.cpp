@@ -478,11 +478,10 @@ void PlayClass::stopADec()
 
 void PlayClass::setFlip()
 {
-	if (vThr)
+	if (vThr && vThr->setFlip())
 	{
-		if (vThr->setFlip())
-			flipRotMsg();
 		vThr->processParams();
+		flipRotMsg();
 	}
 }
 void PlayClass::flipRotMsg()
@@ -888,8 +887,17 @@ void PlayClass::setRotate90(bool b)
 	if (vThr)
 	{
 		if (vThr->setRotate90())
+		{
+			vThr->processParams();
 			flipRotMsg();
-		vThr->processParams();
+		}
+		else if (rotate90)
+		{
+			QAction *act = qobject_cast<QAction *>(sender());
+			if (act)
+				act->trigger();
+			messageAndOSD(tr("Rotation is not supported by this video output module"), true, 2.0);
+		}
 	}
 }
 void PlayClass::screenShot()
@@ -1098,6 +1106,7 @@ void PlayClass::load(Demuxer *demuxer)
 				vThr->setVideoEqualizer();
 				vThr->setDec(dec);
 				vThr->setZoom();
+				vThr->setRotate90();
 				vThr->setFlip();
 				vThr->initFilters(false);
 

@@ -1440,6 +1440,10 @@ amp</translation>
         <source>Rotation 90°</source>
         <translation>Obrót o 90°</translation>
     </message>
+    <message>
+        <source>Rotation is not supported by this video output module</source>
+        <translation>Obrót nie jest obsługiwany przez ten moduł wyjścia obrazu</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
