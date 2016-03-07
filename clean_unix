@@ -2,23 +2,10 @@
 
 cd "$(dirname "$0")"
 
-if [ -z $NOTERM ] || [ $NOTERM == 0 ]; then
-	if [ -z $inKonsole ]; then
-		if [ ! -z "`xterm -help 2> /dev/null`" ] && [ ! -z $DISPLAY ]; then
-			inKonsole=true xterm -e "./$(basename $0)" &
-			exit
-		fi
-		if [ ! -z $KDE_FULL_SESSION ]; then
-			inKonsole=true konsole -e "./$(basename $0)" &
-			exit
-		fi
-	fi
-fi
-
 echo Do you want to remove \"Makefile\", \"*.so*\" files, \"app\" and \"build\" directories form \"$PWD\" ? [n/y]
-read wybor
-if [ ! -z $wybor ]; then
-	if [ $wybor == 'Y' ] || [ $wybor == 'y' ]; then
+read choice
+if [ ! -z $choice ]; then
+	if [ $choice == 'Y' ] || [ $choice == 'y' ]; then
 		rm -rf `find . | grep Makefile`
 		rm -rf `find . | grep .Release`
 		rm -rf `find . | grep .Debug`
@@ -26,9 +13,6 @@ if [ ! -z $wybor ]; then
 		rm -rf app x86_64-w64-mingw32 i686-w64-mingw32
 
 		echo Cleaned!
-		if [ ! -z $inKonsole ]; then
-			sleep 1
-		fi
 		exit
 	fi
 fi

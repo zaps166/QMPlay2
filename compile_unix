@@ -2,19 +2,6 @@
 
 cd "$(dirname "$0")"
 
-if [ -z $NOTERM ] || [ $NOTERM == 0 ]; then
-	if [ -z $inKonsole ]; then
-		if [ ! -z "`xterm -help 2> /dev/null`" ] && [ ! -z $DISPLAY ]; then
-			inKonsole=true xterm -e "./$(basename $0)" "$@" &
-			exit
-		fi
-		if [ ! -z $KDE_FULL_SESSION ]; then
-			inKonsole=true konsole -e "./$(basename $0)" "$@" &
-			exit
-		fi
-	fi
-fi
-
 if [ -z $QT_SUFFIX ]; then
 	if hash qmake-qt4 2> /dev/null; then
 		QT_SUFFIX=-qt4
@@ -79,17 +66,11 @@ else
 	cp src/gui/Icons/QMPlay2.png app/share/icons
 	rm -f app/share/icons/hicolor/128x128/apps/QMPlay2.png
 	ln -s ../../../QMPlay2.png app/share/icons/hicolor/128x128/apps
-# 	touch app/share/qmplay2/noautoupdates
 	cp ChangeLog app/share/qmplay2
 	mkdir -p app/include/QMPlay2
 	cp src/qmplay2/headers/* app/include/QMPlay2
 
 	echo Build complete!
-fi
-
-if [ ! -z $inKonsole ]; then
-	echo Press enter to exit
-	read
 fi
 
 exit $BUILD_ERROR
