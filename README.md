@@ -68,7 +68,6 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 - Install all dependencies using package manager (in devel version) or compile it from sources.
 - If you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5".
 - Compilation only:
-	- If you don't want to open Xterm or Konsole - "export NOTERM=1".
 	- If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
 	- Run "./compile_unix".
 	- QMPlay2 is in "app" directory, you can move its contents into "/usr" directory if "$SYSTEM_BUILD == 1".

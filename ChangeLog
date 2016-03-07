@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.03.06:
+Changes in QMPlay2 build 16.03.07:
 	- feature: suspend the computer after playback is finished,
 	- fix VA-API driver Intel >= 1.6.2 video filtering,
 	- fix slow seeking on some slow network streams,
