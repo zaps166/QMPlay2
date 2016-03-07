@@ -43,10 +43,8 @@ public:
 
 /**/
 
-	quint8 *getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt) const;
-	bool getRGB32Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest) const;
-	bool getYV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
-	bool getNV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
+	quint8 *getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat &img_fmt) const;
+	bool getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
 
 	bool HWAccellInit(int W, int H, const char *codec_name);
 

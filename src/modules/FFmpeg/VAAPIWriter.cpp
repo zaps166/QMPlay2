@@ -229,23 +229,9 @@ bool VAAPIWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgSc
 		VAImageFormat img_fmt[fmt_count];
 		if (vaQueryImageFormats(VADisp, img_fmt, &fmt_count) == VA_STATUS_SUCCESS)
 		{
-			const VASurfaceID surfaceID = videoFrame.surfaceId;
-			int img_fmt_idx[3] = {-1, -1, -1};
 			for (int i = 0; i < fmt_count; ++i)
-			{
-				if (!qstrncmp((const char *)&img_fmt[i].fourcc, "BGR", 3))
-					img_fmt_idx[0] = i;
-				else if (!qstrncmp((const char *)&img_fmt[i].fourcc, "YV12", 4))
-					img_fmt_idx[1] = i;
-				else if (!qstrncmp((const char *)&img_fmt[i].fourcc, "NV12", 4))
-					img_fmt_idx[2] = i;
-			}
-			return
-			(
-				(img_fmt_idx[0] > -1 && getRGB32Image(&img_fmt[img_fmt_idx[0]], surfaceID, dest)) ||
-				(img_fmt_idx[1] > -1 && getYV12Image(&img_fmt[img_fmt_idx[1]], surfaceID, dest, yv12ToRGB32)) ||
-				(img_fmt_idx[2] > -1 && getNV12Image(&img_fmt[img_fmt_idx[2]], surfaceID, dest, yv12ToRGB32))
-			);
+				if (img_fmt[i].fourcc == VA_FOURCC_NV12)
+					return getNV12Image(img_fmt[i], videoFrame.surfaceId, dest, yv12ToRGB32);
 		}
 	}
 	return false;
@@ -290,9 +276,9 @@ bool VAAPIWriter::open()
 	return false;
 }
 
-quint8 *VAAPIWriter::getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat *img_fmt) const
+quint8 *VAAPIWriter::getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat &img_fmt) const
 {
-	if (vaCreateImage(VADisp, img_fmt, outW, outH, &image) == VA_STATUS_SUCCESS)
+	if (vaCreateImage(VADisp, &img_fmt, outW, outH, &image) == VA_STATUS_SUCCESS)
 	{
 		quint8 *data;
 		if
@@ -305,60 +291,44 @@ quint8 *VAAPIWriter::getImage(VAImage &image, VASurfaceID surfaceID, VAImageForm
 	}
 	return NULL;
 }
-bool VAAPIWriter::getRGB32Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest) const
-{
-	VAImage image;
-	quint8 *data = getImage(image, surfaceID, img_fmt);
-	if (data)
-	{
-		memcpy(dest, data + image.offsets[0], outW * outH << 2);
-		vaUnmapBuffer(VADisp, image.buf);
-		vaDestroyImage(VADisp, image.image_id);
-		return true;
-	}
-	return false;
-}
-bool VAAPIWriter::getYV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const
+bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const
 {
 	VAImage image;
 	quint8 *data = getImage(image, surfaceID, img_fmt);
 	if (data)
 	{
 		QByteArray yv12;
-		yv12.resize(outW * outH * 3 << 1);
-		char *yv12Data = yv12.data();
-		memcpy(yv12Data, data + image.offsets[0], outW * outH);
-		memcpy(yv12Data + outW * outH, data + image.offsets[1], outW/2 * outH/2);
-		memcpy(yv12Data + outW * outH + outW/2 * outH/2, data + image.offsets[2], outW/2 * outH/2);
-		vaUnmapBuffer(VADisp, image.buf);
-		yv12ToRGB32->scale(yv12Data, dest);
-		vaDestroyImage(VADisp, image.image_id);
-		return true;
-	}
-	return false;
-}
-bool VAAPIWriter::getNV12Image(VAImageFormat *img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const
-{
-	VAImage image;
-	quint8 *data = getImage(image, surfaceID, img_fmt);
-	if (data)
-	{
-		QByteArray yv12;
-		yv12.resize(outW * outH * 3 << 1);
-		char *yv12Data = yv12.data();
-		memcpy(yv12Data, data + image.offsets[0], outW * outH);
-		quint8 *yv12data_cb = (quint8 *)yv12Data + outW * outH;
-		quint8 *yv12data_cr = yv12data_cb + outW/2 * outH/2;
-		const unsigned second_plane_size = outW * outH / 2;
-		data += image.offsets[1];
-		for (unsigned i = 0; i < second_plane_size; i += 2)
+		yv12.resize(outW * outH * 3 / 2);
+
+		quint8 *yv12Luma = (quint8 *)yv12.data();
+		quint8 *yv12Cb   = yv12Luma + outW * outH;
+		quint8 *yv12Cr   = yv12Cb + outW/2 * outH/2;
+
+		quint8 *planeData = data + image.offsets[0];
+		for (int i = 0; i < outH; ++i)
 		{
-			*(yv12data_cr++) = *(data++);
-			*(yv12data_cb++) = *(data++);
+			memcpy(yv12Luma, planeData, outW);
+			planeData += image.pitches[0];
+			yv12Luma += outW;
 		}
+
+		planeData = data + image.offsets[1];
+		for (int i = 0; i < outH; ++i)
+		{
+			int j = 0;
+			for (; j < outW; j += 4)
+			{
+				*(yv12Cr++) = *(planeData++);
+				*(yv12Cb++) = *(planeData++);
+			}
+			for (; j < (int)image.pitches[1]; ++j)
+				++planeData;
+		}
+
 		vaUnmapBuffer(VADisp, image.buf);
-		yv12ToRGB32->scale(yv12.data(), dest);
 		vaDestroyImage(VADisp, image.image_id);
+
+		yv12ToRGB32->scale(yv12.constData(), dest);
 		return true;
 	}
 	return false;
