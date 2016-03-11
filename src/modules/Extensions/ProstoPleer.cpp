@@ -17,7 +17,7 @@
 #include <QClipboard>
 #include <QMimeData>
 
-static QString ProstoPleerURL("http://pleer.com");
+static QString ProstoPleerURL("http://prostopleer.com");
 
 static inline QString getQMPlay2Url(const QTreeWidgetItem *tWI)
 {

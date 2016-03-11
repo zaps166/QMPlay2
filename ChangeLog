@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 16.03.11:
+	- update Russian translation (victorr2007),
+	- update ProstoPleer address,
+
 Changes in QMPlay2 build 16.03.08:
 	- feature: suspend the computer after playback is finished,
 	- fix VA-API driver Intel >= 1.6.2 video filtering,
