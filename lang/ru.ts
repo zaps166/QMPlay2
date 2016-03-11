@@ -1414,35 +1414,35 @@ amp</source>
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторять А-Б</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключено</translation>
     </message>
     <message>
         <source>from</source>
-        <translation type="unfinished"></translation>
+        <translation>из</translation>
     </message>
     <message>
         <source>to</source>
-        <translation type="unfinished"></translation>
+        <translation>в</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation type="unfinished"></translation>
+        <translation>Повернуть 270°</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation type="unfinished"></translation>
+        <translation>Повернуть 180°</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>Повернуть 90°</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Поворот не поддерживается в этом модуде вывода видео</translation>
     </message>
 </context>
 <context>
@@ -1588,11 +1588,11 @@ amp</source>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Приостановить после заверше&amp;ния воспроизведения</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Повторять A-Б</translation>
     </message>
 </context>
 <context>
@@ -1868,15 +1868,15 @@ amp</source>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>Повторять &amp;запись</translation>
+        <translation>Повторение &amp;записи</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>Повторять &amp;группу</translation>
+        <translation>Повторение &amp;группы</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Повторять &amp;список</translation>
+        <translation>Повторение &amp;списка воспроизведения</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2560,7 +2560,7 @@ amp</source>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Повернуть 90°</translation>
     </message>
 </context>
 <context>
