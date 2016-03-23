@@ -50,7 +50,7 @@ void BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
 				src  += linesize << 1;
 			}
 
-			if (h & 1) //Duplicate last line for odd height
+			if ((p ? (h >> 1) : h) & 1) //Duplicate last line for odd height
 				memcpy(dst2, dst2 - linesize, linesize);
 		}
 
