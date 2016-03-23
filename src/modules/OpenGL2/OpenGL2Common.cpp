@@ -219,7 +219,7 @@ void OpenGL2Common::clearImg()
 
 void OpenGL2Common::resetClearCounter()
 {
-	doClear = 4;
+	doClear = 6;
 }
 
 void OpenGL2Common::initializeGL()
