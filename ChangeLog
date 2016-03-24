@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 16.03.24:
+    - XVideo SHM and OpenGL2(Qt >= 5.6) bugfix,
+    - Bob deint bugfix for odd video height/2,
+
 Changes in QMPlay2 build 16.03.11:
 	- update Russian translation (victorr2007),
 	- update ProstoPleer address,
