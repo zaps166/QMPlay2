@@ -23,6 +23,9 @@ public:
 	}
 
 	bool open(int, int, unsigned long, const QString &adaptorName, bool);
+
+	void freeImage();
+	void invalidateShm();
 	void close();
 
 	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex &);
@@ -42,7 +45,7 @@ private:
 	void XvSetPortAttributeIfExists(void *attributes, int attrib_count, const char *k, int v);
 	void clrVars();
 
-	bool _isOK, _isOpen, hasImage, useSHM;
+	bool _isOK, _isOpen, hasImage;
 	int _flip;
 
 	unsigned long handle;

@@ -7,7 +7,7 @@ XVideo::XVideo() :
 	moduleImg = QImage(":/Xorg");
 
 	init("Enabled", true);
-	init("UseSHM", false);
+	init("UseSHM", true);
 }
 
 QList< XVideo::Info > XVideo::getModulesInfo(const bool showDisabled) const

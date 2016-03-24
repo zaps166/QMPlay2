@@ -41,6 +41,7 @@ XVIDEO::XVIDEO() :
 	_flip = 0;
 	ai = NULL;
 	clrVars();
+	invalidateShm();
 	_isOK = false;
 	disp = QX11Info::display();
 	if (!disp || XvQueryAdaptors(disp, DefaultRootWindow(disp), &adaptors, &ai) != Success)
@@ -57,7 +58,7 @@ XVIDEO::~XVIDEO()
 	delete priv;
 }
 
-bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorName, bool _useSHM)
+bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorName, bool useSHM)
 {
 	if (isOpen())
 		close();
@@ -65,7 +66,6 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	width = W;
 	height = H;
 	handle = _handle;
-	useSHM = _useSHM;
 
 	for (uint i = 0; i < adaptors; i++)
 	{
@@ -121,33 +121,49 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 		return false;
 	}
 
+	if (useSHM)
+	{
+		if (!XShmQueryExtension(disp))
+			useSHM = false;
+		else
+		{
+			image = XvShmCreateImage(disp, port, format_id, NULL, width, height, &shmInfo);
+			if (!image)
+				useSHM = false;
+			else
+			{
+				shmInfo.shmid = shmget(IPC_PRIVATE, image->data_size, IPC_CREAT | 0600);
+				if (shmInfo.shmid < 0)
+					useSHM = false;
+				else
+				{
+					shmInfo.shmaddr = (char *)shmat(shmInfo.shmid, 0, 0);
+					if (shmInfo.shmaddr == (char *)-1)
+					{
+						shmInfo.shmaddr = NULL;
+						useSHM = false;
+					}
+					else
+					{
+						const bool attached = XShmAttach(disp, &shmInfo);
+						XSync(disp, false);
+						if (!attached)
+							useSHM = false;
+						else
+							image->data = shmInfo.shmaddr;
+					}
+				}
+				if (!useSHM)
+					freeImage();
+			}
+		}
+	}
+
 	if (!useSHM)
 	{
 		image = XvCreateImage(disp, port, format_id, NULL, width, height);
-		image->data = new char[image->data_size];
-	}
-	else
-	{
-		image = XvShmCreateImage(disp, port, format_id, NULL, width, height, &shmInfo);
-		shmInfo.shmid = shmget(IPC_PRIVATE, image->data_size, IPC_CREAT | 0777);
-		if (shmInfo.shmid >= 0)
-		{
-			shmInfo.shmaddr = (char *)shmat(shmInfo.shmid, 0, 0);
-			image->data = shmInfo.shmaddr;
-			shmInfo.readOnly = false;
-			if (!XShmAttach(disp, &shmInfo))
-			{
-				close();
-				return false;
-			}
-			XSync(disp, false);
-			shmctl(shmInfo.shmid, IPC_RMID, 0);
-		}
-		else
-		{
-			close();
-			return false;
-		}
+		if (image)
+			image->data = new char[image->data_size];
 	}
 
 	if (!image)
@@ -162,20 +178,32 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	_isOpen = true;
 	return isOpen();
 }
+
+void XVIDEO::freeImage()
+{
+	if (shmInfo.shmid < 0)
+		delete[] image->data;
+	else
+	{
+		XShmDetach(disp, &shmInfo);
+		shmctl(shmInfo.shmid, IPC_RMID, 0);
+		if (shmInfo.shmaddr)
+			shmdt(shmInfo.shmaddr);
+		invalidateShm();
+	}
+	XFree(image);
+}
+void XVIDEO::invalidateShm()
+{
+	shmInfo.shmseg = 0;
+	shmInfo.shmid = -1;
+	shmInfo.shmaddr = NULL;
+	shmInfo.readOnly = false;
+}
 void XVIDEO::close()
 {
 	if (image)
-	{
-		if (useSHM && shmInfo.shmaddr)
-		{
-			XShmDetach(disp, &shmInfo);
-			shmctl(shmInfo.shmid, IPC_RMID, 0);
-			shmdt(shmInfo.shmaddr);
-		}
-		else if (!useSHM)
-			delete[] image->data;
-		XFree(image);
-	}
+		freeImage();
 	if (gc)
 		XFreeGC(disp, gc);
 	if (port)
@@ -269,10 +297,11 @@ QList< QString > XVIDEO::adaptorsList()
 
 void XVIDEO::putImage(const QRect &srcRect, const QRect &dstRect)
 {
-	if (!useSHM)
-		XvPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height());
-	else
+	if (shmInfo.shmaddr)
 		XvShmPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height(), false);
+	else
+		XvPutImage(disp, port, handle, gc, image, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height(), dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height());
+	XSync(disp, false);
 }
 
 void XVIDEO::XvSetPortAttributeIfExists(void *attributes, int attrib_count, const char *k, int v)
