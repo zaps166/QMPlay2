@@ -1048,7 +1048,7 @@ void MainWidget::lockWidgets(bool l)
 
 void MainWidget::hideDocksSlot()
 {
-	if (!geometry().contains(QCursor::pos()))
+	if (fullScreen && !geometry().contains(QCursor::pos()))
 	{
 		if (!playlistDock->isVisible())
 			showToolBar(false);
