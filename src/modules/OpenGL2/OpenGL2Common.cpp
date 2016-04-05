@@ -25,13 +25,13 @@ static const char vShaderYCbCrSrc[] =
 #ifdef OPENGL_ES2
 	"precision lowp float;"
 #endif
-	"attribute vec4 vPosition;"
+	"attribute vec4 aPosition;"
 	"attribute vec2 aTexCoord;"
 	"varying vec2 vTexCoord;"
 	"uniform vec2 scale;"
 	"void main() {"
 		"vTexCoord = aTexCoord;"
-		"gl_Position = vPosition * vec4(scale.xy, 1, 1);"
+		"gl_Position = aPosition * vec4(scale.xy, 1, 1);"
 	"}";
 static const char fShaderYCbCrSrc[] =
 #ifdef OPENGL_ES2
@@ -72,12 +72,12 @@ static const char vShaderOSDSrc[] =
 #ifdef OPENGL_ES2
 	"precision lowp float;"
 #endif
-	"attribute vec4 vPosition;"
+	"attribute vec4 aPosition;"
 	"attribute vec2 aTexCoord;"
 	"varying vec2 vTexCoord;"
 	"void main() {"
 		"vTexCoord = aTexCoord;"
-		"gl_Position = vPosition;"
+		"gl_Position = aPosition;"
 	"}";
 static const char fShaderOSDSrc[] =
 #ifdef OPENGL_ES2
@@ -254,7 +254,7 @@ void OpenGL2Common::initializeGL()
 	if (shaderProgramYCbCr->bind())
 	{
 		const qint32 newTexCoordLoc = shaderProgramYCbCr->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramYCbCr->attributeLocation("vPosition");
+		const qint32 newPositionLoc = shaderProgramYCbCr->attributeLocation("aPosition");
 		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordYCbCrLoc = newTexCoordLoc;
@@ -281,7 +281,7 @@ void OpenGL2Common::initializeGL()
 	if (shaderProgramOSD->bind())
 	{
 		const qint32 newTexCoordLoc = shaderProgramOSD->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramOSD->attributeLocation("vPosition");
+		const qint32 newPositionLoc = shaderProgramOSD->attributeLocation("aPosition");
 		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordOSDLoc = newTexCoordLoc;
