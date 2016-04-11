@@ -28,6 +28,8 @@ private:
 		return (widget() == &iDW) ? iDW.widget() : widget();
 	}
 
+	void unsetCursor(QWidget *w);
+
 	void dragEnterEvent(QDragEnterEvent *);
 	void dropEvent(QDropEvent *);
 	void mouseMoveEvent(QMouseEvent *);

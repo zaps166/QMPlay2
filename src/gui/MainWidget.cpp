@@ -1138,7 +1138,7 @@ void MainWidget::hideDocks()
 
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
-	if (fullScreen)
+	if (fullScreen && e->buttons() == Qt::NoButton)
 	{
 		const int trigger1 = qMax< int >(5,  ceil(0.003 * width()));
 		const int trigger2 = qMax< int >(15, ceil(0.025 * width()));

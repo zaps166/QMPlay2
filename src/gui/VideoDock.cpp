@@ -56,6 +56,8 @@ VideoDock::VideoDock() :
 
 	setWidget(&iDW);
 
+	hideCursorTim.setSingleShot(true);
+
 	connect(&hideCursorTim, SIGNAL(timeout()), this, SLOT(hideCursor()));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
 	connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
@@ -82,12 +84,13 @@ void VideoDock::fullScreen(bool b)
 	else
 	{
 		/* Visualizations on full screen */
-		if (widget() != &iDW)
+		QWidget *dockedW = widget();
+		if (dockedW != &iDW)
 		{
-			if (widget())
+			if (dockedW)
 			{
-				widget()->unsetCursor();
-				widget()->setParent(NULL);
+				unsetCursor(dockedW);
+				dockedW->setParent(NULL);
 			}
 			setWidget(&iDW);
 		}
@@ -99,6 +102,16 @@ void VideoDock::fullScreen(bool b)
 		if (!isBreeze)
 			setStyle(NULL);
 	}
+}
+
+void VideoDock::unsetCursor(QWidget *w)
+{
+	bool ok;
+	const int cursorShape = w->property("customCursor").toInt(&ok);
+	if (ok && cursorShape >= 0 && cursorShape <= Qt::LastCursor)
+		w->setCursor((Qt::CursorShape)cursorShape);
+	else
+		w->unsetCursor();
 }
 
 void VideoDock::dragEnterEvent(QDragEnterEvent *e)
@@ -116,7 +129,7 @@ void VideoDock::dropEvent(QDropEvent *e)
 		const QMimeData *mimeData = e->mimeData();
 		if (Functions::chkMimeData(mimeData))
 		{
-			QStringList urls = Functions::getUrlsFromMimeData(mimeData);
+			const QStringList urls = Functions::getUrlsFromMimeData(mimeData);
 			if (urls.size() == 1)
 			{
 				QString url = Functions::Url(urls[0]);
@@ -143,10 +156,10 @@ void VideoDock::dropEvent(QDropEvent *e)
 }
 void VideoDock::mouseMoveEvent(QMouseEvent *e)
 {
-	if (internalWidget())
+	if (QWidget *internalW = internalWidget())
 	{
-		if (++pixels == 25)
-			internalWidget()->unsetCursor();
+		if (internalW->cursor().shape() == Qt::BlankCursor && ++pixels == 25)
+			unsetCursor(internalW);
 		hideCursorTim.start(750);
 	}
 	if (e)
@@ -176,6 +189,11 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 {
 	if (e->button() == Qt::LeftButton)
 		canPopup = true;
+	if (QWidget *internalW = internalWidget())
+	{
+		if (internalW->cursor().shape() != Qt::BlankCursor)
+			hideCursorTim.start(750);
+	}
 	DockWidget::mouseReleaseEvent(e);
 }
 void VideoDock::moveEvent(QMoveEvent *e)
@@ -198,8 +216,11 @@ void VideoDock::wheelEvent(QWheelEvent *e)
 void VideoDock::leaveEvent(QEvent *e)
 {
 	hideCursorTim.stop();
-	if (internalWidget())
-		internalWidget()->unsetCursor();
+	if (QWidget *internalW = internalWidget())
+	{
+		if (internalW->cursor().shape() == Qt::BlankCursor)
+			unsetCursor(internalW);
+	}
 	pixels = 0;
 	DockWidget::leaveEvent(e);
 }
@@ -241,9 +262,13 @@ void VideoDock::popup(const QPoint &p)
 }
 void VideoDock::hideCursor()
 {
-	hideCursorTim.stop();
-	if (internalWidget())
-		internalWidget()->setCursor(Qt::BlankCursor);
+	if (QWidget *internalW = internalWidget())
+	{
+		bool ok;
+		const int cursorShape = internalW->property("customCursor").toInt(&ok);
+		if (!ok || cursorShape < 0 || cursorShape > Qt::LastCursor || internalW->cursor().shape() == cursorShape)
+			internalW->setCursor(Qt::BlankCursor);
+	}
 	pixels = 0;
 }
 void VideoDock::resizedIDW(int w, int h)
