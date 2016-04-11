@@ -349,7 +349,6 @@ void VideoThr::run()
 			else if (skip)
 				filters.removeLastFromInputBuffer();
 			tmp_br += bytes_consumed;
-
 		}
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
