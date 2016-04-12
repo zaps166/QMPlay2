@@ -1,4 +1,5 @@
 #include <OpenGL2Common.hpp>
+#include <Sphere.hpp>
 
 #include <QMPlay2Core.hpp>
 #include <VideoFrame.hpp>
@@ -14,6 +15,7 @@
 	#define QOpenGLShader QGLShader
 #endif
 #include <QResizeEvent>
+#include <QMatrix4x4>
 #include <QPainter>
 #include <QWidget>
 
@@ -21,139 +23,24 @@
 	#include <GL/glext.h>
 #endif
 
-static const char vShaderYCbCrSrc[] =
-#ifdef OPENGL_ES2
-	"precision lowp float;"
-#endif
-	"attribute vec4 aPosition;"
-	"attribute vec2 aTexCoord;"
-	"varying vec2 vTexCoord;"
-	"uniform vec2 scale;"
-	"void main() {"
-		"vTexCoord = aTexCoord;"
-		"gl_Position = aPosition * vec4(scale.xy, 1, 1);"
-	"}";
-static const char fShaderYCbCrSrc[] =
-#ifdef OPENGL_ES2
-	"precision lowp float;"
-#endif
-	"varying vec2 vTexCoord;"
-	"uniform vec4 videoEq;"
-	"uniform sampler2D Ytex, Utex, Vtex;"
-	"void main() {"
-		"float brightness = videoEq[0];"
-		"float contrast = videoEq[1];"
-		"float saturation = videoEq[2];"
-		"vec3 YCbCr = vec3("
-			"texture2D(Ytex, vTexCoord)[0] - 0.0625,"
-			"texture2D(Utex, vTexCoord)[0] - 0.5,"
-			"texture2D(Vtex, vTexCoord)[0] - 0.5"
-		");"
-		"%1"
-		"YCbCr.yz *= saturation;"
-		"vec3 rgb = mat3"
-		"("
-			"1.16430,  1.16430, 1.16430,"
-			"0.00000, -0.39173, 2.01700,"
-			"1.59580, -0.81290, 0.00000"
-		") * YCbCr * contrast + brightness;"
-		"gl_FragColor = vec4(rgb, 1.0);"
-	"}";
-static const char fShaderYCbCrHueSrc[] =
-	"float hueAdj = videoEq[3];"
-	"if (hueAdj != 0.0) {"
-		"float hue = atan(YCbCr[2], YCbCr[1]) + hueAdj;"
-		"float chroma = sqrt(YCbCr[1] * YCbCr[1] + YCbCr[2] * YCbCr[2]);"
-		"YCbCr[1] = chroma * cos(hue);"
-		"YCbCr[2] = chroma * sin(hue);"
-	"}";
+#include <Vertices.hpp>
+#include <Shaders.hpp>
 
-static const char vShaderOSDSrc[] =
-#ifdef OPENGL_ES2
-	"precision lowp float;"
-#endif
-	"attribute vec4 aPosition;"
-	"attribute vec2 aTexCoord;"
-	"varying vec2 vTexCoord;"
-	"void main() {"
-		"vTexCoord = aTexCoord;"
-		"gl_Position = aPosition;"
-	"}";
-static const char fShaderOSDSrc[] =
-#ifdef OPENGL_ES2
-	"precision lowp float;"
-#endif
-	"varying vec2 vTexCoord;"
-	"uniform sampler2D tex;"
-	"void main() {"
-		"gl_FragColor = texture2D(tex, vTexCoord);"
-	"}";
+#include <math.h>
 
-static const float verticesYCbCr[8][8] = {
-	/* Normal */
-	{
-		-1.0f, -1.0f, //0. Left-bottom
-		+1.0f, -1.0f, //1. Right-bottom
-		-1.0f, +1.0f, //2. Left-top
-		+1.0f, +1.0f, //3. Right-top
-	},
-	/* Horizontal flip */
-	{
-		+1.0f, -1.0f, //1. Right-bottom
-		-1.0f, -1.0f, //0. Left-bottom
-		+1.0f, +1.0f, //3. Right-top
-		-1.0f, +1.0f, //2. Left-top
-	},
-	/* Vertical flip */
-	{
-		-1.0f, +1.0f, //2. Left-top
-		+1.0f, +1.0f, //3. Right-top
-		-1.0f, -1.0f, //0. Left-bottom
-		+1.0f, -1.0f, //1. Right-bottom
-	},
-	/* Rotated 180 */
-	{
-		+1.0f, +1.0f, //3. Right-top
-		-1.0f, +1.0f, //2. Left-top
-		+1.0f, -1.0f, //1. Right-bottom
-		-1.0f, -1.0f, //0. Left-bottom
-	},
+/* RotAnimation */
 
-	/* Rotated 90 */
+void RotAnimation::updateCurrentValue(const QVariant &value)
+{
+	if (!glCommon.buttonPressed)
 	{
-		-1.0f, +1.0f, //2. Left-top
-		-1.0f, -1.0f, //0. Left-bottom
-		+1.0f, +1.0f, //3. Right-top
-		+1.0f, -1.0f, //1. Right-bottom
-	},
-	/* Rotated 90 + horizontal flip */
-	{
-		+1.0f, +1.0f, //3. Right-top
-		+1.0f, -1.0f, //1. Right-bottom
-		-1.0f, +1.0f, //2. Left-top
-		-1.0f, -1.0f, //0. Left-bottom
-	},
-	/* Rotated 90 + vertical flip */
-	{
-		-1.0f, -1.0f, //0. Left-bottom
-		-1.0f, +1.0f, //2. Left-top
-		+1.0f, -1.0f, //1. Right-bottom
-		+1.0f, +1.0f, //3. Right-top
-	},
-	/* Rotated 270 */
-	{
-		+1.0f, -1.0f, //1. Right-bottom
-		+1.0f, +1.0f, //3. Right-top
-		-1.0f, -1.0f, //0. Left-bottom
-		-1.0f, +1.0f, //2. Left-top
-	},
-};
-static const float texCoordOSD[8] = {
-	0.0f, 1.0f,
-	1.0f, 1.0f,
-	0.0f, 0.0f,
-	1.0f, 0.0f,
-};
+		const QPointF newRot = value.toPointF();
+		glCommon.rot.setX(qBound<qreal>(0.0, newRot.x(), 180.0));
+		glCommon.rot.setY(newRot.y());
+		glCommon.setMatrix = true;
+		glCommon.updateGL(true);
+	}
+}
 
 /* OpenGLCommon implementation */
 
@@ -171,14 +58,21 @@ OpenGL2Common::OpenGL2Common() :
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
-	isPaused(false), isOK(false), hasImage(false), doReset(true),
+	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0), doClear(0),
-	aspectRatio(0.0), zoom(0.0)
+	aspectRatio(0.0), zoom(0.0),
+	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false),
+	rotAnimation(*this),
+	mouseTime(0.0)
 {
 	/* Initialize texCoordYCbCr array */
 	texCoordYCbCr[0] = texCoordYCbCr[4] = texCoordYCbCr[5] = texCoordYCbCr[7] = 0.0f;
 	texCoordYCbCr[1] = texCoordYCbCr[3] = 1.0f;
+
+	/* Set 360° view */
+	rotAnimation.setEasingCurve(QEasingCurve::OutQuint);
+	rotAnimation.setDuration(1000.0);
 }
 OpenGL2Common::~OpenGL2Common()
 {
@@ -195,7 +89,7 @@ void OpenGL2Common::newSize(const QSize &size)
 {
 	const bool canUpdate = !size.isValid();
 	const QSize winSize = canUpdate ? widget()->size() : size;
-	if (verticesIdx < 4)
+	if (!isRotate90())
 	{
 		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &subsX, &subsY);
 		subsW = W;
@@ -208,13 +102,38 @@ void OpenGL2Common::newSize(const QSize &size)
 	}
 	doReset = true;
 	if (canUpdate && isPaused)
-		updateGL();
+		updateGL(false);
 }
 void OpenGL2Common::clearImg()
 {
 	hasImage = false;
 	osdImg = QImage();
 	osdChecksums.clear();
+}
+
+void OpenGL2Common::setSpherical(bool spherical)
+{
+	const bool isSphericalView = (spherical && hasVbo);
+	if (sphericalView != isSphericalView)
+	{
+		QWidget *w = widget();
+		const bool isBlankCursor = (w->cursor().shape() == Qt::BlankCursor);
+		sphericalView = isSphericalView;
+		if (sphericalView)
+		{
+			w->setProperty("customCursor", (int)Qt::OpenHandCursor);
+			if (!isBlankCursor)
+				w->setCursor(Qt::OpenHandCursor);
+			rot = QPointF(90.0, 90.0);
+		}
+		else
+		{
+			w->setProperty("customCursor", QVariant());
+			if (!isBlankCursor)
+				w->setCursor(Qt::ArrowCursor);
+			buttonPressed = false;
+		}
+	}
 }
 
 void OpenGL2Common::resetClearCounter()
@@ -318,6 +237,7 @@ void OpenGL2Common::initializeGL()
 	setVSync(vSync);
 
 	doReset = true;
+	resetSphereVbo();
 }
 
 void OpenGL2Common::paintGL()
@@ -331,17 +251,20 @@ void OpenGL2Common::paintGL()
 
 	if (!videoFrame.isEmpty())
 	{
+		const GLsizei heights[3] = {
+			outH,
+			outH >> 1,
+			outH >> 1
+		};
+
 		if (doReset)
 		{
 			/* Prepare textures */
-			glBindTexture(GL_TEXTURE_2D, 2);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[0], outH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
-
-			glBindTexture(GL_TEXTURE_2D, 3);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[1], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
-
-			glBindTexture(GL_TEXTURE_2D, 4);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[2], outH >> 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+			for (qint32 i = 0; i < 3; ++i)
+			{
+				glBindTexture(GL_TEXTURE_2D, i + 2);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[i], heights[i], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+			}
 
 			/* Prepare texture coordinates */
 			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == outW) ? 1.0f : (outW / (videoFrame.linesize[0] + 1.0f));
@@ -349,35 +272,75 @@ void OpenGL2Common::paintGL()
 			resetDone = true;
 		}
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, 2);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[0], outH, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[0].constData());
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, 3);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[1], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[1].constData());
-
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, 4);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[2], outH >> 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[2].constData());
+		/* Load textures */
+		for (qint32 i = 0; i < 3; ++i)
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, i + 2);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[i], heights[i], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[i].constData());
+		}
 
 		videoFrame.clear();
 		hasImage = true;
 	}
 
-	shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
-	shaderProgramYCbCr->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
+	if (!sphericalView)
+	{
+		if (nIndices > 0)
+		{
+			glDeleteBuffers(3, sphereVbo);
+			resetSphereVbo();
+		}
+		shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
+		shaderProgramYCbCr->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
+	}
+	else
+	{
+		if (nIndices == 0)
+			loadSphere();
+
+		glBindBuffer(GL_ARRAY_BUFFER, sphereVbo[0]);
+		shaderProgramYCbCr->setAttributeBuffer(positionYCbCrLoc, GL_FLOAT, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, sphereVbo[1]);
+		shaderProgramYCbCr->setAttributeBuffer(texCoordYCbCrLoc, GL_FLOAT, 0, 2);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 	shaderProgramYCbCr->enableAttributeArray(positionYCbCrLoc);
 	shaderProgramYCbCr->enableAttributeArray(texCoordYCbCrLoc);
 
 	shaderProgramYCbCr->bind();
 	if (doReset)
 	{
-		shaderProgramYCbCr->setUniformValue("scale", W / (float)winSize.width(), H / (float)winSize.height());
 		shaderProgramYCbCr->setUniformValue("videoEq", Brightness, Contrast, Saturation, Hue);
 		doReset = !resetDone;
+		setMatrix = true;
 	}
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	if (setMatrix)
+	{
+		QMatrix4x4 matrix;
+		if (!sphericalView)
+			matrix.scale(W / (qreal)winSize.width(), H / (qreal)winSize.height());
+		else
+		{
+			const double z = qBound(-1.0, (zoom > 1.0 ? log10(zoom) : zoom - 1.0), 0.99);
+			matrix.perspective(68.0, (qreal)winSize.width() / (qreal)winSize.height(), 0.001, 2.0);
+			matrix.translate(0.0, 0.0, z);
+			matrix.rotate(rot.x(), 1.0, 0.0, 0.0);
+			matrix.rotate(rot.y(), 0.0, 0.0, 1.0);
+		}
+		shaderProgramYCbCr->setUniformValue("matrix", matrix);
+		setMatrix = false;
+	}
+	if (!sphericalView)
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	else
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereVbo[2]);
+		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_SHORT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 	shaderProgramYCbCr->release();
 
 	shaderProgramYCbCr->disableAttributeArray(texCoordYCbCrLoc);
@@ -493,6 +456,14 @@ void OpenGL2Common::initGLProc()
 		canCreateNonPowerOfTwoTextures = !!strstr(glExtensions, "GL_ARB_texture_non_power_of_two");
 	}
 	glActiveTexture = (GLActiveTexture)QOpenGLContext::currentContext()->getProcAddress("glActiveTexture");
+	glGenBuffers = (GLGenBuffers)QOpenGLContext::currentContext()->getProcAddress("glGenBuffers");
+	glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
+	glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
+	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
+	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
+	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
+	hasVbo = (glGenBuffers && glBindBuffer && glBufferData && glMapBuffer && glUnmapBuffer && glDeleteBuffers);
+
 }
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()
 {
@@ -514,6 +485,18 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 {
 	switch (e->type())
 	{
+		case QEvent::MouseButtonPress:
+			if (sphericalView)
+				mousePress360((QMouseEvent *)e);
+			break;
+		case QEvent::MouseButtonRelease:
+			if (sphericalView)
+				mouseRelease360((QMouseEvent *)e);
+			break;
+		case QEvent::MouseMove:
+			if (sphericalView)
+				mouseMove360((QMouseEvent *)e);
+			break;
 		case QEvent::Resize:
 			newSize(((QResizeEvent *)e)->size());
 			break;
@@ -523,5 +506,98 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 			break;
 		default:
 			break;
+	}
+}
+
+/* 360 */
+
+void OpenGL2Common::mousePress360(QMouseEvent *e)
+{
+	if (e->buttons() & Qt::LeftButton)
+	{
+		widget()->setCursor(Qt::ClosedHandCursor);
+		mouseTime = Functions::gettime();
+		buttonPressed = true;
+		rotAnimation.stop();
+		mousePos = e->pos();
+	}
+}
+void OpenGL2Common::mouseMove360(QMouseEvent *e)
+{
+	if (mouseWrapped)
+		mouseWrapped = false;
+	else if (buttonPressed && (e->buttons() & Qt::LeftButton))
+	{
+#if QT_VERSION >= 0x050300
+		const bool fromTouch = (e->source() != Qt::MouseEventNotSynthesized);
+#else
+		const bool fromTouch = false;
+#endif
+		const QPoint newMousePos = e->pos();
+		const QPointF mouseDiff = QPointF(mousePos - newMousePos) / 10.0;
+
+		rot.setX(qBound<qreal>(0.0, (rot.rx() += mouseDiff.y()), 180.0));
+		rot.ry() -= mouseDiff.x();
+
+		const double currTime = Functions::gettime();
+		const double mouseTimeDiff = qMax(currTime - mouseTime, 0.001);
+		const QPointF movPerSec(mouseDiff.y() / mouseTimeDiff / 5.0, -mouseDiff.x() / mouseTimeDiff / 5.0);
+		if (rotAnimation.state() != QAbstractAnimation::Stopped)
+			rotAnimation.stop();
+		rotAnimation.setEndValue(rot + movPerSec);
+		mouseTime = currTime;
+
+		mousePos = newMousePos;
+		if (!fromTouch)
+			mouseWrapped = Functions::wrapMouse(widget(), mousePos);
+
+		setMatrix = true;
+		updateGL(true);
+	}
+}
+void OpenGL2Common::mouseRelease360(QMouseEvent *e)
+{
+	if (buttonPressed && e->button() == Qt::LeftButton)
+	{
+		if ((Functions::gettime() - mouseTime) >= 0.075)
+			rotAnimation.stop();
+		else
+		{
+			rotAnimation.setStartValue(rot);
+			rotAnimation.start();
+		}
+		widget()->setCursor(Qt::OpenHandCursor);
+		buttonPressed = false;
+	}
+}
+void OpenGL2Common::resetSphereVbo()
+{
+	memset(sphereVbo, 0, sizeof sphereVbo);
+	nIndices = 0;
+}
+void OpenGL2Common::loadSphere()
+{
+	const quint32 slices = 50;
+	const quint32 stacks = 50;
+	const GLenum targets[3] = {
+		GL_ARRAY_BUFFER,
+		GL_ARRAY_BUFFER,
+		GL_ELEMENT_ARRAY_BUFFER
+	};
+	void *pointers[3];
+	quint32 sizes[3];
+	nIndices = Sphere::getSizes(slices, stacks, sizes[0], sizes[1], sizes[2]);
+	glGenBuffers(3, sphereVbo);
+	for (qint32 i = 0; i < 3; ++i)
+	{
+		glBindBuffer(targets[i], sphereVbo[i]);
+		glBufferData(targets[i], sizes[i], NULL, GL_STATIC_DRAW);
+		pointers[i] = glMapBuffer(targets[i], GL_WRITE_ONLY);
+	}
+	Sphere::generate(1.0f, slices, stacks, (float *)pointers[0], (float *)pointers[1], (quint16 *)pointers[2]);
+	for (qint32 i = 0; i < 3; ++i)
+	{
+		glBindBuffer(targets[i], sphereVbo[i]);
+		glUnmapBuffer(targets[i]);
 	}
 }

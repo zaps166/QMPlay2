@@ -51,6 +51,10 @@ void VideoThr::destroySubtitlesDecoder()
 	}
 }
 
+bool VideoThr::setSpherical()
+{
+	return writer ? writer->modParam("Spherical", playC.spherical) : false;
+}
 bool VideoThr::setFlip()
 {
 	return writer ? writer->modParam("Flip", playC.flip) : false;

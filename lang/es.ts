@@ -1444,6 +1444,10 @@ amp</translation>
         <source>Rotation is not supported by this video output module</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Spherical view is not supported by this video output module</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2560,6 +2564,10 @@ amp</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Spherical view</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

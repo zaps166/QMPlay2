@@ -649,10 +649,11 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playback->subsFromFile, SIGNAL(triggered()), this, SLOT(browseSubsFile()));
 	connect(menuBar->playback->subtitlesSync, SIGNAL(triggered()), &playC, SLOT(setSubtitlesSync()));
 	connect(menuBar->playback->videoFilters->videoEqualizer, SIGNAL(valuesChanged(int, int, int, int)), &playC, SLOT(setVideoEqualizer(int, int, int, int)));
-	connect(menuBar->playback->videoFilters->more, SIGNAL(triggered(bool)), this, SLOT(showSettings()));
+	connect(menuBar->playback->videoFilters->spherical, SIGNAL(triggered(bool)), &playC, SLOT(setSpherical(bool)));
 	connect(menuBar->playback->videoFilters->hFlip, SIGNAL(triggered(bool)), &playC, SLOT(setHFlip(bool)));
 	connect(menuBar->playback->videoFilters->vFlip, SIGNAL(triggered(bool)), &playC, SLOT(setVFlip(bool)));
 	connect(menuBar->playback->videoFilters->rotate90, SIGNAL(triggered(bool)), &playC, SLOT(setRotate90(bool)));
+	connect(menuBar->playback->videoFilters->more, SIGNAL(triggered(bool)), this, SLOT(showSettings()));
 	foreach (QAction *act, menuBar->playback->audioChannels->actions())
 		connect(act, SIGNAL(triggered()), this, SLOT(audioChannelsChanged()));
 	SettingsWidget::SetAudioChannelsMenu();

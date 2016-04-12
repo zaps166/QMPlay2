@@ -530,3 +530,36 @@ quint32 Functions::getBestSampleRate()
 	}
 	return srate;
 }
+
+bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos)
+{
+	const QSize winSize = widget->size();
+	bool doWrap = false;
+
+	if (mousePos.x() >= winSize.width() - 1)
+	{
+		mousePos.setX(1);
+		doWrap = true;
+	}
+	else if (mousePos.x() <= 0)
+	{
+		mousePos.setX(winSize.width() - 2);
+		doWrap = true;
+	}
+
+	if (mousePos.y() >= winSize.height() - 1)
+	{
+		mousePos.setY(1);
+		doWrap = true;
+	}
+	else if (mousePos.y() <= 0)
+	{
+		mousePos.setY(winSize.height() - 2);
+		doWrap = true;
+	}
+
+	if (doWrap)
+		QCursor::setPos(widget->mapToGlobal(mousePos));
+
+	return doWrap;
+}

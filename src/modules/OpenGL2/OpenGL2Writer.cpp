@@ -21,6 +21,7 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("H");
 	addParam("AspectRatio");
 	addParam("Zoom");
+	addParam("Spherical");
 	addParam("Flip");
 	addParam("Rotate90");
 	addParam("Saturation");
@@ -63,6 +64,7 @@ bool OpenGL2Writer::processParams(bool *)
 
 	const double aspectRatio = getParam("AspectRatio").toDouble();
 	const double zoom = getParam("Zoom").toDouble();
+	const bool spherical = getParam("Spherical").toBool();
 	const int flip = getParam("Flip").toInt();
 	const bool rotate90 = getParam("Rotate90").toBool();
 	const float Contrast = (getParam("Contrast").toInt() + 100) / 100.0f;
@@ -70,7 +72,7 @@ bool OpenGL2Writer::processParams(bool *)
 	const float Brightness = getParam("Brightness").toInt() / 100.0f;
 	const float Hue = getParam("Hue").toInt() / -31.831f;
 	const int verticesIdx = rotate90 * 4 + flip;
-	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
+	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
 	{
 		drawable->zoom = zoom;
 		drawable->aspectRatio = aspectRatio;
@@ -79,6 +81,7 @@ bool OpenGL2Writer::processParams(bool *)
 		drawable->Brightness = Brightness;
 		drawable->Saturation = Saturation;
 		drawable->Hue = Hue;
+		drawable->setSpherical(spherical);
 		doResizeEvent = drawable->widget()->isVisible();
 	}
 
@@ -105,7 +108,7 @@ void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
 {
 	drawable->isPaused = false;
 	drawable->videoFrame = videoFrame;
-	drawable->updateGL();
+	drawable->updateGL(drawable->sphericalView);
 }
 void OpenGL2Writer::writeOSD(const QList< const QMPlay2_OSD * > &osds)
 {

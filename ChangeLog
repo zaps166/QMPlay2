@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 16.04.12:
+	- add spherical view for video playback (OpenGL only),
+
 Changes in QMPlay2 build 16.03.24:
 	- XVideo SHM and OpenGL2(Qt >= 5.6) bugfix,
 	- Bob deint bugfix for odd video height/2,

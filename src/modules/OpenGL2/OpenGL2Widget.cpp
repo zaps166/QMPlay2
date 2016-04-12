@@ -18,9 +18,12 @@ bool OpenGL2Widget::setVSync(bool enable)
 	}
 	return (fmt.swapInterval() == enable);
 }
-void OpenGL2Widget::updateGL()
+void OpenGL2Widget::updateGL(bool requestDelayed)
 {
-	update();
+	if (requestDelayed)
+		QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
+	else
+		update();
 }
 
 void OpenGL2Widget::initializeGL()

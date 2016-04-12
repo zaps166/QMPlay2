@@ -36,6 +36,7 @@ public:
 		sDec = dec;
 	}
 
+	bool setSpherical();
 	bool setFlip();
 	bool setRotate90();
 	void setVideoEqualizer();

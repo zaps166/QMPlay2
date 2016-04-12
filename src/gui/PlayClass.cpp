@@ -92,7 +92,7 @@ PlayClass::PlayClass() :
 	aRatioName = "auto";
 	speed = subtitlesScale = zoom = 1.0;
 	flip = 0;
-	rotate90 = false;
+	rotate90 = spherical = false;
 
 	restartSeekTo = SEEK_NOWHERE;
 	seekA = seekB = -1;
@@ -478,7 +478,7 @@ void PlayClass::stopADec()
 
 void PlayClass::setFlip()
 {
-	if (vThr && vThr->setFlip())
+	if (vThr && vThr->setFlip() && !spherical)
 	{
 		vThr->processParams();
 		flipRotMsg();
@@ -865,6 +865,22 @@ void PlayClass::toggleAVS(bool b)
 	}
 	reload = true;
 }
+void PlayClass::setSpherical(bool b)
+{
+	spherical = b;
+	if (vThr)
+	{
+		if (vThr->setSpherical())
+			vThr->processParams();
+		else if (spherical)
+		{
+			QAction *act = qobject_cast<QAction *>(sender());
+			if (act)
+				act->trigger();
+			messageAndOSD(tr("Spherical view is not supported by this video output module"), true, 2.0);
+		}
+	}
+}
 void PlayClass::setHFlip(bool b)
 {
 	if (b)
@@ -888,8 +904,11 @@ void PlayClass::setRotate90(bool b)
 	{
 		if (vThr->setRotate90())
 		{
-			vThr->processParams();
-			flipRotMsg();
+			if (!spherical)
+			{
+				vThr->processParams();
+				flipRotMsg();
+			}
 		}
 		else if (rotate90)
 		{
@@ -1106,7 +1125,8 @@ void PlayClass::load(Demuxer *demuxer)
 				vThr->setVideoEqualizer();
 				vThr->setDec(dec);
 				vThr->setZoom();
-				vThr->setRotate90();
+				vThr->setSpherical(); //TODO: Disable when not supported
+				vThr->setRotate90(); //TODO: Disable when not supported
 				vThr->setFlip();
 				vThr->initFilters(false);
 

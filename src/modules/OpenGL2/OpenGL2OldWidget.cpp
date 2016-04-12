@@ -51,9 +51,12 @@ bool OpenGL2OldWidget::setVSync(bool enable)
 #endif
 	return true;
 }
-void OpenGL2OldWidget::updateGL()
+void OpenGL2OldWidget::updateGL(bool requestDelayed)
 {
-	QGLWidget::updateGL();
+	if (requestDelayed)
+		QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
+	else
+		QGLWidget::updateGL();
 }
 
 void OpenGL2OldWidget::initializeGL()

@@ -48,11 +48,12 @@ bool OpenGL2Window::setVSync(bool enable)
 	vSync = enable;
 	return true;
 }
-void OpenGL2Window::updateGL()
+void OpenGL2Window::updateGL(bool requestDelayed)
 {
-	//sendEvent() doesn't enqueue the event here
-	QEvent updateEvent(QEvent::UpdateRequest);
-	QCoreApplication::sendEvent(this, &updateEvent);
+	if (requestDelayed)
+		QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, true));
+	else
+		doUpdateGL(false);
 }
 
 void OpenGL2Window::initializeGL()
@@ -74,6 +75,17 @@ void OpenGL2Window::paintGL()
 void OpenGL2Window::resetClearCounter()
 {
 	OpenGL2Common::resetClearCounter();
+}
+void OpenGL2Window::doUpdateGL(bool queued)
+{
+	if (queued)
+		QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
+	else
+	{
+		//sendEvent() doesn't enqueue the event here
+		QEvent updateEvent(QEvent::UpdateRequest);
+		QCoreApplication::sendEvent(this, &updateEvent);
+	}
 }
 
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)

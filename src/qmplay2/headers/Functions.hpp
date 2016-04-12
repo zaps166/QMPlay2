@@ -121,6 +121,8 @@ namespace Functions
 	QString dBStr(double a);
 
 	quint32 getBestSampleRate();
+
+	bool wrapMouse(QWidget *widget, QPoint &mousePos);
 }
 
 #endif
