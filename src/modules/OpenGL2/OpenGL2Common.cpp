@@ -19,10 +19,6 @@
 #include <QPainter>
 #include <QWidget>
 
-#if !defined OPENGL_ES2 && !defined Q_OS_MAC
-	#include <GL/glext.h>
-#endif
-
 #include <Vertices.hpp>
 #include <Shaders.hpp>
 

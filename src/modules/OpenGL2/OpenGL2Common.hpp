@@ -15,6 +15,10 @@
 #include <QImage>
 #include <QMutex>
 
+#if !defined OPENGL_ES2 && !defined Q_OS_MAC
+	#include <GL/glext.h>
+#endif
+
 class OpenGL2Common;
 class QMPlay2_OSD;
 class QMouseEvent;
