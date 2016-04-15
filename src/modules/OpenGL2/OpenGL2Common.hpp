@@ -130,7 +130,7 @@ public:
 	QImage osdImg;
 
 	/* Spherical view */
-	bool sphericalView, buttonPressed, hasVbo, mouseWrapped;
+	bool sphericalView, buttonPressed, hasVbo, mouseWrapped, canWrapMouse;
 	RotAnimation rotAnimation;
 	quint32 sphereVbo[3];
 	quint32 nIndices;

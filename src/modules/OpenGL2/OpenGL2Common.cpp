@@ -58,7 +58,7 @@ OpenGL2Common::OpenGL2Common() :
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0), doClear(0),
 	aspectRatio(0.0), zoom(0.0),
-	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false),
+	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
 	mouseTime(0.0)
 {
@@ -496,6 +496,10 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		case QEvent::Resize:
 			newSize(((QResizeEvent *)e)->size());
 			break;
+		case QEvent::TouchBegin:
+		case QEvent::TouchUpdate:
+			canWrapMouse = false;
+			break;
 		case QEvent::Gesture:
 			/* Pass gesture event to the parent */
 			QCoreApplication::sendEvent(p, e);
@@ -524,11 +528,6 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
 		mouseWrapped = false;
 	else if (buttonPressed && (e->buttons() & Qt::LeftButton))
 	{
-#if QT_VERSION >= 0x050300
-		const bool fromTouch = (e->source() != Qt::MouseEventNotSynthesized);
-#else
-		const bool fromTouch = false;
-#endif
 		const QPoint newMousePos = e->pos();
 		const QPointF mouseDiff = QPointF(mousePos - newMousePos) / 10.0;
 
@@ -544,8 +543,10 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
 		mouseTime = currTime;
 
 		mousePos = newMousePos;
-		if (!fromTouch)
+		if (canWrapMouse)
 			mouseWrapped = Functions::wrapMouse(widget(), mousePos);
+		else
+			canWrapMouse = true;
 
 		setMatrix = true;
 		updateGL(true);
