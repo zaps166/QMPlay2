@@ -147,6 +147,7 @@ private:
 	QList< QMPlay2Extensions * > visibleQMPlay2Extensions;
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
+	QWidget *lastFocusWidget;
 	bool isCompactView, wasShow, fullScreen;
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID

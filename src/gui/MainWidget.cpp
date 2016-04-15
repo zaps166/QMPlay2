@@ -91,6 +91,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 
 	settingsW = NULL;
 	aboutW = NULL;
+	lastFocusWidget = NULL;
 
 	isCompactView = wasShow = fullScreen = false;
 
@@ -542,6 +543,7 @@ void MainWidget::toggleVisibility()
 		else
 		{
 			menuBar->options->trayVisible->setEnabled(false);
+			lastFocusWidget = focusWidget(); //Hold the current focus widget, because hiding from Mate systray applet and Xfwm4 can change focus on Qt5...
 			hide();
 		}
 	}
@@ -1295,6 +1297,12 @@ void MainWidget::showEvent(QShowEvent *)
 		}
 #endif
 		wasShow = true;
+	}
+	else if (lastFocusWidget)
+	{
+		if (lastFocusWidget != focusWidget())
+			lastFocusWidget->setFocus();
+		lastFocusWidget = NULL;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));
 }
