@@ -11,6 +11,7 @@ extern "C"
 }
 
 #ifdef QMPLAY2_CPU_X86
+#ifdef QMPLAY2_CPU_X86_32 //Every x86-64 CPU has SSE2, so MMXEXT is unused there
 static void averageTwoLines_MMXEXT(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
 {
 	const int remaining = linesize % 8;
@@ -35,6 +36,7 @@ static void averageTwoLines_MMXEXT(quint8 *dest, const quint8 *src1, const quint
 	while (dest < dest_end)
 		*dest++ = (*(src1++) + *(src2++)) >> 1;
 }
+#endif // QMPLAY2_CPU_X86_32
 static void averageTwoLines_SSE2(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
 {
 	const int remaining = linesize % 16;
@@ -58,7 +60,7 @@ static void averageTwoLines_SSE2(quint8 *dest, const quint8 *src1, const quint8 
 	while (dest < dest_end)
 		*dest++ = (*(src1++) + *(src2++)) >> 1;
 }
-#endif
+#endif // QMPLAY2_CPU_X86
 static void averageTwoLines_C(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
 {
 	for (int i = 0; i < linesize; ++i)
@@ -104,9 +106,11 @@ void VideoFilters::init()
 	const int cpuFlags = av_get_cpu_flags();
 	if (cpuFlags & AV_CPU_FLAG_SSE2)
 		averageTwoLinesPtr = averageTwoLines_SSE2;
+#ifdef QMPLAY2_CPU_X86_32
 	else if (cpuFlags & AV_CPU_FLAG_MMXEXT)
 		averageTwoLinesPtr = averageTwoLines_MMXEXT;
-#endif
+#endif // QMPLAY2_CPU_X86_32
+#endif // QMPLAY2_CPU_X86
 }
 
 void VideoFilters::clear()
