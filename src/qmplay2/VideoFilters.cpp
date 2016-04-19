@@ -4,6 +4,7 @@
 #include <VideoFrame.hpp>
 #include <TimeStamp.hpp>
 #include <Module.hpp>
+#include <CPU.hpp>
 
 extern "C"
 {
@@ -20,10 +21,10 @@ static void averageTwoLines_MMXEXT(quint8 *dest, const quint8 *src1, const quint
 	{
 		asm volatile
 		(
-			"movq  %1,    %%mm0;"
-			"movq  %2,    %%mm1;"
-			"pavgb %%mm1, %%mm0;"
-			"movq  %%mm0, %0;"
+			"movq  %1,    %%mm0\n\t"
+			"movq  %2,    %%mm1\n\t"
+			"pavgb %%mm1, %%mm0\n\t"
+			"movq  %%mm0, %0\n\t"
 			:"=m"(*dest)
 			: "m"(*src1), "m"(*src2)
 		);
@@ -45,10 +46,10 @@ static void averageTwoLines_SSE2(quint8 *dest, const quint8 *src1, const quint8 
 	{
 		asm volatile
 		(
-			"movdqu %1,     %%xmm0;"
-			"movdqu %2,     %%xmm1;"
-			"pavgb  %%xmm1, %%xmm0;"
-			"movdqu %%xmm0, %0;"
+			"movdqu %1,     %%xmm0\n\t"
+			"movdqu %2,     %%xmm1\n\t"
+			"pavgb  %%xmm1, %%xmm0\n\t"
+			"movdqu %%xmm0, %0\n\t"
 			:"=m"(*dest)
 			: "m"(*src1), "m"(*src2)
 		);
