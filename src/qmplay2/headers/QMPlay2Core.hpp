@@ -1,7 +1,7 @@
 #ifndef QMPLAY2CORE_HPP
 #define QMPLAY2CORE_HPP
 
-#define QMPlay2Version "16.04.16"
+#define QMPlay2Version "16.04.19"
 
 #include <QAtomicInt>
 #include <QObject>

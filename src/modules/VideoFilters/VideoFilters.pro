@@ -25,5 +25,5 @@ RESOURCES += icons.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += VFilters.hpp BobDeint.hpp BlendDeint.hpp DiscardDeint.hpp MotionBlur.hpp
-SOURCES += VFilters.cpp BobDeint.cpp BlendDeint.cpp DiscardDeint.cpp MotionBlur.cpp
+HEADERS += VFilters.hpp BobDeint.hpp BlendDeint.hpp DiscardDeint.hpp MotionBlur.hpp YadifDeint.hpp
+SOURCES += VFilters.cpp BobDeint.cpp BlendDeint.cpp DiscardDeint.cpp MotionBlur.cpp YadifDeint.cpp

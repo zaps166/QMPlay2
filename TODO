@@ -10,7 +10,6 @@ Accurate seeking
 Video cropping
 
 Filters:
-	Video filters - YADIF
 	Add audio "Tempo" and LADSPA/LV2 filters
 
 HWAccel: DXVA2
