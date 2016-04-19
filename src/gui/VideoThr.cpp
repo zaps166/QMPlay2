@@ -465,7 +465,8 @@ void VideoThr::run()
 					{
 						if (delay > true_delay / 2.0)
 							delay /= 2.0;
-						--fast;
+						if (fast & 1)
+							--fast;
 					}
 					while (delay > 0.0 && !playC.paused && !br && !br2)
 					{
