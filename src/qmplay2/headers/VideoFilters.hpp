@@ -3,8 +3,6 @@
 
 #include <VideoFilter.hpp>
 
-#include <QDebug>
-
 #include <QWaitCondition>
 #include <QThread>
 #include <QVector>

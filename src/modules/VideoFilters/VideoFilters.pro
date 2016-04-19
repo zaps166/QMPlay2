@@ -14,6 +14,13 @@ else {
 	DESTDIR = ../../../app/share/qmplay2/modules
 	QMAKE_LIBDIR += ../../../app/lib
 }
+
+win32: LIBS += -lavutil
+else {
+	macx: QT_CONFIG -= no-pkg-config
+	CONFIG += link_pkgconfig
+	PKGCONFIG += libavutil
+}
 LIBS += -lqmplay2
 
 OBJECTS_DIR = build/obj

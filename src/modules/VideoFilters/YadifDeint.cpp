@@ -32,14 +32,17 @@ static inline int min3(int a, int b, int c)
 	return min(min(a, b), c);
 }
 
-static void (*filterLinePtr)(quint8 *, const void *const, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const qptrdiff, const qptrdiff, const bool);
+static void (*filterLinePtr)(quint8 *, const void *const,
+                             const quint8 *, const quint8 *, const quint8 *,
+                             const qptrdiff, const qptrdiff,
+                             const int, const bool);
 
 /* Yadif algo */
 
 template<int j>
 static inline void check(const quint8 *const curr,
-						 const int prefs, const int mrefs,
-						 int &spatialScore, int &spatialPred)
+                         const int prefs, const int mrefs,
+                         int &spatialScore, int &spatialPred)
 {
 	const int score = abs(curr[mrefs-1+j] - curr[prefs-1-j]) + abs(curr[mrefs+j] - curr[prefs-j]) + abs(curr[mrefs+1+j] - curr[prefs+1-j]);
 	if (score < spatialScore)
@@ -59,9 +62,12 @@ static inline void check(const quint8 *const curr,
 }
 template<bool isNotEdge>
 static inline void filterLine(quint8 *dest, const void *const destEnd,
-							  const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-							  const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
+                              const quint8 *prev, const quint8 *curr, const quint8 *next,
+                              const qptrdiff prefs, const qptrdiff mrefs,
+                              const int spatialCheck, const bool filterParity)
 {
+	const quint8 *prev2 = filterParity ? prev : curr;
+	const quint8 *next2 = filterParity ? curr : next;
 	while (dest != destEnd)
 	{
 		const int c = curr[mrefs];
@@ -108,8 +114,9 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 
 #ifdef QMPLAY2_CPU_X86
 static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
-							  const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-							  const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
+                              const quint8 *prev, const quint8 *curr, const quint8 *next,
+                              const qptrdiff prefs, const qptrdiff mrefs,
+                              const int spatialCheck, const bool filterParity)
 {
 	static const quint64 pw_1 = 0x0001000100010001ULL;
 	static const quint64 pb_1 = 0x0101010101010101ULL;
@@ -172,138 +179,142 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 		"por       %%mm5, %%mm3 \n\t"\
 		"movq      %%mm3, %%mm1 \n\t"
 
-	while (dest < destEnd)
-	{
-		asm volatile
-		(
-			"pxor      %%mm7, %%mm7 \n\t"
-			LOAD4("(%[curr],%[mrefs])", %%mm0)
-			LOAD4("(%[curr],%[prefs])", %%mm1)
-			LOAD4("(%[prev2])", %%mm2)
-			LOAD4("(%[next2])", %%mm3)
-			"movq      %%mm3, %%mm4 \n\t"
-			"paddw     %%mm2, %%mm3 \n\t"
-			"psraw     $1,    %%mm3 \n\t"
-			"movq      %%mm0, %[tmp0] \n\t"
-			"movq      %%mm3, %[tmp1] \n\t"
-			"movq      %%mm1, %[tmp2] \n\t"
-			"psubw     %%mm4, %%mm2 \n\t"
-			PABS(      %%mm4, %%mm2)
-			LOAD4("(%[prev],%[mrefs])", %%mm3)
-			LOAD4("(%[prev],%[prefs])", %%mm4)
-			"psubw     %%mm0, %%mm3 \n\t"
-			"psubw     %%mm1, %%mm4 \n\t"
-			PABS(      %%mm5, %%mm3)
-			PABS(      %%mm5, %%mm4)
-			"paddw     %%mm4, %%mm3 \n\t"
-			"psrlw     $1,    %%mm2 \n\t"
-			"psrlw     $1,    %%mm3 \n\t"
-			"pmaxsw    %%mm3, %%mm2 \n\t"
-			LOAD4("(%[next],%[mrefs])", %%mm3)
-			LOAD4("(%[next],%[prefs])", %%mm4)
-			"psubw     %%mm0, %%mm3 \n\t"
-			"psubw     %%mm1, %%mm4 \n\t"
-			PABS(      %%mm5, %%mm3)
-			PABS(      %%mm5, %%mm4)
-			"paddw     %%mm4, %%mm3 \n\t"
-			"psrlw     $1,    %%mm3 \n\t"
-			"pmaxsw    %%mm3, %%mm2 \n\t"
-			"movq      %%mm2, %[tmp3] \n\t"
+	#define FILTER(prev2, next2) \
+		while (dest < destEnd)\
+		{\
+			asm volatile\
+			(\
+				"pxor      %%mm7, %%mm7 \n\t"\
+				LOAD4("(%[curr],%[mrefs])", %%mm0)\
+				LOAD4("(%[curr],%[prefs])", %%mm1)\
+				LOAD4("(%["#prev2"])", %%mm2)\
+				LOAD4("(%["#next2"])", %%mm3)\
+				"movq      %%mm3, %%mm4 \n\t"\
+				"paddw     %%mm2, %%mm3 \n\t"\
+				"psraw     $1,    %%mm3 \n\t"\
+				"movq      %%mm0, %[tmp0] \n\t"\
+				"movq      %%mm3, %[tmp1] \n\t"\
+				"movq      %%mm1, %[tmp2] \n\t"\
+				"psubw     %%mm4, %%mm2 \n\t"\
+				PABS(      %%mm4, %%mm2)\
+				LOAD4("(%[prev],%[mrefs])", %%mm3)\
+				LOAD4("(%[prev],%[prefs])", %%mm4)\
+				"psubw     %%mm0, %%mm3 \n\t"\
+				"psubw     %%mm1, %%mm4 \n\t"\
+				PABS(      %%mm5, %%mm3)\
+				PABS(      %%mm5, %%mm4)\
+				"paddw     %%mm4, %%mm3 \n\t"\
+				"psrlw     $1,    %%mm2 \n\t"\
+				"psrlw     $1,    %%mm3 \n\t"\
+				"pmaxsw    %%mm3, %%mm2 \n\t"\
+				LOAD4("(%[next],%[mrefs])", %%mm3)\
+				LOAD4("(%[next],%[prefs])", %%mm4)\
+				"psubw     %%mm0, %%mm3 \n\t"\
+				"psubw     %%mm1, %%mm4 \n\t"\
+				PABS(      %%mm5, %%mm3)\
+				PABS(      %%mm5, %%mm4)\
+				"paddw     %%mm4, %%mm3 \n\t"\
+				"psrlw     $1,    %%mm3 \n\t"\
+				"pmaxsw    %%mm3, %%mm2 \n\t"\
+				"movq      %%mm2, %[tmp3] \n\t"\
+\
+				"paddw     %%mm0, %%mm1 \n\t"\
+				"paddw     %%mm0, %%mm0 \n\t"\
+				"psubw     %%mm1, %%mm0 \n\t"\
+				"psrlw     $1,    %%mm1 \n\t"\
+				PABS(      %%mm2, %%mm0)\
+\
+				"movq -1(%[curr],%[mrefs]), %%mm2 \n\t"\
+				"movq -1(%[curr],%[prefs]), %%mm3 \n\t"\
+				"movq      %%mm2, %%mm4 \n\t"\
+				"psubusb   %%mm3, %%mm2 \n\t"\
+				"psubusb   %%mm4, %%mm3 \n\t"\
+				"pmaxub    %%mm3, %%mm2 \n\t"\
+				"pshufw $9,%%mm2, %%mm3 \n\t"\
+				"punpcklbw %%mm7, %%mm2 \n\t"\
+				"punpcklbw %%mm7, %%mm3 \n\t"\
+				"paddw     %%mm2, %%mm0 \n\t"\
+				"paddw     %%mm3, %%mm0 \n\t"\
+				"psubw    %[pw1], %%mm0 \n\t"\
+\
+				CHECK(-2,0)\
+				CHECK1\
+				CHECK(-3,1)\
+				CHECK2\
+				CHECK(0,-2)\
+				CHECK1\
+				CHECK(1,-3)\
+				CHECK2\
+\
+				/* Spatial check */ \
+				"movq    %[tmp3], %%mm6 \n\t"\
+				"cmpl      $1, %[spatialCheck] \n\t"\
+				"jne       1f \n\t"\
+				LOAD4("(%["#prev2"],%[mrefs],2)", %%mm2)\
+				LOAD4("(%["#next2"],%[mrefs],2)", %%mm4)\
+				LOAD4("(%["#prev2"],%[prefs],2)", %%mm3)\
+				LOAD4("(%["#next2"],%[prefs],2)", %%mm5)\
+				"paddw     %%mm4, %%mm2 \n\t"\
+				"paddw     %%mm5, %%mm3 \n\t"\
+				"psrlw     $1,    %%mm2 \n\t"\
+				"psrlw     $1,    %%mm3 \n\t"\
+				"movq    %[tmp0], %%mm4 \n\t"\
+				"movq    %[tmp1], %%mm5 \n\t"\
+				"movq    %[tmp2], %%mm7 \n\t"\
+				"psubw     %%mm4, %%mm2 \n\t"\
+				"psubw     %%mm7, %%mm3 \n\t"\
+				"movq      %%mm5, %%mm0 \n\t"\
+				"psubw     %%mm4, %%mm5 \n\t"\
+				"psubw     %%mm7, %%mm0 \n\t"\
+				"movq      %%mm2, %%mm4 \n\t"\
+				"pminsw    %%mm3, %%mm2 \n\t"\
+				"pmaxsw    %%mm4, %%mm3 \n\t"\
+				"pmaxsw    %%mm5, %%mm2 \n\t"\
+				"pminsw    %%mm5, %%mm3 \n\t"\
+				"pmaxsw    %%mm0, %%mm2 \n\t"\
+				"pminsw    %%mm0, %%mm3 \n\t"\
+				"pxor      %%mm4, %%mm4 \n\t"\
+				"pmaxsw    %%mm3, %%mm6 \n\t"\
+				"psubw     %%mm2, %%mm4 \n\t"\
+				"pmaxsw    %%mm4, %%mm6 \n\t"\
+\
+				"1: \n\t"\
+				"movq    %[tmp1], %%mm2 \n\t"\
+				"movq      %%mm2, %%mm3 \n\t"\
+				"psubw     %%mm6, %%mm2 \n\t"\
+				"paddw     %%mm6, %%mm3 \n\t"\
+				"pmaxsw    %%mm2, %%mm1 \n\t"\
+				"pminsw    %%mm3, %%mm1 \n\t"\
+				"packuswb  %%mm1, %%mm1 \n\t"\
+\
+				"movd %%mm1, %[dest]"\
+\
+				:[tmp0]        "=m"(tmp0),\
+				 [tmp1]        "=m"(tmp1),\
+				 [tmp2]        "=m"(tmp2),\
+				 [tmp3]        "=m"(tmp3),\
+				 [dest]        "=m"(*dest)\
+				:[prev]         "r"(prev),\
+				 [curr]         "r"(curr),\
+				 [next]         "r"(next),\
+				 [prefs]        "r"(prefs),\
+				 [mrefs]        "r"(mrefs),\
+				 [pw1]          "m"(pw_1),\
+				 [pb1]          "m"(pb_1),\
+				 [spatialCheck] "g"(spatialCheck)\
+			);\
+			dest  += 4;\
+			prev  += 4;\
+			curr  += 4;\
+			next  += 4;\
+		}
 
-			"paddw     %%mm0, %%mm1 \n\t"
-			"paddw     %%mm0, %%mm0 \n\t"
-			"psubw     %%mm1, %%mm0 \n\t"
-			"psrlw     $1,    %%mm1 \n\t"
-			PABS(      %%mm2, %%mm0)
-
-			"movq -1(%[curr],%[mrefs]), %%mm2 \n\t"
-			"movq -1(%[curr],%[prefs]), %%mm3 \n\t"
-			"movq      %%mm2, %%mm4 \n\t"
-			"psubusb   %%mm3, %%mm2 \n\t"
-			"psubusb   %%mm4, %%mm3 \n\t"
-			"pmaxub    %%mm3, %%mm2 \n\t"
-			"pshufw $9,%%mm2, %%mm3 \n\t"
-			"punpcklbw %%mm7, %%mm2 \n\t"
-			"punpcklbw %%mm7, %%mm3 \n\t"
-			"paddw     %%mm2, %%mm0 \n\t"
-			"paddw     %%mm3, %%mm0 \n\t"
-			"psubw    %[pw1], %%mm0 \n\t"
-
-			CHECK(-2,0)
-			CHECK1
-			CHECK(-3,1)
-			CHECK2
-			CHECK(0,-2)
-			CHECK1
-			CHECK(1,-3)
-			CHECK2
-
-			"movq    %[tmp3], %%mm6 \n\t"
-			"cmpb      $1, %[spatialCheck] \n\t"
-			"jne       afterSpatialCheck \n\t"
-			LOAD4("(%[prev2],%[mrefs],2)", %%mm2)
-			LOAD4("(%[next2],%[mrefs],2)", %%mm4)
-			LOAD4("(%[prev2],%[prefs],2)", %%mm3)
-			LOAD4("(%[next2],%[prefs],2)", %%mm5)
-			"paddw     %%mm4, %%mm2 \n\t"
-			"paddw     %%mm5, %%mm3 \n\t"
-			"psrlw     $1,    %%mm2 \n\t"
-			"psrlw     $1,    %%mm3 \n\t"
-			"movq    %[tmp0], %%mm4 \n\t"
-			"movq    %[tmp1], %%mm5 \n\t"
-			"movq    %[tmp2], %%mm7 \n\t"
-			"psubw     %%mm4, %%mm2 \n\t"
-			"psubw     %%mm7, %%mm3 \n\t"
-			"movq      %%mm5, %%mm0 \n\t"
-			"psubw     %%mm4, %%mm5 \n\t"
-			"psubw     %%mm7, %%mm0 \n\t"
-			"movq      %%mm2, %%mm4 \n\t"
-			"pminsw    %%mm3, %%mm2 \n\t"
-			"pmaxsw    %%mm4, %%mm3 \n\t"
-			"pmaxsw    %%mm5, %%mm2 \n\t"
-			"pminsw    %%mm5, %%mm3 \n\t"
-			"pmaxsw    %%mm0, %%mm2 \n\t"
-			"pminsw    %%mm0, %%mm3 \n\t"
-			"pxor      %%mm4, %%mm4 \n\t"
-			"pmaxsw    %%mm3, %%mm6 \n\t"
-			"psubw     %%mm2, %%mm4 \n\t"
-			"pmaxsw    %%mm4, %%mm6 \n\t"
-
-			"afterSpatialCheck: \n\t"
-			"movq    %[tmp1], %%mm2 \n\t"
-			"movq      %%mm2, %%mm3 \n\t"
-			"psubw     %%mm6, %%mm2 \n\t"
-			"paddw     %%mm6, %%mm3 \n\t"
-			"pmaxsw    %%mm2, %%mm1 \n\t"
-			"pminsw    %%mm3, %%mm1 \n\t"
-			"packuswb  %%mm1, %%mm1 \n\t"
-
-			"movd %%mm1, %[dest]"
-
-			:[tmp0] "=m"(tmp0),
-			 [tmp1] "=m"(tmp1),
-			 [tmp2] "=m"(tmp2),
-			 [tmp3] "=m"(tmp3),
-			 [dest] "=m"(*dest)
-			:[prev]  "r"(prev),
-			 [curr]  "r"(curr),
-			 [next]  "r"(next),
-			 [prev2] "r"(prev2),
-			 [next2] "r"(next2),
-			 [prefs] "r"(prefs),
-			 [mrefs] "r"(mrefs),
-			 [pw1]   "m"(pw_1),
-			 [pb1]   "m"(pb_1),
-			 [spatialCheck] "g"(spatialCheck)
-		);
-		dest  += 4;
-		prev  += 4;
-		curr  += 4;
-		next  += 4;
-		prev2 += 4;
-		next2 += 4;
-	}
+	if (filterParity)
+		FILTER(prev, curr)
+	else
+		FILTER(curr, next)
 	asm volatile("emms");
+
 	#undef LOAD4
 	#undef PABS
 	#undef CHECK
@@ -313,15 +324,16 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 }
 #endif // QMPLAY2_CPU_X86
 static void filterLine_CPP(quint8 *dest, const void *const destEnd,
-						   const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-						   const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
+                           const quint8 *prev, const quint8 *curr, const quint8 *next,
+                           const qptrdiff prefs, const qptrdiff mrefs,
+                           const int spatialCheck, const bool filterParity)
 {
-	filterLine<true>(dest, destEnd, prev, curr, next, prev2, next2, prefs, mrefs, spatialCheck);
+	filterLine<true>(dest, destEnd, prev, curr, next, prefs, mrefs, spatialCheck, filterParity);
 }
 
 static void filterSlice(const int plane, const int w, const int h, const int parity, const int tff, const bool spatialCheck,
-						VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame,
-						const int jobId, const int jobsCount)
+                        VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame,
+                        const int jobId, const int jobsCount)
 {
 	const int sliceStart   = (h *  jobId   ) / jobsCount;
 	const int sliceEnd     = (h * (jobId+1)) / jobsCount;
@@ -342,8 +354,6 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 		{
 			const quint8 *prev  = &prevData[y * refs];
 			const quint8 *next  = &nextData[y * refs];
-			const quint8 *prev2 = filterParity ? prev : curr;
-			const quint8 *next2 = filterParity ? curr  : next;
 
 			const int prefs = (y + 1) < h ? refs : -refs;
 			const int mrefs = y ? -refs : refs;
@@ -357,11 +367,10 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 				prev,
 				curr,
 				next,
-				prev2,
-				next2,
 				prefs,
 				mrefs,
-				doSpatialCheck
+				doSpatialCheck,
+				filterParity
 			);
 			filterLinePtr
 			(
@@ -370,11 +379,10 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 				prev  + 3,
 				curr  + 3,
 				next  + 3,
-				prev2 + 3,
-				next2 + 3,
 				prefs,
 				mrefs,
-				doSpatialCheck
+				doSpatialCheck,
+				filterParity
 			);
 			filterLine<false>
 			(
@@ -383,11 +391,10 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 				prev  + w - 3,
 				curr  + w - 3,
 				next  + w - 3,
-				prev2 + w - 3,
-				next2 + w - 3,
 				prefs,
 				mrefs,
-				doSpatialCheck
+				doSpatialCheck,
+				filterParity
 			);
 		}
 		else
