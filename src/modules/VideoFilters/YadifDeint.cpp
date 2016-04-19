@@ -418,17 +418,15 @@ YadifThr::~YadifThr()
 
 void YadifThr::start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n)
 {
+	QMutexLocker locker(&mutex);
 	dest = &destFrame;
 	prev = &prevFrame;
 	curr = &currFrame;
 	next = &nextFrame;
 	jobId = id;
 	jobsCount = n;
-	{
-		QMutexLocker locker(&mutex);
-		hasNewData = true;
-		cond.wakeOne();
-	}
+	hasNewData = true;
+	cond.wakeOne();
 }
 void YadifThr::waitForFinished()
 {
@@ -441,33 +439,29 @@ void YadifThr::run()
 {
 	while (!br)
 	{
+		QMutexLocker locker(&mutex);
+		if (!hasNewData && !br)
+			cond.wait(&mutex);
+		if (!hasNewData || br)
+			continue;
+		const bool tff = yadifDeint.isTopFieldFirst(*curr);
+		for (int p = 0; p < 3; ++p)
 		{
-			QMutexLocker locker(&mutex);
-			if (!hasNewData && !br)
-				cond.wait(&mutex);
-			if (!hasNewData || br)
-				continue;
-			const bool tff = yadifDeint.isTopFieldFirst(*curr);
-			for (int p = 0; p < 3; ++p)
-			{
-				const int width  = yadifDeint.w / (p ? 2 : 1);
-				const int height = yadifDeint.h / (p ? 2 : 1);
-				filterSlice
-				(
-					p,
-					width, height,
-					yadifDeint.secondFrame == tff, tff,
-					yadifDeint.spatialCheck,
-					*dest, *prev, *curr, *next,
-					jobId, jobsCount
-				);
-			}
+			const int shift  = (p ? 1 : 0);
+			const int width  = yadifDeint.w >> shift;
+			const int height = yadifDeint.h >> shift;
+			filterSlice
+			(
+				p,
+				width, height,
+				yadifDeint.secondFrame == tff, tff,
+				yadifDeint.spatialCheck,
+				*dest, *prev, *curr, *next,
+				jobId, jobsCount
+			);
 		}
-		{
-			QMutexLocker locker(&mutex);
-			hasNewData = false;
-			cond.wakeOne();
-		}
+		hasNewData = false;
+		cond.wakeOne();
 	}
 }
 
