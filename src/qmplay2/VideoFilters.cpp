@@ -75,10 +75,10 @@ void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const
 class PrepareForHWBobDeint : public DeintFilter
 {
 public:
-	void filter(QQueue< FrameBuffer > &framesQueue)
+	bool filter(QQueue< FrameBuffer > &framesQueue)
 	{
 		int insertAt = addFramesToDeinterlace(framesQueue, false);
-		while (internalQueue.count() >= 2)
+		if (internalQueue.count() >= 2)
 		{
 			FrameBuffer dequeued = internalQueue.dequeue();
 			const bool TFF = isTopFieldFirst(dequeued.frame);
@@ -87,6 +87,7 @@ public:
 			dequeued.frame.tff = !TFF;
 			framesQueue.insert(insertAt++, FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0), dequeued)));
 		}
+		return internalQueue.count() >= 2;
 	}
 
 	bool processParams(bool *)
@@ -97,6 +98,102 @@ public:
 		return true;
 	}
 };
+
+/**/
+
+VideoFiltersThr::VideoFiltersThr(VideoFilters &videoFilters) :
+	videoFilters(videoFilters),
+	br(false), filtering(false)
+{
+	setObjectName("VideoFiltersThr");
+}
+
+void VideoFiltersThr::start()
+{
+	br = filtering = false;
+	QThread::start();
+}
+void VideoFiltersThr::stop()
+{
+	{
+		QMutexLocker locker(&mutex);
+		br = true;
+		cond.wakeOne();
+	}
+	wait();
+}
+
+void VideoFiltersThr::filterFrame(const VideoFilter::FrameBuffer &frame)
+{
+	QMutexLocker locker(&mutex);
+	frameToFilter = frame;
+	filtering = true;
+	cond.wakeOne();
+}
+
+void VideoFiltersThr::waitForFinished(bool waitForAllFrames)
+{
+	bufferMutex.lock();
+	while (filtering && !br)
+	{
+		if (!waitForAllFrames && !videoFilters.outputQueue.isEmpty())
+			break;
+		cond.wait(&bufferMutex);
+	}
+	if (waitForAllFrames)
+		bufferMutex.unlock();
+}
+
+void VideoFiltersThr::run()
+{
+	while (!br)
+	{
+		QMutexLocker locker(&mutex);
+
+		if (frameToFilter.frame.isEmpty() && !br)
+			cond.wait(&mutex);
+		if (frameToFilter.frame.isEmpty() || br)
+			continue;
+
+		QQueue<VideoFilter::FrameBuffer> queue;
+		queue.enqueue(frameToFilter);
+		frameToFilter.frame.clear();
+
+		bool pending = false;
+		do
+		{
+			foreach (VideoFilter *vFilter, videoFilters.filters)
+			{
+				pending |= vFilter->filter(queue);
+				if (queue.isEmpty())
+				{
+					pending = false;
+					break;
+				}
+			}
+
+			{
+				QMutexLocker locker(&bufferMutex);
+				if (!queue.isEmpty())
+				{
+					videoFilters.outputQueue.append(queue);
+					videoFilters.outputNotEmpty = true;
+					queue.clear();
+				}
+				if (!pending)
+					filtering = false;
+			}
+
+			cond.wakeOne();
+		} while (pending && !br);
+	}
+	if (br)
+	{
+		QMutexLocker locker(&bufferMutex);
+		filtering = false;
+		cond.wakeOne();
+	}
+}
 
 /**/
 
@@ -114,14 +211,19 @@ void VideoFilters::init()
 #endif // QMPLAY2_CPU_X86
 }
 
+void VideoFilters::start()
+{
+	if (!filters.isEmpty())
+		filtersThr.start();
+}
 void VideoFilters::clear()
 {
-	if (hasFilters)
+	if (!filters.isEmpty())
 	{
-		foreach (VideoFilter *vFilter, videoFilters)
+		filtersThr.stop();
+		foreach (VideoFilter *vFilter, filters)
 			delete vFilter;
-		videoFilters.clear();
-		hasFilters = false;
+		filters.clear();
 	}
 	clearBuffers();
 }
@@ -139,70 +241,74 @@ VideoFilter *VideoFilters::on(const QString &filterName)
 				break;
 			}
 	if (filter)
-	{
-		videoFilters.push_back(filter);
-		hasFilters = true;
-	}
+		filters.append(filter);
 	return filter;
 }
 void VideoFilters::off(VideoFilter *&videoFilter)
 {
-	const int idx = videoFilters.indexOf(videoFilter);
+	const int idx = filters.indexOf(videoFilter);
 	if (idx > -1)
 	{
-		videoFilters.remove(idx);
+		filters.remove(idx);
 		delete videoFilter;
 		videoFilter = NULL;
 	}
-	hasFilters = !videoFilters.isEmpty();
 }
 
 void VideoFilters::clearBuffers()
 {
-	if (hasFilters)
-		foreach (VideoFilter *vFilter, videoFilters)
+	if (!filters.isEmpty())
+	{
+		filtersThr.waitForFinished(true);
+		foreach (VideoFilter *vFilter, filters)
 			vFilter->clearBuffer();
+	}
 	outputQueue.clear();
 	outputNotEmpty = false;
 }
 void VideoFilters::removeLastFromInputBuffer()
 {
-	if (hasFilters)
-		for (int i = videoFilters.count() - 1; i >= 0; --i)
-			if (videoFilters[i]->removeLastFromInternalBuffer())
+	if (!filters.isEmpty())
+	{
+		filtersThr.waitForFinished(true);
+		for (int i = filters.count() - 1; i >= 0; --i)
+			if (filters[i]->removeLastFromInternalBuffer())
 				break;
+	}
 }
 
 void VideoFilters::addFrame(const VideoFrame &videoFrame, double ts)
 {
-	if (!hasFilters)
-	{
-		outputQueue.enqueue(VideoFilter::FrameBuffer(videoFrame, ts));
-		outputNotEmpty = true;
-	}
+	const VideoFilter::FrameBuffer frame(videoFrame, ts);
+	if (!filters.isEmpty())
+		filtersThr.filterFrame(frame);
 	else
 	{
-		QQueue< VideoFilter::FrameBuffer > tmpQueue;
-		tmpQueue.enqueue(VideoFilter::FrameBuffer(videoFrame, ts));
-		foreach (VideoFilter *vFilter, videoFilters)
-		{
-			vFilter->filter(tmpQueue);
-			if (tmpQueue.isEmpty())
-				break;
-		}
-		outputQueue += tmpQueue;
-		outputNotEmpty = !outputQueue.isEmpty();
+		outputQueue.enqueue(frame);
+		outputNotEmpty = true;
 	}
 }
 bool VideoFilters::getFrame(VideoFrame &videoFrame, TimeStamp &ts)
 {
-	if (!outputQueue.isEmpty())
+	bool locked, ret;
+	if ((locked = !filters.isEmpty()))
+		filtersThr.waitForFinished(false);
+	if ((ret = !outputQueue.isEmpty()))
 	{
 		videoFrame = outputQueue.at(0).frame;
 		ts = outputQueue.at(0).ts;
-		outputQueue.pop_front();
+		outputQueue.removeFirst();
 		outputNotEmpty = !outputQueue.isEmpty();
-		return true;
 	}
-	return false;
+	if (locked)
+		filtersThr.bufferMutex.unlock();
+	return ret;
+}
+
+bool VideoFilters::readyRead()
+{
+	filtersThr.waitForFinished(false);
+	const bool ret = outputNotEmpty;
+	filtersThr.bufferMutex.unlock();
+	return ret;
 }

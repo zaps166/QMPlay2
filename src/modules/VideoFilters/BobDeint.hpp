@@ -5,10 +5,11 @@ class BobDeint : public DeintFilter
 public:
 	BobDeint();
 
-	void filter(QQueue< FrameBuffer > &framesQueue);
+	bool filter(QQueue< FrameBuffer > &framesQueue);
 
 	bool processParams(bool *paramsCorrected);
 private:
+	bool secondFrame;
 	int w, h;
 };
 

@@ -7,10 +7,10 @@ DiscardDeint::DiscardDeint()
 	addParam("H");
 }
 
-void DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
-	while (!internalQueue.isEmpty())
+	if (!internalQueue.isEmpty())
 	{
 		FrameBuffer dequeued = internalQueue.dequeue();
 		VideoFrame &videoFrame = dequeued.frame;
@@ -41,6 +41,7 @@ void DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
 		}
 		framesQueue.insert(insertAt++, dequeued);
 	}
+	return !internalQueue.isEmpty();
 }
 
 bool DiscardDeint::processParams(bool *)

@@ -3,15 +3,50 @@
 
 #include <VideoFilter.hpp>
 
-#include <QByteArray>
-#include <QVector>
-#include <QQueue>
-#include <QPair>
+#include <QDebug>
 
+#include <QWaitCondition>
+#include <QThread>
+#include <QVector>
+#include <QMutex>
+#include <QQueue>
+
+class VideoFilters;
 class TimeStamp;
+
+class VideoFiltersThr : public QThread
+{
+public:
+	VideoFiltersThr(VideoFilters &videoFilters);
+	inline ~VideoFiltersThr()
+	{
+		stop();
+	}
+
+	void start();
+	void stop();
+
+	void filterFrame(const VideoFilter::FrameBuffer &frame);
+
+	void waitForFinished(bool waitForAllFrames);
+
+	QMutex bufferMutex;
+private:
+	void run();
+
+	VideoFilters &videoFilters;
+
+	bool br, filtering;
+
+	QWaitCondition cond;
+	QMutex mutex;
+
+	VideoFilter::FrameBuffer frameToFilter;
+};
 
 class VideoFilters
 {
+	friend class VideoFiltersThr;
 public:
 	static void init();
 
@@ -21,7 +56,7 @@ public:
 	}
 
 	inline VideoFilters() :
-		hasFilters(false),
+		filtersThr(*this),
 		outputNotEmpty(false)
 	{}
 	inline ~VideoFilters()
@@ -29,6 +64,7 @@ public:
 		clear();
 	}
 
+	void start();
 	void clear();
 
 	VideoFilter *on(const QString &filterName);
@@ -40,16 +76,14 @@ public:
 	void addFrame(const VideoFrame &videoFrame, double ts);
 	bool getFrame(VideoFrame &videoFrame, TimeStamp &ts);
 
-	inline bool readyToRead() const
-	{
-		return outputNotEmpty;
-	}
+	bool readyRead();
 private:
 	static void (*averageTwoLinesPtr)(quint8 *, const quint8 *, const quint8 *, int);
 
-	QQueue< VideoFilter::FrameBuffer > outputQueue;
-	QVector< VideoFilter * > videoFilters;
-	bool hasFilters, outputNotEmpty;
+	QQueue<VideoFilter::FrameBuffer> outputQueue;
+	QVector<VideoFilter *> filters;
+	VideoFiltersThr filtersThr;
+	bool outputNotEmpty;
 };
 
 #endif

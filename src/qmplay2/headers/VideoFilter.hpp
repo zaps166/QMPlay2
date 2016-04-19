@@ -12,6 +12,9 @@ public:
 	class FrameBuffer
 	{
 	public:
+		inline FrameBuffer() :
+			ts(0.0)
+		{}
 		inline FrameBuffer(const VideoFrame &frame, double ts) :
 			frame(frame),
 			ts(ts)
@@ -31,7 +34,7 @@ public:
 
 	bool removeLastFromInternalBuffer();
 
-	virtual void filter(QQueue< FrameBuffer > &framesQueue) = 0;
+	virtual bool filter(QQueue< FrameBuffer > &framesQueue) = 0;
 protected:
 	int addFramesToInternalQueue(QQueue< FrameBuffer > &framesQueue);
 

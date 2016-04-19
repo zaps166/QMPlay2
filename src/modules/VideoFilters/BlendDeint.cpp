@@ -7,7 +7,7 @@ BlendDeint::BlendDeint()
 	addParam("H");
 }
 
-void BlendDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool BlendDeint::filter(QQueue< FrameBuffer > &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
 	while (!internalQueue.isEmpty())
@@ -30,6 +30,7 @@ void BlendDeint::filter(QQueue< FrameBuffer > &framesQueue)
 		}
 		framesQueue.insert(insertAt++, dequeued);
 	}
+	return !internalQueue.isEmpty();
 }
 
 bool BlendDeint::processParams(bool *)

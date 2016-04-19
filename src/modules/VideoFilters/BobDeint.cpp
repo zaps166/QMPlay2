@@ -7,58 +7,63 @@ BobDeint::BobDeint()
 	addParam("H");
 }
 
-void BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
-	while (internalQueue.count() >= 2)
+	if (internalQueue.count() >= 2)
 	{
-		FrameBuffer dequeued = internalQueue.dequeue();
+		const FrameBuffer &sourceBuffer = internalQueue.at(0);
 
-		VideoFrame &videoFrame1 = dequeued.frame;
-		VideoFrame videoFrame2(h, (h + 1) >> 1, videoFrame1.linesize);
+		const VideoFrame &sourceFrame = sourceBuffer.frame;
+		VideoFrame destFrame(h, (h + 1) >> 1, sourceFrame.linesize);
+
+		const bool parity = (isTopFieldFirst(sourceFrame) == secondFrame);
 
 		for (int p = 0; p < 3; ++p)
 		{
-			const int linesize = videoFrame1.linesize[p];
-			const quint8 *src = videoFrame1.buffer[p].data() + linesize;
-			quint8 *dst1 = videoFrame1.buffer[p].data();
-			quint8 *dst2 = videoFrame2.buffer[p].data();
+			const int linesize = sourceFrame.linesize[p];
+			const quint8 *src = sourceFrame.buffer[p].data();
+			quint8 *dst = destFrame.buffer[p].data();
 
-			memcpy(dst2, src, linesize); //Copy second line into new frame (duplicate first line in new frame, simple deshake)
-			dst2 += linesize;
-
-			const int H = p ? h >> 2 : h >> 1;
-			for (int i = 0; i < H; ++i)
+			const int halfH = (p ? h >> 2 : h >> 1) - 1;
+			if (parity)
 			{
-				const bool notLast = i != H-1;
-
-				memcpy(dst2, src, linesize);
-				dst2 += linesize;
-				if (notLast)
-				{
-					VideoFilters::averageTwoLines(dst2, src, src + (linesize << 1), linesize);
-					dst2 += linesize;
-				}
-
-				dst1 += linesize;
-				if (notLast)
-					VideoFilters::averageTwoLines(dst1, src - linesize, src + linesize, linesize);
-				else
-					memcpy(dst1, src - linesize, linesize);
-				dst1 += linesize;
-
-				src  += linesize << 1;
+				src += linesize;
+				memcpy(dst, src, linesize); //Duplicate first line (simple deshake)
+				dst += linesize;
 			}
+			for (int y = 0; y < halfH; ++y)
+			{
+				memcpy(dst, src, linesize);
+				dst += linesize;
 
+				VideoFilters::averageTwoLines(dst, src, src + (linesize << 1), linesize);
+				dst += linesize;
+
+				src += linesize << 1;
+			}
+			memcpy(dst, src, linesize); //Copy last line
+			if (!parity)
+				memcpy(dst + linesize, dst, linesize);
 			if ((p ? (h >> 1) : h) & 1) //Duplicate last line for odd height
-				memcpy(dst2, dst2 - linesize, linesize);
+			{
+				if (!parity)
+					dst += linesize;
+				memcpy(dst + linesize, dst, linesize);
+			}
 		}
 
-		const bool TFF = isTopFieldFirst(videoFrame1);
-		videoFrame1.setNoInterlaced();
-		framesQueue.insert(insertAt++, FrameBuffer( TFF ? videoFrame1 : videoFrame2, dequeued.ts));
-		framesQueue.insert(insertAt++, FrameBuffer(!TFF ? videoFrame1 : videoFrame2, dequeued.ts + halfDelay(internalQueue.first(), dequeued)));
+		double ts = sourceBuffer.ts;
+		if (secondFrame)
+			ts += halfDelay(internalQueue.at(1), sourceBuffer);
+		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+
+		if (secondFrame)
+			internalQueue.removeFirst();
+		secondFrame = !secondFrame;
+
 	}
+	return internalQueue.count() >= 2;
 }
 
 bool BobDeint::processParams(bool *)
@@ -68,5 +73,6 @@ bool BobDeint::processParams(bool *)
 	deintFlags = getParam("DeinterlaceFlags").toInt();
 	if (w < 2 || h < 4 || !(deintFlags & DoubleFramerate))
 		return false;
+	secondFrame = false;
 	return true;
 }

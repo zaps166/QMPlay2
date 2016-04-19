@@ -32,7 +32,7 @@ static inline int min3(int a, int b, int c)
 	return min(min(a, b), c);
 }
 
-static void (*filterLinePtr)(quint8 *, const void *const, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const qintptr, const qintptr, const bool);
+static void (*filterLinePtr)(quint8 *, const void *const, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const quint8 *, const qptrdiff, const qptrdiff, const bool);
 
 /* Yadif algo */
 
@@ -60,7 +60,7 @@ static inline void check(const quint8 *const curr,
 template<bool isNotEdge>
 static inline void filterLine(quint8 *dest, const void *const destEnd,
 							  const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-							  const qintptr prefs, const qintptr mrefs, const bool spatialCheck)
+							  const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
 {
 	while (dest != destEnd)
 	{
@@ -109,7 +109,7 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 #ifdef QMPLAY2_CPU_X86
 static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 							  const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-							  const qintptr prefs, const qintptr mrefs, const bool spatialCheck)
+							  const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
 {
 	static const quint64 pw_1 = 0x0001000100010001ULL;
 	static const quint64 pb_1 = 0x0101010101010101ULL;
@@ -314,7 +314,7 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 #endif // QMPLAY2_CPU_X86
 static void filterLine_CPP(quint8 *dest, const void *const destEnd,
 						   const quint8 *prev, const quint8 *curr, const quint8 *next, const quint8 *prev2, const quint8 *next2,
-						   const qintptr prefs, const qintptr mrefs, const bool spatialCheck)
+						   const qptrdiff prefs, const qptrdiff mrefs, const bool spatialCheck)
 {
 	filterLine<true>(dest, destEnd, prev, curr, next, prev2, next2, prefs, mrefs, spatialCheck);
 }
@@ -401,9 +401,9 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 
 YadifThr::YadifThr(const YadifDeint &yadifDeint) :
 	yadifDeint(yadifDeint),
-	hasNewData(false),
-	br(false)
+	hasNewData(false), br(false)
 {
+	setObjectName("YadifThr");
 	QThread::start();
 }
 YadifThr::~YadifThr()
@@ -484,33 +484,33 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 	addParam("H");
 }
 
-void YadifDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool YadifDeint::filter(QQueue< FrameBuffer > &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
-	while (internalQueue.count() >= 3)
+	if (internalQueue.count() >= 3)
 	{
 		const FrameBuffer &prevBuffer = internalQueue.at(0);
 		const FrameBuffer &currBuffer = internalQueue.at(1);
 		const FrameBuffer &nextBuffer = internalQueue.at(2);
-		for (int f = 0; f <= doubler; ++f)
-		{
-			VideoFrame destFrame(h, (h + 1) >> 1, currBuffer.frame.linesize);
 
-			for (int i = 0; i < threads.count(); ++i)
-				threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threads.count());
-			for (int i = 0; i < threads.count(); ++i)
-				threads[i]->waitForFinished();
+		VideoFrame destFrame(h, (h + 1) >> 1, currBuffer.frame.linesize);
 
-			double ts = currBuffer.ts;
-			if (secondFrame)
-				ts += halfDelay(internalQueue.at(2), currBuffer);
-			framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+		for (int i = 0; i < threads.count(); ++i)
+			threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threads.count());
+		for (int i = 0; i < threads.count(); ++i)
+			threads[i]->waitForFinished();
 
-			if (doubler)
-				secondFrame = !secondFrame;
-		}
-		internalQueue.removeFirst();
+		double ts = currBuffer.ts;
+		if (secondFrame)
+			ts += halfDelay(internalQueue.at(2), currBuffer);
+		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+
+		if (secondFrame || !doubler)
+			internalQueue.removeFirst();
+		if (doubler)
+			secondFrame = !secondFrame;
 	}
+	return internalQueue.count() >= 3;
 }
 
 bool YadifDeint::processParams(bool *)

@@ -8,13 +8,13 @@ MotionBlur::MotionBlur()
 	addParam("H");
 }
 
-void MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
+bool MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
 {
 	int insertAt = addFramesToInternalQueue(framesQueue);
-	while (internalQueue.count() >= 2)
+	if (internalQueue.count() >= 2)
 	{
-		FrameBuffer dequeued = internalQueue.dequeue();
-		FrameBuffer lookup   = internalQueue.first();
+		FrameBuffer dequeued      = internalQueue.dequeue();
+		const FrameBuffer &lookup = internalQueue.at(0);
 
 		const VideoFrame &videoFrame1 = dequeued.frame;
 		VideoFrame videoFrame2(h, (h + 1) >> 1, videoFrame1.linesize);
@@ -39,6 +39,7 @@ void MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
 		framesQueue.insert(insertAt++, dequeued);
 		framesQueue.insert(insertAt++, FrameBuffer(videoFrame2, dequeued.ts + halfDelay(lookup, dequeued)));
 	}
+	return internalQueue.count() >= 2;
 }
 
 bool MotionBlur::processParams(bool *)

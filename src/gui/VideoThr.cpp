@@ -161,6 +161,8 @@ void VideoThr::initFilters(bool processParams)
 		if (writer && writer->hasParam("Deinterlace"))
 			writer->processParams();
 	}
+
+	filters.start();
 }
 
 bool VideoThr::processParams()
@@ -209,7 +211,7 @@ void VideoThr::run()
 			doScreenshot = false;
 		}
 
-		const bool mustFetchNewPacket = !filters.readyToRead();
+		const bool mustFetchNewPacket = !filters.readyRead();
 		playC.vPackets.lock();
 		const bool hasVPackets = playC.vPackets.canFetch();
 		if (maybeFlush)
@@ -342,7 +344,7 @@ void VideoThr::run()
 		if (!packet.isEmpty() || maybeFlush)
 		{
 			VideoFrame decoded;
-			const int bytes_consumed = dec->decodeVideo(packet, decoded, playC.flushVideo, skip ? ~0 : (fast > 1 ? fast - 1 : 0));
+			const int bytes_consumed = dec->decodeVideo(packet, decoded, playC.flushVideo, skip ? ~0 : (fast >> 1));
 			if (playC.flushVideo)
 			{
 				useLastDelay = true; //if seeking
@@ -432,7 +434,7 @@ void VideoThr::run()
 					if (diff < 0.0) //obraz się spóźnia
 					{
 						delay = 0.0;
-						if (fast > 3)
+						if (fast >= 7)
 							skip = true;
 					}
 					else if (diff > 0.0) //obraz idzie za szybko
@@ -456,9 +458,15 @@ void VideoThr::run()
 				if (frame_timer != -1.0)
 				{
 					const double delay_diff = gettime() - frame_timer;
+					delay -= delay_diff;
 					if (syncVtoA && true_delay > 0.0 && delay_diff > true_delay)
 						++fast;
-					delay -= delay_diff;
+					else if (fast && delay > 0.0)
+					{
+						if (delay > true_delay / 2.0)
+							delay /= 2.0;
+						--fast;
+					}
 					while (delay > 0.0 && !playC.paused && !br && !br2)
 					{
 						const double sleepTime = qMin(delay, 0.1);
