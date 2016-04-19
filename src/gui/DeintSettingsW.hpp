@@ -17,6 +17,7 @@ public:
 	void writeSettings();
 private slots:
 	void softwareMethods(bool doubler);
+	void setSoftwareMethodsToolTip(int idx);
 private:
 	QCheckBox *autoDeintB, *doublerB, *autoParityB;
 	QComboBox *softwareMethodsCB, *parityCB;

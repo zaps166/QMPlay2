@@ -51,6 +51,7 @@ DeintSettingsW::DeintSettingsW()
 	parityCB->addItems(QStringList() << "Bottom field first" << "Top field first");
 	parityCB->setCurrentIndex(QMPSettings.getBool("Deinterlace/TFF"));
 
+	connect(softwareMethodsCB, SIGNAL(currentIndexChanged(int)), this, SLOT(setSoftwareMethodsToolTip(int)));
 	softwareMethods(doublerB->isChecked());
 
 	QGridLayout *layout = new QGridLayout(this);
@@ -81,7 +82,12 @@ void DeintSettingsW::softwareMethods(bool doubler)
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if ((mod.type & 0xF) == Module::VIDEOFILTER && (mod.type & Module::DEINTERLACE) && (doubler == (bool)(mod.type & Module::DOUBLER)))
-				softwareMethodsCB->addItem(mod.name);
+				softwareMethodsCB->addItem(mod.name, mod.description);
 	const int idx = softwareMethodsCB->findText(QMPlay2Core.getSettings().getString("Deinterlace/SoftwareMethod"));
 	softwareMethodsCB->setCurrentIndex(idx < 0 ? 0 : idx);
+}
+void DeintSettingsW::setSoftwareMethodsToolTip(int idx)
+{
+	softwareMethodsCB->setToolTip(softwareMethodsCB->itemData(idx).toString());
+
 }
