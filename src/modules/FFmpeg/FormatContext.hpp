@@ -14,7 +14,7 @@ extern "C"
 	#include <libavformat/version.h>
 }
 
-#if LIBAVFORMAT_VERSION_MAJOR >= 56 && LIBAVFORMAT_VERSION_MINOR >= 36
+#if LIBAVFORMAT_VERSION_INT >= 0x382400 // >= 56.36.00
 	#define MP3_FAST_SEEK
 #endif
 

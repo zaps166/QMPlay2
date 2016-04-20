@@ -82,7 +82,7 @@ void DemuxerThr::loadImage()
 			emit QMPlay2Core.coverDataFromMediaFile(demuxerImage);
 		else
 		{
-			if (img.isNull() && url.startsWith("file://") && QMPlay2Core.getSettings().getBool("ShowDirCovers")) //Ładowanie okładki z katalogu
+			if (url.startsWith("file://") && QMPlay2Core.getSettings().getBool("ShowDirCovers")) //Ładowanie okładki z katalogu
 			{
 				const QString directory = Functions::filePath(url.mid(7));
 				foreach (const QString &cover, QDir(directory).entryList(QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files))
@@ -98,7 +98,7 @@ void DemuxerThr::loadImage()
 			}
 			if (img.isNull() && !artist.isEmpty() && (!title.isEmpty() || !album.isEmpty())) //Ładowanie okładki z cache
 			{
-				QString coverPath = getCoverFile(title, artist, album);
+				const QString coverPath = getCoverFile(title, artist, album);
 				img = QImage(coverPath);
 				if (!img.isNull())
 					emit QMPlay2Core.coverFile(coverPath);
@@ -503,7 +503,7 @@ void DemuxerThr::run()
 
 void DemuxerThr::updateCoverAndPlaying()
 {
-	foreach (const QMPlay2Tag &tag, demuxer->tags()) //wczytywanie tytuły, artysty i albumu
+	foreach (const QMPlay2Tag &tag, demuxer->tags()) //wczytywanie tytułu, artysty i albumu
 	{
 		const QMPlay2Tags tagID = StreamInfo::getTag(tag.first);
 		switch (tagID)

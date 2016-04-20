@@ -40,7 +40,7 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 			ddsd_test.ddpfPixelFormat.dwFourCC = MAKEFOURCC('Y', 'V', '1', '2');
 
 			/* Overlay YV12 test */
-			if (QSysInfo::windowsVersion() < QSysInfo::WV_6_2) //Windows 8 and 10 can't disable DWM, so overlay won't work
+			if (QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM, so overlay won't work
 			{
 				DDCAPS ddCaps = {sizeof ddCaps};
 				DDraw->GetCaps(&ddCaps, NULL);
