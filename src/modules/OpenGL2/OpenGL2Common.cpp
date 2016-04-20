@@ -247,6 +247,11 @@ void OpenGL2Common::paintGL()
 
 	if (!videoFrame.isEmpty())
 	{
+		const GLsizei widths[3] = {
+			outW,
+			outW >> 1,
+			outW >> 1
+		};
 		const GLsizei heights[3] = {
 			outH,
 			outH >> 1,
@@ -256,10 +261,13 @@ void OpenGL2Common::paintGL()
 		if (doReset)
 		{
 			/* Prepare textures */
-			for (qint32 i = 0; i < 3; ++i)
+			for (qint32 p = 0; p < 3; ++p)
 			{
-				glBindTexture(GL_TEXTURE_2D, i + 2);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[i], heights[i], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+				glBindTexture(GL_TEXTURE_2D, p + 2);
+				if (!sphericalView)
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+				else
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 			}
 
 			/* Prepare texture coordinates */
@@ -269,11 +277,21 @@ void OpenGL2Common::paintGL()
 		}
 
 		/* Load textures */
-		for (qint32 i = 0; i < 3; ++i)
+		for (qint32 p = 0; p < 3; ++p)
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, i + 2);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[i], heights[i], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[i].constData());
+			glActiveTexture(GL_TEXTURE0 + p);
+			glBindTexture(GL_TEXTURE_2D, p + 2);
+			if (!sphericalView || videoFrame.linesize[p] == widths[p])
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[p], heights[p], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[p].constData());
+			else
+			{
+				const quint8 *data = videoFrame.buffer[p].constData();
+				for (int y = 0; y < heights[p]; ++y)
+				{
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, widths[p], 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+					data += videoFrame.linesize[p];
+				}
+			}
 		}
 
 		videoFrame.clear();
