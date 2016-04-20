@@ -44,16 +44,14 @@ bool OpenGL2Window::setVSync(bool enable)
 		setFormat(fmt);
 		create();
 		setVisible(true);
+		OpenGL2Common::resetClearCounter();
 	}
 	vSync = enable;
 	return true;
 }
 void OpenGL2Window::updateGL(bool requestDelayed)
 {
-	if (requestDelayed)
-		QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, true));
-	else
-		doUpdateGL(false);
+	QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
 }
 
 void OpenGL2Window::initializeGL()
@@ -63,7 +61,7 @@ void OpenGL2Window::initializeGL()
 void OpenGL2Window::paintGL()
 {
 	if (doReset)
-		resetClearCounter();
+		OpenGL2Common::resetClearCounter();
 	if (doClear > 0)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -93,7 +91,7 @@ bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 	if (o == container)
 	{
 		if (e->type() == QEvent::Paint)
-			resetClearCounter();
+			OpenGL2Common::resetClearCounter();
 		else
 			dispatchEvent(e, container->parent());
 	}

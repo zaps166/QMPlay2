@@ -66,7 +66,7 @@ void OpenGL2OldWidget::initializeGL()
 void OpenGL2OldWidget::paintGL()
 {
 	if (doReset)
-		resetClearCounter();
+		OpenGL2Common::resetClearCounter();
 	if (doClear > 0)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -88,7 +88,7 @@ void OpenGL2OldWidget::resizeGL(int w, int h)
 bool OpenGL2OldWidget::event(QEvent *e)
 {
 	if (e->type() == QEvent::Paint)
-		resetClearCounter();
+		OpenGL2Common::resetClearCounter();
 	else
 		dispatchEvent(e, parent());
 	return QGLWidget::event(e);
