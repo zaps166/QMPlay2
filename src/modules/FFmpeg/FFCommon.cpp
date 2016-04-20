@@ -1,7 +1,7 @@
 #include <FFCommon.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <DeintFilter.hpp>
+#include <Version.hpp>
 
 extern "C"
 {

@@ -6,6 +6,7 @@
 #include <Functions.hpp>
 #include <VideoDock.hpp>
 #include <Settings.hpp>
+#include <Version.hpp>
 #include <Module.hpp>
 
 #include <QDesktopWidget>

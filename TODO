@@ -1,22 +1,27 @@
-Support for diplaying/filtering yuv422p, yuv444p, yuv411p, ...
-Use VDPAU and VA-API for software decoded video
-Open with QMPlay2 and Enqueue files - improve
+Support for diplaying/filtering all planar YUV formats
+HW and SW filters settings in the same place
+User can type any aspect ratio and zoom
 Handle auto channels/samplerate change
-Better handle video size change
+Improve handle video size change
+Improve opening enqueuing files
 Video preview on progress bar
-Better radio stations
+Improve radio stations
 YouTube playlists
+Add key bindings
 Accurate seeking
 Video cropping
 
-Filters:
-	Add audio "Tempo" and LADSPA/LV2 filters
+Audio filters:
+	- add LADSPA and LV2,
+	- add "Tempo".
 
-HWAccel: DXVA2
-Users can resume downloading
-Users can introduce aspect ratio and zoom
+HWAccel:
+	- use VDPAU and VA-API for software decoded video,
+	- use VDPAU and VA-API with OpenGL,
+	- add DXVA2.
 
-MIDI - ?
-MKV - ordered chapters - ?
-Touch screen support: scrolling - ?
 Exporting audio during playback - ?
+Touch screen support: scrolling - ?
+Users can resume downloading - ?
+MKV - ordered chapters - ?
+MIDI - ?

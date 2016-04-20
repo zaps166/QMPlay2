@@ -1,9 +1,10 @@
-Changes in QMPlay2 build 16.04.19:
+Changes in QMPlay2 build 16.04.20:
 	- added spherical view for video playback (Ctrl+3; OpenGL only),
 	- added Simplified Chinese translation (king Lee),
 	- move video filtering to separate thread,
 	- added Yadif deinterlacing filter,
 	- better frame skipping,
+	- bugfix,
 
 Changes in QMPlay2 build 16.03.24:
 	- XVideo SHM and OpenGL2(Qt >= 5.6) bugfix,
