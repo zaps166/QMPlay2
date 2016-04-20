@@ -322,7 +322,7 @@ void ResultsYoutube::copyPageURL()
 			tWI = tWI->parent();
 		QMimeData *mimeData = new QMimeData;
 		mimeData->setText(tWI->data(0, Qt::UserRole).toString());
-		qApp->clipboard()->setMimeData(mimeData);
+		QApplication::clipboard()->setMimeData(mimeData);
 	}
 }
 void ResultsYoutube::copyStreamURL()
@@ -332,7 +332,7 @@ void ResultsYoutube::copyStreamURL()
 	{
 		QMimeData *mimeData = new QMimeData;
 		mimeData->setText(streamUrl);
-		qApp->clipboard()->setMimeData(mimeData);
+		QApplication::clipboard()->setMimeData(mimeData);
 	}
 }
 

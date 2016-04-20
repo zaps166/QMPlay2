@@ -98,7 +98,7 @@ void Appearance::init()
 {
 	colorsDir = QMPlay2Core.getSettingsDir() + "Colors/";
 
-	systemPalette = qApp->palette();
+	systemPalette = QApplication::palette();
 	QDir dir(QMPlay2Core.getSettingsDir());
 	dir.mkdir("Colors");
 
@@ -182,9 +182,9 @@ void Appearance::init()
 }
 void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal)
 {
-	qApp->setPalette(pal);
+	QApplication::setPalette(pal);
 	QMPlay2GUI.mainW->setPalette(mainW_pal);
-	foreach (QWidget *w, qApp->allWidgets())
+	foreach (QWidget *w, QApplication::allWidgets())
 	{
 		QSlider *s = qobject_cast< QSlider * >(w);
 		if (s)
@@ -317,7 +317,7 @@ Appearance::Appearance(QWidget *p) :
 	int pos = schemesB->findText(QMPlay2Core.getSettings().getString("ColorScheme"));
 	if (pos >= 2)
 		schemesB->setCurrentIndex(pos);
-	else if (qApp->palette() == systemPalette && QMPlay2GUI.mainW->palette() == systemPalette && QMPlay2GUI.grad1 == DEFAULT_GRAD1 && QMPlay2GUI.grad2 == DEFAULT_GRAD2 && QMPlay2GUI.qmpTxt == DEFAULT_QMPTXT)
+	else if (QApplication::palette() == systemPalette && QMPlay2GUI.mainW->palette() == systemPalette && QMPlay2GUI.grad1 == DEFAULT_GRAD1 && QMPlay2GUI.grad2 == DEFAULT_GRAD2 && QMPlay2GUI.qmpTxt == DEFAULT_QMPTXT)
 		schemesB->setCurrentIndex(1);
 	else
 		loadCurrentPalette();
@@ -510,8 +510,8 @@ void Appearance::reloadSchemes()
 }
 void Appearance::loadCurrentPalette()
 {
-	QPalette currentPalette = qApp->palette(), sliderPalette, mainW_pal = QMPlay2GUI.mainW->palette();
-	foreach (QWidget *w, qApp->allWidgets())
+	QPalette currentPalette = QApplication::palette(), sliderPalette, mainW_pal = QMPlay2GUI.mainW->palette();
+	foreach (QWidget *w, QApplication::allWidgets())
 	{
 		QSlider *s = qobject_cast< QSlider * >(w);
 		if (s && s->isEnabled())

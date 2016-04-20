@@ -4,7 +4,6 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QTimer>
 
 #define VER 3
 
@@ -21,7 +20,7 @@ FileAssociation::FileAssociation() :
 	{
 		reallyFirsttime = contains("Ver");
 		set("Ver", VER);
-		QTimer::singleShot(0, this, SLOT(firsttime()));
+		QMetaObject::invokeMethod(this, "firsttime", Qt::QueuedConnection);
 	}
 }
 
@@ -204,7 +203,7 @@ void ModuleSettingsWidget::saveSettings()
 	RemoveQMPlay2Keys();
 	if (associateB->isChecked())
 	{
-		const QString QMPlay2Path = qApp->applicationFilePath().replace('/', '\\');
+		const QString QMPlay2Path = QCoreApplication::applicationFilePath().replace('/', '\\');
 		CreateQMPlay2Key("QMPlay2", QMPlay2Path, 1, tr("Enqueue in QMPlay2"));
 		CreateQMPlay2Key("QMPlay2Playlist", QMPlay2Path, 2, tr("Enqueue in QMPlay2"));
 		if (addDirB->isChecked())

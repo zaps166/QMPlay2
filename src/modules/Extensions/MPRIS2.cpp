@@ -54,7 +54,7 @@ bool MediaPlayer2Root::hasTrackList() const
 }
 QString MediaPlayer2Root::identity() const
 {
-	return qApp->applicationName();
+	return QCoreApplication::applicationName();
 }
 QStringList MediaPlayer2Root::supportedMimeTypes() const
 {

@@ -100,7 +100,7 @@ void AudioThr::silence(bool invert)
 			double lastDoSilence = doSilence;
 			for (int i = 0; i < 7; ++i)
 			{
-				qApp->processEvents();
+				QCoreApplication::processEvents();
 				if (playC.doSilenceBreak)
 				{
 					playC.doSilenceBreak = false;

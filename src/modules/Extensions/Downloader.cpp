@@ -528,7 +528,7 @@ void DownloaderW::clearFinished()
 void DownloaderW::addUrl()
 {
 	QString clipboardUrl;
-	const QMimeData *mime = qApp->clipboard()->mimeData();
+	const QMimeData *mime = QApplication::clipboard()->mimeData();
 	if (mime && mime->hasText())
 	{
 		clipboardUrl = mime->text();

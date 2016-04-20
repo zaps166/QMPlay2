@@ -28,8 +28,8 @@ UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :
 	pLW(pLW),
 	timeChanged(false)
 {
-	qRegisterMetaType< ItemUpdated >("ItemUpdated");
-	connect(this, SIGNAL(updateItem(const ItemUpdated &)), this, SLOT(updateItemSlot(const ItemUpdated &)));
+	qRegisterMetaType<ItemUpdated>("ItemUpdated");
+	qRegisterMetaType<QTreeWidgetItem *>("QTreeWidgetItem *");
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
 
@@ -97,7 +97,7 @@ void UpdateEntryThr::run()
 			timeChanged = true;
 		}
 
-		emit updateItem(iu);
+		QMetaObject::invokeMethod(this, "updateItem", Q_ARG(ItemUpdated, iu));
 	}
 }
 void UpdateEntryThr::stop()
@@ -112,7 +112,7 @@ void UpdateEntryThr::stop()
 	}
 }
 
-void UpdateEntryThr::updateItemSlot(const ItemUpdated &iu)
+void UpdateEntryThr::updateItem(const ItemUpdated &iu)
 {
 	if (!iu.img.isNull())
 		pLW.setEntryIcon(iu.img, iu.item);
@@ -397,12 +397,8 @@ PlaylistWidget::PlaylistWidget() :
 	currentPlaying = NULL;
 	selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
 
-	connect(this, SIGNAL(insertItem(QTreeWidgetItem *, QTreeWidgetItem *, bool)), this, SLOT(insertItemSlot(QTreeWidgetItem *, QTreeWidgetItem *, bool)));
-
-	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(modifyMenu()));
-
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
-	connect(this, SIGNAL(setItemIcon(QTreeWidgetItem *, const QImage &)), this, SLOT(setItemIconSlot(QTreeWidgetItem *, const QImage &)));
+	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(modifyMenu()));
 	connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animationUpdate()));
 	connect(&addTimer, SIGNAL(timeout()), this, SLOT(addTimerElapsed()));
 }
@@ -537,7 +533,7 @@ QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &ur
 	tWI->setText(0, name);
 	tWI->setData(0, Qt::UserRole, url);
 
-	emit insertItem(tWI, parent, insertChildAt0Idx);
+	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(bool, insertChildAt0Idx));
 	return tWI;
 }
 QTreeWidgetItem *PlaylistWidget::newGroup()
@@ -559,7 +555,7 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	tWI->setText(2, Functions::timeToStr(entry.length));
 	tWI->setData(2, Qt::UserRole, QString::number(entry.length));
 
-	emit insertItem(tWI, parent, false);
+	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(bool, false));
 	return tWI;
 }
 
@@ -700,10 +696,7 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 			img = img.scaledToHeight(IconSize, Qt::SmoothTransformation);
 		else if (img.width() > img.height() && img.width() > IconSize)
 			img = img.scaledToWidth(IconSize, Qt::SmoothTransformation);
-		if (tWI == currentPlaying)
-			emit setItemIcon(NULL, img); //currentPlayingItemIcon
-		else
-			emit setItemIcon(tWI, img);
+		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? NULL : tWI), Q_ARG(QImage, img));
 	}
 }
 
@@ -804,7 +797,7 @@ QRect PlaylistWidget::getArcRect(int size)
 	return QRect(QPoint(width() / 2 - size / 2, height() / 2 - size / 2), QSize(size, size));
 }
 
-void PlaylistWidget::insertItemSlot(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, bool insertChildAt0Idx)
+void PlaylistWidget::insertItem(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, bool insertChildAt0Idx)
 {
 	QTreeWidgetItem *cI = parent;
 	if (parent && !isGroup(parent))
@@ -833,7 +826,7 @@ void PlaylistWidget::popupContextMenu(const QPoint &p)
 {
 	playlistMenu()->popup(mapToGlobal(p));
 }
-void PlaylistWidget::setItemIconSlot(QTreeWidgetItem *tWI, const QImage &img)
+void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QImage &img)
 {
 	if (img.width() == IconSize && img.height() == IconSize)
 	{

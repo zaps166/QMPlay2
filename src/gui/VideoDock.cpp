@@ -64,7 +64,7 @@ VideoDock::VideoDock() :
 	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(&QMPlay2Core, SIGNAL(dockVideo(QWidget *)), &iDW, SLOT(setWidget(QWidget *)));
 
-	if ((isBreeze = qApp->style()->objectName() == "breeze"))
+	if ((isBreeze = QApplication::style()->objectName() == "breeze"))
 		setStyle(&commonStyle);
 }
 

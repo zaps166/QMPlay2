@@ -48,7 +48,7 @@
 			if (!wait(500))
 			{
 				QDialog d(QMPlay2GUI.mainW);
-				d.setWindowTitle(qApp->applicationName());
+				d.setWindowTitle(QCoreApplication::applicationName());
 				QLabel l(QObject::tr("Font cache is updating, please wait"));
 				QProgressBar p;
 				p.setRange(0, 0);
@@ -1022,7 +1022,7 @@ void PlayClass::demuxThrFinished()
 
 	if (quitApp)
 	{
-		qApp->processEvents();
+		QCoreApplication::processEvents();
 		emit quit();
 	}
 	else if (doSuspend)

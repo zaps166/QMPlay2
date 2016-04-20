@@ -328,7 +328,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 		updater.downloadUpdate();
 #endif
 #ifdef QT5_WINDOWS
-	qApp->installNativeEventFilter(this);
+	QCoreApplication::installNativeEventFilter(this);
 #endif
 }
 MainWidget::~MainWidget()
@@ -336,7 +336,7 @@ MainWidget::~MainWidget()
 	QMPlay2Extensions::closeExtensions();
 	emit QMPlay2Core.restoreCursor();
 	QMPlay2GUI.mainW = NULL;
-	qApp->quit();
+	QCoreApplication::quit();
 }
 
 void MainWidget::focusChanged(QWidget *old, QWidget *now)
@@ -406,7 +406,7 @@ void MainWidget::audioChannelsChanged()
 
 void MainWidget::updateWindowTitle(const QString &t)
 {
-	QString title = qApp->applicationName() + (t.isEmpty() ? QString() : " - " + t);
+	QString title = QCoreApplication::applicationName() + (t.isEmpty() ? QString() : " - " + t);
 	tray->setToolTip(title);
 	title.replace('\n', ' ');
 	setWindowTitle(title);
@@ -825,7 +825,7 @@ void MainWidget::toggleFullScreen()
 		else
 			setGeometry(savedGeo);
 #ifdef QT5_WINDOWS
-		qApp->processEvents();
+		QCoreApplication::processEvents();
 #endif
 		restoreState(dockWidgetState);
 		dockWidgetState.clear();
@@ -1069,7 +1069,7 @@ void MainWidget::uncheckSuspend()
 #ifdef QT5_WINDOWS
 void MainWidget::delayedRestore()
 {
-	qApp->processEvents();
+	QCoreApplication::processEvents();
 	restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
 }
 #endif
@@ -1208,7 +1208,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 void MainWidget::leaveEvent(QEvent *e)
 {
 	if (fullScreen)
-		QTimer::singleShot(0, this, SLOT(hideDocksSlot())); //Qt5 can't hide docks correctly here
+		QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); //Qt5 can't hide docks properly here
 	QMainWindow::leaveEvent(e);
 }
 void MainWidget::closeEvent(QCloseEvent *e)
@@ -1293,7 +1293,7 @@ void MainWidget::showEvent(QShowEvent *)
 		if (isMaximized())
 		{
 			//Qt5 can't properly restore docks state on Windows here when window is maximized
-			QTimer::singleShot(0, this, SLOT(delayedRestore()));
+			QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection);
 		}
 #endif
 		wasShow = true;

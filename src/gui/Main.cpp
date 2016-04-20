@@ -162,7 +162,7 @@ void QMPlay2GUIClass::setStyle()
 #if defined Q_OS_ANDROID
 	defaultStyle = "fusion"; //Android style is awful in Qt (tested on Qt 5.4 and Qt 5.5)
 #endif
-	qApp->setStyle(settings->get("Style", defaultStyle).toString());
+	QApplication::setStyle(settings->get("Style", defaultStyle).toString());
 }
 void QMPlay2GUIClass::loadIcons()
 {
@@ -194,7 +194,7 @@ void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const QSiz
 		w->setGeometry(geo);
 	else
 	{
-		w->move(qApp->desktop()->width()/2 - def_size.width()/2, qApp->desktop()->height()/2 - def_size.height()/2);
+		w->move(QApplication::desktop()->width()/2 - def_size.width()/2, QApplication::desktop()->height()/2 - def_size.height()/2);
 		w->resize(def_size);
 	}
 }
@@ -354,7 +354,7 @@ static void signal_handler(int s)
 #endif
 		case SIGINT:
 		{
-			QWidget *modalW = qApp->activeModalWidget();
+			QWidget *modalW = QApplication::activeModalWidget();
 			if (!modalW && QMPlay2GUI.mainW)
 			{
 				QMPlay2GUI.mainW->close();
@@ -425,9 +425,9 @@ int main(int argc, char *argv[])
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
-	qApp->setApplicationName("QMPlay2");
+	QCoreApplication::setApplicationName("QMPlay2");
 
-	QStringList arguments = qApp->arguments();
+	QStringList arguments = QCoreApplication::arguments();
 	arguments.removeAt(0);
 	const bool help = arguments.contains("--help") || arguments.contains("-h");
 	if (!help)
@@ -465,27 +465,27 @@ int main(int argc, char *argv[])
 
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
-	qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
-	QDir::setCurrent(qApp->applicationDirPath()); //Is it really needed?
+	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
 	translator = new QTranslator;
-	qApp->installTranslator(translator);
+	QCoreApplication::installTranslator(translator);
 	if (useGui)
-		qApp->setQuitOnLastWindowClosed(false);
-	QMPlay2GUI.langPath = qApp->applicationDirPath() + unixPath + "/lang/";
+		QApplication::setQuitOnLastWindowClosed(false);
+	QMPlay2GUI.langPath = QCoreApplication::applicationDirPath() + unixPath + "/lang/";
 
 	qsrand(time(NULL));
 
 	do
 	{
 		/* QMPlay2GUI musi być stworzone już wcześniej */
-		QMPlay2Core.init(!help, qApp->applicationDirPath() + unixPath);
+		QMPlay2Core.init(!help, QCoreApplication::applicationDirPath() + unixPath);
 
 		Settings &settings = QMPlay2Core.getSettings();
 		QString lastVer = settings.getString("Version", QMPlay2Version);
 		settings.set("Version", QMPlay2Version);
-		settings.set("LastQMPlay2Path", qApp->applicationDirPath());
+		settings.set("LastQMPlay2Path", QCoreApplication::applicationDirPath());
 
 		if (Functions::parseVersion(lastVer) < QDate(2015, 10, 9))
 		{
@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		qApp->setWindowIcon(QMPlay2Core.getQMPlay2Pixmap());
+		QApplication::setWindowIcon(QMPlay2Core.getQMPlay2Pixmap());
 		QMPlay2GUI.setStyle();
 
 #ifdef UPDATER
@@ -542,7 +542,7 @@ int main(int argc, char *argv[])
 			{
 				QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
 				QMPlay2Core.logInfo(updateString);
-				QMessageBox::information(NULL, qApp->applicationName(), updateString);
+				QMessageBox::information(NULL, QCoreApplication::applicationName(), updateString);
 			}
 			QFile::remove(UpdateFile);
 			settings.remove("UpdateFile");
@@ -560,7 +560,7 @@ int main(int argc, char *argv[])
 
 		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
 		new MainWidget(QMPArguments);
-		qApp->exec();
+		QCoreApplication::exec();
 
 		const QString settingsDir = QMPlay2Core.getSettingsDir();
 		QMPlay2Core.quit();

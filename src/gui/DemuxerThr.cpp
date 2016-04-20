@@ -65,9 +65,7 @@ DemuxerThr::DemuxerThr(PlayClass &playC) :
 	err(false), demuxerReady(false), hasCover(false),
 	skipBufferSeek(false), localStream(true), unknownLength(true),
 	updateBufferedTime(0.0)
-{
-	connect(this, SIGNAL(stopVADec()), this, SLOT(stopVADecSlot()));
-}
+{}
 
 QByteArray DemuxerThr::getCoverFromStream() const
 {
@@ -220,16 +218,16 @@ void DemuxerThr::end()
 	bool endMutexLocked = false;
 
 	stopVAMutex.lock();
-	if (currentThread() != qApp->thread())
+	if (currentThread() != thread())
 	{
 		endMutex.lock(); //Zablokuje główny wątek do czasu zniszczenia demuxer'a
 		endMutexLocked = true;
-		emit stopVADec(); //to wykonuje się w głównym wątku
+		QMetaObject::invokeMethod(this, "stopVADec"); //to wykonuje się w głównym wątku (Qt::QueuedConnection)
 		stopVAMutex.lock(); //i czeka na koniec wykonywania
 		stopVAMutex.unlock();
 	}
 	else //wywołane z głównego wątku
-		stopVADecSlot();
+		stopVADec();
 
 	demuxer.clear();
 
@@ -240,7 +238,7 @@ void DemuxerThr::end()
 bool DemuxerThr::load(bool canEmitInfo)
 {
 	playC.loadMutex.lock();
-	emit load(demuxer.rawPtr()); //to wykonuje się w głównym wątku
+	emit load(demuxer.rawPtr()); //to wykonuje się w głównym wątku (wywołuje load() z "playC")
 	playC.loadMutex.lock(); //i czeka na koniec wykonywania
 	playC.loadMutex.unlock();
 	if (canEmitInfo)
@@ -438,7 +436,7 @@ void DemuxerThr::run()
 			bool loadError = false, first = true;
 			while (!playC.fillBufferB)
 			{
-				qApp->processEvents();
+				QCoreApplication::processEvents();
 				if (mustReloadStreams() && !load())
 				{
 					loadError = true;
@@ -465,7 +463,7 @@ void DemuxerThr::run()
 		int streamIdx = -1;
 		if (demuxer->read(packet, streamIdx))
 		{
-			qApp->processEvents();
+			QCoreApplication::processEvents();
 
 			if (mustReloadStreams() && !load())
 				break;
@@ -845,7 +843,7 @@ double DemuxerThr::getFrameDelay() const
 	return 1.0 / demuxer->streamsInfo().at(playC.videoStream)->FPS;
 }
 
-void DemuxerThr::stopVADecSlot()
+void DemuxerThr::stopVADec()
 {
 	clearBuffers();
 

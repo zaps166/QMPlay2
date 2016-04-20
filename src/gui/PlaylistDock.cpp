@@ -376,15 +376,15 @@ void PlaylistDock::copy()
 	mimeData->setUrls(list->getUrls());
 	if (mimeData->urls().isEmpty())
 	{
-		qApp->clipboard()->clear();
+		QApplication::clipboard()->clear();
 		delete mimeData;
 		return;
 	}
-	qApp->clipboard()->setMimeData(mimeData);
+	QApplication::clipboard()->setMimeData(mimeData);
 }
 void PlaylistDock::paste()
 {
-	const QMimeData *mimeData = qApp->clipboard()->mimeData();
+	const QMimeData *mimeData = QApplication::clipboard()->mimeData();
 	if (chkMimeData(mimeData))
 		list->add(getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : NULL);
 }

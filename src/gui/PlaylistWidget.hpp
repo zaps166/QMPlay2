@@ -54,10 +54,8 @@ private:
 		int length;
 	};
 private slots:
-	void updateItemSlot(const ItemUpdated &iu);
-	void finished();
-signals:
 	void updateItem(const ItemUpdated &iu);
+	void finished();
 };
 
 class AddThr : public QThread
@@ -169,18 +167,16 @@ private:
 	bool repaintAll;
 	int rotation;
 private slots:
-	void insertItemSlot(QTreeWidgetItem *, QTreeWidgetItem *, bool);
+	void insertItem(QTreeWidgetItem *, QTreeWidgetItem *, bool);
 	void popupContextMenu(const QPoint &);
-	void setItemIconSlot(QTreeWidgetItem *, const QImage &);
+	void setItemIcon(QTreeWidgetItem *, const QImage &);
 	void animationUpdate();
 	void addTimerElapsed();
 public slots:
 	void modifyMenu();
 signals:
 	void returnItem(QTreeWidgetItem *);
-	void setItemIcon(QTreeWidgetItem *, const QImage &);
 	void visibleItemsCount(int);
-	void insertItem(QTreeWidgetItem *, QTreeWidgetItem *, bool);
 };
 
 #endif

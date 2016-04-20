@@ -203,13 +203,13 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 
 void QMPlay2CoreClass::restoreCursorSlot()
 {
-	qApp->restoreOverrideCursor();
+	QApplication::restoreOverrideCursor();
 }
 void QMPlay2CoreClass::waitCursorSlot()
 {
-	qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 void QMPlay2CoreClass::busyCursorSlot()
 {
-	qApp->setOverrideCursor(QCursor(Qt::BusyCursor));
+	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 }

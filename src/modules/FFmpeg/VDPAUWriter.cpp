@@ -633,7 +633,7 @@ void VDPAUWriter::resizeEvent(QResizeEvent *)
 	if (flip & Qt::Vertical)
 		qSwap(srcRect.y0, srcRect.y1);
 
-	const int desktopW = qApp->desktop()->width(), desktopH = qApp->desktop()->height();
+	const int desktopW = QApplication::desktop()->width(), desktopH = QApplication::desktop()->height();
 	QSize newOutputSurfacesSize(desktopW, desktopH);
 	if (desktopW > 0 && desktopH > 0)
 	{

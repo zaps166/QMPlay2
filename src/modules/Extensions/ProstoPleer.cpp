@@ -81,7 +81,7 @@ void ResultsPleer::copyPageURL()
 	{
 		QMimeData *mimeData = new QMimeData;
 		mimeData->setText(getPageUrl(tWI));
-		qApp->clipboard()->setMimeData(mimeData);
+		QApplication::clipboard()->setMimeData(mimeData);
 	}
 }
 

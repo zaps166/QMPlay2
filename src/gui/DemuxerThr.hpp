@@ -70,11 +70,10 @@ private:
 	QString title, artist, album;
 	double playIfBuffered, time, updateBufferedTime;
 private slots:
-	void stopVADecSlot();
+	void stopVADec();
 	void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
 signals:
 	void load(Demuxer *);
-	void stopVADec();
 };
 
 #endif //DEMUXERTHR_HPP

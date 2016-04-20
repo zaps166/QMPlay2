@@ -296,7 +296,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->styleL->setText(tr("Style") + ": ");
 	page1->styleBox = new QComboBox;
 	page1->styleBox->addItems(QStyleFactory::keys());
-	idx = page1->styleBox->findText(qApp->style()->objectName(), Qt::MatchFixedString);
+	idx = page1->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
 	if (idx > -1 && idx < page1->styleBox->count())
 		page1->styleBox->setCurrentIndex(idx);
 	connect(page1->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
@@ -827,7 +827,7 @@ void SettingsWidget::closeEvent(QCloseEvent *)
 void SettingsWidget::chStyle()
 {
 	QString newStyle = page1->styleBox->currentText().toLower();
-	if (qApp->style()->objectName() != newStyle)
+	if (QApplication::style()->objectName() != newStyle)
 	{
 		QMPlay2Core.getSettings().set("Style", newStyle);
 		QMPlay2GUI.setStyle();
