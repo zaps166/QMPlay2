@@ -61,6 +61,8 @@ static inline void check(const quint8 *const curr,
 			case +1:
 				check<+2>(curr, prefs, mrefs, spatialScore, spatialPred);
 				break;
+			default:
+				break;
 		}
 	}
 }
@@ -119,119 +121,119 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 #ifdef QMPLAY2_CPU_X86
 
 #define LOAD(mem,dst) \
-	_movh "    " mem  ", " dst " \n\t"\
-	"punpcklbw " mm(7)", " dst " \n\t"
+	_movh "    " mem  ", " dst "\n\t"\
+	"punpcklbw " mm(7)", " dst "\n\t"
 
 #define PABS(tmp,dst) \
-	"pxor    " tmp ", " tmp " \n\t"\
-	"psubw   " dst ", " tmp " \n\t"\
-	"pmaxsw  " tmp ", " dst " \n\t"
+	"pxor    " tmp ", " tmp "\n\t"\
+	"psubw   " dst ", " tmp "\n\t"\
+	"pmaxsw  " tmp ", " dst "\n\t"
 
 #define CHECK(pj,mj) \
-	_movu " "#pj"(%[curr],%[mrefs]), " mm(2)" \n\t"\
-	_movu " "#mj"(%[curr],%[prefs]), " mm(3)" \n\t"\
-	_mova "    " mm(2)", " mm(4)" \n\t"\
-	_mova "    " mm(2)", " mm(5)" \n\t"\
-	"pxor      " mm(3)", " mm(4)" \n\t"\
-	"pavgb     " mm(3)", " mm(5)" \n\t"\
-	"pand      %[pb1],   " mm(4)" \n\t"\
-	"psubusb   " mm(4)", " mm(5)" \n\t"\
+	_movu " "#pj"(%[curr],%[mrefs]), " mm(2)"\n\t"\
+	_movu " "#mj"(%[curr],%[prefs]), " mm(3)"\n\t"\
+	_mova "    " mm(2)", " mm(4)"\n\t"\
+	_mova "    " mm(2)", " mm(5)"\n\t"\
+	"pxor      " mm(3)", " mm(4)"\n\t"\
+	"pavgb     " mm(3)", " mm(5)"\n\t"\
+	"pand      %[pb1],   " mm(4)"\n\t"\
+	"psubusb   " mm(4)", " mm(5)"\n\t"\
 	RSHIFT(      1,        mm(5))\
-	"punpcklbw " mm(7)", " mm(5)" \n\t"\
-	_mova "    " mm(2)", " mm(4)" \n\t"\
-	"psubusb   " mm(3)", " mm(2)" \n\t"\
-	"psubusb   " mm(4)", " mm(3)" \n\t"\
-	"pmaxub    " mm(3)", " mm(2)" \n\t"\
-	_mova "    " mm(2)", " mm(3)" \n\t"\
-	_mova "    " mm(2)", " mm(4)" \n\t"\
+	"punpcklbw " mm(7)", " mm(5)"\n\t"\
+	_mova "    " mm(2)", " mm(4)"\n\t"\
+	"psubusb   " mm(3)", " mm(2)"\n\t"\
+	"psubusb   " mm(4)", " mm(3)"\n\t"\
+	"pmaxub    " mm(3)", " mm(2)"\n\t"\
+	_mova "    " mm(2)", " mm(3)"\n\t"\
+	_mova "    " mm(2)", " mm(4)"\n\t"\
 	RSHIFT(      1,        mm(3))\
 	RSHIFT(      2,        mm(4))\
-	"punpcklbw " mm(7)", " mm(2)" \n\t"\
-	"punpcklbw " mm(7)", " mm(3)" \n\t"\
-	"punpcklbw " mm(7)", " mm(4)" \n\t"\
-	"paddw     " mm(3)", " mm(2)" \n\t"\
-	"paddw     " mm(4)", " mm(2)" \n\t"
+	"punpcklbw " mm(7)", " mm(2)"\n\t"\
+	"punpcklbw " mm(7)", " mm(3)"\n\t"\
+	"punpcklbw " mm(7)", " mm(4)"\n\t"\
+	"paddw     " mm(3)", " mm(2)"\n\t"\
+	"paddw     " mm(4)", " mm(2)"\n\t"
 
 #define CHECK1 \
-	_mova "    " mm(0)", " mm(3)" \n\t"\
-	"pcmpgtw   " mm(2)", " mm(3)" \n\t"\
-	"pminsw    " mm(2)", " mm(0)" \n\t"\
-	_mova "    " mm(3)", " mm(6)" \n\t"\
-	"pand      " mm(3)", " mm(5)" \n\t"\
-	"pandn     " mm(1)", " mm(3)" \n\t"\
-	"por       " mm(5)", " mm(3)" \n\t"\
-	_mova "    " mm(3)", " mm(1)" \n\t"
+	_mova "    " mm(0)", " mm(3)"\n\t"\
+	"pcmpgtw   " mm(2)", " mm(3)"\n\t"\
+	"pminsw    " mm(2)", " mm(0)"\n\t"\
+	_mova "    " mm(3)", " mm(6)"\n\t"\
+	"pand      " mm(3)", " mm(5)"\n\t"\
+	"pandn     " mm(1)", " mm(3)"\n\t"\
+	"por       " mm(5)", " mm(3)"\n\t"\
+	_mova "    " mm(3)", " mm(1)"\n\t"
 
 /* pretend not to have checked dir=2 if dir=1 was bad. hurts both quality and speed, but matches the C version. */
 #define CHECK2 \
-	"paddw     %[pw1],   " mm(6)" \n\t"\
-	"psllw        $14,   " mm(6)" \n\t"\
-	"paddsw    " mm(6)", " mm(2)" \n\t"\
-	_mova "    " mm(0)", " mm(3)" \n\t"\
-	"pcmpgtw   " mm(2)", " mm(3)" \n\t"\
-	"pminsw    " mm(2)", " mm(0)" \n\t"\
-	"pand      " mm(3)", " mm(5)" \n\t"\
-	"pandn     " mm(1)", " mm(3)" \n\t"\
-	"por       " mm(5)", " mm(3)" \n\t"\
-	_mova "    " mm(3)", " mm(1)" \n\t"
+	"paddw     %[pw1],   " mm(6)"\n\t"\
+	"psllw        $14,   " mm(6)"\n\t"\
+	"paddsw    " mm(6)", " mm(2)"\n\t"\
+	_mova "    " mm(0)", " mm(3)"\n\t"\
+	"pcmpgtw   " mm(2)", " mm(3)"\n\t"\
+	"pminsw    " mm(2)", " mm(0)"\n\t"\
+	"pand      " mm(3)", " mm(5)"\n\t"\
+	"pandn     " mm(1)", " mm(3)"\n\t"\
+	"por       " mm(5)", " mm(3)"\n\t"\
+	_mova "    " mm(3)", " mm(1)"\n\t"
 
 #define FILTER(prev2, next2, alignment) \
 	while (dest < destEnd)\
 	{\
 		asm volatile\
 		(\
-			"pxor      " mm(7)", " mm(7)" \n\t"\
+			"pxor      " mm(7)", " mm(7)"\n\t"\
 			LOAD("(%[curr],%[mrefs])", mm(0))\
 			LOAD("(%[curr],%[prefs])", mm(1))\
 			LOAD("(%["#prev2"])",  mm(2))\
 			LOAD("(%["#next2"])",  mm(3))\
-			_mova "    " mm(3)", " mm(4)" \n\t"\
-			"paddw     " mm(2)", " mm(3)" \n\t"\
-			"psraw     $1,       " mm(3)" \n\t"\
-			_mova "    " mm(0)", %[tmp0] \n\t"\
-			_mova "    " mm(3)", %[tmp1] \n\t"\
-			_mova "    " mm(1)", %[tmp2] \n\t"\
-			"psubw     " mm(4)", " mm(2)" \n\t"\
+			_mova "    " mm(3)", " mm(4)"\n\t"\
+			"paddw     " mm(2)", " mm(3)"\n\t"\
+			"psraw     $1,       " mm(3)"\n\t"\
+			_mova "    " mm(0)", %[tmp0]\n\t"\
+			_mova "    " mm(3)", %[tmp1]\n\t"\
+			_mova "    " mm(1)", %[tmp2]\n\t"\
+			"psubw     " mm(4)", " mm(2)"\n\t"\
 			PABS(        mm(4),    mm(2))\
 			LOAD("(%[prev],%[mrefs])", mm(3))\
 			LOAD("(%[prev],%[prefs])", mm(4))\
-			"psubw     " mm(0)", " mm(3)" \n\t"\
-			"psubw     " mm(1)", " mm(4)" \n\t"\
+			"psubw     " mm(0)", " mm(3)"\n\t"\
+			"psubw     " mm(1)", " mm(4)"\n\t"\
 			PABS(        mm(5),    mm(3))\
 			PABS(        mm(5),    mm(4))\
-			"paddw     " mm(4)", " mm(3)" \n\t"\
-			"psrlw     $1,       " mm(2)" \n\t"\
-			"psrlw     $1,       " mm(3)" \n\t"\
-			"pmaxsw    " mm(3)", " mm(2)" \n\t"\
+			"paddw     " mm(4)", " mm(3)"\n\t"\
+			"psrlw     $1,       " mm(2)"\n\t"\
+			"psrlw     $1,       " mm(3)"\n\t"\
+			"pmaxsw    " mm(3)", " mm(2)"\n\t"\
 			LOAD("(%[next],%[mrefs])", mm(3))\
 			LOAD("(%[next],%[prefs])", mm(4))\
-			"psubw     " mm(0)", " mm(3)" \n\t"\
-			"psubw     " mm(1)", " mm(4)" \n\t"\
+			"psubw     " mm(0)", " mm(3)"\n\t"\
+			"psubw     " mm(1)", " mm(4)"\n\t"\
 			PABS(        mm(5),    mm(3))\
 			PABS(        mm(5),    mm(4))\
-			"paddw     " mm(4)", " mm(3)" \n\t"\
-			"psrlw     $1,       " mm(3)" \n\t"\
-			"pmaxsw    " mm(3)", " mm(2)" \n\t"\
-			_mova "    " mm(2)", %[tmp3] \n\t"\
+			"paddw     " mm(4)", " mm(3)"\n\t"\
+			"psrlw     $1,       " mm(3)"\n\t"\
+			"pmaxsw    " mm(3)", " mm(2)"\n\t"\
+			_mova "    " mm(2)", %[tmp3]\n\t"\
 \
-			"paddw     " mm(0)", " mm(1)" \n\t"\
-			"paddw     " mm(0)", " mm(0)" \n\t"\
-			"psubw     " mm(1)", " mm(0)" \n\t"\
-			"psrlw     $1,       " mm(1)" \n\t"\
+			"paddw     " mm(0)", " mm(1)"\n\t"\
+			"paddw     " mm(0)", " mm(0)"\n\t"\
+			"psubw     " mm(1)", " mm(0)"\n\t"\
+			"psrlw     $1,       " mm(1)"\n\t"\
 			PABS(        mm(2),    mm(0))\
 \
-			_movu " -1(%[curr],%[mrefs]), " mm(2)" \n\t"\
-			_movu " -1(%[curr],%[prefs]), " mm(3)" \n\t"\
-			_mova "             " mm(2)", " mm(4)" \n\t"\
-			"psubusb            " mm(3)", " mm(2)" \n\t"\
-			"psubusb            " mm(4)", " mm(3)" \n\t"\
-			"pmaxub             " mm(3)", " mm(2)" \n\t"\
+			_movu " -1(%[curr],%[mrefs]), " mm(2)"\n\t"\
+			_movu " -1(%[curr],%[prefs]), " mm(3)"\n\t"\
+			_mova "             " mm(2)", " mm(4)"\n\t"\
+			"psubusb            " mm(3)", " mm(2)"\n\t"\
+			"psubusb            " mm(4)", " mm(3)"\n\t"\
+			"pmaxub             " mm(3)", " mm(2)"\n\t"\
 			SH(                   mm(2),    mm(3))\
-			"punpcklbw          " mm(7)", " mm(2)" \n\t"\
-			"punpcklbw          " mm(7)", " mm(3)" \n\t"\
-			"paddw              " mm(2)", " mm(0)" \n\t"\
-			"paddw              " mm(3)", " mm(0)" \n\t"\
-			"psubw               %[pw1],  " mm(0)" \n\t"\
+			"punpcklbw          " mm(7)", " mm(2)"\n\t"\
+			"punpcklbw          " mm(7)", " mm(3)"\n\t"\
+			"paddw              " mm(2)", " mm(0)"\n\t"\
+			"paddw              " mm(3)", " mm(0)"\n\t"\
+			"psubw               %[pw1],  " mm(0)"\n\t"\
 \
 			CHECK(-2,0)\
 			CHECK1\
@@ -243,47 +245,47 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 			CHECK2\
 \
 			/* Spatial check */ \
-			_mova "    %[tmp3],  " mm(6)"  \n\t"\
-			"cmpl      $1, %[spatialCheck] \n\t"\
-			"jne       1f \n\t"\
+			_mova "    %[tmp3],  " mm(6)" \n\t"\
+			"cmpl      $1, %[spatialCheck]\n\t"\
+			"jne       1f\n\t"\
 			LOAD("(%["#prev2"],%[mrefs],2)", mm(2))\
 			LOAD("(%["#next2"],%[mrefs],2)", mm(4))\
 			LOAD("(%["#prev2"],%[prefs],2)", mm(3))\
 			LOAD("(%["#next2"],%[prefs],2)", mm(5))\
-			"paddw     " mm(4)", " mm(2)" \n\t"\
-			"paddw     " mm(5)", " mm(3)" \n\t"\
-			"psrlw     $1,       " mm(2)" \n\t"\
-			"psrlw     $1,       " mm(3)" \n\t"\
-			_mova "    %[tmp0],  " mm(4)" \n\t"\
-			_mova "    %[tmp1],  " mm(5)" \n\t"\
-			_mova "    %[tmp2],  " mm(7)" \n\t"\
-			"psubw     " mm(4)", " mm(2)" \n\t"\
-			"psubw     " mm(7)", " mm(3)" \n\t"\
-			_mova "    " mm(5)", " mm(0)" \n\t"\
-			"psubw     " mm(4)", " mm(5)" \n\t"\
-			"psubw     " mm(7)", " mm(0)" \n\t"\
-			_mova "    " mm(2)", " mm(4)" \n\t"\
-			"pminsw    " mm(3)", " mm(2)" \n\t"\
-			"pmaxsw    " mm(4)", " mm(3)" \n\t"\
-			"pmaxsw    " mm(5)", " mm(2)" \n\t"\
-			"pminsw    " mm(5)", " mm(3)" \n\t"\
-			"pmaxsw    " mm(0)", " mm(2)" \n\t"\
-			"pminsw    " mm(0)", " mm(3)" \n\t"\
-			"pxor      " mm(4)", " mm(4)" \n\t"\
-			"pmaxsw    " mm(3)", " mm(6)" \n\t"\
-			"psubw     " mm(2)", " mm(4)" \n\t"\
-			"pmaxsw    " mm(4)", " mm(6)" \n\t"\
+			"paddw     " mm(4)", " mm(2)"\n\t"\
+			"paddw     " mm(5)", " mm(3)"\n\t"\
+			"psrlw     $1,       " mm(2)"\n\t"\
+			"psrlw     $1,       " mm(3)"\n\t"\
+			_mova "    %[tmp0],  " mm(4)"\n\t"\
+			_mova "    %[tmp1],  " mm(5)"\n\t"\
+			_mova "    %[tmp2],  " mm(7)"\n\t"\
+			"psubw     " mm(4)", " mm(2)"\n\t"\
+			"psubw     " mm(7)", " mm(3)"\n\t"\
+			_mova "    " mm(5)", " mm(0)"\n\t"\
+			"psubw     " mm(4)", " mm(5)"\n\t"\
+			"psubw     " mm(7)", " mm(0)"\n\t"\
+			_mova "    " mm(2)", " mm(4)"\n\t"\
+			"pminsw    " mm(3)", " mm(2)"\n\t"\
+			"pmaxsw    " mm(4)", " mm(3)"\n\t"\
+			"pmaxsw    " mm(5)", " mm(2)"\n\t"\
+			"pminsw    " mm(5)", " mm(3)"\n\t"\
+			"pmaxsw    " mm(0)", " mm(2)"\n\t"\
+			"pminsw    " mm(0)", " mm(3)"\n\t"\
+			"pxor      " mm(4)", " mm(4)"\n\t"\
+			"pmaxsw    " mm(3)", " mm(6)"\n\t"\
+			"psubw     " mm(2)", " mm(4)"\n\t"\
+			"pmaxsw    " mm(4)", " mm(6)"\n\t"\
 \
-			"1: \n\t"\
-			_mova "    %[tmp1],  " mm(2)" \n\t"\
-			_mova "    " mm(2)", " mm(3)" \n\t"\
-			"psubw     " mm(6)", " mm(2)" \n\t"\
-			"paddw     " mm(6)", " mm(3)" \n\t"\
-			"pmaxsw    " mm(2)", " mm(1)" \n\t"\
-			"pminsw    " mm(3)", " mm(1)" \n\t"\
-			"packuswb  " mm(1)", " mm(1)" \n\t"\
+			"1:\n\t"\
+			_mova "    %[tmp1],  " mm(2)"\n\t"\
+			_mova "    " mm(2)", " mm(3)"\n\t"\
+			"psubw     " mm(6)", " mm(2)"\n\t"\
+			"paddw     " mm(6)", " mm(3)"\n\t"\
+			"pmaxsw    " mm(2)", " mm(1)"\n\t"\
+			"pminsw    " mm(3)", " mm(1)"\n\t"\
+			"packuswb  " mm(1)", " mm(1)"\n\t"\
 \
-			_movh "    " mm(1)",  %[dest] \n\t"\
+			_movh "    " mm(1)",  %[dest]\n\t"\
 \
 			:[tmp0]        "=m"(tmp0),\
 			 [tmp1]        "=m"(tmp1),\
@@ -311,8 +313,8 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
                               const qptrdiff prefs, const qptrdiff mrefs,
                               const int spatialCheck, const bool filterParity)
 {
-	static const quint64 pw_1(0x0001000100010001ULL);
-	static const quint64 pb_1(0x0101010101010101ULL);
+	const quint64 pw_1(0x0001000100010001ULL);
+	const quint64 pb_1(0x0101010101010101ULL);
 	quint64 tmp0, tmp1, tmp2, tmp3;
 
 	#define _mova  "movq"
@@ -321,10 +323,10 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 	#define  mm(n) "%%mm"#n
 
 	#define RSHIFT(val,dst) \
-		"psrlq   $"#val"*8, " dst" \n\t"
+		"psrlq   $"#val"*8, " dst"\n\t"
 
-	#define SH(r1, r2) \
-		"pshufw $9, "  r1", " r2" \n\t"
+	#define SH(src,dst) \
+		"pshufw $9, " src", " dst"\n\t"
 
 	if (filterParity)
 		FILTER(prev, curr, 4)
@@ -340,21 +342,21 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 	#undef _movu
 	#undef _mova
 }
-#endif
+#endif // QMPLAY2_CPU_X86_32
 static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
                             const quint8 *prev, const quint8 *curr, const quint8 *next,
                             const qptrdiff prefs, const qptrdiff mrefs,
                             const int spatialCheck, const bool filterParity)
 {
-	struct b128
+	struct u128
 	{
-		inline b128() {}
-		inline b128(quint64 v) : lo(v), hi(v) {}
+		inline u128() {}
+		inline u128(quint64 v) : lo(v), hi(v) {}
 		quint64 lo, hi;
 	};
-	static const b128 pw_1(0x0001000100010001ULL);
-	static const b128 pb_1(0x0101010101010101ULL);
-	b128 tmp0, tmp1, tmp2, tmp3;
+	const u128 pw_1(0x0001000100010001ULL);
+	const u128 pb_1(0x0101010101010101ULL);
+	u128 tmp0, tmp1, tmp2, tmp3;
 
 	#define _mova  "movdqa"
 	#define _movu  "movdqu"
@@ -362,11 +364,11 @@ static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
 	#define  mm(n) "%%xmm"#n
 
 	#define RSHIFT(val,dst) \
-		"psrldq   $"#val", " dst" \n\t"
+		"psrldq   $"#val", " dst"\n\t"
 
-	#define SH(r1, r2) \
-		_mova " " r1", " r2" \n\t"\
-		"psrldq   $2,  " r2" \n\t"
+	#define SH(src,dst) \
+		_mova " " src",    " dst"\n\t"\
+		"psrldq   $2,      " dst"\n\t"
 
 	if (filterParity)
 		FILTER(prev, curr, 8)
@@ -575,8 +577,8 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 			filterLinePtr = filterLine_MMXEXT;
 			alignment = 4;
 		}
-#endif
-#endif
+#endif // QMPLAY2_CPU_X86_32
+#endif // QMPLAY2_CPU_X86
 	}
 	addParam("W");
 	addParam("H");

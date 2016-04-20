@@ -17,9 +17,9 @@ QList< VFilters::Info > VFilters::getModulesInfo(const bool) const
 	modulesInfo += Info(BobDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER);
 	modulesInfo += Info(Yadif2xDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER, YadifDescr);
 	modulesInfo += Info(Yadif2xNoSpatialDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER, YadifDescr);
+	modulesInfo += Info(YadifDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
 	modulesInfo += Info(BlendDeintName, VIDEOFILTER | DEINTERLACE);
 	modulesInfo += Info(DiscardDeintName, VIDEOFILTER | DEINTERLACE);
-	modulesInfo += Info(YadifDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
 	modulesInfo += Info(YadifNoSpatialDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
 	modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produces one extra frame which is average of two neighbour frames"));
 	return modulesInfo;
