@@ -2,8 +2,11 @@
  * This is the C++/Qt port of the Yadif deinterlacing filter from FFmpeg (libavfilter/vf_yadif.c)
  * Copyright (C) 2006-2011 Michael Niedermayer <michaelni@gmx.at>
  *
- * The Yadif MMXEXT implementation is taken from MPlayer project (libmpcodecs/vf_yadif.c)
- * Copyright (C) 2006 Michael Niedermayer <michaelni@gmx.at>
+ * The Yadif x86 SIMD implementation is taken from:
+ *   - FFmpeg project (libavfilter/x86/vf_yadif.asm)
+ *     Copyright (C) 2006-2011 Michael Niedermayer <michaelni@gmx.at>
+ *   - MPlayer project (libmpcodecs/vf_yadif.c)
+ *     Copyright (C) 2006 Michael Niedermayer <michaelni@gmx.at>
 */
 
 #include <YadifDeint.hpp>
@@ -36,6 +39,7 @@ static void (*filterLinePtr)(quint8 *, const void *const,
                              const quint8 *, const quint8 *, const quint8 *,
                              const qptrdiff, const qptrdiff,
                              const int, const bool);
+static int alignment;
 
 /* Yadif algo */
 
@@ -113,215 +117,277 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 }
 
 #ifdef QMPLAY2_CPU_X86
+
+#define LOAD(mem,dst) \
+	_movh "    " mem  ", " dst " \n\t"\
+	"punpcklbw " mm(7)", " dst " \n\t"
+
+#define PABS(tmp,dst) \
+	"pxor    " tmp ", " tmp " \n\t"\
+	"psubw   " dst ", " tmp " \n\t"\
+	"pmaxsw  " tmp ", " dst " \n\t"
+
+#define CHECK(pj,mj) \
+	_movu " "#pj"(%[curr],%[mrefs]), " mm(2)" \n\t"\
+	_movu " "#mj"(%[curr],%[prefs]), " mm(3)" \n\t"\
+	_mova "    " mm(2)", " mm(4)" \n\t"\
+	_mova "    " mm(2)", " mm(5)" \n\t"\
+	"pxor      " mm(3)", " mm(4)" \n\t"\
+	"pavgb     " mm(3)", " mm(5)" \n\t"\
+	"pand      %[pb1],   " mm(4)" \n\t"\
+	"psubusb   " mm(4)", " mm(5)" \n\t"\
+	RSHIFT(      1,        mm(5))\
+	"punpcklbw " mm(7)", " mm(5)" \n\t"\
+	_mova "    " mm(2)", " mm(4)" \n\t"\
+	"psubusb   " mm(3)", " mm(2)" \n\t"\
+	"psubusb   " mm(4)", " mm(3)" \n\t"\
+	"pmaxub    " mm(3)", " mm(2)" \n\t"\
+	_mova "    " mm(2)", " mm(3)" \n\t"\
+	_mova "    " mm(2)", " mm(4)" \n\t"\
+	RSHIFT(      1,        mm(3))\
+	RSHIFT(      2,        mm(4))\
+	"punpcklbw " mm(7)", " mm(2)" \n\t"\
+	"punpcklbw " mm(7)", " mm(3)" \n\t"\
+	"punpcklbw " mm(7)", " mm(4)" \n\t"\
+	"paddw     " mm(3)", " mm(2)" \n\t"\
+	"paddw     " mm(4)", " mm(2)" \n\t"
+
+#define CHECK1 \
+	_mova "    " mm(0)", " mm(3)" \n\t"\
+	"pcmpgtw   " mm(2)", " mm(3)" \n\t"\
+	"pminsw    " mm(2)", " mm(0)" \n\t"\
+	_mova "    " mm(3)", " mm(6)" \n\t"\
+	"pand      " mm(3)", " mm(5)" \n\t"\
+	"pandn     " mm(1)", " mm(3)" \n\t"\
+	"por       " mm(5)", " mm(3)" \n\t"\
+	_mova "    " mm(3)", " mm(1)" \n\t"
+
+/* pretend not to have checked dir=2 if dir=1 was bad. hurts both quality and speed, but matches the C version. */
+#define CHECK2 \
+	"paddw     %[pw1],   " mm(6)" \n\t"\
+	"psllw        $14,   " mm(6)" \n\t"\
+	"paddsw    " mm(6)", " mm(2)" \n\t"\
+	_mova "    " mm(0)", " mm(3)" \n\t"\
+	"pcmpgtw   " mm(2)", " mm(3)" \n\t"\
+	"pminsw    " mm(2)", " mm(0)" \n\t"\
+	"pand      " mm(3)", " mm(5)" \n\t"\
+	"pandn     " mm(1)", " mm(3)" \n\t"\
+	"por       " mm(5)", " mm(3)" \n\t"\
+	_mova "    " mm(3)", " mm(1)" \n\t"
+
+#define FILTER(prev2, next2, alignment) \
+	while (dest < destEnd)\
+	{\
+		asm volatile\
+		(\
+			"pxor      " mm(7)", " mm(7)" \n\t"\
+			LOAD("(%[curr],%[mrefs])", mm(0))\
+			LOAD("(%[curr],%[prefs])", mm(1))\
+			LOAD("(%["#prev2"])",  mm(2))\
+			LOAD("(%["#next2"])",  mm(3))\
+			_mova "    " mm(3)", " mm(4)" \n\t"\
+			"paddw     " mm(2)", " mm(3)" \n\t"\
+			"psraw     $1,       " mm(3)" \n\t"\
+			_mova "    " mm(0)", %[tmp0] \n\t"\
+			_mova "    " mm(3)", %[tmp1] \n\t"\
+			_mova "    " mm(1)", %[tmp2] \n\t"\
+			"psubw     " mm(4)", " mm(2)" \n\t"\
+			PABS(        mm(4),    mm(2))\
+			LOAD("(%[prev],%[mrefs])", mm(3))\
+			LOAD("(%[prev],%[prefs])", mm(4))\
+			"psubw     " mm(0)", " mm(3)" \n\t"\
+			"psubw     " mm(1)", " mm(4)" \n\t"\
+			PABS(        mm(5),    mm(3))\
+			PABS(        mm(5),    mm(4))\
+			"paddw     " mm(4)", " mm(3)" \n\t"\
+			"psrlw     $1,       " mm(2)" \n\t"\
+			"psrlw     $1,       " mm(3)" \n\t"\
+			"pmaxsw    " mm(3)", " mm(2)" \n\t"\
+			LOAD("(%[next],%[mrefs])", mm(3))\
+			LOAD("(%[next],%[prefs])", mm(4))\
+			"psubw     " mm(0)", " mm(3)" \n\t"\
+			"psubw     " mm(1)", " mm(4)" \n\t"\
+			PABS(        mm(5),    mm(3))\
+			PABS(        mm(5),    mm(4))\
+			"paddw     " mm(4)", " mm(3)" \n\t"\
+			"psrlw     $1,       " mm(3)" \n\t"\
+			"pmaxsw    " mm(3)", " mm(2)" \n\t"\
+			_mova "    " mm(2)", %[tmp3] \n\t"\
+\
+			"paddw     " mm(0)", " mm(1)" \n\t"\
+			"paddw     " mm(0)", " mm(0)" \n\t"\
+			"psubw     " mm(1)", " mm(0)" \n\t"\
+			"psrlw     $1,       " mm(1)" \n\t"\
+			PABS(        mm(2),    mm(0))\
+\
+			_movu " -1(%[curr],%[mrefs]), " mm(2)" \n\t"\
+			_movu " -1(%[curr],%[prefs]), " mm(3)" \n\t"\
+			_mova "             " mm(2)", " mm(4)" \n\t"\
+			"psubusb            " mm(3)", " mm(2)" \n\t"\
+			"psubusb            " mm(4)", " mm(3)" \n\t"\
+			"pmaxub             " mm(3)", " mm(2)" \n\t"\
+			SH(                   mm(2),    mm(3))\
+			"punpcklbw          " mm(7)", " mm(2)" \n\t"\
+			"punpcklbw          " mm(7)", " mm(3)" \n\t"\
+			"paddw              " mm(2)", " mm(0)" \n\t"\
+			"paddw              " mm(3)", " mm(0)" \n\t"\
+			"psubw               %[pw1],  " mm(0)" \n\t"\
+\
+			CHECK(-2,0)\
+			CHECK1\
+			CHECK(-3,1)\
+			CHECK2\
+			CHECK(0,-2)\
+			CHECK1\
+			CHECK(1,-3)\
+			CHECK2\
+\
+			/* Spatial check */ \
+			_mova "    %[tmp3],  " mm(6)"  \n\t"\
+			"cmpl      $1, %[spatialCheck] \n\t"\
+			"jne       1f \n\t"\
+			LOAD("(%["#prev2"],%[mrefs],2)", mm(2))\
+			LOAD("(%["#next2"],%[mrefs],2)", mm(4))\
+			LOAD("(%["#prev2"],%[prefs],2)", mm(3))\
+			LOAD("(%["#next2"],%[prefs],2)", mm(5))\
+			"paddw     " mm(4)", " mm(2)" \n\t"\
+			"paddw     " mm(5)", " mm(3)" \n\t"\
+			"psrlw     $1,       " mm(2)" \n\t"\
+			"psrlw     $1,       " mm(3)" \n\t"\
+			_mova "    %[tmp0],  " mm(4)" \n\t"\
+			_mova "    %[tmp1],  " mm(5)" \n\t"\
+			_mova "    %[tmp2],  " mm(7)" \n\t"\
+			"psubw     " mm(4)", " mm(2)" \n\t"\
+			"psubw     " mm(7)", " mm(3)" \n\t"\
+			_mova "    " mm(5)", " mm(0)" \n\t"\
+			"psubw     " mm(4)", " mm(5)" \n\t"\
+			"psubw     " mm(7)", " mm(0)" \n\t"\
+			_mova "    " mm(2)", " mm(4)" \n\t"\
+			"pminsw    " mm(3)", " mm(2)" \n\t"\
+			"pmaxsw    " mm(4)", " mm(3)" \n\t"\
+			"pmaxsw    " mm(5)", " mm(2)" \n\t"\
+			"pminsw    " mm(5)", " mm(3)" \n\t"\
+			"pmaxsw    " mm(0)", " mm(2)" \n\t"\
+			"pminsw    " mm(0)", " mm(3)" \n\t"\
+			"pxor      " mm(4)", " mm(4)" \n\t"\
+			"pmaxsw    " mm(3)", " mm(6)" \n\t"\
+			"psubw     " mm(2)", " mm(4)" \n\t"\
+			"pmaxsw    " mm(4)", " mm(6)" \n\t"\
+\
+			"1: \n\t"\
+			_mova "    %[tmp1],  " mm(2)" \n\t"\
+			_mova "    " mm(2)", " mm(3)" \n\t"\
+			"psubw     " mm(6)", " mm(2)" \n\t"\
+			"paddw     " mm(6)", " mm(3)" \n\t"\
+			"pmaxsw    " mm(2)", " mm(1)" \n\t"\
+			"pminsw    " mm(3)", " mm(1)" \n\t"\
+			"packuswb  " mm(1)", " mm(1)" \n\t"\
+\
+			_movh "    " mm(1)",  %[dest] \n\t"\
+\
+			:[tmp0]        "=m"(tmp0),\
+			 [tmp1]        "=m"(tmp1),\
+			 [tmp2]        "=m"(tmp2),\
+			 [tmp3]        "=m"(tmp3),\
+			 [dest]        "=m"(*dest)\
+			:[prev]         "r"(prev),\
+			 [curr]         "r"(curr),\
+			 [next]         "r"(next),\
+			 [prefs]        "r"(prefs),\
+			 [mrefs]        "r"(mrefs),\
+			 [pw1]          "m"(pw_1),\
+			 [pb1]          "m"(pb_1),\
+			 [spatialCheck] "g"(spatialCheck)\
+		);\
+		dest  += alignment;\
+		prev  += alignment;\
+		curr  += alignment;\
+		next  += alignment;\
+	}
+
+#ifdef QMPLAY2_CPU_X86_32 //Every x86-64 CPU has SSE2, so MMXEXT is unused there
 static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
                               const quint8 *prev, const quint8 *curr, const quint8 *next,
                               const qptrdiff prefs, const qptrdiff mrefs,
                               const int spatialCheck, const bool filterParity)
 {
-	static const quint64 pw_1 = 0x0001000100010001ULL;
-	static const quint64 pb_1 = 0x0101010101010101ULL;
+	static const quint64 pw_1(0x0001000100010001ULL);
+	static const quint64 pb_1(0x0101010101010101ULL);
 	quint64 tmp0, tmp1, tmp2, tmp3;
 
-	#define LOAD4(mem,dst) \
-		"movd      "mem", "#dst" \n\t"\
-		"punpcklbw %%mm7, "#dst" \n\t"
+	#define _mova  "movq"
+	#define _movu  "movq"
+	#define _movh  "movd"
+	#define  mm(n) "%%mm"#n
 
-	#define PABS(tmp,dst) \
-		"pxor     "#tmp", "#tmp" \n\t"\
-		"psubw    "#dst", "#tmp" \n\t"\
-		"pmaxsw   "#tmp", "#dst" \n\t"
+	#define RSHIFT(val,dst) \
+		"psrlq   $"#val"*8, " dst" \n\t"
 
-	#define CHECK(pj,mj) \
-		"movq "#pj"(%[curr],%[mrefs]), %%mm2 \n\t"\
-		"movq "#mj"(%[curr],%[prefs]), %%mm3 \n\t"\
-		"movq      %%mm2, %%mm4 \n\t"\
-		"movq      %%mm2, %%mm5 \n\t"\
-		"pxor      %%mm3, %%mm4 \n\t"\
-		"pavgb     %%mm3, %%mm5 \n\t"\
-		"pand     %[pb1], %%mm4 \n\t"\
-		"psubusb   %%mm4, %%mm5 \n\t"\
-		"psrlq     $8,    %%mm5 \n\t"\
-		"punpcklbw %%mm7, %%mm5 \n\t"\
-		"movq      %%mm2, %%mm4 \n\t"\
-		"psubusb   %%mm3, %%mm2 \n\t"\
-		"psubusb   %%mm4, %%mm3 \n\t"\
-		"pmaxub    %%mm3, %%mm2 \n\t"\
-		"movq      %%mm2, %%mm3 \n\t"\
-		"movq      %%mm2, %%mm4 \n\t"\
-		"psrlq      $8,   %%mm3 \n\t"\
-		"psrlq     $16,   %%mm4 \n\t"\
-		"punpcklbw %%mm7, %%mm2 \n\t"\
-		"punpcklbw %%mm7, %%mm3 \n\t"\
-		"punpcklbw %%mm7, %%mm4 \n\t"\
-		"paddw     %%mm3, %%mm2 \n\t"\
-		"paddw     %%mm4, %%mm2 \n\t"
-
-	#define CHECK1 \
-		"movq      %%mm0, %%mm3 \n\t"\
-		"pcmpgtw   %%mm2, %%mm3 \n\t"\
-		"pminsw    %%mm2, %%mm0 \n\t"\
-		"movq      %%mm3, %%mm6 \n\t"\
-		"pand      %%mm3, %%mm5 \n\t"\
-		"pandn     %%mm1, %%mm3 \n\t"\
-		"por       %%mm5, %%mm3 \n\t"\
-		"movq      %%mm3, %%mm1 \n\t"
-
-	/* pretend not to have checked dir=2 if dir=1 was bad. hurts both quality and speed, but matches the C version. */
-	#define CHECK2 \
-		"paddw    %[pw1], %%mm6 \n\t"\
-		"psllw     $14,   %%mm6 \n\t"\
-		"paddsw    %%mm6, %%mm2 \n\t"\
-		"movq      %%mm0, %%mm3 \n\t"\
-		"pcmpgtw   %%mm2, %%mm3 \n\t"\
-		"pminsw    %%mm2, %%mm0 \n\t"\
-		"pand      %%mm3, %%mm5 \n\t"\
-		"pandn     %%mm1, %%mm3 \n\t"\
-		"por       %%mm5, %%mm3 \n\t"\
-		"movq      %%mm3, %%mm1 \n\t"
-
-	#define FILTER(prev2, next2) \
-		while (dest < destEnd)\
-		{\
-			asm volatile\
-			(\
-				"pxor      %%mm7, %%mm7 \n\t"\
-				LOAD4("(%[curr],%[mrefs])", %%mm0)\
-				LOAD4("(%[curr],%[prefs])", %%mm1)\
-				LOAD4("(%["#prev2"])", %%mm2)\
-				LOAD4("(%["#next2"])", %%mm3)\
-				"movq      %%mm3, %%mm4 \n\t"\
-				"paddw     %%mm2, %%mm3 \n\t"\
-				"psraw     $1,    %%mm3 \n\t"\
-				"movq      %%mm0, %[tmp0] \n\t"\
-				"movq      %%mm3, %[tmp1] \n\t"\
-				"movq      %%mm1, %[tmp2] \n\t"\
-				"psubw     %%mm4, %%mm2 \n\t"\
-				PABS(      %%mm4, %%mm2)\
-				LOAD4("(%[prev],%[mrefs])", %%mm3)\
-				LOAD4("(%[prev],%[prefs])", %%mm4)\
-				"psubw     %%mm0, %%mm3 \n\t"\
-				"psubw     %%mm1, %%mm4 \n\t"\
-				PABS(      %%mm5, %%mm3)\
-				PABS(      %%mm5, %%mm4)\
-				"paddw     %%mm4, %%mm3 \n\t"\
-				"psrlw     $1,    %%mm2 \n\t"\
-				"psrlw     $1,    %%mm3 \n\t"\
-				"pmaxsw    %%mm3, %%mm2 \n\t"\
-				LOAD4("(%[next],%[mrefs])", %%mm3)\
-				LOAD4("(%[next],%[prefs])", %%mm4)\
-				"psubw     %%mm0, %%mm3 \n\t"\
-				"psubw     %%mm1, %%mm4 \n\t"\
-				PABS(      %%mm5, %%mm3)\
-				PABS(      %%mm5, %%mm4)\
-				"paddw     %%mm4, %%mm3 \n\t"\
-				"psrlw     $1,    %%mm3 \n\t"\
-				"pmaxsw    %%mm3, %%mm2 \n\t"\
-				"movq      %%mm2, %[tmp3] \n\t"\
-\
-				"paddw     %%mm0, %%mm1 \n\t"\
-				"paddw     %%mm0, %%mm0 \n\t"\
-				"psubw     %%mm1, %%mm0 \n\t"\
-				"psrlw     $1,    %%mm1 \n\t"\
-				PABS(      %%mm2, %%mm0)\
-\
-				"movq -1(%[curr],%[mrefs]), %%mm2 \n\t"\
-				"movq -1(%[curr],%[prefs]), %%mm3 \n\t"\
-				"movq      %%mm2, %%mm4 \n\t"\
-				"psubusb   %%mm3, %%mm2 \n\t"\
-				"psubusb   %%mm4, %%mm3 \n\t"\
-				"pmaxub    %%mm3, %%mm2 \n\t"\
-				"pshufw $9,%%mm2, %%mm3 \n\t"\
-				"punpcklbw %%mm7, %%mm2 \n\t"\
-				"punpcklbw %%mm7, %%mm3 \n\t"\
-				"paddw     %%mm2, %%mm0 \n\t"\
-				"paddw     %%mm3, %%mm0 \n\t"\
-				"psubw    %[pw1], %%mm0 \n\t"\
-\
-				CHECK(-2,0)\
-				CHECK1\
-				CHECK(-3,1)\
-				CHECK2\
-				CHECK(0,-2)\
-				CHECK1\
-				CHECK(1,-3)\
-				CHECK2\
-\
-				/* Spatial check */ \
-				"movq    %[tmp3], %%mm6 \n\t"\
-				"cmpl      $1, %[spatialCheck] \n\t"\
-				"jne       1f \n\t"\
-				LOAD4("(%["#prev2"],%[mrefs],2)", %%mm2)\
-				LOAD4("(%["#next2"],%[mrefs],2)", %%mm4)\
-				LOAD4("(%["#prev2"],%[prefs],2)", %%mm3)\
-				LOAD4("(%["#next2"],%[prefs],2)", %%mm5)\
-				"paddw     %%mm4, %%mm2 \n\t"\
-				"paddw     %%mm5, %%mm3 \n\t"\
-				"psrlw     $1,    %%mm2 \n\t"\
-				"psrlw     $1,    %%mm3 \n\t"\
-				"movq    %[tmp0], %%mm4 \n\t"\
-				"movq    %[tmp1], %%mm5 \n\t"\
-				"movq    %[tmp2], %%mm7 \n\t"\
-				"psubw     %%mm4, %%mm2 \n\t"\
-				"psubw     %%mm7, %%mm3 \n\t"\
-				"movq      %%mm5, %%mm0 \n\t"\
-				"psubw     %%mm4, %%mm5 \n\t"\
-				"psubw     %%mm7, %%mm0 \n\t"\
-				"movq      %%mm2, %%mm4 \n\t"\
-				"pminsw    %%mm3, %%mm2 \n\t"\
-				"pmaxsw    %%mm4, %%mm3 \n\t"\
-				"pmaxsw    %%mm5, %%mm2 \n\t"\
-				"pminsw    %%mm5, %%mm3 \n\t"\
-				"pmaxsw    %%mm0, %%mm2 \n\t"\
-				"pminsw    %%mm0, %%mm3 \n\t"\
-				"pxor      %%mm4, %%mm4 \n\t"\
-				"pmaxsw    %%mm3, %%mm6 \n\t"\
-				"psubw     %%mm2, %%mm4 \n\t"\
-				"pmaxsw    %%mm4, %%mm6 \n\t"\
-\
-				"1: \n\t"\
-				"movq    %[tmp1], %%mm2 \n\t"\
-				"movq      %%mm2, %%mm3 \n\t"\
-				"psubw     %%mm6, %%mm2 \n\t"\
-				"paddw     %%mm6, %%mm3 \n\t"\
-				"pmaxsw    %%mm2, %%mm1 \n\t"\
-				"pminsw    %%mm3, %%mm1 \n\t"\
-				"packuswb  %%mm1, %%mm1 \n\t"\
-\
-				"movd %%mm1, %[dest]"\
-\
-				:[tmp0]        "=m"(tmp0),\
-				 [tmp1]        "=m"(tmp1),\
-				 [tmp2]        "=m"(tmp2),\
-				 [tmp3]        "=m"(tmp3),\
-				 [dest]        "=m"(*dest)\
-				:[prev]         "r"(prev),\
-				 [curr]         "r"(curr),\
-				 [next]         "r"(next),\
-				 [prefs]        "r"(prefs),\
-				 [mrefs]        "r"(mrefs),\
-				 [pw1]          "m"(pw_1),\
-				 [pb1]          "m"(pb_1),\
-				 [spatialCheck] "g"(spatialCheck)\
-			);\
-			dest  += 4;\
-			prev  += 4;\
-			curr  += 4;\
-			next  += 4;\
-		}
+	#define SH(r1, r2) \
+		"pshufw $9, "  r1", " r2" \n\t"
 
 	if (filterParity)
-		FILTER(prev, curr)
+		FILTER(prev, curr, 4)
 	else
-		FILTER(curr, next)
+		FILTER(curr, next, 4)
+
 	asm volatile("emms");
 
-	#undef LOAD4
-	#undef PABS
-	#undef CHECK
-	#undef CHECK1
-	#undef CHECK2
-	#undef FILTER
+	#undef SH
+	#undef RSHIFT
+	#undef mm
+	#undef _movh
+	#undef _movu
+	#undef _mova
 }
+#endif
+static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
+                            const quint8 *prev, const quint8 *curr, const quint8 *next,
+                            const qptrdiff prefs, const qptrdiff mrefs,
+                            const int spatialCheck, const bool filterParity)
+{
+	struct b128
+	{
+		inline b128() {}
+		inline b128(quint64 v) : lo(v), hi(v) {}
+		quint64 lo, hi;
+	};
+	static const b128 pw_1(0x0001000100010001ULL);
+	static const b128 pb_1(0x0101010101010101ULL);
+	b128 tmp0, tmp1, tmp2, tmp3;
+
+	#define _mova  "movdqa"
+	#define _movu  "movdqu"
+	#define _movh  "movq"
+	#define  mm(n) "%%xmm"#n
+
+	#define RSHIFT(val,dst) \
+		"psrldq   $"#val", " dst" \n\t"
+
+	#define SH(r1, r2) \
+		_mova " " r1", " r2" \n\t"\
+		"psrldq   $2,  " r2" \n\t"
+
+	if (filterParity)
+		FILTER(prev, curr, 8)
+	else
+		FILTER(curr, next, 8)
+
+	#undef SH
+	#undef RSHIFT
+	#undef mm
+	#undef _movh
+	#undef _movu
+	#undef _mova
+}
+
+#undef LOAD
+#undef PABS
+#undef CHECK
+#undef CHECK1
+#undef CHECK2
+#undef FILTER
+
 #endif // QMPLAY2_CPU_X86
 static void filterLine_CPP(quint8 *dest, const void *const destEnd,
                            const quint8 *prev, const quint8 *curr, const quint8 *next,
@@ -345,6 +411,8 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 	const quint8 *const currData = currFrame.buffer[plane].data();
 	const quint8 *const nextData = nextFrame.buffer[plane].data();
 	quint8 *const destData = destFrame.buffer[plane].data();
+
+	const int toSub = 3 + alignment - 1;
 
 	for (int y = sliceStart; y < sliceEnd; ++y)
 	{
@@ -375,10 +443,22 @@ static void filterSlice(const int plane, const int w, const int h, const int par
 			filterLinePtr
 			(
 				dest  + 3,
-				dest  - 3 + w,
+				dest  + w - toSub,
 				prev  + 3,
 				curr  + 3,
 				next  + 3,
+				prefs,
+				mrefs,
+				doSpatialCheck,
+				filterParity
+			);
+			filterLine<true>
+			(
+				dest  + w - toSub,
+				dest  + w - 3,
+				prev  + w - toSub,
+				curr  + w - toSub,
+				next  + w - toSub,
 				prefs,
 				mrefs,
 				doSpatialCheck,
@@ -481,10 +561,21 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 	if (!filterLinePtr)
 	{
 		filterLinePtr = filterLine_CPP;
+		alignment = 1;
 #ifdef QMPLAY2_CPU_X86
 		const int cpuFlags = av_get_cpu_flags();
-		if (cpuFlags & AV_CPU_FLAG_MMXEXT)
-			filterLinePtr = filterLine_MMXEXT; // I hope that the linesize is always divisible at least by 4 :)
+		if (cpuFlags & AV_CPU_FLAG_SSE2)
+		{
+			filterLinePtr = filterLine_SSE2;
+			alignment = 8;
+		}
+#ifdef QMPLAY2_CPU_X86_32
+		else if (cpuFlags & AV_CPU_FLAG_MMXEXT)
+		{
+			filterLinePtr = filterLine_MMXEXT;
+			alignment = 4;
+		}
+#endif
 #endif
 	}
 	addParam("W");
