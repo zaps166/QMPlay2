@@ -4,9 +4,16 @@
 #include <QMPlay2Core.hpp>
 #include <Packet.hpp>
 
+#if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
+	#define HAS_REPLAY_GAIN
+#endif
+
 extern "C"
 {
 	#include <libavformat/avformat.h>
+#ifdef HAS_REPLAY_GAIN
+	#include <libavutil/replaygain.h>
+#endif
 	#include <libavutil/pixdesc.h>
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
 	#include <libavutil/opt.h>
@@ -209,6 +216,42 @@ QList< QMPlay2Tag > FormatContext::tags() const
 }
 bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 {
+#ifdef HAS_REPLAY_GAIN
+	const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
+	if (streamIdx > -1)
+	{
+		if (void *sideData = av_stream_get_side_data(formatCtx->streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, NULL))
+		{
+			AVReplayGain replayGain = *(AVReplayGain *)sideData;
+			qint32  tmpGain;
+			quint32 tmpPeak;
+			if (replayGain.album_gain == INT32_MIN && replayGain.track_gain != INT32_MIN)
+				replayGain.album_gain = replayGain.track_gain;
+			if (replayGain.album_gain != INT32_MIN && replayGain.track_gain == INT32_MIN)
+				replayGain.track_gain = replayGain.album_gain;
+			if (replayGain.album_peak == 0 && replayGain.track_peak != 0)
+				replayGain.album_peak = replayGain.track_peak;
+			if (replayGain.album_peak != 0 && replayGain.track_peak == 0)
+				replayGain.track_peak = replayGain.album_peak;
+			if (album)
+			{
+				tmpGain = replayGain.album_gain;
+				tmpPeak = replayGain.album_peak;
+			}
+			else
+			{
+				tmpGain = replayGain.track_gain;
+				tmpPeak = replayGain.track_peak;
+			}
+			if (tmpGain == INT32_MIN)
+				return false;
+			gain_db = tmpGain / 100000.0;
+			if (tmpPeak != 0)
+				peak = tmpPeak / 100000.0;
+			return true;
+		}
+	}
+#else
 	if (AVDictionary *dict = getMetadata())
 	{
 		AVDictionaryEntry *avtag;
@@ -258,6 +301,7 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 
 		return ok;
 	}
+#endif
 	return false;
 }
 double FormatContext::length() const

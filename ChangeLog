@@ -4,6 +4,7 @@ Changes in QMPlay2 build 16.04.20:
 	- move video filtering to separate thread,
 	- added Yadif deinterlacing filter,
 	- better frame skipping,
+	- replay gain fixes,
 	- bugfix,
 
 Changes in QMPlay2 build 16.03.24:
