@@ -24,7 +24,7 @@ else {
 }
 LIBS += -lqmplay2
 
-DEFINES += __STDC_CONSTANT_MACROS
+DEFINES += __STDC_CONSTANT_MACROS __STDC_LIMIT_MACROS
 
 RCC_DIR = build/rcc
 OBJECTS_DIR = build/obj
