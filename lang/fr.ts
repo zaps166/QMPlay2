@@ -2460,7 +2460,7 @@ amp</source>
         <translation>Erreur pendant la vérification des mises à jour</translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation>Erreur durant le téléchargement de la mise à jour</translation>
     </message>
     <message>
@@ -2468,7 +2468,7 @@ amp</source>
         <translation>Vérification des mises à jour</translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation>La mise à jour est téléchargée</translation>
     </message>
 </context>

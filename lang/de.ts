@@ -2461,7 +2461,7 @@ amp</translation>
         <translation>Fehler beim suchen nach Aktualisierungen</translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation>Fehler beim herunterladen der Aktualisierung</translation>
     </message>
     <message>
@@ -2469,7 +2469,7 @@ amp</translation>
         <translation>Suchen nach Aktualisierungen</translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation>Die Aktualisierung wurde heruntergeladen</translation>
     </message>
 </context>

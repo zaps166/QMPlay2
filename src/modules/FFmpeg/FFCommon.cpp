@@ -22,7 +22,7 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 		if (url.left(4) == "http")
 			av_dict_set(&options, "icy", "1", 0);
 #endif
-		av_dict_set(&options, "user-agent", "QMPlay2/" QMPlay2Version, 0);
+		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);
 	}
 	return url;
 }

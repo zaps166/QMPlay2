@@ -2441,7 +2441,7 @@ amp</translation>
         <translation>Actualizar QMPlay2</translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation>La actualización se está descargando</translation>
     </message>
     <message>
@@ -2465,7 +2465,7 @@ amp</translation>
         <translation>Error de escritura de la actualización</translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation>Error de descarga de la actualización</translation>
     </message>
     <message>

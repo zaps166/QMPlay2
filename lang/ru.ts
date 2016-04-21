@@ -2461,7 +2461,7 @@ amp</source>
         <translation>Ошибка при проверке обновлений</translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation>Ошибка загрузки обновления</translation>
     </message>
     <message>
@@ -2469,7 +2469,7 @@ amp</source>
         <translation>Проверка наличия обновлений</translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation>Обновления загружаются</translation>
     </message>
 </context>

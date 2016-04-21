@@ -2460,7 +2460,7 @@ amp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2468,7 +2468,7 @@ amp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -2,6 +2,7 @@
 
 #include <Functions.hpp>
 #include <Settings.hpp>
+#include <Version.hpp>
 #include <Main.hpp>
 #include <CPU.hpp>
 
@@ -162,14 +163,14 @@ void Updater::downloadFinished()
 #endif
 		updateFile.close();
 		QMPlay2Core.getSettings().set("UpdateFile", updateFile.fileName());
-		infoL->setText(tr("The update is downloaded"));
+		infoL->setText(tr("The update has been downloaded"));
 		installB->show();
 		busy = false;
 	}
 	else
 	{
 		updateFile.remove();
-		endWork(tr("Error download the update"));
+		endWork(tr("Error downloading the update"));
 	}
 	reply->deleteLater();
 }
@@ -184,7 +185,7 @@ void Updater::applyUpdate()
 void Updater::getFile(const QUrl &url)
 {
 	QNetworkRequest request(url);
-	request.setRawHeader("User-Agent", "QMPlay2");
+	request.setRawHeader("User-Agent", QMPlay2UserAgent);
 	QNetworkReply *reply = net.get(request);
 	connect(reply, SIGNAL(metaDataChanged()), this, SLOT(headerChanged()));
 	connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFile()));

@@ -2461,7 +2461,7 @@ amp</translation>
         <translation>Błąd sprawdzania aktualizacji</translation>
     </message>
     <message>
-        <source>Error download the update</source>
+        <source>Error downloading the update</source>
         <translation>Błąd pobierania aktualizacji</translation>
     </message>
     <message>
@@ -2469,7 +2469,7 @@ amp</translation>
         <translation>Sprawdzanie dostępności aktualizacji</translation>
     </message>
     <message>
-        <source>The update is downloaded</source>
+        <source>The update has been downloaded</source>
         <translation>Aktualizacja została pobrana</translation>
     </message>
 </context>
