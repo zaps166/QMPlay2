@@ -1145,6 +1145,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 	{
 		const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch * 8) * width()));
 		const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch * 4) * width()));
+		videoDock->isTouch = false;
 
 		int mPosX = 0;
 		if (videoDock->x() >= 0)

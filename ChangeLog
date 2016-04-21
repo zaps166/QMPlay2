@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.04.20:
+Changes in QMPlay2 build 16.04.21:
 	- added spherical view for video playback (Ctrl+3; OpenGL only),
 	- added Simplified Chinese translation (king Lee),
 	- move video filtering to separate thread,
