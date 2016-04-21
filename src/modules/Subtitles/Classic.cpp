@@ -59,7 +59,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 	QRegExp MPL2RegExp("\\[\\d+\\]\\[\\d*\\]");
 	QRegExp MicroDVDRegExp("\\{\\d+\\}\\{\\d*\\}");
 
-	QList< Sub_Without_End > subs_without_end;
+	QList<Sub_Without_End> subs_without_end;
 
 	foreach (const QString &line, QString(txt).remove('\r').split('\n', QString::SkipEmptyParts))
 	{

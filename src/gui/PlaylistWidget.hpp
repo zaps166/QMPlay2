@@ -42,7 +42,7 @@ private:
 		QString name;
 		int length;
 	};
-	QQueue< ItemToUpdate > itemsToUpdate;
+	QQueue<ItemToUpdate> itemsToUpdate;
 
 	struct ItemUpdated
 	{
@@ -110,28 +110,28 @@ public:
 
 	void stopLoading();
 
-	QList< QTreeWidgetItem * > topLevelNonGroupsItems() const;
-	QList< QUrl > getUrls() const;
+	QList<QTreeWidgetItem *> topLevelNonGroupsItems() const;
+	QList<QUrl> getUrls() const;
 
 	QTreeWidgetItem *newGroup(const QString &name, const QString &url = QString(), QTreeWidgetItem *parent = NULL, bool insertChildAt0Idx = false);
 	QTreeWidgetItem *newGroup();
 
 	QTreeWidgetItem *newEntry(const Playlist::Entry &, QTreeWidgetItem *, const Functions::DemuxersInfo &);
 
-	QList< QTreeWidgetItem * > getChildren(CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL) const;
+	QList<QTreeWidgetItem *> getChildren(CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL) const;
 
 	bool canModify(bool all = true) const;
 
 	void enqueue();
 	void refresh(REFRESH Refresh = REFRESH_ALL);
 
-	void processItems(QList< QTreeWidgetItem * > *itemsToShow = NULL, bool hideGroups = false);
+	void processItems(QList<QTreeWidgetItem *> *itemsToShow = NULL, bool hideGroups = false);
 
 	QString currentPlayingUrl;
 	QTreeWidgetItem *currentPlaying;
 	QIcon currentPlayingItemIcon;
 
-	QList< QTreeWidgetItem * > queue;
+	QList<QTreeWidgetItem *> queue;
 
 	AddThr addThr;
 	UpdateEntryThr updateEntryThr;
@@ -162,7 +162,7 @@ private:
 		QTreeWidgetItem *par;
 		bool loadList;
 	};
-	QQueue< AddData > enqueuedAddData;
+	QQueue<AddData> enqueuedAddData;
 	QTimer animationTimer, addTimer;
 	bool repaintAll;
 	int rotation;

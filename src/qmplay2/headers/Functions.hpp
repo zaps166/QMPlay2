@@ -32,8 +32,8 @@ namespace Functions
 		QImage img;
 		QStringList extensions;
 	};
-	typedef QVector< DemuxerInfo > DemuxersInfo;
-	typedef QList< QByteArray > ChecksumList;
+	typedef QVector<DemuxerInfo> DemuxersInfo;
+	typedef QList<QByteArray> ChecksumList;
 
 	QDate parseVersion(const QString &dateTxt);
 
@@ -70,10 +70,7 @@ namespace Functions
 		return ((double)mach_absolute_time() * (double)mach_base_info.numer) / (1000000000.0 * (double)mach_base_info.denom);
 #else
 		timespec now;
-		clock_gettime(
-			CLOCK_MONOTONIC,
-			&now
-		);
+		clock_gettime(CLOCK_MONOTONIC, &now);
 		return now.tv_sec + (now.tv_nsec / 1000000000.0);
 #endif
 	}
@@ -89,7 +86,8 @@ namespace Functions
 		}
 	}
 
-	template < typename T > static inline T aligned(const T val, const T alignment)
+	template<typename T>
+	static inline T aligned(const T val, const T alignment)
 	{
 		return (val + alignment - 1) & ~(alignment - 1);
 	}
@@ -100,9 +98,9 @@ namespace Functions
 
 	void getImageSize(const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = NULL, int *Y = NULL, QRect *dstRect = NULL, const int *vidW = NULL, const int *vidH = NULL, QRect *srcRect = NULL);
 
-	bool mustRepaintOSD(const QList< const QMPlay2_OSD * > &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = NULL, const qreal *scaleH = NULL, QRect *bounds = NULL);
-	void paintOSD(bool rgbSwapped, const QList< const QMPlay2_OSD * > &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = NULL);
-	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums);
+	bool mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = NULL, const qreal *scaleH = NULL, QRect *bounds = NULL);
+	void paintOSD(bool rgbSwapped, const QList<const QMPlay2_OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = NULL);
+	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2_OSD *> &osd_list, ChecksumList &osd_checksums);
 
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
 	int scaleEQValue(int val, int min, int max);

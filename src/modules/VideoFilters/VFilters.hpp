@@ -8,6 +8,6 @@ class VFilters : public Module
 public:
 	VFilters();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 };

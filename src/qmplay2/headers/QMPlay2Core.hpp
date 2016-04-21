@@ -29,7 +29,7 @@ public:
 	void init(bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir = QString());
 	void quit();
 
-	inline QList< Module * > getPluginsInstance() const
+	inline QList<Module *> getPluginsInstance() const
 	{
 		return pluginsInstance;
 	}
@@ -127,7 +127,7 @@ private:
 
 	static QMPlay2CoreClass *qmplay2Core;
 
-	QList< Module * > pluginsInstance;
+	QList<Module *> pluginsInstance;
 	QString qmplay2Dir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
 	QString unixOpenCommand;

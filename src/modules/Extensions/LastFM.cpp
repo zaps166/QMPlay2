@@ -255,7 +255,7 @@ void LastFM::scrobbleFinished()
 {
 	if (scrobbleReply->error())
 	{
-		scrobbleQueue.enqueue(scrobbleReply->property("scrobble").value< Scrobble >());
+		scrobbleQueue.enqueue(scrobbleReply->property("scrobble").value<Scrobble>());
 		logout(false);
 		login();
 	}

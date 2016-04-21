@@ -170,7 +170,7 @@ void VDPAUWriter::writeVideo(const VideoFrame &videoFrame)
 	draw(videoFrame.surfaceId);
 	paused = false;
 }
-void VDPAUWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
+void VDPAUWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	if (canDrawOSD)
 	{
@@ -259,7 +259,7 @@ bool VDPAUWriter::open()
 		{
 			VdpBool isSupported;
 			quint32 out[4];
-			profileList = QList< VdpDecoderProfile >()
+			profileList = QList<VdpDecoderProfile>()
 				<< VDP_DECODER_PROFILE_H264_HIGH << VDP_DECODER_PROFILE_H264_MAIN << VDP_DECODER_PROFILE_H264_BASELINE
 #ifdef VDP_DECODER_PROFILE_HEVC_MAIN
 				<< VDP_DECODER_PROFILE_HEVC_MAIN

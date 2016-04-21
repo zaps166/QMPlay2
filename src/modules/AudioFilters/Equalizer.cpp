@@ -21,9 +21,9 @@ static inline float cosI(const float y1, const float y2, float p)
 	return y1 * (1.0f - p) + y2 * p;
 }
 
-QVector< float > Equalizer::interpolate(const QVector< float > &src, const int len)
+QVector<float> Equalizer::interpolate(const QVector<float> &src, const int len)
 {
-	QVector< float > dest(len);
+	QVector<float> dest(len);
 	const int size = src.size();
 	if (size >= 2)
 	{
@@ -38,9 +38,9 @@ QVector< float > Equalizer::interpolate(const QVector< float > &src, const int l
 	return dest;
 }
 
-QVector< float > Equalizer::freqs(Settings &sets)
+QVector<float> Equalizer::freqs(Settings &sets)
 {
-	QVector< float > freqs(sets.getInt("Equalizer/count"));
+	QVector<float> freqs(sets.getInt("Equalizer/count"));
 	const int minFreq = sets.getInt("Equalizer/minFreq"), maxFreq = sets.getInt("Equalizer/maxFreq");
 	const float l = powf(maxFreq / minFreq, 1.0f / (freqs.count() - 1));
 	for (int i = 0; i < freqs.count(); ++i)
@@ -215,7 +215,7 @@ void Equalizer::interpolateFilterCurve()
 {
 	const int size = sets().getInt("Equalizer/count");
 	preamp = sets().getInt("Equalizer/-1") / 50.0f;
-	QVector< float > src(size);
+	QVector<float> src(size);
 	for (int i = 0; i < size; ++i)
 		src[i] = sets().getInt("Equalizer/" + QString::number(i)) / 50.0f;
 	const int len = FFT_SIZE_2;
@@ -223,7 +223,7 @@ void Equalizer::interpolateFilterCurve()
 		f.resize(len);
 	if (srate && size >= 2)
 	{
-		QVector< float > freqs = Equalizer::freqs(sets());
+		QVector<float> freqs = Equalizer::freqs(sets());
 		const int maxHz = srate / 2;
 		int x = 0, start = 0;
 		for (int i = 0; i < len; ++i)

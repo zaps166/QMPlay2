@@ -161,7 +161,7 @@ void QPainterWriter::writeVideo(const VideoFrame &videoFrame)
 {
 	drawable->draw(videoFrame, true, false);
 }
-void QPainterWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
+void QPainterWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;

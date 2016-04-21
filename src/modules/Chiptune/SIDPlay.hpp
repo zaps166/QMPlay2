@@ -17,7 +17,7 @@ private:
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	double length() const;
 	int bitrate() const;
 
@@ -35,13 +35,13 @@ private:
 	QString getTitle(const SidTuneInfo *info, int track) const;
 
 
-	IOController< Reader > m_reader;
+	IOController<Reader> m_reader;
 	quint32 m_srate;
 	bool m_aborted;
 	int m_length;
 	quint8 m_chn;
 
-	QList< QMPlay2Tag > m_tags;
+	QList<QMPlay2Tag> m_tags;
 	QString m_url, m_title;
 
 	ReSIDfpBuilder m_rs;

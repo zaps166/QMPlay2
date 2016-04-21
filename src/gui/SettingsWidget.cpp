@@ -968,11 +968,11 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 {
 	if (w)
 	{
-		page3->module = (Module *)w->data(Qt::UserRole).value< void * >();
+		page3->module = (Module *)w->data(Qt::UserRole).value<void *>();
 		QWidget *w = page3->module->getSettingsWidget();
 		if (w)
 		{
-			QGridLayout *layout = qobject_cast< QGridLayout * >(w->layout());
+			QGridLayout *layout = qobject_cast<QGridLayout *>(w->layout());
 			if (layout)
 			{
 				layout->setMargin(2);
@@ -991,9 +991,9 @@ void SettingsWidget::tabCh(int idx)
 	if (idx == 1 && !page2->modulesList[0]->list->count() && !page2->modulesList[1]->list->count() && !page2->modulesList[2]->list->count())
 	{
 		QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
-		QVector< QPair< Module *, Module::Info > > pluginsInstances[3];
+		QVector<QPair<Module *, Module::Info> > pluginsInstances[3];
 		for (int m = 0; m < 3; ++m)
-			pluginsInstances[m].fill(QPair< Module *, Module::Info >(), writers[m].size());
+			pluginsInstances[m].fill(QPair<Module *, Module::Info >(), writers[m].size());
 		foreach (Module *module, QMPlay2Core.getPluginsInstance())
 			foreach (const Module::Info &moduleInfo, module->getModulesInfo())
 				for (int m = 0; m < 3; ++m)
@@ -1027,7 +1027,7 @@ void SettingsWidget::tabCh(int idx)
 }
 void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
 {
-	QList< QListWidgetItem * > items = page3->listW->findItems(wI->data(Qt::UserRole).toString(), Qt::MatchExactly);
+	QList<QListWidgetItem *> items = page3->listW->findItems(wI->data(Qt::UserRole).toString(), Qt::MatchExactly);
 	if (items.size())
 	{
 		page3->listW->setCurrentItem(items[0]);
@@ -1036,7 +1036,7 @@ void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
 }
 void SettingsWidget::moveModule()
 {
-	QToolButton *tB = qobject_cast< QToolButton * >(sender());
+	QToolButton *tB = qobject_cast<QToolButton *>(sender());
 	if (tB)
 	{
 		const bool moveDown = tB->arrowType() == Qt::DownArrow;

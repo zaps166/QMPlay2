@@ -266,7 +266,7 @@ void VideoThr::run()
 
 		/* Subtitles */
 		const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
-		QList< const QMPlay2_OSD * > osdList, osdListToDelete;
+		QList<const QMPlay2_OSD *> osdList, osdListToDelete;
 		playC.sPackets.lock();
 		if (sDec) //image subs (pgssub, dvdsub)
 		{

@@ -5,7 +5,7 @@
 
 ALSACommon::DevicesList ALSACommon::getDevices()
 {
-	QPair< QStringList, QStringList > devices;
+	DevicesList devices;
 
 	snd_ctl_card_info_t *cardInfo;
 	snd_ctl_card_info_alloca(&cardInfo);

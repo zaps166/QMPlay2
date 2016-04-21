@@ -289,7 +289,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 	bool subsLoaded = false;
 	if (demuxThr && vThr && ass)
 	{
-		IOController< Reader > reader;
+		IOController<Reader> reader;
 		if (Reader::create(fileName, reader) && reader->size() > 0)
 		{
 			QByteArray fileData = reader->read(reader->size());
@@ -1042,7 +1042,7 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList< StreamInfo * > &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, Writer *writer = NULL)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, Writer *writer = NULL)
 {
 	Decoder *dec = NULL;
 	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;
@@ -1097,7 +1097,7 @@ static Decoder *loadStream(const QList< StreamInfo * > &streams, const int choos
 }
 void PlayClass::load(Demuxer *demuxer)
 {
-	const QList< StreamInfo * > streams = demuxer->streamsInfo();
+	const QList<StreamInfo *> streams = demuxer->streamsInfo();
 	Decoder *dec = NULL;
 
 	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream)) //load video

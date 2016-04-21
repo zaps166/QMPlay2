@@ -44,8 +44,8 @@ private:
 	bool canUpdatePos, canUpdateBitrate;
 #endif
 
-	QVector< QMPlay2Extensions * > visualizations;
-	QVector< AudioFilter * > filters;
+	QVector<QMPlay2Extensions *> visualizations;
+	QVector<AudioFilter *> filters;
 private slots:
 	void pauseVis(bool);
 signals:

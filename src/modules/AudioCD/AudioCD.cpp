@@ -27,9 +27,9 @@ AudioCD::~AudioCD()
 	libcddb_shutdown();
 }
 
-QList< AudioCD::Info > AudioCD::getModulesInfo(const bool) const
+QList<AudioCD::Info> AudioCD::getModulesInfo(const bool) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 #ifdef Q_OS_WIN
 	modulesInfo += Info(AudioCDName, DEMUXER, QStringList("cda"));
 #else
@@ -44,13 +44,13 @@ void *AudioCD::createInstance(const QString &name)
 	return NULL;
 }
 
-QList< QAction * > AudioCD::getAddActions()
+QList<QAction *> AudioCD::getAddActions()
 {
 	QAction *actCD = new QAction(NULL);
 	actCD->setIcon(QIcon(":/AudioCD"));
 	actCD->setText(tr("AudioCD"));
 	actCD->connect(actCD, SIGNAL(triggered()), this, SLOT(add()));
-	return QList< QAction * >() << actCD;
+	return QList<QAction *>() << actCD;
 }
 
 AudioCD::SettingsWidget *AudioCD::getSettingsWidget()
@@ -60,7 +60,7 @@ AudioCD::SettingsWidget *AudioCD::getSettingsWidget()
 
 void AudioCD::add()
 {
-	QWidget *parent = qobject_cast< QWidget * >(sender()->parent());
+	QWidget *parent = qobject_cast<QWidget *>(sender()->parent());
 	QStringList drives = AudioCDDemux::getDevices();
 	if (!drives.isEmpty())
 	{
@@ -106,7 +106,7 @@ void AudioCD::browseCDImage()
 	QString path = QFileDialog::getOpenFileName(parent, tr("Choose AudioCD image"), QString(), tr("Supported AudioCD images") + " (*.cue *.nrg *.toc)");
 	if (!path.isEmpty())
 	{
-		QComboBox &drvB = *parent->findChild< QComboBox * >();
+		QComboBox &drvB = *parent->findChild<QComboBox *>();
 		drvB.addItem(path);
 		drvB.setCurrentIndex(drvB.count() - 1);
 	}

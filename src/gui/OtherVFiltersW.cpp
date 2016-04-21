@@ -9,16 +9,16 @@ OtherVFiltersW::OtherVFiltersW()
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
 	setDragDropMode(QAbstractItemView::InternalMove);
 
-	QPair< QStringList, QList< bool > > videoFilters;
+	QPair<QStringList, QList<bool> > videoFilters;
 	foreach (const QString &filter, QMPlay2Core.getSettings().get("VideoFilters").toStringList())
 	{
 		videoFilters.first += filter.mid(1);
 		videoFilters.second += filter.left(1).toInt();
 	}
 
-	QList< QPair< Module *, Module::Info > > pluginsInstances;
+	QList<QPair<Module *, Module::Info> > pluginsInstances;
 	for (int i = 0; i < videoFilters.first.count(); ++i)
-		pluginsInstances += QPair< Module *, Module::Info >();
+		pluginsInstances += QPair<Module *, Module::Info>();
 
 	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
 		foreach (Module::Info moduleInfo, pluginInstance->getModulesInfo())

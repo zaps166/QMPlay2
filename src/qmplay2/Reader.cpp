@@ -4,7 +4,7 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
-bool Reader::create(const QString &url, IOController< Reader > &reader, const QString &plugName)
+bool Reader::create(const QString &url, IOController<Reader> &reader, const QString &plugName)
 {
 	QString scheme = Functions::getUrlScheme(url);
 	if (reader.isAborted() || url.isEmpty() || scheme.isEmpty())

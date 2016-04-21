@@ -19,7 +19,7 @@ public:
 	void resizeEvent(QResizeEvent *);
 
 	VideoFrame videoFrame;
-	QList< const QMPlay2_OSD * > osd_list;
+	QList<const QMPlay2_OSD *> osd_list;
 	int Brightness, Contrast;
 	QMutex osd_mutex;
 private:
@@ -48,7 +48,7 @@ private:
 
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList< const QMPlay2_OSD * > &);
+	void writeOSD(const QList<const QMPlay2_OSD *> &);
 
 	QString name() const;
 

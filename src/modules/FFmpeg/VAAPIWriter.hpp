@@ -33,7 +33,7 @@ public:
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
 	void pause();
-	void writeOSD(const QList< const QMPlay2_OSD * > &osd);
+	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 
 	bool HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
 
@@ -90,17 +90,17 @@ private:
 	VAImageFormat *rgbImgFmt;
 	_XDisplay *display;
 
-	QList< VAProfile > profileList;
+	QList<VAProfile> profileList;
 
 	static const int surfacesCount = 20;
 	VASurfaceID surfaces[surfacesCount];
-	QQueue< VASurfaceID > surfacesQueue;
+	QQueue<VASurfaceID> surfacesQueue;
 	bool surfacesCreated, paused;
 
 	static const int drawTimeout = 40;
-	QList< const QMPlay2_OSD * > osd_list;
+	QList<const QMPlay2_OSD *> osd_list;
 	bool subpict_dest_is_screen_coord;
-	QList< QByteArray > osd_checksums;
+	QList<QByteArray> osd_checksums;
 	VASubpictureID vaSubpicID;
 	QMutex osd_mutex;
 	QTimer drawTim;

@@ -18,7 +18,7 @@ private:
 
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList< const QMPlay2_OSD * > &);
+	void writeOSD(const QList<const QMPlay2_OSD *> &);
 
 	void pause();
 

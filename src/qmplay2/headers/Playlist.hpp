@@ -21,7 +21,7 @@ public:
 		bool selected;
 		int length, queue, GID, parent;
 	};
-	typedef QList< Entry > Entries;
+	typedef QList<Entry> Entries;
 
 	enum OpenMode {NoOpen, ReadOnly, WriteOnly};
 
@@ -37,7 +37,7 @@ public:
 private:
 	static Playlist *create(const QString &, OpenMode, QString *name = NULL);
 protected:
-	QList< QByteArray > readLines();
+	QList<QByteArray> readLines();
 
 	IOController<> ioCtrl;
 };

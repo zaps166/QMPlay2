@@ -4,7 +4,7 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
-bool Demuxer::create(const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks)
+bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks)
 {
 	const QString scheme = Functions::getUrlScheme(url);
 	if (demuxer.isAborted() || url.isEmpty() || scheme.isEmpty())

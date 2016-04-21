@@ -123,10 +123,10 @@ public:
 
 	double aspectRatio, zoom;
 
-	QList< const QMPlay2_OSD * > osdList;
+	QList<const QMPlay2_OSD *> osdList;
 	QMutex osdMutex;
 
-	QList< QByteArray > osdChecksums;
+	QList<QByteArray> osdChecksums;
 	QImage osdImg;
 
 	/* Spherical view */

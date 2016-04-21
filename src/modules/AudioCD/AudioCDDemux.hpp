@@ -45,7 +45,7 @@ private:
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	double length() const;
 	int bitrate() const;
 

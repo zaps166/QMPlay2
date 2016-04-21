@@ -29,8 +29,8 @@ private:
 	mutable volatile bool metadata_changed;
 	bool fromUrl;
 	double pos;
-	uint srate;
-	QVector< uint > freqs;
+	quint32 srate;
+	QVector<quint32> freqs;
 };
 
 #define ToneGeneratorName "ToneGenerator"

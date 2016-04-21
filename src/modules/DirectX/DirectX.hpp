@@ -5,7 +5,7 @@ class DirectX : public Module
 public:
 	DirectX();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

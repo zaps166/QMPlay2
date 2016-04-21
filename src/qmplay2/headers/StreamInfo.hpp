@@ -6,7 +6,7 @@
 #include <QList>
 #include <QPair>
 
-typedef QPair< QString, QString > QMPlay2Tag;
+typedef QPair<QString, QString> QMPlay2Tag;
 
 enum QMPlay2MediaType
 {
@@ -71,7 +71,7 @@ public:
 
 	QMPlay2MediaType type;
 	QByteArray codec_name, title, artist;
-	QList< QMPlay2Tag > other_info;
+	QList<QMPlay2Tag> other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
 	bool is_default, must_decode;
 	struct {int num, den;} time_base;
@@ -85,7 +85,7 @@ public:
 	int img_fmt, W, H;
 };
 
-class StreamsInfo : public QList< StreamInfo  * >
+class StreamsInfo : public QList<StreamInfo  *>
 {
 	Q_DISABLE_COPY(StreamsInfo)
 public:

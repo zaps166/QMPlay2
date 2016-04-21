@@ -9,9 +9,9 @@ Playlists::Playlists() :
 	init("M3U_enabled", true);
 }
 
-QList< Playlists::Info > Playlists::getModulesInfo(const bool showDisabled) const
+QList<Playlists::Info> Playlists::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("PLS_enabled"))
 		modulesInfo += Info(PLSName, PLAYLIST, QStringList("pls"));
 	if (showDisabled || getBool("M3U_enabled"))

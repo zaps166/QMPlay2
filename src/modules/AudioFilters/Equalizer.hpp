@@ -6,8 +6,8 @@ struct FFTComplex;
 class Equalizer : public AudioFilter
 {
 public:
-	static QVector< float > interpolate(const QVector< float > &, const int);
-	static QVector< float > freqs(Settings &);
+	static QVector<float> interpolate(const QVector<float> &, const int);
+	static QVector<float> freqs(Settings &);
 
 	Equalizer(Module &);
 	~Equalizer();
@@ -33,8 +33,8 @@ private:
 	mutable QMutex mutex;
 	FFTContext *fftIn, *fftOut;
 	FFTComplex *complex;
-	QVector< QVector< float > > input, last_samples;
-	QVector< float > wind_f, f;
+	QVector<QVector<float> > input, last_samples;
+	QVector<float> wind_f, f;
 	float preamp;
 };
 

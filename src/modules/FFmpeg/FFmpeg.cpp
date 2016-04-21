@@ -76,9 +76,9 @@ FFmpeg::~FFmpeg()
 	avformat_network_deinit();
 }
 
-QList< FFmpeg::Info > FFmpeg::getModulesInfo(const bool showDisabled) const
+QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("DemuxerEnabled"))
 		modulesInfo += Info(DemuxerName, DEMUXER);
 	if (showDisabled || getBool("DecoderEnabled"))
@@ -312,7 +312,7 @@ void ModuleSettingsWidget::setVDPAU()
 	sets().set("VDPAUNoiseReductionLvl", noisereductionLvlVDPAUS->value() / 50.0);
 	sets().set("VDPAUSharpnessEnabled", sharpnessVDPAUB->isChecked());
 	sets().set("VDPAUSharpnessLvl", sharpnessLvlVDPAUS->value() / 50.0);
-	SetInstance< VDPAUWriter >();
+	SetInstance<VDPAUWriter>();
 }
 void ModuleSettingsWidget::checkEnables()
 {

@@ -338,7 +338,7 @@ void DownloaderThread::run()
 
 	QMPlay2Core.setWorking(true);
 
-	IOController< Reader > &reader = ioCtrl.toRef< Reader >();
+	IOController<Reader> &reader = ioCtrl.toRef<Reader>();
 	if (!newUrl.isEmpty())
 		Reader::create(newUrl, reader);
 	if (reader && reader->readyRead() && !reader->atEnd())
@@ -412,7 +412,7 @@ QImage DownloaderThread::getImage()
 	{
 		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
-			QList< QMPlay2Extensions::AddressPrefix > addressPrefixList = QMPlay2Ext->addressPrefixList();
+			QList<QMPlay2Extensions::AddressPrefix> addressPrefixList = QMPlay2Ext->addressPrefixList();
 			int idx = addressPrefixList.indexOf(prefix);
 			if (idx > -1)
 				return addressPrefixList[idx].img;
@@ -520,7 +520,7 @@ void DownloaderW::setDownloadsDir()
 }
 void DownloaderW::clearFinished()
 {
-	const QList< QTreeWidgetItem * > items = downloadLW->findItems(QString(), Qt::MatchContains);
+	const QList<QTreeWidgetItem *> items = downloadLW->findItems(QString(), Qt::MatchContains);
 	for (int i = items.count() - 1; i >= 0; --i)
 		if (((DownloadItemW *)downloadLW->itemWidget(items[i], 0))->isFinished())
 			delete items[i];

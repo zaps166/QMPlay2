@@ -23,7 +23,7 @@ private:
 	quint32 srate;
 	int interval;
 	qreal leftBar, rightBar;
-	QPair< qreal, double > leftLine, rightLine;
+	QPair<qreal, double> leftLine, rightLine;
 	SimpleVis &simpleVis;
 	QLinearGradient linearGrad;
 	bool fullScreen;

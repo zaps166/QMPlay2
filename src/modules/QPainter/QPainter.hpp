@@ -5,7 +5,7 @@ class QPainter_Qt : public Module
 public:
 	QPainter_Qt();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

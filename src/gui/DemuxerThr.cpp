@@ -17,7 +17,7 @@
 
 #include <math.h>
 
-static inline bool getCurrentPlaying(int stream, const QList< StreamInfo * > &streamsInfo, const StreamInfo *streamInfo)
+static inline bool getCurrentPlaying(int stream, const QList<StreamInfo *> &streamsInfo, const StreamInfo *streamInfo)
 {
 	return (stream > -1 && streamsInfo.count() > stream) && streamsInfo[stream] == streamInfo;
 }
@@ -528,7 +528,7 @@ void DemuxerThr::updateCoverAndPlaying()
 	emit QMPlay2Core.updatePlaying(true, title, artist, album, demuxer->length(), showCovers && !hasCover, updatePlayingName);
 }
 
-static void printOtherInfo(const QList< QMPlay2Tag > &other_info, QString &str)
+static void printOtherInfo(const QList<QMPlay2Tag> &other_info, QString &str)
 {
 	foreach (const QMPlay2Tag &tag, other_info)
 		if (!tag.second.isEmpty())
@@ -539,7 +539,7 @@ static void printOtherInfo(const QList< QMPlay2Tag > &other_info, QString &str)
 			str += "<li><b>" + StreamInfo::getTagName(tag.first).toLower() + ":</b> " + value + "</li>";
 		}
 }
-void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QList< QMPlay2Tag > &other_info)
+void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QList<QMPlay2Tag> &other_info)
 {
 	subtitlesStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
 	if (currentPlaying)
@@ -633,7 +633,7 @@ void DemuxerThr::emitInfo()
 
 	bool videoPlaying = false, audioPlaying = false;
 
-	const QList< StreamInfo * > streamsInfo = demuxer->streamsInfo();
+	const QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
 	QString videoStreams, audioStreams, subtitlesStreams, attachmentStreams;
 	int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
 	foreach (StreamInfo *streamInfo, streamsInfo)

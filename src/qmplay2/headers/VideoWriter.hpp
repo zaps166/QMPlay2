@@ -16,7 +16,7 @@ public:
 	}
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
-	virtual void writeOSD(const QList< const QMPlay2_OSD * > &osd) = 0;
+	virtual void writeOSD(const QList<const QMPlay2_OSD *> &osd) = 0;
 
 	virtual bool HWAccellInit(int W, int H, const char *codec_name)
 	{

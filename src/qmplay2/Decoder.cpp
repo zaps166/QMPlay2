@@ -26,7 +26,7 @@ Decoder *Decoder::create(StreamInfo *streamInfo, Writer *writer, const QStringLi
 		decoder->open(streamInfo);
 		return decoder;
 	}
-	QVector< QPair< Module *, Module::Info > > pluginsInstances(modNames.count());
+	QVector<QPair<Module *, Module::Info> > pluginsInstances(modNames.count());
 	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
 			if (mod.type == Module::DECODER)

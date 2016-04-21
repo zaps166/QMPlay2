@@ -28,7 +28,7 @@ public:
 	void invalidateShm();
 	void close();
 
-	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList< const QMPlay2_OSD * > &, QMutex &);
+	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList<const QMPlay2_OSD *> &, QMutex &);
 	void redraw(const QRect &, const QRect &, int, int, int, int, int, int);
 
 	void setVideoEqualizer(int, int, int, int);
@@ -38,7 +38,7 @@ public:
 		return _flip;
 	}
 
-	static QList< QString > adaptorsList();
+	static QStringList adaptorsList();
 private:
 	void putImage(const QRect &srcRect, const QRect &dstRect);
 
@@ -53,7 +53,7 @@ private:
 
 	unsigned int adaptors;
 
-	QList< QByteArray > osd_checksums;
+	QList<QByteArray> osd_checksums;
 
 	XVideoPrivate *priv;
 };

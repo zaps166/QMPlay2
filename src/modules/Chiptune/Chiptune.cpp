@@ -20,9 +20,9 @@ Chiptune::Chiptune() :
 	init("DefaultLength", 180);
 }
 
-QList< Chiptune::Info > Chiptune::getModulesInfo(const bool showDisabled) const
+QList<Chiptune::Info> Chiptune::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 #ifdef USE_GME
 	if (showDisabled || getBool("GME"))
 		modulesInfo += Info(GMEName, DEMUXER, QStringList() << "ay" << "gbs" << "gym" << "hes" << "kss" << "nsf" << "nsfe" << "sap" << "spc" << "vgm" << "vgz");

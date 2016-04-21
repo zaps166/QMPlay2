@@ -45,9 +45,9 @@ Inputs::Inputs() :
 	init("Rayman2", true);
 }
 
-QList< Inputs::Info > Inputs::getModulesInfo(const bool showDisabled) const
+QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	modulesInfo += Info(ToneGeneratorName, DEMUXER, sine);
 	if (showDisabled || getBool("PCM"))
 		modulesInfo += Info(PCMName, DEMUXER, get("PCM/extensions").toStringList());
@@ -66,13 +66,13 @@ void *Inputs::createInstance(const QString &name)
 	return NULL;
 }
 
-QList< QAction * > Inputs::getAddActions()
+QList<QAction *> Inputs::getAddActions()
 {
 	QAction *actTone = new QAction(NULL);
 	actTone->setIcon(QIcon(":/sine"));
 	actTone->setText(tr("Tone generator"));
 	actTone->connect(actTone, SIGNAL(triggered()), this, SLOT(add()));
-	return QList< QAction * >() << actTone;
+	return QList<QAction *>() << actTone;
 }
 
 Inputs::SettingsWidget *Inputs::getSettingsWidget()
@@ -82,7 +82,7 @@ Inputs::SettingsWidget *Inputs::getSettingsWidget()
 
 void Inputs::add()
 {
-	QWidget *parent = qobject_cast< QWidget * >(sender()->parent());
+	QWidget *parent = qobject_cast<QWidget *>(sender()->parent());
 	AddD d(*this, parent);
 	const QString params = d.execAndGet();
 	if (!params.isEmpty())
@@ -293,7 +293,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::applyFreqs()
 {
 	toneGenerator->save();
-	SetInstance< ToneGenerator >();
+	SetInstance<ToneGenerator>();
 }
 
 void ModuleSettingsWidget::saveSettings()

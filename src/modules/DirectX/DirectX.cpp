@@ -9,9 +9,9 @@ DirectX::DirectX() :
 	init("DirectDrawEnabled", true);
 }
 
-QList< DirectX::Info > DirectX::getModulesInfo(const bool showDisabled) const
+QList<DirectX::Info> DirectX::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("DirectDrawEnabled"))
 		modulesInfo += Info(DirectDrawWriterName, WRITER, QStringList("video"));
 	return modulesInfo;

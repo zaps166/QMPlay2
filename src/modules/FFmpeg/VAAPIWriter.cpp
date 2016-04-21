@@ -211,7 +211,7 @@ void VAAPIWriter::pause()
 {
 	paused = true;
 }
-void VAAPIWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
+void VAAPIWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	if (rgbImgFmt)
 	{

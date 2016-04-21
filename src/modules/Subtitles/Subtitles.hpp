@@ -5,7 +5,7 @@ class Subtitles : public Module
 public:
 	Subtitles();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

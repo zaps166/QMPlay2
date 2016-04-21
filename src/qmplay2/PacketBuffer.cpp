@@ -62,7 +62,7 @@ bool PacketBuffer::seekTo(double seek_pos, bool backwards)
 void PacketBuffer::clear()
 {
 	lock();
-	QList< Packet >::clear();
+	QList<Packet>::clear();
 	remaining_duration = backward_duration = 0.0;
 	remaining_bytes = backward_bytes = 0;
 	pos = 0;

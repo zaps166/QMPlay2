@@ -33,11 +33,11 @@ public:
 
 	bool metadataChanged() const;
 
-	QList< ChapterInfo > getChapters() const;
+	QList<ChapterInfo> getChapters() const;
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	bool getReplayGain(bool album, float &gain_db, float &peak) const;
 	double length() const;
 	int bitrate() const;
@@ -59,10 +59,10 @@ private:
 	StreamInfo *getStreamInfo(AVStream *stream) const;
 	AVDictionary *getMetadata() const;
 
-	QVector< int > index_map;
-	QVector< AVStream * > streams;
-	QVector< TimeStamp > streamsTS;
-	QVector< double > streamsOffset;
+	QVector<int> index_map;
+	QVector<AVStream *> streams;
+	QVector<TimeStamp> streamsTS;
+	QVector<double> streamsOffset;
 	AVFormatContext *formatCtx;
 	AVPacket *packet;
 

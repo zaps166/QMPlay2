@@ -213,7 +213,7 @@ void XVIDEO::close()
 	clrVars();
 }
 
-void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList< const QMPlay2_OSD * > &osd_list, QMutex &osd_mutex)
+void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList<const QMPlay2_OSD *> &osd_list, QMutex &osd_mutex)
 {
 	const int linesize = image->pitches[0];
 	const int linesize1_2 = image->pitches[1];
@@ -281,9 +281,9 @@ void XVIDEO::setFlip(int f)
 	_flip = f;
 }
 
-QList< QString > XVIDEO::adaptorsList()
+QStringList XVIDEO::adaptorsList()
 {
-	QList< QString > _adaptorsList;
+	QStringList _adaptorsList;
 	XVIDEO *xv = new XVIDEO;
 	if  (xv->isOK())
 	{

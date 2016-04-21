@@ -7,7 +7,7 @@ BobDeint::BobDeint()
 	addParam("H");
 }
 
-bool BobDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
 	if (internalQueue.count() >= 2)

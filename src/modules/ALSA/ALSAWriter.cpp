@@ -8,7 +8,8 @@
 	#define HAVE_CHMAP
 #endif
 
-template< typename T > static void convert_samples(const float *src, const int samples, T *int_samples, unsigned channels)
+template<typename T>
+static void convert_samples(const float *src, const int samples, T *int_samples, unsigned channels)
 {
 	const unsigned min = 1 << ((sizeof(T) << 3) - 1);
 	const unsigned max = min - 1;

@@ -43,7 +43,7 @@ private:
 
 	bool playAfterAdd;
 	QTreeWidgetItem *lastPlaying;
-	QList< QTreeWidgetItem * > randomPlayedItems;
+	QList<QTreeWidgetItem *> randomPlayedItems;
 private slots:
 	void itemDoubleClicked(QTreeWidgetItem *);
 	void addAndPlay(QTreeWidgetItem *);

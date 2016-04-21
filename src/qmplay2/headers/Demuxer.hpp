@@ -25,28 +25,28 @@ public:
 		bool onlyTracks, isOK;
 	};
 
-	static bool create(const QString &url, IOController< Demuxer > &demuxer, FetchTracks *fetchTracks = NULL);
+	static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = NULL);
 
 	virtual bool metadataChanged() const
 	{
 		return false;
 	}
 
-	inline QList< StreamInfo * > streamsInfo() const
+	inline QList<StreamInfo *> streamsInfo() const
 	{
 		return streams_info;
 	}
 
-	virtual QList< ChapterInfo > getChapters() const
+	virtual QList<ChapterInfo> getChapters() const
 	{
-		return QList< ChapterInfo >();
+		return QList<ChapterInfo>();
 	}
 
 	virtual QString name() const = 0;
 	virtual QString title() const = 0;
-	virtual QList< QMPlay2Tag > tags() const
+	virtual QList<QMPlay2Tag> tags() const
 	{
-		return QList< QMPlay2Tag >();
+		return QList<QMPlay2Tag>();
 	}
 	virtual bool getReplayGain(bool album, float &gain_db, float &peak) const
 	{

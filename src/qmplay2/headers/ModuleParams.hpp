@@ -41,7 +41,7 @@ protected:
 		paramList.insert(key, val);
 	}
 private:
-	QHash< QString, QVariant > paramList;
+	QHash<QString, QVariant> paramList;
 };
 
 #endif

@@ -17,7 +17,7 @@ private:
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	double length() const;
 	int bitrate() const;
 
@@ -33,7 +33,7 @@ private:
 	double pos;
 	quint32 srate;
 	_ModPlugFile *mpfile;
-	IOController< Reader > reader;
+	IOController<Reader> reader;
 };
 
 #define DemuxerName "Modplug Demuxer"

@@ -201,12 +201,12 @@ void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const QSiz
 
 void QMPlay2GUIClass::updateInDockW()
 {
-	qobject_cast< MainWidget * >(mainW)->videoDock->updateIDW();
+	qobject_cast<MainWidget *>(mainW)->videoDock->updateIDW();
 }
 
 const QWidget *QMPlay2GUIClass::getVideoDock() const
 {
-	return qobject_cast< MainWidget * >(mainW)->videoDock;
+	return qobject_cast<MainWidget *>(mainW)->videoDock;
 }
 
 QMPlay2GUIClass::QMPlay2GUIClass() :
@@ -218,7 +218,7 @@ QMPlay2GUIClass::QMPlay2GUIClass() :
 	{
 		foreach (const QByteArray &line, f.readAll().split('\n'))
 		{
-			const QList< QByteArray > lineSplitted = line.split(',');
+			const QList<QByteArray> lineSplitted = line.split(',');
 			if (lineSplitted.count() == 2)
 				languages[lineSplitted[0]] = lineSplitted[1];
 		}
@@ -244,7 +244,7 @@ void QMPlay2GUIClass::deleteIcons()
 
 /**/
 
-static QPair< QStringList, QStringList > QMPArguments;
+static QPair<QStringList, QStringList> QMPArguments;
 
 static void parseArguments(QStringList &arguments)
 {

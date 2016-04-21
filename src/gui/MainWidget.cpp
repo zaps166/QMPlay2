@@ -60,7 +60,7 @@ public:
 #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
+MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #ifdef UPDATER
 	: updater(this)
 #endif
@@ -84,7 +84,7 @@ MainWidget::MainWidget(QPair< QStringList, QStringList > &QMPArguments)
 	#elif defined Q_OS_WIN
 		if (QSysInfo::windowsVersion() > QSysInfo::WV_6_1) //Qt4 can't detect touchscreen, so MainWidgetTmpStyle will be used only with Windows >= 8.0
 	#endif
-			setStyle(QScopedPointer< MainWidgetTmpStyle >(new MainWidgetTmpStyle).data()); //Is it always OK?
+			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
 #endif
 
 	setObjectName("MainWidget");
@@ -341,14 +341,14 @@ MainWidget::~MainWidget()
 
 void MainWidget::focusChanged(QWidget *old, QWidget *now)
 {
-	if ((qobject_cast< QTreeWidget * >(old) || qobject_cast< QSlider * >(old) || qobject_cast< QComboBox * >(old) || qobject_cast< QListWidget * >(old)) && old != seekS)
+	if ((qobject_cast<QTreeWidget *>(old) || qobject_cast<QSlider *>(old) || qobject_cast<QComboBox *>(old) || qobject_cast<QListWidget *>(old)) && old != seekS)
 		menuBar->player->seekActionsEnable(true);
-	if ((qobject_cast< QTreeWidget * >(now) || qobject_cast< QSlider * >(now) || qobject_cast< QComboBox * >(now) || qobject_cast< QListWidget * >(now)) && now != seekS)
+	if ((qobject_cast<QTreeWidget *>(now) || qobject_cast<QSlider *>(now) || qobject_cast<QComboBox *>(now) || qobject_cast<QListWidget *>(now)) && now != seekS)
 		menuBar->player->seekActionsEnable(false);
 
-	if (qobject_cast< QAbstractButton * >(old))
+	if (qobject_cast<QAbstractButton *>(old))
 		menuBar->player->togglePlay->setShortcutContext(Qt::WindowShortcut);
-	if (qobject_cast< QAbstractButton * >(now))
+	if (qobject_cast<QAbstractButton *>(now))
 		menuBar->player->togglePlay->setShortcutContext(Qt::WidgetShortcut);
 }
 
@@ -804,7 +804,7 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleVisibility->setEnabled(false);
 #endif
 		menuBar->window->toggleCompactView->setEnabled(false);
-		menuBar->window->toggleFullScreen->setShortcuts(QList< QKeySequence >() << QKeySequence("F") << QKeySequence("ESC"));
+		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence("F") << QKeySequence("ESC"));
 		fullScreen = true;
 		showFullScreen();
 	}
@@ -814,7 +814,7 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleVisibility->setEnabled(true);
 #endif
 		menuBar->window->toggleCompactView->setEnabled(true);
-		menuBar->window->toggleFullScreen->setShortcuts(QList< QKeySequence >() << QKeySequence("F"));
+		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence("F"));
 
 		videoDock->setLoseHeight(0);
 		fullScreen = false;
@@ -1020,7 +1020,7 @@ void MainWidget::about()
 void MainWidget::hideMenu(bool h)
 {
 	if (fullScreen || isCompactView)
-		qobject_cast< QAction * >(sender())->setChecked(!h);
+		qobject_cast<QAction *>(sender())->setChecked(!h);
 	else
 	{
 		menuBar->setVisible(!h);
@@ -1031,12 +1031,12 @@ void MainWidget::hideMenu(bool h)
 void MainWidget::lockWidgets(bool l)
 {
 	if (fullScreen || isCompactView)
-		qobject_cast< QAction * >(sender())->setChecked(!l);
+		qobject_cast<QAction *>(sender())->setChecked(!l);
 	else
 	{
 		foreach (QObject *o, children())
 		{
-			DockWidget *dW = dynamic_cast< DockWidget * >(o);
+			DockWidget *dW = dynamic_cast<DockWidget *>(o);
 			if (dW)
 			{
 				if (dW->isFloating())
@@ -1143,8 +1143,8 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	if (fullScreen && e->buttons() == Qt::NoButton)
 	{
-		const int trigger1 = qMax< int >(5,  ceil(0.003 * width()));
-		const int trigger2 = qMax< int >(15, ceil(0.025 * width()));
+		const int trigger1 = qMax<int>(5,  ceil(0.003 * width()));
+		const int trigger2 = qMax<int>(15, ceil(0.025 * width()));
 
 		int mPosX = 0;
 		if (videoDock->x() >= 0)
@@ -1160,7 +1160,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 			showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
 			restoreState(fullScreenDockWidgetState);
 
-			QList< QDockWidget * > tDW = tabifiedDockWidgets(infoDock);
+			QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
 			bool reloadQMPlay2Extensions = false;
 			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 				if (DockWidget *dw = QMPlay2Ext->getDockWidget())

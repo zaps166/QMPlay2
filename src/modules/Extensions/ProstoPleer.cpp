@@ -105,7 +105,7 @@ void ResultsPleer::contextMenu(const QPoint &point)
 		menu.addSeparator();
 		const QString name = tWI->text(0);
 		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
-			if (!dynamic_cast< ProstoPleer * >(QMPlay2Ext))
+			if (!dynamic_cast<ProstoPleer *>(QMPlay2Ext))
 			{
 				QString addressPrefixName, url, param;
 				if (Functions::splitPrefixAndUrlIfHasPluginPrefix(getQMPlay2Url(tWI), &addressPrefixName, &url, &param))
@@ -344,9 +344,9 @@ DockWidget *ProstoPleer::getDockWidget()
 	return w.dw;
 }
 
-QList< ProstoPleer::AddressPrefix > ProstoPleer::addressPrefixList(bool img)
+QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img)
 {
-	return QList< AddressPrefix >() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
+	return QList<AddressPrefix>() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
 }
 void ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
@@ -367,7 +367,7 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 				fileId.truncate(1);
 			int idx = url.lastIndexOf('/');
 
-			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
+			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
 			if (idx > -1 && Reader::create(ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1), reader))
 			{
 				QByteArray replyData;

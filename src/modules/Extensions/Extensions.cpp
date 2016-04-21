@@ -38,9 +38,9 @@ Extensions::Extensions() :
 #endif
 }
 
-QList< Extensions::Info > Extensions::getModulesInfo(const bool) const
+QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	modulesInfo += Info(DownloaderName, QMPLAY2EXTENSION, downloader);
 	modulesInfo += Info(YouTubeName, QMPLAY2EXTENSION, youtube);
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
@@ -58,14 +58,14 @@ void *Extensions::createInstance(const QString &name)
 	else if (name == YouTubeName)
 		return new YouTube(*this);
 	else if (name == LastFMName)
-		return static_cast< QMPlay2Extensions * >(new LastFM(*this));
+		return static_cast<QMPlay2Extensions *>(new LastFM(*this));
 	else if (name == RadioName)
-		return static_cast< QMPlay2Extensions * >(new Radio(*this));
+		return static_cast<QMPlay2Extensions *>(new Radio(*this));
 	else if (name == ProstoPleerName)
-		return static_cast< QMPlay2Extensions * >(new ProstoPleer(*this));
+		return static_cast<QMPlay2Extensions *>(new ProstoPleer(*this));
 #ifdef USE_MPRIS2
 	else if (name == MPRIS2Name)
-		return static_cast< QMPlay2Extensions * >(new MPRIS2(*this));
+		return static_cast<QMPlay2Extensions *>(new MPRIS2(*this));
 #endif
 	return NULL;
 }

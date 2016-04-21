@@ -92,7 +92,7 @@ MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
 	pos(0)
 {
 	clearMetaData();
-	m_data["mpris:trackid"] = QVariant::fromValue< QDBusObjectPath >(trackID);
+	m_data["mpris:trackid"] = QVariant::fromValue<QDBusObjectPath>(trackID);
 	connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)), this, SLOT(updatePlaying(bool, const QString &, const QString &, const QString &, int, bool, const QString &)));
 	connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(const QByteArray &)), this, SLOT(coverDataFromMediaFile(const QByteArray &)));
 	connect(&QMPlay2Core, SIGNAL(playStateChanged(const QString &)), this, SLOT(playStateChanged(const QString &)));

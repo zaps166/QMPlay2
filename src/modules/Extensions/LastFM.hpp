@@ -52,7 +52,7 @@ private:
 	QNetworkReply *coverReply, *loginReply, *scrobbleReply;
 	bool downloadCovers, dontShowLoginError, firstTime;
 	QString user, md5pass, session_key;
-	QQueue< Scrobble > scrobbleQueue;
+	QQueue<Scrobble> scrobbleQueue;
 	QTimer updateTim, loginTimer;
 	QNetworkAccessManager net;
 	QStringList imageSizes;

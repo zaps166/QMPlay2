@@ -37,5 +37,5 @@ private:
 		double pts, duration;
 		QByteArray bitmap;
 	};
-	QList< BitmapSubBuffer * > bitmapSubBuffer;
+	QList<BitmapSubBuffer *> bitmapSubBuffer;
 };

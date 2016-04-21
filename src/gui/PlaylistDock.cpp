@@ -46,7 +46,7 @@ PlaylistDock::PlaylistDock() :
 	connect(findE, SIGNAL(returnPressed()), this, SLOT(findNext()));
 
 	QAction *act = new QAction(this);
-	act->setShortcuts(QList< QKeySequence >() << QKeySequence("Return") << QKeySequence("Enter"));
+	act->setShortcuts(QList<QKeySequence>() << QKeySequence("Return") << QKeySequence("Enter"));
 	connect(act, SIGNAL(triggered()), this, SLOT(start()));
 	act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 	addAction(act);
@@ -77,7 +77,7 @@ void PlaylistDock::load(const QString &url)
 bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 {
 	const QString url = Functions::Url(_url);
-	QList< QTreeWidgetItem * > parents;
+	QList<QTreeWidgetItem *> parents;
 	Playlist::Entries entries;
 	foreach (QTreeWidgetItem *tWI, list->getChildren(PlaylistWidget::ALL_CHILDREN, saveCurrentGroup ? list->currentItem() : NULL))
 	{
@@ -122,7 +122,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
 	if (_url.isEmpty())
 		return;
 	/* Jeżeli wpis istnieje, znajdzie go i zacznie odtwarzać */
-	const QList< QTreeWidgetItem * > items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
+	const QList<QTreeWidgetItem *> items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
 	const QString url = Functions::Url(_url);
 	foreach (QTreeWidgetItem *item, items)
 	{
@@ -201,7 +201,7 @@ void PlaylistDock::stopLoading()
 }
 void PlaylistDock::next(bool playingError)
 {
-	QList< QTreeWidgetItem * > l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
+	QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
 	if (!l.contains(lastPlaying))
 		lastPlaying = NULL;
 	QTreeWidgetItem *tWI = NULL;
@@ -251,7 +251,7 @@ void PlaylistDock::next(bool playingError)
 						tWI = list->itemBelow(tWI);
 						if (canRepeat && repeatMode == RepeatGroup && P && (!tWI || tWI->parent() != P)) //zapętlenie grupy
 						{
-							const QList< QTreeWidgetItem * > l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P);
+							const QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P);
 							if (!l.isEmpty())
 								tWI = l[0];
 							break;
@@ -325,7 +325,7 @@ void PlaylistDock::delEntries()
 {
 	if (!isVisible() || !list->canModify()) //jeżeli jest np. drag and drop to nie wolno usuwać
 		return;
-	QList< QTreeWidgetItem * > selectedItems = list->selectedItems();
+	QList<QTreeWidgetItem *> selectedItems = list->selectedItems();
 	if (selectedItems.size())
 	{
 		list->setItemsResizeToContents(false);
@@ -450,11 +450,11 @@ void PlaylistDock::queue()
 }
 void PlaylistDock::findItems(const QString &txt)
 {
-	QList< QTreeWidgetItem * > itemsToShow = list->findItems(txt, Qt::MatchContains | Qt::MatchRecursive);
+	QList<QTreeWidgetItem *> itemsToShow = list->findItems(txt, Qt::MatchContains | Qt::MatchRecursive);
 	list->processItems(&itemsToShow, !txt.isEmpty());
 	if (txt.isEmpty())
 	{
-		QList< QTreeWidgetItem * > selectedItems = list->selectedItems();
+		QList<QTreeWidgetItem *> selectedItems = list->selectedItems();
 		if (selectedItems.count())
 			list->scrollToItem(selectedItems[0]);
 		else if (list->currentPlaying)

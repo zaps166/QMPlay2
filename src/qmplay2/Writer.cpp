@@ -53,7 +53,7 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 		delete writer;
 		return NULL;
 	}
-	QVector< QPair< Module *, Module::Info > > pluginsInstances(modNames.count());
+	QVector<QPair<Module *, Module::Info> > pluginsInstances(modNames.count());
 	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
 			if (mod.type == Module::WRITER && mod.extensions.contains(scheme))

@@ -30,11 +30,11 @@ bool FFDemux::metadataChanged() const
 	return isMetadataChanged;
 }
 
-QList< ChapterInfo > FFDemux::getChapters() const
+QList<ChapterInfo> FFDemux::getChapters() const
 {
 	if (formatContexts.count() == 1)
 		return formatContexts.at(0)->getChapters();
-	return QList< ChapterInfo >();
+	return QList<ChapterInfo>();
 }
 
 QString FFDemux::name() const
@@ -55,11 +55,11 @@ QString FFDemux::title() const
 		return formatContexts.at(0)->title();
 	return QString();
 }
-QList< QMPlay2Tag > FFDemux::tags() const
+QList<QMPlay2Tag> FFDemux::tags() const
 {
 	if (formatContexts.count() == 1)
 		return formatContexts.at(0)->tags();
-	return QList< QMPlay2Tag >();
+	return QList<QMPlay2Tag>();
 }
 bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 {

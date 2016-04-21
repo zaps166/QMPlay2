@@ -51,7 +51,7 @@ MenuBar::Widgets::Widgets(MenuBar *parent) :
 void MenuBar::Widgets::menuShow()
 {
 	clear();
-	QMenu *menu = qobject_cast< QMainWindow * >(QMPlay2GUI.mainW)->createPopupMenu();
+	QMenu *menu = qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->createPopupMenu();
 	if (menu)
 	{
 		foreach (QAction *act, menu->actions())

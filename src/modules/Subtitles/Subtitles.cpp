@@ -12,9 +12,9 @@ Subtitles::Subtitles() :
 	init("Sub_max_s", 5.0);
 }
 
-QList< Subtitles::Info > Subtitles::getModulesInfo(const bool showDisabled) const
+QList<Subtitles::Info> Subtitles::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("SRT_enabled"))
 		modulesInfo += Info(SRTSubsName, SUBSDEC, QStringList() << "srt" << "vtt");
 	if (showDisabled || getBool("Classic_enabled"))

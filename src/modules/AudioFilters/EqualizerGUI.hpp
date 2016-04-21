@@ -13,7 +13,7 @@ public:
 private:
 	void paintEvent(QPaintEvent *);
 
-	QVector< float > values;
+	QVector<float> values;
 	float preamp;
 };
 

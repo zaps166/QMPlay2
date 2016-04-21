@@ -181,7 +181,7 @@ void OSDSettingsW::readSettings()
 	alignB[align]->setChecked(true);
 	outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
 	shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
-	textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value< QColor >());
-	outlineColorB->setColor(QMPSettings.get(prefix + "/OutlineColor").value< QColor >());
-	shadowColorB->setColor(QMPSettings.get(prefix + "/ShadowColor").value< QColor >());
+	textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value<QColor>());
+	outlineColorB->setColor(QMPSettings.get(prefix + "/OutlineColor").value<QColor>());
+	shadowColorB->setColor(QMPSettings.get(prefix + "/ShadowColor").value<QColor>());
 }

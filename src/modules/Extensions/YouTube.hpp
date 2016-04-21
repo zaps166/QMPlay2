@@ -22,7 +22,7 @@ class ResultsYoutube : public QTreeWidget
 public:
 	ResultsYoutube();
 
-	QList< int > itags, itagsVideo, itagsAudio;
+	QList<int> itags, itagsVideo, itagsAudio;
 private:
 	QTreeWidgetItem *getDefaultQuality(const QTreeWidgetItem *tWI);
 
@@ -82,8 +82,8 @@ private:
 	void setAutocomplete(const QByteArray &data);
 	void setSearchResults(QString data);
 
-	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController< YouTubeDL > *youtube_dl = NULL); //jeżeli (tWI == NULL) to zwraca {URL, file_extension, TITLE}
-	QStringList getUrlByItagPriority(const QList< int > &itags, QStringList ret);
+	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController<YouTubeDL> *youtube_dl = NULL); //jeżeli (tWI == NULL) to zwraca {URL, file_extension, TITLE}
+	QStringList getUrlByItagPriority(const QList<int> &itags, QStringList ret);
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
@@ -97,7 +97,7 @@ private:
 	int currPage;
 
 	QNetworkReply *autocompleteReply, *searchReply;
-	QList< QNetworkReply * > linkReplies, imageReplies;
+	QList<QNetworkReply *> linkReplies, imageReplies;
 	QNetworkAccessManager net;
 
 	QString youtubedl;
@@ -106,7 +106,7 @@ private:
 
 /**/
 
-typedef QPair< QStringList, QList< int > > ItagNames;
+typedef QPair<QStringList, QList<int> > ItagNames;
 
 class YouTube : public QMPlay2Extensions
 {
@@ -120,7 +120,7 @@ public:
 
 	DockWidget *getDockWidget();
 
-	QList< AddressPrefix > addressPrefixList(bool);
+	QList<AddressPrefix> addressPrefixList(bool);
 	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl);
 
 	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);

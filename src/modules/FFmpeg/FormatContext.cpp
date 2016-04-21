@@ -135,9 +135,9 @@ bool FormatContext::metadataChanged() const
 	return false;
 }
 
-QList< ChapterInfo > FormatContext::getChapters() const
+QList<ChapterInfo> FormatContext::getChapters() const
 {
-	QList< ChapterInfo > chapters;
+	QList<ChapterInfo> chapters;
 	for (unsigned i = 0; i < formatCtx->nb_chapters; i++)
 	{
 		AVChapter &chapter = *formatCtx->chapters[i];
@@ -174,9 +174,9 @@ QString FormatContext::title() const
 	}
 	return QString();
 }
-QList< QMPlay2Tag > FormatContext::tags() const
+QList<QMPlay2Tag> FormatContext::tags() const
 {
-	QList< QMPlay2Tag > tagList;
+	QList<QMPlay2Tag> tagList;
 	AVDictionaryEntry *avtag;
 	QString value;
 	if (isStreamed)

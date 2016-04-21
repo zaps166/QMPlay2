@@ -100,7 +100,7 @@ QString MPDemux::title() const
 
 QList<QMPlay2Tag> MPDemux::tags() const
 {
-	QList< QMPlay2Tag > tags;
+	QList<QMPlay2Tag> tags;
 	tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), QString(ModPlug_GetName(mpfile)));
 	tags << qMakePair(tr("Samples"), QString::number(ModPlug_NumSamples(mpfile)));
 	tags << qMakePair(tr("Patterns"), QString::number(ModPlug_NumPatterns(mpfile)));

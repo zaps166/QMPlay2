@@ -79,7 +79,7 @@ void VideoEqualizer::saveValues()
 
 void VideoEqualizer::setValue(int v)
 {
-	((QLabel *)sender()->property("valueL").value< void * >())->setText(QString::number(v) + "");
+	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v) + "");
 	emit valuesChanged
 	(
 		controls[BRIGHTNESS].slider->value(),

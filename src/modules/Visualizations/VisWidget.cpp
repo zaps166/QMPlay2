@@ -15,7 +15,7 @@ void VisWidget::setValue(qreal &out, qreal in, qreal tDiffScaled)
 	else
 		out = in;
 }
-void VisWidget::setValue(QPair< qreal, double > &out, qreal in, qreal tDiffScaled)
+void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
 {
 	if (in < out.first)
 		out.first -= (Functions::gettime() - out.second) * tDiffScaled;

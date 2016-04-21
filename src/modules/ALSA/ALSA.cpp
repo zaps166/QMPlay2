@@ -12,9 +12,9 @@ ALSA::ALSA() :
 	init("OutputDevice", "default");
 }
 
-QList< ALSA::Info > ALSA::getModulesInfo(const bool showDisabled) const
+QList<ALSA::Info> ALSA::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
 		modulesInfo += Info(ALSAWriterName, WRITER, QStringList("audio"));
 	return modulesInfo;

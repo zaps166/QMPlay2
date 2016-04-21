@@ -9,9 +9,9 @@ QPainter_Qt::QPainter_Qt() :
 	init("Enabled", true);
 }
 
-QList< QPainter_Qt::Info > QPainter_Qt::getModulesInfo(const bool showDisabled) const
+QList<QPainter_Qt::Info> QPainter_Qt::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
 		modulesInfo += Info(QPainterWriterName, WRITER, QStringList("video"));
 	return modulesInfo;

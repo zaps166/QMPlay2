@@ -235,7 +235,7 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 	}
 }
 
-bool Functions::mustRepaintOSD(const QList< const QMPlay2_OSD * > &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
+bool Functions::mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
 {
 	bool mustRepaint = false;
 	foreach (const QMPlay2_OSD *osd, osd_list)
@@ -262,7 +262,7 @@ bool Functions::mustRepaintOSD(const QList< const QMPlay2_OSD * > &osd_list, con
 	}
 	return mustRepaint;
 }
-void Functions::paintOSD(bool rgbSwapped, const QList< const QMPlay2_OSD * > &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums)
+void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2_OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums)
 {
 	if (osd_checksums)
 		osd_checksums->clear();
@@ -288,7 +288,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList< const QMPlay2_OSD * > &os
 		osd->unlock();
 	}
 }
-void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList< const QMPlay2_OSD * > &osd_list, ChecksumList &osd_checksums)
+void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2_OSD *> &osd_list, ChecksumList &osd_checksums)
 {
 	QRect bounds;
 	const int osdW = osdImg.width();
@@ -308,7 +308,8 @@ void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, 
 		Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
 	}
 
-	quint8 *data[3] = {(quint8 *)imageData};
+	quint8 *data[3];
+	data[0] = imageData;
 	data[2] = data[0] + linesizeLuma * imgH;
 	data[1] = data[2] + linesizeChroma * (imgH >> 1);
 

@@ -6,10 +6,10 @@ class Inputs : public Module
 public:
 	Inputs();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
-	QList< QAction * > getAddActions();
+	QList<QAction *> getAddActions();
 
 	SettingsWidget *getSettingsWidget();
 
@@ -35,7 +35,7 @@ public:
 			hzB[i]->connect(hzB[i], SIGNAL(valueChanged(int)), receiver, method);
 	}
 private:
-	QList< QSpinBox * > hzB;
+	QList<QSpinBox *> hzB;
 };
 
 class QGridLayout;
@@ -88,7 +88,7 @@ private:
 	AddD *toneGenerator;
 	QGroupBox *pcmB;
 	QLineEdit *pcmExtsE;
-	QList< QRadioButton * > formatB;
+	QList<QRadioButton *> formatB;
 	QSpinBox *chnB, *srateB, *offsetB;
 	QComboBox *endianB;
 

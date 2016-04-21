@@ -47,7 +47,7 @@ private:
 
 	void updateCoverAndPlaying();
 
-	void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QList< QMPlay2Tag > &other_info = QList< QMPlay2Tag >());
+	void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QList<QMPlay2Tag> &other_info = QList<QMPlay2Tag>());
 
 	bool mustReloadStreams();
 	bool bufferedAllPackets(int vS, int aS, int p);
@@ -66,7 +66,7 @@ private:
 	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength;
 	QMutex stopVAMutex, endMutex, seekMutex;
 	IOController<> ioCtrl;
-	IOController< Demuxer > demuxer;
+	IOController<Demuxer> demuxer;
 	QString title, artist, album;
 	double playIfBuffered, time, updateBufferedTime;
 private slots:

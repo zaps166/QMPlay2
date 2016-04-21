@@ -584,7 +584,7 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 	addParam("H");
 }
 
-bool YadifDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
 	if (internalQueue.count() >= 3)

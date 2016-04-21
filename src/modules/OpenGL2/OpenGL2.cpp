@@ -15,9 +15,9 @@ OpenGL2::OpenGL2() :
 #endif
 }
 
-QList< OpenGL2::Info > OpenGL2::getModulesInfo(const bool showDisabled) const
+QList<OpenGL2::Info> OpenGL2::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
 		modulesInfo += Info(OpenGL2WriterName, WRITER, QStringList("video"));
 	return modulesInfo;

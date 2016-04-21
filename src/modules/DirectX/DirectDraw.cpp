@@ -483,7 +483,7 @@ void DirectDrawWriter::writeVideo(const VideoFrame &videoFrame)
 	drawable->paused = false;
 	drawable->draw(videoFrame);
 }
-void DirectDrawWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
+void DirectDrawWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;

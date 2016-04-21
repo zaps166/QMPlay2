@@ -56,7 +56,7 @@ QString ToneGenerator::name() const
 QString ToneGenerator::title() const
 {
 	QString t;
-	foreach (uint hz, freqs)
+	foreach (quint32 hz, freqs)
 		t += "   - " + QString::number(hz) + tr("Hz") + "\n";
 	t.chop(1);
 	return tr("Tone generator") + " (" + QString::number(srate) + tr("Hz") + "):\n" + t;
@@ -89,7 +89,7 @@ bool ToneGenerator::read(Packet &decoded, int &idx)
 	decoded.resize(sizeof(float) * chn * srate);
 	float *samples = (float *)decoded.data();
 
-	for (uint i = 0; i < srate * chn; i += chn)
+	for (quint32 i = 0; i < srate * chn; i += chn)
 		for (int c = 0; c < chn; ++c)
 			samples[i + c] = sin(2.0 * M_PI * freqs[c] * i / srate / chn); //don't use sinf()!
 
@@ -129,7 +129,7 @@ bool ToneGenerator::open(const QString &entireUrl)
 	if (freqs.isEmpty())
 	{
 		bool ok;
-		uint freq = url.toString().remove('?').toUInt(&ok);
+		quint32 freq = url.toString().remove('?').toUInt(&ok);
 		if (ok)
 			freqs += freq;
 		else

@@ -10,7 +10,7 @@
 
 class Settings : protected QSettings
 {
-	typedef QMap< QString, QVariant > SettingsMap;
+	typedef QMap<QString, QVariant> SettingsMap;
 public:
 	Settings(const QString &name);
 	~Settings();

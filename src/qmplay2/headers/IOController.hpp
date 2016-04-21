@@ -12,7 +12,8 @@ public:
 
 #include <QSharedPointer>
 
-template< typename T = BasicIO > class IOController : public QSharedPointer< BasicIO >
+template<typename T = BasicIO>
+class IOController : public QSharedPointer<BasicIO>
 {
 	Q_DISABLE_COPY(IOController)
 public:
@@ -27,7 +28,7 @@ public:
 	void abort()
 	{
 		br = true;
-		if (QSharedPointer< BasicIO > strongThis = *this)
+		if (QSharedPointer<BasicIO> strongThis = *this)
 			strongThis->abort();
 	}
 	inline void resetAbort()
@@ -43,36 +44,39 @@ public:
 			delete ptr;
 			return false;
 		}
-		QSharedPointer< BasicIO > sPtr(ptr);
+		QSharedPointer<BasicIO> sPtr(ptr);
 		swap(sPtr);
 		return (bool)ptr;
 	}
 
-	template< typename objT > inline objT *rawPtr()
+	template<typename objT>
+	inline objT *rawPtr()
 	{
-		return static_cast< objT * >(data());
+		return static_cast<objT *>(data());
 	}
 	inline T *rawPtr()
 	{
-		return static_cast< T * >(data());
+		return static_cast<T *>(data());
 	}
 
-	template< typename objT > inline IOController< objT > &toRef()
+	template<typename objT>
+	inline IOController<objT> &toRef()
 	{
-		return reinterpret_cast< IOController< objT > & >(*this);
+		return reinterpret_cast<IOController<objT> &>(*this);
 	}
-	template< typename objT > inline IOController< objT > *toPtr()
+	template<typename objT>
+	inline IOController<objT> *toPtr()
 	{
-		return reinterpret_cast< IOController< objT > * >(this);
+		return reinterpret_cast<IOController<objT> *>(this);
 	}
 
 	inline T *operator ->()
 	{
-		return static_cast< T * >(data());
+		return static_cast<T *>(data());
 	}
 	inline const T *operator ->() const
 	{
-		return static_cast< const T * >(data());
+		return static_cast<const T *>(data());
 	}
 private:
 	volatile bool br;

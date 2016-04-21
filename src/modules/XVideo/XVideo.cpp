@@ -10,9 +10,9 @@ XVideo::XVideo() :
 	init("UseSHM", true);
 }
 
-QList< XVideo::Info > XVideo::getModulesInfo(const bool showDisabled) const
+QList<XVideo::Info> XVideo::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
 		modulesInfo += Info(XVideoWriterName, WRITER, QStringList("video"));
 	return modulesInfo;

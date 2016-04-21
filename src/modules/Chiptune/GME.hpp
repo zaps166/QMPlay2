@@ -15,7 +15,7 @@ private:
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	double length() const;
 	int bitrate() const;
 
@@ -34,12 +34,12 @@ private:
 	int getLength(gme_info_t *info) const;
 
 
-	IOController< Reader > m_reader;
+	IOController<Reader> m_reader;
 	quint32 m_srate;
 	bool m_aborted;
 	int m_length;
 
-	QList< QMPlay2Tag > m_tags;
+	QList<QMPlay2Tag> m_tags;
 	QString m_url, m_title;
 
 	Music_Emu *m_gme;

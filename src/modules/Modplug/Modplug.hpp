@@ -5,7 +5,7 @@ class Modplug : public Module
 public:
 	Modplug();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

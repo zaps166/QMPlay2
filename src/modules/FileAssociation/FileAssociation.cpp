@@ -24,9 +24,9 @@ FileAssociation::FileAssociation() :
 	}
 }
 
-QList< FileAssociation::Info > FileAssociation::getModulesInfo(const bool) const
+QList<FileAssociation::Info> FileAssociation::getModulesInfo(const bool) const
 {
-	return QList< Info >();
+	return QList<Info>();
 }
 void *FileAssociation::createInstance(const QString &)
 {
@@ -226,7 +226,7 @@ void ModuleSettingsWidget::saveSettings()
 }
 void ModuleSettingsWidget::addExtension(const QString &extension, const bool isChecked, const bool isPlaylist)
 {
-	QList< QListWidgetItem * > items = extensionLW->findItems(extension, Qt::MatchCaseSensitive);
+	QList<QListWidgetItem *> items = extensionLW->findItems(extension, Qt::MatchCaseSensitive);
 	if (items.isEmpty())
 	{
 		QListWidgetItem *lWI = new QListWidgetItem(extension, extensionLW);

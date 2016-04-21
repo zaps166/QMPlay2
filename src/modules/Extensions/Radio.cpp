@@ -33,7 +33,7 @@ Radio::Radio(Module &module) :
 	lW->setIconSize(QSize(32, 32));
 
 	QAction *act = new QAction(lW);
-	act->setShortcuts(QList< QKeySequence >() << QKeySequence("Return") << QKeySequence("Enter"));
+	act->setShortcuts(QList<QKeySequence>() << QKeySequence("Return") << QKeySequence("Enter"));
 	connect(act, SIGNAL(triggered()), this, SLOT(openLink()));
 	act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 	lW->addAction(act);

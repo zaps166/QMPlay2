@@ -10,9 +10,9 @@ PulseAudio::PulseAudio() :
 	init("Delay", 0.1);
 }
 
-QList< PulseAudio::Info > PulseAudio::getModulesInfo(const bool showDisabled) const
+QList<PulseAudio::Info> PulseAudio::getModulesInfo(const bool showDisabled) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
 		modulesInfo += Info(PulseAudioWriterName, WRITER, QStringList("audio"));
 	return modulesInfo;

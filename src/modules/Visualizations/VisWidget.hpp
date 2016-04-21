@@ -13,7 +13,7 @@ protected:
 	VisWidget();
 
 	static void setValue(qreal &out, qreal in, qreal tDiffScaled);
-	static void setValue(QPair< qreal, double > &out, qreal in, qreal tDiffScaled);
+	static void setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled);
 
 	bool regionIsVisible() const;
 

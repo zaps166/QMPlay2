@@ -1,6 +1,6 @@
 #include <DeintFilter.hpp>
 
-int DeintFilter::addFramesToDeinterlace(QQueue< FrameBuffer > &framesQueue, bool checkSize)
+int DeintFilter::addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize)
 {
 	while (!framesQueue.isEmpty())
 	{

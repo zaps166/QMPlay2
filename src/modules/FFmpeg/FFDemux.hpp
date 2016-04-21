@@ -14,11 +14,11 @@ private:
 
 	bool metadataChanged() const;
 
-	QList< ChapterInfo > getChapters() const;
+	QList<ChapterInfo> getChapters() const;
 
 	QString name() const;
 	QString title() const;
-	QList< QMPlay2Tag > tags() const;
+	QList<QMPlay2Tag> tags() const;
 	bool getReplayGain(bool album, float &gain_db, float &peak) const;
 	double length() const;
 	int bitrate() const;
@@ -37,7 +37,7 @@ private:
 
 	void addFormatContext(QString entireUrl);
 
-	QVector< FormatContext * > formatContexts;
+	QVector<FormatContext *> formatContexts;
 
 	QMutex &avcodec_mutex;
 	QMutex mutex;

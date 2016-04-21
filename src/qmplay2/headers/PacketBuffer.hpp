@@ -6,7 +6,7 @@
 #include <QMutex>
 #include <QList>
 
-class PacketBuffer : private QList< Packet >
+class PacketBuffer : private QList<Packet>
 {
 	static int backwardPackets;
 public:
@@ -29,7 +29,7 @@ public:
 
 	inline bool isEmpty() const
 	{
-		return QList< Packet >::isEmpty();
+		return QList<Packet>::isEmpty();
 	}
 
 	inline bool canFetch() const

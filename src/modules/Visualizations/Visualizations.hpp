@@ -5,7 +5,7 @@ class Visualizations : public Module
 public:
 	Visualizations();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

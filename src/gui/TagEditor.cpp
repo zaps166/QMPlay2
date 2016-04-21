@@ -67,7 +67,7 @@
 #endif
 using namespace TagLib;
 
-#define instanceOf(p, t) (dynamic_cast< t * >(&p) == &p)
+#define instanceOf(p, t) (dynamic_cast<t *>(&p) == &p)
 static inline bool isOgg(File &file)
 {
 	return instanceOf(file, Ogg::Vorbis::File) || instanceOf(file, Ogg::FLAC::File) || instanceOf(file, Ogg::Speex::File)

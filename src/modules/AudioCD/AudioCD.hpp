@@ -11,10 +11,10 @@ public:
 	AudioCD();
 	~AudioCD();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
-	QList< QAction * > getAddActions();
+	QList<QAction *> getAddActions();
 
 	SettingsWidget *getSettingsWidget();
 

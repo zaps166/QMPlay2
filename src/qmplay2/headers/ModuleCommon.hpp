@@ -45,9 +45,10 @@ protected:
 		return *module;
 	}
 
-	template < typename T > inline void SetInstance()
+	template<typename T>
+	inline void SetInstance()
 	{
-		module->SetInstance< T >();
+		module->SetInstance<T>();
 	}
 private:
 	Module *module;

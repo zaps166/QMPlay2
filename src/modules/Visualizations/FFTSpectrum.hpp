@@ -17,8 +17,8 @@ private:
 	void start(bool v = false, bool dontCheckRegion = false);
 	void stop();
 
-	QVector< float > spectrumData;
-	QVector< QPair< qreal, QPair< qreal, double > > > lastData;
+	QVector<float> spectrumData;
+	QVector<QPair<qreal, QPair<qreal, double> > > lastData;
 	uchar chn;
 	uint srate;
 	int interval, fftSize;

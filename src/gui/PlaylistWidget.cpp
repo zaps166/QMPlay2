@@ -69,7 +69,7 @@ void UpdateEntryThr::run()
 		{
 			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.img, &ioCtrl);
 
-			IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
+			IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 			if (Demuxer::create(url, demuxer))
 			{
 				if (itu.name.isEmpty())
@@ -258,7 +258,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				entry.url = url;
 
 				Functions::getDataIfHasPluginPrefix(url, &url, &entry.name, NULL, &ioCtrl, demuxersInfo);
-				IOController< Demuxer > &demuxer = ioCtrl.toRef< Demuxer >();
+				IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 				Demuxer::FetchTracks fetchTracks(pLW.dontUpdateAfterAdd);
 				if (Demuxer::create(url, demuxer, &fetchTracks))
 				{
@@ -306,7 +306,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 }
 QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo)
 {
-	QList< QTreeWidgetItem * > groupList;
+	QList<QTreeWidgetItem *> groupList;
 	const int queueSize = pLW.queue.size();
 	QTreeWidgetItem *firstItem = NULL;
 	foreach (const Playlist::Entry &entry, entries)
@@ -482,9 +482,9 @@ void PlaylistWidget::clearCurrentPlaying(bool url)
 	modifyMenu();
 }
 
-QList< QTreeWidgetItem * > PlaylistWidget::topLevelNonGroupsItems() const
+QList<QTreeWidgetItem *> PlaylistWidget::topLevelNonGroupsItems() const
 {
-	QList< QTreeWidgetItem * > items;
+	QList<QTreeWidgetItem *> items;
 	int count = topLevelItemCount();
 	for (int i = 0; i < count; i++)
 	{
@@ -494,9 +494,9 @@ QList< QTreeWidgetItem * > PlaylistWidget::topLevelNonGroupsItems() const
 	}
 	return items;
 }
-QList< QUrl > PlaylistWidget::getUrls() const
+QList<QUrl> PlaylistWidget::getUrls() const
 {
-	QList< QUrl > urls;
+	QList<QUrl> urls;
 
 	QStringList protocolsToAvoid;
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
@@ -604,7 +604,7 @@ void PlaylistWidget::enqueue()
 }
 void PlaylistWidget::refresh(REFRESH Refresh)
 {
-	const QList< QTreeWidgetItem * > items = getChildren(ONLY_NON_GROUPS);
+	const QList<QTreeWidgetItem *> items = getChildren(ONLY_NON_GROUPS);
 	if (Refresh & REFRESH_QUEUE)
 	{
 		for (int i = 0; i < queue.size(); i++)
@@ -618,7 +618,7 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 	}
 	if (Refresh & REFRESH_GROUPS_TIME)
 	{
-		const QList< QTreeWidgetItem * > groups = getChildren(ONLY_GROUPS);
+		const QList<QTreeWidgetItem *> groups = getChildren(ONLY_GROUPS);
 		for (int i = groups.size() - 1; i >= 0; i--)
 		{
 			int length = 0;
@@ -638,7 +638,7 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 		clearCurrentPlaying(false);
 }
 
-void PlaylistWidget::processItems(QList< QTreeWidgetItem * > *itemsToShow, bool hideGroups)
+void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hideGroups)
 {
 	int count = 0;
 	hasHiddenItems = false;
@@ -657,7 +657,7 @@ void PlaylistWidget::processItems(QList< QTreeWidgetItem * > *itemsToShow, bool 
 		return;
 
 	//ukrywanie pustych grup
-	const QList< QTreeWidgetItem * > groups = getChildren(ONLY_GROUPS);
+	const QList<QTreeWidgetItem *> groups = getChildren(ONLY_GROUPS);
 	for (int i = groups.size() - 1; i >= 0; i--)
 	{
 		if (hideGroups)
@@ -705,7 +705,7 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 	const bool modifier = (e->modifiers() == Qt::MetaModifier) || (e->modifiers() == Qt::AltModifier);
 	if ((e->buttons() & Qt::MidButton) || ((e->buttons() & Qt::LeftButton) && modifier))
 	{
-		const QList< QUrl > urls = getUrls();
+		const QList<QUrl> urls = getUrls();
 		if (!urls.isEmpty())
 		{
 			QMimeData *mimeData = new QMimeData;

@@ -8,7 +8,7 @@ MotionBlur::MotionBlur()
 	addParam("H");
 }
 
-bool MotionBlur::filter(QQueue< FrameBuffer > &framesQueue)
+bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	int insertAt = addFramesToInternalQueue(framesQueue);
 	if (internalQueue.count() >= 2)

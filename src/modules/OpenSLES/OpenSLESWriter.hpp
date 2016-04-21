@@ -34,8 +34,8 @@ private:
 	SLPlayItf bqPlayerPlay;
 	SLBufferQueueItf bqPlayerBufferQueue;
 
-	QVector< QVector< qint16 > > buffers;
-	QVector< qint16 > tmpBuffer;
+	QVector<QVector<qint16> > buffers;
+	QVector<qint16> tmpBuffer;
 	QSemaphore sem;
 	int currBuffIdx;
 

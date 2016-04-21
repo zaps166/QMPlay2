@@ -23,7 +23,7 @@ private:
 	uint srate;
 
 	int w_ofs;
-	QVector< float > sampleBuffer;
+	QVector<float> sampleBuffer;
 };
 
 #define EchoName "Echo"

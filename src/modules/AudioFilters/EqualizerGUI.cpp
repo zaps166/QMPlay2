@@ -30,7 +30,7 @@ void GraphW::paintEvent(QPaintEvent *)
 {
 	if (width() >= 2)
 	{
-		const QVector< float > graph = Equalizer::interpolate(values, width());
+		const QVector<float> graph = Equalizer::interpolate(values, width());
 
 		QPainter p(this);
 		p.scale(1.0, height()-1.0);
@@ -125,17 +125,17 @@ void EqualizerGUI::wallpaperChanged(bool hasWallpaper, double alpha)
 void EqualizerGUI::enabled(bool b)
 {
 	sets().set("Equalizer", b);
-	SetInstance< Equalizer >();
+	SetInstance<Equalizer>();
 }
 void EqualizerGUI::valueChanged(int v)
 {
-	QSlider *slider = qobject_cast< QSlider * >(sender());
+	QSlider *slider = qobject_cast<QSlider *>(sender());
 	if (slider)
 	{
 		graph.setValue(slider->property("idx").toInt(), v / 100.0f);
 		sets().set("Equalizer/" + slider->property("idx").toString(), v);
 		slider->setToolTip(Functions::dBStr(v / 50.0));
-		SetInstance< Equalizer >();
+		SetInstance<Equalizer>();
 	}
 }
 void EqualizerGUI::setSliders()
@@ -143,7 +143,7 @@ void EqualizerGUI::setSliders()
 	graph.hide();
 	foreach (QObject *o, slidersW->children())
 	{
-		QSlider *slider = qobject_cast< QSlider * >(o);
+		QSlider *slider = qobject_cast<QSlider *>(o);
 		if (slider)
 		{
 			const bool isPreamp = slider->property("preamp").toBool();
@@ -166,7 +166,7 @@ bool EqualizerGUI::set()
 	slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	QGridLayout *slidersLayout = new QGridLayout(slidersW);
 
-	QVector< float > freqs = Equalizer::freqs(sets());
+	QVector<float> freqs = Equalizer::freqs(sets());
 	graph.setValues(freqs.count());
 	for (int i = -1; i < freqs.count(); ++i)
 	{

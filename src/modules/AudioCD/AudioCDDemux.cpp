@@ -122,9 +122,9 @@ QString AudioCDDemux::title() const
 		prefix = Artist + " - ";
 	return prefix + tr("Track") + " " + QString::number(trackNo) + suffix;
 }
-QList< QMPlay2Tag > AudioCDDemux::tags() const
+QList<QMPlay2Tag> AudioCDDemux::tags() const
 {
-	QList< QMPlay2Tag > tagList;
+	QList<QMPlay2Tag> tagList;
 	if (!Title.isEmpty())
 		tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), Title);
 	if (!Artist.isEmpty())

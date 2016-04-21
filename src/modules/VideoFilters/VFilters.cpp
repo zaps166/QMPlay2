@@ -11,9 +11,9 @@ VFilters::VFilters() :
 	moduleImg = QImage(":/videofilters");
 }
 
-QList< VFilters::Info > VFilters::getModulesInfo(const bool) const
+QList<VFilters::Info> VFilters::getModulesInfo(const bool) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	modulesInfo += Info(BobDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER);
 	modulesInfo += Info(Yadif2xDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER, YadifDescr);
 	modulesInfo += Info(Yadif2xNoSpatialDeintName, VIDEOFILTER | DEINTERLACE | DOUBLER, YadifDescr);

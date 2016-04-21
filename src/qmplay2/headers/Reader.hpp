@@ -18,7 +18,7 @@
 class Reader : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-	static bool create(const QString &url, IOController< Reader > &reader, const QString &plugName = QString());
+	static bool create(const QString &url, IOController<Reader> &reader, const QString &plugName = QString());
 
 	inline QString getUrl() const
 	{

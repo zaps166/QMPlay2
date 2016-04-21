@@ -26,7 +26,7 @@ private:
 
 	/**/
 
-	IOController< Reader > reader;
+	IOController<Reader> reader;
 
 	double len;
 	FORMAT fmt;

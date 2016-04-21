@@ -5,7 +5,7 @@ class MotionBlur : public VideoFilter
 public:
 	MotionBlur();
 
-	bool filter(QQueue< FrameBuffer > &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue);
 
 	bool processParams(bool *paramsCorrected);
 private:

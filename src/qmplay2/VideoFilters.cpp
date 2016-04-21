@@ -75,7 +75,7 @@ void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const
 class PrepareForHWBobDeint : public DeintFilter
 {
 public:
-	bool filter(QQueue< FrameBuffer > &framesQueue)
+	bool filter(QQueue<FrameBuffer> &framesQueue)
 	{
 		int insertAt = addFramesToDeinterlace(framesQueue, false);
 		if (internalQueue.count() >= 2)

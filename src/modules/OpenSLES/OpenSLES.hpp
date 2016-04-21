@@ -5,7 +5,7 @@ class OpenSLES : public Module
 public:
 	OpenSLES();
 private:
-	QList< Info > getModulesInfo(const bool) const;
+	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();

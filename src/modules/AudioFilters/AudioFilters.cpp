@@ -44,9 +44,9 @@ AudioFilters::AudioFilters() :
 	}
 }
 
-QList< AudioFilters::Info > AudioFilters::getModulesInfo(const bool) const
+QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	modulesInfo += Info(EqualizerName, AUDIOFILTER);
 	modulesInfo += Info(EqualizerGUIName, QMPLAY2EXTENSION);
 	modulesInfo += Info(VoiceRemovalName, AUDIOFILTER);
@@ -59,7 +59,7 @@ void *AudioFilters::createInstance(const QString &name)
 	if (name == EqualizerName)
 		return new Equalizer(*this);
 	else if (name == EqualizerGUIName)
-		return static_cast< QMPlay2Extensions * >(new EqualizerGUI(*this));
+		return static_cast<QMPlay2Extensions *>(new EqualizerGUI(*this));
 	else if (name == VoiceRemovalName)
 		return new VoiceRemoval(*this);
 	else if (name == PhaseReverseName)
@@ -192,14 +192,14 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::voiceRemovalToggle()
 {
 	sets().set("VoiceRemoval", voiceRemovalEB->isChecked());
-	SetInstance< VoiceRemoval >();
+	SetInstance<VoiceRemoval>();
 }
 void ModuleSettingsWidget::phaseReverse()
 {
 	sets().set("PhaseReverse", phaseReverseEB->isChecked());
 	sets().set("PhaseReverse/ReverseRight", phaseReverseRightB->isChecked());
 	phaseReverseRightB->setEnabled(phaseReverseEB->isChecked());
-	SetInstance< PhaseReverse >();
+	SetInstance<PhaseReverse>();
 }
 void ModuleSettingsWidget::echo()
 {
@@ -208,7 +208,7 @@ void ModuleSettingsWidget::echo()
 	sets().set("Echo/Volume", echoVolumeB->value());
 	sets().set("Echo/Feedback", echoFeedbackB->value());
 	sets().set("Echo/Surround", echoSurroundB->isChecked());
-	SetInstance< Echo >();
+	SetInstance<Echo>();
 }
 
 void ModuleSettingsWidget::saveSettings()

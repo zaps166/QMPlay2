@@ -25,7 +25,7 @@ public:
 
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList< const QMPlay2_OSD * > &osd);
+	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 	void pause();
 
 	bool HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
@@ -73,7 +73,7 @@ private:
 
 	bool ok, mustRestartPlaying, canDrawOSD;
 
-	QList< VdpDecoderProfile > profileList;
+	QList<VdpDecoderProfile> profileList;
 
 	VdpPresentationQueueTarget queueTarget;
 	VdpPresentationQueue presentationQueue;
@@ -117,7 +117,7 @@ private:
 	static const int surfacesCount = 20, outputSurfacesCount = 2;
 	VdpOutputSurface outputSurfaces[outputSurfacesCount];
 	VdpVideoSurface surfaces[surfacesCount], renderSurfaces[3];
-	QQueue< VdpVideoSurface > surfacesQueue;
+	QQueue<VdpVideoSurface> surfacesQueue;
 	QSize outputSurfacesSize;
 
 	static const int featuresCount = 13, scalingLevelsIdx = 4, scalingLevelsCount = 9;
@@ -131,8 +131,8 @@ private:
 	WId lastWinId;
 
 	static const int drawTimeout = 40;
-	QList< const QMPlay2_OSD * > osd_list;
-	QList< QByteArray > osd_checksums;
+	QList<const QMPlay2_OSD *> osd_list;
+	QList<QByteArray> osd_checksums;
 	VdpBitmapSurface bitmapSurface;
 	QTimer visibleTim, drawTim;
 	QSize bitmapSurfaceSize;

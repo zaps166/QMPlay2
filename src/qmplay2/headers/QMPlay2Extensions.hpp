@@ -12,7 +12,7 @@ class QMPlay2Extensions : public ModuleCommon
 {
 public:
 	static void openExtensions();
-	static inline QList< QMPlay2Extensions * > QMPlay2ExtensionsList()
+	static inline QList<QMPlay2Extensions *> QMPlay2ExtensionsList()
 	{
 		return guiExtensionsList;
 	}
@@ -42,10 +42,10 @@ public:
 		return NULL;
 	}
 
-	virtual QList< AddressPrefix > addressPrefixList(bool img = true)
+	virtual QList<AddressPrefix> addressPrefixList(bool img = true)
 	{
 		Q_UNUSED(img)
-		return QList< AddressPrefix >();
+		return QList<AddressPrefix>();
 	}
 	virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl)
 	{
@@ -78,7 +78,7 @@ protected:
 
 	virtual void init() {} //Jeżeli jakieś rozszerzenie używa innego podczas inicjalizacji. Wywoływane po załadowaniu wszystkich.
 private:
-	static QList< QMPlay2Extensions * > guiExtensionsList;
+	static QList<QMPlay2Extensions *> guiExtensionsList;
 };
 
 #endif //QMPLAY2EXTENSIONS_HPP

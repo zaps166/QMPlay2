@@ -10,7 +10,7 @@ class Buffer;
 class AudioFilter : public ModuleCommon
 {
 public:
-	static QVector< AudioFilter * > open();
+	static QVector<AudioFilter *> open();
 
 	virtual bool setAudioParameters(uchar chn, uint srate) = 0;
 	virtual int bufferedSamples() const {return 0;}

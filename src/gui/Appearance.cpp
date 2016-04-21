@@ -186,7 +186,7 @@ void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_
 	QMPlay2GUI.mainW->setPalette(mainW_pal);
 	foreach (QWidget *w, QApplication::allWidgets())
 	{
-		QSlider *s = qobject_cast< QSlider * >(w);
+		QSlider *s = qobject_cast<QSlider *>(w);
 		if (s)
 			s->setPalette(sliderButton_pal);
 	}
@@ -513,7 +513,7 @@ void Appearance::loadCurrentPalette()
 	QPalette currentPalette = QApplication::palette(), sliderPalette, mainW_pal = QMPlay2GUI.mainW->palette();
 	foreach (QWidget *w, QApplication::allWidgets())
 	{
-		QSlider *s = qobject_cast< QSlider * >(w);
+		QSlider *s = qobject_cast<QSlider *>(w);
 		if (s && s->isEnabled())
 		{
 			sliderPalette = s->palette();

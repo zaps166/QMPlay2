@@ -7,7 +7,7 @@ DiscardDeint::DiscardDeint()
 	addParam("H");
 }
 
-bool DiscardDeint::filter(QQueue< FrameBuffer > &framesQueue)
+bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
 	if (!internalQueue.isEmpty())

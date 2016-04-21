@@ -49,12 +49,12 @@ public:
 		QImage img;
 		QStringList extensions;
 	};
-	virtual QList< Info > getModulesInfo(const bool showDisabled = false) const = 0;
+	virtual QList<Info> getModulesInfo(const bool showDisabled = false) const = 0;
 	virtual void *createInstance(const QString &) = 0;
 
-	virtual QList< QAction * > getAddActions()
+	virtual QList<QAction *> getAddActions()
 	{
-		return QList< QAction * >();
+		return QList<QAction *>();
 	}
 
 	class SettingsWidget : public QWidget
@@ -77,9 +77,10 @@ public:
 			return module;
 		}
 
-		template < typename T > inline void SetInstance()
+		template<typename T>
+		inline void SetInstance()
 		{
-			module.SetInstance< T >();
+			module.SetInstance<T>();
 		}
 	private:
 		Module &module;
@@ -95,21 +96,24 @@ public:
 	}
 
 	void SetInstances(bool &);
-	template < typename T > void SetInstance();
+
+	template<typename T>
+	void SetInstance();
 protected:
 	QImage moduleImg;
 private:
 	QMutex mutex;
 	QString mName;
-	QList< ModuleCommon * > instances;
+	QList<ModuleCommon *> instances;
 };
 
-template < typename T > void Module::SetInstance()
+template<typename T>
+void Module::SetInstance()
 {
 	mutex.lock();
 	foreach (ModuleCommon *mc, instances)
 	{
-		T *t = dynamic_cast< T * >(mc);
+		T *t = dynamic_cast<T *>(mc);
 		if (t)
 			t->set();
 	}

@@ -11,9 +11,9 @@ Visualizations::Visualizations() :
 	init("FFTSpectrum/Scale", 3);
 }
 
-QList< Visualizations::Info > Visualizations::getModulesInfo(const bool) const
+QList<Visualizations::Info> Visualizations::getModulesInfo(const bool) const
 {
-	QList< Info > modulesInfo;
+	QList<Info> modulesInfo;
 	modulesInfo += Info(SimpleVisName, QMPLAY2EXTENSION);
 	modulesInfo += Info(FFTSpectrumName, QMPLAY2EXTENSION);
 	return modulesInfo;

@@ -143,7 +143,7 @@ void XVideoWriter::writeVideo(const VideoFrame &videoFrame)
 {
 	xv->draw(videoFrame, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list, osd_mutex);
 }
-void XVideoWriter::writeOSD(const QList< const QMPlay2_OSD * > &osds)
+void XVideoWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	osd_mutex.lock();
 	osd_list = osds;

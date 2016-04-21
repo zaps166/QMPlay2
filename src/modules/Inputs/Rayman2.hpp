@@ -26,7 +26,7 @@ private:
 
 	void readHeader(const char *data);
 
-	IOController< Reader > reader;
+	IOController<Reader> reader;
 
 	double len;
 	unsigned srate;

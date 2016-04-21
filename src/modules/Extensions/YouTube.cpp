@@ -25,7 +25,7 @@
 #include <QFile>
 
 static const char cantFindTheTitle[] = "(Can't find the title)";
-static QMap< int, QString > itag_arr;
+static QMap<int, QString> itag_arr;
 
 static inline QUrl getYtUrl(const QString &title, const int page)
 {
@@ -278,14 +278,14 @@ void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 			if (e->buttons() & Qt::LeftButton)
 				mimeData->setText(url);
 			else if (e->buttons() & Qt::MiddleButton)
-				mimeData->setUrls(QList< QUrl >() << url);
+				mimeData->setUrls(QList<QUrl>() << url);
 
 			if (tWI->parent())
 				tWI = tWI->parent();
 
 			QDrag *drag = new QDrag(this);
 			drag->setMimeData(mimeData);
-			drag->setPixmap(tWI->data(0, Qt::DecorationRole).value< QPixmap >());
+			drag->setPixmap(tWI->data(0, Qt::DecorationRole).value<QPixmap>());
 			drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction);
 			return;
 		}
@@ -375,7 +375,7 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
 			const QString name = tWI->parent() ? tWI->parent()->text(0) : tWI->text(0);
 			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
-				if (!dynamic_cast< YouTube * >(QMPlay2Ext))
+				if (!dynamic_cast<YouTube *>(QMPlay2Ext))
 				{
 					QString addressPrefixName, url, param;
 					if (Functions::splitPrefixAndUrlIfHasPluginPrefix(getQMPlay2Url(tWI), &addressPrefixName, &url, &param))
@@ -569,12 +569,12 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 		else if (reply == searchReply)
 			setSearchResults(replyData);
 		else if (linkReplies.contains(reply))
-			getYouTubeVideo(replyData, QString(), ((QTreeWidgetItem *)reply->property("tWI").value< void * >()));
+			getYouTubeVideo(replyData, QString(), ((QTreeWidgetItem *)reply->property("tWI").value<void *>()));
 		else if (imageReplies.contains(reply))
 		{
 			QPixmap p;
 			if (p.loadFromData(replyData))
-				((QTreeWidgetItem *)reply->property("tWI").value< void * >())->setData(0, Qt::DecorationRole, p.scaled(imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+				((QTreeWidgetItem *)reply->property("tWI").value<void *>())->setData(0, Qt::DecorationRole, p.scaled(imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 		}
 	}
 
@@ -767,7 +767,7 @@ void YouTubeW::setSearchResults(QString data)
 	}
 }
 
-QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController< YouTubeDL > *youtube_dl)
+QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController<YouTubeDL> *youtube_dl)
 {
 	QStringList ret;
 
@@ -926,7 +926,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 
 	return ret;
 }
-QStringList YouTubeW::getUrlByItagPriority(const QList< int > &itags, QStringList ret)
+QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList ret)
 {
 	foreach (int itag, itags)
 	{
@@ -1009,7 +1009,7 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 	}
 
 	ItagNames itagPair;
-	for (QMap< int, QString >::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
+	for (QMap<int, QString>::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
 	{
 		switch (mediaType)
 		{
@@ -1063,9 +1063,9 @@ DockWidget *YouTube::getDockWidget()
 	return w.dw;
 }
 
-QList< YouTube::AddressPrefix > YouTube::addressPrefixList(bool img)
+QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img)
 {
-	return QList< AddressPrefix >() << AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()) << AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage());
+	return QList<AddressPrefix>() << AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()) << AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage());
 }
 void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
@@ -1077,7 +1077,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			*img = QImage(":/youtube");
 		if (ioCtrl && (stream_url || name))
 		{
-			IOController< Reader > &reader = ioCtrl->toRef< Reader >();
+			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
 			if (Reader::create(url, reader))
 			{
 				QByteArray replyData;
@@ -1093,7 +1093,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 				const bool multiStream = w.multiStream;
 				if (extension) //Don't use multi stream when downloading
 					w.multiStream = false;
-				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, NULL, url, ioCtrl->toPtr< YouTubeDL >());
+				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, NULL, url, ioCtrl->toPtr<YouTubeDL>());
 				w.multiStream = multiStream;
 				if (youTubeVideo.count() == 3)
 				{
@@ -1113,7 +1113,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			*img = QImage(":/video");
 		if (ioCtrl && !youtubedl_updating)
 		{
-			IOController< YouTubeDL > &youtube_dl = ioCtrl->toRef< YouTubeDL >();
+			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
 			if (ioCtrl->assign(new YouTubeDL(w.youtubedl)))
 			{
 				youtube_dl->addr(url, param, stream_url, name, extension);

@@ -33,7 +33,7 @@ class MainWidget : public QMainWindow
 	friend class QMPlay2GUIClass;
 	Q_OBJECT
 public:
-	MainWidget(QPair< QStringList, QStringList > &);
+	MainWidget(QPair<QStringList, QStringList> &);
 	~MainWidget();
 private slots:
 	void focusChanged(QWidget *, QWidget *);
@@ -144,7 +144,7 @@ private:
 	QSystemTrayIcon *tray;
 	QByteArray dockWidgetState, fullScreenDockWidgetState;
 	QRect savedGeo;
-	QList< QMPlay2Extensions * > visibleQMPlay2Extensions;
+	QList<QMPlay2Extensions *> visibleQMPlay2Extensions;
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
 	QWidget *lastFocusWidget;

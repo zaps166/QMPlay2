@@ -103,7 +103,7 @@ public:
 	//for OSD only
 	double left_duration(); //if < 0 then time out and you must this delete class
 private:
-	QList< Image > images;
+	QList<Image> images;
 
 	QByteArray _text;
 	double _duration, _pts;

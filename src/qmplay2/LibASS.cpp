@@ -279,10 +279,10 @@ void LibASS::setASSStyle()
 		ASS_Style &style = ass_sub_track->styles[i];
 		if (colorsAndBorders)
 		{
-			style.PrimaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value< QColor >());
-			style.SecondaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value< QColor >(), true);
-			style.OutlineColour = assColorFromQColor(settings.get("Subtitles/OutlineColor").value< QColor >());
-			style.BackColour = assColorFromQColor(settings.get("Subtitles/ShadowColor").value< QColor >());
+			style.PrimaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value<QColor>());
+			style.SecondaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value<QColor>(), true);
+			style.OutlineColour = assColorFromQColor(settings.get("Subtitles/OutlineColor").value<QColor>());
+			style.BackColour = assColorFromQColor(settings.get("Subtitles/ShadowColor").value<QColor>());
 			style.BorderStyle = 1;
 			style.Outline = settings.get("Subtitles/Outline").toDouble();
 			style.Shadow = settings.get("Subtitles/Shadow").toDouble();
@@ -455,9 +455,9 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 		free(style->FontName);
 	style->FontName = strdup(settings.get(prefix + "/FontName").toString().toUtf8().data());
 	style->FontSize = settings.get(prefix + "/FontSize").toInt();
-	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.get(prefix + "/TextColor").value< QColor >());
-	style->OutlineColour = assColorFromQColor(settings.get(prefix + "/OutlineColor").value< QColor >());
-	style->BackColour = assColorFromQColor(settings.get(prefix + "/ShadowColor").value< QColor >());
+	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.get(prefix + "/TextColor").value<QColor>());
+	style->OutlineColour = assColorFromQColor(settings.get(prefix + "/OutlineColor").value<QColor>());
+	style->BackColour = assColorFromQColor(settings.get(prefix + "/ShadowColor").value<QColor>());
 	style->Spacing = settings.get(prefix + "/Linespace").toDouble();
 	style->BorderStyle = 1;
 	style->Outline = settings.get(prefix + "/Outline").toDouble();

@@ -9,7 +9,7 @@ using Functions::Url;
 
 Playlist::Entries M3U::_read()
 {
-	Reader *reader = ioCtrl.rawPtr< Reader >();
+	Reader *reader = ioCtrl.rawPtr<Reader>();
 	Entries list;
 
 	QString playlistPath = filePath(reader->getUrl());
@@ -20,7 +20,7 @@ Playlist::Entries M3U::_read()
 	bool noReadLine = false;
 
 	QByteArray line;
-	QList< QByteArray > playlistLines = readLines();
+	QList<QByteArray> playlistLines = readLines();
 	while (!playlistLines.isEmpty())
 	{
 		QStringList splitLine;
@@ -62,7 +62,7 @@ Playlist::Entries M3U::_read()
 }
 bool M3U::_write(const Entries &list)
 {
-	Writer *writer = ioCtrl.rawPtr< Writer >();
+	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write("#EXTM3U\r\n");
 	for (int i = 0; i < list.size(); i++)
 	{
