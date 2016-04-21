@@ -3,6 +3,7 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
+#include <CPU.hpp>
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
