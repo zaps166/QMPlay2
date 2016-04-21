@@ -354,9 +354,9 @@ static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
 		inline u128(quint64 v) : lo(v), hi(v) {}
 		quint64 lo, hi;
 	};
-	const u128 pw_1(0x0001000100010001ULL);
-	const u128 pb_1(0x0101010101010101ULL);
-	u128 tmp0, tmp1, tmp2, tmp3;
+	__attribute__((aligned(16))) const u128 pw_1(0x0001000100010001ULL);
+	__attribute__((aligned(16))) const u128 pb_1(0x0101010101010101ULL);
+	__attribute__((aligned(16))) u128 tmp0, tmp1, tmp2, tmp3;
 
 	#define _mova  "movdqa"
 	#define _movu  "movdqu"
