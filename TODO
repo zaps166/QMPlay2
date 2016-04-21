@@ -13,7 +13,7 @@ Video cropping
 
 Add audio filters:
 	- Lua/LuaJIT scripts (from DSPBlocks),
-	- LADSPA, LV2 (from DSPBlocks),
+	- LADSPA (from DSPBlocks), LV2,
 	- FIR, IIR (from DSPBlocks),
 	- "Tempo".
 
