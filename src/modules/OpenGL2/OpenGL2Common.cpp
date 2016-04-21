@@ -58,7 +58,7 @@ OpenGL2Common::OpenGL2Common() :
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0), doClear(0),
 	aspectRatio(0.0), zoom(0.0),
-	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false), canWrapMouse(true),
+	sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
 	mouseTime(0.0)
 {
@@ -473,10 +473,8 @@ void OpenGL2Common::initGLProc()
 	glGenBuffers = (GLGenBuffers)QOpenGLContext::currentContext()->getProcAddress("glGenBuffers");
 	glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
 	glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
-	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
-	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
 	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
-	hasVbo = (glGenBuffers && glBindBuffer && glBufferData && glMapBuffer && glUnmapBuffer && glDeleteBuffers);
+	hasVbo = (glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers);
 
 }
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()
@@ -605,15 +603,12 @@ void OpenGL2Common::loadSphere()
 	nIndices = Sphere::getSizes(slices, stacks, sizes[0], sizes[1], sizes[2]);
 	glGenBuffers(3, sphereVbo);
 	for (qint32 i = 0; i < 3; ++i)
-	{
-		glBindBuffer(targets[i], sphereVbo[i]);
-		glBufferData(targets[i], sizes[i], NULL, GL_STATIC_DRAW);
-		pointers[i] = glMapBuffer(targets[i], GL_WRITE_ONLY);
-	}
+		pointers[i] = malloc(sizes[i]);
 	Sphere::generate(1.0f, slices, stacks, (float *)pointers[0], (float *)pointers[1], (quint16 *)pointers[2]);
 	for (qint32 i = 0; i < 3; ++i)
 	{
 		glBindBuffer(targets[i], sphereVbo[i]);
-		glUnmapBuffer(targets[i]);
+		glBufferData(targets[i], sizes[i], pointers[i], GL_STATIC_DRAW);
+		free(pointers[i]);
 	}
 }

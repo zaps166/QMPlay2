@@ -45,8 +45,6 @@ class OpenGL2Common
 	typedef    void  (APIENTRY *GLGenBuffers)(GLsizei, GLuint *);
 	typedef    void  (APIENTRY *GLBindBuffer)(GLenum, GLuint);
 	typedef    void  (APIENTRY *GLBufferData)(GLenum, GLsizeiptr, const void *, GLenum);
-	typedef    void *(APIENTRY *GLMapBuffer)(GLenum target, GLenum access);
-	typedef GLboolean(APIENTRY *GLUnmapBuffer)(GLenum target);
 	typedef    void  (APIENTRY *GLDeleteBuffers)(GLsizei, const GLuint *);
 #endif
 public:
@@ -87,8 +85,6 @@ protected:
 	GLGenBuffers glGenBuffers;
 	GLBindBuffer glBindBuffer;
 	GLBufferData glBufferData;
-	GLMapBuffer glMapBuffer;
-	GLUnmapBuffer glUnmapBuffer;
 	GLDeleteBuffers glDeleteBuffers;
 #endif
 
