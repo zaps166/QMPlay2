@@ -18,6 +18,7 @@
 #include <math.h>
 
 VideoDock::VideoDock() :
+	isTouch(false),
 	iDW(QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt),
 	pixels(0),
 	canPopup(true), is_floating(false),
@@ -231,26 +232,33 @@ void VideoDock::enterEvent(QEvent *e)
 }
 bool VideoDock::event(QEvent *e)
 {
-	if (e->type() == QEvent::Gesture)
+	switch (e->type())
 	{
-		QPinchGesture *pinch = (QPinchGesture *)((QGestureEvent *)e)->gesture(Qt::PinchGesture);
-		if (pinch)
-		{
-			if (pinch->state() == Qt::GestureStarted)
-				touchZoom = 0.0;
-			else if (pinch->state() == Qt::GestureUpdated)
+		case QEvent::TouchBegin:
+		case QEvent::TouchUpdate:
+			isTouch = true;
+			break;
+		case QEvent::Gesture:
+			if (QPinchGesture *pinch = (QPinchGesture *)((QGestureEvent *)e)->gesture(Qt::PinchGesture))
 			{
-				touchZoom += pinch->scaleFactor() - 1.0;
-				if (fabs(touchZoom) >= 0.05)
-				{
-					if (touchZoom > 0.00)
-						QMPlay2GUI.menuBar->player->zoomIn->trigger();
-					else if (touchZoom < 0.00)
-						QMPlay2GUI.menuBar->player->zoomOut->trigger();
+				if (pinch->state() == Qt::GestureStarted)
 					touchZoom = 0.0;
+				else if (pinch->state() == Qt::GestureUpdated)
+				{
+					touchZoom += pinch->scaleFactor() - 1.0;
+					if (fabs(touchZoom) >= 0.1)
+					{
+						if (touchZoom > 0.00)
+							QMPlay2GUI.menuBar->player->zoomIn->trigger();
+						else if (touchZoom < 0.00)
+							QMPlay2GUI.menuBar->player->zoomOut->trigger();
+						touchZoom = 0.0;
+					}
 				}
 			}
-		}
+			break;
+		default:
+			break;
 	}
 	return DockWidget::event(e);
 }

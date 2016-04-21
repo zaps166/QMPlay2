@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QToolBar>
 #include <QFrame>
-#include <QKeyEvent>
 #include <QSlider>
 #include <QToolButton>
 #include <QStatusBar>
@@ -15,6 +14,7 @@
 #include <QLocalSocket>
 #include <QTreeWidget>
 #include <QListWidget>
+#include <qevent.h>
 
 /* QMPlay2 gui */
 #include <Main.hpp>
@@ -1141,10 +1141,10 @@ void MainWidget::hideDocks()
 
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
-	if (fullScreen && e->buttons() == Qt::NoButton)
+	if (fullScreen && (e->buttons() == Qt::NoButton || videoDock->isTouch))
 	{
-		const int trigger1 = qMax<int>(5,  ceil(0.003 * width()));
-		const int trigger2 = qMax<int>(15, ceil(0.025 * width()));
+		const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch * 8) * width()));
+		const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch * 4) * width()));
 
 		int mPosX = 0;
 		if (videoDock->x() >= 0)

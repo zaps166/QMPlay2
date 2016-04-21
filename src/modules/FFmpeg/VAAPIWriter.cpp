@@ -684,10 +684,17 @@ void VAAPIWriter::paintEvent(QPaintEvent *)
 }
 bool VAAPIWriter::event(QEvent *e)
 {
-	/* Pass gesture event to the parent */
-	if (e->type() == QEvent::Gesture)
-		return qApp->notify(parent(), e);
-	return QWidget::event(e);
+	/* Pass gesture and touch event to the parent */
+	switch (e->type())
+	{
+		case QEvent::TouchBegin:
+		case QEvent::TouchUpdate:
+		case QEvent::TouchEnd:
+		case QEvent::Gesture:
+			return QCoreApplication::sendEvent(parent(), e);
+		default:
+			return QWidget::event(e);
+	}
 }
 
 QPaintEngine *VAAPIWriter::paintEngine() const

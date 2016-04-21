@@ -517,9 +517,10 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		case QEvent::TouchBegin:
 		case QEvent::TouchUpdate:
 			canWrapMouse = false;
-			break;
+			//Pass through
+		case QEvent::TouchEnd:
 		case QEvent::Gesture:
-			/* Pass gesture event to the parent */
+			/* Pass gesture and touch event to the parent */
 			QCoreApplication::sendEvent(p, e);
 			break;
 		default:

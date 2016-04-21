@@ -22,6 +22,8 @@ public:
 	{
 		iDW.update();
 	}
+
+	bool isTouch;
 private:
 	inline QWidget *internalWidget()
 	{
