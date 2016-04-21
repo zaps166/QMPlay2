@@ -11,9 +11,11 @@ Add key bindings
 Accurate seeking
 Video cropping
 
-Audio filters:
-	- add LADSPA and LV2,
-	- add "Tempo".
+Add audio filters:
+	- Lua/LuaJIT scripts (from DSPBlocks),
+	- LADSPA, LV2 (from DSPBlocks),
+	- FIR, IIR (from DSPBlocks),
+	- "Tempo".
 
 HWAccel:
 	- use VDPAU and VA-API for software decoded video,
