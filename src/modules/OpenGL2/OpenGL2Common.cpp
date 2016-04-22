@@ -264,7 +264,7 @@ void OpenGL2Common::paintGL()
 			for (qint32 p = 0; p < 3; ++p)
 			{
 				glBindTexture(GL_TEXTURE_2D, p + 2);
-				if (!sphericalView)
+				if (checkLinesize(p))
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 				else
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
@@ -281,7 +281,7 @@ void OpenGL2Common::paintGL()
 		{
 			glActiveTexture(GL_TEXTURE0 + p);
 			glBindTexture(GL_TEXTURE_2D, p + 2);
-			if (!sphericalView || videoFrame.linesize[p] == widths[p])
+			if (checkLinesize(p) || videoFrame.linesize[p] == widths[p])
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[p], heights[p], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[p].constData());
 			else
 			{
@@ -524,6 +524,11 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		default:
 			break;
 	}
+}
+
+inline bool OpenGL2Common::checkLinesize(int p)
+{
+	return !sphericalView && (p == 0 || ((videoFrame.linesize[0] >> 1) == videoFrame.linesize[p]));
 }
 
 /* 360 */

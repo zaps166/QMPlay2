@@ -98,6 +98,8 @@ protected:
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:
+	inline bool checkLinesize(int p);
+
 	/* Spherical view */
 	void mousePress360(QMouseEvent *e);
 	void mouseMove360(QMouseEvent *e);
