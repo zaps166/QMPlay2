@@ -19,7 +19,6 @@ using Functions::gettime;
 
 #include <math.h>
 
-
 VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", HWAccelWriter, pluginsName),
 	doScreenshot(false),

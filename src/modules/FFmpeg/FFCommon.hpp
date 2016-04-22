@@ -3,12 +3,12 @@
 
 #include <QString>
 
-#define QMPLAY2_NOPTS_VALUE (int64_t)AV_NOPTS_VALUE
+#define QMPLAY2_NOPTS_VALUE ((qint64)AV_NOPTS_VALUE)
 
 #define DecoderName "FFmpeg Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
-#define DecoderVDPAU_NWName "FFmpeg VDPAU Decoder (no writer)"
+#define DecoderVDPAU_NWName DecoderVDPAUName " (no output)"
 #define DemuxerName "FFmpeg"
 #define VAAPIWriterName "VA-API"
 #define VDPAUWriterName "VDPAU"

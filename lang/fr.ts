@@ -1256,7 +1256,7 @@ amp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This decoder can be used with any video output.
+        <source>This decoder doesnt have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>

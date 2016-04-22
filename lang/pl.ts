@@ -1257,10 +1257,10 @@ amp</translation>
         <translation>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</translation>
     </message>
     <message>
-        <source>This decoder can be used with any video output.
+        <source>This decoder doesnt have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Ten dekoder może być użyty z jakimkolwiek wyjściem obrazu.
-Kopiuje zdekodowany obraz do systemowej pamięci RAM, więc może być wolny!</translation>
+        <translation>Ten dekoder nie posiada własnego wyjścia obrazu, więc może być użyty z dowolnym wyjściem obrazu.
+Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powolny!</translation>
     </message>
 </context>
 <context>

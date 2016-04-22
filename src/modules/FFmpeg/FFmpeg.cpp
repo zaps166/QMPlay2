@@ -98,7 +98,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 		modulesInfo += Info(VAAPIWriterName, WRITER);
 	}
 #endif
-	modulesInfo += Info(FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp");
+	modulesInfo += Info(FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp" << "rtsp");
 	return modulesInfo;
 }
 void *FFmpeg::createInstance(const QString &name)
@@ -205,8 +205,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	vdpauLayout->addWidget(sharpnessLvlVDPAUS, 3, 1, 1, 1);
 
 
-	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no writer) - " + tr("hardware decoding"));
-	decoderVDPAU_NWB->setToolTip(tr("This decoder can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
+	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
+	decoderVDPAU_NWB->setToolTip(tr("This decoder doesnt have its own video output, so it can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
 	decoderVDPAU_NWB->setChecked(sets().getBool("DecoderVDPAU_NWEnabled"));
 #endif
 
