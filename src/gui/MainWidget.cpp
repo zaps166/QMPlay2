@@ -328,7 +328,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 		updater.downloadUpdate();
 #endif
 #ifdef QT5_WINDOWS
-	QCoreApplication::installNativeEventFilter(this);
+	qApp->installNativeEventFilter(this);
 #endif
 }
 MainWidget::~MainWidget()
