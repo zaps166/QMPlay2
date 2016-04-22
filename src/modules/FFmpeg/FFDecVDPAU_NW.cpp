@@ -4,6 +4,7 @@
 #include <HWAccelHelper.hpp>
 #include <StreamInfo.hpp>
 #include <VideoFrame.hpp>
+#include <Functions.hpp>
 
 #include <QQueue>
 
@@ -18,8 +19,6 @@ extern "C"
 class VDPAU : public HWAccelHelper
 {
 public:
-	int id;
-
 	VDPAU(int w, int h, const char *codec_name) :
 		mustDelete(false), mustntDelete(false),
 		display(NULL),
@@ -45,7 +44,7 @@ public:
 			{
 				quint32 out[4];
 				VdpBool isSupported;
-				QList< VdpDecoderProfile > profileList = QList< VdpDecoderProfile >()
+				QList<VdpDecoderProfile> profileList = QList<VdpDecoderProfile>()
 					<< VDP_DECODER_PROFILE_H264_HIGH << VDP_DECODER_PROFILE_H264_MAIN << VDP_DECODER_PROFILE_H264_BASELINE
 #ifdef VDP_DECODER_PROFILE_HEVC_MAIN
 					<< VDP_DECODER_PROFILE_HEVC_MAIN
@@ -151,8 +150,8 @@ public:
 
 	bool mustDelete, mustntDelete;
 
-	static const int surfacesCount = 18;
-	QQueue< VdpVideoSurface > surfacesQueue;
+	static const int surfacesCount = 20;
+	QQueue<VdpVideoSurface> surfacesQueue;
 	VdpVideoSurface surfaces[surfacesCount];
 
 	Display *display;
@@ -201,7 +200,7 @@ bool FFDecVDPAU_NW::set()
 
 QString FFDecVDPAU_NW::name() const
 {
-	return "FFmpeg/VDPAU";
+	return "FFmpeg/" VDPAUWriterName;
 }
 
 int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
@@ -211,7 +210,10 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool 
 	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
 	if (frameFinished && ~hurry_up)
 	{
-		decoded = VideoFrame(streamInfo->W, streamInfo->H, frame->interlaced_frame, frame->top_field_first);
+		const int aligned8W = Functions::aligned(streamInfo->W, 8);
+		const int aligned4H = Functions::aligned(streamInfo->H, 4);
+		const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
+		decoded = VideoFrame(aligned4H, aligned4H >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
 		void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
 		if (((VDPAU *)codec_ctx->opaque)->vdp_surface_get_bits((quintptr)frame->data[3], VDP_YCBCR_FORMAT_YV12, data, (quint32 *)decoded.linesize) != VDP_STATUS_OK)
 			decoded.clear();
@@ -243,7 +245,7 @@ bool FFDecVDPAU_NW::open(StreamInfo *streamInfo, Writer *)
 				codec_ctx->get_buffer2  = HWAccelHelper::get_buffer;
 				codec_ctx->get_format   = get_format;
 				codec_ctx->slice_flags  = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
-				codec_ctx->opaque       = dynamic_cast< HWAccelHelper * >(vdpau);
+				codec_ctx->opaque       = dynamic_cast<HWAccelHelper *>(vdpau);
 				if (openCodec(codec))
 					return true;
 			}
