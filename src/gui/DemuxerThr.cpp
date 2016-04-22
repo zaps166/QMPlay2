@@ -268,26 +268,29 @@ void DemuxerThr::run()
 		return end();
 	}
 
-	QStringList filter;
-	filter << "*.ass" << "*.ssa";
-	foreach (const QString &ext, SubsDec::extensions())
-		filter << "*." + ext;
-	foreach (StreamInfo *streamInfo, demuxer->streamsInfo())
-		if (streamInfo->type == QMPLAY2_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
-		{
-			QString directory = Functions::filePath(url.mid(7));
-			QString fName = Functions::fileName(url, false).replace('_', ' ');
-			foreach (const QString &subsFile, QDir(directory).entryList(filter, QDir::Files))
+	if (url.startsWith("file://"))
+	{
+		QStringList filter;
+		filter << "*.ass" << "*.ssa";
+		foreach (const QString &ext, SubsDec::extensions())
+			filter << "*." + ext;
+		foreach (StreamInfo *streamInfo, demuxer->streamsInfo())
+			if (streamInfo->type == QMPLAY2_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
 			{
-				if (Functions::fileName(subsFile, false).replace('_', ' ').contains(fName, Qt::CaseInsensitive))
+				const QString directory = Functions::filePath(url.mid(7));
+				const QString fName = Functions::fileName(url, false).replace('_', ' ');
+				foreach (const QString &subsFile, QDir(directory).entryList(filter, QDir::Files))
 				{
-					const QString fileSubsUrl = Functions::Url(directory + subsFile);
-					if (!playC.fileSubsList.contains(fileSubsUrl))
-						playC.fileSubsList += fileSubsUrl;
+					if (Functions::fileName(subsFile, false).replace('_', ' ').contains(fName, Qt::CaseInsensitive))
+					{
+						const QString fileSubsUrl = Functions::Url(directory + subsFile);
+						if (!playC.fileSubsList.contains(fileSubsUrl))
+							playC.fileSubsList += fileSubsUrl;
+					}
 				}
+				break;
 			}
-			break;
-		}
+	}
 
 	err = !load(false);
 	if (err || demuxer.isAborted())
