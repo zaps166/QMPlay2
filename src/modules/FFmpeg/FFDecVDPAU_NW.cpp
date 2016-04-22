@@ -195,7 +195,7 @@ FFDecVDPAU_NW::~FFDecVDPAU_NW()
 
 bool FFDecVDPAU_NW::set()
 {
-	return sets().getBool("DecoderVDPAUEnabled");
+	return sets().getBool("DecoderVDPAU_NWEnabled");
 }
 
 QString FFDecVDPAU_NW::name() const

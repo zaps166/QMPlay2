@@ -58,7 +58,6 @@ unix:!macx:!android {
 	SOURCES   += FFDecVDPAU.cpp VDPAUWriter.cpp
 	DEFINES   += QMPlay2_VDPAU
 #VDPAU without writer (decoded video will be copied to system RAM, can be slow)
-#	HEADERS   += FFDecVDPAU_NW.hpp
-#	SOURCES   += FFDecVDPAU_NW.cpp
-#	DEFINES   += QMPlay2_VDPAU_NW
+	HEADERS   += FFDecVDPAU_NW.hpp
+	SOURCES   += FFDecVDPAU_NW.cpp
 }

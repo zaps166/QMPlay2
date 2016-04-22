@@ -51,6 +51,7 @@ private:
 	QComboBox *vdpauDeintMethodB, *vdpauHQScalingB;
 	QCheckBox *noisereductionVDPAUB, *sharpnessVDPAUB;
 	Slider *noisereductionLvlVDPAUS, *sharpnessLvlVDPAUS;
+	QCheckBox *decoderVDPAU_NWB;
 #endif
 #ifdef QMPlay2_VAAPI
 	QCheckBox *allowVDPAUinVAAPIB;

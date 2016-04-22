@@ -1256,6 +1256,12 @@ amp</translation>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</translation>
     </message>
+    <message>
+        <source>This decoder can be used with any video output.
+It copies decoded video frame to system RAM, so it can be slow!</source>
+        <translation>Ten dekoder może być użyty z jakimkolwiek wyjściem obrazu.
+Kopiuje zdekodowany obraz do systemowej pamięci RAM, więc może być wolny!</translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>
