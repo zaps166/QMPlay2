@@ -2,12 +2,12 @@
 
 #include <math.h>
 
-quint32 Sphere::getSizes(quint32 slices, quint32 stacks, quint32 &nVertices, quint32 &nTexcoords, quint32 &nIndices)
+quint32 Sphere::getSizes(quint32 slices, quint32 stacks, quint32 &verticesSize, quint32 &texcoordsSize, quint32 &indicesSize)
 {
-	nVertices  = slices * stacks * 3 * sizeof(float);
-	nTexcoords = slices * stacks * 2 * sizeof(float);
-	nIndices   = slices * stacks * 2 * sizeof(quint16);
-	return nIndices / sizeof(quint16);
+	verticesSize  = slices * stacks * 3 * sizeof(float);
+	texcoordsSize = slices * stacks * 2 * sizeof(float);
+	indicesSize   = slices * stacks * 2 * sizeof(quint16);
+	return indicesSize / sizeof(quint16);
 }
 void Sphere::generate(float radius, quint32 slices, quint32 stacks, float *vertices, float *texcoords, quint16 *indices)
 {
