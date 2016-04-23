@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.04.22:
+Changes in QMPlay2 build 16.04.23:
 	- VDPAU decoder without VDPAU writer is now available (disabled by default),
 	- added spherical view for video playback (Ctrl+3; OpenGL only),
 	- added Simplified Chinese translation (king Lee),
