@@ -27,11 +27,7 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 	sDec(NULL),
 	HWAccelWriter(HWAccelWriter),
 	subtitles(NULL)
-{
-	connect(this, SIGNAL(write(VideoFrame)), this, SLOT(write_slot(VideoFrame)));
-	connect(this, SIGNAL(screenshot(VideoFrame)), this, SLOT(screenshot_slot(VideoFrame)));
-	connect(this, SIGNAL(pause()), this, SLOT(pause_slot()));
-}
+{}
 VideoThr::~VideoThr()
 {
 	delete playC.osd;
@@ -206,7 +202,7 @@ void VideoThr::run()
 
 		if (doScreenshot && !videoFrame.isEmpty())
 		{
-			emit screenshot(videoFrame);
+			QMetaObject::invokeMethod(this, "screenshot", Q_ARG(VideoFrame, videoFrame));
 			doScreenshot = false;
 		}
 
@@ -219,7 +215,7 @@ void VideoThr::run()
 		{
 			if (playC.paused && !paused)
 			{
-				emit pause();
+				QMetaObject::invokeMethod(this, "pause");
 				paused = true;
 				frame_timer = -1.0;
 			}
@@ -477,7 +473,7 @@ void VideoThr::run()
 				if (!skip && canWrite)
 				{
 					oneFrame = canWrite = false;
-					emit write(videoFrame);
+					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame));
 				}
 				frame_timer = gettime();
 			}
@@ -497,7 +493,7 @@ void VideoThr::run()
 	#include <X11/Xlib.h>
 #endif
 
-void VideoThr::write_slot(VideoFrame videoFrame)
+void VideoThr::write(VideoFrame videoFrame)
 {
 #ifdef X11_EXTRAS
 	static bool isXcb = (QGuiApplication::platformName() == "xcb");
@@ -510,7 +506,7 @@ void VideoThr::write_slot(VideoFrame videoFrame)
 	if (writer && writer->readyWrite())
 		((VideoWriter *)writer)->writeVideo(videoFrame);
 }
-void VideoThr::screenshot_slot(VideoFrame videoFrame)
+void VideoThr::screenshot(VideoFrame videoFrame)
 {
 	ImgScaler imgScaler;
 	const int aligned8W = Functions::aligned(W, 8);
@@ -539,7 +535,7 @@ void VideoThr::screenshot_slot(VideoFrame videoFrame)
 		}
 	}
 }
-void VideoThr::pause_slot()
+void VideoThr::pause()
 {
 	if (writer)
 		writer->pause();
