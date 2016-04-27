@@ -54,7 +54,7 @@ private:
 		int length;
 	};
 private slots:
-	void updateItem(const ItemUpdated &iu);
+	void updateItem(ItemUpdated iu);
 	void finished();
 };
 

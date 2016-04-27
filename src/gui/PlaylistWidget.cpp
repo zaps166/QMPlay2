@@ -85,7 +85,7 @@ void UpdateEntryThr::run()
 		{
 			iu.name = itu.name;
 			if (iu.name.isEmpty())
-				iu.name = Functions::fileName(url, false) ;
+				iu.name = Functions::fileName(url, false);
 		}
 
 		if (itu.length == itu.oldLength)
@@ -112,7 +112,7 @@ void UpdateEntryThr::stop()
 	}
 }
 
-void UpdateEntryThr::updateItem(const ItemUpdated &iu)
+void UpdateEntryThr::updateItem(ItemUpdated iu)
 {
 	if (!iu.img.isNull())
 		pLW.setEntryIcon(iu.img, iu.item);
