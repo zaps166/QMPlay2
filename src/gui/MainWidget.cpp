@@ -431,7 +431,7 @@ void MainWidget::togglePlay()
 }
 void MainWidget::seek(int i)
 {
-	if (!seekS->ignoreValueChanged())
+	if (!seekS->ignoringValueChanged())
 		playC.seek(i);
 }
 void MainWidget::chStream(const QString &s)

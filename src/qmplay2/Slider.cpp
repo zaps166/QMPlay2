@@ -7,19 +7,22 @@
 
 Slider::Slider() :
 	QSlider(Qt::Horizontal),
-	canSetValue(true), _ignoreValueChanged(false),
-	wheelStep(5), firstLine(-1), secondLine(-1)
+	canSetValue(true), ignoreValueChanged(false),
+	wheelStep(5), firstLine(-1), secondLine(-1),
+	cachedSliderValue(-1)
 {
 	setMouseTracking(true);
 }
 
 void Slider::setValue(int val)
 {
-	if (canSetValue)
+	if (!canSetValue)
+		cachedSliderValue = val;
+	else
 	{
-		_ignoreValueChanged = true;
+		ignoreValueChanged = true;
 		QSlider::setValue(val);
-		_ignoreValueChanged = false;
+		ignoreValueChanged = false;
 	}
 }
 
@@ -73,7 +76,10 @@ void Slider::paintEvent(QPaintEvent *e)
 void Slider::mousePressEvent(QMouseEvent *e)
 {
 	if (e->buttons() != Qt::RightButton) //Usually context menu or nothing
+	{
+		cachedSliderValue = -1;
 		canSetValue = false;
+	}
 	if (e->buttons() != Qt::LeftButton)
 		QSlider::mousePressEvent(e);
 	else
@@ -84,7 +90,15 @@ void Slider::mousePressEvent(QMouseEvent *e)
 }
 void Slider::mouseReleaseEvent(QMouseEvent *e)
 {
-	canSetValue = true;
+	if (!canSetValue)
+	{
+		canSetValue = true;
+		if (cachedSliderValue > -1)
+		{
+			setValue(cachedSliderValue);
+			cachedSliderValue = -1;
+		}
+	}
 	QSlider::mouseReleaseEvent(e);
 }
 void Slider::mouseMoveEvent(QMouseEvent *e)

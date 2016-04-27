@@ -9,9 +9,9 @@ class Slider : public QSlider
 public:
 	Slider();
 
-	inline bool ignoreValueChanged() const
+	inline bool ignoringValueChanged() const
 	{
-		return _ignoreValueChanged;
+		return ignoreValueChanged;
 	}
 public slots:
 	void setValue(int val);
@@ -34,8 +34,9 @@ protected:
 private:
 	int getMousePos(int X);
 
-	bool canSetValue, _ignoreValueChanged;
+	bool canSetValue, ignoreValueChanged;
 	int lastMousePos, wheelStep, firstLine, secondLine;
+	int cachedSliderValue;
 signals:
 	void mousePosition(int xPos);
 };
