@@ -412,6 +412,11 @@ void PlayClass::flushAssEvents()
 		ass->flushASSEvents();
 	sPackets.unlock();
 }
+void PlayClass::clearSubtitlesBuffer()
+{
+	sPackets.clear();
+	flushAssEvents();
+}
 
 void PlayClass::stopVThr()
 {
@@ -437,6 +442,11 @@ void PlayClass::stopAThr()
 			aThr = NULL;
 		}
 	}
+}
+inline void PlayClass::stopAVThr()
+{
+	stopVThr();
+	stopAThr();
 }
 
 void PlayClass::stopVDec()

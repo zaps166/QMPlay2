@@ -125,7 +125,7 @@ void EqualizerGUI::wallpaperChanged(bool hasWallpaper, double alpha)
 void EqualizerGUI::enabled(bool b)
 {
 	sets().set("Equalizer", b);
-	SetInstance<Equalizer>();
+	setInstance<Equalizer>();
 }
 void EqualizerGUI::valueChanged(int v)
 {
@@ -135,7 +135,7 @@ void EqualizerGUI::valueChanged(int v)
 		graph.setValue(slider->property("idx").toInt(), v / 100.0f);
 		sets().set("Equalizer/" + slider->property("idx").toString(), v);
 		slider->setToolTip(Functions::dBStr(v / 50.0));
-		SetInstance<Equalizer>();
+		setInstance<Equalizer>();
 	}
 }
 void EqualizerGUI::setSliders()

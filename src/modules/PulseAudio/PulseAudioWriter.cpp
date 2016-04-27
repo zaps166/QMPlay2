@@ -70,10 +70,6 @@ qint64 PulseAudioWriter::write(const QByteArray &arr)
 	return arr.size();
 }
 
-qint64 PulseAudioWriter::size() const
-{
-	return -1;
-}
 QString PulseAudioWriter::name() const
 {
 	return PulseAudioWriterName;

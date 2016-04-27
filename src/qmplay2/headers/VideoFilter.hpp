@@ -24,8 +24,7 @@ public:
 		double ts;
 	};
 
-	virtual ~VideoFilter()
-	{}
+	virtual ~VideoFilter();
 
 	inline void clearBuffer()
 	{

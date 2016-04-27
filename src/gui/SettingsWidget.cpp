@@ -939,7 +939,7 @@ void SettingsWidget::apply()
 				Module::SettingsWidget *settingsWidget = (Module::SettingsWidget *)page3->scrollA->widget();
 				settingsWidget->saveSettings();
 				settingsWidget->flushSettings();
-				page3->module->SetInstances(page3Restart);
+				page3->module->setInstances(page3Restart);
 				chModule(page3->listW->currentItem());
 			}
 			break;

@@ -25,10 +25,7 @@ public:
 
 	bool isTouch;
 private:
-	inline QWidget *internalWidget()
-	{
-		return (widget() == &iDW) ? iDW.widget() : widget();
-	}
+	inline QWidget *internalWidget();
 
 	void unsetCursor(QWidget *w);
 

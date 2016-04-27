@@ -55,3 +55,34 @@ Decoder *Decoder::create(StreamInfo *streamInfo, Writer *writer, const QStringLi
 	}
 	return NULL;
 }
+
+Writer *Decoder::HWAccel() const
+{
+	return NULL;
+}
+
+int Decoder::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
+{
+	Q_UNUSED(encodedPacket)
+	Q_UNUSED(decoded)
+	Q_UNUSED(flush)
+	Q_UNUSED(hurry_up)
+	return 0;
+}
+int Decoder::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
+{
+	Q_UNUSED(flush)
+	return (decoded = encodedPacket).size();
+}
+bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h)
+{
+	Q_UNUSED(encodedPacket)
+	Q_UNUSED(pos)
+	Q_UNUSED(osd)
+	Q_UNUSED(w)
+	Q_UNUSED(h)
+	return false;
+}
+
+Decoder::~Decoder()
+{}

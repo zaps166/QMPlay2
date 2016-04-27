@@ -44,6 +44,9 @@ QStringList Playlist::extensions()
 	return extensions;
 }
 
+Playlist::~Playlist()
+{}
+
 Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
 	QString extension = Functions::fileExt(url).toLower();

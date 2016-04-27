@@ -59,26 +59,21 @@ public:
 
 	void messageAndOSD(const QString &, bool onStatusBar = true, double duration = 1.0);
 
-	bool doSilenceOnStart;
+	inline void setDoSilenceOnStart()
+	{
+		doSilenceOnStart = true;
+	}
 private:
 	void speedMessageAndOSD();
 
 	double getARatio();
 
 	void flushAssEvents();
-	inline void clearSubtitlesBuffer()
-	{
-		sPackets.clear();
-		flushAssEvents();
-	}
+	void clearSubtitlesBuffer();
 
 	void stopVThr();
 	void stopAThr();
-	inline void stopAVThr()
-	{
-		stopVThr();
-		stopAThr();
-	}
+	inline void stopAVThr();
 
 	void stopVDec();
 	void stopADec();
@@ -101,7 +96,7 @@ private:
 	PacketBuffer aPackets, vPackets, sPackets;
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
-	bool canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
+	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
 	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB;
 	double vol, replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;

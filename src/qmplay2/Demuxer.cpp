@@ -49,3 +49,43 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 				}
 	return false;
 }
+
+bool Demuxer::metadataChanged() const
+{
+	return false;
+}
+
+QList<ChapterInfo> Demuxer::getChapters() const
+{
+	return QList<ChapterInfo>();
+}
+
+QList<QMPlay2Tag> Demuxer::tags() const
+{
+	return QList<QMPlay2Tag>();
+}
+
+QByteArray Demuxer::image(bool forceCopy) const
+{
+	Q_UNUSED(forceCopy)
+	return QByteArray();
+}
+
+bool Demuxer::localStream() const
+{
+	return true;
+}
+bool Demuxer::dontUseBuffer() const
+{
+	return false;
+}
+
+Demuxer::~Demuxer()
+{}
+
+Playlist::Entries Demuxer::fetchTracks(const QString &url, bool &ok)
+{
+	Q_UNUSED(url)
+	Q_UNUSED(ok)
+	return Playlist::Entries();
+}

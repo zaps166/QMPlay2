@@ -21,7 +21,6 @@ private:
 	qint64 write(const QByteArray &);
 	void pause();
 
-	qint64 size() const;
 	QString name() const;
 
 	bool open();

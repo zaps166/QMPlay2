@@ -17,3 +17,6 @@ QVector<AudioFilter *> AudioFilter::open()
 	filterList.squeeze();
 	return filterList;
 }
+
+AudioFilter::~AudioFilter()
+{}

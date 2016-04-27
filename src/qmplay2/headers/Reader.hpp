@@ -36,7 +36,7 @@ public:
 	virtual qint64 pos() const = 0;
 	virtual QString name() const = 0;
 
-	virtual ~Reader() {}
+	virtual ~Reader();
 private:
 	virtual bool open() = 0;
 

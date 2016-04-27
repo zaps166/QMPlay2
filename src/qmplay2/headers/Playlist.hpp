@@ -33,7 +33,7 @@ public:
 	virtual Entries _read() = 0;
 	virtual bool _write(const Entries &) = 0;
 
-	virtual ~Playlist() {}
+	virtual ~Playlist();
 private:
 	static Playlist *create(const QString &, OpenMode, QString *name = NULL);
 protected:

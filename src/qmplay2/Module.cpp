@@ -1,11 +1,23 @@
 #include <Module.hpp>
 #include <ModuleCommon.hpp>
 
-void Module::SetInstances(bool &restartPlaying)
+Module::~Module()
+{}
+
+QList<QAction *> Module::getAddActions()
 {
-	mutex.lock();
+	return QList<QAction *>();
+}
+
+Module::SettingsWidget *Module::getSettingsWidget()
+{
+	return NULL;
+}
+
+void Module::setInstances(bool &restartPlaying)
+{
+	QMutexLocker locker(&mutex);
 	foreach (ModuleCommon *mc, instances)
 		if (!mc->set())
 			restartPlaying = true;
-	mutex.unlock();
 }

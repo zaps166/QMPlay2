@@ -1,6 +1,9 @@
 #include <VideoFilter.hpp>
 #include <VideoFrame.hpp>
 
+VideoFilter::~VideoFilter()
+{}
+
 bool VideoFilter::removeLastFromInternalBuffer()
 {
 	if (!internalQueue.isEmpty())

@@ -314,7 +314,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 		if (!url.isEmpty() && url == playlistDock->getUrl())
 		{
 			double pos = QMPlay2Core.getSettings().getInt("Pos", 0);
-			playC.doSilenceOnStart = true;
+			playC.setDoSilenceOnStart();
 			playlistDock->start();
 			if (pos > 0.0)
 				seek(pos);

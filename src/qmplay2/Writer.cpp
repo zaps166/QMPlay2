@@ -18,10 +18,6 @@ class QMPlay2FileWriter : public Writer
 		return f.write(arr);
 	}
 
-	qint64 size() const
-	{
-		return f.size();
-	}
 	QString name() const
 	{
 		return "File Writer";
@@ -83,3 +79,6 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 	}
 	return NULL;
 }
+
+Writer::~Writer()
+{}

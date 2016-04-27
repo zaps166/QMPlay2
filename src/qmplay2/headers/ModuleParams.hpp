@@ -7,6 +7,7 @@
 
 class ModuleParams
 {
+	Q_DISABLE_COPY(ModuleParams)
 public:
 	inline bool modParam(const QString &key, const QVariant &val)
 	{
@@ -33,7 +34,6 @@ public:
 	}
 protected:
 	ModuleParams() {}
-	ModuleParams(const ModuleParams &) {}
 	~ModuleParams() {}
 
 	inline void addParam(const QString &key, const QVariant &val = QVariant())

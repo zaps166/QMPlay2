@@ -16,7 +16,6 @@ private:
 	bool processParams(bool *paramsCorrected);
 	qint64 write(const QByteArray &);
 
-	qint64 size() const;
 	QString name() const;
 
 	bool open();

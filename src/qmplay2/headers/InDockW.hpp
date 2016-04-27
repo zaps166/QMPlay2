@@ -9,14 +9,8 @@ class InDockW : public QWidget
 public:
 	InDockW(const QPixmap &, const QColor &, const QColor &, const QColor &);
 
-	inline QWidget *widget()
-	{
-		return w;
-	}
-	inline void setLoseHeight(int lh)
-	{
-		loseHeight = lh;
-	}
+	QWidget *getWidget();
+	void setLoseHeight(int lh);
 	void setCustomPixmap(const QPixmap &pix = QPixmap());
 private:
 	const QColor &grad1, &grad2, &qmpTxt;

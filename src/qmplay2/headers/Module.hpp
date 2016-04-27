@@ -20,7 +20,7 @@ public:
 		Settings(mName),
 		mName(mName)
 	{}
-	virtual ~Module() {}
+	virtual ~Module();
 
 	inline QString name() const
 	{
@@ -52,10 +52,7 @@ public:
 	virtual QList<Info> getModulesInfo(const bool showDisabled = false) const = 0;
 	virtual void *createInstance(const QString &) = 0;
 
-	virtual QList<QAction *> getAddActions()
-	{
-		return QList<QAction *>();
-	}
+	virtual QList<QAction *> getAddActions();
 
 	class SettingsWidget : public QWidget
 	{
@@ -80,25 +77,22 @@ public:
 		template<typename T>
 		inline void SetInstance()
 		{
-			module.SetInstance<T>();
+			module.setInstance<T>();
 		}
 	private:
 		Module &module;
 	};
-	virtual SettingsWidget *getSettingsWidget()
-	{
-		return NULL;
-	}
+	virtual SettingsWidget *getSettingsWidget();
 
 	inline QImage image() const
 	{
 		return moduleImg;
 	}
 
-	void SetInstances(bool &);
+	void setInstances(bool &);
 
 	template<typename T>
-	void SetInstance();
+	void setInstance();
 protected:
 	QImage moduleImg;
 private:
@@ -108,16 +102,15 @@ private:
 };
 
 template<typename T>
-void Module::SetInstance()
+void Module::setInstance()
 {
-	mutex.lock();
+	QMutexLocker locker(&mutex);
 	foreach (ModuleCommon *mc, instances)
 	{
 		T *t = dynamic_cast<T *>(mc);
 		if (t)
 			t->set();
 	}
-	mutex.unlock();
 }
 
 #define QMPLAY2_EXPORT_PLUGIN(ModuleClass) extern "C" Module *qmplay2PluginInstance() {return new ModuleClass;}

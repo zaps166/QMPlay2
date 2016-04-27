@@ -17,7 +17,7 @@ public:
 	virtual void clearBuffers() {}
 	virtual double filter(Buffer &data, bool flush = false) = 0; //returns delay in [s]
 
-	virtual ~AudioFilter() {}
+	virtual ~AudioFilter();
 };
 
 #endif

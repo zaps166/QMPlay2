@@ -13,7 +13,7 @@ public:
 
 	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
 
-	virtual ~SubsDec() {}
+	virtual ~SubsDec();
 };
 
 #endif //SUBSDEC_HPP

@@ -304,10 +304,6 @@ void ALSAWriter::pause()
 		snd_pcm_pause(snd, true);
 }
 
-qint64 ALSAWriter::size() const
-{
-	return -1;
-}
 QString ALSAWriter::name() const
 {
 	return ALSAWriterName;

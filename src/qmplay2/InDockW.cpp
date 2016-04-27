@@ -21,6 +21,14 @@ InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &g
 	setMouseTracking(true);
 }
 
+QWidget *InDockW::getWidget()
+{
+	return w;
+}
+void InDockW::setLoseHeight(int lh)
+{
+	loseHeight = lh;
+}
 void InDockW::setCustomPixmap(const QPixmap &pix)
 {
 	customPixmap = pix;

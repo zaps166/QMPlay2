@@ -21,13 +21,9 @@ public:
 
 	virtual qint64 write(const QByteArray &) = 0;
 
-	virtual qint64 size() const
-	{
-		return -1;
-	}
 	virtual QString name() const = 0;
 
-	virtual ~Writer() {}
+	virtual ~Writer();
 private:
 	virtual bool open() = 0;
 

@@ -105,6 +105,11 @@ void VideoDock::fullScreen(bool b)
 	}
 }
 
+inline QWidget *VideoDock::internalWidget()
+{
+	return (widget() == &iDW) ? iDW.getWidget() : widget();
+}
+
 void VideoDock::unsetCursor(QWidget *w)
 {
 	bool ok;

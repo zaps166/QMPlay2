@@ -6,34 +6,14 @@
 class ModuleCommon
 {
 public:
-	virtual bool set()
-	{
-		return true;
-	}
+	virtual bool set();
 protected:
 	inline ModuleCommon() :
-		module(NULL) {}
-	inline ~ModuleCommon()
-	{
-		if (module)
-		{
-			module->mutex.lock();
-			module->instances.removeOne(this);
-			module->mutex.unlock();
-		}
-	}
+		module(NULL)
+	{}
+	~ModuleCommon();
 
-	inline void SetModule(Module &m)
-	{
-		if (!module)
-		{
-			module = &m;
-			module->mutex.lock();
-			module->instances.append(this);
-			module->mutex.unlock();
-			set();
-		}
-	}
+	void SetModule(Module &m);
 
 	inline Settings &sets()
 	{
@@ -46,9 +26,9 @@ protected:
 	}
 
 	template<typename T>
-	inline void SetInstance()
+	inline void setInstance()
 	{
-		module->SetInstance<T>();
+		module->setInstance<T>();
 	}
 private:
 	Module *module;
