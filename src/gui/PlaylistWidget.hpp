@@ -51,7 +51,7 @@ private:
 		QImage img;
 
 		bool updateLength;
-		int length;
+		double length;
 	};
 private slots:
 	void updateItem(ItemUpdated iu);

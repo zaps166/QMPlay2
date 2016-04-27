@@ -958,7 +958,7 @@ void MainWidget::browseSubsFile()
 
 void MainWidget::updatePos(int pos)
 {
-	QString remainingTime = (seekS->maximum() - pos > -1) ? timeToStr(seekS->maximum() - pos) : timeToStr(0);
+	const QString remainingTime = (seekS->maximum() - pos > -1) ? timeToStr(seekS->maximum() - pos) : timeToStr(0);
 	timeL->setText(timeToStr(pos) + " ; -" + remainingTime + " / " + timeToStr(seekS->maximum()));
 	emit QMPlay2Core.posChanged(pos);
 	seekS->setValue(pos);

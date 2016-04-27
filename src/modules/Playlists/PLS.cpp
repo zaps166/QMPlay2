@@ -101,7 +101,7 @@ bool PLS::write(const Entries &list)
 		if (entry.length >= 0.0)
 		{
 			writer->write(QString("Length" + idx + "=" + QString::number((qint32)(entry.length + 0.5)) + "\r\n").toUtf8());
-			writer->write(QString("QMPlay_length" + idx + "=" + QString::number(entry.length) + "\r\n").toUtf8());
+			writer->write(QString("QMPlay_length" + idx + "=" + QString::number(entry.length, 'g', 13) + "\r\n").toUtf8());
 		}
 		if (entry.selected)
 			writer->write(QString("QMPlay_sel" + idx + "=" + QString::number(entry.selected) + "\r\n").toUtf8());

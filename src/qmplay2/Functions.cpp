@@ -97,9 +97,9 @@ QString Functions::getUrlScheme(const QString &url)
 	return QString();
 }
 
-QString Functions::timeToStr(int t, bool space)
+QString Functions::timeToStr(double t, bool space)
 {
-	if (t < 0)
+	if (t < 0.0)
 		return QString();
 
 	QString separator;
@@ -109,7 +109,7 @@ QString Functions::timeToStr(int t, bool space)
 		separator = ":";
 
 	int h, m, s;
-	getHMS(t, h, m, s);
+	getHMS(t + 0.5, h, m, s);
 
 	QString timStr;
 	if (h)

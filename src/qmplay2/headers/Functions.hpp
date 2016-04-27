@@ -46,7 +46,7 @@ namespace Functions
 		M = t % 3600 / 60;
 		S = t % 60;
 	}
-	QString timeToStr(int, bool space = false);
+	QString timeToStr(double t, bool space = false);
 
 	QString filePath(const QString &);
 	QString fileName(QString, bool extension = true);
