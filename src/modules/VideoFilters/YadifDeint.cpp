@@ -121,13 +121,13 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 #ifdef QMPLAY2_CPU_X86
 
 #define LOAD(mem,dst) \
-	_movh "    " mem  ", " dst "\n\t"\
-	"punpcklbw " mm(7)", " dst "\n\t"
+	_movh "    " mem  ", " dst"\n\t"\
+	"punpcklbw " mm(7)", " dst"\n\t"
 
 #define PABS(tmp,dst) \
-	"pxor    " tmp ", " tmp "\n\t"\
-	"psubw   " dst ", " tmp "\n\t"\
-	"pmaxsw  " tmp ", " dst "\n\t"
+	"pxor    " tmp ", " tmp"\n\t"\
+	"psubw   " dst ", " tmp"\n\t"\
+	"pmaxsw  " tmp ", " dst"\n\t"
 
 #define CHECK(pj,mj) \
 	_movu " "#pj"(%[curr],%[mrefs]), " mm(2)"\n\t"\
