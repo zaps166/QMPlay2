@@ -74,7 +74,8 @@ private:
 #endif
 	bool isOneStreamOgg;
 
-	int lastErr;
+	int lastErr, errFromSeek;
+	bool maybeHasFrame;
 
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
 	AVDictionary *metadata;

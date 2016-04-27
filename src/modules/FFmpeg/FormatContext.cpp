@@ -90,7 +90,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	isPaused(false), isAborted(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
-	lastErr(0),
+	lastErr(0), errFromSeek(0),
 	avcodec_mutex(avcodec_mutex)
 {}
 FormatContext::~FormatContext()
@@ -328,22 +328,39 @@ bool FormatContext::seek(int pos, bool backward)
 	isAborted = false;
 	if (!isStreamed)
 	{
+		const int len = length();
 		if (pos < 0)
 			pos = 0;
-		else
-		{
-			const double len = length();
-			if (len > 0 && pos > len)
-				pos = len;
-		}
+		else if (len > 0 && pos > len)
+			pos = len;
 		pos += startTime;
 #ifndef MP3_FAST_SEEK
 		if (seekByByteOffset < 0)
+		{
 #endif
-			isOk = av_seek_frame(formatCtx, -1, (int64_t)pos * AV_TIME_BASE, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
+			const qint64 timestamp = (qint64)pos * AV_TIME_BASE;
+			isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
+			if (!isOk)
+			{
+				const int ret = av_read_frame(formatCtx, packet);
+				if (ret != AVERROR_EOF)
+				{
+					errFromSeek = ret;
+					maybeHasFrame = true;
+				}
+				else
+				{
+					av_packet_unref(packet);
+					if (!backward && pos < len)
+						isOk = av_seek_frame(formatCtx, -1, timestamp, AVSEEK_FLAG_BACKWARD) >= 0;
+					else
+						isOk = true; //Allow seek to the end of the file, clear buffers and finish the playback
+				}
+			}
 #ifndef MP3_FAST_SEEK
+		}
 		else if (length() > 0)
-			isOk = av_seek_frame(formatCtx, -1, (int64_t)pos * (avio_size(formatCtx->pb) - seekByByteOffset) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | (backward ? AVSEEK_FLAG_BACKWARD : 0)) >= 0;
+			isOk = av_seek_frame(formatCtx, -1, (qint64)pos * (avio_size(formatCtx->pb) - seekByByteOffset) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | (backward ? AVSEEK_FLAG_BACKWARD : 0)) >= 0;
 #endif
 		if (isOk)
 		{
@@ -371,7 +388,15 @@ bool FormatContext::read(Packet &encoded, int &idx)
 
 	AVPacketRAII avPacketRAII(packet);
 
-	const int ret = av_read_frame(formatCtx, packet);
+	int ret;
+	if (!maybeHasFrame)
+		ret = av_read_frame(formatCtx, packet);
+	else
+	{
+		maybeHasFrame = false;
+		ret = errFromSeek;
+		errFromSeek = 0;
+	}
 	if (ret == AVERROR_INVALIDDATA)
 	{
 		if (lastErr != AVERROR_INVALIDDATA)

@@ -61,7 +61,8 @@ void FFCommon::freeAVPacket(AVPacket *&packet)
 #if LIBAVCODEC_VERSION_MAJOR >= 57
 	av_packet_free(&packet);
 #else
-	// Packet buffer is always NULL here, so no need to unref!
+	if (packet)
+		av_packet_unref(packet);
 	av_freep(&packet);
 #endif
 }
