@@ -19,6 +19,7 @@ class Slider;
 class MenuBar;
 class InfoDock;
 class VideoDock;
+class VolWidget;
 class QToolButton;
 class AboutWidget;
 class PlaylistDock;
@@ -83,8 +84,6 @@ private slots:
 	void updatePos(int);
 	void mousePositionOnSlider(int);
 
-	void volume(int);
-
 	void newConnection();
 	void readSocket();
 
@@ -138,7 +137,8 @@ private:
 	InfoDock *infoDock;
 	PlaylistDock *playlistDock;
 
-	Slider *seekS, *volS;
+	Slider *seekS;
+	VolWidget *volW;
 
 	PlayClass playC;
 

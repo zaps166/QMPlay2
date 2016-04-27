@@ -227,10 +227,16 @@ void AudioThr::run()
 			{
 				const double max_len = 0.02; //TODO: zrobić opcje?
 				const int chunk = qMin(decodedSize, (int)(ceil(realSample_rate * max_len) * realChannels * sizeof(float)));
-				const float vol = (playC.muted || playC.vol == 0.0) ? 0.0f : playC.replayGain * (playC.vol == 1.0 ? 1.0f : playC.vol * playC.vol);
+				float vol[2] = {0.0f, 0.0f};
+				if (!playC.muted)
+					for (int c = 0; c < 2; ++c)
+						if (playC.vol[c] > 0.0)
+							vol[c] = playC.replayGain * (playC.vol[c] == 1.0 ? 1.0 : playC.vol[c] * playC.vol[c]);
+
+				const bool isMuted = qFuzzyIsNull(vol[0]) && qFuzzyIsNull(vol[1]);
 
 				QByteArray decodedChunk;
-				if (vol == 0.0f)
+				if (isMuted)
 					decodedChunk.fill(0, chunk);
 				else
 					decodedChunk = QByteArray::fromRawData((const char *)decoded.constData() + decodedPos, chunk);
@@ -268,12 +274,12 @@ void AudioThr::run()
 						lastSpeed = speed;
 					}
 
-					if (vol != 1.0f && vol > 0.0f)
+					if (!isMuted && (!qFuzzyCompare(vol[0], 1.0f) || !qFuzzyCompare(vol[1], 1.0f)))
 					{
 						const int size = decodedChunk.size() / sizeof(float);
 						float *data = (float *)decodedChunk.data();
 						for (int i = 0; i < size; ++i)
-							data[i] *= vol;
+							data[i] *= vol[i & 1];
 					}
 
 					foreach (QMPlay2Extensions *vis, visualizations)
@@ -285,7 +291,7 @@ void AudioThr::run()
 					else
 						dataToWrite = decodedChunk;
 
-					if (doSilence >= 0.0 && vol > 0.0f)
+					if (doSilence >= 0.0 && !isMuted)
 					{
 						silenceChMutex.lock();
 						if (doSilence >= 0.0)

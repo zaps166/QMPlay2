@@ -85,7 +85,7 @@ PlayClass::PlayClass() :
 	doSilenceBreak = doSilenceOnStart = false;
 
 	maxThreshold = 60.0;
-	vol = 1.0;
+	vol[0] = vol[1] = 1.0;
 
 	quitApp = muted = reload = false;
 
@@ -744,20 +744,21 @@ void PlayClass::aRatio()
 	else
 		messageAndOSD(msg_txt);
 }
-void PlayClass::volume(int v)
+void PlayClass::volume(int l, int r)
 {
-	vol = v / 100.0;
+	vol[0] = l / 100.0;
+	vol[1] = r / 100.0;
 	if (!muted)
 	{
-		emit QMPlay2Core.volumeChanged(vol);
-		messageAndOSD(tr("Volume") + ": " + QString::number(v) + "%");
+		emit QMPlay2Core.volumeChanged((vol[0] + vol[1]) / 2.0);
+		messageAndOSD(tr("Volume") + ": " + QString::number((l + r) / 2) + "%");
 	}
 }
 void PlayClass::toggleMute()
 {
 	muted = !muted;
 	if (!muted)
-		volume(vol * 100);
+		volume(vol[0] * 100, vol[1] * 100);
 	else
 	{
 		messageAndOSD(tr("Muted sound"));

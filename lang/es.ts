@@ -1257,7 +1257,7 @@ amp</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This decoder doesn't have its own video output, so it can be used with any video output.
+        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2596,6 +2596,13 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Settings</source>
         <translation>Configuración</translation>
+    </message>
+</context>
+<context>
+    <name>VolWidget</name>
+    <message>
+        <source>Split channels</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

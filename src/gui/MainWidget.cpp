@@ -30,6 +30,7 @@
 #include <AboutWidget.hpp>
 #include <AddressDialog.hpp>
 #include <VideoEqualizer.hpp>
+#include <VolWidget.hpp>
 
 using Functions::timeToStr;
 
@@ -203,13 +204,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	mainTB->addAction(menuBar->player->toggleMute);
 
-	volS = new Slider;
-	volS->setMaximum(settings.getInt("MaxVol"));
-	if (volS->maximum() < 100)
-		volS->setMaximum(100);
-	volS->setValue(100);
-	volS->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed));
-	mainTB->addWidget(volS);
+	volW = new VolWidget(settings.getInt("MaxVol"));
+	mainTB->addWidget(volW);
+
 	/**/
 
 	Appearance::init();
@@ -230,8 +227,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(seekS, SIGNAL(valueChanged(int)), this, SLOT(seek(int)));
 	connect(seekS, SIGNAL(mousePosition(int)), this, SLOT(mousePositionOnSlider(int)));
 
-	connect(volS, SIGNAL(valueChanged(int)), &playC, SLOT(volume(int)));
-	connect(volS, SIGNAL(valueChanged(int)), this, SLOT(volume(int)));
+	connect(volW, SIGNAL(volumeChanged(int, int)), &playC, SLOT(volume(int, int)));
 
 	connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconClicked(QSystemTrayIcon::ActivationReason)));
 
@@ -296,10 +292,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
-	if (settings.getInt("Volume") != 100)
-		volS->setValue(settings.getInt("Volume"));
-	else
-		volume(100); //Sets the tooltip
+	volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
 	if (settings.getBool("Mute"))
 		menuBar->player->toggleMute->trigger();
 
@@ -388,7 +381,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 	else if (param == "volume")
 	{
 		const int vol = data.toInt();
-		volS->setValue(vol);
+		volW->setVolume(vol, vol);
 		if (menuBar->player->toggleMute->isChecked() != !vol)
 			menuBar->player->toggleMute->trigger();
 	}
@@ -461,9 +454,9 @@ void MainWidget::playStateChanged(bool b)
 void MainWidget::volUpDown()
 {
 	if (sender() == menuBar->player->volUp)
-		volS->setValue(volS->value() + 5);
+		volW->changeVolume(5);
 	else if (sender() == menuBar->player->volDown)
-		volS->setValue(volS->value() - 5);
+		volW->changeVolume(-5);
 }
 void MainWidget::actionSeek()
 {
@@ -919,7 +912,7 @@ void MainWidget::showSettings(const QString &moduleName)
 		settingsW = new SettingsWidget(sender() == menuBar->playback->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName);
 		connect(settingsW, SIGNAL(settingsChanged(int, bool)), &playC, SLOT(settingsChanged(int, bool)));
 		connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
-		connect(settingsW, SIGNAL(setVolMax(int)), volS, SLOT(setMaximum(int)));
+		connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));
 		connect(settingsW, SIGNAL(destroyed()), this, SLOT(showSettings()));
 	}
 	else
@@ -977,12 +970,6 @@ void MainWidget::updatePos(int pos)
 void MainWidget::mousePositionOnSlider(int pos)
 {
 	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos), 750);
-}
-
-void MainWidget::volume(int v)
-{
-	const double vol = v / 100.0;
-	volS->setToolTip(Functions::dBStr(vol * vol));
 }
 
 void MainWidget::newConnection()
@@ -1255,7 +1242,8 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	settings.set("MainWidget/isVisible", isVisible());
 #endif
 	settings.set("TrayVisible", tray->isVisible());
-	settings.set("Volume", volS->value());
+	settings.set("VolumeL", volW->volumeL());
+	settings.set("VolumeR", volW->volumeR());
 	settings.set("Mute", menuBar->player->toggleMute->isChecked());
 	menuBar->playback->videoFilters->videoEqualizer->saveValues();
 

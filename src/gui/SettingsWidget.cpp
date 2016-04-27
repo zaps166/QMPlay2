@@ -182,7 +182,8 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("BackwardBuffer", 1);
 	QMPSettings.init("PlayIfBuffered", 1.75);
 	QMPSettings.init("MaxVol", 100);
-	QMPSettings.init("Volume", 100);
+	QMPSettings.init("VolumeL", 100);
+	QMPSettings.init("VolumeR", 100);
 	QMPSettings.init("Mute", false);
 	QMPSettings.init("ForceSamplerate", false);
 	QMPSettings.init("Samplerate", 48000);

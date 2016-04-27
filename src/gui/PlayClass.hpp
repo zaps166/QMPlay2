@@ -98,7 +98,7 @@ private:
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
 	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
 	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB;
-	double vol, replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
+	double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
 	bool rotate90, spherical;
 
@@ -142,7 +142,7 @@ private slots:
 	void zoomOut();
 	void zoomReset();
 	void aRatio();
-	void volume(int);
+	void volume(int, int);
 	void toggleMute();
 	void slowDownVideo();
 	void speedUpVideo();

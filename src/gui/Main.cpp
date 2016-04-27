@@ -494,6 +494,14 @@ int main(int argc, char *argv[])
 			settings.remove("videoWriters");
 		}
 
+		if (settings.contains("Volume"))
+		{
+			const int vol = settings.getInt("Volume");
+			settings.set("VolumeL", vol);
+			settings.set("VolumeR", vol);
+			settings.remove("Volume");
+		}
+
 		QMPlay2GUI.setLanguage();
 
 		if (help)
