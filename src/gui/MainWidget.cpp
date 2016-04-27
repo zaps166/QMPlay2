@@ -98,14 +98,16 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	if (QMPlay2GUI.pipe)
 		connect(QMPlay2GUI.pipe, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
+	Settings &settings = QMPlay2Core.getSettings();
+
 	SettingsWidget::InitSettings();
-	QMPlay2Core.getSettings().init("MainWidget/WidgetsLocked", false);
+	settings.init("MainWidget/WidgetsLocked", false);
 
 	QMPlay2GUI.menuBar = new MenuBar;
 
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getQMPlay2Pixmap());
-	tray->setVisible(QMPlay2Core.getSettings().getBool("TrayVisible", true));
+	tray->setVisible(settings.getBool("TrayVisible", true));
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);
 	setMouseTracking(true);
@@ -190,7 +192,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	seekS = new Slider;
 	seekS->setMaximum(0);
 	seekS->setDisabled(true);
-	seekS->setWheelStep(QMPlay2Core.getSettings().getInt("ShortSeek"));
+	seekS->setWheelStep(settings.getInt("ShortSeek"));
 	mainTB->addWidget(seekS);
 	updatePos(0);
 
@@ -202,7 +204,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	mainTB->addAction(menuBar->player->toggleMute);
 
 	volS = new Slider;
-	volS->setMaximum(QMPlay2Core.getSettings().getInt("MaxVol"));
+	volS->setMaximum(settings.getInt("MaxVol"));
 	if (volS->maximum() < 100)
 		volS->setMaximum(100);
 	volS->setValue(100);
@@ -260,11 +262,11 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&playC, SIGNAL(uncheckSuspend()), this, SLOT(uncheckSuspend()));
 	/**/
 
-	if (QMPlay2Core.getSettings().getBool("MainWidget/TabPositionNorth"))
+	if (settings.getBool("MainWidget/TabPositionNorth"))
 		setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
-	const bool menuHidden = QMPlay2Core.getSettings().getBool("MainWidget/MenuHidden", false);
+	const bool menuHidden = settings.getBool("MainWidget/MenuHidden", false);
 	menuBar->setVisible(!menuHidden);
 	hideMenuAct = new QAction(tr("&Hide menu bar"), menuBar);
 	hideMenuAct->setCheckable(true);
@@ -275,7 +277,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	addAction(hideMenuAct);
 #endif
 
-	const bool widgetsLocked = QMPlay2Core.getSettings().getBool("MainWidget/WidgetsLocked");
+	const bool widgetsLocked = settings.getBool("MainWidget/WidgetsLocked");
 	lockWidgets(widgetsLocked);
 	lockWidgetsAct = new QAction(tr("&Lock widgets"), menuBar);
 	lockWidgetsAct->setCheckable(true);
@@ -285,20 +287,23 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(lockWidgetsAct, SIGNAL(triggered(bool)), this, SLOT(lockWidgets(bool)));
 	addAction(lockWidgetsAct);
 
-	fullScreenDockWidgetState = QMPlay2Core.getSettings().getByteArray("MainWidget/FullScreenDockWidgetState");
+	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
 #if defined Q_OS_MAC || defined Q_OS_ANDROID
 	show();
 #else
-	setVisible(QMPlay2Core.getSettings().getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
+	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
 #endif
 
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
-	if (QMPlay2Core.getSettings().getInt("Volume") != 100)
-		volS->setValue(QMPlay2Core.getSettings().getInt("Volume"));
+	if (settings.getInt("Volume") != 100)
+		volS->setValue(settings.getInt("Volume"));
 	else
 		volume(100); //Sets the tooltip
-	if (QMPlay2Core.getSettings().getBool("RestoreVideoEqualizer"))
+	if (settings.getBool("Mute"))
+		menuBar->player->toggleMute->trigger();
+
+	if (settings.getBool("RestoreVideoEqualizer"))
 		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
 
 	bool noplay = false;
@@ -311,10 +316,10 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	if (!noplay)
 	{
-		QString url = QMPlay2Core.getSettings().getString("Url");
+		const QString url = settings.getString("Url");
 		if (!url.isEmpty() && url == playlistDock->getUrl())
 		{
-			double pos = QMPlay2Core.getSettings().getInt("Pos", 0);
+			const double pos = settings.getInt("Pos", 0);
 			playC.setDoSilenceOnStart();
 			playlistDock->start();
 			if (pos > 0.0)
@@ -325,7 +330,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	}
 
 #ifdef UPDATER
-	if (QMPlay2Core.getSettings().getBool("AutoUpdates"))
+	if (sets.getBool("AutoUpdates"))
 		updater.downloadUpdate();
 #endif
 #ifdef QT5_WINDOWS
@@ -382,7 +387,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		close();
 	else if (param == "volume")
 	{
-		int vol = data.toInt();
+		const int vol = data.toInt();
 		volS->setValue(vol);
 		if (menuBar->player->toggleMute->isChecked() != !vol)
 			menuBar->player->toggleMute->trigger();
@@ -1251,6 +1256,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 #endif
 	settings.set("TrayVisible", tray->isVisible());
 	settings.set("Volume", volS->value());
+	settings.set("Mute", menuBar->player->toggleMute->isChecked());
 	menuBar->playback->videoFilters->videoEqualizer->saveValues();
 
 	hide();
