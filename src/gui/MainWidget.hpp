@@ -79,6 +79,7 @@ private slots:
 	void itemDropped(const QString &, bool);
 	void browseSubsFile();
 
+	void setSeekSMaximum(int);
 	void updatePos(int);
 	void mousePositionOnSlider(int);
 

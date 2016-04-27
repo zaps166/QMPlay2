@@ -189,6 +189,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	seekS = new Slider;
 	seekS->setMaximum(0);
+	seekS->setDisabled(true);
 	seekS->setWheelStep(QMPlay2Core.getSettings().getInt("ShortSeek"));
 	mainTB->addWidget(seekS);
 	updatePos(0);
@@ -238,7 +239,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&QMPlay2Core, SIGNAL(showSettings(const QString &)), this, SLOT(showSettings(const QString &)));
 
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
-	connect(&playC, SIGNAL(updateLength(int)), seekS, SLOT(setMaximum(int)));
+	connect(&playC, SIGNAL(updateLength(int)), this, SLOT(setSeekSMaximum(int)));
 	connect(&playC, SIGNAL(updatePos(int)), this, SLOT(updatePos(int)));
 	connect(&playC, SIGNAL(playStateChanged(bool)), this, SLOT(playStateChanged(bool)));
 	connect(&playC, SIGNAL(setCurrentPlaying()), playlistDock, SLOT(setCurrentPlaying()));
@@ -956,6 +957,11 @@ void MainWidget::browseSubsFile()
 		playC.loadSubsFile(Functions::Url(f));
 }
 
+void MainWidget::setSeekSMaximum(int max)
+{
+	seekS->setMaximum(max);
+	seekS->setEnabled(max > 0);
+}
 void MainWidget::updatePos(int pos)
 {
 	const QString remainingTime = (seekS->maximum() - pos > -1) ? timeToStr(seekS->maximum() - pos) : timeToStr(0);
