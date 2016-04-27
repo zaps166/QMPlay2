@@ -576,7 +576,7 @@ DockWidget *Downloader::getDockWidget()
 	return w->dw;
 }
 
-QAction *Downloader::getAction(const QString &name, int, const QString &url, const QString &prefix, const QString &param)
+QAction *Downloader::getAction(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
 {
 	if (url.startsWith("file://"))
 		return NULL;

@@ -175,7 +175,7 @@ signals:
 	void playStateChanged(bool);
 	void setCurrentPlaying();
 	void setInfo(const QString &, bool, bool);
-	void updateCurrentEntry(const QString &, int);
+	void updateCurrentEntry(const QString &, double);
 	void playNext(bool playingError);
 	void message(const QString &, int ms);
 	void clearCurrentPlaying();

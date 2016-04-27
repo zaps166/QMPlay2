@@ -1123,7 +1123,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 	}
 }
 
-QAction *YouTube::getAction(const QString &name, int, const QString &url, const QString &, const QString &)
+QAction *YouTube::getAction(const QString &name, double, const QString &url, const QString &, const QString &)
 {
 	if (name != url)
 	{

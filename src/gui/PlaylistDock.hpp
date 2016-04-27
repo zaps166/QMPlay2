@@ -75,7 +75,7 @@ public slots:
 	void visibleItemsCount(int);
 	void syncCurrentFolder();
 	void repeat();
-	void updateCurrentEntry(const QString &, int);
+	void updateCurrentEntry(const QString &, double);
 signals:
 	void play(const QString &);
 	void stop();

@@ -12,7 +12,7 @@ Playlist::Entries Playlist::read(const QString &url, QString *name)
 	Playlist *playlist = create(url, ReadOnly, name);
 	if (playlist)
 	{
-		list = playlist->_read();
+		list = playlist->read();
 		delete playlist;
 	}
 	return list;
@@ -23,7 +23,7 @@ bool Playlist::write(const Entries &list, const QString &url, QString *name)
 	Playlist *playlist = create(url, WriteOnly, name);
 	if (playlist)
 	{
-		OK = playlist->_write(list);
+		OK = playlist->write(list);
 		delete playlist;
 	}
 	return OK;

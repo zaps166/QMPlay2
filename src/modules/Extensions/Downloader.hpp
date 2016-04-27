@@ -151,7 +151,7 @@ public:
 
 	DockWidget *getDockWidget();
 
-	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);
+	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &);
 
 	/**/
 

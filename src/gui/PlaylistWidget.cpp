@@ -33,12 +33,12 @@ UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
 
-void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, int length)
+void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, double length)
 {
 	if (!item || !pLW.getChildren(PlaylistWidget::ONLY_NON_GROUPS).contains(item))
 		return;
 	mutex.lock();
-	itemsToUpdate += (ItemToUpdate){item, pLW.getUrl(item), item->data(2, Qt::UserRole).toInt(), name, length};
+	itemsToUpdate += (ItemToUpdate){item, pLW.getUrl(item), item->data(2, Qt::UserRole).toDouble(), name, length};
 	mutex.unlock();
 	if (!isRunning())
 	{
@@ -65,7 +65,7 @@ void UpdateEntryThr::run()
 		ItemUpdated iu;
 		iu.item = itu.item;
 
-		if (itu.name.isNull() && itu.length == -2)
+		if (itu.name.isNull() && itu.length == -2.0)
 		{
 			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.img, &ioCtrl);
 
@@ -121,7 +121,7 @@ void UpdateEntryThr::updateItem(ItemUpdated iu)
 	if (iu.updateLength)
 	{
 		iu.item->setText(2, Functions::timeToStr(iu.length));
-		iu.item->setData(2, Qt::UserRole, QString::number(iu.length));
+		iu.item->setData(2, Qt::UserRole, iu.length);
 	}
 }
 void UpdateEntryThr::finished()
@@ -553,7 +553,7 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	tWI->setText(0, entry.name);
 	tWI->setData(0, Qt::UserRole, entry.url);
 	tWI->setText(2, Functions::timeToStr(entry.length));
-	tWI->setData(2, Qt::UserRole, QString::number(entry.length));
+	tWI->setData(2, Qt::UserRole, entry.length);
 
 	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(bool, false));
 	return tWI;
@@ -621,17 +621,18 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 		const QList<QTreeWidgetItem *> groups = getChildren(ONLY_GROUPS);
 		for (int i = groups.size() - 1; i >= 0; i--)
 		{
-			int length = 0;
+			double length = 0.0;
 			foreach (QTreeWidgetItem *tWI, getChildren(ALL_CHILDREN, groups[i]))
 			{
 				if (tWI->parent() != groups[i])
 					continue;
-				int l = tWI->data(2, Qt::UserRole).toInt();
-				if (l > 0)
+				const double l = tWI->data(2, Qt::UserRole).toDouble();
+				if (l > 0.0)
 					length += l;
 			}
-			groups[i]->setText(2, length ? Functions::timeToStr(length) : QString());
-			groups[i]->setData(2, Qt::UserRole, length ? QString::number(length) : QVariant());
+			const bool hasLength = !qFuzzyIsNull(length);
+			groups[i]->setText(2, hasLength ? Functions::timeToStr(length) : QString());
+			groups[i]->setData(2, Qt::UserRole, hasLength ? length : QVariant());
 		}
 	}
 	if ((Refresh & REFRESH_CURRPLAYING) && !items.contains(currentPlaying))
@@ -874,11 +875,11 @@ void PlaylistWidget::modifyMenu()
 {
 	QString entryUrl = getUrl();
 	QString entryName;
-	int entryLength = -2;
+	double entryLength = -2.0;
 	if (currentItem())
 	{
 		entryName = currentItem()->text(0);
-		entryLength = currentItem()->data(2, Qt::UserRole).toInt();
+		entryLength = currentItem()->data(2, Qt::UserRole).toDouble();
 	}
 
 	playlistMenu()->saveGroup->setVisible(currentItem() && isGroup(currentItem()));

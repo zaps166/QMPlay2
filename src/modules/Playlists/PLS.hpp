@@ -2,12 +2,10 @@
 
 class PLS : public Playlist
 {
-	Entries _read();
-	bool _write(const Entries &);
+	Entries read();
+	bool write(const Entries &);
 
-	~PLS() {}
-
-	void prepareList(Entries *, int);
+	~PLS();
 };
 
 #define PLSName "PLS"

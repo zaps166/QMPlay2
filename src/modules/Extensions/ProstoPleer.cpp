@@ -400,7 +400,7 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 	}
 }
 
-QAction *ProstoPleer::getAction(const QString &name, int, const QString &url, const QString &, const QString &)
+QAction *ProstoPleer::getAction(const QString &name, double, const QString &url, const QString &, const QString &)
 {
 	if (name != url)
 	{

@@ -22,7 +22,7 @@ class UpdateEntryThr : public QThread
 public:
 	UpdateEntryThr(PlaylistWidget &pLW);
 
-	void updateEntry(QTreeWidgetItem *item, const QString &name = QString(), int length = -2);
+	void updateEntry(QTreeWidgetItem *item, const QString &name = QString(), double length = -2.0);
 
 	void stop();
 private:
@@ -37,10 +37,10 @@ private:
 	{
 		QTreeWidgetItem *item;
 		QString url;
-		int oldLength;
+		double oldLength;
 
 		QString name;
-		int length;
+		double length;
 	};
 	QQueue<ItemToUpdate> itemsToUpdate;
 

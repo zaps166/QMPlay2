@@ -43,8 +43,11 @@ void QMPlay2Extensions::convertAddress(const QString &, const QString &, const Q
 	Q_UNUSED(ioCtrl)
 }
 
-QAction *QMPlay2Extensions::getAction(const QString &, int, const QString &, const QString &prefix, const QString &param)
+QAction *QMPlay2Extensions::getAction(const QString &name, double length, const QString &url, const QString &prefix, const QString &param)
 {
+	Q_UNUSED(name)
+	Q_UNUSED(length)
+	Q_UNUSED(url)
 	Q_UNUSED(prefix)
 	Q_UNUSED(param)
 	return NULL;

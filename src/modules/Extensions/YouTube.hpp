@@ -123,7 +123,7 @@ public:
 	QList<AddressPrefix> addressPrefixList(bool);
 	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl);
 
-	QAction *getAction(const QString &, int, const QString &, const QString &, const QString &);
+	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &);
 private:
 	YouTubeW w;
 };

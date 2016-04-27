@@ -13,29 +13,36 @@ public:
 	{
 	public:
 		inline Entry() :
+			length(-1.0),
 			selected(false),
-			length(-1), queue(0), GID(0), parent(0)
+			queue(0), GID(0), parent(0)
 		{}
 
 		QString name, url;
+		double length;
 		bool selected;
-		int length, queue, GID, parent;
+		qint32 queue, GID, parent;
 	};
 	typedef QList<Entry> Entries;
 
-	enum OpenMode {NoOpen, ReadOnly, WriteOnly};
+	enum OpenMode
+	{
+		NoOpen,
+		ReadOnly,
+		WriteOnly
+	};
 
-	static Entries read(const QString &, QString *name = NULL);
-	static bool write(const Entries &, const QString &, QString *name = NULL);
-	static QString name(const QString &);
+	static Entries read(const QString &url, QString *name = NULL);
+	static bool write(const Entries &list, const QString &url, QString *name = NULL);
+	static QString name(const QString &url);
 	static QStringList extensions();
 
-	virtual Entries _read() = 0;
-	virtual bool _write(const Entries &) = 0;
+	virtual Entries read() = 0;
+	virtual bool write(const Entries &) = 0;
 
 	virtual ~Playlist();
 private:
-	static Playlist *create(const QString &, OpenMode, QString *name = NULL);
+	static Playlist *create(const QString &url, OpenMode openMode, QString *name = NULL);
 protected:
 	QList<QByteArray> readLines();
 

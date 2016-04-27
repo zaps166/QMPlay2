@@ -262,7 +262,7 @@ void DemuxerThr::run()
 		if (!demuxer.isAborted() && !demuxer)
 		{
 			QMPlay2Core.logError(tr("Cannot open") + ": " + url.remove("file://"));
-			emit playC.updateCurrentEntry(QString(), -1);
+			emit playC.updateCurrentEntry(QString(), -1.0);
 			err = true;
 		}
 		return end();

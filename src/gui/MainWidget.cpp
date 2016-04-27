@@ -243,7 +243,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&playC, SIGNAL(playStateChanged(bool)), this, SLOT(playStateChanged(bool)));
 	connect(&playC, SIGNAL(setCurrentPlaying()), playlistDock, SLOT(setCurrentPlaying()));
 	connect(&playC, SIGNAL(setInfo(const QString &, bool, bool)), infoDock, SLOT(setInfo(const QString &, bool, bool)));
-	connect(&playC, SIGNAL(updateCurrentEntry(const QString &, int)), playlistDock, SLOT(updateCurrentEntry(const QString &, int)));
+	connect(&playC, SIGNAL(updateCurrentEntry(const QString &, double)), playlistDock, SLOT(updateCurrentEntry(const QString &, double)));
 	connect(&playC, SIGNAL(playNext(bool)), playlistDock, SLOT(next(bool)));
 	connect(&playC, SIGNAL(message(const QString &, int)), statusBar, SLOT(showMessage(const QString &, int)));
 	connect(&playC, SIGNAL(clearCurrentPlaying()), playlistDock, SLOT(clearCurrentPlaying()));

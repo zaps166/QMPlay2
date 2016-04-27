@@ -1,18 +1,15 @@
 #include <M3U.hpp>
 
 #include <Functions.hpp>
-using Functions::filePath;
-using Functions::Url;
-
 #include <Reader.hpp>
 #include <Writer.hpp>
 
-Playlist::Entries M3U::_read()
+Playlist::Entries M3U::read()
 {
 	Reader *reader = ioCtrl.rawPtr<Reader>();
 	Entries list;
 
-	QString playlistPath = filePath(reader->getUrl());
+	QString playlistPath = Functions::filePath(reader->getUrl());
 	if (playlistPath.startsWith("file://"))
 		playlistPath.remove(0, 7);
 	else
@@ -53,14 +50,14 @@ Playlist::Entries M3U::_read()
 			Entry entry;
 			entry.length = splitLine[0].toInt();
 			entry.name = splitLine[1].replace('\001', '\n');
-			entry.url = Url(line, playlistPath);
+			entry.url = Functions::Url(line, playlistPath);
 			list += entry;
 		}
 	}
 
 	return list;
 }
-bool M3U::_write(const Entries &list)
+bool M3U::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write("#EXTM3U\r\n");
@@ -69,7 +66,7 @@ bool M3U::_write(const Entries &list)
 		const Entry &entry = list[i];
 		if (!entry.GID)
 		{
-			QString length = QString::number(entry.length);
+			const QString length = QString::number((qint32)(entry.length + 0.5));
 			QString url = entry.url;
 			const bool isFile = url.startsWith("file://");
 			if (isFile)
@@ -83,3 +80,6 @@ bool M3U::_write(const Entries &list)
 	}
 	return true;
 }
+
+M3U::~M3U()
+{}

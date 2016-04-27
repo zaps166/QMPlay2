@@ -5,9 +5,6 @@
 #include <LineEdit.hpp>
 #include <Main.hpp>
 
-using Functions::getUrlsFromMimeData;
-using Functions::chkMimeData;
-
 #include <QFileInfo>
 #include <QLabel>
 #include <QBuffer>
@@ -89,7 +86,7 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 		}
 		else
 		{
-			entry.length = tWI->data(2, Qt::UserRole).isNull() ? -1 : tWI->data(2, Qt::UserRole).toInt();
+			entry.length = tWI->data(2, Qt::UserRole).isNull() ? -1.0 : tWI->data(2, Qt::UserRole).toDouble(); //FIXME: Is it possible to have a null variant for non-groups entries?
 			entry.queue = tWI->text(1).toInt();
 		}
 		entry.url = tWI->data(0, Qt::UserRole).toString();
@@ -385,8 +382,8 @@ void PlaylistDock::copy()
 void PlaylistDock::paste()
 {
 	const QMimeData *mimeData = QApplication::clipboard()->mimeData();
-	if (chkMimeData(mimeData))
-		list->add(getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : NULL);
+	if (Functions::chkMimeData(mimeData))
+		list->add(Functions::getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : NULL);
 }
 void PlaylistDock::renameGroup()
 {
@@ -539,7 +536,7 @@ void PlaylistDock::repeat()
 	if ((lastRepeatMode == Random && repeatMode != Random) || (lastRepeatMode == RandomGroup && repeatMode != RandomGroup))
 		randomPlayedItems.clear();
 }
-void PlaylistDock::updateCurrentEntry(const QString &name, int length)
+void PlaylistDock::updateCurrentEntry(const QString &name, double length)
 {
 	list->updateEntryThr.updateEntry(list->currentPlaying, name, length);
 }

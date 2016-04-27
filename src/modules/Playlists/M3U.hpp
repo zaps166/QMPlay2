@@ -2,10 +2,10 @@
 
 class M3U : public Playlist
 {
-	Entries _read();
-	bool _write(const Entries &);
+	Entries read();
+	bool write(const Entries &);
 
-	~M3U() {}
+	~M3U();
 };
 
 #define M3UName "M3U"
