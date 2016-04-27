@@ -64,6 +64,7 @@ void UpdateEntryThr::run()
 
 		ItemUpdated iu;
 		iu.item = itu.item;
+
 		if (itu.name.isNull() && itu.length == -2.0)
 		{
 			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.img, &ioCtrl);
@@ -86,6 +87,7 @@ void UpdateEntryThr::run()
 			if (iu.name.isEmpty())
 				iu.name = Functions::fileName(url, false);
 		}
+
 		if (qFuzzyCompare(itu.length, itu.oldLength))
 			iu.updateLength = false;
 		else
