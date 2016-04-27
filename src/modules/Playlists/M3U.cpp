@@ -14,44 +14,43 @@ Playlist::Entries M3U::read()
 		playlistPath.remove(0, 7);
 	else
 		playlistPath.clear();
-	bool noReadLine = false;
 
-	QByteArray line;
 	QList<QByteArray> playlistLines = readLines();
+	bool hasExtinf = false;
+	QString extinf[2];
 	while (!playlistLines.isEmpty())
 	{
-		QStringList splitLine;
-
-		if (noReadLine)
-			noReadLine = false;
-		else
-			line = playlistLines.takeFirst();
-
-		if (line.isEmpty())
+		const QByteArray line = playlistLines.takeFirst();
+		if (line.simplified().isEmpty())
 			continue;
-
-		if (line.left(8) == "#EXTINF:")
+		if (line.startsWith("#EXTINF:"))
 		{
-			line.remove(0, 8);
-			int idx = line.indexOf(',');
+			const int idx = line.indexOf(',');
 			if (idx < 0)
-				continue;
-			splitLine += line.left(idx);
-			line.remove(0, idx+1);
-			splitLine += line;
-			line = playlistLines.takeFirst();
-			if (line.isEmpty())
-				continue;
-			if (line.left(8) == "#EXTINF:")
 			{
-				noReadLine = true;
+				hasExtinf = false;
 				continue;
 			}
-			Entry entry;
-			entry.length = splitLine[0].toInt();
-			entry.name = splitLine[1].replace('\001', '\n');
-			entry.url = Functions::Url(line, playlistPath);
-			list += entry;
+			extinf[0] = line.mid(8, idx - 8);
+			extinf[1] = line.right(line.length() - idx - 1);
+			hasExtinf = true;
+		}
+		else
+		{
+			if (!line.startsWith("#"))
+			{
+				Entry entry;
+				if (!hasExtinf)
+					entry.name = Functions::fileName(line, false);
+				else
+				{
+					entry.length = extinf[0].toInt();
+					entry.name = extinf[1].replace('\001', '\n');
+				}
+				entry.url = Functions::Url(line, playlistPath);
+				list += entry;
+			}
+			hasExtinf = false;
 		}
 	}
 
