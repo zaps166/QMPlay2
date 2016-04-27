@@ -206,7 +206,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 
 	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
-	decoderVDPAU_NWB->setToolTip(tr("This decoder doesnt have its own video output, so it can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
+	decoderVDPAU_NWB->setToolTip(tr("This decoder doesn't have its own video output, so it can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
 	decoderVDPAU_NWB->setChecked(sets().getBool("DecoderVDPAU_NWEnabled"));
 #endif
 
