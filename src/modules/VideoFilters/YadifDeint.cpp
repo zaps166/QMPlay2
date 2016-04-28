@@ -120,16 +120,16 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 
 #ifdef QMPLAY2_CPU_X86
 
-#define LOAD(mem,dst) \
+#define LOAD(mem, dst) \
 	_movh "    " mem  ", " dst"\n\t"\
 	"punpcklbw " mm(7)", " dst"\n\t"
 
-#define PABS(tmp,dst) \
+#define PABS(tmp, dst) \
 	"pxor    " tmp ", " tmp"\n\t"\
 	"psubw   " dst ", " tmp"\n\t"\
 	"pmaxsw  " tmp ", " dst"\n\t"
 
-#define CHECK(pj,mj) \
+#define CHECK(pj, mj) \
 	_movu " "#pj"(%[curr],%[mrefs]), " mm(2)"\n\t"\
 	_movu " "#mj"(%[curr],%[prefs]), " mm(3)"\n\t"\
 	_mova "    " mm(2)", " mm(4)"\n\t"\
@@ -322,10 +322,10 @@ static void filterLine_MMXEXT(quint8 *dest, const void *const destEnd,
 	#define _movh  "movd"
 	#define  mm(n) "%%mm"#n
 
-	#define RSHIFT(val,dst) \
+	#define RSHIFT(val, dst) \
 		"psrlq   $"#val"*8, " dst"\n\t"
 
-	#define SH(src,dst) \
+	#define SH(src, dst) \
 		"pshufw $9, " src", " dst"\n\t"
 
 	if (filterParity)
@@ -363,10 +363,10 @@ static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
 	#define _movh  "movq"
 	#define  mm(n) "%%xmm"#n
 
-	#define RSHIFT(val,dst) \
+	#define RSHIFT(val, dst) \
 		"psrldq   $"#val", " dst"\n\t"
 
-	#define SH(src,dst) \
+	#define SH(src, dst) \
 		_mova " " src",    " dst"\n\t"\
 		"psrldq   $2,      " dst"\n\t"
 
