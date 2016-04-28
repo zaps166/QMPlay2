@@ -246,43 +246,50 @@ void QMPlay2GUIClass::deleteIcons()
 
 static QPair<QStringList, QStringList> QMPArguments;
 
+static QString fileArg(const QString &arg)
+{
+	if (!arg.contains("://"))
+	{
+		const QFileInfo argInfo(arg);
+		if (!argInfo.isAbsolute())
+			return argInfo.absoluteFilePath();
+	}
+	return arg;
+}
 static void parseArguments(QStringList &arguments)
 {
 	QString param;
 	while (arguments.count())
 	{
-		QString arg = arguments.takeAt(0);
-		if (arg.left(1) == "-")
+		QString arg = arguments.takeFirst();
+		if (arg.startsWith('-'))
 		{
 			param = arg;
-			while (param[0] == '-')
+			while (param.startsWith('-'))
 				param.remove(0, 1);
 			if (!param.isEmpty() && !QMPArguments.first.contains(param))
 			{
-				QMPArguments.first += param;
-				QMPArguments.second += "";
+				QMPArguments.first  += param;
+				QMPArguments.second += QString();
 			}
 			else
 				param.clear();
 		}
 		else if (!param.isEmpty())
 		{
-			QString &data = QMPArguments.second[QMPArguments.second.count() - 1];
+			QString &data = QMPArguments.second.last();
 			if (!data.isEmpty())
-				data += " ";
-			data += arg;
+				data += '\n';
+			if (param == "open" || param == "enqueue")
+				data += fileArg(arg);
+			else
+				data += arg;
 		}
 		else if (!QMPArguments.first.contains("open"))
 		{
 			param = "open";
-			if (!arg.contains("://"))
-			{
-				QFileInfo argInfo(arg);
-				if (!argInfo.isAbsolute())
-					arg = argInfo.absoluteFilePath();
-			}
-			QMPArguments.first += param;
-			QMPArguments.second += arg;
+			QMPArguments.first  += param;
+			QMPArguments.second += fileArg(arg);
 		}
 	}
 }
@@ -428,14 +435,15 @@ int main(int argc, char *argv[])
 	QCoreApplication::setApplicationName("QMPlay2");
 
 	QStringList arguments = QCoreApplication::arguments();
-	arguments.removeAt(0);
+	arguments.removeFirst();
 	const bool help = arguments.contains("--help") || arguments.contains("-h");
 	if (!help)
 	{
-		parseArguments(arguments);
-
 		QLocalSocket socket;
 		socket.connectToServer(QMPlay2GUI.getPipe(), QIODevice::WriteOnly);
+
+		parseArguments(arguments);
+
 		if (socket.waitForConnected(1000))
 		{
 			if (writeToSocket(socket))
@@ -453,6 +461,7 @@ int main(int argc, char *argv[])
 			QMPArguments.second += QString();
 		}
 #endif
+
 		if (!useGui)
 		{
 #ifdef QT5_NOT_WIN

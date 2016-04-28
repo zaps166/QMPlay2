@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=QMPlay2
+Exec=QMPlay2 %F
 Icon=QMPlay2
 Name=QMPlay2
 StartupNotify=false

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=QMPlay2 --enqueue
+Exec=QMPlay2 --enqueue %F
 Icon=QMPlay2
 Name=Enqueue in QMPlay2
 Name[pl]=Kolejkuj w QMPlay2

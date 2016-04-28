@@ -300,11 +300,12 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
 
 	bool noplay = false;
-	while (QMPArguments.first.count())
+	while (!QMPArguments.first.isEmpty())
 	{
-		QString param = QMPArguments.first.takeFirst();
-		noplay = param == "open" || param == "noplay";
-		processParam(param, QMPArguments.second.takeLast());
+		const QString param = QMPArguments.first.takeFirst();
+		const QString data  = QMPArguments.second.takeFirst();
+		noplay |= (param == "open" || param == "noplay");
+		processParam(param, data);
 	}
 
 	if (!noplay)
@@ -357,10 +358,18 @@ void MainWidget::processParam(const QString &param, const QString &data)
 	{
 		QMPlay2Core.getSettings().remove("Pos");
 		QMPlay2Core.getSettings().remove("Url");
-		playlistDock->addAndPlay(data);
+		if (data.contains('\n'))
+			playlistDock->addAndPlay(data.split('\n', QString::SkipEmptyParts));
+		else
+			playlistDock->addAndPlay(data);
 	}
 	else if (param == "enqueue")
-		playlistDock->add(data);
+	{
+		if (data.contains('\n'))
+			playlistDock->add(data.split('\n', QString::SkipEmptyParts));
+		else
+			playlistDock->add(data);
+	}
 	else if (param == "toggle")
 		togglePlay();
 	else if (param == "show")
@@ -377,7 +386,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 	else if (param == "prev")
 		playlistDock->prev();
 	else if (param == "quit")
-		close();
+		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection);
 	else if (param == "volume")
 	{
 		const int vol = data.toInt();
@@ -386,7 +395,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 			menuBar->player->toggleMute->trigger();
 	}
 	else if (param == "fullscreen")
-		toggleFullScreen();
+		QTimer::singleShot(100, this, SLOT(toggleFullScreen()));
 	else if (param == "speed")
 		playC.setSpeed(data.toDouble());
 	else if (param == "seek")
