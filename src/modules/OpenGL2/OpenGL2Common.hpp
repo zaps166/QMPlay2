@@ -114,6 +114,7 @@ public:
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
 	float Contrast, Saturation, Brightness, Hue;
 	float texCoordYCbCr[8];
+	quint32 textures[4];
 
 	bool isPaused, isOK, hasImage, doReset, setMatrix;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;

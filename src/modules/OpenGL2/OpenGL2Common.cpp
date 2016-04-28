@@ -221,11 +221,12 @@ void OpenGL2Common::initializeGL()
 	glDisable(GL_DITHER);
 
 	/* Prepare textures */
-	for (int i = 1; i <= 4; ++i)
+	glGenTextures(4, textures);
+	for (int i = 0; i < 4; ++i)
 	{
-		glBindTexture(GL_TEXTURE_2D, i);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 1 ? GL_NEAREST : GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, textures[i]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 0 ? GL_NEAREST : GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 0 ? GL_NEAREST : GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
@@ -263,7 +264,7 @@ void OpenGL2Common::paintGL()
 			/* Prepare textures */
 			for (qint32 p = 0; p < 3; ++p)
 			{
-				glBindTexture(GL_TEXTURE_2D, p + 2);
+				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
 				if (checkLinesize(p))
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 				else
@@ -280,7 +281,7 @@ void OpenGL2Common::paintGL()
 		for (qint32 p = 0; p < 3; ++p)
 		{
 			glActiveTexture(GL_TEXTURE0 + p);
-			glBindTexture(GL_TEXTURE_2D, p + 2);
+			glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
 			if (checkLinesize(p) || videoFrame.linesize[p] == widths[p])
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[p], heights[p], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[p].constData());
 			else
@@ -366,7 +367,7 @@ void OpenGL2Common::paintGL()
 	osdMutex.lock();
 	if (!osdList.isEmpty())
 	{
-		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, textures[0]);
 
 		QRect bounds;
 		const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
