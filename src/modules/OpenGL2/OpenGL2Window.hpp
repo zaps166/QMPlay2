@@ -29,7 +29,9 @@ public:
 private slots:
 	void resetClearCounter();
 	void doUpdateGL(bool queued);
+	void videoVisible(bool v);
 private:
+	void exposeEvent(QExposeEvent *e);
 	bool eventFilter(QObject *o, QEvent *e);
 
 #ifdef PASS_EVENTS_TO_PARENT
@@ -37,6 +39,7 @@ private:
 #endif
 
 	QWidget *container;
+	bool visible;
 };
 
 #endif // OPENGLWIDGET_HPP

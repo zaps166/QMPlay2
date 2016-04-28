@@ -2,7 +2,8 @@
 
 #include <QMPlay2Core.hpp>
 
-OpenGL2Window::OpenGL2Window()
+OpenGL2Window::OpenGL2Window() :
+	visible(true)
 {
 #ifndef PASS_EVENTS_TO_PARENT
 	setFlags(Qt::WindowTransparentForInput);
@@ -17,6 +18,8 @@ OpenGL2Window::OpenGL2Window()
 	container->setAcceptDrops(false);
 
 	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
+	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
+	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible(bool)));
 }
 void OpenGL2Window::deleteMe()
 {
@@ -51,7 +54,8 @@ bool OpenGL2Window::setVSync(bool enable)
 }
 void OpenGL2Window::updateGL(bool requestDelayed)
 {
-	QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
+	if (visible && isExposed())
+		QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
 }
 
 void OpenGL2Window::initializeGL()
@@ -60,14 +64,17 @@ void OpenGL2Window::initializeGL()
 }
 void OpenGL2Window::paintGL()
 {
-	if (doReset)
-		OpenGL2Common::resetClearCounter();
-	if (doClear > 0)
+	if (isExposed())
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		--doClear;
+		if (doReset)
+			OpenGL2Common::resetClearCounter();
+		if (doClear > 0)
+		{
+			glClear(GL_COLOR_BUFFER_BIT);
+			--doClear;
+		}
+		OpenGL2Common::paintGL();
 	}
-	OpenGL2Common::paintGL();
 }
 
 void OpenGL2Window::resetClearCounter()
@@ -85,7 +92,16 @@ void OpenGL2Window::doUpdateGL(bool queued)
 		QCoreApplication::sendEvent(this, &updateEvent);
 	}
 }
+void OpenGL2Window::videoVisible(bool v)
+{
+	visible = v;
+}
 
+void OpenGL2Window::exposeEvent(QExposeEvent *e)
+{
+	OpenGL2Common::resetClearCounter();
+	QOpenGLWindow::exposeEvent(e);
+}
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 {
 	if (o == container)
