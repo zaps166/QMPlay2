@@ -324,7 +324,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	}
 
 #ifdef UPDATER
-	if (sets.getBool("AutoUpdates"))
+	if (settings.getBool("AutoUpdates"))
 		updater.downloadUpdate();
 #endif
 #ifdef QT5_WINDOWS
