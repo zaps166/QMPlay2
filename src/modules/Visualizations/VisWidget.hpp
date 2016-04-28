@@ -10,10 +10,10 @@ class VisWidget : public QWidget
 {
 	Q_OBJECT
 protected:
-	VisWidget();
-
 	static void setValue(qreal &out, qreal in, qreal tDiffScaled);
 	static void setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled);
+
+	VisWidget();
 
 	bool regionIsVisible() const;
 
@@ -25,8 +25,8 @@ protected:
 	DockWidget *dw;
 	double time;
 private:
-	void changeEvent(QEvent *);
 	void mouseDoubleClickEvent(QMouseEvent *);
+	void changeEvent(QEvent *);
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void contextMenu(const QPoint &point);

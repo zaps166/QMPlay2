@@ -38,8 +38,7 @@ SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
 	leftBar = rightBar = leftLine.first = rightLine.first = 0.0;
 	interval = -1;
 
-	linearGrad.setStart(0, 1);
-	linearGrad.setFinalStop(0, 0);
+	linearGrad.setFinalStop(0.0, 0.0);
 	linearGrad.setColorAt(0.0, Qt::blue);
 	linearGrad.setColorAt(0.1, Qt::green);
 	linearGrad.setColorAt(0.5, Qt::yellow);
@@ -48,27 +47,27 @@ SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
 
 void SimpleVisW::paintEvent(QPaintEvent *)
 {
-	QPainter p(this);
-
 	const int size = soundData.size() / sizeof(float);
 	if (size >= chn)
 	{
+		QPainter p(this);
 		const float *samples = (const float *)soundData.constData();
 
 		qreal lr[2] = {0.0f, 0.0f};
 
-		p.translate(0.0, fullScreen);
-		p.scale((width() - 1) * 0.9, (height() - 1 - fullScreen) / 2.0 / chn);
-		p.translate(0.055, 0.0);
+		QTransform t;
+		t.translate(0.0, fullScreen);
+		t.scale((width() - 1) * 0.9, (height() - 1 - fullScreen) / 2.0 / chn);
+		t.translate(0.055, 0.0);
 		for (int c = 0; c < chn; ++c)
 		{
-			p.setPen(QPen(QColor(102, 51, 128), 0.0));
-			p.drawLine(QLineF(0.0, 1.0, 1.0, 1.0));
+			p.setPen(QColor(102, 51, 128));
+			p.drawLine(t.map(QLineF(0.0, 1.0, 1.0, 1.0)));
 
-			p.setPen(QPen(QColor(102, 179, 102), 0.0));
-			QPainterPath path(QPointF(0.0, 1.0 - samples[c]));
+			p.setPen(QColor(102, 179, 102));
+			QPainterPath path(t.map(QPointF(0.0, 1.0 - samples[c])));
 			for (int i = chn; i < size; i += chn)
-				path.lineTo(i / (qreal)(size - chn), 1.0 - samples[i + c]);
+				path.lineTo(t.map(QPointF(i / (qreal)(size - chn), 1.0 - samples[i + c])));
 			p.drawPath(path);
 
 			if (c < 2)
@@ -79,11 +78,13 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 				lr[c] = sqrt(lr[c] / numSamples);
 			}
 
-			p.translate(0.0, 2.0);
+			t.translate(0.0, 2.0);
 		}
 
-		p.resetTransform();
-		p.scale(width()-1, height()-1);
+		t.reset();
+		t.scale(width()-1, height()-1);
+
+		linearGrad.setStart(t.map(QPointF(0.0, 1.0)));
 
 		if (chn == 1)
 			lr[1] = lr[0];
@@ -95,23 +96,24 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 		/* Bars */
 		setValue(leftBar,  lr[0], realInterval * 2.0);
 		setValue(rightBar, lr[1], realInterval * 2.0);
-		p.fillRect(QRectF(0.005, 1.0, 0.035, -leftBar ), linearGrad);
-		p.fillRect(QRectF(0.960, 1.0, 0.035, -rightBar), linearGrad);
+		p.fillRect(t.mapRect(QRectF(0.005, 1.0, 0.035, -leftBar )), linearGrad);
+		p.fillRect(t.mapRect(QRectF(0.960, 1.0, 0.035, -rightBar)), linearGrad);
 
 		/* Horizontal lines over side bars */
 		setValue(leftLine,  lr[0], realInterval * 0.5);
 		setValue(rightLine, lr[1], realInterval * 0.5);
-		p.setPen(QPen(linearGrad, 0.0));
-		p.drawLine(QLineF(0.005, -leftLine.first  + 1.0, 0.040, -leftLine.first  + 1.0));
-		p.drawLine(QLineF(0.960, -rightLine.first + 1.0, 0.995, -rightLine.first + 1.0));
+		p.setPen(QPen(linearGrad, 1.0));
+		p.drawLine(t.map(QLineF(0.005, -leftLine.first  + 1.0, 0.040, -leftLine.first  + 1.0)));
+		p.drawLine(t.map(QLineF(0.960, -rightLine.first + 1.0, 0.995, -rightLine.first + 1.0)));
 
 		if (stopped && tim.isActive() && leftLine.first == lr[0] && rightLine.first == lr[1])
 			tim.stop();
 	}
 }
-void SimpleVisW::resizeEvent(QResizeEvent *)
+void SimpleVisW::resizeEvent(QResizeEvent *e)
 {
 	fullScreen = parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->isFullScreen();
+	VisWidget::resizeEvent(e);
 }
 
 void SimpleVisW::start(bool v, bool dontCheckRegion)

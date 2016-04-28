@@ -26,11 +26,6 @@ void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
 	}
 }
 
-bool VisWidget::regionIsVisible() const
-{
-	return dw->visibleRegion() != QRegion() || visibleRegion() != QRegion();
-}
-
 VisWidget::VisWidget() :
 	stopped(true),
 	dw(new DockWidget)
@@ -48,6 +43,11 @@ VisWidget::VisWidget() :
 #endif
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
+}
+
+bool VisWidget::regionIsVisible() const
+{
+	return dw->visibleRegion() != QRegion() || visibleRegion() != QRegion();
 }
 
 void VisWidget::mouseDoubleClickEvent(QMouseEvent *e)

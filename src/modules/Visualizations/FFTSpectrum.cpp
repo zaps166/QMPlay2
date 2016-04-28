@@ -46,36 +46,39 @@ FFTSpectrumW::FFTSpectrumW(FFTSpectrum &fftSpectrum) :
 
 void FFTSpectrumW::paintEvent(QPaintEvent *)
 {
-	QPainter p(this);
-
 	bool canStop = true;
 
 	const int size = spectrumData.size();
 	if (size)
 	{
-		p.setPen(QPen(linearGrad, 0.0));
-		p.scale((width() - 1.0) / size, height() - 1.0);
+		QTransform t;
+		t.scale((width() - 1.0) / size, height() - 1.0);
+
+		linearGrad.setFinalStop(t.map(QPointF(size, 0.0)));
+
+		QPainter p(this);
+		p.setPen(QPen(linearGrad, 1.0));
 
 		const double currTime = Functions::gettime();
 		const double realInterval = currTime - time;
 		time = currTime;
 
 		const float *spectrum = spectrumData.constData();
-		QPainterPath path(QPointF(0.0, 1.0));
+		QPainterPath path(t.map(QPointF(0.0, 1.0)));
 		for (int x = 0; x < size; ++x)
 		{
 			/* Bars */
 			setValue(lastData[x].first, spectrum[x], realInterval * 2.0);
-			path.lineTo(x, 1.0 - lastData[x].first);
-			path.lineTo(x + 1.0, 1.0 - lastData[x].first);
+			path.lineTo(t.map(QPointF(x,       1.0 - lastData[x].first)));
+			path.lineTo(t.map(QPointF(x + 1.0, 1.0 - lastData[x].first)));
 
 			/* Horizontal lines over bars */
 			setValue(lastData[x].second, spectrum[x], realInterval * 0.5);
-			p.drawLine(QLineF(x, 1.0 - lastData[x].second.first, x + 1.0, 1.0 - lastData[x].second.first));
+			p.drawLine(t.map(QLineF(x, 1.0 - lastData[x].second.first, x + 1.0, 1.0 - lastData[x].second.first)));
 
-			canStop &= lastData[x].second.first == spectrum[x];
+			canStop &= (lastData[x].second.first == spectrum[x]);
 		}
-		path.lineTo(size, 1.0);
+		path.lineTo(t.map(QPointF(size, 1.0)));
 		p.fillPath(path, linearGrad);
 	}
 
@@ -123,7 +126,6 @@ void FFTSpectrum::soundBuffer(const bool enable)
 		{
 			fft_ctx = av_fft_init(w.fftSize, false);
 			tmpData = (FFTComplex *)av_malloc(tmpDataSize * sizeof(FFTComplex));
-			w.linearGrad.setFinalStop(tmpDataSize / 2, 0.0);
 			w.spectrumData.resize(tmpDataSize / 2);
 			w.lastData.resize(tmpDataSize / 2);
 		}
