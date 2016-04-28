@@ -208,11 +208,11 @@ void AddThr::run()
 
 void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList)
 {
+	QTreeWidgetItem *currentItem = parent;
 	for (int i = 0; i < urls.size(); ++i)
 	{
 		if (ioCtrl.isAborted())
 			break;
-		QTreeWidgetItem *currentItem = parent;
 		QString url = Functions::Url(urls[i]), name;
 		const Playlist::Entries entries = Playlist::read(url, &name);
 		if (!name.isEmpty()) //ładowanie playlisty
@@ -817,7 +817,7 @@ void PlaylistWidget::insertItem(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, b
 			if (!insertChildAt0Idx)
 				parent->addChild(tWI);
 			else
-				parent->insertChild(0,tWI);
+				parent->insertChild(0, tWI);
 		}
 		else
 			addTopLevelItem(tWI);
