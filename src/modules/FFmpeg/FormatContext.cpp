@@ -97,9 +97,7 @@ FormatContext::~FormatContext()
 {
 	if (formatCtx)
 	{
-		for (int i = 0; i < streams.count(); ++i)
-		{
-			AVStream *stream = streams[i];
+		foreach (AVStream *stream, streams)
 			if (stream->codec)
 				switch ((quintptr)stream->codec->opaque)
 				{
@@ -112,7 +110,6 @@ FormatContext::~FormatContext()
 						stream->codec->subtitle_header_size = 0;
 						break;
 				}
-		}
 		avformat_close_input(&formatCtx);
 		FFCommon::freeAVPacket(packet);
 	}
@@ -220,7 +217,7 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 	const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
 	if (streamIdx > -1)
 	{
-		if (void *sideData = av_stream_get_side_data(formatCtx->streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, NULL))
+		if (void *sideData = av_stream_get_side_data(streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, NULL))
 		{
 			AVReplayGain replayGain = *(AVReplayGain *)sideData;
 			qint32  tmpGain;
@@ -425,13 +422,13 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	}
 
 #if LIBAVFORMAT_VERSION_MAJOR > 55
-	if (streams[ff_idx]->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
+	if (streams.at(ff_idx)->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
 	{
-		streams[ff_idx]->event_flags = 0;
+		streams.at(ff_idx)->event_flags = 0;
 		isMetadataChanged = true;
 	}
-	if (fixMkvAss && streams[ff_idx]->codec->codec_id == AV_CODEC_ID_ASS)
-		matroska_fix_ass_packet(streams[ff_idx]->time_base, packet);
+	if (fixMkvAss && streams.at(ff_idx)->codec->codec_id == AV_CODEC_ID_ASS)
+		matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
 #else
 	if (isStreamed)
 	{
@@ -473,7 +470,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		packet->buf = NULL;
 	}
 
-	const double time_base = av_q2d(streams[ff_idx]->time_base);
+	const double time_base = av_q2d(streams.at(ff_idx)->time_base);
 
 #ifndef MP3_FAST_SEEK
 	if (seekByByteOffset < 0)
@@ -488,7 +485,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 
 	if (packet->duration > 0)
 		encoded.duration = packet->duration * time_base;
-	else if (!encoded.ts || (encoded.duration = encoded.ts - streamsTS[ff_idx]) < 0.0 /* Calculate packet duration if doesn't exists */)
+	else if (!encoded.ts || (encoded.duration = encoded.ts - streamsTS.at(ff_idx)) < 0.0 /* Calculate packet duration if doesn't exists */)
 		encoded.duration = 0.0;
 	streamsTS[ff_idx] = encoded.ts;
 
@@ -506,8 +503,8 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	currPos = encoded.ts;
 
 	encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
-	if (streams[ff_idx]->sample_aspect_ratio.num)
-		encoded.sampleAspectRatio = av_q2d(streams[ff_idx]->sample_aspect_ratio);
+	if (streams.at(ff_idx)->sample_aspect_ratio.num)
+		encoded.sampleAspectRatio = av_q2d(streams.at(ff_idx)->sample_aspect_ratio);
 
 	idx = index_map.at(ff_idx);
 
