@@ -1052,7 +1052,11 @@ void PlayClass::timTerminateFinished()
 {
 	timTerminate.stop();
 	if (demuxThr && demuxThr->isRunning())
+	{
 		demuxThr->terminate();
+		demuxThr->wait(1000);
+		emit message(tr("Playback has been incorrectly terminated!"), 2000);
+	}
 	emit QMPlay2Core.restoreCursor();
 }
 

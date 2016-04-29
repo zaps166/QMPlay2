@@ -1462,6 +1462,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Spherical view is not supported by this video output module</source>
         <translation>Widok sferyczny nie jest obsługiwany przez ten moduł wyjścia obrazu</translation>
     </message>
+    <message>
+        <source>Playback has been incorrectly terminated!</source>
+        <translation>Odtwarzanie zostało nieprawidłowo zakończone!</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>

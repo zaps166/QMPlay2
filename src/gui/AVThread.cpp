@@ -73,5 +73,6 @@ void AVThread::terminate()
 {
 	disconnect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 	QThread::terminate();
+	wait(1000);
 	deleteLater();
 }

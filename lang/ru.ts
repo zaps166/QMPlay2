@@ -1461,6 +1461,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Spherical view is not supported by this video output module</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Playback has been incorrectly terminated!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
