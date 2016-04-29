@@ -22,6 +22,8 @@ else {
 	PKGCONFIG += libswscale libswresample libavutil libass
 }
 
+RESOURCES += languages.qrc
+
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
 

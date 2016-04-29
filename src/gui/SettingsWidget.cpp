@@ -322,7 +322,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->subsLangB = new QComboBox;
 	page1->audioLangB->addItem(tr("Default or first stream"));
 	page1->subsLangB->addItem(tr("Default or first stream"));
-	foreach (const QString &lang, QMPlay2GUI.languages)
+	foreach (const QString &lang, QMPlay2Core.getLanguagesMap())
 	{
 		page1->audioLangB->addItem(lang);
 		page1->subsLangB->addItem(lang);

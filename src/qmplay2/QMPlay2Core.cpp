@@ -30,7 +30,20 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 #elif defined Q_OS_UNIX
 	unixOpenCommand = "xdg-open ";
 #endif
+
+	QFile f(":/Languages.csv");
+	if (f.open(QFile::ReadOnly))
+	{
+		foreach (const QByteArray &line, f.readAll().split('\n'))
+		{
+			const QList<QByteArray> lineSplitted = line.split(',');
+			if (lineSplitted.count() == 2)
+				languages[lineSplitted[0]] = lineSplitted[1];
+		}
+	}
 }
+QMPlay2CoreClass::~QMPlay2CoreClass()
+{}
 
 bool QMPlay2CoreClass::canSuspend()
 {

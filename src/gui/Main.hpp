@@ -51,7 +51,6 @@ public:
 	const QWidget *getVideoDock() const;
 
 	QString lang, langPath;
-	QMap<QString, QString> languages;
 
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;

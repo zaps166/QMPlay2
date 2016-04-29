@@ -538,7 +538,7 @@ static void printOtherInfo(const QList<QMPlay2Tag> &other_info, QString &str)
 		{
 			QString value = tag.second;
 			if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
-				value = QMPlay2GUI.languages.value(value, tag.second).toLower();
+				value = QMPlay2Core.getLanguagesMap().value(value, tag.second).toLower();
 			str += "<li><b>" + StreamInfo::getTagName(tag.first).toLower() + ":</b> " + value + "</li>";
 		}
 }

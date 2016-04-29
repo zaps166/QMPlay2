@@ -213,16 +213,6 @@ QMPlay2GUIClass::QMPlay2GUIClass() :
 	groupIcon(NULL), mediaIcon(NULL), folderIcon(NULL),
 	mainW(NULL)
 {
-	QFile f(":/Languages.csv");
-	if (f.open(QFile::ReadOnly))
-	{
-		foreach (const QByteArray &line, f.readAll().split('\n'))
-		{
-			const QList<QByteArray> lineSplitted = line.split(',');
-			if (lineSplitted.count() == 2)
-				languages[lineSplitted[0]] = lineSplitted[1];
-		}
-	}
 	qmp2Pixmap = useGui ? new QPixmap(":/QMPlay2") : NULL;
 }
 QMPlay2GUIClass::~QMPlay2GUIClass()

@@ -4,6 +4,7 @@
 #include <QAtomicInt>
 #include <QObject>
 #include <QIcon>
+#include <QMap>
 
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
@@ -109,6 +110,11 @@ public:
 #endif
 	}
 
+	inline QMap<QString, QString> getLanguagesMap() const
+	{
+		return languages;
+	}
+
 	virtual const QWidget *getVideoDock() const = 0;
 private slots:
 	void restoreCursorSlot();
@@ -116,7 +122,7 @@ private slots:
 	void busyCursorSlot();
 protected:
 	QMPlay2CoreClass();
-	~QMPlay2CoreClass() {}
+	virtual ~QMPlay2CoreClass();
 
 	QPixmap *qmp2Pixmap;
 	Settings *settings;
@@ -132,6 +138,7 @@ private:
 #endif
 	QAtomicInt working;
 	QStringList logs;
+	QMap<QString, QString> languages;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

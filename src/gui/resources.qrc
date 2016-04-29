@@ -31,7 +31,5 @@
 
 
 		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
-
-		<file>Languages.csv</file>
 	</qresource>
 </RCC>

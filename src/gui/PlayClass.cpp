@@ -149,8 +149,8 @@ void PlayClass::play(const QString &_url)
 
 			ignorePlaybackError = QMPlay2Core.getSettings().getBool("IgnorePlaybackError");
 
-			choosenAudioLang = QMPlay2GUI.languages.key(QMPlay2Core.getSettings().getString("AudioLanguage"));
-			choosenSubtitlesLang = QMPlay2GUI.languages.key(QMPlay2Core.getSettings().getString("SubtitlesLanguage"));
+			choosenAudioLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("AudioLanguage"));
+			choosenSubtitlesLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("SubtitlesLanguage"));
 
 			if (restartSeekTo >= 0.0) //jeżeli restart odtwarzania
 			{
