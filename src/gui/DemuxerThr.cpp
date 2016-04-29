@@ -144,7 +144,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 				(playC.vPackets.packetsCount() || playC.aPackets.packetsCount()) &&
 				playC.vPackets.seekTo(playC.seekTo, backward) &&
 				playC.aPackets.seekTo(playC.seekTo, backward) &&
-				playC.sPackets.seekTo(playC.seekTo, backward)
+				playC.sPackets.seekTo(playC.seekTo, false, true)
 			)
 			{
 				doDemuxerSeek = false;

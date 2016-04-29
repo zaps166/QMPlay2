@@ -302,6 +302,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 					fileData = codec->toUnicode(fileData).toUtf8();
 			}
 
+			sPackets.clear();
 			sPackets.lock();
 
 			vThr->destroySubtitlesDecoder();
@@ -311,7 +312,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 			ass->clearFonts();
 
 			bool loaded = false;
-			QString fileExt = Functions::fileExt(fileName).toLower();
+			const QString fileExt = Functions::fileExt(fileName).toLower();
 			if (fileExt == "ass" || fileExt == "ssa")
 			{
 				/* Wczytywanie katalogu z czcionkami dla wybranego pliku napisów */
