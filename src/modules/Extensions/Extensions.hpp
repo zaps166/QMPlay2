@@ -39,7 +39,7 @@ private:
 	QCheckBox *exportCoversB;
 #endif
 
-	QCheckBox *additionalInfoB, *multiStreamB;
+	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;
 	LineEdit *youtubedlE;
 	QToolButton *youtubedlBrowseB;
 	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;

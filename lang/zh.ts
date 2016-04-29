@@ -1260,6 +1260,14 @@ amp</source>
 It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Display subtitles if available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>

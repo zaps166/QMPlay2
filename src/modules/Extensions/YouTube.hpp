@@ -101,7 +101,7 @@ private:
 	QNetworkAccessManager net;
 
 	QString youtubedl;
-	bool multiStream;
+	bool multiStream, subtitles;
 };
 
 /**/

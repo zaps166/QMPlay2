@@ -1262,6 +1262,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Ten dekoder nie posiada własnego wyjścia obrazu, więc może być użyty z dowolnym wyjściem obrazu.
 Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powolny!</translation>
     </message>
+    <message>
+        <source>Display subtitles if available</source>
+        <translation>Wyświetlaj napisy, jeżeli są dostępne</translation>
+    </message>
+    <message>
+        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
+        <translation>Wyświetla napisy z YouTube. Uwzględnia domyślny język dla napisów oraz język QMPlay2.</translation>
+    </message>
 </context>
 <context>
     <name>OSDSettingsW</name>

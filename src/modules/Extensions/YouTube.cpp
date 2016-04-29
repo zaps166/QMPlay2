@@ -35,6 +35,10 @@ static inline QUrl getAutocompleteUrl(const QString &text)
 {
 	return QString("http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=%1").arg(text);
 }
+static inline QString getSubsUrl(const QString &langCode, const QString &vidId)
+{
+	return QString("https://www.youtube.com/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode).arg(vidId);
+}
 
 static inline QString getFileExtension(const QString &ItagName)
 {
@@ -769,8 +773,89 @@ void YouTubeW::setSearchResults(QString data)
 
 QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController<YouTubeDL> *youtube_dl)
 {
-	QStringList ret;
+	QString subsUrl;
+	if (subtitles)
+	{
+		QStringList langCodes;
+		int captionIdx = data.indexOf("caption_tracks\":\"");
+		if (captionIdx > -1)
+		{
+			captionIdx += 17;
+			const int captionEndIdx = data.indexOf('"', captionIdx);
+			if (captionEndIdx > -1)
+			{
+				foreach (const QString &caption, data.mid(captionIdx, captionEndIdx - captionIdx).split(','))
+				{
+					bool isAutomated = false;
+					QString lc;
+					foreach (const QString &captionParams, caption.split("\\u0026"))
+					{
+						const QStringList paramL = captionParams.split('=');
+						if (paramL.count() == 2)
+						{
+							if (paramL[0] == "lc")
+								lc = paramL[1];
+							else if (paramL[0] == "k")
+								isAutomated = paramL[1].startsWith("asr");
+						}
+					}
+					if (!isAutomated && !lc.isEmpty())
+						langCodes += lc;
+				}
+			}
+		}
+		if (!langCodes.isEmpty())
+		{
+			QStringList simplifiedLangCodes;
+			int idx = url.indexOf("v=");
+			foreach (const QString &lc, langCodes)
+			{
+				// Remove language suffix after "-" - not supported in QMPlay2
+				const int idx = lc.indexOf('-');
+				if (idx > -1)
+					simplifiedLangCodes += lc.mid(0, idx);
+				else
+					simplifiedLangCodes += lc;
+			}
+			if (idx > -1)
+			{
+				QString lang = QMPlay2Core.getSettings().getString("SubtitlesLanguage");
+				if (!lang.isEmpty())
+				{
+					// Try to convert full language name into short language code
+					for (int i = QLocale::C + 1; i <= QLocale::LastLanguage; ++i)
+					{
+						const QLocale::Language ll = (QLocale::Language)i;
+						if (lang == QLocale::languageToString(ll))
+						{
+							lang = QLocale(ll).name();
+							const int idx = lang.indexOf('_');
+							if (idx > -1)
+								lang.remove(idx, lang.length() - idx);
+							break;
+						}
+					}
+					const int idx = simplifiedLangCodes.indexOf(lang);
+					if (idx > -1)
+						lang = langCodes.at(idx);
+					else
+						lang.clear();
+				}
+				if (lang.isEmpty())
+				{
+					const int idx = simplifiedLangCodes.indexOf(QMPlay2Core.getSettings().getString("Language"));
+					if (idx > -1)
+						lang = langCodes.at(idx);
+				}
+				if (lang.isEmpty())
+					lang = langCodes.at(0);
+				idx += 2;
+				subsUrl = getSubsUrl(lang, url.mid(idx, url.indexOf("&", idx)));
+			}
+		}
+	}
 
+	QStringList ret;
 	for (int i = 0; i <= 1; ++i)
 	{
 		const QString fmts = QString(i ? "adaptive_fmts" : "url_encoded_fmt_stream_map") + "\":\""; //"adaptive_fmts" contains audio or video urls
@@ -778,7 +863,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 		if (streamsIdx > -1)
 		{
 			streamsIdx += fmts.length();
-			int streamsEndIdx = data.indexOf('"', streamsIdx);
+			const int streamsEndIdx = data.indexOf('"', streamsIdx);
 			if (streamsEndIdx > -1)
 			{
 				foreach (const QString &stream, data.mid(streamsIdx, streamsEndIdx - streamsIdx).split(','))
@@ -842,12 +927,27 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			const QStringList video = getUrlByItagPriority(resultsW->itagsVideo, ret);
 			const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
 			if (video.count() == 2 && audio.count() == 2)
-				ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]}" << "[" + video[1] + "][" + audio[1] + "]";
+			{
+				ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]" << "[" + video[1] + "][" + audio[1] + "]";
+				if (!subsUrl.isEmpty())
+				{
+					ret[0] += "[" + subsUrl + "]";
+					ret[1] += "[.vtt]";
+				}
+				ret[0] += "}";
+			}
 			else
 				forceSingleStream = true;
 		}
 		if (!multiStream || forceSingleStream)
+		{
 			ret = getUrlByItagPriority(resultsW->itags, ret);
+			if (ret.count() == 2 && !subsUrl.isEmpty())
+			{
+				ret[0] = "FFmpeg://{[" + ret[0] + "][" + subsUrl + "]}";
+				ret[1] = "[" + ret[1] + "][.vtt]";
+			}
+		}
 	}
 
 	if (tWI) //Włącza item
@@ -898,13 +998,15 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 				ret.clear();
 			else
 			{
-				if (itagsCount == 1)
+				if (itagsCount == 1 && subsUrl.isEmpty())
 					ret[0] = ytdl_stdout[0];
 				else
 				{
 					ret[0] = "FFmpeg://{";
 					foreach (const QString &url, ytdl_stdout)
 						ret[0] += "[" + url + "]";
+					if (!subsUrl.isEmpty())
+						ret[0] += "[" + subsUrl + "]";
 					ret[0] += "}";
 				}
 			}
@@ -1049,6 +1151,7 @@ bool YouTube::set()
 	w.resultsW->itagsAudio = getItagNames(sets().get("YouTube/ItagAudioList").toStringList(), MEDIA_AUDIO).second;
 	w.resultsW->itags = getItagNames(sets().get("YouTube/ItagList").toStringList(), MEDIA_AV).second;
 	w.multiStream = sets().getBool("YouTube/MultiStream");
+	w.subtitles = sets().getBool("YouTube/Subtitles");
 	w.youtubedl = sets().getString("YouTube/youtubedl");
 	if (w.youtubedl.isEmpty())
 		w.youtubedl = "youtube-dl";
@@ -1091,10 +1194,15 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 				reader.clear();
 
 				const bool multiStream = w.multiStream;
-				if (extension) //Don't use multi stream when downloading
+				const bool subtitles = w.subtitles;
+				if (extension) //Don't use multi stream and subtitles when downloading
+				{
 					w.multiStream = false;
+					w.subtitles = false;
+				}
 				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, NULL, url, ioCtrl->toPtr<YouTubeDL>());
 				w.multiStream = multiStream;
+				w.subtitles = subtitles;
 				if (youTubeVideo.count() == 3)
 				{
 					if (stream_url)

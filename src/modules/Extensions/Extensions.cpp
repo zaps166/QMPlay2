@@ -21,6 +21,7 @@ Extensions::Extensions() :
 
 	init("YouTube/ShowAdditionalInfo", false);
 	init("YouTube/MultiStream", true);
+	init("YouTube/Subtitles", true);
 	init("YouTube/youtubedl", QString());
 	init("YouTube/ItagVideoList", QStringList() << "299" << "298" << "137" << "136" << "135");
 	init("YouTube/ItagAudioList", QStringList() << "251" << "171" << "141");
@@ -123,6 +124,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	multiStreamB->setChecked(sets().getBool("YouTube/MultiStream"));
 	connect(multiStreamB, SIGNAL(clicked(bool)), this, SLOT(enableItagLists(bool)));
 
+	subtitlesB = new QCheckBox(tr("Display subtitles if available"));
+	subtitlesB->setToolTip(tr("Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language."));
+	subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
+
 	QLabel *youtubedlL = new QLabel(tr("Path to the 'youtube-dl' application") + ": ");
 
 	youtubedlE = new LineEdit;
@@ -189,10 +194,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout = new QGridLayout(youTubeB);
 	layout->addWidget(additionalInfoB, 0, 0, 1, 3);
 	layout->addWidget(multiStreamB, 1, 0, 1, 3);
-	layout->addWidget(youtubedlL, 2, 0, 1, 1);
-	layout->addWidget(youtubedlE, 2, 1, 1, 1);
-	layout->addWidget(youtubedlBrowseB, 2, 2, 1, 1);
-	layout->addWidget(itagW, 3, 0, 1, 3);
+	layout->addWidget(subtitlesB, 2, 0, 1, 3);
+	layout->addWidget(youtubedlL, 3, 0, 1, 1);
+	layout->addWidget(youtubedlE, 3, 1, 1, 1);
+	layout->addWidget(youtubedlBrowseB, 3, 2, 1, 1);
+	layout->addWidget(itagW, 4, 0, 1, 3);
 	layout->setMargin(2);
 
 	/**/
@@ -273,6 +279,7 @@ void ModuleSettingsWidget::saveSettings()
 
 	sets().set("YouTube/ShowAdditionalInfo", additionalInfoB->isChecked());
 	sets().set("YouTube/MultiStream", multiStreamB->isChecked());
+	sets().set("YouTube/Subtitles", subtitlesB->isChecked());
 	sets().set("YouTube/youtubedl", youtubedlE->text());
 
 	QStringList itagsVideo, itagsAudio, itags;
