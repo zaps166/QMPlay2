@@ -94,7 +94,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	aboutW = NULL;
 	lastFocusWidget = NULL;
 
-	isCompactView = wasShow = fullScreen = false;
+	isCompactView = wasShow = fullScreen = seekSFocus = false;
 
 	if (QMPlay2GUI.pipe)
 		connect(QMPlay2GUI.pipe, SIGNAL(newConnection()), this, SLOT(newConnection()));
@@ -192,7 +192,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	seekS = new Slider;
 	seekS->setMaximum(0);
-	seekS->setDisabled(true);
 	seekS->setWheelStep(settings.getInt("ShortSeek"));
 	mainTB->addWidget(seekS);
 	updatePos(0);
@@ -350,6 +349,8 @@ void MainWidget::focusChanged(QWidget *old, QWidget *now)
 		menuBar->player->togglePlay->setShortcutContext(Qt::WindowShortcut);
 	if (qobject_cast<QAbstractButton *>(now))
 		menuBar->player->togglePlay->setShortcutContext(Qt::WidgetShortcut);
+
+	seekSFocus = (now == seekS);
 }
 
 void MainWidget::processParam(const QString &param, const QString &data)
@@ -966,8 +967,20 @@ void MainWidget::browseSubsFile()
 
 void MainWidget::setSeekSMaximum(int max)
 {
-	seekS->setMaximum(max);
-	seekS->setEnabled(max > 0);
+	seekS->setMaximum(qMax(0, max));
+	if (max >= 0)
+	{
+		seekS->setEnabled(true);
+		if (seekSFocus)
+			seekS->setFocus();
+	}
+	else
+	{
+		const bool focus = seekS->hasFocus();
+		setFocus(); //This changes the "seekSFocus" in "MainWidget::focusChanged()"
+		seekSFocus = focus;
+		seekS->setEnabled(false);
+	}
 }
 void MainWidget::updatePos(int pos)
 {

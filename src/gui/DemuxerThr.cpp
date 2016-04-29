@@ -315,7 +315,7 @@ void DemuxerThr::run()
 	if ((unknownLength = demuxer->length() < 0.0))
 		updateBufferedSeconds = false;
 
-	emit playC.updateLength(unknownLength ? 0.0 : demuxer->length());
+	emit playC.updateLength(demuxer->length());
 	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
 
