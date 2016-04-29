@@ -152,7 +152,7 @@ void QMPlay2GUIClass::setLanguage()
 	lang = settings->get("Language", systemLang).toString();
 	if (lang.isEmpty())
 		lang = systemLang;
-	if (!translator->load(lang, langPath) && lang != "pl" && lang != "en" && translator->load("en", langPath))
+	if (!translator->load(lang, langPath))
 		lang = "en";
 }
 
