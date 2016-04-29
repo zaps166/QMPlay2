@@ -679,7 +679,14 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
 	if (AVCodec *codec = avcodec_find_decoder(codecID))
 		streamInfo->codec_name = codec->name;
-	streamInfo->must_decode = codecID != AV_CODEC_ID_ASS && codecID != AV_CODEC_ID_SSA && codecID != AV_CODEC_ID_SUBRIP && codecID != AV_CODEC_ID_SRT;
+
+	streamInfo->must_decode = true;
+	if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(codecID))
+	{
+		if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
+			streamInfo->must_decode = false;
+	}
+
 	streamInfo->bitrate = stream->codec->bit_rate;
 	streamInfo->bpcs = stream->codec->bits_per_coded_sample;
 	streamInfo->codec_tag = stream->codec->codec_tag;
