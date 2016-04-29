@@ -37,6 +37,11 @@ void AudioThr::stop(bool terminate)
 		delete filter;
 	AVThread::stop(terminate);
 }
+void AudioThr::clearVisualizations()
+{
+	foreach (QMPlay2Extensions *vis, visualizations)
+		vis->clearSoundData();
+}
 
 bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 {

@@ -46,6 +46,7 @@ private:
 	void connectDoubleClick(const QObject *, const char *);
 	void visState(bool, uchar, uint);
 	void sendSoundData(const QByteArray &);
+	void clearSoundData();
 
 	/**/
 

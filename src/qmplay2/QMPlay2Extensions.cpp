@@ -66,6 +66,8 @@ void QMPlay2Extensions::visState(bool, uchar chn, uint srate)
 }
 void QMPlay2Extensions::sendSoundData(const QByteArray &)
 {}
+void QMPlay2Extensions::clearSoundData()
+{}
 
 QMPlay2Extensions::~QMPlay2Extensions()
 {}

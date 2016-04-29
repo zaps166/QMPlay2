@@ -48,6 +48,7 @@ public:
 	virtual void connectDoubleClick(const QObject *, const char *);
 	virtual void visState(bool, uchar chn = 0, uint srate = 0);
 	virtual void sendSoundData(const QByteArray &);
+	virtual void clearSoundData();
 protected:
 	virtual ~QMPlay2Extensions();
 

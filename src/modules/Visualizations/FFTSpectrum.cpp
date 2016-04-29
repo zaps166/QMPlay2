@@ -213,3 +213,13 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
 		}
 	}
 }
+void FFTSpectrum::clearSoundData()
+{
+	if (w.tim.isActive())
+	{
+		QMutexLocker mL(&mutex);
+		w.spectrumData.fill(0.0f);
+		w.stopped = true;
+		w.update();
+	}
+}

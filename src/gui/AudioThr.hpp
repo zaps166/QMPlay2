@@ -18,6 +18,7 @@ public:
 	AudioThr(PlayClass &, const QStringList &pluginsName = QStringList());
 
 	void stop(bool terminate = false);
+	void clearVisualizations();
 
 	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
 

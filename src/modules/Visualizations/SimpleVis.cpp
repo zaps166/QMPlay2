@@ -226,3 +226,13 @@ void SimpleVis::sendSoundData(const QByteArray &data)
 		}
 	}
 }
+void SimpleVis::clearSoundData()
+{
+	if (w.tim.isActive())
+	{
+		QMutexLocker mL(&mutex);
+		w.soundData.fill(0);
+		w.stopped = true;
+		w.update();
+	}
+}
