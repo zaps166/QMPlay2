@@ -178,7 +178,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("ShortSeek", 5);
 	QMPSettings.init("LongSeek", 30);
 	QMPSettings.init("AVBufferLocal", 75);
-	QMPSettings.init("AVBufferNetwork", 10000);
+	QMPSettings.init("AVBufferNetwork", 25000);
 	QMPSettings.init("BackwardBuffer", 1);
 	QMPSettings.init("PlayIfBuffered", 1.75);
 	QMPSettings.init("MaxVol", 100);
