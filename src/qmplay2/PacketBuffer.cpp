@@ -4,12 +4,12 @@
 
 int PacketBuffer::backwardPackets;
 
-bool PacketBuffer::seekTo(double seekPos, bool backwards)
+bool PacketBuffer::seekTo(double seekPos, bool backward)
 {
 	if (isEmpty())
 		return true;
 
-	if (backwards && at(0).ts > seekPos)
+	if (backward && at(0).ts > seekPos)
 	{
 		if (floor(at(0).ts) > seekPos)
 			return false; //Brak paczek do skoku w tył
@@ -19,19 +19,32 @@ bool PacketBuffer::seekTo(double seekPos, bool backwards)
 	double durationToChange = 0.0;
 	qint64 sizeToChange = 0;
 
-	const int count = packetsCount();
-	if (!backwards) //Skok do przodu
+	if (!backward) //Skok do przodu
 	{
+		const int count = packetsCount();
 		for (int i = 0; i < count; ++i)
 		{
 			const Packet &pkt = at(i);
 			if (pkt.ts < seekPos || !pkt.hasKeyFrame)
 			{
-				durationToChange += pkt.duration;
-				sizeToChange += pkt.size();
+				if (i >= pos)
+				{
+					durationToChange += pkt.duration;
+					sizeToChange += pkt.size();
+				}
 			}
 			else
 			{
+				if (i < pos)
+				{
+					//Behaves as backward seeking
+					for (int j = i; j < pos; ++j)
+					{
+						const Packet &pkt = at(j);
+						durationToChange -= pkt.duration;
+						sizeToChange -= pkt.size();
+					}
+				}
 				remaining_duration -= durationToChange;
 				backward_duration += durationToChange;
 				remaining_bytes -= sizeToChange;
@@ -41,7 +54,7 @@ bool PacketBuffer::seekTo(double seekPos, bool backwards)
 			}
 		}
 	}
-	else for (int i = count - 1; i >= 0; --i) //Skok do tyłu
+	else for (int i = pos - 1; i >= 0; --i) //Skok do tyłu
 	{
 		const Packet &pkt = at(i);
 		durationToChange += pkt.duration;
