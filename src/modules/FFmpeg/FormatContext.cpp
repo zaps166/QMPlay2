@@ -342,8 +342,8 @@ bool FormatContext::seek(int pos, bool backward)
 				const int ret = av_read_frame(formatCtx, packet);
 				if (ret == AVERROR_EOF || ret == 0)
 				{
-					if (!backward && (len <= 0 || pos < len))
-						isOk = av_seek_frame(formatCtx, -1, timestamp, AVSEEK_FLAG_BACKWARD) >= 0; //Try to seek backwards
+					if (len <= 0 || pos < len)
+						isOk = av_seek_frame(formatCtx, -1, timestamp, !backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0; //Negate "backward" and try again
 					else if (ret == AVERROR_EOF)
 						isOk = true; //Allow seek to the end of the file, clear buffers and finish the playback
 					if (isOk)
