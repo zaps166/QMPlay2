@@ -336,7 +336,7 @@ bool FormatContext::seek(int pos, bool backward)
 		if (seekByByteOffset < 0)
 		{
 #endif
-			const qint64 timestamp = (qint64)pos * AV_TIME_BASE;
+			const qint64 timestamp = (qint64)pos * AV_TIME_BASE + 250000LL;
 			isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
 			if (!isOk)
 			{
