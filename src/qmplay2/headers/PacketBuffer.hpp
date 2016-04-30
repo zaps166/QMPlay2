@@ -21,7 +21,7 @@ public:
 		pos(0)
 	{}
 
-	bool seekTo(double seekPos, bool backwards, bool fromBegining = false);
+	bool seekTo(double seekPos, bool backwards);
 	void clear(); //Thread-safe
 
 	void put(const Packet &packet); //Thread-safe

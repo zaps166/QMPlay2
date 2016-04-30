@@ -4,7 +4,7 @@
 
 int PacketBuffer::backwardPackets;
 
-bool PacketBuffer::seekTo(double seekPos, bool backwards, bool fromBegining)
+bool PacketBuffer::seekTo(double seekPos, bool backwards)
 {
 	if (isEmpty())
 		return true;
@@ -19,39 +19,21 @@ bool PacketBuffer::seekTo(double seekPos, bool backwards, bool fromBegining)
 	double durationToChange = 0.0;
 	qint64 sizeToChange = 0;
 
-	if (!backwards) //Skok do przodu
-	{
-		const int count = packetsCount();
-		for (int i = (fromBegining ? 0 : pos); i < count; ++i)
-		{
-			const Packet &pkt = at(i);
-			if (pkt.ts < seekPos || !pkt.hasKeyFrame)
-			{
-				durationToChange += pkt.duration;
-				sizeToChange += pkt.size();
-			}
-			else
-			{
-				remaining_duration -= durationToChange;
-				backward_duration += durationToChange;
-				remaining_bytes -= sizeToChange;
-				backward_bytes += sizeToChange;
-				pos = i;
-				return true;
-			}
-		}
-	}
-	else for (int i = pos - 1; i >= 0; --i) //Skok do tyłu
+	const int count = packetsCount();
+	for (int i = 0; i < count; ++i)
 	{
 		const Packet &pkt = at(i);
-		durationToChange += pkt.duration;
-		sizeToChange += pkt.size();
-		if (pkt.hasKeyFrame && pkt.ts <= seekPos)
+		if (pkt.ts < seekPos || !pkt.hasKeyFrame)
 		{
-			remaining_duration += durationToChange;
-			backward_duration -= durationToChange;
-			remaining_bytes += sizeToChange;
-			backward_bytes -= sizeToChange;
+			durationToChange += pkt.duration;
+			sizeToChange += pkt.size();
+		}
+		else
+		{
+			remaining_duration -= durationToChange;
+			backward_duration += durationToChange;
+			remaining_bytes -= sizeToChange;
+			backward_bytes += sizeToChange;
 			pos = i;
 			return true;
 		}
