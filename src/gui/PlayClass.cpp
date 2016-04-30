@@ -1008,8 +1008,6 @@ void PlayClass::demuxThrFinished()
 	{
 		if (restartSeekTo >= 0.0) //jeżeli restart odtwarzania
 			stopAVThr();
-		else if (aThr)
-			aThr->clearVisualizations();
 		emit clearCurrentPlaying();
 		canDoSuspend = false;
 		play(newUrl);
@@ -1039,7 +1037,11 @@ void PlayClass::demuxThrFinished()
 	if (clr)
 		clearPlayInfo();
 	else
+	{
+		if (aThr)
+			aThr->clearVisualizations();
 		emit updateBuffered(-1, -1, 0.0, 0.0);
+	}
 
 	if (quitApp)
 	{
