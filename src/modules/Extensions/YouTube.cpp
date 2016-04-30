@@ -26,12 +26,14 @@
 #include <QFile>
 #include <QDir>
 
+#define YOUTUBE_URL "https://www.youtube.com"
+
 static const char cantFindTheTitle[] = "(Can't find the title)";
 static QMap<int, QString> itag_arr;
 
 static inline QUrl getYtUrl(const QString &title, const int page)
 {
-	return QString("https://www.youtube.com/results?search_query=%1&page=%2").arg(title).arg(page);
+	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(title).arg(page);
 }
 static inline QUrl getAutocompleteUrl(const QString &text)
 {
@@ -39,7 +41,7 @@ static inline QUrl getAutocompleteUrl(const QString &text)
 }
 static inline QString getSubsUrl(const QString &langCode, const QString &vidId)
 {
-	return QString("https://www.youtube.com/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode).arg(vidId);
+	return QString(YOUTUBE_URL "/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode).arg(vidId);
 }
 
 static inline QString getFileExtension(const QString &ItagName)
@@ -345,7 +347,7 @@ void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 		{
 			Playlist::Entry entry;
 			entry.name = ytPlaylist[i+1];
-			entry.url = "YouTube://{https://www.youtube.com/watch?v=" + ytPlaylist[i+0] + "}";
+			entry.url = "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}";
 			entries += entry;
 		}
 		if (!entries.isEmpty())
@@ -738,7 +740,7 @@ void YouTubeW::setSearchResults(QString data)
 				{
 					videoInfoLink = entry.mid(urlIdx, endUrlIdx - urlIdx).replace("&amp;", "&");
 					if (!videoInfoLink.isEmpty() && videoInfoLink.startsWith('/'))
-						videoInfoLink.prepend("https://www.youtube.com");
+						videoInfoLink.prepend(YOUTUBE_URL);
 					title = entry.mid(titleIdx, endTitleIdx - titleIdx);
 				}
 			}
@@ -908,7 +910,8 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 				if (lang.isEmpty())
 					lang = langCodes.at(0);
 				idx += 2;
-				subsUrl = getSubsUrl(lang, url.mid(idx, url.indexOf("&", idx)));
+				const int ampIdx = url.indexOf('&', idx);
+				subsUrl = getSubsUrl(lang, url.mid(idx, ampIdx > -1 ? (ampIdx - idx) : -1));
 			}
 		}
 	}
@@ -1074,7 +1077,14 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 	else if (!tWI && ret.isEmpty() && !youtubedl_updating && youtube_dl->assign(new YouTubeDL(youtubedl))) //cannot find URL at normal way
 	{
 		QString stream_url, name, extension;
-		(*youtube_dl)->addr(url, PARAM.right(PARAM.length() - 5), &stream_url, &name, &extension); //extension doesn't work on youtube in this function
+		QString cleanUrl = url;
+		const int idx = cleanUrl.indexOf("v=");
+		if (idx > -1)
+		{
+			const int ampIdx = cleanUrl.indexOf('&');
+			cleanUrl = YOUTUBE_URL "/watch?" + cleanUrl.mid(idx, ampIdx > -1 ? (ampIdx - idx) : -1);
+		}
+		(*youtube_dl)->addr(cleanUrl, PARAM.right(PARAM.length() - 5), &stream_url, &name, &extension); //extension doesn't work on youtube in this function
 		if (!stream_url.isEmpty())
 		{
 			if (name.isEmpty())
