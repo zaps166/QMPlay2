@@ -2665,5 +2665,13 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
         <translation>Нет внешней программы - &apos;youtube-dl&apos;. Скачайте ее, а затем задайте путь к ней в настройках модуля YouTube.</translation>
     </message>
+    <message>
+        <source>Playlist</source>
+        <translation type="unfinished">Список воспроизведения</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

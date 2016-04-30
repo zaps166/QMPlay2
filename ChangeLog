@@ -1,9 +1,9 @@
-Changes in QMPlay2 build 16.04.29:
+Changes in QMPlay2 build 16.04.30:
 	- fixed command line argument processing (now is possible to properly open or enqueue multiple files on Linux),
 	- playlist uses floating-point variables for storing length (accurate group length information),
 	- added audio balance (right click on volume slider to split channels),
+	- added YouTube playlists and subtitles,
 	- restore mute state on start-up,
-	- added subtitles from YouTube,
 	- bugfix,
 
 Changes in QMPlay2 build 16.04.23:

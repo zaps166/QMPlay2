@@ -2666,5 +2666,13 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
         <translation>Brakuje zewnętrznego programu - &apos;youtube-dl&apos;. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube.</translation>
     </message>
+    <message>
+        <source>Playlist</source>
+        <translation>Playlista</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation>tak</translation>
+    </message>
 </context>
 </TS>

@@ -21,22 +21,32 @@ class ResultsYoutube : public QTreeWidget
 	Q_OBJECT
 public:
 	ResultsYoutube();
+	inline ~ResultsYoutube()
+	{
+		removeTmpFile();
+	}
+
+	void clearAll();
 
 	QList<int> itags, itagsVideo, itagsAudio;
 private:
 	QTreeWidgetItem *getDefaultQuality(const QTreeWidgetItem *tWI);
 
+	void removeTmpFile();
+
 	void mouseMoveEvent(QMouseEvent *);
 
+	QString fileToRemove;
 	QMenu menu;
 private slots:
 	void enqueue();
 	void playCurrentEntry();
+	void playEntry(QTreeWidgetItem *tWI);
+	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
+
 	void openPage();
 	void copyPageURL();
 	void copyStreamURL();
-
-	void playEntry(QTreeWidgetItem *tWI);
 
 	void contextMenu(const QPoint &p);
 };
@@ -84,6 +94,8 @@ private:
 
 	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController<YouTubeDL> *youtube_dl = NULL); //jeżeli (tWI == NULL) to zwraca {URL, file_extension, TITLE}
 	QStringList getUrlByItagPriority(const QList<int> &itags, QStringList ret);
+
+	void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
 
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;

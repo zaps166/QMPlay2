@@ -2665,5 +2665,13 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Search on YouTube</source>
         <translation>Buscar en YouTube</translation>
     </message>
+    <message>
+        <source>Playlist</source>
+        <translation type="unfinished">Lista de reproducción</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

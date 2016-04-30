@@ -2,6 +2,7 @@
 
 #include <Functions.hpp>
 #include <LineEdit.hpp>
+#include <Playlist.hpp>
 #include <Reader.hpp>
 
 #include <QStringListModel>
@@ -23,6 +24,7 @@
 #include <QLabel>
 #include <QDrag>
 #include <QFile>
+#include <QDir>
 
 static const char cantFindTheTitle[] = "(Can't find the title)";
 static QMap<int, QString> itag_arr;
@@ -82,6 +84,11 @@ static QString fromU(QString s)
 			uIdx += 6;
 	}
 	return s;
+}
+
+static inline bool isPlaylist(QTreeWidgetItem *tWI)
+{
+	return tWI->data(1, Qt::UserRole).toBool();
 }
 
 /**/
@@ -251,6 +258,12 @@ ResultsYoutube::ResultsYoutube()
 	setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
+void ResultsYoutube::clearAll()
+{
+	removeTmpFile();
+	clear();
+}
+
 QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
 	if (!tWI->childCount())
@@ -262,10 +275,19 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 	return tWI->child(0);
 }
 
+void ResultsYoutube::removeTmpFile()
+{
+	if (!fileToRemove.isEmpty())
+	{
+		QFile::remove(fileToRemove);
+		fileToRemove.clear();
+	}
+}
+
 void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 {
 	QTreeWidgetItem *tWI = currentItem();
-	if (tWI)
+	if (tWI && !isPlaylist(tWI))
 	{
 		QString url;
 		if (e->buttons() & Qt::LeftButton)
@@ -299,14 +321,46 @@ void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 
 void ResultsYoutube::enqueue()
 {
-	QTreeWidgetItem *tWI = currentItem();
-	if (tWI)
-		emit QMPlay2Core.processParam("enqueue", getQMPlay2Url(tWI));
+	playOrEnqueue("enqueue", currentItem());
 }
 void ResultsYoutube::playCurrentEntry()
 {
-	playEntry(currentItem());
+	playOrEnqueue("open", currentItem());
 }
+void ResultsYoutube::playEntry(QTreeWidgetItem *tWI)
+{
+	playOrEnqueue("open", tWI);
+}
+void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
+{
+	if (!tWI)
+		return;
+	if (!isPlaylist(tWI))
+		emit QMPlay2Core.processParam(param, getQMPlay2Url(tWI));
+	else
+	{
+		const QStringList ytPlaylist = tWI->data(0, Qt::UserRole + 1).toStringList();
+		Playlist::Entries entries;
+		for (int i = 0; i < ytPlaylist.count() ; i += 2)
+		{
+			Playlist::Entry entry;
+			entry.name = ytPlaylist[i+1];
+			entry.url = "YouTube://{https://www.youtube.com/watch?v=" + ytPlaylist[i+0] + "}";
+			entries += entry;
+		}
+		if (!entries.isEmpty())
+		{
+			const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(tWI->text(0)) + ".pls";
+			removeTmpFile();
+			if (Playlist::write(entries, "file://" + fileName))
+			{
+				emit QMPlay2Core.processParam(param, fileName);
+				fileToRemove = fileName;
+			}
+		}
+	}
+}
+
 void ResultsYoutube::openPage()
 {
 	QTreeWidgetItem *tWI = currentItem();
@@ -340,12 +394,6 @@ void ResultsYoutube::copyStreamURL()
 	}
 }
 
-void ResultsYoutube::playEntry(QTreeWidgetItem *tWI)
-{
-	if (tWI)
-		emit QMPlay2Core.processParam("open", getQMPlay2Url(tWI));
-}
-
 void ResultsYoutube::contextMenu(const QPoint &point)
 {
 	menu.clear();
@@ -362,7 +410,7 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 		menu.addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
 		menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 		menu.addSeparator();
-		if (isOK)
+		if (isOK && !isPlaylist(tWI))
 		{
 			QVariant streamUrl;
 			QTreeWidgetItem *tWI_2 = tWI;
@@ -526,7 +574,7 @@ void YouTubeW::search()
 		searchReply->deleteLater();
 		searchReply = NULL;
 	}
-	resultsW->clear();
+	resultsW->clearAll();
 	if (!title.isEmpty())
 	{
 		if (lastTitle != title || sender() == searchE || sender() == searchB)
@@ -558,7 +606,7 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 		if (reply == searchReply)
 		{
 			deleteReplies();
-			resultsW->clear();
+			resultsW->clearAll();
 			lastTitle.clear();
 			progressB->hide();
 			pageSwitcher->hide();
@@ -567,18 +615,24 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 	}
 	else if (!redirectedReply)
 	{
+		QTreeWidgetItem *tWI = ((QTreeWidgetItem *)reply->property("tWI").value<void *>());
 		const QByteArray replyData = reply->readAll();
 		if (reply == autocompleteReply)
 			setAutocomplete(replyData);
 		else if (reply == searchReply)
 			setSearchResults(replyData);
 		else if (linkReplies.contains(reply))
-			getYouTubeVideo(replyData, QString(), ((QTreeWidgetItem *)reply->property("tWI").value<void *>()));
+		{
+			if (!isPlaylist(tWI))
+				getYouTubeVideo(replyData, QString(), tWI);
+			else
+				preparePlaylist(replyData, tWI);
+		}
 		else if (imageReplies.contains(reply))
 		{
 			QPixmap p;
 			if (p.loadFromData(replyData))
-				((QTreeWidgetItem *)reply->property("tWI").value<void *>())->setData(0, Qt::DecorationRole, p.scaled(imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+				tWI->setData(0, Qt::DecorationRole, p.scaled(imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 		}
 	}
 
@@ -667,8 +721,10 @@ void YouTubeW::setSearchResults(QString data)
 		const QString &entry = splitted[i];
 		int idx;
 
-		if (entry.contains("yt-lockup-playlist") || entry.contains("yt-lockup-channel")) //Ominąć playlisty (kiedyś trzeba zrobić obsługę playlist) i kanały
+		if (entry.contains("yt-lockup-channel")) //Ignore channels
 			continue;
+
+		const bool isPlaylist = entry.contains("yt-lockup-playlist");
 
 		if ((idx = entry.indexOf("yt-lockup-title")) > -1)
 		{
@@ -676,11 +732,11 @@ void YouTubeW::setSearchResults(QString data)
 			int titleIdx = entry.indexOf("title=\"", idx);
 			if (titleIdx > -1 && urlIdx > -1 && titleIdx > urlIdx)
 			{
-				int endUrlIdx = entry.indexOf("\"", urlIdx += 6);
-				int endTitleIdx = entry.indexOf("\"", titleIdx += 7);
+				const int endUrlIdx = entry.indexOf("\"", urlIdx += 6);
+				const int endTitleIdx = entry.indexOf("\"", titleIdx += 7);
 				if (endTitleIdx > -1 && endUrlIdx > -1 && endTitleIdx > endUrlIdx)
 				{
-					videoInfoLink = entry.mid(urlIdx, endUrlIdx - urlIdx);
+					videoInfoLink = entry.mid(urlIdx, endUrlIdx - urlIdx).replace("&amp;", "&");
 					if (!videoInfoLink.isEmpty() && videoInfoLink.startsWith('/'))
 						videoInfoLink.prepend("https://www.youtube.com");
 					title = entry.mid(titleIdx, endTitleIdx - titleIdx);
@@ -711,7 +767,7 @@ void YouTubeW::setSearchResults(QString data)
 				}
 			}
 		}
-		if ((idx = entry.indexOf("video-time")) > -1 && (idx = entry.indexOf(">", idx)) > -1)
+		if (!isPlaylist && (idx = entry.indexOf("video-time")) > -1 && (idx = entry.indexOf(">", idx)) > -1)
 		{
 			int endIdx = entry.indexOf("<", idx += 1);
 			if (endIdx > -1)
@@ -740,15 +796,17 @@ void YouTubeW::setSearchResults(QString data)
 			txtDoc.setHtml(title);
 
 			tWI->setText(0, txtDoc.toPlainText());
-			tWI->setText(1, duration);
+			tWI->setText(1, !isPlaylist ? duration : tr("Playlist"));
 			tWI->setText(2, user);
 
 			tWI->setToolTip(0, QString("%1: %2\n%3: %4\n%5: %6")
 				.arg(resultsW->headerItem()->text(0)).arg(tWI->text(0))
-				.arg(resultsW->headerItem()->text(1)).arg(tWI->text(1))
+				.arg(!isPlaylist ? resultsW->headerItem()->text(1) : tr("Playlist")).arg(!isPlaylist ? tWI->text(1) : tr("yes"))
 				.arg(resultsW->headerItem()->text(2)).arg(tWI->text(2))
 			);
+
 			tWI->setData(0, Qt::UserRole, videoInfoLink);
+			tWI->setData(1, Qt::UserRole, isPlaylist);
 
 			QNetworkReply *linkReply = net.get(QNetworkRequest(videoInfoLink));
 			QNetworkReply *imageReply = net.get(QNetworkRequest(image));
@@ -760,7 +818,7 @@ void YouTubeW::setSearchResults(QString data)
 	}
 
 	if (i == 1)
-		resultsW->clear();
+		resultsW->clearAll();
 	else
 	{
 		pageSwitcher->currPageB->setValue(currPage);
@@ -774,7 +832,7 @@ void YouTubeW::setSearchResults(QString data)
 QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController<YouTubeDL> *youtube_dl)
 {
 	QString subsUrl;
-	if (subtitles)
+	if (subtitles && !tWI)
 	{
 		QStringList langCodes;
 		int captionIdx = data.indexOf("caption_tracks\":\"");
@@ -1052,6 +1110,48 @@ QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList 
 		return QStringList();
 	ret.erase(ret.begin()+2, ret.end());
 	return ret;
+}
+
+void YouTubeW::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
+{
+	int idx = data.indexOf("playlist-videos-container");
+	if (idx > -1)
+	{
+		const QString tags[2] = {"video-id", "video-title"};
+		QStringList playlist, entries = data.mid(idx).split("yt-uix-scroller-scroll-unit", QString::SkipEmptyParts);
+		entries.removeFirst();
+		foreach (const QString &entry, entries)
+		{
+			QStringList plistEntry;
+			for (int i = 0; i < 2; ++i)
+			{
+				idx = entry.indexOf(tags[i]);
+				if (idx > -1 && (idx = entry.indexOf('"', idx += tags[i].length())) > -1)
+				{
+					const int endIdx = entry.indexOf('"', idx += 1);
+					if (endIdx > -1)
+					{
+						const QString str = entry.mid(idx, endIdx - idx);
+						if (!i)
+							plistEntry += str;
+						else
+						{
+							QTextDocument txtDoc;
+							txtDoc.setHtml(str);
+							plistEntry += txtDoc.toPlainText();
+						}
+					}
+				}
+			}
+			if (plistEntry.count() == 2)
+				playlist += plistEntry;
+		}
+		if (!playlist.isEmpty())
+		{
+			tWI->setData(0, Qt::UserRole + 1, playlist);
+			tWI->setDisabled(false);
+		}
+	}
 }
 
 /**/
