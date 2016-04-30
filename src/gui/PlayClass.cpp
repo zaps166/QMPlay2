@@ -180,7 +180,7 @@ void PlayClass::stop(bool _quitApp)
 				 aThr->silence();
 			if (isPlaying())
 			{
-				timTerminate.start(TERMINATE_TIMEOUT * 2 / 3);
+				timTerminate.start(TERMINATE_TIMEOUT * 5 / 3);
 				demuxThr->stop();
 				fillBufferB = true;
 			}
