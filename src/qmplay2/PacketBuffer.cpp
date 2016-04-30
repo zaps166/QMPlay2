@@ -20,20 +20,38 @@ bool PacketBuffer::seekTo(double seekPos, bool backwards)
 	qint64 sizeToChange = 0;
 
 	const int count = packetsCount();
-	for (int i = 0; i < count; ++i)
+	if (!backwards) //Skok do przodu
+	{
+		for (int i = 0; i < count; ++i)
+		{
+			const Packet &pkt = at(i);
+			if (pkt.ts < seekPos || !pkt.hasKeyFrame)
+			{
+				durationToChange += pkt.duration;
+				sizeToChange += pkt.size();
+			}
+			else
+			{
+				remaining_duration -= durationToChange;
+				backward_duration += durationToChange;
+				remaining_bytes -= sizeToChange;
+				backward_bytes += sizeToChange;
+				pos = i;
+				return true;
+			}
+		}
+	}
+	else for (int i = count - 1; i >= 0; --i) //Skok do tyłu
 	{
 		const Packet &pkt = at(i);
-		if (pkt.ts < seekPos || !pkt.hasKeyFrame)
+		durationToChange += pkt.duration;
+		sizeToChange += pkt.size();
+		if (pkt.hasKeyFrame && pkt.ts <= seekPos)
 		{
-			durationToChange += pkt.duration;
-			sizeToChange += pkt.size();
-		}
-		else
-		{
-			remaining_duration -= durationToChange;
-			backward_duration += durationToChange;
-			remaining_bytes -= sizeToChange;
-			backward_bytes += sizeToChange;
+			remaining_duration += durationToChange;
+			backward_duration -= durationToChange;
+			remaining_bytes += sizeToChange;
+			backward_bytes -= sizeToChange;
 			pos = i;
 			return true;
 		}
