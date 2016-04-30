@@ -22,6 +22,13 @@
     </message>
 </context>
 <context>
+    <name>AVThread</name>
+    <message>
+        <source>A/V thread has been incorrectly terminated!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AboutWidget</name>
     <message>
         <source>About QMPlay2</source>

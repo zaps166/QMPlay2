@@ -40,7 +40,7 @@ bool AVThread::lock()
 	if (!mutex.tryLock(MUTEXWAIT_TIMEOUT))
 	{
 		emit QMPlay2Core.waitCursor();
-		const bool ret = mutex.tryLock(MUTEXWAIT_TIMEOUT);
+		const bool ret = mutex.tryLock(MUTEXWAIT_TIMEOUT * 2);
 		emit QMPlay2Core.restoreCursor();
 		if (!ret)
 		{
@@ -74,5 +74,6 @@ void AVThread::terminate()
 	disconnect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 	QThread::terminate();
 	wait(1000);
+	emit playC.message(tr("A/V thread has been incorrectly terminated!"), 2000);
 	deleteLater();
 }
