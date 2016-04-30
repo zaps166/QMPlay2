@@ -33,7 +33,7 @@ public:
 	uchar channels;
 	uint sample_rate;
 private:
-	bool _isOK;
+	bool _isOK, writing;
 
 	pa_simple *pulse;
 	pa_sample_spec ss;

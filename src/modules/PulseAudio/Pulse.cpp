@@ -24,7 +24,7 @@ Pulse::Pulse() :
 	delay(0.0),
 	channels(0),
 	sample_rate(0),
-	_isOK(false),
+	_isOK(false), writing(false),
 	pulse(NULL)
 {
 	ss.format = PA_SAMPLE_FLOAT32NE;
@@ -98,7 +98,8 @@ void Pulse::stop()
 {
 	if (pulse)
 	{
-		pa_simple_free(pulse);
+		if (!writing) //If "pa_simple_write()" is freezed and the audio thread is killed - don't free the context to avoid the deadlock
+			pa_simple_free(pulse);
 		pulse = NULL;
 	}
 }
@@ -110,5 +111,8 @@ bool Pulse::write(const QByteArray &arr)
 		s--;
 	if (s <= 0)
 		return false;
-	return pa_simple_write(pulse, arr.data(), s, NULL) >= 0;
+	writing = true;
+	const bool ret = pa_simple_write(pulse, arr.data(), s, NULL) >= 0;
+	writing = false;
+	return ret;
 }
