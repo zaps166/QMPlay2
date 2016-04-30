@@ -566,14 +566,13 @@ bool FormatContext::open(const QString &_url)
 	formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;
 	formatCtx->interrupt_callback.opaque = &isAborted;
 
-#ifdef MP3_FAST_SEEK
-	formatCtx->flags |= AVFMT_FLAG_FAST_SEEK;
-#endif
-
 	if (avformat_open_input(&formatCtx, url.toUtf8(), inputFmt, &options) || !formatCtx || disabledDemuxers.contains(name()))
 		return false;
 
-#ifndef MP3_FAST_SEEK
+#ifdef MP3_FAST_SEEK
+	if (name() == "mp3")
+		formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
+#else
 	seekByByteOffset = formatCtx->pb ? avio_tell(formatCtx->pb) : -1; //formatCtx->data_offset, moved to private since FFmpeg 2.6
 #endif
 
