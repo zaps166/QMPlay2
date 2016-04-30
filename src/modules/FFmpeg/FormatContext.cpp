@@ -91,6 +91,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	isMetadataChanged(false),
 	lastTime(0.0),
 	lastErr(0), errFromSeek(0),
+	maybeHasFrame(false),
 	avcodec_mutex(avcodec_mutex)
 {}
 FormatContext::~FormatContext()
