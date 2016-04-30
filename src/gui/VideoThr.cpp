@@ -174,10 +174,10 @@ void VideoThr::updateSubs()
 {
 	if (writer && playC.ass)
 	{
-		playC.sPackets.lock();
+		playC.subsMutex.lock();
 		if (subtitles)
 			playC.ass->getASS(subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync);
-		playC.sPackets.unlock();
+		playC.subsMutex.unlock();
 	}
 }
 
@@ -252,6 +252,13 @@ void VideoThr::run()
 		}
 		playC.fillBufferB = true;
 
+		/* Subtitles packet */
+		Packet sPacket;
+		playC.sPackets.lock();
+		if (playC.sPackets.canFetch())
+			sPacket = playC.sPackets.fetch();
+		playC.sPackets.unlock();
+
 		mutex.lock();
 		if (br)
 		{
@@ -262,12 +269,9 @@ void VideoThr::run()
 		/* Subtitles */
 		const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
 		QList<const QMPlay2_OSD *> osdList, osdListToDelete;
-		playC.sPackets.lock();
-		if (sDec) //image subs (pgssub, dvdsub)
+		playC.subsMutex.lock();
+		if (sDec) //Image subs (pgssub, dvdsub, ...)
 		{
-			Packet sPacket;
-			if (playC.sPackets.canFetch())
-				sPacket = playC.sPackets.fetch();
 			if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, W, H))
 			{
 				osdListToDelete += subtitles;
@@ -276,9 +280,8 @@ void VideoThr::run()
 		}
 		else
 		{
-			if (playC.sPackets.canFetch())
+			if (!sPacket.isEmpty())
 			{
-				const Packet sPacket = playC.sPackets.fetch();
 				const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
 				if (playC.ass->isASS())
 					playC.ass->addASSEvent(sPacketData);
@@ -293,7 +296,7 @@ void VideoThr::run()
 		}
 		if (subtitles)
 		{
-			bool hasDuration = subtitles->duration() >= 0.0;
+			const bool hasDuration = subtitles->duration() >= 0.0;
 			if (deleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
 			{
 				osdListToDelete += subtitles;
@@ -305,8 +308,8 @@ void VideoThr::run()
 				osdList += subtitles;
 			}
 		}
-		playC.sPackets.unlock();
-		playC.osd_mutex.lock();
+		playC.subsMutex.unlock();
+		playC.osdMutex.lock();
 		if (playC.osd)
 		{
 			if (deleteOSD || playC.osd->left_duration() < 0)
@@ -317,8 +320,7 @@ void VideoThr::run()
 			else
 				osdList += playC.osd;
 		}
-		playC.osd_mutex.unlock();
-
+		playC.osdMutex.unlock();
 		if ((!lastOSDListEmpty || !osdList.isEmpty()) && writer && writer->readyWrite())
 		{
 			((VideoWriter *)writer)->writeOSD(osdList);

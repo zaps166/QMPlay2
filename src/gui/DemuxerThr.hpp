@@ -34,7 +34,7 @@ public:
 
 	void loadImage();
 
-	void seek(bool doDemuxerSeek = true);
+	void seek(bool doDemuxerSeek);
 
 	void stop();
 	void end();

@@ -111,9 +111,7 @@ void DemuxerThr::loadImage()
 
 void DemuxerThr::seek(bool doDemuxerSeek)
 {
-	if (doDemuxerSeek)
-		seekMutex.lock();
-	else if (skipBufferSeek || !seekMutex.tryLock())
+	if (!doDemuxerSeek && skipBufferSeek)
 		return;
 	if (playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD)
 	{
@@ -205,7 +203,6 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 				playC.paused = false;
 		}
 	}
-	seekMutex.unlock();
 }
 
 void DemuxerThr::stop()
@@ -355,7 +352,9 @@ void DemuxerThr::run()
 
 	while (!demuxer.isAborted())
 	{
-		seek();
+		seekMutex.lock();
+		seek(true);
+		seekMutex.unlock();
 
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 		err = (aThr && aThr->writer && !aThr->writer->readyWrite()) || (vThr && vThr->writer && !vThr->writer->readyWrite());

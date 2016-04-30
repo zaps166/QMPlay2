@@ -120,7 +120,7 @@ private:
 #endif
 	LibASS *ass;
 
-	QMutex osd_mutex;
+	QMutex osdMutex, subsMutex;
 	QMPlay2_OSD *osd;
 	int videoWinW, videoWinH;
 	QStringList fileSubsList;

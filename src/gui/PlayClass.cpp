@@ -241,9 +241,16 @@ void PlayClass::seek(int pos)
 		seekA = seekB = -1;
 		updateABRepeatInfo(showDisabledInfo);
 	}
+	bool locked = false;
+	if (demuxThr)
+		locked = demuxThr->seekMutex.tryLock();
 	lastSeekTo = seekTo = pos;
-	if (demuxThr && demuxThr->isDemuxerReady())
-		demuxThr->seek(false);
+	if (locked)
+	{
+		if (demuxThr->isDemuxerReady())
+			demuxThr->seek(false);
+		demuxThr->seekMutex.unlock();
+	}
 	emit QMPlay2Core.seeked(pos); //Signal for MPRIS2
 	fillBufferB = true;
 	if (aThr && paused)
@@ -303,7 +310,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 			}
 
 			sPackets.clear();
-			sPackets.lock();
+			subsMutex.lock();
 
 			vThr->destroySubtitlesDecoder();
 			if (!QMPlay2Core.getSettings().getBool("KeepSubtitlesDelay"))
@@ -370,7 +377,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 				ass->closeASS();
 			}
 
-			sPackets.unlock();
+			subsMutex.unlock();
 		}
 	}
 	if (demuxThr)
@@ -383,9 +390,9 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 {
 	if (ass && QMPlay2Core.getSettings().getBool("OSD/Enabled"))
 	{
-		osd_mutex.lock();
+		osdMutex.lock();
 		ass->getOSD(osd, txt.toUtf8(), duration);
-		osd_mutex.unlock();
+		osdMutex.unlock();
 	}
 	if (onStatusBar)
 		emit message(txt, duration * 1000);
@@ -408,10 +415,10 @@ double PlayClass::getARatio()
 
 void PlayClass::flushAssEvents()
 {
-	sPackets.lock();
+	subsMutex.lock();
 	if (ass && subtitlesStream > -1)
 		ass->flushASSEvents();
-	sPackets.unlock();
+	subsMutex.unlock();
 }
 void PlayClass::clearSubtitlesBuffer()
 {
@@ -603,10 +610,10 @@ void PlayClass::settingsChanged(int page, bool page3Restart)
 			if (ass)
 			{
 				ass->setOSDStyle();
-				osd_mutex.lock();
+				osdMutex.lock();
 				if (osd)
 					ass->getOSD(osd, osd->text(), osd->left_duration());
-				osd_mutex.unlock();
+				osdMutex.unlock();
 			}
 			break;
 		case 6: //video filters
@@ -622,10 +629,10 @@ void PlayClass::videoResized(int w, int h)
 		ass->setWindowSize(w, h);
 		if (QMPlay2Core.getSettings().getBool("OSD/Enabled"))
 		{
-			osd_mutex.lock();
+			osdMutex.lock();
 			if (osd)
 				ass->getOSD(osd, osd->text(), osd->left_duration());
-			osd_mutex.unlock();
+			osdMutex.unlock();
 		}
 		if (vThr)
 			vThr->updateSubs();
@@ -1245,11 +1252,11 @@ void PlayClass::load(Demuxer *demuxer)
 		clearSubtitlesBuffer();
 		if (videoStream >= 0 && vThr)
 		{
-			sPackets.lock();
+			subsMutex.lock();
 			vThr->destroySubtitlesDecoder();
 			ass->closeASS();
 			ass->clearFonts();
-			sPackets.unlock();
+			subsMutex.unlock();
 
 			if (subtitlesEnabled && fileSubsList.count() && choosenSubtitlesStream < 0)
 				loadSubsFile(fileSubsList[fileSubsList.count() - 1]);
@@ -1266,7 +1273,7 @@ void PlayClass::load(Demuxer *demuxer)
 				{
 					if (subtitlesSync < 0.0)
 						subtitlesSync = 0.0;
-					sPackets.lock();
+					subsMutex.lock();
 					if (dec)
 						vThr->setSubtitlesDecoder(dec);
 					QByteArray assHeader = streams[subtitlesStream]->data;
@@ -1281,7 +1288,7 @@ void PlayClass::load(Demuxer *demuxer)
 					ass->initASS(assHeader);
 					if (reload)
 						seekTo = SEEK_STREAM_RELOAD;
-					sPackets.unlock();
+					subsMutex.unlock();
 				}
 				else
 				{
