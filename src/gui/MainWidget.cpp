@@ -977,7 +977,8 @@ void MainWidget::setSeekSMaximum(int max)
 	else
 	{
 		const bool focus = seekS->hasFocus();
-		setFocus(); //This changes the "seekSFocus" in "MainWidget::focusChanged()"
+		if (focus)
+			setFocus(); //This changes the "seekSFocus" in "MainWidget::focusChanged()"
 		seekSFocus = focus;
 		seekS->setEnabled(false);
 	}
