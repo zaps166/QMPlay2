@@ -205,7 +205,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("Silence", true);
 	QMPSettings.init("ScrollSeek", true);
 	QMPSettings.init("RestoreVideoEqualizer", false);
-	QMPSettings.init("IgnorePlaybackError", true);
+	QMPSettings.init("IgnorePlaybackError", false);
 	QMPSettings.init("ApplyToASS/ColorsAndBorders", true);
 	QMPSettings.init("ApplyToASS/MarginsAndAlignment", false);
 	QMPSettings.init("ApplyToASS/FontsAndSpacing", false);
