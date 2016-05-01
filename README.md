@@ -25,8 +25,9 @@ $ yaourt -S qmplay2
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman
 $ sudo zypper in QMPlay2
 ```
-- Qt5 "multimedia" package may be buggy on Qt5 <= 5.6.1 and its FFmpeg doesn't have all codecs.
+- The "multimedia" repository uses Qt5 for QMPlay2, so it may be buggy on Qt5 <= 5.6.1 and its FFmpeg doesn't have all codecs.
 - Don't use official package, because it is obsolete.
+- Don't mix FFmpeg from different repositories!
 
 ####Easy installation on openSUSE 13.2
 
@@ -35,15 +36,16 @@ $ sudo zypper in QMPlay2
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
 $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ```
+- Don't mix FFmpeg from different repositories!
 
 ##YouTube
 
-Some YouTube videos doesn't work without the external "youtube-dl" software. You must install it!
+Some YouTube videos don't work without external "youtube-dl" software. You must install it!
 
 ####Windows
 
 - Watch the video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
-- If the video doesn't play inside the web browser - pase the address to QMPlay2 (Ctrl+V) and play it!
+- If the video doesn't play inside the web browser - paste the address to QMPlay2 (Ctrl+V) and play it!
 - Windows XP: I don't know why, but "youtube-dl.exe" needs .NET 3.5.
 
 ####Arch Linux / Manjaro Linux
@@ -101,7 +103,7 @@ You can also install youtube-dl: ```sudo pacman -S youtube-dl```
 
 #####OpenSUSE dependencies (Qt4 build)
 
-- Add Packman repository for FFmpeg with all codecs:
+- Add Packman repository for FFmpeg with all codecs (don't mix FFmpeg from different repositories!):
 	- openSUSE Leap 42.1: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman```
 	- openSUSE 13.2: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman```
 - Install dependencies: ```sudo zypper in libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel```
