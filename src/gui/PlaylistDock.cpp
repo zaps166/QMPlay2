@@ -518,22 +518,26 @@ void PlaylistDock::syncCurrentFolder()
 }
 void PlaylistDock::repeat()
 {
-	const QString name = sender()->objectName();
-	const RepeatMode lastRepeatMode = repeatMode;
-	if (name == "normal")
-		repeatMode = Normal;
-	else if (name == "repeatEntry")
-		repeatMode = RepeatEntry;
-	else if (name == "repeatGroup")
-		repeatMode = RepeatGroup;
-	else if (name == "repeatList")
-		repeatMode = RepeatList;
-	else if (name == "random")
-		repeatMode = Random;
-	else if (name == "randomGroup")
-		repeatMode = RandomGroup;
-	if ((lastRepeatMode == Random && repeatMode != Random) || (lastRepeatMode == RandomGroup && repeatMode != RandomGroup))
-		randomPlayedItems.clear();
+	if (QAction *act = qobject_cast<QAction *>(sender()))
+	{
+		const QString name = act->objectName();
+		const RepeatMode lastRepeatMode = repeatMode;
+		if (name == "normal")
+			repeatMode = Normal;
+		else if (name == "repeatEntry")
+			repeatMode = RepeatEntry;
+		else if (name == "repeatGroup")
+			repeatMode = RepeatGroup;
+		else if (name == "repeatList")
+			repeatMode = RepeatList;
+		else if (name == "random")
+			repeatMode = Random;
+		else if (name == "randomGroup")
+			repeatMode = RandomGroup;
+		if ((lastRepeatMode == Random && repeatMode != Random) || (lastRepeatMode == RandomGroup && repeatMode != RandomGroup))
+			randomPlayedItems.clear();
+		emit QMPlay2Core.statusBarMessage(act->text().remove('&'), 1500);
+	}
 }
 void PlaylistDock::updateCurrentEntry(const QString &name, double length)
 {

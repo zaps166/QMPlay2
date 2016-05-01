@@ -74,6 +74,6 @@ void AVThread::terminate()
 	disconnect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 	QThread::terminate();
 	wait(1000);
-	emit playC.message(tr("A/V thread has been incorrectly terminated!"), 2000);
+	emit QMPlay2Core.statusBarMessage(tr("A/V thread has been incorrectly terminated!"), 2000);
 	deleteLater();
 }

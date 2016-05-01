@@ -232,7 +232,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	connect(&QMPlay2Core, SIGNAL(sendMessage(const QString &, const QString &, int, int)), this, SLOT(showMessage(const QString &, const QString &, int, int)));
 	connect(&QMPlay2Core, SIGNAL(processParam(const QString &, const QString &)), this, SLOT(processParam(const QString &, const QString &)));
-	connect(&QMPlay2Core, SIGNAL(logSignal(const QString &)), this, SLOT(statusBarMessage(const QString &)));
+	connect(&QMPlay2Core, SIGNAL(statusBarMessage(const QString &, int)), this, SLOT(statusBarMessage(const QString &, int)));
 	connect(&QMPlay2Core, SIGNAL(showSettings(const QString &)), this, SLOT(showSettings(const QString &)));
 
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
@@ -243,7 +243,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&playC, SIGNAL(setInfo(const QString &, bool, bool)), infoDock, SLOT(setInfo(const QString &, bool, bool)));
 	connect(&playC, SIGNAL(updateCurrentEntry(const QString &, double)), playlistDock, SLOT(updateCurrentEntry(const QString &, double)));
 	connect(&playC, SIGNAL(playNext(bool)), playlistDock, SLOT(next(bool)));
-	connect(&playC, SIGNAL(message(const QString &, int)), statusBar, SLOT(showMessage(const QString &, int)));
 	connect(&playC, SIGNAL(clearCurrentPlaying()), playlistDock, SLOT(clearCurrentPlaying()));
 	connect(&playC, SIGNAL(clearInfo()), infoDock, SLOT(clear()));
 	connect(&playC, SIGNAL(quit()), this, SLOT(deleteLater()));
@@ -871,9 +870,9 @@ void MainWidget::showMessage(const QString &msg, const QString &title, int messa
 	else
 		tray->showMessage(title, msg, (QSystemTrayIcon::MessageIcon)messageIcon, ms);
 }
-void MainWidget::statusBarMessage(const QString &msg)
+void MainWidget::statusBarMessage(const QString &msg, int ms)
 {
-	statusBar->showMessage(msg, 2500);
+	statusBar->showMessage(msg, ms);
 }
 
 void MainWidget::openUrl()

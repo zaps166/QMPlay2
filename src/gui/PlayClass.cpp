@@ -395,7 +395,7 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 		osdMutex.unlock();
 	}
 	if (onStatusBar)
-		emit message(txt, duration * 1000);
+		emit QMPlay2Core.statusBarMessage(txt, duration * 1000);
 }
 
 void PlayClass::speedMessageAndOSD()
@@ -562,7 +562,7 @@ void PlayClass::updateABRepeatInfo(bool showDisabledInfo)
 			abMsg += " " + tr("to") + " " + Functions::timeToStr(seekB);
 	}
 	if (!abMsg.isEmpty())
-		emit message(tr("A-B Repeat") + " " + abMsg, 2500);
+		emit QMPlay2Core.statusBarMessage(tr("A-B Repeat") + " " + abMsg, 2500);
 }
 
 void PlayClass::suspendWhenFinished(bool b)
@@ -1064,7 +1064,7 @@ void PlayClass::timTerminateFinished()
 	{
 		demuxThr->terminate();
 		demuxThr->wait(1000);
-		emit message(tr("Playback has been incorrectly terminated!"), 2000);
+		emit QMPlay2Core.statusBarMessage(tr("Playback has been incorrectly terminated!"), 2000);
 	}
 	emit QMPlay2Core.restoreCursor();
 }

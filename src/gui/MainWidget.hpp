@@ -66,7 +66,7 @@ private slots:
 	void toggleCompactView();
 	void toggleFullScreen();
 	void showMessage(const QString &, const QString &, int, int);
-	void statusBarMessage(const QString &);
+	void statusBarMessage(const QString &, int ms);
 
 	void openUrl();
 	void openFiles();

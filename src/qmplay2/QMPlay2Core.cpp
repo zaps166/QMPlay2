@@ -211,7 +211,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 			log(tr("Can't open log file"), ErrorLog | AddTimeToLog);
 	}
 	if (!(logFlags & DontShowInGUI))
-		emit logSignal(txt);
+		emit statusBarMessage(txt, 2500);
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

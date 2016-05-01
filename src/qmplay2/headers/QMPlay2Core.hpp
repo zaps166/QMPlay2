@@ -62,6 +62,7 @@ public:
 	Q_SIGNAL void mainWidgetNotMinimized(bool);
 	Q_SIGNAL void videoDockVisible(bool);
 
+	Q_SIGNAL void statusBarMessage(const QString &txt, int ms);
 	Q_SIGNAL void sendMessage(const QString &msg, const QString &title = QString(), int messageIcon = 1, int ms = 2000);
 	Q_SIGNAL void processParam(const QString &param, const QString &data = QString());
 
@@ -127,8 +128,6 @@ protected:
 	QPixmap *qmp2Pixmap;
 	Settings *settings;
 private:
-	Q_SIGNAL void logSignal(const QString &txt);
-
 	static QMPlay2CoreClass *qmplay2Core;
 
 	QList<Module *> pluginsInstance;
