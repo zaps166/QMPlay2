@@ -18,7 +18,7 @@
 $ yaourt -S qmplay2
 ```
 
-####Easy installation on openSUSE 42.1
+####Easy installation on openSUSE Leap 42.1
 
 - Just run the following commands:
 ```sh
@@ -43,12 +43,12 @@ Some YouTube videos doesn't work without the external "youtube-dl" software. You
 ####Windows
 
 - Watch the video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
-- If the video doesn't play inside the web browser - pase the address to QMPlay2 (Ctrl+V) and play it there!
-- Windows XP: I don't know why, but the exe file needs .NET 3.5.
+- If the video doesn't play inside the web browser - pase the address to QMPlay2 (Ctrl+V) and play it!
+- Windows XP: I don't know why, but "youtube-dl.exe" needs .NET 3.5.
 
 ####Arch Linux / Manjaro Linux
 
-- Install "youtube-dl" from the repositories: ```sudo pacman -S youtube-dl```
+- Install "youtube-dl" from repositories: ```sudo pacman -S youtube-dl```
 
 ####Other Linux distributions or other operating system
 
@@ -64,7 +64,7 @@ If you are using your own ALSA configuration ```asound.conf``` or ```.asoundrc``
 
 ##Ubuntu Unity
 
-Context menu in Ubuntu Unity doesn't work properly on Qt older than 5.6.1!
+Tray context menu in Ubuntu Unity doesn't work properly on Qt older than 5.6.1!
 
 ##Compilation from sources
 
@@ -102,7 +102,7 @@ You can also install youtube-dl: ```sudo pacman -S youtube-dl```
 #####OpenSUSE dependencies (Qt4 build)
 
 - Add Packman repository for FFmpeg with all codecs:
-	- openSUSE 42.1: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman```
+	- openSUSE Leap 42.1: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman```
 	- openSUSE 13.2: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman```
 - Install dependencies: ```sudo zypper in libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel```
 
@@ -159,7 +159,7 @@ This will compile and install the newest FFmpeg without features that are not su
 - Add directory containing "qmake" to "PATH".
 - Run "./compile_mac n" where "n" is number of threads (4 by default).
 
-####Windows (Cross-compile):
+####Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
 - Some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
