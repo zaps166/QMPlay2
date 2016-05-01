@@ -593,18 +593,21 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		const FrameBuffer &currBuffer = internalQueue.at(1);
 		const FrameBuffer &nextBuffer = internalQueue.at(2);
 
-		VideoFrame destFrame(h, (h + 1) >> 1, currBuffer.frame.linesize);
+		const int halfH = (h + 1) >> 1;
+
+		VideoFrame destFrame(h, halfH, currBuffer.frame.linesize);
 
 		if (threads.isEmpty())
 		{
-			threads.resize(QThread::idealThreadCount());
+			threads.resize(min(QThread::idealThreadCount(), 18));
 			for (int i = 0; i < threads.count(); ++i)
 				threads[i] = YadifThrPtr(new YadifThr(*this));
 		}
 
-		for (int i = 0; i < threads.count(); ++i)
-			threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threads.count());
-		for (int i = 0; i < threads.count(); ++i)
+		const int threadsCount = min(threads.count(), halfH);
+		for (int i = 0; i < threadsCount; ++i)
+			threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threadsCount);
+		for (int i = 0; i < threadsCount; ++i)
 			threads[i]->waitForFinished();
 
 		double ts = currBuffer.ts;
