@@ -97,9 +97,7 @@ private slots:
 	void lockWidgets(bool);
 
 	void hideDocksSlot();
-#ifdef QT5_WINDOWS
-	void delayedRestore();
-#endif
+	void delayedRestore(QByteArray data);
 
 	void uncheckSuspend();
 private:
@@ -109,6 +107,7 @@ private:
 
 	void showToolBar(bool);
 	void hideDocks();
+	void restoreFocus();
 
 	void mouseMoveEvent(QMouseEvent *);
 	void leaveEvent(QEvent *);

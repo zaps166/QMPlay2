@@ -542,6 +542,7 @@ void MainWidget::hideAllExtensions()
 void MainWidget::toggleVisibility()
 {
 	const bool isTray = QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible();
+	static bool maximized;
 	if (isVisible())
 	{
 		if (fullScreen)
@@ -552,15 +553,38 @@ void MainWidget::toggleVisibility()
 		{
 			menuBar->options->trayVisible->setEnabled(false);
 			lastFocusWidget = focusWidget(); //Hold the current focus widget, because hiding from Mate systray applet and Xfwm4 can change focus on Qt5...
+			if (isMaximized())
+			{
+				if (!isCompactView)
+					dockWidgetState = saveState();
+				maximized = true;
+				showNormal();
+			}
 			hide();
 		}
 	}
-	else if (!isVisible())
+	else
 	{
+		bool doRestoreFocus = true;
 		if (isTray)
 			menuBar->options->trayVisible->setEnabled(true);
-		showNormal();
+		if (!maximized)
+			showNormal();
+		else
+		{
+			showMaximized();
+			if (!isCompactView && !dockWidgetState.isEmpty())
+			{
+				restoreState(dockWidgetState);
+				QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, dockWidgetState));
+				dockWidgetState.clear();
+				doRestoreFocus = false;
+			}
+			maximized = false;
+		}
 		activateWindow();
+		if (doRestoreFocus)
+			restoreFocus();
 	}
 }
 void MainWidget::createMenuBar()
@@ -1079,20 +1103,18 @@ void MainWidget::hideDocksSlot()
 			hideDocks();
 	}
 }
+void MainWidget::delayedRestore(QByteArray data)
+{
+	QCoreApplication::processEvents();
+	restoreState(data);
+	restoreFocus();
+}
 
 void MainWidget::uncheckSuspend()
 {
 	if (menuBar->player->suspend)
 		menuBar->player->suspend->setChecked(false);
 }
-
-#ifdef QT5_WINDOWS
-void MainWidget::delayedRestore()
-{
-	QCoreApplication::processEvents();
-	restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
-}
-#endif
 
 void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool saveCurrentGroup)
 {
@@ -1157,6 +1179,15 @@ void MainWidget::hideDocks()
 	playlistDock->hide();
 	infoDock->hide();
 	hideAllExtensions();
+}
+void MainWidget::restoreFocus()
+{
+	if (lastFocusWidget)
+	{
+		if (lastFocusWidget != focusWidget())
+			lastFocusWidget->setFocus();
+		lastFocusWidget = NULL;
+	}
 }
 
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
@@ -1311,21 +1342,11 @@ void MainWidget::showEvent(QShowEvent *)
 #else
 		showFullScreen(); //Always fullscreen on Android
 #endif
-		restoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
-#ifdef QT5_WINDOWS
+		const QByteArray restoreData = QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState");
+		restoreState(restoreData);
 		if (isMaximized())
-		{
-			//Qt5 can't properly restore docks state on Windows here when window is maximized
-			QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection);
-		}
-#endif
+			QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, restoreData));
 		wasShow = true;
-	}
-	else if (lastFocusWidget)
-	{
-		if (lastFocusWidget != focusWidget())
-			lastFocusWidget->setFocus();
-		lastFocusWidget = NULL;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));
 }
