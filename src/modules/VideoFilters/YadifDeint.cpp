@@ -595,6 +595,13 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
 		VideoFrame destFrame(h, (h + 1) >> 1, currBuffer.frame.linesize);
 
+		if (threads.isEmpty())
+		{
+			threads.resize(QThread::idealThreadCount());
+			for (int i = 0; i < threads.count(); ++i)
+				threads[i] = YadifThrPtr(new YadifThr(*this));
+		}
+
 		for (int i = 0; i < threads.count(); ++i)
 			threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threads.count());
 		for (int i = 0; i < threads.count(); ++i)
@@ -620,12 +627,6 @@ bool YadifDeint::processParams(bool *)
 	deintFlags = getParam("DeinterlaceFlags").toInt();
 	if (w < 3 || h < 3 || (doubler == !(deintFlags & DoubleFramerate)))
 		return false;
-	if (threads.isEmpty())
-	{
-		threads.resize(QThread::idealThreadCount());
-		for (int i = 0; i < threads.count(); ++i)
-			threads[i] = YadifThrPtr(new YadifThr(*this));
-	}
 	secondFrame = false;
 	return true;
 }
