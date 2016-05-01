@@ -97,8 +97,8 @@ void OpenGL2Common::newSize(const QSize &size)
 		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), subsW, subsH, &subsX, &subsY);
 	}
 	doReset = true;
-	if (canUpdate && isPaused)
-		updateGL(false);
+	if (canUpdate)
+		updateGL(!isPaused);
 }
 void OpenGL2Common::clearImg()
 {
