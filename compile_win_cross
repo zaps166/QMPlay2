@@ -3,16 +3,16 @@
 _architectures="i686-w64-mingw32 x86_64-w64-mingw32"
 
 for _arch in ${_architectures}; do
-	$_arch-lrelease QMPlay2.pro &&
-	mkdir -p app/lang &&
-	mv lang/*.qm app/lang &&
-	$_arch-qmake &&
-	make -j8 &&
-	rm app/*.a &&
-	rm app/modules/*.a &&
-	cp ChangeLog app
-	cp COPYING app
+	$_arch-lrelease QMPlay2.pro || exit 1
+	mkdir -p app/lang || exit 1
+	mv lang/*.qm app/lang || exit 1
+	$_arch-qmake || exit 1
+	make -j8 || exit 1
+	rm -f app/*.a
+	rm -f app/modules/*.a
+	cp ChangeLog app || exit 1
+	cp COPYING app || exit 1
 	$_arch-strip -s `find app` 2> /dev/null ; true
-	mv app $_arch &&
-	make distclean
+	mv app $_arch || exit 1
+	make distclean || exit 1
 done
