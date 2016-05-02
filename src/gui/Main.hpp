@@ -50,7 +50,7 @@ public:
 
 	const QWidget *getVideoDock() const;
 
-	QString lang, langPath;
+	QString langPath;
 
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;

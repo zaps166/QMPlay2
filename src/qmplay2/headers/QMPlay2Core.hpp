@@ -116,6 +116,11 @@ public:
 		return languages;
 	}
 
+	inline QString getLanguage() const
+	{
+		return lang;
+	}
+
 	virtual const QWidget *getVideoDock() const = 0;
 private slots:
 	void restoreCursorSlot();
@@ -127,6 +132,7 @@ protected:
 
 	QPixmap *qmp2Pixmap;
 	Settings *settings;
+	QString lang;
 private:
 	static QMPlay2CoreClass *qmplay2Core;
 

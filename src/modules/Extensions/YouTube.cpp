@@ -903,7 +903,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 				}
 				if (lang.isEmpty())
 				{
-					const int idx = simplifiedLangCodes.indexOf(QMPlay2Core.getSettings().getString("Language"));
+					const int idx = simplifiedLangCodes.indexOf(QMPlay2Core.getLanguage());
 					if (idx > -1)
 						lang = langCodes.at(idx);
 				}

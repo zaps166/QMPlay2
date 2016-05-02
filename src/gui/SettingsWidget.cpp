@@ -290,7 +290,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	for (int i = 0; i < langs.count(); i++)
 	{
 		page1->langBox->addItem(QMPlay2GUI.getLongFromShortLanguage(langs[i]), langs[i]);
-		if (QMPlay2GUI.lang == langs[i])
+		if (QMPlay2Core.getLanguage() == langs[i])
 			page1->langBox->setCurrentIndex(i + 1);
 	}
 
@@ -844,7 +844,7 @@ void SettingsWidget::apply()
 	{
 		case 1:
 		{
-			if (QMPlay2GUI.lang != page1->langBox->itemData(page1->langBox->currentIndex()).toString())
+			if (QMPlay2Core.getLanguage() != page1->langBox->itemData(page1->langBox->currentIndex()).toString())
 			{
 				QMPSettings.set("Language", page1->langBox->itemData(page1->langBox->currentIndex()).toString());
 				QMPlay2GUI.setLanguage();
