@@ -29,7 +29,8 @@ public:
 private slots:
 	void resetClearCounter();
 	void doUpdateGL(bool queued);
-	void videoVisible(bool v);
+	void videoVisible1(bool v);
+	void videoVisible2(bool v);
 private:
 	void exposeEvent(QExposeEvent *e);
 	bool eventFilter(QObject *o, QEvent *e);

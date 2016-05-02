@@ -8,6 +8,7 @@
 
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QDockWidget>
 #include <QPainter>
 
 #include <vdpau/vdpau_x11.h>
@@ -38,9 +39,9 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	for (int i = 0; i < scalingLevelsCount; ++i)
 		features[i + scalingLevelsIdx] = VDP_VIDEO_MIXER_FEATURE_HIGH_QUALITY_SCALING_L1 + i;
 
-	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
+	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible1(bool)));
 #if QT_VERSION >= 0x050000
-	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible(bool)));
+	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible2(bool)));
 #endif
 	connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doVideoVisible()));
 	connect(&drawTim, SIGNAL(timeout()), this, SLOT(draw()));
@@ -454,12 +455,19 @@ void VDPAUWriter::setFeatures()
 		}
 }
 
-void VDPAUWriter::videoVisible(bool v)
+void VDPAUWriter::videoVisible1(bool v)
 {
-	const bool visible = v && (visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
-	visibleTim.setProperty("videoVisible", visible);
+	visibleTim.setProperty("videoVisible", v && (visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion()));
 	visibleTim.start(1);
 }
+#if QT_VERSION >= 0x050000
+void VDPAUWriter::videoVisible2(bool v)
+{
+	if (sender() == &QMPlay2Core && qobject_cast<const QDockWidget *>(QMPlay2Core.getVideoDock())->isFloating())
+		return;
+	videoVisible1(v);
+}
+#endif
 void VDPAUWriter::doVideoVisible()
 {
 	//This can hide overlay if avilable

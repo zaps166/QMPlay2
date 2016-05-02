@@ -80,16 +80,19 @@ void VisWidget::contextMenu(const QPoint &point)
 }
 void VisWidget::visibilityChanged(bool v)
 {
+#if QT_VERSION >= 0x050000
+	const bool fromMainWindow = &QMPlay2Core == sender();
+#else
+	const bool fromMainWindow = false;
+#endif
 	if (!v && parent() == dw)
-		stop();
+	{
+		if (!fromMainWindow || !dw->isFloating()) //Don't stop on Qt5 when window is minimized and the dock is floating
+			stop();
+	}
 	else if (!stopped)
 	{
-#if QT_VERSION >= 0x050000
-		//Don't start visualization on Qt5 when it is invisible and main window is not minimized!
-		const bool fromMainWindow = &QMPlay2Core == sender();
-#else
-		const bool fromMainWindow = false;
-#endif
+		//"fromMainWindow" ensures that visualization won't start on Qt5 when is not visible and main window is not minimized!
 		start(v && (!fromMainWindow || regionIsVisible()), fromMainWindow);
 	}
 }
