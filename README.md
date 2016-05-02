@@ -68,6 +68,26 @@ If you are using your own ALSA configuration ```asound.conf``` or ```.asoundrc``
 
 Tray context menu in Ubuntu Unity doesn't work properly on Qt older than 5.6.1!
 
+##Hardware acceleration
+
+QMPlay2 supports hardware video decoding. Currently it works only on X11 (Linux/BSD) via VDPAU and VA-API. Hardware acceleration is disabled by default.
+You can enable it in "Settings->Playback settings" - move proper decoder on decoders list to the top and then apply settings.
+
+VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU filters won't work.
+
+VDPAU and VA-API has its own deinterlacing filters. These settings are mixed together with "FFmpeg" module settings.
+
+##Deinterlacing
+
+Video interlacing is automatically detected by QMPlay2. Go to "Settings->Video filters" for more options.
+If you have fast CPU (or low video resolution) you can use "Yadif 2x" deinterlacing filter for better quality.
+
+You can enable deinterlacing filter on non-interlaced video if necessary (some interlaced videos may not have interlacing data),
+but remember to revert this settings on any other video! Otherwise the video quality will be worse and performance will be worse!
+
+Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
+Of course you can adjust other deinterlacing settings in case of hardware acceleration.
+
 ##Compilation from sources
 
 ###You need (devel packages):
