@@ -1211,9 +1211,10 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	if (fullScreen && (e->buttons() == Qt::NoButton || videoDock->isTouch))
 	{
-		const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch * 8) * width()));
-		const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch * 4) * width()));
-		videoDock->isTouch = false;
+		const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()));
+		const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch ? 4 : 1) * width()));
+		if (videoDock->touchEnded)
+			videoDock->isTouch = videoDock->touchEnded = false;
 
 		int mPosX = 0;
 		if (videoDock->x() >= 0)

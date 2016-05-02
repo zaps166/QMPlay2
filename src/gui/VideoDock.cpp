@@ -18,7 +18,7 @@
 #include <math.h>
 
 VideoDock::VideoDock() :
-	isTouch(false),
+	isTouch(false), touchEnded(false),
 	iDW(QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt),
 	pixels(0),
 	canPopup(true), is_floating(false),
@@ -242,6 +242,10 @@ bool VideoDock::event(QEvent *e)
 		case QEvent::TouchBegin:
 		case QEvent::TouchUpdate:
 			isTouch = true;
+			touchEnded = false;
+			break;
+		case QEvent::TouchEnd:
+			touchEnded = true;
 			break;
 		case QEvent::Gesture:
 			if (QPinchGesture *pinch = (QPinchGesture *)((QGestureEvent *)e)->gesture(Qt::PinchGesture))

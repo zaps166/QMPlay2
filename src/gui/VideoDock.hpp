@@ -23,7 +23,7 @@ public:
 		iDW.update();
 	}
 
-	bool isTouch;
+	bool isTouch, touchEnded;
 private:
 	inline QWidget *internalWidget();
 
