@@ -142,9 +142,13 @@ private:
 	PlayClass playC;
 
 	QSystemTrayIcon *tray;
+
 	QByteArray dockWidgetState, fullScreenDockWidgetState;
-	QRect savedGeo;
 	QList<QMPlay2Extensions *> visibleQMPlay2Extensions;
+#ifndef Q_OS_ANDROID
+	QRect savedGeo;
+#endif
+
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
 	QWidget *lastFocusWidget;

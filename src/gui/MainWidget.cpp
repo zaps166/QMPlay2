@@ -102,7 +102,11 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	Settings &settings = QMPlay2Core.getSettings();
 
 	SettingsWidget::InitSettings();
+#ifndef Q_OS_ANDROID
 	settings.init("MainWidget/WidgetsLocked", false);
+#else
+	settings.init("MainWidget/WidgetsLocked", true);
+#endif
 
 	QMPlay2GUI.menuBar = new MenuBar;
 
@@ -541,6 +545,7 @@ void MainWidget::hideAllExtensions()
 }
 void MainWidget::toggleVisibility()
 {
+#ifndef Q_OS_ANDROID
 	const bool isTray = QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible();
 	static bool maximized;
 	if (isVisible())
@@ -586,6 +591,7 @@ void MainWidget::toggleVisibility()
 		if (doRestoreFocus)
 			restoreFocus();
 	}
+#endif
 }
 void MainWidget::createMenuBar()
 {
@@ -784,7 +790,10 @@ void MainWidget::toggleCompactView()
 }
 void MainWidget::toggleFullScreen()
 {
-	static bool visible, compact_view, maximized, tb_movable;
+	static bool visible, compact_view, tb_movable;
+#ifndef Q_OS_ANDROID
+	static bool maximized;
+#endif
 	if (!fullScreen)
 	{
 		visible = isVisible();
@@ -792,6 +801,7 @@ void MainWidget::toggleFullScreen()
 		if ((compact_view = isCompactView))
 			toggleCompactView();
 
+#ifndef Q_OS_ANDROID
 		maximized = isMaximized();
 
 #ifndef QT5_WINDOWS
@@ -802,6 +812,9 @@ void MainWidget::toggleFullScreen()
 		dockWidgetState = saveState();
 		if (!maximized)
 			savedGeo = geometry();
+#else
+		dockWidgetState = saveState();
+#endif // Q_OS_ANDROID
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->hide();
@@ -851,11 +864,15 @@ void MainWidget::toggleFullScreen()
 		videoDock->setLoseHeight(0);
 		fullScreen = false;
 
+#ifndef Q_OS_ANDROID
 		showNormal();
 		if (maximized)
 			showMaximized();
 		else
 			setGeometry(savedGeo);
+#else
+		showMaximized();
+#endif
 #ifdef QT5_WINDOWS
 		QCoreApplication::processEvents();
 #endif
@@ -1338,10 +1355,8 @@ void MainWidget::showEvent(QShowEvent *)
 		QMPlay2GUI.restoreGeometry("MainWidget/Geometry", this, size());
 		savedGeo = geometry();
 		if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
-			showMaximized();
-#else
-		showFullScreen(); //Always fullscreen on Android
 #endif
+			showMaximized();
 		const QByteArray restoreData = QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState");
 		restoreState(restoreData);
 		if (isMaximized())
