@@ -1095,7 +1095,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 					{
 						if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
 						{
-							if (tag.second == lang)
+							if (tag.second == lang || QMPlay2Core.getLanguagesMap().key(tag.second) == lang)
 								choosenLangStream = i;
 							break;
 						}
