@@ -1,5 +1,10 @@
 #include "OpenGL2Widget.hpp"
 
+OpenGL2Widget::OpenGL2Widget()
+{
+	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+}
+
 QWidget *OpenGL2Widget::widget()
 {
 	return this;

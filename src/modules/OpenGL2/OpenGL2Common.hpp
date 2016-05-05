@@ -14,6 +14,7 @@
 #include <QCoreApplication>
 #include <QImage>
 #include <QMutex>
+#include <QTimer>
 
 #if !defined OPENGL_ES2 && !defined Q_OS_MAC
 	#include <GL/glext.h>
@@ -127,6 +128,8 @@ public:
 
 	QList<QByteArray> osdChecksums;
 	QImage osdImg;
+
+	QTimer updateTimer;
 
 	/* Spherical view */
 	bool sphericalView, buttonPressed, hasVbo, mouseWrapped, canWrapMouse;

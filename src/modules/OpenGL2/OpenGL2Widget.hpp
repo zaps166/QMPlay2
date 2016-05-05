@@ -9,6 +9,8 @@
 class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
 {
 public:
+	OpenGL2Widget();
+
 	QWidget *widget();
 
 	bool setVSync(bool enable);

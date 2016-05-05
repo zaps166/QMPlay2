@@ -98,7 +98,12 @@ void OpenGL2Common::newSize(const QSize &size)
 	}
 	doReset = true;
 	if (canUpdate)
-		updateGL(!isPaused);
+	{
+		if (isPaused)
+			updateGL(false);
+		else if (!updateTimer.isActive())
+			updateTimer.start(40);
+	}
 }
 void OpenGL2Common::clearImg()
 {
@@ -413,6 +418,9 @@ void OpenGL2Common::paintGL()
 	osdMutex.unlock();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if (updateTimer.isActive())
+		updateTimer.stop();
 }
 
 void OpenGL2Common::testGLInternal()

@@ -28,7 +28,7 @@ public:
 
 private slots:
 	void resetClearCounter();
-	void doUpdateGL(bool queued);
+	void doUpdateGL(bool queued = false);
 	void videoVisible1(bool v);
 	void videoVisible2(bool v);
 private:

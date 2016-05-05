@@ -7,6 +7,8 @@
 OpenGL2Window::OpenGL2Window() :
 	visible(true)
 {
+	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
+
 #ifndef PASS_EVENTS_TO_PARENT
 	setFlags(Qt::WindowTransparentForInput);
 #endif

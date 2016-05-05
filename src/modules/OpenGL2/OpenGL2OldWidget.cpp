@@ -4,6 +4,8 @@
 
 OpenGL2OldWidget::OpenGL2OldWidget()
 {
+	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(updateGL())); //updateGL() from the base class
+
 #ifdef Q_OS_WIN
 	preventFullscreen = true;
 #endif
