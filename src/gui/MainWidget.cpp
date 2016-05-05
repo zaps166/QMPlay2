@@ -471,6 +471,11 @@ void MainWidget::volUpDown()
 	else if (sender() == menuBar->player->volDown)
 		volW->changeVolume(-5);
 }
+void MainWidget::toggleMuteIcon()
+{
+	if (QAction *toggleMuteAct = qobject_cast<QAction *>(sender()))
+		toggleMuteAct->setIcon(QMPlay2Core.getIconFromTheme(toggleMuteAct->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
+}
 void MainWidget::actionSeek()
 {
 	int seekTo = 0;
@@ -671,6 +676,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));
+	connect(menuBar->player->toggleMute, SIGNAL(triggered()), this, SLOT(toggleMuteIcon()));
 	if (menuBar->player->suspend)
 		connect(menuBar->player->suspend, SIGNAL(triggered(bool)), &playC, SLOT(suspendWhenFinished(bool)));
 

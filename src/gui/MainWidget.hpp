@@ -52,6 +52,7 @@ private slots:
 	void playStateChanged(bool);
 
 	void volUpDown();
+	void toggleMuteIcon();
 	void actionSeek();
 	void switchARatio();
 	void resetARatio();
