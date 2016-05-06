@@ -1,10 +1,10 @@
 <RCC>
 	<qresource>
-		<file alias="browserengine">browserengine.png</file>
 		<file alias="prostopleer">prostopleer.png</file>
 		<file alias="downloader">downloader.png</file>
 		<file alias="youtube">youtube.png</file>
 		<file alias="lastfm">lastfm.png</file>
+		<file alias="search">search.png</file>
 		<file alias="radio">radio.png</file>
 		<file alias="video">video.png</file>
 	</qresource>

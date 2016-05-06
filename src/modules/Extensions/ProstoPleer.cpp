@@ -143,7 +143,7 @@ ProstoPleerW::ProstoPleerW() :
 
 	searchB = new QToolButton;
 	connect(searchB, SIGNAL(clicked()), this, SLOT(search()));
-	searchB->setIcon(QIcon(":/browserengine"));
+	searchB->setIcon(QIcon(":/search"));
 	searchB->setToolTip(tr("Search"));
 	searchB->setAutoRaise(true);
 
