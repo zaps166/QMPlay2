@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 16.05.06:
+	- split muted icon to muted and not muted,
+	- bugfix,
+
 Changes in QMPlay2 build 16.05.02:
 	- fixed command line argument processing (now is possible to properly open or enqueue multiple files on Linux),
 	- playlist uses floating-point variables for storing length (accurate group length information),
