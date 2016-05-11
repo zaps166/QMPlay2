@@ -25,7 +25,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>А/В поток был завершен некорректно!</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@
     </message>
     <message>
         <source>Parity (if not detected automatically)</source>
-        <translation>Четность (если не определяется автоматически)</translation>
+        <translation>Чётность (если не определяется автоматически)</translation>
     </message>
 </context>
 <context>
@@ -408,7 +408,7 @@
     </message>
     <message>
         <source>Playback</source>
-        <translation>Проигрывание</translation>
+        <translation>Воспроизведение</translation>
     </message>
     <message>
         <source>Seeking</source>
@@ -416,7 +416,7 @@
     </message>
     <message>
         <source>Paused</source>
-        <translation>Приостановить</translation>
+        <translation>Приостановлено</translation>
     </message>
     <message>
         <source>Address</source>
@@ -685,7 +685,7 @@ amp</source>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -1266,15 +1266,16 @@ amp</source>
     <message>
         <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот декодер не имеет собственного видеовыхода, так что он может быть использован с любым видеовыходом.
+Он копирует декодированные видеокадры в системную память, поэтому может быть медленным!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
-        <translation type="unfinished"></translation>
+        <translation>Отображать субтитры если доступны</translation>
     </message>
     <message>
         <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Отображать субтитры из YouTube. Придерживаться языку субтитров по умолчанию и языку QMPlay2.</translation>
     </message>
 </context>
 <context>
@@ -1336,11 +1337,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>OpenGL2Common</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1466,11 +1467,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Сферический вид не поддерживается этим модулем вывода видео</translation>
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизведение было завершено некорректно!</translation>
     </message>
 </context>
 <context>
@@ -1544,7 +1545,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>&amp;Стоп</translation>
+        <translation>&amp;Остановить</translation>
     </message>
     <message>
         <source>&amp;Next</source>
@@ -1616,7 +1617,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Приостановить после заверше&amp;ния воспроизведения</translation>
+        <translation>Перейти в ждущий режим после заверше&amp;ния воспроизведения</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2592,7 +2593,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Сферический вид</translation>
     </message>
 </context>
 <context>
@@ -2621,7 +2622,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Разделить каналы</translation>
     </message>
 </context>
 <context>
@@ -2674,11 +2675,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Список воспроизведения</translation>
+        <translation>Список воспроизведения</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Да</translation>
     </message>
 </context>
 </TS>
