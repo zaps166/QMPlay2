@@ -73,6 +73,7 @@ private:
 	qint64 seekByByteOffset;
 #endif
 	bool isOneStreamOgg;
+	bool forceCopy;
 
 	int lastErr, errFromSeek;
 	bool maybeHasFrame;

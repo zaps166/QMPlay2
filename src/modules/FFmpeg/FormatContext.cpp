@@ -463,7 +463,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	}
 #endif
 
-	if (!packet->buf) //Buffer isn't reference-counted, so copy the data
+	if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
 		encoded.assign(packet->data, packet->size, packet->size + FF_INPUT_BUFFER_PADDING_SIZE);
 	else
 	{
@@ -591,6 +591,11 @@ bool FormatContext::open(const QString &_url)
 #endif
 
 	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1; //Workaround for some OGG network streams
+#ifdef QMPlay2_libavdevice
+	forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).
+#elif
+	forceCopy = false;
+#endif
 
 	if ((startTime = formatCtx->start_time / (double)AV_TIME_BASE) < 0.0)
 		startTime = 0.0;
