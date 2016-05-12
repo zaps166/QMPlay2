@@ -154,6 +154,7 @@ Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), 
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
 ```./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install```<br/>
 This will compile and install the newest FFmpeg without features that are not supported in QMPlay2.
+- Run: ```sudo ldconfig```
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
 ####Compilation
