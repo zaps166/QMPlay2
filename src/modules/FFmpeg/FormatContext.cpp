@@ -593,7 +593,7 @@ bool FormatContext::open(const QString &_url)
 	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1; //Workaround for some OGG network streams
 #ifdef QMPlay2_libavdevice
 	forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).
-#elif
+#else
 	forceCopy = false;
 #endif
 
