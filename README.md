@@ -88,6 +88,10 @@ but remember to revert this settings on any other video! Otherwise the video qua
 Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
 
+##Spherical view
+
+QMPlay2 supports spherical view on OpenGL video optput. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
+
 ##Compilation from sources
 
 ###You need (devel packages):
