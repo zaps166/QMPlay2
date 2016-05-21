@@ -59,6 +59,10 @@ Some YouTube videos don't work without external "youtube-dl" software. You must 
 - Set the path for the script (you must have Python installed) in QMPlay2 YouTube settings (you can watch the video from Windows installation).
 - QMPlay2 can automatically updates the "youtube-dl" if it is not installed from repositories.
 
+##Spherical view
+
+QMPlay2 supports spherical view on OpenGL video optput. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
+
 ##ALSA
 
 If you are using your own ALSA configuration ```asound.conf``` or ```.asoundrc``` you should also append:
@@ -87,10 +91,6 @@ but remember to revert this settings on any other video! Otherwise the video qua
 
 Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
-
-##Spherical view
-
-QMPlay2 supports spherical view on OpenGL video optput. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
 ##Compilation from sources
 
