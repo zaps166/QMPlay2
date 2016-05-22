@@ -203,7 +203,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 
 		if (frameFinished && ~hurry_up)
 		{
-			if (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P && frame->width == streamInfo->W && frame->height == streamInfo->H)
+			if (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P && frame->width == streamInfo->W && frame->height == streamInfo->H && frame->buf[0] && frame->buf[1] && frame->buf[2])
 				decoded = VideoFrame(streamInfo->H, (streamInfo->H + 1) >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
