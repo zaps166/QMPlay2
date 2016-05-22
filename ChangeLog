@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.05.13:
+Changes in QMPlay2 build 16.05.22:
 	- update Russian translation (victorr2007),
+	- fix "rawvideo" playback,
 	- bugfix,
 
 Changes in QMPlay2 build 16.05.06:
