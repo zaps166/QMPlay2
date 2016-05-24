@@ -392,9 +392,12 @@ void VideoThr::run()
 
 			const double true_delay = delay;
 
-			if (syncVtoA && playC.audio_current_pts > 0.0 && !oneFrame)
+			const double audioCurrentPts = playC.audio_current_pts;
+			bool canSkipFrames = syncVtoA && audioCurrentPts > 0.0;
+
+			if (canSkipFrames && !oneFrame)
 			{
-				double sync_pts = playC.audio_current_pts;
+				double sync_pts = audioCurrentPts;
 				if (sync_last_pts == sync_pts)
 					sync_pts += gettime() - sync_timer;
 				else
@@ -404,27 +407,19 @@ void VideoThr::run()
 				}
 
 				const double diff = packet.ts - (delay + sync_pts - playC.videoSync);
-				const double sync_threshold = qMax(delay, playC.audio_last_delay);
-				const double max_threshold = sync_threshold < 0.1 ? 0.125 : sync_threshold * 1.5;
+				const double sync_threshold = qMax(delay, playC.audio_last_delay) * 1.5;
+				const double max_threshold = qMax(sync_threshold, 0.125);
 				const double fDiff = qAbs(diff);
 
-				if (fast && !skip && diff > -sync_threshold / 2.0)
+				if (fast && !skip && diff > -sync_threshold / 3.0)
 					fast = 0;
 				skip = false;
 
-//				qDebug() << "diff" << diff << "sync_threshold" << sync_threshold << "max_threshold" << max_threshold;
+//				qDebug() << "diff:" << diff << "sync_threshold:" << sync_threshold << "max_threshold:" << max_threshold;
 				if (fDiff > sync_threshold && fDiff < max_threshold)
 				{
-					if (diff < 0.0) //obraz się spóźnia
-					{
-						delay -= sync_threshold / 10.0;
-// 						qDebug() << "speed up" << diff << delay << sync_threshold;
-					}
-					else if (diff > 0.0) //obraz idzie za szybko
-					{
-						delay += sync_threshold / 10.0;
-// 						qDebug() << "slow down" << diff << delay << sync_threshold;
-					}
+					delay += diff / 2.0;
+//					qDebug() << "Syncing" << diff << delay << sync_threshold;
 				}
 				else if (fDiff >= max_threshold)
 				{
@@ -444,19 +439,24 @@ void VideoThr::run()
 //					qDebug() << "Skipping" << diff << skip << fast << delay;
 				}
 			}
-			else if (playC.audio_current_pts <= 0.0 || oneFrame)
+			else if (audioCurrentPts <= 0.0 || oneFrame)
 			{
 				skip = false;
 				fast = 0;
 			}
 
-			if (!videoFrame.isEmpty())
+			const bool hasFrame = !videoFrame.isEmpty();
+			const bool hasFrameTimer = (frame_timer != -1.0);
+			const bool updateFrameTimer = (hasFrame != hasFrameTimer);
+			if (hasFrame)
 			{
-				if (frame_timer != -1.0)
+				if (hasFrameTimer)
 				{
-					const double delay_diff = gettime() - frame_timer;
-					delay -= delay_diff;
-					if (syncVtoA && true_delay > 0.0 && delay_diff > true_delay)
+					const double frame_timer_2 = gettime();
+					const double delay_diff = frame_timer_2 - frame_timer;
+					if (delay > 0.0)
+						delay -= delay_diff;
+					if (canSkipFrames && true_delay > 0.0 && delay_diff > true_delay)
 						++fast;
 					else if (fast && delay > 0.0)
 					{
@@ -465,21 +465,23 @@ void VideoThr::run()
 						if (fast & 1)
 							--fast;
 					}
+					const double toSleep = delay;
 					while (delay > 0.0 && !playC.paused && !br && !br2)
 					{
 						const double sleepTime = qMin(delay, 0.1);
 						Functions::s_wait(sleepTime);
 						delay -= sleepTime;
 					}
+					frame_timer = gettime();
+					frame_timer -= frame_timer - frame_timer_2 - qMax(toSleep, canSkipFrames ? 0.0 : -true_delay);
 				}
 				if (!skip && canWrite)
 				{
 					oneFrame = canWrite = false;
 					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame));
 				}
-				frame_timer = gettime();
 			}
-			else if (frame_timer != -1.0)
+			if (updateFrameTimer)
 				frame_timer = gettime();
 		}
 
