@@ -478,7 +478,7 @@ void MainWidget::toggleMuteIcon()
 }
 void MainWidget::actionSeek()
 {
-	int seekTo = 0;
+	qint64 seekTo = 0;
 	if (sender() == menuBar->player->seekB)
 		seekTo = playC.getPos() - QMPlay2Core.getSettings().getInt("ShortSeek");
 	else if (sender() == menuBar->player->seekF)
@@ -491,16 +491,14 @@ void MainWidget::actionSeek()
 
 	if (!mainTB->isVisible() && !statusBar->isVisible())
 	{
-		int max = seekS->maximum();
+		const int max = seekS->maximum();
 		if (max > 0)
 		{
-			int ile = 50;
-			int pos = seekTo * ile / max;
-			if (pos < 0)
-				pos = 0;
+			const int count = 50;
+			const int pos = qMax<qint64>(0, seekTo * count / max);
 			QByteArray osd_pos = "[";
-			for (int i = 0; i < ile; i++)
-				osd_pos += i == pos ? "|" : "-";
+			for (int i = 0; i < count; i++)
+				osd_pos += (i == pos) ? "|" : "-";
 			osd_pos += "]";
 			playC.messageAndOSD(osd_pos, false);
 		}
@@ -511,9 +509,9 @@ void MainWidget::switchARatio()
 	QAction *checked = menuBar->player->aRatio->choice->checkedAction();
 	if (!checked)
 		return;
-	int count = menuBar->player->aRatio->choice->actions().count();
-	int idx = menuBar->player->aRatio->choice->actions().indexOf(checked);
-	int checkNewIdx = (idx == count - 1) ? 0 : (idx+1);
+	const int count = menuBar->player->aRatio->choice->actions().count();
+	const int idx = menuBar->player->aRatio->choice->actions().indexOf(checked);
+	const int checkNewIdx = (idx == count - 1) ? 0 : (idx+1);
 	menuBar->player->aRatio->choice->actions()[checkNewIdx]->trigger();
 }
 void MainWidget::resetARatio()

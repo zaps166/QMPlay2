@@ -341,7 +341,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 	bool cantDelete = true;
 	for (int i = bitmapSubBuffer.size() - 1; i >= 0 ; --i)
 	{
-		BitmapSubBuffer *buff = bitmapSubBuffer[i];
+		BitmapSubBuffer *buff = bitmapSubBuffer.at(i);
 		if (!buff->bitmap.isEmpty() && buff->pts + buff->duration < pos)
 		{
 			delete buff;

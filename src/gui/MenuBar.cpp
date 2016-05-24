@@ -31,7 +31,7 @@ MenuBar::MenuBar()
 	addMenu(help = new Help(this));
 	connect(widgets, SIGNAL(aboutToShow()), this, SLOT(widgetsMenuShow()));
 #ifdef Q_OS_MAC
-	widgets->addAction(QString()); //Mac must have any item inside menu, otherwise the menu is not shown
+	widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown (QTBUG?)
 #endif
 }
 

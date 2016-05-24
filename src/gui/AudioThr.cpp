@@ -341,10 +341,10 @@ void AudioThr::run()
 
 bool AudioThr::resampler_create()
 {
-	double speed = playC.speed > 0.0 ? playC.speed : 1.0;
+	const double speed = playC.speed > 0.0 ? playC.speed : 1.0;
 	if (realSample_rate != sample_rate || realChannels != channels || speed != 1.0)
 	{
-		const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate/speed, channels);
+		const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate / speed, channels);
 		if (!OK)
 			QMPlay2Core.logError(tr("Error during initialization") + ": " + sndResampler.name());
 		return OK;
