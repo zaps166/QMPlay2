@@ -14,6 +14,7 @@
 #include <Functions.hpp>
 using Functions::gettime;
 
+#include <QDebug>
 #include <QImage>
 #include <QDir>
 
@@ -183,7 +184,7 @@ void VideoThr::updateSubs()
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0;
 	QMutex emptyBufferMutex;
 	VideoFrame videoFrame;
@@ -407,19 +408,31 @@ void VideoThr::run()
 				}
 
 				const double diff = packet.ts - (delay + sync_pts - playC.videoSync);
-				const double sync_threshold = qMax(delay, playC.audio_last_delay) * 1.5;
-				const double max_threshold = qMax(sync_threshold, 0.125);
+				const double sync_threshold = qMax(delay, playC.audio_last_delay);
+				const double max_threshold = qMax(sync_threshold * 2.0, 0.15);
 				const double fDiff = qAbs(diff);
 
-				if (fast && !skip && diff > -sync_threshold / 3.0)
+				if (fast && !skip && diff > -sync_threshold / 2.0)
 					fast = 0;
 				skip = false;
 
 //				qDebug() << "diff:" << diff << "sync_threshold:" << sync_threshold << "max_threshold:" << max_threshold;
 				if (fDiff > sync_threshold && fDiff < max_threshold)
 				{
-					delay += diff / 2.0;
-//					qDebug() << "Syncing" << diff << delay << sync_threshold;
+					if (fDiff > sync_threshold * 1.75)
+					{
+						delay += diff / 4.0;
+						lastAVDesync = true;
+//						qDebug() << "Syncing 2" << diff << delay << sync_threshold;
+					}
+					else
+					{
+						if (lastAVDesync)
+						{
+							delay += diff / 8.0;
+//							qDebug() << "Syncing 1" << diff << delay << sync_threshold;
+						}
+					}
 				}
 				else if (fDiff >= max_threshold)
 				{
@@ -436,7 +449,12 @@ void VideoThr::run()
 						else if (!playC.skipAudioFrame)
 							playC.skipAudioFrame = diff;
 					}
+					lastAVDesync = true;
 //					qDebug() << "Skipping" << diff << skip << fast << delay;
+				}
+				else
+				{
+					lastAVDesync = false;
 				}
 			}
 			else if (audioCurrentPts <= 0.0 || oneFrame)
@@ -454,6 +472,7 @@ void VideoThr::run()
 				{
 					const double frame_timer_2 = gettime();
 					const double delay_diff = frame_timer_2 - frame_timer;
+					const double desired_delay = delay;
 					if (delay > 0.0)
 						delay -= delay_diff;
 					if (canSkipFrames && true_delay > 0.0 && delay_diff > true_delay)
@@ -473,7 +492,7 @@ void VideoThr::run()
 						delay -= sleepTime;
 					}
 					frame_timer = gettime();
-					frame_timer -= frame_timer - frame_timer_2 - qMax(toSleep, canSkipFrames ? 0.0 : -true_delay);
+					frame_timer -= frame_timer - frame_timer_2 - qMax(toSleep, -desired_delay);
 				}
 				if (!skip && canWrite)
 				{
