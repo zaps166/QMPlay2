@@ -68,6 +68,7 @@ void UpdateEntryThr::run()
 		if (itu.name.isNull() && itu.length == -2.0)
 		{
 			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.img, &ioCtrl);
+			iu.updateImg = true;
 
 			IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 			if (Demuxer::create(url, demuxer))
@@ -80,6 +81,8 @@ void UpdateEntryThr::run()
 			else
 				updateTitle = false;
 		}
+		else
+			iu.updateImg = false;
 
 		if (updateTitle)
 		{
@@ -114,7 +117,7 @@ void UpdateEntryThr::stop()
 
 void UpdateEntryThr::updateItem(ItemUpdated iu)
 {
-	if (!iu.img.isNull())
+	if (iu.updateImg)
 		pLW.setEntryIcon(iu.img, iu.item);
 	if (!iu.name.isNull())
 		iu.item->setText(0, iu.name);

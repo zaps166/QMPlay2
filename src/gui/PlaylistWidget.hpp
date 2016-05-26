@@ -50,7 +50,7 @@ private:
 		QString name;
 		QImage img;
 
-		bool updateLength;
+		bool updateLength, updateImg;
 		double length;
 	};
 private slots:
