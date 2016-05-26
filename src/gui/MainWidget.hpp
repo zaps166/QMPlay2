@@ -37,6 +37,8 @@ public:
 	MainWidget(QPair<QStringList, QStringList> &);
 	~MainWidget();
 private slots:
+	void detachFromPipe();
+
 	void focusChanged(QWidget *, QWidget *);
 
 	void processParam(const QString &, const QString &);

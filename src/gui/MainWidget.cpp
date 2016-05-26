@@ -341,6 +341,20 @@ MainWidget::~MainWidget()
 	QCoreApplication::quit();
 }
 
+void MainWidget::detachFromPipe()
+{
+	if (QMPlay2GUI.pipe)
+	{
+		QMPlay2GUI.pipe->deleteLater();
+		QMPlay2GUI.pipe = NULL;
+	}
+	if (menuBar->player->detach)
+	{
+		menuBar->player->detach->deleteLater();
+		menuBar->player->detach = NULL;
+	}
+}
+
 void MainWidget::focusChanged(QWidget *old, QWidget *now)
 {
 	if ((qobject_cast<QTreeWidget *>(old) || qobject_cast<QSlider *>(old) || qobject_cast<QComboBox *>(old) || qobject_cast<QListWidget *>(old)) && old != seekS)
@@ -675,6 +689,8 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));
 	connect(menuBar->player->toggleMute, SIGNAL(triggered()), this, SLOT(toggleMuteIcon()));
+	if (menuBar->player->detach)
+		connect(menuBar->player->detach, SIGNAL(triggered()), this, SLOT(detachFromPipe()));
 	if (menuBar->player->suspend)
 		connect(menuBar->player->suspend, SIGNAL(triggered(bool)), &playC, SLOT(suspendWhenFinished(bool)));
 

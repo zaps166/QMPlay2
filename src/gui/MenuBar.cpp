@@ -169,6 +169,14 @@ MenuBar::Player::Player(MenuBar *parent) :
 	newAction(Player::tr("Volume &down"), this, QKeySequence("/"), volDown, true, QIcon(), false);
 	newAction(Player::tr("&Mute"), this, QKeySequence("M"), toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
 
+	if (!QMPlay2GUI.pipe)
+		detach = NULL;
+	else
+	{
+		addSeparator();
+		newAction(Player::tr("Detach from receiving &commands"), this, QKeySequence(), detach, false, QIcon(), false);
+	}
+
 	if (!QMPlay2CoreClass::canSuspend())
 		suspend = NULL;
 	else

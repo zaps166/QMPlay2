@@ -1623,6 +1623,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>A&amp;-B Repeat</source>
         <translation>Powtarzanie A&amp;-B</translation>
     </message>
+    <message>
+        <source>Detach from receiving &amp;commands</source>
+        <translation>Odłącz o&amp;d otrzymywania poleceń</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
