@@ -135,24 +135,23 @@ You can also install youtube-dl: ```sudo pacman -S youtube-dl```
 #####Ubuntu
 
 - Open "Software & Updates" and select the "Universe" repository.
-- Ubuntu doesn't provide pkg-config for libgme, so if you want to use Game-Music-Emu for chiptunes, you must install "libgme-dev" and manually modify "src/modules/Chiptune/Chiptune.pro".
 
 #####Ubuntu 16.04 and higher dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev```
+```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev```
 
 #####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev```
+```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev```
 
 #####Ubuntu 14.10 and older dependencies (Qt4 build)
 
 Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), so the FFmpeg must be compiled from sources and the LibAV development files must be removed!
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev```
+```sudo apt-get install g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev```
 - Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
 ```sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev```. You can install it again after compilation.
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:

@@ -25,7 +25,14 @@ win32 {
 		PKGCONFIG += libgme
 		DEFINES += USE_GME
 	} else {
-		message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
+		#Some distributions (e.g. Ubuntu) doesn't provide pkg-config for libgme
+		exists("/usr/include/gme") {
+			LIBS += -lgme
+			DEFINES += USE_GME
+		}
+		else {
+			message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
+		}
 	}
 	packagesExist(libsidplayfp) {
 		PKGCONFIG += libsidplayfp
