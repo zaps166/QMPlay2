@@ -374,7 +374,7 @@ void VideoThr::run()
 			if (packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && !qFuzzyCompare(lastSampleAspectRatio, packet.sampleAspectRatio)) //Aspect ratio has been changed
 			{
 				lastSampleAspectRatio = -1.0; //Needs to be updated later
-				emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets lastSampleAspectRatio because it calls processParams()
+				emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets "lastSampleAspectRatio", because it calls "setARatio()";
 			}
 			if (ptsIsValid || packet.ts > playC.pos)
 				playC.chPos(packet.ts);
