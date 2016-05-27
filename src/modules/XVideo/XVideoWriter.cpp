@@ -131,7 +131,10 @@ bool XVideoWriter::processParams(bool *)
 	if (videoSizeChanged)
 	{
 		if (_outW == 0 || _outH == 0)
+		{
+			xv->close();
 			hasVideoSize = false;
+		}
 		else if (_outW > 0 && _outH > 0)
 		{
 			outW = _outW;

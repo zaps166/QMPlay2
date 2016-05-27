@@ -148,14 +148,15 @@ bool QPainterWriter::processParams(bool *)
 
 	const int _outW = getParam("W").toInt();
 	const int _outH = getParam("H").toInt();
-	if (_outW > 0 && _outH > 0 && (_outW != outW || _outH != outH))
+	if (_outW != outW || _outH != outH)
 	{
 		drawable->videoFrame.clear();
-
-		outW = _outW;
-		outH = _outH;
-
-		emit QMPlay2Core.dockVideo(drawable);
+		if (_outW > 0 && _outH > 0)
+		{
+			outW = _outW;
+			outH = _outH;
+			emit QMPlay2Core.dockVideo(drawable);
+		}
 	}
 
 	if (doResizeEvent)

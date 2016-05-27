@@ -89,13 +89,15 @@ bool OpenGL2Writer::processParams(bool *)
 
 	const int outW = getParam("W").toInt();
 	const int outH = getParam("H").toInt();
-	if (outW > 0 && outH > 0 && (outW != drawable->outW || outH != drawable->outH))
+	if (outW != drawable->outW || outH != drawable->outH)
 	{
-		drawable->outW = outW;
-		drawable->outH = outH;
-
 		drawable->clearImg();
-		emit QMPlay2Core.dockVideo(drawable->widget());
+		if (outW > 0 && outH > 0)
+		{
+			drawable->outW = outW;
+			drawable->outH = outH;
+			emit QMPlay2Core.dockVideo(drawable->widget());
+		}
 	}
 
 	if (doResizeEvent)

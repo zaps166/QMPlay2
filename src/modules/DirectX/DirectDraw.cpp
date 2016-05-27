@@ -461,15 +461,16 @@ bool DirectDrawWriter::processParams(bool *)
 	if (_outW != outW || _outH != outH)
 	{
 		if (_outW == 0 || _outH == 0)
+		{
+			drawable->releaseSecondary();
 			hasVideoSize = false;
+		}
 		else if (_outW > 0 && _outH > 0)
 		{
 			outW = _outW;
 			outH = _outH;
-
 			if (drawable->createSecondary())
 				drawable->dock();
-
 			hasVideoSize = true;
 		}
 	}
