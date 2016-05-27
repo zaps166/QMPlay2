@@ -96,6 +96,7 @@ private:
 
 	int outW, outH, flip, Hue, Saturation, Brightness, Contrast;
 	double aspect_ratio, zoom;
+	bool hasVideoSize;
 
 	Drawable *drawable;
 };

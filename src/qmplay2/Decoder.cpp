@@ -11,16 +11,15 @@ class QMPlay2DummyDecoder : public Decoder
 		return QString();
 	}
 
-	bool open(StreamInfo *_streamInfo, Writer *)
+	bool open(StreamInfo &, Writer *)
 	{
-		streamInfo = _streamInfo;
 		return true;
 	}
 };
 
-Decoder *Decoder::create(StreamInfo *streamInfo, Writer *writer, const QStringList &modNames)
+Decoder *Decoder::create(StreamInfo &streamInfo, Writer *writer, const QStringList &modNames)
 {
-	if (!streamInfo->must_decode)
+	if (!streamInfo.must_decode)
 	{
 		Decoder *decoder = new QMPlay2DummyDecoder;
 		decoder->open(streamInfo);

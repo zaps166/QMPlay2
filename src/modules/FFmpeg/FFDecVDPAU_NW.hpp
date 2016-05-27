@@ -13,5 +13,5 @@ private:
 
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up);
 
-	bool open(StreamInfo *, Writer *);
+	bool open(StreamInfo &, Writer *);
 };

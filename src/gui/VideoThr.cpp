@@ -127,7 +127,8 @@ void VideoThr::initFilters(bool processParams)
 			{
 				if (deintFilter)
 					filters.off(deintFilter);
-				QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
+				if (W > 0 && H > 0)
+					QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
 			}
 		}
 	}
@@ -147,7 +148,7 @@ void VideoThr::initFilters(bool processParams)
 					if (!(ok = filter->processParams()))
 						filters.off(filter);
 				}
-				if (!ok)
+				if (!ok && W > 0 && H > 0)
 					QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
 			}
 
@@ -349,7 +350,19 @@ void VideoThr::run()
 				playC.flushVideo = false;
 			}
 			if (!decoded.isEmpty())
+			{
+				if (!HWAccelWriter && (decoded.size.width != W || decoded.size.height != H))
+				{
+					//Frame size has been changed
+					filtersMutex.unlock();
+					frameSizeUpdateMutex.lock();
+					emit playC.frameSizeUpdate(decoded.size.width, decoded.size.height);
+					frameSizeUpdateMutex.lock(); //Wait for "frameSizeUpdate()" to be finished
+					frameSizeUpdateMutex.unlock();
+					filtersMutex.lock();
+				}
 				filters.addFrame(decoded, packet.ts);
+			}
 			else if (skip)
 				filters.removeLastFromInputBuffer();
 			tmp_br += bytes_consumed;

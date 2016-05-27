@@ -2,7 +2,6 @@ Support for diplaying/filtering all planar YUV formats
 HW and SW filters settings in the same place
 User can type any aspect ratio and zoom
 Handle auto channels/samplerate change
-Improve handle video size change
 Video preview on progress bar
 Improve radio stations
 Add key bindings

@@ -17,7 +17,7 @@ bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
 		const FrameBuffer &lookup = internalQueue.at(0);
 
 		const VideoFrame &videoFrame1 = dequeued.frame;
-		VideoFrame videoFrame2(h, (h + 1) >> 1, videoFrame1.linesize);
+		VideoFrame videoFrame2(VideoFrameSize(w, h, 1, 1), videoFrame1.linesize);
 		const VideoFrame &videoFrame3 = lookup.frame;
 
 		for (int p = 0; p < 3; ++p)

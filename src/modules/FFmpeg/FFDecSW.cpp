@@ -203,16 +203,17 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 
 		if (frameFinished && ~hurry_up)
 		{
-			if (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P && frame->width == streamInfo->W && frame->height == streamInfo->H && frame->buf[0] && frame->buf[1] && frame->buf[2])
-				decoded = VideoFrame(streamInfo->H, (streamInfo->H + 1) >> 1, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
+			const VideoFrameSize frameSize(frame->width, frame->height, 1, 1);
+			if (frame->buf[0] && frame->buf[1] && frame->buf[2] && codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P)
+				decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
-				const int aligned8W = Functions::aligned(streamInfo->W, 8);
+				const int aligned8W = Functions::aligned(frame->width, 8);
 				const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
-				decoded = VideoFrame(streamInfo->H, (streamInfo->H + 1) >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
+				decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
 				if (frame->width != lastFrameW || frame->height != lastFrameH || codec_ctx->pix_fmt != lastFrameFmt)
 				{
-					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, streamInfo->W, streamInfo->H, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
+					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
 					lastFrameW = frame->width;
 					lastFrameH = frame->height;
 					lastFrameFmt = codec_ctx->pix_fmt;
@@ -228,9 +229,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 	else
 		encodedPacket.ts.setInvalid();
 
-	if (bytes_consumed < 0)
-		bytes_consumed = 0;
-	return bytes_consumed;
+	return bytes_consumed < 0 ? 0 : bytes_consumed;
 }
 bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h)
 {
@@ -303,15 +302,13 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 	return ret;
 }
 
-bool FFDecSW::open(StreamInfo *streamInfo, Writer *)
+bool FFDecSW::open(StreamInfo &streamInfo, Writer *)
 {
 	AVCodec *codec = FFDec::init(streamInfo);
 	if (!codec)
 		return false;
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 	{
-		if (codec_ctx->pix_fmt == AV_PIX_FMT_NONE || streamInfo->W <= 0 || streamInfo->H <= 0)
-			return false;
 		if ((codec_ctx->thread_count = threads) != 1)
 		{
 			if (!thread_type_slice)
@@ -324,13 +321,11 @@ bool FFDecSW::open(StreamInfo *streamInfo, Writer *)
 	}
 	if (!FFDec::openCodec(codec))
 		return false;
-	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
+	time_base = streamInfo.getTimeBase();
+	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO && codec_ctx->lowres)
 	{
-		if (codec_ctx->lowres)
-		{
-			streamInfo->W = codec_ctx->width;
-			streamInfo->H = codec_ctx->height;
-		}
+		streamInfo.W = codec_ctx->width;
+		streamInfo.H = codec_ctx->height;
 	}
 	return true;
 }

@@ -20,7 +20,7 @@ protected:
 
 	/**/
 
-	AVCodec *init(StreamInfo *streamInfo);
+	AVCodec *init(StreamInfo &streamInfo);
 	bool openCodec(AVCodec *codec);
 
 	void decodeFirstStep(const Packet &encodedPacket, bool flush);

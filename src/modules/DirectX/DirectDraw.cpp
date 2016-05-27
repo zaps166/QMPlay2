@@ -411,6 +411,7 @@ QPaintEngine *Drawable::paintEngine() const
 DirectDrawWriter::DirectDrawWriter(Module &module) :
 	outW(-1), outH(-1), flip(0), Hue(0), Saturation(0), Brightness(0), Contrast(0),
 	aspect_ratio(0.0), zoom(0.0),
+	hasVideoSize(false),
 	drawable(NULL)
 {
 	addParam("W");
@@ -437,7 +438,7 @@ bool DirectDrawWriter::set()
 
 bool DirectDrawWriter::readyWrite() const
 {
-	return drawable && drawable->canDraw();
+	return drawable && (drawable->canDraw() || !hasVideoSize);
 }
 
 bool DirectDrawWriter::processParams(bool *)
@@ -457,13 +458,20 @@ bool DirectDrawWriter::processParams(bool *)
 
 	const int _outW = getParam("W").toInt();
 	const int _outH = getParam("H").toInt();
-	if (_outW > 0 && _outH > 0 && (_outW != outW || _outH != outH))
+	if (_outW != outW || _outH != outH)
 	{
-		outW = _outW;
-		outH = _outH;
+		if (_outW == 0 || _outH == 0)
+			hasVideoSize = false;
+		else if (_outW > 0 && _outH > 0)
+		{
+			outW = _outW;
+			outH = _outH;
 
-		if (drawable->createSecondary())
-			drawable->dock();
+			if (drawable->createSecondary())
+				drawable->dock();
+
+			hasVideoSize = true;
+		}
 	}
 
 	const int _Hue = getParam("Hue").toInt();

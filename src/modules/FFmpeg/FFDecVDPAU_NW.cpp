@@ -210,10 +210,10 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool 
 	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
 	if (frameFinished && ~hurry_up)
 	{
-		const int aligned8W = Functions::aligned(streamInfo->W, 8);
-		const int aligned4H = Functions::aligned(streamInfo->H, 4);
+		const int aligned8W = Functions::aligned(frame->width, 8);
+		const int aligned4H = Functions::aligned(frame->height, 4);
 		const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
-		decoded = VideoFrame(aligned4H, aligned4H >> 1, linesize, frame->interlaced_frame, frame->top_field_first);
+		decoded = VideoFrame(VideoFrameSize(aligned8W, aligned4H, 1, 1), linesize, frame->interlaced_frame, frame->top_field_first);
 		void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
 		if (((VDPAU *)codec_ctx->opaque)->vdp_surface_get_bits((quintptr)frame->data[3], VDP_YCBCR_FORMAT_YV12, data, (quint32 *)decoded.linesize) != VDP_STATUS_OK)
 			decoded.clear();
@@ -228,9 +228,9 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool 
 	return bytes_consumed > 0 ? bytes_consumed : 0;
 }
 
-bool FFDecVDPAU_NW::open(StreamInfo *streamInfo, Writer *)
+bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, Writer *)
 {
-	if (streamInfo->img_fmt == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
+	if (streamInfo.img_fmt == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vdpau"))
@@ -247,7 +247,10 @@ bool FFDecVDPAU_NW::open(StreamInfo *streamInfo, Writer *)
 				codec_ctx->slice_flags  = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
 				codec_ctx->opaque       = dynamic_cast<HWAccelHelper *>(vdpau);
 				if (openCodec(codec))
+				{
+					time_base = streamInfo.getTimeBase();
 					return true;
+				}
 			}
 			else
 				delete vdpau;

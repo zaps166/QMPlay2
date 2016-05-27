@@ -107,6 +107,7 @@ PlayClass::PlayClass() :
 
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
+	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
 }
 
 void PlayClass::play(const QString &_url)
@@ -956,6 +957,21 @@ void PlayClass::nextFrame()
 	}
 }
 
+void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni się podczas odtwarzania
+{
+	/*
+	 * vThr, demuxThr, demuxThr->demuxer and videoStream > -1 are always true here, because
+	 * the "VideoThr" is waiting for this function to be finished in locked state.
+	*/
+	StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
+	streamInfo->W = w;
+	streamInfo->H = h;
+	vThr->setFrameSize(w, h);
+	vThr->initFilters();
+	vThr->processParams();
+	vThr->frameSizeUpdateUnlock();
+	demuxThr->emitInfo();
+}
 void PlayClass::aRatioUpdated(double aRatio) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {
 	if (aRatioName == "auto" && vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
@@ -1076,7 +1092,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 	if (choosenStream >= 0 && choosenStream < streams.count() && streams[choosenStream]->type == type)
 	{
 		if (streams[choosenStream]->must_decode || !subtitles)
-			dec = Decoder::create(streams[choosenStream], writer, QMPlay2GUI.getModules("decoders", 7));
+			dec = Decoder::create(*streams[choosenStream], writer, QMPlay2GUI.getModules("decoders", 7));
 		if (dec || subtitles)
 			stream = choosenStream;
 	}
@@ -1107,10 +1123,10 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 			defaultStream = choosenLangStream;
 		for (int i = 0; i < streams.count(); ++i)
 		{
-			StreamInfo *streamInfo = streams[i];
-			if (streamInfo->type == type && (defaultStream == -1 || i == defaultStream))
+			StreamInfo &streamInfo = *streams[i];
+			if (streamInfo.type == type && (defaultStream == -1 || i == defaultStream))
 			{
-				if (streamInfo->must_decode || !subtitles)
+				if (streamInfo.must_decode || !subtitles)
 					dec = Decoder::create(streamInfo, writer, QMPlay2GUI.getModules("decoders", 7));
 				if (dec || subtitles)
 				{

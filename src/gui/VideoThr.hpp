@@ -30,6 +30,11 @@ public:
 		deleteOSD = true;
 	}
 
+	inline void frameSizeUpdateUnlock()
+	{
+		frameSizeUpdateMutex.unlock();
+	}
+
 	void destroySubtitlesDecoder();
 	inline void setSubtitlesDecoder(Decoder *dec)
 	{
@@ -62,7 +67,7 @@ private:
 	Writer *HWAccelWriter;
 	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
-	QMutex filtersMutex;
+	QMutex filtersMutex, frameSizeUpdateMutex;
 private slots:
 	void write(VideoFrame videoFrame);
 	void screenshot(VideoFrame videoFrame);

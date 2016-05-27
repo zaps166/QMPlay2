@@ -33,9 +33,9 @@ QString FFDecVAAPI::name() const
 	return "FFmpeg/" VAAPIWriterName;
 }
 
-bool FFDecVAAPI::open(StreamInfo *streamInfo, Writer *writer)
+bool FFDecVAAPI::open(StreamInfo &streamInfo, Writer *writer)
 {
-	if ((streamInfo->img_fmt == AV_PIX_FMT_YUV420P || streamInfo->img_fmt == AV_PIX_FMT_YUVJ420P))
+	if ((streamInfo.img_fmt == AV_PIX_FMT_YUV420P || streamInfo.img_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vaapi"))
@@ -55,7 +55,10 @@ bool FFDecVAAPI::open(StreamInfo *streamInfo, Writer *writer)
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
 				codec_ctx->opaque         = dynamic_cast<HWAccelHelper *>(hwAccelWriter);
 				if (openCodec(codec))
+				{
+					time_base = streamInfo.getTimeBase();
 					return true;
+				}
 			}
 			else
 			{

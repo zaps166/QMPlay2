@@ -50,6 +50,7 @@ private:
 	int outW, outH, Hue, Saturation, Brightness, Contrast;
 	double aspect_ratio, zoom;
 	QString adaptorName;
+	bool hasVideoSize;
 	bool useSHM;
 
 	Drawable *drawable;

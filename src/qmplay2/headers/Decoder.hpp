@@ -16,7 +16,7 @@ class LibASS;
 class Decoder : public ModuleCommon
 {
 public:
-	static Decoder *create(StreamInfo *streamInfo, Writer *writer = NULL, const QStringList &modNames = QStringList());
+	static Decoder *create(StreamInfo &streamInfo, Writer *writer = NULL, const QStringList &modNames = QStringList());
 
 	virtual QString name() const = 0;
 
@@ -33,9 +33,7 @@ public:
 
 	virtual ~Decoder();
 private:
-	virtual bool open(StreamInfo *streamInfo, Writer *writer = NULL) = 0;
-protected:
-	StreamInfo *streamInfo;
+	virtual bool open(StreamInfo &streamInfo, Writer *writer = NULL) = 0;
 };
 
 #endif

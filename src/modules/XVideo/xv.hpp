@@ -22,7 +22,7 @@ public:
 		return _isOpen;
 	}
 
-	bool open(int, int, unsigned long, const QString &adaptorName, bool);
+	void open(int, int, unsigned long, const QString &adaptorName, bool);
 
 	void freeImage();
 	void invalidateShm();

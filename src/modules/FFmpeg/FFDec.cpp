@@ -29,28 +29,27 @@ FFDec::~FFDec()
 }
 
 
-AVCodec *FFDec::init(StreamInfo *_streamInfo)
+AVCodec *FFDec::init(StreamInfo &streamInfo)
 {
-	streamInfo = _streamInfo;
-	AVCodec *codec = avcodec_find_decoder_by_name(streamInfo->codec_name);
+	AVCodec *codec = avcodec_find_decoder_by_name(streamInfo.codec_name);
 	if (codec)
 	{
 		codec_ctx = avcodec_alloc_context3(codec);
 		codec_ctx->codec_id = codec->id;
-		codec_ctx->codec_tag = streamInfo->codec_tag;
-		codec_ctx->bit_rate = streamInfo->bitrate;
-		codec_ctx->channels = streamInfo->channels;
-		codec_ctx->sample_rate = streamInfo->sample_rate;
-		codec_ctx->block_align = streamInfo->block_align;
-		codec_ctx->bits_per_coded_sample = streamInfo->bpcs;
-		codec_ctx->pix_fmt = (AVPixelFormat)streamInfo->img_fmt;
-		codec_ctx->coded_width = codec_ctx->width = streamInfo->W;
-		codec_ctx->coded_height = codec_ctx->height = streamInfo->H;
+		codec_ctx->codec_tag = streamInfo.codec_tag;
+		codec_ctx->bit_rate = streamInfo.bitrate;
+		codec_ctx->channels = streamInfo.channels;
+		codec_ctx->sample_rate = streamInfo.sample_rate;
+		codec_ctx->block_align = streamInfo.block_align;
+		codec_ctx->bits_per_coded_sample = streamInfo.bpcs;
+		codec_ctx->pix_fmt = (AVPixelFormat)streamInfo.img_fmt;
+		codec_ctx->coded_width = codec_ctx->width = streamInfo.W;
+		codec_ctx->coded_height = codec_ctx->height = streamInfo.H;
 //		codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR || FF_DEBUG_VIS_MV_B_BACK;
-		if (codec->type != AVMEDIA_TYPE_SUBTITLE && !streamInfo->data.isEmpty())
+		if (codec->type != AVMEDIA_TYPE_SUBTITLE && !streamInfo.data.isEmpty())
 		{
-			codec_ctx->extradata = (uint8_t *)streamInfo->data.data();
-			codec_ctx->extradata_size = streamInfo->data.size();
+			codec_ctx->extradata = (uint8_t *)streamInfo.data.data();
+			codec_ctx->extradata_size = streamInfo.data.size();
 		}
 	}
 	return codec;
@@ -64,7 +63,6 @@ bool FFDec::openCodec(AVCodec *codec)
 		return false;
 	}
 	avcodec_mutex.unlock();
-	time_base = streamInfo->getTimeBase();
 	packet = FFCommon::createAVPacket();
 	switch (codec_ctx->codec_type)
 	{

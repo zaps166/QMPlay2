@@ -58,7 +58,7 @@ XVIDEO::~XVIDEO()
 	delete priv;
 }
 
-bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorName, bool useSHM)
+void XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorName, bool useSHM)
 {
 	if (isOpen())
 		close();
@@ -86,18 +86,12 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 			break;
 	}
 	if (!port)
-	{
-		close();
-		return false;
-	}
+		return close();
 
 	int formats;
 	fo = XvListImageFormats(disp, port, &formats);
 	if (!fo)
-	{
-		close();
-		return false;
-	}
+		return close();
 
 	int format_id = 0;
 	for (int i = 0; i < formats; i++)
@@ -109,17 +103,11 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 		};
 	};
 	if (!format_id)
-	{
-		close();
-		return false;
-	}
+		return close();
 
 	gc = XCreateGC(disp, handle, 0L, NULL);
 	if (!gc)
-	{
-		close();
-		return false;
-	}
+		return close();
 
 	if (useSHM)
 	{
@@ -167,16 +155,12 @@ bool XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	}
 
 	if (!image)
-	{
-		close();
-		return false;
-	}
+		return close();
 
 	osdImg = QImage(image->width, image->height, QImage::Format_ARGB32);
 	osdImg.fill(0);
 
 	_isOpen = true;
-	return isOpen();
 }
 
 void XVIDEO::freeImage()

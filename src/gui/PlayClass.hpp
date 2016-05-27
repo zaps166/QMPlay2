@@ -160,6 +160,7 @@ private slots:
 	void screenShot();
 	void nextFrame();
 
+	void frameSizeUpdated(int w, int h);
 	void aRatioUpdated(double aRatio);
 
 	void demuxThrFinished();
@@ -168,6 +169,7 @@ private slots:
 
 	void load(Demuxer *);
 signals:
+	void frameSizeUpdate(int w, int h);
 	void aRatioUpdate(double aRatio);
 	void chText(const QString &);
 	void updateLength(int);

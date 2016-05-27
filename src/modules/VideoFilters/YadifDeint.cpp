@@ -593,9 +593,9 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		const FrameBuffer &currBuffer = internalQueue.at(1);
 		const FrameBuffer &nextBuffer = internalQueue.at(2);
 
-		const int halfH = (h + 1) >> 1;
+		VideoFrame destFrame(VideoFrameSize(w, h, 1, 1), currBuffer.frame.linesize);
 
-		VideoFrame destFrame(h, halfH, currBuffer.frame.linesize);
+		const int halfH = destFrame.size.chromaHeight;
 
 		if (threads.isEmpty())
 		{

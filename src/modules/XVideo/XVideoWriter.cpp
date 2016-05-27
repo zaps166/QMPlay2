@@ -50,6 +50,7 @@ QPaintEngine *Drawable::paintEngine() const
 XVideoWriter::XVideoWriter(Module &module) :
 	outW(-1), outH(-1), Hue(0), Saturation(0), Brightness(0), Contrast(0),
 	aspect_ratio(0.0), zoom(0.0),
+	hasVideoSize(false),
 	useSHM(false),
 	drawable(NULL),
 	xv(NULL)
@@ -97,7 +98,7 @@ bool XVideoWriter::set()
 
 bool XVideoWriter::readyWrite() const
 {
-	return xv && xv->isOpen();
+	return xv && (xv->isOpen() || !hasVideoSize);
 }
 
 bool XVideoWriter::processParams(bool *)
@@ -127,14 +128,21 @@ bool XVideoWriter::processParams(bool *)
 		doResizeEvent = drawable->isVisible();
 	}
 
-	if (_outW > 0 && _outH > 0 && videoSizeChanged)
+	if (videoSizeChanged)
 	{
-		outW = _outW;
-		outH = _outH;
-		setEQ = true;
+		if (_outW == 0 || _outH == 0)
+			hasVideoSize = false;
+		else if (_outW > 0 && _outH > 0)
+		{
+			outW = _outW;
+			outH = _outH;
+			setEQ = true;
 
-		emit QMPlay2Core.dockVideo(drawable);
-		xv->open(outW, outH, drawable->winId(), adaptorName, useSHM);
+			emit QMPlay2Core.dockVideo(drawable);
+			xv->open(outW, outH, drawable->winId(), adaptorName, useSHM);
+
+			hasVideoSize = true;
+		}
 	}
 
 	if (setEQ)

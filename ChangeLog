@@ -1,7 +1,8 @@
-Changes in QMPlay2 build 16.05.26:
+Changes in QMPlay2 build 16.05.27:
 	- update Russian translation (victorr2007),
 	- allow to detach from receiving commands,
 	- minor fixes in FPS and A/V sync,
+	- support video size changes,
 	- fix "rawvideo" playback,
 	- bugfix,
 

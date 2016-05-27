@@ -254,14 +254,14 @@ void OpenGL2Common::paintGL()
 	if (!videoFrame.isEmpty())
 	{
 		const GLsizei widths[3] = {
-			outW,
-			outW >> 1,
-			outW >> 1
+			videoFrame.size.width,
+			videoFrame.size.chromaWidth,
+			videoFrame.size.chromaWidth,
 		};
 		const GLsizei heights[3] = {
-			outH,
-			outH >> 1,
-			outH >> 1
+			videoFrame.size.height,
+			videoFrame.size.chromaHeight,
+			videoFrame.size.chromaHeight
 		};
 
 		if (doReset)
@@ -277,7 +277,7 @@ void OpenGL2Common::paintGL()
 			}
 
 			/* Prepare texture coordinates */
-			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == outW) ? 1.0f : (outW / (videoFrame.linesize[0] + 1.0f));
+			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
 
 			resetDone = true;
 		}

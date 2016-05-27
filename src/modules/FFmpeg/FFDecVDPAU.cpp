@@ -32,14 +32,14 @@ QString FFDecVDPAU::name() const
 {
 	return "FFmpeg/" VDPAUWriterName;
 }
-bool FFDecVDPAU::open(StreamInfo *streamInfo, Writer *writer)
+bool FFDecVDPAU::open(StreamInfo &streamInfo, Writer *writer)
 {
 	/*
 	 * AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU.
 	 * I tested FFmpeg 2.7 and it works, but crashes (assertion failed) in FFmpeg >= 2.8.
 	*/
 	const bool canUseYUVJ420P = avcodec_version() < 0x383C64;
-	if (streamInfo->img_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && streamInfo->img_fmt == AV_PIX_FMT_YUVJ420P))
+	if (streamInfo.img_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && streamInfo.img_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vdpau"))
@@ -58,7 +58,10 @@ bool FFDecVDPAU::open(StreamInfo *streamInfo, Writer *writer)
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
 				codec_ctx->opaque         = dynamic_cast<HWAccelHelper *>(hwAccelWriter);
 				if (openCodec(codec))
+				{
+					time_base = streamInfo.getTimeBase();
 					return true;
+				}
 			}
 			else
 			{
