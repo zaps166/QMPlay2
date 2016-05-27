@@ -37,7 +37,7 @@ bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
 		}
 
 		framesQueue.insert(insertAt++, dequeued);
-		framesQueue.insert(insertAt++, FrameBuffer(videoFrame2, dequeued.ts + halfDelay(lookup, dequeued)));
+		framesQueue.insert(insertAt++, FrameBuffer(videoFrame2, dequeued.ts + halfDelay(lookup.ts, dequeued.ts)));
 	}
 	return internalQueue.count() >= 2;
 }

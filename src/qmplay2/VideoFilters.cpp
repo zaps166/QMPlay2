@@ -85,7 +85,7 @@ public:
 			dequeued.frame.tff = TFF;
 			framesQueue.insert(insertAt++, dequeued);
 			dequeued.frame.tff = !TFF;
-			framesQueue.insert(insertAt++, FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0), dequeued)));
+			framesQueue.insert(insertAt++, FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0).ts, dequeued.ts)));
 		}
 		return internalQueue.count() >= 2;
 	}

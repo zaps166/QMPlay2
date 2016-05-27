@@ -37,9 +37,9 @@ public:
 protected:
 	int addFramesToInternalQueue(QQueue<FrameBuffer> &framesQueue);
 
-	inline double halfDelay(const FrameBuffer &f1, const FrameBuffer &f2) const
+	inline double halfDelay(double f1_ts, double f2_ts) const
 	{
-		return (f1.ts - f2.ts) / 2.0;
+		return (f1_ts - f2_ts) / 2.0;
 	}
 
 	QQueue<FrameBuffer> internalQueue;

@@ -612,7 +612,7 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
 		double ts = currBuffer.ts;
 		if (secondFrame)
-			ts += halfDelay(internalQueue.at(2), currBuffer);
+			ts += halfDelay(nextBuffer.ts, ts);
 		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
 
 		if (secondFrame || !doubler)

@@ -10,7 +10,7 @@ BobDeint::BobDeint()
 bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	int insertAt = addFramesToDeinterlace(framesQueue);
-	if (internalQueue.count() >= 2)
+	if (internalQueue.count() >= 1)
 	{
 		const FrameBuffer &sourceBuffer = internalQueue.at(0);
 
@@ -55,15 +55,18 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
 		double ts = sourceBuffer.ts;
 		if (secondFrame)
-			ts += halfDelay(internalQueue.at(1), sourceBuffer);
+			ts += halfDelay(ts, lastTS);
 		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+
+		if (secondFrame || lastTS < 0.0)
+			lastTS = sourceBuffer.ts;
 
 		if (secondFrame)
 			internalQueue.removeFirst();
 		secondFrame = !secondFrame;
 
 	}
-	return internalQueue.count() >= 2;
+	return internalQueue.count() >= 1;
 }
 
 bool BobDeint::processParams(bool *)
@@ -74,5 +77,6 @@ bool BobDeint::processParams(bool *)
 	if (w < 2 || h < 4 || !(deintFlags & DoubleFramerate))
 		return false;
 	secondFrame = false;
+	lastTS = -1.0;
 	return true;
 }

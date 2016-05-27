@@ -10,6 +10,7 @@ public:
 	bool processParams(bool *paramsCorrected);
 private:
 	bool secondFrame;
+	double lastTS;
 	int w, h;
 };
 
