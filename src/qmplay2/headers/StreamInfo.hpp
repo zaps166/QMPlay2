@@ -46,6 +46,10 @@ public:
 	{
 		return (double)time_base.num / (double)time_base.den;
 	}
+	inline double getAspectRatio() const
+	{
+		return sample_aspect_ratio * W / H;
+	}
 
 	QMPlay2MediaType type;
 	QByteArray codec_name, title, artist;
@@ -59,7 +63,7 @@ public:
 	quint32 sample_rate, block_align;
 	quint8 channels;
 	/* video only */
-	double aspect_ratio, FPS;
+	double sample_aspect_ratio, FPS;
 	int img_fmt, W, H;
 };
 

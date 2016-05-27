@@ -746,15 +746,10 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->other_info << qMakePair(tr("format"), QString(av_get_sample_fmt_name(stream->codec->sample_fmt)));
 			break;
 		case QMPLAY2_TYPE_VIDEO:
-			streamInfo->aspect_ratio = 1.0;
 			if (stream->sample_aspect_ratio.num)
-				streamInfo->aspect_ratio = av_q2d(stream->sample_aspect_ratio);
+				streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
 			else if (stream->codec->sample_aspect_ratio.num)
-				streamInfo->aspect_ratio = av_q2d(stream->codec->sample_aspect_ratio);
-			if (streamInfo->aspect_ratio <= 0.0)
-				streamInfo->aspect_ratio = 1.0;
-			if (stream->codec->width > 0 && stream->codec->height > 0)
-				streamInfo->aspect_ratio *= (double)stream->codec->width / (double)stream->codec->height;
+				streamInfo->sample_aspect_ratio = av_q2d(stream->codec->sample_aspect_ratio);
 			streamInfo->W = stream->codec->width;
 			streamInfo->H = stream->codec->height;
 			streamInfo->img_fmt = stream->codec->pix_fmt;

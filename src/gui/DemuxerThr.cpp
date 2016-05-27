@@ -664,7 +664,7 @@ void DemuxerThr::emitInfo()
 				if (!streamInfo->codec_name.isEmpty())
 					videoStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
 				videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->W) + "x" + QString::number(streamInfo->H) + "</li>";
-				videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->aspect_ratio) + "</li>";
+				videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->getAspectRatio()) + "</li>";
 				if (streamInfo->FPS)
 					videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(streamInfo->FPS) + "</li>";
 				if (streamInfo->bitrate)

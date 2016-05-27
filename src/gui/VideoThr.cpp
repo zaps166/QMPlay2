@@ -80,11 +80,12 @@ void VideoThr::setFrameSize(int w, int h)
 	}
 	deleteSubs = deleteOSD = deleteFrame = true;
 }
-void VideoThr::setARatio(double aRatio)
+void VideoThr::setARatio(double aRatio, double sar)
 {
 	updateSubs();
 	if (writer)
 		writer->modParam("AspectRatio", aRatio);
+	lastSampleAspectRatio = sar;
 }
 void VideoThr::setZoom()
 {
@@ -165,10 +166,7 @@ void VideoThr::initFilters(bool processParams)
 bool VideoThr::processParams()
 {
 	if (writer)
-	{
-		lastSampleAspectRatio = writer->getParam("AspectRatio").toDouble() / (double)W * (double)H;
 		return writer->processParams();
-	}
 	return false;
 }
 
@@ -373,10 +371,10 @@ void VideoThr::run()
 
 		if ((maybeFlush = packet.ts.isValid()))
 		{
-			if (packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && fabs(lastSampleAspectRatio - packet.sampleAspectRatio) >= 0.000001) //zmiana współczynnika proporcji
+			if (packet.sampleAspectRatio && lastSampleAspectRatio != -1.0 && !qFuzzyCompare(lastSampleAspectRatio, packet.sampleAspectRatio)) //Aspect ratio has been changed
 			{
 				lastSampleAspectRatio = -1.0; //Needs to be updated later
-				emit playC.aRatioUpdate(packet.sampleAspectRatio * (double)W / (double)H); //Sets lastSampleAspectRatio because it calls processParams()
+				emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets lastSampleAspectRatio because it calls processParams()
 			}
 			if (ptsIsValid || packet.ts > playC.pos)
 				playC.chPos(packet.ts);

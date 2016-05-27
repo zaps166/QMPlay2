@@ -67,6 +67,7 @@ private:
 	void speedMessageAndOSD();
 
 	double getARatio();
+	inline double getSAR();
 
 	void flushAssEvents();
 	void clearSubtitlesBuffer();
@@ -161,7 +162,7 @@ private slots:
 	void nextFrame();
 
 	void frameSizeUpdated(int w, int h);
-	void aRatioUpdated(double aRatio);
+	void aRatioUpdated(double sar);
 
 	void demuxThrFinished();
 
@@ -170,7 +171,7 @@ private slots:
 	void load(Demuxer *);
 signals:
 	void frameSizeUpdate(int w, int h);
-	void aRatioUpdate(double aRatio);
+	void aRatioUpdate(double sar);
 	void chText(const QString &);
 	void updateLength(int);
 	void updatePos(int);

@@ -408,10 +408,14 @@ void PlayClass::speedMessageAndOSD()
 double PlayClass::getARatio()
 {
 	if (aRatioName == "auto")
-		return demuxThr->demuxer->streamsInfo().at(videoStream)->aspect_ratio;
+		return demuxThr->demuxer->streamsInfo().at(videoStream)->getAspectRatio();
 	if (aRatioName == "sizeDep")
 		return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->W / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->H;
 	return aRatioName.toDouble();
+}
+inline double PlayClass::getSAR()
+{
+	return demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio;
 }
 
 void PlayClass::flushAssEvents()
@@ -743,11 +747,11 @@ void PlayClass::aRatio()
 	QString msg_txt = tr("Aspect ratio") + ": " + ((QAction *)sender())->text().remove('&');
 	if (vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
 	{
-		double aspect_ratio = getARatio();
+		const double aspect_ratio = getARatio();
 		if (ass)
 			ass->setARatio(aspect_ratio);
 		messageAndOSD(msg_txt);
-		vThr->setARatio(aspect_ratio);
+		vThr->setARatio(aspect_ratio, getSAR());
 		vThr->processParams();
 	}
 	else
@@ -966,23 +970,29 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
 	StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
 	streamInfo->W = w;
 	streamInfo->H = h;
+	const double aspect_ratio = getARatio();
+	if (ass)
+		ass->setARatio(aspect_ratio);
 	vThr->setFrameSize(w, h);
+	vThr->setARatio(aspect_ratio, getSAR());
 	vThr->initFilters();
 	vThr->processParams();
 	vThr->frameSizeUpdateUnlock();
 	demuxThr->emitInfo();
 }
-void PlayClass::aRatioUpdated(double aRatio) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
+void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {
-	if (aRatioName == "auto" && vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
+	if (vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
 	{
-		demuxThr->demuxer->streamsInfo().at(videoStream)->aspect_ratio = aRatio;
+		demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio = sar;
 		const double aspect_ratio = getARatio();
 		if (ass)
 			ass->setARatio(aspect_ratio);
+		vThr->lock();
 		vThr->setDeleteOSD();
-		vThr->setARatio(aspect_ratio);
+		vThr->setARatio(aspect_ratio, getSAR());
 		vThr->processParams();
+		vThr->unlock();
 		demuxThr->emitInfo();
 	}
 }
@@ -1163,8 +1173,10 @@ void PlayClass::load(Demuxer *demuxer)
 			}
 			if (vThr->isRunning())
 			{
+				const double aspect_ratio = getARatio();
+
 				vThr->setFrameSize(streams[videoStream]->W, streams[videoStream]->H);
-				vThr->setARatio(getARatio());
+				vThr->setARatio(aspect_ratio, getSAR());
 				vThr->setVideoEqualizer();
 				vThr->setDec(dec);
 				vThr->setZoom();
@@ -1181,7 +1193,7 @@ void PlayClass::load(Demuxer *demuxer)
 					ass = new LibASS(QMPlay2Core.getSettings());
 					ass->setWindowSize(videoWinW, videoWinH);
 					ass->setFontScale(subtitlesScale);
-					ass->setARatio(getARatio());
+					ass->setARatio(aspect_ratio);
 					ass->setZoom(zoom);
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
