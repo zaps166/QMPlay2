@@ -96,8 +96,8 @@ bool OpenGL2Writer::processParams(bool *)
 		{
 			drawable->outW = outW;
 			drawable->outH = outH;
-			emit QMPlay2Core.dockVideo(drawable->widget());
 		}
+		emit QMPlay2Core.dockVideo(drawable->widget());
 	}
 
 	if (doResizeEvent)
