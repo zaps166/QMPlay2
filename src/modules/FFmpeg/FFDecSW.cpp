@@ -209,7 +209,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 		if (forceSkipFrames) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
 			codec_ctx->skip_frame = AVDISCARD_NONREF;
 
-		if (frameFinished && ~hurry_up && desiredPixFmt != AV_PIX_FMT_NONE)
+		if (frameFinished && ~hurry_up)
 		{
 			bool newFormat = false;
 			if (codec_ctx->pix_fmt != lastPixFmt)
@@ -219,30 +219,33 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 				setPixelFormat();
 				newFormat = true;
 			}
-			const VideoFrameSize frameSize(frame->width, frame->height, chromaShiftW, chromaShiftH);
-			if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
-				decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
-			else
+			if (desiredPixFmt != AV_PIX_FMT_NONE)
 			{
-				const int aligned8W = Functions::aligned(frame->width, 8);
-				const int linesize[] = {
-					aligned8W,
-					aligned8W >> chromaShiftW,
-					aligned8W >> chromaShiftW
-				};
-				decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
-				if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
+				const VideoFrameSize frameSize(frame->width, frame->height, chromaShiftW, chromaShiftH);
+				if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
+					decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
+				else
 				{
-					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, NULL, NULL, NULL);
-					lastFrameW = frame->width;
-					lastFrameH = frame->height;
+					const int aligned8W = Functions::aligned(frame->width, 8);
+					const int linesize[] = {
+						aligned8W,
+						aligned8W >> chromaShiftW,
+						aligned8W >> chromaShiftW
+					};
+					decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
+					if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
+					{
+						sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, NULL, NULL, NULL);
+						lastFrameW = frame->width;
+						lastFrameH = frame->height;
+					}
+					quint8 *decodedData[] = {
+						decoded.buffer[0].data(),
+						decoded.buffer[1].data(),
+						decoded.buffer[2].data()
+					};
+					sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
 				}
-				quint8 *decodedData[] = {
-					decoded.buffer[0].data(),
-					decoded.buffer[1].data(),
-					decoded.buffer[2].data()
-				};
-				sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
 			}
 		}
 	}
