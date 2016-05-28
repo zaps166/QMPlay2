@@ -740,21 +740,20 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 	switch (streamInfo->type)
 	{
 		case QMPLAY2_TYPE_AUDIO:
+			streamInfo->format = av_get_sample_fmt_name(stream->codec->sample_fmt);
 			streamInfo->channels = stream->codec->channels;
 			streamInfo->sample_rate = stream->codec->sample_rate;
 			streamInfo->block_align = stream->codec->block_align;
-			streamInfo->other_info << qMakePair(tr("format"), QString(av_get_sample_fmt_name(stream->codec->sample_fmt)));
 			break;
 		case QMPLAY2_TYPE_VIDEO:
+			streamInfo->format = av_get_pix_fmt_name(stream->codec->pix_fmt);
 			if (stream->sample_aspect_ratio.num)
 				streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
 			else if (stream->codec->sample_aspect_ratio.num)
 				streamInfo->sample_aspect_ratio = av_q2d(stream->codec->sample_aspect_ratio);
 			streamInfo->W = stream->codec->width;
 			streamInfo->H = stream->codec->height;
-			streamInfo->img_fmt = stream->codec->pix_fmt;
 			streamInfo->FPS = av_q2d(stream->r_frame_rate);
-			streamInfo->other_info << qMakePair(tr("format"), QString(av_get_pix_fmt_name(stream->codec->pix_fmt)));
 			break;
 		case QMPLAY2_TYPE_SUBTITLE:
 			if (stream->codec->subtitle_header_size)

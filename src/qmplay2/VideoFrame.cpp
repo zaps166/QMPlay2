@@ -1,20 +1,41 @@
 #include <VideoFrame.hpp>
-#include <Functions.hpp>
 
 extern "C"
 {
 	#include <libavutil/common.h>
 }
 
-VideoFrameSize::VideoFrameSize(qint32 width, qint32 height, qint32 chromaShiftW, qint32 chromaShiftH) :
-	width(width), height(height),
-	chromaWidth(FF_CEIL_RSHIFT(width, chromaShiftW)), chromaHeight(FF_CEIL_RSHIFT(height, chromaShiftH))
-{}
+qint32 VideoFrameSize::chromaWidth() const
+{
+	return FF_CEIL_RSHIFT(width, chromaShiftW);
+}
+qint32 VideoFrameSize::chromaHeight() const
+{
+	return FF_CEIL_RSHIFT(height, chromaShiftH);
+}
+
+QMPlay2PixelFormat VideoFrameSize::getFormat() const
+{
+	switch ((chromaShiftW << 8) | chromaShiftH)
+	{
+		case 0x0000:
+			return QMPLAY2_PIX_FMT_YUV444P;
+		case 0x0001:
+			return QMPLAY2_PIX_FMT_YUV440P;
+		case 0x0100:
+			return QMPLAY2_PIX_FMT_YUV422P;
+		case 0x0200:
+			return QMPLAY2_PIX_FMT_YUV411P;
+		case 0x0202:
+			return QMPLAY2_PIX_FMT_YUV410P;
+	}
+	return QMPLAY2_PIX_FMT_YUV420P;
+}
 
 void VideoFrameSize::clear()
 {
 	width = height = 0;
-	chromaWidth = chromaHeight = 0;
+	chromaShiftW = chromaShiftH = 0;
 }
 
 /**/
@@ -73,24 +94,30 @@ void VideoFrame::clear()
 	size.clear();
 }
 
-void VideoFrame::copy(void *dest, qint32 luma_width, qint32 chroma_width, qint32 height) const
+void VideoFrame::copy(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const
 {
-	qint32 offset = 0;
-	quint8 *dest_data = (quint8 *)dest;
-	for (qint32 i = 0; i < height; ++i)
+	const qint32 chromaHeight = size.chromaHeight();
+	const qint32 wh = linesizeChroma * chromaHeight;
+	quint8 *destData = (quint8 *)dest;
+	const quint8 *srcData[3] = {
+		buffer[0].data(),
+		buffer[1].data(),
+		buffer[2].data()
+	};
+	size_t toCopy = qMin(linesizeLuma, linesize[0]);
+	for (qint32 i = 0; i < size.height; ++i)
 	{
-		memcpy(dest_data, buffer[0].data() + offset, luma_width);
-		offset += linesize[0];
-		dest_data += luma_width;
+		memcpy(destData, srcData[0], toCopy);
+		srcData[0] += linesize[0];
+		destData += linesizeLuma;
 	}
-	offset = 0;
-	height >>= 1;
-	const qint32 wh = chroma_width * height;
-	for (qint32 i = 0; i < height; ++i)
+	toCopy = qMin(linesizeChroma, linesize[1]);
+	for (qint32 i = 0; i < chromaHeight; ++i)
 	{
-		memcpy(dest_data, buffer[2].data() + offset, chroma_width);
-		memcpy(dest_data + wh, buffer[1].data() + offset, chroma_width);
-		offset += linesize[1];
-		dest_data += chroma_width;
+		memcpy(destData + wh, srcData[1], toCopy);
+		memcpy(destData, srcData[2], toCopy);
+		srcData[1] += linesize[1];
+		srcData[2] += linesize[2];
+		destData += linesizeChroma;
 	}
 }

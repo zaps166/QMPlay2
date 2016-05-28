@@ -3,7 +3,7 @@
 
 #include <QCoreApplication>
 #include <QByteArray>
-#include <QList>
+#include <QVector>
 #include <QPair>
 
 typedef QPair<QString, QString> QMPlay2Tag;
@@ -52,8 +52,8 @@ public:
 	}
 
 	QMPlay2MediaType type;
-	QByteArray codec_name, title, artist;
-	QList<QMPlay2Tag> other_info;
+	QByteArray codec_name, title, artist, format;
+	QVector<QMPlay2Tag> other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
 	bool is_default, must_decode;
 	struct {int num, den;} time_base;
@@ -64,7 +64,7 @@ public:
 	quint8 channels;
 	/* video only */
 	double sample_aspect_ratio, FPS;
-	int img_fmt, W, H;
+	int W, H;
 };
 
 class StreamsInfo : public QList<StreamInfo *>

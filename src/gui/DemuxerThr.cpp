@@ -530,7 +530,7 @@ void DemuxerThr::updateCoverAndPlaying()
 	emit QMPlay2Core.updatePlaying(true, title, artist, album, demuxer->length(), showCovers && !hasCover, updatePlayingName);
 }
 
-static void printOtherInfo(const QList<QMPlay2Tag> &other_info, QString &str)
+static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str)
 {
 	foreach (const QMPlay2Tag &tag, other_info)
 		if (!tag.second.isEmpty())
@@ -541,7 +541,7 @@ static void printOtherInfo(const QList<QMPlay2Tag> &other_info, QString &str)
 			str += "<li><b>" + StreamInfo::getTagName(tag.first).toLower() + ":</b> " + value + "</li>";
 		}
 }
-void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QList<QMPlay2Tag> &other_info)
+void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QVector<QMPlay2Tag> &other_info)
 {
 	subtitlesStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
 	if (currentPlaying)
@@ -669,6 +669,8 @@ void DemuxerThr::emitInfo()
 					videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(streamInfo->FPS) + "</li>";
 				if (streamInfo->bitrate)
 					videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bitrate / 1000) + "kbps</li>";
+				if (!streamInfo->format.isEmpty())
+					videoStreams += "<li><b>" + tr("format") + ":</b> " + streamInfo->format + "</li>";
 				printOtherInfo(streamInfo->other_info, videoStreams);
 				videoStreams += "</ul></ul>";
 			} break;
@@ -708,6 +710,8 @@ void DemuxerThr::emitInfo()
 
 				if (streamInfo->bitrate)
 					audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bitrate / 1000) + "kbps</li>";
+				if (!streamInfo->format.isEmpty())
+					audioStreams += "<li><b>" + tr("format") + ":</b> " + streamInfo->format + "</li>";
 				printOtherInfo(streamInfo->other_info, audioStreams);
 				audioStreams += "</ul></ul>";
 			} break;

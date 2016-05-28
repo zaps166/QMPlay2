@@ -1,0 +1,19 @@
+#ifndef PIXELFORMATS_HPP
+#define PIXELFORMATS_HPP
+
+#include <QVector>
+
+enum QMPlay2PixelFormat //Compatible with FFmpeg
+{
+	QMPLAY2_PIX_FMT_YUV420P =  0,
+	QMPLAY2_PIX_FMT_YUV422P =  4,
+	QMPLAY2_PIX_FMT_YUV444P =  5,
+	QMPLAY2_PIX_FMT_YUV410P =  6,
+	QMPLAY2_PIX_FMT_YUV411P =  7,
+	QMPLAY2_PIX_FMT_YUV440P = 33,
+
+	QMPLAY2_PIX_FMT_COUNT   =  6
+};
+typedef QVector<QMPlay2PixelFormat> QMPlay2PixelFormats;
+
+#endif // PIXELFORMATS_HPP

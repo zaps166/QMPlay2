@@ -60,10 +60,16 @@ Writer *Decoder::HWAccel() const
 	return NULL;
 }
 
-int Decoder::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
+void Decoder::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)
+{
+	Q_UNUSED(pixelFormats)
+}
+
+int Decoder::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
 {
 	Q_UNUSED(encodedPacket)
 	Q_UNUSED(decoded)
+	Q_UNUSED(newPixFmt)
 	Q_UNUSED(flush)
 	Q_UNUSED(hurry_up)
 	return 0;

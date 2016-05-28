@@ -3,8 +3,6 @@
 #include <QMPlay2_OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
-using Functions::getImageSize;
-using Functions::aligned;
 
 #include <QCoreApplication>
 #include <QPainter>
@@ -33,7 +31,7 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
 		update();
 		return;
 	}
-	if (imgScaler.create(writer.outW, writer.outH, W, H))
+	if (imgScaler.create(videoFrame.size, W, H))
 	{
 		if (img.isNull())
 			img = QImage(W, H, QImage::Format_RGB32);
@@ -56,8 +54,8 @@ void Drawable::clr()
 
 void Drawable::resizeEvent(QResizeEvent *e)
 {
-	getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
-	W = aligned(W, 8);
+	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
+	W = Functions::aligned(W, 8);
 
 	clr();
 	draw(VideoFrame(), e ? false : true, true);
@@ -163,6 +161,18 @@ bool QPainterWriter::processParams(bool *)
 		drawable->resizeEvent(NULL);
 
 	return readyWrite();
+}
+
+QMPlay2PixelFormats QPainterWriter::supportedPixelFormats() const
+{
+	return QMPlay2PixelFormats()
+			<< QMPLAY2_PIX_FMT_YUV420P
+			<< QMPLAY2_PIX_FMT_YUV422P
+			<< QMPLAY2_PIX_FMT_YUV444P
+			<< QMPLAY2_PIX_FMT_YUV410P
+			<< QMPLAY2_PIX_FMT_YUV411P
+			<< QMPLAY2_PIX_FMT_YUV440P
+	;
 }
 
 void QPainterWriter::writeVideo(const VideoFrame &videoFrame)

@@ -40,7 +40,7 @@ StreamInfo::StreamInfo() :
 	sample_rate(0), block_align(0),
 	channels(0),
 	sample_aspect_ratio(1.0), FPS(0.0),
-	img_fmt(0), W(0), H(0)
+	W(0), H(0)
 {
 	time_base.num = time_base.den = 0;
 }
@@ -52,7 +52,7 @@ StreamInfo::StreamInfo(quint32 sample_rate, quint8 channels) :
 	sample_rate(sample_rate), block_align(0),
 	channels(channels),
 	sample_aspect_ratio(1.0), FPS(0.0),
-	img_fmt(0), W(0), H(0)
+	W(0), H(0)
 {
 	time_base.num = time_base.den = 0;
 }

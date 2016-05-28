@@ -3,8 +3,10 @@
 
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
+#include <PixelFormats.hpp>
 
 class QMPlay2_OSD;
+class VideoWriter;
 
 class VideoThr : public AVThread
 {
@@ -16,6 +18,8 @@ public:
 	{
 		return HWAccelWriter;
 	}
+
+	QMPlay2PixelFormats getSupportedPixelFormats() const;
 
 	inline void setDoScreenshot()
 	{
@@ -56,6 +60,8 @@ public:
 	void updateSubs();
 private:
 	~VideoThr();
+
+	inline VideoWriter *videoWriter() const;
 
 	void run();
 

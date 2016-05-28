@@ -7,6 +7,7 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
+	#include <libavutil/pixdesc.h>
 	#include <libavcodec/vdpau.h>
 }
 
@@ -38,8 +39,9 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, Writer *writer)
 	 * AV_PIX_FMT_YUVJ420P doesn't work on FFmpeg/VDPAU, but works on VAAPI over VDPAU.
 	 * I tested FFmpeg 2.7 and it works, but crashes (assertion failed) in FFmpeg >= 2.8.
 	*/
+	const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
 	const bool canUseYUVJ420P = avcodec_version() < 0x383C64;
-	if (streamInfo.img_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && streamInfo.img_fmt == AV_PIX_FMT_YUVJ420P))
+	if (pix_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vdpau"))

@@ -47,6 +47,9 @@ private:
 	bool readyWrite() const;
 
 	bool processParams(bool *paramsCorrected);
+
+	QMPlay2PixelFormats supportedPixelFormats() const;
+
 	void writeVideo(const VideoFrame &videoFrame);
 	void writeOSD(const QList<const QMPlay2_OSD *> &);
 

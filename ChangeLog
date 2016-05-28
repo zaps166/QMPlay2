@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 16.05.27:
+Changes in QMPlay2 build 16.05.28:
+	- diplaying and filtering all planar 8-bit YUV pixel formats (only OpenGL2 and QPainter video outputs)
 	- update Russian translation (victorr2007),
 	- allow to detach from receiving commands,
 	- minor fixes in FPS and A/V sync,

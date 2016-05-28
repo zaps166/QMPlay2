@@ -108,6 +108,18 @@ bool OpenGL2Writer::processParams(bool *)
 	return readyWrite();
 }
 
+QMPlay2PixelFormats OpenGL2Writer::supportedPixelFormats() const
+{
+	return QMPlay2PixelFormats()
+			<< QMPLAY2_PIX_FMT_YUV420P
+			<< QMPLAY2_PIX_FMT_YUV422P
+			<< QMPLAY2_PIX_FMT_YUV444P
+			<< QMPLAY2_PIX_FMT_YUV410P
+			<< QMPLAY2_PIX_FMT_YUV411P
+			<< QMPLAY2_PIX_FMT_YUV440P
+	;
+}
+
 void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
 {
 	drawable->isPaused = false;

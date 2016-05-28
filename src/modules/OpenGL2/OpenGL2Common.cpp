@@ -255,13 +255,13 @@ void OpenGL2Common::paintGL()
 	{
 		const GLsizei widths[3] = {
 			videoFrame.size.width,
-			videoFrame.size.chromaWidth,
-			videoFrame.size.chromaWidth,
+			videoFrame.size.chromaWidth(),
+			videoFrame.size.chromaWidth(),
 		};
 		const GLsizei heights[3] = {
 			videoFrame.size.height,
-			videoFrame.size.chromaHeight,
-			videoFrame.size.chromaHeight
+			videoFrame.size.chromaHeight(),
+			videoFrame.size.chromaHeight()
 		};
 
 		if (doReset)

@@ -14,7 +14,7 @@ bool VideoFilter::removeLastFromInternalBuffer()
 	return false;
 }
 
-int VideoFilter::addFramesToInternalQueue(QQueue<VideoFilter::FrameBuffer> &framesQueue)
+void VideoFilter::addFramesToInternalQueue(QQueue<VideoFilter::FrameBuffer> &framesQueue)
 {
 	while (!framesQueue.isEmpty())
 	{
@@ -22,5 +22,4 @@ int VideoFilter::addFramesToInternalQueue(QQueue<VideoFilter::FrameBuffer> &fram
 			break;
 		internalQueue.enqueue(framesQueue.dequeue());
 	}
-	return framesQueue.count();
 }

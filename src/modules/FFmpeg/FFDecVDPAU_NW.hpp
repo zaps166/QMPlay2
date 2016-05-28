@@ -11,7 +11,7 @@ private:
 
 	QString name() const;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up);
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned hurry_up);
 
 	bool open(StreamInfo &, Writer *);
 };

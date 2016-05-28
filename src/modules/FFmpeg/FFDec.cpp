@@ -6,6 +6,7 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
+	#include <libavutil/pixdesc.h>
 }
 
 FFDec::FFDec(QMutex &avcodec_mutex) :
@@ -42,7 +43,7 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 		codec_ctx->sample_rate = streamInfo.sample_rate;
 		codec_ctx->block_align = streamInfo.block_align;
 		codec_ctx->bits_per_coded_sample = streamInfo.bpcs;
-		codec_ctx->pix_fmt = (AVPixelFormat)streamInfo.img_fmt;
+		codec_ctx->pix_fmt = av_get_pix_fmt(streamInfo.format);
 		codec_ctx->coded_width = codec_ctx->width = streamInfo.W;
 		codec_ctx->coded_height = codec_ctx->height = streamInfo.H;
 //		codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR || FF_DEBUG_VIS_MV_B_BACK;

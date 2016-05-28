@@ -2,29 +2,39 @@
 #define VIDEOFRAME_HPP
 
 #include <Buffer.hpp>
+#include <PixelFormats.hpp>
 
 class VideoFrameSize
 {
+	friend class VideoFrame;
 public:
-	VideoFrameSize(qint32 width, qint32 height, qint32 chromaShiftW, qint32 chromaShiftH);
+	inline VideoFrameSize(qint32 width, qint32 height, quint8 chromaShiftW, quint8 chromaShiftH) :
+		width(width), height(height),
+		chromaShiftW(chromaShiftW), chromaShiftH(chromaShiftH)
+	{}
 	inline VideoFrameSize()
 	{
 		clear();
 	}
 
+	qint32 chromaWidth() const;
+	qint32 chromaHeight() const;
+
+	inline qint32 getWidth(qint32 plane) const
+	{
+		return plane ? chromaWidth() : width;
+	}
+	inline qint32 getHeight(qint32 plane) const
+	{
+		return plane ? chromaHeight() : height;
+	}
+
+	QMPlay2PixelFormat getFormat() const;
+
 	void clear();
 
-	inline qint32 getWidth(qint32 plane = 0) const
-	{
-		return plane ? chromaWidth : width;
-	}
-	inline qint32 getHeight(qint32 plane = 0) const
-	{
-		return plane ? chromaHeight : height;
-	}
-
 	qint32 width, height;
-	qint32 chromaWidth, chromaHeight;
+	quint8 chromaShiftW, chromaShiftH;
 };
 
 /**/
@@ -53,7 +63,7 @@ public:
 
 	void clear();
 
-	void copy(void *dest, qint32 luma_width, qint32 chroma_width, qint32 height) const;
+	void copy(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
 	VideoFrameSize size;
 	Buffer buffer[3];

@@ -108,6 +108,7 @@ PlayClass::PlayClass() :
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
 	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
+	connect(this, SIGNAL(pixelFormatUpdate(const QByteArray &)), this, SLOT(pixelFormatUpdated(const QByteArray &)));
 }
 
 void PlayClass::play(const QString &_url)
@@ -397,6 +398,11 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 	}
 	if (onStatusBar)
 		emit QMPlay2Core.statusBarMessage(txt, duration * 1000);
+}
+
+inline bool PlayClass::hasVideoStream()
+{
+	return vThr && demuxThr && demuxThr->demuxer && videoStream > -1;
 }
 
 void PlayClass::speedMessageAndOSD()
@@ -745,7 +751,7 @@ void PlayClass::aRatio()
 {
 	aRatioName = sender()->objectName();
 	QString msg_txt = tr("Aspect ratio") + ": " + ((QAction *)sender())->text().remove('&');
-	if (vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
+	if (hasVideoStream())
 	{
 		const double aspect_ratio = getARatio();
 		if (ass)
@@ -982,7 +988,7 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
 }
 void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {
-	if (vThr && demuxThr && demuxThr->demuxer && videoStream > -1)
+	if (hasVideoStream())
 	{
 		demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio = sar;
 		const double aspect_ratio = getARatio();
@@ -993,6 +999,14 @@ void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmi
 		vThr->setARatio(aspect_ratio, getSAR());
 		vThr->processParams();
 		vThr->unlock();
+		demuxThr->emitInfo();
+	}
+}
+void PlayClass::pixelFormatUpdated(const QByteArray &pixFmt)
+{
+	if (hasVideoStream())
+	{
+		demuxThr->demuxer->streamsInfo().at(videoStream)->format = pixFmt;
 		demuxThr->emitInfo();
 	}
 }
@@ -1189,6 +1203,9 @@ void PlayClass::load(Demuxer *demuxer)
 					dec = NULL;
 				else
 				{
+					if (!vThr->getHWAccelWriter())
+						dec->setSupportedPixelFormats(vThr->getSupportedPixelFormats());
+
 					fps = streams[videoStream]->FPS;
 					ass = new LibASS(QMPlay2Core.getSettings());
 					ass->setWindowSize(videoWinW, videoWinH);

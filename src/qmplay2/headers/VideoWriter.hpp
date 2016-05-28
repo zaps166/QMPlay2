@@ -1,6 +1,7 @@
 #ifndef VIDEOWRITER_HPP
 #define VIDEOWRITER_HPP
 
+#include <PixelFormats.hpp>
 #include <Writer.hpp>
 
 class QMPlay2_OSD;
@@ -10,6 +11,9 @@ class ImgScaler;
 class VideoWriter : public Writer
 {
 public:
+
+	virtual QMPlay2PixelFormats supportedPixelFormats() const;
+
 	qint64 write(const QByteArray &);
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;

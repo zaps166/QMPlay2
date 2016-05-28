@@ -217,7 +217,7 @@ void Drawable::draw(const VideoFrame &videoFrame)
 		osd_mutex.lock();
 		BYTE *dest = ((flip && !isOverlay) || !osd_list.isEmpty()) ? new BYTE[dataSize] : surface;
 
-		videoFrame.copy(dest, ddsd.lPitch, ddsd.lPitch >> 1, ddsd.dwHeight);
+		videoFrame.copy(dest, ddsd.lPitch, ddsd.lPitch >> 1);
 		if (!isOverlay)
 		{
 			if (flip & Qt::Horizontal)

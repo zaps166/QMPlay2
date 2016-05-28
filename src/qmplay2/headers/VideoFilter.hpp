@@ -35,7 +35,7 @@ public:
 
 	virtual bool filter(QQueue<FrameBuffer> &framesQueue) = 0;
 protected:
-	int addFramesToInternalQueue(QQueue<FrameBuffer> &framesQueue);
+	void addFramesToInternalQueue(QQueue<FrameBuffer> &framesQueue);
 
 	inline double halfDelay(double f1_ts, double f2_ts) const
 	{

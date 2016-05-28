@@ -45,7 +45,6 @@ private:
 
 	const bool doubler, spatialCheck;
 	bool secondFrame;
-	int w, h;
 };
 
 #define YadifDeintName "Yadif"

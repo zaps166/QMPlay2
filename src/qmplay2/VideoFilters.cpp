@@ -77,15 +77,15 @@ class PrepareForHWBobDeint : public DeintFilter
 public:
 	bool filter(QQueue<FrameBuffer> &framesQueue)
 	{
-		int insertAt = addFramesToDeinterlace(framesQueue, false);
+		addFramesToDeinterlace(framesQueue, false);
 		if (internalQueue.count() >= 2)
 		{
 			FrameBuffer dequeued = internalQueue.dequeue();
 			const bool TFF = isTopFieldFirst(dequeued.frame);
 			dequeued.frame.tff = TFF;
-			framesQueue.insert(insertAt++, dequeued);
+			framesQueue.enqueue(dequeued);
 			dequeued.frame.tff = !TFF;
-			framesQueue.insert(insertAt++, FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0).ts, dequeued.ts)));
+			framesQueue.enqueue(FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0).ts, dequeued.ts)));
 		}
 		return internalQueue.count() >= 2;
 	}

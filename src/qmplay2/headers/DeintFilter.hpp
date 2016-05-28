@@ -14,7 +14,7 @@ public:
 		addParam("DeinterlaceFlags");
 	}
 protected:
-	int addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize = true);
+	void addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize = true);
 
 	inline bool isTopFieldFirst(const VideoFrame &videoFrame) const
 	{

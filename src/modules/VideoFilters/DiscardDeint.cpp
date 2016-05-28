@@ -9,7 +9,7 @@ DiscardDeint::DiscardDeint()
 
 bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
-	int insertAt = addFramesToDeinterlace(framesQueue);
+	addFramesToDeinterlace(framesQueue);
 	if (!internalQueue.isEmpty())
 	{
 		FrameBuffer dequeued = internalQueue.dequeue();
@@ -21,7 +21,7 @@ bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
 			const int linesize = videoFrame.linesize[p];
 			const quint8 *src = videoFrame.buffer[p].data();
 			quint8 *dst = videoFrame.buffer[p].data();
-			const int lines = (p ? h >> 2 : h >> 1) - 1;
+			const int lines = (videoFrame.size.getHeight(p) >> 1) - 1;
 			if (!TFF)
 			{
 				memcpy(dst, src + linesize, linesize);
@@ -39,17 +39,15 @@ bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
 			if (TFF)
 				memcpy(dst, src - linesize, linesize);
 		}
-		framesQueue.insert(insertAt++, dequeued);
+		framesQueue.enqueue(dequeued);
 	}
 	return !internalQueue.isEmpty();
 }
 
 bool DiscardDeint::processParams(bool *)
 {
-	w = getParam("W").toInt();
-	h = getParam("H").toInt();
 	deintFlags = getParam("DeinterlaceFlags").toInt();
-	if (w < 2 || h < 4 || (deintFlags & DoubleFramerate))
+	if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || (deintFlags & DoubleFramerate))
 		return false;
 	return true;
 }

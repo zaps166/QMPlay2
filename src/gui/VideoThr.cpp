@@ -37,6 +37,11 @@ VideoThr::~VideoThr()
 	delete sDec;
 }
 
+QMPlay2PixelFormats VideoThr::getSupportedPixelFormats() const
+{
+	return videoWriter()->supportedPixelFormats();
+}
+
 void VideoThr::destroySubtitlesDecoder()
 {
 	deleteSubs = true;
@@ -49,49 +54,41 @@ void VideoThr::destroySubtitlesDecoder()
 
 bool VideoThr::setSpherical()
 {
-	return writer ? writer->modParam("Spherical", playC.spherical) : false;
+	return writer->modParam("Spherical", playC.spherical);
 }
 bool VideoThr::setFlip()
 {
-	return writer ? writer->modParam("Flip", playC.flip) : false;
+	return writer->modParam("Flip", playC.flip);
 }
 bool VideoThr::setRotate90()
 {
-	return writer ? writer->modParam("Rotate90", playC.rotate90) : false;
+	return writer->modParam("Rotate90", playC.rotate90);
 }
 void VideoThr::setVideoEqualizer()
 {
-	if (writer)
-	{
-		writer->modParam("Brightness", playC.Brightness);
-		writer->modParam("Saturation", playC.Saturation);
-		writer->modParam("Contrast", playC.Contrast);
-		writer->modParam("Hue", playC.Hue);
-	}
+	writer->modParam("Brightness", playC.Brightness);
+	writer->modParam("Saturation", playC.Saturation);
+	writer->modParam("Contrast", playC.Contrast);
+	writer->modParam("Hue", playC.Hue);
 }
 void VideoThr::setFrameSize(int w, int h)
 {
 	W = w;
 	H = h;
-	if (writer)
-	{
-		writer->modParam("W", W);
-		writer->modParam("H", H);
-	}
+	writer->modParam("W", W);
+	writer->modParam("H", H);
 	deleteSubs = deleteOSD = deleteFrame = true;
 }
 void VideoThr::setARatio(double aRatio, double sar)
 {
 	updateSubs();
-	if (writer)
-		writer->modParam("AspectRatio", aRatio);
+	writer->modParam("AspectRatio", aRatio);
 	lastSampleAspectRatio = sar;
 }
 void VideoThr::setZoom()
 {
 	updateSubs();
-	if (writer)
-		writer->modParam("Zoom", playC.zoom);
+	writer->modParam("Zoom", playC.zoom);
 }
 
 void VideoThr::initFilters(bool processParams)
@@ -111,7 +108,7 @@ void VideoThr::initFilters(bool processParams)
 		const bool topFieldFirst = QMPSettings.getBool("Deinterlace/TFF");
 		const quint8 deintFlags = autoDeint | doubleFramerate << 1 | autoParity << 2 | topFieldFirst << 3;
 		bool HWDeint = false, PrepareForHWBobDeint = false;
-		if (writer && ((HWDeint = writer->modParam("Deinterlace", 1 | deintFlags << 1))))
+		if ((HWDeint = writer->modParam("Deinterlace", 1 | deintFlags << 1)))
 			PrepareForHWBobDeint = doubleFramerate && writer->getParam("PrepareForHWBobDeint").toBool();
 		if (!HWDeint || PrepareForHWBobDeint)
 		{
@@ -133,7 +130,7 @@ void VideoThr::initFilters(bool processParams)
 			}
 		}
 	}
-	else if (writer)
+	else
 		writer->modParam("Deinterlace", 0);
 
 	if (!HWAccelWriter)
@@ -156,7 +153,7 @@ void VideoThr::initFilters(bool processParams)
 	if (processParams)
 	{
 		filtersMutex.unlock();
-		if (writer && writer->hasParam("Deinterlace"))
+		if (writer->hasParam("Deinterlace"))
 			writer->processParams();
 	}
 
@@ -165,20 +162,23 @@ void VideoThr::initFilters(bool processParams)
 
 bool VideoThr::processParams()
 {
-	if (writer)
-		return writer->processParams();
-	return false;
+	return writer->processParams();
 }
 
 void VideoThr::updateSubs()
 {
-	if (writer && playC.ass)
+	if (playC.ass)
 	{
 		playC.subsMutex.lock();
 		if (subtitles)
 			playC.ass->getASS(subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync);
 		playC.subsMutex.unlock();
 	}
+}
+
+inline VideoWriter *VideoThr::videoWriter() const
+{
+	return (VideoWriter *)writer;
 }
 
 void VideoThr::run()
@@ -321,9 +321,9 @@ void VideoThr::run()
 				osdList += playC.osd;
 		}
 		playC.osdMutex.unlock();
-		if ((!lastOSDListEmpty || !osdList.isEmpty()) && writer && writer->readyWrite())
+		if ((!lastOSDListEmpty || !osdList.isEmpty()) && writer->readyWrite())
 		{
-			((VideoWriter *)writer)->writeOSD(osdList);
+			videoWriter()->writeOSD(osdList);
 			lastOSDListEmpty = osdList.isEmpty();
 		}
 		while (!osdListToDelete.isEmpty())
@@ -341,7 +341,12 @@ void VideoThr::run()
 		if (!packet.isEmpty() || maybeFlush)
 		{
 			VideoFrame decoded;
-			const int bytes_consumed = dec->decodeVideo(packet, decoded, playC.flushVideo, skip ? ~0 : (fast >> 1));
+			QByteArray newPixelFormat;
+			const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, playC.flushVideo, skip ? ~0 : (fast >> 1));
+			if (!newPixelFormat.isEmpty())
+			{
+				emit playC.pixelFormatUpdate(newPixelFormat);
+			}
 			if (playC.flushVideo)
 			{
 				useLastDelay = true; //if seeking
@@ -537,21 +542,21 @@ void VideoThr::write(VideoFrame videoFrame)
 		XResetScreenSaver(QX11Info::display());
 #endif
 	canWrite = true;
-	if (writer && writer->readyWrite())
-		((VideoWriter *)writer)->writeVideo(videoFrame);
+	if (writer->readyWrite())
+		videoWriter()->writeVideo(videoFrame);
 }
 void VideoThr::screenshot(VideoFrame videoFrame)
 {
 	ImgScaler imgScaler;
 	const int aligned8W = Functions::aligned(W, 8);
-	if (writer && imgScaler.create(W, H, aligned8W, H))
+	if (imgScaler.create(!HWAccelWriter ? videoFrame.size : VideoFrameSize(W, H, 1, 1), aligned8W, H))
 	{
 		QImage img(aligned8W, H, QImage::Format_RGB32);
 		bool ok = true;
 		if (!HWAccelWriter)
 			imgScaler.scale(videoFrame, img.bits());
 		else
-			ok = ((VideoWriter *)writer)->HWAccellGetImg(videoFrame, img.bits(), &imgScaler);
+			ok = videoWriter()->HWAccellGetImg(videoFrame, img.bits(), &imgScaler);
 		if (!ok)
 			QMPlay2Core.logError(tr("Cannot create screenshot"));
 		else
@@ -571,6 +576,5 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 }
 void VideoThr::pause()
 {
-	if (writer)
-		writer->pause();
+	writer->pause();
 }

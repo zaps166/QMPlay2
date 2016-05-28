@@ -399,10 +399,13 @@ static void filterLine_CPP(quint8 *dest, const void *const destEnd,
 	filterLine<true>(dest, destEnd, prev, curr, next, prefs, mrefs, spatialCheck, filterParity);
 }
 
-static void filterSlice(const int plane, const int w, const int h, const int parity, const int tff, const bool spatialCheck,
+static void filterSlice(const int plane, const int parity, const int tff, const bool spatialCheck,
                         VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame,
                         const int jobId, const int jobsCount)
 {
+	const int w = currFrame.size.getWidth(plane);
+	const int h = currFrame.size.getHeight(plane);
+
 	const int sliceStart   = (h *  jobId   ) / jobsCount;
 	const int sliceEnd     = (h * (jobId+1)) / jobsCount;
 	const int refs         = currFrame.linesize[plane];
@@ -536,13 +539,9 @@ void YadifThr::run()
 		const bool tff = yadifDeint.isTopFieldFirst(*curr);
 		for (int p = 0; p < 3; ++p)
 		{
-			const int shift  = (p ? 1 : 0);
-			const int width  = yadifDeint.w >> shift;
-			const int height = yadifDeint.h >> shift;
 			filterSlice
 			(
 				p,
-				width, height,
 				yadifDeint.secondFrame == tff, tff,
 				yadifDeint.spatialCheck,
 				*dest, *prev, *curr, *next,
@@ -586,16 +585,16 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 
 bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
-	int insertAt = addFramesToDeinterlace(framesQueue);
+	addFramesToDeinterlace(framesQueue);
 	if (internalQueue.count() >= 3)
 	{
 		const FrameBuffer &prevBuffer = internalQueue.at(0);
 		const FrameBuffer &currBuffer = internalQueue.at(1);
 		const FrameBuffer &nextBuffer = internalQueue.at(2);
 
-		VideoFrame destFrame(VideoFrameSize(w, h, 1, 1), currBuffer.frame.linesize);
+		VideoFrame destFrame(currBuffer.frame.size, currBuffer.frame.linesize);
 
-		const int halfH = destFrame.size.chromaHeight;
+		const int halfH = destFrame.size.chromaHeight();
 
 		if (threads.isEmpty())
 		{
@@ -613,7 +612,7 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		double ts = currBuffer.ts;
 		if (secondFrame)
 			ts += halfDelay(nextBuffer.ts, ts);
-		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+		framesQueue.enqueue(FrameBuffer(destFrame, ts));
 
 		if (secondFrame || !doubler)
 			internalQueue.removeFirst();
@@ -625,10 +624,8 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
 bool YadifDeint::processParams(bool *)
 {
-	w = getParam("W").toInt();
-	h = getParam("H").toInt();
 	deintFlags = getParam("DeinterlaceFlags").toInt();
-	if (w < 3 || h < 3 || (doubler == !(deintFlags & DoubleFramerate)))
+	if (getParam("W").toInt() < 3 || getParam("H").toInt() < 3 || (doubler == !(deintFlags & DoubleFramerate)))
 		return false;
 	secondFrame = false;
 	return true;

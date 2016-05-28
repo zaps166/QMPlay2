@@ -33,7 +33,7 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)
 	return avHWAccel;
 }
 
-int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned)
+int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned)
 {
 	int frameFinished = 0;
 	decodeFirstStep(encodedPacket, flush);

@@ -1,5 +1,12 @@
 #include <VideoWriter.hpp>
 
+QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
+{
+	return QMPlay2PixelFormats()
+			<< QMPLAY2_PIX_FMT_YUV420P
+	;
+}
+
 qint64 VideoWriter::write(const QByteArray &)
 {
 	return -1;

@@ -11,7 +11,6 @@ public:
 private:
 	bool secondFrame;
 	double lastTS;
-	int w, h;
 };
 
 #define BobDeintName "Bob"

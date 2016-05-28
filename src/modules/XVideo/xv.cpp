@@ -199,20 +199,16 @@ void XVIDEO::close()
 
 void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList<const QMPlay2_OSD *> &osd_list, QMutex &osd_mutex)
 {
-	const int linesize = image->pitches[0];
-	const int linesize1_2 = image->pitches[1];
-	const int imageHeight = image->height;
-
-	videoFrame.copy(image->data, linesize, linesize1_2, imageHeight);
+	videoFrame.copy(image->data, image->pitches[0], image->pitches[1]);
 
 	if (_flip & Qt::Horizontal)
-		Functions::hFlip((quint8 *)image->data, linesize, imageHeight, width);
+		Functions::hFlip((quint8 *)image->data, image->pitches[0], image->height, width);
 	if (_flip & Qt::Vertical)
-		Functions::vFlip((quint8 *)image->data, linesize, imageHeight);
+		Functions::vFlip((quint8 *)image->data, image->pitches[0], image->height);
 
 	osd_mutex.lock();
 	if (!osd_list.isEmpty())
-		Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, linesize, linesize1_2, osd_list, osd_checksums);
+		Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, image->pitches[0], image->pitches[1], osd_list, osd_checksums);
 	osd_mutex.unlock();
 
 	putImage(srcRect, dstRect);

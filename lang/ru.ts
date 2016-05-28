@@ -675,13 +675,6 @@ amp</source>
     </message>
 </context>
 <context>
-    <name>FormatContext</name>
-    <message>
-        <source>format</source>
-        <translation>Формат</translation>
-    </message>
-</context>
-<context>
     <name>GME</name>
     <message>
         <source>System</source>

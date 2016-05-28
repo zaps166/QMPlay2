@@ -297,12 +297,15 @@ bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, vo
 	quint8 *data = getImage(image, surfaceID, img_fmt);
 	if (data)
 	{
+		const int chromaW = (outW + 1) >> 1;
+		const int chromaH = (outH + 1) >> 1;
+
 		QByteArray yv12;
 		yv12.resize(outW * outH * 3 / 2);
 
 		quint8 *yv12Luma = (quint8 *)yv12.data();
 		quint8 *yv12Cb   = yv12Luma + outW * outH;
-		quint8 *yv12Cr   = yv12Cb + outW/2 * outH/2;
+		quint8 *yv12Cr   = yv12Cb + chromaW * chromaH;
 
 		quint8 *planeData = data + image.offsets[0];
 		for (int i = 0; i < outH; ++i)
@@ -315,20 +318,19 @@ bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, vo
 		planeData = data + image.offsets[1];
 		for (int i = 0; i < outH; ++i)
 		{
-			int j = 0;
-			for (; j < outW; j += 4)
+			for (int j = 0; j < outW; j += 4)
 			{
 				*(yv12Cr++) = *(planeData++);
 				*(yv12Cb++) = *(planeData++);
 			}
-			for (; j < (int)image.pitches[1]; ++j)
+			for (int j = 0; j < (int)image.pitches[1]; ++j)
 				++planeData;
 		}
 
 		vaUnmapBuffer(VADisp, image.buf);
 		vaDestroyImage(VADisp, image.image_id);
 
-		yv12ToRGB32->scale(yv12.constData(), dest);
+		yv12ToRGB32->scale(yv12.constData(), (const int *)image.pitches, chromaH, dest);
 		return true;
 	}
 	return false;

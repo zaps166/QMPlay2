@@ -11,6 +11,7 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
+	#include <libavutil/pixdesc.h>
 	#include <libavcodec/vdpau.h>
 }
 
@@ -203,7 +204,7 @@ QString FFDecVDPAU_NW::name() const
 	return "FFmpeg/" VDPAUWriterName;
 }
 
-int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
+int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned hurry_up)
 {
 	int frameFinished = 0;
 	decodeFirstStep(encodedPacket, flush);
@@ -211,9 +212,15 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool 
 	if (frameFinished && ~hurry_up)
 	{
 		const int aligned8W = Functions::aligned(frame->width, 8);
-		const int aligned4H = Functions::aligned(frame->height, 4);
-		const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
-		decoded = VideoFrame(VideoFrameSize(aligned8W, aligned4H, 1, 1), linesize, frame->interlaced_frame, frame->top_field_first);
+		const int linesize[] = {
+			aligned8W,
+			aligned8W >> 1,
+			aligned8W >> 1
+		};
+		const VideoFrameSize aligned4HFrameSize(frame->width, Functions::aligned(frame->height, 4), 1, 1);
+		const VideoFrameSize realFrameSize(frame->width, frame->height, 1, 1);
+		decoded = VideoFrame(aligned4HFrameSize, linesize, frame->interlaced_frame, frame->top_field_first);
+		decoded.size = realFrameSize;
 		void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
 		if (((VDPAU *)codec_ctx->opaque)->vdp_surface_get_bits((quintptr)frame->data[3], VDP_YCBCR_FORMAT_YV12, data, (quint32 *)decoded.linesize) != VDP_STATUS_OK)
 			decoded.clear();
@@ -230,7 +237,7 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool 
 
 bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, Writer *)
 {
-	if (streamInfo.img_fmt == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
+	if (av_get_pix_fmt(streamInfo.format) == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vdpau"))

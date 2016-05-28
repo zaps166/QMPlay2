@@ -10,14 +10,16 @@ extern "C"
 {
 	#include <libavformat/avformat.h>
 	#include <libswscale/swscale.h>
+	#include <libavutil/pixdesc.h>
 }
 
 FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
 	FFDec(avcodec_mutex),
 	threads(0), lowres(0),
 	thread_type_slice(false),
-	lastFrameW(-1), lastFrameH(-1), lastFrameFmt(-1),
-	sws_ctx(NULL)
+	lastFrameW(-1), lastFrameH(-1),
+	sws_ctx(NULL),
+	desiredPixFmt(-1)
 {
 	SetModule(module);
 }
@@ -71,6 +73,12 @@ bool FFDecSW::set()
 QString FFDecSW::name() const
 {
 	return "FFmpeg";
+}
+
+void FFDecSW::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)
+{
+	supportedPixelFormats = pixelFormats;
+	setPixelFormat();
 }
 
 int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
@@ -171,7 +179,7 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
 		bytes_consumed = 0;
 	return bytes_consumed;
 }
-int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush, unsigned hurry_up)
+int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
 {
 	int bytes_consumed = 0, frameFinished = 0;
 
@@ -201,24 +209,39 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, bool flush,
 		if (forceSkipFrames) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
 			codec_ctx->skip_frame = AVDISCARD_NONREF;
 
-		if (frameFinished && ~hurry_up)
+		if (frameFinished && ~hurry_up && desiredPixFmt != AV_PIX_FMT_NONE)
 		{
-			const VideoFrameSize frameSize(frame->width, frame->height, 1, 1);
-			if (frame->buf[0] && frame->buf[1] && frame->buf[2] && codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P)
+			bool newFormat = false;
+			if (codec_ctx->pix_fmt != lastPixFmt)
+			{
+				newPixFmt = av_get_pix_fmt_name(codec_ctx->pix_fmt);
+				lastPixFmt = codec_ctx->pix_fmt;
+				setPixelFormat();
+				newFormat = true;
+			}
+			const VideoFrameSize frameSize(frame->width, frame->height, chromaShiftW, chromaShiftH);
+			if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
 				decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
 			else
 			{
 				const int aligned8W = Functions::aligned(frame->width, 8);
-				const int linesize[] = {aligned8W, aligned8W >> 1, aligned8W >> 1};
+				const int linesize[] = {
+					aligned8W,
+					aligned8W >> chromaShiftW,
+					aligned8W >> chromaShiftW
+				};
 				decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
-				if (frame->width != lastFrameW || frame->height != lastFrameH || codec_ctx->pix_fmt != lastFrameFmt)
+				if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
 				{
-					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_BILINEAR, NULL, NULL, NULL);
+					sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, NULL, NULL, NULL);
 					lastFrameW = frame->width;
 					lastFrameH = frame->height;
-					lastFrameFmt = codec_ctx->pix_fmt;
 				}
-				quint8 *decodedData[] = {decoded.buffer[0].data(), decoded.buffer[1].data(), decoded.buffer[2].data()};
+				quint8 *decodedData[] = {
+					decoded.buffer[0].data(),
+					decoded.buffer[1].data(),
+					decoded.buffer[2].data()
+				};
 				sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
 			}
 		}
@@ -318,6 +341,7 @@ bool FFDecSW::open(StreamInfo &streamInfo, Writer *)
 		}
 		av_codec_set_lowres(codec_ctx, qMin(av_codec_get_max_lowres(codec), lowres));
 		codec_ctx->refcounted_frames = true;
+		lastPixFmt = codec_ctx->pix_fmt;
 	}
 	if (!FFDec::openCodec(codec))
 		return false;
@@ -330,6 +354,34 @@ bool FFDecSW::open(StreamInfo &streamInfo, Writer *)
 	return true;
 }
 
+
+void FFDecSW::setPixelFormat()
+{
+	const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
+	if (!pixDesc) //Invalid pixel format
+		return;
+	dontConvert = supportedPixelFormats.contains((QMPlay2PixelFormat)codec_ctx->pix_fmt);
+	if (dontConvert)
+	{
+		chromaShiftW = pixDesc->log2_chroma_w;
+		chromaShiftH = pixDesc->log2_chroma_h;
+		desiredPixFmt = codec_ctx->pix_fmt;
+	}
+	else for (int i = 0; i < supportedPixelFormats.count(); ++i)
+	{
+		const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get((AVPixelFormat)supportedPixelFormats.at(i));
+		if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
+		{
+			//Use first format as default (mostly QMPLAY2_PIX_FMT_YUV420P) and look at next formats,
+			//otherwise break the loop if found proper format.
+			chromaShiftW = supportedPixDesc->log2_chroma_w;
+			chromaShiftH = supportedPixDesc->log2_chroma_h;
+			desiredPixFmt = supportedPixelFormats.at(i);
+			if (i != 0)
+				break;
+		}
+	}
+}
 
 bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 {

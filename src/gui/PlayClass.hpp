@@ -64,6 +64,8 @@ public:
 		doSilenceOnStart = true;
 	}
 private:
+	inline bool hasVideoStream();
+
 	void speedMessageAndOSD();
 
 	double getARatio();
@@ -163,6 +165,7 @@ private slots:
 
 	void frameSizeUpdated(int w, int h);
 	void aRatioUpdated(double sar);
+	void pixelFormatUpdated(const QByteArray &pixFmt);
 
 	void demuxThrFinished();
 
@@ -172,6 +175,7 @@ private slots:
 signals:
 	void frameSizeUpdate(int w, int h);
 	void aRatioUpdate(double sar);
+	void pixelFormatUpdate(const QByteArray &pixFmt);
 	void chText(const QString &);
 	void updateLength(int);
 	void updatePos(int);

@@ -1,6 +1,6 @@
 #include <DeintFilter.hpp>
 
-int DeintFilter::addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize)
+void DeintFilter::addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize)
 {
 	while (!framesQueue.isEmpty())
 	{
@@ -9,5 +9,4 @@ int DeintFilter::addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool c
 			break;
 		internalQueue.enqueue(framesQueue.dequeue());
 	}
-	return framesQueue.isEmpty();
 }

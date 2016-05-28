@@ -191,16 +191,20 @@ bool VDPAUWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgSc
 {
 	if (dest)
 	{
-		QByteArray yv12;
-		const quint32 linesize[3] = {(quint32)outW, (quint32)outW >> 1, (quint32)outW >> 1};
-		yv12.resize(linesize[0] * Functions::aligned(outH, 4) * 3 / 2);
+		const quint32 linesize[3] = {
+			(quint32)outW,
+			(quint32)outW >> 1,
+			(quint32)outW >> 1
+		};
+		const qint32 chromaH = (outH + 1) >> 1;
+		QByteArray yv12(linesize[0] * Functions::aligned(outH, 4) * 3 / 2, Qt::Uninitialized);
 		void *data[3];
 		data[0] = yv12.data();
 		data[1] = (quint8 *)data[0] + (linesize[0] * outH);
-		data[2] = (quint8 *)data[1] + (linesize[1] * ((outH + 1) >> 1));
+		data[2] = (quint8 *)data[1] + (linesize[1] * chromaH);
 		if (vdp_surface_get_bits(videoFrame.surfaceId, VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
 		{
-			yv12ToRGB32->scale(yv12.constData(), dest);
+			yv12ToRGB32->scale(yv12.constData(), (const int *)linesize, chromaH, dest);
 			return true;
 		}
 	}

@@ -7,6 +7,7 @@
 extern "C"
 {
 	#include <libavformat/avformat.h>
+	#include <libavutil/pixdesc.h>
 	#include <libavcodec/vaapi.h>
 }
 
@@ -35,7 +36,8 @@ QString FFDecVAAPI::name() const
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo, Writer *writer)
 {
-	if ((streamInfo.img_fmt == AV_PIX_FMT_YUV420P || streamInfo.img_fmt == AV_PIX_FMT_YUVJ420P))
+	const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
+	if ((pix_fmt == AV_PIX_FMT_YUV420P || pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vaapi"))

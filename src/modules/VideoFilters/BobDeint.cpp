@@ -9,13 +9,13 @@ BobDeint::BobDeint()
 
 bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
-	int insertAt = addFramesToDeinterlace(framesQueue);
+	addFramesToDeinterlace(framesQueue);
 	if (internalQueue.count() >= 1)
 	{
 		const FrameBuffer &sourceBuffer = internalQueue.at(0);
 
 		const VideoFrame &sourceFrame = sourceBuffer.frame;
-		VideoFrame destFrame(VideoFrameSize(w, h, 1, 1), sourceFrame.linesize);
+		VideoFrame destFrame(sourceFrame.size, sourceFrame.linesize);
 
 		const bool parity = (isTopFieldFirst(sourceFrame) == secondFrame);
 
@@ -25,7 +25,9 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 			const quint8 *src = sourceFrame.buffer[p].data();
 			quint8 *dst = destFrame.buffer[p].data();
 
-			const int halfH = (p ? h >> 2 : h >> 1) - 1;
+			const int h = sourceFrame.size.getHeight(p);
+			const int halfH = (h >> 1) - 1;
+
 			if (parity)
 			{
 				src += linesize;
@@ -45,7 +47,7 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 			memcpy(dst, src, linesize); //Copy last line
 			if (!parity)
 				memcpy(dst + linesize, dst, linesize);
-			if ((p ? (h >> 1) : h) & 1) //Duplicate last line for odd height
+			if (h & 1) //Duplicate last line for odd height
 			{
 				if (!parity)
 					dst += linesize;
@@ -56,7 +58,7 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		double ts = sourceBuffer.ts;
 		if (secondFrame)
 			ts += halfDelay(ts, lastTS);
-		framesQueue.insert(insertAt++, FrameBuffer(destFrame, ts));
+		framesQueue.enqueue(FrameBuffer(destFrame, ts));
 
 		if (secondFrame || lastTS < 0.0)
 			lastTS = sourceBuffer.ts;
@@ -71,10 +73,8 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
 bool BobDeint::processParams(bool *)
 {
-	w = getParam("W").toInt();
-	h = getParam("H").toInt();
 	deintFlags = getParam("DeinterlaceFlags").toInt();
-	if (w < 2 || h < 4 || !(deintFlags & DoubleFramerate))
+	if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || !(deintFlags & DoubleFramerate))
 		return false;
 	secondFrame = false;
 	lastTS = -1.0;
