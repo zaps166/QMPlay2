@@ -68,7 +68,7 @@ void OpenGL2Window::initializeGL()
 }
 void OpenGL2Window::paintGL()
 {
-	if (isExposed())
+	if (visible && isExposed())
 	{
 		if (doReset)
 			OpenGL2Common::resetClearCounter();

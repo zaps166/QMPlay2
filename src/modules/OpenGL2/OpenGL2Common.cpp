@@ -109,6 +109,7 @@ void OpenGL2Common::clearImg()
 {
 	hasImage = false;
 	osdImg = QImage();
+	videoFrame.clear();
 	osdChecksums.clear();
 }
 
@@ -244,14 +245,19 @@ void OpenGL2Common::initializeGL()
 
 void OpenGL2Common::paintGL()
 {
-	if (videoFrame.isEmpty() && !hasImage)
+	const bool frameIsEmpty = videoFrame.isEmpty();
+
+	if (updateTimer.isActive())
+		updateTimer.stop();
+
+	if (frameIsEmpty && !hasImage)
 		return;
 
 	const QSize winSize = widget()->size();
 
 	bool resetDone = false;
 
-	if (!videoFrame.isEmpty())
+	if (!frameIsEmpty)
 	{
 		const GLsizei widths[3] = {
 			videoFrame.size.width,
@@ -418,9 +424,6 @@ void OpenGL2Common::paintGL()
 	osdMutex.unlock();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	if (updateTimer.isActive())
-		updateTimer.stop();
 }
 
 void OpenGL2Common::testGLInternal()
