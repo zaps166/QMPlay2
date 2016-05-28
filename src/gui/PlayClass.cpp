@@ -969,22 +969,24 @@ void PlayClass::nextFrame()
 
 void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni się podczas odtwarzania
 {
-	/*
-	 * vThr, demuxThr, demuxThr->demuxer and videoStream > -1 are always true here, because
-	 * the "VideoThr" is waiting for this function to be finished in locked state.
-	*/
-	StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
-	streamInfo->W = w;
-	streamInfo->H = h;
-	const double aspect_ratio = getARatio();
-	if (ass)
-		ass->setARatio(aspect_ratio);
-	vThr->setFrameSize(w, h);
-	vThr->setARatio(aspect_ratio, getSAR());
-	vThr->initFilters();
-	vThr->processParams();
-	vThr->frameSizeUpdateUnlock();
-	demuxThr->emitInfo();
+	if (hasVideoStream())
+	{
+		StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
+		streamInfo->W = w;
+		streamInfo->H = h;
+		const double aspect_ratio = getARatio();
+		if (ass)
+			ass->setARatio(aspect_ratio);
+		vThr->setARatio(aspect_ratio, getSAR());
+		demuxThr->emitInfo();
+	}
+	if (vThr) //"demuxThr->demuxer" can be closed, but "vThr" can be in waiting state
+	{
+		vThr->setFrameSize(w, h);
+		vThr->initFilters();
+		vThr->processParams();
+		vThr->frameSizeUpdateUnlock();
+	}
 }
 void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {

@@ -359,8 +359,10 @@ void VideoThr::run()
 					//Frame size has been changed
 					filtersMutex.unlock();
 					frameSizeUpdateMutex.lock();
+					mutex.unlock();
 					emit playC.frameSizeUpdate(decoded.size.width, decoded.size.height);
 					frameSizeUpdateMutex.lock(); //Wait for "frameSizeUpdate()" to be finished
+					mutex.lock();
 					frameSizeUpdateMutex.unlock();
 					filtersMutex.lock();
 				}
