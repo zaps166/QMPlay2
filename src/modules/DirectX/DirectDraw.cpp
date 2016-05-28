@@ -169,6 +169,22 @@ bool Drawable::createSecondary()
 
 	return false;
 }
+void Drawable::releaseSecondary()
+{
+	if (DDSSecondary)
+	{
+		if (DDrawColorCtrl)
+		{
+			DDrawColorCtrl->Release();
+			DDrawColorCtrl = NULL;
+		}
+		if (isOverlay)
+			DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
+		DDSSecondary->Release();
+		DDSSecondary = NULL;
+		DDSBackBuffer = NULL;
+	}
+}
 void Drawable::videoEqSet()
 {
 	if (DDrawColorCtrl)
@@ -311,18 +327,21 @@ void Drawable::fillRects()
 
 void Drawable::updateOverlay()
 {
-	RECT srcRect, dstRect;
-	getRects(srcRect, dstRect);
+	if (canDraw())
+	{
+		RECT srcRect, dstRect;
+		getRects(srcRect, dstRect);
 
-	restoreLostSurface();
+		restoreLostSurface();
 
-	DDOVERLAYFX ovfx = {sizeof ovfx};
-	ovfx.dckDestColorkey.dwColorSpaceHighValue = ovfx.dckDestColorkey.dwColorSpaceLowValue = ColorKEY;
-	if (flip & Qt::Horizontal)
-		ovfx.dwDDFX |= DDOVERFX_MIRRORLEFTRIGHT;
-	if (flip & Qt::Vertical)
-		ovfx.dwDDFX |= DDOVERFX_MIRRORUPDOWN;
-	DDSSecondary->UpdateOverlay(&srcRect, DDSPrimary, &dstRect, DDOVER_SHOW | DDOVER_KEYDESTOVERRIDE | DDOVER_DDFX, &ovfx);
+		DDOVERLAYFX ovfx = {sizeof ovfx};
+		ovfx.dckDestColorkey.dwColorSpaceHighValue = ovfx.dckDestColorkey.dwColorSpaceLowValue = ColorKEY;
+		if (flip & Qt::Horizontal)
+			ovfx.dwDDFX |= DDOVERFX_MIRRORLEFTRIGHT;
+		if (flip & Qt::Vertical)
+			ovfx.dwDDFX |= DDOVERFX_MIRRORUPDOWN;
+		DDSSecondary->UpdateOverlay(&srcRect, DDSPrimary, &dstRect, DDOVER_SHOW | DDOVER_KEYDESTOVERRIDE | DDOVER_DDFX, &ovfx);
+	}
 }
 void Drawable::overlayVisible(bool v)
 {
@@ -334,7 +353,7 @@ void Drawable::doOverlayVisible()
 {
 	if (visibleTim.property("overlayVisible").toBool())
 		updateOverlay();
-	else
+	else if (canDraw())
 		DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
 }
 void Drawable::blit()
@@ -345,22 +364,6 @@ void Drawable::blit()
 	DDSPrimary->Blt(&dstRect, DDSSecondary, &srcRect, DDBLT_WAIT, NULL);
 }
 
-void Drawable::releaseSecondary()
-{
-	if (DDSSecondary)
-	{
-		if (DDrawColorCtrl)
-		{
-			DDrawColorCtrl->Release();
-			DDrawColorCtrl = NULL;
-		}
-		if (isOverlay)
-			DDSSecondary->UpdateOverlay(NULL, DDSPrimary, NULL, DDOVER_HIDE, NULL);
-		DDSSecondary->Release();
-		DDSSecondary = NULL;
-		DDSBackBuffer = NULL;
-	}
-}
 bool Drawable::restoreLostSurface()
 {
 	if (DDSPrimary->IsLost() || DDSSecondary->IsLost() || DDSBackBuffer->IsLost())
@@ -379,7 +382,7 @@ bool Drawable::restoreLostSurface()
 
 void Drawable::paintEvent(QPaintEvent *)
 {
-	if (!isOverlay)
+	if (!isOverlay && canDraw())
 	{
 		restoreLostSurface();
 		fillRects();
@@ -497,7 +500,8 @@ bool DirectDrawWriter::processParams(bool *)
 void DirectDrawWriter::writeVideo(const VideoFrame &videoFrame)
 {
 	drawable->paused = false;
-	drawable->draw(videoFrame);
+	if (drawable->canDraw())
+		drawable->draw(videoFrame);
 }
 void DirectDrawWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {

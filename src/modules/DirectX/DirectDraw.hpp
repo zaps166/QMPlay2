@@ -23,6 +23,7 @@ public:
 
 	void dock();
 	bool createSecondary();
+	void releaseSecondary();
 	void videoEqSet();
 	void setFlip();
 
@@ -42,7 +43,6 @@ private:
 	Q_SLOT void doOverlayVisible();
 	void blit();
 
-	void releaseSecondary();
 	bool restoreLostSurface();
 
 	void paintEvent(QPaintEvent *);
