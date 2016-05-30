@@ -59,7 +59,7 @@ public:
 #ifdef UPDATER
 	*autoUpdatesB,
 #endif
-	*tabsNorths, *allowOnlyOneInstance, *displayOnlyFileName;
+	*tabsNorths, *allowOnlyOneInstance, *displayOnlyFileName, *restoreRepeatSettings;
 	QToolButton *screenshotB;
 	QPushButton *clearCoversCache, *resetSettingsB;
 	QGroupBox *proxyB, *proxyLoginB;
@@ -170,6 +170,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("MainWidget/TabPositionNorth", false);
 	QMPSettings.init("AllowOnlyOneInstance", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
+	QMPSettings.init("RestoreRepeatSettings", false);
 	QMPSettings.init("Proxy/Use", false);
 	QMPSettings.init("Proxy/Host", QString());
 	QMPSettings.init("Proxy/Port", 80);
@@ -378,6 +379,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->displayOnlyFileName = new QCheckBox(tr("Always display only file names in playlist"));
 	page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
 
+	page1->restoreRepeatSettings = new QCheckBox(tr("Remember repeat settings"));
+	page1->restoreRepeatSettings->setChecked(QMPSettings.getBool("RestoreRepeatSettings"));
+
 
 	page1->proxyB = new QGroupBox(tr("Use proxy server"));
 	page1->proxyB->setCheckable(true);
@@ -454,6 +458,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->layout->addWidget(page1->tabsNorths, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->allowOnlyOneInstance, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->displayOnlyFileName, layout_row++, 0, 1, 4);
+	page1->layout->addWidget(page1->restoreRepeatSettings, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->proxyB, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->clearCoversCache, layout_row, 0, 1, 1);
 	page1->layout->addWidget(page1->resetSettingsB, layout_row++, 1, 1, 3);
@@ -881,6 +886,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
 			QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
+			QMPSettings.set("RestoreRepeatSettings", page1->restoreRepeatSettings->isChecked());
 			QMPSettings.set("Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty());
 			QMPSettings.set("Proxy/Host", page1->proxyHostE->text());
 			QMPSettings.set("Proxy/Port", page1->proxyPortB->value());

@@ -298,6 +298,13 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	if (settings.getBool("Mute"))
 		menuBar->player->toggleMute->trigger();
 
+	if (settings.getBool("RestoreRepeatSettings"))
+	{
+		const RepeatMode repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
+		if (repeatMode != RepeatNormal)
+			menuBar->player->repeat->repeatActions[repeatMode]->trigger();
+	}
+
 	if (settings.getBool("RestoreVideoEqualizer"))
 		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
 
@@ -1336,6 +1343,12 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	settings.set("VolumeL", volW->volumeL());
 	settings.set("VolumeR", volW->volumeR());
 	settings.set("Mute", menuBar->player->toggleMute->isChecked());
+	for (int i = 0; i < RepeatModeCount; ++i)
+		if (menuBar->player->repeat->repeatActions[i]->isChecked())
+		{
+			settings.set("RepeatMode", i);
+			break;
+		}
 	menuBar->playback->videoFilters->videoEqualizer->saveValues();
 
 	hide();

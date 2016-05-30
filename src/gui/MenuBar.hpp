@@ -1,6 +1,8 @@
 #ifndef MENUBAR_HPP
 #define MENUBAR_HPP
 
+#include <RepeatMode.hpp>
+
 #include <QCoreApplication>
 #include <QMenuBar>
 
@@ -66,7 +68,7 @@ public:
 		public:
 			Repeat(QMenu *parent);
 			QActionGroup *choice;
-			QAction *normal, *repeatEntry, *repeatGroup, *repeatList, *random, *randomGroup;
+			QAction *repeatActions[RepeatModeCount];
 		};
 		class AspectRatio : public QMenu
 		{

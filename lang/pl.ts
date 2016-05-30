@@ -2324,6 +2324,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Always display only file names in playlist</source>
         <translation>Zawsze wyświetlaj tylko nazwy plików w playliście</translation>
     </message>
+    <message>
+        <source>Remember repeat settings</source>
+        <translation>Pamiętaj ustawienia powtarzania utworów</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

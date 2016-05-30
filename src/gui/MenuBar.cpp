@@ -189,20 +189,20 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	QMenu(Repeat::tr("&Repeat"), parent)
 {
 	choice = new QActionGroup(this);
-	choice->addAction(newAction(Repeat::tr("&No repeating"), this, QKeySequence("Alt+0"), normal, false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("&No repeating"), this, QKeySequence("Alt+0"), repeatActions[RepeatNormal], false, QIcon(), true));
 	addSeparator();
-	choice->addAction(newAction(Repeat::tr("&Entry repeating"), this, QKeySequence("Alt+1"), repeatEntry, false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("&Group repeating"), this, QKeySequence("Alt+2"), repeatGroup, false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("&Playlist repeating"), this, QKeySequence("Alt+3"), repeatList, false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("R&andom"), this, QKeySequence("Alt+4"), random, false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("Random in &group"), this, QKeySequence("Alt+5"), randomGroup, false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("&Entry repeating"), this, QKeySequence("Alt+1"), repeatActions[RepeatEntry], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("&Group repeating"), this, QKeySequence("Alt+2"), repeatActions[RepeatGroup], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("&Playlist repeating"), this, QKeySequence("Alt+3"), repeatActions[RepeatList], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("R&andom"), this, QKeySequence("Alt+4"), repeatActions[RepeatRandom], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("Random in &group"), this, QKeySequence("Alt+5"), repeatActions[RepeatRandomGroup], false, QIcon(), true));
 
-	normal->setObjectName("normal");
-	repeatEntry->setObjectName("repeatEntry");
-	repeatGroup->setObjectName("repeatGroup");
-	repeatList->setObjectName("repeatList");
-	random->setObjectName("random");
-	randomGroup->setObjectName("randomGroup");
+	repeatActions[RepeatNormal]->setObjectName("normal");
+	repeatActions[RepeatEntry]->setObjectName("repeatEntry");
+	repeatActions[RepeatGroup]->setObjectName("repeatGroup");
+	repeatActions[RepeatList]->setObjectName("repeatList");
+	repeatActions[RepeatRandom]->setObjectName("random");
+	repeatActions[RepeatRandomGroup]->setObjectName("randomGroup");
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	QMenu(AspectRatio::tr("&Aspect ratio"), parent)

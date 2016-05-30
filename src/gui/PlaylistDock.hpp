@@ -1,4 +1,5 @@
 #include <DockWidget.hpp>
+#include <RepeatMode.hpp>
 
 class QTreeWidgetItem;
 class PlaylistWidget;
@@ -38,7 +39,6 @@ private:
 	QLabel *statusL;
 	LineEdit *findE;
 
-	enum RepeatMode {Normal, RepeatEntry, RepeatGroup, RepeatList, Random, RandomGroup};
 	RepeatMode repeatMode;
 
 	bool playAfterAdd;

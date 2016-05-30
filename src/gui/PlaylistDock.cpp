@@ -18,7 +18,7 @@
 #include <QMessageBox>
 
 PlaylistDock::PlaylistDock() :
-	repeatMode(Normal),
+	repeatMode(RepeatNormal),
 	lastPlaying(NULL)
 {
 	setWindowTitle(tr("Playlist"));
@@ -204,9 +204,9 @@ void PlaylistDock::next(bool playingError)
 	QTreeWidgetItem *tWI = NULL;
 	if (!l.isEmpty())
 	{
-		if (repeatMode == Random || repeatMode == RandomGroup)
+		if (repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup)
 		{
-			if (repeatMode == RandomGroup)
+			if (repeatMode == RepeatRandomGroup)
 			{
 				QTreeWidgetItem *P = list->currentPlaying ? list->currentPlaying->parent() : (list->currentItem() ? list->currentItem()->parent() : NULL);
 				expandTree(P);
@@ -523,7 +523,7 @@ void PlaylistDock::repeat()
 		const QString name = act->objectName();
 		const RepeatMode lastRepeatMode = repeatMode;
 		if (name == "normal")
-			repeatMode = Normal;
+			repeatMode = RepeatNormal;
 		else if (name == "repeatEntry")
 			repeatMode = RepeatEntry;
 		else if (name == "repeatGroup")
@@ -531,10 +531,10 @@ void PlaylistDock::repeat()
 		else if (name == "repeatList")
 			repeatMode = RepeatList;
 		else if (name == "random")
-			repeatMode = Random;
+			repeatMode = RepeatRandom;
 		else if (name == "randomGroup")
-			repeatMode = RandomGroup;
-		if ((lastRepeatMode == Random && repeatMode != Random) || (lastRepeatMode == RandomGroup && repeatMode != RandomGroup))
+			repeatMode = RepeatRandomGroup;
+		if ((lastRepeatMode == RepeatRandom && repeatMode != RepeatRandom) || (lastRepeatMode == RepeatRandomGroup && repeatMode != RepeatRandomGroup))
 			randomPlayedItems.clear();
 		emit QMPlay2Core.statusBarMessage(act->text().remove('&'), 1500);
 	}

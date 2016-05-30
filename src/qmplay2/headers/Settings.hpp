@@ -22,6 +22,12 @@ public:
 	bool contains(const QString &key) const;
 	void remove(const QString &key);
 
+	template<typename T>
+	inline T getWithBounds(const QString &key, T min, T max, T def = T()) const
+	{
+		return qBound(min, (T)get(key, def).toInt(), max);
+	}
+
 	inline bool getBool(const QString &key, const bool def = bool()) const
 	{
 		return get(key, def).toBool();
