@@ -743,8 +743,11 @@ void DemuxerThr::emitInfo()
 		info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Attached files") + ":</big></b></p>" + attachmentStreams;
 
 	emit playC.setInfo(info, videoPlaying, audioPlaying);
+
+	if (formatTitle.isEmpty() || QMPlay2Core.getSettings().getBool("DisplayOnlyFileName"))
+		formatTitle = Functions::fileName(url, false);
 	emit playC.updateCurrentEntry(formatTitle, demuxer->length());
-	emit playC.updateWindowTitle(formatTitle.isEmpty() ? Functions::fileName(url, false) : formatTitle);
+	emit playC.updateWindowTitle(formatTitle);
 }
 
 bool DemuxerThr::mustReloadStreams()

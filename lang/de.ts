@@ -2319,6 +2319,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Play next entry after playback error</source>
         <translation>Spielen nächsten Titel nach einem Wiedergabefehler</translation>
     </message>
+    <message>
+        <source>Always display only file names in playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

@@ -48,6 +48,7 @@ void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, dou
 }
 void UpdateEntryThr::run()
 {
+	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	while (!ioCtrl.isAborted())
 	{
 		mutex.lock();
@@ -73,7 +74,7 @@ void UpdateEntryThr::run()
 			IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 			if (Demuxer::create(url, demuxer))
 			{
-				if (itu.name.isEmpty())
+				if (!displayOnlyFileName && itu.name.isEmpty())
 					itu.name = demuxer->title();
 				itu.length = demuxer->length();
 				demuxer.clear();
@@ -211,6 +212,7 @@ void AddThr::run()
 
 void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList)
 {
+	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	QTreeWidgetItem *currentItem = parent;
 	for (int i = 0; i < urls.size(); ++i)
 	{
@@ -267,7 +269,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				{
 					if (fetchTracks.tracks.isEmpty())
 					{
-						if (entry.name.isEmpty())
+						if (!displayOnlyFileName && entry.name.isEmpty())
 							entry.name = demuxer->title();
 						entry.length = demuxer->length();
 						demuxer.clear();

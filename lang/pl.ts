@@ -2320,6 +2320,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Play next entry after playback error</source>
         <translation>Odtwarzaj następny utwór, jeżeli wystąpił błąd odtwarzania</translation>
     </message>
+    <message>
+        <source>Always display only file names in playlist</source>
+        <translation>Zawsze wyświetlaj tylko nazwy plików w playliście</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>
