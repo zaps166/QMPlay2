@@ -186,7 +186,6 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("MaxVol", 100);
 	QMPSettings.init("VolumeL", 100);
 	QMPSettings.init("VolumeR", 100);
-	QMPSettings.init("Mute", false);
 	QMPSettings.init("ForceSamplerate", false);
 	QMPSettings.init("Samplerate", 48000);
 	QMPSettings.init("ForceChannels", false);
