@@ -2325,7 +2325,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remember repeat settings</source>
+        <source>Remember repeat mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

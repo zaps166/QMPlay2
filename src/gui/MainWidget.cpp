@@ -298,7 +298,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	if (settings.getBool("Mute"))
 		menuBar->player->toggleMute->trigger();
 
-	if (settings.getBool("RestoreRepeatSettings"))
+	if (settings.getBool("RestoreRepeatMode"))
 	{
 		const RepeatMode repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
 		if (repeatMode != RepeatNormal)

@@ -2325,7 +2325,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Zawsze wyświetlaj tylko nazwy plików w playliście</translation>
     </message>
     <message>
-        <source>Remember repeat settings</source>
+        <source>Remember repeat mode</source>
         <translation>Pamiętaj ustawienia powtarzania utworów</translation>
     </message>
 </context>
