@@ -58,7 +58,7 @@ bool QMPlay2CoreClass::canSuspend()
 void QMPlay2CoreClass::suspend()
 {
 #if defined Q_OS_LINUX
-	system("systemctl suspend &> /dev/null &");
+	(void)system("systemctl suspend &> /dev/null &");
 #elif defined Q_OS_WIN
 	SetSuspendState(false, false, false);
 #endif
