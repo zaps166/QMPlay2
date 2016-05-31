@@ -173,8 +173,13 @@ void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
 			emit stop();
 		return;
 	}
+
 	if (!list->currentPlaying || list->currentItem() == list->currentPlaying)
 		list->setCurrentItem(tWI);
+
+	if (isRandomPlayback() && !randomPlayedItems.contains(tWI))
+		randomPlayedItems.append(tWI);
+
 	lastPlaying = tWI;
 
 	//Jeżeli jest w kolejce, usuń z kolejki
@@ -233,12 +238,12 @@ void PlaylistDock::next(bool playingError)
 						r = qrand() % l.count();
 					while (lastPlaying == l.at(r) || randomPlayedItems.contains(l.at(r)));
 				}
-				randomPlayedItems.append((tWI = l.at(r)));
+				tWI = l.at(r);
 			}
 		}
 		else
 		{
-			bool canRepeat = sender() ? !qstrcmp(sender()->metaObject()->className(), "PlayClass") : false;
+			const bool canRepeat = sender() ? !qstrcmp(sender()->metaObject()->className(), "PlayClass") : false;
 			if (canRepeat && repeatMode == RepeatEntry) //zapętlenie utworu
 				tWI = lastPlaying ? lastPlaying : list->currentItem();
 			else
@@ -276,7 +281,11 @@ void PlaylistDock::next(bool playingError)
 		}
 	}
 	if (playingError && tWI == list->currentItem()) //nie ponawiaj odtwarzania tego samego utworu, jeżeli wystąpił błąd przy jego odtwarzaniu
+	{
+		if (isRandomPlayback())
+			randomPlayedItems.append(tWI);
 		emit stop();
+	}
 	else
 		itemDoubleClicked(tWI);
 }
@@ -526,26 +535,8 @@ void PlaylistDock::repeat()
 {
 	if (QAction *act = qobject_cast<QAction *>(sender()))
 	{
-		const QString name = act->objectName();
 		const RepeatMode lastRepeatMode = repeatMode;
-
-		if (name == "normal")
-			repeatMode = RepeatNormal;
-		else if (name == "repeatEntry")
-			repeatMode = RepeatEntry;
-		else if (name == "repeatGroup")
-			repeatMode = RepeatGroup;
-		else if (name == "repeatList")
-			repeatMode = RepeatList;
-		else if (name == "randomMode")
-			repeatMode = RandomMode;
-		else if (name == "randomGroupMode")
-			repeatMode = RandomGroupMode;
-		else if (name == "repeatRandom")
-			repeatMode = RepeatRandom;
-		else if (name == "repeatRandomGroup")
-			repeatMode = RepeatRandomGroup;
-
+		repeatMode = (RepeatMode)act->property("enumValue").toInt();
 		if (lastRepeatMode != repeatMode)
 		{
 			switch (lastRepeatMode)
@@ -559,9 +550,13 @@ void PlaylistDock::repeat()
 				default:
 					break;
 			}
+			if (list->currentPlaying && isRandomPlayback())
+			{
+				Q_ASSERT(randomPlayedItems.isEmpty());
+				randomPlayedItems.append(list->currentPlaying);
+			}
+			emit QMPlay2Core.statusBarMessage(act->text().remove('&'), 1500);
 		}
-
-		emit QMPlay2Core.statusBarMessage(act->text().remove('&'), 1500);
 	}
 }
 void PlaylistDock::updateCurrentEntry(const QString &name, double length)

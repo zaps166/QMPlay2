@@ -201,14 +201,8 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	choice->addAction(newAction(Repeat::tr("Random and &repeat"), this, QKeySequence("Alt+6"), repeatActions[RepeatRandom], false, QIcon(), true));
 	choice->addAction(newAction(Repeat::tr("Random in group and repea&t"), this, QKeySequence("Alt+7"), repeatActions[RepeatRandomGroup], false, QIcon(), true));
 
-	repeatActions[RepeatNormal]->setObjectName("normal");
-	repeatActions[RepeatEntry]->setObjectName("repeatEntry");
-	repeatActions[RepeatGroup]->setObjectName("repeatGroup");
-	repeatActions[RepeatList]->setObjectName("repeatList");
-	repeatActions[RandomMode]->setObjectName("randomMode");
-	repeatActions[RandomGroupMode]->setObjectName("randomGroupMode");
-	repeatActions[RepeatRandom]->setObjectName("repeatRandom");
-	repeatActions[RepeatRandomGroup]->setObjectName("repeatRandomGroup");
+	for (int i = 0; i < RepeatModeCount; ++i)
+		repeatActions[i]->setProperty("enumValue", i);
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	QMenu(AspectRatio::tr("&Aspect ratio"), parent)

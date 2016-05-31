@@ -15,6 +15,7 @@ enum RepeatMode
 	RepeatRandom,
 	RepeatRandomGroup,
 
+	//Number of items in enum
 	RepeatModeCount
 };
 

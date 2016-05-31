@@ -298,12 +298,10 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	if (settings.getBool("Mute"))
 		menuBar->player->toggleMute->trigger();
 
+	RepeatMode repeatMode = RepeatNormal;
 	if (settings.getBool("RestoreRepeatMode"))
-	{
-		const RepeatMode repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
-		if (repeatMode != RepeatNormal)
-			menuBar->player->repeat->repeatActions[repeatMode]->trigger();
-	}
+		repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
+	menuBar->player->repeat->repeatActions[repeatMode]->trigger();
 
 	if (settings.getBool("RestoreVideoEqualizer"))
 		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
@@ -666,11 +664,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->prev, SIGNAL(triggered()), playlistDock, SLOT(prev()));
 	connect(menuBar->player->nextFrame, SIGNAL(triggered()), &playC, SLOT(nextFrame()));
 	foreach (QAction *act, menuBar->player->repeat->actions())
-	{
 		connect(act, SIGNAL(triggered()), playlistDock, SLOT(repeat()));
-		if (act->objectName() == "normal")
-			act->trigger();
-	}
 	connect(menuBar->player->abRepeat, SIGNAL(triggered()), &playC, SLOT(setAB()));
 	connect(menuBar->player->seekF, SIGNAL(triggered()), this, SLOT(actionSeek()));
 	connect(menuBar->player->seekB, SIGNAL(triggered()), this, SLOT(actionSeek()));
