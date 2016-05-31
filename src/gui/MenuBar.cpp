@@ -194,15 +194,21 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	choice->addAction(newAction(Repeat::tr("&Entry repeating"), this, QKeySequence("Alt+1"), repeatActions[RepeatEntry], false, QIcon(), true));
 	choice->addAction(newAction(Repeat::tr("&Group repeating"), this, QKeySequence("Alt+2"), repeatActions[RepeatGroup], false, QIcon(), true));
 	choice->addAction(newAction(Repeat::tr("&Playlist repeating"), this, QKeySequence("Alt+3"), repeatActions[RepeatList], false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("R&andom"), this, QKeySequence("Alt+4"), repeatActions[RepeatRandom], false, QIcon(), true));
-	choice->addAction(newAction(Repeat::tr("Random in &group"), this, QKeySequence("Alt+5"), repeatActions[RepeatRandomGroup], false, QIcon(), true));
+	addSeparator();
+	choice->addAction(newAction(Repeat::tr("R&andom"), this, QKeySequence("Alt+4"), repeatActions[RandomMode], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("Random in &group"), this, QKeySequence("Alt+5"), repeatActions[RandomGroupMode], false, QIcon(), true));
+	addSeparator();
+	choice->addAction(newAction(Repeat::tr("Random and &repeat"), this, QKeySequence("Alt+6"), repeatActions[RepeatRandom], false, QIcon(), true));
+	choice->addAction(newAction(Repeat::tr("Random in group and repea&t"), this, QKeySequence("Alt+7"), repeatActions[RepeatRandomGroup], false, QIcon(), true));
 
 	repeatActions[RepeatNormal]->setObjectName("normal");
 	repeatActions[RepeatEntry]->setObjectName("repeatEntry");
 	repeatActions[RepeatGroup]->setObjectName("repeatGroup");
 	repeatActions[RepeatList]->setObjectName("repeatList");
-	repeatActions[RepeatRandom]->setObjectName("random");
-	repeatActions[RepeatRandomGroup]->setObjectName("randomGroup");
+	repeatActions[RandomMode]->setObjectName("randomMode");
+	repeatActions[RandomGroupMode]->setObjectName("randomGroupMode");
+	repeatActions[RepeatRandom]->setObjectName("repeatRandom");
+	repeatActions[RepeatRandomGroup]->setObjectName("repeatRandomGroup");
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	QMenu(AspectRatio::tr("&Aspect ratio"), parent)

@@ -4,6 +4,7 @@ Changes in QMPlay2 build 16.05.31:
 	- update Russian translation (victorr2007),
 	- allow to detach from receiving commands,
 	- allow to remember the repeat mode,
+	- added random and repeat playback,
 	- minor fixes in FPS and A/V sync,
 	- support video size changes,
 	- fix "rawvideo" playback,

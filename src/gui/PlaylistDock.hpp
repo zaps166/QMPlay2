@@ -33,6 +33,8 @@ public:
 private:
 	void expandTree(QTreeWidgetItem *);
 
+	inline bool isRandomPlayback() const;
+
 	QWidget mainW;
 	QGridLayout *layout;
 	PlaylistWidget *list;

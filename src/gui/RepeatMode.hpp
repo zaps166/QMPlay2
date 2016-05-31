@@ -4,9 +4,14 @@
 enum RepeatMode
 {
 	RepeatNormal,
+
 	RepeatEntry,
 	RepeatGroup,
 	RepeatList,
+
+	RandomMode,
+	RandomGroupMode,
+
 	RepeatRandom,
 	RepeatRandomGroup,
 

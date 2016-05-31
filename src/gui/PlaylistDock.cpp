@@ -160,6 +160,11 @@ void PlaylistDock::expandTree(QTreeWidgetItem *i)
 	}
 }
 
+inline bool PlaylistDock::isRandomPlayback() const
+{
+	return (repeatMode == RandomMode || repeatMode == RandomGroupMode || repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup);
+}
+
 void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
 {
 	if (!tWI || PlaylistWidget::isGroup(tWI))
@@ -204,9 +209,9 @@ void PlaylistDock::next(bool playingError)
 	QTreeWidgetItem *tWI = NULL;
 	if (!l.isEmpty())
 	{
-		if (repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup)
+		if (isRandomPlayback())
 		{
-			if (repeatMode == RepeatRandomGroup)
+			if (repeatMode == RandomGroupMode || repeatMode == RepeatRandomGroup) //Random in group
 			{
 				QTreeWidgetItem *P = list->currentPlaying ? list->currentPlaying->parent() : (list->currentItem() ? list->currentItem()->parent() : NULL);
 				expandTree(P);
@@ -214,9 +219,10 @@ void PlaylistDock::next(bool playingError)
 				if (l.isEmpty() || (!randomPlayedItems.isEmpty() && randomPlayedItems.at(0)->parent() != P))
 					randomPlayedItems.clear();
 			}
-			if (randomPlayedItems.count() == l.count()) //odtworzono całą playlistę
+			const bool playedEverything = (randomPlayedItems.count() == l.count());
+			if (playedEverything)
 				randomPlayedItems.clear();
-			else
+			if (!playedEverything || (repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup))
 			{
 				int r;
 				if (l.count() == 1)
@@ -522,6 +528,7 @@ void PlaylistDock::repeat()
 	{
 		const QString name = act->objectName();
 		const RepeatMode lastRepeatMode = repeatMode;
+
 		if (name == "normal")
 			repeatMode = RepeatNormal;
 		else if (name == "repeatEntry")
@@ -530,12 +537,30 @@ void PlaylistDock::repeat()
 			repeatMode = RepeatGroup;
 		else if (name == "repeatList")
 			repeatMode = RepeatList;
-		else if (name == "random")
+		else if (name == "randomMode")
+			repeatMode = RandomMode;
+		else if (name == "randomGroupMode")
+			repeatMode = RandomGroupMode;
+		else if (name == "repeatRandom")
 			repeatMode = RepeatRandom;
-		else if (name == "randomGroup")
+		else if (name == "repeatRandomGroup")
 			repeatMode = RepeatRandomGroup;
-		if ((lastRepeatMode == RepeatRandom && repeatMode != RepeatRandom) || (lastRepeatMode == RepeatRandomGroup && repeatMode != RepeatRandomGroup))
-			randomPlayedItems.clear();
+
+		if (lastRepeatMode != repeatMode)
+		{
+			switch (lastRepeatMode)
+			{
+				case RandomMode:
+				case RandomGroupMode:
+				case RepeatRandom:
+				case RepeatRandomGroup:
+					randomPlayedItems.clear();
+					break;
+				default:
+					break;
+			}
+		}
+
 		emit QMPlay2Core.statusBarMessage(act->text().remove('&'), 1500);
 	}
 }

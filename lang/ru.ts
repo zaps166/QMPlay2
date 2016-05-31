@@ -1912,6 +1912,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Random in &amp;group</source>
         <translation>Произвольно в г&amp;руппе</translation>
     </message>
+    <message>
+        <source>Random and &amp;repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random in group and repea&amp;t</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ResultsPleer</name>

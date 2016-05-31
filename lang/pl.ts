@@ -1912,6 +1912,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Random in &amp;group</source>
         <translation>Losowe odtwarzanie g&amp;rupy</translation>
     </message>
+    <message>
+        <source>Random and &amp;repeat</source>
+        <translation>&amp;Zapętlone losowe odtwarzanie</translation>
+    </message>
+    <message>
+        <source>Random in group and repea&amp;t</source>
+        <translation>Z&amp;apętlone losowe odtwarzanie grupy</translation>
+    </message>
 </context>
 <context>
     <name>ResultsPleer</name>
