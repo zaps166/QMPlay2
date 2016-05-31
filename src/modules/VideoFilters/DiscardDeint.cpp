@@ -19,25 +19,21 @@ bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		for (int p = 0; p < 3; ++p)
 		{
 			const int linesize = videoFrame.linesize[p];
-			const quint8 *src = videoFrame.buffer[p].data();
-			quint8 *dst = videoFrame.buffer[p].data();
+			quint8 *data = videoFrame.buffer[p].data();
 			const int lines = (videoFrame.size.getHeight(p) >> 1) - 1;
 			if (!TFF)
 			{
-				memcpy(dst, src + linesize, linesize);
-				src += linesize;
-				dst += linesize;
+				memcpy(data, data + linesize, linesize);
+				data += linesize;
 			}
-			dst += linesize;
-			src += linesize;
+			data += linesize;
 			for (int i = 0; i < lines; ++i)
 			{
-				VideoFilters::averageTwoLines(dst, src - linesize, src + linesize, linesize);
-				src += linesize << 1;
-				dst += linesize << 1;
+				VideoFilters::averageTwoLines(data, data - linesize, data + linesize, linesize);
+				data += linesize << 1;
 			}
 			if (TFF)
-				memcpy(dst, src - linesize, linesize);
+				memcpy(data, data - linesize, linesize);
 		}
 		framesQueue.enqueue(dequeued);
 	}

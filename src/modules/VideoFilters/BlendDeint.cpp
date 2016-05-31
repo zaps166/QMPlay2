@@ -18,14 +18,12 @@ bool BlendDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		for (int p = 0; p < 3; ++p)
 		{
 			const int linesize = videoFrame.linesize[p];
-			const quint8 *src = videoFrame.buffer[p].data() + linesize;
-			quint8 *dst = videoFrame.buffer[p].data() + linesize;
+			quint8 *data = videoFrame.buffer[p].data() + linesize;
 			const int h = videoFrame.size.getHeight(p) - 2;
 			for (int i = 0; i < h; ++i)
 			{
-				VideoFilters::averageTwoLines(dst, src, src + linesize, linesize);
-				src += linesize;
-				dst += linesize;
+				VideoFilters::averageTwoLines(data, data, data + linesize, linesize);
+				data += linesize;
 			}
 		}
 		framesQueue.enqueue(dequeued);
