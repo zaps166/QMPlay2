@@ -279,7 +279,8 @@ BOOL CSoundFile::ReadDMF(const BYTE *lpStream, DWORD dwMemLength)
 								case 8: cmd.command = CMD_VIBRATO; cmd.param = eval; break;
 								// 12: Note cut
 								case 12: if (eval & 0xe0) { cmd.command = CMD_S3MCMDEX; cmd.param = (eval>>5)|0xc0; }
-										else if (!cmd.note) { cmd.note = 0xfe; } break;
+										else if (!cmd.note) { cmd.note = 0xfe; }
+									break;
 								#ifdef DMFLOG
 								default: Log("FX2: %02X.%02X\n", efx, eval);
 								#endif
