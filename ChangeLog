@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.05.31:
+Changes in QMPlay2 build 16.06.01:
 	- diplaying and filtering all planar 8-bit YUV pixel formats (only OpenGL2 and QPainter video outputs)
 	- allow to display only file names in playlist,
 	- update Russian translation (victorr2007),
