@@ -237,7 +237,7 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 
 bool Functions::mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
 {
-	bool mustRepaint = false;
+	bool mustRepaint = (osd_list.count() != osd_checksums.count());
 	foreach (const QMPlay2_OSD *osd, osd_list)
 	{
 		osd->lock();
