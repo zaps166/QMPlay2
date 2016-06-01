@@ -9,15 +9,7 @@ class ModuleParams
 {
 	Q_DISABLE_COPY(ModuleParams)
 public:
-	inline bool modParam(const QString &key, const QVariant &val)
-	{
-		if (hasParam(key))
-		{
-			paramList.insert(key, val);
-			return true;
-		}
-		return false;
-	}
+	bool modParam(const QString &key, const QVariant &val);
 	inline QVariant getParam(const QString &key) const
 	{
 		return paramList.value(key);
@@ -27,11 +19,7 @@ public:
 		return paramList.contains(key);
 	}
 
-	virtual bool processParams(bool *paramsCorrected = NULL)
-	{
-		Q_UNUSED(paramsCorrected)
-		return true;
-	}
+	virtual bool processParams(bool *paramsCorrected = NULL);
 protected:
 	ModuleParams() {}
 	~ModuleParams() {}
