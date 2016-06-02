@@ -46,8 +46,8 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 		codec_ctx->pix_fmt = av_get_pix_fmt(streamInfo.format);
 		codec_ctx->coded_width = codec_ctx->width = streamInfo.W;
 		codec_ctx->coded_height = codec_ctx->height = streamInfo.H;
-//		codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR || FF_DEBUG_VIS_MV_B_BACK;
-		if (codec->type != AVMEDIA_TYPE_SUBTITLE && !streamInfo.data.isEmpty())
+//		codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR | FF_DEBUG_VIS_MV_B_BACK;
+		if (!streamInfo.data.isEmpty())
 		{
 			codec_ctx->extradata = (uint8_t *)streamInfo.data.data();
 			codec_ctx->extradata_size = streamInfo.data.size();
@@ -85,7 +85,8 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 	packet->pts = round(encodedPacket.ts.pts() / time_base);
 	if (flush)
 		avcodec_flush_buffers(codec_ctx);
-	memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
+	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
+		memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
 }
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {

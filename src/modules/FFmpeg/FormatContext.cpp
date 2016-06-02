@@ -701,7 +701,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 	streamInfo->time_base.den = stream->time_base.den;
 	streamInfo->type = (QMPlay2MediaType)stream->codec->codec_type; //Enumy są takie same
 
-	if (streamInfo->type != QMPLAY2_TYPE_SUBTITLE && stream->codec->extradata_size)
+	if (streamInfo->must_decode && !stream->codec->subtitle_header_size && stream->codec->extradata_size)
 	{
 		streamInfo->data.reserve(stream->codec->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
 		streamInfo->data.resize(stream->codec->extradata_size);

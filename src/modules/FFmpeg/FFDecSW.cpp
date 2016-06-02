@@ -267,65 +267,51 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 
 	decodeFirstStep(encodedPacket, false);
 
-	bool ret = true;
-	int got_sub_ptr;
+	int got_sub_ptr = 0;
 	AVSubtitle subtitle;
-	if (avcodec_decode_subtitle2(codec_ctx, &subtitle, &got_sub_ptr, packet) && got_sub_ptr)
+	if (avcodec_decode_subtitle2(codec_ctx, &subtitle, &got_sub_ptr, packet) >= 0 && got_sub_ptr && subtitle.format == 0)
 	{
-		if (!subtitle.num_rects)
+		for (unsigned i = 0; i < subtitle.num_rects; ++i)
 		{
+			const AVSubtitleRect *rect = subtitle.rects[i];
 			BitmapSubBuffer *buff = new BitmapSubBuffer;
-			buff->x = buff->y = buff->w = buff->h = 0;
+			buff->duration = (subtitle.end_display_time - subtitle.start_display_time) / 1000.0;
 			buff->pts = subtitle.start_display_time + encodedPacket.ts;
-			buff->duration = 0.0;
-			bitmapSubBuffer += buff;
-		}
-		else for (unsigned i = 0; i < subtitle.num_rects; i++)
-		{
-			AVSubtitleRect *rect = subtitle.rects[i];
-			switch (rect->type)
-			{
-				case SUBTITLE_BITMAP:
-				{
-					BitmapSubBuffer *buff = new BitmapSubBuffer;
-					buff->duration = (subtitle.end_display_time - subtitle.start_display_time) / 1000.0;
-					buff->pts = subtitle.start_display_time + encodedPacket.ts;
-					buff->w = av_clip(rect->w, 0, w);
-					buff->h = av_clip(rect->h, 0, h);
-					buff->x = av_clip(rect->x, 0, w - buff->w);
-					buff->y = av_clip(rect->y, 0, h - buff->h);
-					buff->bitmap.resize((buff->w * buff->h) << 2);
+			buff->w = av_clip(rect->w, 0, w);
+			buff->h = av_clip(rect->h, 0, h);
+			buff->x = av_clip(rect->x, 0, w - buff->w);
+			buff->y = av_clip(rect->y, 0, h - buff->h);
+			buff->bitmap.resize((buff->w * buff->h) << 2);
 
 #if LIBAVCODEC_VERSION_MAJOR >= 57
-					const uint8_t  *source   = (uint8_t  *)rect->data[0];
-					const uint32_t *palette  = (uint32_t *)rect->data[1];
-					const int       linesize = rect->linesize[0];
+			const uint8_t  *source   = (uint8_t  *)rect->data[0];
+			const uint32_t *palette  = (uint32_t *)rect->data[1];
+			const int       linesize = rect->linesize[0];
 #else
-					const uint8_t  *source   = (uint8_t  *)rect->pict.data[0];
-					const uint32_t *palette  = (uint32_t *)rect->pict.data[1];
-					const int       linesize = rect->pict.linesize[0];
+			const uint8_t  *source   = (uint8_t  *)rect->pict.data[0];
+			const uint32_t *palette  = (uint32_t *)rect->pict.data[1];
+			const int       linesize = rect->pict.linesize[0];
 
 #endif
-					uint32_t       *dest     = (uint32_t *)buff->bitmap.data();
-					for (int y = 0; y < buff->h; ++y)
-						for (int x = 0; x < buff->w; ++x)
-							dest[y * buff->w + x] = palette[source[y * linesize + x]];
+			uint32_t       *dest     = (uint32_t *)buff->bitmap.data();
+			for (int y = 0; y < buff->h; ++y)
+				for (int x = 0; x < buff->w; ++x)
+				{
+					const uint32_t color = palette[source[y * linesize + x]];
+					*(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
+				}
 
-					if (buff->pts <= pos)
-						while (bitmapSubBuffer.size())
-							delete bitmapSubBuffer.takeFirst();
-					bitmapSubBuffer += buff;
-					getFromBitmapSubsBuffer(osd, pos);
-				} break;
-				default:
-					ret = false;
-					break;
-			}
+			if (buff->pts <= pos)
+				while (!bitmapSubBuffer.isEmpty())
+					delete bitmapSubBuffer.takeFirst();
+			bitmapSubBuffer += buff;
+
+			getFromBitmapSubsBuffer(osd, pos);
 		}
 		avsubtitle_free(&subtitle);
 	}
 
-	return ret;
+	return true;
 }
 
 bool FFDecSW::open(StreamInfo &streamInfo, Writer *)
