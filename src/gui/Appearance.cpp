@@ -42,14 +42,6 @@ static const QString QMPlay2ColorExtension = ".QMPlay2Color";
 static QPalette systemPalette;
 static QString colorsDir;
 
-static int CLIP(int &v, int min, int max)
-{
-	if (v < min)
-		return min;
-	if (v > max)
-		return max;
-	return v;
-}
 static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color, double alpha = 1.0)
 {
 	color.setAlphaF(alpha);
@@ -69,9 +61,9 @@ static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color,
 			g += 8;
 			b += 8;
 		}
-		r = CLIP(r, 0, 255);
-		r = CLIP(g, 0, 255);
-		r = CLIP(b, 0, 255);
+		r = qBound(0, r, 255);
+		g = qBound(0, g, 255);
+		b = qBound(0, b, 255);
 		color.setRgb(r, g, b, a);
 	}
 	pal.setBrush(QPalette::Active, colorRole, color);
