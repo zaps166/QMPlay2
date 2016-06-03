@@ -343,6 +343,8 @@ bool VDPAUWriter::HWAccellInit(int W, int H, const char *codec_name)
 			p = VDP_DECODER_PROFILE_MPEG1;
 	}
 
+	VdpStatus status = VDP_STATUS_OK;
+
 	if (!ok || profile != p || outW != W || outH != H)
 	{
 		clr();
@@ -351,60 +353,74 @@ bool VDPAUWriter::HWAccellInit(int W, int H, const char *codec_name)
 		outW = W;
 		outH = H;
 
-		if (vdp_decoder_create(device, profile, outW, outH, 16, &decoder) == VDP_STATUS_OK)
+		status = vdp_decoder_create(device, profile, outW, outH, 16, &decoder);
+		if (status == VDP_STATUS_OK)
 		{
+			bool err = false;
 			for (int i = 0; i < surfacesCount; ++i)
 			{
-				if (vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, outW, outH, &surfaces[i]) != VDP_STATUS_OK)
+				status = vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, outW, outH, &surfaces[i]);
+				if (status != VDP_STATUS_OK)
 				{
 					for (int j = 0; j < i; ++j)
 						vdp_video_surface_destroy(surfacesQueue[j]);
 					surfacesQueue.clear();
-					return false;
+					err = true;
+					break;
 				}
 				surfacesQueue.enqueue(surfaces[i]);
 			}
-			surfacesCreated = true;
+			if (!err)
+			{
+				static const int parametersCount = 3;
+				static const VdpVideoMixerParameter parameters[parametersCount] =
+				{
+					VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_WIDTH,
+					VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_HEIGHT,
+					VDP_VIDEO_MIXER_PARAMETER_CHROMA_TYPE
+				};
+				static const VdpChromaType vdp_chroma_type = VDP_CHROMA_TYPE_420;
+				const void *const parameterValues[parametersCount] =
+				{
+					&outW,
+					&outH,
+					&vdp_chroma_type
+				};
 
-			static const int parametersCount = 3;
-			static const VdpVideoMixerParameter parameters[parametersCount] =
-			{
-				VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_WIDTH,
-				VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_HEIGHT,
-				VDP_VIDEO_MIXER_PARAMETER_CHROMA_TYPE
-			};
-			static const VdpChromaType vdp_chroma_type = VDP_CHROMA_TYPE_420;
-			const void *const parameterValues[parametersCount] =
-			{
-				&outW,
-				&outH,
-				&vdp_chroma_type
-			};
+				surfacesCreated = true;
 
-			/* Bywa, że nie można stworzyć video_mixer jeżeli są załączone nieobsługiwane poziomy skalowania oraz nie da się zastosować filtrów */
-			featuresCountCreated = scalingLevelsIdx;
-			for (int i = 0; i < scalingLevelsCount; ++i)
-			{
-				VdpBool fs = false;
-				vdp_video_mixer_query_feature_support(device, features[i + scalingLevelsIdx], &fs);
-				if (!fs)
-					break;
-				++featuresCountCreated;
-			}
+				/* Bywa, że nie można stworzyć video_mixer jeżeli są załączone nieobsługiwane poziomy skalowania oraz nie da się zastosować filtrów */
+				featuresCountCreated = scalingLevelsIdx;
+				for (int i = 0; i < scalingLevelsCount; ++i)
+				{
+					VdpBool fs = false;
+					vdp_video_mixer_query_feature_support(device, features[i + scalingLevelsIdx], &fs);
+					if (!fs)
+						break;
+					++featuresCountCreated;
+				}
 
-			if (vdp_video_mixer_create(device, featuresCountCreated, features, parametersCount, parameters, parameterValues, &mixer) == VDP_STATUS_OK)
-			{
-				setFeatures();
-				ok = true;
+				if (vdp_video_mixer_create(device, featuresCountCreated, features, parametersCount, parameters, parameterValues, &mixer) == VDP_STATUS_OK)
+				{
+					setFeatures();
+					ok = true;
+				}
 			}
 		}
 	}
 	else
 	{
 		vdp_decoder_destroy(decoder);
-		if (!(ok = vdp_decoder_create(device, profile, outW, outH, 16, &decoder) == VDP_STATUS_OK))
+		status = vdp_decoder_create(device, profile, outW, outH, 16, &decoder);
+		if (!(ok = (status == VDP_STATUS_OK)))
+		{
 			decoder = 0;
+			ok = false;
+		}
 	}
+
+	if (status == VDP_STATUS_RESOURCES)
+		QMPlay2Core.logError("VDPAU :: " + tr("Not enough memory"));
 
 	return ok;
 }

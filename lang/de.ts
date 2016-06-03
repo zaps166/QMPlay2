@@ -2539,6 +2539,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Unsupported image scaling level</source>
         <translation>Nicht unterstützte Bildskalierung</translation>
     </message>
+    <message>
+        <source>Not enough memory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VFilters</name>

@@ -2540,6 +2540,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Unsupported image scaling level</source>
         <translation>Nieobsługiwany poziom skalowania obrazu</translation>
     </message>
+    <message>
+        <source>Not enough memory</source>
+        <translation>Brakuje wolnej pamięci</translation>
+    </message>
 </context>
 <context>
     <name>VFilters</name>

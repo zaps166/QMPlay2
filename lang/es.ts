@@ -2539,6 +2539,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Not supported deinterlacing algorithm</source>
         <translation>Algoritmo de desentrelazado no soportado</translation>
     </message>
+    <message>
+        <source>Not enough memory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VFilters</name>

@@ -2538,6 +2538,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Unsupported image scaling level</source>
         <translation>不支持的图像比例级别</translation>
     </message>
+    <message>
+        <source>Not enough memory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VFilters</name>
