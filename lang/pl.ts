@@ -249,6 +249,14 @@
         <source>Color in the middle</source>
         <translation>Kolor w środku</translation>
     </message>
+    <message>
+        <source>Volatile settings</source>
+        <translation>Tymczasowe ustawienia</translation>
+    </message>
+    <message>
+        <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
+        <translation>nie jest zapisywalny, ustawienia będą utracone po restarcie. Rozważ utworzenie nowego schematu kolorów!</translation>
+    </message>
 </context>
 <context>
     <name>AspectRatio</name>

@@ -249,6 +249,14 @@
         <source>Default color scheme</source>
         <translation>默认色彩方案</translation>
     </message>
+    <message>
+        <source>Volatile settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AspectRatio</name>

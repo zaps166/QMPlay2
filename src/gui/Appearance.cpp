@@ -321,6 +321,19 @@ Appearance::Appearance(QWidget *p) :
 		schemesB->setCurrentIndex(1);
 	else
 		loadCurrentPalette();
+
+
+	connect(buttonC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(windowC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(shadowC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(highlightC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(baseC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(textC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(highlightedTextC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(sliderButtonC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(grad1C, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(grad2C, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+	connect(qmpTxtC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
 }
 
 void Appearance::schemesIndexChanged(int idx)
@@ -377,6 +390,7 @@ void Appearance::schemesIndexChanged(int idx)
 		if (idx >= rwSchemesIdx)
 			deleteB->setEnabled(true);
 	}
+	warned = false;
 }
 
 void Appearance::newScheme()
@@ -434,6 +448,7 @@ void Appearance::chooseWallpaper()
 			QPixmap pixmap;
 			pixmap.loadFromData(f.readAll());
 			wallpaperW->setPixmap(pixmap);
+			showReadOnlyWarning();
 		}
 	}
 }
@@ -455,6 +470,14 @@ void Appearance::buttonBoxClicked(QAbstractButton *b)
 			break;
 		default:
 			break;
+	}
+}
+void Appearance::showReadOnlyWarning()
+{
+	if (!saveB->isEnabled() && !warned)
+	{
+		QMessageBox::warning(this, tr("Volatile settings"), schemesB->currentText() + " " + tr("is not writable, settings will be lost after restart. Consider creating a new color scheme!"));
+		warned = true;
 	}
 }
 
@@ -507,6 +530,7 @@ void Appearance::reloadSchemes()
 	foreach (const QString &fName, QDir(colorsDir).entryList(QStringList() << "*" + QMPlay2ColorExtension, QDir::Files, QDir::Name))
 		schemesB->addItem(fName.left(fName.length() - QMPlay2ColorExtension.length()));
 	connect(schemesB, SIGNAL(currentIndexChanged(int)), this, SLOT(schemesIndexChanged(int)));
+	warned = false;
 }
 void Appearance::loadCurrentPalette()
 {

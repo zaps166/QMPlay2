@@ -44,6 +44,7 @@ private slots:
 	void deleteScheme();
 	void chooseWallpaper();
 	void buttonBoxClicked(QAbstractButton *b);
+	void showReadOnlyWarning();
 private:
 	void saveScheme(QSettings &colorScheme);
 	void reloadSchemes();
@@ -52,6 +53,7 @@ private:
 	void apply();
 
 	int rwSchemesIdx;
+	bool warned;
 
 	QGroupBox *colorSchemesB;
 	QComboBox *schemesB;

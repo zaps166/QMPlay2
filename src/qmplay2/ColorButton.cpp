@@ -4,28 +4,32 @@
 #include <QPainter>
 
 ColorButton::ColorButton(bool showAlphaChannel) :
-	showAlphaChannel(showAlphaChannel)
+	m_alphaChannel(showAlphaChannel)
 {
 	setCursor(Qt::PointingHandCursor);
+	setAttribute(Qt::WA_OpaquePaintEvent);
 	connect(this, SIGNAL(clicked()), this, SLOT(openColorDialog()));
 }
 
-void ColorButton::setColor(const QColor &_color)
+void ColorButton::setColor(const QColor &color)
 {
-	setToolTip(QString("#%1").arg(_color.rgba(), 8, 16).replace(' ', '0').toUpper());
-	color = _color;
+	setToolTip(QString("#%1").arg(color.rgba(), 8, 16).replace(' ', '0').toUpper());
+	m_color = color;
 	update();
 }
 
 void ColorButton::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
-	p.fillRect(rect(), color);
+	p.fillRect(rect(), m_color);
 }
 
 void ColorButton::openColorDialog()
 {
-	QColor c = QColorDialog::getColor(getColor(), this, QString(), showAlphaChannel ? QColorDialog::ShowAlphaChannel : (QColorDialog::ColorDialogOptions)0);
-	if (c.isValid())
-		setColor(c);
+	const QColor color = QColorDialog::getColor(getColor(), this, QString(), m_alphaChannel ? QColorDialog::ShowAlphaChannel : QColorDialog::ColorDialogOptions());
+	if (color.isValid() && m_color != color)
+	{
+		setColor(color);
+		emit colorChanged();
+	}
 }
