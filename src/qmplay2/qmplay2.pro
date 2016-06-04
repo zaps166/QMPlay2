@@ -26,6 +26,7 @@ RESOURCES += languages.qrc
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
+RCC_DIR = build/rcc
 
 INCLUDEPATH += . headers
 DEPENDPATH  += . headers
