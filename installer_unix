@@ -48,6 +48,7 @@ function remove_files
 	sudo rm -v    /usr/$libdir/libqmplay2.so
 	sudo rm -v -r /usr/include/QMPlay2
 	sudo rm -v    /usr/share/applications/QMPlay2*.desktop
+	sudo rm -v    /usr/share/man/man1/QMPlay2.1.gz
 	sudo rm -v    /usr/share/icons/QMPlay2.png
 	sudo rm -v    /usr/share/icons/hicolor/128x128/apps/QMPlay2.png
 	if [ -d /usr/share/kde4/apps/solid/actions ]; then

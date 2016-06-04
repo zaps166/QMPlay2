@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cut -c25-32 src/qmplay2/headers/Version.hpp | grep "\."

@@ -66,6 +66,16 @@ else
 		sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" app/share/applications/*.desktop
 	fi
 
+	if hash gzip 2> /dev/null; then
+		VERSION=$(./version)
+		if [ $? == 0 ]; then
+			mkdir -p app/share/man/man1
+			cp src/gui/Unix/QMPlay2.1 app/share/man/man1
+			sed -i "s/VERSION/$VERSION/" app/share/man/man1/QMPlay2.1
+			gzip -f app/share/man/man1/QMPlay2.1
+		fi
+	fi
+
 	if [ ! -z $SOLID_ACTIONS ]; then
 		mkdir -p $SOLID_ACTIONS
 		cp src/gui/KDE4/qmplay2-opencda.desktop $SOLID_ACTIONS
