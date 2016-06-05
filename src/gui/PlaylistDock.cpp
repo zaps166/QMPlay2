@@ -227,7 +227,7 @@ void PlaylistDock::next(bool playingError)
 			const bool playedEverything = (randomPlayedItems.count() == l.count());
 			if (playedEverything)
 				randomPlayedItems.clear();
-			if (!playedEverything || (repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup))
+			if (!playedEverything || (repeatMode == RepeatRandom || (repeatMode == RepeatRandomGroup && !l.isEmpty())))
 			{
 				int r;
 				if (l.count() == 1)
