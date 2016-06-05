@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 16.06.03:
-	- fixed color in graphics subtitles,
-	- show more information to user,
+Changes in QMPlay2 build 16.06.05:
+	- fixed color in graphics subtitles (e.g. dvdsub),
+	- show more information to the user,
+	- bugfix,
 
 Changes in QMPlay2 build 16.06.01:
 	- diplaying and filtering all planar 8-bit YUV pixel formats (only OpenGL2 and QPainter video outputs)
