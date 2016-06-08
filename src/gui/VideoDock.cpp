@@ -17,6 +17,8 @@
 
 #include <math.h>
 
+static const int hideCursorTimeout = 750;
+
 VideoDock::VideoDock() :
 	isTouch(false), touchEnded(false),
 	iDW(QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt),
@@ -62,11 +64,14 @@ VideoDock::VideoDock() :
 	connect(&hideCursorTim, SIGNAL(timeout()), this, SLOT(hideCursor()));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
 	connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
+	connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
 	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(&QMPlay2Core, SIGNAL(dockVideo(QWidget *)), &iDW, SLOT(setWidget(QWidget *)));
 
 	if ((isBreeze = QApplication::style()->objectName() == "breeze"))
 		setStyle(&commonStyle);
+
+	canHideIDWCursor = false;
 }
 
 void VideoDock::fullScreen(bool b)
@@ -105,9 +110,17 @@ void VideoDock::fullScreen(bool b)
 	}
 }
 
-inline QWidget *VideoDock::internalWidget()
+QWidget *VideoDock::internalWidget()
 {
-	return (widget() == &iDW) ? iDW.getWidget() : widget();
+	QWidget *w = widget();
+	if (w == &iDW) //Not a visualization
+	{
+		QWidget *dw = iDW.getWidget();
+		if (!dw && canHideIDWCursor)
+			return w;
+		return dw;
+	}
+	return w;
 }
 
 void VideoDock::unsetCursor(QWidget *w)
@@ -166,7 +179,7 @@ void VideoDock::mouseMoveEvent(QMouseEvent *e)
 	{
 		if (internalW->cursor().shape() == Qt::BlankCursor && ++pixels == 25)
 			unsetCursor(internalW);
-		hideCursorTim.start(750);
+		hideCursorTim.start(hideCursorTimeout);
 	}
 	if (e)
 		DockWidget::mouseMoveEvent(e);
@@ -198,7 +211,7 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 	if (QWidget *internalW = internalWidget())
 	{
 		if (internalW->cursor().shape() != Qt::BlankCursor)
-			hideCursorTim.start(750);
+			hideCursorTim.start(hideCursorTimeout);
 	}
 	DockWidget::mouseReleaseEvent(e);
 }
@@ -299,4 +312,22 @@ void VideoDock::updateImage(const QImage &img)
 void VideoDock::visibilityChanged(bool v)
 {
 	emit QMPlay2Core.videoDockVisible(v);
+}
+void VideoDock::hasCoverImage(bool b)
+{
+	if (canHideIDWCursor != b)
+	{
+		canHideIDWCursor = b;
+		if (canHideIDWCursor)
+		{
+			if (!hideCursorTim.isActive() && iDW.underMouse())
+				hideCursorTim.start(hideCursorTimeout);
+		}
+		else
+		{
+			if (!iDW.getWidget())
+				hideCursorTim.stop();
+			iDW.unsetCursor();
+		}
+	}
 }

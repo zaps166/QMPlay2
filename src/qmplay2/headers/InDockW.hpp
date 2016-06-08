@@ -30,6 +30,7 @@ protected:
 signals:
 	void resized(int, int);
 	void itemDropped(const QString &);
+	void hasCoverImage(bool);
 };
 
 #endif //INDOCKW_HPP

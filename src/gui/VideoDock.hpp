@@ -25,7 +25,7 @@ public:
 
 	bool isTouch, touchEnded;
 private:
-	inline QWidget *internalWidget();
+	QWidget *internalWidget();
 
 	void unsetCursor(QWidget *w);
 
@@ -48,7 +48,7 @@ private:
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
-	bool canPopup, is_floating, isBreeze;
+	bool canPopup, is_floating, isBreeze, canHideIDWCursor;
 	double touchZoom;
 private slots:
 	void popup(const QPoint &);
@@ -56,6 +56,7 @@ private slots:
 	void resizedIDW(int, int);
 	void updateImage(const QImage &);
 	void visibilityChanged(bool);
+	void hasCoverImage(bool);
 signals:
 	void resized(int, int);
 	void itemDropped(const QString &, bool);

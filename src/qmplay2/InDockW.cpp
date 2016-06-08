@@ -32,6 +32,7 @@ void InDockW::setLoseHeight(int lh)
 void InDockW::setCustomPixmap(const QPixmap &pix)
 {
 	customPixmap = pix;
+	emit hasCoverImage(!customPixmap.isNull());
 	update();
 }
 
