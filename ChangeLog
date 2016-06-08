@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.06.05:
+Changes in QMPlay2 build 16.06.08:
 	- fixed color in graphics subtitles (e.g. dvdsub),
+	- hide mouse cursor when cover image is visible,
 	- show more information to the user,
 	- bugfix,
 
