@@ -579,7 +579,7 @@ void MainWidget::toggleVisibility()
 		else
 		{
 			menuBar->options->trayVisible->setEnabled(false);
-			lastFocusWidget = focusWidget(); //Hold the current focus widget, because hiding from Mate systray applet and Xfwm4 can change focus on Qt5...
+			lastFocusWidget = focusWidget(); //Hold the current focus widget, because hiding from Mate systray applet and Xfwm4 can change focus on Qt5 (QTBUG-53993)
 			if (isMaximized())
 			{
 				if (!isCompactView)
@@ -1366,7 +1366,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 void MainWidget::changeEvent(QEvent *e)
 {
 	if (e->type() == QEvent::WindowStateChange)
-		emit QMPlay2Core.mainWidgetNotMinimized(!windowState().testFlag(Qt::WindowMinimized));
+		emit QMPlay2Core.mainWidgetNotMinimized(!windowState().testFlag(Qt::WindowMinimized)); //Mainly for workaround the QTBUG-50589
 	QMainWindow::changeEvent(e);
 }
 void MainWidget::moveEvent(QMoveEvent *e)
