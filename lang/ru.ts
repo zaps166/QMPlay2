@@ -251,11 +251,11 @@
     </message>
     <message>
         <source>Volatile settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Непостоянные настройки</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
-        <translation type="unfinished"></translation>
+        <translation>недоступна для записи, настройки будут утеряны после перезагрузки. Рассмотрите возможность создания новой цветовой схемы!</translation>
     </message>
 </context>
 <context>
@@ -496,11 +496,11 @@
     </message>
     <message>
         <source>Video streams</source>
-        <translation>Видео потоки</translation>
+        <translation>Видеопотоки</translation>
     </message>
     <message>
         <source>Audio streams</source>
-        <translation>Аудио потоки</translation>
+        <translation>Аудиопотоки</translation>
     </message>
     <message>
         <source>Subtitles streams</source>
@@ -694,7 +694,7 @@ amp</source>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментарий</translation>
+        <translation>Комментарий</translation>
     </message>
     <message>
         <source>Track</source>
@@ -754,7 +754,7 @@ amp</source>
     <name>LastFM</name>
     <message>
         <source>LastFM login error.</source>
-        <translation>Ошибка логина LastFM.</translation>
+        <translation>Ошибка авторизации LastFM.</translation>
     </message>
     <message>
         <source>Check login and password!</source>
@@ -1078,11 +1078,11 @@ amp</source>
     </message>
     <message>
         <source>Skip some frames</source>
-        <translation>Допускать выпадние кадров</translation>
+        <translation>Допускать выпадение кадров</translation>
     </message>
     <message>
         <source>Force frame skipping</source>
-        <translation>Допускать жесткое выпадние кадров</translation>
+        <translation>Допускать жесткое выпадение кадров</translation>
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
@@ -1098,7 +1098,7 @@ amp</source>
     </message>
     <message>
         <source>Show additional search information</source>
-        <translation>Показать дополнительную информацию поиска</translation>
+        <translation>Показывать дополнительную информацию поиска</translation>
     </message>
     <message>
         <source>FFT spectrum scale</source>
@@ -1214,7 +1214,7 @@ amp</source>
     </message>
     <message>
         <source>Extract the covers from multimedia files</source>
-        <translation>Извлечь обложки из медиа файлов</translation>
+        <translation>Извлечь обложки из мультимедиа файлов</translation>
     </message>
     <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
@@ -1357,7 +1357,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Показывать иконку в системном лотке</translation>
+        <translation>&amp;Показывать значок в системном лотке</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
@@ -1464,7 +1464,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation>Поворот не поддерживается в этом модуде вывода видео</translation>
+        <translation>Поворот не поддерживается в этом модуле вывода видео</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
@@ -1626,7 +1626,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Отсоединить от получения &amp;команд</translation>
     </message>
 </context>
 <context>
@@ -1842,7 +1842,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
      -speed      - установка скорости воспроизведения [0.05..100.0]
      -seek       - переход к указанному значению
      -stop       - остановить воспроизведение
-     -next       - воспроизсести следующий в списке
+     -next       - воспроизвести следующий в списке
      -prev       - воспроизвести предыдущий в списке
      -quit       - завершить работу приложений</translation>
     </message>
@@ -1918,15 +1918,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Произвольно в г&amp;руппе</translation>
+        <translation>Случайно в г&amp;руппе</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайно и &amp;повторять</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайно в группе и повторя&amp;ть</translation>
     </message>
 </context>
 <context>
@@ -2078,7 +2078,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Keep subtitles delay</source>
-        <translation>Сохранять задержку субтитроа</translation>
+        <translation>Сохранять задержку субтитров</translation>
     </message>
     <message>
         <source>Fonts and spacing</source>
@@ -2142,7 +2142,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Show buffered data indicator on slider</source>
-        <translation>Показать индикатор буферизованных данных на ползунке</translation>
+        <translation>Показывать индикатор буферизованных данных на ползунке</translation>
     </message>
     <message>
         <source>Keep video delay</source>
@@ -2194,11 +2194,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Video filters</source>
-        <translation>Видео фильтры</translation>
+        <translation>Видеофильтры</translation>
     </message>
     <message>
         <source>Software video filters</source>
-        <translation>Программне видео фильтры</translation>
+        <translation>Программные видеофильтры</translation>
     </message>
     <message>
         <source>Use proxy server</source>
@@ -2214,7 +2214,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Proxy server needs login</source>
-        <translation>Прокси-сервер требует логин</translation>
+        <translation>Прокси-сервер требует авторизацию</translation>
     </message>
     <message>
         <source>User name</source>
@@ -2242,11 +2242,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Allow only one instance</source>
-        <translation>Запускать только одину копию</translation>
+        <translation>Запускать только одну копию</translation>
     </message>
     <message>
         <source>Show tabs at the top of the main window</source>
-        <translation>Показать вкладки в верхней части главного окна</translation>
+        <translation>Показывать вкладки в верхней части главного окна</translation>
     </message>
     <message>
         <source>Set appearance</source>
@@ -2258,11 +2258,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Use replay gain if available</source>
-        <translation>Использовать Replay Gain если возможно</translation>
+        <translation>Использовать выравнивание громкости, если возможно</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
-        <translation>Режим Replay Gain для альбома</translation>
+        <translation>Режим выравнивания громкости для альбома</translation>
     </message>
     <message>
         <source>Prevent clipping</source>
@@ -2338,11 +2338,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Always display only file names in playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Всегда показывать только имена файлов в списке воспроизведения</translation>
     </message>
     <message>
         <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить режим повтора</translation>
     </message>
 </context>
 <context>
@@ -2403,7 +2403,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментарий</translation>
+        <translation>Комментарий</translation>
     </message>
 </context>
 <context>
@@ -2426,7 +2426,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментарий</translation>
+        <translation>Комментарий</translation>
     </message>
     <message>
         <source>Genre</source>
@@ -2550,7 +2550,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Недостаточно памяти</translation>
     </message>
 </context>
 <context>
@@ -2598,7 +2598,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Видео фильт&amp;ры</translation>
+        <translation>Видеофильт&amp;ры</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
