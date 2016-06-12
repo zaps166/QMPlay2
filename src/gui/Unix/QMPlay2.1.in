@@ -1,4 +1,4 @@
-.TH "QMPlay2" "1" "VERSION" "Dmitriy A. Perlow aka DAP-DarkneSS" ""
+.TH "QMPlay2" "1" "@QMPLAY2_VERSION@" "Dmitriy A. Perlow aka DAP-DarkneSS" ""
 .SH "NAME"
 QMPlay2 — Qt Media Player 2
 .br
