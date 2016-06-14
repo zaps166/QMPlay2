@@ -25,7 +25,7 @@ public:
 	static bool canSuspend();
 	static void suspend();
 
-	void init(bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir = QString());
+	void init(bool loadModules, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
 	void quit();
 
 	inline QList<Module *> getPluginsInstance() const
@@ -37,9 +37,9 @@ public:
 	{
 		return settingsDir;
 	}
-	inline QString getQMPlay2Dir()
+	inline QString getShareDir()
 	{
-		return qmplay2Dir;
+		return shareDir;
 	}
 
 	inline QPixmap &getQMPlay2Pixmap()
@@ -137,7 +137,7 @@ private:
 	static QMPlay2CoreClass *qmplay2Core;
 
 	QList<Module *> pluginsInstance;
-	QString qmplay2Dir, settingsDir, logFilePath;
+	QString shareDir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
 	QString unixOpenCommand;
 #endif

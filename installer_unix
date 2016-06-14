@@ -33,11 +33,12 @@ function copy_files
 {
 	sudo cp --remove-destination -v    app/bin/QMPlay2 /usr/bin || exit 1
 	sudo cp --remove-destination -v    app/lib/libqmplay2.so /usr/$libdir || exit 1
+	sudo cp --remove-destination -v -r app/lib/qmplay2 /usr/$libdir || exit 1
 	sudo cp --remove-destination -v -r app/include /usr || exit 1
 	sudo cp --remove-destination -v -r app/share /usr || exit 1
 
 	sudo strip /usr/bin/QMPlay2 || exit 1
-	sudo strip /usr/share/qmplay2/modules/*.so || exit 1
+	sudo strip /usr/$libdir/qmplay2/modules/*.so || exit 1
 
 	do_mime_type install
 }
@@ -57,6 +58,7 @@ function remove_files
 		sudo rm -v    /usr/share/apps/solid/actions/qmplay2-opencda.desktop
 	fi
 	sudo rm -v -r /usr/share/qmplay2
+	sudo rm -v -r /usr/$libdir/qmplay2
 
 	do_mime_type uninstall
 }

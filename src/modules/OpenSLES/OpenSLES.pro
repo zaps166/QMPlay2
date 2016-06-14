@@ -8,7 +8,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 TARGET = OpenSL_ES #OpenSLES conflicts with system library
 
-DESTDIR = ../../../app/share/qmplay2/modules
+DESTDIR = ../../../app/lib/qmplay2/modules
 
 QMAKE_LIBDIR += ../../../app/lib
 LIBS += -lqmplay2 -lOpenSLES

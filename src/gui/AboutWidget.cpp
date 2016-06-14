@@ -117,7 +117,7 @@ void AboutWidget::showEvent(QShowEvent *)
 	);
 	refreshLog();
 
-	QFile cl(QMPlay2Core.getQMPlay2Dir() + "ChangeLog");
+	QFile cl(QMPlay2Core.getShareDir() + "ChangeLog");
 	if (cl.open(QFile::ReadOnly))
 	{
 		clE->setText(cl.readAll());

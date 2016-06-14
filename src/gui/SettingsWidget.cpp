@@ -165,7 +165,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("AutoOpenVideoWindow", true);
 #ifdef UPDATER
 	if (!QMPSettings.contains("AutoUpdates"))
-		QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getQMPlay2Dir() + "noautoupdates"));
+		QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
 #endif
 	QMPSettings.init("MainWidget/TabPositionNorth", false);
 	QMPSettings.init("AllowOnlyOneInstance", false);

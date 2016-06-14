@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 16.06.11:
+Changes in QMPlay2 build 16.06.14:
+	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
 	- fixed color in graphics subtitles (e.g. dvdsub),
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),

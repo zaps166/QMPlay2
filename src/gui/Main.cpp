@@ -391,12 +391,6 @@ static void signal_handler(int s)
 
 int main(int argc, char *argv[])
 {
-#if defined Q_OS_WIN || defined Q_OS_MAC || defined Q_OS_ANDROID
-	const QString unixPath;
-#else
-	const QString unixPath = "/../share/qmplay2";
-#endif
-
 	signal(SIGINT, signal_handler);
 #ifndef Q_OS_WIN
 	signal(SIGTSTP, signal_handler);
@@ -462,6 +456,20 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	QString sharePath = QCoreApplication::applicationDirPath();
+	QString   libPath = QCoreApplication::applicationDirPath();
+#if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
+	sharePath += "/../share/qmplay2";
+	libPath += "/../";
+	if (sizeof(void *) == 8 && QDir(libPath).exists("lib64"))
+		libPath += "lib64";
+	else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32"))
+		libPath += "lib32";
+	else
+		libPath += "lib";
+	libPath += "/qmplay2";
+#endif
+
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
 	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -472,14 +480,14 @@ int main(int argc, char *argv[])
 	QCoreApplication::installTranslator(translator);
 	if (useGui)
 		QApplication::setQuitOnLastWindowClosed(false);
-	QMPlay2GUI.langPath = QCoreApplication::applicationDirPath() + unixPath + "/lang/";
+	QMPlay2GUI.langPath = sharePath + "/lang/";
 
 	qsrand(time(NULL));
 
 	do
 	{
 		/* QMPlay2GUI musi być stworzone już wcześniej */
-		QMPlay2Core.init(!help, QCoreApplication::applicationDirPath() + unixPath);
+		QMPlay2Core.init(!help, libPath, sharePath);
 
 		Settings &settings = QMPlay2Core.getSettings();
 		QString lastVer = settings.getString("Version", QMPlay2Version);

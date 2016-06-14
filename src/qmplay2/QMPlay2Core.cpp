@@ -64,13 +64,15 @@ void QMPlay2CoreClass::suspend()
 #endif
 }
 
-void QMPlay2CoreClass::init(bool loadModules, const QString &_qmplay2Dir, const QString &_settingsDir)
+void QMPlay2CoreClass::init(bool loadModules, const QString &libPath, const QString &sharePath, const QString &settingsPath)
 {
 	if (!settingsDir.isEmpty())
 		return;
 
-	qmplay2Dir = Functions::cleanPath(_qmplay2Dir);
-	if (_settingsDir.isEmpty())
+	const QString libDir = Functions::cleanPath(libPath);
+	shareDir = Functions::cleanPath(sharePath);
+
+	if (settingsPath.isEmpty())
 	{
 #ifdef Q_OS_WIN
 		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
@@ -79,7 +81,7 @@ void QMPlay2CoreClass::init(bool loadModules, const QString &_qmplay2Dir, const 
 #endif
 	}
 	else
-		settingsDir = Functions::cleanPath(_settingsDir);
+		settingsDir = Functions::cleanPath(settingsPath);
 	QDir(settingsDir).mkpath(".");
 
 	/* Rename config file */
@@ -101,7 +103,7 @@ void QMPlay2CoreClass::init(bool loadModules, const QString &_qmplay2Dir, const 
 #ifndef Q_OS_ANDROID
 		QDir(settingsDir).mkdir("Modules");
 		pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
-		pluginsList += QDir( qmplay2Dir + "modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
+		pluginsList += QDir(libDir      + "modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
 #else
 		pluginsList += QDir(qmplay2Dir).entryInfoList(QDir::Files | QDir::NoSymLinks);
 #endif
@@ -148,7 +150,7 @@ void QMPlay2CoreClass::quit()
 		return;
 	while (!pluginsInstance.isEmpty())
 		delete pluginsInstance.takeFirst();
-	qmplay2Dir.clear();
+	shareDir.clear();
 	settingsDir.clear();
 #ifdef Q_OS_WIN
 	timeEndPeriod(1);

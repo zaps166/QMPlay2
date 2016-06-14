@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 	QT += widgets
 }
 
-DESTDIR = ../../../app/share/qmplay2/modules
+DESTDIR = ../../../app/lib/qmplay2/modules
 
 QMAKE_LIBDIR += ../../../app/lib
 LIBS += -lqmplay2

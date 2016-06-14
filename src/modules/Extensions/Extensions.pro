@@ -12,7 +12,7 @@ win32|macx {
 	QMAKE_LIBDIR += ../../../app
 }
 else {
-	DESTDIR = ../../../app/share/qmplay2/modules
+	DESTDIR = ../../../app/lib/qmplay2/modules
 	QMAKE_LIBDIR += ../../../app/lib
 }
 LIBS += -lqmplay2
