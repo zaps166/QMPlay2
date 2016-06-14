@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 Threads=4
 if [ ! -e $1 ]; then

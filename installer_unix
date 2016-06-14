@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 arch=`uname -m`
 if [ -z $arch ] || [ $arch != 'x86_64' ] || [ ! -e /usr/lib64 ]; then
