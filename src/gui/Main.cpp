@@ -461,9 +461,9 @@ int main(int argc, char *argv[])
 #if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	sharePath += "/../share/qmplay2";
 	libPath += "/../";
-	if (sizeof(void *) == 8 && QDir(libPath).exists("lib64"))
+	if (sizeof(void *) == 8 && QDir(libPath).exists("lib64/qmplay2"))
 		libPath += "lib64";
-	else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32"))
+	else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32/qmplay2"))
 		libPath += "lib32";
 	else
 		libPath += "lib";
