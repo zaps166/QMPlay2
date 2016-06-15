@@ -22,3 +22,7 @@
 
 #Project config
 *.pro.user
+CMakeLists.txt.user
+
+#Build Directories
+build/

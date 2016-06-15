@@ -70,8 +70,8 @@ else
 		VERSION=$(./version)
 		if [ $? == 0 ]; then
 			mkdir -p app/share/man/man1
-			cp src/gui/Unix/QMPlay2.1 app/share/man/man1
-			sed -i "s/VERSION/$VERSION/" app/share/man/man1/QMPlay2.1
+			cp src/gui/Unix/QMPlay2.1.in app/share/man/man1/QMPlay2.1
+			sed -i "s/@QMPLAY2_VERSION@/$VERSION/" app/share/man/man1/QMPlay2.1
 			gzip -f app/share/man/man1/QMPlay2.1
 		fi
 	fi
