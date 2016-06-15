@@ -120,7 +120,7 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 
 ###Running compilation script:
 
-####Linux/BSD*:
+####Linux/BSD:
 
 #####Arch Linux / Manjaro Linux dependencies
 
@@ -168,6 +168,22 @@ This will compile and install the newest FFmpeg without features that are not su
 ####Compilation
 
 - Install all dependencies using package manager (in devel version) or compile it from sources.
+
+#####Compilation using CMake
+
+- Install CMake 3.0.2 or newer.
+- You can use `cmake-gui` for graphical configuration or `cmake` for command line configuration:
+	- create a build directory and go to it: `mkdir build && cd build`,
+	- for Qt4 compilation (recomended if you have Qt5 older than 5.6.1): `cmake .. -DUSE_QT5=No`,
+	- for Qt5 compilation: `cmake ..`,
+	- if CMake finishes wihout errors, run `make -j4` (replace 4 with numbers of CPU threads),
+	- if compiling finishes wihout errors, install it `sudo make -j4 install`.
+
+The default instalation directory is `/usr/local`. You can change it e.g. to `/usr` by adding `-DCMAKE_INSTALL_PREFIX=/usr` to the CMake command line.<br/>
+You can strip binaries during installation to save disk space: `sudo make -j4 install/strip`.
+
+#####Compilation using QMake and scripts
+
 - If you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5".
 - Qt5 is used by default since Qt 5.6.1 version, so "export QT_SUFFIX=-qt4" for Qt4 in this case.
 - Compilation only:
@@ -177,8 +193,6 @@ This will compile and install the newest FFmpeg without features that are not su
 - Compilation and installation:
 	- Run "./installer_unix install" (it compiles and uses "sudo" to copy files to "/usr").
 	- If you want to uninstall, run "./installer_unix uninstall" (it also uses "sudo").
-
-*BSD - not tested
 
 ####OS X:
 
