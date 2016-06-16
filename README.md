@@ -118,7 +118,7 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 \*\* libavresample: uncomment last 8 lines in "src/qmplay2/qmplay2.pro",<br/>
 \*\*\* libavdevice: only Linux.
 
-###Running compilation script:
+###Running the compilation:
 
 ####Linux/BSD:
 
@@ -165,12 +165,9 @@ This will compile and install the newest FFmpeg without features that are not su
 - Run: ```sudo ldconfig```
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
-####Compilation
+####Compilation and installation using CMake
 
 - Install all dependencies using package manager (in devel version) or compile it from sources.
-
-#####Compilation using CMake
-
 - Install CMake 3.0.2 or newer.
 - You can use `cmake-gui` for graphical configuration or `cmake` for command line configuration:
 	- create a build directory and go to it: `mkdir build && cd build`,
@@ -181,18 +178,6 @@ This will compile and install the newest FFmpeg without features that are not su
 
 The default instalation directory is `/usr/local`. You can change it e.g. to `/usr` by adding `-DCMAKE_INSTALL_PREFIX=/usr` to the CMake command line.<br/>
 You can strip binaries during installation to save disk space: `sudo make -j4 install/strip`.
-
-#####Compilation using QMake and scripts
-
-- If you want to compile with qt suffix (for example "qmake-qt5") - "export QT_SUFFIX=-qt5".
-- Qt5 is used by default since Qt 5.6.1 version, so "export QT_SUFFIX=-qt4" for Qt4 in this case.
-- Compilation only:
-	- If you want to prepare *.desktop files for system use - "export SYSTEM_BUILD=1".
-	- Run "./compile_unix".
-	- QMPlay2 is in "app" directory, you can move its contents into "/usr" directory if "$SYSTEM_BUILD == 1".
-- Compilation and installation:
-	- Run "./installer_unix install" (it compiles and uses "sudo" to copy files to "/usr").
-	- If you want to uninstall, run "./installer_unix uninstall" (it also uses "sudo").
 
 ####OS X:
 
@@ -209,7 +194,7 @@ You can strip binaries during installation to save disk space: `sudo make -j4 in
 - Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
 - Some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
 - Notice that QMPlay2 uses static linking for some libraries.
-- Run "./compile_win_cross".
+- Edit and run "./compile_win_cross".
 
 #####Other information
 
@@ -219,6 +204,6 @@ You can strip binaries during installation to save disk space: `sudo make -j4 in
 
 ##Building package RPM, DEB or any other
 
-- Look at "installer_unix" script or Arch Linux PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/?h=qmplay2
-- QMPlay2 sometimes uses the external software - "youtube-dl", so it should be added as optional package.
+- Look at Arch Linux PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/?h=qmplay2
+- QMPlay2 sometimes uses the external software at runtime - "youtube-dl", so it should be added as an optional package.
 - QMPlay2 has non-standard MIME types in "src/gui/Unix/x-*.xml", so they should be registered during installing from package.

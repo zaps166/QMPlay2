@@ -2,6 +2,21 @@
 
 cd "$(dirname "$0")"
 
+if [ ! -z $1 ] && [ $1 == "clean" ]; then
+	echo -n "Do you want to remove 'Makefile', '*.so*' files, 'app' and 'build' directories form '$PWD'? [N/y]: "
+	read choice
+	if [ ! -z $choice ] && ( [ $choice == 'Y' ] || [ $choice == 'y' ] ); then
+		rm -rf $(find . | grep Makefile)
+		rm -rf $(find . | grep .Release)
+		rm -rf $(find . | grep .Debug)
+		rm -rf $(find . | grep build)
+		rm -rf app x86_64-w64-mingw32 i686-w64-mingw32
+		echo "Cleaned!"
+		exit
+	fi
+	exit 1
+fi
+
 if [ -z ${QT_SUFFIX+x} ]; then
 	if hash pkg-config 2> /dev/null; then
 		pkg-config Qt5Core --atleast-version 5.6.1

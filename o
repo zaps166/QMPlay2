@@ -1,2 +1,0 @@
-#!/bin/sh
-./compile_unix && ./QMPlay2 "$@"
