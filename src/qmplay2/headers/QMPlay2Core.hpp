@@ -22,6 +22,10 @@ public:
 		return *qmplay2Core;
 	}
 
+#ifdef Q_OS_UNIX
+	static QString getLibDir();
+#endif
+
 	static bool canSuspend();
 	static void suspend();
 

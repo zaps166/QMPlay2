@@ -15,6 +15,8 @@
 	#include <powrprof.h>
 #endif
 
+#include <stdio.h>
+
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
@@ -44,6 +46,39 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 }
 QMPlay2CoreClass::~QMPlay2CoreClass()
 {}
+
+#ifdef Q_OS_UNIX
+QString QMPlay2CoreClass::getLibDir()
+{
+	QFile f;
+	if (QFile::exists("/proc/self/maps")) //Linux
+		f.setFileName("/proc/self/maps");
+	else if (QFile::exists("/proc/curproc/map")) //FreeBSD
+		f.setFileName("/proc/curproc/map");
+	if (!f.fileName().isEmpty() && f.open(QFile::ReadOnly | QFile::Text))
+	{
+		const quintptr funcAddr = (quintptr)QMPlay2CoreClass::getLibDir;
+		foreach (const QByteArray &line, f.readAll().split('\n'))
+			if (!line.isEmpty())
+			{
+				quintptr addrBegin, addrEnd;
+				char c; //'-' on Linux, ' ' on FreeBSD
+				const int n = sscanf(line.data(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
+				if (n != 3)
+					continue;
+				if (funcAddr >= addrBegin && funcAddr <= addrEnd)
+				{
+					const int idx1 = line.indexOf('/');
+					const int idx2 = line.lastIndexOf('/');
+					if (idx1 > -1 && idx2 > idx1)
+						return line.mid(idx1, idx2 - idx1);
+					break;
+				}
+			}
+	}
+	return QString();
+}
+#endif
 
 bool QMPlay2CoreClass::canSuspend()
 {

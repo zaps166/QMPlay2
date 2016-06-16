@@ -460,13 +460,17 @@ int main(int argc, char *argv[])
 	QString   libPath = QCoreApplication::applicationDirPath();
 #if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	sharePath += "/../share/qmplay2";
-	libPath += "/../";
-	if (sizeof(void *) == 8 && QDir(libPath).exists("lib64/qmplay2"))
-		libPath += "lib64";
-	else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32/qmplay2"))
-		libPath += "lib32";
-	else
-		libPath += "lib";
+	libPath = QMPlay2CoreClass::getLibDir();
+	if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
+	{
+		libPath += "/../";
+		if (sizeof(void *) == 8 && QDir(libPath).exists("lib64/qmplay2"))
+			libPath += "lib64";
+		else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32/qmplay2"))
+			libPath += "lib32";
+		else
+			libPath += "lib";
+	}
 	libPath += "/qmplay2";
 #endif
 
