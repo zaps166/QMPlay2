@@ -68,7 +68,9 @@ BUILD_ERROR=$?
 if [ $BUILD_ERROR != 0 ]; then
 	echo Build failed!
 else
-	if [ -d /usr/share/kde4/apps/solid/actions ]; then
+	if [ -d /usr/share/solid/actions ]; then
+		SOLID_ACTIONS=app/share/solid/actions
+	elif [ -d /usr/share/kde4/apps/solid/actions ]; then
 		SOLID_ACTIONS=app/share/kde4/apps/solid/actions
 	elif [ -d /usr/share/apps/solid/actions ]; then
 		SOLID_ACTIONS=app/share/apps/solid/actions
@@ -93,7 +95,7 @@ else
 
 	if [ ! -z $SOLID_ACTIONS ]; then
 		mkdir -p $SOLID_ACTIONS
-		cp src/gui/KDE4/qmplay2-opencda.desktop $SOLID_ACTIONS
+		cp src/gui/Unix/solid-actions/qmplay2-opencda.desktop $SOLID_ACTIONS
 		if [ -z $SYSTEM_BUILD ] || [ $SYSTEM_BUILD == 0 ]; then
 			sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" $SOLID_ACTIONS/*.desktop
 		fi
