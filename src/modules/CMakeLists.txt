@@ -41,4 +41,3 @@ endif()
 if(USE_CHIPTUNE_GME OR USE_CHIPTUNE_SID)
     add_subdirectory(Chiptune)
 endif()
-
