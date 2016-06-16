@@ -1,19 +1,19 @@
 # Compiled Object files
+*.obj
 *.slo
 *.lo
 *.o
-*.obj
 
 # Compiled Dynamic libraries
-*.so
 *.dylib
 *.dll
+*.so
 
 # Compiled Static libraries
 *.lai
+*.lib
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -21,8 +21,15 @@
 *.app
 
 #Project config
-*.pro.user
 CMakeLists.txt.user
+*.pro.user
 
 #Build Directories
+x86_64-w64-mingw32/
+i686-w64-mingw32/
 build/
+app/
+
+# Other files
+object_script.*
+Makefile
