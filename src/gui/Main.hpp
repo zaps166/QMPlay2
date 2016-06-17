@@ -6,8 +6,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QMap>
-
 class QLocalServer;
 class VideoDock;
 class MenuBar;
