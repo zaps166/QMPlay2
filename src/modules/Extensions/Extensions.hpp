@@ -10,7 +10,10 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
-	QImage downloader, youtube, radio, lastfm, prostopleer;
+	QImage downloader, youtube, radio, lastfm;
+#ifdef USE_PROSTOPLEER
+	QImage prostopleer;
+#endif
 };
 
 /**/

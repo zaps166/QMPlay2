@@ -26,8 +26,12 @@ RESOURCES += icons.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH  += . ../../qmplay2/headers
 
-HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp LastFM.hpp ProstoPleer.hpp
-SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp LastFM.cpp ProstoPleer.cpp
+HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp LastFM.hpp
+SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp LastFM.cpp
+
+HEADERS += ProstoPleer.hpp
+SOURCES += ProstoPleer.cpp
+DEFINES += USE_PROSTOPLEER
 
 unix:!macx:!android {
 	QT += dbus

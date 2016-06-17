@@ -4,20 +4,28 @@
 #include <YouTube.hpp>
 #include <LastFM.hpp>
 #include <Radio.hpp>
-#include <ProstoPleer.hpp>
+#ifdef USE_PROSTOPLEER
+	#include <ProstoPleer.hpp>
+#endif
 #ifdef USE_MPRIS2
 	#include <MPRIS2.hpp>
 #endif
 
 Extensions::Extensions() :
 	Module("Extensions"),
-	downloader(QImage(":/downloader")), youtube(QImage(":/youtube")), radio(QImage(":/radio")), lastfm(QImage(":/lastfm")), prostopleer(QImage(":/prostopleer"))
+	downloader(QImage(":/downloader")), youtube(QImage(":/youtube")), radio(QImage(":/radio")), lastfm(QImage(":/lastfm"))
 {
+#ifdef USE_PROSTOPLEER
+	prostopleer = QImage(":/prostopleer");
+#endif
+
 	downloader.setText("Path", ":/downloader");
 	youtube.setText("Path", ":/youtube");
 	radio.setText("Path", ":/radio");
 	lastfm.setText("Path", ":/lastfm");
+#ifdef USE_PROSTOPLEER
 	prostopleer.setText("Path", ":/prostopleer");
+#endif
 
 	init("YouTube/ShowAdditionalInfo", false);
 	init("YouTube/MultiStream", true);
@@ -46,7 +54,9 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 	modulesInfo += Info(YouTubeName, QMPLAY2EXTENSION, youtube);
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
 	modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
+#ifdef USE_PROSTOPLEER
 	modulesInfo += Info(ProstoPleerName, QMPLAY2EXTENSION, prostopleer);
+#endif
 #if USE_MPRIS2
 	modulesInfo += Info(MPRIS2Name, QMPLAY2EXTENSION);
 #endif
@@ -62,8 +72,10 @@ void *Extensions::createInstance(const QString &name)
 		return static_cast<QMPlay2Extensions *>(new LastFM(*this));
 	else if (name == RadioName)
 		return static_cast<QMPlay2Extensions *>(new Radio(*this));
+#ifdef USE_PROSTOPLEER
 	else if (name == ProstoPleerName)
 		return static_cast<QMPlay2Extensions *>(new ProstoPleer(*this));
+#endif
 #ifdef USE_MPRIS2
 	else if (name == MPRIS2Name)
 		return static_cast<QMPlay2Extensions *>(new MPRIS2(*this));
