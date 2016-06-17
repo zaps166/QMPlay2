@@ -7,7 +7,6 @@ set(Extensions_HDR
     Downloader.hpp
     Radio.hpp
     LastFM.hpp
-    ProstoPleer.hpp
     MPRIS2.hpp
 )
 
@@ -17,7 +16,6 @@ set(Extensions_SRC
     Downloader.cpp
     Radio.cpp
     LastFM.cpp
-    ProstoPleer.cpp
     MPRIS2.cpp
 )
 
@@ -25,7 +23,13 @@ set(Extensions_RESOURCES
     icons.qrc
 )
 
-add_definitions(-DUSE_MPRIS2 -DUSE_PROSTOPLEER)
+if(USE_PROSTOPLEER)
+    list(APPEND Extensions_HDR ProstoPleer.hpp)
+    list(APPEND Extensions_SRC ProstoPleer.cpp)
+    add_definitions(-DUSE_PROSTOPLEER)
+endif()
+
+add_definitions(-DUSE_MPRIS2)
 
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})

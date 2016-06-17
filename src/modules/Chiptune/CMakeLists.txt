@@ -1,6 +1,5 @@
 project(Chiptune)
 cmake_minimum_required(VERSION 3.0.2)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(Chiptune_HDR
     Chiptune.hpp
@@ -18,7 +17,7 @@ set(Chiptune_LIBS
 )
 
 if(USE_CHIPTUNE_GME)
-    PKG_CHECK_MODULES(LIBGME libgme REQUIRED)
+    find_package(GME REQUIRED)
     list(APPEND Chiptune_HDR GME.hpp)
     list(APPEND Chiptune_SRC GME.cpp)
     add_definitions(-DUSE_GME)

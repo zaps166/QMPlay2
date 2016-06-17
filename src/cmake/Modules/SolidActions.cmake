@@ -1,0 +1,11 @@
+mark_as_advanced(PC_INSTALL_PATH_SOLID_ACTION)
+
+find_package(ECM NO_MODULE QUIET)
+if(ECM_FOUND)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+    include(KDEInstallDirs)
+    set(PC_INSTALL_PATH_SOLID_ACTION "/usr/${DATA_INSTALL_DIR}/solid/actions")
+endif()
+if(NOT PC_INSTALL_PATH_SOLID_ACTION)
+    set(PC_INSTALL_PATH_SOLID_ACTION "/usr/${CMAKE_INSTALL_DATAROOTDIR}/solid/actions")
+endif()

@@ -24,7 +24,7 @@ set(VideoFilters_RESOURCES
     icons.qrc
 )
 
-PKG_CHECK_MODULES(LIBAVUTIL libavutil REQUIRED)
+PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(${LIBAVUTIL_LIBRARY_DIRS})
 
 if(USE_QT5)

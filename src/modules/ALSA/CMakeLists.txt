@@ -1,6 +1,5 @@
 project(ALSA)
 cmake_minimum_required(VERSION 3.0.2)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(ALSA_HDR
     ALSA.hpp
@@ -18,8 +17,7 @@ set(ALSA_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(ALSA alsa REQUIRED)
-link_directories(${ALSA_LIBRARY_DIRS})
+find_package(ALSA REQUIRED)
 
 if(USE_QT5)
     qt5_add_resources(ALSA_RESOURCES_RCC ${ALSA_RESOURCES})
@@ -27,7 +25,7 @@ else()
     qt4_add_resources(ALSA_RESOURCES_RCC ${ALSA_RESOURCES})
 endif()
 
-include_directories(../../qmplay2/headers ${ALSA_INCLUDE_DIRS})
+include_directories(../../qmplay2/headers ${ALSA_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} MODULE
     ${ALSA_HDR}
@@ -43,7 +41,7 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${ALSA_LIBRARIES}
+    ${ALSA_LIBRARY}
     $<TARGET_FILE:qmplay2>
 )
 
