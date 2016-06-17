@@ -10,6 +10,22 @@ class FFDecSW : public FFDec
 public:
 	FFDecSW(QMutex &, Module &);
 private:
+	class BitmapSubBuffer
+	{
+	public:
+		inline BitmapSubBuffer(double pts, double duration) :
+			pts(pts), duration(duration)
+		{}
+		inline BitmapSubBuffer(double pts) :
+			x(0), y(0), w(0), h(0),
+			pts(pts), duration(0.0)
+		{}
+
+		int x, y, w, h;
+		double pts, duration;
+		QByteArray bitmap;
+	};
+
 	~FFDecSW();
 
 	bool set();
@@ -28,7 +44,9 @@ private:
 
 	void setPixelFormat();
 
+	inline void addBitmapSubBuffer(BitmapSubBuffer *buff, double pos);
 	bool getFromBitmapSubsBuffer(QMPlay2_OSD *&, double pts);
+	inline void clearBitmapSubsBuffer();
 
 	int threads, lowres;
 	bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;
@@ -40,11 +58,5 @@ private:
 	int desiredPixFmt;
 	bool dontConvert;
 
-	struct BitmapSubBuffer
-	{
-		int x, y, w, h;
-		double pts, duration;
-		QByteArray bitmap;
-	};
-	QList<BitmapSubBuffer *> bitmapSubBuffer;
+	QList<BitmapSubBuffer *> bitmapSubsBuffer;
 };

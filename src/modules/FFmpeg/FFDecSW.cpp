@@ -25,8 +25,7 @@ FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
 }
 FFDecSW::~FFDecSW()
 {
-	while (!bitmapSubBuffer.isEmpty())
-		delete bitmapSubBuffer.takeFirst();
+	clearBitmapSubsBuffer();
 	sws_freeContext(sws_ctx);
 }
 
@@ -267,16 +266,18 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 
 	decodeFirstStep(encodedPacket, false);
 
-	int got_sub_ptr = 0;
+	int gotSubtitles = 0;
 	AVSubtitle subtitle;
-	if (avcodec_decode_subtitle2(codec_ctx, &subtitle, &got_sub_ptr, packet) >= 0 && got_sub_ptr && subtitle.format == 0)
+	if (avcodec_decode_subtitle2(codec_ctx, &subtitle, &gotSubtitles, packet) >= 0 && gotSubtitles && subtitle.format == 0)
 	{
-		for (unsigned i = 0; i < subtitle.num_rects; ++i)
+		const double pts = subtitle.start_display_time + encodedPacket.ts;
+		if (!subtitle.num_rects)
+			addBitmapSubBuffer(new BitmapSubBuffer(pts), pos); //If no bitmaps - disable subs at current packet PTS
+		else for (unsigned i = 0; i < subtitle.num_rects; ++i)
 		{
 			const AVSubtitleRect *rect = subtitle.rects[i];
-			BitmapSubBuffer *buff = new BitmapSubBuffer;
-			buff->duration = (subtitle.end_display_time - subtitle.start_display_time) / 1000.0;
-			buff->pts = subtitle.start_display_time + encodedPacket.ts;
+
+			BitmapSubBuffer *buff = new BitmapSubBuffer(pts, (subtitle.end_display_time - subtitle.start_display_time) / 1000.0);
 			buff->w = av_clip(rect->w, 0, w);
 			buff->h = av_clip(rect->h, 0, h);
 			buff->x = av_clip(rect->x, 0, w - buff->w);
@@ -301,15 +302,12 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 					*(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
 				}
 
-			if (buff->pts <= pos)
-				while (!bitmapSubBuffer.isEmpty())
-					delete bitmapSubBuffer.takeFirst();
-			bitmapSubBuffer += buff;
-
+			addBitmapSubBuffer(buff, pos);
 			getFromBitmapSubsBuffer(osd, pos);
 		}
-		avsubtitle_free(&subtitle);
 	}
+	if (gotSubtitles)
+		avsubtitle_free(&subtitle);
 
 	return true;
 }
@@ -372,16 +370,22 @@ void FFDecSW::setPixelFormat()
 	}
 }
 
+inline void FFDecSW::addBitmapSubBuffer(BitmapSubBuffer *buff, double pos)
+{
+	if (buff->pts <= pos)
+		clearBitmapSubsBuffer();
+	bitmapSubsBuffer += buff;
+}
 bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 {
 	bool cantDelete = true;
-	for (int i = bitmapSubBuffer.size() - 1; i >= 0 ; --i)
+	for (int i = bitmapSubsBuffer.size() - 1; i >= 0 ; --i)
 	{
-		BitmapSubBuffer *buff = bitmapSubBuffer.at(i);
+		BitmapSubBuffer *buff = bitmapSubsBuffer.at(i);
 		if (!buff->bitmap.isEmpty() && buff->pts + buff->duration < pos)
 		{
 			delete buff;
-			bitmapSubBuffer.removeAt(i);
+			bitmapSubsBuffer.removeAt(i);
 			continue;
 		}
 		if (buff->pts <= pos)
@@ -408,8 +412,13 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 				cantDelete = true;
 			}
 			delete buff;
-			bitmapSubBuffer.removeAt(i);
+			bitmapSubsBuffer.removeAt(i);
 		}
 	}
 	return cantDelete;
+}
+inline void FFDecSW::clearBitmapSubsBuffer()
+{
+	while (!bitmapSubsBuffer.isEmpty())
+		delete bitmapSubsBuffer.takeFirst();
 }
