@@ -53,7 +53,7 @@ else
 		Threads=$(grep -c processor /proc/cpuinfo 2> /dev/null)
 	fi
 	if [ -z $Threads ] || [ $Threads == 0 ]; then
-		Threads=1
+		Threads=4
 	fi
 fi
 
@@ -75,30 +75,25 @@ else
 	elif [ -d /usr/share/apps/solid/actions ]; then
 		SOLID_ACTIONS=app/share/apps/solid/actions
 	fi
-	SedQMPlay2Path=$(echo -n "$PWD" | sed 's/\//\\\//g')
 
 	mkdir -p app/share/applications
 	cp src/gui/Unix/QMPlay2*.desktop app/share/applications
-	if [ -z $SYSTEM_BUILD ] || [ $SYSTEM_BUILD == 0 ]; then
-		sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" app/share/applications/*.desktop
-	fi
 
-	if hash gzip 2> /dev/null; then
-		VERSION=$(./version)
-		if [ $? == 0 ]; then
-			mkdir -p app/share/man/man1
-			cp src/gui/Unix/QMPlay2.1.in app/share/man/man1/QMPlay2.1
-			sed -i "s/@QMPLAY2_VERSION@/$VERSION/" app/share/man/man1/QMPlay2.1
-			gzip -f app/share/man/man1/QMPlay2.1
+	if [ `uname` == "Linux" ]; then
+		if hash gzip 2> /dev/null; then
+			VERSION=$(./version)
+			if [ $? == 0 ]; then
+				mkdir -p app/share/man/man1
+				cp src/gui/Unix/QMPlay2.1.in app/share/man/man1/QMPlay2.1
+				sed -i "s/@QMPLAY2_VERSION@/$VERSION/" app/share/man/man1/QMPlay2.1
+				gzip -f app/share/man/man1/QMPlay2.1
+			fi
 		fi
 	fi
 
 	if [ ! -z $SOLID_ACTIONS ]; then
 		mkdir -p $SOLID_ACTIONS
 		cp src/gui/Unix/solid-actions/qmplay2-opencda.desktop $SOLID_ACTIONS
-		if [ -z $SYSTEM_BUILD ] || [ $SYSTEM_BUILD == 0 ]; then
-			sed -i "s/Exec=/Exec=$SedQMPlay2Path\//;s/Icon=/Icon=$SedQMPlay2Path\/app\/share\/icons\//" $SOLID_ACTIONS/*.desktop
-		fi
 	fi
 
 	mkdir -p app/share/icons/hicolor/128x128/apps
