@@ -1,5 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(FFmpeg)
-cmake_minimum_required(VERSION 3.0.2)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(FFmpeg_HDR
@@ -26,10 +32,10 @@ set(FFmpeg_RESOURCES
     icons.qrc
 )
 
-PKG_CHECK_MODULES(LIBAVFORMAT libavformat REQUIRED)
-PKG_CHECK_MODULES(LIBAVCODEC libavcodec REQUIRED)
-PKG_CHECK_MODULES(LIBSWSCALE libswscale REQUIRED)
-PKG_CHECK_MODULES(LIBAVUTIL libavutil REQUIRED)
+PKG_CHECK_MODULES(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
+PKG_CHECK_MODULES(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+PKG_CHECK_MODULES(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
+PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -70,7 +76,7 @@ if(USE_FFMPEG_VDPAU) # VDPAU
     add_definitions(-DQMPlay2_VDPAU)
     list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
     list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)
-    PKG_CHECK_MODULES(LIBS_VDPAU vdpau REQUIRED)
+    PKG_CHECK_MODULES(LIBS_VDPAU vdpau x11 REQUIRED)
     include_directories(${LIBS_VDPAU_INCLUDE_DIRS})
     link_directories(${LIBS_VDPAU_LIBRARY_DIRS})
     list(APPEND FFmpeg_LIBS ${LIBS_VDPAU_LIBRARIES})

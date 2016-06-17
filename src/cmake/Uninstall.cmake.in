@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 2.8.11)
+
+if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+endif()
+
+set(DIRS_CLEAN
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/QMPlay2/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/lang/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DOCDIR@"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/modules/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/"
+)
+
+file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
+string(REGEX REPLACE "\n" ";" files "${files}")
+foreach(file ${files})
+    message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
+    if(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")
+        exec_program(
+            "@CMAKE_COMMAND@" ARGS "-E remove \"$ENV{DESTDIR}${file}\""
+            OUTPUT_VARIABLE rm_out
+            RETURN_VALUE rm_retval
+        )
+        if(NOT "${rm_retval}" STREQUAL 0)
+            message(FATAL_ERROR "Problem when removing $ENV{DESTDIR}${file}")
+        endif()
+    else()
+        message(STATUS "File $ENV{DESTDIR}${file} does not exist.")
+    endif()
+endforeach()
+
+message("")
+
+list(SORT DIRS_CLEAN)
+list(REVERSE DIRS_CLEAN)
+
+foreach(dir ${DIRS_CLEAN})
+    file(GLOB DIR_LIST "$ENV{DESTDIR}${dir}/*")
+    list(LENGTH DIR_LIST DIR_LIST_LEN)
+    if(DIR_LIST_LEN EQUAL 0)
+        message(STATUS "Uninstalling directory $ENV{DESTDIR}${dir}")
+        if(IS_SYMLINK "$ENV{DESTDIR}${dir}" OR EXISTS "$ENV{DESTDIR}${dir}")
+            exec_program(
+                "@CMAKE_COMMAND@" ARGS "-E remove_directory \"$ENV{DESTDIR}${dir}\""
+                OUTPUT_VARIABLE rmdir_out
+                RETURN_VALUE rmdir_retval
+            )
+            if(NOT "${rmdir_retval}" STREQUAL 0)
+                message(FATAL_ERROR "Problem when removing directory $ENV{DESTDIR}${dir}")
+            endif()
+        else()
+            message(STATUS "Directory $ENV{DESTDIR}${dir} does not exist.")
+        endif()
+    endif()
+endforeach()

@@ -1,5 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(Extensions)
-cmake_minimum_required(VERSION 3.0.2)
 
 set(Extensions_HDR
     Extensions.hpp
@@ -7,7 +13,6 @@ set(Extensions_HDR
     Downloader.hpp
     Radio.hpp
     LastFM.hpp
-    ProstoPleer.hpp
     MPRIS2.hpp
 )
 
@@ -17,7 +22,6 @@ set(Extensions_SRC
     Downloader.cpp
     Radio.cpp
     LastFM.cpp
-    ProstoPleer.cpp
     MPRIS2.cpp
 )
 
@@ -25,7 +29,13 @@ set(Extensions_RESOURCES
     icons.qrc
 )
 
-add_definitions(-DUSE_MPRIS2 -DUSE_PROSTOPLEER)
+if(USE_PROSTOPLEER)
+    list(APPEND Extensions_HDR ProstoPleer.hpp)
+    list(APPEND Extensions_SRC ProstoPleer.cpp)
+    add_definitions(-DUSE_PROSTOPLEER)
+endif()
+
+add_definitions(-DUSE_MPRIS2)
 
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})

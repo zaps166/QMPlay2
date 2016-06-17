@@ -1,6 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(XVideo)
-cmake_minimum_required(VERSION 3.0.2)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(XVideo_HDR
     XVideoWriter.hpp
@@ -18,8 +23,7 @@ set(XVideo_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(LIBX11 xv x11 REQUIRED)
-link_directories(${LIBX11_LIBRARY_DIRS})
+find_package(X11 REQUIRED)
 
 if(USE_QT5)
     qt5_add_resources(XVideo_RESOURCES_RCC ${XVideo_RESOURCES})
@@ -27,7 +31,7 @@ else()
     qt4_add_resources(XVideo_RESOURCES_RCC ${XVideo_RESOURCES})
 endif()
 
-include_directories(../../qmplay2/headers ${LIBX11_INCLUDE_DIRS})
+include_directories(../../qmplay2/headers ${X11_X11_INCLUDE_PATH} ${X11_Xv_INCLUDE_PATH})
 
 add_library(${PROJECT_NAME} MODULE
     ${XVideo_HDR}
@@ -36,14 +40,15 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets X11Extras)
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
 else()
     target_link_libraries(${PROJECT_NAME} Qt4::QtGui Qt4::QtCore)
 endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${LIBX11_LIBRARIES}
+    ${X11_X11_LIB}
+    ${X11_Xv_LIB}
     $<TARGET_FILE:qmplay2>
 )
 
