@@ -128,7 +128,7 @@ set(INSTALL_PATH_SOLID_ACTION "Auto" CACHE
 add_subdirectory(src)
 add_subdirectory(lang)
 
-install(FILES ChangeLog DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2/)
+install(FILES ChangeLog LICENSE DESTINATION "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2/")
 
 # uninstall target
 configure_file(
@@ -139,5 +139,6 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
+message("")
 PRINT_ENABLED_FEATURES()
 PRINT_DISABLED_FEATURES()
