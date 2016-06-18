@@ -11,7 +11,7 @@ for _arch in ${_architectures}; do
 	rm -f app/*.a
 	rm -f app/modules/*.a
 	cp ChangeLog app || exit 1
-	cp COPYING app || exit 1
+	cp LICENSE app || exit 1
 	$_arch-strip -s `find app` 2> /dev/null ; true
 	mv app $_arch || exit 1
 	make distclean || exit 1

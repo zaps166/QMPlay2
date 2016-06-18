@@ -1,2 +1,2 @@
 #!/bin/sh
-cut -c25-32 src/qmplay2/headers/Version.hpp | grep "\."
+grep QMPlay2Version src/qmplay2/headers/Version.hpp | cut -c25-32 | grep "\."
