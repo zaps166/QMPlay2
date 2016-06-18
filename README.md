@@ -115,7 +115,7 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 - libass.
 
 \* QtOpenGL is not used on Qt >= 5.6,<br/>
-\*\* libavresample: uncomment last 8 lines in "src/qmplay2/qmplay2.pro",<br/>
+\*\* libavresample: uncomment last 8 lines in "src/qmplay2/qmplay2.pro" for qmake build,<br/>
 \*\*\* libavdevice: only Linux.
 
 ###Running the compilation:
