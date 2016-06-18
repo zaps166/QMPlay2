@@ -106,7 +106,7 @@ install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # desktop files
 file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-install(FILES ${DESKTOP_FILES} DESTINATION "/usr/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
 
 # mime files
 file(GLOB MIME_FILES Unix/x-*.xml)
@@ -117,7 +117,7 @@ install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x12
 # install solid-actions
 if(INSTALL_PATH_SOLID_ACTION AND NOT INSTALL_PATH_SOLID_ACTION STREQUAL "None")
     if(INSTALL_PATH_SOLID_ACTION STREQUAL "Auto")
-        include(SolidActions)
+        include(FindSolidActions)
     else()
         set(PC_INSTALL_PATH_SOLID_ACTION "${INSTALL_PATH_SOLID_ACTION}")
     endif()

@@ -24,4 +24,4 @@ endif()
 
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 
-install(FILES ${QM_FILES} DESTINATION "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2/lang/")
+install(FILES ${QM_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2/lang/")

@@ -34,17 +34,21 @@ list(SORT DIRS_CLEAN)
 list(REVERSE DIRS_CLEAN)
 
 foreach(dir ${DIRS_CLEAN})
-    file(GLOB DIR_LIST "$ENV{DESTDIR}/${dir}/*")
+    file(GLOB DIR_LIST "$ENV{DESTDIR}${dir}/*")
     list(LENGTH DIR_LIST DIR_LIST_LEN)
     if(DIR_LIST_LEN EQUAL 0)
-        message(STATUS "Uninstalling directory $ENV{DESTDIR}/${dir}/")
-        exec_program(
-            "@CMAKE_COMMAND@" ARGS "-E remove_directory \"$ENV{DESTDIR}/${dir}\""
-            OUTPUT_VARIABLE rmdir_out
-            RETURN_VALUE rmdir_retval
-        )
-        if(NOT "${rmdir_retval}" STREQUAL 0)
-            message(FATAL_ERROR "Problem when removing directory $ENV{DESTDIR}/${dir}")
+        message(STATUS "Uninstalling directory $ENV{DESTDIR}${dir}/")
+        if(IS_SYMLINK "$ENV{DESTDIR}${dir}" OR EXISTS "$ENV{DESTDIR}${dir}")
+            exec_program(
+                "@CMAKE_COMMAND@" ARGS "-E remove_directory \"$ENV{DESTDIR}${dir}\""
+                OUTPUT_VARIABLE rmdir_out
+                RETURN_VALUE rmdir_retval
+            )
+            if(NOT "${rmdir_retval}" STREQUAL 0)
+                message(FATAL_ERROR "Problem when removing directory $ENV{DESTDIR}${dir}")
+            endif()
+        else()
+            message(STATUS "Directory $ENV{DESTDIR}${dir} does not exist.")
         endif()
     endif()
 endforeach()
