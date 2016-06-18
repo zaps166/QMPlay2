@@ -93,7 +93,7 @@ else
 
 	if [ ! -z $SOLID_ACTIONS ]; then
 		mkdir -p $SOLID_ACTIONS
-		cp src/gui/Unix/solid-actions/qmplay2-opencda.desktop $SOLID_ACTIONS
+		cp src/gui/Unix/solid-actions/QMPlay2-opencda.desktop $SOLID_ACTIONS
 	fi
 
 	mkdir -p app/share/icons/hicolor/128x128/apps
