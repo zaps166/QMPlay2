@@ -25,7 +25,7 @@ set(Extensions_RESOURCES
     icons.qrc
 )
 
-add_definitions(-DUSE_MPRIS2)
+add_definitions(-DUSE_MPRIS2 -DUSE_PROSTOPLEER)
 
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
