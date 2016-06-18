@@ -6,7 +6,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 	lessThan(QT_VERSION, 5.7.0): CONFIG -= c++11
 	QT += widgets
 }
-else:unix:!macx: PKGCONFIG += x11
 
 TARGET = QMPlay2
 
@@ -36,12 +35,6 @@ DEPENDPATH  += . ../qmplay2/headers
 
 HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoEqualizer.hpp Appearance.hpp VolWidget.hpp RepeatMode.hpp
 SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoEqualizer.cpp Appearance.cpp VolWidget.cpp
-
-greaterThan(QT_MAJOR_VERSION, 4):qtHaveModule(x11extras) {
-	DEFINES += X11_EXTRAS
-	QT += x11extras
-	PKGCONFIG += x11
-}
 
 DEFINES += QMPlay2_TagEditor
 HEADERS += TagEditor.hpp

@@ -20,6 +20,66 @@ using Functions::gettime;
 
 #include <math.h>
 
+#ifdef X11_RESET_SCREEN_SAVER
+	#if QT_VERSION >= 0x050000
+		#include <QGuiApplication>
+	#endif
+	#include <QLibrary>
+
+	class X11ResetScreenSaver
+	{
+		typedef void *(*XOpenDisplayType)(const char *name);
+		typedef int (*XResetScreenSaverType)(void *dpy);
+		typedef int (*XCloseDisplayType)(void *dpy);
+		typedef int (*XFlushType)(void *dpy);
+		XOpenDisplayType XOpenDisplayFunc;
+		XResetScreenSaverType XResetScreenSaverFunc;
+		XCloseDisplayType XCloseDisplayFunc;
+		XFlushType XFlushFunc;
+	public:
+		inline X11ResetScreenSaver() :
+			disp(NULL)
+		{
+#if QT_VERSION >= 0x050000
+			if (QGuiApplication::platformName() != "xcb")
+				return;
+#endif
+			QLibrary libX11("X11");
+			if (libX11.load())
+			{
+				XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
+				XResetScreenSaverFunc = (XResetScreenSaverType)libX11.resolve("XResetScreenSaver");
+				XFlushFunc = (XFlushType)libX11.resolve("XFlush");
+				XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
+				if (XOpenDisplayFunc && XResetScreenSaverFunc && XFlushFunc && XCloseDisplayFunc)
+				{
+					disp = XOpenDisplayFunc(NULL);
+					lastT = gettime();
+				}
+			}
+		}
+		inline ~X11ResetScreenSaver()
+		{
+			if (disp)
+				XCloseDisplayFunc(disp);
+		}
+
+		inline void reset()
+		{
+			const double t = gettime();
+			if (t - lastT >= 0.75)
+			{
+				XResetScreenSaverFunc(disp);
+				XFlushFunc(disp);
+				lastT = t;
+			}
+		}
+
+		double lastT;
+		void *disp;
+	};
+#endif
+
 VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", HWAccelWriter, pluginsName),
 	doScreenshot(false),
@@ -28,7 +88,13 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 	sDec(NULL),
 	HWAccelWriter(HWAccelWriter),
 	subtitles(NULL)
-{}
+{
+#ifdef X11_RESET_SCREEN_SAVER
+	x11ResetScreenSaver.reset(new X11ResetScreenSaver);
+	if (!x11ResetScreenSaver->disp)
+		x11ResetScreenSaver.reset();
+#endif
+}
 VideoThr::~VideoThr()
 {
 	delete playC.osd;
@@ -526,26 +592,15 @@ void VideoThr::run()
 	}
 }
 
-#if defined(Q_WS_X11) || defined(X11_EXTRAS)
-	#ifdef X11_EXTRAS
-		#include <QGuiApplication>
-	#endif
-	#include <QX11Info>
-	#include <X11/Xlib.h>
-#endif
-
 void VideoThr::write(VideoFrame videoFrame)
 {
-#ifdef X11_EXTRAS
-	static bool isXcb = (QGuiApplication::platformName() == "xcb");
-	if (isXcb)
-#endif
-#if defined(Q_WS_X11) || defined(X11_EXTRAS)
-		XResetScreenSaver(QX11Info::display());
-#endif
 	canWrite = true;
 	if (writer->readyWrite())
 		videoWriter()->writeVideo(videoFrame);
+#ifdef X11_RESET_SCREEN_SAVER
+	if (x11ResetScreenSaver)
+		x11ResetScreenSaver->reset();
+#endif
 }
 void VideoThr::screenshot(VideoFrame videoFrame)
 {

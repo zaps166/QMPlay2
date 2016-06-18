@@ -15,8 +15,7 @@ else {
 }
 
 unix:!macx:!android {
-	!greaterThan(QT_MAJOR_VERSION, 4)|qtHaveModule(x11extras): SUBDIRS += XVideo
-	else: message("XVideo will not be compiled, because QX11Extras doesn't exist")
+	SUBDIRS += XVideo
 
 	packagesExist(libpulse-simple):	SUBDIRS += PulseAudio
 	else: message("PulseAudio will not be compiled, because libpulse-simple doesn't exist")

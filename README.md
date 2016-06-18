@@ -101,7 +101,7 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 
 ###You need (devel packages):
 
-- Qt4 or Qt5 (including QtOpenGL\*, OpenSSL for https, QtDBus on Linux/BSD and QX11Extras for Qt5),
+- Qt4 or Qt5 (including QtOpenGL\*, OpenSSL for https, QtDBus on Linux/BSD),
 - FFmpeg >= 2.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*\*, libavdevice\*\*\*, OpenSSL for https),
 - portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro"),
 - pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro"),
@@ -125,7 +125,7 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 #####Arch Linux / Manjaro Linux dependencies
 
 - Common packages: ```sudo pacman -S make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp```
-- Qt5 build (recommend for Qt5 >= 5.6.1): ```sudo pacman -S qt5-base qt5-x11extras qt5-tools```
+- Qt5 build (recommend for Qt5 >= 5.6.1): ```sudo pacman -S qt5-base qt5-tools```
 - Qt4 build: ```sudo pacman -S qt4```
 
 You can also install youtube-dl: ```sudo pacman -S youtube-dl```
