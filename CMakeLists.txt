@@ -69,8 +69,13 @@ add_feature_info(PulseAudio USE_PULSEAUDIO "Build with PulseAudio support")
 
 if(NOT DEFINED USE_XVIDEO)
     find_package(X11 QUIET)
+    if(X11_FOUND AND X11_Xv_FOUND)
+        set(DEFAULT_XVIDEO ON)
+    else()
+        set(DEFAULT_XVIDEO OFF)
+    endif()
 endif()
-OPTION(USE_XVIDEO "Build with XVideo support" ${X11_FOUND})
+OPTION(USE_XVIDEO "Build with XVideo support" ${DEFAULT_XVIDEO})
 add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
 if(NOT DEFINED USE_FFMPEG_VAAPI)
@@ -88,7 +93,7 @@ add_feature_info(VDPAU USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg")
 OPTION(USE_FFMPEG_AVDEVICE "Build FFmpeg with libavdevice suport" ON)
 add_feature_info(libavdevice USE_FFMPEG_AVDEVICE "Build FFmpeg with libavdevice suport")
 
-set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile in to QMPlay2, or \"None\", or \"All\".")
+set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile in to QMPlay2, \"None\", or \"All\".")
 
 # set default build as Release
 if(NOT CMAKE_BUILD_TYPE)
@@ -110,30 +115,23 @@ else()
     add_definitions(${QT_DEFINITIONS})
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    include(GNUInstallDirs)
+include(GNUInstallDirs)
+set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+set(INSTALL_PATH_MIME "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/mime")
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
+    set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/man")
+else()
     set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_MANDIR}")
-    set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
-    set(INSTALL_PATH_MIME "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/mime")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
-    include(GNUInstallDirs)
-    if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
-        set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/man")
-    else()
-        set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_MANDIR}")
-    endif()
-    set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
-    set(INSTALL_PATH_MIME "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/mime")
 endif()
 
 # solid actions
 set(INSTALL_PATH_SOLID_ACTION "Auto" CACHE
-    STRING "The destionation path for the solid actions, or \"None\", or \"Auto\"")
+    STRING "The destination path for the solid actions, \"None\", or \"Auto\"")
 
 add_subdirectory(src)
 add_subdirectory(lang)
 
-install(FILES ChangeLog LICENSE DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2/")
+install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DOCDIR}")
 
 # uninstall target
 configure_file(

@@ -121,7 +121,11 @@ if(INSTALL_PATH_SOLID_ACTION AND NOT INSTALL_PATH_SOLID_ACTION STREQUAL "None")
     else()
         set(PC_INSTALL_PATH_SOLID_ACTION "${INSTALL_PATH_SOLID_ACTION}")
     endif()
-    install(FILES Unix/solid-actions/qmplay2-opencda.desktop DESTINATION "${PC_INSTALL_PATH_SOLID_ACTION}")
+    if(PC_INSTALL_PATH_SOLID_ACTION)
+        install(FILES Unix/solid-actions/qmplay2-opencda.desktop DESTINATION "${PC_INSTALL_PATH_SOLID_ACTION}")
+    else()
+        message(AUTHOR_WARNING "No path found for solid actions - won't be installed")
+    endif()
 endif()
 
 # man page

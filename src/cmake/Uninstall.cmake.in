@@ -5,9 +5,9 @@ if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
 endif()
 
 set(DIRS_CLEAN
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/QMPlay2"
-    "/usr/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/lang/"
-    "/usr/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/QMPlay2/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/lang/"
+    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/"
     "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/modules/"
     "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/"
 )
@@ -30,6 +30,8 @@ foreach(file ${files})
     endif()
 endforeach()
 
+message("")
+
 list(SORT DIRS_CLEAN)
 list(REVERSE DIRS_CLEAN)
 
@@ -37,7 +39,7 @@ foreach(dir ${DIRS_CLEAN})
     file(GLOB DIR_LIST "$ENV{DESTDIR}${dir}/*")
     list(LENGTH DIR_LIST DIR_LIST_LEN)
     if(DIR_LIST_LEN EQUAL 0)
-        message(STATUS "Uninstalling directory $ENV{DESTDIR}${dir}/")
+        message(STATUS "Uninstalling directory $ENV{DESTDIR}${dir}")
         if(IS_SYMLINK "$ENV{DESTDIR}${dir}" OR EXISTS "$ENV{DESTDIR}${dir}")
             exec_program(
                 "@CMAKE_COMMAND@" ARGS "-E remove_directory \"$ENV{DESTDIR}${dir}\""
