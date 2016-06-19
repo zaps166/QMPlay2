@@ -1,6 +1,10 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0043 NEW)
+endif()
 project(VideoFilters)
-cmake_minimum_required(VERSION 3.0.2)
-FIND_PACKAGE(PkgConfig REQUIRED)
+find_package(PkgConfig REQUIRED)
 
 set(VideoFilters_HDR
     VFilters.hpp

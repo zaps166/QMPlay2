@@ -1,5 +1,9 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(POLICY CMP0003)
+    cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0043 NEW)
+endif(POLICY CMP0003)
 project(Visualizations)
-cmake_minimum_required(VERSION 3.0.2)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(Visualizations_HDR

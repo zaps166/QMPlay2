@@ -1,5 +1,5 @@
 project(PortAudio)
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 2.8.11)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(PortAudio_HDR

@@ -1,5 +1,5 @@
 project(langs)
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 2.8.11)
 
 if(LANGUAGES STREQUAL "All")
     # build LANGUAGES from all existing .ts files

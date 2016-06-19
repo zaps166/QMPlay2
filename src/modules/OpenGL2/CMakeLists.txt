@@ -1,5 +1,9 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0043 NEW)
+endif()
 project(OpenGL2)
-cmake_minimum_required(VERSION 3.0.2)
 
 set(OpenGL2_HDR
     OpenGL2.hpp
