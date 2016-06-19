@@ -52,34 +52,41 @@ set(FFmpeg_LIBS
 
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 
-if(USE_FFMPEG_AVDEVICE) # Common HWAccel
+if(USE_FFMPEG_AVDEVICE)
     add_definitions(-DQMPlay2_libavdevice)
-    list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
-    list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
     PKG_CHECK_MODULES(LIBAVDEVICE libavdevice REQUIRED)
     include_directories(${LIBAVDEVICE_INCLUDE_DIRS})
     link_directories(${LIBAVDEVICE_LIBRARY_DIRS})
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VAAPI) # VAAPI
-    add_definitions(-DQMPlay2_VAAPI)
-    list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPIWriter.hpp)
-    list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPIWriter.cpp)
-    PKG_CHECK_MODULES(LIBS_VAAPI libva libva-x11 REQUIRED)
-    include_directories(${LIBS_VAAPI_INCLUDE_DIRS})
-    link_directories(${LIBS_VAAPI_LIBRARY_DIRS})
-    list(APPEND FFmpeg_LIBS ${LIBS_VAAPI_LIBRARIES})
-endif()
+if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
+    list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
+    list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
+    PKG_CHECK_MODULES(LIBX11 x11 REQUIRED)
+    include_directories(${LIBX11_INCLUDE_DIRS})
+    link_directories(${LIBX11_LIBRARY_DIRS})
+    list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
 
-if(USE_FFMPEG_VDPAU) # VDPAU
-    add_definitions(-DQMPlay2_VDPAU)
-    list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
-    list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)
-    PKG_CHECK_MODULES(LIBS_VDPAU vdpau x11 REQUIRED)
-    include_directories(${LIBS_VDPAU_INCLUDE_DIRS})
-    link_directories(${LIBS_VDPAU_LIBRARY_DIRS})
-    list(APPEND FFmpeg_LIBS ${LIBS_VDPAU_LIBRARIES})
+    if(USE_FFMPEG_VAAPI) # VA-API
+        add_definitions(-DQMPlay2_VAAPI)
+        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPIWriter.hpp)
+        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPIWriter.cpp)
+        PKG_CHECK_MODULES(LBVA libva libva-x11 REQUIRED)
+        include_directories(${LBVA_INCLUDE_DIRS})
+        link_directories(${LBVA_LIBRARY_DIRS})
+        list(APPEND FFmpeg_LIBS ${LBVA_LIBRARIES})
+    endif()
+
+    if(USE_FFMPEG_VDPAU) # VDPAU
+        add_definitions(-DQMPlay2_VDPAU)
+        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
+        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)
+        PKG_CHECK_MODULES(LIBVDPAU vdpau REQUIRED)
+        include_directories(${LIBVDPAU_INCLUDE_DIRS})
+        link_directories(${LIBVDPAU_LIBRARY_DIRS})
+        list(APPEND FFmpeg_LIBS ${LIBVDPAU_LIBRARIES})
+    endif()
 endif()
 
 if(USE_QT5)
