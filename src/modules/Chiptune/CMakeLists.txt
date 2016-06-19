@@ -10,10 +10,12 @@ find_package(PkgConfig REQUIRED)
 
 set(Chiptune_HDR
     Chiptune.hpp
+    Common.hpp
 )
 
 set(Chiptune_SRC
     Chiptune.cpp
+    Common.cpp
 )
 
 set(Chiptune_RESOURCES

@@ -52,8 +52,8 @@ RESOURCES += icon.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += Chiptune.hpp
-SOURCES += Chiptune.cpp
+HEADERS += Chiptune.hpp Common.hpp
+SOURCES += Chiptune.cpp Common.cpp
 
 contains(DEFINES, USE_SIDPLAY) {
 	HEADERS += SIDPlay.hpp

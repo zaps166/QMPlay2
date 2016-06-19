@@ -56,6 +56,7 @@ private:
 	IOController<Reader> m_reader;
 	quint32 m_srate;
 	bool m_aborted;
+	double m_time;
 	int m_length;
 	quint8 m_chn;
 

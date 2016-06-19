@@ -17,6 +17,7 @@
 */
 
 #include <GME.hpp>
+#include <Common.hpp>
 
 #include <Functions.hpp>
 #include <Reader.hpp>
@@ -70,9 +71,9 @@ bool GME::read(Packet &decoded, int &idx)
 	if (m_aborted || gme_track_ended(m_gme))
 		return false;
 
-	const int pos = gme_tell(m_gme);
+	const double t = gme_tell(m_gme) / 1000.0;
 
-	if (pos >= m_length * 1000) //TODO: Fade-out
+	if (t > m_length)
 		return false;
 
 	const int chunkSize = 1024 * 2; //Always stereo
@@ -87,7 +88,11 @@ bool GME::read(Packet &decoded, int &idx)
 	for (int i = chunkSize - 1; i >= 0; --i)
 		dstData[i] = srcData[i] / 32768.0;
 
-	decoded.ts = pos / 1000.0;
+	const double fadePos = t - (m_length - 5);
+	if (fadePos >= 0)
+		ChiptuneCommon::doFadeOut(dstData, chunkSize, 2, m_srate, fadePos, 5.0);
+
+	decoded.ts = t;
 	decoded.duration = chunkSize / 2 / (double)m_srate;
 
 	idx = 0;
@@ -242,8 +247,8 @@ int GME::getLength(gme_info_t *info) const
 {
 	int length = m_length;
 	if (info->length > -1)
-		length = info->play_length / 1000.0;
+		length = info->play_length / 1000;
 	else if (info->intro_length > -1 && info->loop_length > -1)
-		length = (info->intro_length * info->loop_length * 2) / 1000.0;
+		length = (info->intro_length * info->loop_length * 2) / 1000;
 	return length;
 }

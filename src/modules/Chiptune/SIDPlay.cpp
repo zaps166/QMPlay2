@@ -17,6 +17,7 @@
 */
 
 #include <SIDPlay.hpp>
+#include <Common.hpp>
 
 #include <Functions.hpp>
 #include <Reader.hpp>
@@ -30,6 +31,7 @@
 SIDPlay::SIDPlay(Module &module) :
 	m_srate(Functions::getBestSampleRate()),
 	m_aborted(false),
+	m_time(-1.0),
 	m_rs(NULL),
 	m_tune(NULL)
 {
@@ -69,6 +71,8 @@ int SIDPlay::bitrate() const
 
 bool SIDPlay::seek(int s, bool backward)
 {
+	m_time = -1.0;
+
 	if (backward && !m_sidplay.load(m_tune)) //backward
 		return false;
 
@@ -88,8 +92,10 @@ bool SIDPlay::read(Packet &decoded, int &idx)
 	if (m_aborted)
 		return false;
 
-	const int t = m_sidplay.time();
-	if (t > m_length)
+	if (m_time < 0.0)
+		m_time = m_sidplay.time();
+
+	if (m_time > m_length)
 		return false;
 
 	const int chunkSize = 1024 * m_chn;
@@ -104,10 +110,16 @@ bool SIDPlay::read(Packet &decoded, int &idx)
 	for (int i = chunkSize - 1; i >= 0; --i)
 		dstData[i] = srcData[i] / 16384.0;
 
-	decoded.ts = t;
+	const double fadePos = m_time - (m_length - 5);
+	if (fadePos >= 0)
+		ChiptuneCommon::doFadeOut(dstData, chunkSize, m_chn, m_srate, fadePos, 5.0);
+
+	decoded.ts = m_time;
 	decoded.duration = chunkSize / m_chn / (double)m_srate;
 
 	idx = 0;
+
+	m_time += decoded.duration;
 
 	return true;
 }
