@@ -31,8 +31,7 @@ foreach(file ${files})
     endif()
 endforeach()
 
-message("")
-
+#Be sure that the directory list is sorted
 list(SORT DIRS_CLEAN)
 list(REVERSE DIRS_CLEAN)
 
