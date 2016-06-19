@@ -53,7 +53,7 @@ Some YouTube videos don't work without external "youtube-dl" software. You must 
 
 ####Arch Linux / Manjaro Linux
 
-- Install "youtube-dl" from repositories: ```sudo pacman -S youtube-dl```
+- Install "youtube-dl" from repositories: `sudo pacman -S youtube-dl`
 
 ####Other Linux distributions or other operating system
 
@@ -68,8 +68,8 @@ QMPlay2 supports spherical view on OpenGL video optput. You can watch e.g. YouTu
 
 ##ALSA
 
-If you are using your own ALSA configuration ```asound.conf``` or ```.asoundrc``` you should also append:
-```defaults.namehint.!showall on``` to the configuration file. Otherwise devices which were added may not be visible!
+If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you should also append:
+`defaults.namehint.!showall on` to the configuration file. Otherwise devices which were added may not be visible!
 
 ##Ubuntu Unity
 
@@ -124,18 +124,18 @@ Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as 
 
 #####Arch Linux / Manjaro Linux dependencies
 
-- Common packages: ```sudo pacman -S make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp```
-- Qt5 build (recommend for Qt5 >= 5.6.1): ```sudo pacman -S qt5-base qt5-tools```
-- Qt4 build: ```sudo pacman -S qt4```
+- Common packages: `sudo pacman -S make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp`
+- Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`
+- Qt4 build: `sudo pacman -S qt4`
 
-You can also install youtube-dl: ```sudo pacman -S youtube-dl```
+You can also install youtube-dl: `sudo pacman -S youtube-dl`
 
 #####OpenSUSE dependencies (Qt4 build)
 
 - Add Packman repository for FFmpeg with all codecs (don't mix FFmpeg from different repositories!):
-	- openSUSE Leap 42.1: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman```
-	- openSUSE 13.2: ```sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman```
-- Install dependencies: ```sudo zypper in libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel```
+	- openSUSE Leap 42.1: `sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman`
+	- openSUSE 13.2: `sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman`
+- Install dependencies: `sudo zypper in libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel`
 
 #####Ubuntu
 
@@ -144,35 +144,35 @@ You can also install youtube-dl: ```sudo pacman -S youtube-dl```
 #####Ubuntu 16.04 and higher dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev```
+`sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev`
 
 #####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev```
+`sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev`
 
 #####Ubuntu 14.10 and older dependencies (Qt4 build)
 
 Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), so the FFmpeg must be compiled from sources and the LibAV development files must be removed!
 
 - Install dependencies from the package manager:
-```sudo apt-get install g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev```
+`sudo apt-get install g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev`
 - Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
-```sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev```. You can install it again after compilation.
+`sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev`. You can install it again after compilation.
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
-```./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install```<br/>
+`./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install`<br/>
 This will compile and install the newest FFmpeg without features that are not supported in QMPlay2.
-- Run: ```sudo ldconfig```
+- Run: `sudo ldconfig`
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
 ####Compilation and installation using CMake
 
 - Install all dependencies using package manager (in devel version) or compile it from sources.
-- Install CMake 3.0.2 or newer.
+- Install CMake 2.8.11 or newer.
 - You can use `cmake-gui` for graphical configuration or `cmake` for command line configuration:
 	- create a build directory and go to it: `mkdir build && cd build`,
-	- for Qt4 compilation (recomended if you have Qt5 older than 5.6.1): `cmake .. -DUSE_QT5=No`,
-	- for Qt5 compilation: `cmake ..`,
+	- run CMake: `cmake ..`,
+	- check the summary - which features are enabled (you can set it manually),
 	- if CMake finishes wihout errors, run `make -j4` (replace 4 with numbers of CPU threads),
 	- if compiling finishes wihout errors, install it `sudo make -j4 install`.
 
