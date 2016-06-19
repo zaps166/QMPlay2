@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
-    cmake_policy(SET CMP0043 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
 endif()
 project(qmplay2)
 
@@ -112,11 +114,11 @@ execute_process(
     OUTPUT_VARIABLE QMPLAY2_VERSION)
 string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
 
-set(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
 if(USE_QT5)
     find_package(Qt5Widgets REQUIRED)
-    if(CMAKE_VERSION VERSION_LESS "3.1")
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(Qt5_EXECUTABLE_COMPILE_FLAGS "-fPIC ${Qt5_EXECUTABLE_COMPILE_FLAGS}")
+    if(CMAKE_VERSION VERSION_LESS "3.1" AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.7.0)) # cmake < 3.1 && Qt5 >= 5.7.0
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" or CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # gcc or clang
             set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
         endif()
     endif()

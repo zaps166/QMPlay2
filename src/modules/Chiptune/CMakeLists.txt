@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
-    cmake_policy(SET CMP0043 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
 endif()
 project(Chiptune)
 find_package(PkgConfig REQUIRED)
@@ -23,7 +25,6 @@ set(Chiptune_LIBS
 
 if(USE_CHIPTUNE_GME)
     find_package(GME REQUIRED)
-    message("GME locations are: include=${LIBGME_INCLUDE_DIRS} ; libs=${LIBGME_LIBRARIES}")
     list(APPEND Chiptune_HDR GME.hpp)
     list(APPEND Chiptune_SRC GME.cpp)
     add_definitions(-DUSE_GME)
