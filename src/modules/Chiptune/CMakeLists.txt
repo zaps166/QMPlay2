@@ -18,6 +18,7 @@ set(Chiptune_LIBS
 
 if(USE_CHIPTUNE_GME)
     find_package(GME REQUIRED)
+    message("GME locations are: include=${LIBGME_INCLUDE_DIRS} ; libs=${LIBGME_LIBRARIES}")
     list(APPEND Chiptune_HDR GME.hpp)
     list(APPEND Chiptune_SRC GME.cpp)
     add_definitions(-DUSE_GME)
