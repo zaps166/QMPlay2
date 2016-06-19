@@ -1,5 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(POLICY CMP0003)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif(POLICY CMP0003)
 project(Visualizations)
-cmake_minimum_required(VERSION 3.0.2)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(Visualizations_HDR
@@ -18,8 +24,8 @@ set(Visualizations_SRC
 
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
-PKG_CHECK_MODULES(LIBAVUTIL libavutil REQUIRED)
-PKG_CHECK_MODULES(LIBAVCODEC libavcodec REQUIRED)
+PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+PKG_CHECK_MODULES(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})

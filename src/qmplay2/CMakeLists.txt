@@ -1,5 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(qmplay2)
-cmake_minimum_required(VERSION 3.0.2)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(QMPLAY2_HDR
@@ -82,8 +88,8 @@ set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
-PKG_CHECK_MODULES(LIBSWSCALE libswscale REQUIRED)
-PKG_CHECK_MODULES(LIBAVUTIL libavutil REQUIRED)
+PKG_CHECK_MODULES(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
+PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 PKG_CHECK_MODULES(LIBASS libass REQUIRED)
 
 link_directories(
@@ -107,12 +113,12 @@ include_directories(
 
 if(USE_AVRESAMPLE)
     add_definitions(-DQMPLAY2_AVRESAMPLE)
-    PKG_CHECK_MODULES(LIBAVRESAMPLE libavresample REQUIRED)
+    PKG_CHECK_MODULES(LIBAVRESAMPLE libavresample>=1.2.0 REQUIRED)
     list(APPEND QMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
     include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
 else()
-    PKG_CHECK_MODULES(LIBSWRESAMPLE libswresample REQUIRED)
+    PKG_CHECK_MODULES(LIBSWRESAMPLE libswresample>=0.18.100 REQUIRED)
     list(APPEND QMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
     include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})

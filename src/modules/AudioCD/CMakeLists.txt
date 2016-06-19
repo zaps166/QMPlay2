@@ -1,6 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(AudioCD)
-cmake_minimum_required(VERSION 3.0.2)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(AudioCD_HDR
     AudioCD.hpp
@@ -16,9 +21,8 @@ set(AudioCD_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(LIBCDIO libcdio REQUIRED)
-PKG_CHECK_MODULES(LIBCDDB libcddb REQUIRED)
-link_directories(${LIBCDIO_LIBRARY_DIRS} ${LIBCDDB_LIBRARY_DIRS})
+PKG_CHECK_MODULES(LIBCD libcdio libcddb REQUIRED)
+link_directories(${LIBCD_LIBRARY_DIRS})
 
 if(USE_QT5)
     qt5_add_resources(AudioCD_RESOURCES_RCC ${AudioCD_RESOURCES})
@@ -26,7 +30,7 @@ else()
     qt4_add_resources(AudioCD_RESOURCES_RCC ${AudioCD_RESOURCES})
 endif()
 
-include_directories(../../qmplay2/headers ${LIBCDIO_INCLUDE_DIRS} ${LIBCDDB_INCLUDE_DIRS})
+include_directories(../../qmplay2/headers ${LIBCD_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${AudioCD_HDR}
@@ -42,8 +46,7 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${LIBCDIO_LIBRARIES}
-    ${LIBCDDB_LIBRARIES}
+    ${LIBCD_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
 

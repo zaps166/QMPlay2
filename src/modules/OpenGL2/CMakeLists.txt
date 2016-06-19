@@ -1,5 +1,11 @@
+cmake_minimum_required(VERSION 2.8.11)
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif()
+endif()
 project(OpenGL2)
-cmake_minimum_required(VERSION 3.0.2)
 
 set(OpenGL2_HDR
     OpenGL2.hpp
@@ -26,12 +32,17 @@ if(NOT USE_QT5 OR Qt5Widgets_VERSION LESS 5.6.0)
     list(APPEND OpenGL2_HDR OpenGL2OldWidget.hpp)
     list(APPEND OpenGL2_SRC OpenGL2OldWidget.cpp)
 
-    # add check for opengles2 in QT_CONFIG
-    add_definitions(-DVSYNC_SETTINGS)
+    if(NOT Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2) #FIXME (see OpenGL2.pro)
+        add_definitions(-DVSYNC_SETTINGS)
+    endif()
 else()
     add_definitions(-DOPENGL_NEW_API -DVSYNC_SETTINGS)
     list(APPEND OpenGL2_HDR OpenGL2Window.hpp OpenGL2Widget.hpp OpenGL2CommonQt5.hpp)
     list(APPEND OpenGL2_SRC OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp)
+endif()
+
+if(USE_QT5 AND (Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2))
+    add_definitions(-DOPENGL_ES2)
 endif()
 
 if(USE_QT5)
