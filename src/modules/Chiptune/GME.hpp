@@ -18,8 +18,8 @@
 
 #include <Demuxer.hpp>
 
-struct gme_info_t;
-struct Music_Emu;
+#include <gme/gme.h>
+
 class Reader;
 
 class GME : public Demuxer

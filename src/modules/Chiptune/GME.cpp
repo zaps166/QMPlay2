@@ -22,8 +22,6 @@
 #include <Reader.hpp>
 #include <Packet.hpp>
 
-#include <gme/gme.h>
-
 GME::GME(Module &module) :
 	m_srate(Functions::getBestSampleRate()),
 	m_aborted(false),
@@ -72,7 +70,10 @@ bool GME::read(Packet &decoded, int &idx)
 	if (m_aborted || gme_track_ended(m_gme))
 		return false;
 
-	gme_set_fade(m_gme, (m_length - 8) * 1000); //Set every time to avoid problems
+	const int pos = gme_tell(m_gme);
+
+	if (pos >= m_length * 1000) //TODO: Fade-out
+		return false;
 
 	const int chunkSize = 1024 * 2; //Always stereo
 
@@ -86,7 +87,7 @@ bool GME::read(Packet &decoded, int &idx)
 	for (int i = chunkSize - 1; i >= 0; --i)
 		dstData[i] = srcData[i] / 32768.0;
 
-	decoded.ts = gme_tell(m_gme) / 1000.0;
+	decoded.ts = pos / 1000.0;
 	decoded.duration = chunkSize / 2 / (double)m_srate;
 
 	idx = 0;
