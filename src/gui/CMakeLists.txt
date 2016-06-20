@@ -59,13 +59,19 @@ set(GUI_SRC
     VolWidget.cpp
 )
 
+set(GUI_FORMS # *.ui files
+
+)
+
 set(GUI_RESOURCES
     resources.qrc
 )
 
 if(USE_QT5)
+    #qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
     qt5_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
 else()
+    #qt4_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
     qt4_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
 endif()
 
