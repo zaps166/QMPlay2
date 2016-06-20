@@ -74,6 +74,7 @@ include_directories(../qmplay2/headers)
 if(USE_TAGLIB)
     pkg_check_modules(TAGLIB taglib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
+    link_directories(${TAGLIB_LIBRARY_DIRS})
 
     add_definitions(-DQMPlay2_TagEditor)
     list(APPEND GUI_HDR TagEditor.hpp)
@@ -91,7 +92,6 @@ add_executable(QMPlay2
 )
 
 if(USE_TAGLIB)
-    link_directories(${TAGLIB_LIBRARY_DIRS})
     target_link_libraries(QMPlay2 ${TAGLIB_LIBRARIES})
 endif()
 
