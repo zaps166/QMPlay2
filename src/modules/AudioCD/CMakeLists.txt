@@ -21,7 +21,7 @@ set(AudioCD_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(LIBCD libcdio libcddb REQUIRED)
+pkg_check_modules(LIBCD libcdio libcddb REQUIRED)
 link_directories(${LIBCD_LIBRARY_DIRS})
 
 if(USE_QT5)

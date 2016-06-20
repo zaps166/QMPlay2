@@ -32,7 +32,7 @@ if(NOT USE_QT5 OR Qt5Widgets_VERSION LESS 5.6.0)
     list(APPEND OpenGL2_HDR OpenGL2OldWidget.hpp)
     list(APPEND OpenGL2_SRC OpenGL2OldWidget.cpp)
 
-    if(NOT Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2) #FIXME (see OpenGL2.pro)
+    if(NOT Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2) #TODO: do GLES support for Qt4
         add_definitions(-DVSYNC_SETTINGS)
     endif()
 else()
@@ -41,8 +41,12 @@ else()
     list(APPEND OpenGL2_SRC OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp)
 endif()
 
-if(USE_QT5 AND (Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2))
-    add_definitions(-DOPENGL_ES2)
+if(USE_QT5)
+    if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+        add_definitions(-DOPENGL_ES2)
+    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+        message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+    endif()
 endif()
 
 if(USE_QT5)
