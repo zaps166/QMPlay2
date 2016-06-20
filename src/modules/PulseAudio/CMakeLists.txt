@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(PulseAudio)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(PulseAudio_HDR
     PulseAudio.hpp
@@ -24,7 +23,7 @@ set(PulseAudio_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(LIBPULSE libpulse-simple REQUIRED)
+pkg_check_modules(LIBPULSE libpulse-simple REQUIRED)
 link_directories(${LIBPULSE_LIBRARY_DIRS})
 
 if(USE_QT5)

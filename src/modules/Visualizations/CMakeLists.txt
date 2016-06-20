@@ -6,7 +6,6 @@ if(POLICY CMP0003)
     endif()
 endif(POLICY CMP0003)
 project(Visualizations)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(Visualizations_HDR
     Visualizations.hpp
@@ -24,8 +23,8 @@ set(Visualizations_SRC
 
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
-PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
-PKG_CHECK_MODULES(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})

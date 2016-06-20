@@ -23,7 +23,8 @@ set(XVideo_RESOURCES
     icon.qrc
 )
 
-find_package(X11 REQUIRED)
+pkg_check_modules(LIB_X11_XV x11 xv REQUIRED)
+link_directories(${LIB_X11_XV_LIBRARY_DIRS})
 
 if(USE_QT5)
     qt5_add_resources(XVideo_RESOURCES_RCC ${XVideo_RESOURCES})
@@ -31,7 +32,7 @@ else()
     qt4_add_resources(XVideo_RESOURCES_RCC ${XVideo_RESOURCES})
 endif()
 
-include_directories(../../qmplay2/headers ${X11_X11_INCLUDE_PATH} ${X11_Xv_INCLUDE_PATH})
+include_directories(../../qmplay2/headers ${LIB_X11_XV_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${XVideo_HDR}
@@ -47,8 +48,7 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${X11_X11_LIB}
-    ${X11_Xv_LIB}
+    ${LIB_X11_XV_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
 

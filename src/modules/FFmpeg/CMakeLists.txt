@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(FFmpeg)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(FFmpeg_HDR
     FFmpeg.hpp
@@ -32,10 +31,10 @@ set(FFmpeg_RESOURCES
     icons.qrc
 )
 
-PKG_CHECK_MODULES(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
-PKG_CHECK_MODULES(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
-PKG_CHECK_MODULES(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -54,7 +53,7 @@ add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 
 if(USE_FFMPEG_AVDEVICE)
     add_definitions(-DQMPlay2_libavdevice)
-    PKG_CHECK_MODULES(LIBAVDEVICE libavdevice REQUIRED)
+    pkg_check_modules(LIBAVDEVICE libavdevice REQUIRED)
     include_directories(${LIBAVDEVICE_INCLUDE_DIRS})
     link_directories(${LIBAVDEVICE_LIBRARY_DIRS})
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
@@ -63,7 +62,7 @@ endif()
 if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
-    PKG_CHECK_MODULES(LIBX11 x11 REQUIRED)
+    pkg_check_modules(LIBX11 x11 REQUIRED)
     include_directories(${LIBX11_INCLUDE_DIRS})
     link_directories(${LIBX11_LIBRARY_DIRS})
     list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
@@ -72,7 +71,7 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
         add_definitions(-DQMPlay2_VAAPI)
         list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPIWriter.hpp)
         list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPIWriter.cpp)
-        PKG_CHECK_MODULES(LBVA libva libva-x11 REQUIRED)
+        pkg_check_modules(LBVA libva libva-x11 REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LBVA_LIBRARIES})
@@ -82,7 +81,7 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
         add_definitions(-DQMPlay2_VDPAU)
         list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
         list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)
-        PKG_CHECK_MODULES(LIBVDPAU vdpau REQUIRED)
+        pkg_check_modules(LIBVDPAU vdpau REQUIRED)
         include_directories(${LIBVDPAU_INCLUDE_DIRS})
         link_directories(${LIBVDPAU_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LIBVDPAU_LIBRARIES})

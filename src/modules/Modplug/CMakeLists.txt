@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(Modplug)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(Modplug_HDR
     Modplug.hpp

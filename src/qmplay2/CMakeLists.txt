@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(qmplay2)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(QMPLAY2_HDR
     headers/QMPlay2Core.hpp
@@ -88,9 +87,9 @@ set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
-PKG_CHECK_MODULES(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
-PKG_CHECK_MODULES(LIBASS libass REQUIRED)
+pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBASS libass REQUIRED)
 
 link_directories(
     ${LIBSWSCALE_LIBRARY_DIRS}
@@ -113,12 +112,12 @@ include_directories(
 
 if(USE_AVRESAMPLE)
     add_definitions(-DQMPLAY2_AVRESAMPLE)
-    PKG_CHECK_MODULES(LIBAVRESAMPLE libavresample>=1.2.0 REQUIRED)
+    pkg_check_modules(LIBAVRESAMPLE libavresample>=1.2.0 REQUIRED)
     list(APPEND QMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
     include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
 else()
-    PKG_CHECK_MODULES(LIBSWRESAMPLE libswresample>=0.18.100 REQUIRED)
+    pkg_check_modules(LIBSWRESAMPLE libswresample>=0.18.100 REQUIRED)
     list(APPEND QMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
     include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
@@ -149,5 +148,4 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
 install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)

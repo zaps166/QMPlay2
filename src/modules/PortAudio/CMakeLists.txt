@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(PortAudio)
-FIND_PACKAGE(PkgConfig REQUIRED)
 
 set(PortAudio_HDR
     PortAudio.hpp
@@ -24,7 +23,7 @@ set(PortAudio_RESOURCES
     icon.qrc
 )
 
-PKG_CHECK_MODULES(LIBPORTAUDIO portaudio-2.0 REQUIRED)
+pkg_check_modules(LIBPORTAUDIO portaudio-2.0 REQUIRED)
 link_directories(${LIBPORTAUDIO_LIBRARY_DIRS})
 
 if(USE_QT5)

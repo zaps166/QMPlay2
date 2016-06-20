@@ -1,5 +1,5 @@
-project(langs)
 cmake_minimum_required(VERSION 2.8.11)
+project(langs)
 
 if(LANGUAGES STREQUAL "All")
     # build LANGUAGES from all existing .ts files
@@ -13,7 +13,7 @@ else()
     foreach(LANG ${LANGUAGES_TR})
        LIST(APPEND QMPLAY2_TSS "${LANG}.ts")
     endforeach()
-endif ()
+endif()
 
 if(USE_QT5)
     find_package(Qt5LinguistTools REQUIRED)

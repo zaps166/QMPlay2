@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(Chiptune)
-find_package(PkgConfig REQUIRED)
 
 set(Chiptune_HDR
     Chiptune.hpp
@@ -26,7 +25,6 @@ set(Chiptune_LIBS
 )
 
 if(USE_CHIPTUNE_GME)
-    find_package(GME REQUIRED)
     list(APPEND Chiptune_HDR GME.hpp)
     list(APPEND Chiptune_SRC GME.cpp)
     add_definitions(-DUSE_GME)
@@ -36,7 +34,7 @@ if(USE_CHIPTUNE_GME)
 endif()
 
 if(USE_CHIPTUNE_SID)
-    PKG_CHECK_MODULES(LIBSIDPLAYFP libsidplayfp REQUIRED)
+    pkg_check_modules(LIBSIDPLAYFP libsidplayfp REQUIRED)
     list(APPEND Chiptune_HDR SIDPlay.hpp)
     list(APPEND Chiptune_SRC SIDPlay.cpp)
     add_definitions(-DUSE_SIDPLAY)

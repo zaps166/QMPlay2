@@ -6,7 +6,6 @@ if(COMMAND cmake_policy)
     endif()
 endif()
 project(AudioFilters)
-find_package(PkgConfig REQUIRED)
 
 set(AudioFilters_HDR
     AudioFilters.hpp
@@ -32,8 +31,8 @@ set(AudioFilters_RESOURCES
 
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
-PKG_CHECK_MODULES(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
-PKG_CHECK_MODULES(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 if(USE_QT5)
