@@ -25,6 +25,7 @@ set(Chiptune_LIBS
 )
 
 if(USE_CHIPTUNE_GME)
+    find_package(GME REQUIRED)
     list(APPEND Chiptune_HDR GME.hpp)
     list(APPEND Chiptune_SRC GME.cpp)
     add_definitions(-DUSE_GME)
