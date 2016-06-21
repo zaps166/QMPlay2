@@ -1,8 +1,9 @@
-Changes in QMPlay2 build 16.06.19:
+Changes in QMPlay2 build 16.06.22:
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
 	- fixed color in graphics subtitles (e.g. dvdsub),
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),
+	- allow mouse wheel to change the volume,
 	- added CMake build (Zamarin Arthur),
 	- show more information to the user,
 	- bugfix,

@@ -2344,6 +2344,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Remember repeat mode</source>
         <translation>Pamiętaj ustawienia powtarzania utworów</translation>
     </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Akcja kółka myszki w oknie wideo</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Kółko myszki zmienia głośność</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

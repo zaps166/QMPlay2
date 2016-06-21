@@ -2342,6 +2342,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Remember repeat mode</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

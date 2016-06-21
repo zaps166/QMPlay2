@@ -97,12 +97,16 @@ public:
 	QSpinBox *shortSeekB, *longSeekB, *bufferLocalB, *bufferNetworkB, *samplerateB, *channelsB, *maxVolB;
 	QComboBox *backwardBufferNetworkB;
 	QDoubleSpinBox *playIfBufferedB;
-	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *scrollSeek, *restoreVideoEq, *ignorePlaybackError;
+	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *restoreVideoEq, *ignorePlaybackError;
 
 	QGroupBox *replayGain;
 	QVBoxLayout *replayGainL;
 	QCheckBox *replayGainAlbum, *replayGainPreventClipping;
 	QDoubleSpinBox *replayGainPreamp;
+
+	QGroupBox *wheelActionB;
+	QVBoxLayout *wheelActionL;
+	QRadioButton *wheelSeekB, *wheelVolumeB;
 
 	class ModulesList : public QGroupBox
 	{
@@ -213,6 +217,8 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("ReplayGain/PreventClipping", true);
 	QMPSettings.init("ReplayGain/Preamp", 0.0);
 	QMPSettings.init("ShowBufferedTimeOnSlider", true);
+	QMPSettings.init("WheelAction", true);
+	QMPSettings.init("WheelSeek", true);
 	QMPSettings.init("SavePos", false);
 	QMPSettings.init("KeepZoom", false);
 	QMPSettings.init("KeepARatio", false);
@@ -222,7 +228,6 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("KeepSpeed", false);
 	QMPSettings.init("SyncVtoA", true);
 	QMPSettings.init("Silence", true);
-	QMPSettings.init("ScrollSeek", true);
 	QMPSettings.init("RestoreVideoEqualizer", false);
 	QMPSettings.init("IgnorePlaybackError", false);
 	QMPSettings.init("ApplyToASS/ColorsAndBorders", true);
@@ -563,6 +568,22 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2->replayGainL->addWidget(page2->replayGainPreamp);
 
 
+	page2->wheelActionB = new QGroupBox(tr("Mouse wheel action on video dock"));
+	page2->wheelActionB->setCheckable(true);
+	page2->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
+
+	page2->wheelActionL = new QVBoxLayout(page2->wheelActionB);
+
+	page2->wheelSeekB = new QRadioButton(tr("Mouse wheel scrolls music/movie"));
+	page2->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
+
+	page2->wheelVolumeB = new QRadioButton(tr("Mouse wheel changes the volume"));
+	page2->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
+
+	page2->wheelActionL->addWidget(page2->wheelSeekB);
+	page2->wheelActionL->addWidget(page2->wheelVolumeB);
+
+
 	page2->showBufferedTimeOnSlider = new QCheckBox(tr("Show buffered data indicator on slider"));
 	page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
 
@@ -592,9 +613,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 	page2->silence = new QCheckBox(tr("Fade sound"));
 	page2->silence->setChecked(QMPSettings.getBool("Silence"));
-
-	page2->scrollSeek = new QCheckBox(tr("Mouse wheel scrolls music/movie"));
-	page2->scrollSeek->setChecked(QMPSettings.getBool("ScrollSeek"));
 
 	page2->restoreVideoEq = new QCheckBox(tr("Remember video equalizer settings"));
 	page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
@@ -665,6 +683,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2->layout2->addWidget(page2->forceChannels, layout_row, 0, 1, 1);
 	page2->layout2->addWidget(page2->channelsB, layout_row++, 1, 1, 1);
 	page2->layout2->addWidget(page2->replayGain, layout_row++, 0, 1, 2);
+	page2->layout2->addWidget(page2->wheelActionB, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->showBufferedTimeOnSlider, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->savePos, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->keepZoom, layout_row++, 0, 1, 3);
@@ -675,7 +694,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page2->layout2->addWidget(page2->keepSpeed, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->syncVtoA, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->silence, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->scrollSeek, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->restoreVideoEq, layout_row++, 0, 1, 3);
 	page2->layout2->addWidget(page2->ignorePlaybackError, layout_row++, 0, 1, 3);
 	page2->layout2->setMargin(0);
@@ -932,6 +950,9 @@ void SettingsWidget::apply()
 			QMPSettings.set("ReplayGain/Album", page2->replayGainAlbum->isChecked());
 			QMPSettings.set("ReplayGain/PreventClipping", page2->replayGainPreventClipping->isChecked());
 			QMPSettings.set("ReplayGain/Preamp", page2->replayGainPreamp->value());
+			QMPSettings.set("WheelAction", page2->wheelActionB->isChecked());
+			QMPSettings.set("WheelSeek", page2->wheelSeekB->isChecked());
+			QMPSettings.set("WheelVolume", page2->wheelVolumeB->isChecked());
 			QMPSettings.set("ShowBufferedTimeOnSlider", page2->showBufferedTimeOnSlider->isChecked());
 			QMPSettings.set("SavePos", page2->savePos->isChecked());
 			QMPSettings.set("KeepZoom", page2->keepZoom->isChecked());
@@ -942,7 +963,6 @@ void SettingsWidget::apply()
 			QMPSettings.set("KeepSpeed", page2->keepSpeed->isChecked());
 			QMPSettings.set("SyncVtoA", page2->syncVtoA->isChecked());
 			QMPSettings.set("Silence", page2->silence->isChecked());
-			QMPSettings.set("ScrollSeek", page2->scrollSeek->isChecked());
 			QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
 

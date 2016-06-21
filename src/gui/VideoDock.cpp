@@ -245,8 +245,13 @@ void VideoDock::wheelEvent(QWheelEvent *e)
 	{
 		if (e->buttons() & Qt::LeftButton)
 			e->delta() > 0 ? QMPlay2GUI.menuBar->player->zoomIn->trigger() : QMPlay2GUI.menuBar->player->zoomOut->trigger();
-		else if (e->buttons() == Qt::NoButton && QMPlay2Core.getSettings().getBool("ScrollSeek"))
-			e->delta() > 0 ? QMPlay2GUI.menuBar->player->seekF->trigger() : QMPlay2GUI.menuBar->player->seekB->trigger();
+		else if (e->buttons() == Qt::NoButton && QMPlay2Core.getSettings().getBool("WheelAction"))
+		{
+			if (QMPlay2Core.getSettings().getBool("WheelSeek"))
+				e->delta() > 0 ? QMPlay2GUI.menuBar->player->seekF->trigger() : QMPlay2GUI.menuBar->player->seekB->trigger();
+			else if (QMPlay2Core.getSettings().getBool("WheelVolume"))
+				e->delta() > 0 ? QMPlay2GUI.menuBar->player->volUp->trigger() : QMPlay2GUI.menuBar->player->volDown->trigger();
+		}
 	}
 	DockWidget::wheelEvent(e);
 }
