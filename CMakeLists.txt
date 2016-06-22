@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(QMPlay2)
 
+# set default build type as Release
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/src/cmake/Modules/")
 
 include(FeatureSummary)
@@ -93,11 +98,6 @@ add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile in to QMPlay2, \"None\", or \"All\".")
 
-# set default build type as Release
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-endif()
-
 # get QMPlay2 version by running the version script
 execute_process(
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
@@ -125,7 +125,6 @@ else()
         find_package(Qt4 REQUIRED)
     endif()
     include("${QT_USE_FILE}")
-    add_definitions(${QT_DEFINITIONS})
 endif()
 
 include(GNUInstallDirs)
@@ -140,7 +139,7 @@ endif()
 
 option(SET_INSTALL_RPATH "Sets RPATH for executable after install" OFF)
 
-# solid actions
+# Solid actions
 set(SOLID_ACTIONS_INSTALL_PATH "" CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 
 add_subdirectory(src)

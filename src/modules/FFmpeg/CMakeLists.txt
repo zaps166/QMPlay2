@@ -110,7 +110,7 @@ add_library(${PROJECT_NAME} MODULE
 if(USE_QT5)
     qt5_use_modules(${PROJECT_NAME} Gui Widgets Network)
 else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtGui Qt4::QtCore Qt4::QtNetwork)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtNetwork)
 endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)

@@ -140,7 +140,7 @@ add_library(${PROJECT_NAME} SHARED
 if(USE_QT5)
     qt5_use_modules(${PROJECT_NAME} Gui Widgets)
 else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtGui Qt4::QtCore)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
 endif()
 
 target_link_libraries(${PROJECT_NAME}

@@ -255,7 +255,9 @@ void OpenGL2Common::initializeGL()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
+#ifdef VSYNC_SETTINGS
 	setVSync(vSync);
+#endif
 
 	doReset = true;
 	resetSphereVbo();

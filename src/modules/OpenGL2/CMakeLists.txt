@@ -27,26 +27,37 @@ set(OpenGL2_RESOURCES
     icon.qrc
 )
 
+function(gles1Error)
+    message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+endfunction()
+
+if(USE_QT5)
+    if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+        set(QT_USES_OPENGLES ON)
+        add_definitions(-DOPENGL_ES2)
+    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+        gles1Error()
+    endif()
+else()
+    if(${QT_QCONFIG} MATCHES "opengles2")
+        set(QT_USES_OPENGLES ON)
+        add_definitions(-DOPENGL_ES2)
+    elseif(${QT_QCONFIG} MATCHES "opengles1")
+        gles1Error()
+    endif()
+endif()
+
 if(NOT USE_QT5 OR Qt5Widgets_VERSION LESS 5.6.0)
     add_definitions(-DDONT_RECREATE_SHADERS)
     list(APPEND OpenGL2_HDR OpenGL2OldWidget.hpp)
     list(APPEND OpenGL2_SRC OpenGL2OldWidget.cpp)
-
-    if(NOT Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2) #TODO: do GLES support for Qt4
+    if(NOT QT_USES_OPENGLES)
         add_definitions(-DVSYNC_SETTINGS)
     endif()
 else()
     add_definitions(-DOPENGL_NEW_API -DVSYNC_SETTINGS)
     list(APPEND OpenGL2_HDR OpenGL2Window.hpp OpenGL2Widget.hpp OpenGL2CommonQt5.hpp)
     list(APPEND OpenGL2_SRC OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp)
-endif()
-
-if(USE_QT5)
-    if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
-        add_definitions(-DOPENGL_ES2)
-    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
-        message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
-    endif()
 endif()
 
 if(USE_QT5)
@@ -64,7 +75,7 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 if(NOT USE_QT5) # Qt4
-    target_link_libraries(${PROJECT_NAME} Qt4::QtGui Qt4::QtCore Qt4::QtOpenGL)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL)
 elseif(Qt5Widgets_VERSION LESS 5.6.0) # Qt5 < 5.6.0
     qt5_use_modules(${PROJECT_NAME} Gui Widgets OpenGL)
 else() # Qt5 >= 5.6.0
