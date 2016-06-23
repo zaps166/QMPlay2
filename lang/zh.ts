@@ -35,10 +35,6 @@
         <translation>关于QMPlay2</translation>
     </message>
     <message>
-        <source>video player</source>
-        <translation>视频播放器</translation>
-    </message>
-    <message>
         <source>Logs</source>
         <translation>日志</translation>
     </message>
@@ -63,12 +59,12 @@
         <translation>版本</translation>
     </message>
     <message>
-        <source>Creator and developer</source>
-        <translation>开发者</translation>
+        <source>video and audio player</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Software creator</source>
-        <translation>软件开发者</translation>
+        <source>Programmer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

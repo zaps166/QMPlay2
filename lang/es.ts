@@ -43,14 +43,6 @@
         <translation>Cambio de registro</translation>
     </message>
     <message>
-        <source>video player</source>
-        <translation>reproductor de video</translation>
-    </message>
-    <message>
-        <source>Software creator</source>
-        <translation>Creador de software</translation>
-    </message>
-    <message>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
@@ -67,8 +59,12 @@
         <translation>El registro no se puede borrar</translation>
     </message>
     <message>
-        <source>Creator and developer</source>
-        <translation>Creador y desarrollador</translation>
+        <source>video and audio player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Programmer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -35,10 +35,6 @@
         <translation>A propos de QMPlay2</translation>
     </message>
     <message>
-        <source>video player</source>
-        <translation>Lecteur vidéo</translation>
-    </message>
-    <message>
         <source>Logs</source>
         <translation>Logs</translation>
     </message>
@@ -63,12 +59,12 @@
         <translation>Version</translation>
     </message>
     <message>
-        <source>Creator and developer</source>
-        <translation>Créateur et développeur</translation>
+        <source>video and audio player</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Software creator</source>
-        <translation>Créateur du logiciel</translation>
+        <source>Programmer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

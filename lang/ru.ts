@@ -35,10 +35,6 @@
         <translation>О программе QMPlay2</translation>
     </message>
     <message>
-        <source>video player</source>
-        <translation>Видеопроигрыватель</translation>
-    </message>
-    <message>
         <source>Logs</source>
         <translation>Журнал</translation>
     </message>
@@ -63,12 +59,12 @@
         <translation>Версия</translation>
     </message>
     <message>
-        <source>Creator and developer</source>
-        <translation>Создатель и разработчик</translation>
+        <source>video and audio player</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Software creator</source>
-        <translation>Создатель программы</translation>
+        <source>Programmer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

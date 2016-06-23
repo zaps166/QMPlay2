@@ -23,16 +23,6 @@
 #include <QTextEdit>
 #include <QFileSystemWatcher>
 
-class CommunityEdit : public QTextEdit
-{
-	Q_OBJECT
-private:
-	void mouseMoveEvent(QMouseEvent *);
-	void mousePressEvent(QMouseEvent *);
-};
-
-/**/
-
 class QPushButton;
 
 class AboutWidget : public QWidget
@@ -44,11 +34,11 @@ private:
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 
-	CommunityEdit *dE;
 	QTextEdit *logE, *clE;
 	QPushButton *clrLogB;
 	QFileSystemWatcher logWatcher;
 private slots:
+	void linkActivated(const QString &link);
 	void refreshLog();
 	void clrLog();
 	void currentTabChanged(int);
