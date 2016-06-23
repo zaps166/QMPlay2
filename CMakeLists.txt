@@ -27,12 +27,15 @@ endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(DEFAULT_ALSA ON)
-    set(DEFAULT_AVDEVICE ON)
     set(DEFAULT_PORTAUDIO OFF)
+
+    pkg_check_modules(LIBAVDEVICE libavdevice)
+    set(DEFAULT_AVDEVICE ${LIBAVDEVICE_FOUND})
 else()
     set(DEFAULT_ALSA OFF)
-    set(DEFAULT_AVDEVICE OFF)
     set(DEFAULT_PORTAUDIO ON)
+
+    set(DEFAULT_AVDEVICE OFF)
 endif()
 
 option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
