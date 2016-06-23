@@ -98,8 +98,7 @@ else
 
 	mkdir -p app/share/icons/hicolor/128x128/apps
 	cp src/gui/Icons/QMPlay2.png app/share/icons/hicolor/128x128/apps/QMPlay2.png
-	mkdir -p app/share/doc/qmplay2
-	cp {ChangeLog,LICENSE,README.md,TODO} app/share/doc/qmplay2
+	cp {ChangeLog,LICENSE,README.md,TODO} app/share/qmplay2
 	mkdir -p app/include/QMPlay2
 	cp src/qmplay2/headers/* app/include/QMPlay2
 

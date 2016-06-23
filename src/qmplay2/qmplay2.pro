@@ -8,7 +8,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 TARGET = qmplay2
 
-win32|macx: DESTDIR = ../../app
+win32: DESTDIR = ../../app
 else: DESTDIR = ../../app/lib
 
 win32 {

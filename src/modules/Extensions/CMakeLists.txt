@@ -13,7 +13,6 @@ set(Extensions_HDR
     Downloader.hpp
     Radio.hpp
     LastFM.hpp
-    MPRIS2.hpp
 )
 
 set(Extensions_SRC
@@ -22,20 +21,30 @@ set(Extensions_SRC
     Downloader.cpp
     Radio.cpp
     LastFM.cpp
-    MPRIS2.cpp
 )
 
 set(Extensions_RESOURCES
     icons.qrc
 )
 
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    list(APPEND Extensions_HDR MPRIS2.hpp)
+    list(APPEND Extensions_SRC MPRIS2.cpp)
+
+    add_definitions(-DUSE_MPRIS2)
+
+    if(USE_QT5)
+        set(DBUS DBus)
+    else()
+        set(DBUS Qt4::QtDBus)
+    endif()
+endif()
+
 if(USE_PROSTOPLEER)
     list(APPEND Extensions_HDR ProstoPleer.hpp)
     list(APPEND Extensions_SRC ProstoPleer.cpp)
     add_definitions(-DUSE_PROSTOPLEER)
 endif()
-
-add_definitions(-DUSE_MPRIS2)
 
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
@@ -52,9 +61,9 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets Network DBus)
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets Network ${DBUS})
 else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtNetwork Qt4::QtDBus)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtNetwork ${DBUS})
 endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)

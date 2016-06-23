@@ -87,8 +87,13 @@ if(USE_TAGLIB)
     list(APPEND GUI_SRC TagEditor.cpp)
 endif()
 
+# RPATH
 if(SET_INSTALL_RPATH)
-    set(CMAKE_INSTALL_RPATH "../${CMAKE_INSTALL_LIBDIR}")
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+        set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+    else()
+        set(CMAKE_INSTALL_RPATH "@executable_path/../${CMAKE_INSTALL_LIBDIR}")
+    endif()
 endif()
 
 add_executable(QMPlay2
@@ -113,20 +118,22 @@ target_link_libraries(QMPlay2 $<TARGET_FILE:qmplay2>)
 # executable
 install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-# desktop files
-file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    # desktop files
+    file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
+    install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
 
-# mime files
-file(GLOB MIME_FILES Unix/x-*.xml)
-install(FILES ${MIME_FILES} DESTINATION ${INSTALL_PATH_MIME}/packages/)
+    # mime files
+    file(GLOB MIME_FILES Unix/x-*.xml)
+    install(FILES ${MIME_FILES} DESTINATION ${INSTALL_PATH_MIME}/packages/)
 
-# icon
-install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x128/apps/)
+    # icon
+    install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x128/apps/)
 
-# install Solid actions
-include(InstallSolidActions)
-add_feature_info(SolidActions SOLID_ACTIONS_PATH "Install Solid actions")
+    # install Solid actions
+    include(InstallSolidActions)
+    add_feature_info(SolidActions SOLID_ACTIONS_PATH "Install Solid actions")
+endif()
 
 # man page
 find_program(GZIP gzip)

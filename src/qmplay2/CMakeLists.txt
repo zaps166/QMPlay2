@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
+    if(POLICY CMP0042)
+        cmake_policy(SET CMP0042 NEW)
+    endif()
     if(POLICY CMP0043)
         cmake_policy(SET CMP0043 NEW)
     endif()
@@ -148,4 +151,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)
+endif()

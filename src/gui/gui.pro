@@ -9,14 +9,14 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 TARGET = QMPlay2
 
-win32|macx {
+win32 {
 	QMAKE_LIBDIR += ../../app
 	DESTDIR = ../../app
 }
 else {
 	QMAKE_LIBDIR += ../../app/lib
 	DESTDIR = ../../app/bin
-	!android: LIBS += -lrt #For glibc < 2.17
+	!android:!macx: LIBS += -lrt #For glibc < 2.17
 }
 LIBS += -lqmplay2
 

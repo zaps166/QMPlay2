@@ -132,23 +132,34 @@ endif()
 
 include(GNUInstallDirs)
 
-set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
-set(INSTALL_PATH_MIME "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/mime")
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+    set(INSTALL_PATH_MIME "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/mime")
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
     set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/man") # exception for FreeBSD
 else()
     set(INSTALL_PATH_MAN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_MANDIR}")
 endif()
 
-option(SET_INSTALL_RPATH "Sets RPATH for executable after install" OFF)
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(SOLID_ACTIONS_DEFAULT "None")
+    set(DEFAULT_INSTALL_RPATH ON)
+endif()
+
+# RPATH
+option(SET_INSTALL_RPATH "Sets RPATH for executable after install" ${DEFAULT_INSTALL_RPATH})
 
 # Solid actions
-set(SOLID_ACTIONS_INSTALL_PATH "" CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
+set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 
 add_subdirectory(src)
-add_subdirectory(lang)
+if(NOT LANGUAGES STREQUAL "None")
+    add_subdirectory(lang)
+endif()
 
-install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DOCDIR}")
+install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 
 # uninstall target
 configure_file(

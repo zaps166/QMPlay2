@@ -29,6 +29,8 @@
 	#include <MPRIS2.hpp>
 #endif
 
+#include <QCoreApplication>
+
 Extensions::Extensions() :
 	Module("Extensions"),
 	downloader(QImage(":/downloader")), youtube(QImage(":/youtube")), radio(QImage(":/radio")), lastfm(QImage(":/lastfm"))
@@ -286,7 +288,7 @@ void ModuleSettingsWidget::enableItagLists(bool b)
 }
 void ModuleSettingsWidget::browseYoutubedl()
 {
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), QMPlay2Core.getShareDir());
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), QCoreApplication::applicationDirPath());
 	if (!filePath.isEmpty())
 		youtubedlE->setText(filePath);
 }

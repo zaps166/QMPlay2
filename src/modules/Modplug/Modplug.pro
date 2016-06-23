@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 	QT += widgets
 }
 
-win32|macx {
+win32 {
 	DESTDIR = ../../../app/modules
 	QMAKE_LIBDIR += ../../../app
 	LIBS += -lz
@@ -14,6 +14,7 @@ win32|macx {
 else {
 	DESTDIR = ../../../app/lib/qmplay2/modules
 	QMAKE_LIBDIR += ../../../app/lib
+	macx: LIBS += -lz
 }
 LIBS += -lqmplay2
 

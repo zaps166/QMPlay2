@@ -474,8 +474,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	QString sharePath = QCoreApplication::applicationDirPath();
-	QString   libPath = QCoreApplication::applicationDirPath();
+	QString libPath, sharePath = QCoreApplication::applicationDirPath();
 #if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	sharePath += "/../share/qmplay2";
 	libPath = QMPlay2CoreClass::getLibDir();
@@ -490,6 +489,14 @@ int main(int argc, char *argv[])
 			libPath += "lib";
 	}
 	libPath += "/qmplay2";
+#elif defined Q_OS_MAC
+	QString cdUp;
+	if (!QDir(sharePath).exists("share"))
+		cdUp = "/..";
+	libPath = sharePath + cdUp + "/lib/qmplay2";
+	sharePath += cdUp + "/share/qmplay2";
+#else
+	libPath = sharePath;
 #endif
 
 	qRegisterMetaType<VideoFrame>("VideoFrame");
