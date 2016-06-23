@@ -49,7 +49,14 @@ set(Modplug_SRC
     libmodplug/sndmix.cpp
 )
 
-include_directories(../../qmplay2/headers libmodplug)
+if(WIN32)
+    remove_definitions(-DUNICODE)
+endif()
+
+pkg_check_modules(ZLIB zlib REQUIRED)
+link_directories(${ZLIB_LIBRARY_DIRS})
+
+include_directories(../../qmplay2/headers libmodplug ${ZLIB_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${Modplug_HDR}
@@ -69,6 +76,7 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
+    ${ZLIB_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
 

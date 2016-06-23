@@ -92,4 +92,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 endif()
 
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} GLESv2)
+endif()
+
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
