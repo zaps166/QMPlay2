@@ -619,10 +619,6 @@
         <translation>Параметры</translation>
     </message>
     <message>
-        <source>Sync with directory</source>
-        <translation>Синхронизировать с каталогом</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>Выбрать каталог</translation>
     </message>
@@ -631,16 +627,32 @@
         <translation>Некорректный путь</translation>
     </message>
     <message>
-        <source>Enter path to existing directory</source>
-        <translation>Ввести путь к существующему каталогу</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>Размер файла</translation>
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>Ошибка при записи тегов, убедитесь что у вас есть права на изменение файла!</translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1636,10 +1648,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>&amp;Остановить загрузку</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>&amp;Синхронизировать каталог</translation>
-    </message>
-    <message>
         <source>Load &amp;list</source>
         <translation>Загрузить с&amp;писок</translation>
     </message>
@@ -1707,6 +1715,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Save &amp;group</source>
         <translation>Сохранить &amp;группу</translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1733,10 +1745,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Вы уверены, что хотите удалить записи без группы?</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation>Синхронизация с файлом не поддерживается</translation>
     </message>
 </context>
 <context>

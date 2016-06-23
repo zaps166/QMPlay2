@@ -619,10 +619,6 @@
         <translation>Eigenschaften</translation>
     </message>
     <message>
-        <source>Sync with directory</source>
-        <translation>Synchronisieren mit Verzeichnis</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>Verzeichnis wählen</translation>
     </message>
@@ -631,15 +627,31 @@
         <translation>Verkehrter Pfad</translation>
     </message>
     <message>
-        <source>Enter path to existing directory</source>
-        <translation>Pfad zu einem vorhandenen Verzeichnis eingeben</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>Dateigröße</translation>
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1635,10 +1647,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>&amp;Laden stoppen</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>&amp;Verzeichnis synchronisieren</translation>
-    </message>
-    <message>
         <source>Load &amp;list</source>
         <translation>&amp;Liste laden</translation>
     </message>
@@ -1706,6 +1714,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Save &amp;group</source>
         <translation>&amp;Gruppe speichern</translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1732,10 +1744,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Sind Sie sicher das Sie nicht gruppierte Einträge löschen wollen?</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation>Synchronisierung mit der Datei wird nicht unterstützt</translation>
     </message>
 </context>
 <context>

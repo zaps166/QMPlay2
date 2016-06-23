@@ -45,8 +45,8 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		return;
 
 	catalogCB = NULL;
-	browseB = NULL;
-	dirPthE = NULL;
+	browseDirB = browseFileB = NULL;
+	pthE = NULL;
 	addrB = NULL;
 #ifdef QMPlay2_TagEditor
 	tagEditor = NULL;
@@ -66,20 +66,26 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 	if (PlaylistWidget::isGroup(tWI))
 	{
-		dirPthE = new QLineEdit;
-		dirPthE->setText(url);
+		pthE = new QLineEdit;
+		pthE->setText(url);
 		origDirPth = url;
 
 		nameE->selectAll();
 
 		catalogCB = new QCheckBox;
-		catalogCB->setText(tr("Sync with directory"));
-		catalogCB->setChecked(!dirPthE->text().isEmpty());
+		catalogCB->setChecked(!pthE->text().isEmpty());
+		catalogCB->setText(tr("Synchronize with file or directory"));
 		connect(catalogCB, SIGNAL(stateChanged(int)), this, SLOT(setDirPthEEnabled(int)));
 
-		browseB = new QToolButton;
-		browseB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-		connect(browseB, SIGNAL(clicked()), this, SLOT(browse()));
+		browseDirB = new QToolButton;
+		browseDirB->setToolTip(tr("Browse directory"));
+		browseDirB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+		connect(browseDirB, SIGNAL(clicked()), this, SLOT(browse()));
+
+		browseFileB = new QToolButton;
+		browseFileB->setToolTip(tr("Browse file"));
+		browseFileB->setIcon(QMPlay2Core.getIconFromTheme("applications-multimedia"));
+		connect(browseFileB, SIGNAL(clicked()), this, SLOT(browse()));
 
 		setDirPthEEnabled(catalogCB->isChecked());
 	}
@@ -106,7 +112,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 	int row = 0;
-	layout.addWidget(nameE, row++, 0, 1, browseB ? 2 : 1);
+	layout.addWidget(nameE, row++, 0, 1, (browseDirB && browseFileB) ? 3 : 1);
 	if (catalogCB)
 		layout.addWidget(catalogCB, row++, 0, 1, 1);
 	if (addrB)
@@ -117,15 +123,19 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 #endif
 	if (fileSizeL)
 		layout.addWidget(fileSizeL, ++row, 0, 1, 1);
-	if (dirPthE)
-		layout.addWidget(dirPthE, row, 0, 1, 1);
-	if (browseB)
-		layout.addWidget(browseB, row, 1, 1, 1);
+	if (pthE)
+		layout.addWidget(pthE, row, 0, 1, 1);
+	if (browseDirB && browseFileB)
+	{
+		layout.addWidget(browseDirB, row, 1, 1, 1);
+		layout.addWidget(browseFileB, row, 2, 1, 1);
+	}
 #ifdef QMPlay2_TagEditor
 	if (!tagEditor)
 #endif
 		layout.addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), ++row, 0, 1, 2); //vSpacer
-	layout.addWidget(buttonBox, ++row, 0, 1, browseB ? 2 : 1);
+	layout.addWidget(buttonBox, ++row, 0, 1, (browseDirB && browseFileB) ? 3 : 1);
+	layout.setSpacing(3);
 	layout.setMargin(3);
 
 #ifdef QMPlay2_TagEditor
@@ -139,8 +149,9 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 void EntryProperties::setDirPthEEnabled(int e)
 {
-	dirPthE->setEnabled(e);
-	browseB->setEnabled(e);
+	pthE->setEnabled(e);
+	browseDirB->setEnabled(e);
+	browseFileB->setEnabled(e);
 }
 #ifdef QMPlay2_TagEditor
 void EntryProperties::directAddressChanged()
@@ -155,36 +166,41 @@ void EntryProperties::directAddressChanged()
 #endif
 void EntryProperties::browse()
 {
-	QString s = QFileDialog::getExistingDirectory(this, tr("Choose directory"), dirPthE->text());
-	if (!s.isEmpty())
+	QString pth;
+	if (sender() == browseDirB)
+		pth = QFileDialog::getExistingDirectory(this, tr("Choose directory"), pthE->text());
+	else if (sender() == browseFileB)
+		pth = QFileDialog::getOpenFileName(this, tr("Choose file"), pthE->text());
+	if (!pth.isEmpty())
 	{
 		if (nameE->text().isEmpty())
-			nameE->setText(Functions::fileName(s));
-		dirPthE->setText(s);
+			nameE->setText(Functions::fileName(pth));
+		pthE->setText(pth);
 	}
 }
 void EntryProperties::accept()
 {
 	if (catalogCB)
 	{
-		const QString newDirPth = dirPthE->text();
-		const QFileInfo dirPthInfo = (newDirPth);
-		const bool isFile = dirPthInfo.isFile();
-		const bool isDir  = dirPthInfo.isDir();
-		if (catalogCB->isChecked() && ((!isDir && !isFile) || (isFile && origDirPth != newDirPth)))
+		if (catalogCB->isChecked())
 		{
-			QMessageBox::information(this, tr("Incorrect path"), tr("Enter path to existing directory"));
-			return;
+			const QString newDirPth = pthE->text();
+			const QFileInfo dirPthInfo = newDirPth;
+			if (newDirPth.contains("://") || dirPthInfo.isDir() || dirPthInfo.isFile())
+			{
+				if (nameE->text().isEmpty())
+					nameE->setText(Functions::fileName(pthE->text()));
+				tWI->setData(0, Qt::UserRole, (dirPthInfo.isFile() ? "file://" : "") + pthE->text());
+				tWI->setIcon(0, *QMPlay2GUI.folderIcon);
+				sync = true;
+			}
+			else
+			{
+				QMessageBox::information(this, tr("Incorrect path"), tr("The specified path does not exists"));
+				return;
+			}
 		}
-		else if (catalogCB->isChecked() && (isDir || isFile))
-		{
-			if (nameE->text().isEmpty())
-				nameE->setText(Functions::fileName(dirPthE->text()));
-			tWI->setData(0, Qt::UserRole, "file://" + dirPthE->text());
-			tWI->setIcon(0, *QMPlay2GUI.folderIcon);
-			sync = isDir;
-		}
-		else if (!catalogCB->isChecked())
+		else
 		{
 			tWI->setData(0, Qt::UserRole, QString());
 			tWI->setIcon(0, *QMPlay2GUI.groupIcon);

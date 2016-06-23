@@ -619,10 +619,6 @@
         <translation>属性</translation>
     </message>
     <message>
-        <source>Sync with directory</source>
-        <translation>同步目录</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>选择目录</translation>
     </message>
@@ -631,16 +627,32 @@
         <translation>无效路径</translation>
     </message>
     <message>
-        <source>Enter path to existing directory</source>
-        <translation>输入路径</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>文件大小</translation>
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>拒绝访问，请检查权限！写入标签失败!</translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1634,10 +1646,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>停止载入</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>同步目录</translation>
-    </message>
-    <message>
         <source>Load &amp;list</source>
         <translation>载入列表</translation>
     </message>
@@ -1705,6 +1713,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Save &amp;group</source>
         <translation>保存组</translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1731,10 +1743,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>确定要删除非分组目录?</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation>不支持同步文件</translation>
     </message>
 </context>
 <context>

@@ -615,16 +615,8 @@
 <context>
     <name>EntryProperties</name>
     <message>
-        <source>Sync with directory</source>
-        <translation>Sincronizar con el directorio</translation>
-    </message>
-    <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>¡Error al escribir las etiquetas, compruebe que tiene permiso para modificar el archivo!</translation>
-    </message>
-    <message>
-        <source>Enter path to existing directory</source>
-        <translation>Introduzca la ruta al directorio existente</translation>
     </message>
     <message>
         <source>Incorrect path</source>
@@ -641,6 +633,26 @@
     <message>
         <source>Properties</source>
         <translation>Propiedades</translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1639,10 +1651,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>&amp;Guardar grupo</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>&amp;Sincronizar directorio</translation>
-    </message>
-    <message>
         <source>&amp;Clear list</source>
         <translation>&amp;Borrar lista</translation>
     </message>
@@ -1706,6 +1714,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Load &amp;list</source>
         <translation>&amp;Cargar lista</translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1728,10 +1740,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Playlist</source>
         <translation>Lista de reproducción</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation>Sincronizar con archivo no está soportado</translation>
     </message>
     <message>
         <source>Visible entries</source>

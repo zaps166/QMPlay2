@@ -80,12 +80,16 @@ class AddThr : public QThread
 {
 	Q_OBJECT
 public:
+	enum SYNC {NO_SYNC = 0, DIR_SYNC = 1, FILE_SYNC = 2};
+
 	AddThr(PlaylistWidget &pLW);
 
-	void setData(const QStringList &, QTreeWidgetItem *, bool, bool sync = false);
-	void setData(const QString &, QTreeWidgetItem *);
+	void setData(const QStringList &, QTreeWidgetItem *, bool, SYNC = NO_SYNC);
+	void setDataForSync(const QString &, QTreeWidgetItem *, bool);
 
 	void stop();
+private slots:
+	void changeItemText0(QTreeWidgetItem *tWI, QString name);
 private:
 	void run();
 
@@ -96,6 +100,7 @@ private:
 	QStringList urls;
 	QTreeWidgetItem *par;
 	bool loadList;
+	SYNC sync;
 	IOController<> ioCtrl;
 	QTreeWidgetItem *firstItem, *lastItem;
 private slots:
@@ -119,7 +124,7 @@ public:
 
 	bool add(const QStringList &, QTreeWidgetItem *par, bool loadList = false);
 	bool add(const QStringList &, bool atEndOfList = false);
-	void sync(const QString &, QTreeWidgetItem *);
+	void sync(const QString &, QTreeWidgetItem *, bool);
 
 	void setCurrentPlaying(QTreeWidgetItem *tWI);
 

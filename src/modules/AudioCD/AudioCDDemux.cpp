@@ -278,19 +278,21 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 	{
 		if (url.startsWith(AudioCDName "://"))
 		{
-			entries = getTracks(url.mid(strlen(AudioCDName) + 3));
+			const QString realUrl = url.mid(strlen(AudioCDName) + 3);
+			entries = getTracks(realUrl);
 			if (entries.isEmpty())
 				emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
 			ok = !entries.isEmpty();
-		}
-		if (!entries.isEmpty())
-		{
-			for (int i = 0; i < entries.length(); ++i)
-				entries[i].parent = 1;
-			Playlist::Entry entry;
-			entry.name = "Audio CD";
-			entry.GID = 1;
-			entries.prepend(entry);
+			if (ok)
+			{
+				for (int i = 0; i < entries.length(); ++i)
+					entries[i].parent = 1;
+				Playlist::Entry entry;
+				entry.name = "Audio CD (" + realUrl + ")";
+				entry.url = url;
+				entry.GID = 1;
+				entries.prepend(entry);
+			}
 		}
 	}
 	return entries;

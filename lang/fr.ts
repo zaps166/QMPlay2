@@ -619,10 +619,6 @@
         <translation>Propriétés</translation>
     </message>
     <message>
-        <source>Sync with directory</source>
-        <translation>Synchroniser le dossier</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>Choisir le dossier</translation>
     </message>
@@ -631,16 +627,32 @@
         <translation>Chemin incorrect</translation>
     </message>
     <message>
-        <source>Enter path to existing directory</source>
-        <translation>Entrer un chemin vers un dossier existant</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>Taille du fichier</translation>
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>Erreur lors de l&apos;écriture des tags, vérifiez que vous avez la permission de modifier le fichier!</translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1634,10 +1646,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>&amp;Stopper le chargement</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>&amp;Synchroniser le dossier</translation>
-    </message>
-    <message>
         <source>Load &amp;list</source>
         <translation>Charger la &amp;liste</translation>
     </message>
@@ -1705,6 +1713,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Save &amp;group</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1731,10 +1743,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Êtes vous sûr de vouloir effacer les entrées non groupées?</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

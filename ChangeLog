@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.06.22:
+Changes in QMPlay2 build 16.06.23:
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
+	- allow file group and Audio CD tracks synchronization (on F5),
 	- fixed color in graphics subtitles (e.g. dvdsub),
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),

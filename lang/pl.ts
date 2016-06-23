@@ -619,10 +619,6 @@
         <translation>Właściwości</translation>
     </message>
     <message>
-        <source>Sync with directory</source>
-        <translation>Synchronizuj z katalogiem</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>Wybierz katalog</translation>
     </message>
@@ -631,16 +627,32 @@
         <translation>Zła ścieżka</translation>
     </message>
     <message>
-        <source>Enter path to existing directory</source>
-        <translation>Podaj ścieżkę do istniejącego katalogu</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>Rozmiar pliku</translation>
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>Błąd podczas zapisu tagów, sprawdź czy masz uprawnienia do modyfikacji pliku!</translation>
+    </message>
+    <message>
+        <source>Synchronize with file or directory</source>
+        <translation>Synchronizuj z plikiem lub katalogiem</translation>
+    </message>
+    <message>
+        <source>Browse directory</source>
+        <translation>Przeglądaj w poszukiwaniu katalogu</translation>
+    </message>
+    <message>
+        <source>Browse file</source>
+        <translation>Przeglądaj w poszukiwaniu pliku</translation>
+    </message>
+    <message>
+        <source>Choose file</source>
+        <translation>Wybierz plik</translation>
+    </message>
+    <message>
+        <source>The specified path does not exists</source>
+        <translation>Podana ścieżka nie istnieje</translation>
     </message>
 </context>
 <context>
@@ -1636,10 +1648,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>&amp;Zatrzymaj ładowanie</translation>
     </message>
     <message>
-        <source>&amp;Sync directory</source>
-        <translation>&amp;Synchronizuj katalog</translation>
-    </message>
-    <message>
         <source>Load &amp;list</source>
         <translation>Załaduj playl&amp;istę</translation>
     </message>
@@ -1707,6 +1715,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Save &amp;group</source>
         <translation>Zapisz &amp;grupę</translation>
     </message>
+    <message>
+        <source>&amp;Synchronize group</source>
+        <translation>&amp;Synchronizuj grupę</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -1733,10 +1745,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Czy na pewno chcesz usunąć niepogrupowane wpisy?</translation>
-    </message>
-    <message>
-        <source>Synchronizing with file is not supported</source>
-        <translation>Synchronizowanie z plikiem nie jest obsługiwane</translation>
     </message>
 </context>
 <context>

@@ -38,13 +38,13 @@ public:
 	EntryProperties(QWidget *, QTreeWidgetItem *, bool &, bool &);
 private:
 	QTreeWidgetItem *tWI;
-	QLineEdit *nameE, *dirPthE;
+	QLineEdit *nameE, *pthE;
 #ifdef QMPlay2_TagEditor
 	TagEditor *tagEditor;
 #endif
 	QLabel *fileSizeL;
 	QCheckBox *catalogCB;
-	QToolButton *browseB;
+	QToolButton *browseDirB, *browseFileB;
 	AddressBox *addrB;
 	QString origDirPth;
 	bool &sync;

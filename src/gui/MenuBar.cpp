@@ -91,7 +91,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
 	addSeparator();
 	newAction(Playlist::tr("&Stop loading"), this, QKeySequence("F4"), stopLoading, false, QMPlay2Core.getIconFromTheme("process-stop"), false);
 	addSeparator();
-	newAction(Playlist::tr("&Sync directory"), this, QKeySequence("F5"), sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
+	newAction(Playlist::tr("&Synchronize group"), this, QKeySequence("F5"), sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
 	addSeparator();
 	newAction(Playlist::tr("Load &list"), this, QKeySequence("Ctrl+L"), loadPlist, false, QIcon(), false);
 	newAction(Playlist::tr("Save &list"), this, QKeySequence("Ctrl+S"), savePlist, false, QIcon(), false);

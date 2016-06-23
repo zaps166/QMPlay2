@@ -163,13 +163,14 @@ AddThr::AddThr(PlaylistWidget &pLW) :
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
 
-void AddThr::setData(const QStringList &_urls, QTreeWidgetItem *_par, bool _loadList, bool sync)
+void AddThr::setData(const QStringList &_urls, QTreeWidgetItem *_par, bool _loadList, SYNC _sync)
 {
 	ioCtrl.resetAbort();
 
 	urls = _urls;
 	par = _par;
 	loadList = _loadList;
+	sync = _sync;
 
 	firstItem = NULL;
 	lastItem = pLW.currentItem();
@@ -196,12 +197,17 @@ void AddThr::setData(const QStringList &_urls, QTreeWidgetItem *_par, bool _load
 	else
 		run();
 }
-void AddThr::setData(const QString &pth, QTreeWidgetItem *par) //dla synchronizacji
+void AddThr::setDataForSync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
-	QStringList d_urls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
-	for (int i = d_urls.size() - 1; i >= 0; --i)
-		d_urls[i] = pth + d_urls[i];
-	setData(d_urls, par, false, true);
+	if (notDir)
+		setData(QStringList() << pth, par, false, FILE_SYNC); //File synchronization needs only one file!
+	else
+	{
+		QStringList d_urls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
+		for (int i = d_urls.size() - 1; i >= 0; --i)
+			d_urls[i] = pth + d_urls[i];
+		setData(d_urls, par, false, DIR_SYNC);
+	}
 }
 
 void AddThr::stop()
@@ -214,6 +220,11 @@ void AddThr::stop()
 		wait(1000);
 		ioCtrl.clear();
 	}
+}
+
+void AddThr::changeItemText0(QTreeWidgetItem *tWI, QString name)
+{
+	tWI->setText(0, name);
 }
 
 void AddThr::run()
@@ -238,12 +249,22 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			break;
 		QString url = Functions::Url(urls.at(i)), name;
 		const Playlist::Entries entries = Playlist::read(url, &name);
-		if (!name.isEmpty()) //ładowanie playlisty
+		if (!name.isEmpty()) //Loading playlist
 		{
-			if (!loadList)
-				currentItem = pLW.newGroup(Functions::fileName(url, false), url, currentItem); //dodawanie grupy playlisty, jeżeli jest dodawana, a nie ładowana
+			if (loadList) //Loading QMPlay2 playlist on startup
+				pLW.clear(); //This can be executed only from GUI thread!
 			else
-				pLW.clear(); //wykonać można tylko z głównego wątku!
+			{
+				const QString groupName = Functions::fileName(url, false);
+				if (sync != FILE_SYNC)
+					currentItem =  pLW.newGroup(groupName, url, currentItem); //Adding a new playlist group
+				else
+				{
+					//Reuse current playlist group
+					QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, parent), Q_ARG(QString, groupName));
+					currentItem = parent;
+				}
+			}
 			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo);
 			if (!firstItem)
 				firstItem = tmpFirstItem;
@@ -285,12 +306,13 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				Demuxer::FetchTracks fetchTracks(pLW.dontUpdateAfterAdd);
 				if (Demuxer::create(url, demuxer, &fetchTracks))
 				{
-					if (fetchTracks.tracks.isEmpty())
+					if (sync == FILE_SYNC && fetchTracks.tracks.count() <= 1)
+						hasOneEntry = false; //Don't allow adding single file when syncing a file group
+					else if (fetchTracks.tracks.isEmpty())
 					{
 						if (!displayOnlyFileName && entry.name.isEmpty())
 							entry.name = demuxer->title();
 						entry.length = demuxer->length();
-						demuxer.clear();
 						hasOneEntry = true;
 					}
 					else
@@ -301,10 +323,18 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 						hasOneEntry = false;
 						tracksAdded = true;
 					}
+					demuxer.clear();
 				}
 				else if (!fetchTracks.isOK)
-				{
 					hasOneEntry = false; //Don't add entry to list if error occured
+
+				if (sync == FILE_SYNC && (!fetchTracks.isOK || fetchTracks.tracks.count() <= 1))
+				{
+					 //Change group name to "url" if error or only single file for file sync
+					QString groupName = url;
+					if (groupName.startsWith("file://"))
+						groupName.remove("file://");
+					QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, currentItem), Q_ARG(QString, groupName));
 				}
 
 				if (hasOneEntry)
@@ -341,7 +371,16 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		else
 			tmpParent = parent;
 		if (entry.GID)
-			groupList += pLW.newGroup(entry.name, entry.url, tmpParent);
+		{
+			if (sync != FILE_SYNC)
+				groupList += pLW.newGroup(entry.name, entry.url, tmpParent);
+			else
+			{
+				 //Reuse current file group
+				QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, tmpParent), Q_ARG(QString, entry.name));
+				groupList += tmpParent;
+			}
+		}
 		else
 		{
 			currentItem = pLW.newEntry(entry, tmpParent, demuxersInfo);
@@ -462,10 +501,10 @@ bool PlaylistWidget::add(const QStringList &urls, bool atEndOfList)
 	selectAfterAdd = true;
 	return add(urls, atEndOfList ? NULL : (!selectedItems().count() ? NULL : currentItem()), false);
 }
-void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par)
+void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
 	if (canModify())
-		addThr.setData(pth, par);
+		addThr.setDataForSync(pth, par, notDir);
 }
 
 void PlaylistWidget::setCurrentPlaying(QTreeWidgetItem *tWI)

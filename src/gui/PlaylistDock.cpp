@@ -147,21 +147,17 @@ void PlaylistDock::addAndPlay(const QString &_url)
 			urlMatches = itemUrl == url;
 		if (urlMatches)
 		{
-			while (list->isGroup(item))
+			playAfterAdd = true;
+			if (list->isGroup(item))
 			{
-				if (item->childCount() > 0)
-					item = item->child(0);
-				else
-					item = NULL;
-			}
-			if (item)
-			{
-				if (!item->parent())
-					list->addTopLevelItem(list->takeTopLevelItem(list->indexOfTopLevelItem(item)));
-				playAfterAdd = true;
-				addAndPlay(item);
+				list->setCurrentItem(item);
+				syncCurrentFolder();
 				return;
 			}
+			if (!item->parent())
+				list->addTopLevelItem(list->takeTopLevelItem(list->indexOfTopLevelItem(item)));
+			addAndPlay(item);
+			return;
 		}
 	}
 	/**/
@@ -533,21 +529,17 @@ void PlaylistDock::syncCurrentFolder()
 	if (pth.startsWith("file://"))
 		pth.remove(0, 7);
 	const QFileInfo pthInfo(pth);
-	if (pthInfo.isFile())
-	{
-		QMessageBox::information(this, tr("Playlist"), tr("Synchronizing with file is not supported"));
-		return;
-	}
-	if (!pthInfo.isDir())
+	const bool possibleModuleScheme = pth.contains("://");
+	if (!possibleModuleScheme && !pthInfo.isDir() && !pthInfo.isFile())
 	{
 		tWI->setData(0, Qt::UserRole, QString());
 		tWI->setIcon(0, *QMPlay2GUI.groupIcon);
 		return;
 	}
-	if (pth.right(1) != "/")
+	if (pthInfo.isDir() && pth.right(1) != "/")
 		pth += "/";
 	findE->clear();
-	list->sync(pth, tWI);
+	list->sync(pth, tWI, !pthInfo.isDir() && (possibleModuleScheme || pthInfo.isFile()));
 }
 void PlaylistDock::repeat()
 {
