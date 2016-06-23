@@ -207,3 +207,8 @@ You can strip binaries during installation to save disk space: `sudo make -j4 in
 - Look at Arch Linux PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/?h=qmplay2
 - QMPlay2 sometimes uses the external software at runtime - "youtube-dl", so it should be added as an optional package.
 - QMPlay2 has non-standard MIME types in "src/gui/Unix/x-*.xml", so they should be registered during installing from package.
+
+##Other information
+
+- QMPlay2 uses Oxygen icons which are under LGPLv3 license (https://techbase.kde.org/Projects/Oxygen).
+- QMPlay2 contains modified libmodplug sources which are used by Modplug module.
