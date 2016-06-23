@@ -241,7 +241,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		if (!name.isEmpty()) //ładowanie playlisty
 		{
 			if (!loadList)
-				currentItem = pLW.newGroup(Functions::fileName(url, false), QString(), currentItem); //dodawanie grupy playlisty, jeżeli jest dodawana, a nie ładowana
+				currentItem = pLW.newGroup(Functions::fileName(url, false), url, currentItem); //dodawanie grupy playlisty, jeżeli jest dodawana, a nie ładowana
 			else
 				pLW.clear(); //wykonać można tylko z głównego wątku!
 			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo);
