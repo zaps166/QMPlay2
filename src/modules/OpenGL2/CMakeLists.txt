@@ -90,6 +90,12 @@ target_link_libraries(${PROJECT_NAME}
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
+elseif(WIN32)
+    if(QT_USES_OPENGLES)
+        target_link_libraries(${PROJECT_NAME} GLESv2)
+    else()
+        target_link_libraries(${PROJECT_NAME} opengl32)
+    endif()
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

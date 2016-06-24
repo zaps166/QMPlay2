@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8.11)
 
-set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qmplay2/modules/")
+if(WIN32)
+    set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/modules/")
+    set(CMAKE_SHARED_MODULE_PREFIX "") # remove lib prefix
+else()
+    set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qmplay2/modules/")
+endif()
 
 add_subdirectory(FFmpeg)
 add_subdirectory(Inputs)
@@ -39,4 +44,9 @@ endif()
 
 if(USE_CHIPTUNE_GME OR USE_CHIPTUNE_SID)
     add_subdirectory(Chiptune)
+endif()
+
+if(WIN32)
+    add_subdirectory(DirectX)
+    add_subdirectory(FileAssociation)
 endif()

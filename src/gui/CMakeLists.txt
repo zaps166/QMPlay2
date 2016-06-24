@@ -78,11 +78,14 @@ endif()
 include_directories(../qmplay2/headers)
 
 if(USE_TAGLIB)
-    pkg_check_modules(TAGLIB taglib REQUIRED)
+    find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
     link_directories(${TAGLIB_LIBRARY_DIRS})
 
     add_definitions(-DQMPlay2_TagEditor)
+    if(WIN32)
+        add_definitions(-DTAGLIB_FULL_INCLUDE_PATH)
+    endif()
     list(APPEND GUI_HDR TagEditor.hpp)
     list(APPEND GUI_SRC TagEditor.cpp)
 endif()
@@ -94,6 +97,11 @@ if(SET_INSTALL_RPATH)
     else()
         set(CMAKE_INSTALL_RPATH "@executable_path/../${CMAKE_INSTALL_LIBDIR}")
     endif()
+endif()
+
+# set RC file
+if(WIN32)
+    list(APPEND GUI_SRC Windows/icons.rc)
 endif()
 
 add_executable(QMPlay2
@@ -115,35 +123,39 @@ endif()
 add_dependencies(QMPlay2 qmplay2)
 target_link_libraries(QMPlay2 $<TARGET_FILE:qmplay2>)
 
-# executable
-install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+if(WIN32)
+    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}")
+else()
+    # executable
+    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    # desktop files
-    file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-    install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+        # desktop files
+        file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
+        install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
 
-    # mime files
-    file(GLOB MIME_FILES Unix/x-*.xml)
-    install(FILES ${MIME_FILES} DESTINATION ${INSTALL_PATH_MIME}/packages/)
+        # mime files
+        file(GLOB MIME_FILES Unix/x-*.xml)
+        install(FILES ${MIME_FILES} DESTINATION ${INSTALL_PATH_MIME}/packages/)
 
-    # icon
-    install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x128/apps/)
+        # icon
+        install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x128/apps/)
 
-    # install Solid actions
-    include(InstallSolidActions)
-    add_feature_info(SolidActions SOLID_ACTIONS_PATH "Install Solid actions")
-endif()
+        # install Solid actions
+        include(InstallSolidActions)
+        add_feature_info(SolidActions SOLID_ACTIONS_PATH "Install Solid actions")
+    endif()
 
-# man page
-find_program(GZIP gzip)
-if(GZIP)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Unix/QMPlay2.1.in ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1 @ONLY)
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz
-        COMMAND ${GZIP} -c ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1 > QMPlay2.1.gz
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1)
-    add_custom_target(man ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz
-            DESTINATION ${INSTALL_PATH_MAN}/man1/)
+    # man page
+    find_program(GZIP gzip)
+    if(GZIP)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Unix/QMPlay2.1.in ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1 @ONLY)
+        add_custom_command(
+            OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz
+            COMMAND ${GZIP} -c ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1 > QMPlay2.1.gz
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1)
+        add_custom_target(man ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz
+                DESTINATION ${INSTALL_PATH_MAN}/man1/)
+    endif()
 endif()

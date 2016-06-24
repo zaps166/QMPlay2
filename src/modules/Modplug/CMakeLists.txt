@@ -56,7 +56,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Modplug_SRC}
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     find_package(ZLIB REQUIRED)
     target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY})
 endif()

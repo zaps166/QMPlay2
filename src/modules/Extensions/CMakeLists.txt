@@ -27,7 +27,7 @@ set(Extensions_RESOURCES
     icons.qrc
 )
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(NOT WIN32 AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     list(APPEND Extensions_HDR MPRIS2.hpp)
     list(APPEND Extensions_SRC MPRIS2.cpp)
 

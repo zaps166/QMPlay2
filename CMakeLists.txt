@@ -163,7 +163,11 @@ if(LANGUAGES)
     add_subdirectory(lang)
 endif()
 
-install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
+if(WIN32)
+    install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+else()
+    install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
+endif()
 
 # uninstall target
 configure_file(
