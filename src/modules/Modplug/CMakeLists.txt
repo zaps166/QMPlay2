@@ -49,17 +49,14 @@ set(Modplug_SRC
     libmodplug/sndmix.cpp
 )
 
-pkg_check_modules(ZLIB zlib REQUIRED)
-link_directories(${ZLIB_LIBRARY_DIRS})
-
-include_directories(../../qmplay2/headers libmodplug ${ZLIB_INCLUDE_DIRS})
+include_directories(../../qmplay2/headers libmodplug)
 
 add_library(${PROJECT_NAME} MODULE
     ${Modplug_HDR}
     ${Modplug_SRC}
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     find_package(ZLIB REQUIRED)
     target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY})
 endif()
@@ -72,7 +69,6 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${ZLIB_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
 
