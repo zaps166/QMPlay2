@@ -619,10 +619,6 @@
         <translation>Właściwości</translation>
     </message>
     <message>
-        <source>Choose directory</source>
-        <translation>Wybierz katalog</translation>
-    </message>
-    <message>
         <source>Incorrect path</source>
         <translation>Zła ścieżka</translation>
     </message>
@@ -639,20 +635,24 @@
         <translation>Synchronizuj z plikiem lub katalogiem</translation>
     </message>
     <message>
-        <source>Browse directory</source>
+        <source>The specified path does not exists</source>
+        <translation>Podana ścieżka nie istnieje</translation>
+    </message>
+    <message>
+        <source>Browse for a directory</source>
         <translation>Przeglądaj w poszukiwaniu katalogu</translation>
     </message>
     <message>
-        <source>Browse file</source>
-        <translation>Przeglądaj w poszukiwaniu pliku</translation>
+        <source>Browse for a file that contains more than one track</source>
+        <translation>Przeglądaj w poszukiwaniu pliku, który zawiera więcej niż jedną ścieżkę</translation>
     </message>
     <message>
-        <source>Choose file</source>
-        <translation>Wybierz plik</translation>
+        <source>Choose a directory</source>
+        <translation>Wybierz katalog</translation>
     </message>
     <message>
-        <source>The specified path does not exists</source>
-        <translation>Podana ścieżka nie istnieje</translation>
+        <source>Choose a file that contains more than one track</source>
+        <translation>Wybierz plik, który zawiera więcej niż jedną ścieżkę</translation>
     </message>
 </context>
 <context>

@@ -623,10 +623,6 @@
         <translation>Ruta incorrecta</translation>
     </message>
     <message>
-        <source>Choose directory</source>
-        <translation>Elegir el directorio</translation>
-    </message>
-    <message>
         <source>File size</source>
         <translation>Tamaño de archivo</translation>
     </message>
@@ -639,19 +635,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Browse directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Browse file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The specified path does not exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse for a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse for a file that contains more than one track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a file that contains more than one track</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

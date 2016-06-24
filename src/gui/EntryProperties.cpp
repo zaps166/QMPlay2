@@ -78,12 +78,12 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		connect(catalogCB, SIGNAL(stateChanged(int)), this, SLOT(setDirPthEEnabled(int)));
 
 		browseDirB = new QToolButton;
-		browseDirB->setToolTip(tr("Browse directory"));
+		browseDirB->setToolTip(tr("Browse for a directory"));
 		browseDirB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
 		connect(browseDirB, SIGNAL(clicked()), this, SLOT(browse()));
 
 		browseFileB = new QToolButton;
-		browseFileB->setToolTip(tr("Browse file"));
+		browseFileB->setToolTip(tr("Browse for a file that contains more than one track"));
 		browseFileB->setIcon(QMPlay2Core.getIconFromTheme("applications-multimedia"));
 		connect(browseFileB, SIGNAL(clicked()), this, SLOT(browse()));
 
@@ -168,9 +168,9 @@ void EntryProperties::browse()
 {
 	QString pth;
 	if (sender() == browseDirB)
-		pth = QFileDialog::getExistingDirectory(this, tr("Choose directory"), pthE->text());
+		pth = QFileDialog::getExistingDirectory(this, tr("Choose a directory"), pthE->text());
 	else if (sender() == browseFileB)
-		pth = QFileDialog::getOpenFileName(this, tr("Choose file"), pthE->text());
+		pth = QFileDialog::getOpenFileName(this, tr("Choose a file that contains more than one track"), pthE->text());
 	if (!pth.isEmpty())
 	{
 		if (nameE->text().isEmpty())
