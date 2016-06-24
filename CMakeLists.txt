@@ -99,7 +99,7 @@ endif()
 option(USE_XVIDEO "Build with XVideo support" ${LIB_X11_XV_FOUND})
 add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
-set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"None\"")
+set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
 # get QMPlay2 version by running the version script
 execute_process(
