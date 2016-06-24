@@ -133,7 +133,7 @@ static QStringList EnumExtensionKeys()
 			WCHAR value[16];
 			DWORD valueLen = sizeof value;
 			QString keyName = QString::fromUtf16((const ushort *)name);
-			if (!SHGetValue(HKEY_CURRENT_USER, (WCHAR *)QString("Software\\Classes\\" + keyName).utf16(), NULL, NULL, value, &valueLen) && !wcsncmp(value, L"QMPlay2", 7))
+			if (!SHGetValueW(HKEY_CURRENT_USER, (WCHAR *)QString("Software\\Classes\\" + keyName).utf16(), NULL, NULL, value, &valueLen) && !wcsncmp(value, L"QMPlay2", 7))
 				keys += keyName;
 		}
 		RegCloseKey(key);
