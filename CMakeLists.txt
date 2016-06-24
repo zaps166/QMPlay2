@@ -152,7 +152,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 
 # RPATH
-option(SET_INSTALL_RPATH "Sets RPATH for executable after install" ${DEFAULT_INSTALL_RPATH})
+option(SET_INSTALL_RPATH "Set RPATH for executable after install" ${DEFAULT_INSTALL_RPATH})
 
 # Solid actions
 set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
