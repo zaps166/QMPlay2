@@ -94,6 +94,7 @@ endif()
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} GLESv2)
+    set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
