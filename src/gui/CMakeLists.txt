@@ -78,7 +78,7 @@ endif()
 include_directories(../qmplay2/headers)
 
 if(USE_TAGLIB)
-    pkg_check_modules(TAGLIB taglib REQUIRED)
+    find_package(TagLib)
     include_directories(${TAGLIB_INCLUDE_DIRS})
     link_directories(${TAGLIB_LIBRARY_DIRS})
 
