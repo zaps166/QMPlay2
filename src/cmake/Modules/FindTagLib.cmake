@@ -4,12 +4,14 @@
 #  - TAGLIB_LIBRARIES
 #  - TAGLIB_FOUND
 
-pkg_check_modules(TAGLIB QUIET taglib)
-
-if(TAGLIB_FOUND)
-    set(TAGLIB_INCLUDE_DIRS ${TAGLIB_INCLUDE_DIRS})
-    set(TAGLIB_LIBRARY_DIRS ${TAGLIB_LIBRARY_DIRS})
-    set(TAGLIB_LIBRARIES ${TAGLIB_LIBRARIES})
+if(NOT WIN32)
+    if (TagLib_FIND_REQUIRED)
+        pkg_check_modules(TAGLIB taglib REQUIRED)
+    elseif(TagLib_FIND_QUIETLY)
+        pkg_check_modules(TAGLIB taglib QUIET)
+    else()
+        pkg_check_modules(TAGLIB taglib)
+    endif()
 else()
     find_path(TAGLIB_INCLUDE_DIR taglib/taglib.h PATH_SUFFIXES taglib)
     find_library(TAGLIB_LIBRARY NAMES tag)

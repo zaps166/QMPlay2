@@ -5,12 +5,7 @@
 #  - LIBGME_FOUND
 
 pkg_check_modules(LIBGME QUIET libgme)
-
-if(LIBGME_FOUND)
-    set(LIBGME_INCLUDE_DIRS ${LIBGME_INCLUDE_DIRS})
-    set(LIBGME_LIBRARY_DIRS ${LIBGME_LIBRARY_DIRS})
-    set(LIBGME_LIBRARIES ${LIBGME_LIBRARIES})
-else()
+if(NOT LIBGME_FOUND)
     find_path(LIBGME_INCLUDE_DIR gme/gme.h)
     find_library(LIBGME_LIBRARY NAMES gme)
 
