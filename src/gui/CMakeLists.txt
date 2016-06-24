@@ -96,6 +96,11 @@ if(SET_INSTALL_RPATH)
     endif()
 endif()
 
+# set RC file
+if(WIN32)
+    list(APPEND GUI_SRC Windows/icons.rc)
+endif()
+
 add_executable(QMPlay2
     ${GUI_HDR}
     ${GUI_SRC}
