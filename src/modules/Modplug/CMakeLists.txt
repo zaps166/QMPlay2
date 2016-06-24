@@ -49,10 +49,6 @@ set(Modplug_SRC
     libmodplug/sndmix.cpp
 )
 
-if(WIN32)
-    remove_definitions(-DUNICODE)
-endif()
-
 pkg_check_modules(ZLIB zlib REQUIRED)
 link_directories(${ZLIB_LIBRARY_DIRS})
 
