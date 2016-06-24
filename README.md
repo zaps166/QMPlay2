@@ -187,14 +187,15 @@ You can strip binaries during installation to save disk space: `sudo make -j4 in
 - Download and install CMake for Mac (for taglib).
 - Download, compile and install all dependencies from sources.
 - Add directory containing "qmake" to "PATH".
-- Run "./compile_mac n" where "n" is number of threads (4 by default).
+- Run "./compile_unix n" where "n" is number of threads (4 by default).
+
+You can also use `cmake`, but it doesn't create application bundle.
 
 ####Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
-- Some libraries are incompatible, uses unneeded libraries or doesn't exists in repository - you must built them on your own.
-- Notice that QMPlay2 uses static linking for some libraries.
-- Edit and run "./compile_win_cross".
+- Some libraries are incompatible, uses unneeded dependencies or doesn't exists in repository - you must built them on your own.
+- Run `cmake` from cross-compilation toolchain.
 
 #####Other information
 

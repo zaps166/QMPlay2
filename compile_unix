@@ -17,6 +17,44 @@ if [ ! -z $1 ] && [ $1 == "clean" ]; then
 	exit 1
 fi
 
+if [ ! -z $1 ]; then
+	Threads=$1
+else
+	if [ `uname` == "Linux" ]; then
+		Threads=$(grep -c processor /proc/cpuinfo 2> /dev/null)
+	fi
+	if [ -z $Threads ] || [ $Threads == 0 ]; then
+		Threads=4
+	fi
+fi
+
+if [ `uname` == "Darwin" ]; then
+	rm -r app/*
+
+	lrelease QMPlay2.pro
+	qmake && time make -j$Threads
+	BUILD_ERROR=$?
+
+	if [ $BUILD_ERROR != 0 ]; then
+		echo Build failed!
+	else
+		QMPlay2Dir=app/QMPlay2.app/Contents/MacOS
+		mv app/bin/QMPlay2.app app || exit 1
+		rmdir app/bin
+		mv app/lib $QMPlay2Dir || exit 1
+		mkdir -p $QMPlay2Dir/share/qmplay2/lang
+		mv lang/*.qm $QMPlay2Dir/share/qmplay2/lang
+		install_name_tool -change libqmplay2.dylib @executable_path/lib/libqmplay2.dylib $QMPlay2Dir/QMPlay2
+		for dylib in $QMPlay2Dir/lib/qmplay2/modules/*.dylib; do
+			install_name_tool -change libqmplay2.dylib @executable_path/lib/libqmplay2.dylib $dylib
+		done
+		cp ChangeLog $QMPlay2Dir/share/qmplay2
+		echo Build complete!
+	fi
+
+	exit $BUILD_ERROR
+fi
+
 if [ -z ${QT_SUFFIX+x} ]; then
 	if hash pkg-config 2> /dev/null; then
 		pkg-config Qt5Core --atleast-version 5.6.1
@@ -45,17 +83,6 @@ lrelease$QT_SUFFIX QMPlay2.pro
 
 mkdir -p app/share/qmplay2/lang
 mv lang/*.qm app/share/qmplay2/lang
-
-if [ ! -z $1 ]; then
-	Threads=$1
-else
-	if [ `uname` == "Linux" ]; then
-		Threads=$(grep -c processor /proc/cpuinfo 2> /dev/null)
-	fi
-	if [ -z $Threads ] || [ $Threads == 0 ]; then
-		Threads=4
-	fi
-fi
 
 if [ $Threads == 0 ]; then
 	qmake$QT_SUFFIX && time make

@@ -104,7 +104,6 @@ set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to comp
 # get QMPlay2 version by running the version script
 execute_process(
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     OUTPUT_VARIABLE QMPLAY2_VERSION)
 string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
 
