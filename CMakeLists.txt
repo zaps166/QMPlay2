@@ -99,7 +99,7 @@ endif()
 option(USE_XVIDEO "Build with XVideo support" ${LIB_X11_XV_FOUND})
 add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
-set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile in to QMPlay2, \"None\", or \"All\".")
+set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"None\"")
 
 # get QMPlay2 version by running the version script
 execute_process(
@@ -115,11 +115,6 @@ if(USE_QT5)
     if(CMAKE_VERSION VERSION_LESS 2.8.12)
         set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
     endif()
-    if(CMAKE_VERSION VERSION_LESS 3.1 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.7.0)) # CMake < 3.1 && Qt5 >= 5.7.0
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # GCC or Clang
-            set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-        endif()
-    endif()
     if(Qt5Widgets_VERSION VERSION_LESS 5.6.1)
         message(AUTHOR_WARNING "Qt5 >= 5.6.1 is recommended for stable usage")
     endif()
@@ -128,6 +123,15 @@ else()
         find_package(Qt4 REQUIRED)
     endif()
     include("${QT_USE_FILE}")
+endif()
+
+# Don't use C++11 if not necessary - QMPlay2 doesn't use it yet, so speed up compilation time by disabling it especially for GCC 6
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # GCC or Clang
+    if(NOT USE_QT5 OR (Qt5Widgets_VERSION VERSION_LESS 5.7.0))
+        set(CMAKE_CXX_FLAGS "-std=gnu++98 ${CMAKE_CXX_FLAGS}")
+    elseif(CMAKE_VERSION VERSION_LESS 3.1) # CMake < 3.1 && Qt5 >= 5.7.0
+        set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+    endif()
 endif()
 
 include(GNUInstallDirs)
@@ -155,7 +159,7 @@ option(SET_INSTALL_RPATH "Sets RPATH for executable after install" ${DEFAULT_INS
 set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 
 add_subdirectory(src)
-if(NOT LANGUAGES STREQUAL "None")
+if(LANGUAGES)
     add_subdirectory(lang)
 endif()
 
