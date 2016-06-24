@@ -29,6 +29,10 @@
 #pragma warning (disable:4514)
 #endif
 
+#ifdef UNICODE
+	#undef UNICODE
+#endif
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <windowsx.h>
