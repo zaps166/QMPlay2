@@ -101,11 +101,13 @@ add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
-# get QMPlay2 version by running the version script
-execute_process(
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
-    OUTPUT_VARIABLE QMPLAY2_VERSION)
-string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
+if(NOT WIN32)
+    # get QMPlay2 version by running the version script
+    execute_process(
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
+        OUTPUT_VARIABLE QMPLAY2_VERSION)
+    string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
+endif()
 
 if(USE_QT5)
     if(NOT Qt5Widgets_FOUND)
