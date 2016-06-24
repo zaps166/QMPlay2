@@ -815,7 +815,7 @@ void SettingsWidget::applyProxy()
 	if (!QMPSettings.getBool("Proxy/Use"))
 	{
 #ifdef Q_OS_WIN
-		SetEnvironmentVariable("http_proxy", NULL);
+		SetEnvironmentVariableA("http_proxy", NULL);
 #else
 		unsetenv("http_proxy");
 #endif
@@ -842,7 +842,7 @@ void SettingsWidget::applyProxy()
 			proxyEnv.insert(7, auth);
 		}
 #ifdef Q_OS_WIN
-		SetEnvironmentVariable("http_proxy", proxyEnv.toLocal8Bit());
+		SetEnvironmentVariableA("http_proxy", proxyEnv.toLocal8Bit());
 #else
 		setenv("http_proxy", proxyEnv.toLocal8Bit(), true);
 #endif

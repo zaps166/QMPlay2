@@ -21,10 +21,7 @@ else {
 LIBS += -lqmplay2
 
 RESOURCES += resources.qrc
-win32 {
-	RC_FILE = Windows/icons.rc
-	DEFINES -= UNICODE
-}
+win32: RC_FILE = Windows/icons.rc
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
