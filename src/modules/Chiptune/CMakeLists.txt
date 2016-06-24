@@ -70,8 +70,4 @@ target_link_libraries(${PROJECT_NAME}
     $<TARGET_FILE:qmplay2>
 )
 
-if(WIN32)
-    set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
-endif()
-
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

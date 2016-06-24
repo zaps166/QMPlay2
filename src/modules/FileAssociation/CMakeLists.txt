@@ -45,6 +45,4 @@ target_link_libraries(${PROJECT_NAME}
     shlwapi
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
-
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
