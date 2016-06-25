@@ -81,17 +81,18 @@ if(USE_TAGLIB)
     find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
     link_directories(${TAGLIB_LIBRARY_DIRS})
-    if(TAGLIB_STATIC_LINK)
-        set(GUI_LIBS libtag.a)
-        add_definitions(-DTAGLIB_STATIC)
-    else()
-        set(GUI_LIBS ${TAGLIB_LIBRARIES})
-    endif()
 
     add_definitions(-DQMPlay2_TagEditor)
     if(WIN32)
         add_definitions(-DTAGLIB_FULL_INCLUDE_PATH)
+
+        option(TAGLIB_STATIC_LINK "Use TagLib static library" OFF)
+        mark_as_advanced(TAGLIB_STATIC_LINK)
+        if(TAGLIB_STATIC_LINK)
+            add_definitions(-DTAGLIB_STATIC)
+        endif()
     endif()
+
     list(APPEND GUI_HDR TagEditor.hpp)
     list(APPEND GUI_SRC TagEditor.cpp)
 endif()
@@ -100,7 +101,7 @@ if(WIN32)
     # set RC file
     list(APPEND GUI_SRC Windows/icons.rc)
 
-    #Updater
+    # updater
     add_definitions(-DUPDATER)
     list(APPEND GUI_HDR Updater.hpp)
     list(APPEND GUI_SRC Updater.cpp)
@@ -116,7 +117,7 @@ if(SET_INSTALL_RPATH)
 endif()
 
 if(WIN32 AND NOT USE_CMD)
-    set(WIN32_EXE WIN32) # don't show cmd when running on windows
+    set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
 add_executable(QMPlay2 ${WIN32_EXE}
@@ -141,8 +142,8 @@ endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)
     target_link_libraries(QMPlay2 ${CUSTOM_GUI_LIBRARIES})
-else()
-    target_link_libraries(QMPlay2 ${GUI_LIBS})
+elseif(USE_TAGLIB)
+    target_link_libraries(QMPlay2 ${TAGLIB_LIBRARIES})
 endif()
 
 if(WIN32)

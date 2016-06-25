@@ -100,10 +100,10 @@ link_directories(
     ${LIBASS_LIBRARY_DIRS}
 )
 
-set(QMPLAY2_LIBS
+set(LIBQMPLAY2_LIBS
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
-    ${LIBASS_LIBRARIES}
+    # libass will be added later
 )
 
 include_directories(
@@ -116,12 +116,12 @@ include_directories(
 if(USE_AVRESAMPLE)
     add_definitions(-DQMPLAY2_AVRESAMPLE)
     pkg_check_modules(LIBAVRESAMPLE libavresample>=1.2.0 REQUIRED)
-    list(APPEND QMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
+    list(APPEND LIBQMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
     include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
 else()
     pkg_check_modules(LIBSWRESAMPLE libswresample>=0.18.100 REQUIRED)
-    list(APPEND QMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
+    list(APPEND LIBQMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
     include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
 endif()
@@ -147,22 +147,26 @@ else()
 endif()
 
 if(WIN32)
+    target_link_libraries(${PROJECT_NAME} powrprof winmm)
     set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
     mark_as_advanced(CUSTOM_LIBQMPLAY2_LIBRARIES)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
         separate_arguments(CUSTOM_LIBQMPLAY2_LIBRARIES)
-        target_link_libraries(${PROJECT_NAME} ${CUSTOM_LIBQMPLAY2_LIBRARIES})
+        list(APPEND LIBQMPLAY2_LIBS ${CUSTOM_LIBQMPLAY2_LIBRARIES})
     else()
-        target_link_libraries(${PROJECT_NAME} ${QMPLAY2_LIBS} powrprof winmm)
+        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 
     set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/")
 else()
-    target_link_libraries(${PROJECT_NAME} ${QMPLAY2_LIBS})
-
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
     if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)
     endif()
+
+    list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
 endif()
+
+target_link_libraries(${PROJECT_NAME} ${LIBQMPLAY2_LIBS})

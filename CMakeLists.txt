@@ -3,7 +3,7 @@ project(QMPlay2)
 
 # set default build type as Release
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/src/cmake/Modules/")
@@ -46,9 +46,9 @@ option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
 add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")
 
 if(WIN32)
-    option(USE_CMD "Show cmd when running QMPlay2" OFF)
+    option(USE_CMD "Show CMD when running QMPlay2" OFF)
     mark_as_advanced(USE_CMD)
-    add_feature_info(CMD USE_CMD "Show cmd when running QMPlay2")
+    add_feature_info(CMD USE_CMD "Show CMD when running QMPlay2")
 endif()
 
 option(USE_ALSA "Build with ALSA support" ${DEFAULT_ALSA})
@@ -59,7 +59,6 @@ option(USE_PORTAUDIO "Build with PortAudio support" ${DEFAULT_PORTAUDIO})
 add_feature_info(PortAudio USE_PORTAUDIO "Build with PortAudio support")
 option(USE_TAGLIB "Build with tags editor" ON)
 add_feature_info(TagLib USE_TAGLIB "Build with tags editor")
-option(TAGLIB_STATIC_LINK "link with static taglib" OFF)
 
 if(NOT DEFINED USE_FFMPEG_VAAPI)
     pkg_check_modules(LIBS_VAAPI libva libva-x11 x11)
@@ -133,14 +132,17 @@ else()
     include("${QT_USE_FILE}")
 endif()
 
-# Don't use C++11 if not necessary - QMPlay2 doesn't use it yet, so speed up compilation time by disabling it especially for GCC 6
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # GCC or Clang
+    # don't use C++11 if not necessary - QMPlay2 doesn't use it yet, so speed up compilation time by disabling it especially for GCC 6
     if(NOT USE_QT5 OR (Qt5Widgets_VERSION VERSION_LESS 5.7.0))
         set(CMAKE_CXX_FLAGS "-std=gnu++98 ${CMAKE_CXX_FLAGS}")
     elseif(CMAKE_VERSION VERSION_LESS 3.1) # CMake < 3.1 && Qt5 >= 5.7.0
         set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
     endif()
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-exceptions")
+
+    # QMPlay2 doesn't use exceptions - disable it and also make sure that debugging symbols are disabled
+    set(CMAKE_CXX_FLAGS_RELEASE "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
 endif()
 
 include(GNUInstallDirs)
