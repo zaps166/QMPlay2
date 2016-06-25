@@ -52,13 +52,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(STATIC_PORTAUDIO_LIBRARIES "" CACHE STRING "Static libs for PortAudio")
-    mark_as_advanced(STATIC_PORTAUDIO_LIBRARIES)
+    set(CUSTOM_PORTAUDIO_LIBRARIES "" CACHE STRING "Static libs for PortAudio")
+    mark_as_advanced(CUSTOM_PORTAUDIO_LIBRARIES)
 endif()
 
-if(WIN32 AND STATIC_PORTAUDIO_LIBRARIES)
-    separate_arguments(STATIC_PORTAUDIO_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${STATIC_PORTAUDIO_LIBRARIES})
+if(WIN32 AND CUSTOM_PORTAUDIO_LIBRARIES)
+    separate_arguments(CUSTOM_PORTAUDIO_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${CUSTOM_PORTAUDIO_LIBRARIES})
 else()
     target_link_libraries(${PROJECT_NAME} ${LIBPORTAUDIO_LIBRARIES})
 endif()

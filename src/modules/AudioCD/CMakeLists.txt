@@ -50,13 +50,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(STATIC_AUDIOCD_LIBRARIES "" CACHE STRING "Static libs for AudioCD")
-    mark_as_advanced(STATIC_AUDIOCD_LIBRARIES)
+    set(CUSTOM_AUDIOCD_LIBRARIES "" CACHE STRING "Static libs for AudioCD")
+    mark_as_advanced(CUSTOM_AUDIOCD_LIBRARIES)
 endif()
 
-if(WIN32 AND STATIC_AUDIOCD_LIBRARIES)
-    separate_arguments(STATIC_AUDIOCD_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${STATIC_AUDIOCD_LIBRARIES})
+if(WIN32 AND CUSTOM_AUDIOCD_LIBRARIES)
+    separate_arguments(CUSTOM_AUDIOCD_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${CUSTOM_AUDIOCD_LIBRARIES})
 else()
     target_link_libraries(${PROJECT_NAME} ${LIBCD_LIBRARIES})
 endif()

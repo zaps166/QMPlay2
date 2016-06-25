@@ -45,6 +45,12 @@ add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
 add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")
 
+if(WIN32)
+    option(USE_CMD "Show cmd when running QMPlay2" OFF)
+    mark_as_advanced(USE_CMD)
+    add_feature_info(CMD USE_CMD "Show cmd when running QMPlay2")
+endif()
+
 option(USE_ALSA "Build with ALSA support" ${DEFAULT_ALSA})
 add_feature_info(ALSA USE_ALSA "Build with ALSA support")
 option(USE_OPENGL "Build with OpenGL support" ON)

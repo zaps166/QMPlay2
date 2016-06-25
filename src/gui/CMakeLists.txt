@@ -110,7 +110,11 @@ if(SET_INSTALL_RPATH)
     endif()
 endif()
 
-add_executable(QMPlay2
+if(WIN32 AND NOT USE_CMD)
+    set(WIN32_EXE WIN32) # don't show cmd when running on windows
+endif()
+
+add_executable(QMPlay2 ${WIN32_EXE}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_RESOURCES_RCC}
@@ -126,13 +130,13 @@ add_dependencies(QMPlay2 qmplay2)
 target_link_libraries(QMPlay2 $<TARGET_FILE:qmplay2>)
 
 if(WIN32)
-    set(STATIC_GUI_LIBRARIES "" CACHE STRING "Static libs for GUI")
-    mark_as_advanced(STATIC_GUI_LIBRARIES)
+    set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Static libs for GUI")
+    mark_as_advanced(CUSTOM_GUI_LIBRARIES)
 endif()
-if(WIN32 AND STATIC_GUI_LIBRARIES)
+if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     add_definitions(-DTAGLIB_STATIC)
-    separate_arguments(STATIC_GUI_LIBRARIES)
-    target_link_libraries(QMPlay2 ${STATIC_GUI_LIBRARIES})
+    separate_arguments(CUSTOM_GUI_LIBRARIES)
+    target_link_libraries(QMPlay2 ${CUSTOM_GUI_LIBRARIES})
 else()
     target_link_libraries(QMPlay2 ${GUI_LIBS})
 endif()

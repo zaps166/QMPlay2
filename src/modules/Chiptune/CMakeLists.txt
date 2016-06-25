@@ -70,13 +70,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(STATIC_CHIPTUNE_LIBRARIES "" CACHE STRING "Static libs for Chiptune")
-    mark_as_advanced(STATIC_CHIPTUNE_LIBRARIES)
+    set(CUSTOM_CHIPTUNE_LIBRARIES "" CACHE STRING "Static libs for Chiptune")
+    mark_as_advanced(CUSTOM_CHIPTUNE_LIBRARIES)
 endif()
 
-if(WIN32 AND STATIC_CHIPTUNE_LIBRARIES)
-    separate_arguments(STATIC_CHIPTUNE_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${STATIC_CHIPTUNE_LIBRARIES})
+if(WIN32 AND CUSTOM_CHIPTUNE_LIBRARIES)
+    separate_arguments(CUSTOM_CHIPTUNE_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${CUSTOM_CHIPTUNE_LIBRARIES})
 else()
     target_link_libraries(${PROJECT_NAME} ${Chiptune_LIBS})
 endif()
