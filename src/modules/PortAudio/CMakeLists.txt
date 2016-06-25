@@ -48,8 +48,19 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${LIBPORTAUDIO_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
+
+if(WIN32)
+    set(STATIC_PORTAUDIO_LIBRARIES "" CACHE STRING "Static libs for PortAudio")
+    mark_as_advanced(STATIC_PORTAUDIO_LIBRARIES)
+endif()
+
+if(WIN32 AND STATIC_PORTAUDIO_LIBRARIES)
+    separate_arguments(STATIC_PORTAUDIO_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${STATIC_PORTAUDIO_LIBRARIES})
+else()
+    target_link_libraries(${PROJECT_NAME} ${LIBPORTAUDIO_LIBRARIES})
+endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

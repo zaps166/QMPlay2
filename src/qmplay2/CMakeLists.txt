@@ -146,15 +146,21 @@ else()
     target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
 endif()
 
-target_link_libraries(${PROJECT_NAME}
-    ${QMPLAY2_LIBS}
-)
-
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} powrprof winmm)
+    set(STATIC_QMPLAY2_LIBRARIES "" CACHE STRING "Static libs for libqmplay2")
+    mark_as_advanced(STATIC_QMPLAY2_LIBRARIES)
+    if(STATIC_QMPLAY2_LIBRARIES)
+        separate_arguments(STATIC_QMPLAY2_LIBRARIES)
+        target_link_libraries(${PROJECT_NAME} ${STATIC_QMPLAY2_LIBRARIES})
+    else()
+        target_link_libraries(${PROJECT_NAME} ${QMPLAY2_LIBS} powrprof winmm)
+    endif()
+
     set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/")
 else()
+    target_link_libraries(${PROJECT_NAME} ${QMPLAY2_LIBS})
+
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
     if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)

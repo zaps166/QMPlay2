@@ -46,8 +46,19 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${LIBCD_LIBRARIES}
     $<TARGET_FILE:qmplay2>
 )
+
+if(WIN32)
+    set(STATIC_AUDIOCD_LIBRARIES "" CACHE STRING "Static libs for AudioCD")
+    mark_as_advanced(STATIC_AUDIOCD_LIBRARIES)
+endif()
+
+if(WIN32 AND STATIC_AUDIOCD_LIBRARIES)
+    separate_arguments(STATIC_AUDIOCD_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${STATIC_AUDIOCD_LIBRARIES})
+else()
+    target_link_libraries(${PROJECT_NAME} ${LIBCD_LIBRARIES})
+endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

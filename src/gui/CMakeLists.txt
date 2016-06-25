@@ -81,6 +81,7 @@ if(USE_TAGLIB)
     find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
     link_directories(${TAGLIB_LIBRARY_DIRS})
+    set(GUI_LIBS ${TAGLIB_LIBRARIES})
 
     add_definitions(-DQMPlay2_TagEditor)
     if(WIN32)
@@ -88,6 +89,16 @@ if(USE_TAGLIB)
     endif()
     list(APPEND GUI_HDR TagEditor.hpp)
     list(APPEND GUI_SRC TagEditor.cpp)
+endif()
+
+if(WIN32)
+    # set RC file
+    list(APPEND GUI_SRC Windows/icons.rc)
+
+    #Updater
+    add_definitions(-DUPDATER)
+    list(APPEND GUI_HDR Updater.hpp)
+    list(APPEND GUI_SRC Updater.cpp)
 endif()
 
 # RPATH
@@ -99,20 +110,11 @@ if(SET_INSTALL_RPATH)
     endif()
 endif()
 
-# set RC file
-if(WIN32)
-    list(APPEND GUI_SRC Windows/icons.rc)
-endif()
-
 add_executable(QMPlay2
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_RESOURCES_RCC}
 )
-
-if(USE_TAGLIB)
-    target_link_libraries(QMPlay2 ${TAGLIB_LIBRARIES})
-endif()
 
 if(USE_QT5)
     qt5_use_modules(QMPlay2 Gui Widgets Network)
@@ -122,6 +124,18 @@ endif()
 
 add_dependencies(QMPlay2 qmplay2)
 target_link_libraries(QMPlay2 $<TARGET_FILE:qmplay2>)
+
+if(WIN32)
+    set(STATIC_GUI_LIBRARIES "" CACHE STRING "Static libs for GUI")
+    mark_as_advanced(STATIC_GUI_LIBRARIES)
+endif()
+if(WIN32 AND STATIC_GUI_LIBRARIES)
+    add_definitions(-DTAGLIB_STATIC)
+    separate_arguments(STATIC_GUI_LIBRARIES)
+    target_link_libraries(QMPlay2 ${STATIC_GUI_LIBRARIES})
+else()
+    target_link_libraries(QMPlay2 ${GUI_LIBS})
+endif()
 
 if(WIN32)
     install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}")
