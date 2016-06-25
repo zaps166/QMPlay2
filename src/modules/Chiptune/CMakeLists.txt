@@ -66,8 +66,19 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${Chiptune_LIBS}
     $<TARGET_FILE:qmplay2>
 )
+
+if(WIN32)
+    set(CUSTOM_CHIPTUNE_LIBRARIES "" CACHE STRING "Custom libraries for Chiptune")
+    mark_as_advanced(CUSTOM_CHIPTUNE_LIBRARIES)
+endif()
+
+if(WIN32 AND CUSTOM_CHIPTUNE_LIBRARIES)
+    separate_arguments(CUSTOM_CHIPTUNE_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} ${CUSTOM_CHIPTUNE_LIBRARIES})
+else()
+    target_link_libraries(${PROJECT_NAME} ${Chiptune_LIBS})
+endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
