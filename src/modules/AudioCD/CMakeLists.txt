@@ -50,7 +50,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(CUSTOM_AUDIOCD_LIBRARIES "" CACHE STRING "Static libs for AudioCD")
+    set(CUSTOM_AUDIOCD_LIBRARIES "" CACHE STRING "Custom libraries for AudioCD")
     mark_as_advanced(CUSTOM_AUDIOCD_LIBRARIES)
 endif()
 

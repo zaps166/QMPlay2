@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(CUSTOM_PORTAUDIO_LIBRARIES "" CACHE STRING "Static libs for PortAudio")
+    set(CUSTOM_PORTAUDIO_LIBRARIES "" CACHE STRING "Custom libraries for PortAudio")
     mark_as_advanced(CUSTOM_PORTAUDIO_LIBRARIES)
 endif()
 

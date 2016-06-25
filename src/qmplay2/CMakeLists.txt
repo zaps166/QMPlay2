@@ -147,7 +147,7 @@ else()
 endif()
 
 if(WIN32)
-    set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Static libs for libqmplay2")
+    set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
     mark_as_advanced(CUSTOM_LIBQMPLAY2_LIBRARIES)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
         separate_arguments(CUSTOM_LIBQMPLAY2_LIBRARIES)

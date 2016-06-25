@@ -59,6 +59,7 @@ option(USE_PORTAUDIO "Build with PortAudio support" ${DEFAULT_PORTAUDIO})
 add_feature_info(PortAudio USE_PORTAUDIO "Build with PortAudio support")
 option(USE_TAGLIB "Build with tags editor" ON)
 add_feature_info(TagLib USE_TAGLIB "Build with tags editor")
+option(TAGLIB_STATIC_LINK "link with static taglib" OFF)
 
 if(NOT DEFINED USE_FFMPEG_VAAPI)
     pkg_check_modules(LIBS_VAAPI libva libva-x11 x11)
@@ -139,6 +140,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     elseif(CMAKE_VERSION VERSION_LESS 3.1) # CMake < 3.1 && Qt5 >= 5.7.0
         set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
     endif()
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fno-exceptions")
 endif()
 
 include(GNUInstallDirs)
