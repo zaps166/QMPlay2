@@ -42,6 +42,14 @@
 
 #include <math.h>
 
+/* OpenGL|ES 2.0 doesn't have those definitions */
+#ifndef GL_WRITE_ONLY
+	#define GL_WRITE_ONLY 0x88B9
+#endif
+#ifndef GL_PIXEL_UNPACK_BUFFER
+	#define GL_PIXEL_UNPACK_BUFFER 0x88EC
+#endif
+
 /* RotAnimation */
 
 void RotAnimation::updateCurrentValue(const QVariant &value)
@@ -72,11 +80,12 @@ OpenGL2Common::OpenGL2Common() :
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
+	hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0), doClear(0),
 	aspectRatio(0.0), zoom(0.0),
-	sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
+	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
 	mouseTime(0.0)
 {
@@ -255,6 +264,12 @@ void OpenGL2Common::initializeGL()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
+	if (hasPbo)
+	{
+		glGenBuffers(4, pbo);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	}
+
 #ifdef VSYNC_SETTINGS
 	setVSync(vSync);
 #endif
@@ -295,11 +310,15 @@ void OpenGL2Common::paintGL()
 			/* Prepare textures */
 			for (qint32 p = 0; p < 3; ++p)
 			{
+				const GLsizei w = checkLinesize(p) ? videoFrame.linesize[p] : widths[p];
+				const GLsizei h = heights[p];
+				if (hasPbo)
+				{
+					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
+					glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, NULL, GL_DYNAMIC_DRAW);
+				}
 				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-				if (checkLinesize(p))
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, videoFrame.linesize[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
-				else
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[p], heights[p], 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
 			}
 
 			/* Prepare texture coordinates */
@@ -311,20 +330,42 @@ void OpenGL2Common::paintGL()
 		/* Load textures */
 		for (qint32 p = 0; p < 3; ++p)
 		{
-			glActiveTexture(GL_TEXTURE0 + p);
-			glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-			if (checkLinesize(p) || videoFrame.linesize[p] == widths[p])
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoFrame.linesize[p], heights[p], GL_LUMINANCE, GL_UNSIGNED_BYTE, videoFrame.buffer[p].constData());
-			else
+			const quint8 *data = videoFrame.buffer[p].constData();
+			const bool correctLinesize = (videoFrame.linesize[p] == widths[p] || checkLinesize(p));
+			const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
+			const GLsizei h = heights[p];
+			if (hasPbo)
 			{
-				const quint8 *data = videoFrame.buffer[p].constData();
-				for (int y = 0; y < heights[p]; ++y)
+				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
+				quint8 *dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+				if (!dst)
+					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+				else
 				{
-					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, widths[p], 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
-					data += videoFrame.linesize[p];
+					if (correctLinesize)
+						memcpy(dst, data, w * h);
+					else for (int y = 0; y < h; ++y)
+					{
+						memcpy(dst, data, w);
+						data += videoFrame.linesize[p];
+						dst  += w;
+					}
+					glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+					data = NULL;
 				}
 			}
+			glActiveTexture(GL_TEXTURE0 + p);
+			glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+			if (hasPbo || correctLinesize)
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+			else for (int y = 0; y < h; ++y)
+			{
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+				data += videoFrame.linesize[p];
+			}
 		}
+		if (hasPbo)
+			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
 		videoFrame.clear();
 		hasImage = true;
@@ -403,17 +444,41 @@ void OpenGL2Common::paintGL()
 		QRect bounds;
 		const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
 		bool mustRepaint = Functions::mustRepaintOSD(osdList, osdChecksums, &scaleW, &scaleH, &bounds);
+		bool hasNewSize = false;
 		if (!mustRepaint)
 			mustRepaint = osdImg.size() != bounds.size();
 		if (mustRepaint)
 		{
 			if (osdImg.size() != bounds.size())
+			{
 				osdImg = QImage(bounds.size(), QImage::Format_ARGB32);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				hasNewSize = true;
+			}
 			osdImg.fill(0);
 			QPainter p(&osdImg);
 			p.translate(-bounds.topLeft());
 			Functions::paintOSD(false, osdList, scaleW, scaleH, p, &osdChecksums);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, osdImg.bits());
+			const quint8 *data = osdImg.constBits();
+			if (hasPbo)
+			{
+				const GLsizeiptr dataSize = (osdImg.width() * osdImg.height()) << 2;
+				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[0]);
+				if (hasNewSize)
+					glBufferData(GL_PIXEL_UNPACK_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
+				quint8 *dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+				if (!dst)
+					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+				else
+				{
+					memcpy(dst, data, dataSize);
+					glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+					data = NULL;
+				}
+			}
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bounds.width(), bounds.height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
+			if (hasPbo && !data)
+				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		}
 
 		const float left   = (bounds.left() + subsX) * 2.0f / winSize.width();
@@ -505,8 +570,11 @@ void OpenGL2Common::initGLProc()
 	glGenBuffers = (GLGenBuffers)QOpenGLContext::currentContext()->getProcAddress("glGenBuffers");
 	glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
 	glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
+	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
+	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
 	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
 	hasVbo = (glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers);
+	hasPbo = hasVbo && glMapBuffer && glUnmapBuffer;
 
 }
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()

@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.06.23:
+Changes in QMPlay2 build 16.06.26:
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
 	- allow file group and Audio CD tracks synchronization (on F5),
 	- fixed color in graphics subtitles (e.g. dvdsub),
@@ -6,6 +6,7 @@ Changes in QMPlay2 build 16.06.23:
 	- updated Russian translation (victorr2007),
 	- allow mouse wheel to change the volume,
 	- added CMake build (Zamarin Arthur),
+	- OpenGL2 now uses PBO if available,
 	- show more information to the user,
 	- bugfix,
 

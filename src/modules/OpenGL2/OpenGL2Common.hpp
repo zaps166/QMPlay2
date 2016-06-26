@@ -64,6 +64,8 @@ class OpenGL2Common
 	typedef    void  (APIENTRY *GLGenBuffers)(GLsizei, GLuint *);
 	typedef    void  (APIENTRY *GLBindBuffer)(GLenum, GLuint);
 	typedef    void  (APIENTRY *GLBufferData)(GLenum, GLsizeiptr, const void *, GLenum);
+	typedef    void *(APIENTRY *GLMapBuffer)(GLenum, GLbitfield);
+	typedef GLboolean(APIENTRY *GLUnmapBuffer)(GLenum);
 	typedef    void  (APIENTRY *GLDeleteBuffers)(GLsizei, const GLuint *);
 #endif
 public:
@@ -104,6 +106,8 @@ protected:
 	GLGenBuffers glGenBuffers;
 	GLBindBuffer glBindBuffer;
 	GLBufferData glBufferData;
+	GLMapBuffer glMapBuffer;
+	GLUnmapBuffer glUnmapBuffer;
 	GLDeleteBuffers glDeleteBuffers;
 #endif
 
@@ -134,6 +138,9 @@ public:
 	float Contrast, Saturation, Brightness, Hue;
 	float texCoordYCbCr[8];
 	quint32 textures[4];
+
+	quint32 pbo[4];
+	bool hasPbo;
 
 	bool isPaused, isOK, hasImage, doReset, setMatrix;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;

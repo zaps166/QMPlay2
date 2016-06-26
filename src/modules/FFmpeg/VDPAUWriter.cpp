@@ -631,7 +631,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 					{
 						if (mustRepaint)
 						{
-							const void *data = osdImg.bits();
+							const void *data = osdImg.constBits();
 							const quint32 linesize = bounds.width() << 2;
 							vdp_bitmap_surface_put_bits_native(bitmapSurface, &data, &linesize, NULL);
 						}

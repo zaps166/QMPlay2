@@ -315,7 +315,7 @@ void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, 
 	const qreal scaleW = (qreal)W / osdW, scaleH = (qreal)H / imgH;
 	const bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_checksums, &scaleW, &scaleH, &bounds);
 	bounds = QRect(floor(bounds.x() * iScaleW), floor(bounds.y() * iScaleH), ceil(bounds.width() * iScaleW), ceil(bounds.height() * iScaleH)) & QRect(0, 0, osdW, imgH);
-	quint32 *osdImgData = (quint32 *)osdImg.bits();
+	quint32 *osdImgData = (quint32 *)osdImg.constBits();
 	if (mustRepaint)
 	{
 		for (int h = bounds.top(); h <= bounds.bottom(); ++h)
