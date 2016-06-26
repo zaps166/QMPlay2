@@ -1413,10 +1413,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Sous-titres chargés</translation>
     </message>
     <message>
-        <source>Sound off</source>
-        <translation>Son coupé</translation>
-    </message>
-    <message>
         <source>Subtitles off</source>
         <translation>Pas de sous-titres</translation>
     </message>
@@ -1479,6 +1475,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Playback has been incorrectly terminated!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio off</source>
+        <translation>Son coupé</translation>
     </message>
 </context>
 <context>

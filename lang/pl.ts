@@ -1415,10 +1415,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Załadowane napisy</translation>
     </message>
     <message>
-        <source>Sound off</source>
-        <translation>Dźwięk wyłączony</translation>
-    </message>
-    <message>
         <source>Subtitles off</source>
         <translation>Napisy wyłączone</translation>
     </message>
@@ -1481,6 +1477,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Playback has been incorrectly terminated!</source>
         <translation>Odtwarzanie zostało nieprawidłowo zakończone!</translation>
+    </message>
+    <message>
+        <source>Video off</source>
+        <translation>Obraz wyłączony</translation>
+    </message>
+    <message>
+        <source>Audio off</source>
+        <translation>Dźwięk wyłączony</translation>
     </message>
 </context>
 <context>

@@ -897,12 +897,14 @@ void PlayClass::toggleAVS(bool b)
 		audioEnabled = b;
 		audioStream = -1;
 		if (!audioEnabled)
-			messageAndOSD(tr("Sound off"));
+			messageAndOSD(tr("Audio off"));
 	}
 	else if (sender()->objectName() == "toggleVideo")
 	{
 		videoEnabled = b;
 		videoStream = -1;
+		if (!videoEnabled)
+			emit QMPlay2Core.statusBarMessage(tr("Video off"), 1000);
 	}
 	else if (sender()->objectName() == "toggleSubtitles")
 	{
@@ -911,7 +913,8 @@ void PlayClass::toggleAVS(bool b)
 		if (!subtitlesEnabled)
 			messageAndOSD(tr("Subtitles off"));
 	}
-	reload = true;
+	if (isPlaying())
+		reload = true;
 }
 void PlayClass::setSpherical(bool b)
 {
