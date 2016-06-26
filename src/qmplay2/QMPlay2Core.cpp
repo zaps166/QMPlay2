@@ -155,7 +155,13 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		QDir(settingsDir).mkdir("Modules");
 		pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files);
 		if (!modulesInSubdirs)
+		{
+#ifndef Q_OS_ANDROID
 			pluginsList += QDir(libDir + "modules/").entryInfoList(QDir::Files);
+#else
+			pluginsList += QDir(libDir + "/").entryInfoList(QDir::Files);
+#endif
+		}
 		else
 		{
 			//Scan for modules in subdirectories - designed for CMake non-installed build
