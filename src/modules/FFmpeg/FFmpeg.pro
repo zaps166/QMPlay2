@@ -10,13 +10,13 @@ QT += network
 win32 {
 	DESTDIR = ../../../app/modules
 	QMAKE_LIBDIR += ../../../app
-}
-else {
+} else {
 	DESTDIR = ../../../app/lib/qmplay2/modules
 	QMAKE_LIBDIR += ../../../app/lib
 }
 
-win32: LIBS += -lws2_32 -lavformat -lavcodec -lswscale -lavutil
+win32: LIBS += -lws2_32
+win32|android: LIBS += -lavformat -lavcodec -lswscale -lavutil
 else {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig

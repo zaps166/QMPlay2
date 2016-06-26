@@ -9,8 +9,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 win32 {
 	DESTDIR = ../../../app/modules
 	QMAKE_LIBDIR += ../../../app
-}
-else {
+} else {
 	DESTDIR = ../../../app/lib/qmplay2/modules
 	QMAKE_LIBDIR += ../../../app/lib
 }

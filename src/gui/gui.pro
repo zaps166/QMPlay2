@@ -12,8 +12,7 @@ TARGET = QMPlay2
 win32 {
 	QMAKE_LIBDIR += ../../app
 	DESTDIR = ../../app
-}
-else {
+} else {
 	QMAKE_LIBDIR += ../../app/lib
 	DESTDIR = ../../app/bin
 	!android:!macx: LIBS += -lrt #For glibc < 2.17
@@ -33,9 +32,12 @@ DEPENDPATH  += . ../qmplay2/headers
 HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoEqualizer.hpp Appearance.hpp VolWidget.hpp RepeatMode.hpp
 SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoEqualizer.cpp Appearance.cpp VolWidget.cpp
 
-DEFINES += QMPlay2_TagEditor
-HEADERS += TagEditor.hpp
-SOURCES += TagEditor.cpp
+!android {
+	DEFINES += QMPlay2_TagEditor
+	HEADERS += TagEditor.hpp
+	SOURCES += TagEditor.cpp
+}
+
 win32 {
 	DEFINES += UPDATER
 	HEADERS += Updater.hpp
@@ -46,5 +48,5 @@ win32 {
 }
 else {
 	macx: QT_CONFIG -= no-pkg-config
-	PKGCONFIG += taglib
+	!android: PKGCONFIG += taglib
 }
