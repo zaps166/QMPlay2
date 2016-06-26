@@ -152,7 +152,7 @@ void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 
 QStringList QMPlay2GUIClass::getLanguages()
 {
-	QStringList langs = QDir(langPath).entryList(QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
+	QStringList langs = QDir(langPath).entryList(QStringList() << "*.qm", QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
 	for (int i = 0; i < langs.size(); i++)
 	{
 		int idx = langs[i].indexOf('.');
@@ -475,29 +475,41 @@ int main(int argc, char *argv[])
 	}
 
 	QString libPath, sharePath = QCoreApplication::applicationDirPath();
-#if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
-	sharePath += "/../share/qmplay2";
-	libPath = QMPlay2CoreClass::getLibDir();
-	if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
+	bool cmakeBuildFound = false;
+	if (QDir(sharePath).exists("CMakeFiles/QMPlay2.dir"))
 	{
-		libPath += "/../";
-		if (sizeof(void *) == 8 && QDir(libPath).exists("lib64/qmplay2"))
-			libPath += "lib64";
-		else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32/qmplay2"))
-			libPath += "lib32";
-		else
-			libPath += "lib";
+		//We're in CMake not-installed build
+		libPath = sharePath + "/.."; //Here is "modules directory
+		sharePath += "/../.."; //Here is "lang" directory
+		if (QDir(libPath).exists("modules") || QDir(sharePath).exists("lang"))
+			cmakeBuildFound = true;
 	}
-	libPath += "/qmplay2";
+	if (!cmakeBuildFound)
+	{
+#if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
+		sharePath += "/../share/qmplay2";
+		libPath = QMPlay2CoreClass::getLibDir();
+		if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
+		{
+			libPath += "/../";
+			if (sizeof(void *) == 8 && QDir(libPath).exists("lib64/qmplay2"))
+				libPath += "lib64";
+			else if (sizeof(void *) == 4 && QDir(libPath).exists("lib32/qmplay2"))
+				libPath += "lib32";
+			else
+				libPath += "lib";
+		}
+		libPath += "/qmplay2";
 #elif defined Q_OS_MAC
-	QString cdUp;
-	if (!QDir(sharePath).exists("share"))
-		cdUp = "/..";
-	libPath = sharePath + cdUp + "/lib/qmplay2";
-	sharePath += cdUp + "/share/qmplay2";
+		QString cdUp;
+		if (!QDir(sharePath).exists("share"))
+			cdUp = "/..";
+		libPath = sharePath + cdUp + "/lib/qmplay2";
+		sharePath += cdUp + "/share/qmplay2";
 #else
-	libPath = sharePath;
+		libPath = sharePath;
 #endif
+	}
 
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
@@ -516,7 +528,7 @@ int main(int argc, char *argv[])
 	do
 	{
 		/* QMPlay2GUI musi być stworzone już wcześniej */
-		QMPlay2Core.init(!help, libPath, sharePath);
+		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath);
 
 		Settings &settings = QMPlay2Core.getSettings();
 		QString lastVer = settings.getString("Version", QMPlay2Version);
@@ -529,7 +541,6 @@ int main(int argc, char *argv[])
 			settings.remove("audioWriters");
 			settings.remove("videoWriters");
 		}
-
 		if (settings.contains("Volume"))
 		{
 			const int vol = settings.getInt("Volume");

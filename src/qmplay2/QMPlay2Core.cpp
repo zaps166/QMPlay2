@@ -117,7 +117,7 @@ void QMPlay2CoreClass::suspend()
 #endif
 }
 
-void QMPlay2CoreClass::init(bool loadModules, const QString &libPath, const QString &sharePath, const QString &settingsPath)
+void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath)
 {
 	if (!settingsDir.isEmpty())
 		return;
@@ -151,15 +151,21 @@ void QMPlay2CoreClass::init(bool loadModules, const QString &libPath, const QStr
 
 	if (loadModules)
 	{
-		QStringList pluginsName;
 		QFileInfoList pluginsList;
-#ifndef Q_OS_ANDROID
 		QDir(settingsDir).mkdir("Modules");
-		pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
-		pluginsList += QDir(libDir      + "modules/").entryInfoList(QDir::Files | QDir::NoSymLinks);
-#else
-		pluginsList += QDir(qmplay2Dir).entryInfoList(QDir::Files | QDir::NoSymLinks);
-#endif
+		pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files);
+		if (!modulesInSubdirs)
+			pluginsList += QDir(libDir + "modules/").entryInfoList(QDir::Files);
+		else
+		{
+			//Scan for modules in subdirectories - designed for CMake non-installed build
+			foreach (const QFileInfo &dInfo, QDir(libDir + "modules/").entryInfoList(QDir::Dirs))
+				foreach (const QFileInfo &fInfo, QDir(dInfo.filePath()).entryInfoList(QDir::Files))
+					if (QLibrary::isLibrary(fInfo.fileName()))
+						pluginsList += fInfo;
+		}
+
+		QStringList pluginsName;
 		foreach (const QFileInfo &fInfo, pluginsList)
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{

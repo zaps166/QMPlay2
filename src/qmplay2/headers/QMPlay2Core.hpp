@@ -47,7 +47,7 @@ public:
 	static bool canSuspend();
 	static void suspend();
 
-	void init(bool loadModules, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
+	void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
 	void quit();
 
 	inline QList<Module *> getPluginsInstance() const
