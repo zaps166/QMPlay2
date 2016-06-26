@@ -18,6 +18,7 @@
 
 #include <OSDSettingsW.hpp>
 
+#include <LibASS.hpp>
 #include <Main.hpp>
 
 #include <ColorButton.hpp>
@@ -160,6 +161,8 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
 	layout->addWidget(colorsGB, 1, 3, 1, 2);
 
 	readSettings();
+
+	setDisabled(LibASS::isDummy());
 }
 
 void OSDSettingsW::writeSettings()

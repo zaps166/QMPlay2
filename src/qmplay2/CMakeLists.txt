@@ -92,25 +92,29 @@ set(QMPLAY2_RESOURCES
 
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
-pkg_check_modules(LIBASS libass REQUIRED)
+
+if(USE_LIBASS)
+    add_definitions(-DQMPLAY2_LIBASS)
+    pkg_check_modules(LIBASS libass REQUIRED)
+    include_directories(${LIBASS_INCLUDE_DIRS})
+    link_directories(${LIBASS_LIBRARY_DIRS})
+endif()
 
 link_directories(
     ${LIBSWSCALE_LIBRARY_DIRS}
     ${LIBAVUTIL_LIBRARY_DIRS}
-    ${LIBASS_LIBRARY_DIRS}
 )
 
 set(LIBQMPLAY2_LIBS
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
-    # libass will be added later
+    # libass will be added later if enabled
 )
 
 include_directories(
     headers
     ${LIBSWSCALE_INCLUDE_DIRS}
     ${LIBAVUTIL_INCLUDE_DIRS}
-    ${LIBASS_INCLUDE_DIRS}
 )
 
 if(USE_AVRESAMPLE)
@@ -153,7 +157,7 @@ if(WIN32)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
         separate_arguments(CUSTOM_LIBQMPLAY2_LIBRARIES)
         list(APPEND LIBQMPLAY2_LIBS ${CUSTOM_LIBQMPLAY2_LIBRARIES})
-    else()
+    elseif(USE_LIBASS)
         list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 
@@ -166,7 +170,9 @@ else()
         install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)
     endif()
 
-    list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
+    if(USE_LIBASS)
+        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
+    endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME} ${LIBQMPLAY2_LIBS})

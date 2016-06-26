@@ -37,6 +37,8 @@ public:
 	static bool slowFontCacheUpdate();
 #endif
 
+	static bool isDummy();
+
 	LibASS(Settings &);
 	~LibASS();
 
@@ -54,10 +56,7 @@ public:
 	void closeOSD();
 
 	void initASS(const QByteArray &header = QByteArray());
-	inline bool isASS()
-	{
-		return hasASSData && ass_sub_track && ass_sub_renderer;
-	}
+	bool isASS() const;
 	void setASSStyle();
 	void addASSEvent(const QByteArray &);
 	void addASSEvent(const QByteArray &, double, double);

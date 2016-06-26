@@ -18,6 +18,8 @@
 
 #include <LibASS.hpp>
 
+#ifdef QMPLAY2_LIBASS
+
 #include <QMPlay2_OSD.hpp>
 #include <Settings.hpp>
 
@@ -97,6 +99,11 @@ bool LibASS::slowFontCacheUpdate()
 	return ass_library_version() < 0x01300000 || QSysInfo::windowsVersion() < QSysInfo::WV_6_0;
 }
 #endif
+
+bool LibASS::isDummy()
+{
+	return false;
+}
 
 LibASS::LibASS(Settings &settings) :
 	settings(settings)
@@ -250,6 +257,10 @@ void LibASS::initASS(const QByteArray &ass_data)
 
 	ass_sub_renderer = ass_renderer_init(ass);
 	ass_set_fonts(ass_sub_renderer, NULL, NULL, true, NULL, true);
+}
+bool LibASS::isASS() const
+{
+	return hasASSData && ass_sub_track && ass_sub_renderer;
 }
 void LibASS::setASSStyle()
 {
@@ -501,3 +512,71 @@ void LibASS::calcSize()
 	W *= zoom;
 	H *= zoom;
 }
+
+#else // QMPLAY2_LIBASS
+
+#if defined Q_OS_WIN && !defined Q_OS_WIN64
+bool LibASS::slowFontCacheUpdate()
+{
+	return false;
+}
+#endif
+
+bool LibASS::isDummy()
+{
+	return true;
+}
+
+LibASS::LibASS(Settings &settings) :
+	settings(settings)
+{}
+LibASS::~LibASS()
+{}
+
+void LibASS::setWindowSize(int, int)
+{}
+void LibASS::setARatio(double)
+{}
+void LibASS::setZoom(double)
+{}
+void LibASS::setFontScale(double)
+{}
+
+void LibASS::addFont(const QByteArray &, const QByteArray &)
+{}
+void LibASS::clearFonts()
+{}
+
+void LibASS::initOSD()
+{}
+void LibASS::setOSDStyle()
+{}
+bool LibASS::getOSD(QMPlay2_OSD *&, const QByteArray &, double)
+{
+	return false;
+}
+void LibASS::closeOSD()
+{}
+
+void LibASS::initASS(const QByteArray &)
+{}
+bool LibASS::isASS() const
+{
+	return false;
+}
+void LibASS::setASSStyle()
+{}
+void LibASS::addASSEvent(const QByteArray &)
+{}
+void LibASS::addASSEvent(const QByteArray &, double, double)
+{}
+void LibASS::flushASSEvents()
+{}
+bool LibASS::getASS(QMPlay2_OSD *&, double)
+{
+	return false;
+}
+void LibASS::closeASS()
+{}
+
+#endif // QMPLAY2_LIBASS
