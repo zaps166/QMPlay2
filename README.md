@@ -97,6 +97,16 @@ Of course you can adjust other deinterlacing settings in case of hardware accele
 
 Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output might not be properly deinterlaced.
 
+##Hidden features
+
+###Audio balance
+
+Right click on volume slider and select "Split channels".
+
+###Last.fm scrobbling
+
+Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
+
 ##Compilation from sources
 
 ###You need (devel packages):
