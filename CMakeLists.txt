@@ -154,6 +154,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
 
     # enable warnings
     set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
+
+    # remove '-rdynamic'
+    set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
 endif()
 
 include(GNUInstallDirs)
