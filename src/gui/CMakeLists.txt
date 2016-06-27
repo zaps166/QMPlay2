@@ -123,6 +123,11 @@ if(SET_INSTALL_RPATH)
     endif()
 endif()
 
+if(USE_JEMALLOC)
+    pkg_check_modules(JEMALLOC jemalloc REQUIRED)
+    link_directories(${JEMALLOC_LIBRARY_DIRS})
+endif()
+
 if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
@@ -132,6 +137,10 @@ add_executable(QMPlay2 ${WIN32_EXE}
     ${GUI_SRC}
     ${GUI_RESOURCES_RCC}
 )
+
+if(USE_JEMALLOC)
+    target_link_libraries(QMPlay2 ${JEMALLOC_LIBRARIES})
+endif()
 
 if(USE_QT5)
     qt5_use_modules(QMPlay2 Gui Widgets Network)

@@ -47,6 +47,8 @@ if(WIN32)
     add_feature_info(CMD USE_CMD "Show CMD when running QMPlay2")
 endif()
 
+option(USE_JEMALLOC "Link to jemalloc" OFF)
+
 option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
 add_feature_info(Qt5 USE_QT5 "Build with Qt5")
 option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
