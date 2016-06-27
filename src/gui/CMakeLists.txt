@@ -182,7 +182,6 @@ else()
 
         # install Solid actions
         include(InstallSolidActions)
-        add_feature_info(SolidActions SOLID_ACTIONS_PATH "Install Solid actions")
     endif()
 
     # man page
