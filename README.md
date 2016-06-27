@@ -168,7 +168,10 @@ This will compile and install the newest FFmpeg without features that are not su
 ####Compilation and installation using CMake
 
 - Install all dependencies using package manager (in devel version) or compile it from sources.
-- Install CMake 2.8.11 or newer.
+- Install CMake:
+	- CMake 2.8.11 or higher is recommended,
+	- CMake 2.8.9 is the lowest version for Qt5,
+	- CMake 2.8.6 is the lowest version for Qt4.
 - You can use `cmake-gui` for graphical configuration or `cmake` for command line configuration:
 	- create a build directory and go to it: `mkdir build && cd build`,
 	- run CMake: `cmake ..`,

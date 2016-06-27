@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.6)
 project(QMPlay2)
 
 # set default build type as Release
@@ -11,7 +11,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/src/cmake/Module
 include(FeatureSummary)
 find_package(PkgConfig REQUIRED)
 
-if(NOT DEFINED USE_QT5 OR USE_QT5)
+if(CMAKE_VERSION VERSION_LESS 2.8.9)
+    # use Qt5 only if CMake >= 2.8.9
+    set(DEFAULT_QT5 OFF)
+elseif(NOT DEFINED USE_QT5 OR USE_QT5)
     find_package(Qt5Widgets QUIET)
     if(Qt5Widgets_FOUND AND (Qt5Widgets_VERSION VERSION_GREATER 5.6.0))
         set(DEFAULT_QT5 ON)
@@ -130,7 +133,7 @@ if(USE_QT5)
     endif()
 else()
     if(NOT Qt4_FOUND)
-        find_package(Qt4 REQUIRED)
+        find_package(Qt4 REQUIRED QtCore QtGui)
     endif()
     include("${QT_USE_FILE}")
 endif()

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.6)
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
     if(POLICY CMP0043)
@@ -59,7 +59,7 @@ add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
     ${LIBAVCODEC_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
-    $<TARGET_FILE:qmplay2>
+    ${libqmplay2}
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

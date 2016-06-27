@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.6)
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
     if(POLICY CMP0043)
@@ -37,6 +37,7 @@ if(NOT WIN32 AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         set(DBUS DBus)
     else()
         set(DBUS Qt4::QtDBus)
+        find_package(Qt4 REQUIRED QtDBus)
     endif()
 endif()
 
@@ -49,6 +50,8 @@ endif()
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
 else()
+    find_package(Qt4 REQUIRED QtNetwork)
+    include("${QT_USE_FILE}")
     qt4_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
 endif()
 
@@ -68,7 +71,7 @@ endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)
 target_link_libraries(${PROJECT_NAME}
-    $<TARGET_FILE:qmplay2>
+    ${libqmplay2}
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")

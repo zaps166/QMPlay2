@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.6)
 
 if(WIN32)
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/modules/")
