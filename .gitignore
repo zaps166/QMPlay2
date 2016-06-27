@@ -31,5 +31,8 @@ build/
 app/
 
 # Other files
-object_script.*
+qdbusxml2cpp_wrapper.sh
+object_script.sh
+uic_wrapper.*
+.qmake.stash
 Makefile
