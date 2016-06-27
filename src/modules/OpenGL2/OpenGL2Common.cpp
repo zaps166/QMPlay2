@@ -43,6 +43,12 @@
 #include <math.h>
 
 /* OpenGL|ES 2.0 doesn't have those definitions */
+#ifndef GL_MAP_WRITE_BIT
+	#define GL_MAP_WRITE_BIT 0x0002
+#endif
+#ifndef GL_MAP_INVALIDATE_BUFFER_BIT
+	#define GL_MAP_INVALIDATE_BUFFER_BIT 0x0008
+#endif
 #ifndef GL_WRITE_ONLY
 	#define GL_WRITE_ONLY 0x88B9
 #endif
@@ -337,7 +343,11 @@ void OpenGL2Common::paintGL()
 			if (hasPbo)
 			{
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-				quint8 *dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+				quint8 *dst;
+				if (glMapBufferRange)
+					dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+				else
+					dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 				if (!dst)
 					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 				else
@@ -466,7 +476,11 @@ void OpenGL2Common::paintGL()
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[0]);
 				if (hasNewSize)
 					glBufferData(GL_PIXEL_UNPACK_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
-				quint8 *dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+				quint8 *dst;
+				if (glMapBufferRange)
+					dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, dataSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+				else
+					dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 				if (!dst)
 					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 				else
@@ -573,9 +587,10 @@ void OpenGL2Common::initGLProc()
 	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
 	hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
 #endif
+	glMapBufferRange = (GLMapBufferRange)QOpenGLContext::currentContext()->getProcAddress("glMapBufferRange");
 	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
 	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
-	hasPbo = hasVbo && glMapBuffer && glUnmapBuffer;
+	hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
 }
 #ifndef OPENGL_ES2
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()
