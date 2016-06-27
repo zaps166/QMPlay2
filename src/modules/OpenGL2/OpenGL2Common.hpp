@@ -38,6 +38,10 @@
 	#include <GL/glext.h>
 #endif
 
+#if defined OPENGL_ES2 && !defined APIENTRY
+	#define APIENTRY
+#endif
+
 class OpenGL2Common;
 class QMPlay2_OSD;
 class QMouseEvent;
@@ -64,10 +68,10 @@ class OpenGL2Common
 	typedef    void  (APIENTRY *GLGenBuffers)(GLsizei, GLuint *);
 	typedef    void  (APIENTRY *GLBindBuffer)(GLenum, GLuint);
 	typedef    void  (APIENTRY *GLBufferData)(GLenum, GLsizeiptr, const void *, GLenum);
-	typedef    void *(APIENTRY *GLMapBuffer)(GLenum, GLbitfield);
-	typedef GLboolean(APIENTRY *GLUnmapBuffer)(GLenum);
 	typedef    void  (APIENTRY *GLDeleteBuffers)(GLsizei, const GLuint *);
 #endif
+	typedef    void *(APIENTRY *GLMapBuffer)(GLenum, GLbitfield);
+	typedef GLboolean(APIENTRY *GLUnmapBuffer)(GLenum);
 public:
 	OpenGL2Common();
 	virtual ~OpenGL2Common();
@@ -97,8 +101,8 @@ protected:
 
 	void testGLInternal();
 
-#ifndef OPENGL_ES2
 	void initGLProc();
+#ifndef OPENGL_ES2
 	void showOpenGLMissingFeaturesMessage();
 
 	bool supportsShaders, canCreateNonPowerOfTwoTextures;
@@ -106,10 +110,10 @@ protected:
 	GLGenBuffers glGenBuffers;
 	GLBindBuffer glBindBuffer;
 	GLBufferData glBufferData;
-	GLMapBuffer glMapBuffer;
-	GLUnmapBuffer glUnmapBuffer;
 	GLDeleteBuffers glDeleteBuffers;
 #endif
+	GLMapBuffer glMapBuffer;
+	GLUnmapBuffer glUnmapBuffer;
 
 #ifdef Q_OS_WIN
 	bool preventFullscreen;

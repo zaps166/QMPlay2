@@ -85,7 +85,7 @@ OpenGL2Common::OpenGL2Common() :
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0), doClear(0),
 	aspectRatio(0.0), zoom(0.0),
-	sphericalView(false), buttonPressed(false), hasVbo(false), mouseWrapped(false), canWrapMouse(true),
+	sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
 	mouseTime(0.0)
 {
@@ -172,8 +172,8 @@ void OpenGL2Common::resetClearCounter()
 
 void OpenGL2Common::initializeGL()
 {
-#ifndef OPENGL_ES2
 	initGLProc();
+#ifndef OPENGL_ES2
 	if (!glActiveTexture) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
 	{
 		showOpenGLMissingFeaturesMessage();
@@ -533,7 +533,7 @@ void OpenGL2Common::testGLInternal()
 		glVer = glMajor * 10 + glMinor;
 
 #ifndef OPENGL_ES2
-	initGLProc();
+	initGLProc(); //No need to call it here for OpenGL|ES
 	if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
 	{
 		showOpenGLMissingFeaturesMessage();
@@ -557,9 +557,9 @@ void OpenGL2Common::testGLInternal()
 #endif
 }
 
-#ifndef OPENGL_ES2
 void OpenGL2Common::initGLProc()
 {
+#ifndef OPENGL_ES2
 	const char *glExtensions = (const char *)glGetString(GL_EXTENSIONS);
 	if (glExtensions)
 	{
@@ -570,13 +570,14 @@ void OpenGL2Common::initGLProc()
 	glGenBuffers = (GLGenBuffers)QOpenGLContext::currentContext()->getProcAddress("glGenBuffers");
 	glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
 	glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
+	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
+	hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
+#endif
 	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
 	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
-	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
-	hasVbo = (glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers);
 	hasPbo = hasVbo && glMapBuffer && glUnmapBuffer;
-
 }
+#ifndef OPENGL_ES2
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()
 {
 	fprintf
