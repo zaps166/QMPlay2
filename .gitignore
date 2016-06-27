@@ -32,7 +32,7 @@ app/
 
 # Other files
 qdbusxml2cpp_wrapper.sh
-object_script.sh
-uic_wrapper.*
+object_script.*
+uic_wrapper.sh
 .qmake.stash
 Makefile

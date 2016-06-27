@@ -10,7 +10,10 @@ if [ ! -z $1 ] && [ $1 == "clean" ]; then
 		rm -rf $(find . | grep .Release)
 		rm -rf $(find . | grep .Debug)
 		rm -rf $(find . | grep build)
+		rm -rf $(find . | grep qdbusxml2cpp_wrapper.sh)
+		rm -rf $(find . | grep uic_wrapper.sh)
 		rm -rf app x86_64-w64-mingw32 i686-w64-mingw32
+		rm -f .qmake.stash
 		echo "Cleaned!"
 		exit
 	fi
