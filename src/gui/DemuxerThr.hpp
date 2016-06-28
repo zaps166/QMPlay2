@@ -25,6 +25,7 @@
 #include <QString>
 #include <QThread>
 #include <QMutex>
+#include <QTimer>
 
 class BufferInfo;
 class PlayClass;
@@ -34,10 +35,12 @@ class BasicIO;
 
 class DemuxerThr : public QThread
 {
+	friend class DemuxerTimer;
 	friend class PlayClass;
 	Q_OBJECT
-public:
+private:
 	DemuxerThr(PlayClass &);
+	~DemuxerThr();
 
 	QByteArray getCoverFromStream() const;
 
@@ -58,10 +61,15 @@ public:
 	void end();
 
 	void emitInfo();
-private:
+
 	bool load(bool canEmitInfo = true);
 
 	void run();
+
+	inline void ensureTrueUpdateBuffered();
+	inline bool canUpdateBuffered() const;
+	void handlePause();
+	void emitBufferInfo(bool clearBackwards);
 
 	void updateCoverAndPlaying();
 
@@ -71,7 +79,8 @@ private:
 	bool bufferedAllPackets(int vS, int aS, int p);
 	bool emptyBuffers(int vS, int aS);
 	bool canBreak(const AVThread *avThr1, const AVThread *avThr2);
-	void getAVBuffersSize(int &vS, int &aS, BufferInfo *bufferInfo = NULL);
+	double getAVBuffersSize(int &vS, int &aS);
+	BufferInfo getBufferInfo(bool clearBackwards);
 	void clearBuffers();
 
 	double getFrameDelay() const;
@@ -81,7 +90,7 @@ private:
 	QString name, url, updatePlayingName;
 
 	int minBuffSizeLocal, minBuffSizeNetwork;
-	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength;
+	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength, waitingForFillBufferB, paused, demuxerPaused;
 	QMutex stopVAMutex, endMutex, seekMutex;
 	IOController<> ioCtrl;
 	IOController<Demuxer> demuxer;
@@ -92,6 +101,23 @@ private slots:
 	void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
 signals:
 	void load(Demuxer *);
+};
+
+/**/
+
+class DemuxerTimer : public QObject
+{
+	Q_OBJECT
+public:
+	DemuxerTimer(DemuxerThr &demuxerThr);
+
+	inline void start();
+	inline void stop();
+private slots:
+	void timeout();
+private:
+	DemuxerThr &demuxerThr;
+	QTimer t;
 };
 
 #endif //DEMUXERTHR_HPP

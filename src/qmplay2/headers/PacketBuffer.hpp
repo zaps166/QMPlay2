@@ -45,6 +45,8 @@ public:
 	void put(const Packet &packet); //Thread-safe
 	Packet fetch();
 
+	void clearBackwards();
+
 	inline bool isEmpty() const
 	{
 		return QList<Packet>::isEmpty();

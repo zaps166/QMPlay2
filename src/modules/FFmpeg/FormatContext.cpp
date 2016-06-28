@@ -81,6 +81,7 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 
 static int interruptCB(bool &aborted)
 {
+	QCoreApplication::processEvents(); //Let the demuxer thread run the timer
 	return aborted;
 }
 

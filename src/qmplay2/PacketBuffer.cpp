@@ -103,14 +103,7 @@ void PacketBuffer::clear()
 void PacketBuffer::put(const Packet &packet)
 {
 	lock();
-	while (pos > backwardPackets)
-	{
-		const Packet &tmpPacket = first();
-		backward_duration -= tmpPacket.duration;
-		backward_bytes -= tmpPacket.size();
-		removeFirst();
-		--pos;
-	}
+	clearBackwards();
 	append(packet);
 	remaining_bytes += packet.size();
 	remaining_duration += packet.duration;
@@ -124,4 +117,16 @@ Packet PacketBuffer::fetch()
 	remaining_bytes -= packet.size();
 	backward_bytes += packet.size();
 	return packet;
+}
+
+void PacketBuffer::clearBackwards()
+{
+	while (pos > backwardPackets)
+	{
+		const Packet &tmpPacket = first();
+		backward_duration -= tmpPacket.duration;
+		backward_bytes -= tmpPacket.size();
+		removeFirst();
+		--pos;
+	}
 }
