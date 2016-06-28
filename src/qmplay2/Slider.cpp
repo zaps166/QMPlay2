@@ -49,7 +49,7 @@ void Slider::drawRange(int first, int second)
 	if (second > maximum())
 		second = maximum();
 	if (first > second)
-		first = -1;
+		first = second;
 	if (first != firstLine || second != secondLine)
 	{
 		firstLine  = first;
