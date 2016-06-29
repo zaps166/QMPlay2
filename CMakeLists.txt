@@ -95,7 +95,7 @@ endif()
 option(USE_CHIPTUNE_GME "Build Chiptune with GME support" ${LIBGME_FOUND})
 add_feature_info("Chiptune GME" USE_CHIPTUNE_GME "Build Chiptune with GME support")
 
-if(NOT DEFINED LIBSIDPLAYFP_FOUND)
+if(NOT DEFINED USE_CHIPTUNE_SID)
     pkg_check_modules(LIBSIDPLAYFP libsidplayfp)
 endif()
 option(USE_CHIPTUNE_SID "Build Chiptune with SIDPLAY support" ${LIBSIDPLAYFP_FOUND})
