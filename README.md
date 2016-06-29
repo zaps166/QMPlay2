@@ -5,6 +5,21 @@ QMPlay2 - Qt Media Player 2
 
 QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube and Prostopleer browser.
 
+Table of Contents
+=================
+
+* [Instalation](#instalation)
+* [YouTube](#youtube)
+* [Spherical view](#spherical-view)
+* [ALSA](#alsa)
+* [Ubuntu Unity](#ubuntu-unity)
+* [Hardware acceleration](#hardware-acceleration)
+* [Deinterlacing](#deinterlacing)
+* [Hidden features](#hidden-features)
+* [Instalation from sources](#instalation-from-sources)
+* [Building package RPM, DEB or any other](#building-package-rpm-deb-or-any-other)
+* [Other information](#other-information)
+
 ##Instalation
 
 ####Easy installation on Windows (XP or higher)
@@ -84,6 +99,8 @@ VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU f
 
 VDPAU and VA-API has its own deinterlacing filters. These settings are mixed together with "FFmpeg" module settings.
 
+H.264 lossless movies (CRF 0 or QP 0) are not properly decoded.
+
 ##Deinterlacing
 
 Video interlacing is automatically detected by QMPlay2. Go to "Settings->Video filters" for more options.
@@ -107,45 +124,68 @@ Right click on volume slider and select "Split channels".
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
-##Compilation from sources
+##Instalation from sources
 
-###You need (devel packages):
+###CMake requirements
 
-- Qt4 or Qt5 (including QtOpenGL\*, OpenSSL for https, QtDBus on Linux/BSD),
-- FFmpeg >= 2.2 (libavcodec, libavformat, libavutil, libswscale, libswresample or libavresample\*\*, libavdevice\*\*\*, OpenSSL for https),
-- portaudio (default on non-Linux OS, if you want to compile portaudio module on Linux, change "src/modules/modules.pro"),
-- pulseaudio (optional, if you don't want to compile pulseaudio on Linux, remove it from "src/modules/modules.pro"),
-- taglib >= 1.7 (>= 1.9 recommended) (you can disable it in "src/gui/gui.pro"),
-- libgme and libsidplayfp - for Chiptune module,
-- libva (vaapi) and libvdpau - only on X11,
-- libasound (for ALSA module on Linux),
-- DirectDraw SDK - only on Windows,
-- libcdio and libcddb,
-- libxv - only on X11,
-- libass.
+For CMake build be sure that you have correct CMake version:
+- CMake 2.8.11 or higher is recommended,
+- CMake 2.8.9 is the lowest version for Qt5,
+- CMake 2.8.6 is the lowest version for Qt4.
 
-\* QtOpenGL is not used on Qt >= 5.6,<br/>
-\*\* libavresample: uncomment last 8 lines in "src/qmplay2/qmplay2.pro" for qmake build,<br/>
-\*\*\* libavdevice: only Linux.
+###You need devel packages:
+
+####Necessary:
+- Qt4 or Qt5 - Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1 recommended):
+	- QtOpenGL - not used since Qt 5.6.0,
+	- QtDBus - Linux/BSD only,
+	- OpenSSL for https support.
+- FFmpeg >= 2.2:
+	- libavformat - for FFmpeg module only,
+	- libavcodec - for FFmpeg module only,
+	- libswscale,
+	- libavutil,
+	- libswresample or libavresample - libswresample is default,
+	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
+	- OpenSSL for https.
+
+####Important:
+- TagLib >= 1.7 (>= 1.9 recommended),
+- libass - for OSD and every subtitles.
+
+####For modules (some of them can be automatically not used if not found):
+- FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU) - only on X11,
+- Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
+- DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
+- AudioCD: libcdio and libcddb,
+- ALSA (Linux only): libasound,
+- PulseAudio - libpulse-simple,
+- PortAudio: portaudio (v19),
+- XVideo (X11 only): libxv.
 
 ###Running the compilation:
 
-####Linux/BSD:
-
 #####Arch Linux / Manjaro Linux dependencies
 
-- Common packages: `sudo pacman -S make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp`
-- Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`
-- Qt4 build: `sudo pacman -S qt4`
+- Common packages:
+```
+sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp xdg-utils
+```
+- Qt:
+	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
+	- for Qt4 build: `sudo pacman -S qt4`.
 
 You can also install youtube-dl: `sudo pacman -S youtube-dl`
 
-#####OpenSUSE dependencies (Qt4 build)
+#####OpenSUSE dependencies (for Qt4 build)
 
 - Add Packman repository for FFmpeg with all codecs (don't mix FFmpeg from different repositories!):
 	- openSUSE Leap 42.1: `sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman`
 	- openSUSE 13.2: `sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman`
-- Install dependencies: `sudo zypper in libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel`
+- Install dependencies:
+```
+sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel
+```
 
 #####Ubuntu
 
@@ -154,63 +194,124 @@ You can also install youtube-dl: `sudo pacman -S youtube-dl`
 #####Ubuntu 16.04 and higher dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-`sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev`
+```
+sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev
+```
 
 #####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
-`sudo apt-get install g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev`
+```
+sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev
+```
 
 #####Ubuntu 14.10 and older dependencies (Qt4 build)
 
 Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), so the FFmpeg must be compiled from sources and the LibAV development files must be removed!
 
 - Install dependencies from the package manager:
-`sudo apt-get install g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev`
+```
+sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev
+```
 - Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
-`sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev`. You can install it again after compilation.
+```
+sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev
+```
+You can install it again after compilation.
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
-`./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install`<br/>
+```
+./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install
+```
 This will compile and install the newest FFmpeg without features that are not supported in QMPlay2.
 - Run: `sudo ldconfig`
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
-####Compilation and installation using CMake
+####Linux/BSD using CMake:
 
-- Install all dependencies using package manager (in devel version) or compile it from sources.
-- Install CMake:
-	- CMake 2.8.11 or higher is recommended,
-	- CMake 2.8.9 is the lowest version for Qt5,
-	- CMake 2.8.6 is the lowest version for Qt4.
-- You can use `cmake-gui` for graphical configuration or `cmake` for command line configuration:
-	- create a build directory and go to it: `mkdir build && cd build`,
-	- run CMake: `cmake ..`,
-	- check the summary - which features are enabled (you can set it manually),
+- Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
+- You can use `cmake-gui` for graphical configuration. Otherwise follow below instructions:
+	- create a "build" directory and go to it: `mkdir build && cd build`,
+	- run CMake (also you can run with arguments which you want): `cmake ..`,
+	- check the summary - which features are enabled - you can set/force them manually,
 	- if CMake finishes wihout errors, run `make -j4` (replace 4 with numbers of CPU threads),
 	- if compiling finishes wihout errors, install it `sudo make -j4 install`.
 
-The default instalation directory is `/usr/local`. You can change it e.g. to `/usr` by adding `-DCMAKE_INSTALL_PREFIX=/usr` to the CMake command line.<br/>
+CMake options (option - default value: description):
+- CMake options and the default settings:
+	- `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: instalation directory.
+	- `CMAKE_BUILD_TYPE` - `Release`.
+	- `LANGUAGES` - `All` - a space-seperated list of translations to compile into QMPlay2.
+	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
+	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on OS X, `OFF` anywhere else: sets RPATH after installation.
+	- `USE_QT5` - autodetect: if Qt >= 5.6.1 is found then it uses Qt5, otherwise it uses Qt4.
+	- `USE_AVRESAMPLE` - `OFF`: uses libavresample instead of libswresample.
+	- `USE_ALSA` - `ON` on Linux.
+	- `USE_OPENGL` - `ON`: enable/disable OpenGL2 module.
+	- `USE_PORTAUDIO` - `ON` on non-Linux OS.
+	- `USE_TAGLIB` - `ON`: allows to disable tag editor.
+	- `USE_FFMPEG_VAAPI`: autodetect: enabled on X11 if libva and libva-x11 exist.
+	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exist.
+	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
+	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist.
+	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
+	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
+	- `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else.
+	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists.
+	- `USE_OPENGL_FOR_VISUALIZATIONS` - Qt >= 5.6.0 feature, `OFF`: it allows to use "QOpenGLWidget" for visualizations.
+	- `USE_JEMALLOC` - `OFF`: it links to jemalloc memory allocator which can reduce memory usage. Remember to unset `LDFLAGS` if it contains `--as-needed` flag!
+	- `USE_CMD` - Windows only, `OFF`.
+	- `USE_PROSTOPLEER` - `ON`.
+	- `USE_LIBASS` - `ON`.
+
 You can strip binaries during installation to save disk space: `sudo make -j4 install/strip`.
+
+Example commands (execute it in QMPlay2 directory with source code):
+
+- Simple installation (most things are autodetected, `strip` reduces size but it makes that debugging is impossible):
+
+```sh
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+make -j8
+sudo make install/strip
+```
+
+- Uses manually-specified install prefix, forces Qt4, disables SID, enables jemalloc, uses only Polish language and uses manually-specified Solid actions path:
+
+```sh
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT5=NO -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+make -j8
+sudo make install
+```
+
+- Uninstallation (in `build` directory):
+
+```sh
+sudo make uninstall
+```
 
 ####OS X:
 
 - Download and install Xcode.
 - Download and install the newest Qt for Mac.
-- Download, compile and install "pkg-config".
+- Download, compile and install `pkg-config`.
 - Download and install CMake for Mac (for taglib).
 - Download, compile and install all dependencies from sources.
-- Add directory containing "qmake" to "PATH".
-- Run "./compile_unix n" where "n" is number of threads (4 by default).
+- Add directory containing `qmake` to `PATH`.
+- Run `./compile_unix n` where `n` is number of threads (4 as default).
 
 You can also use `cmake`, but it doesn't create application bundle.
 
 ####Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
-- Some libraries are incompatible, uses unneeded dependencies or doesn't exists in repository - you must built them on your own.
+- Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you must built them on your own.
 - Run `cmake` from cross-compilation toolchain.
 
-#####Other information
+#####Other information for Windows
 
 - You can also compile it on Windows, but you must build toolchain for your own!
 - I'm using my own PKGBUILDs for many MinGW libraries.
@@ -218,9 +319,8 @@ You can also use `cmake`, but it doesn't create application bundle.
 
 ##Building package RPM, DEB or any other
 
-- Look at Arch Linux PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/?h=qmplay2
 - QMPlay2 sometimes uses the external software at runtime - "youtube-dl", so it should be added as an optional package.
-- QMPlay2 has non-standard MIME types in "src/gui/Unix/x-*.xml", so they should be registered during installing from package.
+- Use CMake.
 
 ##Other information
 
