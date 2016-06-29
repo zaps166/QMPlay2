@@ -23,8 +23,13 @@
 Visualizations::Visualizations() :
 	Module("Visualizations")
 {
-	init("RefreshTime", 22);
-	init("SimpleVis/SoundLength", 22);
+#ifdef USE_OPENGL
+	const int ms = 10; //Should rely on VSync
+#else
+	const int ms = 22;
+#endif
+	init("RefreshTime", ms);
+	init("SimpleVis/SoundLength", ms);
 	init("FFTSpectrum/Size", 7);
 	init("FFTSpectrum/Scale", 3);
 }

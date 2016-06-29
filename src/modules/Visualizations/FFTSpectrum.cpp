@@ -64,6 +64,8 @@ FFTSpectrumW::FFTSpectrumW(FFTSpectrum &fftSpectrum) :
 
 void FFTSpectrumW::paintEvent(QPaintEvent *)
 {
+	QPainter p(this);
+
 	bool canStop = true;
 
 	const int size = spectrumData.size();
@@ -74,7 +76,6 @@ void FFTSpectrumW::paintEvent(QPaintEvent *)
 
 		linearGrad.setFinalStop(t.map(QPointF(size, 0.0)));
 
-		QPainter p(this);
 		p.setPen(QPen(linearGrad, 1.0));
 
 		const double currTime = Functions::gettime();

@@ -65,10 +65,11 @@ SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
 
 void SimpleVisW::paintEvent(QPaintEvent *)
 {
+	QPainter p(this);
+
 	const int size = soundData.size() / sizeof(float);
 	if (size >= chn)
 	{
-		QPainter p(this);
 		const float *samples = (const float *)soundData.constData();
 
 		qreal lr[2] = {0.0f, 0.0f};

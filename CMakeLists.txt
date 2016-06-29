@@ -113,6 +113,11 @@ endif()
 option(USE_XVIDEO "Build with XVideo support" ${LIB_X11_XV_FOUND})
 add_feature_info(XVideo USE_XVIDEO "Build with XVideo support")
 
+if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
+    option(USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations" OFF)
+    add_feature_info(VisualizationsOpenGL USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations")
+endif()
+
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
 if(NOT WIN32)

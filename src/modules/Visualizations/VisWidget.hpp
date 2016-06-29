@@ -19,12 +19,18 @@
 #ifndef VISWIDGET_HPP
 #define VISWIDGET_HPP
 
-#include <QWidget>
+#ifdef USE_OPENGL
+	#include <QOpenGLWidget>
+	#define BaseWidget QOpenGLWidget
+#else
+	#include <QWidget>
+	#define BaseWidget QWidget
+#endif
 #include <QTimer>
 
 class DockWidget;
 
-class VisWidget : public QWidget
+class VisWidget : public BaseWidget
 {
 	Q_OBJECT
 protected:
