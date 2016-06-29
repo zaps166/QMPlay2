@@ -32,14 +32,14 @@ Table of Contents
 
 - Arch Linux only: Install AUR client (e.g. yaourt),
 - run the following command:
-```sh
+```
 $ yaourt -S qmplay2
 ```
 
 ####Easy installation on openSUSE Leap 42.1
 
-- Just run the following commands:
-```sh
+- Run the following commands:
+```
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman
 $ sudo zypper in QMPlay2
 ```
@@ -49,8 +49,8 @@ $ sudo zypper in QMPlay2
 
 ####Easy installation on openSUSE 13.2
 
-- Just run the following commands:
-```sh
+- Run the following commands:
+```
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
 $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ```
@@ -136,7 +136,7 @@ For CMake build be sure that you have correct CMake version:
 ###You need devel packages:
 
 ####Necessary:
-- Qt4 or Qt5 - Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1 recommended):
+- Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
 	- OpenSSL for https support.
@@ -169,7 +169,7 @@ For CMake build be sure that you have correct CMake version:
 
 - Common packages:
 ```
-sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp xdg-utils
+$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp xdg-utils
 ```
 - Qt:
 	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
@@ -184,7 +184,7 @@ You can also install youtube-dl: `sudo pacman -S youtube-dl`
 	- openSUSE 13.2: `sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman`
 - Install dependencies:
 ```
-sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel
+$ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel xdg-utils
 ```
 
 #####Ubuntu
@@ -195,14 +195,14 @@ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel
 
 - Install dependencies from the package manager:
 ```
-sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev
+$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev xdg-utils
 ```
 
 #####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
 ```
-sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev
+$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev xdg-utils
 ```
 
 #####Ubuntu 14.10 and older dependencies (Qt4 build)
@@ -211,16 +211,18 @@ Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), 
 
 - Install dependencies from the package manager:
 ```
-sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev
+$ sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev xdg-utils
 ```
 - Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
 ```
-sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev
+$ sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev
 ```
 You can install it again after compilation.
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
 ```
-./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs && make -j4 && sudo make -j4 install
+$ ./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs
+$ make -j4
+$ sudo make -j4 install
 ```
 This will compile and install the newest FFmpeg without features that are not supported in QMPlay2.
 - Run: `sudo ldconfig`
@@ -233,8 +235,8 @@ This will compile and install the newest FFmpeg without features that are not su
 	- create a "build" directory and go to it: `mkdir build && cd build`,
 	- run CMake (also you can run with arguments which you want): `cmake ..`,
 	- check the summary - which features are enabled - you can set/force them manually,
-	- if CMake finishes wihout errors, run `make -j4` (replace 4 with numbers of CPU threads),
-	- if compiling finishes wihout errors, install it `sudo make -j4 install`.
+	- if CMake finishes wihout errors, run: `make -j4` (replace 4 with numbers of CPU threads),
+	- if compiling finishes wihout errors, install it: `sudo make -j4 install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
@@ -267,41 +269,41 @@ You can strip binaries during installation to save disk space: `sudo make -j4 in
 
 Example commands (execute it in QMPlay2 directory with source code):
 
-- Simple installation (most things are autodetected, `strip` reduces size but it makes that debugging is impossible):
+- Simple installation (rely on autodetection, `strip` reduces size but it makes that debugging is impossible):
 
 ```sh
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-make -j8
-sudo make install/strip
+$ mkdir build
+$ cd build
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+$ make -j8
+$ sudo make -j8 install/strip
 ```
 
-- Uses manually-specified install prefix, forces Qt4, disables SID, enables jemalloc, uses only Polish language and uses manually-specified Solid actions path:
+- Use manually-specified install prefix, force Qt4, disable SID, enable jemalloc, use Polish language only and use manually-specified Solid actions path:
 
 ```sh
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT5=NO -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
-make -j8
-sudo make install
+$ mkdir build
+$ cd build
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT5=NO -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+$ make -j8
+$ sudo make -j8 install
 ```
 
 - Uninstallation (in `build` directory):
 
 ```sh
-sudo make uninstall
+$ sudo make uninstall
 ```
 
-####OS X:
+####Mac OS X:
 
 - Download and install Xcode.
-- Download and install the newest Qt for Mac.
+- Download and install the newest Qt5 for OS X.
 - Download, compile and install `pkg-config`.
-- Download and install CMake for Mac (for taglib).
+- Download and install CMake for OS X (mainly for taglib).
 - Download, compile and install all dependencies from sources.
-- Add directory containing `qmake` to `PATH`.
-- Run `./compile_unix n` where `n` is number of threads (4 as default).
+- Add directory containing `qmake` to `PATH` (use `export PATH=/path/to/dir`).
+- Run: `./compile_unix n` where `n` is number of threads (4 as default).
 
 You can also use `cmake`, but it doesn't create application bundle.
 
