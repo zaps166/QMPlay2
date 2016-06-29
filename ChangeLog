@@ -1,14 +1,17 @@
-Changes in QMPlay2 build 16.06.28:
+Changes in QMPlay2 build 16.06.30:
+	- update pause and buffered data information when demuxer is busy,
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
-	- allow file group and Audio CD tracks synchronization (on F5),
+	- allow file group and Audio CD tracks synchronization:
+		- synchronize automatically when loading the same playlist into a group,
+		- synchronize automatically when loading Audio CD tracks,
+		- on "F5" key,
+	- show more warnings in VDPAU and appearance settings,
 	- fixed color in graphics subtitles (e.g. dvdsub),
-	- update the buffer information when server lags,
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),
 	- allow mouse wheel to change the volume,
 	- added CMake build (Zamarin Arthur),
 	- OpenGL2 now uses PBO if available,
-	- show more information to the user,
 	- bugfix,
 
 Changes in QMPlay2 build 16.06.01:
