@@ -241,7 +241,7 @@ void LastFM::loginFinished()
 	{
 		const bool wrongLoginOrPassword = reply.contains("error code=\"4\"");
 		if (!dontShowLoginError || wrongLoginOrPassword)
-			QMPlay2Core.log(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()), ErrorLog);
+			QMPlay2Core.logError(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()));
 		if (wrongLoginOrPassword)
 			clear();
 		else
