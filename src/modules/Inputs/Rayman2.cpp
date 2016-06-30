@@ -67,11 +67,6 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 	return predictor / 32768.0f;
 }
 
-static inline void writeSample(Buffer &decoded, float sample)
-{
-	decoded.append((const char *)&sample, sizeof sample);
-}
-
 /**/
 
 Rayman2::Rayman2(Module &module)
@@ -103,14 +98,14 @@ int Rayman2::bitrate() const
 
 bool Rayman2::seek(int s, bool backward)
 {
-	int filePos = 0x64 + s * srate * chn / 2;
+	const int filePos = 0x64 + s * srate * chn / 2;
 	if (backward)
 	{
 		if (!reader->seek(0))
 			return false;
 		readHeader(reader->read(0x64));
 	}
-	QByteArray sampleCodes = reader->read(filePos - reader->pos());
+	const QByteArray sampleCodes = reader->read(filePos - reader->pos());
 	if (filePos - reader->pos() != 0)
 		return false;
 	for (int i = 0; !reader.isAborted() && i < sampleCodes.size(); i += chn)
@@ -130,16 +125,23 @@ bool Rayman2::read(Packet &decoded, int &idx)
 
 	decoded.ts = (reader->pos() - 0x64) * 2.0 / chn / srate;
 
-	QByteArray sampleCodes = reader->read(chn * 256);
+	const QByteArray sampleCodes = reader->read(chn * 256);
+
+	decoded.resize(sampleCodes.size() * sizeof(float) * 2);
+	float *decodedData = (float *)decoded.data();
+
 	for (int i = 0; !reader.isAborted() && i + chn <= sampleCodes.size(); i += chn)
 	{
 		for (int c = 0; c < chn; ++c)
-			writeSample(decoded, decode(sampleCodes[i+c] >> 4, stepIndex[c], predictor[c]));
+			*(decodedData++) = decode(sampleCodes[i+c] >> 4, stepIndex[c], predictor[c]);
 		for (int c = 0; c < chn; ++c)
-			writeSample(decoded, decode(sampleCodes[i+c], stepIndex[c], predictor[c]));
+			*(decodedData++) = decode(sampleCodes[i+c],      stepIndex[c], predictor[c]);
 	}
 
-	if (!decoded.size())
+	if (reader.isAborted())
+		decoded.clear();
+
+	if (decoded.isEmpty())
 		return false;
 
 	idx = 0;

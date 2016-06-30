@@ -104,12 +104,14 @@ void Buffer::assign(const void *data, qint32 len, qint32 mem)
 	m_size = len;
 }
 
+#if 0
 void Buffer::append(const void *data, qint32 len)
 {
 	av_buffer_realloc(&m_bufferRef, m_size + len);
 	memcpy(m_bufferRef->data + m_size, data, len);
 	m_size += len;
 }
+#endif
 
 Buffer &Buffer::operator =(const Buffer &other)
 {

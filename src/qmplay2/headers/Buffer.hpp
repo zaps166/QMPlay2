@@ -70,7 +70,9 @@ public:
 		assign(data, len, len);
 	}
 
+#if 0
 	void append(const void *data, qint32 len);
+#endif
 
 	Buffer &operator =(const Buffer &other);
 };
