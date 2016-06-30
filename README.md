@@ -64,7 +64,7 @@ Some YouTube videos don't work without external "youtube-dl" software. You must 
 
 - Watch the video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
 - If the video doesn't play inside the web browser - paste the address to QMPlay2 (Ctrl+V) and play it!
-- Windows XP: I don't know why, but "youtube-dl.exe" needs .NET 3.5.
+- Currently (as of 30.06.2016) "youtube-dl.exe" needs Visual Studio 2010 Redistributable Package.
 
 ####Arch Linux / Manjaro Linux
 
