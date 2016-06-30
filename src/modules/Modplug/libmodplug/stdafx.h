@@ -21,6 +21,8 @@
 # include <stdint.h>
 // #endif
 
+#define MODPLUG_NO_FILESAVE
+#define NO_AGC
 
 #ifdef _WIN32
 
@@ -89,13 +91,11 @@ inline LONG MulDiv (long a, long b, long c)
   return ((uint64_t) a * (uint64_t) b ) / c;
 }
 
-#define MODPLUG_NO_FILESAVE
-#define NO_AGC
 #define LPCTSTR LPCSTR
 #define lstrcpyn strncpy
 #define lstrcpy strcpy
 #define lstrcmp strcmp
-#define WAVE_FORMAT_PCM 1
+//#define WAVE_FORMAT_PCM 1
 //#define ENABLE_EQ
 
 #define  GHND   0
@@ -126,6 +126,3 @@ inline void ProcessPlugins(int /*n*/) {}
 #endif // _WIN32
 
 #endif
-
-
-
