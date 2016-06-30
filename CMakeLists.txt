@@ -186,6 +186,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     set(CMAKE_CXX_FLAGS_RELEASE "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
 
+    if(NOT CMAKE_BUILD_TYPE MATCHES "Deb")
+        set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}")
+    endif()
     # enable warnings
     set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
 
