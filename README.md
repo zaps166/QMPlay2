@@ -272,6 +272,12 @@ CMake options (option - default value: description):
 	- `USE_PROSTOPLEER` - `ON`.
 	- `USE_LIBASS` - `ON`.
 
+Using other Qt installation using CMake:
+- Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.
+- Qt5: `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
+
+Every CMake option must be prepended with `-D` and new value is set after `=`.
+
 You can strip binaries during installation to save disk space: `sudo make -j4 install/strip`.
 
 Example commands (execute it in QMPlay2 directory with source code):
