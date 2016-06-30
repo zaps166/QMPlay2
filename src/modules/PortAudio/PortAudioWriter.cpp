@@ -101,10 +101,6 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 		else
 			QMPlay2Core.logError("PortAudio :: " + tr("Cannot open audio output stream"));
 	}
-#ifdef Q_OS_WIN
-	else
-		Pa_AbortStream(stream);
-#endif
 
 	return readyWrite();
 }
