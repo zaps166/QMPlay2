@@ -7,18 +7,35 @@ else()
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qmplay2/modules/")
 endif()
 
-add_subdirectory(FFmpeg)
-add_subdirectory(Inputs)
-add_subdirectory(Modplug)
-add_subdirectory(Playlists)
-add_subdirectory(Subtitles)
-add_subdirectory(QPainter)
-add_subdirectory(Extensions)
-add_subdirectory(Visualizations)
-add_subdirectory(AudioFilters)
-add_subdirectory(VideoFilters)
+if(USE_FFMPEG)
+    add_subdirectory(FFmpeg)
+endif()
 
-if(USE_OPENGL)
+if(USE_INPUTS)
+    add_subdirectory(Inputs)
+endif()
+
+if(USE_MODPLUG)
+    add_subdirectory(Modplug)
+endif()
+
+if(USE_EXTENSIONS)
+    add_subdirectory(Extensions)
+endif()
+
+if(USE_VISUALIZATIONS)
+    add_subdirectory(Visualizations)
+endif()
+
+if(USE_AUDIOFILTERS)
+    add_subdirectory(AudioFilters)
+endif()
+
+if(USE_VIDEOFILTERS)
+    add_subdirectory(VideoFilters)
+endif()
+
+if(USE_OPENGL2)
     add_subdirectory(OpenGL2)
 endif()
 
@@ -45,6 +62,10 @@ endif()
 if(USE_CHIPTUNE_GME OR USE_CHIPTUNE_SID)
     add_subdirectory(Chiptune)
 endif()
+
+add_subdirectory(Playlists)
+add_subdirectory(Subtitles)
+add_subdirectory(QPainter)
 
 if(WIN32)
     add_subdirectory(DirectX)

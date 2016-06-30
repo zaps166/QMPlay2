@@ -22,11 +22,77 @@
 #include <Functions.hpp>
 #include <Module.hpp>
 
+#include <QFile>
+
+class QMPlay2FileReader : public Reader
+{
+	bool readyRead() const
+	{
+		return f.isOpen();
+	}
+	bool canSeek() const
+	{
+		return true;
+	}
+
+	bool seek(qint64 pos, int wh)
+	{
+		switch (wh)
+		{
+			case SEEK_SET:
+				return f.seek(pos);
+			case SEEK_CUR:
+				return f.seek(f.pos() + pos);
+			case SEEK_END:
+				return f.seek(f.size() - pos);
+		}
+		return false;
+	}
+	QByteArray read(qint64 len)
+	{
+		return f.read(len);
+	}
+	bool atEnd() const
+	{
+		return f.atEnd();
+	}
+
+	virtual qint64 size() const
+	{
+		return f.size();
+	}
+	virtual qint64 pos() const
+	{
+		return f.pos();
+	}
+	QString name() const
+	{
+		return "File Reader";
+	}
+
+	bool open()
+	{
+		f.setFileName(getUrl().mid(7));
+		return f.open(QIODevice::ReadOnly);
+	}
+
+	/**/
+
+	QFile f;
+};
+
 bool Reader::create(const QString &url, IOController<Reader> &reader, const QString &plugName)
 {
 	QString scheme = Functions::getUrlScheme(url);
 	if (reader.isAborted() || url.isEmpty() || scheme.isEmpty())
 		return false;
+	if (plugName.isEmpty() && scheme == "file" && reader.assign(new QMPlay2FileReader))
+	{
+		reader->_url = url;
+		if (reader->open())
+			return true;
+		reader.clear();
+	}
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if (mod.type == Module::READER && mod.extensions.contains(scheme) && (plugName.isEmpty() || mod.name == plugName))

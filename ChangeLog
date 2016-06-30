@@ -7,6 +7,7 @@ Changes in QMPlay2 build 16.06.30:
 		- on "F5" key,
 	- show more warnings in VDPAU and appearance settings,
 	- fixed color in graphics subtitles (e.g. dvdsub),
+	- reading files doesn't depend on FFmpeg module,
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),
 	- allow mouse wheel to change the volume,

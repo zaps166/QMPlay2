@@ -197,20 +197,23 @@ void VideoThr::initFilters(bool processParams)
 		if (!HWDeint || PrepareForHWBobDeint)
 		{
 			const QString deintFilterName = PrepareForHWBobDeint ? "PrepareForHWBobDeint" : QMPSettings.getString("Deinterlace/SoftwareMethod");
-			VideoFilter *deintFilter = filters.on(deintFilterName);
-			bool ok = false;
-			if (deintFilter && deintFilter->modParam("DeinterlaceFlags", deintFlags))
+			if (!deintFilterName.isEmpty())
 			{
-				deintFilter->modParam("W", W);
-				deintFilter->modParam("H", H);
-				ok = deintFilter->processParams();
-			}
-			if (!ok)
-			{
-				if (deintFilter)
-					filters.off(deintFilter);
-				if (W > 0 && H > 0)
-					QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
+				VideoFilter *deintFilter = filters.on(deintFilterName);
+				bool ok = false;
+				if (deintFilter && deintFilter->modParam("DeinterlaceFlags", deintFlags))
+				{
+					deintFilter->modParam("W", W);
+					deintFilter->modParam("H", H);
+					ok = deintFilter->processParams();
+				}
+				if (!ok)
+				{
+					if (deintFilter)
+						filters.off(deintFilter);
+					if (W > 0 && H > 0)
+						QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
+				}
 			}
 		}
 	}

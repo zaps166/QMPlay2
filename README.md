@@ -246,19 +246,26 @@ CMake options (option - default value: description):
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
 	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on OS X, `OFF` anywhere else: sets RPATH after installation.
 	- `USE_QT5` - autodetect: if Qt >= 5.6.1 is found then it uses Qt5, otherwise it uses Qt4.
-	- `USE_AVRESAMPLE` - `OFF`: uses libavresample instead of libswresample.
-	- `USE_ALSA` - `ON` on Linux.
-	- `USE_OPENGL` - `ON`: enable/disable OpenGL2 module.
-	- `USE_PORTAUDIO` - `ON` on non-Linux OS.
-	- `USE_TAGLIB` - `ON`: allows to disable tag editor.
+	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
 	- `USE_FFMPEG_VAAPI`: autodetect: enabled on X11 if libva and libva-x11 exist.
 	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exist.
 	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
-	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist.
+	- `USE_INPUTS` - ON: enable/disable Inputs module.
+	- `USE_MODPLUG` - ON: enable/disable Modplug module.
+	- `USE_EXTENSIONS` - ON: enable/disable Extensions module.
+	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
+	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
+	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
+	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module.
+	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
+	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
+	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
+	- `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else: enable/disable PulseAudio module.
+	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
 	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
 	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
-	- `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else.
-	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists.
+	- `USE_TAGLIB` - `ON`: allows to disable tag editor.
+	- `USE_AVRESAMPLE` - `OFF`: uses libavresample instead of libswresample.
 	- `USE_OPENGL_FOR_VISUALIZATIONS` - Qt >= 5.6.0 feature, `OFF`: it allows to use "QOpenGLWidget" for visualizations.
 	- `USE_JEMALLOC` - `OFF`: it links to jemalloc memory allocator which can reduce memory usage. Remember to unset `LDFLAGS` if it contains `--as-needed` flag!
 	- `USE_CMD` - Windows only, `OFF`.

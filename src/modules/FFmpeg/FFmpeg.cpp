@@ -116,7 +116,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 		modulesInfo += Info(VAAPIWriterName, WRITER);
 	}
 #endif
-	modulesInfo += Info(FFReaderName, READER, QStringList() << "file" << "http" << "https" << "mms" << "rtmp" << "rtsp");
+	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp");
 	return modulesInfo;
 }
 void *FFmpeg::createInstance(const QString &name)
