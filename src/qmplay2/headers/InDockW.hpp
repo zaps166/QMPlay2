@@ -33,7 +33,7 @@ public:
 private:
 	const QColor &grad1, &grad2, &qmpTxt;
 	const QPixmap &qmp2Pixmap;
-	QPixmap customPixmap;
+	QPixmap customPixmap, customPixmapBlurred;
 	bool hasWallpaper;
 	int loseHeight;
 	QWidget *w;

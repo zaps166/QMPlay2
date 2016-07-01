@@ -73,7 +73,7 @@ public:
 #ifdef ICONS_FROM_THEME
 	QCheckBox *iconsFromTheme;
 #endif
-	QCheckBox *showCoversB, *showDirCoversB, *autoOpenVideoWindowB,
+	QCheckBox *showCoversB, *blurCoversB, *showDirCoversB, *autoOpenVideoWindowB,
 #ifdef UPDATER
 	*autoUpdatesB,
 #endif
@@ -183,6 +183,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("IconsFromTheme", false);
 #endif
 	QMPSettings.init("ShowCovers", true);
+	QMPSettings.init("BlurCovers", true);
 	QMPSettings.init("ShowDirCovers", true);
 	QMPSettings.init("AutoOpenVideoWindow", true);
 #ifdef UPDATER
@@ -379,6 +380,11 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1->showCoversB = new QCheckBox(tr("Show covers"));
 	page1->showCoversB->setChecked(QMPSettings.getBool("ShowCovers"));
 
+	page1->blurCoversB = new QCheckBox(tr("Blurred covers as background"));
+	page1->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
+	connect(page1->showCoversB, SIGNAL(clicked(bool)), page1->blurCoversB, SLOT(setEnabled(bool)));
+	page1->blurCoversB->setEnabled(page1->showCoversB->isChecked());
+
 	page1->showDirCoversB = new QCheckBox(tr("Show covers from directory if there aren't in the music file"));
 	page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
 	connect(page1->showCoversB, SIGNAL(clicked(bool)), page1->showDirCoversB, SLOT(setEnabled(bool)));
@@ -472,6 +478,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 #endif
 	layout_row++;
 	page1->layout->addWidget(page1->showCoversB, layout_row++, 0, 1, 4);
+	page1->layout->addWidget(page1->blurCoversB, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->showDirCoversB, layout_row++, 0, 1, 4);
 	page1->layout->addWidget(page1->autoOpenVideoWindowB, layout_row++, 0, 1, 4);
 #ifdef UPDATER
@@ -913,6 +920,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("screenshotPth", page1->screenshotE->text());
 			QMPSettings.set("screenshotFormat", page1->screenshotFormatB->currentText());
 			QMPSettings.set("ShowCovers", page1->showCoversB->isChecked());
+			QMPSettings.set("BlurCovers", page1->blurCoversB->isChecked());
 			QMPSettings.set("ShowDirCovers", page1->showDirCoversB->isChecked());
 			QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
 #ifdef UPDATER

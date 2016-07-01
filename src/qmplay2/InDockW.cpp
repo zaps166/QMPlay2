@@ -19,10 +19,38 @@
 #include <InDockW.hpp>
 
 #include <QMPlay2Core.hpp>
+#include <Settings.hpp>
 
 #include <QCoreApplication>
 #include <QPainter>
 #include <QVariant>
+
+#include <QGraphicsBlurEffect>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+
+static QPixmap getBlurred(const QPixmap &input)
+{
+	QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
+	blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+	blur->setBlurRadius(250.0);
+
+	QGraphicsPixmapItem *item = new QGraphicsPixmapItem(input);
+	item->setGraphicsEffect(blur);
+
+	QGraphicsScene scene;
+	scene.addItem(item);
+
+	QPixmap blurred(input.size());
+	blurred.fill(Qt::black);
+
+	QPainter p(&blurred);
+	scene.render(&p);
+
+	return blurred;
+}
+
+/**/
 
 InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt) :
 	grad1(grad1), grad2(grad2), qmpTxt(qmpTxt),
@@ -50,6 +78,10 @@ void InDockW::setLoseHeight(int lh)
 void InDockW::setCustomPixmap(const QPixmap &pix)
 {
 	customPixmap = pix;
+	if (customPixmap.isNull() || !QMPlay2Core.getSettings().getBool("BlurCovers"))
+		customPixmapBlurred = QPixmap();
+	else
+		customPixmapBlurred = getBlurred(pix);
 	emit hasCoverImage(!customPixmap.isNull());
 	update();
 }
@@ -118,9 +150,10 @@ void InDockW::paintEvent(QPaintEvent *)
 	{
 		QPainter p(this);
 
-		int fullHeight = height() + loseHeight;
+		const int fullHeight = height() + loseHeight;
+		const bool drawBlurredImage = !customPixmapBlurred.isNull();
 
-		if (!hasWallpaper)
+		if (!hasWallpaper && !drawBlurredImage)
 		{
 			if (grad1 == grad2)
 				p.fillRect(rect(), grad1);
@@ -148,10 +181,18 @@ void InDockW::paintEvent(QPaintEvent *)
 		else
 		{
 			QPixmap pixmapToDraw;
+
+			if (drawBlurredImage)
+			{
+				const QPixmap blurred = customPixmapBlurred.scaled(width(), fullHeight, Qt::KeepAspectRatioByExpanding, Qt::FastTransformation);
+				p.drawPixmap(width() / 2 - blurred.width() / 2, fullHeight / 2 - blurred.height() / 2, blurred);
+			}
+
 			if (customPixmap.width() > width() || customPixmap.height() > fullHeight)
 				pixmapToDraw = customPixmap.scaled(width(), fullHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			else
 				pixmapToDraw = customPixmap;
+
 			p.drawPixmap(width() / 2 - pixmapToDraw.width() / 2, fullHeight / 2 - pixmapToDraw.height() / 2, pixmapToDraw);
 		}
 	}

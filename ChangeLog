@@ -11,6 +11,7 @@ Changes in QMPlay2 build 16.06.30:
 	- hide mouse cursor when cover image is visible,
 	- updated Russian translation (victorr2007),
 	- allow mouse wheel to change the volume,
+	- show blurred covers as a background,
 	- added CMake build (Zamarin Arthur),
 	- OpenGL2 now uses PBO if available,
 	- bugfix,

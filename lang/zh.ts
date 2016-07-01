@@ -2358,6 +2358,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Mouse wheel changes the volume</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>

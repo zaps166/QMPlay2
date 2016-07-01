@@ -2360,6 +2360,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Mouse wheel changes the volume</source>
         <translation>Kółko myszki zmienia głośność</translation>
     </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Rozmyte okładki jako tło</translation>
+    </message>
 </context>
 <context>
     <name>SimpleVisW</name>
