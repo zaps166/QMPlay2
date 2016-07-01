@@ -56,7 +56,7 @@ Extensions::Extensions() :
 	init("YouTube/ItagList", QStringList() << "22" << "43" << "18");
 
 	init("LastFM/DownloadCovers", true);
-	init("LastFM/AllowBigCovers", false);
+	init("LastFM/AllowBigCovers", true);
 	init("LastFM/UpdateNowPlayingAndScrobble", false);
 	init("LastFM/Login", QString());
 	init("LastFM/Password", QString());
