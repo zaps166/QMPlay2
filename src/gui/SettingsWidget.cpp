@@ -407,7 +407,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 		page2_modulesList[m] = ml;
 	}
 
-	/* Strona 3 */
+	/* Page 3 */
 	page3->module = NULL;
 
 	page3->listW = new QListWidget;
@@ -446,7 +446,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page3->layout->addWidget(page3->scrollA);
 	connect(page3->listW, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(chModule(QListWidgetItem *)));
 
-	/* Strona 4 */
+	/* Page 4 */
 	page4->colorsAndBordersB = new QCheckBox(tr("Colors and borders"));
 	page4->colorsAndBordersB->setChecked(QMPSettings.getBool("ApplyToASS/ColorsAndBorders"));
 
@@ -472,14 +472,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page4->layout->addWidget(page4->toASSGB, 2, 0, 1, 5);
 	AddVHSpacer(*page4->layout);
 
-	/* Strona 5 */
+	/* Page 5 */
 	page5->enabledB = new QCheckBox(tr("OSD enabled"));
 	page5->enabledB->setChecked(QMPSettings.getBool("OSD/Enabled"));
 
 	page5->layout->addWidget(page5->enabledB, 2, 0, 1, 5);
 	AddVHSpacer(*page5->layout);
 
-	/* Strona 6 */
+	/* Page 6 */
 	page6->deintSettingsW = new DeintSettingsW;
 
 	page6->otherVFiltersL = new QLabel(tr("Software video filters") + ":");
