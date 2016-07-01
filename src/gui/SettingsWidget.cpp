@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2016  Błażej Szczygieł
+	Copyright (C) 2010-2016	 Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -55,6 +55,8 @@
 #include <MenuBar.hpp>
 #include <Module.hpp>
 
+#include "ui_settings_general.h"
+
 #if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
 	#define ICONS_FROM_THEME
 #endif
@@ -62,30 +64,6 @@
 	#include <windows.h>
 #endif
 
-class Page1 : public QWidget
-{
-public:
-	QGridLayout *layout;
-	QLabel *langL, *styleL, *encodingL, *audioLangL, *subsLangL, *screenshotL;
-	QComboBox *langBox, *styleBox, *encodingB, *audioLangB, *subsLangB, *screenshotFormatB;
-	QLineEdit *screenshotE;
-	QPushButton *setAppearanceB;
-#ifdef ICONS_FROM_THEME
-	QCheckBox *iconsFromTheme;
-#endif
-	QCheckBox *showCoversB, *blurCoversB, *showDirCoversB, *autoOpenVideoWindowB,
-#ifdef UPDATER
-	*autoUpdatesB,
-#endif
-	*tabsNorths, *allowOnlyOneInstance, *displayOnlyFileName, *restoreRepeatMode;
-	QToolButton *screenshotB;
-	QPushButton *clearCoversCache, *resetSettingsB;
-	QGroupBox *proxyB, *proxyLoginB;
-	QGridLayout *proxyL;
-	QVBoxLayout *proxyLoginL;
-	QLineEdit *proxyUserE, *proxyPasswordE, *proxyHostE;
-	QSpinBox *proxyPortB;
-};
 class Page2 : public QWidget
 {
 public:
@@ -277,13 +255,17 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	tabW = new QTabWidget;
-	page1 = new Page1;
+
+	QWidget* page1_cont = new QWidget;
+	page1 = new Ui::GeneralSettings;
+	page1->setupUi(page1_cont);
+
 	page2 = new Page2;
 	page3 = new Page3;
 	page4 = new Page4;
 	page5 = new Page5;
 	page6 = new Page6;
-	tabW->addTab(page1, tr("General settings"));
+	tabW->addTab(page1_cont, tr("General settings"));
 	tabW->addTab(page2, tr("Playback settings"));
 	tabW->addTab(page3, tr("Modules"));
 	tabW->addTab(page4, tr("Subtitles"));
@@ -305,10 +287,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	layout->addWidget(closeB, 1, 2, 1, 1);
 	layout->setMargin(2);
 
-	/* Strona 1 */
-	page1->langL = new QLabel;
-	page1->langL->setText(tr("Language") + ": ");
-	page1->langBox = new QComboBox;
+	/* Page 1 */
 	page1->langBox->addItem("English", "en");
 	page1->langBox->setCurrentIndex(0);
 	QStringList langs = QMPlay2GUI.getLanguages();
@@ -319,17 +298,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 			page1->langBox->setCurrentIndex(i + 1);
 	}
 
-	page1->styleL = new QLabel;
-	page1->styleL->setText(tr("Style") + ": ");
-	page1->styleBox = new QComboBox;
 	page1->styleBox->addItems(QStyleFactory::keys());
 	idx = page1->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
 	if (idx > -1 && idx < page1->styleBox->count())
 		page1->styleBox->setCurrentIndex(idx);
 	connect(page1->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
 
-	page1->encodingL = new QLabel(tr("Subtitles encoding") + ": ");
-	page1->encodingB = new QComboBox;
 	QStringList encodings;
 	foreach (const QByteArray &item, QTextCodec::availableCodecs())
 		encodings += QTextCodec::codecForName(item)->name();
@@ -341,10 +315,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 
 	const QString audioLang = QMPSettings.getString("AudioLanguage");
 	const QString subsLang = QMPSettings.getString("SubtitlesLanguage");
-	page1->audioLangL = new QLabel(tr("Default audio language") + ": ");
-	page1->subsLangL = new QLabel(tr("Default subtitles language") + ": ");
-	page1->audioLangB = new QComboBox;
-	page1->subsLangB = new QComboBox;
 	page1->audioLangB->addItem(tr("Default or first stream"));
 	page1->subsLangB->addItem(tr("Default or first stream"));
 	foreach (const QString &lang, QMPlay2Core.getLanguagesMap())
@@ -357,141 +327,54 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 			page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
 	}
 
-	page1->screenshotL = new QLabel(tr("Screenshots path") + ": ");
-	page1->screenshotE = new QLineEdit;
-	page1->screenshotE->setReadOnly(true);
 	page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
-	page1->screenshotFormatB = new QComboBox;
-	page1->screenshotFormatB->addItems(QStringList() << ".ppm" << ".bmp" << ".png");
 	page1->screenshotFormatB->setCurrentIndex(page1->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
-	page1->screenshotB = new QToolButton;
 	page1->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-	page1->screenshotB->setToolTip(tr("Browse"));
 	connect(page1->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
-	page1->setAppearanceB = new QPushButton(tr("Set appearance"));
 	connect(page1->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
 
 #ifdef ICONS_FROM_THEME
-	page1->iconsFromTheme = new QCheckBox(tr("Use system icon set"));
 	page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
+#else
+	page1->iconsFromTheme->hide();
 #endif
 
-	page1->showCoversB = new QCheckBox(tr("Show covers"));
 	page1->showCoversB->setChecked(QMPSettings.getBool("ShowCovers"));
-
-	page1->blurCoversB = new QCheckBox(tr("Blurred covers as background"));
 	page1->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
 	connect(page1->showCoversB, SIGNAL(clicked(bool)), page1->blurCoversB, SLOT(setEnabled(bool)));
 	page1->blurCoversB->setEnabled(page1->showCoversB->isChecked());
-
-	page1->showDirCoversB = new QCheckBox(tr("Show covers from directory if there aren't in the music file"));
 	page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
 	connect(page1->showCoversB, SIGNAL(clicked(bool)), page1->showDirCoversB, SLOT(setEnabled(bool)));
 	page1->showDirCoversB->setEnabled(page1->showCoversB->isChecked());
 
-	page1->autoOpenVideoWindowB = new QCheckBox(tr("Automatically opening video window"));
 	page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
 
 #ifdef UPDATER
-	page1->autoUpdatesB = new QCheckBox(tr("Automatically check and download updates"));
 	page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
+#else
+	page1->autoUpdatesB->hide();
 #endif
 
-	page1->tabsNorths = new QCheckBox(tr("Show tabs at the top of the main window"));
 	page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
-
-	page1->allowOnlyOneInstance = new QCheckBox(tr("Allow only one instance"));
 	page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
-
-	page1->displayOnlyFileName = new QCheckBox(tr("Always display only file names in playlist"));
 	page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
-
-	page1->restoreRepeatMode = new QCheckBox(tr("Remember repeat mode"));
 	page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
 
-
-	page1->proxyB = new QGroupBox(tr("Use proxy server"));
-	page1->proxyB->setCheckable(true);
 	page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
-
-	page1->proxyHostE = new QLineEdit(QMPSettings.getString("Proxy/Host"));
-	page1->proxyHostE->setPlaceholderText(tr("Proxy server address"));
-
-	page1->proxyPortB = new QSpinBox;
-	page1->proxyPortB->setRange(1, 65535);
+	page1->proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
 	page1->proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
-	page1->proxyPortB->setToolTip(tr("Proxy server port"));
-
-	page1->proxyLoginB = new QGroupBox(tr("Proxy server needs login"));
-	page1->proxyLoginB->setCheckable(true);
 	page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
+	page1->proxyUserE->setText(QMPSettings.getString("Proxy/User"));
+	page1->proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 
-	page1->proxyUserE = new QLineEdit(QMPSettings.getString("Proxy/User"));
-	page1->proxyUserE->setPlaceholderText(tr("User name"));
-
-	page1->proxyPasswordE = new QLineEdit(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
-	page1->proxyPasswordE->setEchoMode(QLineEdit::Password);
-	page1->proxyPasswordE->setPlaceholderText(tr("Password"));
-
-	page1->proxyLoginL = new QVBoxLayout(page1->proxyLoginB);
-	page1->proxyLoginL->addWidget(page1->proxyUserE);
-	page1->proxyLoginL->addWidget(page1->proxyPasswordE);
-
-	page1->proxyL = new QGridLayout(page1->proxyB);
-	page1->proxyL->addWidget(page1->proxyLoginB, 0, 0, 1, 2);
-	page1->proxyL->addWidget(page1->proxyHostE, 1, 0, 1, 1);
-	page1->proxyL->addWidget(page1->proxyPortB, 1, 1, 1, 1);
-
-
-	page1->clearCoversCache = new QPushButton;
-	page1->clearCoversCache->setText(tr("Clear covers cache"));
-	page1->clearCoversCache->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
-	connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
-
-	page1->resetSettingsB = new QPushButton;
-	page1->resetSettingsB->setText(tr("Reset settings"));
-	page1->resetSettingsB->setIcon(QMPlay2Core.getIconFromTheme("view-refresh"));
-	connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
-
-	layout_row = 0;
-	page1->layout = new QGridLayout(page1);
-	page1->layout->setMargin(3);
-	page1->layout->setSpacing(1);
-	page1->layout->addWidget(page1->langL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->langBox, layout_row++, 1, 1, 3);
-	page1->layout->addWidget(page1->styleL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->styleBox, layout_row++, 1, 1, 3);
-	page1->layout->addWidget(page1->encodingL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->encodingB, layout_row++, 1, 1, 3);
-	page1->layout->addWidget(page1->audioLangL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->audioLangB, layout_row++, 1, 1, 3);
-	page1->layout->addWidget(page1->subsLangL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->subsLangB, layout_row++, 1, 1, 3);
-	page1->layout->addWidget(page1->screenshotL, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->screenshotE, layout_row, 1, 1, 1);
-	page1->layout->addWidget(page1->screenshotFormatB, layout_row, 2, 1, 1);
-	page1->layout->addWidget(page1->screenshotB, layout_row++, 3, 1, 1);
-	page1->layout->addWidget(page1->setAppearanceB, layout_row, 1, 1, 3);
-#ifdef ICONS_FROM_THEME
-	page1->layout->addWidget(page1->iconsFromTheme, layout_row, 0, 1, 1);
-#endif
-	layout_row++;
-	page1->layout->addWidget(page1->showCoversB, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->blurCoversB, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->showDirCoversB, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->autoOpenVideoWindowB, layout_row++, 0, 1, 4);
-#ifdef UPDATER
-	page1->layout->addWidget(page1->autoUpdatesB, layout_row++, 0, 1, 4);
-#endif
-	page1->layout->addWidget(page1->tabsNorths, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->allowOnlyOneInstance, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->displayOnlyFileName, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->restoreRepeatMode, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->proxyB, layout_row++, 0, 1, 4);
-	page1->layout->addWidget(page1->clearCoversCache, layout_row, 0, 1, 1);
-	page1->layout->addWidget(page1->resetSettingsB, layout_row++, 1, 1, 3);
-	page1->layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), page1->layout->rowCount(), 0); //vSpacer
+	{
+		QIcon view_refresh = QMPlay2Core.getIconFromTheme("view-refresh");
+		page1->clearCoversCache->setIcon(view_refresh);
+		connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+		page1->resetSettingsB->setIcon(view_refresh);
+		connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
+	}
 
 	/* Strona 2 */
 	page2->shortSeekL = new QLabel(tr("Short seeking (left and right arrows)") + ": ");

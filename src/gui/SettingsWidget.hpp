@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2016  Błażej Szczygieł
+	Copyright (C) 2010-2016	 Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -32,6 +32,10 @@ class Page4;
 class Page5;
 class Page6;
 
+namespace Ui {
+	class GeneralSettings;
+}
+
 class SettingsWidget : public QWidget
 {
 	Q_OBJECT
@@ -51,7 +55,7 @@ private:
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 
-	Page1 *page1;
+	Ui::GeneralSettings *page1;
 	Page2 *page2;
 	Page3 *page3;
 	Page4 *page4;
