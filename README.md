@@ -253,6 +253,7 @@ CMake options (option - default value: description):
 	- `USE_INPUTS` - ON: enable/disable Inputs module.
 	- `USE_MODPLUG` - ON: enable/disable Modplug module.
 	- `USE_EXTENSIONS` - ON: enable/disable Extensions module.
+	- `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
 	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
 	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
 	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.

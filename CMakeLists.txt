@@ -63,6 +63,11 @@ add_feature_info(Modplug USE_MODPLUG "Build with Modplug module")
 option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
 
+if(USE_EXTENSIONS AND NOT WIN32 AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    option(USE_MPRIS2 "Build Extensions with MPRIS2 support" ON)
+    add_feature_info(MPRIS2 USE_MPRIS2 "Build Extensions with MPRIS2 support")
+endif()
+
 option(USE_VISUALIZATIONS "Build with Visualizations module" ON)
 add_feature_info(Visualizations USE_VISUALIZATIONS "Build with Visualizations module")
 
