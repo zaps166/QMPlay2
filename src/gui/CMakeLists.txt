@@ -66,6 +66,8 @@ set(GUI_SRC
 
 set(GUI_FORMS # *.ui files
     ui/settings_general.ui
+    ui/settings_playback.ui
+    ui/settings_playback_moduleslist.ui
 )
 
 set(GUI_RESOURCES

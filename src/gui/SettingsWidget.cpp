@@ -56,6 +56,8 @@
 #include <Module.hpp>
 
 #include "ui_settings_general.h"
+#include "ui_settings_playback.h"
+#include "ui_settings_playback_moduleslist.h"
 
 #if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
 	#define ICONS_FROM_THEME
@@ -64,38 +66,6 @@
 	#include <windows.h>
 #endif
 
-class Page2 : public QWidget
-{
-public:
-	QWidget *w;
-	QScrollArea *scrollA;
-	QGridLayout *layout1;
-	QGridLayout *layout2;
-	QLabel *shortSeekL, *longSeekL, *bufferLocalL, *bufferNetworkL, *backwardBufferNetworkL, *playIfBufferedL, *maxVolL;
-	QSpinBox *shortSeekB, *longSeekB, *bufferLocalB, *bufferNetworkB, *samplerateB, *channelsB, *maxVolB;
-	QComboBox *backwardBufferNetworkB;
-	QDoubleSpinBox *playIfBufferedB;
-	QCheckBox *forceSamplerate, *forceChannels, *showBufferedTimeOnSlider, *savePos, *keepZoom, *keepARatio, *syncVtoA, *keepSubtitlesDelay, *keepSubtitlesScale, *keepVideoDelay, *keepSpeed, *silence, *restoreVideoEq, *ignorePlaybackError;
-
-	QGroupBox *replayGain;
-	QVBoxLayout *replayGainL;
-	QCheckBox *replayGainAlbum, *replayGainPreventClipping;
-	QDoubleSpinBox *replayGainPreamp;
-
-	QGroupBox *wheelActionB;
-	QVBoxLayout *wheelActionL;
-	QRadioButton *wheelSeekB, *wheelVolumeB;
-
-	class ModulesList : public QGroupBox
-	{
-	public:
-		QListWidget *list;
-		QWidget *buttonsW;
-		QToolButton *moveUp, *moveDown;
-		QVBoxLayout *layout1;
-		QHBoxLayout *layout2;
-	} *modulesList[3];
-};
 class Page3 : public QWidget
 {
 public:
@@ -249,7 +219,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	setWindowFlags(Qt::Window);
 
 	Settings &QMPSettings = QMPlay2Core.getSettings();
-	int idx, layout_row;
+	int idx;
 
 	setWindowTitle(tr("Settings"));
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -260,13 +230,16 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page1 = new Ui::GeneralSettings;
 	page1->setupUi(page1_cont);
 
-	page2 = new Page2;
+	QWidget* page2_cont = new QWidget;
+	page2 = new Ui::PlaybackSettings;
+	page2->setupUi(page2_cont);
+
 	page3 = new Page3;
 	page4 = new Page4;
 	page5 = new Page5;
 	page6 = new Page6;
 	tabW->addTab(page1_cont, tr("General settings"));
-	tabW->addTab(page2, tr("Playback settings"));
+	tabW->addTab(page2_cont, tr("Playback settings"));
 	tabW->addTab(page3, tr("Modules"));
 	tabW->addTab(page4, tr("Subtitles"));
 	tabW->addTab(page5, tr("OSD"));
@@ -376,229 +349,63 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 		connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
 	}
 
-	/* Strona 2 */
-	page2->shortSeekL = new QLabel(tr("Short seeking (left and right arrows)") + ": ");
-	page2->shortSeekB = new QSpinBox;
-	page2->shortSeekB->setRange(2, 20);
-	page2->shortSeekB->setSuffix(" " + tr("sec"));
+	/* Page 2 */
 	page2->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
-
-	page2->longSeekL = new QLabel(tr("Long seeking (up and down arrows)") + ": ");
-	page2->longSeekB = new QSpinBox;
-	page2->longSeekB->setRange(30, 300);
-	page2->longSeekB->setSuffix(" " + tr("sec"));
 	page2->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
-
-	page2->bufferLocalL = new QLabel(tr("Local buffer size (A/V packages count)") + ": ");
-	page2->bufferLocalB = new QSpinBox;
-	page2->bufferLocalB->setRange(1, 1000);
 	page2->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
-
-	page2->bufferNetworkL = new QLabel(tr("Network buffer size (A/V packages count)") + ": ");
-	page2->bufferNetworkB = new QSpinBox;
-	page2->bufferNetworkB->setRange(100, 1000000);
 	page2->bufferNetworkB->setValue(QMPSettings.getInt("AVBufferNetwork"));
-
-	page2->backwardBufferNetworkL = new QLabel(tr("Percent of packages for backwards rewinding") + ": ");
-	page2->backwardBufferNetworkB = new QComboBox;
-	page2->backwardBufferNetworkB->addItems(QStringList() << "10%" << "25%" << "50%");
 	page2->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
-
-	page2->playIfBufferedL = new QLabel(tr("Start playback internet stream if it is buffered") + ": ");
-	page2->playIfBufferedB = new QDoubleSpinBox;
-	page2->playIfBufferedB->setRange(0.0, 5.0);
-	page2->playIfBufferedB->setSingleStep(0.25);
-	page2->playIfBufferedB->setSuffix(" " + tr("sec"));
 	page2->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
-
-	page2->maxVolL = new QLabel(tr("Maximum volume"));
-	page2->maxVolB = new QSpinBox;
-	page2->maxVolB->setRange(100, 1000);
-	page2->maxVolB->setSingleStep(50);
-	page2->maxVolB->setSuffix(" %");
 	page2->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
 
-	page2->forceSamplerate = new QCheckBox(tr("Force samplerate"));
 	page2->forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
-	connect(page2->forceSamplerate, SIGNAL(stateChanged(int)), this, SLOT(page2EnableOrDisable()));
-	page2->samplerateB = new QSpinBox;
-	page2->samplerateB->setRange(4000, 192000);
 	page2->samplerateB->setValue(QMPSettings.getInt("Samplerate"));
+	connect(page2->forceSamplerate, SIGNAL(toggled(bool)), page2->samplerateB, SLOT(setEnabled(bool)));
+	page2->samplerateB->setEnabled(page2->forceSamplerate->isChecked());
 
-	page2->forceChannels = new QCheckBox(tr("Force channels conversion"));
 	page2->forceChannels->setChecked(QMPSettings.getBool("ForceChannels"));
-	connect(page2->forceChannels, SIGNAL(stateChanged(int)), this, SLOT(page2EnableOrDisable()));
-	page2->channelsB = new QSpinBox;
-	page2->channelsB->setRange(1, 8);
 	page2->channelsB->setValue(QMPSettings.getInt("Channels"));
+	connect(page2->forceChannels, SIGNAL(toggled(bool)), page2->channelsB, SLOT(setEnabled(bool)));
+	page2->channelsB->setEnabled(page2->forceChannels->isChecked());
 
-	page2EnableOrDisable();
 
-
-	page2->replayGain = new QGroupBox(tr("Use replay gain if available"));
-	page2->replayGain->setCheckable(true);
 	page2->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
-
-	page2->replayGainL = new QVBoxLayout(page2->replayGain);
-
-	page2->replayGainAlbum = new QCheckBox(tr("Album mode for replay gain"));
 	page2->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
-
-	page2->replayGainPreventClipping = new QCheckBox(tr("Prevent clipping"));
 	page2->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
-
-	page2->replayGainPreamp = new QDoubleSpinBox;
-	page2->replayGainPreamp->setRange(-15.0, 15.0);
-	page2->replayGainPreamp->setPrefix(tr("Amplify") + ": ");
-	page2->replayGainPreamp->setSuffix(" dB");
 	page2->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
 
-	page2->replayGainL->addWidget(page2->replayGainAlbum);
-	page2->replayGainL->addWidget(page2->replayGainPreventClipping);
-	page2->replayGainL->addWidget(page2->replayGainPreamp);
-
-
-	page2->wheelActionB = new QGroupBox(tr("Mouse wheel action on video dock"));
-	page2->wheelActionB->setCheckable(true);
 	page2->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
-
-	page2->wheelActionL = new QVBoxLayout(page2->wheelActionB);
-
-	page2->wheelSeekB = new QRadioButton(tr("Mouse wheel scrolls music/movie"));
 	page2->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
-
-	page2->wheelVolumeB = new QRadioButton(tr("Mouse wheel changes the volume"));
 	page2->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
 
-	page2->wheelActionL->addWidget(page2->wheelSeekB);
-	page2->wheelActionL->addWidget(page2->wheelVolumeB);
 
-
-	page2->showBufferedTimeOnSlider = new QCheckBox(tr("Show buffered data indicator on slider"));
 	page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
-
-	page2->savePos = new QCheckBox(tr("Remember playback position"));
 	page2->savePos->setChecked(QMPSettings.getBool("SavePos"));
-
-	page2->keepZoom = new QCheckBox(tr("Keep zoom"));;
 	page2->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
-
-	page2->keepARatio = new QCheckBox(tr("Keep aspect ratio"));
 	page2->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
-
-	page2->keepSubtitlesDelay = new QCheckBox(tr("Keep subtitles delay"));
 	page2->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
-
-	page2->keepSubtitlesScale = new QCheckBox(tr("Keep subtitles scale"));
 	page2->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
-
-	page2->keepVideoDelay = new QCheckBox(tr("Keep video delay"));
 	page2->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
-
-	page2->keepSpeed = new QCheckBox(tr("Keep speed"));
 	page2->keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
-
-	page2->syncVtoA = new QCheckBox(tr("Video to audio sync (frame skipping)"));
 	page2->syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
-
-	page2->silence = new QCheckBox(tr("Fade sound"));
 	page2->silence->setChecked(QMPSettings.getBool("Silence"));
-
-	page2->restoreVideoEq = new QCheckBox(tr("Remember video equalizer settings"));
 	page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
-
-	page2->ignorePlaybackError = new QCheckBox(tr("Play next entry after playback error"));
 	page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
 
-	for (int m = 0; m < 3; ++m)
+	QString modules_title_list[3] = {tr("Video output priority"),
+									 tr("Audio output priority"),
+									 tr("Decoders priority")};
+	for(int m = 0; m < 3; ++m)
 	{
-		Page2::ModulesList *&mL = page2->modulesList[m];
-		mL = new Page2::ModulesList;
-
-		mL->list = new QListWidget;
-		mL->list->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-		connect(mL->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
-		mL->list->setSelectionMode(QAbstractItemView::ExtendedSelection);
-		mL->list->setDragDropMode(QAbstractItemView::InternalMove);
-
-		mL->buttonsW = new QWidget;
-
-		mL->moveUp = new QToolButton;
-		mL->moveUp->setArrowType(Qt::UpArrow);
-		mL->moveUp->setToolTip(tr("Move up"));
-		connect(mL->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
-		mL->moveUp->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-
-		mL->moveDown = new QToolButton;
-		mL->moveDown->setArrowType(Qt::DownArrow);
-		mL->moveDown->setToolTip(tr("Move down"));
-		connect(mL->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
-		mL->moveDown->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-
-		mL->layout1 = new QVBoxLayout(mL->buttonsW);
-		mL->layout1->addWidget(mL->moveUp);
-		mL->layout1->addWidget(mL->moveDown);
-		mL->layout1->setSpacing(2);
-		mL->layout1->setMargin(0);
-
-		mL->layout2 = new QHBoxLayout(mL);
-		mL->layout2->addWidget(mL->list);
-		mL->layout2->addWidget(mL->buttonsW);
-		mL->layout2->setSpacing(2);
-		mL->layout2->setMargin(0);
+		QGroupBox* box = new QGroupBox(modules_title_list[m]);
+		Ui::ModulesList* ml = new Ui::ModulesList;
+		ml->setupUi(box);
+		connect(ml->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+		connect(ml->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
+		connect(ml->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
+		page2->modulesListLayout->addWidget(box);
+		page2_modulesList[m] = ml;
 	}
-	page2->modulesList[0]->setTitle(tr("Video output priority"));
-	page2->modulesList[1]->setTitle(tr("Audio output priority"));
-	page2->modulesList[2]->setTitle(tr("Decoders priority"));
-
-	layout_row = 0;
-	page2->w = new QWidget;
-	page2->layout2 = new QGridLayout(page2->w);
-	page2->layout2->addWidget(page2->shortSeekL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->shortSeekB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->longSeekL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->longSeekB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->bufferLocalL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->bufferLocalB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->bufferNetworkL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->bufferNetworkB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->backwardBufferNetworkL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->backwardBufferNetworkB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->playIfBufferedL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->playIfBufferedB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->maxVolL, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->maxVolB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->forceSamplerate, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->samplerateB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->forceChannels, layout_row, 0, 1, 1);
-	page2->layout2->addWidget(page2->channelsB, layout_row++, 1, 1, 1);
-	page2->layout2->addWidget(page2->replayGain, layout_row++, 0, 1, 2);
-	page2->layout2->addWidget(page2->wheelActionB, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->showBufferedTimeOnSlider, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->savePos, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepZoom, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepARatio, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepSubtitlesDelay, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepSubtitlesScale, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepVideoDelay, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->keepSpeed, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->syncVtoA, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->silence, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->restoreVideoEq, layout_row++, 0, 1, 3);
-	page2->layout2->addWidget(page2->ignorePlaybackError, layout_row++, 0, 1, 3);
-	page2->layout2->setMargin(0);
-	page2->layout2->setSpacing(2);
-
-	page2->scrollA = new QScrollArea;
-	page2->scrollA->setFrameShape(QFrame::NoFrame);
-	page2->scrollA->setWidget(page2->w);
-
-	page2->layout1 = new QGridLayout(page2);
-	page2->layout1->setMargin(2);
-	page2->layout1->setSpacing(3);
-	page2->layout1->addWidget(page2->scrollA, 0, 0, 1, 3);
-	for (int m = 0; m < 3; ++m)
-		page2->layout1->addWidget(page2->modulesList[m], 1, m);
 
 	/* Strona 3 */
 	page3->module = NULL;
@@ -858,11 +665,11 @@ void SettingsWidget::apply()
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
 
 			QStringList videoWriters, audioWriters, decoders;
-			foreach (QListWidgetItem *wI, page2->modulesList[0]->list->findItems(QString(), Qt::MatchContains))
+			foreach (QListWidgetItem *wI, page2_modulesList[0]->list->findItems(QString(), Qt::MatchContains))
 				videoWriters += wI->text();
-			foreach (QListWidgetItem *wI, page2->modulesList[1]->list->findItems(QString(), Qt::MatchContains))
+			foreach (QListWidgetItem *wI, page2_modulesList[1]->list->findItems(QString(), Qt::MatchContains))
 				audioWriters += wI->text();
-			foreach (QListWidgetItem *wI, page2->modulesList[2]->list->findItems(QString(), Qt::MatchContains))
+			foreach (QListWidgetItem *wI, page2_modulesList[2]->list->findItems(QString(), Qt::MatchContains))
 				decoders += wI->text();
 			QMPSettings.set("videoWriters", videoWriters);
 			QMPSettings.set("audioWriters", audioWriters);
@@ -930,7 +737,7 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 }
 void SettingsWidget::tabCh(int idx)
 {
-	if (idx == 1 && !page2->modulesList[0]->list->count() && !page2->modulesList[1]->list->count() && !page2->modulesList[2]->list->count())
+	if (idx == 1 && !page2_modulesList[0]->list->count() && !page2_modulesList[1]->list->count() && !page2_modulesList[2]->list->count())
 	{
 		QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
 		QVector<QPair<Module *, Module::Info> > pluginsInstances[3];
@@ -945,26 +752,27 @@ void SettingsWidget::tabCh(int idx)
 						pluginsInstances[m][mIdx] = qMakePair(module, moduleInfo);
 				}
 		for (int m = 0; m < 3; ++m)
+		{
 			for (int i = 0; i < pluginsInstances[m].size(); i++)
 			{
 				QListWidgetItem *wI = new QListWidgetItem(writers[m][i]);
 				wI->setData(Qt::UserRole, pluginsInstances[m][i].first->name());
 				wI->setIcon(QMPlay2GUI.getIcon(pluginsInstances[m][i].second.img.isNull() ? pluginsInstances[m][i].first->image() : pluginsInstances[m][i].second.img));
-				page2->modulesList[m]->list->addItem(wI);
+				page2_modulesList[m]->list->addItem(wI);
 				if (writers[m][i] == lastM[m])
-					page2->modulesList[m]->list->setCurrentItem(wI);
+					page2_modulesList[m]->list->setCurrentItem(wI);
 			}
-		for (int m = 0; m < 3; ++m)
-			if (page2->modulesList[m]->list->currentRow() < 0)
-				page2->modulesList[m]->list->setCurrentRow(0);
+			if (page2_modulesList[m]->list->currentRow() < 0)
+				page2_modulesList[m]->list->setCurrentRow(0);
+		}
 	}
 	else if (idx == 2)
 		for (int m = 0; m < 3; ++m)
 		{
-			QListWidgetItem *currI = page2->modulesList[m]->list->currentItem();
+			QListWidgetItem *currI = page2_modulesList[m]->list->currentItem();
 			if (currI)
 				lastM[m] = currI->text();
-			page2->modulesList[m]->list->clear();
+			page2_modulesList[m]->list->clear();
 		}
 }
 void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
@@ -983,12 +791,12 @@ void SettingsWidget::moveModule()
 	{
 		const bool moveDown = tB->arrowType() == Qt::DownArrow;
 		QListWidget *mL = NULL;
-		if (tB->parent() == page2->modulesList[0]->buttonsW)
-			mL = page2->modulesList[0]->list;
-		else if (tB->parent() == page2->modulesList[1]->buttonsW)
-			mL = page2->modulesList[1]->list;
-		else if (tB->parent() == page2->modulesList[2]->buttonsW)
-			mL = page2->modulesList[2]->list;
+		if (tB->parent() == page2_modulesList[0]->buttonsW)
+			mL = page2_modulesList[0]->list;
+		else if (tB->parent() == page2_modulesList[1]->buttonsW)
+			mL = page2_modulesList[1]->list;
+		else if (tB->parent() == page2_modulesList[2]->buttonsW)
+			mL = page2_modulesList[2]->list;
 		if (mL)
 		{
 			int row = mL->currentRow();
@@ -1011,11 +819,6 @@ void SettingsWidget::chooseScreenshotDir()
 	QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
 	if (!dir.isEmpty())
 		page1->screenshotE->setText(dir);
-}
-void SettingsWidget::page2EnableOrDisable()
-{
-	page2->samplerateB->setEnabled(page2->forceSamplerate->isChecked());
-	page2->channelsB->setEnabled(page2->forceChannels->isChecked());
 }
 void SettingsWidget::setAppearance()
 {

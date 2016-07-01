@@ -25,8 +25,6 @@ class QListWidgetItem;
 class QGridLayout;
 class QPushButton;
 class QTabWidget;
-class Page1;
-class Page2;
 class Page3;
 class Page4;
 class Page5;
@@ -34,6 +32,8 @@ class Page6;
 
 namespace Ui {
 	class GeneralSettings;
+	class PlaybackSettings;
+	class ModulesList;
 }
 
 class SettingsWidget : public QWidget
@@ -56,7 +56,8 @@ private:
 	void closeEvent(QCloseEvent *);
 
 	Ui::GeneralSettings *page1;
-	Page2 *page2;
+	Ui::PlaybackSettings *page2;
+	Ui::ModulesList *page2_modulesList[3];
 	Page3 *page3;
 	Page4 *page4;
 	Page5 *page5;
@@ -77,7 +78,6 @@ private slots:
 	void openModuleSettings(QListWidgetItem *);
 	void moveModule();
 	void chooseScreenshotDir();
-	void page2EnableOrDisable();
 	void setAppearance();
 	void clearCoversCache();
 	void resetSettings();
