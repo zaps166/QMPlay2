@@ -58,6 +58,9 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 
 ##YouTube
 
+You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
+If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
+
 Some YouTube videos don't work without external "youtube-dl" software. You must install it!
 
 ####Windows
@@ -99,7 +102,7 @@ VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU f
 
 VDPAU and VA-API has its own deinterlacing filters. These settings are mixed together with "FFmpeg" module settings.
 
-H.264 lossless movies (CRF 0 or QP 0) are not properly decoded.
+H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 
 ##Deinterlacing
 
