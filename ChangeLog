@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.06.30:
+Changes in QMPlay2 build 16.07.02:
 	- update pause and buffered data information when demuxer is busy,
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
 	- allow file group and Audio CD tracks synchronization:
