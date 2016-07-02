@@ -40,14 +40,30 @@
 #include <QLabel>
 #include <QFile>
 
-void WallpaperW::paintEvent(QPaintEvent *)
+class WallpaperW : public QWidget
 {
-	if (!pixmap.isNull())
+public:
+	inline void setPixmap(const QPixmap &pix)
 	{
-		QPainter p(this);
-		QMPlay2GUI.drawPixmap(p, this, pixmap);
+		pixmap = pix;
+		update();
 	}
-}
+	inline const QPixmap &getPixmap() const
+	{
+		return pixmap;
+	}
+private:
+	void paintEvent(QPaintEvent *)
+	{
+		if (!pixmap.isNull())
+		{
+			QPainter p(this);
+			QMPlay2GUI.drawPixmap(p, this, pixmap);
+		}
+	}
+
+	QPixmap pixmap;
+};
 
 /**/
 

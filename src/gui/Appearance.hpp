@@ -25,27 +25,10 @@ class QDialogButtonBox;
 class QAbstractButton;
 class QDoubleSpinBox;
 class ColorButton;
+class WallpaperW;
 class QGroupBox;
 class QComboBox;
 class QSettings;
-
-class WallpaperW : public QWidget
-{
-public:
-	void setPixmap(const QPixmap &pix)
-	{
-		pixmap = pix;
-		update();
-	}
-	inline const QPixmap &getPixmap() const
-	{
-		return pixmap;
-	}
-private:
-	void paintEvent(QPaintEvent *);
-
-	QPixmap pixmap;
-};
 
 class Appearance : public QDialog
 {

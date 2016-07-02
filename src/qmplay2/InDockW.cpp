@@ -21,13 +21,13 @@
 #include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 
-#include <QCoreApplication>
-#include <QPainter>
-#include <QVariant>
-
 #include <QGraphicsBlurEffect>
 #include <QGraphicsPixmapItem>
+#include <QCoreApplication>
 #include <QGraphicsScene>
+#include <QDockWidget>
+#include <QPainter>
+#include <QVariant>
 
 static QPixmap getBlurred(const QPixmap &input)
 {
@@ -150,10 +150,15 @@ void InDockW::paintEvent(QPaintEvent *)
 	{
 		QPainter p(this);
 
-		const int fullHeight = height() + loseHeight;
-		const bool drawBlurredImage = !customPixmapBlurred.isNull();
+		bool isFloating = false;
+		if (QDockWidget *dW = qobject_cast<QDockWidget *>(parentWidget()))
+			isFloating = dW->isFloating();
 
-		if (!hasWallpaper && !drawBlurredImage)
+		const int fullHeight = height() + loseHeight;
+		const bool drawBackground = (isFloating || !hasWallpaper);
+		const bool drawBlurredImage = drawBackground && !customPixmapBlurred.isNull();
+
+		if (drawBackground && !drawBlurredImage)
 		{
 			if (grad1 == grad2)
 				p.fillRect(rect(), grad1);
