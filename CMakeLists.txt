@@ -254,9 +254,9 @@ if(LANGUAGES)
 endif()
 
 if(WIN32)
-    install(FILES ChangeLog LICENSE TODO README.md DESTINATION ".")
+    install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION ".")
 else()
-    install(FILES ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
+    install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 endif()
 
 # uninstall target
