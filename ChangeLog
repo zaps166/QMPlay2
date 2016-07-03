@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 16.07.04:
+	- CMake fixes,
+	- PLS bugfix,
+
 Changes in QMPlay2 build 16.07.02:
 	- update pause and buffered data information when demuxer is busy,
 	- move "modules" directory from "share/qmplay2" to "lib/qmplay2",
