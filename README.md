@@ -268,10 +268,10 @@ CMake options (option - default value: description):
 	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
 	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
 	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
-	- `USE_TAGLIB` - `ON`: allows to disable tag editor.
-	- `USE_AVRESAMPLE` - `OFF`: uses libavresample instead of libswresample.
+	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
+	- `USE_AVRESAMPLE` - `OFF`: use libavresample instead of libswresample.
 	- `USE_OPENGL_FOR_VISUALIZATIONS` - Qt >= 5.6.0 feature, `OFF`: it allows to use "QOpenGLWidget" for visualizations.
-	- `USE_JEMALLOC` - `OFF`: it links to jemalloc memory allocator which can reduce memory usage. Remember to unset `LDFLAGS` if it contains `--as-needed` flag!
+	- `USE_JEMALLOC` - `OFF`: link to jemalloc memory allocator which can reduce memory usage.
 	- `USE_CMD` - Windows only, `OFF`.
 	- `USE_PROSTOPLEER` - `ON`.
 	- `USE_LIBASS` - `ON`.
