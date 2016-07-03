@@ -5,11 +5,11 @@ if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
 endif()
 
 set(DIRS_CLEAN
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/QMPlay2/"
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/lang/"
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/"
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/modules/"
-    "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/qmplay2/"
+    "@CMAKE_INSTALL_INCLUDEDIR@/QMPlay2/"
+    "@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/lang/"
+    "@CMAKE_INSTALL_DATAROOTDIR@/qmplay2/"
+    "@CMAKE_INSTALL_LIBDIR@/qmplay2/modules/"
+    "@CMAKE_INSTALL_LIBDIR@/qmplay2/"
 )
 
 file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
@@ -35,6 +35,9 @@ list(SORT DIRS_CLEAN)
 list(REVERSE DIRS_CLEAN)
 
 foreach(dir ${DIRS_CLEAN})
+    if(NOT dir MATCHES "^/")
+        set(dir "@CMAKE_INSTALL_PREFIX@/${dir}")
+    endif()
     file(GLOB DIR_LIST "$ENV{DESTDIR}${dir}/*")
     list(LENGTH DIR_LIST DIR_LIST_LEN)
     if(DIR_LIST_LEN EQUAL 0)
