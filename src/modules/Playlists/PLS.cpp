@@ -22,12 +22,14 @@
 #include <Reader.hpp>
 #include <Writer.hpp>
 
-inline void prepareList(Playlist::Entries &list, int idx)
+static void ensureLastEntryHasName(Playlist::Entries &list, int lastEntryIdx, int entryIdx = -1)
 {
-	if (idx <= list.size() - 1)
-		return;
-	for (int i = list.size(); i <= idx; i++)
-		list += Playlist::Entry();
+	if (lastEntryIdx > -1 && lastEntryIdx != entryIdx)
+	{
+		Playlist::Entry &entry = list[lastEntryIdx];
+		if (entry.name.isEmpty())
+			entry.name = Functions::fileName(entry.url, false);
+	}
 }
 
 /**/
@@ -43,55 +45,75 @@ Playlist::Entries PLS::read()
 	else
 		playlistPath.clear();
 
+	int lastEntryIdx = -1;
+
 	const QList<QByteArray> playlistLines = readLines();
 	for (int i = 0; i < playlistLines.count(); ++i)
 	{
-		const QByteArray &line = playlistLines[i];
+		QByteArray line = playlistLines[i];
 		if (line.isEmpty())
 			continue;
-		const int idx = line.indexOf('=');
+
+		int idx = line.indexOf('=');
 		if (idx < 0)
 			continue;
 
-		int number_idx = -1;
+		int numberIdx = -1;
 		for (int i = 0; i < line.length(); ++i)
 		{
-			if (line[i] == '=')
-				break;
-			if (line[i] >= '0' && line[i] <= '9')
+			const char c = line.at(i);
+			if (c == '=')
 			{
-				number_idx = i;
+				if (list.isEmpty())
+				{
+					line.insert(i, '1');
+					numberIdx = i;
+					++idx;
+				}
+				break;
+			}
+			if (c >= '0' && c <= '9')
+			{
+				numberIdx = i;
 				break;
 			}
 		}
-		if (number_idx == -1)
+		if (numberIdx == -1)
 			continue;
 
-		const QByteArray key = line.left(number_idx);
-		const QByteArray value = line.mid(idx+1);
-		const int entry_idx = line.mid(number_idx, idx - number_idx).toInt() - 1;
+		const QByteArray key = line.left(numberIdx);
+		const QByteArray value = line.mid(idx + 1);
 
-		prepareList(list, entry_idx);
-		if (entry_idx < 0 || entry_idx > list.size() - 1)
+		const int entryIdx = line.mid(numberIdx, idx - numberIdx).toInt() - 1;
+		if (entryIdx < 0)
 			continue;
 
+		ensureLastEntryHasName(list, lastEntryIdx, entryIdx);
+		lastEntryIdx = entryIdx;
+
+		if (list.size() <= entryIdx)
+			list.resize(entryIdx + 1);
+
+		Entry &entry = list[entryIdx];
 		if (key == "File")
-			list[entry_idx].url = Functions::Url(value, playlistPath);
+			entry.url = Functions::Url(value, playlistPath);
 		else if (key == "Title")
-			(list[entry_idx].name = value).replace('\001', '\n');
-		else if (key == "Length" && list[entry_idx].length == -1.0)
-			list[entry_idx].length = value.toInt();
+			(entry.name = value).replace('\001', '\n');
+		else if (key == "Length" && entry.length == -1.0)
+			entry.length = value.toInt();
 		else if (key == "QMPlay_length")
-			list[entry_idx].length = value.toDouble();
+			entry.length = value.toDouble();
 		else if (key == "QMPlay_sel")
-			list[entry_idx].selected = value.toInt();
+			entry.selected = value.toInt();
 		else if (key == "QMPlay_queue")
-			list[entry_idx].queue = value.toInt();
+			entry.queue = value.toInt();
 		else if (key == "QMPlay_GID")
-			list[entry_idx].GID = value.toInt();
+			entry.GID = value.toInt();
 		else if (key == "QMPlay_parent")
-			list[entry_idx].parent = value.toInt();
+			entry.parent = value.toInt();
 	}
+
+	ensureLastEntryHasName(list, lastEntryIdx);
 
 	return list;
 }

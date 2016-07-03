@@ -41,7 +41,7 @@ public:
 		bool selected;
 		qint32 queue, GID, parent;
 	};
-	typedef QList<Entry> Entries;
+	typedef QVector<Entry> Entries;
 
 	enum OpenMode
 	{
