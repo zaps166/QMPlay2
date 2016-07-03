@@ -317,9 +317,9 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					}
 					else
 					{
-						currentItem = insertPlaylistEntries(fetchTracks.tracks, currentItem, demuxersInfo);
+						QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(fetchTracks.tracks, currentItem, demuxersInfo);
 						if (!firstItem)
-							firstItem = currentItem;
+							firstItem = tmpFirstItem;
 						hasOneEntry = false;
 						tracksAdded = true;
 					}
@@ -365,7 +365,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 	foreach (const Playlist::Entry &entry, entries)
 	{
 		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL;
-		int idx = entry.parent - 1;
+		const int idx = entry.parent - 1;
 		if (idx >= 0 && groupList.size() > idx)
 			tmpParent = groupList.at(idx);
 		else
