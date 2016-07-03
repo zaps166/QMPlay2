@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2016  Błażej Szczygieł
+	Copyright (C) 2010-2016	 Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -25,12 +25,16 @@ class QListWidgetItem;
 class QGridLayout;
 class QPushButton;
 class QTabWidget;
-class Page1;
-class Page2;
 class Page3;
 class Page4;
 class Page5;
 class Page6;
+
+namespace Ui {
+	class GeneralSettings;
+	class PlaybackSettings;
+	class ModulesList;
+}
 
 class SettingsWidget : public QWidget
 {
@@ -54,16 +58,15 @@ private:
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 
-	Page1 *page1;
-	Page2 *page2;
+	Ui::GeneralSettings *page1;
+	Ui::PlaybackSettings *page2;
+	Ui::ModulesList *page2_modulesList[3];
 	Page3 *page3;
 	Page4 *page4;
 	Page5 *page5;
 	Page6 *page6;
 
-	QGridLayout *layout;
 	QTabWidget *tabW;
-	QPushButton *applyB, *closeB;
 	QString lastM[3];
 
 	QWidget *videoEq, *videoEqOriginalParent;
@@ -78,7 +81,6 @@ private slots:
 	void openModuleSettings(QListWidgetItem *);
 	void moveModule();
 	void chooseScreenshotDir();
-	void page2EnableOrDisable();
 	void setAppearance();
 	void clearCoversCache();
 	void resetSettings();

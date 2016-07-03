@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PlaybackSettings</class>
+ <widget class="QWidget" name="PlaybackSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>586</width>
+    <height>586</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>552</width>
+        <height>801</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="shortSeekL">
+           <property name="text">
+            <string>Short seeking (left and right arrows): </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="shortSeekB">
+           <property name="suffix">
+            <string> sec</string>
+           </property>
+           <property name="minimum">
+            <number>2</number>
+           </property>
+           <property name="maximum">
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="longSeekL">
+           <property name="text">
+            <string>Long seeking (up and down arrows): </string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="longSeekB">
+           <property name="suffix">
+            <string> sec</string>
+           </property>
+           <property name="minimum">
+            <number>30</number>
+           </property>
+           <property name="maximum">
+            <number>300</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="bufferLocalL">
+           <property name="text">
+            <string>Local buffer size (A/V packages count): </string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="bufferLocalB">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="bufferNetworkL">
+           <property name="text">
+            <string>Network buffer size (A/V packages count): </string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="bufferNetworkB">
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>1000000</number>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="backwardBufferNetworkL">
+           <property name="text">
+            <string>Percent of packages for backwards rewinding: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="backwardBufferNetworkB">
+           <item>
+            <property name="text">
+             <string notr="true">10%</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">25%</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">50%</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="playIfBufferedL">
+           <property name="text">
+            <string>Start playback internet stream if it is buffered: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QDoubleSpinBox" name="playIfBufferedB">
+           <property name="suffix">
+            <string> sec</string>
+           </property>
+           <property name="maximum">
+            <double>5.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.250000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="maxVolL">
+           <property name="text">
+            <string>Maximum volume</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QSpinBox" name="maxVolB">
+           <property name="suffix">
+            <string notr="true"> %</string>
+           </property>
+           <property name="minimum">
+            <number>100</number>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+           <property name="singleStep">
+            <number>50</number>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QCheckBox" name="forceSamplerate">
+           <property name="text">
+            <string>Force samplerate</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QSpinBox" name="samplerateB">
+           <property name="minimum">
+            <number>4000</number>
+           </property>
+           <property name="maximum">
+            <number>192000</number>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QCheckBox" name="forceChannels">
+           <property name="text">
+            <string>Force channels conversion</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QSpinBox" name="channelsB">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>8</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="replayGain">
+         <property name="title">
+          <string>Use replay gain if available</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QCheckBox" name="replayGainAlbum">
+            <property name="text">
+             <string>Album mode for replay gain</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="replayGainPreventClipping">
+            <property name="text">
+             <string>Prevent clipping</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="replayGainPreamp">
+            <property name="prefix">
+             <string>Amplify: </string>
+            </property>
+            <property name="suffix">
+             <string notr="true"> dB</string>
+            </property>
+            <property name="minimum">
+             <double>-15.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>15.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="wheelActionB">
+         <property name="title">
+          <string>Mouse wheel action on video dock</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QRadioButton" name="wheelSeekB">
+            <property name="text">
+             <string>Mouse wheel scrolls music/movie</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="wheelVolumeB">
+            <property name="text">
+             <string>Mouse wheel changes the volume</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepZoom">
+         <property name="text">
+          <string>Keep zoom</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="showBufferedTimeOnSlider">
+         <property name="text">
+          <string>Show buffered data indicator on slider</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepARatio">
+         <property name="text">
+          <string>Keep aspect ratio</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="savePos">
+         <property name="text">
+          <string>Remember playback position</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepSubtitlesDelay">
+         <property name="text">
+          <string>Keep subtitles delay</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepSubtitlesScale">
+         <property name="text">
+          <string>Keep subtitles scale</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepSpeed">
+         <property name="text">
+          <string>Keep speed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="keepVideoDelay">
+         <property name="text">
+          <string>Keep video delay</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="syncVtoA">
+         <property name="text">
+          <string>Video to audio sync (frame skipping)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="silence">
+         <property name="text">
+          <string>Fade sound</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="restoreVideoEq">
+         <property name="text">
+          <string>Remember video equalizer settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="ignorePlaybackError">
+         <property name="text">
+          <string>Play next entry after playback error</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="modulesListLayout"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
