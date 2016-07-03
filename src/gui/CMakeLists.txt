@@ -163,15 +163,15 @@ elseif(USE_TAGLIB)
 endif()
 
 if(WIN32)
-    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}")
+    install(TARGETS QMPlay2 RUNTIME DESTINATION ".")
 else()
     # executable
-    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
     if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
         # desktop files
         file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-        install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+        install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications/")
 
         # mime files
         file(GLOB MIME_FILES Unix/x-*.xml)
