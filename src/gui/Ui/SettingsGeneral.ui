@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GeneralSettings</class>
+ <widget class="QWidget" name="GeneralSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>517</width>
+    <height>625</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="langL">
+       <property name="text">
+        <string>Language: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="langBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="styleL">
+       <property name="text">
+        <string>Style: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="styleBox"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="encodingL">
+       <property name="text">
+        <string>Subtitles encoding: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="encodingB"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="audioLangL">
+       <property name="text">
+        <string>Default audio language: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="audioLangB"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="subsLangL">
+       <property name="text">
+        <string>Default subtitles language: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="subsLangB"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="screenshotL">
+       <property name="text">
+        <string>Screenshots path: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="screenshotE">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="screenshotFormatB">
+         <item>
+          <property name="text">
+           <string notr="true">.ppm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">.bmp</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">.png</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="screenshotB">
+         <property name="toolTip">
+          <string>Browse</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="6" column="0">
+      <widget class="QCheckBox" name="iconsFromTheme">
+       <property name="text">
+        <string>Use system icon set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="setAppearanceB">
+       <property name="text">
+        <string>Set appearance</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="showCoversB">
+     <property name="text">
+      <string>Show covers</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="blurCoversB">
+     <property name="text">
+      <string>Blurred covers as background</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="showDirCoversB">
+     <property name="text">
+      <string>Show covers from directory if there aren't in the music file</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="autoOpenVideoWindowB">
+     <property name="text">
+      <string>Automatically opening video window</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="autoUpdatesB">
+     <property name="text">
+      <string>Automatically check and download updates</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="tabsNorths">
+     <property name="text">
+      <string>Show tabs at the top of the main window</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="allowOnlyOneInstance">
+     <property name="text">
+      <string>Allow only one instance</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="displayOnlyFileName">
+     <property name="text">
+      <string>Always display only file names in playlist</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="restoreRepeatMode">
+     <property name="text">
+      <string>Remember repeat mode</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="proxyB">
+     <property name="title">
+      <string>Use proxy server</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QGroupBox" name="proxyLoginB">
+        <property name="title">
+         <string>Proxy server needs login</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLineEdit" name="proxyUserE">
+           <property name="placeholderText">
+            <string>User name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="proxyPasswordE">
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+           <property name="placeholderText">
+            <string>Password</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="_2">
+        <item>
+         <widget class="QLineEdit" name="proxyHostE">
+          <property name="placeholderText">
+           <string>Proxy server address</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="proxyPortB">
+          <property name="toolTip">
+           <string>Proxy server port</string>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>65535</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="clearCoversCache">
+       <property name="text">
+        <string>Clear covers cache</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetSettingsB">
+       <property name="text">
+        <string>Reset settings</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
