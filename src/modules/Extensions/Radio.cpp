@@ -17,6 +17,7 @@
 */
 
 #include <Radio.hpp>
+#include <Version.hpp>
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -108,7 +109,7 @@ void Radio::visibilityChanged(bool v)
 
 		net = new QNetworkAccessManager(this);
 		QNetworkRequest request(QUrl("http://zaps166.sourceforge.net/downloads/RadioList"));
-		request.setRawHeader("User-Agent", "QMPlay2");
+		request.setRawHeader("User-Agent", QMPlay2UserAgent);
 		QNetworkReply *netReply = net->get(request);
 		connect(netReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
 		connect(netReply, SIGNAL(finished()), this, SLOT(finished()));
@@ -154,7 +155,7 @@ void Radio::openLink()
 
 void Radio::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-	if (bytesTotal != progressB->maximum())
+	if (bytesTotal > 0 && bytesTotal != progressB->maximum())
 		progressB->setMaximum(bytesTotal);
 	progressB->setValue(bytesReceived);
 }
