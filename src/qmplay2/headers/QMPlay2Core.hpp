@@ -50,7 +50,7 @@ public:
 	void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
 	void quit();
 
-	inline QList<Module *> getPluginsInstance() const
+	inline QVector<Module *> getPluginsInstance() const
 	{
 		return pluginsInstance;
 	}
@@ -158,7 +158,7 @@ protected:
 private:
 	static QMPlay2CoreClass *qmplay2Core;
 
-	QList<Module *> pluginsInstance;
+	QVector<Module *> pluginsInstance;
 	QString shareDir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
 	QString unixOpenCommand;

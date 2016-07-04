@@ -213,8 +213,9 @@ void QMPlay2CoreClass::quit()
 {
 	if (settingsDir.isEmpty())
 		return;
-	while (!pluginsInstance.isEmpty())
-		delete pluginsInstance.takeFirst();
+	foreach (Module *pluginInstance, pluginsInstance)
+		delete pluginInstance;
+	pluginsInstance.clear();
 	shareDir.clear();
 	settingsDir.clear();
 #ifdef Q_OS_WIN
