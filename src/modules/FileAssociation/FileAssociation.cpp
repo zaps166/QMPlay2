@@ -28,7 +28,7 @@
 FileAssociation::FileAssociation() :
 	Module("FileAssociation")
 {
-	moduleImg = QImage(":/regedit");
+	moduleImg = QImage(":/FileAssociation");
 
 	init("Associate", true);
 	init("Dirs", true);

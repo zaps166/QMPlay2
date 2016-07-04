@@ -33,8 +33,10 @@
 
 Extensions::Extensions() :
 	Module("Extensions"),
-	downloader(QImage(":/downloader")), youtube(QImage(":/youtube")), radio(QImage(":/radio")), lastfm(QImage(":/lastfm"))
+	downloader(":/downloader"), youtube(":/youtube"), radio(":/radio"), lastfm(":/lastfm")
 {
+	moduleImg = QImage(":/Extensions");
+
 #ifdef USE_PROSTOPLEER
 	prostopleer = QImage(":/prostopleer");
 #endif

@@ -343,5 +343,5 @@ You can also use `cmake`, but it doesn't create application bundle.
 
 ##Other information
 
-- QMPlay2 uses Oxygen icons which are under LGPLv3 license (https://techbase.kde.org/Projects/Oxygen).
 - QMPlay2 contains modified libmodplug sources which are used by Modplug module.
+- QMPlay2 uses Concept icons created by Alexey Varfolomeev.

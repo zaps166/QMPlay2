@@ -31,7 +31,7 @@ set(AudioFilters_SRC
 )
 
 set(AudioFilters_RESOURCES
-    icons.qrc
+    icon.qrc
 )
 
 add_definitions(-D__STDC_CONSTANT_MACROS)

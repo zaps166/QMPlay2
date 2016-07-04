@@ -40,9 +40,21 @@ extern "C"
 }
 
 FFmpeg::FFmpeg() :
-	Module("FFmpeg")
+	Module("FFmpeg"),
+	demuxIcon(":/FFDemux")
 {
 	moduleImg = QImage(":/FFmpeg");
+	moduleImg.setText("Path", ":/FFmpeg");
+
+	demuxIcon.setText("Path", ":/FFDemux");
+#ifdef QMPlay2_VDPAU
+	vdpauIcon = QImage(":/VDPAU");
+	vdpauIcon.setText("Path", ":/VDPAU");
+#endif
+#ifdef QMPlay2_VAAPI
+	vaapiIcon = QImage(":/VAAPI");
+	vaapiIcon.setText("Path", ":/VAAPI");
+#endif
 
 	init("DemuxerEnabled", true);
 	init("DecoderEnabled", true);
@@ -97,26 +109,26 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("DemuxerEnabled"))
-		modulesInfo += Info(DemuxerName, DEMUXER);
+		modulesInfo += Info(DemuxerName, DEMUXER, demuxIcon);
 	if (showDisabled || getBool("DecoderEnabled"))
-		modulesInfo += Info(DecoderName, DECODER);
+		modulesInfo += Info(DecoderName, DECODER, moduleImg);
 #ifdef QMPlay2_VDPAU
 	if (showDisabled || getBool("DecoderVDPAUEnabled"))
 	{
-		modulesInfo += Info(DecoderVDPAUName, DECODER);
-		modulesInfo += Info(VDPAUWriterName, WRITER);
+		modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
+		modulesInfo += Info(VDPAUWriterName, WRITER, vdpauIcon);
 	}
 	if (showDisabled || getBool("DecoderVDPAU_NWEnabled"))
-		modulesInfo += Info(DecoderVDPAU_NWName, DECODER);
+		modulesInfo += Info(DecoderVDPAU_NWName, DECODER, vdpauIcon);
 #endif
 #ifdef QMPlay2_VAAPI
 	if (showDisabled || getBool("DecoderVAAPIEnabled"))
 	{
-		modulesInfo += Info(DecoderVAAPIName, DECODER);
-		modulesInfo += Info(VAAPIWriterName, WRITER);
+		modulesInfo += Info(DecoderVAAPIName, DECODER, vaapiIcon);
+		modulesInfo += Info(VAAPIWriterName, WRITER, vaapiIcon);
 	}
 #endif
-	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp");
+	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp", moduleImg);
 	return modulesInfo;
 }
 void *FFmpeg::createInstance(const QString &name)

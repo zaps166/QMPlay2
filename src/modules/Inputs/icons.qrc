@@ -1,6 +1,8 @@
 <RCC>
 	<qresource>
-		<file alias="sine">sine.png</file>
-		<file alias="ray2">ray2.png</file>
+		<file alias="Inputs">Inputs.png</file>
+		<file alias="PCM">PCM.png</file>
+		<file alias="ToneGenerator">ToneGenerator.png</file>
+		<file alias="Rayman2">Rayman2.png</file>
 	</qresource>
 </RCC>

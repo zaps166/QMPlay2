@@ -25,9 +25,13 @@
 #endif
 
 Chiptune::Chiptune() :
-	Module("Chiptune")
+	Module("Chiptune"),
+	GMEIcon(":/GME"), SIDIcon(":/SID")
 {
-	moduleImg = QImage(":/Chip");
+	GMEIcon.setText("Path", ":/GME");
+	SIDIcon.setText("Path", ":/SID");
+
+	moduleImg = QImage(":/Chiptune");
 
 #ifdef USE_GME
 	init("GME", true);
@@ -43,11 +47,11 @@ QList<Chiptune::Info> Chiptune::getModulesInfo(const bool showDisabled) const
 	QList<Info> modulesInfo;
 #ifdef USE_GME
 	if (showDisabled || getBool("GME"))
-		modulesInfo += Info(GMEName, DEMUXER, QStringList() << "ay" << "gbs" << "gym" << "hes" << "kss" << "nsf" << "nsfe" << "sap" << "spc" << "vgm" << "vgz");
+		modulesInfo += Info(GMEName, DEMUXER, QStringList() << "ay" << "gbs" << "gym" << "hes" << "kss" << "nsf" << "nsfe" << "sap" << "spc" << "vgm" << "vgz", GMEIcon);
 #endif
 #ifdef USE_SIDPLAY
 	if (showDisabled || getBool("SIDPlay"))
-		modulesInfo += Info(SIDPlayName, DEMUXER, QStringList() << "sid" << ".c64" << ".prg");
+		modulesInfo += Info(SIDPlayName, DEMUXER, QStringList() << "sid" << ".c64" << ".prg", SIDIcon);
 #endif
 	return modulesInfo;
 }

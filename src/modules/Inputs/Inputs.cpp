@@ -44,10 +44,13 @@ static const char *formatName[PCM::FORMAT_COUNT] =
 
 Inputs::Inputs() :
 	Module("Inputs"),
-	sine(QImage(":/sine")), ray2(QImage(":/ray2"))
+	toneIcon(":/ToneGenerator"), pcmIcon(":/PCM"), rayman2Icon(":/Rayman2")
 {
-	sine.setText("Path", ":/sine");
-	ray2.setText("Path", ":/ray2");
+	moduleImg = QImage(":/Inputs");
+
+	toneIcon.setText("Path", ":/ToneGenerator");
+	pcmIcon.setText("Path", ":/PCM");
+	rayman2Icon.setText("Path", ":/Rayman2");
 
 	init("ToneGenerator/srate", 48000);
 	init("ToneGenerator/freqs", 440);
@@ -66,11 +69,11 @@ Inputs::Inputs() :
 QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
-	modulesInfo += Info(ToneGeneratorName, DEMUXER, sine);
+	modulesInfo += Info(ToneGeneratorName, DEMUXER, toneIcon);
 	if (showDisabled || getBool("PCM"))
-		modulesInfo += Info(PCMName, DEMUXER, get("PCM/extensions").toStringList());
+		modulesInfo += Info(PCMName, DEMUXER, get("PCM/extensions").toStringList(), pcmIcon);
 	if (showDisabled || getBool("Rayman2"))
-		modulesInfo += Info(Rayman2Name, DEMUXER, QStringList("apm"), ray2);
+		modulesInfo += Info(Rayman2Name, DEMUXER, QStringList("apm"), rayman2Icon);
 	return modulesInfo;
 }
 void *Inputs::createInstance(const QString &name)
@@ -87,7 +90,7 @@ void *Inputs::createInstance(const QString &name)
 QList<QAction *> Inputs::getAddActions()
 {
 	QAction *actTone = new QAction(NULL);
-	actTone->setIcon(QIcon(":/sine"));
+	actTone->setIcon(QIcon(":/ToneGenerator"));
 	actTone->setText(tr("Tone generator"));
 	actTone->connect(actTone, SIGNAL(triggered()), this, SLOT(add()));
 	return QList<QAction *>() << actTone;

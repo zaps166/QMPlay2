@@ -15,7 +15,7 @@ OBJECTS_DIR = build/obj
 RCC_DIR = build/rcc
 MOC_DIR = build/moc
 
-RESOURCES += icons.qrc
+RESOURCES += icon.qrc
 
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers

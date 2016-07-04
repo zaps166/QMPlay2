@@ -514,7 +514,7 @@ YouTubeW::YouTubeW(QWidget *parent) :
 
 	searchB = new QToolButton;
 	connect(searchB, SIGNAL(clicked()), this, SLOT(search()));
-	searchB->setIcon(QIcon(":/search"));
+	searchB->setIcon(QMPlay2Core.getIconFromTheme("edit-find"));
 	searchB->setToolTip(tr("Search"));
 	searchB->setAutoRaise(true);
 

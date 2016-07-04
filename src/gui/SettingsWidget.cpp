@@ -637,6 +637,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 		connect(mL->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
 		mL->list->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		mL->list->setDragDropMode(QAbstractItemView::InternalMove);
+		mL->list->setIconSize(QSize(32, 32));
 
 		mL->buttonsW = new QWidget;
 

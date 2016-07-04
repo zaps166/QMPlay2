@@ -17,6 +17,9 @@ LIBS += -lqmplay2
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
+RCC_DIR = build/rcc
+
+RESOURCES += icon.qrc
 
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers

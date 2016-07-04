@@ -26,6 +26,7 @@ OtherVFiltersW::OtherVFiltersW()
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
 	setDragDropMode(QAbstractItemView::InternalMove);
+	setIconSize(QSize(32, 32));
 
 	QPair<QStringList, QList<bool> > videoFilters;
 	foreach (const QString &filter, QMPlay2Core.getSettings().get("VideoFilters").toStringList())

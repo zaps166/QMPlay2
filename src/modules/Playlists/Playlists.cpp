@@ -23,6 +23,8 @@
 Playlists::Playlists() :
 	Module("Playlists")
 {
+	moduleImg = QImage(":/Playlists");
+
 	init("PLS_enabled", true);
 	init("M3U_enabled", true);
 }

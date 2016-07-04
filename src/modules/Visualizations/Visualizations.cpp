@@ -23,6 +23,8 @@
 Visualizations::Visualizations() :
 	Module("Visualizations")
 {
+	moduleImg = QImage(":/Visualizations");
+
 #ifdef USE_OPENGL
 	const int ms = 10; //Should rely on VSync
 #else

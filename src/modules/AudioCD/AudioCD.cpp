@@ -32,9 +32,12 @@
 
 AudioCD::AudioCD() :
 	Module("AudioCD"),
+	CD(":/CD"),
 	cdioDestroyTimer(new CDIODestroyTimer)
 {
 	moduleImg = QImage(":/AudioCD");
+
+	CD.setText("Path", ":/CD");
 
 	init("AudioCD/CDDB", true);
 	init("AudioCD/CDTEXT", true);
@@ -49,9 +52,9 @@ QList<AudioCD::Info> AudioCD::getModulesInfo(const bool) const
 {
 	QList<Info> modulesInfo;
 #ifdef Q_OS_WIN
-	modulesInfo += Info(AudioCDName, DEMUXER, QStringList("cda"));
+	modulesInfo += Info(AudioCDName, DEMUXER, QStringList("cda"), CD);
 #else
-	modulesInfo += Info(AudioCDName, DEMUXER);
+	modulesInfo += Info(AudioCDName, DEMUXER, CD);
 #endif
 	return modulesInfo;
 }
@@ -65,7 +68,7 @@ void *AudioCD::createInstance(const QString &name)
 QList<QAction *> AudioCD::getAddActions()
 {
 	QAction *actCD = new QAction(NULL);
-	actCD->setIcon(QIcon(":/AudioCD"));
+	actCD->setIcon(QIcon(":/CD"));
 	actCD->setText(tr("AudioCD"));
 	actCD->connect(actCD, SIGNAL(triggered()), this, SLOT(add()));
 	return QList<QAction *>() << actCD;

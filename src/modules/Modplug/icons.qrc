@@ -1,0 +1,6 @@
+<RCC>
+	<qresource>
+		<file alias="Modplug">Modplug.png</file>
+		<file alias="MOD">MOD.png</file>
+	</qresource>
+</RCC>

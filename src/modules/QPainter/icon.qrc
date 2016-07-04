@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="Qt">Qt.png</file>
+		<file alias="QPainter">QPainter.png</file>
 	</qresource>
 </RCC>

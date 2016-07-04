@@ -26,7 +26,7 @@
 AudioFilters::AudioFilters() :
 	Module("AudioFilters")
 {
-	moduleImg = QImage(":/audiofilters");
+	moduleImg = QImage(":/AudioFilters");
 
 	init("Equalizer", false);
 	int nbits = getInt("Equalizer/nbits");

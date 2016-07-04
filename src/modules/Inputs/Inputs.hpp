@@ -31,7 +31,7 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
-	QImage sine, ray2;
+	QImage toneIcon, pcmIcon, rayman2Icon;
 private slots:
 	void add();
 };

@@ -27,6 +27,8 @@ private:
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
+
+	QImage GMEIcon, SIDIcon;
 };
 
 /**/

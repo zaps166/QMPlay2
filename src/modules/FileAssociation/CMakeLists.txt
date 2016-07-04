@@ -21,7 +21,7 @@ set(FileAssociation_SRC
 )
 
 set(FileAssociation_RESOURCES
-    icons.qrc
+    icon.qrc
 )
 
 if(USE_QT5)

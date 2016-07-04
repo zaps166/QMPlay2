@@ -36,6 +36,8 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
+	QImage CD;
+
 	CDIODestroyTimer *cdioDestroyTimer;
 private slots:
 	void add();

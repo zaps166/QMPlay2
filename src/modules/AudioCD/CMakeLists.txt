@@ -23,7 +23,7 @@ set(AudioCD_SRC
 )
 
 set(AudioCD_RESOURCES
-    icon.qrc
+    icons.qrc
 )
 
 pkg_check_modules(LIBCD libcdio libcddb REQUIRED)

@@ -1,0 +1,6 @@
+<RCC>
+	<qresource>
+		<file alias="AudioCD">AudioCD.png</file>
+		<file alias="CD">CD.png</file>
+	</qresource>
+</RCC>

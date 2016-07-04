@@ -22,7 +22,7 @@
 QPainter_Qt::QPainter_Qt() :
 	Module("QPainter_Qt")
 {
-	moduleImg = QImage(":/Qt");
+	moduleImg = QImage(":/QPainter");
 
 	init("Enabled", true);
 }

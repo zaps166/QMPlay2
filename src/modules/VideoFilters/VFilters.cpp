@@ -26,7 +26,7 @@
 VFilters::VFilters() :
 	Module("VideoFilters")
 {
-	moduleImg = QImage(":/videofilters");
+	moduleImg = QImage(":/VideoFilters");
 }
 
 QList<VFilters::Info> VFilters::getModulesInfo(const bool) const

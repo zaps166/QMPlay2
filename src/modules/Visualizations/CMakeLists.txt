@@ -26,6 +26,10 @@ set(Visualizations_SRC
     VisWidget.cpp
 )
 
+set(Visualizations_RESOURCES
+    icon.qrc
+)
+
 add_definitions(-D__STDC_CONSTANT_MACROS)
 if(USE_OPENGL_FOR_VISUALIZATIONS)
     add_definitions(-DUSE_OPENGL)
@@ -37,9 +41,16 @@ link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})
 
+if(USE_QT5)
+    qt5_add_resources(Visualizations_RESOURCES_RCC ${Visualizations_RESOURCES})
+else()
+    qt4_add_resources(Visualizations_RESOURCES_RCC ${Visualizations_RESOURCES})
+endif()
+
 add_library(${PROJECT_NAME} MODULE
     ${Visualizations_HDR}
     ${Visualizations_SRC}
+    ${Visualizations_RESOURCES_RCC}
 )
 
 if(USE_QT5)

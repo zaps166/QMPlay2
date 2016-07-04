@@ -1,5 +1,8 @@
 <RCC>
 	<qresource>
 		<file alias="FFmpeg">FFmpeg.png</file>
+		<file alias="FFDemux">FFDemux.png</file>
+		<file alias="VAAPI">VAAPI.png</file>
+		<file alias="VDPAU">VDPAU.png</file>
 	</qresource>
 </RCC>

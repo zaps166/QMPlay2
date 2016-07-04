@@ -1,0 +1,5 @@
+<RCC>
+	<qresource>
+		<file alias="Visualizations">Visualizations.png</file>
+	</qresource>
+</RCC>

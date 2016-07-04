@@ -22,7 +22,7 @@
 XVideo::XVideo() :
 	Module("XVideo")
 {
-	moduleImg = QImage(":/Xorg");
+	moduleImg = QImage(":/XVideo");
 
 	init("Enabled", true);
 	init("UseSHM", true);

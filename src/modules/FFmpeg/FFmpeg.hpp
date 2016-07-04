@@ -31,6 +31,14 @@ private:
 
 	/**/
 
+	QImage demuxIcon;
+#ifdef QMPlay2_VDPAU
+	QImage vdpauIcon;
+#endif
+#ifdef QMPlay2_VAAPI
+	QImage vaapiIcon;
+#endif
+
 	QMutex mutex;
 };
 

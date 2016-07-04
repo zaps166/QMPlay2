@@ -20,8 +20,13 @@
 #include <MPDemux.hpp>
 
 Modplug::Modplug() :
-	Module("Modplug")
+	Module("Modplug"),
+	modIcon(":/MOD")
 {
+	moduleImg = QImage(":/Modplug");
+
+	modIcon.setText("Path", ":/MOD");
+
 	init("ModplugEnabled", true);
 	init("ModplugResamplingMethod", 3);
 }
@@ -30,7 +35,7 @@ QList<Modplug::Info> Modplug::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("ModplugEnabled"))
-		modulesInfo += Info(DemuxerName, DEMUXER, QStringList() << "669" << "amf" << "ams" << "dbm" << "dmf" << "dsm" << "far" << "it" << "j2b" << "mdl" << "med" << "mod" << "mt2" << "mtm" << "okt" << "psm" << "ptm" << "s3m" << "stm" << "ult" << "umx" << "xm" << "sfx");
+		modulesInfo += Info(DemuxerName, DEMUXER, QStringList() << "669" << "amf" << "ams" << "dbm" << "dmf" << "dsm" << "far" << "it" << "j2b" << "mdl" << "med" << "mod" << "mt2" << "mtm" << "okt" << "psm" << "ptm" << "s3m" << "stm" << "ult" << "umx" << "xm" << "sfx", modIcon);
 	return modulesInfo;
 }
 void *Modplug::createInstance(const QString &name)

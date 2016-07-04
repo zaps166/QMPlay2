@@ -23,7 +23,7 @@ set(Chiptune_SRC
 )
 
 set(Chiptune_RESOURCES
-    icon.qrc
+    icons.qrc
 )
 
 set(Chiptune_LIBS

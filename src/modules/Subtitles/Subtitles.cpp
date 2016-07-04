@@ -24,6 +24,8 @@
 Subtitles::Subtitles() :
 	Module("Subtitles")
 {
+	moduleImg = QImage(":/Subtitles");
+
 	init("SRT_enabled", true);
 	init("Classic_enabled", true);
 	init("Use_mDVD_FPS", true);

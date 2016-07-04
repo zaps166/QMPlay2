@@ -31,7 +31,7 @@ set(VideoFilters_SRC
 )
 
 set(VideoFilters_RESOURCES
-    icons.qrc
+    icon.qrc
 )
 
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
