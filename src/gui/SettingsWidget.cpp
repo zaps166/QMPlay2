@@ -852,7 +852,7 @@ void SettingsWidget::applyProxy()
 		if (QMPSettings.getBool("Proxy/Login"))
 		{
 			proxy.setUser(QMPSettings.getString("Proxy/User"));
-			proxy.setPassword(QByteArray::fromBase64(QMPSettings.getString("Proxy/Password").toLatin1()));
+			proxy.setPassword(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 		}
 
 		/* Proxy env for FFmpeg */
