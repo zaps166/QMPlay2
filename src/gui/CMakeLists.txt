@@ -163,7 +163,7 @@ elseif(USE_TAGLIB)
 endif()
 
 if(WIN32)
-    install(TARGETS QMPlay2 RUNTIME DESTINATION ".")
+    install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 else()
     # executable
     install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
