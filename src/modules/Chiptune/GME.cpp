@@ -129,9 +129,9 @@ Playlist::Entries GME::fetchTracks(const QString &url, bool &ok)
 				entries.append(entry);
 			}
 		}
-		if (entries.length() > 1)
+		if (entries.count() > 1)
 		{
-			for (int i = 0; i < entries.length(); ++i)
+			for (int i = 0; i < entries.count(); ++i)
 				entries[i].parent = 1;
 			Playlist::Entry entry;
 			entry.name = Functions::fileName(m_url, false);

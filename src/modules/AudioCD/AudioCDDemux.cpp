@@ -285,7 +285,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 			ok = !entries.isEmpty();
 			if (ok)
 			{
-				for (int i = 0; i < entries.length(); ++i)
+				for (int i = 0; i < entries.count(); ++i)
 					entries[i].parent = 1;
 				Playlist::Entry entry;
 				entry.name = "Audio CD (" + realUrl + ")";
