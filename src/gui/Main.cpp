@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
 	if (QDir(sharePath).exists("CMakeFiles/QMPlay2.dir"))
 	{
 		//We're in CMake not-installed build
-		libPath = sharePath + "/.."; //Here is "modules directory
+		libPath = sharePath + "/.."; //Here is "modules" directory
 		sharePath += "/../.."; //Here is "lang" directory
 		if (QDir(libPath).exists("modules") || QDir(sharePath).exists("lang"))
 			cmakeBuildFound = true;
