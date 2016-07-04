@@ -101,7 +101,7 @@ QString QMPlay2CoreClass::getLibDir()
 bool QMPlay2CoreClass::canSuspend()
 {
 #if defined Q_OS_LINUX
-	return !system("systemctl --help 2> /dev/null | grep suspend &> /dev/null");
+	return !system("systemctl --help 2> /dev/null | grep suspend > /dev/null 2>&1");
 #elif defined Q_OS_WIN
 	return true;
 #else
@@ -111,7 +111,7 @@ bool QMPlay2CoreClass::canSuspend()
 void QMPlay2CoreClass::suspend()
 {
 #if defined Q_OS_LINUX
-	(void)system("systemctl suspend &> /dev/null &");
+	Q_UNUSED(system("systemctl suspend > /dev/null 2>&1 &"));
 #elif defined Q_OS_WIN
 	SetSuspendState(false, false, false);
 #endif
