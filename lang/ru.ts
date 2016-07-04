@@ -60,11 +60,11 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation type="unfinished"></translation>
+        <translation>Проигрыватель видео и аудио</translation>
     </message>
     <message>
         <source>Programmer</source>
-        <translation type="unfinished"></translation>
+        <translation>Разработчик</translation>
     </message>
 </context>
 <context>
@@ -632,27 +632,27 @@
     </message>
     <message>
         <source>Synchronize with file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Синхронизация с файлом или каталогом</translation>
     </message>
     <message>
         <source>The specified path does not exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанный путь не существует</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск по каталогу</translation>
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск файла, содержащего более одного трека</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите каталог</translation>
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл, который содержит более одного трека</translation>
     </message>
 </context>
 <context>
@@ -1480,7 +1480,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Video off</source>
-        <translation type="unfinished"></translation>
+        <translation>Выключить видео</translation>
     </message>
     <message>
         <source>Audio off</source>
@@ -1721,7 +1721,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Synchronize group</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Синхронизировать группу</translation>
     </message>
 </context>
 <context>
@@ -2354,15 +2354,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Действие колеса мыши на видеопанели</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Колесо мыши изменяет громкость</translation>
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
+        <translation>Помутнение покрывает как фон</translation>
     </message>
 </context>
 <context>
