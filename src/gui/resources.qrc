@@ -2,34 +2,33 @@
 	<qresource>
 		<file alias="QMPlay2">Icons/QMPlay2.png</file>
 
-		<file>Icons/media-playback-start.png</file>
-		<file>Icons/media-playback-stop.png</file>
-		<file>Icons/media-skip-backward.png</file>
-		<file>Icons/media-skip-forward.png</file>
-		<file>Icons/media-playback-pause.png</file>
+		<file alias="media-playback-start">Icons/media-playback-start.png</file>
+		<file alias="media-playback-stop">Icons/media-playback-stop.png</file>
+		<file alias="media-skip-backward">Icons/media-skip-backward.png</file>
+		<file alias="media-skip-forward">Icons/media-skip-forward.png</file>
+		<file alias="media-playback-pause">Icons/media-playback-pause.png</file>
 
-		<file>Icons/folder-orange.png</file>
-		<file>Icons/folder.png</file>
-		<file>Icons/folder-new.png</file>
-		<file>Icons/applications-multimedia.png</file>
-		<file>Icons/archive-remove.png</file>
-		<file>Icons/list-remove.png</file>
-		<file>Icons/list-add.png</file>
-		<file>Icons/edit-clear.png</file>
-		<file>Icons/folder-open.png</file>
-		<file>Icons/view-refresh.png</file>
-		<file>Icons/audio-volume-muted.png</file>
-		<file>Icons/audio-volume-high.png</file>
-		<file>Icons/view-fullscreen.png</file>
-		<file>Icons/configure.png</file>
-		<file>Icons/application-exit.png</file>
-		<file>Icons/process-stop.png</file>
-		<file>Icons/edit-copy.png</file>
-		<file>Icons/edit-paste.png</file>
-		<file>Icons/edit-find.png</file>
-		<file>Icons/document-properties.png</file>
-		<file>Icons/application-x-mswinurl.png</file>
-
+		<file alias="folder-orange">Icons/folder-orange.png</file>
+		<file alias="folder">Icons/folder.png</file>
+		<file alias="folder-new">Icons/folder-new.png</file>
+		<file alias="applications-multimedia">Icons/applications-multimedia.png</file>
+		<file alias="archive-remove">Icons/archive-remove.png</file>
+		<file alias="list-remove">Icons/list-remove.png</file>
+		<file alias="list-add">Icons/list-add.png</file>
+		<file alias="edit-clear">Icons/edit-clear.png</file>
+		<file alias="folder-open">Icons/folder-open.png</file>
+		<file alias="view-refresh">Icons/view-refresh.png</file>
+		<file alias="audio-volume-muted">Icons/audio-volume-muted.png</file>
+		<file alias="audio-volume-high">Icons/audio-volume-high.png</file>
+		<file alias="view-fullscreen">Icons/view-fullscreen.png</file>
+		<file alias="configure">Icons/configure.png</file>
+		<file alias="application-exit">Icons/application-exit.png</file>
+		<file alias="process-stop">Icons/process-stop.png</file>
+		<file alias="edit-copy">Icons/edit-copy.png</file>
+		<file alias="edit-paste">Icons/edit-paste.png</file>
+		<file alias="edit-find">Icons/edit-find.png</file>
+		<file alias="document-properties">Icons/document-properties.png</file>
+		<file alias="application-x-mswinurl">Icons/application-x-mswinurl.png</file>
 
 		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
 	</qresource>

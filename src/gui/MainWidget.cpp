@@ -129,7 +129,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	QMPlay2GUI.menuBar = new MenuBar;
 
 	tray = new QSystemTrayIcon(this);
-	tray->setIcon(QIcon::fromTheme("QMPlay2-panel", windowIcon()));
+	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Pixmap()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);

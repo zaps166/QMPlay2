@@ -72,7 +72,7 @@ public:
 	{
 		return *settings;
 	}
-	QIcon getIconFromTheme(const QString &icon);
+	QIcon getIconFromTheme(const QString &iconName, const QIcon &fallback = QIcon());
 
 	Q_SIGNAL void wallpaperChanged(bool hasWallpaper, double alpha);
 

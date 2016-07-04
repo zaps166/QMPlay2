@@ -582,7 +582,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		QApplication::setWindowIcon(QIcon::fromTheme("QMPlay2", QMPlay2Core.getQMPlay2Pixmap()));
+		QApplication::setWindowIcon(QMPlay2Core.getIconFromTheme("QMPlay2", QMPlay2Core.getQMPlay2Pixmap()));
 		QMPlay2GUI.setStyle();
 
 #ifdef UPDATER

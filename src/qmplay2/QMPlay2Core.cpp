@@ -223,9 +223,10 @@ void QMPlay2CoreClass::quit()
 	delete settings;
 }
 
-QIcon QMPlay2CoreClass::getIconFromTheme(const QString &icon)
+QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &fallback)
 {
-	return settings->getBool("IconsFromTheme", true) ? QIcon::fromTheme(icon, QIcon(":/Icons/" + icon)) : QIcon(":/Icons/" + icon);
+	const QIcon defaultIcon(fallback.isNull() ? QIcon(":/" + iconName) : fallback);
+	return settings->getBool("IconsFromTheme") ? QIcon::fromTheme(iconName, defaultIcon) : defaultIcon;
 }
 
 bool QMPlay2CoreClass::run(const QString &command, const QString &args)
