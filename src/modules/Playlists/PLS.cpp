@@ -66,9 +66,13 @@ Playlist::Entries PLS::read()
 			{
 				if (list.isEmpty())
 				{
-					line.insert(i, '1');
-					numberIdx = i;
-					++idx;
+					const QByteArray tmpKey = line.left(i);
+					if (tmpKey == "File" || tmpKey == "Title" || tmpKey == "Length")
+					{
+						line.insert(i, '1');
+						numberIdx = i;
+						++idx;
+					}
 				}
 				break;
 			}
