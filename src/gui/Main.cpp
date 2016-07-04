@@ -362,27 +362,20 @@ static void signal_handler(int s)
 #endif
 	switch (s)
 	{
-#ifndef Q_OS_WIN
-		case SIGTSTP:
-			raise(SC);
-			break;
-#endif
 		case SIGINT:
-		{
-			QWidget *modalW = QApplication::activeModalWidget();
-			if (!modalW && QMPlay2GUI.mainW)
-			{
-				QMPlay2GUI.mainW->close();
-				QMPlay2GUI.mainW = NULL;
-			}
-			else
+			if (!qApp)
 				raise(SC);
-		} break;
-		case SIGSEGV:
-			QMPlay2Core.logError("Program się wysypał (SIGSEGV)");
-#ifndef Q_OS_WIN
-			raise(SC);
-#endif
+			else
+			{
+				QWidget *modalW = QApplication::activeModalWidget();
+				if (!modalW && QMPlay2GUI.mainW)
+				{
+					QMPlay2GUI.mainW->close();
+					QMPlay2GUI.mainW = NULL;
+				}
+				else
+					raise(SC);
+			}
 			break;
 		case SIGABRT:
 #ifdef QT5_NOT_WIN
@@ -392,13 +385,19 @@ static void signal_handler(int s)
 				longjmp(env, 1);
 			}
 #endif
-			QMPlay2Core.logError("Program przerwał działanie (SIGABRT)");
+			QMPlay2Core.log("QMPlay2 has been aborted (SIGABRT)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
 #ifndef Q_OS_WIN
 			raise(SC);
 #endif
 			break;
 		case SIGFPE:
-			QMPlay2Core.logError("Program się wysypał (SIGFPE)");
+			QMPlay2Core.log("QMPlay2 crashes (SIGFPE)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
+#ifndef Q_OS_WIN
+			raise(SC);
+#endif
+			break;
+		case SIGSEGV:
+			QMPlay2Core.log("QMPlay2 crashes (SIGSEGV)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
 #ifndef Q_OS_WIN
 			raise(SC);
 #endif
@@ -410,12 +409,10 @@ static void signal_handler(int s)
 int main(int argc, char *argv[])
 {
 	signal(SIGINT, signal_handler);
-#ifndef Q_OS_WIN
-	signal(SIGTSTP, signal_handler);
-#endif
+	signal(SIGABRT, signal_handler);
 	signal(SIGFPE, signal_handler);
 	signal(SIGSEGV, signal_handler);
-	signal(SIGABRT, signal_handler);
+
 #ifdef Q_WS_X11
 	useGui = getenv("DISPLAY");
 #endif
