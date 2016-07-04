@@ -55,9 +55,10 @@
 #include <MenuBar.hpp>
 #include <Module.hpp>
 
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	#define ICONS_FROM_THEME
 #endif
+
 #ifdef Q_OS_WIN
 	#include <windows.h>
 #endif
