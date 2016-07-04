@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 16.07.04:
 	- new "Concept" icons by Alexey Varfolomeev,
+	- properly add many files containing tracks,
 	- CMake fixes,
 	- PLS bugfix,
 
