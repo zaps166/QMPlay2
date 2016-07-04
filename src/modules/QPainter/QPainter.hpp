@@ -18,10 +18,10 @@
 
 #include <Module.hpp>
 
-class QPainter_Qt : public Module
+class QPainterSW : public Module
 {
 public:
-	QPainter_Qt();
+	QPainterSW();
 private:
 	QList<Info> getModulesInfo(const bool) const;
 	void *createInstance(const QString &);
