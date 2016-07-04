@@ -1,4 +1,5 @@
 Changes in QMPlay2 build 16.07.04:
+	- added video equalizer to "Settings/Video filters",
 	- new "Concept" icons by Alexey Varfolomeev,
 	- updated Russian translation (victorr2007),
 	- properly add many files containing tracks,

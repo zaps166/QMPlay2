@@ -59,6 +59,7 @@ VideoEqualizer::VideoEqualizer()
 		slider = new Slider;
 		slider->setProperty("valueL", qVariantFromValue((void *)valueL));
 		slider->setTickPosition(QSlider::TicksBelow);
+		slider->setMinimumWidth(50);
 		slider->setTickInterval(25);
 		slider->setMinimum(-100);
 		slider->setMaximum(100);
@@ -75,7 +76,7 @@ VideoEqualizer::VideoEqualizer()
 	connect(resetB, SIGNAL(clicked()), this, SLOT(reset()));
 
 	layout->addWidget(resetB, i++, 0, 1, 3);
-	layout->addItem(new QSpacerItem(40, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), i, 2);
+	layout->addItem(new QSpacerItem(40, 0, QSizePolicy::Maximum, QSizePolicy::Minimum), i, 2);
 
 	setLayout(layout);
 }
@@ -97,7 +98,7 @@ void VideoEqualizer::saveValues()
 
 void VideoEqualizer::setValue(int v)
 {
-	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v) + "");
+	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v));
 	emit valuesChanged
 	(
 		controls[BRIGHTNESS].slider->value(),

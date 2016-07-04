@@ -150,7 +150,8 @@ class Page6 : public QWidget
 public:
 	QGridLayout *layout;
 	DeintSettingsW *deintSettingsW;
-	QLabel *otherVFiltersL;
+	QGroupBox *videoEqContainer;
+	QGroupBox *otherVFiltersContainer;
 	OtherVFiltersW *otherVFiltersW;
 };
 
@@ -265,11 +266,14 @@ void SettingsWidget::SetAudioChannels(int chn)
 	QMPlay2Core.getSettings().set("ForceChannels", forceChannels);
 }
 
-SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
+SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *videoEq) :
+	videoEq(videoEq),
 	wasShow(false),
 	moduleIndex(0)
 {
 	setWindowFlags(Qt::Window);
+
+	videoEqOriginalParent = videoEq->parentWidget();
 
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	int idx, layout_row;
@@ -794,21 +798,29 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	/* Strona 6 */
 	page6->deintSettingsW = new DeintSettingsW;
 
-	page6->otherVFiltersL = new QLabel(tr("Software video filters") + ":");
+	page6->videoEqContainer = new QGroupBox(videoEq->objectName());
+
+	page6->otherVFiltersContainer = new QGroupBox(tr("Software video filters"));
 	page6->otherVFiltersW = new OtherVFiltersW;
-	connect(page6->otherVFiltersW, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+	QGridLayout *otherVFiltersLayout = new QGridLayout(page6->otherVFiltersContainer);
+	otherVFiltersLayout->addWidget(page6->otherVFiltersW);
+	connect(page6->otherVFiltersW, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
 
 	page6->layout = new QGridLayout(page6);
+	page6->layout->addWidget(page6->deintSettingsW, 0, 0, 1, 2);
+	page6->layout->addWidget(page6->videoEqContainer, 1, 0, 1, 1);
+	page6->layout->addWidget(page6->otherVFiltersContainer, 1, 1, 1, 1);
 	page6->layout->setMargin(1);
-	page6->layout->addWidget(page6->deintSettingsW, 0, 0, 1, 1);
-	page6->layout->addWidget(page6->otherVFiltersL, 1, 0, 1, 1);
-	page6->layout->addWidget(page6->otherVFiltersW, 2, 0, 1, 1);
 
 
 	connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(tabCh(int)));
 	tabW->setCurrentIndex(page);
 
 	show();
+}
+SettingsWidget::~SettingsWidget()
+{
+	restoreVideoEq();
 }
 
 void SettingsWidget::setAudioChannels()
@@ -857,6 +869,18 @@ void SettingsWidget::applyProxy()
 #endif
 	}
 	QNetworkProxy::setApplicationProxy(proxy);
+}
+
+void SettingsWidget::restoreVideoEq()
+{
+	if (videoEq->parentWidget() != videoEqOriginalParent)
+	{
+		videoEq->setParent(videoEqOriginalParent);
+		videoEq->setGeometry(videoEqOriginalParent->rect());
+		videoEqOriginalParent->setEnabled(true);
+	}
+	if (QLayout *videoEqLayout = page6->videoEqContainer->layout())
+		videoEqLayout->deleteLater();
 }
 
 void SettingsWidget::restartApp()
@@ -1078,6 +1102,7 @@ void SettingsWidget::tabCh(int idx)
 				page2->modulesList[m]->list->setCurrentRow(0);
 	}
 	else if (idx == 2)
+	{
 		for (int m = 0; m < 3; ++m)
 		{
 			QListWidgetItem *currI = page2->modulesList[m]->list->currentItem();
@@ -1085,6 +1110,18 @@ void SettingsWidget::tabCh(int idx)
 				lastM[m] = currI->text();
 			page2->modulesList[m]->list->clear();
 		}
+	}
+
+	if (idx != 5)
+		restoreVideoEq();
+	else
+	{
+		QGridLayout *videoEqLayout = new QGridLayout(page6->videoEqContainer);
+		videoEqLayout->setMargin(0);
+		videoEqLayout->addWidget(videoEq);
+		videoEqOriginalParent->setDisabled(true);
+		videoEq->show();
+	}
 }
 void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
 {

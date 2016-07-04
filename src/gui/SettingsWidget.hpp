@@ -40,11 +40,14 @@ public:
 	static void SetAudioChannelsMenu();
 	static void SetAudioChannels(int chn);
 
-	SettingsWidget(int page = 0, const QString &module = QString());
+	SettingsWidget(int page, const QString &module, QWidget *videoEq);
+	~SettingsWidget();
 
 	void setAudioChannels();
 private:
 	static void applyProxy();
+
+	void restoreVideoEq();
 
 	void restartApp();
 
@@ -62,6 +65,8 @@ private:
 	QTabWidget *tabW;
 	QPushButton *applyB, *closeB;
 	QString lastM[3];
+
+	QWidget *videoEq, *videoEqOriginalParent;
 
 	bool wasShow;
 	int moduleIndex;

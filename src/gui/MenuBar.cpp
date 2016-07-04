@@ -299,6 +299,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 	addMenu(videoEqualizerMenu);
 	QWidgetAction *widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(videoEqualizer = new VideoEqualizer);
+	videoEqualizer->setObjectName(videoEqualizerMenu->title().remove('&'));
 	videoEqualizerMenu->addAction(widgetAction);
 	/**/
 	addSeparator();
