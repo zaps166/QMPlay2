@@ -91,7 +91,13 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ##Ubuntu Unity
 
-Tray context menu in Ubuntu Unity doesn't work properly on Qt older than 5.6.1!
+QMPlay2 should be visible in sound indicator via MPRIS2 interface. Be sure that it is enabled in "Settings->Modules->Extensions"!
+
+Tray tooltip and mouse interactions with tray icon (show/hide, compact view) doesn't work - only context menu works, but it requires Qt at least in 5.6.1 version!
+
+You can disable tray icon via "Ctrl+T" key shortcut or from menu: "Options->Show tray icon".
+
+You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ##Hardware acceleration
 
@@ -278,7 +284,9 @@ CMake options (option - default value: description):
 
 Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.
-- Qt5: `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
+- Qt5:
+	- `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
+	- `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 
