@@ -24,6 +24,8 @@
 #include <QDBusMessage>
 #include <QDir>
 
+#include <unistd.h>
+
 static void propertyChanged(const QString &name, const QVariant &value)
 {
 	QVariantMap map;
@@ -95,7 +97,6 @@ void MediaPlayer2Root::Raise()
 void MediaPlayer2Root::fullScreenChanged(bool fs)
 {
 	propertyChanged("Fullscreen", fullScreen = fs);
-
 }
 
 /**/
@@ -314,7 +315,7 @@ void MediaPlayer2Player::clearMetaData()
 
 /**/
 
-MPRIS2Interface::MPRIS2Interface(time_t instance_val) :
+MPRIS2Interface::MPRIS2Interface() :
 	service("org.mpris.MediaPlayer2.QMPlay2"),
 	objectOk(false), serviceOk(false),
 	mediaPlayer2Root(this),
@@ -326,7 +327,7 @@ MPRIS2Interface::MPRIS2Interface(time_t instance_val) :
 		serviceOk = QDBusConnection::sessionBus().registerService(service);
 		if (!serviceOk)
 		{
-			service += QString(".instance%1").arg(instance_val);
+			service += QString(".instance%1").arg(getpid());
 			serviceOk = QDBusConnection::sessionBus().registerService(service);
 		}
 	}
@@ -350,8 +351,7 @@ inline void MPRIS2Interface::setExportCovers(bool e)
 
 /**/
 
-MPRIS2::MPRIS2(Module &module) :
-	instance_val(time(NULL))
+MPRIS2::MPRIS2(Module &module)
 {
 	SetModule(module);
 }
@@ -363,7 +363,7 @@ bool MPRIS2::set()
 	if (!sets().getBool("MPRIS2/Enabled"))
 		mpris2Interface.reset();
 	else if (!mpris2Interface)
-		mpris2Interface.reset(new MPRIS2Interface(instance_val));
+		mpris2Interface.reset(new MPRIS2Interface);
 	if (mpris2Interface)
 	{
 		if (mpris2Interface->isOk())

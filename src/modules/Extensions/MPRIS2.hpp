@@ -23,8 +23,6 @@
 #include <QDBusObjectPath>
 #include <QScopedPointer>
 
-#include <time.h>
-
 class MediaPlayer2Root : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
@@ -147,7 +145,7 @@ private:
 class MPRIS2Interface : public QObject
 {
 public:
-	MPRIS2Interface(time_t instance_val);
+	MPRIS2Interface();
 	~MPRIS2Interface();
 
 	inline bool isOk() const;
@@ -172,7 +170,6 @@ private:
 	bool set();
 
 	QScopedPointer<MPRIS2Interface> mpris2Interface;
-	time_t instance_val;
 };
 
 #define MPRIS2Name "MPRIS2"
