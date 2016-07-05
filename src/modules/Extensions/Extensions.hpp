@@ -57,7 +57,6 @@ private:
 
 #ifdef USE_MPRIS2
 	QGroupBox *MPRIS2B;
-	QCheckBox *exportCoversB;
 #endif
 
 	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;

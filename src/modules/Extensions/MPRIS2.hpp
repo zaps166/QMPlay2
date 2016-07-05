@@ -85,11 +85,6 @@ public:
 	MediaPlayer2Player(QObject *p);
 	~MediaPlayer2Player();
 
-	inline void setExportCovers(bool e)
-	{
-		exportCovers = e;
-	}
-
 	bool canControl() const;
 	bool canGoNext() const;
 	bool canGoPrevious() const;
@@ -132,7 +127,7 @@ private slots:
 private:
 	void clearMetaData();
 
-	bool exportCovers, removeCover;
+	bool removeCover;
 
 	QDBusObjectPath trackID;
 	QVariantMap m_data;
@@ -151,7 +146,6 @@ public:
 	~MPRIS2Interface();
 
 	inline bool isOk() const;
-	inline void setExportCovers(bool e);
 private:
 	QString service;
 	bool objectOk, serviceOk;

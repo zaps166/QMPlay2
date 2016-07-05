@@ -1209,10 +1209,6 @@ amp</translation>
         <translation>Obsługa programu przez interfejs MPRIS2</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>Wydobywaj okładki z plików multimedialnych</translation>
-    </message>
-    <message>
         <source>Noise reduction</source>
         <translation>Redukcja szumu</translation>
     </message>

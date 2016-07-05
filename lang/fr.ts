@@ -1220,10 +1220,6 @@ amp</source>
         <translation>Utilise le programme via l&apos;interface MPRIS2</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>Extraire les jaquettes des fichiers multimédia</translation>
-    </message>
-    <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
         <translation>Chemin vers l&apos;application &apos;youtube-dl&apos;</translation>
     </message>

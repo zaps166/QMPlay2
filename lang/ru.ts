@@ -1221,10 +1221,6 @@ amp</source>
         <translation>Использование программы через интерфейс MPRIS2</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>Извлечь обложки из мультимедиа файлов</translation>
-    </message>
-    <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
         <translation>Путь к приложению &apos;youtube-dl&apos;</translation>
     </message>

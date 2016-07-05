@@ -1213,10 +1213,6 @@ amp</translation>
         <translation>Retardo de eco</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>Extraer las portadas de los archivos multimedia</translation>
-    </message>
-    <message>
         <source>Force frame skipping</source>
         <translation>Forzar salto de fotogramas</translation>
     </message>

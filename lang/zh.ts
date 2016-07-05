@@ -1220,10 +1220,6 @@ amp</source>
         <translation>通过MPRIS2接口使用程序</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>从多媒体文件中提取封面</translation>
-    </message>
-    <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
         <translation>应用程序 &apos;youtube-dl&apos; 的目录路径</translation>
     </message>

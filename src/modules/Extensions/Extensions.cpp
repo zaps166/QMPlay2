@@ -65,7 +65,6 @@ Extensions::Extensions() :
 
 #if USE_MPRIS2
 	init("MPRIS2/Enabled", true);
-	init("MPRIS2/ExportCovers", false);
 #endif
 }
 
@@ -135,11 +134,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	MPRIS2B->setCheckable(true);
 	MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 
-	exportCoversB = new QCheckBox(tr("Extract the covers from multimedia files"));
-	exportCoversB->setChecked(sets().getBool("MPRIS2/ExportCovers"));
-
 	layout = new QGridLayout(MPRIS2B);
-	layout->addWidget(exportCoversB);
 	layout->setMargin(2);
 #endif
 
@@ -308,7 +303,6 @@ void ModuleSettingsWidget::saveSettings()
 {
 #ifdef USE_MPRIS2
 	sets().set("MPRIS2/Enabled", MPRIS2B->isChecked());
-	sets().set("MPRIS2/ExportCovers", exportCoversB->isChecked());
 #endif
 
 	sets().set("YouTube/ShowAdditionalInfo", additionalInfoB->isChecked());

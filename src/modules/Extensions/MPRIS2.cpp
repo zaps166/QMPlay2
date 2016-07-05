@@ -70,6 +70,7 @@ void MediaPlayer2Root::setFullscreen(bool fs)
 }
 bool MediaPlayer2Root::hasTrackList() const
 {
+	parent()->setProperty("exportCovers", true);
 	return false;
 }
 QString MediaPlayer2Root::identity() const
@@ -107,7 +108,7 @@ void MediaPlayer2Root::fullScreenChanged(bool fs)
 
 MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
 	QDBusAbstractAdaptor(p),
-	exportCovers(false), removeCover(false),
+	removeCover(false),
 	trackID(QDBusObjectPath(QString("/org/qmplay2/MediaPlayer2/Track/0"))), //I don't use TrackID in QMPlay2
 	playState("Stopped"),
 	can_seek(false),
@@ -158,6 +159,7 @@ bool MediaPlayer2Player::canSeek() const
 
 QVariantMap MediaPlayer2Player::metadata() const
 {
+	parent()->setProperty("exportCovers", true);
 	return m_data;
 }
 QString MediaPlayer2Player::playbackStatus() const
@@ -264,7 +266,7 @@ void MediaPlayer2Player::updatePlaying(bool play, const QString &title, const QS
 }
 void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 {
-	if (exportCovers)
+	if (parent()->property("exportCovers").toBool())
 	{
 		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(getpid()));
 		if (coverF.open(QFile::WriteOnly))
@@ -349,10 +351,6 @@ inline bool MPRIS2Interface::isOk() const
 {
 	return objectOk && serviceOk;
 }
-inline void MPRIS2Interface::setExportCovers(bool e)
-{
-	mediaPlayer2Player.setExportCovers(e);
-}
 
 /**/
 
@@ -369,12 +367,7 @@ bool MPRIS2::set()
 		mpris2Interface.reset();
 	else if (!mpris2Interface)
 		mpris2Interface.reset(new MPRIS2Interface);
-	if (mpris2Interface)
-	{
-		if (mpris2Interface->isOk())
-			mpris2Interface->setExportCovers(sets().getBool("MPRIS2/ExportCovers"));
-		else
-			mpris2Interface.reset();
-	}
+	if (mpris2Interface && !mpris2Interface->isOk())
+		mpris2Interface.reset();
 	return true;
 }

@@ -1221,10 +1221,6 @@ amp</translation>
         <translation>Über das Programm MPRIS2</translation>
     </message>
     <message>
-        <source>Extract the covers from multimedia files</source>
-        <translation>Extrahiere Bilder aus Multimedia Dateien</translation>
-    </message>
-    <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
         <translation>Pfad zu &quot;youtube-dl&quot;</translation>
     </message>
