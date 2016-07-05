@@ -21,6 +21,7 @@
 
 #include <QDBusAbstractAdaptor>
 #include <QDBusObjectPath>
+#include <QScopedPointer>
 
 #include <time.h>
 
@@ -149,12 +150,11 @@ public:
 	MPRIS2Interface(time_t instance_val);
 	~MPRIS2Interface();
 
-	inline void setExportCovers(bool e)
-	{
-		mediaPlayer2Player.setExportCovers(e);
-	}
+	inline bool isOk() const;
+	inline void setExportCovers(bool e);
 private:
 	QString service;
+	bool objectOk, serviceOk;
 	MediaPlayer2Root mediaPlayer2Root;
 	MediaPlayer2Player mediaPlayer2Player;
 };
@@ -171,7 +171,7 @@ public:
 private:
 	bool set();
 
-	MPRIS2Interface *mpris2Interface;
+	QScopedPointer<MPRIS2Interface> mpris2Interface;
 	time_t instance_val;
 };
 

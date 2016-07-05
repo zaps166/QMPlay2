@@ -315,42 +315,61 @@ void MediaPlayer2Player::clearMetaData()
 /**/
 
 MPRIS2Interface::MPRIS2Interface(time_t instance_val) :
-	service(QString("org.mpris.MediaPlayer2.QMPlay2.instance%1").arg(instance_val)),
+	service("org.mpris.MediaPlayer2.QMPlay2"),
+	objectOk(false), serviceOk(false),
 	mediaPlayer2Root(this),
 	mediaPlayer2Player(this)
 {
-	QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
-	QDBusConnection::sessionBus().registerService(service);
+	if (QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this))
+	{
+		objectOk = true;
+		serviceOk = QDBusConnection::sessionBus().registerService(service);
+		if (!serviceOk)
+		{
+			service += QString(".instance%1").arg(instance_val);
+			serviceOk = QDBusConnection::sessionBus().registerService(service);
+		}
+	}
 }
 MPRIS2Interface::~MPRIS2Interface()
 {
-	QDBusConnection::sessionBus().unregisterService(service);
-	QDBusConnection::sessionBus().unregisterObject("/org/mpris/MediaPlayer2");
+	if (serviceOk)
+		QDBusConnection::sessionBus().unregisterService(service);
+	if (objectOk)
+		QDBusConnection::sessionBus().unregisterObject("/org/mpris/MediaPlayer2");
+}
+
+inline bool MPRIS2Interface::isOk() const
+{
+	return objectOk && serviceOk;
+}
+inline void MPRIS2Interface::setExportCovers(bool e)
+{
+	mediaPlayer2Player.setExportCovers(e);
 }
 
 /**/
 
 MPRIS2::MPRIS2(Module &module) :
-	mpris2Interface(NULL),
 	instance_val(time(NULL))
 {
 	SetModule(module);
 }
 MPRIS2::~MPRIS2()
-{
-	delete mpris2Interface;
-}
+{}
 
 bool MPRIS2::set()
 {
 	if (!sets().getBool("MPRIS2/Enabled"))
-	{
-		delete mpris2Interface;
-		mpris2Interface = NULL;
-	}
+		mpris2Interface.reset();
 	else if (!mpris2Interface)
-		mpris2Interface = new MPRIS2Interface(instance_val);
+		mpris2Interface.reset(new MPRIS2Interface(instance_val));
 	if (mpris2Interface)
-		mpris2Interface->setExportCovers(sets().getBool("MPRIS2/ExportCovers"));
+	{
+		if (mpris2Interface->isOk())
+			mpris2Interface->setExportCovers(sets().getBool("MPRIS2/ExportCovers"));
+		else
+			mpris2Interface.reset();
+	}
 	return true;
 }
