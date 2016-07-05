@@ -76,6 +76,10 @@ QString MediaPlayer2Root::identity() const
 {
 	return QCoreApplication::applicationName();
 }
+QString MediaPlayer2Root::desktopEntry() const
+{
+	return QCoreApplication::applicationName();
+}
 QStringList MediaPlayer2Root::supportedMimeTypes() const
 {
 	return QStringList();

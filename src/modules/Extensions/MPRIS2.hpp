@@ -35,6 +35,7 @@ class MediaPlayer2Root : public QDBusAbstractAdaptor
 	Q_PROPERTY(bool Fullscreen READ isFullscreen WRITE setFullscreen)
 	Q_PROPERTY(bool HasTrackList READ hasTrackList)
 	Q_PROPERTY(QString Identity READ identity)
+	Q_PROPERTY(QString DesktopEntry READ desktopEntry)
 	Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes)
 	Q_PROPERTY(QStringList SupportedUriSchemes READ supportedUriSchemes)
 public:
@@ -47,6 +48,7 @@ public:
 	void setFullscreen(bool fs);
 	bool hasTrackList() const;
 	QString identity() const;
+	QString desktopEntry() const;
 	QStringList supportedMimeTypes() const;
 	QStringList supportedUriSchemes() const;
 public slots:

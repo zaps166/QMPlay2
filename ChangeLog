@@ -3,6 +3,7 @@ Changes in QMPlay2 build 16.07.04:
 	- new "Concept" icons by Alexey Varfolomeev,
 	- updated Russian translation (victorr2007),
 	- properly add many files containing tracks,
+	- MPRIS2 fixes (Ubuntu Unity integration),
 	- CMake fixes,
 	- PLS bugfix,
 
