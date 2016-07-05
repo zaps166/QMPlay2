@@ -128,7 +128,7 @@ MediaPlayer2Player::MediaPlayer2Player(QObject *p) :
 MediaPlayer2Player::~MediaPlayer2Player()
 {
 	if (removeCover)
-		QFile::remove(m_data["mpris:artUrl"].toString());
+		QFile::remove(m_data["mpris:artUrl"].toString().remove("file://"));
 }
 
 bool MediaPlayer2Player::canControl() const
@@ -266,24 +266,25 @@ void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 {
 	if (exportCovers)
 	{
-		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(time(NULL)));
+		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(getpid()));
 		if (coverF.open(QFile::WriteOnly))
 		{
 			coverF.write(cover);
 			coverF.close();
-			m_data["mpris:artUrl"] = coverF.fileName();
+			m_data["mpris:artUrl"] = "file://" + coverF.fileName();
 			propertyChanged("Metadata", m_data);
 			removeCover = true;
 		}
 	}
 }
+
 void MediaPlayer2Player::playStateChanged(const QString &plState)
 {
 	propertyChanged("PlaybackStatus", playState = plState);
 }
 void MediaPlayer2Player::coverFile(const QString &filePath)
 {
-	m_data["mpris:artUrl"] = filePath;
+	m_data["mpris:artUrl"] = "file://" + filePath;
 	propertyChanged("Metadata", m_data);
 	removeCover = false;
 }
@@ -309,7 +310,7 @@ void MediaPlayer2Player::clearMetaData()
 {
 	if (removeCover)
 	{
-		QFile::remove(m_data["mpris:artUrl"].toString());
+		QFile::remove(m_data["mpris:artUrl"].toString().remove("file://"));
 		removeCover = false;
 	}
 	m_data["mpris:artUrl"] = m_data["xesam:title"] = m_data["xesam:album"] = QString();
