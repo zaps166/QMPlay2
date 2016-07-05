@@ -418,7 +418,10 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		if (!isVisible())
 			toggleVisibility();
 		if (isMinimized())
+		{
 			showNormal();
+			activateWindow();
+		}
 	}
 	else if (param == "stop")
 		playC.stop();
