@@ -471,15 +471,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	page4->layout2->addWidget(page4->fontsB, 0, 1, 1, 1);
 	page4->layout2->addWidget(page4->overridePlayResB, 1, 1, 1, 1);
 
-	page4->layout->addWidget(page4->toASSGB, 2, 0, 1, 5);
-	AddVHSpacer(*page4->layout);
+	page4->_layout->addWidget(page4->toASSGB);
 
 	/* Page 5 */
 	page5->enabledB = new QCheckBox(tr("OSD enabled"));
 	page5->enabledB->setChecked(QMPSettings.getBool("OSD/Enabled"));
-
-	page5->layout->addWidget(page5->enabledB, 2, 0, 1, 5);
-	AddVHSpacer(*page5->layout);
+	page5->_layout->addWidget(page5->enabledB);
 
 	/* Page 6 */
 	page6->deintSettingsW = new DeintSettingsW;

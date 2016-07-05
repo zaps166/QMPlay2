@@ -68,6 +68,7 @@ set(GUI_FORMS # *.ui files
     Ui/SettingsGeneral.ui
     Ui/SettingsPlayback.ui
     Ui/SettingsPlaybackModuleslist.ui
+    Ui/OSDSettings.ui
 )
 
 set(GUI_RESOURCES
