@@ -1,6 +1,6 @@
 <RCC>
 	<qresource>
-		<file alias="QMPlay2">Icons/QMPlay2.png</file>
+		<file alias="QMPlay2">Icons/hicolor/128x128/apps/QMPlay2.png</file>
 
 		<file alias="media-playback-start">Icons/media-playback-start.png</file>
 		<file alias="media-playback-stop">Icons/media-playback-stop.png</file>

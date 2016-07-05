@@ -175,10 +175,10 @@ else()
 
         # mime files
         file(GLOB MIME_FILES Unix/x-*.xml)
-        install(FILES ${MIME_FILES} DESTINATION ${INSTALL_PATH_MIME}/packages/)
+        install(FILES ${MIME_FILES} DESTINATION "${INSTALL_PATH_MIME}/packages/")
 
         # icon
-        install(FILES Icons/QMPlay2.png DESTINATION ${INSTALL_PATH_ICONS}/hicolor/128x128/apps/)
+        install(DIRECTORY Icons/hicolor DESTINATION "${INSTALL_PATH_ICONS}")
 
         # install Solid actions
         include(InstallSolidActions)
