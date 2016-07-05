@@ -543,6 +543,7 @@ void FormatContext::abort()
 bool FormatContext::open(const QString &_url)
 {
 	static const QStringList disabledDemuxers = QStringList()
+		<< "ass"
 		<< "bmp_pipe"
 		<< "dxp_pipe"
 		<< "exr_pipe"
