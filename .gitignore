@@ -35,4 +35,6 @@ qdbusxml2cpp_wrapper.sh
 object_script.*
 uic_wrapper.sh
 .qmake.stash
+.DS_Store
 Makefile
+*~
