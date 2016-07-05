@@ -295,7 +295,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 	QMenu(VideoFilters::tr("Video &filters"), parent)
 {
 	/** Korektor wideo */
-	QMenu *videoEqualizerMenu = new QMenu(VideoFilters::tr("Video &equalizer"), this);
+	videoEqualizerMenu = new QMenu(VideoFilters::tr("Video &equalizer"), this);
 	addMenu(videoEqualizerMenu);
 	QWidgetAction *widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(videoEqualizer = new VideoEqualizer);

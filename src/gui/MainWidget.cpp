@@ -78,6 +78,22 @@ public:
 };
 #endif
 
+static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
+{
+	QMenu *newMenu = new QMenu(src->title(), dest);
+	foreach (QAction *act, src->actions())
+	{
+		QMenu *menu = act->menu();
+		if (!menu)
+			newMenu->addAction(act);
+		else if (menu != dontCopy)
+			copyMenu(newMenu, menu, dontCopy);
+		else if (dontCopy)
+			newMenu->addMenu(dontCopy);
+	}
+	dest->addMenu(newMenu);
+}
+
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #ifdef UPDATER
@@ -757,13 +773,13 @@ void MainWidget::createMenuBar()
 
 	QMenu *secondMenu = new QMenu(this);
 #ifndef Q_OS_MAC
-	secondMenu->addMenu(menuBar->window);
+	copyMenu(secondMenu, menuBar->window);
 	secondMenu->addMenu(menuBar->widgets);
-	secondMenu->addMenu(menuBar->playlist);
-	secondMenu->addMenu(menuBar->player);
-	secondMenu->addMenu(menuBar->playback);
-	secondMenu->addMenu(menuBar->options);
-	secondMenu->addMenu(menuBar->help);
+	copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
+	copyMenu(secondMenu, menuBar->player);
+	copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoEqualizerMenu);
+	copyMenu(secondMenu, menuBar->options);
+	copyMenu(secondMenu, menuBar->help);
 	tray->setContextMenu(secondMenu);
 #else //On OS X add only the most important menu actions to dock menu
 	secondMenu->addAction(menuBar->player->togglePlay);

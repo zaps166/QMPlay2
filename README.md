@@ -93,7 +93,7 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 QMPlay2 should be visible in sound indicator via MPRIS2 interface. Be sure that it is enabled in "Settings->Modules->Extensions"!
 
-Tray tooltip and mouse interactions with tray icon (show/hide, compact view) doesn't work - only context menu works, but it requires Qt at least in 5.6.1 version!
+Tray tooltip and mouse interactions with tray icon (show/hide, compact view) doesn't work.
 
 You can disable tray icon via "Ctrl+T" key shortcut or from menu: "Options->Show tray icon".
 

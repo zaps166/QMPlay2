@@ -113,6 +113,7 @@ public:
 			Q_DECLARE_TR_FUNCTIONS(VideoFilters)
 		public:
 			VideoFilters(QMenu *parent);
+			QMenu *videoEqualizerMenu;
 			VideoEqualizer *videoEqualizer;
 			QAction *spherical, *hFlip, *vFlip, *rotate90, *more;
 		};
