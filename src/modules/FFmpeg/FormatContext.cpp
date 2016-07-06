@@ -79,6 +79,44 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 }
 #endif
 
+#if LIBAVFORMAT_VERSION_INT >= 0x392900
+	static inline AVCodecParameters *codecParams(AVStream *stream)
+	{
+		return stream->codecpar;
+	}
+	static inline const char *getPixelFormat(AVStream *stream)
+	{
+		return av_get_pix_fmt_name((AVPixelFormat)stream->codecpar->format);
+	}
+	static inline const char *getSampleFormat(AVStream *stream)
+	{
+		return av_get_sample_fmt_name((AVSampleFormat)stream->codecpar->format);
+	}
+#else
+	static inline AVCodecContext *codecParams(AVStream *stream)
+	{
+		return stream->codec;
+	}
+	static inline const char *getPixelFormat(AVStream *stream)
+	{
+		return av_get_pix_fmt_name(stream->codec->pix_fmt);
+	}
+	static inline const char *getSampleFormat(AVStream *stream)
+	{
+		return av_get_sample_fmt_name(stream->codec->sample_fmt);
+	}
+#endif
+
+static bool streamNotValid(AVStream *stream)
+{
+	return
+	(
+		(stream->disposition & AV_DISPOSITION_ATTACHED_PIC)    ||
+		(codecParams(stream)->codec_type == AVMEDIA_TYPE_DATA) ||
+		(codecParams(stream)->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecParams(stream)->codec_id != AV_CODEC_ID_TTF && codecParams(stream)->codec_id != AV_CODEC_ID_OTF)
+	);
+}
+
 static int interruptCB(bool &aborted)
 {
 	QCoreApplication::processEvents(); //Let the demuxer thread run the timer
@@ -118,18 +156,14 @@ FormatContext::~FormatContext()
 	if (formatCtx)
 	{
 		foreach (AVStream *stream, streams)
-			if (stream->codec)
-				switch ((quintptr)stream->codec->opaque)
-				{
-					case 1:
-						stream->codec->extradata = NULL;
-						stream->codec->extradata_size = 0;
-						break;
-					case 2:
-						stream->codec->subtitle_header = NULL;
-						stream->codec->subtitle_header_size = 0;
-						break;
-				}
+		{
+			if (codecParams(stream) && !streamNotValid(stream))
+			{
+				//Data is allocated in QByteArray, so FFmpeg mustn't free it!
+				codecParams(stream)->extradata = NULL;
+				codecParams(stream)->extradata_size = 0;
+			}
+		}
 		avformat_close_input(&formatCtx);
 		FFCommon::freeAVPacket(packet);
 	}
@@ -447,7 +481,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		streams.at(ff_idx)->event_flags = 0;
 		isMetadataChanged = true;
 	}
-	if (fixMkvAss && streams.at(ff_idx)->codec->codec_id == AV_CODEC_ID_ASS)
+	if (fixMkvAss && codecParams(streams.at(ff_idx))->codec_id == AV_CODEC_ID_ASS)
 		matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
 #else
 	if (isStreamed)
@@ -634,7 +668,7 @@ bool FormatContext::open(const QString &_url)
 			streamsInfo += streamInfo;
 		}
 #if LIBAVFORMAT_VERSION_MAJOR > 55
-		if (!fixMkvAss && formatCtx->streams[i]->codec->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
+		if (!fixMkvAss && codecParams(formatCtx->streams[i])->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
 			fixMkvAss = true;
 		formatCtx->streams[i]->event_flags = 0;
 #endif
@@ -693,42 +727,36 @@ AVDictionary *FormatContext::getMetadata() const
 }
 StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 {
-	const AVCodecID codecID = stream->codec->codec_id;
-	if
-	(
-		(stream->disposition & AV_DISPOSITION_ATTACHED_PIC) ||
-		(stream->codec->codec_type == AVMEDIA_TYPE_DATA)    ||
-		(stream->codec->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecID != AV_CODEC_ID_TTF && codecID != AV_CODEC_ID_OTF)
-	) return NULL;
+	if (streamNotValid(stream))
+		return NULL;
 
 	StreamInfo *streamInfo = new StreamInfo;
 
-	if (AVCodec *codec = avcodec_find_decoder(codecID))
+	if (AVCodec *codec = avcodec_find_decoder(codecParams(stream)->codec_id))
 		streamInfo->codec_name = codec->name;
 
 	streamInfo->must_decode = true;
-	if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(codecID))
+	if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(codecParams(stream)->codec_id))
 	{
 		if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
 			streamInfo->must_decode = false;
 	}
 
-	streamInfo->bitrate = stream->codec->bit_rate;
-	streamInfo->bpcs = stream->codec->bits_per_coded_sample;
-	streamInfo->codec_tag = stream->codec->codec_tag;
+	streamInfo->bitrate = codecParams(stream)->bit_rate;
+	streamInfo->bpcs = codecParams(stream)->bits_per_coded_sample;
+	streamInfo->codec_tag = codecParams(stream)->codec_tag;
 	streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
 	streamInfo->time_base.num = stream->time_base.num;
 	streamInfo->time_base.den = stream->time_base.den;
-	streamInfo->type = (QMPlay2MediaType)stream->codec->codec_type; //Enumy są takie same
+	streamInfo->type = (QMPlay2MediaType)codecParams(stream)->codec_type; //Enumy są takie same
 
-	if (streamInfo->must_decode && !stream->codec->subtitle_header_size && stream->codec->extradata_size)
+	if (codecParams(stream)->extradata_size)
 	{
-		streamInfo->data.reserve(stream->codec->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
-		streamInfo->data.resize(stream->codec->extradata_size);
-		memcpy(streamInfo->data.data(), stream->codec->extradata, streamInfo->data.capacity());
-		av_free(stream->codec->extradata);
-		stream->codec->extradata = (quint8 *)streamInfo->data.data();
-		stream->codec->opaque = (void *)1;
+		streamInfo->data.reserve(codecParams(stream)->extradata_size + FF_INPUT_BUFFER_PADDING_SIZE);
+		streamInfo->data.resize(codecParams(stream)->extradata_size);
+		memcpy(streamInfo->data.data(), codecParams(stream)->extradata, streamInfo->data.capacity());
+		av_free(codecParams(stream)->extradata);
+		codecParams(stream)->extradata = (quint8 *)streamInfo->data.data();
 	}
 
 	AVDictionaryEntry *avtag;
@@ -760,34 +788,25 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 	switch (streamInfo->type)
 	{
 		case QMPLAY2_TYPE_AUDIO:
-			streamInfo->format = av_get_sample_fmt_name(stream->codec->sample_fmt);
-			streamInfo->channels = stream->codec->channels;
-			streamInfo->sample_rate = stream->codec->sample_rate;
-			streamInfo->block_align = stream->codec->block_align;
+			streamInfo->format = getSampleFormat(stream);
+			streamInfo->channels = codecParams(stream)->channels;
+			streamInfo->sample_rate = codecParams(stream)->sample_rate;
+			streamInfo->block_align = codecParams(stream)->block_align;
 			break;
 		case QMPLAY2_TYPE_VIDEO:
-			streamInfo->format = av_get_pix_fmt_name(stream->codec->pix_fmt);
+			streamInfo->format = getPixelFormat(stream);
 			if (stream->sample_aspect_ratio.num)
 				streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
-			else if (stream->codec->sample_aspect_ratio.num)
-				streamInfo->sample_aspect_ratio = av_q2d(stream->codec->sample_aspect_ratio);
-			streamInfo->W = stream->codec->width;
-			streamInfo->H = stream->codec->height;
+			else if (codecParams(stream)->sample_aspect_ratio.num)
+				streamInfo->sample_aspect_ratio = av_q2d(codecParams(stream)->sample_aspect_ratio);
+			streamInfo->W = codecParams(stream)->width;
+			streamInfo->H = codecParams(stream)->height;
 			streamInfo->FPS = av_q2d(stream->r_frame_rate);
-			break;
-		case QMPLAY2_TYPE_SUBTITLE:
-			if (stream->codec->subtitle_header_size)
-			{
-				streamInfo->data = QByteArray((char *)stream->codec->subtitle_header, stream->codec->subtitle_header_size);
-				av_free(stream->codec->subtitle_header);
-				stream->codec->subtitle_header = (quint8 *)streamInfo->data.data();
-				stream->codec->opaque = (void *)2;
-			}
 			break;
 		case AVMEDIA_TYPE_ATTACHMENT:
 			if ((avtag = av_dict_get(stream->metadata, "filename", NULL, AV_DICT_IGNORE_SUFFIX)))
 				streamInfo->title = avtag->value;
-			switch (codecID)
+			switch (codecParams(stream)->codec_id)
 			{
 				case AV_CODEC_ID_TTF:
 					streamInfo->codec_name = "TTF";
