@@ -245,16 +245,16 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName) :
 	tabW->addTab(page5, tr("OSD"));
 	tabW->addTab(page6, tr("Video filters"));
 
-	applyB = new QPushButton;
+	QPushButton *applyB = new QPushButton;
 	applyB->setText(tr("Apply"));
 	connect(applyB, SIGNAL(clicked()), this, SLOT(apply()));
 
-	closeB = new QPushButton;
+	QPushButton *closeB = new QPushButton;
 	closeB->setText(tr("Close"));
 	closeB->setShortcut(QKeySequence("Escape"));
 	connect(closeB, SIGNAL(clicked()), this, SLOT(close()));
 
-	layout = new QGridLayout(this);
+	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(tabW, 0, 0, 1, 3);
 	layout->addWidget(applyB, 1, 1, 1, 1);
 	layout->addWidget(closeB, 1, 2, 1, 1);
