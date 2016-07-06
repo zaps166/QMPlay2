@@ -66,9 +66,7 @@ private:
 	Page5 *page5;
 	Page6 *page6;
 
-	QGridLayout *layout;
 	QTabWidget *tabW;
-	QPushButton *applyB, *closeB;
 	QString lastM[3];
 
 	QWidget *videoEq, *videoEqOriginalParent;

@@ -253,16 +253,16 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 	tabW->addTab(page5, tr("OSD"));
 	tabW->addTab(page6, tr("Video filters"));
 
-	applyB = new QPushButton;
+	QPushButton *applyB = new QPushButton;
 	applyB->setText(tr("Apply"));
 	connect(applyB, SIGNAL(clicked()), this, SLOT(apply()));
 
-	closeB = new QPushButton;
+	QPushButton *closeB = new QPushButton;
 	closeB->setText(tr("Close"));
 	closeB->setShortcut(QKeySequence("Escape"));
 	connect(closeB, SIGNAL(clicked()), this, SLOT(close()));
 
-	layout = new QGridLayout(this);
+	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(tabW, 0, 0, 1, 3);
 	layout->addWidget(applyB, 1, 1, 1, 1);
 	layout->addWidget(closeB, 1, 2, 1, 1);
@@ -479,15 +479,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 	page4->layout2->addWidget(page4->fontsB, 0, 1, 1, 1);
 	page4->layout2->addWidget(page4->overridePlayResB, 1, 1, 1, 1);
 
-	page4->layout->addWidget(page4->toASSGB, 2, 0, 1, 5);
-	AddVHSpacer(*page4->layout);
+	page4->_layout->addWidget(page4->toASSGB);
 
 	/* Page 5 */
 	page5->enabledB = new QCheckBox(tr("OSD enabled"));
 	page5->enabledB->setChecked(QMPSettings.getBool("OSD/Enabled"));
-
-	page5->layout->addWidget(page5->enabledB, 2, 0, 1, 5);
-	AddVHSpacer(*page5->layout);
+	page5->_layout->addWidget(page5->enabledB);
 
 	/* Page 6 */
 	page6->deintSettingsW = new DeintSettingsW;
