@@ -124,13 +124,9 @@ void Pulse::stop()
 
 bool Pulse::write(const QByteArray &arr)
 {
-	int s = arr.size();
-	while (s > 0 && s % 4)
-		s--;
-	if (s <= 0)
-		return false;
+	int error = 0;
 	writing = true;
-	const bool ret = pa_simple_write(pulse, arr.data(), s, NULL) >= 0;
+	const bool ret = pa_simple_write(pulse, arr.data(), arr.size(), &error) >= 0;
 	writing = false;
-	return ret;
+	return (ret || error == PA_ERR_INVALID);
 }
