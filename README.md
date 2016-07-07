@@ -172,7 +172,7 @@ For CMake build be sure that you have correct CMake version:
 - PortAudio: portaudio (v19),
 - XVideo (X11 only): libxv.
 
-###Running the compilation:
+###Dependencies:
 
 #####Arch Linux / Manjaro Linux dependencies
 
@@ -237,7 +237,15 @@ This will compile and install the newest FFmpeg without features that are not su
 - Run: `sudo ldconfig`
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
-####Linux/BSD using CMake:
+####PC-BSD 10.3
+
+- Install dependencies form the package manager:
+```
+$ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio libcddb libass portaudio taglib libvdpau libva xdg-utils
+```
+For Qt4 build install also `qt4` package.
+
+###Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
 - You can use `cmake-gui` for graphical configuration. Otherwise follow below instructions:
