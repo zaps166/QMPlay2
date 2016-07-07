@@ -413,6 +413,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		connect(ml->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
 		connect(ml->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
 		connect(ml->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
+		ml->moveUp->setProperty("modulesList", m);
+		ml->moveDown->setProperty("modulesList", m);
 		page2->modulesListLayout->addWidget(box);
 		page2_modulesList[m] = ml;
 	}
@@ -830,15 +832,10 @@ void SettingsWidget::moveModule()
 	if (tB)
 	{
 		const bool moveDown = tB->arrowType() == Qt::DownArrow;
-		QListWidget *mL = NULL;
-		if (tB->parent() == page2_modulesList[0]->buttonsW)
-			mL = page2_modulesList[0]->list;
-		else if (tB->parent() == page2_modulesList[1]->buttonsW)
-			mL = page2_modulesList[1]->list;
-		else if (tB->parent() == page2_modulesList[2]->buttonsW)
-			mL = page2_modulesList[2]->list;
-		if (mL)
+		QVariant m = tB->property("modulesList");
+		if (!m.isNull())
 		{
+			QListWidget *mL = page2_modulesList[m.toInt()]->list;
 			int row = mL->currentRow();
 			if (row > -1)
 			{
