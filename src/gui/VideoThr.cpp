@@ -445,12 +445,12 @@ void VideoThr::run()
 				{
 					//Frame size has been changed
 					filtersMutex.unlock();
-					frameSizeUpdateMutex.lock();
+					updateMutex.lock();
 					mutex.unlock();
 					emit playC.frameSizeUpdate(decoded.size.width, decoded.size.height);
-					frameSizeUpdateMutex.lock(); //Wait for "frameSizeUpdate()" to be finished
+					updateMutex.lock(); //Wait for "frameSizeUpdate()" to be finished
 					mutex.lock();
-					frameSizeUpdateMutex.unlock();
+					updateMutex.unlock();
 					filtersMutex.lock();
 				}
 				filters.addFrame(decoded, packet.ts);

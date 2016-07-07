@@ -49,7 +49,7 @@ public:
 	 * hurry_up == ~0 -> much faster decoding, no frame copying
 	*/
 	virtual int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
-	virtual int decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush = false);
+	virtual int decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush = false);
 	virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
 
 	virtual ~Decoder();

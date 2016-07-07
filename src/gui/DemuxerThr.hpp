@@ -64,6 +64,8 @@ private:
 
 	bool load(bool canEmitInfo = true);
 
+	void checkReadyWrite(AVThread *avThr);
+
 	void run();
 
 	inline void ensureTrueUpdateBuffered();

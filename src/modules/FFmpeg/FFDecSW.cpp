@@ -98,7 +98,7 @@ void FFDecSW::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)
 	setPixelFormat();
 }
 
-int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
+int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
 {
 	int bytes_consumed = 0, frameFinished = 0;
 
@@ -184,6 +184,8 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
 					decoded.clear();
 					break;
 			}
+			channels = codec_ctx->channels;
+			sampleRate = codec_ctx->sample_rate;
 		}
 	}
 

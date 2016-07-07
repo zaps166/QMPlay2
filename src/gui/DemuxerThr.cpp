@@ -258,6 +258,15 @@ bool DemuxerThr::load(bool canEmitInfo)
 	return playC.audioStream >= 0 || playC.videoStream >= 0;
 }
 
+void DemuxerThr::checkReadyWrite(AVThread *avThr)
+{
+	if (avThr && avThr->writer && avThr->updateTryLock())
+	{
+		err |= !avThr->writer->readyWrite();
+		avThr->updateUnlock();
+	}
+}
+
 void DemuxerThr::run()
 {
 	emit playC.chText(tr("Opening"));
@@ -372,7 +381,10 @@ void DemuxerThr::run()
 		seekMutex.unlock();
 
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
-		err = (aThr && aThr->writer && !aThr->writer->readyWrite()) || (vThr && vThr->writer && !vThr->writer->readyWrite());
+
+		checkReadyWrite(aThr);
+		checkReadyWrite(vThr);
+
 		if (demuxer.isAborted() || err)
 			break;
 

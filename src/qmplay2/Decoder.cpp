@@ -92,8 +92,10 @@ int Decoder::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 	Q_UNUSED(hurry_up)
 	return 0;
 }
-int Decoder::decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush)
+int Decoder::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
 {
+	Q_UNUSED(channels)
+	Q_UNUSED(sampleRate)
 	Q_UNUSED(flush)
 	return (decoded = encodedPacket).size();
 }

@@ -52,7 +52,7 @@ private:
 
 	void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats);
 
-	int  decodeAudio(Packet &encodedPacket, Buffer &decoded, bool flush);
+	int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush);
 	int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
 	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
 

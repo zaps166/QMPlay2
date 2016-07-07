@@ -127,6 +127,7 @@ PlayClass::PlayClass() :
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
 	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
 	connect(this, SIGNAL(pixelFormatUpdate(const QByteArray &)), this, SLOT(pixelFormatUpdated(const QByteArray &)));
+	connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
 }
 
 void PlayClass::play(const QString &_url)
@@ -422,6 +423,10 @@ inline bool PlayClass::hasVideoStream()
 {
 	return vThr && demuxThr && demuxThr->demuxer && videoStream > -1;
 }
+inline bool PlayClass::hasAudioStream()
+{
+	return aThr && demuxThr && demuxThr->demuxer && audioStream > -1;
+}
 
 void PlayClass::speedMessageAndOSD()
 {
@@ -592,6 +597,17 @@ void PlayClass::updateABRepeatInfo(bool showDisabledInfo)
 	}
 	if (!abMsg.isEmpty())
 		emit QMPlay2Core.statusBarMessage(tr("A-B Repeat") + " " + abMsg, 2500);
+}
+
+bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
+{
+	quint32 srate = 0;
+	quint8 chn = 0;
+	if (QMPlay2Core.getSettings().getBool("ForceSamplerate"))
+		srate = QMPlay2Core.getSettings().getUInt("Samplerate");
+	if (QMPlay2Core.getSettings().getBool("ForceChannels"))
+		chn = QMPlay2Core.getSettings().getUInt("Channels");
+	return aThr->setParams(realChannels, realSampleRate, chn, srate);
 }
 
 void PlayClass::suspendWhenFinished(bool b)
@@ -1006,7 +1022,7 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
 		vThr->setFrameSize(w, h);
 		vThr->initFilters();
 		vThr->processParams();
-		vThr->frameSizeUpdateUnlock();
+		vThr->updateUnlock();
 	}
 }
 void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
@@ -1031,6 +1047,22 @@ void PlayClass::pixelFormatUpdated(const QByteArray &pixFmt)
 	{
 		demuxThr->demuxer->streamsInfo().at(videoStream)->format = pixFmt;
 		demuxThr->emitInfo();
+	}
+}
+
+void PlayClass::audioParamsUpdated(quint8 channels, quint32 sampleRate)
+{
+	if (hasAudioStream())
+	{
+		StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(audioStream);
+		streamInfo->sample_rate = sampleRate;
+		streamInfo->channels = channels;
+		demuxThr->emitInfo();
+	}
+	if (aThr)
+	{
+		setAudioParams(channels, sampleRate);
+		aThr->updateUnlock();
 	}
 }
 
@@ -1282,15 +1314,10 @@ void PlayClass::load(Demuxer *demuxer)
 			if (aThr->isRunning())
 			{
 				aThr->setDec(dec);
-				quint32 srate = 0;
-				quint8 chn = 0;
-				if (QMPlay2Core.getSettings().getBool("ForceSamplerate"))
-					srate = QMPlay2Core.getSettings().getUInt("Samplerate");
-				if (QMPlay2Core.getSettings().getBool("ForceChannels"))
-					chn = QMPlay2Core.getSettings().getUInt("Channels");
 
-				if (!aThr->setParams(streams[audioStream]->channels, streams[audioStream]->sample_rate, chn, srate))
+				if (!setAudioParams(streams[audioStream]->channels, streams[audioStream]->sample_rate))
 					dec = NULL;
+
 				else if (reload)
 					seekTo = SEEK_STREAM_RELOAD;
 				if (doSilenceOnStart)

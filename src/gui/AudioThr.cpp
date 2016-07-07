@@ -219,8 +219,20 @@ void AudioThr::run()
 			Buffer decoded;
 			if (!hasBufferedSamples)
 			{
-				bytes_consumed = dec->decodeAudio(packet, decoded, flushAudio);
+				quint8 newChannels = 0;
+				quint32 newSampleRate = 0;
+				bytes_consumed = dec->decodeAudio(packet, decoded, newChannels, newSampleRate, flushAudio);
 				tmp_br += bytes_consumed;
+				if (newChannels && newSampleRate && (newChannels != realChannels || newSampleRate != realSample_rate))
+				{
+					//Audio parameters has been changed
+					updateMutex.lock();
+					mutex.unlock();
+					emit playC.audioParamsUpdate(newChannels, newSampleRate);
+					updateMutex.lock(); //Wait for "audioParamsUpdate()" to be finished
+					mutex.lock();
+					updateMutex.unlock();
+				}
 			}
 
 			if (tmp_time >= 1000.0)

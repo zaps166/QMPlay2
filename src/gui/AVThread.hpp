@@ -37,6 +37,15 @@ public:
 		dec = _dec;
 	}
 
+	inline bool updateTryLock()
+	{
+		return updateMutex.tryLock();
+	}
+	inline void updateUnlock()
+	{
+		updateMutex.unlock();
+	}
+
 	bool lock();
 	void unlock();
 
@@ -59,7 +68,7 @@ protected:
 
 	volatile bool br, br2;
 	bool waiting;
-	QMutex mutex;
+	QMutex mutex, updateMutex;
 };
 
 #endif //AVTHREAD_HPP

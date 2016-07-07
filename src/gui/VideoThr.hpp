@@ -57,11 +57,6 @@ public:
 		deleteOSD = true;
 	}
 
-	inline void frameSizeUpdateUnlock()
-	{
-		frameSizeUpdateMutex.unlock();
-	}
-
 	void destroySubtitlesDecoder();
 	inline void setSubtitlesDecoder(Decoder *dec)
 	{
@@ -99,7 +94,7 @@ private:
 #ifdef X11_RESET_SCREEN_SAVER
 	QScopedPointer<X11ResetScreenSaver> x11ResetScreenSaver;
 #endif
-	QMutex filtersMutex, frameSizeUpdateMutex;
+	QMutex filtersMutex;
 private slots:
 	void write(VideoFrame videoFrame);
 	void screenshot(VideoFrame videoFrame);

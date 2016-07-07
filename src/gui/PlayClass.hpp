@@ -83,6 +83,7 @@ public:
 	}
 private:
 	inline bool hasVideoStream();
+	inline bool hasAudioStream();
 
 	void speedMessageAndOSD();
 
@@ -105,6 +106,8 @@ private:
 	void clearPlayInfo();
 
 	void updateABRepeatInfo(bool showDisabledInfo);
+
+	bool setAudioParams(quint8 realChannels, quint32 realSampleRate);
 
 	DemuxerThr *demuxThr;
 	VideoThr *vThr;
@@ -185,6 +188,8 @@ private slots:
 	void aRatioUpdated(double sar);
 	void pixelFormatUpdated(const QByteArray &pixFmt);
 
+	void audioParamsUpdated(quint8 channels, quint32 sampleRate);
+
 	void demuxThrFinished();
 
 	void timTerminateFinished();
@@ -192,6 +197,7 @@ private slots:
 	void load(Demuxer *);
 signals:
 	void frameSizeUpdate(int w, int h);
+	void audioParamsUpdate(quint8 channels, quint32 sampleRate);
 	void aRatioUpdate(double sar);
 	void pixelFormatUpdate(const QByteArray &pixFmt);
 	void chText(const QString &);
