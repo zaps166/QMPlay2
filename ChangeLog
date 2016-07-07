@@ -4,6 +4,7 @@ Changes in QMPlay2 build 16.07.07:
 	- new "Concept" icons by Alexey Varfolomeev,
 	- updated Russian translation (victorr2007),
 	- properly add many files containing tracks,
+	- better detection of subtitles text codec,
 	- handle audio parameters changes,
 	- MPRIS2, CMake and PLS fixes,
 

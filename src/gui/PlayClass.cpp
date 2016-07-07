@@ -322,11 +322,14 @@ void PlayClass::loadSubsFile(const QString &fileName)
 		{
 			QByteArray fileData = reader->read(reader->size());
 
-			QTextCodec *codec = QTextCodec::codecForName(QMPlay2Core.getSettings().getByteArray("SubtitlesEncoding"));
+			QTextCodec *codec = QTextCodec::codecForUtfText(fileData, QTextCodec::codecForName(QMPlay2Core.getSettings().getByteArray("FallbackSubtitlesEncoding")));
 			if (codec && codec->name() != "UTF-8")
 			{
-				codec = QTextCodec::codecForUtfText(fileData, codec);
-				if (codec->name() != "UTF-8")
+				QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+				QTextCodec::ConverterState state;
+				if (utf8Codec)
+					utf8Codec->toUnicode(fileData, fileData.size(), &state); //Try to detect if it is a UTF-8 text
+				if (!utf8Codec || state.invalidChars > 0) //Not a UTF-8 text, use a fallback text codec
 					fileData = codec->toUnicode(fileData).toUtf8();
 			}
 

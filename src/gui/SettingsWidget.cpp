@@ -166,7 +166,10 @@ static inline void AddVHSpacer(QGridLayout &layout)
 void SettingsWidget::InitSettings()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
-	QMPSettings.init("SubtitlesEncoding", "UTF-8");
+
+	QTextCodec *codec = QTextCodec::codecForLocale();
+	QMPSettings.init("FallbackSubtitlesEncoding", codec ? codec->name().data() : "System");
+
 	QMPSettings.init("AudioLanguage", QString());
 	QMPSettings.init("SubtitlesLanguage", QString());
 #if QT_VERSION < 0x050000
@@ -340,7 +343,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		encodings += QTextCodec::codecForName(item)->name();
 	encodings.removeDuplicates();
 	page1->encodingB->addItems(encodings);
-	idx = page1->encodingB->findText(QMPSettings.getByteArray("SubtitlesEncoding"));
+	idx = page1->encodingB->findText(QMPSettings.getByteArray("FallbackSubtitlesEncoding"));
 	if (idx > -1)
 		page1->encodingB->setCurrentIndex(idx);
 
@@ -940,7 +943,7 @@ void SettingsWidget::apply()
 				}
 			}
 #endif
-			QMPSettings.set("SubtitlesEncoding", page1->encodingB->currentText().toUtf8());
+			QMPSettings.set("FallbackSubtitlesEncoding", page1->encodingB->currentText().toUtf8());
 			QMPSettings.set("AudioLanguage", page1->audioLangB->currentIndex() > 0 ? page1->audioLangB->currentText() : QString());
 			QMPSettings.set("SubtitlesLanguage", page1->subsLangB->currentIndex() > 0 ? page1->subsLangB->currentText() : QString());
 			QMPSettings.set("screenshotPth", page1->screenshotE->text());
