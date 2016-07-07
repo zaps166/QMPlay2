@@ -279,8 +279,8 @@ CMake options (option - default value: description):
 	- `USE_OPENGL_FOR_VISUALIZATIONS` - Qt >= 5.6.0 feature, `OFF`: it allows to use "QOpenGLWidget" for visualizations.
 	- `USE_JEMALLOC` - `OFF`: link to jemalloc memory allocator which can reduce memory usage.
 	- `USE_CMD` - Windows only, `OFF`.
-	- `USE_PROSTOPLEER` - `ON`.
-	- `USE_LIBASS` - `ON`.
+	- `USE_PROSTOPLEER` - `ON`: enable/disable Prostopleer in Extensions module.
+	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 
 Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.
@@ -312,6 +312,14 @@ $ cd build
 $ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT5=NO -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
 $ make -j8
 $ sudo make -j8 install
+```
+
+- Update icon theme, mime and desktop database (replace `/usr/share/` by your install prefix path):
+
+```sh
+$ sudo update-desktop-database
+$ sudo update-mime-database /usr/share/mime
+$ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 ```
 
 - Uninstallation (in `build` directory):
