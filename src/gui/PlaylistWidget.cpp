@@ -243,10 +243,11 @@ void AddThr::run()
 		finished();
 }
 
-void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList)
+bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList)
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	QTreeWidgetItem *currentItem = parent;
+	bool added = false;
 	for (int i = 0; i < urls.size(); ++i)
 	{
 		if (ioCtrl.isAborted())
@@ -272,6 +273,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo);
 			if (!firstItem)
 				firstItem = tmpFirstItem;
+			added = !entries.isEmpty();
 			if (loadList)
 				break;
 		}
@@ -283,7 +285,7 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				if (pLW.currPthToSave.isNull())
 					pLW.currPthToSave = dUrl;
 				QStringList d_urls = QDir(dUrl).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
-				if (d_urls.size())
+				if (!d_urls.isEmpty())
 				{
 					url = Functions::cleanPath(url);
 					QTreeWidgetItem *p = pLW.newGroup(Functions::fileName(url), url, currentItem);
@@ -294,8 +296,9 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 						d_urls[j].replace("file://", "file:///");
 #endif
 					}
-					add(d_urls, p, demuxersInfo);
-					if (p->childCount() == 0)
+					if (add(d_urls, p, demuxersInfo))
+						added = true;
+					else
 						QMetaObject::invokeMethod(this, "deleteTreeWidgetItem", Q_ARG(QTreeWidgetItem *, p));
 				}
 			}
@@ -357,12 +360,14 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				{
 					if (pLW.currPthToSave.isNull() && QFileInfo(dUrl).isFile())
 						pLW.currPthToSave = Functions::filePath(dUrl);
+					added = true;
 				}
 
 				pLW.dontUpdateAfterAdd = false;
 			}
 		}
 	}
+	return added;
 }
 QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo)
 {
