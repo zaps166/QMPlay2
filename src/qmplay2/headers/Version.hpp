@@ -19,7 +19,7 @@
 #ifndef VERSION_HPP
 #define VERSION_HPP
 
-#define QMPlay2Version "16.07.07"
+#define QMPlay2Version "16.07.08"
 #define QMPlay2UserAgent ("QMPlay2/" QMPlay2Version)
 
 #endif // VERSION_HPP

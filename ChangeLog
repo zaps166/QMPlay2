@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 16.07.08:
+	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
+
 Changes in QMPlay2 build 16.07.07:
 	- Ubuntu Unity integration (MPRIS2 and shortcut groups),
 	- added video equalizer to "Settings/Video filters",
