@@ -226,6 +226,10 @@ void AddThr::changeItemText0(QTreeWidgetItem *tWI, QString name)
 {
 	tWI->setText(0, name);
 }
+void AddThr::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
+{
+	delete tWI;
+}
 
 void AddThr::run()
 {
@@ -291,6 +295,8 @@ void AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 #endif
 					}
 					add(d_urls, p, demuxersInfo);
+					if (p->childCount() == 0)
+						QMetaObject::invokeMethod(this, "deleteTreeWidgetItem", Q_ARG(QTreeWidgetItem *, p));
 				}
 			}
 			else
