@@ -28,6 +28,7 @@
 #include <QGridLayout>
 #include <QMouseEvent>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 
 AboutWidget::AboutWidget()
 {
@@ -48,31 +49,36 @@ AboutWidget::AboutWidget()
 
 	QTabWidget *tabW = new QTabWidget;
 
-	logE = new QTextEdit;
+	QFont font("Monospace");
+	font.setStyleHint(QFont::TypeWriter);
+
+	logE = new QPlainTextEdit;
+	logE->setFont(font);
 	logE->setPalette(palette);
 	logE->setFrameShape(QFrame::NoFrame);
 	logE->setFrameShadow(QFrame::Plain);
 	logE->setReadOnly(true);
-	logE->setLineWrapMode(QTextEdit::NoWrap);
-	logE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
+	logE->setLineWrapMode(QPlainTextEdit::NoWrap);
+	logE->viewport()->setProperty("cursor", QCursor(Qt::ArrowCursor));
 	tabW->addTab(logE, tr("Logs"));
 
-	clE = new QTextEdit;
+	clE = new QPlainTextEdit;
+	clE->setFont(font);
 	clE->setPalette(palette);
 	clE->setFrameShape(QFrame::NoFrame);
 	clE->setFrameShadow(QFrame::Plain);
 	clE->setReadOnly(true);
-	clE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
+	clE->viewport()->setProperty("cursor", QCursor(Qt::ArrowCursor));
 	tabW->addTab(clE, tr("Change log"));
 
-	auE = new QTextEdit;
+	auE = new QPlainTextEdit;
+	auE->setFont(font);
 	auE->setPalette(palette);
 	auE->setFrameShape(QFrame::NoFrame);
 	auE->setFrameShadow(QFrame::Plain);
 	auE->setReadOnly(true);
-	auE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
+	auE->viewport()->setProperty("cursor", QCursor(Qt::ArrowCursor));
 	tabW->addTab(auE, tr("Contributors"));
-
 
 	clrLogB = new QPushButton;
 	clrLogB->setText(tr("Clear log"));
@@ -109,14 +115,14 @@ void AboutWidget::showEvent(QShowEvent *)
 	QFile cl(QMPlay2Core.getShareDir() + "ChangeLog");
 	if (cl.open(QFile::ReadOnly))
 	{
-		clE->setText(cl.readAll());
+		clE->setPlainText(cl.readAll());
 		cl.close();
 	}
 
 	QFile au(QMPlay2Core.getShareDir() + "AUTHORS");
 	if (au.open(QFile::ReadOnly))
 	{
-		auE->setText(au.readAll());
+		auE->setPlainText(au.readAll());
 		au.close();
 	}
 

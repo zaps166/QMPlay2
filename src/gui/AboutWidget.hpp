@@ -20,9 +20,9 @@
 #define ABOUTWIDGET_HPP
 
 #include <QWidget>
-#include <QTextEdit>
 #include <QFileSystemWatcher>
 
+class QPlainTextEdit;
 class QPushButton;
 
 class AboutWidget : public QWidget
@@ -34,7 +34,7 @@ private:
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 
-	QTextEdit *logE, *clE, *auE;
+	QPlainTextEdit *logE, *clE, *auE;
 	QPushButton *clrLogB;
 	QFileSystemWatcher logWatcher;
 private slots:
