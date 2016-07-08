@@ -65,6 +65,14 @@ AboutWidget::AboutWidget()
 	clE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
 	tabW->addTab(clE, tr("Change log"));
 
+	auE = new QTextEdit;
+	auE->setPalette(palette);
+	auE->setFrameShape(QFrame::NoFrame);
+	auE->setFrameShadow(QFrame::Plain);
+	auE->setReadOnly(true);
+	auE->viewport()->setProperty("cursor", QVariant(QCursor(Qt::ArrowCursor)));
+	tabW->addTab(auE, tr("Contributors"));
+
 
 	clrLogB = new QPushButton;
 	clrLogB->setText(tr("Clear log"));
@@ -103,6 +111,13 @@ void AboutWidget::showEvent(QShowEvent *)
 	{
 		clE->setText(cl.readAll());
 		cl.close();
+	}
+
+	QFile au(QMPlay2Core.getShareDir() + "AUTHORS");
+	if (au.open(QFile::ReadOnly))
+	{
+		auE->setText(au.readAll());
+		au.close();
 	}
 
 	QFile f(QMPlay2Core.getLogFilePath());
