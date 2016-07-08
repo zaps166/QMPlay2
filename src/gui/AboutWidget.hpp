@@ -34,7 +34,7 @@ private:
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 
-	QTextEdit *logE, *clE;
+	QTextEdit *logE, *clE, *auE;
 	QPushButton *clrLogB;
 	QFileSystemWatcher logWatcher;
 private slots:
