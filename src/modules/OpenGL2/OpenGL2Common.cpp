@@ -34,11 +34,11 @@
 #endif
 #include <QResizeEvent>
 #include <QMatrix4x4>
+#include <QResource>
 #include <QPainter>
 #include <QWidget>
 
 #include <Vertices.hpp>
-#include <Shaders.hpp>
 
 #include <math.h>
 
@@ -201,9 +201,15 @@ void OpenGL2Common::initializeGL()
 	/* YCbCr shader */
 	if (shaderProgramYCbCr->shaders().isEmpty())
 	{
-		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderYCbCrSrc);
-		/* Use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage! */
-		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, QString(fShaderYCbCrSrc).arg((glVer >= 30) ? fShaderYCbCrHueSrc : ""));
+		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/YCbCr.vert"));
+		QByteArray YCbCrFrag = readShader(":/YCbCr.frag");
+		if (glVer >= 30)
+		{
+			//Use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			YCbCrFrag.replace("\tHue */", QByteArray());
+			YCbCrFrag.replace("\t/* Hue", QByteArray());
+		}
+		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, YCbCrFrag);
 	}
 	if (shaderProgramYCbCr->bind())
 	{
@@ -214,9 +220,9 @@ void OpenGL2Common::initializeGL()
 			texCoordYCbCrLoc = newTexCoordLoc;
 			positionYCbCrLoc = newPositionLoc;
 		}
-		shaderProgramYCbCr->setUniformValue("Ytex", 0);
-		shaderProgramYCbCr->setUniformValue("Utex", 1);
-		shaderProgramYCbCr->setUniformValue("Vtex", 2);
+		shaderProgramYCbCr->setUniformValue("uY" , 0);
+		shaderProgramYCbCr->setUniformValue("uCb", 1);
+		shaderProgramYCbCr->setUniformValue("uCr", 2);
 		shaderProgramYCbCr->release();
 	}
 	else
@@ -229,8 +235,8 @@ void OpenGL2Common::initializeGL()
 	/* OSD shader */
 	if (shaderProgramOSD->shaders().isEmpty())
 	{
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, vShaderOSDSrc);
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, fShaderOSDSrc);
+		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
+		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
 	}
 	if (shaderProgramOSD->bind())
 	{
@@ -241,7 +247,7 @@ void OpenGL2Common::initializeGL()
 			texCoordOSDLoc = newTexCoordLoc;
 			positionOSDLoc = newPositionLoc;
 		}
-		shaderProgramOSD->setUniformValue("tex", 3);
+		shaderProgramOSD->setUniformValue("uTex", 3);
 		shaderProgramOSD->release();
 	}
 	else
@@ -410,7 +416,7 @@ void OpenGL2Common::paintGL()
 	shaderProgramYCbCr->bind();
 	if (doReset)
 	{
-		shaderProgramYCbCr->setUniformValue("videoEq", Brightness, Contrast, Saturation, Hue);
+		shaderProgramYCbCr->setUniformValue("uVideoEq", Brightness, Contrast, Saturation, Hue);
 		doReset = !resetDone;
 		setMatrix = true;
 	}
@@ -427,7 +433,7 @@ void OpenGL2Common::paintGL()
 			matrix.rotate(rot.x(), 1.0, 0.0, 0.0);
 			matrix.rotate(rot.y(), 0.0, 0.0, 1.0);
 		}
-		shaderProgramYCbCr->setUniformValue("matrix", matrix);
+		shaderProgramYCbCr->setUniformValue("uMatrix", matrix);
 		setMatrix = false;
 	}
 	if (!sphericalView)
@@ -640,6 +646,17 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		default:
 			break;
 	}
+}
+
+QByteArray OpenGL2Common::readShader(const QString &fileName)
+{
+	QResource res(fileName);
+	QByteArray shader;
+#ifdef OPENGL_ES2
+	shader = "precision lowp float;\n";
+#endif
+	shader.append((const char *)res.data(), res.size());
+	return shader;
 }
 
 inline bool OpenGL2Common::checkLinesize(int p)

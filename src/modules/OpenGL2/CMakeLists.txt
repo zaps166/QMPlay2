@@ -17,7 +17,6 @@ set(OpenGL2_HDR
     OpenGL2Writer.hpp
     OpenGL2Common.hpp
     Sphere.hpp
-    Shaders.hpp
     Vertices.hpp
 )
 
@@ -29,7 +28,7 @@ set(OpenGL2_SRC
 )
 
 set(OpenGL2_RESOURCES
-    icon.qrc
+    resources.qrc
 )
 
 function(gles1Error)

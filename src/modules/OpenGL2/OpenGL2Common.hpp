@@ -127,6 +127,8 @@ protected:
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:
+	QByteArray readShader(const QString &fileName);
+
 	inline bool checkLinesize(int p);
 
 	/* Spherical view */

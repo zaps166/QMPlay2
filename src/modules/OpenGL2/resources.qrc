@@ -1,0 +1,11 @@
+<RCC>
+	<qresource>
+		<file alias="OpenGL2">OpenGL2.png</file>
+
+		<file alias="YCbCr.vert">GLSL/YCbCr.vert</file>
+		<file alias="YCbCr.frag">GLSL/YCbCr.frag</file>
+
+		<file alias="OSD.vert">GLSL/OSD.vert</file>
+		<file alias="OSD.frag">GLSL/OSD.frag</file>
+	</qresource>
+</RCC>
