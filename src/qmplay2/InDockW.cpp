@@ -186,15 +186,19 @@ void InDockW::paintEvent(QPaintEvent *)
 		else
 		{
 			QPixmap pixmapToDraw;
+			float multiplier;
 
-			if (drawBlurredImage)
+			if (!drawBlurredImage)
+				multiplier = 1.0f;
+			else
 			{
 				const QPixmap blurred = customPixmapBlurred.scaled(width(), fullHeight, Qt::KeepAspectRatioByExpanding, Qt::FastTransformation);
 				p.drawPixmap(width() / 2 - blurred.width() / 2, fullHeight / 2 - blurred.height() / 2, blurred);
+				multiplier = 0.8f;
 			}
 
 			if (customPixmap.width() > width() || customPixmap.height() > fullHeight)
-				pixmapToDraw = customPixmap.scaled(width(), fullHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+				pixmapToDraw = customPixmap.scaled(width() * multiplier, fullHeight * multiplier, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			else
 				pixmapToDraw = customPixmap;
 
