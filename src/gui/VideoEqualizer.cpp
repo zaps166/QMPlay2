@@ -63,6 +63,7 @@ VideoEqualizer::VideoEqualizer()
 		slider->setTickInterval(25);
 		slider->setMinimum(-100);
 		slider->setMaximum(100);
+		slider->setWheelStep(1);
 		slider->setValue(0);
 
 		layout->addWidget(titleL, i, 0);
