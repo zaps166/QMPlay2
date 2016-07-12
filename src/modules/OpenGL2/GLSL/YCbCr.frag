@@ -10,10 +10,12 @@ const mat3 YUVtoRGB = mat3(
 	1.59580, -0.81290, 0.00000
 );
 
+/* GL >= 3.0
 float getLumaAtOffset(float x, float y)
 {
 	return texture2D(uY, vTexCoord + vec2(x, y))[0] - 0.0625;
 }
+GL >= 3.0 */
 
 void main()
 {
@@ -30,6 +32,7 @@ void main()
 		texture2D(uCr, vTexCoord)[0] - 0.5
 	);
 
+	/* GL >= 3.0
 	if (uSharpness != 0.0)
 	{
 		// Kernel 3x3
@@ -45,7 +48,6 @@ void main()
 		YCbCr[0] = clamp(YCbCr[0] + (YCbCr[0] - lumaBlur) * uSharpness, 0.0, 1.0);
 	}
 
-	/* Hue
 	float hueAdj = uVideoEq[3];
 	if (hueAdj != 0.0)
 	{
@@ -54,7 +56,7 @@ void main()
 		YCbCr[1] = chroma * cos(hue);
 		YCbCr[2] = chroma * sin(hue);
 	}
-	Hue */
+	GL >= 3.0 */
 
 	gl_FragColor = vec4(clamp(YUVtoRGB * (YCbCr * contrastSaturation), 0.0, 1.0) + brightness, 1.0);
 }

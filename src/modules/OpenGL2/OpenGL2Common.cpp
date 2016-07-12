@@ -205,9 +205,9 @@ void OpenGL2Common::initializeGL()
 		QByteArray YCbCrFrag = readShader(":/YCbCr.frag");
 		if (glVer >= 30)
 		{
-			//Use hue only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-			YCbCrFrag.replace("\tHue */", QByteArray());
-			YCbCrFrag.replace("\t/* Hue", QByteArray());
+			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			YCbCrFrag.replace("GL >= 3.0 */", QByteArray());
+			YCbCrFrag.replace("/* GL >= 3.0", QByteArray());
 		}
 		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, YCbCrFrag);
 	}
