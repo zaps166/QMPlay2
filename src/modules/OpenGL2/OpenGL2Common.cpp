@@ -85,7 +85,7 @@ OpenGL2Common::OpenGL2Common() :
 #endif
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
-	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1),
+	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
 	hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
@@ -324,6 +324,8 @@ void OpenGL2Common::paintGL()
 			{
 				const GLsizei w = checkLinesize(p) ? videoFrame.linesize[p] : widths[p];
 				const GLsizei h = heights[p];
+				if (p == 0)
+					pixelStep = QVector2D(1.0f / w, 1.0f / h);
 				if (hasPbo)
 				{
 					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
@@ -417,6 +419,8 @@ void OpenGL2Common::paintGL()
 	if (doReset)
 	{
 		shaderProgramYCbCr->setUniformValue("uVideoEq", Brightness, Contrast, Saturation, Hue);
+		shaderProgramYCbCr->setUniformValue("uSharpness", Sharpness);
+		shaderProgramYCbCr->setUniformValue("uStep", pixelStep);
 		doReset = !resetDone;
 		setMatrix = true;
 	}

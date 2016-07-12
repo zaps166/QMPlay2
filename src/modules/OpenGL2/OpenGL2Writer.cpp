@@ -48,6 +48,7 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("Brightness");
 	addParam("Contrast");
 	addParam("Hue");
+	addParam("Sharpness");
 
 	SetModule(module);
 }
@@ -91,8 +92,9 @@ bool OpenGL2Writer::processParams(bool *)
 	const float Saturation = (getParam("Saturation").toInt() + 100) / 100.0f;
 	const float Brightness = getParam("Brightness").toInt() / 100.0f;
 	const float Hue = getParam("Hue").toInt() / -31.831f;
+	const float Sharpness = getParam("Sharpness").toFloat();
 	const int verticesIdx = rotate90 * 4 + flip;
-	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue)
+	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue || drawable->Sharpness != Sharpness)
 	{
 		drawable->zoom = zoom;
 		drawable->aspectRatio = aspectRatio;
@@ -101,6 +103,7 @@ bool OpenGL2Writer::processParams(bool *)
 		drawable->Brightness = Brightness;
 		drawable->Saturation = Saturation;
 		drawable->Hue = Hue;
+		drawable->Sharpness = Sharpness;
 		drawable->setSpherical(spherical);
 		doResizeEvent = drawable->widget()->isVisible();
 	}

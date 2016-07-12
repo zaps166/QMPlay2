@@ -143,8 +143,9 @@ public:
 	QOpenGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
 
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
-	float Contrast, Saturation, Brightness, Hue;
+	float Contrast, Saturation, Brightness, Hue, Sharpness;
 	float texCoordYCbCr[8];
+	QVector2D pixelStep;
 	quint32 textures[4];
 
 	quint32 pbo[4];
