@@ -44,6 +44,8 @@ public:
 	void add(const QString &);
 	void addAndPlay(const QString &);
 
+	void scrollToCurrectItem();
+
 	inline QWidget *findEdit() const
 	{
 		return (QWidget *)findE;

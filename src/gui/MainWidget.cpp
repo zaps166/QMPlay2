@@ -956,6 +956,8 @@ void MainWidget::toggleFullScreen()
 		if (compact_view)
 			toggleCompactView();
 
+		playlistDock->scrollToCurrectItem();
+
 		visibleQMPlay2Extensions.clear();
 	}
 	QMPlay2Core.fullScreenChanged(fullScreen);
