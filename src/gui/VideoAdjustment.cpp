@@ -67,8 +67,7 @@ VideoAdjustment::VideoAdjustment() :
 		slider->setTickPosition(QSlider::TicksBelow);
 		slider->setMinimumWidth(50);
 		slider->setTickInterval(25);
-		slider->setMinimum(-100);
-		slider->setMaximum(100);
+		slider->setRange(-100, 100);
 		slider->setWheelStep(1);
 		slider->setValue(0);
 
