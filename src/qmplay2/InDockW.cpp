@@ -197,7 +197,7 @@ void InDockW::paintEvent(QPaintEvent *)
 				multiplier = 0.8f;
 			}
 
-			if (customPixmap.width() > width() || customPixmap.height() > fullHeight)
+			if (customPixmap.width() > width() * multiplier || customPixmap.height() > fullHeight * multiplier)
 				pixmapToDraw = customPixmap.scaled(width() * multiplier, fullHeight * multiplier, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			else
 				pixmapToDraw = customPixmap;
