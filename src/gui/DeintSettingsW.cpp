@@ -107,5 +107,4 @@ void DeintSettingsW::softwareMethods(bool doubler)
 void DeintSettingsW::setSoftwareMethodsToolTip(int idx)
 {
 	softwareMethodsCB->setToolTip(softwareMethodsCB->itemData(idx).toString());
-
 }

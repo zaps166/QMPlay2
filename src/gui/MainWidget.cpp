@@ -253,7 +253,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(focusChanged(QWidget *, QWidget *)));
 
 	connect(infoDock, SIGNAL(seek(int)), this, SLOT(seek(int)));
-	connect(infoDock, SIGNAL(chStream(const QString &)), this, SLOT(chStream(const QString &)));
+	connect(infoDock, SIGNAL(chStream(const QString &)), &playC, SLOT(chStream(const QString &)));
 	connect(infoDock, SIGNAL(saveCover()), &playC, SLOT(saveCover()));
 
 	connect(videoDock, SIGNAL(resized(int, int)), &playC, SLOT(videoResized(int, int)));
@@ -503,10 +503,6 @@ void MainWidget::seek(int i)
 {
 	if (!seekS->ignoringValueChanged())
 		playC.seek(i);
-}
-void MainWidget::chStream(const QString &s)
-{
-	playC.chStream(s);
 }
 void MainWidget::playStateChanged(bool b)
 {

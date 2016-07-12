@@ -57,7 +57,7 @@ public:
 
 	void togglePause();
 	void seek(int);
-	void chStream(const QString &);
+	Q_SLOT void chStream(const QString &s);
 	void setSpeed(double);
 
 	bool isPlaying() const;

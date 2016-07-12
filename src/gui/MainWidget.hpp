@@ -68,7 +68,6 @@ private slots:
 
 	void togglePlay();
 	void seek(int);
-	void chStream(const QString &);
 	void playStateChanged(bool);
 
 	void volUpDown();
