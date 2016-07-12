@@ -439,22 +439,22 @@ void PlaylistDock::entryProperties()
 }
 void PlaylistDock::timeSort1()
 {
-	list->sortItems(2, Qt::AscendingOrder);
+	list->sortCurrentGroup(2, Qt::AscendingOrder);
 	scrollToCurrectItem();
 }
 void PlaylistDock::timeSort2()
 {
-	list->sortItems(2, Qt::DescendingOrder);
+	list->sortCurrentGroup(2, Qt::DescendingOrder);
 	scrollToCurrectItem();
 }
 void PlaylistDock::titleSort1()
 {
-	list->sortItems(0, Qt::AscendingOrder);
+	list->sortCurrentGroup(0, Qt::AscendingOrder);
 	scrollToCurrectItem();
 }
 void PlaylistDock::titleSort2()
 {
-	list->sortItems(0, Qt::DescendingOrder);
+	list->sortCurrentGroup(0, Qt::DescendingOrder);
 	scrollToCurrectItem();
 }
 void PlaylistDock::collapseAll()

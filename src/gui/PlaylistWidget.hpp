@@ -123,6 +123,8 @@ public:
 
 	void setItemsResizeToContents(bool);
 
+	void sortCurrentGroup(int column, Qt::SortOrder sortOrder);
+
 	bool add(const QStringList &, QTreeWidgetItem *par, bool loadList = false);
 	bool add(const QStringList &, bool atEndOfList = false);
 	void sync(const QString &, QTreeWidgetItem *, bool);

@@ -495,6 +495,17 @@ void PlaylistWidget::setItemsResizeToContents(bool b)
 #endif
 }
 
+void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)
+{
+	QTreeWidgetItem *item = selectedItems().isEmpty() ? NULL : currentItem();
+	while (item && !isGroup(item))
+		item = item->parent();
+	if (item)
+		item->sortChildren(column, sortOrder);
+	else
+		sortItems(column, sortOrder);
+}
+
 bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, bool loadList)
 {
 	if (urls.isEmpty())

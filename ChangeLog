@@ -1,6 +1,7 @@
 Changes in QMPlay2 build 16.07.12:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
 	- add sharpness to video adjustment (OpenGL2 and VDPAU only),
+	- sort current group instead of entire playlist,
 	- rename video equalizer -> video adjustment,
 	- move OpenGL2 shaders to resources,
 	- add sharpness shader to OpenGL2,
