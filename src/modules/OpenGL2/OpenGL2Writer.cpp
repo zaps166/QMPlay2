@@ -92,7 +92,7 @@ bool OpenGL2Writer::processParams(bool *)
 	const float Saturation = (getParam("Saturation").toInt() + 100) / 100.0f;
 	const float Brightness = getParam("Brightness").toInt() / 100.0f;
 	const float Hue = getParam("Hue").toInt() / -31.831f;
-	const float Sharpness = getParam("Sharpness").toFloat();
+	const float Sharpness = getParam("Sharpness").toInt() / 50.0f;
 	const int verticesIdx = rotate90 * 4 + flip;
 	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue || drawable->Sharpness != Sharpness)
 	{

@@ -66,6 +66,10 @@
         <source>Programmer</source>
         <translation>Programista</translation>
     </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -1211,10 +1215,6 @@ amp</translation>
     <message>
         <source>Noise reduction</source>
         <translation>Redukcja szumu</translation>
-    </message>
-    <message>
-        <source>Sharpness</source>
-        <translation>Ostrość</translation>
     </message>
     <message>
         <source>Image scaling level</source>
@@ -2577,17 +2577,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
-    <name>VideoDock</name>
-    <message>
-        <source>Video</source>
-        <translation>Wideo</translation>
-    </message>
-</context>
-<context>
-    <name>VideoEqualizer</name>
+    <name>VideoAdjustment</name>
     <message>
         <source>Brightness</source>
         <translation>Jasność</translation>
+    </message>
+    <message>
+        <source>Contrast</source>
+        <translation>Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -2598,20 +2595,23 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Odcień</translation>
     </message>
     <message>
+        <source>Sharpness</source>
+        <translation>Ostrość</translation>
+    </message>
+    <message>
         <source>Reset</source>
         <translation>Resetuj</translation>
     </message>
+</context>
+<context>
+    <name>VideoDock</name>
     <message>
-        <source>Contrast</source>
-        <translation>Kontrast</translation>
+        <source>Video</source>
+        <translation>Wideo</translation>
     </message>
 </context>
 <context>
     <name>VideoFilters</name>
-    <message>
-        <source>Video &amp;equalizer</source>
-        <translation>&amp;Korektor wideo</translation>
-    </message>
     <message>
         <source>Video &amp;filters</source>
         <translation>Filtry wid&amp;eo</translation>
@@ -2635,6 +2635,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>&amp;Spherical view</source>
         <translation>Widok &amp;sferyczny</translation>
+    </message>
+    <message>
+        <source>Video &amp;adjustment</source>
+        <translation>Regulacja &amp;wideo</translation>
     </message>
 </context>
 <context>

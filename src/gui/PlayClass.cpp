@@ -121,8 +121,6 @@ PlayClass::PlayClass() :
 
 	doSuspend = false;
 
-	Brightness = Saturation = Contrast = Hue = 0;
-
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
 	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
@@ -689,15 +687,11 @@ void PlayClass::videoResized(int w, int h)
 	videoWinH = h;
 }
 
-void PlayClass::setVideoEqualizer(int b, int s, int c, int h)
+void PlayClass::videoAdjustmentChanged()
 {
-	Brightness = b;
-	Saturation = s;
-	Contrast = c;
-	Hue = h;
 	if (vThr)
 	{
-		vThr->setVideoEqualizer();
+		vThr->setVideoAdjustment();
 		vThr->processParams();
 	}
 }
@@ -1249,7 +1243,7 @@ void PlayClass::load(Demuxer *demuxer)
 
 				vThr->setFrameSize(streams[videoStream]->W, streams[videoStream]->H);
 				vThr->setARatio(aspect_ratio, getSAR());
-				vThr->setVideoEqualizer();
+				vThr->setVideoAdjustment();
 				vThr->setDec(dec);
 				vThr->setZoom();
 				vThr->setSpherical(); //TODO: Disable when not supported

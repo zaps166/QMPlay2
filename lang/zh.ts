@@ -66,6 +66,10 @@
         <source>Programmer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -1210,10 +1214,6 @@ amp</source>
     <message>
         <source>Noise reduction</source>
         <translation>降噪</translation>
-    </message>
-    <message>
-        <source>Sharpness</source>
-        <translation>锐化</translation>
     </message>
     <message>
         <source>Using the program via MPRIS2 interface</source>
@@ -2575,17 +2575,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>VideoDock</name>
-    <message>
-        <source>Video</source>
-        <translation>视频</translation>
-    </message>
-</context>
-<context>
-    <name>VideoEqualizer</name>
+    <name>VideoAdjustment</name>
     <message>
         <source>Brightness</source>
         <translation>亮度</translation>
+    </message>
+    <message>
+        <source>Contrast</source>
+        <translation>对比度</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -2596,20 +2593,23 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>色调</translation>
     </message>
     <message>
+        <source>Sharpness</source>
+        <translation>锐化</translation>
+    </message>
+    <message>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
+</context>
+<context>
+    <name>VideoDock</name>
     <message>
-        <source>Contrast</source>
-        <translation>对比度</translation>
+        <source>Video</source>
+        <translation>视频</translation>
     </message>
 </context>
 <context>
     <name>VideoFilters</name>
-    <message>
-        <source>Video &amp;equalizer</source>
-        <translation>视频均衡器</translation>
-    </message>
     <message>
         <source>Video &amp;filters</source>
         <translation>视频滤镜</translation>
@@ -2632,6 +2632,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Spherical view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video &amp;adjustment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

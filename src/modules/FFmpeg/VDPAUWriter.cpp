@@ -42,6 +42,7 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	display(NULL),
 	vpd_decoder_render(NULL),
 	vdp_device_destroy(NULL),
+	sharpness_lvl(0.0f),
 	lastWinId(0),
 	aspect_ratio(0.0), zoom(0.0),
 	flip(0), outW(0), outH(0), Hue(0), Saturation(0), Brightness(0), Contrast(0)
@@ -100,13 +101,9 @@ bool VDPAUWriter::set()
 			featureEnables[1] = false;
 	}
 	featureEnables[2] = sets().getBool("VDPAUNoiseReductionEnabled");
-	featureEnables[3] = sets().getBool("VDPAUSharpnessEnabled");
 	noisereduction_lvl = sets().getDouble("VDPAUNoiseReductionLvl");
-	sharpness_lvl = sets().getDouble("VDPAUSharpnessLvl");
 	if (noisereduction_lvl < 0.0f || noisereduction_lvl > 1.0f)
 		noisereduction_lvl = 0.0f;
-	if (sharpness_lvl < -1.0f || sharpness_lvl > 1.0f)
-		sharpness_lvl = 0.0f;
 	quint32 scalingLvl = sets().getUInt("VDPAUHQScaling");
 	if (scalingLvl > scalingLevelsCount)
 		scalingLvl = 0;
@@ -161,6 +158,14 @@ bool VDPAUWriter::processParams(bool *)
 			const void *attributeValues[] = {&matrix};
 			vdp_video_mixer_set_attribute_values(mixer, 1, attributes, attributeValues);
 		}
+	}
+
+	const float _sharpness_lvl = getParam("Sharpness").toInt() / 100.0f;
+	if (_sharpness_lvl != sharpness_lvl)
+	{
+		sharpness_lvl = _sharpness_lvl;
+		featureEnables[3] = (sharpness_lvl != 0.0f);
+		setFeatures();
 	}
 
 	if (!isVisible())
@@ -245,6 +250,7 @@ bool VDPAUWriter::open()
 	addParam("Saturation");
 	addParam("Brightness");
 	addParam("Contrast");
+	addParam("Sharpness");
 
 	clr();
 

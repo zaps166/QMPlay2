@@ -75,8 +75,8 @@ private:
 #ifdef QMPlay2_VDPAU
 	QGroupBox *decoderVDPAUB;
 	QComboBox *vdpauDeintMethodB, *vdpauHQScalingB;
-	QCheckBox *noisereductionVDPAUB, *sharpnessVDPAUB;
-	Slider *noisereductionLvlVDPAUS, *sharpnessLvlVDPAUS;
+	QCheckBox *noisereductionVDPAUB;
+	Slider *noisereductionLvlVDPAUS;
 	QCheckBox *decoderVDPAU_NWB;
 #endif
 #ifdef QMPlay2_VAAPI

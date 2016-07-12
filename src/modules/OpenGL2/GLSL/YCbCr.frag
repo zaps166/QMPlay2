@@ -30,7 +30,6 @@ void main()
 		texture2D(uCr, vTexCoord)[0] - 0.5
 	);
 
-
 	if (uSharpness != 0.0)
 	{
 		// Kernel 3x3

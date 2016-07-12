@@ -66,6 +66,10 @@
         <source>Programmer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -1159,10 +1163,6 @@ amp</translation>
     <message>
         <source>Image scaling level</source>
         <translation>Nivel de escalado de imagen</translation>
-    </message>
-    <message>
-        <source>Sharpness</source>
-        <translation>Nitidez</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2576,33 +2576,37 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>VideoDock</name>
+    <name>VideoAdjustment</name>
     <message>
-        <source>Video</source>
-        <translation>Vídeo</translation>
-    </message>
-</context>
-<context>
-    <name>VideoEqualizer</name>
-    <message>
-        <source>Hue</source>
-        <translation>Matiz</translation>
+        <source>Brightness</source>
+        <translation>Brillo</translation>
     </message>
     <message>
         <source>Contrast</source>
         <translation>Contraste</translation>
     </message>
     <message>
+        <source>Saturation</source>
+        <translation>Saturación</translation>
+    </message>
+    <message>
+        <source>Hue</source>
+        <translation>Matiz</translation>
+    </message>
+    <message>
+        <source>Sharpness</source>
+        <translation>Nitidez</translation>
+    </message>
+    <message>
         <source>Reset</source>
         <translation>Reiniciar</translation>
     </message>
+</context>
+<context>
+    <name>VideoDock</name>
     <message>
-        <source>Brightness</source>
-        <translation>Brillo</translation>
-    </message>
-    <message>
-        <source>Saturation</source>
-        <translation>Saturación</translation>
+        <source>Video</source>
+        <translation>Vídeo</translation>
     </message>
 </context>
 <context>
@@ -2614,10 +2618,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;More filters</source>
         <translation>&amp;Mas filtros</translation>
-    </message>
-    <message>
-        <source>Video &amp;equalizer</source>
-        <translation>&amp;Ecualizador de vídeo</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
@@ -2633,6 +2633,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Spherical view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video &amp;adjustment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

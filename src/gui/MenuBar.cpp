@@ -18,7 +18,7 @@
 
 #include <MenuBar.hpp>
 
-#include <VideoEqualizer.hpp>
+#include <VideoAdjustment.hpp>
 #include <DockWidget.hpp>
 #include <Main.hpp>
 
@@ -295,12 +295,12 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 	QMenu(VideoFilters::tr("Video &filters"), parent)
 {
 	/** Korektor wideo */
-	videoEqualizerMenu = new QMenu(VideoFilters::tr("Video &equalizer"), this);
-	addMenu(videoEqualizerMenu);
+	videoAdjustmentMenu = new QMenu(VideoFilters::tr("Video &adjustment"), this);
+	addMenu(videoAdjustmentMenu);
 	QWidgetAction *widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(videoEqualizer = new VideoEqualizer);
-	videoEqualizer->setObjectName(videoEqualizerMenu->title().remove('&'));
-	videoEqualizerMenu->addAction(widgetAction);
+	widgetAction->setDefaultWidget(QMPlay2GUI.videoAdjustment);
+	QMPlay2GUI.videoAdjustment->setObjectName(videoAdjustmentMenu->title().remove('&'));
+	videoAdjustmentMenu->addAction(widgetAction);
 	/**/
 	addSeparator();
 	newAction(VideoFilters::tr("&Spherical view"), this, QKeySequence("Ctrl+3"), spherical, true, QIcon(), true);

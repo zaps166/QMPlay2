@@ -66,7 +66,7 @@ public:
 	bool setSpherical();
 	bool setFlip();
 	bool setRotate90();
-	void setVideoEqualizer();
+	void setVideoAdjustment();
 	void setFrameSize(int w, int h);
 	void setARatio(double aRatio, double sar);
 	void setZoom();

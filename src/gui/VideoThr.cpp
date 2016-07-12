@@ -18,6 +18,7 @@
 
 #include <VideoThr.hpp>
 
+#include <VideoAdjustment.hpp>
 #include <PlayClass.hpp>
 #include <Main.hpp>
 
@@ -115,6 +116,7 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 }
 VideoThr::~VideoThr()
 {
+	QMPlay2GUI.videoAdjustment->enableControls();
 	delete playC.osd;
 	playC.osd = NULL;
 	delete subtitles;
@@ -148,12 +150,9 @@ bool VideoThr::setRotate90()
 {
 	return writer->modParam("Rotate90", playC.rotate90);
 }
-void VideoThr::setVideoEqualizer()
+void VideoThr::setVideoAdjustment()
 {
-	writer->modParam("Brightness", playC.Brightness);
-	writer->modParam("Saturation", playC.Saturation);
-	writer->modParam("Contrast", playC.Contrast);
-	writer->modParam("Hue", playC.Hue);
+	QMPlay2GUI.videoAdjustment->setModuleParam(writer);
 }
 void VideoThr::setFrameSize(int w, int h)
 {

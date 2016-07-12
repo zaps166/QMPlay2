@@ -16,38 +16,42 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOEQUALIZER_HPP
-#define VIDEOEQUALIZER_HPP
+#ifndef VIDEOADJUSTMENT_HPP
+#define VIDEOADJUSTMENT_HPP
 
 #include <QWidget>
 
+class ModuleParams;
 class QGridLayout;
 class QPushButton;
 class QLabel;
 class Slider;
 
-class VideoEqualizer : public QWidget
+class VideoAdjustment : public QWidget
 {
 	Q_OBJECT
 public:
-	VideoEqualizer();
+	VideoAdjustment();
+	~VideoAdjustment();
 
 	void restoreValues();
 	void saveValues();
+
+	void setModuleParam(ModuleParams *writer);
+	void enableControls();
 signals:
-	void valuesChanged(int b, int s, int c, int h);
+	void videoAdjustmentChanged();
 private slots:
 	void setValue(int);
 	void reset();
 private:
 	QGridLayout *layout;
-	enum CONTROLS {BRIGHTNESS, SATURATION, CONTRAST, HUE, CONTROLS_COUNT};
-	struct
+	struct Controls
 	{
 		QLabel *titleL, *valueL;
 		Slider *slider;
-	} controls[CONTROLS_COUNT];
+	} *controls;
 	QPushButton *resetB;
 };
 
-#endif //VIDEOEQUALIZER_HPP
+#endif //VIDEOADJUSTMENT_HPP

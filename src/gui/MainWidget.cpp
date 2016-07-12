@@ -47,7 +47,7 @@
 #include <Playlist.hpp>
 #include <AboutWidget.hpp>
 #include <AddressDialog.hpp>
-#include <VideoEqualizer.hpp>
+#include <VideoAdjustment.hpp>
 #include <VolWidget.hpp>
 
 using Functions::timeToStr;
@@ -100,6 +100,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	: updater(this)
 #endif
 {
+	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
 	QMPlay2GUI.mainW = this;
 
 #if UseMainWidgetTmpStyle
@@ -273,6 +274,8 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&QMPlay2Core, SIGNAL(statusBarMessage(const QString &, int)), this, SLOT(statusBarMessage(const QString &, int)));
 	connect(&QMPlay2Core, SIGNAL(showSettings(const QString &)), this, SLOT(showSettings(const QString &)));
 
+	connect(QMPlay2GUI.videoAdjustment, SIGNAL(videoAdjustmentChanged()), &playC, SLOT(videoAdjustmentChanged()));
+
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
 	connect(&playC, SIGNAL(updateLength(int)), this, SLOT(setSeekSMaximum(int)));
 	connect(&playC, SIGNAL(updatePos(int)), this, SLOT(updatePos(int)));
@@ -338,7 +341,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	menuBar->player->repeat->repeatActions[repeatMode]->trigger();
 
 	if (settings.getBool("RestoreVideoEqualizer"))
-		menuBar->playback->videoFilters->videoEqualizer->restoreValues();
+		QMPlay2GUI.videoAdjustment->restoreValues();
 
 	bool noplay = false;
 	while (!QMPArguments.first.isEmpty())
@@ -746,7 +749,6 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playback->screenShot, SIGNAL(triggered()), &playC, SLOT(screenShot()));
 	connect(menuBar->playback->subsFromFile, SIGNAL(triggered()), this, SLOT(browseSubsFile()));
 	connect(menuBar->playback->subtitlesSync, SIGNAL(triggered()), &playC, SLOT(setSubtitlesSync()));
-	connect(menuBar->playback->videoFilters->videoEqualizer, SIGNAL(valuesChanged(int, int, int, int)), &playC, SLOT(setVideoEqualizer(int, int, int, int)));
 	connect(menuBar->playback->videoFilters->spherical, SIGNAL(triggered(bool)), &playC, SLOT(setSpherical(bool)));
 	connect(menuBar->playback->videoFilters->hFlip, SIGNAL(triggered(bool)), &playC, SLOT(setHFlip(bool)));
 	connect(menuBar->playback->videoFilters->vFlip, SIGNAL(triggered(bool)), &playC, SLOT(setVFlip(bool)));
@@ -777,7 +779,7 @@ void MainWidget::createMenuBar()
 	secondMenu->addMenu(menuBar->widgets);
 	copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
 	copyMenu(secondMenu, menuBar->player);
-	copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoEqualizerMenu);
+	copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoAdjustmentMenu);
 	copyMenu(secondMenu, menuBar->options);
 	copyMenu(secondMenu, menuBar->help);
 	tray->setContextMenu(secondMenu);
@@ -1017,7 +1019,7 @@ void MainWidget::showSettings(const QString &moduleName)
 {
 	if (!settingsW)
 	{
-		settingsW = new SettingsWidget(sender() == menuBar->playback->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName, menuBar->playback->videoFilters->videoEqualizer);
+		settingsW = new SettingsWidget(sender() == menuBar->playback->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName, QMPlay2GUI.videoAdjustment);
 		connect(settingsW, SIGNAL(settingsChanged(int, bool)), &playC, SLOT(settingsChanged(int, bool)));
 		connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
 		connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));
@@ -1380,7 +1382,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 			settings.set("RepeatMode", i);
 			break;
 		}
-	menuBar->playback->videoFilters->videoEqualizer->saveValues();
+	QMPlay2GUI.videoAdjustment->saveValues();
 
 	hide();
 

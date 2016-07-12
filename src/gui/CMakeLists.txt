@@ -33,7 +33,7 @@ set(GUI_HDR
     EntryProperties.hpp
     AboutWidget.hpp
     AddressDialog.hpp
-    VideoEqualizer.hpp
+    VideoAdjustment.hpp
     Appearance.hpp
     VolWidget.hpp
 )
@@ -59,7 +59,7 @@ set(GUI_SRC
     EntryProperties.cpp
     AboutWidget.cpp
     AddressDialog.cpp
-    VideoEqualizer.cpp
+    VideoAdjustment.cpp
     Appearance.cpp
     VolWidget.cpp
 )

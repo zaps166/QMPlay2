@@ -34,6 +34,7 @@ class DemuxerThr;
 class VideoThr;
 class AudioThr;
 class Demuxer;
+class Slider;
 class LibASS;
 
 enum {SEEK_NOWHERE = -1, SEEK_STREAM_RELOAD = -2 /* Seeks to current position after stream reload */};
@@ -132,8 +133,6 @@ private:
 	int choosenAudioStream, choosenVideoStream, choosenSubtitlesStream;
 	QString choosenAudioLang, choosenSubtitlesLang;
 
-	int Brightness, Saturation, Contrast, Hue;
-
 	double maxThreshold, fps;
 
 	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend;
@@ -156,7 +155,7 @@ private slots:
 	void settingsChanged(int, bool);
 	void videoResized(int, int);
 
-	void setVideoEqualizer(int, int, int, int);
+	void videoAdjustmentChanged();
 
 	void setAB();
 	void speedUp();

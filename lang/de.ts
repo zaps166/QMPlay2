@@ -66,6 +66,10 @@
         <source>Programmer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -1211,10 +1215,6 @@ amp</translation>
     <message>
         <source>Noise reduction</source>
         <translation>Noise Reduction</translation>
-    </message>
-    <message>
-        <source>Sharpness</source>
-        <translation>Schärfe</translation>
     </message>
     <message>
         <source>Using the program via MPRIS2 interface</source>
@@ -2576,17 +2576,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>VideoDock</name>
-    <message>
-        <source>Video</source>
-        <translation>Video</translation>
-    </message>
-</context>
-<context>
-    <name>VideoEqualizer</name>
+    <name>VideoAdjustment</name>
     <message>
         <source>Brightness</source>
         <translation>Helligkeit</translation>
+    </message>
+    <message>
+        <source>Contrast</source>
+        <translation>Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -2597,20 +2594,23 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Farbton</translation>
     </message>
     <message>
+        <source>Sharpness</source>
+        <translation>Schärfe</translation>
+    </message>
+    <message>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
+</context>
+<context>
+    <name>VideoDock</name>
     <message>
-        <source>Contrast</source>
-        <translation>Kontrast</translation>
+        <source>Video</source>
+        <translation>Video</translation>
     </message>
 </context>
 <context>
     <name>VideoFilters</name>
-    <message>
-        <source>Video &amp;equalizer</source>
-        <translation>Video &amp;Equalizer</translation>
-    </message>
     <message>
         <source>Video &amp;filters</source>
         <translation>Video &amp;Filter</translation>
@@ -2633,6 +2633,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Spherical view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video &amp;adjustment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

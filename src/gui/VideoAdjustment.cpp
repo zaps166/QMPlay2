@@ -16,8 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <VideoEqualizer.hpp>
+#include <VideoAdjustment.hpp>
 
+#include <ModuleParams.hpp>
 #include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 #include <Slider.hpp>
@@ -27,32 +28,37 @@
 #include <QVariant>
 #include <QLabel>
 
-VideoEqualizer::VideoEqualizer()
+enum CONTROLS
 {
-	layout = new QGridLayout;
+	BRIGHTNESS,
+	CONTRAST,
+	SATURATION,
+	HUE,
+	SHARPNESS,
 
+	CONTROLS_COUNT
+};
+static const char *ControlsNames[CONTROLS_COUNT] = {
+	QT_TRANSLATE_NOOP("VideoAdjustment", "Brightness"),
+	QT_TRANSLATE_NOOP("VideoAdjustment", "Contrast"),
+	QT_TRANSLATE_NOOP("VideoAdjustment", "Saturation"),
+	QT_TRANSLATE_NOOP("VideoAdjustment", "Hue"),
+	QT_TRANSLATE_NOOP("VideoAdjustment", "Sharpness")
+};
+
+VideoAdjustment::VideoAdjustment() :
+	layout(new QGridLayout),
+	controls(new Controls[CONTROLS_COUNT])
+{
 	int i;
-	for (i = BRIGHTNESS; i < CONTROLS_COUNT; ++i)
+	for (i = 0; i < CONTROLS_COUNT; ++i)
 	{
 		QLabel *&titleL = controls[i].titleL;
 		QLabel *&valueL = controls[i].valueL;
 		Slider *&slider = controls[i].slider;
 
-		switch (i)
-		{
-			case BRIGHTNESS:
-				titleL = new QLabel(tr("Brightness") + ": ");
-				break;
-			case SATURATION:
-				titleL = new QLabel(tr("Saturation") + ": ");
-				break;
-			case CONTRAST:
-				titleL = new QLabel(tr("Contrast") + ": ");
-				break;
-			case HUE:
-				titleL = new QLabel(tr("Hue") + ": ");
-				break;
-		}
+		titleL = new QLabel(tr(ControlsNames[i]) + ": ");
+		titleL->setAlignment(Qt::AlignRight);
 
 		valueL = new QLabel("0");
 
@@ -81,35 +87,44 @@ VideoEqualizer::VideoEqualizer()
 
 	setLayout(layout);
 }
-
-void VideoEqualizer::restoreValues()
+VideoAdjustment::~VideoAdjustment()
 {
-	controls[BRIGHTNESS].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Brightness"));
-	controls[SATURATION].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Saturation"));
-	controls[CONTRAST].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Contrast"));
-	controls[HUE].slider->setValue(QMPlay2Core.getSettings().getInt("VideoEqualizer/Hue"));
-}
-void VideoEqualizer::saveValues()
-{
-	QMPlay2Core.getSettings().set("VideoEqualizer/Brightness", controls[BRIGHTNESS].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Saturation", controls[SATURATION].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Contrast", controls[CONTRAST].slider->value());
-	QMPlay2Core.getSettings().set("VideoEqualizer/Hue", controls[HUE].slider->value());
+	delete[] controls;
 }
 
-void VideoEqualizer::setValue(int v)
+void VideoAdjustment::restoreValues()
+{
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+		controls[i].slider->setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
+}
+void VideoAdjustment::saveValues()
+{
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], controls[i].slider->value());
+}
+
+void VideoAdjustment::setModuleParam(ModuleParams *writer)
+{
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+	{
+		controls[i].slider->setEnabled(writer->hasParam(ControlsNames[i]));
+		writer->modParam(ControlsNames[i], controls[i].slider->value());
+	}
+}
+
+void VideoAdjustment::enableControls()
+{
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+		controls[i].slider->setEnabled(true);
+}
+
+void VideoAdjustment::setValue(int v)
 {
 	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v));
-	emit valuesChanged
-	(
-		controls[BRIGHTNESS].slider->value(),
-		controls[SATURATION].slider->value(),
-		controls[CONTRAST].slider->value(),
-		controls[HUE].slider->value()
-	);
+	emit videoAdjustmentChanged();
 }
-void VideoEqualizer::reset()
+void VideoAdjustment::reset()
 {
-	for (int i = BRIGHTNESS; i < CONTROLS_COUNT; ++i)
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		controls[i].slider->setValue(0);
 }

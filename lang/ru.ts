@@ -66,6 +66,10 @@
         <source>Programmer</source>
         <translation>Разработчик</translation>
     </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -1211,10 +1215,6 @@ amp</source>
     <message>
         <source>Noise reduction</source>
         <translation>Шумоподавление</translation>
-    </message>
-    <message>
-        <source>Sharpness</source>
-        <translation>Резкость</translation>
     </message>
     <message>
         <source>Using the program via MPRIS2 interface</source>
@@ -2577,17 +2577,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>VideoDock</name>
-    <message>
-        <source>Video</source>
-        <translation>Видео</translation>
-    </message>
-</context>
-<context>
-    <name>VideoEqualizer</name>
+    <name>VideoAdjustment</name>
     <message>
         <source>Brightness</source>
         <translation>Яркость</translation>
+    </message>
+    <message>
+        <source>Contrast</source>
+        <translation>Контрастность</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -2598,20 +2595,23 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Тон</translation>
     </message>
     <message>
+        <source>Sharpness</source>
+        <translation>Резкость</translation>
+    </message>
+    <message>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
+</context>
+<context>
+    <name>VideoDock</name>
     <message>
-        <source>Contrast</source>
-        <translation>Контрастность</translation>
+        <source>Video</source>
+        <translation>Видео</translation>
     </message>
 </context>
 <context>
     <name>VideoFilters</name>
-    <message>
-        <source>Video &amp;equalizer</source>
-        <translation>&amp;Видео эквалайзер</translation>
-    </message>
     <message>
         <source>Video &amp;filters</source>
         <translation>Видеофильт&amp;ры</translation>
@@ -2635,6 +2635,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Spherical view</source>
         <translation>&amp;Сферический вид</translation>
+    </message>
+    <message>
+        <source>Video &amp;adjustment</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

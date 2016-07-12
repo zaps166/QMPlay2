@@ -66,8 +66,6 @@ FFmpeg::FFmpeg() :
 		set("VDPAUDeintMethod", 1);
 	init("VDPAUNoiseReductionEnabled", false);
 	init("VDPAUNoiseReductionLvl", 0.0);
-	init("VDPAUSharpnessEnabled", false);
-	init("VDPAUSharpnessLvl", 0.0);
 	init("VDPAUHQScaling", 0);
 	if (getUInt("VDPAUHQScaling") > 9)
 		set("VDPAUHQScaling", 0);
@@ -211,17 +209,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
 	connect(noisereductionLvlVDPAUS, SIGNAL(valueChanged(int)), this, SLOT(setVDPAU()));
 
-	sharpnessVDPAUB = new QCheckBox(tr("Sharpness"));
-	sharpnessVDPAUB->setChecked(sets().getBool("VDPAUSharpnessEnabled"));
-	connect(sharpnessVDPAUB, SIGNAL(clicked()), this, SLOT(checkEnables()));
-	connect(sharpnessVDPAUB, SIGNAL(clicked()), this, SLOT(setVDPAU()));
-	sharpnessLvlVDPAUS = new Slider;
-	sharpnessLvlVDPAUS->setRange(-50, 50);
-	sharpnessLvlVDPAUS->setTickInterval(50);
-	sharpnessLvlVDPAUS->setTickPosition(QSlider::TicksBelow);
-	sharpnessLvlVDPAUS->setValue(sets().getDouble("VDPAUSharpnessLvl") * 50);
-	connect(sharpnessLvlVDPAUS, SIGNAL(valueChanged(int)), this, SLOT(setVDPAU()));
-
 	checkEnables();
 
 	QGridLayout *vdpauLayout = new QGridLayout(decoderVDPAUB);
@@ -231,8 +218,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	vdpauLayout->addWidget(vdpauHQScalingB, 1, 1, 1, 1);
 	vdpauLayout->addWidget(noisereductionVDPAUB, 2, 0, 1, 1);
 	vdpauLayout->addWidget(noisereductionLvlVDPAUS, 2, 1, 1, 1);
-	vdpauLayout->addWidget(sharpnessVDPAUB, 3, 0, 1, 1);
-	vdpauLayout->addWidget(sharpnessLvlVDPAUS, 3, 1, 1, 1);
 
 
 	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
@@ -342,14 +327,11 @@ void ModuleSettingsWidget::setVDPAU()
 {
 	sets().set("VDPAUNoiseReductionEnabled", noisereductionVDPAUB->isChecked());
 	sets().set("VDPAUNoiseReductionLvl", noisereductionLvlVDPAUS->value() / 50.0);
-	sets().set("VDPAUSharpnessEnabled", sharpnessVDPAUB->isChecked());
-	sets().set("VDPAUSharpnessLvl", sharpnessLvlVDPAUS->value() / 50.0);
 	SetInstance<VDPAUWriter>();
 }
 void ModuleSettingsWidget::checkEnables()
 {
 	noisereductionLvlVDPAUS->setEnabled(noisereductionVDPAUB->isChecked());
-	sharpnessLvlVDPAUS->setEnabled(sharpnessVDPAUB->isChecked());
 }
 #endif
 
