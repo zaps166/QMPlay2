@@ -47,8 +47,6 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("Saturation");
 	addParam("Brightness");
 	addParam("Contrast");
-	addParam("Hue");
-	addParam("Sharpness");
 
 	SetModule(module);
 }
@@ -200,6 +198,11 @@ bool OpenGL2Writer::open()
 #ifdef VSYNC_SETTINGS
 		drawable->setVSync(vSync);
 #endif
+		if (drawable->glVer >= 30)
+		{
+			addParam("Hue");
+			addParam("Sharpness");
+		}
 		return true;
 	}
 	return false;
