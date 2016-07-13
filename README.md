@@ -24,9 +24,7 @@ Table of Contents
 
 ####Easy installation on Windows (XP or higher)
 
-- Download the newest "*.exe" file from http://sourceforge.net/projects/zaps166/files/QMPlay2 for your CPU architecture and install it:
-	- 64-bit Windows: http://zaps166.sf.net/?QMPlay2Download=Win64Installer
-	- 32-bit Windows: http://zaps166.sf.net/?QMPlay2Download=Win32Installer
+- [Download the newest Windows installer](https://github.com/zaps166/QMPlay2/releases).
 
 ####Easy installation on Arch Linux / Manjaro Linux
 
@@ -65,8 +63,8 @@ Some YouTube videos don't work without external "youtube-dl" software. You must 
 
 ####Windows
 
-- Watch the video: http://zaps166.sf.net/downloads/QMPlay2_youtube-dl.mp4
-- If the video doesn't play inside the web browser - paste the address to QMPlay2 (Ctrl+V) and play it!
+- [Watch the video](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Videos/QMPlay2_youtube-dl.mp4).
+- If the video doesn't play inside the web browser - copy the address, paste it to QMPlay2 (Ctrl+V) and play it!
 - Currently (as of 30.06.2016) "youtube-dl.exe" needs Visual Studio 2010 Redistributable Package.
 
 ####Arch Linux / Manjaro Linux
