@@ -26,6 +26,10 @@ Table of Contents
 
 - [Download the newest Windows installer](https://github.com/zaps166/QMPlay2/releases).
 
+####Easy installation on Ubuntu
+
+- [Download the newest Ubuntu DEB package](https://github.com/zaps166/QMPlay2/releases).
+
 ####Easy installation on Arch Linux / Manjaro Linux
 
 - Arch Linux only: Install AUR client (e.g. yaourt),
