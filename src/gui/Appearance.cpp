@@ -31,6 +31,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QGroupBox>
 #include <QSettings>
 #include <QComboBox>
@@ -248,62 +249,24 @@ Appearance::Appearance(QWidget *p) :
 	useColorsB = new QGroupBox(tr("Use custom colors"));
 	useColorsB->setCheckable(true);
 
-	QLabel *buttonL = new QLabel(tr("Buttons color") + ":");
-	QLabel *windowL = new QLabel(tr("Window color") + ":");
-	QLabel *shadowL = new QLabel(tr("Border color") + ":");
-	QLabel *highlightL = new QLabel(tr("Highlight color") + ":");
-	QLabel *baseL = new QLabel(tr("Base color") + ":");
-	QLabel *textL = new QLabel(tr("Text color") + ":");
-	QLabel *highlightedTextL = new QLabel(tr("Highlighted text color") + ":");
-	QLabel *sliderButtonL = new QLabel(tr("Slider button color") + ":");
-
-	buttonC = new ColorButton(false);
-	windowC = new ColorButton(false);
-	shadowC = new ColorButton(false);
-	highlightC = new ColorButton(false);
-	baseC = new ColorButton(false);
-	textC = new ColorButton(false);
-	highlightedTextC = new ColorButton(false);
-	sliderButtonC = new ColorButton(false);
-
-	int layout_row = 0;
-	layout = new QGridLayout(useColorsB);
-	layout->addWidget(buttonL, layout_row, 0, 1, 1);
-	layout->addWidget(buttonC, layout_row++, 1, 1, 1);
-	layout->addWidget(windowL, layout_row, 0, 1, 1);
-	layout->addWidget(windowC, layout_row++, 1, 1, 1);
-	layout->addWidget(shadowL, layout_row, 0, 1, 1);
-	layout->addWidget(shadowC, layout_row++, 1, 1, 1);
-	layout->addWidget(highlightL, layout_row, 0, 1, 1);
-	layout->addWidget(highlightC, layout_row++, 1, 1, 1);
-	layout->addWidget(baseL, layout_row, 0, 1, 1);
-	layout->addWidget(baseC, layout_row++, 1, 1, 1);
-	layout->addWidget(textL, layout_row, 0, 1, 1);
-	layout->addWidget(textC, layout_row++, 1, 1, 1);
-	layout->addWidget(highlightedTextL, layout_row, 0, 1, 1);
-	layout->addWidget(highlightedTextC, layout_row++, 1, 1, 1);
-	layout->addWidget(sliderButtonL, layout_row, 0, 1, 1);
-	layout->addWidget(sliderButtonC, layout_row++, 1, 1, 1);
-	layout->setMargin(3);
+	QFormLayout *formLayout = new QFormLayout(useColorsB);
+	formLayout->addRow(tr("Buttons color") + ":", buttonC = new ColorButton(false));
+	formLayout->addRow(tr("Window color") + ":", windowC = new ColorButton(false));
+	formLayout->addRow(tr("Border color") + ":", shadowC = new ColorButton(false));
+	formLayout->addRow(tr("Highlight color") + ":", highlightC = new ColorButton(false));
+	formLayout->addRow(tr("Base color") + ":", baseC = new ColorButton(false));
+	formLayout->addRow(tr("Text color") + ":", textC = new ColorButton(false));
+	formLayout->addRow(tr("Highlighted text color") + ":", highlightedTextC = new ColorButton(false));
+	formLayout->addRow(tr("Slider button color") + ":", sliderButtonC = new ColorButton(false));
+	formLayout->setMargin(3);
 
 
 	gradientB = new QGroupBox(tr("Gradient in the video window"));
 
-	QLabel *grad1L = new QLabel(tr("The color on the top and bottom") + ":");
-	QLabel *grad2L = new QLabel(tr("Color in the middle") + ":");
-	QLabel *qmpTxtL = new QLabel(tr("Text color") + ":");
-
-	grad1C = new ColorButton(false);
-	grad2C = new ColorButton(false);
-	qmpTxtC = new ColorButton(false);
-
-	layout = new QGridLayout(gradientB);
-	layout->addWidget(grad1L, 0, 0, 1, 1);
-	layout->addWidget(grad1C, 0, 1, 1, 1);
-	layout->addWidget(grad2L, 1, 0, 1, 1);
-	layout->addWidget(grad2C, 1, 1, 1, 1);
-	layout->addWidget(qmpTxtL, 2, 0, 1, 1);
-	layout->addWidget(qmpTxtC, 2, 1, 1, 1);
+	formLayout = new QFormLayout(gradientB);
+	formLayout->addRow(tr("The color on the top and bottom") + ":", grad1C = new ColorButton(false));
+	formLayout->addRow(tr("Color in the middle") + ":", grad2C = new ColorButton(false));
+	formLayout->addRow(tr("Text color") + ":", qmpTxtC = new ColorButton(false));
 
 
 	useWallpaperB = new QGroupBox(tr("Wallpaper in the main window"));
