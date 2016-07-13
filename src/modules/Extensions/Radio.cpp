@@ -108,7 +108,7 @@ void Radio::visibilityChanged(bool v)
 		progressB->show();
 
 		net = new QNetworkAccessManager(this);
-		QNetworkRequest request(QUrl("http://zaps166.sourceforge.net/downloads/RadioList"));
+		QNetworkRequest request(QUrl("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList"));
 		request.setRawHeader("User-Agent", QMPlay2UserAgent);
 		QNetworkReply *netReply = net->get(request);
 		connect(netReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
@@ -165,8 +165,6 @@ void Radio::finished()
 	bool err = false;
 	if (!netReply->error())
 	{
-		progressB->deleteLater();
-		progressB = NULL;
 		QByteArray RadioList = netReply->readAll();
 		if (RadioList.left(4) != "NXRL")
 			err = true;
@@ -210,6 +208,11 @@ void Radio::finished()
 		infoL->setText(tr("Error while downloading list"));
 		progressB->hide();
 		once = false;
+	}
+	else
+	{
+		progressB->deleteLater();
+		progressB = NULL;
 	}
 	netReply->deleteLater();
 	net->deleteLater();

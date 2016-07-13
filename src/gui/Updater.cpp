@@ -39,7 +39,7 @@ Updater::Updater(QWidget *parent) :
 	busy(false)
 {
 	setWindowTitle(tr("QMPlay2 updates"));
-	infoFile.setFileName(QDir::tempPath() + "/QMPlay2_download_info." + QString::number(qrand()));
+	infoFile.setFileName(QDir::tempPath() + "/QMPlay2UpdaterURLs." + QString::number(qrand()));
 	updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer");
 #ifdef Q_OS_WIN
 	updateFile.setFileName(updateFile.fileName() + ".exe");
@@ -73,12 +73,17 @@ Updater::~Updater()
 	}
 }
 
+bool Updater::downloading() const
+{
+	return busy && updateFile.isOpen() && updateFile.size() > 0;
+}
+
 void Updater::downloadUpdate()
 {
 	if (!busy && infoFile.open(QFile::WriteOnly | QFile::Truncate))
 	{
-		QNetworkRequest request(QUrl("http://zaps166.sourceforge.net/?dwn=qmplay2/QMPlay2_download_info"));
-		request.setRawHeader("User-Agent", "QMPlay2");
+		QNetworkRequest request(QUrl("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater"));
+		request.setRawHeader("User-Agent", QMPlay2UserAgent);
 		QNetworkReply *reply = net.get(request);
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
 		infoL->setText(tr("Checking for updates"));

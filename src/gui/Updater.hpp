@@ -35,10 +35,7 @@ public:
 	Updater(QWidget *);
 	~Updater();
 
-	inline bool downloading() const
-	{
-		return busy && updateFile.isOpen() && updateFile.size() > 0;
-	}
+	bool downloading() const;
 public slots:
 	void downloadUpdate();
 private slots:
