@@ -52,7 +52,7 @@ QMPLAY2_EXPORT_PLUGIN(PulseAudio)
 /**/
 
 #include <QDoubleSpinBox>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QCheckBox>
 #include <QLabel>
 
@@ -62,18 +62,15 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
-	QLabel *delayL = new QLabel(tr("Delay") + ": ");
-
 	delayB = new QDoubleSpinBox;
 	delayB->setRange(0.01, 1.0);
 	delayB->setSingleStep(0.01);
 	delayB->setSuffix(" " + tr("sec"));
 	delayB->setValue(sets().getDouble("Delay"));
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
-	layout->addWidget(delayL, 1, 0, 1, 1);
-	layout->addWidget(delayB, 1, 1, 1, 1);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(enabledB);
+	layout->addRow(tr("Delay") + ": ", delayB);
 }
 
 void ModuleSettingsWidget::saveSettings()
