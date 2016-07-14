@@ -242,6 +242,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	#endif
 #endif
 
+	/* Hurry up */
 	hurryUpB = new QGroupBox(tr("Hurry up"));
 	hurryUpB->setCheckable(true);
 	hurryUpB->setChecked(sets().getBool("HurryUP"));
