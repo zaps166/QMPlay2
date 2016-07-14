@@ -406,6 +406,34 @@ static void signal_handler(int s)
 	}
 }
 
+#ifdef Q_OS_WIN
+static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
+{
+	if (code == HC_ACTION && wparam == WM_KEYDOWN)
+	{
+		PKBDLLHOOKSTRUCT kbd = (PKBDLLHOOKSTRUCT)lparam;
+		if (kbd)
+		{
+			switch (kbd->vkCode)
+			{
+				case VK_MEDIA_NEXT_TRACK:
+					QMPlay2Core.processParam("next");
+					return 1;
+				case VK_MEDIA_PREV_TRACK:
+					QMPlay2Core.processParam("prev");
+					return 1;
+				case VK_MEDIA_STOP:
+					QMPlay2Core.processParam("stop");
+					return 1;
+				case VK_MEDIA_PLAY_PAUSE:
+					QMPlay2Core.processParam("toggle");
+					return 1;
+			}
+		}
+	}
+	return CallNextHookEx(NULL, code, wparam, lparam);
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -521,6 +549,10 @@ int main(int argc, char *argv[])
 		QApplication::setQuitOnLastWindowClosed(false);
 	QMPlay2GUI.langPath = sharePath + "/lang/";
 
+#ifdef Q_OS_WIN
+	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(NULL), 0);
+#endif
+
 	qsrand(time(NULL));
 
 	do
@@ -623,6 +655,10 @@ int main(int argc, char *argv[])
 
 		delete QMPlay2GUI.pipe;
 	} while (QMPlay2GUI.restartApp);
+
+#ifdef Q_OS_WIN
+	UnhookWindowsHookEx(keyboardHook);
+#endif
 
 	delete translator;
 
