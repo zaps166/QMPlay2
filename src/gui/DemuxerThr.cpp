@@ -113,7 +113,9 @@ void DemuxerThr::loadImage()
 			}
 			if (img.isNull() && !artist.isEmpty() && (!title.isEmpty() || !album.isEmpty())) //Ładowanie okładki z cache
 			{
-				const QString coverPath = getCoverFile(title, artist, album);
+				QString coverPath = getCoverFile(title, artist, album);
+				if (!title.isEmpty() && !album.isEmpty() && !QFile::exists(coverPath)) //Try to load cover for title if album cover doesn't exist
+					coverPath = getCoverFile(title, artist, QString());
 				img = QImage(coverPath);
 				if (!img.isNull())
 					emit QMPlay2Core.coverFile(coverPath);
@@ -349,7 +351,7 @@ void DemuxerThr::run()
 	demuxerReady = true;
 
 	updateCoverAndPlaying();
-	connect(&QMPlay2Core, SIGNAL(updateCover(const QString &, const QString &, const QString &, const QByteArray &)), this, SLOT(updateCover(const QString &, const QString &, const QString &, const QByteArray &)));
+	connect(&QMPlay2Core, SIGNAL(updateCover(QString, QString, QString, QByteArray)), this, SLOT(updateCover(QString, QString, QString, QByteArray)));
 
 	if (forwardPackets == 1 || localStream || unknownLength)
 		PacketBuffer::setBackwardPackets((backwardPackets = 0));
@@ -940,7 +942,7 @@ void DemuxerThr::updateCover(const QString &title, const QString &artist, const 
 	const QImage coverImg = QImage::fromData(cover);
 	if (!coverImg.isNull())
 	{
-		if (this->title == title && this->artist == artist && this->album == album)
+		if (this->title == title && this->artist == artist && (this->album == album || (album.isEmpty() && !title.isEmpty())))
 			emit playC.updateImage(coverImg);
 		QDir dir(QMPlay2Core.getSettingsDir());
 		dir.mkdir("Covers");

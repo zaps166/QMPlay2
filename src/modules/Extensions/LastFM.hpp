@@ -50,7 +50,7 @@ public:
 private:
 	bool set();
 
-	void getAlbumCover(const QString &title, const QString &artist, const QString &album);
+	void getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum = false);
 
 	Q_SLOT void login();
 	void logout(bool canClear = true);

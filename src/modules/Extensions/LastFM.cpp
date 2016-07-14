@@ -18,6 +18,7 @@
 
 #include <LastFM.hpp>
 
+static const char audioScrobbler2URL[] = "https://ws.audioscrobbler.com/2.0";
 static const char api_key[] = "b1165c9688c2fcf29fc74c2ab62ffd90";
 static const char secret[]  = "e36ce24a59f45514daad8fccec294c34";
 static const int scrobbleSec = 5;
@@ -77,26 +78,43 @@ bool LastFM::set()
 	return true;
 }
 
-void LastFM::getAlbumCover(const QString &title, const QString &artist, const QString &album)
+void LastFM::getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum)
 {
-	static const QString infoURL = "http://ws.audioscrobbler.com/2.0/?method=%1.getInfo&api_key=%4&artist=%2&%1=%3";
+	/*
+	 * Get cover for artist and album.
+	 * If album is not specified or cover art for album doesn't exist - get cover art for title and artist.
+	 * If title is not specified - do nothing. If cover art for title doesn't exist - set title as album and try again.
+	 * In the last mode, LastFM gets artist and album again (possibly with other album name), but QMPlay2 gets only artist and title.
+	*/
 	if (!artist.isEmpty() && (!title.isEmpty() || !album.isEmpty()))
 	{
-		const QString url = infoURL.arg(album.isEmpty() ? "track" : "album").arg(artist).arg(album.isEmpty() ? title : album).arg(api_key);
+		const QString titleEncoded  = title.toUtf8().toPercentEncoding();
+		const QString artistEncoded = artist.toUtf8().toPercentEncoding();
+		const QString albumEncoded  = album.toUtf8().toPercentEncoding();
+
+		const QString trackOrAlbum = (albumEncoded.isEmpty() ? "track" : "album");
+
+		QString url = audioScrobbler2URL;
+		url += QString("/?method=%1.getInfo").arg(trackOrAlbum);
+		url += QString("&api_key=%1").arg(api_key);
+		url += QString("&artist=%1").arg(artistEncoded);
+		url += QString("&%1=%2").arg(trackOrAlbum).arg(albumEncoded.isEmpty() ? titleEncoded : albumEncoded);
+
 		if (coverReply)
 		{
 			disconnect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 			coverReply->deleteLater();
 		}
 		coverReply = net.get(QNetworkRequest(url));
-		coverReply->setProperty("taa", QStringList() << title << artist << album);
+		coverReply->setProperty("taa", QStringList() << (titleAsAlbum ? album : title) << artist << (titleAsAlbum ? QString() : album));
+		coverReply->setProperty("titleAsAlbum", titleAsAlbum);
 		connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 	}
 }
 
 void LastFM::login()
 {
-	static const QString getSessionURL = "http://ws.audioscrobbler.com/2.0/?method=auth.getmobilesession&username=%1&authToken=%2&api_key=%3&api_sig=%4";
+	static const QString getSessionURL = audioScrobbler2URL + QString("/?method=auth.getmobilesession&username=%1&authToken=%2&api_key=%3&api_sig=%4");
 	if (!loginReply && !user.isEmpty() && md5pass.length() == 32)
 	{
 		const QString auth_token = QCryptographicHash::hash(user.toUtf8() + md5pass.toUtf8(), QCryptographicHash::Md5).toHex();
@@ -127,10 +145,10 @@ void LastFM::logout(bool canClear)
 
 void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 {
-	static const QString audioScrobbler2URL = "http://ws.audioscrobbler.com/2.0";
 	if (!session_key.isEmpty())
 	{
-		QNetworkRequest request(audioScrobbler2URL);
+		static const QUrl requestUrl(audioScrobbler2URL);
+		QNetworkRequest request(requestUrl);
 		QString api_sig;
 
 		request.setRawHeader("content-type", "application/x-www-form-urlencoded");
@@ -198,29 +216,35 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
 
 void LastFM::albumFinished()
 {
-	if (!coverReply->error())
+	const bool isCoverImage = !coverReply->url().toString().contains("api_key");
+	const bool titleAsAlbum = coverReply->property("titleAsAlbum").toBool();
+	const QStringList taa = coverReply->property("taa").toStringList();
+	const QByteArray reply = coverReply->readAll();
+	bool coverNotFound = false;
+	if (coverReply->error())
 	{
-		const QByteArray reply = coverReply->readAll();
-		if (!coverReply->url().toString().contains("api_key"))
-		{
-			const QStringList taa = coverReply->property("taa").toStringList();
+		if (!isCoverImage && reply.contains("error code=\"6\""))
+			coverNotFound = true;
+	}
+	else
+	{
+		if (isCoverImage)
 			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
-		}
-		else foreach (const QString &size, imageSizes)
+		else
 		{
-			int idx = reply.indexOf(size);
-			if (idx > -1)
+			foreach (const QString &size, imageSizes)
 			{
-				idx = reply.indexOf("http:", idx += size.length());
+				int idx = reply.indexOf(size);
 				if (idx > -1)
 				{
-					int end_idx = reply.indexOf("<", idx);
-					if (end_idx > -1)
+					idx += size.length();
+					const int end_idx = reply.indexOf("<", idx);
+					idx = reply.indexOf("http", idx);
+					if (idx > -1 && end_idx > -1 && end_idx > idx)
 					{
 						const QUrl imgUrl = QUrl(reply.mid(idx, end_idx - idx));
 						if (imgUrl.toString().contains("noimage"))
 							continue;
-						const QVariant taa = coverReply->property("taa");
 						coverReply->deleteLater();
 						coverReply = net.get(QNetworkRequest(imgUrl));
 						coverReply->setProperty("taa", taa);
@@ -229,6 +253,22 @@ void LastFM::albumFinished()
 					}
 				}
 			}
+			coverNotFound = true;
+		}
+	}
+	if (coverNotFound && !titleAsAlbum)
+	{
+		if (taa[2].isEmpty())
+		{
+			 //Can't find the track, try find the album with track name
+			getAlbumCover(QString(), taa[1], taa[0], true); //This also will delete the old "coverReply"
+			return;
+		}
+		else if (!taa[0].isEmpty() && !taa[1].isEmpty() && !taa[2].isEmpty())
+		{
+			 //Can't find the album, try find the track
+			getAlbumCover(taa[0], taa[1], QString()); //This also will delete the old "coverReply"
+			return;
 		}
 	}
 	coverReply->deleteLater();
