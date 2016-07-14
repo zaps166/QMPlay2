@@ -417,16 +417,16 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 			switch (kbd->vkCode)
 			{
 				case VK_MEDIA_NEXT_TRACK:
-					QMPlay2Core.processParam("next");
+					emit QMPlay2Core.processParam("next");
 					return 1;
 				case VK_MEDIA_PREV_TRACK:
-					QMPlay2Core.processParam("prev");
+					emit QMPlay2Core.processParam("prev");
 					return 1;
 				case VK_MEDIA_STOP:
-					QMPlay2Core.processParam("stop");
+					emit QMPlay2Core.processParam("stop");
 					return 1;
 				case VK_MEDIA_PLAY_PAUSE:
-					QMPlay2Core.processParam("toggle");
+					emit QMPlay2Core.processParam("toggle");
 					return 1;
 			}
 		}
