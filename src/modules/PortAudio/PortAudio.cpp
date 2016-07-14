@@ -62,7 +62,7 @@ QMPLAY2_EXPORT_PLUGIN(PortAudio)
 /**/
 
 #include <QDoubleSpinBox>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QPushButton>
 #include <QComboBox>
 #include <QCheckBox>
@@ -74,15 +74,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("WriterEnabled"));
 
-	QLabel *delayL = new QLabel(tr("Delay") + ": ");
-
 	delayB = new QDoubleSpinBox;
 	delayB->setRange(0.01, 1.0);
 	delayB->setSingleStep(0.01);
 	delayB->setSuffix(" " + tr("sec"));
 	delayB->setValue(sets().getDouble("Delay"));
-
-	QLabel *devicesL = new QLabel(tr("Playback device") + ": ");
 
 	devicesB = new QComboBox;
 	devicesB->addItems(QStringList(tr("Default")) + PortAudioCommon::getOutputDeviceNames());
@@ -93,13 +89,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	defaultDevs->setText(tr("Find default output device"));
 	connect(defaultDevs, SIGNAL(clicked()), this, SLOT(defaultDevs()));
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
-	layout->addWidget(devicesL, 1, 0, 1, 1);
-	layout->addWidget(devicesB, 1, 1, 1, 1);
-	layout->addWidget(defaultDevs, 2, 0, 1, 2);
-	layout->addWidget(delayL, 3, 0, 1, 1);
-	layout->addWidget(delayB, 3, 1, 1, 1);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(enabledB);
+	layout->addRow(tr("Playback device") + ": ", devicesB);
+	layout->addRow(defaultDevs);
+	layout->addRow(tr("Delay") + ": ", delayB);
 }
 
 void ModuleSettingsWidget::defaultDevs()
