@@ -239,6 +239,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	#ifndef HAVE_VPP
 		vaapiDeintMethodB->setEnabled(false);
+		vaapiLayout->labelForField(vaapiDeintMethodB)->setEnabled(false);
 	#endif
 #endif
 
