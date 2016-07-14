@@ -1,11 +1,13 @@
-Changes in QMPlay2 build 16.07.12:
+Changes in QMPlay2 build 16.07.14:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
 	- add sharpness to video adjustment (OpenGL2 and VDPAU only),
 	- sort current group instead of entire playlist,
 	- rename video equalizer -> video adjustment,
+	- fix bug in tag editor (non-Windows OS'es),
+	- fix downloading cover art from Last FM,
 	- move OpenGL2 shaders to resources,
 	- add sharpness shader to OpenGL2,
-	- added contributors tab,
+	- add contributors tab,
 
 Changes in QMPlay2 build 16.07.07:
 	- Ubuntu Unity integration (MPRIS2 and shortcut groups),
