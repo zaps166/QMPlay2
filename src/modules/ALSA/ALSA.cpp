@@ -54,7 +54,7 @@ QMPLAY2_EXPORT_PLUGIN(ALSA)
 /**/
 
 #include <QDoubleSpinBox>
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
@@ -71,15 +71,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	autoMultichnB = new QCheckBox(tr("Automatic looking for multichannel device"));
 	autoMultichnB->setChecked(sets().getBool("AutoFindMultichnDev"));
 
-	QLabel *delayL = new QLabel(tr("Delay") + ": ");
-
 	delayB = new QDoubleSpinBox;
 	delayB->setRange(0.01, 1.0);
 	delayB->setSingleStep(0.01);
 	delayB->setSuffix(" " + tr("sec"));
 	delayB->setValue(sets().getDouble("Delay"));
-
-	QLabel *devicesL = new QLabel(tr("Playback device") + ": ");
 
 	devicesB = new QComboBox;
 	for (int i = 0; i < devicesList.first.count(); ++i)
@@ -94,13 +90,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 			devicesB->setCurrentIndex(i);
 	}
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
-	layout->addWidget(devicesL, 1, 0, 1, 1);
-	layout->addWidget(devicesB, 1, 1, 1, 1);
-	layout->addWidget(delayL, 2, 0, 1, 1);
-	layout->addWidget(delayB, 2, 1, 1, 1);
-	layout->addWidget(autoMultichnB, 3, 0, 1, 2);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(enabledB);
+	layout->addRow(tr("Delay") + ": ", delayB);
+	layout->addRow(tr("Playback device") + ": ", devicesB);
+	layout->addRow(autoMultichnB);
 }
 
 void ModuleSettingsWidget::saveSettings()
