@@ -51,7 +51,7 @@ QMPLAY2_EXPORT_PLUGIN(XVideo)
 
 /**/
 
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
@@ -65,19 +65,16 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	useSHMB = new QCheckBox(tr("Use shared memory"));
 	useSHMB->setChecked(sets().getBool("UseSHM"));
 
-	QLabel *adaptorsL = new QLabel(tr("XVideo outputs") + ": ");
-
 	adaptorsB = new QComboBox;
 	adaptorsB->addItem(tr("Default"));
 	adaptorsB->addItems(XVIDEO::adaptorsList());
 	int idx = adaptorsB->findText(sets().getString("Adaptor"));
 	adaptorsB->setCurrentIndex(idx < 0 ? 0 : idx);
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
-	layout->addWidget(useSHMB, 1, 0, 1, 2);
-	layout->addWidget(adaptorsL, 2, 0, 1, 1);
-	layout->addWidget(adaptorsB, 2, 1, 1, 1);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(enabledB);
+	layout->addRow(useSHMB);
+	layout->addRow(tr("XVideo outputs") + ": ", adaptorsB);
 }
 
 void ModuleSettingsWidget::saveSettings()
