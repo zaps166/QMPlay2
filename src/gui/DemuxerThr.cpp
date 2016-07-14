@@ -336,7 +336,7 @@ void DemuxerThr::run()
 	if ((unknownLength = demuxer->length() < 0.0))
 		updateBufferedSeconds = false;
 
-	emit playC.updateLength(demuxer->length());
+	emit playC.updateLength(round(demuxer->length()));
 	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
 
@@ -504,7 +504,7 @@ void DemuxerThr::run()
 		}
 	}
 
-	emit QMPlay2Core.updatePlaying(false, title, artist, album, demuxer->length(), false, updatePlayingName);
+	emit QMPlay2Core.updatePlaying(false, title, artist, album, round(demuxer->length()), false, updatePlayingName);
 
 	playC.endOfStream = playC.canUpdatePos = false; //to musi tu być!
 	end();
@@ -574,7 +574,7 @@ void DemuxerThr::updateCoverAndPlaying()
 	if (showCovers)
 		loadImage();
 	emitInfo();
-	emit QMPlay2Core.updatePlaying(true, title, artist, album, demuxer->length(), showCovers && !hasCover, updatePlayingName);
+	emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName);
 }
 
 static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str)
