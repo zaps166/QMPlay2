@@ -23,6 +23,7 @@
 #define TAGLIB_VERSION ((TAGLIB_MAJOR_VERSION << 8) | TAGLIB_MINOR_VERSION)
 #define TAGLIB18 (TAGLIB_VERSION >= 0x108)
 #define TAGLIB19 (TAGLIB_VERSION >= 0x109)
+#define TAGLIB1B (TAGLIB_VERSION >= 0x10B)
 
 #ifdef TAGLIB_FULL_INCLUDE_PATH
 	#include <taglib/taglib.h>
@@ -599,7 +600,7 @@ bool TagEditor::save()
 #endif
 		}
 
-		/* FLAC::File writer BUG workaround - remove ID3 tags */
+		/* Remove ID3 tags from FLAC::File */
 		if (mustSave && instanceOf(file, FLAC::File))
 		{
 			FLAC::File &flacF = (FLAC::File &)file;
@@ -609,13 +610,21 @@ bool TagEditor::save()
 			if (flacF.ID3v1Tag() || flacF.ID3v2Tag())
 #endif
 			{
-				const FileName fName = fRef->file()->name();
+#if TAGLIB1B
+				flacF.strip(FLAC::File::ID3v1 | FLAC::File::ID3v2);
+#else
+	#ifdef Q_OS_WIN
+				const FileName fName = file.name(); //Class with "std::string"
+	#else
+				const QByteArray fName = file.name(); //Raw pointer, so copy it
+	#endif
 				result = fRef->save();
 				delete fRef;
 				fRef = NULL;
 				if (result)
 					result = MPEG::File(fName, false).save(MPEG::File::NoTags);
 				mustSave = false;
+#endif
 			}
 		}
 
