@@ -162,6 +162,7 @@ QMPLAY2_EXPORT_PLUGIN(FFmpeg)
 #include <Slider.hpp>
 
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QComboBox>
@@ -183,15 +184,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	decoderVDPAUB->setCheckable(true);
 	decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
 
-	QLabel *vdpauDeintMethodL = new QLabel(tr("Improving deinterlacing quality") + ": ");
-
 	vdpauDeintMethodB = new QComboBox;
 	vdpauDeintMethodB->addItems(QStringList() << tr("None") << "Temporal" << "Temporal-spatial");
 	vdpauDeintMethodB->setCurrentIndex(sets().getInt("VDPAUDeintMethod"));
 	if (vdpauDeintMethodB->currentIndex() < 0)
 		vdpauDeintMethodB->setCurrentIndex(1);
-
-	QLabel *vdpauHQScalingL = new QLabel(tr("Image scaling level") + ": ");
 
 	vdpauHQScalingB = new QComboBox;
 	for (int i = 0; i <= 9; ++i)
@@ -211,13 +208,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	checkEnables();
 
-	QGridLayout *vdpauLayout = new QGridLayout(decoderVDPAUB);
-	vdpauLayout->addWidget(vdpauDeintMethodL, 0, 0, 1, 1);
-	vdpauLayout->addWidget(vdpauDeintMethodB, 0, 1, 1, 1);
-	vdpauLayout->addWidget(vdpauHQScalingL, 1, 0, 1, 1);
-	vdpauLayout->addWidget(vdpauHQScalingB, 1, 1, 1, 1);
-	vdpauLayout->addWidget(noisereductionVDPAUB, 2, 0, 1, 1);
-	vdpauLayout->addWidget(noisereductionLvlVDPAUS, 2, 1, 1, 1);
+	QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
+	vdpauLayout->addRow(tr("Improving deinterlacing quality") + ": ", vdpauDeintMethodB);
+	vdpauLayout->addRow(tr("Image scaling level") + ": ", vdpauHQScalingB);
+	vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
 
 
 	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
@@ -233,26 +227,23 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	allowVDPAUinVAAPIB = new QCheckBox(tr("Allow VDPAU"));
 	allowVDPAUinVAAPIB->setChecked(sets().getBool("AllowVDPAUinVAAPI"));
 
-	QLabel *vaapiDeintMethodL = new QLabel(tr("Improving deinterlacing quality") + ": ");
-
 	vaapiDeintMethodB = new QComboBox;
 	vaapiDeintMethodB->addItems(QStringList() << tr("None") << "Motion adaptive" << "Motion compensated");
 	vaapiDeintMethodB->setCurrentIndex(sets().getInt("VAAPIDeintMethod"));
 	if (vaapiDeintMethodB->currentIndex() < 0)
 		vaapiDeintMethodB->setCurrentIndex(1);
 
-	QGridLayout *vaapiLayout = new QGridLayout(decoderVAAPIEB);
-	vaapiLayout->addWidget(allowVDPAUinVAAPIB, 0, 0, 1, 2);
-	vaapiLayout->addWidget(vaapiDeintMethodL, 1, 0, 1, 1);
-	vaapiLayout->addWidget(vaapiDeintMethodB, 1, 1, 1, 1);
+	QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
+	vaapiLayout->addRow(allowVDPAUinVAAPIB);
+	vaapiLayout->addRow(tr("Improving deinterlacing quality") + ": ", vaapiDeintMethodB);
 
 	#ifndef HAVE_VPP
-		vaapiDeintMethodL->setEnabled(false);
 		vaapiDeintMethodB->setEnabled(false);
+		vaapiLayout->labelForField(vaapiDeintMethodB)->setEnabled(false);
 	#endif
 #endif
 
-	/* Pospiesz się */
+	/* Hurry up */
 	hurryUpB = new QGroupBox(tr("Hurry up"));
 	hurryUpB->setCheckable(true);
 	hurryUpB->setChecked(sets().getBool("HurryUP"));
@@ -268,14 +259,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	hurryUpLayout->addWidget(forceSkipFramesB);
 	/**/
 
-	QLabel *threadsL = new QLabel(tr("Number of threads used to decode video") + ": ");
-
 	threadsB = new QSpinBox;
 	threadsB->setRange(0, 16);
 	threadsB->setSpecialValueText(tr("Autodetect"));
 	threadsB->setValue(sets().getInt("Threads"));
-
-	QLabel *lowresL = new QLabel(tr("Low resolution decoding (only some codecs)") + ": ");
 
 	lowresB = new QComboBox;
 	lowresB->addItems(QStringList() << tr("Normal size") << tr("4x smaller") << tr("16x smaller"));
@@ -286,8 +273,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		sets().set("LowresValue", 0);
 	}
 
-	QLabel *thrTypeL = new QLabel(tr("Method of multithreaded decoding") + ": ");
-
 	thrTypeB = new QComboBox;
 	thrTypeB->addItems(QStringList() << tr("Frames") << tr("Slices"));
 	thrTypeB->setCurrentIndex(sets().getInt("ThreadTypeSlice"));
@@ -297,14 +282,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		sets().set("ThreadTypeSlice", 0);
 	}
 
-	QGridLayout *decoderLayout = new QGridLayout(decoderB);
-	decoderLayout->addWidget(threadsL, 0, 0, 1, 1);
-	decoderLayout->addWidget(threadsB, 0, 1, 1, 1);
-	decoderLayout->addWidget(lowresL, 1, 0, 1, 1);
-	decoderLayout->addWidget(lowresB, 1, 1, 1, 1);
-	decoderLayout->addWidget(thrTypeL, 2, 0, 1, 1);
-	decoderLayout->addWidget(thrTypeB, 2, 1, 1, 1);
-	decoderLayout->addWidget(hurryUpB, 3, 0, 1, 2);
+	QFormLayout *decoderLayout = new QFormLayout(decoderB);
+	decoderLayout->addRow(tr("Number of threads used to decode video") + ": ", threadsB);
+	decoderLayout->addRow(tr("Low resolution decoding (only some codecs)") + ": ", lowresB);
+	decoderLayout->addRow(tr("Method of multithreaded decoding") + ": ", thrTypeB);
+	decoderLayout->addRow(hurryUpB);
 
 	connect(skipFramesB, SIGNAL(clicked(bool)), forceSkipFramesB, SLOT(setEnabled(bool)));
 	if (hurryUpB->isChecked() || !skipFramesB->isChecked())

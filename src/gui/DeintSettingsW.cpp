@@ -22,7 +22,7 @@
 #include <Module.hpp>
 #include <Main.hpp>
 
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
@@ -58,12 +58,7 @@ DeintSettingsW::DeintSettingsW()
 	autoParityB = new QCheckBox(tr("Automatically detect parity"));
 	autoParityB->setChecked(QMPSettings.getBool("Deinterlace/AutoParity"));
 
-	QLabel *methodL = new QLabel(tr("Deinterlacing method (software decoding)") + ": ");
-
 	softwareMethodsCB = new QComboBox;
-	softwareMethodsCB->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-
-	QLabel *parityL = new QLabel(tr("Parity (if not detected automatically)") + ": ");
 
 	parityCB = new QComboBox;
 	parityCB->addItems(QStringList() << "Bottom field first" << "Top field first");
@@ -72,15 +67,12 @@ DeintSettingsW::DeintSettingsW()
 	connect(softwareMethodsCB, SIGNAL(currentIndexChanged(int)), this, SLOT(setSoftwareMethodsToolTip(int)));
 	softwareMethods(doublerB->isChecked());
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(autoDeintB, 0, 0, 1, 3);
-	layout->addWidget(doublerB, 1, 0, 1, 3);
-	layout->addWidget(autoParityB, 2, 0, 1, 3);
-	layout->addWidget(methodL, 3, 0, 1, 1);
-	layout->addWidget(softwareMethodsCB, 3, 1, 1, 2);
-	layout->addWidget(parityL, 4, 0, 1, 1);
-	layout->addWidget(parityCB, 4, 1, 1, 2);
-	layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), layout->rowCount(), 0);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(autoDeintB);
+	layout->addRow(doublerB);
+	layout->addRow(autoParityB);
+	layout->addRow(tr("Deinterlacing method (software decoding)") + ": ", softwareMethodsCB);
+	layout->addRow(tr("Parity (if not detected automatically)") + ": ", parityCB);
 }
 
 void DeintSettingsW::writeSettings()

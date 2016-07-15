@@ -169,8 +169,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	connect(youtubedlBrowseB, SIGNAL(clicked()), this, SLOT(browseYoutubedl()));
 
 
-	QWidget *itagW = new QWidget;
-
 	QLabel *itagL = new QLabel(tr("Priority of default video/audio quality") + ": ");
 
 	itagLW = new QListWidget;
@@ -210,7 +208,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	enableItagLists(multiStreamB->isChecked());
 
-	QGridLayout *itagLayout = new QGridLayout(itagW);
+	QGridLayout *itagLayout = new QGridLayout;
 	itagLayout->addWidget(itagVideoL, 0, 0, 1, 1);
 	itagLayout->addWidget(itagVideoLW, 1, 0, 1, 1);
 	itagLayout->addWidget(itagAudioL, 0, 1, 1, 1);
@@ -227,7 +225,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(youtubedlL, 3, 0, 1, 1);
 	layout->addWidget(youtubedlE, 3, 1, 1, 1);
 	layout->addWidget(youtubedlBrowseB, 3, 2, 1, 1);
-	layout->addWidget(itagW, 4, 0, 1, 3);
+	layout->addLayout(itagLayout, 4, 0, 1, 3);
 	layout->setMargin(2);
 
 	/**/

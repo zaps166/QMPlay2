@@ -113,7 +113,8 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
 #include <QImageReader>
 #include <QFileDialog>
 #include <QPushButton>
-#include <QGridLayout>
+#include <QFormLayout>
+#include <QBoxLayout>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QPainter>
@@ -175,27 +176,10 @@ TagEditor::TagEditor() :
 	setTitle(tr("Add tags"));
 	setCheckable(true);
 
-	QLabel *titleL = new QLabel(tr("Title") + ": ");
-	titleE = new QLineEdit;
-
-	QLabel *artistL = new QLabel(tr("Artist") + ": ");
-	artistE = new QLineEdit;
-
-	QLabel *albumL = new QLabel(tr("Album") + ": ");
-	albumE = new QLineEdit;
-
-	QLabel *commentL = new QLabel(tr("Comment") + ": ");
-	commentE = new QLineEdit;
-
-	QLabel *genreL = new QLabel(tr("Genre") + ": ");
-	genreE = new QLineEdit;
-
-	QLabel *yearL = new QLabel(tr("Year") + ": ");
 	yearB = new QSpinBox;
 	yearB->setRange(0, 32767);
 	yearB->setSpecialValueText(tr("None"));
 
-	QLabel *trackL = new QLabel(tr("Track") + ": ");
 	trackB = new QSpinBox;
 	trackB->setRange(0, 32767);
 	trackB->setSpecialValueText(tr("None"));
@@ -203,37 +187,31 @@ TagEditor::TagEditor() :
 	pictureB = new QGroupBox(tr("Cover"));
 	pictureB->setCheckable(true);
 	pictureW = new PictureW(*picture);
-	loadImgB = new QPushButton;
-	loadImgB->setText(tr("Load cover picture"));
+	loadImgB = new QPushButton(tr("Load cover picture"));
 	loadImgB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	saveImgB = new QPushButton;
-	saveImgB->setText(tr("Save cover picture"));
+	saveImgB = new QPushButton(tr("Save cover picture"));
 	saveImgB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	connect(loadImgB, SIGNAL(clicked()), this, SLOT(loadImage()));
 	connect(saveImgB, SIGNAL(clicked()), this, SLOT(saveImage()));
 
-	QGridLayout *pictureLayout = new QGridLayout(pictureB);
-	pictureLayout->addWidget(pictureW, 0, 0);
-	pictureLayout->addWidget(loadImgB, 1, 0);
-	pictureLayout->addWidget(saveImgB, 2, 0);
+	QVBoxLayout *pictureLayout = new QVBoxLayout(pictureB);
+	pictureLayout->addWidget(pictureW);
+	pictureLayout->addWidget(loadImgB);
+	pictureLayout->addWidget(saveImgB);
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(titleL, 0, 0, 1, 1);
-	layout->addWidget(titleE, 0, 1, 1, 1);
-	layout->addWidget(artistL, 1, 0, 1, 1);
-	layout->addWidget(artistE, 1, 1, 1, 1);
-	layout->addWidget(albumL, 2, 0, 1, 1);
-	layout->addWidget(albumE, 2, 1, 1, 1);
-	layout->addWidget(commentL, 3, 0, 1, 1);
-	layout->addWidget(commentE, 3, 1, 1, 1);
-	layout->addWidget(genreL, 4, 0, 1, 1);
-	layout->addWidget(genreE, 4, 1, 1, 1);
-	layout->addWidget(yearL, 5, 0, 1, 1);
-	layout->addWidget(yearB, 5, 1, 1, 1);
-	layout->addWidget(trackL, 6, 0, 1, 1);
-	layout->addWidget(trackB, 6, 1, 1, 1);
-	layout->addWidget(pictureB, 0, 2, 8, 1);
+	QFormLayout *tagsLayout = new QFormLayout;
+	tagsLayout->addRow(tr("Title") + ": ", titleE = new QLineEdit);
+	tagsLayout->addRow(tr("Artist") + ": ", artistE = new QLineEdit);
+	tagsLayout->addRow(tr("Album") + ": ", albumE = new QLineEdit);
+	tagsLayout->addRow(tr("Comment") + ": ", commentE = new QLineEdit);
+	tagsLayout->addRow(tr("Genre") + ": ", genreE = new QLineEdit);
+	tagsLayout->addRow(tr("Year") + ": ", yearB);
+	tagsLayout->addRow(tr("Track") + ": ", trackB);
+
+	QHBoxLayout *layout = new QHBoxLayout(this);
+	layout->addLayout(tagsLayout);
+	layout->addWidget(pictureB);
 }
 TagEditor::~TagEditor()
 {
