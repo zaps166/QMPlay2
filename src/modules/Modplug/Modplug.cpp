@@ -54,7 +54,7 @@ QMPLAY2_EXPORT_PLUGIN(Modplug)
 
 /**/
 
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
@@ -65,8 +65,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB = new QCheckBox("Modplug " + tr("enabled"));
 	enabledB->setChecked(sets().getBool("ModplugEnabled"));
 
-	QLabel *resamplingL = new QLabel(tr("Resampling method") + ": ");
-
 	resamplingB = new QComboBox;
 	resamplingB->addItems(QStringList() << "Nearest" << "Linear" << "Spline" << "FIR");
 	resamplingB->setCurrentIndex(sets().getInt("ModplugResamplingMethod"));
@@ -76,10 +74,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		sets().set("ModplugResamplingMethod", 3);
 	}
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
-	layout->addWidget(resamplingL, 1, 0, 1, 1);
-	layout->addWidget(resamplingB, 1, 1, 1, 1);
+	QFormLayout *layout = new QFormLayout(this);
+	layout->addRow(enabledB);
+	layout->addRow(tr("Resampling method") + ": ", resamplingB);
 }
 
 void ModuleSettingsWidget::saveSettings()
