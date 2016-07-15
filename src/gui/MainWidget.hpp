@@ -21,10 +21,6 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
-	#include <QAbstractNativeEventFilter>
-	#define QT5_WINDOWS
-#endif
 
 #include <PlayClass.hpp>
 #ifdef UPDATER
@@ -45,9 +41,6 @@ class SettingsWidget;
 class QMPlay2Extensions;
 
 class MainWidget : public QMainWindow
-#ifdef QT5_WINDOWS
-	, private QAbstractNativeEventFilter
-#endif
 {
 	friend class QMPlay2GUIClass;
 	Q_OBJECT
@@ -137,14 +130,6 @@ private:
 	void moveEvent(QMoveEvent *);
 	void showEvent(QShowEvent *);
 	void hideEvent(QHideEvent *);
-
-#ifdef Q_OS_WIN
-#if QT_VERSION < 0x050000
-	bool winEvent(MSG *m, long *);
-#else
-	bool nativeEventFilter(const QByteArray &, void *m, long *);
-#endif
-#endif
 
 	MenuBar *menuBar;
 	QToolBar *mainTB;

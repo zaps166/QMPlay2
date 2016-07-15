@@ -371,9 +371,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	if (settings.getBool("AutoUpdates"))
 		updater.downloadUpdate();
 #endif
-#ifdef QT5_WINDOWS
-	qApp->installNativeEventFilter(this);
-#endif
 }
 MainWidget::~MainWidget()
 {
@@ -1450,17 +1447,3 @@ void MainWidget::hideEvent(QHideEvent *)
 #endif
 	menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
-#ifdef Q_OS_WIN
-#define blockScreenSaver(m) ((m)->message == WM_SYSCOMMAND && (((m)->wParam & 0xFFF0) == SC_SCREENSAVE || ((m)->wParam & 0xFFF0) == SC_MONITORPOWER) && playC.isNowPlayingVideo())
-#if QT_VERSION < 0x050000
-bool MainWidget::winEvent(MSG *m, long *)
-{
-	return blockScreenSaver(m);
-}
-#else
-bool MainWidget::nativeEventFilter(const QByteArray &, void *m, long *)
-{
-	return blockScreenSaver((MSG *)m);
-}
-#endif
-#endif

@@ -30,6 +30,7 @@
 #include <QWaitCondition>
 
 class QMPlay2_OSD;
+class ScreenSaver;
 class DemuxerThr;
 class VideoThr;
 class AudioThr;
@@ -61,9 +62,6 @@ public:
 	void setSpeed(double);
 
 	bool isPlaying() const;
-#ifdef Q_OS_WIN
-	bool isNowPlayingVideo() const;
-#endif
 
 	inline QString getUrl() const
 	{
@@ -142,6 +140,9 @@ private:
 	bool firsttimeUpdateCache;
 #endif
 	LibASS *ass;
+
+	double screenSaverLastT;
+	ScreenSaver *screenSaver;
 
 	QMutex osdMutex, subsMutex;
 	QMPlay2_OSD *osd;

@@ -36,6 +36,7 @@ set(GUI_HDR
     VideoAdjustment.hpp
     Appearance.hpp
     VolWidget.hpp
+    ScreenSaver.hpp
 )
 
 set(GUI_SRC
@@ -62,6 +63,7 @@ set(GUI_SRC
     VideoAdjustment.cpp
     Appearance.cpp
     VolWidget.cpp
+    ScreenSaver.cpp
 )
 
 set(GUI_FORMS # *.ui files

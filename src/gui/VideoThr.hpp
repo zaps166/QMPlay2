@@ -23,11 +23,6 @@
 #include <VideoFilters.hpp>
 #include <PixelFormats.hpp>
 
-#if defined(Q_WS_X11) || (QT_VERSION >= 0x050000 && defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID))
-	#include <QScopedPointer>
-	class X11ResetScreenSaver;
-	#define X11_RESET_SCREEN_SAVER
-#endif
 class QMPlay2_OSD;
 class VideoWriter;
 
@@ -91,9 +86,6 @@ private:
 	Writer *HWAccelWriter;
 	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
-#ifdef X11_RESET_SCREEN_SAVER
-	QScopedPointer<X11ResetScreenSaver> x11ResetScreenSaver;
-#endif
 	QMutex filtersMutex;
 private slots:
 	void write(VideoFrame videoFrame);

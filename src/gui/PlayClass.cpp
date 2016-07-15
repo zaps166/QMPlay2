@@ -25,6 +25,7 @@
 #include <LibASS.hpp>
 #include <Main.hpp>
 
+#include <ScreenSaver.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
@@ -120,6 +121,14 @@ PlayClass::PlayClass() :
 	videoEnabled = audioEnabled = subtitlesEnabled = true;
 
 	doSuspend = false;
+
+	screenSaverLastT = Functions::gettime();
+	screenSaver = new ScreenSaver;
+	if (!screenSaver->isOk())
+	{
+		delete screenSaver;
+		screenSaver = NULL;
+	}
 
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
@@ -225,6 +234,15 @@ void PlayClass::restart()
 
 void PlayClass::chPos(double newPos, bool updateGUI)
 {
+	if (screenSaver && (QMPlay2GUI.mainW->isFullScreen() || hasVideoStream()))
+	{
+		const double t = Functions::gettime();
+		if (t - screenSaverLastT >= 0.75)
+		{
+			QMetaObject::invokeMethod(screenSaver, "reset");
+			screenSaverLastT = t;
+		}
+	}
 	if (!canUpdatePos)
 		return;
 	if ((updateGUI || pos == -1) && ((int)newPos != (int)pos))
@@ -303,12 +321,6 @@ bool PlayClass::isPlaying() const
 {
 	return demuxThr && demuxThr->isRunning();
 }
-#ifdef Q_OS_WIN
-bool PlayClass::isNowPlayingVideo() const
-{
-	return !paused && vThr && vThr->isRunning();
-}
-#endif
 
 void PlayClass::loadSubsFile(const QString &fileName)
 {
