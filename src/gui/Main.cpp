@@ -625,9 +625,20 @@ int main(int argc, char *argv[])
 			UpdateFile.remove(0, 7);
 			if (lastVer != QMPlay2Version)
 			{
-				QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
+				const QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
 				QMPlay2Core.logInfo(updateString);
 				QMessageBox::information(NULL, QCoreApplication::applicationName(), updateString);
+				settings.remove("UpdateVersion");
+			}
+			else
+			{
+				const QString message = QObject::tr("QMPlay2 hasn't been updated. Do you want to run the update (recommended)?");
+				if (QMessageBox::question(NULL, QCoreApplication::applicationName(), message, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+				{
+					QMPlay2GUI.runUpdate(UpdateFile);
+					QMPlay2Core.quit();
+					break;
+				}
 			}
 			QFile::remove(UpdateFile);
 			settings.remove("UpdateFile");

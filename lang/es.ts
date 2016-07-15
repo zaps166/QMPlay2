@@ -2094,6 +2094,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Font cache is updating, please wait</source>
         <translation>La caché de fuentes se está actualizando, por favor espere</translation>
     </message>
+    <message>
+        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Radio</name>
@@ -2539,16 +2543,20 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Error comprobando actualizaciones</translation>
     </message>
     <message>
-        <source>Error update writing</source>
-        <translation>Error de escritura de la actualización</translation>
-    </message>
-    <message>
         <source>Error downloading the update</source>
         <translation>Error de descarga de la actualización</translation>
     </message>
     <message>
         <source>Apply update</source>
         <translation>Actualización aplicada</translation>
+    </message>
+    <message>
+        <source>Error creating update file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This auto-update is ignored, press the button to update</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -47,7 +47,7 @@ private slots:
 
 	void applyUpdate();
 private:
-	void getFile(const QUrl &);
+	QNetworkReply *getFile(const QUrl &);
 	void endWork(const QString &);
 
 	QFile infoFile, updateFile;

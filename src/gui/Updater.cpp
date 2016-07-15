@@ -40,10 +40,7 @@ Updater::Updater(QWidget *parent) :
 {
 	setWindowTitle(tr("QMPlay2 updates"));
 	infoFile.setFileName(QDir::tempPath() + "/QMPlay2UpdaterURLs." + QString::number(qrand()));
-	updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer");
-#ifdef Q_OS_WIN
-	updateFile.setFileName(updateFile.fileName() + ".exe");
-#endif
+	updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer.exe");
 
 	infoL = new QLabel(windowTitle());
 	progressB = new QProgressBar;
@@ -82,10 +79,15 @@ void Updater::downloadUpdate()
 {
 	if (!busy && infoFile.open(QFile::WriteOnly | QFile::Truncate))
 	{
+		if (sender() == downloadUpdateB)
+			QMPlay2Core.getSettings().remove("UpdateVersion");
+
 		QNetworkRequest request(QUrl("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater"));
 		request.setRawHeader("User-Agent", QMPlay2UserAgent);
+
 		QNetworkReply *reply = net.get(request);
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
+
 		infoL->setText(tr("Checking for updates"));
 		progressB->setRange(0, 0);
 		downloadUpdateB->hide();
@@ -104,32 +106,34 @@ void Updater::infoFinished()
 
 		QSettings info(infoFile.fileName(), QSettings::IniFormat, this);
 
-		QString ThisVersion = QMPlay2Core.getSettings().getString("Version");
-		QString NewVersion  = info.value("Version").toString();
+		Settings &settings = QMPlay2Core.getSettings();
 
-		QDate NewVersionDate = Functions::parseVersion(NewVersion);
+		const QString NewVersion  = info.value("Version").toString();
+		const QDate NewVersionDate = Functions::parseVersion(NewVersion);
+
 		if (NewVersionDate.isValid())
 		{
-			if (NewVersionDate > Functions::parseVersion(ThisVersion))
+			if (NewVersionDate > Functions::parseVersion(settings.getString("Version")))
 			{
-				QString FileURL;
-#if defined Q_OS_WIN && defined QMPLAY2_CPU_X86
-				if (sizeof(void *) == 8)
-					FileURL = info.value("Win64").toString();
-				if (FileURL.isEmpty()) //32bit or 64bit does not exists on server
-					FileURL = info.value("Win32").toString();
-#elif defined Q_OS_LINUX && defined QMPLAY2_CPU_X86
-				if (sizeof(void *) == 8)
-					FileURL = info.value("Linux64").toString();
-				if (FileURL.isEmpty()) //32bit or 64bit does not exists on server
-					FileURL = info.value("Linux32").toString();
-#endif
-				if (FileURL.isEmpty())
-					endWork(tr("No update available"));
-				else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
-					getFile(QUrl(FileURL.replace("$Version", NewVersion)));
+				bool canUpdate = true;
+				if (settings.contains("UpdateVersion"))
+				{
+					const QDate UpdateVersionDate = Functions::parseVersion(settings.getString("UpdateVersion"));
+					if (UpdateVersionDate.isValid() && UpdateVersionDate == NewVersionDate)
+						canUpdate = false;
+				}
+				if (canUpdate)
+				{
+					QString FileURL = info.value(QString("Win%1").arg(sizeof(void *) << 3)).toString();
+					if (FileURL.isEmpty())
+						endWork(tr("No update available"));
+					else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
+						getFile(QUrl(FileURL.replace("$Version", NewVersion)))->setProperty("UpdateVersion", NewVersion);
+					else
+						endWork(tr("Error creating update file"));
+				}
 				else
-					endWork(tr("Error update writing"));
+					endWork(tr("This auto-update is ignored, press the button to update"));
 			}
 			else
 				endWork(tr("Application is up-to-date"));
@@ -145,7 +149,7 @@ void Updater::infoFinished()
 void Updater::headerChanged()
 {
 	QNetworkReply *reply = (QNetworkReply *)sender();
-	QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+	const QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 	if (!newUrl.isEmpty() && reply->url() != newUrl)
 	{
 		disconnect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
@@ -161,11 +165,7 @@ void Updater::writeToFile()
 	bool err = false;
 	if (firstChunk)
 	{
-#if defined Q_OS_WIN
-		err = arr.left(2) != "MZ";
-#elif defined Q_OS_LINUX
-		err = arr.left(4) != "\x7F""ELF" && arr.left(2) != "#!";
-#endif
+		err = (arr.left(2) != "MZ");
 		firstChunk = false;
 	}
 	if (err || updateFile.write(arr) != arr.size())
@@ -181,11 +181,10 @@ void Updater::downloadFinished()
 	QNetworkReply *reply = (QNetworkReply *)sender();
 	if (updateFile.size() && !reply->error())
 	{
-#ifndef Q_OS_WIN
-		updateFile.setPermissions(updateFile.permissions() | QFile::ExeOwner | QFile::ExeGroup | QFile::ExeOther);
-#endif
+		Settings &settings = QMPlay2Core.getSettings();
 		updateFile.close();
-		QMPlay2Core.getSettings().set("UpdateFile", updateFile.fileName());
+		settings.set("UpdateFile", updateFile.fileName());
+		settings.set("UpdateVersion", reply->property("UpdateVersion").toString());
 		infoL->setText(tr("The update has been downloaded"));
 		installB->show();
 		busy = false;
@@ -205,7 +204,7 @@ void Updater::applyUpdate()
 	QMPlay2GUI.mainW->close();
 }
 
-void Updater::getFile(const QUrl &url)
+QNetworkReply *Updater::getFile(const QUrl &url)
 {
 	QNetworkRequest request(url);
 	request.setRawHeader("User-Agent", QMPlay2UserAgent);
@@ -216,6 +215,7 @@ void Updater::getFile(const QUrl &url)
 	connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
 	reply->ignoreSslErrors();
 	firstChunk = true;
+	return reply;
 }
 void Updater::endWork(const QString &str)
 {

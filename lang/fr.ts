@@ -2093,6 +2093,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     -prev       - joue le morceau précédent dans la liste
     -quit       - termine l&apos;application</translation>
     </message>
+    <message>
+        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Radio</name>
@@ -2530,10 +2534,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Pas de mise à jour disponible</translation>
     </message>
     <message>
-        <source>Error update writing</source>
-        <translation>Erreur d&apos;écriture de la mise à jour</translation>
-    </message>
-    <message>
         <source>Error checking for updates</source>
         <translation>Erreur pendant la vérification des mises à jour</translation>
     </message>
@@ -2548,6 +2548,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>The update has been downloaded</source>
         <translation>La mise à jour est téléchargée</translation>
+    </message>
+    <message>
+        <source>Error creating update file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This auto-update is ignored, press the button to update</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

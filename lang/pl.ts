@@ -2095,6 +2095,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     -prev       - odtwarza poprzedni na liście
     -quit       - zakańcza działanie aplikacji</translation>
     </message>
+    <message>
+        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
+        <translation>QMPlay2 nie został zaktualizowany. Czy chcesz uruchomić aktualizację (zalecane)?</translation>
+    </message>
 </context>
 <context>
     <name>Radio</name>
@@ -2532,10 +2536,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Brak dostępnej aktualizacji</translation>
     </message>
     <message>
-        <source>Error update writing</source>
-        <translation>Błąd zapisu aktualizacji</translation>
-    </message>
-    <message>
         <source>Error checking for updates</source>
         <translation>Błąd sprawdzania aktualizacji</translation>
     </message>
@@ -2550,6 +2550,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>The update has been downloaded</source>
         <translation>Aktualizacja została pobrana</translation>
+    </message>
+    <message>
+        <source>Error creating update file</source>
+        <translation>Błąd podczas tworzenia pliku aktualizacji</translation>
+    </message>
+    <message>
+        <source>This auto-update is ignored, press the button to update</source>
+        <translation>Ta aktualizacja jest ignorowana, kliknij przycisk, aby zaktualizaować</translation>
     </message>
 </context>
 <context>
