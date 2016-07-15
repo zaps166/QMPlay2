@@ -118,10 +118,14 @@ void AudioThr::silence(bool invert)
 		silenceChMutex.lock();
 		doSilence = invert ? -silence_step : (1.0 - silence_step);
 		silenceChMutex.unlock();
-		while (!invert && doSilence > 0.0 && doSilence < 1.0 && isRunning())
+		while (!invert && isRunning())
 		{
-			double lastDoSilence = doSilence;
-			for (int i = 0; i < 7; ++i)
+			silenceChMutex.lock();
+			const double lastDoSilence = doSilence;
+			silenceChMutex.unlock();
+			if (lastDoSilence <= 0.0 || lastDoSilence >= 1.0)
+				break;
+			for (int i = 0; i < 100; ++i)
 			{
 				QCoreApplication::processEvents();
 				if (playC.doSilenceBreak)
@@ -129,15 +133,23 @@ void AudioThr::silence(bool invert)
 					playC.doSilenceBreak = false;
 					break;
 				}
-				Functions::s_wait(0.015);
+				Functions::s_wait(0.01);
+				silenceChMutex.lock();
+				if (doSilence <= 0.0)
+				{
+					silenceChMutex.unlock();
+					break;
+				}
+				silenceChMutex.unlock();
 			}
+			silenceChMutex.lock();
 			if (lastDoSilence == doSilence)
 			{
-				silenceChMutex.lock();
 				doSilence = -1.0;
 				silenceChMutex.unlock();
 				break;
 			}
+			silenceChMutex.unlock();
 		}
 	}
 }
@@ -326,7 +338,7 @@ void AudioThr::run()
 					else
 						dataToWrite = decodedChunk;
 
-					if (doSilence >= 0.0 && !isMuted)
+					if (!isMuted && doSilence >= 0.0)
 					{
 						silenceChMutex.lock();
 						if (doSilence >= 0.0)
