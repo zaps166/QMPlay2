@@ -55,6 +55,7 @@ public:
 	MainWidget(QPair<QStringList, QStringList> &);
 	~MainWidget();
 private slots:
+	void setKeyShortcuts();
 	void detachFromPipe();
 
 	void focusChanged(QWidget *, QWidget *);

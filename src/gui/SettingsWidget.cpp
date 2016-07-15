@@ -245,6 +245,7 @@ void SettingsWidget::InitSettings()
 	OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.5, 1.5, QColor(0xFF, 0xA8, 0x58, 0xFF), Qt::black, Qt::black);
 	OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black);
 	DeintSettingsW::init();
+	MenuBar::init();
 	applyProxy();
 }
 void SettingsWidget::SetAudioChannelsMenu()

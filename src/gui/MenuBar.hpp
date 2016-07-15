@@ -28,6 +28,8 @@ class MenuBar : public QMenuBar
 {
 	Q_OBJECT
 public:
+	static void init();
+
 	MenuBar();
 
 	class Window : public QMenu
@@ -146,6 +148,8 @@ public:
 #endif
 		*aboutQt;
 	};
+
+	void setKeyShourtcuts();
 
 	Window *window;
 	Widgets *widgets;

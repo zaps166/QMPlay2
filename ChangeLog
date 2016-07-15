@@ -1,6 +1,7 @@
 Changes in QMPlay2 build 16.07.14:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
 	- add sharpness to video adjustment (OpenGL2 and VDPAU only),
+	- add key bindings (currently only in settings file)
 	- sort current group instead of entire playlist,
 	- rename video equalizer -> video adjustment,
 	- fix bug in tag editor (non-Windows OS'es),

@@ -307,7 +307,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	hideMenuAct->setCheckable(true);
 	hideMenuAct->setAutoRepeat(false);
 	hideMenuAct->setChecked(menuHidden);
-	hideMenuAct->setShortcut(QKeySequence("Alt+Ctrl+M"));
 	connect(hideMenuAct, SIGNAL(triggered(bool)), this, SLOT(hideMenu(bool)));
 	addAction(hideMenuAct);
 #endif
@@ -318,9 +317,10 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	lockWidgetsAct->setCheckable(true);
 	lockWidgetsAct->setAutoRepeat(false);
 	lockWidgetsAct->setChecked(widgetsLocked);
-	lockWidgetsAct->setShortcut(QKeySequence("Shift+L"));
 	connect(lockWidgetsAct, SIGNAL(triggered(bool)), this, SLOT(lockWidgets(bool)));
 	addAction(lockWidgetsAct);
+
+	setKeyShortcuts();
 
 	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
 #if defined Q_OS_MAC || defined Q_OS_ANDROID
@@ -381,6 +381,15 @@ MainWidget::~MainWidget()
 	emit QMPlay2Core.restoreCursor();
 	QMPlay2GUI.mainW = NULL;
 	QCoreApplication::quit();
+}
+
+void MainWidget::setKeyShortcuts()
+{
+	Settings &settings = QMPlay2Core.getSettings();
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+	hideMenuAct->setShortcut(settings.getString("KeyBindings/Widgets-hideMenu"));
+#endif
+	lockWidgetsAct->setShortcut(settings.getString("KeyBindings/Widgets-lockWidgets"));
 }
 
 void MainWidget::detachFromPipe()
@@ -905,7 +914,7 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleVisibility->setEnabled(false);
 #endif
 		menuBar->window->toggleCompactView->setEnabled(false);
-		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence("F") << QKeySequence("ESC"));
+		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut() << QKeySequence("ESC"));
 		fullScreen = true;
 		showFullScreen();
 	}
@@ -915,7 +924,7 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleVisibility->setEnabled(true);
 #endif
 		menuBar->window->toggleCompactView->setEnabled(true);
-		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << QKeySequence("F"));
+		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut());
 
 		videoDock->setLoseHeight(0);
 		fullScreen = false;
