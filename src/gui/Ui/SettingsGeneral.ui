@@ -102,12 +102,6 @@
            </property>
            <item>
             <widget class="QLineEdit" name="screenshotE">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="readOnly">
               <bool>true</bool>
              </property>
