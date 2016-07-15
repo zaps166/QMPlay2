@@ -718,6 +718,117 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>GeneralSettings</name>
+    <message>
+        <source>Browse</source>
+        <translation>Обзор</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Использовать системные значки</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Установить внешний вид</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Показывать обложки</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Помутнение покрывает как фон</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <translation>Показывать обложки из каталога, если нет в музыкальном файле</translation>
+    </message>
+    <message>
+        <source>Automatically opening video window</source>
+        <translation>Автоматически открывать окно фильма</translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Автоматическая проверка и загрузка обновлений</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Показывать вкладки в верхней части главного окна</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Запускать только одну копию</translation>
+    </message>
+    <message>
+        <source>Always display only file names in playlist</source>
+        <translation>Всегда показывать только имена файлов в списке воспроизведения</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Запомнить режим повтора</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Использовать прокси-сервер</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Прокси-сервер требует авторизацию</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Имя пользователя</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Адрес прокси-сервера</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Порт прокси-сервера</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Очистить кэш обложек</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Сброс всех настроек</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Стиль</translation>
+    </message>
+    <message>
+        <source>Subtitles encoding</source>
+        <translation>Кодировка субтитров</translation>
+    </message>
+    <message>
+        <source>Default audio language</source>
+        <translation>Язык аудио по умолчанию</translation>
+    </message>
+    <message>
+        <source>Default subtitles language</source>
+        <translation>Язык субтитров по умолчанию</translation>
+    </message>
+    <message>
+        <source>Screenshots path</source>
+        <translation>Путь для снимков экрана</translation>
+    </message>
+</context>
+<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -1284,14 +1395,49 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>OSDSettingsW</name>
+    <name>ModulesList</name>
+    <message>
+        <source>Move up</source>
+        <translation>Переместить вверх</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Переместить вниз</translation>
+    </message>
+</context>
+<context>
+    <name>OSDSettings</name>
+    <message>
+        <source>Font</source>
+        <translation>Шрифт</translation>
+    </message>
+    <message>
+        <source>Margins</source>
+        <translation>Края</translation>
+    </message>
+    <message>
+        <source>Subtitles alignment</source>
+        <translation>Выравнивание субтитров</translation>
+    </message>
+    <message>
+        <source>Border</source>
+        <translation>Кромка</translation>
+    </message>
+    <message>
+        <source>Colors</source>
+        <translation>Цвет</translation>
+    </message>
     <message>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <source>Font</source>
-        <translation>Шрифт</translation>
+        <source>Spacing</source>
+        <translation>Расстояние</translation>
     </message>
     <message>
         <source>Left</source>
@@ -1306,10 +1452,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Вертикально</translation>
     </message>
     <message>
-        <source>Margins</source>
-        <translation>Края</translation>
-    </message>
-    <message>
         <source>Outline</source>
         <translation>Контур</translation>
     </message>
@@ -1320,22 +1462,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Text</source>
         <translation>Текст</translation>
-    </message>
-    <message>
-        <source>Border</source>
-        <translation>Кромка</translation>
-    </message>
-    <message>
-        <source>Colors</source>
-        <translation>Цвет</translation>
-    </message>
-    <message>
-        <source>Spacing</source>
-        <translation>Расстояние</translation>
-    </message>
-    <message>
-        <source>Subtitles alignment</source>
-        <translation>Выравнивание субтитров</translation>
     </message>
 </context>
 <context>
@@ -1544,6 +1670,125 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Screen shot</source>
         <translation>&amp;Cнимок экрана</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackSettings</name>
+    <message>
+        <source>Maximum volume</source>
+        <translation>Максимальная громкость</translation>
+    </message>
+    <message>
+        <source>Force samplerate</source>
+        <translation>Принудительная частота дискретизации</translation>
+    </message>
+    <message>
+        <source>Force channels conversion</source>
+        <translation>Принудительное преобразование каналов</translation>
+    </message>
+    <message>
+        <source>Use replay gain if available</source>
+        <translation>Использовать выравнивание громкости, если возможно</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Режим выравнивания громкости для альбома</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Предотвратить шипение/треск</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Действие колеса мыши на видеопанели</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Колесо мыши прокручивает музыку/видео</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Колесо мыши изменяет громкость</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Сохранять масштабирование</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Показывать индикатор буферизованных данных на ползунке</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Сохранять соотношение сторон</translation>
+    </message>
+    <message>
+        <source>Remember playback position</source>
+        <translation>Запомнить позицию воспроизведения</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Сохранять задержку субтитров</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Сохранять масштаб субтитров</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Сохранять частоту кадров</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Сохранять задержку аудио/видео</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Синхронизация аудио и видео (пропуск кадров)</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Отключение звука при остановке воспроизведения</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Запомнить настройки видео эквалайзера</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Воспроизводить следующий при ошибке воспроизведения</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows)</source>
+        <translation>Короткий поиск (левые и правые стрелки)</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows)</source>
+        <translation>Длинный поиск (стрелки вверх и вниз)</translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count)</source>
+        <translation>Размер локального буфера (количество пакетов А/V)</translation>
+    </message>
+    <message>
+        <source>Network buffer size (A/V packages count)</source>
+        <translation>Размер сетевого буфера (количество пакетов А/V)</translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding</source>
+        <translation>Количество пакетов А/В при обратной перемотке</translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered</source>
+        <translation>Начинать воспроизводить интернет-поток если он буферизован</translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>сек</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Усиление</translation>
     </message>
 </context>
 <context>
@@ -2033,28 +2278,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Короткий поиск (левые и правые стрелки)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Длинный поиск (стрелки вверх и вниз)</translation>
-    </message>
-    <message>
         <source>Contains</source>
         <translation>Содержание</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Сохранять масштабирование</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Сохранять соотношение сторон</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Синхронизация аудио и видео (пропуск кадров)</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -2065,14 +2290,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>OSD</translation>
     </message>
     <message>
-        <source>Language</source>
-        <translation>Язык</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Стиль</translation>
-    </message>
-    <message>
         <source>Colors and borders</source>
         <translation>Цвет и граница</translation>
     </message>
@@ -2081,16 +2298,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Применить для ASS/SSA</translation>
     </message>
     <message>
-        <source>Keep subtitles delay</source>
-        <translation>Сохранять задержку субтитров</translation>
-    </message>
-    <message>
         <source>Fonts and spacing</source>
         <translation>Шрифты и расстояние</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Сохранять масштаб субтитров</translation>
     </message>
     <message>
         <source>Margins and alignment</source>
@@ -2101,20 +2310,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Общие настройки</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Кодировка субтитров</translation>
-    </message>
-    <message>
         <source>OSD enabled</source>
         <translation>OSD включено</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Путь для снимков экрана</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>Обзор</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -2123,42 +2320,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Use the same size</source>
         <translation>Использовать тот же размер</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Принудительная частота дискретизации</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Принудительное преобразование каналов</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>сек</translation>
-    </message>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Максимальная громкость</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Начинать воспроизводить интернет-поток если он буферизован</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Показывать индикатор буферизованных данных на ползунке</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Сохранять задержку аудио/видео</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Отключение звука при остановке воспроизведения</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Сброс всех настроек</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
@@ -2177,56 +2338,12 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Чтобы установить новый язык, программа должна перезапуститься!</translation>
     </message>
     <message>
-        <source>Keep speed</source>
-        <translation>Сохранять частоту кадров</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Автоматическая проверка и загрузка обновлений</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Колесо мыши прокручивает музыку/видео</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Показывать обложки</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
-        <translation>Показывать обложки из каталога, если нет в музыкальном файле</translation>
-    </message>
-    <message>
         <source>Video filters</source>
         <translation>Видеофильтры</translation>
     </message>
     <message>
         <source>Software video filters</source>
         <translation>Программные видеофильтры</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Использовать прокси-сервер</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Адрес прокси-сервера</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Порт прокси-сервера</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Прокси-сервер требует авторизацию</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Имя пользователя</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Пароль</translation>
     </message>
     <message>
         <source>Confirm clearing the cache covers</source>
@@ -2237,42 +2354,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Вы точно хотите удалить все кэшированные обложки?</translation>
     </message>
     <message>
-        <source>Clear covers cache</source>
-        <translation>Очистить кэш обложек</translation>
-    </message>
-    <message>
-        <source>Automatically opening video window</source>
-        <translation>Автоматически открывать окно фильма</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Запускать только одну копию</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Показывать вкладки в верхней части главного окна</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Установить внешний вид</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Использовать системные значки</translation>
-    </message>
-    <message>
-        <source>Use replay gain if available</source>
-        <translation>Использовать выравнивание громкости, если возможно</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Режим выравнивания громкости для альбома</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Предотвратить шипение/треск</translation>
-    </message>
-    <message>
         <source>Changing icons</source>
         <translation>Изменение значков</translation>
     </message>
@@ -2281,44 +2362,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Чтобы применить изменение значков, программа запустится снова!</translation>
     </message>
     <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Запомнить настройки видео эквалайзера</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Размер локального буфера (количество пакетов А/V)</translation>
-    </message>
-    <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Размер сетевого буфера (количество пакетов А/V)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Количество пакетов А/В при обратной перемотке</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Язык аудио по умолчанию</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Язык субтитров по умолчанию</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>По умолчанию или первый поток</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Усиление</translation>
-    </message>
-    <message>
-        <source>Move up</source>
-        <translation>Переместить вверх</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Переместить вниз</translation>
     </message>
     <message>
         <source>Video output priority</source>
@@ -2331,34 +2376,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Decoders priority</source>
         <translation>Приоритет декодеров</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Воспроизводить следующий при ошибке воспроизведения</translation>
-    </message>
-    <message>
-        <source>Remember playback position</source>
-        <translation>Запомнить позицию воспроизведения</translation>
-    </message>
-    <message>
-        <source>Always display only file names in playlist</source>
-        <translation>Всегда показывать только имена файлов в списке воспроизведения</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Запомнить режим повтора</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Действие колеса мыши на видеопанели</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Колесо мыши изменяет громкость</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Помутнение покрывает как фон</translation>
     </message>
 </context>
 <context>

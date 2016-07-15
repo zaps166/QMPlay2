@@ -717,6 +717,117 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>GeneralSettings</name>
+    <message>
+        <source>Browse</source>
+        <translation>浏览</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>使用系统图标集</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>外观设定</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>显示封面</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <translation>从文件目录里显示封面(如果音乐文件中不包含封面)</translation>
+    </message>
+    <message>
+        <source>Automatically opening video window</source>
+        <translation>自动打开视频窗口</translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>自动检查并下载更新</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>在主窗口上面显示标签</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>仅允许运行一个实例</translation>
+    </message>
+    <message>
+        <source>Always display only file names in playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>使用代理</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>代理服务器需要登录</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>代理服务器地址</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>代理服务器端口</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>清除封面缓存</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>重置设定</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>部件样式</translation>
+    </message>
+    <message>
+        <source>Subtitles encoding</source>
+        <translation>字幕编码</translation>
+    </message>
+    <message>
+        <source>Default audio language</source>
+        <translation>默认音频语言</translation>
+    </message>
+    <message>
+        <source>Default subtitles language</source>
+        <translation>默认字幕语言</translation>
+    </message>
+    <message>
+        <source>Screenshots path</source>
+        <translation>截图保存路径</translation>
+    </message>
+</context>
+<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -1282,14 +1393,49 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>OSDSettingsW</name>
+    <name>ModulesList</name>
+    <message>
+        <source>Move up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OSDSettings</name>
+    <message>
+        <source>Font</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <source>Margins</source>
+        <translation>页边距</translation>
+    </message>
+    <message>
+        <source>Subtitles alignment</source>
+        <translation>字幕对齐</translation>
+    </message>
+    <message>
+        <source>Border</source>
+        <translation>边框</translation>
+    </message>
+    <message>
+        <source>Colors</source>
+        <translation>颜色</translation>
+    </message>
     <message>
         <source>Size</source>
         <translation>尺寸</translation>
     </message>
     <message>
-        <source>Font</source>
-        <translation>字体</translation>
+        <source>Spacing</source>
+        <translation>间隔</translation>
     </message>
     <message>
         <source>Left</source>
@@ -1304,10 +1450,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>垂直</translation>
     </message>
     <message>
-        <source>Margins</source>
-        <translation>页边距</translation>
-    </message>
-    <message>
         <source>Outline</source>
         <translation>轮廓</translation>
     </message>
@@ -1318,22 +1460,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Text</source>
         <translation>文本</translation>
-    </message>
-    <message>
-        <source>Border</source>
-        <translation>边框</translation>
-    </message>
-    <message>
-        <source>Colors</source>
-        <translation>颜色</translation>
-    </message>
-    <message>
-        <source>Spacing</source>
-        <translation>间隔</translation>
-    </message>
-    <message>
-        <source>Subtitles alignment</source>
-        <translation>字幕对齐</translation>
     </message>
 </context>
 <context>
@@ -1542,6 +1668,125 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Screen shot</source>
         <translation>屏幕截图</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackSettings</name>
+    <message>
+        <source>Maximum volume</source>
+        <translation>最大音量</translation>
+    </message>
+    <message>
+        <source>Force samplerate</source>
+        <translation>强制采样率</translation>
+    </message>
+    <message>
+        <source>Force channels conversion</source>
+        <translation>强制声道转换</translation>
+    </message>
+    <message>
+        <source>Use replay gain if available</source>
+        <translation>使用重放(如果可用)</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>回放增益使用专辑模式</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>阻止翻转</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>鼠标滚轮控制音乐/视频</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>保持比例</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>在滑块上显示缓冲数据</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>保持纵横比</translation>
+    </message>
+    <message>
+        <source>Remember playback position</source>
+        <translation>记住播放位置</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>保持字幕延时</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>保持字幕比例</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>保持速度</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>保持视频延时</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>音视频同步(跳帧)</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>淡入淡出声音</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>记住视频均衡器设定</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>当回放错误时自动播放下一个</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows)</source>
+        <translation>短跳转(左右方向键)</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows)</source>
+        <translation>长跳转(上下方向键)</translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count)</source>
+        <translation>本地缓冲大小(音视频包计数)</translation>
+    </message>
+    <message>
+        <source>Network buffer size (A/V packages count)</source>
+        <translation>网络缓冲大小(音视频包计数)</translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding</source>
+        <translation>回退时流的百分比</translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered</source>
+        <translation>如果缓冲完毕，开始播放网络流</translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1833,20 +2078,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     -next       - plays next on the list
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
-        <translation type="unfinished">  Parameters list:
-    -open         &quot;address&quot;
-    -enqueue      &quot;address&quot;
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
-    -toggle     - toggles play/pause
-    -show       - ensures that the window will be visible if the application is running
-    -fullscreen - toggles fullscreen
-    -volume     - sets volume [0..100]
-    -speed      - sets playback speed [0.05..100.0]
-    -seek       - seeks to the specified value [s]
-    -stop       - stops playback
-    -next       - plays next on the list
-    -prev       - plays previous on the list
-    -quit       - terminates the application</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1982,7 +2214,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">入队</translation>
+        <translation>入队</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2031,32 +2263,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>短跳转(左右方向键)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>长跳转(上下方向键)</translation>
-    </message>
-    <message>
-        <source>Remember playback position</source>
-        <translation>记住播放位置</translation>
-    </message>
-    <message>
         <source>Contains</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>保持比例</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>保持纵横比</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>音视频同步(跳帧)</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -2064,15 +2272,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>OSD</source>
-        <translation type="unfinished">OSD</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>语言</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>部件样式</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Colors and borders</source>
@@ -2083,16 +2283,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>应用 ASS/SSA 字幕</translation>
     </message>
     <message>
-        <source>Keep subtitles delay</source>
-        <translation>保持字幕延时</translation>
-    </message>
-    <message>
         <source>Fonts and spacing</source>
         <translation>字体和间距</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>保持字幕比例</translation>
     </message>
     <message>
         <source>Margins and alignment</source>
@@ -2103,20 +2295,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>常规设置</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>字幕编码</translation>
-    </message>
-    <message>
         <source>OSD enabled</source>
         <translation>OSD 已启用</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>截图保存路径</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>浏览</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -2125,42 +2305,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Use the same size</source>
         <translation>使用相同大小</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>强制采样率</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>强制声道转换</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>秒</translation>
-    </message>
-    <message>
-        <source>Maximum volume</source>
-        <translation>最大音量</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>如果缓冲完毕，开始播放网络流</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>在滑块上显示缓冲数据</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>保持视频延时</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>淡入淡出声音</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>重置设定</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
@@ -2179,26 +2323,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>设置新语言后程序重启后生效</translation>
     </message>
     <message>
-        <source>Keep speed</source>
-        <translation>保持速度</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>自动检查并下载更新</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>鼠标滚轮控制音乐/视频</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>显示封面</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
-        <translation>从文件目录里显示封面(如果音乐文件中不包含封面)</translation>
-    </message>
-    <message>
         <source>Video filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2215,66 +2339,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>要清除所有封面缓存?</translation>
     </message>
     <message>
-        <source>Use proxy server</source>
-        <translation>使用代理</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>代理服务器地址</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>代理服务器端口</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>代理服务器需要登录</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>用户名</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>密码</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>清除封面缓存</translation>
-    </message>
-    <message>
-        <source>Automatically opening video window</source>
-        <translation>自动打开视频窗口</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>仅允许运行一个实例</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>在主窗口上面显示标签</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>外观设定</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>使用系统图标集</translation>
-    </message>
-    <message>
-        <source>Use replay gain if available</source>
-        <translation>使用重放(如果可用)</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>回放增益使用专辑模式</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>阻止翻转</translation>
-    </message>
-    <message>
         <source>Changing icons</source>
         <translation>更改图标</translation>
     </message>
@@ -2283,44 +2347,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>更改图标在程序重启后生效</translation>
     </message>
     <message>
-        <source>Remember video equalizer settings</source>
-        <translation>记住视频均衡器设定</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>本地缓冲大小(音视频包计数)</translation>
-    </message>
-    <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>网络缓冲大小(音视频包计数)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>回退时流的百分比</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>默认音频语言</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>默认字幕语言</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>默认 或 依靠第一个流</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>放大</translation>
-    </message>
-    <message>
-        <source>Move up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video output priority</source>
@@ -2333,30 +2361,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Decoders priority</source>
         <translation>解码器优先级</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>当回放错误时自动播放下一个</translation>
-    </message>
-    <message>
-        <source>Always display only file names in playlist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2718,7 +2722,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">播放列表</translation>
+        <translation>播放列表</translation>
     </message>
     <message>
         <source>yes</source>

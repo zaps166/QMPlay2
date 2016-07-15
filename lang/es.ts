@@ -718,6 +718,117 @@ amp</translation>
     </message>
 </context>
 <context>
+    <name>GeneralSettings</name>
+    <message>
+        <source>Browse</source>
+        <translation>Explorar</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Usar iconos del sistema</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Establecer la apariencia</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Mostrar cubiertas</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <translation>Mostrar las cubiertas desde el directorio si no hay en el archivo de sonido</translation>
+    </message>
+    <message>
+        <source>Automatically opening video window</source>
+        <translation>Abrir automáticamente la ventana de vídeo</translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Comprobar automáticamente y descargar las actualizaciones</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Mostrar pestañas en la parte superior de la ventana principal</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Permitir sólo una instancia</translation>
+    </message>
+    <message>
+        <source>Always display only file names in playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Usar servidor proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>El servidor proxy necesita inicio de sesión</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Nombre de usuario</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Contraseña</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Dirección del servidor proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Puerto del servidor proxy</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Borrar la caché de cubiertas</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Reiniciar ajustes</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Lenguaje</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Estilo</translation>
+    </message>
+    <message>
+        <source>Subtitles encoding</source>
+        <translation>Codificación de Subtítulos</translation>
+    </message>
+    <message>
+        <source>Default audio language</source>
+        <translation>Idioma de audio predeterminado</translation>
+    </message>
+    <message>
+        <source>Default subtitles language</source>
+        <translation>Idioma de subtítulos por defecto</translation>
+    </message>
+    <message>
+        <source>Screenshots path</source>
+        <translation>Ruta de las imágenes</translation>
+    </message>
+</context>
+<context>
     <name>Help</name>
     <message>
         <source>About &amp;Qt</source>
@@ -1283,26 +1394,33 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>OSDSettingsW</name>
+    <name>ModulesList</name>
     <message>
-        <source>Left</source>
-        <translation>Izquierda</translation>
+        <source>Move up</source>
+        <translation>Mover arriba</translation>
     </message>
     <message>
-        <source>Shadow</source>
-        <translation>Sombra</translation>
+        <source>...</source>
+        <translation>...</translation>
     </message>
     <message>
-        <source>Right</source>
-        <translation>Derecha</translation>
+        <source>Move down</source>
+        <translation>Mover abajo</translation>
     </message>
-    <message>
-        <source>Text</source>
-        <translation>Texto</translation>
-    </message>
+</context>
+<context>
+    <name>OSDSettings</name>
     <message>
         <source>Font</source>
         <translation>Fuente</translation>
+    </message>
+    <message>
+        <source>Margins</source>
+        <translation>Márgenes</translation>
+    </message>
+    <message>
+        <source>Subtitles alignment</source>
+        <translation>Alineación de subtítulos</translation>
     </message>
     <message>
         <source>Border</source>
@@ -1313,28 +1431,36 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Colores</translation>
     </message>
     <message>
-        <source>Vertical</source>
-        <translation>Vertical</translation>
-    </message>
-    <message>
-        <source>Margins</source>
-        <translation>Márgenes</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation>Tamaño</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>Contorno</translation>
     </message>
     <message>
         <source>Spacing</source>
         <translation>Espaciado</translation>
     </message>
     <message>
-        <source>Subtitles alignment</source>
-        <translation>Alineación de subtítulos</translation>
+        <source>Left</source>
+        <translation>Izquierda</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Derecha</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>Vertical</translation>
+    </message>
+    <message>
+        <source>Outline</source>
+        <translation>Contorno</translation>
+    </message>
+    <message>
+        <source>Shadow</source>
+        <translation>Sombra</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation>Texto</translation>
     </message>
 </context>
 <context>
@@ -1543,6 +1669,125 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Speed up subtitles</source>
         <translation>Acelerar su&amp;btítulos</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackSettings</name>
+    <message>
+        <source>Maximum volume</source>
+        <translation>Volumen máximo</translation>
+    </message>
+    <message>
+        <source>Force samplerate</source>
+        <translation>Forzar la frecuencia de muestreo</translation>
+    </message>
+    <message>
+        <source>Force channels conversion</source>
+        <translation>Forzar conversión de canales</translation>
+    </message>
+    <message>
+        <source>Use replay gain if available</source>
+        <translation>Usar ganancia de la reproducción si está disponible</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Modo álbum para la ganancia de reproducción</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Evitar el recorte</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Rueda del ratón desplaza música/películas </translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Mantener zoom</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Mostrar buffer indicador de datos sobre control deslizante</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Mantener relación de aspecto</translation>
+    </message>
+    <message>
+        <source>Remember playback position</source>
+        <translation>Recordar la posición al reproducir</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Mantener el retardo de subtítulos</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Mantener escala de subtítulos</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Mantener la velocidad</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Mantener retardo de vídeo</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Vídeo para sincronización de audio (saltar fotograma)</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Fundido al finalizar</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Recordar los ajustes del ecualizador de vídeo</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Reproducir la siguiente entrada después de un error de reproducción</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows)</source>
+        <translation>Búsqueda breve (flechas izquierda y derecha)</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows)</source>
+        <translation>Búsqueda larga (flechas arriba y abajo)</translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count)</source>
+        <translation>Tamaño del búfer local (cuenta de paquetes A/V)</translation>
+    </message>
+    <message>
+        <source>Network buffer size (A/V packages count)</source>
+        <translation>Tamaño del búfer de red (cuenta de paquetes A/V)</translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding</source>
+        <translation>Porcentaje de paquetes para rebobinar atrás</translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered</source>
+        <translation>Iniciar el flujo de reproducción de internet  si está en buffer</translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>seg</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Amplificar</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2016,28 +2261,12 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>OSD</translation>
     </message>
     <message>
-        <source>sec</source>
-        <translation>seg</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Estilo</translation>
-    </message>
-    <message>
         <source>Do you really want to clear all settings?</source>
         <translation>¿Quiere borrar todos los ajustes?</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
         <translation>¿Quiere eliminar todas las cubiertas en caché?</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Recordar los ajustes del ecualizador de vídeo</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Comprobar automáticamente y descargar las actualizaciones</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2060,56 +2289,16 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Fuentes y espaciado</translation>
     </message>
     <message>
-        <source>Keep aspect ratio</source>
-        <translation>Mantener relación de aspecto</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Borrar la caché de cubiertas</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Ruta de las imágenes</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Establecer la apariencia</translation>
-    </message>
-    <message>
         <source>Apply for ASS/SSA subtitles</source>
         <translation>Aplicar para subtítulos ASS/SSA</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Nombre de usuario</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Forzar conversión de canales</translation>
     </message>
     <message>
         <source>Playback settings</source>
         <translation>Valores de reproducción</translation>
     </message>
     <message>
-        <source>Keep subtitles scale</source>
-        <translation>Mantener escala de subtítulos</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Porcentaje de paquetes para rebobinar atrás</translation>
-    </message>
-    <message>
         <source>To apply the icons change program will start again!</source>
         <translation>¡El programa reiniciará para aplicar los cambios en los iconos!</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Tamaño del búfer local (cuenta de paquetes A/V)</translation>
-    </message>
-    <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Tamaño del búfer de red (cuenta de paquetes A/V)</translation>
     </message>
     <message>
         <source>Changing icons</source>
@@ -2124,92 +2313,20 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Usar el mismo tamaño</translation>
     </message>
     <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Búsqueda breve (flechas izquierda y derecha)</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Contraseña</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
-        <translation>Mostrar las cubiertas desde el directorio si no hay en el archivo de sonido</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Vídeo para sincronización de audio (saltar fotograma)</translation>
-    </message>
-    <message>
         <source>Subtitles</source>
         <translation>Subtítulos</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Lenguaje</translation>
     </message>
     <message>
         <source>Software video filters</source>
         <translation>Filtros de vídeo Software</translation>
     </message>
     <message>
-        <source>Use replay gain if available</source>
-        <translation>Usar ganancia de la reproducción si está disponible</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Mantener retardo de vídeo</translation>
-    </message>
-    <message>
         <source>Margins and alignment</source>
         <translation>Márgenes y alineación</translation>
     </message>
     <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Mostrar pestañas en la parte superior de la ventana principal</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Modo álbum para la ganancia de reproducción</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Idioma de audio predeterminado</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Reproducir la siguiente entrada después de un error de reproducción</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Mantener zoom</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Mostrar cubiertas</translation>
-    </message>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Volumen máximo</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Idioma de subtítulos por defecto</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Fundido al finalizar</translation>
-    </message>
-    <message>
         <source>New language</source>
         <translation>Nuevo idioma</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Forzar la frecuencia de muestreo</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Mostrar buffer indicador de datos sobre control deslizante</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -2218,14 +2335,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Settings</source>
         <translation>Configuración</translation>
-    </message>
-    <message>
-        <source>Automatically opening video window</source>
-        <translation>Abrir automáticamente la ventana de vídeo</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Mantener la velocidad</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -2244,30 +2353,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Predeterminado o primera secuencia</translation>
     </message>
     <message>
-        <source>Amplify</source>
-        <translation>Amplificar</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>El servidor proxy necesita inicio de sesión</translation>
-    </message>
-    <message>
-        <source>Subtitles encoding</source>
-        <translation>Codificación de Subtítulos</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Mover abajo</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Usar iconos del sistema</translation>
-    </message>
-    <message>
-        <source>Move up</source>
-        <translation>Mover arriba</translation>
-    </message>
-    <message>
         <source>Confirm clearing the cache covers</source>
         <translation>Confirme borrar las cubiertas de caché</translation>
     </message>
@@ -2280,84 +2365,16 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>¡Para configurar el nuevo idioma, el programa se reiniciará!</translation>
     </message>
     <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Iniciar el flujo de reproducción de internet  si está en buffer</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Evitar el recorte</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Rueda del ratón desplaza música/películas </translation>
-    </message>
-    <message>
-        <source>Remember playback position</source>
-        <translation>Recordar la posición al reproducir</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Reiniciar ajustes</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Permitir sólo una instancia</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Mantener el retardo de subtítulos</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Dirección del servidor proxy</translation>
-    </message>
-    <message>
         <source>Video output priority</source>
         <translation>Prioridad de salida de vídeo</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Usar servidor proxy</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>Explorar</translation>
     </message>
     <message>
         <source>Colors and borders</source>
         <translation>Colores y bordes</translation>
     </message>
     <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Búsqueda larga (flechas arriba y abajo)</translation>
-    </message>
-    <message>
         <source>Video filters</source>
         <translation>Filtros de vídeo</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Puerto del servidor proxy</translation>
-    </message>
-    <message>
-        <source>Always display only file names in playlist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2719,7 +2736,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Lista de reproducción</translation>
+        <translation>Lista de reproducción</translation>
     </message>
     <message>
         <source>yes</source>
