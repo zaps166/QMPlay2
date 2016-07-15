@@ -199,9 +199,9 @@ void PlayClass::play(const QString &_url)
 }
 void PlayClass::stop(bool _quitApp)
 {
+	quitApp = _quitApp;
 	if (stopPauseMutex.tryLock())
 	{
-		quitApp = _quitApp;
 		if (isPlaying())
 		{
 			if (aThr && newUrl.isEmpty())
