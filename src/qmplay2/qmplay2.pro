@@ -17,7 +17,8 @@ win32 {
 	LIBS += -lfreetype -lfribidi -Wl,-Bdynamic -lwinmm -lpowrprof
 } android {
 	LIBS += -lswscale -lswresample -lavutil #-lass
-} else {
+}
+!win32:!android {
 	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libswscale libswresample libavutil libass
