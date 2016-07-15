@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.07.14:
+Changes in QMPlay2 build 16.07.15:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
+	- move most settings Ui from C++ to Qt forms (thanks Zamarin Arthur for help),
 	- add sharpness to video adjustment (OpenGL2 and VDPAU only),
 	- add key bindings (currently only in settings file)
 	- sort current group instead of entire playlist,
@@ -9,6 +10,7 @@ Changes in QMPlay2 build 16.07.14:
 	- move OpenGL2 shaders to resources,
 	- handle multimedia keys on Windows,
 	- add sharpness shader to OpenGL2,
+	- move online contents to GitHub,
 	- add contributors tab,
 
 Changes in QMPlay2 build 16.07.07:
