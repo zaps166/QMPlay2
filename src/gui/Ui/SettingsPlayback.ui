@@ -2,20 +2,24 @@
 <ui version="4.0">
  <class>PlaybackSettings</class>
  <widget class="QWidget" name="PlaybackSettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>586</width>
-    <height>586</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QScrollArea" name="scrollArea">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -24,24 +28,36 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>552</width>
-        <height>801</height>
+        <width>391</width>
+        <height>653</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="margin">
+        <number>1</number>
+       </property>
        <item>
         <layout class="QFormLayout" name="formLayout">
+         <property name="horizontalSpacing">
+          <number>3</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>1</number>
+         </property>
          <item row="0" column="0">
           <widget class="QLabel" name="shortSeekL">
            <property name="text">
-            <string>Short seeking (left and right arrows): </string>
+            <string>Short seeking (left and right arrows)</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="QSpinBox" name="shortSeekB">
            <property name="suffix">
-            <string> sec</string>
+            <string>sec</string>
            </property>
            <property name="minimum">
             <number>2</number>
@@ -54,14 +70,14 @@
          <item row="1" column="0">
           <widget class="QLabel" name="longSeekL">
            <property name="text">
-            <string>Long seeking (up and down arrows): </string>
+            <string>Long seeking (up and down arrows)</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
           <widget class="QSpinBox" name="longSeekB">
            <property name="suffix">
-            <string> sec</string>
+            <string>sec</string>
            </property>
            <property name="minimum">
             <number>30</number>
@@ -74,7 +90,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="bufferLocalL">
            <property name="text">
-            <string>Local buffer size (A/V packages count): </string>
+            <string>Local buffer size (A/V packages count)</string>
            </property>
           </widget>
          </item>
@@ -91,7 +107,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="bufferNetworkL">
            <property name="text">
-            <string>Network buffer size (A/V packages count): </string>
+            <string>Network buffer size (A/V packages count)</string>
            </property>
           </widget>
          </item>
@@ -108,7 +124,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="backwardBufferNetworkL">
            <property name="text">
-            <string>Percent of packages for backwards rewinding: </string>
+            <string>Percent of packages for backwards rewinding</string>
            </property>
           </widget>
          </item>
@@ -116,17 +132,17 @@
           <widget class="QComboBox" name="backwardBufferNetworkB">
            <item>
             <property name="text">
-             <string notr="true">10%</string>
+             <string notr="true">10 %</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string notr="true">25%</string>
+             <string notr="true">25 %</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string notr="true">50%</string>
+             <string notr="true">50 %</string>
             </property>
            </item>
           </widget>
@@ -134,14 +150,14 @@
          <item row="5" column="0">
           <widget class="QLabel" name="playIfBufferedL">
            <property name="text">
-            <string>Start playback internet stream if it is buffered: </string>
+            <string>Start playback internet stream if it is buffered</string>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
           <widget class="QDoubleSpinBox" name="playIfBufferedB">
            <property name="suffix">
-            <string> sec</string>
+            <string>sec</string>
            </property>
            <property name="maximum">
             <double>5.000000000000000</double>
@@ -219,6 +235,12 @@
           <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="margin">
+           <number>3</number>
+          </property>
           <item>
            <widget class="QCheckBox" name="replayGainAlbum">
             <property name="text">
@@ -236,7 +258,7 @@
           <item>
            <widget class="QDoubleSpinBox" name="replayGainPreamp">
             <property name="prefix">
-             <string>Amplify: </string>
+             <string>Amplify</string>
             </property>
             <property name="suffix">
              <string notr="true"> dB</string>
@@ -261,6 +283,12 @@
           <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="margin">
+           <number>3</number>
+          </property>
           <item>
            <widget class="QRadioButton" name="wheelSeekB">
             <property name="text">

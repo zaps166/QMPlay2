@@ -20,24 +20,30 @@
 #define OSDSETTINGSW_HPP
 
 #include <QWidget>
-#include "ui_OSDSettings.h"
 
 class QRadioButton;
 
-class OSDSettingsW : public QWidget, public Ui::OSDSettings
+namespace Ui {
+	class OSDSettings;
+}
+
+class OSDSettingsW : public QWidget
 {
 public:
 	static void init(const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor &);
 
 	OSDSettingsW(const QString &);
+	~OSDSettingsW();
+
+	void addWidget(QWidget *w);
 
 	void writeSettings();
 private:
 	void readSettings();
 
-	QString prefix;
-
 	QRadioButton *alignB[9];
+	Ui::OSDSettings *ui;
+	QString prefix;
 
 };
 

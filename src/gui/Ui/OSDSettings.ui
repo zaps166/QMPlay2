@@ -2,20 +2,25 @@
 <ui version="4.0">
  <class>OSDSettings</class>
  <widget class="QWidget" name="OSDSettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>557</width>
-    <height>401</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>1</number>
+   </property>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>89</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="_layout">
+    <layout class="QVBoxLayout" name="layout">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -30,7 +35,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="fontSizeL">
             <property name="text">
-             <string>Size: </string>
+             <string>Size</string>
             </property>
            </widget>
           </item>
@@ -40,7 +45,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="spacingL">
             <property name="text">
-             <string>Spacing: </string>
+             <string>Spacing</string>
             </property>
            </widget>
           </item>
@@ -66,7 +71,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="leftMarginL">
             <property name="text">
-             <string>Left: </string>
+             <string>Left</string>
             </property>
            </widget>
           </item>
@@ -76,7 +81,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="rightMarginL">
             <property name="text">
-             <string>Right: </string>
+             <string>Right</string>
             </property>
            </widget>
           </item>
@@ -86,7 +91,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="vMarginL">
             <property name="text">
-             <string>Vertical: </string>
+             <string>Vertical</string>
             </property>
            </widget>
           </item>
@@ -116,7 +121,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="outlineL">
             <property name="text">
-             <string>Outline: </string>
+             <string>Outline</string>
             </property>
            </widget>
           </item>
@@ -130,7 +135,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="shadowL">
             <property name="text">
-             <string>Shadow: </string>
+             <string>Shadow</string>
             </property>
            </widget>
           </item>
@@ -153,44 +158,32 @@
           <item row="0" column="0">
            <widget class="QLabel" name="textColorL">
             <property name="text">
-             <string>Text: </string>
+             <string>Text</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="ColorButton" name="textColorB">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
+           <widget class="ColorButton" name="textColorB"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="outlineColorL">
             <property name="text">
-             <string>Border: </string>
+             <string>Border</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="ColorButton" name="outlineColorB">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
+           <widget class="ColorButton" name="outlineColorB"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="shadowColorL">
             <property name="text">
-             <string>Shadow: </string>
+             <string>Shadow</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="ColorButton" name="shadowColorB">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
+           <widget class="ColorButton" name="shadowColorB"/>
           </item>
          </layout>
         </widget>
@@ -198,19 +191,6 @@
       </layout>
      </item>
     </layout>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>89</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="1" column="0">
     <spacer name="verticalSpacer">

@@ -60,7 +60,7 @@ private:
 
 	Ui::GeneralSettings *page1;
 	Ui::PlaybackSettings *page2;
-	Ui::ModulesList *page2_modulesList[3];
+	Ui::ModulesList *page2ModulesList[3];
 	Page3 *page3;
 	Page4 *page4;
 	Page5 *page5;

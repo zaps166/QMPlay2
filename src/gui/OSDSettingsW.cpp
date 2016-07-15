@@ -18,11 +18,22 @@
 
 #include <OSDSettingsW.hpp>
 
-#include <LibASS.hpp>
-#include <Main.hpp>
 #include <Settings.hpp>
+#include <LibASS.hpp>
 
 #include <QRadioButton>
+
+#include "ui_OSDSettings.h"
+
+static void appendColon(const QObjectList &objects)
+{
+	foreach (QObject *obj, objects)
+	{
+		appendColon(obj->children());
+		if (QLabel *label = qobject_cast<QLabel *>(obj))
+			label->setText(label->text() + ": ");
+	}
+}
 
 void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k)
 {
@@ -39,67 +50,77 @@ void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e
 	QMPSettings.init(prefix + "/TextColor", i);
 	QMPSettings.init(prefix + "/OutlineColor", j);
 	QMPSettings.init(prefix + "/ShadowColor", k);
-	int align = QMPSettings.getInt(prefix + "/Alignment");
+	const int align = QMPSettings.getInt(prefix + "/Alignment");
 	if (align < 0 || align > 8)
 		QMPSettings.set(prefix + "/Alignment", f);
 }
 
 OSDSettingsW::OSDSettingsW(const QString &prefix) :
+	ui(new Ui::OSDSettings),
 	prefix(prefix)
 {
-	setupUi(this);
+	ui->setupUi(this);
+	appendColon(children());
 
 	// Alignment GroupBox
-	QGridLayout* alignL = new QGridLayout(alignGB);
-	for (int align = 0; align < 9; align++)
+	QGridLayout *alignL = new QGridLayout(ui->alignGB);
+	for (int align = 0; align < 9; ++align)
 	{
 		alignB[align] = new QRadioButton;
-		alignL->addWidget(alignB[align], align/3, align%3);
+		alignL->addWidget(alignB[align], align / 3, align % 3);
 	}
 
 	readSettings();
 
 	setDisabled(LibASS::isDummy());
 }
+OSDSettingsW::~OSDSettingsW()
+{
+	delete ui;
+}
+
+void OSDSettingsW::addWidget(QWidget *w)
+{
+	ui->layout->addWidget(w);
+}
 
 void OSDSettingsW::writeSettings()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
-	QMPSettings.set(prefix + "/FontName", fontCB->currentText());
-	QMPSettings.set(prefix + "/FontSize", fontSizeB->value());
-	QMPSettings.set(prefix + "/Spacing", spacingB->value());
-	QMPSettings.set(prefix + "/LeftMargin", leftMarginB->value());
-	QMPSettings.set(prefix + "/RightMargin", rightMarginB->value());
-	QMPSettings.set(prefix + "/VMargin", vMarginB->value());
+	QMPSettings.set(prefix + "/FontName", ui->fontCB->currentText());
+	QMPSettings.set(prefix + "/FontSize", ui->fontSizeB->value());
+	QMPSettings.set(prefix + "/Spacing", ui->spacingB->value());
+	QMPSettings.set(prefix + "/LeftMargin", ui->leftMarginB->value());
+	QMPSettings.set(prefix + "/RightMargin", ui->rightMarginB->value());
+	QMPSettings.set(prefix + "/VMargin", ui->vMarginB->value());
 	for (int align = 0; align < 9; ++align)
 		if (alignB[align]->isChecked())
 		{
 			QMPSettings.set(prefix + "/Alignment", align);
 			break;
 		}
-	QMPSettings.set(prefix + "/Outline", outlineB->value());
-	QMPSettings.set(prefix + "/Shadow", shadowB->value());
-	QMPSettings.set(prefix + "/TextColor", textColorB->getColor());
-	QMPSettings.set(prefix + "/OutlineColor", outlineColorB->getColor());
-	QMPSettings.set(prefix + "/ShadowColor", shadowColorB->getColor());
+	QMPSettings.set(prefix + "/Outline", ui->outlineB->value());
+	QMPSettings.set(prefix + "/Shadow", ui->shadowB->value());
+	QMPSettings.set(prefix + "/TextColor", ui->textColorB->getColor());
+	QMPSettings.set(prefix + "/OutlineColor", ui->outlineColorB->getColor());
+	QMPSettings.set(prefix + "/ShadowColor", ui->shadowColorB->getColor());
 }
 
 void OSDSettingsW::readSettings()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
-	int idx = fontCB->findText(QMPSettings.getString(prefix + "/FontName"));
+	const int idx = ui->fontCB->findText(QMPSettings.getString(prefix + "/FontName"));
 	if (idx > -1)
-		fontCB->setCurrentIndex(idx);
-	fontSizeB->setValue(QMPSettings.getInt(prefix + "/FontSize"));
-	spacingB->setValue(QMPSettings.getInt(prefix + "/Spacing"));
-	leftMarginB->setValue(QMPSettings.getInt(prefix + "/LeftMargin"));
-	rightMarginB->setValue(QMPSettings.getInt(prefix + "/RightMargin"));
-	vMarginB->setValue(QMPSettings.getInt(prefix + "/VMargin"));
-	int align = QMPSettings.getInt(prefix + "/Alignment");
-	alignB[align]->setChecked(true);
-	outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
-	shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
-	textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value<QColor>());
-	outlineColorB->setColor(QMPSettings.get(prefix + "/OutlineColor").value<QColor>());
-	shadowColorB->setColor(QMPSettings.get(prefix + "/ShadowColor").value<QColor>());
+		ui->fontCB->setCurrentIndex(idx);
+	ui->fontSizeB->setValue(QMPSettings.getInt(prefix + "/FontSize"));
+	ui->spacingB->setValue(QMPSettings.getInt(prefix + "/Spacing"));
+	ui->leftMarginB->setValue(QMPSettings.getInt(prefix + "/LeftMargin"));
+	ui->rightMarginB->setValue(QMPSettings.getInt(prefix + "/RightMargin"));
+	ui->vMarginB->setValue(QMPSettings.getInt(prefix + "/VMargin"));
+	alignB[QMPSettings.getInt(prefix + "/Alignment")]->setChecked(true);
+	ui->outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
+	ui->shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
+	ui->textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value<QColor>());
+	ui->outlineColorB->setColor(QMPSettings.get(prefix + "/OutlineColor").value<QColor>());
+	ui->shadowColorB->setColor(QMPSettings.get(prefix + "/ShadowColor").value<QColor>());
 }

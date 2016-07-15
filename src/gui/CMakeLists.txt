@@ -67,7 +67,7 @@ set(GUI_SRC
 set(GUI_FORMS # *.ui files
     Ui/SettingsGeneral.ui
     Ui/SettingsPlayback.ui
-    Ui/SettingsPlaybackModuleslist.ui
+    Ui/SettingsPlaybackModulesList.ui
     Ui/OSDSettings.ui
 )
 
