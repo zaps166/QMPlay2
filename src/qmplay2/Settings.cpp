@@ -46,6 +46,8 @@ bool Settings::contains(const QString &key) const
 	QMutexLocker mL(&mutex);
 	if (cache.contains(key))
 		return true;
+	if (toRemove.contains(key))
+		return false;
 	return QSettings::contains(key);
 }
 void Settings::set(const QString &key, const QVariant &val)
@@ -67,6 +69,8 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 	SettingsMap::const_iterator it = cache.find(key);
 	if (it != cache.end())
 		return it.value();
+	if (toRemove.contains(key))
+		return def;
 	return QSettings::value(key, def);
 }
 
