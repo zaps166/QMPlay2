@@ -1079,7 +1079,10 @@ void PlayClass::demuxThrFinished()
 {
 	timTerminate.stop();
 
-	if (!stopPauseMutex.tryLock())
+	bool doUnlock = false;
+	if (stopPauseMutex.tryLock())
+		doUnlock = true;
+	else
 		doSilenceBreak = true; //jeżeli ta funkcja jest wywołana spod "processEvents()" z "silence()", po tym wywołaniu ma się natychmiast zakończyć
 
 	if (demuxThr->demuxer) //Jeżeli wątek się zakończył po upływie czasu timera (nieprawidłowo zakończony), to demuxer nadal istnieje
@@ -1089,7 +1092,8 @@ void PlayClass::demuxThrFinished()
 	delete demuxThr;
 	demuxThr = NULL;
 
-	stopPauseMutex.unlock();
+	if (doUnlock)
+		stopPauseMutex.unlock();
 
 	if (restartSeekTo < 0.0) //jeżeli nie restart odtwarzania
 		fileSubsList.clear(); //czyści listę napisów z pliku
