@@ -168,7 +168,7 @@ void QMPlay2GUIClass::setLanguage()
 	const int idx = systemLang.indexOf('_');
 	if (idx > -1)
 		systemLang.remove(idx, systemLang.size() - idx);
-	lang = settings->get("Language", systemLang).toString();
+	lang = settings->getString("Language", systemLang);
 	if (lang.isEmpty())
 		lang = systemLang;
 	if (!translator->load(lang, langPath))
@@ -181,7 +181,7 @@ void QMPlay2GUIClass::setStyle()
 #if defined Q_OS_ANDROID
 	defaultStyle = "fusion"; //Android style is awful in Qt (tested on Qt 5.4 and Qt 5.5)
 #endif
-	QApplication::setStyle(settings->get("Style", defaultStyle).toString());
+	QApplication::setStyle(settings->getString("Style", defaultStyle));
 }
 void QMPlay2GUIClass::loadIcons()
 {
@@ -198,7 +198,7 @@ QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
 	if (!leaveFilename)
 		pth = Functions::filePath(pth);
 	if (!QFileInfo(pth).exists())
-		pth = settings->get("currPth").toString();
+		pth = settings->getString("currPth");
 	return pth;
 }
 void QMPlay2GUIClass::setCurrentPth(const QString &pth)
