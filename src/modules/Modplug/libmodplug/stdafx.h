@@ -47,8 +47,6 @@
 #define random()        rand()
 #define sleep(_ms)      Sleep(_ms)
 
-inline void ProcessPlugins(int n) {}
-
 #define strncasecmp(a,b,c)  strncmp(a,b,c)
 #define strcasecmp(a,b) strcmp(a,b)
 #define strnicmp(a,b,c)		strncasecmp(a,b,c)
@@ -107,8 +105,6 @@ inline int8_t * GlobalAllocPtr(unsigned int, size_t size)
   if (p != NULL) memset(p, 0, size);
   return p;
 }
-
-inline void ProcessPlugins(int /*n*/) {}
 
 #define GlobalFreePtr(p) free((void *)(p))
 

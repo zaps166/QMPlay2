@@ -299,7 +299,6 @@ UINT CSoundFile::Read(LPVOID lpDestBuffer, UINT cbBuffer)
 		} else
 		{
 			m_nMixStat += CreateStereoMix(lCount);
-			if (nMaxPlugins) ProcessPlugins(lCount);
 			ProcessStereoDSP(lCount);
 			X86_MonoFromStereo(MixSoundBuffer, lCount);
 		}
