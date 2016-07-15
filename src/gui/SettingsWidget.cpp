@@ -32,7 +32,7 @@
 #include <QStyleFactory>
 #include <QRadioButton>
 #include <QApplication>
-#include <QHBoxLayout>
+#include <QFormLayout>
 #include <QFileDialog>
 #include <QPushButton>
 #include <QListWidget>
@@ -41,6 +41,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QMainWindow>
+#include <QBoxLayout>
 #include <QTextCodec>
 #include <QComboBox>
 #include <QCheckBox>
@@ -1061,12 +1062,14 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 		QWidget *w = page3->module->getSettingsWidget();
 		if (w)
 		{
-			QGridLayout *layout = qobject_cast<QGridLayout *>(w->layout());
-			if (layout)
+			QLayout *layout = w->layout();
+			layout->setMargin(2);
+			if (QFormLayout *fLayout = qobject_cast<QFormLayout *>(layout))
+				fLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+			else if (QGridLayout *gLayout = qobject_cast<QGridLayout *>(layout))
 			{
-				layout->setMargin(2);
-				if (!layout->property("NoVHSpacer").toBool())
-					AddVHSpacer(*layout);
+				if (!gLayout->property("NoVHSpacer").toBool())
+					AddVHSpacer(*gLayout);
 			}
 			page3->scrollA->setWidget(w);
 			w->setAutoFillBackground(false);
@@ -1079,7 +1082,7 @@ void SettingsWidget::tabCh(int idx)
 {
 	if (idx == 1 && !page2->modulesList[0]->list->count() && !page2->modulesList[1]->list->count() && !page2->modulesList[2]->list->count())
 	{
-		QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
+		const QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
 		QVector<QPair<Module *, Module::Info> > pluginsInstances[3];
 		for (int m = 0; m < 3; ++m)
 			pluginsInstances[m].fill(QPair<Module *, Module::Info >(), writers[m].size());
@@ -1129,8 +1132,8 @@ void SettingsWidget::tabCh(int idx)
 }
 void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
 {
-	QList<QListWidgetItem *> items = page3->listW->findItems(wI->data(Qt::UserRole).toString(), Qt::MatchExactly);
-	if (items.size())
+	const QList<QListWidgetItem *> items = page3->listW->findItems(wI->data(Qt::UserRole).toString(), Qt::MatchExactly);
+	if (!items.isEmpty())
 	{
 		page3->listW->setCurrentItem(items[0]);
 		tabW->setCurrentIndex(2);
