@@ -60,6 +60,10 @@ using Functions::timeToStr;
 
 #include <math.h>
 
+#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
+	#define QT5_WINDOWS
+#endif
+
 /* Qt5 or (Qt4 in Windows) */
 #define UseMainWidgetTmpStyle (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
 
