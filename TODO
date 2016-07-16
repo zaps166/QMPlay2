@@ -2,13 +2,14 @@ HW and SW filters settings in the same place
 User can type any aspect ratio and zoom
 Video preview on progress bar
 Improve radio stations
+Downloading subtitles
 Accurate seeking
 Video cropping
 
 Add audio filters:
 	- Lua/LuaJIT scripts (from DSPBlocks),
+	- FIR and IIR (both from DSPBlocks),
 	- LADSPA (from DSPBlocks), LV2,
-	- FIR, IIR (from DSPBlocks),
 	- "Tempo".
 
 HWAccel:
