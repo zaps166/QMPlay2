@@ -41,6 +41,11 @@ public:
 	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
 
 	void silence(bool invert = false);
+
+	inline void setAllowAudioDrain()
+	{
+		allowAudioDrain = true;
+	}
 private:
 	void run();
 
@@ -62,6 +67,7 @@ private:
 #ifdef Q_OS_WIN
 	bool canUpdatePos, canUpdateBitrate;
 #endif
+	bool allowAudioDrain;
 
 	QVector<QMPlay2Extensions *> visualizations;
 	QVector<AudioFilter *> filters;

@@ -25,8 +25,13 @@ PulseAudioWriter::PulseAudioWriter(Module &module) :
 	addParam("delay");
 	addParam("chn");
 	addParam("rate");
+	addParam("drain");
 
 	SetModule(module);
+}
+PulseAudioWriter::~PulseAudioWriter()
+{
+	pulse.stop(!err && getParam("drain").toBool());
 }
 
 bool PulseAudioWriter::set()

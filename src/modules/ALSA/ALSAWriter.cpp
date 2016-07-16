@@ -77,6 +77,7 @@ ALSAWriter::ALSAWriter(Module &module) :
 	addParam("delay");
 	addParam("rate");
 	addParam("chn");
+	addParam("drain");
 
 	SetModule(module);
 }
@@ -338,7 +339,10 @@ void ALSAWriter::close()
 {
 	if (snd)
 	{
-		snd_pcm_drop(snd);
+		if (!err && getParam("drain").toBool())
+			snd_pcm_drain(snd);
+		else
+			snd_pcm_drop(snd);
 		snd_pcm_close(snd);
 		snd = NULL;
 	}

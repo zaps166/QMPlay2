@@ -112,12 +112,16 @@ bool Pulse::start()
 
 	return pulse;
 }
-void Pulse::stop()
+void Pulse::stop(bool drain)
 {
 	if (pulse)
 	{
 		if (!writing) //If "pa_simple_write()" is freezed and the audio thread is killed - don't free the context to avoid the deadlock
+		{
+			if (drain)
+				pa_simple_drain(pulse, NULL);
 			pa_simple_free(pulse);
+		}
 		pulse = NULL;
 	}
 }

@@ -215,6 +215,8 @@ void PlayClass::stop(bool _quitApp)
 		}
 		else
 		{
+			if (aThr)
+				aThr->setAllowAudioDrain();
 			stopAVThr();
 			clearPlayInfo();
 			if (quitApp)
@@ -1088,7 +1090,7 @@ void PlayClass::demuxThrFinished()
 	if (demuxThr->demuxer) //Jeżeli wątek się zakończył po upływie czasu timera (nieprawidłowo zakończony), to demuxer nadal istnieje
 		demuxThr->end();
 
-	bool br  = demuxThr->demuxer.isAborted(), err = demuxThr->err;
+	const bool br  = demuxThr->demuxer.isAborted(), err = demuxThr->err;
 	delete demuxThr;
 	demuxThr = NULL;
 

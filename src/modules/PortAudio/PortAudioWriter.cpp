@@ -27,6 +27,7 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 	addParam("delay");
 	addParam("chn");
 	addParam("rate");
+	addParam("drain");
 
 	memset(&outputParameters, 0, sizeof(outputParameters));
 	outputParameters.sampleFormat = paFloat32;
@@ -147,7 +148,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 }
 void PortAudioWriter::pause()
 {
-	if (stream)
+	if (readyWrite())
 		Pa_StopStream(stream);
 }
 
@@ -167,6 +168,8 @@ void PortAudioWriter::close()
 {
 	if (stream)
 	{
+		if (!err && getParam("drain").toBool())
+			Pa_StopStream(stream);
 		Pa_CloseStream(stream);
 		stream = NULL;
 	}

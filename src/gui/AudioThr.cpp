@@ -34,6 +34,8 @@
 AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
 	AVThread(playC, "audio:", NULL, pluginsName)
 {
+	allowAudioDrain = false;
+
 	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (QMPlay2Ext->isVisualization())
 			visualizations += QMPlay2Ext;
@@ -114,6 +116,7 @@ void AudioThr::silence(bool invert)
 	if (QMPlay2Core.getSettings().getBool("Silence") && doSilence == -1.0 && isRunning() && (invert || !playC.paused))
 	{
 		playC.doSilenceBreak = false;
+		allowAudioDrain |= !invert;
 		silence_step = (invert ? -4.0 : 4.0) / sample_rate;
 		silenceChMutex.lock();
 		doSilence = invert ? -silence_step : (1.0 - silence_step);
@@ -379,6 +382,7 @@ void AudioThr::run()
 				packet.remove(0, bytes_consumed);
 		}
 	}
+	writer->modParam("drain", allowAudioDrain);
 }
 
 bool AudioThr::resampler_create()

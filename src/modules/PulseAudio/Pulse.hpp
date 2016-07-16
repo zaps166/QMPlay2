@@ -28,10 +28,6 @@ class Pulse
 {
 public:
 	Pulse();
-	inline ~Pulse()
-	{
-		stop();
-	}
 
 	inline bool isOK() const
 	{
@@ -43,7 +39,7 @@ public:
 	}
 
 	bool start();
-	void stop();
+	void stop(bool drain = false);
 
 	bool write(const QByteArray &);
 

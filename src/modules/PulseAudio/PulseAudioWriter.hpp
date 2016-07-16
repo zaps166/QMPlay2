@@ -26,6 +26,7 @@ class PulseAudioWriter : public Writer
 	Q_DECLARE_TR_FUNCTIONS(PulseAudioWriter)
 public:
 	PulseAudioWriter(Module &);
+	~PulseAudioWriter();
 private:
 	bool set();
 
