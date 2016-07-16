@@ -6,6 +6,7 @@ Changes in QMPlay2 build 16.07.15:
 	- add sharpness to video adjustment (OpenGL2 and VDPAU only),
 	- add key bindings (currently only in settings file),
 	- sort current group instead of entire playlist,
+	- HW and SW filters settings in the same place,
 	- rename video equalizer -> video adjustment,
 	- fix bug in tag editor (non-Windows OS'es),
 	- updated Russian translation (victorr2007),

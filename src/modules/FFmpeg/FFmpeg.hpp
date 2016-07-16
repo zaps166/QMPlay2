@@ -18,6 +18,8 @@
 
 #include <Module.hpp>
 
+class QComboBox;
+
 class FFmpeg : public Module
 {
 public:
@@ -29,14 +31,18 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
+	void videoDeintSave();
+
 	/**/
 
 	QImage demuxIcon;
 #ifdef QMPlay2_VDPAU
 	QImage vdpauIcon;
+	QComboBox *vdpauDeintMethodB;
 #endif
 #ifdef QMPlay2_VAAPI
 	QImage vaapiIcon;
+	QComboBox *vaapiDeintMethodB;
 #endif
 
 	QMutex mutex;
@@ -47,7 +53,6 @@ private:
 #include <QCoreApplication>
 
 class QCheckBox;
-class QComboBox;
 class QGroupBox;
 class QSpinBox;
 class Slider;
@@ -74,7 +79,7 @@ private:
 	QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
 	QGroupBox *decoderVDPAUB;
-	QComboBox *vdpauDeintMethodB, *vdpauHQScalingB;
+	QComboBox *vdpauHQScalingB;
 	QCheckBox *noisereductionVDPAUB;
 	Slider *noisereductionLvlVDPAUS;
 	QCheckBox *decoderVDPAU_NWB;
@@ -82,7 +87,6 @@ private:
 #ifdef QMPlay2_VAAPI
 	QCheckBox *allowVDPAUinVAAPIB;
 	QGroupBox *decoderVAAPIEB;
-	QComboBox *vaapiDeintMethodB;
 #endif
 	QSpinBox *threadsB;
 	QComboBox *lowresB, *thrTypeB;

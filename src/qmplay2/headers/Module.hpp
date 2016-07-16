@@ -33,6 +33,7 @@ class Module : public Settings
 public:
 	enum TYPE {NONE, DEMUXER, DECODER, READER, WRITER, PLAYLIST, QMPLAY2EXTENSION, SUBSDEC, AUDIOFILTER, VIDEOFILTER};
 	enum FILTERTYPE {DEINTERLACE = 0x400000, DOUBLER = 0x800000, USERFLAG = 0x80000000};
+	enum HWTYPE {VIDEOHWFILTER = 0x4000000};
 
 	inline Module(const QString &mName) :
 		Settings(mName),
@@ -101,6 +102,8 @@ public:
 		Module &module;
 	};
 	virtual SettingsWidget *getSettingsWidget();
+
+	virtual void videoDeintSave();
 
 	inline QImage image() const
 	{

@@ -108,7 +108,7 @@ You can enable it in "Settings->Playback settings" - move proper decoder on deco
 
 VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU filters won't work.
 
-VDPAU and VA-API has its own deinterlacing filters. These settings are mixed together with "FFmpeg" module settings.
+VDPAU and VA-API has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 
 H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 

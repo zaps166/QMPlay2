@@ -29,7 +29,6 @@ class ImgScaler;
 class VideoWriter : public Writer
 {
 public:
-
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
 	qint64 write(const QByteArray &);

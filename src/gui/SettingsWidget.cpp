@@ -98,13 +98,17 @@ public:
 
 	QCheckBox *enabledB;
 };
-class Page6 : public QWidget
+class Page6 : public QScrollArea
 {
 public:
-	QGridLayout *layout;
+	inline Page6()
+	{
+		setWidgetResizable(true);
+		setFrameShape(QFrame::NoFrame);
+	}
+
 	DeintSettingsW *deintSettingsW;
 	QGroupBox *videoEqContainer;
-	QGroupBox *otherVFiltersContainer;
 	OtherVFiltersW *otherVFiltersW;
 };
 
@@ -523,21 +527,45 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page6 = new Page6;
 		tabW->addTab(page6, tr("Video filters"));
 
+		QWidget *widget = new QWidget;
+
+		QGridLayout *layout = new QGridLayout(widget);
+		layout->setMargin(0);
+
 		page6->deintSettingsW = new DeintSettingsW;
+		layout->addWidget(page6->deintSettingsW, 0, 0, 1, 2);
 
 		page6->videoEqContainer = new QGroupBox(videoEq->objectName());
+		layout->addWidget(page6->videoEqContainer, 1, 0, 2, 1);
 
-		page6->otherVFiltersContainer = new QGroupBox(tr("Software video filters"));
-		page6->otherVFiltersW = new OtherVFiltersW;
-		QGridLayout *otherVFiltersLayout = new QGridLayout(page6->otherVFiltersContainer);
-		otherVFiltersLayout->addWidget(page6->otherVFiltersW);
-		connect(page6->otherVFiltersW, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+		page6->otherVFiltersW = new OtherVFiltersW(false);
+		if (!page6->otherVFiltersW->count())
+		{
+			delete page6->otherVFiltersW;
+			page6->otherVFiltersW = NULL;
+		}
+		else
+		{
+			QGroupBox *otherVFiltersContainer = new QGroupBox(tr("Software video filters"));
+			QGridLayout *otherVFiltersLayout = new QGridLayout(otherVFiltersContainer);
+			otherVFiltersLayout->addWidget(page6->otherVFiltersW);
+			connect(page6->otherVFiltersW, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+			layout->addWidget(otherVFiltersContainer, 1, 1, 1, 1);
+		}
 
-		page6->layout = new QGridLayout(page6);
-		page6->layout->addWidget(page6->deintSettingsW, 0, 0, 1, 2);
-		page6->layout->addWidget(page6->videoEqContainer, 1, 0, 1, 1);
-		page6->layout->addWidget(page6->otherVFiltersContainer, 1, 1, 1, 1);
-		page6->layout->setMargin(1);
+		OtherVFiltersW *otherHWVFiltersW = new OtherVFiltersW(true);
+		if (!otherHWVFiltersW->count())
+			delete otherHWVFiltersW;
+		else
+		{
+			QGroupBox *otherHWVFiltersContainer = new QGroupBox(tr("Video filters for hardware accelerated outputs"));
+			QGridLayout *otherHWVFiltersLayout = new QGridLayout(otherHWVFiltersContainer);
+			otherHWVFiltersLayout->addWidget(otherHWVFiltersW);
+			connect(otherHWVFiltersW, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+			layout->addWidget(otherHWVFiltersContainer, 2, 1, 1, 1);
+		}
+
+		page6->setWidget(widget);
 	}
 
 	connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(tabCh(int)));
@@ -774,7 +802,8 @@ void SettingsWidget::apply()
 			break;
 		case 6:
 			page6->deintSettingsW->writeSettings();
-			page6->otherVFiltersW->writeSettings();
+			if (page6->otherVFiltersW)
+				page6->otherVFiltersW->writeSettings();
 			break;
 	}
 	if (page != 3)

@@ -26,6 +26,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
+#include <QSet>
 
 void DeintSettingsW::init()
 {
@@ -71,8 +72,19 @@ DeintSettingsW::DeintSettingsW()
 	layout->addRow(autoDeintB);
 	layout->addRow(doublerB);
 	layout->addRow(autoParityB);
-	layout->addRow(tr("Deinterlacing method (software decoding)") + ": ", softwareMethodsCB);
+	layout->addRow(tr("Deinterlacing method") + " (" + tr("software decoding") + "): ", softwareMethodsCB);
+	foreach (QWidget *w, QMPlay2Core.getVideoDeintMethods())
+	{
+		const QVariant text = w->property("text");
+		layout->addRow(text.isNull() ? QString() : text.toString(), w);
+	}
 	layout->addRow(tr("Parity (if not detected automatically)") + ": ", parityCB);
+}
+DeintSettingsW::~DeintSettingsW()
+{
+	foreach (QObject *obj, children())
+		if (obj->isWidgetType() && !obj->property("module").isNull())
+			obj->setParent(NULL);
 }
 
 void DeintSettingsW::writeSettings()
@@ -84,6 +96,13 @@ void DeintSettingsW::writeSettings()
 	QMPSettings.set("Deinterlace/AutoParity", autoParityB->isChecked());
 	QMPSettings.set("Deinterlace/SoftwareMethod", softwareMethodsCB->currentText());
 	QMPSettings.set("Deinterlace/TFF", (bool)parityCB->currentIndex());
+
+	QSet<Module *> videoDeintModules;
+	foreach (QObject *obj, children())
+		if (obj->isWidgetType() && !obj->property("module").isNull())
+			videoDeintModules.insert((Module *)obj->property("module").value<void *>());
+	foreach (Module *module, videoDeintModules)
+		module->videoDeintSave();
 }
 
 void DeintSettingsW::softwareMethods(bool doubler)

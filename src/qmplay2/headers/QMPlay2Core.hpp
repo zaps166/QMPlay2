@@ -26,6 +26,9 @@
 
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
+template<typename T>
+class QPointer;
+
 class Settings;
 class QWidget;
 class QPixmap;
@@ -144,6 +147,9 @@ public:
 	}
 
 	virtual const QWidget *getVideoDock() const = 0;
+
+	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
+	QList<QWidget *> getVideoDeintMethods() const;
 private slots:
 	void restoreCursorSlot();
 	void waitCursorSlot();
@@ -166,6 +172,7 @@ private:
 	QAtomicInt working;
 	QStringList logs;
 	QMap<QString, QString> languages;
+	QList<QPointer<QWidget> > videoFilters;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

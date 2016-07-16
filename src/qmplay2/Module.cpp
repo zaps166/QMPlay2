@@ -32,6 +32,9 @@ Module::SettingsWidget *Module::getSettingsWidget()
 	return NULL;
 }
 
+void Module::videoDeintSave()
+{}
+
 void Module::setInstances(bool &restartPlaying)
 {
 	QMutexLocker locker(&mutex);

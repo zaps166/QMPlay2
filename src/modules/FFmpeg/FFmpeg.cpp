@@ -39,6 +39,8 @@ extern "C"
 #endif
 }
 
+#include <QComboBox>
+
 FFmpeg::FFmpeg() :
 	Module("FFmpeg"),
 	demuxIcon(":/FFDemux")
@@ -84,6 +86,29 @@ FFmpeg::FFmpeg() :
 	init("LowresValue", 0);
 	init("ThreadTypeSlice", false);
 
+	const QVariant self = QVariant::fromValue((void *)this);
+
+#ifdef QMPlay2_VDPAU
+	vdpauDeintMethodB = new QComboBox;
+	vdpauDeintMethodB->addItems(QStringList() << tr("None") << "Temporal" << "Temporal-spatial");
+	vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
+	if (vdpauDeintMethodB->currentIndex() < 0)
+		vdpauDeintMethodB->setCurrentIndex(1);
+	vdpauDeintMethodB->setProperty("text", tr("Deinterlacing method") + " (VDPAU): ");
+	vdpauDeintMethodB->setProperty("module", self);
+	QMPlay2Core.addVideoDeintMethod(vdpauDeintMethodB);
+#endif
+#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+	vaapiDeintMethodB = new QComboBox;
+	vaapiDeintMethodB->addItems(QStringList() << tr("None") << "Motion adaptive" << "Motion compensated");
+	vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
+	if (vaapiDeintMethodB->currentIndex() < 0)
+		vaapiDeintMethodB->setCurrentIndex(1);
+	vaapiDeintMethodB->setProperty("text", tr("Deinterlacing method") + " (VA-API): ");
+	vaapiDeintMethodB->setProperty("module", self);
+	QMPlay2Core.addVideoDeintMethod(vaapiDeintMethodB);
+#endif
+
 	static bool firstTime = true;
 	if (firstTime)
 	{
@@ -114,7 +139,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || getBool("DecoderVDPAUEnabled"))
 	{
 		modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
-		modulesInfo += Info(VDPAUWriterName, WRITER, vdpauIcon);
+		modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
 	}
 	if (showDisabled || getBool("DecoderVDPAU_NWEnabled"))
 		modulesInfo += Info(DecoderVDPAU_NWName, DECODER, vdpauIcon);
@@ -123,7 +148,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || getBool("DecoderVAAPIEnabled"))
 	{
 		modulesInfo += Info(DecoderVAAPIName, DECODER, vaapiIcon);
-		modulesInfo += Info(VAAPIWriterName, WRITER, vaapiIcon);
+		modulesInfo += Info(VAAPIWriterName, WRITER | VIDEOHWFILTER, vaapiIcon);
 	}
 #endif
 	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp", moduleImg);
@@ -155,6 +180,18 @@ FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
+void FFmpeg::videoDeintSave()
+{
+#ifdef QMPlay2_VDPAU
+	set("VDPAUDeintMethod", vdpauDeintMethodB->currentIndex());
+	setInstance<VDPAUWriter>();
+#endif
+#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+	set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
+	setInstance<VAAPIWriter>();
+#endif
+}
+
 QMPLAY2_EXPORT_PLUGIN(FFmpeg)
 
 /**/
@@ -165,7 +202,6 @@ QMPLAY2_EXPORT_PLUGIN(FFmpeg)
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QSpinBox>
 #include <QLabel>
 
@@ -183,12 +219,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
 	decoderVDPAUB->setCheckable(true);
 	decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
-
-	vdpauDeintMethodB = new QComboBox;
-	vdpauDeintMethodB->addItems(QStringList() << tr("None") << "Temporal" << "Temporal-spatial");
-	vdpauDeintMethodB->setCurrentIndex(sets().getInt("VDPAUDeintMethod"));
-	if (vdpauDeintMethodB->currentIndex() < 0)
-		vdpauDeintMethodB->setCurrentIndex(1);
 
 	vdpauHQScalingB = new QComboBox;
 	for (int i = 0; i <= 9; ++i)
@@ -209,10 +239,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	checkEnables();
 
 	QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
-	vdpauLayout->addRow(tr("Improving deinterlacing quality") + ": ", vdpauDeintMethodB);
 	vdpauLayout->addRow(tr("Image scaling level") + ": ", vdpauHQScalingB);
 	vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
-
 
 	decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
 	decoderVDPAU_NWB->setToolTip(tr("This decoder doesn't have its own video output, so it can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
@@ -227,20 +255,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	allowVDPAUinVAAPIB = new QCheckBox(tr("Allow VDPAU"));
 	allowVDPAUinVAAPIB->setChecked(sets().getBool("AllowVDPAUinVAAPI"));
 
-	vaapiDeintMethodB = new QComboBox;
-	vaapiDeintMethodB->addItems(QStringList() << tr("None") << "Motion adaptive" << "Motion compensated");
-	vaapiDeintMethodB->setCurrentIndex(sets().getInt("VAAPIDeintMethod"));
-	if (vaapiDeintMethodB->currentIndex() < 0)
-		vaapiDeintMethodB->setCurrentIndex(1);
-
 	QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
 	vaapiLayout->addRow(allowVDPAUinVAAPIB);
-	vaapiLayout->addRow(tr("Improving deinterlacing quality") + ": ", vaapiDeintMethodB);
-
-	#ifndef HAVE_VPP
-		vaapiDeintMethodB->setEnabled(false);
-		vaapiLayout->labelForField(vaapiDeintMethodB)->setEnabled(false);
-	#endif
 #endif
 
 	/* Hurry up */
@@ -329,13 +345,11 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
 #ifdef QMPlay2_VDPAU
 	sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
-	sets().set("VDPAUDeintMethod", vdpauDeintMethodB->currentIndex());
 	sets().set("VDPAUHQScaling", vdpauHQScalingB->currentIndex());
 	sets().set("DecoderVDPAU_NWEnabled", decoderVDPAU_NWB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
 	sets().set("AllowVDPAUinVAAPI", allowVDPAUinVAAPIB->isChecked());
 	sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
-	sets().set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
 #endif
 }

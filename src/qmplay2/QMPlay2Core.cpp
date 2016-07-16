@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QLibrary>
+#include <QPointer>
 #include <QFile>
 #include <QDir>
 #ifdef Q_OS_WIN
@@ -216,8 +217,9 @@ void QMPlay2CoreClass::quit()
 	foreach (Module *pluginInstance, pluginsInstance)
 		delete pluginInstance;
 	pluginsInstance.clear();
-	shareDir.clear();
+	videoFilters.clear();
 	settingsDir.clear();
+	shareDir.clear();
 #ifdef Q_OS_WIN
 	timeEndPeriod(1);
 #endif
@@ -281,6 +283,19 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 	}
 	if (!(logFlags & DontShowInGUI))
 		emit statusBarMessage(txt, 2500);
+}
+
+void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)
+{
+	videoFilters.append(w);
+}
+QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
+{
+	QList<QWidget *> ret;
+	foreach (const QPointer<QWidget> &w, videoFilters)
+		if (w)
+			ret.append(w);
+	return ret;
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

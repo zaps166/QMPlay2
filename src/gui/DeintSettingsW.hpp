@@ -23,6 +23,7 @@
 
 class QCheckBox;
 class QComboBox;
+class Module;
 
 class DeintSettingsW : public QGroupBox
 {
@@ -31,6 +32,7 @@ public:
 	static void init();
 
 	DeintSettingsW();
+	~DeintSettingsW();
 
 	void writeSettings();
 private slots:
