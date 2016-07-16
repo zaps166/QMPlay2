@@ -400,12 +400,16 @@
         <translation>Automatycznie wykryj parzystość</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>Metoda usuwania przeplotu (dekodowanie programowe)</translation>
-    </message>
-    <message>
         <source>Parity (if not detected automatically)</source>
         <translation>Parzystość (jeżeli nie wykryto automatycznie)</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Metoda usuwania przeplotu</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>dekodowanie programowe</translation>
     </message>
 </context>
 <context>
@@ -681,6 +685,17 @@ amp</translation>
     <message>
         <source>FFT Spectrum</source>
         <translation>Widmo FFT</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>Brak</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Metoda usuwania przeplotu</translation>
     </message>
 </context>
 <context>
@@ -1274,14 +1289,6 @@ amp</translation>
     <message>
         <source>Software decoder</source>
         <translation>Dekoder programowy</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>Poprawa jakości usuwania przeplotu</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Brak</translation>
     </message>
     <message>
         <source>Allow VDPAU</source>
@@ -2380,6 +2387,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Decoders priority</source>
         <translation>Priorytet dekoderów</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
+        <translation>Wyjścia obrazu dla akceleracji sprzętowej</translation>
     </message>
 </context>
 <context>

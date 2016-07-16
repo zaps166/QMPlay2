@@ -400,12 +400,16 @@
         <translation>Автоматическое определение четности</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>Метод деинтерлейсинга (программное декодирование)</translation>
-    </message>
-    <message>
         <source>Parity (if not detected automatically)</source>
         <translation>Чётность (если не определяется автоматически)</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Метод деинтерлейсинга</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>программное декодирование</translation>
     </message>
 </context>
 <context>
@@ -681,6 +685,17 @@ amp</source>
     <message>
         <source>FFT Spectrum</source>
         <translation>Спектр FFT</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Метод деинтерлейсинга</translation>
     </message>
 </context>
 <context>
@@ -1242,14 +1257,6 @@ amp</source>
     <message>
         <source>Software decoder</source>
         <translation>Программный декодер</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>Улучшение качества деинтерлейсинга</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Нет</translation>
     </message>
     <message>
         <source>Downloads covers</source>
@@ -2380,6 +2387,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Decoders priority</source>
         <translation>Приоритет декодеров</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -400,12 +400,16 @@
         <translation>Parität automatisch erkennen</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>Deinterlacing Methode (Software Decodierung)</translation>
-    </message>
-    <message>
         <source>Parity (if not detected automatically)</source>
         <translation>Parität (wenn nicht automatisch erkannt wurde)</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Deinterlacing Methode</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>Software Decodierung</translation>
     </message>
 </context>
 <context>
@@ -681,6 +685,17 @@ amp</translation>
     <message>
         <source>FFT Spectrum</source>
         <translation>FFT Spektrum</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>Fehlt</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Deinterlacing Methode</translation>
     </message>
 </context>
 <context>
@@ -1274,14 +1289,6 @@ amp</translation>
     <message>
         <source>Software decoder</source>
         <translation>Software Decoder</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>Verbesserung der Deinterlacing Qualität</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Fehlt</translation>
     </message>
     <message>
         <source>Allow VDPAU</source>
@@ -2379,6 +2386,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Decoders priority</source>
         <translation>Dekoder Priorität</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

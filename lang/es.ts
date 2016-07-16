@@ -392,10 +392,6 @@
         <translation>Detectar automáticamente la paridad</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>Método de desentrelazado (decodificación de software)</translation>
-    </message>
-    <message>
         <source>Remove interlacing</source>
         <translation>Eliminar entrelazado</translation>
     </message>
@@ -406,6 +402,14 @@
     <message>
         <source>Automatically detect interlaced frames</source>
         <translation>Detectar automáticamente fotogramas entrelazados</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Método de desentrelazado</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>decodificación de software</translation>
     </message>
 </context>
 <context>
@@ -681,6 +685,17 @@ amp</translation>
     <message>
         <source>FFT Spectrum</source>
         <translation>Espectro FFT</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>Nada</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Método de desentrelazado</translation>
     </message>
 </context>
 <context>
@@ -1008,10 +1023,6 @@ amp</translation>
         <translation>seg</translation>
     </message>
     <message>
-        <source>None</source>
-        <translation>Nada</translation>
-    </message>
-    <message>
         <source>Echo</source>
         <translation>Eco</translation>
     </message>
@@ -1222,10 +1233,6 @@ amp</translation>
     <message>
         <source>Add entry to the directories context menu</source>
         <translation>Añadir entrada a los directorios del menú contextual</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>Mejorar la calidad de desentrelazado</translation>
     </message>
     <message>
         <source>Default length</source>
@@ -2379,6 +2386,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Video filters</source>
         <translation>Filtros de vídeo</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

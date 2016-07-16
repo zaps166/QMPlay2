@@ -400,12 +400,16 @@
         <translation>Détecter automatiquement la parité</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>Méthode de désentrelacement (Décodage logiciel)</translation>
-    </message>
-    <message>
         <source>Parity (if not detected automatically)</source>
         <translation>Parité (si non détecté automatiqement)</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Méthode de désentrelacement</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>Décodage logiciel</translation>
     </message>
 </context>
 <context>
@@ -680,6 +684,17 @@ amp</source>
     <message>
         <source>FFT Spectrum</source>
         <translation>Spectre FFT</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>Aucun</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Méthode de désentrelacement</translation>
     </message>
 </context>
 <context>
@@ -1273,14 +1288,6 @@ amp</source>
     <message>
         <source>Software decoder</source>
         <translation>Logiciel d&apos;encodage</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>Amélioration de la qualité de désentrelacement</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Aucun</translation>
     </message>
     <message>
         <source>Allow VDPAU</source>
@@ -2377,6 +2384,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Decoders priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

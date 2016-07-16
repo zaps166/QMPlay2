@@ -558,7 +558,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 			delete otherHWVFiltersW;
 		else
 		{
-			QGroupBox *otherHWVFiltersContainer = new QGroupBox(tr("Video filters for hardware accelerated outputs"));
+			QGroupBox *otherHWVFiltersContainer = new QGroupBox(tr("Hardware accelerated video outputs"));
 			QGridLayout *otherHWVFiltersLayout = new QGridLayout(otherHWVFiltersContainer);
 			otherHWVFiltersLayout->addWidget(otherHWVFiltersW);
 			connect(otherHWVFiltersW, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));

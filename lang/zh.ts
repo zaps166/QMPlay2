@@ -400,12 +400,16 @@
         <translation>自动检测奇偶校验</translation>
     </message>
     <message>
-        <source>Deinterlacing method (software decoding)</source>
-        <translation>去隔行方法 (软件解码)</translation>
-    </message>
-    <message>
         <source>Parity (if not detected automatically)</source>
         <translation>奇偶校验 (如果没有自动检测)</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>去隔行方法</translation>
+    </message>
+    <message>
+        <source>software decoding</source>
+        <translation>软件解码</translation>
     </message>
 </context>
 <context>
@@ -680,6 +684,17 @@ amp</source>
     <message>
         <source>FFT Spectrum</source>
         <translation>FFT 频谱仪</translation>
+    </message>
+</context>
+<context>
+    <name>FFmpeg</name>
+    <message>
+        <source>None</source>
+        <translation>无</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>去隔行方法</translation>
     </message>
 </context>
 <context>
@@ -1273,14 +1288,6 @@ amp</source>
     <message>
         <source>Software decoder</source>
         <translation>软件解码</translation>
-    </message>
-    <message>
-        <source>Improving deinterlacing quality</source>
-        <translation>优化去隔行质量</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>无</translation>
     </message>
     <message>
         <source>Allow VDPAU</source>
@@ -2365,6 +2372,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Decoders priority</source>
         <translation>解码器优先级</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video outputs</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
