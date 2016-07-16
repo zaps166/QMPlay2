@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>Помощники</translation>
     </message>
 </context>
 <context>
@@ -2097,7 +2097,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 не был обновлен. Хотите запустить обновление (рекомендуется)?</translation>
     </message>
 </context>
 <context>
@@ -2525,7 +2525,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Download update</source>
-        <translation>Скачать обновление</translation>
+        <translation>Загрузить обновление</translation>
     </message>
     <message>
         <source>Apply update</source>
@@ -2549,15 +2549,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>The update has been downloaded</source>
-        <translation>Обновления загружаются</translation>
+        <translation>Обновления загружено</translation>
     </message>
     <message>
         <source>Error creating update file</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка создания файла обновления</translation>
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation type="unfinished"></translation>
+        <translation>Это автоматическое обновление игнорируется, нажмите кнопку для обновления</translation>
     </message>
 </context>
 <context>
@@ -2663,7 +2663,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>Р&amp;егулировка видео</translation>
     </message>
 </context>
 <context>

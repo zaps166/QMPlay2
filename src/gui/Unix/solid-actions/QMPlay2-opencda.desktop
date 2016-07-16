@@ -6,5 +6,6 @@ Actions=open;
 [Desktop Action open]
 Name=Open with QMPlay2
 Name[pl]=Otwórz w QMPlay2
+Name[ru]=Открыть в QMPlay2
 Exec=QMPlay2 AudioCD://%d
 Icon=QMPlay2
