@@ -130,12 +130,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QGridLayout *layout;
 
 #ifdef USE_MPRIS2
-	MPRIS2B = new QGroupBox(tr("Using the program via MPRIS2 interface"));
-	MPRIS2B->setCheckable(true);
+	MPRIS2B = new QCheckBox(tr("Using the program via MPRIS2 interface"));
 	MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
-
-	layout = new QGridLayout(MPRIS2B);
-	layout->setMargin(2);
 #endif
 
 	/**/
@@ -232,11 +228,16 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGroupBox *lastFMB = new QGroupBox("LastFM");
 
-	downloadCoversB = new QCheckBox(tr("Downloads covers"));
-	downloadCoversB->setChecked(sets().getBool("LastFM/DownloadCovers"));
+	downloadCoversGB = new QGroupBox(tr("Downloads covers"));
+	downloadCoversGB->setCheckable(true);
+	downloadCoversGB->setChecked(sets().getBool("LastFM/DownloadCovers"));
 
 	allowBigCovers = new QCheckBox(tr("Allow to download big covers"));
 	allowBigCovers->setChecked(sets().getBool("LastFM/AllowBigCovers"));
+
+	layout = new QGridLayout(downloadCoversGB);
+	layout->addWidget(allowBigCovers);
+	layout->setMargin(3);
 
 	updateNowPlayingAndScrobbleB = new QCheckBox(tr("Scrobble"));
 	updateNowPlayingAndScrobbleB->setChecked(sets().getBool("LastFM/UpdateNowPlayingAndScrobble"));
@@ -250,15 +251,12 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	passwordE->setPlaceholderText(sets().getString("LastFM/Password").isEmpty() ? tr("Password") : tr("Last password"));
 	connect(passwordE, SIGNAL(textEdited(const QString &)), this, SLOT(passwordEdited()));
 
-	allowBigCovers->setEnabled(downloadCoversB->isChecked());
 	loginPasswordEnable(updateNowPlayingAndScrobbleB->isChecked());
 
-	connect(downloadCoversB, SIGNAL(toggled(bool)), allowBigCovers, SLOT(setEnabled(bool)));
 	connect(updateNowPlayingAndScrobbleB, SIGNAL(toggled(bool)), this, SLOT(loginPasswordEnable(bool)));
 
 	layout = new QGridLayout(lastFMB);
-	layout->addWidget(downloadCoversB);
-	layout->addWidget(allowBigCovers);
+	layout->addWidget(downloadCoversGB);
 	layout->addWidget(updateNowPlayingAndScrobbleB);
 	layout->addWidget(loginE);
 	layout->addWidget(passwordE);
@@ -319,7 +317,7 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("YouTube/ItagAudioList", itagsAudio);
 	sets().set("YouTube/ItagList", itags);
 
-	sets().set("LastFM/DownloadCovers", downloadCoversB->isChecked());
+	sets().set("LastFM/DownloadCovers", downloadCoversGB->isChecked());
 	sets().set("LastFM/AllowBigCovers", allowBigCovers->isChecked());
 	sets().set("LastFM/UpdateNowPlayingAndScrobble", updateNowPlayingAndScrobbleB->isChecked() && !loginE->text().isEmpty());
 	sets().set("LastFM/Login", loginE->text());

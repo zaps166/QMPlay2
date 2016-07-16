@@ -56,7 +56,7 @@ private:
 	void saveSettings();
 
 #ifdef USE_MPRIS2
-	QGroupBox *MPRIS2B;
+	QCheckBox *MPRIS2B;
 #endif
 
 	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;
@@ -64,6 +64,7 @@ private:
 	QToolButton *youtubedlBrowseB;
 	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
 
-	QCheckBox *downloadCoversB, *allowBigCovers, *updateNowPlayingAndScrobbleB;
+	QGroupBox *downloadCoversGB;
+	QCheckBox *allowBigCovers, *updateNowPlayingAndScrobbleB;
 	LineEdit *loginE, *passwordE;
 };
