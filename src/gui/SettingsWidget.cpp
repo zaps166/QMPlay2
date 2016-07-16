@@ -546,13 +546,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 	show();
 }
 SettingsWidget::~SettingsWidget()
-{
-	restoreVideoEq();
-	for (int i = 0; i < 3; ++i)
-		delete page2ModulesList[i];
-	delete page2;
-	delete page1;
-}
+{}
 
 void SettingsWidget::setAudioChannels()
 {
@@ -633,6 +627,13 @@ void SettingsWidget::showEvent(QShowEvent *)
 void SettingsWidget::closeEvent(QCloseEvent *)
 {
 	QMPlay2Core.getSettings().set("SettingsWidget/Geometry", geometry());
+
+	restoreVideoEq();
+
+	for (int i = 0; i < 3; ++i)
+		delete page2ModulesList[i];
+	delete page2;
+	delete page1;
 }
 
 void SettingsWidget::chStyle()
