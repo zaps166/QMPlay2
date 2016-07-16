@@ -24,9 +24,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>426</width>
-        <height>604</height>
+        <y>-244</y>
+        <width>454</width>
+        <height>608</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -36,7 +36,39 @@
        <property name="spacing">
         <number>1</number>
        </property>
-       <item row="0" column="0">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="showCoversGB">
+         <property name="title">
+          <string>Show covers</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="margin">
+           <number>3</number>
+          </property>
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="blurCoversB">
+            <property name="text">
+             <string>Blurred covers as background</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="showDirCoversB">
+            <property name="text">
+             <string>Show covers from directory if there aren't in the music file</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
         <layout class="QFormLayout" name="formLayout">
          <item row="0" column="0">
           <widget class="QLabel" name="langL">
@@ -160,38 +192,6 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="showCoversGB">
-         <property name="title">
-          <string>Show covers</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <property name="margin">
-           <number>3</number>
-          </property>
-          <property name="spacing">
-           <number>3</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="blurCoversB">
-            <property name="text">
-             <string>Blurred covers as background</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="showDirCoversB">
-            <property name="text">
-             <string>Show covers from directory if there aren't in the music file</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="autoUpdatesB">
          <property name="text">
@@ -273,7 +273,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="_2">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLineEdit" name="proxyHostE">
               <property name="placeholderText">
@@ -301,6 +301,15 @@
        </item>
        <item row="9" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>3</number>
+         </property>
+         <property name="topMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
+         </property>
          <item>
           <widget class="QPushButton" name="clearCoversCache">
            <property name="text">
@@ -317,7 +326,7 @@
          </item>
         </layout>
        </item>
-       <item row="10" column="0">
+       <item row="10" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -330,12 +339,55 @@
          </property>
         </spacer>
        </item>
+       <item row="1" column="1" rowspan="8">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>langBox</tabstop>
+  <tabstop>styleBox</tabstop>
+  <tabstop>encodingB</tabstop>
+  <tabstop>audioLangB</tabstop>
+  <tabstop>subsLangB</tabstop>
+  <tabstop>screenshotE</tabstop>
+  <tabstop>screenshotFormatB</tabstop>
+  <tabstop>screenshotB</tabstop>
+  <tabstop>iconsFromTheme</tabstop>
+  <tabstop>setAppearanceB</tabstop>
+  <tabstop>showCoversGB</tabstop>
+  <tabstop>blurCoversB</tabstop>
+  <tabstop>showDirCoversB</tabstop>
+  <tabstop>autoUpdatesB</tabstop>
+  <tabstop>autoOpenVideoWindowB</tabstop>
+  <tabstop>tabsNorths</tabstop>
+  <tabstop>allowOnlyOneInstance</tabstop>
+  <tabstop>displayOnlyFileName</tabstop>
+  <tabstop>restoreRepeatMode</tabstop>
+  <tabstop>proxyB</tabstop>
+  <tabstop>proxyLoginB</tabstop>
+  <tabstop>proxyUserE</tabstop>
+  <tabstop>proxyPasswordE</tabstop>
+  <tabstop>proxyHostE</tabstop>
+  <tabstop>proxyPortB</tabstop>
+  <tabstop>clearCoversCache</tabstop>
+  <tabstop>resetSettingsB</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

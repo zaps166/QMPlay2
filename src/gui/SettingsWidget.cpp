@@ -429,8 +429,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 			connect(ml->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
 			connect(ml->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
 			connect(ml->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
-			ml->moveUp->setProperty("modulesList", m);
-			ml->moveDown->setProperty("modulesList", m);
+			ml->moveUp->setProperty("idx", m);
+			ml->moveDown->setProperty("idx", m);
 			page2->modulesListLayout->addWidget(groupB);
 			page2ModulesList[m] = ml;
 		}
@@ -871,26 +871,22 @@ void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
 }
 void SettingsWidget::moveModule()
 {
-	QToolButton *tB = qobject_cast<QToolButton *>(sender());
-	if (tB)
+	if (QToolButton *tB = qobject_cast<QToolButton *>(sender()))
 	{
 		const bool moveDown = tB->arrowType() == Qt::DownArrow;
-		QVariant m = tB->property("modulesList");
-		if (!m.isNull())
+		const int idx = tB->property("idx").toInt();
+		QListWidget *mL = page2ModulesList[idx]->list;
+		int row = mL->currentRow();
+		if (row > -1)
 		{
-			QListWidget *mL = page2ModulesList[m.toInt()]->list;
-			int row = mL->currentRow();
-			if (row > -1)
-			{
-				QListWidgetItem *item = mL->takeItem(row);
-				mL->clearSelection();
-				if (moveDown)
-					++row;
-				else
-					--row;
-				mL->insertItem(row, item);
-				mL->setCurrentItem(item);
-			}
+			QListWidgetItem *item = mL->takeItem(row);
+			mL->clearSelection();
+			if (moveDown)
+				++row;
+			else
+				--row;
+			mL->insertItem(row, item);
+			mL->setCurrentItem(item);
 		}
 	}
 }

@@ -92,7 +92,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QFormLayout *layout = new QFormLayout(this);
 	layout->addRow(enabledB);
 	layout->addRow(tr("Playback device") + ": ", devicesB);
-	layout->addRow(defaultDevs);
+	layout->addRow(QString(), defaultDevs);
 	layout->addRow(tr("Delay") + ": ", delayB);
 }
 
