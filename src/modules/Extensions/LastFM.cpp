@@ -247,6 +247,7 @@ void LastFM::albumFinished()
 							continue;
 						coverReply->deleteLater();
 						coverReply = net.get(QNetworkRequest(imgUrl));
+						coverReply->ignoreSslErrors();
 						coverReply->setProperty("taa", taa);
 						connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 						return;
