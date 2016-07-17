@@ -2390,7 +2390,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Hardware accelerated video outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Аппаратное ускорение вывода видео</translation>
     </message>
 </context>
 <context>

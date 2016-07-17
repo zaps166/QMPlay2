@@ -4,6 +4,7 @@ Icon=QMPlay2
 Name=QMPlay2
 Comment=Watching movies and listening to music
 Comment[pl]=Oglądanie filmów oraz słuchanie muzyki
+Comment[ru]=Просмотр фильмов и прослушивание музыки
 StartupNotify=false
 Type=Application
 Categories=Qt;AudioVideo;Player;Audio;Video;
