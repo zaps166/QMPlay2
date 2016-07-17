@@ -22,6 +22,7 @@
 // #endif
 
 #define MODPLUG_NO_FILESAVE
+#define MODPLUG_NO_REVERB
 #define NO_AGC
 
 #ifdef _WIN32
