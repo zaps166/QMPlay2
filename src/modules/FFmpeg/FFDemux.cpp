@@ -201,7 +201,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 	Playlist::Entries entries;
 	if (!url.contains("://{") && url.startsWith("file://"))
 	{
-		OggHelper oggHelper(url, abortFetchTracks);
+		OggHelper oggHelper(url.mid(7), abortFetchTracks);
 		if (oggHelper.io)
 		{
 			int i = 0;
