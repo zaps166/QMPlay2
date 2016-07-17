@@ -99,7 +99,7 @@ static LONG DolbyHiFilterBuffer[FILTERBUFFERSIZE];
 static LONG SurroundBuffer[SURROUNDBUFFERSIZE];
 
 // Access the main temporary mix buffer directly: avoids an extra pointer
-extern int MixSoundBuffer[MIXBUFFERSIZE*2];
+extern int MixSoundBuffer[MIXBUFFERSIZE*4];
 //cextern int MixReverbBuffer[MIXBUFFERSIZE*2];
 extern int MixReverbBuffer[MIXBUFFERSIZE*2];
 
