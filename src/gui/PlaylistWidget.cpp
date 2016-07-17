@@ -224,7 +224,9 @@ void AddThr::stop()
 
 void AddThr::changeItemText0(QTreeWidgetItem *tWI, QString name)
 {
-	tWI->setText(0, name);
+	if (!tWI->data(0, Qt::UserRole + 1).toBool()) //It can be set in "EntryProperties::accept()"
+		tWI->setText(0, name);
+	tWI->setData(0, Qt::UserRole + 1, QVariant());
 }
 void AddThr::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
 {
