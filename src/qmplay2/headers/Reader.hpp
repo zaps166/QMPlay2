@@ -19,16 +19,6 @@
 #ifndef READER_HPP
 #define READER_HPP
 
-#ifndef SEEK_SET
-	#define SEEK_SET 0
-#endif
-#ifndef SEEK_CUR
-	#define SEEK_CUR 1
-#endif
-#ifndef SEEK_END
-	#define SEEK_END 2
-#endif
-
 #include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
 #include <IOController.hpp>
@@ -46,7 +36,7 @@ public:
 	virtual bool readyRead() const = 0;
 	virtual bool canSeek() const = 0;
 
-	virtual bool seek(qint64, int wh = SEEK_SET) = 0;
+	virtual bool seek(qint64) = 0;
 	virtual QByteArray read(qint64) = 0;
 	virtual bool atEnd() const = 0;
 

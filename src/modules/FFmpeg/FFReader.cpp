@@ -45,9 +45,9 @@ bool FFReader::canSeek() const
 	return avioCtx->seekable;
 }
 
-bool FFReader::seek(qint64 pos, int wh)
+bool FFReader::seek(qint64 pos)
 {
-	return avio_seek(avioCtx, pos, wh) >= 0;
+	return avio_seek(avioCtx, pos, SEEK_SET) >= 0;
 }
 QByteArray FFReader::read(qint64 size)
 {

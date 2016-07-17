@@ -35,18 +35,9 @@ class QMPlay2FileReader : public Reader
 		return true;
 	}
 
-	bool seek(qint64 pos, int wh)
+	bool seek(qint64 pos)
 	{
-		switch (wh)
-		{
-			case SEEK_SET:
-				return f.seek(pos);
-			case SEEK_CUR:
-				return f.seek(f.pos() + pos);
-			case SEEK_END:
-				return f.seek(f.size() - pos);
-		}
-		return false;
+		return f.seek(pos);
 	}
 	QByteArray read(qint64 len)
 	{
