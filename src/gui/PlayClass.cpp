@@ -136,6 +136,10 @@ PlayClass::PlayClass() :
 	connect(this, SIGNAL(pixelFormatUpdate(const QByteArray &)), this, SLOT(pixelFormatUpdated(const QByteArray &)));
 	connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
 }
+PlayClass::~PlayClass()
+{
+	delete screenSaver;
+}
 
 void PlayClass::play(const QString &_url)
 {
