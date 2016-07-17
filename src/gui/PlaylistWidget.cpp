@@ -270,6 +270,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					//Reuse current playlist group
 					QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, parent), Q_ARG(QString, groupName));
 					currentItem = parent;
+					sync = NO_SYNC;
 				}
 			}
 			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo);
