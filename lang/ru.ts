@@ -710,6 +710,13 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>FormatContext</name>
+    <message>
+        <source>Track</source>
+        <translation>Дорожка</translation>
+    </message>
+</context>
+<context>
     <name>GME</name>
     <message>
         <source>System</source>

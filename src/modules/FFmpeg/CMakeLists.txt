@@ -20,6 +20,7 @@ set(FFmpeg_HDR
     FFReader.hpp
     FFCommon.hpp
     FormatContext.hpp
+    OggHelper.hpp
 )
 
 set(FFmpeg_SRC
@@ -30,6 +31,7 @@ set(FFmpeg_SRC
     FFReader.cpp
     FFCommon.cpp
     FormatContext.cpp
+    OggHelper.cpp
 )
 
 set(FFmpeg_RESOURCES

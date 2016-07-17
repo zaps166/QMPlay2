@@ -51,12 +51,16 @@ private:
 
 	bool open(const QString &entireUrl);
 
+	Playlist::Entries fetchTracks(const QString &url, bool &ok);
+
 	/**/
 
-	void addFormatContext(QString entireUrl);
+	void addFormatContext(QString entireUrl, const QString &param = QString());
 
 	QVector<FormatContext *> formatContexts;
 
 	QMutex &avcodec_mutex;
 	QMutex mutex;
+
+	bool abortFetchTracks;
 };

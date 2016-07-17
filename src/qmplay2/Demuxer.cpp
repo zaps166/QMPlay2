@@ -27,7 +27,7 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 	const QString scheme = Functions::getUrlScheme(url);
 	if (demuxer.isAborted() || url.isEmpty() || scheme.isEmpty())
 		return false;
-	QString extension = Functions::fileExt(url).toLower();
+	const QString extension = Functions::fileExt(url).toLower();
 	for (int i = 0; i <= 1; ++i)
 		foreach (Module *module, QMPlay2Core.getPluginsInstance())
 			foreach (const Module::Info &mod, module->getModulesInfo())

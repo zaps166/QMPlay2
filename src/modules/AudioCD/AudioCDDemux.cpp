@@ -282,8 +282,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 			entries = getTracks(realUrl);
 			if (entries.isEmpty())
 				emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
-			ok = !entries.isEmpty();
-			if (ok)
+			if (!entries.isEmpty())
 			{
 				for (int i = 0; i < entries.count(); ++i)
 					entries[i].parent = 1;
@@ -295,6 +294,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 			}
 		}
 	}
+	ok = !entries.isEmpty();
 	return entries;
 }
 

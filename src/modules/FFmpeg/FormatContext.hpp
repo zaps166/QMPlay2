@@ -40,6 +40,7 @@ struct AVFormatContext;
 struct AVDictionary;
 struct AVStream;
 struct AVPacket;
+class OggHelper;
 struct Packet;
 
 class FormatContext
@@ -66,7 +67,7 @@ public:
 	void pause();
 	void abort();
 
-	bool open(const QString &_url);
+	bool open(const QString &_url, const QString &param = QString());
 
 	void setStreamOffset(double offset);
 
@@ -83,6 +84,8 @@ private:
 	QVector<double> streamsOffset;
 	AVFormatContext *formatCtx;
 	AVPacket *packet;
+
+	OggHelper *oggHelper;
 
 	bool isPaused, isAborted, fixMkvAss;
 	mutable bool isMetadataChanged;

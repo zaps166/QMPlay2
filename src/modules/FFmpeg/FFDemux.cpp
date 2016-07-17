@@ -21,10 +21,12 @@
 #include <FormatContext.hpp>
 
 #include <Functions.hpp>
+#include <OggHelper.hpp>
 #include <Packet.hpp>
 
 FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
-	avcodec_mutex(avcodec_mutex)
+	avcodec_mutex(avcodec_mutex),
+	abortFetchTracks(false)
 {
 	SetModule(module);
 }
@@ -172,16 +174,19 @@ void FFDemux::abort()
 	QMutexLocker mL(&mutex);
 	foreach (FormatContext *fmtCtx, formatContexts)
 		fmtCtx->abort();
+	abortFetchTracks = true;
 }
 
 bool FFDemux::open(const QString &entireUrl)
 {
-	QString prefix, url;
-	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(entireUrl, &prefix, &url))
+	QString prefix, url, param;
+	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(entireUrl, &prefix, &url, &param))
 		addFormatContext(entireUrl);
 	else if (prefix == DemuxerName)
 	{
-		foreach (QString stream, url.split("][", QString::SkipEmptyParts))
+		if (!param.isEmpty())
+			addFormatContext(url, param);
+		else foreach (QString stream, url.split("][", QString::SkipEmptyParts))
 		{
 			stream.remove('[');
 			stream.remove(']');
@@ -191,7 +196,63 @@ bool FFDemux::open(const QString &entireUrl)
 	return !formatContexts.isEmpty();
 }
 
-void FFDemux::addFormatContext(QString url)
+Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
+{
+	Playlist::Entries entries;
+	if (!url.contains("://{") && url.startsWith("file://"))
+	{
+		OggHelper oggHelper(url, abortFetchTracks);
+		if (oggHelper.io)
+		{
+			int i = 0;
+			foreach (const OggHelper::Chain &chains, oggHelper.getOggChains(ok))
+			{
+				const QString param = QString("OGG:%1:%2:%3").arg(++i).arg(chains.first).arg(chains.second);
+
+				FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
+				{
+					QMutexLocker mL(&mutex);
+					formatContexts.append(fmtCtx);
+				}
+
+				if (fmtCtx->open(url, param))
+				{
+					Playlist::Entry entry;
+					entry.url = DemuxerName + QString("://{%1}%2").arg(url).arg(param);
+					entry.name = fmtCtx->title();
+					entry.length = fmtCtx->length();
+					entries.append(entry);
+				}
+
+				{
+					QMutexLocker mL(&mutex);
+					const int idx = formatContexts.indexOf(fmtCtx);
+					if (idx > -1)
+						formatContexts.remove(idx);
+				}
+
+				if (abortFetchTracks)
+				{
+					ok = false;
+					break;
+				}
+			}
+			if (ok && !entries.isEmpty())
+			{
+				for (int i = 0; i < entries.count(); ++i)
+					entries[i].parent = 1;
+				Playlist::Entry entry;
+				entry.name = Functions::fileName(url, false);
+				entry.url = url;
+				entry.GID = 1;
+				entries.prepend(entry);
+			}
+		}
+	}
+	return entries;
+}
+
+void FFDemux::addFormatContext(QString url, const QString &param)
 {
 	FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
 	{
@@ -200,7 +261,7 @@ void FFDemux::addFormatContext(QString url)
 	}
 	if (!url.contains("://"))
 		url.prepend("file://");
-	if (fmtCtx->open(url))
+	if (fmtCtx->open(url, param))
 		streams_info.append(fmtCtx->streamsInfo);
 	else
 	{

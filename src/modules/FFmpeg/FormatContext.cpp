@@ -20,6 +20,7 @@
 #include <FormatContext.hpp>
 
 #include <QMPlay2Core.hpp>
+#include <OggHelper.hpp>
 #include <Packet.hpp>
 
 #if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
@@ -144,6 +145,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	currPos(0.0),
 	formatCtx(NULL),
 	packet(NULL),
+	oggHelper(NULL),
 	isPaused(false), isAborted(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
@@ -167,6 +169,7 @@ FormatContext::~FormatContext()
 		avformat_close_input(&formatCtx);
 		FFCommon::freeAVPacket(packet);
 	}
+	delete oggHelper;
 }
 
 bool FormatContext::metadataChanged() const
@@ -223,6 +226,8 @@ QString FormatContext::title() const
 		else if (!title.simplified().isEmpty() && artist.simplified().isEmpty())
 			return title;
 	}
+	if (oggHelper)
+		return tr("Track") + " " + QString::number(oggHelper->track);
 	return QString();
 }
 QList<QMPlay2Tag> FormatContext::tags() const
@@ -574,7 +579,7 @@ void FormatContext::abort()
 	isAborted = true;
 }
 
-bool FormatContext::open(const QString &_url)
+bool FormatContext::open(const QString &_url, const QString &param)
 {
 	static const QStringList disabledDemuxers = QStringList()
 		<< "ass"
@@ -599,7 +604,22 @@ bool FormatContext::open(const QString &_url)
 		return false;
 
 	const QByteArray scheme = _url.left(idx).toLower().toUtf8();
+
+	qint64 oggOffset = -1, oggSize = -1;
+	int oggTrack = -1;
 	QString url;
+
+	if (param.startsWith("OGG:")) //For chained OGG files
+	{
+		const QStringList splitted = param.split(':');
+		if (splitted.count() != 4)
+			return false;
+		oggTrack = splitted[1].toInt();
+		oggOffset = splitted[2].toLongLong();
+		oggSize = splitted[3].toLongLong();
+		if (oggTrack <= 0 || oggOffset < 0 || (oggSize != -1 && oggSize <= 0))
+			return false;
+	}
 
 	AVInputFormat *inputFmt = NULL;
 	if (scheme == "file")
@@ -619,6 +639,15 @@ bool FormatContext::open(const QString &_url)
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;
 	formatCtx->interrupt_callback.opaque = &isAborted;
+
+	if (oggOffset >= 0)
+	{
+		oggHelper = new OggHelper(url, oggTrack, oggSize, formatCtx->interrupt_callback);
+		if (!oggHelper->pb)
+			return false;
+		formatCtx->pb = oggHelper->pb;
+		av_dict_set(&options, "skip_initial_bytes", QString::number(oggOffset).toLatin1(), 0);
+	}
 
 	if (avformat_open_input(&formatCtx, url.toUtf8(), inputFmt, &options) || !formatCtx || disabledDemuxers.contains(name()))
 		return false;
