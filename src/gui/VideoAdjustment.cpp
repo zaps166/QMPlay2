@@ -59,17 +59,18 @@ VideoAdjustment::VideoAdjustment() :
 
 		QLabel *valueL = new QLabel("0");
 
-		sliders[i].setProperty("valueL", qVariantFromValue((void *)valueL));
-		sliders[i].setTickPosition(QSlider::TicksBelow);
-		sliders[i].setMinimumWidth(50);
-		sliders[i].setTickInterval(25);
-		sliders[i].setRange(-100, 100);
-		sliders[i].setWheelStep(1);
-		sliders[i].setValue(0);
-		connect(&sliders[i], SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
+		Slider *slider = &sliders[i];
+		slider->setProperty("valueL", qVariantFromValue((void *)valueL));
+		slider->setTickPosition(QSlider::TicksBelow);
+		slider->setMinimumWidth(50);
+		slider->setTickInterval(25);
+		slider->setRange(-100, 100);
+		slider->setWheelStep(1);
+		slider->setValue(0);
+		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 
 		layout->addWidget(titleL, i, 0);
-		layout->addWidget(&sliders[i], i, 1);
+		layout->addWidget(slider, i, 1);
 		layout->addWidget(valueL, i, 2);
 	}
 
