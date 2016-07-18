@@ -726,9 +726,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		av_free(value);
 		foreach (const QString &icy, icyHeaders)
 		{
-			if (icy.left(10) == "icy-name: ")
+			if (icy.startsWith("icy-name: "))
 				av_dict_set(&formatCtx->metadata, "icy-name", icy.mid(10).toUtf8(), 0);
-			else if (icy.left(17) == "icy-description: ")
+			else if (icy.startsWith("icy-description: "))
 				av_dict_set(&formatCtx->metadata, "icy-description", icy.mid(17).toUtf8(), 0);
 		}
 		metadata = getMetadata();

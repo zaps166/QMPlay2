@@ -21,7 +21,6 @@
 
 class QTreeWidgetItem;
 class PlaylistWidget;
-class QGridLayout;
 class LineEdit;
 class QLabel;
 
@@ -56,7 +55,6 @@ private:
 	inline bool isRandomPlayback() const;
 
 	QWidget mainW;
-	QGridLayout *layout;
 	PlaylistWidget *list;
 	QLabel *statusL;
 	LineEdit *findE;

@@ -47,22 +47,19 @@ static const char *ControlsNames[CONTROLS_COUNT] = {
 };
 
 VideoAdjustment::VideoAdjustment() :
-	layout(new QGridLayout),
-	controls(new Controls[CONTROLS_COUNT])
+	sliders(new Slider[CONTROLS_COUNT])
 {
+	QGridLayout *layout = new QGridLayout;
 	int i;
 	for (i = 0; i < CONTROLS_COUNT; ++i)
 	{
-		QLabel *&titleL = controls[i].titleL;
-		QLabel *&valueL = controls[i].valueL;
-		Slider *&slider = controls[i].slider;
 
-		titleL = new QLabel(tr(ControlsNames[i]) + ": ");
+		QLabel *titleL = new QLabel(tr(ControlsNames[i]) + ": ");
 		titleL->setAlignment(Qt::AlignRight);
 
-		valueL = new QLabel("0");
+		QLabel *valueL = new QLabel("0");
 
-		slider = new Slider;
+		Slider *slider = &sliders[i];
 		slider->setProperty("valueL", qVariantFromValue((void *)valueL));
 		slider->setTickPosition(QSlider::TicksBelow);
 		slider->setMinimumWidth(50);
@@ -70,15 +67,14 @@ VideoAdjustment::VideoAdjustment() :
 		slider->setRange(-100, 100);
 		slider->setWheelStep(1);
 		slider->setValue(0);
+		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 
 		layout->addWidget(titleL, i, 0);
 		layout->addWidget(slider, i, 1);
 		layout->addWidget(valueL, i, 2);
-
-		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 	}
 
-	resetB = new QPushButton(tr("Reset"));
+	QPushButton *resetB = new QPushButton(tr("Reset"));
 	connect(resetB, SIGNAL(clicked()), this, SLOT(reset()));
 
 	layout->addWidget(resetB, i++, 0, 1, 3);
@@ -88,33 +84,33 @@ VideoAdjustment::VideoAdjustment() :
 }
 VideoAdjustment::~VideoAdjustment()
 {
-	delete[] controls;
+	delete[] sliders;
 }
 
 void VideoAdjustment::restoreValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		controls[i].slider->setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
+		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
 }
 void VideoAdjustment::saveValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], controls[i].slider->value());
+		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], sliders[i].value());
 }
 
 void VideoAdjustment::setModuleParam(ModuleParams *writer)
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
-		controls[i].slider->setEnabled(writer->hasParam(ControlsNames[i]));
-		writer->modParam(ControlsNames[i], controls[i].slider->value());
+		sliders[i].setEnabled(writer->hasParam(ControlsNames[i]));
+		writer->modParam(ControlsNames[i], sliders[i].value());
 	}
 }
 
 void VideoAdjustment::enableControls()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		controls[i].slider->setEnabled(true);
+		sliders[i].setEnabled(true);
 }
 
 void VideoAdjustment::setValue(int v)
@@ -125,5 +121,5 @@ void VideoAdjustment::setValue(int v)
 void VideoAdjustment::reset()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		controls[i].slider->setValue(0);
+		sliders[i].setValue(0);
 }

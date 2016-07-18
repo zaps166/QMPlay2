@@ -56,9 +56,9 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	setWindowTitle(tr("Properties"));
 
 	QGridLayout layout(this);
+	int row = 0;
 
-	nameE = new QLineEdit;
-	nameE->setText(tWI->text(0));
+	nameE = new QLineEdit(tWI->text(0));
 
 	QString url = tWI->data(0, Qt::UserRole).toString();
 	if (url.startsWith("file://"))
@@ -66,15 +66,13 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 	if (PlaylistWidget::isGroup(tWI))
 	{
-		pthE = new QLineEdit;
-		pthE->setText(url);
+		pthE = new QLineEdit(url);
 		origDirPth = url;
 
 		nameE->selectAll();
 
-		catalogCB = new QCheckBox;
+		catalogCB = new QCheckBox(tr("Synchronize with file or directory"));
 		catalogCB->setChecked(!pthE->text().isEmpty());
-		catalogCB->setText(tr("Synchronize with file or directory"));
 		connect(catalogCB, SIGNAL(stateChanged(int)), this, SLOT(setDirPthEEnabled(int)));
 
 		browseDirB = new QToolButton;
@@ -88,48 +86,40 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		connect(browseFileB, SIGNAL(clicked()), this, SLOT(browse()));
 
 		setDirPthEEnabled(catalogCB->isChecked());
+
+		layout.addWidget(nameE, row++, 0, 1, 3);
+		layout.addWidget(catalogCB, row++, 0, 1, 1);
+		layout.addWidget(pthE, row, 0, 1, 1);
+		layout.addWidget(browseDirB, row, 1, 1, 1);
+		layout.addWidget(browseFileB, row, 2, 1, 1);
 	}
 	else
 	{
+		nameE->setReadOnly(true);
+		layout.addWidget(nameE, row++, 0, 1, 1);
+
 		addrB = new AddressBox(Qt::Horizontal, url);
+		layout.addWidget(addrB, row, 0, 1, 1);
 
 #ifdef QMPlay2_TagEditor
 		tagEditor = new TagEditor;
 		connect(addrB, SIGNAL(directAddressChanged()), this, SLOT(directAddressChanged()));
 		directAddressChanged();
+		layout.addWidget(tagEditor, ++row, 0, 1, 1);
 #endif
 
 		QFileInfo fi(addrB->cleanUrl());
 		if (fi.isFile())
+		{
 			fileSizeL = new QLabel(tr("File size") + ": " + Functions::sizeString(fi.size()));
-
-		nameE->setReadOnly(true);
+			layout.addWidget(fileSizeL, ++row, 0, 1, 1);
+		}
 	}
 
-	QDialogButtonBox *buttonBox = new QDialogButtonBox;
-	buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-	int row = 0;
-	layout.addWidget(nameE, row++, 0, 1, (browseDirB && browseFileB) ? 3 : 1);
-	if (catalogCB)
-		layout.addWidget(catalogCB, row++, 0, 1, 1);
-	if (addrB)
-		layout.addWidget(addrB, row, 0, 1, 1);
-#ifdef QMPlay2_TagEditor
-	if (tagEditor)
-		layout.addWidget(tagEditor, ++row, 0, 1, 1);
-#endif
-	if (fileSizeL)
-		layout.addWidget(fileSizeL, ++row, 0, 1, 1);
-	if (pthE)
-		layout.addWidget(pthE, row, 0, 1, 1);
-	if (browseDirB && browseFileB)
-	{
-		layout.addWidget(browseDirB, row, 1, 1, 1);
-		layout.addWidget(browseFileB, row, 2, 1, 1);
-	}
 #ifdef QMPlay2_TagEditor
 	if (!tagEditor)
 #endif

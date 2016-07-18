@@ -22,9 +22,6 @@
 #include <QWidget>
 
 class ModuleParams;
-class QGridLayout;
-class QPushButton;
-class QLabel;
 class Slider;
 
 class VideoAdjustment : public QWidget
@@ -45,13 +42,7 @@ private slots:
 	void setValue(int);
 	void reset();
 private:
-	QGridLayout *layout;
-	struct Controls
-	{
-		QLabel *titleL, *valueL;
-		Slider *slider;
-	} *controls;
-	QPushButton *resetB;
+	Slider *sliders;
 };
 
 #endif //VIDEOADJUSTMENT_HPP

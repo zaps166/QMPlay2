@@ -34,10 +34,10 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 		url.remove(0, 7);
 	else
 	{
-		if (url.left(4) == "mms:")
+		if (url.startsWith("mms:"))
 			url.insert(3, 'h');
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
-		if (url.left(4) == "http")
+		if (url.startsWith("http"))
 			av_dict_set(&options, "icy", "1", 0);
 #endif
 		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);

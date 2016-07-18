@@ -62,17 +62,17 @@ QString Functions::Url(QString url, const QString &pth)
 #endif
 	QString scheme = getUrlScheme(url);
 #ifdef Q_OS_WIN
-	if (url.left(8) == "file:///") //lokalnie na dysku
+	if (url.startsWith("file:///")) //lokalnie na dysku
 	{
 		url.remove(7, 1);
 		return url;
 	}
-	else if (url.left(7) == "file://") //adres sieciowy
+	else if (url.startsWith("file://")) //adres sieciowy
 	{
 		url.replace("file://", "file:////");
 		return url;
 	}
-	if (url.left(2) == "//") //adres sieciowy
+	if (url.startsWith("//")) //adres sieciowy
 	{
 		url.prepend("file://");
 		return url;
@@ -91,15 +91,15 @@ QString Functions::Url(QString url, const QString &pth)
 	if (scheme.isEmpty())
 	{
 #ifdef Q_OS_WIN
-		if (url.left(1) == "/")
+		if (url.startsWith("/"))
 			url.remove(0, 1);
 #endif
 #ifndef Q_OS_WIN
-		if (url.left(1) != "/")
+		if (!url.startsWith("/"))
 #endif
 		{
 			QString addPth = pth.isEmpty() ? QDir::currentPath() : pth;
-			if (addPth.right(1) != "/")
+			if (!addPth.endsWith("/"))
 				addPth += '/';
 			url.prepend(addPth);
 		}
@@ -156,9 +156,9 @@ QString Functions::fileName(QString f, bool extension)
 	if (f == "file:///")
 		return "/";
 #endif
-	while (f.right(1) == "/")
+	while (f.endsWith("/"))
 		f.chop(1);
-	QString n = f.right(f.length() - f.lastIndexOf('/') - 1);
+	const QString n = f.right(f.length() - f.lastIndexOf('/') - 1);
 	if (extension || !f.startsWith("file://"))
 		return n;
 	return n.mid(0, n.lastIndexOf('.'));
@@ -177,9 +177,9 @@ QString Functions::cleanPath(QString p)
 	if (p == "file:///")
 		return p;
 #endif
-	if (p.right(1) != "/")
+	if (!p.endsWith("/"))
 		return p + "/";
-	while (p.right(2) == "//")
+	while (p.endsWith("//"))
 		p.chop(1);
 	return p;
 }
@@ -419,7 +419,7 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 		foreach (const QUrl &url, mimeData->urls())
 		{
 			QString u = url.toLocalFile();
-			if (u.length() > 1 && u.right(1) == "/")
+			if (u.length() > 1 && u.endsWith("/"))
 				u.chop(1);
 			if (!u.isEmpty())
 				urls += u;

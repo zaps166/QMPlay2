@@ -38,12 +38,12 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 		if (!anchor.isEmpty())
 		{
 			InfoDock *infoD = (InfoDock *)parent()->parent();
-			if (anchor.left(5) == "seek:")
+			if (anchor.startsWith("seek:"))
 			{
 				anchor.remove(0, 5);
 				emit infoD->seek(anchor.toDouble());
 			}
-			else if (anchor.left(7) == "stream:")
+			else if (anchor.startsWith("stream:"))
 			{
 				anchor.remove(0, 7);
 				emit infoD->chStream(anchor);
