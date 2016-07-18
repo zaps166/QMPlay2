@@ -670,7 +670,22 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const 
 
 bool PlaylistWidget::canModify(bool all) const
 {
-	return !(addThr.isRunning() || (all ? (QAbstractItemView::state() != QAbstractItemView::NoState || updateEntryThr.isRunning()) : false));
+	if (addThr.isRunning())
+		return false;
+	if (all)
+	{
+		if (updateEntryThr.isRunning())
+			return false;
+		switch (QAbstractItemView::state())
+		{
+			case QAbstractItemView::NoState:
+			case QAbstractItemView::AnimatingState:
+				return true;
+			default:
+				return false;
+		}
+	}
+	return true;
 }
 
 void PlaylistWidget::enqueue()
