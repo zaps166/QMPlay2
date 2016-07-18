@@ -150,7 +150,7 @@ void AboutWidget::refreshLog()
 	{
 		QByteArray data = f.readAll();
 		f.close();
-		if (data.right(1) == "\n")
+		if (data.endsWith("\n"))
 			data.chop(1);
 		logE->setPlainText(data);
 		logE->moveCursor(QTextCursor::End);

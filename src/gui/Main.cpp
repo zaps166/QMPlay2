@@ -336,7 +336,7 @@ static bool writeToSocket(QLocalSocket &socket)
 			if (!QMPArguments.second[i].isEmpty())
 				QMPArguments.second[i] = Functions::Url(QMPArguments.second[i]);
 #ifdef Q_OS_WIN
-			if (QMPArguments.second[i].left(7) == "file://")
+			if (QMPArguments.second[i].startsWith("file://"))
 				QMPArguments.second[i].remove(0, 7);
 #endif
 		}
@@ -620,7 +620,7 @@ int main(int argc, char *argv[])
 
 #ifdef UPDATER
 		QString UpdateFile = settings.getString("UpdateFile");
-		if (UpdateFile.left(7) == "remove:")
+		if (UpdateFile.startsWith("remove:"))
 		{
 			UpdateFile.remove(0, 7);
 			if (lastVer != QMPlay2Version)

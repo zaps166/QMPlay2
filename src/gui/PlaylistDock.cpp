@@ -541,7 +541,7 @@ void PlaylistDock::syncCurrentFolder()
 		tWI->setIcon(0, *QMPlay2GUI.groupIcon);
 		return;
 	}
-	if (pthInfo.isDir() && pth.right(1) != "/")
+	if (pthInfo.isDir() && !pth.endsWith("/"))
 		pth += "/";
 	findE->clear();
 	list->sync(pth, tWI, !pthInfo.isDir() && (possibleModuleScheme || pthInfo.isFile()));

@@ -166,7 +166,7 @@ void Radio::finished()
 	if (!netReply->error())
 	{
 		QByteArray RadioList = netReply->readAll();
-		if (RadioList.left(4) != "NXRL")
+		if (!RadioList.startsWith("NXRL"))
 			err = true;
 		else
 		{
@@ -174,7 +174,7 @@ void Radio::finished()
 			QString GroupName;
 			while (RadioList.size())
 			{
-				if (RadioList.left(4) == "NXRL")
+				if (RadioList.startsWith("NXRL"))
 				{
 					RadioList.remove(0, 4);
 					GroupName = RadioList.data();
