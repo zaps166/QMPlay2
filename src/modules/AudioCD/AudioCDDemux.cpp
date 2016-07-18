@@ -23,6 +23,7 @@
 
 #ifdef Q_OS_WIN
 	#include <QDir>
+	static const QRegExp cdaRegExp("file://\\D:/track\\d\\d.cda");
 #endif
 
 #define CD_BLOCKSIZE 2352/2
@@ -198,7 +199,7 @@ void AudioCDDemux::abort()
 bool AudioCDDemux::open(const QString &_url)
 {
 #ifdef Q_OS_WIN
-	if (_url.toLower().contains(QRegExp("file://\\D:/track\\d\\d.cda")))
+	if (_url.toLower().contains(cdaRegExp))
 	{
 		QString url = _url;
 		url.remove("file://");
@@ -274,27 +275,30 @@ bool AudioCDDemux::open(const QString &_url)
 Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
 {
 	Playlist::Entries entries;
-	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, NULL, NULL, NULL))
+	if (!url.contains("://{") && url.startsWith(AudioCDName "://"))
 	{
-		if (url.startsWith(AudioCDName "://"))
+		const QString realUrl = url.mid(strlen(AudioCDName) + 3);
+		entries = getTracks(realUrl);
+		if (entries.isEmpty())
+			emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
+		if (!entries.isEmpty())
 		{
-			const QString realUrl = url.mid(strlen(AudioCDName) + 3);
-			entries = getTracks(realUrl);
-			if (entries.isEmpty())
-				emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
-			if (!entries.isEmpty())
-			{
-				for (int i = 0; i < entries.count(); ++i)
-					entries[i].parent = 1;
-				Playlist::Entry entry;
-				entry.name = "Audio CD (" + realUrl + ")";
-				entry.url = url;
-				entry.GID = 1;
-				entries.prepend(entry);
-			}
+			for (int i = 0; i < entries.count(); ++i)
+				entries[i].parent = 1;
+			Playlist::Entry entry;
+			entry.name = "Audio CD (" + realUrl + ")";
+			entry.url = url;
+			entry.GID = 1;
+			entries.prepend(entry);
 		}
 	}
-	ok = !entries.isEmpty();
+	if (entries.isEmpty())
+	{
+#ifdef Q_OS_WIN
+		if (!url.toLower().contains(cdaRegExp))
+#endif
+			ok = false;
+	}
 	return entries;
 }
 
