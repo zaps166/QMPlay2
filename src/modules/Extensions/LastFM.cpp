@@ -106,6 +106,7 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 			coverReply->deleteLater();
 		}
 		coverReply = net.get(QNetworkRequest(url));
+		coverReply->ignoreSslErrors();
 		coverReply->setProperty("taa", QStringList() << (titleAsAlbum ? album : title) << artist << (titleAsAlbum ? QString() : album));
 		coverReply->setProperty("titleAsAlbum", titleAsAlbum);
 		connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
@@ -120,6 +121,7 @@ void LastFM::login()
 		const QString auth_token = QCryptographicHash::hash(user.toUtf8() + md5pass.toUtf8(), QCryptographicHash::Md5).toHex();
 		const QString api_sig = QCryptographicHash::hash(QString("api_key%1authToken%2methodauth.getmobilesessionusername%3%4").arg(api_key).arg(auth_token).arg(user).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
 		loginReply = net.get(QNetworkRequest(getSessionURL.arg(user).arg(auth_token).arg(api_key).arg(api_sig)));
+		loginReply->ignoreSslErrors();
 		connect(loginReply, SIGNAL(finished()), this, SLOT(loginFinished()));
 	}
 }
