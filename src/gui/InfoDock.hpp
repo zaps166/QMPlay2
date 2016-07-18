@@ -22,7 +22,6 @@
 
 class TextEdit : public QTextEdit
 {
-	Q_OBJECT
 private:
 	void mouseMoveEvent(QMouseEvent *);
 	void mousePressEvent(QMouseEvent *);
