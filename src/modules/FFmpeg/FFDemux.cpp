@@ -230,6 +230,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 					if (idx > -1)
 						formatContexts.remove(idx);
 				}
+				delete fmtCtx;
 
 				if (abortFetchTracks)
 				{
