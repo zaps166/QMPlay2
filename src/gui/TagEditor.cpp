@@ -156,12 +156,17 @@ static void removeXiphComment(Ogg::XiphComment *xiphComment)
 {
 	if (xiphComment)
 	{
+#if TAGLIB1B
+		xiphComment->removeAllPictures();
+		xiphComment->removeAllFields();
+#else
 		const Ogg::FieldListMap &fieldListMap = xiphComment->fieldListMap();
 		for (Ogg::FieldListMap::ConstIterator it = fieldListMap.begin(); it != fieldListMap.end(); ++it)
 		{
 			if (xiphComment->contains(it->first))
 				xiphComment->removeField(it->first);
 		}
+#endif
 	}
 }
 
@@ -350,24 +355,36 @@ bool TagEditor::open(const QString &fileName)
 		}
 		else if (isOgg(file))
 		{
-			const Ogg::XiphComment *xiphComment = getXiphComment(file);
+			Ogg::XiphComment *xiphComment = getXiphComment(file);
 			if (xiphComment)
 			{
+				FLAC::Picture *flacPicture = NULL;
+				pictureB->setEnabled(true);
+#if TAGLIB1B
+				const List<FLAC::Picture *> pictures = xiphComment->pictureList();
+				if (!pictures.isEmpty())
+				{
+					flacPicture = pictures[0];
+					hasTags = true;
+				}
+#else
 				const Ogg::FieldListMap &fieldListMap = xiphComment->fieldListMap();
 				Ogg::FieldListMap::ConstIterator it = fieldListMap.find("METADATA_BLOCK_PICTURE");
-				pictureB->setEnabled(true);
+				FLAC::Picture tmpFlacPicture;
 				if (it != fieldListMap.end() && !it->second.isEmpty())
 				{
 					/* OGG picture and FLAC picture are the same except OGG picture is encoded into Base64 */
-					QByteArray pict_frame_decoded = QByteArray::fromBase64(it->second.front().toCString());
-					FLAC::Picture flacPicture;
-					if (flacPicture.parse(ByteVector(pict_frame_decoded.data(), pict_frame_decoded.size())))
-					{
-						pictureMimeType = flacPicture.mimeType().toCString();
-						*picture = flacPicture.data();
-						pictureB->setChecked(true);
-						pictureW->update();
-					}
+					const QByteArray pict_frame_decoded = QByteArray::fromBase64(it->second.front().toCString());
+					if (tmpFlacPicture.parse(ByteVector(pict_frame_decoded.data(), pict_frame_decoded.size())))
+						flacPicture = &tmpFlacPicture;
+				}
+#endif
+				if (flacPicture)
+				{
+					pictureMimeType = flacPicture->mimeType().toCString();
+					*picture = flacPicture->data();
+					pictureB->setChecked(true);
+					pictureW->update();
 				}
 			}
 		}
@@ -507,16 +524,27 @@ bool TagEditor::save()
 				Ogg::XiphComment *xiphComment = getXiphComment(file);
 				if (xiphComment)
 				{
-					xiphComment->removeField("METADATA_BLOCK_PICTURE");
+					FLAC::Picture *flacPicture = NULL;
 					if (hasPicture)
 					{
-						FLAC::Picture flacPicture;
-						flacPicture.setMimeType(pictureMimeType.data());
-						flacPicture.setType(FLAC::Picture::FrontCover);
-						flacPicture.setData(*picture);
-						const ByteVector pict_data = flacPicture.render();
-						xiphComment->addField("METADATA_BLOCK_PICTURE", QByteArray::fromRawData(pict_data.data(), pict_data.size()).toBase64().data());
+						flacPicture = new FLAC::Picture;
+						flacPicture->setMimeType(pictureMimeType.data());
+						flacPicture->setType(FLAC::Picture::FrontCover);
+						flacPicture->setData(*picture);
 					}
+#if TAGLIB1B
+					xiphComment->removeAllPictures();
+					if (flacPicture)
+						xiphComment->addPicture(flacPicture);
+#else
+					xiphComment->removeField("METADATA_BLOCK_PICTURE");
+					if (flacPicture)
+					{
+						const ByteVector pict_data = flacPicture->render();
+						xiphComment->addField("METADATA_BLOCK_PICTURE", QByteArray::fromRawData(pict_data.data(), pict_data.size()).toBase64().data());
+						delete flacPicture;
+					}
+#endif
 					mustSave = true;
 				}
 			}

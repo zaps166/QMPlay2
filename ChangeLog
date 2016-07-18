@@ -8,6 +8,7 @@ Changes in QMPlay2 build 16.07.18:
 	- sort current group instead of entire playlist,
 	- HW and SW filters settings in the same place,
 	- rename video equalizer -> video adjustment,
+	- fix OGG pictures for taglib 1.11 and newer,
 	- fix bug in tag editor (non-Windows OS'es),
 	- updated Russian translation (victorr2007),
 	- fix downloading cover art from Last FM,
