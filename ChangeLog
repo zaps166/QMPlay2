@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.07.17:
+Changes in QMPlay2 build 16.07.18:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
 	- move most settings Ui from C++ to Qt forms (thanks Zamarin Arthur for help),
 	- play the entire audio if playback has been finished (don't drop samples),
