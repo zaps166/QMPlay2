@@ -95,7 +95,7 @@
 #endif
 
 PlayClass::PlayClass() :
-	demuxThr(NULL), vThr(NULL), aThr(NULL),
+	demuxThr(NULL), vThr(NULL), aThr(NULL), aRatioName("auto"),
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
 	firsttimeUpdateCache(true),
 #endif
@@ -108,7 +108,6 @@ PlayClass::PlayClass() :
 
 	quitApp = muted = reload = false;
 
-	aRatioName = "auto";
 	speed = subtitlesScale = zoom = 1.0;
 	flip = 0;
 	rotate90 = spherical = false;

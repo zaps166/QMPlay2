@@ -136,7 +136,7 @@ private:
 	QStatusBar *statusBar;
 
 	QFrame *vLine;
-	QLabel *timeL, *stateL;
+	QLabel *timeL;
 
 	VideoDock *videoDock;
 	InfoDock *infoDock;

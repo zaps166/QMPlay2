@@ -47,7 +47,7 @@ PlaylistDock::PlaylistDock() :
 	findE->setToolTip(tr("Filter entries"));
 	statusL = new QLabel;
 
-	layout = new QGridLayout(&mainW);
+	QGridLayout *layout = new QGridLayout(&mainW);
 	layout->addWidget(list);
 	layout->addWidget(findE);
 	layout->addWidget(statusL);

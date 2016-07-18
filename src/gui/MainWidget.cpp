@@ -161,7 +161,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	statusBar->setSizeGripEnabled(false);
 	timeL = new QLabel;
 	statusBar->addPermanentWidget(timeL);
-	stateL = new QLabel(tr("Stopped"));
+	QLabel *stateL = new QLabel(tr("Stopped"));
 	statusBar->addWidget(stateL);
 	setStatusBar(statusBar);
 
