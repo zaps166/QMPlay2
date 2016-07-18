@@ -18,10 +18,13 @@
 
 #include <Module.hpp>
 
+#include <QCoreApplication>
+
 class QComboBox;
 
 class FFmpeg : public Module
 {
+	Q_DECLARE_TR_FUNCTIONS(FFmpeg)
 public:
 	FFmpeg();
 	~FFmpeg();
@@ -49,8 +52,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
 
 class QCheckBox;
 class QGroupBox;

@@ -274,7 +274,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
 		page1->langBox->addItem("English", "en");
 		page1->langBox->setCurrentIndex(0);
-		QStringList langs = QMPlay2GUI.getLanguages();
+		const QStringList langs = QMPlay2Core.getLanguages();
 		for (int i = 0; i < langs.count(); i++)
 		{
 			page1->langBox->addItem(QMPlay2GUI.getLongFromShortLanguage(langs[i]), langs[i]);
@@ -684,7 +684,7 @@ void SettingsWidget::apply()
 			if (QMPlay2Core.getLanguage() != page1->langBox->itemData(page1->langBox->currentIndex()).toString())
 			{
 				QMPSettings.set("Language", page1->langBox->itemData(page1->langBox->currentIndex()).toString());
-				QMPlay2GUI.setLanguage();
+				QMPlay2Core.setLanguage();
 				QMessageBox::information(this, tr("New language"), tr("To set up a new language, the program will start again!"));
 				restartApp();
 			}

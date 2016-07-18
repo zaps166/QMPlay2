@@ -29,6 +29,7 @@ enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8,
 template<typename T>
 class QPointer;
 
+class QTranslator;
 class Settings;
 class QWidget;
 class QPixmap;
@@ -136,6 +137,9 @@ public:
 #endif
 	}
 
+	QStringList getLanguages() const;
+	void setLanguage();
+
 	inline QMap<QString, QString> getLanguagesMap() const
 	{
 		return languages;
@@ -165,7 +169,8 @@ private:
 	static QMPlay2CoreClass *qmplay2Core;
 
 	QVector<Module *> pluginsInstance;
-	QString shareDir, settingsDir, logFilePath;
+	QTranslator *translator;
+	QString shareDir, langDir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
 	QString unixOpenCommand;
 #endif

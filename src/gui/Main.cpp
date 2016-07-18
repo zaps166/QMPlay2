@@ -37,7 +37,6 @@
 #include <QImageReader>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QTranslator>
 #include <QPainter>
 #include <QLocale>
 #include <QBuffer>
@@ -49,7 +48,6 @@
 
 #include <time.h>
 
-static QTranslator *translator = NULL;
 static bool useGui = true;
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
@@ -150,30 +148,6 @@ void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 	QMPlay2Core.run(UpdateFile, "--Auto");
 }
 #endif
-
-QStringList QMPlay2GUIClass::getLanguages()
-{
-	QStringList langs = QDir(langPath).entryList(QStringList() << "*.qm", QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
-	for (int i = 0; i < langs.size(); i++)
-	{
-		int idx = langs[i].indexOf('.');
-		if (idx > 0)
-			langs[i].remove(idx, langs[i].size() - idx);
-	}
-	return langs;
-}
-void QMPlay2GUIClass::setLanguage()
-{
-	QString systemLang = QLocale::system().name();
-	const int idx = systemLang.indexOf('_');
-	if (idx > -1)
-		systemLang.remove(idx, systemLang.size() - idx);
-	lang = settings->getString("Language", systemLang);
-	if (lang.isEmpty())
-		lang = systemLang;
-	if (!translator->load(lang, langPath))
-		lang = "en";
-}
 
 void QMPlay2GUIClass::setStyle()
 {
@@ -543,11 +517,8 @@ int main(int argc, char *argv[])
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
-	translator = new QTranslator;
-	QCoreApplication::installTranslator(translator);
 	if (useGui)
 		QApplication::setQuitOnLastWindowClosed(false);
-	QMPlay2GUI.langPath = sharePath + "/lang/";
 
 #ifdef Q_OS_WIN
 	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(NULL), 0);
@@ -578,8 +549,6 @@ int main(int argc, char *argv[])
 			settings.set("VolumeR", vol);
 			settings.remove("Volume");
 		}
-
-		QMPlay2GUI.setLanguage();
 
 		if (help)
 		{
@@ -670,8 +639,6 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
 	UnhookWindowsHookEx(keyboardHook);
 #endif
-
-	delete translator;
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)

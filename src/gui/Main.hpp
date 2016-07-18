@@ -47,9 +47,6 @@ public:
 	void runUpdate(const QString &);
 #endif
 
-	QStringList getLanguages();
-	void setLanguage();
-
 	void setStyle();
 	void loadIcons();
 
@@ -66,8 +63,6 @@ public:
 	void updateInDockW();
 
 	const QWidget *getVideoDock() const;
-
-	QString langPath;
 
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;

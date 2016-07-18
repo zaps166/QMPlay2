@@ -23,9 +23,11 @@
 #include <Module.hpp>
 
 #include <QApplication>
+#include <QTranslator>
 #include <QDateTime>
 #include <QLibrary>
 #include <QPointer>
+#include <QLocale>
 #include <QFile>
 #include <QDir>
 #ifdef Q_OS_WIN
@@ -125,6 +127,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
 	const QString libDir = Functions::cleanPath(libPath);
 	shareDir = Functions::cleanPath(sharePath);
+	langDir = shareDir + "lang/";
 
 	if (settingsPath.isEmpty())
 	{
@@ -145,6 +148,12 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		if (!QFile::exists(newFFmpegConfig) && QFile::exists(oldFFmpegConfig))
 			QFile::rename(oldFFmpegConfig, newFFmpegConfig);
 	}
+
+	settings = new Settings("QMPlay2");
+
+	translator = new QTranslator;
+	QCoreApplication::installTranslator(translator);
+	setLanguage();
 
 #ifdef Q_OS_WIN
 	timeBeginPeriod(1); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
@@ -204,8 +213,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
 	VideoFilters::init();
 
-	settings = new Settings("QMPlay2");
-
 	connect(this, SIGNAL(restoreCursor()), this, SLOT(restoreCursorSlot()));
 	connect(this, SIGNAL(waitCursor()), this, SLOT(waitCursorSlot()));
 	connect(this, SIGNAL(busyCursor()), this, SLOT(busyCursorSlot()));
@@ -220,9 +227,12 @@ void QMPlay2CoreClass::quit()
 	videoFilters.clear();
 	settingsDir.clear();
 	shareDir.clear();
+	langDir.clear();
 #ifdef Q_OS_WIN
 	timeEndPeriod(1);
 #endif
+	QCoreApplication::removeTranslator(translator);
+	delete translator;
 	delete settings;
 }
 
@@ -283,6 +293,30 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 	}
 	if (!(logFlags & DontShowInGUI))
 		emit statusBarMessage(txt, 2500);
+}
+
+QStringList QMPlay2CoreClass::getLanguages() const
+{
+	QStringList langs = QDir(langDir).entryList(QStringList() << "*.qm", QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
+	for (int i = 0; i < langs.size(); i++)
+	{
+		const int idx = langs.at(i).indexOf('.');
+		if (idx > 0)
+			langs[i].remove(idx, langs.at(i).size() - idx);
+	}
+	return langs;
+}
+void QMPlay2CoreClass::setLanguage()
+{
+	QString systemLang = QLocale::system().name();
+	const int idx = systemLang.indexOf('_');
+	if (idx > -1)
+		systemLang.remove(idx, systemLang.size() - idx);
+	lang = settings->getString("Language", systemLang);
+	if (lang.isEmpty())
+		lang = systemLang;
+	if (!translator->load(lang, langDir))
+		lang = "en";
 }
 
 void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)
