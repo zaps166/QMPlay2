@@ -158,7 +158,7 @@ QString Functions::fileName(QString f, bool extension)
 #endif
 	while (f.endsWith("/"))
 		f.chop(1);
-	QString n = f.right(f.length() - f.lastIndexOf('/') - 1);
+	const QString n = f.right(f.length() - f.lastIndexOf('/') - 1);
 	if (extension || !f.startsWith("file://"))
 		return n;
 	return n.mid(0, n.lastIndexOf('.'));

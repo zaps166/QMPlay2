@@ -165,7 +165,7 @@ void Updater::writeToFile()
 	bool err = false;
 	if (firstChunk)
 	{
-                err = (!arr.startsWith("MZ"));
+		err = !arr.startsWith("MZ");
 		firstChunk = false;
 	}
 	if (err || updateFile.write(arr) != arr.size())
