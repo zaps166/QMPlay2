@@ -250,23 +250,23 @@ Appearance::Appearance(QWidget *p) :
 	useColorsB->setCheckable(true);
 
 	QFormLayout *formLayout = new QFormLayout(useColorsB);
-	formLayout->addRow(tr("Buttons color") + ":", buttonC = new ColorButton(false));
-	formLayout->addRow(tr("Window color") + ":", windowC = new ColorButton(false));
-	formLayout->addRow(tr("Border color") + ":", shadowC = new ColorButton(false));
-	formLayout->addRow(tr("Highlight color") + ":", highlightC = new ColorButton(false));
-	formLayout->addRow(tr("Base color") + ":", baseC = new ColorButton(false));
-	formLayout->addRow(tr("Text color") + ":", textC = new ColorButton(false));
-	formLayout->addRow(tr("Highlighted text color") + ":", highlightedTextC = new ColorButton(false));
-	formLayout->addRow(tr("Slider button color") + ":", sliderButtonC = new ColorButton(false));
+	formLayout->addRow(tr("Buttons color") + ":", buttonC = new ColorButton);
+	formLayout->addRow(tr("Window color") + ":", windowC = new ColorButton);
+	formLayout->addRow(tr("Border color") + ":", shadowC = new ColorButton);
+	formLayout->addRow(tr("Highlight color") + ":", highlightC = new ColorButton);
+	formLayout->addRow(tr("Base color") + ":", baseC = new ColorButton);
+	formLayout->addRow(tr("Text color") + ":", textC = new ColorButton);
+	formLayout->addRow(tr("Highlighted text color") + ":", highlightedTextC = new ColorButton);
+	formLayout->addRow(tr("Slider button color") + ":", sliderButtonC = new ColorButton);
 	formLayout->setMargin(3);
 
 
 	gradientB = new QGroupBox(tr("Gradient in the video window"));
 
 	formLayout = new QFormLayout(gradientB);
-	formLayout->addRow(tr("The color on the top and bottom") + ":", grad1C = new ColorButton(false));
-	formLayout->addRow(tr("Color in the middle") + ":", grad2C = new ColorButton(false));
-	formLayout->addRow(tr("Text color") + ":", qmpTxtC = new ColorButton(false));
+	formLayout->addRow(tr("The color on the top and bottom") + ":", grad1C = new ColorButton);
+	formLayout->addRow(tr("Color in the middle") + ":", grad2C = new ColorButton);
+	formLayout->addRow(tr("Text color") + ":", qmpTxtC = new ColorButton);
 
 
 	useWallpaperB = new QGroupBox(tr("Wallpaper in the main window"));

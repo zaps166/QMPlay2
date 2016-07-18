@@ -25,7 +25,7 @@ class ColorButton : public QPushButton
 {
 	Q_OBJECT
 public:
-	ColorButton(bool showAlphaChannel = true);
+	ColorButton(QWidget *parent = NULL);
 
 	void setColor(const QColor &color);
 	inline QColor getColor() const

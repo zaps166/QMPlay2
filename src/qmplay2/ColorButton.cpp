@@ -21,8 +21,8 @@
 #include <QColorDialog>
 #include <QPainter>
 
-ColorButton::ColorButton(bool showAlphaChannel) :
-	m_alphaChannel(showAlphaChannel)
+ColorButton::ColorButton(QWidget *parent) :
+	QPushButton(parent)
 {
 	setCursor(Qt::PointingHandCursor);
 	setAttribute(Qt::WA_OpaquePaintEvent);
@@ -44,7 +44,7 @@ void ColorButton::paintEvent(QPaintEvent *)
 
 void ColorButton::openColorDialog()
 {
-	const QColor color = QColorDialog::getColor(getColor(), this, QString(), m_alphaChannel ? QColorDialog::ShowAlphaChannel : QColorDialog::ColorDialogOptions());
+	const QColor color = QColorDialog::getColor(getColor(), this);
 	if (color.isValid() && m_color != color)
 	{
 		setColor(color);
