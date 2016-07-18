@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#define VER 3
+#define VER 4
 
 FileAssociation::FileAssociation() :
 	Module("FileAssociation")
@@ -179,7 +179,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	extensionLW->setWrapping(true);
 
 	static const char *defaultVideoExtensions[] = {"mkv", "mp4", "mpg", "mpeg", "asf", "wmv", "ogv", "ogm", "webm", "3gp", "dv", "mts", "m2t", "m2ts", "ts", "m4v", "vob", "qt", "mov", "flv", "avi", "divx", "rmvb", "rm", "bik"};
-	static const char *defaultAudioExtensions[] = {"ogg", "mp3", "wma", "aac", "ac3", "amr", "wav", "flac", "alac", "ape", "wv", "wvp", "mp2", "aiff", "aif", "mus"};
+	static const char *defaultAudioExtensions[] = {"ogg", "mp3", "m4a", "wma", "aac", "ac3", "amr", "wav", "flac", "alac", "ape", "wv", "wvp", "mp2", "aiff", "aif", "mus"};
 	static const size_t defaultVideoCount = sizeof defaultVideoExtensions / sizeof *defaultVideoExtensions;
 	static const size_t defaultAudioCount = sizeof defaultAudioExtensions / sizeof *defaultAudioExtensions;
 
