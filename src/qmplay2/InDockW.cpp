@@ -29,11 +29,16 @@
 #include <QPainter>
 #include <QVariant>
 
-static QPixmap getBlurred(const QPixmap &input)
+#include <math.h>
+
+static QPixmap getBlurred(const QPixmap &input, Qt::TransformationMode &blurredTransformation)
 {
+	const qreal blurRadius = qBound(10.0, sqrt(input.width() * input.width() + input.height() * input.height()) / 4.0, 300.0);
+	blurredTransformation = (blurRadius < 80.0) ? Qt::SmoothTransformation : Qt::FastTransformation;
+
 	QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
 	blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-	blur->setBlurRadius(250.0);
+	blur->setBlurRadius(blurRadius);
 
 	QGraphicsPixmapItem *item = new QGraphicsPixmapItem(input);
 	item->setGraphicsEffect(blur);
@@ -81,7 +86,7 @@ void InDockW::setCustomPixmap(const QPixmap &pix)
 	if (customPixmap.isNull() || !QMPlay2Core.getSettings().getBool("BlurCovers"))
 		customPixmapBlurred = QPixmap();
 	else
-		customPixmapBlurred = getBlurred(pix);
+		customPixmapBlurred = getBlurred(pix, blurredTransformation);
 	emit hasCoverImage(!customPixmap.isNull());
 	update();
 }
@@ -192,7 +197,7 @@ void InDockW::paintEvent(QPaintEvent *)
 				multiplier = 1.0f;
 			else
 			{
-				const QPixmap blurred = customPixmapBlurred.scaled(width(), fullHeight, Qt::KeepAspectRatioByExpanding, Qt::FastTransformation);
+				const QPixmap blurred = customPixmapBlurred.scaled(width(), fullHeight, Qt::KeepAspectRatioByExpanding, blurredTransformation);
 				p.drawPixmap(width() / 2 - blurred.width() / 2, fullHeight / 2 - blurred.height() / 2, blurred);
 				multiplier = 0.8f;
 			}
