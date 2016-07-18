@@ -47,7 +47,7 @@ static const char *ControlsNames[CONTROLS_COUNT] = {
 };
 
 VideoAdjustment::VideoAdjustment() :
-	sliders(new Slider*[CONTROLS_COUNT])
+	sliders(new Slider[CONTROLS_COUNT])
 {
 	QGridLayout *layout = new QGridLayout;
 	int i;
@@ -59,18 +59,17 @@ VideoAdjustment::VideoAdjustment() :
 
 		QLabel *valueL = new QLabel("0");
 
-		Slider *slider = sliders[i] = new Slider;
-		slider->setProperty("valueL", qVariantFromValue((void *)valueL));
-		slider->setTickPosition(QSlider::TicksBelow);
-		slider->setMinimumWidth(50);
-		slider->setTickInterval(25);
-		slider->setRange(-100, 100);
-		slider->setWheelStep(1);
-		slider->setValue(0);
-		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
+		sliders[i].setProperty("valueL", qVariantFromValue((void *)valueL));
+		sliders[i].setTickPosition(QSlider::TicksBelow);
+		sliders[i].setMinimumWidth(50);
+		sliders[i].setTickInterval(25);
+		sliders[i].setRange(-100, 100);
+		sliders[i].setWheelStep(1);
+		sliders[i].setValue(0);
+		connect(&sliders[i], SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 
 		layout->addWidget(titleL, i, 0);
-		layout->addWidget(slider, i, 1);
+		layout->addWidget(&sliders[i], i, 1);
 		layout->addWidget(valueL, i, 2);
 	}
 
@@ -90,27 +89,27 @@ VideoAdjustment::~VideoAdjustment()
 void VideoAdjustment::restoreValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i]->setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
+		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
 }
 void VideoAdjustment::saveValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], sliders[i]->value());
+		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], sliders[i].value());
 }
 
 void VideoAdjustment::setModuleParam(ModuleParams *writer)
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
-		sliders[i]->setEnabled(writer->hasParam(ControlsNames[i]));
-		writer->modParam(ControlsNames[i], sliders[i]->value());
+		sliders[i].setEnabled(writer->hasParam(ControlsNames[i]));
+		writer->modParam(ControlsNames[i], sliders[i].value());
 	}
 }
 
 void VideoAdjustment::enableControls()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i]->setEnabled(true);
+		sliders[i].setEnabled(true);
 }
 
 void VideoAdjustment::setValue(int v)
@@ -121,5 +120,5 @@ void VideoAdjustment::setValue(int v)
 void VideoAdjustment::reset()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i]->setValue(0);
+		sliders[i].setValue(0);
 }

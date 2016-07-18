@@ -42,7 +42,7 @@ private slots:
 	void setValue(int);
 	void reset();
 private:
-	Slider **sliders;
+	Slider *sliders;
 };
 
 #endif //VIDEOADJUSTMENT_HPP

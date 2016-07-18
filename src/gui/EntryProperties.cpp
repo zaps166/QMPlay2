@@ -58,8 +58,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	QGridLayout layout(this);
 	int row = 0;
 
-	nameE = new QLineEdit;
-	nameE->setText(tWI->text(0));
+	nameE = new QLineEdit(tWI->text(0));
 
 	QString url = tWI->data(0, Qt::UserRole).toString();
 	if (url.startsWith("file://"))
@@ -67,8 +66,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 	if (PlaylistWidget::isGroup(tWI))
 	{
-		pthE = new QLineEdit;
-		pthE->setText(url);
+		pthE = new QLineEdit(url);
 		origDirPth = url;
 
 		nameE->selectAll();

@@ -95,7 +95,8 @@
 #endif
 
 PlayClass::PlayClass() :
-	demuxThr(NULL), vThr(NULL), aThr(NULL), aRatioName("auto"),
+	demuxThr(NULL), vThr(NULL), aThr(NULL),
+	aRatioName("auto"),
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
 	firsttimeUpdateCache(true),
 #endif
@@ -300,13 +301,13 @@ void PlayClass::seek(int pos)
 }
 void PlayClass::chStream(const QString &s)
 {
-	if (s.left(5) == "audio")
+	if (s.startsWith("audio"))
 		choosenAudioStream = s.right(s.length() - 5).toInt();
-	else if (s.left(5) == "video")
+	else if (s.startsWith("video"))
 		choosenVideoStream = s.right(s.length() - 5).toInt();
-	else if (s.left(9) == "subtitles")
+	else if (s.startsWith("subtitles"))
 		choosenSubtitlesStream = s.right(s.length() - 9).toInt();
-	else if (s.left(8) == "fileSubs")
+	else if (s.startsWith("fileSubs"))
 	{
 		int idx = s.right(s.length() - 8).toInt();
 		if (fileSubsList.count() > idx)
