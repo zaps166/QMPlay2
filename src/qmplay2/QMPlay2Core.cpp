@@ -101,6 +101,12 @@ QString QMPlay2CoreClass::getLibDir()
 }
 #endif
 
+QString QMPlay2CoreClass::getLongFromShortLanguage(const QString &lng)
+{
+	const QString lang = QLocale::languageToString(QLocale(lng).language());
+	return lang == "C" ? lng : lang;
+}
+
 bool QMPlay2CoreClass::canSuspend()
 {
 #if defined Q_OS_LINUX
@@ -234,6 +240,40 @@ void QMPlay2CoreClass::quit()
 	QCoreApplication::removeTranslator(translator);
 	delete translator;
 	delete settings;
+}
+
+QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
+{
+	QStringList defaultModules;
+#if defined Q_OS_LINUX
+	if (type == "videoWriters")
+		defaultModules << "OpenGL 2" << "XVideo";
+	else if (type == "audioWriters")
+		defaultModules << "PulseAudio" << "ALSA";
+#elif defined Q_OS_WIN
+	if (type == "videoWriters")
+		defaultModules << "OpenGL 2" << "DirectDraw";
+#elif defined Q_OS_ANDROID
+	if (type == "videoWriters")
+		defaultModules << "QPainter" << "OpenGL 2";
+#endif
+	QStringList availableModules;
+	const QString moduleType = type.mid(0, typeLen);
+	foreach (Module *module, pluginsInstance)
+		foreach (const Module::Info &moduleInfo, module->getModulesInfo())
+			if ((moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains(moduleType)) || (moduleInfo.type == Module::DECODER && moduleType == "decoder"))
+				availableModules += moduleInfo.name;
+	QStringList modules;
+	foreach (const QString &module, settings->get(type, defaultModules).toStringList())
+	{
+		const int idx = availableModules.indexOf(module);
+		if (idx > -1)
+		{
+			availableModules.removeAt(idx);
+			modules += module;
+		}
+	}
+	return modules + availableModules;
 }
 
 QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &fallback)

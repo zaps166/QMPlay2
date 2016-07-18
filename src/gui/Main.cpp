@@ -38,7 +38,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPainter>
-#include <QLocale>
 #include <QBuffer>
 #include <QFile>
 #include <QDir>
@@ -56,44 +55,6 @@ QMPlay2GUIClass &QMPlay2GUIClass::instance()
 	return qmplay2Gui;
 }
 
-QString QMPlay2GUIClass::getLongFromShortLanguage(const QString &lng)
-{
-	const QString lang = QLocale::languageToString(QLocale(lng).language());
-	return lang == "C" ? lng : lang;
-}
-QStringList QMPlay2GUIClass::getModules(const QString &type, int typeLen)
-{
-	QStringList defaultModules;
-#if defined Q_OS_LINUX
-	if (type == "videoWriters")
-		defaultModules << "OpenGL 2" << "XVideo";
-	else if (type == "audioWriters")
-		defaultModules << "PulseAudio" << "ALSA";
-#elif defined Q_OS_WIN
-	if (type == "videoWriters")
-		defaultModules << "OpenGL 2" << "DirectDraw";
-#elif defined Q_OS_ANDROID
-	if (type == "videoWriters")
-		defaultModules << "QPainter" << "OpenGL 2";
-#endif
-	QStringList availableModules;
-	const QString moduleType = type.mid(0, typeLen);
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &moduleInfo, module->getModulesInfo())
-			if ((moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains(moduleType)) || (moduleInfo.type == Module::DECODER && moduleType == "decoder"))
-				availableModules += moduleInfo.name;
-	QStringList modules;
-	foreach (const QString &module, QMPlay2Core.getSettings().get(type, defaultModules).toStringList())
-	{
-		const int idx = availableModules.indexOf(module);
-		if (idx > -1)
-		{
-			availableModules.removeAt(idx);
-			modules += module;
-		}
-	}
-	return modules + availableModules;
-}
 QString QMPlay2GUIClass::getPipe()
 {
 #ifdef Q_OS_WIN
@@ -102,7 +63,6 @@ QString QMPlay2GUIClass::getPipe()
 	return QDir::tempPath() + "/QMPlay2." + QString(getenv("USER"));
 #endif
 }
-
 void QMPlay2GUIClass::saveCover(QByteArray cover)
 {
 	QBuffer buffer(&cover);
@@ -127,7 +87,6 @@ void QMPlay2GUIClass::saveCover(QByteArray cover)
 		}
 	}
 }
-
 void QMPlay2GUIClass::drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap)
 {
 	if (pixmap.width() > w->width() || pixmap.height() > w->height())

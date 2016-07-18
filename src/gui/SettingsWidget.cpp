@@ -277,7 +277,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		const QStringList langs = QMPlay2Core.getLanguages();
 		for (int i = 0; i < langs.count(); i++)
 		{
-			page1->langBox->addItem(QMPlay2GUI.getLongFromShortLanguage(langs[i]), langs[i]);
+			page1->langBox->addItem(QMPlay2Core.getLongFromShortLanguage(langs[i]), langs[i]);
 			if (QMPlay2Core.getLanguage() == langs[i])
 				page1->langBox->setCurrentIndex(i + 1);
 		}
@@ -840,7 +840,7 @@ void SettingsWidget::tabCh(int idx)
 {
 	if (idx == 1 && !page2ModulesList[0]->list->count() && !page2ModulesList[1]->list->count() && !page2ModulesList[2]->list->count())
 	{
-		const QStringList writers[3] = {QMPlay2GUI.getModules("videoWriters", 5), QMPlay2GUI.getModules("audioWriters", 5), QMPlay2GUI.getModules("decoders", 7)};
+		const QStringList writers[3] = {QMPlay2Core.getModules("videoWriters", 5), QMPlay2Core.getModules("audioWriters", 5), QMPlay2Core.getModules("decoders", 7)};
 		QVector<QPair<Module *, Module::Info> > pluginsInstances[3];
 		for (int m = 0; m < 3; ++m)
 			pluginsInstances[m].fill(QPair<Module *, Module::Info >(), writers[m].size());

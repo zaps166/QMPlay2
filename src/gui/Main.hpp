@@ -35,12 +35,8 @@ class QMPlay2GUIClass : private QMPlay2CoreClass
 public:
 	static QMPlay2GUIClass &instance();
 
-	static QString getLongFromShortLanguage(const QString &);
-	static QStringList getModules(const QString &, int typeLen);
 	static QString getPipe();
-
 	static void saveCover(QByteArray cover);
-
 	static void drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap);
 
 #ifdef UPDATER

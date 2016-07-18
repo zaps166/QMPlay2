@@ -48,11 +48,15 @@ public:
 	static QString getLibDir();
 #endif
 
+	static QString getLongFromShortLanguage(const QString &lng);
+
 	static bool canSuspend();
 	static void suspend();
 
 	void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
 	void quit();
+
+	QStringList getModules(const QString &type, int typeLen) const;
 
 	inline QVector<Module *> getPluginsInstance() const
 	{

@@ -1190,7 +1190,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 	if (choosenStream >= 0 && choosenStream < streams.count() && streams[choosenStream]->type == type)
 	{
 		if (streams[choosenStream]->must_decode || !subtitles)
-			dec = Decoder::create(*streams[choosenStream], writer, QMPlay2GUI.getModules("decoders", 7));
+			dec = Decoder::create(*streams[choosenStream], writer, QMPlay2Core.getModules("decoders", 7));
 		if (dec || subtitles)
 			stream = choosenStream;
 	}
@@ -1225,7 +1225,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 			if (streamInfo.type == type && (defaultStream == -1 || i == defaultStream))
 			{
 				if (streamInfo.must_decode || !subtitles)
-					dec = Decoder::create(streamInfo, writer, QMPlay2GUI.getModules("decoders", 7));
+					dec = Decoder::create(streamInfo, writer, QMPlay2Core.getModules("decoders", 7));
 				if (dec || subtitles)
 				{
 					stream = i;
@@ -1256,7 +1256,7 @@ void PlayClass::load(Demuxer *demuxer)
 				stopVThr();
 			if (!vThr)
 			{
-				vThr = new VideoThr(*this, dec->HWAccel(), QMPlay2GUI.getModules("videoWriters", 5));
+				vThr = new VideoThr(*this, dec->HWAccel(), QMPlay2Core.getModules("videoWriters", 5));
 				vThr->setSyncVtoA(QMPlay2Core.getSettings().getBool("SyncVtoA"));
 			}
 			if (vThr->isRunning())
@@ -1329,7 +1329,7 @@ void PlayClass::load(Demuxer *demuxer)
 		if (dec)
 		{
 			if (!aThr)
-				aThr = new AudioThr(*this, QMPlay2GUI.getModules("audioWriters", 5));
+				aThr = new AudioThr(*this, QMPlay2Core.getModules("audioWriters", 5));
 			if (aThr->isRunning())
 			{
 				aThr->setDec(dec);
