@@ -87,6 +87,7 @@ void Updater::downloadUpdate()
 
 		QNetworkReply *reply = net.get(request);
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
+		reply->ignoreSslErrors();
 
 		infoL->setText(tr("Checking for updates"));
 		progressB->setRange(0, 0);

@@ -113,6 +113,7 @@ void Radio::visibilityChanged(bool v)
 		QNetworkReply *netReply = net->get(request);
 		connect(netReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
 		connect(netReply, SIGNAL(finished()), this, SLOT(finished()));
+		netReply->ignoreSslErrors();
 	}
 }
 void Radio::popup(const QPoint &p)
