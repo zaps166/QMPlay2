@@ -37,6 +37,7 @@ set(GUI_HDR
     Appearance.hpp
     VolWidget.hpp
     ScreenSaver.hpp
+    ShortcutHandler.hpp
 )
 
 set(GUI_SRC
@@ -64,6 +65,7 @@ set(GUI_SRC
     Appearance.cpp
     VolWidget.cpp
     ScreenSaver.cpp
+    ShortcutHandler.cpp
 )
 
 set(GUI_FORMS # *.ui files

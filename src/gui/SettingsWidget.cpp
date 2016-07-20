@@ -22,6 +22,7 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Main.hpp>
+#include <ShortcutHandler.hpp>
 
 #if QT_VERSION < 0x050000
 	#include <QDesktopServices>
@@ -50,6 +51,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QDir>
+#include <QTableView>
 
 #include <Appearance.hpp>
 #include <Settings.hpp>
@@ -202,7 +204,6 @@ void SettingsWidget::InitSettings()
 	OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.5, 1.5, QColor(0xFF, 0xA8, 0x58, 0xFF), Qt::black, Qt::black);
 	OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black);
 	DeintSettingsW::init();
-	MenuBar::init();
 	applyProxy();
 }
 void SettingsWidget::SetAudioChannelsMenu()
@@ -568,6 +569,23 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page6->setWidget(widget);
 	}
 
+	/* Page 7 */
+	{
+		shortcuts = new QTableView(this);
+		shortcuts->setModel(ShortcutHandler::instance());
+		shortcuts->setFrameShape(QFrame::NoFrame);
+		shortcuts->setAlternatingRowColors(true);
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		shortcuts->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+		shortcuts->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+#else
+		shortcuts->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+		shortcuts->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+#endif
+		shortcuts->verticalHeader()->setVisible(false);
+		tabW->addTab(shortcuts, tr("Shortcuts"));
+	}
+
 	connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(tabCh(int)));
 	tabW->setCurrentIndex(page);
 
@@ -672,6 +690,7 @@ void SettingsWidget::chStyle()
 		QMPlay2GUI.setStyle();
 	}
 }
+
 void SettingsWidget::apply()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
@@ -803,6 +822,9 @@ void SettingsWidget::apply()
 			page6->deintSettingsW->writeSettings();
 			if (page6->otherVFiltersW)
 				page6->otherVFiltersW->writeSettings();
+			break;
+		case 7:
+			ShortcutHandler::instance()->submit();
 			break;
 	}
 	if (page != 3)

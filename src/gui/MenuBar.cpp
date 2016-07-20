@@ -22,6 +22,7 @@
 #include <DockWidget.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
+#include <ShortcutHandler.hpp>
 
 #include <QWidgetAction>
 #include <QMainWindow>
@@ -37,115 +38,6 @@ static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool
 }
 
 /**/
-
-void MenuBar::init()
-{
-	Settings &settings = QMPlay2Core.getSettings();
-
-	settings.init("KeyBindings/Window-toggleVisibility", "`");
-	settings.init("KeyBindings/Window-toggleFullScreen", "F");
-	settings.init("KeyBindings/Window-toggleCompactView", "Alt+V");
-	settings.init("KeyBindings/Window-close", "Alt+F4");
-
-
-	settings.init("KeyBindings/Widgets-hideMenu", "Alt+Ctrl+M");
-	settings.init("KeyBindings/Widgets-lockWidgets", "Shift+L");
-
-
-	settings.init("KeyBindings/Playlist-stopLoading", "F4");
-	settings.init("KeyBindings/Playlist-sync", "F5");
-	settings.init("KeyBindings/Playlist-loadPlist", "Ctrl+L");
-	settings.init("KeyBindings/Playlist-savePlist", "Ctrl+S");
-	settings.init("KeyBindings/Playlist-saveGroup", "Ctrl+Shift+S");
-	settings.init("KeyBindings/Playlist-delEntries", "Del");
-	settings.init("KeyBindings/Playlist-delNonGroupEntries", "Ctrl+Del");
-	settings.init("KeyBindings/Playlist-clear", "Shift+Del");
-	settings.init("KeyBindings/Playlist-copy", "Ctrl+C");
-	settings.init("KeyBindings/Playlist-paste", "Ctrl+V");
-	settings.init("KeyBindings/Playlist-newGroup", "F7");
-	settings.init("KeyBindings/Playlist-renameGroup", "F2");
-	settings.init("KeyBindings/Playlist-find", "Ctrl+F");
-	settings.init("KeyBindings/Playlist-collapseAll", "");
-	settings.init("KeyBindings/Playlist-expandAll", "");
-	settings.init("KeyBindings/Playlist-goToPlayback", "Ctrl+P");
-	settings.init("KeyBindings/Playlist-queue", "Q");
-	settings.init("KeyBindings/Playlist-entryProperties", "Alt+Return");
-
-	settings.init("KeyBindings/Playlist-Add-file", "Ctrl+I");
-	settings.init("KeyBindings/Playlist-Add-dir", "Ctrl+D");
-	settings.init("KeyBindings/Playlist-Add-address", "Ctrl+U");
-
-	settings.init("KeyBindings/Playlist-Sort-timeSort1", "");
-	settings.init("KeyBindings/Playlist-Sort-timeSort2", "");
-	settings.init("KeyBindings/Playlist-Sort-titleSort1", "");
-	settings.init("KeyBindings/Playlist-Sort-titleSort2", "");
-
-
-	settings.init("KeyBindings/Player-togglePlay", "Space");
-	settings.init("KeyBindings/Player-stop", "V");
-	settings.init("KeyBindings/Player-next", "B");
-	settings.init("KeyBindings/Player-prev", "Z");
-	settings.init("KeyBindings/Player-nextFrame", ".");
-	settings.init("KeyBindings/Player-abRepeat", "Ctrl+-");
-	settings.init("KeyBindings/Player-seekF", "Right");
-	settings.init("KeyBindings/Player-seekB", "Left");
-	settings.init("KeyBindings/Player-lSeekF", "Up");
-	settings.init("KeyBindings/Player-lSeekB", "Down");
-	settings.init("KeyBindings/Player-speedUp", "]");
-	settings.init("KeyBindings/Player-slowDown", "[");
-	settings.init("KeyBindings/Player-setSpeed", "Shift+S");
-	settings.init("KeyBindings/Player-zoomIn", "E");
-	settings.init("KeyBindings/Player-zoomOut", "W");
-	settings.init("KeyBindings/Player-switchARatio", "A");
-	settings.init("KeyBindings/Player-reset", "R");
-	settings.init("KeyBindings/Player-volUp", "*");
-	settings.init("KeyBindings/Player-volDown", "/");
-	settings.init("KeyBindings/Player-toggleMute", "M");
-	settings.init("KeyBindings/Player-detach", "");
-	settings.init("KeyBindings/Player-suspend", "");
-
-	settings.init("KeyBindings/Player-Repeat-RepeatNormal", "Alt+0");
-	settings.init("KeyBindings/Player-Repeat-RepeatEntry", "Alt+1");
-	settings.init("KeyBindings/Player-Repeat-RepeatGroup", "Alt+2");
-	settings.init("KeyBindings/Player-Repeat-RepeatList", "Alt+3");
-	settings.init("KeyBindings/Player-Repeat-RandomMode", "Alt+4");
-	settings.init("KeyBindings/Player-Repeat-RandomGroupMode", "Alt+5");
-	settings.init("KeyBindings/Player-Repeat-RepeatRandom", "Alt+6");
-	settings.init("KeyBindings/Player-Repeat-RepeatRandomGroup", "Alt+7");
-
-
-	settings.init("KeyBindings/Playback-toggleAudio", "D");
-	settings.init("KeyBindings/Playback-toggleVideo", "O");
-	settings.init("KeyBindings/Playback-videoSync", "Shift+O");
-	settings.init("KeyBindings/Playback-slowDownVideo", "-");
-	settings.init("KeyBindings/Playback-speedUpVideo", "+");
-	settings.init("KeyBindings/Playback-toggleSubtitles", "N");
-	settings.init("KeyBindings/Playback-subsFromFile", "Alt+I");
-	settings.init("KeyBindings/Playback-subtitlesSync", "Shift+N");
-	settings.init("KeyBindings/Playback-slowDownSubtitles", "Shift+Z");
-	settings.init("KeyBindings/Playback-speedUpSubtitles", "Shift+X");
-	settings.init("KeyBindings/Playback-biggerSubtitles", "Shift+R");
-	settings.init("KeyBindings/Playback-smallerSubtitles", "Shift+T");
-	settings.init("KeyBindings/Playback-playbackSettings", "Ctrl+Shift+P");
-	settings.init("KeyBindings/Playback-screenShot", "Alt+S");
-
-	settings.init("KeyBindings/Playback-VideoFilters-spherical", "Ctrl+3");
-	settings.init("KeyBindings/Playback-VideoFilters-hFlip", "Ctrl+M");
-	settings.init("KeyBindings/Playback-VideoFilters-vFlip", "Ctrl+R");
-	settings.init("KeyBindings/Playback-VideoFilters-rotate90", "Ctrl+9");
-	settings.init("KeyBindings/Playback-VideoFilters-more", "Alt+F");
-
-
-	settings.init("KeyBindings/Options-settings", "Ctrl+O");
-	settings.init("KeyBindings/Options-modulesSettings", "Ctrl+Shift+O");
-	settings.init("KeyBindings/Options-trayVisible", "Ctrl+T");
-
-
-	settings.init("KeyBindings/Help-about", "F1");
-#ifdef UPDATER
-	settings.init("KeyBindings/Help-updates", "F12");
-#endif
-}
 
 MenuBar::MenuBar()
 {
@@ -466,108 +358,103 @@ MenuBar::Help::Help(MenuBar *parent) :
 
 void MenuBar::setKeyShourtcuts()
 {
-	Settings &settings = QMPlay2Core.getSettings();
+	ShortcutHandler* shortcuts = ShortcutHandler::instance();
+	shortcuts->appendAction(window->toggleVisibility, "KeyBindings/Window-toggleVisibility", "`");
+	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
+	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");
+	shortcuts->appendAction(window->close, "KeyBindings/Window-close", "Alt+F4");
 
-	window->toggleVisibility->setShortcut(settings.getString("KeyBindings/Window-toggleVisibility"));
-	window->toggleFullScreen->setShortcut(settings.getString("KeyBindings/Window-toggleFullScreen"));
-	window->toggleCompactView->setShortcut(settings.getString("KeyBindings/Window-toggleCompactView"));
-	window->close->setShortcut(settings.getString("KeyBindings/Window-close"));
+	shortcuts->appendAction(playlist->stopLoading, "KeyBindings/Playlist-stopLoading", "F4");
+	shortcuts->appendAction(playlist->sync, "KeyBindings/Playlist-sync", "F5");
+	shortcuts->appendAction(playlist->loadPlist, "KeyBindings/Playlist-loadPlist", "Ctrl+L");
+	shortcuts->appendAction(playlist->savePlist, "KeyBindings/Playlist-savePlist", "Ctrl+S");
+	shortcuts->appendAction(playlist->saveGroup, "KeyBindings/Playlist-saveGroup", "Ctrl+Shift+S");
+	shortcuts->appendAction(playlist->delEntries, "KeyBindings/Playlist-delEntries", "Del");
+	shortcuts->appendAction(playlist->delNonGroupEntries, "KeyBindings/Playlist-delNonGroupEntries", "Ctrl+Del");
+	shortcuts->appendAction(playlist->clear, "KeyBindings/Playlist-clear", "Shift+Del");
+	shortcuts->appendAction(playlist->copy, "KeyBindings/Playlist-copy", "Ctrl+C");
+	shortcuts->appendAction(playlist->paste, "KeyBindings/Playlist-paste", "Ctrl+V");
+	shortcuts->appendAction(playlist->newGroup, "KeyBindings/Playlist-newGroup", "F7");
+	shortcuts->appendAction(playlist->renameGroup, "KeyBindings/Playlist-renameGroup", "F2");
+	shortcuts->appendAction(playlist->find, "KeyBindings/Playlist-find", "Ctrl+F");
+	shortcuts->appendAction(playlist->collapseAll, "KeyBindings/Playlist-collapseAll", "");
+	shortcuts->appendAction(playlist->expandAll, "KeyBindings/Playlist-expandAll", "");
+	shortcuts->appendAction(playlist->goToPlayback, "KeyBindings/Playlist-goToPlayback", "Ctrl+P");
+	shortcuts->appendAction(playlist->queue, "KeyBindings/Playlist-queue", "Q");
+	shortcuts->appendAction(playlist->entryProperties, "KeyBindings/Playlist-entryProperties", "Alt+Return");
 
+	shortcuts->appendAction(playlist->add->file, "KeyBindings/Playlist-Add-file", "Ctrl+I");
+	shortcuts->appendAction(playlist->add->dir, "KeyBindings/Playlist-Add-dir", "Ctrl+D");
+	shortcuts->appendAction(playlist->add->address, "KeyBindings/Playlist-Add-address", "Ctrl+U");
 
-	playlist->stopLoading->setShortcut(settings.getString("KeyBindings/Playlist-stopLoading"));
-	playlist->sync->setShortcut(settings.getString("KeyBindings/Playlist-sync"));
-	playlist->loadPlist->setShortcut(settings.getString("KeyBindings/Playlist-loadPlist"));
-	playlist->savePlist->setShortcut(settings.getString("KeyBindings/Playlist-savePlist"));
-	playlist->saveGroup->setShortcut(settings.getString("KeyBindings/Playlist-saveGroup"));
-	playlist->delEntries->setShortcut(settings.getString("KeyBindings/Playlist-delEntries"));
-	playlist->delNonGroupEntries->setShortcut(settings.getString("KeyBindings/Playlist-delNonGroupEntries"));
-	playlist->clear->setShortcut(settings.getString("KeyBindings/Playlist-clear"));
-	playlist->copy->setShortcut(settings.getString("KeyBindings/Playlist-copy"));
-	playlist->paste->setShortcut(settings.getString("KeyBindings/Playlist-paste"));
-	playlist->newGroup->setShortcut(settings.getString("KeyBindings/Playlist-newGroup"));
-	playlist->renameGroup->setShortcut(settings.getString("KeyBindings/Playlist-renameGroup"));
-	playlist->find->setShortcut(settings.getString("KeyBindings/Playlist-find"));
-	playlist->collapseAll->setShortcut(settings.getString("KeyBindings/Playlist-collapseAll"));
-	playlist->expandAll->setShortcut(settings.getString("KeyBindings/Playlist-expandAll"));
-	playlist->goToPlayback->setShortcut(settings.getString("KeyBindings/Playlist-goToPlayback"));
-	playlist->queue->setShortcut(settings.getString("KeyBindings/Playlist-queue"));
-	playlist->entryProperties->setShortcut(settings.getString("KeyBindings/Playlist-entryProperties"));
+	shortcuts->appendAction(playlist->sort->timeSort1, "KeyBindings/Playlist-Sort-timeSort1", "");
+	shortcuts->appendAction(playlist->sort->timeSort2, "KeyBindings/Playlist-Sort-timeSort2", "");
+	shortcuts->appendAction(playlist->sort->titleSort1, "KeyBindings/Playlist-Sort-titleSort1", "");
+	shortcuts->appendAction(playlist->sort->titleSort2, "KeyBindings/Playlist-Sort-titleSort2", "");
 
-	playlist->add->file->setShortcut(settings.getString("KeyBindings/Playlist-Add-file"));
-	playlist->add->dir->setShortcut(settings.getString("KeyBindings/Playlist-Add-dir"));
-	playlist->add->address->setShortcut(settings.getString("KeyBindings/Playlist-Add-address"));
+	shortcuts->appendAction(player->togglePlay, "KeyBindings/Player-togglePlay", "Space");
+	shortcuts->appendAction(player->stop, "KeyBindings/Player-stop", "V");
+	shortcuts->appendAction(player->next, "KeyBindings/Player-next", "B");
+	shortcuts->appendAction(player->prev, "KeyBindings/Player-prev", "Z");
+	shortcuts->appendAction(player->nextFrame, "KeyBindings/Player-nextFrame", ".");
+	shortcuts->appendAction(player->abRepeat, "KeyBindings/Player-abRepeat", "Ctrl+-");
+	shortcuts->appendAction(player->seekF, "KeyBindings/Player-seekF", "Right");
+	shortcuts->appendAction(player->seekB, "KeyBindings/Player-seekB", "Left");
+	shortcuts->appendAction(player->lSeekF, "KeyBindings/Player-lSeekF", "Up");
+	shortcuts->appendAction(player->lSeekB, "KeyBindings/Player-lSeekB", "Down");
+	shortcuts->appendAction(player->speedUp, "KeyBindings/Player-speedUp", "]");
+	shortcuts->appendAction(player->slowDown, "KeyBindings/Player-slowDown", "[");
+	shortcuts->appendAction(player->setSpeed, "KeyBindings/Player-setSpeed", "Shift+S");
+	shortcuts->appendAction(player->zoomIn, "KeyBindings/Player-zoomIn", "E");
+	shortcuts->appendAction(player->zoomOut, "KeyBindings/Player-zoomOut", "W");
+	shortcuts->appendAction(player->switchARatio, "KeyBindings/Player-switchARatio", "A");
+	shortcuts->appendAction(player->reset, "KeyBindings/Player-reset", "R");
+	shortcuts->appendAction(player->volUp, "KeyBindings/Player-volUp", "*");
+	shortcuts->appendAction(player->volDown, "KeyBindings/Player-volDown", "/");
+	shortcuts->appendAction(player->toggleMute, "KeyBindings/Player-toggleMute", "M");
+	if(player->detach)
+		shortcuts->appendAction(player->detach, "KeyBindings/Player-detach", "");
+	if(player->suspend)
+		shortcuts->appendAction(player->suspend, "KeyBindings/Player-suspend", "");
 
-	playlist->sort->timeSort1->setShortcut(settings.getString("KeyBindings/Playlist-Sort-timeSort1"));
-	playlist->sort->timeSort2->setShortcut(settings.getString("KeyBindings/Playlist-Sort-timeSort2"));
-	playlist->sort->titleSort1->setShortcut(settings.getString("KeyBindings/Playlist-Sort-titleSort1"));
-	playlist->sort->titleSort2->setShortcut(settings.getString("KeyBindings/Playlist-Sort-titleSort2"));
-
-
-	player->togglePlay->setShortcut(settings.getString("KeyBindings/Player-togglePlay"));
-	player->stop->setShortcut(settings.getString("KeyBindings/Player-stop"));
-	player->next->setShortcut(settings.getString("KeyBindings/Player-next"));
-	player->prev->setShortcut(settings.getString("KeyBindings/Player-prev"));
-	player->nextFrame->setShortcut(settings.getString("KeyBindings/Player-nextFrame"));
-	player->abRepeat->setShortcut(settings.getString("KeyBindings/Player-abRepeat"));
-	player->seekF->setShortcut(settings.getString("KeyBindings/Player-seekF"));
-	player->seekB->setShortcut(settings.getString("KeyBindings/Player-seekB"));
-	player->lSeekF->setShortcut(settings.getString("KeyBindings/Player-lSeekF"));
-	player->lSeekB->setShortcut(settings.getString("KeyBindings/Player-lSeekB"));
-	player->speedUp->setShortcut(settings.getString("KeyBindings/Player-speedUp"));
-	player->slowDown->setShortcut(settings.getString("KeyBindings/Player-slowDown"));
-	player->setSpeed->setShortcut(settings.getString("KeyBindings/Player-setSpeed"));
-	player->zoomIn->setShortcut(settings.getString("KeyBindings/Player-zoomIn"));
-	player->zoomOut->setShortcut(settings.getString("KeyBindings/Player-zoomOut"));
-	player->switchARatio->setShortcut(settings.getString("KeyBindings/Player-switchARatio"));
-	player->reset->setShortcut(settings.getString("KeyBindings/Player-reset"));
-	player->volUp->setShortcut(settings.getString("KeyBindings/Player-volUp"));
-	player->volDown->setShortcut(settings.getString("KeyBindings/Player-volDown"));
-	player->toggleMute->setShortcut(settings.getString("KeyBindings/Player-toggleMute"));
-	if (player->detach)
-		player->detach->setShortcut(settings.getString("KeyBindings/Player-detach"));
-	if (player->suspend)
-		player->suspend->setShortcut(settings.getString("KeyBindings/Player-suspend"));
-
-	player->repeat->repeatActions[RepeatNormal]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatNormal"));
-	player->repeat->repeatActions[RepeatEntry]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatEntry"));
-	player->repeat->repeatActions[RepeatGroup]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatGroup"));
-	player->repeat->repeatActions[RepeatList]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatList"));
-	player->repeat->repeatActions[RandomMode]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RandomMode"));
-	player->repeat->repeatActions[RandomGroupMode]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RandomGroupMode"));
-	player->repeat->repeatActions[RepeatRandom]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatRandom"));
-	player->repeat->repeatActions[RepeatRandomGroup]->setShortcut(settings.getString("KeyBindings/Player-Repeat-RepeatRandomGroup"));
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatNormal], "KeyBindings/Player-Repeat-RepeatNormal", "Alt+0");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatEntry], "KeyBindings/Player-Repeat-RepeatEntry", "Alt+1");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatGroup], "KeyBindings/Player-Repeat-RepeatGroup", "Alt+2");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatList], "KeyBindings/Player-Repeat-RepeatList", "Alt+3");
+	shortcuts->appendAction(player->repeat->repeatActions[RandomMode], "KeyBindings/Player-Repeat-RandomMode", "Alt+4");
+	shortcuts->appendAction(player->repeat->repeatActions[RandomGroupMode], "KeyBindings/Player-Repeat-RandomGroupMode", "Alt+5");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatRandom], "KeyBindings/Player-Repeat-RepeatRandom", "Alt+6");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatRandomGroup], "KeyBindings/Player-Repeat-RepeatRandomGroup", "Alt+7");
 
 
-	playback->toggleAudio->setShortcut(settings.getString("KeyBindings/Playback-toggleAudio"));
-	playback->toggleVideo->setShortcut(settings.getString("KeyBindings/Playback-toggleVideo"));
-	playback->videoSync->setShortcut(settings.getString("KeyBindings/Playback-videoSync"));
-	playback->slowDownVideo->setShortcut(settings.getString("KeyBindings/Playback-slowDownVideo"));
-	playback->speedUpVideo->setShortcut(settings.getString("KeyBindings/Playback-speedUpVideo"));
-	playback->toggleSubtitles->setShortcut(settings.getString("KeyBindings/Playback-toggleSubtitles"));
-	playback->subsFromFile->setShortcut(settings.getString("KeyBindings/Playback-subsFromFile"));
-	playback->subtitlesSync->setShortcut(settings.getString("KeyBindings/Playback-subtitlesSync"));
-	playback->slowDownSubtitles->setShortcut(settings.getString("KeyBindings/Playback-slowDownSubtitles"));
-	playback->speedUpSubtitles->setShortcut(settings.getString("KeyBindings/Playback-speedUpSubtitles"));
-	playback->biggerSubtitles->setShortcut(settings.getString("KeyBindings/Playback-biggerSubtitles"));
-	playback->smallerSubtitles->setShortcut(settings.getString("KeyBindings/Playback-smallerSubtitles"));
-	playback->playbackSettings->setShortcut(settings.getString("KeyBindings/Playback-playbackSettings"));
-	playback->screenShot->setShortcut(settings.getString("KeyBindings/Playback-screenShot"));
+	shortcuts->appendAction(playback->toggleAudio, "KeyBindings/Playback-toggleAudio", "D");
+	shortcuts->appendAction(playback->toggleVideo, "KeyBindings/Playback-toggleVideo", "O");
+	shortcuts->appendAction(playback->videoSync, "KeyBindings/Playback-videoSync", "Shift+O");
+	shortcuts->appendAction(playback->slowDownVideo, "KeyBindings/Playback-slowDownVideo", "-");
+	shortcuts->appendAction(playback->speedUpVideo, "KeyBindings/Playback-speedUpVideo", "+");
+	shortcuts->appendAction(playback->toggleSubtitles, "KeyBindings/Playback-toggleSubtitles", "N");
+	shortcuts->appendAction(playback->subsFromFile, "KeyBindings/Playback-subsFromFile", "Alt+I");
+	shortcuts->appendAction(playback->subtitlesSync, "KeyBindings/Playback-subtitlesSync", "Shift+N");
+	shortcuts->appendAction(playback->slowDownSubtitles, "KeyBindings/Playback-slowDownSubtitles", "Shift+Z");
+	shortcuts->appendAction(playback->speedUpSubtitles, "KeyBindings/Playback-speedUpSubtitles", "Shift+X");
+	shortcuts->appendAction(playback->biggerSubtitles, "KeyBindings/Playback-biggerSubtitles", "Shift+R");
+	shortcuts->appendAction(playback->smallerSubtitles, "KeyBindings/Playback-smallerSubtitles", "Shift+T");
+	shortcuts->appendAction(playback->playbackSettings, "KeyBindings/Playback-playbackSettings", "Ctrl+Shift+P");
+	shortcuts->appendAction(playback->screenShot, "KeyBindings/Playback-screenShot", "Alt+S");
 
-	playback->videoFilters->spherical->setShortcut(settings.getString("KeyBindings/Playback-VideoFilters-spherical"));
-	playback->videoFilters->hFlip->setShortcut(settings.getString("KeyBindings/Playback-VideoFilters-hFlip"));
-	playback->videoFilters->vFlip->setShortcut(settings.getString("KeyBindings/Playback-VideoFilters-vFlip"));
-	playback->videoFilters->rotate90->setShortcut(settings.getString("KeyBindings/Playback-VideoFilters-rotate90"));
-	playback->videoFilters->more->setShortcut(settings.getString("KeyBindings/Playback-VideoFilters-more"));
+	shortcuts->appendAction(playback->videoFilters->spherical, "KeyBindings/Playback-VideoFilters-spherical", "Ctrl+3");
+	shortcuts->appendAction(playback->videoFilters->hFlip, "KeyBindings/Playback-VideoFilters-hFlip", "Ctrl+M");
+	shortcuts->appendAction(playback->videoFilters->vFlip, "KeyBindings/Playback-VideoFilters-vFlip", "Ctrl+R");
+	shortcuts->appendAction(playback->videoFilters->rotate90, "KeyBindings/Playback-VideoFilters-rotate90", "Ctrl+9");
+	shortcuts->appendAction(playback->videoFilters->more, "KeyBindings/Playback-VideoFilters-more", "Alt+F");
 
+	shortcuts->appendAction(options->settings, "KeyBindings/Options-settings", "Ctrl+O");
+	shortcuts->appendAction(options->modulesSettings, "KeyBindings/Options-modulesSettings", "Ctrl+Shift+O");
+	shortcuts->appendAction(options->trayVisible, "KeyBindings/Options-trayVisible", "Ctrl+T");
 
-	options->settings->setShortcut(settings.getString("KeyBindings/Options-settings"));
-	options->modulesSettings->setShortcut(settings.getString("KeyBindings/Options-modulesSettings"));
-	options->trayVisible->setShortcut(settings.getString("KeyBindings/Options-trayVisible"));
-
-
-	help->about->setShortcut(settings.getString("KeyBindings/Help-about"));
+	shortcuts->appendAction(help->about, "KeyBindings/Help-about", "F1");
 #ifdef UPDATER
-	help->updates->setShortcut(settings.getString("KeyBindings/Help-updates"));
+	shortcuts->appendAction(help->updates, "KeyBindings/Help-updates", "F12");
 #endif
 }
 

@@ -29,6 +29,7 @@ class Page3;
 class Page4;
 class Page5;
 class Page6;
+class QTableView;
 
 namespace Ui {
 	class GeneralSettings;
@@ -65,6 +66,7 @@ private:
 	Page4 *page4;
 	Page5 *page5;
 	Page6 *page6;
+	QTableView *shortcuts;
 
 	QTabWidget *tabW;
 	QString lastM[3];

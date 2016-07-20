@@ -28,8 +28,6 @@ class MenuBar : public QMenuBar
 {
 	Q_OBJECT
 public:
-	static void init();
-
 	MenuBar();
 
 	class Window : public QMenu
