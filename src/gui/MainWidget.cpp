@@ -841,17 +841,19 @@ void MainWidget::toggleCompactView()
 	}
 	else
 	{
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
-		menuBar->setVisible(!hideMenuAct->isChecked());
-#endif
-		statusBar->show();
-
-		videoDock->fullScreen(false);
+		videoDock->setLoseHeight(0);
+		isCompactView = false;
 
 		restoreState(dockWidgetState);
 		dockWidgetState.clear();
 
-		isCompactView = false;
+		videoDock->fullScreen(false);
+
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+		menuBar->setVisible(!hideMenuAct->isChecked());
+#endif
+
+		statusBar->show();
 	}
 }
 void MainWidget::toggleFullScreen()
@@ -1180,7 +1182,7 @@ void MainWidget::lockWidgets(bool l)
 
 void MainWidget::hideDocksSlot()
 {
-	if (fullScreen && !geometry().contains(QCursor::pos()))
+	if ((fullScreen || isCompactView) && !geometry().contains(QCursor::pos()))
 	{
 		if (!playlistDock->isVisible())
 			showToolBar(false);
@@ -1277,7 +1279,7 @@ void MainWidget::restoreFocus()
 
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
-	if (fullScreen && (e->buttons() == Qt::NoButton || videoDock->isTouch))
+	if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
 	{
 		const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()));
 		const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch ? 4 : 1) * width()));
@@ -1293,7 +1295,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 			showToolBar(e->pos().y() >= height() - mainTB->height() - statusBar->height() + 10);
 
 		/* DockWidgets */
-		if (!playlistDock->isVisible() && mPosX <= trigger1)
+		if (fullScreen && !playlistDock->isVisible() && mPosX <= trigger1)
 		{
 			showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
 			restoreState(fullScreenDockWidgetState);
@@ -1338,14 +1340,14 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 			}
 			showToolBar(true); //Ensures that status bar is visible
 		}
-		else if (playlistDock->isVisible() && mPosX > trigger2)
+		else if (fullScreen && playlistDock->isVisible() && mPosX > trigger2)
 			hideDocks();
 	}
 	QMainWindow::mouseMoveEvent(e);
 }
 void MainWidget::leaveEvent(QEvent *e)
 {
-	if (fullScreen)
+	if (fullScreen || isCompactView)
 		QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); //Qt5 can't hide docks properly here
 	QMainWindow::leaveEvent(e);
 }

@@ -123,7 +123,7 @@ but remember to revert this settings on any other video! Otherwise the video qua
 Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
 
-Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output might not be properly deinterlaced.
+Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
 
 ##Hidden features
 
