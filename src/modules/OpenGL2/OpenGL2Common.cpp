@@ -665,7 +665,7 @@ QByteArray OpenGL2Common::readShader(const QString &fileName)
 
 inline bool OpenGL2Common::checkLinesize(int p)
 {
-	return !sphericalView && (p == 0 || ((videoFrame.linesize[0] >> 1) == videoFrame.linesize[p]));
+	return !sphericalView && (p == 0 || ((videoFrame.linesize[0] >> videoFrame.size.chromaShiftW) == videoFrame.linesize[p]));
 }
 
 /* 360 */
