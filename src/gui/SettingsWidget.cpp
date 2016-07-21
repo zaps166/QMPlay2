@@ -22,7 +22,6 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Main.hpp>
-#include <ShortcutHandler.hpp>
 
 #if QT_VERSION < 0x050000
 	#include <QDesktopServices>
@@ -51,9 +50,9 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QDir>
-#include <QTableView>
 
 #include <Appearance.hpp>
+#include <KeyBindingsDialog.hpp>
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <Module.hpp>
@@ -318,6 +317,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		connect(page1->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
 		connect(page1->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
+		connect(page1->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
 
 #ifdef ICONS_FROM_THEME
 		page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
@@ -569,23 +569,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page6->setWidget(widget);
 	}
 
-	/* Page 7 */
-	{
-		QTableView *shortcuts = new QTableView(this);
-		shortcuts->setModel(ShortcutHandler::instance());
-		shortcuts->setFrameShape(QFrame::NoFrame);
-		shortcuts->setAlternatingRowColors(true);
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-		shortcuts->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-		shortcuts->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-#else
-		shortcuts->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-		shortcuts->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-#endif
-		shortcuts->verticalHeader()->setVisible(false);
-		tabW->addTab(shortcuts, tr("Shortcuts"));
-	}
-
 	connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(tabCh(int)));
 	tabW->setCurrentIndex(page);
 
@@ -823,9 +806,6 @@ void SettingsWidget::apply()
 			if (page6->otherVFiltersW)
 				page6->otherVFiltersW->writeSettings();
 			break;
-		case 7:
-			ShortcutHandler::instance()->submit();
-			break;
 	}
 	if (page != 3)
 		QMPSettings.flush();
@@ -951,6 +931,12 @@ void SettingsWidget::setAppearance()
 {
 	Appearance(this).exec();
 }
+
+void SettingsWidget::setKeyBindings()
+{
+	KeyBindingsDialog(this).exec();
+}
+
 void SettingsWidget::clearCoversCache()
 {
 	if (QMessageBox::question(this, tr("Confirm clearing the cache covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)

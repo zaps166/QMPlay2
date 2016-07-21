@@ -46,8 +46,8 @@ public:
 	void appendAction(QAction *action, const QString &settingsName, const QString &default_shortcut);
 
 public slots:
-	bool submit();
-	void revert();
+	void save();
+	void restore();
 
 	void reset();
 
@@ -58,9 +58,9 @@ private:
 	ShortcutHandler();
 
 	Settings &settings;
-	QList<QAction*> m_actions;
+	QList<QAction *> m_actions;
 
-	typedef QHash<QAction*, QString> Shortcuts;
+	typedef QHash<QAction *, QString> Shortcuts;
 	Shortcuts m_shortcuts;
 	Shortcuts m_defaultShortcuts;
 

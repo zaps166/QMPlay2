@@ -82,6 +82,7 @@ private slots:
 	void moveModule();
 	void chooseScreenshotDir();
 	void setAppearance();
+	void setKeyBindings();
 	void clearCoversCache();
 	void resetSettings();
 signals:

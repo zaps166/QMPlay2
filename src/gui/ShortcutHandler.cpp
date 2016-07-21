@@ -22,23 +22,21 @@
 
 #include <QApplication>
 
-ShortcutHandler *ShortcutHandler::s_instance = Q_NULLPTR;
+ShortcutHandler *ShortcutHandler::s_instance = NULL;
 
 ShortcutHandler *ShortcutHandler::instance()
 {
-	if (s_instance == Q_NULLPTR)
+	if (s_instance == NULL)
 		s_instance = new ShortcutHandler;
 	return s_instance;
 }
 
 ShortcutHandler::ShortcutHandler() :
 	settings(QMPlay2Core.getSettings())
-{
-}
+{}
 
 ShortcutHandler::~ShortcutHandler()
-{
-}
+{}
 
 void ShortcutHandler::appendAction(QAction *action, const QString &settingsName, const QString &default_shortcut)
 {
@@ -65,7 +63,7 @@ int ShortcutHandler::rowCount(const QModelIndex &parent) const
 
 Qt::ItemFlags ShortcutHandler::flags(const QModelIndex &index) const
 {
-	switch(index.column())
+	switch (index.column())
 	{
 		case 0:
 			return Qt::ItemIsEnabled;
@@ -78,9 +76,9 @@ Qt::ItemFlags ShortcutHandler::flags(const QModelIndex &index) const
 QVariant ShortcutHandler::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	Q_UNUSED(orientation);
-	if(role == Qt::DisplayRole)
+	if (role == Qt::DisplayRole)
 	{
-		switch(section)
+		switch (section)
 		{
 			case 0:
 				return tr("Action");
@@ -93,10 +91,10 @@ QVariant ShortcutHandler::headerData(int section, Qt::Orientation orientation, i
 
 QVariant ShortcutHandler::data(const QModelIndex &index, int role) const
 {
-	if((role == Qt::DisplayRole || role == Qt::EditRole) && index.row() >= 0 && index.row() < m_actions.count())
+	if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.row() >= 0 && index.row() < m_actions.count())
 	{
 		QAction *action = m_actions.at(index.row());
-		switch(index.column())
+		switch (index.column())
 		{
 			case 0:
 				return action->text().remove(QLatin1Char('&'));
@@ -109,7 +107,7 @@ QVariant ShortcutHandler::data(const QModelIndex &index, int role) const
 
 bool ShortcutHandler::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-	if(role == Qt::EditRole && index.column() == 1 && index.row() >= 0 && index.row() < m_actions.count())
+	if (role == Qt::EditRole && index.column() == 1 && index.row() >= 0 && index.row() < m_actions.count())
 	{
 		m_shortcuts.insert(m_actions.at(index.row()), value.toString());
 		emit dataChanged(index, index);
@@ -118,32 +116,31 @@ bool ShortcutHandler::setData(const QModelIndex &index, const QVariant &value, i
 	return false;
 }
 
-bool ShortcutHandler::submit()
+void ShortcutHandler::save()
 {
-	for (Shortcuts::iterator iterator = m_shortcuts.begin(); iterator != m_shortcuts.end(); ++iterator)
+	for (Shortcuts::const_iterator iterator = m_shortcuts.constBegin(); iterator != m_shortcuts.constEnd(); ++iterator)
 	{
-		iterator.key()->setShortcut(iterator.value());
+		iterator.key()->setShortcut(iterator.value().trimmed());
 		settings.set(iterator.key()->property("settingsId").toString(), iterator.value());
 	}
-	return true;
 }
 
-void ShortcutHandler::revert()
+void ShortcutHandler::restore()
 {
-	// TODO: need testing - might not work
 	for (Shortcuts::iterator iterator = m_shortcuts.begin(); iterator != m_shortcuts.end(); ++iterator)
 	{
-		m_shortcuts.insert(iterator.key(), iterator.key()->shortcut().toString());
+		iterator.value() = iterator.key()->shortcut().toString();
 	}
 	emit dataChanged(createIndex(0, 1), createIndex(m_actions.count(), 1));
 }
 
 void ShortcutHandler::reset()
 {
-	// TODO: need testing - might not work
-	for (Shortcuts::iterator iterator = m_defaultShortcuts.begin(); iterator != m_defaultShortcuts.end(); ++iterator)
+	for (Shortcuts::const_iterator iterator = m_defaultShortcuts.constBegin(); iterator != m_defaultShortcuts.constEnd(); ++iterator)
 	{
 		m_shortcuts.insert(iterator.key(), iterator.value());
+		iterator.key()->setShortcut(iterator.value().trimmed());
+		settings.set(iterator.key()->property("settingsId").toString(), iterator.value());
 	}
 	emit dataChanged(createIndex(0, 1), createIndex(m_actions.count(), 1));
 }
