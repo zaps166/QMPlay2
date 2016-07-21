@@ -571,7 +571,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
 	/* Page 7 */
 	{
-		shortcuts = new QTableView(this);
+		QTableView *shortcuts = new QTableView(this);
 		shortcuts->setModel(ShortcutHandler::instance());
 		shortcuts->setFrameShape(QFrame::NoFrame);
 		shortcuts->setAlternatingRowColors(true);
