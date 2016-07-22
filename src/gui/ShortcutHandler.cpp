@@ -97,7 +97,7 @@ QVariant ShortcutHandler::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case 0:
-				return action->text().remove(QLatin1Char('&'));
+				return action->text().remove('&');
 			case 1:
 				return m_shortcuts.value(action);
 		}
