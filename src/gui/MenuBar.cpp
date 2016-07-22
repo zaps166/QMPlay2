@@ -358,7 +358,7 @@ MenuBar::Help::Help(MenuBar *parent) :
 
 void MenuBar::setKeyShourtcuts()
 {
-	ShortcutHandler* shortcuts = ShortcutHandler::instance();
+	ShortcutHandler *shortcuts = ShortcutHandler::instance();
 	shortcuts->appendAction(window->toggleVisibility, "KeyBindings/Window-toggleVisibility", "`");
 	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
 	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");
@@ -412,9 +412,9 @@ void MenuBar::setKeyShourtcuts()
 	shortcuts->appendAction(player->volUp, "KeyBindings/Player-volUp", "*");
 	shortcuts->appendAction(player->volDown, "KeyBindings/Player-volDown", "/");
 	shortcuts->appendAction(player->toggleMute, "KeyBindings/Player-toggleMute", "M");
-	if(player->detach)
+	if (player->detach)
 		shortcuts->appendAction(player->detach, "KeyBindings/Player-detach", "");
-	if(player->suspend)
+	if (player->suspend)
 		shortcuts->appendAction(player->suspend, "KeyBindings/Player-suspend", "");
 
 	shortcuts->appendAction(player->repeat->repeatActions[RepeatNormal], "KeyBindings/Player-Repeat-RepeatNormal", "Alt+0");
