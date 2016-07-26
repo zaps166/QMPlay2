@@ -45,12 +45,10 @@ public:
 	void paintGL();
 
 private slots:
-	void resetClearCounter();
 	void doUpdateGL(bool queued = false);
 	void videoVisible1(bool v);
 	void videoVisible2(bool v);
 private:
-	void exposeEvent(QExposeEvent *e);
 	bool eventFilter(QObject *o, QEvent *e);
 
 #ifdef PASS_EVENTS_TO_PARENT

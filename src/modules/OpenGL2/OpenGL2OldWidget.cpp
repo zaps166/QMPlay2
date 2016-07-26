@@ -27,7 +27,6 @@ OpenGL2OldWidget::OpenGL2OldWidget()
 #ifdef Q_OS_WIN
 	preventFullscreen = true;
 #endif
-	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 }
 
 QWidget *OpenGL2OldWidget::widget()
@@ -85,19 +84,8 @@ void OpenGL2OldWidget::initializeGL()
 }
 void OpenGL2OldWidget::paintGL()
 {
-	if (doReset)
-		OpenGL2Common::resetClearCounter();
-	if (doClear > 0)
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		--doClear;
-	}
+	glClear(GL_COLOR_BUFFER_BIT);
 	OpenGL2Common::paintGL();
-}
-
-void OpenGL2OldWidget::resetClearCounter()
-{
-	OpenGL2Common::resetClearCounter();
 }
 
 void OpenGL2OldWidget::resizeGL(int w, int h)
@@ -107,9 +95,6 @@ void OpenGL2OldWidget::resizeGL(int w, int h)
 
 bool OpenGL2OldWidget::event(QEvent *e)
 {
-	if (e->type() == QEvent::Paint)
-		OpenGL2Common::resetClearCounter();
-	else
-		dispatchEvent(e, parent());
+	dispatchEvent(e, parent());
 	return QGLWidget::event(e);
 }

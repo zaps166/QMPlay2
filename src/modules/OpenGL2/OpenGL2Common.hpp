@@ -89,13 +89,6 @@ public:
 	void clearImg();
 
 	void setSpherical(bool spherical);
-
-	inline bool isRotate90() const
-	{
-		return verticesIdx >= 4 && !sphericalView;
-	}
-
-	virtual void resetClearCounter();
 protected:
 	void initializeGL();
 	void paintGL();
@@ -127,6 +120,8 @@ protected:
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:
+	inline bool isRotate90() const;
+
 	QByteArray readShader(const QString &fileName);
 
 	inline bool checkLinesize(int p);
@@ -153,7 +148,7 @@ public:
 
 	bool isPaused, isOK, hasImage, doReset, setMatrix;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
-	int glVer, doClear;
+	int glVer;
 
 	double aspectRatio, zoom;
 

@@ -39,7 +39,6 @@ OpenGL2Window::OpenGL2Window() :
 	container->installEventFilter(this);
 	container->setAcceptDrops(false);
 
-	connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(resetClearCounter()));
 	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible1(bool)));
 	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible2(bool)));
 }
@@ -69,7 +68,6 @@ bool OpenGL2Window::setVSync(bool enable)
 		setFormat(fmt);
 		create();
 		setVisible(true);
-		OpenGL2Common::resetClearCounter();
 	}
 	vSync = enable;
 	return true;
@@ -88,21 +86,11 @@ void OpenGL2Window::paintGL()
 {
 	if (isExposed())
 	{
-		if (doReset)
-			OpenGL2Common::resetClearCounter();
-		if (doClear > 0)
-		{
-			glClear(GL_COLOR_BUFFER_BIT);
-			--doClear;
-		}
+		glClear(GL_COLOR_BUFFER_BIT);
 		OpenGL2Common::paintGL();
 	}
 }
 
-void OpenGL2Window::resetClearCounter()
-{
-	OpenGL2Common::resetClearCounter();
-}
 void OpenGL2Window::doUpdateGL(bool queued)
 {
 	if (queued)
@@ -125,20 +113,10 @@ void OpenGL2Window::videoVisible2(bool v)
 	videoVisible1(v);
 }
 
-void OpenGL2Window::exposeEvent(QExposeEvent *e)
-{
-	OpenGL2Common::resetClearCounter();
-	QOpenGLWindow::exposeEvent(e);
-}
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 {
 	if (o == container)
-	{
-		if (e->type() == QEvent::Paint)
-			OpenGL2Common::resetClearCounter();
-		else
-			dispatchEvent(e, container->parent());
-	}
+		dispatchEvent(e, container->parent());
 	return false;
 }
 

@@ -89,7 +89,7 @@ OpenGL2Common::OpenGL2Common() :
 	hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
-	glVer(0), doClear(0),
+	glVer(0),
 	aspectRatio(0.0), zoom(0.0),
 	sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
@@ -169,11 +169,6 @@ void OpenGL2Common::setSpherical(bool spherical)
 			buttonPressed = false;
 		}
 	}
-}
-
-void OpenGL2Common::resetClearCounter()
-{
-	doClear = 6;
 }
 
 void OpenGL2Common::initializeGL()
@@ -650,6 +645,11 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		default:
 			break;
 	}
+}
+
+inline bool OpenGL2Common::isRotate90() const
+{
+	return verticesIdx >= 4 && !sphericalView;
 }
 
 QByteArray OpenGL2Common::readShader(const QString &fileName)

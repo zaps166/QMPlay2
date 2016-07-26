@@ -149,8 +149,6 @@ void OpenGL2Writer::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 {
 	QMutexLocker mL(&drawable->osdMutex);
 	drawable->osdList = osds;
-	if (drawable->isRotate90()) //OSD may be out of video bounds
-		drawable->resetClearCounter();
 }
 
 void OpenGL2Writer::pause()
