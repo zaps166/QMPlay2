@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 16.07.26:
+	- OpenGL2 bugfix,
+
 Changes in QMPlay2 build 16.07.20:
 	- don't fetch the stream url twice on add and play action (speed up YouTube video opening),
 	- move most settings Ui from C++ to Qt forms (thanks Zamarin Arthur for help),
