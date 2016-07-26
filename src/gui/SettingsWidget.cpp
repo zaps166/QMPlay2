@@ -52,6 +52,7 @@
 #include <QDir>
 
 #include <Appearance.hpp>
+#include <KeyBindingsDialog.hpp>
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <Module.hpp>
@@ -202,7 +203,6 @@ void SettingsWidget::InitSettings()
 	OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.5, 1.5, QColor(0xFF, 0xA8, 0x58, 0xFF), Qt::black, Qt::black);
 	OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black);
 	DeintSettingsW::init();
-	MenuBar::init();
 	applyProxy();
 }
 void SettingsWidget::SetAudioChannelsMenu()
@@ -317,6 +317,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		connect(page1->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
 		connect(page1->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
+		connect(page1->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
 
 #ifdef ICONS_FROM_THEME
 		page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
@@ -672,6 +673,7 @@ void SettingsWidget::chStyle()
 		QMPlay2GUI.setStyle();
 	}
 }
+
 void SettingsWidget::apply()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
@@ -929,6 +931,12 @@ void SettingsWidget::setAppearance()
 {
 	Appearance(this).exec();
 }
+
+void SettingsWidget::setKeyBindings()
+{
+	KeyBindingsDialog(this).exec();
+}
+
 void SettingsWidget::clearCoversCache()
 {
 	if (QMessageBox::question(this, tr("Confirm clearing the cache covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
