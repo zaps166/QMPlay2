@@ -26,16 +26,15 @@ class QDialogButtonBox;
 
 class KeyBindingsDialog : public QDialog
 {
-		Q_OBJECT
-	public:
-		KeyBindingsDialog(QWidget *p);
-	private slots:
-		void clicked(QAbstractButton *button);
-	private:
-		void showEvent(QShowEvent *);
-		void closeEvent(QCloseEvent *);
+	Q_OBJECT
+public:
+	KeyBindingsDialog(QWidget *p);
 
-		QDialogButtonBox *buttons;
+private slots:
+	void clicked(QAbstractButton *button);
+
+private:
+	QDialogButtonBox *buttons;
 };
 
 #endif

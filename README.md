@@ -135,14 +135,6 @@ Right click on volume slider and select "Split channels".
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
-###Key bindings
-
-Currently QMPlay2 doesn't have graphical interface for key bindings. You can do it in configuration file. Run QMPlay2 first time, then close it. Edit the configuration file:
-- Windows: `%APPDATA%\QMPlay2\QMPlay2.ini`
-- Linux/BSD/OSX: `~/.qmplay2/QMPlay2.ini`
-
-Edit "[KeyBindings]" section.
-
 ##Instalation from sources
 
 ###CMake requirements

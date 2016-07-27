@@ -17,44 +17,21 @@
 */
 
 #include <ShortcutHandler.hpp>
-#include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 
-#include <QApplication>
+#include <QAction>
 
-ShortcutHandler *ShortcutHandler::s_instance = NULL;
-
-ShortcutHandler *ShortcutHandler::instance()
-{
-	if (s_instance == NULL)
-		s_instance = new ShortcutHandler;
-	return s_instance;
-}
-
-ShortcutHandler::ShortcutHandler() :
-	settings(QMPlay2Core.getSettings())
+ShortcutHandler::ShortcutHandler(QObject *parent) :
+	QAbstractTableModel(parent)
 {}
-
 ShortcutHandler::~ShortcutHandler()
 {}
-
-void ShortcutHandler::appendAction(QAction *action, const QString &settingsName, const QString &default_shortcut)
-{
-	QString shortcut = settings.getString(settingsName, default_shortcut);
-	action->setShortcut(shortcut);
-	action->setProperty("settingsId", settingsName);
-
-	m_actions.append(action);
-	m_shortcuts.insert(action, shortcut);
-	m_defaultShortcuts.insert(action, default_shortcut);
-}
 
 int ShortcutHandler::columnCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent);
 	return 2;
 }
-
 int ShortcutHandler::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent);
@@ -68,15 +45,14 @@ Qt::ItemFlags ShortcutHandler::flags(const QModelIndex &index) const
 		case 0:
 			return Qt::ItemIsEnabled;
 		case 1:
-			return Qt::ItemIsEnabled | Qt::ItemIsEditable;
+			return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 	}
 	return Qt::NoItemFlags;
 }
 
 QVariant ShortcutHandler::headerData(int section, Qt::Orientation orientation, int role) const
 {
-	Q_UNUSED(orientation);
-	if (role == Qt::DisplayRole)
+	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 	{
 		switch (section)
 		{
@@ -93,54 +69,65 @@ QVariant ShortcutHandler::data(const QModelIndex &index, int role) const
 {
 	if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.row() >= 0 && index.row() < m_actions.count())
 	{
-		QAction *action = m_actions.at(index.row());
+		QAction *action = m_actions[index.row()];
 		switch (index.column())
 		{
 			case 0:
 				return action->text().remove('&');
 			case 1:
-				return m_shortcuts.value(action);
+				return m_shortcuts.value(action).first;
 		}
 	}
 	return QVariant();
 }
-
 bool ShortcutHandler::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 	if (role == Qt::EditRole && index.column() == 1 && index.row() >= 0 && index.row() < m_actions.count())
 	{
-		m_shortcuts.insert(m_actions.at(index.row()), value.toString());
-		emit dataChanged(index, index);
-		return true;
+		const QString shortcut = QKeySequence(value.toString().trimmed()).toString();
+		if (!shortcut.isEmpty())
+		{
+			m_shortcuts[m_actions.at(index.row())].first = shortcut;
+			emit dataChanged(index, index);
+			return true;
+		}
 	}
 	return false;
 }
 
+void ShortcutHandler::appendAction(QAction *action, const QString &settingsName, const QString &defaultShortcut)
+{
+	const QString shortcut = QMPlay2Core.getSettings().getString(settingsName, defaultShortcut);
+	action->setProperty("settingsId", settingsName);
+	action->setShortcut(shortcut);
+
+	m_actions.append(action);
+	m_shortcuts[action] = qMakePair(action->shortcut().toString(), defaultShortcut);
+}
+
 void ShortcutHandler::save()
 {
-	for (Shortcuts::const_iterator iterator = m_shortcuts.constBegin(); iterator != m_shortcuts.constEnd(); ++iterator)
+	Settings &settings = QMPlay2Core.getSettings();
+	for (Shortcuts::const_iterator it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
 	{
-		iterator.key()->setShortcut(iterator.value().trimmed());
-		settings.set(iterator.key()->property("settingsId").toString(), iterator.value());
+		const QString shortcut = it.value().first;
+		it.key()->setShortcut(shortcut);
+		settings.set(it.key()->property("settingsId").toString(), shortcut);
 	}
+	settings.flush();
 }
-
 void ShortcutHandler::restore()
 {
-	for (Shortcuts::iterator iterator = m_shortcuts.begin(); iterator != m_shortcuts.end(); ++iterator)
-	{
-		iterator.value() = iterator.key()->shortcut().toString();
-	}
+	for (Shortcuts::iterator it = m_shortcuts.begin(), itEnd = m_shortcuts.end(); it != itEnd; ++it)
+		it.value().first = it.key()->shortcut().toString();
 	emit dataChanged(createIndex(0, 1), createIndex(m_actions.count(), 1));
 }
-
 void ShortcutHandler::reset()
 {
-	for (Shortcuts::const_iterator iterator = m_defaultShortcuts.constBegin(); iterator != m_defaultShortcuts.constEnd(); ++iterator)
+	for (Shortcuts::const_iterator it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
 	{
-		m_shortcuts.insert(iterator.key(), iterator.value());
-		iterator.key()->setShortcut(iterator.value().trimmed());
-		settings.set(iterator.key()->property("settingsId").toString(), iterator.value());
+		const QString defaultShortcut = it.value().second;
+		m_shortcuts[it.key()].first = defaultShortcut;
 	}
 	emit dataChanged(createIndex(0, 1), createIndex(m_actions.count(), 1));
 }

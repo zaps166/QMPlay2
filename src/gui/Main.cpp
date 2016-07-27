@@ -18,7 +18,6 @@
 
 #include <Main.hpp>
 
-#include <VideoAdjustment.hpp>
 #include <VideoFrame.hpp>
 #include <MainWidget.hpp>
 #include <PlayClass.hpp>

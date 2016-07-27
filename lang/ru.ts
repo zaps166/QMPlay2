@@ -849,6 +849,10 @@ amp</source>
         <source>Screenshots path</source>
         <translation>Путь для снимков экрана</translation>
     </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -893,6 +897,13 @@ amp</source>
     <message>
         <source>Tone generator</source>
         <translation>Тональный генератор</translation>
+    </message>
+</context>
+<context>
+    <name>KeyBindingsDialog</name>
+    <message>
+        <source>Key bindings settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2398,6 +2409,17 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Hardware accelerated video outputs</source>
         <translation>Аппаратное ускорение вывода видео</translation>
+    </message>
+</context>
+<context>
+    <name>ShortcutHandler</name>
+    <message>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Key sequence</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

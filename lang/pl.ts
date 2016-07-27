@@ -849,6 +849,10 @@ amp</translation>
         <source>Screenshots path</source>
         <translation>Ścieżka do zrzutów ekranu</translation>
     </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Ustaw skróty klawiszowe</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -893,6 +897,13 @@ amp</translation>
     <message>
         <source>Tone generator</source>
         <translation>Generator częstotliwości</translation>
+    </message>
+</context>
+<context>
+    <name>KeyBindingsDialog</name>
+    <message>
+        <source>Key bindings settings</source>
+        <translation>Ustawienia skrótów klawiszowych</translation>
     </message>
 </context>
 <context>
@@ -2398,6 +2409,17 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Hardware accelerated video outputs</source>
         <translation>Wyjścia obrazu dla akceleracji sprzętowej</translation>
+    </message>
+</context>
+<context>
+    <name>ShortcutHandler</name>
+    <message>
+        <source>Action</source>
+        <translation>Akcja</translation>
+    </message>
+    <message>
+        <source>Key sequence</source>
+        <translation>Sekwencja klawiszy</translation>
     </message>
 </context>
 <context>

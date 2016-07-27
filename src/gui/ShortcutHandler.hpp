@@ -20,17 +20,14 @@
 #define SHORTCUTHANDLER_H
 
 #include <QAbstractTableModel>
-#include <QAction>
-#include <QKeySequence>
 
-class QSettings;
-class Settings;
+class QAction;
 
 class ShortcutHandler : public QAbstractTableModel
 {
 	Q_OBJECT
 public:
-	static ShortcutHandler *instance();
+	ShortcutHandler(QObject *parent);
 	~ShortcutHandler();
 
 	int columnCount(const QModelIndex &parent) const;
@@ -43,26 +40,18 @@ public:
 	QVariant data(const QModelIndex &index, int role) const;
 	bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-	void appendAction(QAction *action, const QString &settingsName, const QString &default_shortcut);
+	void appendAction(QAction *action, const QString &settingsName, const QString &defaultShortcut);
 
 public slots:
 	void save();
 	void restore();
-
 	void reset();
 
 private:
-	Q_DISABLE_COPY(ShortcutHandler)
-
-	static ShortcutHandler *s_instance;
-	ShortcutHandler();
-
-	Settings &settings;
 	QList<QAction *> m_actions;
 
-	typedef QHash<QAction *, QString> Shortcuts;
+	typedef QHash<QAction *, QPair<QString, QString> > Shortcuts;
 	Shortcuts m_shortcuts;
-	Shortcuts m_defaultShortcuts;
 
 };
 

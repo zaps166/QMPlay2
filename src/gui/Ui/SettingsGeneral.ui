@@ -24,7 +24,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-244</y>
+        <y>0</y>
         <width>454</width>
         <height>608</height>
        </rect>
@@ -190,13 +190,6 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="0" colspan="2">
-          <widget class="QPushButton" name="setKeyBindingsB">
-           <property name="text">
-            <string>Set key bindings</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item row="2" column="0">
@@ -333,7 +326,7 @@
          </item>
         </layout>
        </item>
-       <item row="10" column="0" colspan="2">
+       <item row="11" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -358,6 +351,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="10" column="0">
+        <widget class="QPushButton" name="setKeyBindingsB">
+         <property name="text">
+          <string>Set key bindings</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -394,6 +394,7 @@
   <tabstop>proxyPortB</tabstop>
   <tabstop>clearCoversCache</tabstop>
   <tabstop>resetSettingsB</tabstop>
+  <tabstop>setKeyBindingsB</tabstop>
  </tabstops>
  <resources/>
  <connections/>

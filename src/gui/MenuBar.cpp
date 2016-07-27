@@ -358,7 +358,7 @@ MenuBar::Help::Help(MenuBar *parent) :
 
 void MenuBar::setKeyShourtcuts()
 {
-	ShortcutHandler *shortcuts = ShortcutHandler::instance();
+	ShortcutHandler *shortcuts = QMPlay2GUI.shortcutHandler;
 	shortcuts->appendAction(window->toggleVisibility, "KeyBindings/Window-toggleVisibility", "`");
 	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
 	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");

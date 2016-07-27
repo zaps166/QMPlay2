@@ -48,6 +48,7 @@
 #include <AboutWidget.hpp>
 #include <AddressDialog.hpp>
 #include <VideoAdjustment.hpp>
+#include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
 
 using Functions::timeToStr;
@@ -98,6 +99,8 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 	dest->addMenu(newMenu);
 }
 
+#include <QDebug>
+
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #ifdef UPDATER
@@ -105,6 +108,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #endif
 {
 	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
+	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 
 #if UseMainWidgetTmpStyle

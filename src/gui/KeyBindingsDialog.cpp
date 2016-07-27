@@ -19,64 +19,58 @@
 #include <KeyBindingsDialog.hpp>
 #include <ShortcutHandler.hpp>
 #include <Main.hpp>
-#include <Settings.hpp>
 
-#include <QBoxLayout>
 #include <QDialogButtonBox>
-#include <QTableView>
 #include <QHeaderView>
+#include <QTableView>
+#include <QBoxLayout>
 
 KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
 	QDialog(p)
 {
-	setWindowTitle(tr("Key Binding settings"));
+	setWindowTitle(tr("Key bindings settings"));
 
-	QTableView *shortcuts = new QTableView(this);
-	shortcuts->setModel(ShortcutHandler::instance());
+	QTableView *shortcuts = new QTableView;
+	shortcuts->setModel(QMPlay2GUI.shortcutHandler);
 	shortcuts->setFrameShape(QFrame::NoFrame);
 	shortcuts->setAlternatingRowColors(true);
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#if QT_VERSION >= 0x050000
 	shortcuts->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	shortcuts->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 #else
 	shortcuts->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
 	shortcuts->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 #endif
+	shortcuts->setSelectionMode(QAbstractItemView::SingleSelection);
 	shortcuts->verticalHeader()->setVisible(false);
 
-	buttons = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Apply | QDialogButtonBox::RestoreDefaults, this);
-	connect(buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(clicked(QAbstractButton*)));
+	buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, this);
+	connect(buttons, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->addWidget(shortcuts);
 	layout->addWidget(buttons);
+	layout->setMargin(3);
+
+	if (QWidget *w = parentWidget())
+		resize(600, w->height() * 9 / 10);
 }
 
 void KeyBindingsDialog::clicked(QAbstractButton *button)
 {
 	switch (buttons->buttonRole(button))
 	{
-		case QDialogButtonBox::ApplyRole:
-			ShortcutHandler::instance()->save();
+		case QDialogButtonBox::AcceptRole:
+			QMPlay2GUI.shortcutHandler->save();
 			break;
 		case QDialogButtonBox::RejectRole:
-			ShortcutHandler::instance()->restore();
+			QMPlay2GUI.shortcutHandler->restore();
 			break;
 		case QDialogButtonBox::ResetRole:
-			ShortcutHandler::instance()->reset();
-			break;
-		default:
+			QMPlay2GUI.shortcutHandler->reset();
 			return;
+		default:
+			break;
 	}
-	this->close();
-}
-
-void KeyBindingsDialog::showEvent(QShowEvent *)
-{
-	QMPlay2GUI.restoreGeometry("KeyBindingsDialog/Geometry", this, QSize(450, 450));
-}
-
-void KeyBindingsDialog::closeEvent(QCloseEvent *)
-{
-	QMPlay2Core.getSettings().set("KeyBindingsDialog/Geometry", geometry());
+	close();
 }

@@ -25,6 +25,7 @@
 #include <QMPlay2Core.hpp>
 
 class VideoAdjustment;
+class ShortcutHandler;
 class QLocalServer;
 class VideoDock;
 class MenuBar;
@@ -67,6 +68,7 @@ public:
 	QWidget *mainW;
 	QLocalServer *pipe;
 	VideoAdjustment *videoAdjustment;
+	ShortcutHandler *shortcutHandler;
 	bool restartApp, removeSettings;
 private:
 	QMPlay2GUIClass();

@@ -51,8 +51,8 @@
 #include <QLabel>
 #include <QDir>
 
-#include <Appearance.hpp>
 #include <KeyBindingsDialog.hpp>
+#include <Appearance.hpp>
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <Module.hpp>
@@ -931,12 +931,10 @@ void SettingsWidget::setAppearance()
 {
 	Appearance(this).exec();
 }
-
 void SettingsWidget::setKeyBindings()
 {
 	KeyBindingsDialog(this).exec();
 }
-
 void SettingsWidget::clearCoversCache()
 {
 	if (QMessageBox::question(this, tr("Confirm clearing the cache covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
