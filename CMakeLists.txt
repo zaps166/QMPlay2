@@ -271,3 +271,4 @@ add_custom_target(uninstall
 message(STATUS "")
 PRINT_ENABLED_FEATURES()
 PRINT_DISABLED_FEATURES()
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
