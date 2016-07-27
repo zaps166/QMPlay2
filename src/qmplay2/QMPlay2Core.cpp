@@ -207,10 +207,15 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 					else
 					{
 						Module *pluginInstance = qmplay2PluginInstance();
-						if (pluginInstance && !pluginsName.contains(pluginInstance->name()))
+						if (pluginInstance)
 						{
-							pluginsName += pluginInstance->name();
-							pluginsInstance += pluginInstance;
+							if (pluginsName.contains(pluginInstance->name()))
+								delete pluginInstance;
+							else
+							{
+								pluginsName += pluginInstance->name();
+								pluginsInstance += pluginInstance;
+							}
 						}
 					}
 				}

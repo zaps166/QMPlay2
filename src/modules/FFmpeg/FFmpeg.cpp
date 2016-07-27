@@ -126,6 +126,12 @@ FFmpeg::FFmpeg() :
 FFmpeg::~FFmpeg()
 {
 	avformat_network_deinit();
+#ifdef QMPlay2_VDPAU
+	delete vdpauDeintMethodB;
+#endif
+#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+	delete vaapiDeintMethodB;
+#endif
 }
 
 QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
