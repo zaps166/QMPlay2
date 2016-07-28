@@ -274,12 +274,12 @@ void LibASS::setASSStyle()
 	}
 
 	bool colorsAndBorders, marginsAndAlignment, fontsAndSpacing;
-	if (settings.get("ApplyToASS/ApplyToASS").toBool())
+	if (settings.getBool("ApplyToASS/ApplyToASS"))
 	{
-		colorsAndBorders = settings.get("ApplyToASS/ColorsAndBorders").toBool();
-		marginsAndAlignment = settings.get("ApplyToASS/MarginsAndAlignment").toBool();
-		fontsAndSpacing = settings.get("ApplyToASS/FontsAndSpacing").toBool();
-		overridePlayRes = settings.get("ApplyToASS/OverridePlayRes").toBool();
+		colorsAndBorders = settings.getBool("ApplyToASS/ColorsAndBorders");
+		marginsAndAlignment = settings.getBool("ApplyToASS/MarginsAndAlignment");
+		fontsAndSpacing = settings.getBool("ApplyToASS/FontsAndSpacing");
+		overridePlayRes = settings.getBool("ApplyToASS/OverridePlayRes");
 	}
 	else
 		colorsAndBorders = marginsAndAlignment = fontsAndSpacing = overridePlayRes = false;
@@ -313,8 +313,8 @@ void LibASS::setASSStyle()
 			style.OutlineColour = assColorFromQColor(settings.get("Subtitles/OutlineColor").value<QColor>());
 			style.BackColour = assColorFromQColor(settings.get("Subtitles/ShadowColor").value<QColor>());
 			style.BorderStyle = 1;
-			style.Outline = settings.get("Subtitles/Outline").toDouble();
-			style.Shadow = settings.get("Subtitles/Shadow").toDouble();
+			style.Outline = settings.getDouble("Subtitles/Outline");
+			style.Shadow = settings.getDouble("Subtitles/Shadow");
 		}
 		else
 		{
@@ -328,10 +328,10 @@ void LibASS::setASSStyle()
 		}
 		if (marginsAndAlignment)
 		{
-			style.MarginL = settings.get("Subtitles/LeftMargin").toInt();
-			style.MarginR = settings.get("Subtitles/RightMargin").toInt();
-			style.MarginV = settings.get("Subtitles/VMargin").toInt();
-			style.Alignment = toASSAlignment(settings.get("Subtitles/Alignment").toInt());
+			style.MarginL = settings.getInt("Subtitles/LeftMargin");
+			style.MarginR = settings.getInt("Subtitles/RightMargin");
+			style.MarginV = settings.getInt("Subtitles/VMargin");
+			style.Alignment = toASSAlignment(settings.getInt("Subtitles/Alignment"));
 			style.Angle = 0;
 		}
 		else
@@ -346,9 +346,9 @@ void LibASS::setASSStyle()
 			free(style.FontName);
 		if (fontsAndSpacing)
 		{
-			style.FontName = strdup(settings.get("Subtitles/FontName").toString().toUtf8().data());
-			style.FontSize = settings.get("Subtitles/FontSize").toInt();
-			style.Spacing = settings.get("Subtitles/Linespace").toDouble();
+			style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().data());
+			style.FontSize = settings.getInt("Subtitles/FontSize");
+			style.Spacing = settings.getInt("Subtitles/Linespace");
 			style.ScaleX = style.ScaleY = 1;
 			style.Bold = style.Italic = style.Underline = style.StrikeOut = 0;
 		}
@@ -482,19 +482,19 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 {
 	if (style->FontName)
 		free(style->FontName);
-	style->FontName = strdup(settings.get(prefix + "/FontName").toString().toUtf8().data());
-	style->FontSize = settings.get(prefix + "/FontSize").toInt();
+	style->FontName = strdup(settings.getString(prefix + "/FontName").toUtf8().data());
+	style->FontSize = settings.getInt(prefix + "/FontSize");
 	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.get(prefix + "/TextColor").value<QColor>());
 	style->OutlineColour = assColorFromQColor(settings.get(prefix + "/OutlineColor").value<QColor>());
 	style->BackColour = assColorFromQColor(settings.get(prefix + "/ShadowColor").value<QColor>());
-	style->Spacing = settings.get(prefix + "/Linespace").toDouble();
+	style->Spacing = settings.getDouble(prefix + "/Linespace");
 	style->BorderStyle = 1;
-	style->Outline = settings.get(prefix + "/Outline").toDouble();
-	style->Shadow = settings.get(prefix + "/Shadow").toDouble();
-	style->Alignment = toASSAlignment(settings.get(prefix + "/Alignment").toInt());
-	style->MarginL = settings.get(prefix + "/LeftMargin").toInt();
-	style->MarginR = settings.get(prefix + "/RightMargin").toInt();
-	style->MarginV = settings.get(prefix + "/VMargin").toInt();
+	style->Outline = settings.getDouble(prefix + "/Outline");
+	style->Shadow = settings.getDouble(prefix + "/Shadow");
+	style->Alignment = toASSAlignment(settings.getInt(prefix + "/Alignment"));
+	style->MarginL = settings.getInt(prefix + "/LeftMargin");
+	style->MarginR = settings.getInt(prefix + "/RightMargin");
+	style->MarginV = settings.getInt(prefix + "/VMargin");
 }
 void LibASS::calcSize()
 {
