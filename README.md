@@ -8,7 +8,7 @@ QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg
 Table of Contents
 =================
 
-* [Instalation](#instalation)
+* [Installation](#installation)
 * [YouTube](#youtube)
 * [Spherical view](#spherical-view)
 * [ALSA](#alsa)
@@ -16,11 +16,11 @@ Table of Contents
 * [Hardware acceleration](#hardware-acceleration)
 * [Deinterlacing](#deinterlacing)
 * [Hidden features](#hidden-features)
-* [Instalation from sources](#instalation-from-sources)
+* [Installation from sources](#installation-from-sources)
 * [Building package RPM, DEB or any other](#building-package-rpm-deb-or-any-other)
 * [Other information](#other-information)
 
-##Instalation
+##Installation
 
 ####Easy installation on Windows (XP or higher)
 
@@ -135,7 +135,7 @@ Right click on volume slider and select "Split channels".
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
-##Instalation from sources
+##Installation from sources
 
 ###CMake requirements
 
@@ -259,9 +259,9 @@ For Qt4 build install also `qt4` package.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
-	- `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: instalation directory.
+	- `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
 	- `CMAKE_BUILD_TYPE` - `Release`.
-	- `LANGUAGES` - `All` - a space-seperated list of translations to compile into QMPlay2.
+	- `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
 	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on OS X, `OFF` anywhere else: sets RPATH after installation.
 	- `USE_QT5` - autodetect: if Qt >= 5.6.1 is found then it uses Qt5, otherwise it uses Qt4.
