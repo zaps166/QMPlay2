@@ -348,7 +348,7 @@ void LibASS::setASSStyle()
 		{
 			style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().data());
 			style.FontSize = settings.getInt("Subtitles/FontSize");
-			style.Spacing = settings.getInt("Subtitles/Linespace");
+			style.Spacing = settings.getDouble("Subtitles/Linespace");
 			style.ScaleX = style.ScaleY = 1;
 			style.Bold = style.Italic = style.Underline = style.StrikeOut = 0;
 		}
