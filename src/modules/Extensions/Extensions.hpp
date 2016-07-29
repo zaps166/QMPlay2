@@ -28,9 +28,12 @@ private:
 
 	SettingsWidget *getSettingsWidget();
 
-	QImage downloader, youtube, radio, lastfm;
+	QImage downloader, youtube, radio;
 #ifdef USE_PROSTOPLEER
 	QImage prostopleer;
+#endif
+#ifdef USE_LASTFM
+	QImage lastfm;
 #endif
 };
 
@@ -50,8 +53,10 @@ public:
 private slots:
 	void enableItagLists(bool b);
 	void browseYoutubedl();
+#ifdef USE_LASTFM
 	void loginPasswordEnable(bool checked);
 	void passwordEdited();
+#endif
 private:
 	void saveSettings();
 
@@ -64,7 +69,9 @@ private:
 	QToolButton *youtubedlBrowseB;
 	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
 
+#ifdef USE_LASTFM
 	QGroupBox *downloadCoversGB;
 	QCheckBox *allowBigCovers, *updateNowPlayingAndScrobbleB;
 	LineEdit *loginE, *passwordE;
+#endif
 };
