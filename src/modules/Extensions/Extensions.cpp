@@ -20,7 +20,9 @@
 
 #include <Downloader.hpp>
 #include <YouTube.hpp>
-#include <LastFM.hpp>
+#ifdef USE_LASTFM
+	#include <LastFM.hpp>
+#endif
 #include <Radio.hpp>
 #ifdef USE_PROSTOPLEER
 	#include <ProstoPleer.hpp>
@@ -33,19 +35,19 @@
 
 Extensions::Extensions() :
 	Module("Extensions"),
-	downloader(":/downloader"), youtube(":/youtube"), radio(":/radio"), lastfm(":/lastfm")
+	downloader(":/downloader"), youtube(":/youtube"), radio(":/radio")
 {
 	moduleImg = QImage(":/Extensions");
-
-#ifdef USE_PROSTOPLEER
-	prostopleer = QImage(":/prostopleer");
-#endif
 
 	downloader.setText("Path", ":/downloader");
 	youtube.setText("Path", ":/youtube");
 	radio.setText("Path", ":/radio");
+#ifdef USE_LASTFM
+	lastfm = QImage(":/lastfm");
 	lastfm.setText("Path", ":/lastfm");
+#endif
 #ifdef USE_PROSTOPLEER
+	prostopleer = QImage(":/prostopleer");
 	prostopleer.setText("Path", ":/prostopleer");
 #endif
 
@@ -57,13 +59,15 @@ Extensions::Extensions() :
 	init("YouTube/ItagAudioList", QStringList() << "251" << "171" << "141");
 	init("YouTube/ItagList", QStringList() << "22" << "43" << "18");
 
+#ifdef USE_LASTFM
 	init("LastFM/DownloadCovers", true);
 	init("LastFM/AllowBigCovers", true);
 	init("LastFM/UpdateNowPlayingAndScrobble", false);
 	init("LastFM/Login", QString());
 	init("LastFM/Password", QString());
+#endif
 
-#if USE_MPRIS2
+#ifdef USE_MPRIS2
 	init("MPRIS2/Enabled", true);
 #endif
 }
@@ -73,12 +77,14 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 	QList<Info> modulesInfo;
 	modulesInfo += Info(DownloaderName, QMPLAY2EXTENSION, downloader);
 	modulesInfo += Info(YouTubeName, QMPLAY2EXTENSION, youtube);
+#ifdef USE_LASTFM
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
+#endif
 	modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
 #ifdef USE_PROSTOPLEER
 	modulesInfo += Info(ProstoPleerName, QMPLAY2EXTENSION, prostopleer);
 #endif
-#if USE_MPRIS2
+#ifdef USE_MPRIS2
 	modulesInfo += Info(MPRIS2Name, QMPLAY2EXTENSION);
 #endif
 	return modulesInfo;
@@ -89,8 +95,10 @@ void *Extensions::createInstance(const QString &name)
 		return new Downloader(*this);
 	else if (name == YouTubeName)
 		return new YouTube(*this);
+#ifdef USE_LASTFM
 	else if (name == LastFMName)
 		return static_cast<QMPlay2Extensions *>(new LastFM(*this));
+#endif
 	else if (name == RadioName)
 		return static_cast<QMPlay2Extensions *>(new Radio(*this));
 #ifdef USE_PROSTOPLEER
@@ -224,6 +232,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addLayout(itagLayout, 4, 0, 1, 3);
 	layout->setMargin(2);
 
+#ifdef USE_LASTFM
 	/**/
 
 	QGroupBox *lastFMB = new QGroupBox("LastFM");
@@ -261,7 +270,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(loginE);
 	layout->addWidget(passwordE);
 	layout->setMargin(2);
-
+#endif
 	/**/
 
 	QGridLayout *mainLayout = new QGridLayout(this);
@@ -270,7 +279,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	mainLayout->addWidget(MPRIS2B);
 #endif
 	mainLayout->addWidget(youTubeB);
+#ifdef USE_LASTFM
 	mainLayout->addWidget(lastFMB);
+#endif
 }
 
 void ModuleSettingsWidget::enableItagLists(bool b)
@@ -285,6 +296,7 @@ void ModuleSettingsWidget::browseYoutubedl()
 	if (!filePath.isEmpty())
 		youtubedlE->setText(filePath);
 }
+#ifdef USE_LASTFM
 void ModuleSettingsWidget::loginPasswordEnable(bool checked)
 {
 	loginE->setEnabled(checked);
@@ -294,6 +306,7 @@ void ModuleSettingsWidget::passwordEdited()
 {
 	passwordE->setProperty("edited", true);
 }
+#endif
 
 void ModuleSettingsWidget::saveSettings()
 {
@@ -317,6 +330,7 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("YouTube/ItagAudioList", itagsAudio);
 	sets().set("YouTube/ItagList", itags);
 
+#ifdef USE_LASTFM
 	sets().set("LastFM/DownloadCovers", downloadCoversGB->isChecked());
 	sets().set("LastFM/AllowBigCovers", allowBigCovers->isChecked());
 	sets().set("LastFM/UpdateNowPlayingAndScrobble", updateNowPlayingAndScrobbleB->isChecked() && !loginE->text().isEmpty());
@@ -325,4 +339,5 @@ void ModuleSettingsWidget::saveSettings()
 		sets().set("LastFM/Password", QString());
 	else if (!passwordE->text().isEmpty() && passwordE->property("edited").toBool())
 		sets().set("LastFM/Password", QString(QCryptographicHash::hash(passwordE->text().toUtf8(), QCryptographicHash::Md5).toHex()));
+#endif
 }

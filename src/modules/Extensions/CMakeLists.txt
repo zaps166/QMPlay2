@@ -17,7 +17,6 @@ set(Extensions_HDR
     YouTube.hpp
     Downloader.hpp
     Radio.hpp
-    LastFM.hpp
 )
 
 set(Extensions_SRC
@@ -25,7 +24,6 @@ set(Extensions_SRC
     YouTube.cpp
     Downloader.cpp
     Radio.cpp
-    LastFM.cpp
 )
 
 set(Extensions_RESOURCES
@@ -50,6 +48,12 @@ if(USE_PROSTOPLEER)
     list(APPEND Extensions_HDR ProstoPleer.hpp)
     list(APPEND Extensions_SRC ProstoPleer.cpp)
     add_definitions(-DUSE_PROSTOPLEER)
+endif()
+
+if(USE_LASTFM)
+    list(APPEND Extensions_HDR LastFM.hpp)
+    list(APPEND Extensions_SRC LastFM.cpp)
+    add_definitions(-DUSE_LASTFM)
 endif()
 
 if(USE_QT5)
