@@ -21,12 +21,15 @@
 
 #include <Functions.hpp>
 
+#include <QMenu>
 #include <QLabel>
 #include <QSlider>
 #include <QPainter>
 #include <QCheckBox>
+#include <QScrollArea>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QInputDialog>
 
 GraphW::GraphW() :
 	preamp(0.5f)
@@ -68,15 +71,46 @@ void GraphW::paintEvent(QPaintEvent *)
 
 /**/
 
-EqualizerGUI::EqualizerGUI(Module &module) :
-	slidersW(NULL)
+EqualizerGUI::EqualizerGUI(Module &module)
 {
 	dw = new DockWidget;
 	dw->setObjectName(EqualizerGUIName);
 	dw->setWindowTitle(tr("Equalizer"));
 	dw->setWidget(this);
 
-	QCheckBox *enabledB = new QCheckBox;
+	deletePresetMenu = new QMenu(this);
+	connect(deletePresetMenu->addAction(tr("Delete")), SIGNAL(triggered()), this, SLOT(deletePreset()));
+
+	QWidget *headerW = new QWidget;
+
+	presetsMenu = new QMenu(this);
+	presetsMenu->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(presetsMenu, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(deletePresetMenuRequest(QPoint)));
+	QAction *addAct = presetsMenu->addAction(tr("Add new preset"));
+	addAct->setObjectName("resetA");
+	connect(addAct, SIGNAL(triggered()), this, SLOT(addPreset()));
+	presetsMenu->addSeparator();
+
+	enabledB = new QCheckBox;
+
+	QToolButton *presetsB = new QToolButton;
+	presetsB->setPopupMode(QToolButton::InstantPopup);
+	presetsB->setText(tr("Presets"));
+	presetsB->setAutoRaise(true);
+	presetsB->setMenu(presetsMenu);
+
+	QToolButton *showSettingsB = new QToolButton;
+	showSettingsB->setIcon(QIcon(":/settings"));
+	showSettingsB->setIcon(QMPlay2Core.getIconFromTheme("configure"));
+	showSettingsB->setToolTip(tr("Settings"));
+	showSettingsB->setAutoRaise(true);
+	connect(showSettingsB, SIGNAL(clicked()), this, SLOT(showSettings()));
+
+	QHBoxLayout *headerLayout = new QHBoxLayout(headerW);
+	headerLayout->addWidget(enabledB);
+	headerLayout->addWidget(presetsB);
+	headerLayout->addWidget(showSettingsB);
+	headerLayout->setMargin(0);
 
 	QFrame *frame = new QFrame;
 	frame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -109,10 +143,15 @@ EqualizerGUI::EqualizerGUI(Module &module) :
 	buttonsLayout->addWidget(minB);
 	buttonsLayout->addWidget(new QLabel("\n"));
 
-	layout = new QGridLayout(this);
-	layout->addWidget(enabledB, 0, 0, 1, 2);
+	slidersA = new QScrollArea;
+	slidersA->setWidgetResizable(true);
+	slidersA->setFrameShape(QFrame::NoFrame);
+
+	QGridLayout *layout = new QGridLayout(this);
+	layout->addWidget(headerW, 0, 0, 1, 2);
 	layout->addWidget(frame, 1, 0, 1, 2);
 	layout->addWidget(buttonsW, 2, 0, 1, 1);
+	layout->addWidget(slidersA, 2, 1, 1, 1);
 
 	SetModule(module);
 
@@ -124,6 +163,7 @@ EqualizerGUI::EqualizerGUI(Module &module) :
 	connect(dw, SIGNAL(visibilityChanged(bool)), maxB, SLOT(setEnabled(bool)));
 	connect(dw, SIGNAL(visibilityChanged(bool)), resetB, SLOT(setEnabled(bool)));
 	connect(dw, SIGNAL(visibilityChanged(bool)), minB, SLOT(setEnabled(bool)));
+	connect(dw, SIGNAL(visibilityChanged(bool)), slidersA, SLOT(setEnabled(bool)));
 
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 }
@@ -158,33 +198,122 @@ void EqualizerGUI::valueChanged(int v)
 }
 void EqualizerGUI::setSliders()
 {
+	const QString objectName = sender()->objectName();
 	graph.hide();
-	foreach (QObject *o, slidersW->children())
+	foreach (QObject *o, slidersA->widget()->children())
 	{
-		QSlider *slider = qobject_cast<QSlider *>(o);
-		if (slider)
+		if (QSlider *slider = qobject_cast<QSlider *>(o))
 		{
 			const bool isPreamp = slider->property("preamp").toBool();
-			if (sender()->objectName() == "maxB" && !isPreamp)
+			if (objectName == "maxB" && !isPreamp)
 				slider->setValue(slider->maximum() - 3);
-			else if (sender()->objectName() == "resetB")
+			else if (objectName == "resetB")
 				slider->setValue(slider->maximum() / 2);
-			else if (sender()->objectName() == "minB" && !isPreamp)
+			else if (objectName == "minB" && !isPreamp)
 				slider->setValue(slider->minimum() + 3);
 		}
 	}
 	graph.show();
 }
 
+void EqualizerGUI::addPreset()
+{
+	bool ok = false;
+	QString name = QInputDialog::getText(this, tr("New preset"), tr("Enter new preset name"), QLineEdit::Normal, QString(), &ok).simplified();
+	if (ok && !name.isEmpty())
+	{
+		QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+		if (!presetsList.contains(name))
+		{
+			presetsList.append(name);
+			sets().set("Equalizer/Presets", presetsList);
+		}
+
+		QMap<int, int> values;
+		foreach (QObject *o, slidersA->widget()->children())
+		{
+			if (QSlider *slider = qobject_cast<QSlider *>(o))
+			{
+				const bool isPreamp = slider->property("preamp").toBool();
+				if (isPreamp)
+					values[-1] = slider->value();
+				else
+					values[slider->property("idx").toInt()] = slider->value();
+			}
+		}
+		QByteArray dataArr;
+		QDataStream stream(&dataArr, QIODevice::WriteOnly);
+		stream << values;
+		sets().set("Equalizer/Preset" + name, dataArr.toBase64().data());
+
+		loadPresets();
+	}
+}
+
+void EqualizerGUI::showSettings()
+{
+	emit QMPlay2Core.showSettings("AudioFilters");
+}
+
+void EqualizerGUI::deletePresetMenuRequest(const QPoint &p)
+{
+	QAction *presetAct = presetsMenu->actionAt(p);
+	if (presetAct && presetsMenu->actions().indexOf(presetAct) >= 2)
+	{
+		deletePresetMenu->setProperty("presetAct", QVariant::fromValue((void *)presetAct));
+		deletePresetMenu->popup(presetsMenu->mapToGlobal(p));
+	}
+}
+void EqualizerGUI::deletePreset()
+{
+	if (QAction *act = (QAction *)deletePresetMenu->property("presetAct").value<void *>())
+	{
+		QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+		presetsList.removeOne(act->text());
+
+		if (presetsList.isEmpty())
+			sets().remove("Equalizer/Presets");
+		else
+			sets().set("Equalizer/Presets", presetsList);
+		sets().remove("Equalizer/Preset" + act->text());
+
+		delete act;
+	}
+}
+
+void EqualizerGUI::setPresetValues()
+{
+	if (QAction *act = qobject_cast<QAction *>(sender()))
+	{
+		QMap<int, int> values = getPresetValues(act->text());
+		if (values.count() > 1)
+		{
+			foreach (QObject *o, slidersA->widget()->children())
+			{
+				if (QSlider *slider = qobject_cast<QSlider *>(o))
+				{
+					const bool isPreamp = slider->property("preamp").toBool();
+					if (isPreamp)
+						slider->setValue(values.value(-1));
+					else
+						slider->setValue(values.value(slider->property("idx").toInt()));
+				}
+			}
+			if (!enabledB->isChecked())
+				enabledB->click();
+		}
+	}
+}
+
 bool EqualizerGUI::set()
 {
-	delete slidersW;
+	delete slidersA->widget();
 
-	slidersW = new QWidget;
+	QWidget *slidersW = new QWidget;
 	slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	QGridLayout *slidersLayout = new QGridLayout(slidersW);
 
-	QVector<float> freqs = Equalizer::freqs(sets());
+	const QVector<float> freqs = Equalizer::freqs(sets());
 	graph.setValues(freqs.count());
 	for (int i = -1; i < freqs.count(); ++i)
 	{
@@ -216,8 +345,58 @@ bool EqualizerGUI::set()
 		slidersLayout->addWidget(descrL, 1, i+1);
 	}
 
-	layout->addWidget(slidersW, 2, 1, 1, 1);
-	connect(dw, SIGNAL(visibilityChanged(bool)), slidersW, SLOT(setEnabled(bool)));
+	slidersA->setWidget(slidersW);
+
+	loadPresets();
 
 	return true;
+}
+
+void EqualizerGUI::loadPresets()
+{
+	const QList<QAction *> presetsActions = presetsMenu->actions();
+	for (int i = 2; i < presetsActions.count(); ++i)
+		delete presetsActions[i];
+
+	const int count = sets().getInt("Equalizer/count");
+
+	QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+	QVector<int> presetsToRemove;
+	for (int i = 0; i < presetsList.count(); ++i)
+	{
+		const int sliders = getPresetValues(presetsList.at(i)).count() - 1;
+		if (sliders < 1)
+			presetsToRemove.append(i);
+		else
+		{
+			QAction *presetAct = presetsMenu->addAction(presetsList.at(i));
+			connect(presetAct, SIGNAL(triggered()), this, SLOT(setPresetValues()));
+			presetAct->setEnabled(sliders == count);
+		}
+	}
+
+	if (!presetsToRemove.isEmpty())
+	{
+		for (int i = presetsToRemove.count() - 1; i >= 0; --i)
+		{
+			const int idxToRemove = presetsToRemove.at(i);
+			sets().remove("Equalizer/Preset" + presetsList.at(idxToRemove));
+			presetsList.removeAt(idxToRemove);
+		}
+		if (presetsList.isEmpty())
+			sets().remove("Equalizer/Presets");
+		else
+			sets().set("Equalizer/Presets", presetsList);
+	}
+
+	deletePresetMenu->setProperty("presetAct", QVariant());
+}
+
+QMap<int, int> EqualizerGUI::getPresetValues(const QString &name)
+{
+	QByteArray dataArr = QByteArray::fromBase64(sets().getByteArray("Equalizer/Preset" + name));
+	QDataStream stream(&dataArr, QIODevice::ReadOnly);
+	QMap<int, int> values;
+	stream >> values;
+	return values;
 }

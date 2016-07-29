@@ -37,7 +37,9 @@ private:
 
 /**/
 
-class QGridLayout;
+class QScrollArea;
+class QCheckBox;
+class QMenu;
 
 class EqualizerGUI : public QWidget, public QMPlay2Extensions
 {
@@ -51,14 +53,29 @@ private slots:
 	void enabled(bool);
 	void valueChanged(int);
 	void setSliders();
+
+	void addPreset();
+
+	void showSettings();
+
+	void deletePresetMenuRequest(const QPoint &p);
+	void deletePreset();
+
+	void setPresetValues();
 private:
 	bool set();
+
+	void loadPresets();
+
+	QMap<int, int> getPresetValues(const QString &name);
 
 	DockWidget *dw;
 	GraphW graph;
 
-	QWidget *slidersW;
-	QGridLayout *layout;
+	QCheckBox *enabledB;
+	QScrollArea *slidersA;
+
+	QMenu *presetsMenu, *deletePresetMenu;
 };
 
 #define EqualizerGUIName "Audio Equalizer Graphical Interface"

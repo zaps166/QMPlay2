@@ -1,5 +1,7 @@
-Changes in QMPlay2 build 16.07.26:
+Changes in QMPlay2 build 16.07.29:
 	- add key shortcuts editor to Settings (thanks Zamarin Arthur for help),
+	- use scroll area for equalizer sliders,
+	- add presets to equalizer,
 	- OpenGL2 bugfix,
 
 Changes in QMPlay2 build 16.07.20:

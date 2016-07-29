@@ -679,6 +679,30 @@ amp</source>
         <translation>Pre
 amp</translation>
     </message>
+    <message>
+        <source>Delete</source>
+        <translation>Usuń</translation>
+    </message>
+    <message>
+        <source>Add new preset</source>
+        <translation>Dodaj nowe nastawienie</translation>
+    </message>
+    <message>
+        <source>Presets</source>
+        <translation>Nastawienia</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ustawienia</translation>
+    </message>
+    <message>
+        <source>New preset</source>
+        <translation>Nowe nastawienie</translation>
+    </message>
+    <message>
+        <source>Enter new preset name</source>
+        <translation>Wprowadź nazwę dla nowego nastawienia</translation>
+    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>

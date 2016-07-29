@@ -679,6 +679,30 @@ amp</source>
         <translation>Пред.
 усиление</translation>
     </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add new preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished">Настройки</translation>
+    </message>
+    <message>
+        <source>New preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter new preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>
