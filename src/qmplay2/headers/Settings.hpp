@@ -70,8 +70,21 @@ public:
 	{
 		return get(key, def).toString();
 	}
-	QVariant get(const QString &key, const QVariant &def = QVariant()) const;
+	inline QStringList getStringList(const QString &key, const QStringList &def = QStringList()) const
+	{
+		return get(key, def).toStringList();
+	}
+	inline QRect getRect(const QString &key, const QRect &def = QRect()) const
+	{
+		return get(key, def).toRect();
+	}
+	inline QColor getColor(const QString &key, const QColor &def = QColor()) const
+	{
+		return get(key, def).value<QColor>();
+	}
 private:
+	QVariant get(const QString &key, const QVariant &def = QVariant()) const;
+
 	void flushCache();
 
 	mutable QMutex mutex;

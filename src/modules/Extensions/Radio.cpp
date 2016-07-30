@@ -76,7 +76,7 @@ Radio::Radio(Module &module) :
 	nowaStacjaLWI->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 
 	Settings sets("Radio");
-	foreach (const QString &entry, sets.get("Radia").toStringList())
+	foreach (const QString &entry, sets.getStringList("Radia"))
 	{
 		const QStringList nazwa_i_adres = entry.split('\n');
 		if (nazwa_i_adres.count() == 2)

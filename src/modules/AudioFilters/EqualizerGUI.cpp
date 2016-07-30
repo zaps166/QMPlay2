@@ -222,7 +222,7 @@ void EqualizerGUI::addPreset()
 	QString name = QInputDialog::getText(this, tr("New preset"), tr("Enter new preset name"), QLineEdit::Normal, QString(), &ok).simplified();
 	if (ok && !name.isEmpty())
 	{
-		QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+		QStringList presetsList = sets().getStringList("Equalizer/Presets");
 		if (!presetsList.contains(name))
 		{
 			presetsList.append(name);
@@ -268,7 +268,7 @@ void EqualizerGUI::deletePreset()
 {
 	if (QAction *act = (QAction *)deletePresetMenu->property("presetAct").value<void *>())
 	{
-		QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+		QStringList presetsList = sets().getStringList("Equalizer/Presets");
 		presetsList.removeOne(act->text());
 
 		if (presetsList.isEmpty())
@@ -360,7 +360,7 @@ void EqualizerGUI::loadPresets()
 
 	const int count = sets().getInt("Equalizer/count");
 
-	QStringList presetsList = sets().get("Equalizer/Presets").toStringList();
+	QStringList presetsList = sets().getStringList("Equalizer/Presets");
 	QVector<int> presetsToRemove;
 	for (int i = 0; i < presetsList.count(); ++i)
 	{

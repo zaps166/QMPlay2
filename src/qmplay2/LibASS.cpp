@@ -308,10 +308,10 @@ void LibASS::setASSStyle()
 		ASS_Style &style = ass_sub_track->styles[i];
 		if (colorsAndBorders)
 		{
-			style.PrimaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value<QColor>());
-			style.SecondaryColour = assColorFromQColor(settings.get("Subtitles/TextColor").value<QColor>(), true);
-			style.OutlineColour = assColorFromQColor(settings.get("Subtitles/OutlineColor").value<QColor>());
-			style.BackColour = assColorFromQColor(settings.get("Subtitles/ShadowColor").value<QColor>());
+			style.PrimaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"));
+			style.SecondaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"), true);
+			style.OutlineColour = assColorFromQColor(settings.getColor("Subtitles/OutlineColor"));
+			style.BackColour = assColorFromQColor(settings.getColor("Subtitles/ShadowColor"));
 			style.BorderStyle = 1;
 			style.Outline = settings.getDouble("Subtitles/Outline");
 			style.Shadow = settings.getDouble("Subtitles/Shadow");
@@ -484,9 +484,9 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 		free(style->FontName);
 	style->FontName = strdup(settings.getString(prefix + "/FontName").toUtf8().data());
 	style->FontSize = settings.getInt(prefix + "/FontSize");
-	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.get(prefix + "/TextColor").value<QColor>());
-	style->OutlineColour = assColorFromQColor(settings.get(prefix + "/OutlineColor").value<QColor>());
-	style->BackColour = assColorFromQColor(settings.get(prefix + "/ShadowColor").value<QColor>());
+	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.getColor(prefix + "/TextColor"));
+	style->OutlineColour = assColorFromQColor(settings.getColor(prefix + "/OutlineColor"));
+	style->BackColour = assColorFromQColor(settings.getColor(prefix + "/ShadowColor"));
 	style->Spacing = settings.getDouble(prefix + "/Linespace");
 	style->BorderStyle = 1;
 	style->Outline = settings.getDouble(prefix + "/Outline");

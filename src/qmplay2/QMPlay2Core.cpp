@@ -269,7 +269,7 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 			if ((moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains(moduleType)) || (moduleInfo.type == Module::DECODER && moduleType == "decoder"))
 				availableModules += moduleInfo.name;
 	QStringList modules;
-	foreach (const QString &module, settings->get(type, defaultModules).toStringList())
+	foreach (const QString &module, settings->getStringList(type, defaultModules))
 	{
 		const int idx = availableModules.indexOf(module);
 		if (idx > -1)

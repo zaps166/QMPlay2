@@ -1275,9 +1275,9 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 bool YouTube::set()
 {
 	w.resultsW->setColumnCount(sets().getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
-	w.resultsW->itagsVideo = getItagNames(sets().get("YouTube/ItagVideoList").toStringList(), MEDIA_VIDEO).second;
-	w.resultsW->itagsAudio = getItagNames(sets().get("YouTube/ItagAudioList").toStringList(), MEDIA_AUDIO).second;
-	w.resultsW->itags = getItagNames(sets().get("YouTube/ItagList").toStringList(), MEDIA_AV).second;
+	w.resultsW->itagsVideo = getItagNames(sets().getStringList("YouTube/ItagVideoList"), MEDIA_VIDEO).second;
+	w.resultsW->itagsAudio = getItagNames(sets().getStringList("YouTube/ItagAudioList"), MEDIA_AUDIO).second;
+	w.resultsW->itags = getItagNames(sets().getStringList("YouTube/ItagList"), MEDIA_AV).second;
 	w.multiStream = sets().getBool("YouTube/MultiStream");
 	w.subtitles = sets().getBool("YouTube/Subtitles");
 	w.youtubedl = sets().getString("YouTube/youtubedl");

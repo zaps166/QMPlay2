@@ -120,7 +120,7 @@ void OSDSettingsW::readSettings()
 	alignB[QMPSettings.getInt(prefix + "/Alignment")]->setChecked(true);
 	ui->outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
 	ui->shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
-	ui->textColorB->setColor(QMPSettings.get(prefix + "/TextColor").value<QColor>());
-	ui->outlineColorB->setColor(QMPSettings.get(prefix + "/OutlineColor").value<QColor>());
-	ui->shadowColorB->setColor(QMPSettings.get(prefix + "/ShadowColor").value<QColor>());
+	ui->textColorB->setColor(QMPSettings.getColor(prefix + "/TextColor"));
+	ui->outlineColorB->setColor(QMPSettings.getColor(prefix + "/OutlineColor"));
+	ui->shadowColorB->setColor(QMPSettings.getColor(prefix + "/ShadowColor"));
 }

@@ -154,7 +154,7 @@ void VideoThr::initFilters(bool processParams)
 		writer->modParam("Deinterlace", 0);
 
 	if (!HWAccelWriter)
-		foreach (QString filterName, QMPSettings.get("VideoFilters").toStringList())
+		foreach (QString filterName, QMPSettings.getStringList("VideoFilters"))
 			if (filterName.left(1).toInt()) //if filter is enabled
 			{
 				VideoFilter *filter = filters.on((filterName = filterName.mid(1)));

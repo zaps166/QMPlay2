@@ -55,7 +55,7 @@ Inputs::Inputs() :
 	init("ToneGenerator/srate", 48000);
 	init("ToneGenerator/freqs", 440);
 	init("PCM", true);
-	if (get("PCM/extensions").toStringList().isEmpty())
+	if (getStringList("PCM/extensions").isEmpty())
 		set("PCM/extensions", standartExts.split(';'));
 	if (getUInt("PCM/format") >= PCM::FORMAT_COUNT)
 		set("PCM/format", 2);
@@ -71,7 +71,7 @@ QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
 	QList<Info> modulesInfo;
 	modulesInfo += Info(ToneGeneratorName, DEMUXER, toneIcon);
 	if (showDisabled || getBool("PCM"))
-		modulesInfo += Info(PCMName, DEMUXER, get("PCM/extensions").toStringList(), pcmIcon);
+		modulesInfo += Info(PCMName, DEMUXER, getStringList("PCM/extensions"), pcmIcon);
 	if (showDisabled || getBool("Rayman2"))
 		modulesInfo += Info(Rayman2Name, DEMUXER, QStringList("apm"), rayman2Icon);
 	return modulesInfo;
@@ -248,7 +248,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	pcmExtsE = new QLineEdit;
 	QString exts;
-	foreach (const QString &ext, sets().get("PCM/extensions").toStringList())
+	foreach (const QString &ext, sets().getStringList("PCM/extensions"))
 		exts += ext + ";";
 	pcmExtsE->setText(exts);
 

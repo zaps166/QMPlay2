@@ -140,7 +140,7 @@ void QMPlay2GUIClass::setCurrentPth(const QString &pth)
 
 void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const QSize &def_size)
 {
-	QRect geo = settings->get(pth).toRect();
+	const QRect geo = settings->getRect(pth);
 	if (geo.isValid())
 		w->setGeometry(geo);
 	else

@@ -142,9 +142,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 #endif
 
-	const ItagNames itagVideoNames = YouTube::getItagNames(sets().get("YouTube/ItagVideoList").toStringList(), YouTube::MEDIA_VIDEO);
-	const ItagNames itagAudioNames = YouTube::getItagNames(sets().get("YouTube/ItagAudioList").toStringList(), YouTube::MEDIA_AUDIO);
-	const ItagNames itagNames = YouTube::getItagNames(sets().get("YouTube/ItagList").toStringList(), YouTube::MEDIA_AV);
+	const ItagNames itagVideoNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO);
+	const ItagNames itagAudioNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO);
+	const ItagNames itagNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagList"), YouTube::MEDIA_AV);
 
 	QGroupBox *youTubeB = new QGroupBox("YouTube");
 
