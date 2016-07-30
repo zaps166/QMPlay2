@@ -56,25 +56,19 @@ if(USE_LASTFM)
     add_definitions(-DUSE_LASTFM)
 endif()
 
-if(USE_QT5)
-    qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
-else()
-    find_package(Qt4 REQUIRED QtNetwork)
-    include("${QT_USE_FILE}")
-    qt4_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${Extensions_HDR}
     ${Extensions_SRC}
-    ${Extensions_RESOURCES_RCC}
+    ${Extensions_RESOURCES}
 )
 
 if(USE_QT5)
     qt5_use_modules(${PROJECT_NAME} Gui Widgets Network ${DBUS})
 else()
+    find_package(Qt4 REQUIRED QtNetwork)
+    include("${QT_USE_FILE}")
     target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtNetwork ${DBUS})
 endif()
 

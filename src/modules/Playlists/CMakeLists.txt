@@ -30,16 +30,10 @@ set(Playlists_RESOURCES
 
 include_directories(../../qmplay2/headers)
 
-if(USE_QT5)
-    qt5_add_resources(Playlists_RESOURCES_RCC ${Playlists_RESOURCES})
-else()
-    qt4_add_resources(Playlists_RESOURCES_RCC ${Playlists_RESOURCES})
-endif()
-
 add_library(${PROJECT_NAME} MODULE
     ${Playlists_HDR}
     ${Playlists_SRC}
-    ${Playlists_RESOURCES_RCC}
+    ${Playlists_RESOURCES}
 )
 
 if(USE_QT5)

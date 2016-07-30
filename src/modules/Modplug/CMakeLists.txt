@@ -60,16 +60,10 @@ set(Modplug_RESOURCES
 
 include_directories(../../qmplay2/headers libmodplug)
 
-if(USE_QT5)
-    qt5_add_resources(Modplug_RESOURCES_RCC ${Modplug_RESOURCES})
-else()
-    qt4_add_resources(Modplug_RESOURCES_RCC ${Modplug_RESOURCES})
-endif()
-
 add_library(${PROJECT_NAME} MODULE
     ${Modplug_HDR}
     ${Modplug_SRC}
-    ${Modplug_RESOURCES_RCC}
+    ${Modplug_RESOURCES}
 )
 
 if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
