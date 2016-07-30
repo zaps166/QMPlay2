@@ -23,6 +23,7 @@
 #include <Module.hpp>
 
 #include <QApplication>
+#include <QLibraryInfo>
 #include <QTranslator>
 #include <QDateTime>
 #include <QLibrary>
@@ -158,7 +159,9 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	settings = new Settings("QMPlay2");
 
 	translator = new QTranslator;
+	qtTranslator = new QTranslator;
 	QCoreApplication::installTranslator(translator);
+	QCoreApplication::installTranslator(qtTranslator);
 	setLanguage();
 
 #ifdef Q_OS_WIN
@@ -242,7 +245,9 @@ void QMPlay2CoreClass::quit()
 #ifdef Q_OS_WIN
 	timeEndPeriod(1);
 #endif
+	QCoreApplication::removeTranslator(qtTranslator);
 	QCoreApplication::removeTranslator(translator);
+	delete qtTranslator;
 	delete translator;
 	delete settings;
 }
@@ -362,6 +367,7 @@ void QMPlay2CoreClass::setLanguage()
 		lang = systemLang;
 	if (!translator->load(lang, langDir))
 		lang = "en";
+	qtTranslator->load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 }
 
 void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)

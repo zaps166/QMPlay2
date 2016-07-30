@@ -173,7 +173,7 @@ private:
 	static QMPlay2CoreClass *qmplay2Core;
 
 	QVector<Module *> pluginsInstance;
-	QTranslator *translator;
+	QTranslator *translator, *qtTranslator;
 	QString shareDir, langDir, settingsDir, logFilePath;
 #ifndef Q_OS_WIN
 	QString unixOpenCommand;
