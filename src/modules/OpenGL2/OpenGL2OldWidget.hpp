@@ -37,8 +37,6 @@ public:
 
 	void initializeGL();
 	void paintGL();
-private slots:
-	void resetClearCounter();
 private:
 	void resizeGL(int w, int h);
 
