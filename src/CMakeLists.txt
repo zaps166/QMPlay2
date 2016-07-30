@@ -11,6 +11,7 @@ endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 add_subdirectory(qmplay2)
 if(CMAKE_VERSION VERSION_LESS 2.8.11)

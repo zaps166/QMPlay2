@@ -26,18 +26,12 @@ set(DirectX_RESOURCES
     icon.qrc
 )
 
-if(USE_QT5)
-    qt5_add_resources(DirectX_RESOURCES_RCC ${DirectX_RESOURCES})
-else()
-    qt4_add_resources(DirectX_RESOURCES_RCC ${DirectX_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${DirectX_HDR}
     ${DirectX_SRC}
-    ${DirectX_RESOURCES_RCC}
+    ${DirectX_RESOURCES}
 )
 
 if(USE_QT5)

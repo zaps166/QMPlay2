@@ -31,18 +31,12 @@ set(PortAudio_RESOURCES
 pkg_check_modules(LIBPORTAUDIO portaudio-2.0 REQUIRED)
 link_directories(${LIBPORTAUDIO_LIBRARY_DIRS})
 
-if(USE_QT5)
-    qt5_add_resources(PortAudio_RESOURCES_RCC ${PortAudio_RESOURCES})
-else()
-    qt4_add_resources(PortAudio_RESOURCES_RCC ${PortAudio_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers ${LIBPORTAUDIO_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${PortAudio_HDR}
     ${PortAudio_SRC}
-    ${PortAudio_RESOURCES_RCC}
+    ${PortAudio_RESOURCES}
 )
 
 if(USE_QT5)

@@ -66,18 +66,12 @@ else()
     list(APPEND OpenGL2_SRC OpenGL2Window.cpp OpenGL2Widget.cpp OpenGL2CommonQt5.cpp)
 endif()
 
-if(USE_QT5)
-    qt5_add_resources(OpenGL2_RESOURCES_RCC ${OpenGL2_RESOURCES})
-else()
-    qt4_add_resources(OpenGL2_RESOURCES_RCC ${OpenGL2_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${OpenGL2_HDR}
     ${OpenGL2_SRC}
-    ${OpenGL2_RESOURCES_RCC}
+    ${OpenGL2_RESOURCES}
 )
 
 if(NOT USE_QT5) # Qt4

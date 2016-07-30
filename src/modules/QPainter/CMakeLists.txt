@@ -26,18 +26,12 @@ set(QPainter_RESOURCES
     icon.qrc
 )
 
-if(USE_QT5)
-    qt5_add_resources(QPainter_RESOURCES_RCC ${QPainter_RESOURCES})
-else()
-    qt4_add_resources(QPainter_RESOURCES_RCC ${QPainter_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${QPainter_HDR}
     ${QPainter_SRC}
-    ${QPainter_RESOURCES_RCC}
+    ${QPainter_RESOURCES}
 )
 
 if(USE_QT5)

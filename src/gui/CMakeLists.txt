@@ -83,12 +83,10 @@ set(GUI_RESOURCES
 
 if(USE_QT5)
     qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt5_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
 else()
     find_package(Qt4 REQUIRED QtNetwork)
     include("${QT_USE_FILE}")
     qt4_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt4_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
 endif()
 
 include_directories(../qmplay2/headers)
@@ -145,7 +143,7 @@ add_executable(QMPlay2 ${WIN32_EXE}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
-    ${GUI_RESOURCES_RCC}
+    ${GUI_RESOURCES}
 )
 
 if(USE_JEMALLOC)
