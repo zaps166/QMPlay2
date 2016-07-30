@@ -44,7 +44,7 @@ KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
 	shortcuts->setSelectionMode(QAbstractItemView::SingleSelection);
 	shortcuts->verticalHeader()->setVisible(false);
 
-	buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, this);
+	buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, Qt::Horizontal, this);
 	connect(buttons, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
