@@ -35,15 +35,15 @@
 #include <QClipboard>
 #include <QMimeData>
 
-static QString ProstoPleerURL("http://pleer.net");
+#define ProstoPleerURL "http://pleer.net"
 
 static inline QString getQMPlay2Url(const QTreeWidgetItem *tWI)
 {
-	return ProstoPleerName"://{" + ProstoPleerURL + "/en/tracks/" + tWI->data(0, Qt::UserRole).toString() + "}";
+	return QString(ProstoPleerName "://{" ProstoPleerURL "/en/tracks/%1}").arg(tWI->data(0, Qt::UserRole).toString());
 }
 static inline QString getPageUrl(const QTreeWidgetItem *tWI)
 {
-	return ProstoPleerURL + "/en/tracks/" + tWI->data(0, Qt::UserRole).toString();
+	return QString(ProstoPleerURL "/en/tracks/") + tWI->data(0, Qt::UserRole).toString();
 }
 
 /**/
@@ -206,7 +206,7 @@ void ProstoPleerW::searchTextEdited(const QString &text)
 		((QStringListModel *)completer->model())->setStringList(QStringList());
 	else
 	{
-		QNetworkRequest request(ProstoPleerURL + "/search_suggest");
+		QNetworkRequest request(QString(ProstoPleerURL "/search_suggest"));
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 		autocompleteReply = net.post(request, QByteArray("part=" + text.toUtf8()));
 	}
@@ -229,7 +229,7 @@ void ProstoPleerW::search()
 	{
 		if (lastName != name || sender() == searchE || sender() == searchB)
 			currPage = 1;
-		searchReply = net.get(QNetworkRequest(ProstoPleerURL + QString("/search?q=%1&page=%2").arg(name).arg(currPage)));
+		searchReply = net.get(QNetworkRequest(QString(ProstoPleerURL "/search?q=%1&page=%2").arg(name, currPage)));
 		progressB->show();
 	}
 	else
@@ -263,7 +263,7 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 			{
 				QTextDocument txtDoc;
 				txtDoc.setHtml(replyData.mid(idx1 + 1, idx2 - idx1 - 1));
-				QStringList suggestions = txtDoc.toPlainText().remove('"').split(',');
+				const QStringList suggestions = txtDoc.toPlainText().remove('"').split(',');
 				if (!suggestions.isEmpty())
 				{
 					((QStringListModel *)completer->model())->setStringList(suggestions);
@@ -299,7 +299,7 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 				QString bitrate = regexp.cap(6).toLower().remove(' ').replace('/', 'p');
 				if (bitrate == "vbr" && time > 0)
 				{
-					QStringList fSizeList = regexp.cap(7).toLower().split(' ');
+					const QStringList fSizeList = regexp.cap(7).toLower().split(' ');
 					if (fSizeList.count() >= 2 && fSizeList[1] == "mb")
 					{
 						float fSize = fSizeList[0].toFloat();
@@ -386,7 +386,7 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 			int idx = url.lastIndexOf('/');
 
 			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
-			if (idx > -1 && Reader::create(ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1), reader))
+			if (idx > -1 && Reader::create(QString(ProstoPleerURL "/site_api/files/get_url?id=") + fileId.mid(idx + 1), reader))
 			{
 				QByteArray replyData;
 				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
