@@ -73,11 +73,9 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	else
 		sizeLText = tr("Waiting for connection");
 
-	titleL = new QLabel;
-	titleL->setText(name);
+	titleL = new QLabel(name);
 
-	sizeL = new QLabel;
-	sizeL->setText(sizeLText);
+	sizeL = new QLabel(sizeLText);
 
 	iconL = new QLabel;
 	iconL->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));

@@ -51,6 +51,7 @@ private:
 	QTreeWidgetItem *getDefaultQuality(const QTreeWidgetItem *tWI);
 
 	void removeTmpFile();
+	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
 	void mouseMoveEvent(QMouseEvent *);
 
@@ -60,7 +61,6 @@ private slots:
 	void enqueue();
 	void playCurrentEntry();
 	void playEntry(QTreeWidgetItem *tWI);
-	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
 	void openPage();
 	void copyPageURL();
@@ -73,7 +73,6 @@ private slots:
 
 class PageSwitcher : public QWidget
 {
-	Q_OBJECT
 public:
 	PageSwitcher(QWidget *youTubeW);
 

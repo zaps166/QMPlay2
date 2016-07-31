@@ -312,7 +312,7 @@ void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 		QString url;
 		if (e->buttons() & Qt::LeftButton)
 			url = getQMPlay2Url(tWI);
-		else if (e->buttons() & Qt::MiddleButton) //Link do strumienia
+		else if (e->buttons() & Qt::MiddleButton) //Link to a stream
 		{
 			QTreeWidgetItem *tWI2 = tWI->parent() ? tWI : getDefaultQuality(tWI);
 			if (tWI2)
@@ -474,7 +474,7 @@ PageSwitcher::PageSwitcher(QWidget *youTubeW)
 	currPageB = new QSpinBox;
 	connect(currPageB, SIGNAL(editingFinished()), youTubeW, SLOT(chPage()));
 	currPageB->setMinimum(1);
-	currPageB->setMaximum(50); //1000 wyników, po 20 wyników na stronę
+	currPageB->setMaximum(50); //1000 results, 20 results per page
 
 	nextB = new QToolButton;
 	connect(nextB, SIGNAL(clicked()), youTubeW, SLOT(next()));
