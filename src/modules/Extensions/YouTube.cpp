@@ -51,7 +51,7 @@ static QMap<int, QString> itag_arr;
 
 static inline QUrl getYtUrl(const QString &title, const int page)
 {
-	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(title).arg(page);
+	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(title, page);
 }
 static inline QUrl getAutocompleteUrl(const QString &text)
 {
@@ -59,7 +59,7 @@ static inline QUrl getAutocompleteUrl(const QString &text)
 }
 static inline QString getSubsUrl(const QString &langCode, const QString &vidId)
 {
-	return QString(YOUTUBE_URL "/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode).arg(vidId);
+	return QString(YOUTUBE_URL "/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode, vidId);
 }
 
 static inline QString getFileExtension(const QString &ItagName)
@@ -76,8 +76,8 @@ static inline QString getFileExtension(const QString &ItagName)
 static inline QString getQMPlay2Url(const QTreeWidgetItem *tWI)
 {
 	if (tWI->parent())
-		return "YouTube://{" + tWI->parent()->data(0, Qt::UserRole).toString() + "}" + tWI->data(0, Qt::UserRole + 1).toString();
-	return "YouTube://{" + tWI->data(0, Qt::UserRole).toString() + "}";
+		return QString("YouTube://{%1}%2").arg(tWI->parent()->data(0, Qt::UserRole).toString(), tWI->data(0, Qt::UserRole + 1).toString());
+	return QString("YouTube://{%1}").arg(tWI->data(0, Qt::UserRole).toString());
 }
 
 static inline QString unescape(const QString &str)
@@ -229,7 +229,7 @@ public:
 					youtubedl_updating = false;
 				}
 				if (!aborted)
-					emit QMPlay2Core.sendMessage(error, YouTubeName + QString(" (%1)").arg(Functions::fileName(youtubedl)), 3, 0);
+					emit QMPlay2Core.sendMessage(error, QString(YouTubeName " (%1)").arg(Functions::fileName(youtubedl)), 3, 0);
 				return QStringList();
 			}
 			return QString(youtubedl_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
@@ -365,12 +365,12 @@ void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 		{
 			Playlist::Entry entry;
 			entry.name = ytPlaylist[i+1];
-			entry.url = "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}";
+			entry.url = QString("YouTube://{" YOUTUBE_URL "/watch?v=%1}").arg(ytPlaylist[i+0]);
 			entries += entry;
 		}
 		if (!entries.isEmpty())
 		{
-			const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(tWI->text(0)) + ".pls";
+			const QString fileName = QString("%1/%2.pls").arg(QDir::tempPath(), Functions::cleanFileName(tWI->text(0)));
 			removeTmpFile();
 			if (Playlist::write(entries, "file://" + fileName))
 			{
@@ -718,17 +718,17 @@ void YouTubeW::setAutocomplete(const QByteArray &data)
 }
 void YouTubeW::setSearchResults(QString data)
 {
-	/* Usuwanie komentarzy HTML */
+	/* Deleting comments in HTML */
 	for (int commentIdx = 0 ;;)
 	{
 		if ((commentIdx = data.indexOf("<!--", commentIdx)) < 0)
 			break;
 		int commentEndIdx = data.indexOf("-->", commentIdx);
-		if (commentEndIdx >= 0) //Jeżeli jest koniec komentarza
-			data.remove(commentIdx, commentEndIdx - commentIdx + 3); //Wyrzuć zakomentowany fragment
+		if (commentEndIdx >= 0) //If it is the end of the comment
+			data.remove(commentIdx, commentEndIdx - commentIdx + 3); //Discard the commented part
 		else
 		{
-			data.remove(commentIdx, data.length() - commentIdx); //Wyrzuć cały tekst do końca
+			data.remove(commentIdx, data.length() - commentIdx); //Discard all text until end
 			break;
 		}
 	}
@@ -780,7 +780,7 @@ void YouTubeW::setSearchResults(QString data)
 				if (imgEndIdx > -1)
 				{
 					image = entry.mid(imgIdx, imgEndIdx - imgIdx);
-					if (image.endsWith(".gif")) //GIF nie jest miniaturką - jest to pojedynczy piksel :D
+					if (image.endsWith(".gif")) //GIF isn't a thumbnail, just a single pixel :D
 						image.clear();
 					else if (image.startsWith("//"))
 						image.prepend("https:");
@@ -819,10 +819,11 @@ void YouTubeW::setSearchResults(QString data)
 			tWI->setText(1, !isPlaylist ? duration : tr("Playlist"));
 			tWI->setText(2, user);
 
-			tWI->setToolTip(0, QString("%1: %2\n%3: %4\n%5: %6")
-				.arg(resultsW->headerItem()->text(0)).arg(tWI->text(0))
-				.arg(!isPlaylist ? resultsW->headerItem()->text(1) : tr("Playlist")).arg(!isPlaylist ? tWI->text(1) : tr("yes"))
-				.arg(resultsW->headerItem()->text(2)).arg(tWI->text(2))
+			tWI->setToolTip(0, QString("%1: %2\n%3: %4\n%5: %6").arg(
+				resultsW->headerItem()->text(0), tWI->text(0),
+				(!isPlaylist ? resultsW->headerItem()->text(1) : tr("Playlist")),
+				(!isPlaylist ? tWI->text(1) : tr("yes")),
+				resultsW->headerItem()->text(2), tWI->text(2))
 			);
 
 			tWI->setData(0, Qt::UserRole, videoInfoLink);
@@ -1007,10 +1008,12 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
 			if (video.count() == 2 && audio.count() == 2)
 			{
-				ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]" << "[" + video[1] + "][" + audio[1] + "]";
+				ret = QStringList()
+						<< QString("FFmpeg://{[%1][%2]").arg(video[0], audio[0])
+						<< QString("[%1][%2]").arg(video[1], audio[1]);
 				if (!subsUrl.isEmpty())
 				{
-					ret[0] += "[" + subsUrl + "]";
+					ret[0] += QString("[%1]").arg(subsUrl);
 					ret[1] += "[.vtt]";
 				}
 				ret[0] += "}";
@@ -1023,8 +1026,8 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			ret = getUrlByItagPriority(resultsW->itags, ret);
 			if (ret.count() == 2 && !subsUrl.isEmpty())
 			{
-				ret[0] = "FFmpeg://{[" + ret[0] + "][" + subsUrl + "]}";
-				ret[1] = "[" + ret[1] + "][.vtt]";
+				ret[0] = QString("FFmpeg://{[%1][%2]}").arg(ret[0], subsUrl);
+				ret[1] = QString("[%1][.vtt]").arg(ret[1]);
 			}
 		}
 	}
