@@ -158,7 +158,7 @@ bool Rayman2::open(const QString &url)
 {
 	if (Reader::create(url, reader))
 	{
-		QByteArray header = reader->read(0x64);
+		const QByteArray header = reader->read(0x64);
 		if (header.size() == 0x64)
 		{
 			const char *data = header.constData();

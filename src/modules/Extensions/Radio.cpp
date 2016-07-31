@@ -134,13 +134,12 @@ void Radio::openLink()
 	{
 		if (lWI == nowaStacjaLWI)
 		{
-			const QString newStation = tr("Adding a new radio station");
-			QString nazwa, adres;
 			bool ok;
-			nazwa = QInputDialog::getText(this, newStation, tr("Name"), QLineEdit::Normal, QString(), &ok);
+			const QString newStation = tr("Adding a new radio station");
+			const QString nazwa = QInputDialog::getText(this, newStation, tr("Name"), QLineEdit::Normal, QString(), &ok);
 			if (ok && !nazwa.isEmpty())
 			{
-				adres = QInputDialog::getText(this, newStation, tr("Address"), QLineEdit::Normal, "http://", &ok);
+				const QString adres = QInputDialog::getText(this, newStation, tr("Address"), QLineEdit::Normal, "http://", &ok);
 				if (ok && !adres.isEmpty() && adres != "http://")
 					addStation(nazwa, adres, wlasneStacje);
 			}

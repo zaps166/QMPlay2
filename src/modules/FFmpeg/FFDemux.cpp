@@ -45,7 +45,7 @@ bool FFDemux::set()
 bool FFDemux::metadataChanged() const
 {
 	bool isMetadataChanged = false;
-	foreach (FormatContext *fmtCtx, formatContexts)
+	foreach (const FormatContext *fmtCtx, formatContexts)
 		isMetadataChanged |= fmtCtx->metadataChanged();
 	return isMetadataChanged;
 }
@@ -60,7 +60,7 @@ QList<ChapterInfo> FFDemux::getChapters() const
 QString FFDemux::name() const
 {
 	QString name;
-	foreach (FormatContext *fmtCtx, formatContexts)
+	foreach (const FormatContext *fmtCtx, formatContexts)
 	{
 		const QString fmtCtxName = fmtCtx->name();
 		if (!name.contains(fmtCtxName))
@@ -90,14 +90,14 @@ bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 double FFDemux::length() const
 {
 	double length = -1.0;
-	foreach (FormatContext *fmtCtx, formatContexts)
+	foreach (const FormatContext *fmtCtx, formatContexts)
 		length = qMax(length, fmtCtx->length());
 	return length;
 }
 int FFDemux::bitrate() const
 {
 	int bitrate = 0;
-	foreach (FormatContext *fmtCtx, formatContexts)
+	foreach (const FormatContext *fmtCtx, formatContexts)
 		bitrate += fmtCtx->bitrate();
 	return bitrate;
 }
@@ -110,7 +110,7 @@ QByteArray FFDemux::image(bool forceCopy) const
 
 bool FFDemux::localStream() const
 {
-	foreach (FormatContext *fmtCtx, formatContexts)
+	foreach (const FormatContext *fmtCtx, formatContexts)
 		if (!fmtCtx->isLocal)
 			return false;
 	return true;
@@ -201,7 +201,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 	Playlist::Entries entries;
 	if (!url.contains("://{") && url.startsWith("file://"))
 	{
-		OggHelper oggHelper(url.mid(7), abortFetchTracks);
+		const OggHelper oggHelper(url.mid(7), abortFetchTracks);
 		if (oggHelper.io)
 		{
 			int i = 0;

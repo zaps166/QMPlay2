@@ -38,7 +38,7 @@ public:
 	OggHelper(const QString &url, bool &isAborted);
 	~OggHelper();
 
-	Chains getOggChains(bool &ok);
+	Chains getOggChains(bool &ok) const;
 
 private:
 	inline quint32 getSerial(const quint8 *header) const;

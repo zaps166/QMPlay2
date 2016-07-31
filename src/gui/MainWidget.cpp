@@ -611,7 +611,7 @@ void MainWidget::visualizationFullScreen()
 }
 void MainWidget::hideAllExtensions()
 {
-	foreach(QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 			dw->hide();
 }

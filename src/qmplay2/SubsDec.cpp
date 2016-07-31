@@ -38,7 +38,7 @@ SubsDec *SubsDec::create(const QString &type)
 QStringList SubsDec::extensions()
 {
 	QStringList extensions;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+	foreach (const Module *module, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if (mod.type == Module::SUBSDEC)
 				extensions << mod.extensions;
