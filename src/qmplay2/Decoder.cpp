@@ -60,7 +60,7 @@ Decoder *Decoder::create(StreamInfo &streamInfo, Writer *writer, const QStringLi
 	for (int i = 0; i < pluginsInstances.count(); i++)
 	{
 		Module *module = pluginsInstances[i].first;
-		Module::Info &moduleInfo = pluginsInstances[i].second;
+		const Module::Info &moduleInfo = pluginsInstances[i].second;
 		if (!module || moduleInfo.name.isEmpty())
 			continue;
 		Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);
