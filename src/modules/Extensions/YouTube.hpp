@@ -149,7 +149,7 @@ public:
 
 	DockWidget *getDockWidget();
 
-	QList<AddressPrefix> addressPrefixList(bool);
+	QList<AddressPrefix> addressPrefixList(bool) const;
 	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl);
 
 	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &);

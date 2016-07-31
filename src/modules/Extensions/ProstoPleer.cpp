@@ -362,7 +362,7 @@ DockWidget *ProstoPleer::getDockWidget()
 	return w.dw;
 }
 
-QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img)
+QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img) const
 {
 	return QList<AddressPrefix>() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
 }

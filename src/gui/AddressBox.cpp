@@ -43,7 +43,7 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 				pB.addItem(icon, mod.name, MODULE);
 			}
 
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	foreach (const QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		foreach (const QMPlay2Extensions::AddressPrefix &addressPrefix, QMPlay2Ext->addressPrefixList())
 			pB.addItem(QPixmap::fromImage(addressPrefix.img), addressPrefix, MODULE);
 

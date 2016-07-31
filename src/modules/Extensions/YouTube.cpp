@@ -1294,7 +1294,7 @@ DockWidget *YouTube::getDockWidget()
 	return w.dw;
 }
 
-QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img)
+QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
 	return QList<AddressPrefix>() << AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()) << AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage());
 }
