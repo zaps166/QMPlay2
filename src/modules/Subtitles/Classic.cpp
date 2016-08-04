@@ -18,6 +18,7 @@
 
 #include <Classic.hpp>
 
+#include <Functions.hpp>
 #include <LibASS.hpp>
 
 #include <QStringList>
@@ -141,7 +142,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 			if (duration > 0.0)
 			{
 				initOnce(ok, ass);
-				ass->addASSEvent(sub.replace('|', "\\n"), start, duration);
+				ass->addASSEvent(Functions::convertToASS(sub.replace('|', "\\n")), start, duration);
 			}
 			else
 				subsWithoutEnd.append(SubWithoutEnd(start, Sub_max_s, sub.replace('|', "\\n")));
@@ -167,7 +168,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
 		initOnce(ok, ass);
 		foreach (const SubWithoutEnd &sub, subsWithoutEnd)
-			ass->addASSEvent(sub.sub, sub.start, sub.duration);
+			ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
 	}
 
 	return ok;
