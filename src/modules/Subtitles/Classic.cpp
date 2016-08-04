@@ -17,6 +17,7 @@
 */
 
 #include <Classic.hpp>
+
 #include <LibASS.hpp>
 
 #include <QStringList>
@@ -31,23 +32,24 @@
  * mDVD - {start}{koniec}napis - podane klatki filmu, należy przeliczyć na sekundy, używając FPS, | oddziela linie
 **/
 
-class Sub_Without_End
+class SubWithoutEnd
 {
 public:
-	Sub_Without_End(unsigned start, double duration, const QByteArray &sub) :
-		start(start), duration(duration), sub(sub) {}
+	inline SubWithoutEnd(unsigned start, double duration, const QByteArray &sub) :
+		start(start), duration(duration), sub(sub)
+	{}
 
-	void setDuration(double duration)
+	inline void setDuration(double duration)
 	{
 		if (duration < this->duration)
 			this->duration = duration;
 	}
 
-	void operator +=(const Sub_Without_End &other)
+	inline void operator +=(const SubWithoutEnd &other)
 	{
 		sub += '\n' + other.sub;
 	}
-	operator unsigned() const
+	inline operator unsigned() const
 	{
 		return start;
 	}
@@ -57,27 +59,33 @@ public:
 	QByteArray sub;
 };
 
-#define initOnce()    \
-	if (!ok)         \
-	{                  \
-		ass->initASS(); \
-		ok = true;      \
+static inline void initOnce(bool &ok, LibASS *ass)
+{
+	if (!ok)
+	{
+		ass->initASS();
+		ok = true;
 	}
+}
+
+/**/
 
 Classic::Classic(bool Use_mDVD_FPS, double Sub_max_s) :
-	Use_mDVD_FPS(Use_mDVD_FPS), Sub_max_s(Sub_max_s) {}
+	Use_mDVD_FPS(Use_mDVD_FPS), Sub_max_s(Sub_max_s)
+{}
 
 bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 {
 	if (!ass)
 		return false;
+
 	bool ok = false, use_mDVD_FPS = Use_mDVD_FPS;
 
-	QRegExp TMPRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}\\D");
-	QRegExp MPL2RegExp("\\[\\d+\\]\\[\\d*\\]");
-	QRegExp MicroDVDRegExp("\\{\\d+\\}\\{\\d*\\}");
+	const QRegExp TMPRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}\\D");
+	const QRegExp MPL2RegExp("\\[\\d+\\]\\[\\d*\\]");
+	const QRegExp MicroDVDRegExp("\\{\\d+\\}\\{\\d*\\}");
 
-	QList<Sub_Without_End> subs_without_end;
+	QList<SubWithoutEnd> subsWithoutEnd;
 
 	foreach (const QString &line, QString(txt).remove('\r').split('\n', QString::SkipEmptyParts))
 	{
@@ -116,10 +124,10 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 				if (use_mDVD_FPS && s == e && (s == 0 || s == 1))
 				{
 					use_mDVD_FPS = false;
-					double new_fps = atof(QByteArray(sub).replace('.', ',').data());
-					if (new_fps > 0.0 && new_fps < 1000.0)
+					const double newFPS = atof(QByteArray(sub).replace('.', ',').data());
+					if (newFPS > 0.0 && newFPS < 1000.0)
 					{
-						fps = new_fps;
+						fps = newFPS;
 						continue;
 					}
 				}
@@ -132,33 +140,33 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		{
 			if (duration > 0.0)
 			{
-				initOnce();
+				initOnce(ok, ass);
 				ass->addASSEvent(sub.replace('|', "\\n"), start, duration);
 			}
 			else
-				subs_without_end.push_back(Sub_Without_End(start, Sub_max_s, sub.replace('|', "\\n")));
+				subsWithoutEnd.append(SubWithoutEnd(start, Sub_max_s, sub.replace('|', "\\n")));
 		}
 	}
 
-	if (subs_without_end.size())
+	if (!subsWithoutEnd.isEmpty())
 	{
-		qSort(subs_without_end);
+		qSort(subsWithoutEnd);
 
-		for (int i = 0; i < subs_without_end.size()-1; ++i)
+		for (int i = 0; i < subsWithoutEnd.size()-1; ++i)
 		{
-			unsigned diff = subs_without_end[i+1] - subs_without_end[i];
+			const unsigned diff = subsWithoutEnd.at(i+1) - subsWithoutEnd.at(i);
 			if (!diff)
 			{
-				subs_without_end[i+1] += subs_without_end[i];
-				subs_without_end.removeAt(i);
+				subsWithoutEnd[i+1] += subsWithoutEnd.at(i);
+				subsWithoutEnd.removeAt(i);
 				--i;
 			}
 			else
-				subs_without_end[i].setDuration(diff);
+				subsWithoutEnd[i].setDuration(diff);
 		}
 
-		initOnce();
-		foreach (const Sub_Without_End &sub, subs_without_end)
+		initOnce(ok, ass);
+		foreach (const SubWithoutEnd &sub, subsWithoutEnd)
 			ass->addASSEvent(sub.sub, sub.start, sub.duration);
 	}
 
