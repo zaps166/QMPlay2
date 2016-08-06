@@ -60,7 +60,7 @@ QString Functions::Url(QString url, const QString &pth)
 #ifdef Q_OS_WIN
 	url.replace('\\', '/');
 #endif
-	QString scheme = getUrlScheme(url);
+	const QString scheme = getUrlScheme(url);
 #ifdef Q_OS_WIN
 	if (url.startsWith("file:///")) //lokalnie na dysku
 	{

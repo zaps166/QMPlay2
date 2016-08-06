@@ -666,7 +666,7 @@ void SettingsWidget::closeEvent(QCloseEvent *)
 
 void SettingsWidget::chStyle()
 {
-	QString newStyle = page1->styleBox->currentText().toLower();
+	const QString newStyle = page1->styleBox->currentText().toLower();
 	if (QApplication::style()->objectName() != newStyle)
 	{
 		QMPlay2Core.getSettings().set("Style", newStyle);
@@ -923,7 +923,7 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
+	const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
 	if (!dir.isEmpty())
 		page1->screenshotE->setText(dir);
 }

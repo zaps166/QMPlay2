@@ -243,14 +243,16 @@ void VideoDock::wheelEvent(QWheelEvent *e)
 {
 	if (e->orientation() == Qt::Vertical)
 	{
+		Settings &settings = QMPlay2Core.getSettings();
+		MenuBar::Player *player = QMPlay2GUI.menuBar->player;
 		if (e->buttons() & Qt::LeftButton)
-			e->delta() > 0 ? QMPlay2GUI.menuBar->player->zoomIn->trigger() : QMPlay2GUI.menuBar->player->zoomOut->trigger();
-		else if (e->buttons() == Qt::NoButton && QMPlay2Core.getSettings().getBool("WheelAction"))
+			e->delta() > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
+		else if (e->buttons() == Qt::NoButton && settings.getBool("WheelAction"))
 		{
-			if (QMPlay2Core.getSettings().getBool("WheelSeek"))
-				e->delta() > 0 ? QMPlay2GUI.menuBar->player->seekF->trigger() : QMPlay2GUI.menuBar->player->seekB->trigger();
-			else if (QMPlay2Core.getSettings().getBool("WheelVolume"))
-				e->delta() > 0 ? QMPlay2GUI.menuBar->player->volUp->trigger() : QMPlay2GUI.menuBar->player->volDown->trigger();
+			if (settings.getBool("WheelSeek"))
+				e->delta() > 0 ? player->seekF->trigger() : player->seekB->trigger();
+			else if (settings.getBool("WheelVolume"))
+				e->delta() > 0 ? player->volUp->trigger() : player->volDown->trigger();
 		}
 	}
 	DockWidget::wheelEvent(e);
