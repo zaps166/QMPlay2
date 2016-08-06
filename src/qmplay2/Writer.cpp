@@ -83,7 +83,7 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 						pluginsInstances[idx] = qMakePair(pluginInstance, mod);
 				}
 			}
-	for(pluginsList_t::const_iterator it = pluginsInstances.constBegin(), end = pluginsInstances.constEnd();
+	for (pluginsList_t::const_iterator it = pluginsInstances.constBegin(), end = pluginsInstances.constEnd();
 		it != end; ++it)
 	{
 		Module *module = it->first;
