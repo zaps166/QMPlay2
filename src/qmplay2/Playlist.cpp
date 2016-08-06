@@ -67,7 +67,7 @@ Playlist::~Playlist()
 
 Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
-	QString extension = Functions::fileExt(url).toLower();
+	const QString extension = Functions::fileExt(url).toLower();
 	if (extension.isEmpty())
 		return NULL;
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())
