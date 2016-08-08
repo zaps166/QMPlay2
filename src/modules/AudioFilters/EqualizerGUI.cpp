@@ -160,6 +160,8 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	connect(enabledB, SIGNAL(clicked(bool)), this, SLOT(enabled(bool)));
 
 	connect(dw, SIGNAL(visibilityChanged(bool)), enabledB, SLOT(setEnabled(bool)));
+	connect(dw, SIGNAL(visibilityChanged(bool)), presetsB, SLOT(setEnabled(bool)));
+	connect(dw, SIGNAL(visibilityChanged(bool)), showSettingsB, SLOT(setEnabled(bool)));
 	connect(dw, SIGNAL(visibilityChanged(bool)), maxB, SLOT(setEnabled(bool)));
 	connect(dw, SIGNAL(visibilityChanged(bool)), resetB, SLOT(setEnabled(bool)));
 	connect(dw, SIGNAL(visibilityChanged(bool)), minB, SLOT(setEnabled(bool)));
