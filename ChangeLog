@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.08.04:
+Changes in QMPlay2 build 16.08.10:
 	- add key shortcuts editor to Settings (thanks Zamarin Arthur for help),
 	- respect HTML tags in classic subtitles,
 	- use scroll area for equalizer sliders,
