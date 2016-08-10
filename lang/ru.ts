@@ -681,27 +681,27 @@ amp</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Add new preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить новую предустановку</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Предустановки</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>New preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая предустановка</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите имя новой предустановки</translation>
     </message>
 </context>
 <context>
@@ -875,7 +875,7 @@ amp</source>
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить комбинации клавиш</translation>
     </message>
 </context>
 <context>
@@ -927,7 +927,7 @@ amp</source>
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка комбинаций клавиш</translation>
     </message>
 </context>
 <context>
@@ -2439,11 +2439,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>ShortcutHandler</name>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Действие</translation>
     </message>
     <message>
         <source>Key sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Комбинация клавиш</translation>
     </message>
 </context>
 <context>
@@ -2613,7 +2613,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>The update has been downloaded</source>
-        <translation>Обновления загружено</translation>
+        <translation>Обновление загружено</translation>
     </message>
     <message>
         <source>Error creating update file</source>
