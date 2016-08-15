@@ -124,7 +124,7 @@ Playlist::Entries PLS::read()
 bool PLS::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
-	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
+	writer->write(QString("[playlist]\r\nNumberOfEntries=%1\r\n").arg(list.size()).toUtf8());
 	for (int i = 0; i < list.size(); i++)
 	{
 		const Playlist::Entry &entry = list[i];
@@ -139,22 +139,22 @@ bool PLS::write(const Entries &list)
 #endif
 		}
 		if (!url.isEmpty())
-			writer->write(QString("File" + idx + "=" + url + "\r\n").toUtf8());
+			writer->write(QString("File%1=%2\r\n").arg(idx, url).toUtf8());
 		if (!entry.name.isEmpty())
-			writer->write(QString("Title" + idx + "=" + QString(entry.name).replace('\n', '\001') + "\r\n").toUtf8());
+			writer->write(QString("Title%1=%2\r\n").arg(idx, QString(entry.name).replace('\n', '\001')).toUtf8());
 		if (entry.length >= 0.0)
 		{
-			writer->write(QString("Length" + idx + "=" + QString::number((qint32)(entry.length + 0.5)) + "\r\n").toUtf8());
-			writer->write(QString("QMPlay_length" + idx + "=" + QString::number(entry.length, 'g', 13) + "\r\n").toUtf8());
+			writer->write(QString("Length%1=%2\r\n").arg(idx).arg((qint32)(entry.length + 0.5)).toUtf8());
+			writer->write(QString("QMPlay_length%1=%2\r\n").arg(idx).arg(entry.length, 0, 'g', 13).toUtf8());
 		}
 		if (entry.selected)
-			writer->write(QString("QMPlay_sel" + idx + "=" + QString::number(entry.selected) + "\r\n").toUtf8());
+			writer->write(QString("QMPlay_sel%1=%2\r\n").arg(idx).arg(entry.selected).toUtf8());
 		if (entry.queue)
-			writer->write(QString("QMPlay_queue" + idx + "=" + QString::number(entry.queue) + "\r\n").toUtf8());
+			writer->write(QString("QMPlay_queue%1=%2\r\n").arg(idx).arg(entry.queue).toUtf8());
 		if (entry.GID)
-			writer->write(QString("QMPlay_GID" + idx + "=" + QString::number(entry.GID) + "\r\n").toUtf8());
+			writer->write(QString("QMPlay_GID%1=%2\r\n").arg(idx).arg(entry.GID).toUtf8());
 		if (entry.parent)
-			writer->write(QString("QMPlay_parent" + idx + "=" + QString::number(entry.parent) + "\r\n").toUtf8());
+			writer->write(QString("QMPlay_parent%1=%2\r\n").arg(idx).arg(entry.parent).toUtf8());
 	}
 	return true;
 }

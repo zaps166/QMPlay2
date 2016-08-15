@@ -73,11 +73,9 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	else
 		sizeLText = tr("Waiting for connection");
 
-	titleL = new QLabel;
-	titleL->setText(name);
+	titleL = new QLabel(name);
 
-	sizeL = new QLabel;
-	sizeL->setText(sizeLText);
+	sizeL = new QLabel(sizeLText);
 
 	iconL = new QLabel;
 	iconL->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
@@ -428,9 +426,9 @@ QImage DownloaderThread::getImage()
 {
 	if (!prefix.isEmpty())
 	{
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		foreach (const QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
-			QList<QMPlay2Extensions::AddressPrefix> addressPrefixList = QMPlay2Ext->addressPrefixList();
+			const QList<QMPlay2Extensions::AddressPrefix> addressPrefixList = QMPlay2Ext->addressPrefixList();
 			int idx = addressPrefixList.indexOf(prefix);
 			if (idx > -1)
 				return addressPrefixList[idx].img;

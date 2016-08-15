@@ -67,7 +67,9 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 		delete writer;
 		return NULL;
 	}
-	QVector<QPair<Module *, Module::Info> > pluginsInstances(modNames.count());
+
+	typedef QVector<QPair<Module *, Module::Info> > pluginsList_t;
+	pluginsList_t pluginsInstances(modNames.count());
 	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
 			if (mod.type == Module::WRITER && mod.extensions.contains(scheme))
@@ -81,10 +83,11 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 						pluginsInstances[idx] = qMakePair(pluginInstance, mod);
 				}
 			}
-	for (int i = 0; i < pluginsInstances.count(); i++)
+	for (pluginsList_t::const_iterator it = pluginsInstances.constBegin(), end = pluginsInstances.constEnd();
+		it != end; ++it)
 	{
-		Module *module = pluginsInstances[i].first;
-		Module::Info &moduleInfo = pluginsInstances[i].second;
+		Module *module = it->first;
+		const Module::Info &moduleInfo = it->second;
 		if (!module || moduleInfo.name.isEmpty())
 			continue;
 		writer = (Writer *)module->createInstance(moduleInfo.name);

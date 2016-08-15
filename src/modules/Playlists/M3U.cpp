@@ -92,7 +92,7 @@ bool M3U::write(const Entries &list)
 			if (isFile)
 				url.replace("/", "\\");
 #endif
-			writer->write(QString("#EXTINF:" + length + "," + QString(entry.name).replace('\n', '\001') + "\r\n" + url + "\r\n").toUtf8());
+			writer->write(QString("#EXTINF:%1,%2\r\n%3\r\n").arg(length, QString(entry.name).replace('\n', '\001'), url).toUtf8());
 		}
 	}
 	return true;

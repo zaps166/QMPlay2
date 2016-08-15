@@ -85,7 +85,7 @@ OggHelper::~OggHelper()
 		avio_close(io);
 }
 
-OggHelper::Chains OggHelper::getOggChains(bool &ok)
+OggHelper::Chains OggHelper::getOggChains(bool &ok) const
 {
 	Chains chains;
 

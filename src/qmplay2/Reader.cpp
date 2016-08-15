@@ -74,7 +74,7 @@ class QMPlay2FileReader : public Reader
 
 bool Reader::create(const QString &url, IOController<Reader> &reader, const QString &plugName)
 {
-	QString scheme = Functions::getUrlScheme(url);
+	const QString scheme = Functions::getUrlScheme(url);
 	if (reader.isAborted() || url.isEmpty() || scheme.isEmpty())
 		return false;
 	if (plugName.isEmpty() && scheme == "file" && reader.assign(new QMPlay2FileReader))

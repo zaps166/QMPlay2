@@ -212,7 +212,7 @@ void AddD::save()
 QString AddD::execAndGet()
 {
 	if (exec() == QDialog::Accepted)
-		return "{samplerate=" + QString::number(getSampleRate()) + "&freqs=" + getFreqs() + "}";
+		return QString("{samplerate=%1&freqs=%2}").arg(getSampleRate()).arg(getFreqs());
 	return QString();
 }
 

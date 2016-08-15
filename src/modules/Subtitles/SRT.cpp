@@ -38,7 +38,7 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
 		int idx = entry.indexOf('\n');
 		if (idx > -1)
 		{
-			QStringList time = entry.mid(0, idx).split(" --> ");
+			const QStringList time = entry.mid(0, idx).split(" --> ");
 			if (time.size() == 2)
 			{
 				double time_double[2] = {-1.0, -1.0};

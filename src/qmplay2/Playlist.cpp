@@ -55,7 +55,7 @@ QString Playlist::name(const QString &url)
 QStringList Playlist::extensions()
 {
 	QStringList extensions;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
+	foreach (const Module *module, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if (mod.type == Module::PLAYLIST)
 				extensions += mod.extensions;
@@ -67,7 +67,7 @@ Playlist::~Playlist()
 
 Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
-	QString extension = Functions::fileExt(url).toLower();
+	const QString extension = Functions::fileExt(url).toLower();
 	if (extension.isEmpty())
 		return NULL;
 	foreach (Module *module, QMPlay2Core.getPluginsInstance())

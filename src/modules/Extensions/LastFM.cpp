@@ -18,10 +18,10 @@
 
 #include <LastFM.hpp>
 
-static const char audioScrobbler2URL[] = "https://ws.audioscrobbler.com/2.0";
-static const char api_key[] = "b1165c9688c2fcf29fc74c2ab62ffd90";
-static const char secret[]  = "e36ce24a59f45514daad8fccec294c34";
-static const int scrobbleSec = 5;
+#define audioScrobbler2URL "https://ws.audioscrobbler.com/2.0"
+#define api_key "b1165c9688c2fcf29fc74c2ab62ffd90"
+#define secret "e36ce24a59f45514daad8fccec294c34"
+#define scrobbleSec 5
 
 Q_DECLARE_METATYPE(LastFM::Scrobble)
 
@@ -94,11 +94,10 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 
 		const QString trackOrAlbum = (albumEncoded.isEmpty() ? "track" : "album");
 
-		QString url = audioScrobbler2URL;
-		url += QString("/?method=%1.getInfo").arg(trackOrAlbum);
-		url += QString("&api_key=%1").arg(api_key);
-		url += QString("&artist=%1").arg(artistEncoded);
-		url += QString("&%1=%2").arg(trackOrAlbum).arg(albumEncoded.isEmpty() ? titleEncoded : albumEncoded);
+		const QString url = QString(audioScrobbler2URL "/?method=%1.getInfo&api_key=%2&artist=%3&%4=%5").arg(
+				trackOrAlbum, api_key, artistEncoded,
+				trackOrAlbum, (albumEncoded.isEmpty() ? titleEncoded : albumEncoded)
+		);
 
 		if (coverReply)
 		{
@@ -115,12 +114,12 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 
 void LastFM::login()
 {
-	static const QString getSessionURL = audioScrobbler2URL + QString("/?method=auth.getmobilesession&username=%1&authToken=%2&api_key=%3&api_sig=%4");
+	static const QString getSessionURL = QString(audioScrobbler2URL "/?method=auth.getmobilesession&username=%1&authToken=%2&api_key=%3&api_sig=%4");
 	if (!loginReply && !user.isEmpty() && md5pass.length() == 32)
 	{
 		const QString auth_token = QCryptographicHash::hash(user.toUtf8() + md5pass.toUtf8(), QCryptographicHash::Md5).toHex();
-		const QString api_sig = QCryptographicHash::hash(QString("api_key%1authToken%2methodauth.getmobilesessionusername%3%4").arg(api_key).arg(auth_token).arg(user).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		loginReply = net.get(QNetworkRequest(getSessionURL.arg(user).arg(auth_token).arg(api_key).arg(api_sig)));
+		const QString api_sig = QCryptographicHash::hash(QString("api_key%1authToken%2methodauth.getmobilesessionusername%3%4").arg(api_key, auth_token, user, secret).toUtf8(), QCryptographicHash::Md5).toHex();
+		loginReply = net.get(QNetworkRequest(getSessionURL.arg(user, auth_token, api_key, api_sig)));
 		loginReply->ignoreSslErrors();
 		connect(loginReply, SIGNAL(finished()), this, SLOT(loginFinished()));
 	}

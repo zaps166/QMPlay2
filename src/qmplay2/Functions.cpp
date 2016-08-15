@@ -60,7 +60,7 @@ QString Functions::Url(QString url, const QString &pth)
 #ifdef Q_OS_WIN
 	url.replace('\\', '/');
 #endif
-	QString scheme = getUrlScheme(url);
+	const QString scheme = getUrlScheme(url);
 #ifdef Q_OS_WIN
 	if (url.startsWith("file:///")) //lokalnie na dysku
 	{
@@ -120,11 +120,7 @@ QString Functions::timeToStr(double t, bool space)
 	if (t < 0.0)
 		return QString();
 
-	QString separator;
-	if (space)
-		separator = " : ";
-	else
-		separator = ":";
+	const QString separator = (space ? " : " : ":");
 
 	int h, m, s;
 	getHMS(t + 0.5, h, m, s);
@@ -471,7 +467,7 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 		const QString extension = fileExt(entireUrl).toLower();
 		if (demuxersInfo.isEmpty())
 		{
-			foreach (Module *module, QMPlay2Core.getPluginsInstance())
+			foreach (const Module *module, QMPlay2Core.getPluginsInstance())
 				foreach (const Module::Info &mod, module->getModulesInfo())
 					if (mod.type == Module::DEMUXER && (mod.name == scheme || mod.extensions.contains(extension)))
 					{
