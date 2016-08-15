@@ -611,7 +611,7 @@ void MainWidget::visualizationFullScreen()
 }
 void MainWidget::hideAllExtensions()
 {
-	foreach(QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 			dw->hide();
 }
@@ -1304,7 +1304,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 			showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
 			restoreState(fullScreenDockWidgetState);
 
-			QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
+			const QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
 			bool reloadQMPlay2Extensions = false;
 			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 				if (DockWidget *dw = QMPlay2Ext->getDockWidget())

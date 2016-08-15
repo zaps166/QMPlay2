@@ -61,7 +61,7 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 	else
 	{
 		foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-			foreach (Module::Info moduleInfo, pluginInstance->getModulesInfo())
+			foreach (const Module::Info &moduleInfo, pluginInstance->getModulesInfo())
 				if ((moduleInfo.type & 0xF) == Module::WRITER && (moduleInfo.type & Module::VIDEOHWFILTER))
 					pluginsInstances += qMakePair(pluginInstance, moduleInfo);
 	}

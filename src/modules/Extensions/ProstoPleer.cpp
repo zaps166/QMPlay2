@@ -263,7 +263,7 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 			{
 				QTextDocument txtDoc;
 				txtDoc.setHtml(replyData.mid(idx1 + 1, idx2 - idx1 - 1));
-				QStringList suggestions = txtDoc.toPlainText().remove('"').split(',');
+				const QStringList suggestions = txtDoc.toPlainText().remove('"').split(',');
 				if (!suggestions.isEmpty())
 				{
 					((QStringListModel *)completer->model())->setStringList(suggestions);
@@ -299,7 +299,7 @@ void ProstoPleerW::netFinished(QNetworkReply *reply)
 				QString bitrate = regexp.cap(6).toLower().remove(' ').replace('/', 'p');
 				if (bitrate == "vbr" && time > 0)
 				{
-					QStringList fSizeList = regexp.cap(7).toLower().split(' ');
+					const QStringList fSizeList = regexp.cap(7).toLower().split(' ');
 					if (fSizeList.count() >= 2 && fSizeList[1] == "mb")
 					{
 						float fSize = fSizeList[0].toFloat();
@@ -362,7 +362,7 @@ DockWidget *ProstoPleer::getDockWidget()
 	return w.dw;
 }
 
-QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img)
+QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img) const
 {
 	return QList<AddressPrefix>() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
 }

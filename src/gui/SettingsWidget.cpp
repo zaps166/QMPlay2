@@ -351,7 +351,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->proxyUserE->setText(QMPSettings.getString("Proxy/User"));
 		page1->proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 
-		QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
+		const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
 		page1->clearCoversCache->setIcon(viewRefresh);
 		connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
 		page1->resetSettingsB->setIcon(viewRefresh);
@@ -455,7 +455,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 			QListWidgetItem *tWI = new QListWidgetItem(module->name());
 			tWI->setData(Qt::UserRole, qVariantFromValue((void *)module));
 			QString toolTip = tr("Contains") + ":";
-			foreach (Module::Info mod, module->getModulesInfo(true))
+			foreach (const Module::Info &mod, module->getModulesInfo(true))
 			{
 				toolTip += "<p>&nbsp;&nbsp;&nbsp;&nbsp;";
 				if (!mod.imgPath().isEmpty())
@@ -666,7 +666,7 @@ void SettingsWidget::closeEvent(QCloseEvent *)
 
 void SettingsWidget::chStyle()
 {
-	QString newStyle = page1->styleBox->currentText().toLower();
+	const QString newStyle = page1->styleBox->currentText().toLower();
 	if (QApplication::style()->objectName() != newStyle)
 	{
 		QMPlay2Core.getSettings().set("Style", newStyle);
@@ -923,7 +923,7 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
+	const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
 	if (!dir.isEmpty())
 		page1->screenshotE->setText(dir);
 }

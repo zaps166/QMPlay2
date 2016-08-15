@@ -87,7 +87,7 @@ bool PCM::read(Packet &decoded, int &idx)
 
 	decoded.ts = (reader->pos() - offset) / (double)bytes[fmt] / chn / srate;
 
-	QByteArray dataBA = reader->read(chn * bytes[fmt] * 256);
+	const QByteArray dataBA = reader->read(chn * bytes[fmt] * 256);
 	const int samples_with_channels = dataBA.size() / bytes[fmt];
 	decoded.resize(samples_with_channels * sizeof(float));
 	float *decoded_data = (float *)decoded.data();

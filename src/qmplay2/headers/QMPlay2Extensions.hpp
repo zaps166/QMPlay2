@@ -40,7 +40,8 @@ public:
 	{
 	public:
 		inline AddressPrefix(const QString &prefix, const QImage &img = QImage()) :
-			prefix(prefix), img(img) {}
+			prefix(prefix), img(img)
+		{}
 
 		inline bool operator ==(const AddressPrefix &other)
 		{
@@ -57,7 +58,7 @@ public:
 
 	virtual DockWidget *getDockWidget();
 
-	virtual QList<AddressPrefix> addressPrefixList(bool img = true);
+	virtual QList<AddressPrefix> addressPrefixList(bool img = true) const;
 	virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl);
 
 	virtual QAction *getAction(const QString &name, double length, const QString &url, const QString &prefix = QString(), const QString &param = QString());

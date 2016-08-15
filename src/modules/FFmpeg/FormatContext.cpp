@@ -194,7 +194,7 @@ QList<ChapterInfo> FormatContext::getChapters() const
 	QList<ChapterInfo> chapters;
 	for (unsigned i = 0; i < formatCtx->nb_chapters; i++)
 	{
-		AVChapter &chapter = *formatCtx->chapters[i];
+		const AVChapter &chapter = *formatCtx->chapters[i];
 		ChapterInfo chapterInfo(chapter.start * chapter.time_base.num / (double)chapter.time_base.den, chapter.end * chapter.time_base.num / (double)chapter.time_base.den);
 		if (AVDictionaryEntry *avtag = av_dict_get(chapter.metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX))
 			chapterInfo.title = avtag->value;
@@ -372,7 +372,7 @@ int FormatContext::bitrate() const
 }
 QByteArray FormatContext::image(bool forceCopy) const
 {
-	foreach (AVStream *stream, streams)
+	foreach (const AVStream *stream, streams)
 		if (stream->disposition & AV_DISPOSITION_ATTACHED_PIC)
 			return forceCopy ? QByteArray((const char *)stream->attached_pic.data, stream->attached_pic.size) : QByteArray::fromRawData((const char *)stream->attached_pic.data, stream->attached_pic.size);
 	return QByteArray();
@@ -761,7 +761,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
 	StreamInfo *streamInfo = new StreamInfo;
 
-	if (AVCodec *codec = avcodec_find_decoder(codecParams(stream)->codec_id))
+	if (const AVCodec *codec = avcodec_find_decoder(codecParams(stream)->codec_id))
 		streamInfo->codec_name = codec->name;
 
 	streamInfo->must_decode = true;

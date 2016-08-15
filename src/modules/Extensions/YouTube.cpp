@@ -59,7 +59,7 @@ static inline QUrl getAutocompleteUrl(const QString &text)
 }
 static inline QString getSubsUrl(const QString &langCode, const QString &vidId)
 {
-	return QString(YOUTUBE_URL "/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode).arg(vidId);
+	return QString(YOUTUBE_URL "/api/timedtext?lang=%1&fmt=vtt&v=%2").arg(langCode, vidId);
 }
 
 static inline QString getFileExtension(const QString &ItagName)
@@ -303,6 +303,35 @@ void ResultsYoutube::removeTmpFile()
 		fileToRemove.clear();
 	}
 }
+void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
+{
+	if (!tWI)
+		return;
+	if (!isPlaylist(tWI))
+		emit QMPlay2Core.processParam(param, getQMPlay2Url(tWI));
+	else
+	{
+		const QStringList ytPlaylist = tWI->data(0, Qt::UserRole + 1).toStringList();
+		Playlist::Entries entries;
+		for (int i = 0; i < ytPlaylist.count() ; i += 2)
+		{
+			Playlist::Entry entry;
+			entry.name = ytPlaylist[i+1];
+			entry.url = "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}";
+			entries += entry;
+		}
+		if (!entries.isEmpty())
+		{
+			const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(tWI->text(0)) + ".pls";
+			removeTmpFile();
+			if (Playlist::write(entries, "file://" + fileName))
+			{
+				emit QMPlay2Core.processParam(param, fileName);
+				fileToRemove = fileName;
+			}
+		}
+	}
+}
 
 void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 {
@@ -350,35 +379,6 @@ void ResultsYoutube::playCurrentEntry()
 void ResultsYoutube::playEntry(QTreeWidgetItem *tWI)
 {
 	playOrEnqueue("open", tWI);
-}
-void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
-{
-	if (!tWI)
-		return;
-	if (!isPlaylist(tWI))
-		emit QMPlay2Core.processParam(param, getQMPlay2Url(tWI));
-	else
-	{
-		const QStringList ytPlaylist = tWI->data(0, Qt::UserRole + 1).toStringList();
-		Playlist::Entries entries;
-		for (int i = 0; i < ytPlaylist.count() ; i += 2)
-		{
-			Playlist::Entry entry;
-			entry.name = ytPlaylist[i+1];
-			entry.url = "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}";
-			entries += entry;
-		}
-		if (!entries.isEmpty())
-		{
-			const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(tWI->text(0)) + ".pls";
-			removeTmpFile();
-			if (Playlist::write(entries, "file://" + fileName))
-			{
-				emit QMPlay2Core.processParam(param, fileName);
-				fileToRemove = fileName;
-			}
-		}
-	}
 }
 
 void ResultsYoutube::openPage()
@@ -820,9 +820,10 @@ void YouTubeW::setSearchResults(QString data)
 			tWI->setText(2, user);
 
 			tWI->setToolTip(0, QString("%1: %2\n%3: %4\n%5: %6")
-				.arg(resultsW->headerItem()->text(0)).arg(tWI->text(0))
-				.arg(!isPlaylist ? resultsW->headerItem()->text(1) : tr("Playlist")).arg(!isPlaylist ? tWI->text(1) : tr("yes"))
-				.arg(resultsW->headerItem()->text(2)).arg(tWI->text(2))
+				.arg(resultsW->headerItem()->text(0), tWI->text(0),
+				!isPlaylist ? resultsW->headerItem()->text(1) : tr("Playlist"),
+				!isPlaylist ? tWI->text(1) : tr("yes"),
+				resultsW->headerItem()->text(2), tWI->text(2))
 			);
 
 			tWI->setData(0, Qt::UserRole, videoInfoLink);
@@ -1294,7 +1295,7 @@ DockWidget *YouTube::getDockWidget()
 	return w.dw;
 }
 
-QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img)
+QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
 	return QList<AddressPrefix>() << AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()) << AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage());
 }

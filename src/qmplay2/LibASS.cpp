@@ -306,6 +306,7 @@ void LibASS::setASSStyle()
 	for (int i = 0; i < ass_sub_track->n_styles; i++)
 	{
 		ASS_Style &style = ass_sub_track->styles[i];
+		ass_style *style_copy = ass_sub_styles_copy.at(i);
 		if (colorsAndBorders)
 		{
 			style.PrimaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"));
@@ -318,13 +319,13 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			style.PrimaryColour = ass_sub_styles_copy[i]->PrimaryColour;
-			style.SecondaryColour = ass_sub_styles_copy[i]->SecondaryColour;
-			style.OutlineColour = ass_sub_styles_copy[i]->OutlineColour;
-			style.BackColour = ass_sub_styles_copy[i]->BackColour;
-			style.BorderStyle = ass_sub_styles_copy[i]->BorderStyle;
-			style.Outline = ass_sub_styles_copy[i]->Outline;
-			style.Shadow = ass_sub_styles_copy[i]->Shadow;
+			style.PrimaryColour = style_copy->PrimaryColour;
+			style.SecondaryColour = style_copy->SecondaryColour;
+			style.OutlineColour = style_copy->OutlineColour;
+			style.BackColour = style_copy->BackColour;
+			style.BorderStyle = style_copy->BorderStyle;
+			style.Outline = style_copy->Outline;
+			style.Shadow = style_copy->Shadow;
 		}
 		if (marginsAndAlignment)
 		{
@@ -336,11 +337,11 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			style.MarginL = ass_sub_styles_copy[i]->MarginL;
-			style.MarginR = ass_sub_styles_copy[i]->MarginR;
-			style.MarginV = ass_sub_styles_copy[i]->MarginV;
-			style.Alignment = ass_sub_styles_copy[i]->Alignment;
-			style.Angle = ass_sub_styles_copy[i]->Angle;
+			style.MarginL = style_copy->MarginL;
+			style.MarginR = style_copy->MarginR;
+			style.MarginV = style_copy->MarginV;
+			style.Alignment = style_copy->Alignment;
+			style.Angle = style_copy->Angle;
 		}
 		if (style.FontName)
 			free(style.FontName);
@@ -354,18 +355,18 @@ void LibASS::setASSStyle()
 		}
 		else
 		{
-			if (ass_sub_styles_copy[i]->FontName)
-				style.FontName = strdup(ass_sub_styles_copy[i]->FontName);
+			if (style_copy->FontName)
+				style.FontName = strdup(style_copy->FontName);
 			else
 				style.FontName = NULL;
-			style.FontSize = ass_sub_styles_copy[i]->FontSize;
-			style.Spacing = ass_sub_styles_copy[i]->Spacing;
-			style.ScaleX = ass_sub_styles_copy[i]->ScaleX;
-			style.ScaleY = ass_sub_styles_copy[i]->ScaleY;
-			style.Bold = ass_sub_styles_copy[i]->Bold;
-			style.Italic = ass_sub_styles_copy[i]->Italic;
-			style.Underline = ass_sub_styles_copy[i]->Underline;
-			style.StrikeOut = ass_sub_styles_copy[i]->StrikeOut;
+			style.FontSize = style_copy->FontSize;
+			style.Spacing = style_copy->Spacing;
+			style.ScaleX = style_copy->ScaleX;
+			style.ScaleY = style_copy->ScaleY;
+			style.Bold = style_copy->Bold;
+			style.Italic = style_copy->Italic;
+			style.Underline = style_copy->Underline;
+			style.StrikeOut = style_copy->StrikeOut;
 		}
 	}
 }

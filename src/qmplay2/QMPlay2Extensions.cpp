@@ -50,7 +50,7 @@ DockWidget *QMPlay2Extensions::getDockWidget()
 	return NULL;
 }
 
-QList<QMPlay2Extensions::AddressPrefix> QMPlay2Extensions::addressPrefixList(bool img)
+QList<QMPlay2Extensions::AddressPrefix> QMPlay2Extensions::addressPrefixList(bool img) const
 {
 	Q_UNUSED(img)
 	return QList<AddressPrefix>();
