@@ -394,13 +394,15 @@ int main(int argc, char *argv[])
 #endif
 	QCoreApplication::setApplicationName("QMPlay2");
 
+	QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
+
 	QStringList arguments = QCoreApplication::arguments();
 	arguments.removeFirst();
 	const bool help = arguments.contains("--help") || arguments.contains("-h");
 	if (!help)
 	{
 		QLocalSocket socket;
-		socket.connectToServer(QMPlay2GUI.getPipe(), QIODevice::WriteOnly);
+		socket.connectToServer(qmplay2Gui.getPipe(), QIODevice::WriteOnly);
 
 		parseArguments(arguments);
 
@@ -414,9 +416,9 @@ int main(int argc, char *argv[])
 			socket.disconnectFromServer();
 		}
 #ifndef Q_OS_WIN
-		else if (QFile::exists(QMPlay2GUI.getPipe()))
+		else if (QFile::exists(qmplay2Gui.getPipe()))
 		{
-			QFile::remove(QMPlay2GUI.getPipe());
+			QFile::remove(qmplay2Gui.getPipe());
 			QMPArguments.first += "noplay";
 			QMPArguments.second += QString();
 		}
@@ -514,24 +516,24 @@ int main(int argc, char *argv[])
 			break;
 		}
 
-		QMPlay2GUI.loadIcons();
+		qmplay2Gui.loadIcons();
 
-		QMPlay2GUI.pipe = new QLocalServer;
+		qmplay2Gui.pipe = new QLocalServer;
 		if
 		(
 #ifdef Q_OS_WIN
-			WaitNamedPipeA(QMPlay2GUI.getPipe().toLocal8Bit(), NMPWAIT_USE_DEFAULT_WAIT) ||
+			WaitNamedPipeA(qmplay2Gui.getPipe().toLocal8Bit(), NMPWAIT_USE_DEFAULT_WAIT) ||
 #endif
-			!QMPlay2GUI.pipe->listen(QMPlay2GUI.getPipe())
+			!qmplay2Gui.pipe->listen(qmplay2Gui.getPipe())
 		)
 		{
-			delete QMPlay2GUI.pipe;
-			QMPlay2GUI.pipe = NULL;
+			delete qmplay2Gui.pipe;
+			qmplay2Gui.pipe = NULL;
 			if (settings.getBool("AllowOnlyOneInstance"))
 			{
 				QMPlay2Core.quit();
 				QLocalSocket socket;
-				socket.connectToServer(QMPlay2GUI.getPipe(), QIODevice::WriteOnly);
+				socket.connectToServer(qmplay2Gui.getPipe(), QIODevice::WriteOnly);
 				if (socket.waitForConnected(1000))
 				{
 					socket.write(QByteArray("show\t") + '\0');
@@ -543,7 +545,7 @@ int main(int argc, char *argv[])
 		}
 
 		QApplication::setWindowIcon(QMPlay2Core.getIconFromTheme("QMPlay2", QMPlay2Core.getQMPlay2Pixmap()));
-		QMPlay2GUI.setStyle();
+		qmplay2Gui.setStyle();
 
 #ifdef UPDATER
 		QString UpdateFile = settings.getString("UpdateFile");
@@ -562,7 +564,7 @@ int main(int argc, char *argv[])
 				const QString message = QObject::tr("QMPlay2 hasn't been updated. Do you want to run the update (recommended)?");
 				if (QMessageBox::question(NULL, QCoreApplication::applicationName(), message, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 				{
-					QMPlay2GUI.runUpdate(UpdateFile);
+					qmplay2Gui.runUpdate(UpdateFile);
 					QMPlay2Core.quit();
 					break;
 				}
@@ -572,7 +574,7 @@ int main(int argc, char *argv[])
 		}
 		else if (QFileInfo(UpdateFile).size())
 		{
-			QMPlay2GUI.runUpdate(UpdateFile);
+			qmplay2Gui.runUpdate(UpdateFile);
 			QMPlay2Core.quit();
 			break;
 		}
@@ -581,18 +583,18 @@ int main(int argc, char *argv[])
 
 		lastVer.clear();
 
-		QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = false;
+		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = false;
 		new MainWidget(QMPArguments);
 		QCoreApplication::exec();
 
 		const QString settingsDir = QMPlay2Core.getSettingsDir();
 		QMPlay2Core.quit();
-		if (QMPlay2GUI.removeSettings)
+		if (qmplay2Gui.removeSettings)
 			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
 				QFile::remove(settingsDir + fName);
 
-		delete QMPlay2GUI.pipe;
-	} while (QMPlay2GUI.restartApp);
+		delete qmplay2Gui.pipe;
+	} while (qmplay2Gui.restartApp);
 
 #ifdef Q_OS_WIN
 	UnhookWindowsHookEx(keyboardHook);
