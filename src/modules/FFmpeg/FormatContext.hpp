@@ -96,7 +96,7 @@ private:
 	bool isOneStreamOgg;
 	bool forceCopy;
 
-	int lastErr, errFromSeek;
+	int invalErrCount, errFromSeek;
 	bool maybeHasFrame;
 
 #if LIBAVFORMAT_VERSION_MAJOR <= 55

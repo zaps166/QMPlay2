@@ -149,7 +149,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	isPaused(false), isAborted(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
-	lastErr(0), errFromSeek(0),
+	invalErrCount(0), errFromSeek(0),
 	maybeHasFrame(false),
 	avcodec_mutex(avcodec_mutex)
 {}
@@ -454,18 +454,19 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		ret = errFromSeek;
 		errFromSeek = 0;
 	}
+
 	if (ret == AVERROR_INVALIDDATA)
 	{
-		if (lastErr != AVERROR_INVALIDDATA)
+		if (invalErrCount < 1000)
 		{
-			lastErr = AVERROR_INVALIDDATA;
+			++invalErrCount;
 			return true;
 		}
 		isError = true;
 		return false;
 	}
 	else
-		lastErr = 0;
+		invalErrCount = 0;
 	if (ret == AVERROR(EAGAIN))
 		return true;
 	else if (ret)
@@ -473,6 +474,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		isError = true;
 		return false;
 	}
+
 	const int ff_idx = packet->stream_index;
 	if (ff_idx >= streams.count())
 	{
