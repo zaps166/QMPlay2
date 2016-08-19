@@ -258,7 +258,20 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 	{
 		if (ioCtrl.isAborted())
 			break;
-		QString url = Functions::Url(urls.at(i)), name;
+
+		QString url, entryName;
+		{
+			//Get the default entry name - it'll be used if not exists in stream
+			QString addressPrefixName;
+			Functions::splitPrefixAndUrlIfHasPluginPrefix(urls.at(i), &addressPrefixName, &url, &entryName);
+			if (addressPrefixName != "QMPlay2EntryName")
+			{
+				url = Functions::Url(urls.at(i));
+				entryName.clear();
+			}
+		}
+
+		QString name;
 		const Playlist::Entries entries = Playlist::read(url, &name);
 		if (!name.isEmpty()) //Loading playlist
 		{
@@ -357,7 +370,12 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				if (hasOneEntry)
 				{
 					if (entry.name.isEmpty())
-						entry.name = Functions::fileName(url, false);
+					{
+						if (entryName.isEmpty())
+							entry.name = Functions::fileName(url, false);
+						else
+							entry.name = entryName;
+					}
 					currentItem = pLW.newEntry(entry, currentItem, demuxersInfo);
 					if (!firstItem)
 						firstItem = currentItem;

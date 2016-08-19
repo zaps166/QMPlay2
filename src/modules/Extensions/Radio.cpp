@@ -148,7 +148,7 @@ void Radio::openLink()
 		{
 			const QString url = lWI->data(Qt::UserRole).toString();
 			if (!url.isEmpty())
-				emit QMPlay2Core.processParam("open", url);
+				emit QMPlay2Core.processParam("open", "QMPlay2EntryName://{" + url + "}" + lWI->text());
 		}
 	}
 }

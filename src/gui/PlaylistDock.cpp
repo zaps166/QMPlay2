@@ -138,13 +138,22 @@ void PlaylistDock::addAndPlay(const QString &_url)
 		return;
 	/* Jeżeli wpis istnieje, znajdzie go i zacznie odtwarzać */
 	const QList<QTreeWidgetItem *> items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
-	const QString url = Functions::Url(_url);
+
+	QString url = Functions::Url(_url);
+	{
+		//Extract real URL if it also contains default entry name
+		QString addressPrefixName, url2;
+		Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &addressPrefixName, &url2, NULL);
+		if (addressPrefixName == "QMPlay2EntryName")
+			url = url2;
+	}
+
 	foreach (QTreeWidgetItem *item, items)
 	{
 		QString itemUrl = item->data(0, Qt::UserRole).toString();
-		bool urlMatches = itemUrl == url;
+		bool urlMatches = (itemUrl == url);
 		if (!urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix(itemUrl, NULL, &itemUrl, NULL))
-			urlMatches = itemUrl == url;
+			urlMatches = (itemUrl == url); //E.g. for chiptunes without group
 		if (urlMatches)
 		{
 			playAfterAdd = true;

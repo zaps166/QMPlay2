@@ -95,7 +95,6 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	}
 	else
 	{
-		nameE->setReadOnly(true);
 		layout.addWidget(nameE, row++, 0, 1, 1);
 
 		addrB = new AddressBox(Qt::Horizontal, url);
@@ -207,6 +206,8 @@ void EntryProperties::accept()
 		const QString scheme = Functions::getUrlScheme(url);
 		if (addrB->currentPrefixType() == AddressBox::DIRECT && (scheme.isEmpty() || scheme.length() == 1 /*Drive letter in Windows*/))
 			url.prepend("file://");
+		if (!url.startsWith("file://") && !nameE->text().simplified().isEmpty())
+			tWI->setText(0, nameE->text());
 		tWI->setData(0, Qt::UserRole, url);
 #ifdef QMPlay2_TagEditor
 		if (tagEditor->isEnabled() && !tagEditor->save())
