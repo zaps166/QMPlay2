@@ -103,11 +103,13 @@ void UpdateEntryThr::run()
 		else
 			iu.updateImg = false;
 
-		if (updateTitle)
+		//Don't update title for network streams if title exists and new title doesn't exists
+		if (updateTitle && (displayOnlyFileName || url.startsWith("file://") || !itu.name.isEmpty()))
 		{
-			iu.name = itu.name;
-			if (iu.name.isEmpty())
+			if (displayOnlyFileName || itu.name.isEmpty())
 				iu.name = Functions::fileName(url, false);
+			else
+				iu.name = itu.name;
 		}
 
 		if (qFuzzyCompare(itu.length, itu.oldLength))
@@ -145,6 +147,8 @@ void UpdateEntryThr::updateItem(ItemUpdated iu)
 		iu.item->setText(2, Functions::timeToStr(iu.length));
 		iu.item->setData(2, Qt::UserRole, iu.length);
 	}
+	if (iu.item == pLW.currentPlaying)
+		QMetaObject::invokeMethod(QMPlay2GUI.mainW, "updateWindowTitle", Q_ARG(QString, iu.item->text(0)));
 }
 void UpdateEntryThr::finished()
 {
