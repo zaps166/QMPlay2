@@ -30,12 +30,18 @@ set(Inputs_RESOURCES
     icons.qrc
 )
 
+if(USE_QT5)
+    qt5_add_resources(Inputs_RESOURCES_RCC ${Inputs_RESOURCES})
+else()
+    qt4_add_resources(Inputs_RESOURCES_RCC ${Inputs_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${Inputs_HDR}
     ${Inputs_SRC}
-    ${Inputs_RESOURCES}
+    ${Inputs_RESOURCES_RCC}
 )
 
 if(USE_QT5)

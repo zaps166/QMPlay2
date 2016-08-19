@@ -30,12 +30,18 @@ set(ALSA_RESOURCES
 
 find_package(ALSA REQUIRED)
 
+if(USE_QT5)
+    qt5_add_resources(ALSA_RESOURCES_RCC ${ALSA_RESOURCES})
+else()
+    qt4_add_resources(ALSA_RESOURCES_RCC ${ALSA_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers ${ALSA_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} MODULE
     ${ALSA_HDR}
     ${ALSA_SRC}
-    ${ALSA_RESOURCES}
+    ${ALSA_RESOURCES_RCC}
 )
 
 if(USE_QT5)

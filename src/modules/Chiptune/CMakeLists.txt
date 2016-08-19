@@ -49,12 +49,18 @@ if(USE_CHIPTUNE_SID)
     list(APPEND Chiptune_LIBS ${LIBSIDPLAYFP_LIBRARIES})
 endif()
 
+if(USE_QT5)
+    qt5_add_resources(Chiptune_RESOURCES_RCC ${Chiptune_RESOURCES})
+else()
+    qt4_add_resources(Chiptune_RESOURCES_RCC ${Chiptune_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers)
 
 add_library(${PROJECT_NAME} MODULE
     ${Chiptune_HDR}
     ${Chiptune_SRC}
-    ${Chiptune_RESOURCES}
+    ${Chiptune_RESOURCES_RCC}
 )
 
 if(USE_QT5)

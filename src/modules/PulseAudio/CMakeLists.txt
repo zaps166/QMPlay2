@@ -31,12 +31,18 @@ set(PulseAudio_RESOURCES
 pkg_check_modules(LIBPULSE libpulse-simple REQUIRED)
 link_directories(${LIBPULSE_LIBRARY_DIRS})
 
+if(USE_QT5)
+    qt5_add_resources(PulseAudio_RESOURCES_RCC ${PulseAudio_RESOURCES})
+else()
+    qt4_add_resources(PulseAudio_RESOURCES_RCC ${PulseAudio_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers ${LIBPULSE_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${PulseAudio_HDR}
     ${PulseAudio_SRC}
-    ${PulseAudio_RESOURCES}
+    ${PulseAudio_RESOURCES_RCC}
 )
 
 if(USE_QT5)

@@ -30,10 +30,16 @@ set(Subtitles_RESOURCES
 
 include_directories(../../qmplay2/headers)
 
+if(USE_QT5)
+    qt5_add_resources(Subtitles_RESOURCES_RCC ${Subtitles_RESOURCES})
+else()
+    qt4_add_resources(Subtitles_RESOURCES_RCC ${Subtitles_RESOURCES})
+endif()
+
 add_library(${PROJECT_NAME} MODULE
     ${Subtitles_HDR}
     ${Subtitles_SRC}
-    ${Subtitles_RESOURCES}
+    ${Subtitles_RESOURCES_RCC}
 )
 
 if(USE_QT5)

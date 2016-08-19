@@ -37,12 +37,18 @@ set(VideoFilters_RESOURCES
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(${LIBAVUTIL_LIBRARY_DIRS})
 
+if(USE_QT5)
+    qt5_add_resources(VideoFilters_RESOURCES_RCC ${VideoFilters_RESOURCES})
+else()
+    qt4_add_resources(VideoFilters_RESOURCES_RCC ${VideoFilters_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${VideoFilters_HDR}
     ${VideoFilters_SRC}
-    ${VideoFilters_RESOURCES}
+    ${VideoFilters_RESOURCES_RCC}
 )
 
 if(USE_QT5)

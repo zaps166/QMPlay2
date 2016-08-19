@@ -95,6 +95,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
     endif()
 endif()
 
+if(USE_QT5)
+    qt5_add_resources(FFmpeg_RESOURCES_RCC ${FFmpeg_RESOURCES})
+else()
+    qt4_add_resources(FFmpeg_RESOURCES_RCC ${FFmpeg_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers
     ${LIBAVFORMAT_INCLUDE_DIRS}
     ${LIBAVCODEC_INCLUDE_DIRS}
@@ -105,7 +111,7 @@ include_directories(../../qmplay2/headers
 add_library(${PROJECT_NAME} MODULE
     ${FFmpeg_HDR}
     ${FFmpeg_SRC}
-    ${FFmpeg_RESOURCES}
+    ${FFmpeg_RESOURCES_RCC}
 )
 
 if(USE_QT5)

@@ -29,12 +29,18 @@ set(AudioCD_RESOURCES
 pkg_check_modules(LIBCD libcdio libcddb REQUIRED)
 link_directories(${LIBCD_LIBRARY_DIRS})
 
+if(USE_QT5)
+    qt5_add_resources(AudioCD_RESOURCES_RCC ${AudioCD_RESOURCES})
+else()
+    qt4_add_resources(AudioCD_RESOURCES_RCC ${AudioCD_RESOURCES})
+endif()
+
 include_directories(../../qmplay2/headers ${LIBCD_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} MODULE
     ${AudioCD_HDR}
     ${AudioCD_SRC}
-    ${AudioCD_RESOURCES}
+    ${AudioCD_RESOURCES_RCC}
 )
 
 if(USE_QT5)

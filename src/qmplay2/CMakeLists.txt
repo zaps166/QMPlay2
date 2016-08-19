@@ -135,12 +135,18 @@ else()
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
 endif()
 
+if(USE_QT5)
+    qt5_add_resources(QMPLAY2_RESOURCES_RCC ${QMPLAY2_RESOURCES})
+else()
+    qt4_add_resources(QMPLAY2_RESOURCES_RCC ${QMPLAY2_RESOURCES})
+endif()
+
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
 add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
     ${QMPLAY2_SRC}
-    ${QMPLAY2_RESOURCES}
+    ${QMPLAY2_RESOURCES_RCC}
 )
 
 if(USE_QT5)
