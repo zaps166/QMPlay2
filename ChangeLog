@@ -1,8 +1,9 @@
-Changes in QMPlay2 build 16.08.10:
+Changes in QMPlay2 build 16.08.19:
 	- add key shortcuts editor to Settings (thanks Zamarin Arthur for help),
 	- respect HTML tags in classic subtitles,
 	- use scroll area for equalizer sliders,
 	- add presets to equalizer,
+	- playlist bugfix,
 	- OpenGL2 bugfix,
 
 Changes in QMPlay2 build 16.07.20:
