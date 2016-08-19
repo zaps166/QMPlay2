@@ -112,5 +112,11 @@ Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 QList<QByteArray> Playlist::readLines()
 {
 	IOController<Reader> &reader = ioCtrl.toRef<Reader>();
-	return reader->read(reader->size()).replace('\r', QByteArray()).split('\n');
+
+	QByteArray data = reader->read(3);
+	if (data.startsWith("\xEF\xBB\xBF")) //Remove UTF-8 BOM
+		data.clear();
+	data.append(reader->read(reader->size() - reader->pos()));
+
+	return data.replace('\r', QByteArray()).split('\n');
 }
