@@ -423,6 +423,10 @@ bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
 
 	ass_set_frame_size(ass_sub_renderer, W, H);
 
+	const int marginLR = qMax(0, W / 2 - winW / 2);
+	const int marginTB = qMax(0, H / 2 - winH / 2);
+	ass_set_margins(ass_sub_renderer, marginTB, marginTB, marginLR, marginLR);
+
 	int ch;
 	ASS_Image *img = ass_render_frame(ass_sub_renderer, ass_sub_track, pos * 1000, &ch);
 
