@@ -65,7 +65,7 @@ public:
 	void closeASS();
 private:
 	void readStyle(const QString &, ass_style *);
-	void calcSize();
+	inline void calcSize();
 
 	Settings &settings;
 

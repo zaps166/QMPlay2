@@ -21,6 +21,7 @@
 #ifdef QMPLAY2_LIBASS
 
 #include <QMPlay2_OSD.hpp>
+#include <Functions.hpp>
 #include <Settings.hpp>
 
 #include <QColor>
@@ -421,6 +422,7 @@ bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
 	}
 
 	ass_set_frame_size(ass_sub_renderer, W, H);
+
 	int ch;
 	ASS_Image *img = ass_render_frame(ass_sub_renderer, ass_sub_track, pos * 1000, &ch);
 
@@ -497,21 +499,9 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 	style->MarginR = settings.getInt(prefix + "/RightMargin");
 	style->MarginV = settings.getInt(prefix + "/VMargin");
 }
-void LibASS::calcSize()
+inline void LibASS::calcSize()
 {
-	if (!winW || !winH || zoom <= 0.0 || aspect_ratio < 0.0)
-		return;
-	W = winW;
-	H = winH;
-	if (aspect_ratio > 0.0)
-	{
-		if (winW / aspect_ratio > winH)
-			W = H * aspect_ratio;
-		else
-			H = W / aspect_ratio;
-	}
-	W *= zoom;
-	H *= zoom;
+	Functions::getImageSize(aspect_ratio, zoom, winW, winH, W, H);
 }
 
 #else // QMPLAY2_LIBASS
