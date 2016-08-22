@@ -1380,7 +1380,7 @@ void PlayClass::load(Demuxer *demuxer)
 			{
 				if (subtitlesEnabled)
 					dec = loadStream(streams, choosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, choosenSubtitlesLang);
-				else
+				if (!subtitlesEnabled || (!dec && subtitlesStream > -1 && streams[subtitlesStream]->must_decode))
 				{
 					subtitlesStream = -1;
 					dec = NULL;
