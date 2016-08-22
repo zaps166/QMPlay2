@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 16.08.21:
+Changes in QMPlay2 build 16.08.22:
+	- don't load subtitles which needs decoder without the decoder,
 	- don't crop non-graphics subtitles on zoom,
 
 Changes in QMPlay2 build 16.08.19:
