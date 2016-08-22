@@ -312,8 +312,8 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 			const uint8_t  *source   = (uint8_t  *)rect->pict.data[0];
 			const uint32_t *palette  = (uint32_t *)rect->pict.data[1];
 			const int       linesize = rect->pict.linesize[0];
-
 #endif
+
 			uint32_t       *dest     = (uint32_t *)buff->bitmap.data();
 			for (int y = 0; y < buff->h; ++y)
 				for (int x = 0; x < buff->w; ++x)
