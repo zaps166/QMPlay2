@@ -771,6 +771,9 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 	{
 		if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
 			streamInfo->must_decode = false;
+
+		if (streamInfo->codec_name.isEmpty())
+			streamInfo->codec_name = codecDescr->name;
 	}
 
 	streamInfo->bitrate = codecParams(stream)->bit_rate;
