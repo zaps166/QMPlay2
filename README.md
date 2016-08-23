@@ -63,21 +63,26 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
 If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
 
-Some YouTube videos don't work without external "youtube-dl" software. You must install it!
+Some YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will ask you for downloading it if "youtube-dl" doesn't exist.
+
+You can also install it manually:
 
 ####Windows
 
 - [Watch the video](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Videos/QMPlay2_youtube-dl.mp4).
 - If the video doesn't play inside the web browser - copy the address, paste it to QMPlay2 (Ctrl+V) and play it!
 - Currently (as of 30.06.2016) "youtube-dl.exe" needs Visual Studio 2010 Redistributable Package.
+- Make sure that antivirus or firewall doesn't block it (and doesn't block executing external application)!
 
 ####Arch Linux / Manjaro Linux
 
-- Install "youtube-dl" from repositories: `sudo pacman -S youtube-dl`
+- Install "youtube-dl" from repositories: `sudo pacman -S youtube-dl`.
+
+Even if Arch Linux repositories provides fresh packages, it is better to don't use "youtube-dl" from them.
 
 ####Other Linux distributions or other operating system
 
-- Don't use "youtube-dl" from repositories - usually it contains too old package which no longer works. The exception is Arch Linux and Manjaro Linux.
+- Don't use "youtube-dl" from repositories - usually it contains too old package which no longer works. The exception is Arch Linux.
 - Download "youtube-dl": http://rg3.github.io/youtube-dl/download.html
 - Set the path for the script (you must have Python installed) in QMPlay2 YouTube settings (you can watch the video from Windows installation).
 - QMPlay2 can automatically updates the "youtube-dl" if it is not installed from repositories.
@@ -365,8 +370,7 @@ You can also use `cmake`, but it doesn't create application bundle.
 
 ##Building package RPM, DEB or any other
 
-- QMPlay2 sometimes uses the external software at runtime - "youtube-dl", so it should be added as an optional package.
-- Use CMake.
+Use CMake. You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2).
 
 ##Other information
 

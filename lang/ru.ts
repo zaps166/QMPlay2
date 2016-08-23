@@ -2804,16 +2804,32 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Поиск на youtube</translation>
     </message>
     <message>
-        <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
-        <translation>Нет внешней программы - &apos;youtube-dl&apos;. Скачайте ее, а затем задайте путь к ней в настройках модуля YouTube.</translation>
-    </message>
-    <message>
         <source>Playlist</source>
         <translation>Список воспроизведения</translation>
     </message>
     <message>
         <source>yes</source>
         <translation>Да</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

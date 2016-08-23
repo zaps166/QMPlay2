@@ -287,7 +287,7 @@ void ModuleSettingsWidget::enableItagLists(bool b)
 }
 void ModuleSettingsWidget::browseYoutubedl()
 {
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), QCoreApplication::applicationDirPath());
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), youtubedlE->text());
 	if (!filePath.isEmpty())
 		youtubedlE->setText(filePath);
 }

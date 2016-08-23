@@ -2804,16 +2804,32 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Wyszukaj w YouTube</translation>
     </message>
     <message>
-        <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
-        <translation>Brakuje zewnętrznego programu - &apos;youtube-dl&apos;. Pobierz go, a następnie ustaw do niego ścieżkę w opcjach modułu YouTube.</translation>
-    </message>
-    <message>
         <source>Playlist</source>
         <translation>Playlista</translation>
     </message>
     <message>
         <source>yes</source>
         <translation>tak</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation>Aktualnie trwa już pobieranie programu &quot;youtube-dl&quot;...</translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation>Brakuje programu &quot;youtube-dl&quot;</translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation>Zewnętrzny program &quot;youtube-dl&quot; jest wymagany do odtworzenia. Czy chcesz go pobrać? Po ukończeniu pobierania, odtwórz ponownie!</translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation>Błąd podczas pobierania programu &quot;youtube-dl&quot;...</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
 </context>
 </TS>

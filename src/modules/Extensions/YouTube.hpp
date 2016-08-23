@@ -88,10 +88,19 @@ class YouTubeW : public QWidget
 	friend class YouTube;
 	Q_OBJECT
 public:
-	YouTubeW(QWidget *parent = NULL);
+	YouTubeW(Settings &sets);
+
+	void set();
+
+	inline QString getYtDlPath() const
+	{
+		return youtubedl;
+	}
 
 	DockWidget *dw;
 private slots:
+	void downloadYtDl();
+
 	void showSettings();
 
 	void next();
@@ -115,6 +124,8 @@ private:
 
 	void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
 
+	Settings &sets;
+
 	LineEdit *searchE;
 	QToolButton *showSettingsB, *searchB;
 	ResultsYoutube *resultsW;
@@ -126,7 +137,7 @@ private:
 	QCompleter *completer;
 	int currPage;
 
-	QNetworkReply *autocompleteReply, *searchReply;
+	QNetworkReply *autocompleteReply, *searchReply, *ytdlReply;
 	QList<QNetworkReply *> linkReplies, imageReplies;
 	QNetworkAccessManager net;
 

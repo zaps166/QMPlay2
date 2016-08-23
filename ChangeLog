@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 16.08.22:
+Changes in QMPlay2 build 16.08.23:
 	- don't load subtitles which needs decoder without the decoder,
 	- don't crop non-graphics subtitles on zoom,
+	- download "youtube-dl" if necessary,
 
 Changes in QMPlay2 build 16.08.19:
 	- add key shortcuts editor to Settings (thanks Zamarin Arthur for help),

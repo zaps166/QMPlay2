@@ -2791,10 +2791,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
-        <translation>No se ha encontrado el programa externo - &apos;youtube-dl&apos;. Descárgelo y establezca la ruta al mismo en las opciones del módulo de YouTube usando el menú: Configurar/Módulos/Extensions/ YouTube/ Ruta a la aplicación &apos;youtube-dl&apos;.</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation>Error de conexión</translation>
     </message>
@@ -2812,6 +2808,26 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

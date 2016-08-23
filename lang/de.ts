@@ -2803,15 +2803,31 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Bei YouTube suchen</translation>
     </message>
     <message>
-        <source>There is no external program - &apos;youtube-dl&apos;. Download it, and then set the path to it in the YouTube module options.</source>
-        <translation>Das externe Programm &quot;youtube-dl&quot; wurde nicht gefunden, bitte installieren Sie es und fügen den Pfad hinzu.</translation>
-    </message>
-    <message>
         <source>Playlist</source>
         <translation>Wiedergabeliste</translation>
     </message>
     <message>
         <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

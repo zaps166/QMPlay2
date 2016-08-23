@@ -33,6 +33,7 @@
 #include <QGridLayout>
 #include <QMouseEvent>
 #include <QToolButton>
+#include <QMessageBox>
 #include <QCompleter>
 #include <QClipboard>
 #include <QMimeData>
@@ -118,8 +119,8 @@ static bool youtubedl_updating;
 class YouTubeDL : public BasicIO
 {
 public:
-	inline YouTubeDL(const QString &youtubedl) :
-		youtubedl(youtubedl),
+	inline YouTubeDL(YouTubeW &ytdlW) :
+		ytdlW(ytdlW),
 		aborted(false)
 	{}
 
@@ -180,7 +181,7 @@ public:
 	QStringList exec(const QString &url, const QStringList &args, bool canUpdate = true)
 	{
 #ifndef Q_OS_WIN
-		QFile youtube_dl_file(youtubedl);
+		QFile youtube_dl_file(ytdlW.getYtDlPath());
 		if (youtube_dl_file.exists())
 		{
 			QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
@@ -188,7 +189,7 @@ public:
 				youtube_dl_file.setPermissions(youtube_dl_file.permissions() | exeFlags);
 		}
 #endif
-		youtubedl_process.start(youtubedl, QStringList() << url << "-g" << args);
+		youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << url << "-g" << args);
 		if (youtubedl_process.waitForFinished() && !aborted)
 		{
 			if (youtubedl_process.exitCode() != 0)
@@ -200,7 +201,7 @@ public:
 				if (canUpdate && error.contains("youtube-dl -U")) //Update is necessary
 				{
 					youtubedl_updating = true;
-					youtubedl_process.start(youtubedl, QStringList() << "-U");
+					youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << "-U");
 					if (youtubedl_process.waitForFinished(-1) && !aborted)
 					{
 						const QString error2 = youtubedl_process.readAllStandardOutput() + youtubedl_process.readAllStandardError();
@@ -209,13 +210,13 @@ public:
 						else if (youtubedl_process.exitCode() == 0)
 						{
 #ifdef Q_OS_WIN
-							const QString updatedFile = youtubedl + ".new";
-							QFile::remove(Functions::filePath(youtubedl) + "youtube-dl-updater.bat");
+							const QString updatedFile = ytdlW.getYtDlPath() + ".new";
+							QFile::remove(Functions::filePath(ytdlW.getYtDlPath()) + "youtube-dl-updater.bat");
 							if (QFile::exists(updatedFile))
 							{
 								Functions::s_wait(0.1); //Wait 100ms to be sure that file is closed
-								QFile::remove(youtubedl);
-								QFile::rename(updatedFile, youtubedl);
+								QFile::remove(ytdlW.getYtDlPath());
+								QFile::rename(updatedFile, ytdlW.getYtDlPath());
 #endif
 								youtubedl_updating = false;
 								return exec(url, args, false);
@@ -229,13 +230,13 @@ public:
 					youtubedl_updating = false;
 				}
 				if (!aborted)
-					emit QMPlay2Core.sendMessage(error, YouTubeName + QString(" (%1)").arg(Functions::fileName(youtubedl)), 3, 0);
+					emit QMPlay2Core.sendMessage(error, YouTubeName + QString(" (%1)").arg(Functions::fileName(ytdlW.getYtDlPath())), 3, 0);
 				return QStringList();
 			}
 			return QString(youtubedl_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
 		}
 		else if (!aborted && youtubedl_process.error() == QProcess::FailedToStart)
-			emit QMPlay2Core.sendMessage(YouTubeW::tr("There is no external program - 'youtube-dl'. Download it, and then set the path to it in the YouTube module options."), YouTubeName, 2, 0);
+			QMetaObject::invokeMethod(&ytdlW, "downloadYtDl"); //Call in GUI thread
 		return QStringList();
 	}
 private:
@@ -246,7 +247,7 @@ private:
 	}
 
 	QProcess youtubedl_process;
-	QString youtubedl;
+	YouTubeW &ytdlW;
 	bool aborted;
 };
 
@@ -490,12 +491,12 @@ PageSwitcher::PageSwitcher(QWidget *youTubeW)
 
 /**/
 
-YouTubeW::YouTubeW(QWidget *parent) :
-	QWidget(parent),
+YouTubeW::YouTubeW(Settings &sets) :
+	sets(sets),
 	imgSize(QSize(100, 100)),
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
-	autocompleteReply(NULL), searchReply(NULL),
+	autocompleteReply(NULL), searchReply(NULL), ytdlReply(NULL),
 	net(this)
 {
 	dw = new DockWidget;
@@ -542,6 +543,39 @@ YouTubeW::YouTubeW(QWidget *parent) :
 	layout->addWidget(resultsW, 1, 0, 1, 4);
 	layout->addWidget(progressB, 2, 0, 1, 4);
 	setLayout(layout);
+}
+
+void YouTubeW::set()
+{
+	resultsW->setColumnCount(sets.getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
+	resultsW->itagsVideo = YouTube::getItagNames(sets.getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO).second;
+	resultsW->itagsAudio = YouTube::getItagNames(sets.getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO).second;
+	resultsW->itags = YouTube::getItagNames(sets.getStringList("YouTube/ItagList"), YouTube::MEDIA_AV).second;
+	multiStream = sets.getBool("YouTube/MultiStream");
+	subtitles = sets.getBool("YouTube/Subtitles");
+	youtubedl = sets.getString("YouTube/youtubedl");
+	if (youtubedl.isEmpty())
+		youtubedl = "youtube-dl";
+#ifdef Q_OS_WIN
+	youtubedl.replace('\\', '/');
+#endif
+}
+
+void YouTubeW::downloadYtDl()
+{
+	if (ytdlReply)
+		QMPlay2Core.sendMessage(tr("\"youtube-dl\" download is in progress..."), dw->windowTitle());
+	else if (QMessageBox::question(this, tr("Missing \"youtube-dl\" application"), tr("External application \"youtube-dl\" is required for this media. Do you want to download it? If download will be finished, play it again!"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	{
+#ifdef Q_OS_WIN
+		const QUrl url("https://yt-dl.org/downloads/latest/youtube-dl.exe");
+#else
+		const QUrl url("https://yt-dl.org/downloads/latest/youtube-dl");
+#endif
+		ytdlReply = net.get(QNetworkRequest(url));
+		ytdlReply->ignoreSslErrors();
+		QMPlay2Core.setWorking(true);
+	}
 }
 
 void YouTubeW::showSettings()
@@ -613,12 +647,13 @@ void YouTubeW::search()
 
 void YouTubeW::netFinished(QNetworkReply *reply)
 {
-	const QUrl redirected = reply->property("Redirected").toBool() ? QUrl() : reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+	const QUrl redirected = reply->property("Redirected").toInt() > 10 ? QUrl() : reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 	QNetworkReply *redirectedReply = (!reply->error() && redirected.isValid()) ? net.get(QNetworkRequest(redirected)) : NULL;
 	if (redirectedReply)
 	{
+		redirectedReply->ignoreSslErrors();
 		redirectedReply->setProperty("tWI", reply->property("tWI"));
-		redirectedReply->setProperty("Redirected", true);
+		redirectedReply->setProperty("Redirected", redirectedReply->property("Redirected").toInt() + 1);
 	}
 
 	if (reply->error())
@@ -632,6 +667,10 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 			pageSwitcher->hide();
 			emit QMPlay2Core.sendMessage(tr("Connection error"), YouTubeName, 3);
 		}
+		else if (reply == ytdlReply)
+		{
+			QMPlay2Core.sendMessage(tr("Error downloading \"youtube-dl\" application..."), dw->windowTitle(), 3);
+		}
 	}
 	else if (!redirectedReply)
 	{
@@ -641,6 +680,26 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 			setAutocomplete(replyData);
 		else if (reply == searchReply)
 			setSearchResults(replyData);
+		else if (reply == ytdlReply)
+		{
+#ifdef Q_OS_WIN
+			const QString ytdlFileName = QMPlay2Core.getSettingsDir() + "youtube-dl.exe";
+#else
+			const QString ytdlFileName = QMPlay2Core.getSettingsDir() + "youtube-dl";
+#endif
+			QFile f(ytdlFileName);
+			if (f.open(QFile::WriteOnly | QFile::Truncate))
+			{
+				if (f.write(replyData) != replyData.size())
+					f.remove();
+				else
+				{
+					f.close();
+					sets.set("YouTube/youtubedl", (youtubedl = ytdlFileName));
+					QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), dw->windowTitle());
+				}
+			}
+		}
 		else if (linkReplies.contains(reply))
 		{
 			if (!isPlaylist(tWI))
@@ -660,6 +719,12 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 		autocompleteReply = redirectedReply;
 	else if (reply == searchReply)
 		searchReply = redirectedReply;
+	else if (reply == ytdlReply)
+	{
+		ytdlReply = redirectedReply;
+		if (!ytdlReply)
+			QMPlay2Core.setWorking(false);
+	}
 	else if (linkReplies.contains(reply))
 	{
 		linkReplies.removeOne(reply);
@@ -1058,7 +1123,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 
 	if (ret.count() == 3 && ret.at(0).contains("ENCRYPTED"))
 	{
-		if (ret.at(0).contains("itag=") && !youtubedl_updating && youtube_dl->assign(new YouTubeDL(youtubedl)))
+		if (ret.at(0).contains("itag=") && !youtubedl_updating && youtube_dl->assign(new YouTubeDL(*this)))
 		{
 			int itagsCount = 0;
 			QString itags;
@@ -1093,7 +1158,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			youtube_dl->clear();
 		}
 	}
-	else if (!tWI && ret.isEmpty() && !youtubedl_updating && youtube_dl->assign(new YouTubeDL(youtubedl))) //cannot find URL at normal way
+	else if (!tWI && ret.isEmpty() && !youtubedl_updating && youtube_dl->assign(new YouTubeDL(*this))) //cannot find URL at normal way
 	{
 		QString stream_url, name, extension;
 		QString cleanUrl = url;
@@ -1185,7 +1250,8 @@ void YouTubeW::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 
 /**/
 
-YouTube::YouTube(Module &module)
+YouTube::YouTube(Module &module) :
+	w(module)
 {
 	SetModule(module);
 }
@@ -1275,18 +1341,7 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 
 bool YouTube::set()
 {
-	w.resultsW->setColumnCount(sets().getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
-	w.resultsW->itagsVideo = getItagNames(sets().getStringList("YouTube/ItagVideoList"), MEDIA_VIDEO).second;
-	w.resultsW->itagsAudio = getItagNames(sets().getStringList("YouTube/ItagAudioList"), MEDIA_AUDIO).second;
-	w.resultsW->itags = getItagNames(sets().getStringList("YouTube/ItagList"), MEDIA_AV).second;
-	w.multiStream = sets().getBool("YouTube/MultiStream");
-	w.subtitles = sets().getBool("YouTube/Subtitles");
-	w.youtubedl = sets().getString("YouTube/youtubedl");
-	if (w.youtubedl.isEmpty())
-		w.youtubedl = "youtube-dl";
-#ifdef Q_OS_WIN
-	w.youtubedl.replace('\\', '/');
-#endif
+	w.set();
 	return true;
 }
 
@@ -1351,7 +1406,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 		if (ioCtrl && !youtubedl_updating)
 		{
 			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
-			if (ioCtrl->assign(new YouTubeDL(w.youtubedl)))
+			if (ioCtrl->assign(new YouTubeDL(w)))
 			{
 				youtube_dl->addr(url, param, stream_url, name, extension);
 				ioCtrl->clear();
