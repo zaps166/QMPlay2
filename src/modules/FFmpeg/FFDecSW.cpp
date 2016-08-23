@@ -400,7 +400,7 @@ inline void FFDecSW::addBitmapSubBuffer(BitmapSubBuffer *buff, double pos)
 }
 bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 {
-	bool cantDelete = true;
+	bool cantDelete = true, doClear = true;
 	for (int i = bitmapSubsBuffer.size() - 1; i >= 0 ; --i)
 	{
 		BitmapSubBuffer *buff = bitmapSubsBuffer.at(i);
@@ -422,7 +422,8 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 				else
 				{
 					osd->lock();
-					osd->clear();
+					if (doClear)
+						osd->clear();
 				}
 				osd->setDuration(buff->duration);
 				osd->setPTS(buff->pts);
@@ -432,6 +433,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 				if (old_osd)
 					osd->unlock();
 				cantDelete = true;
+				doClear = false;
 			}
 			delete buff;
 			bitmapSubsBuffer.removeAt(i);

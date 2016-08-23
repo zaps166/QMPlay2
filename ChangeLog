@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 16.08.23:
 	- don't load subtitles which needs decoder without the decoder,
+	- fix displaying multi-line graphical subtitles,
 	- don't crop non-graphics subtitles on zoom,
 	- download "youtube-dl" if necessary,
 
