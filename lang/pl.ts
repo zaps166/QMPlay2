@@ -2831,5 +2831,9 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
+    <message>
+        <source>Quality</source>
+        <translation>Jakość</translation>
+    </message>
 </context>
 </TS>

@@ -20,7 +20,6 @@
 
 #include <QNetworkAccessManager>
 #include <QTreeWidget>
-#include <QMenu>
 #include <QMap>
 
 class QNetworkReply;
@@ -31,6 +30,7 @@ class YouTubeDL;
 class QSpinBox;
 class LineEdit;
 class QLabel;
+class QMenu;
 
 /**/
 
@@ -56,7 +56,7 @@ private:
 	void mouseMoveEvent(QMouseEvent *);
 
 	QString fileToRemove;
-	QMenu menu;
+	QMenu *menu;
 private slots:
 	void enqueue();
 	void playCurrentEntry();
@@ -88,8 +88,14 @@ class YouTubeW : public QWidget
 	friend class YouTube;
 	Q_OBJECT
 public:
+	enum QUALITY_PRESETS {_2160p60, _1080p60, _720p60, _2160p, _1080p, _720p, _480p, QUALITY_PRESETS_COUNT};
+
+	static QList<int> *getQualityPresets();
+	static QStringList getQualityPresetString(int qualityIdx);
+
 	YouTubeW(Settings &sets);
 
+	void setItags();
 	void set();
 
 	inline QString getYtDlPath() const
@@ -102,6 +108,7 @@ private slots:
 	void downloadYtDl();
 
 	void showSettings();
+	void setQualityFromMenu();
 
 	void next();
 	void prev();
@@ -127,7 +134,8 @@ private:
 	Settings &sets;
 
 	LineEdit *searchE;
-	QToolButton *showSettingsB, *searchB;
+	QToolButton *searchB;
+	QMenu *qualityMenu;
 	ResultsYoutube *resultsW;
 	QProgressBar *progressB;
 	PageSwitcher *pageSwitcher;

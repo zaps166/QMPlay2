@@ -41,6 +41,7 @@
 #include <QProcess>
 #include <QAction>
 #include <QLabel>
+#include <QMenu>
 #include <QDrag>
 #include <QFile>
 #include <QDir>
@@ -253,7 +254,8 @@ private:
 
 /**/
 
-ResultsYoutube::ResultsYoutube()
+ResultsYoutube::ResultsYoutube() :
+	menu(new QMenu(this))
 {
 	setAnimated(true);
 	setIndentation(12);
@@ -417,20 +419,20 @@ void ResultsYoutube::copyStreamURL()
 
 void ResultsYoutube::contextMenu(const QPoint &point)
 {
-	menu.clear();
+	menu->clear();
 	QTreeWidgetItem *tWI = currentItem();
 	if (tWI)
 	{
 		const bool isOK = !tWI->isDisabled();
 		if (isOK)
 		{
-			menu.addAction(tr("Enqueue"), this, SLOT(enqueue()));
-			menu.addAction(tr("Play"), this, SLOT(playCurrentEntry()));
-			menu.addSeparator();
+			menu->addAction(tr("Enqueue"), this, SLOT(enqueue()));
+			menu->addAction(tr("Play"), this, SLOT(playCurrentEntry()));
+			menu->addSeparator();
 		}
-		menu.addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
-		menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
-		menu.addSeparator();
+		menu->addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
+		menu->addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
+		menu->addSeparator();
 		if (isOK && !isPlaylist(tWI))
 		{
 			QVariant streamUrl;
@@ -442,8 +444,8 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
 			if (!streamUrl.isNull())
 			{
-				menu.addAction(tr("Copy stream address"), this, SLOT(copyStreamURL()))->setProperty("StreamUrl", streamUrl);
-				menu.addSeparator();
+				menu->addAction(tr("Copy stream address"), this, SLOT(copyStreamURL()))->setProperty("StreamUrl", streamUrl);
+				menu->addSeparator();
 			}
 
 			const QString name = tWI->parent() ? tWI->parent()->text(0) : tWI->text(0);
@@ -454,12 +456,12 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 					if (Functions::splitPrefixAndUrlIfHasPluginPrefix(getQMPlay2Url(tWI), &addressPrefixName, &url, &param))
 						if (QAction *act = QMPlay2Ext->getAction(name, -2, url, addressPrefixName, param))
 						{
-							act->setParent(&menu);
-							menu.addAction(act);
+							act->setParent(menu);
+							menu->addAction(act);
 						}
 				}
 		}
-		menu.popup(viewport()->mapToGlobal(point));
+		menu->popup(viewport()->mapToGlobal(point));
 	}
 }
 
@@ -491,6 +493,38 @@ PageSwitcher::PageSwitcher(QWidget *youTubeW)
 
 /**/
 
+QList<int> *YouTubeW::getQualityPresets()
+{
+	static QList<int> qualityPresets[QUALITY_PRESETS_COUNT];
+	static bool firstTime = true;
+	if (firstTime)
+	{
+		qualityPresets[_2160p60] << 315 << 299 << 303 << 298 << 302;
+		qualityPresets[_1080p60] << 299 << 303 << 298 << 302;
+		qualityPresets[_720p60] << 298 << 302;
+
+		qualityPresets[_2160p] << 266 << 313 << 137 << 248 << 136 << 247 << 135;
+		qualityPresets[_1080p] << 137 << 248 << 136 << 247 << 135;
+		qualityPresets[_720p] << 136 << 247 << 135;
+		qualityPresets[_480p] << 135;
+
+		//Append also non-60 FPS itags to 60 FPS itags
+		qualityPresets[_2160p60] += qualityPresets[_2160p];
+		qualityPresets[_1080p60] += qualityPresets[_1080p];
+		qualityPresets[_720p60] += qualityPresets[_720p];
+
+		firstTime = false;
+	}
+	return qualityPresets;
+}
+QStringList YouTubeW::getQualityPresetString(int qualityIdx)
+{
+	QStringList videoItags;
+	foreach (int itag, getQualityPresets()[qualityIdx])
+		videoItags.append(QString::number(itag));
+	return videoItags;
+}
+
 YouTubeW::YouTubeW(Settings &sets) :
 	sets(sets),
 	imgSize(QSize(100, 100)),
@@ -519,11 +553,38 @@ YouTubeW::YouTubeW(Settings &sets) :
 	searchB->setToolTip(tr("Search"));
 	searchB->setAutoRaise(true);
 
-	showSettingsB = new QToolButton;
+	QToolButton *showSettingsB = new QToolButton;
 	connect(showSettingsB, SIGNAL(clicked()), this, SLOT(showSettings()));
 	showSettingsB->setIcon(QMPlay2Core.getIconFromTheme("configure"));
 	showSettingsB->setToolTip(tr("Settings"));
 	showSettingsB->setAutoRaise(true);
+
+	QActionGroup *qualityGroup = new QActionGroup(this);
+	qualityGroup->addAction("2160p 60FPS");
+	qualityGroup->addAction("1080p 60FPS");
+	qualityGroup->addAction("720p 60FPS");
+	qualityGroup->addAction("2160p");
+	qualityGroup->addAction("1080p");
+	qualityGroup->addAction("720p");
+	qualityGroup->addAction("480p");
+
+	qualityMenu = new QMenu(this);
+	int qualityIdx = 0;
+	foreach (QAction *act, qualityGroup->actions())
+	{
+		connect(act, SIGNAL(triggered(bool)), this, SLOT(setQualityFromMenu()));
+		act->setObjectName(QString::number(qualityIdx++));
+		act->setCheckable(true);
+		qualityMenu->addAction(act);
+	}
+	qualityMenu->insertSeparator(qualityMenu->actions().at(3));
+
+	QToolButton *qualityB = new QToolButton;
+	qualityB->setPopupMode(QToolButton::InstantPopup);
+	qualityB->setToolTip(tr("Quality"));
+	qualityB->setText(qualityB->toolTip()); //TODO: icon
+	qualityB->setMenu(qualityMenu);
+	qualityB->setAutoRaise(true);
 
 	resultsW = new ResultsYoutube;
 
@@ -537,21 +598,47 @@ YouTubeW::YouTubeW(Settings &sets) :
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(showSettingsB, 0, 0, 1, 1);
-	layout->addWidget(searchE, 0, 1, 1, 1);
-	layout->addWidget(searchB, 0, 2, 1, 1);
-	layout->addWidget(pageSwitcher, 0, 3, 1, 1);
-	layout->addWidget(resultsW, 1, 0, 1, 4);
-	layout->addWidget(progressB, 2, 0, 1, 4);
+	layout->addWidget(qualityB, 0, 1, 1, 1);
+	layout->addWidget(searchE, 0, 2, 1, 1);
+	layout->addWidget(searchB, 0, 3, 1, 1);
+	layout->addWidget(pageSwitcher, 0, 4, 1, 1);
+	layout->addWidget(resultsW, 1, 0, 1, 5);
+	layout->addWidget(progressB, 2, 0, 1, 5);
 	setLayout(layout);
 }
 
-void YouTubeW::set()
+void YouTubeW::setItags()
 {
-	resultsW->setColumnCount(sets.getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
 	resultsW->itagsVideo = YouTube::getItagNames(sets.getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO).second;
 	resultsW->itagsAudio = YouTube::getItagNames(sets.getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO).second;
 	resultsW->itags = YouTube::getItagNames(sets.getStringList("YouTube/ItagList"), YouTube::MEDIA_AV).second;
 	multiStream = sets.getBool("YouTube/MultiStream");
+
+	if (multiStream)
+	{
+		const bool audioOK = (resultsW->itagsAudio.count() >= 2 && (resultsW->itagsAudio.at(0) == 251 || resultsW->itagsAudio.at(0) == 171));
+		if (audioOK)
+		{
+			for (int i = 0; i < QUALITY_PRESETS_COUNT; ++i)
+			{
+				const QList<int> *qualityPresets = getQualityPresets();
+				if (resultsW->itagsVideo.mid(0, qualityPresets[i].count()) == qualityPresets[i])
+				{
+					qualityMenu->actions().at(i > _720p60 ? i + 1 : i /* Avoid separator */)->setChecked(true);
+					return;
+				}
+			}
+		}
+	}
+
+	foreach (QAction *act, qualityMenu->actions())
+		if (act->isChecked())
+			act->setChecked(false);
+}
+void YouTubeW::set()
+{
+	setItags();
+	resultsW->setColumnCount(sets.getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
 	subtitles = sets.getBool("YouTube/Subtitles");
 	youtubedl = sets.getString("YouTube/youtubedl");
 	if (youtubedl.isEmpty())
@@ -581,6 +668,14 @@ void YouTubeW::downloadYtDl()
 void YouTubeW::showSettings()
 {
 	emit QMPlay2Core.showSettings("Extensions");
+}
+void YouTubeW::setQualityFromMenu() //Call it only from quality menu!
+{
+	const int qualityIdx = sender()->objectName().toInt();
+	sets.set("YouTube/MultiStream", true);
+	sets.set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
+	sets.set("YouTube/ItagAudioList", QStringList() << "251" << "171" << "140");
+	setItags();
 }
 
 void YouTubeW::next()
