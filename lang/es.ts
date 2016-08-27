@@ -2052,29 +2052,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
-    <message>
-        <source>Search</source>
-        <translation>Buscar</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Error de conexión</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Inténtelo más tarde</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Buscar en Prostopleer</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>Pagina siguiente</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2228,41 +2205,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Artist</source>
-        <translation>Artista</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Copiar la dirección de la página</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Abrir la página en el navegador</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>Título</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Poner en cola</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Tasa de bits</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Reproducir</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Longitud</translation>
     </message>
 </context>
 <context>

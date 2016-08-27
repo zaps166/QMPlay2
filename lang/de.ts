@@ -2052,29 +2052,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
-    <message>
-        <source>Search</source>
-        <translation>Suchen</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>Nächste Seite</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Fehler beim verbinden</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Versuchen Sie es später erneut</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Suchen bei Prostopleer</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2228,41 +2205,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artist</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Länge</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Warteschlange</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Wiedergabe</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Seite öffnen im Browser</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Kopiere Seiten Adresse</translation>
     </message>
 </context>
 <context>

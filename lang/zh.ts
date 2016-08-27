@@ -2051,29 +2051,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
-    <message>
-        <source>Search</source>
-        <translation>搜索</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>下一页</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>连接错误</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>稍候重试</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>搜索于 Prostopleer</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2214,41 +2191,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>标题</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>艺术家</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>长度</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>比特率</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>入队</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>播放</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>用浏览器打开</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>复制网址</translation>
     </message>
 </context>
 <context>

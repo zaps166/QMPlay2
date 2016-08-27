@@ -46,8 +46,6 @@ option(USE_JEMALLOC "Link to jemalloc" OFF)
 
 option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
 add_feature_info(Qt5 USE_QT5 "Build with Qt5")
-option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
-add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
 option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)

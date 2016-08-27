@@ -24,9 +24,6 @@
 	#include <LastFM.hpp>
 #endif
 #include <Radio.hpp>
-#ifdef USE_PROSTOPLEER
-	#include <ProstoPleer.hpp>
-#endif
 #ifdef USE_MPRIS2
 	#include <MPRIS2.hpp>
 #endif
@@ -45,10 +42,6 @@ Extensions::Extensions() :
 #ifdef USE_LASTFM
 	lastfm = QImage(":/lastfm");
 	lastfm.setText("Path", ":/lastfm");
-#endif
-#ifdef USE_PROSTOPLEER
-	prostopleer = QImage(":/prostopleer");
-	prostopleer.setText("Path", ":/prostopleer");
 #endif
 
 	init("YouTube/ShowAdditionalInfo", false);
@@ -81,9 +74,6 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
 #endif
 	modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
-#ifdef USE_PROSTOPLEER
-	modulesInfo += Info(ProstoPleerName, QMPLAY2EXTENSION, prostopleer);
-#endif
 #ifdef USE_MPRIS2
 	modulesInfo += Info(MPRIS2Name, QMPLAY2EXTENSION);
 #endif
@@ -101,10 +91,6 @@ void *Extensions::createInstance(const QString &name)
 #endif
 	else if (name == RadioName)
 		return static_cast<QMPlay2Extensions *>(new Radio(*this));
-#ifdef USE_PROSTOPLEER
-	else if (name == ProstoPleerName)
-		return static_cast<QMPlay2Extensions *>(new ProstoPleer(*this));
-#endif
 #ifdef USE_MPRIS2
 	else if (name == MPRIS2Name)
 		return static_cast<QMPlay2Extensions *>(new MPRIS2(*this));

@@ -29,9 +29,6 @@ private:
 	SettingsWidget *getSettingsWidget();
 
 	QImage downloader, youtube, radio;
-#ifdef USE_PROSTOPLEER
-	QImage prostopleer;
-#endif
 #ifdef USE_LASTFM
 	QImage lastfm;
 #endif

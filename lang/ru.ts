@@ -2053,29 +2053,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
-    <message>
-        <source>Search</source>
-        <translation>Поиск</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>Следующая страница</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Ошибка соединения</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Повторите попытку позже</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Поиск на prostopleer</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2229,41 +2206,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation>Случайно в группе и повторя&amp;ть</translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Продолжительность</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Битрейт</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Очередь</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Воспроизведение</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Открыть страницу в браузере</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Скопировать адрес страницы</translation>
     </message>
 </context>
 <context>

@@ -1,7 +1,6 @@
 <RCC>
 	<qresource>
 		<file alias="Extensions">Extensions.png</file>
-		<file alias="prostopleer">prostopleer.png</file>
 		<file alias="downloader">downloader.png</file>
 		<file alias="youtube">youtube.png</file>
 		<file alias="lastfm">lastfm.png</file>

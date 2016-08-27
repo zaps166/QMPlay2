@@ -2051,29 +2051,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
-    <message>
-        <source>Search</source>
-        <translation>Chercher</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Erreur de connexion</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2227,41 +2204,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Titre</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artiste</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Durée</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Mettre dans la file d&apos;attente</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Lecture</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Ouvrir la page dans le navigateur</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Copier l&apos;adresse de la page</translation>
     </message>
 </context>
 <context>
