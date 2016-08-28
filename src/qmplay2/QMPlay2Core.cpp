@@ -44,11 +44,7 @@ QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 QMPlay2CoreClass::QMPlay2CoreClass()
 {
 	qmplay2Core = this;
-#ifdef Q_OS_WIN
-	logFilePath = QDir::tempPath() + "/QMPlay2.log";
-#else
-	logFilePath = QDir::tempPath() + "/QMPlay2." + QString(getenv("USER")) + ".log";
-#endif
+
 #if defined Q_OS_MAC
 	unixOpenCommand = "open ";
 #elif defined Q_OS_UNIX
@@ -147,6 +143,8 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	else
 		settingsDir = Functions::cleanPath(settingsPath);
 	QDir(settingsDir).mkpath(".");
+
+	logFilePath = settingsDir + "QMPlay2.log";
 
 	/* Rename config file */
 	{
@@ -338,7 +336,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 			logFile.write(date.toUtf8() + txt.toUtf8() + '\n');
 			logFile.close();
 		}
-		else
+		else if (!logFilePath.isEmpty())
 			log(tr("Can't open log file"), ErrorLog | AddTimeToLog);
 	}
 	if (!(logFlags & DontShowInGUI))
