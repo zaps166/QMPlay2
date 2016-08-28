@@ -190,7 +190,13 @@ public:
 				youtube_dl_file.setPermissions(youtube_dl_file.permissions() | exeFlags);
 		}
 #endif
-		youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << url << "-g" << args);
+
+		QStringList proxy;
+		const char *http_proxy = getenv("http_proxy");
+		if (http_proxy && *http_proxy)
+			proxy << "--proxy" << http_proxy;
+
+		youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << url << "-g" << args << proxy);
 		if (youtubedl_process.waitForFinished() && !aborted)
 		{
 			if (youtubedl_process.exitCode() != 0)
@@ -202,7 +208,7 @@ public:
 				if (canUpdate && error.contains("youtube-dl -U")) //Update is necessary
 				{
 					youtubedl_updating = true;
-					youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << "-U");
+					youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << "-U" << proxy);
 					if (youtubedl_process.waitForFinished(-1) && !aborted)
 					{
 						const QString error2 = youtubedl_process.readAllStandardOutput() + youtubedl_process.readAllStandardError();
