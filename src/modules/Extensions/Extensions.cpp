@@ -49,7 +49,7 @@ Extensions::Extensions() :
 	init("YouTube/Subtitles", true);
 	init("YouTube/youtubedl", QString());
 	init("YouTube/ItagVideoList", YouTubeW::getQualityPresetString(YouTubeW::_1080p60));
-	init("YouTube/ItagAudioList", QStringList() << "251" << "171" << "140");
+	init("YouTube/ItagAudioList", QStringList() << "171" << "251" << "140");
 	init("YouTube/ItagList", QStringList() << "22" << "43" << "18");
 
 #ifdef USE_LASTFM
