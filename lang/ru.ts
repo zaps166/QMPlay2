@@ -744,7 +744,7 @@ amp</source>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation></translation>
+        <translation>Системные</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -1382,7 +1382,7 @@ amp</source>
     </message>
     <message>
         <source>Path to the &apos;youtube-dl&apos; application</source>
-        <translation>Путь к приложению &apos;youtube-dl&apos;</translation>
+        <translation>Путь к приложению «youtube-dl»</translation>
     </message>
     <message>
         <source>Browse</source>
@@ -1390,7 +1390,7 @@ amp</source>
     </message>
     <message>
         <source>Choose &apos;youtube-dl&apos; application</source>
-        <translation>Выберите приложение &apos;youtube-dl&apos;</translation>
+        <translation>Выберите приложение «youtube-dl»</translation>
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
@@ -1517,11 +1517,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>OpenGL2Common</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation></translation>
+        <translation>Драйвер должен поддерживать мультитекстурирование, шейдеры и размер текстур, которые уже не являются степенями двух (Non-Power-Of-Two)</translation>
     </message>
 </context>
 <context>
@@ -2755,27 +2755,27 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загружается «youtube-dl»...</translation>
     </message>
     <message>
         <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation type="unfinished"></translation>
+        <translation>Отсутствует приложение «youtube-dl»</translation>
     </message>
     <message>
         <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Для этого мультимедиа требуется внешнее приложение «youtube-dl». Загрузить его? Когда загрузка будет завершена, проиграть его!</translation>
     </message>
     <message>
         <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка загрузки приложения «youtube-dl»...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished"></translation>
+        <translation>«youtube-dl» успешно загружен!</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Качество</translation>
     </message>
 </context>
 </TS>
