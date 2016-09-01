@@ -52,6 +52,8 @@ set(QMPLAY2_HDR
     headers/ChapterInfo.hpp
     headers/PacketBuffer.hpp
     headers/Buffer.hpp
+    headers/Http.hpp
+    headers/IPC.hpp
     headers/CPU.hpp
     headers/Version.hpp
     headers/PixelFormats.hpp
@@ -89,12 +91,15 @@ set(QMPLAY2_SRC
     DockWidget.cpp
     PacketBuffer.cpp
     Buffer.cpp
+    Http.cpp
+    IPC.cpp
 )
 
 set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
+pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 
@@ -106,11 +111,13 @@ if(USE_LIBASS)
 endif()
 
 link_directories(
+    ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBSWSCALE_LIBRARY_DIRS}
     ${LIBAVUTIL_LIBRARY_DIRS}
 )
 
 set(LIBQMPLAY2_LIBS
+    ${LIBAVFORMAT_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
     # libass will be added later if enabled
@@ -118,6 +125,7 @@ set(LIBQMPLAY2_LIBS
 
 include_directories(
     headers
+    ${LIBAVFORMAT_INCLUDE_DIRS}
     ${LIBSWSCALE_INCLUDE_DIRS}
     ${LIBAVUTIL_INCLUDE_DIRS}
 )

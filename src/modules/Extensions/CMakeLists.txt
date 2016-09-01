@@ -53,8 +53,6 @@ endif()
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
 else()
-    find_package(Qt4 REQUIRED QtNetwork)
-    include("${QT_USE_FILE}")
     qt4_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
 endif()
 
@@ -67,9 +65,9 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets Network ${DBUS})
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets ${DBUS})
 else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui Qt4::QtNetwork ${DBUS})
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui ${DBUS})
 endif()
 
 add_dependencies(${PROJECT_NAME} qmplay2)

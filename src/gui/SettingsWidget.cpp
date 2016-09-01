@@ -28,7 +28,6 @@
 #else
 	#include <QStandardPaths>
 #endif
-#include <QNetworkProxy>
 #include <QStyleFactory>
 #include <QRadioButton>
 #include <QApplication>
@@ -591,7 +590,6 @@ void SettingsWidget::setAudioChannels()
 void SettingsWidget::applyProxy()
 {
 	Settings &QMPSettings = QMPlay2Core.getSettings();
-	QNetworkProxy proxy;
 	if (!QMPSettings.getBool("Proxy/Use"))
 	{
 #ifdef Q_OS_WIN
@@ -602,22 +600,22 @@ void SettingsWidget::applyProxy()
 	}
 	else
 	{
-		proxy.setType(QNetworkProxy::Socks5Proxy);
-		proxy.setHostName(QMPSettings.getString("Proxy/Host"));
-		proxy.setPort(QMPSettings.getInt("Proxy/Port"));
+		const QString proxyHostName = QMPSettings.getString("Proxy/Host");
+		const quint16 proxyPort = QMPSettings.getInt("Proxy/Port");
+		QString proxyUser, proxyPassword;
 		if (QMPSettings.getBool("Proxy/Login"))
 		{
-			proxy.setUser(QMPSettings.getString("Proxy/User"));
-			proxy.setPassword(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
+			proxyUser = QMPSettings.getString("Proxy/User");
+			proxyPassword = QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password"));
 		}
 
 		/* Proxy env for FFmpeg */
-		QString proxyEnv = QString("http://" + proxy.hostName() + ':' + QString::number(proxy.port()));
-		if (!proxy.user().isEmpty())
+		QString proxyEnv = QString("http://" + proxyHostName + ':' + QString::number(proxyPort));
+		if (!proxyUser.isEmpty())
 		{
-			QString auth = proxy.user();
-			if (!proxy.password().isEmpty())
-				auth += ':' + proxy.password();
+			QString auth = proxyUser;
+			if (!proxyPassword.isEmpty())
+				auth += ':' + proxyPassword;
 			auth += '@';
 			proxyEnv.insert(7, auth);
 		}
@@ -627,7 +625,6 @@ void SettingsWidget::applyProxy()
 		setenv("http_proxy", proxyEnv.toLocal8Bit(), true);
 #endif
 	}
-	QNetworkProxy::setApplicationProxy(proxy);
 }
 
 void SettingsWidget::restoreVideoEq()

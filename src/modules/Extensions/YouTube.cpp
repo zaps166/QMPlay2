@@ -24,8 +24,6 @@
 #include <Reader.hpp>
 
 #include <QStringListModel>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QTextDocument>
 #include <QProgressBar>
 #include <QApplication>
@@ -45,19 +43,25 @@
 #include <QDrag>
 #include <QFile>
 #include <QDir>
+#include <QUrl>
 
 #define YOUTUBE_URL "https://www.youtube.com"
 
 static const char cantFindTheTitle[] = "(Can't find the title)";
 static QMap<int, QString> itag_arr;
 
-static inline QUrl getYtUrl(const QString &title, const int page)
+static inline QString toPercentEncoding(const QString &txt)
 {
-	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(title).arg(page);
+	return txt.toUtf8().toPercentEncoding();
 }
-static inline QUrl getAutocompleteUrl(const QString &text)
+
+static inline QString getYtUrl(const QString &title, const int page)
 {
-	return QString("http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=%1").arg(text);
+	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(toPercentEncoding(title)).arg(page);
+}
+static inline QString getAutocompleteUrl(const QString &text)
+{
+	return QString("http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=%1").arg(toPercentEncoding(text));
 }
 static inline QString getSubsUrl(const QString &langCode, const QString &vidId)
 {
@@ -600,7 +604,7 @@ YouTubeW::YouTubeW(Settings &sets) :
 	pageSwitcher = new PageSwitcher(this);
 	pageSwitcher->hide();
 
-	connect(&net, SIGNAL(finished(QNetworkReply *)), this, SLOT(netFinished(QNetworkReply *)));
+	connect(&net, SIGNAL(finished(HttpReply *)), this, SLOT(netFinished(HttpReply *)));
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(showSettingsB, 0, 0, 1, 1);
@@ -661,12 +665,11 @@ void YouTubeW::downloadYtDl()
 	else if (QMessageBox::question(this, tr("Missing \"youtube-dl\" application"), tr("External application \"youtube-dl\" is required for this media. Do you want to download it? If download will be finished, play it again!"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 #ifdef Q_OS_WIN
-		const QUrl url("https://yt-dl.org/downloads/latest/youtube-dl.exe");
+		const QString url("https://yt-dl.org/downloads/latest/youtube-dl.exe");
 #else
-		const QUrl url("https://yt-dl.org/downloads/latest/youtube-dl");
+		const QString url("https://yt-dl.org/downloads/latest/youtube-dl");
 #endif
-		ytdlReply = net.get(QNetworkRequest(url));
-		ytdlReply->ignoreSslErrors();
+		ytdlReply = net.start(url);
 		QMPlay2Core.setWorking(true);
 	}
 }
@@ -713,7 +716,7 @@ void YouTubeW::searchTextEdited(const QString &text)
 	if (text.isEmpty())
 		((QStringListModel *)completer->model())->setStringList(QStringList());
 	else
-		autocompleteReply = net.get(QNetworkRequest(getAutocompleteUrl(text)));
+		autocompleteReply = net.start(getAutocompleteUrl(text));
 }
 void YouTubeW::search()
 {
@@ -734,7 +737,7 @@ void YouTubeW::search()
 	{
 		if (lastTitle != title || sender() == searchE || sender() == searchB)
 			currPage = 1;
-		searchReply = net.get(QNetworkRequest(getYtUrl(title, currPage)));
+		searchReply = net.start(getYtUrl(title, currPage));
 		progressB->setRange(0, 0);
 		progressB->show();
 	}
@@ -746,17 +749,8 @@ void YouTubeW::search()
 	lastTitle = title;
 }
 
-void YouTubeW::netFinished(QNetworkReply *reply)
+void YouTubeW::netFinished(HttpReply *reply)
 {
-	const QUrl redirected = reply->property("Redirected").toInt() > 10 ? QUrl() : reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-	QNetworkReply *redirectedReply = (!reply->error() && redirected.isValid()) ? net.get(QNetworkRequest(redirected)) : NULL;
-	if (redirectedReply)
-	{
-		redirectedReply->ignoreSslErrors();
-		redirectedReply->setProperty("tWI", reply->property("tWI"));
-		redirectedReply->setProperty("Redirected", redirectedReply->property("Redirected").toInt() + 1);
-	}
-
 	if (reply->error())
 	{
 		if (reply == searchReply)
@@ -773,7 +767,7 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 			QMPlay2Core.sendMessage(tr("Error downloading \"youtube-dl\" application..."), dw->windowTitle(), 3);
 		}
 	}
-	else if (!redirectedReply)
+	else
 	{
 		QTreeWidgetItem *tWI = ((QTreeWidgetItem *)reply->property("tWI").value<void *>());
 		const QByteArray replyData = reply->readAll();
@@ -817,30 +811,24 @@ void YouTubeW::netFinished(QNetworkReply *reply)
 	}
 
 	if (reply == autocompleteReply)
-		autocompleteReply = redirectedReply;
+		autocompleteReply = NULL;
 	else if (reply == searchReply)
-		searchReply = redirectedReply;
+		searchReply = NULL;
 	else if (reply == ytdlReply)
 	{
-		ytdlReply = redirectedReply;
+		ytdlReply = NULL;
 		if (!ytdlReply)
 			QMPlay2Core.setWorking(false);
 	}
 	else if (linkReplies.contains(reply))
 	{
 		linkReplies.removeOne(reply);
-		if (!redirectedReply)
-			progressB->setValue(progressB->value() + 1);
-		else
-			linkReplies += redirectedReply;
+		progressB->setValue(progressB->value() + 1);
 	}
 	else if (imageReplies.contains(reply))
 	{
 		imageReplies.removeOne(reply);
-		if (!redirectedReply)
-			progressB->setValue(progressB->value() + 1);
-		else
-			imageReplies += redirectedReply;
+		progressB->setValue(progressB->value() + 1);
 	}
 
 	if (progressB->isVisible() && linkReplies.isEmpty() && imageReplies.isEmpty())
@@ -995,8 +983,8 @@ void YouTubeW::setSearchResults(QString data)
 			tWI->setData(0, Qt::UserRole, videoInfoLink);
 			tWI->setData(1, Qt::UserRole, isPlaylist);
 
-			QNetworkReply *linkReply = net.get(QNetworkRequest(videoInfoLink));
-			QNetworkReply *imageReply = net.get(QNetworkRequest(image));
+			HttpReply *linkReply = net.start(videoInfoLink);
+			HttpReply *imageReply = net.start(image);
 			linkReply->setProperty("tWI", qVariantFromValue((void *)tWI));
 			imageReply->setProperty("tWI", qVariantFromValue((void *)tWI));
 			linkReplies += linkReply;

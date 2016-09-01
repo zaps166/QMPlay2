@@ -18,11 +18,11 @@
 
 #include <QMPlay2Extensions.hpp>
 
-class QNetworkAccessManager;
 class QListWidgetItem;
 class QProgressBar;
 class QListWidget;
 class QLabel;
+class Http;
 
 #include <QMenu>
 #include <QIcon>
@@ -42,7 +42,7 @@ private slots:
 
 	void openLink();
 
-	void downloadProgress(qint64, qint64);
+	void downloadProgress(int bytesReceived, int bytesTotal);
 	void finished();
 private:
 	void addGroup(const QString &);
@@ -51,7 +51,7 @@ private:
 	DockWidget *dw;
 
 	bool once;
-	QNetworkAccessManager *net;
+	Http *net;
 
 	QListWidget *lW;
 	QLabel *infoL;

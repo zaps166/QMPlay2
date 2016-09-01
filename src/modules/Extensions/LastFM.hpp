@@ -20,8 +20,8 @@
 #define LASTFM_HPP
 
 #include <QMPlay2Extensions.hpp>
+#include <Http.hpp>
 
-#include <QNetworkAccessManager>
 #include <QTimer>
 #include <QQueue>
 
@@ -67,12 +67,12 @@ private slots:
 
 	void processScrobbleQueue();
 private:
-	QNetworkReply *coverReply, *loginReply, *scrobbleReply;
+	HttpReply *coverReply, *loginReply, *scrobbleReply;
 	bool downloadCovers, dontShowLoginError, firstTime;
 	QString user, md5pass, session_key;
 	QQueue<Scrobble> scrobbleQueue;
 	QTimer updateTim, loginTimer;
-	QNetworkAccessManager net;
+	Http net;
 	QStringList imageSizes;
 };
 

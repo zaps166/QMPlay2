@@ -34,6 +34,7 @@ class MenuBar;
 class InfoDock;
 class VideoDock;
 class VolWidget;
+class IPCSocket;
 class QToolButton;
 class AboutWidget;
 class PlaylistDock;
@@ -98,7 +99,7 @@ private slots:
 	void updatePos(int);
 	void mousePositionOnSlider(int);
 
-	void newConnection();
+	void newConnection(IPCSocket *socket);
 	void readSocket();
 
 	void about();

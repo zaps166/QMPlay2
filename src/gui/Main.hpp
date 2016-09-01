@@ -26,7 +26,7 @@
 
 class VideoAdjustment;
 class ShortcutHandler;
-class QLocalServer;
+class IPCServer;
 class VideoDock;
 class MenuBar;
 class QWidget;
@@ -66,7 +66,7 @@ public:
 
 	MenuBar *menuBar;
 	QWidget *mainW;
-	QLocalServer *pipe;
+	IPCServer *pipe;
 	VideoAdjustment *videoAdjustment;
 	ShortcutHandler *shortcutHandler;
 	bool restartApp, removeSettings;

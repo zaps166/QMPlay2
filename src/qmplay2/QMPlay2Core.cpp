@@ -39,6 +39,12 @@
 
 #include <stdio.h>
 
+extern "C"
+{
+	#include <libavformat/avformat.h>
+	#include <libavutil/log.h>
+}
+
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
@@ -166,6 +172,11 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	timeBeginPeriod(1); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
 #endif
 
+#ifndef QT_DEBUG
+	av_log_set_level(AV_LOG_FATAL);
+#endif
+	avformat_network_init();
+
 	if (loadModules)
 	{
 		QFileInfoList pluginsList;
@@ -240,6 +251,7 @@ void QMPlay2CoreClass::quit()
 	settingsDir.clear();
 	shareDir.clear();
 	langDir.clear();
+	avformat_network_deinit();
 #ifdef Q_OS_WIN
 	timeEndPeriod(1);
 #endif

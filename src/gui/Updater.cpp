@@ -24,8 +24,6 @@
 #include <Main.hpp>
 #include <CPU.hpp>
 
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -82,12 +80,8 @@ void Updater::downloadUpdate()
 		if (sender() == downloadUpdateB)
 			QMPlay2Core.getSettings().remove("UpdateVersion");
 
-		QNetworkRequest request(QUrl("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater"));
-		request.setRawHeader("User-Agent", QMPlay2UserAgent);
-
-		QNetworkReply *reply = net.get(request);
+		HttpReply *reply = net.start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater");
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
-		reply->ignoreSslErrors();
 
 		infoL->setText(tr("Checking for updates"));
 		progressB->setRange(0, 0);
@@ -99,7 +93,7 @@ void Updater::downloadUpdate()
 
 void Updater::infoFinished()
 {
-	QNetworkReply *reply = (QNetworkReply *)sender();
+	HttpReply *reply = (HttpReply *)sender();
 	if (!reply->error())
 	{
 		infoFile.write(reply->readAll());
@@ -129,7 +123,7 @@ void Updater::infoFinished()
 					if (FileURL.isEmpty())
 						endWork(tr("No update available"));
 					else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
-						getFile(QUrl(FileURL.replace("$Version", NewVersion)))->setProperty("UpdateVersion", NewVersion);
+						getFile(FileURL.replace("$Version", NewVersion))->setProperty("UpdateVersion", NewVersion);
 					else
 						endWork(tr("Error creating update file"));
 				}
@@ -147,22 +141,10 @@ void Updater::infoFinished()
 	infoFile.remove();
 	reply->deleteLater();
 }
-void Updater::headerChanged()
-{
-	QNetworkReply *reply = (QNetworkReply *)sender();
-	const QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-	if (!newUrl.isEmpty() && reply->url() != newUrl)
-	{
-		disconnect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-		reply->abort();
-		reply->deleteLater();
-		getFile(newUrl);
-	}
-}
 void Updater::writeToFile()
 {
-	QNetworkReply *reply = (QNetworkReply *)sender();
-	QByteArray arr = reply->readAll();
+	HttpReply *reply = (HttpReply *)sender();
+	const QByteArray arr = reply->readAll();
 	bool err = false;
 	if (firstChunk)
 	{
@@ -172,14 +154,14 @@ void Updater::writeToFile()
 	if (err || updateFile.write(arr) != arr.size())
 		reply->abort();
 }
-void Updater::downloadprogress(qint64 bytesReceived, qint64 bytesTotal)
+void Updater::downloadprogress(int bytesReceived, int bytesTotal)
 {
 	progressB->setMaximum(bytesTotal);
 	progressB->setValue(bytesReceived);
 }
 void Updater::downloadFinished()
 {
-	QNetworkReply *reply = (QNetworkReply *)sender();
+	HttpReply *reply = (HttpReply *)sender();
 	if (updateFile.size() && !reply->error())
 	{
 		Settings &settings = QMPlay2Core.getSettings();
@@ -205,16 +187,12 @@ void Updater::applyUpdate()
 	QMPlay2GUI.mainW->close();
 }
 
-QNetworkReply *Updater::getFile(const QUrl &url)
+HttpReply *Updater::getFile(const QString &url)
 {
-	QNetworkRequest request(url);
-	request.setRawHeader("User-Agent", QMPlay2UserAgent);
-	QNetworkReply *reply = net.get(request);
-	connect(reply, SIGNAL(metaDataChanged()), this, SLOT(headerChanged()));
+	HttpReply *reply = net.start(url);
 	connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFile()));
-	connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadprogress(qint64, qint64)));
+	connect(reply, SIGNAL(downloadProgress(int, int)), this, SLOT(downloadprogress(int, int)));
 	connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-	reply->ignoreSslErrors();
 	firstChunk = true;
 	return reply;
 }

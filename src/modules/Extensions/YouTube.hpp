@@ -17,15 +17,15 @@
 */
 
 #include <QMPlay2Extensions.hpp>
+#include <Http.hpp>
 
-#include <QNetworkAccessManager>
 #include <QTreeWidget>
 #include <QMap>
 
-class QNetworkReply;
 class QProgressBar;
 class QToolButton;
 class QCompleter;
+class HttpReply;
 class YouTubeDL;
 class QSpinBox;
 class LineEdit;
@@ -117,7 +117,7 @@ private slots:
 	void searchTextEdited(const QString &text);
 	void search();
 
-	void netFinished(QNetworkReply *reply);
+	void netFinished(HttpReply *reply);
 
 	void searchMenu();
 private:
@@ -145,9 +145,9 @@ private:
 	QCompleter *completer;
 	int currPage;
 
-	QNetworkReply *autocompleteReply, *searchReply, *ytdlReply;
-	QList<QNetworkReply *> linkReplies, imageReplies;
-	QNetworkAccessManager net;
+	HttpReply *autocompleteReply, *searchReply, *ytdlReply;
+	QList<HttpReply *> linkReplies, imageReplies;
+	Http net;
 
 	QString youtubedl;
 	bool multiStream, subtitles;

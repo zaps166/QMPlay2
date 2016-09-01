@@ -28,8 +28,6 @@
 #include <QLabel>
 #include <QShortcut>
 #include <QFileDialog>
-#include <QLocalServer>
-#include <QLocalSocket>
 #include <QTreeWidget>
 #include <QListWidget>
 #include <qevent.h>
@@ -58,6 +56,7 @@ using Functions::timeToStr;
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <SubsDec.hpp>
+#include <IPC.hpp>
 
 #include <math.h>
 
@@ -140,7 +139,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	isCompactView = wasShow = fullScreen = seekSFocus = false;
 
 	if (QMPlay2GUI.pipe)
-		connect(QMPlay2GUI.pipe, SIGNAL(newConnection()), this, SLOT(newConnection()));
+		connect(QMPlay2GUI.pipe, SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
 
 	Settings &settings = QMPlay2Core.getSettings();
 
@@ -1109,30 +1108,23 @@ void MainWidget::mousePositionOnSlider(int pos)
 	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos), 750);
 }
 
-void MainWidget::newConnection()
+void MainWidget::newConnection(IPCSocket *socket)
 {
-	while (QMPlay2GUI.pipe->hasPendingConnections())
-	{
-		QLocalSocket *socket = QMPlay2GUI.pipe->nextPendingConnection();
-		if (socket)
-		{
-			connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
-			connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
-		}
-	}
+	connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
+	connect(socket, SIGNAL(aboutToClose()), socket, SLOT(deleteLater()));
 }
 void MainWidget::readSocket()
 {
-	QLocalSocket *socket = (QLocalSocket *)sender();
-	disconnect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+	IPCSocket *socket = (IPCSocket *)sender();
+	disconnect(socket, SIGNAL(aboutToClose()), socket, SLOT(deleteLater()));
 	foreach (const QByteArray &arr, socket->readAll().split('\0'))
 	{
 		int idx = arr.indexOf('\t');
 		if (idx > -1)
 			processParam(arr.mid(0, idx), arr.mid(idx + 1)); //tu może wywołać się precessEvents()!
 	}
-	if (socket->state() == QLocalSocket::ConnectedState)
-		connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+	if (socket->isConnected())
+		connect(socket, SIGNAL(aboutToClose()), socket, SLOT(deleteLater()));
 	else
 		socket->deleteLater();
 }
@@ -1374,7 +1366,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	emit QMPlay2Core.waitCursor();
 
 	if (QMPlay2GUI.pipe)
-		disconnect(QMPlay2GUI.pipe, SIGNAL(newConnection()), this, SLOT(newConnection()));
+		disconnect(QMPlay2GUI.pipe, SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
 
 	Settings &settings = QMPlay2Core.getSettings();
 

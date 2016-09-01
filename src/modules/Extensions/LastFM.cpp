@@ -28,8 +28,6 @@ Q_DECLARE_METATYPE(LastFM::Scrobble)
 /**/
 
 #include <QCryptographicHash>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QStringList>
 #include <QImage>
 
@@ -105,8 +103,7 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 			disconnect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 			coverReply->deleteLater();
 		}
-		coverReply = net.get(QNetworkRequest(url));
-		coverReply->ignoreSslErrors();
+		coverReply = net.start(url);
 		coverReply->setProperty("taa", QStringList() << (titleAsAlbum ? album : title) << artist << (titleAsAlbum ? QString() : album));
 		coverReply->setProperty("titleAsAlbum", titleAsAlbum);
 		connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
@@ -120,8 +117,7 @@ void LastFM::login()
 	{
 		const QString auth_token = QCryptographicHash::hash(user.toUtf8() + md5pass.toUtf8(), QCryptographicHash::Md5).toHex();
 		const QString api_sig = QCryptographicHash::hash(QString("api_key%1authToken%2methodauth.getmobilesessionusername%3%4").arg(api_key, auth_token, user, secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		loginReply = net.get(QNetworkRequest(getSessionURL.arg(user, auth_token, api_key, api_sig)));
-		loginReply->ignoreSslErrors();
+		loginReply = net.start(getSessionURL.arg(user, auth_token, api_key, api_sig));
 		connect(loginReply, SIGNAL(finished()), this, SLOT(loginFinished()));
 	}
 }
@@ -149,11 +145,9 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 {
 	if (!session_key.isEmpty())
 	{
-		static const QUrl requestUrl(audioScrobbler2URL);
-		QNetworkRequest request(requestUrl);
-		QString api_sig;
+		static const QString header = "Content-Type: application/x-www-form-urlencoded";
 
-		request.setRawHeader("content-type", "application/x-www-form-urlencoded");
+		QString api_sig;
 
 		int duration = scrobble.duration - (time(NULL) - scrobble.startTime);
 		if (duration < 0)
@@ -161,13 +155,13 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 
 		//updateNowPlaying
 		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		QNetworkReply *reply = net.post(request, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).toUtf8());
+		HttpReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).toUtf8(), header);
 		connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 
 		//scrobble
 		const QString ts = QString::number(scrobble.startTime);
 		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		scrobbleReply = net.post(request, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).toUtf8());
+		scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).toUtf8(), header);
 		scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
 		connect(scrobbleReply, SIGNAL(finished()), this, SLOT(scrobbleFinished()));
 	}
@@ -218,18 +212,18 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
 
 void LastFM::albumFinished()
 {
-	const bool isCoverImage = !coverReply->url().toString().contains("api_key");
+	const bool isCoverImage = !coverReply->url().contains("api_key");
 	const bool titleAsAlbum = coverReply->property("titleAsAlbum").toBool();
 	const QStringList taa = coverReply->property("taa").toStringList();
-	const QByteArray reply = coverReply->readAll();
 	bool coverNotFound = false;
 	if (coverReply->error())
 	{
-		if (!isCoverImage && reply.contains("error code=\"6\""))
+		if (!isCoverImage && coverReply->error() == HttpReply::CONNECTION_ERROR_400)
 			coverNotFound = true;
 	}
 	else
 	{
+		const QByteArray reply = coverReply->readAll();
 		if (isCoverImage)
 			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
 		else
@@ -244,12 +238,11 @@ void LastFM::albumFinished()
 					idx = reply.indexOf("http", idx);
 					if (idx > -1 && end_idx > -1 && end_idx > idx)
 					{
-						const QUrl imgUrl = QUrl(reply.mid(idx, end_idx - idx));
-						if (imgUrl.toString().contains("noimage"))
+						const QString imgUrl = reply.mid(idx, end_idx - idx);
+						if (imgUrl.contains("noimage"))
 							continue;
 						coverReply->deleteLater();
-						coverReply = net.get(QNetworkRequest(imgUrl));
-						coverReply->ignoreSslErrors();
+						coverReply = net.start(imgUrl);
 						coverReply->setProperty("taa", taa);
 						connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 						return;
@@ -279,10 +272,9 @@ void LastFM::albumFinished()
 }
 void LastFM::loginFinished()
 {
-	const QByteArray reply = loginReply->readAll();
 	if (loginReply->error())
 	{
-		const bool wrongLoginOrPassword = reply.contains("error code=\"4\"");
+		const bool wrongLoginOrPassword = (loginReply->error() == HttpReply::CONNECTION_ERROR_403);
 		if (!dontShowLoginError || wrongLoginOrPassword)
 			QMPlay2Core.logError(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()));
 		if (wrongLoginOrPassword)
@@ -295,6 +287,7 @@ void LastFM::loginFinished()
 	}
 	else
 	{
+		const QByteArray reply = loginReply->readAll();
 		int idx = reply.indexOf("<key>");
 		if (idx > -1)
 		{

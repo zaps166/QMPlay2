@@ -17,11 +17,8 @@
 */
 
 #include <Radio.hpp>
-#include <Version.hpp>
+#include <Http.hpp>
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QProgressBar>
 #include <QInputDialog>
 #include <QListWidget>
@@ -107,13 +104,10 @@ void Radio::visibilityChanged(bool v)
 		progressB->setMaximum(0);
 		progressB->show();
 
-		net = new QNetworkAccessManager(this);
-		QNetworkRequest request(QUrl("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList"));
-		request.setRawHeader("User-Agent", QMPlay2UserAgent);
-		QNetworkReply *netReply = net->get(request);
-		connect(netReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+		net = new Http(this);
+		HttpReply *netReply = net->start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList");
+		connect(netReply, SIGNAL(downloadProgress(int, int)), this, SLOT(downloadProgress(int, int)));
 		connect(netReply, SIGNAL(finished()), this, SLOT(finished()));
-		netReply->ignoreSslErrors();
 	}
 }
 void Radio::popup(const QPoint &p)
@@ -153,7 +147,7 @@ void Radio::openLink()
 	}
 }
 
-void Radio::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+void Radio::downloadProgress(int bytesReceived, int bytesTotal)
 {
 	if (bytesTotal > 0 && bytesTotal != progressB->maximum())
 		progressB->setMaximum(bytesTotal);
@@ -161,7 +155,7 @@ void Radio::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 }
 void Radio::finished()
 {
-	QNetworkReply *netReply = (QNetworkReply *)sender();
+	HttpReply *netReply = (HttpReply *)sender();
 	bool err = false;
 	if (!netReply->error())
 	{

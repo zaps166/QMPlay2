@@ -26,12 +26,11 @@
 #include <Settings.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
+#include <IPC.hpp>
 
 #include <QDesktopWidget>
 #include <QStyleFactory>
 #include <QStyleOption>
-#include <QLocalServer>
-#include <QLocalSocket>
 #include <QApplication>
 #include <QImageReader>
 #include <QMessageBox>
@@ -256,7 +255,7 @@ static void showHelp(const QByteArray &ver)
 "    -quit       - terminates the application"
 	).toUtf8() + "\n");
 }
-static bool writeToSocket(QLocalSocket &socket)
+static bool writeToSocket(IPCSocket &socket)
 {
 	bool ret = false;
 	for (int i = QMPArguments.first.count() - 1; i >= 0; i--)
@@ -401,19 +400,16 @@ int main(int argc, char *argv[])
 	const bool help = arguments.contains("--help") || arguments.contains("-h");
 	if (!help)
 	{
-		QLocalSocket socket;
-		socket.connectToServer(qmplay2Gui.getPipe(), QIODevice::WriteOnly);
-
+		IPCSocket socket(qmplay2Gui.getPipe());
 		parseArguments(arguments);
-
-		if (socket.waitForConnected(1000))
+		if (socket.open(IPCSocket::WriteOnly))
 		{
 			if (writeToSocket(socket))
 			{
 				socket.waitForBytesWritten(1000);
 				useGui = false;
 			}
-			socket.disconnectFromServer();
+			socket.close();
 		}
 #ifndef Q_OS_WIN
 		else if (QFile::exists(qmplay2Gui.getPipe()))
@@ -518,13 +514,13 @@ int main(int argc, char *argv[])
 
 		qmplay2Gui.loadIcons();
 
-		qmplay2Gui.pipe = new QLocalServer;
+		qmplay2Gui.pipe = new IPCServer(qmplay2Gui.getPipe());
 		if
 		(
 #ifdef Q_OS_WIN
-			WaitNamedPipeA(qmplay2Gui.getPipe().toLocal8Bit(), NMPWAIT_USE_DEFAULT_WAIT) ||
+			WaitNamedPipeW((const wchar_t *)qmplay2Gui.getPipe().utf16(), NMPWAIT_USE_DEFAULT_WAIT) ||
 #endif
-			!qmplay2Gui.pipe->listen(qmplay2Gui.getPipe())
+			!qmplay2Gui.pipe->listen()
 		)
 		{
 			delete qmplay2Gui.pipe;
@@ -532,13 +528,12 @@ int main(int argc, char *argv[])
 			if (settings.getBool("AllowOnlyOneInstance"))
 			{
 				QMPlay2Core.quit();
-				QLocalSocket socket;
-				socket.connectToServer(qmplay2Gui.getPipe(), QIODevice::WriteOnly);
-				if (socket.waitForConnected(1000))
+				IPCSocket socket(qmplay2Gui.getPipe());
+				if (socket.open(IPCSocket::WriteOnly))
 				{
 					socket.write(QByteArray("show\t") + '\0');
 					socket.waitForBytesWritten(1000);
-					socket.disconnectFromServer();
+					socket.close();
 				}
 				break;
 			}

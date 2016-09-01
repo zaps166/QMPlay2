@@ -19,7 +19,8 @@
 #ifndef UPDATER_HPP
 #define UPDATER_HPP
 
-#include <QNetworkAccessManager>
+#include <Http.hpp>
+
 #include <QDialog>
 #include <QFile>
 
@@ -40,18 +41,17 @@ public slots:
 	void downloadUpdate();
 private slots:
 	void infoFinished();
-	void headerChanged();
 	void writeToFile();
-	void downloadprogress(qint64, qint64);
+	void downloadprogress(int bytesReceived, int bytesTotal);
 	void downloadFinished();
 
 	void applyUpdate();
 private:
-	QNetworkReply *getFile(const QUrl &);
-	void endWork(const QString &);
+	HttpReply *getFile(const QString &url);
+	void endWork(const QString &str);
 
 	QFile infoFile, updateFile;
-	QNetworkAccessManager net;
+	Http net;
 	QLabel *infoL;
 	QProgressBar *progressB;
 	QPushButton *downloadUpdateB, *installB;
