@@ -19,8 +19,7 @@
 #ifndef FORMATCONTEXT_HPP
 #define FORMATCONTEXT_HPP
 
-#include <ChapterInfo.hpp>
-#include <StreamInfo.hpp>
+#include <ChapterProgramInfo.hpp>
 #include <TimeStamp.hpp>
 
 #include <QCoreApplication>
@@ -52,6 +51,7 @@ public:
 
 	bool metadataChanged() const;
 
+	QList<ProgramInfo> getPrograms() const;
 	QList<ChapterInfo> getChapters() const;
 
 	QString name() const;

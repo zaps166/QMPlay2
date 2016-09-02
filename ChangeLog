@@ -5,6 +5,7 @@ Changes in QMPlay2 build 16.09.02:
 	- add quality button in YouTube browser,
 	- download "youtube-dl" if necessary,
 	- get rid of "QtNetwork" module,
+	- add MPEG-TS programs support,
 
 Changes in QMPlay2 build 16.08.19:
 	- add key shortcuts editor to Settings (thanks Zamarin Arthur for help),

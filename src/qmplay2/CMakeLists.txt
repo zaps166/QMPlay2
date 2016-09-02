@@ -49,7 +49,7 @@ set(QMPLAY2_HDR
     headers/StreamInfo.hpp
     headers/DockWidget.hpp
     headers/IOController.hpp
-    headers/ChapterInfo.hpp
+    headers/ChapterProgramInfo.hpp
     headers/PacketBuffer.hpp
     headers/Buffer.hpp
     headers/Http.hpp

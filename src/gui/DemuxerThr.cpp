@@ -669,7 +669,44 @@ void DemuxerThr::emitInfo()
 		info += "<br/><br/><a href='save_cover'>" + tr("Save cover picture") + "</a>";
 
 	bool once = false;
+	foreach (const ProgramInfo &program, demuxer->getPrograms())
+	{
+		if (!once)
+		{
+			info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Programs") + ":</big></b></p>";
+			once = true;
+		}
+
+		const int currentPlayingWanted = (playC.videoStream != -1) + (playC.audioStream != -1) + (playC.subtitlesStream != -1);
+		int currentPlaying = 0;
+		QString streams;
+
+		for (int i = 0; i < program.streams.count(); ++i)
+		{
+			const int stream = program.streams.at(i).first;
+			const QMPlay2MediaType type = program.streams.at(i).second;
+			streams += QString::number(type) + ":" + QString::number(stream) + ",";
+			if (stream == playC.videoStream || stream == playC.audioStream || stream == playC.subtitlesStream)
+				++currentPlaying;
+		}
+		streams.chop(1);
+
+		info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
+		info += "<li>";
+		if (!streams.isEmpty())
+			info += "<a href='stream:" + streams + "'>";
+		if (currentPlaying == currentPlayingWanted)
+			info += "<b>";
+		info += tr("Program") + " " + QString::number(program.number);
+		if (currentPlaying == currentPlayingWanted)
+			info += "</b>";
+		if (!streams.isEmpty())
+			info += "</a>";
+		info += "</li></ul>";
+	}
+
 	int chapterCount = 0;
+	once = false;
 	foreach (const ChapterInfo &chapter, demuxer->getChapters())
 	{
 		if (!once)

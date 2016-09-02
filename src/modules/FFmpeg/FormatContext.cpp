@@ -189,10 +189,38 @@ bool FormatContext::metadataChanged() const
 	return false;
 }
 
+QList<ProgramInfo> FormatContext::getPrograms() const
+{
+	QList<ProgramInfo> programs;
+	for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
+	{
+		const AVProgram &program = *formatCtx->programs[i];
+		if (program.discard != AVDISCARD_ALL)
+		{
+			ProgramInfo programInfo(program.program_num);
+			if (program.nb_stream_indexes)
+			{
+				for (unsigned s = 0; s < program.nb_stream_indexes; ++s)
+				{
+					const int ff_idx = program.stream_index[s];
+					const int idx = index_map[ff_idx];
+					if (idx > -1)
+					{
+						const QMPlay2MediaType type = (QMPlay2MediaType)codecParams(streams[ff_idx])->codec_type;
+						if (type != QMPLAY2_TYPE_UNKNOWN)
+							programInfo.streams += qMakePair(idx, type);
+					}
+				}
+			}
+			programs += programInfo;
+		}
+	}
+	return programs;
+}
 QList<ChapterInfo> FormatContext::getChapters() const
 {
 	QList<ChapterInfo> chapters;
-	for (unsigned i = 0; i < formatCtx->nb_chapters; i++)
+	for (unsigned i = 0; i < formatCtx->nb_chapters; ++i)
 	{
 		const AVChapter &chapter = *formatCtx->chapters[i];
 		ChapterInfo chapterInfo(chapter.start * chapter.time_base.num / (double)chapter.time_base.den, chapter.end * chapter.time_base.num / (double)chapter.time_base.den);

@@ -74,3 +74,11 @@ StreamInfo::StreamInfo(quint32 sample_rate, quint8 channels) :
 {
 	time_base.num = time_base.den = 0;
 }
+
+/**/
+
+StreamsInfo::~StreamsInfo()
+{
+	for (int i = 0; i < count(); ++i)
+		delete at(i);
+}

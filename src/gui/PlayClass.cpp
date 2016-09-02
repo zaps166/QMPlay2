@@ -313,6 +313,38 @@ void PlayClass::chStream(const QString &s)
 		if (fileSubsList.count() > idx)
 			loadSubsFile(fileSubsList[idx]);
 	}
+	else
+	{
+		//TODO: What if one of type will not be found in next program?
+		choosenAudioStream = -1;
+		choosenVideoStream = -1;
+		choosenSubtitlesStream = -1;
+		foreach (const QString &streamPair, s.split(','))
+		{
+			const QStringList splitted = streamPair.split(':');
+			if (splitted.count() != 2)
+				return;
+			const QMPlay2MediaType type = (QMPlay2MediaType)splitted[0].toInt();
+			const int stream = splitted[1].toInt();
+			switch (type)
+			{
+				case QMPLAY2_TYPE_VIDEO:
+					if (choosenVideoStream == -1)
+						choosenVideoStream = stream;
+					break;
+				case QMPLAY2_TYPE_AUDIO:
+					if (choosenAudioStream == -1)
+						choosenAudioStream = stream;
+					break;
+				case QMPLAY2_TYPE_SUBTITLE:
+					if (choosenSubtitlesStream == -1)
+						choosenSubtitlesStream = stream;
+					break;
+				default:
+					break;
+			}
+		}
+	}
 }
 void PlayClass::setSpeed(double spd)
 {

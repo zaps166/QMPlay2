@@ -16,8 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CHAPTERINFO_HPP
-#define CHAPTERINFO_HPP
+#ifndef CHAPTERPROGRAMINFO_HPP
+#define CHAPTERPROGRAMINFO_HPP
+
+#include <StreamInfo.hpp>
 
 #include <QString>
 
@@ -32,4 +34,15 @@ public:
 	double start, end;
 };
 
-#endif // CHAPTERINFO_HPP
+class ProgramInfo
+{
+public:
+	inline ProgramInfo(int number) :
+		number(number)
+	{}
+
+	int number;
+	QVector<QPair<int, QMPlay2MediaType> > streams;
+};
+
+#endif // CHAPTERPROGRAMINFO_HPP

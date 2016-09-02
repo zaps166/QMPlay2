@@ -542,6 +542,14 @@
         <source>Save cover picture</source>
         <translation>Zapisz okładkę</translation>
     </message>
+    <message>
+        <source>Programs</source>
+        <translation>Programy</translation>
+    </message>
+    <message>
+        <source>Program</source>
+        <translation>Program</translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>

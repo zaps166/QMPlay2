@@ -91,11 +91,7 @@ class StreamsInfo : public QList<StreamInfo *>
 public:
 	inline StreamsInfo()
 	{}
-	inline ~StreamsInfo()
-	{
-		for (int i = 0; i < count(); ++i)
-			delete at(i);
-	}
+	~StreamsInfo();
 };
 
 #endif // STREAMINFO_HPP

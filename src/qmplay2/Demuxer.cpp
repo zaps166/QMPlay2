@@ -73,6 +73,10 @@ bool Demuxer::metadataChanged() const
 	return false;
 }
 
+QList<ProgramInfo> Demuxer::getPrograms() const
+{
+	return QList<ProgramInfo>();
+}
 QList<ChapterInfo> Demuxer::getChapters() const
 {
 	return QList<ChapterInfo>();

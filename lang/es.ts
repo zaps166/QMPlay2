@@ -542,6 +542,14 @@
         <source>Opening</source>
         <translation>Abriendo</translation>
     </message>
+    <message>
+        <source>Programs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Program</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>

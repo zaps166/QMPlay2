@@ -19,9 +19,8 @@
 #ifndef DEMUXER_HPP
 #define DEMUXER_HPP
 
+#include <ChapterProgramInfo.hpp>
 #include <ModuleCommon.hpp>
-#include <ChapterInfo.hpp>
-#include <StreamInfo.hpp>
 #include <Playlist.hpp>
 
 #include <QString>
@@ -52,6 +51,7 @@ public:
 		return streams_info;
 	}
 
+	virtual QList<ProgramInfo> getPrograms() const;
 	virtual QList<ChapterInfo> getChapters() const;
 
 	virtual QString name() const = 0;

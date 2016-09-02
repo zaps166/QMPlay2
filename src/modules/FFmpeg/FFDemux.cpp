@@ -50,6 +50,12 @@ bool FFDemux::metadataChanged() const
 	return isMetadataChanged;
 }
 
+QList<ProgramInfo> FFDemux::getPrograms() const
+{
+	if (formatContexts.count() == 1)
+		return formatContexts.at(0)->getPrograms();
+	return QList<ProgramInfo>();
+}
 QList<ChapterInfo> FFDemux::getChapters() const
 {
 	if (formatContexts.count() == 1)

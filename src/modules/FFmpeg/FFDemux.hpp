@@ -32,6 +32,7 @@ private:
 
 	bool metadataChanged() const;
 
+	QList<ProgramInfo> getPrograms() const;
 	QList<ChapterInfo> getChapters() const;
 
 	QString name() const;

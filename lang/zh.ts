@@ -542,6 +542,14 @@
         <source>Save cover picture</source>
         <translation>保存封面图片</translation>
     </message>
+    <message>
+        <source>Programs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Program</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>
