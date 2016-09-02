@@ -43,7 +43,7 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 	AVThread(playC, "video:", HWAccelWriter, pluginsName),
 	doScreenshot(false),
 	deleteOSD(false), deleteFrame(false),
-	W(0), H(0),
+	W(0), H(0), seq(0),
 	sDec(NULL),
 	HWAccelWriter(HWAccelWriter),
 	subtitles(NULL)
@@ -95,6 +95,7 @@ void VideoThr::setFrameSize(int w, int h)
 	writer->modParam("W", W);
 	writer->modParam("H", H);
 	deleteSubs = deleteOSD = deleteFrame = true;
+	++seq;
 }
 void VideoThr::setARatio(double aRatio, double sar)
 {
@@ -535,7 +536,7 @@ void VideoThr::run()
 				if (!skip && canWrite)
 				{
 					oneFrame = canWrite = false;
-					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame));
+					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame), Q_ARG(quint32, seq));
 				}
 			}
 			if (updateFrameTimer)
@@ -546,10 +547,10 @@ void VideoThr::run()
 	}
 }
 
-void VideoThr::write(VideoFrame videoFrame)
+void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
 {
 	canWrite = true;
-	if (writer->readyWrite())
+	if (lastSeq == seq && writer->readyWrite())
 		videoWriter()->writeVideo(videoFrame);
 }
 void VideoThr::screenshot(VideoFrame videoFrame)

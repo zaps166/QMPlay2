@@ -81,6 +81,7 @@ private:
 	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame;
 	double lastSampleAspectRatio;
 	int W, H;
+	quint32 seq;
 
 	Decoder *sDec;
 	Writer *HWAccelWriter;
@@ -88,7 +89,7 @@ private:
 	VideoFilters filters;
 	QMutex filtersMutex;
 private slots:
-	void write(VideoFrame videoFrame);
+	void write(VideoFrame videoFrame, quint32 lastSeq);
 	void screenshot(VideoFrame videoFrame);
 	void pause();
 };
