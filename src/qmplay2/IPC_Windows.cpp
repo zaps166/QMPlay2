@@ -40,9 +40,12 @@ public:
 			CloseHandle(hPipe);
 			hPipe = INVALID_HANDLE_VALUE;
 
-			eventNotifier->wait();
-			delete eventNotifier;
-			eventNotifier = NULL;
+			if (eventNotifier)
+			{
+				eventNotifier->wait();
+				delete eventNotifier;
+				eventNotifier = NULL;
+			}
 
 			if (ov)
 			{
