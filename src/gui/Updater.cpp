@@ -158,6 +158,7 @@ void Updater::downloadprogress(int bytesReceived, int bytesTotal)
 {
 	progressB->setMaximum(bytesTotal);
 	progressB->setValue(bytesReceived);
+	writeToFile();
 }
 void Updater::downloadFinished()
 {
@@ -190,7 +191,6 @@ void Updater::applyUpdate()
 HttpReply *Updater::getFile(const QString &url)
 {
 	HttpReply *reply = net.start(url);
-	connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFile()));
 	connect(reply, SIGNAL(downloadProgress(int, int)), this, SLOT(downloadprogress(int, int)));
 	connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
 	firstChunk = true;
