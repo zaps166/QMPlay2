@@ -27,6 +27,10 @@ DEPENDPATH  += . ../../qmplay2/headers
 HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp
 SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp
 
+HEADERS += ProstoPleer.hpp
+SOURCES += ProstoPleer.cpp
+DEFINES += USE_PROSTOPLEER
+
 HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
 DEFINES += USE_LASTFM

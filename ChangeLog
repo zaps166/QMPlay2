@@ -1,6 +1,5 @@
 Changes in QMPlay2 build 16.09.02:
 	- don't load subtitles which needs decoder without the decoder,
-	- removed ProstoPleer (website no longer exists),
 	- fix displaying multi-line graphical subtitles,
 	- don't crop non-graphics subtitles on zoom,
 	- add quality button in YouTube browser,
