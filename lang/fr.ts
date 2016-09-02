@@ -1861,7 +1861,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Chercher en a&amp;vant</translation>
     </message>
     <message>
-        <source>seek &amp;backward</source>
+        <source>Seek &amp;backward</source>
         <translation>Chercher en &amp;arrière</translation>
     </message>
     <message>

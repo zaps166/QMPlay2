@@ -1863,7 +1863,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Przewiń do p&amp;rzodu</translation>
     </message>
     <message>
-        <source>seek &amp;backward</source>
+        <source>Seek &amp;backward</source>
         <translation>Przewiń do &amp;tyłu</translation>
     </message>
     <message>

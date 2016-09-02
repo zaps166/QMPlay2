@@ -1861,7 +1861,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>步进</translation>
     </message>
     <message>
-        <source>seek &amp;backward</source>
+        <source>Seek &amp;backward</source>
         <translation>步退</translation>
     </message>
     <message>

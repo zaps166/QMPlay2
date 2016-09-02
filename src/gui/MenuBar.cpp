@@ -167,7 +167,7 @@ MenuBar::Player::Player(MenuBar *parent) :
 
 	addSeparator();
 	newAction(Player::tr("Seek &forward"), this, seekF, true, QIcon(), false);
-	newAction(Player::tr("seek &backward"), this, seekB, true, QIcon(), false);
+	newAction(Player::tr("Seek &backward"), this, seekB, true, QIcon(), false);
 	newAction(Player::tr("Long &seek &forward"), this, lSeekF, true, QIcon(), false);
 	newAction(Player::tr("Long s&eek backward"), this, lSeekB, true, QIcon(), false);
 	addSeparator();

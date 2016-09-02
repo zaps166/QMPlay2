@@ -1862,7 +1862,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Más &amp;lento</translation>
     </message>
     <message>
-        <source>seek &amp;backward</source>
+        <source>Seek &amp;backward</source>
         <translation>Búsqueda a&amp;trás</translation>
     </message>
     <message>
