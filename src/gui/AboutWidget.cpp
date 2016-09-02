@@ -21,6 +21,7 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
+#include <QUrl>
 #include <QFile>
 #include <QLabel>
 #include <QTabWidget>
@@ -29,6 +30,7 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QDesktopServices>
 
 AboutWidget::AboutWidget()
 {
@@ -140,7 +142,7 @@ void AboutWidget::closeEvent(QCloseEvent *)
 
 void AboutWidget::linkActivated(const QString &link)
 {
-	QMPlay2Core.run(link);
+	QDesktopServices::openUrl(link);
 }
 void AboutWidget::refreshLog()
 {

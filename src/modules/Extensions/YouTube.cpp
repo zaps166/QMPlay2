@@ -24,6 +24,7 @@
 #include <Reader.hpp>
 
 #include <QStringListModel>
+#include <QDesktopServices>
 #include <QTextDocument>
 #include <QProgressBar>
 #include <QApplication>
@@ -401,7 +402,7 @@ void ResultsYoutube::openPage()
 	{
 		if (tWI->parent())
 			tWI = tWI->parent();
-		QMPlay2Core.run(tWI->data(0, Qt::UserRole).toString());
+		QDesktopServices::openUrl(tWI->data(0, Qt::UserRole).toString());
 	}
 }
 void ResultsYoutube::copyPageURL()

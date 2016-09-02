@@ -112,8 +112,6 @@ public:
 	Q_SIGNAL void posChanged(int pos);
 	Q_SIGNAL void seeked(int pos);
 
-	bool run(const QString &command, const QString &args = QString());
-
 	void log(const QString &, int logFlags = ErrorLog);
 	inline void logInfo(const QString &txt, const bool showInGUI = true, const bool logOnce = false)
 	{
@@ -175,9 +173,6 @@ private:
 	QVector<Module *> pluginsInstance;
 	QTranslator *translator, *qtTranslator;
 	QString shareDir, langDir, settingsDir, logFilePath;
-#ifndef Q_OS_WIN
-	QString unixOpenCommand;
-#endif
 	QAtomicInt working;
 	QStringList logs;
 	QMap<QString, QString> languages;

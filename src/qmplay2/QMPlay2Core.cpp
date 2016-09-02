@@ -33,7 +33,6 @@
 #include <QDir>
 #ifdef Q_OS_WIN
 	#include <windows.h>
-	#include <shlwapi.h>
 	#include <powrprof.h>
 #endif
 
@@ -50,12 +49,6 @@ QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 QMPlay2CoreClass::QMPlay2CoreClass()
 {
 	qmplay2Core = this;
-
-#if defined Q_OS_MAC
-	unixOpenCommand = "open ";
-#elif defined Q_OS_UNIX
-	unixOpenCommand = "xdg-open ";
-#endif
 
 	QFile f(":/Languages.csv");
 	if (f.open(QFile::ReadOnly))
@@ -300,22 +293,6 @@ QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &f
 {
 	const QIcon defaultIcon(fallback.isNull() ? QIcon(":/" + iconName) : fallback);
 	return settings->getBool("IconsFromTheme") ? QIcon::fromTheme(iconName, defaultIcon) : defaultIcon;
-}
-
-bool QMPlay2CoreClass::run(const QString &command, const QString &args)
-{
-	if (!command.isEmpty())
-#ifdef Q_OS_WIN
-		return (quintptr)ShellExecuteW(NULL, L"open", (WCHAR *)command.utf16(), (WCHAR *)args.utf16(), NULL, SW_SHOWNORMAL) > 32;
-#else
-	{
-		if (args.isEmpty() && !unixOpenCommand.isEmpty())
-			return !system(QString(unixOpenCommand + "\"" + command + "\" &").toLocal8Bit());
-		else if (!args.isEmpty())
-			return !system(QString("\"" + command + "\" " + args + " &").toLocal8Bit());
-	}
-#endif
-	return false;
 }
 
 void QMPlay2CoreClass::log(const QString &txt, int logFlags)
