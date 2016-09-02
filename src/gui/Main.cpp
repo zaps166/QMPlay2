@@ -409,10 +409,7 @@ int main(int argc, char *argv[])
 		if (socket.open(IPCSocket::WriteOnly))
 		{
 			if (writeToSocket(socket))
-			{
-				socket.waitForBytesWritten(1000);
 				useGui = false;
-			}
 			socket.close();
 		}
 #ifndef Q_OS_WIN
@@ -536,7 +533,6 @@ int main(int argc, char *argv[])
 				if (socket.open(IPCSocket::WriteOnly))
 				{
 					socket.write(QByteArray("show\t") + '\0');
-					socket.waitForBytesWritten(1000);
 					socket.close();
 				}
 				break;
