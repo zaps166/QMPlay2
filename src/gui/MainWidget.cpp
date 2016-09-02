@@ -316,6 +316,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	hideMenuAct->setChecked(menuHidden);
 	connect(hideMenuAct, SIGNAL(triggered(bool)), this, SLOT(hideMenu(bool)));
 	addAction(hideMenuAct);
+	QMPlay2GUI.menuBar->widgets->hideMenuAct = hideMenuAct;
+#else
+	QMPlay2GUI.menuBar->widgets->hideMenuAct = NULL;
 #endif
 
 	const bool widgetsLocked = settings.getBool("MainWidget/WidgetsLocked");
@@ -326,8 +329,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	lockWidgetsAct->setChecked(widgetsLocked);
 	connect(lockWidgetsAct, SIGNAL(triggered(bool)), this, SLOT(lockWidgets(bool)));
 	addAction(lockWidgetsAct);
+	QMPlay2GUI.menuBar->widgets->lockWidgetsAct = lockWidgetsAct;
 
-	setKeyShortcuts();
+	QMPlay2GUI.menuBar->setKeyShortcuts();
 
 	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
 #if defined Q_OS_MAC || defined Q_OS_ANDROID
@@ -385,15 +389,6 @@ MainWidget::~MainWidget()
 	emit QMPlay2Core.restoreCursor();
 	QMPlay2GUI.mainW = NULL;
 	QCoreApplication::quit();
-}
-
-void MainWidget::setKeyShortcuts()
-{
-	Settings &settings = QMPlay2Core.getSettings();
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
-	hideMenuAct->setShortcut(settings.getString("KeyBindings/Widgets-hideMenu"));
-#endif
-	lockWidgetsAct->setShortcut(settings.getString("KeyBindings/Widgets-lockWidgets"));
 }
 
 void MainWidget::detachFromPipe()

@@ -52,7 +52,6 @@ MenuBar::MenuBar()
 #ifdef Q_OS_MAC
 	widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown (QTBUG?)
 #endif
-	setKeyShourtcuts();
 }
 
 MenuBar::Window::Window(MenuBar *parent) :
@@ -356,13 +355,19 @@ MenuBar::Help::Help(MenuBar *parent) :
 	newAction(Help::tr("About &Qt"), this, aboutQt, false, QIcon(), false);
 }
 
-void MenuBar::setKeyShourtcuts()
+void MenuBar::setKeyShortcuts()
 {
 	ShortcutHandler *shortcuts = QMPlay2GUI.shortcutHandler;
 	shortcuts->appendAction(window->toggleVisibility, "KeyBindings/Window-toggleVisibility", "`");
 	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
 	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");
 	shortcuts->appendAction(window->close, "KeyBindings/Window-close", "Alt+F4");
+
+
+	if (widgets->hideMenuAct)
+		shortcuts->appendAction(widgets->hideMenuAct, "KeyBindings/Widgets-hideMenu", "Ctrl+Alt+M");
+	shortcuts->appendAction(widgets->lockWidgetsAct, "KeyBindings/Widgets-lockWidgets", "Shift+L");
+
 
 	shortcuts->appendAction(playlist->stopLoading, "KeyBindings/Playlist-stopLoading", "F4");
 	shortcuts->appendAction(playlist->sync, "KeyBindings/Playlist-sync", "F5");
@@ -391,6 +396,7 @@ void MenuBar::setKeyShourtcuts()
 	shortcuts->appendAction(playlist->sort->timeSort2, "KeyBindings/Playlist-Sort-timeSort2", "");
 	shortcuts->appendAction(playlist->sort->titleSort1, "KeyBindings/Playlist-Sort-titleSort1", "");
 	shortcuts->appendAction(playlist->sort->titleSort2, "KeyBindings/Playlist-Sort-titleSort2", "");
+
 
 	shortcuts->appendAction(player->togglePlay, "KeyBindings/Player-togglePlay", "Space");
 	shortcuts->appendAction(player->stop, "KeyBindings/Player-stop", "V");
@@ -448,9 +454,11 @@ void MenuBar::setKeyShourtcuts()
 	shortcuts->appendAction(playback->videoFilters->rotate90, "KeyBindings/Playback-VideoFilters-rotate90", "Ctrl+9");
 	shortcuts->appendAction(playback->videoFilters->more, "KeyBindings/Playback-VideoFilters-more", "Alt+F");
 
+
 	shortcuts->appendAction(options->settings, "KeyBindings/Options-settings", "Ctrl+O");
 	shortcuts->appendAction(options->modulesSettings, "KeyBindings/Options-modulesSettings", "Ctrl+Shift+O");
 	shortcuts->appendAction(options->trayVisible, "KeyBindings/Options-trayVisible", "Ctrl+T");
+
 
 	shortcuts->appendAction(help->about, "KeyBindings/Help-about", "F1");
 #ifdef UPDATER

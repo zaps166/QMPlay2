@@ -44,6 +44,8 @@ public:
 		friend class MenuBar;
 	public:
 		Widgets(MenuBar *parent);
+
+		QAction *hideMenuAct, *lockWidgetsAct;
 	private:
 		void menuShow();
 	};
@@ -147,7 +149,7 @@ public:
 		*aboutQt;
 	};
 
-	void setKeyShourtcuts();
+	void setKeyShortcuts();
 
 	Window *window;
 	Widgets *widgets;
