@@ -94,8 +94,13 @@ set(QMPLAY2_SRC
     PacketBuffer.cpp
     Buffer.cpp
     Http.cpp
-    IPC.cpp
 )
+
+if(WIN32)
+    list(APPEND QMPLAY2_SRC IPC_Windows.cpp)
+else()
+    list(APPEND QMPLAY2_SRC IPC_Unix.cpp)
+endif()
 
 set(QMPLAY2_RESOURCES
     languages.qrc
