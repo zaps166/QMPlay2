@@ -16,6 +16,7 @@ Table of Contents
 * [Hardware acceleration](#hardware-acceleration)
 * [Deinterlacing](#deinterlacing)
 * [Hidden features](#hidden-features)
+* [Multimedia keys](#multimedia-keys)
 * [Installation from sources](#installation-from-sources)
 * [Building package RPM, DEB or any other](#building-package-rpm-deb-or-any-other)
 * [Other information](#other-information)
@@ -140,6 +141,18 @@ Right click on volume slider and select "Split channels".
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
+##Multimedia keys
+
+In Windows multimedia keys should work automatically.
+
+In Linux/BSD you must associate keys with commands:
+- using QMPlay2 binary, see: `QMPlay2 -h`,
+- using MPRIS2:
+	- Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
+	- Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
+	- Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
+	- Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
+
 ##Installation from sources
 
 ###CMake requirements
@@ -152,12 +165,12 @@ For CMake build be sure that you have correct CMake version:
 ###You need devel packages:
 
 ####Necessary:
-- Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1 recommended):
+- Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
 	- OpenSSL for https support.
 - FFmpeg >= 2.2:
-	- libavformat - for FFmpeg module only,
+	- libavformat,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
 	- libavutil,
