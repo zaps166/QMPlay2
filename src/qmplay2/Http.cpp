@@ -219,7 +219,8 @@ Http::~Http()
 
 HttpReply *Http::start(const QString &url, const QByteArray &postData, const QString &rawHeaders)
 {
-	HttpReply *reply = new HttpReply(url.toUtf8(), postData, (rawHeaders.endsWith("\r\n") ? rawHeaders : rawHeaders + "\r\n").toUtf8(), m_customUserAgent.isNull() ? QMPlay2UserAgent : m_customUserAgent);
+	const QByteArray rawHeadersData = ((rawHeaders.isEmpty() || rawHeaders.endsWith("\r\n")) ? rawHeaders : rawHeaders + "\r\n").toUtf8();
+	HttpReply *reply = new HttpReply(url.toUtf8(), postData, rawHeadersData, m_customUserAgent.isNull() ? QMPlay2UserAgent : m_customUserAgent);
 	connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
 	//Don't set parent to "m_priv" - this prevents waiting for thread at QMPlay2 exit
 	reply->setParent(this);
