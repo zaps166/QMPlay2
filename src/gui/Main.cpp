@@ -59,8 +59,10 @@ QMPlay2GUIClass &QMPlay2GUIClass::instance()
 
 QString QMPlay2GUIClass::getPipe()
 {
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
 	return "\\\\.\\pipe\\QMPlay2";
+#elif defined Q_OS_MAC
+	return "/tmp/QMPlay2." + QString(getenv("USER"));
 #else
 	return QDir::tempPath() + "/QMPlay2." + QString(getenv("USER"));
 #endif
