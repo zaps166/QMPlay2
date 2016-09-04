@@ -168,15 +168,13 @@ For CMake build be sure that you have correct CMake version:
 - Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
-	- OpenSSL for https support.
 - FFmpeg >= 2.2:
-	- libavformat,
+	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
 	- libavutil,
 	- libswresample or libavresample - libswresample is default,
 	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
-	- OpenSSL for https.
 
 ####Important:
 - TagLib >= 1.7 (>= 1.9 recommended),
