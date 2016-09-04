@@ -28,10 +28,6 @@
 #include <Module.hpp>
 #include <IPC.hpp>
 
-#ifdef UPDATER
-	#include <QDesktopServices>
-	#include <QUrl>
-#endif
 #include <QDesktopWidget>
 #include <QStyleFactory>
 #include <QStyleOption>
@@ -108,7 +104,7 @@ void QMPlay2GUIClass::drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap)
 void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 {
 	settings->set("UpdateFile", "remove:" + UpdateFile);
-	QDesktopServices::openUrl(UpdateFile + " --Auto");
+	ShellExecuteW(NULL, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", NULL, SW_SHOWNORMAL);
 }
 #endif
 
