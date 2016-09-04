@@ -50,6 +50,7 @@ private:
 	/**/
 
 	OpenGL2Common *drawable;
+	bool allowPBO;
 #ifdef OPENGL_NEW_API
 	bool forceRtt, useRtt;
 #endif

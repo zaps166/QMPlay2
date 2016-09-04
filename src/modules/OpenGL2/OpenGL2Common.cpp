@@ -86,7 +86,7 @@ OpenGL2Common::OpenGL2Common() :
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
-	hasPbo(false),
+	allowPBO(true), hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0),
@@ -592,9 +592,18 @@ void OpenGL2Common::initGLProc()
 	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
 	hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
 #endif
-	glMapBufferRange = (GLMapBufferRange)QOpenGLContext::currentContext()->getProcAddress("glMapBufferRange");
-	glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
-	glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
+	if (allowPBO)
+	{
+		glMapBufferRange = (GLMapBufferRange)QOpenGLContext::currentContext()->getProcAddress("glMapBufferRange");
+		glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
+		glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
+	}
+	else
+	{
+		glMapBufferRange = NULL;
+		glMapBuffer = NULL;
+		glUnmapBuffer = NULL;
+	}
 	hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
 }
 #ifndef OPENGL_ES2

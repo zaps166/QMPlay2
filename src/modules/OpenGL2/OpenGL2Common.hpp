@@ -85,6 +85,11 @@ public:
 	virtual bool setVSync(bool enable) = 0;
 	virtual void updateGL(bool requestDelayed) = 0;
 
+	inline void setAllowPBO(bool allow)
+	{
+		allowPBO = allow;
+	}
+
 	void newSize(const QSize &size = QSize());
 	void clearImg();
 
@@ -144,7 +149,7 @@ public:
 	quint32 textures[4];
 
 	quint32 pbo[4];
-	bool hasPbo;
+	bool allowPBO, hasPbo;
 
 	bool isPaused, isOK, hasImage, doReset, setMatrix;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;

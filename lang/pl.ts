@@ -1450,6 +1450,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
         <translation>Wyświetla napisy z YouTube. Uwzględnia domyślny język dla napisów oraz język QMPlay2.</translation>
     </message>
+    <message>
+        <source>Allow to use PBO (if available)</source>
+        <translation>Zezwalaj na wykorzystanie PBO (jeżeli dostępny)</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

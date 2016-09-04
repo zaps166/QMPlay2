@@ -25,6 +25,7 @@ OpenGL2::OpenGL2() :
 	moduleImg = QImage(":/OpenGL2");
 
 	init("Enabled", true);
+	init("AllowPBO", true);
 #ifdef OPENGL_NEW_API
 	init("ForceRtt", false);
 #endif
@@ -65,6 +66,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB = new QCheckBox(tr("Enabled"));
 	enabledB->setChecked(sets().getBool("Enabled"));
 
+	allowPboB = new QCheckBox(tr("Allow to use PBO (if available)"));
+	allowPboB->setChecked(sets().getBool("AllowPBO"));
+
 #ifdef OPENGL_NEW_API
 	forceRttB = new QCheckBox(tr("Force render to texture if possible (not recommended)"));
 	forceRttB->setChecked(sets().getBool("ForceRtt"));
@@ -77,6 +81,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(enabledB);
+	layout->addWidget(allowPboB);
 #ifdef OPENGL_NEW_API
 	layout->addWidget(forceRttB);
 #endif
@@ -88,6 +93,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", enabledB->isChecked());
+	sets().set("AllowPBO", allowPboB->isChecked());
 #ifdef OPENGL_NEW_API
 	sets().set("ForceRtt", forceRttB->isChecked());
 #endif

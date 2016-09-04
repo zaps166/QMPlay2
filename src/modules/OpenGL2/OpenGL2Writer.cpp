@@ -32,7 +32,8 @@
 #endif
 
 OpenGL2Writer::OpenGL2Writer(Module &module) :
-	drawable(NULL)
+	drawable(NULL),
+	allowPBO(true)
 #ifdef OPENGL_NEW_API
 	, forceRtt(false)
 #endif
@@ -58,6 +59,12 @@ OpenGL2Writer::~OpenGL2Writer()
 bool OpenGL2Writer::set()
 {
 	bool doReset = false;
+	bool newAllowPBO = sets().getBool("AllowPBO");
+	if (newAllowPBO != allowPBO)
+	{
+		allowPBO = newAllowPBO;
+		doReset = true;
+	}
 #ifdef VSYNC_SETTINGS
 	vSync = sets().getBool("VSync");
 	if (drawable && !drawable->setVSync(vSync))
@@ -191,6 +198,7 @@ bool OpenGL2Writer::open()
 #else
 	drawable = new OpenGL2OldWidget;
 #endif
+	drawable->setAllowPBO(allowPBO);
 	if (drawable->testGL())
 	{
 #ifdef VSYNC_SETTINGS

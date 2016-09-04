@@ -43,7 +43,7 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *enabledB;
+	QCheckBox *enabledB, *allowPboB;
 #ifdef OPENGL_NEW_API
 	QCheckBox *forceRttB;
 #endif

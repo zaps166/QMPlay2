@@ -1449,6 +1449,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow to use PBO (if available)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
