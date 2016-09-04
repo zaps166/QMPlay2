@@ -53,7 +53,6 @@ public:
 
 	HTTP_ERROR error() const;
 
-	int size() const;
 	QByteArray readAll();
 
 signals:

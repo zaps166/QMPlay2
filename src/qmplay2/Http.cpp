@@ -61,8 +61,8 @@ public:
 	QByteArray m_data;
 	HttpReply::HTTP_ERROR m_error;
 
+	QMutex m_httpReplyMutex, m_dataMutex;
 	bool m_aborted;
-	QMutex m_mutex;
 
 private:
 	void run()
@@ -100,38 +100,38 @@ private:
 						size = -1; //Unknown size
 
 					const int chunkSize = qMax<int>(4096, size / 1000);
+					quint8 *data = new quint8[chunkSize];
 					int64_t pos = 0;
 
 					for (;;)
 					{
-						const int dataPos = m_data.size();
-						m_data.resize(dataPos + chunkSize);
-
-						const int received = avio_read(m_ctx, (quint8 *)m_data.data() + dataPos, chunkSize);
+						const int received = avio_read(m_ctx, data, chunkSize);
 
 						if (received < 0) //Error
 						{
-							m_data.resize(dataPos);
-							if (received == AVERROR_EOF)
-								break; //EOF
-							m_error = HttpReply::DOWNLOAD_ERROR;
+							if (received != AVERROR_EOF)
+								m_error = HttpReply::DOWNLOAD_ERROR;
 							break;
 						}
 
 						if (received > 0)
 						{
 							pos += received;
-							m_mutex.lock();
+
+							m_dataMutex.lock();
+							const int dataPos = m_data.size();
+							m_data.resize(dataPos + received);
+							memcpy(m_data.data() + dataPos, data, received);
+							m_dataMutex.unlock();
+
+							m_httpReplyMutex.lock();
 							if (m_httpReply)
 								emit m_httpReply->downloadProgress(pos, size);
-							m_mutex.unlock();
+							m_httpReplyMutex.unlock();
 						}
 
 						if (received < chunkSize) //EOF
-						{
-							m_data.resize(dataPos + received);
 							break;
-						}
 
 						if (pos + chunkSize >= INT_MAX)
 						{
@@ -139,6 +139,8 @@ private:
 							break;
 						}
 					}
+
+					delete[] data;
 				}
 				avio_closep(&m_ctx);
 			}
@@ -174,10 +176,10 @@ private:
 		if (m_aborted)
 			m_error = HttpReply::ABORTED;
 
-		m_mutex.lock();
+		m_httpReplyMutex.lock();
 		if (m_httpReply)
 			emit m_httpReply->finished();
-		m_mutex.unlock();
+		m_httpReplyMutex.unlock();
 	}
 };
 
@@ -198,13 +200,9 @@ HttpReply::HTTP_ERROR HttpReply::error() const
 	return m_priv->m_error;
 }
 
-int HttpReply::size() const
-{
-	return m_priv->m_data.size();
-}
-
 QByteArray HttpReply::readAll()
 {
+	QMutexLocker locker(&m_priv->m_dataMutex);
 	const QByteArray ret = m_priv->m_data;
 	m_priv->m_data.clear();
 	return ret;
@@ -220,9 +218,9 @@ HttpReply::~HttpReply()
 	else
 	{
 		connect(m_priv, SIGNAL(finished()), m_priv, SLOT(deleteLater()));
-		m_priv->m_mutex.lock();
+		m_priv->m_httpReplyMutex.lock();
 		m_priv->m_httpReply = NULL;
-		m_priv->m_mutex.unlock();
+		m_priv->m_httpReplyMutex.unlock();
 		abort();
 	}
 }
