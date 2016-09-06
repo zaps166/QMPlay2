@@ -593,7 +593,7 @@ YouTubeW::YouTubeW(Settings &sets) :
 	QToolButton *qualityB = new QToolButton;
 	qualityB->setPopupMode(QToolButton::InstantPopup);
 	qualityB->setToolTip(tr("Quality"));
-	qualityB->setIcon(QIcon(":/quality"));
+	qualityB->setIcon(QMPlay2Core.getIconFromTheme("video-display"));
 	qualityB->setMenu(qualityMenu);
 	qualityB->setAutoRaise(true);
 

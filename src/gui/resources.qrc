@@ -29,6 +29,7 @@
 		<file alias="edit-find">Icons/edit-find.png</file>
 		<file alias="document-properties">Icons/document-properties.png</file>
 		<file alias="application-x-mswinurl">Icons/application-x-mswinurl.png</file>
+		<file alias="video-display">Icons/video-display.png</file>
 
 		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
 	</qresource>
