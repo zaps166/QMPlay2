@@ -37,8 +37,7 @@ OpenGL2Window::OpenGL2Window() :
 	container->installEventFilter(this);
 	container->setAcceptDrops(false);
 
-	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible1(bool)));
-	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible2(bool)));
+	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
 }
 OpenGL2Window::~OpenGL2Window()
 {
@@ -112,15 +111,9 @@ void OpenGL2Window::aboutToBeDestroyed()
 	contextAboutToBeDestroyed();
 	doneCurrent();
 }
-void OpenGL2Window::videoVisible1(bool v)
+void OpenGL2Window::videoVisible(bool v)
 {
 	visible = v && (container->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
-}
-void OpenGL2Window::videoVisible2(bool v)
-{
-	if (sender() == &QMPlay2Core && qobject_cast<const QDockWidget *>(QMPlay2Core.getVideoDock())->isFloating())
-		return;
-	videoVisible1(v);
 }
 
 bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)

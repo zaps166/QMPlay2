@@ -104,7 +104,6 @@ public:
 	Q_SIGNAL void showSettings(const QString &moduleName);
 
 	Q_SIGNAL void videoDockMoved();
-	Q_SIGNAL void mainWidgetNotMinimized(bool);
 	Q_SIGNAL void videoDockVisible(bool);
 
 	Q_SIGNAL void statusBarMessage(const QString &txt, int ms);

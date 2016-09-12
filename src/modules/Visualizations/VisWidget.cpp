@@ -63,9 +63,6 @@ VisWidget::VisWidget() :
 
 	connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
 	connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
-#if QT_VERSION >= 0x050000
-	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(visibilityChanged(bool)));
-#endif
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 }
@@ -177,21 +174,10 @@ void VisWidget::contextMenu(const QPoint &point)
 }
 void VisWidget::visibilityChanged(bool v)
 {
-#if QT_VERSION >= 0x050000
-	const bool fromMainWindow = &QMPlay2Core == sender();
-#else
-	const bool fromMainWindow = false;
-#endif
 	if (!v && parent() == dw)
-	{
-		if (!fromMainWindow || !dw->isFloating()) //Don't stop on Qt5 when window is minimized and the dock is floating
-			stop();
-	}
+		stop();
 	else if (!stopped)
-	{
-		//"fromMainWindow" ensures that visualization won't start on Qt5 when is not visible and main window is not minimized!
-		start(v && (!fromMainWindow || regionIsVisible()), fromMainWindow);
-	}
+		start(v && regionIsVisible());
 }
 void VisWidget::updateVisualization()
 {

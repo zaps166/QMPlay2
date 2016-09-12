@@ -70,10 +70,7 @@ private:
 
 	void setFeatures();
 
-	Q_SLOT void videoVisible1(bool);
-#if QT_VERSION >= 0x050000
-	Q_SLOT void videoVisible2(bool);
-#endif
+	Q_SLOT void videoVisible(bool);
 	Q_SLOT void doVideoVisible();
 
 	void presentationQueueCreate(WId winId);

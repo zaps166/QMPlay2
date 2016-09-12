@@ -40,7 +40,7 @@ protected:
 
 	virtual void paint(QPainter &p) = 0;
 
-	virtual void start(bool v, bool dontCheckRegion) = 0;
+	virtual void start(bool v) = 0;
 	virtual void stop();
 
 #ifdef USE_OPENGL

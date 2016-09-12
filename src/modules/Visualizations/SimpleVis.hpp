@@ -38,7 +38,7 @@ private:
 
 	void resizeEvent(QResizeEvent *) override final;
 
-	void start(bool v = false, bool dontCheckRegion = false) override final;
+	void start(bool v = false) override final;
 	void stop() override final;
 
 	QByteArray soundData;

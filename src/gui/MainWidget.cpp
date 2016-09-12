@@ -1564,12 +1564,6 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
 	playC.stop(true);
 }
-void MainWidget::changeEvent(QEvent *e)
-{
-	if (e->type() == QEvent::WindowStateChange)
-		emit QMPlay2Core.mainWidgetNotMinimized(!windowState().testFlag(Qt::WindowMinimized)); //Mainly for workaround the QTBUG-50589
-	QMainWindow::changeEvent(e);
-}
 void MainWidget::moveEvent(QMoveEvent *e)
 {
 	if (videoDock->isVisible() && !videoDock->isFloating())

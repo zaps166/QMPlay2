@@ -129,7 +129,6 @@ private:
 	void mouseMoveEvent(QMouseEvent *) override final;
 	void leaveEvent(QEvent *) override final;
 	void closeEvent(QCloseEvent *) override final;
-	void changeEvent(QEvent *) override final;
 	void moveEvent(QMoveEvent *) override final;
 	void showEvent(QShowEvent *) override final;
 	void hideEvent(QHideEvent *) override final;

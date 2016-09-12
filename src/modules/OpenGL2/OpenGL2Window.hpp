@@ -47,8 +47,7 @@ public:
 private slots:
 	void doUpdateGL(bool queued = false);
 	void aboutToBeDestroyed();
-	void videoVisible1(bool v);
-	void videoVisible2(bool v);
+	void videoVisible(bool v);
 private:
 	bool eventFilter(QObject *o, QEvent *e) override final;
 
