@@ -148,7 +148,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 
 	settingsW = nullptr;
 	aboutW = nullptr;
-	lastFocusWidget = nullptr;
 
 	isCompactView = wasShow = fullScreen = seekSFocus = false;
 
@@ -669,7 +668,6 @@ void MainWidget::toggleVisibility()
 		else
 		{
 			menuBar->options->trayVisible->setEnabled(false);
-			lastFocusWidget = focusWidget(); //Hold the current focus widget, because hiding from Mate systray applet and Xfwm4 can change focus on Qt5 (QTBUG-53993)
 			if (isMaximized())
 			{
 				if (!isCompactView)
@@ -682,7 +680,6 @@ void MainWidget::toggleVisibility()
 	}
 	else
 	{
-		bool doRestoreFocus = true;
 		if (isTray)
 			menuBar->options->trayVisible->setEnabled(true);
 		if (!maximized)
@@ -695,13 +692,10 @@ void MainWidget::toggleVisibility()
 				restoreState(dockWidgetState);
 				QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, dockWidgetState));
 				dockWidgetState.clear();
-				doRestoreFocus = false;
 			}
 			maximized = false;
 		}
 		activateWindow();
-		if (doRestoreFocus)
-			restoreFocus();
 	}
 #endif
 }
@@ -1258,7 +1252,6 @@ void MainWidget::delayedRestore(QByteArray data)
 {
 	QCoreApplication::processEvents();
 	restoreState(data);
-	restoreFocus();
 }
 
 void MainWidget::uncheckSuspend()
@@ -1330,15 +1323,6 @@ void MainWidget::hideDocks()
 	playlistDock->hide();
 	infoDock->hide();
 	hideAllExtensions();
-}
-void MainWidget::restoreFocus()
-{
-	if (lastFocusWidget)
-	{
-		if (lastFocusWidget != focusWidget())
-			lastFocusWidget->setFocus();
-		lastFocusWidget = nullptr;
-	}
 }
 
 inline bool MainWidget::isTrayVisible() const
