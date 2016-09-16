@@ -28,8 +28,8 @@ bool OpenGL2CommonQt5::testGL()
 	{
 		QOffscreenSurface offscreenSurface;
 		offscreenSurface.create();
-		glCtx.makeCurrent(&offscreenSurface);
-		testGLInternal();
+		if ((isOK = glCtx.makeCurrent(&offscreenSurface)))
+			testGLInternal();
 	}
 	return isOK;
 }
