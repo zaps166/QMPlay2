@@ -1,3 +1,8 @@
+Changes in QMPlay2 build 16.09.17:
+	- updated icon for YouTube quality button,
+	- fix screen saver blocking on Windows,
+	- OpenGL2 bugfix,
+
 Changes in QMPlay2 build 16.09.04:
 	- don't load subtitles which needs decoder without the decoder,
 	- add checkbox to disable PBO in OpenGL2 module settings,
