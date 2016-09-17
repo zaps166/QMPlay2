@@ -177,7 +177,7 @@ void VisWidget::visibilityChanged(bool v)
 	if (!v && parent() == dw)
 		stop();
 	else if (!stopped)
-		start(v && regionIsVisible());
+		start(v);
 }
 void VisWidget::updateVisualization()
 {
