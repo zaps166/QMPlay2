@@ -44,6 +44,7 @@ class QMPlay2Extensions;
 class MainWidget : public QMainWindow
 {
 	friend class QMPlay2GUIClass;
+	Q_PROPERTY(bool fullScreen READ getFullScreen)
 	Q_OBJECT
 public:
 	MainWidget(QPair<QStringList, QStringList> &);
@@ -122,6 +123,8 @@ private:
 	void showToolBar(bool);
 	void hideDocks();
 	void restoreFocus();
+
+	bool getFullScreen() const;
 
 	void mouseMoveEvent(QMouseEvent *);
 	void leaveEvent(QEvent *);

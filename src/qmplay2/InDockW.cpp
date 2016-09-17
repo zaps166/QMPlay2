@@ -128,23 +128,30 @@ void InDockW::resizeEvent(QResizeEvent *)
 {
 	if (w)
 	{
-		int mappedY = mapToParent(QPoint()).y();
+		int X = 0;
 		int Y = 0;
 		int W = width();
 		int H = height() + loseHeight;
+
+		const int mappedY = mapToParent(QPoint()).y();
 		if (mappedY < 0)
 		{
 			H += mappedY;
 			Y -= mappedY;
 		}
-		if (loseHeight && w->property("PreventFullscreen").toBool())
+
+		const Qt::CheckState preventFullscreen = (Qt::CheckState)w->property("preventFullscreen").value<int>();
+		if ((preventFullscreen == Qt::Checked || (loseHeight && preventFullscreen == Qt::PartiallyChecked)) && window()->property("fullScreen").toBool())
 		{
+			X -= 1;
 			Y -= 1;
+			W += 2;
 			H += 2;
 		}
-		if (w->geometry() != QRect(0, Y, W, H))
+
+		if (w->geometry() != QRect(X, Y, W, H))
 		{
-			w->setGeometry(0, Y, W, H);
+			w->setGeometry(X, Y, W, H);
 			emit resized(W, H);
 		}
 	}

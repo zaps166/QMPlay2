@@ -572,7 +572,21 @@ void OpenGL2Common::testGLInternal()
 	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
 	if (preventFullscreen && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
-		w->setProperty("PreventFullscreen", true);
+	{
+		Qt::CheckState compositionEnabled = Qt::Checked;
+		if (QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
+		{
+			typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
+			DwmIsCompositionEnabledProc DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled");
+			if (DwmIsCompositionEnabled)
+			{
+				BOOL enabled = false;
+				if (DwmIsCompositionEnabled(&enabled) == S_OK && !enabled)
+					compositionEnabled = Qt::PartiallyChecked;
+			}
+		}
+		w->setProperty("preventFullscreen", (int)compositionEnabled);
+	}
 #endif
 }
 

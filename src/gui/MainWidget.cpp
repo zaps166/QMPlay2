@@ -1268,6 +1268,11 @@ void MainWidget::restoreFocus()
 	}
 }
 
+bool MainWidget::getFullScreen() const
+{
+	return fullScreen;
+}
+
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
