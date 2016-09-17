@@ -333,15 +333,6 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	QMPlay2GUI.menuBar->setKeyShortcuts();
 
-	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
-#if defined Q_OS_MAC || defined Q_OS_ANDROID
-	show();
-#else
-	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
-#endif
-
-	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
-
 	volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
 	if (settings.getBool("Mute"))
 		menuBar->player->toggleMute->trigger();
@@ -353,6 +344,15 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	if (settings.getBool("RestoreVideoEqualizer"))
 		QMPlay2GUI.videoAdjustment->restoreValues();
+
+	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
+#if defined Q_OS_MAC || defined Q_OS_ANDROID
+	show();
+#else
+	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
+#endif
+
+	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
 	while (!QMPArguments.first.isEmpty())
