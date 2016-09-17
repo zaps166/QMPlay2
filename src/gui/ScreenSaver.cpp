@@ -70,16 +70,35 @@ void ScreenSaver::reset()
 
 #include <QCoreApplication>
 
-#include <windows.h>
+#include <Functions.hpp>
 
-static inline bool blockScreenSaver(MSG *msg, bool &blocked)
+class ScreenSaverCtx
 {
-	if (msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER) && blocked)
+public:
+	inline ScreenSaverCtx() :
+		time(0.0),
+		blocked(false)
+	{}
+
+	double time;
+	bool blocked;
+};
+
+static inline bool blockScreenSaver(MSG *msg, ScreenSaverCtx &screenSaverCtx)
+{
+	if (msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER) && screenSaverCtx.blocked)
 	{
-		blocked = false;
+		if (Functions::gettime() - screenSaverCtx.time >= 3.0)
+			screenSaverCtx.blocked = false;
 		return true;
 	}
 	return false;
+}
+
+static inline void screenSaverReset(ScreenSaverCtx &screenSaverCtx)
+{
+	screenSaverCtx.time = Functions::gettime();
+	screenSaverCtx.blocked = true;
 }
 
 #if QT_VERSION >= 0x050000
@@ -92,12 +111,12 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 			blocked(false)
 		{}
 
-		bool blocked;
+		ScreenSaverCtx screenSaverCtx;
 
 	private:
 		bool nativeEventFilter(const QByteArray &, void *m, long *)
 		{
-			return blockScreenSaver((MSG *)m, blocked);
+			return blockScreenSaver((MSG *)m, screenSaverCtx);
 		}
 	};
 
@@ -113,14 +132,14 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 
 	void ScreenSaver::reset()
 	{
-		priv->blocked = true;
+		screenSaverReset(priv->screenSaverCtx);
 	}
 #else
-	static bool blocked = false;
+	static ScreenSaverCtx screenSaverCtx;
 
 	static bool eventFilter(void *m, long *)
 	{
-		return blockScreenSaver((MSG *)m, blocked);
+		return blockScreenSaver((MSG *)m, screenSaverCtx);
 	}
 
 	ScreenSaver::ScreenSaver() :
@@ -133,7 +152,7 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 
 	void ScreenSaver::reset()
 	{
-		blocked = true;
+		screenSaverReset(screenSaverCtx);
 	}
 #endif
 
