@@ -546,30 +546,30 @@ quint32 Functions::getBestSampleRate()
 	return srate;
 }
 
-bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos)
+bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {
 	const QSize winSize = widget->size();
 	bool doWrap = false;
 
-	if (mousePos.x() >= winSize.width() - 1)
+	if (mousePos.x() >= winSize.width() - (margin + 1))
 	{
-		mousePos.setX(1);
+		mousePos.setX(margin + 1);
 		doWrap = true;
 	}
-	else if (mousePos.x() <= 0)
+	else if (mousePos.x() <= margin)
 	{
-		mousePos.setX(winSize.width() - 2);
+		mousePos.setX(winSize.width() - (margin + 2));
 		doWrap = true;
 	}
 
-	if (mousePos.y() >= winSize.height() - 1)
+	if (mousePos.y() >= winSize.height() - (margin + 1))
 	{
-		mousePos.setY(1);
+		mousePos.setY(margin + 1);
 		doWrap = true;
 	}
-	else if (mousePos.y() <= 0)
+	else if (mousePos.y() <= margin)
 	{
-		mousePos.setY(winSize.height() - 2);
+		mousePos.setY(winSize.height() - (margin + 2));
 		doWrap = true;
 	}
 
