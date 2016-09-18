@@ -725,10 +725,15 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
 		mouseTime = currTime;
 
 		mousePos = newMousePos;
-		if (canWrapMouse)
-			mouseWrapped = Functions::wrapMouse(widget(), mousePos, 1);
-		else
-			canWrapMouse = true;
+#if QT_VERSION >= 0x050300
+		if (e->source() == Qt::MouseEventNotSynthesized)
+#endif
+		{
+			if (canWrapMouse)
+				mouseWrapped = Functions::wrapMouse(widget(), mousePos, 1);
+			else
+				canWrapMouse = true;
+		}
 
 		setMatrix = true;
 		updateGL(true);
