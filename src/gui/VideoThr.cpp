@@ -29,6 +29,7 @@
 #include <Decoder.hpp>
 #include <LibASS.hpp>
 
+#include <ScreenSaver.hpp>
 #include <ImgScaler.hpp>
 #include <Functions.hpp>
 using Functions::gettime;
@@ -42,7 +43,7 @@ using Functions::gettime;
 VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", HWAccelWriter, pluginsName),
 	doScreenshot(false),
-	deleteOSD(false), deleteFrame(false),
+	deleteOSD(false), deleteFrame(false), isScreenSaverBlocked(false),
 	W(0), H(0), seq(0),
 	sDec(NULL),
 	HWAccelWriter(HWAccelWriter),
@@ -51,6 +52,8 @@ VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &p
 VideoThr::~VideoThr()
 {
 	QMPlay2GUI.videoAdjustment->enableControls();
+	if (isScreenSaverBlocked)
+		QMPlay2GUI.screenSaver->unblock();
 	delete playC.osd;
 	playC.osd = NULL;
 	delete subtitles;
@@ -551,7 +554,14 @@ void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
 {
 	canWrite = true;
 	if (lastSeq == seq && writer->readyWrite())
+	{
+		if (!isScreenSaverBlocked)
+		{
+			QMPlay2GUI.screenSaver->block();
+			isScreenSaverBlocked = true;
+		}
 		videoWriter()->writeVideo(videoFrame);
+	}
 }
 void VideoThr::screenshot(VideoFrame videoFrame)
 {
@@ -584,5 +594,10 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 }
 void VideoThr::pause()
 {
+	if (isScreenSaverBlocked)
+	{
+		QMPlay2GUI.screenSaver->unblock();
+		isScreenSaverBlocked = false;
+	}
 	writer->pause();
 }

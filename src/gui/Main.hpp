@@ -26,6 +26,7 @@
 
 class VideoAdjustment;
 class ShortcutHandler;
+class ScreenSaver;
 class IPCServer;
 class VideoDock;
 class MenuBar;
@@ -67,6 +68,7 @@ public:
 	MenuBar *menuBar;
 	QWidget *mainW;
 	IPCServer *pipe;
+	ScreenSaver *screenSaver;
 	VideoAdjustment *videoAdjustment;
 	ShortcutHandler *shortcutHandler;
 	bool restartApp, removeSettings;

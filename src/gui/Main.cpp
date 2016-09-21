@@ -18,6 +18,7 @@
 
 #include <Main.hpp>
 
+#include <ScreenSaver.hpp>
 #include <VideoFrame.hpp>
 #include <MainWidget.hpp>
 #include <PlayClass.hpp>
@@ -45,7 +46,8 @@
 
 #include <time.h>
 
-static bool useGui = true;
+static ScreenSaver *g_screenSaver = NULL;
+static bool g_useGui = true;
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
 {
@@ -163,13 +165,14 @@ const QWidget *QMPlay2GUIClass::getVideoDock() const
 
 QMPlay2GUIClass::QMPlay2GUIClass() :
 	groupIcon(NULL), mediaIcon(NULL), folderIcon(NULL),
-	mainW(NULL)
+	mainW(NULL),
+	screenSaver(NULL)
 {
-	qmp2Pixmap = useGui ? new QPixmap(":/QMPlay2") : NULL;
+	qmp2Pixmap = g_useGui ? new QPixmap(":/QMPlay2") : NULL;
 }
 QMPlay2GUIClass::~QMPlay2GUIClass()
 {
-	if (useGui)
+	if (g_useGui)
 	{
 		delete qmp2Pixmap;
 		deleteIcons();
@@ -286,19 +289,26 @@ static bool writeToSocket(IPCSocket &socket)
 	static bool qAppOK;
 	static bool canDeleteApp = true;
 #endif
+
 #include <signal.h>
-static void signal_handler(int s)
+
+static inline void forceKill()
 {
 #ifdef Q_OS_WIN
 	const int SC = SIGBREAK;
 #else
 	const int SC = SIGKILL;
 #endif
+	delete g_screenSaver;
+	raise(SC);
+}
+static void signal_handler(int s)
+{
 	switch (s)
 	{
 		case SIGINT:
 			if (!qApp)
-				raise(SC);
+				forceKill();
 			else
 			{
 				QWidget *modalW = QApplication::activeModalWidget();
@@ -308,32 +318,32 @@ static void signal_handler(int s)
 					QMPlay2GUI.mainW = NULL;
 				}
 				else
-					raise(SC);
+					forceKill();
 			}
 			break;
 		case SIGABRT:
 #ifdef QT5_NOT_WIN
-			if (!qAppOK && useGui)
+			if (!qAppOK && g_useGui)
 			{
-				canDeleteApp = useGui = false;
+				canDeleteApp = g_useGui = false;
 				longjmp(env, 1);
 			}
 #endif
 			QMPlay2Core.log("QMPlay2 has been aborted (SIGABRT)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
 #ifndef Q_OS_WIN
-			raise(SC);
+			forceKill();
 #endif
 			break;
 		case SIGFPE:
 			QMPlay2Core.log("QMPlay2 crashes (SIGFPE)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
 #ifndef Q_OS_WIN
-			raise(SC);
+			forceKill();
 #endif
 			break;
 		case SIGSEGV:
 			QMPlay2Core.log("QMPlay2 crashes (SIGSEGV)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
 #ifndef Q_OS_WIN
-			raise(SC);
+			forceKill();
 #endif
 			break;
 	}
@@ -368,21 +378,27 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 }
 #endif
 
+static void unblockScreenSaver()
+{
+	delete g_screenSaver;
+}
+
 int main(int argc, char *argv[])
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGABRT, signal_handler);
 	signal(SIGFPE, signal_handler);
 	signal(SIGSEGV, signal_handler);
+	atexit(unblockScreenSaver);
 
 #ifdef Q_WS_X11
-	useGui = getenv("DISPLAY");
+	g_useGui = getenv("DISPLAY");
 #endif
 #ifdef QT5_NOT_WIN
 	if (!setjmp(env))
 #endif
 #if QT_VERSION < 0x050000
-		new QApplication(argc, argv, useGui);
+		new QApplication(argc, argv, g_useGui);
 #else
 		new QApplication(argc, argv);
 #endif
@@ -407,7 +423,7 @@ int main(int argc, char *argv[])
 		if (socket.open(IPCSocket::WriteOnly))
 		{
 			if (writeToSocket(socket))
-				useGui = false;
+				g_useGui = false;
 			socket.close();
 		}
 #ifndef Q_OS_WIN
@@ -419,7 +435,7 @@ int main(int argc, char *argv[])
 		}
 #endif
 
-		if (!useGui)
+		if (!g_useGui)
 		{
 #ifdef QT5_NOT_WIN
 			if (canDeleteApp)
@@ -472,8 +488,11 @@ int main(int argc, char *argv[])
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
-	if (useGui)
+	if (g_useGui)
+	{
+		QMPlay2GUI.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
+	}
 
 #ifdef Q_OS_WIN
 	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(NULL), 0);
@@ -592,6 +611,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
 	UnhookWindowsHookEx(keyboardHook);
 #endif
+
+	delete g_screenSaver;
+	g_screenSaver = NULL;
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)

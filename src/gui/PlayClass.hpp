@@ -30,7 +30,6 @@
 #include <QWaitCondition>
 
 class QMPlay2_OSD;
-class ScreenSaver;
 class DemuxerThr;
 class VideoThr;
 class AudioThr;
@@ -81,6 +80,7 @@ public:
 	{
 		doSilenceOnStart = true;
 	}
+
 private:
 	inline bool hasVideoStream();
 	inline bool hasAudioStream();
@@ -141,9 +141,6 @@ private:
 	bool firsttimeUpdateCache;
 #endif
 	LibASS *ass;
-
-	double screenSaverLastT;
-	ScreenSaver *screenSaver;
 
 	QMutex osdMutex, subsMutex;
 	QMPlay2_OSD *osd;

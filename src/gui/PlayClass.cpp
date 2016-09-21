@@ -25,7 +25,6 @@
 #include <LibASS.hpp>
 #include <Main.hpp>
 
-#include <ScreenSaver.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
@@ -122,14 +121,6 @@ PlayClass::PlayClass() :
 
 	doSuspend = false;
 
-	screenSaverLastT = Functions::gettime();
-	screenSaver = new ScreenSaver;
-	if (!screenSaver->isOk())
-	{
-		delete screenSaver;
-		screenSaver = NULL;
-	}
-
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
 	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
@@ -137,9 +128,7 @@ PlayClass::PlayClass() :
 	connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
 }
 PlayClass::~PlayClass()
-{
-	delete screenSaver;
-}
+{}
 
 void PlayClass::play(const QString &_url)
 {
@@ -240,23 +229,15 @@ void PlayClass::restart()
 
 void PlayClass::chPos(double newPos, bool updateGUI)
 {
-	if (screenSaver && (QMPlay2GUI.mainW->isFullScreen() || hasVideoStream()))
+	if (canUpdatePos)
 	{
-		const double t = Functions::gettime();
-		if (t - screenSaverLastT >= 0.75)
-		{
-			QMetaObject::invokeMethod(screenSaver, "reset");
-			screenSaverLastT = t;
-		}
+		if ((updateGUI || pos == -1) && ((int)newPos != (int)pos))
+			emit updatePos(newPos);
+		pos = newPos;
+		lastSeekTo = SEEK_NOWHERE;
+		if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
+			seek(seekA);
 	}
-	if (!canUpdatePos)
-		return;
-	if ((updateGUI || pos == -1) && ((int)newPos != (int)pos))
-		emit updatePos(newPos);
-	pos = newPos;
-	lastSeekTo = SEEK_NOWHERE;
-	if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
-		seek(seekA);
 }
 
 void PlayClass::togglePause()

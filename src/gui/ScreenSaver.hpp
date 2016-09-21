@@ -7,18 +7,17 @@ class ScreenSaverPriv;
 
 class ScreenSaver : public QObject
 {
-	Q_OBJECT
 	Q_DISABLE_COPY(ScreenSaver)
 public:
 	ScreenSaver();
 	~ScreenSaver();
 
-	bool isOk() const;
+	void block();
+	void unblock();
 
-public slots:
-	void reset();
 private:
-	ScreenSaverPriv *priv;
+	ScreenSaverPriv *m_priv;
+	qint32 m_ref;
 };
 
 #endif // SCREENSAVER_HPP

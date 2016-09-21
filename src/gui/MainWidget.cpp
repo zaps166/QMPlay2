@@ -48,6 +48,7 @@
 #include <VideoAdjustment.hpp>
 #include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
+#include <ScreenSaver.hpp>
 
 using Functions::timeToStr;
 
@@ -918,6 +919,8 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut() << QKeySequence("ESC"));
 		fullScreen = true;
 		showFullScreen();
+
+		QMPlay2GUI.screenSaver->block();
 	}
 	else
 	{
@@ -969,6 +972,8 @@ void MainWidget::toggleFullScreen()
 		playlistDock->scrollToCurrectItem();
 
 		visibleQMPlay2Extensions.clear();
+
+		QMPlay2GUI.screenSaver->unblock();
 	}
 	QMPlay2Core.fullScreenChanged(fullScreen);
 }

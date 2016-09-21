@@ -11,29 +11,48 @@ class ScreenSaverPriv
 {
 public:
 	inline ScreenSaverPriv() :
-		disp(NULL)
+		m_disp(NULL)
 	{}
 	inline ~ScreenSaverPriv()
 	{
-		if (disp)
-			XCloseDisplayFunc(disp);
+		if (m_disp)
+			XCloseDisplayFunc(m_disp);
+	}
+
+	inline void block()
+	{
+		int interval, preferBlanking, allowExposures;
+		XGetScreenSaverFunc(m_disp, m_timeout, interval, preferBlanking, allowExposures);
+		XSetScreenSaverFunc(m_disp, 0, interval, preferBlanking, allowExposures);
+		XFlushFunc(m_disp);
+	}
+	inline void unblock()
+	{
+		int tmpTimeout, interval, preferBlanking, allowExposures;
+		XGetScreenSaverFunc(m_disp, tmpTimeout, interval, preferBlanking, allowExposures);
+		XSetScreenSaverFunc(m_disp, m_timeout, interval, preferBlanking, allowExposures);
+		XFlushFunc(m_disp);
 	}
 
 	typedef void *(*XOpenDisplayType)(const char *name);
-	typedef int (*XResetScreenSaverType)(void *dpy);
+	typedef int (*XGetScreenSaverType)(void *dpy, int &timeout, int &interval, int &preferBlanking, int &allowExposures);
+	typedef int (*XSetScreenSaverType)(void *dpy, int timeout, int interval, int prefer_blanking, int allow_exposures);
 	typedef int (*XCloseDisplayType)(void *dpy);
 	typedef int (*XFlushType)(void *dpy);
 
 	XOpenDisplayType XOpenDisplayFunc;
-	XResetScreenSaverType XResetScreenSaverFunc;
+	XGetScreenSaverType XGetScreenSaverFunc;
+	XSetScreenSaverType XSetScreenSaverFunc;
 	XCloseDisplayType XCloseDisplayFunc;
 	XFlushType XFlushFunc;
 
-	void *disp;
+	void *m_disp;
+	int m_timeout;
 };
 
 ScreenSaver::ScreenSaver() :
-	priv(new ScreenSaverPriv)
+	m_priv(new ScreenSaverPriv),
+	m_ref(0)
 {
 #if QT_VERSION >= 0x050000
 	if (QGuiApplication::platformName() != "xcb")
@@ -42,63 +61,42 @@ ScreenSaver::ScreenSaver() :
 	QLibrary libX11("X11");
 	if (libX11.load())
 	{
-		priv->XOpenDisplayFunc = (ScreenSaverPriv::XOpenDisplayType)libX11.resolve("XOpenDisplay");
-		priv->XResetScreenSaverFunc = (ScreenSaverPriv::XResetScreenSaverType)libX11.resolve("XResetScreenSaver");
-		priv->XFlushFunc = (ScreenSaverPriv::XFlushType)libX11.resolve("XFlush");
-		priv->XCloseDisplayFunc = (ScreenSaverPriv::XCloseDisplayType)libX11.resolve("XCloseDisplay");
-		if (priv->XOpenDisplayFunc && priv->XResetScreenSaverFunc && priv->XFlushFunc && priv->XCloseDisplayFunc)
-			priv->disp = priv->XOpenDisplayFunc(NULL);
+		m_priv->XOpenDisplayFunc = (ScreenSaverPriv::XOpenDisplayType)libX11.resolve("XOpenDisplay");
+		m_priv->XGetScreenSaverFunc = (ScreenSaverPriv::XGetScreenSaverType)libX11.resolve("XGetScreenSaver");
+		m_priv->XSetScreenSaverFunc = (ScreenSaverPriv::XSetScreenSaverType)libX11.resolve("XSetScreenSaver");
+		m_priv->XFlushFunc = (ScreenSaverPriv::XFlushType)libX11.resolve("XFlush");
+		m_priv->XCloseDisplayFunc = (ScreenSaverPriv::XCloseDisplayType)libX11.resolve("XCloseDisplay");
+		if (m_priv->XOpenDisplayFunc && m_priv->XGetScreenSaverFunc && m_priv->XSetScreenSaverFunc && m_priv->XFlushFunc && m_priv->XCloseDisplayFunc)
+			m_priv->m_disp = m_priv->XOpenDisplayFunc(NULL);
 	}
 }
 ScreenSaver::~ScreenSaver()
 {
-	delete priv;
+	if (m_ref > 0)
+		m_priv->unblock();
+	delete m_priv;
 }
 
-bool ScreenSaver::isOk() const
+void ScreenSaver::block()
 {
-	return priv->disp;
+	if (m_priv->m_disp && m_ref++ == 0)
+		m_priv->block();
 }
-
-void ScreenSaver::reset()
+void ScreenSaver::unblock()
 {
-	priv->XResetScreenSaverFunc(priv->disp);
-	priv->XFlushFunc(priv->disp);
+	if (m_priv->m_disp && --m_ref == 0)
+		m_priv->unblock();
 }
 
 #elif defined(Q_OS_WIN)
 
 #include <QCoreApplication>
 
-#include <Functions.hpp>
+#include <windows.h>
 
-class ScreenSaverCtx
+static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 {
-public:
-	inline ScreenSaverCtx() :
-		time(0.0),
-		blocked(false)
-	{}
-
-	double time;
-	bool blocked;
-};
-
-static inline bool blockScreenSaver(MSG *msg, ScreenSaverCtx &screenSaverCtx)
-{
-	if (msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER) && screenSaverCtx.blocked)
-	{
-		if (Functions::gettime() - screenSaverCtx.time >= 3.0)
-			screenSaverCtx.blocked = false;
-		return true;
-	}
-	return false;
-}
-
-static inline void screenSaverReset(ScreenSaverCtx &screenSaverCtx)
-{
-	screenSaverCtx.time = Functions::gettime();
-	screenSaverCtx.blocked = true;
+	return (blocked && msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER));
 }
 
 #if QT_VERSION >= 0x050000
@@ -111,70 +109,77 @@ static inline void screenSaverReset(ScreenSaverCtx &screenSaverCtx)
 			blocked(false)
 		{}
 
-		ScreenSaverCtx screenSaverCtx;
+		bool blocked;
 
 	private:
 		bool nativeEventFilter(const QByteArray &, void *m, long *)
 		{
-			return blockScreenSaver((MSG *)m, screenSaverCtx);
+			return blockScreenSaver((MSG *)m, blocked);
 		}
 	};
 
 	ScreenSaver::ScreenSaver() :
-		priv(new ScreenSaverPriv)
+		m_priv(new ScreenSaverPriv),
+		m_ref(0)
 	{
-		qApp->installNativeEventFilter(priv);
+		qApp->installNativeEventFilter(m_priv);
 	}
 	ScreenSaver::~ScreenSaver()
 	{
-		delete priv;
+		delete m_priv;
 	}
 
-	void ScreenSaver::reset()
+	void ScreenSaver::block()
 	{
-		screenSaverReset(priv->screenSaverCtx);
+		if (m_ref++ == 0)
+			m_priv->blocked = true;
+	}
+	void ScreenSaver::unblock()
+	{
+		if (--m_ref == 0)
+			m_priv->blocked = false;
 	}
 #else
-	static ScreenSaverCtx screenSaverCtx;
+	static bool blocked = false;
 
 	static bool eventFilter(void *m, long *)
 	{
-		return blockScreenSaver((MSG *)m, screenSaverCtx);
+		return blockScreenSaver((MSG *)m, blocked);
 	}
 
 	ScreenSaver::ScreenSaver() :
-		priv(NULL)
+		m_priv(NULL),
+		m_ref(0)
 	{
 		qApp->setEventFilter(::eventFilter);
 	}
 	ScreenSaver::~ScreenSaver()
 	{}
 
-	void ScreenSaver::reset()
+	void ScreenSaver::block()
 	{
-		screenSaverReset(screenSaverCtx);
+		if (m_ref++ == 0)
+			blocked = true;
+	}
+	void ScreenSaver::unblock()
+	{
+		if (--m_ref == 0)
+			blocked = false;
 	}
 #endif
-
-bool ScreenSaver::isOk() const
-{
-	return true;
-}
 
 #else
 
 ScreenSaver::ScreenSaver() :
-	priv(NULL)
+	priv(NULL),
+	m_ref(0)
 {}
 ScreenSaver::~ScreenSaver()
 {}
 
-bool ScreenSaver::isOk() const
-{
-	return false;
-}
-
-void ScreenSaver::reset()
+void ScreenSaver::block()
+{}
+void ScreenSaver::unblock()
 {}
 
 #endif
