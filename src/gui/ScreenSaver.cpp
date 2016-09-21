@@ -171,7 +171,7 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 #else
 
 ScreenSaver::ScreenSaver() :
-	priv(NULL),
+	m_priv(NULL),
 	m_ref(0)
 {}
 ScreenSaver::~ScreenSaver()
