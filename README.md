@@ -27,9 +27,13 @@ Table of Contents
 
 - [Download the newest Windows installer](https://github.com/zaps166/QMPlay2/releases).
 
-####Easy installation on Ubuntu
+####Easy installation on Ubuntu / Mint
 
 - [Download the newest Ubuntu DEB package](https://github.com/zaps166/QMPlay2/releases).
+
+####Easy installation on Debian / Ubuntu / Mint (from unofficial repository)
+
+- [Follow installation instructions on OBS](https://software.opensuse.org/download.html?project=home%3Astevepassert&package=qmplay2).
 
 ####Easy installation on Arch Linux / Manjaro Linux
 
@@ -66,27 +70,13 @@ If the chosen quality won't be found on YouTube content, QMPlay2 will try to use
 
 Some YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will ask you for downloading it if "youtube-dl" doesn't exist.
 
-You can also install it manually:
-
 ####Windows
 
-- [Watch the video](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Videos/QMPlay2_youtube-dl.mp4).
-- If the video doesn't play inside the web browser - copy the address, paste it to QMPlay2 (Ctrl+V) and play it!
-- Currently (as of 30.06.2016) "youtube-dl.exe" needs Visual Studio 2010 Redistributable Package.
-- Make sure that antivirus or firewall doesn't block it (and doesn't block executing external application)!
+- Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
 
-####Arch Linux / Manjaro Linux
+####Linux
 
-- Install "youtube-dl" from repositories: `sudo pacman -S youtube-dl`.
-
-Even if Arch Linux repositories provides fresh packages, it is better to don't use "youtube-dl" from them.
-
-####Other Linux distributions or other operating system
-
-- Don't use "youtube-dl" from repositories - usually it contains too old package which no longer works. The exception is Arch Linux.
-- Download "youtube-dl": http://rg3.github.io/youtube-dl/download.html
-- Set the path for the script (you must have Python installed) in QMPlay2 YouTube settings (you can watch the video from Windows installation).
-- QMPlay2 can automatically updates the "youtube-dl" if it is not installed from repositories.
+- Don't use "youtube-dl" from repositories - usually it contains too old package which no longer works.
 
 ##Spherical view
 
@@ -201,8 +191,6 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 - Qt:
 	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
 	- for Qt4 build: `sudo pacman -S qt4`.
-
-You can also install youtube-dl: `sudo pacman -S youtube-dl`
 
 #####OpenSUSE dependencies (for Qt4 build)
 
