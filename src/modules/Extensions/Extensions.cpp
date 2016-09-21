@@ -54,7 +54,11 @@ Extensions::Extensions() :
 	init("YouTube/ShowAdditionalInfo", false);
 	init("YouTube/MultiStream", true);
 	init("YouTube/Subtitles", true);
-	init("YouTube/youtubedl", QString());
+#ifdef Q_OS_WIN
+	init("YouTube/youtubedl", QMPlay2Core.getSettingsDir() + "youtube-dl.exe");
+#else
+	init("YouTube/youtubedl", QMPlay2Core.getSettingsDir() + "youtube-dl");
+#endif
 	init("YouTube/ItagVideoList", YouTubeW::getQualityPresetString(YouTubeW::_1080p60));
 	init("YouTube/ItagAudioList", QStringList() << "171" << "251" << "140");
 	init("YouTube/ItagList", QStringList() << "22" << "43" << "18");
