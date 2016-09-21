@@ -1,6 +1,6 @@
-Changes in QMPlay2 build 16.09.17:
+Changes in QMPlay2 build 16.09.21:
 	- updated icon for YouTube quality button,
-	- fix screen saver blocking on Windows,
+	- fix screen saver blocking behavior,
 	- OpenGL2 bugfix,
 
 Changes in QMPlay2 build 16.09.04:
