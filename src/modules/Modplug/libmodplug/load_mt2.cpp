@@ -1,5 +1,7 @@
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 //#define MT2DEBUG
 
@@ -633,3 +635,5 @@ BOOL CSoundFile::ReadMT2(LPCBYTE lpStream, DWORD dwMemLength)
 	}
 	return TRUE;
 }
+
+} //namespace

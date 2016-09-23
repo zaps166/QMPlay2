@@ -5,8 +5,10 @@
  *          Adam Goode       <adam@evdebs.org> (endian and char fixes for PPC)
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 ////////////////////////////////////////////////////////
 // FastTracker II XM file support
@@ -891,3 +893,5 @@ BOOL CSoundFile::SaveXM(LPCSTR lpszFileName, UINT nPacking)
 }
 
 #endif // MODPLUG_NO_FILESAVE
+
+} //namespace

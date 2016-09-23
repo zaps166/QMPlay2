@@ -7,8 +7,10 @@
 //////////////////////////////////////////////
 // DSIK Internal Format (DSM) module loader //
 //////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 #pragma pack(1)
 
@@ -234,3 +236,4 @@ BOOL CSoundFile::ReadDSM(LPCBYTE lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

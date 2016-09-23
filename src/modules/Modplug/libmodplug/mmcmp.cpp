@@ -5,8 +5,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 BOOL PP20_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength);
 
@@ -406,7 +408,4 @@ BOOL PP20_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 	return TRUE;
 }
 
-
-
-
-
+} //namespace

@@ -4,10 +4,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #define ULT_16BIT   0x04
 #define ULT_LOOP    0x08
@@ -222,3 +222,4 @@ BOOL CSoundFile::ReadUlt(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

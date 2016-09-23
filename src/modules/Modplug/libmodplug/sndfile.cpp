@@ -6,8 +6,11 @@
 */
 
 #include <math.h> //for GCCFIX
-#include "stdafx.h"
-#include "sndfile.h"
+
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 #define MMCMP_SUPPORT
 
@@ -1899,3 +1902,4 @@ BOOL CSoundFile::DestroySample(UINT nSample)
 
 #endif // MODPLUG_FASTSOUNDLIB
 
+} //namespace

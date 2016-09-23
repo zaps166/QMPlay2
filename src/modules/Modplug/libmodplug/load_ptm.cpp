@@ -8,10 +8,10 @@
 //////////////////////////////////////////////
 // PTM PolyTracker module loader            //
 //////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #pragma pack(1)
 
@@ -210,3 +210,4 @@ BOOL CSoundFile::ReadPTM(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

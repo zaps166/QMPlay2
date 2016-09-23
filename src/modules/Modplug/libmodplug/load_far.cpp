@@ -7,10 +7,10 @@
 ////////////////////////////////////////
 // Farandole (FAR) module loader	  //
 ////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #define FARFILEMAGIC	0xFE524146	// "FAR"
 
@@ -263,3 +263,4 @@ BOOL CSoundFile::ReadFAR(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

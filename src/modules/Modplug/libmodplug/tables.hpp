@@ -4,12 +4,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
  */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-#ifndef MODPLUG_FASTSOUNDLIB
-//#pragma data_seg(".tables")
-#endif
+namespace QMPlay2ModPlug {
 
 static const BYTE ImpulseTrackerPortaVolCmd[16] =
 {
@@ -374,3 +372,4 @@ static const int SpectrumSinusTable[256*2] =
 	-12, -11, -10, -10, -9, -8, -7, -7, -6, -5, -4, -3, -3, -2, -1, 0,
 };
 
+} //namespace

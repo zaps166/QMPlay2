@@ -4,8 +4,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 #define MODMAGIC_OFFSET	(20+31*30+130)
 
@@ -51,3 +53,4 @@ BOOL CSoundFile::ReadUMX(const BYTE *lpStream, DWORD dwMemLength)
 	return FALSE;
 }
 
+} //namespace

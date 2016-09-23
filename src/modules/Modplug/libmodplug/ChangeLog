@@ -4,3 +4,4 @@ Changes for QMPlay/QMPlay2:
 	- added Amiga SoundFX loader,
 	- removed unnecessary files like MID, PAT, WAV loader,
 	- X86_Convert32To24 runtime endian detection,
+	- use namespace for the library.

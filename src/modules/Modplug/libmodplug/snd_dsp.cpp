@@ -4,8 +4,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 #ifdef MODPLUG_FASTSOUNDLIB
 #define MODPLUG_NO_REVERB
@@ -483,3 +485,5 @@ BOOL CSoundFile::SetWaveConfigEx(BOOL bSurround,BOOL bNoOverSampling,BOOL bRever
 	InitPlayer(FALSE);
 	return TRUE;
 }
+
+} // namespace

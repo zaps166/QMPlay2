@@ -9,28 +9,13 @@
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
 
-/* Autoconf detection of stdint/inttypes */
-// #if defined(HAVE_CONFIG_H) && !defined(CONFIG_H_INCLUDED)
-// # include "config.h"
-// # define CONFIG_H_INCLUDED 1
-// #endif
-// #ifdef HAVE_INTTYPES_H
-// # include <inttypes.h>
-// #endif
-// #ifdef HAVE_STDINT_H
-# include <stdint.h>
-// #endif
+#include <stdint.h>
 
 #define MODPLUG_NO_FILESAVE
 #define MODPLUG_NO_REVERB
 #define NO_AGC
 
 #ifdef _WIN32
-
-#ifdef MSC_VER
-#pragma warning (disable:4201)
-#pragma warning (disable:4514)
-#endif
 
 #ifdef UNICODE
 	#undef UNICODE
@@ -58,9 +43,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
+
+namespace QMPlay2ModPlug {
 
 typedef int8_t CHAR;
 typedef uint8_t UCHAR;
@@ -84,28 +68,22 @@ typedef const char* LPCSTR;
 typedef void* PVOID;
 typedef void VOID;
 
-inline LONG MulDiv (long a, long b, long c)
-{
-  // if (!c) return 0;
-  return ((uint64_t) a * (uint64_t) b ) / c;
-}
-
-#define LPCTSTR LPCSTR
-#define lstrcpyn strncpy
-#define lstrcpy strcpy
-#define lstrcmp strcmp
-//#define WAVE_FORMAT_PCM 1
-//#define ENABLE_EQ
-
-#define  GHND   0
-
-inline int8_t * GlobalAllocPtr(unsigned int, size_t size)
+static inline int8_t * GlobalAllocPtr(unsigned int, size_t size)
 {
   int8_t * p = (int8_t *) malloc(size);
 
   if (p != NULL) memset(p, 0, size);
   return p;
 }
+
+}
+
+#define LPCTSTR LPCSTR
+#define lstrcpyn strncpy
+#define lstrcpy strcpy
+#define lstrcmp strcmp
+
+#define  GHND   0
 
 #define GlobalFreePtr(p) free((void *)(p))
 

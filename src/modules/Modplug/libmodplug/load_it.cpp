@@ -7,13 +7,11 @@
  *
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
-#include "it_defs.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+#include "it_defs.hpp"
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#endif
+namespace QMPlay2ModPlug {
 
 BYTE autovibit2xm[8] =
 { 0, 3, 1, 4, 2, 0, 0, 0 };
@@ -1516,3 +1514,4 @@ UINT CSoundFile::LoadMixPlugins(const void *pData, UINT nLen)
 	return nPos;
 }
 
+} //namespace

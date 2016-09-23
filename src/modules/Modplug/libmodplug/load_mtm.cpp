@@ -4,10 +4,10 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 //////////////////////////////////////////////////////////
 // MTM file support (import only)
@@ -166,3 +166,4 @@ BOOL CSoundFile::ReadMTM(LPCBYTE lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

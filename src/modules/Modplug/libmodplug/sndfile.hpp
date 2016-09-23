@@ -5,13 +5,10 @@
  *          Adam Goode       <adam@evdebs.org> (endian and char fixes for PPC)
 */
 
-#if defined(HAVE_CONFIG_H) && !defined(CONFIG_H_INCLUDED)
-#include "config.h"
-#define CONFIG_H_INCLUDED 1
-#endif
-
 #ifndef __SNDFILE_H
 #define __SNDFILE_H
+
+namespace QMPlay2ModPlug {
 
 #ifdef UNDER_CE
 int _strnicmp(const char *str1,const char *str2, int n);
@@ -1005,5 +1002,7 @@ ARM_get32(const void *data)
 #define bswapBE16(X) bswap_16(X)
 #define bswapBE32(X) bswap_32(X)
 #endif
+
+} //namespace
 
 #endif

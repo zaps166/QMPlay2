@@ -22,7 +22,7 @@
 #include <Packet.hpp>
 #include <Reader.hpp>
 
-#include <libmodplug/modplug.h>
+#include <libmodplug/libmodplug.hpp>
 
 MPDemux::MPDemux(Module &module) :
 	aborted(false),
@@ -36,32 +36,32 @@ MPDemux::MPDemux(Module &module) :
 MPDemux::~MPDemux()
 {
 	if (mpfile)
-		ModPlug_Unload(mpfile);
+		QMPlay2ModPlug::Unload(mpfile);
 }
 
 bool MPDemux::set()
 {
 	bool restartPlaying = false;
 
-	ModPlug_Settings settings;
-	ModPlug_GetSettings(&settings);
+	QMPlay2ModPlug::Settings settings;
+	QMPlay2ModPlug::GetSettings(&settings);
 	if (settings.mResamplingMode != sets().getInt("ModplugResamplingMethod"))
 	{
 		settings.mResamplingMode = sets().getInt("ModplugResamplingMethod");
 		restartPlaying = true;
 	}
-	settings.mFlags = MODPLUG_ENABLE_OVERSAMPLING;
+	settings.mFlags = QMPlay2ModPlug::ENABLE_OVERSAMPLING;
 	settings.mChannels = 2;
 	settings.mBits = 32;
 	settings.mFrequency = srate;
-	ModPlug_SetSettings(&settings);
+	QMPlay2ModPlug::SetSettings(&settings);
 
 	return !restartPlaying && sets().getBool("ModplugEnabled");
 }
 
 QString MPDemux::name() const
 {
-	switch (ModPlug_GetModuleType(mpfile))
+	switch (QMPlay2ModPlug::GetModuleType(mpfile))
 	{
 		case 0x01:
 			return "ProTracker MOD";
@@ -113,21 +113,21 @@ QString MPDemux::name() const
 }
 QString MPDemux::title() const
 {
-	return ModPlug_GetName(mpfile);
+	return QMPlay2ModPlug::GetName(mpfile);
 }
 
 QList<QMPlay2Tag> MPDemux::tags() const
 {
 	QList<QMPlay2Tag> tags;
-	tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), QString(ModPlug_GetName(mpfile)));
-	tags << qMakePair(tr("Samples"), QString::number(ModPlug_NumSamples(mpfile)));
-	tags << qMakePair(tr("Patterns"), QString::number(ModPlug_NumPatterns(mpfile)));
-	tags << qMakePair(tr("Channels"), QString::number(ModPlug_NumChannels(mpfile)));
+	tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), QString(QMPlay2ModPlug::GetName(mpfile)));
+	tags << qMakePair(tr("Samples"), QString::number(QMPlay2ModPlug::NumSamples(mpfile)));
+	tags << qMakePair(tr("Patterns"), QString::number(QMPlay2ModPlug::NumPatterns(mpfile)));
+	tags << qMakePair(tr("Channels"), QString::number(QMPlay2ModPlug::NumChannels(mpfile)));
 	return tags;
 }
 double MPDemux::length() const
 {
-	return ModPlug_GetLength(mpfile) / 1000.0;
+	return QMPlay2ModPlug::GetLength(mpfile) / 1000.0;
 }
 int MPDemux::bitrate() const
 {
@@ -138,7 +138,7 @@ bool MPDemux::seek(int val, bool)
 {
 	if (val >= length())
 		val = length()-1;
-	ModPlug_Seek(mpfile, val * 1000);
+	QMPlay2ModPlug::Seek(mpfile, val * 1000);
 	pos = val;
 	return true;
 }
@@ -148,7 +148,7 @@ bool MPDemux::read(Packet &decoded, int &idx)
 		return false;
 
 	decoded.resize(1024 * 2 * 4); //BASE_SIZE * CHN * BITS/8
-	decoded.resize(ModPlug_Read(mpfile, decoded.data(), decoded.size()));
+	decoded.resize(QMPlay2ModPlug::Read(mpfile, decoded.data(), decoded.size()));
 	if (!decoded.size())
 		return false;
 
@@ -176,12 +176,12 @@ bool MPDemux::open(const QString &url)
 	if (Reader::create(url, reader))
 	{
 		if (reader->size() > 0)
-			mpfile = ModPlug_Load(reader->read(reader->size()), reader->size());
+			mpfile = QMPlay2ModPlug::Load(reader->read(reader->size()), reader->size());
 		reader.clear();
-		if (mpfile && ModPlug_GetModuleType(mpfile))
+		if (mpfile && QMPlay2ModPlug::GetModuleType(mpfile))
 		{
 			streams_info += new StreamInfo(srate, 2);
-			ModPlug_SetMasterVolume(mpfile, 256); //OK?
+			QMPlay2ModPlug::SetMasterVolume(mpfile, 256); //OK?
 			return true;
 		}
 	}

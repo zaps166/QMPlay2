@@ -4,14 +4,13 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
 #include <stdlib.h>
-#include "sndfile.h"
-#include "tables.h"
 
-#ifdef MSC_VER
-#pragma warning(disable:4244)
-#endif
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+#include "tables.hpp"
+
+namespace QMPlay2ModPlug {
 
 ////////////////////////////////////////////////////////////
 // Length
@@ -2374,4 +2373,4 @@ UINT CSoundFile::GetFreqFromPeriod(UINT period, UINT nC4Speed, int nPeriodFrac) 
 	}
 }
 
-
+} //namespace

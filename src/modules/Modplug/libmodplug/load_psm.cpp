@@ -10,8 +10,10 @@
 // PSM module loader
 //
 ///////////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+namespace QMPlay2ModPlug {
 
 //#define PSM_LOG
 
@@ -864,3 +866,4 @@ CONST
 
 */
 
+} //namespace

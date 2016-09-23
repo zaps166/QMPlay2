@@ -7,10 +7,10 @@
 //////////////////////////////////////////////
 // AMS module loader                        //
 //////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #pragma pack(1)
 
@@ -626,3 +626,4 @@ void AMSUnpack(const char *psrc, UINT inputlen, char *pdest, UINT dmax, char pac
 	delete[] amstmp;
 }
 
+} //namespace

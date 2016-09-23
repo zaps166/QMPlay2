@@ -7,10 +7,10 @@
 //////////////////////////////////////////////
 // DigiTracker (MDL) module loader          //
 //////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 typedef struct MDLSONGHEADER
 {
@@ -500,4 +500,4 @@ WORD MDLReadBits(DWORD &bitbuf, UINT &bitnum, LPBYTE &ibuf, CHAR n)
 	return v;
 }
 
-
+} //namespace

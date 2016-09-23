@@ -13,12 +13,12 @@
 // - Advanced Music Format(DSM)
 //
 ///////////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
 //#define AMFLOG
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #pragma pack(1)
 
@@ -420,3 +420,4 @@ BOOL CSoundFile::ReadAMF(LPCBYTE lpStream, const DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

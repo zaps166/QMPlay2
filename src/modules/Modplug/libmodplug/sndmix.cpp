@@ -4,9 +4,11 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
-#include "tables.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+#include "tables.hpp"
+
+namespace QMPlay2ModPlug {
 
 #ifdef MODPLUG_TRACKER
 #define ENABLE_STEREOVU
@@ -1233,4 +1235,4 @@ BOOL CSoundFile::ReadNote()
 	return TRUE;
 }
 
-
+} //namespace

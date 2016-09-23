@@ -20,7 +20,9 @@
 
 #include <IOController.hpp>
 
-struct _ModPlugFile;
+namespace QMPlay2ModPlug {
+	struct File;
+}
 class Reader;
 
 class MPDemux : public Demuxer
@@ -50,7 +52,7 @@ private:
 	bool aborted;
 	double pos;
 	quint32 srate;
-	_ModPlugFile *mpfile;
+	QMPlay2ModPlug::File *mpfile;
 	IOController<Reader> reader;
 };
 

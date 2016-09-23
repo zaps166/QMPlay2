@@ -11,11 +11,13 @@
 // J2B module loader (AM and AMFF)
 //
 ///////////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
 /* ZLIB */
 #include <zlib.h>
+
+namespace QMPlay2ModPlug {
 
 static bool Inflate(const BYTE *data, DWORD size, BYTE *&out_arr, const DWORD out_size)
 {
@@ -548,4 +550,6 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 
 	delete[] uncompressed_arr;
 	return m_nPattern && m_nChannels && m_nInstruments && m_nSamples;
-};
+}
+
+} //namespace

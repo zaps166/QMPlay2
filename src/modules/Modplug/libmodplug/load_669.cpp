@@ -9,10 +9,10 @@
 // 669 Composer / UNIS 669 module loader
 ////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 typedef struct tagFILEHEADER669
 {
@@ -185,4 +185,4 @@ BOOL CSoundFile::Read669(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
-
+} //namespace

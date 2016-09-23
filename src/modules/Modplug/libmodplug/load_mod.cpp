@@ -5,13 +5,11 @@
  *          Adam Goode       <adam@evdebs.org> (endian and char fixes for PPC)
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
-#include "tables.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+#include "tables.hpp"
 
-#ifdef _MSC_VER
-//#pragma warning(disable:4244)
-#endif
+namespace QMPlay2ModPlug {
 
 //////////////////////////////////////////////////////////
 // ProTracker / NoiseTracker MOD/NST file support
@@ -504,3 +502,5 @@ BOOL CSoundFile::SaveMod(LPCSTR lpszFileName, UINT nPacking)
 #endif
 
 #endif // MODPLUG_NO_FILESAVE
+
+} //namespace

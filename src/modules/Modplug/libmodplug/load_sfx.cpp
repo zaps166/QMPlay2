@@ -1,7 +1,9 @@
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
 #include <ByteArray.hpp>
+
+namespace QMPlay2ModPlug {
 
 BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 {
@@ -131,3 +133,5 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 
 	return true;
 }
+
+} //namespace

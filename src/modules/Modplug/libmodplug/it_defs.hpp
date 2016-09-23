@@ -1,6 +1,8 @@
 #ifndef _ITDEFS_H_
 #define _ITDEFS_H_
 
+namespace QMPlay2ModPlug {
+
 #pragma pack(1)
 
 typedef struct tagITFILEHEADER
@@ -132,3 +134,5 @@ extern BYTE autovibit2xm[8];
 extern BYTE autovibxm2it[8];
 
 #endif
+
+} //namespace

@@ -7,12 +7,12 @@
 ///////////////////////////////////////////////////////
 // DMF DELUSION DIGITAL MUSIC FILEFORMAT (X-Tracker) //
 ///////////////////////////////////////////////////////
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
 //#define DMFLOG
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #pragma pack(1)
 
@@ -606,4 +606,4 @@ int DMFUnpack(LPBYTE psample, LPBYTE ibuf, LPBYTE ibufmax, UINT maxlen)
 	return tree.ibuf - ibuf;
 }
 
-
+} //namespace

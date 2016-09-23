@@ -13,10 +13,10 @@
 //
 ///////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 
-//#pragma warning(disable:4244)
+namespace QMPlay2ModPlug {
 
 #define DBM_FILE_MAGIC	0x304d4244
 #define DBM_ID_NAME		0x454d414e
@@ -366,3 +366,4 @@ BOOL CSoundFile::ReadDBM(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
+} //namespace

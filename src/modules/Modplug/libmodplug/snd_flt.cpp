@@ -4,51 +4,18 @@
  * Authors: Olivier Lapicque <olivierl@jps.net>
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
+
+#include <math.h>
+
+namespace QMPlay2ModPlug {
 
 // AWE32: cutoff = reg[0-255] * 31.25 + 100 -> [100Hz-8060Hz]
 // EMU10K1 docs: cutoff = reg[0-127]*62+100
 #define FILTER_PRECISION	8192
 
 #ifndef NO_FILTER
-
-#ifdef MSC_VER
-#define _ASM_MATH
-#endif
-
-#ifdef _ASM_MATH
-
-// pow(a,b) returns a^^b -> 2^^(b.log2(a))
-static float pow(float a, float b)
-{
-	long tmpint;
-	float result;
-	_asm {
-	fld b				// Load b
-	fld a				// Load a
-	fyl2x				// ST(0) = b.log2(a)
-	fist tmpint			// Store integer exponent
-	fisub tmpint		// ST(0) = -1 <= (b*log2(a)) <= 1
-	f2xm1				// ST(0) = 2^(x)-1
-	fild tmpint			// load integer exponent
-	fld1				// Load 1
-	fscale				// ST(0) = 2^ST(1)
-	fstp ST(1)			// Remove the integer from the stack
-	fmul ST(1), ST(0)	// multiply with fractional part
-	faddp ST(1), ST(0)	// add integer_part
-	fstp result			// Store the result
-	}
-	return result;
-}
-
-
-#else
-
-#include <math.h>
-
-#endif // _ASM_MATH
-
 
 DWORD CSoundFile::CutOffToFrequency(UINT nCutOff, int flt_modifier) const
 //-----------------------------------------------------------------------
@@ -99,3 +66,5 @@ void CSoundFile::SetupChannelFilter(MODCHANNEL *pChn, BOOL bReset, int flt_modif
 }
 
 #endif // NO_FILTER
+
+} //namespace

@@ -5,13 +5,11 @@
  *          Markus Fick <webmaster@mark-f.de> spline + fir-resampler
 */
 
-#include "stdafx.h"
-#include "sndfile.h"
+#include "stdafx.hpp"
+#include "sndfile.hpp"
 #include <math.h>
 
-#ifdef MSC_VER
-#pragma bss_seg(".modplug")
-#endif
+namespace QMPlay2ModPlug {
 
 // Front Mix Buffer (Also room for interleaved rear mix)
 int MixSoundBuffer[MIXBUFFERSIZE*4];
@@ -2395,3 +2393,5 @@ void CSoundFile::ResetAGC()
 }
 
 #endif // NO_AGC
+
+} //namespace
