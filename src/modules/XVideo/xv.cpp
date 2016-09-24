@@ -80,7 +80,8 @@ XVIDEO::~XVIDEO()
 	if (ai)
 		XvFreeAdaptorInfo(ai);
 #if QT_VERSION >= 0x050000
-	XCloseDisplay(disp);
+	if (disp)
+		XCloseDisplay(disp);
 #endif
 	delete priv;
 }

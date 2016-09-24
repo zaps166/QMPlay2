@@ -47,7 +47,8 @@ public:
 		vdp_device_destroy(NULL)
 	{
 		memset(surfaces, 0, sizeof surfaces);
-		if (vdp_device_create_x11((display = XOpenDisplay(NULL)), 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
+		display = XOpenDisplay(NULL);
+		if (display && vdp_device_create_x11(display, 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
 		{
 			if
 			(

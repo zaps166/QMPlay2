@@ -254,7 +254,8 @@ bool VDPAUWriter::open()
 
 	clr();
 
-	if (vdp_device_create_x11((display = XOpenDisplay(NULL)), 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
+	display = XOpenDisplay(NULL);
+	if (display && vdp_device_create_x11(display, 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
 	{
 		bool getProcAddressOK = true;
 		getProcAddressOK &= vdp_get_proc_address(device, VDP_FUNC_ID_DECODER_CREATE, (void **)&vdp_decoder_create) == VDP_STATUS_OK;
