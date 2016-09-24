@@ -7,7 +7,7 @@
 #endif
 #include <QLibrary>
 
-class ScreenSaverPriv
+class ScreenSaverPriv : public QObject
 {
 public:
 	inline ScreenSaverPriv() :
@@ -19,73 +19,82 @@ public:
 			XCloseDisplayFunc(m_disp);
 	}
 
-	inline void block()
+	inline void load()
 	{
-		int interval, preferBlanking, allowExposures;
-		XGetScreenSaverFunc(m_disp, m_timeout, interval, preferBlanking, allowExposures);
-		XSetScreenSaverFunc(m_disp, 0, interval, preferBlanking, allowExposures);
-		XFlushFunc(m_disp);
+		QLibrary libX11("X11");
+		if (libX11.load())
+		{
+			XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
+			XForceScreenSaverFunc = (XForceScreenSaverType)libX11.resolve("XForceScreenSaver");
+			XFlushFunc = (XFlushType)libX11.resolve("XFlush");
+			XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
+			if (XOpenDisplayFunc && XForceScreenSaverFunc && XFlushFunc && XCloseDisplayFunc)
+				m_disp = XOpenDisplayFunc(NULL);
+		}
 	}
-	inline void unblock()
+	inline bool isLoaded() const
 	{
-		int tmpTimeout, interval, preferBlanking, allowExposures;
-		XGetScreenSaverFunc(m_disp, tmpTimeout, interval, preferBlanking, allowExposures);
-		XSetScreenSaverFunc(m_disp, m_timeout, interval, preferBlanking, allowExposures);
+		return (bool)m_disp;
+	}
+
+	inline void inhibit()
+	{
+		timerEvent(NULL);
+		m_timerID = startTimer(30000);
+	}
+	inline void unInhibit()
+	{
+		killTimer(m_timerID);
+	}
+
+private:
+	void timerEvent(QTimerEvent *)
+	{
+		XForceScreenSaverFunc(m_disp, 0);
 		XFlushFunc(m_disp);
 	}
 
 	typedef void *(*XOpenDisplayType)(const char *name);
-	typedef int (*XGetScreenSaverType)(void *dpy, int &timeout, int &interval, int &preferBlanking, int &allowExposures);
-	typedef int (*XSetScreenSaverType)(void *dpy, int timeout, int interval, int prefer_blanking, int allow_exposures);
-	typedef int (*XCloseDisplayType)(void *dpy);
-	typedef int (*XFlushType)(void *dpy);
-
 	XOpenDisplayType XOpenDisplayFunc;
-	XGetScreenSaverType XGetScreenSaverFunc;
-	XSetScreenSaverType XSetScreenSaverFunc;
-	XCloseDisplayType XCloseDisplayFunc;
+
+	typedef int (*XForceScreenSaverType)(void *display, int mode);
+	XForceScreenSaverType XForceScreenSaverFunc;
+
+	typedef int (*XFlushType)(void *display);
 	XFlushType XFlushFunc;
 
+	typedef int (*XCloseDisplayType)(void *display);
+	XCloseDisplayType XCloseDisplayFunc;
+
 	void *m_disp;
-	int m_timeout;
+	int m_timerID;
 };
 
+/**/
+
 ScreenSaver::ScreenSaver() :
-	m_priv(new ScreenSaverPriv),
-	m_ref(0)
+	m_priv(new ScreenSaverPriv)
 {
 #if QT_VERSION >= 0x050000
 	if (QGuiApplication::platformName() != "xcb")
 		return;
 #endif
-	QLibrary libX11("X11");
-	if (libX11.load())
-	{
-		m_priv->XOpenDisplayFunc = (ScreenSaverPriv::XOpenDisplayType)libX11.resolve("XOpenDisplay");
-		m_priv->XGetScreenSaverFunc = (ScreenSaverPriv::XGetScreenSaverType)libX11.resolve("XGetScreenSaver");
-		m_priv->XSetScreenSaverFunc = (ScreenSaverPriv::XSetScreenSaverType)libX11.resolve("XSetScreenSaver");
-		m_priv->XFlushFunc = (ScreenSaverPriv::XFlushType)libX11.resolve("XFlush");
-		m_priv->XCloseDisplayFunc = (ScreenSaverPriv::XCloseDisplayType)libX11.resolve("XCloseDisplay");
-		if (m_priv->XOpenDisplayFunc && m_priv->XGetScreenSaverFunc && m_priv->XSetScreenSaverFunc && m_priv->XFlushFunc && m_priv->XCloseDisplayFunc)
-			m_priv->m_disp = m_priv->XOpenDisplayFunc(NULL);
-	}
+	m_priv->load();
 }
 ScreenSaver::~ScreenSaver()
 {
-	if (m_ref > 0)
-		m_priv->unblock();
 	delete m_priv;
 }
 
-void ScreenSaver::block()
+void ScreenSaver::inhibit(int context)
 {
-	if (m_priv->m_disp && m_ref++ == 0)
-		m_priv->block();
+	if (inhibitHelper(context) && m_priv->isLoaded())
+		m_priv->inhibit();
 }
-void ScreenSaver::unblock()
+void ScreenSaver::unInhibit(int context)
 {
-	if (m_priv->m_disp && --m_ref == 0)
-		m_priv->unblock();
+	if (unInhibitHelper(context) && m_priv->isLoaded())
+		m_priv->unInhibit();
 }
 
 #elif defined(Q_OS_WIN)
@@ -94,9 +103,9 @@ void ScreenSaver::unblock()
 
 #include <windows.h>
 
-static inline bool blockScreenSaver(MSG *msg, bool &blocked)
+static inline bool inhibitScreenSaver(MSG *msg, bool &inhibited)
 {
-	return (blocked && msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER));
+	return (inhibited && msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER));
 }
 
 #if QT_VERSION >= 0x050000
@@ -106,21 +115,20 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 	{
 	public:
 		inline ScreenSaverPriv() :
-			blocked(false)
+			inhibited(false)
 		{}
 
-		bool blocked;
+		bool inhibited;
 
 	private:
 		bool nativeEventFilter(const QByteArray &, void *m, long *)
 		{
-			return blockScreenSaver((MSG *)m, blocked);
+			return inhibitScreenSaver((MSG *)m, inhibited);
 		}
 	};
 
 	ScreenSaver::ScreenSaver() :
-		m_priv(new ScreenSaverPriv),
-		m_ref(0)
+		m_priv(new ScreenSaverPriv)
 	{
 		qApp->installNativeEventFilter(m_priv);
 	}
@@ -129,57 +137,99 @@ static inline bool blockScreenSaver(MSG *msg, bool &blocked)
 		delete m_priv;
 	}
 
-	void ScreenSaver::block()
+	void ScreenSaver::inhibit(int context)
 	{
-		if (m_ref++ == 0)
-			m_priv->blocked = true;
+		if (inhibitHelper(context))
+			m_priv->inhibited = true;
 	}
-	void ScreenSaver::unblock()
+	void ScreenSaver::unInhibit(int context)
 	{
-		if (--m_ref == 0)
-			m_priv->blocked = false;
+		if (unInhibitHelper(context))
+			m_priv->inhibited = false;
 	}
 #else
-	static bool blocked = false;
+	static bool inhibited = false;
 
 	static bool eventFilter(void *m, long *)
 	{
-		return blockScreenSaver((MSG *)m, blocked);
+		return inhibitScreenSaver((MSG *)m, inhibited);
 	}
 
 	ScreenSaver::ScreenSaver() :
-		m_priv(NULL),
-		m_ref(0)
+		m_priv(NULL)
 	{
 		qApp->setEventFilter(::eventFilter);
 	}
 	ScreenSaver::~ScreenSaver()
 	{}
 
-	void ScreenSaver::block()
+	void ScreenSaver::inhibit(int context)
 	{
-		if (m_ref++ == 0)
-			blocked = true;
+		if (inhibitHelper(context))
+			inhibited = true;
 	}
-	void ScreenSaver::unblock()
+	void ScreenSaver::unInhibit(int context)
 	{
-		if (--m_ref == 0)
-			blocked = false;
+		if (unInhibitHelper(context))
+			inhibited = false;
 	}
 #endif
 
 #else
 
 ScreenSaver::ScreenSaver() :
-	m_priv(NULL),
-	m_ref(0)
+	m_priv(NULL)
 {}
 ScreenSaver::~ScreenSaver()
 {}
 
-void ScreenSaver::block()
+void ScreenSaver::inhibit(int)
 {}
-void ScreenSaver::unblock()
+void ScreenSaver::unInhibit(int)
 {}
+
+inline bool ScreenSaver::inhibitHelper(int)
+{
+	return false;
+}
+inline bool ScreenSaver::unInhibitHelper(int)
+{
+	return false;
+}
+
+#define NO_INHIBIT_HELPER
+
+#endif
+
+#ifndef NO_INHIBIT_HELPER
+
+inline bool ScreenSaver::inhibitHelper(int context)
+{
+	if (!m_refs.value(context))
+	{
+		m_refs[context] = true;
+		for (Refs::const_iterator it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		{
+			if (it.value() && it.key() != context)
+				return false;
+		}
+		return true;
+	}
+	return false;
+}
+inline bool ScreenSaver::unInhibitHelper(int context)
+{
+	if (m_refs.value(context))
+	{
+		m_refs[context] = false;
+		for (Refs::const_iterator it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		{
+			if (it.value())
+				return false;
+		}
+		return true;
+	}
+	return false;
+}
 
 #endif

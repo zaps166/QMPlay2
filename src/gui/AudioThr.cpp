@@ -25,6 +25,7 @@
 #include <Functions.hpp>
 #include <PlayClass.hpp>
 #include <AudioFilter.hpp>
+#include <ScreenSaver.hpp>
 #include <QMPlay2Extensions.hpp>
 
 #include <QCoreApplication>
@@ -47,6 +48,13 @@ AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
 #ifdef Q_OS_WIN
 	startTimer(500);
 #endif
+
+	if (QMPlay2GUI.mainW->property("fullScreen").toBool())
+		QMPlay2GUI.screenSaver->inhibit(1);
+}
+AudioThr::~AudioThr()
+{
+	QMPlay2GUI.screenSaver->unInhibit(1);
 }
 
 void AudioThr::stop(bool terminate)

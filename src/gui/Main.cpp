@@ -282,6 +282,12 @@ static bool writeToSocket(IPCSocket &socket)
 	return ret;
 }
 
+static void unInhibitScreenSaver()
+{
+	/* Current implementation doesn't need this */
+	delete g_screenSaver;
+}
+
 #if QT_VERSION >= 0x050000 && !defined Q_OS_WIN
 	#define QT5_NOT_WIN
 	#include <setjmp.h>
@@ -299,7 +305,7 @@ static inline void forceKill()
 #else
 	const int SC = SIGKILL;
 #endif
-	delete g_screenSaver;
+	delete g_screenSaver; //Current implementation doesn't need this
 	raise(SC);
 }
 static void signal_handler(int s)
@@ -378,18 +384,13 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 }
 #endif
 
-static void unblockScreenSaver()
-{
-	delete g_screenSaver;
-}
-
 int main(int argc, char *argv[])
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGABRT, signal_handler);
 	signal(SIGFPE, signal_handler);
 	signal(SIGSEGV, signal_handler);
-	atexit(unblockScreenSaver);
+	atexit(unInhibitScreenSaver);
 
 #ifdef Q_WS_X11
 	g_useGui = getenv("DISPLAY");

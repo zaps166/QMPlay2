@@ -920,7 +920,8 @@ void MainWidget::toggleFullScreen()
 		fullScreen = true;
 		showFullScreen();
 
-		QMPlay2GUI.screenSaver->block();
+		if (playC.isPlaying())
+			QMPlay2GUI.screenSaver->inhibit(1);
 	}
 	else
 	{
@@ -973,7 +974,7 @@ void MainWidget::toggleFullScreen()
 
 		visibleQMPlay2Extensions.clear();
 
-		QMPlay2GUI.screenSaver->unblock();
+		QMPlay2GUI.screenSaver->unInhibit(1);
 	}
 	QMPlay2Core.fullScreenChanged(fullScreen);
 }
