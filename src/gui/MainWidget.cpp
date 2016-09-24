@@ -99,8 +99,6 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 	dest->addMenu(newMenu);
 }
 
-#include <QDebug>
-
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #ifdef UPDATER
