@@ -23,6 +23,8 @@
 #include <OggHelper.hpp>
 #include <Packet.hpp>
 
+#include <QPointer>
+
 #if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
 	#define HAS_REPLAY_GAIN
 #endif
@@ -134,8 +136,37 @@ public:
 	{
 		av_packet_unref(packet);
 	}
+
 private:
 	AVPacket *packet;
+};
+
+class OpenFmtCtxThr : public OpenThr
+{
+	AVFormatContext *m_formatCtx;
+	AVInputFormat *m_inputFmt;
+
+public:
+	inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+		OpenThr(url, options, abortCtx),
+		m_formatCtx(formatCtx),
+		m_inputFmt(inputFmt)
+	{
+		start();
+	}
+
+	inline AVFormatContext *getFormatCtx() const
+	{
+		return  canGetPointer() ? m_formatCtx : NULL;
+	}
+
+private:
+	void run()
+	{
+		avformat_open_input(&m_formatCtx, m_url, m_inputFmt, &m_options);
+		if (!wakeIfNotAborted() && m_formatCtx)
+			avformat_close_input(&m_formatCtx);
+	}
 };
 
 /**/
@@ -143,10 +174,11 @@ private:
 FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	isError(false),
 	currPos(0.0),
+	abortCtx(new AbortContext),
 	formatCtx(NULL),
 	packet(NULL),
 	oggHelper(NULL),
-	isPaused(false), isAborted(false), fixMkvAss(false),
+	isPaused(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
 	invalErrCount(0), errFromSeek(0),
@@ -409,7 +441,7 @@ QByteArray FormatContext::image(bool forceCopy) const
 bool FormatContext::seek(int pos, bool backward)
 {
 	bool isOk = false;
-	isAborted = false;
+	abortCtx->isAborted = false;
 	if (!isStreamed)
 	{
 		const int len = length();
@@ -459,7 +491,7 @@ bool FormatContext::seek(int pos, bool backward)
 }
 bool FormatContext::read(Packet &encoded, int &idx)
 {
-	if (isAborted)
+	if (abortCtx->isAborted)
 	{
 		isError = true;
 		return false;
@@ -606,7 +638,7 @@ void FormatContext::pause()
 }
 void FormatContext::abort()
 {
-	isAborted = true;
+	abortCtx->abort();
 }
 
 bool FormatContext::open(const QString &_url, const QString &param)
@@ -668,7 +700,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;
-	formatCtx->interrupt_callback.opaque = &isAborted;
+	formatCtx->interrupt_callback.opaque = &abortCtx->isAborted;
 
 	if (oggOffset >= 0)
 	{
@@ -679,8 +711,14 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		av_dict_set(&options, "skip_initial_bytes", QString::number(oggOffset).toLatin1(), 0);
 	}
 
-	if (avformat_open_input(&formatCtx, url.toUtf8(), inputFmt, &options) || !formatCtx || disabledDemuxers.contains(name()))
+	QPointer<OpenFmtCtxThr> openThr(new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx));
+	if (!(formatCtx = openThr->getFormatCtx()) || disabledDemuxers.contains(name()))
+	{
+		//Execute "deleteLater()" in main thread, because in this thread "processEvents()" won't be called.
+		openThr->moveToThread(qApp->thread());
 		return false;
+	}
+	delete openThr;
 
 #ifdef MP3_FAST_SEEK
 	if (name() == "mp3")

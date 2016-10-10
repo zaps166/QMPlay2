@@ -19,12 +19,12 @@
 #ifndef FORMATCONTEXT_HPP
 #define FORMATCONTEXT_HPP
 
+#include <OpenThr.hpp>
+
 #include <ChapterProgramInfo.hpp>
 #include <TimeStamp.hpp>
 
 #include <QCoreApplication>
-#include <QVector>
-#include <QMutex>
 
 extern "C"
 {
@@ -78,6 +78,8 @@ private:
 	StreamInfo *getStreamInfo(AVStream *stream) const;
 	AVDictionary *getMetadata() const;
 
+	QSharedPointer<AbortContext> abortCtx;
+
 	QVector<int> index_map;
 	QVector<AVStream *> streams;
 	QVector<TimeStamp> streamsTS;
@@ -87,7 +89,7 @@ private:
 
 	OggHelper *oggHelper;
 
-	bool isPaused, isAborted, fixMkvAss;
+	bool isPaused, fixMkvAss;
 	mutable bool isMetadataChanged;
 	double lastTime, startTime;
 #ifndef MP3_FAST_SEEK

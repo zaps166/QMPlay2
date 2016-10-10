@@ -19,6 +19,9 @@
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
+#include <QCoreApplication>
+#include <QPointer>
+
 extern "C"
 {
 	#include <libavformat/avio.h>
@@ -29,16 +32,44 @@ static int interruptCB(bool &aborted)
 	return aborted;
 }
 
+class OpenAvioThr : public OpenThr
+{
+	AVIOContext *m_avioCtx;
+
+public:
+	inline OpenAvioThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+		OpenThr(url, options, abortCtx),
+		m_avioCtx(NULL)
+	{
+		start();
+	}
+
+	inline AVIOContext *getAvioCtx() const
+	{
+		return  canGetPointer() ? m_avioCtx : NULL;
+	}
+
+private:
+	void run()
+	{
+		const AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, &m_abortCtx->isAborted};
+		avio_open2(&m_avioCtx, m_url, AVIO_FLAG_READ, &interruptCB, &m_options);
+		if (!wakeIfNotAborted() && m_avioCtx)
+			avio_close(m_avioCtx);
+	}
+};
+
 /**/
 
 FFReader::FFReader() :
 	avioCtx(NULL),
-	aborted(false), paused(false), canRead(false)
+	paused(false), canRead(false),
+	abortCtx(new AbortContext)
 {}
 
 bool FFReader::readyRead() const
 {
-	return canRead && !aborted;
+	return canRead && !abortCtx->isAborted;
 }
 bool FFReader::canSeek() const
 {
@@ -83,7 +114,7 @@ bool FFReader::atEnd() const
 }
 void FFReader::abort()
 {
-	aborted = true;
+	abortCtx->abort();
 }
 
 qint64 FFReader::size() const
@@ -103,10 +134,17 @@ bool FFReader::open()
 {
 	AVDictionary *options = NULL;
 	const QString url = FFCommon::prepareUrl(getUrl(), options);
-	AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, &aborted};
-	if (avio_open2(&avioCtx, url.toUtf8(), AVIO_FLAG_READ, &interruptCB, &options) >= 0)
-		return (canRead = true);
-	return false;
+
+	QPointer<OpenAvioThr> openThr(new OpenAvioThr(url.toUtf8(), options, abortCtx));
+	if (!(avioCtx = openThr->getAvioCtx()))
+	{
+		//Execute "deleteLater()" in main thread, because in this thread "processEvents()" won't be called.
+		openThr->moveToThread(qApp->thread());
+		return false;
+	}
+	delete openThr;
+
+	return (canRead = true);
 }
 
 FFReader::~FFReader()

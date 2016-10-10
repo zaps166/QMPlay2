@@ -16,42 +16,51 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFREADER_HPP
-#define FFREADER_HPP
+#ifndef OPENTHR_HPP
+#define OPENTHR_HPP
 
-#include <Reader.hpp>
+#include <QSharedPointer>
+#include <QWaitCondition>
+#include <QThread>
+#include <QMutex>
 
-#include <OpenThr.hpp>
-
-struct AVIOContext;
-
-class FFReader : public Reader
+class AbortContext
 {
 public:
-	FFReader();
-private:
-	bool readyRead() const;
-	bool canSeek() const;
+	inline AbortContext() :
+		isAborted(false)
+	{}
 
-	bool seek(qint64);
-	QByteArray read(qint64);
-	void pause();
-	bool atEnd() const;
 	void abort();
 
-	qint64 size() const;
-	qint64 pos() const;
-	QString name() const;
-
-	bool open();
-
-	/**/
-
-	~FFReader();
-
-	AVIOContext *avioCtx;
-	bool paused, canRead;
-	QSharedPointer<AbortContext> abortCtx;
+	QWaitCondition openCond;
+	QMutex openMutex;
+	bool isAborted;
 };
 
-#endif // FFREADER_HPP
+/**/
+
+struct AVFormatContext;
+struct AVInputFormat;
+struct AVDictionary;
+
+class OpenThr : public QThread
+{
+protected:
+	OpenThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx);
+
+	bool canGetPointer() const;
+
+	bool wakeIfNotAborted();
+
+	const QByteArray m_url;
+	AVInputFormat *m_inputFmt;
+	AVDictionary *m_options;
+
+	QSharedPointer<AbortContext> m_abortCtx;
+
+private:
+	bool m_finished;
+};
+
+#endif // OPENTHR_HPP
