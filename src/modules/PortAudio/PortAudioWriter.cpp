@@ -122,7 +122,8 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 
 	if (Pa_IsStreamStopped(stream))
 	{
-		Pa_StartStream(stream);
+		if (Pa_StartStream(stream) == paUnanticipatedHostError)
+			return playbackError();
 		fullBufferReached = false;
 	}
 #ifndef Q_OS_MAC
@@ -178,11 +179,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 #endif
 
 		if (isError)
-		{
-			QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
-			err = true;
-			return 0;
-		}
+			return playbackError();
 	}
 
 	return arr.size();
@@ -216,7 +213,16 @@ bool PortAudioWriter::openStream()
 
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-	return (Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float)) != paUnanticipatedHostError);
+	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
+	if (e != paNoError)
+		fullBufferReached = false;
+	return (e != paUnanticipatedHostError);
+}
+qint64 PortAudioWriter::playbackError()
+{
+	QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
+	err = true;
+	return 0;
 }
 
 /**/

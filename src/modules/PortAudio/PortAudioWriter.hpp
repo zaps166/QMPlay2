@@ -47,6 +47,7 @@ private:
 
 	bool openStream();
 	inline bool writeStream(const QByteArray &arr);
+	qint64 playbackError();
 
 	void close();
 
