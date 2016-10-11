@@ -1168,10 +1168,6 @@ amp</source>
         <translation>ms</translation>
     </message>
     <message>
-        <source>Find default output device</source>
-        <translation>Trouver le périphérique de sortie par défaut</translation>
-    </message>
-    <message>
         <source>Voice removal</source>
         <translation>Suppression de voix</translation>
     </message>

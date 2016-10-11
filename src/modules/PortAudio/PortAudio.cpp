@@ -24,7 +24,7 @@ PortAudio::PortAudio() :
 {
 	moduleImg = QImage(":/PortAudio");
 
-	Pa_Initialize();
+	initialized = (Pa_Initialize() == paNoError);
 	init("WriterEnabled", true);
 #ifdef Q_OS_WIN
 	init("Delay", 0.15);
@@ -35,13 +35,14 @@ PortAudio::PortAudio() :
 }
 PortAudio::~PortAudio()
 {
-	Pa_Terminate();
+	if (initialized)
+		Pa_Terminate();
 }
 
 QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
-	if (showDisabled || getBool("WriterEnabled"))
+	if (initialized && (showDisabled || getBool("WriterEnabled")))
 		modulesInfo += Info(PortAudioWriterName, WRITER, QStringList("audio"));
 	return modulesInfo;
 }
@@ -85,20 +86,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	int idx = devicesB->findText(sets().getString("OutputDevice"));
 	devicesB->setCurrentIndex(idx < 0 ? 0 : idx);
 
-	QPushButton *defaultDevs = new QPushButton;
-	defaultDevs->setText(tr("Find default output device"));
-	connect(defaultDevs, SIGNAL(clicked()), this, SLOT(defaultDevs()));
-
 	QFormLayout *layout = new QFormLayout(this);
 	layout->addRow(enabledB);
 	layout->addRow(tr("Playback device") + ": ", devicesB);
-	layout->addRow(QString(), defaultDevs);
 	layout->addRow(tr("Delay") + ": ", delayB);
-}
-
-void ModuleSettingsWidget::defaultDevs()
-{
-	devicesB->setCurrentIndex(PortAudioCommon::deviceIndexToOutputIndex(PortAudioCommon::getDefaultOutputDevice()) + 1);
 }
 
 void ModuleSettingsWidget::saveSettings()

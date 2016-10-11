@@ -28,9 +28,13 @@ private:
 	void *createInstance(const QString &);
 
 	SettingsWidget *getSettingsWidget();
+
+	bool initialized;
 };
 
 /**/
+
+#include <QCoreApplication>
 
 class QDoubleSpinBox;
 class QCheckBox;
@@ -38,11 +42,9 @@ class QComboBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {
-	Q_OBJECT
+	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 public:
 	ModuleSettingsWidget(Module &);
-private slots:
-	void defaultDevs();
 private:
 	void saveSettings();
 

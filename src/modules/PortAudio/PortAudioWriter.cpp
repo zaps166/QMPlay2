@@ -47,11 +47,11 @@ PortAudioWriter::~PortAudioWriter()
 bool PortAudioWriter::set()
 {
 	bool restartPlaying = false;
-	const int devIdx = PortAudioCommon::getDeviceIndexForOutput(sets().getString("OutputDevice"));
 	const double delay = sets().getDouble("Delay");
-	if (outputParameters.device != devIdx)
+	const QString newOutputDevice = sets().getString("OutputDevice");
+	if (outputDevice != newOutputDevice)
 	{
-		outputParameters.device = devIdx;
+		outputDevice = newOutputDevice;
 		restartPlaying = true;
 	}
 	if (outputParameters.suggestedLatency != delay)
@@ -72,6 +72,14 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 	bool resetAudio = false;
 
 	int chn = getParam("chn").toInt();
+
+	const int devIdx = PortAudioCommon::getDeviceIndexForOutput(outputDevice, chn);
+	if (outputParameters.device != devIdx)
+	{
+		outputParameters.device = devIdx;
+		resetAudio = true;
+	}
+
 	if (paramsCorrected)
 	{
 		const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(outputParameters.device);
@@ -81,6 +89,7 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 			*paramsCorrected = true;
 		}
 	}
+
 	if (outputParameters.channelCount != chn)
 	{
 		resetAudio = true;

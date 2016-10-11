@@ -1169,10 +1169,6 @@ amp</translation>
         <translation>ms</translation>
     </message>
     <message>
-        <source>Find default output device</source>
-        <translation>Znajdź domyślne urządzenie wyjścia dźwięku</translation>
-    </message>
-    <message>
         <source>Voice removal</source>
         <translation>Usuwanie głosu</translation>
     </message>

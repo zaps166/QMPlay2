@@ -50,6 +50,7 @@ private:
 
 	void close();
 
+	QString outputDevice;
 	PaStreamParameters outputParameters;
 	PaStream *stream;
 	int sample_rate;

@@ -40,7 +40,7 @@ QStringList PortAudioCommon::getOutputDeviceNames()
 	}
 	return outputDeviceNames;
 }
-int PortAudioCommon::getDeviceIndexForOutput(const QString &name)
+int PortAudioCommon::getDeviceIndexForOutput(const QString &name, const int chn)
 {
 	if (!name.isEmpty())
 	{
@@ -52,23 +52,28 @@ int PortAudioCommon::getDeviceIndexForOutput(const QString &name)
 				return i;
 		}
 	}
-	return getDefaultOutputDevice();
-}
-int PortAudioCommon::getDefaultOutputDevice()
-{
-#ifdef Q_OS_LINUX
-	if (getOutputDeviceNames().contains("ALSA: default"))
-		return getDeviceIndexForOutput("ALSA: default");
+
+	//Find the default device
+#if defined Q_OS_LINUX
+	if (chn > 0)
+	{
+		const char alsaDefault[] = "ALSA: default";
+		if (getOutputDeviceNames().contains(alsaDefault))
+			return getDeviceIndexForOutput(alsaDefault, 0);
+	}
+#elif defined Q_OS_WIN
+	if (chn <= 2)
+	{
+		const int numDevices = Pa_GetDeviceCount();
+		for (int i = 0; i < numDevices; i++)
+		{
+			const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
+			if (deviceInfo && deviceInfo->maxOutputChannels > 0 && Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paMME)
+				return i; //First MME output device is a "WAVE_MAPPER". The "WAVE_MAPPER" doesn't support multi-channel.
+		}
+	}
+#else
+	Q_UNUSED(chn)
 #endif
 	return Pa_GetDefaultOutputDevice();
-}
-int PortAudioCommon::deviceIndexToOutputIndex(int dev)
-{
-	if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(dev))
-	{
-		const int idx = getOutputDeviceNames().indexOf(getOutputDeviceName(deviceInfo));
-		if (idx > -1)
-			return idx;
-	}
-	return dev;
 }

@@ -1169,10 +1169,6 @@ amp</source>
         <translation>мс</translation>
     </message>
     <message>
-        <source>Find default output device</source>
-        <translation>Поиск устройства вывода по умолчанию</translation>
-    </message>
-    <message>
         <source>Voice removal</source>
         <translation>Удаление голоса</translation>
     </message>

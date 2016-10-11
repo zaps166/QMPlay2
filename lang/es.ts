@@ -1405,10 +1405,6 @@ amp</translation>
         <translation>Frecuencia de muestreo</translation>
     </message>
     <message>
-        <source>Find default output device</source>
-        <translation>Buscar dispositivo de salida predeterminado</translation>
-    </message>
-    <message>
         <source>Very high</source>
         <translation>Muy alto</translation>
     </message>

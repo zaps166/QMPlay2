@@ -1168,10 +1168,6 @@ amp</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <source>Find default output device</source>
-        <translation>查找默认输出设备</translation>
-    </message>
-    <message>
         <source>Voice removal</source>
         <translation>去除人声</translation>
     </message>
