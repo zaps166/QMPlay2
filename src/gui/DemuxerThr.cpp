@@ -51,7 +51,7 @@ static QString getWriterName(AVThread *avThr)
 	return (avThr && avThr->writer) ? " - <i>" + decName + avThr->writer->name() + "</i>" : QString();
 }
 
-static inline QString getCoverFile(const QString &title, const QString &artist, const QString &album)
+static QString getCoverFile(const QString &title, const QString &artist, const QString &album)
 {
 	return QMPlay2Core.getSettingsDir() + "Covers/" + QCryptographicHash::hash((album.isEmpty() ? title.toUtf8() : album.toUtf8()) + artist.toUtf8(), QCryptographicHash::Md5).toHex();
 }
@@ -414,10 +414,10 @@ void DemuxerThr::run()
 		(
 			playC.waitForData &&
 			(
-				playC.endOfStream                                ||
-				bufferedAllPackets(vS, aS, forwardPackets)       || //bufor pełny
-				(remainingDuration >= playIfBuffered) ||
-				(qFuzzyIsNull(remainingDuration) && bufferedAllPackets(vS, aS, 2)) //bufor ma conajmniej 2 paczki, a nadal bez informacji o długości w [s]
+				playC.endOfStream                                                  ||
+				bufferedAllPackets(vS, aS, forwardPackets)                         || //Buffer is full
+				(remainingDuration >= playIfBuffered)                              ||
+				(qFuzzyIsNull(remainingDuration) && bufferedAllPackets(vS, aS, 2))    //Buffer has at least 2 packets, but still without length (in seconds) information
 			)
 		)
 		{
