@@ -83,10 +83,12 @@ qint64 PulseAudioWriter::write(const QByteArray &arr)
 	if (!arr.size() || !readyWrite())
 		return 0;
 
-	err = !pulse.write(arr);
+	bool showError = true;
+	err = !pulse.write(arr, showError);
 	if (err)
 	{
-		QMPlay2Core.logError("PulseAudio :: " + tr("Playback error"));
+		if (showError)
+			QMPlay2Core.logError("PulseAudio :: " + tr("Playback error"));
 		return 0;
 	}
 

@@ -41,7 +41,7 @@ public:
 	bool start();
 	void stop(bool drain = false);
 
-	bool write(const QByteArray &);
+	bool write(const QByteArray &, bool &showError);
 
 	double delay;
 	uchar channels;

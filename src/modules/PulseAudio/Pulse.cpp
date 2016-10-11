@@ -126,11 +126,13 @@ void Pulse::stop(bool drain)
 	}
 }
 
-bool Pulse::write(const QByteArray &arr)
+bool Pulse::write(const QByteArray &arr, bool &showError)
 {
 	int error = 0;
 	writing = true;
 	const bool ret = pa_simple_write(pulse, arr.data(), arr.size(), &error) >= 0;
 	writing = false;
+	if (error == PA_ERR_KILLED)
+		showError = false;
 	return (ret || error == PA_ERR_INVALID);
 }
