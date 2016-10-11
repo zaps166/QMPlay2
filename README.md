@@ -63,6 +63,10 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ```
 - Don't mix FFmpeg from different repositories!
 
+####Easy installation on Gentoo Linux
+
+[Gentoo Linux repository](https://github.com/reagentoo/gentoo-overlay/tree/master/media-video/qmplay2)
+
 ##YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
