@@ -304,7 +304,8 @@ void DemuxerThr::run()
 				const QString fName = Functions::fileName(url, false).replace('_', ' ');
 				foreach (const QString &subsFile, QDir(directory).entryList(filter, QDir::Files))
 				{
-					if (Functions::fileName(subsFile, false).replace('_', ' ').contains(fName, Qt::CaseInsensitive))
+					const QString subsFName = Functions::fileName(subsFile, false).replace('_', ' ');
+					if (subsFName.contains(fName, Qt::CaseInsensitive) || fName.contains(subsFName, Qt::CaseInsensitive))
 					{
 						const QString fileSubsUrl = Functions::Url(directory + subsFile);
 						if (!playC.fileSubsList.contains(fileSubsUrl))
