@@ -23,8 +23,6 @@
 #include <OggHelper.hpp>
 #include <Packet.hpp>
 
-#include <QPointer>
-
 #if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
 	#define HAS_REPLAY_GAIN
 #endif
@@ -157,7 +155,7 @@ public:
 
 	inline AVFormatContext *getFormatCtx() const
 	{
-		return  canGetPointer() ? m_formatCtx : NULL;
+		return waitForOpened() ? m_formatCtx : NULL;
 	}
 
 private:
@@ -711,14 +709,11 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		av_dict_set(&options, "skip_initial_bytes", QString::number(oggOffset).toLatin1(), 0);
 	}
 
-	QPointer<OpenFmtCtxThr> openThr(new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx));
-	if (!(formatCtx = openThr->getFormatCtx()) || disabledDemuxers.contains(name()))
-	{
-		//Execute "deleteLater()" in main thread, because in this thread "processEvents()" won't be called.
-		openThr->moveToThread(qApp->thread());
+	OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);
+	formatCtx = openThr->getFormatCtx();
+	openThr->drop();
+	if (!formatCtx || disabledDemuxers.contains(name()))
 		return false;
-	}
-	delete openThr;
 
 #ifdef MP3_FAST_SEEK
 	if (name() == "mp3")

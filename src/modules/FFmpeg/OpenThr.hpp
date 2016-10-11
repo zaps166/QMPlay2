@@ -46,10 +46,13 @@ struct AVDictionary;
 
 class OpenThr : public QThread
 {
+public:
+	void drop();
+
 protected:
 	OpenThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx);
 
-	bool canGetPointer() const;
+	bool waitForOpened() const;
 
 	bool wakeIfNotAborted();
 

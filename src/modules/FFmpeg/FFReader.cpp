@@ -19,9 +19,6 @@
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
-#include <QCoreApplication>
-#include <QPointer>
-
 extern "C"
 {
 	#include <libavformat/avio.h>
@@ -46,7 +43,7 @@ public:
 
 	inline AVIOContext *getAvioCtx() const
 	{
-		return  canGetPointer() ? m_avioCtx : NULL;
+		return waitForOpened() ? m_avioCtx : NULL;
 	}
 
 private:
@@ -135,16 +132,14 @@ bool FFReader::open()
 	AVDictionary *options = NULL;
 	const QString url = FFCommon::prepareUrl(getUrl(), options);
 
-	QPointer<OpenAvioThr> openThr(new OpenAvioThr(url.toUtf8(), options, abortCtx));
-	if (!(avioCtx = openThr->getAvioCtx()))
-	{
-		//Execute "deleteLater()" in main thread, because in this thread "processEvents()" won't be called.
-		openThr->moveToThread(qApp->thread());
-		return false;
-	}
-	delete openThr;
+	OpenAvioThr *openThr = new OpenAvioThr(url.toUtf8(), options, abortCtx);
+	avioCtx = openThr->getAvioCtx();
+	openThr->drop();
 
-	return (canRead = true);
+	if (avioCtx)
+		canRead = true;
+
+	return canRead;
 }
 
 FFReader::~FFReader()
