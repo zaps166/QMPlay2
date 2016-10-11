@@ -121,12 +121,24 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		return 0;
 
 	if (Pa_IsStreamStopped(stream))
+	{
 		Pa_StartStream(stream);
-
-#ifndef Q_OS_MAC //?
-	const int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
-	if (diff > 0)
-		Pa_WriteStream(stream, QByteArray(diff * outputParameters.channelCount * sizeof(float), 0).constData(), diff);
+		fullBufferReached = false;
+	}
+#ifndef Q_OS_MAC
+	else
+	{
+		const int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
+		if (diff <= 0)
+			fullBufferReached = true;
+		else if (fullBufferReached)
+		{
+			//Reset stream to prevent potential short audio garbage on Windows
+			Pa_AbortStream(stream);
+			Pa_StartStream(stream);
+			fullBufferReached = false;
+		}
+	}
 #endif
 
 #ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data.
@@ -161,6 +173,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 				Pa_StartStream(stream);
 				isError = !writeStream(arr);
 			}
+			fullBufferReached = false;
 		}
 #endif
 

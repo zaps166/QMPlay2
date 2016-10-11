@@ -55,7 +55,7 @@ private:
 	PaStream *stream;
 	int sample_rate;
 	double outputLatency;
-	bool err;
+	bool err, fullBufferReached;
 };
 
 #define PortAudioWriterName "PortAudio"
