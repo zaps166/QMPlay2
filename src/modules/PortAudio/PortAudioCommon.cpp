@@ -21,34 +21,34 @@
 
 #include <portaudio.h>
 
-#define getOutputDeviceName QString(hostApiInfo->name) + ": " + QString::fromLocal8Bit(deviceInfo->name)
+static inline QString getOutputDeviceName(const PaDeviceInfo *deviceInfo)
+{
+	return QString(Pa_GetHostApiInfo(deviceInfo->hostApi)->name) + ": " + QString::fromLocal8Bit(deviceInfo->name);
+}
+
+/**/
 
 QStringList PortAudioCommon::getOutputDeviceNames()
 {
 	QStringList outputDeviceNames;
-	int numDevices = Pa_GetDeviceCount();
+	const int numDevices = Pa_GetDeviceCount();
 	for (int i = 0; i < numDevices; i++)
 	{
 		const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
-		if (deviceInfo)
-		{
-			const PaHostApiInfo *hostApiInfo = Pa_GetHostApiInfo(deviceInfo->hostApi);
-			if (deviceInfo->maxOutputChannels > 0)
-				outputDeviceNames += getOutputDeviceName;
-		}
+		if (deviceInfo && deviceInfo->maxOutputChannels > 0)
+			outputDeviceNames += getOutputDeviceName(deviceInfo);
 	}
 	return outputDeviceNames;
 }
 int PortAudioCommon::getDeviceIndexForOutput(const QString &name)
 {
-	int numDevices = Pa_GetDeviceCount();
-	for (int i = 0; i < numDevices; i++)
+	if (!name.isEmpty())
 	{
-		const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
-		if (deviceInfo)
+		const int numDevices = Pa_GetDeviceCount();
+		for (int i = 0; i < numDevices; i++)
 		{
-			const PaHostApiInfo *hostApiInfo = Pa_GetHostApiInfo(deviceInfo->hostApi);
-			if (deviceInfo->maxOutputChannels > 0 && name == getOutputDeviceName)
+			const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
+			if (deviceInfo && deviceInfo->maxOutputChannels > 0 && getOutputDeviceName(deviceInfo) == name)
 				return i;
 		}
 	}
@@ -64,11 +64,9 @@ int PortAudioCommon::getDefaultOutputDevice()
 }
 int PortAudioCommon::deviceIndexToOutputIndex(int dev)
 {
-	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(dev);
-	if (deviceInfo)
+	if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(dev))
 	{
-		const PaHostApiInfo *hostApiInfo = Pa_GetHostApiInfo(deviceInfo->hostApi);
-		int idx = getOutputDeviceNames().indexOf(getOutputDeviceName);
+		const int idx = getOutputDeviceNames().indexOf(getOutputDeviceName(deviceInfo));
 		if (idx > -1)
 			return idx;
 	}

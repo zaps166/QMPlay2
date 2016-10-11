@@ -47,8 +47,8 @@ PortAudioWriter::~PortAudioWriter()
 bool PortAudioWriter::set()
 {
 	bool restartPlaying = false;
-	int devIdx = PortAudioCommon::getDeviceIndexForOutput(sets().getString("OutputDevice"));
-	double delay = sets().getDouble("Delay");
+	const int devIdx = PortAudioCommon::getDeviceIndexForOutput(sets().getString("OutputDevice"));
+	const double delay = sets().getDouble("Delay");
 	if (outputParameters.device != devIdx)
 	{
 		outputParameters.device = devIdx;
@@ -120,7 +120,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		Pa_WriteStream(stream, QByteArray(diff * outputParameters.channelCount * sizeof(float), 0).constData(), diff);
 #endif
 
-#ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data
+#ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data.
 	const int chn = outputParameters.channelCount;
 	if (chn == 6 || chn == 8)
 	{
