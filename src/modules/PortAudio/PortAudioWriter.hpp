@@ -45,6 +45,9 @@ private:
 
 	/**/
 
+	bool openStream();
+	inline bool writeStream(const QByteArray &arr);
+
 	void close();
 
 	PaStreamParameters outputParameters;

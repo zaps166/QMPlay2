@@ -19,6 +19,10 @@
 #include <PortAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
+#ifdef Q_OS_WIN
+	#define MMSYSERR_NODRIVER 6
+#endif
+
 PortAudioWriter::PortAudioWriter(Module &module) :
 	stream(NULL),
 	sample_rate(0),
@@ -29,7 +33,7 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 	addParam("rate");
 	addParam("drain");
 
-	memset(&outputParameters, 0, sizeof(outputParameters));
+	memset(&outputParameters, 0, sizeof outputParameters);
 	outputParameters.sampleFormat = paFloat32;
 	outputParameters.hostApiSpecificStreamInfo = NULL;
 
@@ -93,14 +97,11 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 	if (resetAudio || err)
 	{
 		close();
-		err = Pa_OpenStream(&stream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL);
-		if (!err)
+		if (!openStream())
 		{
-			outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
-			modParam("delay", outputLatency);
-		}
-		else
 			QMPlay2Core.logError("PortAudio :: " + tr("Cannot open audio output stream"));
+			err = true;
+		}
 	}
 
 	return readyWrite();
@@ -114,13 +115,13 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		Pa_StartStream(stream);
 
 #ifndef Q_OS_MAC //?
-	int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
+	const int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
 	if (diff > 0)
 		Pa_WriteStream(stream, QByteArray(diff * outputParameters.channelCount * sizeof(float), 0).constData(), diff);
 #endif
 
-#ifdef Q_OS_LINUX
-	int chn = outputParameters.channelCount;
+#ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data
+	const int chn = outputParameters.channelCount;
 	if (chn == 6 || chn == 8)
 	{
 		float *audio_buffer = (float *)arr.data();
@@ -136,12 +137,30 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 	}
 #endif
 
-	int e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
-	if (e == paUnanticipatedHostError)
+	if (!writeStream(arr))
 	{
-		QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
-		err = true;
-		return 0;
+		bool isError = true;
+
+#ifdef Q_OS_WIN
+		const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
+		if (errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER)
+		{
+			Pa_CloseStream(stream);
+			stream = NULL;
+			if (openStream())
+			{
+				Pa_StartStream(stream);
+				isError = !writeStream(arr);
+			}
+		}
+#endif
+
+		if (isError)
+		{
+			QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
+			err = true;
+			return 0;
+		}
 	}
 
 	return arr.size();
@@ -160,6 +179,22 @@ QString PortAudioWriter::name() const
 bool PortAudioWriter::open()
 {
 	return true;
+}
+
+bool PortAudioWriter::openStream()
+{
+	if (Pa_OpenStream(&stream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL) == paNoError)
+	{
+		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
+		modParam("delay", outputLatency);
+		return true;
+	}
+	return false;
+}
+
+inline bool PortAudioWriter::writeStream(const QByteArray &arr)
+{
+	return (Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float)) != paUnanticipatedHostError);
 }
 
 /**/
