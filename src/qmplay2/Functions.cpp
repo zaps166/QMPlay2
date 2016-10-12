@@ -42,7 +42,7 @@ static inline void swapArray(quint8 *a, quint8 *b, int size)
 
 QDate Functions::parseVersion(const QString &dateTxt)
 {
-	QStringList l = dateTxt.split('.');
+	const QStringList l = dateTxt.split('.');
 	int y = 0, m = 0, d = 0;
 	if (l.count() == 3)
 	{
@@ -161,7 +161,7 @@ QString Functions::fileName(QString f, bool extension)
 }
 QString Functions::fileExt(const QString &f)
 {
-	int idx = f.lastIndexOf('.');
+	const int idx = f.lastIndexOf('.');
 	if (idx > -1)
 		return f.mid(idx+1);
 	return QString();
