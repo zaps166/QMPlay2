@@ -38,10 +38,6 @@ public:
 private:
 	class EmptyW : public QWidget
 	{
-#if QT_VERSION >= 0x050000 && QT_VERSION < 0x050600
-		void showEvent(QShowEvent *);
-#endif
-
 		QSize sizeHint() const override final;
 	} emptyW;
 	bool titleBarVisible, globalTitleBarVisible;
