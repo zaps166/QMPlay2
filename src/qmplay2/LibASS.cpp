@@ -414,10 +414,11 @@ bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
 	{
 		for (int i = 0; i < ass_sub_track->n_styles; i++)
 		{
-			ass_sub_track->styles[i].ScaleX  *= _fontScale;
-			ass_sub_track->styles[i].ScaleY  *= _fontScale;
-			ass_sub_track->styles[i].Shadow  *= _fontScale;
-			ass_sub_track->styles[i].Outline *= _fontScale;
+			ASS_Style &style = ass_sub_track->styles[i];
+			style.ScaleX  *= _fontScale;
+			style.ScaleY  *= _fontScale;
+			style.Shadow  *= _fontScale;
+			style.Outline *= _fontScale;
 		}
 	}
 
@@ -434,10 +435,11 @@ bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
 	{
 		for (int i = 0; i < ass_sub_track->n_styles; i++)
 		{
-			ass_sub_track->styles[i].ScaleX  /= _fontScale;
-			ass_sub_track->styles[i].ScaleY  /= _fontScale;
-			ass_sub_track->styles[i].Shadow  /= _fontScale;
-			ass_sub_track->styles[i].Outline /= _fontScale;
+			ASS_Style &style = ass_sub_track->styles[i];
+			style.ScaleX  /= _fontScale;
+			style.ScaleY  /= _fontScale;
+			style.Shadow  /= _fontScale;
+			style.Outline /= _fontScale;
 		}
 	}
 
