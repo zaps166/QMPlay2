@@ -122,7 +122,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 
 	if (Pa_IsStreamStopped(stream))
 	{
-		if (Pa_StartStream(stream) == paUnanticipatedHostError)
+		if (!startStream())
 			return playbackError();
 		fullBufferReached = false;
 	}
@@ -136,7 +136,8 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		{
 			//Reset stream to prevent potential short audio garbage on Windows
 			Pa_AbortStream(stream);
-			Pa_StartStream(stream);
+			if (!startStream())
+				return playbackError();
 			fullBufferReached = false;
 		}
 	}
@@ -164,16 +165,9 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		bool isError = true;
 
 #ifdef Q_OS_WIN
-		const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
-		if (errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER)
+		if (isNoDriverError() && reopenStream()) //"writeStream()" must fail only on "paUnanticipatedHostError"
 		{
-			Pa_CloseStream(stream);
-			stream = NULL;
-			if (openStream())
-			{
-				Pa_StartStream(stream);
-				isError = !writeStream(arr);
-			}
+			isError = !writeStream(arr);
 			fullBufferReached = false;
 		}
 #endif
@@ -200,17 +194,33 @@ bool PortAudioWriter::open()
 	return true;
 }
 
+/**/
+
 bool PortAudioWriter::openStream()
 {
-	if (Pa_OpenStream(&stream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL) == paNoError)
+	PaStream *newStream = NULL;
+	if (Pa_OpenStream(&newStream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL) == paNoError)
 	{
+		stream = newStream;
 		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
 		modParam("delay", outputLatency);
 		return true;
 	}
 	return false;
 }
-
+bool PortAudioWriter::startStream()
+{
+	const PaError e = Pa_StartStream(stream);
+	if (e != paNoError)
+	{
+#ifdef Q_OS_WIN
+		if (e == paUnanticipatedHostError && isNoDriverError())
+			return reopenStream();
+#endif
+		return false;
+	}
+	return true;
+}
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
 	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
@@ -225,7 +235,21 @@ qint64 PortAudioWriter::playbackError()
 	return 0;
 }
 
-/**/
+#ifdef Q_OS_WIN
+bool PortAudioWriter::isNoDriverError() const
+{
+	const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
+	return errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER;
+}
+bool PortAudioWriter::reopenStream()
+{
+	Pa_CloseStream(stream);
+	if (openStream())
+		return (Pa_StartStream(stream) == paNoError);
+	stream = NULL;
+	return false;
+}
+#endif
 
 void PortAudioWriter::close()
 {

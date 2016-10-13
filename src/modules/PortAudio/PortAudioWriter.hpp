@@ -46,8 +46,14 @@ private:
 	/**/
 
 	bool openStream();
+	bool startStream();
 	inline bool writeStream(const QByteArray &arr);
 	qint64 playbackError();
+
+#ifdef Q_OS_WIN
+	bool isNoDriverError() const;
+	bool reopenStream();
+#endif
 
 	void close();
 
