@@ -1,3 +1,5 @@
+Improve YouTube support, use scripts for this
+Playlist - directory browser and cover view
 User can type any aspect ratio and zoom
 Video preview on progress bar
 Improve radio stations
@@ -17,7 +19,6 @@ HWAccel:
 	- add DXVA2.
 
 Exporting audio during playback - ?
-Touch screen support: scrolling - ?
 Users can resume downloading - ?
 MKV - ordered chapters - ?
 MIDI - ?
