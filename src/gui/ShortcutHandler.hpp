@@ -25,7 +25,6 @@ class QAction;
 
 class ShortcutHandler : public QAbstractTableModel
 {
-	Q_OBJECT
 public:
 	ShortcutHandler(QObject *parent);
 	~ShortcutHandler();
@@ -42,7 +41,6 @@ public:
 
 	void appendAction(QAction *action, const QString &settingsName, const QString &defaultShortcut);
 
-public slots:
 	void save();
 	void restore();
 	void reset();
