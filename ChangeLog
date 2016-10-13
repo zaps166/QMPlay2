@@ -1,6 +1,8 @@
-Changes in QMPlay2 build 16.10.11:
+Changes in QMPlay2 build 16.10.13:
 	- fix issue (deadlock/crash) if playback has been stopped when FFmpeg resolves a hostname,
-	- PortAudio fixes for Windows,
+	- PortAudio fixes (especially for Windows),
+	- better finding subtitles files for video,
+	- bugfix,
 
 Changes in QMPlay2 build 16.09.24:
 	- use namespace on libmodplug - don't mix system and QMPlay2 modplug,
