@@ -31,10 +31,6 @@ Table of Contents
 
 - [Download the newest Ubuntu DEB package](https://github.com/zaps166/QMPlay2/releases).
 
-####Easy installation on Debian / Ubuntu / Mint (from unofficial repository)
-
-- [Follow installation instructions on OBS](https://software.opensuse.org/download.html?project=home%3Astevepassert&package=qmplay2).
-
 ####Easy installation on Arch Linux / Manjaro Linux
 
 - Arch Linux only: Install AUR client (e.g. yaourt),
@@ -190,7 +186,7 @@ For CMake build be sure that you have correct CMake version:
 
 - Common packages:
 ```
-$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp xdg-utils
+$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp
 ```
 - Qt:
 	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
@@ -203,7 +199,7 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 	- openSUSE 13.2: `sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman`
 - Install dependencies:
 ```
-$ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel xdg-utils
+$ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel
 ```
 
 #####Ubuntu
@@ -214,14 +210,14 @@ $ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-dev
 
 - Install dependencies from the package manager:
 ```
-$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev xdg-utils
+$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev
 ```
 
 #####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
 ```
-$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev xdg-utils
+$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev
 ```
 
 #####Ubuntu 14.10 and older dependencies (Qt4 build)
@@ -230,7 +226,7 @@ Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), 
 
 - Install dependencies from the package manager:
 ```
-$ sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev xdg-utils
+$ sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev
 ```
 - Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
 ```
@@ -251,7 +247,7 @@ This will compile and install the newest FFmpeg without features that are not su
 
 - Install dependencies form the package manager:
 ```
-$ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio libcddb libass portaudio taglib libvdpau libva xdg-utils
+$ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio libcddb libass portaudio taglib libvdpau libva
 ```
 For Qt4 build install also `qt4` package.
 
