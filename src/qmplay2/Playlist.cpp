@@ -45,12 +45,6 @@ bool Playlist::write(const Entries &list, const QString &url, QString *name)
 	}
 	return OK;
 }
-QString Playlist::name(const QString &url)
-{
-	QString name;
-	create(url, NoOpen, &name);
-	return name;
-}
 QStringList Playlist::extensions()
 {
 	QStringList extensions;
