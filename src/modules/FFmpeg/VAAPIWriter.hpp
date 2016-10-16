@@ -27,7 +27,6 @@
 
 class VAAPIWriter : public QWidget, public VideoWriter
 {
-	Q_OBJECT
 public:
 	VAAPIWriter(Module &module, VAAPI *vaapi);
 	~VAAPIWriter();

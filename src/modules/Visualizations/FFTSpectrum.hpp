@@ -19,6 +19,7 @@
 #include <QMPlay2Extensions.hpp>
 #include <VisWidget.hpp>
 
+#include <QCoreApplication>
 #include <QLinearGradient>
 
 class FFTSpectrum;
@@ -26,7 +27,7 @@ class FFTSpectrum;
 class FFTSpectrumW : public VisWidget
 {
 	friend class FFTSpectrum;
-	Q_OBJECT
+	Q_DECLARE_TR_FUNCTIONS(FFTSpectrumW)
 public:
 	FFTSpectrumW(FFTSpectrum &);
 private:
