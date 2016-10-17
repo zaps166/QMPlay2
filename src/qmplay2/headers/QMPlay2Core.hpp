@@ -29,6 +29,7 @@ enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8,
 template<typename T>
 class QPointer;
 
+class QSystemTrayIcon;
 class QTranslator;
 class Settings;
 class QWidget;
@@ -156,6 +157,8 @@ public:
 
 	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
 	QList<QWidget *> getVideoDeintMethods() const;
+
+	QSystemTrayIcon *systemTray;
 private slots:
 	void restoreCursorSlot();
 	void waitCursorSlot();
