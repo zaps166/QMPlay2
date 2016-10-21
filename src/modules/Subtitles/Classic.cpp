@@ -142,10 +142,10 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 			if (duration > 0.0)
 			{
 				initOnce(ok, ass);
-				ass->addASSEvent(Functions::convertToASS(sub.replace('|', "\\n")), start, duration);
+				ass->addASSEvent(Functions::convertToASS(sub.replace('|', "\n")), start, duration);
 			}
 			else
-				subsWithoutEnd.append(SubWithoutEnd(start, Sub_max_s, sub.replace('|', "\\n")));
+				subsWithoutEnd.append(SubWithoutEnd(start, Sub_max_s, sub.replace('|', "\n")));
 		}
 	}
 
