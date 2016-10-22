@@ -25,7 +25,6 @@
 
 #include <QMimeData>
 #include <QPainter>
-#include <QRegExp>
 #include <QDir>
 #include <QUrl>
 
@@ -388,9 +387,8 @@ int Functions::scaleEQValue(int val, int min, int max)
 	return (val + 100) * ((abs(min) + abs(max))) / 200 - abs(min);
 }
 
-QByteArray Functions::convertToASS(const QByteArray &arr)
+QString Functions::convertToASS(QString txt)
 {
-	QString txt = arr;
 	txt.replace("<i>", "{\\i1}", Qt::CaseInsensitive);
 	txt.replace("</i>", "{\\i0}", Qt::CaseInsensitive);
 	txt.replace("<b>", "{\\b1}", Qt::CaseInsensitive);
@@ -401,19 +399,7 @@ QByteArray Functions::convertToASS(const QByteArray &arr)
 	txt.replace("</s>", "{\\s0}", Qt::CaseInsensitive);
 	txt.remove('\r');
 	txt.replace('\n', "\\N", Qt::CaseInsensitive);
-
-	//Colors
-	QRegExp rx("<font\\s+color\\s*=\\s*\\\"?\\#?(\\w{6})\\\"?>(.*)</font>", Qt::CaseInsensitive);
-	rx.setMinimal(true);
-	int pos = 0;
-	while ((pos = rx.indexIn(txt, pos)) != -1)
-	{
-		const QString replaced = "{\\1c&" + rx.cap(1) + "&}" + rx.cap(2) + "{\\1c}";
-		txt.replace(pos, rx.matchedLength(), replaced);
-		pos += replaced.length();
-	}
-
-	return txt.toUtf8();
+	return txt;
 }
 
 bool Functions::chkMimeData(const QMimeData *mimeData)

@@ -30,6 +30,9 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
 	if (!ass)
 		return false;
 
+	QRegExp colorRegExp("<font\\s+color\\s*=\\s*\\\"?\\#?(\\w{6})\\\"?>(.*)</font>", Qt::CaseInsensitive);
+	colorRegExp.setMinimal(true);
+
 	bool ok = false;
 	const char *scanfFmt = (srt.left(11 /* Including BOM */).contains("WEBVTT")) ? "%d:%d:%d.%d" : "%d:%d:%d,%d";
 
@@ -58,7 +61,23 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
 						ass->initASS();
 						ok = true;
 					}
-					ass->addASSEvent(Functions::convertToASS(entry.mid(idx+1).toUtf8()), time_double[0], time_double[1]-time_double[0]);
+
+					QString txt = Functions::convertToASS(entry.mid(idx+1));
+
+					//Colors
+					int pos = 0;
+					while ((pos = colorRegExp.indexIn(txt, pos)) != -1)
+					{
+						QString rgb = colorRegExp.cap(1);
+						rgb = rgb.mid(4, 2) + rgb.mid(2, 2) + rgb.mid(0, 2);
+
+						const QString replaced = "{\\1c&" + rgb + "&}" + colorRegExp.cap(2) + "{\\1c}";
+
+						txt.replace(pos, colorRegExp.matchedLength(), replaced);
+						pos += replaced.length();
+					}
+
+					ass->addASSEvent(txt.toUtf8(), time_double[0], time_double[1]-time_double[0]);
 				}
 			}
 		}
