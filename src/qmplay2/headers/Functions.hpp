@@ -123,7 +123,7 @@ namespace Functions
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
 	int scaleEQValue(int val, int min, int max);
 
-	QString convertToASS(QString txt);
+	QByteArray convertToASS(QString txt);
 
 	bool chkMimeData(const QMimeData *);
 	QStringList getUrlsFromMimeData(const QMimeData *);

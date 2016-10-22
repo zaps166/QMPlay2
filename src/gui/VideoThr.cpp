@@ -309,7 +309,7 @@ void VideoThr::run()
 				if (playC.ass->isASS())
 					playC.ass->addASSEvent(sPacketData);
 				else
-					playC.ass->addASSEvent(Functions::convertToASS(sPacketData).toUtf8(), sPacket.ts, sPacket.duration);
+					playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts, sPacket.duration);
 			}
 			if (!playC.ass->getASS(subtitles, subsPts))
 			{

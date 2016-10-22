@@ -387,7 +387,7 @@ int Functions::scaleEQValue(int val, int min, int max)
 	return (val + 100) * ((abs(min) + abs(max))) / 200 - abs(min);
 }
 
-QString Functions::convertToASS(QString txt)
+QByteArray Functions::convertToASS(QString txt)
 {
 	txt.replace("<i>", "{\\i1}", Qt::CaseInsensitive);
 	txt.replace("</i>", "{\\i0}", Qt::CaseInsensitive);
@@ -399,7 +399,23 @@ QString Functions::convertToASS(QString txt)
 	txt.replace("</s>", "{\\s0}", Qt::CaseInsensitive);
 	txt.remove('\r');
 	txt.replace('\n', "\\N", Qt::CaseInsensitive);
-	return txt;
+
+	//Colors
+	QRegExp colorRegExp("<font\\s+color\\s*=\\s*\\\"?\\#?(\\w{6})\\\"?>(.*)</font>", Qt::CaseInsensitive);
+	colorRegExp.setMinimal(true);
+	int pos = 0;
+	while ((pos = colorRegExp.indexIn(txt, pos)) != -1)
+	{
+		QString rgb = colorRegExp.cap(1);
+		rgb = rgb.mid(4, 2) + rgb.mid(2, 2) + rgb.mid(0, 2);
+
+		const QString replaced = "{\\1c&" + rgb + "&}" + colorRegExp.cap(2) + "{\\1c}";
+
+		txt.replace(pos, colorRegExp.matchedLength(), replaced);
+		pos += replaced.length();
+	}
+
+	return txt.toUtf8();
 }
 
 bool Functions::chkMimeData(const QMimeData *mimeData)

@@ -220,7 +220,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 			if (duration > 0.0)
 			{
 				initOnce(ok, ass);
-				ass->addASSEvent(Functions::convertToASS(sub).toUtf8(), start, duration);
+				ass->addASSEvent(Functions::convertToASS(sub), start, duration);
 			}
 			else
 				subsWithoutEnd.append(SubWithoutEnd(start, Sub_max_s, sub));
@@ -246,7 +246,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
 		initOnce(ok, ass);
 		foreach (const SubWithoutEnd &sub, subsWithoutEnd)
-			ass->addASSEvent(Functions::convertToASS(sub.sub).toUtf8(), sub.start, sub.duration);
+			ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
 	}
 
 	return ok;
