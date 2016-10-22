@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 16.10.22:
+	- properly read styles from MPL, MicroDVD and SubRip format,
+
 Changes in QMPlay2 build 16.10.14:
 	- fix issue (deadlock/crash) if playback has been stopped when FFmpeg resolves a hostname,
 	- PortAudio fixes (especially for Windows),
