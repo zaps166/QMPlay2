@@ -104,6 +104,11 @@ void Buffer::assign(const void *data, qint32 len, qint32 mem)
 	m_size = len;
 }
 
+AVBufferRef *Buffer::toAvBufferRef()
+{
+	return av_buffer_ref(m_bufferRef);
+}
+
 #if 0
 void Buffer::append(const void *data, qint32 len)
 {

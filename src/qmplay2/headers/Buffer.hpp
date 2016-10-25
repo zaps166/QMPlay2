@@ -70,6 +70,8 @@ public:
 		assign(data, len, len);
 	}
 
+	AVBufferRef *toAvBufferRef();
+
 #if 0
 	void append(const void *data, qint32 len);
 #endif
