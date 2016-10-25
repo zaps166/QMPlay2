@@ -42,7 +42,7 @@ PortAudio::~PortAudio()
 QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
-	if (initialized && (showDisabled || getBool("WriterEnabled")))
+	if (showDisabled || (initialized && getBool("WriterEnabled")))
 		modulesInfo += Info(PortAudioWriterName, WRITER, QStringList("audio"));
 	return modulesInfo;
 }
