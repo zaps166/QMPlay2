@@ -87,7 +87,7 @@ OpenGL2Common::OpenGL2Common() :
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
 	allowPBO(true), hasPbo(false),
-	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true),
+	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0),
 	aspectRatio(0.0), zoom(0.0),
@@ -314,10 +314,18 @@ void OpenGL2Common::paintGL()
 
 		if (doReset)
 		{
+			/* Check linesize */
+			const qint32 halfLinesize = (videoFrame.linesize[0] >> videoFrame.size.chromaShiftW);
+			correctLinesize =
+			(
+				(halfLinesize == videoFrame.linesize[1] && videoFrame.linesize[1] == videoFrame.linesize[2]) &&
+				(!sphericalView ? (videoFrame.linesize[1] == halfLinesize) : (videoFrame.linesize[0] == widths[0]))
+			);
+
 			/* Prepare textures */
 			for (qint32 p = 0; p < 3; ++p)
 			{
-				const GLsizei w = checkLinesize(p) ? videoFrame.linesize[p] : widths[p];
+				const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
 				const GLsizei h = heights[p];
 				if (p == 0)
 					pixelStep = QVector2D(1.0f / w, 1.0f / h);
@@ -340,7 +348,6 @@ void OpenGL2Common::paintGL()
 		for (qint32 p = 0; p < 3; ++p)
 		{
 			const quint8 *data = videoFrame.buffer[p].constData();
-			const bool correctLinesize = (videoFrame.linesize[p] == widths[p] || checkLinesize(p));
 			const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
 			const GLsizei h = heights[p];
 			if (hasPbo)
@@ -684,11 +691,6 @@ QByteArray OpenGL2Common::readShader(const QString &fileName)
 #endif
 	shader.append((const char *)res.data(), res.size());
 	return shader;
-}
-
-inline bool OpenGL2Common::checkLinesize(int p)
-{
-	return !sphericalView && (p == 0 || ((videoFrame.linesize[0] >> videoFrame.size.chromaShiftW) == videoFrame.linesize[p]));
 }
 
 /* 360 */

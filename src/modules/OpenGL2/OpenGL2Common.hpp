@@ -129,8 +129,6 @@ private:
 
 	QByteArray readShader(const QString &fileName);
 
-	inline bool checkLinesize(int p);
-
 	/* Spherical view */
 	void mousePress360(QMouseEvent *e);
 	void mouseMove360(QMouseEvent *e);
@@ -151,7 +149,7 @@ public:
 	quint32 pbo[4];
 	bool allowPBO, hasPbo;
 
-	bool isPaused, isOK, hasImage, doReset, setMatrix;
+	bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
 	int glVer;
 
