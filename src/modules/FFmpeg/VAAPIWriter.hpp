@@ -53,7 +53,7 @@ public:
 	void pause();
 	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 
-	bool HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
+	bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
 
 	QString name() const;
 

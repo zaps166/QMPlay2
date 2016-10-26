@@ -239,7 +239,7 @@ void VAAPIWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 	}
 }
 
-bool VAAPIWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VAAPIWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
 {
 	if (dest && !(outH & 1) && !(outW % 4))
 	{

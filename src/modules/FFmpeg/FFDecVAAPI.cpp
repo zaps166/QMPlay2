@@ -62,30 +62,27 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, Writer *writer)
 		{
 			if (writer && writer->name() != VAAPIWriterName)
 				writer = NULL;
-			hwAccelWriter = writer ? (VideoWriter *)writer : new VAAPIWriter(getModule());
-			if ((writer || hwAccelWriter->open()) && hwAccelWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			VAAPIWriter *vaapiWriter = writer ? (VAAPIWriter *)writer : new VAAPIWriter(getModule());
+			if ((writer || vaapiWriter->open()) && vaapiWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
 			{
 				codec_ctx->hwaccel_context = av_mallocz(sizeof(vaapi_context));
-				((vaapi_context *)codec_ctx->hwaccel_context)->display    = ((VAAPIWriter *)hwAccelWriter)->getVADisplay();
-				((vaapi_context *)codec_ctx->hwaccel_context)->context_id = ((VAAPIWriter *)hwAccelWriter)->getVAContext();
-				((vaapi_context *)codec_ctx->hwaccel_context)->config_id  = ((VAAPIWriter *)hwAccelWriter)->getVAConfig();
+				((vaapi_context *)codec_ctx->hwaccel_context)->display    = vaapiWriter->getVADisplay();
+				((vaapi_context *)codec_ctx->hwaccel_context)->context_id = vaapiWriter->getVAContext();
+				((vaapi_context *)codec_ctx->hwaccel_context)->config_id  = vaapiWriter->getVAConfig();
 				codec_ctx->thread_count   = 1;
 				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
 				codec_ctx->get_format     = get_format;
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
-				codec_ctx->opaque         = dynamic_cast<HWAccelHelper *>(hwAccelWriter);
+				codec_ctx->opaque         = (HWAccelHelper *)vaapiWriter;
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
+					hwAccelWriter = (VideoWriter *)vaapiWriter;
 					return true;
 				}
 			}
-			else
-			{
-				if (!writer)
-					delete hwAccelWriter;
-				hwAccelWriter = NULL;
-			}
+			else if (!writer)
+				delete vaapiWriter;
 		}
 	}
 	return false;

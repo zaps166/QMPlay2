@@ -66,29 +66,26 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, Writer *writer)
 		{
 			if (writer && writer->name() != VDPAUWriterName)
 				writer = NULL;
-			hwAccelWriter = writer ? (VideoWriter *)writer : new VDPAUWriter(getModule());
-			if ((writer || hwAccelWriter->open()) && hwAccelWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			VDPAUWriter *vdpauWriter = writer ? (VDPAUWriter *)writer : new VDPAUWriter(getModule());
+			if ((writer || vdpauWriter->open()) && vdpauWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
 			{
 				codec_ctx->hwaccel_context = av_mallocz(sizeof(AVVDPAUContext));
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->decoder = ((VDPAUWriter *)hwAccelWriter)->getVdpDecoder();
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->render  = ((VDPAUWriter *)hwAccelWriter)->getVdpDecoderRender();
+				((AVVDPAUContext *)codec_ctx->hwaccel_context)->decoder = vdpauWriter->getVdpDecoder();
+				((AVVDPAUContext *)codec_ctx->hwaccel_context)->render  = vdpauWriter->getVdpDecoderRender();
 				codec_ctx->thread_count   = 1;
 				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
 				codec_ctx->get_format     = get_format;
 				codec_ctx->slice_flags    = SLICE_FLAG_CODED_ORDER | SLICE_FLAG_ALLOW_FIELD;
-				codec_ctx->opaque         = dynamic_cast<HWAccelHelper *>(hwAccelWriter);
+				codec_ctx->opaque         = (HWAccelHelper *)vdpauWriter;
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
+					hwAccelWriter = (VideoWriter *)vdpauWriter;
 					return true;
 				}
 			}
-			else
-			{
-				if (!writer)
-					delete hwAccelWriter;
-				hwAccelWriter = NULL;
-			}
+			else if (!writer)
+				delete vdpauWriter;
 		}
 	}
 	return false;

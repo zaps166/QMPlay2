@@ -210,7 +210,7 @@ void VDPAUWriter::pause()
 	vdpau_display();
 }
 
-bool VDPAUWriter::HWAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VDPAUWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
 {
 	if (dest)
 	{
