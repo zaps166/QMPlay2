@@ -2,7 +2,12 @@ varying vec2 vTexCoord;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
 uniform vec2 uStep;
-uniform sampler2D uY, uCb, uCr;
+uniform sampler2D uY;
+#ifdef NV12
+	uniform sampler2D uCbCr;
+#else
+	uniform sampler2D uCb, uCr;
+#endif
 
 const mat3 YUVtoRGB = mat3(
 	1.16430,  1.16430, 1.16430,
@@ -10,12 +15,12 @@ const mat3 YUVtoRGB = mat3(
 	1.59580, -0.81290, 0.00000
 );
 
-/* GL >= 3.0
+#ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
 	return texture2D(uY, vTexCoord + vec2(x, y))[0] - 0.0625;
 }
-GL >= 3.0 */
+#endif
 
 void main()
 {
@@ -26,13 +31,21 @@ void main()
 		uVideoEq[1] * uVideoEq[2]
 	);
 
+#ifdef NV12
+	vec3 YCbCr = vec3(
+		texture2D(uY   , vTexCoord)[0] - 0.0625,
+		texture2D(uCbCr, vTexCoord)[0] - 0.5,
+		texture2D(uCbCr, vTexCoord)[1] - 0.5
+	);
+#else
 	vec3 YCbCr = vec3(
 		texture2D(uY , vTexCoord)[0] - 0.0625,
 		texture2D(uCb, vTexCoord)[0] - 0.5,
 		texture2D(uCr, vTexCoord)[0] - 0.5
 	);
+#endif
 
-	/* GL >= 3.0
+#ifdef HueAndSharpness
 	if (uSharpness != 0.0)
 	{
 		// Kernel 3x3
@@ -56,7 +69,7 @@ void main()
 		YCbCr[1] = chroma * cos(hue);
 		YCbCr[2] = chroma * sin(hue);
 	}
-	GL >= 3.0 */
+#endif
 
 	gl_FragColor = vec4(clamp(YUVtoRGB * (YCbCr * contrastSaturation), 0.0, 1.0) + brightness, 1.0);
 }

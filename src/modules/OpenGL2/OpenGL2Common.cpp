@@ -201,8 +201,7 @@ void OpenGL2Common::initializeGL()
 		if (glVer >= 30)
 		{
 			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-			YCbCrFrag.replace("GL >= 3.0 */", QByteArray());
-			YCbCrFrag.replace("/* GL >= 3.0", QByteArray());
+			YCbCrFrag.prepend("#define HueAndSharpness\n");
 		}
 		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, YCbCrFrag);
 	}
