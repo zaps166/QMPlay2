@@ -72,7 +72,11 @@ private:
 		else
 		{
 			AVDictionary *options = NULL;
+#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
+			av_dict_set(&options, "user_agent", m_userAgent, 0);
+#else
 			av_dict_set(&options, "user-agent", m_userAgent, 0);
+#endif
 			av_dict_set(&options, "seekable", "0", 0);
 #if LIBAVFORMAT_VERSION_MAJOR > 55
 			av_dict_set(&options, "icy", "0", 0);
