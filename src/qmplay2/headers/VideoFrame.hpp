@@ -26,7 +26,7 @@ class VideoFrameSize
 {
 	friend class VideoFrame;
 public:
-	inline VideoFrameSize(qint32 width, qint32 height, quint8 chromaShiftW, quint8 chromaShiftH) :
+	inline VideoFrameSize(qint32 width, qint32 height, quint8 chromaShiftW = 1, quint8 chromaShiftH = 1) :
 		width(width), height(height),
 		chromaShiftW(chromaShiftW), chromaShiftH(chromaShiftH)
 	{}
@@ -62,7 +62,7 @@ class VideoFrame
 public:
 	VideoFrame(const VideoFrameSize &size, AVBufferRef *bufferRef[], const qint32 newLinesize[], bool interlaced, bool tff);
 	VideoFrame(const VideoFrameSize &size, const qint32 newLinesize[], bool interlaced = false, bool tff = false);
-	VideoFrame(quintptr surfaceId, bool interlaced, bool tff);
+	VideoFrame(const VideoFrameSize &size, quintptr surfaceId, bool interlaced, bool tff);
 	VideoFrame();
 
 	inline bool hasNoData() const

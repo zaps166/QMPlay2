@@ -83,7 +83,8 @@ VideoFrame::VideoFrame(const VideoFrameSize &size, const qint32 newLinesize[], b
 		buffer[p].resize(linesize[p] * size.getHeight(p));
 	}
 }
-VideoFrame::VideoFrame(quintptr surfaceId, bool interlaced, bool tff) :
+VideoFrame::VideoFrame(const VideoFrameSize &size, quintptr surfaceId, bool interlaced, bool tff) :
+	size(size),
 	interlaced(interlaced),
 	tff(tff),
 	surfaceId(surfaceId)

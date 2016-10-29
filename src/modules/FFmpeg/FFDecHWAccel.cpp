@@ -58,7 +58,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
 	if (frameFinished)
 	{
-		decoded = VideoFrame((quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
+		decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
 		decodeLastStep(encodedPacket, frame);
 	}
 	else

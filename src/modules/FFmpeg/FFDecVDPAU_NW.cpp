@@ -236,8 +236,8 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByte
 			aligned8W >> 1,
 			aligned8W >> 1
 		};
-		const VideoFrameSize aligned4HFrameSize(frame->width, Functions::aligned(frame->height, 4), 1, 1);
-		const VideoFrameSize realFrameSize(frame->width, frame->height, 1, 1);
+		const VideoFrameSize aligned4HFrameSize(frame->width, Functions::aligned(frame->height, 4));
+		const VideoFrameSize realFrameSize(frame->width, frame->height);
 		decoded = VideoFrame(aligned4HFrameSize, linesize, frame->interlaced_frame, frame->top_field_first);
 		decoded.size = realFrameSize;
 		void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
