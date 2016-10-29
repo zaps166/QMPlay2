@@ -266,10 +266,9 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 #elif defined Q_OS_WIN
 	if (type == "videoWriters")
 		defaultModules << "OpenGL 2" << "DirectDraw";
-#elif defined Q_OS_ANDROID
-	if (type == "videoWriters")
-		defaultModules << "QPainter" << "OpenGL 2";
 #endif
+	if (type == "decoders")
+		defaultModules << "FFmpeg Decoder";
 	QStringList availableModules;
 	const QString moduleType = type.mid(0, typeLen);
 	foreach (Module *module, pluginsInstance)

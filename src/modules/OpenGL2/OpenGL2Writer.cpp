@@ -25,6 +25,7 @@
 	#include <OpenGL2OldWidget.hpp>
 #endif
 
+#include <HWAccellInterface.hpp>
 #include <VideoFrame.hpp>
 
 #ifdef OPENGL_NEW_API
@@ -99,6 +100,7 @@ bool OpenGL2Writer::processParams(bool *)
 	const float Hue = getParam("Hue").toInt() / -31.831f;
 	const float Sharpness = getParam("Sharpness").toInt() / 50.0f;
 	const int verticesIdx = rotate90 * 4 + flip;
+	drawable->Deinterlace = getParam("Deinterlace").toInt();
 	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue || drawable->Sharpness != Sharpness)
 	{
 		drawable->zoom = zoom;
@@ -158,6 +160,14 @@ void OpenGL2Writer::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 	drawable->osdList = osds;
 }
 
+void OpenGL2Writer::setHWAccellInterface(HWAccellInterface *hwAccellInterface)
+{
+	addParam("Deinterlace");
+	addParam("PrepareForHWBobDeint", true);
+	drawable->hwAccellInterface = hwAccellInterface;
+	VideoWriter::setHWAccellInterface(hwAccellInterface);
+}
+
 void OpenGL2Writer::pause()
 {
 	drawable->isPaused = true;
@@ -166,6 +176,8 @@ void OpenGL2Writer::pause()
 QString OpenGL2Writer::name() const
 {
 	QString glStr = drawable->glVer ? QString("%1.%2").arg(drawable->glVer / 10).arg(drawable->glVer % 10) : "2";
+	if (drawable->hwAccellInterface)
+		glStr += " " + drawable->hwAccellInterface->name();
 #ifdef OPENGL_NEW_API
 	if (useRtt)
 		glStr += " (render-to-texture)";

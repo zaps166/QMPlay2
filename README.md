@@ -99,12 +99,15 @@ You can force single instance for QMPlay2: set "Allow only one instance" in "Set
 
 ##Hardware acceleration
 
-QMPlay2 supports hardware video decoding. Currently it works only on X11 (Linux/BSD) via VDPAU and VA-API. Hardware acceleration is disabled by default.
-You can enable it in "Settings->Playback settings" - move proper decoder on decoders list to the top and then apply settings.
+QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), VDPAU/VA-API (X11, Linux/BSD only).
+Hardware acceleration is disabled by default, you can enable it in "Settings->Playback settings":
+- move hardware accelerated decoder on decoders list to the top,
+- apply settings.
 
 VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU filters won't work.
+CUVID uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
 
-VDPAU and VA-API has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
+VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 
 H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 
@@ -296,6 +299,7 @@ CMake options (option - default value: description):
 	- `USE_PROSTOPLEER` - `ON`: enable/disable Prostopleer in Extensions module.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
+	- `USE_CUVID` - `ON`: enable/disable CUVID module.
 
 Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.

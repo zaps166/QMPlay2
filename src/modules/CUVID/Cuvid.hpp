@@ -16,34 +16,52 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <VideoWriter.hpp>
+#ifndef CUVID_HPP
+#define CUVID_HPP
 
-#include <HWAccellInterface.hpp>
+#include <Module.hpp>
 
-VideoWriter::VideoWriter() :
-	m_hwAccellInterface(NULL)
-{}
+#include <QCoreApplication>
 
-QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
+class QComboBox;
+
+class Cuvid : public Module
 {
-	return QMPlay2PixelFormats()
-			<< QMPLAY2_PIX_FMT_YUV420P
-	;
-}
+	Q_DECLARE_TR_FUNCTIONS(Cuvid)
 
-void VideoWriter::setHWAccellInterface(HWAccellInterface *hwAccellInterface)
-{
-	m_hwAccellInterface = hwAccellInterface;
-}
+public:
+	Cuvid();
+	~Cuvid();
+private:
+	QList<Info> getModulesInfo(const bool showDisabled) const;
+	void *createInstance(const QString &name);
 
-qint64 VideoWriter::write(const QByteArray &)
-{
-	return -1;
-}
+	SettingsWidget *getSettingsWidget();
 
-bool VideoWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+	void videoDeintSave();
+
+	/**/
+
+	bool m_cudaLoaded;
+	QComboBox *m_deintMethodB;
+};
+
+/**/
+
+class QCheckBox;
+
+class ModuleSettingsWidget : public Module::SettingsWidget
 {
-	if (m_hwAccellInterface)
-		return m_hwAccellInterface->getImage(videoFrame, dest, nv12ToRGB32);
-	return false;
-}
+	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
+
+public:
+	ModuleSettingsWidget(Module &module, bool cudaLoaded);
+
+private:
+	void saveSettings();
+
+	bool m_cudaLoaded;
+	QCheckBox *m_enabledB, *m_copyVideoB;
+};
+
+#endif // CUVID_HPP

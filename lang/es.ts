@@ -382,6 +382,28 @@
     </message>
 </context>
 <context>
+    <name>Cuvid</name>
+    <message>
+        <source>None</source>
+        <translation type="unfinished">Nada</translation>
+    </message>
+    <message>
+        <source>Adaptive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation type="unfinished">Método de desentrelazado</translation>
+    </message>
+</context>
+<context>
+    <name>CuvidDec</name>
+    <message>
+        <source>Can&apos;t open OpenGL 2 module</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Parity (if not detected automatically)</source>
@@ -1447,6 +1469,18 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Allow to use PBO (if available)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decoder enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (not recommended)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t load CUDA and/or CUVID library!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

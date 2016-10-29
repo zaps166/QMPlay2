@@ -22,6 +22,7 @@
 #include <PixelFormats.hpp>
 #include <Writer.hpp>
 
+class HWAccellInterface;
 class QMPlay2_OSD;
 class VideoFrame;
 class ImgScaler;
@@ -29,6 +30,8 @@ class ImgScaler;
 class VideoWriter : public Writer
 {
 public:
+	VideoWriter();
+
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
 	qint64 write(const QByteArray &);
@@ -36,9 +39,18 @@ public:
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
 	virtual void writeOSD(const QList<const QMPlay2_OSD *> &osd) = 0;
 
+	virtual void setHWAccellInterface(HWAccellInterface *hwAccellInterface);
+	inline HWAccellInterface *getHWAccellInterface() const
+	{
+		return m_hwAccellInterface;
+	}
+
 	virtual bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	virtual bool open() = 0;
+
+protected:
+	HWAccellInterface *m_hwAccellInterface;
 };
 
 #endif //VIDEOWRITER_HPP

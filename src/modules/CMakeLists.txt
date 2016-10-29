@@ -71,3 +71,7 @@ if(WIN32)
     add_subdirectory(DirectX)
     add_subdirectory(FileAssociation)
 endif()
+
+if(USE_CUVID)
+    add_subdirectory(CUVID)
+endif()

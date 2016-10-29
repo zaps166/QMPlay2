@@ -382,6 +382,28 @@
     </message>
 </context>
 <context>
+    <name>Cuvid</name>
+    <message>
+        <source>None</source>
+        <translation>Brak</translation>
+    </message>
+    <message>
+        <source>Adaptive</source>
+        <translation>Adaptacyjny</translation>
+    </message>
+    <message>
+        <source>Deinterlacing method</source>
+        <translation>Metoda usuwania przeplotu</translation>
+    </message>
+</context>
+<context>
+    <name>CuvidDec</name>
+    <message>
+        <source>Can&apos;t open OpenGL 2 module</source>
+        <translation>Nie można otworzyć modułu OpenGL 2</translation>
+    </message>
+</context>
+<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1449,6 +1471,18 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Allow to use PBO (if available)</source>
         <translation>Zezwalaj na wykorzystanie PBO (jeżeli dostępny)</translation>
+    </message>
+    <message>
+        <source>Decoder enabled</source>
+        <translation>Dekoder włączony</translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (not recommended)</source>
+        <translation>Kopiuj obraz do pamięci CPU (nie zalecane)</translation>
+    </message>
+    <message>
+        <source>Can&apos;t load CUDA and/or CUVID library!</source>
+        <translation>Nie udało się załadować biblioteki CUDA i/lub CUVID!</translation>
     </message>
 </context>
 <context>

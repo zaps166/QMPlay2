@@ -19,6 +19,7 @@
 #include <OpenGL2Common.hpp>
 #include <Sphere.hpp>
 
+#include <HWAccellInterface.hpp>
 #include <QMPlay2Core.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
@@ -55,6 +56,18 @@
 #ifndef GL_PIXEL_UNPACK_BUFFER
 	#define GL_PIXEL_UNPACK_BUFFER 0x88EC
 #endif
+#ifndef GL_R8
+	#define GL_R8 0x8229
+#endif
+#ifndef GL_RG8
+	#define GL_RG8 0x822B
+#endif
+#ifndef GL_RED
+	#define GL_RED 0x1903
+#endif
+#ifndef GL_RG
+	#define GL_RG 0x8227
+#endif
 
 /* RotAnimation */
 
@@ -83,9 +96,11 @@ OpenGL2Common::OpenGL2Common() :
 #ifdef VSYNC_SETTINGS
 	vSync(true),
 #endif
+	hwAccellInterface(NULL),
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
+	Deinterlace(0),
 	allowPBO(true), hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
@@ -105,6 +120,8 @@ OpenGL2Common::OpenGL2Common() :
 }
 OpenGL2Common::~OpenGL2Common()
 {
+	if (hwAccellInterface)
+		delete hwAccellInterface;
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
 }
@@ -183,6 +200,8 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
+	const qint32 numPlanes = hwAccellInterface ? 2 : 3; //Currently HWAccell has NV12 image
+
 #ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
@@ -203,6 +222,10 @@ void OpenGL2Common::initializeGL()
 			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
 			YCbCrFrag.prepend("#define HueAndSharpness\n");
 		}
+
+		if (numPlanes == 2)
+			YCbCrFrag.prepend("#define NV12\n");
+
 		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, YCbCrFrag);
 	}
 	if (shaderProgramYCbCr->bind())
@@ -215,8 +238,13 @@ void OpenGL2Common::initializeGL()
 			positionYCbCrLoc = newPositionLoc;
 		}
 		shaderProgramYCbCr->setUniformValue("uY" , 0);
-		shaderProgramYCbCr->setUniformValue("uCb", 1);
-		shaderProgramYCbCr->setUniformValue("uCr", 2);
+		if (numPlanes == 2)
+			shaderProgramYCbCr->setUniformValue("uCbCr", 1);
+		else
+		{
+			shaderProgramYCbCr->setUniformValue("uCb", 1);
+			shaderProgramYCbCr->setUniformValue("uCr", 2);
+		}
 		shaderProgramYCbCr->release();
 	}
 	else
@@ -260,8 +288,8 @@ void OpenGL2Common::initializeGL()
 	glDisable(GL_DITHER);
 
 	/* Prepare textures */
-	glGenTextures(4, textures);
-	for (int i = 0; i < 4; ++i)
+	glGenTextures(numPlanes + 1, textures);
+	for (int i = 0; i < numPlanes + 1; ++i)
 	{
 		glBindTexture(GL_TEXTURE_2D, textures[i]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 0 ? GL_NEAREST : GL_LINEAR);
@@ -272,7 +300,7 @@ void OpenGL2Common::initializeGL()
 
 	if (hasPbo)
 	{
-		glGenBuffers(4, pbo);
+		glGenBuffers(1 + (hwAccellInterface ? 0 : numPlanes), pbo);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	}
 
@@ -311,80 +339,122 @@ void OpenGL2Common::paintGL()
 			videoFrame.size.chromaHeight()
 		};
 
+		if (hwAccellInterface)
+			hwAccellInterface->lock();
+
 		if (doReset)
 		{
-			/* Check linesize */
-			const qint32 halfLinesize = (videoFrame.linesize[0] >> videoFrame.size.chromaShiftW);
-			correctLinesize =
-			(
-				(halfLinesize == videoFrame.linesize[1] && videoFrame.linesize[1] == videoFrame.linesize[2]) &&
-				(!sphericalView ? (videoFrame.linesize[1] == halfLinesize) : (videoFrame.linesize[0] == widths[0]))
-			);
-
-			/* Prepare textures */
-			for (qint32 p = 0; p < 3; ++p)
+			if (hwAccellInterface)
 			{
-				const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
-				const GLsizei h = heights[p];
-				if (p == 0)
-					pixelStep = QVector2D(1.0f / w, 1.0f / h);
-				if (hasPbo)
+				/* Release HWAccell resources */
+				hwAccellInterface->clear();
+
+				quint8 *zero = hasImage ? NULL : new quint8[widths[0] * heights[0]];
+				for (int p = 0; p < 2; ++p)
 				{
-					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-					glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, NULL, GL_DYNAMIC_DRAW);
+					if (zero)
+						memset(zero, p ? 0x7F : 0x00, widths[p] * heights[p] * (p ? 2 : 1)); //Needed for adaptive deinterlacing to not show garbage on first frame
+					glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+					glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, zero);
 				}
-				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+				delete[] zero;
+
+				/* Prepare textures, register GL textures */
+				hwAccellInterface->init(&textures[1]);
+
+				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
+
+				/* Prepare texture coordinates */
+				texCoordYCbCr[2] = texCoordYCbCr[6] = 1.0f;
 			}
+			else
+			{
+				/* Check linesize */
+				const qint32 halfLinesize = (videoFrame.linesize[0] >> videoFrame.size.chromaShiftW);
+				correctLinesize =
+				(
+					(halfLinesize == videoFrame.linesize[1] && videoFrame.linesize[1] == videoFrame.linesize[2]) &&
+					(!sphericalView ? (videoFrame.linesize[1] == halfLinesize) : (videoFrame.linesize[0] == widths[0]))
+				);
 
-			/* Prepare texture coordinates */
-			texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
+				/* Prepare textures */
+				for (qint32 p = 0; p < 3; ++p)
+				{
+					const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
+					const GLsizei h = heights[p];
+					if (p == 0)
+						pixelStep = QVector2D(1.0f / w, 1.0f / h);
+					if (hasPbo)
+					{
+						glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
+						glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, NULL, GL_DYNAMIC_DRAW);
+					}
+					glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+				}
 
+				/* Prepare texture coordinates */
+				texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
+			}
 			resetDone = true;
 		}
 
-		/* Load textures */
-		for (qint32 p = 0; p < 3; ++p)
+		if (hwAccellInterface)
 		{
-			const quint8 *data = videoFrame.buffer[p].constData();
-			const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
-			const GLsizei h = heights[p];
-			if (hasPbo)
+			const HWAccellInterface::Field field = (HWAccellInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccellInterface::FullFrame, HWAccellInterface::TopField, HWAccellInterface::BottomField);
+			hwAccellInterface->copyFrame(videoFrame, field);
+			hwAccellInterface->unlock();
+			for (int p = 0; p < 2; ++p)
 			{
-				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-				quint8 *dst;
-				if (glMapBufferRange)
-					dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-				else
-					dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
-				if (!dst)
-					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-				else
-				{
-					if (correctLinesize)
-						memcpy(dst, data, w * h);
-					else for (int y = 0; y < h; ++y)
-					{
-						memcpy(dst, data, w);
-						data += videoFrame.linesize[p];
-						dst  += w;
-					}
-					glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-					data = NULL;
-				}
-			}
-			glActiveTexture(GL_TEXTURE0 + p);
-			glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-			if (hasPbo || correctLinesize)
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
-			else for (int y = 0; y < h; ++y)
-			{
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
-				data += videoFrame.linesize[p];
+				glActiveTexture(GL_TEXTURE0 + p);
+				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
 			}
 		}
-		if (hasPbo)
-			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		else
+		{
+			/* Load textures */
+			for (qint32 p = 0; p < 3; ++p)
+			{
+				const quint8 *data = videoFrame.buffer[p].constData();
+				const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
+				const GLsizei h = heights[p];
+				if (hasPbo)
+				{
+					glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
+					quint8 *dst;
+					if (glMapBufferRange)
+						dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+					else
+						dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+					if (!dst)
+						glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+					else
+					{
+						if (correctLinesize)
+							memcpy(dst, data, w * h);
+						else for (int y = 0; y < h; ++y)
+						{
+							memcpy(dst, data, w);
+							data += videoFrame.linesize[p];
+							dst  += w;
+						}
+						glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+						data = NULL;
+					}
+				}
+				glActiveTexture(GL_TEXTURE0 + p);
+				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+				if (hasPbo || correctLinesize)
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+				else for (int y = 0; y < h; ++y)
+				{
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+					data += videoFrame.linesize[p];
+				}
+			}
+			if (hasPbo)
+				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		}
 
 		videoFrame.clear();
 		hasImage = true;

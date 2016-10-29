@@ -42,6 +42,7 @@
 	#define APIENTRY
 #endif
 
+class HWAccellInterface;
 class OpenGL2Common;
 class QMPlay2_OSD;
 class QMouseEvent;
@@ -136,6 +137,7 @@ private:
 	void resetSphereVbo();
 	void loadSphere();
 public:
+	HWAccellInterface *hwAccellInterface;
 	VideoFrame videoFrame;
 
 	QOpenGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
@@ -145,6 +147,7 @@ public:
 	float texCoordYCbCr[8];
 	QVector2D pixelStep;
 	quint32 textures[4];
+	int Deinterlace;
 
 	quint32 pbo[4];
 	bool allowPBO, hasPbo;

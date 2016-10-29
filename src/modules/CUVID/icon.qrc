@@ -1,0 +1,5 @@
+<RCC>
+	<qresource>
+		<file alias="CUVID">CUVID.png</file>
+	</qresource>
+</RCC>
