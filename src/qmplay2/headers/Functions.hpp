@@ -123,6 +123,8 @@ namespace Functions
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
 	int scaleEQValue(int val, int min, int max);
 
+	int getField(const VideoFrame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
+
 	QByteArray convertToASS(QString txt);
 
 	bool chkMimeData(const QMimeData *);

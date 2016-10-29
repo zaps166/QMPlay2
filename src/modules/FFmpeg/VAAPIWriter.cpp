@@ -152,7 +152,7 @@ bool VAAPIWriter::processParams(bool *)
 void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 {
 	const VASurfaceID curr_id = videoFrame.surfaceId;
-	const int field = FFCommon::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
+	const int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
 #ifdef HAVE_VPP
 	const bool do_vpp_deint = field != 0 && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
 	if (use_vpp && !do_vpp_deint)

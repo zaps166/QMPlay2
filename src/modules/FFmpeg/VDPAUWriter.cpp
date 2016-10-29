@@ -190,7 +190,7 @@ bool VDPAUWriter::processParams(bool *)
 }
 void VDPAUWriter::writeVideo(const VideoFrame &videoFrame)
 {
-	field = (VdpVideoMixerPictureStructure)FFCommon::getField(videoFrame, deinterlace, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD);
+	field = (VdpVideoMixerPictureStructure)Functions::getField(videoFrame, deinterlace, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD, VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD);
 	draw(videoFrame.surfaceId);
 	paused = false;
 }

@@ -18,7 +18,6 @@
 
 #include <FFCommon.hpp>
 
-#include <DeintFilter.hpp>
 #include <Version.hpp>
 
 extern "C"
@@ -43,24 +42,6 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);
 	}
 	return url;
-}
-
-int FFCommon::getField(const VideoFrame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField)
-{
-	if (deinterlace)
-	{
-		const quint8 deintFlags = deinterlace >> 1;
-		if (videoFrame.interlaced || !(deintFlags & DeintFilter::AutoDeinterlace))
-		{
-			bool topFieldFirst;
-			if ((deintFlags & DeintFilter::DoubleFramerate) || ((deintFlags & DeintFilter::AutoParity) && videoFrame.interlaced))
-				topFieldFirst = videoFrame.tff;
-			else
-				topFieldFirst = deintFlags & DeintFilter::TopFieldFirst;
-			return topFieldFirst ? topField : bottomField;
-		}
-	}
-	return fullFrame;
 }
 
 AVPacket *FFCommon::createAVPacket()
