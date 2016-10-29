@@ -377,7 +377,7 @@ void VideoThr::run()
 			}
 			if (!decoded.isEmpty())
 			{
-				if (!hwAccelWriter && (decoded.size.width != W || decoded.size.height != H))
+				if (decoded.size.width != W || decoded.size.height != H)
 				{
 					//Frame size has been changed
 					filtersMutex.unlock();
