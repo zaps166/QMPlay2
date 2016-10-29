@@ -40,7 +40,11 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 		if (url.startsWith("http"))
 			av_dict_set(&options, "icy", "1", 0);
 #endif
+#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
+		av_dict_set(&options, "user_agent", QMPlay2UserAgent, 0);
+#else
 		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);
+#endif
 	}
 	return url;
 }
