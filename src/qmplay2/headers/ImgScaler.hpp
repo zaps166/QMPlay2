@@ -36,13 +36,13 @@ public:
 		destroy();
 	}
 
-	bool create(const VideoFrameSize &size, int newWdst, int newHdst);
+	bool create(const VideoFrameSize &size, int newWdst, int newHdst, bool isNV12 = false);
 	void scale(const VideoFrame &videoFrame, void *dst = NULL);
-	void scale(const void *src, const int srcLinesize[], int HChromaSrc, void *dst);
+	void scale(const void *src[], const int srcLinesize[], void *dst);
 	void destroy();
 private:
-	SwsContext *img_convert_ctx;
-	int Hsrc, dstLinesize;
+	SwsContext *m_swsCtx;
+	int m_srcH, m_dstLinesize;
 };
 
 #endif

@@ -30,10 +30,10 @@ qint64 VideoWriter::write(const QByteArray &)
 	return -1;
 }
 
-bool VideoWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VideoWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	Q_UNUSED(videoFrame)
 	Q_UNUSED(dest)
-	Q_UNUSED(yv12ToRGB32)
+	Q_UNUSED(nv12ToRGB32)
 	return false;
 }

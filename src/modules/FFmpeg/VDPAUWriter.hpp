@@ -46,7 +46,7 @@ public:
 	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 	void pause();
 
-	bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const;
+	bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	QString name() const;
 

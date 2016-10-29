@@ -26,38 +26,34 @@ extern "C"
 }
 
 ImgScaler::ImgScaler() :
-	img_convert_ctx(NULL),
-	Hsrc(0), dstLinesize(0)
+	m_swsCtx(NULL),
+	m_srcH(0), m_dstLinesize(0)
 {}
 
-bool ImgScaler::create(const VideoFrameSize &size, int newWdst, int newHdst)
+bool ImgScaler::create(const VideoFrameSize &size, int newWdst, int newHdst, bool isNV12)
 {
-	Hsrc = size.height;
-	dstLinesize = newWdst << 2;
-	return (img_convert_ctx = sws_getCachedContext(img_convert_ctx, size.width, Hsrc, (AVPixelFormat)size.getFormat(), newWdst, newHdst, AV_PIX_FMT_RGB32, SWS_BILINEAR, NULL, NULL, NULL));
+	m_srcH = size.height;
+	m_dstLinesize = newWdst << 2;
+	return (m_swsCtx = sws_getCachedContext(m_swsCtx, size.width, m_srcH, isNV12 ? AV_PIX_FMT_NV12 : (AVPixelFormat)size.getFormat(), newWdst, newHdst, AV_PIX_FMT_RGB32, SWS_BILINEAR, NULL, NULL, NULL));
 }
 void ImgScaler::scale(const VideoFrame &src, void *dst)
 {
 	const quint8 *srcData[3] = {
 		src.buffer[0].constData(),
 		src.buffer[1].constData(),
-		src.buffer[2].constData()
+		src.buffer[2].constData() //Ignored for NV12
 	};
-	sws_scale(img_convert_ctx, srcData, src.linesize, 0, Hsrc, (uint8_t **)&dst, &dstLinesize);
+	sws_scale(m_swsCtx, srcData, src.linesize, 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
 }
-void ImgScaler::scale(const void *src, const int srcLinesize[], int HChromaSrc, void *dst)
+void ImgScaler::scale(const void *src[], const int srcLinesize[], void *dst)
 {
-	uint8_t *srcData[3];
-	srcData[0] = (uint8_t *)src;
-	srcData[2] = (uint8_t *)srcData[0] + (srcLinesize[0] * Hsrc);
-	srcData[1] = (uint8_t *)srcData[2] + (srcLinesize[1] * HChromaSrc);
-	sws_scale(img_convert_ctx, srcData, srcLinesize, 0, Hsrc, (uint8_t **)&dst, &dstLinesize);
+	sws_scale(m_swsCtx, (const uint8_t **)src, srcLinesize, 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
 }
 void ImgScaler::destroy()
 {
-	if (img_convert_ctx)
+	if (m_swsCtx)
 	{
-		sws_freeContext(img_convert_ctx);
-		img_convert_ctx = NULL;
+		sws_freeContext(m_swsCtx);
+		m_swsCtx = NULL;
 	}
 }

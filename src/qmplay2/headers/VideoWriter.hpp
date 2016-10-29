@@ -36,7 +36,7 @@ public:
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
 	virtual void writeOSD(const QList<const QMPlay2_OSD *> &osd) = 0;
 
-	virtual bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32 = NULL) const;
+	virtual bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	virtual bool open() = 0;
 };

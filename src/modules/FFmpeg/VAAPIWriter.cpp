@@ -239,7 +239,7 @@ void VAAPIWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 	}
 }
 
-bool VAAPIWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VAAPIWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	if (dest && !(outH & 1) && !(outW % 4))
 	{
@@ -249,7 +249,7 @@ bool VAAPIWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgSc
 		{
 			for (int i = 0; i < fmt_count; ++i)
 				if (img_fmt[i].fourcc == VA_FOURCC_NV12)
-					return getNV12Image(img_fmt[i], videoFrame.surfaceId, dest, yv12ToRGB32);
+					return getNV12Image(img_fmt[i], videoFrame.surfaceId, dest, nv12ToRGB32);
 		}
 	}
 	return false;
@@ -309,46 +309,21 @@ quint8 *VAAPIWriter::getImage(VAImage &image, VASurfaceID surfaceID, VAImageForm
 	}
 	return NULL;
 }
-bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const
+bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	VAImage image;
-	quint8 *data = getImage(image, surfaceID, img_fmt);
-	if (data)
+	quint8 *vaData = getImage(image, surfaceID, img_fmt);
+	if (vaData)
 	{
-		const int chromaW = (outW + 1) >> 1;
-		const int chromaH = (outH + 1) >> 1;
-
-		QByteArray yv12;
-		yv12.resize(outW * outH * 3 / 2);
-
-		quint8 *yv12Luma = (quint8 *)yv12.data();
-		quint8 *yv12Cb   = yv12Luma + outW * outH;
-		quint8 *yv12Cr   = yv12Cb + chromaW * chromaH;
-
-		quint8 *planeData = data + image.offsets[0];
-		for (int i = 0; i < outH; ++i)
-		{
-			memcpy(yv12Luma, planeData, outW);
-			planeData += image.pitches[0];
-			yv12Luma += outW;
-		}
-
-		planeData = data + image.offsets[1];
-		for (int i = 0; i < outH; ++i)
-		{
-			for (int j = 0; j < outW; j += 4)
-			{
-				*(yv12Cr++) = *(planeData++);
-				*(yv12Cb++) = *(planeData++);
-			}
-			for (int j = 0; j < (int)image.pitches[1]; ++j)
-				++planeData;
-		}
+		const void *data[2] = {
+			vaData + image.offsets[0],
+			vaData + image.offsets[1]
+		};
+		nv12ToRGB32->scale(data, (const int *)image.pitches, dest);
 
 		vaUnmapBuffer(VADisp, image.buf);
 		vaDestroyImage(VADisp, image.image_id);
 
-		yv12ToRGB32->scale(yv12.constData(), (const int *)image.pitches, chromaH, dest);
 		return true;
 	}
 	return false;

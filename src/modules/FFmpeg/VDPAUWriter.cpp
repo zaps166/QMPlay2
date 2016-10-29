@@ -210,26 +210,24 @@ void VDPAUWriter::pause()
 	vdpau_display();
 }
 
-bool VDPAUWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32) const
+bool VDPAUWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	if (dest)
 	{
-		const quint32 linesize[3] = {
+		const quint32 linesize[2] = {
 			(quint32)outW,
-			(quint32)outW >> 1,
-			(quint32)outW >> 1
+			(quint32)outW
 		};
-		const qint32 chromaH = (outH + 1) >> 1;
-		QByteArray yv12(linesize[0] * Functions::aligned(outH, 4) * 3 / 2, Qt::Uninitialized);
-		void *data[3];
-		data[0] = yv12.data();
-		data[1] = (quint8 *)data[0] + (linesize[0] * outH);
-		data[2] = (quint8 *)data[1] + (linesize[1] * chromaH);
-		if (vdp_surface_get_bits(videoFrame.surfaceId, VDP_YCBCR_FORMAT_YV12, data, linesize) == VDP_STATUS_OK)
-		{
-			yv12ToRGB32->scale(yv12.constData(), (const int *)linesize, chromaH, dest);
-			return true;
-		}
+		void *data[2] = {
+			new quint8[linesize[0] * outH],
+			new quint8[linesize[1] * ((outH + 1) >> 1)],
+		};
+		const bool ok = (vdp_surface_get_bits(videoFrame.surfaceId, VDP_YCBCR_FORMAT_NV12, data, linesize) == VDP_STATUS_OK);
+		if (ok)
+			nv12ToRGB32->scale((const void **)data, (const int *)linesize, dest);
+		for (int p = 0; p < 2; ++p)
+			delete[] (quint8 *)data[p];
+		return ok;
 	}
 	return false;
 }
