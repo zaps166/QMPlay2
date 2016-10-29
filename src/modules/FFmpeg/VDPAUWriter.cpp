@@ -320,7 +320,7 @@ bool VDPAUWriter::open()
 }
 
 
-bool VDPAUWriter::HWAccellInit(int W, int H, const char *codec_name)
+bool VDPAUWriter::hwAccellInit(int W, int H, const char *codec_name)
 {
 	VdpDecoderProfile p = -1;
 	if (!qstrcmp(codec_name, "h264"))

@@ -54,7 +54,7 @@ public:
 
 /**/
 
-	bool HWAccellInit(int W, int H, const char *codec_name);
+	bool hwAccellInit(int W, int H, const char *codec_name);
 
 	inline VdpDecoder getVdpDecoder() const
 	{

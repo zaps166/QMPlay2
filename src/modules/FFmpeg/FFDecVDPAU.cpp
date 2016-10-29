@@ -67,7 +67,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 			if (writer && writer->name() != VDPAUWriterName)
 				writer = NULL;
 			VDPAUWriter *vdpauWriter = writer ? (VDPAUWriter *)writer : new VDPAUWriter(getModule());
-			if ((writer || vdpauWriter->open()) && vdpauWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			if ((writer || vdpauWriter->open()) && vdpauWriter->hwAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
 			{
 				codec_ctx->hwaccel_context = av_mallocz(sizeof(AVVDPAUContext));
 				((AVVDPAUContext *)codec_ctx->hwaccel_context)->decoder = vdpauWriter->getVdpDecoder();
