@@ -24,50 +24,61 @@ class TimeStamp
 public:
 	inline bool isValid() const
 	{
-		return _dts == _dts && _pts == _pts;
+		return m_dts == m_dts && m_pts == m_pts;
 	}
 
 	inline void set(double dts, double pts, double start_time = 0.0)
 	{
-		_dts = dts - start_time;
-		_pts = pts - start_time;
+		m_dts = dts - start_time;
+		m_pts = pts - start_time;
 	}
 	inline void setInvalid()
 	{
-		_dts = _pts = 0.0 / 0.0;
+		m_dts = m_pts = 0.0 / 0.0;
 	}
 
 	inline double operator =(double t)
 	{
-		return (_pts = _dts = t);
+		return (m_pts = m_dts = t);
 	}
 	inline void operator +=(double t)
 	{
-		_dts += t;
-		_pts += t;
+		m_dts += t;
+		m_pts += t;
 	}
 	inline operator double() const
 	{
-		if (_dts < 0.0)
-		{
-			if (_pts >= 0.0)
-				return _pts;
-		}
-		else
-			return _dts;
-		return 0.0;
+		return dtsPts();
 	}
 
 	inline double pts() const
 	{
-		return _pts;
+		return m_pts;
 	}
 	inline double dts() const
 	{
-		return _dts;
+		return m_dts;
 	}
+
+	inline double ptsDts() const
+	{
+		if (m_pts >= 0.0)
+			return m_pts;
+		if (m_dts >= 0.0)
+			return m_dts;
+		return 0.0;
+	}
+	inline double dtsPts() const
+	{
+		if (m_dts >= 0.0)
+			return m_dts;
+		if (m_pts >= 0.0)
+			return m_pts;
+		return 0.0;
+	}
+
 private:
-	double _pts, _dts;
+	double m_pts, m_dts;
 };
 
 #endif //TIMESTAMP_HPP
