@@ -1196,7 +1196,7 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, Writer *writer = NULL)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, VideoWriter *writer = NULL)
 {
 	Decoder *dec = NULL;
 	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;

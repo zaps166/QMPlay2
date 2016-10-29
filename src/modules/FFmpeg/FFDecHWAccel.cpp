@@ -37,9 +37,9 @@ FFDecHWAccel::~FFDecHWAccel()
 		av_free(codec_ctx->hwaccel_context);
 }
 
-Writer *FFDecHWAccel::HWAccel() const
+VideoWriter *FFDecHWAccel::HWAccel() const
 {
-	return (Writer *)hwAccelWriter;
+	return hwAccelWriter;
 }
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)

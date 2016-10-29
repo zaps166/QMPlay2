@@ -31,5 +31,5 @@ private:
 
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned hurry_up);
 
-	bool open(StreamInfo &, Writer *);
+	bool open(StreamInfo &, VideoWriter *);
 };

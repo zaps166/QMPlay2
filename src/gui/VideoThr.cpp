@@ -40,13 +40,13 @@ using Functions::gettime;
 
 #include <math.h>
 
-VideoThr::VideoThr(PlayClass &playC, Writer *HWAccelWriter, const QStringList &pluginsName) :
-	AVThread(playC, "video:", HWAccelWriter, pluginsName),
+VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
+	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
 	deleteOSD(false), deleteFrame(false),
 	W(0), H(0), seq(0),
 	sDec(NULL),
-	HWAccelWriter(HWAccelWriter),
+	hwAccelWriter(hwAccelWriter),
 	subtitles(NULL)
 {}
 VideoThr::~VideoThr()
@@ -156,7 +156,7 @@ void VideoThr::initFilters(bool processParams)
 	else
 		writer->modParam("Deinterlace", 0);
 
-	if (!HWAccelWriter)
+	if (!hwAccelWriter)
 		foreach (QString filterName, QMPSettings.getStringList("VideoFilters"))
 			if (filterName.left(1).toInt()) //if filter is enabled
 			{
@@ -377,7 +377,7 @@ void VideoThr::run()
 			}
 			if (!decoded.isEmpty())
 			{
-				if (!HWAccelWriter && (decoded.size.width != W || decoded.size.height != H))
+				if (!hwAccelWriter && (decoded.size.width != W || decoded.size.height != H))
 				{
 					//Frame size has been changed
 					filtersMutex.unlock();
@@ -562,11 +562,11 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 {
 	ImgScaler imgScaler;
 	const int aligned8W = Functions::aligned(W, 8);
-	if (imgScaler.create(!HWAccelWriter ? videoFrame.size : VideoFrameSize(W, H, 1, 1), aligned8W, H))
+	if (imgScaler.create(!hwAccelWriter ? videoFrame.size : VideoFrameSize(W, H, 1, 1), aligned8W, H))
 	{
 		QImage img(aligned8W, H, QImage::Format_RGB32);
 		bool ok = true;
-		if (!HWAccelWriter)
+		if (!hwAccelWriter)
 			imgScaler.scale(videoFrame, img.bits());
 		else
 			ok = videoWriter()->hwAccellGetImg(videoFrame, img.bits(), &imgScaler);

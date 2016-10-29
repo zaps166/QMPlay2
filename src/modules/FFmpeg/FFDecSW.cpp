@@ -332,7 +332,7 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OS
 	return true;
 }
 
-bool FFDecSW::open(StreamInfo &streamInfo, Writer *)
+bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
 {
 	AVCodec *codec = FFDec::init(streamInfo);
 	if (!codec)

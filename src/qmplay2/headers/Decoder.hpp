@@ -28,18 +28,18 @@
 #include <QString>
 
 class QMPlay2_OSD;
+class VideoWriter;
 class StreamInfo;
-class Writer;
 class LibASS;
 
 class Decoder : public ModuleCommon
 {
 public:
-	static Decoder *create(StreamInfo &streamInfo, Writer *writer = NULL, const QStringList &modNames = QStringList());
+	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = NULL, const QStringList &modNames = QStringList());
 
 	virtual QString name() const = 0;
 
-	virtual Writer *HWAccel() const;
+	virtual VideoWriter *HWAccel() const;
 
 	virtual void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats);
 
@@ -54,7 +54,7 @@ public:
 
 	virtual ~Decoder();
 private:
-	virtual bool open(StreamInfo &streamInfo, Writer *writer = NULL) = 0;
+	virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = NULL) = 0;
 };
 
 #endif

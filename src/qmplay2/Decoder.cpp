@@ -29,13 +29,13 @@ class QMPlay2DummyDecoder : public Decoder
 		return QString();
 	}
 
-	bool open(StreamInfo &, Writer *)
+	bool open(StreamInfo &, VideoWriter *)
 	{
 		return true;
 	}
 };
 
-Decoder *Decoder::create(StreamInfo &streamInfo, Writer *writer, const QStringList &modNames)
+Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStringList &modNames)
 {
 	if (!streamInfo.must_decode)
 	{
@@ -73,7 +73,7 @@ Decoder *Decoder::create(StreamInfo &streamInfo, Writer *writer, const QStringLi
 	return NULL;
 }
 
-Writer *Decoder::HWAccel() const
+VideoWriter *Decoder::HWAccel() const
 {
 	return NULL;
 }

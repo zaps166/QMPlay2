@@ -56,7 +56,7 @@ private:
 	int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
 	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
 
-	bool open(StreamInfo &, Writer *);
+	bool open(StreamInfo &, VideoWriter *);
 
 	/**/
 

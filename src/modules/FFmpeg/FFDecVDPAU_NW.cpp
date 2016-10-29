@@ -254,7 +254,7 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByte
 	return bytes_consumed > 0 ? bytes_consumed : 0;
 }
 
-bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, Writer *)
+bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, VideoWriter *)
 {
 	if (av_get_pix_fmt(streamInfo.format) == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
 	{

@@ -27,5 +27,5 @@ private:
 
 	QString name() const;
 
-	bool open(StreamInfo &, Writer *);
+	bool open(StreamInfo &, VideoWriter *);
 };

@@ -30,11 +30,11 @@ class VideoThr : public AVThread
 {
 	Q_OBJECT
 public:
-	VideoThr(PlayClass &, Writer *, const QStringList &pluginsName = QStringList());
+	VideoThr(PlayClass &, VideoWriter *, const QStringList &pluginsName = QStringList());
 
-	inline Writer *getHWAccelWriter() const
+	inline VideoWriter *getHWAccelWriter() const
 	{
-		return HWAccelWriter;
+		return hwAccelWriter;
 	}
 
 	QMPlay2PixelFormats getSupportedPixelFormats() const;
@@ -84,7 +84,7 @@ private:
 	quint32 seq;
 
 	Decoder *sDec;
-	Writer *HWAccelWriter;
+	VideoWriter *hwAccelWriter;
 	QMPlay2_OSD *subtitles;
 	VideoFilters filters;
 	QMutex filtersMutex;
