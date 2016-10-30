@@ -42,25 +42,27 @@ private:
 
 	/**/
 
-	bool m_cudaLoaded;
+	int m_cudaLoaded;
 	QComboBox *m_deintMethodB;
 };
 
 /**/
 
 class QCheckBox;
+class QLabel;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {
 	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 
 public:
-	ModuleSettingsWidget(Module &module, bool cudaLoaded);
+	ModuleSettingsWidget(Module &module, int &cudaLoaded);
 
 private:
 	void saveSettings();
 
-	bool m_cudaLoaded;
+	int &m_cudaLoaded;
+	QLabel *m_infoL;
 	QCheckBox *m_enabledB, *m_copyVideoB;
 };
 

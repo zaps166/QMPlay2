@@ -120,8 +120,6 @@ OpenGL2Common::OpenGL2Common() :
 }
 OpenGL2Common::~OpenGL2Common()
 {
-	if (hwAccellInterface)
-		delete hwAccellInterface;
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
 }
@@ -360,7 +358,9 @@ void OpenGL2Common::paintGL()
 				delete[] zero;
 
 				/* Prepare textures, register GL textures */
-				hwAccellInterface->init(&textures[1]);
+				isOK = hwAccellInterface->init(&textures[1]);
+				if (!isOK)
+					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init HWaccell textures"));
 
 				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
 
@@ -638,6 +638,23 @@ void OpenGL2Common::testGLInternal()
 	supportsShaders = canCreateNonPowerOfTwoTextures = false;
 	glActiveTexture = NULL;
 #endif
+
+	if (hwAccellInterface)
+	{
+		quint32 textures[2];
+		glGenTextures(2, textures);
+		for (int p = 0; p < 2; ++p)
+		{
+			glBindTexture(GL_TEXTURE_2D, textures[p]);
+			glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
+		}
+		hwAccellInterface->lock();
+		if (!hwAccellInterface->init(textures))
+			isOK = false;
+		hwAccellInterface->clear();
+		hwAccellInterface->unlock();
+		glDeleteTextures(2, textures);
+	}
 
 	QWidget *w = widget();
 	w->grabGesture(Qt::PinchGesture);

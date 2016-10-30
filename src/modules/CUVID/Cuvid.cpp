@@ -27,11 +27,14 @@ Cuvid::Cuvid() :
 	moduleImg = QImage(":/CUVID");
 	moduleImg.setText("Path", ":/CUVID");
 
-	m_cudaLoaded = CuvidDec::loadLibraries();
-
 	init("Enabled", true);
 	init("DeintMethod", 2);
-	init("CopyVideo", false);
+	init("CopyVideo", Qt::PartiallyChecked);
+
+	if (getBool("Enabled"))
+		m_cudaLoaded = CuvidDec::loadLibraries();
+	else
+		m_cudaLoaded = -1;
 
 	m_deintMethodB = new QComboBox;
 	m_deintMethodB->addItems(QStringList() << tr("None") << "Bob" << tr("Adaptive"));
@@ -50,13 +53,13 @@ QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 	Q_UNUSED(showDisabled)
 
 	QList<Info> modulesInfo;
-	if (showDisabled || (m_cudaLoaded && getBool("Enabled")))
+	if (showDisabled || getBool("Enabled"))
 		modulesInfo += Info(CuvidName, DECODER, moduleImg);
 	return modulesInfo;
 }
 void *Cuvid::createInstance(const QString &name)
 {
-	if (name == CuvidName)
+	if (name == CuvidName && m_cudaLoaded == 1 && getBool("Enabled"))
 		return new CuvidDec(*this);
 	return NULL;
 }
@@ -80,7 +83,7 @@ QMPLAY2_EXPORT_PLUGIN(Cuvid)
 #include <QCheckBox>
 #include <QLabel>
 
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool cudaLoaded) :
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, int &cudaLoaded) :
 	Module::SettingsWidget(module),
 	m_cudaLoaded(cudaLoaded)
 {
@@ -88,11 +91,18 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool cudaLoaded) :
 	m_enabledB->setChecked(sets().getBool("Enabled"));
 
 	m_copyVideoB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
-	m_copyVideoB->setChecked(sets().getBool("CopyVideo"));
+	m_copyVideoB->setTristate();
+	m_copyVideoB->setCheckState((Qt::CheckState)sets().getInt("CopyVideo"));
+	m_copyVideoB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
 
 	QGridLayout *layout = new QGridLayout(this);
-	if (!m_cudaLoaded)
-		layout->addWidget(new QLabel("<b>" + tr("Can't load CUDA and/or CUVID library!") + "</b>"));
+	if (m_cudaLoaded != 1)
+	{
+		m_infoL = new QLabel("<b>" + tr("Can't load CUDA and/or CUVID library!") + "</b>");
+		layout->addWidget(m_infoL);
+		if (m_cudaLoaded == -1)
+			m_infoL->close();
+	}
 	layout->addWidget(m_enabledB);
 	layout->addWidget(m_copyVideoB);
 }
@@ -100,5 +110,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool cudaLoaded) :
 void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", m_enabledB->isChecked());
-	sets().set("CopyVideo", m_copyVideoB->isChecked());
+	sets().set("CopyVideo", m_copyVideoB->checkState());
+	if (m_cudaLoaded == -1 && m_enabledB->isChecked())
+	{
+		m_cudaLoaded = CuvidDec::loadLibraries();
+		if (m_cudaLoaded == 0)
+			m_infoL->show();
+	}
 }

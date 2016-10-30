@@ -54,7 +54,8 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 }
 OpenGL2Writer::~OpenGL2Writer()
 {
-	drawable->deleteMe();
+	if (drawable)
+		drawable->deleteMe();
 }
 
 bool OpenGL2Writer::set()
@@ -164,7 +165,6 @@ void OpenGL2Writer::setHWAccellInterface(HWAccellInterface *hwAccellInterface)
 {
 	addParam("Deinterlace");
 	addParam("PrepareForHWBobDeint", true);
-	drawable->hwAccellInterface = hwAccellInterface;
 	VideoWriter::setHWAccellInterface(hwAccellInterface);
 }
 
@@ -210,6 +210,7 @@ bool OpenGL2Writer::open()
 #else
 	drawable = new OpenGL2OldWidget;
 #endif
+	drawable->hwAccellInterface = m_hwAccellInterface;
 	drawable->setAllowPBO(allowPBO);
 	if (drawable->testGL())
 	{

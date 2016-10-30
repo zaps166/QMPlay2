@@ -111,13 +111,14 @@ namespace cu
 
 	static CUcontext createContext()
 	{
-		CUcontext ctx;
+		CUcontext ctx, tmpCtx;
 		CUdevice dev = -1;
 		const int devIdx = 0;
 		if (deviceGet(&dev, devIdx) != CUDA_SUCCESS)
 			return NULL;
 		if (ctxCreate(&ctx, CU_CTX_SCHED_BLOCKING_SYNC, dev) != CUDA_SUCCESS)
 			return NULL;
+		ctxPopCurrent(&tmpCtx);
 		return ctx;
 	}
 
@@ -131,11 +132,6 @@ namespace cu
 		{
 			cudaMutex.lock();
 			ctxPushCurrent(ctx);
-		}
-		inline ContextGuard() :
-			m_locked(true)
-		{
-			cudaMutex.lock();
 		}
 		inline ~ContextGuard()
 		{
@@ -230,6 +226,7 @@ class CuvidHWAccell : public HWAccellInterface
 {
 public:
 	CuvidHWAccell(CUcontext cuCtx) :
+		m_canDestroyCuda(false),
 		m_codedHeight(0),
 		m_lastId(0),
 		m_tff(false),
@@ -247,7 +244,8 @@ public:
 			if (m_res[p])
 				cu::graphicsUnregisterResource(m_res[p]);
 		}
-		cu::ctxDestroy(m_cuCtx);
+		if (m_canDestroyCuda)
+			cu::ctxDestroy(m_cuCtx);
 	}
 
 	QString name() const
@@ -281,6 +279,8 @@ public:
 				ret = (cu::graphicsSubResourceGetMappedArray(&m_array[p], m_res[p], 0, 0) == CUDA_SUCCESS);
 				ret &= (cu::graphicsUnmapResources(1, &m_res[p], NULL) == CUDA_SUCCESS);
 			}
+			if (!ret)
+				break;
 		}
 		return ret;
 	}
@@ -394,6 +394,11 @@ public:
 
 	/**/
 
+	inline void allowDestroyCuda()
+	{
+		m_canDestroyCuda = true;
+	}
+
 	inline CUcontext getCudaContext() const
 	{
 		return m_cuCtx;
@@ -406,6 +411,8 @@ public:
 	}
 
 private:
+	bool m_canDestroyCuda;
+
 	int m_codedHeight;
 
 	quintptr m_lastId;
@@ -431,7 +438,7 @@ CuvidDec::CuvidDec(Module &module) :
 	m_writer(NULL),
 	m_cuvidHWAccell(NULL),
 	m_deintMethod(cudaVideoDeinterlaceMode_Weave),
-	m_copyVideo(false),
+	m_copyVideo(Qt::PartiallyChecked),
 	m_forceFlush(false),
 	m_nv12Chroma(NULL),
 	m_bsfCtx(NULL),
@@ -467,7 +474,7 @@ bool CuvidDec::set()
 	if (sets().getBool("Enabled"))
 	{
 		const cudaVideoDeinterlaceMode deintMethod = (cudaVideoDeinterlaceMode)sets().getInt("DeintMethod");
-		const bool copyVideo = sets().getBool("CopyVideo");
+		const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
 		if (deintMethod != m_deintMethod)
 		{
 			m_forceFlush = true;
@@ -487,7 +494,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
 	cuvidDecInfo.CodecType = format->codec;
 	cuvidDecInfo.ChromaFormat = format->chroma_format;
-	cuvidDecInfo.DeinterlaceMode = (m_copyVideo || format->progressive_sequence) ? cudaVideoDeinterlaceMode_Weave : m_deintMethod;
+	cuvidDecInfo.DeinterlaceMode = (!m_writer || format->progressive_sequence) ? cudaVideoDeinterlaceMode_Weave : m_deintMethod;
 	cuvidDecInfo.OutputFormat = cudaVideoSurfaceFormat_NV12;
 
 	cuvidDecInfo.ulWidth = format->coded_width;
@@ -571,34 +578,38 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	CUVIDSOURCEDATAPACKET cuvidPkt;
 	memset(&cuvidPkt, 0, sizeof cuvidPkt);
-	cuvidPkt.flags = CUVID_PKT_TIMESTAMP;
-	cuvidPkt.timestamp = encodedPacket.ts.ptsDts() * 10000000.0 + 0.5;
-
-	if (m_bsfCtx)
-	{
-		m_pkt->buf = encodedPacket.toAvBufferRef();
-		m_pkt->data = m_pkt->buf->data;
-		m_pkt->size = encodedPacket.size();
-
-		if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
-		{
-			encodedPacket.ts.setInvalid();
-			return 0;
-		}
-
-		if (av_bsf_receive_packet(m_bsfCtx, m_pkt) < 0) //Can it return more than one packet in this case?
-		{
-			encodedPacket.ts.setInvalid();
-			return 0;
-		}
-
-		cuvidPkt.payload = m_pkt->data;
-		cuvidPkt.payload_size = m_pkt->size;
-	}
+	if (encodedPacket.isEmpty())
+		cuvidPkt.flags = CUVID_PKT_ENDOFSTREAM;
 	else
 	{
-		cuvidPkt.payload = encodedPacket.constData();
-		cuvidPkt.payload_size = encodedPacket.size();
+		cuvidPkt.flags = CUVID_PKT_TIMESTAMP;
+		cuvidPkt.timestamp = encodedPacket.ts.ptsDts() * 10000000.0 + 0.5;
+		if (m_bsfCtx)
+		{
+			m_pkt->buf = encodedPacket.toAvBufferRef();
+			m_pkt->data = m_pkt->buf->data;
+			m_pkt->size = encodedPacket.size();
+
+			if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
+			{
+				encodedPacket.ts.setInvalid();
+				return 0;
+			}
+
+			if (av_bsf_receive_packet(m_bsfCtx, m_pkt) < 0) //Can it return more than one packet in this case?
+			{
+				encodedPacket.ts.setInvalid();
+				return 0;
+			}
+
+			cuvidPkt.payload = m_pkt->data;
+			cuvidPkt.payload_size = m_pkt->size;
+		}
+		else
+		{
+			cuvidPkt.payload = encodedPacket.constData();
+			cuvidPkt.payload_size = encodedPacket.size();
+		}
 	}
 
 	const bool videoDataParsed = (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) == CUDA_SUCCESS);
@@ -782,43 +793,35 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	m_height = streamInfo.H;
 	m_codedHeight = m_height;
 
-	if (m_copyVideo)
+	if (writer)
 	{
-		if (!(m_cuCtx = cu::createContext()))
-			return false;
-	}
-	else
-	{
-		/* Initialize video output */
-		if (writer)
+		m_cuvidHWAccell = dynamic_cast<CuvidHWAccell *>(writer->getHWAccellInterface());
+		if (m_cuvidHWAccell)
 		{
-			m_cuvidHWAccell = dynamic_cast<CuvidHWAccell *>(writer->getHWAccellInterface());
-			if (m_cuvidHWAccell)
-			{
-				m_cuCtx = m_cuvidHWAccell->getCudaContext();
-				cu::ctxPushCurrent(m_cuCtx);
-				m_writer = writer;
-			}
-		}
-		if (!m_writer)
-		{
-			m_writer = (VideoWriter *)Writer::create("video://", QStringList("OpenGL 2"));
-			if (m_writer)
-			{
-				if (!(m_cuCtx = cu::createContext()))
-					return false;
-				m_cuvidHWAccell = new CuvidHWAccell(m_cuCtx);
-				m_writer->setHWAccellInterface(m_cuvidHWAccell);
-			}
-			else
-			{
-				QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
-				return false;
-			}
+			m_cuCtx = m_cuvidHWAccell->getCudaContext();
+			m_writer = writer;
 		}
 	}
 
-	cu::ContextGuard cuCtxGuard;
+	if (!m_cuCtx && !(m_cuCtx = cu::createContext()))
+		return false;
+
+	if (!m_writer && m_copyVideo != Qt::Checked)
+	{
+		m_writer = VideoWriter::createOpenGL2(new CuvidHWAccell(m_cuCtx));
+		if (m_writer)
+		{
+			m_cuvidHWAccell = (CuvidHWAccell *)m_writer->getHWAccellInterface();
+			m_cuvidHWAccell->allowDestroyCuda();
+		}
+		else if (m_copyVideo == Qt::Unchecked)
+		{
+			QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
+			return false;
+		}
+	}
+
+	cu::ContextGuard cuCtxGuard(m_cuCtx);
 
 	memset(&m_cuvidFmt, 0, sizeof m_cuvidFmt);
 	m_cuvidFmt.format.seqhdr_data_length = qMin<size_t>(sizeof m_cuvidFmt.raw_seqhdr_data, extraData.size());

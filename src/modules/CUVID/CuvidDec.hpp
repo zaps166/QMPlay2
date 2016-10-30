@@ -73,7 +73,8 @@ private:
 	int m_width, m_height, m_codedHeight;
 
 	cudaVideoDeinterlaceMode m_deintMethod;
-	bool m_copyVideo, m_forceFlush;
+	Qt::CheckState m_copyVideo;
+	bool m_forceFlush;
 
 	QQueue<CUVIDPARSERDISPINFO> m_cuvidSurfaces;
 

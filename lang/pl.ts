@@ -1484,6 +1484,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Can&apos;t load CUDA and/or CUVID library!</source>
         <translation>Nie udało się załadować biblioteki CUDA i/lub CUVID!</translation>
     </message>
+    <message>
+        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
+        <translation>Częściowo zaznaczone oznacza, że kopiowanie obrazu nastąpi, gdy szybka metoda nie zadziała</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1564,6 +1568,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
         <translation>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</translation>
+    </message>
+    <message>
+        <source>Can&apos;t init HWaccell textures</source>
+        <translation>Nie udało się zainicjalizować tekstur dla sprzętowej akceleracji</translation>
     </message>
 </context>
 <context>

@@ -1484,6 +1484,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Can&apos;t load CUDA and/or CUVID library!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1564,6 +1568,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
         <translation>Драйвер должен поддерживать мультитекстурирование, шейдеры и размер текстур, которые уже не являются степенями двух (Non-Power-Of-Two)</translation>
+    </message>
+    <message>
+        <source>Can&apos;t init HWaccell textures</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -20,9 +20,36 @@
 
 #include <HWAccellInterface.hpp>
 
+VideoWriter *VideoWriter::createOpenGL2(HWAccellInterface *hwAccellInterface)
+{
+	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
+		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
+			if (mod.type == Module::WRITER && mod.extensions.contains("video"))
+			{
+				VideoWriter *videoWriter = (VideoWriter *)pluginInstance->createInstance("OpenGL 2");
+				if (videoWriter)
+				{
+					if (hwAccellInterface)
+						videoWriter->setHWAccellInterface(hwAccellInterface);
+					if (!videoWriter->open())
+					{
+						delete videoWriter;
+						videoWriter = NULL;
+					}
+					return videoWriter;
+				}
+			}
+	delete hwAccellInterface;
+	return NULL;
+}
+
 VideoWriter::VideoWriter() :
 	m_hwAccellInterface(NULL)
 {}
+VideoWriter::~VideoWriter()
+{
+	delete m_hwAccellInterface;
+}
 
 QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
 {

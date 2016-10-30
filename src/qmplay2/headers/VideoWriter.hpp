@@ -30,7 +30,10 @@ class ImgScaler;
 class VideoWriter : public Writer
 {
 public:
+	static VideoWriter *createOpenGL2(HWAccellInterface *hwAccellInterface);
+
 	VideoWriter();
+	virtual ~VideoWriter();
 
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
