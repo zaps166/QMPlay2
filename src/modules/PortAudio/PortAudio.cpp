@@ -42,13 +42,13 @@ PortAudio::~PortAudio()
 QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
-	if (showDisabled || (initialized && getBool("WriterEnabled")))
+	if (showDisabled || getBool("WriterEnabled"))
 		modulesInfo += Info(PortAudioWriterName, WRITER, QStringList("audio"));
 	return modulesInfo;
 }
 void *PortAudio::createInstance(const QString &name)
 {
-	if (name == PortAudioWriterName && getBool("WriterEnabled"))
+	if (name == PortAudioWriterName && initialized && getBool("WriterEnabled"))
 		return new PortAudioWriter(*this);
 	return NULL;
 }
