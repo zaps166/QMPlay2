@@ -713,8 +713,12 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (!avCodec)
 		return false;
 
+	const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
+	if (pixFmt != AV_PIX_FMT_YUV420P)
+		return false;
+
 	int depth = 8;
-	if (const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(av_get_pix_fmt(streamInfo.format)))
+	if (const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(pixFmt))
 		depth = pixDesc->comp[0].depth;
 
 	cudaVideoCodec codec;
