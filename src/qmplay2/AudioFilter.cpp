@@ -18,7 +18,6 @@
 
 #include <AudioFilter.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <Module.hpp>
 
 QVector<AudioFilter *> AudioFilter::open()

@@ -17,7 +17,6 @@
 */
 
 #include <SubsDec.hpp>
-#include <QMPlay2Core.hpp>
 #include <Module.hpp>
 
 SubsDec *SubsDec::create(const QString &type)

@@ -18,9 +18,7 @@
 
 #include <Reader.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <Functions.hpp>
-#include <Module.hpp>
 
 #include <QFile>
 

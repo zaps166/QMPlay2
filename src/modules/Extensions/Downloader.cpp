@@ -21,7 +21,6 @@
 #include <Reader.hpp>
 #include <Settings.hpp>
 #include <Functions.hpp>
-#include <QMPlay2Core.hpp>
 
 #include <QTime>
 #include <QTimer>

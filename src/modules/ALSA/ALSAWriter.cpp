@@ -17,7 +17,6 @@
 */
 
 #include <ALSAWriter.hpp>
-#include <QMPlay2Core.hpp>
 
 #include <alsa/asoundlib.h>
 #include <math.h>

@@ -17,7 +17,6 @@
 */
 
 #include <PulseAudioWriter.hpp>
-#include <QMPlay2Core.hpp>
 
 PulseAudioWriter::PulseAudioWriter(Module &module) :
 	err(false)

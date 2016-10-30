@@ -18,7 +18,6 @@
 
 #include <Decoder.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <StreamInfo.hpp>
 #include <Module.hpp>
 

@@ -18,7 +18,6 @@
 
 #include <AddressDialog.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 
 #include <QDialogButtonBox>

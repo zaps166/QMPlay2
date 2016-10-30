@@ -17,7 +17,6 @@
 */
 
 #include <MPRIS2.hpp>
-#include <QMPlay2Core.hpp>
 
 #include <QCoreApplication>
 #include <QDBusConnection>

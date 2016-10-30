@@ -18,7 +18,6 @@
 
 #include <InDockW.hpp>
 
-#include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 
 #include <QGraphicsBlurEffect>

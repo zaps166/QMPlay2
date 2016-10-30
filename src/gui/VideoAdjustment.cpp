@@ -19,7 +19,6 @@
 #include <VideoAdjustment.hpp>
 
 #include <ModuleParams.hpp>
-#include <QMPlay2Core.hpp>
 #include <Settings.hpp>
 #include <Slider.hpp>
 
