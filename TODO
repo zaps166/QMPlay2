@@ -11,6 +11,7 @@ Add audio filters:
 	- Lua/LuaJIT scripts (from DSPBlocks),
 	- FIR and IIR (both from DSPBlocks),
 	- LADSPA (from DSPBlocks), LV2,
+	- AVFilter,
 	- "Tempo".
 
 HWAccel:
