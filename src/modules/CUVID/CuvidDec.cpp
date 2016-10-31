@@ -714,7 +714,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		return false;
 
 	const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
-	if (pixFmt != AV_PIX_FMT_YUV420P)
+	if (pixFmt != AV_PIX_FMT_YUV420P && pixFmt != AV_PIX_FMT_YUV420P10)
 		return false;
 
 	int depth = 8;
