@@ -745,6 +745,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 			codec = cudaVideoCodec_VP8;
 			break;
 		case AV_CODEC_ID_VP9:
+			if (depth > 8)
+				return false;
 			codec = cudaVideoCodec_VP9;
 			break;
 		case AV_CODEC_ID_HEVC:
