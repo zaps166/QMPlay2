@@ -112,7 +112,6 @@ FFmpeg::FFmpeg() :
 	static bool firstTime = true;
 	if (firstTime)
 	{
-		av_register_all();
 #ifdef QMPlay2_libavdevice
 		avdevice_register_all();
 #endif
