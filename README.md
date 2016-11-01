@@ -106,6 +106,7 @@ Hardware acceleration is disabled by default, you can enable it in "Settings->Pl
 
 VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU filters won't work.
 CUVID uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
+CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support!
 
 VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 
@@ -161,7 +162,7 @@ For CMake build be sure that you have correct CMake version:
 - Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
-- FFmpeg >= 2.2 (>= 2.5.x recommended):
+- FFmpeg >= 2.2 (>= 2.5.x recommended; >= 3.1.x recommended for CUVID):
 	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,

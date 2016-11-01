@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 16.10.30:
+Changes in QMPlay2 build 16.11.01:
 	- properly read styles from MPL, MicroDVD and SubRip format,
 	- add CUVID decoder,
+	- bugfix,
 
 Changes in QMPlay2 build 16.10.14:
 	- fix issue (deadlock/crash) if playback has been stopped when FFmpeg resolves a hostname,
