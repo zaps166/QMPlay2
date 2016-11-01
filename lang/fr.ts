@@ -402,6 +402,10 @@
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeintSettingsW</name>

@@ -33,7 +33,6 @@ class VideoWriter;
 struct AVBSFContext;
 struct SwsContext;
 struct AVPacket;
-struct AVFrame;
 
 class CuvidDec : public Decoder
 {

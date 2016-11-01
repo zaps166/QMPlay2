@@ -35,9 +35,14 @@ static QMutex cudaMutex(QMutex::Recursive);
 extern "C"
 {
 	#include <libavcodec/avcodec.h>
+	#include <libavcodec/version.h>
 	#include <libavutil/pixdesc.h>
 	#include <libswscale/swscale.h>
 }
+
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(57, 48, 101)
+	#define NEW_BSF_API
+#endif
 
 namespace cu
 {
@@ -467,10 +472,14 @@ CuvidDec::~CuvidDec()
 		if (!m_writer)
 			cu::ctxDestroy(m_cuCtx);
 	}
+#ifdef NEW_BSF_API
 	av_bsf_free(&m_bsfCtx);
+#endif
 	if (m_swsCtx)
 		sws_freeContext(m_swsCtx);
+#ifdef NEW_BSF_API
 	av_packet_free(&m_pkt);
+#endif
 	av_buffer_unref(&m_nv12Chroma);
 	for (int p = 0; p < 3; ++p)
 		av_buffer_unref(&m_frameBuffer[p]);
@@ -593,6 +602,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		cuvidPkt.timestamp = encodedPacket.ts.ptsDts() * 10000000.0 + 0.5;
 		if (m_bsfCtx)
 		{
+#ifdef NEW_BSF_API
 			m_pkt->buf = encodedPacket.toAvBufferRef();
 			m_pkt->data = m_pkt->buf->data;
 			m_pkt->size = encodedPacket.size();
@@ -611,6 +621,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 			cuvidPkt.payload = m_pkt->data;
 			cuvidPkt.payload_size = m_pkt->size;
+#endif
 		}
 		else
 		{
@@ -621,8 +632,10 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	const bool videoDataParsed = (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) == CUDA_SUCCESS);
 
+#ifdef NEW_BSF_API
 	if (m_pkt)
 		av_packet_unref(m_pkt);
+#endif
 
 	if (m_cuvidSurfaces.isEmpty())
 		encodedPacket.ts.setInvalid();
@@ -726,7 +739,13 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 	int depth = 8;
 	if (const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(pixFmt))
+	{
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(57, 24, 102)
 		depth = pixDesc->comp[0].depth;
+#else
+		depth = pixDesc->comp[0].depth_minus1 + 1;
+#endif
+	}
 
 	cudaVideoCodec codec;
 	switch (avCodec->id)
@@ -766,6 +785,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	const AVBitStreamFilter *bsf = NULL;
 	switch (codec)
 	{
+#ifdef NEW_BSF_API
 		case cudaVideoCodec_H264:
 			bsf = av_bsf_get_by_name("h264_mp4toannexb");
 			if (!bsf)
@@ -776,6 +796,13 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 			if (!bsf)
 				return false;
 			break;
+#else
+		case cudaVideoCodec_H264:
+		case cudaVideoCodec_HEVC:
+			#warning "FFmpeg 3.1 or higher is required for H264 and HEVC support in CUVID"
+			QMPlay2Core.logError("CUVID :: " + tr("Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!"));
+			return false;
+#endif
 		default:
 			break;
 	}
@@ -784,6 +811,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 	if (!bsf)
 		extraData = streamInfo.data;
+#ifdef NEW_BSF_API
 	else
 	{
 		av_bsf_alloc(bsf, &m_bsfCtx);
@@ -801,6 +829,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 		m_pkt = av_packet_alloc();
 	}
+#endif
 
 	m_width = streamInfo.W;
 	m_height = streamInfo.H;
