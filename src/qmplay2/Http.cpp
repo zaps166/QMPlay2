@@ -152,6 +152,7 @@ private:
 			{
 				switch (ret)
 				{
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 15, 100)
 					case AVERROR_HTTP_BAD_REQUEST:
 						m_error = HttpReply::CONNECTION_ERROR_400;
 						break;
@@ -170,6 +171,7 @@ private:
 					case AVERROR_HTTP_SERVER_ERROR:
 						m_error = HttpReply::CONNECTION_ERROR_5XX;
 						break;
+#endif
 					default:
 						m_error = HttpReply::CONNECTION_ERROR;
 						break;

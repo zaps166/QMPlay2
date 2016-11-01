@@ -161,7 +161,7 @@ For CMake build be sure that you have correct CMake version:
 - Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
-- FFmpeg >= 2.2:
+- FFmpeg >= 2.2 (>= 2.5.x recommended):
 	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
