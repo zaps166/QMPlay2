@@ -30,13 +30,10 @@ set(Visualizations_RESOURCES
     icon.qrc
 )
 
-add_definitions(-D__STDC_CONSTANT_MACROS)
 if(USE_OPENGL_FOR_VISUALIZATIONS)
     add_definitions(-DUSE_OPENGL)
 endif()
 
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})

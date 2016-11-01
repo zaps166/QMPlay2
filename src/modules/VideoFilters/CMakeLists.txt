@@ -34,7 +34,6 @@ set(VideoFilters_RESOURCES
     icon.qrc
 )
 
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(${LIBAVUTIL_LIBRARY_DIRS})
 
 if(USE_QT5)

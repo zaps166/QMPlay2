@@ -40,10 +40,6 @@ set(FFmpeg_RESOURCES
     icons.qrc
 )
 
-pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
-pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -57,8 +53,6 @@ set(FFmpeg_LIBS
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
 )
-
-add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 
 if(USE_FFMPEG_AVDEVICE)
     add_definitions(-DQMPlay2_libavdevice)

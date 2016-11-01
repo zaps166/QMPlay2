@@ -34,10 +34,6 @@ set(AudioFilters_RESOURCES
     icon.qrc
 )
 
-add_definitions(-D__STDC_CONSTANT_MACROS)
-
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 if(USE_QT5)

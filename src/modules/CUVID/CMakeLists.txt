@@ -26,9 +26,6 @@ set(CUVID_RESOURCES
    icon.qrc
 )
 
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
-pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 link_directories(
     ${LIBAVCODEC_LIBRARY_DIRS}
     ${LIBSWSCALE_LIBRARY_DIRS}
@@ -40,8 +37,6 @@ set(CUVID_LIBS
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
 )
-
-add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 
 if(USE_QT5)
 	qt5_add_resources(CUVID_RESOURCES ${CUVID_RESOURCES})

@@ -36,6 +36,8 @@ else()
     set(DEFAULT_PORTAUDIO ON)
 endif()
 
+add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
+
 if(WIN32)
     option(USE_CMD "Show CMD when running QMPlay2" OFF)
     mark_as_advanced(USE_CMD)

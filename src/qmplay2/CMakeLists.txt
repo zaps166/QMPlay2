@@ -101,6 +101,7 @@ set(QMPLAY2_RESOURCES
 )
 
 pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 
@@ -113,12 +114,14 @@ endif()
 
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
+    ${LIBAVCODEC_LIBRARY_DIRS}
     ${LIBSWSCALE_LIBRARY_DIRS}
     ${LIBAVUTIL_LIBRARY_DIRS}
 )
 
 set(LIBQMPLAY2_LIBS
     ${LIBAVFORMAT_LIBRARIES}
+    ${LIBAVCODEC_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
     # libass will be added later if enabled
@@ -127,6 +130,7 @@ set(LIBQMPLAY2_LIBS
 include_directories(
     headers
     ${LIBAVFORMAT_INCLUDE_DIRS}
+    ${LIBAVCODEC_INCLUDE_DIRS}
     ${LIBSWSCALE_INCLUDE_DIRS}
     ${LIBAVUTIL_INCLUDE_DIRS}
 )
@@ -149,8 +153,6 @@ if(USE_QT5)
 else()
     qt4_add_resources(QMPLAY2_RESOURCES_RCC ${QMPLAY2_RESOURCES})
 endif()
-
-add_definitions(-D__STDC_CONSTANT_MACROS)
 
 add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
