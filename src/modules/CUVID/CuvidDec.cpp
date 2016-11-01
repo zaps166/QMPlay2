@@ -256,14 +256,16 @@ public:
 	bool lock()
 	{
 		cudaMutex.lock();
-		return (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS);
+		if (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS)
+			return true;
+		cudaMutex.unlock();
+		return false;
 	}
-	bool unlock()
+	void unlock()
 	{
 		CUcontext cuCtx;
-		const bool ret = (cu::ctxPopCurrent(&cuCtx) == CUDA_SUCCESS);
+		cu::ctxPopCurrent(&cuCtx);
 		cudaMutex.unlock();
-		return ret;
 	}
 
 	bool init(quint32 *textures)
@@ -296,8 +298,11 @@ public:
 		}
 	}
 
-	bool copyFrame(const VideoFrame &videoFrame, Field field)
+	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
 	{
+		if (!m_cuvidDec)
+			return CopyNotReady;
+
 		CUVIDPROCPARAMS vidProcParams;
 		memset(&vidProcParams, 0, sizeof vidProcParams);
 
@@ -323,7 +328,7 @@ public:
 		unsigned pitch = 0;
 
 		if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-			return false;
+			return CopyError;
 
 		bool copied = true;
 
@@ -345,7 +350,9 @@ public:
 				break;
 			}
 		}
-		return (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS) && copied;
+		if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
+			return CopyOk;
+		return CopyError;
 	}
 
 	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)

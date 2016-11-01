@@ -324,7 +324,7 @@ void OpenGL2Common::paintGL()
 
 	bool resetDone = false;
 
-	if (!frameIsEmpty)
+	if (!frameIsEmpty && hwAccellPossibleLock())
 	{
 		const GLsizei widths[3] = {
 			videoFrame.size.width,
@@ -336,9 +336,6 @@ void OpenGL2Common::paintGL()
 			videoFrame.size.chromaHeight(),
 			videoFrame.size.chromaHeight()
 		};
-
-		if (hwAccellInterface)
-			hwAccellInterface->lock();
 
 		if (doReset)
 		{
@@ -360,7 +357,7 @@ void OpenGL2Common::paintGL()
 				/* Prepare textures, register GL textures */
 				isOK = hwAccellInterface->init(&textures[1]);
 				if (!isOK)
-					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init HWaccell textures"));
+					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellInterface->name());
 
 				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
 
@@ -402,7 +399,11 @@ void OpenGL2Common::paintGL()
 		if (hwAccellInterface)
 		{
 			const HWAccellInterface::Field field = (HWAccellInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccellInterface::FullFrame, HWAccellInterface::TopField, HWAccellInterface::BottomField);
-			hwAccellInterface->copyFrame(videoFrame, field);
+			if (hwAccellInterface->copyFrame(videoFrame, field) == HWAccellInterface::CopyError)
+			{
+				QMPlay2Core.logError("OpenGL2 :: " + hwAccellInterface->name() + " " + tr("texture copy error"));
+				isOK = false;
+			}
 			hwAccellInterface->unlock();
 			for (int p = 0; p < 2; ++p)
 			{
@@ -641,18 +642,22 @@ void OpenGL2Common::testGLInternal()
 
 	if (hwAccellInterface)
 	{
-		quint32 textures[2];
+		quint32 textures[2] = {0};
 		glGenTextures(2, textures);
 		for (int p = 0; p < 2; ++p)
 		{
 			glBindTexture(GL_TEXTURE_2D, textures[p]);
 			glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
 		}
-		hwAccellInterface->lock();
-		if (!hwAccellInterface->init(textures))
+		if (!hwAccellInterface->lock())
 			isOK = false;
-		hwAccellInterface->clear();
-		hwAccellInterface->unlock();
+		else
+		{
+			if (!hwAccellInterface->init(textures))
+				isOK = false;
+			hwAccellInterface->clear();
+			hwAccellInterface->unlock();
+		}
 		glDeleteTextures(2, textures);
 	}
 
@@ -766,6 +771,17 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 inline bool OpenGL2Common::isRotate90() const
 {
 	return verticesIdx >= 4 && !sphericalView;
+}
+
+inline bool OpenGL2Common::hwAccellPossibleLock()
+{
+	if (hwAccellInterface && !hwAccellInterface->lock())
+	{
+		QMPlay2Core.logError("OpenGL2 :: " + hwAccellInterface->name() + " " + tr("error"));
+		isOK = false;
+		return false;
+	}
+	return true;
 }
 
 QByteArray OpenGL2Common::readShader(const QString &fileName)

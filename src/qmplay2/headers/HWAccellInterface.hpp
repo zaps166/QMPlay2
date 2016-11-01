@@ -15,6 +15,12 @@ public:
 		TopField,
 		BottomField
 	};
+	enum CopyResult
+	{
+		CopyNotReady = -1,
+		CopyOk,
+		CopyError,
+	};
 
 	virtual ~HWAccellInterface()
 	{}
@@ -22,12 +28,12 @@ public:
 	virtual QString name() const = 0;
 
 	virtual bool lock() = 0;
-	virtual bool unlock() = 0;
+	virtual void unlock() = 0;
 
 	virtual bool init(quint32 *textures) = 0;
 	virtual void clear() = 0;
 
-	virtual bool copyFrame(const VideoFrame &videoFrame, Field field) = 0;
+	virtual CopyResult copyFrame(const VideoFrame &videoFrame, Field field) = 0;
 
 	virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32 = NULL) = 0;
 };

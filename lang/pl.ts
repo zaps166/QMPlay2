@@ -1570,8 +1570,16 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</translation>
     </message>
     <message>
-        <source>Can&apos;t init HWaccell textures</source>
-        <translation>Nie udało się zainicjalizować tekstur dla sprzętowej akceleracji</translation>
+        <source>Can&apos;t init textures for</source>
+        <translation>Nie udało się zainicjalizować tekstur dla</translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation>błąd</translation>
+    </message>
+    <message>
+        <source>texture copy error</source>
+        <translation>błąd kopiowania tekstury</translation>
     </message>
 </context>
 <context>

@@ -1568,7 +1568,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t init HWaccell textures</source>
+        <source>Can&apos;t init textures for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>texture copy error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

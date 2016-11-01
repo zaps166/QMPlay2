@@ -128,6 +128,8 @@ protected:
 private:
 	inline bool isRotate90() const;
 
+	inline bool hwAccellPossibleLock();
+
 	QByteArray readShader(const QString &fileName);
 
 	/* Spherical view */
