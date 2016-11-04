@@ -852,10 +852,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	{
 		m_writer = VideoWriter::createOpenGL2(new CuvidHWAccell(m_cuCtx));
 		if (m_writer)
-		{
 			m_cuvidHWAccell = (CuvidHWAccell *)m_writer->getHWAccellInterface();
-			m_cuvidHWAccell->allowDestroyCuda();
-		}
 		else if (m_copyVideo == Qt::Unchecked)
 		{
 			QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
@@ -879,15 +876,26 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	m_cuvidParserParams.pfnDisplayPicture = (PFNVIDDISPLAYCALLBACK)cuvid::pictureDisplay;
 	m_cuvidParserParams.pExtVideoInfo = &m_cuvidFmt;
 
+	bool err = false;
+
 	if (!testDecoder(depth))
+		err = true;
+	else if (!createCuvidVideoParser())
+		err = true;
+
+	if (err)
 	{
 		if (!writer)
+		{
 			delete m_writer;
+			m_writer = NULL;
+			m_cuvidHWAccell = NULL;
+		}
 		return false;
 	}
 
-	if (!createCuvidVideoParser())
-		return false;
+	if (m_cuvidHWAccell)
+		m_cuvidHWAccell->allowDestroyCuda();
 
 	return true;
 }
