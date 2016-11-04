@@ -39,7 +39,7 @@ class CuvidDec : public Decoder
 	Q_DECLARE_TR_FUNCTIONS(CuvidDec)
 
 public:
-	static bool loadLibraries();
+	static bool loadLibrariesAndInit();
 
 	CuvidDec(Module &module);
 	~CuvidDec();

@@ -61,6 +61,8 @@ public:
 private:
 	void saveSettings();
 
+	void initCuvidDec();
+
 	int &m_cudaLoaded;
 	QLabel *m_infoL;
 	QCheckBox *m_enabledB, *m_copyVideoB;

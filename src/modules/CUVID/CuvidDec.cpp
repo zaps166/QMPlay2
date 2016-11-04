@@ -441,7 +441,7 @@ private:
 
 static const quint32 MaxSurfaces = 25;
 
-bool CuvidDec::loadLibraries()
+bool CuvidDec::loadLibrariesAndInit()
 {
 	return cuvid::load() && cu::load();
 }

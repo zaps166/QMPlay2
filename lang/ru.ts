@@ -1485,11 +1485,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t load CUDA and/or CUVID library!</source>
+        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
+        <source>Cannot load/initialize CUDA/CUVID library!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

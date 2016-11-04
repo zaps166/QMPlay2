@@ -1485,12 +1485,12 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Kopiuj obraz do pamięci CPU (nie zalecane)</translation>
     </message>
     <message>
-        <source>Can&apos;t load CUDA and/or CUVID library!</source>
-        <translation>Nie udało się załadować biblioteki CUDA i/lub CUVID!</translation>
-    </message>
-    <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
         <translation>Częściowo zaznaczone oznacza, że kopiowanie obrazu nastąpi, gdy szybka metoda nie zadziała</translation>
+    </message>
+    <message>
+        <source>Cannot load/initialize CUDA/CUVID library!</source>
+        <translation>Nie udało się załadować/zainicjalizować biblioteki CUDA/CUVID!</translation>
     </message>
 </context>
 <context>
