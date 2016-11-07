@@ -33,6 +33,8 @@ class HWAccelHelper
 public:
 	virtual ~HWAccelHelper() {}
 
+	static bool hasHWAccel(AVCodecContext *codec_ctx, const char *hwaccelName);
+
 	static int get_buffer(AVCodecContext *codec_ctx, AVFrame *frame, int flags);
 
 	virtual QMPlay2SurfaceID getSurface() = 0;

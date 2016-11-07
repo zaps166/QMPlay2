@@ -33,6 +33,15 @@ typedef void (*ReleaseBufferProc)(void *, uint8_t *);
 
 /**/
 
+bool HWAccelHelper::hasHWAccel(AVCodecContext *codec_ctx, const char *hwaccelName)
+{
+	AVHWAccel *avHWAccel = NULL;
+	while ((avHWAccel = av_hwaccel_next(avHWAccel)))
+		if (avHWAccel->id == codec_ctx->codec_id && strstr(avHWAccel->name, hwaccelName))
+			break;
+	return avHWAccel;
+}
+
 int HWAccelHelper::get_buffer(AVCodecContext *codec_ctx, AVFrame *frame, int /*flags*/)
 {
 	const QMPlay2SurfaceID surface_id = ((HWAccelHelper *)codec_ctx->opaque)->getSurface();

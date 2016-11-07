@@ -16,9 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <FFDecHWAccel.hpp>
+#include <FFDec.hpp>
 
-class FFDecVDPAU_NW : public FFDecHWAccel
+class FFDecVDPAU_NW : public FFDec
 {
 public:
 	FFDecVDPAU_NW(QMutex &, Module &);

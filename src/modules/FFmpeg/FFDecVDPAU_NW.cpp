@@ -196,7 +196,7 @@ static AVPixelFormat get_format(AVCodecContext *, const AVPixelFormat *)
 /**/
 
 FFDecVDPAU_NW::FFDecVDPAU_NW(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex)
+	FFDec(avcodec_mutex)
 {
 	SetModule(module);
 }
@@ -256,7 +256,7 @@ bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, VideoWriter *)
 	if (av_get_pix_fmt(streamInfo.format) == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && hasHWAccel("vdpau"))
+		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vdpau"))
 		{
 			VDPAU *vdpau = new VDPAU(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id));
 			if (vdpau->surfacesQueue.count() == VDPAU::surfacesCount)

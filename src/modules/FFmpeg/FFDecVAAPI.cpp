@@ -58,7 +58,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if ((pix_fmt == AV_PIX_FMT_YUV420P || pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && hasHWAccel("vaapi"))
+		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vaapi"))
 		{
 			if (writer && writer->name() != VAAPIWriterName)
 				writer = NULL;

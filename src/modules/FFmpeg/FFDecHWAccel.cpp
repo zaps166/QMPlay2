@@ -42,15 +42,6 @@ VideoWriter *FFDecHWAccel::HWAccel() const
 	return hwAccelWriter;
 }
 
-bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)
-{
-	AVHWAccel *avHWAccel = NULL;
-	while ((avHWAccel = av_hwaccel_next(avHWAccel)))
-		if (avHWAccel->id == codec_ctx->codec_id && strstr(avHWAccel->name, hwaccelName))
-			break;
-	return avHWAccel;
-}
-
 int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned)
 {
 	int frameFinished = 0;

@@ -29,8 +29,6 @@ protected:
 
 	VideoWriter *HWAccel() const;
 
-	bool hasHWAccel(const char *hwaccelName);
-
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned);
 
 	/**/

@@ -62,7 +62,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (pix_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && hasHWAccel("vdpau"))
+		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vdpau"))
 		{
 			if (writer && writer->name() != VDPAUWriterName)
 				writer = NULL;
