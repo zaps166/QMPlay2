@@ -399,9 +399,9 @@ void OpenGL2Common::paintGL()
 		if (hwAccellInterface)
 		{
 			const HWAccellInterface::Field field = (HWAccellInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccellInterface::FullFrame, HWAccellInterface::TopField, HWAccellInterface::BottomField);
-			if (hwAccellInterface->copyFrame(videoFrame, field) == HWAccellInterface::CopyError)
+			if (isOK && hwAccellInterface->copyFrame(videoFrame, field) == HWAccellInterface::CopyError)
 			{
-				QMPlay2Core.logError("OpenGL2 :: " + hwAccellInterface->name() + " " + tr("texture copy error"));
+				QMPlay2Core.logError("OpenGL 2 :: " + hwAccellInterface->name() + " " + tr("texture copy error"));
 				isOK = false;
 			}
 			hwAccellInterface->unlock();
@@ -777,7 +777,7 @@ inline bool OpenGL2Common::hwAccellPossibleLock()
 {
 	if (hwAccellInterface && !hwAccellInterface->lock())
 	{
-		QMPlay2Core.logError("OpenGL2 :: " + hwAccellInterface->name() + " " + tr("error"));
+		QMPlay2Core.logError("OpenGL 2 :: " + hwAccellInterface->name() + " " + tr("error"));
 		isOK = false;
 		return false;
 	}

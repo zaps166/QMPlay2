@@ -35,7 +35,7 @@ public:
 
 	virtual CopyResult copyFrame(const VideoFrame &videoFrame, Field field) = 0;
 
-	virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *yv12ToRGB32 = NULL) = 0;
+	virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = NULL) = 0;
 };
 
 #endif // HWACCELLINTERFACE_HPP
