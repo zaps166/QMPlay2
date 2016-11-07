@@ -245,10 +245,7 @@ int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByte
 			decoded.clear();
 	}
 	if (frameFinished)
-	{
-		if (frame->best_effort_timestamp != QMPLAY2_NOPTS_VALUE)
-			encodedPacket.ts = frame->best_effort_timestamp * time_base;
-	}
+		decodeLastStep(encodedPacket, frame);
 	else
 		encodedPacket.ts.setInvalid();
 	return bytes_consumed > 0 ? bytes_consumed : 0;

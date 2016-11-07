@@ -642,9 +642,10 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	else
 	{
 		const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
+		const VideoFrameSize frameSize(m_width, m_height);
 		encodedPacket.ts = dispInfo.timestamp / 10000000.0;
 		if (m_cuvidHWAccell)
-			decoded = VideoFrame(VideoFrameSize(m_width, m_height), (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
 		else if (~hurry_up)
 		{
 			CUdeviceptr mappedFrame = 0;
@@ -711,7 +712,6 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 					if (m_swsCtx)
 						sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dtsData, dstLinesize);
 
-					const VideoFrameSize frameSize(m_width, m_height, 1, 1);
 					decoded = VideoFrame(frameSize, m_frameBuffer, dstLinesize, !dispInfo.progressive_frame, dispInfo.top_field_first);
 				}
 			}
