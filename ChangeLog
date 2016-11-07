@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 16.11.07:
+	- CUVID bugfix,
+
 Changes in QMPlay2 build 16.11.01:
 	- properly read styles from MPL, MicroDVD and SubRip format,
 	- add CUVID decoder,
