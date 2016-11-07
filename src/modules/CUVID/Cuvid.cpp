@@ -42,7 +42,9 @@ Cuvid::Cuvid() :
 	QMPlay2Core.addVideoDeintMethod(m_deintMethodB);
 }
 Cuvid::~Cuvid()
-{}
+{
+	delete m_deintMethodB;
+}
 
 QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 {
