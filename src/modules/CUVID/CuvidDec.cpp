@@ -255,6 +255,11 @@ public:
 		return "CUVID";
 	}
 
+	Format getFormat() const
+	{
+		return NV12;
+	}
+
 	bool lock()
 	{
 		cudaMutex.lock();

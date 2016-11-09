@@ -97,7 +97,7 @@ OpenGL2Common::OpenGL2Common() :
 	vSync(true),
 #endif
 	hwAccellnterface(NULL),
-	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
+	shaderProgramVideo(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
 	numPlanes(0),
@@ -122,7 +122,7 @@ OpenGL2Common::OpenGL2Common() :
 OpenGL2Common::~OpenGL2Common()
 {
 	contextAboutToBeDestroyed();
-	delete shaderProgramYCbCr;
+	delete shaderProgramVideo;
 	delete shaderProgramOSD;
 }
 
@@ -202,52 +202,67 @@ void OpenGL2Common::initializeGL()
 
 	numPlanes = 3;
 	if (hwAccellnterface)
-		numPlanes = 2;
+	{
+		switch (hwAccellnterface->getFormat())
+		{
+			case HWAccelInterface::NV12:
+				numPlanes = 2;
+				break;
+			case HWAccelInterface::RGB32:
+				numPlanes = 1;
+				break;
+		}
+	}
 
 #ifndef DONT_RECREATE_SHADERS
-	delete shaderProgramYCbCr;
+	delete shaderProgramVideo;
 	delete shaderProgramOSD;
-	shaderProgramYCbCr = shaderProgramOSD = NULL;
+	shaderProgramVideo = shaderProgramOSD = NULL;
 #endif
-	if (!shaderProgramYCbCr)
-		shaderProgramYCbCr = new QOpenGLShaderProgram;
+	if (!shaderProgramVideo)
+		shaderProgramVideo = new QOpenGLShaderProgram;
 	if (!shaderProgramOSD)
 		shaderProgramOSD = new QOpenGLShaderProgram;
 
 	/* YCbCr shader */
-	if (shaderProgramYCbCr->shaders().isEmpty())
+	if (shaderProgramVideo->shaders().isEmpty())
 	{
-		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/YCbCr.vert"));
-		QByteArray YCbCrFrag = readShader(":/YCbCr.frag");
-		if (glVer >= 30)
+		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
+		QByteArray VideoFrag;
+		if (numPlanes == 1)
+			VideoFrag = readShader(":/VideoRGB.frag");
+		else
 		{
-			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-			YCbCrFrag.prepend("#define HueAndSharpness\n");
+			VideoFrag = readShader(":/VideoYCbCr.frag");
+			if (glVer >= 30)
+			{
+				//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+				VideoFrag.prepend("#define HueAndSharpness\n");
+			}
+
+			if (numPlanes == 2)
+				VideoFrag.prepend("#define NV12\n");
 		}
-
-		if (numPlanes == 2)
-			YCbCrFrag.prepend("#define NV12\n");
-
-		shaderProgramYCbCr->addShaderFromSourceCode(QOpenGLShader::Fragment, YCbCrFrag);
+		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, VideoFrag);
 	}
-	if (shaderProgramYCbCr->bind())
+	if (shaderProgramVideo->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramYCbCr->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramYCbCr->attributeLocation("aPosition");
+		const qint32 newTexCoordLoc = shaderProgramVideo->attributeLocation("aTexCoord");
+		const qint32 newPositionLoc = shaderProgramVideo->attributeLocation("aPosition");
 		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
 		{
 			texCoordYCbCrLoc = newTexCoordLoc;
 			positionYCbCrLoc = newPositionLoc;
 		}
-		shaderProgramYCbCr->setUniformValue("uY", 0);
+		shaderProgramVideo->setUniformValue((numPlanes == 1) ? "uRGB" : "uY" , 0);
 		if (numPlanes == 2)
-			shaderProgramYCbCr->setUniformValue("uCbCr", 1);
-		else
+			shaderProgramVideo->setUniformValue("uCbCr", 1);
+		else if (numPlanes == 3)
 		{
-			shaderProgramYCbCr->setUniformValue("uCb", 1);
-			shaderProgramYCbCr->setUniformValue("uCr", 2);
+			shaderProgramVideo->setUniformValue("uCb", 1);
+			shaderProgramVideo->setUniformValue("uCr", 2);
 		}
-		shaderProgramYCbCr->release();
+		shaderProgramVideo->release();
 	}
 	else
 	{
@@ -345,15 +360,25 @@ void OpenGL2Common::paintGL()
 		{
 			if (hwAccellnterface)
 			{
-				quint8 *zero = hasImage ? NULL : new quint8[widths[0] * heights[0]];
-				for (int p = 0; p < 2; ++p)
+				if (numPlanes == 2)
 				{
-					if (zero)
-						memset(zero, p ? 0x7F : 0x00, widths[p] * heights[p] * (p ? 2 : 1)); //Needed for adaptive deinterlacing to not show garbage on first frame
-					glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-					glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, zero);
+					//NV12
+					quint8 *zero = hasImage ? NULL : new quint8[widths[0] * heights[0]];
+					for (int p = 0; p < 2; ++p)
+					{
+						if (zero)
+							memset(zero, p ? 0x7F : 0x00, widths[p] * heights[p] * (p ? 2 : 1)); //Needed for adaptive deinterlacing to not show garbage on first frame
+						glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, zero);
+					}
+					delete[] zero;
 				}
-				delete[] zero;
+				else if (numPlanes == 1)
+				{
+					//RGB32
+					glBindTexture(GL_TEXTURE_2D, textures[1]);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				}
 
 				/* Prepare textures, register GL textures */
 				isOK = hwAccellnterface->init(&textures[1]);
@@ -469,8 +494,8 @@ void OpenGL2Common::paintGL()
 			glDeleteBuffers(3, sphereVbo);
 			resetSphereVbo();
 		}
-		shaderProgramYCbCr->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
-		shaderProgramYCbCr->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
+		shaderProgramVideo->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
+		shaderProgramVideo->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
 	}
 	else
 	{
@@ -478,22 +503,22 @@ void OpenGL2Common::paintGL()
 			loadSphere();
 
 		glBindBuffer(GL_ARRAY_BUFFER, sphereVbo[0]);
-		shaderProgramYCbCr->setAttributeBuffer(positionYCbCrLoc, GL_FLOAT, 0, 3);
+		shaderProgramVideo->setAttributeBuffer(positionYCbCrLoc, GL_FLOAT, 0, 3);
 
 		glBindBuffer(GL_ARRAY_BUFFER, sphereVbo[1]);
-		shaderProgramYCbCr->setAttributeBuffer(texCoordYCbCrLoc, GL_FLOAT, 0, 2);
+		shaderProgramVideo->setAttributeBuffer(texCoordYCbCrLoc, GL_FLOAT, 0, 2);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-	shaderProgramYCbCr->enableAttributeArray(positionYCbCrLoc);
-	shaderProgramYCbCr->enableAttributeArray(texCoordYCbCrLoc);
+	shaderProgramVideo->enableAttributeArray(positionYCbCrLoc);
+	shaderProgramVideo->enableAttributeArray(texCoordYCbCrLoc);
 
-	shaderProgramYCbCr->bind();
+	shaderProgramVideo->bind();
 	if (doReset)
 	{
-		shaderProgramYCbCr->setUniformValue("uVideoEq", Brightness, Contrast, Saturation, Hue);
-		shaderProgramYCbCr->setUniformValue("uSharpness", Sharpness);
-		shaderProgramYCbCr->setUniformValue("uStep", pixelStep);
+		shaderProgramVideo->setUniformValue("uVideoEq", Brightness, Contrast, Saturation, Hue);
+		shaderProgramVideo->setUniformValue("uSharpness", Sharpness);
+		shaderProgramVideo->setUniformValue("uStep", pixelStep);
 		doReset = !resetDone;
 		setMatrix = true;
 	}
@@ -510,7 +535,7 @@ void OpenGL2Common::paintGL()
 			matrix.rotate(rot.x(), 1.0, 0.0, 0.0);
 			matrix.rotate(rot.y(), 0.0, 0.0, 1.0);
 		}
-		shaderProgramYCbCr->setUniformValue("uMatrix", matrix);
+		shaderProgramVideo->setUniformValue("uMatrix", matrix);
 		setMatrix = false;
 	}
 	if (!sphericalView)
@@ -521,10 +546,10 @@ void OpenGL2Common::paintGL()
 		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_SHORT, NULL);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-	shaderProgramYCbCr->release();
+	shaderProgramVideo->release();
 
-	shaderProgramYCbCr->disableAttributeArray(texCoordYCbCrLoc);
-	shaderProgramYCbCr->disableAttributeArray(positionYCbCrLoc);
+	shaderProgramVideo->disableAttributeArray(texCoordYCbCrLoc);
+	shaderProgramVideo->disableAttributeArray(positionYCbCrLoc);
 
 	glActiveTexture(GL_TEXTURE3);
 

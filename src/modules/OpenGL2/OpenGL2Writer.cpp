@@ -46,9 +46,6 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("Spherical");
 	addParam("Flip");
 	addParam("Rotate90");
-	addParam("Saturation");
-	addParam("Brightness");
-	addParam("Contrast");
 
 	SetModule(module);
 }
@@ -217,10 +214,16 @@ bool OpenGL2Writer::open()
 #ifdef VSYNC_SETTINGS
 		drawable->setVSync(vSync);
 #endif
-		if (drawable->glVer >= 30)
+		if (drawable->numPlanes > 1)
 		{
-			addParam("Hue");
-			addParam("Sharpness");
+			addParam("Saturation");
+			addParam("Brightness");
+			addParam("Contrast");
+			if (drawable->glVer >= 30)
+			{
+				addParam("Hue");
+				addParam("Sharpness");
+			}
 		}
 		return true;
 	}

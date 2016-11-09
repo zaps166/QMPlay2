@@ -9,6 +9,11 @@ class ImgScaler;
 class HWAccelInterface
 {
 public:
+	enum Format
+	{
+		NV12,
+		RGB32
+	};
 	enum Field
 	{
 		FullFrame,
@@ -26,6 +31,8 @@ public:
 	{}
 
 	virtual QString name() const = 0;
+
+	virtual Format getFormat() const = 0;
 
 	virtual bool lock() = 0;
 	virtual void unlock() = 0;

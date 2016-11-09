@@ -144,7 +144,7 @@ public:
 	HWAccelInterface *hwAccellnterface;
 	VideoFrame videoFrame;
 
-	QOpenGLShaderProgram *shaderProgramYCbCr, *shaderProgramOSD;
+	QOpenGLShaderProgram *shaderProgramVideo, *shaderProgramOSD;
 
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
 	float Contrast, Saturation, Brightness, Hue, Sharpness;
