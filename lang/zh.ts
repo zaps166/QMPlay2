@@ -1490,6 +1490,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Cannot load/initialize CUDA/CUVID library!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

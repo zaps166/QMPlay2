@@ -106,6 +106,11 @@ if(USE_FFMPEG)
     option(USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg" ${LIBS_VDPAU_FOUND})
     add_feature_info(VDPAU USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg")
 
+    if(WIN32)
+        option(USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg" ON)
+        add_feature_info(DXVA2 USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg")
+    endif()
+
     if(NOT DEFINED USE_FFMPEG_AVDEVICE)
         if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
             pkg_check_modules(LIBAVDEVICE libavdevice)

@@ -4,5 +4,6 @@
 		<file alias="FFDemux">FFDemux.png</file>
 		<file alias="VAAPI">VAAPI.png</file>
 		<file alias="VDPAU">VDPAU.png</file>
+		<file alias="DXVA2">DXVA2.png</file>
 	</qresource>
 </RCC>

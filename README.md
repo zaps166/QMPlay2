@@ -105,10 +105,12 @@ Hardware acceleration is disabled by default, you can enable it in "Settings->Pl
 - apply settings.
 
 VDPAU and VA-API decoder uses its own video output, so OpenGL features and CPU filters won't work.
-CUVID uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
+CUVID and DXVA2 uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
 CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support!
 
 VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
+
+DXVA2 requires "WGL_NV_DX_interop" extension and currently it doesn't support video adjustment and video deinterlacing.
 
 H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 

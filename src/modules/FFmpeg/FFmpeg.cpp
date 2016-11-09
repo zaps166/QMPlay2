@@ -28,6 +28,9 @@
 	#include <FFDecVDPAU_NW.hpp>
 	#include <VDPAUWriter.hpp>
 #endif
+#ifdef QMPlay2_DXVA2
+	#include <FFDecDXVA2.hpp>
+#endif
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
@@ -57,6 +60,11 @@ FFmpeg::FFmpeg() :
 	vaapiIcon = QImage(":/VAAPI");
 	vaapiIcon.setText("Path", ":/VAAPI");
 #endif
+#ifdef QMPlay2_DXVA2
+	dxva2Icon = QImage(":/DXVA2");
+	dxva2Icon.setText("Path", ":/DXVA2");
+	dxva2Loaded = FFDecDXVA2::loadLibraries();
+#endif
 
 	init("DemuxerEnabled", true);
 	init("DecoderEnabled", true);
@@ -78,6 +86,10 @@ FFmpeg::FFmpeg() :
 	init("VAAPIDeintMethod", 1);
 	if (getUInt("VAAPIDeintMethod") > 2)
 		set("VAAPIDeintMethod", 1);
+#endif
+#ifdef QMPlay2_DXVA2
+	init("DecoderDXVA2Enabled", true);
+	init("CopyVideoDXVA2", Qt::Unchecked);
 #endif
 	init("HurryUP", true);
 	init("SkipFrames", true);
@@ -151,6 +163,10 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 		modulesInfo += Info(VAAPIWriterName, WRITER | VIDEOHWFILTER, vaapiIcon);
 	}
 #endif
+#ifdef QMPlay2_DXVA2
+	if (showDisabled || (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
+		modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
+#endif
 	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp", moduleImg);
 	return modulesInfo;
 }
@@ -170,6 +186,10 @@ void *FFmpeg::createInstance(const QString &name)
 	else if (name == DecoderVAAPIName && getBool("DecoderVAAPIEnabled"))
 		return new FFDecVAAPI(mutex, *this);
 #endif
+#ifdef QMPlay2_DXVA2
+	else if (name == DecoderDXVA2Name && (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
+		return new FFDecDXVA2(mutex, *this);
+#endif
 	else if (name == FFReaderName)
 		return new FFReader;
 	return NULL;
@@ -177,7 +197,11 @@ void *FFmpeg::createInstance(const QString &name)
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
+#ifdef QMPlay2_DXVA2
+	return new ModuleSettingsWidget(*this, dxva2Loaded);
+#else
 	return new ModuleSettingsWidget(*this);
+#endif
 }
 
 void FFmpeg::videoDeintSave()
@@ -205,7 +229,11 @@ QMPLAY2_EXPORT_PLUGIN(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
+#ifdef QMPlay2_DXVA2
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2Loaded) :
+#else
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
+#endif
 	Module::SettingsWidget(module)
 {
 	demuxerEB = new QCheckBox(tr("Demuxer"));
@@ -257,6 +285,28 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
 	vaapiLayout->addRow(allowVDPAUinVAAPIB);
+#endif
+
+#ifdef QMPlay2_DXVA2
+	if (dxva2Loaded)
+	{
+		decoderDXVA2EB = new QGroupBox(tr("Decoder") + " DXVA2 - " + tr("hardware decoding"));
+		decoderDXVA2EB->setCheckable(true);
+		decoderDXVA2EB->setChecked(sets().getBool("DecoderDXVA2Enabled"));
+
+		copyVideoDXVA2 = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended, very slow on Intel)"));
+		copyVideoDXVA2->setTristate(true);
+		copyVideoDXVA2->setCheckState((Qt::CheckState)sets().getInt("CopyVideoDXVA2"));
+		copyVideoDXVA2->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
+
+		QFormLayout *dxva2Layout = new QFormLayout(decoderDXVA2EB);
+		dxva2Layout->addRow(copyVideoDXVA2);
+	}
+	else
+	{
+		decoderDXVA2EB = NULL;
+		copyVideoDXVA2 = NULL;
+	}
 #endif
 
 	/* Hurry up */
@@ -317,6 +367,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #ifdef QMPlay2_VAAPI
 	layout->addWidget(decoderVAAPIEB);
 #endif
+#ifdef QMPlay2_DXVA2
+	layout->addWidget(decoderDXVA2EB);
+#endif
 	layout->addWidget(decoderB);
 }
 
@@ -351,5 +404,12 @@ void ModuleSettingsWidget::saveSettings()
 #ifdef QMPlay2_VAAPI
 	sets().set("AllowVDPAUinVAAPI", allowVDPAUinVAAPIB->isChecked());
 	sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
+#endif
+#ifdef QMPlay2_DXVA2
+	if (decoderDXVA2EB)
+	{
+		sets().set("DecoderDXVA2Enabled", decoderDXVA2EB->isChecked());
+		sets().set("CopyVideoDXVA2", copyVideoDXVA2->checkState());
+	}
 #endif
 }

@@ -62,13 +62,16 @@ if(USE_FFMPEG_AVDEVICE)
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
+if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
-    pkg_check_modules(LIBX11 x11 REQUIRED)
-    include_directories(${LIBX11_INCLUDE_DIRS})
-    link_directories(${LIBX11_LIBRARY_DIRS})
-    list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
+
+    if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # libX11 for VA-API and VDPAU
+        pkg_check_modules(LIBX11 x11 REQUIRED)
+        include_directories(${LIBX11_INCLUDE_DIRS})
+        link_directories(${LIBX11_LIBRARY_DIRS})
+        list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
+    endif()
 
     if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)
@@ -88,6 +91,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU) # Common HWAccel
         include_directories(${LIBVDPAU_INCLUDE_DIRS})
         link_directories(${LIBVDPAU_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LIBVDPAU_LIBRARIES})
+    endif()
+
+    if(USE_FFMPEG_DXVA2) # DXVA2
+        add_definitions(-DQMPlay2_DXVA2)
+        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
+        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
     endif()
 endif()
 

@@ -1492,6 +1492,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Cannot load/initialize CUDA/CUVID library!</source>
         <translation>Nie udało się załadować/zainicjalizować biblioteki CUDA/CUVID!</translation>
     </message>
+    <message>
+        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
+        <translation>Kopiuj obraz do pamięci CPU (nie zalecane, bardzo wolne na GPU Intel&apos;a)</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

@@ -60,3 +60,16 @@ unix:!macx:!android {
 	HEADERS   += FFDecVDPAU_NW.hpp
 	SOURCES   += FFDecVDPAU_NW.cpp
 }
+
+win32 {
+#Common HWAccel
+	HEADERS   += FFDecHWAccel.hpp HWAccelHelper.hpp
+	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
+
+#DXVA2
+	HEADERS   += FFDecDXVA2.hpp
+	SOURCES   += FFDecDXVA2.cpp
+	DEFINES   += QMPlay2_DXVA2
+
+	LIBS      += -lole32
+}

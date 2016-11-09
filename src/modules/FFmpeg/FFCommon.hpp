@@ -27,6 +27,7 @@
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
 #define DecoderVDPAU_NWName DecoderVDPAUName " (no output)"
+#define DecoderDXVA2Name "FFmpeg DXVA2 Decoder"
 #define DemuxerName "FFmpeg"
 #define VAAPIWriterName "VA-API"
 #define VDPAUWriterName "VDPAU"

@@ -47,6 +47,10 @@ private:
 	QImage vaapiIcon;
 	QComboBox *vaapiDeintMethodB;
 #endif
+#ifdef QMPlay2_DXVA2
+	QImage dxva2Icon;
+	bool dxva2Loaded;
+#endif
 
 	QMutex mutex;
 };
@@ -66,7 +70,11 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 #endif
 public:
-	ModuleSettingsWidget(Module &);
+#ifdef QMPlay2_DXVA2
+	ModuleSettingsWidget(Module &module, bool dxva2Loaded);
+#else
+	ModuleSettingsWidget(Module &module);
+#endif
 #ifdef QMPlay2_VDPAU
 private slots:
 	void setVDPAU();
@@ -88,6 +96,10 @@ private:
 #ifdef QMPlay2_VAAPI
 	QCheckBox *allowVDPAUinVAAPIB;
 	QGroupBox *decoderVAAPIEB;
+#endif
+#ifdef QMPlay2_DXVA2
+	QGroupBox *decoderDXVA2EB;
+	QCheckBox *copyVideoDXVA2;
 #endif
 	QSpinBox *threadsB;
 	QComboBox *lowresB, *thrTypeB;
