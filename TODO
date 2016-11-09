@@ -16,8 +16,7 @@ Add audio filters:
 
 HWAccel:
 	- use VDPAU and VA-API for software decoded video,
-	- use VDPAU and VA-API with OpenGL,
-	- add DXVA2.
+	- use VDPAU and VA-API with OpenGL.
 
 Exporting audio during playback - ?
 Users can resume downloading - ?

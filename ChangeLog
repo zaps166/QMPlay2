@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 16.11.07:
+Changes in QMPlay2 build 16.11.09:
+	- add DXVA2 decoder (experimental),
 	- CUVID bugfix,
 
 Changes in QMPlay2 build 16.11.01:
