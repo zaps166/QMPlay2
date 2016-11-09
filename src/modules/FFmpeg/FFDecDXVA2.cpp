@@ -127,8 +127,6 @@ public:
 		if (!wglDXOpenDeviceNV || !wglDXSetResourceShareHandleNV || !wglDXRegisterObjectNV || !wglDXLockObjectsNV || !wglDXUnlockObjectsNV || !wglDXUnregisterObjectNV || !wglDXCloseDeviceNV)
 			return false;
 
-		clear();
-
 		if (m_sharedHande)
 		{
 			if (!wglDXSetResourceShareHandleNV(m_d3d9Surface, m_sharedHande))

@@ -278,7 +278,6 @@ public:
 	bool init(quint32 *textures)
 	{
 		bool ret = true;
-		clear();
 		for (int p = 0; p < 2; ++p)
 		{
 			ret = (cu::graphicsGLRegisterImage(&m_res[p], textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) == CUDA_SUCCESS);

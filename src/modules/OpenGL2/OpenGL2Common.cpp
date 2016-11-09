@@ -360,6 +360,9 @@ void OpenGL2Common::paintGL()
 		{
 			if (hwAccellnterface)
 			{
+				/* Release HWAccell resources */
+				hwAccellnterface->clear();
+
 				if (numPlanes == 2)
 				{
 					//NV12
