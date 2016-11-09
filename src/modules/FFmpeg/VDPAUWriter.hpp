@@ -19,18 +19,17 @@
 #ifndef VDPAUWRITER_HPP
 #define VDPAUWRITER_HPP
 
-#include <HWAccelHelper.hpp>
 #include <VideoWriter.hpp>
+#include <HWAccelHelper.hpp>
 
 #include <QWidget>
 #include <QTimer>
-#include <QQueue>
 
 #include <vdpau/vdpau.h>
 
 struct _XDisplay;
 
-class VDPAUWriter : public QWidget, public HWAccelHelper, public VideoWriter
+class VDPAUWriter : public QWidget, public VideoWriter
 {
 	Q_OBJECT
 public:
@@ -46,15 +45,17 @@ public:
 	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 	void pause();
 
-	bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	QString name() const;
 
 	bool open();
 
-/**/
+	/**/
 
-	bool hwAccellInit(int W, int H, const char *codec_name);
+	SurfacesQueue getSurfacesQueue() const;
+
+	bool hwAccelInit(int W, int H, const char *codec_name);
 
 	inline VdpDecoder getVdpDecoder() const
 	{
@@ -65,8 +66,6 @@ public:
 		return vpd_decoder_render;
 	}
 
-	QMPlay2SurfaceID getSurface();
-	void putSurface(QMPlay2SurfaceID id);
 private:
 	static void preemption_callback(VdpDevice device, void *context);
 
@@ -138,7 +137,6 @@ private:
 	static const int surfacesCount = 20, outputSurfacesCount = 2;
 	VdpOutputSurface outputSurfaces[outputSurfacesCount];
 	VdpVideoSurface surfaces[surfacesCount], renderSurfaces[3];
-	QQueue<VdpVideoSurface> surfacesQueue;
 	QSize outputSurfacesSize;
 
 	static const int featuresCount = 13, scalingLevelsIdx = 4, scalingLevelsCount = 9;

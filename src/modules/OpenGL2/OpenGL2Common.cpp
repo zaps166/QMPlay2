@@ -19,7 +19,7 @@
 #include <OpenGL2Common.hpp>
 #include <Sphere.hpp>
 
-#include <HWAccellInterface.hpp>
+#include <HWAccelInterface.hpp>
 #include <QMPlay2Core.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
@@ -96,10 +96,11 @@ OpenGL2Common::OpenGL2Common() :
 #ifdef VSYNC_SETTINGS
 	vSync(true),
 #endif
-	hwAccellInterface(NULL),
+	hwAccellnterface(NULL),
 	shaderProgramYCbCr(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
+	numPlanes(0),
 	Deinterlace(0),
 	allowPBO(true), hasPbo(false),
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false),
@@ -120,6 +121,7 @@ OpenGL2Common::OpenGL2Common() :
 }
 OpenGL2Common::~OpenGL2Common()
 {
+	contextAboutToBeDestroyed();
 	delete shaderProgramYCbCr;
 	delete shaderProgramOSD;
 }
@@ -198,7 +200,9 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
-	const qint32 numPlanes = hwAccellInterface ? 2 : 3; //Currently HWAccell has NV12 image
+	numPlanes = 3;
+	if (hwAccellnterface)
+		numPlanes = 2;
 
 #ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramYCbCr;
@@ -235,7 +239,7 @@ void OpenGL2Common::initializeGL()
 			texCoordYCbCrLoc = newTexCoordLoc;
 			positionYCbCrLoc = newPositionLoc;
 		}
-		shaderProgramYCbCr->setUniformValue("uY" , 0);
+		shaderProgramYCbCr->setUniformValue("uY", 0);
 		if (numPlanes == 2)
 			shaderProgramYCbCr->setUniformValue("uCbCr", 1);
 		else
@@ -298,7 +302,7 @@ void OpenGL2Common::initializeGL()
 
 	if (hasPbo)
 	{
-		glGenBuffers(1 + (hwAccellInterface ? 0 : numPlanes), pbo);
+		glGenBuffers(1 + (hwAccellnterface ? 0 : numPlanes), pbo);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	}
 
@@ -339,11 +343,8 @@ void OpenGL2Common::paintGL()
 
 		if (doReset)
 		{
-			if (hwAccellInterface)
+			if (hwAccellnterface)
 			{
-				/* Release HWAccell resources */
-				hwAccellInterface->clear();
-
 				quint8 *zero = hasImage ? NULL : new quint8[widths[0] * heights[0]];
 				for (int p = 0; p < 2; ++p)
 				{
@@ -355,9 +356,9 @@ void OpenGL2Common::paintGL()
 				delete[] zero;
 
 				/* Prepare textures, register GL textures */
-				isOK = hwAccellInterface->init(&textures[1]);
+				isOK = hwAccellnterface->init(&textures[1]);
 				if (!isOK)
-					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellInterface->name());
+					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
 				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
 
@@ -396,16 +397,16 @@ void OpenGL2Common::paintGL()
 			resetDone = true;
 		}
 
-		if (hwAccellInterface)
+		if (hwAccellnterface)
 		{
-			const HWAccellInterface::Field field = (HWAccellInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccellInterface::FullFrame, HWAccellInterface::TopField, HWAccellInterface::BottomField);
-			if (isOK && hwAccellInterface->copyFrame(videoFrame, field) == HWAccellInterface::CopyError)
+			const HWAccelInterface::Field field = (HWAccelInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccelInterface::FullFrame, HWAccelInterface::TopField, HWAccelInterface::BottomField);
+			if (isOK && hwAccellnterface->copyFrame(videoFrame, field) == HWAccelInterface::CopyError)
 			{
-				QMPlay2Core.logError("OpenGL 2 :: " + hwAccellInterface->name() + " " + tr("texture copy error"));
+				QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
 				isOK = false;
 			}
-			hwAccellInterface->unlock();
-			for (int p = 0; p < 2; ++p)
+			hwAccellnterface->unlock();
+			for (int p = 0; p < numPlanes; ++p)
 			{
 				glActiveTexture(GL_TEXTURE0 + p);
 				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
@@ -607,6 +608,15 @@ void OpenGL2Common::paintGL()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void OpenGL2Common::contextAboutToBeDestroyed()
+{
+	if (hwAccellnterface && hwAccellnterface->lock())
+	{
+		hwAccellnterface->clear();
+		hwAccellnterface->unlock();
+	}
+}
+
 void OpenGL2Common::testGLInternal()
 {
 	int glMajor = 0, glMinor = 0;
@@ -640,7 +650,7 @@ void OpenGL2Common::testGLInternal()
 	glActiveTexture = NULL;
 #endif
 
-	if (hwAccellInterface)
+	if (hwAccellnterface)
 	{
 		quint32 textures[2] = {0};
 		glGenTextures(2, textures);
@@ -649,14 +659,14 @@ void OpenGL2Common::testGLInternal()
 			glBindTexture(GL_TEXTURE_2D, textures[p]);
 			glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
 		}
-		if (!hwAccellInterface->lock())
+		if (!hwAccellnterface->lock())
 			isOK = false;
 		else
 		{
-			if (!hwAccellInterface->init(textures))
+			if (!hwAccellnterface->init(textures))
 				isOK = false;
-			hwAccellInterface->clear();
-			hwAccellInterface->unlock();
+			hwAccellnterface->clear();
+			hwAccellnterface->unlock();
 		}
 		glDeleteTextures(2, textures);
 	}
@@ -775,9 +785,9 @@ inline bool OpenGL2Common::isRotate90() const
 
 inline bool OpenGL2Common::hwAccellPossibleLock()
 {
-	if (hwAccellInterface && !hwAccellInterface->lock())
+	if (hwAccellnterface && !hwAccellnterface->lock())
 	{
-		QMPlay2Core.logError("OpenGL 2 :: " + hwAccellInterface->name() + " " + tr("error"));
+		QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("error"));
 		isOK = false;
 		return false;
 	}
@@ -791,6 +801,7 @@ QByteArray OpenGL2Common::readShader(const QString &fileName)
 #ifdef OPENGL_ES2
 	shader = "precision lowp float;\n";
 #endif
+	shader.append("#line 1\n");
 	shader.append((const char *)res.data(), res.size());
 	return shader;
 }

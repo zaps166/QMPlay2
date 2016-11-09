@@ -29,11 +29,14 @@ protected:
 
 	VideoWriter *HWAccel() const;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned);
+	bool hasHWAccel(const char *hwaccelName) const;
+
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp);
+	virtual void downloadVideoFrame(VideoFrame &decoded);
 
 	/**/
 
-	VideoWriter *hwAccelWriter;
+	VideoWriter *m_hwAccelWriter;
 };
 
 #endif

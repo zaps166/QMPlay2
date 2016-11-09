@@ -24,8 +24,6 @@
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
-#include <QQueue>
-
 extern "C"
 {
 	#include <libavformat/avformat.h>
@@ -35,11 +33,11 @@ extern "C"
 
 #include <vdpau/vdpau_x11.h>
 
-class VDPAU : public HWAccelHelper
+class VDPAU
 {
 public:
 	VDPAU(int w, int h, const char *codec_name) :
-		mustDelete(false), mustntDelete(false),
+		ok(false),
 		display(NULL),
 		device(0),
 		decoder(0),
@@ -129,12 +127,15 @@ public:
 
 					if (vdp_decoder_create(device, p, w, h, 16, &decoder) == VDP_STATUS_OK)
 					{
+						ok = true;
 						for (int i = 0 ; i < surfacesCount ; ++i)
-						{
-							if (vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, w, h, &surfaces[i]) == VDP_STATUS_OK)
-								surfacesQueue.enqueue(surfaces[i]);
-						}
+							if (vdp_video_surface_create(device, VDP_CHROMA_TYPE_420, w, h, &surfaces[i]) != VDP_STATUS_OK)
+							{
+								ok = false;
+								break;
+							}
 					}
+
 				}
 			}
 		}
@@ -156,23 +157,18 @@ public:
 			XCloseDisplay(display);
 	}
 
-	QMPlay2SurfaceID getSurface()
+	inline SurfacesQueue getSurfacesQueue() const
 	{
-		mustntDelete = true;
-		return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
+		SurfacesQueue surfacesQueue;
+		for (int i = 0; i < surfacesCount; ++i)
+			surfacesQueue.enqueue((QMPlay2SurfaceID)surfaces[i]);
+		return surfacesQueue;
 	}
-	void putSurface(QMPlay2SurfaceID id)
-	{
-		surfacesQueue.enqueue(id);
-		if (mustDelete && surfacesQueue.count() == surfacesCount)
-			delete this;
-	}
-
-	bool mustDelete, mustntDelete;
 
 	static const int surfacesCount = 20;
-	QQueue<VdpVideoSurface> surfacesQueue;
 	VdpVideoSurface surfaces[surfacesCount];
+
+	bool ok;
 
 	Display *display;
 	VdpDevice device;
@@ -188,29 +184,19 @@ public:
 	VdpDecoderQueryCapabilities *vdp_decoder_query_capabilities;
 };
 
-static AVPixelFormat get_format(AVCodecContext *, const AVPixelFormat *)
-{
-	return AV_PIX_FMT_VDPAU;
-}
-
 /**/
 
 FFDecVDPAU_NW::FFDecVDPAU_NW(QMutex &avcodec_mutex, Module &module) :
-	FFDec(avcodec_mutex)
+	FFDecHWAccel(avcodec_mutex),
+	vdpau(NULL)
 {
 	SetModule(module);
 }
-
 FFDecVDPAU_NW::~FFDecVDPAU_NW()
 {
-	if (codec_ctx && codec_ctx->opaque)
-	{
-		VDPAU *vdpau = (VDPAU *)codec_ctx->opaque;
-		if (vdpau->mustntDelete)
-			vdpau->mustDelete = true;
-		else
-			delete vdpau;
-	}
+	if (codecIsOpen)
+		avcodec_flush_buffers(codec_ctx);
+	delete vdpau;
 }
 
 bool FFDecVDPAU_NW::set()
@@ -223,32 +209,21 @@ QString FFDecVDPAU_NW::name() const
 	return "FFmpeg/" VDPAUWriterName;
 }
 
-int FFDecVDPAU_NW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned hurry_up)
+void FFDecVDPAU_NW::downloadVideoFrame(VideoFrame &decoded)
 {
-	int frameFinished = 0;
-	decodeFirstStep(encodedPacket, flush);
-	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
-	if (frameFinished && ~hurry_up)
-	{
-		const int aligned8W = Functions::aligned(frame->width, 8);
-		const int linesize[] = {
-			aligned8W,
-			aligned8W >> 1,
-			aligned8W >> 1
-		};
-		const VideoFrameSize aligned4HFrameSize(frame->width, Functions::aligned(frame->height, 4));
-		const VideoFrameSize realFrameSize(frame->width, frame->height);
-		decoded = VideoFrame(aligned4HFrameSize, linesize, frame->interlaced_frame, frame->top_field_first);
-		decoded.size = realFrameSize;
-		void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
-		if (((VDPAU *)codec_ctx->opaque)->vdp_surface_get_bits((quintptr)frame->data[3], VDP_YCBCR_FORMAT_YV12, data, (quint32 *)decoded.linesize) != VDP_STATUS_OK)
-			decoded.clear();
-	}
-	if (frameFinished)
-		decodeLastStep(encodedPacket, frame);
-	else
-		encodedPacket.ts.setInvalid();
-	return bytes_consumed > 0 ? bytes_consumed : 0;
+	const int aligned8W = Functions::aligned(frame->width, 8);
+	const int linesize[] = {
+		aligned8W,
+		aligned8W >> 1,
+		aligned8W >> 1
+	};
+	const VideoFrameSize aligned4HFrameSize(frame->width, Functions::aligned(frame->height, 4));
+	const VideoFrameSize realFrameSize(frame->width, frame->height);
+	decoded = VideoFrame(aligned4HFrameSize, linesize, frame->interlaced_frame, frame->top_field_first);
+	decoded.size = realFrameSize;
+	void *data[] = {decoded.buffer[0].data(), decoded.buffer[2].data(), decoded.buffer[1].data()};
+	if (vdpau->vdp_surface_get_bits((quintptr)frame->data[3], VDP_YCBCR_FORMAT_YV12, data, (quint32 *)decoded.linesize) != VDP_STATUS_OK)
+		decoded.clear();
 }
 
 bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, VideoWriter *)
@@ -256,26 +231,23 @@ bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, VideoWriter *)
 	if (av_get_pix_fmt(streamInfo.format) == AV_PIX_FMT_YUV420P) //Read comment in FFDecVDPAU::open()
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vdpau"))
+		if (codec && hasHWAccel("vdpau"))
 		{
-			VDPAU *vdpau = new VDPAU(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id));
-			if (vdpau->surfacesQueue.count() == VDPAU::surfacesCount)
+			vdpau = new VDPAU(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id));
+			if (vdpau->ok)
 			{
-				codec_ctx->hwaccel_context = av_mallocz(sizeof(AVVDPAUContext));
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->decoder = vdpau->decoder;
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->render  = vdpau->vpd_decoder_render;
-				codec_ctx->thread_count = 1;
-				codec_ctx->get_buffer2  = HWAccelHelper::get_buffer;
-				codec_ctx->get_format   = get_format;
-				codec_ctx->opaque       = (HWAccelHelper *)vdpau;
+				AVVDPAUContext *vdpauCtx = (AVVDPAUContext *)av_mallocz(sizeof(AVVDPAUContext));
+				vdpauCtx->decoder = vdpau->decoder;
+				vdpauCtx->render  = vdpau->vpd_decoder_render;
+
+				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VDPAU, vdpauCtx, vdpau->getSurfacesQueue());
+
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
 					return true;
 				}
 			}
-			else
-				delete vdpau;
 		}
 	}
 	return false;

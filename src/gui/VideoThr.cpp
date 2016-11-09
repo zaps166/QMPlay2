@@ -569,7 +569,7 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 		if (!hwAccelWriter)
 			imgScaler.scale(videoFrame, img.bits());
 		else
-			ok = videoWriter()->hwAccellGetImg(videoFrame, img.bits(), &imgScaler);
+			ok = videoWriter()->hwAccelGetImg(videoFrame, img.bits(), &imgScaler);
 		if (!ok)
 			QMPlay2Core.logError(tr("Cannot create screenshot"));
 		else

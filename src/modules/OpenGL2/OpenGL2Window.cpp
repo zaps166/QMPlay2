@@ -20,6 +20,7 @@
 
 #include <QMPlay2Core.hpp>
 
+#include <QOpenGLContext>
 #include <QDockWidget>
 
 OpenGL2Window::OpenGL2Window() :
@@ -80,6 +81,7 @@ void OpenGL2Window::updateGL(bool requestDelayed)
 
 void OpenGL2Window::initializeGL()
 {
+	connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(aboutToBeDestroyed()), Qt::DirectConnection);
 	OpenGL2Common::initializeGL();
 }
 void OpenGL2Window::paintGL()
@@ -101,6 +103,12 @@ void OpenGL2Window::doUpdateGL(bool queued)
 		QEvent updateEvent(QEvent::UpdateRequest);
 		QCoreApplication::sendEvent(this, &updateEvent);
 	}
+}
+void OpenGL2Window::aboutToBeDestroyed()
+{
+	makeCurrent();
+	contextAboutToBeDestroyed();
+	doneCurrent();
 }
 void OpenGL2Window::videoVisible1(bool v)
 {

@@ -22,7 +22,8 @@ class FFDecVAAPI : public FFDecHWAccel
 {
 public:
 	FFDecVAAPI(QMutex &, Module &);
-private:
+	~FFDecVAAPI();
+
 	bool set();
 
 	QString name() const;

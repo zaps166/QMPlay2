@@ -19,12 +19,11 @@
 #ifndef VAAPIWRITER_HPP
 #define VAAPIWRITER_HPP
 
-#include <HWAccelHelper.hpp>
 #include <VideoWriter.hpp>
+#include <HWAccelHelper.hpp>
 
 #include <QWidget>
 #include <QTimer>
-#include <QQueue>
 
 #include <va/va.h>
 
@@ -37,7 +36,7 @@
 
 struct _XDisplay;
 
-class VAAPIWriter : public QWidget, public HWAccelHelper, public VideoWriter
+class VAAPIWriter : public QWidget, public VideoWriter
 {
 	Q_OBJECT
 public:
@@ -53,18 +52,20 @@ public:
 	void pause();
 	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
 
-	bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	QString name() const;
 
 	bool open();
 
-/**/
+	/**/
+
+	SurfacesQueue getSurfacesQueue() const;
 
 	quint8 *getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat &img_fmt) const;
-	bool getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *yv12ToRGB32) const;
+	bool getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, void *dest, ImgScaler *nv12ToRGB32) const;
 
-	bool HWAccellInit(int W, int H, const char *codec_name);
+	bool HWAccelInit(int W, int H, const char *codec_name);
 
 	inline VADisplay getVADisplay() const
 	{
@@ -79,8 +80,6 @@ public:
 		return config;
 	}
 
-	QMPlay2SurfaceID getSurface();
-	void putSurface(QMPlay2SurfaceID id);
 private:
 	void init_vpp();
 
@@ -112,7 +111,6 @@ private:
 
 	static const int surfacesCount = 20;
 	VASurfaceID surfaces[surfacesCount];
-	QQueue<VASurfaceID> surfacesQueue;
 	bool surfacesCreated, paused;
 
 	static const int drawTimeout = 40;

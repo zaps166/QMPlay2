@@ -41,7 +41,7 @@ private:
 	void writeVideo(const VideoFrame &videoFrame);
 	void writeOSD(const QList<const QMPlay2_OSD *> &);
 
-	void setHWAccellInterface(HWAccellInterface *hwAccellInterface);
+	void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
 
 	void pause();
 

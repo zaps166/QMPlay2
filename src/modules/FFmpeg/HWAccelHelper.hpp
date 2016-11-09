@@ -19,9 +19,15 @@
 #ifndef HWACCELHELPER_HPP
 #define HWACCELHELPER_HPP
 
-#include <QtGlobal>
+#include <QQueue>
+
+extern "C"
+{
+	#include <libavutil/pixfmt.h>
+}
 
 typedef quintptr QMPlay2SurfaceID;
+typedef QQueue<QMPlay2SurfaceID> SurfacesQueue;
 
 #define QMPlay2InvalidSurfaceID ((QMPlay2SurfaceID)-1)
 
@@ -31,14 +37,20 @@ struct AVFrame;
 class HWAccelHelper
 {
 public:
-	virtual ~HWAccelHelper() {}
+	static AVPixelFormat getFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt);
+	static int getBuffer(AVCodecContext *codecCtx, AVFrame *frame, int flags);
 
-	static bool hasHWAccel(AVCodecContext *codec_ctx, const char *hwaccelName);
+	HWAccelHelper(AVCodecContext *codecCtx, AVPixelFormat pixFmt, void *hwAccelCtx, const SurfacesQueue &surfacesQueue);
+	~HWAccelHelper();
 
-	static int get_buffer(AVCodecContext *codec_ctx, AVFrame *frame, int flags);
+	inline AVPixelFormat getPixelFormat() const;
 
-	virtual QMPlay2SurfaceID getSurface() = 0;
-	virtual void putSurface(QMPlay2SurfaceID id) = 0;
+	inline QMPlay2SurfaceID getSurface();
+	inline void putSurface(QMPlay2SurfaceID id);
+
+private:
+	SurfacesQueue m_surfacesQueue;
+	const AVPixelFormat m_pixFmt;
 };
 
 #endif // HWACCELHELPER_HPP

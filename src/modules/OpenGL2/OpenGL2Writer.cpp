@@ -25,7 +25,7 @@
 	#include <OpenGL2OldWidget.hpp>
 #endif
 
-#include <HWAccellInterface.hpp>
+#include <HWAccelInterface.hpp>
 #include <VideoFrame.hpp>
 
 #ifdef OPENGL_NEW_API
@@ -161,11 +161,11 @@ void OpenGL2Writer::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 	drawable->osdList = osds;
 }
 
-void OpenGL2Writer::setHWAccellInterface(HWAccellInterface *hwAccellInterface)
+void OpenGL2Writer::setHWAccelInterface(HWAccelInterface *hwAccelInterface)
 {
 	addParam("Deinterlace");
 	addParam("PrepareForHWBobDeint", true);
-	VideoWriter::setHWAccellInterface(hwAccellInterface);
+	VideoWriter::setHWAccelInterface(hwAccelInterface);
 }
 
 void OpenGL2Writer::pause()
@@ -176,8 +176,8 @@ void OpenGL2Writer::pause()
 QString OpenGL2Writer::name() const
 {
 	QString glStr = drawable->glVer ? QString("%1.%2").arg(drawable->glVer / 10).arg(drawable->glVer % 10) : "2";
-	if (drawable->hwAccellInterface)
-		glStr += " " + drawable->hwAccellInterface->name();
+	if (drawable->hwAccellnterface)
+		glStr += " " + drawable->hwAccellnterface->name();
 #ifdef OPENGL_NEW_API
 	if (useRtt)
 		glStr += " (render-to-texture)";
@@ -210,7 +210,7 @@ bool OpenGL2Writer::open()
 #else
 	drawable = new OpenGL2OldWidget;
 #endif
-	drawable->hwAccellInterface = m_hwAccellInterface;
+	drawable->hwAccellnterface = m_hwAccelInterface;
 	drawable->setAllowPBO(allowPBO);
 	if (drawable->testGL())
 	{

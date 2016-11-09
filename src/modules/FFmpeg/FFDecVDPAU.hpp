@@ -24,7 +24,8 @@ class FFDecVDPAU : public FFDecHWAccel
 {
 public:
 	FFDecVDPAU(QMutex &, Module &);
-private:
+	~FFDecVDPAU();
+
 	bool set();
 
 	QString name() const;

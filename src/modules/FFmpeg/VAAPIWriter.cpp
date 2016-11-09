@@ -239,7 +239,7 @@ void VAAPIWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
 	}
 }
 
-bool VAAPIWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VAAPIWriter::hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	if (dest && !(outH & 1) && !(outW % 4))
 	{
@@ -294,6 +294,14 @@ bool VAAPIWriter::open()
 	return false;
 }
 
+SurfacesQueue VAAPIWriter::getSurfacesQueue() const
+{
+	SurfacesQueue surfacesQueue;
+	for (int i = 0; i < surfacesCount; ++i)
+		surfacesQueue.enqueue((QMPlay2SurfaceID)surfaces[i]);
+	return surfacesQueue;
+}
+
 quint8 *VAAPIWriter::getImage(VAImage &image, VASurfaceID surfaceID, VAImageFormat &img_fmt) const
 {
 	if (vaCreateImage(VADisp, &img_fmt, outW, outH, &image) == VA_STATUS_SUCCESS)
@@ -329,7 +337,7 @@ bool VAAPIWriter::getNV12Image(VAImageFormat &img_fmt, VASurfaceID surfaceID, vo
 	return false;
 }
 
-bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
+bool VAAPIWriter::HWAccelInit(int W, int H, const char *codec_name)
 {
 	VAProfile p = (VAProfile)-1; //VAProfileNone
 	if (!qstrcmp(codec_name, "h264"))
@@ -406,9 +414,6 @@ bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
 		if (!vaCreateConfigAndContext())
 			return false;
 
-		for (int i = 0; i < surfacesCount; i++)
-			surfacesQueue.enqueue(surfaces[i]);
-
 
 		unsigned numSubpicFmts = vaMaxNumSubpictureFormats(VADisp);
 		VAImageFormat subpicFmtList[numSubpicFmts];
@@ -458,15 +463,6 @@ bool VAAPIWriter::HWAccellInit(int W, int H, const char *codec_name)
 	}
 
 	return ok;
-}
-
-QMPlay2SurfaceID VAAPIWriter::getSurface()
-{
-	return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
-}
-void VAAPIWriter::putSurface(QMPlay2SurfaceID id)
-{
-	surfacesQueue.enqueue(id);
 }
 
 void VAAPIWriter::init_vpp()
@@ -743,7 +739,6 @@ void VAAPIWriter::clr()
 			vaDestroyConfig(VADisp, config);
 	}
 	surfacesCreated = ok = paused = false;
-	surfacesQueue.clear();
 	profile = (VAProfile)-1; //VAProfileNone
 	delete rgbImgFmt;
 	rgbImgFmt = NULL;

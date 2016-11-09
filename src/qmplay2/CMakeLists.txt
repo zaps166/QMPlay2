@@ -57,7 +57,7 @@ set(QMPLAY2_HDR
     headers/CPU.hpp
     headers/Version.hpp
     headers/PixelFormats.hpp
-    headers/HWAccellInterface.hpp
+    headers/HWAccelInterface.hpp
 )
 
 set(QMPLAY2_SRC

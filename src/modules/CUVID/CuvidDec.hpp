@@ -27,7 +27,7 @@
 #include <QCoreApplication>
 #include <QQueue>
 
-class CuvidHWAccell;
+class CuvidHWAccel;
 class VideoWriter;
 
 struct AVBSFContext;
@@ -67,7 +67,7 @@ private:
 	void destroyCuvid(bool all);
 
 	VideoWriter *m_writer;
-	CuvidHWAccell *m_cuvidHWAccell;
+	CuvidHWAccel *m_cuvidHWAccel;
 
 	int m_width, m_height, m_codedHeight;
 

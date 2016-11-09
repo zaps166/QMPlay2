@@ -1,12 +1,12 @@
-#ifndef HWACCELLINTERFACE_HPP
-#define HWACCELLINTERFACE_HPP
+#ifndef HWACCELINTERFACE_HPP
+#define HWACCELINTERFACE_HPP
 
 #include <QString>
 
 class VideoFrame;
 class ImgScaler;
 
-class HWAccellInterface
+class HWAccelInterface
 {
 public:
 	enum Field
@@ -22,7 +22,7 @@ public:
 		CopyError,
 	};
 
-	virtual ~HWAccellInterface()
+	virtual ~HWAccelInterface()
 	{}
 
 	virtual QString name() const = 0;
@@ -38,4 +38,4 @@ public:
 	virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = NULL) = 0;
 };
 
-#endif // HWACCELLINTERFACE_HPP
+#endif // HWACCELINTERFACE_HPP

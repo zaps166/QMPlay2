@@ -17,10 +17,9 @@
 */
 
 #include <FFDecHWAccel.hpp>
-#include <FFCommon.hpp>
+#include <HWAccelHelper.hpp>
 
 #include <VideoFrame.hpp>
-#include <StreamInfo.hpp>
 
 extern "C"
 {
@@ -29,30 +28,51 @@ extern "C"
 
 FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
 	FFDec(mutex),
-	hwAccelWriter(NULL)
+	m_hwAccelWriter(NULL)
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {
-	if (hwAccelWriter)
+	if (codecIsOpen)
+	{
 		av_free(codec_ctx->hwaccel_context);
+		delete (HWAccelHelper *)codec_ctx->opaque;
+	}
 }
 
 VideoWriter *FFDecHWAccel::HWAccel() const
 {
-	return hwAccelWriter;
+	return m_hwAccelWriter;
 }
 
-int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned)
+bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
+	AVHWAccel *hwAccel = NULL;
+	while ((hwAccel = av_hwaccel_next(hwAccel)))
+		if (hwAccel->id == codec_ctx->codec_id && strstr(hwAccel->name, hwaccelName))
+			break;
+	return hwAccel;
+}
+
+int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+{
+	Q_UNUSED(newPixFmt)
 	int frameFinished = 0;
 	decodeFirstStep(encodedPacket, flush);
 	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
-	if (frameFinished)
+	if (frameFinished && ~hurryUp)
 	{
-		decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
-		decodeLastStep(encodedPacket, frame);
+		if (m_hwAccelWriter)
+			decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
+		else
+			downloadVideoFrame(decoded);
 	}
+	if (frameFinished)
+		decodeLastStep(encodedPacket, frame);
 	else
 		encodedPacket.ts.setInvalid();
 	return bytes_consumed > 0 ? bytes_consumed : 0;
+}
+void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
+{
+	Q_UNUSED(decoded)
 }

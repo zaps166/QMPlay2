@@ -22,7 +22,7 @@
 #include <PixelFormats.hpp>
 #include <Writer.hpp>
 
-class HWAccellInterface;
+class HWAccelInterface;
 class QMPlay2_OSD;
 class VideoFrame;
 class ImgScaler;
@@ -30,7 +30,7 @@ class ImgScaler;
 class VideoWriter : public Writer
 {
 public:
-	static VideoWriter *createOpenGL2(HWAccellInterface *hwAccellInterface);
+	static VideoWriter *createOpenGL2(HWAccelInterface *hwAccelInterface);
 
 	VideoWriter();
 	virtual ~VideoWriter();
@@ -42,18 +42,18 @@ public:
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
 	virtual void writeOSD(const QList<const QMPlay2_OSD *> &osd) = 0;
 
-	virtual void setHWAccellInterface(HWAccellInterface *hwAccellInterface);
-	inline HWAccellInterface *getHWAccellInterface() const
+	virtual void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
+	inline HWAccelInterface *getHWAccelInterface() const
 	{
-		return m_hwAccellInterface;
+		return m_hwAccelInterface;
 	}
 
-	virtual bool hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+	virtual bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
 	virtual bool open() = 0;
 
 protected:
-	HWAccellInterface *m_hwAccellInterface;
+	HWAccelInterface *m_hwAccelInterface;
 };
 
 #endif //VIDEOWRITER_HPP

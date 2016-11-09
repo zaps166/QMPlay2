@@ -17,6 +17,7 @@
 */
 
 #include <FFDecVDPAU.hpp>
+#include <HWAccelHelper.hpp>
 #include <VDPAUWriter.hpp>
 #include <FFCommon.hpp>
 
@@ -29,17 +30,15 @@ extern "C"
 	#include <libavcodec/vdpau.h>
 }
 
-static AVPixelFormat get_format(AVCodecContext *, const AVPixelFormat *)
-{
-	return AV_PIX_FMT_VDPAU;
-}
-
-/**/
-
 FFDecVDPAU::FFDecVDPAU(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex)
 {
 	SetModule(module);
+}
+FFDecVDPAU::~FFDecVDPAU()
+{
+	if (codecIsOpen)
+		avcodec_flush_buffers(codec_ctx);
 }
 
 bool FFDecVDPAU::set()
@@ -62,24 +61,23 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (pix_fmt == AV_PIX_FMT_YUV420P || (canUseYUVJ420P && pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vdpau"))
+		if (codec && hasHWAccel("vdpau"))
 		{
 			if (writer && writer->name() != VDPAUWriterName)
 				writer = NULL;
 			VDPAUWriter *vdpauWriter = writer ? (VDPAUWriter *)writer : new VDPAUWriter(getModule());
-			if ((writer || vdpauWriter->open()) && vdpauWriter->hwAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			if ((writer || vdpauWriter->open()) && vdpauWriter->hwAccelInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
 			{
-				codec_ctx->hwaccel_context = av_mallocz(sizeof(AVVDPAUContext));
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->decoder = vdpauWriter->getVdpDecoder();
-				((AVVDPAUContext *)codec_ctx->hwaccel_context)->render  = vdpauWriter->getVdpDecoderRender();
-				codec_ctx->thread_count   = 1;
-				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
-				codec_ctx->get_format     = get_format;
-				codec_ctx->opaque         = (HWAccelHelper *)vdpauWriter;
+				AVVDPAUContext *vdpauCtx = (AVVDPAUContext *)av_mallocz(sizeof(AVVDPAUContext));
+				vdpauCtx->decoder = vdpauWriter->getVdpDecoder();
+				vdpauCtx->render  = vdpauWriter->getVdpDecoderRender();
+
+				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VDPAU, vdpauCtx, vdpauWriter->getSurfacesQueue());
+
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
-					hwAccelWriter = (VideoWriter *)vdpauWriter;
+					m_hwAccelWriter = vdpauWriter;
 					return true;
 				}
 			}

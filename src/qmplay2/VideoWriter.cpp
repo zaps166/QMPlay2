@@ -18,9 +18,9 @@
 
 #include <VideoWriter.hpp>
 
-#include <HWAccellInterface.hpp>
+#include <HWAccelInterface.hpp>
 
-VideoWriter *VideoWriter::createOpenGL2(HWAccellInterface *hwAccellInterface)
+VideoWriter *VideoWriter::createOpenGL2(HWAccelInterface *hwAccelInterface)
 {
 	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
 		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
@@ -29,8 +29,8 @@ VideoWriter *VideoWriter::createOpenGL2(HWAccellInterface *hwAccellInterface)
 				VideoWriter *videoWriter = (VideoWriter *)pluginInstance->createInstance("OpenGL 2");
 				if (videoWriter)
 				{
-					if (hwAccellInterface)
-						videoWriter->setHWAccellInterface(hwAccellInterface);
+					if (hwAccelInterface)
+						videoWriter->setHWAccelInterface(hwAccelInterface);
 					if (!videoWriter->open())
 					{
 						delete videoWriter;
@@ -39,16 +39,16 @@ VideoWriter *VideoWriter::createOpenGL2(HWAccellInterface *hwAccellInterface)
 					return videoWriter;
 				}
 			}
-	delete hwAccellInterface;
+	delete hwAccelInterface;
 	return NULL;
 }
 
 VideoWriter::VideoWriter() :
-	m_hwAccellInterface(NULL)
+	m_hwAccelInterface(NULL)
 {}
 VideoWriter::~VideoWriter()
 {
-	delete m_hwAccellInterface;
+	delete m_hwAccelInterface;
 }
 
 QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
@@ -58,9 +58,9 @@ QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
 	;
 }
 
-void VideoWriter::setHWAccellInterface(HWAccellInterface *hwAccellInterface)
+void VideoWriter::setHWAccelInterface(HWAccelInterface *hwAccelInterface)
 {
-	m_hwAccellInterface = hwAccellInterface;
+	m_hwAccelInterface = hwAccelInterface;
 }
 
 qint64 VideoWriter::write(const QByteArray &)
@@ -68,9 +68,9 @@ qint64 VideoWriter::write(const QByteArray &)
 	return -1;
 }
 
-bool VideoWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VideoWriter::hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
-	if (m_hwAccellInterface)
-		return m_hwAccellInterface->getImage(videoFrame, dest, nv12ToRGB32);
+	if (m_hwAccelInterface)
+		return m_hwAccelInterface->getImage(videoFrame, dest, nv12ToRGB32);
 	return false;
 }

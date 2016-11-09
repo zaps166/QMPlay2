@@ -29,17 +29,15 @@ extern "C"
 	#include <libavcodec/vaapi.h>
 }
 
-static AVPixelFormat get_format(AVCodecContext *, const AVPixelFormat *)
-{
-	return AV_PIX_FMT_VAAPI_VLD;
-}
-
-/**/
-
 FFDecVAAPI::FFDecVAAPI(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex)
 {
 	SetModule(module);
+}
+FFDecVAAPI::~FFDecVAAPI()
+{
+	if (codecIsOpen)
+		avcodec_flush_buffers(codec_ctx);
 }
 
 bool FFDecVAAPI::set()
@@ -58,25 +56,24 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if ((pix_fmt == AV_PIX_FMT_YUV420P || pix_fmt == AV_PIX_FMT_YUVJ420P))
 	{
 		AVCodec *codec = init(streamInfo);
-		if (codec && HWAccelHelper::hasHWAccel(codec_ctx, "vaapi"))
+		if (codec && hasHWAccel("vaapi"))
 		{
 			if (writer && writer->name() != VAAPIWriterName)
 				writer = NULL;
 			VAAPIWriter *vaapiWriter = writer ? (VAAPIWriter *)writer : new VAAPIWriter(getModule());
-			if ((writer || vaapiWriter->open()) && vaapiWriter->HWAccellInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			if ((writer || vaapiWriter->open()) && vaapiWriter->HWAccelInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
 			{
-				codec_ctx->hwaccel_context = av_mallocz(sizeof(vaapi_context));
-				((vaapi_context *)codec_ctx->hwaccel_context)->display    = vaapiWriter->getVADisplay();
-				((vaapi_context *)codec_ctx->hwaccel_context)->context_id = vaapiWriter->getVAContext();
-				((vaapi_context *)codec_ctx->hwaccel_context)->config_id  = vaapiWriter->getVAConfig();
-				codec_ctx->thread_count   = 1;
-				codec_ctx->get_buffer2    = HWAccelHelper::get_buffer;
-				codec_ctx->get_format     = get_format;
-				codec_ctx->opaque         = (HWAccelHelper *)vaapiWriter;
+				vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
+				vaapiCtx->display    = vaapiWriter->getVADisplay();
+				vaapiCtx->context_id = vaapiWriter->getVAContext();
+				vaapiCtx->config_id  = vaapiWriter->getVAConfig();
+
+				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, vaapiWriter->getSurfacesQueue());
+
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
-					hwAccelWriter = (VideoWriter *)vaapiWriter;
+					m_hwAccelWriter = vaapiWriter;
 					return true;
 				}
 			}

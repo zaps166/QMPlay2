@@ -18,6 +18,8 @@
 
 #include "OpenGL2Widget.hpp"
 
+#include <QOpenGLContext>
+
 OpenGL2Widget::OpenGL2Widget()
 {
 	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -51,11 +53,19 @@ void OpenGL2Widget::updateGL(bool requestDelayed)
 
 void OpenGL2Widget::initializeGL()
 {
+	connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(aboutToBeDestroyed()), Qt::DirectConnection);
 	OpenGL2Common::initializeGL();
 }
 void OpenGL2Widget::paintGL()
 {
 	OpenGL2Common::paintGL();
+}
+
+void OpenGL2Widget::aboutToBeDestroyed()
+{
+	makeCurrent();
+	contextAboutToBeDestroyed();
+	doneCurrent();
 }
 
 bool OpenGL2Widget::event(QEvent *e)

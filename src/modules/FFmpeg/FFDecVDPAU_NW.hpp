@@ -16,20 +16,24 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <FFDec.hpp>
+#include <FFDecHWAccel.hpp>
 
-class FFDecVDPAU_NW : public FFDec
+class VDPAU;
+
+class FFDecVDPAU_NW : public FFDecHWAccel
 {
 public:
 	FFDecVDPAU_NW(QMutex &, Module &);
-private:
 	~FFDecVDPAU_NW();
 
 	bool set();
 
 	QString name() const;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &, bool flush, unsigned hurry_up);
+	void downloadVideoFrame(VideoFrame &decoded);
 
 	bool open(StreamInfo &, VideoWriter *);
+
+private:
+	VDPAU *vdpau;
 };

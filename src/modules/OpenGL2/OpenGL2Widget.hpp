@@ -26,6 +26,7 @@
 
 class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
 {
+	Q_OBJECT
 public:
 	OpenGL2Widget();
 
@@ -36,6 +37,8 @@ public:
 
 	void initializeGL();
 	void paintGL();
+private slots:
+	void aboutToBeDestroyed();
 private:
 	bool event(QEvent *e);
 };

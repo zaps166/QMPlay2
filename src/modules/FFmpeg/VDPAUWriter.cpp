@@ -210,7 +210,7 @@ void VDPAUWriter::pause()
 	vdpau_display();
 }
 
-bool VDPAUWriter::hwAccellGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VDPAUWriter::hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
 	if (dest)
 	{
@@ -317,8 +317,15 @@ bool VDPAUWriter::open()
 	return false;
 }
 
+SurfacesQueue VDPAUWriter::getSurfacesQueue() const
+{
+	SurfacesQueue surfacesQueue;
+	for (int i = 0; i < surfacesCount; ++i)
+		surfacesQueue.enqueue((QMPlay2SurfaceID)surfaces[i]);
+	return surfacesQueue;
+}
 
-bool VDPAUWriter::hwAccellInit(int W, int H, const char *codec_name)
+bool VDPAUWriter::hwAccelInit(int W, int H, const char *codec_name)
 {
 	VdpDecoderProfile p = -1;
 	if (!qstrcmp(codec_name, "h264"))
@@ -386,12 +393,10 @@ bool VDPAUWriter::hwAccellInit(int W, int H, const char *codec_name)
 				if (status != VDP_STATUS_OK)
 				{
 					for (int j = 0; j < i; ++j)
-						vdp_video_surface_destroy(surfacesQueue[j]);
-					surfacesQueue.clear();
+						vdp_video_surface_destroy(surfaces[j]);
 					err = true;
 					break;
 				}
-				surfacesQueue.enqueue(surfaces[i]);
 			}
 			if (!err)
 			{
@@ -446,15 +451,6 @@ bool VDPAUWriter::hwAccellInit(int W, int H, const char *codec_name)
 		QMPlay2Core.logError("VDPAU :: " + tr("Not enough memory"));
 
 	return ok;
-}
-
-QMPlay2SurfaceID VDPAUWriter::getSurface()
-{
-	return surfacesQueue.isEmpty() ? QMPlay2InvalidSurfaceID : surfacesQueue.dequeue();
-}
-void VDPAUWriter::putSurface(QMPlay2SurfaceID id)
-{
-	surfacesQueue.enqueue(id);
 }
 
 void VDPAUWriter::preemption_callback(VdpDevice, void *context)
@@ -766,7 +762,6 @@ void VDPAUWriter::clr()
 	bitmapSurfaceSize = QSize();
 	outputSurfacesSize = QSize();
 	surfacesCreated = outputSurfacesCreated = ok = paused = hasImage = false;
-	surfacesQueue.clear();
 	osd_checksums.clear();
 	outputSurfaceIdx = 0;
 	osdImg = QImage();

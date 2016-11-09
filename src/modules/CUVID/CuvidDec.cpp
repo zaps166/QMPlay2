@@ -18,7 +18,7 @@
 
 #include <CuvidDec.hpp>
 
-#include <HWAccellInterface.hpp>
+#include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
 #include <ImgScaler.hpp>
@@ -225,12 +225,12 @@ namespace cuvid
 	}
 }
 
-/* HWAccellInterface implementation */
+/* HWAccelInterface implementation */
 
-class CuvidHWAccell : public HWAccellInterface
+class CuvidHWAccel : public HWAccelInterface
 {
 public:
-	CuvidHWAccell(CUcontext cuCtx) :
+	CuvidHWAccel(CUcontext cuCtx) :
 		m_canDestroyCuda(false),
 		m_codedHeight(0),
 		m_lastId(0),
@@ -241,16 +241,13 @@ public:
 		memset(m_res, 0, sizeof m_res);
 		memset(m_array, 0, sizeof m_array);
 	}
-	~CuvidHWAccell()
+	~CuvidHWAccel()
 	{
-		cu::ContextGuard cuCtxGuard(m_cuCtx);
-		for (int p = 0; p < 2; ++p)
-		{
-			if (m_res[p])
-				cu::graphicsUnregisterResource(m_res[p]);
-		}
 		if (m_canDestroyCuda)
+		{
+			cu::ContextGuard cuCtxGuard(m_cuCtx); //Is it necessary here?
 			cu::ctxDestroy(m_cuCtx);
+		}
 	}
 
 	QString name() const
@@ -276,6 +273,7 @@ public:
 	bool init(quint32 *textures)
 	{
 		bool ret = true;
+		clear();
 		for (int p = 0; p < 2; ++p)
 		{
 			ret = (cu::graphicsGLRegisterImage(&m_res[p], textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) == CUDA_SUCCESS);
@@ -448,7 +446,7 @@ bool CuvidDec::loadLibrariesAndInit()
 
 CuvidDec::CuvidDec(Module &module) :
 	m_writer(NULL),
-	m_cuvidHWAccell(NULL),
+	m_cuvidHWAccel(NULL),
 	m_deintMethod(cudaVideoDeinterlaceMode_Weave),
 	m_copyVideo(Qt::PartiallyChecked),
 	m_forceFlush(false),
@@ -532,7 +530,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
 	destroyCuvid(false);
 
-	if (!m_cuvidHWAccell)
+	if (!m_cuvidHWAccel)
 	{
 		m_swsCtx = sws_getCachedContext(m_swsCtx, m_width, m_height, AV_PIX_FMT_NV12, m_width, m_height, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL);
 		if (!m_swsCtx)
@@ -546,8 +544,8 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 		return 0;
 	}
 
-	if (m_cuvidHWAccell)
-		m_cuvidHWAccell->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
+	if (m_cuvidHWAccel)
+		m_cuvidHWAccel->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
 
 	return 1;
 }
@@ -644,7 +642,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
 		const VideoFrameSize frameSize(m_width, m_height);
 		encodedPacket.ts = dispInfo.timestamp / 10000000.0;
-		if (m_cuvidHWAccell)
+		if (m_cuvidHWAccel)
 			decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
 		else if (~hurry_up)
 		{
@@ -837,10 +835,10 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 	if (writer)
 	{
-		m_cuvidHWAccell = dynamic_cast<CuvidHWAccell *>(writer->getHWAccellInterface());
-		if (m_cuvidHWAccell)
+		m_cuvidHWAccel = dynamic_cast<CuvidHWAccel *>(writer->getHWAccelInterface());
+		if (m_cuvidHWAccel)
 		{
-			m_cuCtx = m_cuvidHWAccell->getCudaContext();
+			m_cuCtx = m_cuvidHWAccel->getCudaContext();
 			m_writer = writer;
 		}
 	}
@@ -850,9 +848,9 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 	if (!m_writer && m_copyVideo != Qt::Checked)
 	{
-		m_writer = VideoWriter::createOpenGL2(new CuvidHWAccell(m_cuCtx));
+		m_writer = VideoWriter::createOpenGL2(new CuvidHWAccel(m_cuCtx));
 		if (m_writer)
-			m_cuvidHWAccell = (CuvidHWAccell *)m_writer->getHWAccellInterface();
+			m_cuvidHWAccel = (CuvidHWAccel *)m_writer->getHWAccelInterface();
 		else if (m_copyVideo == Qt::Unchecked)
 		{
 			QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
@@ -889,13 +887,13 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		{
 			delete m_writer;
 			m_writer = NULL;
-			m_cuvidHWAccell = NULL;
+			m_cuvidHWAccel = NULL;
 		}
 		return false;
 	}
 
-	if (m_cuvidHWAccell)
-		m_cuvidHWAccell->allowDestroyCuda();
+	if (m_cuvidHWAccel)
+		m_cuvidHWAccel->allowDestroyCuda();
 
 	return true;
 }
@@ -950,8 +948,8 @@ bool CuvidDec::createCuvidVideoParser()
 }
 void CuvidDec::destroyCuvid(bool all)
 {
-	if (m_cuvidHWAccell)
-		m_cuvidHWAccell->setDecoderAndCodedHeight(NULL, 0);
+	if (m_cuvidHWAccel)
+		m_cuvidHWAccel->setDecoderAndCodedHeight(NULL, 0);
 	cuvid::destroyDecoder(m_cuvidDec);
 	m_cuvidDec = NULL;
 	if (all)
