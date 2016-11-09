@@ -200,20 +200,6 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
-	numPlanes = 3;
-	if (hwAccellnterface)
-	{
-		switch (hwAccellnterface->getFormat())
-		{
-			case HWAccelInterface::NV12:
-				numPlanes = 2;
-				break;
-			case HWAccelInterface::RGB32:
-				numPlanes = 1;
-				break;
-		}
-	}
-
 #ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramVideo;
 	delete shaderProgramOSD;
@@ -678,6 +664,7 @@ void OpenGL2Common::testGLInternal()
 	glActiveTexture = NULL;
 #endif
 
+	numPlanes = 3;
 	if (hwAccellnterface)
 	{
 		quint32 textures[2] = {0};
@@ -687,6 +674,17 @@ void OpenGL2Common::testGLInternal()
 			glBindTexture(GL_TEXTURE_2D, textures[p]);
 			glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
 		}
+
+		switch (hwAccellnterface->getFormat())
+		{
+			case HWAccelInterface::NV12:
+				numPlanes = 2;
+				break;
+			case HWAccelInterface::RGB32:
+				numPlanes = 1;
+				break;
+		}
+
 		if (!hwAccellnterface->lock())
 			isOK = false;
 		else
