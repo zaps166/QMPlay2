@@ -584,6 +584,7 @@ int main(int argc, char *argv[])
 			}
 			QFile::remove(UpdateFile);
 			settings.remove("UpdateFile");
+			settings.flush();
 		}
 		else if (QFileInfo(UpdateFile).size())
 		{
