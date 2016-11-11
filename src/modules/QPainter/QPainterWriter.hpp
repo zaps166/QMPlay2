@@ -23,7 +23,7 @@
 #include <QWidget>
 
 class QPainterWriter;
-class QMPlay2_OSD;
+class QMPlay2OSD;
 
 class Drawable : public QWidget
 {
@@ -37,7 +37,7 @@ public:
 	void resizeEvent(QResizeEvent *);
 
 	VideoFrame videoFrame;
-	QList<const QMPlay2_OSD *> osd_list;
+	QList<const QMPlay2OSD *> osd_list;
 	int Brightness, Contrast;
 	QMutex osd_mutex;
 private:
@@ -69,7 +69,7 @@ private:
 	QMPlay2PixelFormats supportedPixelFormats() const;
 
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2_OSD *> &);
+	void writeOSD(const QList<const QMPlay2OSD *> &);
 
 	QString name() const;
 

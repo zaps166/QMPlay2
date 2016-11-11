@@ -16,15 +16,15 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QMPlay2_OSD_HPP
-#define QMPlay2_OSD_HPP
+#ifndef QMPlay2OSD_HPP
+#define QMPlay2OSD_HPP
 
 #include <QMutex>
 #include <QList>
 #include <QRect>
 #include <QTime>
 
-class QMPlay2_OSD
+class QMPlay2OSD
 {
 public:
 	typedef QByteArray Checksum;
@@ -32,48 +32,50 @@ public:
 	class Image
 	{
 	public:
-		inline Image() {}
+		inline Image()
+		{}
 		inline Image(const QRect &rect, const QByteArray &data) :
-			rect(rect), data(data) {}
+			rect(rect), data(data)
+		{}
 
 		QRect rect;
 		QByteArray data;
 	};
 
-	inline QMPlay2_OSD()
+	inline QMPlay2OSD()
 	{
 		clear();
 	}
 
 	inline void setText(const QByteArray &txt)
 	{
-		_text = txt;
+		m_text = txt;
 	}
 	inline void setDuration(double d)
 	{
-		_duration = d;
+		m_duration = d;
 	}
 	//for subtitles only, not for OSD
 	inline void setPTS(double p)
 	{
-		_pts = p;
+		m_pts = p;
 	}
 	inline void setNeedsRescale()
 	{
-		_needsRescale = true;
+		m_needsRescale = true;
 	}
 
 	inline const Image &getImage(int idx) const
 	{
-		return images[idx];
+		return m_images[idx];
 	}
 	inline int imageCount() const
 	{
-		return images.count();
+		return m_images.count();
 	}
 	inline void addImage(const QRect &rect, const QByteArray &data)
 	{
-		images.push_back(Image(rect, data));
+		m_images.push_back(Image(rect, data));
 	}
 
 	void genChecksum();
@@ -82,53 +84,53 @@ public:
 
 	inline void lock() const
 	{
-		mutex.lock();
+		m_mutex.lock();
 	}
 	inline void unlock() const
 	{
-		mutex.unlock();
+		m_mutex.unlock();
 	}
 
-	inline QByteArray text()
+	inline QByteArray text() const
 	{
-		return _text;
+		return m_text;
 	}
 	//for subtitles only
-	inline double duration()
+	inline double duration() const
 	{
-		return _duration;
+		return m_duration;
 	}
-	inline double pts()
+	inline double pts() const
 	{
-		return _pts;
+		return m_pts;
 	}
-	inline bool isStarted()
+	inline bool isStarted() const
 	{
-		return started;
+		return m_started;
 	}
 	inline bool needsRescale() const
 	{
-		return _needsRescale;
+		return m_needsRescale;
 	}
 
 	inline Checksum getChecksum() const
 	{
-		return checksum;
+		return m_checksum;
 	}
 
-	void start(); //for OSD: start counting left_duration, for subtitles: marks that subtitles are displayed
+	void start(); //for OSD: start counting leftDuration; for subtitles: marks that subtitles are displayed
 
 	//for OSD only
-	double left_duration(); //if < 0 then time out and you must this delete class
+	double leftDuration(); //if < 0 then time out and you must this delete class
 private:
-	QList<Image> images;
+	QList<Image> m_images;
 
-	QByteArray _text;
-	double _duration, _pts;
-	bool started, _needsRescale;
-	QTime timer;
-	mutable QMutex mutex;
-	Checksum checksum;
+	QByteArray m_text;
+	double m_duration, m_pts;
+	bool m_started, m_needsRescale;
+	QTime m_timer;
+	mutable QMutex m_mutex;
+	Checksum m_checksum;
 };
 
 #endif

@@ -18,7 +18,7 @@
 
 #include <PlayClass.hpp>
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoThr.hpp>
 #include <AudioThr.hpp>
 #include <DemuxerThr.hpp>
@@ -689,7 +689,7 @@ void PlayClass::settingsChanged(int page, bool page3Restart)
 				ass->setOSDStyle();
 				osdMutex.lock();
 				if (osd)
-					ass->getOSD(osd, osd->text(), osd->left_duration());
+					ass->getOSD(osd, osd->text(), osd->leftDuration());
 				osdMutex.unlock();
 			}
 			break;
@@ -708,7 +708,7 @@ void PlayClass::videoResized(int w, int h)
 		{
 			osdMutex.lock();
 			if (osd)
-				ass->getOSD(osd, osd->text(), osd->left_duration());
+				ass->getOSD(osd, osd->text(), osd->leftDuration());
 			osdMutex.unlock();
 		}
 		if (vThr)

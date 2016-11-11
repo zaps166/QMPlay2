@@ -20,7 +20,7 @@
 
 #ifdef QMPLAY2_LIBASS
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
 
@@ -32,7 +32,7 @@ extern "C"
 }
 #include <string.h>
 
-static void addImgs(ASS_Image *img, QMPlay2_OSD *osd)
+static void addImgs(ASS_Image *img, QMPlay2OSD *osd)
 {
 	while (img)
 	{
@@ -187,7 +187,7 @@ void LibASS::setOSDStyle()
 	osd_style->ScaleX = osd_style->ScaleY = 1;
 	readStyle("OSD", osd_style);
 }
-bool LibASS::getOSD(QMPlay2_OSD *&osd, const QByteArray &txt, double duration)
+bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
 {
 	if (!osd_track || !osd_style || !osd_event || !osd_renderer || !W || !H)
 		return false;
@@ -204,7 +204,7 @@ bool LibASS::getOSD(QMPlay2_OSD *&osd, const QByteArray &txt, double duration)
 		return false;
 	bool old_osd = osd;
 	if (!old_osd)
-		osd = new QMPlay2_OSD;
+		osd = new QMPlay2OSD;
 	else
 	{
 		osd->lock();
@@ -395,7 +395,7 @@ void LibASS::flushASSEvents()
 		return;
 	ass_flush_events(ass_sub_track);
 }
-bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
+bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
 {
 	if (!ass_sub_track || !ass_sub_renderer || !W || !H)
 		return false;
@@ -451,7 +451,7 @@ bool LibASS::getASS(QMPlay2_OSD *&osd, double pos)
 		return false;
 	bool old_osd = osd;
 	if (!old_osd)
-		osd = new QMPlay2_OSD;
+		osd = new QMPlay2OSD;
 	else
 	{
 		osd->lock();
@@ -546,7 +546,7 @@ void LibASS::initOSD()
 {}
 void LibASS::setOSDStyle()
 {}
-bool LibASS::getOSD(QMPlay2_OSD *&, const QByteArray &, double)
+bool LibASS::getOSD(QMPlay2OSD *&, const QByteArray &, double)
 {
 	return false;
 }
@@ -567,7 +567,7 @@ void LibASS::addASSEvent(const QByteArray &, double, double)
 {}
 void LibASS::flushASSEvents()
 {}
-bool LibASS::getASS(QMPlay2_OSD *&, double)
+bool LibASS::getASS(QMPlay2OSD *&, double)
 {
 	return false;
 }

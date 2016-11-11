@@ -54,7 +54,7 @@ private:
 
 	int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush);
 	int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
-	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
+	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h);
 
 	bool open(StreamInfo &, VideoWriter *);
 
@@ -63,7 +63,7 @@ private:
 	void setPixelFormat();
 
 	inline void addBitmapSubBuffer(BitmapSubBuffer *buff, double pos);
-	bool getFromBitmapSubsBuffer(QMPlay2_OSD *&, double pts);
+	bool getFromBitmapSubsBuffer(QMPlay2OSD *&, double pts);
 	inline void clearBitmapSubsBuffer();
 
 	int threads, lowres;

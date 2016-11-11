@@ -19,7 +19,7 @@
 #include <VAAPIWriter.hpp>
 #include <FFCommon.hpp>
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 #include <ImgScaler.hpp>
@@ -229,7 +229,7 @@ void VAAPIWriter::pause()
 {
 	paused = true;
 }
-void VAAPIWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
+void VAAPIWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {
 	if (rgbImgFmt)
 	{

@@ -39,7 +39,7 @@ private:
 	QMPlay2PixelFormats supportedPixelFormats() const;
 
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2_OSD *> &);
+	void writeOSD(const QList<const QMPlay2OSD *> &);
 
 	void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
 

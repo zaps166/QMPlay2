@@ -29,7 +29,7 @@
 #include <QStringList>
 #include <QWaitCondition>
 
-class QMPlay2_OSD;
+class QMPlay2OSD;
 class DemuxerThr;
 class VideoThr;
 class AudioThr;
@@ -143,7 +143,7 @@ private:
 	LibASS *ass;
 
 	QMutex osdMutex, subsMutex;
-	QMPlay2_OSD *osd;
+	QMPlay2OSD *osd;
 	int videoWinW, videoWinH;
 	QStringList fileSubsList;
 	QString fileSubs;

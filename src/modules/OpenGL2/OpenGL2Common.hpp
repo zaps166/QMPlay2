@@ -44,7 +44,7 @@
 
 class HWAccelInterface;
 class OpenGL2Common;
-class QMPlay2_OSD;
+class QMPlay2OSD;
 class QMouseEvent;
 
 class RotAnimation : public QVariantAnimation
@@ -163,7 +163,7 @@ public:
 
 	double aspectRatio, zoom;
 
-	QList<const QMPlay2_OSD *> osdList;
+	QList<const QMPlay2OSD *> osdList;
 	QMutex osdMutex;
 
 	QList<QByteArray> osdChecksums;

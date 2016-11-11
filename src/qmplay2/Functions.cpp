@@ -19,7 +19,7 @@
 #include <Functions.hpp>
 
 #include <QMPlay2Extensions.hpp>
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <DeintFilter.hpp>
 #include <VideoFrame.hpp>
 #include <Reader.hpp>
@@ -250,10 +250,10 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 	}
 }
 
-bool Functions::mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
+bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
 {
 	bool mustRepaint = (osd_list.count() != osd_checksums.count());
-	foreach (const QMPlay2_OSD *osd, osd_list)
+	foreach (const QMPlay2OSD *osd, osd_list)
 	{
 		osd->lock();
 		if (!mustRepaint)
@@ -262,7 +262,7 @@ bool Functions::mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const
 		{
 			for (int j = 0; j < osd->imageCount(); j++)
 			{
-				const QMPlay2_OSD::Image &img = osd->getImage(j);
+				const QMPlay2OSD::Image &img = osd->getImage(j);
 				if (!osd->needsRescale())
 					*bounds |= img.rect;
 				else
@@ -277,11 +277,11 @@ bool Functions::mustRepaintOSD(const QList<const QMPlay2_OSD *> &osd_list, const
 	}
 	return mustRepaint;
 }
-void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2_OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums)
+void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums)
 {
 	if (osd_checksums)
 		osd_checksums->clear();
-	foreach (const QMPlay2_OSD *osd, osd_list)
+	foreach (const QMPlay2OSD *osd, osd_list)
 	{
 		osd->lock();
 		if (osd_checksums)
@@ -294,7 +294,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2_OSD *> &osd_
 		}
 		for (int j = 0; j < osd->imageCount(); j++)
 		{
-			const QMPlay2_OSD::Image &img = osd->getImage(j);
+			const QMPlay2OSD::Image &img = osd->getImage(j);
 			const QImage qImg = QImage((uchar *)img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32);
 			painter.drawImage(img.rect.topLeft(), rgbSwapped ? qImg.rgbSwapped() : qImg);
 		}
@@ -303,7 +303,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2_OSD *> &osd_
 		osd->unlock();
 	}
 }
-void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2_OSD *> &osd_list, ChecksumList &osd_checksums)
+void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_checksums)
 {
 	QRect bounds;
 	const int osdW = osdImg.width();

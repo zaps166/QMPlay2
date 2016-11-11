@@ -50,7 +50,7 @@ public:
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
 	void pause();
-	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
+	void writeOSD(const QList<const QMPlay2OSD *> &osd);
 
 	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
@@ -114,7 +114,7 @@ private:
 	bool surfacesCreated, paused;
 
 	static const int drawTimeout = 40;
-	QList<const QMPlay2_OSD *> osd_list;
+	QList<const QMPlay2OSD *> osd_list;
 	bool subpict_dest_is_screen_coord;
 	QList<QByteArray> osd_checksums;
 	VASubpictureID vaSubpicID;

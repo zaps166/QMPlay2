@@ -23,7 +23,7 @@
 #include <Main.hpp>
 
 #include <VideoWriter.hpp>
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Settings.hpp>
 #include <Decoder.hpp>
@@ -291,7 +291,7 @@ void VideoThr::run()
 
 		/* Subtitles */
 		const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
-		QList<const QMPlay2_OSD *> osdList, osdListToDelete;
+		QList<const QMPlay2OSD *> osdList, osdListToDelete;
 		playC.subsMutex.lock();
 		if (sDec) //Image subs (pgssub, dvdsub, ...)
 		{
@@ -335,7 +335,7 @@ void VideoThr::run()
 		playC.osdMutex.lock();
 		if (playC.osd)
 		{
-			if (deleteOSD || playC.osd->left_duration() < 0)
+			if (deleteOSD || playC.osd->leftDuration() < 0)
 			{
 				osdListToDelete += playC.osd;
 				playC.osd = NULL;

@@ -23,7 +23,7 @@
 #include <Writer.hpp>
 
 class HWAccelInterface;
-class QMPlay2_OSD;
+class QMPlay2OSD;
 class VideoFrame;
 class ImgScaler;
 
@@ -40,7 +40,7 @@ public:
 	qint64 write(const QByteArray &);
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
-	virtual void writeOSD(const QList<const QMPlay2_OSD *> &osd) = 0;
+	virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;
 
 	virtual void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
 	inline HWAccelInterface *getHWAccelInterface() const

@@ -41,7 +41,7 @@ private:
 
 /**/
 
-class QMPlay2_OSD;
+class QMPlay2OSD;
 
 class XVideoWriter : public VideoWriter
 {
@@ -57,7 +57,7 @@ private:
 
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2_OSD *> &);
+	void writeOSD(const QList<const QMPlay2OSD *> &);
 
 	QString name() const;
 
@@ -74,7 +74,7 @@ private:
 	Drawable *drawable;
 	XVIDEO *xv;
 
-	QList<const QMPlay2_OSD *> osd_list;
+	QList<const QMPlay2OSD *> osd_list;
 	QMutex osd_mutex;
 };
 

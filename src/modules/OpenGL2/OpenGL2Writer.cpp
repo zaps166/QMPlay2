@@ -152,7 +152,7 @@ void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
 	drawable->videoFrame = videoFrame;
 	drawable->updateGL(drawable->sphericalView);
 }
-void OpenGL2Writer::writeOSD(const QList<const QMPlay2_OSD *> &osds)
+void OpenGL2Writer::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {
 	QMutexLocker mL(&drawable->osdMutex);
 	drawable->osdList = osds;

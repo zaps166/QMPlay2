@@ -27,7 +27,7 @@
 #include <QByteArray>
 #include <QString>
 
-class QMPlay2_OSD;
+class QMPlay2OSD;
 class VideoWriter;
 class StreamInfo;
 class LibASS;
@@ -50,7 +50,7 @@ public:
 	*/
 	virtual int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
 	virtual int decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush = false);
-	virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h);
+	virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h);
 
 	virtual ~Decoder();
 private:

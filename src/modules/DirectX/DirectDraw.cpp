@@ -18,7 +18,7 @@
 
 #include <DirectDraw.hpp>
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
@@ -521,7 +521,7 @@ void DirectDrawWriter::writeVideo(const VideoFrame &videoFrame)
 	if (drawable->canDraw())
 		drawable->draw(videoFrame);
 }
-void DirectDrawWriter::writeOSD(const QList<const QMPlay2_OSD *> &osds)
+void DirectDrawWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {
 	drawable->osd_mutex.lock();
 	drawable->osd_list = osds;

@@ -19,7 +19,7 @@
 #include <FFDecSW.hpp>
 #include <FFCommon.hpp>
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
 #include <StreamInfo.hpp>
 #include <Functions.hpp>
@@ -276,7 +276,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 
 	return bytes_consumed < 0 ? 0 : bytes_consumed;
 }
-bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2_OSD *&osd, int w, int h)
+bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h)
 {
 	if (codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE)
 		return false;
@@ -398,7 +398,7 @@ inline void FFDecSW::addBitmapSubBuffer(BitmapSubBuffer *buff, double pos)
 		clearBitmapSubsBuffer();
 	bitmapSubsBuffer += buff;
 }
-bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
+bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 {
 	bool cantDelete = true, doClear = true;
 	for (int i = bitmapSubsBuffer.size() - 1; i >= 0 ; --i)
@@ -418,7 +418,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2_OSD *&osd, double pos)
 			{
 				const bool old_osd = osd;
 				if (!old_osd)
-					osd = new QMPlay2_OSD;
+					osd = new QMPlay2OSD;
 				else
 				{
 					osd->lock();

@@ -16,37 +16,37 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 
 #include <QCryptographicHash>
 
-void QMPlay2_OSD::genChecksum()
+void QMPlay2OSD::genChecksum()
 {
 	QCryptographicHash hash(QCryptographicHash::Md4);
-	foreach (const Image &img, images)
+	foreach (const Image &img, m_images)
 		hash.addData(img.data);
-	checksum = hash.result();
+	m_checksum = hash.result();
 }
 
-void QMPlay2_OSD::clear(bool all)
+void QMPlay2OSD::clear(bool all)
 {
-	images.clear();
-	_text.clear();
+	m_images.clear();
+	m_text.clear();
 	if (all)
-		_pts = _duration = -1.0;
-	_needsRescale = started = false;
-	checksum.clear();
+		m_pts = m_duration = -1.0;
+	m_needsRescale = m_started = false;
+	m_checksum.clear();
 }
 
-void QMPlay2_OSD::start()
+void QMPlay2OSD::start()
 {
-	started = true;
-	if (_pts == -1.0)
-		timer.start();
+	m_started = true;
+	if (m_pts == -1.0)
+		m_timer.start();
 }
-double QMPlay2_OSD::left_duration()
+double QMPlay2OSD::leftDuration()
 {
-	if (!started || _pts != -1.0)
+	if (!m_started || m_pts != -1.0)
 		return 0.0;
-	return _duration - timer.elapsed() / 1000.0;
+	return m_duration - m_timer.elapsed() / 1000.0;
 }

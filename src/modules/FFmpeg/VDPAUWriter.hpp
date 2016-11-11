@@ -42,7 +42,7 @@ public:
 
 	bool processParams(bool *paramsCorrected);
 	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2_OSD *> &osd);
+	void writeOSD(const QList<const QMPlay2OSD *> &osd);
 	void pause();
 
 	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
@@ -150,7 +150,7 @@ private:
 	WId lastWinId;
 
 	static const int drawTimeout = 40;
-	QList<const QMPlay2_OSD *> osd_list;
+	QList<const QMPlay2OSD *> osd_list;
 	QList<QByteArray> osd_checksums;
 	VdpBitmapSurface bitmapSurface;
 	QTimer visibleTim, drawTim;

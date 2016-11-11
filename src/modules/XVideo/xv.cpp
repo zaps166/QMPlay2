@@ -18,7 +18,7 @@
 
 #include <xv.hpp>
 
-#include <QMPlay2_OSD.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
@@ -225,7 +225,7 @@ void XVIDEO::close()
 	clrVars();
 }
 
-void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList<const QMPlay2_OSD *> &osd_list, QMutex &osd_mutex)
+void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList<const QMPlay2OSD *> &osd_list, QMutex &osd_mutex)
 {
 	videoFrame.copy(image->data, image->pitches[0], image->pitches[1]);
 

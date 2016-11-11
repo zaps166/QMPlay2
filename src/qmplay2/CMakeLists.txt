@@ -34,7 +34,7 @@ set(QMPLAY2_HDR
     headers/QMPlay2Extensions.hpp
     headers/LineEdit.hpp
     headers/Slider.hpp
-    headers/QMPlay2_OSD.hpp
+    headers/QMPlay2OSD.hpp
     headers/InDockW.hpp
     headers/LibASS.hpp
     headers/ColorButton.hpp
@@ -79,7 +79,7 @@ set(QMPLAY2_SRC
     QMPlay2Extensions.cpp
     LineEdit.cpp
     Slider.cpp
-    QMPlay2_OSD.cpp
+    QMPlay2OSD.cpp
     InDockW.cpp
     LibASS.cpp
     ColorButton.cpp

@@ -22,7 +22,7 @@
 
 class QRect;
 class VideoFrame;
-class QMPlay2_OSD;
+class QMPlay2OSD;
 struct XVideoPrivate;
 
 class XVIDEO
@@ -46,7 +46,7 @@ public:
 	void invalidateShm();
 	void close();
 
-	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList<const QMPlay2_OSD *> &, QMutex &);
+	void draw(const VideoFrame &, const QRect &, const QRect &, int, int, const QList<const QMPlay2OSD *> &, QMutex &);
 	void redraw(const QRect &, const QRect &, int, int, int, int, int, int);
 
 	void setVideoEqualizer(int, int, int, int);

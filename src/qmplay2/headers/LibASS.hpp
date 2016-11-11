@@ -23,7 +23,7 @@
 #include <QList>
 
 class Settings;
-class QMPlay2_OSD;
+class QMPlay2OSD;
 struct ass_style;
 struct ass_library;
 struct ass_track;
@@ -52,7 +52,7 @@ public:
 
 	void initOSD();
 	void setOSDStyle();
-	bool getOSD(QMPlay2_OSD *&, const QByteArray &, double);
+	bool getOSD(QMPlay2OSD *&, const QByteArray &, double);
 	void closeOSD();
 
 	void initASS(const QByteArray &header = QByteArray());
@@ -61,7 +61,7 @@ public:
 	void addASSEvent(const QByteArray &);
 	void addASSEvent(const QByteArray &, double, double);
 	void flushASSEvents();
-	bool getASS(QMPlay2_OSD *&, double);
+	bool getASS(QMPlay2OSD *&, double);
 	void closeASS();
 private:
 	void readStyle(const QString &, ass_style *);

@@ -23,7 +23,7 @@
 #include <VideoFilters.hpp>
 #include <PixelFormats.hpp>
 
-class QMPlay2_OSD;
+class QMPlay2OSD;
 class VideoWriter;
 
 class VideoThr : public AVThread
@@ -85,7 +85,7 @@ private:
 
 	Decoder *sDec;
 	VideoWriter *hwAccelWriter;
-	QMPlay2_OSD *subtitles;
+	QMPlay2OSD *subtitles;
 	VideoFilters filters;
 	QMutex filtersMutex;
 private slots:
