@@ -18,8 +18,6 @@
 
 #include <AudioFilter.hpp>
 
-class Buffer;
-
 class Echo : public AudioFilter
 {
 public:

@@ -18,8 +18,6 @@
 
 #include <AudioFilter.hpp>
 
-class Buffer;
-
 class VoiceRemoval : public AudioFilter
 {
 public:

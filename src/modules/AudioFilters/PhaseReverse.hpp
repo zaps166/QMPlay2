@@ -18,8 +18,6 @@
 
 #include <AudioFilter.hpp>
 
-class Buffer;
-
 class PhaseReverse : public AudioFilter
 {
 public:
