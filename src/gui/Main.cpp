@@ -166,7 +166,8 @@ const QWidget *QMPlay2GUIClass::getVideoDock() const
 QMPlay2GUIClass::QMPlay2GUIClass() :
 	groupIcon(NULL), mediaIcon(NULL), folderIcon(NULL),
 	mainW(NULL),
-	screenSaver(NULL)
+	screenSaver(NULL),
+	shortcutHandler(NULL)
 {
 	qmp2Pixmap = g_useGui ? new QPixmap(":/QMPlay2") : NULL;
 }
