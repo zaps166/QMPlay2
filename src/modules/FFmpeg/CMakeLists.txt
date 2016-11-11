@@ -75,9 +75,9 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2) # Common HWAccel
 
     if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)
-        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPIWriter.hpp)
-        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPIWriter.cpp)
-        pkg_check_modules(LBVA libva libva-x11 REQUIRED)
+        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp VAAPIWriter.hpp)
+        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp VAAPIWriter.cpp)
+        pkg_check_modules(LBVA libva libva-x11 libva-glx REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LBVA_LIBRARIES})

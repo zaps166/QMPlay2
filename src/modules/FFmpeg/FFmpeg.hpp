@@ -94,8 +94,10 @@ private:
 	QCheckBox *decoderVDPAU_NWB;
 #endif
 #ifdef QMPlay2_VAAPI
-	QCheckBox *allowVDPAUinVAAPIB;
 	QGroupBox *decoderVAAPIEB;
+	QCheckBox *useOpenGLinVAAPIB;
+	QCheckBox *allowVDPAUinVAAPIB;
+	QCheckBox *copyVideoVAAPIB;
 #endif
 #ifdef QMPlay2_DXVA2
 	QGroupBox *decoderDXVA2EB;

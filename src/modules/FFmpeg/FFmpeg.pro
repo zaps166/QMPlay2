@@ -46,9 +46,9 @@ unix:!macx:!android {
 	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
 
 #VAAPI
-	PKGCONFIG += libva libva-x11
-	HEADERS   += FFDecVAAPI.hpp VAAPIWriter.hpp
-	SOURCES   += FFDecVAAPI.cpp VAAPIWriter.cpp
+	PKGCONFIG += libva libva-x11 libva-glx
+	HEADERS   += FFDecVAAPI.hpp VAAPI.hpp VAAPIWriter.hpp
+	SOURCES   += FFDecVAAPI.cpp VAAPI.cpp VAAPIWriter.cpp
 	DEFINES   += QMPlay2_VAAPI
 
 #VDPAU

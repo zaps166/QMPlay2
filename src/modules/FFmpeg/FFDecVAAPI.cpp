@@ -17,6 +17,7 @@
 */
 
 #include <FFDecVAAPI.hpp>
+#include <HWAccelInterface.hpp>
 #include <VAAPIWriter.hpp>
 #include <FFCommon.hpp>
 
@@ -27,10 +28,86 @@ extern "C"
 	#include <libavformat/avformat.h>
 	#include <libavutil/pixdesc.h>
 	#include <libavcodec/vaapi.h>
+	#include <libswscale/swscale.h>
 }
 
+#include <va/va_glx.h>
+
+class VAAPIOpenGL : public HWAccelInterface
+{
+public:
+	VAAPIOpenGL(VAAPI *vaapi) :
+		m_vaapi(vaapi),
+		m_glSurface(NULL)
+	{}
+	~VAAPIOpenGL()
+	{
+		delete m_vaapi;
+	}
+
+	QString name() const
+	{
+		return VAAPIWriterName;
+	}
+
+	Format getFormat() const
+	{
+		return RGB32;
+	}
+
+	bool lock()
+	{
+		return true;
+	}
+	void unlock()
+	{}
+
+	bool init(quint32 *textures)
+	{
+		return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
+	}
+	void clear()
+	{
+		if (m_glSurface)
+		{
+			vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
+			m_glSurface = NULL;
+		}
+	}
+
+	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
+	{
+		//VA-API fields codes are compatible with "HWAccelInterface::Field" codes.
+		if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, videoFrame.surfaceId, field) == VA_STATUS_SUCCESS)
+			return CopyOk;
+		return CopyError;
+	}
+
+	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+	{
+		return m_vaapi->getImage(videoFrame, dest, nv12ToRGB32);
+	}
+
+	/**/
+
+	inline VAAPI *getVAAPI() const
+	{
+		return m_vaapi;
+	}
+
+private:
+	VAAPI *m_vaapi;
+	void *m_glSurface;
+};
+
+/**/
+
 FFDecVAAPI::FFDecVAAPI(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex)
+	FFDecHWAccel(avcodec_mutex),
+	m_useOpenGL(true), m_allowVDPAU(false),
+	m_copyVideo(Qt::Unchecked),
+	m_vaapi(NULL),
+	m_swsCtx(NULL)
 {
 	SetModule(module);
 }
@@ -38,16 +115,107 @@ FFDecVAAPI::~FFDecVAAPI()
 {
 	if (codecIsOpen)
 		avcodec_flush_buffers(codec_ctx);
+	if (m_swsCtx)
+		sws_freeContext(m_swsCtx);
 }
 
 bool FFDecVAAPI::set()
 {
-	return sets().getBool("DecoderVAAPIEnabled");
+	bool ret = true;
+
+	const bool useOpenGL = sets().getBool("UseOpenGLinVAAPI");
+	if (useOpenGL != m_useOpenGL)
+	{
+		m_useOpenGL = useOpenGL;
+		ret = false;
+	}
+
+	const bool allowVDPAU = sets().getBool("AllowVDPAUinVAAPI");
+	if (allowVDPAU != m_allowVDPAU)
+	{
+		m_allowVDPAU = allowVDPAU;
+		ret = false;
+	}
+
+	const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideoVAAPI");
+	if (copyVideo != m_copyVideo)
+	{
+		m_copyVideo = copyVideo;
+		ret = false;
+	}
+
+#ifdef HAVE_VPP
+	switch (sets().getInt("VAAPIDeintMethod"))
+	{
+		case 0:
+			m_vppDeintType = VAProcDeinterlacingNone;
+			break;
+		case 2:
+			m_vppDeintType = VAProcDeinterlacingMotionCompensated;
+			break;
+		default:
+			m_vppDeintType = VAProcDeinterlacingMotionAdaptive;
+	}
+	if (m_vaapi)
+	{
+		const bool reloadVpp = m_vaapi->ok && m_vaapi->use_vpp && (m_vaapi->vpp_deint_type != m_vppDeintType);
+		m_vaapi->vpp_deint_type = m_vppDeintType;
+		if (reloadVpp)
+		{
+			m_vaapi->clr_vpp();
+			m_vaapi->init_vpp();
+		}
+	}
+#endif
+
+	return sets().getBool("DecoderVAAPIEnabled") && ret;
 }
 
 QString FFDecVAAPI::name() const
 {
 	return "FFmpeg/" VAAPIWriterName;
+}
+
+void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
+{
+	VAImage image;
+	quint8 *vaData = m_vaapi->getNV12Image(image, (quintptr)frame->data[3]);
+	if (vaData)
+	{
+		AVBufferRef *dstBuffer[3] = {
+			av_buffer_alloc(image.pitches[0] * image.height),
+			av_buffer_alloc((image.pitches[1] / 2) * (image.height / 2)),
+			av_buffer_alloc((image.pitches[1] / 2) * (image.height / 2))
+		};
+
+		quint8 *srcData[2] = {
+			vaData + image.offsets[0],
+			vaData + image.offsets[1]
+		};
+		qint32 srcLinesize[2] = {
+			(qint32)image.pitches[0],
+			(qint32)image.pitches[1]
+		};
+
+		uint8_t *dstData[3] = {
+			dstBuffer[0]->data,
+			dstBuffer[1]->data,
+			dstBuffer[2]->data
+		};
+		qint32 dstLinesize[3] = {
+			(qint32)image.pitches[0],
+			(qint32)image.pitches[1] / 2,
+			(qint32)image.pitches[1] / 2
+		};
+
+		m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL);
+		sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
+
+		decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
+
+		vaUnmapBuffer(m_vaapi->VADisp, image.buf);
+		vaDestroyImage(m_vaapi->VADisp, image.image_id);
+	}
 }
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
@@ -58,27 +226,85 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vaapi"))
 		{
-			if (writer && writer->name() != VAAPIWriterName)
-				writer = NULL;
-			VAAPIWriter *vaapiWriter = writer ? (VAAPIWriter *)writer : new VAAPIWriter(getModule());
-			if ((writer || vaapiWriter->open()) && vaapiWriter->HWAccelInit(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+			if (writer)
 			{
-				vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
-				vaapiCtx->display    = vaapiWriter->getVADisplay();
-				vaapiCtx->context_id = vaapiWriter->getVAContext();
-				vaapiCtx->config_id  = vaapiWriter->getVAConfig();
+				VAAPIOpenGL *vaapiOpenGL = dynamic_cast<VAAPIOpenGL *>(writer->getHWAccelInterface());
+				if (vaapiOpenGL)
+				{
+					m_vaapi = vaapiOpenGL->getVAAPI();
+					m_hwAccelWriter = writer;
+				}
+				else if (writer->name() != VAAPIWriterName)
+					writer = NULL;
+			}
 
-				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, vaapiWriter->getSurfacesQueue());
+			if (!m_vaapi && writer)
+			{
+				VAAPIWriter *vaapiWriter = (VAAPIWriter *)writer;
+				m_vaapi = vaapiWriter->getVAAPI();
+				if (m_vaapi)
+					m_hwAccelWriter = vaapiWriter;
+				else
+					writer = NULL;
+			}
+
+			if (!m_vaapi)
+			{
+				m_vaapi = new VAAPI;
+				if (!m_vaapi->open(m_allowVDPAU, m_useOpenGL))
+				{
+					delete m_vaapi;
+					m_vaapi = NULL;
+				}
+			}
+
+			if (m_vaapi)
+			{
+				m_vaapi->vpp_deint_type = m_vppDeintType;
+				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+				{
+					delete m_vaapi;
+					m_vaapi = NULL;
+				}
+			}
+
+			if (m_vaapi)
+			{
+				if (m_copyVideo != Qt::Checked && !m_hwAccelWriter)
+				{
+					if (m_useOpenGL)
+						m_hwAccelWriter = VideoWriter::createOpenGL2(new VAAPIOpenGL(m_vaapi));
+					if (!m_hwAccelWriter)
+					{
+						VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
+						if (!vaapiWriter->open())
+							delete vaapiWriter;
+						else
+						{
+							vaapiWriter->init();
+							m_hwAccelWriter = vaapiWriter;
+						}
+					}
+				}
+
+				if (m_copyVideo == Qt::Unchecked && !m_hwAccelWriter)
+					return false;
+
+				vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
+				vaapiCtx->display    = m_vaapi->VADisp;
+				vaapiCtx->context_id = m_vaapi->context;
+				vaapiCtx->config_id  = m_vaapi->config;
+
+				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, m_vaapi->getSurfacesQueue());
 
 				if (openCodec(codec))
 				{
 					time_base = streamInfo.getTimeBase();
-					m_hwAccelWriter = vaapiWriter;
+					if (!m_hwAccelWriter && m_vaapi->nv12ImageFmt.fourcc != VA_FOURCC_NV12)
+						return false;
 					return true;
 				}
 			}
-			else if (!writer)
-				delete vaapiWriter;
 		}
 	}
 	return false;

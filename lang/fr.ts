@@ -1494,6 +1494,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Use OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2689,7 +2693,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>VAAPIWriter</name>
+    <name>VAAPI</name>
     <message>
         <source>Not supported deinterlacing algorithm</source>
         <translation>Algorithme de désentrelacement non supporté</translation>

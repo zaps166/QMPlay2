@@ -1496,6 +1496,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
         <translation>Kopiuj obraz do pamięci CPU (nie zalecane, bardzo wolne na GPU Intel&apos;a)</translation>
     </message>
+    <message>
+        <source>Use OpenGL</source>
+        <translation>Użyj OpenGL</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2691,7 +2695,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
-    <name>VAAPIWriter</name>
+    <name>VAAPI</name>
     <message>
         <source>Not supported deinterlacing algorithm</source>
         <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>

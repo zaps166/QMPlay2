@@ -17,6 +17,9 @@
 */
 
 #include <FFDecHWAccel.hpp>
+#include <VAAPI.hpp>
+
+struct SwsContext;
 
 class FFDecVAAPI : public FFDecHWAccel
 {
@@ -28,5 +31,16 @@ public:
 
 	QString name() const;
 
+	void downloadVideoFrame(VideoFrame &decoded);
+
 	bool open(StreamInfo &, VideoWriter *);
+
+private:
+	bool m_useOpenGL, m_allowVDPAU;
+	Qt::CheckState m_copyVideo;
+#ifdef HAVE_VPP
+	VAProcDeinterlacingType m_vppDeintType;
+#endif
+	VAAPI *m_vaapi;
+	SwsContext *m_swsCtx;
 };

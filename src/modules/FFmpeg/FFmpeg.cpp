@@ -81,8 +81,10 @@ FFmpeg::FFmpeg() :
 		set("VDPAUHQScaling", 0);
 #endif
 #ifdef QMPlay2_VAAPI
-	init("AllowVDPAUinVAAPI", false);
 	init("DecoderVAAPIEnabled", true);
+	init("UseOpenGLinVAAPI", true);
+	init("AllowVDPAUinVAAPI", false);
+	init("CopyVideoVAAPI", Qt::Unchecked);
 	init("VAAPIDeintMethod", 1);
 	if (getUInt("VAAPIDeintMethod") > 2)
 		set("VAAPIDeintMethod", 1);
@@ -280,11 +282,21 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	decoderVAAPIEB->setCheckable(true);
 	decoderVAAPIEB->setChecked(sets().getBool("DecoderVAAPIEnabled"));
 
+	useOpenGLinVAAPIB = new QCheckBox(tr("Use OpenGL"));
+	useOpenGLinVAAPIB->setChecked(sets().getBool("UseOpenGLinVAAPI"));
+
 	allowVDPAUinVAAPIB = new QCheckBox(tr("Allow VDPAU"));
 	allowVDPAUinVAAPIB->setChecked(sets().getBool("AllowVDPAUinVAAPI"));
 
+	copyVideoVAAPIB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
+	copyVideoVAAPIB->setTristate(true);
+	copyVideoVAAPIB->setCheckState((Qt::CheckState)sets().getInt("CopyVideoVAAPI"));
+	copyVideoVAAPIB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
+
 	QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
+	vaapiLayout->addRow(useOpenGLinVAAPIB);
 	vaapiLayout->addRow(allowVDPAUinVAAPIB);
+	vaapiLayout->addRow(copyVideoVAAPIB);
 #endif
 
 #ifdef QMPlay2_DXVA2
@@ -402,8 +414,10 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("DecoderVDPAU_NWEnabled", decoderVDPAU_NWB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
-	sets().set("AllowVDPAUinVAAPI", allowVDPAUinVAAPIB->isChecked());
 	sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
+	sets().set("UseOpenGLinVAAPI", useOpenGLinVAAPIB->isChecked());
+	sets().set("AllowVDPAUinVAAPI", allowVDPAUinVAAPIB->isChecked());
+	sets().set("CopyVideoVAAPI", copyVideoVAAPIB->checkState());
 #endif
 #ifdef QMPlay2_DXVA2
 	if (decoderDXVA2EB)
