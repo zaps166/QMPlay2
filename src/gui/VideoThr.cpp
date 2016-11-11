@@ -367,9 +367,7 @@ void VideoThr::run()
 			QByteArray newPixelFormat;
 			const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, playC.flushVideo, skip ? ~0 : (fast >> 1));
 			if (!newPixelFormat.isEmpty())
-			{
 				emit playC.pixelFormatUpdate(newPixelFormat);
-			}
 			if (playC.flushVideo)
 			{
 				useLastDelay = true; //if seeking

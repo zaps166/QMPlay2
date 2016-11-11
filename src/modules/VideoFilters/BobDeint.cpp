@@ -84,7 +84,6 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		if (secondFrame)
 			internalQueue.removeFirst();
 		secondFrame = !secondFrame;
-
 	}
 	return internalQueue.count() >= 1;
 }
