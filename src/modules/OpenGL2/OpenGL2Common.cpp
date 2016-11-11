@@ -667,14 +667,6 @@ void OpenGL2Common::testGLInternal()
 	numPlanes = 3;
 	if (hwAccellnterface)
 	{
-		quint32 textures[2] = {0};
-		glGenTextures(2, textures);
-		for (int p = 0; p < 2; ++p)
-		{
-			glBindTexture(GL_TEXTURE_2D, textures[p]);
-			glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
-		}
-
 		switch (hwAccellnterface->getFormat())
 		{
 			case HWAccelInterface::NV12:
@@ -683,6 +675,17 @@ void OpenGL2Common::testGLInternal()
 			case HWAccelInterface::RGB32:
 				numPlanes = 1;
 				break;
+		}
+
+		quint32 textures[numPlanes] = {0};
+		glGenTextures(numPlanes, textures);
+		for (int p = 0; p < numPlanes; ++p)
+		{
+			glBindTexture(GL_TEXTURE_2D, textures[p]);
+			if (numPlanes == 2)
+				glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
+			else if (numPlanes == 1)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		}
 
 		if (!hwAccellnterface->lock())
@@ -694,7 +697,8 @@ void OpenGL2Common::testGLInternal()
 			hwAccellnterface->clear();
 			hwAccellnterface->unlock();
 		}
-		glDeleteTextures(2, textures);
+
+		glDeleteTextures(numPlanes, textures);
 	}
 
 	QWidget *w = widget();
