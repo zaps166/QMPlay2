@@ -96,16 +96,24 @@ public:
 	bool filter(QQueue<FrameBuffer> &framesQueue)
 	{
 		addFramesToDeinterlace(framesQueue, false);
-		if (internalQueue.count() >= 2)
+		if (internalQueue.count() >= 1)
 		{
-			FrameBuffer dequeued = internalQueue.dequeue();
-			const bool TFF = isTopFieldFirst(dequeued.frame);
-			dequeued.frame.tff = TFF;
-			framesQueue.enqueue(dequeued);
-			dequeued.frame.tff = !TFF;
-			framesQueue.enqueue(FrameBuffer(dequeued.frame, dequeued.ts + halfDelay(internalQueue.at(0).ts, dequeued.ts)));
+			FrameBuffer frameBuffer = internalQueue.at(0);
+
+			frameBuffer.frame.tff = (isTopFieldFirst(frameBuffer.frame) != secondFrame);
+			if (secondFrame)
+				frameBuffer.ts += halfDelay(frameBuffer.ts, lastTS);
+
+			framesQueue.enqueue(frameBuffer);
+
+			if (secondFrame || lastTS < 0.0)
+				lastTS = frameBuffer.ts;
+
+			if (secondFrame)
+				internalQueue.removeFirst();
+			secondFrame = !secondFrame;
 		}
-		return internalQueue.count() >= 2;
+		return internalQueue.count() >= 1;
 	}
 
 	bool processParams(bool *)
@@ -113,8 +121,14 @@ public:
 		deintFlags = getParam("DeinterlaceFlags").toInt();
 		if (!(deintFlags & DoubleFramerate))
 			return false;
+		secondFrame = false;
+		lastTS = -1.0;
 		return true;
 	}
+
+private:
+	bool secondFrame;
+	double lastTS;
 };
 
 /**/
