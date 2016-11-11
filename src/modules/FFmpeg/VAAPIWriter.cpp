@@ -63,8 +63,8 @@ VAAPIWriter::~VAAPIWriter()
 
 bool VAAPIWriter::set()
 {
-#ifdef HAVE_VPP
 	allowVDPAU = sets().getBool("AllowVDPAUinVAAPI");
+#ifdef HAVE_VPP
 	VAProcDeinterlacingType _vpp_deint_type;
 	switch (sets().getInt("VAAPIDeintMethod"))
 	{
