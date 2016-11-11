@@ -35,5 +35,12 @@ QVector<AudioFilter *> AudioFilter::open()
 	return filterList;
 }
 
+int AudioFilter::bufferedSamples() const
+{
+	return 0;
+}
+void AudioFilter::clearBuffers()
+{}
+
 AudioFilter::~AudioFilter()
 {}
