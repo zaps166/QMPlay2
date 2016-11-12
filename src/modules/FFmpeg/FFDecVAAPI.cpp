@@ -197,9 +197,9 @@ void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
 	if (vaData)
 	{
 		AVBufferRef *dstBuffer[3] = {
-			av_buffer_alloc(image.pitches[0] * image.height),
-			av_buffer_alloc((image.pitches[1] / 2) * (image.height / 2)),
-			av_buffer_alloc((image.pitches[1] / 2) * (image.height / 2))
+			av_buffer_alloc(image.pitches[0] * frame->height),
+			av_buffer_alloc((image.pitches[1] / 2) * ((frame->height + 1) / 2)),
+			av_buffer_alloc((image.pitches[1] / 2) * ((frame->height + 1) / 2))
 		};
 
 		quint8 *srcData[2] = {

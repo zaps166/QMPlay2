@@ -362,9 +362,9 @@ void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
 	if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, NULL, D3DLOCK_READONLY)))
 	{
 		AVBufferRef *dstBuffer[3] = {
-			av_buffer_alloc(lockedRect.Pitch * desc.Height),
-			av_buffer_alloc((lockedRect.Pitch / 2) * (desc.Height / 2)),
-			av_buffer_alloc((lockedRect.Pitch / 2) * (desc.Height / 2))
+			av_buffer_alloc(lockedRect.Pitch * frame->height),
+			av_buffer_alloc((lockedRect.Pitch / 2) * ((frame->height + 1) / 2)),
+			av_buffer_alloc((lockedRect.Pitch / 2) * ((frame->height + 1) / 2))
 		};
 
 		quint8 *srcData[2] = {
