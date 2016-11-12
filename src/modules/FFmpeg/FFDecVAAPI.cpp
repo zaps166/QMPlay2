@@ -38,11 +38,13 @@ class VAAPIOpenGL : public HWAccelInterface
 public:
 	VAAPIOpenGL(VAAPI *vaapi) :
 		m_vaapi(vaapi),
-		m_glSurface(NULL)
+		m_glSurface(NULL),
+		m_canDeleteVAAPI(false)
 	{}
 	~VAAPIOpenGL()
 	{
-		delete m_vaapi;
+		if (m_canDeleteVAAPI)
+			delete m_vaapi;
 	}
 
 	QString name() const
@@ -95,9 +97,15 @@ public:
 		return m_vaapi;
 	}
 
+	inline void allowDeleteVAAPI()
+	{
+		m_canDeleteVAAPI = true;
+	}
+
 private:
 	VAAPI *m_vaapi;
 	void *m_glSurface;
+	bool m_canDeleteVAAPI;
 };
 
 /**/
@@ -226,39 +234,38 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 		AVCodec *codec = init(streamInfo);
 		if (codec && hasHWAccel("vaapi"))
 		{
-			if (writer)
+			if (writer) //Writer is already created
 			{
 				VAAPIOpenGL *vaapiOpenGL = dynamic_cast<VAAPIOpenGL *>(writer->getHWAccelInterface());
-				if (vaapiOpenGL)
+				if (vaapiOpenGL) //Check if it is OpenGL 2
 				{
 					m_vaapi = vaapiOpenGL->getVAAPI();
 					m_hwAccelWriter = writer;
 				}
-				else if (writer->name() != VAAPIWriterName)
+				else if (writer->name() == VAAPIWriterName) //Check if it is VA-API
+				{
+					VAAPIWriter *vaapiWriter = (VAAPIWriter *)writer;
+					m_vaapi = vaapiWriter->getVAAPI();
+					if (m_vaapi)
+						m_hwAccelWriter = vaapiWriter;
+				}
+				if (!m_hwAccelWriter)
 					writer = NULL;
 			}
 
-			if (!m_vaapi && writer)
-			{
-				VAAPIWriter *vaapiWriter = (VAAPIWriter *)writer;
-				m_vaapi = vaapiWriter->getVAAPI();
-				if (m_vaapi)
-					m_hwAccelWriter = vaapiWriter;
-				else
-					writer = NULL;
-			}
+			bool useOpenGL = m_useOpenGL;
 
-			if (!m_vaapi)
+			if (!m_vaapi) //VA-API context doesn't exist yet, so create it
 			{
 				m_vaapi = new VAAPI;
-				if (!m_vaapi->open(m_allowVDPAU, m_useOpenGL))
+				if (!m_vaapi->open(m_allowVDPAU, useOpenGL))
 				{
 					delete m_vaapi;
 					m_vaapi = NULL;
 				}
 			}
 
-			if (m_vaapi)
+			if (m_vaapi) //Initialize VA-API context
 			{
 				m_vaapi->vpp_deint_type = m_vppDeintType;
 				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
@@ -268,12 +275,17 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 				}
 			}
 
-			if (m_vaapi)
+			if (m_vaapi) //VA-API context is properly initialized
 			{
-				if (m_copyVideo != Qt::Checked && !m_hwAccelWriter)
+				if (m_copyVideo != Qt::Checked && !m_hwAccelWriter) //Open writer if doesn't exist yet and if we don't want to copy the video
 				{
-					if (m_useOpenGL)
-						m_hwAccelWriter = VideoWriter::createOpenGL2(new VAAPIOpenGL(m_vaapi));
+					if (useOpenGL)
+					{
+						VAAPIOpenGL *vaapiOpengGL = new VAAPIOpenGL(m_vaapi);
+						m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
+						if (m_hwAccelWriter)
+							vaapiOpengGL->allowDeleteVAAPI();
+					}
 					if (!m_hwAccelWriter)
 					{
 						VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
@@ -287,22 +299,27 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 					}
 				}
 
-				if (m_copyVideo == Qt::Unchecked && !m_hwAccelWriter)
-					return false;
-
-				vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
-				vaapiCtx->display    = m_vaapi->VADisp;
-				vaapiCtx->context_id = m_vaapi->context;
-				vaapiCtx->config_id  = m_vaapi->config;
-
-				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, m_vaapi->getSurfacesQueue());
-
-				if (openCodec(codec))
+				if (m_copyVideo != Qt::Unchecked || m_hwAccelWriter)
 				{
-					time_base = streamInfo.getTimeBase();
-					if (!m_hwAccelWriter && m_vaapi->nv12ImageFmt.fourcc != VA_FOURCC_NV12)
-						return false;
-					return true;
+					vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
+					vaapiCtx->display    = m_vaapi->VADisp;
+					vaapiCtx->context_id = m_vaapi->context;
+					vaapiCtx->config_id  = m_vaapi->config;
+
+					new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, m_vaapi->getSurfacesQueue());
+
+					if (openCodec(codec))
+					{
+						time_base = streamInfo.getTimeBase();
+						if (m_hwAccelWriter || m_vaapi->nv12ImageFmt.fourcc == VA_FOURCC_NV12)
+							return true;
+					}
+				}
+
+				if (!m_hwAccelWriter)
+				{
+					delete m_vaapi;
+					m_vaapi = NULL;
 				}
 			}
 		}
