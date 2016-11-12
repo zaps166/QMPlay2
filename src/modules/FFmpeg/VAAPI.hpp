@@ -43,7 +43,7 @@ public:
 	VAAPI();
 	~VAAPI();
 
-	bool open(bool allowVDPAU, bool openGL);
+	bool open(bool allowVDPAU, bool &openGL);
 
 	bool init(int width, int height, const char *codecName);
 
@@ -56,6 +56,8 @@ public:
 
 	void clr_vpp();
 	void clr();
+
+	void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
 	bool writeVideo(const VideoFrame &videoFrame, int deinterlace, VASurfaceID &id, int &field);
 

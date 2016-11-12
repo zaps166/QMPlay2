@@ -93,33 +93,7 @@ bool VAAPIWriter::processParams(bool *)
 		Saturation = _Saturation;
 		Brightness = _Brightness;
 		Contrast = _Contrast;
-
-		int num_attribs = vaMaxNumDisplayAttributes(vaapi->VADisp);
-		VADisplayAttribute attribs[num_attribs];
-		if (!vaQueryDisplayAttributes(vaapi->VADisp, attribs, &num_attribs))
-		{
-			for (int i = 0; i < num_attribs; ++i)
-			{
-				switch (attribs[i].type)
-				{
-					case VADisplayAttribHue:
-						attribs[i].value = Functions::scaleEQValue(Hue, attribs[i].min_value, attribs[i].max_value);
-						break;
-					case VADisplayAttribSaturation:
-						attribs[i].value = Functions::scaleEQValue(Saturation, attribs[i].min_value, attribs[i].max_value);
-						break;
-					case VADisplayAttribBrightness:
-						attribs[i].value = Functions::scaleEQValue(Brightness, attribs[i].min_value, attribs[i].max_value);
-						break;
-					case VADisplayAttribContrast:
-						attribs[i].value = Functions::scaleEQValue(Contrast, attribs[i].min_value, attribs[i].max_value);
-						break;
-					default:
-						break;
-				}
-			}
-			vaSetDisplayAttributes(vaapi->VADisp, attribs, num_attribs);
-		}
+		vaapi->applyVideoAdjustment(Brightness, Contrast, Saturation, Hue);
 	}
 
 	if (!isVisible())

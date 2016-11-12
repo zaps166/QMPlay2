@@ -47,7 +47,7 @@ VAAPI::~VAAPI()
 		XCloseDisplay(display);
 }
 
-bool VAAPI::open(bool allowVDPAU, bool openGL)
+bool VAAPI::open(bool allowVDPAU, bool &openGL)
 {
 	clr();
 
@@ -57,7 +57,15 @@ bool VAAPI::open(bool allowVDPAU, bool openGL)
 
 	VADisp = openGL ? vaGetDisplayGLX(display) : vaGetDisplay(display);
 	if (!VADisp)
-		return false;
+	{
+		if (openGL)
+		{
+			VADisp = vaGetDisplay(display);
+			openGL = false;
+		}
+		if (!VADisp)
+			return false;
+	}
 
 	int major = 0, minor = 0;
 	if (vaInitialize(VADisp, &major, &minor) == VA_STATUS_SUCCESS)
@@ -343,6 +351,36 @@ void VAAPI::clr()
 	profile = (VAProfile)-1; //VAProfileNone
 	context = 0;
 	config = 0;
+}
+
+void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, int hue)
+{
+	int num_attribs = vaMaxNumDisplayAttributes(VADisp);
+	VADisplayAttribute attribs[num_attribs];
+	if (!vaQueryDisplayAttributes(VADisp, attribs, &num_attribs))
+	{
+		for (int i = 0; i < num_attribs; ++i)
+		{
+			switch (attribs[i].type)
+			{
+				case VADisplayAttribHue:
+					attribs[i].value = Functions::scaleEQValue(hue, attribs[i].min_value, attribs[i].max_value);
+					break;
+				case VADisplayAttribSaturation:
+					attribs[i].value = Functions::scaleEQValue(saturation, attribs[i].min_value, attribs[i].max_value);
+					break;
+				case VADisplayAttribBrightness:
+					attribs[i].value = Functions::scaleEQValue(brightness, attribs[i].min_value, attribs[i].max_value);
+					break;
+				case VADisplayAttribContrast:
+					attribs[i].value = Functions::scaleEQValue(contrast, attribs[i].min_value, attribs[i].max_value);
+					break;
+				default:
+					break;
+			}
+		}
+		vaSetDisplayAttributes(VADisp, attribs, num_attribs);
+	}
 }
 
 bool VAAPI::writeVideo(const VideoFrame &videoFrame, int deinterlace, VASurfaceID &id, int &field)
