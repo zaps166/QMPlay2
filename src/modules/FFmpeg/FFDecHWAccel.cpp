@@ -32,10 +32,12 @@ FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {
-	if (codecIsOpen)
+	if (codec_ctx)
 	{
-		av_free(codec_ctx->hwaccel_context);
-		delete (HWAccelHelper *)codec_ctx->opaque;
+		if (codec_ctx->hwaccel_context)
+			av_free(codec_ctx->hwaccel_context);
+		if (codec_ctx->opaque)
+			delete (HWAccelHelper *)codec_ctx->opaque;
 	}
 }
 
