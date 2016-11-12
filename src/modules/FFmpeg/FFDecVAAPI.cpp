@@ -57,13 +57,6 @@ public:
 		return RGB32;
 	}
 
-	bool lock()
-	{
-		return true;
-	}
-	void unlock()
-	{}
-
 	bool init(quint32 *textures)
 	{
 		return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
@@ -88,6 +81,19 @@ public:
 	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
 	{
 		return m_vaapi->getImage(videoFrame, dest, nv12ToRGB32);
+	}
+
+	void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
+	{
+		videoAdjustmentCap.brightness = true;
+		videoAdjustmentCap.contrast = true;
+		videoAdjustmentCap.saturation = true;
+		videoAdjustmentCap.hue = true;
+		videoAdjustmentCap.sharpness = false;
+	}
+	void setVideAdjustment(const VideoAdjustment &videoAdjustment)
+	{
+		m_vaapi->applyVideoAdjustment(videoAdjustment.brightness, videoAdjustment.contrast, videoAdjustment.saturation, videoAdjustment.hue);
 	}
 
 	/**/

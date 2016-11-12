@@ -99,7 +99,6 @@ OpenGL2Common::OpenGL2Common() :
 	hwAccellnterface(NULL),
 	shaderProgramVideo(NULL), shaderProgramOSD(NULL),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
-	Contrast(-1), Saturation(-1), Brightness(-1), Hue(-1), Sharpness(-1),
 	numPlanes(0),
 	Deinterlace(0),
 	allowPBO(true), hasPbo(false),
@@ -111,6 +110,8 @@ OpenGL2Common::OpenGL2Common() :
 	rotAnimation(*this),
 	mouseTime(0.0)
 {
+	videoAdjustment.unset();
+
 	/* Initialize texCoordYCbCr array */
 	texCoordYCbCr[0] = texCoordYCbCr[4] = texCoordYCbCr[5] = texCoordYCbCr[7] = 0.0f;
 	texCoordYCbCr[1] = texCoordYCbCr[3] = 1.0f;
@@ -505,9 +506,19 @@ void OpenGL2Common::paintGL()
 	shaderProgramVideo->bind();
 	if (doReset)
 	{
-		shaderProgramVideo->setUniformValue("uVideoEq", Brightness, Contrast, Saturation, Hue);
-		shaderProgramVideo->setUniformValue("uSharpness", Sharpness);
-		shaderProgramVideo->setUniformValue("uStep", pixelStep);
+		if (hwAccellnterface && numPlanes == 1)
+			hwAccellnterface->setVideAdjustment(videoAdjustment);
+		else
+		{
+			const float brightness = videoAdjustment.brightness / 100.0f;
+			const float contrast = (videoAdjustment.contrast + 100) / 100.0f;
+			const float saturation = (videoAdjustment.saturation + 100) / 100.0f;
+			const float hue = videoAdjustment.hue / -31.831f;
+			const float sharpness = videoAdjustment.sharpness / 50.0f;
+			shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
+			shaderProgramVideo->setUniformValue("uSharpness", sharpness);
+			shaderProgramVideo->setUniformValue("uStep", pixelStep);
+		}
 		doReset = !resetDone;
 		setMatrix = true;
 	}
@@ -694,6 +705,21 @@ void OpenGL2Common::testGLInternal()
 		{
 			if (!hwAccellnterface->init(textures))
 				isOK = false;
+			if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
+			{
+				VideoAdjustment videoAdjustmentCap;
+				hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
+				if (videoAdjustmentCap.brightness)
+					videoAdjustmentKeys += "Brightness";
+				if (videoAdjustmentCap.contrast)
+					videoAdjustmentKeys += "Contrast";
+				if (videoAdjustmentCap.saturation)
+					videoAdjustmentKeys += "Saturation";
+				if (videoAdjustmentCap.hue)
+					videoAdjustmentKeys += "Hue";
+				if (videoAdjustmentCap.sharpness)
+					videoAdjustmentKeys += "Sharpness";
+			}
 			hwAccellnterface->clear();
 			hwAccellnterface->unlock();
 		}

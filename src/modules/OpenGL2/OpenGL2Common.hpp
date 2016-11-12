@@ -20,6 +20,7 @@
 #define OPENGLCOMMON_HPP
 
 #include <VideoFrame.hpp>
+#include <VideoAdjustment.hpp>
 
 #ifdef OPENGL_NEW_API
 	#include <QOpenGLShaderProgram>
@@ -142,12 +143,13 @@ private:
 	void loadSphere();
 public:
 	HWAccelInterface *hwAccellnterface;
+	QStringList videoAdjustmentKeys;
 	VideoFrame videoFrame;
 
 	QOpenGLShaderProgram *shaderProgramVideo, *shaderProgramOSD;
 
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
-	float Contrast, Saturation, Brightness, Hue, Sharpness;
+	VideoAdjustment videoAdjustment;
 	float texCoordYCbCr[8];
 	QVector2D pixelStep;
 	quint32 textures[4];

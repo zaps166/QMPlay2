@@ -1,6 +1,8 @@
 #ifndef HWACCELINTERFACE_HPP
 #define HWACCELINTERFACE_HPP
 
+#include <VideoAdjustment.hpp>
+
 #include <QString>
 
 class VideoFrame;
@@ -34,8 +36,12 @@ public:
 
 	virtual Format getFormat() const = 0;
 
-	virtual bool lock() = 0;
-	virtual void unlock() = 0;
+	virtual bool lock()
+	{
+		return true;
+	}
+	virtual void unlock()
+	{}
 
 	virtual bool init(quint32 *textures) = 0;
 	virtual void clear() = 0;
@@ -43,6 +49,15 @@ public:
 	virtual CopyResult copyFrame(const VideoFrame &videoFrame, Field field) = 0;
 
 	virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = NULL) = 0;
+
+	virtual void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
+	{
+		videoAdjustmentCap.zero();
+	}
+	virtual void setVideAdjustment(const VideoAdjustment &videoAdjustment)
+	{
+		Q_UNUSED(videoAdjustment)
+	}
 };
 
 #endif // HWACCELINTERFACE_HPP

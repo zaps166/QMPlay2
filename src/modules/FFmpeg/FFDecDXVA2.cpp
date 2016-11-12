@@ -103,13 +103,6 @@ public:
 		return RGB32;
 	}
 
-	bool lock()
-	{
-		return true;
-	}
-	void unlock()
-	{}
-
 	bool init(quint32 *textures)
 	{
 		typedef PROC(WINAPI *wglGetProcAddressType)(LPCSTR);

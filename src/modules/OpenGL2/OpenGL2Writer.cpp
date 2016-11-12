@@ -92,23 +92,23 @@ bool OpenGL2Writer::processParams(bool *)
 	const bool spherical = getParam("Spherical").toBool();
 	const int flip = getParam("Flip").toInt();
 	const bool rotate90 = getParam("Rotate90").toBool();
-	const float Contrast = (getParam("Contrast").toInt() + 100) / 100.0f;
-	const float Saturation = (getParam("Saturation").toInt() + 100) / 100.0f;
-	const float Brightness = getParam("Brightness").toInt() / 100.0f;
-	const float Hue = getParam("Hue").toInt() / -31.831f;
-	const float Sharpness = getParam("Sharpness").toInt() / 50.0f;
+
+	const VideoAdjustment videoAdjustment = {
+		(qint16)getParam("Brightness").toInt(),
+		(qint16)getParam("Contrast").toInt(),
+		(qint16)getParam("Saturation").toInt(),
+		(qint16)getParam("Hue").toInt(),
+		(qint16)getParam("Sharpness").toInt()
+	};
+
 	const int verticesIdx = rotate90 * 4 + flip;
 	drawable->Deinterlace = getParam("Deinterlace").toInt();
-	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->Contrast != Contrast || drawable->Brightness != Brightness || drawable->Saturation != Saturation || drawable->Hue != Hue || drawable->Sharpness != Sharpness)
+	if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->videoAdjustment != videoAdjustment)
 	{
 		drawable->zoom = zoom;
 		drawable->aspectRatio = aspectRatio;
 		drawable->verticesIdx = verticesIdx;
-		drawable->Contrast = Contrast;
-		drawable->Brightness = Brightness;
-		drawable->Saturation = Saturation;
-		drawable->Hue = Hue;
-		drawable->Sharpness = Sharpness;
+		drawable->videoAdjustment = videoAdjustment;
 		drawable->setSpherical(spherical);
 		doResizeEvent = drawable->widget()->isVisible();
 	}
@@ -214,11 +214,17 @@ bool OpenGL2Writer::open()
 #ifdef VSYNC_SETTINGS
 		drawable->setVSync(vSync);
 #endif
-		if (drawable->numPlanes > 1)
+		if (!drawable->videoAdjustmentKeys.isEmpty())
 		{
-			addParam("Saturation");
+			foreach (const QString &key, drawable->videoAdjustmentKeys)
+				addParam(key);
+			drawable->videoAdjustmentKeys.clear();
+		}
+		else if (drawable->numPlanes > 1)
+		{
 			addParam("Brightness");
 			addParam("Contrast");
+			addParam("Saturation");
 			if (drawable->glVer >= 30)
 			{
 				addParam("Hue");
