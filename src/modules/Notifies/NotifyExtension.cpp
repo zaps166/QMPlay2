@@ -95,6 +95,11 @@ NotifyExtension::NotifyExtension(Module &module) : m_notify(NULL)
 	SetModule(module);
 }
 
+NotifyExtension::~NotifyExtension()
+{
+	delete m_notify;
+}
+
 bool NotifyExtension::set()
 {
 	if (sets().getBool("TypeDisabled"))

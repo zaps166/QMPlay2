@@ -41,7 +41,7 @@ class NotifyExtension : public QMPlay2Extensions
 {
 public:
 	NotifyExtension(Module &module);
-	~NotifyExtension() {}
+	~NotifyExtension();
 private:
 	bool set();
 
