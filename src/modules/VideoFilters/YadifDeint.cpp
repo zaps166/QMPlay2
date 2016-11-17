@@ -601,6 +601,12 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 	addParam("H");
 }
 
+void YadifDeint::clearBuffer()
+{
+	secondFrame = false;
+	DeintFilter::clearBuffer();
+}
+
 bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	addFramesToDeinterlace(framesQueue);

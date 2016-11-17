@@ -93,6 +93,13 @@ void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const
 class PrepareForHWBobDeint : public DeintFilter
 {
 public:
+	void clearBuffer()
+	{
+		secondFrame = false;
+		lastTS = -1.0;
+		DeintFilter::clearBuffer();
+	}
+
 	bool filter(QQueue<FrameBuffer> &framesQueue)
 	{
 		addFramesToDeinterlace(framesQueue, false);

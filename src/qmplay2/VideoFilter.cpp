@@ -22,6 +22,11 @@
 VideoFilter::~VideoFilter()
 {}
 
+void VideoFilter::clearBuffer()
+{
+	internalQueue.clear();
+}
+
 bool VideoFilter::removeLastFromInternalBuffer()
 {
 	if (!internalQueue.isEmpty())

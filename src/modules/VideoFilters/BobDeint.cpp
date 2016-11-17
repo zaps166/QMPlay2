@@ -25,6 +25,13 @@ BobDeint::BobDeint()
 	addParam("H");
 }
 
+void BobDeint::clearBuffer()
+{
+	secondFrame = false;
+	lastTS = -1.0;
+	DeintFilter::clearBuffer();
+}
+
 bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 {
 	addFramesToDeinterlace(framesQueue);

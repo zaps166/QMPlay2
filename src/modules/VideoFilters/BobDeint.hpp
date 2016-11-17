@@ -23,6 +23,8 @@ class BobDeint : public DeintFilter
 public:
 	BobDeint();
 
+	void clearBuffer();
+
 	bool filter(QQueue<FrameBuffer> &framesQueue);
 
 	bool processParams(bool *paramsCorrected);

@@ -44,10 +44,7 @@ public:
 
 	virtual ~VideoFilter();
 
-	inline void clearBuffer()
-	{
-		internalQueue.clear();
-	}
+	virtual void clearBuffer();
 
 	bool removeLastFromInternalBuffer();
 
