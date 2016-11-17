@@ -28,6 +28,10 @@ OpenGL2OldWidget::OpenGL2OldWidget()
 	preventFullscreen = true;
 #endif
 }
+OpenGL2OldWidget::~OpenGL2OldWidget()
+{
+	makeCurrent();
+}
 
 QWidget *OpenGL2OldWidget::widget()
 {

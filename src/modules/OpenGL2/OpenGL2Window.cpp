@@ -43,6 +43,11 @@ OpenGL2Window::OpenGL2Window() :
 	connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible1(bool)));
 	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(videoVisible2(bool)));
 }
+OpenGL2Window::~OpenGL2Window()
+{
+	makeCurrent();
+}
+
 void OpenGL2Window::deleteMe()
 {
 	delete container;

@@ -139,7 +139,8 @@ private:
 	void mousePress360(QMouseEvent *e);
 	void mouseMove360(QMouseEvent *e);
 	void mouseRelease360(QMouseEvent *e);
-	void resetSphereVbo();
+	inline void resetSphereVbo();
+	inline void deleteSphereVbo();
 	void loadSphere();
 public:
 	HWAccelInterface *hwAccellnterface;

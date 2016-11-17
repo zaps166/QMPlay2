@@ -33,6 +33,7 @@ class OpenGL2Window : private QOpenGLWindow, public OpenGL2CommonQt5
 	Q_OBJECT
 public:
 	OpenGL2Window();
+	~OpenGL2Window();
 
 	void deleteMe();
 

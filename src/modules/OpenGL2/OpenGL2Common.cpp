@@ -479,11 +479,7 @@ void OpenGL2Common::paintGL()
 
 	if (!sphericalView)
 	{
-		if (nIndices > 0)
-		{
-			glDeleteBuffers(3, sphereVbo);
-			resetSphereVbo();
-		}
+		deleteSphereVbo();
 		shaderProgramVideo->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
 		shaderProgramVideo->setAttributeArray(texCoordYCbCrLoc, texCoordYCbCr, 2);
 	}
@@ -640,6 +636,10 @@ void OpenGL2Common::contextAboutToBeDestroyed()
 		hwAccellnterface->clear(true);
 		hwAccellnterface->unlock();
 	}
+	deleteSphereVbo();
+	if (hasPbo)
+		glDeleteBuffers(1 + (hwAccellnterface ? 0 : numPlanes), pbo);
+	glDeleteTextures(numPlanes + 1, textures);
 }
 
 void OpenGL2Common::testGLInternal()
@@ -925,10 +925,18 @@ void OpenGL2Common::mouseRelease360(QMouseEvent *e)
 		buttonPressed = false;
 	}
 }
-void OpenGL2Common::resetSphereVbo()
+inline void OpenGL2Common::resetSphereVbo()
 {
 	memset(sphereVbo, 0, sizeof sphereVbo);
 	nIndices = 0;
+}
+inline void OpenGL2Common::deleteSphereVbo()
+{
+	if (nIndices > 0)
+	{
+		glDeleteBuffers(3, sphereVbo);
+		resetSphereVbo();
+	}
 }
 void OpenGL2Common::loadSphere()
 {

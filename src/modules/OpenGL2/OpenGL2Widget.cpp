@@ -24,6 +24,10 @@ OpenGL2Widget::OpenGL2Widget()
 {
 	connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
+OpenGL2Widget::~OpenGL2Widget()
+{
+	makeCurrent();
+}
 
 QWidget *OpenGL2Widget::widget()
 {

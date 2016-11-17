@@ -29,6 +29,7 @@ class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
 	Q_OBJECT
 public:
 	OpenGL2Widget();
+	~OpenGL2Widget();
 
 	QWidget *widget();
 
