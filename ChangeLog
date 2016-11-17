@@ -1,6 +1,6 @@
-Changes in QMPlay2 build 16.11.12:
+Changes in QMPlay2 build 16.11.17:
 	- VA-API displays using OpenGL (default behavior),
-	- add DXVA2 decoder (experimental),
+	- add DXVA2 decoder (limited features),
 	- CUVID bugfix,
 
 Changes in QMPlay2 build 16.11.01:
