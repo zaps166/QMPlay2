@@ -27,12 +27,12 @@
 
 #include <QMultiMap>
 #include <QLibrary>
-#include <QQueue>
-
 #include <QDebug>
 
 #include <GL/gl.h>
 #include <GL/wglext.h>
+
+typedef QPair<quint32, quint32> Size;
 
 namespace DX
 {
@@ -79,17 +79,16 @@ public:
 		m_d3d9Device(d3d9Device),
 		m_glHandleD3D(NULL),
 		m_videoDecoder(NULL),
-		m_d3d9Surface(NULL),
-		m_glHandleSurface(NULL),
-		m_sharedHande(NULL)
+		m_renderTarget(NULL),
+		m_glHandleSurface(NULL)
 	{
 		m_d3d9Device->AddRef();
 	}
 	~DXVA2Hwaccel()
 	{
-		releaseDX();
-		if (m_d3d9Surface)
-			m_d3d9Surface->Release();
+		releaseSurfacesAndDecoder();
+		for (RenderTargets::const_iterator it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
+			it.value()->Release();
 		m_d3d9Device->Release();
 	}
 
@@ -120,18 +119,32 @@ public:
 		if (!wglDXOpenDeviceNV || !wglDXSetResourceShareHandleNV || !wglDXRegisterObjectNV || !wglDXLockObjectsNV || !wglDXUnlockObjectsNV || !wglDXUnregisterObjectNV || !wglDXCloseDeviceNV)
 			return false;
 
-		if (m_sharedHande)
+		m_renderTarget = m_renderTargets.value(m_size);
+
+		if (!m_renderTarget)
 		{
-			if (!wglDXSetResourceShareHandleNV(m_d3d9Surface, m_sharedHande))
+			HANDLE sharedHande = NULL;
+			HRESULT hr;
+
+			hr = m_d3d9Device->CreateRenderTarget(m_size.first, m_size.second, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &m_renderTarget, &sharedHande);
+			if (FAILED(hr))
 				return false;
-			m_sharedHande = NULL;
+
+			//Don't release render target here, otherwise on Intel drivers "wglDXSetResourceShareHandleNV()" can fail.
+			m_renderTargets[m_size] = m_renderTarget;
+
+			if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHande))
+				return false;
 		}
 
-		m_glHandleD3D = wglDXOpenDeviceNV(m_d3d9Device);
 		if (!m_glHandleD3D)
-			return false;
+		{
+			m_glHandleD3D = wglDXOpenDeviceNV(m_d3d9Device);
+			if (!m_glHandleD3D)
+				return false;
+		}
 
-		m_glHandleSurface = wglDXRegisterObjectNV(m_glHandleD3D, m_d3d9Surface, *textures, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
+		m_glHandleSurface = wglDXRegisterObjectNV(m_glHandleD3D, m_renderTarget, *textures, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
 		if (!m_glHandleSurface)
 			return false;
 
@@ -140,7 +153,7 @@ public:
 
 		return true;
 	}
-	void clear()
+	void clear(bool contextChange)
 	{
 		if (m_glHandleSurface)
 		{
@@ -148,7 +161,7 @@ public:
 			wglDXUnregisterObjectNV(m_glHandleD3D, m_glHandleSurface);
 			m_glHandleSurface = NULL;
 		}
-		if (m_glHandleD3D)
+		if (contextChange && m_glHandleD3D)
 		{
 			wglDXCloseDeviceNV(m_glHandleD3D);
 			m_glHandleD3D = NULL;
@@ -164,7 +177,7 @@ public:
 
 		IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.surfaceId;
 		const RECT rect = {0, 0, videoFrame.size.width, videoFrame.size.height};
-		HRESULT hr = m_d3d9Device->StretchRect(surface, &rect, m_d3d9Surface, &rect, D3DTEXF_NONE);
+		HRESULT hr = m_d3d9Device->StretchRect(surface, &rect, m_renderTarget, &rect, D3DTEXF_NONE);
 
 		if (!wglDXLockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface) || FAILED(hr))
 			return CopyError;
@@ -201,9 +214,9 @@ public:
 		return m_d3d9Device;
 	}
 
-	bool setNewData(quint32 w, quint32 h, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
+	bool setNewData(const Size &size, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
 	{
-		releaseDX();
+		releaseSurfacesAndDecoder();
 
 		m_videoDecoder = videoDecoder;
 		m_surfaces = surfaces;
@@ -212,30 +225,13 @@ public:
 		foreach (IDirect3DSurface9 *surface, *m_surfaces)
 			surface->AddRef();
 
-		HRESULT hr;
-
-		if (m_d3d9Surface)
-		{
-			D3DSURFACE_DESC desc;
-			hr = m_d3d9Surface->GetDesc(&desc);
-			if (SUCCEEDED(hr) && desc.Width == w && desc.Height == h)
-				return true;
-
-			m_d3d9Surface->Release();
-			m_d3d9Surface = NULL;
-		}
-
-		m_sharedHande = NULL;
-
-		hr = m_d3d9Device->CreateRenderTarget(w, h, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &m_d3d9Surface, &m_sharedHande);
-		if (FAILED(hr))
-			return false;
+		m_size = size;
 
 		return true;
 	}
 
 private:
-	void releaseDX()
+	void releaseSurfacesAndDecoder()
 	{
 		if (m_surfaces)
 		{
@@ -260,9 +256,12 @@ private:
 	IDirectXVideoDecoder *m_videoDecoder;
 	FFDecDXVA2::Surfaces m_surfaces;
 
-	IDirect3DSurface9 *m_d3d9Surface;
+	IDirect3DSurface9 *m_renderTarget;
 	HANDLE m_glHandleSurface;
-	HANDLE m_sharedHande;
+
+	typedef QMap<Size, IDirect3DSurface9 *> RenderTargets;
+	RenderTargets m_renderTargets;
+	Size m_size;
 };
 
 /**/
@@ -626,7 +625,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	{
 		if (!dxva2Hwaccel)
 			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device);
-		if (!dxva2Hwaccel->setNewData(streamInfo.W, streamInfo.H, m_videoDecoder, m_surfaces))
+		if (!dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces))
 		{
 			if (m_hwAccelWriter)
 				return false;

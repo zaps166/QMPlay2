@@ -293,8 +293,9 @@ public:
 		}
 		return ret;
 	}
-	void clear()
+	void clear(bool contextChange)
 	{
+		Q_UNUSED(contextChange)
 		for (int p = 0; p < 2; ++p)
 		{
 			if (m_res[p] && cu::graphicsUnregisterResource(m_res[p]) == CUDA_SUCCESS)

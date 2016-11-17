@@ -348,7 +348,7 @@ void OpenGL2Common::paintGL()
 			if (hwAccellnterface)
 			{
 				/* Release HWAccell resources */
-				hwAccellnterface->clear();
+				hwAccellnterface->clear(false);
 
 				if (numPlanes == 2)
 				{
@@ -637,7 +637,7 @@ void OpenGL2Common::contextAboutToBeDestroyed()
 {
 	if (hwAccellnterface && hwAccellnterface->lock())
 	{
-		hwAccellnterface->clear();
+		hwAccellnterface->clear(true);
 		hwAccellnterface->unlock();
 	}
 }
@@ -720,7 +720,7 @@ void OpenGL2Common::testGLInternal()
 				if (videoAdjustmentCap.sharpness)
 					videoAdjustmentKeys += "Sharpness";
 			}
-			hwAccellnterface->clear();
+			hwAccellnterface->clear(true);
 			hwAccellnterface->unlock();
 		}
 

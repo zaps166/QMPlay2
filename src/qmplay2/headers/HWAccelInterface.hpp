@@ -44,7 +44,7 @@ public:
 	{}
 
 	virtual bool init(quint32 *textures) = 0;
-	virtual void clear() = 0;
+	virtual void clear(bool contextChange) = 0;
 
 	virtual CopyResult copyFrame(const VideoFrame &videoFrame, Field field) = 0;
 

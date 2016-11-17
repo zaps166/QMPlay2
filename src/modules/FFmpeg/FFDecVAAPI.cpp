@@ -61,8 +61,9 @@ public:
 	{
 		return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
 	}
-	void clear()
+	void clear(bool contextChange)
 	{
+		Q_UNUSED(contextChange)
 		if (m_glSurface)
 		{
 			vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
