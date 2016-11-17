@@ -484,7 +484,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	m_devMgr->Release();
 	m_devMgr = NULL;
 
-	const quint32 requiredFormat = (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P) ? MAKEFOURCC('N', 'V', '1', '2') : MAKEFOURCC('P', '0', '1', '0');
+	const quint32 requiredFormat = (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P || codec_ctx->pix_fmt == AV_PIX_FMT_YUVJ420P) ? MAKEFOURCC('N', 'V', '1', '2') : MAKEFOURCC('P', '0', '1', '0');
 	D3DFORMAT targetFmt = D3DFMT_UNKNOWN;
 	const GUID *deviceGUID = NULL;
 
