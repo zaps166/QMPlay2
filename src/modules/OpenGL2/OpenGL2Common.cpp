@@ -217,7 +217,14 @@ void OpenGL2Common::initializeGL()
 		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
 		QByteArray VideoFrag;
 		if (numPlanes == 1)
+		{
 			VideoFrag = readShader(":/VideoRGB.frag");
+			if (glVer >= 30)
+			{
+				//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+				VideoFrag.prepend("#define Sharpness\n");
+			}
+		}
 		else
 		{
 			VideoFrag = readShader(":/VideoYCbCr.frag");
@@ -226,7 +233,6 @@ void OpenGL2Common::initializeGL()
 				//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
 				VideoFrag.prepend("#define HueAndSharpness\n");
 			}
-
 			if (numPlanes == 2)
 				VideoFrag.prepend("#define NV12\n");
 		}
@@ -502,19 +508,29 @@ void OpenGL2Common::paintGL()
 	shaderProgramVideo->bind();
 	if (doReset)
 	{
+		bool setSharpness = true;
 		if (hwAccellnterface && numPlanes == 1)
+		{
 			hwAccellnterface->setVideAdjustment(videoAdjustment);
+			if (videoAdjustmentKeys.contains("Sharpness"))
+				setSharpness = false;
+		}
 		else
 		{
 			const float brightness = videoAdjustment.brightness / 100.0f;
 			const float contrast = (videoAdjustment.contrast + 100) / 100.0f;
 			const float saturation = (videoAdjustment.saturation + 100) / 100.0f;
 			const float hue = videoAdjustment.hue / -31.831f;
-			const float sharpness = videoAdjustment.sharpness / 50.0f;
 			shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
+		}
+
+		if (setSharpness)
+		{
+			const float sharpness = videoAdjustment.sharpness / 50.0f;
 			shaderProgramVideo->setUniformValue("uSharpness", sharpness);
 			shaderProgramVideo->setUniformValue("uStep", pixelStep);
 		}
+
 		doReset = !resetDone;
 		setMatrix = true;
 	}

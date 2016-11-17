@@ -214,11 +214,15 @@ bool OpenGL2Writer::open()
 #ifdef VSYNC_SETTINGS
 		drawable->setVSync(vSync);
 #endif
+		bool hasSharpness = false;
 		if (!drawable->videoAdjustmentKeys.isEmpty())
 		{
 			foreach (const QString &key, drawable->videoAdjustmentKeys)
+			{
+				if (key == "Sharpness")
+					hasSharpness = true;
 				addParam(key);
-			drawable->videoAdjustmentKeys.clear();
+			}
 		}
 		else if (drawable->numPlanes > 1)
 		{
@@ -226,11 +230,10 @@ bool OpenGL2Writer::open()
 			addParam("Contrast");
 			addParam("Saturation");
 			if (drawable->glVer >= 30)
-			{
 				addParam("Hue");
-				addParam("Sharpness");
-			}
 		}
+		if (!hasSharpness && drawable->glVer >= 30)
+			addParam("Sharpness");
 		return true;
 	}
 	return false;
