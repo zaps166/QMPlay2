@@ -359,15 +359,11 @@ void OpenGL2Common::paintGL()
 				if (numPlanes == 2)
 				{
 					//NV12
-					quint8 *zero = hasImage ? NULL : new quint8[widths[0] * heights[0]];
 					for (int p = 0; p < 2; ++p)
 					{
-						if (zero)
-							memset(zero, p ? 0x7F : 0x00, widths[p] * heights[p] * (p ? 2 : 1)); //Needed for adaptive deinterlacing to not show garbage on first frame
 						glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, zero);
+						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
 					}
-					delete[] zero;
 				}
 				else if (numPlanes == 1)
 				{

@@ -239,7 +239,6 @@ public:
 		m_cuvidDec(NULL)
 	{
 		memset(m_res, 0, sizeof m_res);
-		memset(m_array, 0, sizeof m_array);
 	}
 	~CuvidHWAccel()
 	{
@@ -277,30 +276,21 @@ public:
 
 	bool init(quint32 *textures)
 	{
-		bool ret = true;
 		for (int p = 0; p < 2; ++p)
 		{
-			ret = (cu::graphicsGLRegisterImage(&m_res[p], textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) == CUDA_SUCCESS);
-			if (ret)
-				ret = (cu::graphicsMapResources(1, &m_res[p], NULL) == CUDA_SUCCESS);
-			if (ret)
-			{
-				ret = (cu::graphicsSubResourceGetMappedArray(&m_array[p], m_res[p], 0, 0) == CUDA_SUCCESS);
-				ret &= (cu::graphicsUnmapResources(1, &m_res[p], NULL) == CUDA_SUCCESS);
-			}
-			if (!ret)
-				break;
+			if (cu::graphicsGLRegisterImage(&m_res[p], textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) != CUDA_SUCCESS)
+				return false;
 		}
-		return ret;
+		return true;
 	}
 	void clear(bool contextChange)
 	{
 		Q_UNUSED(contextChange)
 		for (int p = 0; p < 2; ++p)
 		{
-			if (m_res[p] && cu::graphicsUnregisterResource(m_res[p]) == CUDA_SUCCESS)
+			if (m_res[p])
 			{
-				m_array[p] = NULL;
+				cu::graphicsUnregisterResource(m_res[p]);
 				m_res[p] = NULL;
 			}
 		}
@@ -325,10 +315,10 @@ public:
 				vidProcParams.progressive_frame = true;
 				break;
 			case TopField:
-				vidProcParams.second_field = !vidProcParams.top_field_first;
+				vidProcParams.second_field = false;
 				break;
 			case BottomField:
-				vidProcParams.second_field = vidProcParams.top_field_first;
+				vidProcParams.second_field = true;
 				break;
 		}
 
@@ -338,28 +328,43 @@ public:
 		if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
 			return CopyError;
 
-		bool copied = true;
-
-		CUDA_MEMCPY2D cpy;
-		memset(&cpy, 0, sizeof cpy);
-		cpy.srcMemoryType = CU_MEMORYTYPE_DEVICE;
-		cpy.dstMemoryType = CU_MEMORYTYPE_ARRAY;
-		cpy.srcDevice = mappedFrame;
-		cpy.srcPitch = pitch;
-		cpy.WidthInBytes = videoFrame.size.width;
-		for (int p = 0; p < 2; ++p)
+		if (cu::graphicsMapResources(2, m_res, NULL) == CUDA_SUCCESS)
 		{
-			cpy.srcY = p ? m_codedHeight : 0;
-			cpy.dstArray = m_array[p];
-			cpy.Height = videoFrame.size.getHeight(p);
-			if (cu::memcpy2D(&cpy) != CUDA_SUCCESS)
+			bool copied = true;
+
+			CUDA_MEMCPY2D cpy;
+			memset(&cpy, 0, sizeof cpy);
+			cpy.srcMemoryType = CU_MEMORYTYPE_DEVICE;
+			cpy.dstMemoryType = CU_MEMORYTYPE_ARRAY;
+			cpy.srcDevice = mappedFrame;
+			cpy.srcPitch = pitch;
+			cpy.WidthInBytes = videoFrame.size.width;
+			for (int p = 0; p < 2; ++p)
 			{
-				copied = false;
-				break;
+				CUarray array = NULL;
+				if (cu::graphicsSubResourceGetMappedArray(&array, m_res[p], 0, 0) != CUDA_SUCCESS)
+				{
+					copied = false;
+					break;
+				}
+
+				cpy.srcY = p ? m_codedHeight : 0;
+				cpy.dstArray = array;
+				cpy.Height = videoFrame.size.getHeight(p);
+
+				if (cu::memcpy2D(&cpy) != CUDA_SUCCESS)
+				{
+					copied = false;
+					break;
+				}
 			}
+
+			cu::graphicsUnmapResources(2, m_res, NULL);
+
+			if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
+				return CopyOk;
 		}
-		if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
-			return CopyOk;
+
 		return CopyError;
 	}
 
@@ -437,7 +442,6 @@ private:
 	CUvideodecoder m_cuvidDec;
 
 	CUgraphicsResource m_res[2];
-	CUarray m_array[2];
 };
 
 /**/
