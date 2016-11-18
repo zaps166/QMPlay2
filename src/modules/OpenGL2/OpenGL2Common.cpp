@@ -504,28 +504,31 @@ void OpenGL2Common::paintGL()
 	shaderProgramVideo->bind();
 	if (doReset)
 	{
-		bool setSharpness = true;
+		const float brightness = videoAdjustment.brightness / 100.0f;
+		const float contrast   = (videoAdjustment.contrast + 100) / 100.0f;
+		const float sharpness  = videoAdjustment.sharpness / 50.0f;
 		if (hwAccellnterface && numPlanes == 1)
 		{
 			hwAccellnterface->setVideAdjustment(videoAdjustment);
-			if (videoAdjustmentKeys.contains("Sharpness"))
-				setSharpness = false;
+			const bool hasBrightness = videoAdjustmentKeys.contains("Brightness");
+			const bool hasContrast   = videoAdjustmentKeys.contains("Contrast");
+			const bool hasSharpness  = videoAdjustmentKeys.contains("Sharpness");
+			shaderProgramVideo->setUniformValue
+			(
+				"uVideoAdj",
+				hasBrightness ? 0.0f : brightness,
+				hasContrast   ? 1.0f : contrast,
+				hasSharpness  ? 0.0f : sharpness
+			);
 		}
 		else
 		{
-			const float brightness = videoAdjustment.brightness / 100.0f;
-			const float contrast = (videoAdjustment.contrast + 100) / 100.0f;
 			const float saturation = (videoAdjustment.saturation + 100) / 100.0f;
 			const float hue = videoAdjustment.hue / -31.831f;
 			shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
-		}
-
-		if (setSharpness)
-		{
-			const float sharpness = videoAdjustment.sharpness / 50.0f;
 			shaderProgramVideo->setUniformValue("uSharpness", sharpness);
-			shaderProgramVideo->setUniformValue("uStep", pixelStep);
 		}
+		shaderProgramVideo->setUniformValue("uStep", pixelStep);
 
 		doReset = !resetDone;
 		setMatrix = true;

@@ -1,5 +1,5 @@
 varying vec2 vTexCoord;
-uniform float uSharpness;
+uniform vec3 uVideoAdj;
 uniform vec2 uStep;
 uniform sampler2D uRGB;
 
@@ -12,9 +12,12 @@ vec4 getRGBAtOffset(float x, float y)
 
 void main()
 {
-	vec4 RGB = texture2D(uRGB, vTexCoord);
+	float brightness = uVideoAdj[0];
+	float contrast = uVideoAdj[1];
+	vec4 RGB = clamp(texture2D(uRGB, vTexCoord) * contrast, 0.0, 1.0) + brightness;
 #ifdef Sharpness
-	if (uSharpness != 0.0)
+	float sharpness = uVideoAdj[2];
+	if (sharpness != 0.0)
 	{
 		// Kernel 3x3
 		// 1 2 1
@@ -26,7 +29,7 @@ void main()
 			getRGBAtOffset(-uStep.x,  uStep.y) / 16.0 + getRGBAtOffset(0.0,  uStep.y) / 8.0 + getRGBAtOffset(uStep.x,  uStep.y) / 16.0
 		);
 		// Subtract blur from original image, multiply and then add it to the original image
-		RGB = clamp(RGB + (RGB - blur) * uSharpness, 0.0, 1.0);
+		RGB = clamp(RGB + (RGB - blur) * sharpness, 0.0, 1.0);
 	}
 #endif
 	gl_FragColor = RGB;
