@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.11.17:
+Changes in QMPlay2 build 16.11.18:
 	- VA-API displays using OpenGL (default behavior),
+	- updated German translation (martinkg),
 	- add DXVA2 decoder (limited features),
 	- fix seeking on interlaced videos,
 	- CUVID bugfix,
