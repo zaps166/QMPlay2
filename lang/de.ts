@@ -25,7 +25,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>A/V-Prozess wurde nicht korrekt beendet!</translation>
     </message>
 </context>
 <context>
@@ -60,15 +60,15 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation type="unfinished"></translation>
+        <translation>Video-und Audio-Player</translation>
     </message>
     <message>
         <source>Programmer</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmierer</translation>
     </message>
     <message>
         <source>Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitwirkende</translation>
     </message>
 </context>
 <context>
@@ -251,11 +251,11 @@
     </message>
     <message>
         <source>Volatile settings</source>
-        <translation type="unfinished"></translation>
+        <translation>flüchtige Einstellungen</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ist nicht beschreibbar, Einstellungen gehen nach Neustart verloren. Erwägen Sie, ein neues Farbschema zu erstellen!</translation>
     </message>
 </context>
 <context>
@@ -385,26 +385,26 @@
     <name>Cuvid</name>
     <message>
         <source>None</source>
-        <translation type="unfinished">Fehlt</translation>
+        <translation>Fehlt</translation>
     </message>
     <message>
         <source>Adaptive</source>
-        <translation type="unfinished"></translation>
+        <translation>Anpassungsfähig</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Deinterlacing Methode</translation>
+        <translation>Deinterlacing Methode</translation>
     </message>
 </context>
 <context>
     <name>CuvidDec</name>
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
-        <translation type="unfinished"></translation>
+        <translation>kann OpenGL 2-Modul nicht öffnen</translation>
     </message>
     <message>
         <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation type="unfinished"></translation>
+        <translation>Für die H264- und HEVC-Unterstützung ist eine Kompilierung mit FFmpeg 3.1 oder höher erforderlich!</translation>
     </message>
 </context>
 <context>
@@ -670,31 +670,31 @@
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schreiben von Tags, überprüfen Sie, ob Sie über die Berechtigung zum Ändern der Datei verfügen!</translation>
     </message>
     <message>
         <source>Synchronize with file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronisiere mit Datei oder Verzeichnis</translation>
     </message>
     <message>
         <source>The specified path does not exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Der angegebene Pfad existiert nicht</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach einem Verzeichnis</translation>
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach einer Datei, die mehrere Spuren enthält</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle ein Verzeichnis</translation>
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle eine Datei, die mehr als eine Spur enthält</translation>
     </message>
 </context>
 <context>
@@ -715,27 +715,27 @@ amp</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Add new preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Profil hinzufügen</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Profile</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Einstellungen</translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>New preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Profile</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebe einen neuen Profilnamen ein</translation>
     </message>
 </context>
 <context>
@@ -821,7 +821,7 @@ amp</translation>
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschwommenes Cover als Hintergrund</translation>
     </message>
     <message>
         <source>Show covers from directory if there aren&apos;t in the music file</source>
@@ -845,11 +845,11 @@ amp</translation>
     </message>
     <message>
         <source>Always display only file names in playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>Immer nur Dateinamen in der Wiedergabeliste anzuzeigen</translation>
     </message>
     <message>
         <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholungsmodus merken</translation>
     </message>
     <message>
         <source>Use proxy server</source>
@@ -909,7 +909,7 @@ amp</translation>
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastaturbelegung festlegen</translation>
     </message>
 </context>
 <context>
@@ -961,7 +961,7 @@ amp</translation>
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen Tastaturbelegung</translation>
     </message>
 </context>
 <context>
@@ -1440,64 +1440,57 @@ amp</translation>
     </message>
     <message>
         <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende verschiedene Audio- und Video-Streams</translation>
     </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Priorität der Standard-Video/Audio-Qualität</translation>
     </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Priorität der Standard-Videoqualität</translation>
     </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Priorität der Standard-Audioqualität</translation>
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzwinge, wenn möglich in Textur zu rendern (nicht empfohlen)</translation>
     </message>
     <message>
         <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieser Decoder verfügt nicht über einen eigenen Videoausgang, so dass er mit jedem Videoausgang verwendet werden kann.
+Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam sein!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
-        <translation type="unfinished"></translation>
+        <translation>Untertitel anzeigen, falls vorhanden</translation>
     </message>
     <message>
         <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigt Untertitel von YouTube an. Übernimmt die Standard-Untertitelsprache und QMPlay2-Sprache.</translation>
     </message>
     <message>
         <source>Allow to use PBO (if available)</source>
-        <translation type="unfinished"></translation>
+        <translation>PBO verwenden (falls vorhanden)</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Decoder aktiviert</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodiertes Video in den CPU-Speicher kopieren (nicht empfohlen)</translation>
+    </message>
+    <message>
+        <source>Can&apos;t load CUDA and/or CUVID library!</source>
+        <translation>Kann CUDA und/oder CUVID Bibliothek nicht laden!</translation>
     </message>
     <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot load/initialize CUDA/CUVID library!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilweise geprüft bedeutet, dass es nur dann Videodaten kopiert, wenn die schnelle Methode fehlschlägt</translation>
     </message>
 </context>
 <context>
@@ -1582,15 +1575,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Can&apos;t init textures for</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Texturen nicht initialisieren für</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <source>texture copy error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim kopieren von Textur</translation>
     </message>
 </context>
 <context>
@@ -1680,47 +1673,47 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>A-B wiederholen</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>deaktiviert</translation>
     </message>
     <message>
         <source>from</source>
-        <translation type="unfinished"></translation>
+        <translation>von</translation>
     </message>
     <message>
         <source>to</source>
-        <translation type="unfinished"></translation>
+        <translation>nach</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation type="unfinished"></translation>
+        <translation>270° Drehung</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation type="unfinished"></translation>
+        <translation>180° Drehung</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>90° Drehung</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Rotation wird von diesem Videoausgangsmodul nicht unterstützt</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Die sphärische Ansicht wird von diesem Videoausgangsmodul nicht unterstützt</translation>
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Wiedergabe wurde fehlerhaft beendet!</translation>
     </message>
     <message>
         <source>Video off</source>
-        <translation type="unfinished"></translation>
+        <translation>Video aus</translation>
     </message>
     <message>
         <source>Audio off</source>
@@ -1902,11 +1895,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Mausrad-Aktion auf Video-Dock</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Mausrad ändert die Lautstärke</translation>
     </message>
 </context>
 <context>
@@ -1989,15 +1982,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Anh&amp;alten nach der Wiedergabe ist beendet</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>A&amp;-B wiederholen</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenne eingehende &amp;Befehle</translation>
     </message>
 </context>
 <context>
@@ -2080,7 +2073,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Synchronize group</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;synchronisiere Gruppe </translation>
     </message>
 </context>
 <context>
@@ -2118,7 +2111,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Fehler bei der Wiedergabe</translation>
+        <translation>Wiedergabefehler</translation>
     </message>
 </context>
 <context>
@@ -2133,7 +2126,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Connection error</source>
-        <translation>Fehler beim verbinden</translation>
+        <translation>Fehler beim Verbinden</translation>
     </message>
     <message>
         <source>Try again later</source>
@@ -2148,11 +2141,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Kann nicht den Audio Ausgabestrom öffnen</translation>
+        <translation>Kann den Audio Ausgabestrom nicht öffnen</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Wiedergabe Fehler</translation>
+        <translation>Wiedergabefehler</translation>
     </message>
 </context>
 <context>
@@ -2215,7 +2208,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 wurde n&apos;icht aktualisiert. Möchten Sie das Update ausführen (empfohlen)?</translation>
     </message>
 </context>
 <context>
@@ -2250,7 +2243,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Add new radio station</source>
-        <translation>Fügen Sie ein neuen Radiosender hinzu</translation>
+        <translation>Füge einen neuen Radiosender hinzu</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2265,7 +2258,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>&amp;Wiederholen</translation>
+        <translation>&amp;wiederholen</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
@@ -2293,11 +2286,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Zufällige Wiedergabe und &amp;wiederholen</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Zufällige Wiedergabe der Gruppe und wiederholen</translation>
     </message>
 </context>
 <context>
@@ -2501,18 +2494,18 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Hardware accelerated video outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware beschleunigte Videoausgabe</translation>
     </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktion</translation>
     </message>
     <message>
         <source>Key sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenfolge</translation>
     </message>
 </context>
 <context>
@@ -2686,15 +2679,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Error creating update file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Erstellen der Update-Datei</translation>
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Auto-Update wird ignoriert, drücken Sie die Taste zum Aktualisieren</translation>
     </message>
 </context>
 <context>
-    <name>VAAPI</name>
+    <name>VAAPIWriter</name>
     <message>
         <source>Not supported deinterlacing algorithm</source>
         <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
@@ -2724,7 +2717,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht genÜgend Speicher</translation>
     </message>
 </context>
 <context>
@@ -2788,15 +2781,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>90° drehen</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation type="unfinished"></translation>
+        <translation>Sphärische Ansicht</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>Video &amp;Anpassung</translation>
     </message>
 </context>
 <context>
@@ -2825,7 +2818,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation type="unfinished"></translation>
+        <translation>splitte Kanäle</translation>
     </message>
 </context>
 <context>
@@ -2878,31 +2871,31 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>ja</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; Der Download läuft...</translation>
     </message>
     <message>
         <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlende &quot;youtube-dl&quot; Anwendung</translation>
     </message>
     <message>
         <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Die externe Anwendung &quot;youtube-dl&quot; ist für diese Medien erforderlich. Möchten Sie es herunterladen? Wenn der Download beendet ist, spielen Sie ihn erneut ab!</translation>
     </message>
     <message>
         <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Herunterladen von &quot;youtube-dl&quot; Anwendung...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualität</translation>
     </message>
 </context>
 </TS>
