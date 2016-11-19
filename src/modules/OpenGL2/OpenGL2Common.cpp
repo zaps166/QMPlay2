@@ -703,7 +703,8 @@ void OpenGL2Common::testGLInternal()
 				break;
 		}
 
-		quint32 textures[numPlanes] = {0};
+		quint32 textures[numPlanes];
+		memset(textures, 0, sizeof textures);
 		glGenTextures(numPlanes, textures);
 		for (int p = 0; p < numPlanes; ++p)
 		{
