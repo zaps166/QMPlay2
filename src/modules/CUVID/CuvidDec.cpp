@@ -826,7 +826,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		case cudaVideoCodec_HEVC:
 			if (checkAnnexB(streamInfo.data, avCodec->id))
 				break;
-			QMPlay2Core.logError("CUVID :: " + tr("Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!"));
+			QMPlay2Core.logError("CUVID :: " + tr("Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!"), true, true);
 			return false;
 #endif
 		default:
