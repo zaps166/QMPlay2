@@ -42,6 +42,24 @@ extern "C"
 
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(57, 48, 101)
 	#define NEW_BSF_API
+#else
+	#warning "FFmpeg 3.1 or higher is required for H264 and HEVC non Annex B support in CUVID"
+
+	static bool checkAnnexB(const QByteArray &extraData, AVCodecID codecID)
+	{
+		const quint8 *data = (const quint8 *)extraData.constData();
+		const int size = extraData.size();
+		switch (codecID)
+		{
+			case AV_CODEC_ID_H264:
+				return size == 0 || (size >= 3 && (!data[0] && !data[1] && (data[2] == 1 || (size >= 4 && data[3] == 1))));
+			case AV_CODEC_ID_HEVC:
+				return size < 23 || (!data[0] && !data[1] && (data[2] == 1 || data[3] == 1));
+			default:
+				break;
+		}
+		return false;
+	}
 #endif
 
 namespace cu
@@ -607,9 +625,9 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	{
 		cuvidPkt.flags = CUVID_PKT_TIMESTAMP;
 		cuvidPkt.timestamp = encodedPacket.ts.ptsDts() * 10000000.0 + 0.5;
+#ifdef NEW_BSF_API
 		if (m_bsfCtx)
 		{
-#ifdef NEW_BSF_API
 			m_pkt->buf = encodedPacket.toAvBufferRef();
 			m_pkt->data = m_pkt->buf->data;
 			m_pkt->size = encodedPacket.size();
@@ -628,9 +646,9 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 			cuvidPkt.payload = m_pkt->data;
 			cuvidPkt.payload_size = m_pkt->size;
-#endif
 		}
 		else
+#endif
 		{
 			cuvidPkt.payload = encodedPacket.constData();
 			cuvidPkt.payload_size = encodedPacket.size();
@@ -806,7 +824,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 #else
 		case cudaVideoCodec_H264:
 		case cudaVideoCodec_HEVC:
-			#warning "FFmpeg 3.1 or higher is required for H264 and HEVC support in CUVID"
+			if (checkAnnexB(streamInfo.data, avCodec->id))
+				break;
 			QMPlay2Core.logError("CUVID :: " + tr("Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!"));
 			return false;
 #endif
