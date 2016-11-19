@@ -77,12 +77,16 @@ InfoDock::InfoDock()
 	infoE->viewport()->setProperty("cursor", QCursor(Qt::ArrowCursor));
 
 	buffer = new QLabel;
-	bitrate = new QLabel;
+	bitrateAndFPS = new QLabel;
 
 	layout = new QGridLayout(&mainW);
 	layout->addWidget(infoE);
 	layout->addWidget(buffer);
-	layout->addWidget(bitrate);
+	layout->addWidget(bitrateAndFPS);
+
+	QMargins margins = layout->contentsMargins();
+	margins.setBottom(1);
+	layout->setContentsMargins(margins);
 
 	clear();
 
@@ -97,25 +101,34 @@ void InfoDock::setInfo(const QString &info, bool _videoPlaying, bool _audioPlayi
 	videoPlaying = _videoPlaying;
 	audioPlaying = _audioPlaying;
 }
-void InfoDock::updateBitrate(int a, int v, double fps)
+void InfoDock::updateBitrateAndFPS(int a, int v, double fps, double realFPS, bool interlaced)
 {
 	if (audioPlaying && a >= 0)
 		audioBR = a;
 	else if (!audioPlaying)
 		audioBR = -1;
 
-	if (videoPlaying && v >= 0)
-		videoBR = v;
-	else if (!videoPlaying)
+	if (videoPlaying)
+	{
+		if (v >= 0)
+			videoBR = v;
+		if (fps >= 0.0)
+			videoFPS = fps;
+		if (realFPS >= 0.0)
+			videoRealFPS = realFPS;
+		if (v >= 0 || fps >= 0.0 || realFPS >= 0.0)
+			interlacedVideo = interlaced;
+	}
+	else
+	{
 		videoBR = -1;
-
-	if (videoPlaying && fps >= 0.0)
-		videoFPS = fps;
-	else if (!videoPlaying)
 		videoFPS = -1.0;
+		videoRealFPS = -1.0;
+		interlacedVideo = false;
+	}
 
 	if (visibleRegion() != QRegion())
-		setBRLabels();
+		setLabelValues();
 }
 void InfoDock::updateBuffered(qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds)
 {
@@ -142,33 +155,46 @@ void InfoDock::updateBuffered(qint64 backwardBytes, qint64 remainingBytes, doubl
 void InfoDock::clear()
 {
 	infoE->clear();
-	videoPlaying = audioPlaying = false;
+	videoPlaying = audioPlaying = interlacedVideo = false;
 	videoBR = audioBR = -1;
-	videoFPS = -1.0;
+	videoFPS = videoRealFPS = -1.0;
 	buffer->clear();
 	buffer->close();
-	bitrate->setText("\n");
+	bitrateAndFPS->clear();
 }
 void InfoDock::visibilityChanged(bool v)
 {
 	if (v)
 	{
-		setBRLabels();
+		setLabelValues();
 		if (buffer->isVisible())
 			setBufferLabel();
 	}
 }
 
-void InfoDock::setBRLabels()
+void InfoDock::setLabelValues()
 {
-	QString abr, vbr, fps;
-	if (videoBR > -1)
-		vbr = tr("Video bitrate") + ": " + QString::number(videoBR) + "kbps";
-	if (videoFPS > -1.0)
-		fps = QString::number(videoFPS) + " FPS";
+	QString text;
 	if (audioBR > -1)
-		abr = tr("Audio bitrate") + ": " + QString::number(audioBR) + "kbps";
-	bitrate->setText(abr + "\n" + vbr + (!fps.isEmpty() ? (!vbr.isEmpty() ? ", " : "") + fps : ""));
+		text += tr("Audio bitrate") + QString(": %1%2").arg(audioBR).arg(" kbps");
+	if (videoBR > -1)
+	{
+		const bool Mbps = (videoBR >= 1024);
+		if (!text.isEmpty())
+			text += "\n";
+		text += tr("Video bitrate") + QString(": %1%2").arg(Mbps ? videoBR / 1024.0 : videoBR, 0, Mbps ? 'f' : 'g', Mbps ? 3 : -1).arg(videoBR >= 1024 ? " Mbps" : " kbps");
+	}
+	if (videoFPS > -1.0)
+	{
+		if (!text.isEmpty())
+			text += "\n";
+		text += QString::number(videoFPS, 'g', 5) + " FPS";
+		if (videoRealFPS >= 0.0)
+			text += ", " + tr("visible") + ": " + QString::number(videoRealFPS, 'g', 5) + " FPS";
+		if (interlacedVideo)
+			text += ", " + tr("interlaced");
+	}
+	bitrateAndFPS->setText(text);
 }
 void InfoDock::setBufferLabel()
 {

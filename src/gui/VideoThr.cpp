@@ -206,12 +206,12 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false;
-	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false;
+	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
 	QMutex emptyBufferMutex;
 	VideoFrame videoFrame;
 	unsigned fast = 0;
-	int tmp_br = 0, frames = 0;
+	int tmp_br = 0, frames = 0, framesDisplayed = 0;
 	canWrite = true;
 
 	while (!br)
@@ -387,6 +387,7 @@ void VideoThr::run()
 					updateMutex.unlock();
 					filtersMutex.lock();
 				}
+				interlaced = decoded.interlaced;
 				filters.addFrame(decoded, packet.ts);
 			}
 			else if (skip)
@@ -414,12 +415,13 @@ void VideoThr::run()
 				useLastDelay = false;
 			}
 
-			tmp_time += delay * 1000.0;
-			frames += 1000;
-			if (tmp_time >= 1000.0)
+			tmp_time += delay;
+			++frames;
+			if (tmp_time >= 1.0)
 			{
-				emit playC.updateBitrate(-1, round((tmp_br << 3) / tmp_time), frames / tmp_time);
-				frames = tmp_br = tmp_time = 0;
+				emit playC.updateBitrateAndFPS(-1, round((tmp_br << 3) / (tmp_time * 1000.0)), frames / tmp_time, framesDisplayed / framesDisplayedTime, interlaced);
+				frames = tmp_br = framesDisplayed = 0;
+				tmp_time = framesDisplayedTime = 0.0;
 			}
 
 			delay /= playC.speed;
@@ -537,7 +539,9 @@ void VideoThr::run()
 				{
 					oneFrame = canWrite = false;
 					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame), Q_ARG(quint32, seq));
+					++framesDisplayed;
 				}
+				framesDisplayedTime += true_delay;
 			}
 			if (updateFrameTimer)
 				frame_timer = gettime();

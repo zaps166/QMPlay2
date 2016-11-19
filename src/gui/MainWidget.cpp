@@ -294,7 +294,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	connect(&playC, SIGNAL(clearInfo()), infoDock, SLOT(clear()));
 	connect(&playC, SIGNAL(quit()), this, SLOT(deleteLater()));
 	connect(&playC, SIGNAL(resetARatio()), this, SLOT(resetARatio()));
-	connect(&playC, SIGNAL(updateBitrate(int, int, double)), infoDock, SLOT(updateBitrate(int, int, double)));
+	connect(&playC, SIGNAL(updateBitrateAndFPS(int, int, double, double, bool)), infoDock, SLOT(updateBitrateAndFPS(int, int, double, double, bool)));
 	connect(&playC, SIGNAL(updateBuffered(qint64, qint64, double, double)), infoDock, SLOT(updateBuffered(qint64, qint64, double, double)));
 	connect(&playC, SIGNAL(updateBufferedRange(int, int)), seekS, SLOT(drawRange(int, int)));
 	connect(&playC, SIGNAL(updateWindowTitle(const QString &)), this, SLOT(updateWindowTitle(const QString &)));

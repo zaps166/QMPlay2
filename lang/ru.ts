@@ -945,6 +945,14 @@ amp</source>
         <source>Buffer</source>
         <translation>буфер</translation>
     </message>
+    <message>
+        <source>interlaced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>visible</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Inputs</name>

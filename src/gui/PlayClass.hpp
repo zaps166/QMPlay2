@@ -210,7 +210,7 @@ signals:
 	void clearInfo();
 	void quit();
 	void resetARatio();
-	void updateBitrate(int, int, double);
+	void updateBitrateAndFPS(int a, int v, double fps = -1.0, double realFPS = -1.0, bool interlaced = false);
 	void updateBuffered(qint64 backwardBytes, qint64 remainingBytes, double backwardSeconds, double remainingSeconds);
 	void updateBufferedRange(int, int);
 	void updateWindowTitle(const QString &t = QString());

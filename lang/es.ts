@@ -945,6 +945,14 @@ amp</translation>
         <source>Audio bitrate</source>
         <translation>Tasa de bits de audio</translation>
     </message>
+    <message>
+        <source>interlaced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>visible</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Inputs</name>

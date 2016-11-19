@@ -945,6 +945,14 @@ amp</translation>
         <source>Buffer</source>
         <translation>Bufor</translation>
     </message>
+    <message>
+        <source>interlaced</source>
+        <translation>z przeplotem</translation>
+    </message>
+    <message>
+        <source>visible</source>
+        <translation>widoczne</translation>
+    </message>
 </context>
 <context>
     <name>Inputs</name>

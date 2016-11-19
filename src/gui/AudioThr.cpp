@@ -263,7 +263,7 @@ void AudioThr::run()
 #ifdef Q_OS_WIN
 				canUpdateBitrate = true;
 #else
-				emit playC.updateBitrate(round((tmp_br << 3) / tmp_time), -1, -1.0);
+				emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
 				tmp_br = tmp_time = 0;
 #endif
 			}
@@ -420,7 +420,7 @@ void AudioThr::timerEvent(QTimerEvent *)
 	}
 	if (canUpdateBitrate)
 	{
-		emit playC.updateBitrate(round((tmp_br << 3) / tmp_time), -1, -1.0);
+		emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
 		canUpdateBitrate = false;
 		tmp_time = tmp_br = 0;
 	}
