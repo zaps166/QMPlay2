@@ -148,7 +148,7 @@ void VideoThr::initFilters(bool processParams)
 					if (deintFilter)
 						filters.off(deintFilter);
 					if (W > 0 && H > 0)
-						QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"');
+						QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"', true, true);
 				}
 			}
 		}
