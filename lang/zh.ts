@@ -384,10 +384,6 @@
 <context>
     <name>Cuvid</name>
     <message>
-        <source>None</source>
-        <translation type="unfinished">无</translation>
-    </message>
-    <message>
         <source>Adaptive</source>
         <translation type="unfinished"></translation>
     </message>
