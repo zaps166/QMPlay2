@@ -1493,8 +1493,8 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cannot load/initialize CUDA/CUVID library!</source>
-        <translation>Kann CUDA und/oder CUVID Bibliothek nicht laden!</translation>
+        <source>Use CUVID only when primary GPU is NVIDIA</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

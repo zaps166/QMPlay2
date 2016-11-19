@@ -32,6 +32,8 @@ class Cuvid : public Module
 public:
 	Cuvid();
 	~Cuvid();
+
+	void initCuvidDec();
 private:
 	QList<Info> getModulesInfo(const bool showDisabled) const;
 	void *createInstance(const QString &name);
@@ -56,16 +58,15 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 
 public:
-	ModuleSettingsWidget(Module &module, int &cudaLoaded);
+	ModuleSettingsWidget(Module &module);
 
 private:
 	void saveSettings();
 
-	void initCuvidDec();
-
-	int &m_cudaLoaded;
-	QLabel *m_infoL;
 	QCheckBox *m_enabledB, *m_copyVideoB;
+#ifdef Q_OS_WIN
+	QCheckBox *m_checkFirstGPU;
+#endif
 };
 
 #endif // CUVID_HPP

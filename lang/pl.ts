@@ -1485,16 +1485,16 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Częściowo zaznaczone oznacza, że kopiowanie obrazu nastąpi, gdy szybka metoda nie zadziała</translation>
     </message>
     <message>
-        <source>Cannot load/initialize CUDA/CUVID library!</source>
-        <translation>Nie udało się załadować/zainicjalizować biblioteki CUDA/CUVID!</translation>
-    </message>
-    <message>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
         <translation>Kopiuj obraz do pamięci CPU (nie zalecane, bardzo wolne na GPU Intel&apos;a)</translation>
     </message>
     <message>
         <source>Use OpenGL</source>
         <translation>Użyj OpenGL</translation>
+    </message>
+    <message>
+        <source>Use CUVID only when primary GPU is NVIDIA</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -21,6 +21,10 @@
 
 #include <QComboBox>
 
+#ifdef Q_OS_WIN
+	#include <windows.h>
+#endif
+
 Cuvid::Cuvid() :
 	Module("CUVID"),
 	m_cudaLoaded(-1)
@@ -31,6 +35,9 @@ Cuvid::Cuvid() :
 	init("Enabled", true);
 	init("DeintMethod", 2);
 	init("CopyVideo", Qt::PartiallyChecked);
+#ifdef Q_OS_WIN
+	init("CheckFirstGPU", true);
+#endif
 
 	m_deintMethodB = new QComboBox;
 	m_deintMethodB->addItems(QStringList() << "Bob" << tr("Adaptive"));
@@ -46,6 +53,31 @@ Cuvid::~Cuvid()
 	delete m_deintMethodB;
 }
 
+void Cuvid::initCuvidDec()
+{
+	if (m_cudaLoaded == -1)
+	{
+#ifdef Q_OS_WIN
+		if (getBool("CheckFirstGPU"))
+		{
+			DISPLAY_DEVICEA displayDev;
+			memset(&displayDev, 0, sizeof displayDev);
+			displayDev.cb = sizeof displayDev;
+			if (EnumDisplayDevicesA(NULL, 0, &displayDev, 0))
+			{
+				const bool isNvidia = QByteArray::fromRawData(displayDev.DeviceString, sizeof displayDev.DeviceString).toLower().contains("nvidia");
+				if (!isNvidia)
+				{
+					m_cudaLoaded = 0;
+					return;
+				}
+			}
+		}
+#endif
+		m_cudaLoaded = CuvidDec::loadLibrariesAndInit();
+	}
+}
+
 QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 {
 	Q_UNUSED(showDisabled)
@@ -59,8 +91,7 @@ void *Cuvid::createInstance(const QString &name)
 {
 	if (name == CuvidName && getBool("Enabled"))
 	{
-		if (m_cudaLoaded == -1)
-			m_cudaLoaded = CuvidDec::loadLibrariesAndInit();
+		initCuvidDec();
 		if (m_cudaLoaded == 1)
 			return new CuvidDec(*this);
 	}
@@ -69,7 +100,7 @@ void *Cuvid::createInstance(const QString &name)
 
 Module::SettingsWidget *Cuvid::getSettingsWidget()
 {
-	return new ModuleSettingsWidget(*this, m_cudaLoaded);
+	return new ModuleSettingsWidget(*this);
 }
 
 void Cuvid::videoDeintSave()
@@ -86,10 +117,8 @@ QMPLAY2_EXPORT_PLUGIN(Cuvid)
 #include <QCheckBox>
 #include <QLabel>
 
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, int &cudaLoaded) :
-	Module::SettingsWidget(module),
-	m_cudaLoaded(cudaLoaded),
-	m_infoL(NULL)
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
+	Module::SettingsWidget(module)
 {
 	m_enabledB = new QCheckBox(tr("Decoder enabled"));
 	m_enabledB->setChecked(sets().getBool("Enabled"));
@@ -99,31 +128,27 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, int &cudaLoaded) :
 	m_copyVideoB->setCheckState((Qt::CheckState)sets().getInt("CopyVideo"));
 	m_copyVideoB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
 
+#ifdef Q_OS_WIN
+	m_checkFirstGPU = new QCheckBox(tr("Use CUVID only when primary GPU is NVIDIA"));
+	m_checkFirstGPU->setChecked(sets().getBool("CheckFirstGPU"));
+#endif
+
 	connect(m_enabledB, SIGNAL(clicked(bool)), m_copyVideoB, SLOT(setEnabled(bool)));
 	m_copyVideoB->setEnabled(m_enabledB->isChecked());
 
 	QGridLayout *layout = new QGridLayout(this);
-	if (m_cudaLoaded != 1)
-	{
-		m_infoL = new QLabel("<b>" + tr("Cannot load/initialize CUDA/CUVID library!") + "</b>");
-		layout->addWidget(m_infoL);
-		initCuvidDec();
-	}
 	layout->addWidget(m_enabledB);
 	layout->addWidget(m_copyVideoB);
+#ifdef Q_OS_WIN
+	layout->addWidget(m_checkFirstGPU);
+#endif
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", m_enabledB->isChecked());
 	sets().set("CopyVideo", m_copyVideoB->checkState());
-	initCuvidDec();
-}
-
-void ModuleSettingsWidget::initCuvidDec()
-{
-	if (m_cudaLoaded == -1 && m_enabledB->isChecked())
-		m_cudaLoaded = CuvidDec::loadLibrariesAndInit();
-	if (m_infoL)
-		m_infoL->setVisible(!m_cudaLoaded);
+#ifdef Q_OS_WIN
+	sets().set("CheckFirstGPU", m_checkFirstGPU->isChecked());
+#endif
 }
