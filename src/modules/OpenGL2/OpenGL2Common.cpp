@@ -417,12 +417,21 @@ void OpenGL2Common::paintGL()
 		if (hwAccellnterface)
 		{
 			const HWAccelInterface::Field field = (HWAccelInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccelInterface::FullFrame, HWAccelInterface::TopField, HWAccelInterface::BottomField);
-			if (isOK && hwAccellnterface->copyFrame(videoFrame, field) == HWAccelInterface::CopyError)
+			bool imageReady = false;
+			if (isOK)
 			{
-				QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
-				isOK = false;
+				const HWAccelInterface::CopyResult res = hwAccellnterface->copyFrame(videoFrame, field);
+				if (res == HWAccelInterface::CopyOk)
+					imageReady = true;
+				else if (res == HWAccelInterface::CopyError)
+				{
+					QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
+					isOK = false;
+				}
 			}
 			hwAccellnterface->unlock();
+			if (!imageReady)
+				return;
 			for (int p = 0; p < numPlanes; ++p)
 			{
 				glActiveTexture(GL_TEXTURE0 + p);
