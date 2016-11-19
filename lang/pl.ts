@@ -1494,7 +1494,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj CUVID tylko jeżeli pierwszym GPU jest NVIDIA</translation>
     </message>
 </context>
 <context>
