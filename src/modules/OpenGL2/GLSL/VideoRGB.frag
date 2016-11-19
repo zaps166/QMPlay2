@@ -14,7 +14,7 @@ void main()
 {
 	float brightness = uVideoAdj[0];
 	float contrast = uVideoAdj[1];
-	vec4 RGB = clamp(texture2D(uRGB, vTexCoord) * contrast, 0.0, 1.0) + brightness;
+	vec4 RGB = texture2D(uRGB, vTexCoord);
 #ifdef Sharpness
 	float sharpness = uVideoAdj[2];
 	if (sharpness != 0.0)
@@ -32,5 +32,5 @@ void main()
 		RGB = clamp(RGB + (RGB - blur) * sharpness, 0.0, 1.0);
 	}
 #endif
-	gl_FragColor = RGB;
+	gl_FragColor = clamp(RGB * contrast, 0.0, 1.0) + brightness;
 }
