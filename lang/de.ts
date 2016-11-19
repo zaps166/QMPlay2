@@ -1485,12 +1485,20 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation>Decodiertes Video in den CPU-Speicher kopieren (nicht empfohlen)</translation>
     </message>
     <message>
-        <source>Can&apos;t load CUDA and/or CUVID library!</source>
-        <translation>Kann CUDA und/oder CUVID Bibliothek nicht laden!</translation>
-    </message>
-    <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
         <translation>Teilweise geprüft bedeutet, dass es nur dann Videodaten kopiert, wenn die schnelle Methode fehlschlägt</translation>
+    </message>
+    <message>
+        <source>Use OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot load/initialize CUDA/CUVID library!</source>
+        <translation>Kann CUDA und/oder CUVID Bibliothek nicht laden!</translation>
     </message>
 </context>
 <context>
@@ -2687,14 +2695,14 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
-    <name>VAAPIWriter</name>
+    <name>VAAPI</name>
     <message>
         <source>Not supported deinterlacing algorithm</source>
-        <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
+        <translation type="unfinished">Nicht unterstützter De-Interlacing-Algorithmus</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation>Kann den Videofilter nicht öffnen</translation>
+        <translation type="unfinished">Kann den Videofilter nicht öffnen</translation>
     </message>
 </context>
 <context>
