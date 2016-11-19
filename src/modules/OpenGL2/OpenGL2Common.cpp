@@ -430,7 +430,7 @@ void OpenGL2Common::paintGL()
 				}
 			}
 			hwAccellnterface->unlock();
-			if (!imageReady)
+			if (!imageReady && !hasImage)
 				return;
 			for (int p = 0; p < numPlanes; ++p)
 			{
