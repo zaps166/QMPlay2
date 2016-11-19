@@ -45,7 +45,7 @@ public:
 
 	bool open(bool allowVDPAU, bool &openGL);
 
-	bool init(int width, int height, const char *codecName);
+	bool init(int width, int height, const char *codecName, bool initFilters);
 
 	SurfacesQueue getSurfacesQueue() const;
 
@@ -59,7 +59,7 @@ public:
 
 	void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
-	bool writeVideo(const VideoFrame &videoFrame, int deinterlace, VASurfaceID &id, int &field);
+	bool filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field);
 
 	quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
 	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;

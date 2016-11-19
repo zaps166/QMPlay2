@@ -214,7 +214,7 @@ void FFmpeg::videoDeintSave()
 #endif
 #if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
 	set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
-	setInstance<VAAPIWriter>();
+	setInstance<FFDecVAAPI>();
 #endif
 }
 

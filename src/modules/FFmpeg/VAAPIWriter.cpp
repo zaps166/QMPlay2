@@ -110,8 +110,8 @@ bool VAAPIWriter::processParams(bool *)
 void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 {
 	VASurfaceID id;
-	int field;
-	if (vaapi->writeVideo(videoFrame, deinterlace, id, field))
+	int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
+	if (vaapi->filterVideo(videoFrame, id, field))
 		draw(id, field);
 	paused = false;
 }

@@ -73,10 +73,15 @@ public:
 
 	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
 	{
-		//VA-API fields codes are compatible with "HWAccelInterface::Field" codes.
-		if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, videoFrame.surfaceId, field) == VA_STATUS_SUCCESS)
-			return CopyOk;
-		return CopyError;
+		VASurfaceID id;
+		int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
+		if (m_vaapi->filterVideo(videoFrame, id, vaField))
+		{
+			if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
+				return CopyOk;
+			return CopyError;
+		}
+		return CopyNotReady;
 	}
 
 	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
@@ -178,7 +183,8 @@ bool FFDecVAAPI::set()
 		if (reloadVpp)
 		{
 			m_vaapi->clr_vpp();
-			m_vaapi->init_vpp();
+			if (m_hwAccelWriter)
+				m_vaapi->init_vpp();
 		}
 	}
 #endif
@@ -275,7 +281,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 			if (m_vaapi) //Initialize VA-API context
 			{
 				m_vaapi->vpp_deint_type = m_vppDeintType;
-				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id)))
+				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id), (m_copyVideo != Qt::Checked)))
 				{
 					delete m_vaapi;
 					m_vaapi = NULL;

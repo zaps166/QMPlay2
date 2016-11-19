@@ -101,7 +101,7 @@ bool VAAPI::open(bool allowVDPAU, bool &openGL)
 	return false;
 }
 
-bool VAAPI::init(int width, int height, const char *codecName)
+bool VAAPI::init(int width, int height, const char *codecName, bool initFilters)
 {
 	VAProfile p = (VAProfile)-1; //VAProfileNone
 	if (!qstrcmp(codecName, "h264"))
@@ -178,7 +178,8 @@ bool VAAPI::init(int width, int height, const char *codecName)
 		if (!vaCreateConfigAndContext())
 			return false;
 
-		init_vpp();
+		if (initFilters)
+			init_vpp();
 
 		ok = true;
 	}
@@ -383,12 +384,11 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
 	}
 }
 
-bool VAAPI::writeVideo(const VideoFrame &videoFrame, int deinterlace, VASurfaceID &id, int &field)
+bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field)
 {
 	const VASurfaceID curr_id = videoFrame.surfaceId;
-	field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
 #ifdef HAVE_VPP
-	const bool do_vpp_deint = field != 0 && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
+	const bool do_vpp_deint = (field != 0) && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
 	if (use_vpp && !do_vpp_deint)
 	{
 		forward_reference = VA_INVALID_SURFACE;
@@ -409,7 +409,7 @@ bool VAAPI::writeVideo(const VideoFrame &videoFrame, int deinterlace, VASurfaceI
 			if (vaMapBuffer(VADisp, vpp_buffers[VAProcFilterDeinterlacing], (void **)&deint_params) == VA_STATUS_SUCCESS)
 			{
 				if (version > 0x0025 || !vpp_second)
-					deint_params->flags = field == VA_TOP_FIELD ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
+					deint_params->flags = (field == VA_TOP_FIELD) ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
 				vaUnmapBuffer(VADisp, vpp_buffers[VAProcFilterDeinterlacing]);
 			}
 		}
