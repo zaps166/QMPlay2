@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.11.18:
+Changes in QMPlay2 build 16.11.20:
 	- display real FPS and interlaced video information on Information panel,
 	- VA-API displays using OpenGL (default behavior),
 	- updated German translation (martinkg),
