@@ -26,7 +26,8 @@
 #include <QCoreApplication>
 
 NotifyService::NotifyService(Notify *notify, Settings &settings) :
-	m_notify(notify)
+	m_notify(notify),
+	m_lastPlayState(Stopped)
 {
 	Q_ASSERT(notify);
 	if (settings.getBool("ShowTitle"))
@@ -84,7 +85,22 @@ void NotifyService::updatePlaying(bool play, const QString &title, const QString
 
 void NotifyService::playStateChanged(const QString &playState)
 {
-	if (playState != "Playing")
+	const PlayState last = m_lastPlayState;
+	if (playState == "Playing")
+		m_lastPlayState = Playing;
+	else if (playState == "Paused")
+		m_lastPlayState = Paused;
+	else
+		m_lastPlayState = Stopped;
+
+	/* In those cases we don't show notification:
+	 *  1. The last one is the same as the current one
+	 *  2. The current one is Playing and the last one wasn't Paused
+	 */
+	if (
+			last != m_lastPlayState &&
+			(m_lastPlayState != Playing || last == Paused)
+		)
 		m_notify->showMessage(QCoreApplication::applicationName(), playState);
 }
 
