@@ -66,9 +66,11 @@ using Functions::timeToStr;
 #endif
 
 /* Qt5 or (Qt4 in Windows) */
-#define UseMainWidgetTmpStyle (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
+#if (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
+	#define UseMainWidgetTmpStyle
+#endif
 
-#if UseMainWidgetTmpStyle
+#ifdef UseMainWidgetTmpStyle
 /* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
 class MainWidgetTmpStyle : public QCommonStyle
 {
@@ -109,7 +111,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 
-#if UseMainWidgetTmpStyle
+#ifdef UseMainWidgetTmpStyle
 	#if QT_VERSION >= 0x050000
 		bool createTmpStyle = false;
 		/* Looking for touch screen */

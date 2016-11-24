@@ -28,11 +28,7 @@ class VideoAdjustment
 public:
 	inline void unset()
 	{
-		brightness = 0x8000;
-		contrast = 0x8000;
-		saturation = 0x8000;
-		hue = 0x8000;
-		sharpness = 0x8000;
+		brightness = contrast = saturation = hue = sharpness = (qint16)0x8000;
 	}
 
 	inline void zero()

@@ -24,7 +24,9 @@
 
 class IPCSocketPriv;
 class IPCServerPriv;
-struct PipeData;
+#ifdef Q_OS_WIN
+	class PipeData;
+#endif
 
 class QSocketNotifier;
 
