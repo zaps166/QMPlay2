@@ -19,12 +19,14 @@
 #ifndef TIMESTAMP_HPP
 #define TIMESTAMP_HPP
 
+#include <qnumeric.h>
+
 class TimeStamp
 {
 public:
 	inline bool isValid() const
 	{
-		return m_dts == m_dts && m_pts == m_pts;
+		return !qIsNaN(m_pts) && !qIsNaN(m_dts);
 	}
 
 	inline void set(double dts, double pts, double start_time = 0.0)
@@ -34,7 +36,7 @@ public:
 	}
 	inline void setInvalid()
 	{
-		m_dts = m_pts = 0.0 / 0.0;
+		m_dts = m_pts = qQNaN();
 	}
 
 	inline double operator =(double t)
