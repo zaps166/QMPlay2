@@ -97,10 +97,7 @@ void NotifyService::playStateChanged(const QString &playState)
 	 *  1. The last one is the same as the current one
 	 *  2. The current one is Playing and the last one wasn't Paused
 	 */
-	if (
-			last != m_lastPlayState &&
-			(m_lastPlayState != Playing || last == Paused)
-		)
+	if (m_lastPlayState != last && (m_lastPlayState != Playing || last == Paused))
 		m_notify->showMessage(QCoreApplication::applicationName(), playState);
 }
 

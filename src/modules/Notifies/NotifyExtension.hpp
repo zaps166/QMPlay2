@@ -33,7 +33,7 @@ private slots:
 private:
 	Notify *m_notify;
 	QString m_summaryFormat, m_bodyFormat;
-	enum PlayState{
+	enum PlayState {
 		Playing = 0,
 		Paused,
 		Stopped
