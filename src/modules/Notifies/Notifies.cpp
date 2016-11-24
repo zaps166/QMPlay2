@@ -25,13 +25,11 @@ Notifies::Notifies() :
 {
 //	moduleImg = QImage(":/???"); // TODO: add icon
 
-	init("TypeDisabled", false);
+	init("TypeDisabled", true);
 #ifdef Q_OS_LINUX
-	init("TypeNative", true);
-	init("TypeTray", false);
-#else
-	init("TypeTray", true);
+	init("TypeNative", false);
 #endif
+	init("TypeTray", false);
 
 	init("timeout", 5000);
 
@@ -102,7 +100,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	connect(m_disabledR, SIGNAL(toggled(bool)), generalG, SLOT(setDisabled(bool)));
 
 	m_timeoutSB = new QDoubleSpinBox;
-	m_timeoutSB->setDecimals(4);
+	m_timeoutSB->setDecimals(1);
 	m_timeoutSB->setRange(0.0, 3600.0);
 	m_timeoutSB->setSingleStep(0.1);
 	m_timeoutSB->setSpecialValueText(tr("Infinite"));

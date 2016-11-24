@@ -84,11 +84,10 @@ const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &)
 }
 
 
-X11Notify::X11Notify(qint32 timeout)
+X11Notify::X11Notify(qint32 timeout) :
+	Notify(timeout),
+	m_notificationId(0)
 {
-	this->m_timeout = timeout;
-	m_notificationId = 0;
-
 	m_interface = new OrgFreedesktopNotificationsInterface(
 		OrgFreedesktopNotificationsInterface::staticInterfaceName(),
 		"/org/freedesktop/Notifications", QDBusConnection::sessionBus());

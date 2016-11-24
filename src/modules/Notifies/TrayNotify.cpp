@@ -24,17 +24,15 @@
 #include <QImage>
 #include <QSystemTrayIcon>
 
-TrayNotify::TrayNotify(qint32 timeout)
-{
-	this->m_timeout = timeout;
-}
+TrayNotify::TrayNotify(qint32 timeout) :
+	Notify(timeout)
+{}
 
 bool TrayNotify::showMessage(const QString &summary, const QString &message, const QString &, const QImage &)
 {
-	if (!QSystemTrayIcon::supportsMessages())
-		return false;
-
 	QSystemTrayIcon *tray = QMPlay2Core.systemTray;
+	if (!tray || !QSystemTrayIcon::supportsMessages())
+		return false;
 
 	if (m_timeout > 0)
 		tray->showMessage(summary, message, QSystemTrayIcon::Information, m_timeout);

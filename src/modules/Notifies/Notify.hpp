@@ -30,6 +30,7 @@ public:
 
 	virtual ~Notify() { }
 protected:
+	Notify(qint32 timeout) : m_timeout(timeout) {}
 	qint32 m_timeout; // in msec
 };
 
