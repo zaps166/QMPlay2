@@ -29,6 +29,6 @@ SOURCES += Notifies.cpp NotifyExtension.cpp TrayNotify.cpp
 
 unix:!macx:!android {
 		QT += dbus
-		HEADERS += X11Notify.hpp
-		SOURCES += X11Notify.cpp
+		HEADERS += FreedesktopNotify.hpp
+		SOURCES += FreedesktopNotify.cpp
 }

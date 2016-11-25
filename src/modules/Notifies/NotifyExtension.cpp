@@ -19,7 +19,7 @@
 #include <NotifyExtension.hpp>
 
 #ifdef Q_OS_LINUX
-	#include <X11Notify.hpp>
+	#include <FreedesktopNotify.hpp>
 #endif
 #include <TrayNotify.hpp>
 
@@ -124,7 +124,7 @@ bool NotifyExtension::set()
 			notify = new TrayNotify(timeout);
 #ifdef Q_OS_LINUX
 		else if (sets().getBool("TypeNative"))
-			notify = new X11Notify(timeout);
+			notify = new FreedesktopNotify(timeout);
 #endif
 		if (notify)
 		{

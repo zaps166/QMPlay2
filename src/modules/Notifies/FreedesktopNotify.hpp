@@ -23,13 +23,13 @@
 class OrgFreedesktopNotificationsInterface;
 class QDBusPendingCallWatcher;
 
-class X11Notify : public Notify
+class FreedesktopNotify : public Notify
 {
 	Q_OBJECT
-	Q_DISABLE_COPY(X11Notify)
+	Q_DISABLE_COPY(FreedesktopNotify)
 public:
-	X11Notify(qint32 timeout);
-	~X11Notify();
+	FreedesktopNotify(qint32 timeout);
+	~FreedesktopNotify();
 
 	bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage());
 private slots:

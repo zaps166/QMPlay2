@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <X11Notify.hpp>
+#include <FreedesktopNotify.hpp>
 #include <QMPlay2Core.hpp>
 #include <Module.hpp>
 
@@ -26,8 +26,9 @@
 
 #include <QDBusArgument>
 
-#define X11NotifyName "X11 Notify"
+#define FreedesktopNotifyName "Freedesktop Notify"
 
+#if 0 //For future use
 QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
 {
 	if (image.isNull())
@@ -63,22 +64,23 @@ const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &)
 	Q_ASSERT(0); // This is needed to link but shouldn't be called.
 	return arg;
 }
+#endif
 
-X11Notify::X11Notify(qint32 timeout) :
+FreedesktopNotify::FreedesktopNotify(qint32 timeout) :
 	Notify(timeout),
 	m_notificationId(0)
 {
 	m_interface = new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus());
 	if (!m_interface->isValid()) {
-		QMPlay2Core.logError(X11NotifyName " :: " + tr("Error connecting to notifications service"));
+		QMPlay2Core.logError(FreedesktopNotifyName " :: " + tr("Error connecting to notifications service"));
 	}
 }
-X11Notify::~X11Notify()
+FreedesktopNotify::~FreedesktopNotify()
 {
 	delete m_interface;
 }
 
-bool X11Notify::showMessage(const QString &summary, const QString &message, const QString &icon, const QImage &image)
+bool FreedesktopNotify::showMessage(const QString &summary, const QString &message, const QString &icon, const QImage &image)
 {
 	if (!m_interface) return false;
 
@@ -98,17 +100,17 @@ bool X11Notify::showMessage(const QString &summary, const QString &message, cons
 	}
 
 	QDBusPendingReply<uint> reply = m_interface->Notify(QCoreApplication::applicationName(), id, icon, summary, message, QStringList(), hints, m_timeout);
-	QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
+	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(CallFinished(QDBusPendingCallWatcher*)));
 	return true;
 }
 
-void X11Notify::CallFinished(QDBusPendingCallWatcher *watcher)
+void FreedesktopNotify::CallFinished(QDBusPendingCallWatcher *watcher)
 {
 	QDBusPendingReply<uint> reply = *watcher;
 	if (reply.isError())
 	{
-		QMPlay2Core.logError(X11NotifyName " :: " + tr("Error sending notification") + ": " + reply.error().name());
+		QMPlay2Core.logError(FreedesktopNotifyName " :: " + tr("Error sending notification") + ": " + reply.error().name());
 		return;
 	}
 

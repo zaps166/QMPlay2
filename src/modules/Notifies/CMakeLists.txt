@@ -29,8 +29,8 @@ set(Notifies_RESOURCES
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    list(APPEND Notifies_HDR X11Notify.hpp)
-    list(APPEND Notifies_SRC X11Notify.cpp org.freedesktop.Notifications.xml)
+    list(APPEND Notifies_HDR FreedesktopNotify.hpp)
+    list(APPEND Notifies_SRC FreedesktopNotify.cpp org.freedesktop.Notifications.xml)
     if(USE_QT5)
         set(DBUS DBus)
         find_package(Qt5DBus REQUIRED)
