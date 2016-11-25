@@ -48,6 +48,7 @@ QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
 {
+	systemTray = NULL;
 	qmplay2Core = this;
 
 	QFile f(":/Languages.csv");

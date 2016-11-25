@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters CUVID
+SUBDIRS = FFmpeg Inputs Modplug Playlists Subtitles QPainter Extensions Visualizations AudioFilters VideoFilters CUVID Notifies
 
 !contains(QT_CONFIG, opengles1): SUBDIRS += OpenGL2
 else: message("OpenGL doesn't work with OpenGL|ES 1.0")

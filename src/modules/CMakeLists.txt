@@ -75,3 +75,7 @@ endif()
 if(USE_CUVID)
     add_subdirectory(CUVID)
 endif()
+
+if(USE_NOTIFIES)
+    add_subdirectory(Notifies)
+endif()

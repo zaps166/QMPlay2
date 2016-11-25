@@ -156,6 +156,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Pixmap()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
+	QMPlay2Core.systemTray = tray;
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);
 	setMouseTracking(true);
