@@ -63,7 +63,6 @@ if(USE_CHIPTUNE_GME OR USE_CHIPTUNE_SID)
     add_subdirectory(Chiptune)
 endif()
 
-add_subdirectory(Notifies)
 add_subdirectory(Playlists)
 add_subdirectory(Subtitles)
 add_subdirectory(QPainter)
@@ -75,4 +74,8 @@ endif()
 
 if(USE_CUVID)
     add_subdirectory(CUVID)
+endif()
+
+if(USE_NOTIFIES)
+    add_subdirectory(Notifies)
 endif()

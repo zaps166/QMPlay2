@@ -159,6 +159,9 @@ add_feature_info(XVideo USE_XVIDEO "Build with XVideo module")
 option(USE_CUVID "Build with CUVID module" ON)
 add_feature_info(USE_CUVID USE_USE_CUVID "Build with CUVID module")
 
+option(USE_NOTIFIES "Build with Notifications support" ON)
+add_feature_info(Notifications USE_NOTIFIES "Build with Notifications support")
+
 if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
     option(USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations" OFF)
     add_feature_info(VisualizationsOpenGL USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations")
