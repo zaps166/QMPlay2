@@ -28,9 +28,12 @@ class Notify : public QObject
 public:
 	virtual bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage()) = 0;
 
-	virtual ~Notify() { }
+	virtual ~Notify()
+	{}
 protected:
-	Notify(qint32 timeout) : m_timeout(timeout) {}
+	Notify(qint32 timeout) :
+		m_timeout(timeout)
+	{}
 	qint32 m_timeout; // in msec
 };
 

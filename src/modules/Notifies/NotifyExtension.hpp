@@ -24,7 +24,7 @@ class NotifyService : public QObject
 {
 	Q_OBJECT
 public:
-	NotifyService(Notify *m_notify, Settings &settings);
+	NotifyService(Notify *notify, Settings &settings);
 	~NotifyService();
 private slots:
 	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
@@ -50,7 +50,7 @@ public:
 private:
 	bool set();
 
-	NotifyService *m_notify;
+	NotifyService *m_notifyService;
 };
 
 #define NotifyExtensionName "Notify"

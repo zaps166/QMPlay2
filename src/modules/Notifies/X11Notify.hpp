@@ -29,14 +29,13 @@ class X11Notify : public Notify
 	Q_DISABLE_COPY(X11Notify)
 public:
 	X11Notify(qint32 timeout);
+	~X11Notify();
 
 	bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage());
-
-	~X11Notify();
+private slots:
+	void CallFinished(QDBusPendingCallWatcher *watcher);
 private:
 	OrgFreedesktopNotificationsInterface *m_interface;
 	uint m_notificationId;
 	QDateTime m_lastNotificationTime;
-private slots:
-	void CallFinished(QDBusPendingCallWatcher *watcher);
 };

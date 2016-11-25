@@ -43,7 +43,6 @@ NotifyService::NotifyService(Notify *notify, Settings &settings) :
 		m_bodyFormat = settings.getString("CustomBody");
 	}
 }
-
 NotifyService::~NotifyService()
 {
 	delete m_notify;
@@ -53,7 +52,6 @@ void NotifyService::volumeChanged(double v)
 {
 	m_notify->showMessage(tr("Volume Changed"), tr("Volume: %1%").arg((int)(100 * v)));
 }
-
 void NotifyService::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName)
 {
 	if (!play)
@@ -82,7 +80,6 @@ void NotifyService::updatePlaying(bool play, const QString &title, const QString
 
 	m_notify->showMessage(summary, body);
 }
-
 void NotifyService::playStateChanged(const QString &playState)
 {
 	const PlayState last = m_lastPlayState;
@@ -103,20 +100,22 @@ void NotifyService::playStateChanged(const QString &playState)
 
 /**/
 
-NotifyExtension::NotifyExtension(Module &module) : m_notify(NULL)
+NotifyExtension::NotifyExtension(Module &module) : m_notifyService(NULL)
 {
 	SetModule(module);
 }
-
 NotifyExtension::~NotifyExtension()
 {
-	delete m_notify;
+	delete m_notifyService;
 }
 
 bool NotifyExtension::set()
 {
 	if (sets().getBool("TypeDisabled"))
-		delete m_notify;
+	{
+		delete m_notifyService;
+		m_notifyService = NULL;
+	}
 	else
 	{
 		const int timeout = sets().getInt("timeout");
@@ -129,8 +128,8 @@ bool NotifyExtension::set()
 #endif
 		if (notify)
 		{
-			delete m_notify;
-			m_notify = new NotifyService(notify, sets());
+			delete m_notifyService;
+			m_notifyService = new NotifyService(notify, sets());
 		}
 	}
 

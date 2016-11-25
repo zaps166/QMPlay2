@@ -44,10 +44,8 @@ Notifies::Notifies() :
 
 QList<Notifies::Info> Notifies::getModulesInfo(const bool) const
 {
-	return QList<Info>()
-			<< Info(NotifyExtensionName, QMPLAY2EXTENSION);
+	return QList<Info>() << Info(NotifyExtensionName, QMPLAY2EXTENSION);
 }
-
 void *Notifies::createInstance(const QString &name)
 {
 	if (name == NotifyExtensionName)

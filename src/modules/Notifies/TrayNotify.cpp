@@ -27,7 +27,6 @@
 TrayNotify::TrayNotify(qint32 timeout) :
 	Notify(timeout)
 {}
-
 bool TrayNotify::showMessage(const QString &summary, const QString &message, const QString &, const QImage &)
 {
 	QSystemTrayIcon *tray = QMPlay2Core.systemTray;

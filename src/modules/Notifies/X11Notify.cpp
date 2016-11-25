@@ -39,25 +39,8 @@ QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
 		return arg;
 	}
 	const QImage scaled = image.scaledToHeight(100, Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32);
-#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 	// ABGR -> ARGB
 	const QImage i = scaled.rgbSwapped();
-#else
-	// ABGR -> GBAR
-	QImage i(scaled.size(), scaled.format());
-	for (int y = 0; y < i.height(); ++y)
-	{
-		QRgb *p = (QRgb *)scaled.scanLine(y);
-		QRgb *q = (QRgb *)i.scanLine(y);
-		QRgb *end = p + scaled.width();
-		while (p < end)
-		{
-			*q = qRgba(qGreen(*p), qBlue(*p), qAlpha(*p), qRed(*p));
-			p++;
-			q++;
-		}
-	}
-#endif
 
 	arg.beginStructure();
 	arg << i.width();
@@ -75,25 +58,24 @@ QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
 	arg.endStructure();
 	return arg;
 }
-
-
 const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &)
 {
 	Q_ASSERT(0); // This is needed to link but shouldn't be called.
 	return arg;
 }
 
-
 X11Notify::X11Notify(qint32 timeout) :
 	Notify(timeout),
 	m_notificationId(0)
 {
-	m_interface = new OrgFreedesktopNotificationsInterface(
-		OrgFreedesktopNotificationsInterface::staticInterfaceName(),
-		"/org/freedesktop/Notifications", QDBusConnection::sessionBus());
+	m_interface = new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus());
 	if (!m_interface->isValid()) {
 		QMPlay2Core.logError(X11NotifyName " :: " + tr("Error connecting to notifications service"));
 	}
+}
+X11Notify::~X11Notify()
+{
+	delete m_interface;
 }
 
 bool X11Notify::showMessage(const QString &summary, const QString &message, const QString &icon, const QImage &image)
@@ -107,7 +89,7 @@ bool X11Notify::showMessage(const QString &summary, const QString &message, cons
 	}
 
 	int id = 0;
-	if (m_lastNotificationTime.secsTo(QDateTime::currentDateTime()) * 1000 < m_timeout)
+	if (m_lastNotificationTime.msecsTo(QDateTime::currentDateTime()) < m_timeout)
 	{
 		// Reuse the existing popup if it's still open.  The reason we don't always
 		// reuse the popup is because the notification daemon on KDE4 won't re-show
@@ -115,18 +97,10 @@ bool X11Notify::showMessage(const QString &summary, const QString &message, cons
 		id = m_notificationId;
 	}
 
-	QDBusPendingReply<uint> reply = m_interface->Notify(
-				QCoreApplication::applicationName(), id, icon, summary,
-				message, QStringList(), hints, m_timeout);
+	QDBusPendingReply<uint> reply = m_interface->Notify(QCoreApplication::applicationName(), id, icon, summary, message, QStringList(), hints, m_timeout);
 	QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
-	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-		SLOT(CallFinished(QDBusPendingCallWatcher*)));
+	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(CallFinished(QDBusPendingCallWatcher*)));
 	return true;
-}
-
-X11Notify::~X11Notify()
-{
-	delete m_interface;
 }
 
 void X11Notify::CallFinished(QDBusPendingCallWatcher *watcher)
