@@ -37,4 +37,4 @@ protected:
 	qint32 m_timeout; // in msec
 };
 
-#endif //SUBSDEC_HPP
+#endif //NOTIFY_HPP
