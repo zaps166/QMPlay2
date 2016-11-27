@@ -25,9 +25,15 @@
 
 #include <QCoreApplication>
 
+static const char *PlayState[3] = {
+	QT_TRANSLATE_NOOP("NotifyService", "Stopped"),
+	QT_TRANSLATE_NOOP("NotifyService", "Playing"),
+	QT_TRANSLATE_NOOP("NotifyService", "Paused")
+};
+
 NotifyService::NotifyService(Notify *notify, Settings &settings) :
 	m_notify(notify),
-	m_lastPlayState(Stopped)
+	m_lastPlayState(PlayState[0])
 {
 	Q_ASSERT(notify);
 	if (settings.getBool("ShowTitle"))
@@ -50,7 +56,7 @@ NotifyService::~NotifyService()
 
 void NotifyService::volumeChanged(double v)
 {
-	m_notify->showMessage(tr("Volume Changed"), tr("Volume: %1%").arg((int)(100 * v)));
+	m_notify->showMessage(tr("Volume changed"), tr("Volume: %1%").arg((int)(100 * v)));
 }
 void NotifyService::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName)
 {
@@ -82,25 +88,19 @@ void NotifyService::updatePlaying(bool play, const QString &title, const QString
 }
 void NotifyService::playStateChanged(const QString &playState)
 {
-	const PlayState last = m_lastPlayState;
-	if (playState == "Playing")
-		m_lastPlayState = Playing;
-	else if (playState == "Paused")
-		m_lastPlayState = Paused;
-	else
-		m_lastPlayState = Stopped;
-
 	/* In those cases we don't show notification:
 	 *  1. The last one is the same as the current one
 	 *  2. The current one is Playing and the last one wasn't Paused
-	 */
-	if (m_lastPlayState != last && (m_lastPlayState != Playing || last == Paused))
-		m_notify->showMessage(QCoreApplication::applicationName(), playState);
+	*/
+	if (playState != m_lastPlayState && (playState != PlayState[1] || m_lastPlayState == PlayState[2]))
+		m_notify->showMessage(QCoreApplication::applicationName(), tr(playState.toUtf8()));
+	m_lastPlayState = playState;
 }
 
 /**/
 
-NotifyExtension::NotifyExtension(Module &module) : m_notifyService(NULL)
+NotifyExtension::NotifyExtension(Module &module) :
+	m_notifyService(NULL)
 {
 	SetModule(module);
 }
@@ -118,7 +118,7 @@ bool NotifyExtension::set()
 	}
 	else
 	{
-		const int timeout = sets().getInt("timeout");
+		const int timeout = sets().getInt("Timeout");
 		Notify *notify = NULL;
 		if (sets().getBool("TypeTray"))
 			notify = new TrayNotify(timeout);

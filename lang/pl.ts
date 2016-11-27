@@ -771,6 +771,13 @@ amp</translation>
     </message>
 </context>
 <context>
+    <name>FreedesktopNotify</name>
+    <message>
+        <source>Error sending notification</source>
+        <translation>Błąd podczas wysyłania powiadomienia</translation>
+    </message>
+</context>
+<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -1504,6 +1511,58 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>Użyj CUVID tylko jeżeli pierwszym GPU jest NVIDIA</translation>
     </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Wyłączone</translation>
+    </message>
+    <message>
+        <source>Infinite</source>
+        <translation>Nieskończony</translation>
+    </message>
+    <message>
+        <source>Show notification when volume changes</source>
+        <translation>Pokazuj powiadomienia jeżeli głośność zostanie zmieniona</translation>
+    </message>
+    <message>
+        <source>Show notification when media changes</source>
+        <translation>Pokazuj powiadomienia jeżeli odtwarzany plik zostanie zmieniony</translation>
+    </message>
+    <message>
+        <source>Show notification when play state changes</source>
+        <translation>Pokazuj powiadomienia jeżeli stan odtwarzania zostanie zmieniony</translation>
+    </message>
+    <message>
+        <source>Use a custom message for media change notifications</source>
+        <translation>Użyj własnej wiadomości dla powiadomień o zmianie odtwarzanego pliku</translation>
+    </message>
+    <message>
+        <source>Summary</source>
+        <translation>Opis</translation>
+    </message>
+    <message>
+        <source>Body</source>
+        <translation>Treść</translation>
+    </message>
+    <message>
+        <source>Notification type</source>
+        <translation>Typ powiadomienia</translation>
+    </message>
+    <message>
+        <source>Show a native desktop notification</source>
+        <translation>Pokazuj natywne powiadomienia</translation>
+    </message>
+    <message>
+        <source>Show a popup from the system tray</source>
+        <translation>Pokazuj powiadomienia z tray&apos;a</translation>
+    </message>
+    <message>
+        <source>General settings</source>
+        <translation>Ustawienia ogólne</translation>
+    </message>
+    <message>
+        <source>Notification timeout</source>
+        <translation>Czas wyświetlania powiadomienia</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1518,6 +1577,29 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Move down</source>
         <translation>Przenieś niżej</translation>
+    </message>
+</context>
+<context>
+    <name>NotifyService</name>
+    <message>
+        <source>Volume: %1%</source>
+        <translation>Głośność: %1%</translation>
+    </message>
+    <message>
+        <source>Volume changed</source>
+        <translation>Zmiana głośności</translation>
+    </message>
+    <message>
+        <source>Stopped</source>
+        <translation>Zatrzymany</translation>
+    </message>
+    <message>
+        <source>Playing</source>
+        <translation>Odtwarzanie</translation>
+    </message>
+    <message>
+        <source>Paused</source>
+        <translation>Pauza</translation>
     </message>
 </context>
 <context>

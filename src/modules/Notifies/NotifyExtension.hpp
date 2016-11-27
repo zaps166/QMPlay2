@@ -32,12 +32,7 @@ private slots:
 	void volumeChanged(double v);
 private:
 	Notify *m_notify;
-	QString m_summaryFormat, m_bodyFormat;
-	enum PlayState {
-		Playing = 0,
-		Paused,
-		Stopped
-	} m_lastPlayState;
+	QString m_summaryFormat, m_bodyFormat, m_lastPlayState;
 };
 
 /**/

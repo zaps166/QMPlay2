@@ -31,7 +31,7 @@ Notifies::Notifies() :
 #endif
 	init("TypeTray", false);
 
-	init("timeout", 5000);
+	init("Timeout", 5000);
 
 	init("ShowVolume", true);
 	init("ShowTitle", true);
@@ -74,7 +74,7 @@ QMPLAY2_EXPORT_PLUGIN(Notifies)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	QGroupBox *notifyTypeG = new QGroupBox(tr("Notification Type"));
+	QGroupBox *notifyTypeG = new QGroupBox(tr("Notification type"));
 	QVBoxLayout *notifyTypeL = new QVBoxLayout(notifyTypeG);
 
 	m_disabledR = new QRadioButton(tr("Disabled"));
@@ -82,18 +82,18 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	notifyTypeL->addWidget(m_disabledR);
 
 #ifdef Q_OS_LINUX
-	m_nativeR = new QRadioButton(tr("Show a Native Desktop Notification"));
+	m_nativeR = new QRadioButton(tr("Show a native desktop notification"));
 	m_nativeR->setChecked(sets().getBool("TypeNative"));
 	notifyTypeL->addWidget(m_nativeR);
 #endif
 
-	m_trayR = new QRadioButton(tr("Show a Popup from the System Tray"));
+	m_trayR = new QRadioButton(tr("Show a popup from the system tray"));
 	m_trayR->setChecked(sets().getBool("TypeTray"));
 	notifyTypeL->addWidget(m_trayR);
 
 	/**/
 
-	QGroupBox *generalG = new QGroupBox(tr("General Settings"));
+	QGroupBox *generalG = new QGroupBox(tr("General settings"));
 	generalG->setDisabled(sets().getBool("TypeDisabled"));
 	connect(m_disabledR, SIGNAL(toggled(bool)), generalG, SLOT(setDisabled(bool)));
 
@@ -103,7 +103,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_timeoutSB->setSingleStep(0.1);
 	m_timeoutSB->setSpecialValueText(tr("Infinite"));
 	m_timeoutSB->setSuffix(" " + tr("sec"));
-	m_timeoutSB->setValue(sets().getInt("timeout") / 1000.0);
+	m_timeoutSB->setValue(sets().getInt("Timeout") / 1000.0);
 
 	m_notifyVolumeB = new QCheckBox(tr("Show notification when volume changes"));
 	m_notifyVolumeB->setChecked(sets().getBool("ShowVolume"));
@@ -115,7 +115,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_notifyPlayStateB->setChecked(sets().getBool("ShowPlayState"));
 
 	QFormLayout *generalL = new QFormLayout(generalG);
-	generalL->addRow(tr("Notification Timeout") + ":", m_timeoutSB);
+	generalL->addRow(tr("Notification timeout") + ":", m_timeoutSB);
 	generalL->addRow(m_notifyVolumeB);
 	generalL->addRow(m_notifyTitleB);
 	generalL->addRow(m_notifyPlayStateB);
@@ -156,7 +156,7 @@ void ModuleSettingsWidget::saveSettings()
 #endif
 	sets().set("TypeTray", m_trayR->isChecked());
 
-	sets().set("timeout", (int)(m_timeoutSB->value() * 1000));
+	sets().set("Timeout", (int)(m_timeoutSB->value() * 1000));
 	sets().set("ShowVolume", m_notifyVolumeB->isChecked());
 	sets().set("ShowTitle", m_notifyTitleB->isChecked());
 	sets().set("ShowPlayState", m_notifyPlayStateB->isChecked());

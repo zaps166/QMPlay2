@@ -770,6 +770,13 @@ amp</source>
     </message>
 </context>
 <context>
+    <name>FreedesktopNotify</name>
+    <message>
+        <source>Error sending notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -1502,6 +1509,58 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infinite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show notification when volume changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show notification when media changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show notification when play state changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use a custom message for media change notifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Body</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notification type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show a native desktop notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show a popup from the system tray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General settings</source>
+        <translation type="unfinished">Réglages généraux</translation>
+    </message>
+    <message>
+        <source>Notification timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1516,6 +1575,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Move down</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NotifyService</name>
+    <message>
+        <source>Volume: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stopped</source>
+        <translation type="unfinished">Arrêté</translation>
+    </message>
+    <message>
+        <source>Playing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paused</source>
+        <translation type="unfinished">Pause</translation>
     </message>
 </context>
 <context>
