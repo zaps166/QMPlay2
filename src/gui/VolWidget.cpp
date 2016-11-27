@@ -63,7 +63,7 @@ void VolWidget::setVolume(int volL, int volR, bool first)
 void VolWidget::changeVolume(int deltaVol)
 {
 	vol[0].setValue(vol[0].value() + deltaVol);
-	if (vol[1].isVisible())
+	if (vol[1].isEnabled())
 		vol[1].setValue(vol[1].value() + deltaVol);
 }
 
@@ -74,6 +74,7 @@ void VolWidget::customContextMenuRequested(const QPoint &pos)
 void VolWidget::splitTriggered(bool splitted)
 {
 	vol[1].setVisible(splitted);
+	vol[1].setEnabled(splitted);
 	if (!splitted)
 	{
 		const int v = (vol[0].value() + vol[1].value()) / 2;
@@ -92,7 +93,7 @@ void VolWidget::sliderValueChanged(int v)
 	Slider *senderSlider = qobject_cast<Slider *>(sender());
 	if (senderSlider)
 	{
-		if (!vol[1].isVisible())
+		if (!vol[1].isEnabled())
 		{
 			vol[1].setValue(v);
 			if (senderSlider == &vol[1])
