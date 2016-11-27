@@ -52,7 +52,7 @@ private:
 	QCheckBox *m_notifyVolumeB, *m_notifyTitleB, *m_notifyPlayStateB;
 	QGroupBox *m_customMsgG;
 	QLineEdit *m_customSummary, *m_customBody;
-#ifdef Q_OS_LINUX
+#ifdef FREEDESKTOP_NOTIFY
 	QRadioButton *m_nativeR;
 #endif
 };

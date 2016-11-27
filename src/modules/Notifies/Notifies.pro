@@ -19,7 +19,7 @@ OBJECTS_DIR = build/obj
 RCC_DIR = build/rcc
 MOC_DIR = build/moc
 
-# RESOURCES += icons.qrc
+RESOURCES += icon.qrc
 
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH  += . ../../qmplay2/headers
@@ -27,8 +27,10 @@ DEPENDPATH  += . ../../qmplay2/headers
 HEADERS += Notifies.hpp NotifyExtension.hpp TrayNotify.hpp Notify.hpp
 SOURCES += Notifies.cpp NotifyExtension.cpp TrayNotify.cpp
 
-unix:!macx:!android {
-		QT += dbus
-		HEADERS += FreedesktopNotify.hpp
-		SOURCES += FreedesktopNotify.cpp
-}
+ unix:!macx:!android {
+	QT += dbus
+	DBUS_INTERFACES += org.freedesktop.Notifications.xml
+	HEADERS += FreedesktopNotify.hpp
+	SOURCES += FreedesktopNotify.cpp
+	DEFINES += FREEDESKTOP_NOTIFY
+ }

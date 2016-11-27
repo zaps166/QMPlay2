@@ -23,7 +23,7 @@
 class OrgFreedesktopNotificationsInterface;
 class QDBusPendingCallWatcher;
 
-class FreedesktopNotify : public Notify
+class FreedesktopNotify : public QObject, public Notify
 {
 	Q_OBJECT
 	Q_DISABLE_COPY(FreedesktopNotify)

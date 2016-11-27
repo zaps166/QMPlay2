@@ -26,20 +26,22 @@ set(Notifies_SRC
 )
 
 set(Notifies_RESOURCES
+    icon.qrc
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
     list(APPEND Notifies_HDR FreedesktopNotify.hpp)
-    list(APPEND Notifies_SRC FreedesktopNotify.cpp org.freedesktop.Notifications.xml)
+    list(APPEND Notifies_SRC FreedesktopNotify.cpp)
     if(USE_QT5)
         set(DBUS DBus)
         find_package(Qt5DBus REQUIRED)
-        qt5_add_dbus_interface(Notifies_SRC org.freedesktop.Notifications.xml dbus/notification)
+        qt5_add_dbus_interface(Notifies_SRC org.freedesktop.Notifications.xml notifications_interface)
     else()
         set(DBUS Qt4::QtDBus)
         find_package(Qt4 REQUIRED QtDBus)
-        qt4_add_dbus_interface(Notifies_SRC org.freedesktop.Notifications.xml dbus/notification)
+        qt4_add_dbus_interface(Notifies_SRC org.freedesktop.Notifications.xml notifications_interface)
     endif()
+    add_definitions(-DFREEDESKTOP_NOTIFY)
 endif()
 
 include_directories(../../qmplay2/headers)

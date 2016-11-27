@@ -23,10 +23,10 @@
 Notifies::Notifies() :
 	Module("Notifies")
 {
-//	moduleImg = QImage(":/???"); // TODO: add icon
+	moduleImg = QImage(":/Notifies");
 
 	init("TypeDisabled", true);
-#ifdef Q_OS_LINUX
+#ifdef FREEDESKTOP_NOTIFY
 	init("TypeNative", false);
 #endif
 	init("TypeTray", false);
@@ -81,7 +81,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_disabledR->setChecked(sets().getBool("TypeDisabled"));
 	notifyTypeL->addWidget(m_disabledR);
 
-#ifdef Q_OS_LINUX
+#ifdef FREEDESKTOP_NOTIFY
 	m_nativeR = new QRadioButton(tr("Show a native desktop notification"));
 	m_nativeR->setChecked(sets().getBool("TypeNative"));
 	notifyTypeL->addWidget(m_nativeR);
@@ -151,7 +151,7 @@ void ModuleSettingsWidget::saveSettings()
 	const bool disabled = m_disabledR->isChecked();
 
 	sets().set("TypeDisabled", disabled);
-#ifdef Q_OS_LINUX
+#ifdef FREEDESKTOP_NOTIFY
 	sets().set("TypeNative", m_nativeR->isChecked());
 #endif
 	sets().set("TypeTray", m_trayR->isChecked());

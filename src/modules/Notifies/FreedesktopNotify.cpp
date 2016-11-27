@@ -20,9 +20,7 @@
 #include <QMPlay2Core.hpp>
 #include <Module.hpp>
 
-#include "dbus/notification.h"
-
-#include <QImage>
+#include "notifications_interface.h"
 
 #include <QDBusArgument>
 
