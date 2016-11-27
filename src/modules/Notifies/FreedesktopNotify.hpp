@@ -33,9 +33,9 @@ public:
 
 	bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage());
 private slots:
-	void CallFinished(QDBusPendingCallWatcher *watcher);
+	void callFinished(QDBusPendingCallWatcher *watcher);
 private:
 	OrgFreedesktopNotificationsInterface *m_interface;
-	uint m_notificationId;
+	quint32 m_notificationId;
 	QDateTime m_lastNotificationTime;
 };

@@ -68,13 +68,9 @@ const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &)
 
 FreedesktopNotify::FreedesktopNotify(qint32 timeout) :
 	Notify(timeout),
+	m_interface(new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus())),
 	m_notificationId(0)
-{
-	m_interface = new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus());
-	if (!m_interface->isValid()) {
-		QMPlay2Core.logError(FreedesktopNotifyName " :: " + tr("Error connecting to notifications service"));
-	}
-}
+{}
 FreedesktopNotify::~FreedesktopNotify()
 {
 	delete m_interface;
@@ -82,13 +78,9 @@ FreedesktopNotify::~FreedesktopNotify()
 
 bool FreedesktopNotify::showMessage(const QString &summary, const QString &message, const QString &icon, const QImage &image)
 {
-	if (!m_interface) return false;
-
 	QVariantMap hints;
 	if (!image.isNull())
-	{
 		hints["image_data"] = QVariant(image);
-	}
 
 	int id = 0;
 	if (m_lastNotificationTime.msecsTo(QDateTime::currentDateTime()) < m_timeout)
@@ -99,25 +91,27 @@ bool FreedesktopNotify::showMessage(const QString &summary, const QString &messa
 		id = m_notificationId;
 	}
 
-	QDBusPendingReply<uint> reply = m_interface->Notify(QCoreApplication::applicationName(), id, icon, summary, message, QStringList(), hints, m_timeout);
+	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, icon, summary, message, QStringList(), hints, m_timeout);
 	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
-	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(CallFinished(QDBusPendingCallWatcher*)));
+	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)), SLOT(callFinished(QDBusPendingCallWatcher *)));
 	return true;
 }
 
-void FreedesktopNotify::CallFinished(QDBusPendingCallWatcher *watcher)
+void FreedesktopNotify::callFinished(QDBusPendingCallWatcher *watcher)
 {
-	QDBusPendingReply<uint> reply = *watcher;
+	const QDBusPendingReply<quint32> reply = *watcher;
 	if (reply.isError())
 	{
 		QMPlay2Core.logError(FreedesktopNotifyName " :: " + tr("Error sending notification") + ": " + reply.error().name());
 		return;
 	}
 
-	uint id = reply.value();
+	const quint32 id = reply.value();
 	if (id != 0)
 	{
 		m_notificationId = id;
 		m_lastNotificationTime = QDateTime::currentDateTime();
 	}
+
+	watcher->deleteLater();
 }
