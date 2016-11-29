@@ -22,6 +22,7 @@
 #include <VoiceRemoval.hpp>
 #include <PhaseReverse.hpp>
 #include <Echo.hpp>
+#include <DysonCompressor.hpp>
 
 AudioFilters::AudioFilters() :
 	Module("AudioFilters")
@@ -52,6 +53,11 @@ AudioFilters::AudioFilters() :
 	init("Echo/Volume", 50);
 	init("Echo/Feedback", 50);
 	init("Echo/Surround", false);
+	init("Compressor", false);
+	init("Compressor/PeakPercent", 90);
+	init("Compressor/ReleaseTime", 0.2);
+	init("Compressor/FastGainCompressionRatio", 0.9);
+	init("Compressor/OverallCompressionRatio", 0.6);
 	if (getBool("Equalizer"))
 	{
 		bool disableEQ = true;
@@ -70,6 +76,7 @@ QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
 	modulesInfo += Info(VoiceRemovalName, AUDIOFILTER);
 	modulesInfo += Info(PhaseReverseName, AUDIOFILTER);
 	modulesInfo += Info(EchoName, AUDIOFILTER);
+	modulesInfo += Info(DysonCompressorName, AUDIOFILTER);
 	return modulesInfo;
 }
 void *AudioFilters::createInstance(const QString &name)
@@ -84,6 +91,8 @@ void *AudioFilters::createInstance(const QString &name)
 		return new PhaseReverse(*this);
 	else if (name == EchoName)
 		return new Echo(*this);
+	else if (name == DysonCompressorName)
+		return new DysonCompressor(*this);
 	return NULL;
 }
 
@@ -113,6 +122,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	voiceRemovalEB->setChecked(sets().getBool("VoiceRemoval"));
 	connect(voiceRemovalEB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
 
+
 	phaseReverseEB = new QCheckBox(tr("Phase reverse"));
 	phaseReverseEB->setChecked(sets().getBool("PhaseReverse"));
 	connect(phaseReverseEB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
@@ -122,6 +132,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	connect(phaseReverseRightB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
 
 	phaseReverseRightB->setEnabled(phaseReverseEB->isChecked());
+
 
 	echoB = new QGroupBox(tr("Echo"));
 	echoB->setCheckable(true);
@@ -152,6 +163,39 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	echoBLayout->addRow(tr("Echo volume") + ": ", echoVolumeS);
 	echoBLayout->addRow(tr("Echo repeat") + ": ", echoFeedbackS);
 	echoBLayout->addRow(echoSurroundB);
+
+
+	compressorB = new QGroupBox(tr("Dynamic range compression"));
+	compressorB->setCheckable(true);
+	compressorB->setChecked(sets().getBool("Compressor"));
+	connect(compressorB, SIGNAL(clicked()), this, SLOT(compressor()));
+
+	compressorPeakS = new Slider;
+	compressorPeakS->setRange(1, 20);
+	compressorPeakS->setValue(sets().getInt("Compressor/PeakPercent") / 5);
+	connect(compressorPeakS, SIGNAL(valueChanged(int)), this, SLOT(compressor()));
+
+	compressorReleaseTimeS = new Slider;
+	compressorReleaseTimeS->setRange(1, 20);
+	compressorReleaseTimeS->setValue(sets().getDouble("Compressor/ReleaseTime") * 20);
+	connect(compressorReleaseTimeS, SIGNAL(valueChanged(int)), this, SLOT(compressor()));
+
+	compressorFastRatioS = new Slider;
+	compressorFastRatioS->setRange(1, 20);
+	compressorFastRatioS->setValue(sets().getDouble("Compressor/FastGainCompressionRatio") * 20);
+	connect(compressorFastRatioS, SIGNAL(valueChanged(int)), this, SLOT(compressor()));
+
+	compressorRatioS = new Slider;
+	compressorRatioS->setRange(1, 20);
+	compressorRatioS->setValue(sets().getDouble("Compressor/OverallCompressionRatio") * 20);
+	connect(compressorRatioS, SIGNAL(valueChanged(int)), this, SLOT(compressor()));
+
+	QFormLayout *compressorBLayout = new QFormLayout(compressorB);
+	compressorBLayout->addRow(tr("Peak limit") + ": ", compressorPeakS); //[%]
+	compressorBLayout->addRow(tr("Release time") + ": ", compressorReleaseTimeS); //[s]
+	compressorBLayout->addRow(tr("Fast compression ratio") + ": ", compressorFastRatioS);
+	compressorBLayout->addRow(tr("Overall compression ratio") + ": ", compressorRatioS);
+
 
 	QLabel *eqQualityL = new QLabel(tr("Sound equalizer quality") + ": ");
 
@@ -192,12 +236,13 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(phaseReverseEB, 1, 0, 1, 2);
 	layout->addWidget(phaseReverseRightB, 2, 0, 1, 2);
 	layout->addWidget(echoB, 3, 0, 1, 2);
-	layout->addWidget(eqQualityL, 4, 0, 1, 1);
-	layout->addWidget(eqQualityB, 4, 1, 1, 1);
-	layout->addWidget(eqSlidersL, 5, 0, 1, 1);
-	layout->addWidget(eqSlidersB, 5, 1, 1, 1);
-	layout->addWidget(eqMinFreqB, 6, 0, 1, 1);
-	layout->addWidget(eqMaxFreqB, 6, 1, 1, 1);
+	layout->addWidget(compressorB, 4, 0, 1, 2);
+	layout->addWidget(eqQualityL, 5, 0, 1, 1);
+	layout->addWidget(eqQualityB, 5, 1, 1, 1);
+	layout->addWidget(eqSlidersL, 6, 0, 1, 1);
+	layout->addWidget(eqSlidersB, 6, 1, 1, 1);
+	layout->addWidget(eqMinFreqB, 7, 0, 1, 1);
+	layout->addWidget(eqMaxFreqB, 7, 1, 1, 1);
 }
 
 void ModuleSettingsWidget::voiceRemovalToggle()
@@ -220,6 +265,15 @@ void ModuleSettingsWidget::echo()
 	sets().set("Echo/Feedback", echoFeedbackS->value());
 	sets().set("Echo/Surround", echoSurroundB->isChecked());
 	SetInstance<Echo>();
+}
+void ModuleSettingsWidget::compressor()
+{
+	sets().set("Compressor", compressorB->isChecked());
+	sets().set("Compressor/PeakPercent", compressorPeakS->value() * 5);
+	sets().set("Compressor/ReleaseTime", compressorReleaseTimeS->value() / 20.0);
+	sets().set("Compressor/FastGainCompressionRatio", compressorFastRatioS->value() / 20.0);
+	sets().set("Compressor/OverallCompressionRatio", compressorRatioS->value() / 20.0);
+	SetInstance<DysonCompressor>();
 }
 
 void ModuleSettingsWidget::saveSettings()

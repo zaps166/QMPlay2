@@ -19,6 +19,7 @@ set(AudioFilters_HDR
     VoiceRemoval.hpp
     PhaseReverse.hpp
     Echo.hpp
+    DysonCompressor.hpp
 )
 
 set(AudioFilters_SRC
@@ -28,6 +29,7 @@ set(AudioFilters_SRC
     VoiceRemoval.cpp
     PhaseReverse.cpp
     Echo.cpp
+    DysonCompressor.cpp
 )
 
 set(AudioFilters_RESOURCES

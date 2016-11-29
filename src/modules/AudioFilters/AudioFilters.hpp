@@ -46,6 +46,7 @@ private slots:
 	void voiceRemovalToggle();
 	void phaseReverse();
 	void echo();
+	void compressor();
 private:
 	void saveSettings();
 
@@ -54,6 +55,9 @@ private:
 	QGroupBox *echoB;
 	Slider *echoDelayS, *echoVolumeS, *echoFeedbackS;
 	QCheckBox *echoSurroundB;
+
+	QGroupBox *compressorB;
+	Slider *compressorPeakS, *compressorReleaseTimeS, *compressorFastRatioS, *compressorRatioS;
 
 	QComboBox *eqQualityB;
 	QSpinBox *eqSlidersB, *eqMinFreqB, *eqMaxFreqB;

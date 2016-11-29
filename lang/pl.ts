@@ -1563,6 +1563,26 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Notification timeout</source>
         <translation>Czas wyświetlania powiadomienia</translation>
     </message>
+    <message>
+        <source>Peak limit</source>
+        <translation>Limit szczytu</translation>
+    </message>
+    <message>
+        <source>Release time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fast compression ratio</source>
+        <translation>Współczynnik szybkiej kompresji</translation>
+    </message>
+    <message>
+        <source>Overall compression ratio</source>
+        <translation>Współczynnik całkowitej kompresji</translation>
+    </message>
+    <message>
+        <source>Dynamic range compression</source>
+        <translation>Kompresja zakresu dynamiki</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

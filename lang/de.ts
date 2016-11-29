@@ -1563,6 +1563,26 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Notification timeout</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Peak limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Release time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fast compression ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overall compression ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dynamic range compression</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
