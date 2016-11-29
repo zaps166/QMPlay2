@@ -98,6 +98,7 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 
 #include <Slider.hpp>
 
+#include <QFormLayout>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QComboBox>
@@ -127,38 +128,30 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	echoB->setChecked(sets().getBool("Echo"));
 	connect(echoB, SIGNAL(clicked()), this, SLOT(echo()));
 
-	QLabel *echoDelayL = new QLabel(tr("Echo delay") + ": ");
+	echoDelayS = new Slider;
+	echoDelayS->setRange(1, 1000);
+	echoDelayS->setValue(sets().getUInt("Echo/Delay"));
+	connect(echoDelayS, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
-	echoDelayB = new Slider;
-	echoDelayB->setRange(1, 1000);
-	echoDelayB->setValue(sets().getUInt("Echo/Delay"));
-	connect(echoDelayB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
+	echoVolumeS = new Slider;
+	echoVolumeS->setRange(1, 100);
+	echoVolumeS->setValue(sets().getUInt("Echo/Volume"));
+	connect(echoVolumeS, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
-	QLabel *echoVolumeL = new QLabel(tr("Echo volume") + ": ");
-
-	echoVolumeB = new Slider;
-	echoVolumeB->setRange(1, 100);
-	echoVolumeB->setValue(sets().getUInt("Echo/Volume"));
-	connect(echoVolumeB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
-
-	QLabel *echoFeedbackL = new QLabel(tr("Echo repeat") + ": ");
-
-	echoFeedbackB = new Slider;
-	echoFeedbackB->setRange(1, 100);
-	echoFeedbackB->setValue(sets().getUInt("Echo/Feedback"));
-	connect(echoFeedbackB, SIGNAL(valueChanged(int)), this, SLOT(echo()));
+	echoFeedbackS = new Slider;
+	echoFeedbackS->setRange(1, 100);
+	echoFeedbackS->setValue(sets().getUInt("Echo/Feedback"));
+	connect(echoFeedbackS, SIGNAL(valueChanged(int)), this, SLOT(echo()));
 
 	echoSurroundB = new QCheckBox(tr("Echo surround"));
+	echoSurroundB->setChecked(sets().getBool("Echo/Surround"));
 	connect(echoSurroundB, SIGNAL(clicked()), this, SLOT(echo()));
 
-	QGridLayout *echoBLayout = new QGridLayout(echoB);
-	echoBLayout->addWidget(echoDelayL, 0, 0, 1, 1);
-	echoBLayout->addWidget(echoDelayB, 0, 1, 1, 1);
-	echoBLayout->addWidget(echoVolumeL, 1, 0, 1, 1);
-	echoBLayout->addWidget(echoVolumeB, 1, 1, 1, 1);
-	echoBLayout->addWidget(echoFeedbackL, 2, 0, 1, 1);
-	echoBLayout->addWidget(echoFeedbackB, 2, 1, 1, 1);
-	echoBLayout->addWidget(echoSurroundB, 3, 0, 1, 2);
+	QFormLayout *echoBLayout = new QFormLayout(echoB);
+	echoBLayout->addRow(tr("Echo delay") + ": ", echoDelayS);
+	echoBLayout->addRow(tr("Echo volume") + ": ", echoVolumeS);
+	echoBLayout->addRow(tr("Echo repeat") + ": ", echoFeedbackS);
+	echoBLayout->addRow(echoSurroundB);
 
 	QLabel *eqQualityL = new QLabel(tr("Sound equalizer quality") + ": ");
 
@@ -222,9 +215,9 @@ void ModuleSettingsWidget::phaseReverse()
 void ModuleSettingsWidget::echo()
 {
 	sets().set("Echo", echoB->isChecked());
-	sets().set("Echo/Delay", echoDelayB->value());
-	sets().set("Echo/Volume", echoVolumeB->value());
-	sets().set("Echo/Feedback", echoFeedbackB->value());
+	sets().set("Echo/Delay", echoDelayS->value());
+	sets().set("Echo/Volume", echoVolumeS->value());
+	sets().set("Echo/Feedback", echoFeedbackS->value());
 	sets().set("Echo/Surround", echoSurroundB->isChecked());
 	SetInstance<Echo>();
 }
