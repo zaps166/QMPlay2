@@ -66,10 +66,13 @@ private:
 	bool createCuvidVideoParser();
 	void destroyCuvid(bool all);
 
+	inline void resetLastTS();
+
 	VideoWriter *m_writer;
 	CuvidHWAccel *m_cuvidHWAccel;
 
 	int m_width, m_height, m_codedHeight;
+	double m_lastTS[2];
 
 	cudaVideoDeinterlaceMode m_deintMethod;
 	Qt::CheckState m_copyVideo;

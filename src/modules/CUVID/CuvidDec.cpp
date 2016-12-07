@@ -554,6 +554,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 	m_width = format->display_area.right;
 	m_height = format->display_area.bottom;
 	m_codedHeight = format->coded_height;
+	resetLastTS();
 
 	destroyCuvid(false);
 
@@ -610,6 +611,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		m_cuvidSurfaces.clear();
 		m_forceFlush = false;
 		destroyCuvid(true);
+		resetLastTS();
 		if (!createCuvidVideoParser())
 		{
 			encodedPacket.ts.setInvalid();
@@ -664,14 +666,31 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	if (m_cuvidSurfaces.isEmpty())
 		encodedPacket.ts.setInvalid();
-	else
+	else if (~hurry_up)
 	{
 		const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
 		const VideoFrameSize frameSize(m_width, m_height);
+
 		encodedPacket.ts = dispInfo.timestamp / 10000000.0;
+
+		//Sometimes (MPEG1, MPEG2) CUVID provides incorrect timestamp, so compare the
+		//current timestamp with the previous timestamp and calculate the correct one.
+		if (encodedPacket.ts > m_lastTS[0])
+		{
+			m_lastTS[1] = m_lastTS[0];
+			m_lastTS[0] = encodedPacket.ts;
+		}
+		else if (m_lastTS[0] >= 0.0 && m_lastTS[0] > m_lastTS[1])
+		{
+			const double diff = m_lastTS[0] - m_lastTS[1];
+			m_lastTS[1] = m_lastTS[0];
+			m_lastTS[0] += diff;
+			encodedPacket.ts = m_lastTS[0];
+		}
+
 		if (m_cuvidHWAccel)
 			decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
-		else if (~hurry_up)
+		else
 		{
 			CUdeviceptr mappedFrame = 0;
 			unsigned int pitch = 0;
@@ -985,4 +1004,9 @@ void CuvidDec::destroyCuvid(bool all)
 		cuvid::destroyVideoParser(m_cuvidParser);
 		m_cuvidParser = NULL;
 	}
+}
+
+inline void CuvidDec::resetLastTS()
+{
+	m_lastTS[0] = m_lastTS[1] = -1.0;
 }
