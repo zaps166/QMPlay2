@@ -98,10 +98,7 @@ public:
 	void setItags();
 	void set();
 
-	inline QString getYtDlPath() const
-	{
-		return youtubedl;
-	}
+	inline QString getYtDlPath() const;
 
 	DockWidget *dw;
 private slots:

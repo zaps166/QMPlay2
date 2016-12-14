@@ -196,7 +196,7 @@ public:
 		}
 #endif
 
-		QStringList commonArgs;
+		QStringList commonArgs("-i"); //Ignore errors, e.g. SSL errors
 
 		const char *http_proxy = getenv("http_proxy");
 		if (http_proxy && *http_proxy)
@@ -728,6 +728,11 @@ void YouTubeW::set()
 #ifdef Q_OS_WIN
 	youtubedl.replace('\\', '/');
 #endif
+}
+
+inline QString YouTubeW::getYtDlPath() const
+{
+	return youtubedl;
 }
 
 void YouTubeW::downloadYtDl()
