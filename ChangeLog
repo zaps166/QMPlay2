@@ -1,5 +1,6 @@
-Changes in QMPlay2 build 16.11.29:
+Changes in QMPlay2 build 16.12.14:
 	- new Notifications module (Zamarin Arthur),
+	- use cookies obtained from "youtube-dl",
 	- add audio dynamic range compressor,
 	- bugfix,
 
