@@ -17,6 +17,7 @@
 */
 
 #include <AudioFilters.hpp>
+#include <BS2B.hpp>
 #include <Equalizer.hpp>
 #include <EqualizerGUI.hpp>
 #include <VoiceRemoval.hpp>
@@ -28,6 +29,8 @@ AudioFilters::AudioFilters() :
 	Module("AudioFilters")
 {
 	moduleImg = QImage(":/AudioFilters");
+
+	init("BS2B", false);
 
 	init("Equalizer", false);
 	int nbits = getInt("Equalizer/nbits");
@@ -45,19 +48,24 @@ AudioFilters::AudioFilters() :
 	init("Equalizer/-1", 50);
 	for (int i = 0; i < count; ++i)
 		init("Equalizer/" + QString::number(i), 50);
+
 	init("VoiceRemoval", false);
+
 	init("PhaseReverse", false);
 	init("PhaseReverse/ReverseRight", false);
+
 	init("Echo", false);
 	init("Echo/Delay", 500);
 	init("Echo/Volume", 50);
 	init("Echo/Feedback", 50);
 	init("Echo/Surround", false);
+
 	init("Compressor", false);
 	init("Compressor/PeakPercent", 90);
 	init("Compressor/ReleaseTime", 0.2);
 	init("Compressor/FastGainCompressionRatio", 0.9);
 	init("Compressor/OverallCompressionRatio", 0.6);
+
 	if (getBool("Equalizer"))
 	{
 		bool disableEQ = true;
@@ -71,6 +79,7 @@ AudioFilters::AudioFilters() :
 QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
 {
 	QList<Info> modulesInfo;
+	modulesInfo += Info(BS2BName, AUDIOFILTER);
 	modulesInfo += Info(EqualizerName, AUDIOFILTER);
 	modulesInfo += Info(EqualizerGUIName, QMPLAY2EXTENSION);
 	modulesInfo += Info(VoiceRemovalName, AUDIOFILTER);
@@ -81,6 +90,8 @@ QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
 }
 void *AudioFilters::createInstance(const QString &name)
 {
+	if (name == BS2BName)
+		return new BS2B(*this);
 	if (name == EqualizerName)
 		return new Equalizer(*this);
 	else if (name == EqualizerGUIName)
@@ -118,6 +129,10 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
+	bs2bB = new QCheckBox(tr(BS2BName));
+	bs2bB->setChecked(sets().getBool("BS2B"));
+	connect(bs2bB, SIGNAL(clicked()), this, SLOT(bs2bToggle()));
+
 	voiceRemovalEB = new QCheckBox(tr("Voice removal"));
 	voiceRemovalEB->setChecked(sets().getBool("VoiceRemoval"));
 	connect(voiceRemovalEB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
@@ -232,19 +247,25 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	eqMaxFreqB->setValue(sets().getInt("Equalizer/maxFreq"));
 
 	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(voiceRemovalEB, 0, 0, 1, 2);
-	layout->addWidget(phaseReverseEB, 1, 0, 1, 2);
-	layout->addWidget(phaseReverseRightB, 2, 0, 1, 2);
-	layout->addWidget(echoB, 3, 0, 1, 2);
-	layout->addWidget(compressorB, 4, 0, 1, 2);
-	layout->addWidget(eqQualityL, 5, 0, 1, 1);
-	layout->addWidget(eqQualityB, 5, 1, 1, 1);
-	layout->addWidget(eqSlidersL, 6, 0, 1, 1);
-	layout->addWidget(eqSlidersB, 6, 1, 1, 1);
-	layout->addWidget(eqMinFreqB, 7, 0, 1, 1);
-	layout->addWidget(eqMaxFreqB, 7, 1, 1, 1);
+	layout->addWidget(bs2bB, 0, 0, 1, 2);
+	layout->addWidget(voiceRemovalEB, 1, 0, 1, 2);
+	layout->addWidget(phaseReverseEB, 2, 0, 1, 2);
+	layout->addWidget(phaseReverseRightB, 3, 0, 1, 2);
+	layout->addWidget(echoB, 4, 0, 1, 2);
+	layout->addWidget(compressorB, 5, 0, 1, 2);
+	layout->addWidget(eqQualityL, 6, 0, 1, 1);
+	layout->addWidget(eqQualityB, 6, 1, 1, 1);
+	layout->addWidget(eqSlidersL, 7, 0, 1, 1);
+	layout->addWidget(eqSlidersB, 7, 1, 1, 1);
+	layout->addWidget(eqMinFreqB, 8, 0, 1, 1);
+	layout->addWidget(eqMaxFreqB, 8, 1, 1, 1);
 }
 
+void ModuleSettingsWidget::bs2bToggle()
+{
+	sets().set("BS2B", bs2bB->isChecked());
+	SetInstance<BS2B>();
+}
 void ModuleSettingsWidget::voiceRemovalToggle()
 {
 	sets().set("VoiceRemoval", voiceRemovalEB->isChecked());

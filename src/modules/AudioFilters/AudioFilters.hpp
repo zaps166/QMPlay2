@@ -43,12 +43,15 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private slots:
+	void bs2bToggle();
 	void voiceRemovalToggle();
 	void phaseReverse();
 	void echo();
 	void compressor();
 private:
 	void saveSettings();
+
+	QCheckBox *bs2bB;
 
 	QCheckBox *voiceRemovalEB, *phaseReverseEB, *phaseReverseRightB;
 

@@ -20,6 +20,8 @@ set(AudioFilters_HDR
     PhaseReverse.hpp
     Echo.hpp
     DysonCompressor.hpp
+    BS2B.hpp
+    bs2b/bs2b.c
 )
 
 set(AudioFilters_SRC
@@ -30,6 +32,9 @@ set(AudioFilters_SRC
     PhaseReverse.cpp
     Echo.cpp
     DysonCompressor.cpp
+    BS2B.cpp
+    bs2b/bs2b.h
+    bs2b/bs2bversion.h
 )
 
 set(AudioFilters_RESOURCES
