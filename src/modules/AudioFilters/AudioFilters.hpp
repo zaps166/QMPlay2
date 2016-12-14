@@ -53,7 +53,10 @@ private:
 
 	QCheckBox *bs2bB;
 
-	QCheckBox *voiceRemovalEB, *phaseReverseEB, *phaseReverseRightB;
+	QCheckBox *voiceRemovalB;
+
+	QGroupBox *phaseReverseB;
+	QCheckBox *phaseReverseRightB;
 
 	QGroupBox *echoB;
 	Slider *echoDelayS, *echoVolumeS, *echoFeedbackS;

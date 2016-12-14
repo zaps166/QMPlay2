@@ -133,20 +133,23 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	bs2bB->setChecked(sets().getBool("BS2B"));
 	connect(bs2bB, SIGNAL(clicked()), this, SLOT(bs2bToggle()));
 
-	voiceRemovalEB = new QCheckBox(tr("Voice removal"));
-	voiceRemovalEB->setChecked(sets().getBool("VoiceRemoval"));
-	connect(voiceRemovalEB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
+	voiceRemovalB = new QCheckBox(tr("Voice removal"));
+	voiceRemovalB->setChecked(sets().getBool("VoiceRemoval"));
+	connect(voiceRemovalB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
 
 
-	phaseReverseEB = new QCheckBox(tr("Phase reverse"));
-	phaseReverseEB->setChecked(sets().getBool("PhaseReverse"));
-	connect(phaseReverseEB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
+	phaseReverseB = new QGroupBox(tr("Phase reverse"));
+	phaseReverseB->setCheckable(true);
+	phaseReverseB->setChecked(sets().getBool("PhaseReverse"));
+	connect(phaseReverseB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
 
 	phaseReverseRightB = new QCheckBox(tr("Reverse the right channel phase"));
 	phaseReverseRightB->setChecked(sets().getBool("PhaseReverse/ReverseRight"));
 	connect(phaseReverseRightB, SIGNAL(clicked()), this, SLOT(phaseReverse()));
 
-	phaseReverseRightB->setEnabled(phaseReverseEB->isChecked());
+	QGridLayout *phaseReverseLayout = new QGridLayout(phaseReverseB);
+	phaseReverseLayout->addWidget(phaseReverseRightB);
+	phaseReverseLayout->setMargin(3);
 
 
 	echoB = new QGroupBox(tr("Echo"));
@@ -248,17 +251,16 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(bs2bB, 0, 0, 1, 2);
-	layout->addWidget(voiceRemovalEB, 1, 0, 1, 2);
-	layout->addWidget(phaseReverseEB, 2, 0, 1, 2);
-	layout->addWidget(phaseReverseRightB, 3, 0, 1, 2);
-	layout->addWidget(echoB, 4, 0, 1, 2);
-	layout->addWidget(compressorB, 5, 0, 1, 2);
-	layout->addWidget(eqQualityL, 6, 0, 1, 1);
-	layout->addWidget(eqQualityB, 6, 1, 1, 1);
-	layout->addWidget(eqSlidersL, 7, 0, 1, 1);
-	layout->addWidget(eqSlidersB, 7, 1, 1, 1);
-	layout->addWidget(eqMinFreqB, 8, 0, 1, 1);
-	layout->addWidget(eqMaxFreqB, 8, 1, 1, 1);
+	layout->addWidget(voiceRemovalB, 1, 0, 1, 2);
+	layout->addWidget(phaseReverseB, 2, 0, 1, 2);
+	layout->addWidget(echoB, 3, 0, 1, 2);
+	layout->addWidget(compressorB, 4, 0, 1, 2);
+	layout->addWidget(eqQualityL, 5, 0, 1, 1);
+	layout->addWidget(eqQualityB, 5, 1, 1, 1);
+	layout->addWidget(eqSlidersL, 6, 0, 1, 1);
+	layout->addWidget(eqSlidersB, 6, 1, 1, 1);
+	layout->addWidget(eqMinFreqB, 7, 0, 1, 1);
+	layout->addWidget(eqMaxFreqB, 7, 1, 1, 1);
 }
 
 void ModuleSettingsWidget::bs2bToggle()
@@ -268,14 +270,13 @@ void ModuleSettingsWidget::bs2bToggle()
 }
 void ModuleSettingsWidget::voiceRemovalToggle()
 {
-	sets().set("VoiceRemoval", voiceRemovalEB->isChecked());
+	sets().set("VoiceRemoval", voiceRemovalB->isChecked());
 	SetInstance<VoiceRemoval>();
 }
 void ModuleSettingsWidget::phaseReverse()
 {
-	sets().set("PhaseReverse", phaseReverseEB->isChecked());
+	sets().set("PhaseReverse", phaseReverseB->isChecked());
 	sets().set("PhaseReverse/ReverseRight", phaseReverseRightB->isChecked());
-	phaseReverseRightB->setEnabled(phaseReverseEB->isChecked());
 	SetInstance<PhaseReverse>();
 }
 void ModuleSettingsWidget::echo()
