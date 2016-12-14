@@ -18,6 +18,7 @@
 
 #include <FFCommon.hpp>
 
+#include <QMPlay2Core.hpp>
 #include <Version.hpp>
 
 extern "C"
@@ -33,6 +34,8 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 		url.remove(0, 7);
 	else
 	{
+		const QByteArray cookies = QMPlay2Core.getCookies(url);
+
 		if (url.startsWith("mms:"))
 			url.insert(3, 'h');
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
@@ -44,6 +47,9 @@ QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
 #else
 		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);
 #endif
+
+		if (!cookies.isEmpty())
+			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
 	}
 	return url;
 }

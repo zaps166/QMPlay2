@@ -21,7 +21,9 @@
 
 #include <QAtomicInt>
 #include <QObject>
+#include <QMutex>
 #include <QIcon>
+#include <QHash>
 #include <QMap>
 
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
@@ -158,6 +160,9 @@ public:
 	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
 	QList<QWidget *> getVideoDeintMethods() const;
 
+	void addCookies(const QString &url, const QByteArray &newCookies);
+	QByteArray getCookies(const QString &url) const;
+
 	QSystemTrayIcon *systemTray;
 private slots:
 	void restoreCursorSlot();
@@ -180,6 +185,9 @@ private:
 	QStringList logs;
 	QMap<QString, QString> languages;
 	QList<QPointer<QWidget> > videoFilters;
+
+	mutable QMutex cookiesMutex;
+	QHash<QString, QByteArray> cookies;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

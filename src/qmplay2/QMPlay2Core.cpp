@@ -371,6 +371,23 @@ QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
 	return ret;
 }
 
+void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies)
+{
+	if (!url.isEmpty())
+	{
+		QMutexLocker locker(&cookiesMutex);
+		if (newCookies.isEmpty())
+			cookies.remove(url);
+		else
+			cookies[url] = newCookies;
+	}
+}
+QByteArray QMPlay2CoreClass::getCookies(const QString &url) const
+{
+	QMutexLocker locker(&cookiesMutex);
+	return cookies[url];
+}
+
 void QMPlay2CoreClass::restoreCursorSlot()
 {
 	QApplication::restoreOverrideCursor();

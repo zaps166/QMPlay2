@@ -196,12 +196,13 @@ public:
 		}
 #endif
 
-		QStringList proxy;
+		QStringList commonArgs;
+
 		const char *http_proxy = getenv("http_proxy");
 		if (http_proxy && *http_proxy)
-			proxy << "--proxy" << http_proxy;
+			commonArgs << "--proxy" << http_proxy;
 
-		youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << url << "-g" << args << proxy);
+		youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << url << "-g" << args << commonArgs << "-j");
 		if (youtubedl_process.waitForFinished() && !aborted)
 		{
 			if (youtubedl_process.exitCode() != 0)
@@ -213,7 +214,7 @@ public:
 				if (canUpdate && error.contains("youtube-dl -U")) //Update is necessary
 				{
 					youtubedl_updating = true;
-					youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << "-U" << proxy);
+					youtubedl_process.start(ytdlW.getYtDlPath(), QStringList() << "-U" << commonArgs);
 					if (youtubedl_process.waitForFinished(-1) && !aborted)
 					{
 						const QString error2 = youtubedl_process.readAllStandardOutput() + youtubedl_process.readAllStandardError();
@@ -245,17 +246,87 @@ public:
 					emit QMPlay2Core.sendMessage(error, YouTubeName + QString(" (%1)").arg(Functions::fileName(ytdlW.getYtDlPath())), 3, 0);
 				return QStringList();
 			}
-			return QString(youtubedl_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
+
+			//[Title], url, JSON, [url, JSON]
+			QStringList result = QString(youtubedl_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
+			for (int i = result.count() - 1; i >= 0; --i)
+			{
+				if (i > 0 && result.at(i).startsWith('{'))
+				{
+					//First entry in URL array might be a title, but it doesn't bother
+					exportCookiesFromJSON(result.at(i), result.at(i - 1));
+					result.removeAt(i);
+				}
+			}
+
+			return result;
 		}
 		else if (!aborted && youtubedl_process.error() == QProcess::FailedToStart)
 			QMetaObject::invokeMethod(&ytdlW, "downloadYtDl"); //Call in GUI thread
 		return QStringList();
 	}
+
 private:
 	void abort()
 	{
 		aborted = true;
 		youtubedl_process.kill();
+	}
+
+	static QString getJSONValue(const QString &json, const QString &key)
+	{
+		int idx = json.indexOf("\"" + key + "\":");
+		if (idx < 0)
+			return QString();
+
+		idx = json.indexOf("\"", idx + key.length() + 3);
+		if (idx < 0)
+			return QString();
+
+		idx += 1;
+		const int endIdx = json.indexOf("\"", idx);
+		if (endIdx < 0)
+			return QString();
+
+		return json.mid(idx, endIdx - idx);
+	}
+
+	void exportCookiesFromJSON(const QString &json, const QString &url)
+	{
+		const int formatsIdx = json.indexOf("\"formats\":");
+		if (formatsIdx > -1)
+		{
+			int idx1 = json.indexOf('[', formatsIdx + 10);
+			if (idx1 > -1)
+			{
+				int idx2 = json.indexOf(']', idx1 += 1);
+				if (idx2 > -1)
+				{
+					int level = 0, lastIdx = 0;
+					for (int i = idx1; i < idx2; ++i)
+					{
+						if (json[i] == '{')
+						{
+							if (level == 0)
+								lastIdx = i;
+							++level;
+						}
+						else if (json[i] == '}')
+						{
+							--level;
+							if (level < 0)
+								break;
+							if (level == 0)
+							{
+								const QString format = json.mid(lastIdx + 1, i - lastIdx - 1);
+								if (url == getJSONValue(format, "url"))
+									QMPlay2Core.addCookies(url, getJSONValue(format, "Cookie").toLatin1());
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	QProcess youtubedl_process;
