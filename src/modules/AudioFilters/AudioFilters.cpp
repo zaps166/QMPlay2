@@ -242,6 +242,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	compressorBLayout->addRow(tr("Overall compression ratio") + ": ", compressorRatioS);
 
 
+	QGroupBox *eqGroupB = new QGroupBox(tr("Equalizer"));
+
 	QLabel *eqQualityL = new QLabel(tr("Sound equalizer quality") + ": ");
 
 	eqQualityB = new QComboBox;
@@ -276,18 +278,23 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	eqMaxFreqB->setRange(10000, 96000);
 	eqMaxFreqB->setValue(sets().getInt("Equalizer/maxFreq"));
 
+	QGridLayout *eqLayout = new QGridLayout(eqGroupB);
+	eqLayout->addWidget(eqQualityL, 1, 0);
+	eqLayout->addWidget(eqQualityB, 1, 1);
+	eqLayout->addWidget(eqSlidersL, 2, 0);
+	eqLayout->addWidget(eqSlidersB, 2, 1);
+	eqLayout->addWidget(eqMinFreqB, 3, 0);
+	eqLayout->addWidget(eqMaxFreqB, 3, 1);
+	eqLayout->setMargin(3);
+
+
 	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(bs2bB, 0, 0, 1, 2);
-	layout->addWidget(voiceRemovalB, 1, 0, 1, 2);
-	layout->addWidget(phaseReverseB, 2, 0, 1, 2);
-	layout->addWidget(echoB, 3, 0, 1, 2);
-	layout->addWidget(compressorB, 4, 0, 1, 2);
-	layout->addWidget(eqQualityL, 5, 0, 1, 1);
-	layout->addWidget(eqQualityB, 5, 1, 1, 1);
-	layout->addWidget(eqSlidersL, 6, 0, 1, 1);
-	layout->addWidget(eqSlidersB, 6, 1, 1, 1);
-	layout->addWidget(eqMinFreqB, 7, 0, 1, 1);
-	layout->addWidget(eqMaxFreqB, 7, 1, 1, 1);
+	layout->addWidget(bs2bB);
+	layout->addWidget(voiceRemovalB);
+	layout->addWidget(phaseReverseB);
+	layout->addWidget(echoB);
+	layout->addWidget(compressorB);
+	layout->addWidget(eqGroupB);
 }
 
 void ModuleSettingsWidget::bs2bToggle()
