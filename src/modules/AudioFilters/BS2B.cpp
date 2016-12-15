@@ -34,6 +34,8 @@ BS2B::~BS2B()
 bool BS2B::set()
 {
 	m_enabled = sets().getBool("BS2B");
+	m_fcut = sets().getInt("BS2B/Fcut");
+	m_feed = sets().getDouble("BS2B/Feed") * 10;
 	m_canFilter = m_enabled && m_hasParameters;
 	alloc();
 	return true;
@@ -67,7 +69,8 @@ void BS2B::alloc()
 		if (!m_bs2b)
 			m_bs2b = bs2b_open();
 		bs2b_set_srate(m_bs2b, m_srate);
-		bs2b_set_level(m_bs2b, BS2B_DEFAULT_CLEVEL);
+		bs2b_set_level_fcut(m_bs2b, m_fcut);
+		bs2b_set_level_feed(m_bs2b, m_feed);
 	}
 	else if (m_bs2b)
 	{

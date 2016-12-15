@@ -31,6 +31,7 @@ private:
 
 /**/
 
+class QDoubleSpinBox;
 class QGroupBox;
 class QCheckBox;
 class QComboBox;
@@ -51,7 +52,9 @@ private slots:
 private:
 	void saveSettings();
 
-	QCheckBox *bs2bB;
+	QGroupBox *bs2bB;
+	QSpinBox *bs2bFcutB;
+	QDoubleSpinBox *bs2bFeedB;
 
 	QCheckBox *voiceRemovalB;
 

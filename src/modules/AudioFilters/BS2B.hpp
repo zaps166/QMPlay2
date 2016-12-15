@@ -35,6 +35,7 @@ private:
 	void alloc();
 
 	bool m_enabled, m_hasParameters, m_canFilter;
+	qint32 m_fcut, m_feed;
 	quint32 m_srate;
 	t_bs2bd *m_bs2b;
 };

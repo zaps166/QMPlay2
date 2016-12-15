@@ -31,6 +31,8 @@ AudioFilters::AudioFilters() :
 	moduleImg = QImage(":/AudioFilters");
 
 	init("BS2B", false);
+	init("BS2B/Fcut", 700);
+	init("BS2B/Feed", 4.5);
 
 	init("Equalizer", false);
 	int nbits = getInt("Equalizer/nbits");
@@ -118,6 +120,7 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 
 #include <Slider.hpp>
 
+#include <QDoubleSpinBox>
 #include <QFormLayout>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -129,9 +132,33 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	bs2bB = new QCheckBox(tr(BS2BName));
+	bs2bB = new QGroupBox(tr(BS2BName));
+	bs2bB->setCheckable(true);
 	bs2bB->setChecked(sets().getBool("BS2B"));
 	connect(bs2bB, SIGNAL(clicked()), this, SLOT(bs2bToggle()));
+
+	bs2bFcutB = new QSpinBox;
+	bs2bFcutB->setRange(BS2B_MINFCUT, BS2B_MAXFCUT);
+	bs2bFcutB->setValue(sets().getInt("BS2B/Fcut"));
+	bs2bFcutB->setPrefix(tr("Cut frequency") + ": ");
+	bs2bFcutB->setSuffix(" Hz");
+	connect(bs2bFcutB, SIGNAL(valueChanged(int)), this, SLOT(bs2bToggle()));
+
+	bs2bFeedB = new QDoubleSpinBox;
+	bs2bFeedB->setRange(BS2B_MINFEED / 10.0, BS2B_MAXFEED / 10.0);
+	bs2bFeedB->setValue(sets().getDouble("BS2B/Feed"));
+	bs2bFeedB->setSingleStep(0.1);
+	bs2bFeedB->setDecimals(1);
+	bs2bFeedB->setPrefix(tr("Feed level") + ": ");
+	bs2bFeedB->setSuffix(" dB");
+	connect(bs2bFeedB, SIGNAL(valueChanged(double)), this, SLOT(bs2bToggle()));
+
+	QGridLayout *bs2bLayoutB = new QGridLayout(bs2bB);
+	bs2bLayoutB->addWidget(bs2bFcutB);
+	bs2bLayoutB->addWidget(bs2bFeedB);
+	bs2bLayoutB->setSpacing(3);
+	bs2bLayoutB->setMargin(3);
+
 
 	voiceRemovalB = new QCheckBox(tr("Voice removal"));
 	voiceRemovalB->setChecked(sets().getBool("VoiceRemoval"));
@@ -266,6 +293,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::bs2bToggle()
 {
 	sets().set("BS2B", bs2bB->isChecked());
+	sets().set("BS2B/Fcut", bs2bFcutB->value());
+	sets().set("BS2B/Feed", bs2bFeedB->value());
 	SetInstance<BS2B>();
 }
 void ModuleSettingsWidget::voiceRemovalToggle()
