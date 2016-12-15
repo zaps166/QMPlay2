@@ -1581,6 +1581,22 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Dynamic range compression</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Cut frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Feed level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equalizer</source>
+        <translation type="unfinished">均衡器</translation>
+    </message>
+    <message>
+        <source>Default settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

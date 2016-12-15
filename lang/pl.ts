@@ -1583,6 +1583,22 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Dynamic range compression</source>
         <translation>Kompresja zakresu dynamiki</translation>
     </message>
+    <message>
+        <source>Cut frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Feed level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equalizer</source>
+        <translation>Equalizer</translation>
+    </message>
+    <message>
+        <source>Default settings</source>
+        <translation>Domyślne ustawienia</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

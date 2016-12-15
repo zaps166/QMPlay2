@@ -1583,6 +1583,22 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Dynamic range compression</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Cut frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Feed level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equalizer</source>
+        <translation type="unfinished">Equalizer</translation>
+    </message>
+    <message>
+        <source>Default settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
