@@ -253,7 +253,6 @@ public:
 			{
 				if (i > 0 && result.at(i).startsWith('{'))
 				{
-					//First entry in URL array might be a title, but it doesn't bother
 					exportCookiesFromJSON(result.at(i), result.at(i - 1));
 					result.removeAt(i);
 				}
