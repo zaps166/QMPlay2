@@ -32,6 +32,7 @@ private:
 /**/
 
 class QDoubleSpinBox;
+class QPushButton;
 class QGroupBox;
 class QCheckBox;
 class QComboBox;
@@ -44,13 +45,16 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private slots:
-	void bs2bToggle();
+	void bs2b();
 	void voiceRemovalToggle();
 	void phaseReverse();
 	void echo();
 	void compressor();
+	void defaultSettings();
 private:
 	void saveSettings();
+
+	bool restoringDefault;
 
 	QGroupBox *bs2bB;
 	QSpinBox *bs2bFcutB;
@@ -70,4 +74,6 @@ private:
 
 	QComboBox *eqQualityB;
 	QSpinBox *eqSlidersB, *eqMinFreqB, *eqMaxFreqB;
+
+	QPushButton *defaultB;
 };

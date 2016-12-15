@@ -25,28 +25,49 @@
 #include <Echo.hpp>
 #include <DysonCompressor.hpp>
 
+enum Defaults
+{
+	BS2B_FCUT = 700,
+	BS2B_FEED = 45,
+
+	EQUALIZER_FFT_BITS = 10,
+	EQUALIZER_COUNT = 8,
+	EQUALIZER_MIN_FREQ = 200,
+	EQUALIZER_MAX_FREQ = 18000,
+
+	ECHO_DELAY = 500,
+	ECHO_VOLUME = 50,
+	ECHO_FEEDBACK = 50,
+	ECHO_SURROUND = 0,
+
+	COMPRESSOR_PEEK_PERCENT = 90,
+	COMPRESSOR_RELEASE_TIME = 2,
+	COMPRESSOR_FAST = 9,
+	COMPRESSOR_OVERALL = 6
+};
+
 AudioFilters::AudioFilters() :
 	Module("AudioFilters")
 {
 	moduleImg = QImage(":/AudioFilters");
 
 	init("BS2B", false);
-	init("BS2B/Fcut", 700);
-	init("BS2B/Feed", 4.5);
+	init("BS2B/Fcut", BS2B_FCUT);
+	init("BS2B/Feed", BS2B_FEED / 10.0);
 
 	init("Equalizer", false);
 	int nbits = getInt("Equalizer/nbits");
 	if (nbits < 8 || nbits > 16)
-		set("Equalizer/nbits", 10);
+		set("Equalizer/nbits", EQUALIZER_FFT_BITS);
 	int count = getInt("Equalizer/count");
 	if (count < 2 || count > 20)
-		set("Equalizer/count", (count = 8));
+		set("Equalizer/count", (count = EQUALIZER_COUNT));
 	int minFreq = getInt("Equalizer/minFreq");
 	if (minFreq < 10 || minFreq > 300)
-		set("Equalizer/minFreq", (minFreq = 200));
+		set("Equalizer/minFreq", (minFreq = EQUALIZER_MIN_FREQ));
 	int maxFreq = getInt("Equalizer/maxFreq");
 	if (maxFreq < 10000 || maxFreq > 96000)
-		set("Equalizer/maxFreq", (maxFreq = 18000));
+		set("Equalizer/maxFreq", (maxFreq = EQUALIZER_MAX_FREQ));
 	init("Equalizer/-1", 50);
 	for (int i = 0; i < count; ++i)
 		init("Equalizer/" + QString::number(i), 50);
@@ -57,16 +78,16 @@ AudioFilters::AudioFilters() :
 	init("PhaseReverse/ReverseRight", false);
 
 	init("Echo", false);
-	init("Echo/Delay", 500);
-	init("Echo/Volume", 50);
-	init("Echo/Feedback", 50);
-	init("Echo/Surround", false);
+	init("Echo/Delay", ECHO_DELAY);
+	init("Echo/Volume", ECHO_VOLUME);
+	init("Echo/Feedback", ECHO_FEEDBACK);
+	init("Echo/Surround", (bool)ECHO_SURROUND);
 
 	init("Compressor", false);
-	init("Compressor/PeakPercent", 90);
-	init("Compressor/ReleaseTime", 0.2);
-	init("Compressor/FastGainCompressionRatio", 0.9);
-	init("Compressor/OverallCompressionRatio", 0.6);
+	init("Compressor/PeakPercent", COMPRESSOR_PEEK_PERCENT);
+	init("Compressor/ReleaseTime", COMPRESSOR_RELEASE_TIME / 10.0);
+	init("Compressor/FastGainCompressionRatio", COMPRESSOR_FAST / 10.0);
+	init("Compressor/OverallCompressionRatio", COMPRESSOR_OVERALL / 10.0);
 
 	if (getBool("Equalizer"))
 	{
@@ -123,6 +144,7 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 #include <QDoubleSpinBox>
 #include <QFormLayout>
 #include <QGridLayout>
+#include <QPushButton>
 #include <QGroupBox>
 #include <QComboBox>
 #include <QCheckBox>
@@ -130,19 +152,20 @@ QMPLAY2_EXPORT_PLUGIN(AudioFilters)
 #include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
-	Module::SettingsWidget(module)
+	Module::SettingsWidget(module),
+	restoringDefault(false)
 {
 	bs2bB = new QGroupBox(tr(BS2BName));
 	bs2bB->setCheckable(true);
 	bs2bB->setChecked(sets().getBool("BS2B"));
-	connect(bs2bB, SIGNAL(clicked()), this, SLOT(bs2bToggle()));
+	connect(bs2bB, SIGNAL(clicked()), this, SLOT(bs2b()));
 
 	bs2bFcutB = new QSpinBox;
 	bs2bFcutB->setRange(BS2B_MINFCUT, BS2B_MAXFCUT);
 	bs2bFcutB->setValue(sets().getInt("BS2B/Fcut"));
 	bs2bFcutB->setPrefix(tr("Cut frequency") + ": ");
 	bs2bFcutB->setSuffix(" Hz");
-	connect(bs2bFcutB, SIGNAL(valueChanged(int)), this, SLOT(bs2bToggle()));
+	connect(bs2bFcutB, SIGNAL(valueChanged(int)), this, SLOT(bs2b()));
 
 	bs2bFeedB = new QDoubleSpinBox;
 	bs2bFeedB->setRange(BS2B_MINFEED / 10.0, BS2B_MAXFEED / 10.0);
@@ -151,7 +174,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	bs2bFeedB->setDecimals(1);
 	bs2bFeedB->setPrefix(tr("Feed level") + ": ");
 	bs2bFeedB->setSuffix(" dB");
-	connect(bs2bFeedB, SIGNAL(valueChanged(double)), this, SLOT(bs2bToggle()));
+	connect(bs2bFeedB, SIGNAL(valueChanged(double)), this, SLOT(bs2b()));
 
 	QGridLayout *bs2bLayoutB = new QGridLayout(bs2bB);
 	bs2bLayoutB->addWidget(bs2bFcutB);
@@ -288,6 +311,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	eqLayout->setMargin(3);
 
 
+	defaultB = new QPushButton(tr("Default settings"));
+	connect(defaultB, SIGNAL(clicked(bool)), this, SLOT(defaultSettings()));
+
+
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(bs2bB);
 	layout->addWidget(voiceRemovalB);
@@ -295,10 +322,13 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(echoB);
 	layout->addWidget(compressorB);
 	layout->addWidget(eqGroupB);
+	layout->addWidget(defaultB);
 }
 
-void ModuleSettingsWidget::bs2bToggle()
+void ModuleSettingsWidget::bs2b()
 {
+	if (restoringDefault)
+		return;
 	sets().set("BS2B", bs2bB->isChecked());
 	sets().set("BS2B/Fcut", bs2bFcutB->value());
 	sets().set("BS2B/Feed", bs2bFeedB->value());
@@ -306,17 +336,23 @@ void ModuleSettingsWidget::bs2bToggle()
 }
 void ModuleSettingsWidget::voiceRemovalToggle()
 {
+	if (restoringDefault)
+		return;
 	sets().set("VoiceRemoval", voiceRemovalB->isChecked());
 	SetInstance<VoiceRemoval>();
 }
 void ModuleSettingsWidget::phaseReverse()
 {
+	if (restoringDefault)
+		return;
 	sets().set("PhaseReverse", phaseReverseB->isChecked());
 	sets().set("PhaseReverse/ReverseRight", phaseReverseRightB->isChecked());
 	SetInstance<PhaseReverse>();
 }
 void ModuleSettingsWidget::echo()
 {
+	if (restoringDefault)
+		return;
 	sets().set("Echo", echoB->isChecked());
 	sets().set("Echo/Delay", echoDelayS->value());
 	sets().set("Echo/Volume", echoVolumeS->value());
@@ -326,12 +362,54 @@ void ModuleSettingsWidget::echo()
 }
 void ModuleSettingsWidget::compressor()
 {
+	if (restoringDefault)
+		return;
 	sets().set("Compressor", compressorB->isChecked());
 	sets().set("Compressor/PeakPercent", compressorPeakS->value() * 5);
 	sets().set("Compressor/ReleaseTime", compressorReleaseTimeS->value() / 20.0);
 	sets().set("Compressor/FastGainCompressionRatio", compressorFastRatioS->value() / 20.0);
 	sets().set("Compressor/OverallCompressionRatio", compressorRatioS->value() / 20.0);
 	SetInstance<DysonCompressor>();
+}
+void ModuleSettingsWidget::defaultSettings()
+{
+	restoringDefault = true;
+
+	bs2bB->setChecked(false);
+	bs2bFcutB->setValue(BS2B_FCUT);
+	bs2bFeedB->setValue(BS2B_FEED / 10.0);
+
+	eqQualityB->setCurrentIndex(EQUALIZER_FFT_BITS - 8);
+	eqSlidersB->setValue(EQUALIZER_COUNT);
+	eqMinFreqB->setValue(EQUALIZER_MIN_FREQ);
+	eqMaxFreqB->setValue(EQUALIZER_MAX_FREQ);
+
+	voiceRemovalB->setChecked(false);
+
+	phaseReverseB->setChecked(false);
+	phaseReverseRightB->setChecked(false);
+
+	echoB->setChecked(false);
+	echoDelayS->setValue(ECHO_DELAY);
+	echoVolumeS->setValue(ECHO_VOLUME);
+	echoFeedbackS->setValue(ECHO_FEEDBACK);
+	echoSurroundB->setChecked(ECHO_SURROUND);
+
+	compressorB->setChecked(false);
+	compressorPeakS->setValue(COMPRESSOR_PEEK_PERCENT);
+	compressorReleaseTimeS->setValue(COMPRESSOR_RELEASE_TIME * 2);
+	compressorFastRatioS->setValue(COMPRESSOR_FAST * 2);
+	compressorRatioS->setValue(COMPRESSOR_OVERALL * 2);
+
+	restoringDefault = false;
+
+	bs2b();
+	saveSettings(); //For equalizer
+	SetInstance<Equalizer>();
+	voiceRemovalToggle();
+	phaseReverse();
+	echo();
+	compressor();
 }
 
 void ModuleSettingsWidget::saveSettings()
