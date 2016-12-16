@@ -68,7 +68,11 @@ public:
 
 	inline QString getSettingsDir()
 	{
-		return settingsDir + settingsProfile;
+		return settingsDir;
+	}
+	inline QString getSettingsProfile()
+	{
+		return settingsProfile;
 	}
 	inline QString getShareDir()
 	{

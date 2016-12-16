@@ -49,6 +49,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QDir>
+#include <QDirIterator>
 
 #include <KeyBindingsDialog.hpp>
 #include <Appearance.hpp>
@@ -266,6 +267,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		appendColon(page1->audioLangL);
 		appendColon(page1->subsLangL);
 		appendColon(page1->screenshotL);
+		appendColon(page1->profileL);
 
 		tabW->addTab(page1Widget, tr("General settings"));
 
@@ -308,6 +310,20 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->audioLangB->setCurrentIndex(page1->audioLangB->count() - 1);
 			if (lang == subsLang)
 				page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
+		}
+		{
+			page1->profileB->addItem("default", "/");
+			QDirIterator it(QMPlay2Core.getSettingsDir() + "profiles/", QStringList() << "QMPlay2.ini", QDir::Files, QDirIterator::Subdirectories);
+			while (it.hasNext())
+			{
+				const QString path = it.next();
+				const int right = QMPlay2Core.getSettingsDir().length() + strlen("profiles/");
+				const int left = strlen("/QMPlay2.ini");
+				const QString profile = path.mid(right, path.length() - right - left);
+				page1->profileB->addItem(profile, profile);
+			}
+			if(QMPlay2Core.getSettingsProfile() != "/")
+				page1->profileB->setCurrentText(QMPlay2Core.getSettingsProfile());
 		}
 
 		page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
@@ -724,6 +740,15 @@ void SettingsWidget::apply()
 			page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
 			qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
 			applyProxy();
+
+			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+			const QString selectedProfile = page1->profileB->currentData().toString();
+			if(selectedProfile != profileSettings.value("Profile", "/").toString())
+			{
+				profileSettings.setValue("Profile", page1->profileB->currentData());
+				// TODO: restart the app
+				QMessageBox::warning(this, "Profile Change", "To see updated profile change\nPlease Restart the app!");
+			}
 		} break;
 		case 2:
 		{
