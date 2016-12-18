@@ -774,7 +774,7 @@ amp</translation>
     <name>FreedesktopNotify</name>
     <message>
         <source>Error sending notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Senden der Benachrichtigung</translation>
     </message>
 </context>
 <context>
@@ -954,11 +954,11 @@ amp</translation>
     </message>
     <message>
         <source>interlaced</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeilensprungverfahren</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation type="unfinished"></translation>
+        <translation>sichtbar</translation>
     </message>
 </context>
 <context>
@@ -1501,103 +1501,103 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Use OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende OpenGL</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiere decodiertes Video in den CPU-Speicher (nicht empfohlen, sehr langsam auf Intel)</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende CUVID nur wenn primäre GPU NVIDIA ist</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <source>Infinite</source>
-        <translation type="unfinished"></translation>
+        <translation>Unendlich</translation>
     </message>
     <message>
         <source>Show notification when volume changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigung anzeigen, wenn sich Lautstärke ändert</translation>
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigung anzeigen, wenn Medien ändern</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigung anzeigen, wenn sich der Wiedergabezustand ändert</translation>
     </message>
     <message>
         <source>Use a custom message for media change notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende eine benutzerdefinierte Nachricht für Medienänderungsbenachrichtigung</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusammenfassung</translation>
     </message>
     <message>
         <source>Body</source>
-        <translation type="unfinished"></translation>
+        <translation>Körper</translation>
     </message>
     <message>
         <source>Notification type</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigunstyp</translation>
     </message>
     <message>
         <source>Show a native desktop notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzeigen einer systemeigenen Desktop-Benachrichtigung</translation>
     </message>
     <message>
         <source>Show a popup from the system tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigen ein Popup aus der Task-Leiste an</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation type="unfinished">Allgemeine Einstellungen</translation>
+        <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
         <source>Notification timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigungszeitüberschreitung</translation>
     </message>
     <message>
         <source>Peak limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Spitzenbegrenzung</translation>
     </message>
     <message>
         <source>Release time</source>
-        <translation type="unfinished"></translation>
+        <translation>Veröffentlichkeitsdatum</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnelles Kompressionsverhältnis</translation>
     </message>
     <message>
         <source>Overall compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtverdichtungsverhältnis</translation>
     </message>
     <message>
         <source>Dynamic range compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamische Bereichskomprimierung</translation>
     </message>
     <message>
         <source>Cut frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnittfrequenz</translation>
     </message>
     <message>
         <source>Feed level</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorschubpegel</translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation type="unfinished">Equalizer</translation>
+        <translation>Equalizer</translation>
     </message>
     <message>
         <source>Default settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardeinstellungen</translation>
     </message>
 </context>
 <context>
@@ -1619,23 +1619,23 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Lautstärke: %1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Lautstärke geändert</translation>
     </message>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">Stoppen</translation>
+        <translation>Stoppen</translation>
     </message>
     <message>
         <source>Playing</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">Pause</translation>
+        <translation>Pause</translation>
     </message>
 </context>
 <context>
@@ -2321,20 +2321,20 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     -next       - plays next on the list
     -prev       - plays previous on the list
     -quit       - terminates the application</source>
-        <translation>  Parameters list:
+        <translation>  Parameterliste:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
-    -toggle     - toggles play/pause
-    -show       - ensures that the window will be visible if the application is running
-    -fullscreen - toggles fullscreen
-    -volume     - sets volume [0..100]
-    -speed      - sets playback speed [0.05..100.0]
-    -seek       - seeks to the specified value [s]
-    -stop       - stops playback
-    -next       - plays next on the list
-    -prev       - plays previous on the list
-    -quit       - terminates the application</translation>
+    -noplay     - keine Wiedergabe nach dem Start (Umgehe &quot;Wiedergabeposition merken&quot; Option)
+    -toggle     - Wiedergabe/Pause
+    -show       - Sorgt dafür dass die Fenster sichtbar sind, wenn die Anwendung läuft
+    -fullscreen - Vollbild
+    -volume     - Lautstärkeeinstellung [0..100]
+    -speed      - Wiedergabegeschwindigkeit [0.05..100.0]
+    -seek       - Sucht an der angegebenen Stelle [s]
+    -stop       - Wiedergabe stoppen
+    -next       - nächsten Titel der Wiedergabeliste abspielen
+    -prev       - vorherigen Titel der Wiedergabelist abspielen
+    -quit       - Programm beenden</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
@@ -2349,7 +2349,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Downloading list, please wait...</source>
-        <translation>Bitte warten lade Liste...</translation>
+        <translation>Bitte warten, lade Liste...</translation>
     </message>
     <message>
         <source>Number of radio stations</source>
@@ -2820,11 +2820,11 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <name>VAAPI</name>
     <message>
         <source>Not supported deinterlacing algorithm</source>
-        <translation type="unfinished">Nicht unterstützter De-Interlacing-Algorithmus</translation>
+        <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation type="unfinished">Kann den Videofilter nicht öffnen</translation>
+        <translation>Kann den Videofilter nicht öffnen</translation>
     </message>
 </context>
 <context>
