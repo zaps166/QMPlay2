@@ -396,7 +396,7 @@ void ModuleSettingsWidget::defaultSettings()
 	echoSurroundB->setChecked(ECHO_SURROUND);
 
 	compressorB->setChecked(false);
-	compressorPeakS->setValue(COMPRESSOR_PEEK_PERCENT);
+	compressorPeakS->setValue(COMPRESSOR_PEEK_PERCENT / 5);
 	compressorReleaseTimeS->setValue(COMPRESSOR_RELEASE_TIME * 2);
 	compressorFastRatioS->setValue(COMPRESSOR_FAST * 2);
 	compressorRatioS->setValue(COMPRESSOR_OVERALL * 2);
