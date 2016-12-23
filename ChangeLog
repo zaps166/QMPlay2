@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 16.12.20:
+Changes in QMPlay2 build 16.12.23:
 	- new Notifications module (Zamarin Arthur),
 	- use cookies obtained from "youtube-dl",
 	- add Bauer stereophonic-to-binaural DSP,

@@ -35,6 +35,6 @@ HEADERS += AudioFilters.hpp Equalizer.hpp EqualizerGUI.hpp VoiceRemoval.hpp Phas
 SOURCES += AudioFilters.cpp Equalizer.cpp EqualizerGUI.cpp VoiceRemoval.cpp PhaseReverse.cpp Echo.cpp DysonCompressor.cpp BS2B.cpp
 
 HEADERS += bs2b/bs2b.h bs2b/bs2bversion.h
-SOURCES += bs2b/bs2b.c
+SOURCES += bs2b/bs2b_lib.c
 
 DEFINES += __STDC_CONSTANT_MACROS

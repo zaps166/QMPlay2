@@ -115,7 +115,7 @@ void *AudioFilters::createInstance(const QString &name)
 {
 	if (name == BS2BName)
 		return new BS2B(*this);
-	if (name == EqualizerName)
+	else if (name == EqualizerName)
 		return new Equalizer(*this);
 	else if (name == EqualizerGUIName)
 		return static_cast<QMPlay2Extensions *>(new EqualizerGUI(*this));

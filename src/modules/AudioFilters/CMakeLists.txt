@@ -21,7 +21,7 @@ set(AudioFilters_HDR
     Echo.hpp
     DysonCompressor.hpp
     BS2B.hpp
-    bs2b/bs2b.c
+    bs2b/bs2b_lib.c
 )
 
 set(AudioFilters_SRC
