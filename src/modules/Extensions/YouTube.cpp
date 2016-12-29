@@ -196,7 +196,7 @@ public:
 		}
 #endif
 
-		QStringList commonArgs("-i"); //Ignore errors, e.g. SSL errors
+		QStringList commonArgs("--no-check-certificate"); //Ignore SSL errors
 
 		const char *http_proxy = getenv("http_proxy");
 		if (http_proxy && *http_proxy)
