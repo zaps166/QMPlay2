@@ -566,7 +566,7 @@ void Functions::vFlip(quint8 *data, int linesize, int height)
 
 QString Functions::dBStr(double a)
 {
-	return (!a ? "-∞" : QString::number(20.0 * log10(a), 'g', 2)) + " dB";
+	return (!a ? "-∞" : QString::number(20.0 * log10(a), 'f', 1)) + " dB";
 }
 
 quint32 Functions::getBestSampleRate()

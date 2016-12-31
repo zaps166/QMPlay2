@@ -25,13 +25,13 @@ extern "C"
 	#include <libavcodec/avfft.h>
 }
 
+#include <math.h>
+
 static inline void fft_calc(FFTContext *fft_ctx, FFTComplex *cplx)
 {
 	av_fft_permute(fft_ctx, cplx);
 	av_fft_calc(fft_ctx, cplx);
 }
-
-#include <math.h>
 
 static inline float cosI(const float y1, const float y2, float p)
 {
@@ -64,6 +64,15 @@ QVector<float> Equalizer::freqs(Settings &sets)
 	for (int i = 0; i < freqs.count(); ++i)
 		freqs[i] = minFreq * powf(l, i);
 	return freqs;
+}
+
+float Equalizer::getAmpl(int val)
+{
+	if (val == 50)
+		return 1.0f;
+	if (val > 50)
+		return powf(val / 50.0f, 3.33f);
+	return powf(50.0f / (100 - val), 3.33f);
 }
 
 Equalizer::Equalizer(Module &module) :
@@ -233,10 +242,11 @@ void Equalizer::alloc(bool b)
 void Equalizer::interpolateFilterCurve()
 {
 	const int size = sets().getInt("Equalizer/count");
-	preamp = sets().getInt("Equalizer/-1") / 50.0f;
+	preamp = getAmpl(sets().getInt("Equalizer/-1"));
 	QVector<float> src(size);
 	for (int i = 0; i < size; ++i)
-		src[i] = sets().getInt("Equalizer/" + QString::number(i)) / 50.0f;
+		src[i] = getAmpl(sets().getInt("Equalizer/" + QString::number(i)));
+
 	const int len = FFT_SIZE_2;
 	if (f.size() != len)
 		f.resize(len);

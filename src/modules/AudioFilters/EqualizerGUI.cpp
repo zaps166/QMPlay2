@@ -31,6 +31,21 @@
 #include <QToolButton>
 #include <QInputDialog>
 
+static QLabel *createDescrLabel(const QString &text, int minimumWidth = 50)
+{
+	QLabel *descrL = new QLabel(text);
+	descrL->setAlignment(Qt::AlignCenter);
+	descrL->setMinimumWidth(minimumWidth);
+
+	QFont font = descrL->font();
+	font.setPointSize(qMax(6, font.pointSize() - 2));
+	descrL->setFont(font);
+
+	return descrL;
+}
+
+/**/
+
 GraphW::GraphW() :
 	preamp(0.5f)
 {
@@ -41,7 +56,7 @@ GraphW::GraphW() :
 void GraphW::setValue(int idx, float val)
 {
 	if (idx == -1)
-		preamp = val == 0.5f ? 0.5f : -1.0f; //FIXME
+		preamp = val;
 	else if (values.size() > idx)
 		values[idx] = val;
 	update();
@@ -141,7 +156,8 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	buttonsLayout->addWidget(resetB);
 	buttonsLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 	buttonsLayout->addWidget(minB);
-	buttonsLayout->addWidget(new QLabel("\n"));
+	buttonsLayout->addWidget(createDescrLabel("\n", 0));
+	buttonsLayout->setMargin(0);
 
 	slidersA = new QScrollArea;
 	slidersA->setWidgetResizable(true);
@@ -200,13 +216,7 @@ bool EqualizerGUI::set()
 
 		graph.setValue(i, slider->value() / 100.0f);
 
-		QLabel *descrL = new QLabel("\n" + Functions::dBStr(slider->value() / 50.0));
-		descrL->setAlignment(Qt::AlignCenter);
-
-		QFont font = descrL->font();
-		font.setPointSize(qMax(6, font.pointSize() - 2));
-		descrL->setFont(font);
-
+		QLabel *descrL = createDescrLabel("\n" + Functions::dBStr(Equalizer::getAmpl(slider->value())));
 		slider->setProperty("label", QVariant::fromValue((void *)descrL));
 
 		sliderWLaout->addWidget(slider, 0, 1);
@@ -219,7 +229,6 @@ bool EqualizerGUI::set()
 			slider->setProperty("preamp", true);
 
 			descrL->setText(tr("Preamp") + descrL->text());
-			descrL->setMinimumWidth(50);
 
 			QFrame *line = new QFrame;
 			line->setFrameShape(QFrame::VLine);
@@ -269,17 +278,15 @@ void EqualizerGUI::valueChanged(int v)
 	{
 		graph.setValue(slider->property("idx").toInt(), v / 100.0f);
 		sets().set("Equalizer/" + slider->property("idx").toString(), v);
-
 		QLabel *descrL = (QLabel *)slider->property("label").value<void *>();
 		QString text = descrL->text();
 		const int idx = text.indexOf('\n');
 		if (idx > -1)
 		{
 			text.remove(idx + 1, text.length() - idx + 1);
-			text.append(Functions::dBStr(v / 50.0));
+			text.append(Functions::dBStr(Equalizer::getAmpl(v)));
 			descrL->setText(text);
 		}
-
 		setInstance<Equalizer>();
 	}
 }
@@ -291,11 +298,11 @@ void EqualizerGUI::setSliders()
 	{
 		const bool isPreamp = slider->property("preamp").toBool();
 		if (objectName == "maxB" && !isPreamp)
-			slider->setValue(slider->maximum() - 3);
+			slider->setValue(slider->maximum());
 		else if (objectName == "resetB")
 			slider->setValue(slider->maximum() / 2);
 		else if (objectName == "minB" && !isPreamp)
-			slider->setValue(slider->minimum() + 3);
+			slider->setValue(slider->minimum());
 	}
 	graph.show();
 }

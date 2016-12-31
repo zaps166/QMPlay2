@@ -26,6 +26,7 @@ class Equalizer : public AudioFilter
 public:
 	static QVector<float> interpolate(const QVector<float> &, const int);
 	static QVector<float> freqs(Settings &);
+	static float getAmpl(int val);
 
 	Equalizer(Module &);
 	~Equalizer();
