@@ -141,6 +141,8 @@ namespace Functions
 	quint32 getBestSampleRate();
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
+
+	QStringList getProfiles();
 }
 
 #endif

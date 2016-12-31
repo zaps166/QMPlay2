@@ -21,6 +21,7 @@
 #include <DeintSettingsW.hpp>
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
+#include <Functions.hpp>
 #include <Main.hpp>
 
 #if QT_VERSION < 0x050000
@@ -48,8 +49,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QLabel>
-#include <QDir>
-#include <QDirIterator>
 
 #include <KeyBindingsDialog.hpp>
 #include <Appearance.hpp>
@@ -313,17 +312,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		}
 		{
 			page1->profileB->addItem("default", "/");
-			QDirIterator it(QMPlay2Core.getSettingsDir() + "profiles/", QStringList() << "QMPlay2.ini", QDir::Files, QDirIterator::Subdirectories);
-			while (it.hasNext())
+			foreach (const QString &profile, Functions::getProfiles())
 			{
-				const QString path = it.next();
-				const int right = QMPlay2Core.getSettingsDir().length() + strlen("profiles/");
-				const int left = strlen("/QMPlay2.ini");
-				const QString profile = path.mid(right, path.length() - right - left);
 				page1->profileB->addItem(profile, profile);
 			}
+			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			if(QMPlay2Core.getSettingsProfile() != "/")
-				page1->profileB->setCurrentText(QMPlay2Core.getSettingsProfile());
+				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
 		}
 
 		page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
@@ -746,8 +741,7 @@ void SettingsWidget::apply()
 			if(selectedProfile != profileSettings.value("Profile", "/").toString())
 			{
 				profileSettings.setValue("Profile", page1->profileB->currentData());
-				// TODO: restart the app
-				QMessageBox::warning(this, "Profile Change", "To see updated profile change\nPlease Restart the app!");
+				restartApp();
 			}
 		} break;
 		case 2:

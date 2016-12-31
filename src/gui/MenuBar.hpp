@@ -158,6 +158,8 @@ public:
 	Playback *playback;
 	Options *options;
 	Help *help;
+public slots:
+	void changeProfile();
 private slots:
 	void widgetsMenuShow();
 };

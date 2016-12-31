@@ -27,6 +27,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QDir>
+#include <QDirIterator>
 #include <QUrl>
 
 #include <math.h>
@@ -611,4 +612,20 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 		QCursor::setPos(widget->mapToGlobal(mousePos));
 
 	return doWrap;
+}
+
+QStringList Functions::getProfiles()
+{
+	QStringList profiles;
+
+	QDirIterator it(QMPlay2Core.getSettingsDir() + "profiles/", QStringList() << "QMPlay2.ini", QDir::Files, QDirIterator::Subdirectories);
+	while (it.hasNext())
+	{
+		const QString path = it.next();
+		const int right = QMPlay2Core.getSettingsDir().length() + strlen("profiles/");
+		const int left = strlen("/QMPlay2.ini");
+		const QString profile = path.mid(right, path.length() - right - left);
+		profiles << profile;
+	}
+	return profiles;
 }

@@ -23,6 +23,7 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 #include <ShortcutHandler.hpp>
+#include <Functions.hpp>
 
 #include <QWidgetAction>
 #include <QMainWindow>
@@ -338,8 +339,28 @@ MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
 MenuBar::Options::Options(MenuBar *parent) :
 	QMenu(Options::tr("Op&tions"), parent)
 {
-	newAction(Options::tr("&Settings"), this, settings, false, QMPlay2Core.getIconFromTheme("configure"), false);
-	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, QMPlay2Core.getIconFromTheme("configure"), false);
+	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
+	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
+	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
+
+	QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
+	profiles->setIcon(configureIcon);
+
+	QAction *act = new QAction("default", profiles);
+	act->setProperty("path", "/");
+	connect(act, SIGNAL(triggered()), parent, SLOT(changeProfile()));
+	profiles->addAction(act);
+
+	foreach (const QString &profile, Functions::getProfiles())
+	{
+		QAction *act = new QAction(profile, profiles);
+		act->setProperty("path", profile);
+		connect(act, SIGNAL(triggered()), parent, SLOT(changeProfile()));
+		profiles->addAction(act);
+	}
+
+	this->addMenu(profiles);
+
 	addSeparator();
 	newAction(Options::tr("&Show tray icon"), this, trayVisible, false, QIcon(), true);
 }
@@ -464,6 +485,19 @@ void MenuBar::setKeyShortcuts()
 #ifdef UPDATER
 	shortcuts->appendAction(help->updates, "KeyBindings/Help-updates", "F12");
 #endif
+}
+
+void MenuBar::changeProfile()
+{
+	QAction *act = (QAction *)sender();
+	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+	const QString selectedProfile = act->property("path").toString();
+	if(selectedProfile != profileSettings.value("Profile", "/").toString())
+	{
+		profileSettings.setValue("Profile", selectedProfile);
+		QMPlay2GUI.restartApp = true;
+		QMPlay2GUI.mainW->close();
+	}
 }
 
 void MenuBar::widgetsMenuShow()
