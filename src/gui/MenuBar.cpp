@@ -27,6 +27,7 @@
 
 #include <QWidgetAction>
 #include <QMainWindow>
+#include <QInputDialog>
 
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable)
 {
@@ -342,24 +343,21 @@ MenuBar::Options::Options(MenuBar *parent) :
 	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
 	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
 	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
-
-	QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
-	profiles->setIcon(configureIcon);
-
-	QAction *act = new QAction("default", profiles);
-	act->setProperty("path", "/");
-	connect(act, SIGNAL(triggered()), parent, SLOT(changeProfile()));
-	profiles->addAction(act);
-
-	foreach (const QString &profile, Functions::getProfiles())
 	{
-		QAction *act = new QAction(profile, profiles);
-		act->setProperty("path", profile);
-		connect(act, SIGNAL(triggered()), parent, SLOT(changeProfile()));
-		profiles->addAction(act);
-	}
+		QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
+		profiles->setIcon(configureIcon);
 
-	this->addMenu(profiles);
+		profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("&New Profile"), parent, SLOT(addProfile()));
+		profiles->addSeparator();
+		profiles->addAction("default", parent, SLOT(changeProfile()))->setProperty("path", "/");
+
+		foreach (const QString &profile, Functions::getProfiles())
+		{
+			profiles->addAction(profile, parent, SLOT(changeProfile()))->setProperty("path", profile);
+		}
+
+		this->addMenu(profiles);
+	}
 
 	addSeparator();
 	newAction(Options::tr("&Show tray icon"), this, trayVisible, false, QIcon(), true);
@@ -490,8 +488,24 @@ void MenuBar::setKeyShortcuts()
 void MenuBar::changeProfile()
 {
 	QAction *act = (QAction *)sender();
-	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 	const QString selectedProfile = act->property("path").toString();
+	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+	if(selectedProfile != profileSettings.value("Profile", "/").toString())
+	{
+		profileSettings.setValue("Profile", selectedProfile);
+		QMPlay2GUI.restartApp = true;
+		QMPlay2GUI.mainW->close();
+	}
+}
+
+void MenuBar::addProfile()
+{
+	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(
+				this, Options::tr("Create new profile"),
+				Options::tr("Profile name")));
+	if(selectedProfile.isEmpty())
+		return;
+	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 	if(selectedProfile != profileSettings.value("Profile", "/").toString())
 	{
 		profileSettings.setValue("Profile", selectedProfile);

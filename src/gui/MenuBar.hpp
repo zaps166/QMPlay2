@@ -160,6 +160,7 @@ public:
 	Help *help;
 public slots:
 	void changeProfile();
+	void addProfile();
 private slots:
 	void widgetsMenuShow();
 };
