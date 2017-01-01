@@ -25,9 +25,11 @@
 #include <ShortcutHandler.hpp>
 #include <Functions.hpp>
 
-#include <QWidgetAction>
-#include <QMainWindow>
+#include <QDir>
+#include <QFile>
 #include <QInputDialog>
+#include <QMainWindow>
+#include <QWidgetAction>
 
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable)
 {
@@ -508,6 +510,11 @@ void MenuBar::addProfile()
 	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 	if (selectedProfile != profileSettings.value("Profile", "/").toString())
 	{
+		QDir(QMPlay2Core.getSettingsDir()).mkpath("profiles/" + selectedProfile);
+		QFile tempFile(QMPlay2Core.getSettingsDir() + "profiles/" + selectedProfile + "/QMPlay2.ini");
+		tempFile.open(QFile::WriteOnly);
+		tempFile.close();
+
 		profileSettings.setValue("Profile", selectedProfile);
 		QMPlay2GUI.restartApp = true;
 		QMPlay2GUI.mainW->close();
