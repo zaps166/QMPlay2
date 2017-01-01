@@ -345,6 +345,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
 	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
 	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
+	addSeparator();
 	{
 		QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
 		profiles->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -361,7 +362,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 			profiles->addAction(profile, parent, SLOT(changeProfile()))->setProperty("path", profile);
 		}
 
-		this->addMenu(profiles);
+		addMenu(profiles);
 	}
 
 	addSeparator();

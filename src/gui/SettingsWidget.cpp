@@ -318,7 +318,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 			}
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			if (QMPlay2Core.getSettingsProfile() != "/")
+			{
 				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
+				page1->profileRemoveB->setDisabled(true);
+			}
+			connect(page1->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
+
+			page1->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+			connect(page1->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
 		}
 
 		page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
@@ -972,4 +979,23 @@ void SettingsWidget::resetSettings()
 		QMPlay2GUI.removeSettings = true;
 		restartApp();
 	}
+}
+void SettingsWidget::profileListIndexChanged(int index)
+{
+	page1->profileRemoveB->setEnabled(index != 0);
+}
+void SettingsWidget::removeProfile()
+{
+	const QString selectedProfile = page1->profileB->currentData().toString();
+	Functions::dirRemoveRecursively(QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile);
+
+	if("Profiles/" + selectedProfile + "/" == QMPlay2Core.getSettingsProfile())
+	{
+		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+		profileSettings.setValue("Profile", "/");
+		QMPlay2GUI.removeSettings = true;
+		restartApp();
+	}
+	else
+		page1->profileB->removeItem(page1->profileB->currentIndex());
 }

@@ -85,6 +85,8 @@ private slots:
 	void setKeyBindings();
 	void clearCoversCache();
 	void resetSettings();
+	void profileListIndexChanged(int index);
+	void removeProfile();
 signals:
 	void settingsChanged(int, bool);
 	void setWheelStep(int);
