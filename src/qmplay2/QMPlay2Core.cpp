@@ -149,7 +149,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		settingsProfile = profileSettings.value("Profile", "/").toString();
 		if (settingsProfile != "/")
 		{
-			settingsProfile.prepend("profiles/");
+			settingsProfile.prepend("Profiles/");
 			QDir(settingsDir).mkpath(settingsProfile);
 		}
 		if (!settingsProfile.endsWith('/'))

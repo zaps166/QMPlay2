@@ -602,7 +602,7 @@ int main(int argc, char *argv[])
 		new MainWidget(QMPArguments);
 		QCoreApplication::exec();
 
-		const QString settingsDir = QMPlay2Core.getSettingsDir();
+		const QString settingsDir = QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile();
 		QMPlay2Core.quit();
 		if (qmplay2Gui.removeSettings)
 			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))

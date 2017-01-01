@@ -69,6 +69,7 @@ namespace Functions
 	QString filePath(const QString &);
 	QString fileName(QString, bool extension = true);
 	QString fileExt(const QString &);
+	bool dirRemoveRecursively(const QString &dirName);
 
 	QString cleanPath(QString);
 	QString cleanFileName(QString);
