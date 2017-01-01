@@ -161,6 +161,7 @@ public:
 public slots:
 	void changeProfile();
 	void addProfile();
+	void copyProfile();
 private slots:
 	void widgetsMenuShow();
 };

@@ -350,6 +350,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 		profiles->setIcon(configureIcon);
 
 		profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("&New Profile"), parent, SLOT(addProfile()));
+		profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("&Copy Profile"), parent, SLOT(copyProfile()));
 		profiles->addSeparator();
 		profiles->addAction("default", parent, SLOT(changeProfile()))->setProperty("path", "/");
 
@@ -514,6 +515,30 @@ void MenuBar::addProfile()
 		QFile tempFile(QMPlay2Core.getSettingsDir() + "profiles/" + selectedProfile + "/QMPlay2.ini");
 		tempFile.open(QFile::WriteOnly);
 		tempFile.close();
+
+		profileSettings.setValue("Profile", selectedProfile);
+		QMPlay2GUI.restartApp = true;
+		QMPlay2GUI.mainW->close();
+	}
+}
+
+void MenuBar::copyProfile()
+{
+	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(
+				this, Options::tr("Create new profile"),
+				Options::tr("Profile name")));
+	if (selectedProfile.isEmpty())
+		return;
+	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+	if (selectedProfile != profileSettings.value("Profile", "/").toString())
+	{
+		QDir(QMPlay2Core.getSettingsDir()).mkpath("profiles/" + selectedProfile);
+		const QString srcDir = QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + "/";
+		const QString dstDir = QMPlay2Core.getSettingsDir() + "profiles/" + selectedProfile + "/";
+		foreach (const QString &path, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
+		{
+			QFile::copy(srcDir + path, dstDir + path);
+		}
 
 		profileSettings.setValue("Profile", selectedProfile);
 		QMPlay2GUI.restartApp = true;
