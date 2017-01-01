@@ -490,7 +490,7 @@ void MenuBar::changeProfile()
 	QAction *act = (QAction *)sender();
 	const QString selectedProfile = act->property("path").toString();
 	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-	if(selectedProfile != profileSettings.value("Profile", "/").toString())
+	if (selectedProfile != profileSettings.value("Profile", "/").toString())
 	{
 		profileSettings.setValue("Profile", selectedProfile);
 		QMPlay2GUI.restartApp = true;
@@ -503,10 +503,10 @@ void MenuBar::addProfile()
 	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(
 				this, Options::tr("Create new profile"),
 				Options::tr("Profile name")));
-	if(selectedProfile.isEmpty())
+	if (selectedProfile.isEmpty())
 		return;
 	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-	if(selectedProfile != profileSettings.value("Profile", "/").toString())
+	if (selectedProfile != profileSettings.value("Profile", "/").toString())
 	{
 		profileSettings.setValue("Profile", selectedProfile);
 		QMPlay2GUI.restartApp = true;

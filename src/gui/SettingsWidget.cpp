@@ -317,7 +317,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->profileB->addItem(profile, profile);
 			}
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-			if(QMPlay2Core.getSettingsProfile() != "/")
+			if (QMPlay2Core.getSettingsProfile() != "/")
 				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
 		}
 
@@ -738,7 +738,7 @@ void SettingsWidget::apply()
 
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			const QString selectedProfile = page1->profileB->currentData().toString();
-			if(selectedProfile != profileSettings.value("Profile", "/").toString())
+			if (selectedProfile != profileSettings.value("Profile", "/").toString())
 			{
 				profileSettings.setValue("Profile", page1->profileB->currentData());
 				restartApp();
