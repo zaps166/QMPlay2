@@ -558,7 +558,7 @@ void MenuBar::removeProfile()
 	if (QAction *act = (QAction *)options->removeProfileMenu->property("profile").value<void *>())
 	{
 		const QString &profile = "Profiles/" + act->property("path").toString() + "/";
-		if(profile == QMPlay2Core.getSettingsProfile())
+		if (profile == QMPlay2Core.getSettingsProfile())
 		{
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			profileSettings.setValue("Profile", "/");

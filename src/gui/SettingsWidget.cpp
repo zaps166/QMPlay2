@@ -311,7 +311,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
 		}
 		{
-			page1->profileB->addItem("Default", "/");
+			page1->profileB->addItem(tr("Default"), "/");
 			foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 			{
 				page1->profileB->addItem(profile, profile);
@@ -991,7 +991,7 @@ void SettingsWidget::removeProfile()
 	if (selectedProfile != "/")
 		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
 
-	if(selectedProfile == QMPlay2Core.getSettingsProfile())
+	if (selectedProfile == QMPlay2Core.getSettingsProfile())
 	{
 		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 		profileSettings.setValue("Profile", "/");
