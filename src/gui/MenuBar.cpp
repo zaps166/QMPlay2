@@ -18,18 +18,17 @@
 
 #include <MenuBar.hpp>
 
+#include <ShortcutHandler.hpp>
 #include <VideoAdjustment.hpp>
 #include <DockWidget.hpp>
+#include <Functions.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
-#include <ShortcutHandler.hpp>
-#include <Functions.hpp>
 
-#include <QDir>
-#include <QFile>
+#include <QWidgetAction>
 #include <QInputDialog>
 #include <QMainWindow>
-#include <QWidgetAction>
+#include <QDir>
 
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable)
 {
@@ -39,6 +38,25 @@ static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool
 	parent->addAction(act);
 	act->setIcon(icon);
 	return act;
+}
+
+static QString createAndSetProfile(MenuBar *menuBar)
+{
+	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(menuBar, MenuBar::Options::tr("Create new profile"), MenuBar::Options::tr("Profile name")));
+	if (!selectedProfile.isEmpty())
+	{
+		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+		if (selectedProfile != profileSettings.value("Profile", "/").toString())
+		{
+			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
+
+			profileSettings.setValue("Profile", selectedProfile);
+			QMPlay2GUI.restartApp = true;
+			QMPlay2GUI.mainW->close();
+			return selectedProfile;
+		}
+	}
+	return QString();
 }
 
 /**/
@@ -346,6 +364,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
 	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
 	addSeparator();
+
 	{
 		QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
 		profiles->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -355,11 +374,30 @@ MenuBar::Options::Options(MenuBar *parent) :
 		profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("&New Profile"), parent, SLOT(addProfile()));
 		profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("&Copy Profile"), parent, SLOT(copyProfile()));
 		profiles->addSeparator();
-		profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()))->setProperty("path", "/");
+
+		QActionGroup *group = new QActionGroup(parent);
+
+		QAction *act = profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()));
+		act->setProperty("path", "/");
+		act->setCheckable(true);
+		group->addAction(act);
 
 		foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 		{
-			profiles->addAction(profile, parent, SLOT(changeProfile()))->setProperty("path", profile);
+			QAction *act = profiles->addAction(profile, parent, SLOT(changeProfile()));
+			act->setProperty("path", profile);
+			act->setCheckable(true);
+			group->addAction(act);
+		}
+
+		const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile", "/").toString();
+		foreach (act, group->actions())
+		{
+			if (act->property("path").toString() == currentProfile)
+			{
+				act->setChecked(true);
+				break;
+			}
 		}
 
 		addMenu(profiles);
@@ -506,26 +544,6 @@ void MenuBar::changeProfile()
 		QMPlay2GUI.mainW->close();
 	}
 }
-static QString createAndSetProfile(MenuBar *menuBar)
-{
-	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(
-				menuBar, MenuBar::Options::tr("Create new profile"),
-				MenuBar::Options::tr("Profile name")));
-	if (!selectedProfile.isEmpty())
-	{
-		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-		if (selectedProfile != profileSettings.value("Profile", "/").toString())
-		{
-			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
-
-			profileSettings.setValue("Profile", selectedProfile);
-			QMPlay2GUI.restartApp = true;
-			QMPlay2GUI.mainW->close();
-			return selectedProfile;
-		}
-	}
-	return QString();
-}
 void MenuBar::addProfile()
 {
 	createAndSetProfile(this);
@@ -538,9 +556,7 @@ void MenuBar::copyProfile()
 		const QString srcDir = QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + "/";
 		const QString dstDir = QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile + "/";
 		foreach (const QString &path, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
-		{
 			QFile::copy(srcDir + path, dstDir + path);
-		}
 	}
 }
 void MenuBar::removeProfileMenuRequest(const QPoint &p)
