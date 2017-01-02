@@ -27,7 +27,6 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QDir>
-#include <QDirIterator>
 #include <QUrl>
 #include <QMessageBox>
 
@@ -168,25 +167,6 @@ QString Functions::fileExt(const QString &f)
 	if (idx > -1)
 		return f.mid(idx+1);
 	return QString();
-}
-bool Functions::dirRemoveRecursively(const QString &dirName)
-{
-#if QT_VERSION >= 0x050000
-	return QDir(dirName).removeRecursively();
-#else
-	QDir dir(dirName);
-	if (dir.exists(dirName))
-	{
-		foreach (const QFileInfo &info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
-		{
-			const QString &path = info.absoluteFilePath();
-			if (!(info.isDir() ? dirRemoveRecursively(path) : QFile::remove(path)))
-				return false;
-		}
-		return dir.rmdir(dirName);
-	}
-	return true;
-#endif
 }
 
 QString Functions::cleanPath(QString p)
@@ -632,20 +612,4 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 		QCursor::setPos(widget->mapToGlobal(mousePos));
 
 	return doWrap;
-}
-
-QStringList Functions::getProfiles()
-{
-	QStringList profiles;
-
-	QDirIterator it(QMPlay2Core.getSettingsDir() + "Profiles/", QStringList() << "QMPlay2.ini", QDir::Files, QDirIterator::Subdirectories);
-	while (it.hasNext())
-	{
-		const QString path = it.next();
-		const int right = QMPlay2Core.getSettingsDir().length() + strlen("Profiles/");
-		const int left = strlen("/QMPlay2.ini");
-		const QString profile = path.mid(right, path.length() - right - left);
-		profiles << profile;
-	}
-	return profiles;
 }

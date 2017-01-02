@@ -357,7 +357,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 		profiles->addSeparator();
 		profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()))->setProperty("path", "/");
 
-		foreach (const QString &profile, Functions::getProfiles())
+		foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 		{
 			profiles->addAction(profile, parent, SLOT(changeProfile()))->setProperty("path", profile);
 		}
@@ -528,13 +528,7 @@ static QString createAndSetProfile(MenuBar *menuBar)
 }
 void MenuBar::addProfile()
 {
-	const QString selectedProfile = createAndSetProfile(this);
-	if (!selectedProfile.isEmpty())
-	{
-		QFile tempFile(QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile + "/QMPlay2.ini");
-		tempFile.open(QFile::WriteOnly);
-		tempFile.close();
-	}
+	createAndSetProfile(this);
 }
 void MenuBar::copyProfile()
 {
@@ -563,9 +557,8 @@ void MenuBar::removeProfile()
 {
 	if (QAction *act = (QAction *)options->removeProfileMenu->property("profile").value<void *>())
 	{
-		const QString &profile = act->property("path").toString();
-		Functions::dirRemoveRecursively(QMPlay2Core.getSettingsDir() + "Profiles/" + profile);
-		if("Profiles/" + profile + "/" == QMPlay2Core.getSettingsProfile())
+		const QString &profile = "Profiles/" + act->property("path").toString() + "/";
+		if(profile == QMPlay2Core.getSettingsProfile())
 		{
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			profileSettings.setValue("Profile", "/");
@@ -573,7 +566,13 @@ void MenuBar::removeProfile()
 			QMPlay2GUI.mainW->close();
 		}
 		else
+		{
+			const QString settingsDir = QMPlay2Core.getSettingsDir() + profile;
+			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+				QFile::remove(settingsDir + fName);
+			QDir(QMPlay2Core.getSettingsDir()).rmdir(profile);
 			delete act;
+		}
 	}
 }
 

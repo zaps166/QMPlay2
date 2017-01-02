@@ -311,20 +311,18 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
 		}
 		{
-			page1->profileB->addItem("default", "/");
-			foreach (const QString &profile, Functions::getProfiles())
+			page1->profileB->addItem("Default", "/");
+			foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 			{
 				page1->profileB->addItem(profile, profile);
 			}
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			if (QMPlay2Core.getSettingsProfile() != "/")
-			{
 				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
-				page1->profileRemoveB->setDisabled(true);
-			}
 			connect(page1->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
 
 			page1->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+			page1->profileRemoveB->setEnabled(page1->profileB->currentIndex() != 0);
 			connect(page1->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
 		}
 
@@ -986,10 +984,14 @@ void SettingsWidget::profileListIndexChanged(int index)
 }
 void SettingsWidget::removeProfile()
 {
-	const QString selectedProfile = page1->profileB->currentData().toString();
-	Functions::dirRemoveRecursively(QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile);
+	const QString selectedProfile = "Profiles/" + page1->profileB->currentData().toString() + "/";
+	const QString settingsDir = QMPlay2Core.getSettingsDir() + selectedProfile;
+	foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+		QFile::remove(settingsDir + fName);
+	if (selectedProfile != "/")
+		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
 
-	if("Profiles/" + selectedProfile + "/" == QMPlay2Core.getSettingsProfile())
+	if(selectedProfile == QMPlay2Core.getSettingsProfile())
 	{
 		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 		profileSettings.setValue("Profile", "/");

@@ -69,7 +69,6 @@ namespace Functions
 	QString filePath(const QString &);
 	QString fileName(QString, bool extension = true);
 	QString fileExt(const QString &);
-	bool dirRemoveRecursively(const QString &dirName);
 
 	QString cleanPath(QString);
 	QString cleanFileName(QString);
@@ -142,8 +141,6 @@ namespace Functions
 	quint32 getBestSampleRate();
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
-
-	QStringList getProfiles();
 }
 
 #endif
