@@ -21,6 +21,7 @@
 #include <DeintSettingsW.hpp>
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
+#include <Functions.hpp>
 #include <Main.hpp>
 
 #if QT_VERSION < 0x050000
@@ -48,7 +49,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QLabel>
-#include <QDir>
 
 #include <KeyBindingsDialog.hpp>
 #include <Appearance.hpp>
@@ -266,6 +266,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		appendColon(page1->audioLangL);
 		appendColon(page1->subsLangL);
 		appendColon(page1->screenshotL);
+		appendColon(page1->profileL);
 
 		tabW->addTab(page1Widget, tr("General settings"));
 
@@ -308,6 +309,21 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->audioLangB->setCurrentIndex(page1->audioLangB->count() - 1);
 			if (lang == subsLang)
 				page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
+		}
+		{
+			page1->profileB->addItem(tr("Default"), "/");
+			foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+			{
+				page1->profileB->addItem(profile, profile);
+			}
+			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+			if (QMPlay2Core.getSettingsProfile() != "/")
+				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
+			connect(page1->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
+
+			page1->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+			page1->profileRemoveB->setEnabled(page1->profileB->currentIndex() != 0);
+			connect(page1->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
 		}
 
 		page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
@@ -724,6 +740,14 @@ void SettingsWidget::apply()
 			page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
 			qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
 			applyProxy();
+
+			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+			const QString selectedProfile = page1->profileB->currentData().toString();
+			if (selectedProfile != profileSettings.value("Profile", "/").toString())
+			{
+				profileSettings.setValue("Profile", page1->profileB->currentData());
+				restartApp();
+			}
 		} break;
 		case 2:
 		{
@@ -953,4 +977,27 @@ void SettingsWidget::resetSettings()
 		QMPlay2GUI.removeSettings = true;
 		restartApp();
 	}
+}
+void SettingsWidget::profileListIndexChanged(int index)
+{
+	page1->profileRemoveB->setEnabled(index != 0);
+}
+void SettingsWidget::removeProfile()
+{
+	const QString selectedProfile = "Profiles/" + page1->profileB->currentData().toString() + "/";
+	const QString settingsDir = QMPlay2Core.getSettingsDir() + selectedProfile;
+	foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+		QFile::remove(settingsDir + fName);
+	if (selectedProfile != "/")
+		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
+
+	if (selectedProfile == QMPlay2Core.getSettingsProfile())
+	{
+		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+		profileSettings.setValue("Profile", "/");
+		QMPlay2GUI.removeSettings = true;
+		restartApp();
+	}
+	else
+		page1->profileB->removeItem(page1->profileB->currentIndex());
 }

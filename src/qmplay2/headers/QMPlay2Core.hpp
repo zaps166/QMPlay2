@@ -70,6 +70,10 @@ public:
 	{
 		return settingsDir;
 	}
+	inline QString getSettingsProfile()
+	{
+		return settingsProfile;
+	}
 	inline QString getShareDir()
 	{
 		return shareDir;
@@ -180,7 +184,7 @@ private:
 
 	QVector<Module *> pluginsInstance;
 	QTranslator *translator, *qtTranslator;
-	QString shareDir, langDir, settingsDir, logFilePath;
+	QString shareDir, langDir, settingsDir, logFilePath, settingsProfile;
 	QAtomicInt working;
 	QStringList logs;
 	QMap<QString, QString> languages;

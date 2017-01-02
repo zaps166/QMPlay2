@@ -144,6 +144,18 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		settingsDir = Functions::cleanPath(settingsPath);
 	QDir(settingsDir).mkpath(".");
 
+	{
+		QSettings profileSettings(settingsDir + "Profile.ini", QSettings::IniFormat);
+		settingsProfile = profileSettings.value("Profile", "/").toString();
+		if (settingsProfile != "/")
+		{
+			settingsProfile.prepend("Profiles/");
+			QDir(settingsDir).mkpath(settingsProfile);
+		}
+		if (!settingsProfile.endsWith('/'))
+			settingsProfile.append('/');
+	}
+
 	logFilePath = settingsDir + "QMPlay2.log";
 
 	/* Rename config file */
@@ -163,7 +175,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	setLanguage();
 
 #ifdef Q_OS_WIN
-	timeBeginPeriod(1); //ustawianie rozdzielczości timera na 1ms (dla Sleep())
+	timeBeginPeriod(1); //Set the timer for 1ms resolution (for Sleep ())
 #endif
 
 #ifndef QT_DEBUG

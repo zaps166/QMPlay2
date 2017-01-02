@@ -603,10 +603,17 @@ int main(int argc, char *argv[])
 		QCoreApplication::exec();
 
 		const QString settingsDir = QMPlay2Core.getSettingsDir();
+		const QString profile = QMPlay2Core.getSettingsProfile();
+		const QString settingsDirProfile = settingsDir + profile;
 		QMPlay2Core.quit();
 		if (qmplay2Gui.removeSettings)
-			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
-				QFile::remove(settingsDir + fName);
+		{
+			foreach (const QString &fName, QDir(settingsDirProfile).entryList(QStringList("*.ini")))
+				QFile::remove(settingsDirProfile + fName);
+			if (profile != "/")
+				QDir(settingsDir).rmdir(profile);
+		}
+
 
 		delete qmplay2Gui.pipe;
 	} while (qmplay2Gui.restartApp);

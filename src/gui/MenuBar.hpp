@@ -135,6 +135,7 @@ public:
 	public:
 		Options(MenuBar *parent);
 		QAction *settings, *modulesSettings, *trayVisible;
+		QMenu *removeProfileMenu;
 	};
 
 	class Help : public QMenu
@@ -158,6 +159,12 @@ public:
 	Playback *playback;
 	Options *options;
 	Help *help;
+public slots:
+	void changeProfile();
+	void addProfile();
+	void copyProfile();
+	void removeProfileMenuRequest(const QPoint &p);
+	void removeProfile();
 private slots:
 	void widgetsMenuShow();
 };

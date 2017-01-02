@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QUrl>
+#include <QMessageBox>
 
 #include <math.h>
 

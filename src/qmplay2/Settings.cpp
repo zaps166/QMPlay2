@@ -19,7 +19,7 @@
 #include <Settings.hpp>
 
 Settings::Settings(const QString &name) :
-	QSettings(QMPlay2Core.getSettingsDir() + name + ".ini", QSettings::IniFormat)
+	QSettings(QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + name + ".ini", QSettings::IniFormat)
 {}
 Settings::~Settings()
 {

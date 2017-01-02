@@ -23,9 +23,13 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 #include <ShortcutHandler.hpp>
+#include <Functions.hpp>
 
-#include <QWidgetAction>
+#include <QDir>
+#include <QFile>
+#include <QInputDialog>
 #include <QMainWindow>
+#include <QWidgetAction>
 
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable)
 {
@@ -338,10 +342,34 @@ MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
 MenuBar::Options::Options(MenuBar *parent) :
 	QMenu(Options::tr("Op&tions"), parent)
 {
-	newAction(Options::tr("&Settings"), this, settings, false, QMPlay2Core.getIconFromTheme("configure"), false);
-	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, QMPlay2Core.getIconFromTheme("configure"), false);
+	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
+	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
+	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
+	addSeparator();
+	{
+		QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
+		profiles->setContextMenuPolicy(Qt::CustomContextMenu);
+		connect(profiles, SIGNAL(customContextMenuRequested(QPoint)), parent, SLOT(removeProfileMenuRequest(QPoint)));
+		profiles->setIcon(configureIcon);
+
+		profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("&New Profile"), parent, SLOT(addProfile()));
+		profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("&Copy Profile"), parent, SLOT(copyProfile()));
+		profiles->addSeparator();
+		profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()))->setProperty("path", "/");
+
+		foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+		{
+			profiles->addAction(profile, parent, SLOT(changeProfile()))->setProperty("path", profile);
+		}
+
+		addMenu(profiles);
+	}
+
 	addSeparator();
 	newAction(Options::tr("&Show tray icon"), this, trayVisible, false, QIcon(), true);
+
+	removeProfileMenu = new QMenu(this);
+	removeProfileMenu->addAction(tr("Remove"), parent, SLOT(removeProfile()));
 }
 
 MenuBar::Help::Help(MenuBar *parent) :
@@ -464,6 +492,88 @@ void MenuBar::setKeyShortcuts()
 #ifdef UPDATER
 	shortcuts->appendAction(help->updates, "KeyBindings/Help-updates", "F12");
 #endif
+}
+
+void MenuBar::changeProfile()
+{
+	QAction *act = (QAction *)sender();
+	const QString selectedProfile = act->property("path").toString();
+	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+	if (selectedProfile != profileSettings.value("Profile", "/").toString())
+	{
+		profileSettings.setValue("Profile", selectedProfile);
+		QMPlay2GUI.restartApp = true;
+		QMPlay2GUI.mainW->close();
+	}
+}
+static QString createAndSetProfile(MenuBar *menuBar)
+{
+	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(
+				menuBar, MenuBar::Options::tr("Create new profile"),
+				MenuBar::Options::tr("Profile name")));
+	if (!selectedProfile.isEmpty())
+	{
+		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+		if (selectedProfile != profileSettings.value("Profile", "/").toString())
+		{
+			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
+
+			profileSettings.setValue("Profile", selectedProfile);
+			QMPlay2GUI.restartApp = true;
+			QMPlay2GUI.mainW->close();
+			return selectedProfile;
+		}
+	}
+	return QString();
+}
+void MenuBar::addProfile()
+{
+	createAndSetProfile(this);
+}
+void MenuBar::copyProfile()
+{
+	const QString selectedProfile = createAndSetProfile(this);
+	if (!selectedProfile.isEmpty())
+	{
+		const QString srcDir = QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + "/";
+		const QString dstDir = QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile + "/";
+		foreach (const QString &path, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
+		{
+			QFile::copy(srcDir + path, dstDir + path);
+		}
+	}
+}
+void MenuBar::removeProfileMenuRequest(const QPoint &p)
+{
+	QMenu *menu = qobject_cast<QMenu *>(sender());
+	QAction *act = menu->actionAt(p);
+	if (act && menu->actions().indexOf(act) >= 4)
+	{
+		options->removeProfileMenu->setProperty("profile", QVariant::fromValue((void *)act));
+		options->removeProfileMenu->popup(menu->mapToGlobal(p));
+	}
+}
+void MenuBar::removeProfile()
+{
+	if (QAction *act = (QAction *)options->removeProfileMenu->property("profile").value<void *>())
+	{
+		const QString &profile = "Profiles/" + act->property("path").toString() + "/";
+		if (profile == QMPlay2Core.getSettingsProfile())
+		{
+			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
+			profileSettings.setValue("Profile", "/");
+			QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = true;
+			QMPlay2GUI.mainW->close();
+		}
+		else
+		{
+			const QString settingsDir = QMPlay2Core.getSettingsDir() + profile;
+			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+				QFile::remove(settingsDir + fName);
+			QDir(QMPlay2Core.getSettingsDir()).rmdir(profile);
+			delete act;
+		}
+	}
 }
 
 void MenuBar::widgetsMenuShow()
