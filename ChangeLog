@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 17.01.02:
+	- add Profiles (Zamarin Arthur),
+
 Changes in QMPlay2 build 16.12.23:
 	- new Notifications module (Zamarin Arthur),
 	- use cookies obtained from "youtube-dl",
