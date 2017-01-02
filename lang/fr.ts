@@ -913,6 +913,10 @@ amp</source>
         <source>Set key bindings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Selected Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1731,6 +1735,34 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Modules settings</source>
         <translation>&amp;Réglages des modules</translation>
+    </message>
+    <message>
+        <source>Create new profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;New Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Supprimer</translation>
+    </message>
+    <message>
+        <source>Enter new profile name:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2623,6 +2655,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Hardware accelerated video outputs</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Par défaut</translation>
     </message>
 </context>
 <context>

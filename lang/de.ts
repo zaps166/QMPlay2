@@ -914,6 +914,10 @@ amp</translation>
         <source>Set key bindings</source>
         <translation>Tastaturbelegung festlegen</translation>
     </message>
+    <message>
+        <source>Selected Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1733,6 +1737,34 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>&amp;Modules settings</source>
         <translation>&amp;Modul Einstellungen</translation>
+    </message>
+    <message>
+        <source>Create new profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;New Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Entfernen</translation>
+    </message>
+    <message>
+        <source>Enter new profile name:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2625,6 +2657,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Hardware accelerated video outputs</source>
         <translation>Hardware beschleunigte Videoausgabe</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Standard</translation>
     </message>
 </context>
 <context>

@@ -42,7 +42,7 @@ static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool
 
 static QString createAndSetProfile(MenuBar *menuBar)
 {
-	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(menuBar, MenuBar::Options::tr("Create new profile"), MenuBar::Options::tr("Profile name")));
+	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(menuBar, MenuBar::Options::tr("Create new profile"), MenuBar::Options::tr("Enter new profile name:")));
 	if (!selectedProfile.isEmpty())
 	{
 		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
@@ -53,6 +53,7 @@ static QString createAndSetProfile(MenuBar *menuBar)
 			profileSettings.setValue("Profile", selectedProfile);
 			QMPlay2GUI.restartApp = true;
 			QMPlay2GUI.mainW->close();
+
 			return selectedProfile;
 		}
 	}

@@ -914,6 +914,10 @@ amp</translation>
         <source>Set key bindings</source>
         <translation>Ustaw skróty klawiszowe</translation>
     </message>
+    <message>
+        <source>Selected Profile</source>
+        <translation>Wybrany profil</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1733,6 +1737,34 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>&amp;Modules settings</source>
         <translation>Ustawienia &amp;modułów</translation>
+    </message>
+    <message>
+        <source>Create new profile</source>
+        <translation>Utwórz nowy profil</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profile</translation>
+    </message>
+    <message>
+        <source>&amp;New Profile</source>
+        <translation>&amp;Nowy profil</translation>
+    </message>
+    <message>
+        <source>&amp;Copy Profile</source>
+        <translation>&amp;Skopiuj profil</translation>
+    </message>
+    <message>
+        <source>&amp;Default</source>
+        <translation>&amp;Domyślny</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Usuń</translation>
+    </message>
+    <message>
+        <source>Enter new profile name:</source>
+        <translation>Wprowadź nazwę nowego profilu:</translation>
     </message>
 </context>
 <context>
@@ -2625,6 +2657,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Hardware accelerated video outputs</source>
         <translation>Wyjścia obrazu dla akceleracji sprzętowej</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Domyślny</translation>
     </message>
 </context>
 <context>
