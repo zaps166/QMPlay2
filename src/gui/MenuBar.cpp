@@ -40,6 +40,12 @@ static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool
 	return act;
 }
 
+static void restartApp()
+{
+	QMPlay2GUI.restartApp = true;
+	QMPlay2GUI.mainW->close();
+}
+
 static QString createAndSetProfile(MenuBar *menuBar)
 {
 	const QString selectedProfile = Functions::cleanFileName(QInputDialog::getText(menuBar, MenuBar::Options::tr("Create new profile"), MenuBar::Options::tr("Enter new profile name:")));
@@ -51,8 +57,7 @@ static QString createAndSetProfile(MenuBar *menuBar)
 			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
 
 			profileSettings.setValue("Profile", selectedProfile);
-			QMPlay2GUI.restartApp = true;
-			QMPlay2GUI.mainW->close();
+			restartApp();
 
 			return selectedProfile;
 		}
@@ -541,8 +546,8 @@ void MenuBar::changeProfile()
 	if (selectedProfile != profileSettings.value("Profile", "/").toString())
 	{
 		profileSettings.setValue("Profile", selectedProfile);
-		QMPlay2GUI.restartApp = true;
-		QMPlay2GUI.mainW->close();
+		QMPlay2GUI.noAutoPlay = true;
+		restartApp();
 	}
 }
 void MenuBar::addProfile()
@@ -551,14 +556,7 @@ void MenuBar::addProfile()
 }
 void MenuBar::copyProfile()
 {
-	const QString selectedProfile = createAndSetProfile(this);
-	if (!selectedProfile.isEmpty())
-	{
-		const QString srcDir = QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + "/";
-		const QString dstDir = QMPlay2Core.getSettingsDir() + "Profiles/" + selectedProfile + "/";
-		foreach (const QString &path, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
-			QFile::copy(srcDir + path, dstDir + path);
-	}
+	QMPlay2GUI.newProfileName = createAndSetProfile(this);
 }
 void MenuBar::removeProfileMenuRequest(const QPoint &p)
 {
@@ -579,8 +577,8 @@ void MenuBar::removeProfile()
 		{
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			profileSettings.setValue("Profile", "/");
-			QMPlay2GUI.restartApp = QMPlay2GUI.removeSettings = true;
-			QMPlay2GUI.mainW->close();
+			QMPlay2GUI.removeSettings = QMPlay2GUI.noAutoPlay = true;
+			restartApp();
 		}
 		else
 		{

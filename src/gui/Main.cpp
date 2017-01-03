@@ -356,6 +356,12 @@ static void signal_handler(int s)
 	}
 }
 
+static void noAutoPlay()
+{
+	QMPArguments.first += "noplay";
+	QMPArguments.second += QString();
+}
+
 #ifdef Q_OS_WIN
 static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 {
@@ -432,8 +438,7 @@ int main(int argc, char *argv[])
 		else if (QFile::exists(qmplay2Gui.getPipe()))
 		{
 			QFile::remove(qmplay2Gui.getPipe());
-			QMPArguments.first += "noplay";
-			QMPArguments.second += QString();
+			noAutoPlay();
 		}
 #endif
 
@@ -598,22 +603,37 @@ int main(int argc, char *argv[])
 
 		lastVer.clear();
 
-		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = false;
+		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = qmplay2Gui.noAutoPlay = false;
+		qmplay2Gui.newProfileName.clear();
 		new MainWidget(QMPArguments);
 		QCoreApplication::exec();
 
 		const QString settingsDir = QMPlay2Core.getSettingsDir();
 		const QString profile = QMPlay2Core.getSettingsProfile();
-		const QString settingsDirProfile = settingsDir + profile;
+
 		QMPlay2Core.quit();
+
 		if (qmplay2Gui.removeSettings)
 		{
+			const QString settingsDirProfile = settingsDir + profile;
 			foreach (const QString &fName, QDir(settingsDirProfile).entryList(QStringList("*.ini")))
 				QFile::remove(settingsDirProfile + fName);
 			if (profile != "/")
 				QDir(settingsDir).rmdir(profile);
 		}
+		else if (!qmplay2Gui.newProfileName.isEmpty())
+		{
+			const QString srcDir = settingsDir + profile;
+			const QString dstDir = settingsDir + "Profiles/" + qmplay2Gui.newProfileName + "/";
+			foreach (const QString &fName, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
+			{
+				if (fName != "Profile.ini")
+					QFile::copy(srcDir + fName, dstDir + fName);
+			}
+		}
 
+		if (qmplay2Gui.noAutoPlay)
+			noAutoPlay();
 
 		delete qmplay2Gui.pipe;
 	} while (qmplay2Gui.restartApp);

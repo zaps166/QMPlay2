@@ -71,7 +71,9 @@ public:
 	ScreenSaver *screenSaver;
 	VideoAdjustment *videoAdjustment;
 	ShortcutHandler *shortcutHandler;
-	bool restartApp, removeSettings;
+
+	bool restartApp, removeSettings, noAutoPlay;
+	QString newProfileName;
 private:
 	QMPlay2GUIClass();
 	~QMPlay2GUIClass();
