@@ -31,6 +31,7 @@ struct _XDisplay;
 
 class VDPAUWriter : public QWidget, public VideoWriter
 {
+	Q_OBJECT
 public:
 	VDPAUWriter(Module &module);
 	~VDPAUWriter();
