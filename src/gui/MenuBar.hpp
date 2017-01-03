@@ -136,6 +136,7 @@ public:
 		Options(MenuBar *parent);
 		QAction *settings, *modulesSettings, *trayVisible;
 		QMenu *removeProfileMenu;
+		QActionGroup *profilesGroup;
 	};
 
 	class Help : public QMenu

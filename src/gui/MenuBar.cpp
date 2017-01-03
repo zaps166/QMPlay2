@@ -381,23 +381,23 @@ MenuBar::Options::Options(MenuBar *parent) :
 		profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("&Copy Profile"), parent, SLOT(copyProfile()));
 		profiles->addSeparator();
 
-		QActionGroup *group = new QActionGroup(parent);
+		profilesGroup = new QActionGroup(parent);
 
 		QAction *act = profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()));
 		act->setProperty("path", "/");
 		act->setCheckable(true);
-		group->addAction(act);
+		profilesGroup->addAction(act);
 
 		foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 		{
 			QAction *act = profiles->addAction(profile, parent, SLOT(changeProfile()));
 			act->setProperty("path", profile);
 			act->setCheckable(true);
-			group->addAction(act);
+			profilesGroup->addAction(act);
 		}
 
 		const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile", "/").toString();
-		foreach (act, group->actions())
+		foreach (act, profilesGroup->actions())
 		{
 			if (act->property("path").toString() == currentProfile)
 			{

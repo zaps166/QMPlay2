@@ -55,6 +55,8 @@ private:
 
 	void restartApp();
 
+	inline QString getSelectedProfile();
+
 	void showEvent(QShowEvent *);
 	void closeEvent(QCloseEvent *);
 

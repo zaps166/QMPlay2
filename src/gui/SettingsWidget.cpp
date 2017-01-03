@@ -311,14 +311,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 				page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
 		}
 		{
-			page1->profileB->addItem(tr("Default"), "/");
+			const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile").toString();
+			page1->profileB->addItem(tr("Default"));
 			foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 			{
-				page1->profileB->addItem(profile, profile);
+				page1->profileB->addItem(profile);
+				if (profile == currentProfile)
+					page1->profileB->setCurrentIndex(page1->profileB->count() - 1);
 			}
-			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-			if (QMPlay2Core.getSettingsProfile() != "/")
-				page1->profileB->setCurrentText(profileSettings.value("Profile", "/").toString());
 			connect(page1->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
 
 			page1->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
@@ -662,6 +662,11 @@ void SettingsWidget::restartApp()
 	QMPlay2GUI.mainW->close();
 }
 
+inline QString SettingsWidget::getSelectedProfile()
+{
+	return !page1->profileB->currentIndex() ? "/" : page1->profileB->currentText();
+}
+
 void SettingsWidget::showEvent(QShowEvent *)
 {
 	if (!wasShow)
@@ -742,10 +747,10 @@ void SettingsWidget::apply()
 			applyProxy();
 
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-			const QString selectedProfile = page1->profileB->currentData().toString();
+			const QString selectedProfile = getSelectedProfile();
 			if (selectedProfile != profileSettings.value("Profile", "/").toString())
 			{
-				profileSettings.setValue("Profile", page1->profileB->currentData());
+				profileSettings.setValue("Profile", selectedProfile);
 				restartApp();
 			}
 		} break;
@@ -984,20 +989,27 @@ void SettingsWidget::profileListIndexChanged(int index)
 }
 void SettingsWidget::removeProfile()
 {
-	const QString selectedProfile = "Profiles/" + page1->profileB->currentData().toString() + "/";
-	const QString settingsDir = QMPlay2Core.getSettingsDir() + selectedProfile;
-	foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
-		QFile::remove(settingsDir + fName);
-	if (selectedProfile != "/")
-		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
-
+	const QString selectedProfileName = getSelectedProfile();
+	const QString selectedProfile = "Profiles/" + selectedProfileName + "/";
 	if (selectedProfile == QMPlay2Core.getSettingsProfile())
 	{
-		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-		profileSettings.setValue("Profile", "/");
+		QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).setValue("Profile", "/");
 		QMPlay2GUI.removeSettings = true;
 		restartApp();
 	}
 	else
+	{
+		const QString settingsDir = QMPlay2Core.getSettingsDir() + selectedProfile;
+		foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+			QFile::remove(settingsDir + fName);
+		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
+
 		page1->profileB->removeItem(page1->profileB->currentIndex());
+		foreach (QAction *act, QMPlay2GUI.menuBar->options->profilesGroup->actions())
+			if (act->text() == selectedProfileName)
+			{
+				delete act;
+				break;
+			}
+	}
 }
