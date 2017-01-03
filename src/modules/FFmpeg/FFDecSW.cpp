@@ -339,6 +339,8 @@ bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
 		return false;
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 	{
+		if (codec->capabilities & CODEC_CAP_DR1)
+			codec_ctx->flags |= CODEC_FLAG_EMU_EDGE; //Does nothing since FFmpeg 2.3
 		if ((codec_ctx->thread_count = threads) != 1)
 		{
 			if (!thread_type_slice)
