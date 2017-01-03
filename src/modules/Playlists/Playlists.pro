@@ -24,5 +24,5 @@ RESOURCES += icon.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH += . ../../qmplay2/headers
 
-HEADERS += Playlists.hpp PLS.hpp M3U.hpp
-SOURCES += Playlists.cpp PLS.cpp M3U.cpp
+HEADERS += Playlists.hpp PLS.hpp M3U.hpp XSPF.hpp
+SOURCES += Playlists.cpp PLS.cpp M3U.cpp XSPF.cpp

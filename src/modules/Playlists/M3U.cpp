@@ -76,25 +76,26 @@ bool M3U::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write("#EXTM3U\r\n");
-	for (int i = 0; i < list.size(); i++)
+	const QString saveFilePath = Functions::filePath(writer->getUrl());
+
+	for (Entries::const_iterator iter = list.constBegin(), end = list.constEnd(); iter != end; ++iter)
 	{
-		const Entry &entry = list[i];
-		if (!entry.GID)
+		if (!iter->GID)
 		{
-			const QString length = QString::number((qint32)(entry.length + 0.5));
-			QString url = entry.url;
-			const bool isFile = url.startsWith("file://");
-			if (isFile)
+			const QString length = QString::number((qint32)(iter->length + 0.5));
+			QString url = iter->url;
+			if (m_useRelative && url.startsWith(saveFilePath))
+				url.remove(0, saveFilePath.length());
+			else if (url.startsWith("file://"))
+			{
 				url.remove(0, 7);
 #ifdef Q_OS_WIN
-			if (isFile)
 				url.replace("/", "\\");
 #endif
-			writer->write(QString("#EXTINF:" + length + "," + QString(entry.name).replace('\n', '\001') + "\r\n" + url + "\r\n").toUtf8());
+			}
+
+			writer->write(QString("#EXTINF:" + length + "," + QString(iter->name).replace('\n', '\001') + "\r\n" + url + "\r\n").toUtf8());
 		}
 	}
 	return true;
 }
-
-M3U::~M3U()
-{}
