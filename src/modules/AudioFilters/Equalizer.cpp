@@ -162,10 +162,11 @@ double Equalizer::filter(Buffer &data, bool flush)
 					fft_calc(fftIn, complex);
 					for (int i = 0; i < FFT_SIZE_2; ++i)
 					{
-						complex[           i].re *= f.at(i) * preamp;
-						complex[           i].im *= f.at(i) * preamp;
-						complex[FFT_SIZE-1-i].re *= f.at(i) * preamp;
-						complex[FFT_SIZE-1-i].im *= f.at(i) * preamp;
+						const float coeff = f.at(i) * preamp;
+						complex[           i].re *= coeff;
+						complex[           i].im *= coeff;
+						complex[FFT_SIZE-1-i].re *= coeff;
+						complex[FFT_SIZE-1-i].im *= coeff;
 					}
 					fft_calc(fftOut, complex);
 

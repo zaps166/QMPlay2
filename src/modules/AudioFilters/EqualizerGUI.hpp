@@ -39,6 +39,7 @@ private:
 
 class QScrollArea;
 class QCheckBox;
+class QSlider;
 class QMenu;
 
 class EqualizerGUI : public QWidget, public QMPlay2Extensions
@@ -76,6 +77,7 @@ private:
 	QScrollArea *slidersA;
 
 	QMenu *presetsMenu, *deletePresetMenu;
+	QList<QSlider *> sliders;
 };
 
 #define EqualizerGUIName "Audio Equalizer Graphical Interface"

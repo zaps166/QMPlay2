@@ -40,8 +40,8 @@ GraphW::GraphW() :
 
 void GraphW::setValue(int idx, float val)
 {
-	if (idx == -1) //Preamp
-		preamp = val;
+	if (idx == -1)
+		preamp = val == 0.5f ? 0.5f : -1.0f; //FIXME
 	else if (values.size() > idx)
 		values[idx] = val;
 	update();
@@ -189,12 +189,21 @@ void EqualizerGUI::enabled(bool b)
 }
 void EqualizerGUI::valueChanged(int v)
 {
-	QSlider *slider = qobject_cast<QSlider *>(sender());
-	if (slider)
+	if (QSlider *slider = qobject_cast<QSlider *>(sender()))
 	{
 		graph.setValue(slider->property("idx").toInt(), v / 100.0f);
 		sets().set("Equalizer/" + slider->property("idx").toString(), v);
-		slider->setToolTip(Functions::dBStr(v / 50.0));
+
+		QLabel *descrL = (QLabel *)slider->property("label").value<void *>();
+		QString text = descrL->text();
+		const int idx = text.indexOf('\n');
+		if (idx > -1)
+		{
+			text.remove(idx + 1, text.length() - idx + 1);
+			text.append(Functions::dBStr(v / 50.0));
+			descrL->setText(text);
+		}
+
 		setInstance<Equalizer>();
 	}
 }
@@ -202,18 +211,15 @@ void EqualizerGUI::setSliders()
 {
 	const QString objectName = sender()->objectName();
 	graph.hide();
-	foreach (QObject *o, slidersA->widget()->children())
+	foreach (QSlider *slider, sliders)
 	{
-		if (QSlider *slider = qobject_cast<QSlider *>(o))
-		{
-			const bool isPreamp = slider->property("preamp").toBool();
-			if (objectName == "maxB" && !isPreamp)
-				slider->setValue(slider->maximum() - 3);
-			else if (objectName == "resetB")
-				slider->setValue(slider->maximum() / 2);
-			else if (objectName == "minB" && !isPreamp)
-				slider->setValue(slider->minimum() + 3);
-		}
+		const bool isPreamp = slider->property("preamp").toBool();
+		if (objectName == "maxB" && !isPreamp)
+			slider->setValue(slider->maximum() - 3);
+		else if (objectName == "resetB")
+			slider->setValue(slider->maximum() / 2);
+		else if (objectName == "minB" && !isPreamp)
+			slider->setValue(slider->minimum() + 3);
 	}
 	graph.show();
 }
@@ -232,16 +238,13 @@ void EqualizerGUI::addPreset()
 		}
 
 		QMap<int, int> values;
-		foreach (QObject *o, slidersA->widget()->children())
+		foreach (QSlider *slider, sliders)
 		{
-			if (QSlider *slider = qobject_cast<QSlider *>(o))
-			{
-				const bool isPreamp = slider->property("preamp").toBool();
-				if (isPreamp)
-					values[-1] = slider->value();
-				else
-					values[slider->property("idx").toInt()] = slider->value();
-			}
+			const bool isPreamp = slider->property("preamp").toBool();
+			if (isPreamp)
+				values[-1] = slider->value();
+			else
+				values[slider->property("idx").toInt()] = slider->value();
 		}
 		QByteArray dataArr;
 		QDataStream stream(&dataArr, QIODevice::WriteOnly);
@@ -290,16 +293,13 @@ void EqualizerGUI::setPresetValues()
 		QMap<int, int> values = getPresetValues(act->text());
 		if (values.count() > 1)
 		{
-			foreach (QObject *o, slidersA->widget()->children())
+			foreach (QSlider *slider, sliders)
 			{
-				if (QSlider *slider = qobject_cast<QSlider *>(o))
-				{
-					const bool isPreamp = slider->property("preamp").toBool();
-					if (isPreamp)
-						slider->setValue(values.value(-1));
-					else
-						slider->setValue(values.value(slider->property("idx").toInt()));
-				}
+				const bool isPreamp = slider->property("preamp").toBool();
+				if (isPreamp)
+					slider->setValue(values.value(-1));
+				else
+					slider->setValue(values.value(slider->property("idx").toInt()));
 			}
 			if (!enabledB->isChecked())
 				enabledB->click();
@@ -309,42 +309,71 @@ void EqualizerGUI::setPresetValues()
 
 bool EqualizerGUI::set()
 {
+	sliders.clear();
 	delete slidersA->widget();
 
 	QWidget *slidersW = new QWidget;
 	slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	QGridLayout *slidersLayout = new QGridLayout(slidersW);
+
+	QHBoxLayout *slidersLayout = new QHBoxLayout(slidersW);
+	slidersLayout->setMargin(0);
 
 	const QVector<float> freqs = Equalizer::freqs(sets());
 	graph.setValues(freqs.count());
 	for (int i = -1; i < freqs.count(); ++i)
 	{
+		QWidget *sliderW = new QWidget;
+
+		QGridLayout *sliderWLaout = new QGridLayout(sliderW);
+		sliderWLaout->setMargin(0);
+
 		QSlider *slider = new QSlider;
 		slider->setMaximum(100);
 		slider->setTickInterval(50);
 		slider->setProperty("idx", i);
 		slider->setTickPosition(QSlider::TicksBelow);
 		slider->setValue(sets().getInt("Equalizer/" + QString::number(i)));
-		slider->setToolTip(Functions::dBStr(slider->value() / 50.0));
 		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 
 		graph.setValue(i, slider->value() / 100.0f);
 
-		QLabel *descrL = new QLabel;
+		QLabel *descrL = new QLabel("\n" + Functions::dBStr(slider->value() / 50.0));
 		descrL->setAlignment(Qt::AlignCenter);
+
+		QFont font = descrL->font();
+		font.setPointSize(qMax(6, font.pointSize() - 2));
+		descrL->setFont(font);
+
+		slider->setProperty("label", QVariant::fromValue((void *)descrL));
+
+		sliderWLaout->addWidget(slider, 0, 1);
+		sliderWLaout->addWidget(descrL, 1, 0, 1, 3);
+		slidersLayout->addWidget(sliderW);
 
 		if (i == -1)
 		{
-			descrL->setText(tr("Pre\namp"));
+			sliderW->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 			slider->setProperty("preamp", true);
-		}
-		else if (freqs[i] < 1000.0f)
-			descrL->setText(QString::number(freqs[i], 'f', 0) + "\nHz");
-		else
-			descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + "k\nHz");
 
-		slidersLayout->addWidget(slider, 0, i+1);
-		slidersLayout->addWidget(descrL, 1, i+1);
+			descrL->setText(tr("Preamp") + descrL->text());
+			descrL->setMinimumWidth(50);
+
+			QFrame *line = new QFrame;
+			line->setFrameShape(QFrame::VLine);
+			line->setFrameShadow(QFrame::Sunken);
+			slidersLayout->addWidget(line);
+		}
+		else
+		{
+			sliderW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+			if (freqs[i] < 1000.0f)
+				descrL->setText(QString::number(freqs[i], 'f', 0) + " Hz" + descrL->text());
+			else
+				descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + " kHz" + descrL->text());
+		}
+
+		sliders.append(slider);
 	}
 
 	slidersA->setWidget(slidersW);
