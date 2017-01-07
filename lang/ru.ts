@@ -731,6 +731,10 @@
         <source>Preamp</source>
         <translation>Предусиление</translation>
     </message>
+    <message>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>

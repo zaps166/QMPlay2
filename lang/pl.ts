@@ -731,6 +731,10 @@
         <source>Preamp</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Auto</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>
