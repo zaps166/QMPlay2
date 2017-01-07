@@ -696,12 +696,6 @@
 <context>
     <name>EqualizerGUI</name>
     <message>
-        <source>Pre
-amp</source>
-        <translation>Pre
-amp</translation>
-    </message>
-    <message>
         <source>Equalizer</source>
         <translation>Ecualizador</translation>
     </message>
@@ -731,6 +725,10 @@ amp</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preamp</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

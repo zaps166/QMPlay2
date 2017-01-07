@@ -704,12 +704,6 @@
         <translation>AN</translation>
     </message>
     <message>
-        <source>Pre
-amp</source>
-        <translation>Pre
-amp</translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
@@ -732,6 +726,10 @@ amp</translation>
     <message>
         <source>Enter new preset name</source>
         <translation>Gebe einen neuen Profilnamen ein</translation>
+    </message>
+    <message>
+        <source>Preamp</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -704,11 +704,6 @@
         <translation>ON</translation>
     </message>
     <message>
-        <source>Pre
-amp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -730,6 +725,10 @@ amp</source>
     </message>
     <message>
         <source>Enter new preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preamp</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

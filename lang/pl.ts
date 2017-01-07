@@ -704,12 +704,6 @@
         <translation>Włączony</translation>
     </message>
     <message>
-        <source>Pre
-amp</source>
-        <translation>Pre
-amp</translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
@@ -732,6 +726,10 @@ amp</translation>
     <message>
         <source>Enter new preset name</source>
         <translation>Wprowadź nazwę dla nowego nastawienia</translation>
+    </message>
+    <message>
+        <source>Preamp</source>
+        <translation></translation>
     </message>
 </context>
 <context>

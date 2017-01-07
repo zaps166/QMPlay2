@@ -704,12 +704,6 @@
         <translation>Включен</translation>
     </message>
     <message>
-        <source>Pre
-amp</source>
-        <translation>Пред.
-усиление</translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -732,6 +726,10 @@ amp</source>
     <message>
         <source>Enter new preset name</source>
         <translation>Введите имя новой предустановки</translation>
+    </message>
+    <message>
+        <source>Preamp</source>
+        <translation>Предусиление</translation>
     </message>
 </context>
 <context>
