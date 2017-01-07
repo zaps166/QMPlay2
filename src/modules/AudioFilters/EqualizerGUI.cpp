@@ -103,6 +103,7 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	presetsMenu->addSeparator();
 
 	enabledB = new QCheckBox;
+	enabledB->setFocusPolicy(Qt::TabFocus);
 
 	QToolButton *presetsB = new QToolButton;
 	presetsB->setPopupMode(QToolButton::InstantPopup);
@@ -222,6 +223,7 @@ bool EqualizerGUI::set()
 
 		QCheckBox *checkB = setSmallerFont(new QCheckBox);
 		connect(checkB, SIGNAL(clicked(bool)), this, SLOT(sliderChecked(bool)));
+		checkB->setFocusPolicy(Qt::TabFocus);
 		checkB->setProperty("sliderIdx", i);
 
 		slider->setProperty("label", QVariant::fromValue((void *)descrL));
