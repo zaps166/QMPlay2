@@ -31,17 +31,13 @@
 #include <QToolButton>
 #include <QInputDialog>
 
-static QLabel *createDescrLabel(const QString &text, int minimumWidth = 50)
+template <typename W>
+static W *setSmallerFont(W *w)
 {
-	QLabel *descrL = new QLabel(text);
-	descrL->setAlignment(Qt::AlignCenter);
-	descrL->setMinimumWidth(minimumWidth);
-
-	QFont font = descrL->font();
+	QFont font = w->font();
 	font.setPointSize(qMax(6, font.pointSize() - 2));
-	descrL->setFont(font);
-
-	return descrL;
+	w->setFont(font);
+	return w;
 }
 
 /**/
@@ -69,7 +65,7 @@ void GraphW::paintEvent(QPaintEvent *)
 		const QVector<float> graph = Equalizer::interpolate(values, width());
 
 		QPainter p(this);
-		p.scale(1.0, height()-1.0);
+		p.scale(1.0, height() - 0.5);
 
 		QPainterPath path;
 		path.moveTo(QPointF(0.0, 1.0 - graph[0]));
@@ -141,6 +137,7 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	QToolButton *maxB = new QToolButton;
 	QToolButton *resetB = new QToolButton;
 	QToolButton *minB = new QToolButton;
+	autoCheckBoxSpacer = new QWidget;
 	maxB->setObjectName("maxB");
 	maxB->setArrowType(Qt::RightArrow);
 	resetB->setObjectName("resetB");
@@ -151,12 +148,13 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	connect(resetB, SIGNAL(clicked()), this, SLOT(setSliders()));
 	connect(minB, SIGNAL(clicked()), this, SLOT(setSliders()));
 	QVBoxLayout *buttonsLayout = new QVBoxLayout(buttonsW);
+	buttonsLayout->addWidget(autoCheckBoxSpacer);
 	buttonsLayout->addWidget(maxB);
 	buttonsLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 	buttonsLayout->addWidget(resetB);
 	buttonsLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 	buttonsLayout->addWidget(minB);
-	buttonsLayout->addWidget(createDescrLabel("\n", 0));
+	buttonsLayout->addWidget(setSmallerFont(new QLabel("\n")));
 	buttonsLayout->setMargin(0);
 
 	slidersA = new QScrollArea;
@@ -206,27 +204,41 @@ bool EqualizerGUI::set()
 		QGridLayout *sliderWLaout = new QGridLayout(sliderW);
 		sliderWLaout->setMargin(0);
 
+		const int value = sets().getInt(QString("Equalizer/%1").arg(i));
+
 		QSlider *slider = new QSlider;
 		slider->setMaximum(100);
 		slider->setTickInterval(50);
 		slider->setProperty("idx", i);
 		slider->setTickPosition(QSlider::TicksBelow);
-		slider->setValue(sets().getInt("Equalizer/" + QString::number(i)));
+		slider->setValue((value < 0) ? ~value : value);
 		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 
 		graph.setValue(i, slider->value() / 100.0f);
 
-		QLabel *descrL = createDescrLabel("\n" + Functions::dBStr(Equalizer::getAmpl(slider->value())));
-		slider->setProperty("label", QVariant::fromValue((void *)descrL));
+		QLabel *descrL = setSmallerFont(new QLabel("\n" + Functions::dBStr(Equalizer::getAmpl(slider->value()))));
+		descrL->setAlignment(Qt::AlignCenter);
+		descrL->setMinimumWidth(50);
 
-		sliderWLaout->addWidget(slider, 0, 1);
-		sliderWLaout->addWidget(descrL, 1, 0, 1, 3);
+		QCheckBox *checkB = setSmallerFont(new QCheckBox);
+		connect(checkB, SIGNAL(clicked(bool)), this, SLOT(sliderChecked(bool)));
+		checkB->setProperty("sliderIdx", i);
+
+		slider->setProperty("label", QVariant::fromValue((void *)descrL));
+		slider->setProperty("checkbox", QVariant::fromValue((void *)checkB));
+
+		slider->setEnabled(value >= 0);
+
 		slidersLayout->addWidget(sliderW);
 
 		if (i == -1)
 		{
+			checkB->setText(tr("Auto"));
+			checkB->setChecked(!slider->isEnabled());
+
+			sliderWLaout->addWidget(checkB, 0, 0, 1, 3);
+
 			sliderW->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-			slider->setProperty("preamp", true);
 
 			descrL->setText(tr("Preamp") + descrL->text());
 
@@ -237,6 +249,11 @@ bool EqualizerGUI::set()
 		}
 		else
 		{
+			checkB->setChecked(slider->isEnabled());
+			checkB->setText(" ");
+
+			sliderWLaout->addWidget(checkB, 0, 1);
+
 			sliderW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 			if (freqs[i] < 1000.0f)
@@ -245,10 +262,16 @@ bool EqualizerGUI::set()
 				descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + " kHz" + descrL->text());
 		}
 
+		sliderWLaout->addWidget(slider, 1, 1);
+		sliderWLaout->addWidget(descrL, 2, 0, 1, 3);
+
 		sliders.append(slider);
 	}
 
 	slidersA->setWidget(slidersW);
+
+	if (!sliders.at(0)->isEnabled()) //auto preamp
+		autoPreamp();
 
 	loadPresets();
 
@@ -272,37 +295,61 @@ void EqualizerGUI::enabled(bool b)
 	sets().set("Equalizer", b);
 	setInstance<Equalizer>();
 }
+
 void EqualizerGUI::valueChanged(int v)
 {
 	if (QSlider *slider = qobject_cast<QSlider *>(sender()))
+		sliderValueChanged(slider->property("idx").toInt(), v);
+}
+void EqualizerGUI::sliderChecked(bool b)
+{
+	QCheckBox *checkB = (QCheckBox *)sender();
+
+	const int idx = checkB->property("sliderIdx").toInt();
+	const bool isPreamp = (idx == -1);
+
+	QSlider *slider = sliders.at(idx + 1);
+	slider->setEnabled(b != isPreamp);
+
+	if (!isPreamp)
+		sliderValueChanged(idx, slider->isEnabled() ? slider->value() : ~slider->value());
+	else
 	{
-		graph.setValue(slider->property("idx").toInt(), v / 100.0f);
-		sets().set("Equalizer/" + slider->property("idx").toString(), v);
-		QLabel *descrL = (QLabel *)slider->property("label").value<void *>();
-		QString text = descrL->text();
-		const int idx = text.indexOf('\n');
-		if (idx > -1)
+		if (b)
 		{
-			text.remove(idx + 1, text.length() - idx + 1);
-			text.append(Functions::dBStr(Equalizer::getAmpl(v)));
-			descrL->setText(text);
+			sets().set("Equalizer/-1", ~slider->value());
+			autoPreamp();
 		}
-		setInstance<Equalizer>();
+		else
+		{
+			const int value = sets().getInt("Equalizer/-1");
+			slider->setValue(~value);
+			sets().set("Equalizer/-1", slider->value());
+		}
 	}
 }
+
 void EqualizerGUI::setSliders()
 {
 	const QString objectName = sender()->objectName();
 	graph.hide();
 	foreach (QSlider *slider, sliders)
 	{
-		const bool isPreamp = slider->property("preamp").toBool();
+		const bool isPreamp = (sliders.at(0) == slider);
+
 		if (objectName == "maxB" && !isPreamp)
 			slider->setValue(slider->maximum());
 		else if (objectName == "resetB")
 			slider->setValue(slider->maximum() / 2);
 		else if (objectName == "minB" && !isPreamp)
 			slider->setValue(slider->minimum());
+
+		if (!isPreamp)
+		{
+			QCheckBox *checkB = getSliderCheckBox(slider);
+			if (!checkB->isChecked())
+				checkB->click();
+		}
 	}
 	graph.show();
 }
@@ -323,11 +370,11 @@ void EqualizerGUI::addPreset()
 		QMap<int, int> values;
 		foreach (QSlider *slider, sliders)
 		{
-			const bool isPreamp = slider->property("preamp").toBool();
+			const bool isPreamp = (sliders.at(0) == slider);
 			if (isPreamp)
 				values[-1] = slider->value();
 			else
-				values[slider->property("idx").toInt()] = slider->value();
+				values[slider->property("idx").toInt()] = (slider->isEnabled() ? slider->value() : ~slider->value());
 		}
 		QByteArray dataArr;
 		QDataStream stream(&dataArr, QIODevice::WriteOnly);
@@ -378,16 +425,67 @@ void EqualizerGUI::setPresetValues()
 		{
 			foreach (QSlider *slider, sliders)
 			{
-				const bool isPreamp = slider->property("preamp").toBool();
+				QCheckBox *checkB = getSliderCheckBox(slider);
+				const bool isPreamp = (sliders.at(0) == slider);
 				if (isPreamp)
+				{
+					if (checkB->isChecked()) //Disable preamp auto for presets
+						checkB->click();
 					slider->setValue(values.value(-1));
+				}
 				else
-					slider->setValue(values.value(slider->property("idx").toInt()));
+				{
+					if (!checkB->isChecked()) //Enable slider
+						checkB->click();
+					const int value = values.value(slider->property("idx").toInt());
+					slider->setValue((value < 0) ? ~value : value);
+					if (value < 0) //Disable slider if necessary
+						checkB->click();
+				}
 			}
 			if (!enabledB->isChecked())
 				enabledB->click();
 		}
 	}
+}
+
+inline QCheckBox *EqualizerGUI::getSliderCheckBox(QSlider *slider)
+{
+	return (QCheckBox *)slider->property("checkbox").value<void *>();
+}
+
+void EqualizerGUI::sliderValueChanged(int idx, int v)
+{
+	const bool isAuto = getSliderCheckBox(sliders.at(0))->isChecked();
+	QSlider *slider = sliders.at(idx + 1);
+
+	graph.setValue(idx, ((v < 0) ? -1 : v) / 100.0f);
+
+	if (!isAuto || idx >= 0)
+		sets().set(QString("Equalizer/%1").arg(idx), v);
+
+	if (idx > -1 && isAuto)
+		autoPreamp();
+
+	QLabel *descrL = (QLabel *)slider->property("label").value<void *>();
+	QString text = descrL->text();
+	const int nIdx = text.indexOf('\n');
+	text.remove(nIdx + 1, text.length() - nIdx + 1);
+	text.append(Functions::dBStr(Equalizer::getAmpl(v)));
+	descrL->setText(text);
+
+	setInstance<Equalizer>();
+}
+
+void EqualizerGUI::autoPreamp()
+{
+	int value = 0;
+	foreach (QSlider *slider, sliders)
+	{
+		if (sliders.at(0) != slider)
+			value = qMax(slider->isEnabled() ? slider->value() : 0, value);
+	}
+	sliders.at(0)->setValue(100 - value);
 }
 
 void EqualizerGUI::loadPresets()
@@ -428,6 +526,12 @@ void EqualizerGUI::loadPresets()
 	}
 
 	deletePresetMenu->setProperty("presetAct", QVariant());
+}
+
+void EqualizerGUI::showEvent(QShowEvent *event)
+{
+	autoCheckBoxSpacer->setMinimumHeight(getSliderCheckBox(sliders.at(0))->height());
+	QWidget::showEvent(event);
 }
 
 QMap<int, int> EqualizerGUI::getPresetValues(const QString &name)

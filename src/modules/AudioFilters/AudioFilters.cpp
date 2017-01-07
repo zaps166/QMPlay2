@@ -93,7 +93,10 @@ AudioFilters::AudioFilters() :
 	{
 		bool disableEQ = true;
 		for (int i = -1; i < count; ++i)
-			disableEQ &= getInt("Equalizer/" + QString::number(i)) == 50;
+		{
+			const int val = getInt(QString("Equalizer/%1").arg(i));
+			disableEQ &= (((val < 0 && i < 0) ? ~val : val) == 50);
+		}
 		if (disableEQ)
 			set("Equalizer", false);
 	}

@@ -68,6 +68,8 @@ QVector<float> Equalizer::freqs(Settings &sets)
 
 float Equalizer::getAmpl(int val)
 {
+	if (val < 0)
+		return 0.0f; //-inf
 	if (val == 50)
 		return 1.0f;
 	if (val > 50)
@@ -242,10 +244,24 @@ void Equalizer::alloc(bool b)
 void Equalizer::interpolateFilterCurve()
 {
 	const int size = sets().getInt("Equalizer/count");
-	preamp = getAmpl(sets().getInt("Equalizer/-1"));
+
 	QVector<float> src(size);
 	for (int i = 0; i < size; ++i)
-		src[i] = getAmpl(sets().getInt("Equalizer/" + QString::number(i)));
+		src[i] = getAmpl(sets().getInt(QString("Equalizer/%1").arg(i)));
+
+	int preampVal = sets().getInt("Equalizer/-1");
+	if (preampVal >= 0)
+		preamp = getAmpl(preampVal);
+	else //auto preamp
+	{
+		preampVal = 0;
+		for (int i = 0; i < size; ++i)
+		{
+			const int val = sets().getInt(QString("Equalizer/%1").arg(i));
+			preampVal = qMax(val < 0 ? 0 : val, preampVal);
+		}
+		preamp = getAmpl(100 - preampVal);
+	}
 
 	const int len = FFT_SIZE_2;
 	if (f.size() != len)

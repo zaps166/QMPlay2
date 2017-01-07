@@ -54,7 +54,10 @@ public:
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void enabled(bool);
+
 	void valueChanged(int);
+	void sliderChecked(bool);
+
 	void setSliders();
 
 	void addPreset();
@@ -66,7 +69,15 @@ private slots:
 
 	void setPresetValues();
 private:
+	inline QCheckBox *getSliderCheckBox(QSlider *slider);
+
+	void sliderValueChanged(int idx, int v);
+
+	void autoPreamp();
+
 	void loadPresets();
+
+	void showEvent(QShowEvent *event);
 
 	QMap<int, int> getPresetValues(const QString &name);
 
@@ -77,6 +88,7 @@ private:
 	QScrollArea *slidersA;
 
 	QMenu *presetsMenu, *deletePresetMenu;
+	QWidget *autoCheckBoxSpacer;
 	QList<QSlider *> sliders;
 };
 
