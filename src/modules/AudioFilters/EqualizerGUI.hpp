@@ -48,6 +48,8 @@ class EqualizerGUI : public QWidget, public QMPlay2Extensions
 public:
 	EqualizerGUI(Module &);
 
+	bool set();
+
 	DockWidget *getDockWidget();
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
@@ -64,8 +66,6 @@ private slots:
 
 	void setPresetValues();
 private:
-	bool set();
-
 	void loadPresets();
 
 	QMap<int, int> getPresetValues(const QString &name);

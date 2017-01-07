@@ -405,6 +405,7 @@ void ModuleSettingsWidget::defaultSettings()
 
 	bs2b();
 	saveSettings(); //For equalizer
+	SetInstance<EqualizerGUI>();
 	SetInstance<Equalizer>();
 	voiceRemovalToggle();
 	phaseReverse();

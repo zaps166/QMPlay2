@@ -170,6 +170,82 @@ EqualizerGUI::EqualizerGUI(Module &module)
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 }
 
+bool EqualizerGUI::set()
+{
+	sliders.clear();
+	delete slidersA->widget();
+
+	QWidget *slidersW = new QWidget;
+	slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+	QHBoxLayout *slidersLayout = new QHBoxLayout(slidersW);
+	slidersLayout->setMargin(0);
+
+	const QVector<float> freqs = Equalizer::freqs(sets());
+	graph.setValues(freqs.count());
+	for (int i = -1; i < freqs.count(); ++i)
+	{
+		QWidget *sliderW = new QWidget;
+
+		QGridLayout *sliderWLaout = new QGridLayout(sliderW);
+		sliderWLaout->setMargin(0);
+
+		QSlider *slider = new QSlider;
+		slider->setMaximum(100);
+		slider->setTickInterval(50);
+		slider->setProperty("idx", i);
+		slider->setTickPosition(QSlider::TicksBelow);
+		slider->setValue(sets().getInt("Equalizer/" + QString::number(i)));
+		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
+
+		graph.setValue(i, slider->value() / 100.0f);
+
+		QLabel *descrL = new QLabel("\n" + Functions::dBStr(slider->value() / 50.0));
+		descrL->setAlignment(Qt::AlignCenter);
+
+		QFont font = descrL->font();
+		font.setPointSize(qMax(6, font.pointSize() - 2));
+		descrL->setFont(font);
+
+		slider->setProperty("label", QVariant::fromValue((void *)descrL));
+
+		sliderWLaout->addWidget(slider, 0, 1);
+		sliderWLaout->addWidget(descrL, 1, 0, 1, 3);
+		slidersLayout->addWidget(sliderW);
+
+		if (i == -1)
+		{
+			sliderW->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+			slider->setProperty("preamp", true);
+
+			descrL->setText(tr("Preamp") + descrL->text());
+			descrL->setMinimumWidth(50);
+
+			QFrame *line = new QFrame;
+			line->setFrameShape(QFrame::VLine);
+			line->setFrameShadow(QFrame::Sunken);
+			slidersLayout->addWidget(line);
+		}
+		else
+		{
+			sliderW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+			if (freqs[i] < 1000.0f)
+				descrL->setText(QString::number(freqs[i], 'f', 0) + " Hz" + descrL->text());
+			else
+				descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + " kHz" + descrL->text());
+		}
+
+		sliders.append(slider);
+	}
+
+	slidersA->setWidget(slidersW);
+
+	loadPresets();
+
+	return true;
+}
+
 DockWidget *EqualizerGUI::getDockWidget()
 {
 	return dw;
@@ -305,82 +381,6 @@ void EqualizerGUI::setPresetValues()
 				enabledB->click();
 		}
 	}
-}
-
-bool EqualizerGUI::set()
-{
-	sliders.clear();
-	delete slidersA->widget();
-
-	QWidget *slidersW = new QWidget;
-	slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-	QHBoxLayout *slidersLayout = new QHBoxLayout(slidersW);
-	slidersLayout->setMargin(0);
-
-	const QVector<float> freqs = Equalizer::freqs(sets());
-	graph.setValues(freqs.count());
-	for (int i = -1; i < freqs.count(); ++i)
-	{
-		QWidget *sliderW = new QWidget;
-
-		QGridLayout *sliderWLaout = new QGridLayout(sliderW);
-		sliderWLaout->setMargin(0);
-
-		QSlider *slider = new QSlider;
-		slider->setMaximum(100);
-		slider->setTickInterval(50);
-		slider->setProperty("idx", i);
-		slider->setTickPosition(QSlider::TicksBelow);
-		slider->setValue(sets().getInt("Equalizer/" + QString::number(i)));
-		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
-
-		graph.setValue(i, slider->value() / 100.0f);
-
-		QLabel *descrL = new QLabel("\n" + Functions::dBStr(slider->value() / 50.0));
-		descrL->setAlignment(Qt::AlignCenter);
-
-		QFont font = descrL->font();
-		font.setPointSize(qMax(6, font.pointSize() - 2));
-		descrL->setFont(font);
-
-		slider->setProperty("label", QVariant::fromValue((void *)descrL));
-
-		sliderWLaout->addWidget(slider, 0, 1);
-		sliderWLaout->addWidget(descrL, 1, 0, 1, 3);
-		slidersLayout->addWidget(sliderW);
-
-		if (i == -1)
-		{
-			sliderW->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-			slider->setProperty("preamp", true);
-
-			descrL->setText(tr("Preamp") + descrL->text());
-			descrL->setMinimumWidth(50);
-
-			QFrame *line = new QFrame;
-			line->setFrameShape(QFrame::VLine);
-			line->setFrameShadow(QFrame::Sunken);
-			slidersLayout->addWidget(line);
-		}
-		else
-		{
-			sliderW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-			if (freqs[i] < 1000.0f)
-				descrL->setText(QString::number(freqs[i], 'f', 0) + " Hz" + descrL->text());
-			else
-				descrL->setText(QString::number(freqs[i] / 1000.0f, 'g', 2) + " kHz" + descrL->text());
-		}
-
-		sliders.append(slider);
-	}
-
-	slidersA->setWidget(slidersW);
-
-	loadPresets();
-
-	return true;
 }
 
 void EqualizerGUI::loadPresets()
