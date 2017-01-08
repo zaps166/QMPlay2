@@ -72,6 +72,7 @@ private:
 	inline QCheckBox *getSliderCheckBox(QSlider *slider);
 
 	void sliderValueChanged(int idx, int v);
+	void setSliderInfo(int idx, int v);
 
 	void autoPreamp();
 

@@ -215,9 +215,7 @@ bool EqualizerGUI::set()
 		slider->setValue((value < 0) ? ~value : value);
 		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 
-		graph.setValue(i, slider->value() / 100.0f);
-
-		QLabel *descrL = setSmallerFont(new QLabel("\n" + Functions::dBStr(Equalizer::getAmpl(slider->value()))));
+		QLabel *descrL = setSmallerFont(new QLabel("\n"));
 		descrL->setAlignment(Qt::AlignCenter);
 		descrL->setMinimumWidth(50);
 
@@ -268,6 +266,8 @@ bool EqualizerGUI::set()
 		sliderWLaout->addWidget(descrL, 2, 0, 1, 3);
 
 		sliders.append(slider);
+
+		setSliderInfo(i, value);
 	}
 
 	slidersA->setWidget(slidersW);
@@ -459,9 +459,6 @@ inline QCheckBox *EqualizerGUI::getSliderCheckBox(QSlider *slider)
 void EqualizerGUI::sliderValueChanged(int idx, int v)
 {
 	const bool isAuto = getSliderCheckBox(sliders.at(0))->isChecked();
-	QSlider *slider = sliders.at(idx + 1);
-
-	graph.setValue(idx, ((v < 0) ? -1 : v) / 100.0f);
 
 	if (!isAuto || idx >= 0)
 		sets().set(QString("Equalizer/%1").arg(idx), v);
@@ -469,14 +466,20 @@ void EqualizerGUI::sliderValueChanged(int idx, int v)
 	if (idx > -1 && isAuto)
 		autoPreamp();
 
-	QLabel *descrL = (QLabel *)slider->property("label").value<void *>();
+	setSliderInfo(idx, v);
+
+	setInstance<Equalizer>();
+}
+void EqualizerGUI::setSliderInfo(int idx, int v)
+{
+	QLabel *descrL = (QLabel *)sliders.at(idx + 1)->property("label").value<void *>();
 	QString text = descrL->text();
 	const int nIdx = text.indexOf('\n');
 	text.remove(nIdx + 1, text.length() - nIdx + 1);
 	text.append(Functions::dBStr(Equalizer::getAmpl(v)));
 	descrL->setText(text);
 
-	setInstance<Equalizer>();
+	graph.setValue(idx, ((v < 0) ? -1 : v) / 100.0f);
 }
 
 void EqualizerGUI::autoPreamp()
