@@ -6,7 +6,7 @@
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Не удалось открыть выходной аудио поток</translation>
+        <translation>Не удалось открыть поток вывода звука</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -385,22 +385,22 @@
     <name>Cuvid</name>
     <message>
         <source>Adaptive</source>
-        <translation type="unfinished"></translation>
+        <translation>Адаптивный</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Метод деинтерлейсинга</translation>
+        <translation>Метод деинтерлейсинга</translation>
     </message>
 </context>
 <context>
     <name>CuvidDec</name>
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть модуль OpenGL 2</translation>
     </message>
     <message>
         <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation type="unfinished"></translation>
+        <translation>Компиляция с FFmpeg 3.1 или выше требуется для поддержки H264 и HEVC!</translation>
     </message>
 </context>
 <context>
@@ -566,11 +566,11 @@
     </message>
     <message>
         <source>Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Программы</translation>
     </message>
     <message>
         <source>Program</source>
-        <translation type="unfinished"></translation>
+        <translation>Программа</translation>
     </message>
 </context>
 <context>
@@ -728,12 +728,12 @@
         <translation>Введите имя новой предустановки</translation>
     </message>
     <message>
-        <source>Preamp</source>
-        <translation>Предусиление</translation>
+        <source>Auto</source>
+        <translation>Авто</translation>
     </message>
     <message>
-        <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <source>Preamp</source>
+        <translation>Предварительный усилитель</translation>
     </message>
 </context>
 <context>
@@ -776,7 +776,7 @@
     <name>FreedesktopNotify</name>
     <message>
         <source>Error sending notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка отправки уведомления</translation>
     </message>
 </context>
 <context>
@@ -918,7 +918,7 @@
     </message>
     <message>
         <source>Selected Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбранный профиль</translation>
     </message>
 </context>
 <context>
@@ -960,11 +960,11 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation type="unfinished"></translation>
+        <translation>Черезстрочный</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Видимость</translation>
     </message>
 </context>
 <context>
@@ -1133,7 +1133,7 @@
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Максимальная продолжительность субтитров без указанной длины</translation>
+        <translation>Максимальное отображение субтитров без определенной продолжительности</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1491,15 +1491,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Allow to use PBO (if available)</source>
-        <translation type="unfinished"></translation>
+        <translation>Всегда использовать PBO (если доступно)</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Декодер включен</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копировать декодированное видео в память ЦП (не рекомендуется)</translation>
     </message>
     <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
@@ -1507,103 +1507,103 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копировать декодированное видео в память ЦП (не рекомендуется, очень медленно на Intel)</translation>
     </message>
     <message>
         <source>Use OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать OpenGL</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation type="unfinished"></translation>
+        <translation>Используйте CUVID только тогда, когда основным является NVIDIA GPU</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключено</translation>
     </message>
     <message>
         <source>Infinite</source>
-        <translation type="unfinished"></translation>
+        <translation>Неограниченное</translation>
     </message>
     <message>
         <source>Show notification when volume changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать уведомление изменения громкости</translation>
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать уведомление изменения носителя</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать уведомление изменения состояния воспроизведения</translation>
     </message>
     <message>
         <source>Use a custom message for media change notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать пользовательское уведомление для изменения носителя</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <source>Body</source>
-        <translation type="unfinished"></translation>
+        <translation>Тело</translation>
     </message>
     <message>
         <source>Notification type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип уведомления</translation>
     </message>
     <message>
         <source>Show a native desktop notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать экранное уведомление</translation>
     </message>
     <message>
         <source>Show a popup from the system tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать всплывающее окно в системном лотке</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation type="unfinished">Общие настройки</translation>
+        <translation>Общие настройки</translation>
     </message>
     <message>
         <source>Notification timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Тайм-аут уведомления</translation>
     </message>
     <message>
         <source>Peak limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ограничение пика</translation>
     </message>
     <message>
         <source>Release time</source>
-        <translation type="unfinished"></translation>
+        <translation>Время возврата</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Степень быстрого сжатия</translation>
     </message>
     <message>
         <source>Overall compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Общая степень сжатия</translation>
     </message>
     <message>
         <source>Dynamic range compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Сжатие динамического диапазона</translation>
     </message>
     <message>
         <source>Cut frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Предельная частота</translation>
     </message>
     <message>
         <source>Feed level</source>
-        <translation type="unfinished"></translation>
+        <translation>Уровень подачи</translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation type="unfinished">Эквалайзер</translation>
+        <translation>Эквалайзер</translation>
     </message>
     <message>
         <source>Default settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -1625,23 +1625,23 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Громкость: %1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Громкость изменена</translation>
     </message>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">Остановлено</translation>
+        <translation>Остановлено</translation>
     </message>
     <message>
         <source>Playing</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизводится</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">Приостановлено</translation>
+        <translation>Приостановлено</translation>
     </message>
 </context>
 <context>
@@ -1711,15 +1711,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Can&apos;t init textures for</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удается инициализировать текстуры для</translation>
     </message>
     <message>
         <source>error</source>
-        <translation type="unfinished"></translation>
+        <translation>ошибка</translation>
     </message>
     <message>
         <source>texture copy error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка копирования текстур</translation>
     </message>
 </context>
 <context>
@@ -1742,31 +1742,31 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Create new profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать новый профиль</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Профили</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Новый профиль</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Скопировать профиль</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>По &amp;умолчанию</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите имя нового профиля:</translation>
     </message>
 </context>
 <context>
@@ -2662,7 +2662,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">По умолчанию</translation>
+        <translation>По умолчанию</translation>
     </message>
 </context>
 <context>
