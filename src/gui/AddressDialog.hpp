@@ -21,8 +21,8 @@
 
 #include <AddressBox.hpp>
 
-#include <QCheckBox>
 #include <QCoreApplication>
+#include <QCheckBox>
 #include <QDialog>
 
 class AddressDialog : public QDialog
