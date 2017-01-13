@@ -227,14 +227,15 @@ bool EqualizerGUI::set()
 		slider->setProperty("label", QVariant::fromValue((void *)descrL));
 		slider->setProperty("checkbox", QVariant::fromValue((void *)checkB));
 
-		slider->setEnabled(value >= 0);
+		const bool sliderEnabled = (value >= 0);
+		slider->setEnabled(sliderEnabled);
 
 		slidersLayout->addWidget(sliderW);
 
 		if (i == -1)
 		{
 			checkB->setText(tr("Auto"));
-			checkB->setChecked(!slider->isEnabled());
+			checkB->setChecked(!sliderEnabled);
 
 			sliderWLaout->addWidget(checkB, 0, 0, 1, 3);
 
@@ -249,7 +250,7 @@ bool EqualizerGUI::set()
 		}
 		else
 		{
-			checkB->setChecked(slider->isEnabled());
+			checkB->setChecked(sliderEnabled);
 			checkB->setText(" ");
 
 			sliderWLaout->addWidget(checkB, 0, 1);
@@ -272,7 +273,7 @@ bool EqualizerGUI::set()
 
 	slidersA->setWidget(slidersW);
 
-	if (!sliders.at(0)->isEnabled()) //auto preamp
+	if (getSliderCheckBox(sliders.at(0))->isChecked()) //auto preamp
 		autoPreamp();
 
 	loadPresets();
@@ -314,7 +315,7 @@ void EqualizerGUI::sliderChecked(bool b)
 	slider->setEnabled(b != isPreamp);
 
 	if (!isPreamp)
-		sliderValueChanged(idx, slider->isEnabled() ? slider->value() : ~slider->value());
+		sliderValueChanged(idx, b ? slider->value() : ~slider->value());
 	else
 	{
 		if (b)
@@ -376,7 +377,7 @@ void EqualizerGUI::addPreset()
 			if (isPreamp)
 				values[-1] = slider->value();
 			else
-				values[slider->property("idx").toInt()] = (slider->isEnabled() ? slider->value() : ~slider->value());
+				values[slider->property("idx").toInt()] = (getSliderCheckBox(slider)->isChecked() ? slider->value() : ~slider->value());
 		}
 		QByteArray dataArr;
 		QDataStream stream(&dataArr, QIODevice::WriteOnly);
@@ -485,10 +486,10 @@ void EqualizerGUI::setSliderInfo(int idx, int v)
 void EqualizerGUI::autoPreamp()
 {
 	int value = 0;
-	foreach (QSlider *slider, sliders)
+	for (int i = 1; i < sliders.count(); ++i)
 	{
-		if (sliders.at(0) != slider)
-			value = qMax(slider->isEnabled() ? slider->value() : 0, value);
+		QSlider *slider = sliders.at(i);
+		value = qMax(getSliderCheckBox(slider)->isChecked() ? slider->value() : 0, value);
 	}
 	sliders.at(0)->setValue(100 - value);
 }
