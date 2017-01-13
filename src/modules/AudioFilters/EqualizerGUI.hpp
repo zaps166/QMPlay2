@@ -91,6 +91,8 @@ private:
 	QMenu *presetsMenu, *deletePresetMenu;
 	QWidget *autoCheckBoxSpacer;
 	QList<QSlider *> sliders;
+
+	bool canUpdateEqualizer;
 };
 
 #define EqualizerGUIName "Audio Equalizer Graphical Interface"

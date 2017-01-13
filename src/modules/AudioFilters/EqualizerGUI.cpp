@@ -82,7 +82,8 @@ void GraphW::paintEvent(QPaintEvent *)
 
 /**/
 
-EqualizerGUI::EqualizerGUI(Module &module)
+EqualizerGUI::EqualizerGUI(Module &module) :
+	canUpdateEqualizer(true)
 {
 	dw = new DockWidget;
 	dw->setObjectName(EqualizerGUIName);
@@ -274,7 +275,11 @@ bool EqualizerGUI::set()
 	slidersA->setWidget(slidersW);
 
 	if (getSliderCheckBox(sliders.at(0))->isChecked()) //auto preamp
+	{
+		canUpdateEqualizer = false;
 		autoPreamp();
+		canUpdateEqualizer = true;
+	}
 
 	loadPresets();
 
@@ -460,16 +465,23 @@ inline QCheckBox *EqualizerGUI::getSliderCheckBox(QSlider *slider)
 void EqualizerGUI::sliderValueChanged(int idx, int v)
 {
 	const bool isAuto = getSliderCheckBox(sliders.at(0))->isChecked();
+	bool canUpdateEqualizerNow = canUpdateEqualizer;
 
 	if (!isAuto || idx >= 0)
 		sets().set(QString("Equalizer/%1").arg(idx), v);
 
 	if (idx > -1 && isAuto)
+	{
+		const int preampValue = sliders.at(0)->value();
 		autoPreamp();
+		if (canUpdateEqualizerNow && sliders.at(0)->value() != preampValue)
+			canUpdateEqualizerNow = false; //Don't update equalizer instance now, because it will be updated from preamp slider.
+	}
 
 	setSliderInfo(idx, v);
 
-	setInstance<Equalizer>();
+	if (canUpdateEqualizerNow)
+		setInstance<Equalizer>();
 }
 void EqualizerGUI::setSliderInfo(int idx, int v)
 {
