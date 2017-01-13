@@ -430,7 +430,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 			if (!firstItem)
 				firstItem = currentItem;
 		}
-		if (entry.selected)
+		if (entry.flags & Playlist::Entry::FlagSelected)
 			firstItem = entry.GID ? groupList.last() : currentItem;
 	}
 	return firstItem;
@@ -660,8 +660,18 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	setEntryIcon(img, tWI);
 
 	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
+	if (entry.flags & (Playlist::Entry::FlagSkip | Playlist::Entry::FlagStopAfter))
+	{
+		QFont font = tWI->font(0);
+		if (entry.flags & Playlist::Entry::FlagSkip)
+			font.setStrikeOut(true);
+		if (entry.flags & Playlist::Entry::FlagStopAfter)
+			font.setItalic(true);
+		tWI->setFont(0, font);
+	}
 	tWI->setText(0, entry.name);
 	tWI->setData(0, Qt::UserRole, entry.url);
+	tWI->setData(0, Qt::UserRole + 1, entry.flags & (Playlist::Entry::FlagSkip | Playlist::Entry::FlagStopAfter)); //store only those flags
 	tWI->setText(2, Functions::timeToStr(entry.length));
 	tWI->setData(2, Qt::UserRole, entry.length);
 

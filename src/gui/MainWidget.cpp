@@ -702,6 +702,8 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playlist->expandAll, SIGNAL(triggered()), playlistDock, SLOT(expandAll()));
 	connect(menuBar->playlist->goToPlayback, SIGNAL(triggered()), playlistDock, SLOT(goToPlayback()));
 	connect(menuBar->playlist->queue, SIGNAL(triggered()), playlistDock, SLOT(queue()));
+	connect(menuBar->playlist->skip, SIGNAL(triggered()), playlistDock, SLOT(skip()));
+	connect(menuBar->playlist->stopAfter, SIGNAL(triggered()), playlistDock, SLOT(stopAfter()));
 	connect(menuBar->playlist->entryProperties, SIGNAL(triggered()), playlistDock, SLOT(entryProperties()));
 
 	connect(menuBar->player->togglePlay, SIGNAL(triggered()), this, SLOT(togglePlay()));

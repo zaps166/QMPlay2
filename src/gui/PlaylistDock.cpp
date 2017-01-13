@@ -111,7 +111,9 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 		entry.name = tWI->text(0);
 		if (tWI->parent())
 			entry.parent = parents.indexOf(tWI->parent()) + 1;
-		entry.selected = tWI == list->currentItem();
+		if (tWI == list->currentItem())
+			entry.flags |= Playlist::Entry::FlagSelected;
+		entry.flags |= tWI->data(0, Qt::UserRole + 1).toInt(); //skip & stopAfter flags
 		entries += entry;
 	}
 	return Playlist::write(entries, url);
@@ -136,7 +138,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
 {
 	if (_url.isEmpty())
 		return;
-	/* Jeżeli wpis istnieje, znajdzie go i zacznie odtwarzać */
+	/* If the entry exists, find and play it */
 	const QList<QTreeWidgetItem *> items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
 
 	QString url = Functions::Url(_url);
@@ -210,7 +212,7 @@ void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
 
 	lastPlaying = tWI;
 
-	//Jeżeli jest w kolejce, usuń z kolejki
+	//If in queue, remove from queue
 	int idx = list->queue.indexOf(tWI);
 	if (idx >= 0)
 	{
@@ -237,6 +239,15 @@ void PlaylistDock::stopLoading()
 void PlaylistDock::next(bool playingError)
 {
 	QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
+	if (lastPlaying->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::FlagStopAfter)
+	{
+		QFont font = lastPlaying->font(0);
+		font.setItalic(false);
+		lastPlaying->setFont(0, font);
+		lastPlaying->setData(0, Qt::UserRole + 1, lastPlaying->data(0, Qt::UserRole + 1).toInt() &~ Playlist::Entry::FlagStopAfter);
+		emit stop();
+		return;
+	}
 	if (!l.contains(lastPlaying))
 		lastPlaying = NULL;
 	QTreeWidgetItem *tWI = NULL;
@@ -272,7 +283,7 @@ void PlaylistDock::next(bool playingError)
 		else
 		{
 			const bool canRepeat = sender() ? !qstrcmp(sender()->metaObject()->className(), "PlayClass") : false;
-			if (canRepeat && repeatMode == RepeatEntry) //zapętlenie utworu
+			if (canRepeat && repeatMode == RepeatEntry) //loop track
 				tWI = lastPlaying ? lastPlaying : list->currentItem();
 			else
 			{
@@ -285,30 +296,32 @@ void PlaylistDock::next(bool playingError)
 					for (;;)
 					{
 						tWI = list->itemBelow(tWI);
-						if (canRepeat && repeatMode == RepeatGroup && P && (!tWI || tWI->parent() != P)) //zapętlenie grupy
+						if (canRepeat && repeatMode == RepeatGroup && P && (!tWI || tWI->parent() != P)) //loop group
 						{
 							const QList<QTreeWidgetItem *> l2 = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P);
 							if (!l2.isEmpty())
 								tWI = l2[0];
 							break;
 						}
-						if (PlaylistWidget::isGroup(tWI)) //grupa
+						if (PlaylistWidget::isGroup(tWI)) //group
 						{
 							if (!tWI->isExpanded())
 								tWI->setExpanded(true);
 							continue;
 						}
+						if (tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::FlagSkip) //skip item
+							continue;
 						break;
 					}
 				}
 				else
 					tWI = list->queue.first();
-				if (canRepeat && (repeatMode == RepeatList || repeatMode == RepeatGroup) && !tWI && !l.isEmpty()) //zapętlenie listy
+				if (canRepeat && (repeatMode == RepeatList || repeatMode == RepeatGroup) && !tWI && !l.isEmpty()) //loop list
 					tWI = l.at(0);
 			}
 		}
 	}
-	if (playingError && tWI == list->currentItem()) //nie ponawiaj odtwarzania tego samego utworu, jeżeli wystąpił błąd przy jego odtwarzaniu
+	if (playingError && tWI == list->currentItem()) //don't play the same song if playback error occurred
 	{
 		if (isRandomPlayback())
 			randomPlayedItems.append(tWI);
@@ -337,6 +350,34 @@ void PlaylistDock::prev()
 			break;
 	}
 	itemDoubleClicked(tWI);
+}
+void PlaylistDock::skip()
+{
+	foreach (QTreeWidgetItem *tWI, list->selectedItems())
+	{
+		if (!list->isGroup(tWI))
+		{
+			int flags = tWI->data(0, Qt::UserRole + 1).toInt();
+			tWI->setData(0, Qt::UserRole + 1, flags ^ Playlist::Entry::FlagSkip); // invert skip bit
+			QFont font = tWI->font(0);
+			font.setStrikeOut(!(flags & Playlist::Entry::FlagSkip));
+			tWI->setFont(0, font);
+		}
+	}
+}
+void PlaylistDock::stopAfter()
+{
+	foreach (QTreeWidgetItem *tWI, list->selectedItems())
+	{
+		if (!list->isGroup(tWI))
+		{
+			int flags = tWI->data(0, Qt::UserRole + 1).toInt();
+			tWI->setData(0, Qt::UserRole + 1, flags ^ Playlist::Entry::FlagStopAfter); // invert stopAfter bit
+			QFont font = tWI->font(0);
+			font.setItalic(!(flags & Playlist::Entry::FlagStopAfter));
+			tWI->setFont(0, font);
+		}
+	}
 }
 void PlaylistDock::start()
 {

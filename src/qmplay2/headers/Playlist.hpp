@@ -30,16 +30,21 @@ public:
 	class Entry
 	{
 	public:
+		enum Flags
+		{
+			FlagSelected = 0x1,
+			FlagSkip = 0x2,
+			FlagStopAfter = 0x4
+		};
+
 		inline Entry() :
 			length(-1.0),
-			selected(false),
-			queue(0), GID(0), parent(0)
+			flags(0), queue(0), GID(0), parent(0)
 		{}
 
 		QString name, url;
 		double length;
-		bool selected;
-		qint32 queue, GID, parent;
+		qint32 flags, queue, GID, parent;
 	};
 	typedef QVector<Entry> Entries;
 
