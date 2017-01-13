@@ -1006,20 +1006,23 @@ void PlaylistWidget::modifyMenu()
 		entryLength = currentItem()->data(2, Qt::UserRole).toDouble();
 	}
 
-	playlistMenu()->saveGroup->setVisible(currentItem() && isGroup(currentItem()));
-	playlistMenu()->sync->setVisible(currentItem() && isGroup(currentItem()) && !entryUrl.isEmpty());
-	playlistMenu()->renameGroup->setVisible(currentItem() && isGroup(currentItem()));
-	playlistMenu()->entryProperties->setVisible(currentItem());
-	playlistMenu()->queue->setVisible(currentItem());
+	QTreeWidgetItem *currItem = currentItem();
+	bool isItemGroup = isGroup(currItem);
+	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->sync->setVisible(currItem && isItemGroup && !entryUrl.isEmpty());
+	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->entryProperties->setVisible(currItem);
+	playlistMenu()->queue->setVisible(currItem);
 	playlistMenu()->goToPlayback->setVisible(currentPlaying);
 	playlistMenu()->copy->setVisible(selectedItems().count());
 
 	playlistMenu()->extensions->clear();
+	QString addressPrefixName, url, param;
+	bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
 	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
 	{
-		QString addressPrefixName, url, param;
 		QAction *act;
-		if (Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param))
+		if (splitFlag)
 			act = QMPlay2Ext->getAction(entryName, entryLength, url, addressPrefixName, param);
 		else
 			act = QMPlay2Ext->getAction(entryName, entryLength, entryUrl);

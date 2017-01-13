@@ -19,6 +19,7 @@
 #include <QMPlay2Extensions.hpp>
 #include <VisWidget.hpp>
 
+#include <QCoreApplication>
 #include <QLinearGradient>
 
 class SimpleVis;
@@ -26,7 +27,8 @@ class SimpleVis;
 class SimpleVisW : public VisWidget
 {
 	friend class SimpleVis;
-	Q_OBJECT
+
+	Q_DECLARE_TR_FUNCTIONS(SimpleVisW)
 public:
 	SimpleVisW(SimpleVis &);
 private:

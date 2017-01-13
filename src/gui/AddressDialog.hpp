@@ -21,12 +21,13 @@
 
 #include <AddressBox.hpp>
 
+#include <QCoreApplication>
 #include <QCheckBox>
 #include <QDialog>
 
 class AddressDialog : public QDialog
 {
-	Q_OBJECT
+	Q_DECLARE_TR_FUNCTIONS(AddressDialog)
 public:
 	AddressDialog(QWidget *);
 	~AddressDialog();

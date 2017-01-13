@@ -52,7 +52,6 @@ public:
 
 	static Entries read(const QString &url, QString *name = NULL);
 	static bool write(const Entries &list, const QString &url, QString *name = NULL);
-	static QString name(const QString &url);
 	static QStringList extensions();
 
 	virtual Entries read() = 0;

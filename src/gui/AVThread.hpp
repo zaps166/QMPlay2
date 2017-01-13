@@ -19,6 +19,7 @@
 #ifndef AVTHREAD_HPP
 #define AVTHREAD_HPP
 
+#include <QCoreApplication>
 #include <QStringList>
 #include <QThread>
 #include <QMutex>
@@ -29,7 +30,7 @@ class Writer;
 
 class AVThread : public QThread
 {
-	Q_OBJECT
+	Q_DECLARE_TR_FUNCTIONS(AVThread)
 public:
 	void destroyDec();
 	inline void setDec(Decoder *_dec)

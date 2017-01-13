@@ -33,12 +33,10 @@ Playlist::Entries M3U::read()
 	else
 		playlistPath.clear();
 
-	QList<QByteArray> playlistLines = readLines();
 	bool hasExtinf = false;
 	QString extinf[2];
-	while (!playlistLines.isEmpty())
+	foreach (const QByteArray &line, readLines())
 	{
-		const QByteArray line = playlistLines.takeFirst();
 		if (line.simplified().isEmpty())
 			continue;
 		if (line.startsWith("#EXTINF:"))
