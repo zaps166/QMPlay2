@@ -477,10 +477,10 @@ void EqualizerGUI::setSliderInfo(int idx, int v)
 	QString text = descrL->text();
 	const int nIdx = text.indexOf('\n');
 	text.remove(nIdx + 1, text.length() - nIdx + 1);
-	text.append(Functions::dBStr(Equalizer::getAmpl(v)));
+	text.append(Functions::dBStr(Equalizer::getAmpl((v < 0 && idx == -1) ? ~v : v)));
 	descrL->setText(text);
 
-	graph.setValue(idx, ((v < 0) ? -1 : v) / 100.0f);
+	graph.setValue(idx, ((v < 0) ? (idx == -1 ? ~v : -1) : v) / 100.0f);
 }
 
 void EqualizerGUI::autoPreamp()
