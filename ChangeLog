@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 17.01.13:
+Changes in QMPlay2 build 17.01.14:
+	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
 	- equalizer improvements (presets must be set again),
 	- add Profiles (Zamarin Arthur),
 
