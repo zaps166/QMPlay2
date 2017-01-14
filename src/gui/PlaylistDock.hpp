@@ -75,6 +75,7 @@ public slots:
 	void prev();
 	void skip();
 	void stopAfter();
+	void toggleLock();
 	void start();
 	void clearCurrentPlaying();
 	void setCurrentPlaying();

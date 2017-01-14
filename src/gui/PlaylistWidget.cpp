@@ -401,7 +401,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 	QTreeWidgetItem *firstItem = NULL;
 	foreach (const Playlist::Entry &entry, entries)
 	{
-		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL;
+		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL, *createdItem = NULL;
 		const int idx = entry.parent - 1;
 		if (idx >= 0 && groupList.size() > idx)
 			tmpParent = groupList.at(idx);
@@ -410,7 +410,10 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		if (entry.GID)
 		{
 			if (sync != FILE_SYNC)
-				groupList += pLW.newGroup(entry.name, entry.url, tmpParent);
+			{
+				createdItem = pLW.newGroup(entry.name, entry.url, tmpParent);
+				groupList += createdItem;
+			}
 			else
 			{
 				 //Reuse current file group
@@ -420,7 +423,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		}
 		else
 		{
-			currentItem = pLW.newEntry(entry, tmpParent, demuxersInfo);
+			currentItem = createdItem = pLW.newEntry(entry, tmpParent, demuxersInfo);
 			if (entry.queue) //Rebuild queue
 			{
 				for (int j = pLW.queue.size(); j <= queueSize + entry.queue - 1; ++j)
@@ -430,6 +433,15 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 			if (!firstItem)
 				firstItem = currentItem;
 		}
+
+		if (createdItem)
+		{
+			const int entryAdditionalFlags = (entry.flags &~ Playlist::Entry::Selected);
+			if (entryAdditionalFlags)
+				PlaylistWidget::setEntryFont(createdItem, entryAdditionalFlags);
+			createdItem->setData(0, Qt::UserRole + 1, entryAdditionalFlags);
+		}
+
 		if (entry.flags & Playlist::Entry::Selected)
 			firstItem = entry.GID ? groupList.last() : currentItem;
 	}
@@ -660,12 +672,8 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	setEntryIcon(img, tWI);
 
 	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
-	const int entryAdditionalFlags = entry.flags & (Playlist::Entry::Skip | Playlist::Entry::StopAfter);
-	if (entryAdditionalFlags)
-		setEntryFont(tWI, entryAdditionalFlags);
 	tWI->setText(0, entry.name);
 	tWI->setData(0, Qt::UserRole, entry.url);
-	tWI->setData(0, Qt::UserRole + 1, entryAdditionalFlags);
 	tWI->setText(2, Functions::timeToStr(entry.length));
 	tWI->setData(2, Qt::UserRole, entry.length);
 
@@ -810,6 +818,7 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
 {
 	QFont font = tWI->font(0);
+	font.setBold(flags & Playlist::Entry::Locked);
 	font.setStrikeOut(flags & Playlist::Entry::Skip);
 	font.setItalic(flags & Playlist::Entry::StopAfter);
 	tWI->setFont(0, font);

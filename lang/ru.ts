@@ -2164,6 +2164,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>&amp;Stop after</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Lock</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

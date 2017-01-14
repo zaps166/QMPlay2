@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 17.01.14:
 	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
+	- add "Lock" flag for playlist entry - don't allow to remove it,
 	- equalizer improvements (presets must be set again),
 	- add "Skip" and "Stop after" flags for playlist,
 	- add Profiles (Zamarin Arthur),

@@ -113,7 +113,7 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 			entry.parent = parents.indexOf(tWI->parent()) + 1;
 		if (tWI == list->currentItem())
 			entry.flags |= Playlist::Entry::Selected;
-		entry.flags |= tWI->data(0, Qt::UserRole + 1).toInt(); //skip & stopAfter flags
+		entry.flags |= tWI->data(0, Qt::UserRole + 1).toInt(); //Additional flags
 		entries += entry;
 	}
 	return Playlist::write(entries, url);
@@ -383,6 +383,15 @@ void PlaylistDock::stopAfter()
 {
 	toggleEntryFlag(Playlist::Entry::StopAfter);
 }
+void PlaylistDock::toggleLock()
+{
+	foreach (QTreeWidgetItem *tWI, list->selectedItems())
+	{
+		const int entryFlags = tWI->data(0, Qt::UserRole + 1).toInt() ^ Playlist::Entry::Locked; //Toggle "Locked" flag
+		PlaylistWidget::setEntryFont(tWI, entryFlags);
+		tWI->setData(0, Qt::UserRole + 1, entryFlags);
+	}
+}
 void PlaylistDock::start()
 {
 	itemDoubleClicked(list->currentItem());
@@ -417,8 +426,11 @@ void PlaylistDock::delEntries()
 		list->setItemsResizeToContents(false);
 		foreach (QTreeWidgetItem *tWI, selectedItems)
 		{
-			randomPlayedItems.removeOne(tWI);
-			delete tWI;
+			if (!(tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Locked))
+			{
+				randomPlayedItems.removeOne(tWI);
+				delete tWI;
+			}
 		}
 		list->refresh();
 		if (list->currentItem())
@@ -441,8 +453,11 @@ void PlaylistDock::delNonGroupEntries()
 		list->setItemsResizeToContents(false);
 		foreach (QTreeWidgetItem *tWI, list->topLevelNonGroupsItems())
 		{
-			randomPlayedItems.removeOne(tWI);
-			delete tWI;
+			if (!(tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Locked))
+			{
+				randomPlayedItems.removeOne(tWI);
+				delete tWI;
+			}
 		}
 		list->refresh();
 		list->setItemsResizeToContents(true);

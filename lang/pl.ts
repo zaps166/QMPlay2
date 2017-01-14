@@ -2164,6 +2164,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>&amp;Stop after</source>
         <translation>Z&amp;atrzymaj po</translation>
     </message>
+    <message>
+        <source>&amp;Lock</source>
+        <translation>Za&amp;blokuj</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

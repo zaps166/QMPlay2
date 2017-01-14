@@ -126,6 +126,8 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
 	newAction(Playlist::tr("Save &list"), this, savePlist, false, QIcon(), false);
 	newAction(Playlist::tr("Save &group"), this, saveGroup, false, QIcon(), false);
 	addSeparator();
+	newAction(Player::tr("&Lock"), this, lock, false, QIcon(), false);
+	addSeparator();
 	newAction(Playlist::tr("&Remove selected entries"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
 	newAction(Playlist::tr("Remove entries &without groups"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
 	newAction(Playlist::tr("&Clear list"), this, clear, false, QMPlay2Core.getIconFromTheme("archive-remove"), false);
@@ -462,6 +464,7 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(playlist->queue, "KeyBindings/Playlist-queue", "Q");
 	shortcuts->appendAction(playlist->skip, "KeyBindings/Playlist-skip", "S");
 	shortcuts->appendAction(playlist->stopAfter, "KeyBindings/Playlist-stopAfter", "Alt+A");
+	shortcuts->appendAction(playlist->lock, "KeyBindings/Playlist-lock", "Ctrl+Shift+L");
 	shortcuts->appendAction(playlist->entryProperties, "KeyBindings/Playlist-entryProperties", "Alt+Return");
 
 	shortcuts->appendAction(playlist->add->file, "KeyBindings/Playlist-Add-file", "Ctrl+I");
