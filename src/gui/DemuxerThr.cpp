@@ -555,6 +555,9 @@ void DemuxerThr::emitBufferInfo(bool clearBackwards)
 
 void DemuxerThr::updateCoverAndPlaying()
 {
+	title.clear();
+	artist.clear();
+	album.clear();
 	foreach (const QMPlay2Tag &tag, demuxer->tags()) //wczytywanie tytułu, artysty i albumu
 	{
 		const QMPlay2Tags tagID = StreamInfo::getTag(tag.first);
