@@ -71,6 +71,8 @@ public slots:
 	void stopLoading();
 	void next(bool playingError = false);
 	void prev();
+	void skip();
+	void stopAfter();
 	void start();
 	void clearCurrentPlaying();
 	void setCurrentPlaying();

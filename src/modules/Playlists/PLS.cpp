@@ -108,7 +108,9 @@ Playlist::Entries PLS::read()
 		else if (key == "QMPlay_length")
 			entry.length = value.toDouble();
 		else if (key == "QMPlay_sel")
-			entry.selected = value.toInt();
+			entry.flags |= Entry::FlagSelected;
+		else if (key == "QMPlay_flags")
+			entry.flags = value.toInt();
 		else if (key == "QMPlay_queue")
 			entry.queue = value.toInt();
 		else if (key == "QMPlay_GID")
@@ -147,8 +149,8 @@ bool PLS::write(const Entries &list)
 			writer->write(QString("Length" + idx + "=" + QString::number((qint32)(entry.length + 0.5)) + "\r\n").toUtf8());
 			writer->write(QString("QMPlay_length" + idx + "=" + QString::number(entry.length, 'g', 13) + "\r\n").toUtf8());
 		}
-		if (entry.selected)
-			writer->write(QString("QMPlay_sel" + idx + "=" + QString::number(entry.selected) + "\r\n").toUtf8());
+		if (entry.flags)
+			writer->write(QString("QMPlay_flags" + idx + "=" + QString::number(entry.flags) + "\r\n").toUtf8());
 		if (entry.queue)
 			writer->write(QString("QMPlay_queue" + idx + "=" + QString::number(entry.queue) + "\r\n").toUtf8());
 		if (entry.GID)
