@@ -736,7 +736,6 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		seekByByteOffset = -1;
 #endif
 
-	isOneStreamOgg = name() == "ogg" && formatCtx->nb_streams == 1; //Workaround for some OGG network streams
 #ifdef QMPlay2_libavdevice
 	forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).
 #else
@@ -772,6 +771,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	}
 	if (streamsInfo.isEmpty())
 		return false;
+
+	isOneStreamOgg = (name() == "ogg" && streamsInfo.count() == 1); //Workaround for OGG network streams
 
 	if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->type == QMPLAY2_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
 		isStreamed = false; //Allow subtitles streams to be non-streamed if size is known
