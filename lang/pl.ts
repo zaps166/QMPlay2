@@ -2156,6 +2156,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Detach from receiving &amp;commands</source>
         <translation>Odłącz o&amp;d otrzymywania poleceń</translation>
     </message>
+    <message>
+        <source>&amp;Skip</source>
+        <translation>&amp;Pomiń</translation>
+    </message>
+    <message>
+        <source>&amp;Stop after</source>
+        <translation>Z&amp;atrzymaj po</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

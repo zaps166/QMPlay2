@@ -32,9 +32,9 @@ public:
 	public:
 		enum Flags
 		{
-			FlagSelected = 0x1,
-			FlagSkip = 0x2,
-			FlagStopAfter = 0x4
+			Selected = 0x1,
+			Skip = 0x2,
+			StopAfter = 0x4
 		};
 
 		inline Entry() :

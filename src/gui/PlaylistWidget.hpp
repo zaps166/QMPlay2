@@ -168,6 +168,8 @@ public:
 	{
 		return tWI ? (bool)(tWI->flags() & Qt::ItemIsDropEnabled) : false;
 	}
+
+	static void setEntryFont(QTreeWidgetItem *tWI, const int flags);
 private:
 	void setEntryIcon(const QImage &, QTreeWidgetItem *);
 

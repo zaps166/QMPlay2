@@ -2156,6 +2156,14 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Detach from receiving &amp;commands</source>
         <translation>Отсоединить от получения &amp;команд</translation>
     </message>
+    <message>
+        <source>&amp;Skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Stop after</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

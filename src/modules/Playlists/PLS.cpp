@@ -107,8 +107,8 @@ Playlist::Entries PLS::read()
 			entry.length = value.toInt();
 		else if (key == "QMPlay_length")
 			entry.length = value.toDouble();
-		else if (key == "QMPlay_sel")
-			entry.flags |= Entry::FlagSelected;
+		else if (key == "QMPlay_sel") //Obsolete
+			entry.flags |= Entry::Selected;
 		else if (key == "QMPlay_flags")
 			entry.flags = value.toInt();
 		else if (key == "QMPlay_queue")

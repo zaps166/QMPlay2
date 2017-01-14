@@ -52,6 +52,8 @@ public:
 private:
 	void expandTree(QTreeWidgetItem *);
 
+	void toggleEntryFlag(const int flag);
+
 	inline bool isRandomPlayback() const;
 
 	QWidget mainW;

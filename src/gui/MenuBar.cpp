@@ -155,8 +155,8 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
 	newAction(Playlist::tr("&Go to the playback"), this, goToPlayback, false, QIcon(), false);
 	addSeparator();
 	newAction(Playlist::tr("&Enqueue"), this, queue, false, QIcon(), false);
-	newAction(Player::tr("&Skip"), this, skip, true, QIcon(), false);
-	newAction(Player::tr("&Stop after this track"), this, stopAfter, true, QIcon(), false);
+	newAction(Player::tr("&Skip"), this, skip, false, QIcon(), false);
+	newAction(Player::tr("&Stop after"), this, stopAfter, false, QIcon(), false);
 	addSeparator();
 	newAction(Playlist::tr("&Properties"), this, entryProperties, false, QMPlay2Core.getIconFromTheme("document-properties"), false);
 }
@@ -460,8 +460,8 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(playlist->expandAll, "KeyBindings/Playlist-expandAll", "");
 	shortcuts->appendAction(playlist->goToPlayback, "KeyBindings/Playlist-goToPlayback", "Ctrl+P");
 	shortcuts->appendAction(playlist->queue, "KeyBindings/Playlist-queue", "Q");
-	shortcuts->appendAction(playlist->skip, "KeyBindings/Playlist-skip", "");
-	shortcuts->appendAction(playlist->stopAfter, "KeyBindings/Playlist-stopAfter", "");
+	shortcuts->appendAction(playlist->skip, "KeyBindings/Playlist-skip", "S");
+	shortcuts->appendAction(playlist->stopAfter, "KeyBindings/Playlist-stopAfter", "Alt+A");
 	shortcuts->appendAction(playlist->entryProperties, "KeyBindings/Playlist-entryProperties", "Alt+Return");
 
 	shortcuts->appendAction(playlist->add->file, "KeyBindings/Playlist-Add-file", "Ctrl+I");

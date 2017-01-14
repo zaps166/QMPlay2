@@ -430,7 +430,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 			if (!firstItem)
 				firstItem = currentItem;
 		}
-		if (entry.flags & Playlist::Entry::FlagSelected)
+		if (entry.flags & Playlist::Entry::Selected)
 			firstItem = entry.GID ? groupList.last() : currentItem;
 	}
 	return firstItem;
@@ -660,18 +660,12 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	setEntryIcon(img, tWI);
 
 	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
-	if (entry.flags & (Playlist::Entry::FlagSkip | Playlist::Entry::FlagStopAfter))
-	{
-		QFont font = tWI->font(0);
-		if (entry.flags & Playlist::Entry::FlagSkip)
-			font.setStrikeOut(true);
-		if (entry.flags & Playlist::Entry::FlagStopAfter)
-			font.setItalic(true);
-		tWI->setFont(0, font);
-	}
+	const int entryAdditionalFlags = entry.flags & (Playlist::Entry::Skip | Playlist::Entry::StopAfter);
+	if (entryAdditionalFlags)
+		setEntryFont(tWI, entryAdditionalFlags);
 	tWI->setText(0, entry.name);
 	tWI->setData(0, Qt::UserRole, entry.url);
-	tWI->setData(0, Qt::UserRole + 1, entry.flags & (Playlist::Entry::FlagSkip | Playlist::Entry::FlagStopAfter)); //store only those flags
+	tWI->setData(0, Qt::UserRole + 1, entryAdditionalFlags);
 	tWI->setText(2, Functions::timeToStr(entry.length));
 	tWI->setData(2, Qt::UserRole, entry.length);
 
@@ -811,6 +805,14 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 		else
 			groups.at(i)->setHidden(false);
 	}
+}
+
+void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
+{
+	QFont font = tWI->font(0);
+	font.setStrikeOut(flags & Playlist::Entry::Skip);
+	font.setItalic(flags & Playlist::Entry::StopAfter);
+	tWI->setFont(0, font);
 }
 
 void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
