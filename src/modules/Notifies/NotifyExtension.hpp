@@ -24,15 +24,20 @@ class NotifyService : public QObject
 {
 	Q_OBJECT
 public:
-	NotifyService(Notify *notify, Settings &settings);
+	NotifyService(Notify *notify, bool useImages, Settings &settings);
 	~NotifyService();
 private slots:
 	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
+	void coverDataFromMediaFile(const QByteArray &cover);
+	void coverFile(const QString &fileName);
+
 	void playStateChanged(const QString &playState);
 	void volumeChanged(double v);
 private:
 	Notify *m_notify;
+
 	QString m_summaryFormat, m_bodyFormat, m_lastPlayState;
+	QByteArray m_cover;
 };
 
 /**/

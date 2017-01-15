@@ -36,6 +36,7 @@ private slots:
 	void callFinished(QDBusPendingCallWatcher *watcher);
 private:
 	OrgFreedesktopNotificationsInterface *m_interface;
-	quint32 m_notificationId;
 	QDateTime m_lastNotificationTime;
+	quint32 m_notificationId;
+	bool m_notificationImg;
 };
