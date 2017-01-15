@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.01.14:
+Changes in QMPlay2 build 17.01.15:
 	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
 	- add "Lock" flag for playlist entry - don't allow to remove it,
 	- equalizer improvements (presets must be set again),
