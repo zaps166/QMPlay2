@@ -1034,10 +1034,13 @@ void PlaylistWidget::modifyMenu()
 
 	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
+	playlistMenu()->lock->setVisible(currItem);
 	playlistMenu()->sync->setVisible(currItem && isItemGroup && !entryUrl.isEmpty());
 	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
 	playlistMenu()->queue->setVisible(currItem);
+	playlistMenu()->skip->setVisible(currItem);
+	playlistMenu()->stopAfter->setVisible(currItem);
 	playlistMenu()->goToPlayback->setVisible(currentPlaying);
 	playlistMenu()->copy->setVisible(selectedItems().count());
 
