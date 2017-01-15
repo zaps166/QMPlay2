@@ -31,12 +31,11 @@ public:
 	FreedesktopNotify(qint32 timeout);
 	~FreedesktopNotify();
 
-	bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage());
+	bool showMessage(const QString &summary, const QString &message, const QImage &image);
 private slots:
 	void callFinished(QDBusPendingCallWatcher *watcher);
 private:
 	OrgFreedesktopNotificationsInterface *m_interface;
 	QDateTime m_lastNotificationTime;
 	quint32 m_notificationId;
-	bool m_notificationImg;
 };

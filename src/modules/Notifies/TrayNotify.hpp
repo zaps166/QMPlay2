@@ -22,5 +22,6 @@ class TrayNotify : public Notify
 {
 public:
 	TrayNotify(qint32 timeout);
-	bool showMessage(const QString &summary, const QString &message = QString(), const QString &icon = QString(), const QImage &image = QImage());
+
+	bool showMessage(const QString &summary, const QString &message, const QImage &image);
 };

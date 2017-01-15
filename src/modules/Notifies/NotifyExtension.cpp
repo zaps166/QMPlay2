@@ -94,7 +94,7 @@ void NotifyService::updatePlaying(bool play, const QString &title, const QString
 		coverImage = QImage::fromData(m_cover);
 		m_cover.clear();
 	}
-	m_notify->showMessage(summary, body, QString(), coverImage);
+	m_notify->showMessage(summary, body, coverImage);
 }
 void NotifyService::coverDataFromMediaFile(const QByteArray &cover)
 {

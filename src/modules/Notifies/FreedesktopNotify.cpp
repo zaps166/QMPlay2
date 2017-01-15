@@ -61,8 +61,7 @@ const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &image)
 FreedesktopNotify::FreedesktopNotify(qint32 timeout) :
 	Notify(timeout),
 	m_interface(new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus())),
-	m_notificationId(0),
-	m_notificationImg(false)
+	m_notificationId(0)
 {
 	static const int metaTypeId = qDBusRegisterMetaType<QImage>();
 	Q_UNUSED(metaTypeId);
@@ -72,16 +71,19 @@ FreedesktopNotify::~FreedesktopNotify()
 	delete m_interface;
 }
 
-bool FreedesktopNotify::showMessage(const QString &summary, const QString &message, const QString &icon, const QImage &image)
+bool FreedesktopNotify::showMessage(const QString &summary, const QString &message, const QImage &image)
 {
 	QVariantMap hints;
 
 	//"image_data" is deprecated, "image-data" should be used for version >= 1.2
 
 	if (!image.isNull())
-	{
 		hints["image_data"] = image;
-		m_notificationImg = true;
+	else if (QIcon::fromTheme("QMPlay2").isNull())
+	{
+		// Set QMPlay2 icon explicitly when it can't be found in system icons.
+		// Otherwise it will be set by the Freedesktop notifications automatically.
+		hints["image_data"] = QMPlay2Core.getQMPlay2Pixmap().toImage();
 	}
 
 	int id = 0;
@@ -91,20 +93,10 @@ bool FreedesktopNotify::showMessage(const QString &summary, const QString &messa
 		// reuse the popup is because the notification daemon on KDE4 won't re-show
 		// the bubble if it's already gone to the tray.
 		id = m_notificationId;
-
-		if (m_notificationImg && image.isNull())
-		{
-			// Discard the image from the previous message.
-			QImage image(1, 1, QImage::Format_ARGB32);
-			image.fill(Qt::transparent);
-			hints["image_data"] = image;
-			m_notificationImg = false;
-		}
-
 		m_notificationId = 0;
 	}
 
-	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, icon, summary, message, QStringList(), hints, m_timeout);
+	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, "QMPlay2", summary, message, QStringList(), hints, m_timeout);
 	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)), SLOT(callFinished(QDBusPendingCallWatcher *)));
 	return true;

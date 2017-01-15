@@ -27,8 +27,10 @@
 TrayNotify::TrayNotify(qint32 timeout) :
 	Notify(timeout)
 {}
-bool TrayNotify::showMessage(const QString &summary, const QString &message, const QString &, const QImage &)
+bool TrayNotify::showMessage(const QString &summary, const QString &message, const QImage &image)
 {
+	Q_UNUSED(image)
+
 	QSystemTrayIcon *tray = QMPlay2Core.systemTray;
 	if (!tray || !QSystemTrayIcon::supportsMessages())
 		return false;
