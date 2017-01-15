@@ -2164,10 +2164,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>&amp;Stop after</source>
         <translation>Z&amp;atrzymaj po</translation>
     </message>
-    <message>
-        <source>&amp;Lock</source>
-        <translation>Za&amp;blokuj</translation>
-    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -2277,6 +2273,17 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Czy na pewno chcesz usunąć niepogrupowane wpisy?</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistWidget</name>
+    <message>
+        <source>Un&amp;lock</source>
+        <translation>Od&amp;blokuj</translation>
+    </message>
+    <message>
+        <source>&amp;Lock</source>
+        <translation>Za&amp;blokuj</translation>
     </message>
 </context>
 <context>

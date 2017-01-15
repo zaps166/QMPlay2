@@ -391,6 +391,7 @@ void PlaylistDock::toggleLock()
 		PlaylistWidget::setEntryFont(tWI, entryFlags);
 		tWI->setData(0, Qt::UserRole + 1, entryFlags);
 	}
+	list->modifyMenu();
 }
 void PlaylistDock::start()
 {

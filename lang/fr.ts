@@ -2163,10 +2163,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>&amp;Stop after</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>&amp;Lock</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -2276,6 +2272,17 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Êtes vous sûr de vouloir effacer les entrées non groupées?</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistWidget</name>
+    <message>
+        <source>Un&amp;lock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Lock</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

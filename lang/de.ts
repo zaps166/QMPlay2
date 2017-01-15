@@ -2164,10 +2164,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>&amp;Stop after</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>&amp;Lock</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -2277,6 +2273,17 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Are you sure you want to delete not grouped entries?</source>
         <translation>Sind Sie sicher das Sie nicht gruppierte Einträge löschen wollen?</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistWidget</name>
+    <message>
+        <source>Un&amp;lock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Lock</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1028,8 +1028,12 @@ void PlaylistWidget::modifyMenu()
 	}
 
 	QTreeWidgetItem *currItem = currentItem();
-	bool isItemGroup = isGroup(currItem);
+
+	const bool isLocked = currItem ? (currItem->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Locked) : false;
+	const bool isItemGroup = isGroup(currItem);
+
 	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
 	playlistMenu()->sync->setVisible(currItem && isItemGroup && !entryUrl.isEmpty());
 	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
