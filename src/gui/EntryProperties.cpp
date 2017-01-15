@@ -181,7 +181,7 @@ void EntryProperties::accept()
 					nameE->setText(Functions::fileName(newPth));
 				const QString newPthWithScheme = (pthInfo.isFile() ? "file://" : "") + newPth;
 				if (!pthInfo.isDir() && (nameE->text() != tWI->text(0) || newPthWithScheme == tWI->data(0, Qt::UserRole).toString()))
-					tWI->setData(0, Qt::UserRole + 1, true); //Don't allow to change the group name automatically
+					tWI->setData(0, Qt::UserRole + 2, true); //Don't allow to change the group name automatically
 				tWI->setData(0, Qt::UserRole, newPthWithScheme);
 				tWI->setIcon(0, *QMPlay2GUI.folderIcon);
 				sync = true;
