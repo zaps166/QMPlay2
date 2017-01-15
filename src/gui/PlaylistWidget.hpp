@@ -168,6 +168,10 @@ public:
 	{
 		return tWI ? (bool)(tWI->flags() & Qt::ItemIsDropEnabled) : false;
 	}
+	static inline int getFlags(QTreeWidgetItem *tWI)
+	{
+		return tWI ? tWI->data(0, Qt::UserRole + 1).toInt() : 0;
+	}
 
 	static void setEntryFont(QTreeWidgetItem *tWI, const int flags);
 private:

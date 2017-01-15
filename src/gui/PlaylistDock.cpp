@@ -113,7 +113,7 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 			entry.parent = parents.indexOf(tWI->parent()) + 1;
 		if (tWI == list->currentItem())
 			entry.flags |= Playlist::Entry::Selected;
-		entry.flags |= tWI->data(0, Qt::UserRole + 1).toInt(); //Additional flags
+		entry.flags |= PlaylistWidget::getFlags(tWI); //Additional flags
 		entries += entry;
 	}
 	return Playlist::write(entries, url);
@@ -196,7 +196,7 @@ void PlaylistDock::toggleEntryFlag(const int flag)
 	{
 		if (!list->isGroup(tWI))
 		{
-			const int entryFlags = tWI->data(0, Qt::UserRole + 1).toInt() ^ flag; //Toggle flag
+			const int entryFlags = PlaylistWidget::getFlags(tWI) ^ flag; //Toggle flag
 			PlaylistWidget::setEntryFont(tWI, entryFlags);
 			tWI->setData(0, Qt::UserRole + 1, entryFlags);
 		}
@@ -277,7 +277,7 @@ void PlaylistDock::next(bool playingError)
 				else do
 				{
 					tWI = l.at(qrand() % l.count());
-					if (tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Skip)
+					if (PlaylistWidget::getFlags(tWI) & Playlist::Entry::Skip)
 					{
 						//Don't play skipped item.
 						if (!randomPlayedItems.contains(tWI))
@@ -294,7 +294,7 @@ void PlaylistDock::next(bool playingError)
 		}
 		else
 		{
-			int entryFlags = lastPlaying ? lastPlaying->data(0, Qt::UserRole + 1).toInt() : 0;
+			int entryFlags = PlaylistWidget::getFlags(lastPlaying);
 			if (entryFlags & Playlist::Entry::StopAfter)
 			{
 				//Remove "StopAfter" flag and stop playback.
@@ -332,7 +332,7 @@ void PlaylistDock::next(bool playingError)
 									tWI->setExpanded(true);
 								continue;
 							}
-							if (tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Skip) //skip item
+							if (PlaylistWidget::getFlags(tWI) & Playlist::Entry::Skip) //skip item
 								continue;
 							break;
 						}
@@ -387,7 +387,7 @@ void PlaylistDock::toggleLock()
 {
 	foreach (QTreeWidgetItem *tWI, list->selectedItems())
 	{
-		const int entryFlags = tWI->data(0, Qt::UserRole + 1).toInt() ^ Playlist::Entry::Locked; //Toggle "Locked" flag
+		const int entryFlags = PlaylistWidget::getFlags(tWI) ^ Playlist::Entry::Locked; //Toggle "Locked" flag
 		PlaylistWidget::setEntryFont(tWI, entryFlags);
 		tWI->setData(0, Qt::UserRole + 1, entryFlags);
 	}
@@ -427,7 +427,7 @@ void PlaylistDock::delEntries()
 		list->setItemsResizeToContents(false);
 		foreach (QTreeWidgetItem *tWI, selectedItems)
 		{
-			if (!(tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Locked))
+			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
 			{
 				randomPlayedItems.removeOne(tWI);
 				delete tWI;
@@ -454,7 +454,7 @@ void PlaylistDock::delNonGroupEntries()
 		list->setItemsResizeToContents(false);
 		foreach (QTreeWidgetItem *tWI, list->topLevelNonGroupsItems())
 		{
-			if (!(tWI->data(0, Qt::UserRole + 1).toInt() & Playlist::Entry::Locked))
+			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
 			{
 				randomPlayedItems.removeOne(tWI);
 				delete tWI;
