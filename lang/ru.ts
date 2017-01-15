@@ -733,7 +733,7 @@
     </message>
     <message>
         <source>Preamp</source>
-        <translation>Предварительный усилитель</translation>
+        <translation>Предусилитель</translation>
     </message>
 </context>
 <context>
