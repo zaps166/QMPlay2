@@ -2246,6 +2246,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>&amp;Synchronize group</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Quick group synchronization</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>

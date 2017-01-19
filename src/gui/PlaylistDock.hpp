@@ -56,6 +56,8 @@ private:
 
 	inline bool isRandomPlayback() const;
 
+	void doGroupSync(bool quick);
+
 	QWidget mainW;
 	PlaylistWidget *list;
 	QLabel *statusL;
@@ -99,6 +101,7 @@ public slots:
 	void findNext();
 	void visibleItemsCount(int);
 	void syncCurrentFolder();
+	void quickSyncCurrentFolder();
 	void repeat();
 	void updateCurrentEntry(const QString &, double);
 signals:

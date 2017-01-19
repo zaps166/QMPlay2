@@ -2247,6 +2247,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>&amp;Synchronize group</source>
         <translation>&amp;synchronisiere Gruppe </translation>
     </message>
+    <message>
+        <source>&amp;Quick group synchronization</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>

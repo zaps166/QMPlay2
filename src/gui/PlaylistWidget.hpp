@@ -127,7 +127,8 @@ public:
 
 	bool add(const QStringList &, QTreeWidgetItem *par, bool loadList = false);
 	bool add(const QStringList &, bool atEndOfList = false);
-	void sync(const QString &, QTreeWidgetItem *, bool);
+	void sync(const QString &pth, QTreeWidgetItem *par, bool notDir);
+	void quickSync(const QString &pth, QTreeWidgetItem *par);
 
 	void setCurrentPlaying(QTreeWidgetItem *tWI);
 
@@ -176,6 +177,8 @@ public:
 	static void setEntryFont(QTreeWidgetItem *tWI, const int flags);
 private:
 	void setEntryIcon(const QImage &, QTreeWidgetItem *);
+
+	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
 
 	void mouseMoveEvent(QMouseEvent *);
 	void dragEnterEvent(QDragEnterEvent *);

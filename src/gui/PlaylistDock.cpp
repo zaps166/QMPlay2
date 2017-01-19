@@ -208,6 +208,38 @@ inline bool PlaylistDock::isRandomPlayback() const
 	return (repeatMode == RandomMode || repeatMode == RandomGroupMode || repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup);
 }
 
+void PlaylistDock::doGroupSync(bool quick)
+{
+	QTreeWidgetItem *tWI = list->currentItem();
+	if (!tWI || !PlaylistWidget::isGroup(tWI))
+		return;
+	QString pth = tWI->data(0, Qt::UserRole).toString();
+	if (pth.isEmpty())
+		return;
+	if (pth.startsWith("file://"))
+		pth.remove(0, 7);
+	const QFileInfo pthInfo(pth);
+	const bool possibleModuleScheme = pth.contains("://");
+	if (!possibleModuleScheme && !pthInfo.isDir() && !pthInfo.isFile())
+	{
+		tWI->setData(0, Qt::UserRole, QString());
+		tWI->setIcon(0, *QMPlay2GUI.groupIcon);
+		return;
+	}
+	if (pthInfo.isDir() && !pth.endsWith("/"))
+		pth += "/";
+	if (!quick)
+	{
+		findE->clear();
+		list->sync(pth, tWI, !pthInfo.isDir() && (possibleModuleScheme || pthInfo.isFile()));
+	}
+	else if (pthInfo.isDir())
+	{
+		findE->clear();
+		list->quickSync(pth, tWI);
+	}
+}
+
 void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
 {
 	if (!tWI || PlaylistWidget::isGroup(tWI))
@@ -595,26 +627,11 @@ void PlaylistDock::visibleItemsCount(int count)
 }
 void PlaylistDock::syncCurrentFolder()
 {
-	QTreeWidgetItem *tWI = list->currentItem();
-	if (!(tWI && PlaylistWidget::isGroup(tWI)))
-		return;
-	QString pth = tWI->data(0, Qt::UserRole).toString();
-	if (pth.isEmpty())
-		return;
-	if (pth.startsWith("file://"))
-		pth.remove(0, 7);
-	const QFileInfo pthInfo(pth);
-	const bool possibleModuleScheme = pth.contains("://");
-	if (!possibleModuleScheme && !pthInfo.isDir() && !pthInfo.isFile())
-	{
-		tWI->setData(0, Qt::UserRole, QString());
-		tWI->setIcon(0, *QMPlay2GUI.groupIcon);
-		return;
-	}
-	if (pthInfo.isDir() && !pth.endsWith("/"))
-		pth += "/";
-	findE->clear();
-	list->sync(pth, tWI, !pthInfo.isDir() && (possibleModuleScheme || pthInfo.isFile()));
+	doGroupSync(false);
+}
+void PlaylistDock::quickSyncCurrentFolder()
+{
+	doGroupSync(true);
 }
 void PlaylistDock::repeat()
 {

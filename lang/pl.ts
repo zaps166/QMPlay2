@@ -2247,6 +2247,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>&amp;Synchronize group</source>
         <translation>&amp;Synchronizuj grupę</translation>
     </message>
+    <message>
+        <source>&amp;Quick group synchronization</source>
+        <translation>&amp;Szybka synchronizacja grupy</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>

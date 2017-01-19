@@ -566,6 +566,19 @@ void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 	if (canModify())
 		addThr.setDataForSync(pth, par, notDir);
 }
+void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par)
+{
+	if (canModify())
+	{
+		bool mustRefresh = false;
+		quickSyncScanDirs(pth, par, mustRefresh);
+		if (mustRefresh && canModify())
+		{
+			refresh();
+			processItems();
+		}
+	}
+}
 
 void PlaylistWidget::setCurrentPlaying(QTreeWidgetItem *tWI)
 {
@@ -846,6 +859,46 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 	}
 }
 
+void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh)
+{
+	QStringList dirEntryUrls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
+
+	for (int i = par->childCount() - 1; i >= 0; --i)
+	{
+		QTreeWidgetItem *item = par->child(i);
+
+		const QString itemFileName = Functions::fileName(item->data(0, Qt::UserRole).toString());
+		const bool isGroup = PlaylistWidget::isGroup(item);
+		const int urlIdx = dirEntryUrls.indexOf(itemFileName);
+		QString fullPth = urlIdx > -1 ? pth + dirEntryUrls.at(urlIdx) : QString();
+
+		if (urlIdx > -1 && isGroup == QFileInfo(fullPth).isDir())
+		{
+			dirEntryUrls.removeAt(urlIdx);
+			if (isGroup)
+			{
+				if (!fullPth.endsWith('/'))
+					fullPth.append('/');
+				quickSyncScanDirs(fullPth, item, mustRefresh);
+			}
+		}
+		else
+		{
+			mustRefresh = true;
+			delete item;
+		}
+	}
+
+	if (!dirEntryUrls.isEmpty())
+	{
+		for (int i = 0; i < dirEntryUrls.count(); ++i)
+			dirEntryUrls[i].prepend(pth);
+
+		add(dirEntryUrls, par);
+		mustRefresh = false;
+	}
+}
+
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	const bool modifier = (e->modifiers() == Qt::MetaModifier) || (e->modifiers() == Qt::AltModifier);
@@ -1031,11 +1084,13 @@ void PlaylistWidget::modifyMenu()
 
 	const bool isLocked = (getFlags(currItem) & Playlist::Entry::Locked);
 	const bool isItemGroup = isGroup(currItem);
+	const bool syncVisible = (currItem && isItemGroup && !entryUrl.isEmpty());
 
 	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
 	playlistMenu()->lock->setVisible(currItem);
-	playlistMenu()->sync->setVisible(currItem && isItemGroup && !entryUrl.isEmpty());
+	playlistMenu()->sync->setVisible(syncVisible);
+	playlistMenu()->quickSync->setVisible(syncVisible && QFileInfo(QString(entryUrl).remove("file://")).isDir());
 	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
 	playlistMenu()->queue->setVisible(currItem);
