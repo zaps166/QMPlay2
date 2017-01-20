@@ -322,7 +322,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					{
 						dirEntries[j].prepend(url);
 #ifdef Q_OS_WIN
-						d_urls[j].replace("file://", "file:///");
+						dirEntries[j].replace("file://", "file:///");
 #endif
 					}
 					if (add(dirEntries, p, demuxersInfo))
