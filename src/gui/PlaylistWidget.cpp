@@ -33,6 +33,16 @@
 #include <QMenu>
 #include <QDir>
 
+static inline QStringList getDirEntries(const QString &pth)
+{
+	return QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
+}
+static inline void prependPath(QStringList &dirEntries, const QString &pth)
+{
+	for (int i = 0; i < dirEntries.count(); ++i)
+		dirEntries[i].prepend(pth);
+}
+
 static inline MenuBar::Playlist *playlistMenu()
 {
 	return QMPlay2GUI.menuBar->playlist;
@@ -207,10 +217,9 @@ void AddThr::setDataForSync(const QString &pth, QTreeWidgetItem *par, bool notDi
 		setData(QStringList() << pth, par, false, FILE_SYNC); //File synchronization needs only one file!
 	else
 	{
-		QStringList d_urls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
-		for (int i = d_urls.size() - 1; i >= 0; --i)
-			d_urls[i] = pth + d_urls[i];
-		setData(d_urls, par, false, DIR_SYNC);
+		QStringList dirEntries = getDirEntries(pth);
+		prependPath(dirEntries, pth);
+		setData(dirEntries, par, false, DIR_SYNC);
 	}
 }
 
@@ -281,7 +290,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			{
 				const QString groupName = Functions::fileName(url, false);
 				if (sync != FILE_SYNC)
-					currentItem =  pLW.newGroup(groupName, url, currentItem); //Adding a new playlist group
+					currentItem = pLW.newGroup(groupName, url, currentItem); //Adding a new playlist group
 				else
 				{
 					//Reuse current playlist group
@@ -304,19 +313,19 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			{
 				if (pLW.currPthToSave.isNull())
 					pLW.currPthToSave = dUrl;
-				QStringList d_urls = QDir(dUrl).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
-				if (!d_urls.isEmpty())
+				QStringList dirEntries = getDirEntries(dUrl);
+				if (!dirEntries.isEmpty())
 				{
 					url = Functions::cleanPath(url);
 					QTreeWidgetItem *p = pLW.newGroup(Functions::fileName(url), url, currentItem);
-					for (int j = d_urls.size() - 1; j >= 0; j--)
+					for (int j = dirEntries.size() - 1; j >= 0; j--)
 					{
-						d_urls[j].prepend(url);
+						dirEntries[j].prepend(url);
 #ifdef Q_OS_WIN
 						d_urls[j].replace("file://", "file:///");
 #endif
 					}
-					if (add(d_urls, p, demuxersInfo))
+					if (add(dirEntries, p, demuxersInfo))
 						added = true;
 					else
 						QMetaObject::invokeMethod(this, "deleteTreeWidgetItem", Q_ARG(QTreeWidgetItem *, p));
@@ -861,7 +870,7 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 
 void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh)
 {
-	QStringList dirEntryUrls = QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
+	QStringList dirEntries = getDirEntries(pth);
 
 	for (int i = par->childCount() - 1; i >= 0; --i)
 	{
@@ -869,12 +878,12 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 
 		const QString itemFileName = Functions::fileName(item->data(0, Qt::UserRole).toString());
 		const bool isGroup = PlaylistWidget::isGroup(item);
-		const int urlIdx = dirEntryUrls.indexOf(itemFileName);
-		QString fullPth = urlIdx > -1 ? pth + dirEntryUrls.at(urlIdx) : QString();
+		const int urlIdx = dirEntries.indexOf(itemFileName);
+		QString fullPth = urlIdx > -1 ? pth + dirEntries.at(urlIdx) : QString();
 
 		if (urlIdx > -1 && isGroup == QFileInfo(fullPth).isDir())
 		{
-			dirEntryUrls.removeAt(urlIdx);
+			dirEntries.removeAt(urlIdx);
 			if (isGroup)
 			{
 				if (!fullPth.endsWith('/'))
@@ -889,12 +898,10 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 		}
 	}
 
-	if (!dirEntryUrls.isEmpty())
+	if (!dirEntries.isEmpty())
 	{
-		for (int i = 0; i < dirEntryUrls.count(); ++i)
-			dirEntryUrls[i].prepend(pth);
-
-		add(dirEntryUrls, par);
+		prependPath(dirEntries, pth);
+		add(dirEntries, par);
 		mustRefresh = false;
 	}
 }
