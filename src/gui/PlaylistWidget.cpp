@@ -181,7 +181,8 @@ void UpdateEntryThr::finished()
 
 /* AddThr class */
 AddThr::AddThr(PlaylistWidget &pLW) :
-	pLW(pLW)
+	pLW(pLW),
+	inProgress(false)
 {
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
@@ -210,16 +211,25 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
 		pLW.refresh(PlaylistWidget::REFRESH_CURRPLAYING);
 	}
 
-	emit QMPlay2Core.busyCursor();
+	if (!inProgress)
+		emit QMPlay2Core.busyCursor();
+
 	if (!loadList)
 	{
-		pLW.rotation = 0;
-		pLW.animationTimer.start(50);
-		playlistMenu()->stopLoading->setVisible(true);
+		if (!inProgress)
+		{
+			pLW.rotation = 0;
+			pLW.animationTimer.start(50);
+			playlistMenu()->stopLoading->setVisible(true);
+		}
+		inProgress = true;
 		start();
 	}
 	else
+	{
+		inProgress = true;
 		run();
+	}
 }
 void AddThr::setDataForSync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
@@ -491,6 +501,8 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 
 void AddThr::finished()
 {
+	if (pLW.addTimer.isActive())
+		return; //Don't finish, because this thread will be started soon again
 	if (!pLW.currPthToSave.isNull())
 	{
 		QMPlay2GUI.setCurrentPth(pLW.currPthToSave);
@@ -520,6 +532,7 @@ void AddThr::finished()
 			}
 	}
 	emit QMPlay2Core.restoreCursor();
+	inProgress = false;
 }
 
 /*PlaylistWidget class*/
@@ -585,11 +598,11 @@ void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)
 		sortItems(column, sortOrder);
 }
 
-bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QStringList &existingEntries, bool loadList)
+bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QStringList &existingEntries, bool loadList, bool forceEnqueue)
 {
 	if (urls.isEmpty())
 		return false;
-	if (canModify())
+	if (!forceEnqueue && enqueuedAddData.isEmpty() && canModify())
 		addThr.setData(urls, existingEntries, par, loadList);
 	else
 	{
@@ -602,7 +615,7 @@ bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QS
 bool PlaylistWidget::add(const QStringList &urls, bool atEndOfList)
 {
 	selectAfterAdd = true;
-	return add(urls, atEndOfList ? NULL : (!selectedItems().count() ? NULL : currentItem()));
+	return add(urls, atEndOfList ? NULL : (selectedItems().isEmpty() ? NULL : currentItem()));
 }
 void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
@@ -944,7 +957,7 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 	if (!dirEntries.isEmpty())
 	{
 		prependPath(dirEntries, pth);
-		add(dirEntries, par, existingEntries);
+		add(dirEntries, par, existingEntries, false, true);
 		mustRefresh = false;
 	}
 }

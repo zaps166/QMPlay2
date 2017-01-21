@@ -104,6 +104,7 @@ private:
 	SYNC sync;
 	IOController<> ioCtrl;
 	QTreeWidgetItem *firstItem, *lastItem;
+	bool inProgress;
 private slots:
 	void finished();
 };
@@ -125,7 +126,7 @@ public:
 
 	void sortCurrentGroup(int column, Qt::SortOrder sortOrder);
 
-	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = QStringList(), bool loadList = false);
+	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = QStringList(), bool loadList = false, bool forceEnqueue = false);
 	bool add(const QStringList &, bool atEndOfList = false);
 	void sync(const QString &pth, QTreeWidgetItem *par, bool notDir);
 	void quickSync(const QString &pth, QTreeWidgetItem *par);
