@@ -447,8 +447,8 @@ void MenuBar::setKeyShortcuts()
 
 
 	shortcuts->appendAction(playlist->stopLoading, "KeyBindings/Playlist-stopLoading", "F4");
-	shortcuts->appendAction(playlist->sync, "KeyBindings/Playlist-sync", "F5");
-	shortcuts->appendAction(playlist->quickSync, "KeyBindings/Playlist-quickSync", "Shift+F5");
+	shortcuts->appendAction(playlist->sync, "KeyBindings/Playlist-sync", "Shift+F5");
+	shortcuts->appendAction(playlist->quickSync, "KeyBindings/Playlist-quickSync", "F5");
 	shortcuts->appendAction(playlist->loadPlist, "KeyBindings/Playlist-loadPlist", "Ctrl+L");
 	shortcuts->appendAction(playlist->savePlist, "KeyBindings/Playlist-savePlist", "Ctrl+S");
 	shortcuts->appendAction(playlist->saveGroup, "KeyBindings/Playlist-saveGroup", "Ctrl+Shift+S");
