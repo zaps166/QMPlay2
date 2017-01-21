@@ -21,13 +21,8 @@
 
 #include <QComboBox>
 
-#ifdef Q_OS_WIN
-	#include <windows.h>
-#endif
-
 Cuvid::Cuvid() :
-	Module("CUVID"),
-	m_cudaLoaded(-1)
+	Module("CUVID")
 {
 	moduleImg = QImage(":/CUVID");
 	moduleImg.setText("Path", ":/CUVID");
@@ -53,31 +48,6 @@ Cuvid::~Cuvid()
 	delete m_deintMethodB;
 }
 
-void Cuvid::initCuvidDec()
-{
-	if (m_cudaLoaded == -1)
-	{
-#ifdef Q_OS_WIN
-		if (getBool("CheckFirstGPU"))
-		{
-			DISPLAY_DEVICEA displayDev;
-			memset(&displayDev, 0, sizeof displayDev);
-			displayDev.cb = sizeof displayDev;
-			if (EnumDisplayDevicesA(NULL, 0, &displayDev, 0))
-			{
-				const bool isNvidia = QByteArray::fromRawData(displayDev.DeviceString, sizeof displayDev.DeviceString).toLower().contains("nvidia");
-				if (!isNvidia)
-				{
-					m_cudaLoaded = 0;
-					return;
-				}
-			}
-		}
-#endif
-		m_cudaLoaded = CuvidDec::loadLibrariesAndInit();
-	}
-}
-
 QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 {
 	Q_UNUSED(showDisabled)
@@ -91,8 +61,7 @@ void *Cuvid::createInstance(const QString &name)
 {
 	if (name == CuvidName && getBool("Enabled"))
 	{
-		initCuvidDec();
-		if (m_cudaLoaded == 1)
+		if (CuvidDec::canCreateInstance())
 			return new CuvidDec(*this);
 	}
 	return NULL;

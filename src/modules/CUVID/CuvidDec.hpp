@@ -38,8 +38,11 @@ class CuvidDec : public Decoder
 {
 	Q_DECLARE_TR_FUNCTIONS(CuvidDec)
 
+	static QMutex loadMutex;
+	static int loadState;
+
 public:
-	static bool loadLibrariesAndInit();
+	static bool canCreateInstance();
 
 	CuvidDec(Module &module);
 	~CuvidDec();
@@ -67,6 +70,8 @@ private:
 	void destroyCuvid(bool all);
 
 	inline void resetLastTS();
+
+	bool loadLibrariesAndInit();
 
 	VideoWriter *m_writer;
 	CuvidHWAccel *m_cuvidHWAccel;

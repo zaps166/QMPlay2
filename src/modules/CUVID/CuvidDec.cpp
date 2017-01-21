@@ -26,6 +26,10 @@
 #include <QLibrary>
 #include <QMutex>
 
+#ifdef Q_OS_WIN
+	#include <windows.h>
+#endif
+
 #ifndef GL_TEXTURE_2D
 	#define GL_TEXTURE_2D 0x0DE1
 #endif
@@ -466,9 +470,13 @@ private:
 
 static const quint32 MaxSurfaces = 25;
 
-bool CuvidDec::loadLibrariesAndInit()
+QMutex CuvidDec::loadMutex;
+int CuvidDec::loadState = -1;
+
+bool CuvidDec::canCreateInstance()
 {
-	return cuvid::load() && cu::load();
+	QMutexLocker locker(&loadMutex);
+	return (loadState != 0);
 }
 
 CuvidDec::CuvidDec(Module &module) :
@@ -826,6 +834,9 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 			return false;
 	}
 
+	if (!loadLibrariesAndInit())
+		return false;
+
 	const AVBitStreamFilter *bsf = NULL;
 	switch (codec)
 	{
@@ -1009,4 +1020,31 @@ void CuvidDec::destroyCuvid(bool all)
 inline void CuvidDec::resetLastTS()
 {
 	m_lastTS[0] = m_lastTS[1] = -1.0;
+}
+
+bool CuvidDec::loadLibrariesAndInit()
+{
+	QMutexLocker locker(&loadMutex);
+	if (loadState == -1)
+	{
+#ifdef Q_OS_WIN
+		if (sets().getBool("CheckFirstGPU"))
+		{
+			DISPLAY_DEVICEA displayDev;
+			memset(&displayDev, 0, sizeof displayDev);
+			displayDev.cb = sizeof displayDev;
+			if (EnumDisplayDevicesA(NULL, 0, &displayDev, 0))
+			{
+				const bool isNvidia = QByteArray::fromRawData(displayDev.DeviceString, sizeof displayDev.DeviceString).toLower().contains("nvidia");
+				if (!isNvidia)
+				{
+					loadState = 0;
+					return false;
+				}
+			}
+		}
+#endif
+		loadState = (cuvid::load() && cu::load());
+	}
+	return (loadState == 1);
 }

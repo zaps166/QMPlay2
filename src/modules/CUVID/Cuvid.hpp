@@ -33,7 +33,6 @@ public:
 	Cuvid();
 	~Cuvid();
 
-	void initCuvidDec();
 private:
 	QList<Info> getModulesInfo(const bool showDisabled) const;
 	void *createInstance(const QString &name);
@@ -44,7 +43,6 @@ private:
 
 	/**/
 
-	int m_cudaLoaded;
 	QComboBox *m_deintMethodB;
 };
 
