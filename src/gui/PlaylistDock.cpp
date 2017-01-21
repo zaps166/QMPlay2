@@ -87,7 +87,7 @@ QString PlaylistDock::getCurrentItemName() const
 void PlaylistDock::load(const QString &url)
 {
 	if (!url.isEmpty())
-		list->add(QStringList(url), NULL, true);
+		list->add(QStringList(url), NULL, QStringList(), true);
 }
 bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 {

@@ -43,6 +43,15 @@ static inline void prependPath(QStringList &dirEntries, const QString &pth)
 		dirEntries[i].prepend(pth);
 }
 
+static void entryCreated(const QString &url, int insertChildAt, QStringList &existingEntries)
+{
+	const QString fileName = Functions::fileName(url);
+	if (insertChildAt < 0 || insertChildAt >= existingEntries.count())
+		existingEntries.append(fileName);
+	else
+		existingEntries.insert(insertChildAt, fileName);
+}
+
 static inline MenuBar::Playlist *playlistMenu()
 {
 	return QMPlay2GUI.menuBar->playlist;
@@ -177,11 +186,12 @@ AddThr::AddThr(PlaylistWidget &pLW) :
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
 
-void AddThr::setData(const QStringList &_urls, QTreeWidgetItem *_par, bool _loadList, SYNC _sync)
+void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntries, QTreeWidgetItem *_par, bool _loadList, SYNC _sync)
 {
 	ioCtrl.resetAbort();
 
 	urls = _urls;
+	existingEntries = _existingEntries;
 	par = _par;
 	loadList = _loadList;
 	sync = _sync;
@@ -214,17 +224,22 @@ void AddThr::setData(const QStringList &_urls, QTreeWidgetItem *_par, bool _load
 void AddThr::setDataForSync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
 	if (notDir)
-		setData(QStringList() << pth, par, false, FILE_SYNC); //File synchronization needs only one file!
+		setData(QStringList() << pth, QStringList(), par, false, FILE_SYNC); //File synchronization needs only one file!
 	else
 	{
 		QStringList dirEntries = getDirEntries(pth);
 		prependPath(dirEntries, pth);
-		setData(dirEntries, par, false, DIR_SYNC);
+		setData(dirEntries, QStringList(), par, false, DIR_SYNC);
 	}
 }
 
 void AddThr::stop()
 {
+	if (pLW.addTimer.isActive())
+	{
+		pLW.addTimer.stop();
+		pLW.enqueuedAddData.clear();
+	}
 	ioCtrl.abort();
 	wait(TERMINATE_TIMEOUT);
 	if (isRunning())
@@ -253,12 +268,12 @@ void AddThr::run()
 		foreach (const Module::Info &mod, module->getModulesInfo())
 			if (mod.type == Module::DEMUXER)
 				demuxersInfo += (Functions::DemuxerInfo){mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions};
-	add(urls, par, demuxersInfo, loadList);
+	add(urls, par, demuxersInfo, existingEntries.isEmpty() ? NULL : &existingEntries, loadList);
 	if (currentThread() == pLW.thread()) //jeżeli funkcja działa w głównym wątku
 		finished();
 }
 
-bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, bool loadList)
+bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, QStringList *existingEntries, bool loadList)
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	QTreeWidgetItem *currentItem = parent;
@@ -270,13 +285,30 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 
 		QString url, entryName;
 		{
-			//Get the default entry name - it'll be used if not exists in stream
+			//Get the default entry name - it'll be used if doesn't exist in stream
 			QString addressPrefixName;
 			Functions::splitPrefixAndUrlIfHasPluginPrefix(urls.at(i), &addressPrefixName, &url, &entryName);
 			if (addressPrefixName != "QMPlay2EntryName")
 			{
 				url = Functions::Url(urls.at(i));
 				entryName.clear();
+			}
+		}
+
+		int insertChildAt = -1;
+		if (existingEntries)
+		{
+			//For quick group sync only - find where to place the new item
+			const QString newFileName = Functions::fileName(url);
+			insertChildAt = existingEntries->count();
+			for (int i = 0; i < insertChildAt; ++i)
+			{
+				const QString fileName = existingEntries->at(i);
+				if (fileName > newFileName)
+				{
+					insertChildAt = i;
+					break;
+				}
 			}
 		}
 
@@ -290,7 +322,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			{
 				const QString groupName = Functions::fileName(url, false);
 				if (sync != FILE_SYNC)
-					currentItem = pLW.newGroup(groupName, url, currentItem); //Adding a new playlist group
+					currentItem = pLW.newGroup(groupName, url, currentItem, insertChildAt, existingEntries); //Adding a new playlist group
 				else
 				{
 					//Reuse current playlist group
@@ -299,7 +331,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					sync = NO_SYNC;
 				}
 			}
-			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo);
+			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo, insertChildAt, existingEntries);
 			if (!firstItem)
 				firstItem = tmpFirstItem;
 			added = !entries.isEmpty();
@@ -317,7 +349,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				if (!dirEntries.isEmpty())
 				{
 					url = Functions::cleanPath(url);
-					QTreeWidgetItem *p = pLW.newGroup(Functions::fileName(url), url, currentItem);
+					QTreeWidgetItem *p = pLW.newGroup(Functions::fileName(url), url, currentItem, insertChildAt, existingEntries);
 					for (int j = dirEntries.size() - 1; j >= 0; j--)
 					{
 						dirEntries[j].prepend(url);
@@ -356,7 +388,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					}
 					else
 					{
-						QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(fetchTracks.tracks, currentItem, demuxersInfo);
+						QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(fetchTracks.tracks, currentItem, demuxersInfo, insertChildAt, existingEntries);
 						if (!firstItem)
 							firstItem = tmpFirstItem;
 						hasOneEntry = false;
@@ -385,7 +417,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 						else
 							entry.name = entryName;
 					}
-					currentItem = pLW.newEntry(entry, currentItem, demuxersInfo);
+					currentItem = pLW.newEntry(entry, currentItem, demuxersInfo, insertChildAt, existingEntries);
 					if (!firstItem)
 						firstItem = currentItem;
 				}
@@ -403,7 +435,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 	}
 	return added;
 }
-QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo)
+QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries)
 {
 	QList<QTreeWidgetItem *> groupList;
 	const int queueSize = pLW.queue.size();
@@ -420,7 +452,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		{
 			if (sync != FILE_SYNC)
 			{
-				createdItem = pLW.newGroup(entry.name, entry.url, tmpParent);
+				createdItem = pLW.newGroup(entry.name, entry.url, tmpParent, insertChildAt, existingEntries);
 				groupList += createdItem;
 			}
 			else
@@ -432,7 +464,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		}
 		else
 		{
-			currentItem = createdItem = pLW.newEntry(entry, tmpParent, demuxersInfo);
+			currentItem = createdItem = pLW.newEntry(entry, tmpParent, demuxersInfo, insertChildAt, existingEntries);
 			if (entry.queue) //Rebuild queue
 			{
 				for (int j = pLW.queue.size(); j <= queueSize + entry.queue - 1; ++j)
@@ -476,6 +508,7 @@ void AddThr::finished()
 	pLW.processItems();
 	emit pLW.returnItem(firstItem);
 	urls.clear();
+	existingEntries.clear();
 	playlistMenu()->stopLoading->setVisible(false);
 	if (!pLW.currentPlaying && !pLW.currentPlayingUrl.isEmpty())
 	{
@@ -552,23 +585,24 @@ void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)
 		sortItems(column, sortOrder);
 }
 
-bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, bool loadList)
+bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QStringList &existingEntries, bool loadList)
 {
 	if (urls.isEmpty())
 		return false;
 	if (canModify())
-		addThr.setData(urls, par, loadList);
+		addThr.setData(urls, existingEntries, par, loadList);
 	else
 	{
-		enqueuedAddData += (AddData){urls, par, loadList};
-		addTimer.start();
+		enqueuedAddData += (AddData){urls, existingEntries, par, loadList};
+		if (!addTimer.isActive())
+			addTimer.start(1);
 	}
 	return true;
 }
 bool PlaylistWidget::add(const QStringList &urls, bool atEndOfList)
 {
 	selectAfterAdd = true;
-	return add(urls, atEndOfList ? NULL : (!selectedItems().count() ? NULL : currentItem()), false);
+	return add(urls, atEndOfList ? NULL : (!selectedItems().count() ? NULL : currentItem()));
 }
 void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
@@ -668,39 +702,10 @@ QList<QUrl> PlaylistWidget::getUrls() const
 	return urls;
 }
 
-QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &url, QTreeWidgetItem *parent, bool insertChildAt0Idx)
-{
-	QTreeWidgetItem *tWI = new QTreeWidgetItem;
-
-	tWI->setFlags(tWI->flags() | Qt::ItemIsEditable);
-	tWI->setIcon(0, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon);
-	tWI->setText(0, name);
-	tWI->setData(0, Qt::UserRole, url);
-
-	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(bool, insertChildAt0Idx));
-	return tWI;
-}
 QTreeWidgetItem *PlaylistWidget::newGroup()
 {
-	return newGroup(QString(), QString(), !selectedItems().count() ? NULL : currentItem(), true);
-}
-
-QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo)
-{
-	QTreeWidgetItem *tWI = new QTreeWidgetItem;
-
-	QImage img;
-	Functions::getDataIfHasPluginPrefix(entry.url, NULL, NULL, &img, NULL, demuxersInfo);
-	setEntryIcon(img, tWI);
-
-	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
-	tWI->setText(0, entry.name);
-	tWI->setData(0, Qt::UserRole, entry.url);
-	tWI->setText(2, Functions::timeToStr(entry.length));
-	tWI->setData(2, Qt::UserRole, entry.length);
-
-	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(bool, false));
-	return tWI;
+	QTreeWidgetItem *parent = selectedItems().isEmpty() ? NULL : currentItem();
+	return newGroup(QString(), QString(), parent, isGroup(parent) ? 0 : -1, NULL);
 }
 
 QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const QTreeWidgetItem *parent) const
@@ -846,6 +851,42 @@ void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
 	tWI->setFont(0, font);
 }
 
+QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &url, QTreeWidgetItem *parent, int insertChildAt, QStringList *existingEntries)
+{
+	QTreeWidgetItem *tWI = new QTreeWidgetItem;
+
+	tWI->setFlags(tWI->flags() | Qt::ItemIsEditable);
+	tWI->setIcon(0, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon);
+	tWI->setText(0, name);
+	tWI->setData(0, Qt::UserRole, url);
+
+	if (existingEntries)
+		entryCreated(url, insertChildAt, *existingEntries);
+
+	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(int, insertChildAt));
+	return tWI;
+}
+QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries)
+{
+	QTreeWidgetItem *tWI = new QTreeWidgetItem;
+
+	QImage img;
+	Functions::getDataIfHasPluginPrefix(entry.url, NULL, NULL, &img, NULL, demuxersInfo);
+	setEntryIcon(img, tWI);
+
+	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
+	tWI->setText(0, entry.name);
+	tWI->setData(0, Qt::UserRole, entry.url);
+	tWI->setText(2, Functions::timeToStr(entry.length));
+	tWI->setData(2, Qt::UserRole, entry.length);
+
+	if (existingEntries)
+		entryCreated(entry.url, insertChildAt, *existingEntries);
+
+	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(int, insertChildAt));
+	return tWI;
+}
+
 void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 {
 	QImage img = origImg;
@@ -871,6 +912,7 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh)
 {
 	QStringList dirEntries = getDirEntries(pth);
+	QStringList existingEntries;
 
 	for (int i = par->childCount() - 1; i >= 0; --i)
 	{
@@ -883,6 +925,7 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 
 		if (urlIdx > -1 && isGroup == QFileInfo(fullPth).isDir())
 		{
+			existingEntries.prepend(itemFileName);
 			dirEntries.removeAt(urlIdx);
 			if (isGroup)
 			{
@@ -901,7 +944,7 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 	if (!dirEntries.isEmpty())
 	{
 		prependPath(dirEntries, pth);
-		add(dirEntries, par);
+		add(dirEntries, par, existingEntries);
 		mustRefresh = false;
 	}
 }
@@ -1003,29 +1046,28 @@ QRect PlaylistWidget::getArcRect(int size)
 	return QRect(QPoint(width() / 2 - size / 2, height() / 2 - size / 2), QSize(size, size));
 }
 
-void PlaylistWidget::insertItem(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, bool insertChildAt0Idx)
+void PlaylistWidget::insertItem(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, int insertChildAt)
 {
-	QTreeWidgetItem *cI = parent;
+	QTreeWidgetItem *childItem = parent;
 	if (parent && !isGroup(parent))
 		parent = parent->parent();
-	if (cI && cI->parent() == parent)
+	if (insertChildAt < 0 && childItem && childItem->parent() == parent)
 	{
 		if (parent)
-			parent->insertChild(parent->indexOfChild(cI) + 1, tWI);
+			parent->insertChild(parent->indexOfChild(childItem) + 1, tWI);
 		else
-			insertTopLevelItem(indexOfTopLevelItem(cI) + 1, tWI);
+			insertTopLevelItem(indexOfTopLevelItem(childItem) + 1, tWI);
+	}
+	else if (parent)
+	{
+		if (insertChildAt < 0)
+			parent->addChild(tWI);
+		else
+			parent->insertChild(insertChildAt, tWI);
 	}
 	else
 	{
-		if (parent)
-		{
-			if (!insertChildAt0Idx)
-				parent->addChild(tWI);
-			else
-				parent->insertChild(0, tWI);
-		}
-		else
-			addTopLevelItem(tWI);
+		addTopLevelItem(tWI);
 	}
 }
 void PlaylistWidget::popupContextMenu(const QPoint &p)
@@ -1069,8 +1111,8 @@ void PlaylistWidget::addTimerElapsed()
 {
 	if (canModify() && !enqueuedAddData.isEmpty())
 	{
-		AddData addData = enqueuedAddData.dequeue();
-		addThr.setData(addData.urls, addData.par, addData.loadList);
+		const AddData addData = enqueuedAddData.dequeue();
+		addThr.setData(addData.urls, addData.existingEntries, addData.par, addData.loadList);
 	}
 	if (enqueuedAddData.isEmpty())
 		addTimer.stop();
