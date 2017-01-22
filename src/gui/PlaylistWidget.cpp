@@ -833,25 +833,31 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 	foreach (QTreeWidgetItem *tWI, getChildren(PlaylistWidget::ONLY_NON_GROUPS, NULL))
 	{
 		if (itemsToShow)
-			tWI->setHidden(!itemsToShow->contains(tWI));
-		if (!tWI->isHidden())
-			count++;
-		else
+		{
+			const int idx = itemsToShow->indexOf(tWI);
+			tWI->setHidden(idx < 0);
+			if (idx > -1)
+				itemsToShow->removeAt(idx);
+		}
+		if (tWI->isHidden())
 			hasHiddenItems = true;
+		else
+			count++;
 	}
 	emit visibleItemsCount(count);
 
 	if (!itemsToShow)
 		return;
 
-	//ukrywanie pustych grup
+	// Hide empty groups which doesn't exist in "itemsToShow" list
 	const QList<QTreeWidgetItem *> groups = getChildren(ONLY_GROUPS);
 	for (int i = groups.size() - 1; i >= 0; i--)
 	{
-		if (hideGroups)
+		QTreeWidgetItem *group = groups.at(i);
+		if (hideGroups && !itemsToShow->contains(group))
 		{
 			bool hasVisibleItems = false;
-			foreach (QTreeWidgetItem *tWI, getChildren(ONLY_NON_GROUPS, groups.at(i)))
+			foreach (QTreeWidgetItem *tWI, getChildren(ONLY_NON_GROUPS, group))
 			{
 				if (!tWI->isHidden())
 				{
@@ -859,10 +865,12 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 					break;
 				}
 			}
-			groups.at(i)->setHidden(!hasVisibleItems);
+			group->setHidden(!hasVisibleItems);
 		}
 		else
-			groups.at(i)->setHidden(false);
+		{
+			group->setHidden(false);
+		}
 	}
 }
 
