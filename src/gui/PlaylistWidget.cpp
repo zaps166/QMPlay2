@@ -266,6 +266,11 @@ void AddThr::changeItemText0(QTreeWidgetItem *tWI, QString name)
 		tWI->setText(0, name);
 	tWI->setData(0, Qt::UserRole + 2, QVariant());
 }
+void AddThr::modifyItemFlags(QTreeWidgetItem *tWI, int flags)
+{
+	PlaylistWidget::setEntryFont(tWI, flags);
+	tWI->setData(0, Qt::UserRole + 1, flags);
+}
 void AddThr::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
 {
 	delete tWI;
@@ -493,8 +498,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 		{
 			const int entryAdditionalFlags = (entry.flags &~ Playlist::Entry::Selected);
 			if (entryAdditionalFlags)
-				PlaylistWidget::setEntryFont(createdItem, entryAdditionalFlags);
-			createdItem->setData(0, Qt::UserRole + 1, entryAdditionalFlags);
+				QMetaObject::invokeMethod(this, "modifyItemFlags", Q_ARG(QTreeWidgetItem *, createdItem), Q_ARG(int, entryAdditionalFlags));
 		}
 
 		if (entry.flags & Playlist::Entry::Selected)

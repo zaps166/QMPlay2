@@ -90,7 +90,8 @@ public:
 	void stop();
 private slots:
 	void changeItemText0(QTreeWidgetItem *tWI, QString name);
-	void deleteTreeWidgetItem(QTreeWidgetItem *);
+	void modifyItemFlags(QTreeWidgetItem *tWI, int flags);
+	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
 private:
 	void run();
 
