@@ -1,9 +1,10 @@
-Changes in QMPlay2 build 17.01.21:
+Changes in QMPlay2 build 17.01.22:
 	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
 	- add "Skip" and "Stop after" flags for playlist (Zamarin Arthur),
 	- add "Lock" flag for playlist entry - don't allow to remove it,
 	- equalizer improvements (presets must be set again),
 	- display cover arts in Freedesktop notifications,
+	- minor improvements and bug fixes,
 	- add quick group synchronization,
 	- add Profiles (Zamarin Arthur),
 
