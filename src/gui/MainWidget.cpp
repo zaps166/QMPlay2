@@ -1284,6 +1284,20 @@ bool MainWidget::getFullScreen() const
 	return fullScreen;
 }
 
+void MainWidget::keyPressEvent(QKeyEvent *e)
+{
+	// Trigger group sync on quick group sync key shortcut if quick group sync is unavailable.
+	// This works only in quick group sync has only one key shourtcut.
+	QAction *sync = menuBar->playlist->sync;
+	QAction *quickSync = menuBar->playlist->quickSync;
+	if (!quickSync->isVisible() && sync->isVisible() && (!e->isAutoRepeat() || sync->autoRepeat()))
+	{
+		const QKeySequence keySeq = quickSync->shortcut();
+		if (keySeq.count() == 1 && keySeq.matches(e->key()))
+			sync->trigger();
+	}
+	QMainWindow::keyPressEvent(e);
+}
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))

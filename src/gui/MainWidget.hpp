@@ -126,6 +126,7 @@ private:
 
 	bool getFullScreen() const;
 
+	void keyPressEvent(QKeyEvent *);
 	void mouseMoveEvent(QMouseEvent *);
 	void leaveEvent(QEvent *);
 	void closeEvent(QCloseEvent *);
