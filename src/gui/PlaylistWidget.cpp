@@ -309,12 +309,16 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		if (existingEntries)
 		{
 			//For quick group sync only - find where to place the new item
-			const QString newFileName = Functions::fileName(url);
+			const QString newUrl = url.startsWith("file://") ? url.mid(7) : url;
+			const QString newFileName = Functions::fileName(newUrl);
+			const QString filePath = Functions::filePath(newUrl);
+			const bool newIsDir = QFileInfo(newUrl).isDir();
 			insertChildAt = existingEntries->count();
 			for (int i = 0; i < insertChildAt; ++i)
 			{
 				const QString fileName = existingEntries->at(i);
-				if (fileName > newFileName)
+				const bool isDir = QFileInfo(filePath + fileName).isDir();
+				if ((newIsDir && !isDir) || (newIsDir == isDir && fileName > newFileName))
 				{
 					insertChildAt = i;
 					break;
