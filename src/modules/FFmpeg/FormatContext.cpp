@@ -108,6 +108,53 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 	}
 #endif
 
+static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
+{
+	AVDictionaryEntry *avTag = av_dict_get(metadata, key, NULL, AV_DICT_IGNORE_SUFFIX);
+	if (avTag && avTag->value)
+	{
+		const QByteArray tag = QByteArray(avTag->value);
+		if (deduplicate)
+		{
+			// Workaround for duplicated tags separated by ';'.
+			// Check only when both tag has the same length and use only letters and numbers for
+			// comparision (sometimes it differs in apostrophe or different/incorrect encoding).
+			// Return the second tag (mostly better).
+			const QList<QByteArray> tags = tag.split(';');
+			if (tags.count() == 2)
+			{
+				const QByteArray first  = tags[0].trimmed();
+				const QByteArray second = tags[1].trimmed();
+				if (first.length() == second.length())
+				{
+					bool ok = true;
+					for (int i = 0; i < second.length(); ++i)
+					{
+						const char c1 = first[i];
+						const char c2 = second[i];
+						if
+						(
+							(c2 >= '0' && c2 <= '9' && c1 != c2) ||
+							(
+								((c2 >= 'a' && c2 <= 'z') || (c2 >= 'A' && c2 <= 'Z')) &&
+								((c1 | 0x20) != (c2 | 0x20))
+							)
+						)
+						{
+							ok = false;
+							break;
+						}
+					}
+					if (ok)
+						return second;
+				}
+			}
+		}
+		return tag.trimmed();
+	}
+	return QByteArray();
+}
+
 static bool streamNotValid(AVStream *stream)
 {
 	return
@@ -253,9 +300,9 @@ QList<ChapterInfo> FormatContext::getChapters() const
 	for (unsigned i = 0; i < formatCtx->nb_chapters; ++i)
 	{
 		const AVChapter &chapter = *formatCtx->chapters[i];
-		ChapterInfo chapterInfo(chapter.start * chapter.time_base.num / (double)chapter.time_base.den, chapter.end * chapter.time_base.num / (double)chapter.time_base.den);
-		if (AVDictionaryEntry *avtag = av_dict_get(chapter.metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX))
-			chapterInfo.title = avtag->value;
+		const double mul = (double)chapter.time_base.num / (double)chapter.time_base.den;
+		ChapterInfo chapterInfo(chapter.start * mul, chapter.end * mul);
+		chapterInfo.title = getTag(chapter.metadata, "title", false);
 		chapters += chapterInfo;
 	}
 	return chapters;
@@ -267,21 +314,21 @@ QString FormatContext::name() const
 }
 QString FormatContext::title() const
 {
-	AVDictionaryEntry *avtag;
-	if (isStreamed && (avtag = av_dict_get(formatCtx->metadata, "icy-name", NULL, AV_DICT_IGNORE_SUFFIX)))
-		return avtag->value;
+	if (isStreamed)
+	{
+		const QByteArray icyName = getTag(formatCtx->metadata, "icy-name", false);
+		if (!icyName.isEmpty())
+			return icyName;
+	}
 	if (AVDictionary *dict = getMetadata())
 	{
-		QString title, artist;
-		if ((avtag = av_dict_get(dict, "title", NULL, AV_DICT_IGNORE_SUFFIX)))
-			title = avtag->value;
-		if ((avtag = av_dict_get(dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX)))
-			artist = avtag->value;
-		if (!title.simplified().isEmpty() && !artist.simplified().isEmpty())
+		const QString title  = getTag(dict, "title");
+		const QString artist = getTag(dict, "artist");
+		if (!title.isEmpty() && !artist.isEmpty())
 			return artist + " - " + title;
-		else if (title.simplified().isEmpty() && !artist.simplified().isEmpty())
+		else if (title.isEmpty() && !artist.isEmpty())
 			return artist;
-		else if (!title.simplified().isEmpty() && artist.simplified().isEmpty())
+		else if (!title.isEmpty() && artist.isEmpty())
 			return title;
 	}
 	if (oggHelper)
@@ -291,16 +338,15 @@ QString FormatContext::title() const
 QList<QMPlay2Tag> FormatContext::tags() const
 {
 	QList<QMPlay2Tag> tagList;
-	AVDictionaryEntry *avtag;
 	QString value;
 	if (isStreamed)
 	{
-		if ((avtag = av_dict_get(formatCtx->metadata, "icy-name", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(formatCtx->metadata, "icy-name", false)).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_NAME), value);
-		if ((avtag = av_dict_get(formatCtx->metadata, "icy-description", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(formatCtx->metadata, "icy-description", false)).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_DESCRIPTION), value);
 	}
-	if (isStreamed && (avtag = av_dict_get(formatCtx->metadata, "StreamTitle", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+	if (isStreamed && !(value = getTag(formatCtx->metadata, "StreamTitle", false)).isEmpty())
 	{
 		int idx = value.indexOf(" - ");
 		if (idx < 0)
@@ -313,17 +359,17 @@ QList<QMPlay2Tag> FormatContext::tags() const
 	}
 	else if (AVDictionary *dict = getMetadata())
 	{
-		if ((avtag = av_dict_get(dict, "title", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "title")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), value);
-		if ((avtag = av_dict_get(dict, "artist", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "artist")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), value);
-		if ((avtag = av_dict_get(dict, "album", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "album")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), value);
-		if ((avtag = av_dict_get(dict, "genre", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "genre")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), value);
-		if ((avtag = av_dict_get(dict, "date", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "date")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_DATE), value);
-		if ((avtag = av_dict_get(dict, "comment", NULL, AV_DICT_IGNORE_SUFFIX)) && !(value = avtag->value).simplified().isEmpty())
+		if (!(value = getTag(dict, "comment")).isEmpty())
 			tagList << qMakePair(QString::number(QMPLAY2_TAG_COMMENT), value);
 	}
 	return tagList;
@@ -368,17 +414,10 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 #else
 	if (AVDictionary *dict = getMetadata())
 	{
-		AVDictionaryEntry *avtag;
-		QString album_gain_db, album_peak, track_gain_db, track_peak;
-
-		if ((avtag = av_dict_get(dict, "REPLAYGAIN_ALBUM_GAIN", NULL, AV_DICT_IGNORE_SUFFIX)) && avtag->value)
-			album_gain_db = avtag->value;
-		if ((avtag = av_dict_get(dict, "REPLAYGAIN_ALBUM_PEAK", NULL, AV_DICT_IGNORE_SUFFIX)) && avtag->value)
-			album_peak = avtag->value;
-		if ((avtag = av_dict_get(dict, "REPLAYGAIN_TRACK_GAIN", NULL, AV_DICT_IGNORE_SUFFIX)) && avtag->value)
-			track_gain_db = avtag->value;
-		if ((avtag = av_dict_get(dict, "REPLAYGAIN_TRACK_PEAK", NULL, AV_DICT_IGNORE_SUFFIX)) && avtag->value)
-			track_peak = avtag->value;
+		QString album_gain_db = getTag(dict, "REPLAYGAIN_ALBUM_GAIN", false);
+		QString album_peak    = getTag(dict, "REPLAYGAIN_ALBUM_PEAK", false);
+		QString track_gain_db = getTag(dict, "REPLAYGAIN_TRACK_GAIN", false);
+		QString track_peak    = getTag(dict, "REPLAYGAIN_TRACK_PEAK", false);
 
 		if (album_gain_db.isEmpty() && !track_gain_db.isEmpty())
 			album_gain_db = track_gain_db;
@@ -855,30 +894,24 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 		codecParams(stream)->extradata = (quint8 *)streamInfo->data.data();
 	}
 
-	AVDictionaryEntry *avtag;
 	if (streamInfo->type != QMPLAY2_TYPE_ATTACHMENT)
 	{
+		QString value;
 		if (streamsInfo.count() > 1)
 		{
-			if ((avtag = av_dict_get(stream->metadata, "title", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->title = avtag->value;
-			if ((avtag = av_dict_get(stream->metadata, "artist", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->artist = avtag->value;
-			if ((avtag = av_dict_get(stream->metadata, "album", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), QString(avtag->value));
-			if ((avtag = av_dict_get(stream->metadata, "genre", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_GENRE), QString(avtag->value));
-			if ((avtag = av_dict_get(stream->metadata, "date", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_DATE), QString(avtag->value));
-			if ((avtag = av_dict_get(stream->metadata, "comment", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_COMMENT), QString(avtag->value));
+			streamInfo->title  = getTag(stream->metadata, "title");
+			streamInfo->artist = getTag(stream->metadata, "artist");
+			if (!(value = getTag(stream->metadata, "album")).isEmpty())
+				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), value);
+			if (!(value = getTag(stream->metadata, "genre")).isEmpty())
+				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_GENRE), value);
+			if (!(value = getTag(stream->metadata, "date")).isEmpty())
+				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_DATE), value);
+			if (!(value = getTag(stream->metadata, "comment")).isEmpty())
+				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_COMMENT), value);
 		}
-		if ((avtag = av_dict_get(stream->metadata, "language", NULL, AV_DICT_IGNORE_SUFFIX)))
-		{
-			const QString value = avtag->value;
-			if (value != "und")
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_LANGUAGE), value);
-		}
+		if (!(value = getTag(stream->metadata, "language", false)).isEmpty() && value != "und")
+			streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_LANGUAGE), value);
 	}
 
 	switch (streamInfo->type)
@@ -900,8 +933,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->FPS = av_q2d(stream->r_frame_rate);
 			break;
 		case AVMEDIA_TYPE_ATTACHMENT:
-			if ((avtag = av_dict_get(stream->metadata, "filename", NULL, AV_DICT_IGNORE_SUFFIX)))
-				streamInfo->title = avtag->value;
+			streamInfo->title = getTag(stream->metadata, "filename", false);
 			switch (codecParams(stream)->codec_id)
 			{
 				case AV_CODEC_ID_TTF:
