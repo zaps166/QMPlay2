@@ -341,10 +341,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 			{
 				const QString groupName = Functions::fileName(url, false);
 				if (sync != FILE_SYNC)
-				{
-					const bool addUrl = !(url.startsWith("file://" + QDir::tempPath())); //Don't add urls from temp
-					currentItem = pLW.newGroup(groupName, addUrl ? url : QString(), currentItem, insertChildAt, existingEntries); //Adding a new playlist group
-				}
+					currentItem = pLW.newGroup(groupName, url, currentItem, insertChildAt, existingEntries); //Adding a new playlist group
 				else
 				{
 					//Reuse current playlist group
@@ -893,7 +890,7 @@ QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &ur
 	tWI->setData(0, Qt::UserRole, url);
 
 	if (existingEntries)
-		entryCreated(url.isEmpty() ? name : url, insertChildAt, *existingEntries);
+		entryCreated(url, insertChildAt, *existingEntries);
 
 	QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(int, insertChildAt));
 	return tWI;
