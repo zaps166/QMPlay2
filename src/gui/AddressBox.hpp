@@ -50,7 +50,6 @@ signals:
 	void directAddressChanged();
 private slots:
 	void pBIdxChanged();
-	void aETextChanged();
 private:
 	QComboBox pB;
 	QLineEdit aE, pE;

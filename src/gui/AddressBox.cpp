@@ -74,7 +74,7 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 	}
 
 	connect(&pB, SIGNAL(currentIndexChanged(int)), this, SLOT(pBIdxChanged()));
-	connect(&aE, SIGNAL(textEdited(const QString &)), this, SLOT(aETextChanged()));
+	connect(&aE, SIGNAL(textEdited(const QString &)), this, SIGNAL(directAddressChanged()));
 
 	pE.setToolTip(tr("Additional module parameter"));
 	pE.setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
@@ -117,9 +117,5 @@ QString AddressBox::cleanUrl() const
 void AddressBox::pBIdxChanged()
 {
 	pE.setVisible(currentPrefixType() != DIRECT);
-	emit directAddressChanged();
-}
-void AddressBox::aETextChanged()
-{
 	emit directAddressChanged();
 }

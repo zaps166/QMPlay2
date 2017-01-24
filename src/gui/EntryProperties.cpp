@@ -64,7 +64,9 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	if (url.startsWith("file://"))
 		url.remove(0, 7);
 
-	if (PlaylistWidget::isGroup(tWI))
+	const bool isGroup = PlaylistWidget::isGroup(tWI);
+
+	if (isGroup)
 	{
 		pthE = new QLineEdit(url);
 		origDirPth = url;
@@ -95,24 +97,19 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	}
 	else
 	{
-		layout.addWidget(nameE, row++, 0, 1, 1);
+		layout.addWidget(nameE, row++, 0, 1, 2);
 
 		addrB = new AddressBox(Qt::Horizontal, url);
-		layout.addWidget(addrB, row, 0, 1, 1);
+		layout.addWidget(addrB, row, 0, 1, 2);
+
+		fileSizeL = new QLabel;
 
 #ifdef QMPlay2_TagEditor
 		tagEditor = new TagEditor;
 		connect(addrB, SIGNAL(directAddressChanged()), this, SLOT(directAddressChanged()));
 		directAddressChanged();
-		layout.addWidget(tagEditor, ++row, 0, 1, 1);
+		layout.addWidget(tagEditor, ++row, 0, 1, 2);
 #endif
-
-		QFileInfo fi(addrB->cleanUrl());
-		if (fi.isFile())
-		{
-			fileSizeL = new QLabel(tr("File size") + ": " + Functions::sizeString(fi.size()));
-			layout.addWidget(fileSizeL, ++row, 0, 1, 1);
-		}
 	}
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -123,7 +120,9 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	if (!tagEditor)
 #endif
 		layout.addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), ++row, 0, 1, 2); //vSpacer
-	layout.addWidget(buttonBox, ++row, 0, 1, (browseDirB && browseFileB) ? 3 : 1);
+	layout.addWidget(buttonBox, ++row, isGroup ? 0 : 1, 1, isGroup ? 3 : 1);
+	if (fileSizeL)
+		layout.addWidget(fileSizeL, row, 0, 1, 1);
 	layout.setSpacing(3);
 	layout.setMargin(3);
 
@@ -145,9 +144,23 @@ void EntryProperties::setDirPthEEnabled(int e)
 #ifdef QMPlay2_TagEditor
 void EntryProperties::directAddressChanged()
 {
-	bool e = addrB->currentPrefixType() == AddressBox::DIRECT;
+	bool e = (addrB->currentPrefixType() == AddressBox::DIRECT);
 	if (e)
+	{
+		QFileInfo fi(addrB->cleanUrl());
+		if (fi.isFile())
+		{
+			fileSizeL->setText(tr("File size") + ": " + Functions::sizeString(fi.size()));
+			nameE->setReadOnly(true);
+		}
+		else
+		{
+			fileSizeL->clear();
+			nameE->setReadOnly(false);
+		}
+
 		e = tagEditor->open(addrB->url());
+	}
 	if (!e)
 		tagEditor->clear();
 	tagEditor->setEnabled(e);
