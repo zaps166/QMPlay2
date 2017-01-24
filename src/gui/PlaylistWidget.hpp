@@ -108,6 +108,8 @@ private:
 	bool inProgress;
 private slots:
 	void finished();
+signals:
+	void status(bool s);
 };
 
 class PlaylistWidget : public QTreeWidget
@@ -215,6 +217,7 @@ public slots:
 signals:
 	void returnItem(QTreeWidgetItem *);
 	void visibleItemsCount(int);
+	void addStatus(bool s);
 };
 
 #endif

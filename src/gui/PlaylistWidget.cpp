@@ -212,7 +212,10 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
 	}
 
 	if (!inProgress)
+	{
+		emit status(true);
 		emit QMPlay2Core.busyCursor();
+	}
 
 	if (!loadList)
 	{
@@ -221,8 +224,8 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
 			pLW.rotation = 0;
 			pLW.animationTimer.start(50);
 			playlistMenu()->stopLoading->setVisible(true);
+			inProgress = true;
 		}
-		inProgress = true;
 		start();
 	}
 	else
@@ -540,6 +543,7 @@ void AddThr::finished()
 			}
 	}
 	emit QMPlay2Core.restoreCursor();
+	emit status(false);
 	inProgress = false;
 }
 
@@ -575,6 +579,7 @@ PlaylistWidget::PlaylistWidget() :
 	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(modifyMenu()));
 	connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animationUpdate()));
 	connect(&addTimer, SIGNAL(timeout()), this, SLOT(addTimerElapsed()));
+	connect(&addThr, SIGNAL(status(bool)), this, SIGNAL(addStatus(bool)));
 }
 
 QString PlaylistWidget::getUrl(QTreeWidgetItem *tWI) const
