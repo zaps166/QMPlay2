@@ -19,7 +19,10 @@
 #ifndef VERSION_HPP
 #define VERSION_HPP
 
-#define QMPlay2Version "17.01.24"
+#ifndef QMPlay2GitHEAD
+	#define QMPlay2GitHEAD
+#endif
+#define QMPlay2Version "17.01.24" QMPlay2GitHEAD
 #define QMPlay2UserAgent ("QMPlay2/" QMPlay2Version)
 
 #endif // VERSION_HPP
