@@ -179,6 +179,7 @@ if(NOT WIN32)
     #get QMPlay2 Git HEAD by running git command
     execute_process(
         COMMAND git rev-parse --short HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE QMPLAY2_GIT_HEAD)
     if(QMPLAY2_GIT_HEAD)
         string(STRIP ${QMPLAY2_GIT_HEAD} QMPLAY2_GIT_HEAD)
