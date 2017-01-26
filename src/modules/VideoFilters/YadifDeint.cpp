@@ -554,18 +554,7 @@ void YadifThr::run()
 			cond.wait(&mutex);
 		if (!hasNewData || br)
 			continue;
-		const bool tff = yadifDeint.isTopFieldFirst(*curr);
-		for (int p = 0; p < 3; ++p)
-		{
-			filterSlice
-			(
-				p,
-				yadifDeint.secondFrame == tff, tff,
-				yadifDeint.spatialCheck,
-				*dest, *prev, *curr, *next,
-				jobId, jobsCount
-			);
-		}
+		yadifDeint.doFilter(*dest, *prev, *curr, *next, jobId, jobsCount);
 		hasNewData = false;
 		cond.wakeOne();
 	}
@@ -628,8 +617,10 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 		}
 
 		const int threadsCount = min(threads.count(), halfH);
-		for (int i = 0; i < threadsCount; ++i)
+		for (int i = 1; i < threadsCount; ++i)
 			threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threadsCount);
+		doFilter(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, 0, threadsCount);
+
 		for (int i = 0; i < threadsCount; ++i)
 			threads[i]->waitForFinished();
 
@@ -653,4 +644,20 @@ bool YadifDeint::processParams(bool *)
 		return false;
 	secondFrame = false;
 	return true;
+}
+
+inline void YadifDeint::doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int jobId, const int jobsCount) const
+{
+	const bool tff = isTopFieldFirst(curr);
+	for (int p = 0; p < 3; ++p)
+	{
+		filterSlice
+		(
+			p,
+			secondFrame == tff, tff,
+			spatialCheck,
+			dest, prev, curr, next,
+			jobId, jobsCount
+		);
+	}
 }

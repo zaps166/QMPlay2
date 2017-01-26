@@ -60,6 +60,8 @@ public:
 
 	bool processParams(bool *paramsCorrected);
 private:
+	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
+
 	typedef QSharedPointer<YadifThr> YadifThrPtr;
 	QVector<YadifThrPtr> threads;
 
