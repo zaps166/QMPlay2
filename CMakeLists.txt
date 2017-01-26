@@ -183,7 +183,7 @@ if(NOT WIN32)
         OUTPUT_VARIABLE QMPLAY2_GIT_HEAD)
     if(QMPLAY2_GIT_HEAD)
         string(STRIP ${QMPLAY2_GIT_HEAD} QMPLAY2_GIT_HEAD)
-        add_definitions(-DQMPlay2GitHEAD="-${QMPLAY2_GIT_HEAD}")
+        add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
     endif()
 endif()
 
