@@ -301,6 +301,7 @@ CMake options (option - default value: description):
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.
+	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
 
 Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.

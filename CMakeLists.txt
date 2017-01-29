@@ -205,6 +205,9 @@ else()
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # GCC or Clang
+    option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
+    add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
+
     # don't use C++11 if not necessary - QMPlay2 doesn't use it yet, so speed up compilation time by disabling it especially for GCC 6
     if(NOT USE_QT5 OR (Qt5Widgets_VERSION VERSION_LESS 5.7.0))
         set(CMAKE_CXX_FLAGS "-std=gnu++98 ${CMAKE_CXX_FLAGS}")
@@ -213,7 +216,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     endif()
 
     # QMPlay2 doesn't use exceptions - disable it and also make sure that debugging symbols are disabled
-    set(CMAKE_CXX_FLAGS_RELEASE "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
 
     # disable deprecated declarations warnings for Release build
@@ -226,6 +229,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     if(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
         # remove '-rdynamic'
         string(REPLACE "-rdynamic" "" CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS})
+    endif()
+
+    if(USE_LINK_TIME_OPTIMIZATION)
+        set(CMAKE_CXX_FLAGS_RELEASE    "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
+        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
     endif()
 
     if(CMAKE_MODULE_LINKER_FLAGS)
