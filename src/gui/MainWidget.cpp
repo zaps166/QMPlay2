@@ -354,16 +354,15 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
 #endif
 
-#if QT_VERSION >= 0x050400
 	foreach (QObject *obj, children())
 	{
-		if (QTabBar *tabBar = qobject_cast<QTabBar *>(obj))
+		QTabBar *tabBar = qobject_cast<QTabBar *>(obj);
+		if (tabBar && tabBar->property("changeCurrentOnDrag").isValid())
 		{
 			tabBar->setAcceptDrops(true);
-			tabBar->setChangeCurrentOnDrag(true);
+			tabBar->setProperty("changeCurrentOnDrag", true);
 		}
 	}
-#endif
 
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
