@@ -18,7 +18,7 @@
 
 #include <AudioFilter.hpp>
 
-#include <bs2b/bs2b.h>
+#include <bs2b/bs2b.hpp>
 
 class BS2B : public AudioFilter
 {

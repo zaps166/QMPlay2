@@ -34,7 +34,7 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += AudioFilters.hpp Equalizer.hpp EqualizerGUI.hpp VoiceRemoval.hpp PhaseReverse.hpp Echo.hpp DysonCompressor.hpp BS2B.hpp
 SOURCES += AudioFilters.cpp Equalizer.cpp EqualizerGUI.cpp VoiceRemoval.cpp PhaseReverse.cpp Echo.cpp DysonCompressor.cpp BS2B.cpp
 
-HEADERS += bs2b/bs2b.h bs2b/bs2bversion.h
-SOURCES += bs2b/bs2b_lib.c
+HEADERS += bs2b/bs2b.hpp bs2b/bs2bversion.hpp
+SOURCES += bs2b/bs2b_lib.cpp
 
 DEFINES += __STDC_CONSTANT_MACROS

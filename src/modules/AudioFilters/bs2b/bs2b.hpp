@@ -26,7 +26,7 @@
 
 #include <stdint.h>
 
-#include "bs2bversion.h"
+#include "bs2bversion.hpp"
 
 /* Minimum/maximum sample rate (Hz) */
 #define BS2B_MINSRATE 2000
@@ -76,11 +76,6 @@ typedef struct
 } t_bs2bd;
 
 typedef t_bs2bd *t_bs2bdp;
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif	/* __cplusplus */
 
 /* Allocates and sets a data to defaults.
  * Return NULL on error.
@@ -144,9 +139,5 @@ uint32_t bs2b_runtime_version_int( void );
 
 /* sample poits to floats native endians */
 void bs2b_cross_feed_f( t_bs2bdp bs2bdp, float *sample, int n );
-
-#ifdef __cplusplus
-}	/* extern "C" */
-#endif /* __cplusplus */
 
 #endif	/* BS2B_H */

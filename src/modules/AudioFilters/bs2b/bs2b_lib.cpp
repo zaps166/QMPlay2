@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
-#include "bs2b.h"
+#include "bs2b.hpp"
 
 /* Set up bs2b data. */
 static void init( t_bs2bdp bs2bdp )
@@ -122,7 +122,7 @@ t_bs2bdp bs2b_open( void )
 {
 	t_bs2bdp bs2bdp = NULL;
 
-	if( NULL != ( bs2bdp = malloc( sizeof( t_bs2bd ) ) ) )
+	if( NULL != ( bs2bdp = ( t_bs2bdp )malloc( sizeof( t_bs2bd ) ) ) )
 	{
 		memset( bs2bdp, 0, sizeof( t_bs2bd ) );
 		bs2b_set_srate( bs2bdp, BS2B_DEFAULT_SRATE );
