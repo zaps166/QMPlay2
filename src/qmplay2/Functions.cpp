@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QUrl>
+#include <QRegExp>
 #include <QMessageBox>
 
 #include <math.h>
@@ -44,9 +45,9 @@ static inline void swapArray(quint8 *a, quint8 *b, int size)
 
 QDate Functions::parseVersion(const QString &dateTxt)
 {
-	const QStringList l = dateTxt.split('.');
+	const QStringList l = dateTxt.split(QRegExp("\\D"));
 	int y = 0, m = 0, d = 0;
-	if (l.count() == 3)
+	if (l.count() >= 3)
 	{
 		y = l[0].toInt() + 2000;
 		m = l[1].toInt();
