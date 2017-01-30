@@ -454,6 +454,10 @@ int main(int argc, char *argv[])
 
 	QString libPath, sharePath = QCoreApplication::applicationDirPath();
 	bool cmakeBuildFound = false;
+#ifdef Q_OS_MAC
+	if (QDir(sharePath).exists("../../../CMakeFiles/QMPlay2.dir"))
+		sharePath += "/../../.."; //Probably CMake not-installed build in Bundle
+#endif
 	if (QDir(sharePath).exists("CMakeFiles/QMPlay2.dir"))
 	{
 		//We're in CMake not-installed build
@@ -465,7 +469,7 @@ int main(int argc, char *argv[])
 	if (!cmakeBuildFound)
 	{
 #if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
-		sharePath += "/../share/qmplay2";
+		sharePath = QCoreApplication::applicationDirPath() + "/../share/qmplay2";
 		libPath = QMPlay2CoreClass::getLibDir();
 		if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
 		{
@@ -479,11 +483,9 @@ int main(int argc, char *argv[])
 		}
 		libPath += "/qmplay2";
 #elif defined Q_OS_MAC
-		QString cdUp;
-		if (!QDir(sharePath).exists("share"))
-			cdUp = "/..";
-		libPath = sharePath + cdUp + "/lib/qmplay2";
-		sharePath += cdUp + "/share/qmplay2";
+		sharePath = QCoreApplication::applicationDirPath() + "/..";
+		libPath = sharePath + "/lib/qmplay2";
+		sharePath += "/share/qmplay2";
 #else
 		libPath = sharePath;
 #endif
