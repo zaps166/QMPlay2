@@ -202,14 +202,12 @@ void VideoDock::mouseMoveEvent(QMouseEvent *e)
 	if (e)
 		DockWidget::mouseMoveEvent(e);
 }
-#ifndef Q_OS_MAC
 void VideoDock::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	if (e->buttons() == Qt::LeftButton)
 		QMPlay2GUI.menuBar->window->toggleFullScreen->trigger();
 	DockWidget::mouseDoubleClickEvent(e);
 }
-#endif
 void VideoDock::mousePressEvent(QMouseEvent *e)
 {
 	if (e->button() == Qt::LeftButton)

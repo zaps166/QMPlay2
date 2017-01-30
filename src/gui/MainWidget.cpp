@@ -85,6 +85,7 @@ public:
 };
 #endif
 
+#ifndef Q_OS_MAC
 static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 {
 	QMenu *newMenu = new QMenu(src->title(), dest);
@@ -100,6 +101,7 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 	}
 	dest->addMenu(newMenu);
 }
+#endif
 
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
