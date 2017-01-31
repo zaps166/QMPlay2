@@ -1406,6 +1406,12 @@ void MainWidget::leaveEvent(QEvent *e)
 }
 void MainWidget::closeEvent(QCloseEvent *e)
 {
+#ifdef Q_OS_MAC
+	static bool first = true;
+	if (!first)
+		return; // Prevent calling this method twice on macOS
+#endif
+
 	const QString quitMsg = tr("Are you sure you want to quit?");
 	if
 	(
@@ -1465,6 +1471,10 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	playC.stop(true);
+
+#ifdef Q_OS_MAC
+	first = false;
+#endif
 }
 void MainWidget::changeEvent(QEvent *e)
 {
