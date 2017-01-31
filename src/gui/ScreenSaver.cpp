@@ -179,7 +179,9 @@ static inline bool inhibitScreenSaver(MSG *msg, bool &inhibited)
 
 ScreenSaver::ScreenSaver() :
 	m_priv(NULL)
-{}
+{
+	Q_UNUSED(m_priv)
+}
 ScreenSaver::~ScreenSaver()
 {}
 
