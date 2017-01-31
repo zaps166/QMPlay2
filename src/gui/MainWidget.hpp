@@ -124,6 +124,8 @@ private:
 	void hideDocks();
 	void restoreFocus();
 
+	inline bool isTrayVisible() const;
+
 	bool getFullScreen() const;
 
 	void keyPressEvent(QKeyEvent *);

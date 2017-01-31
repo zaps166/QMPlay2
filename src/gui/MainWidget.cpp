@@ -155,10 +155,14 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	QMPlay2GUI.menuBar = new MenuBar;
 
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Pixmap()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
 	QMPlay2Core.systemTray = tray;
+#else
+	tray = NULL;
+#endif
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);
 	setMouseTracking(true);
@@ -278,7 +282,8 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	connect(volW, SIGNAL(volumeChanged(int, int)), &playC, SLOT(volume(int, int)));
 
-	connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconClicked(QSystemTrayIcon::ActivationReason)));
+	if (tray)
+		connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayIconClicked(QSystemTrayIcon::ActivationReason)));
 
 	connect(&QMPlay2Core, SIGNAL(sendMessage(const QString &, const QString &, int, int)), this, SLOT(showMessage(const QString &, const QString &, int, int)));
 	connect(&QMPlay2Core, SIGNAL(processParam(const QString &, const QString &)), this, SLOT(processParam(const QString &, const QString &)));
@@ -353,7 +358,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #if defined Q_OS_MAC || defined Q_OS_ANDROID
 	show();
 #else
-	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !(QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible()));
+	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !isTrayVisible());
 #endif
 
 	foreach (QObject *obj, children())
@@ -500,7 +505,8 @@ void MainWidget::audioChannelsChanged()
 void MainWidget::updateWindowTitle(const QString &t)
 {
 	QString title = QCoreApplication::applicationName() + (t.isEmpty() ? QString() : " - " + t);
-	tray->setToolTip(title);
+	if (tray)
+		tray->setToolTip(title);
 	title.replace('\n', ' ');
 	setWindowTitle(title);
 }
@@ -626,7 +632,7 @@ void MainWidget::hideAllExtensions()
 void MainWidget::toggleVisibility()
 {
 #ifndef Q_OS_ANDROID
-	const bool isTray = QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible();
+	const bool isTray = isTrayVisible();
 	static bool maximized;
 	if (isVisible())
 	{
@@ -782,7 +788,8 @@ void MainWidget::createMenuBar()
 
 	connect(menuBar->options->settings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	connect(menuBar->options->modulesSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
-	connect(menuBar->options->trayVisible, SIGNAL(triggered(bool)), tray, SLOT(setVisible(bool)));
+	if (tray)
+		connect(menuBar->options->trayVisible, SIGNAL(triggered(bool)), tray, SLOT(setVisible(bool)));
 
 	connect(menuBar->help->about, SIGNAL(triggered()), this, SLOT(about()));
 #ifdef UPDATER
@@ -791,7 +798,10 @@ void MainWidget::createMenuBar()
 	connect(menuBar->help->aboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
 	menuBar->window->toggleCompactView->setChecked(isCompactView);
-	menuBar->options->trayVisible->setChecked(tray->isVisible());
+	if (tray)
+		menuBar->options->trayVisible->setChecked(tray->isVisible());
+	else
+		menuBar->options->trayVisible->setVisible(false);
 
 	setMenuBar(menuBar);
 
@@ -819,12 +829,11 @@ void MainWidget::createMenuBar()
 }
 void MainWidget::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
+#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	switch (reason)
 	{
 		case QSystemTrayIcon::Trigger:
-#ifndef Q_OS_MAC
 		case QSystemTrayIcon::DoubleClick:
-#endif
 			toggleVisibility();
 			break;
 		case QSystemTrayIcon::MiddleClick:
@@ -833,6 +842,9 @@ void MainWidget::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 		default:
 			break;
 	}
+#else
+	Q_UNUSED(reason)
+#endif
 }
 void MainWidget::toggleCompactView()
 {
@@ -997,10 +1009,13 @@ void MainWidget::toggleFullScreen()
 }
 void MainWidget::showMessage(const QString &msg, const QString &title, int messageIcon, int ms)
 {
-	if (ms < 1)
+	const bool isTray = isTrayVisible();
+	if (ms < 1 || !isTray)
 		QMessageBox((QMessageBox::Icon)messageIcon, title, msg, QMessageBox::Ok, this).exec();
 	else
+	{
 		tray->showMessage(title, msg, (QSystemTrayIcon::MessageIcon)messageIcon, ms);
+	}
 }
 void MainWidget::statusBarMessage(const QString &msg, int ms)
 {
@@ -1291,6 +1306,11 @@ void MainWidget::restoreFocus()
 	}
 }
 
+inline bool MainWidget::isTrayVisible() const
+{
+	return (tray && QSystemTrayIcon::isSystemTrayAvailable() && tray->isVisible());
+}
+
 bool MainWidget::getFullScreen() const
 {
 	return fullScreen;
@@ -1415,7 +1435,8 @@ void MainWidget::closeEvent(QCloseEvent *e)
 #ifndef Q_OS_MAC
 	settings.set("MainWidget/isVisible", isVisible());
 #endif
-	settings.set("TrayVisible", tray->isVisible());
+	if (tray)
+		settings.set("TrayVisible", tray->isVisible());
 	settings.set("VolumeL", volW->volumeL());
 	settings.set("VolumeR", volW->volumeR());
 	settings.set("Mute", menuBar->player->toggleMute->isChecked());
