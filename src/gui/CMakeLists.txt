@@ -119,6 +119,10 @@ if(WIN32)
     add_definitions(-DUPDATER)
     list(APPEND GUI_HDR Updater.hpp)
     list(APPEND GUI_SRC Updater.cpp)
+elseif(APPLE)
+    set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
+    set(ICNS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2.icns")
+    set_source_files_properties(${ICNS_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 # RPATH
@@ -135,7 +139,7 @@ if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
-add_executable(QMPlay2 MACOSX_BUNDLE ${WIN32_EXE}
+add_executable(QMPlay2 MACOSX_BUNDLE ${ICNS_FILE_PATH} ${WIN32_EXE}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
