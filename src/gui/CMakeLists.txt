@@ -123,11 +123,7 @@ endif()
 
 # RPATH
 if(SET_INSTALL_RPATH)
-    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
-    else()
-        set(CMAKE_INSTALL_RPATH "@executable_path/../${CMAKE_INSTALL_LIBDIR}")
-    endif()
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
 
 if(USE_JEMALLOC)
@@ -139,7 +135,7 @@ if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
-add_executable(QMPlay2 ${WIN32_EXE}
+add_executable(QMPlay2 MACOSX_BUNDLE ${WIN32_EXE}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
@@ -172,25 +168,25 @@ endif()
 
 if(WIN32)
     install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+elseif(APPLE)
+    install(TARGETS QMPlay2 BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
 else()
     # executable
     install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
-    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        # desktop files
-        file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-        install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+    # desktop files
+    file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
+    install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications/")
 
-        # mime files
-        file(GLOB MIME_FILES Unix/x-*.xml)
-        install(FILES ${MIME_FILES} DESTINATION "${INSTALL_PATH_MIME}/packages/")
+    # mime files
+    file(GLOB MIME_FILES Unix/x-*.xml)
+    install(FILES ${MIME_FILES} DESTINATION "${INSTALL_PATH_MIME}/packages/")
 
-        # icon
-        install(DIRECTORY Icons/hicolor DESTINATION "${INSTALL_PATH_ICONS}")
+    # icon
+    install(DIRECTORY Icons/hicolor DESTINATION "${INSTALL_PATH_ICONS}")
 
-        # install Solid actions
-        include(InstallSolidActions)
-    endif()
+    # install Solid actions
+    include(InstallSolidActions)
 
     # man page
     find_program(GZIP gzip)

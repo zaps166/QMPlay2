@@ -93,7 +93,7 @@ target_link_libraries(${PROJECT_NAME}
     ${libqmplay2}
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(APPLE)
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 elseif(WIN32)

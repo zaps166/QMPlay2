@@ -67,7 +67,7 @@ add_feature_info(Modplug USE_MODPLUG "Build with Modplug module")
 option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
 
-if(USE_EXTENSIONS AND NOT WIN32 AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(USE_EXTENSIONS AND NOT WIN32 AND NOT APPLE)
     option(USE_MPRIS2 "Build Extensions with MPRIS2 support" ON)
     add_feature_info(MPRIS2 USE_MPRIS2 "Build Extensions with MPRIS2 support")
 endif()
@@ -255,9 +255,15 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     endif()
 endif()
 
-include(GNUInstallDirs)
+if(APPLE)
+    # set paths to Bundle
+    set(CMAKE_INSTALL_DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/QMPlay2.app/Contents/share")
+    set(CMAKE_INSTALL_LIBDIR      "${CMAKE_INSTALL_PREFIX}/QMPlay2.app/Contents/lib")
+elseif(NOT WIN32)
+    include(GNUInstallDirs)
+endif()
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(NOT APPLE)
     set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_DATAROOTDIR}/icons")
     set(INSTALL_PATH_MIME "${CMAKE_INSTALL_DATAROOTDIR}/mime")
 endif()
@@ -268,12 +274,12 @@ else()
     set(INSTALL_PATH_MAN "${CMAKE_INSTALL_MANDIR}")
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(APPLE)
     set(SOLID_ACTIONS_DEFAULT "None")
     set(DEFAULT_INSTALL_RPATH ON)
 endif()
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT APPLE)
     # RPATH
     option(SET_INSTALL_RPATH "Set RPATH for executable after install" ${DEFAULT_INSTALL_RPATH})
 
@@ -292,16 +298,17 @@ else()
     install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 endif()
 
-# uninstall target
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/Uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
+if(NOT APPLE AND NOT WIN32)
+    # uninstall target
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/Uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+    add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+endif()
 
-message(STATUS "")
 PRINT_ENABLED_FEATURES()
 PRINT_DISABLED_FEATURES()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
