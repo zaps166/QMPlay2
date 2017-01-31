@@ -483,9 +483,8 @@ int main(int argc, char *argv[])
 		}
 		libPath += "/qmplay2";
 #elif defined Q_OS_MAC
-		sharePath = QCoreApplication::applicationDirPath() + "/..";
-		libPath = sharePath + "/lib/qmplay2";
-		sharePath += "/share/qmplay2";
+		libPath = QCoreApplication::applicationDirPath();
+		sharePath += "/../share/qmplay2";
 #else
 		libPath = sharePath;
 #endif

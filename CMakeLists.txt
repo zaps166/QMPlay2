@@ -256,9 +256,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
 endif()
 
 if(APPLE)
+    set(MAC_BUNDLE_PATH "${CMAKE_INSTALL_PREFIX}/QMPlay2.app")
+
     # set paths to Bundle
-    set(CMAKE_INSTALL_DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/QMPlay2.app/Contents/share")
-    set(CMAKE_INSTALL_LIBDIR      "${CMAKE_INSTALL_PREFIX}/QMPlay2.app/Contents/lib")
+    set(CMAKE_INSTALL_DATAROOTDIR "${MAC_BUNDLE_PATH}/Contents/share")
+    set(CMAKE_INSTALL_LIBDIR      "${MAC_BUNDLE_PATH}/Contents/MacOS")
 elseif(NOT WIN32)
     include(GNUInstallDirs)
 endif()

@@ -174,6 +174,31 @@ if(WIN32)
     install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 elseif(APPLE)
     install(TARGETS QMPlay2 BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+    set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
+    set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
+    install(FILES ${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/platforms)
+    install(FILES
+        ${QT_PLUGINS_DIR}/imageformats/libqgif.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqjpeg.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqicns.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqico.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqmacjp2.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqsvg.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqtga.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqtiff.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqwbmp.dylib
+        ${QT_PLUGINS_DIR}/imageformats/libqwebp.dylib
+        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
+    install(CODE "
+         include(BundleUtilities)
+         set(BU_CHMOD_BUNDLE_ITEMS ON)
+         list(APPEND DIRS /usr/local/lib ${QT_LIBS_DIR})
+         file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
+             \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
+             \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
+         fixup_bundle(${CMAKE_INSTALL_PREFIX}/QMPlay2.app \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")"
+     )
 else()
     # executable
     install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")

@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.6)
 if(WIN32)
     set(MODULES_INSTALL_PATH "modules/")
     set(CMAKE_SHARED_MODULE_PREFIX "") # remove lib prefix
+elseif(APPLE)
+    set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/modules/")
 else()
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/qmplay2/modules/")
 endif()
