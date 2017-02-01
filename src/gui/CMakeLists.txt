@@ -120,7 +120,12 @@ if(WIN32)
     list(APPEND GUI_HDR Updater.hpp)
     list(APPEND GUI_SRC Updater.cpp)
 elseif(APPLE)
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
+    set(MACOSX_BUNDLE_BUNDLE_NAME "QMPlay2")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${QMPLAY2_VERSION})
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2017  Błażej Szczygieł")
+
     set(ICNS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2.icns")
     set_source_files_properties(${ICNS_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
@@ -177,7 +182,9 @@ elseif(APPLE)
 
     set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
     set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
-    install(FILES ${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/platforms)
+    install(FILES
+        ${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib
+        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/platforms)
     install(FILES
         ${QT_PLUGINS_DIR}/imageformats/libqgif.dylib
         ${QT_PLUGINS_DIR}/imageformats/libqjpeg.dylib
@@ -191,14 +198,15 @@ elseif(APPLE)
         ${QT_PLUGINS_DIR}/imageformats/libqwebp.dylib
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
     install(CODE "
-         include(BundleUtilities)
-         set(BU_CHMOD_BUNDLE_ITEMS ON)
-         list(APPEND DIRS /usr/local/lib ${QT_LIBS_DIR})
-         file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
-             \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
-             \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
-         fixup_bundle(${CMAKE_INSTALL_PREFIX}/QMPlay2.app \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")"
-     )
+        include(BundleUtilities)
+        set(BU_CHMOD_BUNDLE_ITEMS ON)
+        list(APPEND DIRS /usr/local/lib ${QT_LIBS_DIR})
+        file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
+            \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
+            \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
+        fixup_bundle(${CMAKE_INSTALL_PREFIX}/QMPlay2.app \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
+
+     ")
 else()
     # executable
     install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
