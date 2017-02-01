@@ -101,6 +101,11 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 	}
 	dest->addMenu(newMenu);
 }
+#else
+namespace QMPlay2MacExtensions
+{
+	static void hideApplication();
+}
 #endif
 
 /* MainWidget */
@@ -639,7 +644,13 @@ void MainWidget::toggleVisibility()
 		if (fullScreen)
 			toggleFullScreen();
 		if (!isTray)
+		{
+#ifndef Q_OS_MAC
 			showMinimized();
+#else
+			QMPlay2MacExtensions::hideApplication();
+#endif
+		}
 		else
 		{
 			menuBar->options->trayVisible->setEnabled(false);
@@ -1517,3 +1528,21 @@ void MainWidget::hideEvent(QHideEvent *)
 #endif
 	menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
+
+#ifdef Q_OS_MAC
+namespace QMPlay2MacExtensions
+{
+	#include <objc/message.h>
+
+	static void hideApplication()
+	{
+		static Class cls = objc_getClass("NSApplication");
+		if (cls)
+		{
+			static id appInst = objc_msgSend((id)cls, sel_registerName("sharedApplication"));
+			if (appInst)
+				objc_msgSend(appInst, sel_registerName("hide:"));
+		}
+	}
+}
+#endif
