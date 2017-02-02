@@ -110,7 +110,7 @@ bool QMPlay2CoreClass::canSuspend()
 {
 #if defined Q_OS_LINUX
 	return !system("systemctl --help 2> /dev/null | grep -q suspend");
-#elif defined Q_OS_WIN
+#elif defined Q_OS_WIN || defined Q_OS_MAC
 	return true;
 #else
 	return false;
@@ -122,6 +122,8 @@ void QMPlay2CoreClass::suspend()
 	Q_UNUSED(system("systemctl suspend > /dev/null 2>&1 &"));
 #elif defined Q_OS_WIN
 	SetSuspendState(false, false, false);
+#elif defined Q_OS_MAC
+	Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
 #endif
 }
 
