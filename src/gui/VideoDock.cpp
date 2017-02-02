@@ -205,7 +205,15 @@ void VideoDock::mouseMoveEvent(QMouseEvent *e)
 void VideoDock::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	if (e->buttons() == Qt::LeftButton)
+	{
+#ifndef Q_OS_MAC
 		QMPlay2GUI.menuBar->window->toggleFullScreen->trigger();
+#else
+		// On macOS if full screen is toggled to fast after double click, mouse remains
+		// in clicked state...
+		QTimer::singleShot(100, QMPlay2GUI.menuBar->window->toggleFullScreen, SLOT(trigger()));
+#endif
+	}
 	DockWidget::mouseDoubleClickEvent(e);
 }
 void VideoDock::mousePressEvent(QMouseEvent *e)
