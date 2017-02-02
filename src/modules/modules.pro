@@ -14,7 +14,7 @@ else {
 	SUBDIRS += PortAudio
 }
 
-unix:!macx:!android {
+unix:!android {
 	SUBDIRS += XVideo
 
 	packagesExist(libpulse-simple):	SUBDIRS += PulseAudio
@@ -23,6 +23,5 @@ unix:!macx:!android {
 
 win32: SUBDIRS += FileAssociation DirectX
 
-macx: QT_CONFIG -= no-pkg-config
 win32|packagesExist(libsidplayfp)|packagesExist(libgme): SUBDIRS += Chiptune
 else: message("Chiptune will not be compiled, because libsidplayfp and libgme don't exist")

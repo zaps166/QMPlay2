@@ -16,7 +16,6 @@ win32 {
 
 win32: LIBS += -Wl,-Bstatic -lcdio -lcddb -lregex -Wl,-Bdynamic -lwinmm -lws2_32
 else {
-	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libcdio libcddb
 }

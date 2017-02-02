@@ -16,7 +16,6 @@ win32 {
 
 win32|android: LIBS += -lavcodec -lavutil
 else {
-	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavcodec libavutil
 }

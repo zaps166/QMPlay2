@@ -35,7 +35,7 @@ HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
 DEFINES += USE_LASTFM
 
-unix:!macx:!android {
+unix:!android {
 	QT += dbus
 	HEADERS += MPRIS2.hpp
 	SOURCES += MPRIS2.cpp

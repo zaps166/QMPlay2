@@ -17,7 +17,6 @@ win32 {
 win32: LIBS += -lws2_32
 win32|android: LIBS += -lavformat -lavcodec -lswscale -lavutil
 else {
-	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavformat libavcodec libswscale libavutil
 }
@@ -37,7 +36,7 @@ DEPENDPATH += . ../../qmplay2/headers
 HEADERS += FFmpeg.hpp FFDemux.hpp FFDec.hpp FFDecSW.hpp FFReader.hpp FFCommon.hpp FormatContext.hpp OggHelper.hpp OpenThr.hpp
 SOURCES += FFmpeg.cpp FFDemux.cpp FFDec.cpp FFDecSW.cpp FFReader.cpp FFCommon.cpp FormatContext.cpp OggHelper.cpp OpenThr.cpp
 
-unix:!macx:!android {
+unix:!android {
 	PKGCONFIG += libavdevice
 	DEFINES   += QMPlay2_libavdevice
 

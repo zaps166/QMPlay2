@@ -27,7 +27,7 @@ DEPENDPATH  += . ../../qmplay2/headers
 HEADERS += Notifies.hpp NotifyExtension.hpp TrayNotify.hpp Notify.hpp
 SOURCES += Notifies.cpp NotifyExtension.cpp TrayNotify.cpp
 
- unix:!macx:!android {
+ unix:!android {
 	QT += dbus
 	DBUS_INTERFACES += org.freedesktop.Notifications.xml
 	HEADERS += FreedesktopNotify.hpp

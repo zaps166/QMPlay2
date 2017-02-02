@@ -14,7 +14,7 @@ win32 {
 } else {
 	QMAKE_LIBDIR += ../../app/lib
 	DESTDIR = ../../app/bin
-	!android:!macx: LIBS += -lrt #For glibc < 2.17
+	!android: LIBS += -lrt #For glibc < 2.17
 }
 LIBS += -lqmplay2
 
@@ -48,6 +48,5 @@ win32 {
 	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
 }
 else {
-	macx: QT_CONFIG -= no-pkg-config
 	!android: PKGCONFIG += taglib
 }

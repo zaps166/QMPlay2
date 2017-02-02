@@ -16,7 +16,6 @@ win32 {
 
 win32: LIBS += -Wl,-Bstatic -lportaudio -Wl,-Bdynamic -lwinmm -luuid
 else {
-	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += portaudio-2.0
 }

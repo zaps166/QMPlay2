@@ -19,7 +19,6 @@ win32 {
 	LIBS += -lavformat -lswscale -lswresample -lavutil #-lass
 }
 !win32:!android {
-	macx: QT_CONFIG -= no-pkg-config
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavformat libswscale libswresample libavutil libass
 }
