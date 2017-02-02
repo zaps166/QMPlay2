@@ -36,6 +36,14 @@ else()
     set(DEFAULT_PORTAUDIO ON)
 endif()
 
+if(APPLE)
+    set(DEFAULT_NOTIFIES OFF)
+    set(DEFAULT_CUVID OFF)
+else()
+    set(DEFAULT_NOTIFIES ON)
+    set(DEFAULT_CUVID ON)
+endif()
+
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
 
 if(WIN32)
@@ -156,10 +164,10 @@ endif()
 option(USE_XVIDEO "Build with XVideo module" ${LIB_X11_XV_FOUND})
 add_feature_info(XVideo USE_XVIDEO "Build with XVideo module")
 
-option(USE_CUVID "Build with CUVID module" ON)
+option(USE_CUVID "Build with CUVID module" ${DEFAULT_CUVID})
 add_feature_info(CUVID USE_CUVID "Build with CUVID module")
 
-option(USE_NOTIFIES "Build with Notifications support" ON)
+option(USE_NOTIFIES "Build with Notifications support" ${DEFAULT_NOTIFIES})
 add_feature_info(Notifications USE_NOTIFIES "Build with Notifications support")
 
 if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
