@@ -108,6 +108,11 @@ namespace QMPlay2MacExtensions
 }
 #endif
 
+static bool focusChangedHelper(QWidget *w)
+{
+	return (qobject_cast<QAbstractItemView *>(w) || qobject_cast<QTextEdit *>(w) || qobject_cast<QAbstractSlider *>(w) || qobject_cast<QComboBox *>(w) || qobject_cast<QLineEdit *>(w) || qobject_cast<QMenu *>(w));
+}
+
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 #ifdef UPDATER
@@ -431,15 +436,15 @@ void MainWidget::detachFromPipe()
 
 void MainWidget::focusChanged(QWidget *old, QWidget *now)
 {
-	if ((qobject_cast<QTreeWidget *>(old) || qobject_cast<QSlider *>(old) || qobject_cast<QComboBox *>(old) || qobject_cast<QListWidget *>(old)) && old != seekS)
+	if (focusChangedHelper(old) && old != seekS)
 		menuBar->player->seekActionsEnable(true);
-	if ((qobject_cast<QTreeWidget *>(now) || qobject_cast<QSlider *>(now) || qobject_cast<QComboBox *>(now) || qobject_cast<QListWidget *>(now)) && now != seekS)
+	if (focusChangedHelper(now) && now != seekS)
 		menuBar->player->seekActionsEnable(false);
 
 	if (qobject_cast<QAbstractButton *>(old))
-		menuBar->player->togglePlay->setShortcutContext(Qt::WindowShortcut);
+		menuBar->player->playActionEnable(true);
 	if (qobject_cast<QAbstractButton *>(now))
-		menuBar->player->togglePlay->setShortcutContext(Qt::WidgetShortcut);
+		menuBar->player->playActionEnable(false);
 
 	seekSFocus = (now == seekS);
 }

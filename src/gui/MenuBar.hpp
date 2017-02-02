@@ -80,6 +80,7 @@ public:
 		Q_DECLARE_TR_FUNCTIONS(Player)
 	public:
 		Player(MenuBar *parent);
+
 		class Repeat : public QMenu
 		{
 			Q_DECLARE_TR_FUNCTIONS(Repeat)
@@ -96,7 +97,10 @@ public:
 			QActionGroup *choice;
 			QAction *_auto, *_1x1, *_4x3, *_5x4, *_16x9, *_3x2, *_21x9, *sizeDep, *off;
 		};
-		void seekActionsEnable(bool);
+
+		void seekActionsEnable(bool e);
+		void playActionEnable(bool e);
+
 		Repeat *repeat;
 		AspectRatio *aRatio;
 		QAction *togglePlay, *stop, *next, *prev, *nextFrame, *abRepeat, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute, *detach, *suspend;

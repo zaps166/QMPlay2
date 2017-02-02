@@ -282,13 +282,29 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 	sizeDep->setObjectName("sizeDep");
 	off->setObjectName("off");
 }
+
 void MenuBar::Player::seekActionsEnable(bool e)
 {
+#ifndef Q_OS_MAC
 	Qt::ShortcutContext ctx = e ? Qt::WindowShortcut : Qt::WidgetShortcut;
 	seekF->setShortcutContext(ctx);
 	seekB->setShortcutContext(ctx);
 	lSeekF->setShortcutContext(ctx);
 	lSeekB->setShortcutContext(ctx);
+#else
+	seekF->setEnabled(e);
+	seekB->setEnabled(e);
+	lSeekF->setEnabled(e);
+	lSeekB->setEnabled(e);
+#endif
+}
+void MenuBar::Player::playActionEnable(bool e)
+{
+#ifndef Q_OS_MAC
+	togglePlay->setShortcutContext(e ? Qt::WindowShortcut : Qt::WidgetShortcut);
+#else
+	togglePlay->setEnabled(e);
+#endif
 }
 
 MenuBar::Playback::Playback(MenuBar *parent) :
