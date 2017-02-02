@@ -6,6 +6,9 @@ if(POLICY CMP0003)
     if(POLICY CMP0020)
         cmake_policy(SET CMP0020 NEW)
     endif()
+    if(POLICY CMP0042)
+        cmake_policy(SET CMP0042 NEW)
+    endif()
     if(POLICY CMP0043)
         cmake_policy(SET CMP0043 NEW)
     endif()
@@ -44,7 +47,7 @@ else()
     qt4_add_resources(Visualizations_RESOURCES_RCC ${Visualizations_RESOURCES})
 endif()
 
-add_library(${PROJECT_NAME} MODULE
+add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Visualizations_HDR}
     ${Visualizations_SRC}
     ${Visualizations_RESOURCES_RCC}

@@ -6,6 +6,9 @@ if(COMMAND cmake_policy)
     if(POLICY CMP0020)
         cmake_policy(SET CMP0020 NEW)
     endif()
+    if(POLICY CMP0042)
+        cmake_policy(SET CMP0042 NEW)
+    endif()
     if(POLICY CMP0043)
         cmake_policy(SET CMP0043 NEW)
     endif()
@@ -38,7 +41,7 @@ endif()
 
 include_directories(../../qmplay2/headers)
 
-add_library(${PROJECT_NAME} MODULE
+add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Inputs_HDR}
     ${Inputs_SRC}
     ${Inputs_RESOURCES_RCC}
