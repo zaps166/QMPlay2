@@ -916,10 +916,12 @@ void MainWidget::toggleFullScreen()
 #ifndef Q_OS_ANDROID
 		maximized = isMaximized();
 
+#ifndef Q_OS_MAC
 #ifndef QT5_WINDOWS
 		if (isFullScreen())
 #endif
 			showNormal();
+#endif
 
 		dockWidgetState = saveState();
 		if (!maximized)
