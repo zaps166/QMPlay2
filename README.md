@@ -271,7 +271,7 @@ CMake options (option - default value: description):
 	- `CMAKE_BUILD_TYPE` - `Release`.
 	- `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
-	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on OS X, `OFF` anywhere else: sets RPATH after installation.
+	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
 	- `USE_QT5` - autodetect: if Qt >= 5.6.1 is found then it uses Qt5, otherwise it uses Qt4.
 	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
 	- `USE_FFMPEG_VAAPI`: autodetect: enabled on X11 if libva and libva-x11 exist.
@@ -349,17 +349,17 @@ $ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 $ sudo make uninstall
 ```
 
-####Mac OS X:
+####macOS:
 
-- Download and install Xcode.
-- Download and install the newest Qt5 for OS X.
-- Download, compile and install `pkg-config`.
-- Download and install CMake for OS X (mainly for taglib).
-- Download, compile and install all dependencies from sources.
-- Add directory containing `qmake` to `PATH` (use `export PATH=/path/to/dir`).
-- Run: `./compile_unix n` where `n` is number of threads (4 as default).
-
-You can also use `cmake`, but it doesn't create application bundle.
+- Install [Brew](http://brew.sh) and developer command line tools.
+- Download and install Qt5 for macOS (ignore errors about missing XCode if any).
+- Download and install CMake for macOS:
+ - create symlink for `cmake` CLI (from Bundle) to `/usr/local/bin`.
+- Install `pkg-config` and all dependencies from Brew.
+ - you can also compile them manually (especially `libass`, `ffmpeg` (w/o encoders) and `freetype` (w/o `glib`)):
+- Use CMake and set missing directories for dependencies (QtCreator is recommended or at least CMake GUI):
+ - set install prefix e.g. to Desktop directory (for Bundle),
+ - install via `make install` - this creates a Bundle.
 
 ####Windows (cross-compilation):
 
