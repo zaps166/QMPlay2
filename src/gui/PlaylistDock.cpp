@@ -50,6 +50,7 @@ PlaylistDock::PlaylistDock() :
 
 	m_playlistsW = new QTabWidget;
 	m_playlistsW->setTabsClosable(true);
+	m_playlistsW->setMovable(true);
 
 	QGridLayout *layout = new QGridLayout(&mainW);
 	layout->addWidget(m_playlistsW);
