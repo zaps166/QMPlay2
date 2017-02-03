@@ -23,8 +23,10 @@
 
 class QTreeWidgetItem;
 class PlaylistWidget;
+class QTabWidget;
 class LineEdit;
 class QLabel;
+class QMenu;
 
 class PlaylistDock : public DockWidget
 {
@@ -37,8 +39,8 @@ public:
 	QString getUrl(QTreeWidgetItem *tWI = nullptr) const;
 	QString getCurrentItemName() const;
 
-	void load(const QString &);
-	bool save(const QString &, bool saveCurrentGroup = false);
+	void load(const QString &url, const QString &name = QString());
+	bool save(const QString &url, bool saveCurrentGroup = false, PlaylistWidget *list = nullptr);
 
 	void add(const QStringList &);
 	void addAndPlay(const QStringList &);
@@ -63,7 +65,8 @@ private:
 	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
 
 	QWidget mainW;
-	PlaylistWidget *list;
+	QTabWidget *m_playlistsW;
+	PlaylistWidget *m_currPlaylist;
 	QLabel *statusL;
 	LineEdit *findE;
 
@@ -76,6 +79,7 @@ private slots:
 	void itemDoubleClicked(QTreeWidgetItem *);
 	void addAndPlay(QTreeWidgetItem *);
 	void maybeDoQuickSync(QTreeWidgetItem *item);
+	void playlistsTabsCurrentChanged(int index);
 public slots:
 	void stopLoading();
 	void next(bool playingError = false);
