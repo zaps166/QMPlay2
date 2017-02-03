@@ -51,7 +51,7 @@ QList<Chiptune::Info> Chiptune::getModulesInfo(const bool showDisabled) const
 #endif
 #ifdef USE_SIDPLAY
 	if (showDisabled || getBool("SIDPlay"))
-		modulesInfo += Info(SIDPlayName, DEMUXER, QStringList() << "sid" << ".c64" << ".prg", SIDIcon);
+		modulesInfo += Info(SIDPlayName, DEMUXER, QStringList() << "sid" << "c64" << "prg", SIDIcon);
 #endif
 	return modulesInfo;
 }

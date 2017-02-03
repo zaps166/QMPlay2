@@ -137,6 +137,15 @@ private:
 	void showEvent(QShowEvent *);
 	void hideEvent(QHideEvent *);
 
+#ifdef Q_OS_MAC
+	bool eventFilter(QObject *obj, QEvent *event);
+
+	void fileOpenTimerTimeout();
+
+	QTimer fileOpenTimer;
+	QStringList filesToAdd;
+#endif
+
 	MenuBar *menuBar;
 	QToolBar *mainTB;
 	QStatusBar *statusBar;

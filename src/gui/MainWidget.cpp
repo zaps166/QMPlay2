@@ -407,6 +407,12 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 			playStateChanged(false);
 	}
 
+#ifdef Q_OS_MAC
+	qApp->installEventFilter(this);
+	fileOpenTimer.setSingleShot(true);
+	connect(&fileOpenTimer, &QTimer::timeout, this, &MainWidget::fileOpenTimerTimeout);
+#endif
+
 #ifdef UPDATER
 	if (settings.getBool("AutoUpdates"))
 		updater.downloadUpdate();
@@ -1536,6 +1542,25 @@ void MainWidget::hideEvent(QHideEvent *)
 }
 
 #ifdef Q_OS_MAC
+bool MainWidget::eventFilter(QObject *obj, QEvent *event)
+{
+	if (event->type() == QEvent::FileOpen)
+	{
+		filesToAdd.append(((QFileOpenEvent *)event)->file());
+		fileOpenTimer.start(10);
+	}
+	return QMainWindow::eventFilter(obj, event);
+}
+
+void MainWidget::fileOpenTimerTimeout()
+{
+	if (filesToAdd.count() == 1)
+		playlistDock->addAndPlay(filesToAdd.at(0));
+	else
+		playlistDock->addAndPlay(filesToAdd);
+	filesToAdd.clear();
+}
+
 namespace QMPlay2MacExtensions
 {
 	#include <objc/message.h>

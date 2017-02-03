@@ -128,6 +128,12 @@ elseif(APPLE)
 
     set(ICNS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2.icns")
     set_source_files_properties(${ICNS_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+    set(ICNS_FILE_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2File.icns")
+    set_source_files_properties(${ICNS_FILE_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+    set(ICNS_PLAYLIST_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2List.icns")
+    set_source_files_properties(${ICNS_PLAYLIST_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 # RPATH
@@ -144,7 +150,9 @@ if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
-add_executable(QMPlay2 MACOSX_BUNDLE ${ICNS_FILE_PATH} ${WIN32_EXE}
+add_executable(QMPlay2
+    ${WIN32_EXE}
+    MACOSX_BUNDLE ${ICNS_FILE_PATH} ${ICNS_FILE_FILE_PATH} ${ICNS_PLAYLIST_FILE_PATH}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
@@ -168,6 +176,9 @@ if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     mark_as_advanced(CUSTOM_GUI_LIBRARIES)
 elseif(APPLE)
+    set_target_properties(QMPlay2 PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
+
     target_link_libraries(QMPlay2 "objc")
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
