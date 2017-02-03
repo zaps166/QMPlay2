@@ -185,6 +185,7 @@ void VideoDock::dropEvent(QDropEvent *e)
 						url.prepend("file://");
 #endif
 					emit itemDropped(url, subtitles);
+					e->accept();
 				}
 			}
 		}

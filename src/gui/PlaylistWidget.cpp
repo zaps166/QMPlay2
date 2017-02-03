@@ -1053,6 +1053,7 @@ void PlaylistWidget::dropEvent(QDropEvent *e)
 	{
 		selectAfterAdd = true;
 		add(Functions::getUrlsFromMimeData(e->mimeData()), itemAt(e->pos()));
+		e->accept();
 	}
 }
 void PlaylistWidget::paintEvent(QPaintEvent *e)
