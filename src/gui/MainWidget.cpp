@@ -778,6 +778,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playlist->stopLoading, SIGNAL(triggered()), playlistDock, SLOT(stopLoading()));
 	connect(menuBar->playlist->sync, SIGNAL(triggered()), playlistDock, SLOT(syncCurrentFolder()));
 	connect(menuBar->playlist->quickSync, SIGNAL(triggered()), playlistDock, SLOT(quickSyncCurrentFolder()));
+	connect(menuBar->playlist->newPlist, SIGNAL(triggered()), playlistDock, SLOT(newPlaylist()));
 	connect(menuBar->playlist->loadPlist, SIGNAL(triggered()), this, SLOT(loadPlist()));
 	connect(menuBar->playlist->savePlist, SIGNAL(triggered()), this, SLOT(savePlist()));
 	connect(menuBar->playlist->delPlist, SIGNAL(triggered()), playlistDock, SLOT(playlistsCloseTab()));

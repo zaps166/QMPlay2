@@ -35,6 +35,7 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QDir>
+#include <QToolButton>
 
 PlaylistDock::PlaylistDock() :
 	m_currPlaylist(nullptr),
@@ -51,6 +52,11 @@ PlaylistDock::PlaylistDock() :
 	m_playlistsW = new QTabWidget;
 	m_playlistsW->setTabsClosable(true);
 	m_playlistsW->setMovable(true);
+
+	QToolButton *newTab = new QToolButton;
+	newTab->setIcon(QMPlay2Core.getIconFromTheme("list-add"));
+	connect(newTab, SIGNAL(clicked(bool)), this, SLOT(newPlaylist()));
+	m_playlistsW->setCornerWidget(newTab, Qt::TopLeftCorner);
 
 	QGridLayout *layout = new QGridLayout(&mainW);
 	layout->addWidget(m_playlistsW);
@@ -746,6 +752,10 @@ void PlaylistDock::updateCurrentEntry(const QString &name, double length)
 	m_currPlaylist->updateEntryThr.updateEntry(m_currPlaylist->currentPlaying, name, length);
 }
 
+void PlaylistDock::newPlaylist()
+{
+	m_playlistsW->addTab(new PlaylistWidget, tr("Playlist"));
+}
 void PlaylistDock::playlistsCloseTab(int index)
 {
 	if (index == -1)

@@ -133,6 +133,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
 	newAction(Playlist::tr("&Synchronize group"), this, sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
 	newAction(Playlist::tr("&Quick group synchronization"), this, quickSync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
 	addSeparator();
+	newAction(Playlist::tr("New &list"), this, newPlist, false, QIcon(), false);
 	newAction(Playlist::tr("Load &list"), this, loadPlist, false, QIcon(), false);
 	newAction(Playlist::tr("Save &list"), this, savePlist, false, QIcon(), false);
 	newAction(Playlist::tr("Close &list"), this, delPlist, false, QIcon(), false);
@@ -503,6 +504,7 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(playlist->stopLoading, "KeyBindings/Playlist-stopLoading", "F4");
 	shortcuts->appendAction(playlist->sync, "KeyBindings/Playlist-sync", "Shift+F5");
 	shortcuts->appendAction(playlist->quickSync, "KeyBindings/Playlist-quickSync", "F5");
+	shortcuts->appendAction(playlist->newPlist, "KeyBindings/Playlist-newPlist", "Ctrl+N");
 	shortcuts->appendAction(playlist->loadPlist, "KeyBindings/Playlist-loadPlist", "Ctrl+L");
 	shortcuts->appendAction(playlist->savePlist, "KeyBindings/Playlist-savePlist", "Ctrl+S");
 	shortcuts->appendAction(playlist->delPlist, "KeyBindings/Playlist-delPlist", "Ctrl+W");
