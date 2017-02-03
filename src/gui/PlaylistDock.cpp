@@ -155,6 +155,13 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup, PlaylistWidg
 }
 void PlaylistDock::loadAll()
 {
+	const QString oldPath = QMPlay2Core.getSettingsDir() + "Playlist.pls";
+	QFile oldPlist(oldPath);
+	if (oldPlist.exists())
+	{
+		load(oldPath, tr("Main"));
+		oldPlist.remove();
+	}
 	for (const QString &fname : QDir(QMPlay2Core.getSettingsDir() + "/Playlists").entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst))
 	{
 		const QString fileName = Functions::fileName(fname);
