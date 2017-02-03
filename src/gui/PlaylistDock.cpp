@@ -21,6 +21,7 @@
 
 #include <EntryProperties.hpp>
 #include <LineEdit.hpp>
+#include <Settings.hpp>
 #include <Main.hpp>
 
 #include <QFileInfo>
@@ -159,6 +160,7 @@ void PlaylistDock::loadAll()
 	{
 		m_playlistsW->addTab(m_currPlaylist = new PlaylistWidget, tr("Playlist"));
 	}
+	m_playlistsW->setCurrentIndex(qBound(0, QMPlay2Core.getSettings().getInt("PlaylistDock/SelectedPlaylist"), m_playlistsW->count()));
 }
 void PlaylistDock::saveAll()
 {
@@ -168,6 +170,7 @@ void PlaylistDock::saveAll()
 	int length = QString::number(m_playlistsW->count()).length();
 	for (int i = 0; i < m_playlistsW->count(); ++i)
 		save(QString("%0/%2_%1.pls").arg(dir, m_playlistsW->tabText(i)).arg(i, length, 10, QChar('0')), false, (PlaylistWidget *)m_playlistsW->widget(i));
+	QMPlay2Core.getSettings().set("PlaylistDock/SelectedPlaylist", m_playlistsW->currentIndex());
 }
 
 void PlaylistDock::add(const QStringList &urls)
