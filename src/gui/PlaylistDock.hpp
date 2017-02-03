@@ -41,6 +41,8 @@ public:
 
 	void load(const QString &url, const QString &name = QString());
 	bool save(const QString &url, bool saveCurrentGroup = false, PlaylistWidget *list = nullptr);
+	void loadAll();
+	void saveAll();
 
 	void add(const QStringList &);
 	void addAndPlay(const QStringList &);

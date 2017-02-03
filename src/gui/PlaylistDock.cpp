@@ -135,6 +135,29 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup, PlaylistWidg
 	}
 	return Playlist::write(entries, url);
 }
+void PlaylistDock::loadAll()
+{
+	for (const QString &fname : QDir(QMPlay2Core.getSettingsDir() + "/Playlists").entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst))
+	{
+		const QString fileName = Functions::fileName(fname);
+		const int end = fileName.lastIndexOf('.');
+		const int start = fileName.indexOf('_') + 1;
+		load(QMPlay2Core.getSettingsDir() + "/Playlists/" + fname, fileName.mid(start, end == -1 ? -1 : end - start));
+	}
+	if (m_playlistsW->count() == 0)
+	{
+		m_playlistsW->addTab(m_currPlaylist = new PlaylistWidget, tr("Playlist"));
+	}
+}
+void PlaylistDock::saveAll()
+{
+	const QString dir = QMPlay2Core.getSettingsDir() + "/Playlists/";
+	for (const QString &fName : QDir(dir).entryList(QDir::Files | QDir::NoDotAndDotDot))
+		QFile::remove(dir + fName);
+	int length = QString::number(m_playlistsW->count()).length();
+	for (int i = 0; i < m_playlistsW->count(); ++i)
+		save(QString("%0/%2_%1.pls").arg(dir, m_playlistsW->tabText(i)).arg(i, length, 10, QChar('0')), false, (PlaylistWidget *)m_playlistsW->widget(i));
+}
 
 void PlaylistDock::add(const QStringList &urls)
 {
