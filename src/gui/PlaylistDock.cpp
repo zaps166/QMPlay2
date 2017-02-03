@@ -16,28 +16,29 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <PlaylistDock.hpp>
 #include <PlaylistWidget.hpp>
+#include <PlaylistDock.hpp>
 
 #include <EntryProperties.hpp>
 #include <LineEdit.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
 
-#include <QFileInfo>
-#include <QLabel>
-#include <QBuffer>
-#include <QLineEdit>
-#include <QGridLayout>
-#include <QClipboard>
 #include <QApplication>
+#include <QInputDialog>
+#include <QGridLayout>
+#include <QMessageBox>
+#include <QToolButton>
+#include <QClipboard>
+#include <QTabWidget>
+#include <QFileInfo>
+#include <QLineEdit>
 #include <QMimeData>
 #include <QPainter>
 #include <QAction>
-#include <QMessageBox>
+#include <QBuffer>
+#include <QLabel>
 #include <QDir>
-#include <QToolButton>
-#include <QInputDialog>
 
 PlaylistDock::PlaylistDock() :
 	m_currPlaylist(nullptr),
