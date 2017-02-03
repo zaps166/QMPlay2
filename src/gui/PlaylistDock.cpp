@@ -102,6 +102,11 @@ QString PlaylistDock::getCurrentItemName() const
 	return m_currPlaylist->currentItem()->text(0);
 }
 
+QString PlaylistDock::getCurrentPlaylistName() const
+{
+	return m_playlistsW->tabText(m_playlistsW->currentIndex());
+}
+
 void PlaylistDock::load(const QString &url, const QString &name)
 {
 	if (!url.isEmpty())

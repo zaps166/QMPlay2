@@ -38,6 +38,7 @@ public:
 
 	QString getUrl(QTreeWidgetItem *tWI = nullptr) const;
 	QString getCurrentItemName() const;
+	QString getCurrentPlaylistName() const;
 
 	void load(const QString &url, const QString &name = QString());
 	bool save(const QString &url, bool saveCurrentGroup = false, PlaylistWidget *list = nullptr);
