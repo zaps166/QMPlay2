@@ -782,6 +782,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playlist->loadPlist, SIGNAL(triggered()), this, SLOT(loadPlist()));
 	connect(menuBar->playlist->savePlist, SIGNAL(triggered()), this, SLOT(savePlist()));
 	connect(menuBar->playlist->delPlist, SIGNAL(triggered()), playlistDock, SLOT(playlistsCloseTab()));
+	connect(menuBar->playlist->renamePlist, SIGNAL(triggered()), playlistDock, SLOT(playlistsTabDoubleClicked()));
 	connect(menuBar->playlist->saveGroup, SIGNAL(triggered()), this, SLOT(saveGroup()));
 	connect(menuBar->playlist->newGroup, SIGNAL(triggered()), playlistDock, SLOT(newGroup()));
 	connect(menuBar->playlist->renameGroup, SIGNAL(triggered()), playlistDock, SLOT(renameGroup()));
