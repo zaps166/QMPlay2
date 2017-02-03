@@ -49,6 +49,7 @@ PlaylistDock::PlaylistDock() :
 	statusL = new QLabel;
 
 	m_playlistsW = new QTabWidget;
+	m_playlistsW->setTabsClosable(true);
 
 	QGridLayout *layout = new QGridLayout(&mainW);
 	layout->addWidget(m_playlistsW);
@@ -59,6 +60,7 @@ PlaylistDock::PlaylistDock() :
 
 	connect(findE, SIGNAL(textChanged(const QString &)), this, SLOT(findItems(const QString &)));
 	connect(findE, SIGNAL(returnPressed()), this, SLOT(findNext()));
+	connect(m_playlistsW, SIGNAL(tabCloseRequested(int)), this, SLOT(playlistsCloseTab(int)));
 	connect(m_playlistsW, SIGNAL(currentChanged(int)), this, SLOT(playlistsTabsCurrentChanged(int)));
 
 	QAction *act = new QAction(this);
@@ -741,4 +743,19 @@ void PlaylistDock::repeat()
 void PlaylistDock::updateCurrentEntry(const QString &name, double length)
 {
 	m_currPlaylist->updateEntryThr.updateEntry(m_currPlaylist->currentPlaying, name, length);
+}
+
+void PlaylistDock::playlistsCloseTab(int index)
+{
+	if (index == -1)
+		index = m_playlistsW->currentIndex();
+	PlaylistWidget *list = (PlaylistWidget *)m_playlistsW->widget(index);
+	m_playlistsW->removeTab(index);
+
+	if (m_playlistsW->count() == 0)
+		m_playlistsW->addTab(m_currPlaylist = new PlaylistWidget, tr("Playlist"));
+	else
+		m_currPlaylist = (PlaylistWidget *)m_playlistsW->currentWidget();
+
+	delete list;
 }
