@@ -1029,7 +1029,16 @@ void MainWidget::showMessage(const QString &msg, const QString &title, int messa
 {
 	const bool isTray = isTrayVisible();
 	if (ms < 1 || !isTray)
-		QMessageBox((QMessageBox::Icon)messageIcon, title, msg, QMessageBox::Ok, this).exec();
+	{
+		QMessageBox *messageBox = new QMessageBox(this);
+		messageBox->setIcon((QMessageBox::Icon)messageIcon);
+		messageBox->setStandardButtons(QMessageBox::Ok);
+		messageBox->setAttribute(Qt::WA_DeleteOnClose);
+		messageBox->setInformativeText(msg);
+		messageBox->setText(title);
+		messageBox->setModal(true);
+		messageBox->show();
+	}
 	else
 	{
 		tray->showMessage(title, msg, (QSystemTrayIcon::MessageIcon)messageIcon, ms);
@@ -1424,12 +1433,6 @@ void MainWidget::leaveEvent(QEvent *e)
 }
 void MainWidget::closeEvent(QCloseEvent *e)
 {
-#ifdef Q_OS_MAC
-	static bool first = true;
-	if (!first)
-		return; // Prevent calling this method twice on macOS
-#endif
-
 	const QString quitMsg = tr("Are you sure you want to quit?");
 	if
 	(
@@ -1489,10 +1492,6 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	playC.stop(true);
-
-#ifdef Q_OS_MAC
-	first = false;
-#endif
 }
 void MainWidget::changeEvent(QEvent *e)
 {
