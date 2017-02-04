@@ -206,6 +206,7 @@ TagEditor::TagEditor() :
 	pictureLayout->addWidget(saveImgB);
 
 	QFormLayout *tagsLayout = new QFormLayout;
+	tagsLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 	tagsLayout->addRow(tr("Title") + ": ", titleE = new QLineEdit);
 	tagsLayout->addRow(tr("Artist") + ": ", artistE = new QLineEdit);
 	tagsLayout->addRow(tr("Album") + ": ", albumE = new QLineEdit);

@@ -121,6 +121,9 @@
        </item>
        <item row="0" column="0" colspan="2">
         <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
          <property name="verticalSpacing">
           <number>1</number>
          </property>

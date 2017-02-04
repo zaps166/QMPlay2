@@ -230,6 +230,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	connect(echoSurroundB, SIGNAL(clicked()), this, SLOT(echo()));
 
 	QFormLayout *echoBLayout = new QFormLayout(echoB);
+	echoBLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 	echoBLayout->addRow(tr("Echo delay") + ": ", echoDelayS);
 	echoBLayout->addRow(tr("Echo volume") + ": ", echoVolumeS);
 	echoBLayout->addRow(tr("Echo repeat") + ": ", echoFeedbackS);
@@ -262,6 +263,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	connect(compressorRatioS, SIGNAL(valueChanged(int)), this, SLOT(compressor()));
 
 	QFormLayout *compressorBLayout = new QFormLayout(compressorB);
+	compressorBLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 	compressorBLayout->addRow(tr("Peak limit") + ": ", compressorPeakS); //[%]
 	compressorBLayout->addRow(tr("Release time") + ": ", compressorReleaseTimeS); //[s]
 	compressorBLayout->addRow(tr("Fast compression ratio") + ": ", compressorFastRatioS);
