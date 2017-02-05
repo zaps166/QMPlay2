@@ -58,6 +58,8 @@ private:
 
 	void doGroupSync(bool quick);
 
+	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
+
 	QWidget mainW;
 	PlaylistWidget *list;
 	QLabel *statusL;

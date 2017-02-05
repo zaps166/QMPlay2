@@ -70,6 +70,8 @@ private:
 
 		bool updateLength, updateImg;
 		double length;
+
+		QMutex *mutex;
 	};
 private slots:
 	void updateItem(ItemUpdated iu);

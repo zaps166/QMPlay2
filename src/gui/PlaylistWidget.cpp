@@ -86,6 +86,7 @@ void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, dou
 void UpdateEntryThr::run()
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
+	QList<QMutex *> mutexesToDelete;
 	while (!ioCtrl.isAborted())
 	{
 		mutex.lock();
@@ -140,7 +141,16 @@ void UpdateEntryThr::run()
 			timeChanged = true;
 		}
 
+		iu.mutex = new QMutex;
+		iu.mutex->lock();
 		QMetaObject::invokeMethod(this, "updateItem", Q_ARG(ItemUpdated, iu));
+		mutexesToDelete.append(iu.mutex);
+	}
+	foreach (QMutex *mutex, mutexesToDelete)
+	{
+		mutex->lock(); // Wait for "updateItem()", because thread mustn't be finished earlier
+		mutex->unlock();
+		delete mutex;
 	}
 }
 void UpdateEntryThr::stop()
@@ -168,6 +178,7 @@ void UpdateEntryThr::updateItem(ItemUpdated iu)
 	}
 	if (iu.item == pLW.currentPlaying)
 		QMetaObject::invokeMethod(QMPlay2GUI.mainW, "updateWindowTitle", Q_ARG(QString, iu.item->text(0)));
+	iu.mutex->unlock();
 }
 void UpdateEntryThr::finished()
 {

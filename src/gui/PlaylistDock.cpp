@@ -241,6 +241,14 @@ void PlaylistDock::doGroupSync(bool quick)
 	}
 }
 
+void PlaylistDock::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
+{
+	randomPlayedItems.removeOne(tWI);
+	if (lastPlaying == tWI)
+		lastPlaying = NULL;
+	delete tWI;
+}
+
 void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
 {
 	if (!tWI || PlaylistWidget::isGroup(tWI))
@@ -285,8 +293,6 @@ void PlaylistDock::stopLoading()
 void PlaylistDock::next(bool playingError)
 {
 	QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
-	if (lastPlaying && !l.contains(lastPlaying))
-		lastPlaying = NULL;
 	QTreeWidgetItem *tWI = NULL;
 	if (!l.isEmpty())
 	{
@@ -461,10 +467,7 @@ void PlaylistDock::delEntries()
 		foreach (QTreeWidgetItem *tWI, selectedItems)
 		{
 			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
-			{
-				randomPlayedItems.removeOne(tWI);
-				delete tWI;
-			}
+				deleteTreeWidgetItem(tWI);
 		}
 		list->refresh();
 		if (list->currentItem())
@@ -488,10 +491,7 @@ void PlaylistDock::delNonGroupEntries()
 		foreach (QTreeWidgetItem *tWI, list->topLevelNonGroupsItems())
 		{
 			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
-			{
-				randomPlayedItems.removeOne(tWI);
-				delete tWI;
-			}
+				deleteTreeWidgetItem(tWI);
 		}
 		list->refresh();
 		list->setItemsResizeToContents(true);
@@ -501,7 +501,10 @@ void PlaylistDock::delNonGroupEntries()
 void PlaylistDock::clear()
 {
 	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to clear the list?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	{
+		lastPlaying = NULL;
 		list->clear();
+	}
 }
 void PlaylistDock::copy()
 {
