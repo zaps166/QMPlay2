@@ -27,7 +27,11 @@ OpenGL2::OpenGL2() :
 	init("Enabled", true);
 	init("AllowPBO", true);
 #ifdef OPENGL_NEW_API
-	init("ForceRtt", false);
+	#ifdef DEFAULT_RTT
+		init("ForceRtt", true);
+	#else
+		init("ForceRtt", false);
+	#endif
 #endif
 #ifdef VSYNC_SETTINGS
 	init("VSync", true);
