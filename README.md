@@ -357,7 +357,7 @@ $ sudo make uninstall
 - Download and install CMake for macOS:
  - create symlink for `cmake` CLI (from Bundle) to `/usr/local/bin`.
 - Install `pkg-config` and all dependencies from Brew.
- - you can also compile them manually (especially `libass`, `ffmpeg` (w/o encoders) and `freetype` (w/o `glib`)):
+ - you can also compile them manually (especially `libass`, `ffmpeg` (w/o encoders), `fribidi` (w/o `glib`) and `libsidplayfp`):
 - Use CMake and set missing directories for dependencies (QtCreator is recommended or at least CMake GUI):
  - set install prefix e.g. to Desktop directory (for Bundle),
  - install via `make install` - this creates a Bundle.
