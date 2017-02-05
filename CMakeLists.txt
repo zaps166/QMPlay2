@@ -171,7 +171,12 @@ option(USE_NOTIFIES "Build with Notifications support" ${DEFAULT_NOTIFIES})
 add_feature_info(Notifications USE_NOTIFIES "Build with Notifications support")
 
 if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
-    option(USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations" OFF)
+    if(APPLE)
+        set(DEFAULT_OPENGL_FOR_VISUALIZATIONS ON)
+    else()
+        set(DEFAULT_OPENGL_FOR_VISUALIZATIONS OFF)
+    endif()
+    option(USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations" ${DEFAULT_OPENGL_FOR_VISUALIZATIONS})
     add_feature_info(VisualizationsOpenGL USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations")
 endif()
 
