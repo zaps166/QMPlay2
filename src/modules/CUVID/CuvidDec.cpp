@@ -688,7 +688,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 			m_lastTS[1] = m_lastTS[0];
 			m_lastTS[0] = encodedPacket.ts;
 		}
-		else if (m_lastTS[0] >= 0.0 && m_lastTS[0] > m_lastTS[1])
+		else if (m_lastTS[0] >= 0.0 && m_lastTS[1] >= 0.0 && m_lastTS[0] > m_lastTS[1])
 		{
 			const double diff = m_lastTS[0] - m_lastTS[1];
 			m_lastTS[1] = m_lastTS[0];
