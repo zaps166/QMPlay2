@@ -1605,6 +1605,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Default settings</source>
         <translation>Domyślne ustawienia</translation>
     </message>
+    <message>
+        <source>Prevent exclusive full screen</source>
+        <translation>Nie zezwalaj na exclusive full screen</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

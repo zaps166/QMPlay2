@@ -1605,6 +1605,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Default settings</source>
         <translation>Standardeinstellungen</translation>
     </message>
+    <message>
+        <source>Prevent exclusive full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

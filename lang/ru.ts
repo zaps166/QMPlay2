@@ -1605,6 +1605,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Default settings</source>
         <translation>Параметры по умолчанию</translation>
     </message>
+    <message>
+        <source>Prevent exclusive full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
