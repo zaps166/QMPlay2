@@ -32,6 +32,10 @@ OpenGL2::OpenGL2() :
 #ifdef VSYNC_SETTINGS
 	init("VSync", true);
 #endif
+#ifdef Q_OS_WIN
+	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+		init("PreventFullScreen", true);
+#endif
 }
 
 QList<OpenGL2::Info> OpenGL2::getModulesInfo(const bool showDisabled) const
@@ -79,6 +83,18 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	vsyncB->setChecked(sets().getBool("VSync"));
 #endif
 
+#ifdef Q_OS_WIN
+	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+	{
+		preventFullScreenB = new QCheckBox(tr("Prevent exclusive full screen"));
+		preventFullScreenB->setChecked(sets().getBool("PreventFullScreen"));
+	}
+	else
+	{
+		preventFullScreenB = NULL;
+	}
+#endif
+
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(enabledB);
 	layout->addWidget(allowPboB);
@@ -87,6 +103,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 #ifdef VSYNC_SETTINGS
 	layout->addWidget(vsyncB);
+#endif
+#ifdef Q_OS_WIN
+	if (preventFullScreenB)
+		layout->addWidget(preventFullScreenB);
 #endif
 }
 
@@ -99,5 +119,9 @@ void ModuleSettingsWidget::saveSettings()
 #endif
 #ifdef VSYNC_SETTINGS
 	sets().set("VSync", vsyncB->isChecked());
+#endif
+#ifdef Q_OS_WIN
+	if (preventFullScreenB)
+		sets().set("PreventFullScreen", preventFullScreenB->isChecked());
 #endif
 }

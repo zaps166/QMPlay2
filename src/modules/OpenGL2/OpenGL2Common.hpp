@@ -87,11 +87,6 @@ public:
 	virtual bool setVSync(bool enable) = 0;
 	virtual void updateGL(bool requestDelayed) = 0;
 
-	inline void setAllowPBO(bool allow)
-	{
-		allowPBO = allow;
-	}
-
 	void newSize(const QSize &size = QSize());
 	void clearImg();
 
@@ -118,10 +113,6 @@ protected:
 	GLMapBufferRange glMapBufferRange;
 	GLMapBuffer glMapBuffer;
 	GLUnmapBuffer glUnmapBuffer;
-
-#ifdef Q_OS_WIN
-	bool preventFullscreen;
-#endif
 
 #ifdef VSYNC_SETTINGS
 	bool vSync;
@@ -159,6 +150,10 @@ public:
 
 	quint32 pbo[4];
 	bool allowPBO, hasPbo;
+
+#ifdef Q_OS_WIN
+	bool preventFullScreen;
+#endif
 
 	bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;

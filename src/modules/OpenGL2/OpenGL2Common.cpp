@@ -90,9 +90,6 @@ OpenGL2Common::OpenGL2Common() :
 	supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
 	glActiveTexture(NULL),
 #endif
-#ifdef Q_OS_WIN
-	preventFullscreen(false),
-#endif
 #ifdef VSYNC_SETTINGS
 	vSync(true),
 #endif
@@ -102,6 +99,9 @@ OpenGL2Common::OpenGL2Common() :
 	numPlanes(0),
 	Deinterlace(0),
 	allowPBO(true), hasPbo(false),
+#ifdef Q_OS_WIN
+	preventFullScreen(false),
+#endif
 	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0),
@@ -760,7 +760,7 @@ void OpenGL2Common::testGLInternal()
 	 * This property is read by QMPlay2 and it ensures that toolbar will be visible
 	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
-	if (preventFullscreen && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+	if (preventFullScreen && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 	{
 		Qt::CheckState compositionEnabled = Qt::Checked;
 		if (QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
@@ -774,7 +774,7 @@ void OpenGL2Common::testGLInternal()
 					compositionEnabled = Qt::PartiallyChecked;
 			}
 		}
-		w->setProperty("preventFullscreen", (int)compositionEnabled);
+		w->setProperty("preventFullScreen", (int)compositionEnabled);
 	}
 #endif
 }

@@ -75,6 +75,12 @@ bool OpenGL2Writer::set()
 		doReset = true;
 	forceRtt = newForceRtt;
 #endif
+#ifdef Q_OS_WIN
+	bool newPreventFullScreen = sets().getBool("PreventFullScreen");
+	if (preventFullScreen != newPreventFullScreen)
+		doReset = true;
+	preventFullScreen = newPreventFullScreen;
+#endif
 	return !doReset && sets().getBool("Enabled");
 }
 
@@ -205,7 +211,10 @@ bool OpenGL2Writer::open()
 	drawable = new OpenGL2OldWidget;
 #endif
 	drawable->hwAccellnterface = m_hwAccelInterface;
-	drawable->setAllowPBO(allowPBO);
+#ifdef Q_OS_WIN
+	drawable->preventFullScreen = preventFullScreen;
+#endif
+	drawable->allowPBO = allowPBO;
 	if (drawable->testGL())
 	{
 #ifdef VSYNC_SETTINGS

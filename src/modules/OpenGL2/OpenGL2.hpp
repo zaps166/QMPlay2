@@ -50,4 +50,7 @@ private:
 #ifdef VSYNC_SETTINGS
 	QCheckBox *vsyncB;
 #endif
+#ifdef Q_OS_WIN
+	QCheckBox *preventFullScreenB;
+#endif
 };

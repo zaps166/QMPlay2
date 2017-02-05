@@ -59,6 +59,9 @@ private:
 #ifdef VSYNC_SETTINGS
 	bool vSync;
 #endif
+#ifdef Q_OS_WIN
+	bool preventFullScreen;
+#endif
 };
 
 #define OpenGL2WriterName "OpenGL 2"

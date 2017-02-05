@@ -149,8 +149,8 @@ void InDockW::resizeEvent(QResizeEvent *)
 			Y -= mappedY;
 		}
 
-		const Qt::CheckState preventFullscreen = (Qt::CheckState)w->property("preventFullscreen").value<int>();
-		if ((preventFullscreen == Qt::Checked || (loseHeight && preventFullscreen == Qt::PartiallyChecked)) && window()->property("fullScreen").toBool())
+		const Qt::CheckState preventFullScreen = (Qt::CheckState)w->property("preventFullScreen").value<int>();
+		if ((preventFullScreen == Qt::Checked || (loseHeight && preventFullScreen == Qt::PartiallyChecked)) && window()->property("fullScreen").toBool())
 		{
 			X -= 1;
 			Y -= 1;
