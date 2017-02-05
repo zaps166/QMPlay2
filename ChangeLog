@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.02.02:
+Changes in QMPlay2 build 17.02.05:
 	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
 	- add "Skip" and "Stop after" flags for playlist (Zamarin Arthur),
 	- add "Lock" flag for playlist entry - don't allow to remove it,
