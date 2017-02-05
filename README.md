@@ -302,6 +302,7 @@ CMake options (option - default value: description):
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.
 	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
+	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
 
 Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.

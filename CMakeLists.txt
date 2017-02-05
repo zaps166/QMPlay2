@@ -183,17 +183,21 @@ if(NOT WIN32)
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
         OUTPUT_VARIABLE QMPLAY2_VERSION)
     string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
+endif()
 
-    #get QMPlay2 Git HEAD by running git command
+option(USE_GIT_VERSION "Append Git HEAD to QMPlay2 version (if exists)" ON)
+if(USE_GIT_VERSION)
+    # get QMPlay2 Git HEAD by running git command
     execute_process(
         COMMAND git rev-parse --short HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         OUTPUT_VARIABLE QMPLAY2_GIT_HEAD)
     if(QMPLAY2_GIT_HEAD)
         string(STRIP ${QMPLAY2_GIT_HEAD} QMPLAY2_GIT_HEAD)
         add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
     endif()
 endif()
+add_feature_info("Git version" QMPLAY2_GIT_HEAD "Append Git HEAD to QMPlay2 version")
 
 if(USE_QT5)
     if(NOT Qt5Widgets_FOUND)
