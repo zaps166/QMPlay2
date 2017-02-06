@@ -81,6 +81,20 @@ set(GUI_RESOURCES
     resources.qrc
 )
 
+if(APPLE)
+    find_library(APPKIT_LIBRARY AppKit REQUIRED)
+    find_package(Qt5MacExtras REQUIRED)
+
+    list(APPEND GUI_HDR
+        macOS/QMPlay2MacExtensions.hpp
+    )
+    list(APPEND GUI_SRC
+        macOS/QMPlay2MacExtensions.mm
+    )
+
+    include_directories("macOS")
+endif()
+
 if(USE_QT5)
     qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
     qt5_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
@@ -179,7 +193,9 @@ elseif(APPLE)
     set_target_properties(QMPlay2 PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
 
-    target_link_libraries(QMPlay2 "objc")
+    qt5_use_modules(QMPlay2 MacExtras)
+
+    target_link_libraries(QMPlay2 ${APPKIT_LIBRARY})
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)

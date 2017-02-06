@@ -49,6 +49,9 @@
 #include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
 #include <ScreenSaver.hpp>
+#ifdef Q_OS_MAC
+	#include <QMPlay2MacExtensions.hpp>
+#endif
 
 using Functions::timeToStr;
 
@@ -100,11 +103,6 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
 			newMenu->addMenu(dontCopy);
 	}
 	dest->addMenu(newMenu);
-}
-#else
-namespace QMPlay2MacExtensions
-{
-	static void hideApplication();
 }
 #endif
 
@@ -172,6 +170,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	QMPlay2Core.systemTray = tray;
 #else
 	tray = NULL;
+	#ifdef Q_OS_MAC
+		QMPlay2MacExtensions::init();
+	#endif
 #endif
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);
@@ -659,7 +660,7 @@ void MainWidget::toggleVisibility()
 #ifndef Q_OS_MAC
 			showMinimized();
 #else
-			QMPlay2MacExtensions::hideApplication();
+			QMPlay2MacExtensions::setApplicationVisible(false);
 #endif
 		}
 		else
@@ -1036,6 +1037,13 @@ void MainWidget::showMessage(const QString &msg, const QString &title, int messa
 	const bool isTray = isTrayVisible();
 	if (ms < 1 || !isTray)
 	{
+#ifdef Q_OS_MAC
+		if (ms > 0)
+		{
+			QMPlay2MacExtensions::notify(title, msg, messageIcon, ms);
+			return;
+		}
+#endif
 		QMessageBox *messageBox = new QMessageBox(this);
 		messageBox->setIcon((QMessageBox::Icon)messageIcon);
 		messageBox->setStandardButtons(QMessageBox::Ok);
@@ -1467,6 +1475,8 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
 #ifndef Q_OS_MAC
 	settings.set("MainWidget/isVisible", isVisible());
+#else
+	QMPlay2MacExtensions::deinit();
 #endif
 	if (tray)
 		settings.set("TrayVisible", tray->isVisible());
@@ -1559,21 +1569,5 @@ void MainWidget::fileOpenTimerTimeout()
 	else
 		playlistDock->addAndPlay(filesToAdd);
 	filesToAdd.clear();
-}
-
-namespace QMPlay2MacExtensions
-{
-	#include <objc/message.h>
-
-	static void hideApplication()
-	{
-		static Class cls = objc_getClass("NSApplication");
-		if (cls)
-		{
-			static id appInst = objc_msgSend((id)cls, sel_registerName("sharedApplication"));
-			if (appInst)
-				objc_msgSend(appInst, sel_registerName("hide:"));
-		}
-	}
 }
 #endif
