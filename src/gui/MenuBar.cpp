@@ -30,12 +30,13 @@
 #include <QMainWindow>
 #include <QDir>
 
-static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable)
+static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable, QAction::MenuRole role = QAction::NoRole)
 {
 	act = new QAction(txt, parent);
 	act->setAutoRepeat(autoRepeat);
 	act->setCheckable(checkable);
 	parent->addAction(act);
+	act->setMenuRole(role);
 	act->setIcon(icon);
 	return act;
 }
@@ -78,7 +79,7 @@ MenuBar::MenuBar()
 	addMenu(help = new Help(this));
 	connect(widgets, SIGNAL(aboutToShow()), this, SLOT(widgetsMenuShow()));
 #ifdef Q_OS_MAC
-	widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown (QTBUG?)
+	widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown
 #endif
 }
 
@@ -89,7 +90,7 @@ MenuBar::Window::Window(MenuBar *parent) :
 	newAction(Window::tr("&Full screen"), this, toggleFullScreen, false, QMPlay2Core.getIconFromTheme("view-fullscreen"), false);
 	newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true );
 	addSeparator();
-	newAction(Window::tr("&Close"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false);
+	newAction(Window::tr("&Close"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false, QAction::QuitRole);
 }
 
 MenuBar::Widgets::Widgets(MenuBar *parent) :
@@ -388,7 +389,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 	QMenu(Options::tr("Op&tions"), parent)
 {
 	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
-	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false);
+	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false, QAction::PreferencesRole);
 	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
 	addSeparator();
 
@@ -440,12 +441,12 @@ MenuBar::Options::Options(MenuBar *parent) :
 MenuBar::Help::Help(MenuBar *parent) :
 	QMenu(Help::tr("&Help"), parent)
 {
-	newAction(Help::tr("&About QMPlay2"), this, about, false, QIcon(), false);
+	newAction(Help::tr("&About QMPlay2"), this, about, false, QIcon(), false, QAction::AboutRole);
 #ifdef UPDATER
 	newAction(Help::tr("&Updates"), this, updates, false, QIcon(), false);
 #endif
 	addSeparator();
-	newAction(Help::tr("About &Qt"), this, aboutQt, false, QIcon(), false);
+	newAction(Help::tr("About &Qt"), this, aboutQt, false, QIcon(), false, QAction::AboutQtRole);
 }
 
 void MenuBar::setKeyShortcuts()
