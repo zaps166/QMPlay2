@@ -38,6 +38,8 @@ static inline void releaseNotification(NSUserNotification *notification)
 	[notification release];
 }
 
+/**/
+
 void QMPlay2MacExtensions::init()
 {
 	if (!g_notificationItem)
