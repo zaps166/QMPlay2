@@ -607,7 +607,12 @@ int main(int argc, char *argv[])
 		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = qmplay2Gui.noAutoPlay = false;
 		qmplay2Gui.newProfileName.clear();
 		new MainWidget(QMPArguments);
-		QCoreApplication::exec();
+		do
+		{
+			QCoreApplication::exec();
+			// Go back to event queue and allow to close the main window (and playback) if
+			// QCoreApplication exits too early. Reproducible on macOS when closing from dock.
+		} while (qmplay2Gui.mainW);
 
 		const QString settingsDir = QMPlay2Core.getSettingsDir();
 		const QString profile = QMPlay2Core.getSettingsProfile();
