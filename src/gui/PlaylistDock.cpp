@@ -293,6 +293,8 @@ void PlaylistDock::stopLoading()
 void PlaylistDock::next(bool playingError)
 {
 	QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
+	if (lastPlaying && !l.contains(lastPlaying))
+		lastPlaying = NULL;
 	QTreeWidgetItem *tWI = NULL;
 	if (!l.isEmpty())
 	{
