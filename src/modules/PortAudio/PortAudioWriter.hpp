@@ -52,6 +52,8 @@ private:
 
 #ifdef Q_OS_WIN
 	bool isNoDriverError() const;
+#endif
+#if defined Q_OS_WIN || defined Q_OS_MAC
 	bool reopenStream();
 #endif
 
@@ -63,6 +65,7 @@ private:
 	int sample_rate;
 	double outputLatency;
 	bool err, fullBufferReached;
+	int underflows;
 };
 
 #define PortAudioWriterName "PortAudio"

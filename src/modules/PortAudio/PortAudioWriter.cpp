@@ -23,6 +23,12 @@
 	#define MMSYSERR_NODRIVER 6
 #endif
 
+#ifdef Q_OS_MAC
+	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
+#else
+	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
+#endif
+
 PortAudioWriter::PortAudioWriter(Module &module) :
 	stream(NULL),
 	sample_rate(0),
@@ -125,8 +131,8 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 		if (!startStream())
 			return playbackError();
 		fullBufferReached = false;
+		underflows = 0;
 	}
-#ifndef Q_OS_MAC
 	else
 	{
 		const int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
@@ -141,7 +147,6 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 			fullBufferReached = false;
 		}
 	}
-#endif
 
 #ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data.
 	const int chn = outputParameters.channelCount;
@@ -226,6 +231,21 @@ inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e != paNoError)
 		fullBufferReached = false;
+	if (e == paOutputUnderflowed)
+	{
+		if (outputParameters.suggestedLatency < DEFAULT_HIGH_AUDIO_DELAY && ++underflows >= 10)
+		{
+			// Increase delay and try again - useful e.g. on VirtualBox and Bluetooth audio.
+			outputParameters.suggestedLatency = DEFAULT_HIGH_AUDIO_DELAY;
+			if (!reopenStream())
+				return false;
+			return true;
+		}
+	}
+	else if (underflows > 0)
+	{
+		--underflows;
+	}
 	return (e != paUnanticipatedHostError);
 }
 qint64 PortAudioWriter::playbackError()
@@ -241,6 +261,8 @@ bool PortAudioWriter::isNoDriverError() const
 	const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
 	return errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER;
 }
+#endif
+#if defined Q_OS_WIN || defined Q_OS_MAC
 bool PortAudioWriter::reopenStream()
 {
 	Pa_CloseStream(stream);
