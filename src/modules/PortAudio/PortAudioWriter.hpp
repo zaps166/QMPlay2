@@ -53,9 +53,7 @@ private:
 #ifdef Q_OS_WIN
 	bool isNoDriverError() const;
 #endif
-#if defined Q_OS_WIN || defined Q_OS_MAC
 	bool reopenStream();
-#endif
 
 	void close();
 

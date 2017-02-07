@@ -262,7 +262,6 @@ bool PortAudioWriter::isNoDriverError() const
 	return errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER;
 }
 #endif
-#if defined Q_OS_WIN || defined Q_OS_MAC
 bool PortAudioWriter::reopenStream()
 {
 	Pa_CloseStream(stream);
@@ -271,7 +270,6 @@ bool PortAudioWriter::reopenStream()
 	stream = NULL;
 	return false;
 }
-#endif
 
 void PortAudioWriter::close()
 {
