@@ -302,30 +302,41 @@ static void unInhibitScreenSaver()
 static inline void forceKill()
 {
 #ifdef Q_OS_WIN
-	const int SC = SIGBREAK;
+	const int s = SIGBREAK;
 #else
-	const int SC = SIGKILL;
+	const int s = SIGKILL;
 #endif
 	delete g_screenSaver; //Current implementation doesn't need this
-	raise(SC);
+	raise(s);
+}
+static inline void callDefaultSignalHandler(int s)
+{
+	delete g_screenSaver; //Current implementation doesn't need this
+	signal(s, SIG_DFL);
+	raise(s);
 }
 static void signal_handler(int s)
 {
+	const char *crashSignal = NULL;
 	switch (s)
 	{
 		case SIGINT:
+		case SIGTERM:
 			if (!qApp)
 				forceKill();
 			else
 			{
+				static bool first = true;
 				QWidget *modalW = QApplication::activeModalWidget();
-				if (!modalW && QMPlay2GUI.mainW)
+				if (!modalW && QMPlay2GUI.mainW && first)
 				{
 					QMPlay2GUI.mainW->close();
-					QMPlay2GUI.mainW = NULL;
+					first = false;
 				}
 				else
+				{
 					forceKill();
+				}
 			}
 			break;
 		case SIGABRT:
@@ -337,22 +348,27 @@ static void signal_handler(int s)
 			}
 #endif
 			QMPlay2Core.log("QMPlay2 has been aborted (SIGABRT)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
-#ifndef Q_OS_WIN
-			forceKill();
-#endif
+			callDefaultSignalHandler(s);
+			break;
+		case SIGILL:
+			crashSignal = "SIGILL";
 			break;
 		case SIGFPE:
-			QMPlay2Core.log("QMPlay2 crashes (SIGFPE)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
-#ifndef Q_OS_WIN
-			forceKill();
-#endif
+			crashSignal = "SIGFPE";
 			break;
+#ifndef Q_OS_WIN
+		case SIGBUS:
+			crashSignal = "SIGBUS";
+			break;
+#endif
 		case SIGSEGV:
-			QMPlay2Core.log("QMPlay2 crashes (SIGSEGV)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
-#ifndef Q_OS_WIN
-			forceKill();
-#endif
+			crashSignal = "SIGSEGV";
 			break;
+	}
+	if (crashSignal)
+	{
+		QMPlay2Core.log(QString("QMPlay2 crashed (%1)").arg(crashSignal), ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
+		callDefaultSignalHandler(s);
 	}
 }
 
@@ -395,8 +411,13 @@ int main(int argc, char *argv[])
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGABRT, signal_handler);
+	signal(SIGILL, signal_handler);
 	signal(SIGFPE, signal_handler);
+#ifndef Q_OS_WIN
+	signal(SIGBUS, signal_handler);
+#endif
 	signal(SIGSEGV, signal_handler);
+	signal(SIGTERM, signal_handler);
 	atexit(unInhibitScreenSaver);
 
 #ifdef Q_WS_X11
