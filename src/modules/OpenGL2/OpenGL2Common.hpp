@@ -155,7 +155,7 @@ public:
 	bool preventFullScreen;
 #endif
 
-	bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize;
+	bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
 	int glVer;
 

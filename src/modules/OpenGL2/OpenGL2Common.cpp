@@ -102,7 +102,7 @@ OpenGL2Common::OpenGL2Common() :
 #ifdef Q_OS_WIN
 	preventFullScreen(false),
 #endif
-	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false),
+	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0),
 	aspectRatio(0.0), zoom(0.0),
@@ -219,7 +219,7 @@ void OpenGL2Common::initializeGL()
 		if (numPlanes == 1)
 		{
 			VideoFrag = readShader(":/VideoRGB.frag");
-			if (glVer >= 30)
+			if (canUseHueSharpness)
 			{
 				//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
 				VideoFrag.prepend("#define Sharpness\n");
@@ -228,7 +228,7 @@ void OpenGL2Common::initializeGL()
 		else
 		{
 			VideoFrag = readShader(":/VideoYCbCr.frag");
-			if (glVer >= 30)
+			if (canUseHueSharpness)
 			{
 				//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
 				VideoFrag.prepend("#define HueAndSharpness\n");
@@ -673,6 +673,7 @@ void OpenGL2Common::testGLInternal()
 	glGetIntegerv(GL_MAJOR_VERSION, &glMajor);
 	glGetIntegerv(GL_MINOR_VERSION, &glMinor);
 #endif
+#ifndef Q_OS_MAC //On macOS I have always OpenGL 2.1...
 	if (!glMajor)
 	{
 		const QString glVersionStr = (const char *)glGetString(GL_VERSION);
@@ -686,6 +687,8 @@ void OpenGL2Common::testGLInternal()
 	}
 	if (glMajor)
 		glVer = glMajor * 10 + glMinor;
+	canUseHueSharpness = (glVer >= 30);
+#endif
 
 #ifndef OPENGL_ES2
 	initGLProc(); //No need to call it here for OpenGL|ES

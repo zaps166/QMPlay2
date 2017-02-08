@@ -237,14 +237,14 @@ bool OpenGL2Writer::open()
 		else if (drawable->numPlanes > 1)
 		{
 			addParam("Saturation");
-			if (drawable->glVer >= 30)
+			if (drawable->canUseHueSharpness)
 				addParam("Hue");
 		}
 		if (!hasBrightness)
 			addParam("Brightness");
 		if (!hasContrast)
 			addParam("Contrast");
-		if (!hasSharpness && drawable->glVer >= 30)
+		if (!hasSharpness && drawable->canUseHueSharpness)
 			addParam("Sharpness");
 		return true;
 	}
