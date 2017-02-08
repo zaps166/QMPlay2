@@ -1606,8 +1606,8 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Domyślne ustawienia</translation>
     </message>
     <message>
-        <source>Prevent exclusive full screen</source>
-        <translation>Nie zezwalaj na exclusive full screen</translation>
+        <source>Try to prevent exclusive full screen</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

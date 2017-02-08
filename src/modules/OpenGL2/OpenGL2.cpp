@@ -90,7 +90,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #ifdef Q_OS_WIN
 	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 	{
-		preventFullScreenB = new QCheckBox(tr("Prevent exclusive full screen"));
+		preventFullScreenB = new QCheckBox(tr("Try to prevent exclusive full screen"));
 		preventFullScreenB->setChecked(sets().getBool("PreventFullScreen"));
 	}
 	else

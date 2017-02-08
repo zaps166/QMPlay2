@@ -760,18 +760,26 @@ void OpenGL2Common::testGLInternal()
 	 * This property is read by QMPlay2 and it ensures that toolbar will be visible
 	 * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
 	*/
-	if (preventFullScreen && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+	const bool canPreventFullScreen = (qstrcmp(w->metaObject()->className(), "QOpenGLWidget") != 0);
+	const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
+	if (canPreventFullScreen && winVer >= QSysInfo::WV_6_0)
 	{
-		Qt::CheckState compositionEnabled = Qt::Checked;
-		if (QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
+		Qt::CheckState compositionEnabled;
+		if (!preventFullScreen)
+			compositionEnabled = Qt::PartiallyChecked;
+		else
 		{
-			typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
-			DwmIsCompositionEnabledProc DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled");
-			if (DwmIsCompositionEnabled)
+			compositionEnabled = Qt::Checked;
+			if (winVer <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
 			{
-				BOOL enabled = false;
-				if (DwmIsCompositionEnabled(&enabled) == S_OK && !enabled)
-					compositionEnabled = Qt::PartiallyChecked;
+				typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
+				DwmIsCompositionEnabledProc DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled");
+				if (DwmIsCompositionEnabled)
+				{
+					BOOL enabled = false;
+					if (DwmIsCompositionEnabled(&enabled) == S_OK && !enabled)
+						compositionEnabled = Qt::PartiallyChecked;
+				}
 			}
 		}
 		w->setProperty("preventFullScreen", (int)compositionEnabled);

@@ -1606,7 +1606,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Параметры по умолчанию</translation>
     </message>
     <message>
-        <source>Prevent exclusive full screen</source>
+        <source>Try to prevent exclusive full screen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

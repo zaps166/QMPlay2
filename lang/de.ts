@@ -1606,7 +1606,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <source>Prevent exclusive full screen</source>
+        <source>Try to prevent exclusive full screen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
