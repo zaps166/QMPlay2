@@ -20,7 +20,6 @@
 #include <Functions.hpp>
 
 #include <QPainter>
-#include <QMenu>
 
 #include <math.h>
 
@@ -94,7 +93,8 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 				const int numSamples = size / chn;
 				for (int i = 0; i < size; i += chn)
 					lr[c] += samples[i + c] * samples[i + c];
-				lr[c] = sqrt(lr[c] / numSamples);
+				lr[c] = 20.0 * log10(sqrt(lr[c] / numSamples));
+				lr[c] = qMin<qreal>(qMax<qreal>(0.0, lr[c] + 43.0) / 40.0, 1.0);
 			}
 
 			t.translate(0.0, 2.0);
