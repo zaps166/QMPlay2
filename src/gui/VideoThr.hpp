@@ -78,7 +78,7 @@ private:
 
 	void run();
 
-	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame;
+	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrame;
 	double lastSampleAspectRatio;
 	int W, H;
 	quint32 seq;

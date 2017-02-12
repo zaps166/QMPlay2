@@ -274,7 +274,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 	else
 		encodedPacket.ts.setInvalid();
 
-	return bytes_consumed < 0 ? 0 : bytes_consumed;
+	return bytes_consumed < 0 ? -1 : bytes_consumed;
 }
 bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h)
 {

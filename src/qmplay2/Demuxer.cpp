@@ -72,6 +72,11 @@ bool Demuxer::metadataChanged() const
 	return false;
 }
 
+bool Demuxer::isStillImage() const
+{
+	return false;
+}
+
 QList<ProgramInfo> Demuxer::getPrograms() const
 {
 	return QList<ProgramInfo>();

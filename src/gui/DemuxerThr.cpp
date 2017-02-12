@@ -343,6 +343,8 @@ void DemuxerThr::run()
 	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
 
+	bool stillImage = demuxer->isStillImage();
+
 	localStream = demuxer->localStream();
 	time = localStream ? 0.0 : Functions::gettime();
 
@@ -377,6 +379,9 @@ void DemuxerThr::run()
 
 	DemuxerTimer demuxerTimer(*this);
 
+	if (stillImage && playC.paused)
+		playC.paused = false;
+
 	while (!demuxer.isAborted())
 	{
 		seekMutex.lock();
@@ -396,7 +401,18 @@ void DemuxerThr::run()
 		const bool updateBuffered = localStream ? false : canUpdateBuffered();
 		const double remainingDuration = getAVBuffersSize(vS, aS);
 		if (playC.endOfStream && !vS && !aS && canBreak(aThr, vThr))
-			break;
+		{
+			if (!stillImage)
+				break;
+			else
+			{
+				if (playC.paused)
+					stillImage = false;
+				else
+					playC.paused = true;
+				handlePause();
+			}
+		}
 		if (updateBuffered)
 		{
 			emitBufferInfo(false);

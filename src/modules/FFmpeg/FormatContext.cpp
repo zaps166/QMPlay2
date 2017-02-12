@@ -228,6 +228,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	lastTime(0.0),
 	invalErrCount(0), errFromSeek(0),
 	maybeHasFrame(false),
+	stillImage(false),
 	avcodec_mutex(avcodec_mutex)
 {}
 FormatContext::~FormatContext()
@@ -264,6 +265,11 @@ bool FormatContext::metadataChanged() const
 		return true;
 	}
 	return false;
+}
+
+bool FormatContext::isStillImage() const
+{
+	return stillImage;
 }
 
 QList<ProgramInfo> FormatContext::getPrograms() const
@@ -459,7 +465,7 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 }
 double FormatContext::length() const
 {
-	if (!isStreamed && formatCtx->duration != QMPLAY2_NOPTS_VALUE)
+	if (!isStreamed && !stillImage && formatCtx->duration != QMPLAY2_NOPTS_VALUE)
 		return formatCtx->duration / (double)AV_TIME_BASE;
 	return -1.0;
 }
@@ -682,19 +688,6 @@ bool FormatContext::open(const QString &_url, const QString &param)
 {
 	static const QStringList disabledDemuxers = QStringList()
 		<< "ass"
-		<< "bmp_pipe"
-		<< "dxp_pipe"
-		<< "exr_pipe"
-		<< "j2k_pipe"
-		<< "jpeg_pipe"
-		<< "jpegls_pipe"
-		<< "pictor_pipe"
-		<< "png_pipe"
-		<< "sgi_pipe"
-		<< "sunrast_pipe"
-		<< "tiff_pipe"
-		<< "webp_pipe"
-		<< "image2"
 		<< "tty" //txt files
 	;
 
@@ -753,6 +746,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	openThr->drop();
 	if (!formatCtx || disabledDemuxers.contains(name()))
 		return false;
+
+	if (name().startsWith("image2") || name().endsWith("_pipe"))
+		stillImage = true;
 
 #ifdef MP3_FAST_SEEK
 	if (name() == "mp3")
@@ -930,7 +926,8 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 				streamInfo->sample_aspect_ratio = av_q2d(codecParams(stream)->sample_aspect_ratio);
 			streamInfo->W = codecParams(stream)->width;
 			streamInfo->H = codecParams(stream)->height;
-			streamInfo->FPS = av_q2d(stream->r_frame_rate);
+			if (!stillImage)
+				streamInfo->FPS = av_q2d(stream->r_frame_rate);
 			break;
 		case AVMEDIA_TYPE_ATTACHMENT:
 			streamInfo->title = getTag(stream->metadata, "filename", false);

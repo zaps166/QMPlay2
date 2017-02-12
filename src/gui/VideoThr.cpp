@@ -43,7 +43,7 @@ using Functions::gettime;
 VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
-	deleteOSD(false), deleteFrame(false),
+	deleteOSD(false), deleteFrame(false), gotFrame(false),
 	W(0), H(0), seq(0),
 	sDec(NULL),
 	hwAccelWriter(hwAccelWriter),
@@ -97,6 +97,7 @@ void VideoThr::setFrameSize(int w, int h)
 	writer->modParam("W", W);
 	writer->modParam("H", H);
 	deleteSubs = deleteOSD = deleteFrame = true;
+	gotFrame = false;
 	++seq;
 }
 void VideoThr::setARatio(double aRatio, double sar)
@@ -206,7 +207,7 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
 	QMutex emptyBufferMutex;
 	VideoFrame videoFrame;
@@ -232,8 +233,9 @@ void VideoThr::run()
 		const bool mustFetchNewPacket = !filters.readyRead();
 		playC.vPackets.lock();
 		const bool hasVPackets = playC.vPackets.canFetch();
-		if (maybeFlush)
+		if (maybeFlush || (!gotFrame && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
+		err = false;
 		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData)
 		{
 			if (playC.paused && !paused)
@@ -241,6 +243,7 @@ void VideoThr::run()
 				QMetaObject::invokeMethod(this, "pause");
 				paused = true;
 				frame_timer = -1.0;
+				emit playC.updateBitrateAndFPS(-1, -1, -1.0, 0.0, interlaced); //Set real FPS to 0 on pause
 			}
 			playC.vPackets.unlock();
 
@@ -389,10 +392,14 @@ void VideoThr::run()
 				}
 				interlaced = decoded.interlaced;
 				filters.addFrame(decoded, packet.ts);
+				gotFrame = true;
 			}
 			else if (skip)
 				filters.removeLastFromInputBuffer();
-			tmp_br += bytes_consumed;
+			if (bytes_consumed < 0)
+				err = true;
+			else
+				tmp_br += bytes_consumed;
 		}
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);

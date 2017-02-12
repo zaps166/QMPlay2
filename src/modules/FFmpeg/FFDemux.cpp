@@ -50,6 +50,14 @@ bool FFDemux::metadataChanged() const
 	return isMetadataChanged;
 }
 
+bool FFDemux::isStillImage() const
+{
+	bool stillImage = true;
+	foreach (const FormatContext *fmtCtx, formatContexts)
+		stillImage &= fmtCtx->isStillImage();
+	return stillImage;
+}
+
 QList<ProgramInfo> FFDemux::getPrograms() const
 {
 	if (formatContexts.count() == 1)

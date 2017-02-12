@@ -46,6 +46,8 @@ public:
 
 	virtual bool metadataChanged() const;
 
+	virtual bool isStillImage() const;
+
 	inline QList<StreamInfo *> streamsInfo() const
 	{
 		return streams_info;

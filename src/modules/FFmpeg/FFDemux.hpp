@@ -32,6 +32,8 @@ private:
 
 	bool metadataChanged() const;
 
+	bool isStillImage() const;
+
 	QList<ProgramInfo> getPrograms() const;
 	QList<ChapterInfo> getChapters() const;
 

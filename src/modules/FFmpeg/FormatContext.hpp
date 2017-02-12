@@ -51,6 +51,8 @@ public:
 
 	bool metadataChanged() const;
 
+	bool isStillImage() const;
+
 	QList<ProgramInfo> getPrograms() const;
 	QList<ChapterInfo> getChapters() const;
 
@@ -100,6 +102,8 @@ private:
 
 	int invalErrCount, errFromSeek;
 	bool maybeHasFrame;
+
+	bool stillImage;
 
 #if LIBAVFORMAT_VERSION_MAJOR <= 55
 	AVDictionary *metadata;
