@@ -1029,6 +1029,8 @@ void MainWidget::toggleFullScreen()
 		visibleQMPlay2Extensions.clear();
 
 		QMPlay2GUI.screenSaver->unInhibit(1);
+
+		setFocus();
 	}
 	QMPlay2Core.fullScreenChanged(fullScreen);
 }
