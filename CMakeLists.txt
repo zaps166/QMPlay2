@@ -60,6 +60,8 @@ option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
 add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
+option(USE_SOUNDCLOUD "Build with SoundCloud support" ON)
+add_feature_info(SoundCloud USE_SOUNDCLOUD "Build with ProstoPleer support")
 option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
 add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")
 

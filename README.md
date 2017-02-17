@@ -298,6 +298,7 @@ CMake options (option - default value: description):
 	- `USE_JEMALLOC` - `OFF`: link to jemalloc memory allocator which can reduce memory usage.
 	- `USE_CMD` - Windows only, `OFF`.
 	- `USE_PROSTOPLEER` - `ON`: enable/disable Prostopleer in Extensions module.
+	- `USE_SOUNDCLOUD` - `ON`: enable/disable SoundCloud in Extensions module.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.

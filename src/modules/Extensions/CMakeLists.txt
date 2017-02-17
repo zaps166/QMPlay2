@@ -59,6 +59,12 @@ if(USE_LASTFM)
     add_definitions(-DUSE_LASTFM)
 endif()
 
+if(USE_SOUNDCLOUD)
+    list(APPEND Extensions_HDR SoundCloud.hpp)
+    list(APPEND Extensions_SRC SoundCloud.cpp)
+    add_definitions(-DUSE_SOUNDCLOUD)
+endif()
+
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
 else()

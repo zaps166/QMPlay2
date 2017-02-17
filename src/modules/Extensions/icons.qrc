@@ -7,5 +7,6 @@
 		<file alias="lastfm">lastfm.png</file>
 		<file alias="radio">radio.png</file>
 		<file alias="video">video.png</file>
+                <file alias="soundcloud">soundcloud.png</file>
 	</qresource>
 </RCC>

@@ -35,6 +35,9 @@ private:
 #ifdef USE_LASTFM
 	QImage lastfm;
 #endif
+#ifdef USE_SOUNDCLOUD
+	QImage soundcloud;
+#endif
 };
 
 /**/
