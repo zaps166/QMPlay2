@@ -18,10 +18,10 @@
 
 #include <Playlist.hpp>
 
-class PLS : public Playlist
+class XSPF : public Playlist
 {
 	Entries read();
 	bool write(const Entries &);
 };
 
-#define PLSName "PLS"
+#define XSPFName "XSPF"

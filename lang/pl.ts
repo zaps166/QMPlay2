@@ -1112,10 +1112,6 @@
         <translation>włączony</translation>
     </message>
     <message>
-        <source>PLS support</source>
-        <translation>Obsługa formatu PLS</translation>
-    </message>
-    <message>
         <source>M3U support</source>
         <translation>Obsługa formatu M3U</translation>
     </message>
@@ -1608,6 +1604,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Try to prevent exclusive full screen</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XSPF support</source>
+        <translation>Obsługa formatu XSPF</translation>
     </message>
 </context>
 <context>

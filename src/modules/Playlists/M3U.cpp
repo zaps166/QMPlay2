@@ -76,9 +76,8 @@ bool M3U::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write("#EXTM3U\r\n");
-	for (int i = 0; i < list.size(); i++)
+	foreach (const Entry &entry, list)
 	{
-		const Entry &entry = list[i];
 		if (!entry.GID)
 		{
 			const QString length = QString::number((qint32)(entry.length + 0.5));
@@ -95,6 +94,3 @@ bool M3U::write(const Entries &list)
 	}
 	return true;
 }
-
-M3U::~M3U()
-{}

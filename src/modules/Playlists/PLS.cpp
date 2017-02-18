@@ -129,7 +129,7 @@ bool PLS::write(const Entries &list)
 	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
 	for (int i = 0; i < list.size(); i++)
 	{
-		const Playlist::Entry &entry = list[i];
+		const Entry &entry = list[i];
 		const QString idx = QString::number(i+1);
 		QString url = entry.url;
 		const bool isFile = url.startsWith("file://");
@@ -160,6 +160,3 @@ bool PLS::write(const Entries &list)
 	}
 	return true;
 }
-
-PLS::~PLS()
-{}

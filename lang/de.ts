@@ -1112,10 +1112,6 @@
         <translation>Aktiviert</translation>
     </message>
     <message>
-        <source>PLS support</source>
-        <translation>PLS Unterstützung</translation>
-    </message>
-    <message>
         <source>M3U support</source>
         <translation>M3U Unterstützung</translation>
     </message>
@@ -1607,6 +1603,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Try to prevent exclusive full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XSPF support</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

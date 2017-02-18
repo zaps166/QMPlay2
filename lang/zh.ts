@@ -1112,10 +1112,6 @@
         <translation>已启用</translation>
     </message>
     <message>
-        <source>PLS support</source>
-        <translation>PLS 支持</translation>
-    </message>
-    <message>
         <source>M3U support</source>
         <translation>M3U 支持</translation>
     </message>
@@ -1606,6 +1602,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Try to prevent exclusive full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XSPF support</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

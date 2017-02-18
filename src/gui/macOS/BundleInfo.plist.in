@@ -101,6 +101,7 @@
             <array>
                 <string>pls</string>
                 <string>m3u</string>
+                <string>xspf</string>
             </array>
             <key>CFBundleTypeIconFile</key>
             <string>QMPlay2List.icns</string>

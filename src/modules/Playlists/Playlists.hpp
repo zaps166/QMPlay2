@@ -43,6 +43,6 @@ public:
 private:
 	void saveSettings();
 
-	QCheckBox *plsEnabledB, *m3uEnabledB;
+	QCheckBox *m3uEnabledB, *xspfEnabledB;
 };
 
