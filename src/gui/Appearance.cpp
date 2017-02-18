@@ -77,7 +77,7 @@ static const QString QMPlay2ColorExtension = ".QMPlay2Color";
 static QPalette systemPalette;
 static QString colorsDir;
 
-static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color, double alpha = 1.0)
+static QColor getColor(QPalette::ColorRole colorRole, QColor color, double alpha = 1.0)
 {
 	color.setAlphaF(alpha);
 	if (colorRole == QPalette::AlternateBase)
@@ -101,6 +101,12 @@ static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color,
 		b = qBound(0, b, 255);
 		color.setRgb(r, g, b, a);
 	}
+	return color;
+}
+
+static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color, double alpha = 1.0)
+{
+	color = getColor(colorRole, color, alpha);
 	pal.setBrush(QPalette::Active, colorRole, color);
 	pal.setBrush(QPalette::Inactive, colorRole, colorRole == QPalette::Highlight ? color.lighter(120) : color);
 	pal.setBrush(QPalette::Disabled, colorRole, color.darker(140));
@@ -120,24 +126,34 @@ static QString getColorSchemePath(const QString &dir, QString name)
 		return ":/Colors/" + name;
 	return dir + name;
 }
+static void applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal, const QColor &borderC)
+{
+	QApplication::setPalette(pal);
+	qApp->setStyleSheet("QMenu::separator {background: " + borderC.name() + "; }");
+	QMPlay2GUI.mainW->setPalette(mainW_pal);
+	foreach (QWidget *w, QApplication::allWidgets())
+	{
+		if (QSlider *s = qobject_cast<QSlider *>(w))
+			s->setPalette(sliderButton_pal);
+	}
+}
 
 void Appearance::init()
 {
 	colorsDir = QMPlay2Core.getSettingsDir() + "Colors/";
 
 	systemPalette = QApplication::palette();
-	QDir dir(QMPlay2Core.getSettingsDir());
-	dir.mkdir("Colors");
+	QDir(QMPlay2Core.getSettingsDir()).mkdir("Colors");
 
 	QMPlay2GUI.grad1  = DEFAULT_GRAD1;
 	QMPlay2GUI.grad2  = DEFAULT_GRAD2;
 	QMPlay2GUI.qmpTxt = DEFAULT_QMPTXT;
 
-	QString colorScheme = QMPlay2Core.getSettings().getString("ColorScheme");
+	const QString colorScheme = QMPlay2Core.getSettings().getString("ColorScheme");
 	if (!colorScheme.isEmpty())
 	{
 		const QString filePath = getColorSchemePath(colorsDir, colorScheme);
-		QSettings colorScheme(filePath, QSettings::IniFormat);
+		const QSettings colorScheme(filePath, QSettings::IniFormat);
 		if (colorScheme.value("QMPlay2ColorScheme").toBool())
 		{
 			bool mustApplyPalette = false;
@@ -203,19 +219,8 @@ void Appearance::init()
 			}
 
 			if (mustApplyPalette)
-				applyPalette(pal, sliderButton_pal, mainW_pal);
+				applyPalette(pal, sliderButton_pal, mainW_pal, getColor(QPalette::Shadow, colorScheme.value("Colors/Shadow").toUInt()));
 		}
-	}
-}
-void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal)
-{
-	QApplication::setPalette(pal);
-	QMPlay2GUI.mainW->setPalette(mainW_pal);
-	foreach (QWidget *w, QApplication::allWidgets())
-	{
-		QSlider *s = qobject_cast<QSlider *>(w);
-		if (s)
-			s->setPalette(sliderButton_pal);
 	}
 }
 
@@ -623,7 +628,7 @@ void Appearance::apply()
 	}
 	emit QMPlay2Core.wallpaperChanged(hasWallpaper, alphaB->value());
 
-	applyPalette(pal, sliderButton_pal, mainW_pal);
+	applyPalette(pal, sliderButton_pal, mainW_pal, shadowC->getColor());
 
 	QMPlay2Core.getSettings().set("ColorScheme", schemesB->currentIndex() >= 2 ? schemesB->currentText() : QString());
 }

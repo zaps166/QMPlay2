@@ -35,7 +35,6 @@ class Appearance : public QDialog
 	Q_OBJECT
 public:
 	static void init();
-	static void applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal);
 
 	Appearance(QWidget *p);
 private slots:
