@@ -24,19 +24,13 @@ static const char client_id[] = "2add0f709fcfae1fd7a198ec7573d2d4";
 #include <LineEdit.hpp>
 #include <Reader.hpp>
 
-#include <QStringListModel>
-#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QApplication>
 #include <QProgressBar>
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QToolButton>
-#include <QCompleter>
-#include <QClipboard>
-#include <QMimeData>
 #include <QUrl>
 
 static QString SoundCloudURL("http://api.soundcloud.com");
@@ -63,11 +57,9 @@ ResultsSound::ResultsSound()
 	header()->setStretchLastSection(false);
 #if QT_VERSION < 0x050000
 	header()->setResizeMode(0, QHeaderView::Stretch);
-	header()->setResizeMode(2, QHeaderView::ResizeToContents);
 	header()->setResizeMode(3, QHeaderView::ResizeToContents);
 #else
 	header()->setSectionResizeMode(0, QHeaderView::Stretch);
-	header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 	header()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
 #endif
 
@@ -171,7 +163,7 @@ void SoundCloudW::next()
 
 void SoundCloudW::search()
 {
-	const QString name = searchE->text();
+	const QString name = QUrl::toPercentEncoding(searchE->text());
 	if (searchReply)
 	{
 		searchReply->deleteLater();
