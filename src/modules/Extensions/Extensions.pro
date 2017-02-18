@@ -35,6 +35,12 @@ HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
 DEFINES += USE_LASTFM
 
+greaterThan(QT_MAJOR_VERSION, 4) {
+        HEADERS += SoundCloud.hpp
+        SOURCES += SoundCloud.cpp
+        DEFINES += USE_SoundCloud
+}
+
 unix:!android {
 	QT += dbus
 	HEADERS += MPRIS2.hpp
