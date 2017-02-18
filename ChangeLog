@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 17.02.18:
+	- add XSPF support (thanks Zamarin Arthur for help),
+	- minor bugfix,
+
 Changes in QMPlay2 build 17.02.12:
 	- fix updating covers (also title, artist and album outside QMPlay2) in network streams,
 	- add "Skip" and "Stop after" flags for playlist (Zamarin Arthur),
