@@ -19,12 +19,14 @@ set(Playlists_HDR
     Playlists.hpp
     PLS.hpp
     M3U.hpp
+    XSPF.hpp
 )
 
 set(Playlists_SRC
     Playlists.cpp
     PLS.cpp
     M3U.cpp
+    XSPF.cpp
 )
 
 set(Playlists_RESOURCES

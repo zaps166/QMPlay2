@@ -76,7 +76,7 @@ Playlist::Entries PLS::read()
 				}
 				break;
 			}
-			if (c >= '0' && c <= '9')
+			else if (c >= '0' && c <= '9')
 			{
 				numberIdx = i;
 				break;
@@ -127,13 +127,16 @@ bool PLS::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
+	const QString saveFilePath = Functions::filePath(writer->getUrl());
+
 	for (int i = 0; i < list.size(); i++)
 	{
-		const Playlist::Entry &entry = list[i];
+		const Playlist::Entry &entry = list.at(i);
 		const QString idx = QString::number(i+1);
 		QString url = entry.url;
-		const bool isFile = url.startsWith("file://");
-		if (isFile)
+		if (m_useRelative && url.startsWith(saveFilePath))
+			url.remove(0, saveFilePath.length());
+		else if (url.startsWith("file://"))
 		{
 			url.remove(0, 7);
 #ifdef Q_OS_WIN
@@ -160,6 +163,3 @@ bool PLS::write(const Entries &list)
 	}
 	return true;
 }
-
-PLS::~PLS()
-{}

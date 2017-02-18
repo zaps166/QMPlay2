@@ -20,10 +20,15 @@
 
 class PLS : public Playlist
 {
+public:
+	PLS(bool useRelative) :
+		m_useRelative(useRelative)
+	{}
+
 	Entries read();
 	bool write(const Entries &);
-
-	~PLS();
+private:
+	bool m_useRelative;
 };
 
 #define PLSName "PLS"

@@ -18,10 +18,10 @@
 
 #include <Playlist.hpp>
 
-class M3U : public Playlist
+class XSPF : public Playlist
 {
 public:
-	M3U(bool useRelative) :
+	XSPF(bool useRelative) :
 		m_useRelative(useRelative)
 	{}
 
@@ -31,4 +31,4 @@ private:
 	bool m_useRelative;
 };
 
-#define M3UName "M3U"
+#define XSPFName "XSPF"

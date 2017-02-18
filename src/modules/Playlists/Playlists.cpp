@@ -19,6 +19,7 @@
 #include <Playlists.hpp>
 #include <PLS.hpp>
 #include <M3U.hpp>
+#include <XSPF.hpp>
 
 Playlists::Playlists() :
 	Module("Playlists")
@@ -27,6 +28,8 @@ Playlists::Playlists() :
 
 	init("PLS_enabled", true);
 	init("M3U_enabled", true);
+	init("XSPF_enabled", true);
+	init("Relative", true);
 }
 
 QList<Playlists::Info> Playlists::getModulesInfo(const bool showDisabled) const
@@ -36,14 +39,19 @@ QList<Playlists::Info> Playlists::getModulesInfo(const bool showDisabled) const
 		modulesInfo += Info(PLSName, PLAYLIST, QStringList("pls"));
 	if (showDisabled || getBool("M3U_enabled"))
 		modulesInfo += Info(M3UName, PLAYLIST, QStringList("m3u"));
+	if (showDisabled || getBool("XSPF_enabled"))
+		modulesInfo += Info(XSPFName, PLAYLIST, QStringList("xspf"));
 	return modulesInfo;
 }
 void *Playlists::createInstance(const QString &name)
 {
+	const bool useRalative = getBool("Relative");
 	if (name == PLSName && getBool("PLS_enabled"))
-		return new PLS;
+		return new PLS(useRalative);
 	else if (name == M3UName && getBool("M3U_enabled"))
-		return new M3U;
+		return new M3U(useRalative);
+	else if (name == XSPFName && getBool("XSPF_enabled"))
+		return new XSPF(useRalative);
 	return NULL;
 }
 
@@ -57,24 +65,35 @@ QMPLAY2_EXPORT_PLUGIN(Playlists)
 /**/
 
 #include <QGridLayout>
+#include <QBoxLayout>
 #include <QCheckBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	plsEnabledB = new QCheckBox(tr("PLS support"));
-	plsEnabledB->setChecked(sets().getBool("PLS_enabled"));
+	m_plsEnabledB = new QCheckBox(tr("PLS support"));
+	m_plsEnabledB->setChecked(sets().getBool("PLS_enabled"));
 
-	m3uEnabledB = new QCheckBox(tr("M3U support"));
-	m3uEnabledB->setChecked(sets().getBool("M3U_enabled"));
+	m_m3uEnabledB = new QCheckBox(tr("M3U support"));
+	m_m3uEnabledB->setChecked(sets().getBool("M3U_enabled"));
+
+	m_xspfEnabledB = new QCheckBox(tr("XSPF support"));
+	m_xspfEnabledB->setChecked(sets().getBool("XSPF_enabled"));
+
+	m_relativeB = new QCheckBox(tr("Try to use relative path when possible"));
+	m_relativeB->setChecked(sets().getBool("Relative"));
 
 	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(plsEnabledB);
-	layout->addWidget(m3uEnabledB);
+	layout->addWidget(m_plsEnabledB);
+	layout->addWidget(m_m3uEnabledB);
+	layout->addWidget(m_xspfEnabledB);
+	layout->addWidget(m_relativeB);
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
-	sets().set("PLS_enabled", plsEnabledB->isChecked());
-	sets().set("M3U_enabled", m3uEnabledB->isChecked());
+	sets().set("PLS_enabled", m_plsEnabledB->isChecked());
+	sets().set("M3U_enabled", m_m3uEnabledB->isChecked());
+	sets().set("XSPF_enabled", m_xspfEnabledB->isChecked());
+	sets().set("Relative", m_relativeB->isChecked());
 }
