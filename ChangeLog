@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 17.02.18:
 	- add XSPF support (thanks Zamarin Arthur for help),
+	- add SoundCloud support (Zamarin Arthur),
 	- minor bugfix,
 
 Changes in QMPlay2 build 17.02.12:
