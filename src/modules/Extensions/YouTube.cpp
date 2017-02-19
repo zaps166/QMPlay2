@@ -22,6 +22,7 @@
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 #include <Reader.hpp>
+#include <Json11.hpp>
 
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -272,59 +273,14 @@ private:
 		youtubedl_process.kill();
 	}
 
-	static QString getJSONValue(const QString &json, const QString &key)
+	void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 	{
-		int idx = json.indexOf("\"" + key + "\":");
-		if (idx < 0)
-			return QString();
-
-		idx = json.indexOf("\"", idx + key.length() + 3);
-		if (idx < 0)
-			return QString();
-
-		idx += 1;
-		const int endIdx = json.indexOf("\"", idx);
-		if (endIdx < 0)
-			return QString();
-
-		return json.mid(idx, endIdx - idx);
-	}
-
-	void exportCookiesFromJSON(const QString &json, const QString &url)
-	{
-		const int formatsIdx = json.indexOf("\"formats\":");
-		if (formatsIdx > -1)
+		const Json json = Json::parse(jsonData.toUtf8().constData());
+		const std::string stdUrl = url.toUtf8().data();
+		for (const Json &formats : json["formats"].array_items())
 		{
-			int idx1 = json.indexOf('[', formatsIdx + 10);
-			if (idx1 > -1)
-			{
-				int idx2 = json.indexOf(']', idx1 += 1);
-				if (idx2 > -1)
-				{
-					int level = 0, lastIdx = 0;
-					for (int i = idx1; i < idx2; ++i)
-					{
-						if (json[i] == '{')
-						{
-							if (level == 0)
-								lastIdx = i;
-							++level;
-						}
-						else if (json[i] == '}')
-						{
-							--level;
-							if (level < 0)
-								break;
-							if (level == 0)
-							{
-								const QString format = json.mid(lastIdx + 1, i - lastIdx - 1);
-								if (url == getJSONValue(format, "url"))
-									QMPlay2Core.addCookies(url, getJSONValue(format, "Cookie").toLatin1());
-							}
-						}
-					}
-				}
-			}
+			if (stdUrl == formats["url"].string_value())
+				QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].string_value().c_str());
 		}
 	}
 
