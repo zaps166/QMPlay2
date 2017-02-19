@@ -305,7 +305,7 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
     set(INSTALL_PATH_MAN "man") # exception for FreeBSD
 else()
-    set(INSTALL_PATH_MAN "${CMAKE_INSTALL_MANDIR}")
+    set(INSTALL_PATH_MAN ${CMAKE_INSTALL_MANDIR})
 endif()
 
 if(APPLE)

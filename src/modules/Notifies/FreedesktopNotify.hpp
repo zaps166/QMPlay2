@@ -26,7 +26,6 @@ class QDBusPendingCallWatcher;
 class FreedesktopNotify : public QObject, public Notify
 {
 	Q_OBJECT
-	Q_DISABLE_COPY(FreedesktopNotify)
 public:
 	FreedesktopNotify(qint32 timeout);
 	~FreedesktopNotify();
