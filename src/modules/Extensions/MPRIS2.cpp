@@ -270,7 +270,7 @@ void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 		{
 			coverF.write(cover);
 			coverF.close();
-			m_data["mpris:artUrl"] = "file://" + coverF.fileName();
+			m_data["mpris:artUrl"] = QString("file://" + coverF.fileName());
 			propertyChanged("Metadata", m_data);
 			removeCover = true;
 		}
@@ -283,7 +283,7 @@ void MediaPlayer2Player::playStateChanged(const QString &plState)
 }
 void MediaPlayer2Player::coverFile(const QString &filePath)
 {
-	m_data["mpris:artUrl"] = "file://" + filePath;
+	m_data["mpris:artUrl"] = QString("file://" + filePath);
 	propertyChanged("Metadata", m_data);
 	removeCover = false;
 }

@@ -39,7 +39,7 @@ Cuvid::Cuvid() :
 	m_deintMethodB->setCurrentIndex(getInt("DeintMethod") - 1);
 	if (m_deintMethodB->currentIndex() < 0)
 		m_deintMethodB->setCurrentIndex(1);
-	m_deintMethodB->setProperty("text", tr("Deinterlacing method") + " (CUVID): ");
+	m_deintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (CUVID): "));
 	m_deintMethodB->setProperty("module", QVariant::fromValue((void *)this));
 	QMPlay2Core.addVideoDeintMethod(m_deintMethodB);
 }

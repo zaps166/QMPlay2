@@ -61,7 +61,7 @@ else()
     set(DEFAULT_CUVID ON)
 endif()
 
-add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS)
+add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DQT_USE_FAST_OPERATOR_PLUS)
 
 if(WIN32)
     option(USE_CMD "Show CMD when running QMPlay2" OFF)

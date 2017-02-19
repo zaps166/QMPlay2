@@ -108,7 +108,7 @@ FFmpeg::FFmpeg() :
 	vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
 	if (vdpauDeintMethodB->currentIndex() < 0)
 		vdpauDeintMethodB->setCurrentIndex(1);
-	vdpauDeintMethodB->setProperty("text", tr("Deinterlacing method") + " (VDPAU): ");
+	vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
 	vdpauDeintMethodB->setProperty("module", self);
 	QMPlay2Core.addVideoDeintMethod(vdpauDeintMethodB);
 #endif
@@ -118,7 +118,7 @@ FFmpeg::FFmpeg() :
 	vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
 	if (vaapiDeintMethodB->currentIndex() < 0)
 		vaapiDeintMethodB->setCurrentIndex(1);
-	vaapiDeintMethodB->setProperty("text", tr("Deinterlacing method") + " (VA-API): ");
+	vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API): "));
 	vaapiDeintMethodB->setProperty("module", self);
 	QMPlay2Core.addVideoDeintMethod(vaapiDeintMethodB);
 #endif
