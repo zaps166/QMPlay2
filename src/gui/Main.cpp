@@ -44,7 +44,7 @@
 	#include <QTextCodec>
 #endif
 
-#include <time.h>
+#include <ctime>
 
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
@@ -291,13 +291,13 @@ static void unInhibitScreenSaver()
 
 #if QT_VERSION >= 0x050000 && !defined Q_OS_WIN
 	#define QT5_NOT_WIN
-	#include <setjmp.h>
+	#include <csetjmp>
 	static jmp_buf env;
 	static bool qAppOK;
 	static bool canDeleteApp = true;
 #endif
 
-#include <signal.h>
+#include <csignal>
 
 static inline void forceKill()
 {
