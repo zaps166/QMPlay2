@@ -1,6 +1,7 @@
-Changes in QMPlay2 build 17.02.18:
+Changes in QMPlay2 build 17.02.19:
 	- add XSPF support (thanks Zamarin Arthur for help),
 	- add SoundCloud support (Zamarin Arthur),
+	- switch to C++11,
 	- minor bugfix,
 
 Changes in QMPlay2 build 17.02.12:
