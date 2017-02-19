@@ -91,9 +91,9 @@ else() # Qt5 >= 5.6.0
     qt5_use_modules(${PROJECT_NAME} Gui Widgets)
 endif()
 
-add_dependencies(${PROJECT_NAME} qmplay2)
+add_dependencies(${PROJECT_NAME} libqmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${libqmplay2}
+    ${qmplay2lib}
 )
 
 if(APPLE)
@@ -111,4 +111,4 @@ if(USE_OPENGL_FOR_VISUALIZATIONS)
     add_definitions(-DDEFAULT_RTT)
 endif()
 
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

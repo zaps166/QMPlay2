@@ -53,10 +53,10 @@ else()
     target_link_libraries(${PROJECT_NAME} Qt4::QtGui Qt4::QtCore)
 endif()
 
-add_dependencies(${PROJECT_NAME} qmplay2)
+add_dependencies(${PROJECT_NAME} libqmplay2)
 target_link_libraries(${PROJECT_NAME}
     ${ALSA_LIBRARY}
-    ${libqmplay2}
+    ${qmplay2lib}
 )
 
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

@@ -14,9 +14,9 @@ set(CMAKE_AUTOMOC ON)
 
 add_subdirectory(qmplay2)
 if(CMAKE_VERSION VERSION_LESS 2.8.11)
-    get_target_property(libqmplay2 qmplay2 LOCATION)
+    get_target_property(qmplay2lib libqmplay2 LOCATION)
 else()
-    set(libqmplay2 $<TARGET_FILE:qmplay2>)
+    set(qmplay2lib $<TARGET_FILE:libqmplay2>)
 endif()
 
 add_subdirectory(modules)

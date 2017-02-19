@@ -10,7 +10,7 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0043 NEW)
     endif()
 endif()
-project(gui)
+project(QMPlay2)
 
 set(GUI_HDR
     Main.hpp
@@ -135,8 +135,8 @@ if(WIN32)
     list(APPEND GUI_SRC Updater.cpp)
 elseif(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
-    set(MACOSX_BUNDLE_BUNDLE_NAME "QMPlay2")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${QMPLAY2_VERSION})
     set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2017  Błażej Szczygieł")
 
@@ -164,7 +164,7 @@ if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
-add_executable(QMPlay2
+add_executable(${PROJECT_NAME}
     ${WIN32_EXE}
     MACOSX_BUNDLE ${ICNS_FILE_PATH} ${ICNS_FILE_FILE_PATH} ${ICNS_PLAYLIST_FILE_PATH}
     ${GUI_HDR}
@@ -174,40 +174,40 @@ add_executable(QMPlay2
 )
 
 if(USE_JEMALLOC)
-    target_link_libraries(QMPlay2 ${JEMALLOC_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} ${JEMALLOC_LIBRARIES})
 endif()
 
 if(USE_QT5)
-    qt5_use_modules(QMPlay2 Gui Widgets)
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
 else()
-    target_link_libraries(QMPlay2 Qt4::QtCore Qt4::QtGui)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
 endif()
 
-add_dependencies(QMPlay2 qmplay2)
-target_link_libraries(QMPlay2 ${libqmplay2})
+add_dependencies(${PROJECT_NAME} libqmplay2)
+target_link_libraries(${PROJECT_NAME} ${qmplay2lib})
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     mark_as_advanced(CUSTOM_GUI_LIBRARIES)
 elseif(APPLE)
-    set_target_properties(QMPlay2 PROPERTIES
+    set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
 
-    qt5_use_modules(QMPlay2 MacExtras)
+    qt5_use_modules(${PROJECT_NAME} MacExtras)
 
-    target_link_libraries(QMPlay2 ${APPKIT_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY})
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)
-    target_link_libraries(QMPlay2 ${CUSTOM_GUI_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} ${CUSTOM_GUI_LIBRARIES})
 elseif(USE_TAGLIB)
-    target_link_libraries(QMPlay2 ${TAGLIB_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} ${TAGLIB_LIBRARIES})
 endif()
 
 if(WIN32)
-    install(TARGETS QMPlay2 RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 elseif(APPLE)
-    install(TARGETS QMPlay2 BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+    install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
 
     set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
     set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
@@ -233,23 +233,23 @@ elseif(APPLE)
         file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
             \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
             \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
-        fixup_bundle(${CMAKE_INSTALL_PREFIX}/QMPlay2.app \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
+        fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
 
      ")
 else()
     # executable
-    install(TARGETS QMPlay2 RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     # desktop files
     file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)
-    install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications/")
+    install(FILES ${DESKTOP_FILES} DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
 
     # mime files
     file(GLOB MIME_FILES Unix/x-*.xml)
-    install(FILES ${MIME_FILES} DESTINATION "${INSTALL_PATH_MIME}/packages/")
+    install(FILES ${MIME_FILES} DESTINATION "${INSTALL_PATH_MIME}/packages")
 
     # icon
-    install(DIRECTORY Icons/hicolor DESTINATION "${INSTALL_PATH_ICONS}")
+    install(DIRECTORY Icons/hicolor DESTINATION ${INSTALL_PATH_ICONS})
 
     # install Solid actions
     include(InstallSolidActions)

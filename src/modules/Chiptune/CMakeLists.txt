@@ -72,9 +72,9 @@ else()
     target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
 endif()
 
-add_dependencies(${PROJECT_NAME} qmplay2)
+add_dependencies(${PROJECT_NAME} libqmplay2)
 target_link_libraries(${PROJECT_NAME}
-    ${libqmplay2}
+    ${qmplay2lib}
 )
 
 if(WIN32)
@@ -89,4 +89,4 @@ else()
     target_link_libraries(${PROJECT_NAME} ${Chiptune_LIBS})
 endif()
 
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${MODULES_INSTALL_PATH}")
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

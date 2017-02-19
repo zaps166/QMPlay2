@@ -13,7 +13,7 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0043 NEW)
     endif()
 endif()
-project(qmplay2)
+project(libqmplay2)
 
 set(QMPLAY2_HDR
     headers/QMPlay2Core.hpp
@@ -185,11 +185,11 @@ if(WIN32)
 
     set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 else()
-    install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+    install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
     if(NOT APPLE)
-        install(FILES ${QMPLAY2_HDR} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2)
+        install(FILES ${QMPLAY2_HDR} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2")
     endif()
 
     if(USE_LIBASS)
