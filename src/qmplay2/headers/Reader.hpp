@@ -28,6 +28,8 @@ class Reader : protected ModuleCommon, public ModuleParams, public BasicIO
 public:
 	static bool create(const QString &url, IOController<Reader> &reader, const QString &plugName = QString());
 
+	virtual ~Reader() = default;
+
 	inline QString getUrl() const
 	{
 		return _url;
@@ -44,7 +46,6 @@ public:
 	virtual qint64 pos() const = 0;
 	virtual QString name() const = 0;
 
-	virtual ~Reader();
 private:
 	virtual bool open() = 0;
 

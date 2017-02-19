@@ -44,6 +44,8 @@ public:
 
 	static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = nullptr);
 
+	virtual ~Demuxer() = default;
+
 	virtual bool metadataChanged() const;
 
 	virtual bool isStillImage() const;
@@ -76,11 +78,11 @@ public:
 	virtual bool seek(int pos, bool backward) = 0;
 	virtual bool read(Packet &, int &) = 0;
 
-	virtual ~Demuxer();
 private:
 	virtual bool open(const QString &url) = 0;
 
 	virtual Playlist::Entries fetchTracks(const QString &url, bool &ok);
+
 protected:
 	StreamsInfo streams_info;
 };

@@ -106,9 +106,6 @@ bool Demuxer::dontUseBuffer() const
 	return false;
 }
 
-Demuxer::~Demuxer()
-{}
-
 Playlist::Entries Demuxer::fetchTracks(const QString &url, bool &ok)
 {
 	Q_UNUSED(url)

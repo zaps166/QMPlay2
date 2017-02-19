@@ -95,6 +95,3 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 	}
 	return nullptr;
 }
-
-Writer::~Writer()
-{}

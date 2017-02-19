@@ -43,6 +43,3 @@ QStringList SubsDec::extensions()
 				extensions << mod.extensions;
 	return extensions;
 }
-
-SubsDec::~SubsDec()
-{}

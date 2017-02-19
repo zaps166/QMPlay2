@@ -39,7 +39,7 @@ public:
 		Settings(mName),
 		mName(mName)
 	{}
-	virtual ~Module();
+	virtual ~Module() = default;
 
 	inline QString name() const
 	{

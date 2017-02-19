@@ -29,9 +29,9 @@ public:
 	static SubsDec *create(const QString &);
 	static QStringList extensions();
 
-	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
+	virtual ~SubsDec() = default;
 
-	virtual ~SubsDec();
+	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
 };
 
 #endif //SUBSDEC_HPP

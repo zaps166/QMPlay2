@@ -40,13 +40,14 @@ public:
 		double ts = 0.0;
 	};
 
-	virtual ~VideoFilter();
+	virtual ~VideoFilter() = default;
 
 	virtual void clearBuffer();
 
 	bool removeLastFromInternalBuffer();
 
 	virtual bool filter(QQueue<FrameBuffer> &framesQueue) = 0;
+
 protected:
 	void addFramesToInternalQueue(QQueue<FrameBuffer> &framesQueue);
 

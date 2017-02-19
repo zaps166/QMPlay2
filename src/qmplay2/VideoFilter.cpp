@@ -19,9 +19,6 @@
 #include <VideoFilter.hpp>
 #include <VideoFrame.hpp>
 
-VideoFilter::~VideoFilter()
-{}
-
 void VideoFilter::clearBuffer()
 {
 	internalQueue.clear();

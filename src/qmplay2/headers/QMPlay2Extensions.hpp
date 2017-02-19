@@ -69,7 +69,7 @@ public:
 	virtual void sendSoundData(const QByteArray &);
 	virtual void clearSoundData();
 protected:
-	virtual ~QMPlay2Extensions();
+	virtual ~QMPlay2Extensions() = default;
 
 	virtual void init(); //Jeżeli jakieś rozszerzenie używa innego podczas inicjalizacji. Wywoływane po załadowaniu wszystkich.
 private:

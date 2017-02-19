@@ -41,6 +41,3 @@ int AudioFilter::bufferedSamples() const
 }
 void AudioFilter::clearBuffers()
 {}
-
-AudioFilter::~AudioFilter()
-{}

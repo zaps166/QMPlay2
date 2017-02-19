@@ -50,6 +50,8 @@ public:
 		WriteOnly
 	};
 
+	virtual ~Playlist() = default;
+
 	static Entries read(const QString &url, QString *name = nullptr);
 	static bool write(const Entries &list, const QString &url, QString *name = nullptr);
 	static QStringList extensions();
@@ -57,9 +59,9 @@ public:
 	virtual Entries read() = 0;
 	virtual bool write(const Entries &) = 0;
 
-	virtual ~Playlist();
 private:
 	static Playlist *create(const QString &url, OpenMode openMode, QString *name = nullptr);
+
 protected:
 	QList<QByteArray> readLines();
 

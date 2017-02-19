@@ -107,6 +107,3 @@ bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
 	Q_UNUSED(h)
 	return false;
 }
-
-Decoder::~Decoder()
-{}

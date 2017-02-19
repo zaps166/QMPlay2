@@ -98,6 +98,3 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 			}
 	return false;
 }
-
-Reader::~Reader()
-{}

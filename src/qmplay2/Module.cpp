@@ -19,9 +19,6 @@
 #include <Module.hpp>
 #include <ModuleCommon.hpp>
 
-Module::~Module()
-{}
-
 QList<QAction *> Module::getAddActions()
 {
 	return QList<QAction *>();

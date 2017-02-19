@@ -30,6 +30,8 @@ class Writer : public ModuleCommon, public ModuleParams, public BasicIO
 public:
 	static Writer *create(const QString &, const QStringList &modNames = {});
 
+	virtual ~Writer() = default;
+
 	inline QString getUrl() const
 	{
 		return _url;
@@ -41,7 +43,6 @@ public:
 
 	virtual QString name() const = 0;
 
-	virtual ~Writer();
 private:
 	virtual bool open() = 0;
 
