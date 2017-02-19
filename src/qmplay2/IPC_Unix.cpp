@@ -213,9 +213,7 @@ void IPCServer::close()
 
 void IPCServer::socketAcceptActive()
 {
-	sockaddr_un sockAddr;
-	socklen_t sockAddrLen;
-	const int client = accept(m_priv->fd, (sockaddr *)&sockAddr, &sockAddrLen);
+	const int client = accept(m_priv->fd, nullptr, nullptr);
 	if (client > 0)
 	{
 		IPCSocket *socket = new IPCSocket(client, this);
