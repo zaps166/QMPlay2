@@ -41,6 +41,7 @@ if(USE_MPRIS2)
 
     if(USE_QT5)
         set(DBUS DBus)
+        find_package(Qt5DBus REQUIRED)
     else()
         set(DBUS Qt4::QtDBus)
         find_package(Qt4 REQUIRED QtDBus)

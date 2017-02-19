@@ -14,16 +14,33 @@ find_package(PkgConfig REQUIRED)
 if(CMAKE_VERSION VERSION_LESS 2.8.9)
     # use Qt5 only if CMake >= 2.8.9
     set(DEFAULT_QT5 OFF)
-elseif(NOT DEFINED USE_QT5 OR USE_QT5)
-    find_package(Qt5Widgets QUIET)
-    if(Qt5Widgets_FOUND AND (Qt5Widgets_VERSION VERSION_GREATER 5.6.0))
-        set(DEFAULT_QT5 ON)
-    else()
-        find_package(Qt4 QUIET)
-        if(NOT Qt4_FOUND AND Qt5Widgets_FOUND)
+elseif(NOT DEFINED USE_QT5)
+    if(QT_QMAKE_EXECUTABLE)
+        # detect Qt version using QMake executable (if specified)
+        execute_process(
+            COMMAND ${QT_QMAKE_EXECUTABLE} -v
+            OUTPUT_VARIABLE QMAKE_VERSION_STRING
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+        if(QMAKE_VERSION_STRING)
+            if(QMAKE_VERSION_STRING MATCHES "Qt version 4")
+                set(DEFAULT_QT5 OFF)
+            elseif(QMAKE_VERSION_STRING MATCHES "Qt version 5")
+                set(DEFAULT_QT5 ON)
+            endif()
+        endif()
+    endif()
+    if(NOT DEFINED DEFAULT_QT5)
+        # use Qt5 by default if it is greater than 5.6.0, otherwise use Qt4 by default
+        find_package(Qt5Widgets QUIET)
+        if(Qt5Widgets_FOUND AND (Qt5Widgets_VERSION VERSION_GREATER 5.6.0))
             set(DEFAULT_QT5 ON)
         else()
-            set(DEFAULT_QT5 OFF)
+            find_package(Qt4 QUIET)
+            if(NOT Qt4_FOUND AND Qt5Widgets_FOUND)
+                set(DEFAULT_QT5 ON)
+            else()
+                set(DEFAULT_QT5 OFF)
+            endif()
         endif()
     endif()
 endif()
@@ -188,8 +205,8 @@ if(NOT WIN32)
     # get QMPlay2 version by running the version script
     execute_process(
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
-        OUTPUT_VARIABLE QMPLAY2_VERSION)
-    string(STRIP ${QMPLAY2_VERSION} QMPLAY2_VERSION)
+        OUTPUT_VARIABLE QMPLAY2_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
 option(USE_GIT_VERSION "Append Git HEAD to QMPlay2 version (if exists)" ON)
@@ -198,9 +215,9 @@ if(USE_GIT_VERSION)
     execute_process(
         COMMAND git rev-parse --short HEAD
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        OUTPUT_VARIABLE QMPLAY2_GIT_HEAD)
+        OUTPUT_VARIABLE QMPLAY2_GIT_HEAD
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(QMPLAY2_GIT_HEAD)
-        string(STRIP ${QMPLAY2_GIT_HEAD} QMPLAY2_GIT_HEAD)
         add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
     endif()
 endif()
@@ -310,7 +327,7 @@ if(LANGUAGES)
 endif()
 
 if(WIN32)
-    install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+    install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION ${CMAKE_INSTALL_PREFIX})
 else()
     install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 endif()
