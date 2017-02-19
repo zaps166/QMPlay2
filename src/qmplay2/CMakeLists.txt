@@ -59,6 +59,7 @@ set(QMPLAY2_HDR
     headers/PixelFormats.hpp
     headers/HWAccelInterface.hpp
     headers/VideoAdjustment.hpp
+    headers/Json11.hpp
 )
 
 set(QMPLAY2_SRC
@@ -94,6 +95,7 @@ set(QMPLAY2_SRC
     PacketBuffer.cpp
     Buffer.cpp
     Http.cpp
+    Json11.cpp
 )
 
 if(WIN32)

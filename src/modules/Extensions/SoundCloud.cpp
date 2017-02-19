@@ -23,17 +23,15 @@ static const char client_id[] = "2add0f709fcfae1fd7a198ec7573d2d4";
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Reader.hpp>
+#include <Json11.hpp>
 
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
 #include <QProgressBar>
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QToolButton>
 #include <QUrl>
 
-static QString SoundCloudURL("http://api.soundcloud.com");
+static const char SoundCloudURL[] = "http://api.soundcloud.com";
 
 static inline QString getQMPlay2Url(const QTreeWidgetItem *tWI)
 {
@@ -202,34 +200,35 @@ void SoundCloudW::netFinished(HttpReply *reply)
 		const QByteArray replyData = reply->readAll();
 		if (reply == searchReply)
 		{
-			QJsonParseError error;
-			QJsonDocument jsonData = QJsonDocument::fromJson(replyData, &error);
-
-			const QIcon soundcloudIcon(":/soundcloud");
-
-			for (const QJsonValue &trackJson : jsonData.array())
+			const Json json = Json::parse(replyData.constData());
+			if (json.is_array())
 			{
-				const QJsonObject track = trackJson.toObject();
+				const QIcon soundcloudIcon(":/soundcloud");
+				for (const Json &track : json.array_items())
+				{
+					if (!track.is_object())
+						continue;
 
-				QTreeWidgetItem *tWI = new QTreeWidgetItem(resultsW);
-				tWI->setData(0, Qt::UserRole, QString::number(track.value("id").toInt()));
-				tWI->setIcon(0, soundcloudIcon);
+					QTreeWidgetItem *tWI = new QTreeWidgetItem(resultsW);
+					tWI->setData(0, Qt::UserRole, QString::number(track["id"].int_value()));
+					tWI->setIcon(0, soundcloudIcon);
 
-				const QString title(track.value("title").toString());
-				tWI->setText(0, title);
-				tWI->setToolTip(0, title);
+					const QString title = QString::fromStdString(track["title"].string_value());
+					tWI->setText(0, title);
+					tWI->setToolTip(0, title);
 
-				const QString artist(track.value("user").toObject().value("username").toString());
-				tWI->setText(1, artist);
-				tWI->setToolTip(1, artist);
+					const QString artist = QString::fromStdString(track["user"]["username"].string_value());
+					tWI->setText(1, artist);
+					tWI->setToolTip(1, artist);
 
-				const QString genre(track.value("genre").toString());
-				tWI->setText(2, genre);
-				tWI->setToolTip(2, genre);
+					const QString genre = QString::fromStdString(track["genre"].string_value());
+					tWI->setText(2, genre);
+					tWI->setToolTip(2, genre);
 
-				const QString duration = Functions::timeToStr(track.value("duration").toInt() / 1000.0);
-				tWI->setText(3, duration);
-				tWI->setToolTip(3, duration);
+					const QString duration = Functions::timeToStr(track["duration"].int_value() / 1000.0);
+					tWI->setText(3, duration);
+					tWI->setToolTip(3, duration);
+				}
 			}
 
 			nextPageB->setVisible(resultsW->topLevelItemCount());
@@ -304,16 +303,13 @@ void SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 				}
 				reader.clear();
 
-				QJsonParseError error;
-				const QJsonDocument jsonData = QJsonDocument::fromJson(replyData, &error);
-
-				if (error.error == QJsonParseError::NoError)
+				const Json json = Json::parse(replyData.constData());
+				if (json.is_object())
 				{
-					const QJsonObject track = jsonData.object();
 					if (stream_url)
-						*stream_url = track.value("stream_url").toString() + "?client_id=" + client_id;
+						*stream_url = QString::fromStdString(json["stream_url"].string_value()) + "?client_id=" + client_id;
 					if (name)
-						*name = track.value("title").toString();
+						*name = QString::fromStdString(json["title"].string_value());
 				}
 			}
 		}
