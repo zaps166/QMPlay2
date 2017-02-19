@@ -293,17 +293,17 @@ void SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
 			if (Reader::create(SoundCloudURL + QString("/resolve?url=%1&client_id=%2").arg(url, client_id), reader))
 			{
-				QByteArray replyData;
+				std::string replyData;
 				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
 				{
 					QByteArray arr =  reader->read(4096);;
 					if (arr.isEmpty())
 						break;
-					replyData += arr;
+					replyData += arr.constData();
 				}
 				reader.clear();
 
-				const Json json = Json::parse(replyData.constData());
+				const Json json = Json::parse(replyData);
 				if (json.is_object())
 				{
 					if (stream_url)
