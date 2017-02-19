@@ -133,7 +133,7 @@ void PlaylistDock::addAndPlay(const QStringList &urls)
 void PlaylistDock::add(const QString &url)
 {
 	if (!url.isEmpty())
-		add({url});
+		add(QStringList{url});
 }
 void PlaylistDock::addAndPlay(const QString &_url)
 {
@@ -173,7 +173,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
 		}
 	}
 	/**/
-	addAndPlay({_url});
+	addAndPlay(QStringList{_url});
 }
 
 void PlaylistDock::scrollToCurrectItem()
