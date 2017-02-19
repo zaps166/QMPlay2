@@ -2,7 +2,6 @@ TEMPLATE = lib
 !win32: CONFIG += plugin #Don't create symlinks to library
 
 greaterThan(QT_MAJOR_VERSION, 4) {
-	lessThan(QT_VERSION, 5.7.0): CONFIG -= c++11
 	QT += widgets
 }
 
