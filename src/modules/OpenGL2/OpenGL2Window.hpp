@@ -54,7 +54,7 @@ private:
 	bool eventFilter(QObject *o, QEvent *e) override;
 
 #ifdef PASS_EVENTS_TO_PARENT
-	bool event(QEvent *e);
+	bool event(QEvent *e) override;
 #endif
 
 	QWidget *container;
