@@ -213,15 +213,15 @@ void SoundCloudW::netFinished(HttpReply *reply)
 					tWI->setData(0, Qt::UserRole, QString::number(track["id"].int_value()));
 					tWI->setIcon(0, soundcloudIcon);
 
-					const QString title = QString::fromStdString(track["title"].string_value());
+					const QString title = track["title"].string_value().c_str();
 					tWI->setText(0, title);
 					tWI->setToolTip(0, title);
 
-					const QString artist = QString::fromStdString(track["user"]["username"].string_value());
+					const QString artist = track["user"]["username"].string_value().c_str();
 					tWI->setText(1, artist);
 					tWI->setToolTip(1, artist);
 
-					const QString genre = QString::fromStdString(track["genre"].string_value());
+					const QString genre = track["genre"].string_value().c_str();
 					tWI->setText(2, genre);
 					tWI->setToolTip(2, genre);
 
@@ -307,9 +307,9 @@ void SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 				if (json.is_object())
 				{
 					if (stream_url)
-						*stream_url = QString::fromStdString(json["stream_url"].string_value()) + "?client_id=" + client_id;
+						*stream_url = json["stream_url"].string_value().c_str() + QString("?client_id=") + client_id;
 					if (name)
-						*name = QString::fromStdString(json["title"].string_value());
+						*name = json["title"].string_value().c_str();
 				}
 			}
 		}
