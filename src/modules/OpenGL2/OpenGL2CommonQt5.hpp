@@ -24,7 +24,7 @@
 class OpenGL2CommonQt5 : public OpenGL2Common
 {
 protected:
-	bool testGL();
+	bool testGL() override final;
 };
 
 #endif // OFFSCREENTEST_HPP

@@ -47,21 +47,21 @@ public:
 			delete m_vaapi;
 	}
 
-	QString name() const
+	QString name() const override
 	{
 		return VAAPIWriterName;
 	}
 
-	Format getFormat() const
+	Format getFormat() const override
 	{
 		return RGB32;
 	}
 
-	bool init(quint32 *textures)
+	bool init(quint32 *textures) override
 	{
 		return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
 	}
-	void clear(bool contextChange)
+	void clear(bool contextChange) override
 	{
 		Q_UNUSED(contextChange)
 		if (m_glSurface)
@@ -71,7 +71,7 @@ public:
 		}
 	}
 
-	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
+	CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
 	{
 		VASurfaceID id;
 		int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
@@ -84,12 +84,12 @@ public:
 		return CopyNotReady;
 	}
 
-	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
 	{
 		return m_vaapi->getImage(videoFrame, dest, nv12ToRGB32);
 	}
 
-	void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
+	void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override
 	{
 		videoAdjustmentCap.brightness = true;
 		videoAdjustmentCap.contrast = true;
@@ -97,7 +97,7 @@ public:
 		videoAdjustmentCap.hue = true;
 		videoAdjustmentCap.sharpness = false;
 	}
-	void setVideAdjustment(const VideoAdjustment &videoAdjustment)
+	void setVideAdjustment(const VideoAdjustment &videoAdjustment) override
 	{
 		m_vaapi->applyVideoAdjustment(videoAdjustment.brightness, videoAdjustment.contrast, videoAdjustment.saturation, videoAdjustment.hue);
 	}

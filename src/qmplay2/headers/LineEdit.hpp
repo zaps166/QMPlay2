@@ -28,7 +28,7 @@ class LineEditButton : public QLabel
 public:
 	LineEditButton();
 private:
-	void mousePressEvent(QMouseEvent *);
+	void mousePressEvent(QMouseEvent *) override;
 signals:
 	void clicked();
 };
@@ -41,9 +41,9 @@ class LineEdit : public QLineEdit
 public:
 	LineEdit(QWidget *parent = nullptr);
 private:
-	void resizeEvent(QResizeEvent *);
-	void mousePressEvent(QMouseEvent *);
-	void mouseMoveEvent(QMouseEvent *);
+	void resizeEvent(QResizeEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override;
 
 	LineEditButton b;
 private slots:

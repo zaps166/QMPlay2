@@ -82,14 +82,14 @@ class SoundCloud : public QMPlay2Extensions
 public:
 	SoundCloud(Module &module);
 
-	bool set();
+	bool set() override;
 
-	DockWidget *getDockWidget();
+	DockWidget *getDockWidget() override;
 
-	QList<AddressPrefix> addressPrefixList(bool) const;
-	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl);
+	QList<AddressPrefix> addressPrefixList(bool) const override;
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override;
 
-	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &);
+	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &) override;
 private:
 	SoundCloudW w;
 };

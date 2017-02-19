@@ -26,9 +26,9 @@ public:
 	FFDecVDPAU(QMutex &, Module &);
 	~FFDecVDPAU();
 
-	bool set();
+	bool set() override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open(StreamInfo &, VideoWriter *);
+	bool open(StreamInfo &, VideoWriter *) override;
 };

@@ -32,8 +32,7 @@ public:
 	class Image
 	{
 	public:
-		inline Image()
-		{}
+		Image() = default;
 		inline Image(const QRect &rect, const QByteArray &data) :
 			rect(rect), data(data)
 		{}

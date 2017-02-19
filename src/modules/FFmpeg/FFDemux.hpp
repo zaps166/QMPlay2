@@ -28,33 +28,33 @@ public:
 private:
 	~FFDemux();
 
-	bool set();
+	bool set() override;
 
-	bool metadataChanged() const;
+	bool metadataChanged() const override;
 
-	bool isStillImage() const;
+	bool isStillImage() const override;
 
-	QList<ProgramInfo> getPrograms() const;
-	QList<ChapterInfo> getChapters() const;
+	QList<ProgramInfo> getPrograms() const override;
+	QList<ChapterInfo> getChapters() const override;
 
-	QString name() const;
-	QString title() const;
-	QList<QMPlay2Tag> tags() const;
-	bool getReplayGain(bool album, float &gain_db, float &peak) const;
-	double length() const;
-	int bitrate() const;
-	QByteArray image(bool forceCopy) const;
+	QString name() const override;
+	QString title() const override;
+	QList<QMPlay2Tag> tags() const override;
+	bool getReplayGain(bool album, float &gain_db, float &peak) const override;
+	double length() const override;
+	int bitrate() const override;
+	QByteArray image(bool forceCopy) const override;
 
-	bool localStream() const;
+	bool localStream() const override;
 
-	bool seek(int pos, bool backward);
-	bool read(Packet &encoded, int &idx);
-	void pause();
-	void abort();
+	bool seek(int pos, bool backward) override;
+	bool read(Packet &encoded, int &idx) override;
+	void pause() override;
+	void abort() override;
 
-	bool open(const QString &entireUrl);
+	bool open(const QString &entireUrl) override;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok);
+	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
 	/**/
 

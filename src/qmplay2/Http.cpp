@@ -49,6 +49,7 @@ public:
 		m_error(HttpReply::NO_HTTP_ERROR),
 		m_aborted(false)
 	{}
+	~HttpReplyPriv() final = default;
 
 	HttpReply *m_httpReply;
 
@@ -65,7 +66,7 @@ public:
 	bool m_aborted;
 
 private:
-	void run()
+	void run() override
 	{
 		if (!m_url.startsWith("http:") && !m_url.startsWith("https:"))
 			m_error = HttpReply::UNSUPPORTED_SCHEME_ERROR;

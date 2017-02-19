@@ -32,11 +32,11 @@ class SimpleVisW : public VisWidget
 public:
 	SimpleVisW(SimpleVis &);
 private:
-	void paintEvent(QPaintEvent *);
-	void resizeEvent(QResizeEvent *);
+	void paintEvent(QPaintEvent *) override;
+	void resizeEvent(QResizeEvent *) override;
 
-	void start(bool v = false, bool dontCheckRegion = false);
-	void stop();
+	void start(bool v = false, bool dontCheckRegion = false) override;
+	void stop() override;
 
 	QByteArray soundData;
 	quint8 chn;
@@ -58,15 +58,15 @@ public:
 
 	void soundBuffer(const bool);
 
-	bool set();
+	bool set() override;
 private:
-	DockWidget *getDockWidget();
+	DockWidget *getDockWidget() override;
 
-	bool isVisualization() const;
-	void connectDoubleClick(const QObject *, const char *);
-	void visState(bool, uchar, uint);
-	void sendSoundData(const QByteArray &);
-	void clearSoundData();
+	bool isVisualization() const override;
+	void connectDoubleClick(const QObject *, const char *) override;
+	void visState(bool, uchar, uint) override;
+	void sendSoundData(const QByteArray &) override;
+	void clearSoundData() override;
 
 	/**/
 

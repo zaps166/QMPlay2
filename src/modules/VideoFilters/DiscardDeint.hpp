@@ -23,9 +23,9 @@ class DiscardDeint : public DeintFilter
 public:
 	DiscardDeint();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define DiscardDeintName "Discard"

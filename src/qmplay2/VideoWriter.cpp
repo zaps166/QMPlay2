@@ -53,9 +53,7 @@ VideoWriter::~VideoWriter()
 
 QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
 {
-	return QMPlay2PixelFormats()
-			<< QMPLAY2_PIX_FMT_YUV420P
-	;
+	return {QMPLAY2_PIX_FMT_YUV420P};
 }
 
 void VideoWriter::setHWAccelInterface(HWAccelInterface *hwAccelInterface)

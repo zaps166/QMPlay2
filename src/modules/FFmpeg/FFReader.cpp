@@ -47,7 +47,7 @@ public:
 	}
 
 private:
-	void run()
+	void run() override
 	{
 		const AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, &m_abortCtx->isAborted};
 		avio_open2(&m_avioCtx, m_url, AVIO_FLAG_READ, &interruptCB, &m_options);

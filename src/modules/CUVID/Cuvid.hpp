@@ -34,12 +34,12 @@ public:
 	~Cuvid();
 
 private:
-	QList<Info> getModulesInfo(const bool showDisabled) const;
-	void *createInstance(const QString &name);
+	QList<Info> getModulesInfo(const bool showDisabled) const override;
+	void *createInstance(const QString &name) override;
 
-	SettingsWidget *getSettingsWidget();
+	SettingsWidget *getSettingsWidget() override;
 
-	void videoDeintSave();
+	void videoDeintSave() override;
 
 	/**/
 
@@ -59,7 +59,7 @@ public:
 	ModuleSettingsWidget(Module &module);
 
 private:
-	void saveSettings();
+	void saveSettings() override;
 
 	QCheckBox *m_enabledB, *m_copyVideoB;
 #ifdef Q_OS_WIN

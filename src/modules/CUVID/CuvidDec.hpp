@@ -47,20 +47,20 @@ public:
 	CuvidDec(Module &module);
 	~CuvidDec();
 
-	bool set();
+	bool set() override;
 
 	int videoSequence(CUVIDEOFORMAT *format);
 	int pictureDecode(CUVIDPICPARAMS *picParams);
 	int pictureDisplay(CUVIDPARSERDISPINFO *dispInfo);
 
 private:
-	QString name() const;
+	QString name() const override;
 
-	VideoWriter *HWAccel() const;
+	VideoWriter *HWAccel() const override;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
 
-	bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr);
+	bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) override;
 
 	/**/
 

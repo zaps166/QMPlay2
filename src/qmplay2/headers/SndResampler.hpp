@@ -26,10 +26,7 @@ class QByteArray;
 class SndResampler
 {
 public:
-	inline SndResampler() :
-		snd_convert_ctx(nullptr),
-		src_samplerate(0), src_channels(0), dst_samplerate(0), dst_channels(0)
-	{}
+	SndResampler() = default;
 	inline ~SndResampler()
 	{
 		destroy();
@@ -47,11 +44,11 @@ public:
 	void destroy();
 private:
 #ifdef QMPLAY2_AVRESAMPLE
-	struct AVAudioResampleContext *snd_convert_ctx;
+	struct AVAudioResampleContext *snd_convert_ctx = nullptr;
 #else
-	struct SwrContext *snd_convert_ctx;
+	struct SwrContext *snd_convert_ctx = nullptr;
 #endif
-	int src_samplerate, src_channels, dst_samplerate, dst_channels;
+	int src_samplerate = 0, src_channels = 0, dst_samplerate = 0, dst_channels = 0;
 };
 
 #endif

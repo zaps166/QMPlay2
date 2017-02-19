@@ -29,20 +29,20 @@ class Drawable : public QWidget
 {
 public:
 	Drawable(class QPainterWriter &);
-	~Drawable();
+	~Drawable() final;
 
 	void draw(const VideoFrame &newVideoFrame, bool, bool);
 	void clr();
 
-	void resizeEvent(QResizeEvent *);
+	void resizeEvent(QResizeEvent *) override final;
 
 	VideoFrame videoFrame;
 	QList<const QMPlay2OSD *> osd_list;
 	int Brightness, Contrast;
 	QMutex osd_mutex;
 private:
-	void paintEvent(QPaintEvent *);
-	bool event(QEvent *);
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
 	int X, Y, W, H;
 	QPainterWriter &writer;
@@ -60,20 +60,20 @@ public:
 private:
 	~QPainterWriter();
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 
-	QMPlay2PixelFormats supportedPixelFormats() const;
+	QMPlay2PixelFormats supportedPixelFormats() const override;
 
-	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2OSD *> &);
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 

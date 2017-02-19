@@ -47,17 +47,17 @@ private:
 
 	void unsetCursor(QWidget *w);
 
-	void dragEnterEvent(QDragEnterEvent *);
-	void dropEvent(QDropEvent *);
-	void mouseMoveEvent(QMouseEvent *);
-	void mouseDoubleClickEvent(QMouseEvent *);
-	void mousePressEvent(QMouseEvent *);
-	void mouseReleaseEvent(QMouseEvent *);
-	void moveEvent(QMoveEvent *);
-	void wheelEvent(QWheelEvent *);
-	void leaveEvent(QEvent *);
-	void enterEvent(QEvent *);
-	bool event(QEvent *);
+	void dragEnterEvent(QDragEnterEvent *) override;
+	void dropEvent(QDropEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override final;
+	void mouseDoubleClickEvent(QMouseEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
+	void mouseReleaseEvent(QMouseEvent *) override;
+	void moveEvent(QMoveEvent *) override;
+	void wheelEvent(QWheelEvent *) override;
+	void leaveEvent(QEvent *) override;
+	void enterEvent(QEvent *) override;
+	bool event(QEvent *) override;
 
 	QTimer hideCursorTim;
 	InDockW iDW;

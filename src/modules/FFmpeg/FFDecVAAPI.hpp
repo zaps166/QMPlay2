@@ -27,13 +27,13 @@ public:
 	FFDecVAAPI(QMutex &, Module &);
 	~FFDecVAAPI();
 
-	bool set();
+	bool set() override final;
 
-	QString name() const;
+	QString name() const override;
 
-	void downloadVideoFrame(VideoFrame &decoded);
+	void downloadVideoFrame(VideoFrame &decoded) override;
 
-	bool open(StreamInfo &, VideoWriter *);
+	bool open(StreamInfo &, VideoWriter *) override;
 
 private:
 	bool m_useOpenGL, m_allowVDPAU;

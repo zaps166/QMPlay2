@@ -40,8 +40,8 @@ public:
 
 	bool isConnected() const;
 
-	bool open(OpenMode mode);
-	void close();
+	bool open(OpenMode mode) override;
+	void close() override final;
 
 private slots:
 	void socketReadActive();
@@ -53,8 +53,8 @@ private:
 	IPCSocket(int socket, QObject *parent);
 #endif
 
-	qint64 readData(char *data, qint64 maxSize);
-	qint64 writeData(const char *data, qint64 maxSize);
+	qint64 readData(char *data, qint64 maxSize) override;
+	qint64 writeData(const char *data, qint64 maxSize) override;
 
 	IPCSocketPriv *m_priv;
 };
@@ -66,7 +66,7 @@ class IPCServer : public QObject
 	Q_OBJECT
 public:
 	IPCServer(const QString &fileName, QObject *parent = nullptr);
-	~IPCServer();
+	~IPCServer() final;
 
 	bool listen();
 	void close();

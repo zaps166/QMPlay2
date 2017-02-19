@@ -33,7 +33,7 @@ public:
 		return m_color;
 	}
 protected:
-	void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *) override;
 private:
 	QColor m_color;
 	bool m_alphaChannel;

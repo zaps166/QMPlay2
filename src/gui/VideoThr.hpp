@@ -76,7 +76,7 @@ private:
 
 	inline VideoWriter *videoWriter() const;
 
-	void run();
+	void run() override;
 
 	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrame;
 	double lastSampleAspectRatio;

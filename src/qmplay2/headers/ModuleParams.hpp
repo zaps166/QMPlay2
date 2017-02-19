@@ -39,8 +39,8 @@ public:
 
 	virtual bool processParams(bool *paramsCorrected = nullptr);
 protected:
-	ModuleParams() {}
-	~ModuleParams() {}
+	ModuleParams() = default;
+	~ModuleParams() = default;
 
 	inline void addParam(const QString &key, const QVariant &val = QVariant())
 	{

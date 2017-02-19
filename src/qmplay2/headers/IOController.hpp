@@ -22,7 +22,7 @@
 class BasicIO
 {
 public:
-	virtual ~BasicIO() {}
+	virtual ~BasicIO() = default;
 
 	virtual void pause() {}
 	virtual void abort() {} //must be thread-safe!
@@ -35,9 +35,7 @@ class IOController : public QSharedPointer<BasicIO>
 {
 	Q_DISABLE_COPY(IOController)
 public:
-	inline IOController() :
-		br(false)
-	{}
+	IOController() = default;
 
 	inline bool isAborted() const
 	{
@@ -97,7 +95,7 @@ public:
 		return static_cast<const T *>(data());
 	}
 private:
-	volatile bool br;
+	volatile bool br = false;
 };
 
 #endif // IOCONTROLLER_HPP

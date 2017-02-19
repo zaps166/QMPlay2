@@ -23,9 +23,9 @@ class MotionBlur : public VideoFilter
 public:
 	MotionBlur();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define MotionBlurName "Motion Blur"

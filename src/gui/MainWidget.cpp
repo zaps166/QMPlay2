@@ -78,7 +78,9 @@ using Functions::timeToStr;
 class MainWidgetTmpStyle : public QCommonStyle
 {
 public:
-	int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
+	~MainWidgetTmpStyle() final = default;
+
+	int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override
 	{
 		const int pM = QCommonStyle::pixelMetric(metric, option, widget);
 		if (metric == QStyle::PM_DockWidgetSeparatorExtent)

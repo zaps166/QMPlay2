@@ -23,9 +23,9 @@ class BlendDeint : public DeintFilter
 public:
 	BlendDeint();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define BlendDeintName "Blend"

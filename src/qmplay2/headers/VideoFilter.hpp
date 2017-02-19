@@ -30,16 +30,14 @@ public:
 	class FrameBuffer
 	{
 	public:
-		inline FrameBuffer() :
-			ts(0.0)
-		{}
+		FrameBuffer() = default;
 		inline FrameBuffer(const VideoFrame &frame, double ts) :
 			frame(frame),
 			ts(ts)
 		{}
 
 		VideoFrame frame;
-		double ts;
+		double ts = 0.0;
 	};
 
 	virtual ~VideoFilter();

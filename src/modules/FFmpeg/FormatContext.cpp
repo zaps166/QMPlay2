@@ -206,7 +206,7 @@ public:
 	}
 
 private:
-	void run()
+	void run() override
 	{
 		avformat_open_input(&m_formatCtx, m_url, m_inputFmt, &m_options);
 		if (!wakeIfNotAborted() && m_formatCtx)

@@ -26,11 +26,11 @@ public:
 	BS2B(Module &module);
 	~BS2B();
 
-	bool set();
+	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint srate);
-	void clearBuffers();
-	double filter(Buffer &data, bool flush);
+	bool setAudioParameters(uchar, uint srate) override;
+	void clearBuffers() override;
+	double filter(Buffer &data, bool flush) override;
 
 	void alloc();
 

@@ -25,6 +25,7 @@ class OtherVFiltersW : public QListWidget
 {
 public:
 	OtherVFiltersW(bool hw);
+	~OtherVFiltersW() final = default;
 
 	void writeSettings();
 private:

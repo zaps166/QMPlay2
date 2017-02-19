@@ -32,14 +32,14 @@
 #include <GL/gl.h>
 #include <GL/wglext.h>
 
-typedef QPair<quint32, quint32> Size;
+using Size = QPair<quint32, quint32>;
 
 namespace DX
 {
-	typedef HRESULT (WINAPI *Direct3DCreate9ExType)(UINT SDKVersion, IDirect3D9Ex **ppD3D);
+	using  Direct3DCreate9ExType = HRESULT (WINAPI *)(UINT SDKVersion, IDirect3D9Ex **ppD3D);
 	static Direct3DCreate9ExType Direct3DCreate9Ex;
 
-	typedef HRESULT (WINAPI *DXVA2CreateDirect3DDeviceManager9Type)(UINT *pResetToken,IDirect3DDeviceManager9 **ppDXVAManager);
+	using  DXVA2CreateDirect3DDeviceManager9Type = HRESULT (WINAPI *)(UINT *pResetToken,IDirect3DDeviceManager9 **ppDXVAManager);
 	static DXVA2CreateDirect3DDeviceManager9Type DXVA2CreateDirect3DDeviceManager9;
 }
 
@@ -84,27 +84,27 @@ public:
 	{
 		m_d3d9Device->AddRef();
 	}
-	~DXVA2Hwaccel()
+	~DXVA2Hwaccel() final
 	{
 		releaseSurfacesAndDecoder();
-		for (RenderTargets::const_iterator it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
+		for (auto it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
 			it.value()->Release();
 		m_d3d9Device->Release();
 	}
 
-	QString name() const
+	QString name() const override
 	{
 		return "DXVA2";
 	}
 
-	Format getFormat() const
+	Format getFormat() const override
 	{
 		return RGB32;
 	}
 
-	bool init(quint32 *textures)
+	bool init(quint32 *textures) override
 	{
-		typedef PROC(WINAPI *wglGetProcAddressType)(LPCSTR);
+		using  wglGetProcAddressType = PROC(WINAPI *)(LPCSTR);
 		static wglGetProcAddressType wglGetProcAddress = (wglGetProcAddressType)QLibrary::resolve("opengl32", "wglGetProcAddress");
 		if (!wglGetProcAddress)
 			return false;
@@ -153,7 +153,7 @@ public:
 
 		return true;
 	}
-	void clear(bool contextChange)
+	void clear(bool contextChange) override
 	{
 		if (m_glHandleSurface)
 		{
@@ -168,7 +168,7 @@ public:
 		}
 	}
 
-	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
+	CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
 	{
 		Q_UNUSED(field);
 
@@ -185,7 +185,7 @@ public:
 		return CopyOk;
 	}
 
-	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
 	{
 		D3DSURFACE_DESC desc;
 		D3DLOCKED_RECT lockedRect;
@@ -222,7 +222,7 @@ public:
 		m_surfaces = surfaces;
 
 		m_videoDecoder->AddRef();
-		foreach (IDirect3DSurface9 *surface, *m_surfaces)
+		for (IDirect3DSurface9 *surface : *m_surfaces)
 			surface->AddRef();
 
 		m_size = size;
@@ -235,7 +235,7 @@ private:
 	{
 		if (m_surfaces)
 		{
-			foreach (IDirect3DSurface9 *surface, *m_surfaces)
+			for (IDirect3DSurface9 *surface : *m_surfaces)
 				surface->Release();
 		}
 		if (m_videoDecoder)
@@ -259,8 +259,7 @@ private:
 	IDirect3DSurface9 *m_renderTarget;
 	HANDLE m_glHandleSurface;
 
-	typedef QMap<Size, IDirect3DSurface9 *> RenderTargets;
-	RenderTargets m_renderTargets;
+	QMap<Size, IDirect3DSurface9 *> m_renderTargets;
 	Size m_size;
 };
 
@@ -317,7 +316,7 @@ FFDecDXVA2::~FFDecDXVA2()
 		avcodec_flush_buffers(codec_ctx);
 
 	if (m_surfaces)
-		foreach (IDirect3DSurface9 *surface, *m_surfaces)
+		for (IDirect3DSurface9 *surface : *m_surfaces)
 			surface->Release();
 
 	if (m_videoDecoder)

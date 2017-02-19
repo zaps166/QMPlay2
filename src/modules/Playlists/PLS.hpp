@@ -20,8 +20,8 @@
 
 class PLS : public Playlist
 {
-	Entries read();
-	bool write(const Entries &);
+	Entries read() override;
+	bool write(const Entries &) override;
 };
 
 #define PLSName "PLS"

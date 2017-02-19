@@ -89,8 +89,7 @@ class StreamsInfo : public QList<StreamInfo *>
 {
 	Q_DISABLE_COPY(StreamsInfo)
 public:
-	inline StreamsInfo()
-	{}
+	StreamsInfo() = default;
 	~StreamsInfo();
 };
 

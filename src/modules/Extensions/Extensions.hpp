@@ -23,10 +23,10 @@ class Extensions : public Module
 public:
 	Extensions();
 private:
-	QList<Info> getModulesInfo(const bool) const;
-	void *createInstance(const QString &);
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget();
+	SettingsWidget *getSettingsWidget() override;
 
 	QImage downloader, youtube, radio;
 #ifdef USE_PROSTOPLEER
@@ -61,7 +61,7 @@ private slots:
 	void passwordEdited();
 #endif
 private:
-	void saveSettings();
+	void saveSettings() override;
 
 #ifdef USE_MPRIS2
 	QCheckBox *MPRIS2B;

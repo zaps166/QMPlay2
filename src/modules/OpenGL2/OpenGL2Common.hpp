@@ -55,7 +55,7 @@ public:
 		glCommon(glCommon)
 	{}
 private:
-	void updateCurrentValue(const QVariant &value);
+	void updateCurrentValue(const QVariant &value) override;
 
 	OpenGL2Common &glCommon;
 };

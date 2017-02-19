@@ -30,12 +30,12 @@ class YadifThr : public QThread
 {
 public:
 	YadifThr(const YadifDeint &yadifDeint);
-	~YadifThr();
+	~YadifThr() final;
 
 	void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
 	void waitForFinished();
 private:
-	void run();
+	void run() override;
 
 	const YadifDeint &yadifDeint;
 
@@ -54,11 +54,11 @@ class YadifDeint : public DeintFilter
 public:
 	YadifDeint(bool doubler, bool spatialCheck);
 
-	void clearBuffer();
+	void clearBuffer() override;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 private:
 	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 

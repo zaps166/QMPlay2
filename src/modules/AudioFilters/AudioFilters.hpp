@@ -23,10 +23,10 @@ class AudioFilters : public Module
 public:
 	AudioFilters();
 private:
-	QList<Info> getModulesInfo(const bool) const;
-	void *createInstance(const QString &);
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget();
+	SettingsWidget *getSettingsWidget() override;
 };
 
 /**/
@@ -52,7 +52,7 @@ private slots:
 	void compressor();
 	void defaultSettings();
 private:
-	void saveSettings();
+	void saveSettings() override final;
 
 	bool restoringDefault;
 

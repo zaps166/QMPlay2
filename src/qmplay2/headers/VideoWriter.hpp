@@ -37,7 +37,7 @@ public:
 
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
-	qint64 write(const QByteArray &);
+	qint64 write(const QByteArray &) override;
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
 	virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;
@@ -50,7 +50,7 @@ public:
 
 	virtual bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
-	virtual bool open() = 0;
+	virtual bool open() override = 0;
 
 protected:
 	HWAccelInterface *m_hwAccelInterface;

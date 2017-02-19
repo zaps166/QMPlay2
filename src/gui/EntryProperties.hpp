@@ -54,8 +54,8 @@ private slots:
 	void directAddressChanged();
 #endif
 	void browse();
-	void accept();
-	void reject();
+	void accept() override final;
+	void reject() override final;
 };
 
 #endif //ENTRYPROPERTIES_HPP

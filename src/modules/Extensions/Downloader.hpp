@@ -77,6 +77,8 @@ private:
 	class SpeedProgressWidget : public QWidget
 	{
 	public:
+		~SpeedProgressWidget() final = default;
+
 		QLabel *speedL;
 		QProgressBar *progressB;
 	} *speedProgressW;
@@ -107,7 +109,7 @@ class DownloaderThread : public QThread
 	enum {ADD_ENTRY, NAME, SET, SET_POS, SET_SPEED, DOWNLOAD_ERROR, FINISH};
 public:
 	DownloaderThread(QDataStream *, const QString &, DownloadListW *, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString());
-	~DownloaderThread();
+	~DownloaderThread() final;
 
 	void write(QDataStream &stream)
 	{
@@ -120,7 +122,7 @@ private slots:
 	void stop();
 	void finished();
 private:
-	void run();
+	void run() override;
 
 	QImage getImage();
 
@@ -139,7 +141,7 @@ class DownloaderW : public QWidget
 	friend class Downloader;
 public:
 	DownloaderW();
-	~DownloaderW();
+	~DownloaderW() final;
 private slots:
 	void setDownloadsDir();
 	void clearFinished();
@@ -165,11 +167,11 @@ public:
 	}
 	~Downloader();
 
-	void init();
+	void init() override;
 
-	DockWidget *getDockWidget();
+	DockWidget *getDockWidget() override;
 
-	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &);
+	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &) override;
 
 	/**/
 

@@ -33,12 +33,6 @@ public:
 		PacketBuffer::backwardPackets = backwardPackets;
 	}
 
-	inline PacketBuffer() :
-		remaining_duration(0.0), backward_duration(0.0),
-		remaining_bytes(0), backward_bytes(0),
-		pos(0)
-	{}
-
 	bool seekTo(double seekPos, bool backward);
 	void clear(); //Thread-safe
 
@@ -101,10 +95,10 @@ public:
 		mutex.unlock();
 	}
 private:
-	double remaining_duration, backward_duration;
-	qint64 remaining_bytes, backward_bytes;
+	double remaining_duration = 0.0, backward_duration = 0.0;
+	qint64 remaining_bytes = 0, backward_bytes = 0;
 	QMutex mutex;
-	int pos;
+	int pos = 0;
 };
 
 #endif // PACKETBUFFER_HPP

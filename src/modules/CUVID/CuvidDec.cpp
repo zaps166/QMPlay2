@@ -271,17 +271,17 @@ public:
 		}
 	}
 
-	QString name() const
+	QString name() const override
 	{
 		return "CUVID";
 	}
 
-	Format getFormat() const
+	Format getFormat() const override
 	{
 		return NV12;
 	}
 
-	bool lock()
+	bool lock() override
 	{
 		cudaMutex.lock();
 		if (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS)
@@ -289,14 +289,14 @@ public:
 		cudaMutex.unlock();
 		return false;
 	}
-	void unlock()
+	void unlock() override
 	{
 		CUcontext cuCtx;
 		cu::ctxPopCurrent(&cuCtx);
 		cudaMutex.unlock();
 	}
 
-	bool init(quint32 *textures)
+	bool init(quint32 *textures) override
 	{
 		for (int p = 0; p < 2; ++p)
 		{
@@ -305,7 +305,7 @@ public:
 		}
 		return true;
 	}
-	void clear(bool contextChange)
+	void clear(bool contextChange) override
 	{
 		Q_UNUSED(contextChange)
 		for (int p = 0; p < 2; ++p)
@@ -318,7 +318,7 @@ public:
 		}
 	}
 
-	CopyResult copyFrame(const VideoFrame &videoFrame, Field field)
+	CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
 	{
 		if (!m_cuvidDec)
 			return CopyNotReady;
@@ -390,7 +390,7 @@ public:
 		return CopyError;
 	}
 
-	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
 	{
 		cu::ContextGuard cuCtxGuard(m_cuCtx);
 

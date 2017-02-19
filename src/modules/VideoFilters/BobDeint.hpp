@@ -23,11 +23,11 @@ class BobDeint : public DeintFilter
 public:
 	BobDeint();
 
-	void clearBuffer();
+	void clearBuffer() override;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue);
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 private:
 	bool secondFrame;
 	double lastTS;

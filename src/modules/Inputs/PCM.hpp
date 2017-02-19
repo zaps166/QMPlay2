@@ -29,18 +29,18 @@ public:
 
 	PCM(Module &);
 private:
-	bool set();
+	bool set() override;
 
-	QString name() const;
-	QString title() const;
-	double length() const;
-	int bitrate() const;
+	QString name() const override;
+	QString title() const override;
+	double length() const override;
+	int bitrate() const override;
 
-	bool seek(int, bool);
-	bool read(Packet &, int &);
-	void abort();
+	bool seek(int, bool) override;
+	bool read(Packet &, int &) override;
+	void abort() override;
 
-	bool open(const QString &);
+	bool open(const QString &) override;
 
 	/**/
 

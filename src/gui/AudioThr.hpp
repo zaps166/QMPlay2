@@ -36,7 +36,7 @@ public:
 	AudioThr(PlayClass &, const QStringList &pluginsName = {});
 	~AudioThr();
 
-	void stop(bool terminate = false);
+	void stop(bool terminate = false) override final;
 	void clearVisualizations();
 
 	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
@@ -48,12 +48,12 @@ public:
 		allowAudioDrain = true;
 	}
 private:
-	void run();
+	void run() override;
 
 	bool resampler_create();
 
 #ifdef Q_OS_WIN
-	void timerEvent(QTimerEvent *);
+	void timerEvent(QTimerEvent *) override;
 #endif
 
 	SndResampler sndResampler;

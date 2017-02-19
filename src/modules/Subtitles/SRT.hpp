@@ -20,9 +20,7 @@
 
 class SRT : public SubsDec
 {
-	bool toASS(const QByteArray &, class LibASS *, double);
-
-	~SRT() {}
+	bool toASS(const QByteArray &, class LibASS *, double) override;
 };
 
 #define SRTSubsName "SRT Subtitles"

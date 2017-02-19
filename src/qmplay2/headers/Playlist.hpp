@@ -27,9 +27,8 @@
 class Playlist
 {
 public:
-	class Entry
+	struct Entry
 	{
-	public:
 		enum Flags
 		{
 			Selected = 0x1,
@@ -38,14 +37,9 @@ public:
 			Locked = 0x8
 		};
 
-		inline Entry() :
-			length(-1.0),
-			flags(0), queue(0), GID(0), parent(0)
-		{}
-
 		QString name, url;
-		double length;
-		qint32 flags, queue, GID, parent;
+		double length = -1.0;
+		qint32 flags = 0, queue = 0, GID = 0, parent = 0;
 	};
 	using Entries = QVector<Entry>;
 

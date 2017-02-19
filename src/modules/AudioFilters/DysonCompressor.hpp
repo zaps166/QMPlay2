@@ -29,13 +29,13 @@ public:
 	DysonCompressor(Module &module);
 	~DysonCompressor();
 
-	bool set();
+	bool set() override final;
 
 private:
-	bool setAudioParameters(uchar chn, uint srate);
-	int bufferedSamples() const;
-	void clearBuffers();
-	double filter(Buffer &data, bool flush);
+	bool setAudioParameters(uchar chn, uint srate) override;
+	int bufferedSamples() const override;
+	void clearBuffers() override final;
+	double filter(Buffer &data, bool flush) override;
 
 	using FloatVector = QVector<float>;
 

@@ -37,7 +37,7 @@ public:
 	}
 
 private:
-	void run()
+	void run() override
 	{
 		WaitForSingleObject(m_event, INFINITE);
 	}

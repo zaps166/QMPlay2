@@ -46,17 +46,17 @@ private:
 
 	~FFDecSW();
 
-	bool set();
+	bool set() override;
 
-	QString name() const;
+	QString name() const override;
 
-	void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats);
+	void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats) override;
 
-	int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush);
-	int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
-	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h);
+	int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush) override;
+	int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
+	bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h) override;
 
-	bool open(StreamInfo &, VideoWriter *);
+	bool open(StreamInfo &, VideoWriter *) override;
 
 	/**/
 

@@ -44,7 +44,7 @@ public:
 
 	void stop();
 private:
-	void run();
+	void run() override;
 
 	IOController<> ioCtrl;
 	PlaylistWidget &pLW;
@@ -95,7 +95,7 @@ private slots:
 	void modifyItemFlags(QTreeWidgetItem *tWI, int flags);
 	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
 private:
-	void run();
+	void run() override final;
 
 	bool add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, QStringList *existingEntries = nullptr, bool loadList = false);
 	QTreeWidgetItem *insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries);
@@ -186,12 +186,12 @@ private:
 
 	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
 
-	void mouseMoveEvent(QMouseEvent *);
-	void dragEnterEvent(QDragEnterEvent *);
-	void dragMoveEvent(QDragMoveEvent *);
-	void dropEvent(QDropEvent *);
-	void paintEvent(QPaintEvent *);
-	void scrollContentsBy(int dx, int dy);
+	void mouseMoveEvent(QMouseEvent *) override;
+	void dragEnterEvent(QDragEnterEvent *) override;
+	void dragMoveEvent(QDragMoveEvent *) override;
+	void dropEvent(QDropEvent *) override;
+	void paintEvent(QPaintEvent *) override;
+	void scrollContentsBy(int dx, int dy) override;
 
 	QRect getArcRect(int size);
 

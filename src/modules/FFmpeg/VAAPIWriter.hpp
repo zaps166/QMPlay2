@@ -30,22 +30,22 @@ class VAAPIWriter : public QWidget, public VideoWriter
 	Q_OBJECT
 public:
 	VAAPIWriter(Module &module, VAAPI *vaapi);
-	~VAAPIWriter();
+	~VAAPIWriter() final;
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected);
-	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2OSD *> &osd);
-	void pause();
+	bool processParams(bool *paramsCorrected) override;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &osd) override;
+	void pause() override;
 
-	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 
@@ -59,11 +59,11 @@ public:
 private:
 	Q_SLOT void draw(VASurfaceID _id = -1, int _field = -1);
 
-	void resizeEvent(QResizeEvent *);
-	void paintEvent(QPaintEvent *);
-	bool event(QEvent *);
+	void resizeEvent(QResizeEvent *) override final;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
-	QPaintEngine *paintEngine() const;
+	QPaintEngine *paintEngine() const override;
 
 	void clearRGBImage();
 

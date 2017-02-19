@@ -266,7 +266,7 @@ public:
 	}
 
 private:
-	void abort()
+	void abort() override
 	{
 		aborted = true;
 		youtubedl_process.kill();

@@ -43,9 +43,9 @@ private slots:
 	void setWidget(QWidget *);
 	void nullWidget();
 protected:
-	void resizeEvent(QResizeEvent *);
-	void paintEvent(QPaintEvent *);
-	bool event(QEvent *);
+	void resizeEvent(QResizeEvent *) override final;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 signals:
 	void resized(int, int);
 	void itemDropped(const QString &);

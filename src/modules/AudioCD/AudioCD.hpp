@@ -29,12 +29,12 @@ public:
 	AudioCD();
 	~AudioCD();
 private:
-	QList<Info> getModulesInfo(const bool) const;
-	void *createInstance(const QString &);
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	QList<QAction *> getAddActions();
+	QList<QAction *> getAddActions() override;
 
-	SettingsWidget *getSettingsWidget();
+	SettingsWidget *getSettingsWidget() override;
 
 	QImage CD;
 
@@ -56,7 +56,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private:
-	void saveSettings();
+	void saveSettings() override;
 
 	QGroupBox *audioCDB;
 	QCheckBox *useCDDB, *useCDTEXT;

@@ -24,22 +24,22 @@
 
 class QMPlay2FileWriter : public Writer
 {
-	bool readyWrite() const
+	bool readyWrite() const override
 	{
 		return f.isOpen();
 	}
 
-	qint64 write(const QByteArray &arr)
+	qint64 write(const QByteArray &arr) override
 	{
 		return f.write(arr);
 	}
 
-	QString name() const
+	QString name() const override
 	{
 		return "File Writer";
 	}
 
-	bool open()
+	bool open() override
 	{
 		f.setFileName(getUrl().mid(7));
 		return f.open(QIODevice::WriteOnly);

@@ -27,12 +27,13 @@ class Drawable : public QWidget
 	friend class XVideoWriter;
 public:
 	Drawable(class XVideoWriter &);
+	~Drawable() final = default;
 private:
-	void resizeEvent(QResizeEvent *);
-	void paintEvent(QPaintEvent *);
-	bool event(QEvent *);
+	void resizeEvent(QResizeEvent *) override final;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
-	QPaintEngine *paintEngine() const;
+	QPaintEngine *paintEngine() const override;
 
 	int X, Y, W, H;
 	QRect dstRect, srcRect;
@@ -51,17 +52,17 @@ public:
 private:
 	~XVideoWriter();
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected);
-	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2OSD *> &);
+	bool processParams(bool *paramsCorrected) override;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 

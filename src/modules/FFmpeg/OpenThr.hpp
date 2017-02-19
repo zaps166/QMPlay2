@@ -27,15 +27,11 @@
 class AbortContext
 {
 public:
-	inline AbortContext() :
-		isAborted(false)
-	{}
-
 	void abort();
 
 	QWaitCondition openCond;
 	QMutex openMutex;
-	bool isAborted;
+	bool isAborted = false;
 };
 
 /**/

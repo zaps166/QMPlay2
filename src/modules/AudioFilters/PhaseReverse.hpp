@@ -23,10 +23,10 @@ class PhaseReverse : public AudioFilter
 public:
 	PhaseReverse(Module &);
 
-	bool set();
+	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint);
-	double filter(Buffer &, bool);
+	bool setAudioParameters(uchar, uint) override;
+	double filter(Buffer &, bool) override;
 
 	bool enabled, hasParameters, canFilter, reverseRight;
 	uchar chn;

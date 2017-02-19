@@ -23,10 +23,10 @@ class Modplug : public Module
 public:
 	Modplug();
 private:
-	QList<Info> getModulesInfo(const bool) const;
-	void *createInstance(const QString &);
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget();
+	SettingsWidget *getSettingsWidget() override;
 
 	QImage modIcon;
 };
@@ -44,7 +44,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private:
-	void saveSettings();
+	void saveSettings() override;
 
 	QCheckBox *enabledB;
 	QComboBox *resamplingB;

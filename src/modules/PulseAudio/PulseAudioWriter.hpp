@@ -28,16 +28,16 @@ public:
 	PulseAudioWriter(Module &);
 	~PulseAudioWriter();
 private:
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override;
 
-	bool processParams(bool *paramsCorrected);
-	qint64 write(const QByteArray &);
+	bool processParams(bool *paramsCorrected) override;
+	qint64 write(const QByteArray &) override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 

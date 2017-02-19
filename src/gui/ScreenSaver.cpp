@@ -31,7 +31,7 @@ public:
 	inline ScreenSaverPriv() :
 		m_disp(nullptr)
 	{}
-	inline ~ScreenSaverPriv()
+	inline ~ScreenSaverPriv() final
 	{
 		if (m_disp)
 			XCloseDisplayFunc(m_disp);
@@ -66,7 +66,7 @@ public:
 	}
 
 private:
-	void timerEvent(QTimerEvent *)
+	void timerEvent(QTimerEvent *) override final
 	{
 		XForceScreenSaverFunc(m_disp, 0);
 		XFlushFunc(m_disp);
@@ -132,14 +132,10 @@ static inline bool inhibitScreenSaver(MSG *msg, bool &inhibited)
 	class ScreenSaverPriv : public QAbstractNativeEventFilter
 	{
 	public:
-		inline ScreenSaverPriv() :
-			inhibited(false)
-		{}
-
-		bool inhibited;
+		bool inhibited = false;
 
 	private:
-		bool nativeEventFilter(const QByteArray &, void *m, long *)
+		bool nativeEventFilter(const QByteArray &, void *m, long *) override
 		{
 			return inhibitScreenSaver((MSG *)m, inhibited);
 		}

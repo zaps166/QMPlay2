@@ -29,7 +29,7 @@ public:
 		values.resize(vals);
 	}
 private:
-	void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *) override;
 
 	QVector<float> values;
 	float preamp;
@@ -48,9 +48,9 @@ class EqualizerGUI : public QWidget, public QMPlay2Extensions
 public:
 	EqualizerGUI(Module &);
 
-	bool set();
+	bool set() override final;
 
-	DockWidget *getDockWidget();
+	DockWidget *getDockWidget() override;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void enabled(bool);
@@ -78,7 +78,7 @@ private:
 
 	void loadPresets();
 
-	void showEvent(QShowEvent *event);
+	void showEvent(QShowEvent *event) override;
 
 	QMap<int, int> getPresetValues(const QString &name);
 

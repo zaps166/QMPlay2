@@ -31,7 +31,7 @@ public:
 	FreedesktopNotify(qint32 timeout);
 	~FreedesktopNotify();
 
-	bool showMessage(const QString &summary, const QString &message, const QImage &image);
+	bool showMessage(const QString &summary, const QString &message, const QImage &image) override;
 private slots:
 	void callFinished(QDBusPendingCallWatcher *watcher);
 private:

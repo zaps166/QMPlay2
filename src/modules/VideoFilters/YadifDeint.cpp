@@ -368,7 +368,7 @@ static void filterLine_SSE2(quint8 *dest, const void *const destEnd,
 {
 	struct u128
 	{
-		inline u128() {}
+		u128() = default;
 		inline u128(quint64 v) : lo(v), hi(v) {}
 		quint64 lo, hi;
 	};

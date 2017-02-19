@@ -29,17 +29,17 @@ public:
 private:
 	~OpenSLESWriter();
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override;
 
-	bool processParams(bool *paramsCorrected);
-	qint64 write(const QByteArray &);
-	void pause();
+	bool processParams(bool *paramsCorrected) override;
+	qint64 write(const QByteArray &) override;
+	void pause() override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 
@@ -52,7 +52,7 @@ private:
 	SLPlayItf bqPlayerPlay;
 	SLBufferQueueItf bqPlayerBufferQueue;
 
-	QVector<QVector<qint16> > buffers;
+	QVector<QVector<qint16>> buffers;
 	QVector<qint16> tmpBuffer;
 	QSemaphore sem;
 	int currBuffIdx;

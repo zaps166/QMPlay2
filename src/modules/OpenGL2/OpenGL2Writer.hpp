@@ -30,24 +30,24 @@ public:
 private:
 	~OpenGL2Writer();
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected);
+	bool processParams(bool *paramsCorrected) override;
 
-	QMPlay2PixelFormats supportedPixelFormats() const;
+	QMPlay2PixelFormats supportedPixelFormats() const override;
 
-	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2OSD *> &);
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-	void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
+	void setHWAccelInterface(HWAccelInterface *hwAccelInterface) override;
 
-	void pause();
+	void pause() override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 

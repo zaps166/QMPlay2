@@ -31,12 +31,12 @@ public:
 	Equalizer(Module &);
 	~Equalizer();
 
-	bool set();
+	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint);
-	int bufferedSamples() const;
-	void clearBuffers();
-	double filter(Buffer &data, bool flush);
+	bool setAudioParameters(uchar, uint) override;
+	int bufferedSamples() const override;
+	void clearBuffers() override final;
+	double filter(Buffer &data, bool flush) override;
 
 	/**/
 

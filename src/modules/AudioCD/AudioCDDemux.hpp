@@ -32,14 +32,14 @@ class CDIODestroyTimer : public QObject
 	Q_OBJECT
 public:
 	CDIODestroyTimer();
-	~CDIODestroyTimer();
+	~CDIODestroyTimer() final;
 
 	Q_SIGNAL void setInstance(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 	CdIo_t *getInstance(const QString &_device, unsigned &_discID);
 private slots:
 	void setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 private:
-	void timerEvent(QTimerEvent *e);
+	void timerEvent(QTimerEvent *e) override;
 
 	QAtomicInt timerId;
 	CdIo_t *cdio;
@@ -59,21 +59,21 @@ public:
 private:
 	~AudioCDDemux();
 
-	bool set();
+	bool set() override;
 
-	QString name() const;
-	QString title() const;
-	QList<QMPlay2Tag> tags() const;
-	double length() const;
-	int bitrate() const;
+	QString name() const override;
+	QString title() const override final;
+	QList<QMPlay2Tag> tags() const override;
+	double length() const override final;
+	int bitrate() const override;
 
-	bool seek(int, bool);
-	bool read(Packet &, int & );
-	void abort();
+	bool seek(int, bool) override;
+	bool read(Packet &, int & ) override;
+	void abort() override;
 
-	bool open(const QString &);
+	bool open(const QString &) override;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok);
+	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
 	/**/
 

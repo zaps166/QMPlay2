@@ -29,8 +29,7 @@ public:
 		CopyError,
 	};
 
-	virtual ~HWAccelInterface()
-	{}
+	virtual ~HWAccelInterface() = default;
 
 	virtual QString name() const = 0;
 

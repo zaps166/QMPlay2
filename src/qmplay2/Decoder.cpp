@@ -23,12 +23,12 @@
 
 class QMPlay2DummyDecoder : public Decoder
 {
-	QString name() const
+	QString name() const override
 	{
 		return QString();
 	}
 
-	bool open(StreamInfo &, VideoWriter *)
+	bool open(StreamInfo &, VideoWriter *) override
 	{
 		return true;
 	}

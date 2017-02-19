@@ -26,9 +26,7 @@ class ModuleCommon
 public:
 	virtual bool set();
 protected:
-	inline ModuleCommon() :
-		module(nullptr)
-	{}
+	ModuleCommon() = default;
 	~ModuleCommon();
 
 	void SetModule(Module &m);
@@ -49,7 +47,7 @@ protected:
 		module->setInstance<T>();
 	}
 private:
-	Module *module;
+	Module *module = nullptr;
 };
 
 #endif //MODULECOMMON_HPP

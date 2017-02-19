@@ -23,10 +23,10 @@ class Echo : public AudioFilter
 public:
 	Echo(Module &);
 
-	bool set();
+	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint);
-	double filter(Buffer &, bool);
+	bool setAudioParameters(uchar, uint) override;
+	double filter(Buffer &, bool) override;
 
 	void alloc(bool);
 

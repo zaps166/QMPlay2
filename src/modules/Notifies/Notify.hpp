@@ -28,10 +28,9 @@ class Notify
 public:
 	virtual bool showMessage(const QString &summary, const QString &message = QString(), const QImage &image = QImage()) = 0;
 
-	virtual ~Notify()
-	{}
+	virtual ~Notify() = default;
 protected:
-	Notify(qint32 timeout) :
+	inline Notify(qint32 timeout) :
 		m_timeout(timeout)
 	{}
 	qint32 m_timeout; // in msec

@@ -24,42 +24,42 @@
 
 class QMPlay2FileReader : public Reader
 {
-	bool readyRead() const
+	bool readyRead() const override
 	{
 		return f.isOpen();
 	}
-	bool canSeek() const
+	bool canSeek() const override
 	{
 		return true;
 	}
 
-	bool seek(qint64 pos)
+	bool seek(qint64 pos) override
 	{
 		return f.seek(pos);
 	}
-	QByteArray read(qint64 len)
+	QByteArray read(qint64 len) override
 	{
 		return f.read(len);
 	}
-	bool atEnd() const
+	bool atEnd() const override
 	{
 		return f.atEnd();
 	}
 
-	virtual qint64 size() const
+	virtual qint64 size() const override
 	{
 		return f.size();
 	}
-	virtual qint64 pos() const
+	virtual qint64 pos() const override
 	{
 		return f.pos();
 	}
-	QString name() const
+	QString name() const override
 	{
 		return "File Reader";
 	}
 
-	bool open()
+	bool open() override
 	{
 		f.setFileName(getUrl().mid(7));
 		return f.open(QIODevice::ReadOnly);

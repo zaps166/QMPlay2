@@ -25,7 +25,7 @@ class NotifyService : public QObject
 	Q_OBJECT
 public:
 	NotifyService(Notify *notify, bool useImages, Settings &settings);
-	~NotifyService();
+	~NotifyService() final;
 private slots:
 	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
 	void coverDataFromMediaFile(const QByteArray &cover);
@@ -48,7 +48,7 @@ public:
 	NotifyExtension(Module &module);
 	~NotifyExtension();
 private:
-	bool set();
+	bool set() override;
 
 	NotifyService *m_notifyService;
 };

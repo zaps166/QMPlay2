@@ -54,7 +54,7 @@ public:
 		return pixmap;
 	}
 private:
-	void paintEvent(QPaintEvent *)
+	void paintEvent(QPaintEvent *) override
 	{
 		if (!pixmap.isNull())
 		{

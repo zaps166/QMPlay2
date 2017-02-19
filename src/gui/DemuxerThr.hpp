@@ -40,7 +40,7 @@ class DemuxerThr : public QThread
 	Q_OBJECT
 private:
 	DemuxerThr(PlayClass &);
-	~DemuxerThr();
+	~DemuxerThr() final;
 
 	QByteArray getCoverFromStream() const;
 
@@ -66,7 +66,7 @@ private:
 
 	void checkReadyWrite(AVThread *avThr);
 
-	void run();
+	void run() override;
 
 	inline void ensureTrueUpdateBuffered();
 	inline bool canUpdateBuffered() const;

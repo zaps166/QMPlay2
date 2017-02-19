@@ -29,10 +29,9 @@ class QMPlay2OSD;
 class Drawable : public QWidget
 {
 	Q_OBJECT
-	typedef HRESULT (WINAPI *DwmEnableCompositionProc)(UINT uCompositionAction);
 public:
 	Drawable(DirectDrawWriter &);
-	~Drawable();
+	~Drawable() final;
 
 	inline bool canDraw() const
 	{
@@ -47,7 +46,7 @@ public:
 
 	void draw(const VideoFrame &videoFrame);
 
-	void resizeEvent(QResizeEvent *);
+	void resizeEvent(QResizeEvent *) override final;
 
 	QList<const QMPlay2OSD *> osd_list;
 	QMutex osd_mutex;
@@ -63,10 +62,10 @@ private:
 
 	bool restoreLostSurface();
 
-	void paintEvent(QPaintEvent *);
-	bool event(QEvent *);
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
-	QPaintEngine *paintEngine() const;
+	QPaintEngine *paintEngine() const override;
 
 	QImage osdImg;
 	QList<QByteArray> osd_checksums;
@@ -83,6 +82,7 @@ private:
 	LPDIRECTDRAWSURFACE DDSPrimary, DDSSecondary, DDSBackBuffer;
 	LPDIRECTDRAWCOLORCONTROL DDrawColorCtrl;
 
+	using DwmEnableCompositionProc = HRESULT (WINAPI *)(UINT uCompositionAction);
 	DwmEnableCompositionProc DwmEnableComposition;
 };
 
@@ -96,19 +96,19 @@ public:
 private:
 	~DirectDrawWriter();
 
-	bool set();
+	bool set() override;
 
-	bool readyWrite() const;
+	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected);
-	void writeVideo(const VideoFrame &videoFrame);
-	void writeOSD(const QList<const QMPlay2OSD *> &);
+	bool processParams(bool *paramsCorrected) override;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-	void pause();
+	void pause() override;
 
-	QString name() const;
+	QString name() const override;
 
-	bool open();
+	bool open() override;
 
 	/**/
 

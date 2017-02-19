@@ -26,6 +26,7 @@ class Slider : public QSlider
 	Q_OBJECT
 public:
 	Slider();
+	~Slider() final = default;
 
 	inline bool ignoringValueChanged() const
 	{
@@ -43,12 +44,12 @@ public slots:
 	}
 	void drawRange(int first, int second);
 protected:
-	void paintEvent(QPaintEvent *);
-	void mousePressEvent(QMouseEvent *);
-	void mouseReleaseEvent(QMouseEvent *);
-	void mouseMoveEvent(QMouseEvent *);
-	void wheelEvent(QWheelEvent *);
-	void enterEvent(QEvent *);
+	void paintEvent(QPaintEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
+	void mouseReleaseEvent(QMouseEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void wheelEvent(QWheelEvent *) override;
+	void enterEvent(QEvent *) override;
 private:
 	int getMousePos(int X);
 

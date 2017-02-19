@@ -31,17 +31,17 @@ public:
 	OpenGL2Widget();
 	~OpenGL2Widget();
 
-	QWidget *widget();
+	QWidget *widget() override;
 
-	bool setVSync(bool enable);
-	void updateGL(bool requestDelayed);
+	bool setVSync(bool enable) override;
+	void updateGL(bool requestDelayed) override;
 
-	void initializeGL();
-	void paintGL();
+	void initializeGL() override;
+	void paintGL() override;
 private slots:
 	void aboutToBeDestroyed();
 private:
-	bool event(QEvent *e);
+	bool event(QEvent *e) override;
 };
 
 #endif // OPENGL2WIDGET_HPP

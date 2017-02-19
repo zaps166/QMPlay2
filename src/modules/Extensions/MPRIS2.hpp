@@ -143,7 +143,7 @@ class MPRIS2Interface : public QObject
 {
 public:
 	MPRIS2Interface();
-	~MPRIS2Interface();
+	~MPRIS2Interface() final;
 
 	inline bool isOk() const;
 private:
@@ -163,7 +163,7 @@ public:
 	MPRIS2(Module &module);
 	~MPRIS2();
 private:
-	bool set();
+	bool set() override;
 
 	QScopedPointer<MPRIS2Interface> mpris2Interface;
 };
