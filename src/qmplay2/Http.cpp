@@ -234,11 +234,18 @@ HttpReply::~HttpReply()
 
 /**/
 
+const char *Http::UrlEncoded = "Content-Type: application/x-www-form-urlencoded; charset=utf-8";
+
 Http::Http(QObject *parent) :
 	QObject(parent)
 {}
 Http::~Http()
 {}
+
+void Http::setCustomUserAgent(const QString &customUserAgent)
+{
+	m_customUserAgent = customUserAgent.toUtf8();
+}
 
 HttpReply *Http::start(const QString &url, const QByteArray &postData, const QString &rawHeaders)
 {

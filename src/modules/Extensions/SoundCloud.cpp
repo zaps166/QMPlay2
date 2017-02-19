@@ -275,7 +275,7 @@ DockWidget *SoundCloud::getDockWidget()
 
 QList<SoundCloud::AddressPrefix> SoundCloud::addressPrefixList(bool img) const
 {
-	return QList<AddressPrefix>() << AddressPrefix(SoundCloudName, img ? QImage(":/soundcloud") : QImage());
+	return {AddressPrefix(SoundCloudName, img ? QImage(":/soundcloud") : QImage())};
 }
 void SoundCloud::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {

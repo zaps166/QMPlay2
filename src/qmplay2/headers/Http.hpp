@@ -74,13 +74,12 @@ class Http : public QObject
 {
 	Q_OBJECT
 public:
+	static const char *UrlEncoded;
+
 	Http(QObject *parent = nullptr);
 	~Http();
 
-	inline void setCustomUserAgent(const QString &customUserAgent)
-	{
-		m_customUserAgent = customUserAgent.toUtf8();
-	}
+	void setCustomUserAgent(const QString &customUserAgent);
 
 	HttpReply *start(const QString &url, const QByteArray &postData = QByteArray(), const QString &rawHeaders = QString());
 

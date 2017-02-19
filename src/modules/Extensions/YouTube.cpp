@@ -1476,7 +1476,10 @@ DockWidget *YouTube::getDockWidget()
 
 QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
-	return QList<AddressPrefix>() << AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()) << AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage());
+	return {
+		AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()),
+		AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage())
+	};
 }
 void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
