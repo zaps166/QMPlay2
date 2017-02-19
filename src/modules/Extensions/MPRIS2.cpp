@@ -23,8 +23,6 @@
 #include <QDBusMessage>
 #include <QDir>
 
-#include <unistd.h>
-
 static void propertyChanged(const QString &name, const QVariant &value)
 {
 	QVariantMap map;
@@ -267,7 +265,7 @@ void MediaPlayer2Player::coverDataFromMediaFile(const QByteArray &cover)
 {
 	if (parent()->property("exportCovers").toBool())
 	{
-		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(getpid()));
+		QFile coverF(QDir::tempPath() + "/QMPlay2." + QString("%1.%2.mpris2cover").arg(getenv("USER")).arg(QCoreApplication::applicationPid()));
 		if (coverF.open(QFile::WriteOnly))
 		{
 			coverF.write(cover);
@@ -333,7 +331,7 @@ MPRIS2Interface::MPRIS2Interface() :
 		serviceOk = QDBusConnection::sessionBus().registerService(service);
 		if (!serviceOk)
 		{
-			service += QString(".instance%1").arg(getpid());
+			service += QString(".instance%1").arg(QCoreApplication::applicationPid());
 			serviceOk = QDBusConnection::sessionBus().registerService(service);
 		}
 	}

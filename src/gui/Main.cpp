@@ -306,12 +306,12 @@ static inline void forceKill()
 #else
 	const int s = SIGKILL;
 #endif
-	delete g_screenSaver; //Current implementation doesn't need this
+	unInhibitScreenSaver();
 	raise(s);
 }
 static inline void callDefaultSignalHandler(int s)
 {
-	delete g_screenSaver; //Current implementation doesn't need this
+	unInhibitScreenSaver();
 	signal(s, SIG_DFL);
 	raise(s);
 }
