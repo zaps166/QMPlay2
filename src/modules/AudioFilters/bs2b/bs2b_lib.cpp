@@ -21,7 +21,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <memory.h>
 

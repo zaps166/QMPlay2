@@ -47,9 +47,7 @@ public:
 
 private:
 	QList<QAction *> m_actions;
-
-	typedef QHash<QAction *, QPair<QString, QString> > Shortcuts;
-	Shortcuts m_shortcuts;
+	QHash<QAction *, QPair<QString, QString>> m_shortcuts;
 
 };
 

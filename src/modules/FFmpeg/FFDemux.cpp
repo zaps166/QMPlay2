@@ -33,7 +33,7 @@ FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
 FFDemux::~FFDemux()
 {
 	streams_info.clear();
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		delete fmtCtx;
 }
 
@@ -45,7 +45,7 @@ bool FFDemux::set()
 bool FFDemux::metadataChanged() const
 {
 	bool isMetadataChanged = false;
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		isMetadataChanged |= fmtCtx->metadataChanged();
 	return isMetadataChanged;
 }
@@ -53,7 +53,7 @@ bool FFDemux::metadataChanged() const
 bool FFDemux::isStillImage() const
 {
 	bool stillImage = true;
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		stillImage &= fmtCtx->isStillImage();
 	return stillImage;
 }
@@ -74,7 +74,7 @@ QList<ChapterInfo> FFDemux::getChapters() const
 QString FFDemux::name() const
 {
 	QString name;
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 	{
 		const QString fmtCtxName = fmtCtx->name();
 		if (!name.contains(fmtCtxName))
@@ -104,14 +104,14 @@ bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 double FFDemux::length() const
 {
 	double length = -1.0;
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		length = qMax(length, fmtCtx->length());
 	return length;
 }
 int FFDemux::bitrate() const
 {
 	int bitrate = 0;
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		bitrate += fmtCtx->bitrate();
 	return bitrate;
 }
@@ -124,7 +124,7 @@ QByteArray FFDemux::image(bool forceCopy) const
 
 bool FFDemux::localStream() const
 {
-	foreach (const FormatContext *fmtCtx, formatContexts)
+	for (const FormatContext *fmtCtx : formatContexts)
 		if (!fmtCtx->isLocal)
 			return false;
 	return true;
@@ -133,7 +133,7 @@ bool FFDemux::localStream() const
 bool FFDemux::seek(int pos, bool backward)
 {
 	bool seeked = false;
-	foreach (FormatContext *fmtCtx, formatContexts)
+	for (FormatContext *fmtCtx : formatContexts)
 	{
 		if (fmtCtx->seek(pos, backward))
 			seeked |= true;
@@ -180,13 +180,13 @@ bool FFDemux::read(Packet &encoded, int &idx)
 }
 void FFDemux::pause()
 {
-	foreach (FormatContext *fmtCtx, formatContexts)
+	for (FormatContext *fmtCtx : formatContexts)
 		fmtCtx->pause();
 }
 void FFDemux::abort()
 {
 	QMutexLocker mL(&mutex);
-	foreach (FormatContext *fmtCtx, formatContexts)
+	for (FormatContext *fmtCtx : formatContexts)
 		fmtCtx->abort();
 	abortFetchTracks = true;
 }
@@ -200,7 +200,7 @@ bool FFDemux::open(const QString &entireUrl)
 	{
 		if (!param.isEmpty())
 			addFormatContext(url, param);
-		else foreach (QString stream, url.split("][", QString::SkipEmptyParts))
+		else for (QString stream : url.split("][", QString::SkipEmptyParts))
 		{
 			stream.remove('[');
 			stream.remove(']');
@@ -219,7 +219,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 		if (oggHelper.io)
 		{
 			int i = 0;
-			foreach (const OggHelper::Chain &chains, oggHelper.getOggChains(ok))
+			for (const OggHelper::Chain &chains : oggHelper.getOggChains(ok))
 			{
 				const QString param = QString("OGG:%1:%2:%3").arg(++i).arg(chains.first).arg(chains.second);
 

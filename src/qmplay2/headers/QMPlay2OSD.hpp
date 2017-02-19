@@ -27,7 +27,7 @@
 class QMPlay2OSD
 {
 public:
-	typedef QByteArray Checksum;
+	using Checksum = QByteArray;
 
 	class Image
 	{

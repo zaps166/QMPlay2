@@ -74,7 +74,7 @@ class Http : public QObject
 {
 	Q_OBJECT
 public:
-	Http(QObject *parent = NULL);
+	Http(QObject *parent = nullptr);
 	~Http();
 
 	inline void setCustomUserAgent(const QString &customUserAgent)

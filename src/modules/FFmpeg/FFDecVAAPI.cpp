@@ -38,7 +38,7 @@ class VAAPIOpenGL : public HWAccelInterface
 public:
 	VAAPIOpenGL(VAAPI *vaapi) :
 		m_vaapi(vaapi),
-		m_glSurface(NULL),
+		m_glSurface(nullptr),
 		m_canDeleteVAAPI(false)
 	{}
 	~VAAPIOpenGL()
@@ -67,7 +67,7 @@ public:
 		if (m_glSurface)
 		{
 			vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
-			m_glSurface = NULL;
+			m_glSurface = nullptr;
 		}
 	}
 
@@ -126,8 +126,8 @@ FFDecVAAPI::FFDecVAAPI(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex),
 	m_useOpenGL(true), m_allowVDPAU(false),
 	m_copyVideo(Qt::Unchecked),
-	m_vaapi(NULL),
-	m_swsCtx(NULL)
+	m_vaapi(nullptr),
+	m_swsCtx(nullptr)
 {
 	SetModule(module);
 }
@@ -229,7 +229,7 @@ void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
 			(qint32)image.pitches[1] / 2
 		};
 
-		m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL);
+		m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
 		sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
 		decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
@@ -263,7 +263,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 						m_hwAccelWriter = vaapiWriter;
 				}
 				if (!m_hwAccelWriter)
-					writer = NULL;
+					writer = nullptr;
 			}
 
 			bool useOpenGL = m_useOpenGL;
@@ -274,7 +274,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 				if (!m_vaapi->open(m_allowVDPAU, useOpenGL))
 				{
 					delete m_vaapi;
-					m_vaapi = NULL;
+					m_vaapi = nullptr;
 				}
 			}
 
@@ -284,7 +284,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id), (m_copyVideo != Qt::Checked)))
 				{
 					delete m_vaapi;
-					m_vaapi = NULL;
+					m_vaapi = nullptr;
 				}
 			}
 
@@ -332,7 +332,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 				if (!m_hwAccelWriter)
 				{
 					delete m_vaapi;
-					m_vaapi = NULL;
+					m_vaapi = nullptr;
 				}
 			}
 		}

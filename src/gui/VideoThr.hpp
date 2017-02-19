@@ -30,7 +30,7 @@ class VideoThr : public AVThread
 {
 	Q_OBJECT
 public:
-	VideoThr(PlayClass &, VideoWriter *, const QStringList &pluginsName = QStringList());
+	VideoThr(PlayClass &, VideoWriter *, const QStringList &pluginsName = {});
 
 	inline VideoWriter *getHWAccelWriter() const
 	{

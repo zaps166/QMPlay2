@@ -28,7 +28,7 @@
 #include <QPainter>
 #include <QVariant>
 
-#include <math.h>
+#include <cmath>
 
 static QPixmap getBlurred(const QPixmap &input, Qt::TransformationMode &blurredTransformation)
 {
@@ -61,7 +61,7 @@ InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &g
 	qmp2Pixmap(qmp2Pixmap),
 	hasWallpaper(false),
 	loseHeight(0),
-	w(NULL)
+	w(nullptr)
 {
 	connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 	setAttribute(Qt::WA_OpaquePaintEvent);
@@ -106,7 +106,7 @@ void InDockW::setWidget(QWidget *_w)
 	if (w)
 	{
 		disconnect(w, SIGNAL(destroyed()), this, SLOT(nullWidget()));
-		w->setParent(NULL);
+		w->setParent(nullptr);
 	}
 	if ((w = _w))
 	{
@@ -122,7 +122,7 @@ void InDockW::setWidget(QWidget *_w)
 
 		w->setMinimumSize(2, 2);
 		w->setParent(this);
-		resizeEvent(NULL);
+		resizeEvent(nullptr);
 		w->show();
 		connect(w, SIGNAL(destroyed()), this, SLOT(nullWidget()));
 	}
@@ -130,7 +130,7 @@ void InDockW::setWidget(QWidget *_w)
 
 void InDockW::nullWidget()
 {
-	w = NULL;
+	w = nullptr;
 }
 
 void InDockW::resizeEvent(QResizeEvent *)

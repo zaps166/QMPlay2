@@ -59,7 +59,7 @@ ALSACommon::DevicesList ALSACommon::getDevices()
 	if (!snd_device_name_hint(-1, "pcm", (void ***)&hints)) //add "defaults.namehint.!showall on" to .asoundrc
 	{
 		char **n = hints;
-		while (*n != NULL)
+		while (*n != nullptr)
 		{
 			char *name = snd_device_name_get_hint(*n, "NAME");
 			if (name)

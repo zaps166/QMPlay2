@@ -54,8 +54,8 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 {
 	const QString scheme = Functions::getUrlScheme(url);
 	if (url.isEmpty() || scheme.isEmpty())
-		return NULL;
-	Writer *writer = NULL;
+		return nullptr;
+	Writer *writer = nullptr;
 	if (modNames.isEmpty() && scheme == "file")
 	{
 		writer = new QMPlay2FileWriter;
@@ -63,11 +63,11 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 		if (writer->open())
 			return writer;
 		delete writer;
-		return NULL;
+		return nullptr;
 	}
-	QVector<QPair<Module *, Module::Info> > pluginsInstances(modNames.count());
-	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
+	QVector<QPair<Module *, Module::Info>> pluginsInstances(modNames.count());
+	for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : pluginInstance->getModulesInfo())
 			if (mod.type == Module::WRITER && mod.extensions.contains(scheme))
 			{
 				if (modNames.isEmpty())
@@ -93,7 +93,7 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 			return writer;
 		delete writer;
 	}
-	return NULL;
+	return nullptr;
 }
 
 Writer::~Writer()

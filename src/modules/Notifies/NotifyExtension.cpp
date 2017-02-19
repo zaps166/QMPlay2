@@ -125,7 +125,7 @@ void NotifyService::volumeChanged(double v)
 /**/
 
 NotifyExtension::NotifyExtension(Module &module) :
-	m_notifyService(NULL)
+	m_notifyService(nullptr)
 {
 	SetModule(module);
 }
@@ -139,12 +139,12 @@ bool NotifyExtension::set()
 	if (sets().getBool("TypeDisabled"))
 	{
 		delete m_notifyService;
-		m_notifyService = NULL;
+		m_notifyService = nullptr;
 	}
 	else
 	{
 		const int timeout = sets().getInt("Timeout");
-		Notify *notify = NULL;
+		Notify *notify = nullptr;
 		bool useImages = false;
 		if (sets().getBool("TypeTray"))
 			notify = new TrayNotify(timeout);

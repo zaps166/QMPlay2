@@ -32,6 +32,6 @@ enum QMPlay2PixelFormat //Compatible with FFmpeg
 
 	QMPLAY2_PIX_FMT_COUNT   =  6
 };
-typedef QVector<QMPlay2PixelFormat> QMPlay2PixelFormats;
+using QMPlay2PixelFormats = QVector<QMPlay2PixelFormat>;
 
 #endif // PIXELFORMATS_HPP

@@ -68,7 +68,7 @@ VideoFrame::VideoFrame(const VideoFrameSize &size, AVBufferRef *bufferRef[], con
 	{
 		linesize[p] = newLinesize[p];
 		buffer[p].assign(bufferRef[p], linesize[p] * size.getHeight(p));
-		bufferRef[p] = NULL;
+		bufferRef[p] = nullptr;
 	}
 }
 VideoFrame::VideoFrame(const VideoFrameSize &size, const qint32 newLinesize[], bool interlaced, bool tff) :

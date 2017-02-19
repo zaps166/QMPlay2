@@ -126,7 +126,7 @@ template<typename T>
 void Module::setInstance()
 {
 	QMutexLocker locker(&mutex);
-	foreach (ModuleCommon *mc, instances)
+	for (ModuleCommon *mc : instances)
 	{
 		T *t = dynamic_cast<T *>(mc);
 		if (t)

@@ -33,7 +33,7 @@
 #include <QGesture>
 #include <QMenu>
 
-#include <math.h>
+#include <cmath>
 
 static const int hideCursorTimeout = 750;
 
@@ -56,17 +56,17 @@ VideoDock::VideoDock() :
 	popupMenu->addMenu(QMPlay2GUI.menuBar->help);
 
 	/* Menu actions which will be available in fullscreen or compact mode */
-	foreach (QAction *act, QMPlay2GUI.menuBar->window->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->window->actions())
 		addAction(act);
-	foreach (QAction *act, QMPlay2GUI.menuBar->playlist->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->playlist->actions())
 		addAction(act);
-	foreach (QAction *act, QMPlay2GUI.menuBar->player->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->player->actions())
 		addAction(act);
-	foreach (QAction *act, QMPlay2GUI.menuBar->playback->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->playback->actions())
 		addAction(act);
-	foreach (QAction *act, QMPlay2GUI.menuBar->options->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->options->actions())
 		addAction(act);
-	foreach (QAction *act, QMPlay2GUI.menuBar->help->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->help->actions())
 		addAction(act);
 	/**/
 
@@ -114,7 +114,7 @@ void VideoDock::fullScreen(bool b)
 			if (dockedW)
 			{
 				unsetCursor(dockedW);
-				dockedW->setParent(NULL);
+				dockedW->setParent(nullptr);
 			}
 			setWidget(&iDW);
 		}
@@ -124,7 +124,7 @@ void VideoDock::fullScreen(bool b)
 		setFloating(is_floating);
 
 		if (!isBreeze)
-			setStyle(NULL);
+			setStyle(nullptr);
 	}
 }
 
@@ -277,7 +277,7 @@ void VideoDock::leaveEvent(QEvent *e)
 }
 void VideoDock::enterEvent(QEvent *e)
 {
-	mouseMoveEvent(NULL);
+	mouseMoveEvent(nullptr);
 	DockWidget::enterEvent(e);
 }
 bool VideoDock::event(QEvent *e)

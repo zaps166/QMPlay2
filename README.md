@@ -159,7 +159,7 @@ For CMake build be sure that you have correct CMake version:
 ###You need devel packages:
 
 ####Necessary:
-- Qt4 >= 4.7.0 (4.8.x recommended) or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
+- Qt4 >= 4.8.0 or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
 - FFmpeg >= 2.2 (>= 2.5.x recommended; >= 3.1.x recommended for CUVID):

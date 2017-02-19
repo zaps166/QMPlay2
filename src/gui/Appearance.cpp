@@ -211,7 +211,7 @@ void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_
 {
 	QApplication::setPalette(pal);
 	QMPlay2GUI.mainW->setPalette(mainW_pal);
-	foreach (QWidget *w, QApplication::allWidgets())
+	for (QWidget *w : QApplication::allWidgets())
 	{
 		QSlider *s = qobject_cast<QSlider *>(w);
 		if (s)
@@ -509,14 +509,14 @@ void Appearance::reloadSchemes()
 {
 	disconnect(schemesB, SIGNAL(currentIndexChanged(int)), this, SLOT(schemesIndexChanged(int)));
 	schemesB->clear();
-	schemesB->addItems(QStringList() << tr("Current color scheme") << tr("Default color scheme"));
+	schemesB->addItems({tr("Current color scheme"), tr("Default color scheme")});
 	rwSchemesIdx = 2;
-	foreach (const QString &fName, QDir(":/Colors").entryList())
+	for (const QString &fName : QDir(":/Colors").entryList())
 	{
 		schemesB->addItem(fName.left(fName.length() - QMPlay2ColorExtension.length()));
 		++rwSchemesIdx;
 	}
-	foreach (const QString &fName, QDir(colorsDir).entryList(QStringList() << "*" + QMPlay2ColorExtension, QDir::Files, QDir::Name))
+	for (const QString &fName : QDir(colorsDir).entryList({"*" + QMPlay2ColorExtension}, QDir::Files, QDir::Name))
 		schemesB->addItem(fName.left(fName.length() - QMPlay2ColorExtension.length()));
 	connect(schemesB, SIGNAL(currentIndexChanged(int)), this, SLOT(schemesIndexChanged(int)));
 	warned = false;
@@ -524,7 +524,7 @@ void Appearance::reloadSchemes()
 void Appearance::loadCurrentPalette()
 {
 	QPalette currentPalette = QApplication::palette(), sliderPalette, mainW_pal = QMPlay2GUI.mainW->palette();
-	foreach (QWidget *w, QApplication::allWidgets())
+	for (QWidget *w : QApplication::allWidgets())
 	{
 		QSlider *s = qobject_cast<QSlider *>(w);
 		if (s && s->isEnabled())

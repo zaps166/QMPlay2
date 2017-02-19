@@ -42,7 +42,7 @@ public:
 		bool onlyTracks, isOK;
 	};
 
-	static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = NULL);
+	static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = nullptr);
 
 	virtual bool metadataChanged() const;
 

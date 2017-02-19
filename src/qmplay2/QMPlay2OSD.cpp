@@ -23,7 +23,7 @@
 void QMPlay2OSD::genChecksum()
 {
 	QCryptographicHash hash(QCryptographicHash::Md4);
-	foreach (const Image &img, m_images)
+	for (const Image &img : m_images)
 		hash.addData(img.data);
 	m_checksum = hash.result();
 }

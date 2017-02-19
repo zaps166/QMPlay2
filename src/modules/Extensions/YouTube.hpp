@@ -123,7 +123,7 @@ private:
 	void setAutocomplete(const QByteArray &data);
 	void setSearchResults(QString data);
 
-	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = NULL, const QString &url = QString(), IOController<YouTubeDL> *youtube_dl = NULL); //jeżeli (tWI == NULL) to zwraca {URL, file_extension, TITLE}
+	QStringList getYouTubeVideo(const QString &data, const QString &PARAM = QString(), QTreeWidgetItem *tWI = nullptr, const QString &url = QString(), IOController<YouTubeDL> *youtube_dl = nullptr); //jeżeli (tWI == nullptr) to zwraca {URL, file_extension, TITLE}
 	QStringList getUrlByItagPriority(const QList<int> &itags, QStringList ret);
 
 	void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
@@ -152,7 +152,7 @@ private:
 
 /**/
 
-typedef QPair<QStringList, QList<int> > ItagNames;
+using ItagNames = QPair<QStringList, QList<int>>;
 
 class YouTube : public QMPlay2Extensions
 {

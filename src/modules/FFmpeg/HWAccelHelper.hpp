@@ -26,8 +26,8 @@ extern "C"
 	#include <libavutil/pixfmt.h>
 }
 
-typedef quintptr QMPlay2SurfaceID;
-typedef QQueue<QMPlay2SurfaceID> SurfacesQueue;
+using QMPlay2SurfaceID = quintptr;
+using SurfacesQueue = QQueue<QMPlay2SurfaceID>;
 
 #define QMPlay2InvalidSurfaceID ((QMPlay2SurfaceID)-1)
 

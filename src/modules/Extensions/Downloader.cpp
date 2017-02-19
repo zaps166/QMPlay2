@@ -233,7 +233,7 @@ void DownloadItemW::downloadStop(bool ok)
 /**/
 
 DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name, const QString &prefix, const QString &param) :
-	url(url), name(name), prefix(prefix), param(param), downloadItemW(NULL), downloadLW(downloadLW), item(NULL)
+	url(url), name(name), prefix(prefix), param(param), downloadItemW(nullptr), downloadLW(downloadLW), item(nullptr)
 {
 	connect(this, SIGNAL(listSig(int, qint64, const QString &)), this, SLOT(listSlot(int, qint64, const QString &)));
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
@@ -326,11 +326,11 @@ void DownloaderThread::run()
 	QString extension;
 
 	if (!prefix.isEmpty())
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (QMPlay2Ext->addressPrefixList(false).contains(prefix))
 			{
 				newUrl.clear();
-				QMPlay2Ext->convertAddress(prefix, url, param, &newUrl, &name, NULL, &extension, &ioCtrl);
+				QMPlay2Ext->convertAddress(prefix, url, param, &newUrl, &name, nullptr, &extension, &ioCtrl);
 				break;
 			}
 
@@ -425,7 +425,7 @@ QImage DownloaderThread::getImage()
 {
 	if (!prefix.isEmpty())
 	{
-		foreach (const QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
 			const QList<QMPlay2Extensions::AddressPrefix> addressPrefixList = QMPlay2Ext->addressPrefixList();
 			const int idx = addressPrefixList.indexOf(prefix);
@@ -507,7 +507,7 @@ DownloaderW::~DownloaderW()
 	int count = 0;
 	QByteArray arr;
 	QDataStream stream(&arr, QIODevice::WriteOnly);
-	foreach (QTreeWidgetItem *item, downloadLW->findItems(QString(), Qt::MatchContains))
+	for (QTreeWidgetItem *item : downloadLW->findItems(QString(), Qt::MatchContains))
 	{
 		DownloadItemW *downloadItemW = (DownloadItemW *)downloadLW->itemWidget(item, 0);
 		downloadItemW->write(stream);
@@ -552,13 +552,13 @@ void DownloaderW::addUrl()
 	}
 	QString url = QInputDialog::getText(this, DownloaderName, tr("Enter address"), QLineEdit::Normal, clipboardUrl);
 	if (!url.isEmpty())
-		new DownloaderThread(NULL, url, downloadLW);
+		new DownloaderThread(nullptr, url, downloadLW);
 }
 void DownloaderW::download()
 {
 	new DownloaderThread
 	(
-		NULL,
+		nullptr,
 		sender()->property("url").toString(),
 		downloadLW,
 		sender()->property("name").toString(),
@@ -594,12 +594,12 @@ DockWidget *Downloader::getDockWidget()
 QAction *Downloader::getAction(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
 {
 	if (url.startsWith("file://"))
-		return NULL;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+		return nullptr;
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
-				return NULL;
-	QAction *act = new QAction(DownloaderW::tr("Download"), NULL);
+				return nullptr;
+	QAction *act = new QAction(DownloaderW::tr("Download"), nullptr);
 	act->setIcon(QIcon(":/downloader"));
 	act->connect(act, SIGNAL(triggered()), w, SLOT(download()));
 	if (!prefix.isEmpty())

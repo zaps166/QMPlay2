@@ -32,7 +32,7 @@ public:
 
 	void stopThreads();
 
-	QString getUrl(QTreeWidgetItem *tWI = NULL) const;
+	QString getUrl(QTreeWidgetItem *tWI = nullptr) const;
 	QString getCurrentItemName() const;
 
 	void load(const QString &);

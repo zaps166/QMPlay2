@@ -46,14 +46,14 @@ QList<OpenGL2::Info> OpenGL2::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
-		modulesInfo += Info(OpenGL2WriterName, WRITER, QStringList("video"));
+		modulesInfo += Info(OpenGL2WriterName, WRITER, QStringList{"video"});
 	return modulesInfo;
 }
 void *OpenGL2::createInstance(const QString &name)
 {
 	if (name == OpenGL2WriterName && getBool("Enabled"))
 		return new OpenGL2Writer(*this);
-	return NULL;
+	return nullptr;
 }
 
 OpenGL2::SettingsWidget *OpenGL2::getSettingsWidget()
@@ -95,7 +95,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	}
 	else
 	{
-		preventFullScreenB = NULL;
+		preventFullScreenB = nullptr;
 	}
 #endif
 

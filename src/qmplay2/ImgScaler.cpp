@@ -26,7 +26,7 @@ extern "C"
 }
 
 ImgScaler::ImgScaler() :
-	m_swsCtx(NULL),
+	m_swsCtx(nullptr),
 	m_srcH(0), m_dstLinesize(0)
 {}
 
@@ -34,7 +34,7 @@ bool ImgScaler::create(const VideoFrameSize &size, int newWdst, int newHdst, boo
 {
 	m_srcH = size.height;
 	m_dstLinesize = newWdst << 2;
-	return (m_swsCtx = sws_getCachedContext(m_swsCtx, size.width, m_srcH, isNV12 ? AV_PIX_FMT_NV12 : (AVPixelFormat)size.getFormat(), newWdst, newHdst, AV_PIX_FMT_RGB32, SWS_BILINEAR, NULL, NULL, NULL));
+	return (m_swsCtx = sws_getCachedContext(m_swsCtx, size.width, m_srcH, isNV12 ? AV_PIX_FMT_NV12 : (AVPixelFormat)size.getFormat(), newWdst, newHdst, AV_PIX_FMT_RGB32, SWS_BILINEAR, nullptr, nullptr, nullptr));
 }
 void ImgScaler::scale(const VideoFrame &src, void *dst)
 {
@@ -54,6 +54,6 @@ void ImgScaler::destroy()
 	if (m_swsCtx)
 	{
 		sws_freeContext(m_swsCtx);
-		m_swsCtx = NULL;
+		m_swsCtx = nullptr;
 	}
 }

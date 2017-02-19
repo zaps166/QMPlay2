@@ -48,7 +48,7 @@
 #include <DysonCompressor.hpp>
 #include <Buffer.hpp>
 
-#include <math.h>
+#include <cmath>
 
 #define MAXLEVEL 1.0 //default: 0.9
 

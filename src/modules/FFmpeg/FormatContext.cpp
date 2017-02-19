@@ -110,7 +110,7 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 
 static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
 {
-	AVDictionaryEntry *avTag = av_dict_get(metadata, key, NULL, AV_DICT_IGNORE_SUFFIX);
+	AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, AV_DICT_IGNORE_SUFFIX);
 	if (avTag && avTag->value)
 	{
 		const QByteArray tag = QByteArray(avTag->value);
@@ -202,7 +202,7 @@ public:
 
 	inline AVFormatContext *getFormatCtx() const
 	{
-		return waitForOpened() ? m_formatCtx : NULL;
+		return waitForOpened() ? m_formatCtx : nullptr;
 	}
 
 private:
@@ -220,9 +220,9 @@ FormatContext::FormatContext(QMutex &avcodec_mutex) :
 	isError(false),
 	currPos(0.0),
 	abortCtx(new AbortContext),
-	formatCtx(NULL),
-	packet(NULL),
-	oggHelper(NULL),
+	formatCtx(nullptr),
+	packet(nullptr),
+	oggHelper(nullptr),
 	isPaused(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
@@ -235,12 +235,12 @@ FormatContext::~FormatContext()
 {
 	if (formatCtx)
 	{
-		foreach (AVStream *stream, streams)
+		for (AVStream *stream : streams)
 		{
 			if (codecParams(stream) && !streamNotValid(stream))
 			{
 				//Data is allocated in QByteArray, so FFmpeg mustn't free it!
-				codecParams(stream)->extradata = NULL;
+				codecParams(stream)->extradata = nullptr;
 				codecParams(stream)->extradata_size = 0;
 			}
 		}
@@ -383,10 +383,10 @@ QList<QMPlay2Tag> FormatContext::tags() const
 bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 {
 #ifdef HAS_REPLAY_GAIN
-	const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
+	const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
 	if (streamIdx > -1)
 	{
-		if (void *sideData = av_stream_get_side_data(streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, NULL))
+		if (void *sideData = av_stream_get_side_data(streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, nullptr))
 		{
 			AVReplayGain replayGain = *(AVReplayGain *)sideData;
 			qint32  tmpGain;
@@ -475,7 +475,7 @@ int FormatContext::bitrate() const
 }
 QByteArray FormatContext::image(bool forceCopy) const
 {
-	foreach (const AVStream *stream, streams)
+	for (const AVStream *stream : streams)
 		if (stream->disposition & AV_DISPOSITION_ATTACHED_PIC)
 			return forceCopy ? QByteArray((const char *)stream->attached_pic.data, stream->attached_pic.size) : QByteArray::fromRawData((const char *)stream->attached_pic.data, stream->attached_pic.size);
 	return QByteArray();
@@ -596,7 +596,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 #else
 	if (isStreamed)
 	{
-		char *value = NULL;
+		char *value = nullptr;
 		av_opt_get(formatCtx, "icy_metadata_packet", AV_OPT_SEARCH_CHILDREN, (quint8 **)&value);
 		QString icyPacket = value;
 		av_free(value);
@@ -606,7 +606,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 			int idx2 = icyPacket.indexOf("';", idx += 13);
 			if (idx2 > -1)
 			{
-				AVDictionaryEntry *e = av_dict_get(formatCtx->metadata, "StreamTitle", NULL, AV_DICT_IGNORE_SUFFIX);
+				AVDictionaryEntry *e = av_dict_get(formatCtx->metadata, "StreamTitle", nullptr, AV_DICT_IGNORE_SUFFIX);
 				icyPacket = icyPacket.mid(idx, idx2-idx);
 				if (!e || QString(e->value) != icyPacket)
 				{
@@ -631,7 +631,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	else
 	{
 		encoded.assign(packet->buf, packet->size);
-		packet->buf = NULL;
+		packet->buf = nullptr;
 	}
 
 	const double time_base = av_q2d(streams.at(ff_idx)->time_base);
@@ -686,10 +686,10 @@ void FormatContext::abort()
 
 bool FormatContext::open(const QString &_url, const QString &param)
 {
-	static const QStringList disabledDemuxers = QStringList()
-		<< "ass"
-		<< "tty" //txt files
-	;
+	static const QStringList disabledDemuxers {
+		"ass",
+		"tty" //txt files
+	};
 
 	const int idx = _url.indexOf("://");
 	if (idx < 0)
@@ -713,7 +713,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 			return false;
 	}
 
-	AVInputFormat *inputFmt = NULL;
+	AVInputFormat *inputFmt = nullptr;
 	if (scheme == "file")
 		isLocal = true;
 	else
@@ -724,7 +724,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		isLocal = false;
 	}
 
-	AVDictionary *options = NULL;
+	AVDictionary *options = nullptr;
 	if (!inputFmt)
 		url = FFCommon::prepareUrl(_url, options);
 
@@ -758,7 +758,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 #endif
 
 	avcodec_mutex.lock();
-	if (avformat_find_stream_info(formatCtx, NULL) < 0)
+	if (avformat_find_stream_info(formatCtx, nullptr) < 0)
 	{
 		avcodec_mutex.unlock();
 		return false;
@@ -816,14 +816,14 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	formatCtx->event_flags = 0;
 #else
 	if (!isStreamed)
-		metadata = NULL;
+		metadata = nullptr;
 	else
 	{
-		char *value = NULL;
+		char *value = nullptr;
 		av_opt_get(formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, (quint8 **)&value);
 		QStringList icyHeaders = QString(value).split("\n", QString::SkipEmptyParts);
 		av_free(value);
-		foreach (const QString &icy, icyHeaders)
+		for (const QString &icy, icyHeaders)
 		{
 			if (icy.startsWith("icy-name: "))
 				av_dict_set(&formatCtx->metadata, "icy-name", icy.mid(10).toUtf8(), 0);
@@ -856,7 +856,7 @@ AVDictionary *FormatContext::getMetadata() const
 StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 {
 	if (streamNotValid(stream))
-		return NULL;
+		return nullptr;
 
 	StreamInfo *streamInfo = new StreamInfo;
 

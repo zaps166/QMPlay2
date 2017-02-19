@@ -35,7 +35,7 @@ class LibASS;
 class Decoder : public ModuleCommon
 {
 public:
-	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = NULL, const QStringList &modNames = QStringList());
+	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {});
 
 	virtual QString name() const = 0;
 
@@ -54,7 +54,7 @@ public:
 
 	virtual ~Decoder();
 private:
-	virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = NULL) = 0;
+	virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) = 0;
 };
 
 #endif

@@ -25,7 +25,7 @@ extern "C"
 }
 
 Buffer::Buffer(const Buffer &other) :
-	m_bufferRef(other.m_bufferRef ? av_buffer_ref(other.m_bufferRef) : NULL),
+	m_bufferRef(other.m_bufferRef ? av_buffer_ref(other.m_bufferRef) : nullptr),
 	m_size(other.m_size)
 {}
 Buffer::~Buffer()
@@ -74,12 +74,12 @@ void Buffer::clear()
 
 const quint8 *Buffer::data() const
 {
-	return !isNull() ? m_bufferRef->data : NULL;
+	return !isNull() ? m_bufferRef->data : nullptr;
 }
 quint8 *Buffer::data()
 {
 	if (isNull())
-		return NULL;
+		return nullptr;
 	av_buffer_make_writable(&m_bufferRef);
 	return m_bufferRef->data;
 }

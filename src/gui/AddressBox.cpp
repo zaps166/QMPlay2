@@ -29,8 +29,8 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 {
 	pB.addItem(QMPlay2Core.getQMPlay2Pixmap(), tr("Direct address"), DIRECT);
 
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && !mod.name.contains(' '))
 			{
 				QIcon icon;
@@ -43,8 +43,8 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 				pB.addItem(icon, mod.name, MODULE);
 			}
 
-	foreach (const QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
-		foreach (const QMPlay2Extensions::AddressPrefix &addressPrefix, QMPlay2Ext->addressPrefixList())
+	for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (const QMPlay2Extensions::AddressPrefix &addressPrefix : QMPlay2Ext->addressPrefixList())
 			pB.addItem(QPixmap::fromImage(addressPrefix.img), addressPrefix, MODULE);
 
 	if (!url.isEmpty())

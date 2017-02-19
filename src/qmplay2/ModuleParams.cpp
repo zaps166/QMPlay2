@@ -20,7 +20,7 @@
 
 bool ModuleParams::modParam(const QString &key, const QVariant &val)
 {
-	QHash<QString, QVariant>::iterator it = paramList.find(key);
+	auto it = paramList.find(key);
 	if (it != paramList.end())
 	{
 		*it = val;

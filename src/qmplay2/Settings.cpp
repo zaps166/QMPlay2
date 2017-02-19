@@ -66,7 +66,7 @@ void Settings::remove(const QString &key)
 QVariant Settings::get(const QString &key, const QVariant &def) const
 {
 	QMutexLocker mL(&mutex);
-	SettingsMap::const_iterator it = cache.find(key);
+	auto it = cache.find(key);
 	if (it != cache.end())
 		return it.value();
 	if (toRemove.contains(key))
@@ -76,11 +76,11 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 
 void Settings::flushCache()
 {
-	foreach (const QString &key, toRemove)
+	for (const QString &key : toRemove)
 		QSettings::remove(key);
 	toRemove.clear();
 
-	for (SettingsMap::const_iterator it = cache.constBegin(), end_it = cache.constEnd(); it != end_it; ++it)
+	for (auto it = cache.constBegin(), end_it = cache.constEnd(); it != end_it; ++it)
 		QSettings::setValue(it.key(), it.value());
 	cache.clear();
 }

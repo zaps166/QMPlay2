@@ -34,14 +34,14 @@ QList<ALSA::Info> ALSA::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
-		modulesInfo += Info(ALSAWriterName, WRITER, QStringList("audio"));
+		modulesInfo += Info(ALSAWriterName, WRITER, QStringList{"audio"});
 	return modulesInfo;
 }
 void *ALSA::createInstance(const QString &name)
 {
 	if (name == ALSAWriterName && getBool("WriterEnabled"))
 		return new ALSAWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 ALSA::SettingsWidget *ALSA::getSettingsWidget()

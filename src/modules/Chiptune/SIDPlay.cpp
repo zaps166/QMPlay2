@@ -32,8 +32,8 @@ SIDPlay::SIDPlay(Module &module) :
 	m_srate(Functions::getBestSampleRate()),
 	m_aborted(false),
 	m_time(-1.0),
-	m_rs(NULL),
-	m_tune(NULL)
+	m_rs(nullptr),
+	m_tune(nullptr)
 {
 	SetModule(module);
 }

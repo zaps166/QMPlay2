@@ -22,7 +22,7 @@
 BS2B::BS2B(Module &module) :
 	m_hasParameters(false), m_canFilter(false),
 	m_srate(0),
-	m_bs2b(NULL)
+	m_bs2b(nullptr)
 {
 	SetModule(module);
 }
@@ -75,6 +75,6 @@ void BS2B::alloc()
 	else if (m_bs2b)
 	{
 		bs2b_close(m_bs2b);
-		m_bs2b = NULL;
+		m_bs2b = nullptr;
 	}
 }

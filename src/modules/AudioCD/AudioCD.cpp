@@ -52,7 +52,7 @@ QList<AudioCD::Info> AudioCD::getModulesInfo(const bool) const
 {
 	QList<Info> modulesInfo;
 #ifdef Q_OS_WIN
-	modulesInfo += Info(AudioCDName, DEMUXER, QStringList("cda"), CD);
+	modulesInfo += Info(AudioCDName, DEMUXER, QStringList{"cda"}, CD);
 #else
 	modulesInfo += Info(AudioCDName, DEMUXER, CD);
 #endif
@@ -62,12 +62,12 @@ void *AudioCD::createInstance(const QString &name)
 {
 	if (name == AudioCDName)
 		return new AudioCDDemux(*this, *cdioDestroyTimer);
-	return NULL;
+	return nullptr;
 }
 
 QList<QAction *> AudioCD::getAddActions()
 {
-	QAction *actCD = new QAction(NULL);
+	QAction *actCD = new QAction(nullptr);
 	actCD->setIcon(QIcon(":/CD"));
 	actCD->setText(tr("AudioCD"));
 	actCD->connect(actCD, SIGNAL(triggered()), this, SLOT(add()));

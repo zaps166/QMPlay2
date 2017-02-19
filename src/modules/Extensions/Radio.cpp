@@ -27,7 +27,7 @@
 #include <QLabel>
 
 Radio::Radio(Module &module) :
-	once(false), net(NULL),
+	once(false), net(nullptr),
 	qmp2Icon(QMPlay2Core.getQMPlay2Pixmap()),
 	wlasneStacje(tr("Own radio stations"))
 {
@@ -73,7 +73,7 @@ Radio::Radio(Module &module) :
 	nowaStacjaLWI->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 
 	Settings sets("Radio");
-	foreach (const QString &entry, sets.getStringList("Radia"))
+	for (const QString &entry : sets.getStringList("Radia"))
 	{
 		const QStringList nazwa_i_adres = entry.split('\n');
 		if (nazwa_i_adres.count() == 2)
@@ -83,7 +83,7 @@ Radio::Radio(Module &module) :
 Radio::~Radio()
 {
 	QStringList radia;
-	foreach (QListWidgetItem *lWI, lW->findItems(QString(), Qt::MatchContains))
+	for (QListWidgetItem *lWI : lW->findItems(QString(), Qt::MatchContains))
 		if (lWI->data(Qt::ToolTipRole).toString() == wlasneStacje)
 			radia += lWI->text() + '\n' + lWI->data(Qt::UserRole).toString();
 	Settings sets("Radio");
@@ -206,11 +206,11 @@ void Radio::finished()
 	else
 	{
 		progressB->deleteLater();
-		progressB = NULL;
+		progressB = nullptr;
 	}
 	netReply->deleteLater();
 	net->deleteLater();
-	net = NULL;
+	net = nullptr;
 }
 
 void Radio::addGroup(const QString &groupName)

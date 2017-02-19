@@ -52,7 +52,7 @@ private:
 	mutable QMutex mutex;
 	FFTContext *fftIn, *fftOut;
 	FFTComplex *complex;
-	QVector<QVector<float> > input, last_samples;
+	QVector<QVector<float>> input, last_samples;
 	QVector<float> wind_f, f;
 	float preamp;
 };

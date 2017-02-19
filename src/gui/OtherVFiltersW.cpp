@@ -24,7 +24,7 @@
 OtherVFiltersW::OtherVFiltersW(bool hw) :
 	hw(hw)
 {
-	QList<QPair<Module *, Module::Info> > pluginsInstances;
+	QList<QPair<Module *, Module::Info>> pluginsInstances;
 
 	setIconSize(QSize(32, 32));
 
@@ -33,8 +33,8 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 		setSelectionMode(QAbstractItemView::ExtendedSelection);
 		setDragDropMode(QAbstractItemView::InternalMove);
 
-		QPair<QStringList, QList<bool> > videoFilters;
-		foreach (const QString &filter, QMPlay2Core.getSettings().getStringList("VideoFilters"))
+		QPair<QStringList, QList<bool>> videoFilters;
+		for (const QString &filter : QMPlay2Core.getSettings().getStringList("VideoFilters"))
 		{
 			videoFilters.first += filter.mid(1);
 			videoFilters.second += filter.left(1).toInt();
@@ -43,8 +43,8 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 		for (int i = 0; i < videoFilters.first.count(); ++i)
 			pluginsInstances += QPair<Module *, Module::Info>();
 
-		foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-			foreach (Module::Info moduleInfo, pluginInstance->getModulesInfo())
+		for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+			for (Module::Info moduleInfo : pluginInstance->getModulesInfo())
 				if ((moduleInfo.type & 0xF) == Module::VIDEOFILTER && !(moduleInfo.type & Module::DEINTERLACE))
 				{
 					const int idx = videoFilters.first.indexOf(moduleInfo.name);
@@ -60,8 +60,8 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 	}
 	else
 	{
-		foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-			foreach (const Module::Info &moduleInfo, pluginInstance->getModulesInfo())
+		for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+			for (const Module::Info &moduleInfo : pluginInstance->getModulesInfo())
 				if ((moduleInfo.type & 0xF) == Module::WRITER && (moduleInfo.type & Module::VIDEOHWFILTER))
 					pluginsInstances += qMakePair(pluginInstance, moduleInfo);
 	}

@@ -33,11 +33,11 @@ Playlists::Playlists() :
 QList<Playlists::Info> Playlists::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
-	modulesInfo += Info(PLSName, PLAYLIST, QStringList("pls"));
+	modulesInfo += Info(PLSName, PLAYLIST, QStringList{"pls"});
 	if (showDisabled || getBool("M3U_enabled"))
-		modulesInfo += Info(M3UName, PLAYLIST, QStringList("m3u"));
+		modulesInfo += Info(M3UName, PLAYLIST, QStringList{"m3u"});
 	if (showDisabled || getBool("XSPF_enabled"))
-		modulesInfo += Info(XSPFName, PLAYLIST, QStringList("xspf"));
+		modulesInfo += Info(XSPFName, PLAYLIST, QStringList{"xspf"});
 	return modulesInfo;
 }
 void *Playlists::createInstance(const QString &name)
@@ -48,7 +48,7 @@ void *Playlists::createInstance(const QString &name)
 		return new M3U;
 	else if (name == XSPFName && getBool("XSPF_enabled"))
 		return new XSPF;
-	return NULL;
+	return nullptr;
 }
 
 Playlists::SettingsWidget *Playlists::getSettingsWidget()

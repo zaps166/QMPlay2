@@ -62,7 +62,7 @@ class AddD : public QDialog
 {
 	Q_OBJECT
 public:
-	AddD(Settings &, QWidget *parent = NULL, QObject *moduleSetsW = NULL);
+	AddD(Settings &, QWidget *parent = nullptr, QObject *moduleSetsW = nullptr);
 
 	inline int getSampleRate() const
 	{

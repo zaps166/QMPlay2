@@ -27,14 +27,14 @@
 
 VAAPI::VAAPI() :
 	ok(false),
-	VADisp(NULL),
+	VADisp(nullptr),
 	outW(0), outH(0),
 #ifdef HAVE_VPP
 	vpp_deint_type(VAProcDeinterlacingNone),
 	use_vpp(false),
 #endif
 	version(0),
-	display(NULL)
+	display(nullptr)
 {
 	memset(&nv12ImageFmt, 0, sizeof nv12ImageFmt);
 }
@@ -51,7 +51,7 @@ bool VAAPI::open(bool allowVDPAU, bool &openGL)
 {
 	clr();
 
-	display = XOpenDisplay(NULL);
+	display = XOpenDisplay(nullptr);
 	if (!display)
 		return false;
 
@@ -219,12 +219,12 @@ SurfacesQueue VAAPI::getSurfacesQueue() const
 
 inline bool VAAPI::vaCreateConfigAndContext()
 {
-	return vaCreateConfig(VADisp, profile, VAEntrypointVLD, NULL, 0, &config) == VA_STATUS_SUCCESS && vaCreateContext(VADisp, config, outW, outH, VA_PROGRESSIVE, surfaces, surfacesCount, &context) == VA_STATUS_SUCCESS;
+	return vaCreateConfig(VADisp, profile, VAEntrypointVLD, nullptr, 0, &config) == VA_STATUS_SUCCESS && vaCreateContext(VADisp, config, outW, outH, VA_PROGRESSIVE, surfaces, surfacesCount, &context) == VA_STATUS_SUCCESS;
 }
 bool VAAPI::vaapiCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, bool useAttr)
 {
 #ifdef NEW_CREATESURFACES
-	VASurfaceAttrib attrib, *attribs = NULL;
+	VASurfaceAttrib attrib, *attribs = nullptr;
 	if (useAttr)
 	{
 		attrib.type = VASurfaceAttribPixelFormat;
@@ -246,8 +246,8 @@ void VAAPI::init_vpp()
 	use_vpp = true;
 	if
 	(
-		vaCreateConfig(VADisp, (VAProfile)-1, VAEntrypointVideoProc, NULL, 0, &config_vpp) == VA_STATUS_SUCCESS &&
-		vaCreateContext(VADisp, config_vpp, 0, 0, 0, NULL, 0, &context_vpp) == VA_STATUS_SUCCESS &&
+		vaCreateConfig(VADisp, (VAProfile)-1, VAEntrypointVideoProc, nullptr, 0, &config_vpp) == VA_STATUS_SUCCESS &&
+		vaCreateContext(VADisp, config_vpp, 0, 0, 0, nullptr, 0, &context_vpp) == VA_STATUS_SUCCESS &&
 		vaapiCreateSurfaces(&id_vpp, 1, true)
 	)
 	{
@@ -405,7 +405,7 @@ bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &fiel
 
 		if (do_vpp_deint)
 		{
-			VAProcFilterParameterBufferDeinterlacing *deint_params = NULL;
+			VAProcFilterParameterBufferDeinterlacing *deint_params = nullptr;
 			if (vaMapBuffer(VADisp, vpp_buffers[VAProcFilterDeinterlacing], (void **)&deint_params) == VA_STATUS_SUCCESS)
 			{
 				if (version > 0x0025 || !vpp_second)
@@ -415,9 +415,9 @@ bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &fiel
 		}
 
 		VABufferID pipeline_buf;
-		if (vaCreateBuffer(VADisp, context_vpp, VAProcPipelineParameterBufferType, sizeof(VAProcPipelineParameterBuffer), 1, NULL, &pipeline_buf) == VA_STATUS_SUCCESS)
+		if (vaCreateBuffer(VADisp, context_vpp, VAProcPipelineParameterBufferType, sizeof(VAProcPipelineParameterBuffer), 1, nullptr, &pipeline_buf) == VA_STATUS_SUCCESS)
 		{
-			VAProcPipelineParameterBuffer *pipeline_param = NULL;
+			VAProcPipelineParameterBuffer *pipeline_param = nullptr;
 			if (vaMapBuffer(VADisp, pipeline_buf, (void **)&pipeline_param) == VA_STATUS_SUCCESS)
 			{
 				memset(pipeline_param, 0, sizeof *pipeline_param);
@@ -484,7 +484,7 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
 			vaDestroyImage(VADisp, image.image_id);
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {

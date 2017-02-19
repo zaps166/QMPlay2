@@ -82,11 +82,11 @@ QString MediaPlayer2Root::desktopEntry() const
 }
 QStringList MediaPlayer2Root::supportedMimeTypes() const
 {
-	return QStringList();
+	return {};
 }
 QStringList MediaPlayer2Root::supportedUriSchemes() const
 {
-	return QStringList();
+	return {};
 }
 
 void MediaPlayer2Root::Quit()
@@ -257,7 +257,7 @@ void MediaPlayer2Player::updatePlaying(bool play, const QString &title, const QS
 		else
 		{
 			m_data["xesam:title"] = title;
-			m_data["xesam:artist"] = QStringList() << artist;
+			m_data["xesam:artist"] = QStringList{artist};
 		}
 		m_data["xesam:album"] = album;
 	}
@@ -315,7 +315,7 @@ void MediaPlayer2Player::clearMetaData()
 		removeCover = false;
 	}
 	m_data["mpris:artUrl"] = m_data["xesam:title"] = m_data["xesam:album"] = QString();
-	m_data["xesam:artist"] = QStringList() << QString();
+	m_data["xesam:artist"] = QStringList{QString()};
 	m_data["mpris:length"] = qint64();
 }
 

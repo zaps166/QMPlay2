@@ -24,7 +24,7 @@
 
 namespace ALSACommon
 {
-	typedef QPair<QStringList, QStringList> DevicesList;
+	using DevicesList = QPair<QStringList, QStringList>;
 
 	DevicesList getDevices();
 

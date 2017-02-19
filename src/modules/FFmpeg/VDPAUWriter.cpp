@@ -39,9 +39,9 @@ VDPAUWriter::VDPAUWriter(Module &module) :
 	presentationQueue(0),
 	profile(-1),
 	device(0),
-	display(NULL),
-	vpd_decoder_render(NULL),
-	vdp_device_destroy(NULL),
+	display(nullptr),
+	vpd_decoder_render(nullptr),
+	vdp_device_destroy(nullptr),
 	sharpness_lvl(0.0f),
 	lastWinId(0),
 	aspect_ratio(0.0), zoom(0.0),
@@ -172,7 +172,7 @@ bool VDPAUWriter::processParams(bool *)
 		emit QMPlay2Core.dockVideo(this);
 	else
 	{
-		resizeEvent(NULL);
+		resizeEvent(nullptr);
 		if (!paused)
 		{
 			if (!drawTim.isActive())
@@ -252,7 +252,7 @@ bool VDPAUWriter::open()
 
 	clr();
 
-	display = XOpenDisplay(NULL);
+	display = XOpenDisplay(nullptr);
 	if (display && vdp_device_create_x11(display, 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
 	{
 		bool getProcAddressOK = true;
@@ -578,14 +578,14 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 				vdp_video_mixer_render
 				(
 					mixer,
-					VDP_INVALID_HANDLE, NULL,
+					VDP_INVALID_HANDLE, nullptr,
 					field,
 					2, renderSurfaces + 1,
 					renderSurfaces[0],
 					1, &renderSurfaces[0], //is it OK?
 					&srcRect,
-					outputSurfaces[outputSurfaceIdx], NULL, &dstRect,
-					0, NULL
+					outputSurfaces[outputSurfaceIdx], nullptr, &dstRect,
+					0, nullptr
 				);
 
 				osd_mutex.lock();
@@ -634,10 +634,10 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 						{
 							const void *data = osdImg.constBits();
 							const quint32 linesize = bounds.width() << 2;
-							vdp_bitmap_surface_put_bits_native(bitmapSurface, &data, &linesize, NULL);
+							vdp_bitmap_surface_put_bits_native(bitmapSurface, &data, &linesize, nullptr);
 						}
 						const VdpRect bitmapDstRect = {(quint32)bounds.left() + X, (quint32)bounds.top() + Y, (quint32)bounds.right() + X + 1, (quint32)bounds.bottom() + Y + 1};
-						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, NULL, NULL, &blend_state, 0);
+						vdp_output_surface_render_bitmap_surface(outputSurfaces[outputSurfaceIdx], &bitmapDstRect, bitmapSurface, nullptr, nullptr, &blend_state, 0);
 					}
 				}
 				osd_mutex.unlock();
@@ -732,7 +732,7 @@ bool VDPAUWriter::event(QEvent *e)
 
 QPaintEngine *VDPAUWriter::paintEngine() const
 {
-	return NULL;
+	return nullptr;
 }
 
 void VDPAUWriter::destroyOutputSurfaces()

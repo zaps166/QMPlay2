@@ -82,8 +82,8 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 			return true;
 		reader.clear();
 	}
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::READER && mod.extensions.contains(scheme) && (plugName.isEmpty() || mod.name == plugName))
 			{
 				if (reader.assign((Reader *)module->createInstance(mod.name)))

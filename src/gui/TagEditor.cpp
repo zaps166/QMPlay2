@@ -107,7 +107,7 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
 	else if (instanceOf(file, Ogg::Opus::File))
 		return ((Ogg::Opus::File &)file).tag();
 #endif
-	return NULL;
+	return nullptr;
 }
 
 #include <QImageReader>
@@ -173,7 +173,7 @@ static void removeXiphComment(Ogg::XiphComment *xiphComment)
 /**/
 
 TagEditor::TagEditor() :
-	fRef(NULL),
+	fRef(nullptr),
 	picture(new ByteVector),
 	pictureModificated(false), pictureBChecked(false)
 {
@@ -275,7 +275,7 @@ bool TagEditor::open(const QString &fileName)
 			pictureB->setEnabled(true);
 			if (hasTags)
 			{
-				ID3v2::Tag *id3v2 = NULL;
+				ID3v2::Tag *id3v2 = nullptr;
 				if (instanceOf(file, MPEG::File))
 				{
 					MPEG::File &mpegF = (MPEG::File &)file;
@@ -359,7 +359,7 @@ bool TagEditor::open(const QString &fileName)
 			Ogg::XiphComment *xiphComment = getXiphComment(file);
 			if (xiphComment)
 			{
-				FLAC::Picture *flacPicture = NULL;
+				FLAC::Picture *flacPicture = nullptr;
 				pictureB->setEnabled(true);
 #if TAGLIB1B
 				const List<FLAC::Picture *> pictures = xiphComment->pictureList();
@@ -394,7 +394,7 @@ bool TagEditor::open(const QString &fileName)
 		return true;
 	}
 	delete fRef;
-	fRef = NULL;
+	fRef = nullptr;
 	return false;
 }
 void TagEditor::clear()
@@ -402,7 +402,7 @@ void TagEditor::clear()
 	if (fRef)
 	{
 		delete fRef;
-		fRef = NULL;
+		fRef = nullptr;
 	}
 	setChecked(false);
 	clearValues();
@@ -460,7 +460,7 @@ bool TagEditor::save()
 			const bool hasPicture = pictureB->isChecked() && !picture->isEmpty();
 			if (instanceOf(file, MPEG::File) || instanceOf(file, RIFF::AIFF::File))
 			{
-				ID3v2::Tag *id3v2 = NULL;
+				ID3v2::Tag *id3v2 = nullptr;
 				if (instanceOf(file, MPEG::File))
 					id3v2 = ((MPEG::File &)file).ID3v2Tag(hasPicture);
 				else if (instanceOf(file, RIFF::AIFF::File))
@@ -525,7 +525,7 @@ bool TagEditor::save()
 				Ogg::XiphComment *xiphComment = getXiphComment(file);
 				if (xiphComment)
 				{
-					FLAC::Picture *flacPicture = NULL;
+					FLAC::Picture *flacPicture = nullptr;
 					if (hasPicture)
 					{
 						flacPicture = new FLAC::Picture;
@@ -592,7 +592,7 @@ bool TagEditor::save()
 #if TAGLIB18
 			else if (instanceOf(file, Mod::File) || instanceOf(file, S3M::File) || instanceOf(file, IT::File) || instanceOf(file, XM::File))
 			{
-				Mod::Tag *modTag = NULL;
+				Mod::Tag *modTag = nullptr;
 				if (instanceOf(file, Mod::File))
 					modTag = ((Mod::File &)file).tag();
 				else if (instanceOf(file, S3M::File))
@@ -627,7 +627,7 @@ bool TagEditor::save()
 	#endif
 				result = fRef->save();
 				delete fRef;
-				fRef = NULL;
+				fRef = nullptr;
 				if (result)
 					result = MPEG::File(fName, false).save(MPEG::File::NoTags);
 				mustSave = false;

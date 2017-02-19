@@ -113,7 +113,7 @@ bool Drawable::event(QEvent *e)
 QPainterWriter::QPainterWriter(Module &module) :
 	outW(-1), outH(-1), flip(0),
 	aspect_ratio(0.0), zoom(0.0),
-	drawable(NULL)
+	drawable(nullptr)
 {
 	addParam("W");
 	addParam("H");
@@ -176,7 +176,7 @@ bool QPainterWriter::processParams(bool *)
 	}
 
 	if (doResizeEvent)
-		drawable->resizeEvent(NULL);
+		drawable->resizeEvent(nullptr);
 
 	return readyWrite();
 }

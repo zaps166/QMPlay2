@@ -33,7 +33,7 @@ class DownloadItemW : public QWidget
 {
 	Q_OBJECT
 public:
-	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = NULL);
+	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = nullptr);
 	~DownloadItemW();
 
 	void setName(const QString &);

@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QPair>
 
-typedef QPair<QString, QString> QMPlay2Tag;
+using QMPlay2Tag = QPair<QString, QString>;
 
 enum QMPlay2MediaType
 {

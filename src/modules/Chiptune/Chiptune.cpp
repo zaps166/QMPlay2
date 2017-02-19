@@ -47,11 +47,11 @@ QList<Chiptune::Info> Chiptune::getModulesInfo(const bool showDisabled) const
 	QList<Info> modulesInfo;
 #ifdef USE_GME
 	if (showDisabled || getBool("GME"))
-		modulesInfo += Info(GMEName, DEMUXER, QStringList() << "ay" << "gbs" << "gym" << "hes" << "kss" << "nsf" << "nsfe" << "sap" << "spc" << "vgm" << "vgz", GMEIcon);
+		modulesInfo += Info(GMEName, DEMUXER, {"ay", "gbs", "gym", "hes", "kss", "nsf", "nsfe", "sap", "spc", "vgm", "vgz"}, GMEIcon);
 #endif
 #ifdef USE_SIDPLAY
 	if (showDisabled || getBool("SIDPlay"))
-		modulesInfo += Info(SIDPlayName, DEMUXER, QStringList() << "sid" << "c64" << "prg", SIDIcon);
+		modulesInfo += Info(SIDPlayName, DEMUXER, {"sid", "c64", "prg"}, SIDIcon);
 #endif
 	return modulesInfo;
 }
@@ -65,7 +65,7 @@ void *Chiptune::createInstance(const QString &name)
 	if (name == SIDPlayName)
 		return new SIDPlay(*this);
 #endif
-	return NULL;
+	return nullptr;
 }
 
 Chiptune::SettingsWidget *Chiptune::getSettingsWidget()

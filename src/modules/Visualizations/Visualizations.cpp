@@ -49,7 +49,7 @@ void *Visualizations::createInstance(const QString &name)
 		return new SimpleVis(*this);
 	else if (name == FFTSpectrumName)
 		return new FFTSpectrum(*this);
-	return NULL;
+	return nullptr;
 }
 
 Visualizations::SettingsWidget *Visualizations::getSettingsWidget()

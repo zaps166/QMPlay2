@@ -72,7 +72,7 @@ class Page3 : public QWidget
 {
 public:
 	inline Page3() :
-		module(NULL)
+		module(nullptr)
 	{}
 
 	QListWidget *listW;
@@ -209,7 +209,7 @@ void SettingsWidget::SetAudioChannelsMenu()
 	const bool forceChn = QMPlay2Core.getSettings().getBool("ForceChannels");
 	const int chn = QMPlay2Core.getSettings().getInt("Channels");
 	bool audioChannelsChecked = false;
-	foreach (QAction *act, QMPlay2GUI.menuBar->playback->audioChannels->actions())
+	for (QAction *act : QMPlay2GUI.menuBar->playback->audioChannels->actions())
 		if ((!forceChn && act->objectName() == "auto") || (forceChn && chn == act->objectName().toInt()))
 		{
 			act->setChecked(true);
@@ -289,7 +289,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		connect(page1->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
 
 		QStringList encodings;
-		foreach (const QByteArray &item, QTextCodec::availableCodecs())
+		for (const QByteArray &item : QTextCodec::availableCodecs())
 			encodings += QTextCodec::codecForName(item)->name();
 		encodings.removeDuplicates();
 		page1->encodingB->addItems(encodings);
@@ -301,7 +301,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		const QString subsLang = QMPSettings.getString("SubtitlesLanguage");
 		page1->audioLangB->addItem(tr("Default or first stream"));
 		page1->subsLangB->addItem(tr("Default or first stream"));
-		foreach (const QString &lang, QMPlay2Core.getLanguagesMap())
+		for (const QString &lang : QMPlay2Core.getLanguagesMap())
 		{
 			page1->audioLangB->addItem(lang);
 			page1->subsLangB->addItem(lang);
@@ -313,7 +313,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		{
 			const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile").toString();
 			page1->profileB->addItem(tr("Default"));
-			foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+			for (const QString &profile : QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 			{
 				page1->profileB->addItem(profile);
 				if (profile == currentProfile)
@@ -338,7 +338,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
 #else
 		delete page1->iconsFromTheme;
-		page1->iconsFromTheme = NULL;
+		page1->iconsFromTheme = nullptr;
 #endif
 
 		page1->showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
@@ -351,7 +351,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
 #else
 		delete page1->autoUpdatesB;
-		page1->autoUpdatesB = NULL;
+		page1->autoUpdatesB = nullptr;
 #endif
 
 		page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
@@ -465,12 +465,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page3->listW->setIconSize(QSize(32, 32));
 		page3->listW->setMinimumSize(200, 0);
 		page3->listW->setMaximumSize(200, 16777215);
-		foreach (Module *module, QMPlay2Core.getPluginsInstance())
+		for (Module *module : QMPlay2Core.getPluginsInstance())
 		{
 			QListWidgetItem *tWI = new QListWidgetItem(module->name());
 			tWI->setData(Qt::UserRole, qVariantFromValue((void *)module));
 			QString toolTip = tr("Contains") + ":";
-			foreach (const Module::Info &mod, module->getModulesInfo(true))
+			for (const Module::Info &mod : module->getModulesInfo(true))
 			{
 				toolTip += "<p>&nbsp;&nbsp;&nbsp;&nbsp;";
 				if (!mod.imgPath().isEmpty())
@@ -558,7 +558,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		if (!page6->otherVFiltersW->count())
 		{
 			delete page6->otherVFiltersW;
-			page6->otherVFiltersW = NULL;
+			page6->otherVFiltersW = nullptr;
 		}
 		else
 		{
@@ -609,7 +609,7 @@ void SettingsWidget::applyProxy()
 	if (!QMPSettings.getBool("Proxy/Use"))
 	{
 #ifdef Q_OS_WIN
-		SetEnvironmentVariableA("http_proxy", NULL);
+		SetEnvironmentVariableA("http_proxy", nullptr);
 #else
 		unsetenv("http_proxy");
 #endif
@@ -788,11 +788,11 @@ void SettingsWidget::apply()
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
 
 			QStringList videoWriters, audioWriters, decoders;
-			foreach (QListWidgetItem *wI, page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))
+			for (QListWidgetItem *wI : page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))
 				videoWriters += wI->text();
-			foreach (QListWidgetItem *wI, page2ModulesList[1]->list->findItems(QString(), Qt::MatchContains))
+			for (QListWidgetItem *wI : page2ModulesList[1]->list->findItems(QString(), Qt::MatchContains))
 				audioWriters += wI->text();
-			foreach (QListWidgetItem *wI, page2ModulesList[2]->list->findItems(QString(), Qt::MatchContains))
+			for (QListWidgetItem *wI : page2ModulesList[2]->list->findItems(QString(), Qt::MatchContains))
 				decoders += wI->text();
 			QMPSettings.set("videoWriters", videoWriters);
 			QMPSettings.set("audioWriters", audioWriters);
@@ -861,7 +861,7 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 			w->setAutoFillBackground(false);
 		}
 		else if (page3->scrollA->widget())
-			page3->scrollA->widget()->close(); //ustawi się na NULL po usunięciu (WA_DeleteOnClose)
+			page3->scrollA->widget()->close(); //ustawi się na nullptr po usunięciu (WA_DeleteOnClose)
 	}
 }
 void SettingsWidget::tabCh(int idx)
@@ -869,11 +869,11 @@ void SettingsWidget::tabCh(int idx)
 	if (idx == 1 && !page2ModulesList[0]->list->count() && !page2ModulesList[1]->list->count() && !page2ModulesList[2]->list->count())
 	{
 		const QStringList writers[3] = {QMPlay2Core.getModules("videoWriters", 5), QMPlay2Core.getModules("audioWriters", 5), QMPlay2Core.getModules("decoders", 7)};
-		QVector<QPair<Module *, Module::Info> > pluginsInstances[3];
+		QVector<QPair<Module *, Module::Info>> pluginsInstances[3];
 		for (int m = 0; m < 3; ++m)
 			pluginsInstances[m].fill(QPair<Module *, Module::Info >(), writers[m].size());
-		foreach (Module *module, QMPlay2Core.getPluginsInstance())
-			foreach (const Module::Info &moduleInfo, module->getModulesInfo())
+		for (Module *module : QMPlay2Core.getPluginsInstance())
+			for (const Module::Info &moduleInfo : module->getModulesInfo())
 				for (int m = 0; m < 3; ++m)
 				{
 					const int mIdx = writers[m].indexOf(moduleInfo.name);
@@ -968,7 +968,7 @@ void SettingsWidget::clearCoversCache()
 		QDir dir(QMPlay2Core.getSettingsDir());
 		if (dir.cd("Covers"))
 		{
-			foreach (const QString &fileName, dir.entryList(QDir::Files))
+			for (const QString &fileName : dir.entryList(QDir::Files))
 				QFile::remove(dir.absolutePath() + "/" + fileName);
 			if (dir.cdUp())
 				dir.rmdir("Covers");
@@ -1000,12 +1000,12 @@ void SettingsWidget::removeProfile()
 	else
 	{
 		const QString settingsDir = QMPlay2Core.getSettingsDir() + selectedProfile;
-		foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+		for (const QString &fName : QDir(settingsDir).entryList({"*.ini"}))
 			QFile::remove(settingsDir + fName);
 		QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
 
 		page1->profileB->removeItem(page1->profileB->currentIndex());
-		foreach (QAction *act, QMPlay2GUI.menuBar->options->profilesGroup->actions())
+		for (QAction *act : QMPlay2GUI.menuBar->options->profilesGroup->actions())
 			if (act->text() == selectedProfileName)
 			{
 				delete act;

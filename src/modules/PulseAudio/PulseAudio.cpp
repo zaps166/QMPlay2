@@ -32,14 +32,14 @@ QList<PulseAudio::Info> PulseAudio::getModulesInfo(const bool showDisabled) cons
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
-		modulesInfo += Info(PulseAudioWriterName, WRITER, QStringList("audio"));
+		modulesInfo += Info(PulseAudioWriterName, WRITER, QStringList{"audio"});
 	return modulesInfo;
 }
 void *PulseAudio::createInstance(const QString &name)
 {
 	if (name == PulseAudioWriterName && getBool("WriterEnabled"))
 		return new PulseAudioWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 PulseAudio::SettingsWidget *PulseAudio::getSettingsWidget()

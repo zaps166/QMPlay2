@@ -23,8 +23,8 @@
 QVector<AudioFilter *> AudioFilter::open()
 {
 	QVector<AudioFilter *> filterList;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::AUDIOFILTER)
 			{
 				AudioFilter *filter = (AudioFilter *)module->createInstance(mod.name);

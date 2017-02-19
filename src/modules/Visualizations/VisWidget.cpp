@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 
-#include <math.h>
+#include <cmath>
 
 void VisWidget::setValue(qreal &out, qreal in, qreal tDiffScaled)
 {

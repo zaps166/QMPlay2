@@ -28,9 +28,9 @@ extern "C"
 }
 
 FFDec::FFDec(QMutex &avcodec_mutex) :
-	codec_ctx(NULL),
-	packet(NULL),
-	frame(NULL),
+	codec_ctx(nullptr),
+	packet(nullptr),
+	frame(nullptr),
 	codecIsOpen(false),
 	avcodec_mutex(avcodec_mutex)
 {}
@@ -76,7 +76,7 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 bool FFDec::openCodec(AVCodec *codec)
 {
 	avcodec_mutex.lock();
-	if (avcodec_open2(codec_ctx, codec, NULL))
+	if (avcodec_open2(codec_ctx, codec, nullptr))
 	{
 		avcodec_mutex.unlock();
 		return false;

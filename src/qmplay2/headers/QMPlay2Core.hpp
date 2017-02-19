@@ -188,7 +188,7 @@ private:
 	QAtomicInt working;
 	QStringList logs;
 	QMap<QString, QString> languages;
-	QList<QPointer<QWidget> > videoFilters;
+	QList<QPointer<QWidget>> videoFilters;
 
 	mutable QMutex cookiesMutex;
 	QHash<QString, QByteArray> cookies;

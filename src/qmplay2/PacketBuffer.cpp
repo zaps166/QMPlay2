@@ -18,7 +18,7 @@
 
 #include <PacketBuffer.hpp>
 
-#include <math.h>
+#include <cmath>
 
 int PacketBuffer::backwardPackets;
 

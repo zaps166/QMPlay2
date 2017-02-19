@@ -62,7 +62,7 @@ DeintSettingsW::DeintSettingsW()
 	softwareMethodsCB = new QComboBox;
 
 	parityCB = new QComboBox;
-	parityCB->addItems(QStringList() << "Bottom field first" << "Top field first");
+	parityCB->addItems({"Bottom field first", "Top field first"});
 	parityCB->setCurrentIndex(QMPSettings.getBool("Deinterlace/TFF"));
 
 	connect(softwareMethodsCB, SIGNAL(currentIndexChanged(int)), this, SLOT(setSoftwareMethodsToolTip(int)));
@@ -73,7 +73,7 @@ DeintSettingsW::DeintSettingsW()
 	layout->addRow(doublerB);
 	layout->addRow(autoParityB);
 	layout->addRow(tr("Deinterlacing method") + " (" + tr("software decoding") + "): ", softwareMethodsCB);
-	foreach (QWidget *w, QMPlay2Core.getVideoDeintMethods())
+	for (QWidget *w : QMPlay2Core.getVideoDeintMethods())
 	{
 		const QVariant text = w->property("text");
 		layout->addRow(text.isNull() ? QString() : text.toString(), w);
@@ -82,9 +82,9 @@ DeintSettingsW::DeintSettingsW()
 }
 DeintSettingsW::~DeintSettingsW()
 {
-	foreach (QObject *obj, children())
+	for (QObject *obj : children())
 		if (obj->isWidgetType() && !obj->property("module").isNull())
-			obj->setParent(NULL);
+			obj->setParent(nullptr);
 }
 
 void DeintSettingsW::writeSettings()
@@ -98,18 +98,18 @@ void DeintSettingsW::writeSettings()
 	QMPSettings.set("Deinterlace/TFF", (bool)parityCB->currentIndex());
 
 	QSet<Module *> videoDeintModules;
-	foreach (QObject *obj, children())
+	for (QObject *obj : children())
 		if (obj->isWidgetType() && !obj->property("module").isNull())
 			videoDeintModules.insert((Module *)obj->property("module").value<void *>());
-	foreach (Module *module, videoDeintModules)
+	for (Module *module : videoDeintModules)
 		module->videoDeintSave();
 }
 
 void DeintSettingsW::softwareMethods(bool doubler)
 {
 	softwareMethodsCB->clear();
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if ((mod.type & 0xF) == Module::VIDEOFILTER && (mod.type & Module::DEINTERLACE) && (doubler == (bool)(mod.type & Module::DOUBLER)))
 				softwareMethodsCB->addItem(mod.name, mod.description);
 	const int idx = softwareMethodsCB->findText(QMPlay2Core.getSettings().getString("Deinterlace/SoftwareMethod"));

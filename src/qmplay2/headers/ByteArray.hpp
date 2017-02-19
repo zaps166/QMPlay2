@@ -19,7 +19,7 @@
 #ifndef BYTEARRAY_HPP
 #define BYTEARRAY_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 class ByteArray
 {
@@ -177,19 +177,19 @@ public:
 	inline operator const void *() const
 	{
 		if (atEnd())
-			return NULL;
+			return nullptr;
 		return data;
 	}
 	inline operator const char *() const
 	{
 		if (atEnd())
-			return NULL;
+			return nullptr;
 		return (const char *)data;
 	}
 	inline operator const uint8_t *() const
 	{
 		if (atEnd())
-			return NULL;
+			return nullptr;
 		return data;
 	}
 private:

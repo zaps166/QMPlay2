@@ -51,7 +51,7 @@ bool OpenGL2OldWidget::setVSync(bool enable)
 		makeCurrent();
 		doDoneCurrent = true;
 	}
-	typedef int (APIENTRY *SwapInterval)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
+	using SwapInterval = int (APIENTRY *)(int); //BOOL is just normal int in Windows, APIENTRY declares nothing on non-Windows platforms
 	SwapInterval swapInterval = NULL;
 #ifdef Q_OS_WIN
 	swapInterval = (SwapInterval)context()->getProcAddress("wglSwapIntervalEXT");

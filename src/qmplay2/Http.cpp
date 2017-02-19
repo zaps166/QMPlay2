@@ -45,7 +45,7 @@ public:
 		m_postData(postData),
 		m_rawHeaders(rawHeaders),
 		m_userAgent(userAgent),
-		m_ctx(NULL),
+		m_ctx(nullptr),
 		m_error(HttpReply::NO_HTTP_ERROR),
 		m_aborted(false)
 	{}
@@ -71,7 +71,7 @@ private:
 			m_error = HttpReply::UNSUPPORTED_SCHEME_ERROR;
 		else
 		{
-			AVDictionary *options = NULL;
+			AVDictionary *options = nullptr;
 #if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
 			av_dict_set(&options, "user_agent", m_userAgent, 0);
 #else
@@ -225,7 +225,7 @@ HttpReply::~HttpReply()
 	{
 		connect(m_priv, SIGNAL(finished()), m_priv, SLOT(deleteLater()));
 		m_priv->m_httpReplyMutex.lock();
-		m_priv->m_httpReply = NULL;
+		m_priv->m_httpReply = nullptr;
 		m_priv->m_httpReplyMutex.unlock();
 		abort();
 	}

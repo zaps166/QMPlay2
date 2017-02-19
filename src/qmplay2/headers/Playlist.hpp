@@ -47,7 +47,7 @@ public:
 		double length;
 		qint32 flags, queue, GID, parent;
 	};
-	typedef QVector<Entry> Entries;
+	using Entries = QVector<Entry>;
 
 	enum OpenMode
 	{
@@ -56,8 +56,8 @@ public:
 		WriteOnly
 	};
 
-	static Entries read(const QString &url, QString *name = NULL);
-	static bool write(const Entries &list, const QString &url, QString *name = NULL);
+	static Entries read(const QString &url, QString *name = nullptr);
+	static bool write(const Entries &list, const QString &url, QString *name = nullptr);
 	static QStringList extensions();
 
 	virtual Entries read() = 0;
@@ -65,7 +65,7 @@ public:
 
 	virtual ~Playlist();
 private:
-	static Playlist *create(const QString &url, OpenMode openMode, QString *name = NULL);
+	static Playlist *create(const QString &url, OpenMode openMode, QString *name = nullptr);
 protected:
 	QList<QByteArray> readLines();
 

@@ -134,7 +134,7 @@ public:
 	{
 		if (stream_url || name)
 		{
-			QStringList paramList = QStringList() << "-e";
+			QStringList paramList {"-e"};
 			if (!param.isEmpty())
 				paramList << "-f" << param;
 			QStringList ytdl_stdout = exec(url, paramList);
@@ -150,7 +150,7 @@ public:
 					else
 					{
 						*stream_url = "FFmpeg://{";
-						foreach (const QString &tmpUrl, ytdl_stdout)
+						for (const QString &tmpUrl : ytdl_stdout)
 							*stream_url += "[" + tmpUrl + "]";
 						*stream_url += "}";
 					}
@@ -160,7 +160,7 @@ public:
 				if (extension)
 				{
 					QStringList extensions;
-					foreach (const QString &tmpUrl, ytdl_stdout)
+					for (const QString &tmpUrl : ytdl_stdout)
 					{
 						if (tmpUrl.contains("mp4"))
 							extensions += ".mp4";
@@ -177,7 +177,7 @@ public:
 					}
 					if (extensions.count() == 1)
 						*extension = extensions.at(0);
-					else foreach (const QString &tmpExt, extensions)
+					else for (const QString &tmpExt : extensions)
 						*extension += "[" + tmpExt + "]";
 				}
 			}
@@ -244,7 +244,7 @@ public:
 				}
 				if (!aborted)
 					emit QMPlay2Core.sendMessage(error, YouTubeName + QString(" (%1)").arg(Functions::fileName(ytdlW.getYtDlPath())), 3, 0);
-				return QStringList();
+				return {};
 			}
 
 			//[Title], url, JSON, [url, JSON]
@@ -262,7 +262,7 @@ public:
 		}
 		else if (!aborted && youtubedl_process.error() == QProcess::FailedToStart)
 			QMetaObject::invokeMethod(&ytdlW, "downloadYtDl"); //Call in GUI thread
-		return QStringList();
+		return {};
 	}
 
 private:
@@ -371,8 +371,8 @@ void ResultsYoutube::clearAll()
 QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
 	if (!tWI->childCount())
-		return NULL;
-	foreach (int itag, itags)
+		return nullptr;
+	for (int itag : itags)
 		for (int i = 0; i < tWI->childCount(); ++i)
 			if (tWI->child(i)->data(0, Qt::UserRole + 2).toInt() == itag)
 				return tWI->child(i);
@@ -530,7 +530,7 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 			}
 
 			const QString name = tWI->parent() ? tWI->parent()->text(0) : tWI->text(0);
-			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+			for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 				if (!dynamic_cast<YouTube *>(QMPlay2Ext))
 				{
 					QString addressPrefixName, url, param;
@@ -601,7 +601,7 @@ QList<int> *YouTubeW::getQualityPresets()
 QStringList YouTubeW::getQualityPresetString(int qualityIdx)
 {
 	QStringList videoItags;
-	foreach (int itag, getQualityPresets()[qualityIdx])
+	for (int itag : getQualityPresets()[qualityIdx])
 		videoItags.append(QString::number(itag));
 	return videoItags;
 }
@@ -611,7 +611,7 @@ YouTubeW::YouTubeW(Settings &sets) :
 	imgSize(QSize(100, 100)),
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
-	autocompleteReply(NULL), searchReply(NULL), ytdlReply(NULL),
+	autocompleteReply(nullptr), searchReply(nullptr), ytdlReply(nullptr),
 	net(this)
 {
 	dw = new DockWidget;
@@ -651,7 +651,7 @@ YouTubeW::YouTubeW(Settings &sets) :
 
 	qualityMenu = new QMenu(this);
 	int qualityIdx = 0;
-	foreach (QAction *act, qualityGroup->actions())
+	for (QAction *act : qualityGroup->actions())
 	{
 		connect(act, SIGNAL(triggered(bool)), this, SLOT(setQualityFromMenu()));
 		act->setObjectName(QString::number(qualityIdx++));
@@ -712,7 +712,7 @@ void YouTubeW::setItags()
 		}
 	}
 
-	foreach (QAction *act, qualityMenu->actions())
+	for (QAction *act : qualityMenu->actions())
 		if (act->isChecked())
 			act->setChecked(false);
 }
@@ -759,7 +759,7 @@ void YouTubeW::setQualityFromMenu() //Call it only from quality menu!
 	const int qualityIdx = sender()->objectName().toInt();
 	sets.set("YouTube/MultiStream", true);
 	sets.set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
-	sets.set("YouTube/ItagAudioList", QStringList() << "171" << "251" << "140");
+	sets.set("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
 	setItags();
 }
 
@@ -787,10 +787,10 @@ void YouTubeW::searchTextEdited(const QString &text)
 	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	}
 	if (text.isEmpty())
-		((QStringListModel *)completer->model())->setStringList(QStringList());
+		((QStringListModel *)completer->model())->setStringList({});
 	else
 		autocompleteReply = net.start(getAutocompleteUrl(text));
 }
@@ -801,12 +801,12 @@ void YouTubeW::search()
 	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	}
 	if (searchReply)
 	{
 		searchReply->deleteLater();
-		searchReply = NULL;
+		searchReply = nullptr;
 	}
 	resultsW->clearAll();
 	if (!title.isEmpty())
@@ -887,12 +887,12 @@ void YouTubeW::netFinished(HttpReply *reply)
 	}
 
 	if (reply == autocompleteReply)
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	else if (reply == searchReply)
-		searchReply = NULL;
+		searchReply = nullptr;
 	else if (reply == ytdlReply)
 	{
-		ytdlReply = NULL;
+		ytdlReply = nullptr;
 		if (!ytdlReply)
 			QMPlay2Core.setWorking(false);
 	}
@@ -1093,11 +1093,11 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			const int captionEndIdx = data.indexOf('"', captionIdx);
 			if (captionEndIdx > -1)
 			{
-				foreach (const QString &caption, data.mid(captionIdx, captionEndIdx - captionIdx).split(','))
+				for (const QString &caption : data.mid(captionIdx, captionEndIdx - captionIdx).split(','))
 				{
 					bool isAutomated = false;
 					QString lc;
-					foreach (const QString &captionParams, caption.split("\\u0026"))
+					for (const QString &captionParams : caption.split("\\u0026"))
 					{
 						const QStringList paramL = captionParams.split('=');
 						if (paramL.count() == 2)
@@ -1117,7 +1117,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 		{
 			QStringList simplifiedLangCodes;
 			int idx = url.indexOf("v=");
-			foreach (const QString &lc, langCodes)
+			for (const QString &lc : langCodes)
 			{
 				// Remove language suffix after "-" - not supported in QMPlay2
 				const int idx = lc.indexOf('-');
@@ -1176,11 +1176,11 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			const int streamsEndIdx = data.indexOf('"', streamsIdx);
 			if (streamsEndIdx > -1)
 			{
-				foreach (const QString &stream, data.mid(streamsIdx, streamsEndIdx - streamsIdx).split(','))
+				for (const QString &stream : data.mid(streamsIdx, streamsEndIdx - streamsIdx).split(','))
 				{
 					int itag = -1;
 					QString ITAG, URL, Signature;
-					foreach (const QString &streamParams, stream.split("\\u0026"))
+					for (const QString &streamParams : stream.split("\\u0026"))
 					{
 						const QStringList paramL = streamParams.split('=');
 						if (paramL.count() == 2)
@@ -1238,7 +1238,10 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			const QStringList audio = getUrlByItagPriority(resultsW->itagsAudio, ret);
 			if (video.count() == 2 && audio.count() == 2)
 			{
-				ret = QStringList() << "FFmpeg://{[" + video[0] + "][" + audio[0] + "]" << "[" + video[1] + "][" + audio[1] + "]";
+				ret = QStringList {
+					"FFmpeg://{[" + video[0] + "][" + audio[0] + "]",
+					"[" + video[1] + "][" + audio[1] + "]"
+				};
 				if (!subsUrl.isEmpty())
 				{
 					ret[0] += "[" + subsUrl + "]";
@@ -1292,7 +1295,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 		{
 			int itagsCount = 0;
 			QString itags;
-			foreach (const QString &ITAG, ret.at(0).split("itag=", QString::SkipEmptyParts))
+			for (const QString &ITAG : ret.at(0).split("itag=", QString::SkipEmptyParts))
 			{
 				const int itag = atoi(ITAG.toLatin1());
 				if (itag > 0)
@@ -1303,7 +1306,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 			}
 			itags.chop(1);
 
-			const QStringList ytdl_stdout = (*youtube_dl)->exec(url, QStringList() << "-f" << itags);
+			const QStringList ytdl_stdout = (*youtube_dl)->exec(url, {"-f", itags});
 			if (ytdl_stdout.count() != itagsCount)
 				ret.clear();
 			else
@@ -1313,7 +1316,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 				else
 				{
 					ret[0] = "FFmpeg://{";
-					foreach (const QString &url, ytdl_stdout)
+					for (const QString &url : ytdl_stdout)
 						ret[0] += "[" + url + "]";
 					if (!subsUrl.isEmpty())
 						ret[0] += "[" + subsUrl + "]";
@@ -1347,7 +1350,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 }
 QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList ret)
 {
-	foreach (int itag, itags)
+	for (int itag : itags)
 	{
 		bool br = false;
 		for (int i = 2; i < ret.count(); i += 3)
@@ -1366,7 +1369,7 @@ QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList 
 			break;
 	}
 	if (!itags.contains(ret.at(2).toInt()))
-		return QStringList();
+		return {};
 	ret.erase(ret.begin()+2, ret.end());
 	return ret;
 }
@@ -1379,7 +1382,7 @@ void YouTubeW::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 		const QString tags[2] = {"video-id", "video-title"};
 		QStringList playlist, entries = data.mid(idx).split("yt-uix-scroller-scroll-unit", QString::SkipEmptyParts);
 		entries.removeFirst();
-		foreach (const QString &entry, entries)
+		for (const QString &entry : entries)
 		{
 			QStringList plistEntry;
 			for (int i = 0; i < 2; ++i)
@@ -1471,7 +1474,7 @@ ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType
 	}
 
 	ItagNames itagPair;
-	for (QMap<int, QString>::const_iterator it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
+	for (auto it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
 	{
 		switch (mediaType)
 		{
@@ -1549,7 +1552,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 					w.multiStream = false;
 					w.subtitles = false;
 				}
-				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, NULL, url, ioCtrl->toPtr<YouTubeDL>());
+				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
 				w.multiStream = multiStream;
 				w.subtitles = subtitles;
 				if (youTubeVideo.count() == 3)
@@ -1584,11 +1587,11 @@ QAction *YouTube::getAction(const QString &name, double, const QString &url, con
 {
 	if (name != url)
 	{
-		QAction *act = new QAction(YouTubeW::tr("Search on YouTube"), NULL);
+		QAction *act = new QAction(YouTubeW::tr("Search on YouTube"), nullptr);
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/youtube"));
 		act->setProperty("name", name);
 		return act;
 	}
-	return NULL;
+	return nullptr;
 }

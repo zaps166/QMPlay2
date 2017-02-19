@@ -43,7 +43,7 @@ Pulse::Pulse() :
 	channels(0),
 	sample_rate(0),
 	_isOK(false), writing(false),
-	pulse(NULL)
+	pulse(nullptr)
 {
 	ss.format = PA_SAMPLE_FLOAT32NE;
 
@@ -55,7 +55,7 @@ Pulse::Pulse() :
 	if (context)
 	{
 		pa_context_set_state_callback(context, context_state_cb, mainloop);
-		if (pa_context_connect(context, NULL, PA_CONTEXT_NOFLAGS, NULL) >= 0)
+		if (pa_context_connect(context, nullptr, PA_CONTEXT_NOFLAGS, nullptr) >= 0)
 		{
 			pa_threaded_mainloop_lock(mainloop);
 			if (pa_threaded_mainloop_start(mainloop) >= 0)
@@ -91,7 +91,7 @@ bool Pulse::start()
 	ss.channels = channels;
 	ss.rate = sample_rate;
 
-	pa_channel_map *chn_map = NULL;
+	pa_channel_map *chn_map = nullptr;
 	if (channels > 2 && channels <= 8)
 	{
 		chn_map = new pa_channel_map;
@@ -106,7 +106,7 @@ bool Pulse::start()
 		chn_map->map[7] = PA_CHANNEL_POSITION_SIDE_RIGHT;
 	}
 
-	pulse = pa_simple_new(NULL, "QMPlay2", PA_STREAM_PLAYBACK, NULL, "Output", &ss, chn_map, &attr, NULL);
+	pulse = pa_simple_new(nullptr, "QMPlay2", PA_STREAM_PLAYBACK, nullptr, "Output", &ss, chn_map, &attr, nullptr);
 
 	delete chn_map;
 
@@ -119,10 +119,10 @@ void Pulse::stop(bool drain)
 		if (!writing) //If "pa_simple_write()" is freezed and the audio thread is killed - don't free the context to avoid the deadlock
 		{
 			if (drain)
-				pa_simple_drain(pulse, NULL);
+				pa_simple_drain(pulse, nullptr);
 			pa_simple_free(pulse);
 		}
-		pulse = NULL;
+		pulse = nullptr;
 	}
 }
 

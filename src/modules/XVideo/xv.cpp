@@ -27,7 +27,7 @@
 	#include <QX11Info>
 #endif
 
-#include <math.h>
+#include <cmath>
 
 #include <sys/shm.h>
 #include <X11/Xlib.h>
@@ -59,14 +59,14 @@ XVIDEO::XVIDEO() :
 	priv(new XVideoPrivate)
 {
 	_flip = 0;
-	ai = NULL;
+	ai = nullptr;
 	clrVars();
 	invalidateShm();
 	_isOK = false;
 #if QT_VERSION < 0x050000
 	disp = QX11Info::display();
 #else
-	disp = XOpenDisplay(NULL);
+	disp = XOpenDisplay(nullptr);
 #endif
 	if (!disp || XvQueryAdaptors(disp, DefaultRootWindow(disp), &adaptors, &ai) != Success)
 		return;
@@ -133,7 +133,7 @@ void XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 	if (!format_id)
 		return close();
 
-	gc = XCreateGC(disp, handle, 0L, NULL);
+	gc = XCreateGC(disp, handle, 0L, nullptr);
 	if (!gc)
 		return close();
 
@@ -143,7 +143,7 @@ void XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 			useSHM = false;
 		else
 		{
-			image = XvShmCreateImage(disp, port, format_id, NULL, width, height, &shmInfo);
+			image = XvShmCreateImage(disp, port, format_id, nullptr, width, height, &shmInfo);
 			if (!image)
 				useSHM = false;
 			else
@@ -156,7 +156,7 @@ void XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 					shmInfo.shmaddr = (char *)shmat(shmInfo.shmid, 0, 0);
 					if (shmInfo.shmaddr == (char *)-1)
 					{
-						shmInfo.shmaddr = NULL;
+						shmInfo.shmaddr = nullptr;
 						useSHM = false;
 					}
 					else
@@ -177,7 +177,7 @@ void XVIDEO::open(int W, int H, unsigned long _handle, const QString &adaptorNam
 
 	if (!useSHM)
 	{
-		image = XvCreateImage(disp, port, format_id, NULL, width, height);
+		image = XvCreateImage(disp, port, format_id, nullptr, width, height);
 		if (image)
 			image->data = new char[image->data_size];
 	}
@@ -209,7 +209,7 @@ void XVIDEO::invalidateShm()
 {
 	shmInfo.shmseg = 0;
 	shmInfo.shmid = -1;
-	shmInfo.shmaddr = NULL;
+	shmInfo.shmaddr = nullptr;
 	shmInfo.readOnly = false;
 }
 void XVIDEO::close()
@@ -326,15 +326,15 @@ void XVIDEO::XvSetPortAttributeIfExists(void *attributes, int attrib_count, cons
 }
 void XVIDEO::clrVars()
 {
-	image = NULL;
-	gc = NULL;
+	image = nullptr;
+	gc = nullptr;
 	port = 0;
 	_isOpen = false;
 	width = 0;
 	height = 0;
 	handle = 0;
 	hasImage = false;
-	fo = NULL;
+	fo = nullptr;
 	osdImg = QImage();
 	osd_checksums.clear();
 }

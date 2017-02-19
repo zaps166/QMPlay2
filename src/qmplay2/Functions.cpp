@@ -31,7 +31,7 @@
 #include <QRegExp>
 #include <QMessageBox>
 
-#include <math.h>
+#include <cmath>
 
 static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
@@ -83,7 +83,7 @@ QString Functions::Url(QString url, const QString &pth)
 
 	QStringList drives;
 	QFileInfoList fIL = QDir::drives();
-	foreach (const QFileInfo &fI, fIL)
+	for (const QFileInfo &fI : fIL)
 		drives += getUrlScheme(fI.path());
 	if (drives.contains(scheme))
 	{
@@ -144,7 +144,7 @@ QString Functions::fileName(QString f, bool extension)
 {
 	/* Tylko dla adresów do przekonwertowania */
 	QString real_url;
-	if (splitPrefixAndUrlIfHasPluginPrefix(f, NULL, &real_url))
+	if (splitPrefixAndUrlIfHasPluginPrefix(f, nullptr, &real_url))
 	{
 		if (real_url.startsWith("file://"))
 			return fileName(real_url, extension);
@@ -255,7 +255,7 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
 {
 	bool mustRepaint = (osd_list.count() != osd_checksums.count());
-	foreach (const QMPlay2OSD *osd, osd_list)
+	for (const QMPlay2OSD *osd : osd_list)
 	{
 		osd->lock();
 		if (!mustRepaint)
@@ -283,7 +283,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
 {
 	if (osd_checksums)
 		osd_checksums->clear();
-	foreach (const QMPlay2OSD *osd, osd_list)
+	for (const QMPlay2OSD *osd : osd_list)
 	{
 		osd->lock();
 		if (osd_checksums)
@@ -448,7 +448,7 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 	QStringList urls;
 	if (mimeData->hasUrls())
 	{
-		foreach (const QUrl &url, mimeData->urls())
+		for (const QUrl &url : mimeData->urls())
 		{
 			QString u = url.toLocalFile();
 			if (u.length() > 1 && u.endsWith("/"))
@@ -490,10 +490,10 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 	QString addressPrefixName, realUrl, param;
 	if ((url || img) && splitPrefixAndUrlIfHasPluginPrefix(entireUrl, &addressPrefixName, &realUrl, &param))
 	{
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (QMPlay2Ext->addressPrefixList(false).contains(addressPrefixName))
 			{
-				QMPlay2Ext->convertAddress(addressPrefixName, realUrl, param, url, name, img, NULL, ioCtrl);
+				QMPlay2Ext->convertAddress(addressPrefixName, realUrl, param, url, name, img, nullptr, ioCtrl);
 				return;
 			}
 	}
@@ -503,8 +503,8 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 		const QString extension = fileExt(entireUrl).toLower();
 		if (demuxersInfo.isEmpty())
 		{
-			foreach (const Module *module, QMPlay2Core.getPluginsInstance())
-				foreach (const Module::Info &mod, module->getModulesInfo())
+			for (const Module *module : QMPlay2Core.getPluginsInstance())
+				for (const Module::Info &mod : module->getModulesInfo())
 					if (mod.type == Module::DEMUXER && (mod.name == scheme || mod.extensions.contains(extension)))
 					{
 						*img = !mod.img.isNull() ? mod.img : module->image();
@@ -513,7 +513,7 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 		}
 		else
 		{
-			foreach (const DemuxerInfo &demuxerInfo, demuxersInfo)
+			for (const DemuxerInfo &demuxerInfo : demuxersInfo)
 				if (demuxerInfo.name == scheme || demuxerInfo.extensions.contains(extension))
 				{
 					*img = demuxerInfo.img;

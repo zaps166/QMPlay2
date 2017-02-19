@@ -33,7 +33,7 @@
 #include <QCoreApplication>
 #include <QDir>
 
-#include <math.h>
+#include <cmath>
 
 static inline bool getCurrentPlaying(int stream, const QList<StreamInfo *> &streamsInfo, const StreamInfo *streamInfo)
 {
@@ -100,7 +100,7 @@ void DemuxerThr::loadImage()
 			if (url.startsWith("file://") && QMPlay2Core.getSettings().getBool("ShowDirCovers")) //Ładowanie okładki z katalogu
 			{
 				const QString directory = Functions::filePath(url.mid(7));
-				foreach (const QString &cover, QDir(directory).entryList(QStringList() << "cover" << "cover.*" << "folder" << "folder.*", QDir::Files))
+				for (const QString &cover : QDir(directory).entryList({"cover", "cover.*", "folder", "folder.*"}, QDir::Files))
 				{
 					const QString coverPath = directory + cover;
 					img = QImage(coverPath);
@@ -275,7 +275,7 @@ void DemuxerThr::run()
 	emit playC.setCurrentPlaying();
 
 	emit QMPlay2Core.busyCursor();
-	Functions::getDataIfHasPluginPrefix(url, &url, &name, NULL, &ioCtrl);
+	Functions::getDataIfHasPluginPrefix(url, &url, &name, nullptr, &ioCtrl);
 	emit QMPlay2Core.restoreCursor();
 	if (ioCtrl.isAborted())
 		return end();
@@ -295,14 +295,14 @@ void DemuxerThr::run()
 	{
 		QStringList filter;
 		filter << "*.ass" << "*.ssa";
-		foreach (const QString &ext, SubsDec::extensions())
+		for (const QString &ext : SubsDec::extensions())
 			filter << "*." + ext;
-		foreach (StreamInfo *streamInfo, demuxer->streamsInfo())
+		for (StreamInfo *streamInfo : demuxer->streamsInfo())
 			if (streamInfo->type == QMPLAY2_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
 			{
 				const QString directory = Functions::filePath(url.mid(7));
 				const QString fName = Functions::fileName(url, false).replace('_', ' ');
-				foreach (const QString &subsFile, QDir(directory).entryList(filter, QDir::Files))
+				for (const QString &subsFile : QDir(directory).entryList(filter, QDir::Files))
 				{
 					const QString subsFName = Functions::fileName(subsFile, false).replace('_', ' ');
 					if (subsFName.contains(fName, Qt::CaseInsensitive) || fName.contains(subsFName, Qt::CaseInsensitive))
@@ -574,7 +574,7 @@ void DemuxerThr::updateCoverAndPlaying()
 	title.clear();
 	artist.clear();
 	album.clear();
-	foreach (const QMPlay2Tag &tag, demuxer->tags()) //wczytywanie tytułu, artysty i albumu
+	for (const QMPlay2Tag &tag : demuxer->tags()) //wczytywanie tytułu, artysty i albumu
 	{
 		const QMPlay2Tags tagID = StreamInfo::getTag(tag.first);
 		switch (tagID)
@@ -601,7 +601,7 @@ void DemuxerThr::updateCoverAndPlaying()
 
 static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str)
 {
-	foreach (const QMPlay2Tag &tag, other_info)
+	for (const QMPlay2Tag &tag : other_info)
 		if (!tag.second.isEmpty())
 		{
 			QString value = tag.second;
@@ -645,7 +645,7 @@ void DemuxerThr::emitInfo()
 	}
 
 	bool nameOrDescr = false;
-	foreach (const QMPlay2Tag &tag, demuxer->tags())
+	for (const QMPlay2Tag &tag : demuxer->tags())
 		if (!tag.first.isEmpty())
 		{
 			QString txt = tag.second;
@@ -670,7 +670,7 @@ void DemuxerThr::emitInfo()
 		info += "<br/>";
 
 	QString realUrl;
-	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, NULL, &realUrl, NULL))
+	if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, nullptr, &realUrl, nullptr))
 		realUrl = url;
 	if (!realUrl.startsWith("file://"))
 		info += "<b>" + tr("Address") + ":</b> " + realUrl + "<br>";
@@ -689,7 +689,7 @@ void DemuxerThr::emitInfo()
 		info += "<br/><br/><a href='save_cover'>" + tr("Save cover picture") + "</a>";
 
 	bool once = false;
-	foreach (const ProgramInfo &program, demuxer->getPrograms())
+	for (const ProgramInfo &program : demuxer->getPrograms())
 	{
 		if (!once)
 		{
@@ -727,7 +727,7 @@ void DemuxerThr::emitInfo()
 
 	int chapterCount = 0;
 	once = false;
-	foreach (const ChapterInfo &chapter, demuxer->getChapters())
+	for (const ChapterInfo &chapter : demuxer->getChapters())
 	{
 		if (!once)
 		{
@@ -744,7 +744,7 @@ void DemuxerThr::emitInfo()
 	const QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
 	QString videoStreams, audioStreams, subtitlesStreams, attachmentStreams;
 	int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
-	foreach (StreamInfo *streamInfo, streamsInfo)
+	for (StreamInfo *streamInfo : streamsInfo)
 	{
 		switch (streamInfo->type)
 		{
@@ -836,7 +836,7 @@ void DemuxerThr::emitInfo()
 		++i;
 	}
 	i = 0;
-	foreach (const QString &fName, playC.fileSubsList)
+	for (const QString &fName : playC.fileSubsList)
 		addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
 
 	if (!videoStreams.isEmpty())

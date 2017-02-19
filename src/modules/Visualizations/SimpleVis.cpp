@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-#include <math.h>
+#include <cmath>
 
 static inline float fltclip(float f)
 {

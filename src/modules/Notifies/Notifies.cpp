@@ -50,7 +50,7 @@ void *Notifies::createInstance(const QString &name)
 {
 	if (name == NotifyExtensionName)
 		return static_cast<QMPlay2Extensions *>(new NotifyExtension(*this));
-	return NULL;
+	return nullptr;
 }
 
 Notifies::SettingsWidget *Notifies::getSettingsWidget()

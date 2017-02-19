@@ -36,14 +36,14 @@ class OpenAvioThr : public OpenThr
 public:
 	inline OpenAvioThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
 		OpenThr(url, options, abortCtx),
-		m_avioCtx(NULL)
+		m_avioCtx(nullptr)
 	{
 		start();
 	}
 
 	inline AVIOContext *getAvioCtx() const
 	{
-		return waitForOpened() ? m_avioCtx : NULL;
+		return waitForOpened() ? m_avioCtx : nullptr;
 	}
 
 private:
@@ -59,7 +59,7 @@ private:
 /**/
 
 FFReader::FFReader() :
-	avioCtx(NULL),
+	avioCtx(nullptr),
 	paused(false), canRead(false),
 	abortCtx(new AbortContext)
 {}
@@ -129,7 +129,7 @@ QString FFReader::name() const
 
 bool FFReader::open()
 {
-	AVDictionary *options = NULL;
+	AVDictionary *options = nullptr;
 	const QString url = FFCommon::prepareUrl(getUrl(), options);
 
 	OpenAvioThr *openThr = new OpenAvioThr(url.toUtf8(), options, abortCtx);

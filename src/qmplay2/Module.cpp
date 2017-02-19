@@ -29,7 +29,7 @@ QList<QAction *> Module::getAddActions()
 
 Module::SettingsWidget *Module::getSettingsWidget()
 {
-	return NULL;
+	return nullptr;
 }
 
 void Module::videoDeintSave()
@@ -38,7 +38,7 @@ void Module::videoDeintSave()
 void Module::setInstances(bool &restartPlaying)
 {
 	QMutexLocker locker(&mutex);
-	foreach (ModuleCommon *mc, instances)
+	for (ModuleCommon *mc : instances)
 		if (!mc->set())
 			restartPlaying = true;
 }

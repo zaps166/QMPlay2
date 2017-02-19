@@ -29,7 +29,7 @@ static void releaseBuffer(HWAccelHelper *hwAccelHelper, QMPlay2SurfaceID surface
 		hwAccelHelper->putSurface(surfaceID);
 }
 
-typedef void (*ReleaseBufferProc)(void *, uint8_t *);
+using ReleaseBufferProc = void (*)(void *, uint8_t *);
 
 /**/
 

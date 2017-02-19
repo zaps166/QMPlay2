@@ -62,7 +62,7 @@ using Functions::timeToStr;
 #include <SubsDec.hpp>
 #include <IPC.hpp>
 
-#include <math.h>
+#include <cmath>
 
 #if QT_VERSION >= 0x050000 && defined Q_OS_WIN
 	#define QT5_WINDOWS
@@ -89,10 +89,10 @@ public:
 #endif
 
 #ifndef Q_OS_MAC
-static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = NULL)
+static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 {
 	QMenu *newMenu = new QMenu(src->title(), dest);
-	foreach (QAction *act, src->actions())
+	for (QAction *act : src->actions())
 	{
 		QMenu *menu = act->menu();
 		if (!menu)
@@ -125,7 +125,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	#if QT_VERSION >= 0x050000
 		bool createTmpStyle = false;
 		/* Looking for touch screen */
-		foreach (const QTouchDevice *touchDev, QTouchDevice::devices())
+		for (const QTouchDevice *touchDev : QTouchDevice::devices())
 		{
 			/* Touchscreen found */
 			if (touchDev->type() == QTouchDevice::TouchScreen)
@@ -143,9 +143,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 
 	setObjectName("MainWidget");
 
-	settingsW = NULL;
-	aboutW = NULL;
-	lastFocusWidget = NULL;
+	settingsW = nullptr;
+	aboutW = nullptr;
+	lastFocusWidget = nullptr;
 
 	isCompactView = wasShow = fullScreen = seekSFocus = false;
 
@@ -169,7 +169,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	tray->setVisible(settings.getBool("TrayVisible", true));
 	QMPlay2Core.systemTray = tray;
 #else
-	tray = NULL;
+	tray = nullptr;
 	#ifdef Q_OS_MAC
 		QMPlay2MacExtensions::init();
 	#endif
@@ -202,8 +202,8 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	addDockWidget(Qt::LeftDockWidgetArea, videoDock);
 	addDockWidget(Qt::RightDockWidgetArea, infoDock);
 	addDockWidget(Qt::RightDockWidgetArea, playlistDock);
-	DockWidget *firstVisualization = NULL;
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList()) //GUI Extensions
+	DockWidget *firstVisualization = nullptr;
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList()) //GUI Extensions
 		if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 		{
 			dw->setVisible(false);
@@ -226,7 +226,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	addDockWidget(Qt::TopDockWidgetArea, videoDock);
 	addDockWidget(Qt::BottomDockWidgetArea, playlistDock);
 	tabifyDockWidget(playlistDock, infoDock);
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList()) //GUI Extensions
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList()) //GUI Extensions
 		if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 		{
 			dw->setVisible(false);
@@ -338,7 +338,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	addAction(hideMenuAct);
 	QMPlay2GUI.menuBar->widgets->hideMenuAct = hideMenuAct;
 #else
-	QMPlay2GUI.menuBar->widgets->hideMenuAct = NULL;
+	QMPlay2GUI.menuBar->widgets->hideMenuAct = nullptr;
 #endif
 
 	const bool widgetsLocked = settings.getBool("MainWidget/WidgetsLocked");
@@ -372,7 +372,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !isTrayVisible());
 #endif
 
-	foreach (QObject *obj, children())
+	for (QObject *obj : children())
 	{
 		QTabBar *tabBar = qobject_cast<QTabBar *>(obj);
 		if (tabBar && tabBar->property("changeCurrentOnDrag").isValid())
@@ -423,7 +423,7 @@ MainWidget::~MainWidget()
 {
 	QMPlay2Extensions::closeExtensions();
 	emit QMPlay2Core.restoreCursor();
-	QMPlay2GUI.mainW = NULL;
+	QMPlay2GUI.mainW = nullptr;
 	QCoreApplication::quit();
 }
 
@@ -432,12 +432,12 @@ void MainWidget::detachFromPipe()
 	if (QMPlay2GUI.pipe)
 	{
 		QMPlay2GUI.pipe->deleteLater();
-		QMPlay2GUI.pipe = NULL;
+		QMPlay2GUI.pipe = nullptr;
 	}
 	if (menuBar->player->detach)
 	{
 		menuBar->player->detach->deleteLater();
-		menuBar->player->detach = NULL;
+		menuBar->player->detach = nullptr;
 	}
 }
 
@@ -642,7 +642,7 @@ void MainWidget::visualizationFullScreen()
 }
 void MainWidget::hideAllExtensions()
 {
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 			dw->hide();
 }
@@ -706,8 +706,8 @@ void MainWidget::createMenuBar()
 {
 	menuBar = QMPlay2GUI.menuBar;
 
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (QAction *act, module->getAddActions())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (QAction *act : module->getAddActions())
 		{
 			act->setParent(menuBar->playlist->add);
 			menuBar->playlist->add->addAction(act);
@@ -754,7 +754,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->next, SIGNAL(triggered()), playlistDock, SLOT(next()));
 	connect(menuBar->player->prev, SIGNAL(triggered()), playlistDock, SLOT(prev()));
 	connect(menuBar->player->nextFrame, SIGNAL(triggered()), &playC, SLOT(nextFrame()));
-	foreach (QAction *act, menuBar->player->repeat->actions())
+	for (QAction *act : menuBar->player->repeat->actions())
 		connect(act, SIGNAL(triggered()), playlistDock, SLOT(repeat()));
 	connect(menuBar->player->abRepeat, SIGNAL(triggered()), &playC, SLOT(setAB()));
 	connect(menuBar->player->seekF, SIGNAL(triggered()), this, SLOT(actionSeek()));
@@ -767,7 +767,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
 	connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
 	connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));
-	foreach (QAction *act, menuBar->player->aRatio->actions())
+	for (QAction *act : menuBar->player->aRatio->actions())
 	{
 		connect(act, SIGNAL(triggered()), &playC, SLOT(aRatio()));
 		if (act->objectName() == "auto")
@@ -805,7 +805,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playback->videoFilters->vFlip, SIGNAL(triggered(bool)), &playC, SLOT(setVFlip(bool)));
 	connect(menuBar->playback->videoFilters->rotate90, SIGNAL(triggered(bool)), &playC, SLOT(setRotate90(bool)));
 	connect(menuBar->playback->videoFilters->more, SIGNAL(triggered(bool)), this, SLOT(showSettings()));
-	foreach (QAction *act, menuBar->playback->audioChannels->actions())
+	for (QAction *act : menuBar->playback->audioChannels->actions())
 		connect(act, SIGNAL(triggered()), this, SLOT(audioChannelsChanged()));
 	SettingsWidget::SetAudioChannelsMenu();
 
@@ -954,7 +954,7 @@ void MainWidget::toggleFullScreen()
 		playlistDock->setFeatures(DockWidget::NoDockWidgetFeatures);
 
 		addDockWidget(Qt::RightDockWidgetArea, videoDock);
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 			{
 				if (dw->isVisible())
@@ -1010,7 +1010,7 @@ void MainWidget::toggleFullScreen()
 
 		infoDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
 		playlistDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
 				dw->setFeatures(QDockWidget::AllDockWidgetFeatures);
 
@@ -1088,7 +1088,7 @@ void MainWidget::openDir()
 void MainWidget::loadPlist()
 {
 	QString filter = tr("Playlists") + " (";
-	foreach (const QString &e, Playlist::extensions())
+	for (const QString &e : Playlist::extensions())
 		filter += "*." + e + " ";
 	filter.chop(1);
 	filter += ")";
@@ -1120,7 +1120,7 @@ void MainWidget::showSettings(const QString &moduleName)
 		if (showAgain)
 			disconnect(settingsW, SIGNAL(destroyed()), this, SLOT(showSettings()));
 		settingsW->close();
-		settingsW = NULL;
+		settingsW = nullptr;
 		if (showAgain)
 			showSettings(moduleName);
 	}
@@ -1146,7 +1146,7 @@ void MainWidget::browseSubsFile()
 		dir.remove(0, 7);
 
 	QString filter = tr("Subtitles") + " ASS/SSA (*.ass *.ssa)";
-	foreach (const QString &ext, SubsDec::extensions())
+	for (const QString &ext : SubsDec::extensions())
 		filter += ";;" + tr("Subtitles") + " " + ext.toUpper() + " (*." + ext + ")";
 
 	QString f = QFileDialog::getOpenFileName(this, tr("Choose subtitles"), dir, filter);
@@ -1193,7 +1193,7 @@ void MainWidget::readSocket()
 {
 	IPCSocket *socket = (IPCSocket *)sender();
 	disconnect(socket, SIGNAL(aboutToClose()), socket, SLOT(deleteLater()));
-	foreach (const QByteArray &arr, socket->readAll().split('\0'))
+	for (const QByteArray &arr : socket->readAll().split('\0'))
 	{
 		int idx = arr.indexOf('\t');
 		if (idx > -1)
@@ -1215,7 +1215,7 @@ void MainWidget::about()
 	else
 	{
 		aboutW->close();
-		aboutW = NULL;
+		aboutW = nullptr;
 	}
 }
 
@@ -1237,7 +1237,7 @@ void MainWidget::lockWidgets(bool l)
 		qobject_cast<QAction *>(sender())->setChecked(!l);
 	else
 	{
-		foreach (QObject *o, children())
+		for (QObject *o : children())
 		{
 			DockWidget *dW = dynamic_cast<DockWidget *>(o);
 			if (dW)
@@ -1278,7 +1278,7 @@ void MainWidget::uncheckSuspend()
 void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool saveCurrentGroup)
 {
 	QString filter;
-	foreach (const QString &e, Playlist::extensions())
+	for (const QString &e : Playlist::extensions())
 		filter += e.toUpper() + " (*." + e + ");;";
 	filter.chop(2);
 	if (filter.isEmpty())
@@ -1309,7 +1309,7 @@ QMenu *MainWidget::createPopupMenu()
 #endif
 		popupMenu->addAction(lockWidgetsAct);
 	}
-	foreach (QAction *act, popupMenu->actions())
+	for (QAction *act : popupMenu->actions())
 		act->setEnabled(isVisible() && !fullScreen && !isCompactView);
 	return popupMenu;
 }
@@ -1345,7 +1345,7 @@ void MainWidget::restoreFocus()
 	{
 		if (lastFocusWidget != focusWidget())
 			lastFocusWidget->setFocus();
-		lastFocusWidget = NULL;
+		lastFocusWidget = nullptr;
 	}
 }
 
@@ -1398,7 +1398,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 
 			const QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
 			bool reloadQMPlay2Extensions = false;
-			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+			for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 				if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 				{
 					if (!visibleQMPlay2Extensions.contains(QMPlay2Ext) || QMPlay2Ext->isVisualization())
@@ -1426,7 +1426,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 				playlistDock->show();
 				infoDock->show();
 
-				foreach (QMPlay2Extensions *QMPlay2Ext, visibleQMPlay2Extensions)
+				for (QMPlay2Extensions *QMPlay2Ext : visibleQMPlay2Extensions)
 					if (!QMPlay2Ext->isVisualization())
 						if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 						{

@@ -46,7 +46,7 @@
 
 #include <time.h>
 
-static ScreenSaver *g_screenSaver = NULL;
+static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
@@ -106,7 +106,7 @@ void QMPlay2GUIClass::drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap)
 void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 {
 	settings->set("UpdateFile", "remove:" + UpdateFile);
-	ShellExecuteW(NULL, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", NULL, SW_SHOWNORMAL);
+	ShellExecuteW(nullptr, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", nullptr, SW_SHOWNORMAL);
 }
 #endif
 
@@ -164,12 +164,12 @@ const QWidget *QMPlay2GUIClass::getVideoDock() const
 }
 
 QMPlay2GUIClass::QMPlay2GUIClass() :
-	groupIcon(NULL), mediaIcon(NULL), folderIcon(NULL),
-	mainW(NULL),
-	screenSaver(NULL),
-	shortcutHandler(NULL)
+	groupIcon(nullptr), mediaIcon(nullptr), folderIcon(nullptr),
+	mainW(nullptr),
+	screenSaver(nullptr),
+	shortcutHandler(nullptr)
 {
-	qmp2Pixmap = g_useGui ? new QPixmap(":/QMPlay2") : NULL;
+	qmp2Pixmap = g_useGui ? new QPixmap(":/QMPlay2") : nullptr;
 }
 QMPlay2GUIClass::~QMPlay2GUIClass()
 {
@@ -185,7 +185,7 @@ void QMPlay2GUIClass::deleteIcons()
 	delete groupIcon;
 	delete mediaIcon;
 	delete folderIcon;
-	groupIcon = mediaIcon = folderIcon = NULL;
+	groupIcon = mediaIcon = folderIcon = nullptr;
 }
 
 /**/
@@ -317,7 +317,7 @@ static inline void callDefaultSignalHandler(int s)
 }
 static void signal_handler(int s)
 {
-	const char *crashSignal = NULL;
+	const char *crashSignal = nullptr;
 	switch (s)
 	{
 		case SIGINT:
@@ -403,7 +403,7 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 			}
 		}
 	}
-	return CallNextHookEx(NULL, code, wparam, lparam);
+	return CallNextHookEx(nullptr, code, wparam, lparam);
 }
 #endif
 
@@ -524,10 +524,10 @@ int main(int argc, char *argv[])
 	}
 
 #ifdef Q_OS_WIN
-	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(NULL), 0);
+	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(nullptr), 0);
 #endif
 
-	qsrand(time(NULL));
+	qsrand(time(nullptr));
 
 	do
 	{
@@ -571,7 +571,7 @@ int main(int argc, char *argv[])
 		)
 		{
 			delete qmplay2Gui.pipe;
-			qmplay2Gui.pipe = NULL;
+			qmplay2Gui.pipe = nullptr;
 			if (settings.getBool("AllowOnlyOneInstance"))
 			{
 				QMPlay2Core.quit();
@@ -597,13 +597,13 @@ int main(int argc, char *argv[])
 			{
 				const QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
 				QMPlay2Core.logInfo(updateString);
-				QMessageBox::information(NULL, QCoreApplication::applicationName(), updateString);
+				QMessageBox::information(nullptr, QCoreApplication::applicationName(), updateString);
 				settings.remove("UpdateVersion");
 			}
 			else
 			{
 				const QString message = QObject::tr("QMPlay2 hasn't been updated. Do you want to run the update (recommended)?");
-				if (QMessageBox::question(NULL, QCoreApplication::applicationName(), message, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+				if (QMessageBox::question(nullptr, QCoreApplication::applicationName(), message, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 				{
 					qmplay2Gui.runUpdate(UpdateFile);
 					QMPlay2Core.quit();
@@ -643,7 +643,7 @@ int main(int argc, char *argv[])
 		if (qmplay2Gui.removeSettings)
 		{
 			const QString settingsDirProfile = settingsDir + profile;
-			foreach (const QString &fName, QDir(settingsDirProfile).entryList(QStringList("*.ini")))
+			for (const QString &fName : QDir(settingsDirProfile).entryList({"*.ini"}))
 				QFile::remove(settingsDirProfile + fName);
 			if (profile != "/")
 				QDir(settingsDir).rmdir(profile);
@@ -652,7 +652,7 @@ int main(int argc, char *argv[])
 		{
 			const QString srcDir = settingsDir + profile;
 			const QString dstDir = settingsDir + "Profiles/" + qmplay2Gui.newProfileName + "/";
-			foreach (const QString &fName, QDir(srcDir).entryList(QStringList() << "*.ini", QDir::Files))
+			for (const QString &fName : QDir(srcDir).entryList({"*.ini"}, QDir::Files))
 			{
 				if (fName != "Profile.ini")
 					QFile::copy(srcDir + fName, dstDir + fName);
@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
 #endif
 
 	delete g_screenSaver;
-	g_screenSaver = NULL;
+	g_screenSaver = nullptr;
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)

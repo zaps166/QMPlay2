@@ -35,7 +35,7 @@ Cuvid::Cuvid() :
 #endif
 
 	m_deintMethodB = new QComboBox;
-	m_deintMethodB->addItems(QStringList() << "Bob" << tr("Adaptive"));
+	m_deintMethodB->addItems({"Bob", tr("Adaptive")});
 	m_deintMethodB->setCurrentIndex(getInt("DeintMethod") - 1);
 	if (m_deintMethodB->currentIndex() < 0)
 		m_deintMethodB->setCurrentIndex(1);
@@ -64,7 +64,7 @@ void *Cuvid::createInstance(const QString &name)
 		if (CuvidDec::canCreateInstance())
 			return new CuvidDec(*this);
 	}
-	return NULL;
+	return nullptr;
 }
 
 Module::SettingsWidget *Cuvid::getSettingsWidget()

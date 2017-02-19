@@ -341,7 +341,7 @@ void EqualizerGUI::setSliders()
 {
 	const QString objectName = sender()->objectName();
 	graph.hide();
-	foreach (QSlider *slider, sliders)
+	for (QSlider *slider : sliders)
 	{
 		const bool isPreamp = (sliders.at(0) == slider);
 
@@ -376,7 +376,7 @@ void EqualizerGUI::addPreset()
 		}
 
 		QMap<int, int> values;
-		foreach (QSlider *slider, sliders)
+		for (QSlider *slider : sliders)
 		{
 			const bool isPreamp = (sliders.at(0) == slider);
 			if (isPreamp)
@@ -431,7 +431,7 @@ void EqualizerGUI::setPresetValues()
 		QMap<int, int> values = getPresetValues(act->text());
 		if (values.count() > 1)
 		{
-			foreach (QSlider *slider, sliders)
+			for (QSlider *slider : sliders)
 			{
 				QCheckBox *checkB = getSliderCheckBox(slider);
 				const bool isPreamp = (sliders.at(0) == slider);

@@ -28,7 +28,7 @@
 	#include <QUrlQuery>
 #endif
 
-#include <math.h>
+#include <cmath>
 
 ToneGenerator::ToneGenerator(Module &module) :
 	aborted(false), metadata_changed(false), fromUrl(false), pos(0.0), srate(0)
@@ -74,7 +74,7 @@ QString ToneGenerator::name() const
 QString ToneGenerator::title() const
 {
 	QString t;
-	foreach (quint32 hz, freqs)
+	for (quint32 hz : freqs)
 		t += "   - " + QString::number(hz) + tr("Hz") + "\n";
 	t.chop(1);
 	return tr("Tone generator") + " (" + QString::number(srate) + tr("Hz") + "):\n" + t;
@@ -142,7 +142,7 @@ bool ToneGenerator::open(const QString &entireUrl)
 		srate = 44100;
 
 	freqs.clear();
-	foreach (const QString &freq, QUrlQuery(url).queryItemValue("freqs").split(',', QString::SkipEmptyParts))
+	for (const QString &freq : QUrlQuery(url).queryItemValue("freqs").split(',', QString::SkipEmptyParts))
 		freqs += freq.toInt();
 	if (freqs.isEmpty())
 	{

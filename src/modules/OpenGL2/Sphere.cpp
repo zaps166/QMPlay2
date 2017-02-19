@@ -18,7 +18,7 @@
 
 #include "Sphere.hpp"
 
-#include <math.h>
+#include <cmath>
 
 quint32 Sphere::getSizes(quint32 slices, quint32 stacks, quint32 &verticesSize, quint32 &texcoordsSize, quint32 &indicesSize)
 {

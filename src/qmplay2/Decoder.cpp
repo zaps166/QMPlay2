@@ -42,9 +42,9 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
 		decoder->open(streamInfo);
 		return decoder;
 	}
-	QVector<QPair<Module *, Module::Info> > pluginsInstances(modNames.count());
-	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
+	QVector<QPair<Module *, Module::Info>> pluginsInstances(modNames.count());
+	for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : pluginInstance->getModulesInfo())
 			if (mod.type == Module::DECODER)
 			{
 				if (modNames.isEmpty())
@@ -69,12 +69,12 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
 			return decoder;
 		delete decoder;
 	}
-	return NULL;
+	return nullptr;
 }
 
 VideoWriter *Decoder::HWAccel() const
 {
-	return NULL;
+	return nullptr;
 }
 
 void Decoder::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)

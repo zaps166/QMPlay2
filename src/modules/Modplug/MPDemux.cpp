@@ -28,7 +28,7 @@ MPDemux::MPDemux(Module &module) :
 	aborted(false),
 	pos(0.0),
 	srate(Functions::getBestSampleRate()),
-	mpfile(NULL)
+	mpfile(nullptr)
 {
 	SetModule(module);
 }

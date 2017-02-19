@@ -60,7 +60,7 @@ public:
 	Decoder *dec;
 	Writer *writer;
 protected:
-	AVThread(PlayClass &, const QString &, Writer *writer = NULL, const QStringList &pluginsName = QStringList());
+	AVThread(PlayClass &, const QString &, Writer *writer = nullptr, const QStringList &pluginsName = {});
 	virtual ~AVThread();
 
 	void terminate();

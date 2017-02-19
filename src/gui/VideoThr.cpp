@@ -38,23 +38,23 @@ using Functions::gettime;
 #include <QImage>
 #include <QDir>
 
-#include <math.h>
+#include <cmath>
 
 VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
 	deleteOSD(false), deleteFrame(false), gotFrame(false),
 	W(0), H(0), seq(0),
-	sDec(NULL),
+	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
-	subtitles(NULL)
+	subtitles(nullptr)
 {}
 VideoThr::~VideoThr()
 {
 	QMPlay2GUI.videoAdjustment->enableControls();
 	QMPlay2GUI.screenSaver->unInhibit(0);
 	delete playC.osd;
-	playC.osd = NULL;
+	playC.osd = nullptr;
 	delete subtitles;
 	delete sDec;
 }
@@ -70,7 +70,7 @@ void VideoThr::destroySubtitlesDecoder()
 	if (sDec)
 	{
 		delete sDec;
-		sDec = NULL;
+		sDec = nullptr;
 	}
 }
 
@@ -158,7 +158,7 @@ void VideoThr::initFilters(bool processParams)
 		writer->modParam("Deinterlace", 0);
 
 	if (!hwAccelWriter)
-		foreach (QString filterName, QMPSettings.getStringList("VideoFilters"))
+		for (QString filterName : QMPSettings.getStringList("VideoFilters"))
 			if (filterName.left(1).toInt()) //if filter is enabled
 			{
 				VideoFilter *filter = filters.on((filterName = filterName.mid(1)));
@@ -301,7 +301,7 @@ void VideoThr::run()
 			if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, W, H))
 			{
 				osdListToDelete += subtitles;
-				subtitles = NULL;
+				subtitles = nullptr;
 			}
 		}
 		else
@@ -317,7 +317,7 @@ void VideoThr::run()
 			if (!playC.ass->getASS(subtitles, subsPts))
 			{
 				osdListToDelete += subtitles;
-				subtitles = NULL;
+				subtitles = nullptr;
 			}
 		}
 		if (subtitles)
@@ -326,7 +326,7 @@ void VideoThr::run()
 			if (deleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
 			{
 				osdListToDelete += subtitles;
-				subtitles = NULL;
+				subtitles = nullptr;
 			}
 			else if (subsPts >= subtitles->pts())
 			{
@@ -341,7 +341,7 @@ void VideoThr::run()
 			if (deleteOSD || playC.osd->leftDuration() < 0)
 			{
 				osdListToDelete += playC.osd;
-				playC.osd = NULL;
+				playC.osd = nullptr;
 			}
 			else
 				osdList += playC.osd;
@@ -586,7 +586,7 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 			const QString ext = QMPlay2Core.getSettings().getString("screenshotFormat");
 			const QString dir = QMPlay2Core.getSettings().getString("screenshotPth");
 			quint16 num = 0;
-			foreach (const QString &f, QDir(dir).entryList(QStringList("QMPlay2_snap_?????" + ext), QDir::Files, QDir::Name))
+			for (const QString &f : QDir(dir).entryList({"QMPlay2_snap_?????" + ext}, QDir::Files, QDir::Name))
 			{
 				const quint16 n = f.mid(13, 5).toUShort();
 				if (n > num)

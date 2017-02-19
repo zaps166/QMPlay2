@@ -60,7 +60,7 @@ void *VFilters::createInstance(const QString &name)
 		return new YadifDeint(false, false);
 	else if (name == MotionBlurName)
 		return new MotionBlur;
-	return NULL;
+	return nullptr;
 }
 
 QMPLAY2_EXPORT_PLUGIN(VFilters)

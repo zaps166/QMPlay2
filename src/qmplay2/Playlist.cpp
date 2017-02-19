@@ -48,8 +48,8 @@ bool Playlist::write(const Entries &list, const QString &url, QString *name)
 QStringList Playlist::extensions()
 {
 	QStringList extensions;
-	foreach (const Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (const Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::PLAYLIST)
 				extensions += mod.extensions;
 	return extensions;
@@ -62,16 +62,16 @@ Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
 	const QString extension = Functions::fileExt(url).toLower();
 	if (extension.isEmpty())
-		return NULL;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+		return nullptr;
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::PLAYLIST && mod.extensions.contains(extension))
 			{
 				if (openMode == NoOpen)
 				{
 					if (name)
 						*name = mod.name;
-					return NULL;
+					return nullptr;
 				}
 				Playlist *playlist = (Playlist *)module->createInstance(mod.name);
 				if (!playlist)
@@ -99,7 +99,7 @@ Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 				}
 				delete playlist;
 			}
-	return NULL;
+	return nullptr;
 }
 
 QList<QByteArray> Playlist::readLines()

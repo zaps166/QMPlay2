@@ -28,7 +28,7 @@
 
 class Settings : protected QSettings
 {
-	typedef QMap<QString, QVariant> SettingsMap;
+	using SettingsMap = QMap<QString, QVariant>;
 public:
 	Settings(const QString &name);
 	~Settings();
@@ -70,7 +70,7 @@ public:
 	{
 		return get(key, def).toString();
 	}
-	inline QStringList getStringList(const QString &key, const QStringList &def = QStringList()) const
+	inline QStringList getStringList(const QString &key, const QStringList &def = {}) const
 	{
 		return get(key, def).toStringList();
 	}

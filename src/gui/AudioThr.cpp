@@ -30,14 +30,14 @@
 
 #include <QCoreApplication>
 
-#include <math.h>
+#include <cmath>
 
 AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
-	AVThread(playC, "audio:", NULL, pluginsName)
+	AVThread(playC, "audio:", nullptr, pluginsName)
 {
 	allowAudioDrain = false;
 
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (QMPlay2Ext->isVisualization())
 			visualizations += QMPlay2Ext;
 	visualizations.squeeze();
@@ -59,15 +59,15 @@ AudioThr::~AudioThr()
 
 void AudioThr::stop(bool terminate)
 {
-	foreach (QMPlay2Extensions *vis, visualizations)
+	for (QMPlay2Extensions *vis : visualizations)
 		vis->visState(false);
-	foreach (AudioFilter *filter, filters)
+	for (AudioFilter *filter : filters)
 		delete filter;
 	AVThread::stop(terminate);
 }
 void AudioThr::clearVisualizations()
 {
-	foreach (QMPlay2Extensions *vis, visualizations)
+	for (QMPlay2Extensions *vis : visualizations)
 		vis->clearSoundData();
 }
 
@@ -83,7 +83,7 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 	writer->modParam("rate", (sample_rate = sRate ? sRate : realSRate));
 
 	bool paramsCorrected = false;
-	if (writer->processParams((sRate && chn) ? NULL : &paramsCorrected)) //nie pozwala na korektę jeżeli są wymuszone parametry
+	if (writer->processParams((sRate && chn) ? nullptr : &paramsCorrected)) //nie pozwala na korektę jeżeli są wymuszone parametry
 	{
 		if (paramsCorrected)
 		{
@@ -108,9 +108,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 			sample_rate = realSample_rate;
 		}
 
-		foreach (QMPlay2Extensions *vis, visualizations)
+		for (QMPlay2Extensions *vis : visualizations)
 			vis->visState(true, realChannels, realSample_rate);
-		foreach (AudioFilter *filter, filters)
+		for (AudioFilter *filter : filters)
 			filter->setAudioParameters(realChannels, realSample_rate);
 
 		return true;
@@ -187,7 +187,7 @@ void AudioThr::run()
 			const bool hasAPackets = playC.aPackets.canFetch();
 			bool hasBufferedSamples = false;
 			if (playC.endOfStream && !hasAPackets)
-				foreach (AudioFilter *filter, filters)
+				for (AudioFilter *filter : filters)
 					if (filter->bufferedSamples())
 					{
 						hasBufferedSamples = true;
@@ -269,7 +269,7 @@ void AudioThr::run()
 			}
 
 			delay = writer->getParam("delay").toDouble();
-			foreach (AudioFilter *filter, filters)
+			for (AudioFilter *filter : filters)
 			{
 				if (flushAudio)
 					filter->clearBuffers();
@@ -340,7 +340,7 @@ void AudioThr::run()
 							data[i] *= vol[i & 1];
 					}
 
-					foreach (QMPlay2Extensions *vis, visualizations)
+					for (QMPlay2Extensions *vis : visualizations)
 						vis->sendSoundData(decodedChunk);
 
 					QByteArray dataToWrite;
@@ -384,7 +384,7 @@ void AudioThr::run()
 			if (playC.flushAudio || packet.size() == bytes_consumed || (!bytes_consumed && !decoded.size()))
 			{
 				bytes_consumed = -1;
-				packet.reset();
+				packet = Packet();
 			}
 			else if (bytes_consumed != packet.size())
 				packet.remove(0, bytes_consumed);
@@ -429,6 +429,6 @@ void AudioThr::timerEvent(QTimerEvent *)
 
 void AudioThr::pauseVis(bool b)
 {
-	foreach (QMPlay2Extensions *vis, visualizations)
+	for (QMPlay2Extensions *vis : visualizations)
 		vis->visState(!b, realChannels, realSample_rate);
 }

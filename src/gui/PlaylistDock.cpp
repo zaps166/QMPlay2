@@ -37,7 +37,7 @@
 
 PlaylistDock::PlaylistDock() :
 	repeatMode(RepeatNormal),
-	lastPlaying(NULL)
+	lastPlaying(nullptr)
 {
 	setWindowTitle(tr("Playlist"));
 	setWidget(&mainW);
@@ -88,14 +88,14 @@ QString PlaylistDock::getCurrentItemName() const
 void PlaylistDock::load(const QString &url)
 {
 	if (!url.isEmpty())
-		list->add(QStringList(url), NULL, QStringList(), true);
+		list->add({url}, nullptr, {}, true);
 }
 bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 {
 	const QString url = Functions::Url(_url);
 	QList<QTreeWidgetItem *> parents;
 	Playlist::Entries entries;
-	foreach (QTreeWidgetItem *tWI, list->getChildren(PlaylistWidget::ALL_CHILDREN, saveCurrentGroup ? list->currentItem() : NULL))
+	for (QTreeWidgetItem *tWI : list->getChildren(PlaylistWidget::ALL_CHILDREN, saveCurrentGroup ? list->currentItem() : nullptr))
 	{
 		Playlist::Entry entry;
 		if (PlaylistWidget::isGroup(tWI))
@@ -133,7 +133,7 @@ void PlaylistDock::addAndPlay(const QStringList &urls)
 void PlaylistDock::add(const QString &url)
 {
 	if (!url.isEmpty())
-		add(QStringList(url));
+		add({url});
 }
 void PlaylistDock::addAndPlay(const QString &_url)
 {
@@ -146,16 +146,16 @@ void PlaylistDock::addAndPlay(const QString &_url)
 	{
 		//Extract real URL if it also contains default entry name
 		QString addressPrefixName, url2;
-		Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &addressPrefixName, &url2, NULL);
+		Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &addressPrefixName, &url2, nullptr);
 		if (addressPrefixName == "QMPlay2EntryName")
 			url = url2;
 	}
 
-	foreach (QTreeWidgetItem *item, items)
+	for (QTreeWidgetItem *item : items)
 	{
 		QString itemUrl = item->data(0, Qt::UserRole).toString();
 		bool urlMatches = (itemUrl == url);
-		if (!urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix(itemUrl, NULL, &itemUrl, NULL))
+		if (!urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix(itemUrl, nullptr, &itemUrl, nullptr))
 			urlMatches = (itemUrl == url); //E.g. for chiptunes without group
 		if (urlMatches)
 		{
@@ -173,7 +173,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
 		}
 	}
 	/**/
-	addAndPlay(QStringList(_url));
+	addAndPlay({_url});
 }
 
 void PlaylistDock::scrollToCurrectItem()
@@ -193,7 +193,7 @@ void PlaylistDock::expandTree(QTreeWidgetItem *i)
 
 void PlaylistDock::toggleEntryFlag(const int flag)
 {
-	foreach (QTreeWidgetItem *tWI, list->selectedItems())
+	for (QTreeWidgetItem *tWI : list->selectedItems())
 	{
 		if (!list->isGroup(tWI))
 		{
@@ -245,7 +245,7 @@ void PlaylistDock::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
 {
 	randomPlayedItems.removeOne(tWI);
 	if (lastPlaying == tWI)
-		lastPlaying = NULL;
+		lastPlaying = nullptr;
 	delete tWI;
 }
 
@@ -294,15 +294,15 @@ void PlaylistDock::next(bool playingError)
 {
 	QList<QTreeWidgetItem *> l = list->getChildren(PlaylistWidget::ONLY_NON_GROUPS);
 	if (lastPlaying && !l.contains(lastPlaying))
-		lastPlaying = NULL;
-	QTreeWidgetItem *tWI = NULL;
+		lastPlaying = nullptr;
+	QTreeWidgetItem *tWI = nullptr;
 	if (!l.isEmpty())
 	{
 		if (isRandomPlayback())
 		{
 			if (repeatMode == RandomGroupMode || repeatMode == RepeatRandomGroup) //Random in group
 			{
-				QTreeWidgetItem *P = list->currentPlaying ? list->currentPlaying->parent() : (list->currentItem() ? list->currentItem()->parent() : NULL);
+				QTreeWidgetItem *P = list->currentPlaying ? list->currentPlaying->parent() : (list->currentItem() ? list->currentItem()->parent() : nullptr);
 				expandTree(P);
 				l = P ? list->getChildren(PlaylistWidget::ONLY_NON_GROUPS, P) : list->topLevelNonGroupsItems();
 				if (l.isEmpty() || (!randomPlayedItems.isEmpty() && randomPlayedItems.at(0)->parent() != P))
@@ -326,7 +326,7 @@ void PlaylistDock::next(bool playingError)
 						if (randomPlayedItems.count() == l.count())
 						{
 							//Break and stop playback if played everything ignoring skipped entries
-							tWI = NULL;
+							tWI = nullptr;
 							break;
 						}
 					}
@@ -342,7 +342,7 @@ void PlaylistDock::next(bool playingError)
 				entryFlags &= ~Playlist::Entry::StopAfter;
 				PlaylistWidget::setEntryFont(lastPlaying, entryFlags);
 				lastPlaying->setData(0, Qt::UserRole + 1, entryFlags);
-				//"tWI" is NULL here, so playback will stop.
+				//"tWI" is nullptr here, so playback will stop.
 			}
 			else
 			{
@@ -351,11 +351,11 @@ void PlaylistDock::next(bool playingError)
 					tWI = lastPlaying ? lastPlaying : list->currentItem();
 				else
 				{
-					QTreeWidgetItem *P = NULL;
+					QTreeWidgetItem *P = nullptr;
 					if (!list->queue.size())
 					{
 						tWI = list->currentPlaying ? list->currentPlaying : list->currentItem();
-						P = tWI ? tWI->parent() : NULL;
+						P = tWI ? tWI->parent() : nullptr;
 						expandTree(P);
 						for (;;)
 						{
@@ -397,7 +397,7 @@ void PlaylistDock::next(bool playingError)
 }
 void PlaylistDock::prev()
 {
-	QTreeWidgetItem *tWI = NULL;
+	QTreeWidgetItem *tWI = nullptr;
 //Dla "wstecz" nie uwzględniam kolejkowania utworów
 	tWI = list->currentPlaying ? list->currentPlaying : list->currentItem();
 	if (tWI)
@@ -426,7 +426,7 @@ void PlaylistDock::stopAfter()
 }
 void PlaylistDock::toggleLock()
 {
-	foreach (QTreeWidgetItem *tWI, list->selectedItems())
+	for (QTreeWidgetItem *tWI : list->selectedItems())
 	{
 		const int entryFlags = PlaylistWidget::getFlags(tWI) ^ Playlist::Entry::Locked; //Toggle "Locked" flag
 		PlaylistWidget::setEntryFont(tWI, entryFlags);
@@ -464,9 +464,9 @@ void PlaylistDock::delEntries()
 	const QList<QTreeWidgetItem *> selectedItems = list->selectedItems();
 	if (!selectedItems.isEmpty())
 	{
-		QTreeWidgetItem *par = list->currentItem() ? list->currentItem()->parent() : NULL;
+		QTreeWidgetItem *par = list->currentItem() ? list->currentItem()->parent() : nullptr;
 		list->setItemsResizeToContents(false);
-		foreach (QTreeWidgetItem *tWI, selectedItems)
+		for (QTreeWidgetItem *tWI : selectedItems)
 		{
 			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
 				deleteTreeWidgetItem(tWI);
@@ -475,7 +475,7 @@ void PlaylistDock::delEntries()
 		if (list->currentItem())
 			par = list->currentItem();
 		else if (!list->getChildren().contains(par))
-			par = NULL;
+			par = nullptr;
 		if (!par)
 			par = list->topLevelItem(0);
 		list->setCurrentItem(par);
@@ -490,7 +490,7 @@ void PlaylistDock::delNonGroupEntries()
 	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to delete not grouped entries?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		list->setItemsResizeToContents(false);
-		foreach (QTreeWidgetItem *tWI, list->topLevelNonGroupsItems())
+		for (QTreeWidgetItem *tWI : list->topLevelNonGroupsItems())
 		{
 			if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
 				deleteTreeWidgetItem(tWI);
@@ -504,7 +504,7 @@ void PlaylistDock::clear()
 {
 	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to clear the list?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
-		lastPlaying = NULL;
+		lastPlaying = nullptr;
 		list->clear();
 	}
 }
@@ -524,7 +524,7 @@ void PlaylistDock::paste()
 {
 	const QMimeData *mimeData = QApplication::clipboard()->mimeData();
 	if (Functions::chkMimeData(mimeData))
-		list->add(Functions::getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : NULL);
+		list->add(Functions::getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : nullptr);
 }
 void PlaylistDock::renameGroup()
 {
@@ -603,8 +603,8 @@ void PlaylistDock::findNext()
 {
 	bool belowSelection = false;
 	QTreeWidgetItem *currentItem = list->currentItem();
-	QTreeWidgetItem *firstItem = NULL;
-	foreach (QTreeWidgetItem *tWI, list->getChildren(PlaylistWidget::ALL_CHILDREN))
+	QTreeWidgetItem *firstItem = nullptr;
+	for (QTreeWidgetItem *tWI : list->getChildren(PlaylistWidget::ALL_CHILDREN))
 	{
 		if (tWI->isHidden())
 			continue;

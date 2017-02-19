@@ -33,23 +33,15 @@
 #include <Decoder.hpp>
 #include <Reader.hpp>
 
-#if QT_VERSION >= 0x040800
-	#define USE_QRAWFONT
-#endif
-
 #include <QCoreApplication>
-#ifdef USE_QRAWFONT
-	#include <QRawFont>
-#else
-	#include <QFontDatabase>
-#endif
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QTextCodec>
+#include <QRawFont>
 #include <QAction>
 #include <QDir>
 
-#include <math.h>
+#include <cmath>
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
 	#include <QProgressBar>
@@ -94,12 +86,12 @@
 #endif
 
 PlayClass::PlayClass() :
-	demuxThr(NULL), vThr(NULL), aThr(NULL),
+	demuxThr(nullptr), vThr(nullptr), aThr(nullptr),
 	aRatioName("auto"),
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
 	firsttimeUpdateCache(true),
 #endif
-	ass(NULL), osd(NULL)
+	ass(nullptr), osd(nullptr)
 {
 	doSilenceBreak = doSilenceOnStart = false;
 
@@ -300,7 +292,7 @@ void PlayClass::chStream(const QString &s)
 		choosenAudioStream = -1;
 		choosenVideoStream = -1;
 		choosenSubtitlesStream = -1;
-		foreach (const QString &streamPair, s.split(','))
+		for (const QString &streamPair : s.split(','))
 		{
 			const QStringList splitted = streamPair.split(':');
 			if (splitted.count() != 2)
@@ -377,27 +369,16 @@ void PlayClass::loadSubsFile(const QString &fileName)
 			{
 				/* Wczytywanie katalogu z czcionkami dla wybranego pliku napisów */
 				const QString fontPath = Functions::filePath(fileName.mid(7));
-				foreach (const QString &fontFile, QDir(fontPath).entryList(QStringList() << "*.ttf" << "*.otf", QDir::Files))
+				for (const QString &fontFile : QDir(fontPath).entryList({"*.ttf", "*.otf"}, QDir::Files))
 				{
 					QFile f(fontPath + fontFile);
 					if (f.size() <= 0xA00000 /* 10MiB max */ && f.open(QFile::ReadOnly))
 					{
 						const QByteArray fontData = f.readAll();
 						f.close();
-#ifdef USE_QRAWFONT
 						const QString fontName = QRawFont(fontData, 0.0).familyName();
 						if (!fontName.isEmpty())
 							ass->addFont(fontName.toUtf8(), fontData);
-#else //For Qt older than 4.8
-						const int fontID = QFontDatabase::addApplicationFontFromData(fontData);
-						if (fontID != -1)
-						{
-							const QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontID);
-							QFontDatabase::removeApplicationFont(fontID);
-							if (!fontFamilies.isEmpty())
-								ass->addFont(fontFamilies.first().toUtf8(), fontData);
-						}
-#endif
 					}
 				}
 
@@ -500,7 +481,7 @@ void PlayClass::stopVThr()
 		if (vThr)
 		{
 			vThr->stop();
-			vThr = NULL;
+			vThr = nullptr;
 		}
 	}
 }
@@ -513,7 +494,7 @@ void PlayClass::stopAThr()
 		if (aThr)
 		{
 			aThr->stop();
-			aThr = NULL;
+			aThr = nullptr;
 		}
 	}
 }
@@ -535,14 +516,14 @@ void PlayClass::stopVDec()
 		else
 		{
 			vThr->stop(true);
-			vThr = NULL;
+			vThr = nullptr;
 		}
 	}
 	frame_last_pts = frame_last_delay = 0.0;
 	subtitlesStream = -1;
 	nextFrameB = false;
 	delete ass; //wywołuje też closeASS(), sMutex nie potrzebny, bo vThr jest zablokowany (mutex przed sMutex)
-	ass = NULL;
+	ass = nullptr;
 	fps = 0.0;
 }
 void PlayClass::stopADec()
@@ -554,7 +535,7 @@ void PlayClass::stopADec()
 		else
 		{
 			aThr->stop(true);
-			aThr = NULL;
+			aThr = nullptr;
 		}
 	}
 	audio_current_pts = skipAudioFrame = audio_last_delay = 0.0;
@@ -763,7 +744,7 @@ void PlayClass::slowDown()
 void PlayClass::setSpeed()
 {
 	bool ok;
-	double s = QInputDialog::getDouble(NULL, tr("Play speed"), tr("Set playback speed (sec.)"), speed, 0.05, 100.0, 2, &ok);
+	double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed (sec.)"), speed, 0.05, 100.0, 2, &ok);
 	if (ok)
 	{
 		speed = s;
@@ -867,7 +848,7 @@ void PlayClass::speedUpVideo()
 void PlayClass::setVideoSync()
 {
 	bool ok;
-	double vs = QInputDialog::getDouble(NULL, tr("Video delay"), tr("Set video delay (sec.)"), videoSync, -maxThreshold, maxThreshold, 1, &ok);
+	double vs = QInputDialog::getDouble(nullptr, tr("Video delay"), tr("Set video delay (sec.)"), videoSync, -maxThreshold, maxThreshold, 1, &ok);
 	if (!ok)
 		return;
 	videoSync = vs;
@@ -896,7 +877,7 @@ void PlayClass::setSubtitlesSync()
 	if (subtitlesStream == -1)
 		return;
 	bool ok;
-	double ss = QInputDialog::getDouble(NULL, tr("Subtitles delay"), tr("Set subtitles delay (sec.)"), subtitlesSync, fileSubs.isEmpty() ? 0 : -2147483647, 2147483647, 2, &ok);
+	double ss = QInputDialog::getDouble(nullptr, tr("Subtitles delay"), tr("Set subtitles delay (sec.)"), subtitlesSync, fileSubs.isEmpty() ? 0 : -2147483647, 2147483647, 2, &ok);
 	if (!ok)
 		return;
 	subtitlesSync = ss;
@@ -1109,7 +1090,7 @@ void PlayClass::demuxThrFinished()
 
 	const bool br  = demuxThr->demuxer.isAborted(), err = demuxThr->err;
 	delete demuxThr;
-	demuxThr = NULL;
+	demuxThr = nullptr;
 
 	if (doUnlock)
 		stopPauseMutex.unlock();
@@ -1196,9 +1177,9 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, VideoWriter *writer = NULL)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, VideoWriter *writer = nullptr)
 {
-	Decoder *dec = NULL;
+	Decoder *dec = nullptr;
 	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;
 	if (choosenStream >= 0 && choosenStream < streams.count() && streams[choosenStream]->type == type)
 	{
@@ -1218,7 +1199,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 					defaultStream = i;
 				if (!lang.isEmpty() && choosenLangStream < 0)
 				{
-					foreach (const QMPlay2Tag &tag, streams[i]->other_info)
+					for (const QMPlay2Tag &tag : streams[i]->other_info)
 					{
 						if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
 						{
@@ -1252,16 +1233,16 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 void PlayClass::load(Demuxer *demuxer)
 {
 	const QList<StreamInfo *> streams = demuxer->streamsInfo();
-	Decoder *dec = NULL;
+	Decoder *dec = nullptr;
 
 	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream)) //load video
 	{
 		vPackets.clear();
 		stopVDec(); //lock
 		if (videoEnabled)
-			dec = loadStream(streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), vThr ? vThr->getHWAccelWriter() : NULL);
+			dec = loadStream(streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), vThr ? vThr->getHWAccelWriter() : nullptr);
 		else
-			dec = NULL;
+			dec = nullptr;
 		if (dec)
 		{
 			const bool canEmitVideoStarted = !vThr;
@@ -1287,7 +1268,7 @@ void PlayClass::load(Demuxer *demuxer)
 				vThr->initFilters(false);
 
 				if (!vThr->processParams())
-					dec = NULL;
+					dec = nullptr;
 				else
 				{
 					if (!vThr->getHWAccelWriter())
@@ -1321,7 +1302,7 @@ void PlayClass::load(Demuxer *demuxer)
 			else
 			{
 				delete dec;
-				dec = NULL;
+				dec = nullptr;
 			}
 		}
 		if (!dec)
@@ -1338,7 +1319,7 @@ void PlayClass::load(Demuxer *demuxer)
 		if (audioEnabled)
 			dec = loadStream(streams, choosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO, choosenAudioLang);
 		else
-			dec = NULL;
+			dec = nullptr;
 		if (dec)
 		{
 			if (!aThr)
@@ -1348,7 +1329,7 @@ void PlayClass::load(Demuxer *demuxer)
 				aThr->setDec(dec);
 
 				if (!setAudioParams(streams[audioStream]->channels, streams[audioStream]->sample_rate))
-					dec = NULL;
+					dec = nullptr;
 
 				else if (reload)
 					seekTo = SEEK_STREAM_RELOAD;
@@ -1362,7 +1343,7 @@ void PlayClass::load(Demuxer *demuxer)
 			else
 			{
 				delete dec;
-				dec = NULL;
+				dec = nullptr;
 			}
 		}
 		if (!dec)
@@ -1396,7 +1377,7 @@ void PlayClass::load(Demuxer *demuxer)
 				if (!subtitlesEnabled || (!dec && subtitlesStream > -1 && streams[subtitlesStream]->must_decode))
 				{
 					subtitlesStream = -1;
-					dec = NULL;
+					dec = nullptr;
 				}
 				if (vThr && subtitlesStream > -1)
 				{
@@ -1425,7 +1406,7 @@ void PlayClass::load(Demuxer *demuxer)
 					if (dec)
 					{
 						delete dec;
-						dec = NULL;
+						dec = nullptr;
 					}
 				}
 			}

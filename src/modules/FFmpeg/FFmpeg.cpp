@@ -104,7 +104,7 @@ FFmpeg::FFmpeg() :
 
 #ifdef QMPlay2_VDPAU
 	vdpauDeintMethodB = new QComboBox;
-	vdpauDeintMethodB->addItems(QStringList() << tr("None") << "Temporal" << "Temporal-spatial");
+	vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
 	vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
 	if (vdpauDeintMethodB->currentIndex() < 0)
 		vdpauDeintMethodB->setCurrentIndex(1);
@@ -114,7 +114,7 @@ FFmpeg::FFmpeg() :
 #endif
 #if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
 	vaapiDeintMethodB = new QComboBox;
-	vaapiDeintMethodB->addItems(QStringList() << tr("None") << "Motion adaptive" << "Motion compensated");
+	vaapiDeintMethodB->addItems({tr("None"), "Motion adaptive", "Motion compensated"});
 	vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
 	if (vaapiDeintMethodB->currentIndex() < 0)
 		vaapiDeintMethodB->setCurrentIndex(1);
@@ -169,7 +169,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
 		modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
 #endif
-	modulesInfo += Info(FFReaderName, READER, QStringList() << "http" << "https" << "mms" << "rtmp" << "rtsp", moduleImg);
+	modulesInfo += Info(FFReaderName, READER, {"http", "https", "mms", "rtmp", "rtsp"}, moduleImg);
 	return modulesInfo;
 }
 void *FFmpeg::createInstance(const QString &name)
@@ -194,7 +194,7 @@ void *FFmpeg::createInstance(const QString &name)
 #endif
 	else if (name == FFReaderName)
 		return new FFReader;
-	return NULL;
+	return nullptr;
 }
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
@@ -316,8 +316,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	}
 	else
 	{
-		decoderDXVA2EB = NULL;
-		copyVideoDXVA2 = NULL;
+		decoderDXVA2EB = nullptr;
+		copyVideoDXVA2 = nullptr;
 	}
 #endif
 
@@ -343,7 +343,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	threadsB->setValue(sets().getInt("Threads"));
 
 	lowresB = new QComboBox;
-	lowresB->addItems(QStringList() << tr("Normal size") << tr("4x smaller") << tr("16x smaller"));
+	lowresB->addItems({tr("Normal size"), tr("4x smaller"), tr("16x smaller")});
 	lowresB->setCurrentIndex(sets().getInt("LowresValue"));
 	if (lowresB->currentIndex() < 0)
 	{
@@ -352,7 +352,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	}
 
 	thrTypeB = new QComboBox;
-	thrTypeB->addItems(QStringList() << tr("Frames") << tr("Slices"));
+	thrTypeB->addItems({tr("Frames"), tr("Slices")});
 	thrTypeB->setCurrentIndex(sets().getInt("ThreadTypeSlice"));
 	if (thrTypeB->currentIndex() < 0)
 	{

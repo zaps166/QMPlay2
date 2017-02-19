@@ -73,7 +73,7 @@ QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || getBool("PCM"))
 		modulesInfo += Info(PCMName, DEMUXER, getStringList("PCM/extensions"), pcmIcon);
 	if (showDisabled || getBool("Rayman2"))
-		modulesInfo += Info(Rayman2Name, DEMUXER, QStringList("apm"), rayman2Icon);
+		modulesInfo += Info(Rayman2Name, DEMUXER, QStringList{"apm"}, rayman2Icon);
 	return modulesInfo;
 }
 void *Inputs::createInstance(const QString &name)
@@ -84,12 +84,12 @@ void *Inputs::createInstance(const QString &name)
 		return new PCM(*this);
 	else if (name == Rayman2Name)
 		return new Rayman2(*this);
-	return NULL;
+	return nullptr;
 }
 
 QList<QAction *> Inputs::getAddActions()
 {
-	QAction *actTone = new QAction(NULL);
+	QAction *actTone = new QAction(nullptr);
 	actTone->setIcon(QIcon(":/ToneGenerator"));
 	actTone->setText(tr("Tone generator"));
 	actTone->connect(actTone, SIGNAL(triggered()), this, SLOT(add()));
@@ -137,7 +137,7 @@ HzW::HzW(int c, const QStringList &freqs)
 QString HzW::getFreqs() const
 {
 	QString freqs;
-	foreach (QSpinBox *sB, hzB)
+	for (QSpinBox *sB : hzB)
 		freqs += QString::number(sB->value()) + ",";
 	freqs.chop(1);
 	return freqs;
@@ -146,9 +146,9 @@ QString HzW::getFreqs() const
 /**/
 
 AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
-	QDialog(parent), moduleSetsW(moduleSetsW), sets(sets), hzW(NULL)
+	QDialog(parent), moduleSetsW(moduleSetsW), sets(sets), hzW(nullptr)
 {
-	QGroupBox *gB = NULL;
+	QGroupBox *gB = nullptr;
 	if (parent)
 	{
 		setWindowTitle(tr("Tone generator"));
@@ -169,8 +169,8 @@ AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
 	srateB->setSuffix(" Hz");
 	srateB->setValue(sets.getInt("ToneGenerator/srate"));
 
-	QDialogButtonBox *bb = NULL;
-	QPushButton *addB = NULL;
+	QDialogButtonBox *bb = nullptr;
+	QPushButton *addB = nullptr;
 	if (parent)
 	{
 		bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal);
@@ -238,7 +238,7 @@ void AddD::add()
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	toneGenerator = new AddD(sets(), NULL, this);
+	toneGenerator = new AddD(sets(), nullptr, this);
 
 	pcmB = new QGroupBox(tr("Uncompressed PCM sound"));
 	pcmB->setCheckable(true);
@@ -248,7 +248,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	pcmExtsE = new QLineEdit;
 	QString exts;
-	foreach (const QString &ext, sets().getStringList("PCM/extensions"))
+	for (const QString &ext : sets().getStringList("PCM/extensions"))
 		exts += ext + ";";
 	pcmExtsE->setText(exts);
 

@@ -35,7 +35,7 @@ Playlist::Entries M3U::read()
 
 	bool hasExtinf = false;
 	QString extinf[2];
-	foreach (const QByteArray &line, readLines())
+	for (const QByteArray &line : readLines())
 	{
 		if (line.simplified().isEmpty())
 			continue;
@@ -76,7 +76,7 @@ bool M3U::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
 	writer->write("#EXTM3U\r\n");
-	foreach (const Entry &entry, list)
+	for (const Entry &entry : list)
 	{
 		if (!entry.GID)
 		{

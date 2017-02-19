@@ -22,8 +22,8 @@
 
 VideoWriter *VideoWriter::createOpenGL2(HWAccelInterface *hwAccelInterface)
 {
-	foreach (Module *pluginInstance, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, pluginInstance->getModulesInfo())
+	for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : pluginInstance->getModulesInfo())
 			if (mod.type == Module::WRITER && mod.extensions.contains("video"))
 			{
 				VideoWriter *videoWriter = (VideoWriter *)pluginInstance->createInstance("OpenGL 2");
@@ -34,17 +34,17 @@ VideoWriter *VideoWriter::createOpenGL2(HWAccelInterface *hwAccelInterface)
 					if (!videoWriter->open())
 					{
 						delete videoWriter;
-						videoWriter = NULL;
+						videoWriter = nullptr;
 					}
 					return videoWriter;
 				}
 			}
 	delete hwAccelInterface;
-	return NULL;
+	return nullptr;
 }
 
 VideoWriter::VideoWriter() :
-	m_hwAccelInterface(NULL)
+	m_hwAccelInterface(nullptr)
 {}
 VideoWriter::~VideoWriter()
 {

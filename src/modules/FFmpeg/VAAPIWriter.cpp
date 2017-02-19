@@ -31,7 +31,7 @@
 
 VAAPIWriter::VAAPIWriter(Module &module, VAAPI *vaapi) :
 	vaapi(vaapi),
-	rgbImgFmt(NULL),
+	rgbImgFmt(nullptr),
 	aspect_ratio(0.0), zoom(0.0),
 	Hue(0), Saturation(0), Brightness(0), Contrast(0)
 {
@@ -100,7 +100,7 @@ bool VAAPIWriter::processParams(bool *)
 		emit QMPlay2Core.dockVideo(this);
 	else
 	{
-		resizeEvent(NULL);
+		resizeEvent(nullptr);
 		if (!drawTim.isActive())
 			drawTim.start(paused ? 1 : drawTimeout);
 	}
@@ -253,7 +253,7 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 			vaapi->VADisp, id, winId(),
 			srcQRect.x(), srcQRect.y(), srcQRect.width(), srcQRect.height(),
 			dstQRect.x(), dstQRect.y(), dstQRect.width(), dstQRect.height(),
-			NULL, 0, field | VA_CLEAR_DRAWABLE
+			nullptr, 0, field | VA_CLEAR_DRAWABLE
 		);
 		if (err != VA_STATUS_SUCCESS)
 			QMPlay2Core.log(QString("vaPutSurface() - ") + vaErrorStr(err));
@@ -295,7 +295,7 @@ bool VAAPIWriter::event(QEvent *e)
 
 QPaintEngine *VAAPIWriter::paintEngine() const
 {
-	return NULL;
+	return nullptr;
 }
 
 void VAAPIWriter::clearRGBImage()

@@ -66,15 +66,15 @@ class OpenGL2Common
 {
 	Q_DECLARE_TR_FUNCTIONS(OpenGL2Common)
 #ifndef OPENGL_ES2
-	typedef    void  (APIENTRY *GLActiveTexture)(GLenum);
-	typedef    void  (APIENTRY *GLGenBuffers)(GLsizei, GLuint *);
-	typedef    void  (APIENTRY *GLBindBuffer)(GLenum, GLuint);
-	typedef    void  (APIENTRY *GLBufferData)(GLenum, GLsizeiptr, const void *, GLenum);
-	typedef    void  (APIENTRY *GLDeleteBuffers)(GLsizei, const GLuint *);
+	using GLActiveTexture  = void  (APIENTRY *)(GLenum);
+	using GLGenBuffers     = void  (APIENTRY *)(GLsizei, GLuint *);
+	using GLBindBuffer     = void  (APIENTRY *)(GLenum, GLuint);
+	using GLBufferData     = void  (APIENTRY *)(GLenum, GLsizeiptr, const void *, GLenum);
+	using GLDeleteBuffers  = void  (APIENTRY *)(GLsizei, const GLuint *);
 #endif
-	typedef    void *(APIENTRY *GLMapBufferRange)(GLenum, GLintptr, GLsizeiptr, GLbitfield);
-	typedef    void *(APIENTRY *GLMapBuffer)(GLenum, GLbitfield);
-	typedef GLboolean(APIENTRY *GLUnmapBuffer)(GLenum);
+	using GLMapBufferRange = void *(APIENTRY *)(GLenum, GLintptr, GLsizeiptr, GLbitfield);
+	using GLMapBuffer      = void *(APIENTRY *)(GLenum, GLbitfield);
+	using GLUnmapBuffer    = GLboolean(APIENTRY *)(GLenum);
 public:
 	OpenGL2Common();
 	virtual ~OpenGL2Common();

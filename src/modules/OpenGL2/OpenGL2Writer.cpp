@@ -33,7 +33,7 @@
 #endif
 
 OpenGL2Writer::OpenGL2Writer(Module &module) :
-	drawable(NULL),
+	drawable(nullptr),
 	allowPBO(true)
 #ifdef OPENGL_NEW_API
 	, forceRtt(false)
@@ -223,7 +223,7 @@ bool OpenGL2Writer::open()
 		bool hasBrightness = false, hasContrast = false, hasSharpness = false;
 		if (!drawable->videoAdjustmentKeys.isEmpty())
 		{
-			foreach (const QString &key, drawable->videoAdjustmentKeys)
+			for (const QString &key : drawable->videoAdjustmentKeys)
 			{
 				if (key == "Brightness")
 					hasBrightness = true;

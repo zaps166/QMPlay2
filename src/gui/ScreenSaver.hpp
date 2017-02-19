@@ -39,8 +39,7 @@ private:
 
 	ScreenSaverPriv *m_priv;
 
-	typedef QMap<int, bool> Refs;
-	Refs m_refs;
+	QMap<int, bool> m_refs;
 };
 
 #endif // SCREENSAVER_HPP

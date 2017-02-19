@@ -28,7 +28,7 @@
 class Writer : public ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-	static Writer *create(const QString &, const QStringList &modNames = QStringList());
+	static Writer *create(const QString &, const QStringList &modNames = {});
 
 	inline QString getUrl() const
 	{

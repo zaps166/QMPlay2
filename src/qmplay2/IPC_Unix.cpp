@@ -40,7 +40,7 @@ class IPCSocketPriv
 public:
 	inline IPCSocketPriv(const QString &fileName, int fd = -1) :
 		fileName(fileName),
-		socketNotifier(NULL),
+		socketNotifier(nullptr),
 		fd(fd)
 	{}
 
@@ -54,7 +54,7 @@ class IPCServerPriv
 public:
 	inline IPCServerPriv(const QString &fileName) :
 		fileName(fileName),
-		socketNotifier(NULL),
+		socketNotifier(nullptr),
 		fd(-1)
 	{}
 
@@ -108,7 +108,7 @@ void IPCSocket::close()
 	if (m_priv->fd > 0)
 	{
 		delete m_priv->socketNotifier;
-		m_priv->socketNotifier = NULL;
+		m_priv->socketNotifier = nullptr;
 
 		::close(m_priv->fd);
 		m_priv->fd = -1;
@@ -206,7 +206,7 @@ void IPCServer::close()
 		if (m_priv->socketNotifier)
 		{
 			unlink(m_priv->fileName.toLocal8Bit());
-			m_priv->socketNotifier = NULL;
+			m_priv->socketNotifier = nullptr;
 		}
 	}
 }

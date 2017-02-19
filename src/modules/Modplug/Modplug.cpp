@@ -35,14 +35,14 @@ QList<Modplug::Info> Modplug::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("ModplugEnabled"))
-		modulesInfo += Info(DemuxerName, DEMUXER, QStringList() << "669" << "amf" << "ams" << "dbm" << "dmf" << "dsm" << "far" << "it" << "j2b" << "mdl" << "med" << "mod" << "mt2" << "mtm" << "okt" << "psm" << "ptm" << "s3m" << "stm" << "ult" << "umx" << "xm" << "sfx", modIcon);
+		modulesInfo += Info(DemuxerName, DEMUXER, QStringList{"669", "amf", "ams", "dbm", "dmf", "dsm", "far", "it", "j2b", "mdl", "med", "mod", "mt2", "mtm", "okt", "psm", "ptm", "s3m", "stm", "ult", "umx", "xm", "sfx"}, modIcon);
 	return modulesInfo;
 }
 void *Modplug::createInstance(const QString &name)
 {
 	if (name == DemuxerName && getBool("ModplugEnabled"))
 		return new MPDemux(*this);
-	return NULL;
+	return nullptr;
 }
 
 Modplug::SettingsWidget *Modplug::getSettingsWidget()
@@ -66,7 +66,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	enabledB->setChecked(sets().getBool("ModplugEnabled"));
 
 	resamplingB = new QComboBox;
-	resamplingB->addItems(QStringList() << "Nearest" << "Linear" << "Spline" << "FIR");
+	resamplingB->addItems({"Nearest", "Linear", "Spline", "FIR"});
 	resamplingB->setCurrentIndex(sets().getInt("ModplugResamplingMethod"));
 	if (resamplingB->currentIndex() < 0)
 	{

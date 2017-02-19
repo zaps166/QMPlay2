@@ -37,7 +37,7 @@ private:
 	void clearBuffers();
 	double filter(Buffer &data, bool flush);
 
-	typedef QVector<float> FloatVector;
+	using FloatVector = QVector<float>;
 
 	QMutex mutex;
 	bool enabled;

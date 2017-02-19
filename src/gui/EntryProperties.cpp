@@ -44,14 +44,14 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	if (!tWI)
 		return;
 
-	catalogCB = NULL;
-	browseDirB = browseFileB = NULL;
-	pthE = NULL;
-	addrB = NULL;
+	catalogCB = nullptr;
+	browseDirB = browseFileB = nullptr;
+	pthE = nullptr;
+	addrB = nullptr;
 #ifdef QMPlay2_TagEditor
-	tagEditor = NULL;
+	tagEditor = nullptr;
 #endif
-	fileSizeL = NULL;
+	fileSizeL = nullptr;
 
 	setWindowTitle(tr("Properties"));
 

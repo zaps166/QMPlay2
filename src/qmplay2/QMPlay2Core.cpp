@@ -38,7 +38,7 @@
 	#include <QStandardPaths>
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 
 extern "C"
 {
@@ -50,13 +50,13 @@ QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
 {
-	systemTray = NULL;
+	systemTray = nullptr;
 	qmplay2Core = this;
 
 	QFile f(":/Languages.csv");
 	if (f.open(QFile::ReadOnly))
 	{
-		foreach (const QByteArray &line, f.readAll().split('\n'))
+		for (const QByteArray &line : f.readAll().split('\n'))
 		{
 			const QList<QByteArray> lineSplitted = line.split(',');
 			if (lineSplitted.count() == 2)
@@ -78,7 +78,7 @@ QString QMPlay2CoreClass::getLibDir()
 	if (!f.fileName().isEmpty() && f.open(QFile::ReadOnly | QFile::Text))
 	{
 		const quintptr funcAddr = (quintptr)QMPlay2CoreClass::getLibDir;
-		foreach (const QByteArray &line, f.readAll().split('\n'))
+		for (const QByteArray &line : f.readAll().split('\n'))
 			if (!line.isEmpty())
 			{
 				quintptr addrBegin, addrEnd;
@@ -207,14 +207,14 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		else
 		{
 			//Scan for modules in subdirectories - designed for CMake non-installed build
-			foreach (const QFileInfo &dInfo, QDir(libDir + "modules/").entryInfoList(QDir::Dirs))
-				foreach (const QFileInfo &fInfo, QDir(dInfo.filePath()).entryInfoList(QDir::Files))
+			for (const QFileInfo &dInfo : QDir(libDir + "modules/").entryInfoList(QDir::Dirs))
+				for (const QFileInfo &fInfo : QDir(dInfo.filePath()).entryInfoList(QDir::Files))
 					if (QLibrary::isLibrary(fInfo.fileName()))
 						pluginsList += fInfo;
 		}
 
 		QStringList pluginsName;
-		foreach (const QFileInfo &fInfo, pluginsList)
+		for (const QFileInfo &fInfo : pluginsList)
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
 				QLibrary lib(fInfo.filePath());
@@ -222,7 +222,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else
 				{
-					typedef Module *(*QMPlay2PluginInstance)();
+					using QMPlay2PluginInstance = Module *(*)();
 					QMPlay2PluginInstance qmplay2PluginInstance = (QMPlay2PluginInstance)lib.resolve("qmplay2PluginInstance");
 					if (!qmplay2PluginInstance)
 					{
@@ -258,7 +258,7 @@ void QMPlay2CoreClass::quit()
 {
 	if (settingsDir.isEmpty())
 		return;
-	foreach (Module *pluginInstance, pluginsInstance)
+	for (Module *pluginInstance : pluginsInstance)
 		delete pluginInstance;
 	pluginsInstance.clear();
 	videoFilters.clear();
@@ -292,12 +292,12 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 		defaultModules << "FFmpeg Decoder";
 	QStringList availableModules;
 	const QString moduleType = type.mid(0, typeLen);
-	foreach (Module *module, pluginsInstance)
-		foreach (const Module::Info &moduleInfo, module->getModulesInfo())
+	for (Module *module : pluginsInstance)
+		for (const Module::Info &moduleInfo : module->getModulesInfo())
 			if ((moduleInfo.type == Module::WRITER && moduleInfo.extensions.contains(moduleType)) || (moduleInfo.type == Module::DECODER && moduleType == "decoder"))
 				availableModules += moduleInfo.name;
 	QStringList modules;
-	foreach (const QString &module, settings->getStringList(type, defaultModules))
+	for (const QString &module : settings->getStringList(type, defaultModules))
 	{
 		const int idx = availableModules.indexOf(module);
 		if (idx > -1)
@@ -354,7 +354,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 
 QStringList QMPlay2CoreClass::getLanguages() const
 {
-	QStringList langs = QDir(langDir).entryList(QStringList() << "*.qm", QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
+	QStringList langs = QDir(langDir).entryList({"*.qm"}, QDir::NoDotAndDotDot | QDir::Files | QDir::NoSymLinks);
 	for (int i = 0; i < langs.size(); i++)
 	{
 		const int idx = langs.at(i).indexOf('.');
@@ -384,7 +384,7 @@ void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)
 QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
 {
 	QList<QWidget *> ret;
-	foreach (const QPointer<QWidget> &w, videoFilters)
+	for (const QPointer<QWidget> &w : videoFilters)
 		if (w)
 			ret.append(w);
 	return ret;

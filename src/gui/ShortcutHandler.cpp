@@ -108,7 +108,7 @@ void ShortcutHandler::appendAction(QAction *action, const QString &settingsName,
 void ShortcutHandler::save()
 {
 	Settings &settings = QMPlay2Core.getSettings();
-	for (Shortcuts::const_iterator it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
+	for (auto it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
 	{
 		const QString shortcut = it.value().first;
 		it.key()->setShortcut(shortcut);
@@ -118,13 +118,13 @@ void ShortcutHandler::save()
 }
 void ShortcutHandler::restore()
 {
-	for (Shortcuts::iterator it = m_shortcuts.begin(), itEnd = m_shortcuts.end(); it != itEnd; ++it)
+	for (auto it = m_shortcuts.begin(), itEnd = m_shortcuts.end(); it != itEnd; ++it)
 		it.value().first = it.key()->shortcut().toString();
 	emit dataChanged(createIndex(0, 1), createIndex(m_actions.count(), 1));
 }
 void ShortcutHandler::reset()
 {
-	for (Shortcuts::const_iterator it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
+	for (auto it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
 	{
 		const QString defaultShortcut = it.value().second;
 		m_shortcuts[it.key()].first = defaultShortcut;

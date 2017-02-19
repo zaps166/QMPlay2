@@ -36,9 +36,9 @@ QList<Subtitles::Info> Subtitles::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("SRT_enabled"))
-		modulesInfo += Info(SRTSubsName, SUBSDEC, QStringList() << "srt" << "vtt");
+		modulesInfo += Info(SRTSubsName, SUBSDEC, QStringList{"srt", "vtt"});
 	if (showDisabled || getBool("Classic_enabled"))
-		modulesInfo += Info(ClassicSubsName, SUBSDEC, QStringList() << "sub" << "txt" << "tmp");
+		modulesInfo += Info(ClassicSubsName, SUBSDEC, QStringList{"sub", "txt", "tmp"});
 	return modulesInfo;
 }
 void *Subtitles::createInstance(const QString &name)
@@ -47,7 +47,7 @@ void *Subtitles::createInstance(const QString &name)
 		return new SRT;
 	else if (name == ClassicSubsName && getBool("Classic_enabled"))
 		return new Classic(getBool("Use_mDVD_FPS"), getDouble("Sub_max_s"));
-	return NULL;
+	return nullptr;
 }
 
 Subtitles::SettingsWidget *Subtitles::getSettingsWidget()

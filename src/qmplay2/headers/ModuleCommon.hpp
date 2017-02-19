@@ -27,7 +27,7 @@ public:
 	virtual bool set();
 protected:
 	inline ModuleCommon() :
-		module(NULL)
+		module(nullptr)
 	{}
 	~ModuleCommon();
 

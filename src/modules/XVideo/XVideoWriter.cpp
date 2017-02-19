@@ -60,7 +60,7 @@ bool Drawable::event(QEvent *e)
 
 QPaintEngine *Drawable::paintEngine() const
 {
-	return NULL;
+	return nullptr;
 }
 
 /**/
@@ -70,8 +70,8 @@ XVideoWriter::XVideoWriter(Module &module) :
 	aspect_ratio(0.0), zoom(0.0),
 	hasVideoSize(false),
 	useSHM(false),
-	drawable(NULL),
-	xv(NULL)
+	drawable(nullptr),
+	xv(nullptr)
 {
 	addParam("W");
 	addParam("H");
@@ -170,7 +170,7 @@ bool XVideoWriter::processParams(bool *)
 		xv->setVideoEqualizer(Hue, Saturation, Brightness, Contrast);
 
 	if (doResizeEvent)
-		drawable->resizeEvent(NULL);
+		drawable->resizeEvent(nullptr);
 
 	return readyWrite();
 }
@@ -200,6 +200,6 @@ bool XVideoWriter::open()
 		return true;
 	}
 	delete xv;
-	xv = NULL;
+	xv = nullptr;
 	return false;
 }

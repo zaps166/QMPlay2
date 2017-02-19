@@ -96,7 +96,7 @@ bool FreedesktopNotify::showMessage(const QString &summary, const QString &messa
 		m_notificationId = 0;
 	}
 
-	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, "QMPlay2", summary, message, QStringList(), hints, m_timeout);
+	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, "QMPlay2", summary, message, {}, hints, m_timeout);
 	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)), SLOT(callFinished(QDBusPendingCallWatcher *)));
 	return true;

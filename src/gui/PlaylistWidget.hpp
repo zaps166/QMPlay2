@@ -97,7 +97,7 @@ private slots:
 private:
 	void run();
 
-	bool add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, QStringList *existingEntries = NULL, bool loadList = false);
+	bool add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, QStringList *existingEntries = nullptr, bool loadList = false);
 	QTreeWidgetItem *insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries);
 
 	PlaylistWidget &pLW;
@@ -125,13 +125,13 @@ public:
 
 	PlaylistWidget();
 
-	QString getUrl(QTreeWidgetItem *tWI = NULL) const;
+	QString getUrl(QTreeWidgetItem *tWI = nullptr) const;
 
 	void setItemsResizeToContents(bool);
 
 	void sortCurrentGroup(int column, Qt::SortOrder sortOrder);
 
-	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = QStringList(), bool loadList = false, bool forceEnqueue = false);
+	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = {}, bool loadList = false, bool forceEnqueue = false);
 	bool add(const QStringList &, bool atEndOfList = false);
 	void sync(const QString &pth, QTreeWidgetItem *par, bool notDir);
 	void quickSync(const QString &pth, QTreeWidgetItem *par);
@@ -148,14 +148,14 @@ public:
 
 	QTreeWidgetItem *newGroup();
 
-	QList<QTreeWidgetItem *> getChildren(CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = NULL) const;
+	QList<QTreeWidgetItem *> getChildren(CHILDREN children = ALL_CHILDREN, const QTreeWidgetItem *parent = nullptr) const;
 
 	bool canModify(bool all = true) const;
 
 	void enqueue();
 	void refresh(REFRESH Refresh = REFRESH_ALL);
 
-	void processItems(QList<QTreeWidgetItem *> *itemsToShow = NULL, bool hideGroups = false);
+	void processItems(QList<QTreeWidgetItem *> *itemsToShow = nullptr, bool hideGroups = false);
 
 	QString currentPlayingUrl;
 	QTreeWidgetItem *currentPlaying;

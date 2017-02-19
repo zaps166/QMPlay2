@@ -31,8 +31,8 @@ class OggHelper
 	Q_DISABLE_COPY(OggHelper)
 
 public:
-	typedef QPair<qint64, qint64> Chain;
-	typedef QVector<Chain> Chains;
+	using Chain = QPair<qint64, qint64>;
+	using Chains = QVector<Chain>;
 
 	OggHelper(const QString &url, int track, qint64 size, const AVIOInterruptCB &interruptCB);
 	OggHelper(const QString &url, bool &isAborted);

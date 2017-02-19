@@ -130,7 +130,7 @@ void *AudioFilters::createInstance(const QString &name)
 		return new Echo(*this);
 	else if (name == DysonCompressorName)
 		return new DysonCompressor(*this);
-	return NULL;
+	return nullptr;
 }
 
 AudioFilters::SettingsWidget *AudioFilters::getSettingsWidget()
@@ -275,17 +275,17 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QLabel *eqQualityL = new QLabel(tr("Sound equalizer quality") + ": ");
 
 	eqQualityB = new QComboBox;
-	eqQualityB->addItems(QStringList()
-		<< tr("Low") + ", " + tr("filter size") + ": 256"
-		<< tr("Low") + ", " + tr("filter size") + ": 512"
-		<< tr("Medium") + ", " + tr("filter size") + ": 1024"
-		<< tr("Medium") + ", " + tr("filter size") + ": 2048"
-		<< tr("High") + ", " + tr("filter size") + ": 4096"
-		<< tr("Very high") + ", " + tr("filter size") + ": 8192"
-		<< tr("Very high") + ", " + tr("filter size") + ": 16384"
-		<< tr("Very high") + ", " + tr("filter size") + ": 32768"
-		<< tr("Very high") + ", " + tr("filter size") + ": 65536"
-	);
+	eqQualityB->addItems({
+		tr("Low") + ", " + tr("filter size") + ": 256",
+		tr("Low") + ", " + tr("filter size") + ": 512",
+		tr("Medium") + ", " + tr("filter size") + ": 1024",
+		tr("Medium") + ", " + tr("filter size") + ": 2048",
+		tr("High") + ", " + tr("filter size") + ": 4096",
+		tr("Very high") + ", " + tr("filter size") + ": 8192",
+		tr("Very high") + ", " + tr("filter size") + ": 16384",
+		tr("Very high") + ", " + tr("filter size") + ": 32768",
+		tr("Very high") + ", " + tr("filter size") + ": 65536"
+	});
 	eqQualityB->setCurrentIndex(sets().getInt("Equalizer/nbits") - 8);
 
 	QLabel *eqSlidersL = new QLabel(tr("Slider count in sound equalizer") + ": ");

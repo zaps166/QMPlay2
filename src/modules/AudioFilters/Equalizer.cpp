@@ -25,7 +25,7 @@ extern "C"
 	#include <libavcodec/avfft.h>
 }
 
-#include <math.h>
+#include <cmath>
 
 static inline void fft_calc(FFTContext *fft_ctx, FFTComplex *cplx)
 {
@@ -80,7 +80,7 @@ float Equalizer::getAmpl(int val)
 Equalizer::Equalizer(Module &module) :
 	FFT_NBITS(0), FFT_SIZE(0), FFT_SIZE_2(0),
 	canFilter(false), hasParameters(false), enabled(false),
-	mutex(QMutex::Recursive), fftIn(NULL), fftOut(NULL)
+	mutex(QMutex::Recursive), fftIn(nullptr), fftOut(nullptr)
 {
 	SetModule(module);
 }
@@ -211,10 +211,10 @@ void Equalizer::alloc(bool b)
 		FFT_NBITS = FFT_SIZE = FFT_SIZE_2 = 0;
 		av_fft_end(fftIn);
 		av_fft_end(fftOut);
-		fftIn = NULL;
-		fftOut = NULL;
+		fftIn = nullptr;
+		fftOut = nullptr;
 		av_free(complex);
-		complex = NULL;
+		complex = nullptr;
 		input.clear();
 		last_samples.clear();
 		wind_f.clear();

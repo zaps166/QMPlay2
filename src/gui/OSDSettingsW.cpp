@@ -27,7 +27,7 @@
 
 static void appendColon(const QObjectList &objects)
 {
-	foreach (QObject *obj, objects)
+	for (QObject *obj : objects)
 	{
 		appendColon(obj->children());
 		if (QLabel *label = qobject_cast<QLabel *>(obj))

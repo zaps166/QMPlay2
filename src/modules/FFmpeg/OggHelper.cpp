@@ -57,22 +57,22 @@ static const int MaxPageSize = 65307; //MinHeaderSize + 255 + 255 * 255
 /**/
 
 OggHelper::OggHelper(const QString &url, int track, qint64 size, const AVIOInterruptCB &interruptCB) :
-	io(NULL), pb(NULL),
-	isAborted(NULL),
+	io(nullptr), pb(nullptr),
+	isAborted(nullptr),
 	size(size),
 	track(track)
 {
-	if (avio_open2(&io, url.toUtf8(), AVIO_FLAG_READ, &interruptCB, NULL) >= 0)
-		pb = avio_alloc_context((quint8 *)av_malloc(4096), 4096, false, this, readPacket, NULL, seekPacket);
+	if (avio_open2(&io, url.toUtf8(), AVIO_FLAG_READ, &interruptCB, nullptr) >= 0)
+		pb = avio_alloc_context((quint8 *)av_malloc(4096), 4096, false, this, readPacket, nullptr, seekPacket);
 }
 OggHelper::OggHelper(const QString &url, bool &isAborted) :
-	io(NULL), pb(NULL),
+	io(nullptr), pb(nullptr),
 	isAborted(&isAborted),
 	size(-1),
 	track(-1)
 {
 	const AVIOInterruptCB avioInterruptCB = {(int(*)(void *))interruptCB, &isAborted};
-	avio_open2(&io, url.toUtf8(), AVIO_FLAG_READ, &avioInterruptCB, NULL);
+	avio_open2(&io, url.toUtf8(), AVIO_FLAG_READ, &avioInterruptCB, nullptr);
 }
 OggHelper::~OggHelper()
 {

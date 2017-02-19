@@ -29,7 +29,7 @@ public:
 	{}
 	inline void setTitleBarVisible(bool v = true)
 	{
-		setTitleBarWidget((titleBarVisible = v) && globalTitleBarVisible ? NULL : &emptyW);
+		setTitleBarWidget((titleBarVisible = v) && globalTitleBarVisible ? nullptr : &emptyW);
 	}
 	inline void setGlobalTitleBarVisible(bool v)
 	{

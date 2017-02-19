@@ -42,7 +42,7 @@ public:
 	{}
 
 	int number;
-	QVector<QPair<int, QMPlay2MediaType> > streams;
+	QVector<QPair<int, QMPlay2MediaType>> streams;
 };
 
 #endif // CHAPTERPROGRAMINFO_HPP

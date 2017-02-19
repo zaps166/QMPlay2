@@ -19,7 +19,7 @@
 #include <ALSAWriter.hpp>
 
 #include <alsa/asoundlib.h>
-#include <math.h>
+#include <cmath>
 
 #if SND_LIB_VERSION >= 0x1001B
 	#define HAVE_CHMAP
@@ -56,11 +56,11 @@ static void convert_samples(const float *src, const int samples, T *int_samples,
 
 static bool set_snd_pcm_hw_params(snd_pcm_t *snd, snd_pcm_hw_params_t *params, snd_pcm_format_t fmt, unsigned &channels, unsigned &sample_rate, unsigned &delay_us)
 {
-	const bool ok = !snd_pcm_hw_params_set_access(snd, params, SND_PCM_ACCESS_RW_INTERLEAVED) && !snd_pcm_hw_params_set_format(snd, params, fmt) && !snd_pcm_hw_params_set_channels_near(snd, params, &channels) && !snd_pcm_hw_params_set_rate_near(snd, params, &sample_rate, NULL);
+	const bool ok = !snd_pcm_hw_params_set_access(snd, params, SND_PCM_ACCESS_RW_INTERLEAVED) && !snd_pcm_hw_params_set_format(snd, params, fmt) && !snd_pcm_hw_params_set_channels_near(snd, params, &channels) && !snd_pcm_hw_params_set_rate_near(snd, params, &sample_rate, nullptr);
 	if (ok)
 	{
 		unsigned period_us = delay_us >> 2;
-		return (!snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, NULL) && !snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, NULL)) || (!snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, NULL) && !snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, NULL));
+		return (!snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, nullptr) && !snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, nullptr)) || (!snd_pcm_hw_params_set_period_time_near(snd, params, &period_us, nullptr) && !snd_pcm_hw_params_set_buffer_time_near(snd, params, &delay_us, nullptr));
 	}
 	return false;
 }
@@ -68,7 +68,7 @@ static bool set_snd_pcm_hw_params(snd_pcm_t *snd, snd_pcm_hw_params_t *params, s
 /**/
 
 ALSAWriter::ALSAWriter(Module &module) :
-	snd(NULL),
+	snd(nullptr),
 	delay(0.0),
 	sample_rate(0), channels(0),
 	autoFindMultichannelDevice(false), err(false)
@@ -139,7 +139,7 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
 				}
 #endif
 				snd_pcm_close(snd);
-				snd = NULL;
+				snd = nullptr;
 			}
 			if (mustAutoFind)
 			{
@@ -343,7 +343,7 @@ void ALSAWriter::close()
 		else
 			snd_pcm_drop(snd);
 		snd_pcm_close(snd);
-		snd = NULL;
+		snd = nullptr;
 	}
 	err = false;
 }

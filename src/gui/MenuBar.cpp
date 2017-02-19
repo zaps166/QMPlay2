@@ -105,7 +105,7 @@ void MenuBar::Widgets::menuShow()
 	QMenu *menu = qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->createPopupMenu();
 	if (menu)
 	{
-		foreach (QAction *act, menu->actions())
+		for (QAction *act : menu->actions())
 		{
 			if (act->parent() == menu)
 				act->setParent(this);
@@ -226,7 +226,7 @@ MenuBar::Player::Player(MenuBar *parent) :
 	newAction(Player::tr("&Mute"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
 
 	if (!QMPlay2GUI.pipe)
-		detach = NULL;
+		detach = nullptr;
 	else
 	{
 		addSeparator();
@@ -234,7 +234,7 @@ MenuBar::Player::Player(MenuBar *parent) :
 	}
 
 	if (!QMPlay2CoreClass::canSuspend())
-		suspend = NULL;
+		suspend = nullptr;
 	else
 	{
 		addSeparator();
@@ -434,7 +434,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 		act->setCheckable(true);
 		profilesGroup->addAction(act);
 
-		foreach (const QString &profile, QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+		for (const QString &profile : QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
 		{
 			QAction *act = profiles->addAction(profile, parent, SLOT(changeProfile()));
 			act->setProperty("path", profile);
@@ -443,7 +443,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 		}
 
 		const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile", "/").toString();
-		foreach (act, profilesGroup->actions())
+		for (QAction *act : profilesGroup->actions())
 		{
 			if (act->property("path").toString() == currentProfile)
 			{
@@ -633,7 +633,7 @@ void MenuBar::removeProfile()
 		else
 		{
 			const QString settingsDir = QMPlay2Core.getSettingsDir() + profile;
-			foreach (const QString &fName, QDir(settingsDir).entryList(QStringList("*.ini")))
+			for (const QString &fName : QDir(settingsDir).entryList({"*.ini"}))
 				QFile::remove(settingsDir + fName);
 			QDir(QMPlay2Core.getSettingsDir()).rmdir(profile);
 			delete act;

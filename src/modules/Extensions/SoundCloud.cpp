@@ -98,7 +98,7 @@ void ResultsSound::contextMenu(const QPoint &point)
 		{
 			const QString name = tWI->text(0);
 			QAction *act;
-			foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+			for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 				if (!dynamic_cast<SoundCloud *>(QMPlay2Ext) && (act = QMPlay2Ext->getAction(name, -2, url, addressPrefixName, param)))
 				{
 					act->setParent(&menu);
@@ -113,7 +113,7 @@ void ResultsSound::contextMenu(const QPoint &point)
 
 SoundCloudW::SoundCloudW() :
 	currPage(1),
-	searchReply(NULL),
+	searchReply(nullptr),
 	net(this)
 {
 	dw = new DockWidget;
@@ -167,7 +167,7 @@ void SoundCloudW::search()
 	if (searchReply)
 	{
 		searchReply->deleteLater();
-		searchReply = NULL;
+		searchReply = nullptr;
 	}
 	resultsW->clear();
 	if (!name.isEmpty())
@@ -207,9 +207,9 @@ void SoundCloudW::netFinished(HttpReply *reply)
 
 			const QIcon soundcloudIcon(":/soundcloud");
 
-			foreach (const QJsonValue &_track, jsonData.array())
+			for (const QJsonValue &trackJson : jsonData.array())
 			{
-				const QJsonObject track = _track.toObject();
+				const QJsonObject track = trackJson.toObject();
 
 				QTreeWidgetItem *tWI = new QTreeWidgetItem(resultsW);
 				tWI->setData(0, Qt::UserRole, QString::number(track.value("id").toInt()));
@@ -237,7 +237,7 @@ void SoundCloudW::netFinished(HttpReply *reply)
 	}
 	if (reply == searchReply)
 	{
-		searchReply = NULL;
+		searchReply = nullptr;
 		progressB->hide();
 	}
 	reply->deleteLater();
@@ -324,11 +324,11 @@ QAction *SoundCloud::getAction(const QString &name, double, const QString &url, 
 {
 	if (name != url)
 	{
-		QAction *act = new QAction(SoundCloudW::tr("Search on SoundCloud"), NULL);
+		QAction *act = new QAction(SoundCloudW::tr("Search on SoundCloud"), nullptr);
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/soundcloud"));
 		act->setProperty("name", name);
 		return act;
 	}
-	return NULL;
+	return nullptr;
 }

@@ -201,7 +201,7 @@ void VideoFiltersThr::run()
 		bool pending = false;
 		do
 		{
-			foreach (VideoFilter *vFilter, videoFilters.filters)
+			for (VideoFilter *vFilter : videoFilters.filters)
 			{
 				pending |= vFilter->filter(queue);
 				if (queue.isEmpty())
@@ -260,7 +260,7 @@ void VideoFilters::clear()
 	if (!filters.isEmpty())
 	{
 		filtersThr.stop();
-		foreach (VideoFilter *vFilter, filters)
+		for (VideoFilter *vFilter : filters)
 			delete vFilter;
 		filters.clear();
 	}
@@ -269,11 +269,11 @@ void VideoFilters::clear()
 
 VideoFilter *VideoFilters::on(const QString &filterName)
 {
-	VideoFilter *filter = NULL;
+	VideoFilter *filter = nullptr;
 	if (filterName == "PrepareForHWBobDeint")
 		filter = new PrepareForHWBobDeint;
-	else foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	else for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if ((mod.type & 0xF) == Module::VIDEOFILTER && mod.name == filterName)
 			{
 				filter = (VideoFilter *)module->createInstance(mod.name);
@@ -290,7 +290,7 @@ void VideoFilters::off(VideoFilter *&videoFilter)
 	{
 		filters.remove(idx);
 		delete videoFilter;
-		videoFilter = NULL;
+		videoFilter = nullptr;
 	}
 }
 
@@ -299,7 +299,7 @@ void VideoFilters::clearBuffers()
 	if (!filters.isEmpty())
 	{
 		filtersThr.waitForFinished(true);
-		foreach (VideoFilter *vFilter, filters)
+		for (VideoFilter *vFilter : filters)
 			vFilter->clearBuffer();
 	}
 	outputQueue.clear();

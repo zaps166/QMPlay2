@@ -36,7 +36,7 @@ FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
 	threads(0), lowres(0),
 	thread_type_slice(false),
 	lastFrameW(-1), lastFrameH(-1),
-	sws_ctx(NULL),
+	sws_ctx(nullptr),
 	desiredPixFmt(-1)
 {
 	SetModule(module);
@@ -254,7 +254,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 					decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
 					if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
 					{
-						sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, NULL, NULL, NULL);
+						sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
 						lastFrameW = frame->width;
 						lastFrameH = frame->height;
 					}

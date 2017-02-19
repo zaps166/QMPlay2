@@ -67,8 +67,8 @@ Extensions::Extensions() :
 	init("YouTube/youtubedl", QMPlay2Core.getSettingsDir() + "youtube-dl");
 #endif
 	init("YouTube/ItagVideoList", YouTubeW::getQualityPresetString(YouTubeW::_1080p60));
-	init("YouTube/ItagAudioList", QStringList() << "171" << "251" << "140");
-	init("YouTube/ItagList", QStringList() << "22" << "43" << "18");
+	init("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
+	init("YouTube/ItagList", QStringList{"22", "43", "18"});
 
 #ifdef USE_LASTFM
 	init("LastFM/DownloadCovers", true);
@@ -127,7 +127,7 @@ void *Extensions::createInstance(const QString &name)
 	else if (name == MPRIS2Name)
 		return static_cast<QMPlay2Extensions *>(new MPRIS2(*this));
 #endif
-	return NULL;
+	return nullptr;
 }
 
 Extensions::SettingsWidget *Extensions::getSettingsWidget()

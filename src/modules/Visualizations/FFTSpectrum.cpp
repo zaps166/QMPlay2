@@ -123,7 +123,7 @@ void FFTSpectrumW::stop()
 /**/
 
 FFTSpectrum::FFTSpectrum(Module &module) :
-	w(*this), fft_ctx(NULL), tmpData(NULL), tmpDataSize(0), tmpDataPos(0)
+	w(*this), fft_ctx(nullptr), tmpData(nullptr), tmpDataSize(0), tmpDataPos(0)
 {
 	SetModule(module);
 }
@@ -136,11 +136,11 @@ void FFTSpectrum::soundBuffer(const bool enable)
 	{
 		tmpDataPos = 0;
 		av_free(tmpData);
-		tmpData = NULL;
+		tmpData = nullptr;
 		w.spectrumData.clear();
 		w.lastData.clear();
 		av_fft_end(fft_ctx);
-		fft_ctx = NULL;
+		fft_ctx = nullptr;
 		if ((tmpDataSize = arrSize))
 		{
 			fft_ctx = av_fft_init(w.fftSize, false);

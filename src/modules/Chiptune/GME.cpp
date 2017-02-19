@@ -26,7 +26,7 @@
 GME::GME(Module &module) :
 	m_srate(Functions::getBestSampleRate()),
 	m_aborted(false),
-	m_gme(NULL)
+	m_gme(nullptr)
 {
 	SetModule(module);
 }
@@ -82,7 +82,7 @@ bool GME::read(Packet &decoded, int &idx)
 	qint16 *srcData = (qint16 *)decoded.data();
 	float *dstData = (float *)decoded.data();
 
-	if (gme_play(m_gme, chunkSize, srcData) != NULL)
+	if (gme_play(m_gme, chunkSize, srcData) != nullptr)
 		return false;
 
 	for (int i = chunkSize - 1; i >= 0; --i)
@@ -118,7 +118,7 @@ Playlist::Entries GME::fetchTracks(const QString &url, bool &ok)
 		const int tracks = gme_track_count(m_gme);
 		for (int i = 0; i < tracks; ++i)
 		{
-			gme_info_t *info = NULL;
+			gme_info_t *info = nullptr;
 			if (!gme_track_info(m_gme, &info, i) && info)
 			{
 				Playlist::Entry entry;
@@ -189,7 +189,7 @@ bool GME::open(const QString &_url, bool tracksOnly)
 		if (track >= gme_track_count(m_gme))
 			return false;
 
-		gme_info_t *info = NULL;
+		gme_info_t *info = nullptr;
 		if (!gme_track_info(m_gme, &info, track) && info)
 		{
 			m_title = getTitle(info, track);

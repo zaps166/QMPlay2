@@ -37,7 +37,7 @@ public:
 		return paramList.contains(key);
 	}
 
-	virtual bool processParams(bool *paramsCorrected = NULL);
+	virtual bool processParams(bool *paramsCorrected = nullptr);
 protected:
 	ModuleParams() {}
 	~ModuleParams() {}

@@ -146,7 +146,7 @@ void UpdateEntryThr::run()
 		QMetaObject::invokeMethod(this, "updateItem", Q_ARG(ItemUpdated, iu));
 		mutexesToDelete.append(iu.mutex);
 	}
-	foreach (QMutex *mutex, mutexesToDelete)
+	for (QMutex *mutex : mutexesToDelete)
 	{
 		mutex->lock(); // Wait for "updateItem()", because thread mustn't be finished earlier
 		mutex->unlock();
@@ -208,7 +208,7 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
 	loadList = _loadList;
 	sync = _sync;
 
-	firstItem = NULL;
+	firstItem = nullptr;
 	lastItem = pLW.currentItem();
 
 	pLW.setItemsResizeToContents(false);
@@ -248,12 +248,12 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
 void AddThr::setDataForSync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
 	if (notDir)
-		setData(QStringList() << pth, QStringList(), par, false, FILE_SYNC); //File synchronization needs only one file!
+		setData({pth}, {}, par, false, FILE_SYNC); //File synchronization needs only one file!
 	else
 	{
 		QStringList dirEntries = getDirEntries(pth);
 		prependPath(dirEntries, pth);
-		setData(dirEntries, QStringList(), par, false, DIR_SYNC);
+		setData(dirEntries, {}, par, false, DIR_SYNC);
 	}
 }
 
@@ -293,11 +293,11 @@ void AddThr::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
 void AddThr::run()
 {
 	Functions::DemuxersInfo demuxersInfo;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER)
 				demuxersInfo += (Functions::DemuxerInfo){mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions};
-	add(urls, par, demuxersInfo, existingEntries.isEmpty() ? NULL : &existingEntries, loadList);
+	add(urls, par, demuxersInfo, existingEntries.isEmpty() ? nullptr : &existingEntries, loadList);
 	if (currentThread() == pLW.thread()) //jeżeli funkcja działa w głównym wątku
 		finished();
 }
@@ -405,7 +405,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 				entry.url = url;
 
 				if (!pLW.dontUpdateAfterAdd) //Don't try to get the real address from extension plugin in this case (no needed for tracks)
-					Functions::getDataIfHasPluginPrefix(url, &url, &entry.name, NULL, &ioCtrl, demuxersInfo);
+					Functions::getDataIfHasPluginPrefix(url, &url, &entry.name, nullptr, &ioCtrl, demuxersInfo);
 				IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 				Demuxer::FetchTracks fetchTracks(pLW.dontUpdateAfterAdd);
 				if (Demuxer::create(url, demuxer, &fetchTracks))
@@ -472,10 +472,10 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 {
 	QList<QTreeWidgetItem *> groupList;
 	const int queueSize = pLW.queue.size();
-	QTreeWidgetItem *firstItem = NULL;
-	foreach (const Playlist::Entry &entry, entries)
+	QTreeWidgetItem *firstItem = nullptr;
+	for (const Playlist::Entry &entry : entries)
 	{
-		QTreeWidgetItem *currentItem = NULL, *tmpParent = NULL, *createdItem = NULL;
+		QTreeWidgetItem *currentItem = nullptr, *tmpParent = nullptr, *createdItem = nullptr;
 		const int idx = entry.parent - 1;
 		if (idx >= 0 && groupList.size() > idx)
 			tmpParent = groupList.at(idx);
@@ -501,7 +501,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
 			if (entry.queue) //Rebuild queue
 			{
 				for (int j = pLW.queue.size(); j <= queueSize + entry.queue - 1; ++j)
-					pLW.queue += NULL;
+					pLW.queue += nullptr;
 				pLW.queue[queueSize + entry.queue - 1] = currentItem;
 			}
 			if (!firstItem)
@@ -546,7 +546,7 @@ void AddThr::finished()
 	playlistMenu()->stopLoading->setVisible(false);
 	if (!pLW.currentPlaying && !pLW.currentPlayingUrl.isEmpty())
 	{
-		foreach (QTreeWidgetItem *tWI, pLW.findItems(QString(), Qt::MatchRecursive | Qt::MatchContains))
+		for (QTreeWidgetItem *tWI : pLW.findItems(QString(), Qt::MatchRecursive | Qt::MatchContains))
 			if (pLW.getUrl(tWI) == pLW.currentPlayingUrl)
 			{
 				pLW.setCurrentPlaying(tWI);
@@ -583,7 +583,7 @@ PlaylistWidget::PlaylistWidget() :
 	setItemsResizeToContents(true);
 	setIconSize(QSize(IconSize, IconSize));
 
-	currentPlaying = NULL;
+	currentPlaying = nullptr;
 	selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
 
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popupContextMenu(const QPoint &)));
@@ -613,7 +613,7 @@ void PlaylistWidget::setItemsResizeToContents(bool b)
 
 void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)
 {
-	QTreeWidgetItem *item = selectedItems().isEmpty() ? NULL : currentItem();
+	QTreeWidgetItem *item = selectedItems().isEmpty() ? nullptr : currentItem();
 	while (item && !isGroup(item))
 		item = item->parent();
 	if (item)
@@ -639,7 +639,7 @@ bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QS
 bool PlaylistWidget::add(const QStringList &urls, bool atEndOfList)
 {
 	selectAfterAdd = true;
-	return add(urls, atEndOfList ? NULL : (selectedItems().isEmpty() ? NULL : currentItem()));
+	return add(urls, atEndOfList ? nullptr : (selectedItems().isEmpty() ? nullptr : currentItem()));
 }
 void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 {
@@ -690,7 +690,7 @@ void PlaylistWidget::clear()
 }
 void PlaylistWidget::clearCurrentPlaying(bool url)
 {
-	currentPlaying = NULL;
+	currentPlaying = nullptr;
 	if (url)
 		currentPlayingUrl.clear();
 	currentPlayingItemIcon = QIcon();
@@ -714,12 +714,12 @@ QList<QUrl> PlaylistWidget::getUrls() const
 	QList<QUrl> urls;
 
 	QStringList protocolsToAvoid;
-	foreach (Module *module, QMPlay2Core.getPluginsInstance())
-		foreach (const Module::Info &mod, module->getModulesInfo())
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && !mod.name.contains(' '))
 				protocolsToAvoid += mod.name;
 
-	foreach (QTreeWidgetItem *tWI, selectedItems())
+	for (QTreeWidgetItem *tWI : selectedItems())
 	{
 		QString url = getUrl(tWI);
 		if (!url.isEmpty() && !url.contains("://{"))
@@ -741,8 +741,8 @@ QList<QUrl> PlaylistWidget::getUrls() const
 
 QTreeWidgetItem *PlaylistWidget::newGroup()
 {
-	QTreeWidgetItem *parent = selectedItems().isEmpty() ? NULL : currentItem();
-	return newGroup(QString(), QString(), parent, isGroup(parent) ? 0 : -1, NULL);
+	QTreeWidgetItem *parent = selectedItems().isEmpty() ? nullptr : currentItem();
+	return newGroup(QString(), QString(), parent, isGroup(parent) ? 0 : -1, nullptr);
 }
 
 QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const QTreeWidgetItem *parent) const
@@ -788,7 +788,7 @@ bool PlaylistWidget::canModify(bool all) const
 
 void PlaylistWidget::enqueue()
 {
-	foreach (QTreeWidgetItem *tWI, selectedItems())
+	for (QTreeWidgetItem *tWI : selectedItems())
 	{
 		if (isGroup(tWI))
 			continue;
@@ -822,7 +822,7 @@ void PlaylistWidget::refresh(REFRESH Refresh)
 		for (int i = groups.size() - 1; i >= 0; i--)
 		{
 			double length = 0.0;
-			foreach (QTreeWidgetItem *tWI, getChildren(ALL_CHILDREN, groups.at(i)))
+			for (QTreeWidgetItem *tWI : getChildren(ALL_CHILDREN, groups.at(i)))
 			{
 				if (tWI->parent() != groups.at(i))
 					continue;
@@ -843,7 +843,7 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 {
 	int count = 0;
 	hasHiddenItems = false;
-	foreach (QTreeWidgetItem *tWI, getChildren(PlaylistWidget::ONLY_NON_GROUPS, NULL))
+	for (QTreeWidgetItem *tWI : getChildren(PlaylistWidget::ONLY_NON_GROUPS, nullptr))
 	{
 		if (itemsToShow)
 		{
@@ -870,7 +870,7 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 		if (hideGroups && !itemsToShow->contains(group))
 		{
 			bool hasVisibleItems = false;
-			foreach (QTreeWidgetItem *tWI, getChildren(ONLY_NON_GROUPS, group))
+			for (QTreeWidgetItem *tWI : getChildren(ONLY_NON_GROUPS, group))
 			{
 				if (!tWI->isHidden())
 				{
@@ -916,7 +916,7 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	QTreeWidgetItem *tWI = new QTreeWidgetItem;
 
 	QImage img;
-	Functions::getDataIfHasPluginPrefix(entry.url, NULL, NULL, &img, NULL, demuxersInfo);
+	Functions::getDataIfHasPluginPrefix(entry.url, nullptr, nullptr, &img, nullptr, demuxersInfo);
 	setEntryIcon(img, tWI);
 
 	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
@@ -950,7 +950,7 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 			img = img.scaledToHeight(IconSize, Qt::SmoothTransformation);
 		else if (img.width() > img.height() && img.width() > IconSize)
 			img = img.scaledToWidth(IconSize, Qt::SmoothTransformation);
-		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? NULL : tWI), Q_ARG(QImage, img));
+		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? nullptr : tWI), Q_ARG(QImage, img));
 	}
 }
 
@@ -1197,7 +1197,7 @@ void PlaylistWidget::modifyMenu()
 	playlistMenu()->extensions->clear();
 	QString addressPrefixName, url, param;
 	bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
-	foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 	{
 		QAction *act;
 		if (splitFlag)

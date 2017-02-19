@@ -39,7 +39,7 @@ class LineEdit : public QLineEdit
 {
 	Q_OBJECT
 public:
-	LineEdit(QWidget *parent = NULL);
+	LineEdit(QWidget *parent = nullptr);
 private:
 	void resizeEvent(QResizeEvent *);
 	void mousePressEvent(QMouseEvent *);

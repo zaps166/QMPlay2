@@ -68,43 +68,43 @@ extern "C"
 
 namespace cu
 {
-	typedef CUresult CUDAAPI (*cuInitType)(unsigned int flags);
+	using  cuInitType = CUresult CUDAAPI (*)(unsigned int flags);
 	static cuInitType init;
 
-	typedef CUresult CUDAAPI (*cuDeviceGetType)(CUdevice *device, int ordinal);
+	using  cuDeviceGetType = CUresult CUDAAPI (*)(CUdevice *device, int ordinal);
 	static cuDeviceGetType deviceGet;
 
-	typedef CUresult CUDAAPI (*cuCtxCreateType)(CUcontext *pctx, unsigned int flags, CUdevice dev);
+	using  cuCtxCreateType = CUresult CUDAAPI (*)(CUcontext *pctx, unsigned int flags, CUdevice dev);
 	static cuCtxCreateType ctxCreate;
 
-	typedef CUresult CUDAAPI (*cuCtxPushCurrentType)(CUcontext ctx);
+	using  cuCtxPushCurrentType = CUresult CUDAAPI (*)(CUcontext ctx);
 	static cuCtxPushCurrentType ctxPushCurrent;
 
-	typedef CUresult CUDAAPI (*cuCtxPopCurrentType)(CUcontext *pctx);
+	using  cuCtxPopCurrentType = CUresult CUDAAPI (*)(CUcontext *pctx);
 	static cuCtxPopCurrentType ctxPopCurrent;
 
-	typedef CUresult CUDAAPI (*cuMemcpyDtoHType)(void *dstHost, CUdeviceptr srcDevice, size_t byteCount);
+	using  cuMemcpyDtoHType = CUresult CUDAAPI (*)(void *dstHost, CUdeviceptr srcDevice, size_t byteCount);
 	static cuMemcpyDtoHType memcpyDtoH;
 
-	typedef CUresult CUDAAPI (*cuMemcpy2DType)(const CUDA_MEMCPY2D *pCopy);
+	using  cuMemcpy2DType = CUresult CUDAAPI (*)(const CUDA_MEMCPY2D *pCopy);
 	static cuMemcpy2DType memcpy2D;
 
-	typedef CUresult CUDAAPI (*cuGraphicsGLRegisterImageType)(CUgraphicsResource *pCudaResource, quint32 image, qint32 target, unsigned int flags);
+	using  cuGraphicsGLRegisterImageType = CUresult CUDAAPI (*)(CUgraphicsResource *pCudaResource, quint32 image, qint32 target, unsigned int flags);
 	static cuGraphicsGLRegisterImageType graphicsGLRegisterImage;
 
-	typedef CUresult CUDAAPI (*cuGraphicsMapResourcesType)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
+	using  cuGraphicsMapResourcesType = CUresult CUDAAPI (*)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
 	static cuGraphicsMapResourcesType graphicsMapResources;
 
-	typedef CUresult CUDAAPI (*cuGraphicsSubResourceGetMappedArrayType)(CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel);
+	using  cuGraphicsSubResourceGetMappedArrayType = CUresult CUDAAPI (*)(CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel);
 	static cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray;
 
-	typedef CUresult CUDAAPI (*cuGraphicsUnmapResourcesType)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
+	using  cuGraphicsUnmapResourcesType = CUresult CUDAAPI (*)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
 	static cuGraphicsUnmapResourcesType graphicsUnmapResources;
 
-	typedef CUresult CUDAAPI (*cuGraphicsUnregisterResourceType)(CUgraphicsResource resource);
+	using  cuGraphicsUnregisterResourceType = CUresult CUDAAPI (*)(CUgraphicsResource resource);
 	static cuGraphicsUnregisterResourceType graphicsUnregisterResource;
 
-	typedef CUresult CUDAAPI (*cuCtxDestroyType)(CUcontext ctx);
+	using  cuCtxDestroyType = CUresult CUDAAPI (*)(CUcontext ctx);
 	static cuCtxDestroyType ctxDestroy;
 
 	static bool load()
@@ -142,9 +142,9 @@ namespace cu
 		CUdevice dev = -1;
 		const int devIdx = 0;
 		if (deviceGet(&dev, devIdx) != CUDA_SUCCESS)
-			return NULL;
+			return nullptr;
 		if (ctxCreate(&ctx, CU_CTX_SCHED_BLOCKING_SYNC, dev) != CUDA_SUCCESS)
-			return NULL;
+			return nullptr;
 		ctxPopCurrent(&tmpCtx);
 		return ctx;
 	}
@@ -183,28 +183,28 @@ namespace cu
 
 namespace cuvid
 {
-	typedef CUresult CUDAAPI (*cuvidCreateVideoParserType)(CUvideoparser *pObj, CUVIDPARSERPARAMS *pParams);
+	using  cuvidCreateVideoParserType = CUresult CUDAAPI (*)(CUvideoparser *pObj, CUVIDPARSERPARAMS *pParams);
 	static cuvidCreateVideoParserType createVideoParser;
 
-	typedef CUresult CUDAAPI (*cuvidDestroyVideoParserType)(CUvideoparser obj);
+	using  cuvidDestroyVideoParserType = CUresult CUDAAPI (*)(CUvideoparser obj);
 	static cuvidDestroyVideoParserType destroyVideoParser;
 
-	typedef CUresult CUDAAPI (*cuvidDecodePictureType)(CUvideodecoder hDecoder, CUVIDPICPARAMS *pPicParams);
+	using  cuvidDecodePictureType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, CUVIDPICPARAMS *pPicParams);
 	static cuvidDecodePictureType decodePicture;
 
-	typedef CUresult CUDAAPI (*cuvidCreateDecoderType)(CUvideodecoder *phDecoder, CUVIDDECODECREATEINFO *pdci);
+	using  cuvidCreateDecoderType = CUresult CUDAAPI (*)(CUvideodecoder *phDecoder, CUVIDDECODECREATEINFO *pdci);
 	static cuvidCreateDecoderType createDecoder;
 
-	typedef CUresult CUDAAPI (*cuvidDestroyDecoderType)(CUvideodecoder hDecoder);
+	using  cuvidDestroyDecoderType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder);
 	static cuvidDestroyDecoderType destroyDecoder;
 
-	typedef CUresult CUDAAPI (*cuvidMapVideoFrameType)(CUvideodecoder hDecoder, int nPicIdx, quintptr *pDevPtr, unsigned int *pPitch, CUVIDPROCPARAMS *pVPP);
+	using  cuvidMapVideoFrameType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, int nPicIdx, quintptr *pDevPtr, unsigned int *pPitch, CUVIDPROCPARAMS *pVPP);
 	static cuvidMapVideoFrameType mapVideoFrame;
 
-	typedef CUresult CUDAAPI (*cuvidUnmapVideoFrameType)(CUvideodecoder hDecoder, quintptr DevPtr);
+	using  cuvidUnmapVideoFrameType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, quintptr DevPtr);
 	static cuvidUnmapVideoFrameType unmapVideoFrame;
 
-	typedef CUresult CUDAAPI (*cuvidParseVideoDataType)(CUvideoparser obj, CUVIDSOURCEDATAPACKET *pPacket);
+	using  cuvidParseVideoDataType = CUresult CUDAAPI (*)(CUvideoparser obj, CUVIDSOURCEDATAPACKET *pPacket);
 	static cuvidParseVideoDataType parseVideoData;
 
 	static bool load()
@@ -258,7 +258,7 @@ public:
 		m_lastId(0),
 		m_tff(false),
 		m_cuCtx(cuCtx),
-		m_cuvidDec(NULL)
+		m_cuvidDec(nullptr)
 	{
 		memset(m_res, 0, sizeof m_res);
 	}
@@ -313,7 +313,7 @@ public:
 			if (m_res[p])
 			{
 				cu::graphicsUnregisterResource(m_res[p]);
-				m_res[p] = NULL;
+				m_res[p] = nullptr;
 			}
 		}
 	}
@@ -350,7 +350,7 @@ public:
 		if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
 			return CopyError;
 
-		if (cu::graphicsMapResources(2, m_res, NULL) == CUDA_SUCCESS)
+		if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
 		{
 			bool copied = true;
 
@@ -363,7 +363,7 @@ public:
 			cpy.WidthInBytes = videoFrame.size.width;
 			for (int p = 0; p < 2; ++p)
 			{
-				CUarray array = NULL;
+				CUarray array = nullptr;
 				if (cu::graphicsSubResourceGetMappedArray(&array, m_res[p], 0, 0) != CUDA_SUCCESS)
 				{
 					copied = false;
@@ -381,7 +381,7 @@ public:
 				}
 			}
 
-			cu::graphicsUnmapResources(2, m_res, NULL);
+			cu::graphicsUnmapResources(2, m_res, nullptr);
 
 			if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
 				return CopyOk;
@@ -480,18 +480,18 @@ bool CuvidDec::canCreateInstance()
 }
 
 CuvidDec::CuvidDec(Module &module) :
-	m_writer(NULL),
-	m_cuvidHWAccel(NULL),
+	m_writer(nullptr),
+	m_cuvidHWAccel(nullptr),
 	m_deintMethod(cudaVideoDeinterlaceMode_Weave),
 	m_copyVideo(Qt::PartiallyChecked),
 	m_forceFlush(false),
-	m_nv12Chroma(NULL),
-	m_bsfCtx(NULL),
-	m_swsCtx(NULL),
-	m_pkt(NULL),
-	m_cuCtx(NULL),
-	m_cuvidParser(NULL),
-	m_cuvidDec(NULL)
+	m_nv12Chroma(nullptr),
+	m_bsfCtx(nullptr),
+	m_swsCtx(nullptr),
+	m_pkt(nullptr),
+	m_cuCtx(nullptr),
+	m_cuvidParser(nullptr),
+	m_cuvidDec(nullptr)
 {
 	memset(m_frameBuffer, 0, sizeof m_frameBuffer);
 	SetModule(module);
@@ -568,7 +568,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
 	if (!m_cuvidHWAccel)
 	{
-		m_swsCtx = sws_getCachedContext(m_swsCtx, m_width, m_height, AV_PIX_FMT_NV12, m_width, m_height, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL);
+		m_swsCtx = sws_getCachedContext(m_swsCtx, m_width, m_height, AV_PIX_FMT_NV12, m_width, m_height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
 		if (!m_swsCtx)
 			return 0;
 	}
@@ -837,7 +837,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (!loadLibrariesAndInit())
 		return false;
 
-	const AVBitStreamFilter *bsf = NULL;
+	const AVBitStreamFilter *bsf = nullptr;
 	switch (codec)
 	{
 #ifdef NEW_BSF_API
@@ -944,8 +944,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		if (!writer)
 		{
 			delete m_writer;
-			m_writer = NULL;
-			m_cuvidHWAccel = NULL;
+			m_writer = nullptr;
+			m_cuvidHWAccel = nullptr;
 		}
 		return false;
 	}
@@ -979,7 +979,7 @@ bool CuvidDec::testDecoder(const int depth)
 	cuvidDecInfo.ulCreationFlags = cudaVideoCreate_PreferCUVID;
 	cuvidDecInfo.bitDepthMinus8 = qMax(0, depth - 8);
 
-	CUvideodecoder tmpCuvidDec = NULL;
+	CUvideodecoder tmpCuvidDec = nullptr;
 	if (cuvid::createDecoder(&tmpCuvidDec, &cuvidDecInfo) != CUDA_SUCCESS)
 		return false;
 
@@ -1007,13 +1007,13 @@ bool CuvidDec::createCuvidVideoParser()
 void CuvidDec::destroyCuvid(bool all)
 {
 	if (m_cuvidHWAccel)
-		m_cuvidHWAccel->setDecoderAndCodedHeight(NULL, 0);
+		m_cuvidHWAccel->setDecoderAndCodedHeight(nullptr, 0);
 	cuvid::destroyDecoder(m_cuvidDec);
-	m_cuvidDec = NULL;
+	m_cuvidDec = nullptr;
 	if (all)
 	{
 		cuvid::destroyVideoParser(m_cuvidParser);
-		m_cuvidParser = NULL;
+		m_cuvidParser = nullptr;
 	}
 }
 
@@ -1033,7 +1033,7 @@ bool CuvidDec::loadLibrariesAndInit()
 			DISPLAY_DEVICEA displayDev;
 			memset(&displayDev, 0, sizeof displayDev);
 			displayDev.cb = sizeof displayDev;
-			if (EnumDisplayDevicesA(NULL, 0, &displayDev, 0))
+			if (EnumDisplayDevicesA(nullptr, 0, &displayDev, 0))
 			{
 				const bool isNvidia = QByteArray::fromRawData(displayDev.DeviceString, sizeof displayDev.DeviceString).toLower().contains("nvidia");
 				if (!isNvidia)

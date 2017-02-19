@@ -33,7 +33,7 @@ class AudioThr : public AVThread
 {
 	Q_OBJECT
 public:
-	AudioThr(PlayClass &, const QStringList &pluginsName = QStringList());
+	AudioThr(PlayClass &, const QStringList &pluginsName = {});
 	~AudioThr();
 
 	void stop(bool terminate = false);

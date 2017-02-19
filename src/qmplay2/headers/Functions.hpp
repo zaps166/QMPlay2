@@ -50,8 +50,8 @@ namespace Functions
 		QImage img;
 		QStringList extensions;
 	};
-	typedef QVector<DemuxerInfo> DemuxersInfo;
-	typedef QList<QByteArray> ChecksumList;
+	using DemuxersInfo = QVector<DemuxerInfo>;
+	using ChecksumList = QList<QByteArray>;
 
 	QDate parseVersion(const QString &dateTxt);
 
@@ -114,10 +114,10 @@ namespace Functions
 		return val > 255 ? (quint8)255 : (val < 0 ? (quint8)0 : val);
 	}
 
-	void getImageSize(const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = NULL, int *Y = NULL, QRect *dstRect = NULL, const int *vidW = NULL, const int *vidH = NULL, QRect *srcRect = NULL);
+	void getImageSize(const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = nullptr, int *Y = nullptr, QRect *dstRect = nullptr, const int *vidW = nullptr, const int *vidH = nullptr, QRect *srcRect = nullptr);
 
-	bool mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = NULL, const qreal *scaleH = NULL, QRect *bounds = NULL);
-	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = NULL);
+	bool mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = nullptr, const qreal *scaleH = nullptr, QRect *bounds = nullptr);
+	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = nullptr);
 	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_checksums);
 
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
@@ -130,8 +130,8 @@ namespace Functions
 	bool chkMimeData(const QMimeData *);
 	QStringList getUrlsFromMimeData(const QMimeData *);
 
-	bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = NULL);
-	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = NULL, QString *name = NULL, QImage *img = NULL, IOController<> *ioCtrl = NULL, const DemuxersInfo &demuxersInfo = DemuxersInfo());
+	bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
+	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QImage *img = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
 
 	void hFlip(quint8 *data, int linesize, int height, int width);
 	void vFlip(quint8 *data, int linesize, int height);

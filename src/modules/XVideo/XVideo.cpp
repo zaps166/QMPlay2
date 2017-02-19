@@ -32,14 +32,14 @@ QList<XVideo::Info> XVideo::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
-		modulesInfo += Info(XVideoWriterName, WRITER, QStringList("video"));
+		modulesInfo += Info(XVideoWriterName, WRITER, QStringList{"video"});
 	return modulesInfo;
 }
 void *XVideo::createInstance(const QString &name)
 {
 	if (name == XVideoWriterName && getBool("Enabled"))
 		return new XVideoWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 XVideo::SettingsWidget *XVideo::getSettingsWidget()

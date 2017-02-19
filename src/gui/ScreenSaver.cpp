@@ -29,7 +29,7 @@ class ScreenSaverPriv : public QObject
 {
 public:
 	inline ScreenSaverPriv() :
-		m_disp(NULL)
+		m_disp(nullptr)
 	{}
 	inline ~ScreenSaverPriv()
 	{
@@ -47,7 +47,7 @@ public:
 			XFlushFunc = (XFlushType)libX11.resolve("XFlush");
 			XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
 			if (XOpenDisplayFunc && XForceScreenSaverFunc && XFlushFunc && XCloseDisplayFunc)
-				m_disp = XOpenDisplayFunc(NULL);
+				m_disp = XOpenDisplayFunc(nullptr);
 		}
 	}
 	inline bool isLoaded() const
@@ -57,7 +57,7 @@ public:
 
 	inline void inhibit()
 	{
-		timerEvent(NULL);
+		timerEvent(nullptr);
 		m_timerID = startTimer(30000);
 	}
 	inline void unInhibit()
@@ -72,16 +72,16 @@ private:
 		XFlushFunc(m_disp);
 	}
 
-	typedef void *(*XOpenDisplayType)(const char *name);
+	using XOpenDisplayType = void *(*)(const char *name);
 	XOpenDisplayType XOpenDisplayFunc;
 
-	typedef int (*XForceScreenSaverType)(void *display, int mode);
+	using XForceScreenSaverType = int (*)(void *display, int mode);
 	XForceScreenSaverType XForceScreenSaverFunc;
 
-	typedef int (*XFlushType)(void *display);
+	using XFlushType = int (*)(void *display);
 	XFlushType XFlushFunc;
 
-	typedef int (*XCloseDisplayType)(void *display);
+	using XCloseDisplayType = int (*)(void *display);
 	XCloseDisplayType XCloseDisplayFunc;
 
 	void *m_disp;
@@ -174,7 +174,7 @@ static inline bool inhibitScreenSaver(MSG *msg, bool &inhibited)
 	}
 
 	ScreenSaver::ScreenSaver() :
-		m_priv(NULL)
+		m_priv(nullptr)
 	{
 		qApp->setEventFilter(::eventFilter);
 	}
@@ -196,7 +196,7 @@ static inline bool inhibitScreenSaver(MSG *msg, bool &inhibited)
 #else
 
 ScreenSaver::ScreenSaver() :
-	m_priv(NULL)
+	m_priv(nullptr)
 {
 	Q_UNUSED(m_priv)
 }
@@ -228,7 +228,7 @@ inline bool ScreenSaver::inhibitHelper(int context)
 	if (!m_refs.value(context))
 	{
 		m_refs[context] = true;
-		for (Refs::const_iterator it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		for (auto it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
 		{
 			if (it.value() && it.key() != context)
 				return false;
@@ -242,7 +242,7 @@ inline bool ScreenSaver::unInhibitHelper(int context)
 	if (m_refs.value(context))
 	{
 		m_refs[context] = false;
-		for (Refs::const_iterator it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		for (auto it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
 		{
 			if (it.value())
 				return false;

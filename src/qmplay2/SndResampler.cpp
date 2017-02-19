@@ -20,7 +20,7 @@
 
 #include <QByteArray>
 
-#include <math.h>
+#include <cmath>
 
 extern "C"
 {
@@ -67,7 +67,7 @@ bool SndResampler::create(int _src_samplerate, int _src_channels, int _dst_sampl
 	av_opt_set_int(snd_convert_ctx, "in_sample_fmt",      AV_SAMPLE_FMT_FLT, 0);
 	av_opt_set_int(snd_convert_ctx, "out_sample_fmt",     AV_SAMPLE_FMT_FLT, 0);
 #else
-	if (!(snd_convert_ctx = swr_alloc_set_opts(NULL, dst_chn_layout, AV_SAMPLE_FMT_FLT, dst_samplerate, src_chn_layout, AV_SAMPLE_FMT_FLT, src_samplerate, 0, NULL)))
+	if (!(snd_convert_ctx = swr_alloc_set_opts(nullptr, dst_chn_layout, AV_SAMPLE_FMT_FLT, dst_samplerate, src_chn_layout, AV_SAMPLE_FMT_FLT, src_samplerate, 0, nullptr)))
 		return false;
 #endif
 	av_opt_set_int(snd_convert_ctx, "linear_interp",      true,              0);

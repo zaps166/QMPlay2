@@ -50,7 +50,7 @@ CdIo_t *CDIODestroyTimer::getInstance(const QString &_device, unsigned &_discID)
 		}
 		cdio_destroy(cdio);
 	}
-	return NULL;
+	return nullptr;
 }
 
 void CDIODestroyTimer::setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID)
@@ -97,7 +97,7 @@ QStringList AudioCDDemux::getDevices()
 
 AudioCDDemux::AudioCDDemux(Module &module, CDIODestroyTimer &destroyTimer) :
 	destroyTimer(destroyTimer),
-	cdio(NULL),
+	cdio(nullptr),
 	sector(0),
 	aborted(false),
 	discID(0)
@@ -411,7 +411,7 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
 
 	cddb_disc_destroy(cddb_disc);
 	cddb_destroy(cddb);
-	cddb_disc = NULL;
+	cddb_disc = nullptr;
 	return false;
 }
 void AudioCDDemux::freedb_get_disc_info(cddb_disc_t *cddb_disc)
@@ -440,13 +440,13 @@ Playlist::Entries AudioCDDemux::getTracks(const QString &_device)
 	if (device.endsWith("/"))
 		device.chop(1);
 #endif
-	cdio_close_tray(device.toLocal8Bit(), NULL);
+	cdio_close_tray(device.toLocal8Bit(), nullptr);
 	if ((cdio = cdio_open(device.toLocal8Bit(), DRIVER_UNKNOWN)))
 	{
 		numTracks = cdio_get_num_tracks(cdio);
 		if (cdio_get_discmode(cdio) != CDIO_DISC_MODE_ERROR && numTracks > 0 && numTracks != CDIO_INVALID_TRACK)
 		{
-			cddb_disc_t *cddb_disc = NULL;
+			cddb_disc_t *cddb_disc = nullptr;
 			bool cddb_ok = useCDDB;
 			for (trackNo = 1; trackNo <= numTracks; ++trackNo)
 			{

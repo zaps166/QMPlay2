@@ -28,7 +28,7 @@ extern "C"
 
 FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
 	FFDec(mutex),
-	m_hwAccelWriter(NULL)
+	m_hwAccelWriter(nullptr)
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {
@@ -48,7 +48,7 @@ VideoWriter *FFDecHWAccel::HWAccel() const
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
-	AVHWAccel *hwAccel = NULL;
+	AVHWAccel *hwAccel = nullptr;
 	while ((hwAccel = av_hwaccel_next(hwAccel)))
 		if (hwAccel->id == codec_ctx->codec_id && strstr(hwAccel->name, hwaccelName))
 			break;

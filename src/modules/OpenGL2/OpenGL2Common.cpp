@@ -41,7 +41,7 @@
 
 #include <Vertices.hpp>
 
-#include <math.h>
+#include <cmath>
 
 /* OpenGL|ES 2.0 doesn't have those definitions */
 #ifndef GL_MAP_WRITE_BIT
@@ -88,13 +88,13 @@ void RotAnimation::updateCurrentValue(const QVariant &value)
 OpenGL2Common::OpenGL2Common() :
 #ifndef OPENGL_ES2
 	supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
-	glActiveTexture(NULL),
+	glActiveTexture(nullptr),
 #endif
 #ifdef VSYNC_SETTINGS
 	vSync(true),
 #endif
-	hwAccellnterface(NULL),
-	shaderProgramVideo(NULL), shaderProgramOSD(NULL),
+	hwAccellnterface(nullptr),
+	shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	numPlanes(0),
 	Deinterlace(0),
@@ -204,7 +204,7 @@ void OpenGL2Common::initializeGL()
 #ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramVideo;
 	delete shaderProgramOSD;
-	shaderProgramVideo = shaderProgramOSD = NULL;
+	shaderProgramVideo = shaderProgramOSD = nullptr;
 #endif
 	if (!shaderProgramVideo)
 		shaderProgramVideo = new QOpenGLShaderProgram;
@@ -362,14 +362,14 @@ void OpenGL2Common::paintGL()
 					for (int p = 0; p < 2; ++p)
 					{
 						glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
+						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
 					}
 				}
 				else if (numPlanes == 1)
 				{
 					//RGB32
 					glBindTexture(GL_TEXTURE_2D, textures[1]);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 				}
 
 				/* Prepare textures, register GL textures */
@@ -402,10 +402,10 @@ void OpenGL2Common::paintGL()
 					if (hasPbo)
 					{
 						glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-						glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, NULL, GL_DYNAMIC_DRAW);
+						glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, nullptr, GL_DYNAMIC_DRAW);
 					}
 					glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
 				}
 
 				/* Prepare texture coordinates */
@@ -467,7 +467,7 @@ void OpenGL2Common::paintGL()
 							dst  += w;
 						}
 						glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-						data = NULL;
+						data = nullptr;
 					}
 				}
 				glActiveTexture(GL_TEXTURE0 + p);
@@ -563,7 +563,7 @@ void OpenGL2Common::paintGL()
 	else
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereVbo[2]);
-		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_SHORT, NULL);
+		glDrawElements(GL_TRIANGLE_STRIP, nIndices, GL_UNSIGNED_SHORT, nullptr);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	shaderProgramVideo->release();
@@ -590,7 +590,7 @@ void OpenGL2Common::paintGL()
 			if (osdImg.size() != bounds.size())
 			{
 				osdImg = QImage(bounds.size(), QImage::Format_ARGB32);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bounds.width(), bounds.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 				hasNewSize = true;
 			}
 			osdImg.fill(0);
@@ -603,7 +603,7 @@ void OpenGL2Common::paintGL()
 				const GLsizeiptr dataSize = (osdImg.width() * osdImg.height()) << 2;
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[0]);
 				if (hasNewSize)
-					glBufferData(GL_PIXEL_UNPACK_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
+					glBufferData(GL_PIXEL_UNPACK_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
 				quint8 *dst;
 				if (glMapBufferRange)
 					dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, dataSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
@@ -615,7 +615,7 @@ void OpenGL2Common::paintGL()
 				{
 					memcpy(dst, data, dataSize);
 					glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-					data = NULL;
+					data = nullptr;
 				}
 			}
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bounds.width(), bounds.height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -699,7 +699,7 @@ void OpenGL2Common::testGLInternal()
 	}
 	/* Reset variables */
 	supportsShaders = canCreateNonPowerOfTwoTextures = false;
-	glActiveTexture = NULL;
+	glActiveTexture = nullptr;
 #endif
 
 	numPlanes = 3;
@@ -722,9 +722,9 @@ void OpenGL2Common::testGLInternal()
 		{
 			glBindTexture(GL_TEXTURE_2D, textures[p]);
 			if (numPlanes == 2)
-				glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
 			else if (numPlanes == 1)
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		}
 
 		if (!hwAccellnterface->lock())
@@ -775,7 +775,7 @@ void OpenGL2Common::testGLInternal()
 			compositionEnabled = Qt::Checked;
 			if (winVer <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
 			{
-				typedef HRESULT (WINAPI *DwmIsCompositionEnabledProc)(BOOL *pfEnabled);
+				using DwmIsCompositionEnabledProc = HRESULT (WINAPI *)(BOOL *pfEnabled);
 				DwmIsCompositionEnabledProc DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled");
 				if (DwmIsCompositionEnabled)
 				{
@@ -814,9 +814,9 @@ void OpenGL2Common::initGLProc()
 	}
 	else
 	{
-		glMapBufferRange = NULL;
-		glMapBuffer = NULL;
-		glUnmapBuffer = NULL;
+		glMapBufferRange = nullptr;
+		glMapBuffer = nullptr;
+		glUnmapBuffer = nullptr;
 	}
 	hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
 }

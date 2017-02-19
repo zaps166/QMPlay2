@@ -123,7 +123,7 @@ bool XSPF::write(const Entries &list)
 	xmlWriter.writeStartElement("playlist");
 	xmlWriter.writeStartElement("trackList");
 
-	foreach (const Entry &entry, list)
+	for (const Entry &entry : list)
 	{
 		xmlWriter.writeStartElement("track");
 

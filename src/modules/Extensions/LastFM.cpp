@@ -32,9 +32,9 @@ Q_DECLARE_METATYPE(LastFM::Scrobble)
 #include <QImage>
 
 LastFM::LastFM(Module &module) :
-	coverReply(NULL),
-	loginReply(NULL),
-	scrobbleReply(NULL),
+	coverReply(nullptr),
+	loginReply(nullptr),
+	scrobbleReply(nullptr),
 	dontShowLoginError(false),
 	firstTime(true)
 {
@@ -53,7 +53,7 @@ bool LastFM::set()
 	imageSizes.clear();
 	if (sets().getBool("LastFM/AllowBigCovers"))
 		imageSizes += "mega";
-	imageSizes += QStringList() << "extralarge" << "large" << "medium" << "small";
+	imageSizes += {"extralarge", "large", "medium", "small"};
 
 	const QString _user = sets().getString("LastFM/Login");
 	const QString _md5pass = sets().getString("LastFM/Password");
@@ -104,7 +104,11 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 			coverReply->deleteLater();
 		}
 		coverReply = net.start(url);
-		coverReply->setProperty("taa", QStringList() << (titleAsAlbum ? album : title) << artist << (titleAsAlbum ? QString() : album));
+		coverReply->setProperty("taa", QStringList {
+			titleAsAlbum ? album : title,
+			artist,
+			titleAsAlbum ? QString() : album
+		});
 		coverReply->setProperty("titleAsAlbum", titleAsAlbum);
 		connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
 	}
@@ -128,12 +132,12 @@ void LastFM::logout(bool canClear)
 	if (loginReply)
 	{
 		loginReply->deleteLater();
-		loginReply = NULL;
+		loginReply = nullptr;
 	}
 	if (scrobbleReply)
 	{
 		scrobbleReply->deleteLater();
-		scrobbleReply = NULL;
+		scrobbleReply = nullptr;
 	}
 	if (canClear)
 		clear();
@@ -149,7 +153,7 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 
 		QString api_sig;
 
-		int duration = scrobble.duration - (time(NULL) - scrobble.startTime);
+		int duration = scrobble.duration - (time(nullptr) - scrobble.startTime);
 		if (duration < 0)
 			duration = 0;
 
@@ -185,7 +189,7 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
 	{
 		if (!user.isEmpty() && !md5pass.isEmpty())
 		{
-			const time_t currTime = time(NULL);
+			const time_t currTime = time(nullptr);
 			const Scrobble scrobble = {title, artist, album, currTime, length};
 			if (play)
 			{
@@ -228,7 +232,7 @@ void LastFM::albumFinished()
 			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
 		else
 		{
-			foreach (const QString &size, imageSizes)
+			for (const QString &size : imageSizes)
 			{
 				int idx = reply.indexOf(size);
 				if (idx > -1)
@@ -268,7 +272,7 @@ void LastFM::albumFinished()
 		}
 	}
 	coverReply->deleteLater();
-	coverReply = NULL;
+	coverReply = nullptr;
 }
 void LastFM::loginFinished()
 {
@@ -303,7 +307,7 @@ void LastFM::loginFinished()
 		}
 	}
 	loginReply->deleteLater();
-	loginReply = NULL;
+	loginReply = nullptr;
 }
 void LastFM::scrobbleFinished()
 {
@@ -316,7 +320,7 @@ void LastFM::scrobbleFinished()
 	else
 	{
 		scrobbleReply->deleteLater();
-		scrobbleReply = NULL;
+		scrobbleReply = nullptr;
 	}
 }
 

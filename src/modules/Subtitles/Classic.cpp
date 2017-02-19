@@ -24,8 +24,8 @@
 #include <QStringList>
 #include <QRegExp>
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 /**
  * TMP      - hh:mm:ss:text    - "|" breaks line
@@ -107,7 +107,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
 	QList<SubWithoutEnd> subsWithoutEnd;
 
-	foreach (const QString &line, QString(txt).remove('\r').split('\n', QString::SkipEmptyParts))
+	for (const QString &line : QString(txt).remove('\r').split('\n', QString::SkipEmptyParts))
 	{
 		double start = 0.0, duration = 0.0;
 		QString sub;
@@ -129,7 +129,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 			sscanf(line.toLatin1().data() + idx, "[%d][%d]", &s, &e);
 			if (s > -1)
 			{
-				foreach (const QString &l, convertLine(MPL2RegExp, line).split('\n'))
+				for (const QString &l : convertLine(MPL2RegExp, line).split('\n'))
 				{
 					if (!sub.isEmpty())
 						sub.append('\n');
@@ -245,7 +245,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		}
 
 		initOnce(ok, ass);
-		foreach (const SubWithoutEnd &sub, subsWithoutEnd)
+		for (const SubWithoutEnd &sub : subsWithoutEnd)
 			ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
 	}
 

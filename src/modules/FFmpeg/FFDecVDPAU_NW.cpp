@@ -38,14 +38,14 @@ class VDPAU
 public:
 	VDPAU(int w, int h, const char *codec_name) :
 		ok(false),
-		display(NULL),
+		display(nullptr),
 		device(0),
 		decoder(0),
-		vpd_decoder_render(NULL),
-		vdp_device_destroy(NULL)
+		vpd_decoder_render(nullptr),
+		vdp_device_destroy(nullptr)
 	{
 		memset(surfaces, 0, sizeof surfaces);
-		display = XOpenDisplay(NULL);
+		display = XOpenDisplay(nullptr);
 		if (display && vdp_device_create_x11(display, 0, &device, &vdp_get_proc_address) == VDP_STATUS_OK)
 		{
 			if
@@ -188,7 +188,7 @@ public:
 
 FFDecVDPAU_NW::FFDecVDPAU_NW(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex),
-	vdpau(NULL)
+	vdpau(nullptr)
 {
 	SetModule(module);
 }

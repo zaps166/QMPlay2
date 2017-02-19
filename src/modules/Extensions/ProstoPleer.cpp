@@ -122,7 +122,7 @@ void ResultsPleer::contextMenu(const QPoint &point)
 		menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 		menu.addSeparator();
 		const QString name = tWI->text(0);
-		foreach (QMPlay2Extensions *QMPlay2Ext, QMPlay2Extensions::QMPlay2ExtensionsList())
+		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (!dynamic_cast<ProstoPleer *>(QMPlay2Ext))
 			{
 				QString addressPrefixName, url, param;
@@ -142,7 +142,7 @@ void ResultsPleer::contextMenu(const QPoint &point)
 ProstoPleerW::ProstoPleerW() :
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
-	autocompleteReply(NULL), searchReply(NULL),
+	autocompleteReply(nullptr), searchReply(nullptr),
 	net(this)
 {
 	dw = new DockWidget;
@@ -200,10 +200,10 @@ void ProstoPleerW::searchTextEdited(const QString &text)
 	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	}
 	if (text.isEmpty())
-		((QStringListModel *)completer->model())->setStringList(QStringList());
+		((QStringListModel *)completer->model())->setStringList({});
 	else
 		autocompleteReply = net.start(ProstoPleerURL + "/search_suggest", QByteArray("part=" + text.toUtf8()), "Content-Type: application/x-www-form-urlencoded");
 }
@@ -213,12 +213,12 @@ void ProstoPleerW::search()
 	if (autocompleteReply)
 	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	}
 	if (searchReply)
 	{
 		searchReply->deleteLater();
-		searchReply = NULL;
+		searchReply = nullptr;
 	}
 	resultsW->clear();
 	if (!name.isEmpty())
@@ -318,10 +318,10 @@ void ProstoPleerW::netFinished(HttpReply *reply)
 		}
 	}
 	if (reply == autocompleteReply)
-		autocompleteReply = NULL;
+		autocompleteReply = nullptr;
 	else if (reply == searchReply)
 	{
-		searchReply = NULL;
+		searchReply = nullptr;
 		progressB->hide();
 	}
 	reply->deleteLater();
@@ -418,11 +418,11 @@ QAction *ProstoPleer::getAction(const QString &name, double, const QString &url,
 {
 	if (name != url)
 	{
-		QAction *act = new QAction(ProstoPleerW::tr("Search on Prostopleer"), NULL);
+		QAction *act = new QAction(ProstoPleerW::tr("Search on Prostopleer"), nullptr);
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/prostopleer"));
 		act->setProperty("name", name);
 		return act;
 	}
-	return NULL;
+	return nullptr;
 }

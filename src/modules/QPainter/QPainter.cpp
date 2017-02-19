@@ -31,14 +31,14 @@ QList<QPainterSW::Info> QPainterSW::getModulesInfo(const bool showDisabled) cons
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
-		modulesInfo += Info(QPainterWriterName, WRITER, QStringList("video"));
+		modulesInfo += Info(QPainterWriterName, WRITER, QStringList{"video"});
 	return modulesInfo;
 }
 void *QPainterSW::createInstance(const QString &name)
 {
 	if (name == QPainterWriterName && getBool("Enabled"))
 		return new QPainterWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 QPainterSW::SettingsWidget *QPainterSW::getSettingsWidget()

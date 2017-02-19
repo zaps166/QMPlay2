@@ -62,7 +62,7 @@ public:
 private:
 	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 
-	typedef QSharedPointer<YadifThr> YadifThrPtr;
+	using YadifThrPtr = QSharedPointer<YadifThr>;
 	QVector<YadifThrPtr> threads;
 
 	const bool doubler, spatialCheck;

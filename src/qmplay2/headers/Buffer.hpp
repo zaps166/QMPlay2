@@ -25,29 +25,19 @@ struct AVBufferRef;
 
 class Buffer
 {
-	AVBufferRef *m_bufferRef;
-	qint32 m_size;
+	AVBufferRef *m_bufferRef = nullptr;
+	qint32 m_size = 0;
+
 public:
-	inline Buffer() :
-		m_bufferRef(NULL),
-		m_size(0)
-	{}
+	Buffer() = default;
 	Buffer(const Buffer &other);
+	inline Buffer(Buffer &&other);
 	~Buffer();
 
-	inline bool isNull() const
-	{
-		return m_bufferRef == NULL;
-	}
-	inline bool isEmpty() const
-	{
-		return size() == 0;
-	}
+	inline bool isNull() const;
+	inline bool isEmpty() const;
 
-	inline qint32 size() const
-	{
-		return m_size;
-	}
+	inline qint32 size() const;
 	qint32 capacity() const;
 
 	bool isWritable() const;
@@ -57,18 +47,12 @@ public:
 	void clear();
 
 	const quint8 *data() const;
-	inline const quint8 *constData() const
-	{
-		return data();
-	}
+	inline const quint8 *constData() const;
 	quint8 *data(); //Automatically detaches the buffer if necessary
 
 	void assign(AVBufferRef *otherBufferRef, qint32 len = -1);
 	void assign(const void *data, qint32 len, qint32 mem);
-	inline void assign(const void *data, qint32 len)
-	{
-		assign(data, len, len);
-	}
+	inline void assign(const void *data, qint32 len);
 
 	AVBufferRef *toAvBufferRef();
 
@@ -77,6 +61,56 @@ public:
 #endif
 
 	Buffer &operator =(const Buffer &other);
+	inline Buffer &operator =(Buffer &&other);
+
+private:
+	inline void move(Buffer &other);
 };
+
+/* Inline implementation */
+
+Buffer::Buffer(Buffer &&other)
+{
+	move(other);
+}
+
+bool Buffer::isNull() const
+{
+	return m_bufferRef == nullptr;
+}
+bool Buffer::isEmpty() const
+{
+	return size() == 0;
+}
+
+qint32 Buffer::size() const
+{
+	return m_size;
+}
+
+const quint8 *Buffer::constData() const
+{
+	return data();
+}
+
+void Buffer::assign(const void *data, qint32 len)
+{
+	assign(data, len, len);
+}
+
+Buffer &Buffer::operator =(Buffer &&other)
+{
+	move(other);
+	return *this;
+}
+
+void Buffer::move(Buffer &other)
+{
+	m_bufferRef = other.m_bufferRef;
+	m_size = other.m_size;
+
+	other.m_bufferRef = nullptr;
+	other.m_size = 0;
+}
 
 #endif //BUFFER_HPP

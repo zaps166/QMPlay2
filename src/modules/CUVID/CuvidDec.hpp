@@ -60,7 +60,7 @@ private:
 
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
 
-	bool open(StreamInfo &streamInfo, VideoWriter *writer = NULL);
+	bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr);
 
 	/**/
 
