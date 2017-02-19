@@ -21,6 +21,7 @@
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Reader.hpp>
+#include <Json11.hpp>
 
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -205,7 +206,7 @@ void ProstoPleerW::searchTextEdited(const QString &text)
 	if (text.isEmpty())
 		((QStringListModel *)completer->model())->setStringList({});
 	else
-		autocompleteReply = net.start(ProstoPleerURL + "/search_suggest", QByteArray("part=" + text.toUtf8()), "Content-Type: application/x-www-form-urlencoded");
+		autocompleteReply = net.start(ProstoPleerURL + "/search_suggest", QByteArray("part=" + text.toUtf8()), Http::UrlEncoded);
 }
 void ProstoPleerW::search()
 {
@@ -360,7 +361,7 @@ DockWidget *ProstoPleer::getDockWidget()
 
 QList<ProstoPleer::AddressPrefix> ProstoPleer::addressPrefixList(bool img) const
 {
-	return QList<AddressPrefix>() << AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage());
+	return {AddressPrefix(ProstoPleerName, img ? QImage(":/prostopleer") : QImage())};
 }
 void ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
@@ -384,30 +385,25 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
 			if (idx > -1 && Reader::create(ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1), reader))
 			{
-				QByteArray replyData;
+				std::string replyData;
 				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
 				{
-					QByteArray arr =  reader->read(4096);;
+					QByteArray arr =  reader->read(4096);
 					if (arr.isEmpty())
 						break;
-					replyData += arr;
+					replyData += arr.constData();
 				}
 				reader.clear();
 
-				replyData.replace('"', QByteArray());
-				int idx = replyData.indexOf("track_link:");
-				if (idx > -1)
+				const Json json = Json::parse(replyData);
+				const QString tmpStreamUrl = json["track_link"].string_value().c_str();
+				if (!tmpStreamUrl.isEmpty())
 				{
-					idx += 11;
-					int idx2 = replyData.indexOf('}', idx);
-					if (idx2 > -1)
-					{
-						*stream_url = replyData.mid(idx, idx2 - idx);
-						return;
-					}
+					*stream_url = tmpStreamUrl;
+					return;
 				}
 
-				if (!replyData.isEmpty())
+				if (!replyData.empty())
 					QMPlay2Core.sendMessage(ProstoPleerW::tr("Try again later"), ProstoPleerName);
 			}
 		}
