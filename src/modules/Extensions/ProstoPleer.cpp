@@ -179,7 +179,7 @@ ProstoPleerW::ProstoPleerW() :
 
 	resultsW = new ResultsPleer;
 
-	connect(&net, SIGNAL(finished(HttpReply *)), this, SLOT(netFinished(HttpReply *)));
+	connect(&net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(searchE, 0, 0, 1, 1);
@@ -206,7 +206,7 @@ void ProstoPleerW::searchTextEdited(const QString &text)
 	if (text.isEmpty())
 		((QStringListModel *)completer->model())->setStringList({});
 	else
-		autocompleteReply = net.start(ProstoPleerURL + "/search_suggest", QByteArray("part=" + text.toUtf8()), Http::UrlEncoded);
+		autocompleteReply = net.start(ProstoPleerURL + "/search_suggest", QByteArray("part=" + text.toUtf8()), NetworkAccess::UrlEncoded);
 }
 void ProstoPleerW::search()
 {
@@ -237,9 +237,9 @@ void ProstoPleerW::search()
 	lastName = name;
 }
 
-void ProstoPleerW::netFinished(HttpReply *reply)
+void ProstoPleerW::netFinished(NetworkReply *reply)
 {
-	if (reply->error())
+	if (reply->hasError())
 	{
 		if (reply == searchReply)
 		{

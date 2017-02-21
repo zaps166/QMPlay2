@@ -157,13 +157,13 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 
 		//updateNowPlaying
 		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		HttpReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).toUtf8(), Http::UrlEncoded);
+		NetworkReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
 		connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 
 		//scrobble
 		const QString ts = QString::number(scrobble.startTime);
 		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).toUtf8(), Http::UrlEncoded);
+		scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
 		scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
 		connect(scrobbleReply, SIGNAL(finished()), this, SLOT(scrobbleFinished()));
 	}
@@ -218,9 +218,9 @@ void LastFM::albumFinished()
 	const bool titleAsAlbum = coverReply->property("titleAsAlbum").toBool();
 	const QStringList taa = coverReply->property("taa").toStringList();
 	bool coverNotFound = false;
-	if (coverReply->error())
+	if (coverReply->hasError())
 	{
-		if (!isCoverImage && coverReply->error() == HttpReply::CONNECTION_ERROR_400)
+		if (!isCoverImage && coverReply->error() == NetworkReply::Error::Connection400)
 			coverNotFound = true;
 	}
 	else
@@ -274,9 +274,9 @@ void LastFM::albumFinished()
 }
 void LastFM::loginFinished()
 {
-	if (loginReply->error())
+	if (loginReply->hasError())
 	{
-		const bool wrongLoginOrPassword = (loginReply->error() == HttpReply::CONNECTION_ERROR_403);
+		const bool wrongLoginOrPassword = (loginReply->error() == NetworkReply::Error::Connection403);
 		if (!dontShowLoginError || wrongLoginOrPassword)
 			QMPlay2Core.logError(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()));
 		if (wrongLoginOrPassword)
@@ -309,7 +309,7 @@ void LastFM::loginFinished()
 }
 void LastFM::scrobbleFinished()
 {
-	if (scrobbleReply->error())
+	if (scrobbleReply->hasError())
 	{
 		scrobbleQueue.enqueue(scrobbleReply->property("scrobble").value<Scrobble>());
 		logout(false);

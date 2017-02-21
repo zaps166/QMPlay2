@@ -22,7 +22,7 @@ class QListWidgetItem;
 class QProgressBar;
 class QListWidget;
 class QLabel;
-class Http;
+class NetworkAccess;
 
 #include <QMenu>
 #include <QIcon>
@@ -51,7 +51,7 @@ private:
 	DockWidget *dw;
 
 	bool once;
-	Http *net;
+	NetworkAccess *net;
 
 	QListWidget *lW;
 	QLabel *infoL;

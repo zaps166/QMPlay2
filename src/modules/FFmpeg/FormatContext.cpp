@@ -725,7 +725,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	AVDictionary *options = nullptr;
 	if (!inputFmt)
-		url = FFCommon::prepareUrl(_url, options);
+		url = Functions::prepareFFmpegUrl(_url, options);
 
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;

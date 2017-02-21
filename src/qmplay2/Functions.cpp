@@ -19,9 +19,10 @@
 #include <Functions.hpp>
 
 #include <QMPlay2Extensions.hpp>
-#include <QMPlay2OSD.hpp>
 #include <DeintFilter.hpp>
+#include <QMPlay2OSD.hpp>
 #include <VideoFrame.hpp>
+#include <Version.hpp>
 #include <Reader.hpp>
 
 #include <QMimeData>
@@ -30,6 +31,12 @@
 #include <QUrl>
 #include <QRegExp>
 #include <QMessageBox>
+
+extern "C"
+{
+	#include <libavformat/version.h>
+	#include <libavutil/dict.h>
+}
 
 #include <cmath>
 
@@ -613,4 +620,29 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 		QCursor::setPos(widget->mapToGlobal(mousePos));
 
 	return doWrap;
+}
+
+QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool icy, const QByteArray &userAgent)
+{
+	if (url.startsWith("file://"))
+		url.remove(0, 7);
+	else
+	{
+		const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
+
+		if (url.startsWith("mms:"))
+			url.insert(3, 'h');
+
+		if (url.startsWith("http"))
+			av_dict_set(&options, "icy", icy ? "1" : "0", 0);
+#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
+		av_dict_set(&options, "user_agent", userAgent.isNull() ? QMPlay2UserAgent : userAgent, 0);
+#else
+		av_dict_set(&options, "user-agent", userAgent.isNull() ? QMPlay2UserAgent : userAgent, 0);
+#endif
+
+		if (!cookies.isEmpty())
+			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
+	}
+	return url;
 }

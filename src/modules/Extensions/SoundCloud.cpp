@@ -143,7 +143,7 @@ SoundCloudW::SoundCloudW() :
 
 	resultsW = new ResultsSound;
 
-	connect(&net, SIGNAL(finished(HttpReply *)), this, SLOT(netFinished(HttpReply *)));
+	connect(&net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(searchE, 0, 0, 1, 1);
@@ -183,9 +183,9 @@ void SoundCloudW::search()
 	lastName = name;
 }
 
-void SoundCloudW::netFinished(HttpReply *reply)
+void SoundCloudW::netFinished(NetworkReply *reply)
 {
-	if (reply->error())
+	if (reply->hasError())
 	{
 		if (reply == searchReply)
 		{

@@ -17,7 +17,8 @@
 */
 
 #include <QMPlay2Extensions.hpp>
-#include <Http.hpp>
+
+#include <NetworkAccess.hpp>
 
 #include <QTreeWidget>
 #include <QMenu>
@@ -61,7 +62,7 @@ private slots:
 	void searchTextEdited(const QString &text);
 	void search();
 
-	void netFinished(HttpReply *reply);
+	void netFinished(NetworkReply *reply);
 
 	void searchMenu();
 private:
@@ -76,8 +77,8 @@ private:
 	QString lastName;
 	int currPage;
 
-	HttpReply *autocompleteReply, *searchReply;
-	Http net;
+	NetworkReply *autocompleteReply, *searchReply;
+	NetworkAccess net;
 };
 
 /**/

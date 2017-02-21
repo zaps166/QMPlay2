@@ -17,6 +17,8 @@
 */
 
 #include <FFReader.hpp>
+
+#include <Functions.hpp>
 #include <FFCommon.hpp>
 
 extern "C"
@@ -130,7 +132,7 @@ QString FFReader::name() const
 bool FFReader::open()
 {
 	AVDictionary *options = nullptr;
-	const QString url = FFCommon::prepareUrl(getUrl(), options);
+	const QString url = Functions::prepareFFmpegUrl(getUrl(), options);
 
 	OpenAvioThr *openThr = new OpenAvioThr(url.toUtf8(), options, abortCtx);
 	avioCtx = openThr->getAvioCtx();

@@ -17,7 +17,8 @@
 */
 
 #include <Radio.hpp>
-#include <Http.hpp>
+
+#include <NetworkAccess.hpp>
 
 #include <QProgressBar>
 #include <QInputDialog>
@@ -104,8 +105,8 @@ void Radio::visibilityChanged(bool v)
 		progressB->setMaximum(0);
 		progressB->show();
 
-		net = new Http(this);
-		HttpReply *netReply = net->start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList");
+		net = new NetworkAccess(this);
+		NetworkReply *netReply = net->start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList");
 		connect(netReply, SIGNAL(downloadProgress(int, int)), this, SLOT(downloadProgress(int, int)));
 		connect(netReply, SIGNAL(finished()), this, SLOT(finished()));
 	}
@@ -155,9 +156,9 @@ void Radio::downloadProgress(int bytesReceived, int bytesTotal)
 }
 void Radio::finished()
 {
-	HttpReply *netReply = (HttpReply *)sender();
+	NetworkReply *netReply = (NetworkReply *)sender();
 	bool err = false;
-	if (!netReply->error())
+	if (!netReply->hasError())
 	{
 		QByteArray RadioList = netReply->readAll();
 		if (!RadioList.startsWith("NXRL"))

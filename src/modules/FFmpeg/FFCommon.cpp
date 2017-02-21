@@ -28,32 +28,6 @@ extern "C"
 	#include <libavutil/dict.h>
 }
 
-QString FFCommon::prepareUrl(QString url, AVDictionary *&options)
-{
-	if (url.startsWith("file://"))
-		url.remove(0, 7);
-	else
-	{
-		const QByteArray cookies = QMPlay2Core.getCookies(url);
-
-		if (url.startsWith("mms:"))
-			url.insert(3, 'h');
-#if LIBAVFORMAT_VERSION_MAJOR <= 55
-		if (url.startsWith("http"))
-			av_dict_set(&options, "icy", "1", 0);
-#endif
-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
-		av_dict_set(&options, "user_agent", QMPlay2UserAgent, 0);
-#else
-		av_dict_set(&options, "user-agent", QMPlay2UserAgent, 0);
-#endif
-
-		if (!cookies.isEmpty())
-			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
-	}
-	return url;
-}
-
 AVPacket *FFCommon::createAVPacket()
 {
 	AVPacket *packet;

@@ -52,7 +52,7 @@ set(QMPLAY2_HDR
     headers/ChapterProgramInfo.hpp
     headers/PacketBuffer.hpp
     headers/Buffer.hpp
-    headers/Http.hpp
+    headers/NetworkAccess.hpp
     headers/IPC.hpp
     headers/CPU.hpp
     headers/Version.hpp
@@ -94,7 +94,7 @@ set(QMPLAY2_SRC
     DockWidget.cpp
     PacketBuffer.cpp
     Buffer.cpp
-    Http.cpp
+    NetworkAccess.cpp
     Json11.cpp
 )
 

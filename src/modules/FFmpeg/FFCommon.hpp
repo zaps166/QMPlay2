@@ -19,8 +19,6 @@
 #ifndef FFCOMMON_H
 #define FFCOMMON_H
 
-#include <QString>
-
 #define QMPLAY2_NOPTS_VALUE ((qint64)AV_NOPTS_VALUE)
 
 #define DecoderName "FFmpeg Decoder"
@@ -39,8 +37,6 @@ class VideoFrame;
 
 namespace FFCommon
 {
-	QString prepareUrl(QString url, AVDictionary *&options);
-
 	AVPacket *createAVPacket();
 	void freeAVPacket(AVPacket *&packet);
 }

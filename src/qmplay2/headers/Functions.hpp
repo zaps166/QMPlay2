@@ -25,6 +25,8 @@
 #include <QImage>
 #include <QDate>
 
+struct AVDictionary;
+
 class QMPlay2OSD;
 class VideoFrame;
 class QMimeData;
@@ -132,6 +134,8 @@ namespace Functions
 
 	bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
 	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QImage *img = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
+
+	QString prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies = true, bool icy = true, const QByteArray &userAgent = QByteArray());
 
 	void hFlip(quint8 *data, int linesize, int height, int width);
 	void vFlip(quint8 *data, int linesize, int height);

@@ -631,7 +631,7 @@ YouTubeW::YouTubeW(Settings &sets) :
 	pageSwitcher = new PageSwitcher(this);
 	pageSwitcher->hide();
 
-	connect(&net, SIGNAL(finished(HttpReply *)), this, SLOT(netFinished(HttpReply *)));
+	connect(&net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(showSettingsB, 0, 0, 1, 1);
@@ -781,9 +781,9 @@ void YouTubeW::search()
 	lastTitle = title;
 }
 
-void YouTubeW::netFinished(HttpReply *reply)
+void YouTubeW::netFinished(NetworkReply *reply)
 {
-	if (reply->error())
+	if (reply->hasError())
 	{
 		if (reply == searchReply)
 		{
@@ -1015,8 +1015,8 @@ void YouTubeW::setSearchResults(QString data)
 			tWI->setData(0, Qt::UserRole, videoInfoLink);
 			tWI->setData(1, Qt::UserRole, isPlaylist);
 
-			HttpReply *linkReply = net.start(videoInfoLink);
-			HttpReply *imageReply = net.start(image);
+			NetworkReply *linkReply = net.start(videoInfoLink);
+			NetworkReply *imageReply = net.start(image);
 			linkReply->setProperty("tWI", qVariantFromValue((void *)tWI));
 			imageReply->setProperty("tWI", qVariantFromValue((void *)tWI));
 			linkReplies += linkReply;
