@@ -80,7 +80,7 @@ void Updater::downloadUpdate()
 		if (sender() == downloadUpdateB)
 			QMPlay2Core.getSettings().remove("UpdateVersion");
 
-		HttpReply *reply = net.start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater");
+		NetworkReply *reply = net.start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater");
 		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
 
 		infoL->setText(tr("Checking for updates"));
@@ -93,8 +93,8 @@ void Updater::downloadUpdate()
 
 void Updater::infoFinished()
 {
-	HttpReply *reply = (HttpReply *)sender();
-	if (!reply->error())
+	NetworkReply *reply = (NetworkReply *)sender();
+	if (!reply->hasError())
 	{
 		infoFile.write(reply->readAll());
 		infoFile.close();
@@ -143,7 +143,7 @@ void Updater::infoFinished()
 }
 void Updater::writeToFile()
 {
-	HttpReply *reply = (HttpReply *)sender();
+	NetworkReply *reply = (NetworkReply *)sender();
 	const QByteArray arr = reply->readAll();
 	bool err = false;
 	if (firstChunk)
@@ -162,8 +162,8 @@ void Updater::downloadprogress(int bytesReceived, int bytesTotal)
 }
 void Updater::downloadFinished()
 {
-	HttpReply *reply = (HttpReply *)sender();
-	if (updateFile.size() && !reply->error())
+	NetworkReply *reply = (NetworkReply *)sender();
+	if (updateFile.size() && !reply->hasError())
 	{
 		Settings &settings = QMPlay2Core.getSettings();
 		updateFile.close();
@@ -188,9 +188,9 @@ void Updater::applyUpdate()
 	QMPlay2GUI.mainW->close();
 }
 
-HttpReply *Updater::getFile(const QString &url)
+NetworkReply *Updater::getFile(const QString &url)
 {
-	HttpReply *reply = net.start(url);
+	NetworkReply *reply = net.start(url);
 	connect(reply, SIGNAL(downloadProgress(int, int)), this, SLOT(downloadprogress(int, int)));
 	connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
 	firstChunk = true;
