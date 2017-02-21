@@ -21,7 +21,8 @@
 
 #pragma once
 
-#include <string>
+#include <QByteArray>
+
 #include <vector>
 #include <memory>
 #include <map>
@@ -41,7 +42,7 @@ public:
 
 	// Array and object typedefs
 	using array  = std::vector<Json>;
-	using object = std::map<std::string, Json>;
+	using object = std::map<QByteArray, Json>;
 
 	// Constructors for the various types of JSON value.
 	Json() noexcept;                // NUL
@@ -49,8 +50,8 @@ public:
 	Json(double value);             // NUMBER
 	Json(int value);                // NUMBER
 	Json(bool value);               // BOOL
-	Json(const std::string &value); // STRING
-	Json(std::string &&value);      // STRING
+	Json(const QByteArray &value);  // STRING
+	Json(QByteArray &&value);       // STRING
 	Json(const char * value);       // STRING
 	Json(const array &values);      // ARRAY
 	Json(array &&values);           // ARRAY
@@ -63,7 +64,7 @@ public:
 
 	// Implicit constructor: map-like objects (std::map, std::unordered_map, etc)
 	template <class M, typename std::enable_if<
-		std::is_constructible<std::string, typename M::key_type>::value
+		std::is_constructible<QByteArray, typename M::key_type>::value
 		&& std::is_constructible<Json, typename M::mapped_type>::value,
 			int>::type = 0>
 	Json(const M & m) : Json(object(m.begin(), m.end())) {}
@@ -97,47 +98,47 @@ public:
 	// Return the enclosed value if this is a boolean, false otherwise.
 	bool bool_value() const;
 	// Return the enclosed string if this is a string, "" otherwise.
-	const std::string &string_value() const;
+	const QByteArray &string_value() const;
 	// Return the enclosed std::vector if this is an array, or an empty vector otherwise.
 	const array &array_items() const;
 	// Return the enclosed std::map if this is an object, or an empty map otherwise.
 	const object &object_items() const;
 
 	// Return a reference to arr[i] if this is an array, Json() otherwise.
-	const Json & operator[](size_t i) const;
+	const Json & operator[](int i) const;
 	// Return a reference to obj[key] if this is an object, Json() otherwise.
-	const Json & operator[](const std::string &key) const;
+	const Json & operator[](const QByteArray &key) const;
 
 	// Serialize.
-	void dump(std::string &out) const;
-	std::string dump() const {
-		std::string out;
+	void dump(QByteArray &out) const;
+	QByteArray dump() const {
+		QByteArray out;
 		dump(out);
 		return out;
 	}
 
 	// Parse.
-	static inline Json parse(const std::string & in,
+	static inline Json parse(const QByteArray & in,
 					  JsonParse strategy = JsonParse::STANDARD) {
-		std::string err;
+		QByteArray err;
 		return parse(in, err, strategy);
 	}
 	// Parse. If parse fails, return Json() and assign an error message to err.
-	static Json parse(const std::string & in,
-					  std::string & err,
+	static Json parse(const QByteArray & in,
+					  QByteArray & err,
 					  JsonParse strategy = JsonParse::STANDARD);
 
 	// Parse multiple objects, concatenated or separated by whitespace
 	static std::vector<Json> parse_multi(
-		const std::string & in,
-		std::string::size_type & parser_stop_pos,
-		std::string & err,
+		const QByteArray & in,
+		int & parser_stop_pos,
+		QByteArray & err,
 		JsonParse strategy = JsonParse::STANDARD);
 	static inline std::vector<Json> parse_multi(
-		const std::string & in,
-		std::string & err,
+		const QByteArray & in,
+		QByteArray & err,
 		JsonParse strategy = JsonParse::STANDARD) {
-		std::string::size_type parser_stop_pos;
+		int parser_stop_pos;
 		return parse_multi(in, parser_stop_pos, err, strategy);
 	}
 
@@ -161,14 +162,14 @@ protected:
 	virtual Json::Type type() const = 0;
 	virtual bool equals(const JsonValue * other) const = 0;
 	virtual bool less(const JsonValue * other) const = 0;
-	virtual void dump(std::string &out) const = 0;
+	virtual void dump(QByteArray &out) const = 0;
 	virtual double number_value() const;
 	virtual int int_value() const;
 	virtual bool bool_value() const;
-	virtual const std::string &string_value() const;
+	virtual const QByteArray &string_value() const;
 	virtual const Json::array &array_items() const;
-	virtual const Json &operator[](size_t i) const;
+	virtual const Json &operator[](int i) const;
 	virtual const Json::object &object_items() const;
-	virtual const Json &operator[](const std::string &key) const;
+	virtual const Json &operator[](const QByteArray &key) const;
 	virtual ~JsonValue() = default;
 };

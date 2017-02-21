@@ -274,12 +274,12 @@ private:
 
 	void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 	{
-		const Json json = Json::parse(jsonData.toUtf8().constData());
-		const std::string stdUrl = url.toUtf8().data();
+		const Json json = Json::parse(jsonData.toUtf8());
+		const QByteArray urlData = url.toUtf8();
 		for (const Json &formats : json["formats"].array_items())
 		{
-			if (stdUrl == formats["url"].string_value())
-				QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].string_value().c_str());
+			if (urlData == formats["url"].string_value())
+				QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].string_value());
 		}
 	}
 

@@ -391,8 +391,8 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 				netReply->waitForFinished();
 				if (!netReply->hasError())
 				{
-					const Json json = Json::parse(netReply->readAll().constData());
-					const QString tmpStreamUrl = json["track_link"].string_value().c_str();
+					const Json json = Json::parse(netReply->readAll());
+					const QString tmpStreamUrl = json["track_link"].string_value();
 					if (!tmpStreamUrl.isEmpty())
 						*stream_url = tmpStreamUrl;
 

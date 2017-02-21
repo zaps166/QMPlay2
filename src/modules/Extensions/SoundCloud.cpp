@@ -199,7 +199,7 @@ void SoundCloudW::netFinished(NetworkReply *reply)
 		const QByteArray replyData = reply->readAll();
 		if (reply == searchReply)
 		{
-			const Json json = Json::parse(replyData.constData());
+			const Json json = Json::parse(replyData);
 			if (json.is_array())
 			{
 				const QIcon soundcloudIcon(":/soundcloud");
@@ -212,15 +212,15 @@ void SoundCloudW::netFinished(NetworkReply *reply)
 					tWI->setData(0, Qt::UserRole, QString::number(track["id"].int_value()));
 					tWI->setIcon(0, soundcloudIcon);
 
-					const QString title = track["title"].string_value().c_str();
+					const QString title = track["title"].string_value();
 					tWI->setText(0, title);
 					tWI->setToolTip(0, title);
 
-					const QString artist = track["user"]["username"].string_value().c_str();
+					const QString artist = track["user"]["username"].string_value();
 					tWI->setText(1, artist);
 					tWI->setToolTip(1, artist);
 
-					const QString genre = track["genre"].string_value().c_str();
+					const QString genre = track["genre"].string_value();
 					tWI->setText(2, genre);
 					tWI->setToolTip(2, genre);
 
@@ -297,13 +297,13 @@ void SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 			netReply->waitForFinished();
 			if (!netReply->hasError())
 			{
-				const Json json = Json::parse(netReply->readAll().constData());
+				const Json json = Json::parse(netReply->readAll());
 				if (json.is_object())
 				{
 					if (stream_url)
-						*stream_url = QString("%1?client_id=%2").arg(json["stream_url"].string_value().c_str(), client_id);
+						*stream_url = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
 					if (name)
-						*name = json["title"].string_value().c_str();
+						*name = json["title"].string_value();
 				}
 			}
 			netReply.clear();
