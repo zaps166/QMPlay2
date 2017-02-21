@@ -20,6 +20,7 @@
 #include <FormatContext.hpp>
 
 #include <QMPlay2Core.hpp>
+#include <Functions.hpp>
 #include <OggHelper.hpp>
 #include <Packet.hpp>
 
@@ -691,11 +692,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		"tty" //txt files
 	};
 
-	const int idx = _url.indexOf("://");
-	if (idx < 0)
+	const QByteArray scheme = Functions::getUrlScheme(_url).toUtf8();
+	if (scheme.isEmpty())
 		return false;
-
-	const QByteArray scheme = _url.left(idx).toLower().toUtf8();
 
 	qint64 oggOffset = -1, oggSize = -1;
 	int oggTrack = -1;
