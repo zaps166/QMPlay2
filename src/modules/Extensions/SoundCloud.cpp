@@ -22,7 +22,6 @@ static const char client_id[] = "2add0f709fcfae1fd7a198ec7573d2d4";
 
 #include <Functions.hpp>
 #include <LineEdit.hpp>
-#include <Reader.hpp>
 #include <Json11.hpp>
 
 #include <QProgressBar>
@@ -290,28 +289,24 @@ void SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 			*extension = ".mp3";
 		if (ioCtrl)
 		{
-			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
-			if (Reader::create(SoundCloudURL + QString("/resolve?url=%1&client_id=%2").arg(url, client_id), reader))
-			{
-				std::string replyData;
-				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
-				{
-					QByteArray arr =  reader->read(4096);;
-					if (arr.isEmpty())
-						break;
-					replyData += arr.constData();
-				}
-				reader.clear();
+			NetworkAccess net;
+			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
-				const Json json = Json::parse(replyData);
+			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+			net.start(netReply, SoundCloudURL + QString("/resolve?url=%1&client_id=%2").arg(url, client_id));
+			netReply->waitForFinished();
+			if (!netReply->hasError())
+			{
+				const Json json = Json::parse(netReply->readAll().constData());
 				if (json.is_object())
 				{
 					if (stream_url)
-						*stream_url = json["stream_url"].string_value().c_str() + QString("?client_id=") + client_id;
+						*stream_url = QString("%1?client_id=%2").arg(json["stream_url"].string_value().c_str(), client_id);
 					if (name)
 						*name = json["title"].string_value().c_str();
 				}
 			}
+			netReply.clear();
 		}
 	}
 }

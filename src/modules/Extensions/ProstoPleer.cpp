@@ -20,7 +20,6 @@
 
 #include <Functions.hpp>
 #include <LineEdit.hpp>
-#include <Reader.hpp>
 #include <Json11.hpp>
 
 #include <QStringListModel>
@@ -380,31 +379,27 @@ void ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 			QString fileId = url;
 			while (fileId.endsWith('/'))
 				fileId.truncate(1);
-			int idx = url.lastIndexOf('/');
 
-			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
-			if (idx > -1 && Reader::create(ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1), reader))
+			const int idx = url.lastIndexOf('/');
+			if (idx > -1)
 			{
-				std::string replyData;
-				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* 2 MiB */)
-				{
-					QByteArray arr =  reader->read(4096);
-					if (arr.isEmpty())
-						break;
-					replyData += arr.constData();
-				}
-				reader.clear();
+				NetworkAccess net;
+				net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
-				const Json json = Json::parse(replyData);
-				const QString tmpStreamUrl = json["track_link"].string_value().c_str();
-				if (!tmpStreamUrl.isEmpty())
+				IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+				net.start(netReply, ProstoPleerURL + "/site_api/files/get_url?id=" + fileId.mid(idx + 1));
+				netReply->waitForFinished();
+				if (!netReply->hasError())
 				{
-					*stream_url = tmpStreamUrl;
-					return;
-				}
+					const Json json = Json::parse(netReply->readAll().constData());
+					const QString tmpStreamUrl = json["track_link"].string_value().c_str();
+					if (!tmpStreamUrl.isEmpty())
+						*stream_url = tmpStreamUrl;
 
-				if (!replyData.empty())
+				}
+				else if (netReply->error() != NetworkReply::Error::Aborted)
 					QMPlay2Core.sendMessage(ProstoPleerW::tr("Try again later"), ProstoPleerName);
+				netReply.clear();
 			}
 		}
 	}
