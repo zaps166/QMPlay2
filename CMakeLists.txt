@@ -79,6 +79,9 @@ add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_SOUNDCLOUD "Build with SoundCloud support" ON)
 add_feature_info(SoundCloud USE_SOUNDCLOUD "Build with SoundCloud support")
 
+option(USE_ANIMEODCINKI "Build with AnimeOdcinki support" ON)
+add_feature_info(AnimeOdcinki USE_ANIMEODCINKI "Build with AnimeOdcinki support")
+
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
 

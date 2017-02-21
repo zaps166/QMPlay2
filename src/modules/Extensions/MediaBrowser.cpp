@@ -28,6 +28,9 @@
 #ifdef USE_SOUNDCLOUD
 	#include <MediaBrowser/SoundCloud.hpp>
 #endif
+#ifdef USE_ANIMEODCINKI
+	#include <MediaBrowser/AnimeOdcinki.hpp>
+#endif
 
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -148,6 +151,9 @@ MediaBrowser::MediaBrowser(Module &module) :
 #endif
 #ifdef USE_SOUNDCLOUD
 	m_mediaBrowsers.emplace_back(new SoundCloud(m_net));
+#endif
+#ifdef USE_ANIMEODCINKI
+	m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));
 #endif
 
 	m_dW = new DockWidget;
