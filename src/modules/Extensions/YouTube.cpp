@@ -21,7 +21,6 @@
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
-#include <Reader.hpp>
 #include <Json11.hpp>
 
 #include <QStringListModel>
@@ -1491,19 +1490,14 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			*img = QImage(":/youtube");
 		if (ioCtrl && (stream_url || name))
 		{
-			IOController<Reader> &reader = ioCtrl->toRef<Reader>();
-			if (Reader::create(url, reader))
-			{
-				QByteArray replyData;
-				while (reader->readyRead() && !reader->atEnd() && replyData.size() < 0x200000 /* < 2 MiB */)
-				{
-					const QByteArray arr = reader->read(4096);
-					if (!arr.size())
-						break;
-					replyData += arr;
-				}
-				reader.clear();
+			NetworkAccess net;
+			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
+			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+			net.start(netReply, url);
+			netReply->waitForFinished();
+			if (!netReply->hasError())
+			{
 				const bool multiStream = w.multiStream;
 				const bool subtitles = w.subtitles;
 				if (extension) //Don't use multi stream and subtitles when downloading
@@ -1511,7 +1505,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 					w.multiStream = false;
 					w.subtitles = false;
 				}
-				const QStringList youTubeVideo = w.getYouTubeVideo(replyData, param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
+				const QStringList youTubeVideo = w.getYouTubeVideo(netReply->readAll(), param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
 				w.multiStream = multiStream;
 				w.subtitles = subtitles;
 				if (youTubeVideo.count() == 3)
@@ -1524,6 +1518,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 						*extension = youTubeVideo[1];
 				}
 			}
+			netReply.clear();
 		}
 	}
 	else if (prefix == "youtube-dl")
