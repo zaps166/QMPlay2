@@ -190,9 +190,6 @@ private:
 			}
 		}
 
-		if (m_aborted)
-			m_error = NetworkReply::Error::Aborted;
-
 		m_networkReplyMutex.lock();
 		if (m_networkReply)
 			emit m_networkReply->finished();
@@ -214,11 +211,11 @@ void NetworkReply::abort()
 
 bool NetworkReply::hasError() const
 {
-	return (m_priv->m_error != Error::Ok);
+	return (error() != Error::Ok);
 }
 NetworkReply::Error NetworkReply::error() const
 {
-	return m_priv->m_error;
+	return m_priv->m_aborted ? Error::Aborted : m_priv->m_error;
 }
 
 QByteArray NetworkReply::readAll()
