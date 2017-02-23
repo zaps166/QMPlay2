@@ -39,11 +39,7 @@ Playlist::Entries XSPF::read()
 	Reader *reader = ioCtrl.rawPtr<Reader>();
 	Entries list;
 
-	QString playlistPath = Functions::filePath(reader->getUrl());
-	if (playlistPath.startsWith("file://"))
-		playlistPath.remove(0, 7);
-	else
-		playlistPath.clear();
+	const QString playlistPath = getPlaylistPath(reader->getUrl());
 
 	QXmlStreamReader xmlReader(reader->read(reader->size()));
 	bool inTrack = false, inExtension = false;
@@ -113,6 +109,7 @@ Playlist::Entries XSPF::read()
 bool XSPF::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
+	const QString playlistPath = getPlaylistPath(writer->getUrl());
 
 	QByteArray buffer;
 	QXmlStreamWriter xmlWriter(&buffer);
@@ -130,8 +127,11 @@ bool XSPF::write(const Entries &list)
 		if (entry.GID)
 			startExtension(xmlWriter);
 
-		if (!entry.url.isEmpty())
-			xmlWriter.writeTextElement("location", entry.url);
+		QString url = entry.url;
+		if (url.startsWith("file://") && url.mid(7, playlistPath.length()) == playlistPath)
+			url.remove(0, playlistPath.length() + 7);
+		xmlWriter.writeTextElement("location", url);
+
 		if (!entry.name.isEmpty())
 			xmlWriter.writeTextElement("title", entry.name);
 		if (entry.length >= 0.0)

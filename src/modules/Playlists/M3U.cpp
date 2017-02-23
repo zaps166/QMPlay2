@@ -27,11 +27,7 @@ Playlist::Entries M3U::read()
 	Reader *reader = ioCtrl.rawPtr<Reader>();
 	Entries list;
 
-	QString playlistPath = Functions::filePath(reader->getUrl());
-	if (playlistPath.startsWith("file://"))
-		playlistPath.remove(0, 7);
-	else
-		playlistPath.clear();
+	const QString playlistPath = getPlaylistPath(reader->getUrl());
 
 	bool hasExtinf = false;
 	QString extinf[2];
@@ -75,6 +71,7 @@ Playlist::Entries M3U::read()
 bool M3U::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
+	const QString playlistPath = getPlaylistPath(writer->getUrl());
 	writer->write("#EXTM3U\r\n");
 	for (const Entry &entry : list)
 	{
@@ -82,13 +79,15 @@ bool M3U::write(const Entries &list)
 		{
 			const QString length = QString::number((qint32)(entry.length + 0.5));
 			QString url = entry.url;
-			const bool isFile = url.startsWith("file://");
-			if (isFile)
+			if (url.startsWith("file://"))
+			{
 				url.remove(0, 7);
+				if (url.startsWith(playlistPath))
+					url.remove(0, playlistPath.length());
 #ifdef Q_OS_WIN
-			if (isFile)
 				url.replace("/", "\\");
 #endif
+			}
 			writer->write(QString("#EXTINF:" + length + "," + QString(entry.name).replace('\n', '\001') + "\r\n" + url + "\r\n").toUtf8());
 		}
 	}

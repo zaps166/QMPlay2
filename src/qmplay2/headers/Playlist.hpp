@@ -63,6 +63,8 @@ private:
 	static Playlist *create(const QString &url, OpenMode openMode, QString *name = nullptr);
 
 protected:
+	static QString getPlaylistPath(const QString &url);
+
 	QList<QByteArray> readLines();
 
 	IOController<> ioCtrl;

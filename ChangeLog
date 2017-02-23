@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 17.02.23:
 	- replace Http class by NetworkAccess and use it in more places,
+	- save playlists with relative file path (autodetection),
 	- add XSPF support (thanks Zamarin Arthur for help),
 	- merge ProstoPleer and SoundCloud in MusicBrowser,
 	- add SoundCloud support (Zamarin Arthur),

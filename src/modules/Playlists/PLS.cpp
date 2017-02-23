@@ -39,11 +39,7 @@ Playlist::Entries PLS::read()
 	Reader *reader = ioCtrl.rawPtr<Reader>();
 	Entries list;
 
-	QString playlistPath = Functions::filePath(reader->getUrl());
-	if (playlistPath.startsWith("file://"))
-		playlistPath.remove(0, 7);
-	else
-		playlistPath.clear();
+	const QString playlistPath = getPlaylistPath(reader->getUrl());
 
 	int lastEntryIdx = -1;
 
@@ -126,16 +122,18 @@ Playlist::Entries PLS::read()
 bool PLS::write(const Entries &list)
 {
 	Writer *writer = ioCtrl.rawPtr<Writer>();
+	const QString playlistPath = getPlaylistPath(writer->getUrl());
 	writer->write(QString("[playlist]\r\nNumberOfEntries=" + QString::number(list.size()) + "\r\n").toUtf8());
 	for (int i = 0; i < list.size(); i++)
 	{
 		const Entry &entry = list[i];
 		const QString idx = QString::number(i+1);
 		QString url = entry.url;
-		const bool isFile = url.startsWith("file://");
-		if (isFile)
+		if (url.startsWith("file://"))
 		{
 			url.remove(0, 7);
+			if (url.startsWith(playlistPath))
+				url.remove(0, playlistPath.length());
 #ifdef Q_OS_WIN
 			url.replace("/", "\\");
 #endif

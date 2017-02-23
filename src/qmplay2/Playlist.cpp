@@ -99,6 +99,14 @@ Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 	return nullptr;
 }
 
+QString Playlist::getPlaylistPath(const QString &url)
+{
+	const QString playlistPath = Functions::filePath(url);
+	if (playlistPath.startsWith("file://"))
+		return playlistPath.mid(7);
+	return QString();
+}
+
 QList<QByteArray> Playlist::readLines()
 {
 	IOController<Reader> &reader = ioCtrl.toRef<Reader>();
