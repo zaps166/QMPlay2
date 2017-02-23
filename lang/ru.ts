@@ -1626,6 +1626,40 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Очередь</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Воспроизведение</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Открыть страницу в браузере</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Скопировать адрес страницы</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Поиск</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Следующая страница</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Ошибка соединения</translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2306,26 +2340,30 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>Поиск</translation>
+        <source>Title</source>
+        <translation type="unfinished">Название</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>Следующая страница</translation>
+        <source>Artist</source>
+        <translation type="unfinished">Исполнитель</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Ошибка соединения</translation>
+        <source>Length</source>
+        <translation type="unfinished">Продолжительность</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation>Повторите попытку позже</translation>
+        <source>Bitrate</source>
+        <translation type="unfinished">Битрейт</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation>Поиск на prostopleer</translation>
+        <translation type="unfinished">Поиск на prostopleer</translation>
+    </message>
+    <message>
+        <source>Try again later</source>
+        <translation type="unfinished">Повторите попытку позже</translation>
     </message>
 </context>
 <context>
@@ -2482,41 +2520,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation>Случайно в группе и повторя&amp;ть</translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Продолжительность</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Битрейт</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Очередь</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Воспроизведение</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Открыть страницу в браузере</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Скопировать адрес страницы</translation>
     </message>
 </context>
 <context>
@@ -2731,6 +2734,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Я-А</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Исполнитель</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished">Жанр</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Продолжительность</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

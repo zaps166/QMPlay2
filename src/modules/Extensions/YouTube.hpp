@@ -170,7 +170,7 @@ public:
 	QList<AddressPrefix> addressPrefixList(bool) const override;
 	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override;
 
-	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 private:
 	YouTubeW w;
 };

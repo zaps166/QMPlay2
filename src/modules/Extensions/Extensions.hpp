@@ -29,14 +29,8 @@ private:
 	SettingsWidget *getSettingsWidget() override;
 
 	QImage downloader, youtube, radio;
-#ifdef USE_PROSTOPLEER
-	QImage prostopleer;
-#endif
 #ifdef USE_LASTFM
 	QImage lastfm;
-#endif
-#ifdef USE_SOUNDCLOUD
-	QImage soundcloud;
 #endif
 };
 

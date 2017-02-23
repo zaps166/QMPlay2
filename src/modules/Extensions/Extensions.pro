@@ -26,19 +26,13 @@ DEPENDPATH  += . ../../qmplay2/headers
 HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp
 SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp
 
-HEADERS += ProstoPleer.hpp
-SOURCES += ProstoPleer.cpp
-DEFINES += USE_PROSTOPLEER
+HEADERS += MusicBrowser.hpp MusicBrowser/ProstoPleer.hpp MusicBrowser/SoundCloud.hpp MusicBrowser/MusicBrowserInterface.cpp
+SOURCES += MusicBrowser.cpp MusicBrowser/ProstoPleer.cpp MusicBrowser/SoundCloud.cpp
+DEFINES += USE_MUSICBROWSER USE_PROSTOPLEER USE_SOUNDCLOUD
 
 HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
 DEFINES += USE_LASTFM
-
-greaterThan(QT_MAJOR_VERSION, 4) {
-        HEADERS += SoundCloud.hpp
-        SOURCES += SoundCloud.cpp
-        DEFINES += USE_SoundCloud
-}
 
 unix:!android {
 	QT += dbus

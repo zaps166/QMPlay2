@@ -37,10 +37,11 @@ void LineEditButton::mousePressEvent(QMouseEvent *e)
 
 /**/
 
-LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)
+LineEdit::LineEdit(QWidget *parent)
+	: QLineEdit(parent)
 {
 	connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(textChangedSlot(const QString &)));
-	connect(&b, SIGNAL(clicked()), this, SLOT(clear_text()));
+	connect(&b, SIGNAL(clicked()), this, SLOT(clearText()));
 	setMinimumWidth(b.width() * 2.5);
 	setTextMargins(0, 0, b.width() * 1.5, 0);
 	b.setParent(this);
@@ -66,7 +67,7 @@ void LineEdit::textChangedSlot(const QString &str)
 {
 	b.setVisible(!str.isEmpty());
 }
-void LineEdit::clear_text()
+void LineEdit::clearText()
 {
 	clear();
 	emit clearButtonClicked();

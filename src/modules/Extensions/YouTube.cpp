@@ -486,16 +486,20 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
 			const QString name = tWI->parent() ? tWI->parent()->text(0) : tWI->text(0);
 			for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+			{
 				if (!dynamic_cast<YouTube *>(QMPlay2Ext))
 				{
 					QString addressPrefixName, url, param;
 					if (Functions::splitPrefixAndUrlIfHasPluginPrefix(getQMPlay2Url(tWI), &addressPrefixName, &url, &param))
-						if (QAction *act = QMPlay2Ext->getAction(name, -2, url, addressPrefixName, param))
+					{
+						for (QAction *act : QMPlay2Ext->getActions(name, -2, url, addressPrefixName, param))
 						{
 							act->setParent(menu);
 							menu->addAction(act);
 						}
+					}
 				}
+			}
 		}
 		menu->popup(viewport()->mapToGlobal(point));
 	}
@@ -1537,7 +1541,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 	}
 }
 
-QAction *YouTube::getAction(const QString &name, double, const QString &url, const QString &, const QString &)
+QVector<QAction *> YouTube::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
 {
 	if (name != url)
 	{
@@ -1545,7 +1549,7 @@ QAction *YouTube::getAction(const QString &name, double, const QString &url, con
 		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
 		act->setIcon(QIcon(":/youtube"));
 		act->setProperty("name", name);
-		return act;
+		return {act};
 	}
-	return nullptr;
+	return {};
 }

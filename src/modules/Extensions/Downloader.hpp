@@ -171,7 +171,7 @@ public:
 
 	DockWidget *getDockWidget() override;
 
-	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
 	/**/
 

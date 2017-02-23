@@ -1626,6 +1626,40 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation>Kolejkuj</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Odtwarzaj</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation>Otwórz stronę w przeglądarce</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation>Kopiuj adres strony</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation>Wyszukaj</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation>Następna strona</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation>Błąd połączenia</translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2306,26 +2340,30 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>Wyszukaj</translation>
+        <source>Title</source>
+        <translation>Tytuł</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>Następna strona</translation>
+        <source>Artist</source>
+        <translation>Wykonawca</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Błąd połączenia</translation>
+        <source>Length</source>
+        <translation>Długość</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation>Spróbuj ponownie później</translation>
+        <source>Bitrate</source>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
         <translation>Wyszukaj w Prostopleer</translation>
+    </message>
+    <message>
+        <source>Try again later</source>
+        <translation>Spróbuj ponownie później</translation>
     </message>
 </context>
 <context>
@@ -2482,41 +2520,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation>Z&amp;apętlone losowe odtwarzanie grupy</translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Wykonawca</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Kolejkuj</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Odtwórz</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Otwórz stronę w przeglądarce</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Kopiuj adres strony</translation>
     </message>
 </context>
 <context>
@@ -2731,6 +2734,29 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation>Tytuł</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation>Wykonwaca</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation>Gatunek</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation>Długość</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation>Wyszukaj w SoundCloud</translation>
     </message>
 </context>
 <context>

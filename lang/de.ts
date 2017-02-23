@@ -1626,6 +1626,40 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Warteschlange</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Seite öffnen im Browser</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Kopiere Seiten Adresse</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Suchen</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Nächste Seite</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2306,26 +2340,30 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>Suchen</translation>
+        <source>Title</source>
+        <translation type="unfinished">Titel</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>Nächste Seite</translation>
+        <source>Artist</source>
+        <translation type="unfinished">Artist</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Fehler beim Verbinden</translation>
+        <source>Length</source>
+        <translation type="unfinished">Länge</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation>Versuchen Sie es später erneut</translation>
+        <source>Bitrate</source>
+        <translation type="unfinished">Bitrate</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation>Suchen bei Prostopleer</translation>
+        <translation type="unfinished">Suchen bei Prostopleer</translation>
+    </message>
+    <message>
+        <source>Try again later</source>
+        <translation type="unfinished">Versuchen Sie es später erneut</translation>
     </message>
 </context>
 <context>
@@ -2482,41 +2520,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation>Zufällige Wiedergabe der Gruppe und wiederholen</translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artist</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Länge</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Warteschlange</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Wiedergabe</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Seite öffnen im Browser</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Kopiere Seiten Adresse</translation>
     </message>
 </context>
 <context>
@@ -2731,6 +2734,29 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Titel</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artist</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished">Genre</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Länge</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -591,14 +591,14 @@ DockWidget *Downloader::getDockWidget()
 	return w->dw;
 }
 
-QAction *Downloader::getAction(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
+QVector<QAction *> Downloader::getActions(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
 {
 	if (url.startsWith("file://"))
-		return nullptr;
+		return {};
 	for (Module *module : QMPlay2Core.getPluginsInstance())
 		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
-				return nullptr;
+				return {};
 	QAction *act = new QAction(DownloaderW::tr("Download"), nullptr);
 	act->setIcon(QIcon(":/downloader"));
 	act->connect(act, SIGNAL(triggered()), w, SLOT(download()));
@@ -609,5 +609,5 @@ QAction *Downloader::getAction(const QString &name, double, const QString &url, 
 		act->setProperty("param", param);
 	}
 	act->setProperty("url", url);
-	return act;
+	return {act};
 }

@@ -1625,6 +1625,40 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Mettre dans la file d&apos;attente</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Ouvrir la page dans le navigateur</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Copier l&apos;adresse de la page</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Chercher</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Erreur de connexion</translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2305,25 +2339,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>Chercher</translation>
+        <source>Title</source>
+        <translation type="unfinished">Titre</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <source>Artist</source>
+        <translation type="unfinished">Artiste</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Erreur de connexion</translation>
+        <source>Length</source>
+        <translation type="unfinished">Durée</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation type="unfinished"></translation>
+        <source>Bitrate</source>
+        <translation type="unfinished">Bitrate</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try again later</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2481,41 +2519,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Titre</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artiste</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Durée</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Mettre dans la file d&apos;attente</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Lecture</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Ouvrir la page dans le navigateur</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Copier l&apos;adresse de la page</translation>
     </message>
 </context>
 <context>
@@ -2730,6 +2733,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Titre</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artiste</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished">Genre</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Durée</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

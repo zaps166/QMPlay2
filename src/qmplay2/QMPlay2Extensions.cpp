@@ -50,7 +50,7 @@ DockWidget *QMPlay2Extensions::getDockWidget()
 QList<QMPlay2Extensions::AddressPrefix> QMPlay2Extensions::addressPrefixList(bool img) const
 {
 	Q_UNUSED(img)
-	return QList<AddressPrefix>();
+	return {};
 }
 void QMPlay2Extensions::convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl)
 {
@@ -58,14 +58,14 @@ void QMPlay2Extensions::convertAddress(const QString &, const QString &, const Q
 	Q_UNUSED(ioCtrl)
 }
 
-QAction *QMPlay2Extensions::getAction(const QString &name, double length, const QString &url, const QString &prefix, const QString &param)
+QVector<QAction *> QMPlay2Extensions::getActions(const QString &name, double length, const QString &url, const QString &prefix, const QString &param)
 {
 	Q_UNUSED(name)
 	Q_UNUSED(length)
 	Q_UNUSED(url)
 	Q_UNUSED(prefix)
 	Q_UNUSED(param)
-	return nullptr;
+	return {};
 }
 
 bool QMPlay2Extensions::isVisualization() const

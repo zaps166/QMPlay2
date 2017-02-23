@@ -1199,12 +1199,12 @@ void PlaylistWidget::modifyMenu()
 	bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
 	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 	{
-		QAction *act;
+		QVector<QAction *> actions;
 		if (splitFlag)
-			act = QMPlay2Ext->getAction(entryName, entryLength, url, addressPrefixName, param);
+			actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
 		else
-			act = QMPlay2Ext->getAction(entryName, entryLength, entryUrl);
-		if (act)
+			actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
+		for (QAction *act : actions)
 		{
 			act->setParent(playlistMenu()->extensions);
 			playlistMenu()->extensions->addAction(act);

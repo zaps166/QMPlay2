@@ -1625,6 +1625,40 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">入队</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">播放</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">用浏览器打开</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">复制网址</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">搜索</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">下一页</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">连接错误</translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2305,26 +2339,30 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>搜索</translation>
+        <source>Title</source>
+        <translation type="unfinished">标题</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>下一页</translation>
+        <source>Artist</source>
+        <translation type="unfinished">艺术家</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>连接错误</translation>
+        <source>Length</source>
+        <translation type="unfinished">长度</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation>稍候重试</translation>
+        <source>Bitrate</source>
+        <translation type="unfinished">比特率</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation>搜索于 Prostopleer</translation>
+        <translation type="unfinished">搜索于 Prostopleer</translation>
+    </message>
+    <message>
+        <source>Try again later</source>
+        <translation type="unfinished">稍候重试</translation>
     </message>
 </context>
 <context>
@@ -2468,41 +2506,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>标题</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>艺术家</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>长度</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>比特率</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>入队</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>播放</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>用浏览器打开</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>复制网址</translation>
     </message>
 </context>
 <context>
@@ -2717,6 +2720,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">标题</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">艺术家</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished">流派</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">长度</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

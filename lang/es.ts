@@ -1625,6 +1625,40 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Poner en cola</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Reproducir</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Abrir la página en el navegador</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Copiar la dirección de la página</translation>
+    </message>
+</context>
+<context>
+    <name>MusicBrowserW</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Buscar</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Pagina siguiente</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Error de conexión</translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2305,26 +2339,30 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleerW</name>
+    <name>ProstoPleer</name>
     <message>
-        <source>Search</source>
-        <translation>Buscar</translation>
+        <source>Title</source>
+        <translation type="unfinished">Título</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Error de conexión</translation>
+        <source>Artist</source>
+        <translation type="unfinished">Artista</translation>
     </message>
     <message>
-        <source>Try again later</source>
-        <translation>Inténtelo más tarde</translation>
+        <source>Length</source>
+        <translation type="unfinished">Longitud</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation type="unfinished">Tasa de bits</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation>Buscar en Prostopleer</translation>
+        <translation type="unfinished">Buscar en Prostopleer</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>Pagina siguiente</translation>
+        <source>Try again later</source>
+        <translation type="unfinished">Inténtelo más tarde</translation>
     </message>
 </context>
 <context>
@@ -2481,41 +2519,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ResultsPleer</name>
-    <message>
-        <source>Artist</source>
-        <translation>Artista</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Copiar la dirección de la página</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Abrir la página en el navegador</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>Título</translation>
-    </message>
-    <message>
-        <source>Enqueue</source>
-        <translation>Poner en cola</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Tasa de bits</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Reproducir</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Longitud</translation>
     </message>
 </context>
 <context>
@@ -2730,6 +2733,29 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
+    </message>
+</context>
+<context>
+    <name>SoundCloud</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Título</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artista</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished">Género</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Longitud</translation>
+    </message>
+    <message>
+        <source>Search on SoundCloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -48,7 +48,8 @@ private:
 	LineEditButton b;
 private slots:
 	void textChangedSlot(const QString &);
-	void clear_text();
+public slots:
+	void clearText();
 signals:
 	void clearButtonClicked();
 };

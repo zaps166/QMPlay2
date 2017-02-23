@@ -16,6 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 #include <QMPlay2Extensions.hpp>
 
 #include <NetworkAccess.hpp>
@@ -23,15 +25,21 @@
 #include <QTreeWidget>
 #include <QMenu>
 
+#include <memory>
+#include <vector>
+
+class MusicBrowserInterface;
+
 /**/
 
-class ResultsPleer : public QTreeWidget
+class MusicBrowserResults : public QTreeWidget
 {
 	Q_OBJECT
+
 public:
-	ResultsPleer();
-private:
-	QMenu menu;
+	MusicBrowserResults(MusicBrowserInterface *&musicBrowser);
+	~MusicBrowserResults();
+
 private slots:
 	void enqueue();
 	void playCurrentEntry();
@@ -41,6 +49,10 @@ private slots:
 	void playEntry(QTreeWidgetItem *tWI);
 
 	void contextMenu(const QPoint &p);
+
+private:
+	MusicBrowserInterface *&m_musicBrowser;
+	QMenu m_menu;
 };
 
 /**/
@@ -48,15 +60,21 @@ private slots:
 class QProgressBar;
 class QToolButton;
 class QCompleter;
+class QComboBox;
 class LineEdit;
 
-class ProstoPleerW : public QWidget
+class MusicBrowserW : public QWidget
 {
-	friend class ProstoPleer;
+	friend class MusicBrowser;
 	Q_OBJECT
+
 public:
-	ProstoPleerW();
+	MusicBrowserW();
+	~MusicBrowserW();
+
 private slots:
+	void providerChanged(int idx);
+
 	void next();
 
 	void searchTextEdited(const QString &text);
@@ -65,39 +83,42 @@ private slots:
 	void netFinished(NetworkReply *reply);
 
 	void searchMenu();
+
 private:
-	DockWidget *dw;
+	std::vector<std::unique_ptr<MusicBrowserInterface>> m_musicBrowsers;
+	MusicBrowserInterface *m_musicBrowser;
 
-	LineEdit *searchE;
-	QToolButton *searchB, *nextPageB;
-	QProgressBar *progressB;
-	ResultsPleer *resultsW;
+	DockWidget *m_dW;
 
-	QCompleter *completer;
-	QString lastName;
-	int currPage;
+	QComboBox *m_providersB;
+	LineEdit *m_searchE;
+	QToolButton *m_searchB, *m_nextPageB;
+	QProgressBar *m_progressB;
+	MusicBrowserResults *m_resultsW;
 
-	NetworkReply *autocompleteReply, *searchReply;
-	NetworkAccess net;
+	QCompleter *m_completer;
+	QString m_lastName;
+	qint32 m_currPage;
+
+	NetworkReply *m_autocompleteReply, *m_searchReply;
+	NetworkAccess m_net;
 };
 
 /**/
 
-class ProstoPleer : public QMPlay2Extensions
+class MusicBrowser : public QMPlay2Extensions
 {
 public:
-	ProstoPleer(Module &module);
-
-	bool set() override;
+	MusicBrowser(Module &module);
 
 	DockWidget *getDockWidget() override;
 
 	QList<AddressPrefix> addressPrefixList(bool) const override;
 	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override;
 
-	QAction *getAction(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 private:
-	ProstoPleerW w;
+	MusicBrowserW m_w;
 };
 
-#define ProstoPleerName "Prostopleer"
+#define MusicBrowserName "MusicBrowser"
