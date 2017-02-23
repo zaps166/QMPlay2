@@ -31,10 +31,10 @@ class FFTSpectrumW : public VisWidget
 public:
 	FFTSpectrumW(FFTSpectrum &);
 private:
-	void paintEvent(QPaintEvent *) override;
+	void paintEvent(QPaintEvent *) override final;
 
-	void start(bool v = false, bool dontCheckRegion = false) override;
-	void stop() override;
+	void start(bool v = false, bool dontCheckRegion = false) override final;
+	void stop() override final;
 
 	QVector<float> spectrumData;
 	QVector<QPair<qreal, QPair<qreal, double>>> lastData;
@@ -57,15 +57,15 @@ public:
 
 	void soundBuffer(const bool);
 
-	bool set() override;
+	bool set() override final;
 private:
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 
-	bool isVisualization() const override;
-	void connectDoubleClick(const QObject *, const char *) override;
-	void visState(bool, uchar, uint) override;
-	void sendSoundData(const QByteArray &) override;
-	void clearSoundData() override;
+	bool isVisualization() const override final;
+	void connectDoubleClick(const QObject *, const char *) override final;
+	void visState(bool, uchar, uint) override final;
+	void sendSoundData(const QByteArray &) override final;
+	void clearSoundData() override final;
 
 	/**/
 

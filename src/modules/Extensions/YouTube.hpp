@@ -54,7 +54,7 @@ private:
 	void removeTmpFile();
 	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
-	void mouseMoveEvent(QMouseEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override final;
 
 	QString fileToRemove;
 	QMenu *menu;
@@ -163,14 +163,14 @@ public:
 	enum MediaType {MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO};
 	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
 
-	bool set() override;
+	bool set() override final;
 
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 
-	QList<AddressPrefix> addressPrefixList(bool) const override;
-	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override;
+	QList<AddressPrefix> addressPrefixList(bool) const override final;
+	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override final;
 
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 private:
 	YouTubeW w;
 };

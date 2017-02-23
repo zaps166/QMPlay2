@@ -30,20 +30,20 @@ class FFReader : public Reader
 public:
 	FFReader();
 private:
-	bool readyRead() const override;
-	bool canSeek() const override;
+	bool readyRead() const override final;
+	bool canSeek() const override final;
 
-	bool seek(qint64) override;
-	QByteArray read(qint64) override;
-	void pause() override;
-	bool atEnd() const override;
-	void abort() override;
+	bool seek(qint64) override final;
+	QByteArray read(qint64) override final;
+	void pause() override final;
+	bool atEnd() const override final;
+	void abort() override final;
 
-	qint64 size() const override;
-	qint64 pos() const override;
-	QString name() const override;
+	qint64 size() const override final;
+	qint64 pos() const override final;
+	QString name() const override final;
 
-	bool open() override;
+	bool open() override final;
 
 	/**/
 

@@ -57,8 +57,8 @@ private:
 
 	inline QString getSelectedProfile();
 
-	void showEvent(QShowEvent *) override;
-	void closeEvent(QCloseEvent *) override;
+	void showEvent(QShowEvent *) override final;
+	void closeEvent(QCloseEvent *) override final;
 
 	Ui::GeneralSettings *page1;
 	Ui::PlaybackSettings *page2;

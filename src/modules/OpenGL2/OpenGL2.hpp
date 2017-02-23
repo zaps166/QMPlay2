@@ -23,10 +23,10 @@ class OpenGL2 : public Module
 public:
 	OpenGL2();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
-	SettingsWidget *getSettingsWidget() override;
+	SettingsWidget *getSettingsWidget() override final;
 };
 
 /**/
@@ -41,7 +41,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private:
-	void saveSettings() override;
+	void saveSettings() override final;
 
 	QCheckBox *enabledB, *allowPboB;
 #ifdef OPENGL_NEW_API

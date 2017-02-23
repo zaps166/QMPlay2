@@ -26,6 +26,6 @@ class VFilters : public Module
 public:
 	VFilters();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 };

@@ -44,12 +44,12 @@ public slots:
 	}
 	void drawRange(int first, int second);
 protected:
-	void paintEvent(QPaintEvent *) override;
-	void mousePressEvent(QMouseEvent *) override;
-	void mouseReleaseEvent(QMouseEvent *) override;
-	void mouseMoveEvent(QMouseEvent *) override;
-	void wheelEvent(QWheelEvent *) override;
-	void enterEvent(QEvent *) override;
+	void paintEvent(QPaintEvent *) override final;
+	void mousePressEvent(QMouseEvent *) override final;
+	void mouseReleaseEvent(QMouseEvent *) override final;
+	void mouseMoveEvent(QMouseEvent *) override final;
+	void wheelEvent(QWheelEvent *) override final;
+	void enterEvent(QEvent *) override final;
 private:
 	int getMousePos(int X);
 

@@ -44,7 +44,7 @@ public:
 
 	void stop();
 private:
-	void run() override;
+	void run() override final;
 
 	IOController<> ioCtrl;
 	PlaylistWidget &pLW;
@@ -186,12 +186,12 @@ private:
 
 	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
 
-	void mouseMoveEvent(QMouseEvent *) override;
-	void dragEnterEvent(QDragEnterEvent *) override;
-	void dragMoveEvent(QDragMoveEvent *) override;
-	void dropEvent(QDropEvent *) override;
-	void paintEvent(QPaintEvent *) override;
-	void scrollContentsBy(int dx, int dy) override;
+	void mouseMoveEvent(QMouseEvent *) override final;
+	void dragEnterEvent(QDragEnterEvent *) override final;
+	void dragMoveEvent(QDragMoveEvent *) override final;
+	void dropEvent(QDropEvent *) override final;
+	void paintEvent(QPaintEvent *) override final;
+	void scrollContentsBy(int dx, int dy) override final;
 
 	QRect getArcRect(int size);
 

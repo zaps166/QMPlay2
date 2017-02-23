@@ -60,7 +60,7 @@ public:
 
 	void updateInDockW();
 
-	const QWidget *getVideoDock() const override;
+	const QWidget *getVideoDock() const override final;
 
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;

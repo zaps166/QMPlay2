@@ -48,7 +48,7 @@ public:
 
 	QMutex bufferMutex;
 private:
-	void run() override;
+	void run() override final;
 
 	VideoFilters &videoFilters;
 

@@ -111,12 +111,12 @@ class MusicBrowser : public QMPlay2Extensions
 public:
 	MusicBrowser(Module &module);
 
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 
-	QList<AddressPrefix> addressPrefixList(bool) const override;
-	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override;
+	QList<AddressPrefix> addressPrefixList(bool) const override final;
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
 
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 private:
 	MusicBrowserW m_w;
 };

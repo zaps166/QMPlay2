@@ -35,7 +35,7 @@ class PictureW : public QWidget
 public:
 	PictureW(TagLib::ByteVector &picture);
 private:
-	void paintEvent(QPaintEvent *) override;
+	void paintEvent(QPaintEvent *) override final;
 
 	TagLib::ByteVector &picture;
 };

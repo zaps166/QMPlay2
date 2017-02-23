@@ -41,13 +41,13 @@ public:
 	FFDecDXVA2(QMutex &avcodec_mutex, Module &module);
 	~FFDecDXVA2();
 
-	bool set() override;
+	bool set() override final;
 
-	QString name() const override;
+	QString name() const override final;
 
-	void downloadVideoFrame(VideoFrame &decoded) override;
+	void downloadVideoFrame(VideoFrame &decoded) override final;
 
-	bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
+	bool open(StreamInfo &streamInfo, VideoWriter *writer) override final;
 
 private:
 	Qt::CheckState m_copyVideo;

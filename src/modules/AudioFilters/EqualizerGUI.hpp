@@ -29,7 +29,7 @@ public:
 		values.resize(vals);
 	}
 private:
-	void paintEvent(QPaintEvent *) override;
+	void paintEvent(QPaintEvent *) override final;
 
 	QVector<float> values;
 	float preamp;
@@ -50,7 +50,7 @@ public:
 
 	bool set() override final;
 
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void enabled(bool);
@@ -78,7 +78,7 @@ private:
 
 	void loadPresets();
 
-	void showEvent(QShowEvent *event) override;
+	void showEvent(QShowEvent *event) override final;
 
 	QMap<int, int> getPresetValues(const QString &name);
 

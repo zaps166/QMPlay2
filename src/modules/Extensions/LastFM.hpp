@@ -49,7 +49,7 @@ public:
 
 	LastFM(Module &module);
 private:
-	bool set() override;
+	bool set() override final;
 
 	void getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum = false);
 

@@ -43,7 +43,7 @@ private:
 		void showEvent(QShowEvent *);
 #endif
 
-		QSize sizeHint() const override;
+		QSize sizeHint() const override final;
 	} emptyW;
 	bool titleBarVisible, globalTitleBarVisible;
 };

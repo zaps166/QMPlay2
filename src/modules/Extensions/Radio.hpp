@@ -34,7 +34,7 @@ public:
 	Radio(Module &);
 	~Radio();
 
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 private slots:
 	void visibilityChanged(bool);
 	void popup(const QPoint &);

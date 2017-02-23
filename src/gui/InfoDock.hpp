@@ -23,8 +23,8 @@
 class TextEdit : public QTextEdit
 {
 private:
-	void mouseMoveEvent(QMouseEvent *) override;
-	void mousePressEvent(QMouseEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override final;
+	void mousePressEvent(QMouseEvent *) override final;
 };
 
 /**/

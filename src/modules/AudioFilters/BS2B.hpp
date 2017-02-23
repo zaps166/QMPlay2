@@ -28,9 +28,9 @@ public:
 
 	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint srate) override;
-	void clearBuffers() override;
-	double filter(Buffer &data, bool flush) override;
+	bool setAudioParameters(uchar, uint srate) override final;
+	void clearBuffers() override final;
+	double filter(Buffer &data, bool flush) override final;
 
 	void alloc();
 

@@ -35,7 +35,7 @@ public:
 	void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
 	void waitForFinished();
 private:
-	void run() override;
+	void run() override final;
 
 	const YadifDeint &yadifDeint;
 
@@ -54,11 +54,11 @@ class YadifDeint : public DeintFilter
 public:
 	YadifDeint(bool doubler, bool spatialCheck);
 
-	void clearBuffer() override;
+	void clearBuffer() override final;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
 
-	bool processParams(bool *paramsCorrected) override;
+	bool processParams(bool *paramsCorrected) override final;
 private:
 	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 

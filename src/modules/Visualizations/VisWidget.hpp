@@ -49,8 +49,8 @@ protected:
 	DockWidget *dw;
 	double time;
 private:
-	void mouseDoubleClickEvent(QMouseEvent *) override;
-	void changeEvent(QEvent *) override;
+	void mouseDoubleClickEvent(QMouseEvent *) override final;
+	void changeEvent(QEvent *) override final;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void contextMenu(const QPoint &point);

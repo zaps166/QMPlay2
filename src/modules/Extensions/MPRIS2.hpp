@@ -163,7 +163,7 @@ public:
 	MPRIS2(Module &module);
 	~MPRIS2();
 private:
-	bool set() override;
+	bool set() override final;
 
 	QScopedPointer<MPRIS2Interface> mpris2Interface;
 };

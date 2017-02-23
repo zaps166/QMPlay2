@@ -118,7 +118,7 @@ private slots:
 private:
 	void savePlistHelper(const QString &, const QString &, bool);
 
-	QMenu *createPopupMenu() override;
+	QMenu *createPopupMenu() override final;
 
 	void showToolBar(bool);
 	void hideDocks();
@@ -128,17 +128,17 @@ private:
 
 	bool getFullScreen() const;
 
-	void keyPressEvent(QKeyEvent *) override;
-	void mouseMoveEvent(QMouseEvent *) override;
-	void leaveEvent(QEvent *) override;
-	void closeEvent(QCloseEvent *) override;
-	void changeEvent(QEvent *) override;
-	void moveEvent(QMoveEvent *) override;
-	void showEvent(QShowEvent *) override;
-	void hideEvent(QHideEvent *) override;
+	void keyPressEvent(QKeyEvent *) override final;
+	void mouseMoveEvent(QMouseEvent *) override final;
+	void leaveEvent(QEvent *) override final;
+	void closeEvent(QCloseEvent *) override final;
+	void changeEvent(QEvent *) override final;
+	void moveEvent(QMoveEvent *) override final;
+	void showEvent(QShowEvent *) override final;
+	void hideEvent(QHideEvent *) override final;
 
 #ifdef Q_OS_MAC
-	bool eventFilter(QObject *obj, QEvent *event) override;
+	bool eventFilter(QObject *obj, QEvent *event) override final;
 
 	void fileOpenTimerTimeout();
 

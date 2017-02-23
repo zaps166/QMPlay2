@@ -48,7 +48,7 @@ public:
 	NotifyExtension(Module &module);
 	~NotifyExtension();
 private:
-	bool set() override;
+	bool set() override final;
 
 	NotifyService *m_notifyService;
 };

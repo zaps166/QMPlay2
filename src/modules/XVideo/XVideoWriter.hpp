@@ -30,10 +30,10 @@ public:
 	~Drawable() final = default;
 private:
 	void resizeEvent(QResizeEvent *) override final;
-	void paintEvent(QPaintEvent *) override;
-	bool event(QEvent *) override;
+	void paintEvent(QPaintEvent *) override final;
+	bool event(QEvent *) override final;
 
-	QPaintEngine *paintEngine() const override;
+	QPaintEngine *paintEngine() const override final;
 
 	int X, Y, W, H;
 	QRect dstRect, srcRect;
@@ -52,17 +52,17 @@ public:
 private:
 	~XVideoWriter();
 
-	bool set() override;
+	bool set() override final;
 
 	bool readyWrite() const override final;
 
-	bool processParams(bool *paramsCorrected) override;
-	void writeVideo(const VideoFrame &videoFrame) override;
-	void writeOSD(const QList<const QMPlay2OSD *> &) override;
+	bool processParams(bool *paramsCorrected) override final;
+	void writeVideo(const VideoFrame &videoFrame) override final;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override final;
 
-	QString name() const override;
+	QString name() const override final;
 
-	bool open() override;
+	bool open() override final;
 
 	/**/
 

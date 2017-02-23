@@ -33,10 +33,10 @@ public:
 
 	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint) override;
-	int bufferedSamples() const override;
+	bool setAudioParameters(uchar, uint) override final;
+	int bufferedSamples() const override final;
 	void clearBuffers() override final;
-	double filter(Buffer &data, bool flush) override;
+	double filter(Buffer &data, bool flush) override final;
 
 	/**/
 

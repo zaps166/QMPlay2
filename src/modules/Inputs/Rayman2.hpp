@@ -27,18 +27,18 @@ class Rayman2 : public Demuxer
 public:
 	Rayman2(Module &);
 private:
-	bool set() override;
+	bool set() override final;
 
-	QString name() const override;
-	QString title() const override;
-	double length() const override;
-	int bitrate() const override;
+	QString name() const override final;
+	QString title() const override final;
+	double length() const override final;
+	int bitrate() const override final;
 
-	bool seek(int, bool backward) override;
-	bool read(Packet &, int &) override;
-	void abort() override;
+	bool seek(int, bool backward) override final;
+	bool read(Packet &, int &) override final;
+	void abort() override final;
 
-	bool open(const QString &) override;
+	bool open(const QString &) override final;
 
 	/**/
 

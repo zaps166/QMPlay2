@@ -40,7 +40,7 @@ public:
 
 	bool isConnected() const;
 
-	bool open(OpenMode mode) override;
+	bool open(OpenMode mode) override final;
 	void close() override final;
 
 private slots:
@@ -53,8 +53,8 @@ private:
 	IPCSocket(int socket, QObject *parent);
 #endif
 
-	qint64 readData(char *data, qint64 maxSize) override;
-	qint64 writeData(const char *data, qint64 maxSize) override;
+	qint64 readData(char *data, qint64 maxSize) override final;
+	qint64 writeData(const char *data, qint64 maxSize) override final;
 
 	IPCSocketPriv *m_priv;
 };

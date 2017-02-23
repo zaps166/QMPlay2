@@ -24,12 +24,12 @@ class Inputs : public Module
 public:
 	Inputs();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
-	QList<QAction *> getAddActions() override;
+	QList<QAction *> getAddActions() override final;
 
-	SettingsWidget *getSettingsWidget() override;
+	SettingsWidget *getSettingsWidget() override final;
 
 	QImage toneIcon, pcmIcon, rayman2Icon;
 private slots:
@@ -101,7 +101,7 @@ public:
 private slots:
 	void applyFreqs();
 private:
-	void saveSettings() override;
+	void saveSettings() override final;
 
 	AddD *toneGenerator;
 	QGroupBox *pcmB;

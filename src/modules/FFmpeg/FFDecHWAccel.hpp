@@ -27,11 +27,11 @@ protected:
 	FFDecHWAccel(QMutex &mutex);
 	virtual ~FFDecHWAccel();
 
-	VideoWriter *HWAccel() const override;
+	VideoWriter *HWAccel() const override final;
 
 	bool hasHWAccel(const char *hwaccelName) const;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override final;
 	virtual void downloadVideoFrame(VideoFrame &decoded);
 
 	/**/

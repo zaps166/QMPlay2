@@ -66,7 +66,7 @@ private:
 
 	void checkReadyWrite(AVThread *avThr);
 
-	void run() override;
+	void run() override final;
 
 	inline void ensureTrueUpdateBuffered();
 	inline bool canUpdateBuffered() const;

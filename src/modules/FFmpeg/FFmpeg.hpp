@@ -29,12 +29,12 @@ public:
 	FFmpeg();
 	~FFmpeg();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
-	SettingsWidget *getSettingsWidget() override;
+	SettingsWidget *getSettingsWidget() override final;
 
-	void videoDeintSave() override;
+	void videoDeintSave() override final;
 
 	/**/
 
@@ -81,7 +81,7 @@ private slots:
 	void checkEnables();
 #endif
 private:
-	void saveSettings() override;
+	void saveSettings() override final;
 
 	QGroupBox *hurryUpB;
 	QCheckBox *demuxerEB, *skipFramesB, *forceSkipFramesB;

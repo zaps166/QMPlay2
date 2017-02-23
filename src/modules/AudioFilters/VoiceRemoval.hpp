@@ -25,8 +25,8 @@ public:
 
 	bool set() override final;
 private:
-	bool setAudioParameters(uchar, uint) override;
-	double filter(Buffer &, bool) override;
+	bool setAudioParameters(uchar, uint) override final;
+	double filter(Buffer &, bool) override final;
 
 	bool enabled, hasParameters, canFilter;
 	uchar chn;

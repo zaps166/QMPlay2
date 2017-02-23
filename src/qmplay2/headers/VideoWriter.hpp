@@ -37,7 +37,7 @@ public:
 
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
-	qint64 write(const QByteArray &) override;
+	qint64 write(const QByteArray &) override final;
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;
 	virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;

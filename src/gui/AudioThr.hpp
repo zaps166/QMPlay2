@@ -48,12 +48,12 @@ public:
 		allowAudioDrain = true;
 	}
 private:
-	void run() override;
+	void run() override final;
 
 	bool resampler_create();
 
 #ifdef Q_OS_WIN
-	void timerEvent(QTimerEvent *) override;
+	void timerEvent(QTimerEvent *) override final;
 #endif
 
 	SndResampler sndResampler;

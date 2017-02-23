@@ -30,18 +30,18 @@ public:
 	OpenGL2OldWidget();
 	~OpenGL2OldWidget();
 
-	QWidget *widget() override;
+	QWidget *widget() override final;
 
-	bool testGL() override;
-	bool setVSync(bool enable) override;
-	void updateGL(bool requestDelayed) override;
+	bool testGL() override final;
+	bool setVSync(bool enable) override final;
+	void updateGL(bool requestDelayed) override final;
 
-	void initializeGL() override;
-	void paintGL() override;
+	void initializeGL() override final;
+	void paintGL() override final;
 private:
-	void resizeGL(int w, int h) override;
+	void resizeGL(int w, int h) override final;
 
-	bool event(QEvent *e) override;
+	bool event(QEvent *e) override final;
 };
 
 #endif // OPENGL2OLDWIDGET_HPP

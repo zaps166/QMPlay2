@@ -31,8 +31,8 @@ class AboutWidget : public QWidget
 public:
 	AboutWidget();
 private:
-	void showEvent(QShowEvent *) override;
-	void closeEvent(QCloseEvent *) override;
+	void showEvent(QShowEvent *) override final;
+	void closeEvent(QCloseEvent *) override final;
 
 	QPlainTextEdit *logE, *clE, *auE;
 	QPushButton *clrLogB;

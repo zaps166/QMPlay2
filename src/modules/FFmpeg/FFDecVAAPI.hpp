@@ -29,11 +29,11 @@ public:
 
 	bool set() override final;
 
-	QString name() const override;
+	QString name() const override final;
 
-	void downloadVideoFrame(VideoFrame &decoded) override;
+	void downloadVideoFrame(VideoFrame &decoded) override final;
 
-	bool open(StreamInfo &, VideoWriter *) override;
+	bool open(StreamInfo &, VideoWriter *) override final;
 
 private:
 	bool m_useOpenGL, m_allowVDPAU;

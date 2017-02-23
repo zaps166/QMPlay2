@@ -20,8 +20,8 @@
 
 class M3U : public Playlist
 {
-	Entries read() override;
-	bool write(const Entries &) override;
+	Entries read() override final;
+	bool write(const Entries &) override final;
 };
 
 #define M3UName "M3U"

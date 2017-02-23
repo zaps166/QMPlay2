@@ -24,8 +24,8 @@ class FileAssociation : public Module
 public:
 	FileAssociation();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
 	SettingsWidget *getSettingsWidget() override final;
 

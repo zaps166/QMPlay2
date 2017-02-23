@@ -122,7 +122,7 @@ private slots:
 	void stop();
 	void finished();
 private:
-	void run() override;
+	void run() override final;
 
 	QImage getImage();
 
@@ -167,11 +167,11 @@ public:
 	}
 	~Downloader();
 
-	void init() override;
+	void init() override final;
 
-	DockWidget *getDockWidget() override;
+	DockWidget *getDockWidget() override final;
 
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
 	/**/
 

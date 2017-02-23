@@ -39,7 +39,7 @@ public:
 private slots:
 	void setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 private:
-	void timerEvent(QTimerEvent *e) override;
+	void timerEvent(QTimerEvent *e) override final;
 
 	QAtomicInt timerId;
 	CdIo_t *cdio;
@@ -59,21 +59,21 @@ public:
 private:
 	~AudioCDDemux();
 
-	bool set() override;
+	bool set() override final;
 
-	QString name() const override;
+	QString name() const override final;
 	QString title() const override final;
-	QList<QMPlay2Tag> tags() const override;
+	QList<QMPlay2Tag> tags() const override final;
 	double length() const override final;
-	int bitrate() const override;
+	int bitrate() const override final;
 
-	bool seek(int, bool) override;
-	bool read(Packet &, int & ) override;
-	void abort() override;
+	bool seek(int, bool) override final;
+	bool read(Packet &, int & ) override final;
+	void abort() override final;
 
-	bool open(const QString &) override;
+	bool open(const QString &) override final;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
+	Playlist::Entries fetchTracks(const QString &url, bool &ok) override final;
 
 	/**/
 

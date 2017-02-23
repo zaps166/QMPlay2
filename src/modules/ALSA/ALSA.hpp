@@ -23,10 +23,10 @@ class ALSA : public Module
 public:
 	ALSA();
 private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
-	SettingsWidget *getSettingsWidget() override;
+	SettingsWidget *getSettingsWidget() override final;
 };
 
 /**/
@@ -43,7 +43,7 @@ class ModuleSettingsWidget : public Module::SettingsWidget
 public:
 	ModuleSettingsWidget(Module &);
 private:
-	void saveSettings() override;
+	void saveSettings() override final;
 
 	QCheckBox *enabledB, *autoMultichnB;
 	QDoubleSpinBox *delayB;

@@ -35,15 +35,15 @@ public:
 	OpenGL2Window();
 	~OpenGL2Window();
 
-	void deleteMe() override;
+	void deleteMe() override final;
 
-	QWidget *widget() override;
+	QWidget *widget() override final;
 
-	bool setVSync(bool enable) override;
-	void updateGL(bool requestDelayed) override;
+	bool setVSync(bool enable) override final;
+	void updateGL(bool requestDelayed) override final;
 
-	void initializeGL() override;
-	void paintGL() override;
+	void initializeGL() override final;
+	void paintGL() override final;
 
 private slots:
 	void doUpdateGL(bool queued = false);
@@ -51,10 +51,10 @@ private slots:
 	void videoVisible1(bool v);
 	void videoVisible2(bool v);
 private:
-	bool eventFilter(QObject *o, QEvent *e) override;
+	bool eventFilter(QObject *o, QEvent *e) override final;
 
 #ifdef PASS_EVENTS_TO_PARENT
-	bool event(QEvent *e) override;
+	bool event(QEvent *e) override final;
 #endif
 
 	QWidget *container;
