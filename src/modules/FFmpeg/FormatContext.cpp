@@ -822,7 +822,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		av_opt_get(formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, (quint8 **)&value);
 		QStringList icyHeaders = QString(value).split("\n", QString::SkipEmptyParts);
 		av_free(value);
-		for (const QString &icy, icyHeaders)
+		for (const QString &icy : icyHeaders)
 		{
 			if (icy.startsWith("icy-name: "))
 				av_dict_set(&formatCtx->metadata, "icy-name", icy.mid(10).toUtf8(), 0);
