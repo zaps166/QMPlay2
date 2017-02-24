@@ -138,13 +138,15 @@ void MusicBrowserResults::contextMenu(const QPoint &point)
 
 /**/
 
-MusicBrowserW::MusicBrowserW() :
+MusicBrowser::MusicBrowser(Module &module) :
 	m_musicBrowser(nullptr),
 	m_completer(new QCompleter(new QStringListModel(this), this)),
 	m_currPage(1),
 	m_autocompleteReply(nullptr), m_searchReply(nullptr),
 	m_net(this)
 {
+	SetModule(module);
+
 #ifdef USE_PROSTOPLEER
 	m_musicBrowsers.emplace_back(new ProstoPleer);
 #endif
@@ -202,10 +204,50 @@ MusicBrowserW::MusicBrowserW() :
 	for (const auto &m : m_musicBrowsers)
 		m_providersB->addItem(m->icon(), m->name());
 }
-MusicBrowserW::~MusicBrowserW()
+MusicBrowser::~MusicBrowser()
 {}
 
-void MusicBrowserW::providerChanged(int idx)
+DockWidget *MusicBrowser::getDockWidget()
+{
+	return m_dW;
+}
+
+QList<QMPlay2Extensions::AddressPrefix> MusicBrowser::addressPrefixList(bool img) const
+{
+	QList<AddressPrefix> ret;
+	for (const auto &m : m_musicBrowsers)
+		ret.append(m->addressPrefixList(img));
+	return ret;
+}
+void MusicBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+{
+	Q_UNUSED(param)
+	if (stream_url || img)
+		for (const auto &m : m_musicBrowsers)
+			if (m->convertAddress(prefix, url, stream_url, name, img, extension, ioCtrl))
+				break;
+}
+
+QVector<QAction *> MusicBrowser::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
+{
+	QVector<QAction *> actions;
+	if (name != url)
+	{
+		for (size_t i = 0; i < m_musicBrowsers.size(); ++i)
+		{
+			MusicBrowserInterface *m = m_musicBrowsers[i].get();
+			QAction *act = m->getAction();
+			act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
+			act->setProperty("ptr", (quintptr)m);
+			act->setProperty("idx", (quint32)i);
+			act->setProperty("name", name);
+			actions.append(act);
+		}
+	}
+	return actions;
+}
+
+void MusicBrowser::providerChanged(int idx)
 {
 	m_searchE->clearText();
 
@@ -215,13 +257,13 @@ void MusicBrowserW::providerChanged(int idx)
 	m_musicBrowser->prepareWidget(m_resultsW);
 }
 
-void MusicBrowserW::next()
+void MusicBrowser::next()
 {
 	++m_currPage;
 	search();
 }
 
-void MusicBrowserW::searchTextEdited(const QString &text)
+void MusicBrowser::searchTextEdited(const QString &text)
 {
 	if (m_autocompleteReply)
 	{
@@ -233,7 +275,7 @@ void MusicBrowserW::searchTextEdited(const QString &text)
 	else if (m_musicBrowser)
 		m_autocompleteReply = m_musicBrowser->getCompleterReply(text, m_net);
 }
-void MusicBrowserW::search()
+void MusicBrowser::search()
 {
 	const QString name = m_searchE->text();
 	if (m_autocompleteReply)
@@ -265,7 +307,7 @@ void MusicBrowserW::search()
 	m_lastName = name;
 }
 
-void MusicBrowserW::netFinished(NetworkReply *reply)
+void MusicBrowser::netFinished(NetworkReply *reply)
 {
 	if (reply->hasError())
 	{
@@ -310,7 +352,7 @@ void MusicBrowserW::netFinished(NetworkReply *reply)
 	reply->deleteLater();
 }
 
-void MusicBrowserW::searchMenu()
+void MusicBrowser::searchMenu()
 {
 	const QString name = sender()->property("name").toString();
 	if (!name.isEmpty())
@@ -323,51 +365,4 @@ void MusicBrowserW::searchMenu()
 		m_searchE->setText(name);
 		search();
 	}
-}
-
-/**/
-
-MusicBrowser::MusicBrowser(Module &module)
-{
-	SetModule(module);
-}
-
-DockWidget *MusicBrowser::getDockWidget()
-{
-	return m_w.m_dW;
-}
-
-QList<QMPlay2Extensions::AddressPrefix> MusicBrowser::addressPrefixList(bool img) const
-{
-	QList<AddressPrefix> ret;
-	for (const auto &m : m_w.m_musicBrowsers)
-		ret.append(m->addressPrefixList(img));
-	return ret;
-}
-void MusicBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
-{
-	Q_UNUSED(param)
-	if (stream_url || img)
-		for (const auto &m : m_w.m_musicBrowsers)
-			if (m->convertAddress(prefix, url, stream_url, name, img, extension, ioCtrl))
-				break;
-}
-
-QVector<QAction *> MusicBrowser::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
-{
-	QVector<QAction *> actions;
-	if (name != url)
-	{
-		for (size_t i = 0; i < m_w.m_musicBrowsers.size(); ++i)
-		{
-			MusicBrowserInterface *m = m_w.m_musicBrowsers[i].get();
-			QAction *act = m->getAction();
-			act->connect(act, SIGNAL(triggered()), &m_w, SLOT(searchMenu()));
-			act->setProperty("ptr", (quintptr)m);
-			act->setProperty("idx", (quint32)i);
-			act->setProperty("name", name);
-			actions.append(act);
-		}
-	}
-	return actions;
 }

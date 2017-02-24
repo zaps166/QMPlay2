@@ -63,14 +63,20 @@ class QCompleter;
 class QComboBox;
 class LineEdit;
 
-class MusicBrowserW : public QWidget
+class MusicBrowser : public QWidget, public QMPlay2Extensions
 {
-	friend class MusicBrowser;
 	Q_OBJECT
 
 public:
-	MusicBrowserW();
-	~MusicBrowserW();
+	MusicBrowser(Module &module);
+	~MusicBrowser();
+
+	DockWidget *getDockWidget() override final;
+
+	QList<AddressPrefix> addressPrefixList(bool) const override final;
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
+
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
 private slots:
 	void providerChanged(int idx);
@@ -102,23 +108,6 @@ private:
 
 	NetworkReply *m_autocompleteReply, *m_searchReply;
 	NetworkAccess m_net;
-};
-
-/**/
-
-class MusicBrowser : public QMPlay2Extensions
-{
-public:
-	MusicBrowser(Module &module);
-
-	DockWidget *getDockWidget() override final;
-
-	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
-
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
-private:
-	MusicBrowserW m_w;
 };
 
 #define MusicBrowserName "MusicBrowser"
