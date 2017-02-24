@@ -125,7 +125,7 @@ static bool youtubedl_updating;
 class YouTubeDL : public BasicIO
 {
 public:
-	inline YouTubeDL(YouTubeW &ytdlW) :
+	inline YouTubeDL(YouTube &ytdlW) :
 		ytdlW(ytdlW),
 		aborted(false)
 	{}
@@ -284,7 +284,7 @@ private:
 	}
 
 	QProcess youtubedl_process;
-	YouTubeW &ytdlW;
+	YouTube &ytdlW;
 	bool aborted;
 };
 
@@ -533,7 +533,7 @@ PageSwitcher::PageSwitcher(QWidget *youTubeW)
 
 /**/
 
-QList<int> *YouTubeW::getQualityPresets()
+QList<int> *YouTube::getQualityPresets()
 {
 	static QList<int> qualityPresets[QUALITY_PRESETS_COUNT];
 	static bool firstTime = true;
@@ -557,7 +557,7 @@ QList<int> *YouTubeW::getQualityPresets()
 	}
 	return qualityPresets;
 }
-QStringList YouTubeW::getQualityPresetString(int qualityIdx)
+QStringList YouTube::getQualityPresetString(int qualityIdx)
 {
 	QStringList videoItags;
 	for (int itag : getQualityPresets()[qualityIdx])
@@ -565,8 +565,7 @@ QStringList YouTubeW::getQualityPresetString(int qualityIdx)
 	return videoItags;
 }
 
-YouTubeW::YouTubeW(Settings &sets) :
-	sets(sets),
+YouTube::YouTube(Module &module) :
 	imgSize(QSize(100, 100)),
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
@@ -645,55 +644,197 @@ YouTubeW::YouTubeW(Settings &sets) :
 	layout->addWidget(resultsW, 1, 0, 1, 5);
 	layout->addWidget(progressB, 2, 0, 1, 5);
 	setLayout(layout);
+
+	SetModule(module);
 }
+YouTube::~YouTube()
+{}
 
-void YouTubeW::setItags()
+ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType)
 {
-	resultsW->itagsVideo = YouTube::getItagNames(sets.getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO).second;
-	resultsW->itagsAudio = YouTube::getItagNames(sets.getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO).second;
-	resultsW->itags = YouTube::getItagNames(sets.getStringList("YouTube/ItagList"), YouTube::MEDIA_AV).second;
-	multiStream = sets.getBool("YouTube/MultiStream");
-
-	if (multiStream)
+	if (itag_arr.isEmpty())
 	{
-		const bool audioOK = (resultsW->itagsAudio.count() >= 2 && (resultsW->itagsAudio.at(0) == 251 || resultsW->itagsAudio.at(0) == 171));
-		if (audioOK)
-		{
-			for (int i = 0; i < QUALITY_PRESETS_COUNT; ++i)
-			{
-				const QList<int> *qualityPresets = getQualityPresets();
-				if (resultsW->itagsVideo.mid(0, qualityPresets[i].count()) == qualityPresets[i])
-				{
-					qualityMenu->actions().at(i > _720p60 ? i + 1 : i /* Avoid separator */)->setChecked(true);
-					return;
-				}
-			}
-		}
+		/* Video + Audio */
+		itag_arr[43] = "360p WebM (VP8 + Vorbis 128kbps)";
+		itag_arr[36] = "180p MP4 (MPEG4 + AAC 32kbps)";
+		itag_arr[22] = "720p MP4 (H.264 + AAC 192kbps)"; //default
+		itag_arr[18] = "360p MP4 (H.264 + AAC 96kbps)";
+		itag_arr[ 5] = "240p FLV (FLV + MP3 64kbps)";
+
+		/* Video */
+		itag_arr[247] = "Video  720p (VP9)";
+		itag_arr[248] = "Video 1080p (VP9)";
+		itag_arr[271] = "Video 1440p (VP9)";
+		itag_arr[313] = "Video 2160p (VP9)";
+		itag_arr[272] = "Video 4320p/2160p (VP9)";
+
+		itag_arr[302] = "Video  720p 60fps (VP9)";
+		itag_arr[303] = "Video 1080p 60fps (VP9)";
+		itag_arr[308] = "Video 1440p 60fps (VP9)";
+		itag_arr[315] = "Video 2160p 60fps (VP9)";
+
+		itag_arr[298] = "Video  720p 60fps (H.264)";
+		itag_arr[299] = "Video 1080p 60fps (H.264)";
+
+		itag_arr[135] = "Video  480p (H.264)";
+		itag_arr[136] = "Video  720p (H.264)";
+		itag_arr[137] = "Video 1080p (H.264)";
+		itag_arr[264] = "Video 1440p (H.264)";
+		itag_arr[266] = "Video 2160p (H.264)";
+
+		itag_arr[170] = "Video  480p (VP8)";
+		itag_arr[168] = "Video  720p (VP8)";
+		itag_arr[170] = "Video 1080p (VP8)";
+
+		/* Audio */
+		itag_arr[139] = "Audio (AAC 48kbps)";
+		itag_arr[140] = "Audio (AAC 128kbps)";
+		itag_arr[141] = "Audio (AAC 256kbps)"; //?
+
+		itag_arr[171] = "Audio (Vorbis 128kbps)";
+		itag_arr[172] = "Audio (Vorbis 256kbps)"; //?
+
+		itag_arr[249] = "Audio (Opus 50kbps)";
+		itag_arr[250] = "Audio (Opus 70kbps)";
+		itag_arr[251] = "Audio (Opus 160kbps)";
 	}
 
-	for (QAction *act : qualityMenu->actions())
-		if (act->isChecked())
-			act->setChecked(false);
+	ItagNames itagPair;
+	for (auto it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
+	{
+		switch (mediaType)
+		{
+			case MEDIA_AV:
+				if (it.value().startsWith("Video") || it.value().startsWith("Audio"))
+					continue;
+				break;
+			case MEDIA_VIDEO:
+				if (!it.value().startsWith("Video"))
+					continue;
+				break;
+			case MEDIA_AUDIO:
+				if (!it.value().startsWith("Audio"))
+					continue;
+				break;
+		}
+		itagPair.first += it.value();
+		itagPair.second += it.key();
+	}
+	for (int i = 0, j = 0; i < itagList.count(); ++i)
+	{
+		const int idx = itagPair.second.indexOf(itagList[i].toInt());
+		if (idx > -1)
+		{
+			itagPair.first.swap(j, idx);
+			itagPair.second.swap(j, idx);
+			++j;
+		}
+	}
+	return itagPair;
 }
-void YouTubeW::set()
+
+bool YouTube::set()
 {
 	setItags();
-	resultsW->setColumnCount(sets.getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
-	subtitles = sets.getBool("YouTube/Subtitles");
-	youtubedl = sets.getString("YouTube/youtubedl");
+	resultsW->setColumnCount(sets().getBool("YouTube/ShowAdditionalInfo") ? 3 : 1);
+	subtitles = sets().getBool("YouTube/Subtitles");
+	youtubedl = sets().getString("YouTube/youtubedl");
 	if (youtubedl.isEmpty())
 		youtubedl = "youtube-dl";
 #ifdef Q_OS_WIN
 	youtubedl.replace('\\', '/');
 #endif
+	return true;
 }
 
-inline QString YouTubeW::getYtDlPath() const
+DockWidget *YouTube::getDockWidget()
+{
+	return dw;
+}
+
+QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
+{
+	return {
+		AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()),
+		AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage())
+	};
+}
+void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+{
+	if (!stream_url && !name && !img)
+		return;
+	if (prefix == "YouTube")
+	{
+		if (img)
+			*img = QImage(":/youtube");
+		if (ioCtrl && (stream_url || name))
+		{
+			NetworkAccess net;
+			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+
+			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+			net.start(netReply, url);
+			netReply->waitForFinished();
+			if (!netReply->hasError())
+			{
+				const bool tmpMultiStream = multiStream;
+				const bool tmpSubtitles = subtitles;
+				if (extension) //Don't use multi stream and subtitles when downloading
+				{
+					multiStream = false;
+					subtitles = false;
+				}
+				const QStringList youTubeVideo = getYouTubeVideo(netReply->readAll(), param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
+				multiStream = tmpMultiStream;
+				subtitles = tmpSubtitles;
+				if (youTubeVideo.count() == 3)
+				{
+					if (stream_url)
+						*stream_url = youTubeVideo[0];
+					if (name)
+						*name = youTubeVideo[2];
+					if (extension)
+						*extension = youTubeVideo[1];
+				}
+			}
+			netReply.clear();
+		}
+	}
+	else if (prefix == "youtube-dl")
+	{
+		if (img)
+			*img = QImage(":/video");
+		if (ioCtrl && !youtubedl_updating)
+		{
+			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
+			if (ioCtrl->assign(new YouTubeDL(*this)))
+			{
+				youtube_dl->addr(url, param, stream_url, name, extension);
+				ioCtrl->clear();
+			}
+		}
+	}
+}
+
+QVector<QAction *> YouTube::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
+{
+	if (name != url)
+	{
+		QAction *act = new QAction(YouTube::tr("Search on YouTube"), nullptr);
+		act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
+		act->setIcon(QIcon(":/youtube"));
+		act->setProperty("name", name);
+		return {act};
+	}
+	return {};
+}
+
+inline QString YouTube::getYtDlPath() const
 {
 	return youtubedl;
 }
 
-void YouTubeW::downloadYtDl()
+void YouTube::downloadYtDl()
 {
 	if (ytdlReply)
 		QMPlay2Core.sendMessage(tr("\"youtube-dl\" download is in progress..."), dw->windowTitle());
@@ -709,30 +850,30 @@ void YouTubeW::downloadYtDl()
 	}
 }
 
-void YouTubeW::showSettings()
+void YouTube::showSettings()
 {
 	emit QMPlay2Core.showSettings("Extensions");
 }
-void YouTubeW::setQualityFromMenu() //Call it only from quality menu!
+void YouTube::setQualityFromMenu() //Call it only from quality menu!
 {
 	const int qualityIdx = sender()->objectName().toInt();
-	sets.set("YouTube/MultiStream", true);
-	sets.set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
-	sets.set("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
+	sets().set("YouTube/MultiStream", true);
+	sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
+	sets().set("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
 	setItags();
 }
 
-void YouTubeW::next()
+void YouTube::next()
 {
 	pageSwitcher->currPageB->setValue(pageSwitcher->currPageB->value() + 1);
 	chPage();
 }
-void YouTubeW::prev()
+void YouTube::prev()
 {
 	pageSwitcher->currPageB->setValue(pageSwitcher->currPageB->value() - 1);
 	chPage();
 }
-void YouTubeW::chPage()
+void YouTube::chPage()
 {
 	if (currPage != pageSwitcher->currPageB->value())
 	{
@@ -741,7 +882,7 @@ void YouTubeW::chPage()
 	}
 }
 
-void YouTubeW::searchTextEdited(const QString &text)
+void YouTube::searchTextEdited(const QString &text)
 {
 	if (autocompleteReply)
 	{
@@ -753,7 +894,7 @@ void YouTubeW::searchTextEdited(const QString &text)
 	else
 		autocompleteReply = net.start(getAutocompleteUrl(text));
 }
-void YouTubeW::search()
+void YouTube::search()
 {
 	const QString title = searchE->text();
 	deleteReplies();
@@ -784,7 +925,7 @@ void YouTubeW::search()
 	lastTitle = title;
 }
 
-void YouTubeW::netFinished(NetworkReply *reply)
+void YouTube::netFinished(NetworkReply *reply)
 {
 	if (reply->hasError())
 	{
@@ -825,7 +966,7 @@ void YouTubeW::netFinished(NetworkReply *reply)
 				else
 				{
 					f.close();
-					sets.set("YouTube/youtubedl", (youtubedl = ytdlFileName));
+					sets().set("YouTube/youtubedl", (youtubedl = ytdlFileName));
 					QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), dw->windowTitle());
 				}
 			}
@@ -872,7 +1013,7 @@ void YouTubeW::netFinished(NetworkReply *reply)
 	reply->deleteLater();
 }
 
-void YouTubeW::searchMenu()
+void YouTube::searchMenu()
 {
 	const QString name = sender()->property("name").toString();
 	if (!name.isEmpty())
@@ -886,7 +1027,36 @@ void YouTubeW::searchMenu()
 	}
 }
 
-void YouTubeW::deleteReplies()
+void YouTube::setItags()
+{
+	resultsW->itagsVideo = YouTube::getItagNames(sets().getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO).second;
+	resultsW->itagsAudio = YouTube::getItagNames(sets().getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO).second;
+	resultsW->itags = YouTube::getItagNames(sets().getStringList("YouTube/ItagList"), YouTube::MEDIA_AV).second;
+	multiStream = sets().getBool("YouTube/MultiStream");
+
+	if (multiStream)
+	{
+		const bool audioOK = (resultsW->itagsAudio.count() >= 2 && (resultsW->itagsAudio.at(0) == 251 || resultsW->itagsAudio.at(0) == 171));
+		if (audioOK)
+		{
+			for (int i = 0; i < QUALITY_PRESETS_COUNT; ++i)
+			{
+				const QList<int> *qualityPresets = getQualityPresets();
+				if (resultsW->itagsVideo.mid(0, qualityPresets[i].count()) == qualityPresets[i])
+				{
+					qualityMenu->actions().at(i > _720p60 ? i + 1 : i /* Avoid separator */)->setChecked(true);
+					return;
+				}
+			}
+		}
+	}
+
+	for (QAction *act : qualityMenu->actions())
+		if (act->isChecked())
+			act->setChecked(false);
+}
+
+void YouTube::deleteReplies()
 {
 	while (!linkReplies.isEmpty())
 		linkReplies.takeFirst()->deleteLater();
@@ -894,7 +1064,7 @@ void YouTubeW::deleteReplies()
 		imageReplies.takeFirst()->deleteLater();
 }
 
-void YouTubeW::setAutocomplete(const QByteArray &data)
+void YouTube::setAutocomplete(const QByteArray &data)
 {
 	QStringList suggestions = fromU(QString(data).remove('"').remove('[').remove(']')).split(',');
 	if (suggestions.size() > 1)
@@ -905,7 +1075,7 @@ void YouTubeW::setAutocomplete(const QByteArray &data)
 			completer->complete();
 	}
 }
-void YouTubeW::setSearchResults(QString data)
+void YouTube::setSearchResults(QString data)
 {
 	/* Usuwanie komentarzy HTML */
 	for (int commentIdx = 0 ;;)
@@ -1039,7 +1209,7 @@ void YouTubeW::setSearchResults(QString data)
 	}
 }
 
-QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController<YouTubeDL> *youtube_dl)
+QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, QTreeWidgetItem *tWI, const QString &url, IOController<YouTubeDL> *youtube_dl)
 {
 	QString subsUrl;
 	if (subtitles && !tWI)
@@ -1307,7 +1477,7 @@ QStringList YouTubeW::getYouTubeVideo(const QString &data, const QString &PARAM,
 
 	return ret;
 }
-QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList ret)
+QStringList YouTube::getUrlByItagPriority(const QList<int> &itags, QStringList ret)
 {
 	for (int itag : itags)
 	{
@@ -1333,7 +1503,7 @@ QStringList YouTubeW::getUrlByItagPriority(const QList<int> &itags, QStringList 
 	return ret;
 }
 
-void YouTubeW::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
+void YouTube::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 {
 	int idx = data.indexOf("playlist-videos-container");
 	if (idx > -1)
@@ -1373,183 +1543,4 @@ void YouTubeW::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 			tWI->setDisabled(false);
 		}
 	}
-}
-
-/**/
-
-YouTube::YouTube(Module &module) :
-	w(module)
-{
-	SetModule(module);
-}
-
-ItagNames YouTube::getItagNames(const QStringList &itagList, MediaType mediaType)
-{
-	if (itag_arr.isEmpty())
-	{
-		/* Video + Audio */
-		itag_arr[43] = "360p WebM (VP8 + Vorbis 128kbps)";
-		itag_arr[36] = "180p MP4 (MPEG4 + AAC 32kbps)";
-		itag_arr[22] = "720p MP4 (H.264 + AAC 192kbps)"; //default
-		itag_arr[18] = "360p MP4 (H.264 + AAC 96kbps)";
-		itag_arr[ 5] = "240p FLV (FLV + MP3 64kbps)";
-
-		/* Video */
-		itag_arr[247] = "Video  720p (VP9)";
-		itag_arr[248] = "Video 1080p (VP9)";
-		itag_arr[271] = "Video 1440p (VP9)";
-		itag_arr[313] = "Video 2160p (VP9)";
-		itag_arr[272] = "Video 4320p/2160p (VP9)";
-
-		itag_arr[302] = "Video  720p 60fps (VP9)";
-		itag_arr[303] = "Video 1080p 60fps (VP9)";
-		itag_arr[308] = "Video 1440p 60fps (VP9)";
-		itag_arr[315] = "Video 2160p 60fps (VP9)";
-
-		itag_arr[298] = "Video  720p 60fps (H.264)";
-		itag_arr[299] = "Video 1080p 60fps (H.264)";
-
-		itag_arr[135] = "Video  480p (H.264)";
-		itag_arr[136] = "Video  720p (H.264)";
-		itag_arr[137] = "Video 1080p (H.264)";
-		itag_arr[264] = "Video 1440p (H.264)";
-		itag_arr[266] = "Video 2160p (H.264)";
-
-		itag_arr[170] = "Video  480p (VP8)";
-		itag_arr[168] = "Video  720p (VP8)";
-		itag_arr[170] = "Video 1080p (VP8)";
-
-		/* Audio */
-		itag_arr[139] = "Audio (AAC 48kbps)";
-		itag_arr[140] = "Audio (AAC 128kbps)";
-		itag_arr[141] = "Audio (AAC 256kbps)"; //?
-
-		itag_arr[171] = "Audio (Vorbis 128kbps)";
-		itag_arr[172] = "Audio (Vorbis 256kbps)"; //?
-
-		itag_arr[249] = "Audio (Opus 50kbps)";
-		itag_arr[250] = "Audio (Opus 70kbps)";
-		itag_arr[251] = "Audio (Opus 160kbps)";
-	}
-
-	ItagNames itagPair;
-	for (auto it = itag_arr.constBegin(), it_end = itag_arr.constEnd(); it != it_end; ++it)
-	{
-		switch (mediaType)
-		{
-			case MEDIA_AV:
-				if (it.value().startsWith("Video") || it.value().startsWith("Audio"))
-					continue;
-				break;
-			case MEDIA_VIDEO:
-				if (!it.value().startsWith("Video"))
-					continue;
-				break;
-			case MEDIA_AUDIO:
-				if (!it.value().startsWith("Audio"))
-					continue;
-				break;
-		}
-		itagPair.first += it.value();
-		itagPair.second += it.key();
-	}
-	for (int i = 0, j = 0; i < itagList.count(); ++i)
-	{
-		const int idx = itagPair.second.indexOf(itagList[i].toInt());
-		if (idx > -1)
-		{
-			itagPair.first.swap(j, idx);
-			itagPair.second.swap(j, idx);
-			++j;
-		}
-	}
-	return itagPair;
-}
-
-bool YouTube::set()
-{
-	w.set();
-	return true;
-}
-
-DockWidget *YouTube::getDockWidget()
-{
-	return w.dw;
-}
-
-QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
-{
-	return {
-		AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()),
-		AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage())
-	};
-}
-void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
-{
-	if (!stream_url && !name && !img)
-		return;
-	if (prefix == "YouTube")
-	{
-		if (img)
-			*img = QImage(":/youtube");
-		if (ioCtrl && (stream_url || name))
-		{
-			NetworkAccess net;
-			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
-
-			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			net.start(netReply, url);
-			netReply->waitForFinished();
-			if (!netReply->hasError())
-			{
-				const bool multiStream = w.multiStream;
-				const bool subtitles = w.subtitles;
-				if (extension) //Don't use multi stream and subtitles when downloading
-				{
-					w.multiStream = false;
-					w.subtitles = false;
-				}
-				const QStringList youTubeVideo = w.getYouTubeVideo(netReply->readAll(), param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
-				w.multiStream = multiStream;
-				w.subtitles = subtitles;
-				if (youTubeVideo.count() == 3)
-				{
-					if (stream_url)
-						*stream_url = youTubeVideo[0];
-					if (name)
-						*name = youTubeVideo[2];
-					if (extension)
-						*extension = youTubeVideo[1];
-				}
-			}
-			netReply.clear();
-		}
-	}
-	else if (prefix == "youtube-dl")
-	{
-		if (img)
-			*img = QImage(":/video");
-		if (ioCtrl && !youtubedl_updating)
-		{
-			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
-			if (ioCtrl->assign(new YouTubeDL(w)))
-			{
-				youtube_dl->addr(url, param, stream_url, name, extension);
-				ioCtrl->clear();
-			}
-		}
-	}
-}
-
-QVector<QAction *> YouTube::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
-{
-	if (name != url)
-	{
-		QAction *act = new QAction(YouTubeW::tr("Search on YouTube"), nullptr);
-		act->connect(act, SIGNAL(triggered()), &w, SLOT(searchMenu()));
-		act->setIcon(QIcon(":/youtube"));
-		act->setProperty("name", name);
-		return {act};
-	}
-	return {};
 }

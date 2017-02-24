@@ -55,7 +55,7 @@ Extensions::Extensions() :
 #else
 	init("YouTube/youtubedl", QString(QMPlay2Core.getSettingsDir() + "youtube-dl"));
 #endif
-	init("YouTube/ItagVideoList", YouTubeW::getQualityPresetString(YouTubeW::_1080p60));
+	init("YouTube/ItagVideoList", YouTube::getQualityPresetString(YouTube::_1080p60));
 	init("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
 	init("YouTube/ItagList", QStringList{"22", "43", "18"});
 
@@ -92,9 +92,9 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 void *Extensions::createInstance(const QString &name)
 {
 	if (name == DownloaderName)
-		return new Downloader(*this);
+		return static_cast<QMPlay2Extensions *>(new Downloader(*this));
 	else if (name == YouTubeName)
-		return new YouTube(*this);
+		return static_cast<QMPlay2Extensions *>(new YouTube(*this));
 #ifdef USE_LASTFM
 	else if (name == LastFMName)
 		return static_cast<QMPlay2Extensions *>(new LastFM(*this));

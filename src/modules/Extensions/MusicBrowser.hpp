@@ -38,7 +38,7 @@ class MusicBrowserResults : public QTreeWidget
 
 public:
 	MusicBrowserResults(MusicBrowserInterface *&musicBrowser);
-	~MusicBrowserResults();
+	~MusicBrowserResults() final;
 
 private slots:
 	void enqueue();
@@ -69,7 +69,7 @@ class MusicBrowser : public QWidget, public QMPlay2Extensions
 
 public:
 	MusicBrowser(Module &module);
-	~MusicBrowser();
+	~MusicBrowser() final;
 
 	DockWidget *getDockWidget() override final;
 

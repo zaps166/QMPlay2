@@ -438,7 +438,31 @@ QImage DownloaderThread::getImage()
 
 /**/
 
-DownloaderW::DownloaderW()
+Downloader::Downloader(Module &module) :
+	downloadLW(nullptr)
+{
+	SetModule(module);
+}
+Downloader::~Downloader()
+{
+	if (downloadLW)
+	{
+		int count = 0;
+		QByteArray arr;
+		QDataStream stream(&arr, QIODevice::WriteOnly);
+		for (QTreeWidgetItem *item : downloadLW->findItems(QString(), Qt::MatchContains))
+		{
+			DownloadItemW *downloadItemW = (DownloadItemW *)downloadLW->itemWidget(item, 0);
+			downloadItemW->write(stream);
+			++count;
+		}
+		Settings sets("Downloader");
+		sets.set("Count", count);
+		sets.set("Items", arr);
+	}
+}
+
+void Downloader::init()
 {
 	dw = new DockWidget;
 	dw->setObjectName(DownloaderName);
@@ -502,23 +526,34 @@ DownloaderW::DownloaderW()
 		downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 	}
 }
-DownloaderW::~DownloaderW()
+
+DockWidget *Downloader::getDockWidget()
 {
-	int count = 0;
-	QByteArray arr;
-	QDataStream stream(&arr, QIODevice::WriteOnly);
-	for (QTreeWidgetItem *item : downloadLW->findItems(QString(), Qt::MatchContains))
-	{
-		DownloadItemW *downloadItemW = (DownloadItemW *)downloadLW->itemWidget(item, 0);
-		downloadItemW->write(stream);
-		++count;
-	}
-	Settings sets("Downloader");
-	sets.set("Count", count);
-	sets.set("Items", arr);
+	return dw;
 }
 
-void DownloaderW::setDownloadsDir()
+QVector<QAction *> Downloader::getActions(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
+{
+	if (url.startsWith("file://"))
+		return {};
+	for (Module *module : QMPlay2Core.getPluginsInstance())
+		for (const Module::Info &mod : module->getModulesInfo())
+			if (mod.type == Module::DEMUXER && mod.name == prefix)
+				return {};
+	QAction *act = new QAction(Downloader::tr("Download"), nullptr);
+	act->setIcon(QIcon(":/downloader"));
+	act->connect(act, SIGNAL(triggered()), this, SLOT(download()));
+	if (!prefix.isEmpty())
+	{
+		act->setProperty("name", name);
+		act->setProperty("prefix", prefix);
+		act->setProperty("param", param);
+	}
+	act->setProperty("url", url);
+	return {act};
+}
+
+void Downloader::setDownloadsDir()
 {
 	QFileInfo dir(QFileDialog::getExistingDirectory(this, tr("Choose directory for downloaded files"), downloadLW->downloadsDirPath));
 #ifndef Q_OS_WIN
@@ -533,14 +568,14 @@ void DownloaderW::setDownloadsDir()
 	else if (dir.filePath() != QString())
 		QMessageBox::warning(this, DownloaderName, tr("Cannot change downloading files directory"));
 }
-void DownloaderW::clearFinished()
+void Downloader::clearFinished()
 {
 	const QList<QTreeWidgetItem *> items = downloadLW->findItems(QString(), Qt::MatchContains);
 	for (int i = items.count() - 1; i >= 0; --i)
 		if (((DownloadItemW *)downloadLW->itemWidget(items[i], 0))->isFinished())
 			delete items[i];
 }
-void DownloaderW::addUrl()
+void Downloader::addUrl()
 {
 	QString clipboardUrl;
 	const QMimeData *mime = QApplication::clipboard()->mimeData();
@@ -554,7 +589,7 @@ void DownloaderW::addUrl()
 	if (!url.isEmpty())
 		new DownloaderThread(nullptr, url, downloadLW);
 }
-void DownloaderW::download()
+void Downloader::download()
 {
 	new DownloaderThread
 	(
@@ -567,47 +602,9 @@ void DownloaderW::download()
 	);
 	downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 }
-void DownloaderW::itemDoubleClicked(QTreeWidgetItem *item)
+void Downloader::itemDoubleClicked(QTreeWidgetItem *item)
 {
 	DownloadItemW *downloadItemW = (DownloadItemW *)downloadLW->itemWidget(item, 0);
 	if (!downloadItemW->getFilePath().isEmpty())
 		emit QMPlay2Core.processParam("open", downloadItemW->getFilePath());
-}
-
-/**/
-
-Downloader::~Downloader()
-{
-	delete w;
-}
-
-void Downloader::init()
-{
-	w = new DownloaderW;
-}
-
-DockWidget *Downloader::getDockWidget()
-{
-	return w->dw;
-}
-
-QVector<QAction *> Downloader::getActions(const QString &name, double, const QString &url, const QString &prefix, const QString &param)
-{
-	if (url.startsWith("file://"))
-		return {};
-	for (Module *module : QMPlay2Core.getPluginsInstance())
-		for (const Module::Info &mod : module->getModulesInfo())
-			if (mod.type == Module::DEMUXER && mod.name == prefix)
-				return {};
-	QAction *act = new QAction(DownloaderW::tr("Download"), nullptr);
-	act->setIcon(QIcon(":/downloader"));
-	act->connect(act, SIGNAL(triggered()), w, SLOT(download()));
-	if (!prefix.isEmpty())
-	{
-		act->setProperty("name", name);
-		act->setProperty("prefix", prefix);
-		act->setProperty("param", param);
-	}
-	act->setProperty("url", url);
-	return {act};
 }

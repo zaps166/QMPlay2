@@ -93,7 +93,7 @@ private:
 
 class DownloadListW : public QTreeWidget
 {
-	friend class DownloaderW;
+	friend class Downloader;
 public:
 	inline QString getDownloadsDirPath()
 	{
@@ -137,37 +137,13 @@ private:
 
 /**/
 
-class DownloaderW : public QWidget
+class Downloader : public QWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
-	friend class Downloader;
+
 public:
-	DownloaderW();
-	~DownloaderW() final;
-private slots:
-	void setDownloadsDir();
-	void clearFinished();
-	void addUrl();
-	void download();
-	void itemDoubleClicked(QTreeWidgetItem *);
-private:
-	DockWidget *dw;
-
-	QGridLayout *layout;
-	DownloadListW *downloadLW;
-	QToolButton *setDownloadsDirB, *clearFinishedB, *addUrlB;
-};
-
-/**/
-
-class Downloader : public QMPlay2Extensions
-{
-public:
-	inline Downloader(Module &module)
-	{
-		SetModule(module);
-	}
-	~Downloader();
+	Downloader(Module &module);
+	~Downloader() final;
 
 	void init() override final;
 
@@ -175,9 +151,19 @@ public:
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
-	/**/
+private slots:
+	void setDownloadsDir();
+	void clearFinished();
+	void addUrl();
+	void download();
+	void itemDoubleClicked(QTreeWidgetItem *);
 
-	DownloaderW *w;
+private:
+	DockWidget *dw;
+
+	QGridLayout *layout;
+	DownloadListW *downloadLW;
+	QToolButton *setDownloadsDirB, *clearFinishedB, *addUrlB;
 };
 
 #define DownloaderName "QMPlay2 Downloader"

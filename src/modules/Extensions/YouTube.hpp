@@ -86,24 +86,35 @@ public:
 
 /**/
 
-class YouTubeW : public QWidget
+using ItagNames = QPair<QStringList, QList<int>>;
+
+class YouTube : public QWidget, public QMPlay2Extensions
 {
-	friend class YouTube;
 	Q_OBJECT
+
 public:
 	enum QUALITY_PRESETS {_2160p60, _1080p60, _720p60, _2160p, _1080p, _720p, _480p, QUALITY_PRESETS_COUNT};
 
 	static QList<int> *getQualityPresets();
 	static QStringList getQualityPresetString(int qualityIdx);
 
-	YouTubeW(Settings &sets);
+	YouTube(Module &module);
+	~YouTube() final;
 
-	void setItags();
-	void set();
+	enum MediaType {MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO};
+	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
+
+	bool set() override final;
+
+	DockWidget *getDockWidget() override final;
+
+	QList<AddressPrefix> addressPrefixList(bool) const override final;
+	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override final;
+
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
 	inline QString getYtDlPath() const;
 
-	DockWidget *dw;
 private slots:
 	void downloadYtDl();
 
@@ -120,7 +131,10 @@ private slots:
 	void netFinished(NetworkReply *reply);
 
 	void searchMenu();
+
 private:
+	void setItags();
+
 	void deleteReplies();
 
 	void setAutocomplete(const QByteArray &data);
@@ -131,7 +145,7 @@ private:
 
 	void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
 
-	Settings &sets;
+	DockWidget *dw;
 
 	LineEdit *searchE;
 	QToolButton *searchB;
@@ -151,30 +165,6 @@ private:
 
 	QString youtubedl;
 	bool multiStream, subtitles;
-};
-
-/**/
-
-using ItagNames = QPair<QStringList, QList<int>>;
-
-class YouTube : public QMPlay2Extensions
-{
-public:
-	YouTube(Module &module);
-
-	enum MediaType {MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO};
-	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
-
-	bool set() override final;
-
-	DockWidget *getDockWidget() override final;
-
-	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override final;
-
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
-private:
-	YouTubeW w;
 };
 
 #define YouTubeName "YouTube Browser"
