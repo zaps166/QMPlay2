@@ -31,14 +31,14 @@ QList<OpenSLES::Info> OpenSLES::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
-		modulesInfo += Info(OpenSLESWriterName, WRITER, QStringList("audio"));
+		modulesInfo += Info(OpenSLESWriterName, WRITER, {"audio"});
 	return modulesInfo;
 }
 void *OpenSLES::createInstance(const QString &name)
 {
 	if (name == OpenSLESWriterName && getBool("WriterEnabled"))
 		return new OpenSLESWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 OpenSLES::SettingsWidget *OpenSLES::getSettingsWidget()

@@ -51,12 +51,12 @@ static void bqPlayerCallback(SLBufferQueueItf bq, QSemaphore *sem)
 /**/
 
 OpenSLESWriter::OpenSLESWriter(Module &module) :
-	engineObject(NULL),
-	engineEngine(NULL),
-	outputMixObject(NULL),
-	bqPlayerObject(NULL),
-	bqPlayerPlay(NULL),
-	bqPlayerBufferQueue(NULL),
+	engineObject(nullptr),
+	engineEngine(nullptr),
+	outputMixObject(nullptr),
+	bqPlayerObject(nullptr),
+	bqPlayerPlay(nullptr),
+	bqPlayerBufferQueue(nullptr),
 	sample_rate(0), channels(0)
 {
 	addParam("delay");
@@ -129,14 +129,14 @@ bool OpenSLESWriter::processParams(bool *paramsCorrected)
 			buffers[i].resize(10 * channels * sample_rate / 1000);
 
 		/* Engine, output mix */
-		if (slCreateEngine(&engineObject, 0, NULL, 0, NULL, NULL) != SL_RESULT_SUCCESS)
+		if (slCreateEngine(&engineObject, 0, nullptr, 0, nullptr, nullptr) != SL_RESULT_SUCCESS)
 			return false;
 		if ((*engineObject)->Realize(engineObject, false) != SL_RESULT_SUCCESS)
 			return false;
 		if ((*engineObject)->GetInterface(engineObject, SL_IID_ENGINE, &engineEngine))
 			return false;
 
-		if ((*engineEngine)->CreateOutputMix(engineEngine, &outputMixObject, 0, NULL, NULL) != SL_RESULT_SUCCESS)
+		if ((*engineEngine)->CreateOutputMix(engineEngine, &outputMixObject, 0, nullptr, nullptr) != SL_RESULT_SUCCESS)
 			return false;
 
 		if ((*outputMixObject)->Realize(outputMixObject, false) != SL_RESULT_SUCCESS)
@@ -153,7 +153,7 @@ bool OpenSLESWriter::processParams(bool *paramsCorrected)
 		SLDataSource audioSrc = {&loc_bufq, &format_pcm};
 
 		SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, outputMixObject};
-		SLDataSink audioSink = {&loc_outmix, NULL};
+		SLDataSink audioSink = {&loc_outmix, nullptr};
 
 		/* Audio player */
 		const SLInterfaceID ids = SL_IID_BUFFERQUEUE;
@@ -271,20 +271,20 @@ void OpenSLESWriter::close()
 	if (bqPlayerObject)
 	{
 		(*bqPlayerObject)->Destroy(bqPlayerObject);
-		bqPlayerObject = NULL;
-		bqPlayerPlay = NULL;
-		bqPlayerBufferQueue = NULL;
+		bqPlayerObject = nullptr;
+		bqPlayerPlay = nullptr;
+		bqPlayerBufferQueue = nullptr;
 	}
 	if (outputMixObject)
 	{
 		(*outputMixObject)->Destroy(outputMixObject);
-		outputMixObject = NULL;
+		outputMixObject = nullptr;
 	}
 	if (engineObject)
 	{
 		(*engineObject)->Destroy(engineObject);
-		engineObject = NULL;
-		engineEngine = NULL;
+		engineObject = nullptr;
+		engineEngine = nullptr;
 	}
 	if (!buffers.isEmpty())
 		buffers.clear();
