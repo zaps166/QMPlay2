@@ -156,6 +156,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("AllowOnlyOneInstance", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
 	QMPSettings.init("RestoreRepeatMode", false);
+	QMPSettings.init("StillImages", false);
 	QMPSettings.init("Proxy/Use", false);
 	QMPSettings.init("Proxy/Host", QString());
 	QMPSettings.init("Proxy/Port", 80);
@@ -358,6 +359,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
 		page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
 		page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
+		page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
 
 		page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
 		page1->proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
@@ -735,6 +737,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
+			QMPSettings.set("StillImages", page1->stillImages->isChecked());
 			QMPSettings.set("Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty());
 			QMPSettings.set("Proxy/Host", page1->proxyHostE->text());
 			QMPSettings.set("Proxy/Port", page1->proxyPortB->value());

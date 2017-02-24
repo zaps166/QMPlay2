@@ -22,6 +22,7 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
+#include <Settings.hpp>
 #include <Packet.hpp>
 
 #if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
@@ -747,7 +748,11 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		return false;
 
 	if (name().startsWith("image2") || name().endsWith("_pipe"))
+	{
+		if (!QMPlay2Core.getSettings().getBool("StillImages"))
+			return false;
 		stillImage = true;
+	}
 
 #ifdef MP3_FAST_SEEK
 	if (name() == "mp3")

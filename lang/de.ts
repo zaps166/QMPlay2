@@ -920,6 +920,10 @@
         <source>Selected Profile</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1656,7 +1660,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fehler beim verbinden</translation>
     </message>
 </context>
 <context>

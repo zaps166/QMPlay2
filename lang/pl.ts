@@ -920,6 +920,10 @@
         <source>Selected Profile</source>
         <translation>Wybrany profil</translation>
     </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Wczytuj i wyświetlaj statyczne obrazy</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

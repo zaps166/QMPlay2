@@ -68,6 +68,13 @@
          </layout>
         </widget>
        </item>
+       <item row="11" column="0">
+        <widget class="QPushButton" name="setKeyBindingsB">
+         <property name="text">
+          <string>Set key bindings</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0" colspan="2">
         <layout class="QFormLayout" name="formLayout">
          <property name="fieldGrowthPolicy">
@@ -258,7 +265,7 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="9" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -323,7 +330,20 @@
          </layout>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="1" column="1" rowspan="9">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>3</number>
@@ -350,7 +370,7 @@
          </item>
         </layout>
        </item>
-       <item row="11" column="0" colspan="2">
+       <item row="12" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -363,23 +383,10 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="1" rowspan="8">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="10" column="0">
-        <widget class="QPushButton" name="setKeyBindingsB">
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="stillImages">
          <property name="text">
-          <string>Set key bindings</string>
+          <string>Read and display still images</string>
          </property>
         </widget>
        </item>
@@ -410,6 +417,7 @@
   <tabstop>allowOnlyOneInstance</tabstop>
   <tabstop>displayOnlyFileName</tabstop>
   <tabstop>restoreRepeatMode</tabstop>
+  <tabstop>stillImages</tabstop>
   <tabstop>proxyB</tabstop>
   <tabstop>proxyLoginB</tabstop>
   <tabstop>proxyUserE</tabstop>

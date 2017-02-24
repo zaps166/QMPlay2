@@ -920,6 +920,10 @@
         <source>Selected Profile</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
