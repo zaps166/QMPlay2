@@ -252,8 +252,10 @@ void MusicBrowserW::search()
 		if (m_lastName != name || sender() == m_searchE || sender() == m_searchB)
 			m_currPage = 1;
 		if (m_musicBrowser)
+		{
 			m_searchReply = m_musicBrowser->getSearchReply(name, m_currPage, m_net);
-		m_progressB->show();
+			m_progressB->show();
+		}
 	}
 	else
 	{
