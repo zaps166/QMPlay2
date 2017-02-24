@@ -361,7 +361,6 @@ void MusicBrowser::searchMenu()
 		if (!m_dW->isVisible())
 			m_dW->show();
 		m_dW->raise();
-		sender()->setProperty("name", QVariant());
 		m_searchE->setText(name);
 		search();
 	}

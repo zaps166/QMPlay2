@@ -1021,7 +1021,6 @@ void YouTube::searchMenu()
 		if (!dw->isVisible())
 			dw->show();
 		dw->raise();
-		sender()->setProperty("name", QVariant());
 		searchE->setText(name);
 		search();
 	}
