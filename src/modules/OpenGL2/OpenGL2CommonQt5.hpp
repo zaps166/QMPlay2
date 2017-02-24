@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OFFSCREENTEST_HPP
-#define OFFSCREENTEST_HPP
+#pragma once
 
 #include <OpenGL2Common.hpp>
 
@@ -26,5 +25,3 @@ class OpenGL2CommonQt5 : public OpenGL2Common
 protected:
 	bool testGL() override final;
 };
-
-#endif // OFFSCREENTEST_HPP

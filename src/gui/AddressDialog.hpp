@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ADDRESSDIALOG_HPP
-#define ADDRESSDIALOG_HPP
+#pragma once
 
 #include <AddressBox.hpp>
 
@@ -45,5 +44,3 @@ private:
 	AddressBox addrB;
 	QCheckBox addAndPlayB;
 };
-
-#endif //ADDRESSDIALOG_HPP

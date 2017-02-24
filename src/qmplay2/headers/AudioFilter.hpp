@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AUDIOFILTER_HPP
-#define AUDIOFILTER_HPP
+#pragma once
 
 #include <ModuleCommon.hpp>
 
@@ -37,5 +36,3 @@ public:
 	virtual void clearBuffers();
 	virtual double filter(Buffer &data, bool flush = false) = 0; //returns delay in [s]
 };
-
-#endif

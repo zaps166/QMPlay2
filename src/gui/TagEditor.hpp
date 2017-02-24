@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TAGEDITOR_HPP
-#define TAGEDITOR_HPP
+#pragma once
 
 #include <QGroupBox>
 
@@ -67,5 +66,3 @@ private:
 	PictureW *pictureW;
 	QPushButton *loadImgB, *saveImgB;
 };
-
-#endif //TAGEDITOR_HPP

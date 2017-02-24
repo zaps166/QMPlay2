@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VDPAUWRITER_HPP
-#define VDPAUWRITER_HPP
+#pragma once
 
 #include <VideoWriter.hpp>
 #include <HWAccelHelper.hpp>
@@ -164,5 +163,3 @@ private:
 	double aspect_ratio, zoom;
 	int X, Y, W, H, flip, outW, outH, deinterlace, Hue, Saturation, Brightness, Contrast;
 };
-
-#endif //VDPAUWRITER_HPP

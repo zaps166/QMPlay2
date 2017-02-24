@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MODULEPARAMS_HPP
-#define MODULEPARAMS_HPP
+#pragma once
 
 #include <QHash>
 #include <QString>
@@ -49,5 +48,3 @@ protected:
 private:
 	QHash<QString, QVariant> paramList;
 };
-
-#endif

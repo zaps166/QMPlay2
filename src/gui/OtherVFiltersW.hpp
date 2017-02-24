@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OTHERVFILTERSW_HPP
-#define OTHERVFILTERSW_HPP
+#pragma once
 
 #include <QListWidget>
 
@@ -31,5 +30,3 @@ public:
 private:
 	bool hw;
 };
-
-#endif

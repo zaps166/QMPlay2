@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PULSE_HPP
-#define PULSE_HPP
+#pragma once
 
 #include <QByteArray>
 
@@ -52,5 +51,3 @@ private:
 	pa_simple *pulse;
 	pa_sample_spec ss;
 };
-
-#endif //PULSE_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DECODER_HPP
-#define DECODER_HPP
+#pragma once
 
 #include <ModuleCommon.hpp>
 #include <PixelFormats.hpp>
@@ -57,5 +56,3 @@ public:
 private:
 	virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) = 0;
 };
-
-#endif

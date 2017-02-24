@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEMUXER_HPP
-#define DEMUXER_HPP
+#pragma once
 
 #include <ChapterProgramInfo.hpp>
 #include <ModuleCommon.hpp>
@@ -86,5 +85,3 @@ private:
 protected:
 	StreamsInfo streams_info;
 };
-
-#endif

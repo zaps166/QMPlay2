@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OGGHELPER_HPP
-#define OGGHELPER_HPP
+#pragma once
 
 #include <QString>
 #include <QVector>
@@ -52,5 +51,3 @@ public:
 	qint64 size;
 	int track;
 };
-
-#endif // OGGHELPER_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WRITER_HPP
-#define WRITER_HPP
+#pragma once
 
 #include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
@@ -48,5 +47,3 @@ private:
 
 	QString _url;
 };
-
-#endif

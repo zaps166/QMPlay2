@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LINEEDIT_HPP
-#define LINEEDIT_HPP
+#pragma once
 
 #include <QLineEdit>
 #include <QLabel>
@@ -53,5 +52,3 @@ public slots:
 signals:
 	void clearButtonClicked();
 };
-
-#endif

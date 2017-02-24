@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOWRITER_HPP
-#define VIDEOWRITER_HPP
+#pragma once
 
 #include <PixelFormats.hpp>
 #include <Writer.hpp>
@@ -55,5 +54,3 @@ public:
 protected:
 	HWAccelInterface *m_hwAccelInterface;
 };
-
-#endif //VIDEOWRITER_HPP

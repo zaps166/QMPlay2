@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGLCOMMON_HPP
-#define OPENGLCOMMON_HPP
+#pragma once
 
 #include <VideoFrame.hpp>
 #include <VideoAdjustment.hpp>
@@ -178,5 +177,3 @@ public:
 	QPoint mousePos;
 	QPointF rot;
 };
-
-#endif // OPENGLCOMMON_HPP

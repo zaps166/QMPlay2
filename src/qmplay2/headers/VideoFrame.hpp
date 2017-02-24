@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOFRAME_HPP
-#define VIDEOFRAME_HPP
+#pragma once
 
 #include <Buffer.hpp>
 #include <PixelFormats.hpp>
@@ -89,5 +88,3 @@ public:
 	bool interlaced, tff;
 	quintptr surfaceId;
 };
-
-#endif

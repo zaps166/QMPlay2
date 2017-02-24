@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PORTAUDIOCOMMON_HPP
-#define PORTAUDIOCOMMON_HPP
+#pragma once
 
 #include <QStringList>
 #include <QPair>
@@ -30,5 +29,3 @@ namespace ALSACommon
 
 	QString getDeviceName(const DevicesList &devicesList, const QString &deviceName);
 }
-
-#endif

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFDEC_HPP
-#define FFDEC_HPP
+#pragma once
 
 #include <Decoder.hpp>
 
@@ -52,5 +51,3 @@ protected:
 
 	QMutex &avcodec_mutex;
 };
-
-#endif

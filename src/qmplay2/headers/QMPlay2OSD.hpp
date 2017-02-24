@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QMPlay2OSD_HPP
-#define QMPlay2OSD_HPP
+#pragma once
 
 #include <QMutex>
 #include <QList>
@@ -131,5 +130,3 @@ private:
 	mutable QMutex m_mutex;
 	Checksum m_checksum;
 };
-
-#endif

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SLIDER_HPP
-#define SLIDER_HPP
+#pragma once
 
 #include <QSlider>
 
@@ -59,5 +58,3 @@ private:
 signals:
 	void mousePosition(int xPos);
 };
-
-#endif

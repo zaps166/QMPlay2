@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IPC_HPP
-#define IPC_HPP
+#pragma once
 
 #include <QIODevice>
 #include <QString>
@@ -80,5 +79,3 @@ private slots:
 private:
 	IPCServerPriv *m_priv;
 };
-
-#endif // IPC_HPP

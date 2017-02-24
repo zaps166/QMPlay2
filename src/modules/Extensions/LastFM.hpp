@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LASTFM_HPP
-#define LASTFM_HPP
+#pragma once
 
 #include <QMPlay2Extensions.hpp>
 
@@ -78,5 +77,3 @@ private:
 };
 
 #define LastFMName "LastFM"
-
-#endif // LASTFM_HPP

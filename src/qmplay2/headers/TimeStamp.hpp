@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TIMESTAMP_HPP
-#define TIMESTAMP_HPP
+#pragma once
 
 #include <qnumeric.h>
 
@@ -82,5 +81,3 @@ public:
 private:
 	double m_pts, m_dts;
 };
-
-#endif //TIMESTAMP_HPP

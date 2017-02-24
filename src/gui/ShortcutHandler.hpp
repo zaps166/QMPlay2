@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SHORTCUTHANDLER_H
-#define SHORTCUTHANDLER_H
+#pragma once
 
 #include <QAbstractTableModel>
 
@@ -48,7 +47,4 @@ public:
 private:
 	QList<QAction *> m_actions;
 	QHash<QAction *, QPair<QString, QString>> m_shortcuts;
-
 };
-
-#endif // SHORTCUTHANDLER_H

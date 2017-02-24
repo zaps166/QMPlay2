@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FUNCTIONS_HPP
-#define FUNCTIONS_HPP
+#pragma once
 
 #include <IOController.hpp>
 
@@ -146,5 +145,3 @@ namespace Functions
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 }
-
-#endif

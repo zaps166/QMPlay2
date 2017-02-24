@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STREAMINFO_HPP
-#define STREAMINFO_HPP
+#pragma once
 
 #include <QCoreApplication>
 #include <QByteArray>
@@ -92,5 +91,3 @@ public:
 	StreamsInfo() = default;
 	~StreamsInfo();
 };
-
-#endif // STREAMINFO_HPP

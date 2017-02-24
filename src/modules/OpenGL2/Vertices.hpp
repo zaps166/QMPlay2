@@ -16,6 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 static const float verticesYCbCr[8][8] = {
 	/* Normal */
 	{

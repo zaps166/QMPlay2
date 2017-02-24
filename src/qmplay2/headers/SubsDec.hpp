@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SUBSDEC_HPP
-#define SUBSDEC_HPP
+#pragma once
 
 #include <QStringList>
 
@@ -33,5 +32,3 @@ public:
 
 	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
 };
-
-#endif //SUBSDEC_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ADDRESSBOX_HPP
-#define ADDRESSBOX_HPP
+#pragma once
 
 #include <QComboBox>
 #include <QLineEdit>
@@ -55,5 +54,3 @@ private:
 	QLineEdit aE, pE;
 	QString filePrefix;
 };
-
-#endif //ADDRCOMBOBOX_HPP

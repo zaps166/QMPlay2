@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MPRIS2_HPP
-#define MPRIS2_HPP
+#pragma once
 
 #include <QDBusAbstractAdaptor>
 #include <QDBusObjectPath>
@@ -169,5 +168,3 @@ private:
 };
 
 #define MPRIS2Name "MPRIS2"
-
-#endif // MPRIS2_HPP

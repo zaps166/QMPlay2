@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OSDSETTINGSW_HPP
-#define OSDSETTINGSW_HPP
+#pragma once
 
 #include <QWidget>
 
@@ -46,5 +45,3 @@ private:
 	QString prefix;
 
 };
-
-#endif //OSDSETTINGSW_HPP

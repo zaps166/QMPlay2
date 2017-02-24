@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AVTHREAD_HPP
-#define AVTHREAD_HPP
+#pragma once
 
 #include <QCoreApplication>
 #include <QStringList>
@@ -71,5 +70,3 @@ protected:
 	bool waiting;
 	QMutex mutex, updateMutex;
 };
-
-#endif //AVTHREAD_HPP

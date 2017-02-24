@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QMPLAY2EXTENSIONS_HPP
-#define QMPLAY2EXTENSIONS_HPP
+#pragma once
 
 #include <IOController.hpp>
 #include <ModuleCommon.hpp>
@@ -75,5 +74,3 @@ protected:
 private:
 	static QList<QMPlay2Extensions *> guiExtensionsList;
 };
-
-#endif //QMPLAY2EXTENSIONS_HPP

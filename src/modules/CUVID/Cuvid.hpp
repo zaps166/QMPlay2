@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CUVID_HPP
-#define CUVID_HPP
+#pragma once
 
 #include <Module.hpp>
 
@@ -66,5 +65,3 @@ private:
 	QCheckBox *m_checkFirstGPU;
 #endif
 };
-
-#endif // CUVID_HPP

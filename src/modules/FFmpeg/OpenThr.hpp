@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENTHR_HPP
-#define OPENTHR_HPP
+#pragma once
 
 #include <QSharedPointer>
 #include <QWaitCondition>
@@ -61,5 +60,3 @@ protected:
 private:
 	bool m_finished;
 };
-
-#endif // OPENTHR_HPP

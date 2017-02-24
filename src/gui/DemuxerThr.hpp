@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEMUXERTHR_HPP
-#define DEMUXERTHR_HPP
+#pragma once
 
 #include <IOController.hpp>
 #include <StreamInfo.hpp>
@@ -121,5 +120,3 @@ private:
 	DemuxerThr &demuxerThr;
 	QTimer t;
 };
-
-#endif //DEMUXERTHR_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGL2WIDGET_HPP
-#define OPENGL2WIDGET_HPP
+#pragma once
 
 #include <OpenGL2CommonQt5.hpp>
 
@@ -43,5 +42,3 @@ private slots:
 private:
 	bool event(QEvent *e) override final;
 };
-
-#endif // OPENGL2WIDGET_HPP

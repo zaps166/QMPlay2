@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ABOUTWIDGET_HPP
-#define ABOUTWIDGET_HPP
+#pragma once
 
 #include <QWidget>
 #include <QFileSystemWatcher>
@@ -43,5 +42,3 @@ private slots:
 	void clrLog();
 	void currentTabChanged(int);
 };
-
-#endif //ABOUTWIDGET_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PACKET_HPP
-#define PACKET_HPP
+#pragma once
 
 #include <TimeStamp.hpp>
 #include <Buffer.hpp>
@@ -28,5 +27,3 @@ struct Packet : public Buffer
 	double duration, sampleAspectRatio = 0.0;
 	bool hasKeyFrame = true;
 };
-
-#endif

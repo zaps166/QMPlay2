@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MODULE_HPP
-#define MODULE_HPP
+#pragma once
 
 #include <QStringList>
 #include <QWidget>
@@ -134,6 +133,8 @@ void Module::setInstance()
 	}
 }
 
-#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) extern "C" Module *qmplay2PluginInstance() {return new ModuleClass;}
-
-#endif
+#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) \
+	extern "C" Module *qmplay2PluginInstance() \
+	{ \
+		return new ModuleClass; \
+	}

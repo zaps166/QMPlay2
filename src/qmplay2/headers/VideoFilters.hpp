@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FILTERS_HPP
-#define FILTERS_HPP
+#pragma once
 
 #include <VideoFilter.hpp>
 
@@ -101,5 +100,3 @@ private:
 	VideoFiltersThr filtersThr;
 	bool outputNotEmpty;
 };
-
-#endif

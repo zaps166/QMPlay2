@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAINWIDGET_HPP
-#define MAINWIDGET_HPP
+#pragma once
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
@@ -184,5 +183,3 @@ private:
 	Updater updater;
 #endif
 };
-
-#endif //MAINWIDGET_HPP

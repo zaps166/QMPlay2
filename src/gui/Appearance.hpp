@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef APPEARANCE_HPP
-#define APPEARANCE_HPP
+#pragma once
 
 #include <QDialog>
 
@@ -73,5 +72,3 @@ private:
 
 	QDialogButtonBox *buttonBox;
 };
-
-#endif // APPEARANCE_HPP

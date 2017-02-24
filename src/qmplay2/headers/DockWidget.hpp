@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DOCKWIDGET_HPP
-#define DOCKWIDGET_HPP
+#pragma once
 
 #include <QDockWidget>
 
@@ -47,5 +46,3 @@ private:
 	} emptyW;
 	bool titleBarVisible, globalTitleBarVisible;
 };
-
-#endif // DOCKWIDGET_HPP

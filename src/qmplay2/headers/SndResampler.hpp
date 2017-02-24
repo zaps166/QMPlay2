@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SNDRESAMPLER_HPP
-#define SNDRESAMPLER_HPP
+#pragma once
 
 #include <stddef.h>
 
@@ -50,5 +49,3 @@ private:
 #endif
 	int src_samplerate = 0, src_channels = 0, dst_samplerate = 0, dst_channels = 0;
 };
-
-#endif

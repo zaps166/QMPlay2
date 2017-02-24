@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PIXELFORMATS_HPP
-#define PIXELFORMATS_HPP
+#pragma once
 
 #include <QVector>
 
@@ -33,5 +32,3 @@ enum QMPlay2PixelFormat //Compatible with FFmpeg
 	QMPLAY2_PIX_FMT_COUNT   =  6
 };
 using QMPlay2PixelFormats = QVector<QMPlay2PixelFormat>;
-
-#endif // PIXELFORMATS_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AUDIOCD_HPP
-#define AUDIOCD_HPP
+#pragma once
 
 #include <Demuxer.hpp>
 #include <Playlist.hpp>
@@ -98,5 +97,3 @@ private:
 };
 
 #define AudioCDName "AudioCD"
-
-#endif

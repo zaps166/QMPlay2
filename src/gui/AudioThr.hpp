@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AUDIOTHR_HPP
-#define AUDIOTHR_HPP
+#pragma once
 
 #include <AVThread.hpp>
 
@@ -77,5 +76,3 @@ private slots:
 signals:
 	void pauseVisSig(bool);
 };
-
-#endif //AUDIOTHR_HPP

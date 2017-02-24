@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLAYLIST_HPP
-#define PLAYLIST_HPP
+#pragma once
 
 #include <IOController.hpp>
 
@@ -69,5 +68,3 @@ protected:
 
 	IOController<> ioCtrl;
 };
-
-#endif

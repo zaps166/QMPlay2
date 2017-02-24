@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BUFFER_HPP
-#define BUFFER_HPP
+#pragma once
 
 #include <QtGlobal>
 
@@ -112,5 +111,3 @@ void Buffer::move(Buffer &other)
 	other.m_bufferRef = nullptr;
 	other.m_size = 0;
 }
-
-#endif //BUFFER_HPP

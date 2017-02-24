@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLAYCLASS_HPP
-#define PLAYCLASS_HPP
+#pragma once
 
 #include <PacketBuffer.hpp>
 
@@ -218,5 +217,3 @@ signals:
 	void videoStarted();
 	void uncheckSuspend();
 };
-
-#endif //PLAYCLASS_HPP

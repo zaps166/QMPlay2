@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KEYBINDINGDIALOG_HPP
-#define KEYBINDINGDIALOG_HPP
+#pragma once
 
 #include <QDialog>
 
@@ -36,5 +35,3 @@ private slots:
 private:
 	QDialogButtonBox *buttons;
 };
-
-#endif

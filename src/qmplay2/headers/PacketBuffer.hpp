@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PACKETBUFFER_HPP
-#define PACKETBUFFER_HPP
+#pragma once
 
 #include <Packet.hpp>
 
@@ -100,5 +99,3 @@ private:
 	QMutex mutex;
 	int pos = 0;
 };
-
-#endif // PACKETBUFFER_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MODULECOMMON_HPP
-#define MODULECOMMON_HPP
+#pragma once
 
 #include <Module.hpp>
 
@@ -49,5 +48,3 @@ protected:
 private:
 	Module *module = nullptr;
 };
-
-#endif //MODULECOMMON_HPP

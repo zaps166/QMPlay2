@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VAAPIWRITER_HPP
-#define VAAPIWRITER_HPP
+#pragma once
 
 #include <VideoWriter.hpp>
 #include <VAAPI.hpp>
@@ -87,5 +86,3 @@ private:
 	VASurfaceID id;
 	int field, X, Y, W, H, deinterlace, Hue, Saturation, Brightness, Contrast;
 };
-
-#endif //VAAPIWRITER_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOADJUSTMENT_HPP
-#define VIDEOADJUSTMENT_HPP
+#pragma once
 
 #include <QWidget>
 
@@ -44,5 +43,3 @@ private slots:
 private:
 	Slider *sliders;
 };
-
-#endif //VIDEOADJUSTMENT_HPP

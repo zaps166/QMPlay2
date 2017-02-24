@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFCOMMON_H
-#define FFCOMMON_H
+#pragma once
 
 #define QMPLAY2_NOPTS_VALUE ((qint64)AV_NOPTS_VALUE)
 
@@ -40,5 +39,3 @@ namespace FFCommon
 	AVPacket *createAVPacket();
 	void freeAVPacket(AVPacket *&packet);
 }
-
-#endif

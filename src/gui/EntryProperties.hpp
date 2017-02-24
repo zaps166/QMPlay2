@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ENTRYPROPERTIES_HPP
-#define ENTRYPROPERTIES_HPP
+#pragma once
 
 #include <QDialog>
 
@@ -57,5 +56,3 @@ private slots:
 	void accept() override final;
 	void reject() override final;
 };
-
-#endif //ENTRYPROPERTIES_HPP

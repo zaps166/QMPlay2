@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEINT_FILTER_HPP
-#define DEINT_FILTER_HPP
+#pragma once
 
 #include <VideoFilter.hpp>
 #include <VideoFrame.hpp>
@@ -41,5 +40,3 @@ protected:
 
 	quint8 deintFlags;
 };
-
-#endif

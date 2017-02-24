@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FORMATCONTEXT_HPP
-#define FORMATCONTEXT_HPP
+#pragma once
 
 #include <OpenThr.hpp>
 
@@ -111,5 +110,3 @@ private:
 
 	QMutex &avcodec_mutex;
 };
-
-#endif // FORMATCONTEXT_HPP

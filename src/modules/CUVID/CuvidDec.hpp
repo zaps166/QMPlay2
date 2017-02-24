@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CUVIDDEC_HPP
-#define CUVIDDEC_HPP
+#pragma once
 
 #include <Decoder.hpp>
 
@@ -101,5 +100,3 @@ private:
 };
 
 #define CuvidName "CUVID decoder"
-
-#endif // CUVIDDEC_HPP

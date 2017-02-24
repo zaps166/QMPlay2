@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef READER_HPP
-#define READER_HPP
+#pragma once
 
 #include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
@@ -51,5 +50,3 @@ private:
 
 	QString _url;
 };
-
-#endif

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MENUBAR_HPP
-#define MENUBAR_HPP
+#pragma once
 
 #include <RepeatMode.hpp>
 
@@ -173,5 +172,3 @@ public slots:
 private slots:
 	void widgetsMenuShow();
 };
-
-#endif //MENUBAR_HPP

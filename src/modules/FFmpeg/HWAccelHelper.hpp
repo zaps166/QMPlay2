@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef HWACCELHELPER_HPP
-#define HWACCELHELPER_HPP
+#pragma once
 
 #include <QQueue>
 
@@ -52,5 +51,3 @@ private:
 	SurfacesQueue m_surfacesQueue;
 	const AVPixelFormat m_pixFmt;
 };
-
-#endif // HWACCELHELPER_HPP

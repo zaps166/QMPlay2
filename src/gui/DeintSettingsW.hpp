@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEINTSETTINGSW_HPP
-#define DEINTSETTINGSW_HPP
+#pragma once
 
 #include <QGroupBox>
 
@@ -42,5 +41,3 @@ private:
 	QCheckBox *autoDeintB, *doublerB, *autoParityB;
 	QComboBox *softwareMethodsCB, *parityCB;
 };
-
-#endif

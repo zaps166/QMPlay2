@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFREADER_HPP
-#define FFREADER_HPP
+#pragma once
 
 #include <Reader.hpp>
 
@@ -53,5 +52,3 @@ private:
 	bool paused, canRead;
 	QSharedPointer<AbortContext> abortCtx;
 };
-
-#endif // FFREADER_HPP

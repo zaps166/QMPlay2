@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAIN_HPP
-#define MAIN_HPP
+#pragma once
 
 #define MUTEXWAIT_TIMEOUT 1250
 #define TERMINATE_TIMEOUT (MUTEXWAIT_TIMEOUT*3)
@@ -82,5 +81,3 @@ private:
 };
 
 #define QMPlay2GUI QMPlay2GUIClass::instance()
-
-#endif

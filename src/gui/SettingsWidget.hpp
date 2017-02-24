@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SETTINGSWIDHET_HPP
-#define SETTINGSWIDHET_HPP
+#pragma once
 
 #include <QWidget>
 
@@ -94,5 +93,3 @@ signals:
 	void setWheelStep(int);
 	void setVolMax(int);
 };
-
-#endif // SETTINGSWIDHET_HPP

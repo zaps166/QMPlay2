@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFDECDXVA2_HPP
-#define FFDECDXVA2_HPP
+#pragma once
 
 #include <FFDecHWAccel.hpp>
 
@@ -63,5 +62,3 @@ private:
 
 	SwsContext *m_swsCtx;
 };
-
-#endif // FFDECDXVA2_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOTHR_HPP
-#define VIDEOTHR_HPP
+#pragma once
 
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
@@ -93,5 +92,3 @@ private slots:
 	void screenshot(VideoFrame videoFrame);
 	void pause();
 };
-
-#endif //VIDEOTHR_HPP

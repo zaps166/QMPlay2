@@ -16,6 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 namespace ChiptuneCommon {
 
 void doFadeOut(float *data, int len, int chn, int srate, double fadePos, double fadeTime);

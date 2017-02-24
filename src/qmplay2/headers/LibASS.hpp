@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBASS_HPP
-#define LIBASS_HPP
+#pragma once
 
 #include <QByteArray>
 #include <QList>
@@ -85,5 +84,3 @@ private:
 	QList<ass_style *> ass_sub_styles_copy;
 	bool hasASSData, overridePlayRes;
 };
-
-#endif //LIBASS_HPP

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLAYLISTWIDGET_HPP
-#define PLAYLISTWIDGET_HPP
+#pragma once
 
 #include <IOController.hpp>
 #include <Functions.hpp>
@@ -221,5 +220,3 @@ signals:
 	void visibleItemsCount(int);
 	void addStatus(bool s);
 };
-
-#endif

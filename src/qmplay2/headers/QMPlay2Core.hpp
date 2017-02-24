@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef QMPLAY2CORE_HPP
-#define QMPLAY2CORE_HPP
+#pragma once
 
 #include <QAtomicInt>
 #include <QObject>
@@ -195,5 +194,3 @@ private:
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()
-
-#endif

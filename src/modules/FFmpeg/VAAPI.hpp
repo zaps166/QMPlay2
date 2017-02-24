@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VAAPI_HPP
-#define VAAPI_HPP
+#pragma once
 
 #include <HWAccelHelper.hpp>
 
@@ -102,5 +101,3 @@ private:
 	bool vpp_second;
 #endif
 };
-
-#endif // VAAPI_HPP

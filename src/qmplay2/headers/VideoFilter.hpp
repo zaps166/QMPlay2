@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOFILTER_HPP
-#define VIDEOFILTER_HPP
+#pragma once
 
 #include <ModuleParams.hpp>
 #include <VideoFrame.hpp>
@@ -58,5 +57,3 @@ protected:
 
 	QQueue<FrameBuffer> internalQueue;
 };
-
-#endif

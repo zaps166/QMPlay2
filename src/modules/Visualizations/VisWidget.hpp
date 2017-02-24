@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VISWIDGET_HPP
-#define VISWIDGET_HPP
+#pragma once
 
 #ifdef USE_OPENGL
 	#include <QOpenGLWidget>
@@ -59,5 +58,3 @@ private slots:
 signals:
 	void doubleClicked();
 };
-
-#endif

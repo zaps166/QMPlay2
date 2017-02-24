@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IMGSCALER_HPP
-#define IMGSCALER_HPP
+#pragma once
 
 #include <stddef.h>
 
@@ -44,5 +43,3 @@ private:
 	SwsContext *m_swsCtx;
 	int m_srcH, m_dstLinesize;
 };
-
-#endif

@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPU_HPP
-#define CPU_HPP
+#pragma once
 
 #if defined(__i386) || defined(__i386__) || defined(_M_IX86)
 	#define QMPLAY2_CPU_X86_32
@@ -26,5 +25,3 @@
 	#define QMPLAY2_CPU_X86_64
 	#define QMPLAY2_CPU_X86
 #endif
-
-#endif // CPU_HPP

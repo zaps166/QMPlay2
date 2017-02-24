@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FFDECHWACCEL_HPP
-#define FFDECHWACCEL_HPP
+#pragma once
 
 #include <FFDec.hpp>
 
@@ -38,5 +37,3 @@ protected:
 
 	VideoWriter *m_hwAccelWriter;
 };
-
-#endif

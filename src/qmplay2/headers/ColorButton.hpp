@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COLORBUTTON_HPP
-#define COLORBUTTON_HPP
+#pragma once
 
 #include <QPushButton>
 
@@ -42,5 +41,3 @@ private slots:
 signals:
 	void colorChanged();
 };
-
-#endif //COLORBUTTON_HPP

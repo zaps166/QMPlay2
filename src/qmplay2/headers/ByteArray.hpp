@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BYTEARRAY_HPP
-#define BYTEARRAY_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -204,5 +203,3 @@ static inline uint32_t FourCC(const char str[5], const bool data_bigendian = fal
 	else
 		return str[0] | str[1] << 8 | str[2] << 16 | str[3] << 24;
 }
-
-#endif

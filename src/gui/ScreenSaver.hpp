@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCREENSAVER_HPP
-#define SCREENSAVER_HPP
+#pragma once
 
 #include <QMap>
 
@@ -41,5 +40,3 @@ private:
 
 	QMap<int, bool> m_refs;
 };
-
-#endif // SCREENSAVER_HPP

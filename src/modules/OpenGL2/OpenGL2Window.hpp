@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGLWIDGET_HPP
-#define OPENGLWIDGET_HPP
+#pragma once
 
 #include <OpenGL2CommonQt5.hpp>
 
@@ -60,5 +59,3 @@ private:
 	QWidget *container;
 	bool visible;
 };
-
-#endif // OPENGLWIDGET_HPP

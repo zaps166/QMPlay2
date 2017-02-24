@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INDOCKW_HPP
-#define INDOCKW_HPP
+#pragma once
 
 #include <QWidget>
 
@@ -51,5 +50,3 @@ signals:
 	void itemDropped(const QString &);
 	void hasCoverImage(bool);
 };
-
-#endif //INDOCKW_HPP

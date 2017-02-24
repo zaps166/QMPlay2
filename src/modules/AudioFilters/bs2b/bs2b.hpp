@@ -21,8 +21,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef BS2B_H
-#define BS2B_H
+#pragma once
 
 #include <stdint.h>
 
@@ -139,5 +138,3 @@ uint32_t bs2b_runtime_version_int( void );
 
 /* sample poits to floats native endians */
 void bs2b_cross_feed_f( t_bs2bdp bs2bdp, float *sample, int n );
-
-#endif	/* BS2B_H */

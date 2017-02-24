@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
+#pragma once
 
 #include <QMPlay2Core.hpp>
 
@@ -91,5 +90,3 @@ private:
 	QSet<QString> toRemove;
 	SettingsMap cache;
 };
-
-#endif

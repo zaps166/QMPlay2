@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VOLWIDGET_HPP
-#define VOLWIDGET_HPP
+#pragma once
 
 #include <Slider.hpp>
 
@@ -56,5 +55,3 @@ private:
 	Slider vol[2];
 	QMenu menu;
 };
-
-#endif // VOLWIDGET_HPP
