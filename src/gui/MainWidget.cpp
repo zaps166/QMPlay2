@@ -839,7 +839,8 @@ void MainWidget::createMenuBar()
 	copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoAdjustmentMenu);
 	copyMenu(secondMenu, menuBar->options);
 	copyMenu(secondMenu, menuBar->help);
-	tray->setContextMenu(secondMenu);
+	if (tray)
+		tray->setContextMenu(secondMenu);
 #else //On OS X add only the most important menu actions to dock menu
 	secondMenu->addAction(menuBar->player->togglePlay);
 	secondMenu->addAction(menuBar->player->stop);
