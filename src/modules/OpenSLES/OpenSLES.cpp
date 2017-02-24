@@ -31,7 +31,7 @@ QList<OpenSLES::Info> OpenSLES::getModulesInfo(const bool showDisabled) const
 {
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("WriterEnabled"))
-		modulesInfo += Info(OpenSLESWriterName, WRITER, {"audio"});
+		modulesInfo += Info(OpenSLESWriterName, WRITER, QStringList{"audio"});
 	return modulesInfo;
 }
 void *OpenSLES::createInstance(const QString &name)
