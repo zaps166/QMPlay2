@@ -159,6 +159,7 @@ void PlayClass::play(const QString &_url)
 			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
+			stillImage = false;
 
 			ignorePlaybackError = QMPlay2Core.getSettings().getBool("IgnorePlaybackError");
 
@@ -171,7 +172,9 @@ void PlayClass::play(const QString &_url)
 				restartSeekTo = SEEK_NOWHERE;
 			}
 			else
+			{
 				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
+			}
 
 			demuxThr->start();
 		}

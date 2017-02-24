@@ -123,7 +123,7 @@ private:
 	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB;
 	double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
-	bool rotate90, spherical;
+	bool rotate90, spherical, stillImage;
 
 	QString url, newUrl, aRatioName;
 

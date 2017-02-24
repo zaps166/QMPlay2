@@ -121,7 +121,7 @@ void VideoThr::initFilters(bool processParams)
 
 	filters.clear();
 
-	if (QMPSettings.getBool("Deinterlace/ON")) //Deinterlacing filters as first
+	if (!playC.stillImage && QMPSettings.getBool("Deinterlace/ON")) //Deinterlacing filters as first
 	{
 		const bool autoDeint = QMPSettings.getBool("Deinterlace/Auto");
 		const bool doubleFramerate = QMPSettings.getBool("Deinterlace/Doubler");
@@ -155,10 +155,14 @@ void VideoThr::initFilters(bool processParams)
 		}
 	}
 	else
+	{
 		writer->modParam("Deinterlace", 0);
+	}
 
-	if (!hwAccelWriter)
+	if (!playC.stillImage && !hwAccelWriter)
+	{
 		for (QString filterName : QMPSettings.getStringList("VideoFilters"))
+		{
 			if (filterName.left(1).toInt()) //if filter is enabled
 			{
 				VideoFilter *filter = filters.on((filterName = filterName.mid(1)));
@@ -173,6 +177,8 @@ void VideoThr::initFilters(bool processParams)
 				if (!ok && W > 0 && H > 0)
 					QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
 			}
+		}
+	}
 
 	if (processParams)
 	{

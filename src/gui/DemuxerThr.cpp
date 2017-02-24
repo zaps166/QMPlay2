@@ -316,6 +316,8 @@ void DemuxerThr::run()
 			}
 	}
 
+	bool stillImage = playC.stillImage = demuxer->isStillImage();
+
 	err = !load(false);
 	if (err || demuxer.isAborted())
 		return end();
@@ -342,8 +344,6 @@ void DemuxerThr::run()
 	emit playC.updateLength(round(demuxer->length()));
 	emit playC.chText(tr("Playback"));
 	emit playC.playStateChanged(true);
-
-	bool stillImage = demuxer->isStillImage();
 
 	localStream = demuxer->localStream();
 	time = localStream ? 0.0 : Functions::gettime();
