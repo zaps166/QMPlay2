@@ -609,45 +609,45 @@
     </message>
 </context>
 <context>
+    <name>Downloader</name>
+    <message>
+        <source>Downloader</source>
+        <translation type="unfinished">下载器</translation>
+    </message>
+    <message>
+        <source>Download directory</source>
+        <translation type="unfinished">下载目录</translation>
+    </message>
+    <message>
+        <source>Choose directory for downloaded files</source>
+        <translation type="unfinished">选择目录用来保存下载的文件</translation>
+    </message>
+    <message>
+        <source>Clear completed downloads</source>
+        <translation type="unfinished">清除已完成的下载记录</translation>
+    </message>
+    <message>
+        <source>Enter the address for download</source>
+        <translation type="unfinished">输入下载地址</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">下载</translation>
+    </message>
+    <message>
+        <source>Cannot change downloading files directory</source>
+        <translation type="unfinished">无法更改下载文件的目录</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation type="unfinished">输入地址</translation>
+    </message>
+</context>
+<context>
     <name>DownloaderThread</name>
     <message>
         <source>Invalid address</source>
         <translation>无效地址</translation>
-    </message>
-</context>
-<context>
-    <name>DownloaderW</name>
-    <message>
-        <source>Downloader</source>
-        <translation>下载器</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation>下载</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>选择目录用来保存下载的文件</translation>
-    </message>
-    <message>
-        <source>Clear completed downloads</source>
-        <translation>清除已完成的下载记录</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>无法更改下载文件的目录</translation>
-    </message>
-    <message>
-        <source>Enter address</source>
-        <translation>输入地址</translation>
-    </message>
-    <message>
-        <source>Enter the address for download</source>
-        <translation>输入下载地址</translation>
-    </message>
-    <message>
-        <source>Download directory</source>
-        <translation>下载目录</translation>
     </message>
 </context>
 <context>
@@ -1629,6 +1629,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">搜索</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">下一页</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">连接错误</translation>
+    </message>
+</context>
+<context>
     <name>MusicBrowserResults</name>
     <message>
         <source>Enqueue</source>
@@ -1645,21 +1660,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Copy page address</source>
         <translation type="unfinished">复制网址</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserW</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">搜索</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">下一页</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">连接错误</translation>
     </message>
 </context>
 <context>
@@ -3059,30 +3059,22 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>YouTubeW</name>
+    <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation type="unfinished">搜索</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>设置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>连接错误</translation>
+        <source>Quality</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation>搜索于YouTube</translation>
-    </message>
-    <message>
-        <source>Playlist</source>
-        <translation>播放列表</translation>
-    </message>
-    <message>
-        <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">搜索于YouTube</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download is in progress...</source>
@@ -3097,6 +3089,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Connection error</source>
+        <translation type="unfinished">连接错误</translation>
+    </message>
+    <message>
         <source>Error downloading &quot;youtube-dl&quot; application...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3105,7 +3101,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Quality</source>
+        <source>Playlist</source>
+        <translation type="unfinished">播放列表</translation>
+    </message>
+    <message>
+        <source>yes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

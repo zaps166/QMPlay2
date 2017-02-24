@@ -609,21 +609,14 @@
     </message>
 </context>
 <context>
-    <name>DownloaderThread</name>
-    <message>
-        <source>Invalid address</source>
-        <translation>Nieprawidłowy adres</translation>
-    </message>
-</context>
-<context>
-    <name>DownloaderW</name>
+    <name>Downloader</name>
     <message>
         <source>Downloader</source>
         <translation>Pobieranie plików z Internetu</translation>
     </message>
     <message>
-        <source>Download</source>
-        <translation>Pobierz</translation>
+        <source>Download directory</source>
+        <translation>Katalog pobierania</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
@@ -634,6 +627,14 @@
         <translation>Wyczyść zakończone pobierania</translation>
     </message>
     <message>
+        <source>Enter the address for download</source>
+        <translation>Wprowadź adres do pobrania</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>Pobierz</translation>
+    </message>
+    <message>
         <source>Cannot change downloading files directory</source>
         <translation>Nie udało się zmienić katalogu dla pobieranych plików</translation>
     </message>
@@ -641,13 +642,12 @@
         <source>Enter address</source>
         <translation>Wprowadź adres</translation>
     </message>
+</context>
+<context>
+    <name>DownloaderThread</name>
     <message>
-        <source>Enter the address for download</source>
-        <translation>Wprowadź adres do pobrania</translation>
-    </message>
-    <message>
-        <source>Download directory</source>
-        <translation>Katalog pobierania</translation>
+        <source>Invalid address</source>
+        <translation>Nieprawidłowy adres</translation>
     </message>
 </context>
 <context>
@@ -1630,6 +1630,21 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
+    <name>MusicBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation>Wyszukaj</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation>Następna strona</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation>Błąd połączenia</translation>
+    </message>
+</context>
+<context>
     <name>MusicBrowserResults</name>
     <message>
         <source>Enqueue</source>
@@ -1646,21 +1661,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Copy page address</source>
         <translation>Kopiuj adres strony</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserW</name>
-    <message>
-        <source>Search</source>
-        <translation>Wyszukaj</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>Następna strona</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Błąd połączenia</translation>
     </message>
 </context>
 <context>
@@ -3073,7 +3073,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
-    <name>YouTubeW</name>
+    <name>YouTube</name>
     <message>
         <source>Search</source>
         <translation>Wyszukaj</translation>
@@ -3083,20 +3083,12 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Błąd połączenia</translation>
+        <source>Quality</source>
+        <translation>Jakość</translation>
     </message>
     <message>
         <source>Search on YouTube</source>
         <translation>Wyszukaj w YouTube</translation>
-    </message>
-    <message>
-        <source>Playlist</source>
-        <translation>Playlista</translation>
-    </message>
-    <message>
-        <source>yes</source>
-        <translation>tak</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download is in progress...</source>
@@ -3111,6 +3103,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Zewnętrzny program &quot;youtube-dl&quot; jest wymagany do odtworzenia. Czy chcesz go pobrać? Po ukończeniu pobierania, odtwórz ponownie!</translation>
     </message>
     <message>
+        <source>Connection error</source>
+        <translation>Błąd połączenia</translation>
+    </message>
+    <message>
         <source>Error downloading &quot;youtube-dl&quot; application...</source>
         <translation>Błąd podczas pobierania programu &quot;youtube-dl&quot;...</translation>
     </message>
@@ -3119,8 +3115,12 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Jakość</translation>
+        <source>Playlist</source>
+        <translation>Playlista</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation>tak</translation>
     </message>
 </context>
 </TS>

@@ -609,45 +609,45 @@
     </message>
 </context>
 <context>
+    <name>Downloader</name>
+    <message>
+        <source>Downloader</source>
+        <translation type="unfinished">Téléchargeur</translation>
+    </message>
+    <message>
+        <source>Download directory</source>
+        <translation type="unfinished">Dossier de téléchargement</translation>
+    </message>
+    <message>
+        <source>Choose directory for downloaded files</source>
+        <translation type="unfinished">Choisir le dossier pour les fichiers téléchargés</translation>
+    </message>
+    <message>
+        <source>Clear completed downloads</source>
+        <translation type="unfinished">Nettoyer les téléchargements terminés</translation>
+    </message>
+    <message>
+        <source>Enter the address for download</source>
+        <translation type="unfinished">Entrer l&apos;adresse du téléchargement</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Télécharger</translation>
+    </message>
+    <message>
+        <source>Cannot change downloading files directory</source>
+        <translation type="unfinished">Impossible de changer le dossier de téléchargement du fichier</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation type="unfinished">Entrer une adresse</translation>
+    </message>
+</context>
+<context>
     <name>DownloaderThread</name>
     <message>
         <source>Invalid address</source>
         <translation>Adresse invalide</translation>
-    </message>
-</context>
-<context>
-    <name>DownloaderW</name>
-    <message>
-        <source>Downloader</source>
-        <translation>Téléchargeur</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation>Télécharger</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Choisir le dossier pour les fichiers téléchargés</translation>
-    </message>
-    <message>
-        <source>Clear completed downloads</source>
-        <translation>Nettoyer les téléchargements terminés</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Impossible de changer le dossier de téléchargement du fichier</translation>
-    </message>
-    <message>
-        <source>Enter address</source>
-        <translation>Entrer une adresse</translation>
-    </message>
-    <message>
-        <source>Enter the address for download</source>
-        <translation>Entrer l&apos;adresse du téléchargement</translation>
-    </message>
-    <message>
-        <source>Download directory</source>
-        <translation>Dossier de téléchargement</translation>
     </message>
 </context>
 <context>
@@ -1629,6 +1629,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Chercher</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Erreur de connexion</translation>
+    </message>
+</context>
+<context>
     <name>MusicBrowserResults</name>
     <message>
         <source>Enqueue</source>
@@ -1645,21 +1660,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Copy page address</source>
         <translation type="unfinished">Copier l&apos;adresse de la page</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserW</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Chercher</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Erreur de connexion</translation>
     </message>
 </context>
 <context>
@@ -3072,30 +3072,22 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>YouTubeW</name>
+    <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation>Chercher</translation>
+        <translation type="unfinished">Chercher</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Réglages</translation>
+        <translation type="unfinished">Réglages</translation>
     </message>
     <message>
-        <source>Connection error</source>
-        <translation>Erreur de connexion</translation>
+        <source>Quality</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation>Chercher sur YouTube</translation>
-    </message>
-    <message>
-        <source>Playlist</source>
-        <translation>Liste de lecture</translation>
-    </message>
-    <message>
-        <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chercher sur YouTube</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download is in progress...</source>
@@ -3110,6 +3102,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Erreur de connexion</translation>
+    </message>
+    <message>
         <source>Error downloading &quot;youtube-dl&quot; application...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3118,7 +3114,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Quality</source>
+        <source>Playlist</source>
+        <translation type="unfinished">Liste de lecture</translation>
+    </message>
+    <message>
+        <source>yes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

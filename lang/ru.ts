@@ -609,45 +609,45 @@
     </message>
 </context>
 <context>
+    <name>Downloader</name>
+    <message>
+        <source>Downloader</source>
+        <translation type="unfinished">Загрузчик</translation>
+    </message>
+    <message>
+        <source>Download directory</source>
+        <translation type="unfinished">Каталог загрузки</translation>
+    </message>
+    <message>
+        <source>Choose directory for downloaded files</source>
+        <translation type="unfinished">Выбрать папку для загружаемых файлов</translation>
+    </message>
+    <message>
+        <source>Clear completed downloads</source>
+        <translation type="unfinished">Очистить завершенные загрузки</translation>
+    </message>
+    <message>
+        <source>Enter the address for download</source>
+        <translation type="unfinished">Ввести адрес для загрузки</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Загрузить</translation>
+    </message>
+    <message>
+        <source>Cannot change downloading files directory</source>
+        <translation type="unfinished">Не удалось изменить каталог загрузки файлов</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation type="unfinished">Ввести адрес</translation>
+    </message>
+</context>
+<context>
     <name>DownloaderThread</name>
     <message>
         <source>Invalid address</source>
         <translation>Неверный адрес</translation>
-    </message>
-</context>
-<context>
-    <name>DownloaderW</name>
-    <message>
-        <source>Downloader</source>
-        <translation>Загрузчик</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation>Загрузить</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Выбрать папку для загружаемых файлов</translation>
-    </message>
-    <message>
-        <source>Clear completed downloads</source>
-        <translation>Очистить завершенные загрузки</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Не удалось изменить каталог загрузки файлов</translation>
-    </message>
-    <message>
-        <source>Enter address</source>
-        <translation>Ввести адрес</translation>
-    </message>
-    <message>
-        <source>Enter the address for download</source>
-        <translation>Ввести адрес для загрузки</translation>
-    </message>
-    <message>
-        <source>Download directory</source>
-        <translation>Каталог загрузки</translation>
     </message>
 </context>
 <context>
@@ -1630,6 +1630,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>MusicBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Поиск</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Следующая страница</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Ошибка соединения</translation>
+    </message>
+</context>
+<context>
     <name>MusicBrowserResults</name>
     <message>
         <source>Enqueue</source>
@@ -1646,21 +1661,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Copy page address</source>
         <translation type="unfinished">Скопировать адрес страницы</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserW</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">Следующая страница</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Ошибка соединения</translation>
     </message>
 </context>
 <context>
@@ -3073,54 +3073,54 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
-    <name>YouTubeW</name>
+    <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation>Поиск</translation>
+        <translation type="unfinished">Поиск</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Настройки</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Ошибка соединения</translation>
-    </message>
-    <message>
-        <source>Search on YouTube</source>
-        <translation>Поиск на youtube</translation>
-    </message>
-    <message>
-        <source>Playlist</source>
-        <translation>Список воспроизведения</translation>
-    </message>
-    <message>
-        <source>yes</source>
-        <translation>Да</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation>Загружается «youtube-dl»...</translation>
-    </message>
-    <message>
-        <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation>Отсутствует приложение «youtube-dl»</translation>
-    </message>
-    <message>
-        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation>Для этого мультимедиа требуется внешнее приложение «youtube-dl». Загрузить его? Когда загрузка будет завершена, проиграть его!</translation>
-    </message>
-    <message>
-        <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation>Ошибка загрузки приложения «youtube-dl»...</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>«youtube-dl» успешно загружен!</translation>
+        <translation type="unfinished">Настройки</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation>Качество</translation>
+        <translation type="unfinished">Качество</translation>
+    </message>
+    <message>
+        <source>Search on YouTube</source>
+        <translation type="unfinished">Поиск на youtube</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation type="unfinished">Загружается «youtube-dl»...</translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation type="unfinished">Отсутствует приложение «youtube-dl»</translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation type="unfinished">Для этого мультимедиа требуется внешнее приложение «youtube-dl». Загрузить его? Когда загрузка будет завершена, проиграть его!</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Ошибка соединения</translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation type="unfinished">Ошибка загрузки приложения «youtube-dl»...</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation type="unfinished">«youtube-dl» успешно загружен!</translation>
+    </message>
+    <message>
+        <source>Playlist</source>
+        <translation type="unfinished">Список воспроизведения</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation type="unfinished">Да</translation>
     </message>
 </context>
 </TS>

@@ -609,45 +609,45 @@
     </message>
 </context>
 <context>
+    <name>Downloader</name>
+    <message>
+        <source>Downloader</source>
+        <translation type="unfinished">Downloads</translation>
+    </message>
+    <message>
+        <source>Download directory</source>
+        <translation type="unfinished">Download Verzeichnis</translation>
+    </message>
+    <message>
+        <source>Choose directory for downloaded files</source>
+        <translation type="unfinished">Verzeichnis für die Downloads wählen</translation>
+    </message>
+    <message>
+        <source>Clear completed downloads</source>
+        <translation type="unfinished">Lösche komplette Downloads</translation>
+    </message>
+    <message>
+        <source>Enter the address for download</source>
+        <translation type="unfinished">Adresse für den Download eingeben</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished">Download</translation>
+    </message>
+    <message>
+        <source>Cannot change downloading files directory</source>
+        <translation type="unfinished">Verzeichnis für Downloads konnte nicht geändert werden</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation type="unfinished">Adresse eingeben</translation>
+    </message>
+</context>
+<context>
     <name>DownloaderThread</name>
     <message>
         <source>Invalid address</source>
         <translation>Adresse ungültig</translation>
-    </message>
-</context>
-<context>
-    <name>DownloaderW</name>
-    <message>
-        <source>Downloader</source>
-        <translation>Downloads</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation>Download</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Verzeichnis für die Downloads wählen</translation>
-    </message>
-    <message>
-        <source>Clear completed downloads</source>
-        <translation>Lösche komplette Downloads</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Verzeichnis für Downloads konnte nicht geändert werden</translation>
-    </message>
-    <message>
-        <source>Enter address</source>
-        <translation>Adresse eingeben</translation>
-    </message>
-    <message>
-        <source>Enter the address for download</source>
-        <translation>Adresse für den Download eingeben</translation>
-    </message>
-    <message>
-        <source>Download directory</source>
-        <translation>Download Verzeichnis</translation>
     </message>
 </context>
 <context>
@@ -1630,6 +1630,21 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
+    <name>MusicBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Suchen</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Nächste Seite</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Fehler beim verbinden</translation>
+    </message>
+</context>
+<context>
     <name>MusicBrowserResults</name>
     <message>
         <source>Enqueue</source>
@@ -1646,21 +1661,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Copy page address</source>
         <translation type="unfinished">Kopiere Seiten Adresse</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserW</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Suchen</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">Nächste Seite</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Fehler beim verbinden</translation>
     </message>
 </context>
 <context>
@@ -3073,54 +3073,54 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
-    <name>YouTubeW</name>
+    <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation>Suchen</translation>
+        <translation type="unfinished">Suchen</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Fehler beim verbinden</translation>
-    </message>
-    <message>
-        <source>Search on YouTube</source>
-        <translation>Bei YouTube suchen</translation>
-    </message>
-    <message>
-        <source>Playlist</source>
-        <translation>Wiedergabeliste</translation>
-    </message>
-    <message>
-        <source>yes</source>
-        <translation>ja</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation>&quot;youtube-dl&quot; Der Download läuft...</translation>
-    </message>
-    <message>
-        <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation>Fehlende &quot;youtube-dl&quot; Anwendung</translation>
-    </message>
-    <message>
-        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation>Die externe Anwendung &quot;youtube-dl&quot; ist für diese Medien erforderlich. Möchten Sie es herunterladen? Wenn der Download beendet ist, spielen Sie ihn erneut ab!</translation>
-    </message>
-    <message>
-        <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation>Fehler beim Herunterladen von &quot;youtube-dl&quot; Anwendung...</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
+        <translation type="unfinished">Einstellungen</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation>Qualität</translation>
+        <translation type="unfinished">Qualität</translation>
+    </message>
+    <message>
+        <source>Search on YouTube</source>
+        <translation type="unfinished">Bei YouTube suchen</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download is in progress...</source>
+        <translation type="unfinished">&quot;youtube-dl&quot; Der Download läuft...</translation>
+    </message>
+    <message>
+        <source>Missing &quot;youtube-dl&quot; application</source>
+        <translation type="unfinished">Fehlende &quot;youtube-dl&quot; Anwendung</translation>
+    </message>
+    <message>
+        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
+        <translation type="unfinished">Die externe Anwendung &quot;youtube-dl&quot; ist für diese Medien erforderlich. Möchten Sie es herunterladen? Wenn der Download beendet ist, spielen Sie ihn erneut ab!</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Fehler beim verbinden</translation>
+    </message>
+    <message>
+        <source>Error downloading &quot;youtube-dl&quot; application...</source>
+        <translation type="unfinished">Fehler beim Herunterladen von &quot;youtube-dl&quot; Anwendung...</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation type="unfinished">&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
+    </message>
+    <message>
+        <source>Playlist</source>
+        <translation type="unfinished">Wiedergabeliste</translation>
+    </message>
+    <message>
+        <source>yes</source>
+        <translation type="unfinished">ja</translation>
     </message>
 </context>
 </TS>
