@@ -26,6 +26,7 @@
 void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 {
 	treeW->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	treeW->headerItem()->setHidden(false);
 	treeW->setSortingEnabled(true);
 	treeW->setIndentation(0);
 

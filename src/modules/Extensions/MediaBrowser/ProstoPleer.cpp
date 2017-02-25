@@ -37,7 +37,6 @@ void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 {
 	MediaBrowserCommon::prepareWidget(treeW);
 
-	treeW->headerItem()->setHidden(false);
 	treeW->setIconSize(QSize(22, 22));
 
 	treeW->headerItem()->setText(0, tr("Title"));
