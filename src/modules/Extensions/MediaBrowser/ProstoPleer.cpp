@@ -28,16 +28,19 @@
 #include <QTreeWidget>
 #include <QAction>
 
-constexpr char g_name[] = "Prostopleer";
 constexpr char g_url[]  = "http://pleer.net";
 
 /**/
 
+ProstoPleer::ProstoPleer(NetworkAccess &net) :
+	MediaBrowserCommon(net, "Prostopleer", ":/prostopleer")
+{}
+ProstoPleer::~ProstoPleer()
+{}
+
 void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 {
 	MediaBrowserCommon::prepareWidget(treeW);
-
-	treeW->setIconSize(QSize(22, 22));
 
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
@@ -48,27 +51,18 @@ void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 	Functions::setheaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
-QString ProstoPleer::name() const
-{
-	return g_name;
-}
-QIcon ProstoPleer::icon() const
-{
-	return QIcon(":/prostopleer");
-}
-
 QString ProstoPleer::getQMPlay2Url(const QString &text)
 {
-	return QString("%1://{%2}").arg(g_name, getWebpageUrl(text));
+	return QString("%1://{%2}").arg(m_name, getWebpageUrl(text));
 }
 
-NetworkReply *ProstoPleer::getSearchReply(const QString &text, const qint32 page, NetworkAccess &net)
+NetworkReply *ProstoPleer::getSearchReply(const QString &text, const qint32 page)
 {
-	return net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text).arg(page));
+	return m_net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text).arg(page));
 }
-void ProstoPleer::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
+MediaBrowserCommon::Description ProstoPleer::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
-	const QIcon prostopleerIcon(":/prostopleer");
+	const QIcon prostopleerIcon = icon();
 
 	QRegExp regexp("<li duration=\"([\\d]+)\"\\s+file_id=\"([^\"]+)\"\\s+singer=\"([^\"]+)\"\\s+song=\"([^\"]+)\"\\s+link=\"([^\"]+)\"\\s+rate=\"([^\"]+)\"\\s+size=\"([^\"]+)\"");
 	regexp.setMinimal(true);
@@ -115,6 +109,12 @@ void ProstoPleer::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 
 		offset += regexp.matchedLength();
 	}
+
+	return {};
+}
+bool ProstoPleer::hasMultiplePages() const
+{
+	return true;
 }
 
 bool ProstoPleer::hasWebpage()
@@ -130,9 +130,9 @@ bool ProstoPleer::hasCompleter()
 {
 	return true;
 }
-NetworkReply *ProstoPleer::getCompleterReply(const QString &text, NetworkAccess &net)
+NetworkReply *ProstoPleer::getCompleterReply(const QString &text)
 {
-	return net.start(QString("%1/search_suggest").arg(g_url), QByteArray("part=" + text.toUtf8()), NetworkAccess::UrlEncoded);
+	return m_net.start(QString("%1/search_suggest").arg(g_url), QByteArray("part=" + text.toUtf8()), NetworkAccess::UrlEncoded);
 }
 QStringList ProstoPleer::getCompletions(const QByteArray &reply)
 {
@@ -147,27 +147,27 @@ QStringList ProstoPleer::getCompletions(const QByteArray &reply)
 	return {};
 }
 
-QMPlay2Extensions::AddressPrefix ProstoPleer::addressPrefixList(bool img) const
+QMPlay2Extensions::AddressPrefix ProstoPleer::addressPrefix(bool img) const
 {
-	return QMPlay2Extensions::AddressPrefix(g_name, img ? QImage(":/prostopleer") : QImage());
+	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
 }
 
 QAction *ProstoPleer::getAction() const
 {
 	QAction *act = new QAction(tr("Search on Prostopleer"), nullptr);
-	act->setIcon(QIcon(":/prostopleer"));
+	act->setIcon(icon());
 	return act;
 }
 
 bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(name)
-	if (prefix == g_name)
+	if (prefix == m_name)
 	{
 		if (streamUrl || img)
 		{
 			if (img)
-				*img = QImage(":/prostopleer");
+				*img = m_img;
 			if (extension)
 				*extension = ".mp3";
 			if (ioCtrl && streamUrl)
@@ -183,18 +183,20 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, QStr
 					net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
 					IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-					net.start(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1)));
-					netReply->waitForFinished();
-					if (!netReply->hasError())
+					if (net.start(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
 					{
-						const Json json = Json::parse(netReply->readAll());
-						const QString tmpStreamUrl = json["track_link"].string_value();
-						if (!tmpStreamUrl.isEmpty())
-							*streamUrl = tmpStreamUrl;
+						netReply->waitForFinished();
+						if (!netReply->hasError())
+						{
+							const Json json = Json::parse(netReply->readAll());
+							const QString tmpStreamUrl = json["track_link"].string_value();
+							if (!tmpStreamUrl.isEmpty())
+								*streamUrl = tmpStreamUrl;
+						}
+						else if (netReply->error() != NetworkReply::Error::Aborted)
+							QMPlay2Core.sendMessage(tr("Try again later"), m_name);
+						netReply.clear();
 					}
-					else if (netReply->error() != NetworkReply::Error::Aborted)
-						QMPlay2Core.sendMessage(tr("Try again later"), g_name);
-					netReply.clear();
 				}
 			}
 		}

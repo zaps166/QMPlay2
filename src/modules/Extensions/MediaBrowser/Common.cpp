@@ -23,11 +23,18 @@
 #include <QHeaderView>
 #include <QTreeWidget>
 
+MediaBrowserCommon::MediaBrowserCommon(NetworkAccess &net, const QString &name, const QString &imgPath) :
+	m_net(net),
+	m_name(name),
+	m_img(imgPath)
+{}
+
 void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 {
 	treeW->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	treeW->headerItem()->setHidden(false);
 	treeW->setSortingEnabled(true);
+	treeW->setIconSize({22, 22});
 	treeW->setIndentation(0);
 
 	treeW->setColumnCount(1);

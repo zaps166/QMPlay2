@@ -57,9 +57,11 @@ private:
 
 /**/
 
+class QStringListModel;
 class QProgressBar;
 class QToolButton;
 class QCompleter;
+class QTextEdit;
 class QComboBox;
 class LineEdit;
 
@@ -85,6 +87,8 @@ private:
 	void setCompletions(const QStringList &completions);
 
 private slots:
+	void visibilityChanged(bool v);
+
 	void providerChanged(int idx);
 
 	void next();
@@ -107,13 +111,17 @@ private:
 	QToolButton *m_searchB, *m_nextPageB;
 	QProgressBar *m_progressB;
 	MediaBrowserResults *m_resultsW;
+	QTextEdit *m_descr;
 
+	QStringListModel *m_completerModel;
 	QCompleter *m_completer;
 	QString m_lastName;
 	qint32 m_currPage;
 
-	NetworkReply *m_autocompleteReply, *m_searchReply;
+	NetworkReply *m_autocompleteReply, *m_searchReply, *m_imageReply;
 	NetworkAccess m_net;
+
+	bool m_visible, m_first;
 };
 
 #define MediaBrowserName "MediaBrowser"

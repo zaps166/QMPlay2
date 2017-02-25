@@ -27,27 +27,28 @@ class SoundCloud : public MediaBrowserCommon
 	Q_DECLARE_TR_FUNCTIONS(SoundCloud)
 
 public:
+	SoundCloud(NetworkAccess &net);
+	~SoundCloud() final;
+
+
 	void prepareWidget(QTreeWidget *treeW) override final;
-
-
-	QString name() const override final;
-	QIcon icon() const override final;
 
 
 	QString getQMPlay2Url(const QString &text) override final;
 
-	NetworkReply *getSearchReply(const QString &text, const qint32 page, NetworkAccess &net) override final;
-	void addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override final;
+	NetworkReply *getSearchReply(const QString &text, const qint32 page) override final;
+	Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override final;
+	bool hasMultiplePages() const override final;
 
 	bool hasWebpage() override final;
 	QString getWebpageUrl(const QString &text) override final;
 
 	bool hasCompleter() override final;
-	NetworkReply *getCompleterReply(const QString &text, NetworkAccess &net) override final;
+	NetworkReply *getCompleterReply(const QString &text) override final;
 	QStringList getCompletions(const QByteArray &reply) override final;
 
 
-	QMPlay2Extensions::AddressPrefix addressPrefixList(bool img) const override final;
+	QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const override final;
 
 	QAction *getAction() const override final;
 

@@ -38,6 +38,8 @@
 #include <QToolButton>
 #include <QCompleter>
 #include <QClipboard>
+#include <QTextFrame>
+#include <QTextEdit>
 #include <QComboBox>
 #include <QMimeData>
 #include <QUrl>
@@ -134,20 +136,22 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 
 MediaBrowser::MediaBrowser(Module &module) :
 	m_mediaBrowser(nullptr),
-	m_completer(new QCompleter(new QStringListModel(this), this)),
+	m_completerModel(new QStringListModel(this)),
+	m_completer(new QCompleter(m_completerModel, this)),
 	m_currPage(1),
-	m_autocompleteReply(nullptr), m_searchReply(nullptr),
-	m_net(this)
+	m_autocompleteReply(nullptr), m_searchReply(nullptr), m_imageReply(nullptr),
+	m_net(this),
+	m_visible(false), m_first(true)
 {
 #ifdef USE_PROSTOPLEER
-	m_mediaBrowsers.emplace_back(new ProstoPleer);
+	m_mediaBrowsers.emplace_back(new ProstoPleer(m_net));
 #endif
 #ifdef USE_SOUNDCLOUD
-	m_mediaBrowsers.emplace_back(new SoundCloud);
+	m_mediaBrowsers.emplace_back(new SoundCloud(m_net));
 #endif
 
 	m_dW = new DockWidget;
-	connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(setEnabled(bool)));
+	connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
 	m_dW->setWindowTitle(MediaBrowserName);
 	m_dW->setObjectName(MediaBrowserName);
 	m_dW->setWidget(this);
@@ -184,6 +188,11 @@ MediaBrowser::MediaBrowser(Module &module) :
 
 	m_resultsW = new MediaBrowserResults(m_mediaBrowser);
 
+	m_descr = new QTextEdit;
+	m_descr->setSizePolicy({QSizePolicy::Preferred, QSizePolicy::Fixed});
+	m_descr->setReadOnly(true);
+	m_descr->hide();
+
 	connect(&m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
 	QGridLayout *layout = new QGridLayout;
@@ -192,7 +201,8 @@ MediaBrowser::MediaBrowser(Module &module) :
 	layout->addWidget(m_searchB, 0, 2, 1, 1);
 	layout->addWidget(m_nextPageB, 0, 3, 1, 1);
 	layout->addWidget(m_resultsW, 1, 0, 1, 4);
-	layout->addWidget(m_progressB, 2, 0, 1, 4);
+	layout->addWidget(m_descr, 2, 0, 1, 4);
+	layout->addWidget(m_progressB, 3, 0, 1, 4);
 	setLayout(layout);
 
 	SetModule(module);
@@ -204,7 +214,6 @@ bool MediaBrowser::set()
 {
 	const QString provider = sets().getString("MediaBrowser/Provider");
 	m_providersB->setCurrentText(provider);
-	providerChanged(m_providersB->currentIndex());
 	return true;
 }
 
@@ -217,7 +226,7 @@ QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img
 {
 	QList<AddressPrefix> ret;
 	for (const auto &m : m_mediaBrowsers)
-		ret.append(m->addressPrefixList(img));
+		ret.append(m->addressPrefix(img));
 	return ret;
 }
 void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
@@ -254,18 +263,33 @@ void MediaBrowser::setCompletions(const QStringList &completions)
 {
 	if (!completions.isEmpty())
 	{
-		((QStringListModel *)m_completer->model())->setStringList(completions);
+		m_completerModel->setStringList(completions);
 		if (m_searchE->hasFocus())
 			m_completer->complete();
 	}
 }
 
+void MediaBrowser::visibilityChanged(bool v)
+{
+	setEnabled(v);
+	m_visible = v;
+	if (m_visible && m_first)
+	{
+		providerChanged(m_providersB->currentIndex());
+		m_first = false;
+	}
+}
+
 void MediaBrowser::providerChanged(int idx)
 {
-	m_searchE->clearText();
-	m_mediaBrowser = m_mediaBrowsers[idx].get();
-	m_mediaBrowser->prepareWidget(m_resultsW);
-	sets().set("MediaBrowser/Provider", m_providersB->currentText());
+	if (m_visible && idx > -1)
+	{
+		m_searchE->clearText();
+		m_mediaBrowser = m_mediaBrowsers[idx].get();
+		m_mediaBrowser->prepareWidget(m_resultsW);
+		sets().set("MediaBrowser/Provider", m_providersB->currentText());
+		m_first = false;
+	}
 }
 
 void MediaBrowser::next()
@@ -282,11 +306,11 @@ void MediaBrowser::searchTextEdited(const QString &text)
 		m_autocompleteReply = nullptr;
 	}
 	if (text.isEmpty())
-		((QStringListModel *)m_completer->model())->setStringList({});
+		m_completerModel->setStringList({});
 	else if (m_mediaBrowser && m_mediaBrowser->hasCompleter())
 	{
-		m_autocompleteReply = m_mediaBrowser->getCompleterReply(text, m_net);
-		if (!m_autocompleteReply)
+		m_autocompleteReply = m_mediaBrowser->getCompleterReply(text);
+		if (!m_autocompleteReply && m_completerModel->stringList().isEmpty())
 			setCompletions(m_mediaBrowser->getCompletions());
 	}
 }
@@ -303,19 +327,27 @@ void MediaBrowser::search()
 		m_searchReply->deleteLater();
 		m_searchReply = nullptr;
 	}
+	if (m_imageReply)
+	{
+		m_imageReply->deleteLater();
+		m_imageReply = nullptr;
+	}
 	m_resultsW->clear();
 	if (!name.isEmpty())
 	{
 		if (m_lastName != name || sender() == m_searchE || sender() == m_searchB)
 			m_currPage = 1;
 		if (m_mediaBrowser)
-			m_searchReply = m_mediaBrowser->getSearchReply(name, m_currPage, m_net);
+			m_searchReply = m_mediaBrowser->getSearchReply(name, m_currPage);
 		if (m_searchReply)
 			m_progressB->show();
 	}
 	else
 	{
+		m_completerModel->setStringList({});
 		m_nextPageB->hide();
+		m_descr->clear();
+		m_descr->hide();
 		m_progressB->hide();
 	}
 	m_lastName = name;
@@ -344,10 +376,43 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		else if (reply == m_searchReply)
 		{
 			if (m_mediaBrowser)
-				m_mediaBrowser->addSearchResults(replyData, m_resultsW);
-			m_nextPageB->setVisible(m_resultsW->topLevelItemCount());
+			{
+				const MediaBrowserCommon::Description descr = m_mediaBrowser->addSearchResults(replyData, m_resultsW);
+				if (!descr.description.isEmpty())
+				{
+					m_descr->setHtml(descr.description);
+					m_descr->setAlignment(Qt::AlignJustify);
+					m_descr->show();
+				}
+				if (descr.imageReply)
+				{
+					m_imageReply = descr.imageReply;
+					m_descr->show();
+				}
+				m_nextPageB->setVisible(m_mediaBrowser->hasMultiplePages() && m_resultsW->topLevelItemCount());
+			}
+		}
+		else if (reply == m_imageReply)
+		{
+			const QImage img = QImage::fromData(replyData);
+			if (!img.isNull())
+			{
+				QTextDocument *doc = m_descr->document();
+
+				const int h = qMin<int>(img.height(), m_descr->height() - doc->documentMargin() * 3);
+				doc->addResource(QTextDocument::ImageResource, QUrl("image"), img.scaledToHeight(h, Qt::SmoothTransformation));
+
+				QTextImageFormat txtImg;
+				txtImg.setName("image");
+
+				QTextCursor cursor = m_descr->textCursor();
+				cursor.setPosition(0);
+				cursor.insertImage(txtImg, QTextFrameFormat::FloatLeft);
+				cursor.insertBlock();
+			}
 		}
 	}
+
 	if (reply == m_autocompleteReply)
 		m_autocompleteReply = nullptr;
 	else if (reply == m_searchReply)
@@ -355,6 +420,9 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		m_searchReply = nullptr;
 		m_progressB->hide();
 	}
+	else if (reply == m_imageReply)
+		m_imageReply = nullptr;
+
 	reply->deleteLater();
 }
 

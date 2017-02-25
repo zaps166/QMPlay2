@@ -29,17 +29,20 @@
 #include <QAction>
 #include <QUrl>
 
-constexpr char g_name[] = "SoundCloud";
 constexpr char client_id[] = "2add0f709fcfae1fd7a198ec7573d2d4";
 constexpr char g_url[]  = "http://api.soundcloud.com";
 
 /**/
 
+SoundCloud::SoundCloud(NetworkAccess &net) :
+	MediaBrowserCommon(net, "SoundCloud", ":/soundcloud")
+{}
+SoundCloud::~SoundCloud()
+{}
+
 void SoundCloud::prepareWidget(QTreeWidget *treeW)
 {
 	MediaBrowserCommon::prepareWidget(treeW);
-
-	treeW->setIconSize(QSize(22, 22));
 
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
@@ -49,30 +52,21 @@ void SoundCloud::prepareWidget(QTreeWidget *treeW)
 	Functions::setheaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
-QString SoundCloud::name() const
-{
-	return g_name;
-}
-QIcon SoundCloud::icon() const
-{
-	return QIcon(":/soundcloud");
-}
-
 QString SoundCloud::getQMPlay2Url(const QString &text)
 {
-	return QString("%1://{%2/tracks/%3}").arg(g_name, g_url, text);
+	return QString("%1://{%2/tracks/%3}").arg(m_name, g_url, text);
 }
 
-NetworkReply *SoundCloud::getSearchReply(const QString &text, const qint32 page, NetworkAccess &net)
+NetworkReply *SoundCloud::getSearchReply(const QString &text, const qint32 page)
 {
-	return net.start(QString("%1/tracks?q=%2&client_id=%3&offset=%4&limit=20").arg(g_url, QUrl::toPercentEncoding(text), client_id).arg(page));
+	return m_net.start(QString("%1/tracks?q=%2&client_id=%3&offset=%4&limit=20").arg(g_url, QUrl::toPercentEncoding(text), client_id).arg(page));
 }
-void SoundCloud::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
+MediaBrowserCommon::Description SoundCloud::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
 	const Json json = Json::parse(reply);
 	if (json.is_array())
 	{
-		const QIcon soundcloudIcon(":/soundcloud");
+		const QIcon soundcloudIcon = icon();
 
 		for (const Json &track : json.array_items())
 		{
@@ -100,6 +94,11 @@ void SoundCloud::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 			tWI->setToolTip(3, duration);
 		}
 	}
+	return {};
+}
+bool SoundCloud::hasMultiplePages() const
+{
+	return true;
 }
 
 bool SoundCloud::hasWebpage()
@@ -115,7 +114,7 @@ bool SoundCloud::hasCompleter()
 {
 	return false;
 }
-NetworkReply *SoundCloud::getCompleterReply(const QString &text, NetworkAccess &net)
+NetworkReply *SoundCloud::getCompleterReply(const QString &text)
 {
 	return nullptr;
 }
@@ -124,24 +123,24 @@ QStringList SoundCloud::getCompletions(const QByteArray &reply)
 	return {};
 }
 
-QMPlay2Extensions::AddressPrefix SoundCloud::addressPrefixList(bool img) const
+QMPlay2Extensions::AddressPrefix SoundCloud::addressPrefix(bool img) const
 {
-	return QMPlay2Extensions::AddressPrefix(g_name, img ? QImage(":/soundcloud") : QImage());
+	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
 }
 
 QAction *SoundCloud::getAction() const
 {
 	QAction *act = new QAction(tr("Search on SoundCloud"), nullptr);
-	act->setIcon(QIcon(":/soundcloud"));
+	act->setIcon(icon());
 	return act;
 }
 
 bool SoundCloud::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
-	if (prefix == g_name)
+	if (prefix == m_name)
 	{
 		if (img)
-			*img = QImage(":/soundcloud");
+			*img = m_img;
 		if (extension)
 			*extension = ".mp3";
 		if (ioCtrl)
@@ -150,20 +149,22 @@ bool SoundCloud::convertAddress(const QString &prefix, const QString &url, QStri
 			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
 			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			net.start(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id));
-			netReply->waitForFinished();
-			if (!netReply->hasError())
+			if (net.start(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
 			{
-				const Json json = Json::parse(netReply->readAll());
-				if (json.is_object())
+				netReply->waitForFinished();
+				if (!netReply->hasError())
 				{
-					if (streamUrl)
-						*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
-					if (name)
-						*name = json["title"].string_value();
+					const Json json = Json::parse(netReply->readAll());
+					if (json.is_object())
+					{
+						if (streamUrl)
+							*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
+						if (name)
+							*name = json["title"].string_value();
+					}
 				}
+				netReply.clear();
 			}
-			netReply.clear();
 		}
 		return true;
 	}

@@ -27,11 +27,25 @@ class QTreeWidget;
 class MediaBrowserCommon
 {
 public:
+	class Description
+	{
+	public:
+		Description() = default;
+		inline Description(const QString &descr, NetworkReply *reply) :
+			description(descr),
+			imageReply(reply)
+		{}
+
+		QString description;
+		NetworkReply *imageReply = nullptr;
+	};
+
+	MediaBrowserCommon(NetworkAccess &net, const QString &name, const QString &imgPath);
 	virtual ~MediaBrowserCommon() = default;
 
 
-	virtual QString name() const = 0;
-	virtual QIcon icon() const = 0;
+	inline QString name() const;
+	inline QIcon icon() const;
 
 
 	virtual void prepareWidget(QTreeWidget *treeW);
@@ -39,20 +53,37 @@ public:
 
 	virtual QString getQMPlay2Url(const QString &text) = 0;
 
-	virtual NetworkReply *getSearchReply(const QString &text, const qint32 page, NetworkAccess &net) = 0;
-	virtual void addSearchResults(const QByteArray &reply, QTreeWidget *treeW) = 0;
+	virtual NetworkReply *getSearchReply(const QString &text, const qint32 page) = 0;
+	virtual Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) = 0;
+	virtual bool hasMultiplePages() const = 0;
 
 	virtual bool hasWebpage() = 0;
 	virtual QString getWebpageUrl(const QString &text) = 0;
 
 	virtual bool hasCompleter() = 0;
-	virtual NetworkReply *getCompleterReply(const QString &text, NetworkAccess &net) = 0;
+	virtual NetworkReply *getCompleterReply(const QString &text) = 0;
 	virtual QStringList getCompletions(const QByteArray &reply = QByteArray()) = 0;
 
 
-	virtual QMPlay2Extensions::AddressPrefix addressPrefixList(bool img) const = 0;
+	virtual QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const = 0;
 
 	virtual QAction *getAction() const = 0;
 
 	virtual bool convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) = 0;
+
+protected:
+	NetworkAccess &m_net;
+	const QString m_name;
+	const QImage m_img;
 };
+
+/* Inline implementation */
+
+QString MediaBrowserCommon::name() const
+{
+	return m_name;
+}
+QIcon MediaBrowserCommon::icon() const
+{
+	return QPixmap::fromImage(m_img);
+}
