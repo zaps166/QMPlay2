@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <MusicBrowser/MusicBrowserInterface.hpp>
+#include <MediaBrowser/Common.hpp>
 
 #include <QCoreApplication>
 
-class SoundCloud : public MusicBrowserInterface
+class SoundCloud : public MediaBrowserCommon
 {
 	Q_DECLARE_TR_FUNCTIONS(SoundCloud)
 

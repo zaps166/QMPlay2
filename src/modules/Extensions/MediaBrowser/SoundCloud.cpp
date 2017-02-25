@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <MusicBrowser/SoundCloud.hpp>
+#include <MediaBrowser/SoundCloud.hpp>
 
 #include <QMPlay2Extensions.hpp>
 #include <NetworkAccess.hpp>
@@ -37,6 +37,8 @@ constexpr char g_url[]  = "http://api.soundcloud.com";
 
 void SoundCloud::prepareWidget(QTreeWidget *treeW)
 {
+	MediaBrowserCommon::prepareWidget(treeW);
+
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
 	treeW->headerItem()->setText(2, tr("Genre"));

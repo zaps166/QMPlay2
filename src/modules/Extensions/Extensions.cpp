@@ -27,8 +27,8 @@
 #ifdef USE_MPRIS2
 	#include <MPRIS2.hpp>
 #endif
-#ifdef USE_MUSICBROWSER
-	#include <MusicBrowser.hpp>
+#ifdef USE_MEDIABROWSER
+	#include <MediaBrowser.hpp>
 #endif
 
 #include <QCoreApplication>
@@ -81,8 +81,8 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
 #endif
 	modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
-#ifdef USE_MUSICBROWSER
-	modulesInfo += Info(MusicBrowserName, QMPLAY2EXTENSION);
+#ifdef USE_MEDIABROWSER
+	modulesInfo += Info(MediaBrowserName, QMPLAY2EXTENSION);
 #endif
 #ifdef USE_MPRIS2
 	modulesInfo += Info(MPRIS2Name, QMPLAY2EXTENSION);
@@ -101,9 +101,9 @@ void *Extensions::createInstance(const QString &name)
 #endif
 	else if (name == RadioName)
 		return static_cast<QMPlay2Extensions *>(new Radio(*this));
-#ifdef USE_MUSICBROWSER
-	else if (name == MusicBrowserName)
-		return static_cast<QMPlay2Extensions *>(new MusicBrowser(*this));
+#ifdef USE_MEDIABROWSER
+	else if (name == MediaBrowserName)
+		return static_cast<QMPlay2Extensions *>(new MediaBrowser(*this));
 #endif
 #ifdef USE_MPRIS2
 	else if (name == MPRIS2Name)

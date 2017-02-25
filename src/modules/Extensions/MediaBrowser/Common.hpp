@@ -24,17 +24,17 @@ class NetworkAccess;
 class NetworkReply;
 class QTreeWidget;
 
-class MusicBrowserInterface
+class MediaBrowserCommon
 {
 public:
-	virtual ~MusicBrowserInterface() = default;
+	virtual ~MediaBrowserCommon() = default;
 
 
 	virtual QString name() const = 0;
 	virtual QIcon icon() const = 0;
 
 
-	virtual void prepareWidget(QTreeWidget *treeW) = 0;
+	virtual void prepareWidget(QTreeWidget *treeW);
 
 
 	virtual QString getQMPlay2Url(const QString &text) = 0;
@@ -47,7 +47,7 @@ public:
 
 	virtual bool hasCompleter() = 0;
 	virtual NetworkReply *getCompleterReply(const QString &text, NetworkAccess &net) = 0;
-	virtual QStringList getCompletions(const QByteArray &reply) = 0;
+	virtual QStringList getCompletions(const QByteArray &reply = QByteArray()) = 0;
 
 
 	virtual QMPlay2Extensions::AddressPrefix addressPrefixList(bool img) const = 0;

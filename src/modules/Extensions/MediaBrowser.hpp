@@ -28,17 +28,17 @@
 #include <memory>
 #include <vector>
 
-class MusicBrowserInterface;
+class MediaBrowserCommon;
 
 /**/
 
-class MusicBrowserResults : public QTreeWidget
+class MediaBrowserResults : public QTreeWidget
 {
 	Q_OBJECT
 
 public:
-	MusicBrowserResults(MusicBrowserInterface *&musicBrowser);
-	~MusicBrowserResults() final;
+	MediaBrowserResults(MediaBrowserCommon *&mediaBrowser);
+	~MediaBrowserResults() final;
 
 private slots:
 	void enqueue();
@@ -51,7 +51,7 @@ private slots:
 	void contextMenu(const QPoint &p);
 
 private:
-	MusicBrowserInterface *&m_musicBrowser;
+	MediaBrowserCommon *&m_mediaBrowser;
 	QMenu m_menu;
 };
 
@@ -63,13 +63,16 @@ class QCompleter;
 class QComboBox;
 class LineEdit;
 
-class MusicBrowser : public QWidget, public QMPlay2Extensions
+class MediaBrowser : public QWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
 
 public:
-	MusicBrowser(Module &module);
-	~MusicBrowser() final;
+	MediaBrowser(Module &module);
+	~MediaBrowser() final;
+
+private:
+	bool set() override final;
 
 	DockWidget *getDockWidget() override final;
 
@@ -77,6 +80,9 @@ public:
 	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
+
+
+	void setCompletions(const QStringList &completions);
 
 private slots:
 	void providerChanged(int idx);
@@ -91,8 +97,8 @@ private slots:
 	void searchMenu();
 
 private:
-	std::vector<std::unique_ptr<MusicBrowserInterface>> m_musicBrowsers;
-	MusicBrowserInterface *m_musicBrowser;
+	std::vector<std::unique_ptr<MediaBrowserCommon>> m_mediaBrowsers;
+	MediaBrowserCommon *m_mediaBrowser;
 
 	DockWidget *m_dW;
 
@@ -100,7 +106,7 @@ private:
 	LineEdit *m_searchE;
 	QToolButton *m_searchB, *m_nextPageB;
 	QProgressBar *m_progressB;
-	MusicBrowserResults *m_resultsW;
+	MediaBrowserResults *m_resultsW;
 
 	QCompleter *m_completer;
 	QString m_lastName;
@@ -110,4 +116,4 @@ private:
 	NetworkAccess m_net;
 };
 
-#define MusicBrowserName "MusicBrowser"
+#define MediaBrowserName "MediaBrowser"

@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <MusicBrowser/ProstoPleer.hpp>
+#include <MediaBrowser/ProstoPleer.hpp>
 
 #include <QMPlay2Extensions.hpp>
 #include <NetworkAccess.hpp>
@@ -35,6 +35,8 @@ constexpr char g_url[]  = "http://pleer.net";
 
 void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 {
+	MediaBrowserCommon::prepareWidget(treeW);
+
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
 	treeW->headerItem()->setText(2, tr("Length"));

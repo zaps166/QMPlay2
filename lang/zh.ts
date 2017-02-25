@@ -1110,6 +1110,40 @@
     </message>
 </context>
 <context>
+    <name>MediaBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">搜索</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">下一页</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">连接错误</translation>
+    </message>
+</context>
+<context>
+    <name>MediaBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">入队</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">播放</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">用浏览器打开</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">复制网址</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1626,40 +1660,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Move down</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowser</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">搜索</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">下一页</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">连接错误</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserResults</name>
-    <message>
-        <source>Enqueue</source>
-        <translation type="unfinished">入队</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished">播放</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation type="unfinished">用浏览器打开</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation type="unfinished">复制网址</translation>
     </message>
 </context>
 <context>

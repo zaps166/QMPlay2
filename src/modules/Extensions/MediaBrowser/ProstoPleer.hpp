@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <MusicBrowser/MusicBrowserInterface.hpp>
+#include <MediaBrowser/Common.hpp>
 
 #include <QCoreApplication>
 
-class ProstoPleer : public MusicBrowserInterface
+class ProstoPleer : public MediaBrowserCommon
 {
 	Q_DECLARE_TR_FUNCTIONS(ProstoPleer)
 

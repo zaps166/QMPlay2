@@ -1110,6 +1110,40 @@
     </message>
 </context>
 <context>
+    <name>MediaBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation>Wyszukaj</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation>Następna strona</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation>Błąd połączenia</translation>
+    </message>
+</context>
+<context>
+    <name>MediaBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation>Kolejkuj</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Odtwarzaj</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation>Otwórz stronę w przeglądarce</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation>Kopiuj adres strony</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1627,40 +1661,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Move down</source>
         <translation>Przenieś niżej</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowser</name>
-    <message>
-        <source>Search</source>
-        <translation>Wyszukaj</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation>Następna strona</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation>Błąd połączenia</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserResults</name>
-    <message>
-        <source>Enqueue</source>
-        <translation>Kolejkuj</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Odtwarzaj</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation>Otwórz stronę w przeglądarce</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation>Kopiuj adres strony</translation>
     </message>
 </context>
 <context>

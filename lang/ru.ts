@@ -1110,6 +1110,40 @@
     </message>
 </context>
 <context>
+    <name>MediaBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Поиск</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Следующая страница</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Ошибка соединения</translation>
+    </message>
+</context>
+<context>
+    <name>MediaBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Очередь</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Воспроизведение</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Открыть страницу в браузере</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Скопировать адрес страницы</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1627,40 +1661,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Move down</source>
         <translation>Переместить вниз</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowser</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">Следующая страница</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Ошибка соединения</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserResults</name>
-    <message>
-        <source>Enqueue</source>
-        <translation type="unfinished">Очередь</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished">Воспроизведение</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation type="unfinished">Открыть страницу в браузере</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation type="unfinished">Скопировать адрес страницы</translation>
     </message>
 </context>
 <context>

@@ -1110,6 +1110,40 @@
     </message>
 </context>
 <context>
+    <name>MediaBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Suchen</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Nächste Seite</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Fehler beim verbinden</translation>
+    </message>
+</context>
+<context>
+    <name>MediaBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Warteschlange</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Seite öffnen im Browser</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Kopiere Seiten Adresse</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1627,40 +1661,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Move down</source>
         <translation>Absenken</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowser</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Suchen</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">Nächste Seite</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Fehler beim verbinden</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserResults</name>
-    <message>
-        <source>Enqueue</source>
-        <translation type="unfinished">Warteschlange</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished">Wiedergabe</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation type="unfinished">Seite öffnen im Browser</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation type="unfinished">Kopiere Seiten Adresse</translation>
     </message>
 </context>
 <context>

@@ -16,17 +16,17 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <MusicBrowser.hpp>
+#include <MediaBrowser.hpp>
 
-#include <MusicBrowser/MusicBrowserInterface.hpp>
+#include <MediaBrowser/Common.hpp>
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 
 #ifdef USE_PROSTOPLEER
-	#include <MusicBrowser/ProstoPleer.hpp>
+	#include <MediaBrowser/ProstoPleer.hpp>
 #endif
 #ifdef USE_SOUNDCLOUD
-	#include <MusicBrowser/SoundCloud.hpp>
+	#include <MediaBrowser/SoundCloud.hpp>
 #endif
 
 #include <QStringListModel>
@@ -42,74 +42,68 @@
 #include <QMimeData>
 #include <QUrl>
 
-MusicBrowserResults::MusicBrowserResults(MusicBrowserInterface *&musicBrowser) :
-	m_musicBrowser(musicBrowser)
+MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
+	m_mediaBrowser(mediaBrowser)
 {
-	setEditTriggers(QAbstractItemView::NoEditTriggers);
-	setIconSize(QSize(22, 22));
-	setSortingEnabled(true);
-	setIndentation(0);
-
-	header()->setStretchLastSection(false);
 	headerItem()->setHidden(true);
 
 	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(playEntry(QTreeWidgetItem *)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 	setContextMenuPolicy(Qt::CustomContextMenu);
 }
-MusicBrowserResults::~MusicBrowserResults()
+MediaBrowserResults::~MediaBrowserResults()
 {}
 
-void MusicBrowserResults::enqueue()
+void MediaBrowserResults::enqueue()
 {
-	if (m_musicBrowser)
+	if (m_mediaBrowser)
 	{
 		if (QTreeWidgetItem *tWI = currentItem())
-			emit QMPlay2Core.processParam("enqueue", m_musicBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
+			emit QMPlay2Core.processParam("enqueue", m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
 	}
 }
-void MusicBrowserResults::playCurrentEntry()
+void MediaBrowserResults::playCurrentEntry()
 {
 	playEntry(currentItem());
 }
-void MusicBrowserResults::openPage()
+void MediaBrowserResults::openPage()
 {
-	if (m_musicBrowser && m_musicBrowser->hasWebpage())
+	if (m_mediaBrowser && m_mediaBrowser->hasWebpage())
 	{
 		if (QTreeWidgetItem *tWI = currentItem())
-			QDesktopServices::openUrl(m_musicBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
+			QDesktopServices::openUrl(m_mediaBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
 	}
 }
-void MusicBrowserResults::copyPageURL()
+void MediaBrowserResults::copyPageURL()
 {
-	if (m_musicBrowser && m_musicBrowser->hasWebpage())
+	if (m_mediaBrowser && m_mediaBrowser->hasWebpage())
 	{
 		if (QTreeWidgetItem *tWI = currentItem())
 		{
 			QMimeData *mimeData = new QMimeData;
-			mimeData->setText(m_musicBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
+			mimeData->setText(m_mediaBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
 			QApplication::clipboard()->setMimeData(mimeData);
 		}
 	}
 }
 
-void MusicBrowserResults::playEntry(QTreeWidgetItem *tWI)
+void MediaBrowserResults::playEntry(QTreeWidgetItem *tWI)
 {
 	if (tWI)
-		emit QMPlay2Core.processParam("open", m_musicBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
+		emit QMPlay2Core.processParam("open", m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
 }
 
-void MusicBrowserResults::contextMenu(const QPoint &point)
+void MediaBrowserResults::contextMenu(const QPoint &point)
 {
 	m_menu.clear();
-	if (!m_musicBrowser)
+	if (!m_mediaBrowser)
 		return;
 	if (QTreeWidgetItem *tWI = currentItem())
 	{
 		m_menu.addAction(tr("Enqueue"), this, SLOT(enqueue()));
 		m_menu.addAction(tr("Play"), this, SLOT(playCurrentEntry()));
 		m_menu.addSeparator();
-		if (m_musicBrowser->hasWebpage())
+		if (m_mediaBrowser->hasWebpage())
 		{
 			m_menu.addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
 			m_menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
@@ -119,12 +113,12 @@ void MusicBrowserResults::contextMenu(const QPoint &point)
 		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
 			QString addressPrefixName, url, param;
-			if (Functions::splitPrefixAndUrlIfHasPluginPrefix(m_musicBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()), &addressPrefixName, &url, &param))
+			if (Functions::splitPrefixAndUrlIfHasPluginPrefix(m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()), &addressPrefixName, &url, &param))
 			{
-				const bool self = dynamic_cast<MusicBrowser *>(QMPlay2Ext);
+				const bool self = dynamic_cast<MediaBrowser *>(QMPlay2Ext);
 				for (QAction *act : QMPlay2Ext->getActions(name, -2, url, addressPrefixName, param))
 				{
-					if (!self || act->property("ptr").value<quintptr>() != (quintptr)m_musicBrowser)
+					if (!self || act->property("ptr").value<quintptr>() != (quintptr)m_mediaBrowser)
 					{
 						act->setParent(&m_menu);
 						m_menu.addAction(act);
@@ -138,26 +132,24 @@ void MusicBrowserResults::contextMenu(const QPoint &point)
 
 /**/
 
-MusicBrowser::MusicBrowser(Module &module) :
-	m_musicBrowser(nullptr),
+MediaBrowser::MediaBrowser(Module &module) :
+	m_mediaBrowser(nullptr),
 	m_completer(new QCompleter(new QStringListModel(this), this)),
 	m_currPage(1),
 	m_autocompleteReply(nullptr), m_searchReply(nullptr),
 	m_net(this)
 {
-	SetModule(module);
-
 #ifdef USE_PROSTOPLEER
-	m_musicBrowsers.emplace_back(new ProstoPleer);
+	m_mediaBrowsers.emplace_back(new ProstoPleer);
 #endif
 #ifdef USE_SOUNDCLOUD
-	m_musicBrowsers.emplace_back(new SoundCloud);
+	m_mediaBrowsers.emplace_back(new SoundCloud);
 #endif
 
 	m_dW = new DockWidget;
 	connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(setEnabled(bool)));
-	m_dW->setWindowTitle(MusicBrowserName);
-	m_dW->setObjectName(MusicBrowserName);
+	m_dW->setWindowTitle(MediaBrowserName);
+	m_dW->setObjectName(MediaBrowserName);
 	m_dW->setWidget(this);
 
 	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -169,6 +161,8 @@ MusicBrowser::MusicBrowser(Module &module) :
 	m_searchE->setCompleter(m_completer);
 
 	m_providersB = new QComboBox;
+	for (const auto &m : m_mediaBrowsers)
+		m_providersB->addItem(m->icon(), m->name());
 	connect(m_providersB, SIGNAL(currentIndexChanged(int)), this, SLOT(providerChanged(int)));
 
 	m_searchB = new QToolButton;
@@ -188,7 +182,7 @@ MusicBrowser::MusicBrowser(Module &module) :
 	m_progressB->setRange(0, 0);
 	m_progressB->hide();
 
-	m_resultsW = new MusicBrowserResults(m_musicBrowser);
+	m_resultsW = new MediaBrowserResults(m_mediaBrowser);
 
 	connect(&m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
@@ -201,69 +195,86 @@ MusicBrowser::MusicBrowser(Module &module) :
 	layout->addWidget(m_progressB, 2, 0, 1, 4);
 	setLayout(layout);
 
-	for (const auto &m : m_musicBrowsers)
-		m_providersB->addItem(m->icon(), m->name());
+	SetModule(module);
 }
-MusicBrowser::~MusicBrowser()
+MediaBrowser::~MediaBrowser()
 {}
 
-DockWidget *MusicBrowser::getDockWidget()
+bool MediaBrowser::set()
+{
+	const QString provider = sets().getString("MediaBrowser/Provider");
+	m_providersB->setCurrentText(provider);
+	providerChanged(m_providersB->currentIndex());
+	return true;
+}
+
+DockWidget *MediaBrowser::getDockWidget()
 {
 	return m_dW;
 }
 
-QList<QMPlay2Extensions::AddressPrefix> MusicBrowser::addressPrefixList(bool img) const
+QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img) const
 {
 	QList<AddressPrefix> ret;
-	for (const auto &m : m_musicBrowsers)
+	for (const auto &m : m_mediaBrowsers)
 		ret.append(m->addressPrefixList(img));
 	return ret;
 }
-void MusicBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(param)
 	if (stream_url || img)
-		for (const auto &m : m_musicBrowsers)
+		for (const auto &m : m_mediaBrowsers)
 			if (m->convertAddress(prefix, url, stream_url, name, img, extension, ioCtrl))
 				break;
 }
 
-QVector<QAction *> MusicBrowser::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
+QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
 {
 	QVector<QAction *> actions;
 	if (name != url)
 	{
-		for (size_t i = 0; i < m_musicBrowsers.size(); ++i)
+		for (size_t i = 0; i < m_mediaBrowsers.size(); ++i)
 		{
-			MusicBrowserInterface *m = m_musicBrowsers[i].get();
-			QAction *act = m->getAction();
-			act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
-			act->setProperty("ptr", (quintptr)m);
-			act->setProperty("idx", (quint32)i);
-			act->setProperty("name", name);
-			actions.append(act);
+			MediaBrowserCommon *m = m_mediaBrowsers[i].get();
+			if (QAction *act = m->getAction())
+			{
+				act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
+				act->setProperty("ptr", (quintptr)m);
+				act->setProperty("idx", (quint32)i);
+				act->setProperty("name", name);
+				actions.append(act);
+			}
 		}
 	}
 	return actions;
 }
 
-void MusicBrowser::providerChanged(int idx)
+void MediaBrowser::setCompletions(const QStringList &completions)
 {
-	m_searchE->clearText();
-
-	m_musicBrowser = m_musicBrowsers[idx].get();
-
-	m_resultsW->headerItem()->setHidden(false);
-	m_musicBrowser->prepareWidget(m_resultsW);
+	if (!completions.isEmpty())
+	{
+		((QStringListModel *)m_completer->model())->setStringList(completions);
+		if (m_searchE->hasFocus())
+			m_completer->complete();
+	}
 }
 
-void MusicBrowser::next()
+void MediaBrowser::providerChanged(int idx)
+{
+	m_searchE->clearText();
+	m_mediaBrowser = m_mediaBrowsers[idx].get();
+	m_mediaBrowser->prepareWidget(m_resultsW);
+	sets().set("MediaBrowser/Provider", m_providersB->currentText());
+}
+
+void MediaBrowser::next()
 {
 	++m_currPage;
 	search();
 }
 
-void MusicBrowser::searchTextEdited(const QString &text)
+void MediaBrowser::searchTextEdited(const QString &text)
 {
 	if (m_autocompleteReply)
 	{
@@ -272,10 +283,14 @@ void MusicBrowser::searchTextEdited(const QString &text)
 	}
 	if (text.isEmpty())
 		((QStringListModel *)m_completer->model())->setStringList({});
-	else if (m_musicBrowser)
-		m_autocompleteReply = m_musicBrowser->getCompleterReply(text, m_net);
+	else if (m_mediaBrowser && m_mediaBrowser->hasCompleter())
+	{
+		m_autocompleteReply = m_mediaBrowser->getCompleterReply(text, m_net);
+		if (!m_autocompleteReply)
+			setCompletions(m_mediaBrowser->getCompletions());
+	}
 }
-void MusicBrowser::search()
+void MediaBrowser::search()
 {
 	const QString name = m_searchE->text();
 	if (m_autocompleteReply)
@@ -293,11 +308,10 @@ void MusicBrowser::search()
 	{
 		if (m_lastName != name || sender() == m_searchE || sender() == m_searchB)
 			m_currPage = 1;
-		if (m_musicBrowser)
-		{
-			m_searchReply = m_musicBrowser->getSearchReply(name, m_currPage, m_net);
+		if (m_mediaBrowser)
+			m_searchReply = m_mediaBrowser->getSearchReply(name, m_currPage, m_net);
+		if (m_searchReply)
 			m_progressB->show();
-		}
 	}
 	else
 	{
@@ -307,7 +321,7 @@ void MusicBrowser::search()
 	m_lastName = name;
 }
 
-void MusicBrowser::netFinished(NetworkReply *reply)
+void MediaBrowser::netFinished(NetworkReply *reply)
 {
 	if (reply->hasError())
 	{
@@ -316,7 +330,7 @@ void MusicBrowser::netFinished(NetworkReply *reply)
 			m_lastName.clear();
 			m_nextPageB->hide();
 			m_progressB->hide();
-			emit QMPlay2Core.sendMessage(tr("Connection error"), MusicBrowserName, 3);
+			emit QMPlay2Core.sendMessage(tr("Connection error"), MediaBrowserName, 3);
 		}
 	}
 	else
@@ -324,21 +338,13 @@ void MusicBrowser::netFinished(NetworkReply *reply)
 		const QByteArray replyData = reply->readAll();
 		if (reply == m_autocompleteReply)
 		{
-			if (m_musicBrowser)
-			{
-				const QStringList suggestions = m_musicBrowser->getCompletions(replyData);
-				if (!suggestions.isEmpty())
-				{
-					((QStringListModel *)m_completer->model())->setStringList(suggestions);
-					if (m_searchE->hasFocus())
-						m_completer->complete();
-				}
-			}
+			if (m_mediaBrowser)
+				setCompletions(m_mediaBrowser->getCompletions(replyData));
 		}
 		else if (reply == m_searchReply)
 		{
-			if (m_musicBrowser)
-				m_musicBrowser->addSearchResults(replyData, m_resultsW);
+			if (m_mediaBrowser)
+				m_mediaBrowser->addSearchResults(replyData, m_resultsW);
 			m_nextPageB->setVisible(m_resultsW->topLevelItemCount());
 		}
 	}
@@ -352,7 +358,7 @@ void MusicBrowser::netFinished(NetworkReply *reply)
 	reply->deleteLater();
 }
 
-void MusicBrowser::searchMenu()
+void MediaBrowser::searchMenu()
 {
 	const QString name = sender()->property("name").toString();
 	if (!name.isEmpty())

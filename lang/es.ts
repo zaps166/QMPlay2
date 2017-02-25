@@ -1110,6 +1110,40 @@
     </message>
 </context>
 <context>
+    <name>MediaBrowser</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Buscar</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Pagina siguiente</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Error de conexión</translation>
+    </message>
+</context>
+<context>
+    <name>MediaBrowserResults</name>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Poner en cola</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Reproducir</translation>
+    </message>
+    <message>
+        <source>Open the page in the browser</source>
+        <translation type="unfinished">Abrir la página en el navegador</translation>
+    </message>
+    <message>
+        <source>Copy page address</source>
+        <translation type="unfinished">Copiar la dirección de la página</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>ms</source>
@@ -1626,40 +1660,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Move down</source>
         <translation>Mover abajo</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowser</name>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished">Pagina siguiente</translation>
-    </message>
-    <message>
-        <source>Connection error</source>
-        <translation type="unfinished">Error de conexión</translation>
-    </message>
-</context>
-<context>
-    <name>MusicBrowserResults</name>
-    <message>
-        <source>Enqueue</source>
-        <translation type="unfinished">Poner en cola</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished">Reproducir</translation>
-    </message>
-    <message>
-        <source>Open the page in the browser</source>
-        <translation type="unfinished">Abrir la página en el navegador</translation>
-    </message>
-    <message>
-        <source>Copy page address</source>
-        <translation type="unfinished">Copiar la dirección de la página</translation>
     </message>
 </context>
 <context>

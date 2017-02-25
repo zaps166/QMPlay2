@@ -1,8 +1,8 @@
 <RCC>
 	<qresource>
 		<file alias="Extensions">Extensions.png</file>
-		<file alias="prostopleer">MusicBrowser/prostopleer.png</file>
-		<file alias="soundcloud">MusicBrowser/soundcloud.png</file>
+		<file alias="prostopleer">MediaBrowser/prostopleer.png</file>
+		<file alias="soundcloud">MediaBrowser/soundcloud.png</file>
 		<file alias="downloader">downloader.png</file>
 		<file alias="youtube">youtube.png</file>
 		<file alias="lastfm">lastfm.png</file>
