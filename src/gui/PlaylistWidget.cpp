@@ -574,11 +574,7 @@ PlaylistWidget::PlaylistWidget() :
 	setAnimated(true);
 	header()->setStretchLastSection(false);
 	setHeaderHidden(true);
-#if QT_VERSION < 0x050000
-	header()->setResizeMode(0, QHeaderView::Stretch);
-#else
-	header()->setSectionResizeMode(0, QHeaderView::Stretch);
-#endif
+	Functions::setheaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
 	header()->hideSection(1);
 	setItemsResizeToContents(true);
 	setIconSize(QSize(IconSize, IconSize));
@@ -604,11 +600,7 @@ void PlaylistWidget::setItemsResizeToContents(bool b)
 {
 	const QHeaderView::ResizeMode rm = b ? QHeaderView::ResizeToContents : QHeaderView::Fixed;
 	for (int i = 1; i <= 2; ++i)
-#if QT_VERSION < 0x050000
-		header()->setResizeMode(i, rm);
-#else
-		header()->setSectionResizeMode(i, rm);
-#endif
+		Functions::setheaderSectionResizeMode(header(), i, rm);
 }
 
 void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)

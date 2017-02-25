@@ -26,6 +26,7 @@
 
 struct AVDictionary;
 
+class QHeaderView;
 class QMPlay2OSD;
 class VideoFrame;
 class QMimeData;
@@ -144,4 +145,6 @@ namespace Functions
 	quint32 getBestSampleRate();
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
+
+	void setheaderSectionResizeMode(QHeaderView *header, int index, int resizeMode);
 }

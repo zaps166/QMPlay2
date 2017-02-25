@@ -37,20 +37,16 @@ void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 {
 	MediaBrowserCommon::prepareWidget(treeW);
 
+	treeW->headerItem()->setHidden(false);
+	treeW->setIconSize(QSize(22, 22));
+
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
 	treeW->headerItem()->setText(2, tr("Length"));
 	treeW->headerItem()->setText(3, tr("Bitrate"));
 
-#if QT_VERSION < 0x050000
-	treeW->header()->setResizeMode(0, QHeaderView::Stretch);
-	treeW->header()->setResizeMode(2, QHeaderView::ResizeToContents);
-	treeW->header()->setResizeMode(3, QHeaderView::ResizeToContents);
-#else
-	treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-	treeW->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-	treeW->header()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
-#endif
+	Functions::setheaderSectionResizeMode(treeW->header(), 2, QHeaderView::ResizeToContents);
+	Functions::setheaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
 QString ProstoPleer::name() const

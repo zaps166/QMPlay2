@@ -25,6 +25,7 @@
 #include <Version.hpp>
 #include <Reader.hpp>
 
+#include <QHeaderView>
 #include <QMimeData>
 #include <QPainter>
 #include <QDir>
@@ -645,4 +646,13 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
 	}
 	return url;
+}
+
+void Functions::setheaderSectionResizeMode(QHeaderView *header, int index, int resizeMode)
+{
+#if QT_VERSION < 0x050000
+	header->setResizeMode(index, (QHeaderView::ResizeMode)resizeMode);
+#else
+	header->setSectionResizeMode(index, (QHeaderView::ResizeMode)resizeMode);
+#endif
 }

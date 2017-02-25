@@ -18,6 +18,7 @@
 
 #include <KeyBindingsDialog.hpp>
 #include <ShortcutHandler.hpp>
+#include <Functions.hpp>
 #include <Main.hpp>
 
 #include <QDialogButtonBox>
@@ -34,13 +35,8 @@ KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
 	shortcuts->setModel(QMPlay2GUI.shortcutHandler);
 	shortcuts->setFrameShape(QFrame::NoFrame);
 	shortcuts->setAlternatingRowColors(true);
-#if QT_VERSION >= 0x050000
-	shortcuts->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-	shortcuts->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-#else
-	shortcuts->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	shortcuts->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-#endif
+	Functions::setheaderSectionResizeMode(shortcuts->horizontalHeader(), 0, QHeaderView::ResizeToContents);
+	Functions::setheaderSectionResizeMode(shortcuts->horizontalHeader(), 1, QHeaderView::Stretch);
 	shortcuts->setSelectionMode(QAbstractItemView::SingleSelection);
 	shortcuts->verticalHeader()->setVisible(false);
 

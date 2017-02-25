@@ -18,16 +18,18 @@
 
 #include <MediaBrowser/Common.hpp>
 
+#include <Functions.hpp>
+
 #include <QHeaderView>
 #include <QTreeWidget>
 
 void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 {
 	treeW->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	treeW->setIconSize(QSize(22, 22));
 	treeW->setSortingEnabled(true);
 	treeW->setIndentation(0);
 
+	treeW->setColumnCount(1);
 	treeW->header()->setStretchLastSection(false);
-	treeW->headerItem()->setHidden(false);
+	Functions::setheaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
 }
