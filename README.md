@@ -383,3 +383,4 @@ Use CMake. You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/
 
 - QMPlay2 contains modified libmodplug sources which are used by Modplug module.
 - QMPlay2 uses Concept icons created by Alexey Varfolomeev.
+- QMPlay2 uses modified [json11](https://github.com/dropbox/json11) sources.
