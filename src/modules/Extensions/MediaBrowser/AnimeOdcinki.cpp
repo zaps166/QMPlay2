@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
+#include <YouTubeDL.hpp>
 #include <Json11.hpp>
 
 #include <QTextDocumentFragment>
@@ -317,13 +318,19 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 						}
 					}
 
-					const auto getStreamUrl = [streamUrl, name, ioCtrl, &hasName](const QString &animeUrl)->bool {
-						QString newUrl;
-						Functions::getDataIfHasPluginPrefix("youtube-dl://{" + animeUrl + "}", &newUrl, hasName ? nullptr : name, nullptr, ioCtrl);
-						if (!newUrl.isEmpty())
+					QString error;
+					const auto getStreamUrl = [streamUrl, name, ioCtrl, hasName, &error](const QString &animeUrl)->bool {
+						IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
+						if (!YouTubeDL::isUpdating() && ytDl.assign(new YouTubeDL))
 						{
-							*streamUrl = newUrl;
-							return true;
+							QString newUrl;
+							ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
+							ytDl.clear();
+							if (!newUrl.isEmpty())
+							{
+								*streamUrl = newUrl;
+								return true;
+							}
 						}
 						return false;
 					};
@@ -347,10 +354,17 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 						for (const Json &json : getEmbeddedPlayers(reply))
 						{
 							const QString url = decryptUrl(json["v"].string_value(), json["b"].string_value(), json["a"].string_value());
-							if (!url.isEmpty() && getStreamUrl(url))
-								break;
+							if (!url.isEmpty())
+							{
+								hasStreamUrl = getStreamUrl(url);
+								if (hasStreamUrl)
+									break;
+							}
 						}
 					}
+
+					if (!hasStreamUrl && !error.isEmpty())
+						emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 				}
 				netReply.clear();
 			}
