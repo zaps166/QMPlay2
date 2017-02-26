@@ -219,7 +219,9 @@ MediaBrowser::~MediaBrowser()
 bool MediaBrowser::set()
 {
 	const QString provider = sets().getString("MediaBrowser/Provider");
-	m_providersB->setCurrentText(provider);
+	const int idx = m_providersB->findText(provider, Qt::MatchExactly);
+	if (idx > -1)
+		m_providersB->setCurrentIndex(idx);
 	return true;
 }
 
