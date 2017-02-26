@@ -20,10 +20,14 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
+#include <Json11.hpp>
 
 #include <QTextDocumentFragment>
 #include <QTreeWidget>
+#include <QProcess>
 #include <QDebug>
+
+using EmbeddedPlayers = std::vector<Json>;
 
 constexpr char g_url[]  = "https://anime-odcinki.pl/anime/";
 
@@ -109,6 +113,65 @@ static QByteArray getAdFlyUrl(const QByteArray &data)
 			return data.mid(idx1, idx2 - idx1);
 	}
 	return QByteArray();
+}
+
+static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
+{
+	EmbeddedPlayers ret;
+	ret.reserve(2);
+
+	for (int pos = 0; ;)
+	{
+		int idx1 = data.indexOf("data-hash='", pos);
+		if (idx1 < 0)
+			break;
+
+		idx1 += 11;
+
+		int idx2 = data.indexOf("'", idx1);
+		if (idx2 < 0)
+			break;
+
+		Json json = Json::parse(data.mid(idx1, idx2 - idx1));
+		if (json.is_object())
+		{
+			idx1 = idx2 + 2;
+			idx2 = data.indexOf("<", idx1);
+			if (idx2 > -1)
+			{
+				QByteArray name = data.mid(idx1, idx2 - idx1).simplified();
+				name = name.left(name.indexOf(' ')).toLower();
+
+				const bool isGoogle   = (name == "google");
+				const bool isOpenload = (name == "openload");
+				// TODO: VidFile ?
+
+				if (isGoogle || isOpenload)
+					ret.insert(isGoogle ? ret.begin() : ret.end(), std::move(json));
+			}
+		}
+
+		pos = idx2;
+	}
+
+	return ret;
+}
+static QString decryptUrl(const QByteArray &saltHex, const QByteArray &ivHex, const QByteArray &cipheredBase64)
+{
+	QProcess process;
+	process.start("openssl", {
+		"enc", "-aes-256-cbc", "-d",
+		"-iv", ivHex,
+		"-k",  QByteArray::fromBase64("czA1ejlHcGQ9c3lHXjd7")
+	});
+	if (process.waitForStarted(2000))
+	{
+		process.write("Salted__" + QByteArray::fromHex(saltHex) + QByteArray::fromBase64(cipheredBase64));
+		process.closeWriteChannel();
+		if (process.waitForFinished(2000))
+			return Json::parse(process.readAllStandardOutput()).string_value();
+	}
+	return QString();
 }
 
 /**/
@@ -229,19 +292,63 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 				netReply->waitForFinished();
 				if (!netReply->hasError())
 				{
-					const QByteArray adFlyUrl = getAdFlyUrl(netReply->readAll()).toPercentEncoding();
+					const QByteArray reply = netReply->readAll();
+					const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
+
+					bool hasName = false;
+					if (name)
+					{
+						int idx1 = reply.indexOf("page-header");
+						if (idx1 > -1)
+						{
+							idx1 = reply.indexOf(">", idx1);
+							if (idx1 > -1)
+							{
+								idx1 += 1;
+
+								int idx2 = reply.indexOf("<", idx1);
+								if (idx2 > -1)
+								{
+									*name = reply.mid(idx1, idx2 - idx1);
+									if (!name->isEmpty())
+										hasName = true;
+								}
+							}
+						}
+					}
+
+					const auto getStreamUrl = [streamUrl, name, ioCtrl, &hasName](const QString &animeUrl)->bool {
+						QString newUrl;
+						Functions::getDataIfHasPluginPrefix("youtube-dl://{" + animeUrl + "}", &newUrl, hasName ? nullptr : name, nullptr, ioCtrl);
+						if (!newUrl.isEmpty())
+						{
+							*streamUrl = newUrl;
+							return true;
+						}
+						return false;
+					};
+
+					bool hasStreamUrl = false;
+
 					if (!adFlyUrl.isEmpty() && net.start(netReply, "http://www.linkexpander.com/get_url.php", "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
 					{
 						netReply->waitForFinished();
 						if (!netReply->hasError())
 						{
 							const QByteArray data = netReply->readAll();
-							const int idx = data.indexOf("<div");
+							const int idx = data.indexOf("<");
 							if (idx > -1)
-							{
-								const QString animeUrl = data.left(idx);
-								Functions::getDataIfHasPluginPrefix("youtube-dl://{" + animeUrl + "}", streamUrl, name, nullptr, ioCtrl);
-							}
+								hasStreamUrl = getStreamUrl(data.left(idx));
+						}
+					}
+
+					if (!hasStreamUrl)
+					{
+						for (const Json &json : getEmbeddedPlayers(reply))
+						{
+							const QString url = decryptUrl(json["v"].string_value(), json["b"].string_value(), json["a"].string_value());
+							if (!url.isEmpty() && getStreamUrl(url))
+								break;
 						}
 					}
 				}
