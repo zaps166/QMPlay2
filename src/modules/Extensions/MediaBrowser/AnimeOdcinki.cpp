@@ -145,9 +145,10 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 
 				const bool isGoogle   = (name == "google");
 				const bool isOpenload = (name == "openload");
+				const bool isVk       = (name == "vk");
 				// TODO: VidFile ?
 
-				if (isGoogle || isOpenload)
+				if (isGoogle || isOpenload || isVk)
 					ret.insert(isGoogle ? ret.begin() : ret.end(), std::move(json));
 			}
 		}
@@ -171,6 +172,24 @@ static QString decryptUrl(const QByteArray &saltHex, const QByteArray &ivHex, co
 		process.closeWriteChannel();
 		if (process.waitForFinished(2000))
 			return Json::parse(process.readAllStandardOutput()).string_value();
+	}
+	return QString();
+}
+
+static QString getGamedorUsermdUrl(const QByteArray &data)
+{
+	int idx1 = data.indexOf("iframe");
+	if (idx1 > -1)
+	{
+		idx1 = data.indexOf("src=\"", idx1);
+		if (idx1 > -1)
+		{
+			idx1 += 5;
+
+			int idx2 = data.indexOf('"', idx1);
+			if (idx2 > -1)
+				return data.mid(idx1, idx2 - idx1);
+		}
 	}
 	return QString();
 }
@@ -353,10 +372,20 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 					{
 						for (const Json &json : getEmbeddedPlayers(reply))
 						{
-							const QString url = decryptUrl(json["v"].string_value(), json["b"].string_value(), json["a"].string_value());
-							if (!url.isEmpty())
+							QString playerUrl = decryptUrl(json["v"].string_value(), json["b"].string_value(), json["a"].string_value());
+							if (!playerUrl.isEmpty())
 							{
-								hasStreamUrl = getStreamUrl(url);
+								if (playerUrl.contains("gamedor.usermd.net") && net.start(netReply, playerUrl, QByteArray(), "Referer: " + url.toUtf8()))
+								{
+									netReply->waitForFinished();
+									if (!netReply->hasError())
+									{
+										playerUrl = getGamedorUsermdUrl(netReply->readAll());
+										if (playerUrl.isEmpty())
+											continue;
+									}
+								}
+								hasStreamUrl = getStreamUrl(playerUrl);
 								if (hasStreamUrl)
 									break;
 							}
