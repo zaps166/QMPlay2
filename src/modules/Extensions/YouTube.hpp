@@ -116,8 +116,6 @@ public:
 	inline QString getYtDlPath() const;
 
 private slots:
-	void downloadYtDl();
-
 	void showSettings();
 	void setQualityFromMenu();
 
@@ -159,7 +157,7 @@ private:
 	QCompleter *completer;
 	int currPage;
 
-	NetworkReply *autocompleteReply, *searchReply, *ytdlReply;
+	NetworkReply *autocompleteReply, *searchReply;
 	QList<NetworkReply *> linkReplies, imageReplies;
 	NetworkAccess net;
 

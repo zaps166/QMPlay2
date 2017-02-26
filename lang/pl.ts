@@ -1462,18 +1462,6 @@
         <translation>Poziom skalowania obrazu</translation>
     </message>
     <message>
-        <source>Path to the &apos;youtube-dl&apos; application</source>
-        <translation>Ścieżka do programu &apos;youtube-dl&apos;</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>Przeglądaj</translation>
-    </message>
-    <message>
-        <source>Choose &apos;youtube-dl&apos; application</source>
-        <translation>Wybierz program &apos;youtube-dl&apos;</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Liczba suwaków w korektorze dźwięku</translation>
     </message>
@@ -3091,28 +3079,8 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Wyszukaj w YouTube</translation>
     </message>
     <message>
-        <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation>Aktualnie trwa już pobieranie programu &quot;youtube-dl&quot;...</translation>
-    </message>
-    <message>
-        <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation>Brakuje programu &quot;youtube-dl&quot;</translation>
-    </message>
-    <message>
-        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation>Zewnętrzny program &quot;youtube-dl&quot; jest wymagany do odtworzenia. Czy chcesz go pobrać? Po ukończeniu pobierania, odtwórz ponownie!</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation>Błąd połączenia</translation>
-    </message>
-    <message>
-        <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation>Błąd podczas pobierania programu &quot;youtube-dl&quot;...</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
     <message>
         <source>Playlist</source>
@@ -3121,6 +3089,17 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>yes</source>
         <translation>tak</translation>
+    </message>
+</context>
+<context>
+    <name>YouTubeDL</name>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully updated!</source>
+        <translation>&quot;youtube-dl&quot; został zaktualizowany!</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
 </context>
 </TS>

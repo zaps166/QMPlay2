@@ -1182,10 +1182,6 @@
         <translation>Fase inversa</translation>
     </message>
     <message>
-        <source>Choose &apos;youtube-dl&apos; application</source>
-        <translation>Elija el archivo &apos;youtube-dl&apos; </translation>
-    </message>
-    <message>
         <source>M3U support</source>
         <translation>soporte M3U</translation>
     </message>
@@ -1370,10 +1366,6 @@
         <translation>Dispositivo de reproducción</translation>
     </message>
     <message>
-        <source>Path to the &apos;youtube-dl&apos; application</source>
-        <translation>Ruta a la aplicación &apos;youtube-dl&apos;</translation>
-    </message>
-    <message>
         <source>SRT reading</source>
         <translation>Lectura de SRT</translation>
     </message>
@@ -1464,10 +1456,6 @@
     <message>
         <source>Select all</source>
         <translation>Seleccionar todo</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>Explorar</translation>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
@@ -3090,28 +3078,8 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished">Buscar en YouTube</translation>
     </message>
     <message>
-        <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation type="unfinished">Error de conexión</translation>
-    </message>
-    <message>
-        <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Playlist</source>
@@ -3119,6 +3087,17 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>YouTubeDL</name>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully updated!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

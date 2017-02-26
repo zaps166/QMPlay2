@@ -1462,18 +1462,6 @@
         <translation>Über das Programm MPRIS2</translation>
     </message>
     <message>
-        <source>Path to the &apos;youtube-dl&apos; application</source>
-        <translation>Pfad zu &quot;youtube-dl&quot;</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation>Blättern</translation>
-    </message>
-    <message>
-        <source>Choose &apos;youtube-dl&apos; application</source>
-        <translation>Das Programm &quot;youtube-dl&quot; auswählen</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Anzahl der Schieberegler im Equalizer</translation>
     </message>
@@ -3091,28 +3079,8 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation type="unfinished">Bei YouTube suchen</translation>
     </message>
     <message>
-        <source>&quot;youtube-dl&quot; download is in progress...</source>
-        <translation type="unfinished">&quot;youtube-dl&quot; Der Download läuft...</translation>
-    </message>
-    <message>
-        <source>Missing &quot;youtube-dl&quot; application</source>
-        <translation type="unfinished">Fehlende &quot;youtube-dl&quot; Anwendung</translation>
-    </message>
-    <message>
-        <source>External application &quot;youtube-dl&quot; is required for this media. Do you want to download it? If download will be finished, play it again!</source>
-        <translation type="unfinished">Die externe Anwendung &quot;youtube-dl&quot; ist für diese Medien erforderlich. Möchten Sie es herunterladen? Wenn der Download beendet ist, spielen Sie ihn erneut ab!</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation type="unfinished">Fehler beim verbinden</translation>
-    </message>
-    <message>
-        <source>Error downloading &quot;youtube-dl&quot; application...</source>
-        <translation type="unfinished">Fehler beim Herunterladen von &quot;youtube-dl&quot; Anwendung...</translation>
-    </message>
-    <message>
-        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished">&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
     </message>
     <message>
         <source>Playlist</source>
@@ -3121,6 +3089,17 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>yes</source>
         <translation type="unfinished">ja</translation>
+    </message>
+</context>
+<context>
+    <name>YouTubeDL</name>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully updated!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation type="unfinished">&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
     </message>
 </context>
 </TS>

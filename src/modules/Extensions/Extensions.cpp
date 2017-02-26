@@ -50,11 +50,6 @@ Extensions::Extensions() :
 	init("YouTube/ShowAdditionalInfo", false);
 	init("YouTube/MultiStream", true);
 	init("YouTube/Subtitles", true);
-#ifdef Q_OS_WIN
-	init("YouTube/youtubedl", QString(QMPlay2Core.getSettingsDir() + "youtube-dl.exe"));
-#else
-	init("YouTube/youtubedl", QString(QMPlay2Core.getSettingsDir() + "youtube-dl"));
-#endif
 	init("YouTube/ItagVideoList", YouTube::getQualityPresetString(YouTube::_1080p60));
 	init("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
 	init("YouTube/ItagList", QStringList{"22", "43", "18"});
@@ -159,17 +154,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	subtitlesB->setToolTip(tr("Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language."));
 	subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
 
-	QLabel *youtubedlL = new QLabel(tr("Path to the 'youtube-dl' application") + ": ");
-
-	youtubedlE = new LineEdit;
-	youtubedlE->setPlaceholderText("youtube-dl");
-	youtubedlE->setText(sets().getString("YouTube/youtubedl"));
-
-	youtubedlBrowseB = new QToolButton;
-	youtubedlBrowseB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-	youtubedlBrowseB->setToolTip(tr("Browse"));
-	connect(youtubedlBrowseB, SIGNAL(clicked()), this, SLOT(browseYoutubedl()));
-
 
 	QLabel *itagL = new QLabel(tr("Priority of default video/audio quality") + ": ");
 
@@ -224,10 +208,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(additionalInfoB, 0, 0, 1, 3);
 	layout->addWidget(multiStreamB, 1, 0, 1, 3);
 	layout->addWidget(subtitlesB, 2, 0, 1, 3);
-	layout->addWidget(youtubedlL, 3, 0, 1, 1);
-	layout->addWidget(youtubedlE, 3, 1, 1, 1);
-	layout->addWidget(youtubedlBrowseB, 3, 2, 1, 1);
-	layout->addLayout(itagLayout, 4, 0, 1, 3);
+	layout->addLayout(itagLayout, 3, 0, 1, 3);
 	layout->setMargin(2);
 
 #ifdef USE_LASTFM
@@ -285,12 +266,6 @@ void ModuleSettingsWidget::enableItagLists(bool b)
 	itagAudioLW->setEnabled(b);
 	itagLW->setDisabled(b);
 }
-void ModuleSettingsWidget::browseYoutubedl()
-{
-	const QString filePath = QFileDialog::getOpenFileName(this, tr("Choose 'youtube-dl' application"), youtubedlE->text());
-	if (!filePath.isEmpty())
-		youtubedlE->setText(filePath);
-}
 #ifdef USE_LASTFM
 void ModuleSettingsWidget::loginPasswordEnable(bool checked)
 {
@@ -312,7 +287,6 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("YouTube/ShowAdditionalInfo", additionalInfoB->isChecked());
 	sets().set("YouTube/MultiStream", multiStreamB->isChecked());
 	sets().set("YouTube/Subtitles", subtitlesB->isChecked());
-	sets().set("YouTube/youtubedl", youtubedlE->text());
 
 	QStringList itagsVideo, itagsAudio, itags;
 	for (int i = 0; i < itagVideoLW->count(); ++i)

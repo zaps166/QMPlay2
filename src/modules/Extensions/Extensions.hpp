@@ -51,7 +51,6 @@ public:
 	ModuleSettingsWidget(Module &);
 private slots:
 	void enableItagLists(bool b);
-	void browseYoutubedl();
 #ifdef USE_LASTFM
 	void loginPasswordEnable(bool checked);
 	void passwordEdited();
@@ -64,8 +63,6 @@ private:
 #endif
 
 	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;
-	LineEdit *youtubedlE;
-	QToolButton *youtubedlBrowseB;
 	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
 
 #ifdef USE_LASTFM

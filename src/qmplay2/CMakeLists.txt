@@ -60,6 +60,7 @@ set(QMPLAY2_HDR
     headers/HWAccelInterface.hpp
     headers/VideoAdjustment.hpp
     headers/Json11.hpp
+    headers/YouTubeDL.hpp
 )
 
 set(QMPLAY2_SRC
@@ -96,6 +97,7 @@ set(QMPLAY2_SRC
     Buffer.cpp
     NetworkAccess.cpp
     Json11.cpp
+    YouTubeDL.cpp
 )
 
 if(WIN32)
