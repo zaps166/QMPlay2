@@ -1,11 +1,12 @@
-Changes in QMPlay2 build 17.02.25:
+Changes in QMPlay2 build 17.02.26:
 	- replace Http class by NetworkAccess and use it in more places,
 	- option to enable/disable still images (disabled by default),
 	- save playlists with relative file path (autodetection),
 	- add XSPF support (thanks Zamarin Arthur for help),
 	- merge ProstoPleer and SoundCloud in MediaBrowser,
-	- add Anime Odcinki to MediaBrowser (experimental),
+	- move YouTubeDL from YouTube to shared library,
 	- add SoundCloud support (Zamarin Arthur),
+	- add Anime Odcinki to MediaBrowser,
 	- switch to C++11,
 	- minor bugfix,
 
