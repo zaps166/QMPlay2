@@ -21,6 +21,9 @@
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
 #include <Json11.hpp>
+#ifdef Q_OS_WIN
+	#include <Functions.hpp>
+#endif
 
 #include <QFile>
 
