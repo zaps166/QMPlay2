@@ -328,6 +328,8 @@ void MediaBrowser::search()
 	if (m_imageReply)
 		m_imageReply->deleteLater();
 	m_resultsW->clear();
+	m_descr->clear();
+	m_descr->hide();
 	if (!name.isEmpty())
 	{
 		if (m_lastName != name || sender() == m_searchE || sender() == m_searchB)
@@ -341,8 +343,6 @@ void MediaBrowser::search()
 	{
 		m_completerModel->setStringList({});
 		m_nextPageB->hide();
-		m_descr->clear();
-		m_descr->hide();
 		m_progressB->hide();
 	}
 	m_lastName = name;
