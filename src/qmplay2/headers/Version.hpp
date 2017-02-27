@@ -21,5 +21,5 @@
 #ifndef QMPlay2GitHEAD
 	#define QMPlay2GitHEAD
 #endif
-#define QMPlay2Version "17.02.26" QMPlay2GitHEAD
+#define QMPlay2Version "17.02.27" QMPlay2GitHEAD
 #define QMPlay2UserAgent ("QMPlay2/" QMPlay2Version)
