@@ -27,9 +27,13 @@
 
 #include <QFile>
 
+constexpr char g_name[] = "YouTubeDL";
+
+/**/
+
 static bool youtubeDlUpdating;
 
-static void setUpdating(bool b)
+static inline void setUpdating(bool b)
 {
 	youtubeDlUpdating = b;
 	QMPlay2Core.setWorking(b);
@@ -128,7 +132,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	QFile file(ytDlPath);
 	if (file.exists())
 	{
-		QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
+		const QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
 		if ((file.permissions() & exeFlags) != exeFlags)
 			file.setPermissions(file.permissions() | exeFlags);
 	}
@@ -149,16 +153,27 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			const int idx = error.indexOf("ERROR:");
 			if (idx > -1)
 				error.remove(0, idx);
-			if (canUpdate && !error.contains("said:")) // Update is necessary
+			if (canUpdate && !error.contains("said:")) // Probably update can fix the error, so do it!
 			{
 				setUpdating(true);
 				m_process.start(ytDlPath, QStringList() << "-U" << commonArgs);
-				if (m_process.waitForFinished(-1) && !m_aborted)
+				QString updateOutput;
+				bool updating = false;
+				if (m_process.waitForStarted() && m_process.waitForReadyRead() && !m_aborted)
 				{
-					const QString error2 = m_process.readAllStandardOutput() + m_process.readAllStandardError();
-					if (error2.contains("ERROR:") || error2.contains("package manager"))
-						error += "\n" + error2;
-					else if (m_process.exitCode() == 0 && !error2.contains("up-to-date"))
+					updateOutput = m_process.readAllStandardOutput();
+					if (updateOutput.contains("Updating"))
+					{
+						QMPlay2Core.sendMessage(tr("Updating \"youtube-dl\", please wait..."), g_name);
+						updating = true;
+					}
+				}
+				if (!m_aborted && m_process.waitForFinished(-1) && !m_aborted)
+				{
+					updateOutput += m_process.readAllStandardOutput() + m_process.readAllStandardError();
+					if (updateOutput.contains("ERROR:") || updateOutput.contains("package manager"))
+						error += "\n" + updateOutput;
+					else if (m_process.exitCode() == 0 && !updateOutput.contains("up-to-date"))
 					{
 #ifdef Q_OS_WIN
 						const QString updatedFile = ytDlPath + ".new";
@@ -171,10 +186,9 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 #endif
 							{
 								setUpdating(false);
-								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), "YouTubeDL");
+								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
 								return exec(url, args, silentErr, false);
 							}
-							setUpdating(false);
 #ifdef Q_OS_WIN
 						}
 						else
@@ -184,6 +198,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 #endif
 					}
 				}
+				else if (updating && m_aborted)
+				{
+					QMPlay2Core.sendMessage(tr("\"youtube-dl\" update has been aborted!"), g_name, 2);
+				}
 				setUpdating(false);
 			}
 			if (!m_aborted)
@@ -191,7 +209,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				if (silentErr)
 					*silentErr = error;
 				else
-					emit QMPlay2Core.sendMessage(error, "YouTubeDL", 3, 0);
+					emit QMPlay2Core.sendMessage(error, g_name, 3, 0);
 			}
 			return {};
 		}
@@ -221,11 +239,14 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		if (net.start(m_reply, downloadUrl))
 		{
 			setUpdating(true);
+			QMPlay2Core.sendMessage(tr("Downloading \"youtube-dl\", please wait..."), g_name);
 			m_reply->waitForFinished();
 			const QByteArray replyData = m_reply->readAll();
 			const bool hasError = m_reply->hasError();
 			m_reply.clear();
-			if (!hasError)
+			if (m_aborted)
+				QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has been aborted!"), g_name, 2);
+			else if (!hasError)
 			{
 				QFile f(ytDlPath);
 				if (f.open(QFile::WriteOnly | QFile::Truncate))
@@ -235,7 +256,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 					else
 					{
 						f.close();
-						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), "YouTubeDL");
+						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
 						setUpdating(false);
 						return exec(url, args, silentErr, false);
 					}

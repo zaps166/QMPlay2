@@ -3087,5 +3087,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Updating &quot;youtube-dl&quot;, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; update has been aborted!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has been aborted!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -3101,5 +3101,21 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation type="unfinished">&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
     </message>
+    <message>
+        <source>Updating &quot;youtube-dl&quot;, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; update has been aborted!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has been aborted!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

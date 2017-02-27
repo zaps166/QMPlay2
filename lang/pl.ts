@@ -3101,5 +3101,21 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation>&quot;youtube-dl&quot; został pobrany!</translation>
     </message>
+    <message>
+        <source>Updating &quot;youtube-dl&quot;, please wait...</source>
+        <translation>Aktualizacja &quot;youtube-dl&quot;, proszę czekać...</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; update has been aborted!</source>
+        <translation>Aktualizacja &quot;youtube-dl&quot; została przerwana!</translation>
+    </message>
+    <message>
+        <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
+        <translation>Pobieranie &quot;youtube-dl&quot;, proszę czekać...</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has been aborted!</source>
+        <translation>Pobieranie &quot;youtube-dl&quot; zostało przerwane!</translation>
+    </message>
 </context>
 </TS>
