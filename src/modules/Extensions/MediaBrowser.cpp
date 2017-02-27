@@ -287,10 +287,10 @@ MediaBrowser::MediaBrowser(Module &module) :
 	layout->addWidget(m_searchE, 0, 1, 1, 1);
 	layout->addWidget(m_searchB, 0, 2, 1, 1);
 	layout->addWidget(m_nextPageB, 0, 3, 1, 1);
-	layout->addWidget(m_loadAllB, 0, 4, 1, 1);
-	layout->addWidget(m_resultsW, 1, 0, 1, 5);
-	layout->addWidget(m_descr, 2, 0, 1, 5);
-	layout->addWidget(m_progressB, 3, 0, 1, 5);
+	layout->addWidget(m_loadAllB, 0, 3, 1, 1);
+	layout->addWidget(m_resultsW, 1, 0, 1, 4);
+	layout->addWidget(m_descr, 2, 0, 1, 4);
+	layout->addWidget(m_progressB, 3, 0, 1, 4);
 	setLayout(layout);
 
 	SetModule(module);
