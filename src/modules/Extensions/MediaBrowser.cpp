@@ -21,6 +21,7 @@
 #include <MediaBrowser/Common.hpp>
 #include <Functions.hpp>
 #include <LineEdit.hpp>
+#include <Playlist.hpp>
 
 #ifdef USE_PROSTOPLEER
 	#include <MediaBrowser/ProstoPleer.hpp>
@@ -45,7 +46,15 @@
 #include <QTextEdit>
 #include <QComboBox>
 #include <QMimeData>
+#include <QDir>
 #include <QUrl>
+
+static inline QString getStringFromItem(QTreeWidgetItem *tWI)
+{
+	return tWI->data(0, Qt::UserRole).toString();
+}
+
+/**/
 
 MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
 	m_mediaBrowser(mediaBrowser)
@@ -55,28 +64,40 @@ MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
 	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(playEntry(QTreeWidgetItem *)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 	setContextMenuPolicy(Qt::CustomContextMenu);
+	setSelectionMode(ExtendedSelection);
 }
 MediaBrowserResults::~MediaBrowserResults()
-{}
-
-void MediaBrowserResults::enqueue()
 {
-	if (m_mediaBrowser)
-	{
-		if (QTreeWidgetItem *tWI = currentItem())
-			emit QMPlay2Core.processParam("enqueue", m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
-	}
+	removeTmpFile();
 }
-void MediaBrowserResults::playCurrentEntry()
+
+inline void MediaBrowserResults::setCurrentName(const QString &name)
 {
-	playEntry(currentItem());
+	m_currentName = name;
+	if (!m_currentName.isEmpty() && m_currentName.at(0).isLower())
+		m_currentName[0] = m_currentName.at(0).toUpper();
+}
+
+void MediaBrowserResults::clearAll()
+{
+	removeTmpFile();
+	clear();
+}
+
+void MediaBrowserResults::enqueueSelected()
+{
+	QMPlay2Action("enqueue", getItems());
+}
+void MediaBrowserResults::playSelected()
+{
+	QMPlay2Action("open", getItems());
 }
 void MediaBrowserResults::openPage()
 {
 	if (m_mediaBrowser && m_mediaBrowser->hasWebpage())
 	{
 		if (QTreeWidgetItem *tWI = currentItem())
-			QDesktopServices::openUrl(m_mediaBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
+			QDesktopServices::openUrl(m_mediaBrowser->getWebpageUrl(getStringFromItem(tWI)));
 	}
 }
 void MediaBrowserResults::copyPageURL()
@@ -86,7 +107,7 @@ void MediaBrowserResults::copyPageURL()
 		if (QTreeWidgetItem *tWI = currentItem())
 		{
 			QMimeData *mimeData = new QMimeData;
-			mimeData->setText(m_mediaBrowser->getWebpageUrl(tWI->data(0, Qt::UserRole).toString()));
+			mimeData->setText(m_mediaBrowser->getWebpageUrl(getStringFromItem(tWI)));
 			QApplication::clipboard()->setMimeData(mimeData);
 		}
 	}
@@ -94,8 +115,7 @@ void MediaBrowserResults::copyPageURL()
 
 void MediaBrowserResults::playEntry(QTreeWidgetItem *tWI)
 {
-	if (tWI)
-		emit QMPlay2Core.processParam("open", m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()));
+	QMPlay2Action("open", {tWI});
 }
 
 void MediaBrowserResults::contextMenu(const QPoint &point)
@@ -105,8 +125,8 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 		return;
 	if (QTreeWidgetItem *tWI = currentItem())
 	{
-		m_menu.addAction(tr("Enqueue"), this, SLOT(enqueue()));
-		m_menu.addAction(tr("Play"), this, SLOT(playCurrentEntry()));
+		m_menu.addAction(tr("Enqueue"), this, SLOT(enqueueSelected()));
+		m_menu.addAction(tr("Play"), this, SLOT(playSelected()));
 		m_menu.addSeparator();
 		if (m_mediaBrowser->hasWebpage())
 		{
@@ -118,7 +138,7 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
 			QString addressPrefixName, url, param;
-			if (Functions::splitPrefixAndUrlIfHasPluginPrefix(m_mediaBrowser->getQMPlay2Url(tWI->data(0, Qt::UserRole).toString()), &addressPrefixName, &url, &param))
+			if (Functions::splitPrefixAndUrlIfHasPluginPrefix(m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI)), &addressPrefixName, &url, &param))
 			{
 				const bool self = dynamic_cast<MediaBrowser *>(QMPlay2Ext);
 				for (QAction *act : QMPlay2Ext->getActions(name, -2, url, addressPrefixName, param))
@@ -132,6 +152,55 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 			}
 		}
 		m_menu.popup(viewport()->mapToGlobal(point));
+	}
+}
+
+QList<QTreeWidgetItem *> MediaBrowserResults::getItems() const
+{
+	QList<QTreeWidgetItem *> items = selectedItems();
+	if (items.count() < 2)
+		return {currentItem()};
+	std::sort(items.begin(), items.end(), [](QTreeWidgetItem *a, QTreeWidgetItem *b) {
+		return (a->text(0) < b->text(0));
+	});
+	return items;
+}
+
+void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTreeWidgetItem *> &items)
+{
+	if (m_mediaBrowser && items.value(0))
+	{
+		if (items.count() == 1)
+			emit QMPlay2Core.processParam(action, m_mediaBrowser->getQMPlay2Url(getStringFromItem(items[0])));
+		else
+		{
+			Playlist::Entries entries;
+			for (QTreeWidgetItem *tWI : items)
+			{
+				Playlist::Entry entry;
+				entry.name = tWI->text(0);
+				entry.url = m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI));
+				entries += entry;
+			}
+			if (!entries.isEmpty())
+			{
+				const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(m_currentName) + ".pls";
+				if (Playlist::write(entries, "file://" + fileName))
+				{
+					emit QMPlay2Core.processParam(action, fileName);
+					m_fileToRemove = fileName;
+				}
+			}
+		}
+	}
+}
+
+void MediaBrowserResults::removeTmpFile()
+{
+	if (!m_fileToRemove.isEmpty())
+	{
+		QFile::remove(m_fileToRemove);
+		m_fileToRemove.clear();
 	}
 }
 
@@ -320,14 +389,14 @@ void MediaBrowser::searchTextEdited(const QString &text)
 }
 void MediaBrowser::search()
 {
-	const QString name = m_searchE->text();
+	const QString name = m_searchE->text().simplified();
 	if (m_autocompleteReply)
 		m_autocompleteReply->deleteLater();
 	if (m_searchReply)
 		m_searchReply->deleteLater();
 	if (m_imageReply)
 		m_imageReply->deleteLater();
-	m_resultsW->clear();
+	m_resultsW->clearAll();
 	m_descr->clear();
 	m_descr->hide();
 	if (!name.isEmpty())
@@ -346,6 +415,7 @@ void MediaBrowser::search()
 		m_progressB->hide();
 	}
 	m_lastName = name;
+	m_resultsW->setCurrentName(m_lastName);
 }
 
 void MediaBrowser::netFinished(NetworkReply *reply)
@@ -357,7 +427,10 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 			m_lastName.clear();
 			m_nextPageB->hide();
 			m_progressB->hide();
-			emit QMPlay2Core.sendMessage(tr("Connection error"), MediaBrowserName, 3);
+			if (reply->error() == NetworkReply::Error::Connection404)
+				emit QMPlay2Core.sendMessage(tr("Website doesn't exist"), MediaBrowserName, 3);
+			else
+				emit QMPlay2Core.sendMessage(tr("Connection error"), MediaBrowserName, 3);
 		}
 	}
 	else

@@ -1123,6 +1123,10 @@
         <source>Connection error</source>
         <translation type="unfinished">Ошибка соединения</translation>
     </message>
+    <message>
+        <source>Website doesn&apos;t exist</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>

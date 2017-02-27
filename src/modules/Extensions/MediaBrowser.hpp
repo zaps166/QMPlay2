@@ -41,9 +41,13 @@ public:
 	MediaBrowserResults(MediaBrowserCommon *&mediaBrowser);
 	~MediaBrowserResults() final;
 
+	inline void setCurrentName(const QString &name);
+
+	void clearAll();
+
 private slots:
-	void enqueue();
-	void playCurrentEntry();
+	void enqueueSelected();
+	void playSelected();
 	void openPage();
 	void copyPageURL();
 
@@ -52,7 +56,15 @@ private slots:
 	void contextMenu(const QPoint &p);
 
 private:
+	QList<QTreeWidgetItem *> getItems() const;
+
+	void QMPlay2Action(const QString &action, const QList<QTreeWidgetItem *> &items);
+
+	void removeTmpFile();
+
 	MediaBrowserCommon *&m_mediaBrowser;
+	QString m_fileToRemove;
+	QString m_currentName;
 	QMenu m_menu;
 };
 

@@ -1123,6 +1123,10 @@
         <source>Connection error</source>
         <translation>Błąd połączenia</translation>
     </message>
+    <message>
+        <source>Website doesn&apos;t exist</source>
+        <translation>Strona internetowa nie istnieje</translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>

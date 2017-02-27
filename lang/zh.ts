@@ -1123,6 +1123,10 @@
         <source>Connection error</source>
         <translation type="unfinished">连接错误</translation>
     </message>
+    <message>
+        <source>Website doesn&apos;t exist</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
