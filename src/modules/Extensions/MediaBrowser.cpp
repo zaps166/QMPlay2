@@ -263,7 +263,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_nextPageB->hide();
 
 	m_loadAllB = new QToolButton;
-	m_loadAllB->setIcon(QMPlay2Core.getQMPlay2Pixmap());
+	m_loadAllB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
 	m_loadAllB->setAutoRaise(true);
 	m_loadAllB->setToolTip(tr("Play all"));
 	m_loadAllB->hide();
