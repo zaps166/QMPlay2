@@ -145,14 +145,14 @@ QList<QMPlay2Tag> AudioCDDemux::tags() const
 {
 	QList<QMPlay2Tag> tagList;
 	if (!Title.isEmpty())
-		tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), Title);
+		tagList += {QString::number(QMPLAY2_TAG_TITLE), Title};
 	if (!Artist.isEmpty())
-		tagList << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), Artist);
+		tagList += {QString::number(QMPLAY2_TAG_ARTIST), Artist};
 	if (!cdTitle.isEmpty())
-		tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), cdTitle);
+		tagList += {QString::number(QMPLAY2_TAG_ALBUM), cdTitle};
 	if (!Genre.isEmpty())
-		tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), Genre);
-	tagList << qMakePair(tr("Track"), QString::number(trackNo));
+		tagList += {QString::number(QMPLAY2_TAG_GENRE), Genre};
+	tagList += {tr("Track"), QString::number(trackNo)};
 	return tagList;
 }
 double AudioCDDemux::length() const

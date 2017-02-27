@@ -881,7 +881,7 @@ void SettingsWidget::tabCh(int idx)
 				{
 					const int mIdx = writers[m].indexOf(moduleInfo.name);
 					if (mIdx > -1)
-						pluginsInstances[m][mIdx] = qMakePair(module, moduleInfo);
+						pluginsInstances[m][mIdx] = {module, moduleInfo};
 				}
 		for (int m = 0; m < 3; ++m)
 		{

@@ -293,7 +293,7 @@ QList<ProgramInfo> FormatContext::getPrograms() const
 					{
 						const QMPlay2MediaType type = (QMPlay2MediaType)codecParams(streams[ff_idx])->codec_type;
 						if (type != QMPLAY2_TYPE_UNKNOWN)
-							programInfo.streams += qMakePair(idx, type);
+							programInfo.streams += {idx, type};
 					}
 				}
 			}
@@ -350,35 +350,35 @@ QList<QMPlay2Tag> FormatContext::tags() const
 	if (isStreamed)
 	{
 		if (!(value = getTag(formatCtx->metadata, "icy-name", false)).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_NAME), value);
+			tagList += {QString::number(QMPLAY2_TAG_NAME), value};
 		if (!(value = getTag(formatCtx->metadata, "icy-description", false)).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_DESCRIPTION), value);
+			tagList += {QString::number(QMPLAY2_TAG_DESCRIPTION), value};
 	}
 	if (isStreamed && !(value = getTag(formatCtx->metadata, "StreamTitle", false)).isEmpty())
 	{
 		int idx = value.indexOf(" - ");
 		if (idx < 0)
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), value);
+			tagList += {QString::number(QMPLAY2_TAG_TITLE), value};
 		else
 		{
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), value.mid(idx + 3));
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), value.mid(0, idx));
+			tagList += {QString::number(QMPLAY2_TAG_TITLE), value.mid(idx + 3)};
+			tagList += {QString::number(QMPLAY2_TAG_ARTIST), value.mid(0, idx)};
 		}
 	}
 	else if (AVDictionary *dict = getMetadata())
 	{
 		if (!(value = getTag(dict, "title")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_TITLE), value);
+			tagList += {QString::number(QMPLAY2_TAG_TITLE), value};
 		if (!(value = getTag(dict, "artist")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_ARTIST), value);
+			tagList += {QString::number(QMPLAY2_TAG_ARTIST), value};
 		if (!(value = getTag(dict, "album")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), value);
+			tagList += {QString::number(QMPLAY2_TAG_ALBUM), value};
 		if (!(value = getTag(dict, "genre")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_GENRE), value);
+			tagList += {QString::number(QMPLAY2_TAG_GENRE), value};
 		if (!(value = getTag(dict, "date")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_DATE), value);
+			tagList += {QString::number(QMPLAY2_TAG_DATE), value};
 		if (!(value = getTag(dict, "comment")).isEmpty())
-			tagList << qMakePair(QString::number(QMPLAY2_TAG_COMMENT), value);
+			tagList += {QString::number(QMPLAY2_TAG_COMMENT), value};
 	}
 	return tagList;
 }
@@ -902,16 +902,16 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->title  = getTag(stream->metadata, "title");
 			streamInfo->artist = getTag(stream->metadata, "artist");
 			if (!(value = getTag(stream->metadata, "album")).isEmpty())
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_ALBUM), value);
+				streamInfo->other_info += {QString::number(QMPLAY2_TAG_ALBUM), value};
 			if (!(value = getTag(stream->metadata, "genre")).isEmpty())
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_GENRE), value);
+				streamInfo->other_info += {QString::number(QMPLAY2_TAG_GENRE), value};
 			if (!(value = getTag(stream->metadata, "date")).isEmpty())
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_DATE), value);
+				streamInfo->other_info += {QString::number(QMPLAY2_TAG_DATE), value};
 			if (!(value = getTag(stream->metadata, "comment")).isEmpty())
-				streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_COMMENT), value);
+				streamInfo->other_info += {QString::number(QMPLAY2_TAG_COMMENT), value};
 		}
 		if (!(value = getTag(stream->metadata, "language", false)).isEmpty() && value != "und")
-			streamInfo->other_info << qMakePair(QString::number(QMPLAY2_TAG_LANGUAGE), value);
+			streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), value};
 	}
 
 	switch (streamInfo->type)

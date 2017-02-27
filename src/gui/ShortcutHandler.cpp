@@ -103,7 +103,7 @@ void ShortcutHandler::appendAction(QAction *action, const QString &settingsName,
 	action->setShortcut(shortcut);
 
 	m_actions.append(action);
-	m_shortcuts[action] = qMakePair(action->shortcut().toString(), defaultShortcut);
+	m_shortcuts[action] = {action->shortcut().toString(), defaultShortcut};
 }
 
 void ShortcutHandler::save()

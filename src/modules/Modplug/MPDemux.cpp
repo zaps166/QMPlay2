@@ -119,10 +119,10 @@ QString MPDemux::title() const
 QList<QMPlay2Tag> MPDemux::tags() const
 {
 	QList<QMPlay2Tag> tags;
-	tags << qMakePair(QString::number(QMPLAY2_TAG_TITLE), QString(QMPlay2ModPlug::GetName(mpfile)));
-	tags << qMakePair(tr("Samples"), QString::number(QMPlay2ModPlug::NumSamples(mpfile)));
-	tags << qMakePair(tr("Patterns"), QString::number(QMPlay2ModPlug::NumPatterns(mpfile)));
-	tags << qMakePair(tr("Channels"), QString::number(QMPlay2ModPlug::NumChannels(mpfile)));
+	tags += {QString::number(QMPLAY2_TAG_TITLE), QString(QMPlay2ModPlug::GetName(mpfile))};
+	tags += {tr("Samples"), QString::number(QMPlay2ModPlug::NumSamples(mpfile))};
+	tags += {tr("Patterns"), QString::number(QMPlay2ModPlug::NumPatterns(mpfile))};
+	tags += {tr("Channels"), QString::number(QMPlay2ModPlug::NumChannels(mpfile))};
 	return tags;
 }
 double MPDemux::length() const

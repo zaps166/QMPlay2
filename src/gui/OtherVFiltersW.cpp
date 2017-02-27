@@ -52,10 +52,10 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 					{
 						if (videoFilters.second[idx])
 							moduleInfo.type |= Module::USERFLAG;
-						pluginsInstances[idx] = qMakePair(pluginInstance, moduleInfo);
+						pluginsInstances[idx] = {pluginInstance, moduleInfo};
 					}
 					else
-						pluginsInstances += qMakePair(pluginInstance, moduleInfo);
+						pluginsInstances += {pluginInstance, moduleInfo};
 				}
 	}
 	else
@@ -63,7 +63,7 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 		for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
 			for (const Module::Info &moduleInfo : pluginInstance->getModulesInfo())
 				if ((moduleInfo.type & 0xF) == Module::WRITER && (moduleInfo.type & Module::VIDEOHWFILTER))
-					pluginsInstances += qMakePair(pluginInstance, moduleInfo);
+					pluginsInstances += {pluginInstance, moduleInfo};
 	}
 
 	for (int i = 0; i < pluginsInstances.count(); i++)

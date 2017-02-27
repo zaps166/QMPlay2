@@ -48,12 +48,12 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
 			if (mod.type == Module::DECODER)
 			{
 				if (modNames.isEmpty())
-					pluginsInstances += qMakePair(pluginInstance, mod);
+					pluginsInstances += {pluginInstance, mod};
 				else
 				{
 					const int idx = modNames.indexOf(mod.name);
 					if (idx > -1)
-						pluginsInstances[idx] = qMakePair(pluginInstance, mod);
+						pluginsInstances[idx] = {pluginInstance, mod};
 				}
 			}
 	for (int i = 0; i < pluginsInstances.count(); i++)
