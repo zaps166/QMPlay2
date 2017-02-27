@@ -84,8 +84,9 @@ bool ShortcutHandler::setData(const QModelIndex &index, const QVariant &value, i
 {
 	if (role == Qt::EditRole && index.column() == 1 && index.row() >= 0 && index.row() < m_actions.count())
 	{
-		const QString shortcut = QKeySequence(value.toString().trimmed()).toString();
-		if (!shortcut.isEmpty())
+		const QString trimmedValue = value.toString().trimmed();
+		const QString shortcut = QKeySequence(trimmedValue).toString();
+		if (!shortcut.isEmpty() || trimmedValue.isEmpty())
 		{
 			m_shortcuts[m_actions.at(index.row())].first = shortcut;
 			emit dataChanged(index, index);
