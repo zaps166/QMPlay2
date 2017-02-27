@@ -330,7 +330,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 								int idx2 = reply.indexOf("<", idx1);
 								if (idx2 > -1)
 								{
-									*name = reply.mid(idx1, idx2 - idx1);
+									*name = QTextDocumentFragment::fromHtml(reply.mid(idx1, idx2 - idx1)).toPlainText();
 									if (!name->isEmpty())
 										hasName = true;
 								}
