@@ -1127,6 +1127,10 @@
         <source>Website doesn&apos;t exist</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Play all</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>

@@ -1127,6 +1127,10 @@
         <source>Website doesn&apos;t exist</source>
         <translation>Strona internetowa nie istnieje</translation>
     </message>
+    <message>
+        <source>Play all</source>
+        <translation>Odtwórz wszystkie</translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>

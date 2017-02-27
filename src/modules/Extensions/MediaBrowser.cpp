@@ -86,11 +86,15 @@ void MediaBrowserResults::clearAll()
 
 void MediaBrowserResults::enqueueSelected()
 {
-	QMPlay2Action("enqueue", getItems());
+	QMPlay2Action("enqueue", getItems(true));
 }
 void MediaBrowserResults::playSelected()
 {
-	QMPlay2Action("open", getItems());
+	QMPlay2Action("open", getItems(true));
+}
+void MediaBrowserResults::playAll()
+{
+	QMPlay2Action("open", getItems(false));
 }
 void MediaBrowserResults::openPage()
 {
@@ -155,9 +159,9 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 	}
 }
 
-QList<QTreeWidgetItem *> MediaBrowserResults::getItems() const
+QList<QTreeWidgetItem *> MediaBrowserResults::getItems(bool selected) const
 {
-	QList<QTreeWidgetItem *> items = selectedItems();
+	QList<QTreeWidgetItem *> items = selected ? selectedItems() : findItems(QString(), Qt::MatchContains);
 	if (items.count() < 2)
 		return {currentItem()};
 	std::sort(items.begin(), items.end(), [](QTreeWidgetItem *a, QTreeWidgetItem *b) {
@@ -256,11 +260,18 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_nextPageB->setToolTip(tr("Next page"));
 	m_nextPageB->hide();
 
+	m_loadAllB = new QToolButton;
+	m_loadAllB->setIcon(QMPlay2Core.getQMPlay2Pixmap());
+	m_loadAllB->setAutoRaise(true);
+	m_loadAllB->setToolTip(tr("Play all"));
+	m_loadAllB->hide();
+
 	m_progressB = new QProgressBar;
 	m_progressB->setRange(0, 0);
 	m_progressB->hide();
 
 	m_resultsW = new MediaBrowserResults(m_mediaBrowser);
+	connect(m_loadAllB, SIGNAL(clicked()), m_resultsW, SLOT(playAll()));
 
 	m_descr = new QTextEdit;
 	m_descr->setSizePolicy({QSizePolicy::Preferred, QSizePolicy::Fixed});
@@ -274,9 +285,10 @@ MediaBrowser::MediaBrowser(Module &module) :
 	layout->addWidget(m_searchE, 0, 1, 1, 1);
 	layout->addWidget(m_searchB, 0, 2, 1, 1);
 	layout->addWidget(m_nextPageB, 0, 3, 1, 1);
-	layout->addWidget(m_resultsW, 1, 0, 1, 4);
-	layout->addWidget(m_descr, 2, 0, 1, 4);
-	layout->addWidget(m_progressB, 3, 0, 1, 4);
+	layout->addWidget(m_loadAllB, 0, 4, 1, 1);
+	layout->addWidget(m_resultsW, 1, 0, 1, 5);
+	layout->addWidget(m_descr, 2, 0, 1, 5);
+	layout->addWidget(m_progressB, 3, 0, 1, 5);
 	setLayout(layout);
 
 	SetModule(module);
@@ -412,6 +424,7 @@ void MediaBrowser::search()
 	{
 		m_completerModel->setStringList({});
 		m_nextPageB->hide();
+		m_loadAllB->hide();
 		m_progressB->hide();
 	}
 	m_lastName = name;
@@ -426,6 +439,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		{
 			m_lastName.clear();
 			m_nextPageB->hide();
+			m_loadAllB->hide();
 			m_progressB->hide();
 			if (reply->error() == NetworkReply::Error::Connection404)
 				emit QMPlay2Core.sendMessage(tr("Website doesn't exist"), MediaBrowserName, 3);
@@ -458,6 +472,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 					m_descr->show();
 				}
 				m_nextPageB->setVisible(m_mediaBrowser->hasMultiplePages() && m_resultsW->topLevelItemCount());
+				m_loadAllB->setVisible(!m_mediaBrowser->hasMultiplePages() && m_resultsW->topLevelItemCount());
 			}
 		}
 		else if (reply == m_imageReply)

@@ -48,6 +48,7 @@ public:
 private slots:
 	void enqueueSelected();
 	void playSelected();
+	void playAll();
 	void openPage();
 	void copyPageURL();
 
@@ -56,7 +57,7 @@ private slots:
 	void contextMenu(const QPoint &p);
 
 private:
-	QList<QTreeWidgetItem *> getItems() const;
+	QList<QTreeWidgetItem *> getItems(bool selected) const;
 
 	void QMPlay2Action(const QString &action, const QList<QTreeWidgetItem *> &items);
 
@@ -121,7 +122,7 @@ private:
 
 	QComboBox *m_providersB;
 	LineEdit *m_searchE;
-	QToolButton *m_searchB, *m_nextPageB;
+	QToolButton *m_searchB, *m_nextPageB, *m_loadAllB;
 	QProgressBar *m_progressB;
 	MediaBrowserResults *m_resultsW;
 	QTextEdit *m_descr;
