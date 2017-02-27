@@ -394,7 +394,6 @@ YouTube::YouTube(Module &module) :
 	imgSize(QSize(100, 100)),
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
-	autocompleteReply(nullptr), searchReply(nullptr),
 	net(this)
 {
 	dw = new DockWidget;
@@ -694,10 +693,7 @@ void YouTube::chPage()
 void YouTube::searchTextEdited(const QString &text)
 {
 	if (autocompleteReply)
-	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = nullptr;
-	}
 	if (text.isEmpty())
 		((QStringListModel *)completer->model())->setStringList({});
 	else
@@ -708,15 +704,9 @@ void YouTube::search()
 	const QString title = searchE->text();
 	deleteReplies();
 	if (autocompleteReply)
-	{
 		autocompleteReply->deleteLater();
-		autocompleteReply = nullptr;
-	}
 	if (searchReply)
-	{
 		searchReply->deleteLater();
-		searchReply = nullptr;
-	}
 	resultsW->clearAll();
 	if (!title.isEmpty())
 	{
@@ -771,11 +761,7 @@ void YouTube::netFinished(NetworkReply *reply)
 		}
 	}
 
-	if (reply == autocompleteReply)
-		autocompleteReply = nullptr;
-	else if (reply == searchReply)
-		searchReply = nullptr;
-	else if (linkReplies.contains(reply))
+	if (linkReplies.contains(reply))
 	{
 		linkReplies.removeOne(reply);
 		progressB->setValue(progressB->value() + 1);

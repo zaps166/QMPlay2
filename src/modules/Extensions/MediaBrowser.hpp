@@ -23,6 +23,7 @@
 #include <NetworkAccess.hpp>
 
 #include <QTreeWidget>
+#include <QPointer>
 #include <QMenu>
 
 #include <memory>
@@ -118,7 +119,7 @@ private:
 	QString m_lastName;
 	qint32 m_currPage;
 
-	NetworkReply *m_autocompleteReply, *m_searchReply, *m_imageReply;
+	QPointer<NetworkReply> m_autocompleteReply, m_searchReply, m_imageReply;
 	NetworkAccess m_net;
 
 	bool m_visible, m_first;

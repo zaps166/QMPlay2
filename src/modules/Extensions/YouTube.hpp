@@ -23,6 +23,7 @@
 #include <NetworkAccess.hpp>
 
 #include <QTreeWidget>
+#include <QPointer>
 #include <QMap>
 
 class QProgressBar;
@@ -157,7 +158,7 @@ private:
 	QCompleter *completer;
 	int currPage;
 
-	NetworkReply *autocompleteReply, *searchReply;
+	QPointer<NetworkReply> autocompleteReply, searchReply;
 	QList<NetworkReply *> linkReplies, imageReplies;
 	NetworkAccess net;
 

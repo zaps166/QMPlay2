@@ -142,7 +142,6 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_completerModel(new QStringListModel(this)),
 	m_completer(new QCompleter(m_completerModel, this)),
 	m_currPage(1),
-	m_autocompleteReply(nullptr), m_searchReply(nullptr), m_imageReply(nullptr),
 	m_net(this),
 	m_visible(false), m_first(true)
 {
@@ -309,10 +308,7 @@ void MediaBrowser::next()
 void MediaBrowser::searchTextEdited(const QString &text)
 {
 	if (m_autocompleteReply)
-	{
 		m_autocompleteReply->deleteLater();
-		m_autocompleteReply = nullptr;
-	}
 	if (text.isEmpty())
 		m_completerModel->setStringList({});
 	else if (m_mediaBrowser && m_mediaBrowser->hasCompleter())
@@ -326,20 +322,11 @@ void MediaBrowser::search()
 {
 	const QString name = m_searchE->text();
 	if (m_autocompleteReply)
-	{
 		m_autocompleteReply->deleteLater();
-		m_autocompleteReply = nullptr;
-	}
 	if (m_searchReply)
-	{
 		m_searchReply->deleteLater();
-		m_searchReply = nullptr;
-	}
 	if (m_imageReply)
-	{
 		m_imageReply->deleteLater();
-		m_imageReply = nullptr;
-	}
 	m_resultsW->clear();
 	if (!name.isEmpty())
 	{
@@ -421,15 +408,8 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		}
 	}
 
-	if (reply == m_autocompleteReply)
-		m_autocompleteReply = nullptr;
-	else if (reply == m_searchReply)
-	{
-		m_searchReply = nullptr;
+	if (reply == m_searchReply)
 		m_progressB->hide();
-	}
-	else if (reply == m_imageReply)
-		m_imageReply = nullptr;
 
 	reply->deleteLater();
 }
