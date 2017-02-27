@@ -26,7 +26,6 @@
 #include <QTextDocumentFragment>
 #include <QTreeWidget>
 #include <QProcess>
-#include <QDebug>
 
 using EmbeddedPlayers = std::vector<Json>;
 
@@ -210,11 +209,7 @@ void AnimeOdcinki::prepareWidget(QTreeWidget *treeW)
 
 	m_currentAnime.clear();
 
-	if (m_animePairList.isEmpty() && !m_animeListReply)
-	{
-		m_animeListReply = start(g_url);
-		connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
-	}
+	maybeDownloadAnimeList();
 }
 
 QString AnimeOdcinki::getQMPlay2Url(const QString &text)
@@ -225,14 +220,19 @@ QString AnimeOdcinki::getQMPlay2Url(const QString &text)
 NetworkReply *AnimeOdcinki::getSearchReply(const QString &text, const qint32 page)
 {
 	Q_UNUSED(page)
+	m_currentAnime.clear();
 	for (const auto &animePair : m_animePairList)
 	{
 		if (animePair.first.compare(text, Qt::CaseInsensitive) == 0)
 		{
 			m_currentAnime = animePair.second;
-			return m_net.start(g_url + m_currentAnime);
+			break;
 		}
 	}
+	if (m_currentAnime.isEmpty())
+		m_currentAnime = text.toLower().replace(' ', '-');
+	if (!m_currentAnime.isEmpty())
+		return m_net.start(g_url + m_currentAnime);
 	return nullptr;
 }
 MediaBrowserCommon::Description AnimeOdcinki::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
@@ -279,6 +279,7 @@ QStringList AnimeOdcinki::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
+	maybeDownloadAnimeList();
 	for (const auto &animePair : m_animePairList)
 		completions.append(animePair.first);
 	return completions;
@@ -408,8 +409,17 @@ void AnimeOdcinki::gotAnimeList()
 	NetworkReply *animeListReply = qobject_cast<NetworkReply *>(sender());
 	if (animeListReply && m_animeListReply == animeListReply)
 	{
-		m_animePairList = parseAnimeList(m_animeListReply->readAll(), nullptr);
+		if (!m_animeListReply->hasError())
+			m_animePairList = parseAnimeList(m_animeListReply->readAll(), nullptr);
 		m_animeListReply->deleteLater();
-		m_animeListReply = nullptr;
+	}
+}
+
+void AnimeOdcinki::maybeDownloadAnimeList()
+{
+	if (m_animePairList.isEmpty() && !m_animeListReply)
+	{
+		m_animeListReply = start(g_url);
+		connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
 	}
 }

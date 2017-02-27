@@ -22,6 +22,8 @@
 
 #include <NetworkAccess.hpp>
 
+#include <QPointer>
+
 class AnimeOdcinki : public NetworkAccess, public MediaBrowserCommon
 {
 	Q_OBJECT
@@ -62,7 +64,9 @@ private slots:
 	void gotAnimeList();
 
 private:
-	NetworkReply *m_animeListReply = nullptr;
+	void maybeDownloadAnimeList();
+
+	QPointer<NetworkReply> m_animeListReply;
 	AnimePairList m_animePairList;
 	QString m_currentAnime;
 };
