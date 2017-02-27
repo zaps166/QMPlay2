@@ -49,6 +49,8 @@
 #include <QDir>
 #include <QUrl>
 
+#include <algorithm>
+
 static inline QString getStringFromItem(QTreeWidgetItem *tWI)
 {
 	return tWI->data(0, Qt::UserRole).toString();
