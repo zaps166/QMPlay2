@@ -29,6 +29,12 @@
 
 static bool youtubeDlUpdating;
 
+static void setUpdating(bool b)
+{
+	youtubeDlUpdating = b;
+	QMPlay2Core.setWorking(b);
+}
+
 static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 {
 	const Json json = Json::parse(jsonData.toUtf8());
@@ -145,7 +151,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				error.remove(0, idx);
 			if (canUpdate && !error.contains("said:")) // Update is necessary
 			{
-				youtubeDlUpdating = true;
+				setUpdating(true);
 				m_process.start(ytDlPath, QStringList() << "-U" << commonArgs);
 				if (m_process.waitForFinished(-1) && !m_aborted)
 				{
@@ -164,11 +170,11 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 							if (QFile::rename(updatedFile, ytDlPath))
 #endif
 							{
-								youtubeDlUpdating = false;
+								setUpdating(false);
 								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), "YouTubeDL");
 								return exec(url, args, silentErr, false);
 							}
-							youtubeDlUpdating = false;
+							setUpdating(false);
 #ifdef Q_OS_WIN
 						}
 						else
@@ -178,7 +184,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 #endif
 					}
 				}
-				youtubeDlUpdating = false;
+				setUpdating(false);
 			}
 			if (!m_aborted)
 			{
@@ -214,11 +220,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		NetworkAccess net;
 		if (net.start(m_reply, downloadUrl))
 		{
-			youtubeDlUpdating = true;
+			setUpdating(true);
 			m_reply->waitForFinished();
 			const QByteArray replyData = m_reply->readAll();
+			const bool hasError = m_reply->hasError();
 			m_reply.clear();
-			if (!m_reply->hasError())
+			if (!hasError)
 			{
 				QFile f(ytDlPath);
 				if (f.open(QFile::WriteOnly | QFile::Truncate))
@@ -229,12 +236,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 					{
 						f.close();
 						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), "YouTubeDL");
-						youtubeDlUpdating = false;
+						setUpdating(false);
 						return exec(url, args, silentErr, false);
 					}
 				}
 			}
-			youtubeDlUpdating = false;
+			setUpdating(false);
 		}
 	}
 	return {};
