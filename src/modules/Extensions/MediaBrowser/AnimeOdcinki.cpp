@@ -30,6 +30,7 @@
 using EmbeddedPlayers = std::vector<Json>;
 
 constexpr char g_url[]  = "https://anime-odcinki.pl/anime/";
+constexpr char g_linkexpander[] = "http://www.linkexpander.com/get_url.php";
 
 static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeOdcinki::AnimePair *episodeImgDescr)
 {
@@ -297,7 +298,6 @@ QAction *AnimeOdcinki::getAction() const
 
 bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
-	Q_UNUSED(extension)
 	if (prefix == m_name)
 	{
 		if (img)
@@ -314,7 +314,6 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 				if (!netReply->hasError())
 				{
 					const QByteArray reply = netReply->readAll();
-					const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
 
 					bool hasName = false;
 					if (name)
@@ -338,8 +337,10 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 						}
 					}
 
+					bool hasStreamUrl = false;
 					QString error;
-					const auto getStreamUrl = [streamUrl, name, ioCtrl, hasName, &error](const QString &animeUrl)->bool {
+
+					const auto getStreamUrl = [&](const QString &animeUrl)->bool {
 						IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
 						if (!YouTubeDL::isUpdating() && ytDl.assign(new YouTubeDL))
 						{
@@ -355,18 +356,65 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 						return false;
 					};
 
-					bool hasStreamUrl = false;
-
-					if (!adFlyUrl.isEmpty() && net.start(netReply, "http://www.linkexpander.com/get_url.php", "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
-					{
-						netReply->waitForFinished();
-						if (!netReply->hasError())
+					const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
+						const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
+						if (!adFlyUrl.isEmpty())
 						{
-							const QByteArray data = netReply->readAll();
-							const int idx = data.indexOf("<");
-							if (idx > -1)
-								hasStreamUrl = getStreamUrl(data.left(idx));
+							for (int i = 0; i < 3; ++i) // Try three times
+							{
+								if (!net.start(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
+									break;
+								netReply->waitForFinished();
+								if (netReply->error() != NetworkReply::Error::Connection)
+									break;
+							}
+							if (!netReply->hasError())
+							{
+								QByteArray data = netReply->readAll();
+								const int idx = data.indexOf("<");
+								if (idx > -1)
+								{
+									const QString &animeUrl = data.left(idx);
+									if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
+										hasStreamUrl = getStreamUrl(animeUrl);
+									else if (net.start(netReply, animeUrl))
+									{
+										// Download raw file from Google Drive
+										netReply->waitForFinished();
+										if (!netReply->hasError())
+										{
+											data = netReply->readAll().constData();
+											int idx1 = data.indexOf("uc-download-link");
+											if (idx1 > -1)
+											{
+												idx1 = data.indexOf("href=\"", idx1);
+												if (idx1 > -1)
+												{
+													idx1 += 6;
+													int idx2 = data.indexOf('"', idx1);
+													if (idx2 > -1)
+													{
+														const QString path = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
+														if (path.startsWith("/"))
+														{
+															*streamUrl = "https://docs.google.com" + path;
+															QMPlay2Core.addCookies(*streamUrl, netReply->getCookies());
+															hasStreamUrl = true;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 						}
+					};
+
+					if (extension) // Download only
+					{
+						getDownloadButtonUrl(true);
+						*extension = ".mp4"; // Probably all videos here have MP4 file format
 					}
 
 					if (!hasStreamUrl)
@@ -392,6 +440,9 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 							}
 						}
 					}
+
+					if (!extension && !hasStreamUrl) // Fallback to download button...
+						getDownloadButtonUrl(false);
 
 					if (!hasStreamUrl && !error.isEmpty())
 						emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
