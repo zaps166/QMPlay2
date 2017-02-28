@@ -404,13 +404,13 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 					}
 				};
 
-				if (extension) // Download only
+				if (extension && !ioCtrl->isAborted()) // Download only
 				{
 					getDownloadButtonUrl(true);
 					*extension = ".mp4"; // Probably all videos here have MP4 file format
 				}
 
-				if (!hasStreamUrl)
+				if (!hasStreamUrl && !ioCtrl->isAborted())
 				{
 					for (const Json &json : getEmbeddedPlayers(reply))
 					{
@@ -430,13 +430,13 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 					}
 				}
 
-				if (!extension && !hasStreamUrl) // Fallback to download button...
+				if (!extension && !hasStreamUrl && !ioCtrl->isAborted()) // Fallback to download button...
 					getDownloadButtonUrl(false);
 
 				if (!hasStreamUrl && !error.isEmpty())
 					emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 
-				netReply.clear();
+				ioCtrl->clear();
 			}
 		}
 		return true;
