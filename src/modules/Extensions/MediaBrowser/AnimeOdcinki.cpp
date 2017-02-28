@@ -365,7 +365,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 							if (netReply->error() != NetworkReply::Error::Connection)
 								break;
 						}
-						if (!netReply->hasError())
+						if (netReply && !netReply->hasError())
 						{
 							QByteArray data = netReply->readAll();
 							const int idx = data.indexOf("<");
