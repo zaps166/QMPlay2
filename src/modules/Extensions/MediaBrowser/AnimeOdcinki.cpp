@@ -146,10 +146,10 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 				const bool isGoogle   = (name == "google");
 				const bool isOpenload = (name == "openload");
 				const bool isVk       = (name == "vk");
-				// TODO: VidFile ?
+//				const bool isVIDFile  = (name == "vidfile"); // Currently VIDfile doesn't play
 
 				if (isGoogle || isOpenload || isVk)
-					ret.insert(isGoogle ? ret.begin() : ret.end(), std::move(json));
+					ret.insert(isGoogle ? ret.end() : ret.begin(), std::move(json));
 			}
 		}
 
