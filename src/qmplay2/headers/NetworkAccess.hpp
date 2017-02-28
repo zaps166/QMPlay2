@@ -56,6 +56,8 @@ public:
 	bool hasError() const;
 	Error error() const;
 
+	QByteArray getCookies() const;
+
 	QByteArray readAll();
 
 	bool waitForFinished(int ms = -1);

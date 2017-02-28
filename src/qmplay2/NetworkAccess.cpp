@@ -26,6 +26,7 @@ extern "C"
 	#include <libavformat/avformat.h>
 	#include <libavformat/avio.h>
 	#include <libavutil/dict.h>
+	#include <libavutil/opt.h>
 }
 
 #include <QThread>
@@ -66,6 +67,7 @@ public:
 	const int m_maxSize;
 
 	AVIOContext *m_ctx;
+	QByteArray m_cookies;
 	QByteArray m_data;
 	NetworkReply::Error m_error;
 
@@ -106,6 +108,21 @@ private:
 			const int ret = avio_open2(&m_ctx, url, AVIO_FLAG_READ | AVIO_FLAG_DIRECT, &interruptCB, &options);
 			if (ret >= 0)
 			{
+				char *cookies = nullptr;
+				if (av_opt_get(m_ctx, "cookies", AV_OPT_SEARCH_CHILDREN, (uint8_t **)&cookies) >= 0)
+				{
+					for (const QByteArray &cookie : QByteArray(cookies).trimmed().split('\n'))
+					{
+						int idx = cookie.indexOf(';');
+						if (idx < 0)
+							idx = cookie.length();
+						if (idx > 0)
+							m_cookies += cookie.left(idx) + "; ";
+					}
+					m_cookies.chop(1);
+					av_free(cookies);
+				}
+
 				int64_t size = avio_size(m_ctx);
 				if (size >= m_maxSize)
 					m_error = NetworkReply::Error::FileTooLarge;
@@ -157,6 +174,7 @@ private:
 
 					delete[] data;
 				}
+
 				avio_closep(&m_ctx);
 			}
 			else
@@ -216,6 +234,11 @@ bool NetworkReply::hasError() const
 NetworkReply::Error NetworkReply::error() const
 {
 	return m_priv->m_aborted ? Error::Aborted : m_priv->m_error;
+}
+
+QByteArray NetworkReply::getCookies() const
+{
+	return m_priv->m_cookies;
 }
 
 QByteArray NetworkReply::readAll()
