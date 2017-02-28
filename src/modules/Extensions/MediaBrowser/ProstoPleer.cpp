@@ -183,19 +183,17 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, QStr
 					net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
 					IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-					if (net.start(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
+					if (net.startAndWait(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
 					{
-						netReply->waitForFinished();
-						if (!netReply->hasError())
-						{
-							const Json json = Json::parse(netReply->readAll());
-							const QString tmpStreamUrl = json["track_link"].string_value();
-							if (!tmpStreamUrl.isEmpty())
-								*streamUrl = tmpStreamUrl;
-						}
-						else if (netReply->error() != NetworkReply::Error::Aborted)
-							QMPlay2Core.sendMessage(tr("Try again later"), m_name);
+						const Json json = Json::parse(netReply->readAll());
+						const QString tmpStreamUrl = json["track_link"].string_value();
+						if (!tmpStreamUrl.isEmpty())
+							*streamUrl = tmpStreamUrl;
 						netReply.clear();
+					}
+					else if (!netReply.isAborted())
+					{
+						QMPlay2Core.sendMessage(tr("Try again later"), m_name);
 					}
 				}
 			}

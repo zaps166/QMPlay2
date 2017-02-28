@@ -597,9 +597,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
 			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			net.start(netReply, url);
-			netReply->waitForFinished();
-			if (!netReply->hasError())
+			if (net.startAndWait(netReply, url))
 			{
 				const bool tmpMultiStream = multiStream;
 				const bool tmpSubtitles = subtitles;

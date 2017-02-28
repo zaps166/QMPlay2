@@ -49,6 +49,16 @@ public:
 	Q_ENUM(Error)
 #endif
 
+	enum class Wait
+	{
+		Ok = 0,
+		Timeout,
+		Error
+	};
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+	Q_ENUM(Wait)
+#endif
+
 	QString url() const;
 
 	void abort() override final;
@@ -60,7 +70,7 @@ public:
 
 	QByteArray readAll();
 
-	bool waitForFinished(int ms = -1);
+	Wait waitForFinished(int ms = -1);
 
 signals:
 	void downloadProgress(int pos, int total);
@@ -89,7 +99,9 @@ public:
 	void setMaxDownloadSize(const int maxSize);
 
 	NetworkReply *start(const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
-	inline bool start(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
+	bool start(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
+
+	bool startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
 
 signals:
 	void finished(NetworkReply *reply);
@@ -101,10 +113,3 @@ private:
 	QByteArray m_customUserAgent;
 	qint32 m_maxSize;
 };
-
-/* Inline implementation */
-
-bool NetworkAccess::start(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders)
-{
-	return ioCtrl.assign(start(url, postData, rawHeaders));
-}

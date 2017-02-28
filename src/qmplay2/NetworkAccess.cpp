@@ -249,7 +249,7 @@ QByteArray NetworkReply::readAll()
 	return ret;
 }
 
-bool NetworkReply::waitForFinished(int ms)
+NetworkReply::Wait NetworkReply::waitForFinished(int ms)
 {
 	const bool inf = (ms < 0);
 	bool ret = true;
@@ -259,7 +259,7 @@ bool NetworkReply::waitForFinished(int ms)
 			ret = m_priv->wait(ms);
 		else
 		{
-			// "avio_open2" can block in DNS name resolution, so it doesn't call interrupt callback.
+			// "avio_open2()" can block in DNS name resolution, so it doesn't call interrupt callback.
 			const int timeout = inf ? 100 : qMin(ms, 100);
 			ret = m_priv->wait(timeout);
 			if (ret)
@@ -272,7 +272,7 @@ bool NetworkReply::waitForFinished(int ms)
 			}
 		}
 	}
-	return ret;
+	return ret ? (hasError() ? Wait::Error : Wait::Ok) : Wait::Timeout;
 }
 
 NetworkReply::NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const QByteArray &userAgent, const int maxSize) :
@@ -321,6 +321,21 @@ NetworkReply *NetworkAccess::start(const QString &url, const QByteArray &postDat
 	reply->setParent(this);
 	reply->m_priv->start();
 	return reply;
+}
+bool NetworkAccess::start(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders)
+{
+	return ioCtrl.assign(start(url, postData, rawHeaders));
+}
+
+bool NetworkAccess::startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders)
+{
+	if (start(ioCtrl, url, postData, rawHeaders))
+	{
+		if (ioCtrl->waitForFinished() == NetworkReply::Wait::Ok)
+			return true;
+		ioCtrl.reset();
+	}
+	return false;
 }
 
 void NetworkAccess::networkFinished()

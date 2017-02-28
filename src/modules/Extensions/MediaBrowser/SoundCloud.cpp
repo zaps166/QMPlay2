@@ -149,19 +149,15 @@ bool SoundCloud::convertAddress(const QString &prefix, const QString &url, QStri
 			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
 			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			if (net.start(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
+			if (net.startAndWait(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
 			{
-				netReply->waitForFinished();
-				if (!netReply->hasError())
+				const Json json = Json::parse(netReply->readAll());
+				if (json.is_object())
 				{
-					const Json json = Json::parse(netReply->readAll());
-					if (json.is_object())
-					{
-						if (streamUrl)
-							*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
-						if (name)
-							*name = json["title"].string_value();
-					}
+					if (streamUrl)
+						*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
+					if (name)
+						*name = json["title"].string_value();
 				}
 				netReply.clear();
 			}
