@@ -146,5 +146,5 @@ namespace Functions
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 
-	void setheaderSectionResizeMode(QHeaderView *header, int index, int resizeMode);
+	void setHeaderSectionResizeMode(QHeaderView *header, int index, int resizeMode);
 }

@@ -134,8 +134,8 @@ ResultsYoutube::ResultsYoutube() :
 	headerItem()->setText(2, tr("User"));
 
 	header()->setStretchLastSection(false);
-	Functions::setheaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
-	Functions::setheaderSectionResizeMode(header(), 1, QHeaderView::ResizeToContents);
+	Functions::setHeaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
+	Functions::setHeaderSectionResizeMode(header(), 1, QHeaderView::ResizeToContents);
 
 	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(playEntry(QTreeWidgetItem *)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));

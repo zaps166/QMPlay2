@@ -648,7 +648,7 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 	return url;
 }
 
-void Functions::setheaderSectionResizeMode(QHeaderView *header, int index, int resizeMode)
+void Functions::setHeaderSectionResizeMode(QHeaderView *header, int index, int resizeMode)
 {
 #if QT_VERSION < 0x050000
 	header->setResizeMode(index, (QHeaderView::ResizeMode)resizeMode);

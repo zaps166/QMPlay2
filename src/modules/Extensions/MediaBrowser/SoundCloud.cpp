@@ -49,7 +49,7 @@ void SoundCloud::prepareWidget(QTreeWidget *treeW)
 	treeW->headerItem()->setText(2, tr("Genre"));
 	treeW->headerItem()->setText(3, tr("Length"));
 
-	Functions::setheaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
+	Functions::setHeaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
 QString SoundCloud::getQMPlay2Url(const QString &text)

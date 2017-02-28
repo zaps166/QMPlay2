@@ -39,5 +39,5 @@ void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 
 	treeW->setColumnCount(1);
 	treeW->header()->setStretchLastSection(false);
-	Functions::setheaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
+	Functions::setHeaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
 }
