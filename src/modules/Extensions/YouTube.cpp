@@ -626,7 +626,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 	{
 		if (img)
 			*img = QImage(":/video");
-		if (ioCtrl && !YouTubeDL::isUpdating())
+		if (ioCtrl)
 		{
 			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
 			if (ioCtrl->assign(new YouTubeDL))
@@ -1182,7 +1182,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 
 	if (ret.count() == 3 && ret.at(0).contains("ENCRYPTED"))
 	{
-		if (ret.at(0).contains("itag=") && !YouTubeDL::isUpdating() && youtube_dl->assign(new YouTubeDL))
+		if (ret.at(0).contains("itag=") && youtube_dl->assign(new YouTubeDL))
 		{
 			int itagsCount = 0;
 			QString itags;
@@ -1217,7 +1217,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 			youtube_dl->clear();
 		}
 	}
-	else if (!tWI && ret.isEmpty() && !YouTubeDL::isUpdating() && youtube_dl->assign(new YouTubeDL)) //cannot find URL at normal way
+	else if (!tWI && ret.isEmpty() && youtube_dl->assign(new YouTubeDL)) //cannot find URL at normal way
 	{
 		QString stream_url, name, extension;
 		QString cleanUrl = url;

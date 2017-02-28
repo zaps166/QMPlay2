@@ -25,19 +25,14 @@
 	#include <Functions.hpp>
 #endif
 
+#include <QReadWriteLock>
 #include <QFile>
 
 constexpr char g_name[] = "YouTubeDL";
 
+static QReadWriteLock g_lock;
+
 /**/
-
-static bool youtubeDlUpdating;
-
-static inline void setUpdating(bool b)
-{
-	youtubeDlUpdating = b;
-	QMPlay2Core.setWorking(b);
-}
 
 static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 {
@@ -51,11 +46,6 @@ static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 }
 
 /**/
-
-bool YouTubeDL::isUpdating()
-{
-	return youtubeDlUpdating;
-}
 
 YouTubeDL::YouTubeDL() :
 	m_aborted(false)
@@ -119,22 +109,61 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 
 QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
 {
+	enum class Lock
+	{
+		Read,
+		Write
+	};
+
+	const auto doLock = [this](const Lock lockType, const bool unlock)->bool {
+		if (unlock)
+			g_lock.unlock();
+		for (;;)
+		{
+			if (m_aborted)
+				return false;
+			bool locked = false;
+			switch (lockType)
+			{
+				case Lock::Read:
+					locked = g_lock.tryLockForRead(100);
+					break;
+				case Lock::Write:
+					locked = g_lock.tryLockForWrite(100);
+					break;
+			}
+			if (m_aborted)
+			{
+				if (locked)
+					g_lock.unlock();
+				return false;
+			}
+			if (locked)
+				break;
+		}
+		return true;
+	};
+
 	const QString ytDlPath = QMPlay2Core.getSettingsDir() + "youtube-dl"
 #ifdef Q_OS_WIN
 	".exe"
 #endif
 	;
 
-	if (isUpdating())
+	if (!doLock(Lock::Read, false))
 		return {};
 
 #ifndef Q_OS_WIN
 	QFile file(ytDlPath);
 	if (file.exists())
 	{
+		if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
+			return {};
 		const QFile::Permissions exeFlags = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup | QFile::ExeOther;
 		if ((file.permissions() & exeFlags) != exeFlags)
 			file.setPermissions(file.permissions() | exeFlags);
+		if (!doLock(Lock::Read, true)) // Unlock for write and lock for read
+			return {};
 	}
 #endif
 
@@ -155,7 +184,9 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				error.remove(0, idx);
 			if (canUpdate && !error.contains("said:")) // Probably update can fix the error, so do it!
 			{
-				setUpdating(true);
+				if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
+					return {};
+				QMPlay2Core.setWorking(true);
 				m_process.start(ytDlPath, QStringList() << "-U" << commonArgs);
 				QString updateOutput;
 				bool updating = false;
@@ -185,8 +216,9 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 							if (QFile::rename(updatedFile, ytDlPath))
 #endif
 							{
-								setUpdating(false);
+								QMPlay2Core.setWorking(false);
 								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
+								g_lock.unlock(); // Unlock for write
 								return exec(url, args, silentErr, false);
 							}
 #ifdef Q_OS_WIN
@@ -202,7 +234,9 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				{
 					QMPlay2Core.sendMessage(tr("\"youtube-dl\" update has been aborted!"), g_name, 2);
 				}
-				setUpdating(false);
+				QMPlay2Core.setWorking(false);
+				if (!doLock(Lock::Read, true)) // Unlock for write and lock for read
+					return {};
 			}
 			if (!m_aborted)
 			{
@@ -211,6 +245,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				else
 					emit QMPlay2Core.sendMessage(error, g_name, 3, 0);
 			}
+			g_lock.unlock(); // Unlock for read
 			return {};
 		}
 
@@ -225,6 +260,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			}
 		}
 
+		g_lock.unlock(); // Unlock for read
 		return result;
 	}
 	else if (canUpdate && !m_aborted && m_process.error() == QProcess::FailedToStart)
@@ -238,7 +274,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		NetworkAccess net;
 		if (net.start(m_reply, downloadUrl))
 		{
-			setUpdating(true);
+			if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
+			{
+				m_reply.clear();
+				return {};
+			}
+			QMPlay2Core.setWorking(true);
 			QMPlay2Core.sendMessage(tr("Downloading \"youtube-dl\", please wait..."), g_name);
 			m_reply->waitForFinished();
 			const QByteArray replyData = m_reply->readAll();
@@ -257,14 +298,17 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 					{
 						f.close();
 						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
-						setUpdating(false);
+						QMPlay2Core.setWorking(false);
+						g_lock.unlock(); // Unlock for write
 						return exec(url, args, silentErr, false);
 					}
 				}
 			}
-			setUpdating(false);
+			QMPlay2Core.setWorking(false);
 		}
 	}
+
+	g_lock.unlock(); // Unlock for read or for write (if download has failed)
 	return {};
 }
 

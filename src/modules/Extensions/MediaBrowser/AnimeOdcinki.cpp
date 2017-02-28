@@ -339,7 +339,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 
 				const auto getStreamUrl = [&](const QString &animeUrl)->bool {
 					IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
-					if (!YouTubeDL::isUpdating() && ytDl.assign(new YouTubeDL))
+					if (ytDl.assign(new YouTubeDL))
 					{
 						QString newUrl;
 						ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
