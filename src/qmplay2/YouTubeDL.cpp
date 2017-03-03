@@ -54,14 +54,14 @@ YouTubeDL::YouTubeDL() :
 YouTubeDL::~YouTubeDL()
 {}
 
-void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err)
+void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err, bool useQMPlay2UserAgent)
 {
 	if (streamUrl || name)
 	{
 		QStringList paramList {"-e"};
 		if (!param.isEmpty())
 			paramList << "-f" << param;
-		QStringList ytdlStdout = exec(url, paramList, err);
+		QStringList ytdlStdout = exec(url, paramList, err, useQMPlay2UserAgent);
 		if (!ytdlStdout.isEmpty())
 		{
 			QString title;
@@ -108,7 +108,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 	}
 }
 
-QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
+QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool useQMPlay2UserAgent, bool canUpdate)
 {
 	enum class Lock
 	{
@@ -170,12 +170,14 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
 	QStringList commonArgs {
 		"--no-check-certificate", //Ignore SSL errors
-		"--user-agent", QMPlay2UserAgent
 	};
+
+	if (useQMPlay2UserAgent)
+		commonArgs += {"--user-agent", QMPlay2UserAgent};
 
 	const char *httpProxy = getenv("http_proxy");
 	if (httpProxy && *httpProxy)
-		commonArgs << "--proxy" << httpProxy;
+		commonArgs += {"--proxy", httpProxy};
 
 	m_process.start(ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
 	if (m_process.waitForFinished() && !m_aborted)
@@ -223,7 +225,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 								QMPlay2Core.setWorking(false);
 								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
 								g_lock.unlock(); // Unlock for write
-								return exec(url, args, silentErr, false);
+								return exec(url, args, silentErr, useQMPlay2UserAgent, false);
 							}
 #ifdef Q_OS_WIN
 						}
@@ -304,7 +306,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
 						QMPlay2Core.setWorking(false);
 						g_lock.unlock(); // Unlock for write
-						return exec(url, args, silentErr, false);
+						return exec(url, args, silentErr, useQMPlay2UserAgent, false);
 					}
 				}
 			}
