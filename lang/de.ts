@@ -2409,6 +2409,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>  Parameters list:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
+    -profile      &quot;name&quot; - start application with given profile
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2423,6 +2424,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation>  Parameterliste:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
+    -profile      &quot;name&quot; - start application with given profile
     -noplay     - keine Wiedergabe nach dem Start (Umgehe &quot;Wiedergabeposition merken&quot; Option)
     -toggle     - Wiedergabe/Pause
     -show       - Sorgt dafür dass die Fenster sichtbar sind, wenn die Anwendung läuft
