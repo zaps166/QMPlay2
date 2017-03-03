@@ -119,7 +119,6 @@ static QByteArray getAdFlyUrl(const QByteArray &data)
 static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 {
 	EmbeddedPlayers ret;
-	ret.reserve(2);
 
 	for (int pos = 0; ;)
 	{
