@@ -114,7 +114,7 @@ static bool focusChangedHelper(QWidget *w)
 }
 
 /* MainWidget */
-MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
+MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 #ifdef UPDATER
 	: updater(this)
 #endif
@@ -387,10 +387,10 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &QMPArguments)
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
-	while (!QMPArguments.first.isEmpty())
+	while (!arguments.first.isEmpty())
 	{
-		const QString param = QMPArguments.first.takeFirst();
-		const QString data  = QMPArguments.second.takeFirst();
+		const QString param = arguments.first.takeFirst();
+		const QString data  = arguments.second.takeFirst();
 		noplay |= (param == "open" || param == "noplay");
 		processParam(param, data);
 	}

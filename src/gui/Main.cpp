@@ -44,10 +44,14 @@
 	#include <QTextCodec>
 #endif
 
+#include <csignal>
 #include <ctime>
 
+static QPair<QStringList, QStringList> g_arguments;
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
+
+/**/
 
 QMPlay2GUIClass &QMPlay2GUIClass::instance()
 {
@@ -190,8 +194,6 @@ void QMPlay2GUIClass::deleteIcons()
 
 /**/
 
-static QPair<QStringList, QStringList> QMPArguments;
-
 static QString fileArg(const QString &arg)
 {
 	if (!arg.contains("://"))
@@ -207,23 +209,23 @@ static void parseArguments(QStringList &arguments)
 	QString param;
 	while (arguments.count())
 	{
-		QString arg = arguments.takeFirst();
+		const QString arg = arguments.takeFirst();
 		if (arg.startsWith('-'))
 		{
 			param = arg;
 			while (param.startsWith('-'))
 				param.remove(0, 1);
-			if (!param.isEmpty() && !QMPArguments.first.contains(param))
+			if (!param.isEmpty() && !g_arguments.first.contains(param))
 			{
-				QMPArguments.first  += param;
-				QMPArguments.second += QString();
+				g_arguments.first  += param;
+				g_arguments.second += QString();
 			}
 			else
 				param.clear();
 		}
 		else if (!param.isEmpty())
 		{
-			QString &data = QMPArguments.second.last();
+			QString &data = g_arguments.second.last();
 			if (!data.isEmpty())
 				data += '\n';
 			if (param == "open" || param == "enqueue")
@@ -231,19 +233,19 @@ static void parseArguments(QStringList &arguments)
 			else
 				data += arg;
 		}
-		else if (!QMPArguments.first.contains("open"))
+		else if (!g_arguments.first.contains("open"))
 		{
 			param = "open";
-			QMPArguments.first  += param;
-			QMPArguments.second += fileArg(arg);
+			g_arguments.first  += param;
+			g_arguments.second += fileArg(arg);
 		}
 	}
 }
-static void showHelp(const QByteArray &ver)
+static void showHelp()
 {
 	QFile f;
 	f.open(stdout, QFile::WriteOnly);
-	f.write("QMPlay2 - Qt Media Player 2 (" + ver + ")\n");
+	f.write("QMPlay2 - Qt Media Player 2 (" QMPlay2Version ")\n");
 	f.write(QObject::tr(
 "  Parameters list:\n"
 "    -open         \"address\"\n"
@@ -259,34 +261,35 @@ static void showHelp(const QByteArray &ver)
 "    -next       - plays next on the list\n"
 "    -prev       - plays previous on the list\n"
 "    -quit       - terminates the application"
-	).toUtf8() + "\n");
+	).toLocal8Bit() + "\n");
 }
 static bool writeToSocket(IPCSocket &socket)
 {
 	bool ret = false;
-	for (int i = QMPArguments.first.count() - 1; i >= 0; i--)
+	for (int i = g_arguments.first.count() - 1; i >= 0; i--)
 	{
-		if (QMPArguments.first[i] == "noplay")
+		if (g_arguments.first[i] == "noplay")
 			continue;
-		else if (QMPArguments.first[i] == "open" || QMPArguments.first[i] == "enqueue")
+		else if (g_arguments.first[i] == "open" || g_arguments.first[i] == "enqueue")
 		{
-			if (!QMPArguments.second[i].isEmpty())
-				QMPArguments.second[i] = Functions::Url(QMPArguments.second[i]);
+			if (!g_arguments.second[i].isEmpty())
+				g_arguments.second[i] = Functions::Url(g_arguments.second[i]);
 #ifdef Q_OS_WIN
 			if (QMPArguments.second[i].startsWith("file://"))
 				QMPArguments.second[i].remove(0, 7);
 #endif
 		}
-		socket.write(QString(QMPArguments.first[i] + '\t' + QMPArguments.second[i]).toUtf8() + '\0');
+		socket.write(QString(g_arguments.first[i] + '\t' + g_arguments.second[i]).toUtf8() + '\0');
 		ret = true;
 	}
 	return ret;
 }
 
-static void unInhibitScreenSaver()
+static inline void unInhibitScreenSaver()
 {
 	/* Current implementation doesn't need this */
 	delete g_screenSaver;
+	g_screenSaver = nullptr;
 }
 
 #if QT_VERSION >= 0x050000 && !defined Q_OS_WIN
@@ -296,8 +299,6 @@ static void unInhibitScreenSaver()
 	static bool qAppOK;
 	static bool canDeleteApp = true;
 #endif
-
-#include <csignal>
 
 static inline void forceKill()
 {
@@ -372,10 +373,10 @@ static void signal_handler(int s)
 	}
 }
 
-static void noAutoPlay()
+static inline void noAutoPlay()
 {
-	QMPArguments.first += "noplay";
-	QMPArguments.second += QString();
+	g_arguments.first += "noplay";
+	g_arguments.second += QString();
 }
 
 #ifdef Q_OS_WIN
@@ -444,7 +445,7 @@ int main(int argc, char *argv[])
 
 	QStringList arguments = QCoreApplication::arguments();
 	arguments.removeFirst();
-	const bool help = arguments.contains("--help") || arguments.contains("-h");
+	const bool help = arguments.contains("-help") || arguments.contains("-h");
 	if (!help)
 	{
 		IPCSocket socket(qmplay2Gui.getPipe());
@@ -555,7 +556,7 @@ int main(int argc, char *argv[])
 
 		if (help)
 		{
-			showHelp(QMPlay2Version);
+			showHelp();
 			break;
 		}
 
@@ -627,7 +628,7 @@ int main(int argc, char *argv[])
 
 		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = qmplay2Gui.noAutoPlay = false;
 		qmplay2Gui.newProfileName.clear();
-		new MainWidget(QMPArguments);
+		new MainWidget(g_arguments);
 		do
 		{
 			QCoreApplication::exec();
@@ -669,8 +670,7 @@ int main(int argc, char *argv[])
 	UnhookWindowsHookEx(keyboardHook);
 #endif
 
-	delete g_screenSaver;
-	g_screenSaver = nullptr;
+	unInhibitScreenSaver();
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)
