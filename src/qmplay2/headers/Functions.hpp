@@ -73,7 +73,7 @@ namespace Functions
 	QString fileExt(const QString &);
 
 	QString cleanPath(QString);
-	QString cleanFileName(QString);
+	QString cleanFileName(QString, const QString &replaced = "_");
 
 	QString sizeString(quint64);
 

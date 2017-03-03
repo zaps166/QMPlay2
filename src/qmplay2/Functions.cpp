@@ -190,20 +190,20 @@ QString Functions::cleanPath(QString p)
 		p.chop(1);
 	return p;
 }
-QString Functions::cleanFileName(QString f)
+QString Functions::cleanFileName(QString f, const QString &replaced)
 {
 	if (f.length() > 200)
 		f.resize(200);
-	f.replace('/', '_');
+	f.replace("/", replaced);
 #ifdef Q_OS_WIN
-	f.replace('\\', '_');
-	f.replace(':', '_');
-	f.replace('*', '_');
-	f.replace('?', '_');
-	f.replace('"', '_');
-	f.replace('<', '_');
-	f.replace('>', '_');
-	f.replace('|', '_');
+	f.replace("\\", replaced);
+	f.replace(":",  replaced);
+	f.replace("*",  replaced);
+	f.replace("?",  replaced);
+	f.replace("\"", replaced);
+	f.replace("<",  replaced);
+	f.replace(">",  replaced);
+	f.replace("|",  replaced);
 #endif
 	return f;
 }

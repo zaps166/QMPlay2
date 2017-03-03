@@ -55,7 +55,7 @@ public:
 	static bool canSuspend();
 	static void suspend();
 
-	void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath = QString());
+	void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
 	void quit();
 
 	QStringList getModules(const QString &type, int typeLen) const;

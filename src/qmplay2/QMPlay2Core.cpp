@@ -127,7 +127,7 @@ void QMPlay2CoreClass::suspend()
 #endif
 }
 
-void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &settingsPath)
+void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName)
 {
 	if (!settingsDir.isEmpty())
 		return;
@@ -136,29 +136,34 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	shareDir = Functions::cleanPath(sharePath);
 	langDir = shareDir + "lang/";
 
-	if (settingsPath.isEmpty())
-	{
 #ifdef Q_OS_WIN
-		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
+	settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
 #else
-		settingsDir = QDir::homePath() + "/.qmplay2/";
+	settingsDir = QDir::homePath() + "/.qmplay2/";
 #endif
 #ifdef Q_OS_MAC
-		settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
+	settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
 #endif
-	}
-	else
-		settingsDir = Functions::cleanPath(settingsPath);
 	QDir(settingsDir).mkpath(".");
 
 	{
-		QSettings profileSettings(settingsDir + "Profile.ini", QSettings::IniFormat);
-		settingsProfile = profileSettings.value("Profile", "/").toString();
+		settingsProfile = Functions::cleanFileName(profileName, QString());
+		if (settingsProfile.isEmpty())
+		{
+			const QSettings profileSettings(settingsDir + "Profile.ini", QSettings::IniFormat);
+			settingsProfile = profileSettings.value("Profile", "/").toString();
+		}
+		else if (settingsProfile.compare("default", Qt::CaseInsensitive) == 0)
+		{
+			settingsProfile = "/";
+		}
+
 		if (settingsProfile != "/")
 		{
 			settingsProfile.prepend("Profiles/");
 			QDir(settingsDir).mkpath(settingsProfile);
 		}
+
 		if (!settingsProfile.endsWith('/'))
 			settingsProfile.append('/');
 	}

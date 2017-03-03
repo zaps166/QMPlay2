@@ -221,7 +221,9 @@ static void parseArguments(QStringList &arguments)
 				g_arguments.second += QString();
 			}
 			else
+			{
 				param.clear();
+			}
 		}
 		else if (!param.isEmpty())
 		{
@@ -250,6 +252,7 @@ static void showHelp()
 "  Parameters list:\n"
 "    -open         \"address\"\n"
 "    -enqueue      \"address\"\n"
+"    -profile      \"name\" - start application with given profile\n"
 "    -noplay     - doesn't play after run (bypass \"Remember playback position\" option)\n"
 "    -toggle     - toggles play/pause\n"
 "    -show       - ensures that the window will be visible if the application is running\n"
@@ -268,7 +271,7 @@ static bool writeToSocket(IPCSocket &socket)
 	bool ret = false;
 	for (int i = g_arguments.first.count() - 1; i >= 0; i--)
 	{
-		if (g_arguments.first[i] == "noplay")
+		if (g_arguments.first[i] == "noplay" || g_arguments.first[i] == "profile")
 			continue;
 		else if (g_arguments.first[i] == "open" || g_arguments.first[i] == "enqueue")
 		{
@@ -474,6 +477,17 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	for (int i = 0; i < g_arguments.first.count(); ++i)
+	{
+		if (g_arguments.first.at(i) == "profile")
+		{
+			qmplay2Gui.cmdLineProfile = g_arguments.second.at(i);
+			g_arguments.first.removeAt(i);
+			g_arguments.second.removeAt(i);
+			break;
+		}
+	}
+
 	QString libPath, sharePath = QCoreApplication::applicationDirPath();
 	bool cmakeBuildFound = false;
 #ifdef Q_OS_MAC
@@ -533,7 +547,7 @@ int main(int argc, char *argv[])
 	do
 	{
 		/* QMPlay2GUI musi być stworzone już wcześniej */
-		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath);
+		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath, qmplay2Gui.cmdLineProfile);
 
 		Settings &settings = QMPlay2Core.getSettings();
 		QString lastVer = settings.getString("Version", QMPlay2Version);

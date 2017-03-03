@@ -72,7 +72,7 @@ public:
 	ShortcutHandler *shortcutHandler;
 
 	bool restartApp, removeSettings, noAutoPlay;
-	QString newProfileName;
+	QString newProfileName, cmdLineProfile;
 private:
 	QMPlay2GUIClass();
 	~QMPlay2GUIClass();
@@ -80,4 +80,5 @@ private:
 	void deleteIcons();
 };
 
-#define QMPlay2GUI QMPlay2GUIClass::instance()
+#define QMPlay2GUI \
+	QMPlay2GUIClass::instance()

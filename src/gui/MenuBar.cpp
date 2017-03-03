@@ -47,7 +47,13 @@ static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool
 static void restartApp()
 {
 	QMPlay2GUI.restartApp = true;
+	QMPlay2GUI.cmdLineProfile.clear();
 	QMPlay2GUI.mainW->close();
+}
+
+static inline QString getCurrentProfile(const QSettings &profileSettings)
+{
+	return QMPlay2GUI.cmdLineProfile.isEmpty() ? profileSettings.value("Profile", "/").toString() : QMPlay2GUI.cmdLineProfile;
 }
 
 static QString createAndSetProfile(MenuBar *menuBar)
@@ -56,7 +62,7 @@ static QString createAndSetProfile(MenuBar *menuBar)
 	if (!selectedProfile.isEmpty())
 	{
 		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-		if (selectedProfile != profileSettings.value("Profile", "/").toString())
+		if (selectedProfile != getCurrentProfile(profileSettings))
 		{
 			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
 
@@ -442,7 +448,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 			profilesGroup->addAction(act);
 		}
 
-		const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile", "/").toString();
+		const QString currentProfile = getCurrentProfile(QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat));
 		for (QAction *act : profilesGroup->actions())
 		{
 			if (act->property("path").toString() == currentProfile)
@@ -593,7 +599,7 @@ void MenuBar::changeProfile()
 	QAction *act = (QAction *)sender();
 	const QString selectedProfile = act->property("path").toString();
 	QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-	if (selectedProfile != profileSettings.value("Profile", "/").toString())
+	if (selectedProfile != getCurrentProfile(profileSettings))
 	{
 		profileSettings.setValue("Profile", selectedProfile);
 		QMPlay2GUI.noAutoPlay = true;
