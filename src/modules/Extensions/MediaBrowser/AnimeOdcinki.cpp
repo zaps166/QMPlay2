@@ -187,7 +187,7 @@ static QString getGamedorUsermdUrl(const QByteArray &data)
 
 			int idx2 = data.indexOf('"', idx1);
 			if (idx2 > -1)
-				return data.mid(idx1, idx2 - idx1);
+				return QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
 		}
 	}
 	return QString();
