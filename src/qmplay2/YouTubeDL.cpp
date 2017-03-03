@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
+#include <Version.hpp>
 #include <Json11.hpp>
 #ifdef Q_OS_WIN
 	#include <Functions.hpp>
@@ -167,7 +168,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	}
 #endif
 
-	QStringList commonArgs("--no-check-certificate"); //Ignore SSL errors
+	QStringList commonArgs {
+		"--no-check-certificate", //Ignore SSL errors
+		"--user-agent", QMPlay2UserAgent
+	};
 
 	const char *httpProxy = getenv("http_proxy");
 	if (httpProxy && *httpProxy)
