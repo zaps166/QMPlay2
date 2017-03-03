@@ -278,8 +278,8 @@ static bool writeToSocket(IPCSocket &socket)
 			if (!g_arguments.second[i].isEmpty())
 				g_arguments.second[i] = Functions::Url(g_arguments.second[i]);
 #ifdef Q_OS_WIN
-			if (QMPArguments.second[i].startsWith("file://"))
-				QMPArguments.second[i].remove(0, 7);
+			if (g_arguments.second[i].startsWith("file://"))
+				g_arguments.second[i].remove(0, 7);
 #endif
 		}
 		socket.write(QString(g_arguments.first[i] + '\t' + g_arguments.second[i]).toUtf8() + '\0');
