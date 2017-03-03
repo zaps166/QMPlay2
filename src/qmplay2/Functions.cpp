@@ -31,6 +31,7 @@
 #include <QDir>
 #include <QUrl>
 #include <QRegExp>
+#include <QLibrary>
 #include <QMessageBox>
 
 extern "C"
@@ -655,4 +656,67 @@ void Functions::setHeaderSectionResizeMode(QHeaderView *header, int index, int r
 #else
 	header->setSectionResizeMode(index, (QHeaderView::ResizeMode)resizeMode);
 #endif
+}
+
+QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
+{
+	constexpr char libsslFileName[] =
+#ifdef Q_OS_WIN
+		"libeay32"
+#else
+		"ssl"
+#endif
+	;
+
+	struct EVP_CIPHER_CTX
+	{
+		quint8 data[256];
+	};
+	using EVP_CIPHER = void;
+	using EVP_MD = void;
+	using ENGINE = void;
+
+	using EVP_md5_Type = const EVP_MD *(*)(void);
+	using EVP_aes_256_cbc_Type = const EVP_CIPHER *(*)(void);
+	using EVP_BytesToKey_Type = int(*)(const EVP_CIPHER *type, const EVP_MD *md, const unsigned char *salt, const unsigned char *data, int datal, int count, unsigned char *key, unsigned char *iv);
+	using EVP_CIPHER_CTX_init_Type = void(*)(EVP_CIPHER_CTX *a);
+	using EVP_DecryptUpdate_Type = int(*)(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, const unsigned char *in, int inl);
+	using EVP_DecryptInit_ex_Type = int(*)(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *impl, const unsigned char *key, const unsigned char *iv);
+	using EVP_DecryptFinal_ex_Type = int(*)(EVP_CIPHER_CTX *ctx, unsigned char *outm, int *outl);
+	using EVP_CIPHER_CTX_cleanup_Type = int(*)(EVP_CIPHER_CTX *a);
+
+	QLibrary libssl(libsslFileName);
+	if (!libssl.load())
+		return QByteArray();
+
+	EVP_md5_Type EVP_md5 = (EVP_md5_Type)libssl.resolve("EVP_md5");
+	EVP_aes_256_cbc_Type EVP_aes_256_cbc = (EVP_aes_256_cbc_Type)libssl.resolve("EVP_aes_256_cbc");
+	EVP_BytesToKey_Type EVP_BytesToKey = (EVP_BytesToKey_Type)libssl.resolve("EVP_BytesToKey");
+	EVP_CIPHER_CTX_init_Type EVP_CIPHER_CTX_init = (EVP_CIPHER_CTX_init_Type)libssl.resolve("EVP_CIPHER_CTX_init");
+	EVP_DecryptUpdate_Type EVP_DecryptUpdate = (EVP_DecryptUpdate_Type)libssl.resolve("EVP_DecryptUpdate");
+	EVP_DecryptInit_ex_Type EVP_DecryptInit_ex = (EVP_DecryptInit_ex_Type)libssl.resolve("EVP_DecryptInit_ex");
+	EVP_DecryptFinal_ex_Type EVP_DecryptFinal_ex = (EVP_DecryptFinal_ex_Type)libssl.resolve("EVP_DecryptFinal_ex");
+	EVP_CIPHER_CTX_cleanup_Type EVP_CIPHER_CTX_cleanup = (EVP_CIPHER_CTX_cleanup_Type)libssl.resolve("EVP_CIPHER_CTX_cleanup");
+
+	if (!EVP_md5 || !EVP_aes_256_cbc || !EVP_BytesToKey || !EVP_CIPHER_CTX_init || !EVP_DecryptUpdate || !EVP_DecryptInit_ex || !EVP_DecryptFinal_ex || !EVP_CIPHER_CTX_cleanup)
+		return QByteArray();
+
+	quint8 key[32], iv[32];
+	const int keyLen = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_md5(), (const quint8 *)salt.constData(), (const quint8 *)password.constData(), password.length(), 1, key, iv);
+	if (keyLen != 32)
+		return QByteArray();
+
+	int decryptedLen = ciphered.length(), finalizeLen = 0;
+	QByteArray deciphered(decryptedLen, Qt::Uninitialized);
+
+	EVP_CIPHER_CTX ctx;
+	EVP_CIPHER_CTX_init(&ctx);
+	EVP_DecryptInit_ex(&ctx, EVP_aes_256_cbc(), nullptr, key, iv);
+	EVP_DecryptInit_ex(&ctx, nullptr, nullptr, nullptr, nullptr);
+	EVP_DecryptUpdate(&ctx, (quint8 *)deciphered.data(), &decryptedLen, (const quint8 *)ciphered.constData(), decryptedLen);
+	EVP_DecryptFinal_ex(&ctx, (quint8 *)deciphered.data() + decryptedLen, &finalizeLen);
+	EVP_CIPHER_CTX_cleanup(&ctx);
+
+	deciphered.resize(decryptedLen + finalizeLen);
+	return deciphered;
 }

@@ -25,7 +25,6 @@
 
 #include <QTextDocumentFragment>
 #include <QTreeWidget>
-#include <QProcess>
 
 using EmbeddedPlayers = std::vector<Json>;
 
@@ -157,22 +156,9 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 
 	return ret;
 }
-static QString decryptUrl(const QByteArray &saltHex, const QByteArray &ivHex, const QByteArray &cipheredBase64)
+static inline QString decryptUrl(const QByteArray &saltHex, const QByteArray &cipheredBase64)
 {
-	QProcess process;
-	process.start("openssl", {
-		"enc", "-aes-256-cbc", "-d",
-		"-iv", ivHex,
-		"-k",  QByteArray::fromBase64("czA1ejlHcGQ9c3lHXjd7")
-	});
-	if (process.waitForStarted(2000))
-	{
-		process.write("Salted__" + QByteArray::fromHex(saltHex) + QByteArray::fromBase64(cipheredBase64));
-		process.closeWriteChannel();
-		if (process.waitForFinished(2000))
-			return Json::parse(process.readAllStandardOutput()).string_value();
-	}
-	return QString();
+	return Json::parse(Functions::decryptAes256Cbc(QByteArray::fromBase64("czA1ejlHcGQ9c3lHXjd7"), QByteArray::fromHex(saltHex), QByteArray::fromBase64(cipheredBase64))).string_value();
 }
 
 static QString getGamedorUsermdUrl(const QByteArray &data)
@@ -413,7 +399,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 				{
 					for (const Json &json : getEmbeddedPlayers(reply))
 					{
-						QString playerUrl = decryptUrl(json["v"].string_value(), json["b"].string_value(), json["a"].string_value());
+						QString playerUrl = decryptUrl(json["v"].string_value(), json["a"].string_value());
 						if (!playerUrl.isEmpty())
 						{
 							if (playerUrl.contains("gamedor.usermd.net") && net.startAndWait(netReply, playerUrl, QByteArray(), "Referer: " + url.toUtf8()))

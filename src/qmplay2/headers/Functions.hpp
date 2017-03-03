@@ -147,4 +147,6 @@ namespace Functions
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 
 	void setHeaderSectionResizeMode(QHeaderView *header, int index, int resizeMode);
+
+	QByteArray decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered);
 }
