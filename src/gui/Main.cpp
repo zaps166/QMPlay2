@@ -529,6 +529,9 @@ int main(int argc, char *argv[])
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
 	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
