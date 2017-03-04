@@ -34,9 +34,9 @@ public:
 	YouTubeDL();
 	~YouTubeDL();
 
-	void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr, bool useQMPlay2UserAgent = false);
+	void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr);
 
-	QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool useQMPlay2UserAgent = false, bool canUpdate = true);
+	QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true);
 
 private:
 	void abort() override final;

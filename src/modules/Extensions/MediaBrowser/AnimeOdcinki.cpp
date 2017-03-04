@@ -322,12 +322,12 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 				bool hasStreamUrl = false;
 				QString error;
 
-				const auto getStreamUrl = [&](const QString &animeUrl, bool useQMPlay2UserAgent)->bool {
+				const auto getStreamUrl = [&](const QString &animeUrl)->bool {
 					IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
 					if (ytDl.assign(new YouTubeDL))
 					{
 						QString newUrl;
-						ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error, useQMPlay2UserAgent);
+						ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
 						ytDl.clear();
 						if (!newUrl.isEmpty())
 						{
@@ -358,7 +358,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 							{
 								const QString &animeUrl = data.left(idx);
 								if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
-									hasStreamUrl = getStreamUrl(animeUrl, false);
+									hasStreamUrl = getStreamUrl(animeUrl);
 								else if (net.startAndWait(netReply, animeUrl))
 								{
 									// Download raw file from Google Drive
@@ -408,7 +408,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 								if (playerUrl.isEmpty())
 									continue;
 							}
-							hasStreamUrl = getStreamUrl(playerUrl, playerUrl.contains("vidfile.net/"));
+							hasStreamUrl = getStreamUrl(playerUrl);
 							if (hasStreamUrl)
 								break;
 						}

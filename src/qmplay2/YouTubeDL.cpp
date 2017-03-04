@@ -54,14 +54,14 @@ YouTubeDL::YouTubeDL() :
 YouTubeDL::~YouTubeDL()
 {}
 
-void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err, bool useQMPlay2UserAgent)
+void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err)
 {
 	if (streamUrl || name)
 	{
 		QStringList paramList {"-e"};
 		if (!param.isEmpty())
 			paramList << "-f" << param;
-		QStringList ytdlStdout = exec(url, paramList, err, useQMPlay2UserAgent);
+		QStringList ytdlStdout = exec(url, paramList, err);
 		if (!ytdlStdout.isEmpty())
 		{
 			QString title;
@@ -108,7 +108,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 	}
 }
 
-QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool useQMPlay2UserAgent, bool canUpdate)
+QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
 {
 	enum class Lock
 	{
@@ -172,6 +172,8 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		"--no-check-certificate", //Ignore SSL errors
 	};
 
+	const bool useQMPlay2UserAgent = url.contains("vidfile.net/");
+
 	if (useQMPlay2UserAgent)
 		commonArgs += {"--user-agent", QMPlay2UserAgent};
 
@@ -225,7 +227,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 								QMPlay2Core.setWorking(false);
 								QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
 								g_lock.unlock(); // Unlock for write
-								return exec(url, args, silentErr, useQMPlay2UserAgent, false);
+								return exec(url, args, silentErr, false);
 							}
 #ifdef Q_OS_WIN
 						}
@@ -306,7 +308,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 						QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
 						QMPlay2Core.setWorking(false);
 						g_lock.unlock(); // Unlock for write
-						return exec(url, args, silentErr, useQMPlay2UserAgent, false);
+						return exec(url, args, silentErr, false);
 					}
 				}
 			}
