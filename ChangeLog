@@ -1,4 +1,5 @@
-Changes in QMPlay2 build 17.03.03:
+Changes in QMPlay2 build 17.03.04:
+	- playlists from MediaBrowser and YouTube are no longer loaded by temporary file,
 	- replace Http class by NetworkAccess and use it in more places,
 	- option to enable/disable still images (disabled by default),
 	- save playlists with relative file path (autodetection),
@@ -8,6 +9,7 @@ Changes in QMPlay2 build 17.03.03:
 	- move YouTubeDL from YouTube to shared library,
 	- add SoundCloud support (Zamarin Arthur),
 	- add Anime Odcinki to MediaBrowser,
+	- allow to compile in portable mode,
 	- switch to C++11,
 	- minor bugfix,
 
