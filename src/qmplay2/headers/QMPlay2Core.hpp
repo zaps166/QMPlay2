@@ -176,6 +176,7 @@ public:
 
 	void addResource(const QString &url, const QByteArray &data);
 	void modResource(const QString &url, const bool removeAfterUse);
+	bool hasResource(const QString &url) const;
 	QByteArray getResource(const QString &url);
 
 	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false, const QString &context = QString());
@@ -207,7 +208,7 @@ private:
 
 	struct
 	{
-		QMutex mutex;
+		mutable QMutex mutex;
 		QHash<QString, QPair<QByteArray, bool>> data;
 	} cookies, resources;
 };

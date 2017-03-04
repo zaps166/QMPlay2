@@ -447,6 +447,11 @@ void QMPlay2CoreClass::modResource(const QString &url, const bool removeAfterUse
 	if (it != resources.data.end())
 		it.value().second = removeAfterUse;
 }
+bool QMPlay2CoreClass::hasResource(const QString &url) const
+{
+	QMutexLocker locker(&resources.mutex);
+	return resources.data.contains(url);
+}
 QByteArray QMPlay2CoreClass::getResource(const QString &url)
 {
 	QMutexLocker locker(&resources.mutex);

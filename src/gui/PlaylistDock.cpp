@@ -215,7 +215,7 @@ void PlaylistDock::doGroupSync(bool quick)
 	if (!tWI || !PlaylistWidget::isGroup(tWI))
 		return;
 	QString pth = tWI->data(0, Qt::UserRole).toString();
-	if (pth.isEmpty())
+	if (pth.isEmpty() || (pth.startsWith("QMPlay2://") && !QMPlay2Core.hasResource(pth)))
 		return;
 	if (pth.startsWith("file://"))
 		pth.remove(0, 7);
