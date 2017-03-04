@@ -67,6 +67,13 @@ if(WIN32)
     option(USE_CMD "Show CMD when running QMPlay2" OFF)
     mark_as_advanced(USE_CMD)
     add_feature_info(CMD USE_CMD "Show CMD when running QMPlay2")
+
+    option(USE_PORTABLE "Store settings in application directory" OFF)
+    mark_as_advanced(USE_PORTABLE)
+    add_feature_info(PORTABLE USE_PORTABLE "Store settings in application directory")
+    if(USE_PORTABLE)
+        add_definitions(-DQMPLAY2_PORTABLE)
+    endif()
 endif()
 
 option(USE_JEMALLOC "Link to jemalloc" OFF)

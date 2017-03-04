@@ -153,13 +153,16 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	shareDir = Functions::cleanPath(sharePath);
 	langDir = shareDir + "lang/";
 
-#ifdef Q_OS_WIN
-	settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
+#ifdef QMPLAY2_PORTABLE
+	settingsDir = QCoreApplication::applicationDirPath() + "/settings/";
 #else
-	settingsDir = QDir::homePath() + "/.qmplay2/";
-#endif
-#ifdef Q_OS_MAC
-	settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
+	#if defined(Q_OS_WIN)
+		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
+	#elif defined(Q_OS_MAC)
+		settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
+	#else
+		settingsDir = QDir::homePath() + "/.qmplay2/";
+	#endif
 #endif
 	QDir(settingsDir).mkpath(".");
 
