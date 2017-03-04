@@ -69,21 +69,13 @@ MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
 	setSelectionMode(ExtendedSelection);
 }
 MediaBrowserResults::~MediaBrowserResults()
-{
-	removeTmpFile();
-}
+{}
 
 inline void MediaBrowserResults::setCurrentName(const QString &name)
 {
 	m_currentName = name;
 	if (!m_currentName.isEmpty() && m_currentName.at(0).isLower())
 		m_currentName[0] = m_currentName.at(0).toUpper();
-}
-
-void MediaBrowserResults::clearAll()
-{
-	removeTmpFile();
-	clear();
 }
 
 void MediaBrowserResults::enqueueSelected()
@@ -180,33 +172,15 @@ void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTree
 			emit QMPlay2Core.processParam(action, m_mediaBrowser->getQMPlay2Url(getStringFromItem(items[0])));
 		else
 		{
-			Playlist::Entries entries;
+			QMPlay2CoreClass::GroupEntries entries;
 			for (QTreeWidgetItem *tWI : items)
-			{
-				Playlist::Entry entry;
-				entry.name = tWI->text(0);
-				entry.url = m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI));
-				entries += entry;
-			}
+				entries += {tWI->text(0), m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI))};
 			if (!entries.isEmpty())
 			{
-				const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(m_currentName) + ".pls";
-				if (Playlist::write(entries, "file://" + fileName))
-				{
-					emit QMPlay2Core.processParam(action, fileName);
-					m_fileToRemove = fileName;
-				}
+				const bool enqueue = (action == "enqueue");
+				QMPlay2Core.loadPlaylistGroup(m_currentName, entries, enqueue, m_mediaBrowser->name());
 			}
 		}
-	}
-}
-
-void MediaBrowserResults::removeTmpFile()
-{
-	if (!m_fileToRemove.isEmpty())
-	{
-		QFile::remove(m_fileToRemove);
-		m_fileToRemove.clear();
 	}
 }
 
@@ -410,7 +384,7 @@ void MediaBrowser::search()
 		m_searchReply->deleteLater();
 	if (m_imageReply)
 		m_imageReply->deleteLater();
-	m_resultsW->clearAll();
+	m_resultsW->clear();
 	m_descr->clear();
 	m_descr->hide();
 	if (!name.isEmpty())

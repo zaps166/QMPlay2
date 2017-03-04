@@ -43,23 +43,16 @@ class ResultsYoutube : public QTreeWidget
 	Q_OBJECT
 public:
 	ResultsYoutube();
-	inline ~ResultsYoutube()
-	{
-		removeTmpFile();
-	}
-
-	void clearAll();
+	~ResultsYoutube();
 
 	QList<int> itags, itagsVideo, itagsAudio;
 private:
 	QTreeWidgetItem *getDefaultQuality(const QTreeWidgetItem *tWI);
 
-	void removeTmpFile();
 	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
 	void mouseMoveEvent(QMouseEvent *) override final;
 
-	QString fileToRemove;
 	QMenu *menu;
 private slots:
 	void enqueue();

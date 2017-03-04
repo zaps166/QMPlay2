@@ -141,12 +141,8 @@ ResultsYoutube::ResultsYoutube() :
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 	setContextMenuPolicy(Qt::CustomContextMenu);
 }
-
-void ResultsYoutube::clearAll()
-{
-	removeTmpFile();
-	clear();
-}
+ResultsYoutube::~ResultsYoutube()
+{}
 
 QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
@@ -159,14 +155,6 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 	return tWI->child(0);
 }
 
-void ResultsYoutube::removeTmpFile()
-{
-	if (!fileToRemove.isEmpty())
-	{
-		QFile::remove(fileToRemove);
-		fileToRemove.clear();
-	}
-}
 void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 {
 	if (!tWI)
@@ -176,23 +164,13 @@ void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 	else
 	{
 		const QStringList ytPlaylist = tWI->data(0, Qt::UserRole + 1).toStringList();
-		Playlist::Entries entries;
+		QMPlay2CoreClass::GroupEntries entries;
 		for (int i = 0; i < ytPlaylist.count() ; i += 2)
-		{
-			Playlist::Entry entry;
-			entry.name = ytPlaylist[i+1];
-			entry.url = "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}";
-			entries += entry;
-		}
+			entries += {ytPlaylist[i+1], "YouTube://{" YOUTUBE_URL "/watch?v=" + ytPlaylist[i+0] + "}"};
 		if (!entries.isEmpty())
 		{
-			const QString fileName = QDir::tempPath() + "/" + Functions::cleanFileName(tWI->text(0)) + ".pls";
-			removeTmpFile();
-			if (Playlist::write(entries, "file://" + fileName))
-			{
-				emit QMPlay2Core.processParam(param, fileName);
-				fileToRemove = fileName;
-			}
+			const bool enqueue = (param == "enqueue");
+			QMPlay2Core.loadPlaylistGroup(tWI->text(0), entries, enqueue, YouTubeName);
 		}
 	}
 }
@@ -705,7 +683,7 @@ void YouTube::search()
 		autocompleteReply->deleteLater();
 	if (searchReply)
 		searchReply->deleteLater();
-	resultsW->clearAll();
+	resultsW->clear();
 	if (!title.isEmpty())
 	{
 		if (lastTitle != title || sender() == searchE || sender() == searchB)
@@ -729,7 +707,7 @@ void YouTube::netFinished(NetworkReply *reply)
 		if (reply == searchReply)
 		{
 			deleteReplies();
-			resultsW->clearAll();
+			resultsW->clear();
 			lastTitle.clear();
 			progressB->hide();
 			pageSwitcher->hide();
@@ -960,7 +938,7 @@ void YouTube::setSearchResults(QString data)
 	}
 
 	if (i == 1)
-		resultsW->clearAll();
+		resultsW->clear();
 	else
 	{
 		pageSwitcher->currPageB->setValue(currPage);

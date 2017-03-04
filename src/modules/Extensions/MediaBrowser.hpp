@@ -43,8 +43,6 @@ public:
 
 	inline void setCurrentName(const QString &name);
 
-	void clearAll();
-
 private slots:
 	void enqueueSelected();
 	void playSelected();
@@ -61,10 +59,7 @@ private:
 
 	void QMPlay2Action(const QString &action, const QList<QTreeWidgetItem *> &items);
 
-	void removeTmpFile();
-
 	MediaBrowserCommon *&m_mediaBrowser;
-	QString m_fileToRemove;
 	QString m_currentName;
 	QMenu m_menu;
 };

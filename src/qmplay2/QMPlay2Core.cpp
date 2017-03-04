@@ -20,6 +20,7 @@
 
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
+#include <Playlist.hpp>
 #include <Module.hpp>
 
 #include <QApplication>
@@ -450,6 +451,22 @@ QByteArray QMPlay2CoreClass::getResource(const QString &url)
 {
 	QMutexLocker locker(&resources.mutex);
 	return getCookiesOrResource(url, resources.data);
+}
+
+void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue, const QString &context)
+{
+	if (!entries.isEmpty())
+	{
+		const QString resourceName = "QMPlay2://" + context + "/" + name + ".pls";
+		Playlist::Entries playlistEntries;
+		for (const auto &entry : entries)
+			playlistEntries += {entry.first, entry.second};
+		if (Playlist::write(playlistEntries, resourceName))
+		{
+			modResource(resourceName, true);
+			emit processParam(enqueue ? "enqueue" : "open", resourceName);
+		}
+	}
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

@@ -40,7 +40,10 @@ class Module;
 class QMPlay2CoreClass : public QObject
 {
 	Q_OBJECT
+
 public:
+	using GroupEntries = QVector<QPair<QString, QString>>;
+
 	static inline QMPlay2CoreClass &instance()
 	{
 		return *qmplay2Core;
@@ -175,10 +178,13 @@ public:
 	void modResource(const QString &url, const bool removeAfterUse);
 	QByteArray getResource(const QString &url);
 
+	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false, const QString &context = QString());
+
 private slots:
 	void restoreCursorSlot();
 	void waitCursorSlot();
 	void busyCursorSlot();
+
 protected:
 	QMPlay2CoreClass();
 	virtual ~QMPlay2CoreClass();
@@ -187,6 +193,7 @@ protected:
 	QPixmap *qmp2Pixmap;
 	Settings *settings;
 	QString lang;
+
 private:
 	static QMPlay2CoreClass *qmplay2Core;
 

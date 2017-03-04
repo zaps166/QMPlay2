@@ -26,8 +26,9 @@
 class Playlist
 {
 public:
-	struct Entry
+	class Entry
 	{
+	public:
 		enum Flags
 		{
 			Selected = 0x1,
@@ -35,6 +36,11 @@ public:
 			StopAfter = 0x4,
 			Locked = 0x8
 		};
+
+		Entry() = default;
+		inline Entry(const QString &name, const QString &url) :
+			name(name), url(url)
+		{}
 
 		QString name, url;
 		double length = -1.0;
