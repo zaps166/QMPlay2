@@ -2852,6 +2852,17 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
 </context>
 <context>
+    <name>Tekstowo</name>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ToneGenerator</name>
     <message>
         <source>Tone generator</source>

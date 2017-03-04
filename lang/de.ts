@@ -2852,6 +2852,17 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
 </context>
 <context>
+    <name>Tekstowo</name>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ToneGenerator</name>
     <message>
         <source>Tone generator</source>

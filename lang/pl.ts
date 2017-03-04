@@ -2852,6 +2852,17 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
 </context>
 <context>
+    <name>Tekstowo</name>
+    <message>
+        <source>Translation</source>
+        <translation>Tłumaczenie</translation>
+    </message>
+    <message>
+        <source>Lyrics</source>
+        <translation>Tekstowo</translation>
+    </message>
+</context>
+<context>
     <name>ToneGenerator</name>
     <message>
         <source>Tone generator</source>
