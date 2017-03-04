@@ -18,6 +18,7 @@
 
 #include <Tekstowo.hpp>
 
+#include <algorithm>
 #include <vector>
 #include <tuple>
 
