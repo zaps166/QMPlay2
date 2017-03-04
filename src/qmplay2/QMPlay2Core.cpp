@@ -395,21 +395,27 @@ QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
 	return ret;
 }
 
-void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies)
+void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies, bool removeAfterUse)
 {
 	if (!url.isEmpty())
 	{
-		QMutexLocker locker(&cookiesMutex);
+		QMutexLocker locker(&cookies.mutex);
 		if (newCookies.isEmpty())
-			cookies.remove(url);
+			cookies.data.remove(url);
 		else
-			cookies[url] = newCookies;
+			cookies.data[url] = {newCookies, removeAfterUse};
 	}
 }
-QByteArray QMPlay2CoreClass::getCookies(const QString &url) const
+QByteArray QMPlay2CoreClass::getCookies(const QString &url)
 {
-	QMutexLocker locker(&cookiesMutex);
-	return cookies[url];
+	QMutexLocker locker(&cookies.mutex);
+	auto it = cookies.data.find(url);
+	if (it == cookies.data.end())
+		return QByteArray();
+	const QByteArray ret = it.value().first;
+	if (it.value().second)
+		cookies.data.erase(it);
+	return ret;
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

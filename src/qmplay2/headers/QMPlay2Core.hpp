@@ -163,8 +163,8 @@ public:
 	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
 	QList<QWidget *> getVideoDeintMethods() const;
 
-	void addCookies(const QString &url, const QByteArray &newCookies);
-	QByteArray getCookies(const QString &url) const;
+	void addCookies(const QString &url, const QByteArray &newCookies, bool removeAfterUse = true);
+	QByteArray getCookies(const QString &url);
 
 	QSystemTrayIcon *systemTray;
 private slots:
@@ -189,8 +189,11 @@ private:
 	QMap<QString, QString> languages;
 	QList<QPointer<QWidget>> videoFilters;
 
-	mutable QMutex cookiesMutex;
-	QHash<QString, QByteArray> cookies;
+	struct
+	{
+		QMutex mutex;
+		QHash<QString, QPair<QByteArray, bool>> data;
+	} cookies;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()
