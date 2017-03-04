@@ -418,7 +418,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 				if (!extension && !hasStreamUrl && !ioCtrl->isAborted()) // Fallback to download button...
 					getDownloadButtonUrl(false);
 
-				if (!hasStreamUrl && !error.isEmpty())
+				if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
 					emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 
 				ioCtrl->clear();
