@@ -75,7 +75,7 @@ void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, dou
 	if (!item || !pLW.getChildren(PlaylistWidget::ONLY_NON_GROUPS).contains(item))
 		return;
 	mutex.lock();
-	itemsToUpdate += (ItemToUpdate){item, pLW.getUrl(item), item->data(2, Qt::UserRole).toDouble(), name, length};
+	itemsToUpdate += {item, pLW.getUrl(item), item->data(2, Qt::UserRole).toDouble(), name, length};
 	mutex.unlock();
 	if (!isRunning())
 	{
@@ -296,7 +296,7 @@ void AddThr::run()
 	for (Module *module : QMPlay2Core.getPluginsInstance())
 		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER)
-				demuxersInfo += (Functions::DemuxerInfo){mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions};
+				demuxersInfo += {mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions};
 	add(urls, par, demuxersInfo, existingEntries.isEmpty() ? nullptr : &existingEntries, loadList);
 	if (currentThread() == pLW.thread()) //jeżeli funkcja działa w głównym wątku
 		finished();
@@ -622,7 +622,7 @@ bool PlaylistWidget::add(const QStringList &urls, QTreeWidgetItem *par, const QS
 		addThr.setData(urls, existingEntries, par, loadList);
 	else
 	{
-		enqueuedAddData += (AddData){urls, existingEntries, par, loadList};
+		enqueuedAddData += {urls, existingEntries, par, loadList};
 		if (!addTimer.isActive())
 			addTimer.start(1);
 	}
