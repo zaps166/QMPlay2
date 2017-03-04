@@ -92,6 +92,9 @@ add_feature_info(AnimeOdcinki USE_ANIMEODCINKI "Build with AnimeOdcinki support"
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
 
+option(USE_TEKSTOWO "Build with Tekstowo lyrics support" ON)
+add_feature_info(Tekstowo USE_TEKSTOWO "Build with Tekstowo lyrics support")
+
 option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
 add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")
 

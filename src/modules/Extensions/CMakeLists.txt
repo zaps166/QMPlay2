@@ -54,6 +54,12 @@ if(USE_LASTFM)
     add_definitions(-DUSE_LASTFM)
 endif()
 
+if(USE_TEKSTOWO)
+    list(APPEND Extensions_HDR Tekstowo.hpp)
+    list(APPEND Extensions_SRC Tekstowo.cpp)
+    add_definitions(-DUSE_TEKSTOWO)
+endif()
+
 if(USE_PROSTOPLEER)
     list(APPEND Extensions_HDR MediaBrowser/ProstoPleer.hpp)
     list(APPEND Extensions_SRC MediaBrowser/ProstoPleer.cpp)

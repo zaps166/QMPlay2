@@ -34,6 +34,10 @@ HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
 DEFINES += USE_LASTFM
 
+HEADERS += Tekstowo.hpp
+SOURCES += Tekstowo.cpp
+DEFINES += USE_TEKSTOWO
+
 unix:!android {
 	QT += dbus
 	HEADERS += MPRIS2.hpp

@@ -27,6 +27,9 @@
 #ifdef USE_MPRIS2
 	#include <MPRIS2.hpp>
 #endif
+#ifdef USE_TEKSTOWO
+	#include <Tekstowo.hpp>
+#endif
 #ifdef USE_MEDIABROWSER
 	#include <MediaBrowser.hpp>
 #endif
@@ -76,6 +79,9 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 	modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
 #endif
 	modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
+#ifdef USE_TEKSTOWO
+	modulesInfo += Info(TekstowoName, QMPLAY2EXTENSION);
+#endif
 #ifdef USE_MEDIABROWSER
 	modulesInfo += Info(MediaBrowserName, QMPLAY2EXTENSION);
 #endif
@@ -96,6 +102,10 @@ void *Extensions::createInstance(const QString &name)
 #endif
 	else if (name == RadioName)
 		return static_cast<QMPlay2Extensions *>(new Radio(*this));
+#ifdef USE_TEKSTOWO
+	else if (name == TekstowoName)
+		return static_cast<QMPlay2Extensions *>(new Tekstowo(*this));
+#endif
 #ifdef USE_MEDIABROWSER
 	else if (name == MediaBrowserName)
 		return static_cast<QMPlay2Extensions *>(new MediaBrowser(*this));
