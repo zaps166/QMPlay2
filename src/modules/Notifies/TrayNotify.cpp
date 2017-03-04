@@ -31,7 +31,7 @@ bool TrayNotify::showMessage(const QString &summary, const QString &message, con
 {
 	Q_UNUSED(image)
 
-	QSystemTrayIcon *tray = QMPlay2Core.systemTray;
+	QSystemTrayIcon *tray = QMPlay2Core.getSystemTray();
 	if (!tray || !QSystemTrayIcon::supportsMessages())
 		return false;
 

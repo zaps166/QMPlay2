@@ -61,6 +61,11 @@ public:
 
 	const QWidget *getVideoDock() const override final;
 
+	inline void setSystemTray(QSystemTrayIcon *tray)
+	{
+		systemTray = tray;
+	}
+
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;
 

@@ -158,6 +158,11 @@ public:
 		return lang;
 	}
 
+	inline QSystemTrayIcon *getSystemTray() const
+	{
+		return systemTray;
+	}
+
 	virtual const QWidget *getVideoDock() const = 0;
 
 	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
@@ -166,7 +171,6 @@ public:
 	void addCookies(const QString &url, const QByteArray &newCookies, bool removeAfterUse = true);
 	QByteArray getCookies(const QString &url);
 
-	QSystemTrayIcon *systemTray;
 private slots:
 	void restoreCursorSlot();
 	void waitCursorSlot();
@@ -175,6 +179,7 @@ protected:
 	QMPlay2CoreClass();
 	virtual ~QMPlay2CoreClass();
 
+	QSystemTrayIcon *systemTray;
 	QPixmap *qmp2Pixmap;
 	Settings *settings;
 	QString lang;
