@@ -46,6 +46,22 @@ extern "C"
 	#include <libavutil/log.h>
 }
 
+/**/
+
+template<typename Data>
+static QByteArray getCookiesOrResource(const QString &url, Data &data)
+{
+	auto it = data.find(url);
+	if (it == data.end())
+		return QByteArray();
+	const QByteArray ret = it.value().first;
+	if (it.value().second)
+		data.erase(it);
+	return ret;
+}
+
+/**/
+
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
@@ -395,7 +411,7 @@ QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
 	return ret;
 }
 
-void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies, bool removeAfterUse)
+void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies, const bool removeAfterUse)
 {
 	if (!url.isEmpty())
 	{
@@ -409,13 +425,31 @@ void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCooki
 QByteArray QMPlay2CoreClass::getCookies(const QString &url)
 {
 	QMutexLocker locker(&cookies.mutex);
-	auto it = cookies.data.find(url);
-	if (it == cookies.data.end())
-		return QByteArray();
-	const QByteArray ret = it.value().first;
-	if (it.value().second)
-		cookies.data.erase(it);
-	return ret;
+	return getCookiesOrResource(url, cookies.data);
+}
+
+void QMPlay2CoreClass::addResource(const QString &url, const QByteArray &data)
+{
+	if (url.length() > 10 && url.startsWith("QMPlay2://"))
+	{
+		QMutexLocker locker(&resources.mutex);
+		if (data.isNull())
+			resources.data.remove(url);
+		else
+			resources.data[url] = {data, false};
+	}
+}
+void QMPlay2CoreClass::modResource(const QString &url, const bool removeAfterUse)
+{
+	QMutexLocker locker(&resources.mutex);
+	auto it = resources.data.find(url);
+	if (it != resources.data.end())
+		it.value().second = removeAfterUse;
+}
+QByteArray QMPlay2CoreClass::getResource(const QString &url)
+{
+	QMutexLocker locker(&resources.mutex);
+	return getCookiesOrResource(url, resources.data);
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

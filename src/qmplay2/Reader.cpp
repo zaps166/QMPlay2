@@ -20,67 +20,110 @@
 
 #include <Functions.hpp>
 
+#include <QBuffer>
 #include <QFile>
 
-class QMPlay2FileReader : public Reader
+class IODeviceReader : public Reader
 {
-	bool readyRead() const override
+	bool readyRead() const override final
 	{
-		return f.isOpen();
+		return m_io->isOpen();
 	}
-	bool canSeek() const override
+	bool canSeek() const override final
 	{
 		return true;
 	}
 
-	bool seek(qint64 pos) override
+	bool seek(qint64 pos) override final
 	{
-		return f.seek(pos);
+		return m_io->seek(pos);
 	}
-	QByteArray read(qint64 len) override
+	QByteArray read(qint64 len) override final
 	{
-		return f.read(len);
+		return m_io->read(len);
 	}
-	bool atEnd() const override
+	bool atEnd() const override final
 	{
-		return f.atEnd();
+		return m_io->atEnd();
 	}
 
-	virtual qint64 size() const override
+	virtual qint64 size() const override final
 	{
-		return f.size();
+		return m_io->size();
 	}
-	virtual qint64 pos() const override
+	virtual qint64 pos() const override final
 	{
-		return f.pos();
+		return m_io->pos();
 	}
-	QString name() const override
+
+protected:
+	bool open() override
+	{
+		return m_io->open(QIODevice::ReadOnly);
+	}
+
+	QScopedPointer<QIODevice> m_io;
+};
+
+/**/
+
+class QMPlay2FileReader : public IODeviceReader
+{
+	QString name() const override final
 	{
 		return "File Reader";
 	}
 
-	bool open() override
+	bool open() override final
 	{
-		f.setFileName(getUrl().mid(7));
-		return f.open(QIODevice::ReadOnly);
+		m_io.reset(new QFile(getUrl().mid(7)));
+		return IODeviceReader::open();
+	}
+};
+
+/**/
+
+class QMPlay2ResourceReader : public IODeviceReader
+{
+	QString name() const override final
+	{
+		return "Resource Reader";
 	}
 
-	/**/
+	bool open() override final
+	{
+		m_data = QMPlay2Core.getResource(getUrl());
+		if (!m_data.isNull())
+		{
+			m_io.reset(new QBuffer(&m_data));
+			return IODeviceReader::open();
+		}
+		return false;
+	}
 
-	QFile f;
+	QByteArray m_data;
 };
+
+/**/
 
 bool Reader::create(const QString &url, IOController<Reader> &reader, const QString &plugName)
 {
 	const QString scheme = Functions::getUrlScheme(url);
 	if (reader.isAborted() || url.isEmpty() || scheme.isEmpty())
 		return false;
-	if (plugName.isEmpty() && scheme == "file" && reader.assign(new QMPlay2FileReader))
+	if (plugName.isEmpty())
 	{
-		reader->_url = url;
-		if (reader->open())
-			return true;
-		reader.clear();
+		if (scheme == "file")
+			reader.assign(new QMPlay2FileReader);
+		else if (scheme == "QMPlay2")
+			reader.assign(new QMPlay2ResourceReader);
+		if (!reader.isNull())
+		{
+			reader->_url = url;
+			if (reader->open())
+				return true;
+			reader.clear();
+		}
 	}
 	for (Module *module : QMPlay2Core.getPluginsInstance())
 		for (const Module::Info &mod : module->getModulesInfo())

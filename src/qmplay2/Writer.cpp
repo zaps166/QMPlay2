@@ -20,35 +20,74 @@
 
 #include <Functions.hpp>
 
+#include <QBuffer>
 #include <QFile>
 
-class QMPlay2FileWriter : public Writer
+#include <QDebug>
+
+class IODeviceWriter : public Writer
 {
-	bool readyWrite() const override
+	bool readyWrite() const override final
 	{
-		return f.isOpen();
+		return m_io->isOpen();
 	}
 
-	qint64 write(const QByteArray &arr) override
+	qint64 write(const QByteArray &arr) override final
 	{
-		return f.write(arr);
+		return m_io->write(arr);
 	}
 
-	QString name() const override
+protected:
+	bool open() override
+	{
+		return m_io->open(QIODevice::WriteOnly);
+	}
+
+	QScopedPointer<QIODevice> m_io;
+};
+
+/**/
+
+class QMPlay2FileWriter : public IODeviceWriter
+{
+	QString name() const override final
 	{
 		return "File Writer";
 	}
 
-	bool open() override
+	bool open() override final
 	{
-		f.setFileName(getUrl().mid(7));
-		return f.open(QIODevice::WriteOnly);
+		m_io.reset(new QFile(getUrl().mid(7)));
+		return IODeviceWriter::open();
+	}
+};
+
+/**/
+
+class QMPlay2ResourceWriter : public IODeviceWriter
+{
+	~QMPlay2ResourceWriter() final
+	{
+		if (m_io)
+			m_io->close();
+		QMPlay2Core.addResource(getUrl(), m_data);
 	}
 
-	/**/
+	QString name() const override final
+	{
+		return "Resource Writer";
+	}
 
-	QFile f;
+	bool open() override final
+	{
+		m_io.reset(new QBuffer(&m_data));
+		return IODeviceWriter::open();
+	}
+
+	QByteArray m_data;
 };
+
+/**/
 
 Writer *Writer::create(const QString &url, const QStringList &modNames)
 {
@@ -56,14 +95,20 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
 	if (url.isEmpty() || scheme.isEmpty())
 		return nullptr;
 	Writer *writer = nullptr;
-	if (modNames.isEmpty() && scheme == "file")
+	if (modNames.isEmpty())
 	{
-		writer = new QMPlay2FileWriter;
-		writer->_url = url;
-		if (writer->open())
-			return writer;
-		delete writer;
-		return nullptr;
+		if (scheme == "file")
+			writer = new QMPlay2FileWriter;
+		else if (scheme == "QMPlay2")
+			writer = new QMPlay2ResourceWriter;
+		if (writer)
+		{
+			writer->_url = url;
+			if (writer->open())
+				return writer;
+			delete writer;
+			return nullptr;
+		}
 	}
 	QVector<QPair<Module *, Module::Info>> pluginsInstances(modNames.count());
 	for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())

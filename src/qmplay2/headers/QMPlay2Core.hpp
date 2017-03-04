@@ -168,8 +168,12 @@ public:
 	void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
 	QList<QWidget *> getVideoDeintMethods() const;
 
-	void addCookies(const QString &url, const QByteArray &newCookies, bool removeAfterUse = true);
+	void addCookies(const QString &url, const QByteArray &newCookies, const bool removeAfterUse = true);
 	QByteArray getCookies(const QString &url);
+
+	void addResource(const QString &url, const QByteArray &data);
+	void modResource(const QString &url, const bool removeAfterUse);
+	QByteArray getResource(const QString &url);
 
 private slots:
 	void restoreCursorSlot();
@@ -198,7 +202,7 @@ private:
 	{
 		QMutex mutex;
 		QHash<QString, QPair<QByteArray, bool>> data;
-	} cookies;
+	} cookies, resources;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()
