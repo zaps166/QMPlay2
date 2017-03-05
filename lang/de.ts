@@ -773,13 +773,6 @@
     </message>
 </context>
 <context>
-    <name>FreedesktopNotify</name>
-    <message>
-        <source>Error sending notification</source>
-        <translation>Fehler beim Senden der Benachrichtigung</translation>
-    </message>
-</context>
-<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -922,6 +915,10 @@
     </message>
     <message>
         <source>Read and display still images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1548,10 +1545,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <translation>Verwende CUVID nur wenn primäre GPU NVIDIA ist</translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation>Deaktiviert</translation>
-    </message>
-    <message>
         <source>Infinite</source>
         <translation>Unendlich</translation>
     </message>
@@ -1578,22 +1571,6 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Body</source>
         <translation>Körper</translation>
-    </message>
-    <message>
-        <source>Notification type</source>
-        <translation>Benachrichtigunstyp</translation>
-    </message>
-    <message>
-        <source>Show a native desktop notification</source>
-        <translation>Anzeigen einer systemeigenen Desktop-Benachrichtigung</translation>
-    </message>
-    <message>
-        <source>Show a popup from the system tray</source>
-        <translation>Zeigen ein Popup aus der Task-Leiste an</translation>
-    </message>
-    <message>
-        <source>General settings</source>
-        <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1641,6 +1618,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>XSPF support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

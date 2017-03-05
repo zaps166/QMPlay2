@@ -81,6 +81,6 @@ if(USE_CUVID)
     add_subdirectory(CUVID)
 endif()
 
-if(USE_NOTIFIES)
-    add_subdirectory(Notifies)
+if(USE_NOTIFY)
+	add_subdirectory(Notify)
 endif()

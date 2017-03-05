@@ -23,13 +23,5 @@ RESOURCES += icon.qrc
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH  += . ../../qmplay2/headers
 
-HEADERS += Notifies.hpp NotifyExtension.hpp TrayNotify.hpp Notify.hpp
-SOURCES += Notifies.cpp NotifyExtension.cpp TrayNotify.cpp
-
- unix:!android {
-	QT += dbus
-	DBUS_INTERFACES += org.freedesktop.Notifications.xml
-	HEADERS += FreedesktopNotify.hpp
-	SOURCES += FreedesktopNotify.cpp
-	DEFINES += FREEDESKTOP_NOTIFY
- }
+HEADERS += Notify.hpp NotifyExtension.hpp
+SOURCES += Notify.cpp NotifyExtension.cpp

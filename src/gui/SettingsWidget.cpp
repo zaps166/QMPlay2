@@ -22,6 +22,7 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Functions.hpp>
+#include <Notifies.hpp>
 #include <Main.hpp>
 
 #if QT_VERSION < 0x050000
@@ -157,6 +158,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("DisplayOnlyFileName", false);
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
+	QMPSettings.init("TrayNotifiesDefault", false);
 	QMPSettings.init("Proxy/Use", false);
 	QMPSettings.init("Proxy/Host", QString());
 	QMPSettings.init("Proxy/Port", 80);
@@ -354,6 +356,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		delete page1->autoUpdatesB;
 		page1->autoUpdatesB = nullptr;
 #endif
+
+		if (Notifies::hasBoth())
+			page1->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
+		else
+		{
+			delete page1->trayNotifiesDefault;
+			page1->trayNotifiesDefault = nullptr;
+		}
 
 		page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
 		page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
@@ -738,6 +748,8 @@ void SettingsWidget::apply()
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());
+			if (page1->trayNotifiesDefault)
+				QMPSettings.set("TrayNotifiesDefault", page1->trayNotifiesDefault->isChecked());
 			QMPSettings.set("Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty());
 			QMPSettings.set("Proxy/Host", page1->proxyHostE->text());
 			QMPSettings.set("Proxy/Port", page1->proxyPortB->value());
@@ -748,6 +760,9 @@ void SettingsWidget::apply()
 			page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
 			qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
 			applyProxy();
+
+			if (page1->trayNotifiesDefault)
+				Notifies::setNativeFirst(!page1->trayNotifiesDefault->isChecked());
 
 			QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
 			const QString selectedProfile = getSelectedProfile();

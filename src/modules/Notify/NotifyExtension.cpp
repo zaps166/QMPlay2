@@ -18,10 +18,7 @@
 
 #include <NotifyExtension.hpp>
 
-#ifdef FREEDESKTOP_NOTIFY
-	#include <FreedesktopNotify.hpp>
-#endif
-#include <TrayNotify.hpp>
+#include <Notifies.hpp>
 
 #include <QCoreApplication>
 #include <QFile>
@@ -32,19 +29,17 @@ static const char *PlayState[3] = {
 	QT_TRANSLATE_NOOP("NotifyService", "Paused")
 };
 
-NotifyService::NotifyService(Notify *notify, bool useImages, Settings &settings) :
-	m_notify(notify),
-	m_lastPlayState(PlayState[0])
+NotifyService::NotifyService(Settings &settings) :
+	m_lastPlayState(PlayState[0]),
+	m_timeout(settings.getInt("Timeout"))
 {
 	if (settings.getBool("ShowTitle"))
 	{
 		connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, QString, QString, QString, int, bool, QString)), this, SLOT(updatePlaying(bool, QString, QString, QString, int, bool, QString)));
-		if (useImages)
-		{
-			//"coverDataFromMediaFile()" and "coverFile()" are emited before "updatePlaying()"
-			connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(QByteArray)), this, SLOT(coverDataFromMediaFile(QByteArray)));
-			connect(&QMPlay2Core, SIGNAL(coverFile(QString)), this, SLOT(coverFile(QString)));
-		}
+
+		//"coverDataFromMediaFile()" and "coverFile()" are emited before "updatePlaying()"
+		connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(QByteArray)), this, SLOT(coverDataFromMediaFile(QByteArray)));
+		connect(&QMPlay2Core, SIGNAL(coverFile(QString)), this, SLOT(coverFile(QString)));
 	}
 	if (settings.getBool("ShowPlayState"))
 		connect(&QMPlay2Core, SIGNAL(playStateChanged(QString)), this, SLOT(playStateChanged(QString)));
@@ -58,9 +53,7 @@ NotifyService::NotifyService(Notify *notify, bool useImages, Settings &settings)
 	}
 }
 NotifyService::~NotifyService()
-{
-	delete m_notify;
-}
+{}
 
 void NotifyService::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName)
 {
@@ -94,7 +87,8 @@ void NotifyService::updatePlaying(bool play, const QString &title, const QString
 		coverImage = QImage::fromData(m_cover);
 		m_cover.clear();
 	}
-	m_notify->showMessage(summary, body, coverImage);
+
+	Notifies::notify(summary, body, m_timeout, coverImage, 1);
 }
 void NotifyService::coverDataFromMediaFile(const QByteArray &cover)
 {
@@ -114,53 +108,28 @@ void NotifyService::playStateChanged(const QString &playState)
 	 *  2. The current one is Playing and the last one wasn't Paused
 	*/
 	if (playState != m_lastPlayState && (playState != PlayState[1] || m_lastPlayState == PlayState[2]))
-		m_notify->showMessage(QCoreApplication::applicationName(), tr(playState.toUtf8()));
+		Notifies::notify(QCoreApplication::applicationName(), tr(playState.toUtf8()), m_timeout, 1);
 	m_lastPlayState = playState;
 }
 void NotifyService::volumeChanged(double v)
 {
-	m_notify->showMessage(tr("Volume changed"), tr("Volume: %1%").arg((int)(100 * v)));
+	Notifies::notify(tr("Volume changed"), tr("Volume: %1%").arg((int)(100 * v)), m_timeout, 1);
 }
 
 /**/
 
-NotifyExtension::NotifyExtension(Module &module) :
-	m_notifyService(nullptr)
+NotifyExtension::NotifyExtension(Module &module)
 {
 	SetModule(module);
 }
 NotifyExtension::~NotifyExtension()
-{
-	delete m_notifyService;
-}
+{}
 
 bool NotifyExtension::set()
 {
-	if (sets().getBool("TypeDisabled"))
-	{
-		delete m_notifyService;
-		m_notifyService = nullptr;
-	}
+	if (sets().getBool("Enabled"))
+		m_notifyService.reset(new NotifyService(sets()));
 	else
-	{
-		const int timeout = sets().getInt("Timeout");
-		Notify *notify = nullptr;
-		bool useImages = false;
-		if (sets().getBool("TypeTray"))
-			notify = new TrayNotify(timeout);
-#ifdef FREEDESKTOP_NOTIFY
-		else if (sets().getBool("TypeNative"))
-		{
-			notify = new FreedesktopNotify(timeout);
-			useImages = true;
-		}
-#endif
-		if (notify)
-		{
-			delete m_notifyService;
-			m_notifyService = new NotifyService(notify, useImages, sets());
-		}
-	}
-
+		m_notifyService.reset();
 	return true;
 }

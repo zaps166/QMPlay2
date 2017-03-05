@@ -16,20 +16,16 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Notifies.hpp>
-#include <Settings.hpp>
+#include <Notify.hpp>
+
 #include <NotifyExtension.hpp>
 
-Notifies::Notifies() :
-	Module("Notifies")
+Notify::Notify() :
+	Module("Notify")
 {
-	moduleImg = QImage(":/Notifies");
+	moduleImg = QImage(":/Notify");
 
-	init("TypeDisabled", true);
-#ifdef FREEDESKTOP_NOTIFY
-	init("TypeNative", false);
-#endif
-	init("TypeTray", false);
+	init("Enabled", false);
 
 	init("Timeout", 5000);
 
@@ -42,60 +38,42 @@ Notifies::Notifies() :
 	init("CustomBody", QString());
 }
 
-QList<Notifies::Info> Notifies::getModulesInfo(const bool) const
+QList<Notify::Info> Notify::getModulesInfo(const bool) const
 {
-	return QList<Info>() << Info(NotifyExtensionName, QMPLAY2EXTENSION);
+	return {Info(NotifyExtensionName, QMPLAY2EXTENSION)};
 }
-void *Notifies::createInstance(const QString &name)
+void *Notify::createInstance(const QString &name)
 {
 	if (name == NotifyExtensionName)
-		return static_cast<QMPlay2Extensions *>(new NotifyExtension(*this));
+		return new NotifyExtension(*this);
 	return nullptr;
 }
 
-Notifies::SettingsWidget *Notifies::getSettingsWidget()
+Notify::SettingsWidget *Notify::getSettingsWidget()
 {
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Notifies)
+QMPLAY2_EXPORT_PLUGIN(Notify)
 
 /**/
 
-#include <QBoxLayout>
-#include <QCheckBox>
 #include <QDoubleSpinBox>
+#include <QRadioButton>
 #include <QFormLayout>
 #include <QGridLayout>
+#include <QCheckBox>
 #include <QGroupBox>
 #include <QLineEdit>
-#include <QRadioButton>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
-	QGroupBox *notifyTypeG = new QGroupBox(tr("Notification type"));
-	QVBoxLayout *notifyTypeL = new QVBoxLayout(notifyTypeG);
-
-	m_disabledR = new QRadioButton(tr("Disabled"));
-	m_disabledR->setChecked(sets().getBool("TypeDisabled"));
-	notifyTypeL->addWidget(m_disabledR);
-
-#ifdef FREEDESKTOP_NOTIFY
-	m_nativeR = new QRadioButton(tr("Show a native desktop notification"));
-	m_nativeR->setChecked(sets().getBool("TypeNative"));
-	notifyTypeL->addWidget(m_nativeR);
-#endif
-
-	m_trayR = new QRadioButton(tr("Show a popup from the system tray"));
-	m_trayR->setChecked(sets().getBool("TypeTray"));
-	notifyTypeL->addWidget(m_trayR);
+	m_notify = new QGroupBox(tr("Additional notifications"));
+	m_notify->setCheckable(true);
+	m_notify->setChecked(sets().getBool("Enabled"));
 
 	/**/
-
-	QGroupBox *generalG = new QGroupBox(tr("General settings"));
-	generalG->setDisabled(sets().getBool("TypeDisabled"));
-	connect(m_disabledR, SIGNAL(toggled(bool)), generalG, SLOT(setDisabled(bool)));
 
 	m_timeoutSB = new QDoubleSpinBox;
 	m_timeoutSB->setDecimals(1);
@@ -114,7 +92,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_notifyPlayStateB = new QCheckBox(tr("Show notification when play state changes"));
 	m_notifyPlayStateB->setChecked(sets().getBool("ShowPlayState"));
 
-	QFormLayout *generalL = new QFormLayout(generalG);
+	QFormLayout *generalL = new QFormLayout;
 	generalL->addRow(tr("Notification timeout") + ":", m_timeoutSB);
 	generalL->addRow(m_notifyVolumeB);
 	generalL->addRow(m_notifyTitleB);
@@ -125,8 +103,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_customMsgG = new QGroupBox(tr("Use a custom message for media change notifications"));
 	m_customMsgG->setCheckable(true);
 	m_customMsgG->setChecked(sets().getBool("CustomMsg"));
-	m_customMsgG->setDisabled(sets().getBool("TypeDisabled"));
-	connect(m_disabledR, SIGNAL(toggled(bool)), m_customMsgG, SLOT(setDisabled(bool)));
 
 	m_customSummary = new QLineEdit(sets().getString("CustomSummary"));
 	m_customSummary->setPlaceholderText("%title% - %artist%");
@@ -140,21 +116,21 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	/**/
 
-	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(notifyTypeG);
-	layout->addWidget(generalG);
+
+	QVBoxLayout *layout = new QVBoxLayout(m_notify);
+	layout->addLayout(generalL);
 	layout->addWidget(m_customMsgG);
+	layout->setMargin(3);
+
+	/**/
+
+	QGridLayout *mainLayout = new QGridLayout(this);
+	mainLayout->addWidget(m_notify);
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
-	const bool disabled = m_disabledR->isChecked();
-
-	sets().set("TypeDisabled", disabled);
-#ifdef FREEDESKTOP_NOTIFY
-	sets().set("TypeNative", m_nativeR->isChecked());
-#endif
-	sets().set("TypeTray", m_trayR->isChecked());
+	sets().set("Enabled", m_notify->isChecked());
 
 	sets().set("Timeout", (int)(m_timeoutSB->value() * 1000));
 	sets().set("ShowVolume", m_notifyVolumeB->isChecked());

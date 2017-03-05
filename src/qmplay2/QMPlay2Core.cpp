@@ -67,7 +67,6 @@ QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
 {
-	systemTray = nullptr;
 	qmplay2Core = this;
 
 	QFile f(":/Languages.csv");
@@ -190,12 +189,17 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
 	logFilePath = settingsDir + "QMPlay2.log";
 
-	/* Rename config file */
+	/* Rename config files */
 	{
 		const QString oldFFmpegConfig = settingsDir + "FFMpeg.ini";
 		const QString newFFmpegConfig = settingsDir + "FFmpeg.ini";
 		if (!QFile::exists(newFFmpegConfig) && QFile::exists(oldFFmpegConfig))
 			QFile::rename(oldFFmpegConfig, newFFmpegConfig);
+
+		const QString oldNotifiesConfig = settingsDir + "Notifies.ini";
+		const QString newFNotifyConfig  = settingsDir + "Notify.ini";
+		if (!QFile::exists(newFNotifyConfig) && QFile::exists(oldNotifiesConfig))
+			QFile::rename(oldNotifiesConfig, newFNotifyConfig);
 	}
 
 	settings = new Settings("QMPlay2");

@@ -773,13 +773,6 @@
     </message>
 </context>
 <context>
-    <name>FreedesktopNotify</name>
-    <message>
-        <source>Error sending notification</source>
-        <translation>Błąd podczas wysyłania powiadomienia</translation>
-    </message>
-</context>
-<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -923,6 +916,10 @@
     <message>
         <source>Read and display still images</source>
         <translation>Wczytuj i wyświetlaj statyczne obrazy</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Powiadomienia w tray&apos;u jako domyślne</translation>
     </message>
 </context>
 <context>
@@ -1548,10 +1545,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>Użyj CUVID tylko jeżeli pierwszym GPU jest NVIDIA</translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation>Wyłączone</translation>
-    </message>
-    <message>
         <source>Infinite</source>
         <translation>Nieskończony</translation>
     </message>
@@ -1578,22 +1571,6 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Body</source>
         <translation>Treść</translation>
-    </message>
-    <message>
-        <source>Notification type</source>
-        <translation>Typ powiadomienia</translation>
-    </message>
-    <message>
-        <source>Show a native desktop notification</source>
-        <translation>Pokazuj natywne powiadomienia</translation>
-    </message>
-    <message>
-        <source>Show a popup from the system tray</source>
-        <translation>Pokazuj powiadomienia z tray&apos;a</translation>
-    </message>
-    <message>
-        <source>General settings</source>
-        <translation>Ustawienia ogólne</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1642,6 +1619,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>XSPF support</source>
         <translation>Obsługa formatu XSPF</translation>
+    </message>
+    <message>
+        <source>Additional notifications</source>
+        <translation>Dodatkowe powiadomienia</translation>
     </message>
 </context>
 <context>

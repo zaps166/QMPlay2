@@ -16,11 +16,13 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <FreedesktopNotify.hpp>
+#include <NotifiesFreedesktop.hpp>
 
-#include "notifications_interface.h"
+#include <notifications_interface.h>
 
-#define FreedesktopNotifyName "Freedesktop Notify"
+#include <QMPlay2Core.hpp>
+
+#include <QDebug>
 
 QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
 {
@@ -58,24 +60,38 @@ const QDBusArgument &operator >>(const QDBusArgument &arg, QImage &image)
 	return arg;
 }
 
-FreedesktopNotify::FreedesktopNotify(qint32 timeout) :
-	Notify(timeout),
+/**/
+
+NotifiesFreedesktop::NotifiesFreedesktop() :
 	m_interface(new OrgFreedesktopNotificationsInterface(OrgFreedesktopNotificationsInterface::staticInterfaceName(), "/org/freedesktop/Notifications", QDBusConnection::sessionBus())),
-	m_notificationId(0)
+	m_notificationId(0),
+	m_error(false)
 {
 	static const int metaTypeId = qDBusRegisterMetaType<QImage>();
 	Q_UNUSED(metaTypeId);
+
+	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_interface->GetCapabilities(), this);
+	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)), SLOT(callFinished(QDBusPendingCallWatcher *)));
 }
-FreedesktopNotify::~FreedesktopNotify()
+NotifiesFreedesktop::~NotifiesFreedesktop()
 {
 	delete m_interface;
 }
 
-bool FreedesktopNotify::showMessage(const QString &summary, const QString &message, const QImage &image)
+bool NotifiesFreedesktop::doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId)
 {
+	return doNotify(title, message, ms, pixmap.toImage(), iconId);
+}
+bool NotifiesFreedesktop::doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId)
+{
+	Q_UNUSED(iconId)
+
+	if (m_error)
+		return false;
+
 	QVariantMap hints;
 
-	//"image_data" is deprecated, "image-data" should be used for version >= 1.2
+	// "image_data" is deprecated, "image-data" should be used for version >= 1.2
 
 	if (!image.isNull())
 		hints["image_data"] = image;
@@ -87,7 +103,7 @@ bool FreedesktopNotify::showMessage(const QString &summary, const QString &messa
 	}
 
 	int id = 0;
-	if (m_lastNotificationTime.msecsTo(QDateTime::currentDateTime()) < m_timeout)
+	if (m_lastNotificationTime.msecsTo(QDateTime::currentDateTime()) < ms)
 	{
 		// Reuse the existing popup if it's still open.  The reason we don't always
 		// reuse the popup is because the notification daemon on KDE4 won't re-show
@@ -96,27 +112,29 @@ bool FreedesktopNotify::showMessage(const QString &summary, const QString &messa
 		m_notificationId = 0;
 	}
 
-	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, "QMPlay2", summary, message, {}, hints, m_timeout);
+	const QDBusPendingReply<quint32> reply = m_interface->Notify(QCoreApplication::applicationName(), id, QCoreApplication::applicationName(), title, message, {}, hints, ms);
 	QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 	connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)), SLOT(callFinished(QDBusPendingCallWatcher *)));
+
 	return true;
 }
 
-void FreedesktopNotify::callFinished(QDBusPendingCallWatcher *watcher)
+void NotifiesFreedesktop::callFinished(QDBusPendingCallWatcher *watcher)
 {
-	const QDBusPendingReply<quint32> reply = *watcher;
-	if (reply.isError())
+	if (watcher->isError())
+		m_error = true;
+	else
 	{
-		QMPlay2Core.logError(FreedesktopNotifyName " :: " + tr("Error sending notification") + ": " + reply.error().name());
-		return;
+		const QDBusPendingReply<quint32> reply = *watcher;
+		if (reply.isValid())
+		{
+			const quint32 id = reply.value();
+			if (id != 0)
+			{
+				m_lastNotificationTime = QDateTime::currentDateTime();
+				m_notificationId = id;
+			}
+		}
 	}
-
-	const quint32 id = reply.value();
-	if (id != 0)
-	{
-		m_lastNotificationTime = QDateTime::currentDateTime();
-		m_notificationId = id;
-	}
-
 	watcher->deleteLater();
 }

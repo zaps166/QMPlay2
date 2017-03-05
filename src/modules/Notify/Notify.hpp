@@ -16,28 +16,44 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <TrayNotify.hpp>
+#pragma once
+
 #include <Module.hpp>
-#include <QMPlay2Core.hpp>
 
-#include <QApplication>
-#include <QImage>
-#include <QSystemTrayIcon>
-
-TrayNotify::TrayNotify(qint32 timeout) :
-	Notify(timeout)
-{}
-bool TrayNotify::showMessage(const QString &summary, const QString &message, const QImage &image)
+class Notify : public Module
 {
-	Q_UNUSED(image)
+public:
+	Notify();
 
-	QSystemTrayIcon *tray = QMPlay2Core.getSystemTray();
-	if (!tray || !QSystemTrayIcon::supportsMessages())
-		return false;
+private:
+	QList<Info> getModulesInfo(const bool) const override final;
+	void *createInstance(const QString &) override final;
 
-	if (m_timeout > 0)
-		tray->showMessage(summary, message, QSystemTrayIcon::Information, m_timeout);
-	else
-		tray->showMessage(summary, message);
-	return true;
-}
+	SettingsWidget *getSettingsWidget() override final;
+};
+
+/**/
+
+#include <QCoreApplication>
+
+class QDoubleSpinBox;
+class QCheckBox;
+class QGroupBox;
+class QLineEdit;
+
+class ModuleSettingsWidget : public Module::SettingsWidget
+{
+	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
+
+public:
+	ModuleSettingsWidget(Module &module);
+
+private:
+	void saveSettings() override final;
+
+	QGroupBox *m_notify;
+	QDoubleSpinBox *m_timeoutSB;
+	QCheckBox *m_notifyVolumeB, *m_notifyTitleB, *m_notifyPlayStateB;
+	QGroupBox *m_customMsgG;
+	QLineEdit *m_customSummary, *m_customBody;
+};

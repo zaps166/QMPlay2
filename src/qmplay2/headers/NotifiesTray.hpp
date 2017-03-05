@@ -18,12 +18,18 @@
 
 #pragma once
 
-#include <Notify.hpp>
+#include <Notifies.hpp>
 
-class TrayNotify : public Notify
+class NotifiesTray : public Notifies
 {
 public:
-	TrayNotify(qint32 timeout);
+	NotifiesTray(QSystemTrayIcon *tray);
+	~NotifiesTray() final = default;
 
-	bool showMessage(const QString &summary, const QString &message, const QImage &image) override final;
+private:
+	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const int iconId) override final;
+
+	QSystemTrayIcon *m_tray;
 };

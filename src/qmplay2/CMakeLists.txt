@@ -61,6 +61,8 @@ set(QMPLAY2_HDR
     headers/VideoAdjustment.hpp
     headers/Json11.hpp
     headers/YouTubeDL.hpp
+    headers/Notifies.hpp
+    headers/NotifiesTray.hpp
 )
 
 set(QMPLAY2_SRC
@@ -98,12 +100,34 @@ set(QMPLAY2_SRC
     NetworkAccess.cpp
     Json11.cpp
     YouTubeDL.cpp
+    Notifies.cpp
+    NotifiesTray.cpp
 )
 
 if(WIN32)
     list(APPEND QMPLAY2_SRC IPC_Windows.cpp)
 else()
     list(APPEND QMPLAY2_SRC IPC_Unix.cpp)
+endif()
+
+if(USE_FREEDESKTOP_NOTIFICATIONS)
+    list(APPEND QMPLAY2_HDR headers/NotifiesFreedesktop.hpp)
+    list(APPEND QMPLAY2_SRC NotifiesFreedesktop.cpp)
+    if(USE_QT5)
+        set(DBUS DBus)
+        find_package(Qt5DBus REQUIRED)
+        qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
+    else()
+        set(DBUS Qt4::QtDBus)
+        find_package(Qt4 REQUIRED QtDBus)
+        qt4_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
+    endif()
+    add_definitions(-DNOTIFIES_FREEDESKTOP)
+elseif(APPLE)
+    list(APPEND QMPLAY2_HDR headers/NotifiesMacOS.hpp)
+    list(APPEND QMPLAY2_SRC NotifiesMacOS.mm)
+    find_package(Qt5MacExtras REQUIRED)
+    add_definitions(-DNOTIFIES_MACOS)
 endif()
 
 set(QMPLAY2_RESOURCES
@@ -175,9 +199,13 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets ${DBUS})
+    if(APPLE)
+        qt5_use_modules(${PROJECT_NAME} MacExtras)
+        target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY})
+    endif()
 else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
+    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui ${DBUS})
 endif()
 
 if(WIN32)

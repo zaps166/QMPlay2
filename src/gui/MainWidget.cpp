@@ -34,6 +34,7 @@
 
 /* QMPlay2 gui */
 #include <Main.hpp>
+#include <Notifies.hpp>
 #include <Functions.hpp>
 #include <Appearance.hpp>
 #include <MainWidget.hpp>
@@ -169,13 +170,12 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Pixmap()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
-	QMPlay2GUI.setSystemTray(tray);
 #else
 	tray = nullptr;
-	#ifdef Q_OS_MAC
-		QMPlay2MacExtensions::init();
-	#endif
 #endif
+	Notifies::initialize(tray);
+	if (Notifies::hasBoth())
+		Notifies::setNativeFirst(!settings.getBool("TrayNotifiesDefault"));
 
 	setDockOptions(AllowNestedDocks | AnimatedDocks | AllowTabbedDocks);
 	setMouseTracking(true);
@@ -425,6 +425,7 @@ MainWidget::~MainWidget()
 {
 	QMPlay2Extensions::closeExtensions();
 	emit QMPlay2Core.restoreCursor();
+	Notifies::finalize();
 	QMPlay2GUI.mainW = nullptr;
 	QCoreApplication::quit();
 }
@@ -1039,16 +1040,8 @@ void MainWidget::toggleFullScreen()
 }
 void MainWidget::showMessage(const QString &msg, const QString &title, int messageIcon, int ms)
 {
-	const bool isTray = isTrayVisible();
-	if (ms < 1 || !isTray)
+	if (ms < 1 || !Notifies::notify(title, msg, ms, messageIcon))
 	{
-#ifdef Q_OS_MAC
-		if (ms > 0)
-		{
-			QMPlay2MacExtensions::notify(title, msg, messageIcon, ms);
-			return;
-		}
-#endif
 		QMessageBox *messageBox = new QMessageBox(this);
 		messageBox->setIcon((QMessageBox::Icon)messageIcon);
 		messageBox->setStandardButtons(QMessageBox::Ok);
@@ -1057,10 +1050,6 @@ void MainWidget::showMessage(const QString &msg, const QString &title, int messa
 		messageBox->setText(title);
 		messageBox->setModal(true);
 		messageBox->show();
-	}
-	else
-	{
-		tray->showMessage(title, msg, (QSystemTrayIcon::MessageIcon)messageIcon, ms);
 	}
 }
 void MainWidget::statusBarMessage(const QString &msg, int ms)
@@ -1480,8 +1469,6 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
 #ifndef Q_OS_MAC
 	settings.set("MainWidget/isVisible", isVisible());
-#else
-	QMPlay2MacExtensions::deinit();
 #endif
 	if (tray)
 		settings.set("TrayVisible", tray->isVisible());

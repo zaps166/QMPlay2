@@ -82,9 +82,6 @@ set(GUI_RESOURCES
 )
 
 if(APPLE)
-    find_library(APPKIT_LIBRARY AppKit REQUIRED)
-    find_package(Qt5MacExtras REQUIRED)
-
     list(APPEND GUI_HDR
         macOS/QMPlay2MacExtensions.hpp
     )
@@ -192,9 +189,6 @@ if(WIN32)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
-
-    qt5_use_modules(${PROJECT_NAME} MacExtras)
-
     target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY})
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)

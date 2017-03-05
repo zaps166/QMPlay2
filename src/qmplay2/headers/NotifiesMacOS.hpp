@@ -18,25 +18,20 @@
 
 #pragma once
 
-#include <Notify.hpp>
+#include <Notifies.hpp>
 
-#include <QDateTime>
+#include <QList>
 
-class OrgFreedesktopNotificationsInterface;
-class QDBusPendingCallWatcher;
-
-class FreedesktopNotify : public QObject, public Notify
+class NotifiesMacOS : public Notifies
 {
-	Q_OBJECT
 public:
-	FreedesktopNotify(qint32 timeout);
-	~FreedesktopNotify();
+	NotifiesMacOS();
+	~NotifiesMacOS() final;
 
-	bool showMessage(const QString &summary, const QString &message, const QImage &image) override final;
-private slots:
-	void callFinished(QDBusPendingCallWatcher *watcher);
 private:
-	OrgFreedesktopNotificationsInterface *m_interface;
-	QDateTime m_lastNotificationTime;
-	quint32 m_notificationId;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId) override final;
+
+	void *m_notificationItem;
+	QList<void *> m_notifications;
 };

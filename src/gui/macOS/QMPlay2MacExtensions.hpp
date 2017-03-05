@@ -18,14 +18,7 @@
 
 #pragma once
 
-class QString;
-
 namespace QMPlay2MacExtensions
 {
-	void init();
-	void deinit();
-
 	void setApplicationVisible(bool visible);
-
-	void notify(const QString &title, const QString &msg, const int iconId, const int ms);
 }

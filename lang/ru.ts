@@ -773,13 +773,6 @@
     </message>
 </context>
 <context>
-    <name>FreedesktopNotify</name>
-    <message>
-        <source>Error sending notification</source>
-        <translation>Ошибка отправки уведомления</translation>
-    </message>
-</context>
-<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -922,6 +915,10 @@
     </message>
     <message>
         <source>Read and display still images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1548,10 +1545,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>Используйте CUVID только тогда, когда основным является NVIDIA GPU</translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation>Отключено</translation>
-    </message>
-    <message>
         <source>Infinite</source>
         <translation>Неограниченное</translation>
     </message>
@@ -1578,22 +1571,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Body</source>
         <translation>Тело</translation>
-    </message>
-    <message>
-        <source>Notification type</source>
-        <translation>Тип уведомления</translation>
-    </message>
-    <message>
-        <source>Show a native desktop notification</source>
-        <translation>Показывать экранное уведомление</translation>
-    </message>
-    <message>
-        <source>Show a popup from the system tray</source>
-        <translation>Показывать всплывающее окно в системном лотке</translation>
-    </message>
-    <message>
-        <source>General settings</source>
-        <translation>Общие настройки</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1641,6 +1618,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>XSPF support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

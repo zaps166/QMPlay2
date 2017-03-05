@@ -24,9 +24,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-134</y>
         <width>454</width>
-        <height>608</height>
+        <height>710</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -68,12 +68,39 @@
          </layout>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <widget class="QPushButton" name="setKeyBindingsB">
          <property name="text">
           <string>Set key bindings</string>
          </property>
         </widget>
+       </item>
+       <item row="11" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>3</number>
+         </property>
+         <property name="topMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="clearCoversCache">
+           <property name="text">
+            <string>Clear covers cache</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="resetSettingsB">
+           <property name="text">
+            <string>Reset settings</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item row="0" column="0" colspan="2">
         <layout class="QFormLayout" name="formLayout">
@@ -265,7 +292,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -330,7 +357,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="9">
+       <item row="1" column="1" rowspan="10">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -343,34 +370,7 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <property name="spacing">
-          <number>3</number>
-         </property>
-         <property name="topMargin">
-          <number>3</number>
-         </property>
-         <property name="bottomMargin">
-          <number>3</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="clearCoversCache">
-           <property name="text">
-            <string>Clear covers cache</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="resetSettingsB">
-           <property name="text">
-            <string>Reset settings</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="12" column="0" colspan="2">
+       <item row="13" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -387,6 +387,13 @@
         <widget class="QCheckBox" name="stillImages">
          <property name="text">
           <string>Read and display still images</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QCheckBox" name="trayNotifiesDefault">
+         <property name="text">
+          <string>Use tray notifications as default</string>
          </property>
         </widget>
        </item>
@@ -418,6 +425,7 @@
   <tabstop>displayOnlyFileName</tabstop>
   <tabstop>restoreRepeatMode</tabstop>
   <tabstop>stillImages</tabstop>
+  <tabstop>trayNotifiesDefault</tabstop>
   <tabstop>proxyB</tabstop>
   <tabstop>proxyLoginB</tabstop>
   <tabstop>proxyUserE</tabstop>

@@ -54,10 +54,8 @@ else()
 endif()
 
 if(APPLE)
-    set(DEFAULT_NOTIFIES OFF)
     set(DEFAULT_CUVID OFF)
 else()
-    set(DEFAULT_NOTIFIES ON)
     set(DEFAULT_CUVID ON)
 endif()
 
@@ -78,11 +76,15 @@ option(USE_JEMALLOC "Link to jemalloc" OFF)
 option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
 add_feature_info(Qt5 USE_QT5 "Build with Qt5")
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+    option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
+    add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
+endif()
+
 option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
 add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_SOUNDCLOUD "Build with SoundCloud support" ON)
 add_feature_info(SoundCloud USE_SOUNDCLOUD "Build with SoundCloud support")
-
 option(USE_ANIMEODCINKI "Build with AnimeOdcinki support" ON)
 add_feature_info(AnimeOdcinki USE_ANIMEODCINKI "Build with AnimeOdcinki support")
 
@@ -199,8 +201,8 @@ add_feature_info(XVideo USE_XVIDEO "Build with XVideo module")
 option(USE_CUVID "Build with CUVID module" ${DEFAULT_CUVID})
 add_feature_info(CUVID USE_CUVID "Build with CUVID module")
 
-option(USE_NOTIFIES "Build with Notifications support" ${DEFAULT_NOTIFIES})
-add_feature_info(Notifications USE_NOTIFIES "Build with Notifications support")
+option(USE_NOTIFY "Build additional notifications module" ON)
+add_feature_info(Notifications USE_NOTIFY "Build additional notifications module")
 
 if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
     if(APPLE)
@@ -322,6 +324,7 @@ else()
 endif()
 
 if(APPLE)
+    find_library(APPKIT_LIBRARY AppKit REQUIRED)
     set(SOLID_ACTIONS_DEFAULT "None")
     set(DEFAULT_INSTALL_RPATH ON)
 endif()

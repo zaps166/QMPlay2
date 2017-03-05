@@ -773,13 +773,6 @@
     </message>
 </context>
 <context>
-    <name>FreedesktopNotify</name>
-    <message>
-        <source>Error sending notification</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GME</name>
     <message>
         <source>System</source>
@@ -922,6 +915,10 @@
     </message>
     <message>
         <source>Read and display still images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1547,10 +1544,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Infinite</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1577,22 +1570,6 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Body</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notification type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show a native desktop notification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show a popup from the system tray</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>General settings</source>
-        <translation type="unfinished">Réglages généraux</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1640,6 +1617,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>XSPF support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

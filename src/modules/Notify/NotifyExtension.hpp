@@ -20,14 +20,14 @@
 
 #include <QMPlay2Extensions.hpp>
 
-class Notify;
-
 class NotifyService : public QObject
 {
 	Q_OBJECT
+
 public:
-	NotifyService(Notify *notify, bool useImages, Settings &settings);
+	NotifyService(Settings &settings);
 	~NotifyService() final;
+
 private slots:
 	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
 	void coverDataFromMediaFile(const QByteArray &cover);
@@ -35,11 +35,11 @@ private slots:
 
 	void playStateChanged(const QString &playState);
 	void volumeChanged(double v);
-private:
-	Notify *m_notify;
 
+private:
 	QString m_summaryFormat, m_bodyFormat, m_lastPlayState;
 	QByteArray m_cover;
+	qint32 m_timeout;
 };
 
 /**/
@@ -49,10 +49,11 @@ class NotifyExtension : public QMPlay2Extensions
 public:
 	NotifyExtension(Module &module);
 	~NotifyExtension();
+
 private:
 	bool set() override final;
 
-	NotifyService *m_notifyService;
+	QScopedPointer<NotifyService> m_notifyService;
 };
 
-#define NotifyExtensionName "Notify"
+#define NotifyExtensionName "Aditional Notifications"
