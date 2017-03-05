@@ -115,6 +115,10 @@ pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
 pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
 
+if(WIN32 AND USE_PORTABLE)
+    add_definitions(-DQMPLAY2_PORTABLE)
+endif()
+
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
     pkg_check_modules(LIBASS libass REQUIRED)
