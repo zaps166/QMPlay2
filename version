@@ -1,2 +1,2 @@
 #!/bin/sh
-grep QMPlay2Version "$(dirname "$0")"/src/qmplay2/headers/Version.hpp | cut -c25-32 | grep "\."
+grep QMPlay2Version "$(dirname "$0")"/src/qmplay2/Version.cpp | cut -c25-32 | grep "\."

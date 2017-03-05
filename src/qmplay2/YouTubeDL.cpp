@@ -175,7 +175,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	const bool useQMPlay2UserAgent = url.contains("vidfile.net/");
 
 	if (useQMPlay2UserAgent)
-		commonArgs += {"--user-agent", QMPlay2UserAgent};
+		commonArgs += {"--user-agent", Version::userAgent()};
 
 	const char *httpProxy = getenv("http_proxy");
 	if (httpProxy && *httpProxy)

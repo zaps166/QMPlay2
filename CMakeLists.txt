@@ -232,9 +232,6 @@ if(USE_GIT_VERSION)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         OUTPUT_VARIABLE QMPLAY2_GIT_HEAD
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(QMPLAY2_GIT_HEAD)
-        add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
-    endif()
 endif()
 add_feature_info("Git version" QMPLAY2_GIT_HEAD "Append Git HEAD to QMPlay2 version")
 

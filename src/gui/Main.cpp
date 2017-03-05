@@ -247,7 +247,7 @@ static void showHelp()
 {
 	QFile f;
 	f.open(stdout, QFile::WriteOnly);
-	f.write("QMPlay2 - Qt Media Player 2 (" QMPlay2Version ")\n");
+	f.write("QMPlay2 - Qt Media Player 2 (" + Version::get() + ")\n");
 	f.write(QObject::tr(
 "  Parameters list:\n"
 "    -open         \"address\"\n"
@@ -553,8 +553,8 @@ int main(int argc, char *argv[])
 		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath, qmplay2Gui.cmdLineProfile);
 
 		Settings &settings = QMPlay2Core.getSettings();
-		QString lastVer = settings.getString("Version", QMPlay2Version);
-		settings.set("Version", QMPlay2Version);
+		QByteArray lastVer = settings.getByteArray("Version", Version::get());
+		settings.set("Version", Version::get());
 		settings.set("LastQMPlay2Path", QCoreApplication::applicationDirPath());
 
 		if (Functions::parseVersion(lastVer) < QDate(2015, 10, 9))
@@ -611,9 +611,9 @@ int main(int argc, char *argv[])
 		if (UpdateFile.startsWith("remove:"))
 		{
 			UpdateFile.remove(0, 7);
-			if (lastVer != QMPlay2Version)
+			if (lastVer != Version::get())
 			{
-				const QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + QMPlay2Version;
+				const QString updateString = QObject::tr("QMPlay2 has been updated to version") + " " + Version::get();
 				QMPlay2Core.logInfo(updateString);
 				QMessageBox::information(nullptr, QCoreApplication::applicationName(), updateString);
 				settings.remove("UpdateVersion");

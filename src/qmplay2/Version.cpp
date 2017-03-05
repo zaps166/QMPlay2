@@ -16,12 +16,23 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <Version.hpp>
 
-#include <QByteArray>
+#ifndef QMPlay2GitHEAD
+	#define QMPlay2GitHEAD
+#endif
+#ifdef QMPLAY2_PORTABLE
+	#define QMPlay2PortableInfo "-portable"
+#else
+	#define QMPlay2PortableInfo
+#endif
+#define QMPlay2Version "17.03.04" QMPlay2GitHEAD QMPlay2PortableInfo
 
-namespace Version
+QByteArray Version::get()
 {
-	QByteArray get();
-	QByteArray userAgent();
+	return QMPlay2Version;
+}
+QByteArray Version::userAgent()
+{
+	return "QMPlay2/" QMPlay2Version;
 }

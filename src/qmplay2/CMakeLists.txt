@@ -98,6 +98,7 @@ set(QMPLAY2_SRC
     PacketBuffer.cpp
     Buffer.cpp
     NetworkAccess.cpp
+    Version.cpp
     Json11.cpp
     YouTubeDL.cpp
     Notifies.cpp
@@ -108,6 +109,10 @@ if(WIN32)
     list(APPEND QMPLAY2_SRC IPC_Windows.cpp)
 else()
     list(APPEND QMPLAY2_SRC IPC_Unix.cpp)
+endif()
+
+if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
+    add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
 endif()
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
