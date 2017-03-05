@@ -1180,9 +1180,9 @@ void PlaylistWidget::modifyMenu()
 	playlistMenu()->quickSync->setVisible(syncVisible && QFileInfo(QString(entryUrl).remove("file://")).isDir());
 	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
-	playlistMenu()->queue->setVisible(currItem);
-	playlistMenu()->skip->setVisible(currItem);
-	playlistMenu()->stopAfter->setVisible(currItem);
+	playlistMenu()->queue->setVisible(currItem && !isItemGroup);
+	playlistMenu()->skip->setVisible(currItem && !isItemGroup);
+	playlistMenu()->stopAfter->setVisible(currItem && !isItemGroup);
 	playlistMenu()->goToPlayback->setVisible(currentPlaying);
 	playlistMenu()->copy->setVisible(selectedItems().count());
 
