@@ -35,8 +35,10 @@ HEADERS += headers/QMPlay2Core.hpp headers/Functions.hpp headers/Settings.hpp he
 SOURCES +=         QMPlay2Core.cpp         Functions.cpp         Settings.cpp         Module.cpp         ModuleParams.cpp         ModuleCommon.cpp         Playlist.cpp         Reader.cpp         Demuxer.cpp         Decoder.cpp         VideoFilters.cpp         VideoFilter.cpp         DeintFilter.cpp         AudioFilter.cpp         Writer.cpp         QMPlay2Extensions.cpp         LineEdit.cpp         Slider.cpp         QMPlay2OSD.cpp         InDockW.cpp         LibASS.cpp         ColorButton.cpp         ImgScaler.cpp         SndResampler.cpp         VideoWriter.cpp         SubsDec.cpp                                                                        VideoFrame.cpp         StreamInfo.cpp         DockWidget.cpp                                                                 PacketBuffer.cpp         Buffer.cpp         NetworkAccess.cpp         Json11.cpp         YouTubeDL.cpp         Notifies.cpp         NotifiesTray.cpp         Version.cpp
 
 unix:!android {
+	QT += dbus
+	DBUS_INTERFACES += org.freedesktop.Notifications.xml
 	HEADERS += headers/NotifiesFreedesktop.hpp
-	SOURCES += NotifiesFreedesktop.cpp
+	SOURCES +=         NotifiesFreedesktop.cpp
 }
 
 win32: SOURCES += IPC_Windows.cpp
