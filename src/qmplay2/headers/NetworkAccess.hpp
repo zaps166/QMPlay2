@@ -59,6 +59,8 @@ public:
 	Q_ENUM(Wait)
 #endif
 
+	~NetworkReply() final;
+
 	QString url() const;
 
 	void abort() override final;
@@ -78,7 +80,6 @@ signals:
 
 private:
 	NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const QByteArray &userAgent, const int maxSize);
-	~NetworkReply();
 
 	NetworkReplyPriv *m_priv;
 };
