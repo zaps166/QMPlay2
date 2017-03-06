@@ -76,7 +76,7 @@ option(USE_JEMALLOC "Link to jemalloc" OFF)
 option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
 add_feature_info(Qt5 USE_QT5 "Build with Qt5")
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+if(NOT WIN32 AND NOT APPLE)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 endif()
