@@ -31,6 +31,7 @@ build/
 app/
 
 # Other files
+notifications_interface.*
 qdbusxml2cpp_wrapper.sh
 object_script.*
 uic_wrapper.sh
