@@ -40,3 +40,34 @@ private:
 
 	QMap<int, bool> m_refs;
 };
+
+/* Inline implementation */
+
+inline bool ScreenSaver::inhibitHelper(int context)
+{
+	if (!m_refs.value(context))
+	{
+		m_refs[context] = true;
+		for (auto it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		{
+			if (it.value() && it.key() != context)
+				return false;
+		}
+		return true;
+	}
+	return false;
+}
+inline bool ScreenSaver::unInhibitHelper(int context)
+{
+	if (m_refs.value(context))
+	{
+		m_refs[context] = false;
+		for (auto it = m_refs.constBegin(), itEnd = m_refs.constEnd(); it != itEnd; ++it)
+		{
+			if (it.value())
+				return false;
+		}
+		return true;
+	}
+	return false;
+}

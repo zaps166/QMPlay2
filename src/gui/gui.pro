@@ -29,7 +29,7 @@ INCLUDEPATH += . ../qmplay2/headers
 DEPENDPATH  += . ../qmplay2/headers
 
 HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoAdjustment.hpp Appearance.hpp VolWidget.hpp ScreenSaver.hpp ShortcutHandler.hpp KeyBindingsDialog.hpp RepeatMode.hpp
-SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoAdjustment.cpp Appearance.cpp VolWidget.cpp ScreenSaver.cpp ShortcutHandler.cpp KeyBindingsDialog.cpp
+SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoAdjustment.cpp Appearance.cpp VolWidget.cpp                 ShortcutHandler.cpp KeyBindingsDialog.cpp
 FORMS += Ui/SettingsGeneral.ui Ui/SettingsPlayback.ui Ui/SettingsPlaybackModulesList.ui Ui/OSDSettings.ui
 
 !android {
@@ -43,9 +43,13 @@ win32 {
 	HEADERS += Updater.hpp
 	SOURCES += Updater.cpp
 
+	SOURCES += Windows/ScreenSaver.cpp
+
 	DEFINES += TAGLIB_STATIC TAGLIB_FULL_INCLUDE_PATH
 	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
 }
 else {
 	!android: PKGCONFIG += taglib
+
+	SOURCES += Unix/ScreenSaver.cpp
 }

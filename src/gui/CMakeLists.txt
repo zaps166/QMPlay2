@@ -65,7 +65,6 @@ set(GUI_SRC
     VideoAdjustment.cpp
     Appearance.cpp
     VolWidget.cpp
-    ScreenSaver.cpp
     ShortcutHandler.cpp
     KeyBindingsDialog.cpp
 )
@@ -130,6 +129,9 @@ if(WIN32)
     add_definitions(-DUPDATER)
     list(APPEND GUI_HDR Updater.hpp)
     list(APPEND GUI_SRC Updater.cpp)
+
+    # screen saver
+    list(APPEND GUI_SRC Windows/ScreenSaver.cpp)
 elseif(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
@@ -145,6 +147,12 @@ elseif(APPLE)
 
     set(ICNS_PLAYLIST_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2List.icns")
     set_source_files_properties(${ICNS_PLAYLIST_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+    # screen saver
+    list(APPEND GUI_SRC macOS/ScreenSaver.cpp)
+else()
+    # screen saver
+    list(APPEND GUI_SRC Unix/ScreenSaver.cpp)
 endif()
 
 # RPATH
@@ -189,7 +197,7 @@ if(WIN32)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
-    target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY} ${IOKIT_LIBRARY})
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)

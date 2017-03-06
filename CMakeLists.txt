@@ -322,6 +322,7 @@ endif()
 
 if(APPLE)
     find_library(APPKIT_LIBRARY AppKit REQUIRED)
+    find_library(IOKIT_LIBRARY IoKit REQUIRED)
     set(SOLID_ACTIONS_DEFAULT "None")
     set(DEFAULT_INSTALL_RPATH ON)
 endif()
