@@ -35,7 +35,7 @@ static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeO
 {
 	AnimeOdcinki::AnimePairList animePairList;
 
-	int idx1, idx2;
+	int idx1 = 0, idx2 = 0;
 
 	const auto getRange = [&idx1, &idx2](const QByteArray &data, const QVector<QByteArray> &args) {
 		const QByteArray first = args.value(0);
@@ -57,7 +57,6 @@ static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeO
 		return true;
 	};
 
-	idx1 = 0;
 	if (episodeImgDescr)
 	{
 		if (!getRange(data, {"<ul>", "</ul>", "view-id-lista_odcink_w view-display-id-block"}))
