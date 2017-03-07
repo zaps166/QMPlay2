@@ -2677,6 +2677,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Default</source>
         <translation>Domyślny</translation>
     </message>
+    <message>
+        <source>Automatically check for updates</source>
+        <translation>Automatycznie sprawdzaj dostępność aktualizacji</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
@@ -2899,6 +2903,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>This auto-update is ignored, press the button to update</source>
         <translation>Ta aktualizacja jest ignorowana, kliknij przycisk, aby zaktualizaować</translation>
+    </message>
+    <message>
+        <source>Update is available for QMPlay2!</source>
+        <translation>Aktualizacja QMPlay2 jest dostępna!</translation>
+    </message>
+    <message>
+        <source>New QMPlay2 version: %1</source>
+        <translation>Nowa wersja QMPlay2: %1</translation>
     </message>
 </context>
 <context>

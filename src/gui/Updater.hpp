@@ -16,46 +16,68 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UPDATER_HPP
-#define UPDATER_HPP
+#pragma once
 
 #include <NetworkAccess.hpp>
 
-#include <QDialog>
 #include <QFile>
 
-class QUrl;
-class QLabel;
-class QProgressBar;
-class QPushButton;
+#ifdef UPDATER
+	#include <QDialog>
 
-class Updater : public QDialog
+	class QProgressBar;
+	class QPushButton;
+	class QLabel;
+#endif
+
+class Updater : public
+#ifdef UPDATER
+	QDialog
+#else
+	QObject
+#endif
 {
 	Q_OBJECT
+
 public:
-	Updater(QWidget *);
+#ifdef UPDATER
+	Updater(QWidget *parent);
+#else
+	Updater(QObject *parent);
+#endif
 	~Updater();
 
+#ifdef UPDATER
 	bool downloading() const;
+#endif
+
 public slots:
 	void downloadUpdate();
+
 private slots:
 	void infoFinished();
+#ifdef UPDATER
 	void writeToFile();
 	void downloadprogress(int bytesReceived, int bytesTotal);
 	void downloadFinished();
 
 	void applyUpdate();
+#endif
+
 private:
+#ifdef UPDATER
 	NetworkReply *getFile(const QString &url);
 	void endWork(const QString &str);
+#endif
 
-	QFile infoFile, updateFile;
 	NetworkAccess net;
+	QFile infoFile;
+	bool busy;
+#ifdef UPDATER
+	bool firstChunk;
+	QFile updateFile;
 	QLabel *infoL;
 	QProgressBar *progressB;
 	QPushButton *downloadUpdateB, *installB;
-	bool busy, firstChunk;
+#endif
 };
-
-#endif //UPDATER_HPP

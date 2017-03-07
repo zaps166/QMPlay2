@@ -149,10 +149,8 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("BlurCovers", true);
 	QMPSettings.init("ShowDirCovers", true);
 	QMPSettings.init("AutoOpenVideoWindow", true);
-#ifdef UPDATER
 	if (!QMPSettings.contains("AutoUpdates"))
 		QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
-#endif
 	QMPSettings.init("MainWidget/TabPositionNorth", false);
 	QMPSettings.init("AllowOnlyOneInstance", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
@@ -350,11 +348,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
 		page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
 
-#ifdef UPDATER
 		page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
-#else
-		delete page1->autoUpdatesB;
-		page1->autoUpdatesB = nullptr;
+#ifndef UPDATER
+		page1->autoUpdatesB->setText(tr("Automatically check for updates"));
 #endif
 
 		if (Notifies::hasBoth())
@@ -740,9 +736,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("BlurCovers", page1->blurCoversB->isChecked());
 			QMPSettings.set("ShowDirCovers", page1->showDirCoversB->isChecked());
 			QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
-#ifdef UPDATER
 			QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());
-#endif
 			QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
 			QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());

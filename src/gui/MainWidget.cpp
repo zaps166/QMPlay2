@@ -116,9 +116,7 @@ static bool focusChangedHelper(QWidget *w)
 
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
-#ifdef UPDATER
 	: updater(this)
-#endif
 {
 	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
@@ -415,10 +413,8 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	connect(&fileOpenTimer, &QTimer::timeout, this, &MainWidget::fileOpenTimerTimeout);
 #endif
 
-#ifdef UPDATER
 	if (settings.getBool("AutoUpdates"))
 		updater.downloadUpdate();
-#endif
 }
 MainWidget::~MainWidget()
 {

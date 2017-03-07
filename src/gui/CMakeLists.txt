@@ -39,6 +39,7 @@ set(GUI_HDR
     ScreenSaver.hpp
     ShortcutHandler.hpp
     KeyBindingsDialog.hpp
+    Updater.hpp
 )
 
 set(GUI_SRC
@@ -67,6 +68,7 @@ set(GUI_SRC
     VolWidget.cpp
     ShortcutHandler.cpp
     KeyBindingsDialog.cpp
+    Updater.cpp
 )
 
 set(GUI_FORMS # *.ui files
@@ -127,8 +129,6 @@ if(WIN32)
 
     # updater
     add_definitions(-DUPDATER)
-    list(APPEND GUI_HDR Updater.hpp)
-    list(APPEND GUI_SRC Updater.cpp)
 
     # screen saver
     list(APPEND GUI_SRC Windows/ScreenSaver.cpp)

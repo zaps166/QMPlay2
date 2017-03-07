@@ -20,25 +20,36 @@
 
 #include <Functions.hpp>
 #include <Settings.hpp>
-#include <Version.hpp>
-#include <Main.hpp>
-#include <CPU.hpp>
+#ifndef UPDATER
+	#include <Notifies.hpp>
 
-#include <QProgressBar>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QSettings>
-#include <QLabel>
+	#define endWork(no_Op)
+#else
+	#include <Main.hpp>
+
+	#include <QProgressBar>
+	#include <QPushButton>
+	#include <QVBoxLayout>
+	#include <QLabel>
+#endif
+#include <QCoreApplication>
 #include <QDir>
 
+#ifdef UPDATER
 Updater::Updater(QWidget *parent) :
 	QDialog(parent),
+#else
+Updater::Updater(QObject *parent) :
+	QObject(parent),
+#endif
 	net(this),
 	busy(false)
 {
-	setWindowTitle(tr("QMPlay2 updates"));
-	infoFile.setFileName(QDir::tempPath() + "/QMPlay2UpdaterURLs." + QString::number(qrand()));
+	infoFile.setFileName(QString("%1/%2.%3.%4").arg(QDir::tempPath(), "QMPlay2UpdaterURLs").arg(QCoreApplication::applicationPid()));
+#ifdef UPDATER
 	updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer.exe");
+
+	setWindowTitle(tr("QMPlay2 updates"));
 
 	infoL = new QLabel(windowTitle());
 	progressB = new QProgressBar;
@@ -58,35 +69,43 @@ Updater::Updater(QWidget *parent) :
 	installB->hide();
 
 	resize(350, 0);
+#endif
 }
 Updater::~Updater()
 {
 	if (busy)
 	{
 		infoFile.remove();
+#ifdef UPDATER
 		updateFile.remove();
+#endif
 	}
 }
 
+#ifdef UPDATER
 bool Updater::downloading() const
 {
 	return busy && updateFile.isOpen() && updateFile.size() > 0;
 }
+#endif
 
 void Updater::downloadUpdate()
 {
 	if (!busy && infoFile.open(QFile::WriteOnly | QFile::Truncate))
 	{
+#ifdef UPDATER
 		if (sender() == downloadUpdateB)
 			QMPlay2Core.getSettings().remove("UpdateVersion");
-
-		NetworkReply *reply = net.start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater");
-		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
 
 		infoL->setText(tr("Checking for updates"));
 		progressB->setRange(0, 0);
 		downloadUpdateB->hide();
 		progressB->show();
+#endif
+
+		NetworkReply *reply = net.start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Updater");
+		connect(reply, SIGNAL(finished()), this, SLOT(infoFinished()));
+
 		busy = true;
 	}
 }
@@ -122,10 +141,18 @@ void Updater::infoFinished()
 					QString FileURL = info.value(QString("Win%1").arg(sizeof(void *) << 3)).toString();
 					if (FileURL.isEmpty())
 						endWork(tr("No update available"));
+#ifdef UPDATER
 					else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
 						getFile(FileURL.replace("$Version", NewVersion))->setProperty("UpdateVersion", NewVersion);
 					else
 						endWork(tr("Error creating update file"));
+#else
+					else
+					{
+						Notifies::notify(tr("Update is available for QMPlay2!"), tr("New QMPlay2 version: %1").arg(NewVersion), 0, 1);
+						settings.set("UpdateVersion", NewVersion);
+					}
+#endif
 				}
 				else
 					endWork(tr("This auto-update is ignored, press the button to update"));
@@ -141,6 +168,7 @@ void Updater::infoFinished()
 	infoFile.remove();
 	reply->deleteLater();
 }
+#ifdef UPDATER
 void Updater::writeToFile()
 {
 	NetworkReply *reply = (NetworkReply *)sender();
@@ -203,3 +231,4 @@ void Updater::endWork(const QString &str)
 	downloadUpdateB->show();
 	busy = false;
 }
+#endif

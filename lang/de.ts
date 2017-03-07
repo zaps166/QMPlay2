@@ -2677,6 +2677,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Default</source>
         <translation type="unfinished">Standard</translation>
     </message>
+    <message>
+        <source>Automatically check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
@@ -2899,6 +2903,14 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>This auto-update is ignored, press the button to update</source>
         <translation>Dieses Auto-Update wird ignoriert, drücken Sie die Taste zum Aktualisieren</translation>
+    </message>
+    <message>
+        <source>Update is available for QMPlay2!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New QMPlay2 version: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

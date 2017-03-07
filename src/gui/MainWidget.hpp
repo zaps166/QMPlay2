@@ -22,9 +22,7 @@
 #include <QSystemTrayIcon>
 
 #include <PlayClass.hpp>
-#ifdef UPDATER
-	#include <Updater.hpp>
-#endif
+#include <Updater.hpp>
 
 class QFrame;
 class QLabel;
@@ -177,7 +175,5 @@ private:
 #endif
 	QAction *lockWidgetsAct;
 
-#ifdef UPDATER
 	Updater updater;
-#endif
 };
