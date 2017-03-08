@@ -1,0 +1,3 @@
+#!/bin/sh
+
+lupdate-qt4 -no-obsolete -locations none QMPlay2.pro
