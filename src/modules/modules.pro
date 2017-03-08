@@ -21,7 +21,5 @@ unix:!android {
 	else: message("PulseAudio will not be compiled, because libpulse-simple doesn't exist")
 }
 
-win32: SUBDIRS += FileAssociation DirectX
-
-win32|packagesExist(libsidplayfp)|packagesExist(libgme): SUBDIRS += Chiptune
+packagesExist(libsidplayfp)|packagesExist(libgme): SUBDIRS += Chiptune
 else: message("Chiptune will not be compiled, because libsidplayfp and libgme don't exist")

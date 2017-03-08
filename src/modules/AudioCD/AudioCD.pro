@@ -1,23 +1,13 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
 
-win32: LIBS += -Wl,-Bstatic -lcdio -lcddb -lregex -Wl,-Bdynamic -lwinmm -lws2_32
-else {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += libcdio libcddb
-}
+CONFIG += link_pkgconfig
+PKGCONFIG += libcdio libcddb
 LIBS += -lqmplay2
 
 OBJECTS_DIR = build/obj

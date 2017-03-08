@@ -1,9 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
 TARGET = OpenSL_ES #OpenSLES conflicts with system library
 

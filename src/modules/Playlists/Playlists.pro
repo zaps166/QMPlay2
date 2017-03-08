@@ -1,17 +1,11 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
+
 LIBS += -lqmplay2
 
 OBJECTS_DIR = build/obj

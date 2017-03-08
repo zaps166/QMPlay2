@@ -1,20 +1,13 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	!lessThan(QT_VERSION, 5.6.0):android: DEFINES += USE_OPENGL
-	QT += widgets
-}
+!lessThan(QT_VERSION, 5.6.0):android: DEFINES += USE_OPENGL
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
 
-win32|android: LIBS += -lavcodec -lavutil
+android: LIBS += -lavcodec -lavutil
 else {
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavcodec libavutil

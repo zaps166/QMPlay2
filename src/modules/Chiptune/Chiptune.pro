@@ -1,43 +1,32 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
 
-win32 {
-	LIBS += -Wl,-Bstatic -lgme -lsidplayfp -Wl,-Bdynamic -lz
-	DEFINES += USE_GME USE_SIDPLAY
+CONFIG += link_pkgconfig
+packagesExist(libgme) {
+	PKGCONFIG += libgme
+	DEFINES += USE_GME
 } else {
-	CONFIG += link_pkgconfig
-	packagesExist(libgme) {
-		PKGCONFIG += libgme
+	#Some distributions (e.g. Ubuntu) doesn't provide pkg-config for libgme
+	exists("/usr/include/gme") {
+		LIBS += -lgme
 		DEFINES += USE_GME
-	} else {
-		#Some distributions (e.g. Ubuntu) doesn't provide pkg-config for libgme
-		exists("/usr/include/gme") {
-			LIBS += -lgme
-			DEFINES += USE_GME
-		}
-		else {
-			message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
-		}
 	}
-	packagesExist(libsidplayfp) {
-		PKGCONFIG += libsidplayfp
-		DEFINES += USE_SIDPLAY
-	} else {
-		message("SID will not be compiled, because libsidplayfp doesn't exist")
+	else {
+		message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
 	}
 }
+packagesExist(libsidplayfp) {
+	PKGCONFIG += libsidplayfp
+	DEFINES += USE_SIDPLAY
+} else {
+	message("SID will not be compiled, because libsidplayfp doesn't exist")
+}
+
 LIBS += -lqmplay2
 
 OBJECTS_DIR = build/obj

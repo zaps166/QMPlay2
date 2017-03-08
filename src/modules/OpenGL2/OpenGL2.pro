@@ -1,17 +1,11 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
+
 LIBS += -lqmplay2
 
 RCC_DIR = build/rcc
@@ -35,7 +29,7 @@ equals(QT_VERSION, 5.6.0)|greaterThan(QT_VERSION, 5.6.0) {
 	DEFINES += DONT_RECREATE_SHADERS
 	HEADERS += OpenGL2OldWidget.hpp
 	SOURCES += OpenGL2OldWidget.cpp
-	win32|unix:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
+	unix:!android:!contains(QT_CONFIG, opengles2): DEFINES += VSYNC_SETTINGS
 }
 
 contains(QT_CONFIG, opengles2): DEFINES += OPENGL_ES2

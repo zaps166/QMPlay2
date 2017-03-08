@@ -1,20 +1,12 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
-win32 {
-	DESTDIR = ../../../app/modules
-	QMAKE_LIBDIR += ../../../app
-} else {
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
-}
+DESTDIR = ../../../app/lib/qmplay2/modules
+QMAKE_LIBDIR += ../../../app/lib
 
-win32: LIBS += -lws2_32
-win32|android: LIBS += -lavformat -lavcodec -lswscale -lavutil
+android: LIBS += -lavformat -lavcodec -lswscale -lavutil
 else {
 	CONFIG += link_pkgconfig
 	PKGCONFIG += libavformat libavcodec libswscale libavutil
@@ -57,17 +49,4 @@ unix:!android {
 #VDPAU without its own video output (decoded video will be copied to system RAM, can be slow)
 	HEADERS   += FFDecVDPAU_NW.hpp
 	SOURCES   += FFDecVDPAU_NW.cpp
-}
-
-win32 {
-#Common HWAccel
-	HEADERS   += FFDecHWAccel.hpp HWAccelHelper.hpp
-	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
-
-#DXVA2
-	HEADERS   += FFDecDXVA2.hpp
-	SOURCES   += FFDecDXVA2.cpp
-	DEFINES   += QMPlay2_DXVA2
-
-	LIBS      += -lole32
 }

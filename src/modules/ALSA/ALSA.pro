@@ -1,9 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin link_pkgconfig
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
 DESTDIR = ../../../app/lib/qmplay2/modules
 

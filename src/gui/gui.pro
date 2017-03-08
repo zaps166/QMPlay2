@@ -1,24 +1,16 @@
 TEMPLATE = app
-!win32: CONFIG += link_pkgconfig
+CONFIG += link_pkgconfig
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets
 
 TARGET = QMPlay2
 
-win32 {
-	QMAKE_LIBDIR += ../../app
-	DESTDIR = ../../app
-} else {
-	QMAKE_LIBDIR += ../../app/lib
-	DESTDIR = ../../app/bin
-	!android: LIBS += -lrt #For glibc < 2.17
-}
+QMAKE_LIBDIR += ../../app/lib
+DESTDIR = ../../app/bin
+!android: LIBS += -lrt #For glibc < 2.17
 LIBS += -lqmplay2
 
 RESOURCES += resources.qrc
-win32: RC_FILE = Windows/icons.rc
 
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
@@ -28,8 +20,8 @@ UI_DIR = build/ui
 INCLUDEPATH += . ../qmplay2/headers
 DEPENDPATH  += . ../qmplay2/headers
 
-HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoAdjustment.hpp Appearance.hpp VolWidget.hpp Updater.hpp ShortcutHandler.hpp KeyBindingsDialog.hpp RepeatMode.hpp ScreenSaver.hpp
-SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoAdjustment.cpp Appearance.cpp VolWidget.cpp Updater.cpp ShortcutHandler.cpp KeyBindingsDialog.cpp
+HEADERS += Main.hpp MenuBar.hpp MainWidget.hpp AddressBox.hpp VideoDock.hpp InfoDock.hpp PlaylistDock.hpp PlayClass.hpp DemuxerThr.hpp AVThread.hpp VideoThr.hpp AudioThr.hpp SettingsWidget.hpp OSDSettingsW.hpp DeintSettingsW.hpp OtherVFiltersW.hpp PlaylistWidget.hpp EntryProperties.hpp AboutWidget.hpp AddressDialog.hpp VideoAdjustment.hpp Appearance.hpp VolWidget.hpp Updater.hpp ShortcutHandler.hpp KeyBindingsDialog.hpp      ScreenSaver.hpp RepeatMode.hpp
+SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp InfoDock.cpp PlaylistDock.cpp PlayClass.cpp DemuxerThr.cpp AVThread.cpp VideoThr.cpp AudioThr.cpp SettingsWidget.cpp OSDSettingsW.cpp DeintSettingsW.cpp OtherVFiltersW.cpp PlaylistWidget.cpp EntryProperties.cpp AboutWidget.cpp AddressDialog.cpp VideoAdjustment.cpp Appearance.cpp VolWidget.cpp Updater.cpp ShortcutHandler.cpp KeyBindingsDialog.cpp Unix/ScreenSaver.cpp
 FORMS += Ui/SettingsGeneral.ui Ui/SettingsPlayback.ui Ui/SettingsPlaybackModulesList.ui Ui/OSDSettings.ui
 
 !android {
@@ -38,14 +30,4 @@ FORMS += Ui/SettingsGeneral.ui Ui/SettingsPlayback.ui Ui/SettingsPlaybackModules
 	SOURCES += TagEditor.cpp
 }
 
-win32 {
-	SOURCES += Windows/ScreenSaver.cpp
-
-	DEFINES += UPDATER TAGLIB_STATIC TAGLIB_FULL_INCLUDE_PATH
-	LIBS += -Wl,-Bstatic -ltag -Wl,-Bdynamic -lz
-}
-else {
-	!android: PKGCONFIG += taglib
-
-	SOURCES += Unix/ScreenSaver.cpp
-}
+!android: PKGCONFIG += taglib
