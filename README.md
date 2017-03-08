@@ -365,14 +365,17 @@ $ sudo make uninstall
 
 ####Windows (cross-compilation):
 
-- Install all required MinGW packages (I recommend Arch Linux unofficial MinGW repository).
-- Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you must built them on your own.
+- Install all required MinGW packages (I recommend AUR MinGW packages).
+- Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you should built them on your own.
 - Run `cmake` from cross-compilation toolchain.
 
 #####Other information for Windows
 
-- You can also compile it on Windows, but you must build toolchain for your own!
-- I'm using my own PKGBUILDs for many MinGW libraries.
+- You can compile QMPlay2 on Windows host, but you must prepare toolchain for your own (also with CMake advanced options for libraries and paths):
+ - `CMAKE_LIBRARY_PATH` - where to find QMPlay2 dependency libraries,
+ - `CMAKE_INCLUDE_PATH`- where to find QMPlay2 dependency includes,
+ - `CUSTOM_*_LIBRARIES` - additional custom libraries for linker (useful for static linking),
+- I use my own PKGBUILDs for many MinGW libraries.
 - Visual Studio can't compile QMPlay2.
 
 ##Building package RPM, DEB or any other
