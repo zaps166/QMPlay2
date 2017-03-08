@@ -36,7 +36,7 @@ class DownloadItemW : public QWidget
 	Q_OBJECT
 public:
 	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = nullptr);
-	~DownloadItemW();
+	~DownloadItemW() final;
 
 	void setName(const QString &);
 	void setSizeAndFilePath(qint64, const QString &);

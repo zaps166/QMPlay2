@@ -46,7 +46,7 @@ private:
 		QByteArray bitmap;
 	};
 
-	~FFDecSW();
+	~FFDecSW() final;
 
 	bool set() override final;
 

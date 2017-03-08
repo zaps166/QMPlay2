@@ -44,7 +44,7 @@ public:
 	static bool canCreateInstance();
 
 	CuvidDec(Module &module);
-	~CuvidDec();
+	~CuvidDec() final;
 
 	bool set() override final;
 

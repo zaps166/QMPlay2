@@ -75,7 +75,7 @@ public:
 	QString newProfileName, cmdLineProfile;
 private:
 	QMPlay2GUIClass();
-	~QMPlay2GUIClass();
+	~QMPlay2GUIClass() final;
 
 	void deleteIcons();
 };

@@ -28,7 +28,7 @@ class VideoAdjustment : public QWidget
 	Q_OBJECT
 public:
 	VideoAdjustment();
-	~VideoAdjustment();
+	~VideoAdjustment() final;
 
 	void restoreValues();
 	void saveValues();

@@ -30,7 +30,7 @@ class Cuvid : public Module
 
 public:
 	Cuvid();
-	~Cuvid();
+	~Cuvid() final;
 
 private:
 	QList<Info> getModulesInfo(const bool showDisabled) const override final;

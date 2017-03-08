@@ -30,7 +30,7 @@ class OpenGL2Writer : public VideoWriter
 public:
 	OpenGL2Writer(Module &);
 private:
-	~OpenGL2Writer();
+	~OpenGL2Writer() final;
 
 	bool set() override final;
 

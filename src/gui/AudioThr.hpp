@@ -33,7 +33,7 @@ class AudioThr : public AVThread
 	Q_OBJECT
 public:
 	AudioThr(PlayClass &, const QStringList &pluginsName = {});
-	~AudioThr();
+	~AudioThr() final;
 
 	void stop(bool terminate = false) override final;
 	void clearVisualizations();

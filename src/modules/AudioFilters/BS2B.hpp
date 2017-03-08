@@ -26,7 +26,7 @@ class BS2B : public AudioFilter
 {
 public:
 	BS2B(Module &module);
-	~BS2B();
+	~BS2B() final;
 
 	bool set() override final;
 private:

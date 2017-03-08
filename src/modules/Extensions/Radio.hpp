@@ -34,7 +34,7 @@ class Radio : public QWidget, public QMPlay2Extensions
 	Q_OBJECT
 public:
 	Radio(Module &);
-	~Radio();
+	~Radio() final;
 
 	DockWidget *getDockWidget() override final;
 private slots:

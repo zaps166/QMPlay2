@@ -46,7 +46,7 @@ private:
 
 	/**/
 
-	~FFReader();
+	~FFReader() final;
 
 	AVIOContext *avioCtx;
 	bool paused, canRead;

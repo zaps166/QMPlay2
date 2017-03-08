@@ -47,7 +47,7 @@ class PlayClass : public QObject
 	friend class AudioThr;
 public:
 	PlayClass();
-	~PlayClass();
+	~PlayClass() final;
 
 	Q_SLOT void play(const QString &);
 	Q_SLOT void stop(bool quitApp = false);

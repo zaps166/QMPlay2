@@ -28,7 +28,7 @@ class FFDemux : public Demuxer
 public:
 	FFDemux(QMutex &, Module &);
 private:
-	~FFDemux();
+	~FFDemux() final;
 
 	bool set() override final;
 

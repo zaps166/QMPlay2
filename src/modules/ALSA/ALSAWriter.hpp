@@ -31,7 +31,7 @@ class ALSAWriter : public Writer
 public:
 	ALSAWriter(Module &);
 private:
-	~ALSAWriter();
+	~ALSAWriter() final;
 
 	bool set() override final;
 

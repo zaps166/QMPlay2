@@ -71,7 +71,7 @@ public:
 
 	void updateSubs();
 private:
-	~VideoThr();
+	~VideoThr() final;
 
 	inline VideoWriter *videoWriter() const;
 

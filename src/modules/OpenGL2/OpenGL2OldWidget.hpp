@@ -28,7 +28,7 @@ class OpenGL2OldWidget : public QGLWidget, public OpenGL2Common
 	Q_OBJECT
 public:
 	OpenGL2OldWidget();
-	~OpenGL2OldWidget();
+        ~OpenGL2OldWidget() final;
 
 	QWidget *widget() override final;
 

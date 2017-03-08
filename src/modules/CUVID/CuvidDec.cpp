@@ -262,7 +262,7 @@ public:
 	{
 		memset(m_res, 0, sizeof m_res);
 	}
-	~CuvidHWAccel()
+	~CuvidHWAccel() final
 	{
 		if (m_canDestroyCuda)
 		{

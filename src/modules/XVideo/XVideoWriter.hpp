@@ -52,7 +52,7 @@ class XVideoWriter : public VideoWriter
 public:
 	XVideoWriter(Module &);
 private:
-	~XVideoWriter();
+	~XVideoWriter() final;
 
 	bool set() override final;
 

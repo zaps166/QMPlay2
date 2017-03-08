@@ -29,7 +29,7 @@ class FFmpeg : public Module
 	Q_DECLARE_TR_FUNCTIONS(FFmpeg)
 public:
 	FFmpeg();
-	~FFmpeg();
+	~FFmpeg() final;
 private:
 	QList<Info> getModulesInfo(const bool) const override final;
 	void *createInstance(const QString &) override final;

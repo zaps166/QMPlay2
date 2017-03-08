@@ -29,7 +29,7 @@ class DysonCompressor : public AudioFilter
 {
 public:
 	DysonCompressor(Module &module);
-	~DysonCompressor();
+	~DysonCompressor() final;
 
 	bool set() override final;
 

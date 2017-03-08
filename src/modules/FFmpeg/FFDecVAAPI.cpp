@@ -41,7 +41,7 @@ public:
 		m_glSurface(nullptr),
 		m_canDeleteVAAPI(false)
 	{}
-	~VAAPIOpenGL()
+	~VAAPIOpenGL() final
 	{
 		if (m_canDeleteVAAPI)
 			delete m_vaapi;

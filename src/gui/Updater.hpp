@@ -45,7 +45,7 @@ public:
 #else
 	Updater(QObject *parent);
 #endif
-	~Updater();
+	~Updater() final;
 
 #ifdef UPDATER
 	bool downloading() const;

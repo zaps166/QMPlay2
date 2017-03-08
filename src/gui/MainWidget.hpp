@@ -45,7 +45,7 @@ class MainWidget : public QMainWindow
 	Q_OBJECT
 public:
 	MainWidget(QPair<QStringList, QStringList> &argument);
-	~MainWidget();
+	~MainWidget() final;
 private slots:
 	void detachFromPipe();
 

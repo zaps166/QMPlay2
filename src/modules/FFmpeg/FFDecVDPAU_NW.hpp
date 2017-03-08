@@ -26,7 +26,7 @@ class FFDecVDPAU_NW : public FFDecHWAccel
 {
 public:
 	FFDecVDPAU_NW(QMutex &, Module &);
-	~FFDecVDPAU_NW();
+	~FFDecVDPAU_NW() final;
 
 	bool set() override final;
 

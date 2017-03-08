@@ -31,7 +31,7 @@ class SIDPlay : public Demuxer
 	Q_DECLARE_TR_FUNCTIONS(SIDPlay)
 public:
 	SIDPlay(Module &);
-	~SIDPlay();
+	~SIDPlay() final;
 private:
 	bool set() override final;
 

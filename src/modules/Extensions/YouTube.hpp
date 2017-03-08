@@ -43,7 +43,7 @@ class ResultsYoutube : public QTreeWidget
 	Q_OBJECT
 public:
 	ResultsYoutube();
-	~ResultsYoutube();
+	~ResultsYoutube() final;
 
 	QList<int> itags, itagsVideo, itagsAudio;
 private:

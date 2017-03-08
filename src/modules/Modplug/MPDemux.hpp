@@ -33,7 +33,7 @@ class MPDemux : public Demuxer
 public:
 	MPDemux(Module &);
 private:
-	~MPDemux();
+	~MPDemux() final;
 
 	bool set() override final;
 

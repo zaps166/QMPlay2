@@ -31,7 +31,7 @@ class Tekstowo : public QTextEdit, public QMPlay2Extensions
 
 public:
 	Tekstowo(Module &module);
-	~Tekstowo();
+	~Tekstowo() final;
 
 	DockWidget *getDockWidget() override final;
 

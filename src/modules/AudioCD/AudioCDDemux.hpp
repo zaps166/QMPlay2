@@ -56,7 +56,7 @@ public:
 
 	AudioCDDemux(Module &, CDIODestroyTimer &destroyTimer);
 private:
-	~AudioCDDemux();
+	~AudioCDDemux() final;
 
 	bool set() override final;
 

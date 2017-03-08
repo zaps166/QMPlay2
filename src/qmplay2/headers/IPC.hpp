@@ -35,7 +35,7 @@ class IPCSocket : public QIODevice
 	friend class IPCServer;
 public:
 	IPCSocket(const QString &fileName, QObject *parent = nullptr);
-	~IPCSocket();
+	~IPCSocket() final;
 
 	bool isConnected() const;
 

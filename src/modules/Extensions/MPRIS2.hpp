@@ -82,7 +82,7 @@ class MediaPlayer2Player : public QDBusAbstractAdaptor
 	Q_PROPERTY(double Volume READ volume WRITE setVolume)
 public:
 	MediaPlayer2Player(QObject *p);
-	~MediaPlayer2Player();
+	~MediaPlayer2Player() final;
 
 	bool canControl() const;
 	bool canGoNext() const;
@@ -160,7 +160,7 @@ class MPRIS2 : public QMPlay2Extensions
 {
 public:
 	MPRIS2(Module &module);
-	~MPRIS2();
+	~MPRIS2() final;
 private:
 	bool set() override final;
 

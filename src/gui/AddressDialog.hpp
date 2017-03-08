@@ -29,7 +29,7 @@ class AddressDialog : public QDialog
 	Q_DECLARE_TR_FUNCTIONS(AddressDialog)
 public:
 	AddressDialog(QWidget *);
-	~AddressDialog();
+	~AddressDialog() final;
 
 	inline bool addAndPlay() const
 	{

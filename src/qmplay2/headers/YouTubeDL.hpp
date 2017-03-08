@@ -32,7 +32,7 @@ class YouTubeDL : public BasicIO
 
 public:
 	YouTubeDL();
-	~YouTubeDL();
+	~YouTubeDL() final;
 
 	void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr);
 

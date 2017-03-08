@@ -44,7 +44,7 @@ public:
 	static void SetAudioChannels(int chn);
 
 	SettingsWidget(int page, const QString &module, QWidget *videoEq);
-	~SettingsWidget();
+	~SettingsWidget() final;
 
 	void setAudioChannels();
 private:

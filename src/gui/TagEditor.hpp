@@ -44,7 +44,7 @@ class TagEditor : public QGroupBox
 	Q_OBJECT
 public:
 	TagEditor();
-	~TagEditor();
+	~TagEditor() final;
 
 	bool open(const QString &fileName);
 	void clear();

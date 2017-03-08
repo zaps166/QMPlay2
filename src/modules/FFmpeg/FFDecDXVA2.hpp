@@ -38,7 +38,7 @@ public:
 	static bool loadLibraries();
 
 	FFDecDXVA2(QMutex &avcodec_mutex, Module &module);
-	~FFDecDXVA2();
+        ~FFDecDXVA2() final;
 
 	bool set() override final;
 

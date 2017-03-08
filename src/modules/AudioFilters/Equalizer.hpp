@@ -31,7 +31,7 @@ public:
 	static float getAmpl(int val);
 
 	Equalizer(Module &);
-	~Equalizer();
+	~Equalizer() final;
 
 	bool set() override final;
 private:

@@ -96,7 +96,7 @@ class DirectDrawWriter : public VideoWriter
 public:
 	DirectDrawWriter(Module &);
 private:
-	~DirectDrawWriter();
+        ~DirectDrawWriter() final;
 
 	bool set() override final;
 

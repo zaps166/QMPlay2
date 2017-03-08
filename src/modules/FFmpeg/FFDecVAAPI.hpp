@@ -27,7 +27,7 @@ class FFDecVAAPI : public FFDecHWAccel
 {
 public:
 	FFDecVAAPI(QMutex &, Module &);
-	~FFDecVAAPI();
+	~FFDecVAAPI() final;
 
 	bool set() override final;
 

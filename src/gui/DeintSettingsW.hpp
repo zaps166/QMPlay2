@@ -31,7 +31,7 @@ public:
 	static void init();
 
 	DeintSettingsW();
-	~DeintSettingsW();
+	~DeintSettingsW() final;
 
 	void writeSettings();
 private slots:

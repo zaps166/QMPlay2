@@ -29,7 +29,7 @@ class GME : public Demuxer
 	Q_DECLARE_TR_FUNCTIONS(GME)
 public:
 	GME(Module &);
-	~GME();
+	~GME() final;
 private:
 	bool set() override final;
 

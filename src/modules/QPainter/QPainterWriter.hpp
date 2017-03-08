@@ -60,7 +60,7 @@ class QPainterWriter : public VideoWriter
 public:
 	QPainterWriter(Module &);
 private:
-	~QPainterWriter();
+	~QPainterWriter() final;
 
 	bool set() override final;
 
