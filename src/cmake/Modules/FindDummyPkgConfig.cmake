@@ -1,0 +1,33 @@
+function(pkg_check_modules Variable)
+    set(Arguments "${ARGN}")
+    foreach(Argument IN LISTS Arguments)
+        if(${Argument} MATCHES "REQUIRED" OR ${Argument} MATCHES "QUIET")
+            continue()
+        endif()
+
+        string(FIND ${Argument} "-" Idx)
+        if(${Idx} MATCHES "-1")
+            string(FIND ${Argument} ">" Idx)
+        endif()
+        if(${Idx} MATCHES "-1")
+            string(FIND ${Argument} "<" Idx)
+        endif()
+        if(${Idx} MATCHES "-1")
+            string(FIND ${Argument} "=" Idx)
+        endif()
+
+        if(NOT ${Idx} MATCHES "-1")
+            string(SUBSTRING ${Argument} 0 ${Idx} TmpLib)
+        else()
+            set(TmpLib ${Argument})
+        endif()
+
+        string(REGEX REPLACE "^lib" "" TmpLib ${TmpLib})
+
+        list(APPEND ${Variable}_LIBRARIES ${TmpLib})
+    endforeach()
+
+    set(${Variable}_INCLUDE_DIRS ${CMAKE_INCLUDE_PATH} CACHE INTERNAL "")
+    set(${Variable}_LIBRARY_DIRS ${CMAKE_LIBRARY_PATH} CACHE INTERNAL "")
+    set(${Variable}_LIBRARIES ${${Variable}_LIBRARIES} CACHE INTERNAL "")
+endfunction()

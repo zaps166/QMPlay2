@@ -9,7 +9,12 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/src/cmake/Modules")
 
 include(FeatureSummary)
-find_package(PkgConfig REQUIRED)
+
+if(NOT CMAKE_HOST_WIN32)
+    find_package(PkgConfig REQUIRED)
+else()
+    find_package(DummyPkgConfig REQUIRED)
+endif()
 
 if(CMAKE_VERSION VERSION_LESS 2.8.9)
     # use Qt5 only if CMake >= 2.8.9
