@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.03.07:
+Changes in QMPlay2 build 17.03.08:
 	- playlists from MediaBrowser and YouTube are no longer loaded by temporary file,
 	- replace Http class by NetworkAccess and use it in more places,
 	- use Freedesktop notifications for all notifications (option),
@@ -12,6 +12,7 @@ Changes in QMPlay2 build 17.03.07:
 	- move YouTubeDL from YouTube to shared library,
 	- rename "Notifies" module to "Notify" module,
 	- add SoundCloud support (Zamarin Arthur),
+	- CMake improvements for Windows host,
 	- add Anime Odcinki to MediaBrowser,
 	- allow to compile in portable mode,
 	- move version to source file,
