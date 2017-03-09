@@ -135,6 +135,12 @@ Right click on volume slider and select "Split channels".
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
+###Control files
+
+Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe`):
+- `portable` - runs QMPlay2 in portable mode (settings are stored in applications directory),
+- `noautoupdates` - disables auto-updates at first run.
+
 ##Multimedia keys
 
 In Windows multimedia keys should work automatically.
