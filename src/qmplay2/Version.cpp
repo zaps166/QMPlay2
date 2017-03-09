@@ -26,7 +26,7 @@
 #else
 	#define QMPlay2PortableInfo
 #endif
-#define QMPlay2Version "17.03.08" QMPlay2GitHEAD QMPlay2PortableInfo
+#define QMPlay2Version "17.03.09" QMPlay2GitHEAD QMPlay2PortableInfo
 
 QByteArray Version::get()
 {

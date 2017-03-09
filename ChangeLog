@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.03.08:
+Changes in QMPlay2 build 17.03.09:
 	- playlists from MediaBrowser and YouTube are no longer loaded by temporary file,
 	- replace Http class by NetworkAccess and use it in more places,
 	- use Freedesktop notifications for all notifications (option),
@@ -16,6 +16,7 @@ Changes in QMPlay2 build 17.03.08:
 	- add Anime Odcinki to MediaBrowser,
 	- allow to compile in portable mode,
 	- move version to source file,
+	- API versioning for modules,
 	- add Tekstowo lyrics,
 	- switch to C++11,
 	- minor bugfix,
