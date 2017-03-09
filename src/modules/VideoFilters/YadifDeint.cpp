@@ -36,22 +36,10 @@ extern "C"
 	#include <libavutil/cpu.h>
 }
 
-static inline int max(int a, int b)
-{
-	return a > b ? a : b;
-}
-static inline int max3(int a, int b, int c)
-{
-	return max(max(a, b), c);
-}
-static inline int min(int a, int b)
-{
-	return a > b ? b : a;
-}
-static inline int min3(int a, int b, int c)
-{
-	return min(min(a, b), c);
-}
+#include <algorithm>
+
+using std::min;
+using std::max;
 
 static void (*filterLinePtr)(quint8 *, const void *const,
                              const quint8 *, const quint8 *, const quint8 *,
@@ -101,7 +89,7 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 		const int temporalDiff1 = (abs(prev[mrefs] - c) + abs(prev[prefs] - e)) >> 1;
 		const int temporalDiff2 = (abs(next[mrefs] - c) + abs(next[prefs] - e)) >> 1;
 
-		int diff = max3(temporalDiff0 >> 1, temporalDiff1, temporalDiff2);
+		int diff = max({temporalDiff0 >> 1, temporalDiff1, temporalDiff2});
 		int spatialPred = (c + e) >> 1;
 
 		/* Reads 3 pixels to the left/right */
@@ -117,9 +105,9 @@ static inline void filterLine(quint8 *dest, const void *const destEnd,
 		{
 			const int b = (prev2[2 * mrefs] + next2[2 * mrefs]) >> 1;
 			const int f = (prev2[2 * prefs] + next2[2 * prefs]) >> 1;
-			const int maxVal = max3(d - e, d - c, min(b - c, f - e));
-			const int minVal = min3(d - e, d - c, max(b - c, f - e));
-			diff = max3(diff, minVal, -maxVal);
+			const int maxVal = max({d - e, d - c, min(b - c, f - e)});
+			const int minVal = min({d - e, d - c, max(b - c, f - e)});
+			diff = max({diff, minVal, -maxVal});
 		}
 
 		if (spatialPred > d + diff)
