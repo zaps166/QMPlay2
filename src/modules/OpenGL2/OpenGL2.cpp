@@ -61,7 +61,7 @@ OpenGL2::SettingsWidget *OpenGL2::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(OpenGL2)
+QMPLAY2_EXPORT_MODULE(OpenGL2)
 
 /**/
 

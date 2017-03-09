@@ -60,7 +60,7 @@ PortAudio::SettingsWidget *PortAudio::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(PortAudio)
+QMPLAY2_EXPORT_MODULE(PortAudio)
 
 /**/
 

@@ -50,7 +50,7 @@ Modplug::SettingsWidget *Modplug::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Modplug)
+QMPLAY2_EXPORT_MODULE(Modplug)
 
 /**/
 

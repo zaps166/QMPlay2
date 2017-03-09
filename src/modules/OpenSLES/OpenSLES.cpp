@@ -46,7 +46,7 @@ OpenSLES::SettingsWidget *OpenSLES::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(OpenSLES)
+QMPLAY2_EXPORT_MODULE(OpenSLES)
 
 /**/
 

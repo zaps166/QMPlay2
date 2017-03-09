@@ -47,7 +47,7 @@ PulseAudio::SettingsWidget *PulseAudio::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(PulseAudio)
+QMPLAY2_EXPORT_MODULE(PulseAudio)
 
 /**/
 

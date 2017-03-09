@@ -46,7 +46,7 @@ QPainterSW::SettingsWidget *QPainterSW::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(QPainterSW)
+QMPLAY2_EXPORT_MODULE(QPainterSW)
 
 /**/
 

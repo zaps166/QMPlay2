@@ -138,7 +138,7 @@ AudioFilters::SettingsWidget *AudioFilters::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(AudioFilters)
+QMPLAY2_EXPORT_MODULE(AudioFilters)
 
 /**/
 

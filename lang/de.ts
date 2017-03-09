@@ -2379,6 +2379,22 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Can&apos;t open log file</source>
         <translation>Logdatei kann nicht geöffnet werden</translation>
     </message>
+    <message>
+        <source>too old QMPlay2 library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mismatch module API version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>duplicated module name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mismatch module Qt version</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMPlay2GUIClass</name>

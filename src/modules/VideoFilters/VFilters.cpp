@@ -63,4 +63,4 @@ void *VFilters::createInstance(const QString &name)
 	return nullptr;
 }
 
-QMPLAY2_EXPORT_PLUGIN(VFilters)
+QMPLAY2_EXPORT_MODULE(VFilters)

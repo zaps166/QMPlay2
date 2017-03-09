@@ -49,7 +49,7 @@ ALSA::SettingsWidget *ALSA::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(ALSA)
+QMPLAY2_EXPORT_MODULE(ALSA)
 
 /**/
 

@@ -78,7 +78,7 @@ void Cuvid::videoDeintSave()
 	setInstance<CuvidDec>();
 }
 
-QMPLAY2_EXPORT_PLUGIN(Cuvid)
+QMPLAY2_EXPORT_MODULE(Cuvid)
 
 /**/
 

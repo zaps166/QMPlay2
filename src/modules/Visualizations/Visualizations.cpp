@@ -57,7 +57,7 @@ Visualizations::SettingsWidget *Visualizations::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Visualizations)
+QMPLAY2_EXPORT_MODULE(Visualizations)
 
 /**/
 

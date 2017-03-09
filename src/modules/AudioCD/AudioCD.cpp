@@ -133,7 +133,7 @@ void AudioCD::browseCDImage()
 	}
 }
 
-QMPLAY2_EXPORT_PLUGIN(AudioCD)
+QMPLAY2_EXPORT_MODULE(AudioCD)
 
 /**/
 

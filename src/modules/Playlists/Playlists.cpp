@@ -56,7 +56,7 @@ Playlists::SettingsWidget *Playlists::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Playlists)
+QMPLAY2_EXPORT_MODULE(Playlists)
 
 /**/
 

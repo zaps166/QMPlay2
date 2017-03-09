@@ -110,7 +110,7 @@ void Inputs::add()
 		emit QMPlay2Core.processParam("open", ToneGeneratorName "://" + params);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Inputs)
+QMPLAY2_EXPORT_MODULE(Inputs)
 
 /**/
 

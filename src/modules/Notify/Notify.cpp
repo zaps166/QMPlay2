@@ -54,7 +54,7 @@ Notify::SettingsWidget *Notify::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Notify)
+QMPLAY2_EXPORT_MODULE(Notify)
 
 /**/
 

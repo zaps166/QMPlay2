@@ -133,8 +133,16 @@ void Module::setInstance()
 	}
 }
 
-#define QMPLAY2_EXPORT_PLUGIN(ModuleClass) \
-	extern "C" Module *qmplay2PluginInstance() \
+/**/
+
+#define QMPLAY2_MODULES_API_VERSION 1
+
+#define QMPLAY2_EXPORT_MODULE(ModuleClass) \
+	extern "C" quint32 getQMPlay2ModuleAPIVersion() \
+	{ \
+		return (QT_VERSION << 8) | QMPLAY2_MODULES_API_VERSION; \
+	} \
+	extern "C" Module *createQMPlay2ModuleInstance() \
 	{ \
 		return new ModuleClass; \
 	}

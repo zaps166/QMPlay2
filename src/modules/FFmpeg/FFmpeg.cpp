@@ -218,7 +218,7 @@ void FFmpeg::videoDeintSave()
 #endif
 }
 
-QMPLAY2_EXPORT_PLUGIN(FFmpeg)
+QMPLAY2_EXPORT_MODULE(FFmpeg)
 
 /**/
 

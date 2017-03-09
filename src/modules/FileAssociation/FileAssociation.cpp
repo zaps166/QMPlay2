@@ -80,7 +80,7 @@ void FileAssociation::firsttime()
 		set("Associate", false);
 }
 
-QMPLAY2_EXPORT_PLUGIN(FileAssociation)
+QMPLAY2_EXPORT_MODULE(FileAssociation)
 
 /**/
 

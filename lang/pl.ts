@@ -2379,6 +2379,22 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Can&apos;t open log file</source>
         <translation>Nie można otworzyć pliku dziennika</translation>
     </message>
+    <message>
+        <source>too old QMPlay2 library</source>
+        <translation>przestarzała biblioteka QMPlay2</translation>
+    </message>
+    <message>
+        <source>mismatch module API version</source>
+        <translation>niepasująca wersja API dla modułu</translation>
+    </message>
+    <message>
+        <source>duplicated module name</source>
+        <translation>zduplikowana nazwa modułu</translation>
+    </message>
+    <message>
+        <source>mismatch module Qt version</source>
+        <translation>niepasująca wersja Qt dla modułu</translation>
+    </message>
 </context>
 <context>
     <name>QMPlay2GUIClass</name>

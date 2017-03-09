@@ -73,7 +73,7 @@ Chiptune::SettingsWidget *Chiptune::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Chiptune)
+QMPLAY2_EXPORT_MODULE(Chiptune)
 
 /**/
 

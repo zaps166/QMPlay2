@@ -39,6 +39,11 @@
 	#include <QStandardPaths>
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	#define QT_VERSION_MAJOR 4
+	#define QT_VERSION_MINOR 8 // Qt 4.8.0 is the oldest supported Qt version
+#endif
+
 #include <cstdio>
 
 extern "C"
@@ -244,37 +249,70 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
 		QStringList pluginsName;
 		for (const QFileInfo &fInfo : pluginsList)
+		{
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
 				QLibrary lib(fInfo.filePath());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+				// Don't override global symbols if they are different in libraries (e.g. Qt5 vs Qt4)
+				lib.setLoadHints(QLibrary::DeepBindHint);
+#endif
 				if (!lib.load())
 					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else
 				{
-					using QMPlay2PluginInstance = Module *(*)();
-					QMPlay2PluginInstance qmplay2PluginInstance = (QMPlay2PluginInstance)lib.resolve("qmplay2PluginInstance");
-					if (!qmplay2PluginInstance)
+					using CreateQMPlay2ModuleInstance = Module  *(*)();
+					using GetQMPlay2ModuleAPIVersion  = quint32  (*)();
+
+					GetQMPlay2ModuleAPIVersion  getQMPlay2ModuleAPIVersion  = (GetQMPlay2ModuleAPIVersion )lib.resolve("getQMPlay2ModuleAPIVersion" );
+					CreateQMPlay2ModuleInstance createQMPlay2ModuleInstance = (CreateQMPlay2ModuleInstance)lib.resolve("createQMPlay2ModuleInstance");
+
+					const auto checkModuleAPIVersion = [&](const quint32 v)->bool {
+						const quint8 moduleApiVersion = (v & 0xFF);
+						const quint8   qtMajorVersion = ((v >> 24) & 0xFF);
+						const quint8   qtMinorVersion = ((v >> 16) & 0xFF);
+						if (moduleApiVersion != QMPLAY2_MODULES_API_VERSION)
+						{
+							log(fInfo.fileName() + " - " + tr("mismatch module API version"), AddTimeToLog | ErrorLog | SaveLog);
+							return false;
+						}
+						if (qtMajorVersion != QT_VERSION_MAJOR || qtMinorVersion < QT_VERSION_MINOR)
+						{
+							log(fInfo.fileName() + " - " + tr("mismatch module Qt version"), AddTimeToLog | ErrorLog | SaveLog);
+							return false;
+						}
+						return true;
+					};
+
+					if (!getQMPlay2ModuleAPIVersion || !createQMPlay2ModuleInstance)
 					{
 #ifndef Q_OS_ANDROID
-						log(fInfo.fileName() + " - " + tr("invalid QMPlay2 library"), AddTimeToLog | ErrorLog | SaveLog);
+						if (lib.resolve("qmplay2PluginInstance"))
+							log(fInfo.fileName() + " - " + tr("too old QMPlay2 library"), AddTimeToLog | ErrorLog | SaveLog);
+						else
+							log(fInfo.fileName() + " - " + tr("invalid QMPlay2 library"), AddTimeToLog | ErrorLog | SaveLog);
 #endif
 					}
-					else
+					else if (checkModuleAPIVersion(getQMPlay2ModuleAPIVersion()))
 					{
-						Module *pluginInstance = qmplay2PluginInstance();
-						if (pluginInstance)
+						if (Module *moduleInstance = createQMPlay2ModuleInstance())
 						{
-							if (pluginsName.contains(pluginInstance->name()))
-								delete pluginInstance;
+							const QString name = moduleInstance->name();
+							if (pluginsName.contains(name))
+							{
+								log(fInfo.fileName() + " (" + name + ") - " + tr("duplicated module name"), AddTimeToLog | ErrorLog | SaveLog);
+								delete moduleInstance;
+							}
 							else
 							{
-								pluginsName += pluginInstance->name();
-								pluginsInstance += pluginInstance;
+								pluginsName += moduleInstance->name();
+								pluginsInstance += moduleInstance;
 							}
 						}
 					}
 				}
 			}
+		}
 	}
 
 	VideoFilters::init();

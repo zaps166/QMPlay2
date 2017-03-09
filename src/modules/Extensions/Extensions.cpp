@@ -122,7 +122,7 @@ Extensions::SettingsWidget *Extensions::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Extensions)
+QMPLAY2_EXPORT_MODULE(Extensions)
 
 /**/
 

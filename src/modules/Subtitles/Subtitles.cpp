@@ -55,7 +55,7 @@ Subtitles::SettingsWidget *Subtitles::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(Subtitles)
+QMPLAY2_EXPORT_MODULE(Subtitles)
 
 /**/
 

@@ -46,7 +46,7 @@ DirectX::SettingsWidget *DirectX::getSettingsWidget()
 	return new ModuleSettingsWidget(*this);
 }
 
-QMPLAY2_EXPORT_PLUGIN(DirectX)
+QMPLAY2_EXPORT_MODULE(DirectX)
 
 /**/
 
