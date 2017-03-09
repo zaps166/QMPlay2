@@ -14,7 +14,7 @@ Changes in QMPlay2 build 17.03.09:
 	- add SoundCloud support (Zamarin Arthur),
 	- CMake improvements for Windows host,
 	- add Anime Odcinki to MediaBrowser,
-	- allow to compile in portable mode,
+	- allow to run in portable mode,
 	- move version to source file,
 	- API versioning for modules,
 	- add Tekstowo lyrics,
