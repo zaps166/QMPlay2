@@ -112,7 +112,7 @@ else()
 endif()
 
 if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
-    add_definitions(-DQMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
+    set_source_files_properties(Version.cpp PROPERTIES COMPILE_DEFINITIONS QMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
 endif()
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
