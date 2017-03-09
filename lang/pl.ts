@@ -132,6 +132,13 @@
     </message>
 </context>
 <context>
+    <name>AnimeOdcinki</name>
+    <message>
+        <source>Episode name</source>
+        <translation>Nazwa odcinka</translation>
+    </message>
+</context>
+<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -920,6 +927,10 @@
     <message>
         <source>Use tray notifications as default</source>
         <translation>Powiadomienia w tray&apos;u jako domyślne</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>Usuń youtube-dl</translation>
     </message>
 </context>
 <context>
@@ -2680,6 +2691,14 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Automatically check for updates</source>
         <translation>Automatycznie sprawdzaj dostępność aktualizacji</translation>
+    </message>
+    <message>
+        <source>Confirm &quot;youtube-dl&quot; deletion</source>
+        <translation>Potwierdź usunięcie &quot;youtube-dl&quot;</translation>
+    </message>
+    <message>
+        <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
+        <translation>Czy na pewno chcesz usunąć program &quot;youtube-dl&quot;?</translation>
     </message>
 </context>
 <context>

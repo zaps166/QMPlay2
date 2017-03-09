@@ -132,6 +132,13 @@
     </message>
 </context>
 <context>
+    <name>AnimeOdcinki</name>
+    <message>
+        <source>Episode name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -919,6 +926,10 @@
     </message>
     <message>
         <source>Use tray notifications as default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2679,6 +2690,14 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Automatically check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Confirm &quot;youtube-dl&quot; deletion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
