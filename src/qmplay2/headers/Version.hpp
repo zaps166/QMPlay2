@@ -24,4 +24,5 @@ namespace Version
 {
 	QByteArray get();
 	QByteArray userAgent();
+	bool isPortable();
 }

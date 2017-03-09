@@ -18,21 +18,27 @@
 
 #include <Version.hpp>
 
+#include <QMPlay2Core.hpp>
+
+#include <QFile>
+
 #ifndef QMPlay2GitHEAD
 	#define QMPlay2GitHEAD
 #endif
-#ifdef QMPLAY2_PORTABLE
-	#define QMPlay2PortableInfo "-portable"
-#else
-	#define QMPlay2PortableInfo
-#endif
-#define QMPlay2Version "17.03.09" QMPlay2GitHEAD QMPlay2PortableInfo
+#define QMPlay2Version "17.03.09" QMPlay2GitHEAD
 
 QByteArray Version::get()
 {
-	return QMPlay2Version;
+	static const QByteArray ver = QMPlay2Version + (isPortable() ? "-portable" : QByteArray());
+	return ver;
 }
 QByteArray Version::userAgent()
 {
-	return "QMPlay2/" QMPlay2Version;
+	static const QByteArray agent = "QMPlay2/" + get();
+	return agent;
+}
+bool Version::isPortable()
+{
+	static bool portable = QFile::exists(QMPlay2Core.getShareDir() + "portable");
+	return portable;
 }

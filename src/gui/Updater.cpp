@@ -20,11 +20,11 @@
 
 #include <Functions.hpp>
 #include <Settings.hpp>
+#include <Notifies.hpp>
 #ifndef UPDATER
-	#include <Notifies.hpp>
-
 	#define endWork(no_Op)
 #else
+	#include <Version.hpp>
 	#include <Main.hpp>
 
 	#include <QProgressBar>
@@ -138,20 +138,29 @@ void Updater::infoFinished()
 				}
 				if (canUpdate)
 				{
+					const QString updateIsAvailable = tr("Update is available for QMPlay2!");
+
+					const auto notify = [&] {
+						Notifies::notify(updateIsAvailable, tr("New QMPlay2 version: %1").arg(NewVersion), 0, 1);
+						settings.set("UpdateVersion", NewVersion);
+					};
+
 					QString FileURL = info.value(QString("Win%1").arg(sizeof(void *) << 3)).toString();
 					if (FileURL.isEmpty())
 						endWork(tr("No update available"));
 #ifdef UPDATER
+					else if (Version::isPortable())
+					{
+						notify();
+						endWork(updateIsAvailable);
+					}
 					else if (updateFile.open(QFile::WriteOnly | QFile::Truncate))
 						getFile(FileURL.replace("$Version", NewVersion))->setProperty("UpdateVersion", NewVersion);
 					else
 						endWork(tr("Error creating update file"));
 #else
 					else
-					{
-						Notifies::notify(tr("Update is available for QMPlay2!"), tr("New QMPlay2 version: %1").arg(NewVersion), 0, 1);
-						settings.set("UpdateVersion", NewVersion);
-					}
+						notify();
 #endif
 				}
 				else

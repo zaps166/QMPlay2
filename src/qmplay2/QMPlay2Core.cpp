@@ -21,6 +21,7 @@
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
 #include <Playlist.hpp>
+#include <Version.hpp>
 #include <Module.hpp>
 
 #include <QApplication>
@@ -157,17 +158,18 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	shareDir = Functions::cleanPath(sharePath);
 	langDir = shareDir + "lang/";
 
-#ifdef QMPLAY2_PORTABLE
-	settingsDir = QCoreApplication::applicationDirPath() + "/settings/";
-#else
-	#if defined(Q_OS_WIN)
+	if (Version::isPortable())
+		settingsDir = QCoreApplication::applicationDirPath() + "/settings/";
+	else
+	{
+#if defined(Q_OS_WIN)
 		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
-	#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MAC)
 		settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
-	#else
+#else
 		settingsDir = QDir::homePath() + "/.qmplay2/";
-	#endif
 #endif
+	}
 	QDir(settingsDir).mkpath(".");
 
 	{
