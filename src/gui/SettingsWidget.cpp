@@ -22,6 +22,7 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Functions.hpp>
+#include <YouTubeDL.hpp>
 #include <Notifies.hpp>
 #include <Main.hpp>
 
@@ -377,6 +378,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
 		page1->clearCoversCache->setIcon(viewRefresh);
 		connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+		page1->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+		connect(page1->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
 		page1->resetSettingsB->setIcon(viewRefresh);
 		connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
 	}
@@ -985,6 +988,16 @@ void SettingsWidget::clearCoversCache()
 			if (dir.cdUp())
 				dir.rmdir("Covers");
 		}
+	}
+}
+void SettingsWidget::removeYouTubeDl()
+{
+	const QString filePath = YouTubeDL::getFilePath();
+	while (QFile::exists(filePath))
+	{
+		if (QMessageBox::question(this, tr("Confirm \"youtube-dl\" deletion"), tr("Do you want to remove \"youtube-dl\" software?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+			break;
+		QFile::remove(filePath);
 	}
 }
 void SettingsWidget::resetSettings()

@@ -31,6 +31,8 @@ class YouTubeDL : public BasicIO
 	Q_DISABLE_COPY(YouTubeDL)
 
 public:
+	static QString getFilePath();
+
 	YouTubeDL();
 	~YouTubeDL() final;
 

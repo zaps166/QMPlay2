@@ -48,6 +48,15 @@ static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 
 /**/
 
+QString YouTubeDL::getFilePath()
+{
+	return QMPlay2Core.getSettingsDir() + "youtube-dl"
+#ifdef Q_OS_WIN
+	".exe"
+#endif
+	;
+}
+
 YouTubeDL::YouTubeDL() :
 	m_aborted(false)
 {}
@@ -145,11 +154,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		return true;
 	};
 
-	const QString ytDlPath = QMPlay2Core.getSettingsDir() + "youtube-dl"
-#ifdef Q_OS_WIN
-	".exe"
-#endif
-	;
+	const QString ytDlPath = getFilePath();
 
 	if (!doLock(Lock::Read, false))
 		return {};

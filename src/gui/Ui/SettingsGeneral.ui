@@ -94,6 +94,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="removeYtDlB">
+           <property name="text">
+            <string>Remove youtube-dl</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="resetSettingsB">
            <property name="text">
             <string>Reset settings</string>
@@ -433,6 +440,7 @@
   <tabstop>proxyHostE</tabstop>
   <tabstop>proxyPortB</tabstop>
   <tabstop>clearCoversCache</tabstop>
+  <tabstop>removeYtDlB</tabstop>
   <tabstop>resetSettingsB</tabstop>
   <tabstop>setKeyBindingsB</tabstop>
  </tabstops>
