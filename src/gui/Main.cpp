@@ -252,7 +252,7 @@ static void showHelp()
 "  Parameters list:\n"
 "    -open         \"address\"\n"
 "    -enqueue      \"address\"\n"
-"    -profile      \"name\" - start application with given profile\n"
+"    -profile      \"name\" - starts application with given profile name\n"
 "    -noplay     - doesn't play after run (bypass \"Remember playback position\" option)\n"
 "    -toggle     - toggles play/pause\n"
 "    -show       - ensures that the window will be visible if the application is running\n"

@@ -2416,7 +2416,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>  Parameters list:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
-    -profile      &quot;name&quot; - start application with given profile
+    -profile      &quot;name&quot; - starts application with given profile name
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2431,7 +2431,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation>  Parameters list:
     -open         &quot;adresse&quot;
     -enqueue      &quot;adresse&quot;
-    -profile      &quot;name&quot; - start application with given profile
+    -profile      &quot;name&quot; - starts application with given profile name
     -noplay     - ne joue p&apos;as après (passer outre l&apos;option &quot;mémoriser la position de lecture&quot;)
     -toggle     - bascule entre lecture/pause
     -show       - Assure que la fenêtre sera visible si l&apos;application tourne

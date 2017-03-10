@@ -2417,7 +2417,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>  Parameters list:
     -open         &quot;address&quot;
     -enqueue      &quot;address&quot;
-    -profile      &quot;name&quot; - start application with given profile
+    -profile      &quot;name&quot; - starts application with given profile name
     -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
     -toggle     - toggles play/pause
     -show       - ensures that the window will be visible if the application is running
@@ -2432,7 +2432,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <translation>  Lista parametrów:
     -open         &quot;adres&quot;
     -enqueue      &quot;adres&quot;
-    -profile      &quot;nazwa&quot; - uruchom aplikację z podaną nazwą profilu
+    -profile      &quot;nazwa&quot; - uruchamia aplikację z podaną nazwą profilu
     -noplay     - nie odtwarza muzyki po uruchomieniu (omija opcję &quot;Zapamiętaj pozycję odtwarzania&quot;)
     -toggle     - przełącza play/pause
     -show       - zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona
