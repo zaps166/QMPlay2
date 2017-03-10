@@ -468,7 +468,7 @@ private:
 
 /**/
 
-static const quint32 MaxSurfaces = 25;
+constexpr quint32 g_maxSurfaces = 25;
 
 QMutex CuvidDec::loadMutex;
 int CuvidDec::loadState = -1;
@@ -554,7 +554,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 	cuvidDecInfo.target_rect.right = cuvidDecInfo.ulWidth;
 	cuvidDecInfo.target_rect.bottom = cuvidDecInfo.ulHeight;
 
-	cuvidDecInfo.ulNumDecodeSurfaces = MaxSurfaces;
+	cuvidDecInfo.ulNumDecodeSurfaces = g_maxSurfaces;
 	cuvidDecInfo.ulNumOutputSurfaces = 1;
 	cuvidDecInfo.ulCreationFlags = cudaVideoCreate_PreferCUVID;
 	cuvidDecInfo.bitDepthMinus8 = format->bit_depth_luma_minus8;
@@ -924,7 +924,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 	memset(&m_cuvidParserParams, 0, sizeof m_cuvidParserParams);
 	m_cuvidParserParams.CodecType = codec;
-	m_cuvidParserParams.ulMaxNumDecodeSurfaces = MaxSurfaces;
+	m_cuvidParserParams.ulMaxNumDecodeSurfaces = g_maxSurfaces;
 	m_cuvidParserParams.ulMaxDisplayDelay = 4;
 	m_cuvidParserParams.pUserData = this;
 	m_cuvidParserParams.pfnSequenceCallback = (PFNVIDSEQUENCECALLBACK)cuvid::videoSequence;
@@ -974,7 +974,7 @@ bool CuvidDec::testDecoder(const int depth)
 	cuvidDecInfo.target_rect.right = cuvidDecInfo.ulWidth;
 	cuvidDecInfo.target_rect.bottom = cuvidDecInfo.ulHeight;
 
-	cuvidDecInfo.ulNumDecodeSurfaces = MaxSurfaces;
+	cuvidDecInfo.ulNumDecodeSurfaces = g_maxSurfaces;
 	cuvidDecInfo.ulNumOutputSurfaces = 1;
 	cuvidDecInfo.ulCreationFlags = cudaVideoCreate_PreferCUVID;
 	cuvidDecInfo.bitDepthMinus8 = qMax(0, depth - 8);

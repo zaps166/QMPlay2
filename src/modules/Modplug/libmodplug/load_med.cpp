@@ -20,7 +20,7 @@ extern void Log(LPCSTR s, ...);
 // OctaMed MED file support (import only)
 //
 // Lookup table for bpm values.
-static const BYTE bpmvals[10] = { 179,164,152,141,131,123,116,110,104,99 };
+constexpr BYTE bpmvals[10] = { 179,164,152,141,131,123,116,110,104,99 };
 
 
 // flags

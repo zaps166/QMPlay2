@@ -51,8 +51,8 @@ static int interruptCB(bool &aborted)
 	return aborted;
 }
 
-static const int MinHeaderSize = 27;
-static const int MaxPageSize = 65307; //MinHeaderSize + 255 + 255 * 255
+constexpr int g_minHeaderSize = 27;
+constexpr int g_maxPageSize = 65307; //MinHeaderSize + 255 + 255 * 255
 
 /**/
 
@@ -90,11 +90,11 @@ OggHelper::Chains OggHelper::getOggChains(bool &ok)
 	Chains chains;
 
 	/* Read OGG page header at the end of the file */
-	QByteArray endData(MaxPageSize, Qt::Uninitialized);
+	QByteArray endData(g_maxPageSize, Qt::Uninitialized);
 	const qint64 fileSize = avio_size(io);
-	if (avio_seek(io, qMax<qint64>(fileSize - MaxPageSize, 0), SEEK_SET) < 0)
+	if (avio_seek(io, qMax<qint64>(fileSize - g_maxPageSize, 0), SEEK_SET) < 0)
 		return chains;
-	const int tmpToRead = qMin<qint64>(MaxPageSize, fileSize);
+	const int tmpToRead = qMin<qint64>(g_maxPageSize, fileSize);
 	if (avio_read(io, (uint8_t *)endData.data(), tmpToRead) != tmpToRead)
 		return chains;
 	const int lastPagePos = endData.lastIndexOf(QByteArray("OggS", 5)); //0 byte at the end of the string means OGG version 0
@@ -104,7 +104,7 @@ OggHelper::Chains OggHelper::getOggChains(bool &ok)
 		return chains;
 	}
 	endData.remove(0, lastPagePos);
-	if (endData.size() < MinHeaderSize)
+	if (endData.size() < g_minHeaderSize)
 	{
 		//Incorrect header size
 		return chains;
@@ -120,14 +120,14 @@ OggHelper::Chains OggHelper::getOggChains(bool &ok)
 	bool checkEndHeader = true;
 
 	int64_t eosCnt = 0, bosCnt = 0;
-	quint8 header[MinHeaderSize];
+	quint8 header[g_minHeaderSize];
 	quint8 pageSegments[255];
 
 	/* Analyse OGG file */
 	while (!*isAborted)
 	{
 		/* Read and check OGG page header */
-		if (avio_read(io, header, MinHeaderSize) != MinHeaderSize)
+		if (avio_read(io, header, g_minHeaderSize) != g_minHeaderSize)
 		{
 			//EOF or read error - break
 			break;

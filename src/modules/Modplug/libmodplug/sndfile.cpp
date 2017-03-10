@@ -31,7 +31,7 @@ extern void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, D
 
 
 // Compression table
-static const signed char UnpackTable[MAX_PACK_TABLES][16] =
+constexpr signed char UnpackTable[MAX_PACK_TABLES][16] =
 //--------------------------------------------
 {
 	// CPU-generated dynamic table

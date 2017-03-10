@@ -29,8 +29,8 @@
 #include <QAction>
 #include <QLabel>
 
-static const QString standartExts = "pcm;raw";
-static const char *formatName[PCM::FORMAT_COUNT] =
+constexpr char g_standartExts[] = "pcm;raw";
+constexpr const char *g_formatName[PCM::FORMAT_COUNT] =
 {
 	"Unsigned 8bit PCM",
 	"Signed 8bit PCM",
@@ -56,7 +56,7 @@ Inputs::Inputs() :
 	init("ToneGenerator/freqs", 440);
 	init("PCM", true);
 	if (getStringList("PCM/extensions").isEmpty())
-		set("PCM/extensions", standartExts.split(';'));
+		set("PCM/extensions", QString(g_standartExts).split(';'));
 	if (getUInt("PCM/format") >= PCM::FORMAT_COUNT)
 		set("PCM/format", 2);
 	init("PCM/chn", 2);
@@ -257,7 +257,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	int checked = sets().getInt("PCM/format");
 	for (int i = 0; i < PCM::FORMAT_COUNT; ++i)
 	{
-		QRadioButton *rB = new QRadioButton(formatName[i]);
+		QRadioButton *rB = new QRadioButton(g_formatName[i]);
 		if (i == checked)
 			rB->setChecked(true);
 		fmtLayout->addWidget(rB);
@@ -321,7 +321,7 @@ void ModuleSettingsWidget::saveSettings()
 {
 	toneGenerator->save();
 	if (pcmExtsE->text().isEmpty())
-		pcmExtsE->setText(standartExts);
+		pcmExtsE->setText(g_standartExts);
 	sets().set("PCM", pcmB->isChecked());
 	sets().set("PCM/extensions", pcmExtsE->text().split(';', QString::SkipEmptyParts));
 	for (int i = 0; i < formatB.size(); ++i)

@@ -57,8 +57,8 @@ static inline MenuBar::Playlist *playlistMenu()
 	return QMPlay2GUI.menuBar->playlist;
 }
 
-static const int IconSize = 22;
-static const int IconSizeDiv2 = IconSize / 2;
+constexpr int IconSize = 22;
+constexpr int IconSizeDiv2 = IconSize / 2;
 
 /* UpdateEntryThr class */
 UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :

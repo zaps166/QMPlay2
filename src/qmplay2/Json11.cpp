@@ -26,7 +26,7 @@
 #include <limits>
 #include <cmath>
 
-static const int max_depth = 200;
+constexpr int max_depth = 200;
 
 using std::make_shared;
 using std::vector;

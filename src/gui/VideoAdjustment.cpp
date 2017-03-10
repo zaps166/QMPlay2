@@ -37,7 +37,7 @@ enum CONTROLS
 
 	CONTROLS_COUNT
 };
-static const char *ControlsNames[CONTROLS_COUNT] = {
+constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
 	QT_TRANSLATE_NOOP("VideoAdjustment", "Brightness"),
 	QT_TRANSLATE_NOOP("VideoAdjustment", "Contrast"),
 	QT_TRANSLATE_NOOP("VideoAdjustment", "Saturation"),
@@ -53,7 +53,7 @@ VideoAdjustment::VideoAdjustment() :
 	for (i = 0; i < CONTROLS_COUNT; ++i)
 	{
 
-		QLabel *titleL = new QLabel(tr(ControlsNames[i]) + ": ");
+		QLabel *titleL = new QLabel(tr(g_controlsNames[i]) + ": ");
 		titleL->setAlignment(Qt::AlignRight);
 
 		QLabel *valueL = new QLabel("0");
@@ -89,20 +89,20 @@ VideoAdjustment::~VideoAdjustment()
 void VideoAdjustment::restoreValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + ControlsNames[i]));
+		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + g_controlsNames[i]));
 }
 void VideoAdjustment::saveValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + ControlsNames[i], sliders[i].value());
+		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + g_controlsNames[i], sliders[i].value());
 }
 
 void VideoAdjustment::setModuleParam(ModuleParams *writer)
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
-		sliders[i].setEnabled(writer->hasParam(ControlsNames[i]));
-		writer->modParam(ControlsNames[i], sliders[i].value());
+		sliders[i].setEnabled(writer->hasParam(g_controlsNames[i]));
+		writer->modParam(g_controlsNames[i], sliders[i].value());
 	}
 }
 

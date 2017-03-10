@@ -239,7 +239,7 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 	else
 		data += 0x07;
 
-	static const BYTE J2B_MAX_ENVPOINTS = 10;
+	constexpr BYTE J2B_MAX_ENVPOINTS = 10;
 
 	if (isAM)
 	{
@@ -527,7 +527,7 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 				}
 				else
 				{
-					static const DWORD instr_header = 223;
+					constexpr DWORD instr_header = 223;
 					++data;
 					BYTE inst_idx = data.getBYTE() + 1;
 					data += instr_header;

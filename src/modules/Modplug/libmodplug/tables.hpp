@@ -9,14 +9,14 @@
 
 namespace QMPlay2ModPlug {
 
-static const BYTE ImpulseTrackerPortaVolCmd[16] =
+constexpr BYTE ImpulseTrackerPortaVolCmd[16] =
 {
 	0x00, 0x01, 0x04, 0x08, 0x10, 0x20, 0x40, 0x60,
 	0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 // Period table for Protracker octaves 0-5:
-static const WORD ProTrackerPeriodTable[6*12] =
+constexpr WORD ProTrackerPeriodTable[6*12] =
 {
 	1712,1616,1524,1440,1356,1280,1208,1140,1076,1016,960,907,
 	856,808,762,720,678,640,604,570,538,508,480,453,
@@ -27,7 +27,7 @@ static const WORD ProTrackerPeriodTable[6*12] =
 };
 
 
-static const WORD ProTrackerTunedPeriods[16*12] =
+constexpr WORD ProTrackerTunedPeriods[16*12] =
 {
 	1712,1616,1524,1440,1356,1280,1208,1140,1076,1016,960,907,
 	1700,1604,1514,1430,1348,1274,1202,1134,1070,1010,954,900,
@@ -49,7 +49,7 @@ static const WORD ProTrackerTunedPeriods[16*12] =
 
 
 // S3M C-4 periods
-static const WORD FreqS3MTable[16] =
+constexpr WORD FreqS3MTable[16] =
 {
 	1712,1616,1524,1440,1356,1280,
 	1208,1140,1076,1016,960,907,
@@ -58,7 +58,7 @@ static const WORD FreqS3MTable[16] =
 
 
 // S3M FineTune frequencies
-static const WORD S3MFineTuneTable[16] =
+constexpr WORD S3MFineTuneTable[16] =
 {
 	7895,7941,7985,8046,8107,8169,8232,8280,
 	8363,8413,8463,8529,8581,8651,8723,8757,	// 8363*2^((i-8)/(12*8))
@@ -66,7 +66,7 @@ static const WORD S3MFineTuneTable[16] =
 
 
 // Sinus table
-static const int16_t ModSinusTable[64] =
+constexpr int16_t ModSinusTable[64] =
 {
 	0,12,25,37,49,60,71,81,90,98,106,112,117,122,125,126,
 	127,126,125,122,117,112,106,98,90,81,71,60,49,37,25,12,
@@ -75,7 +75,7 @@ static const int16_t ModSinusTable[64] =
 };
 
 // Triangle wave table (ramp down)
-static const int16_t ModRampDownTable[64] =
+constexpr int16_t ModRampDownTable[64] =
 {
 	0,-4,-8,-12,-16,-20,-24,-28,-32,-36,-40,-44,-48,-52,-56,-60,
 	-64,-68,-72,-76,-80,-84,-88,-92,-96,-100,-104,-108,-112,-116,-120,-124,
@@ -84,7 +84,7 @@ static const int16_t ModRampDownTable[64] =
 };
 
 // Square wave table
-static const int16_t ModSquareTable[64] =
+constexpr int16_t ModSquareTable[64] =
 {
 	127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,
 	127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,
@@ -93,7 +93,7 @@ static const int16_t ModSquareTable[64] =
 };
 
 // Random wave table
-static const int16_t ModRandomTable[64] =
+constexpr int16_t ModRandomTable[64] =
 {
 	98,-127,-43,88,102,41,-65,-94,125,20,-71,-86,-70,-32,-16,-96,
 	17,72,107,-5,116,-69,-62,-40,10,-61,65,109,-18,-38,-13,-76,
@@ -103,15 +103,15 @@ static const int16_t ModRandomTable[64] =
 
 
 // volume fade tables for Retrig Note:
-static const int8_t retrigTable1[16] =
+constexpr int8_t retrigTable1[16] =
 { 0, 0, 0, 0, 0, 0, 10, 8, 0, 0, 0, 0, 0, 0, 24, 32 };
 
-static const int8_t retrigTable2[16] =
+constexpr int8_t retrigTable2[16] =
 { 0, -1, -2, -4, -8, -16, 0, 0, 0, 1, 2, 4, 8, 16, 0, 0 };
 
 
 
-static const WORD XMPeriodTable[104] =
+constexpr WORD XMPeriodTable[104] =
 {
 	907,900,894,887,881,875,868,862,856,850,844,838,832,826,820,814,
 	808,802,796,791,785,779,774,768,762,757,752,746,741,736,730,725,
@@ -123,7 +123,7 @@ static const WORD XMPeriodTable[104] =
 };
 
 
-static const uint32_t XMLinearTable[768] =
+constexpr uint32_t XMLinearTable[768] =
 {
 	535232,534749,534266,533784,533303,532822,532341,531861,
 	531381,530902,530423,529944,529466,528988,528511,528034,
@@ -225,7 +225,7 @@ static const uint32_t XMLinearTable[768] =
 };
 
 
-static const int8_t ft2VibratoTable[256] =
+constexpr int8_t ft2VibratoTable[256] =
 {
 	0,-2,-3,-5,-6,-8,-9,-11,-12,-14,-16,-17,-19,-20,-22,-23,
 	-24,-26,-27,-29,-30,-32,-33,-34,-36,-37,-38,-39,-41,-42,
@@ -247,21 +247,21 @@ static const int8_t ft2VibratoTable[256] =
 
 
 
-static const DWORD FineLinearSlideUpTable[16] =
+constexpr DWORD FineLinearSlideUpTable[16] =
 {
 	65536, 65595, 65654, 65714,	65773, 65832, 65892, 65951,
 	66011, 66071, 66130, 66190, 66250, 66309, 66369, 66429
 };
 
 
-static const DWORD FineLinearSlideDownTable[16] =
+constexpr DWORD FineLinearSlideDownTable[16] =
 {
 	65535, 65477, 65418, 65359, 65300, 65241, 65182, 65123,
 	65065, 65006, 64947, 64888, 64830, 64772, 64713, 64645
 };
 
 
-static const DWORD LinearSlideUpTable[256] =
+constexpr DWORD LinearSlideUpTable[256] =
 {
 	65536, 65773, 66010, 66249, 66489, 66729, 66971, 67213,
 	67456, 67700, 67945, 68190, 68437, 68685, 68933, 69182,
@@ -298,7 +298,7 @@ static const DWORD LinearSlideUpTable[256] =
 };
 
 
-static const DWORD LinearSlideDownTable[256] =
+constexpr DWORD LinearSlideDownTable[256] =
 {
 	65536, 65299, 65064, 64830, 64596, 64363, 64131, 63900,
 	63670, 63440, 63212, 62984, 62757, 62531, 62305, 62081,
@@ -336,7 +336,7 @@ static const DWORD LinearSlideDownTable[256] =
 };
 
 
-static const int SpectrumSinusTable[256*2] =
+constexpr int SpectrumSinusTable[256*2] =
 {
 	0, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 10, 10, 11,
 	12, 13, 14, 14, 15, 16, 17, 17, 18, 19, 20, 20, 21, 22, 22, 23,

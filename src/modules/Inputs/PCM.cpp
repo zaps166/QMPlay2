@@ -24,7 +24,7 @@
 
 /**/
 
-static const unsigned char bytes[PCM::FORMAT_COUNT] =
+constexpr quint8 bytes[PCM::FORMAT_COUNT] =
 {
 	1, 1, 2, 3, 4, 4
 };

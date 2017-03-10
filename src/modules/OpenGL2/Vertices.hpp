@@ -18,7 +18,7 @@
 
 #pragma once
 
-static const float verticesYCbCr[8][8] = {
+constexpr float verticesYCbCr[8][8] = {
 	/* Normal */
 	{
 		-1.0f, -1.0f, //0. Left-bottom
@@ -77,7 +77,7 @@ static const float verticesYCbCr[8][8] = {
 		-1.0f, +1.0f, //2. Left-top
 	},
 };
-static const float texCoordOSD[8] = {
+constexpr float texCoordOSD[8] = {
 	0.0f, 1.0f,
 	1.0f, 1.0f,
 	0.0f, 0.0f,

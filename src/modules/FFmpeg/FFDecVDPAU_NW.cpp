@@ -165,7 +165,7 @@ public:
 		return surfacesQueue;
 	}
 
-	static const int surfacesCount = 20;
+	static constexpr int surfacesCount = 20;
 	VdpVideoSurface surfaces[surfacesCount];
 
 	bool ok;

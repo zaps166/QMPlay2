@@ -70,7 +70,7 @@ private:
 
 	bool paused;
 
-	static const int drawTimeout = 40;
+	static constexpr int drawTimeout = 40;
 	QList<const QMPlay2OSD *> osd_list;
 	bool subpict_dest_is_screen_coord;
 	QList<QByteArray> osd_checksums;

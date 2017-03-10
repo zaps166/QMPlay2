@@ -88,7 +88,7 @@ private:
 
 	QList<VAProfile> profileList;
 
-	static const int surfacesCount = 20;
+	static constexpr int surfacesCount = 20;
 	VASurfaceID surfaces[surfacesCount];
 	bool surfacesCreated;
 

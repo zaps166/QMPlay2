@@ -154,7 +154,7 @@ bool VDPAUWriter::processParams(bool *)
 		VdpProcamp procamp = {VDP_PROCAMP_VERSION, Brightness / 100.0f, (Contrast / 100.0f) + 1.0f, (Saturation / 100.0f) + 1.0f, Hue / 31.830989f};
 		if (vdp_generate_csc_matrix(&procamp, (outW >= 1280 || outH > 576) ? VDP_COLOR_STANDARD_ITUR_BT_709 : VDP_COLOR_STANDARD_ITUR_BT_601, &matrix) == VDP_STATUS_OK)
 		{
-			static const VdpVideoMixerAttribute attributes[] = {VDP_VIDEO_MIXER_ATTRIBUTE_CSC_MATRIX};
+			static constexpr VdpVideoMixerAttribute attributes[] = {VDP_VIDEO_MIXER_ATTRIBUTE_CSC_MATRIX};
 			const void *attributeValues[] = {&matrix};
 			vdp_video_mixer_set_attribute_values(mixer, 1, attributes, attributeValues);
 		}
@@ -400,14 +400,14 @@ bool VDPAUWriter::hwAccelInit(int W, int H, const char *codec_name)
 			}
 			if (!err)
 			{
-				static const int parametersCount = 3;
-				static const VdpVideoMixerParameter parameters[parametersCount] =
+				static constexpr int parametersCount = 3;
+				static constexpr VdpVideoMixerParameter parameters[parametersCount] =
 				{
 					VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_WIDTH,
 					VDP_VIDEO_MIXER_PARAMETER_VIDEO_SURFACE_HEIGHT,
 					VDP_VIDEO_MIXER_PARAMETER_CHROMA_TYPE
 				};
-				static const VdpChromaType vdp_chroma_type = VDP_CHROMA_TYPE_420;
+				static constexpr VdpChromaType vdp_chroma_type = VDP_CHROMA_TYPE_420;
 				const void *const parameterValues[parametersCount] =
 				{
 					&outW,
@@ -481,8 +481,14 @@ void VDPAUWriter::setFeatures()
 		QMPlay2Core.log(tr("Unsupported image sharpness filter"), ErrorLog | LogOnce);
 	if (featuresSupport[2] || featuresSupport[3])
 	{
-		static const VdpVideoMixerAttribute attributes[] = {VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL, VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL};
-		const void *attributeValues[] = {&noisereduction_lvl, &sharpness_lvl};
+		static constexpr VdpVideoMixerAttribute attributes[] = {
+			VDP_VIDEO_MIXER_ATTRIBUTE_NOISE_REDUCTION_LEVEL,
+			VDP_VIDEO_MIXER_ATTRIBUTE_SHARPNESS_LEVEL
+		};
+		const void *attributeValues[] = {
+			&noisereduction_lvl,
+			&sharpness_lvl
+		};
 		vdp_video_mixer_set_attribute_values(mixer, 2, attributes, attributeValues);
 	}
 	for (int i = scalingLevelsCount - 1; i >= 0; --i)
@@ -543,7 +549,7 @@ void VDPAUWriter::presentationQueueCreate(WId winId)
 		vdp_presentation_queue_create(device, queueTarget, &presentationQueue) == VDP_STATUS_OK
 	)
 	{
-		static const VdpColor vdp_background_color = {0.000f, 0.000f, 0.004f, 0.000f};
+		static constexpr VdpColor vdp_background_color = {0.000f, 0.000f, 0.004f, 0.000f};
 		vdp_presentation_queue_set_background_color(presentationQueue, (VdpColor *)&vdp_background_color);
 		lastWinId = winId;
 	}

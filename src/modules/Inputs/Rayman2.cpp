@@ -26,7 +26,7 @@
 
 static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 {
-	static const quint16 ima_step_table[89] =
+	constexpr quint16 ima_step_table[89] =
 	{
 		7,     8,     9,     10,    11,    12,    13,    14,    16,    17,
 		19,    21,    23,    25,    28,    31,    34,    37,    41,    45,
@@ -38,7 +38,7 @@ static float decode(unsigned char nibble, short &stepIndex, int &predictor)
 		5894,  6484,  7132,  7845,  8630,  9493,  10442, 11487, 12635, 13899,
 		15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
 	};
-	static const qint8 ima_index_table[8] = {-1, -1, -1, -1, 2, 4, 6, 8};
+	constexpr qint8 ima_index_table[8] = {-1, -1, -1, -1, 2, 4, 6, 8};
 
 	const int step = ima_step_table[stepIndex];
 	int diff = step >> 3;

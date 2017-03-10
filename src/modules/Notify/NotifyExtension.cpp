@@ -23,14 +23,14 @@
 #include <QCoreApplication>
 #include <QFile>
 
-static const char *PlayState[3] = {
+constexpr const char *g_playState[3] = {
 	QT_TRANSLATE_NOOP("NotifyService", "Stopped"),
 	QT_TRANSLATE_NOOP("NotifyService", "Playing"),
 	QT_TRANSLATE_NOOP("NotifyService", "Paused")
 };
 
 NotifyService::NotifyService(Settings &settings) :
-	m_lastPlayState(PlayState[0]),
+	m_lastPlayState(g_playState[0]),
 	m_timeout(settings.getInt("Timeout"))
 {
 	if (settings.getBool("ShowTitle"))
@@ -107,7 +107,7 @@ void NotifyService::playStateChanged(const QString &playState)
 	 *  1. The last one is the same as the current one
 	 *  2. The current one is Playing and the last one wasn't Paused
 	*/
-	if (playState != m_lastPlayState && (playState != PlayState[1] || m_lastPlayState == PlayState[2]))
+	if (playState != m_lastPlayState && (playState != g_playState[1] || m_lastPlayState == g_playState[2]))
 		Notifies::notify(QCoreApplication::applicationName(), tr(playState.toUtf8()), m_timeout, 1);
 	m_lastPlayState = playState;
 }

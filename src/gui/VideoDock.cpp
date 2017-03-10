@@ -35,7 +35,7 @@
 
 #include <cmath>
 
-static const int hideCursorTimeout = 750;
+constexpr int g_hideCursorTimeout = 750;
 
 VideoDock::VideoDock() :
 	isTouch(false), touchEnded(false),
@@ -198,7 +198,7 @@ void VideoDock::mouseMoveEvent(QMouseEvent *e)
 	{
 		if (internalW->cursor().shape() == Qt::BlankCursor && ++pixels == 25)
 			unsetCursor(internalW);
-		hideCursorTim.start(hideCursorTimeout);
+		hideCursorTim.start(g_hideCursorTimeout);
 	}
 	if (e)
 		DockWidget::mouseMoveEvent(e);
@@ -236,7 +236,7 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 	if (QWidget *internalW = internalWidget())
 	{
 		if (internalW->cursor().shape() != Qt::BlankCursor)
-			hideCursorTim.start(hideCursorTimeout);
+			hideCursorTim.start(g_hideCursorTimeout);
 	}
 	DockWidget::mouseReleaseEvent(e);
 }
@@ -362,7 +362,7 @@ void VideoDock::hasCoverImage(bool b)
 		if (canHideIDWCursor)
 		{
 			if (!hideCursorTim.isActive() && iDW.underMouse())
-				hideCursorTim.start(hideCursorTimeout);
+				hideCursorTim.start(g_hideCursorTimeout);
 		}
 		else
 		{

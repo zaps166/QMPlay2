@@ -133,12 +133,12 @@ private:
 	VdpPreemptionCallbackRegister *vdp_preemption_callback_register;
 	VdpVideoMixerQueryFeatureSupport *vdp_video_mixer_query_feature_support;
 
-	static const int surfacesCount = 20, outputSurfacesCount = 2;
+	static constexpr int surfacesCount = 20, outputSurfacesCount = 2;
 	VdpOutputSurface outputSurfaces[outputSurfacesCount];
 	VdpVideoSurface surfaces[surfacesCount], renderSurfaces[3];
 	QSize outputSurfacesSize;
 
-	static const int featuresCount = 13, scalingLevelsIdx = 4, scalingLevelsCount = 9;
+	static constexpr int featuresCount = 13, scalingLevelsIdx = 4, scalingLevelsCount = 9;
 	VdpVideoMixerFeature features[featuresCount];
 	VdpBool featureEnables[featuresCount];
 	float noisereduction_lvl, sharpness_lvl;
@@ -148,7 +148,7 @@ private:
 	VdpRect srcRect, dstRect;
 	WId lastWinId;
 
-	static const int drawTimeout = 40;
+	static constexpr int drawTimeout = 40;
 	QList<const QMPlay2OSD *> osd_list;
 	QList<QByteArray> osd_checksums;
 	VdpBitmapSurface bitmapSurface;
