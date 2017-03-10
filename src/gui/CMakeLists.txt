@@ -268,4 +268,9 @@ else()
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.1.gz
                 DESTINATION ${INSTALL_PATH_MAN}/man1/)
     endif()
+
+    # appdata
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Unix/QMPlay2.appdata.xml.in ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.appdata.xml @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.appdata.xml
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
 endif()
