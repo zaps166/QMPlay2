@@ -19,6 +19,11 @@ QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg
 		Adds specified <\fIaddress\fR> to playlist.
 .br
 
+-profile <\fIname\fR>
+.br
+		Starts application with given profile name.
+.br
+
 -noplay
 .br
 		Doesn't play after run (bypass "Remember playback position" option).
