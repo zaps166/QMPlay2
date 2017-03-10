@@ -37,17 +37,17 @@ QMPlay2PixelFormat VideoFrameSize::getFormat() const
 	switch ((chromaShiftW << 8) | chromaShiftH)
 	{
 		case 0x0000:
-			return QMPLAY2_PIX_FMT_YUV444P;
+			return QMPlay2PixelFormat::YUV444P;
 		case 0x0001:
-			return QMPLAY2_PIX_FMT_YUV440P;
+			return QMPlay2PixelFormat::YUV440P;
 		case 0x0100:
-			return QMPLAY2_PIX_FMT_YUV422P;
+			return QMPlay2PixelFormat::YUV422P;
 		case 0x0200:
-			return QMPLAY2_PIX_FMT_YUV411P;
+			return QMPlay2PixelFormat::YUV411P;
 		case 0x0202:
-			return QMPLAY2_PIX_FMT_YUV410P;
+			return QMPlay2PixelFormat::YUV410P;
 	}
-	return QMPLAY2_PIX_FMT_YUV420P;
+	return QMPlay2PixelFormat::YUV420P;
 }
 
 void VideoFrameSize::clear()

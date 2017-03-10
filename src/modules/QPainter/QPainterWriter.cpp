@@ -184,12 +184,12 @@ bool QPainterWriter::processParams(bool *)
 QMPlay2PixelFormats QPainterWriter::supportedPixelFormats() const
 {
 	return QMPlay2PixelFormats()
-			<< QMPLAY2_PIX_FMT_YUV420P
-			<< QMPLAY2_PIX_FMT_YUV422P
-			<< QMPLAY2_PIX_FMT_YUV444P
-			<< QMPLAY2_PIX_FMT_YUV410P
-			<< QMPLAY2_PIX_FMT_YUV411P
-			<< QMPLAY2_PIX_FMT_YUV440P
+			<< QMPlay2PixelFormat::YUV420P
+			<< QMPlay2PixelFormat::YUV422P
+			<< QMPlay2PixelFormat::YUV444P
+			<< QMPlay2PixelFormat::YUV410P
+			<< QMPlay2PixelFormat::YUV411P
+			<< QMPlay2PixelFormat::YUV440P
 	;
 }
 

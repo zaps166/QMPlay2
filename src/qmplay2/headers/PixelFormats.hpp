@@ -20,15 +20,15 @@
 
 #include <QVector>
 
-enum QMPlay2PixelFormat //Compatible with FFmpeg
+enum class QMPlay2PixelFormat //Compatible with FFmpeg
 {
-	QMPLAY2_PIX_FMT_YUV420P =  0,
-	QMPLAY2_PIX_FMT_YUV422P =  4,
-	QMPLAY2_PIX_FMT_YUV444P =  5,
-	QMPLAY2_PIX_FMT_YUV410P =  6,
-	QMPLAY2_PIX_FMT_YUV411P =  7,
-	QMPLAY2_PIX_FMT_YUV440P = 33,
+	YUV420P =  0,
+	YUV422P =  4,
+	YUV444P =  5,
+	YUV410P =  6,
+	YUV411P =  7,
+	YUV440P = 33,
 
-	QMPLAY2_PIX_FMT_COUNT   =  6
+	Count   =  6
 };
 using QMPlay2PixelFormats = QVector<QMPlay2PixelFormat>;

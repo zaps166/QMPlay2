@@ -381,11 +381,11 @@ void FFDecSW::setPixelFormat()
 		const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get((AVPixelFormat)supportedPixelFormats.at(i));
 		if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
 		{
-			//Use first format as default (mostly QMPLAY2_PIX_FMT_YUV420P) and look at next formats,
+			//Use first format as default (mostly QMPlay2PixelFormat::YUV420P) and look at next formats,
 			//otherwise break the loop if found proper format.
 			chromaShiftW = supportedPixDesc->log2_chroma_w;
 			chromaShiftH = supportedPixDesc->log2_chroma_h;
-			desiredPixFmt = supportedPixelFormats.at(i);
+			desiredPixFmt = (int)supportedPixelFormats.at(i);
 			if (i != 0)
 				break;
 		}
