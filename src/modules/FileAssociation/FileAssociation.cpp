@@ -18,6 +18,8 @@
 
 #include <FileAssociation.hpp>
 
+#include <Version.hpp>
+
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -34,7 +36,7 @@ FileAssociation::FileAssociation() :
 	init("Dirs", true);
 	init("Drvs", true);
 	init("AudioCD", true);
-	if (getUInt("Ver") < VER)
+	if (!Version::isPortable() && getUInt("Ver") < VER)
 	{
 		reallyFirsttime = contains("Ver");
 		set("Ver", VER);
