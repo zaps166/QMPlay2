@@ -30,8 +30,7 @@
 #include <QLabel>
 
 constexpr char g_standartExts[] = "pcm;raw";
-constexpr const char *g_formatName[PCM::FORMAT_COUNT] =
-{
+constexpr const char *g_formatName[PCM::FORMAT_COUNT] = {
 	"Unsigned 8bit PCM",
 	"Signed 8bit PCM",
 	"Signed 16bit PCM",
