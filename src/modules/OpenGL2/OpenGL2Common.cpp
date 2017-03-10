@@ -17,6 +17,8 @@
 */
 
 #include <OpenGL2Common.hpp>
+
+#include <Vertices.hpp>
 #include <Sphere.hpp>
 
 #include <HWAccelInterface.hpp>
@@ -38,8 +40,6 @@
 #include <QResource>
 #include <QPainter>
 #include <QWidget>
-
-#include <Vertices.hpp>
 
 #include <cmath>
 
