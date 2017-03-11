@@ -121,7 +121,8 @@ static inline bool isPlaylist(QTreeWidgetItem *tWI)
 /**/
 
 ResultsYoutube::ResultsYoutube() :
-	menu(new QMenu(this))
+	menu(new QMenu(this)),
+	pixels(0)
 {
 	setAnimated(true);
 	setIndentation(12);
@@ -177,37 +178,46 @@ void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 
 void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 {
-	QTreeWidgetItem *tWI = currentItem();
-	if (tWI && !isPlaylist(tWI))
+	if (++pixels == 25)
 	{
-		QString url;
-		if (e->buttons() & Qt::LeftButton)
-			url = getQMPlay2Url(tWI);
-		else if (e->buttons() & Qt::MiddleButton) //Link do strumienia
+		QTreeWidgetItem *tWI = currentItem();
+		if (tWI && !isPlaylist(tWI))
 		{
-			QTreeWidgetItem *tWI2 = tWI->parent() ? tWI : getDefaultQuality(tWI);
-			if (tWI2)
-				url = tWI2->data(0, Qt::UserRole).toString();
-		}
-		if (!url.isEmpty())
-		{
-			QMimeData *mimeData = new QMimeData;
+			QString url;
 			if (e->buttons() & Qt::LeftButton)
-				mimeData->setText(url);
-			else if (e->buttons() & Qt::MiddleButton)
-				mimeData->setUrls(QList<QUrl>() << url);
+				url = getQMPlay2Url(tWI);
+			else if (e->buttons() & Qt::MiddleButton) //Link do strumienia
+			{
+				QTreeWidgetItem *tWI2 = tWI->parent() ? tWI : getDefaultQuality(tWI);
+				if (tWI2)
+					url = tWI2->data(0, Qt::UserRole).toString();
+			}
+			if (!url.isEmpty())
+			{
+				QMimeData *mimeData = new QMimeData;
+				if (e->buttons() & Qt::LeftButton)
+					mimeData->setText(url);
+				else if (e->buttons() & Qt::MiddleButton)
+					mimeData->setUrls(QList<QUrl>() << url);
 
-			if (tWI->parent())
-				tWI = tWI->parent();
+				if (tWI->parent())
+					tWI = tWI->parent();
 
-			QDrag *drag = new QDrag(this);
-			drag->setMimeData(mimeData);
-			drag->setPixmap(tWI->data(0, Qt::DecorationRole).value<QPixmap>());
-			drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction);
-			return;
+				QDrag *drag = new QDrag(this);
+				drag->setMimeData(mimeData);
+				drag->setPixmap(tWI->data(0, Qt::DecorationRole).value<QPixmap>());
+				drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction);
+				pixels = 0;
+				return;
+			}
 		}
 	}
 	QTreeWidget::mouseMoveEvent(e);
+}
+void ResultsYoutube::mouseReleaseEvent(QMouseEvent *e)
+{
+	pixels = 0;
+	QTreeWidget::mouseReleaseEvent(e);
 }
 
 void ResultsYoutube::enqueue()

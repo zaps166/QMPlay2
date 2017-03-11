@@ -52,7 +52,9 @@ private:
 	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
 	void mouseMoveEvent(QMouseEvent *) override final;
+	void mouseReleaseEvent(QMouseEvent *) override final;
 
+	int pixels;
 	QMenu *menu;
 private slots:
 	void enqueue();
