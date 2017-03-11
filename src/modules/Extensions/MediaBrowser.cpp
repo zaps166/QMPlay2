@@ -192,7 +192,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_completer(new QCompleter(m_completerModel, this)),
 	m_currPage(1),
 	m_net(this),
-	m_visible(false), m_first(true)
+	m_visible(false), m_first(true), m_overrideVisibility(false)
 {
 #ifdef USE_PROSTOPLEER
 	m_mediaBrowsers.emplace_back(new ProstoPleer(m_net));
@@ -337,21 +337,21 @@ void MediaBrowser::visibilityChanged(bool v)
 {
 	setEnabled(v);
 	m_visible = v;
-	if (m_visible && m_first)
-	{
+	if (m_first)
 		providerChanged(m_providersB->currentIndex());
-		m_first = false;
-	}
 }
 
 void MediaBrowser::providerChanged(int idx)
 {
-	if (m_visible && idx > -1)
+	if (m_visible || m_overrideVisibility)
 	{
-		m_searchE->clearText();
-		m_mediaBrowser = m_mediaBrowsers[idx].get();
-		m_mediaBrowser->prepareWidget(m_resultsW);
-		sets().set("MediaBrowser/Provider", m_providersB->currentText());
+		if (idx > -1)
+		{
+			m_searchE->clearText();
+			m_mediaBrowser = m_mediaBrowsers[idx].get();
+			m_mediaBrowser->prepareWidget(m_resultsW);
+			sets().set("MediaBrowser/Provider", m_providersB->currentText());
+		}
 		m_first = false;
 	}
 }
@@ -483,7 +483,9 @@ void MediaBrowser::searchMenu()
 	const QString name = sender()->property("name").toString();
 	if (!name.isEmpty())
 	{
+		m_overrideVisibility = true;
 		m_providersB->setCurrentIndex(sender()->property("idx").toUInt());
+		m_overrideVisibility = false;
 		if (!m_dW->isVisible())
 			m_dW->show();
 		m_dW->raise();

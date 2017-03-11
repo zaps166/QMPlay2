@@ -130,7 +130,7 @@ private:
 	QPointer<NetworkReply> m_autocompleteReply, m_searchReply, m_imageReply;
 	NetworkAccess m_net;
 
-	bool m_visible, m_first;
+	bool m_visible, m_first, m_overrideVisibility;
 };
 
 #define MediaBrowserName "MediaBrowser"
