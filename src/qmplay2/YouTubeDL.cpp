@@ -119,6 +119,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 
 QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
 {
+#ifndef Q_OS_ANDROID
 	enum class Lock
 	{
 		Read,
@@ -322,6 +323,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	}
 
 	g_lock.unlock(); // Unlock for read or for write (if download has failed)
+#endif // Q_OS_ANDROID
 	return {};
 }
 
