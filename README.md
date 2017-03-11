@@ -68,15 +68,11 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
 If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
 
-Some YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will ask you for downloading it if "youtube-dl" doesn't exist.
+Some YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will download it automatically. You can remove downloaded "youtube-dl" from settings.
 
 ####Windows
 
 - Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
-
-####Linux
-
-- Don't use "youtube-dl" from repositories - usually it contains too old package which no longer works.
 
 ##Spherical view
 
