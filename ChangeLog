@@ -9,7 +9,10 @@ Changes in QMPlay2 build 17.03.10:
 	- add XSPF support (thanks Zamarin Arthur for help),
 	- merge ProstoPleer and SoundCloud in MediaBrowser,
 	- allow to load profile from command line argument,
-	- move YouTubeDL from YouTube to shared library,
+	- move YouTubeDL from YouTube to shared library:
+		- "youtube-dl" is downloaded automatically without question (if necessary),
+		- you can see notifications about downloading/updating "youtube-dl",
+		- "youtube-dl" can be removed from settings,
 	- rename "Notifies" module to "Notify" module,
 	- add SoundCloud support (Zamarin Arthur),
 	- CMake improvements for Windows host,
