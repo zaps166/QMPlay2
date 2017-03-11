@@ -77,7 +77,7 @@ public:
 	virtual void setCompleterListCallback(const CompleterReadyCallback &callback);
 
 
-	virtual QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const = 0;
+	QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const;
 
 	virtual QAction *getAction() const = 0;
 

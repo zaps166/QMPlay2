@@ -46,3 +46,8 @@ void MediaBrowserCommon::setCompleterListCallback(const CompleterReadyCallback &
 {
 	Q_UNUSED(callback)
 }
+
+QMPlay2Extensions::AddressPrefix MediaBrowserCommon::addressPrefix(bool img) const
+{
+	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
+}

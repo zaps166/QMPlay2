@@ -48,8 +48,6 @@ public:
 	QStringList getCompletions(const QByteArray &reply) override final;
 
 
-	QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const override final;
-
 	QAction *getAction() const override final;
 
 	bool convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;

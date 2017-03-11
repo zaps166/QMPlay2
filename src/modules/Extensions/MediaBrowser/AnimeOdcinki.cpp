@@ -284,11 +284,6 @@ void AnimeOdcinki::setCompleterListCallback(const MediaBrowserCommon::CompleterR
 	}
 }
 
-QMPlay2Extensions::AddressPrefix AnimeOdcinki::addressPrefix(bool img) const
-{
-	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
-}
-
 QAction *AnimeOdcinki::getAction() const
 {
 	return nullptr;
@@ -296,103 +291,103 @@ QAction *AnimeOdcinki::getAction() const
 
 bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
-	if (prefix == m_name)
+	if (prefix != m_name)
+		return false;
+
+	if (img)
+		*img = m_img;
+	if (ioCtrl && streamUrl)
 	{
-		if (img)
-			*img = m_img;
-		if (ioCtrl && streamUrl)
+		NetworkAccess net;
+		net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+
+		IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+		if (net.startAndWait(netReply, url))
 		{
-			NetworkAccess net;
-			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+			const QByteArray reply = netReply->readAll();
 
-			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			if (net.startAndWait(netReply, url))
+			bool hasName = false;
+			if (name)
 			{
-				const QByteArray reply = netReply->readAll();
-
-				bool hasName = false;
-				if (name)
+				int idx1 = reply.indexOf("page-header");
+				if (idx1 > -1)
 				{
-					int idx1 = reply.indexOf("page-header");
+					idx1 = reply.indexOf(">", idx1);
 					if (idx1 > -1)
 					{
-						idx1 = reply.indexOf(">", idx1);
-						if (idx1 > -1)
-						{
-							idx1 += 1;
+						idx1 += 1;
 
-							int idx2 = reply.indexOf("<", idx1);
-							if (idx2 > -1)
-							{
-								*name = QTextDocumentFragment::fromHtml(reply.mid(idx1, idx2 - idx1)).toPlainText();
-								if (!name->isEmpty())
-									hasName = true;
-							}
+						int idx2 = reply.indexOf("<", idx1);
+						if (idx2 > -1)
+						{
+							*name = QTextDocumentFragment::fromHtml(reply.mid(idx1, idx2 - idx1)).toPlainText();
+							if (!name->isEmpty())
+								hasName = true;
 						}
 					}
 				}
+			}
 
-				bool hasStreamUrl = false;
-				QString error;
+			bool hasStreamUrl = false;
+			QString error;
 
-				const auto getStreamUrl = [&](const QString &animeUrl)->bool {
-					IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
-					if (ytDl.assign(new YouTubeDL))
+			const auto getStreamUrl = [&](const QString &animeUrl)->bool {
+				IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
+				if (ytDl.assign(new YouTubeDL))
+				{
+					QString newUrl;
+					ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
+					ytDl.clear();
+					if (!newUrl.isEmpty())
 					{
-						QString newUrl;
-						ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
-						ytDl.clear();
-						if (!newUrl.isEmpty())
-						{
-							*streamUrl = newUrl;
-							return true;
-						}
+						*streamUrl = newUrl;
+						return true;
 					}
-					return false;
-				};
+				}
+				return false;
+			};
 
-				const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
-					const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
-					if (!adFlyUrl.isEmpty())
+			const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
+				const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
+				if (!adFlyUrl.isEmpty())
+				{
+					for (int i = 0; i < 3; ++i) // Try three times
 					{
-						for (int i = 0; i < 3; ++i) // Try three times
+						if (!net.start(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
+							break;
+						netReply->waitForFinished();
+						if (netReply->error() != NetworkReply::Error::Connection)
+							break;
+					}
+					if (netReply && !netReply->hasError())
+					{
+						QByteArray data = netReply->readAll();
+						const int idx = data.indexOf("<");
+						if (idx > -1)
 						{
-							if (!net.start(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
-								break;
-							netReply->waitForFinished();
-							if (netReply->error() != NetworkReply::Error::Connection)
-								break;
-						}
-						if (netReply && !netReply->hasError())
-						{
-							QByteArray data = netReply->readAll();
-							const int idx = data.indexOf("<");
-							if (idx > -1)
+							const QString &animeUrl = data.left(idx);
+							if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
+								hasStreamUrl = getStreamUrl(animeUrl);
+							else if (net.startAndWait(netReply, animeUrl))
 							{
-								const QString &animeUrl = data.left(idx);
-								if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
-									hasStreamUrl = getStreamUrl(animeUrl);
-								else if (net.startAndWait(netReply, animeUrl))
+								// Download raw file from Google Drive
+								data = netReply->readAll().constData();
+								int idx1 = data.indexOf("uc-download-link");
+								if (idx1 > -1)
 								{
-									// Download raw file from Google Drive
-									data = netReply->readAll().constData();
-									int idx1 = data.indexOf("uc-download-link");
+									idx1 = data.indexOf("href=\"", idx1);
 									if (idx1 > -1)
 									{
-										idx1 = data.indexOf("href=\"", idx1);
-										if (idx1 > -1)
+										idx1 += 6;
+										int idx2 = data.indexOf('"', idx1);
+										if (idx2 > -1)
 										{
-											idx1 += 6;
-											int idx2 = data.indexOf('"', idx1);
-											if (idx2 > -1)
+											const QString path = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
+											if (path.startsWith("/"))
 											{
-												const QString path = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
-												if (path.startsWith("/"))
-												{
-													*streamUrl = "https://docs.google.com" + path;
-													QMPlay2Core.addCookies(*streamUrl, netReply->getCookies());
-													hasStreamUrl = true;
-												}
+												*streamUrl = "https://docs.google.com" + path;
+												QMPlay2Core.addCookies(*streamUrl, netReply->getCookies());
+												hasStreamUrl = true;
 											}
 										}
 									}
@@ -400,46 +395,45 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QSt
 							}
 						}
 					}
-				};
-
-				if (extension && !ioCtrl->isAborted()) // Download only
-				{
-					getDownloadButtonUrl(true);
-					*extension = ".mp4"; // Probably all videos here have MP4 file format
 				}
+			};
 
-				if (!hasStreamUrl && !ioCtrl->isAborted())
+			if (extension && !ioCtrl->isAborted()) // Download only
+			{
+				getDownloadButtonUrl(true);
+				*extension = ".mp4"; // Probably all videos here have MP4 file format
+			}
+
+			if (!hasStreamUrl && !ioCtrl->isAborted())
+			{
+				for (const Json &json : getEmbeddedPlayers(reply))
 				{
-					for (const Json &json : getEmbeddedPlayers(reply))
+					QString playerUrl = decryptUrl(json["v"].string_value(), json["a"].string_value());
+					if (!playerUrl.isEmpty())
 					{
-						QString playerUrl = decryptUrl(json["v"].string_value(), json["a"].string_value());
-						if (!playerUrl.isEmpty())
+						if (playerUrl.contains("gamedor.usermd.net") && net.startAndWait(netReply, playerUrl, QByteArray(), "Referer: " + url.toUtf8()))
 						{
-							if (playerUrl.contains("gamedor.usermd.net") && net.startAndWait(netReply, playerUrl, QByteArray(), "Referer: " + url.toUtf8()))
-							{
-								playerUrl = getGamedorUsermdUrl(netReply->readAll());
-								if (playerUrl.isEmpty())
-									continue;
-							}
-							hasStreamUrl = getStreamUrl(playerUrl);
-							if (hasStreamUrl)
-								break;
+							playerUrl = getGamedorUsermdUrl(netReply->readAll());
+							if (playerUrl.isEmpty())
+								continue;
 						}
+						hasStreamUrl = getStreamUrl(playerUrl);
+						if (hasStreamUrl)
+							break;
 					}
 				}
-
-				if (!extension && !hasStreamUrl && !ioCtrl->isAborted()) // Fallback to download button...
-					getDownloadButtonUrl(false);
-
-				if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
-					emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
-
-				ioCtrl->clear();
 			}
+
+			if (!extension && !hasStreamUrl && !ioCtrl->isAborted()) // Fallback to download button...
+				getDownloadButtonUrl(false);
+
+			if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
+				emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
+
+			ioCtrl->clear();
 		}
-		return true;
 	}
-	return false;
+	return true;
 }
 
 void AnimeOdcinki::gotAnimeList()

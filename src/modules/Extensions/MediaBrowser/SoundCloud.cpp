@@ -123,11 +123,6 @@ QStringList SoundCloud::getCompletions(const QByteArray &reply)
 	return {};
 }
 
-QMPlay2Extensions::AddressPrefix SoundCloud::addressPrefix(bool img) const
-{
-	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
-}
-
 QAction *SoundCloud::getAction() const
 {
 	QAction *act = new QAction(tr("Search on SoundCloud"), nullptr);
@@ -137,32 +132,31 @@ QAction *SoundCloud::getAction() const
 
 bool SoundCloud::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
-	if (prefix == m_name)
-	{
-		if (img)
-			*img = m_img;
-		if (extension)
-			*extension = ".mp3";
-		if (ioCtrl)
-		{
-			NetworkAccess net;
-			net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+	if (prefix != m_name)
+		return false;
 
-			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-			if (net.startAndWait(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
+	if (img)
+		*img = m_img;
+	if (extension)
+		*extension = ".mp3";
+	if (ioCtrl)
+	{
+		NetworkAccess net;
+		net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+
+		IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+		if (net.startAndWait(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
+		{
+			const Json json = Json::parse(netReply->readAll());
+			if (json.is_object())
 			{
-				const Json json = Json::parse(netReply->readAll());
-				if (json.is_object())
-				{
-					if (streamUrl)
-						*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
-					if (name)
-						*name = json["title"].string_value();
-				}
-				netReply.clear();
+				if (streamUrl)
+					*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
+				if (name)
+					*name = json["title"].string_value();
 			}
+			netReply.clear();
 		}
-		return true;
 	}
-	return false;
+	return true;
 }

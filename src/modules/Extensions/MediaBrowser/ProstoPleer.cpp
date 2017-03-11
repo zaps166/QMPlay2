@@ -147,11 +147,6 @@ QStringList ProstoPleer::getCompletions(const QByteArray &reply)
 	return {};
 }
 
-QMPlay2Extensions::AddressPrefix ProstoPleer::addressPrefix(bool img) const
-{
-	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
-}
-
 QAction *ProstoPleer::getAction() const
 {
 	QAction *act = new QAction(tr("Search on Prostopleer"), nullptr);
@@ -162,43 +157,42 @@ QAction *ProstoPleer::getAction() const
 bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(name)
-	if (prefix == m_name)
+	if (prefix != m_name)
+		return false;
+
+	if (streamUrl || img)
 	{
-		if (streamUrl || img)
+		if (img)
+			*img = m_img;
+		if (extension)
+			*extension = ".mp3";
+		if (ioCtrl && streamUrl)
 		{
-			if (img)
-				*img = m_img;
-			if (extension)
-				*extension = ".mp3";
-			if (ioCtrl && streamUrl)
+			QString fileId = url;
+			while (fileId.endsWith('/'))
+				fileId.truncate(1);
+
+			const int idx = url.lastIndexOf('/');
+			if (idx > -1)
 			{
-				QString fileId = url;
-				while (fileId.endsWith('/'))
-					fileId.truncate(1);
+				NetworkAccess net;
+				net.setMaxDownloadSize(0x200000 /* 2 MiB */);
 
-				const int idx = url.lastIndexOf('/');
-				if (idx > -1)
+				IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
+				if (net.startAndWait(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
 				{
-					NetworkAccess net;
-					net.setMaxDownloadSize(0x200000 /* 2 MiB */);
-
-					IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
-					if (net.startAndWait(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
-					{
-						const Json json = Json::parse(netReply->readAll());
-						const QString tmpStreamUrl = json["track_link"].string_value();
-						if (!tmpStreamUrl.isEmpty())
-							*streamUrl = tmpStreamUrl;
-						netReply.clear();
-					}
-					else if (!netReply.isAborted())
-					{
-						QMPlay2Core.sendMessage(tr("Try again later"), m_name);
-					}
+					const Json json = Json::parse(netReply->readAll());
+					const QString tmpStreamUrl = json["track_link"].string_value();
+					if (!tmpStreamUrl.isEmpty())
+						*streamUrl = tmpStreamUrl;
+					netReply.clear();
+				}
+				else if (!netReply.isAborted())
+				{
+					QMPlay2Core.sendMessage(tr("Try again later"), m_name);
 				}
 			}
 		}
-		return true;
 	}
-	return false;
+	return true;
 }
