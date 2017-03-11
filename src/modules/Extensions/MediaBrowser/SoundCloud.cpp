@@ -52,7 +52,7 @@ void SoundCloud::prepareWidget(QTreeWidget *treeW)
 	Functions::setHeaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
-QString SoundCloud::getQMPlay2Url(const QString &text)
+QString SoundCloud::getQMPlay2Url(const QString &text) const
 {
 	return QString("%1://{%2/tracks/%3}").arg(m_name, g_url, text);
 }
@@ -101,18 +101,18 @@ bool SoundCloud::hasMultiplePages() const
 	return true;
 }
 
-bool SoundCloud::hasWebpage()
+bool SoundCloud::hasWebpage() const
 {
 	return false;
 }
-QString SoundCloud::getWebpageUrl(const QString &text)
+QString SoundCloud::getWebpageUrl(const QString &text) const
 {
 	return QString();
 }
 
-bool SoundCloud::hasCompleter()
+MediaBrowserCommon::CompleterMode SoundCloud::completerMode() const
 {
-	return false;
+	return CompleterMode::Continuous;
 }
 NetworkReply *SoundCloud::getCompleterReply(const QString &text)
 {

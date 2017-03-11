@@ -193,11 +193,9 @@ void AnimeOdcinki::prepareWidget(QTreeWidget *treeW)
 	treeW->headerItem()->setText(0, tr("Episode name"));
 
 	m_currentAnime.clear();
-
-	maybeDownloadAnimeList();
 }
 
-QString AnimeOdcinki::getQMPlay2Url(const QString &text)
+QString AnimeOdcinki::getQMPlay2Url(const QString &text) const
 {
 	return QString("%1://{%2}").arg(m_name, getWebpageUrl(text));
 }
@@ -242,18 +240,18 @@ bool AnimeOdcinki::hasMultiplePages() const
 	return false;
 }
 
-bool AnimeOdcinki::hasWebpage()
+bool AnimeOdcinki::hasWebpage() const
 {
 	return true;
 }
-QString AnimeOdcinki::getWebpageUrl(const QString &text)
+QString AnimeOdcinki::getWebpageUrl(const QString &text) const
 {
 	return QString("%1%2").arg(g_url, text);
 }
 
-bool AnimeOdcinki::hasCompleter()
+MediaBrowserCommon::CompleterMode AnimeOdcinki::completerMode() const
 {
-	return true;
+	return CompleterMode::All;
 }
 NetworkReply *AnimeOdcinki::getCompleterReply(const QString &text)
 {
@@ -264,10 +262,26 @@ QStringList AnimeOdcinki::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	maybeDownloadAnimeList();
 	for (const auto &animePair : m_animePairList)
 		completions.append(animePair.first);
 	return completions;
+}
+void AnimeOdcinki::setCompleterListCallback(const MediaBrowserCommon::CompleterReadyCallback &callback)
+{
+	m_completerListCallback = callback;
+	if (m_completerListCallback)
+	{
+		if (m_animePairList.isEmpty() && !m_animeListReply)
+		{
+			m_animeListReply = start(g_url);
+			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
+		}
+		else if (!m_animePairList.isEmpty())
+		{
+			m_completerListCallback();
+			m_completerListCallback = nullptr;
+		}
+	}
 }
 
 QMPlay2Extensions::AddressPrefix AnimeOdcinki::addressPrefix(bool img) const
@@ -434,16 +448,12 @@ void AnimeOdcinki::gotAnimeList()
 	if (animeListReply && m_animeListReply == animeListReply)
 	{
 		if (!m_animeListReply->hasError())
+		{
 			m_animePairList = parseAnimeList(m_animeListReply->readAll(), nullptr);
+			if (m_completerListCallback)
+				m_completerListCallback();
+		}
+		m_completerListCallback = nullptr;
 		m_animeListReply->deleteLater();
-	}
-}
-
-void AnimeOdcinki::maybeDownloadAnimeList()
-{
-	if (m_animePairList.isEmpty() && !m_animeListReply)
-	{
-		m_animeListReply = start(g_url);
-		connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
 	}
 }

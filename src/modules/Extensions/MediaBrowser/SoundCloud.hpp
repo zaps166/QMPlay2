@@ -34,16 +34,16 @@ public:
 	void prepareWidget(QTreeWidget *treeW) override final;
 
 
-	QString getQMPlay2Url(const QString &text) override final;
+	QString getQMPlay2Url(const QString &text) const override final;
 
 	NetworkReply *getSearchReply(const QString &text, const qint32 page) override final;
 	Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override final;
 	bool hasMultiplePages() const override final;
 
-	bool hasWebpage() override final;
-	QString getWebpageUrl(const QString &text) override final;
+	bool hasWebpage() const override final;
+	QString getWebpageUrl(const QString &text) const override final;
 
-	bool hasCompleter() override final;
+	CompleterMode completerMode() const override final;
 	NetworkReply *getCompleterReply(const QString &text) override final;
 	QStringList getCompletions(const QByteArray &reply) override final;
 

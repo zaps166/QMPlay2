@@ -51,7 +51,7 @@ void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 	Functions::setHeaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
 }
 
-QString ProstoPleer::getQMPlay2Url(const QString &text)
+QString ProstoPleer::getQMPlay2Url(const QString &text) const
 {
 	return QString("%1://{%2}").arg(m_name, getWebpageUrl(text));
 }
@@ -117,18 +117,18 @@ bool ProstoPleer::hasMultiplePages() const
 	return true;
 }
 
-bool ProstoPleer::hasWebpage()
+bool ProstoPleer::hasWebpage() const
 {
 	return true;
 }
-QString ProstoPleer::getWebpageUrl(const QString &text)
+QString ProstoPleer::getWebpageUrl(const QString &text) const
 {
 	return QString("%1/en/tracks/%2").arg(g_url, text);
 }
 
-bool ProstoPleer::hasCompleter()
+MediaBrowserCommon::CompleterMode ProstoPleer::completerMode() const
 {
-	return true;
+	return CompleterMode::Continuous;
 }
 NetworkReply *ProstoPleer::getCompleterReply(const QString &text)
 {

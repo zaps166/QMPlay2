@@ -41,3 +41,8 @@ void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 	treeW->header()->setStretchLastSection(false);
 	Functions::setHeaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
 }
+
+void MediaBrowserCommon::setCompleterListCallback(const CompleterReadyCallback &callback)
+{
+	Q_UNUSED(callback)
+}

@@ -20,6 +20,8 @@
 
 #include <QMPlay2Extensions.hpp>
 
+#include <functional>
+
 class NetworkAccess;
 class NetworkReply;
 class QTreeWidget;
@@ -27,6 +29,8 @@ class QTreeWidget;
 class MediaBrowserCommon
 {
 public:
+	using CompleterReadyCallback = std::function<void()>;
+
 	class Description
 	{
 	public:
@@ -40,6 +44,13 @@ public:
 		NetworkReply *imageReply = nullptr;
 	};
 
+	enum class CompleterMode
+	{
+		None,
+		Continuous,
+		All
+	};
+
 	MediaBrowserCommon(NetworkAccess &net, const QString &name, const QString &imgPath);
 	virtual ~MediaBrowserCommon() = default;
 
@@ -51,18 +62,19 @@ public:
 	virtual void prepareWidget(QTreeWidget *treeW);
 
 
-	virtual QString getQMPlay2Url(const QString &text) = 0;
+	virtual QString getQMPlay2Url(const QString &text) const = 0;
 
 	virtual NetworkReply *getSearchReply(const QString &text, const qint32 page) = 0;
 	virtual Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) = 0;
 	virtual bool hasMultiplePages() const = 0;
 
-	virtual bool hasWebpage() = 0;
-	virtual QString getWebpageUrl(const QString &text) = 0;
+	virtual bool hasWebpage() const = 0;
+	virtual QString getWebpageUrl(const QString &text) const = 0;
 
-	virtual bool hasCompleter() = 0;
+	virtual CompleterMode completerMode() const = 0;
 	virtual NetworkReply *getCompleterReply(const QString &text) = 0;
 	virtual QStringList getCompletions(const QByteArray &reply = QByteArray()) = 0;
+	virtual void setCompleterListCallback(const CompleterReadyCallback &callback);
 
 
 	virtual QMPlay2Extensions::AddressPrefix addressPrefix(bool img) const = 0;
@@ -70,6 +82,9 @@ public:
 	virtual QAction *getAction() const = 0;
 
 	virtual bool convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) = 0;
+
+signals:
+	void gotCompleterList();
 
 protected:
 	NetworkAccess &m_net;

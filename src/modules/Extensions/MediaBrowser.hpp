@@ -88,12 +88,13 @@ private:
 	DockWidget *getDockWidget() override final;
 
 	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
 
-	void setCompletions(const QStringList &completions);
+	inline void setCompleterListCallback();
+	void completionsReady();
 
 private slots:
 	void visibilityChanged(bool v);
@@ -115,7 +116,7 @@ private:
 
 	DockWidget *m_dW;
 
-	QComboBox *m_providersB;
+	QComboBox *m_providersB, *m_searchCB;
 	LineEdit *m_searchE;
 	QToolButton *m_searchB, *m_nextPageB, *m_loadAllB;
 	QProgressBar *m_progressB;

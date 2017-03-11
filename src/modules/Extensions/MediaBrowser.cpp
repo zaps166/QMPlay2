@@ -218,6 +218,13 @@ MediaBrowser::MediaBrowser(Module &module) :
 	connect(m_searchE, SIGNAL(returnPressed()), this, SLOT(search()));
 	m_searchE->setCompleter(m_completer);
 
+	m_searchCB = new QComboBox;
+	connect(m_searchCB, SIGNAL(currentTextChanged(const QString &)), this, SLOT(searchTextEdited(const QString &)));
+	connect(m_searchCB, SIGNAL(activated(int)), this, SLOT(search()));
+	m_searchCB->setSizePolicy(m_searchE->sizePolicy());
+	m_searchCB->setInsertPolicy(QComboBox::NoInsert);
+	m_searchCB->setEditable(true);
+
 	m_providersB = new QComboBox;
 	for (const auto &m : m_mediaBrowsers)
 		m_providersB->addItem(m->icon(), m->name());
@@ -259,6 +266,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(m_providersB, 0, 0, 1, 1);
 	layout->addWidget(m_searchE, 0, 1, 1, 1);
+	layout->addWidget(m_searchCB, 0, 1, 1, 1);
 	layout->addWidget(m_searchB, 0, 2, 1, 1);
 	layout->addWidget(m_nextPageB, 0, 3, 1, 1);
 	layout->addWidget(m_loadAllB, 0, 3, 1, 1);
@@ -293,12 +301,12 @@ QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img
 		ret.append(m->addressPrefix(img));
 	return ret;
 }
-void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(param)
-	if (stream_url || img)
+	if (streamUrl || img)
 		for (const auto &m : m_mediaBrowsers)
-			if (m->convertAddress(prefix, url, stream_url, name, img, extension, ioCtrl))
+			if (m->convertAddress(prefix, url, streamUrl, name, img, extension, ioCtrl))
 				break;
 }
 
@@ -323,13 +331,21 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
 	return actions;
 }
 
-void MediaBrowser::setCompletions(const QStringList &completions)
+inline void MediaBrowser::setCompleterListCallback()
 {
-	if (!completions.isEmpty())
+	if (m_mediaBrowser)
+		m_mediaBrowser->setCompleterListCallback(std::bind(&MediaBrowser::completionsReady, this));
+}
+void MediaBrowser::completionsReady()
+{
+	if (m_mediaBrowser)
 	{
-		m_completerModel->setStringList(completions);
-		if (m_searchE->hasFocus())
-			m_completer->complete();
+		const QString text = m_searchCB->currentText();
+		m_searchCB->blockSignals(true);
+		m_searchCB->clear();
+		m_searchCB->addItems(m_mediaBrowser->getCompletions());
+		m_searchCB->setEditText(text);
+		m_searchCB->blockSignals(false);
 	}
 }
 
@@ -347,9 +363,35 @@ void MediaBrowser::providerChanged(int idx)
 	{
 		if (idx > -1)
 		{
+			if (m_mediaBrowser)
+				m_mediaBrowser->setCompleterListCallback(nullptr);
+
+			m_searchCB->blockSignals(true);
+			m_searchCB->clear();
+			m_searchCB->blockSignals(false);
+			m_searchE->blockSignals(true);
 			m_searchE->clearText();
+			m_searchE->blockSignals(false);
+
+			m_mediaBrowser = nullptr;
+			search(); // Clear list and cancel all network actions.
+
 			m_mediaBrowser = m_mediaBrowsers[idx].get();
+			switch (m_mediaBrowser->completerMode())
+			{
+				case MediaBrowserCommon::CompleterMode::None:
+				case MediaBrowserCommon::CompleterMode::Continuous:
+					m_searchE->setVisible(true);
+					m_searchCB->setVisible(false);
+					break;
+				case MediaBrowserCommon::CompleterMode::All:
+					m_searchE->setVisible(false);
+					m_searchCB->setVisible(true);
+					setCompleterListCallback();
+					break;
+			}
 			m_mediaBrowser->prepareWidget(m_resultsW);
+
 			sets().set("MediaBrowser/Provider", m_providersB->currentText());
 		}
 		m_first = false;
@@ -364,20 +406,44 @@ void MediaBrowser::next()
 
 void MediaBrowser::searchTextEdited(const QString &text)
 {
-	if (m_autocompleteReply)
-		m_autocompleteReply->deleteLater();
-	if (text.isEmpty())
-		m_completerModel->setStringList({});
-	else if (m_mediaBrowser && m_mediaBrowser->hasCompleter())
+	if (sender() == m_searchE)
 	{
-		m_autocompleteReply = m_mediaBrowser->getCompleterReply(text);
-		if (!m_autocompleteReply && m_completerModel->stringList().isEmpty())
-			setCompletions(m_mediaBrowser->getCompletions());
+		if (m_autocompleteReply)
+			m_autocompleteReply->deleteLater();
+		if (text.isEmpty())
+			m_completerModel->setStringList({});
+		else if (m_mediaBrowser && m_mediaBrowser->completerMode() == MediaBrowserCommon::CompleterMode::Continuous)
+			m_autocompleteReply = m_mediaBrowser->getCompleterReply(text);
+	}
+	else if (sender() == m_searchCB && m_searchCB->count() == 0)
+	{
+		setCompleterListCallback();
 	}
 }
+
 void MediaBrowser::search()
 {
-	const QString name = m_searchE->text().simplified();
+	QWidget *searchW = nullptr;
+	QString name;
+
+	if (m_mediaBrowser)
+	{
+		switch (m_mediaBrowser->completerMode())
+		{
+			case MediaBrowserCommon::CompleterMode::Continuous:
+				searchW = m_searchE;
+				name = m_searchE->text();
+				break;
+			case MediaBrowserCommon::CompleterMode::All:
+				searchW = m_searchCB;
+				name = m_searchCB->currentText();
+				break;
+			default:
+				break;
+		}
+		name = name.simplified();
+	}
+
 	if (m_autocompleteReply)
 		m_autocompleteReply->deleteLater();
 	if (m_searchReply)
@@ -389,7 +455,7 @@ void MediaBrowser::search()
 	m_descr->hide();
 	if (!name.isEmpty())
 	{
-		if (m_lastName != name || sender() == m_searchE || sender() == m_searchB)
+		if (m_lastName != name || sender() == searchW || sender() == m_searchB)
 			m_currPage = 1;
 		if (m_mediaBrowser)
 			m_searchReply = m_mediaBrowser->getSearchReply(name, m_currPage);
@@ -428,8 +494,13 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		const QByteArray replyData = reply->readAll();
 		if (reply == m_autocompleteReply)
 		{
-			if (m_mediaBrowser)
-				setCompletions(m_mediaBrowser->getCompletions(replyData));
+			const QStringList completions = m_mediaBrowser ? m_mediaBrowser->getCompletions(replyData) : QStringList();
+			if (!completions.isEmpty())
+			{
+				m_completerModel->setStringList(completions);
+				if (m_searchE->hasFocus())
+					m_completer->complete();
+			}
 		}
 		else if (reply == m_searchReply)
 		{
