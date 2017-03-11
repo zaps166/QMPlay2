@@ -424,6 +424,10 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, signal_handler);
 	atexit(unInhibitScreenSaver);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
 #ifdef Q_WS_X11
 	g_useGui = getenv("DISPLAY");
 #endif
@@ -528,10 +532,10 @@ int main(int argc, char *argv[])
 
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
-	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
+	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
