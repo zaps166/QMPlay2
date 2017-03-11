@@ -54,8 +54,8 @@ private:
 	void mouseMoveEvent(QMouseEvent *) override final;
 	void mouseReleaseEvent(QMouseEvent *) override final;
 
-	int pixels;
 	QMenu *menu;
+	int pixels;
 private slots:
 	void enqueue();
 	void playCurrentEntry();
