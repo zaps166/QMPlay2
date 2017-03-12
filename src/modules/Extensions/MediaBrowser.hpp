@@ -146,6 +146,8 @@ private slots:
 	void searchMenu();
 
 private:
+	void loadSearchResults(const QByteArray &replyData = QByteArray());
+
 	std::vector<std::unique_ptr<MediaBrowserCommon>> m_mediaBrowsers;
 	MediaBrowserCommon *m_mediaBrowser;
 

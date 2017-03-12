@@ -265,7 +265,7 @@ QStringList AnimeOdcinki::getCompletions(const QByteArray &reply)
 		completions.append(animePair.first);
 	return completions;
 }
-void AnimeOdcinki::setCompleterListCallback(const MediaBrowserCommon::CompleterReadyCallback &callback)
+void AnimeOdcinki::setCompleterListCallback(const CompleterReadyCallback &callback)
 {
 	m_completerListCallback = callback;
 	if (m_completerListCallback)

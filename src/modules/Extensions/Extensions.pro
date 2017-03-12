@@ -20,9 +20,9 @@ DEPENDPATH  += . ../../qmplay2/headers
 HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp
 SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp
 
-HEADERS += MediaBrowser.hpp MediaBrowser/Common.hpp MediaBrowser/ProstoPleer.hpp MediaBrowser/SoundCloud.hpp MediaBrowser/AnimeOdcinki.hpp
-SOURCES += MediaBrowser.cpp MediaBrowser/Common.cpp MediaBrowser/ProstoPleer.cpp MediaBrowser/SoundCloud.cpp MediaBrowser/AnimeOdcinki.cpp
-DEFINES += USE_MEDIABROWSER USE_PROSTOPLEER USE_SOUNDCLOUD USE_ANIMEODCINKI
+HEADERS += MediaBrowser.hpp MediaBrowser/Common.hpp MediaBrowser/ProstoPleer.hpp MediaBrowser/SoundCloud.hpp MediaBrowser/AnimeOdcinki.hpp MediaBrowser/Wbijam.hpp
+SOURCES += MediaBrowser.cpp MediaBrowser/Common.cpp MediaBrowser/ProstoPleer.cpp MediaBrowser/SoundCloud.cpp MediaBrowser/AnimeOdcinki.cpp MediaBrowser/Wbijam.cpp
+DEFINES += USE_MEDIABROWSER USE_PROSTOPLEER USE_SOUNDCLOUD USE_ANIMEODCINKI USE_WBIJAM
 
 HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp

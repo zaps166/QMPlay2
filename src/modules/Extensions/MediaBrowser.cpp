@@ -32,6 +32,9 @@
 #ifdef USE_ANIMEODCINKI
 	#include <MediaBrowser/AnimeOdcinki.hpp>
 #endif
+#ifdef USE_WBIJAM
+	#include <MediaBrowser/Wbijam.hpp>
+#endif
 
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -321,6 +324,9 @@ MediaBrowser::MediaBrowser(Module &module) :
 #ifdef USE_ANIMEODCINKI
 	m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));
 #endif
+#ifdef USE_WBIJAM
+	m_mediaBrowsers.emplace_back(new Wbijam(m_net));
+#endif
 
 	m_dW = new DockWidget;
 	connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
@@ -562,8 +568,6 @@ void MediaBrowser::search()
 	if (m_imageReply)
 		m_imageReply->deleteLater();
 	m_resultsW->clear();
-	m_descr->clear();
-	m_descr->hide();
 	if (!name.isEmpty())
 	{
 		if (m_lastName != name || sender() == searchW || sender() == m_searchB)
@@ -571,10 +575,20 @@ void MediaBrowser::search()
 		if (m_mediaBrowser)
 			m_searchReply = m_mediaBrowser->getSearchReply(name, m_pages->getCurrentPage());
 		if (m_searchReply)
+		{
+			m_descr->clear();
+			m_descr->hide();
 			m_progressB->show();
+		}
+		else
+		{
+			loadSearchResults();
+		}
 	}
 	else
 	{
+		m_descr->clear();
+		m_descr->hide();
 		m_completerModel->setStringList({});
 		m_pages->hide();
 		m_pages->setPages({});
@@ -617,36 +631,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		else if (reply == m_searchReply)
 		{
 			if (m_mediaBrowser)
-			{
-				const MediaBrowserCommon::Description descr = m_mediaBrowser->addSearchResults(replyData, m_resultsW);
-				if (!descr.description.isEmpty())
-				{
-					m_descr->setHtml(descr.description);
-					m_descr->setAlignment(Qt::AlignJustify);
-					m_descr->show();
-				}
-				if (descr.imageReply)
-				{
-					m_imageReply = descr.imageReply;
-					m_descr->show();
-				}
-				if (descr.nextReply)
-					m_searchReply = descr.nextReply;
-				else
-				{
-					if (m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::List)
-					{
-						const QStringList pages = m_mediaBrowser->getPagesList();
-						m_pages->setPages(pages);
-						m_pages->setVisible(!pages.isEmpty());
-					}
-					else
-					{
-						m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Single && m_resultsW->topLevelItemCount());
-					}
-					m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Multi && m_resultsW->topLevelItemCount());
-				}
-			}
+				loadSearchResults(replyData);
 		}
 		else if (reply == m_imageReply)
 		{
@@ -688,5 +673,37 @@ void MediaBrowser::searchMenu()
 		m_dW->raise();
 		m_searchE->setText(name);
 		search();
+	}
+}
+
+void MediaBrowser::loadSearchResults(const QByteArray &replyData)
+{
+	const MediaBrowserCommon::Description descr = m_mediaBrowser->addSearchResults(replyData, m_resultsW);
+	if (!descr.description.isEmpty())
+	{
+		m_descr->setHtml(descr.description);
+		m_descr->setAlignment(Qt::AlignJustify);
+		m_descr->show();
+	}
+	if (descr.imageReply)
+	{
+		m_imageReply = descr.imageReply;
+		m_descr->show();
+	}
+	if (descr.nextReply)
+		m_searchReply = descr.nextReply;
+	else
+	{
+		if (m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::List)
+		{
+			const QStringList pages = m_mediaBrowser->getPagesList();
+			m_pages->setPages(pages);
+			m_pages->setVisible(!pages.isEmpty());
+		}
+		else
+		{
+			m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Single && m_resultsW->topLevelItemCount());
+		}
+		m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Multi && m_resultsW->topLevelItemCount());
 	}
 }
