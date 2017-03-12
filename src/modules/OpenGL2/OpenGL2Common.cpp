@@ -108,6 +108,7 @@ OpenGL2Common::OpenGL2Common() :
 	aspectRatio(0.0), zoom(0.0),
 	sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
 	rotAnimation(*this),
+	nIndices(0),
 	mouseTime(0.0)
 {
 	videoAdjustment.unset();
