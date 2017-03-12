@@ -1124,10 +1124,6 @@
         <translation type="unfinished">Buscar</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation type="unfinished">Pagina siguiente</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation type="unfinished">Error de conexión</translation>
     </message>
@@ -3079,6 +3075,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Wbijam</name>
+    <message>
+        <source>Episode name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode date</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

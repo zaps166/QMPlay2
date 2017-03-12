@@ -1124,10 +1124,6 @@
         <translation>Wyszukaj</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation>Następna strona</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation>Błąd połączenia</translation>
     </message>
@@ -3081,6 +3077,21 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     <message>
         <source>Split channels</source>
         <translation>Rozdziel kanały</translation>
+    </message>
+</context>
+<context>
+    <name>Wbijam</name>
+    <message>
+        <source>Episode name</source>
+        <translation>Nazwa odcinka</translation>
+    </message>
+    <message>
+        <source>Episode type</source>
+        <translation>Typ odcinka</translation>
+    </message>
+    <message>
+        <source>Episode date</source>
+        <translation>Data odcinka</translation>
     </message>
 </context>
 <context>

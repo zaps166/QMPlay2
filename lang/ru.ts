@@ -1124,10 +1124,6 @@
         <translation type="unfinished">Поиск</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation type="unfinished">Следующая страница</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation type="unfinished">Ошибка соединения</translation>
     </message>
@@ -3081,6 +3077,21 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <message>
         <source>Split channels</source>
         <translation>Разделить каналы</translation>
+    </message>
+</context>
+<context>
+    <name>Wbijam</name>
+    <message>
+        <source>Episode name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode date</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

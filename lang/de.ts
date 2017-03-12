@@ -1124,10 +1124,6 @@
         <translation type="unfinished">Suchen</translation>
     </message>
     <message>
-        <source>Next page</source>
-        <translation type="unfinished">Nächste Seite</translation>
-    </message>
-    <message>
         <source>Connection error</source>
         <translation type="unfinished">Fehler beim verbinden</translation>
     </message>
@@ -3081,6 +3077,21 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Split channels</source>
         <translation>splitte Kanäle</translation>
+    </message>
+</context>
+<context>
+    <name>Wbijam</name>
+    <message>
+        <source>Episode name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode date</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
