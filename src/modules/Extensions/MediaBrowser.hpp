@@ -66,12 +66,49 @@ private:
 
 /**/
 
+class QToolButton;
+class QComboBox;
+
+class MediaBrowserPages : public QWidget
+{
+	Q_OBJECT
+
+public:
+	MediaBrowserPages();
+	~MediaBrowserPages();
+
+	void setPage(const int page, bool gui);
+	void setPages(const QStringList &pages);
+
+	inline int getCurrentPage() const;
+
+private slots:
+	void maybeSwitchPage();
+	void prevPage();
+	void nextPage();
+
+signals:
+	void pageSwitched();
+
+private:
+	void setPageInGui(const int page);
+
+	void maybeSetCurrentPage(const int page);
+
+	int getPageFromUi() const;
+
+	QToolButton *m_prevPage, *m_nextPage;
+	QLineEdit *m_currentPage;
+	QComboBox *m_list;
+	int m_page;
+};
+
+/**/
+
 class QStringListModel;
 class QProgressBar;
-class QToolButton;
 class QCompleter;
 class QTextEdit;
-class QComboBox;
 class LineEdit;
 
 class MediaBrowser : public QWidget, public QMPlay2Extensions
@@ -101,8 +138,6 @@ private slots:
 
 	void providerChanged(int idx);
 
-	void next();
-
 	void searchTextEdited(const QString &text);
 	void search();
 
@@ -116,9 +151,11 @@ private:
 
 	DockWidget *m_dW;
 
+
 	QComboBox *m_providersB, *m_searchCB;
 	LineEdit *m_searchE;
-	QToolButton *m_searchB, *m_nextPageB, *m_loadAllB;
+	QToolButton *m_searchB, *m_loadAllB;
+	MediaBrowserPages *m_pages;
 	QProgressBar *m_progressB;
 	MediaBrowserResults *m_resultsW;
 	QTextEdit *m_descr;
@@ -126,7 +163,6 @@ private:
 	QStringListModel *m_completerModel;
 	QCompleter *m_completer;
 	QString m_lastName;
-	qint32 m_currPage;
 
 	QPointer<NetworkReply> m_autocompleteReply, m_searchReply, m_imageReply;
 	NetworkAccess m_net;

@@ -39,11 +39,21 @@ public:
 			description(descr),
 			imageReply(reply)
 		{}
+		inline Description(NetworkReply *reply) :
+			nextReply(reply)
+		{}
 
 		QString description;
 		NetworkReply *imageReply = nullptr;
+		NetworkReply *nextReply = nullptr;
 	};
 
+	enum class PagesMode
+	{
+		Single,
+		Multi,
+		List,
+	};
 	enum class CompleterMode
 	{
 		None,
@@ -66,7 +76,9 @@ public:
 
 	virtual NetworkReply *getSearchReply(const QString &text, const qint32 page) = 0;
 	virtual Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) = 0;
-	virtual bool hasMultiplePages() const = 0;
+
+	virtual PagesMode pagesMode() const = 0;
+	virtual QStringList getPagesList() const;
 
 	virtual bool hasWebpage() const = 0;
 	virtual QString getWebpageUrl(const QString &text) const = 0;

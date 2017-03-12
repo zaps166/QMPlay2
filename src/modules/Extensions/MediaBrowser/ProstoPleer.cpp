@@ -112,9 +112,10 @@ MediaBrowserCommon::Description ProstoPleer::addSearchResults(const QByteArray &
 
 	return {};
 }
-bool ProstoPleer::hasMultiplePages() const
+
+MediaBrowserCommon::PagesMode ProstoPleer::pagesMode() const
 {
-	return true;
+	return PagesMode::Multi;
 }
 
 bool ProstoPleer::hasWebpage() const

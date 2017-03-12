@@ -42,6 +42,11 @@ void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 	Functions::setHeaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
 }
 
+QStringList MediaBrowserCommon::getPagesList() const
+{
+	return {};
+}
+
 void MediaBrowserCommon::setCompleterListCallback(const CompleterReadyCallback &callback)
 {
 	Q_UNUSED(callback)

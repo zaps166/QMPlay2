@@ -38,7 +38,8 @@ public:
 
 	NetworkReply *getSearchReply(const QString &text, const qint32 page) override final;
 	Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override final;
-	bool hasMultiplePages() const override final;
+
+	PagesMode pagesMode() const override final;
 
 	bool hasWebpage() const override final;
 	QString getWebpageUrl(const QString &text) const override final;

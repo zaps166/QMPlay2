@@ -46,6 +46,7 @@
 #include <QTextEdit>
 #include <QComboBox>
 #include <QMimeData>
+#include <QSpinBox>
 #include <QDir>
 #include <QUrl>
 
@@ -186,11 +187,128 @@ void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTree
 
 /**/
 
+MediaBrowserPages::MediaBrowserPages() :
+	m_page(0)
+{
+	m_prevPage = new QToolButton;
+	connect(m_prevPage, SIGNAL(clicked()), this, SLOT(prevPage()));
+	m_prevPage->setArrowType(Qt::LeftArrow);
+	m_prevPage->setAutoRaise(true);
+	m_prevPage->hide();
+
+	m_currentPage = new QLineEdit;
+	connect(m_currentPage, SIGNAL(editingFinished()), this, SLOT(maybeSwitchPage()));
+	m_currentPage->setFixedWidth(QFontMetrics(m_currentPage->font()).boundingRect('0').width() * 3);
+	m_currentPage->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	m_currentPage->setValidator(new QIntValidator(1, 99, m_currentPage));
+	m_currentPage->setContextMenuPolicy(Qt::NoContextMenu);
+	m_currentPage->setMaxLength(2);
+	m_currentPage->hide();
+
+	m_nextPage = new QToolButton;
+	connect(m_nextPage, SIGNAL(clicked()), this, SLOT(nextPage()));
+	m_nextPage->setArrowType(Qt::RightArrow);
+	m_nextPage->setAutoRaise(true);
+	m_nextPage->hide();
+
+	m_list = new QComboBox;
+	connect(m_list, SIGNAL(activated(int)), this, SLOT(maybeSwitchPage()));
+	m_list->hide();
+
+	QGridLayout *layout = new QGridLayout(this);
+	layout->addWidget(m_prevPage, 0, 0, 1, 1);
+	layout->addWidget(m_currentPage, 0, 1, 1, 1);
+	layout->addWidget(m_nextPage, 0, 2, 1, 1);
+	layout->addWidget(m_list, 1, 0, 1, 3);
+	layout->setSpacing(3);
+	layout->setMargin(0);
+}
+MediaBrowserPages::~MediaBrowserPages()
+{}
+
+void MediaBrowserPages::setPage(const int page, bool gui)
+{
+	if (gui)
+		setPageInGui(page);
+	m_page = page;
+}
+void MediaBrowserPages::setPages(const QStringList &pages)
+{
+	m_list->blockSignals(true);
+	m_list->clear();
+	if (!pages.isEmpty())
+	{
+		m_list->addItems(pages);
+		m_list->setCurrentIndex(m_page - 1);
+	}
+	m_list->blockSignals(false);
+
+	m_prevPage->setVisible(pages.isEmpty());
+	m_currentPage->setVisible(pages.isEmpty());
+	m_nextPage->setVisible(pages.isEmpty());
+	m_list->setVisible(!pages.isEmpty());
+}
+
+inline int MediaBrowserPages::getCurrentPage() const
+{
+	return m_page;
+}
+
+void MediaBrowserPages::maybeSwitchPage()
+{
+	const int page = getPageFromUi();
+	maybeSetCurrentPage(page);
+	if (page != m_page)
+	{
+		m_page = page;
+		emit pageSwitched();
+	}
+}
+void MediaBrowserPages::prevPage()
+{
+	setPageInGui(getPageFromUi() - 1);
+	maybeSwitchPage();
+}
+void MediaBrowserPages::nextPage()
+{
+	setPageInGui(getPageFromUi() + 1);
+	maybeSwitchPage();
+}
+
+void MediaBrowserPages::setPageInGui(const int page)
+{
+	if (m_list->count() == 0)
+		maybeSetCurrentPage(page);
+	else
+	{
+		m_list->blockSignals(true);
+		m_list->setCurrentIndex(page - 1);
+		m_list->blockSignals(false);
+	}
+}
+
+void MediaBrowserPages::maybeSetCurrentPage(const int page)
+{
+	if (m_list->count() == 0)
+	{
+		const QIntValidator *validator = (const QIntValidator *)m_currentPage->validator();
+		m_currentPage->setText(QString::number(qBound(validator->bottom(), page, validator->top())));
+	}
+}
+
+int MediaBrowserPages::getPageFromUi() const
+{
+	if (m_list->count() == 0)
+		return m_currentPage->text().toInt();
+	return m_list->currentIndex() + 1;
+}
+
+/**/
+
 MediaBrowser::MediaBrowser(Module &module) :
 	m_mediaBrowser(nullptr),
 	m_completerModel(new QStringListModel(this)),
 	m_completer(new QCompleter(m_completerModel, this)),
-	m_currPage(1),
 	m_net(this),
 	m_visible(false), m_first(true), m_overrideVisibility(false)
 {
@@ -216,6 +334,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	connect(m_searchE, SIGNAL(textEdited(const QString &)), this, SLOT(searchTextEdited(const QString &)));
 	connect(m_searchE, SIGNAL(clearButtonClicked()), this, SLOT(search()));
 	connect(m_searchE, SIGNAL(returnPressed()), this, SLOT(search()));
+	m_searchE->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	m_searchE->setCompleter(m_completer);
 
 	m_searchCB = new QComboBox;
@@ -236,12 +355,9 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_searchB->setToolTip(tr("Search"));
 	m_searchB->setAutoRaise(true);
 
-	m_nextPageB = new QToolButton;
-	connect(m_nextPageB, SIGNAL(clicked()), this, SLOT(next()));
-	m_nextPageB->setAutoRaise(true);
-	m_nextPageB->setArrowType(Qt::RightArrow);
-	m_nextPageB->setToolTip(tr("Next page"));
-	m_nextPageB->hide();
+	m_pages = new MediaBrowserPages;
+	connect(m_pages, SIGNAL(pageSwitched()), this, SLOT(search()));
+	m_pages->hide();
 
 	m_loadAllB = new QToolButton;
 	m_loadAllB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
@@ -267,12 +383,12 @@ MediaBrowser::MediaBrowser(Module &module) :
 	layout->addWidget(m_providersB, 0, 0, 1, 1);
 	layout->addWidget(m_searchE, 0, 1, 1, 1);
 	layout->addWidget(m_searchCB, 0, 1, 1, 1);
-	layout->addWidget(m_searchB, 0, 2, 1, 1);
-	layout->addWidget(m_nextPageB, 0, 3, 1, 1);
-	layout->addWidget(m_loadAllB, 0, 3, 1, 1);
-	layout->addWidget(m_resultsW, 1, 0, 1, 4);
-	layout->addWidget(m_descr, 2, 0, 1, 4);
-	layout->addWidget(m_progressB, 3, 0, 1, 4);
+	layout->addWidget(m_pages, 0, 2, 1, 1);
+	layout->addWidget(m_searchB, 0, 3, 1, 1);
+	layout->addWidget(m_loadAllB, 0, 4, 1, 1);
+	layout->addWidget(m_resultsW, 1, 0, 1, 5);
+	layout->addWidget(m_descr, 2, 0, 1, 5);
+	layout->addWidget(m_progressB, 3, 0, 1, 5);
 	setLayout(layout);
 
 	SetModule(module);
@@ -344,6 +460,7 @@ void MediaBrowser::completionsReady()
 		m_searchCB->blockSignals(true);
 		m_searchCB->clear();
 		m_searchCB->addItems(m_mediaBrowser->getCompletions());
+		m_searchCB->setCurrentIndex(-1);
 		m_searchCB->setEditText(text);
 		m_searchCB->blockSignals(false);
 	}
@@ -373,8 +490,9 @@ void MediaBrowser::providerChanged(int idx)
 			m_searchE->clearText();
 			m_searchE->blockSignals(false);
 
+			// Clear list and cancel all network actions.
 			m_mediaBrowser = nullptr;
-			search(); // Clear list and cancel all network actions.
+			search();
 
 			m_mediaBrowser = m_mediaBrowsers[idx].get();
 			switch (m_mediaBrowser->completerMode())
@@ -396,12 +514,6 @@ void MediaBrowser::providerChanged(int idx)
 		}
 		m_first = false;
 	}
-}
-
-void MediaBrowser::next()
-{
-	++m_currPage;
-	search();
 }
 
 void MediaBrowser::searchTextEdited(const QString &text)
@@ -456,16 +568,17 @@ void MediaBrowser::search()
 	if (!name.isEmpty())
 	{
 		if (m_lastName != name || sender() == searchW || sender() == m_searchB)
-			m_currPage = 1;
+			m_pages->setPage(1, m_mediaBrowser && m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::Multi);
 		if (m_mediaBrowser)
-			m_searchReply = m_mediaBrowser->getSearchReply(name, m_currPage);
+			m_searchReply = m_mediaBrowser->getSearchReply(name, m_pages->getCurrentPage());
 		if (m_searchReply)
 			m_progressB->show();
 	}
 	else
 	{
 		m_completerModel->setStringList({});
-		m_nextPageB->hide();
+		m_pages->hide();
+		m_pages->setPages({});
 		m_loadAllB->hide();
 		m_progressB->hide();
 	}
@@ -480,7 +593,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 		if (reply == m_searchReply)
 		{
 			m_lastName.clear();
-			m_nextPageB->hide();
+			m_pages->hide();
 			m_loadAllB->hide();
 			m_progressB->hide();
 			if (reply->error() == NetworkReply::Error::Connection404)
@@ -518,8 +631,22 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 					m_imageReply = descr.imageReply;
 					m_descr->show();
 				}
-				m_nextPageB->setVisible(m_mediaBrowser->hasMultiplePages() && m_resultsW->topLevelItemCount());
-				m_loadAllB->setVisible(!m_mediaBrowser->hasMultiplePages() && m_resultsW->topLevelItemCount());
+				if (descr.nextReply)
+					m_searchReply = descr.nextReply;
+				else
+				{
+					if (m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::List)
+					{
+						const QStringList pages = m_mediaBrowser->getPagesList();
+						m_pages->setPages(pages);
+						m_pages->setVisible(!pages.isEmpty());
+					}
+					else
+					{
+						m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Single && m_resultsW->topLevelItemCount());
+					}
+					m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Multi && m_resultsW->topLevelItemCount());
+				}
 			}
 		}
 		else if (reply == m_imageReply)

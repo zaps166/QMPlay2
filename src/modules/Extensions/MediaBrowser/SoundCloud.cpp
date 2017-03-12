@@ -96,9 +96,10 @@ MediaBrowserCommon::Description SoundCloud::addSearchResults(const QByteArray &r
 	}
 	return {};
 }
-bool SoundCloud::hasMultiplePages() const
+
+MediaBrowserCommon::PagesMode SoundCloud::pagesMode() const
 {
-	return true;
+	return PagesMode::Multi;
 }
 
 bool SoundCloud::hasWebpage() const

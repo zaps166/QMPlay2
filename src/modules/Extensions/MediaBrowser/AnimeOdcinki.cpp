@@ -206,14 +206,12 @@ NetworkReply *AnimeOdcinki::getSearchReply(const QString &text, const qint32 pag
 	m_currentAnime.clear();
 	for (const auto &animePair : m_animePairList)
 	{
-		if (animePair.first.compare(text, Qt::CaseInsensitive) == 0)
+		if (animePair.first == text)
 		{
 			m_currentAnime = animePair.second;
 			break;
 		}
 	}
-	if (m_currentAnime.isEmpty())
-		m_currentAnime = text.toLower().replace(' ', '-');
 	if (!m_currentAnime.isEmpty())
 		return m_net.start(g_url + m_currentAnime);
 	return nullptr;
@@ -235,9 +233,10 @@ MediaBrowserCommon::Description AnimeOdcinki::addSearchResults(const QByteArray 
 		m_net.start(episodeImgDescr.first)
 	};
 }
-bool AnimeOdcinki::hasMultiplePages() const
+
+MediaBrowserCommon::PagesMode AnimeOdcinki::pagesMode() const
 {
-	return false;
+	return PagesMode::Single;
 }
 
 bool AnimeOdcinki::hasWebpage() const
