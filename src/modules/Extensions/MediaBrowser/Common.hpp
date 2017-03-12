@@ -93,7 +93,7 @@ public:
 
 	virtual QAction *getAction() const = 0;
 
-	virtual bool convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) = 0;
+	virtual bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) = 0;
 
 signals:
 	void gotCompleterList();

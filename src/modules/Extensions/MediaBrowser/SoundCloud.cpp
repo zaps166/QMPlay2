@@ -131,8 +131,10 @@ QAction *SoundCloud::getAction() const
 	return act;
 }
 
-bool SoundCloud::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool SoundCloud::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
+	Q_UNUSED(param)
+
 	if (prefix != m_name)
 		return false;
 

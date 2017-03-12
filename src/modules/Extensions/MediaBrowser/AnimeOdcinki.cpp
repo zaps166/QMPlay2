@@ -288,8 +288,10 @@ QAction *AnimeOdcinki::getAction() const
 	return nullptr;
 }
 
-bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
+	Q_UNUSED(param)
+
 	if (prefix != m_name)
 		return false;
 

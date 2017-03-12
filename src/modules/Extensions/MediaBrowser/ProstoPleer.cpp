@@ -155,9 +155,11 @@ QAction *ProstoPleer::getAction() const
 	return act;
 }
 
-bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
 {
+	Q_UNUSED(param)
 	Q_UNUSED(name)
+
 	if (prefix != m_name)
 		return false;
 

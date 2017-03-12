@@ -51,6 +51,6 @@ public:
 
 	QAction *getAction() const override final;
 
-	bool convertAddress(const QString &prefix, const QString &url, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
+	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
 };
 
