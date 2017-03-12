@@ -23,6 +23,7 @@
 #include <YouTubeDL.hpp>
 #include <Json11.hpp>
 
+#include <QTextDocumentFragment>
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QRegExp>
@@ -174,7 +175,7 @@ MediaBrowserCommon::Description Wbijam::addSearchResults(const QByteArray &reply
 		}
 		else
 		{
-			QRegExp rx("<td><a href=\"(.*)\">.*>(.*)</a></td>.*<td.+>(.*)</td>.*<td.+>(.*)</td>");
+			QRegExp rx("<td><a href=\"(.*)\">.*\"\">(.*)</a></td>.*<td.+>(.*)</td>.*<td.+>(.*)</td>");
 			rx.setMinimal(true);
 
 			int pos = 0;
@@ -182,7 +183,7 @@ MediaBrowserCommon::Description Wbijam::addSearchResults(const QByteArray &reply
 			{
 				QTreeWidgetItem *tWI = new QTreeWidgetItem(treeW);
 
-				tWI->setText(0, rx.cap(2).simplified());
+				tWI->setText(0, QTextDocumentFragment::fromHtml(rx.cap(2)).toPlainText().simplified());
 				tWI->setData(0, Qt::UserRole, QString("{%1%2}").arg(url, rx.cap(1)));
 				tWI->setIcon(0, wbijamIcon);
 
