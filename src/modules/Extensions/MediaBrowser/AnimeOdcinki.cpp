@@ -95,8 +95,8 @@ static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeO
 	{
 		if (getRange(data, {"<img src=\"", "\"", "field-name-field-okladka"}))
 			episodeImgDescr->first = data.mid(idx1, idx2 - idx1);
-		if (getRange(data, {"<p><p>", "</p>", "field-type-text-with-summary"}))
-			episodeImgDescr->second = data.mid(idx1, idx2 - idx1);
+		if (getRange(data, {"<p>", "</p>", "field-type-text-with-summary"}))
+			episodeImgDescr->second = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
 	}
 
 	return animePairList;
