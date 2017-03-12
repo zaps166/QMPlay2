@@ -21,12 +21,13 @@
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
 #include <YouTubeDL.hpp>
-#include <Json11.hpp>
 
 #include <QTextDocumentFragment>
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QRegExp>
+
+#include <algorithm>
 
 constexpr char g_inneUrl[] = "http://www.inne.wbijam.pl/";
 
