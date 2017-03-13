@@ -57,6 +57,23 @@ QString YouTubeDL::getFilePath()
 	;
 }
 
+bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCtrl, QString *name, QString *extension, QString *error)
+{
+	IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
+	if (ytDl.assign(new YouTubeDL))
+	{
+		QString newUrl;
+		ytDl->addr(url, QString(), &newUrl, name, extension, error);
+		ytDl.clear();
+		if (!newUrl.isEmpty())
+		{
+			outUrl = newUrl;
+			return true;
+		}
+	}
+	return false;
+}
+
 YouTubeDL::YouTubeDL() :
 	m_aborted(false)
 {}

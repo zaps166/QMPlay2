@@ -365,19 +365,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 			QString error;
 
 			const auto getStreamUrl = [&](const QString &animeUrl)->bool {
-				IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
-				if (ytDl.assign(new YouTubeDL))
-				{
-					QString newUrl;
-					ytDl->addr(animeUrl, QString(), &newUrl, hasName ? nullptr : name, nullptr, &error);
-					ytDl.clear();
-					if (!newUrl.isEmpty())
-					{
-						*streamUrl = newUrl;
-						return true;
-					}
-				}
-				return false;
+				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, nullptr, &error);
 			};
 
 			QStringList videoUrls;

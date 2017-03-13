@@ -33,6 +33,8 @@ class YouTubeDL : public BasicIO
 public:
 	static QString getFilePath();
 
+	static bool fixUrl(const QString &url, QString &outUrl, IOController<> *ioCtrl, QString *name, QString *extension, QString *error);
+
 	YouTubeDL();
 	~YouTubeDL() final;
 
