@@ -368,8 +368,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, extension, &error);
 			};
 
-			QStringList videoUrls;
-			QStringList vkUrls;
+			std::vector<std::tuple<QString, bool>> videoPriorityUrls[4];
 
 			const auto extractUrl = [&](const QString section) {
 				int idx1 = section.indexOf("a href=\"");
@@ -384,7 +383,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 						int idxRelEnd = section.indexOf('"', idxRel);
 						int idxIdEnd  = section.indexOf('"', idxId);
 						if (idxRelEnd > -1 && idxIdEnd > -1)
-							vkUrls.append(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)));
+							videoPriorityUrls[0].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
 					}
 				}
 				else
@@ -395,8 +394,14 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 					if (idx2 > -1)
 					{
 						const QString urlSection = section.mid(idx1, idx2 - idx1);
-						if (!urlSection.contains("mp4up") && !urlSection.contains("sibnet"))
-							videoUrls.insert(urlSection.contains("openload") ? videoUrls.end() : videoUrls.begin(), url.left(url.indexOf("wbijam.pl/") + 10) + urlSection);
+						const QString urlDest = url.left(url.indexOf("wbijam.pl/") + 10) + urlSection;
+
+						if (urlSection.contains("openload")) // Causes problems very often
+							videoPriorityUrls[3].emplace_back(urlDest, false);
+						else if (urlSection.contains("google")) // Currently (13.03.2017) "youtube-dl" has a bug which gets the lowest video quality
+							videoPriorityUrls[2].emplace_back(urlDest, false);
+						else if (!urlSection.contains("mp4up") && !urlSection.contains("sibnet")) // Those servers doesn't work properly
+							videoPriorityUrls[1].emplace_back(urlDest, false); // vidfile, d-on, ...
 					}
 				}
 			};
@@ -404,32 +409,35 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 			bool hasStreamUrl = false;
 
 			const auto processUrls = [&] {
-				for (const QString &url : vkUrls)
+				for (const auto &videoUrls : videoPriorityUrls)
 				{
-					if (getStreamUrl(url))
+					for (const auto &tuple : videoUrls)
 					{
-						hasStreamUrl = true;
-						return;
-					}
-				}
-				for (const QString &url : videoUrls)
-				{
-					if (net.startAndWait(netReply, url))
-					{
-						const QString replyData = netReply->readAll();
+						QString animeUrl = std::get<0>(tuple);
+						bool ok = std::get<1>(tuple);
 
-						QRegExp videoRx("<iframe.+src=\"(.*)\"");
-						videoRx.setMinimal(true);
-						if (videoRx.indexIn(replyData) != -1)
+						if (!ok) // iframe
 						{
-							QString animeUrl = videoRx.cap(1);
-							if (animeUrl.startsWith("//"))
-								animeUrl.prepend("http:");
-							if (getStreamUrl(animeUrl))
+							if (net.startAndWait(netReply, animeUrl))
 							{
-								hasStreamUrl = true;
-								return;
+								const QString replyData = netReply->readAll();
+
+								QRegExp videoRx("<iframe.+src=\"(.*)\"");
+								videoRx.setMinimal(true);
+								if (videoRx.indexIn(replyData) != -1)
+								{
+									animeUrl = videoRx.cap(1);
+									if (animeUrl.startsWith("//"))
+										animeUrl.prepend("http:");
+									ok = true;
+								}
 							}
+						}
+
+						if (ok && getStreamUrl(animeUrl))
+						{
+							hasStreamUrl = true;
+							return;
 						}
 					}
 				}
