@@ -63,7 +63,7 @@ public:
 	inline Buffer &operator =(Buffer &&other);
 
 private:
-	inline void move(Buffer &other);
+	void move(Buffer &other);
 };
 
 /* Inline implementation */
@@ -101,13 +101,4 @@ Buffer &Buffer::operator =(Buffer &&other)
 {
 	move(other);
 	return *this;
-}
-
-void Buffer::move(Buffer &other)
-{
-	m_bufferRef = other.m_bufferRef;
-	m_size = other.m_size;
-
-	other.m_bufferRef = nullptr;
-	other.m_size = 0;
 }
