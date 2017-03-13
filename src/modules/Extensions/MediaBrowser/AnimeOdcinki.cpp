@@ -333,7 +333,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 			QString error;
 
 			const auto getStreamUrl = [&](const QString &animeUrl)->bool {
-				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, nullptr, &error);
+				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, extension, &error);
 			};
 
 			const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
@@ -390,7 +390,8 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 			if (extension && !ioCtrl->isAborted()) // Download only
 			{
 				getDownloadButtonUrl(true);
-				*extension = ".mp4"; // Probably all videos here have MP4 file format
+				if (extension->isEmpty())
+					*extension = ".mp4"; // Probably all videos here have MP4 file format
 			}
 
 			if (!hasStreamUrl && !ioCtrl->isAborted())

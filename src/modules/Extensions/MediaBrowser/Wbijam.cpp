@@ -365,7 +365,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 			QString error;
 
 			const auto getStreamUrl = [&](const QString &animeUrl)->bool {
-				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, nullptr, &error);
+				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, extension, &error);
 			};
 
 			QStringList videoUrls;
@@ -500,8 +500,8 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				}
 			}
 
-			if (extension && !ioCtrl->isAborted())
-				*extension = ".mp4";
+			if (extension && !ioCtrl->isAborted() && extension->isEmpty())
+				*extension = ".mp4"; // Probably all videos here have MP4 file format
 
 			if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
 				emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
