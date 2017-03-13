@@ -77,6 +77,8 @@ public:
 	MediaBrowserPages();
 	~MediaBrowserPages();
 
+	inline QComboBox *getPagesList() const;
+
 	void setPage(const int page, bool gui);
 	void setPages(const QStringList &pages);
 

@@ -228,12 +228,16 @@ MediaBrowserPages::MediaBrowserPages() :
 	layout->addWidget(m_prevPage, 0, 0, 1, 1);
 	layout->addWidget(m_currentPage, 0, 1, 1, 1);
 	layout->addWidget(m_nextPage, 0, 2, 1, 1);
-	layout->addWidget(m_list, 1, 0, 1, 3);
 	layout->setSpacing(3);
 	layout->setMargin(0);
 }
 MediaBrowserPages::~MediaBrowserPages()
 {}
+
+inline QComboBox *MediaBrowserPages::getPagesList() const
+{
+	return m_list;
+}
 
 void MediaBrowserPages::setPage(const int page, bool gui)
 {
@@ -402,9 +406,10 @@ MediaBrowser::MediaBrowser(Module &module) :
 	layout->addWidget(m_pages, 0, 2, 1, 1);
 	layout->addWidget(m_searchB, 0, 3, 1, 1);
 	layout->addWidget(m_loadAllB, 0, 4, 1, 1);
-	layout->addWidget(m_resultsW, 1, 0, 1, 5);
-	layout->addWidget(m_descr, 2, 0, 1, 5);
-	layout->addWidget(m_progressB, 3, 0, 1, 5);
+	layout->addWidget(m_pages->getPagesList(), 1, 0, 1, 5);
+	layout->addWidget(m_resultsW, 2, 0, 1, 5);
+	layout->addWidget(m_descr, 3, 0, 1, 5);
+	layout->addWidget(m_progressB, 4, 0, 1, 5);
 	setLayout(layout);
 
 	SetModule(module);
