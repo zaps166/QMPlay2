@@ -171,7 +171,7 @@ void ResultsYoutube::playOrEnqueue(const QString &param, QTreeWidgetItem *tWI)
 		if (!entries.isEmpty())
 		{
 			const bool enqueue = (param == "enqueue");
-			QMPlay2Core.loadPlaylistGroup(tWI->text(0), entries, enqueue, YouTubeName);
+			QMPlay2Core.loadPlaylistGroup(YouTubeName "/" + QString(tWI->text(0)).replace('/', '_'), entries, enqueue);
 		}
 	}
 }

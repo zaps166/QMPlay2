@@ -75,11 +75,17 @@ MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
 MediaBrowserResults::~MediaBrowserResults()
 {}
 
-inline void MediaBrowserResults::setCurrentName(const QString &name)
+void MediaBrowserResults::setCurrentName(const QString &name, const QString &pageName)
 {
 	m_currentName = name;
-	if (!m_currentName.isEmpty() && m_currentName.at(0).isLower())
-		m_currentName[0] = m_currentName.at(0).toUpper();
+	if (!m_currentName.isEmpty())
+	{
+		if (m_currentName.at(0).isLower())
+			m_currentName[0] = m_currentName.at(0).toUpper();
+		m_currentName.replace('/', '_');
+		if (!pageName.isEmpty())
+			m_currentName.prepend(QString(pageName).replace('/', '_') + "/");
+	}
 }
 
 void MediaBrowserResults::enqueueSelected()
@@ -182,7 +188,7 @@ void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTree
 			if (!entries.isEmpty())
 			{
 				const bool enqueue = (action == "enqueue");
-				QMPlay2Core.loadPlaylistGroup(m_currentName, entries, enqueue, m_mediaBrowser->name());
+				QMPlay2Core.loadPlaylistGroup(m_mediaBrowser->name() + "/" + m_currentName, entries, enqueue);
 			}
 		}
 	}
@@ -255,6 +261,10 @@ void MediaBrowserPages::setPages(const QStringList &pages)
 inline int MediaBrowserPages::getCurrentPage() const
 {
 	return m_page;
+}
+QString MediaBrowserPages::getCurrentPageName() const
+{
+	return m_list->currentText();
 }
 
 void MediaBrowserPages::maybeSwitchPage()
@@ -594,9 +604,9 @@ void MediaBrowser::search()
 		m_pages->setPages({});
 		m_loadAllB->hide();
 		m_progressB->hide();
+		m_resultsW->setCurrentName(QString(), QString());
 	}
 	m_lastName = name;
-	m_resultsW->setCurrentName(m_lastName);
 }
 
 void MediaBrowser::netFinished(NetworkReply *reply)
@@ -705,5 +715,6 @@ void MediaBrowser::loadSearchResults(const QByteArray &replyData)
 			m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Single && m_resultsW->topLevelItemCount());
 		}
 		m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Multi && m_resultsW->topLevelItemCount());
+		m_resultsW->setCurrentName(m_lastName, m_pages->getCurrentPageName());
 	}
 }

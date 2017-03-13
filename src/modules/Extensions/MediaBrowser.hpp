@@ -41,7 +41,7 @@ public:
 	MediaBrowserResults(MediaBrowserCommon *&mediaBrowser);
 	~MediaBrowserResults() final;
 
-	inline void setCurrentName(const QString &name);
+	void setCurrentName(const QString &name, const QString &pageName);
 
 private slots:
 	void enqueueSelected();
@@ -81,6 +81,7 @@ public:
 	void setPages(const QStringList &pages);
 
 	inline int getCurrentPage() const;
+	inline QString getCurrentPageName() const;
 
 private slots:
 	void maybeSwitchPage();

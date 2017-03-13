@@ -505,11 +505,11 @@ QByteArray QMPlay2CoreClass::getResource(const QString &url)
 	return getCookiesOrResource(url, resources.data);
 }
 
-void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue, const QString &context)
+void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue)
 {
 	if (!entries.isEmpty())
 	{
-		const QString resourceName = "QMPlay2://" + context + "/" + name + ".pls";
+		const QString resourceName = "QMPlay2://" + name + ".pls";
 		Playlist::Entries playlistEntries;
 		for (const auto &entry : entries)
 			playlistEntries += {entry.first, entry.second};

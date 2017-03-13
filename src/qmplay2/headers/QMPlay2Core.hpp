@@ -173,7 +173,7 @@ public:
 	bool hasResource(const QString &url) const;
 	QByteArray getResource(const QString &url);
 
-	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false, const QString &context = QString());
+	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
 
 private slots:
 	void restoreCursorSlot();
