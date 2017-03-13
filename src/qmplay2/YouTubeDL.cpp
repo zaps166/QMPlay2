@@ -207,6 +207,17 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	m_process.start(ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
 	if (m_process.waitForFinished() && !m_aborted)
 	{
+		const auto finishWithError = [&](const QString &error) {
+			if (!m_aborted)
+			{
+				if (silentErr)
+					*silentErr = error;
+				else
+					emit QMPlay2Core.sendMessage(error, g_name, 3, 0);
+			}
+			g_lock.unlock(); // Unlock for read
+		};
+
 		if (m_process.exitCode() != 0)
 		{
 			QString error = m_process.readAllStandardError();
@@ -269,19 +280,31 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 				if (!doLock(Lock::Read, true)) // Unlock for write and lock for read
 					return {};
 			}
-			if (!m_aborted)
-			{
-				if (silentErr)
-					*silentErr = error;
-				else
-					emit QMPlay2Core.sendMessage(error, g_name, 3, 0);
-			}
-			g_lock.unlock(); // Unlock for read
+			finishWithError(error);
 			return {};
 		}
 
-		//[Title], url, JSON, [url, JSON]
 		QStringList result = QString(m_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
+
+		// Verify if URLs has printable characters, because sometimes we
+		// can get binary garbage at output (especially on Openload).
+		for (const QString &line : result)
+		{
+			if (line.startsWith("http"))
+			{
+				for (const QChar &c : line)
+				{
+					if (!c.isPrint())
+					{
+						finishWithError("Invalid stream URL");
+						return {};
+					}
+				}
+				break;
+			}
+		}
+
+		//[Title], url, JSON, [url, JSON]
 		for (int i = result.count() - 1; i >= 0; --i)
 		{
 			if (i > 0 && result.at(i).startsWith('{'))
