@@ -207,7 +207,7 @@ MediaBrowserPages::MediaBrowserPages() :
 
 	m_currentPage = new QLineEdit;
 	connect(m_currentPage, SIGNAL(editingFinished()), this, SLOT(maybeSwitchPage()));
-	m_currentPage->setFixedWidth(QFontMetrics(m_currentPage->font()).boundingRect('0').width() * 3);
+	m_currentPage->setFixedWidth(QFontMetrics(m_currentPage->font()).boundingRect('0').width() * 35 / 10);
 	m_currentPage->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_currentPage->setValidator(new QIntValidator(1, 99, m_currentPage));
 	m_currentPage->setContextMenuPolicy(Qt::NoContextMenu);
@@ -372,6 +372,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_searchB = new QToolButton;
 	connect(m_searchB, SIGNAL(clicked()), this, SLOT(search()));
 	m_searchB->setIcon(QMPlay2Core.getIconFromTheme("edit-find"));
+	m_searchB->setFocusPolicy(Qt::StrongFocus);
 	m_searchB->setToolTip(tr("Search"));
 	m_searchB->setAutoRaise(true);
 
@@ -381,8 +382,9 @@ MediaBrowser::MediaBrowser(Module &module) :
 
 	m_loadAllB = new QToolButton;
 	m_loadAllB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
-	m_loadAllB->setAutoRaise(true);
+	m_loadAllB->setFocusPolicy(Qt::StrongFocus);
 	m_loadAllB->setToolTip(tr("Play all"));
+	m_loadAllB->setAutoRaise(true);
 	m_loadAllB->hide();
 
 	m_progressB = new QProgressBar;
