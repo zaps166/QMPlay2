@@ -228,6 +228,11 @@ elseif(APPLE)
         ${QT_PLUGINS_DIR}/imageformats/libqwbmp.dylib
         ${QT_PLUGINS_DIR}/imageformats/libqwebp.dylib
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
+    if(Qt5Widgets_VERSION VERSION_LESS 5.8.0)
+        install(FILES
+            ${QT_PLUGINS_DIR}/imageformats/libqdds.dylib
+            DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
+    endif()
     install(CODE "
         include(BundleUtilities)
         set(BU_CHMOD_BUNDLE_ITEMS ON)
