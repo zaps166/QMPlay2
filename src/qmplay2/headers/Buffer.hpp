@@ -63,7 +63,7 @@ public:
 	inline Buffer &operator =(Buffer &&other);
 
 private:
-	void move(Buffer &other);
+	inline void move(Buffer &other);
 };
 
 /* Inline implementation */
@@ -101,4 +101,10 @@ Buffer &Buffer::operator =(Buffer &&other)
 {
 	move(other);
 	return *this;
+}
+
+void Buffer::move(Buffer &other)
+{
+	qSwap(m_bufferRef, other.m_bufferRef);
+	qSwap(m_size, other.m_size);
 }

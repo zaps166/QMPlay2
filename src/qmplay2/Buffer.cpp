@@ -126,14 +126,3 @@ Buffer &Buffer::operator =(const Buffer &other)
 	m_size = other.m_size;
 	return *this;
 }
-
-void Buffer::move(Buffer &other)
-{
-	av_buffer_unref(&m_bufferRef);
-
-	m_bufferRef = other.m_bufferRef;
-	m_size = other.m_size;
-
-	other.m_bufferRef = nullptr;
-	other.m_size = 0;
-}
