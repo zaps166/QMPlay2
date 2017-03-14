@@ -2093,7 +2093,7 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
     </message>
     <message>
         <source>Left mouse button on video dock toggles playback</source>
-        <translation>Lewy przycisk myszy w oknie wideoprzełącza odtwarzanie</translation>
+        <translation>Lewy przycisk myszy w oknie wideo przełącza odtwarzanie</translation>
     </message>
 </context>
 <context>
