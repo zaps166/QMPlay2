@@ -184,6 +184,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("ShowBufferedTimeOnSlider", true);
 	QMPSettings.init("WheelAction", true);
 	QMPSettings.init("WheelSeek", true);
+	QMPSettings.init("LeftMouseTogglePlay", false);
 	QMPSettings.init("SavePos", false);
 	QMPSettings.init("KeepZoom", false);
 	QMPSettings.init("KeepARatio", false);
@@ -446,6 +447,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->silence->setChecked(QMPSettings.getBool("Silence"));
 		page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
 		page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
+		page2->leftMouseTogglePlay->setChecked(QMPSettings.getBool("LeftMouseTogglePlay"));
 
 		const QString modulesListTitle[3] = {
 			tr("Video output priority"),
@@ -801,6 +803,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("Silence", page2->silence->isChecked());
 			QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
+			QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->isChecked());
 
 			QStringList videoWriters, audioWriters, decoders;
 			for (QListWidgetItem *wI : page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))

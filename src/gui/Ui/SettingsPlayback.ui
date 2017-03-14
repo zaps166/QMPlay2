@@ -119,6 +119,26 @@
          </layout>
         </widget>
        </item>
+       <item row="17" column="0" colspan="3">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="15" column="0" colspan="2">
+        <widget class="QCheckBox" name="ignorePlaybackError">
+         <property name="text">
+          <string>Play next entry after playback error</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0" colspan="2">
         <layout class="QFormLayout" name="formLayout">
          <property name="fieldGrowthPolicy">
@@ -319,19 +339,6 @@
          </property>
         </spacer>
        </item>
-       <item row="15" column="0" colspan="3">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="4" column="0" colspan="2">
         <widget class="QCheckBox" name="showBufferedTimeOnSlider">
          <property name="text">
@@ -409,10 +416,10 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0" colspan="2">
-        <widget class="QCheckBox" name="ignorePlaybackError">
+       <item row="16" column="0">
+        <widget class="QCheckBox" name="leftMouseTogglePlay">
          <property name="text">
-          <string>Play next entry after playback error</string>
+          <string>Left mouse button on video dock toggles playback</string>
          </property>
         </widget>
        </item>

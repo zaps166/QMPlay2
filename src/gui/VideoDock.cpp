@@ -78,8 +78,10 @@ VideoDock::VideoDock() :
 	setWidget(&iDW);
 
 	hideCursorTim.setSingleShot(true);
+	leftButtonPlayTim.setSingleShot(true);
 
 	connect(&hideCursorTim, SIGNAL(timeout()), this, SLOT(hideCursor()));
+	connect(&leftButtonPlayTim, SIGNAL(timeout()), QMPlay2GUI.menuBar->player->togglePlay, SLOT(trigger()));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
 	connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
 	connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
@@ -90,6 +92,7 @@ VideoDock::VideoDock() :
 		setStyle(&commonStyle);
 
 	canHideIDWCursor = false;
+	doubleClicked = false;
 }
 
 void VideoDock::fullScreen(bool b)
@@ -214,6 +217,7 @@ void VideoDock::mouseDoubleClickEvent(QMouseEvent *e)
 		// in clicked state...
 		QTimer::singleShot(100, QMPlay2GUI.menuBar->window->toggleFullScreen, SLOT(trigger()));
 #endif
+		doubleClicked = true;
 	}
 	DockWidget::mouseDoubleClickEvent(e);
 }
@@ -232,7 +236,18 @@ void VideoDock::mousePressEvent(QMouseEvent *e)
 void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 {
 	if (e->button() == Qt::LeftButton)
+	{
 		canPopup = true;
+		if (doubleClicked)
+		{
+			doubleClicked = false;
+			leftButtonPlayTim.stop();
+		}
+		else if (QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
+		{
+			leftButtonPlayTim.start(300);
+		}
+	}
 	if (QWidget *internalW = internalWidget())
 	{
 		if (internalW->cursor().shape() != Qt::BlankCursor)

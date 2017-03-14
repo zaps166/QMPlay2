@@ -61,12 +61,12 @@ private:
 	void enterEvent(QEvent *) override final;
 	bool event(QEvent *) override final;
 
-	QTimer hideCursorTim;
+	QTimer hideCursorTim, leftButtonPlayTim;
 	InDockW iDW;
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
-	bool canPopup, is_floating, isBreeze, canHideIDWCursor;
+	bool canPopup, is_floating, isBreeze, canHideIDWCursor, doubleClicked;
 	double touchZoom;
 private slots:
 	void popup(const QPoint &);
