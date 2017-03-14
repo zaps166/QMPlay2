@@ -62,9 +62,15 @@ bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCt
 	IOController<YouTubeDL> &ytDl = ioCtrl->toRef<YouTubeDL>();
 	if (ytDl.assign(new YouTubeDL))
 	{
-		QString newUrl;
-		ytDl->addr(url, QString(), &newUrl, name, extension, error);
+		QString newUrl, newError;
+		ytDl->addr(url, QString(), &newUrl, name, extension, error ? &newError : nullptr);
 		ytDl.clear();
+		if (!newError.isEmpty())
+		{
+			if (!error->isEmpty())
+				error->append("\n");
+			error->append(newError);
+		}
 		if (!newUrl.isEmpty())
 		{
 			outUrl = newUrl;
