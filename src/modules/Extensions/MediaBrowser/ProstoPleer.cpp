@@ -34,7 +34,9 @@ constexpr char g_url[]  = "http://pleer.net";
 
 ProstoPleer::ProstoPleer(NetworkAccess &net) :
 	MediaBrowserCommon(net, "Prostopleer", ":/prostopleer")
-{}
+{
+	m_net.setRetries(5);
+}
 ProstoPleer::~ProstoPleer()
 {}
 
@@ -180,6 +182,7 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 			{
 				NetworkAccess net;
 				net.setMaxDownloadSize(0x200000 /* 2 MiB */);
+				net.setRetries(m_net.getRetries());
 
 				IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
 				if (net.startAndWait(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))

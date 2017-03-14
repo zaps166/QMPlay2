@@ -338,46 +338,35 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 
 			const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
 				const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
-				if (!adFlyUrl.isEmpty())
+				if (!adFlyUrl.isEmpty() && net.startAndWait(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded, 3))
 				{
-					for (int i = 0; i < 3; ++i) // Try three times
+					QByteArray data = netReply->readAll();
+					const int idx = data.indexOf("<");
+					if (idx > -1)
 					{
-						if (!net.start(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded))
-							break;
-						netReply->waitForFinished();
-						if (netReply->error() != NetworkReply::Error::Connection)
-							break;
-					}
-					if (netReply && !netReply->hasError())
-					{
-						QByteArray data = netReply->readAll();
-						const int idx = data.indexOf("<");
-						if (idx > -1)
+						const QString &animeUrl = data.left(idx);
+						if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
+							hasStreamUrl = getStreamUrl(animeUrl);
+						else if (net.startAndWait(netReply, animeUrl))
 						{
-							const QString &animeUrl = data.left(idx);
-							if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
-								hasStreamUrl = getStreamUrl(animeUrl);
-							else if (net.startAndWait(netReply, animeUrl))
+							// Download raw file from Google Drive
+							data = netReply->readAll().constData();
+							int idx1 = data.indexOf("uc-download-link");
+							if (idx1 > -1)
 							{
-								// Download raw file from Google Drive
-								data = netReply->readAll().constData();
-								int idx1 = data.indexOf("uc-download-link");
+								idx1 = data.indexOf("href=\"", idx1);
 								if (idx1 > -1)
 								{
-									idx1 = data.indexOf("href=\"", idx1);
-									if (idx1 > -1)
+									idx1 += 6;
+									int idx2 = data.indexOf('"', idx1);
+									if (idx2 > -1)
 									{
-										idx1 += 6;
-										int idx2 = data.indexOf('"', idx1);
-										if (idx2 > -1)
+										const QString path = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
+										if (path.startsWith("/"))
 										{
-											const QString path = QTextDocumentFragment::fromHtml(data.mid(idx1, idx2 - idx1)).toPlainText();
-											if (path.startsWith("/"))
-											{
-												*streamUrl = "https://docs.google.com" + path;
-												QMPlay2Core.addCookies(*streamUrl, netReply->getCookies());
-												hasStreamUrl = true;
-											}
+											*streamUrl = "https://docs.google.com" + path;
+											QMPlay2Core.addCookies(*streamUrl, netReply->getCookies());
+											hasStreamUrl = true;
 										}
 									}
 								}
