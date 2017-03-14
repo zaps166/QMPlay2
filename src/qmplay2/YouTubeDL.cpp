@@ -65,7 +65,7 @@ bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCt
 		QString newUrl, newError;
 		ytDl->addr(url, QString(), &newUrl, name, extension, error ? &newError : nullptr);
 		ytDl.clear();
-		if (!newError.isEmpty())
+		if (!newError.isEmpty() && !error->contains(newError))
 		{
 			if (!error->isEmpty())
 				error->append("\n");
@@ -257,12 +257,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		if (!isExitOk)
 		{
 			result.clear();
+			const QString newError = m_process.readAllStandardError();
 			if (error.isEmpty())
 			{
-				error = m_process.readAllStandardError();
-				const int idx = error.indexOf("ERROR:");
-				if (idx > -1)
-					error.remove(0, idx);
+				error = newError;
+				if (error.indexOf("ERROR: ") == 0)
+					error.remove(0, 7);
 			}
 			if (canUpdate && !error.contains("said:")) // Probably update can fix the error, so do it!
 			{
