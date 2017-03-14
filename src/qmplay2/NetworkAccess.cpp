@@ -40,16 +40,35 @@ static int interruptCB(bool *m_status)
 
 /**/
 
+static bool doSleep(bool &aborted)
+{
+	for (int i = 0; i < 20 && !aborted; ++i)
+		Functions::s_wait(0.1);
+	return !aborted;
+}
+
+/**/
+
+struct NetworkAccessParams
+{
+	QByteArray customUserAgent;
+	int maxSize = INT_MAX;
+	int retries = 1;
+};
+
+/**/
+
 class NetworkReplyPriv : public QThread
 {
 public:
-	NetworkReplyPriv(NetworkReply *networkReply, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const QByteArray &userAgent, const int maxSize) :
+	NetworkReplyPriv(NetworkReply *networkReply, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const NetworkAccessParams &params) :
 		m_networkReply(networkReply),
 		m_url(url),
 		m_postData(postData),
 		m_rawHeaders(rawHeaders),
-		m_userAgent(userAgent),
-		m_maxSize(maxSize),
+		m_customUserAgent(params.customUserAgent),
+		m_maxSize(params.maxSize),
+		m_retries(params.retries),
 		m_ctx(nullptr),
 		m_error(NetworkReply::Error::Ok),
 		m_aborted(false),
@@ -62,9 +81,10 @@ public:
 	const QString    m_url;
 	const QByteArray m_postData;
 	const QByteArray m_rawHeaders;
-	const QByteArray m_userAgent;
+	const QByteArray m_customUserAgent;
 
 	const int m_maxSize;
+	int m_retries;
 
 	AVIOContext *m_ctx;
 	QByteArray m_cookies;
@@ -92,7 +112,7 @@ private:
 		else
 		{
 			AVDictionary *options = nullptr;
-			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), false, m_userAgent).toUtf8();
+			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
 			av_dict_set(&options, "seekable", "0", 0);
 			if (!m_postData.isNull())
 			{
@@ -105,8 +125,44 @@ private:
 
 			AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, m_status};
 
-			const int ret = avio_open2(&m_ctx, url, AVIO_FLAG_READ | AVIO_FLAG_DIRECT, &interruptCB, &options);
-			if (ret >= 0)
+			do
+			{
+				const int ret = avio_open2(&m_ctx, url, AVIO_FLAG_READ | AVIO_FLAG_DIRECT, &interruptCB, &options);
+				if (ret >= 0)
+				{
+					m_error = NetworkReply::Error::Ok;
+					break;
+				}
+				switch (ret)
+				{
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 15, 100)
+					case AVERROR_HTTP_BAD_REQUEST:
+						m_error = NetworkReply::Error::Connection400;
+						break;
+					case AVERROR_HTTP_UNAUTHORIZED:
+						m_error = NetworkReply::Error::Connection401;
+						break;
+					case AVERROR_HTTP_FORBIDDEN:
+						m_error = NetworkReply::Error::Connection403;
+						break;
+					case AVERROR_HTTP_NOT_FOUND:
+						m_error = NetworkReply::Error::Connection404;
+						break;
+					case AVERROR_HTTP_OTHER_4XX:
+						m_error = NetworkReply::Error::Connection4XX;
+						break;
+					case AVERROR_HTTP_SERVER_ERROR:
+						m_error = NetworkReply::Error::Connection5XX;
+						continue; // Continue if server error (e.g. Service Temporarily Unavailable)
+#endif
+					default:
+						m_error = NetworkReply::Error::Connection;
+						continue; // Continue if connection error
+				}
+				break;
+			} while (--m_retries > 0 && doSleep(m_aborted));
+
+			if (m_error == NetworkReply::Error::Ok)
 			{
 				char *cookies = nullptr;
 				if (av_opt_get(m_ctx, "cookies", AV_OPT_SEARCH_CHILDREN, (uint8_t **)&cookies) >= 0)
@@ -177,35 +233,6 @@ private:
 
 				avio_closep(&m_ctx);
 			}
-			else
-			{
-				switch (ret)
-				{
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 15, 100)
-					case AVERROR_HTTP_BAD_REQUEST:
-						m_error = NetworkReply::Error::Connection400;
-						break;
-					case AVERROR_HTTP_UNAUTHORIZED:
-						m_error = NetworkReply::Error::Connection401;
-						break;
-					case AVERROR_HTTP_FORBIDDEN:
-						m_error = NetworkReply::Error::Connection403;
-						break;
-					case AVERROR_HTTP_NOT_FOUND:
-						m_error = NetworkReply::Error::Connection404;
-						break;
-					case AVERROR_HTTP_OTHER_4XX:
-						m_error = NetworkReply::Error::Connection4XX;
-						break;
-					case AVERROR_HTTP_SERVER_ERROR:
-						m_error = NetworkReply::Error::Connection5XX;
-						break;
-#endif
-					default:
-						m_error = NetworkReply::Error::Connection;
-						break;
-				}
-			}
 		}
 
 		m_networkReplyMutex.lock();
@@ -275,8 +302,8 @@ NetworkReply::Wait NetworkReply::waitForFinished(int ms)
 	return ret ? (hasError() ? Wait::Error : Wait::Ok) : Wait::Timeout;
 }
 
-NetworkReply::NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const QByteArray &userAgent, const int maxSize) :
-	m_priv(new NetworkReplyPriv(this, url, postData, rawHeaders, userAgent, maxSize))
+NetworkReply::NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const NetworkAccessParams &params) :
+	m_priv(new NetworkReplyPriv(this, url, postData, rawHeaders, params))
 {}
 NetworkReply::~NetworkReply()
 {
@@ -298,24 +325,36 @@ const char *const NetworkAccess::UrlEncoded = "Content-Type: application/x-www-f
 
 NetworkAccess::NetworkAccess(QObject *parent) :
 	QObject(parent),
-	m_maxSize(INT_MAX)
+	m_params(new NetworkAccessParams)
 {}
 NetworkAccess::~NetworkAccess()
-{}
+{
+	delete m_params;
+}
 
 void NetworkAccess::setCustomUserAgent(const QString &customUserAgent)
 {
-	m_customUserAgent = customUserAgent.toUtf8();
+	m_params->customUserAgent = customUserAgent.toUtf8();
 }
 void NetworkAccess::setMaxDownloadSize(const int maxSize)
 {
-	m_maxSize = maxSize;
+	m_params->maxSize = maxSize;
+}
+void NetworkAccess::setRetries(const int retries)
+{
+	if (retries > 0 && retries <= 10)
+		m_params->retries = retries;
+}
+
+int NetworkAccess::getRetries() const
+{
+	return m_params->retries;
 }
 
 NetworkReply *NetworkAccess::start(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders)
 {
 	const QByteArray rawHeadersData = (rawHeaders.isEmpty() || rawHeaders.endsWith("\r\n")) ? rawHeaders : rawHeaders + "\r\n";
-	NetworkReply *reply = new NetworkReply(url, postData, rawHeadersData, m_customUserAgent, m_maxSize);
+	NetworkReply *reply = new NetworkReply(url, postData, rawHeadersData, *m_params);
 	connect(reply, SIGNAL(finished()), this, SLOT(networkFinished()));
 	// Don't set parent to "m_priv" - this prevents waiting for thread at QMPlay2 exit
 	reply->setParent(this);
@@ -327,9 +366,13 @@ bool NetworkAccess::start(IOController<NetworkReply> &ioCtrl, const QString &url
 	return ioCtrl.assign(start(url, postData, rawHeaders));
 }
 
-bool NetworkAccess::startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders)
+bool NetworkAccess::startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const int retries)
 {
-	if (start(ioCtrl, url, postData, rawHeaders))
+	const int oldRetries = m_params->retries;
+	setRetries(retries);
+	const bool ok = start(ioCtrl, url, postData, rawHeaders);
+	m_params->retries = oldRetries;
+	if (ok)
 	{
 		if (ioCtrl->waitForFinished() == NetworkReply::Wait::Ok)
 			return true;

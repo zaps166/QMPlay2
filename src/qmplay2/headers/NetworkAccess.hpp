@@ -21,6 +21,7 @@
 #include <IOController.hpp>
 
 class NetworkReplyPriv;
+struct NetworkAccessParams;
 
 class NetworkReply : public QObject, public BasicIO
 {
@@ -79,7 +80,7 @@ signals:
 	void finished();
 
 private:
-	NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const QByteArray &userAgent, const int maxSize);
+	NetworkReply(const QString &url, const QByteArray &postData, const QByteArray &rawHeaders, const NetworkAccessParams &params);
 
 	NetworkReplyPriv *m_priv;
 };
@@ -98,11 +99,14 @@ public:
 
 	void setCustomUserAgent(const QString &customUserAgent);
 	void setMaxDownloadSize(const int maxSize);
+	void setRetries(const int retries);
+
+	int getRetries() const;
 
 	NetworkReply *start(const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
 	bool start(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
 
-	bool startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray());
+	bool startAndWait(IOController<NetworkReply> &ioCtrl, const QString &url, const QByteArray &postData = QByteArray(), const QByteArray &rawHeaders = QByteArray(), const int retries = -1);
 
 signals:
 	void finished(NetworkReply *reply);
@@ -111,6 +115,5 @@ private slots:
 	void networkFinished();
 
 private:
-	QByteArray m_customUserAgent;
-	qint32 m_maxSize;
+	NetworkAccessParams *m_params;
 };
