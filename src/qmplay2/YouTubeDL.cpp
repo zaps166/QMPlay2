@@ -224,12 +224,46 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			g_lock.unlock(); // Unlock for read
 		};
 
-		if (m_process.exitCode() != 0)
+		QStringList result;
+
+		bool isExitOk = (m_process.exitCode() == 0);
+		QString error;
+
+		if (isExitOk)
 		{
-			QString error = m_process.readAllStandardError();
-			const int idx = error.indexOf("ERROR:");
-			if (idx > -1)
-				error.remove(0, idx);
+			result = QString(m_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
+
+			// Verify if URLs has printable characters, because sometimes we
+			// can get binary garbage at output (especially on Openload).
+			for (const QString &line : result)
+			{
+				if (line.startsWith("http"))
+				{
+					for (const QChar &c : line)
+					{
+						if (!c.isPrint())
+						{
+							error = "Invalid stream URL";
+							isExitOk = false;
+							break;
+						}
+					}
+					if (!isExitOk)
+						break;
+				}
+			}
+		}
+
+		if (!isExitOk)
+		{
+			result.clear();
+			if (error.isEmpty())
+			{
+				error = m_process.readAllStandardError();
+				const int idx = error.indexOf("ERROR:");
+				if (idx > -1)
+					error.remove(0, idx);
+			}
 			if (canUpdate && !error.contains("said:")) // Probably update can fix the error, so do it!
 			{
 				if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
@@ -288,26 +322,6 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			}
 			finishWithError(error);
 			return {};
-		}
-
-		QStringList result = QString(m_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
-
-		// Verify if URLs has printable characters, because sometimes we
-		// can get binary garbage at output (especially on Openload).
-		for (const QString &line : result)
-		{
-			if (line.startsWith("http"))
-			{
-				for (const QChar &c : line)
-				{
-					if (!c.isPrint())
-					{
-						finishWithError("Invalid stream URL");
-						return {};
-					}
-				}
-				break;
-			}
 		}
 
 		//[Title], url, JSON, [url, JSON]
