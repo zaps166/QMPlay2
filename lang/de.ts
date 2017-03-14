@@ -2091,6 +2091,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Mouse wheel changes the volume</source>
         <translation>Mausrad ändert die Lautstärke</translation>
     </message>
+    <message>
+        <source>Left mouse button on video dock toggles playback</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

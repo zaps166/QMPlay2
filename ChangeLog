@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.03.12:
+Changes in QMPlay2 build 17.03.14:
 	- playlists from MediaBrowser and YouTube are no longer loaded by temporary file,
 	- replace Http class by NetworkAccess and use it in more places,
 	- use Freedesktop notifications for all notifications (option),
@@ -6,6 +6,7 @@ Changes in QMPlay2 build 17.03.12:
 	- option to enable/disable still images (disabled by default),
 	- show notification about new version on Linux and macOS,
 	- save playlists with relative file path (autodetection),
+	- added option to toggle playback on left mouse button,
 	- add XSPF support (thanks Zamarin Arthur for help),
 	- merge ProstoPleer and SoundCloud in MediaBrowser,
 	- allow to load profile from command line argument,

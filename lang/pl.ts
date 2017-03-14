@@ -2091,6 +2091,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Amplify</source>
         <translation>Wzmocnienie</translation>
     </message>
+    <message>
+        <source>Left mouse button on video dock toggles playback</source>
+        <translation>Lewy przycisk myszy w oknie wideoprzełącza odtwarzanie</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

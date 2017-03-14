@@ -2091,6 +2091,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Amplify</source>
         <translation>Усиление</translation>
     </message>
+    <message>
+        <source>Left mouse button on video dock toggles playback</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
