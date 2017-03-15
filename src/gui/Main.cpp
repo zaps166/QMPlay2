@@ -589,6 +589,7 @@ int main(int argc, char *argv[])
 		{
 			delete qmplay2Gui.pipe;
 			qmplay2Gui.pipe = nullptr;
+#ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 			if (settings.getBool("AllowOnlyOneInstance"))
 			{
 				QMPlay2Core.quit();
@@ -600,6 +601,7 @@ int main(int argc, char *argv[])
 				}
 				break;
 			}
+#endif
 		}
 
 		QApplication::setWindowIcon(QMPlay2Core.getIconFromTheme("QMPlay2", QMPlay2Core.getQMPlay2Pixmap()));

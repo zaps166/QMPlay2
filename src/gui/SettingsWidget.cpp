@@ -153,7 +153,9 @@ void SettingsWidget::InitSettings()
 	if (!QMPSettings.contains("AutoUpdates"))
 		QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
 	QMPSettings.init("MainWidget/TabPositionNorth", false);
+#ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 	QMPSettings.init("AllowOnlyOneInstance", false);
+#endif
 	QMPSettings.init("DisplayOnlyFileName", false);
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
@@ -364,7 +366,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		}
 
 		page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
+
+#ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 		page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
+#else
+		delete page1->allowOnlyOneInstance;
+		page1->allowOnlyOneInstance = nullptr;
+#endif
+
 		page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
 		page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
 		page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
@@ -743,7 +752,9 @@ void SettingsWidget::apply()
 			QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
 			QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());
 			QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
+#ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 			QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
+#endif
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());

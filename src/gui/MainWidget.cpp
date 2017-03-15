@@ -30,6 +30,9 @@
 #include <QFileDialog>
 #include <QTreeWidget>
 #include <QListWidget>
+#ifdef Q_OS_MAC
+	#include <QProcess>
+#endif
 #include <qevent.h>
 
 /* QMPlay2 gui */
@@ -841,6 +844,14 @@ void MainWidget::createMenuBar()
 	secondMenu->addAction(menuBar->player->toggleMute);
 	secondMenu->addSeparator();
 	secondMenu->addAction(menuBar->options->settings);
+
+	QAction *newInstanceAct = new QAction(tr("New instance"), secondMenu);
+	connect(newInstanceAct, &QAction::triggered, [] {
+		QProcess::startDetached(QCoreApplication::applicationFilePath(), {}, QCoreApplication::applicationDirPath());
+	});
+	secondMenu->addSeparator();
+	secondMenu->addAction(newInstanceAct);
+
 	qt_mac_set_dock_menu(secondMenu);
 #endif
 }

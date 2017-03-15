@@ -25,6 +25,8 @@ SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp Info
 FORMS += Ui/SettingsGeneral.ui Ui/SettingsPlayback.ui Ui/SettingsPlaybackModulesList.ui Ui/OSDSettings.ui
 
 !android {
+	DEFINES += QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
+
 	DEFINES += QMPlay2_TagEditor
 	HEADERS += TagEditor.hpp
 	SOURCES += TagEditor.cpp
