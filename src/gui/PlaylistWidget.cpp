@@ -57,9 +57,6 @@ static inline MenuBar::Playlist *playlistMenu()
 	return QMPlay2GUI.menuBar->playlist;
 }
 
-constexpr int IconSize = 22;
-constexpr int IconSizeDiv2 = IconSize / 2;
-
 /* UpdateEntryThr class */
 UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :
 	pLW(pLW),
@@ -577,7 +574,7 @@ PlaylistWidget::PlaylistWidget() :
 	Functions::setHeaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
 	header()->hideSection(1);
 	setItemsResizeToContents(true);
-	setIconSize(QSize(IconSize, IconSize));
+	setIconSize({22, 22});
 
 	currentPlaying = nullptr;
 	selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;
@@ -660,13 +657,13 @@ void PlaylistWidget::setCurrentPlaying(QTreeWidgetItem *tWI)
 	/* Ikona */
 	currentPlayingItemIcon = currentPlaying->icon(0);
 	QIcon play_icon = QMPlay2Core.getIconFromTheme("media-playback-start");
-	if (!play_icon.availableSizes().isEmpty() && !play_icon.availableSizes().contains(QSize(IconSize, IconSize)))
+	if (!play_icon.availableSizes().isEmpty() && !play_icon.availableSizes().contains(iconSize()))
 	{
 		const QPixmap playPix = play_icon.pixmap(play_icon.availableSizes().at(0));
-		QPixmap pix(IconSize, IconSize);
+		QPixmap pix(iconSize());
 		pix.fill(Qt::transparent);
 		QPainter p(&pix);
-		p.drawPixmap(IconSizeDiv2- playPix.width() / 2, IconSizeDiv2 - playPix.height() / 2, playPix);
+		p.drawPixmap(iconSize().width() / 2 - playPix.width() / 2, iconSize().height() / 2 - playPix.height() / 2, playPix);
 		play_icon = QIcon(pix);
 	}
 	currentPlaying->setIcon(0, play_icon);
@@ -936,12 +933,8 @@ void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
 	}
 	else
 	{
-		if (img.height() == img.width() && img.height() > IconSize && img.width() > IconSize)
-			img = img.scaled(IconSize, IconSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		else if (img.height() > img.width() && img.height() > IconSize)
-			img = img.scaledToHeight(IconSize, Qt::SmoothTransformation);
-		else if (img.width() > img.height() && img.width() > IconSize)
-			img = img.scaledToWidth(IconSize, Qt::SmoothTransformation);
+		if (img.size() != iconSize())
+			img = img.scaled(iconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? nullptr : tWI), Q_ARG(QImage, img));
 	}
 }
@@ -1003,9 +996,9 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 			QPixmap pix;
 			QTreeWidgetItem *currI = currentItem();
 			if (currI && currI != currentPlaying)
-				pix = currI->icon(0).pixmap(IconSize, IconSize);
+				pix = currI->icon(0).pixmap(iconSize());
 			if (pix.isNull())
-				pix = QMPlay2Core.getIconFromTheme("applications-multimedia").pixmap(IconSize, IconSize);
+				pix = QMPlay2Core.getIconFromTheme("applications-multimedia").pixmap(iconSize());
 			drag->setPixmap(pix);
 
 			drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction, Qt::CopyAction);
@@ -1114,7 +1107,7 @@ void PlaylistWidget::popupContextMenu(const QPoint &p)
 }
 void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QImage &img)
 {
-	if (img.width() == IconSize && img.height() == IconSize)
+	if (img.size() == iconSize())
 	{
 		if (tWI)
 			tWI->setIcon(0, QPixmap::fromImage(img));
@@ -1123,10 +1116,10 @@ void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QImage &img)
 	}
 	else
 	{
-		QPixmap canvas(IconSize, IconSize);
-		canvas.fill(QColor(0, 0, 0, 0));
+		QPixmap canvas(iconSize());
+		canvas.fill(Qt::transparent);
 		QPainter p(&canvas);
-		p.drawImage(IconSizeDiv2 - img.width() / 2, IconSizeDiv2 - img.height() / 2, img);
+		p.drawImage(iconSize().width() / 2 - img.width() / 2, iconSize().height() / 2 - img.height() / 2, img);
 		p.end();
 		if (tWI)
 			tWI->setIcon(0, canvas);

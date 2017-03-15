@@ -38,7 +38,6 @@ public:
 
 	static QString getPipe();
 	static void saveCover(QByteArray cover);
-	static void drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap);
 
 #ifdef UPDATER
 	void runUpdate(const QString &);

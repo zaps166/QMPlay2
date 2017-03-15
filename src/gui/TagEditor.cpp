@@ -18,6 +18,7 @@
 
 #include <TagEditor.hpp>
 
+#include <Functions.hpp>
 #include <Main.hpp>
 
 #define TAGLIB_VERSION ((TAGLIB_MAJOR_VERSION << 8) | TAGLIB_MINOR_VERSION)
@@ -135,7 +136,7 @@ void PictureW::paintEvent(QPaintEvent *)
 		if (!pixmap.isNull())
 		{
 			QPainter p(this);
-			QMPlay2GUI.drawPixmap(p, this, pixmap);
+			Functions::drawPixmap(p, pixmap, this);
 		}
 	}
 }

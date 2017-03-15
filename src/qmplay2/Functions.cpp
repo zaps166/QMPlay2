@@ -33,6 +33,7 @@
 #include <QRegExp>
 #include <QLibrary>
 #include <QMessageBox>
+#include <QStyleOption>
 
 extern "C"
 {
@@ -259,6 +260,58 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 				srcRect->setCoords(0, 0, 0, 0);
 		}
 	}
+}
+
+void Functions::drawPixmap(QPainter &p, QPixmap pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
+{
+	if (Q_UNLIKELY(scale <= 0.0))
+		return;
+
+	if (!size.isValid())
+	{
+		if (Q_UNLIKELY(!w))
+			return;
+		size = w->size();
+	}
+
+	if (w && !w->isEnabled())
+	{
+		QStyleOption opt;
+		opt.initFrom(w);
+		pixmap = w->style()->generatedIconPixmap(QIcon::Disabled, pixmap, &opt);
+	}
+
+	const qreal aRatio = (qreal)pixmap.width() / (qreal)pixmap.height();
+	QSize pixmapSize = size * scale;
+
+	if (aRatioMode == Qt::KeepAspectRatioByExpanding)
+	{
+		if (pixmapSize.width() / aRatio < pixmapSize.height())
+			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
+		else
+			pixmapSize.rheight() = pixmapSize.width() / aRatio;
+	}
+	else if (aRatioMode == Qt::KeepAspectRatio && (pixmap.width() > pixmapSize.width() || pixmap.height() > pixmapSize.height()))
+	{
+		if (pixmapSize.width() / aRatio > pixmapSize.height())
+			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
+		else
+			pixmapSize.rheight() = pixmapSize.width() / aRatio;
+	}
+	else
+	{
+		pixmapSize = pixmap.size();
+	}
+
+	const QPoint pixmapPos {
+		size.width()  / 2 - pixmapSize.width()  / 2,
+		size.height() / 2 - pixmapSize.height() / 2
+	};
+
+	const bool oldTransformationMode = p.testRenderHint(QPainter::SmoothPixmapTransform);
+	p.setRenderHint(QPainter::SmoothPixmapTransform, (transformationMode == Qt::SmoothTransformation));
+	p.drawPixmap(QRect(pixmapPos, pixmapSize), pixmap);
+	p.setRenderHint(QPainter::SmoothPixmapTransform, oldTransformationMode);
 }
 
 bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)

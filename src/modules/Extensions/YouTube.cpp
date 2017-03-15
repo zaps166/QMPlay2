@@ -126,6 +126,7 @@ ResultsYoutube::ResultsYoutube() :
 {
 	setAnimated(true);
 	setIndentation(12);
+	setIconSize({100, 100});
 	setExpandsOnDoubleClick(false);
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
 	setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -205,7 +206,7 @@ void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 
 				QDrag *drag = new QDrag(this);
 				drag->setMimeData(mimeData);
-				drag->setPixmap(tWI->data(0, Qt::DecorationRole).value<QPixmap>());
+				drag->setPixmap(tWI->icon(0).pixmap(iconSize()));
 				drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction);
 				pixels = 0;
 				return;
@@ -379,7 +380,6 @@ QStringList YouTube::getQualityPresetString(int qualityIdx)
 }
 
 YouTube::YouTube(Module &module) :
-	imgSize(QSize(100, 100)),
 	completer(new QCompleter(new QStringListModel(this), this)),
 	currPage(1),
 	net(this)
@@ -743,7 +743,7 @@ void YouTube::netFinished(NetworkReply *reply)
 		{
 			QPixmap p;
 			if (p.loadFromData(replyData))
-				tWI->setData(0, Qt::DecorationRole, p.scaled(imgSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+				tWI->setIcon(0, p);
 		}
 	}
 

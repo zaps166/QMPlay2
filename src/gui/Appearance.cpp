@@ -59,7 +59,7 @@ private:
 		if (!pixmap.isNull())
 		{
 			QPainter p(this);
-			QMPlay2GUI.drawPixmap(p, this, pixmap);
+			Functions::drawPixmap(p, pixmap, this);
 		}
 	}
 

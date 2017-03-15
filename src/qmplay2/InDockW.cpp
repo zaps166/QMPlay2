@@ -18,6 +18,7 @@
 
 #include <InDockW.hpp>
 
+#include <Functions.hpp>
 #include <Settings.hpp>
 
 #include <QGraphicsBlurEffect>
@@ -195,6 +196,7 @@ void InDockW::paintEvent(QPaintEvent *)
 
 		if (customPixmap.isNull())
 		{
+			p.setRenderHint(QPainter::SmoothPixmapTransform);
 			p.drawPixmap(width() / 2 - qmp2Pixmap.width() / 2, fullHeight / 2 - qmp2Pixmap.height() / 2, qmp2Pixmap);
 
 			QFont font = p.font();
@@ -206,24 +208,14 @@ void InDockW::paintEvent(QPaintEvent *)
 		}
 		else
 		{
-			QPixmap pixmapToDraw;
-			float multiplier;
-
-			if (!drawBlurredImage)
-				multiplier = 1.0f;
-			else
+			const QSize drawSize(width(), fullHeight);
+			float scale = 1.0f;
+			if (drawBlurredImage)
 			{
-				const QPixmap blurred = customPixmapBlurred.scaled(width(), fullHeight, Qt::KeepAspectRatioByExpanding, blurredTransformation);
-				p.drawPixmap(width() / 2 - blurred.width() / 2, fullHeight / 2 - blurred.height() / 2, blurred);
-				multiplier = 0.8f;
+				Functions::drawPixmap(p, customPixmapBlurred, nullptr, blurredTransformation, Qt::KeepAspectRatioByExpanding, drawSize);
+				scale = 0.8f;
 			}
-
-			if (customPixmap.width() > width() * multiplier || customPixmap.height() > fullHeight * multiplier)
-				pixmapToDraw = customPixmap.scaled(width() * multiplier, fullHeight * multiplier, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-			else
-				pixmapToDraw = customPixmap;
-
-			p.drawPixmap(width() / 2 - pixmapToDraw.width() / 2, fullHeight / 2 - pixmapToDraw.height() / 2, pixmapToDraw);
+			Functions::drawPixmap(p, customPixmap, nullptr, Qt::SmoothTransformation, Qt::KeepAspectRatio, drawSize, scale);
 		}
 	}
 }

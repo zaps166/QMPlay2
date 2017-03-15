@@ -30,8 +30,6 @@
 #include <IPC.hpp>
 
 #include <QDesktopWidget>
-#include <QStyleFactory>
-#include <QStyleOption>
 #include <QApplication>
 #include <QImageReader>
 #include <QMessageBox>
@@ -92,18 +90,6 @@ void QMPlay2GUIClass::saveCover(QByteArray cover)
 			}
 		}
 	}
-}
-void QMPlay2GUIClass::drawPixmap(QPainter &p, QWidget *w, QPixmap pixmap)
-{
-	if (pixmap.width() > w->width() || pixmap.height() > w->height())
-		pixmap = pixmap.scaled(w->width(), w->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	if (!w->isEnabled())
-	{
-		QStyleOption opt;
-		opt.initFrom(w);
-		pixmap = w->style()->generatedIconPixmap(QIcon::Disabled, pixmap, &opt);
-	}
-	p.drawPixmap(w->width() / 2 - pixmap.width() / 2, w->height() / 2 - pixmap.height() / 2, pixmap);
 }
 
 #ifdef UPDATER

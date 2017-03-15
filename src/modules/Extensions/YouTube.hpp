@@ -149,7 +149,6 @@ private:
 	PageSwitcher *pageSwitcher;
 
 	QString lastTitle;
-	const QSize imgSize;
 	QCompleter *completer;
 	int currPage;
 
