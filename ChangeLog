@@ -22,6 +22,7 @@ Changes in QMPlay2 build 17.03.14:
 	- move version to source file,
 	- API versioning for modules,
 	- add "appdata.xml" file,
+	- better HiDPI support,
 	- add Tekstowo lyrics,
 	- switch to C++11,
 	- minor bugfix,
