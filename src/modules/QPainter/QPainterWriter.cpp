@@ -49,15 +49,20 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
 		update();
 		return;
 	}
-	if (imgScaler.create(videoFrame.size, W, H))
+	if (imgScaler.create(videoFrame.size, imgW, imgH))
 	{
 		if (img.isNull())
-			img = QImage(W, H, QImage::Format_RGB32);
+		{
+			img = QImage(imgW, imgH, QImage::Format_RGB32);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+			img.setDevicePixelRatio(QMPlay2Core.getVideoDevicePixelRatio());
+#endif
+		}
 		imgScaler.scale(videoFrame, img.bits());
 		if (writer.flip)
 			img = img.mirrored(writer.flip & Qt::Horizontal, writer.flip & Qt::Vertical);
 		if (Brightness != 0 || Contrast != 100)
-			Functions::ImageEQ(Contrast, Brightness, img.bits(), W * H << 2);
+			Functions::ImageEQ(Contrast, Brightness, img.bits(), imgW * imgH << 2);
 	}
 	if (canRepaint && !entireScreen)
 		update(X, Y, W, H);
@@ -72,8 +77,10 @@ void Drawable::clr()
 
 void Drawable::resizeEvent(QResizeEvent *e)
 {
+	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
 	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
-	W = Functions::aligned(W, 8);
+	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width() * scale, height() * scale, imgW, imgH);
+	imgW = Functions::aligned(imgW, 8);
 
 	clr();
 	draw(VideoFrame(), e ? false : true, true);
@@ -88,7 +95,10 @@ void Drawable::paintEvent(QPaintEvent *)
 	osd_mutex.lock();
 	if (!osd_list.isEmpty())
 	{
-		p.setClipRect(0, 0, W, H);
+		const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
+		if (!qFuzzyCompare(scale, 1.0))
+			p.scale(1.0 / scale, 1.0 / scale);
+		p.setClipRect(0, 0, imgW, imgH);
 		Functions::paintOSD(true, osd_list, (qreal)W / writer.outW, (qreal)H / writer.outH, p);
 	}
 	osd_mutex.unlock();

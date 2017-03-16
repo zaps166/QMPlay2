@@ -31,7 +31,12 @@ class QMPlay2OSD;
 class VideoFrame;
 class QMimeData;
 class QPainter;
+class QPixmap;
+class QIcon;
 class QRect;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	class QWindow;
+#endif
 
 #ifdef Q_OS_WIN
 	#include <windows.h>
@@ -118,7 +123,8 @@ namespace Functions
 
 	void getImageSize(const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = nullptr, int *Y = nullptr, QRect *dstRect = nullptr, const int *vidW = nullptr, const int *vidH = nullptr, QRect *srcRect = nullptr);
 
-	void drawPixmap(QPainter &p, QPixmap pixmap, QWidget *w = nullptr, Qt::TransformationMode transformationMode = Qt::SmoothTransformation, Qt::AspectRatioMode aRatioMode = Qt::KeepAspectRatio, QSize size = QSize(), qreal scale = 1.0);
+	QPixmap getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w = nullptr);
+	void drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w = nullptr, Qt::TransformationMode transformationMode = Qt::SmoothTransformation, Qt::AspectRatioMode aRatioMode = Qt::KeepAspectRatio, QSize size = QSize(), qreal scale = 1.0);
 
 	bool mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = nullptr, const qreal *scaleH = nullptr, QRect *bounds = nullptr);
 	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = nullptr);
@@ -145,6 +151,10 @@ namespace Functions
 	QString dBStr(double a);
 
 	quint32 getBestSampleRate();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	QWindow *getNativeWindow(const QWidget *w);
+#endif
 
 	bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 

@@ -30,7 +30,7 @@ extern "C"
 {
 	#include <ass/ass.h>
 }
-#include <string.h>
+#include <cstring>
 
 static void addImgs(ASS_Image *img, QMPlay2OSD *osd)
 {
@@ -130,8 +130,8 @@ LibASS::~LibASS()
 
 void LibASS::setWindowSize(int _winW, int _winH)
 {
-	winW = _winW;
-	winH = _winH;
+	winW = _winW * QMPlay2Core.getVideoDevicePixelRatio();
+	winH = _winH * QMPlay2Core.getVideoDevicePixelRatio();
 	calcSize();
 }
 void LibASS::setARatio(double _aspect_ratio)

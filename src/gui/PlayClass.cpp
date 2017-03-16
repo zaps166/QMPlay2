@@ -176,6 +176,7 @@ void PlayClass::play(const QString &_url)
 				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
 			}
 
+			QMPlay2Core.setVideoDevicePixelRatio();
 			demuxThr->start();
 		}
 	}

@@ -88,6 +88,13 @@ public:
 	{
 		return *settings;
 	}
+
+	inline qreal getVideoDevicePixelRatio() const
+	{
+		return videoDevicePixelRatio;
+	}
+	void setVideoDevicePixelRatio();
+
 	QIcon getIconFromTheme(const QString &iconName, const QIcon &fallback = QIcon());
 
 	Q_SIGNAL void wallpaperChanged(bool hasWallpaper, double alpha);
@@ -198,6 +205,7 @@ private:
 	QStringList logs;
 	QMap<QString, QString> languages;
 	QList<QPointer<QWidget>> videoFilters;
+	qreal videoDevicePixelRatio;
 
 	struct
 	{

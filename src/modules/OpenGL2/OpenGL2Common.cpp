@@ -137,16 +137,16 @@ void OpenGL2Common::newSize(const QSize &size)
 {
 	const bool canUpdate = !size.isValid();
 	const QSize winSize = canUpdate ? widget()->size() : size;
+	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
 	if (!isRotate90())
 	{
 		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &subsX, &subsY);
-		subsW = W;
-		subsH = H;
+		Functions::getImageSize(aspectRatio, zoom, winSize.width() * scale, winSize.height() * scale, subsW, subsH, &subsX, &subsY);
 	}
 	else
 	{
 		Functions::getImageSize(aspectRatio, zoom, winSize.height(), winSize.width(), H, W);
-		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), subsW, subsH, &subsX, &subsY);
+		Functions::getImageSize(aspectRatio, zoom, winSize.width() * scale, winSize.height() * scale, subsW, subsH, &subsX, &subsY);
 	}
 	doReset = true;
 	if (canUpdate)
@@ -624,10 +624,11 @@ void OpenGL2Common::paintGL()
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		}
 
-		const float left   = (bounds.left() + subsX) * 2.0f / winSize.width();
-		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSize.width();
-		const float top    = (bounds.top() + subsY) * 2.0f / winSize.height();
-		const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSize.height();
+		const QSizeF winSizeSubs = winSize * QMPlay2Core.getVideoDevicePixelRatio();
+		const float left   = (bounds.left() + subsX) * 2.0f / winSizeSubs.width();
+		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSizeSubs.width();
+		const float top    = (bounds.top() + subsY) * 2.0f / winSizeSubs.height();
+		const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSizeSubs.height();
 		const float verticesOSD[8] = {
 			left  - 1.0f, -bottom + 1.0f,
 			right - 1.0f, -bottom + 1.0f,

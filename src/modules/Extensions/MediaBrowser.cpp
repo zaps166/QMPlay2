@@ -657,8 +657,8 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 			{
 				QTextDocument *doc = m_descr->document();
 
-				const int h = qMin<int>(img.height(), m_descr->height() - doc->documentMargin() * 3);
-				doc->addResource(QTextDocument::ImageResource, QUrl("image"), img.scaledToHeight(h, Qt::SmoothTransformation));
+				const int h = qMin<int>(img.height(), m_descr->height() - doc->documentMargin() * 5 / 2);
+				doc->addResource(QTextDocument::ImageResource, QUrl("image"), Functions::getPixmapFromIcon(QPixmap::fromImage(img), QSize(0, h), this));
 
 				QTextImageFormat txtImg;
 				txtImg.setName("image");

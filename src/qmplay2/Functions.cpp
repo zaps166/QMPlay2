@@ -262,7 +262,31 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 	}
 }
 
-void Functions::drawPixmap(QPainter &p, QPixmap pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
+QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
+{
+	const QList<QSize> sizes = icon.availableSizes();
+	if (sizes.isEmpty() || (size.width() <= 0 && size.height() <= 0))
+		return QPixmap();
+
+	QSize imgSize;
+	if (sizes.contains(size))
+		imgSize = size;
+	else
+	{
+		imgSize = icon.availableSizes().value(0);
+		imgSize.scale(size, size.isEmpty() ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio);
+	}
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+	if (QWindow *win = Functions::getNativeWindow(w))
+		return icon.pixmap(win, imgSize);
+#else
+	Q_UNUSED(w)
+#endif
+
+	return icon.pixmap(imgSize);
+}
+void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
 	if (Q_UNLIKELY(scale <= 0.0))
 		return;
@@ -274,11 +298,16 @@ void Functions::drawPixmap(QPainter &p, QPixmap pixmap, QWidget *w, Qt::Transfor
 		size = w->size();
 	}
 
+	QPixmap pixmapToDraw;
 	if (w && !w->isEnabled())
 	{
 		QStyleOption opt;
 		opt.initFrom(w);
-		pixmap = w->style()->generatedIconPixmap(QIcon::Disabled, pixmap, &opt);
+		pixmapToDraw = w->style()->generatedIconPixmap(QIcon::Disabled, pixmap, &opt);
+	}
+	else
+	{
+		pixmapToDraw = pixmap;
 	}
 
 	const qreal aRatio = (qreal)pixmap.width() / (qreal)pixmap.height();
@@ -310,7 +339,7 @@ void Functions::drawPixmap(QPainter &p, QPixmap pixmap, QWidget *w, Qt::Transfor
 
 	const bool oldTransformationMode = p.testRenderHint(QPainter::SmoothPixmapTransform);
 	p.setRenderHint(QPainter::SmoothPixmapTransform, (transformationMode == Qt::SmoothTransformation));
-	p.drawPixmap(QRect(pixmapPos, pixmapSize), pixmap);
+	p.drawPixmap(QRect(pixmapPos, pixmapSize), pixmapToDraw);
 	p.setRenderHint(QPainter::SmoothPixmapTransform, oldTransformationMode);
 }
 
@@ -643,6 +672,18 @@ quint32 Functions::getBestSampleRate()
 	}
 	return srate;
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+QWindow *Functions::getNativeWindow(const QWidget *w)
+{
+	if (w)
+	{
+		if (QWidget *winW = w->window())
+			return winW->windowHandle();
+	}
+	return nullptr;
+}
+#endif
 
 bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {

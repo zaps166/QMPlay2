@@ -206,7 +206,7 @@ void ResultsYoutube::mouseMoveEvent(QMouseEvent *e)
 
 				QDrag *drag = new QDrag(this);
 				drag->setMimeData(mimeData);
-				drag->setPixmap(tWI->icon(0).pixmap(iconSize()));
+				drag->setPixmap(Functions::getPixmapFromIcon(tWI->icon(0), iconSize(), this));
 				drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction);
 				pixels = 0;
 				return;

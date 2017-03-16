@@ -670,8 +670,13 @@ void VDPAUWriter::vdpau_display()
 
 void VDPAUWriter::resizeEvent(QResizeEvent *)
 {
+	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
+
+	const int winW = width()  * scale;
+	const int winH = height() * scale;
+
 	QRect dstQRect, srcQRect;
-	Functions::getImageSize(aspect_ratio, zoom, width(), height(), W, H, &X, &Y, &dstQRect, &outW, &outH, &srcQRect);
+	Functions::getImageSize(aspect_ratio, zoom, winW, winH, W, H, &X, &Y, &dstQRect, &outW, &outH, &srcQRect);
 
 	srcRect.x0 = srcQRect.left();
 	srcRect.y0 = srcQRect.top();
@@ -688,13 +693,13 @@ void VDPAUWriter::resizeEvent(QResizeEvent *)
 	if (flip & Qt::Vertical)
 		qSwap(srcRect.y0, srcRect.y1);
 
-	const int desktopW = QApplication::desktop()->width(), desktopH = QApplication::desktop()->height();
+	const int desktopW = QApplication::desktop()->width() * scale, desktopH = QApplication::desktop()->height() * scale;
 	QSize newOutputSurfacesSize(desktopW, desktopH);
 	if (desktopW > 0 && desktopH > 0)
 	{
-		while (newOutputSurfacesSize.width() < width())
+		while (newOutputSurfacesSize.width() < winW)
 			newOutputSurfacesSize.rwidth() += desktopW >> 1;
-		while (newOutputSurfacesSize.height() < height())
+		while (newOutputSurfacesSize.height() < winH)
 			newOutputSurfacesSize.rheight() += desktopH >> 1;
 	}
 	if (outputSurfacesSize != newOutputSurfacesSize)

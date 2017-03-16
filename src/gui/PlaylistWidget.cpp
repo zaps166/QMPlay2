@@ -996,9 +996,9 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 			QPixmap pix;
 			QTreeWidgetItem *currI = currentItem();
 			if (currI && currI != currentPlaying)
-				pix = currI->icon(0).pixmap(iconSize());
+				pix = Functions::getPixmapFromIcon(currI->icon(0), iconSize(), this);
 			if (pix.isNull())
-				pix = QMPlay2Core.getIconFromTheme("applications-multimedia").pixmap(iconSize());
+				pix = Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("applications-multimedia"), iconSize(), this);
 			drag->setPixmap(pix);
 
 			drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction, Qt::CopyAction);

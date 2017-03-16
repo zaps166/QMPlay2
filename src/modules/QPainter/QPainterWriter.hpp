@@ -46,7 +46,7 @@ private:
 	void paintEvent(QPaintEvent *) override final;
 	bool event(QEvent *) override final;
 
-	int X, Y, W, H;
+	int X, Y, W, H, imgW, imgH;
 	QPainterWriter &writer;
 	QImage img;
 	ImgScaler imgScaler;

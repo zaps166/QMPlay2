@@ -17,14 +17,17 @@
 */
 
 #include <LineEdit.hpp>
+
+
 #include <QMPlay2Core.hpp>
+#include <Functions.hpp>
 
 #include <QResizeEvent>
 
 LineEditButton::LineEditButton()
 {
 	setToolTip(tr("Clear"));
-	setPixmap(QMPlay2Core.getIconFromTheme("edit-clear").pixmap(16, 16));
+	setPixmap(Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("edit-clear"), QSize(16, 16), this));
 	resize(pixmap()->size());
 	setCursor(Qt::ArrowCursor);
 }
