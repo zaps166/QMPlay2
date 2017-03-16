@@ -358,7 +358,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_searchE->setCompleter(m_completer);
 
 	m_searchCB = new QComboBox;
-	connect(m_searchCB, SIGNAL(currentTextChanged(const QString &)), this, SLOT(searchTextEdited(const QString &)));
+	connect(m_searchCB, SIGNAL(editTextChanged(const QString &)), this, SLOT(searchTextEdited(const QString &)));
 	connect(m_searchCB, SIGNAL(activated(int)), this, SLOT(search()));
 	m_searchCB->setSizePolicy(m_searchE->sizePolicy());
 	m_searchCB->setInsertPolicy(QComboBox::NoInsert);
