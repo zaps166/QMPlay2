@@ -383,6 +383,11 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 	}
 
 	g_lock.unlock(); // Unlock for read or for write (if download has failed)
+#else
+	Q_UNUSED(url)
+	Q_UNUSED(args)
+	Q_UNUSED(silentErr)
+	Q_UNUSED(canUpdate)
 #endif // Q_OS_ANDROID
 	return {};
 }

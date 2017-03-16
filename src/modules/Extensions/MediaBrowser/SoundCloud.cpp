@@ -108,6 +108,7 @@ bool SoundCloud::hasWebpage() const
 }
 QString SoundCloud::getWebpageUrl(const QString &text) const
 {
+	Q_UNUSED(text)
 	return QString();
 }
 
@@ -117,10 +118,12 @@ MediaBrowserCommon::CompleterMode SoundCloud::completerMode() const
 }
 NetworkReply *SoundCloud::getCompleterReply(const QString &text)
 {
+	Q_UNUSED(text)
 	return nullptr;
 }
 QStringList SoundCloud::getCompletions(const QByteArray &reply)
 {
+	Q_UNUSED(reply)
 	return {};
 }
 

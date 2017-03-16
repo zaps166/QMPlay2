@@ -164,16 +164,24 @@ void Updater::infoFinished()
 #endif
 				}
 				else
+				{
 					endWork(tr("This auto-update is ignored, press the button to update"));
+				}
 			}
 			else
+			{
 				endWork(tr("Application is up-to-date"));
+			}
 		}
 		else
+		{
 			endWork(tr("Error checking for updates"));
+		}
 	}
 	else
+	{
 		endWork(tr("Error checking for updates"));
+	}
 	infoFile.remove();
 	reply->deleteLater();
 }
