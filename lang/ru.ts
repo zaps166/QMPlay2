@@ -1037,10 +1037,6 @@
         <translation>Главная панель инструментов</translation>
     </message>
     <message>
-        <source>&amp;Paused</source>
-        <translation>&amp;Пауза</translation>
-    </message>
-    <message>
         <source>&amp;Play</source>
         <translation>&amp;Воспроизведение</translation>
     </message>
@@ -1115,6 +1111,14 @@
     <message>
         <source>&amp;Hide menu bar</source>
         <translation> &amp;Скрыть меню</translation>
+    </message>
+    <message>
+        <source>New window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Pause</source>
+        <translation>&amp;Пауза</translation>
     </message>
 </context>
 <context>

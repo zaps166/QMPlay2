@@ -1037,10 +1037,6 @@
         <translation>Barre d&apos;outils principale</translation>
     </message>
     <message>
-        <source>&amp;Paused</source>
-        <translation>&amp;En pause</translation>
-    </message>
-    <message>
         <source>&amp;Play</source>
         <translation>&amp;Lecture</translation>
     </message>
@@ -1115,6 +1111,14 @@
     <message>
         <source>&amp;Hide menu bar</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Pause</source>
+        <translation>&amp;En pause</translation>
     </message>
 </context>
 <context>

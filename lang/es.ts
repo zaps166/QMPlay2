@@ -1045,10 +1045,6 @@
         <translation>Elegir archivos</translation>
     </message>
     <message>
-        <source>&amp;Paused</source>
-        <translation>&amp;Páusa</translation>
-    </message>
-    <message>
         <source>&amp;Hide</source>
         <translation>&amp;Ocultar</translation>
     </message>
@@ -1115,6 +1111,14 @@
     <message>
         <source>The update is downloading now.</source>
         <translation>La actualización se está descargando ahora.</translation>
+    </message>
+    <message>
+        <source>New window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Pause</source>
+        <translation>&amp;Páusa</translation>
     </message>
 </context>
 <context>

@@ -555,7 +555,7 @@ void MainWidget::playStateChanged(bool b)
 	if (b)
 	{
 		menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-pause"));
-		menuBar->player->togglePlay->setText(tr("&Paused"));
+		menuBar->player->togglePlay->setText(tr("&Pause"));
 	}
 	else
 	{
@@ -845,7 +845,7 @@ void MainWidget::createMenuBar()
 	secondMenu->addSeparator();
 	secondMenu->addAction(menuBar->options->settings);
 
-	QAction *newInstanceAct = new QAction(tr("New instance"), secondMenu);
+	QAction *newInstanceAct = new QAction(tr("New window"), secondMenu);
 	connect(newInstanceAct, &QAction::triggered, [] {
 		QProcess::startDetached(QCoreApplication::applicationFilePath(), {}, QCoreApplication::applicationDirPath());
 	});

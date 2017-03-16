@@ -1037,10 +1037,6 @@
         <translation>主工具栏</translation>
     </message>
     <message>
-        <source>&amp;Paused</source>
-        <translation>暂停</translation>
-    </message>
-    <message>
         <source>&amp;Play</source>
         <translation>播放</translation>
     </message>
@@ -1115,6 +1111,14 @@
     <message>
         <source>&amp;Hide menu bar</source>
         <translation>隐藏菜单栏</translation>
+    </message>
+    <message>
+        <source>New window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Pause</source>
+        <translation>暂停</translation>
     </message>
 </context>
 <context>

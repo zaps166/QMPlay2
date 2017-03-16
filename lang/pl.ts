@@ -1037,10 +1037,6 @@
         <translation>Główny pasek narzędzi</translation>
     </message>
     <message>
-        <source>&amp;Paused</source>
-        <translation>&amp;Pauza</translation>
-    </message>
-    <message>
         <source>&amp;Play</source>
         <translation>&amp;Odtwarzaj</translation>
     </message>
@@ -1115,6 +1111,14 @@
     <message>
         <source>&amp;Hide menu bar</source>
         <translation>&amp;Ukryj pasek menu</translation>
+    </message>
+    <message>
+        <source>New window</source>
+        <translation>Nowe okno</translation>
+    </message>
+    <message>
+        <source>&amp;Pause</source>
+        <translation>&amp;Pauza</translation>
     </message>
 </context>
 <context>
