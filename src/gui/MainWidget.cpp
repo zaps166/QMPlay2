@@ -847,7 +847,7 @@ void MainWidget::createMenuBar()
 
 	QAction *newInstanceAct = new QAction(tr("New window"), secondMenu);
 	connect(newInstanceAct, &QAction::triggered, [] {
-		QProcess::startDetached(QCoreApplication::applicationFilePath(), {}, QCoreApplication::applicationDirPath());
+		QProcess::startDetached(QCoreApplication::applicationFilePath(), {"-noplay"}, QCoreApplication::applicationDirPath());
 	});
 	secondMenu->addSeparator();
 	secondMenu->addAction(newInstanceAct);
