@@ -192,8 +192,8 @@ bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
 	if (!osd_track || !osd_style || !osd_event || !osd_renderer || !W || !H)
 		return false;
 
-	osd_track->PlayResX = W;
-	osd_track->PlayResY = H;
+	osd_track->PlayResX = W / QMPlay2Core.getVideoDevicePixelRatio();
+	osd_track->PlayResY = H / QMPlay2Core.getVideoDevicePixelRatio();
 	ass_set_frame_size(osd_renderer, W, H);
 
 	osd_event->Text = (char *)txt.data();
