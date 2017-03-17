@@ -275,18 +275,20 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
 					const auto checkModuleAPIVersion = [&](const quint32 v)->bool {
 						const quint8 moduleApiVersion = (v & 0xFF);
-						const quint8   qtMajorVersion = ((v >> 24) & 0xFF);
-						const quint8   qtMinorVersion = ((v >> 16) & 0xFF);
 						if (moduleApiVersion != QMPLAY2_MODULES_API_VERSION)
 						{
 							log(fInfo.fileName() + " - " + tr("mismatch module API version"), AddTimeToLog | ErrorLog | SaveLog);
 							return false;
 						}
+#if defined(QT_VERSION_MAJOR) && defined(QT_VERSION_MINOR)
+						const quint8   qtMajorVersion = ((v >> 24) & 0xFF);
+						const quint8   qtMinorVersion = ((v >> 16) & 0xFF);
 						if (qtMajorVersion != QT_VERSION_MAJOR || qtMinorVersion < QT_VERSION_MINOR)
 						{
 							log(fInfo.fileName() + " - " + tr("mismatch module Qt version"), AddTimeToLog | ErrorLog | SaveLog);
 							return false;
 						}
+#endif
 						return true;
 					};
 
