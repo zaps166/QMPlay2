@@ -199,6 +199,8 @@ add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_RESOURCES_RCC}
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
 if(USE_QT5)
     qt5_use_modules(${PROJECT_NAME} Gui Widgets ${DBUS})
     if(APPLE)
@@ -219,8 +221,6 @@ if(WIN32)
     elseif(USE_LIBASS)
         list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
-
-    set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 else()
