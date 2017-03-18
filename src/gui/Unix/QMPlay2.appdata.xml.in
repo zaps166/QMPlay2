@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>org.zaps166.QMPlay2</id>
+    <id>QMPlay2.desktop</id>
+    <metadata_license>CC0-1.0</metadata_license>
     <name>QMPlay2</name>
     <summary>Video and audio player</summary>
     <description>
@@ -11,7 +12,6 @@
     </description>
     <url type="homepage">http://zaps166.sourceforge.net/?app=QMPlay2</url>
     <url type="bugtracker">https://github.com/zaps166/QMPlay2/issues</url>
-    <icon type="stock">QMPlay2</icon>
     <categories>
         <category>AudioVideo</category>
         <category>Player</category>

@@ -279,7 +279,7 @@ else()
     endif()
 
     # appdata
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Unix/QMPlay2.appdata.xml.in ${CMAKE_CURRENT_BINARY_DIR}/org.zaps166.QMPlay2.appdata.xml @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.zaps166.QMPlay2.appdata.xml
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Unix/QMPlay2.appdata.xml.in ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.appdata.xml @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QMPlay2.appdata.xml
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
 endif()
