@@ -21,17 +21,17 @@ Table of Contents
 * [Building package RPM, DEB or any other](#building-package-rpm-deb-or-any-other)
 * [Other information](#other-information)
 
-##Installation
+## Installation
 
-####Easy installation on Windows (XP or higher)
+#### Easy installation on Windows (XP or higher)
 
 - [Download the newest Windows installer](https://github.com/zaps166/QMPlay2/releases).
 
-####Easy installation on Ubuntu / Mint
+#### Easy installation on Ubuntu / Mint
 
 - [Download the newest Ubuntu DEB package](https://github.com/zaps166/QMPlay2/releases).
 
-####Easy installation on Arch Linux / Manjaro Linux
+#### Easy installation on Arch Linux / Manjaro Linux
 
 - Arch Linux only: Install AUR client (e.g. yaourt),
 - run the following command:
@@ -39,7 +39,7 @@ Table of Contents
 $ yaourt -S qmplay2
 ```
 
-####Easy installation on openSUSE Leap 42.1
+#### Easy installation on openSUSE Leap 42.1
 
 - Run the following commands:
 ```
@@ -50,7 +50,7 @@ $ sudo zypper in QMPlay2
 - Don't use official package, because it is obsolete.
 - Don't mix FFmpeg from different repositories!
 
-####Easy installation on openSUSE 13.2
+#### Easy installation on openSUSE 13.2
 
 - Run the following commands:
 ```
@@ -59,18 +59,18 @@ $ sudo zypper in QMPlay2 QMPlay2-kde-integration
 ```
 - Don't mix FFmpeg from different repositories!
 
-####Easy installation on Gentoo Linux
+#### Easy installation on Gentoo Linux
 
 [Gentoo Linux repository](https://github.com/reagentoo/gentoo-overlay/tree/master/media-video/qmplay2)
 
-##YouTube
+## YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
 If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
 
 Some YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will download it automatically. You can remove downloaded "youtube-dl" from settings.
 
-####Windows
+#### Windows
 
 - Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
 
@@ -78,12 +78,12 @@ Some YouTube videos don't work without external "youtube-dl" software, so QMPlay
 
 QMPlay2 supports spherical view on OpenGL video output. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
-##ALSA
+## ALSA
 
 If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you should also append:
 `defaults.namehint.!showall on` to the configuration file. Otherwise devices which were added may not be visible!
 
-##Ubuntu Unity
+## Ubuntu Unity
 
 QMPlay2 should be visible in sound indicator via MPRIS2 interface. Be sure that it is enabled in "Settings->Modules->Extensions"!
 
@@ -93,7 +93,7 @@ You can disable tray icon via "Ctrl+T" key shortcut or from menu: "Options->Show
 
 You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
-##Hardware acceleration
+## Hardware acceleration
 
 QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher) and VDPAU/VA-API (X11, Linux/BSD only).
 Hardware acceleration is disabled by default, you can enable it in "Settings->Playback settings":
@@ -108,7 +108,7 @@ Hardware acceleration important information:
 - CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support (requirement during compilation)!
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 
-##Deinterlacing
+## Deinterlacing
 
 Video interlacing is automatically detected by QMPlay2. Go to "Settings->Video filters" for more options.
 If you have fast CPU (or low video resolution) you can use "Yadif 2x" deinterlacing filter for better quality.
@@ -121,23 +121,23 @@ Of course you can adjust other deinterlacing settings in case of hardware accele
 
 Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
 
-##Hidden features
+## Hidden features
 
-###Audio balance
+### Audio balance
 
 Right click on volume slider and select "Split channels".
 
-###Last.fm scrobbling
+### Last.fm scrobbling
 
 Go to "Options->Modules settings" and click "Extensions" on the list. Find "LastFM" group box, select "Scrobble", type your login and password and then press "Apply".
 
-###Control files
+### Control files
 
 Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe`):
 - `portable` - runs QMPlay2 in portable mode (settings are stored in applications directory),
 - `noautoupdates` - disables auto-updates at first run.
 
-##Multimedia keys
+## Multimedia keys
 
 In Windows multimedia keys should work automatically.
 
@@ -149,18 +149,18 @@ In Linux/BSD you must associate keys with commands:
 	- Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
 	- Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
 
-##Installation from sources
+## Installation from sources
 
-###CMake requirements
+### CMake requirements
 
 For CMake build be sure that you have correct CMake version:
 - CMake 2.8.11 or higher is recommended,
 - CMake 2.8.9 is the lowest version for Qt5,
 - CMake 2.8.6 is the lowest version for Qt4.
 
-###You need devel packages:
+### You need devel packages:
 
-####Necessary:
+#### Necessary:
 - Qt4 >= 4.8.0 or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
 	- QtOpenGL - not used since Qt 5.6.0,
 	- QtDBus - Linux/BSD only,
@@ -172,11 +172,11 @@ For CMake build be sure that you have correct CMake version:
 	- libswresample or libavresample - libswresample is default,
 	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
-####Important:
+#### Important:
 - TagLib >= 1.7 (>= 1.9 recommended),
 - libass - for OSD and every subtitles.
 
-####For modules (some of them can be automatically not used if not found):
+#### For modules (some of them can be automatically not used if not found):
 - FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU) - only on X11,
 - Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
@@ -186,9 +186,9 @@ For CMake build be sure that you have correct CMake version:
 - PortAudio: portaudio (v19),
 - XVideo (X11 only): libxv.
 
-###Dependencies:
+### Dependencies:
 
-#####Arch Linux / Manjaro Linux dependencies
+##### Arch Linux / Manjaro Linux dependencies
 
 - Common packages:
 ```
@@ -198,7 +198,7 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
 	- for Qt4 build: `sudo pacman -S qt4`.
 
-#####OpenSUSE dependencies (for Qt4 build)
+##### OpenSUSE dependencies (for Qt4 build)
 
 - Add Packman repository for FFmpeg with all codecs (don't mix FFmpeg from different repositories!):
 	- openSUSE Leap 42.1: `sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman`
@@ -208,25 +208,25 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 $ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel
 ```
 
-#####Ubuntu
+##### Ubuntu
 
 - Open "Software & Updates" and select the "Universe" repository.
 
-#####Ubuntu 16.04 and higher dependencies (Qt4 build)
+##### Ubuntu 16.04 and higher dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
 ```
 $ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev
 ```
 
-#####Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
+##### Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
 
 - Install dependencies from the package manager:
 ```
 $ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev
 ```
 
-#####Ubuntu 14.10 and older dependencies (Qt4 build)
+##### Ubuntu 14.10 and older dependencies (Qt4 build)
 
 Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), so the FFmpeg must be compiled from sources and the LibAV development files must be removed!
 
@@ -249,7 +249,7 @@ This will compile and install the newest FFmpeg without features that are not su
 - Run: `sudo ldconfig`
 - Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
-####PC-BSD 10.3
+#### PC-BSD 10.3
 
 - Install dependencies form the package manager:
 ```
@@ -257,7 +257,7 @@ $ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio lib
 ```
 For Qt4 build install also `qt4` package.
 
-###Running the compilation for Linux/BSD using CMake:
+### Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
 - You can use `cmake-gui` for graphical configuration. Otherwise follow below instructions:
@@ -354,7 +354,7 @@ $ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 $ sudo make uninstall
 ```
 
-####macOS:
+#### macOS:
 
 - Install [Brew](http://brew.sh) and developer command line tools.
 - Download and install Qt5 for macOS (ignore errors about missing XCode if any).
@@ -366,13 +366,13 @@ $ sudo make uninstall
  - set install prefix e.g. to Desktop directory (for Bundle),
  - install via `make install` - this creates a Bundle.
 
-####Windows (cross-compilation):
+#### Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend AUR MinGW packages).
 - Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you should built them on your own.
 - Run `cmake` from cross-compilation toolchain.
 
-#####Other information for Windows
+##### Other information for Windows
 
 - You can compile QMPlay2 on Windows host, but you must prepare toolchain for your own (also with CMake advanced options for libraries and paths):
  - `CMAKE_LIBRARY_PATH` - where to find QMPlay2 dependency libraries,
@@ -381,11 +381,11 @@ $ sudo make uninstall
 - I use my own PKGBUILDs for many MinGW libraries.
 - Visual Studio can't compile QMPlay2.
 
-##Building package RPM, DEB or any other
+## Building package RPM, DEB or any other
 
 Use CMake. You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2).
 
-##Other information
+## Other information
 
 - QMPlay2 contains modified libmodplug sources which are used by Modplug module.
 - QMPlay2 uses Concept icons created by Alexey Varfolomeev.
