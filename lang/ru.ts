@@ -135,7 +135,7 @@
     <name>AnimeOdcinki</name>
     <message>
         <source>Episode name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название эпизода</translation>
     </message>
 </context>
 <context>
@@ -619,35 +619,35 @@
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation type="unfinished">Загрузчик</translation>
+        <translation>Загрузчик</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation type="unfinished">Каталог загрузки</translation>
+        <translation>Каталог загрузки</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation type="unfinished">Выбрать папку для загружаемых файлов</translation>
+        <translation>Выбрать папку для загружаемых файлов</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation type="unfinished">Очистить завершенные загрузки</translation>
+        <translation>Очистить завершенные загрузки</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation type="unfinished">Ввести адрес для загрузки</translation>
+        <translation>Введите адрес для загрузки</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Загрузить</translation>
+        <translation>Загрузить</translation>
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation type="unfinished">Не удалось изменить каталог загрузки файлов</translation>
+        <translation>Не удалось изменить каталог загрузки файлов</translation>
     </message>
     <message>
         <source>Enter address</source>
-        <translation type="unfinished">Ввести адрес</translation>
+        <translation>Введите адрес</translation>
     </message>
 </context>
 <context>
@@ -922,15 +922,15 @@
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение и отображение неподвижных изображений</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать по умолчанию уведомления в системном лотке</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить youtube-dl</translation>
     </message>
 </context>
 <context>
@@ -1114,7 +1114,7 @@
     </message>
     <message>
         <source>New window</source>
-        <translation type="unfinished"></translation>
+        <translation>Новое окно</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
@@ -1125,38 +1125,38 @@
     <name>MediaBrowser</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Ошибка соединения</translation>
+        <translation>Ошибка соединения</translation>
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>Сайт не существует</translation>
     </message>
     <message>
         <source>Play all</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизвести все</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Очередь</translation>
+        <translation>Очередь</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Воспроизведение</translation>
+        <translation>Воспроизведение</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation type="unfinished">Открыть страницу в браузере</translation>
+        <translation>Открыть страницу в браузере</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation type="unfinished">Скопировать адрес страницы</translation>
+        <translation>Скопировать адрес страницы</translation>
     </message>
 </context>
 <context>
@@ -1541,7 +1541,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation type="unfinished"></translation>
+        <translation>Частичная проверка означает, что будут скопированы видеоданные только если быстрый метод потерпит неудачу</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
@@ -1625,15 +1625,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Try to prevent exclusive full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Пытаться предотвратить эксклюзивный полный экран</translation>
     </message>
     <message>
         <source>XSPF support</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддержка XSPF</translation>
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительные уведомления</translation>
     </message>
 </context>
 <context>
@@ -2097,7 +2097,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Left mouse button on video dock toggles playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Левая кнопка мыши на видео панели переключает воспроизведен</translation>
     </message>
 </context>
 <context>
@@ -2128,11 +2128,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Long &amp;seek &amp;forward</source>
-        <translation>Длинная  перемотка впе&amp;ред</translation>
+        <translation>Длинная перемотка впе&amp;ред</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Длинная  перемотка на&amp;зад</translation>
+        <translation>Длинная перемотка на&amp;зад</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
@@ -2192,11 +2192,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Пропустить</translation>
     </message>
     <message>
         <source>&amp;Stop after</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Остановить после этого</translation>
     </message>
 </context>
 <context>
@@ -2283,7 +2283,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Быстрая синхронизация группы</translation>
     </message>
 </context>
 <context>
@@ -2317,11 +2317,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Ра&amp;зблокировать</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Заблокировать</translation>
     </message>
 </context>
 <context>
@@ -2339,27 +2339,27 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>ProstoPleer</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Исполнитель</translation>
+        <translation>Исполнитель</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Продолжительность</translation>
+        <translation>Продолжительность</translation>
     </message>
     <message>
         <source>Bitrate</source>
-        <translation type="unfinished">Битрейт</translation>
+        <translation>Битрейт</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation type="unfinished">Поиск на prostopleer</translation>
+        <translation>Поиск на prostopleer</translation>
     </message>
     <message>
         <source>Try again later</source>
-        <translation type="unfinished">Повторите попытку позже</translation>
+        <translation>Повторите попытку позже</translation>
     </message>
 </context>
 <context>
@@ -2385,19 +2385,19 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation type="unfinished"></translation>
+        <translation>Слишком старая библиотека QMPlay2</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>Модуль не соответствует версии API</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation type="unfinished"></translation>
+        <translation>Дублированное имя модуля</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>Модуль не соответствует версии Qt</translation>
     </message>
 </context>
 <context>
@@ -2710,15 +2710,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Automatically check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически проверять наличие обновлений</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>Подтвердить удаление «youtube-dl»</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить «youtube-dl»?</translation>
     </message>
 </context>
 <context>
@@ -2766,23 +2766,23 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>SoundCloud</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Исполнитель</translation>
+        <translation>Исполнитель</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="unfinished">Жанр</translation>
+        <translation>Жанр</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Продолжительность</translation>
+        <translation>Продолжительность</translation>
     </message>
     <message>
         <source>Search on SoundCloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск на SoundCloud</translation>
     </message>
 </context>
 <context>
@@ -2879,11 +2879,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>Tekstowo</name>
     <message>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевод</translation>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст песни</translation>
     </message>
 </context>
 <context>
@@ -2945,11 +2945,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation type="unfinished"></translation>
+        <translation>Для QMPlay2 доступно обновление!</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая версия QMPlay2: %1</translation>
     </message>
 </context>
 <context>
@@ -3091,15 +3091,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>Wbijam</name>
     <message>
         <source>Episode name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название эпизода</translation>
     </message>
     <message>
         <source>Episode type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип эпизода</translation>
     </message>
     <message>
         <source>Episode date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата эпизода</translation>
     </message>
 </context>
 <context>
@@ -3132,58 +3132,58 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Настройки</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished">Качество</translation>
+        <translation>Качество</translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation type="unfinished">Поиск на youtube</translation>
+        <translation>Поиск на youtube</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Ошибка соединения</translation>
+        <translation>Ошибка соединения</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Список воспроизведения</translation>
+        <translation>Список воспроизведения</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="unfinished">Да</translation>
+        <translation>Доступно</translation>
     </message>
 </context>
 <context>
     <name>YouTubeDL</name>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully updated!</source>
-        <translation type="unfinished"></translation>
+        <translation>«youtube-dl» успешно обновлён!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished">«youtube-dl» успешно загружен!</translation>
+        <translation>«youtube-dl» успешно загружен!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление «youtube-dl», подождите...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление «youtube-dl» было прервано!</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка «youtube-dl», подождите...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка «youtube-dl» была прервана!</translation>
     </message>
 </context>
 </TS>
