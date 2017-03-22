@@ -832,7 +832,7 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 {
 	int count = 0;
 	hasHiddenItems = false;
-	for (QTreeWidgetItem *tWI : getChildren(PlaylistWidget::ONLY_NON_GROUPS, nullptr))
+	for (QTreeWidgetItem *tWI : getChildren(PlaylistWidget::ONLY_NON_GROUPS))
 	{
 		if (itemsToShow)
 		{
@@ -859,7 +859,7 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 		if (hideGroups && !itemsToShow->contains(group))
 		{
 			bool hasVisibleItems = false;
-			for (QTreeWidgetItem *tWI : getChildren(ONLY_NON_GROUPS, group))
+			for (QTreeWidgetItem *tWI : getChildren(ALL_CHILDREN, group))
 			{
 				if (!tWI->isHidden())
 				{
