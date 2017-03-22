@@ -62,7 +62,7 @@ static QString createAndSetProfile(MenuBar *menuBar)
 	if (!selectedProfile.isEmpty())
 	{
 		QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
-		if (selectedProfile != getCurrentProfile(profileSettings))
+		if (selectedProfile.compare(getCurrentProfile(profileSettings), Qt::CaseInsensitive) != 0)
 		{
 			QDir(QMPlay2Core.getSettingsDir()).mkpath("Profiles/" + selectedProfile);
 
