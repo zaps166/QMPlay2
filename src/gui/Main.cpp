@@ -551,6 +551,9 @@ int main(int argc, char *argv[])
 		/* QMPlay2GUI musi być stworzone już wcześniej */
 		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath, qmplay2Gui.cmdLineProfile);
 
+		if (!qmplay2Gui.cmdLineProfile.isEmpty() && QMPlay2Core.getSettingsProfile() == "/")
+			qmplay2Gui.cmdLineProfile = QMPlay2Core.getSettingsProfile(); // Default profile
+
 		Settings &settings = QMPlay2Core.getSettings();
 		QByteArray lastVer = settings.getByteArray("Version", Version::get());
 		settings.set("Version", Version::get());
