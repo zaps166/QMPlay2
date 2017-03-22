@@ -532,14 +532,17 @@ void PlaylistDock::start()
 }
 void PlaylistDock::clearCurrentPlaying()
 {
-	if (m_currPlaylist->currentPlaying)
+	for (int i = 0, end = m_playlistsW->count(); i < end; ++i)
 	{
-		if (m_currPlaylist->currentPlayingItemIcon.type() == QVariant::Icon)
-			QMPlay2GUI.setTreeWidgetItemIcon(m_currPlaylist->currentPlaying, m_currPlaylist->currentPlayingItemIcon.value<QIcon>(), 0, m_currPlaylist);
-		else
-			m_currPlaylist->currentPlaying->setData(0, Qt::DecorationRole, m_currPlaylist->currentPlayingItemIcon);
+		PlaylistWidget *list = (PlaylistWidget *)m_playlistsW->widget(i);
+		if (list->currentPlaying)
+		{
+			if (list->currentPlayingItemIcon.type() == QVariant::Icon)
+				QMPlay2GUI.setTreeWidgetItemIcon(list->currentPlaying, list->currentPlayingItemIcon.value<QIcon>(), 0, list);
+			else
+				list->currentPlaying->setData(0, Qt::DecorationRole, list->currentPlayingItemIcon);
+		}
 	}
-	m_currPlaylist->clearCurrentPlaying();
 }
 void PlaylistDock::setCurrentPlaying()
 {
