@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, signal_handler);
 	atexit(unInhibitScreenSaver);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#if Q_OS_MAC && (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
 	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
