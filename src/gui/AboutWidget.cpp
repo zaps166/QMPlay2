@@ -110,7 +110,7 @@ AboutWidget::AboutWidget()
 
 void AboutWidget::showEvent(QShowEvent *)
 {
-	QMPlay2GUI.restoreGeometry("AboutWidget/Geometry", this, QSize(630, 440));
+	QMPlay2GUI.restoreGeometry("AboutWidget/Geometry", this, QSize(800, 500));
 
 	refreshLog();
 
