@@ -53,6 +53,7 @@ PlaylistDock::PlaylistDock() :
 	statusL = new QLabel;
 
 	m_playlistsW = new QTabWidget;
+	m_playlistsW->setTabBarAutoHide(true);
 	m_playlistsW->setTabsClosable(true);
 	m_playlistsW->setMovable(true);
 
