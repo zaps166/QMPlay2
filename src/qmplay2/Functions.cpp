@@ -313,13 +313,35 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::T
 		pixmapToDraw = pixmap;
 	}
 
+	const qreal aRatio = (qreal)pixmap.width() / (qreal)pixmap.height();
+	QSize pixmapSize = size * scale;
+
+	if (aRatioMode == Qt::KeepAspectRatioByExpanding)
+	{
+		if (pixmapSize.width() / aRatio < pixmapSize.height())
+			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
+		else
+			pixmapSize.rheight() = pixmapSize.width() / aRatio;
+	}
+	else if (aRatioMode == Qt::KeepAspectRatio && (pixmap.width() > pixmapSize.width() || pixmap.height() > pixmapSize.height()))
+	{
+		if (pixmapSize.width() / aRatio > pixmapSize.height())
+			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
+		else
+			pixmapSize.rheight() = pixmapSize.width() / aRatio;
+	}
+	else
+	{
+		pixmapSize = pixmap.size();
+	}
+
 	qreal devicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	if (QWindow *win = getNativeWindow(w))
 		devicePixelRatio = win->devicePixelRatio();
 #endif
 
-	pixmapToDraw = pixmapToDraw.scaled(size * scale * devicePixelRatio, aRatioMode, transformationMode);
+	pixmapToDraw = pixmapToDraw.scaled(pixmapSize * devicePixelRatio, Qt::IgnoreAspectRatio, transformationMode);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	pixmapToDraw.setDevicePixelRatio(devicePixelRatio);
 #endif
