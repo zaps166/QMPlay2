@@ -1,3 +1,11 @@
+Changes in QMPlay2 build 17.03.25:
+	- fix drawing smooth cover images (regression),
+	- updated Russian translation (victorr2007),
+	- high dpi scaling enabled only for macOS,
+	- fixed "QMPlay2.appdata.xml" file,
+	- use SVG icons,
+	- bugfix,
+
 Changes in QMPlay2 build 17.03.17:
 	- playlists from MediaBrowser and YouTube are no longer loaded by temporary file,
 	- replace Http class by NetworkAccess and use it in more places,
