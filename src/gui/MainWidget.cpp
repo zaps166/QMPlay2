@@ -113,11 +113,6 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 }
 #endif
 
-static bool focusChangedHelper(QWidget *w)
-{
-	return (qobject_cast<QAbstractItemView *>(w) || qobject_cast<QTextEdit *>(w) || qobject_cast<QAbstractSlider *>(w) || qobject_cast<QComboBox *>(w) || qobject_cast<QLineEdit *>(w) || qobject_cast<QMenu *>(w));
-}
-
 /* MainWidget */
 MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	: updater(this)
@@ -448,6 +443,16 @@ void MainWidget::detachFromPipe()
 
 void MainWidget::focusChanged(QWidget *old, QWidget *now)
 {
+	const auto focusChangedHelper = [this](QWidget *w) {
+		if (w)
+		{
+			QWidget *tlw = w->window();
+			if (tlw && (tlw == settingsW || tlw == aboutW))
+				return true;
+		}
+		return (qobject_cast<QAbstractItemView *>(w) || qobject_cast<QTextEdit *>(w) || qobject_cast<QAbstractSlider *>(w) || qobject_cast<QComboBox *>(w) || qobject_cast<QLineEdit *>(w) || qobject_cast<QMenu *>(w));
+	};
+
 	if (focusChangedHelper(old) && old != seekS)
 		menuBar->player->seekActionsEnable(true);
 	if (focusChangedHelper(now) && now != seekS)
