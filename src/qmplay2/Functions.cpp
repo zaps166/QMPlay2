@@ -310,37 +310,18 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::T
 		pixmapToDraw = pixmap;
 	}
 
-	const qreal aRatio = (qreal)pixmap.width() / (qreal)pixmap.height();
-	QSize pixmapSize = size * scale;
-
-	if (aRatioMode == Qt::KeepAspectRatioByExpanding)
-	{
-		if (pixmapSize.width() / aRatio < pixmapSize.height())
-			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
-		else
-			pixmapSize.rheight() = pixmapSize.width() / aRatio;
-	}
-	else if (aRatioMode == Qt::KeepAspectRatio && (pixmap.width() > pixmapSize.width() || pixmap.height() > pixmapSize.height()))
-	{
-		if (pixmapSize.width() / aRatio > pixmapSize.height())
-			pixmapSize.rwidth() = pixmapSize.height() * aRatio;
-		else
-			pixmapSize.rheight() = pixmapSize.width() / aRatio;
-	}
-	else
-	{
-		pixmapSize = pixmap.size();
-	}
+	const qreal videoDevicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
+	pixmapToDraw = pixmapToDraw.scaled(size * scale * videoDevicePixelRatio, aRatioMode, transformationMode);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	pixmapToDraw.setDevicePixelRatio(videoDevicePixelRatio);
+#endif
 
 	const QPoint pixmapPos {
-		size.width()  / 2 - pixmapSize.width()  / 2,
-		size.height() / 2 - pixmapSize.height() / 2
+		size.width()  / 2 - int(pixmapToDraw.width()  / (videoDevicePixelRatio * 2)),
+		size.height() / 2 - int(pixmapToDraw.height() / (videoDevicePixelRatio * 2))
 	};
 
-	const bool oldTransformationMode = p.testRenderHint(QPainter::SmoothPixmapTransform);
-	p.setRenderHint(QPainter::SmoothPixmapTransform, (transformationMode == Qt::SmoothTransformation));
-	p.drawPixmap(QRect(pixmapPos, pixmapSize), pixmapToDraw);
-	p.setRenderHint(QPainter::SmoothPixmapTransform, oldTransformationMode);
+	p.drawPixmap(pixmapPos, pixmapToDraw);
 }
 
 bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW, const qreal *scaleH, QRect *bounds)

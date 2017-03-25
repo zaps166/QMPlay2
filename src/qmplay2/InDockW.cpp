@@ -209,11 +209,11 @@ void InDockW::paintEvent(QPaintEvent *)
 		else
 		{
 			const QSize drawSize(width(), fullHeight);
-			float scale = 1.0f;
+			qreal scale = 1.0;
 			if (drawBlurredImage)
 			{
 				Functions::drawPixmap(p, customPixmapBlurred, nullptr, blurredTransformation, Qt::KeepAspectRatioByExpanding, drawSize);
-				scale = 0.8f;
+				scale = 0.8;
 			}
 			Functions::drawPixmap(p, customPixmap, nullptr, Qt::SmoothTransformation, Qt::KeepAspectRatio, drawSize, scale);
 		}
