@@ -34,6 +34,9 @@
 #include <QLibrary>
 #include <QMessageBox>
 #include <QStyleOption>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	#include <QWindow>
+#endif
 
 extern "C"
 {
@@ -310,15 +313,20 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::T
 		pixmapToDraw = pixmap;
 	}
 
-	const qreal videoDevicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
-	pixmapToDraw = pixmapToDraw.scaled(size * scale * videoDevicePixelRatio, aRatioMode, transformationMode);
+	qreal devicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-	pixmapToDraw.setDevicePixelRatio(videoDevicePixelRatio);
+	if (QWindow *win = getNativeWindow(w))
+		devicePixelRatio = win->devicePixelRatio();
+#endif
+
+	pixmapToDraw = pixmapToDraw.scaled(size * scale * devicePixelRatio, aRatioMode, transformationMode);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	pixmapToDraw.setDevicePixelRatio(devicePixelRatio);
 #endif
 
 	const QPoint pixmapPos {
-		size.width()  / 2 - int(pixmapToDraw.width()  / (videoDevicePixelRatio * 2)),
-		size.height() / 2 - int(pixmapToDraw.height() / (videoDevicePixelRatio * 2))
+		size.width()  / 2 - int(pixmapToDraw.width()  / (devicePixelRatio * 2)),
+		size.height() / 2 - int(pixmapToDraw.height() / (devicePixelRatio * 2))
 	};
 
 	p.drawPixmap(pixmapPos, pixmapToDraw);

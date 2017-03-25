@@ -212,10 +212,10 @@ void InDockW::paintEvent(QPaintEvent *)
 			qreal scale = 1.0;
 			if (drawBlurredImage)
 			{
-				Functions::drawPixmap(p, customPixmapBlurred, nullptr, blurredTransformation, Qt::KeepAspectRatioByExpanding, drawSize);
+				Functions::drawPixmap(p, customPixmapBlurred, this, blurredTransformation, Qt::KeepAspectRatioByExpanding, drawSize);
 				scale = 0.8;
 			}
-			Functions::drawPixmap(p, customPixmap, nullptr, Qt::SmoothTransformation, Qt::KeepAspectRatio, drawSize, scale);
+			Functions::drawPixmap(p, customPixmap, this, Qt::SmoothTransformation, Qt::KeepAspectRatio, drawSize, scale);
 		}
 	}
 }
