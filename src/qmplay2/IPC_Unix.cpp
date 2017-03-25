@@ -98,7 +98,8 @@ bool IPCSocket::open(QIODevice::OpenMode mode)
 
 	if (m_priv->fd > 0)
 	{
-		ioctl(m_priv->fd, FIONBIO, "\xFF\xFF\xFF\xFF");
+		const u_long on = 1;
+		ioctl(m_priv->fd, FIONBIO, &on);
 		m_priv->socketNotifier = new QSocketNotifier(m_priv->fd, QSocketNotifier::Read, this);
 		connect(m_priv->socketNotifier, SIGNAL(activated(int)), this, SLOT(socketReadActive()));
 		return QIODevice::open(mode);
