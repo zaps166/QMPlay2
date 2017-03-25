@@ -128,7 +128,7 @@ private:
 	DockWidget *getDockWidget() override final;
 
 	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) override final;
+	void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override final;
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 

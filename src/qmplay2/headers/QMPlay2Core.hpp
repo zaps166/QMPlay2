@@ -67,24 +67,24 @@ public:
 		return pluginsInstance;
 	}
 
-	inline QString getSettingsDir()
+	inline QString getSettingsDir() const
 	{
 		return settingsDir;
 	}
-	inline QString getSettingsProfile()
+	inline QString getSettingsProfile() const
 	{
 		return settingsProfile;
 	}
-	inline QString getShareDir()
+	inline QString getShareDir() const
 	{
 		return shareDir;
 	}
 
-	inline QPixmap &getQMPlay2Pixmap()
+	inline QIcon &getQMPlay2Icon() const
 	{
-		return *qmp2Pixmap;
+		return *qmplay2Icon;
 	}
-	inline Settings &getSettings()
+	inline Settings &getSettings() const
 	{
 		return *settings;
 	}
@@ -191,9 +191,8 @@ protected:
 	QMPlay2CoreClass();
 	virtual ~QMPlay2CoreClass();
 
-	QPixmap *qmp2Pixmap;
+	QIcon *qmplay2Icon;
 	Settings *settings;
-	QString lang;
 
 private:
 	static QMPlay2CoreClass *qmplay2Core;
@@ -206,6 +205,7 @@ private:
 	QMap<QString, QString> languages;
 	QList<QPointer<QWidget>> videoFilters;
 	qreal videoDevicePixelRatio;
+	QString lang;
 
 	struct
 	{

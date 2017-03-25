@@ -26,7 +26,7 @@
 MediaBrowserCommon::MediaBrowserCommon(NetworkAccess &net, const QString &name, const QString &imgPath) :
 	m_net(net),
 	m_name(name),
-	m_img(imgPath)
+	m_icon(imgPath)
 {}
 
 void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
@@ -54,5 +54,5 @@ void MediaBrowserCommon::setCompleterListCallback(const CompleterReadyCallback &
 
 QMPlay2Extensions::AddressPrefix MediaBrowserCommon::addressPrefix(bool img) const
 {
-	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_img : QImage());
+	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_icon : QIcon());
 }

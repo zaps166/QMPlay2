@@ -40,17 +40,17 @@ private:
 
 	/**/
 
-	QImage demuxIcon;
+	QIcon demuxIcon;
 #ifdef QMPlay2_VDPAU
-	QImage vdpauIcon;
+	QIcon vdpauIcon;
 	QComboBox *vdpauDeintMethodB;
 #endif
 #ifdef QMPlay2_VAAPI
-	QImage vaapiIcon;
+	QIcon vaapiIcon;
 	QComboBox *vaapiDeintMethodB;
 #endif
 #ifdef QMPlay2_DXVA2
-	QImage dxva2Icon;
+	QIcon dxva2Icon;
 	bool dxva2Loaded;
 #endif
 

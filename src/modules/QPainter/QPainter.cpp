@@ -22,7 +22,7 @@
 QPainterSW::QPainterSW() :
 	Module("QPainterSW")
 {
-	moduleImg = QImage(":/QPainter");
+	m_icon = QIcon(":/QPainter.svgz");
 
 	init("Enabled", true);
 }

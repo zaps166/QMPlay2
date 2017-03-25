@@ -92,7 +92,7 @@ static Wbijam::AnimeTupleList parseAnimeList(const QString &data, const QString 
 /**/
 
 Wbijam::Wbijam(NetworkAccess &net) :
-	MediaBrowserCommon(net, "Wbijam", ":/video"),
+	MediaBrowserCommon(net, "Wbijam", ":/video.svgz"),
 	m_treeW(nullptr),
 	m_tupleIdx(-1),
 	m_page(-1)
@@ -344,13 +344,13 @@ QAction *Wbijam::getAction() const
 	return nullptr;
 }
 
-bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
 	if (prefix != m_name)
 		return false;
 
-	if (img)
-		*img = m_img;
+	if (icon)
+		*icon = m_icon;
 	if (ioCtrl && streamUrl)
 	{
 		NetworkAccess net;

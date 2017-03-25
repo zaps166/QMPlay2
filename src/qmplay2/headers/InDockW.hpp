@@ -24,14 +24,13 @@ class InDockW : public QWidget
 {
 	Q_OBJECT
 public:
-	InDockW(const QPixmap &, const QColor &, const QColor &, const QColor &);
+	InDockW(const QColor &, const QColor &, const QColor &);
 
 	QWidget *getWidget();
 	void setLoseHeight(int lh);
 	void setCustomPixmap(const QPixmap &pix = QPixmap());
 private:
 	const QColor &grad1, &grad2, &qmpTxt;
-	const QPixmap &qmp2Pixmap;
 	Qt::TransformationMode blurredTransformation;
 	QPixmap customPixmap, customPixmapBlurred;
 	bool hasWallpaper;

@@ -3,6 +3,11 @@ CONFIG += link_pkgconfig
 
 QT += widgets
 
+android {
+	QT += svg androidextras
+	QTPLUGIN += svg
+}
+
 TARGET = QMPlay2
 
 QMAKE_LIBDIR += ../../app/lib

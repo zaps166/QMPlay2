@@ -48,23 +48,20 @@ public:
 	class Info
 	{
 	public:
-		inline Info() :
-			type(NONE) {}
-		inline Info(const QString &name, const quint32 type, const QImage &img = QImage(), const QString &description = QString()) :
-			name(name), description(description), type(type), img(img) {}
+		Info() = default;
+		inline Info(const QString &name, const quint32 type, const QIcon &icon = QIcon(), const QString &description = QString()) :
+			name(name), description(description), type(type), icon(icon)
+		{}
 		inline Info(const QString &name, const quint32 type, const QString &description) :
-			name(name), description(description), type(type) {}
-		inline Info(const QString &name, const quint32 type, const QStringList &extensions, const QImage &img = QImage(), const QString &description = QString()) :
-			name(name), description(description), type(type), img(img), extensions(extensions) {}
-
-		inline QString imgPath() const
-		{
-			return img.text("Path");
-		}
+			name(name), description(description), type(type)
+		{}
+		inline Info(const QString &name, const quint32 type, const QStringList &extensions, const QIcon &icon = QIcon(), const QString &description = QString()) :
+			name(name), description(description), type(type), icon(icon), extensions(extensions)
+		{}
 
 		QString name, description;
-		quint32 type;
-		QImage img;
+		quint32 type = NONE;
+		QIcon icon;
 		QStringList extensions;
 	};
 	virtual QList<Info> getModulesInfo(const bool showDisabled = false) const = 0;
@@ -104,17 +101,19 @@ public:
 
 	virtual void videoDeintSave();
 
-	inline QImage image() const
+	inline QIcon icon() const
 	{
-		return moduleImg;
+		return m_icon;
 	}
 
 	void setInstances(bool &);
 
 	template<typename T>
 	void setInstance();
+
 protected:
-	QImage moduleImg;
+	QIcon m_icon;
+
 private:
 	QMutex mutex;
 	QString mName;
@@ -135,7 +134,7 @@ void Module::setInstance()
 
 /**/
 
-#define QMPLAY2_MODULES_API_VERSION 1
+#define QMPLAY2_MODULES_API_VERSION 2
 
 #define QMPLAY2_EXPORT_MODULE(ModuleClass) \
 	extern "C" quint32 getQMPlay2ModuleAPIVersion() \

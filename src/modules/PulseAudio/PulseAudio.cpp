@@ -22,7 +22,7 @@
 PulseAudio::PulseAudio() :
 	Module("PulseAudio")
 {
-	moduleImg = QImage(":/PulseAudio");
+	m_icon = QIcon(":/PulseAudio.svgz");
 
 	init("WriterEnabled", true);
 	init("Delay", 0.1);

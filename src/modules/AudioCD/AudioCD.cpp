@@ -32,12 +32,10 @@
 
 AudioCD::AudioCD() :
 	Module("AudioCD"),
-	CD(":/CD"),
+	CD(":/CD.svgz"),
 	cdioDestroyTimer(new CDIODestroyTimer)
 {
-	moduleImg = QImage(":/AudioCD");
-
-	CD.setText("Path", ":/CD");
+	m_icon = QIcon(":/AudioCD.svgz");
 
 	init("AudioCD/CDDB", true);
 	init("AudioCD/CDTEXT", true);
@@ -68,7 +66,7 @@ void *AudioCD::createInstance(const QString &name)
 QList<QAction *> AudioCD::getAddActions()
 {
 	QAction *actCD = new QAction(nullptr);
-	actCD->setIcon(QIcon(":/CD"));
+	actCD->setIcon(CD);
 	actCD->setText(tr("AudioCD"));
 	actCD->connect(actCD, SIGNAL(triggered()), this, SLOT(add()));
 	return QList<QAction *>() << actCD;
@@ -86,7 +84,7 @@ void AudioCD::add()
 	if (!drives.isEmpty())
 	{
 		QDialog chooseCD(parent);
-		chooseCD.setWindowIcon(QIcon(":/AudioCD"));
+		chooseCD.setWindowIcon(m_icon);
 		chooseCD.setWindowTitle(tr("Choose the drive"));
 		QLabel drvL(tr("Path") + ":");
 		drvL.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));

@@ -22,7 +22,7 @@
 XVideo::XVideo() :
 	Module("XVideo")
 {
-	moduleImg = QImage(":/XVideo");
+	m_icon = QIcon(":/XVideo.svgz");
 
 	init("Enabled", true);
 	init("UseSHM", true);

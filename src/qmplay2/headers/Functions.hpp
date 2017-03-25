@@ -21,7 +21,7 @@
 #include <IOController.hpp>
 
 #include <QStringList>
-#include <QImage>
+#include <QIcon>
 #include <QDate>
 
 struct AVDictionary;
@@ -54,7 +54,7 @@ namespace Functions
 	struct DemuxerInfo
 	{
 		QString name;
-		QImage img;
+		QIcon icon;
 		QStringList extensions;
 	};
 	using DemuxersInfo = QVector<DemuxerInfo>;
@@ -130,6 +130,9 @@ namespace Functions
 	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = nullptr);
 	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_checksums);
 
+	QPixmap applyDropShadow(const QPixmap &input, const qreal blurRadius, const QPointF &offset, const QColor &color);
+	QPixmap applyBlur(const QPixmap &input, const qreal blurRadius);
+
 	void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
 	int scaleEQValue(int val, int min, int max);
 
@@ -141,7 +144,7 @@ namespace Functions
 	QStringList getUrlsFromMimeData(const QMimeData *);
 
 	bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
-	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QImage *img = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
+	void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QIcon *icon = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
 
 	QString prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies = true, bool icy = true, const QByteArray &userAgent = QByteArray());
 

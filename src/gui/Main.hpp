@@ -25,6 +25,8 @@
 
 class VideoAdjustment;
 class ShortcutHandler;
+class QTreeWidgetItem;
+class QTreeWidget;
 class ScreenSaver;
 class IPCServer;
 class VideoDock;
@@ -39,21 +41,25 @@ public:
 	static QString getPipe();
 	static void saveCover(QByteArray cover);
 
+	static void setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &icon, const int column = 0, QTreeWidget *treeWidget = nullptr);
+
 #ifdef UPDATER
 	void runUpdate(const QString &);
 #endif
 
 	void setStyle();
+
 	void loadIcons();
+	void deleteIcons();
 
 	QString getCurrentPth(QString pth = QString(), bool leaveFilename = false);
 	void setCurrentPth(const QString &);
 
 	void restoreGeometry(const QString &pth, QWidget *w, const QSize &def_size);
 
-	inline QIcon getIcon(const QImage &img)
+	inline QIcon getIcon(const QIcon &icon)
 	{
-		return img.isNull() ? *qmp2Pixmap : QPixmap::fromImage(img);
+		return icon.isNull() ? getQMPlay2Icon() : icon;
 	}
 
 	void updateInDockW();
@@ -75,8 +81,6 @@ public:
 private:
 	QMPlay2GUIClass();
 	~QMPlay2GUIClass() final;
-
-	void deleteIcons();
 };
 
 #define QMPlay2GUI \

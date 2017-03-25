@@ -1,7 +1,7 @@
 <RCC>
 	<qresource>
-		<file alias="Chiptune">Chiptune.png</file>
-		<file alias="GME">GME.png</file>
-		<file alias="SID">SID.png</file>
+		<file alias="Chiptune.svgz">Chiptune.svgz</file>
+		<file alias="GME.svgz">GME.svgz</file>
+		<file alias="SID.svgz">SID.svgz</file>
 	</qresource>
 </RCC>

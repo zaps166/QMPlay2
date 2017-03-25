@@ -24,8 +24,7 @@
 Cuvid::Cuvid() :
 	Module("CUVID")
 {
-	moduleImg = QImage(":/CUVID");
-	moduleImg.setText("Path", ":/CUVID");
+	m_icon = QIcon(":/CUVID.svgz");
 
 	init("Enabled", true);
 	init("DeintMethod", 2);
@@ -54,7 +53,7 @@ QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 
 	QList<Info> modulesInfo;
 	if (showDisabled || getBool("Enabled"))
-		modulesInfo += Info(CuvidName, DECODER, moduleImg);
+		modulesInfo += Info(CuvidName, DECODER, m_icon);
 	return modulesInfo;
 }
 void *Cuvid::createInstance(const QString &name)

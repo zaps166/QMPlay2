@@ -38,7 +38,7 @@ private:
 
 	SettingsWidget *getSettingsWidget() override final;
 
-	QImage CD;
+	QIcon CD;
 
 	CDIODestroyTimer *cdioDestroyTimer;
 private slots:

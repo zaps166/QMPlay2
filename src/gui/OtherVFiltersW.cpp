@@ -26,7 +26,7 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 {
 	QList<QPair<Module *, Module::Info>> pluginsInstances;
 
-	setIconSize(QSize(32, 32));
+	setIconSize({32, 32});
 
 	if (!hw)
 	{
@@ -75,7 +75,7 @@ OtherVFiltersW::OtherVFiltersW(bool hw) :
 		QListWidgetItem *item = new QListWidgetItem(this);
 		item->setData(Qt::UserRole, module->name());
 		item->setData(Qt::ToolTipRole, moduleInfo.description);
-		item->setIcon(QMPlay2GUI.getIcon(moduleInfo.img.isNull() ? module->image() : moduleInfo.img));
+		item->setIcon(QMPlay2GUI.getIcon(moduleInfo.icon.isNull() ? module->icon() : moduleInfo.icon));
 		if (!hw)
 			item->setCheckState(moduleInfo.type & Module::USERFLAG ? Qt::Checked : Qt::Unchecked);
 		item->setText(moduleInfo.name);

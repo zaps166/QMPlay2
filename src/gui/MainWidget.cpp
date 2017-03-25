@@ -158,6 +158,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 
 	Settings &settings = QMPlay2Core.getSettings();
 
+	if (!settings.getBool("IconsFromTheme"))
+		setIconSize({22, 22});
+
 	SettingsWidget::InitSettings();
 #ifndef Q_OS_ANDROID
 	settings.init("MainWidget/WidgetsLocked", false);
@@ -169,7 +172,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 
 #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 	tray = new QSystemTrayIcon(this);
-	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Pixmap()));
+	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Icon()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
 #else
 	tray = nullptr;

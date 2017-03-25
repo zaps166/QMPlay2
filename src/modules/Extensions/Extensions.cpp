@@ -38,16 +38,12 @@
 
 Extensions::Extensions() :
 	Module("Extensions"),
-	downloader(":/downloader"), youtube(":/youtube"), radio(":/radio")
+	downloader(":/downloader.svgz"), youtube(":/youtube.svgz"), radio(":/radio.svgz")
 {
-	moduleImg = QImage(":/Extensions");
+	m_icon = QIcon(":/Extensions.svgz");
 
-	downloader.setText("Path", ":/downloader");
-	youtube.setText("Path", ":/youtube");
-	radio.setText("Path", ":/radio");
 #ifdef USE_LASTFM
-	lastfm = QImage(":/lastfm");
-	lastfm.setText("Path", ":/lastfm");
+	lastfm = QIcon(":/lastfm.svgz");
 #endif
 
 	init("YouTube/ShowAdditionalInfo", false);

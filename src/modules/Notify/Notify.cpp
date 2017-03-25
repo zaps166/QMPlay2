@@ -23,7 +23,7 @@
 Notify::Notify() :
 	Module("Notify")
 {
-	moduleImg = QImage(":/Notify");
+	m_icon = QIcon(":/Notify.svgz");
 
 	init("Enabled", false);
 

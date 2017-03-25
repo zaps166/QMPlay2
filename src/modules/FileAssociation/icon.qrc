@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="FileAssociation">FileAssociation.png</file>
+		<file alias="FileAssociation.svgz">FileAssociation.svgz</file>
 	</qresource>
 </RCC>

@@ -22,7 +22,7 @@
 OpenGL2::OpenGL2() :
 	Module("OpenGL2")
 {
-	moduleImg = QImage(":/OpenGL2");
+	m_icon = QIcon(":/OpenGL2.svgz");
 
 	init("Enabled", true);
 	init("AllowPBO", true);

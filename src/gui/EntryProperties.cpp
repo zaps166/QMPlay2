@@ -84,7 +84,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
 		browseFileB = new QToolButton;
 		browseFileB->setToolTip(tr("Browse for a file that contains more than one track"));
-		browseFileB->setIcon(QMPlay2Core.getIconFromTheme("applications-multimedia"));
+		browseFileB->setIcon(*QMPlay2GUI.mediaIcon);
 		connect(browseFileB, SIGNAL(clicked()), this, SLOT(browse()));
 
 		setDirPthEEnabled(catalogCB->isChecked());
@@ -196,7 +196,7 @@ void EntryProperties::accept()
 				if (!pthInfo.isDir() && (nameE->text() != tWI->text(0) || newPthWithScheme == tWI->data(0, Qt::UserRole).toString()))
 					tWI->setData(0, Qt::UserRole + 2, true); //Don't allow to change the group name automatically
 				tWI->setData(0, Qt::UserRole, newPthWithScheme);
-				tWI->setIcon(0, *QMPlay2GUI.folderIcon);
+				QMPlay2GUI.setTreeWidgetItemIcon(tWI, *QMPlay2GUI.folderIcon);
 				sync = true;
 			}
 			else
@@ -208,7 +208,7 @@ void EntryProperties::accept()
 		else
 		{
 			tWI->setData(0, Qt::UserRole, QString());
-			tWI->setIcon(0, *QMPlay2GUI.groupIcon);
+			QMPlay2GUI.setTreeWidgetItemIcon(tWI, *QMPlay2GUI.groupIcon);
 		}
 		if (!nameE->isReadOnly())
 			tWI->setText(0, nameE->text());

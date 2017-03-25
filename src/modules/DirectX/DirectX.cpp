@@ -22,7 +22,7 @@
 DirectX::DirectX() :
 	Module("DirectX")
 {
-	moduleImg = QImage(":/DirectX");
+	m_icon = QIcon(":/DirectX.svgz");
 
 	init("DirectDrawEnabled", true);
 }

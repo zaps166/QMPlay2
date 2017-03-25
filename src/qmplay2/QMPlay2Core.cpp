@@ -73,7 +73,8 @@ static QByteArray getCookiesOrResource(const QString &url, Data &data)
 
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
-QMPlay2CoreClass::QMPlay2CoreClass()
+QMPlay2CoreClass::QMPlay2CoreClass() :
+	qmplay2Icon(nullptr)
 {
 	qmplay2Core = this;
 
@@ -397,8 +398,12 @@ void QMPlay2CoreClass::setVideoDevicePixelRatio()
 
 QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &fallback)
 {
-	const QIcon defaultIcon(fallback.isNull() ? QIcon(":/" + iconName) : fallback);
-	return settings->getBool("IconsFromTheme") ? QIcon::fromTheme(iconName, defaultIcon) : defaultIcon;
+	QIcon icon;
+	if (settings->getBool("IconsFromTheme"))
+		icon = QIcon::fromTheme(iconName);
+	if (icon.isNull())
+		icon = QIcon(fallback.isNull() ? QIcon(":/" + iconName + ".svgz") : fallback);
+	return icon;
 }
 
 void QMPlay2CoreClass::log(const QString &txt, int logFlags)

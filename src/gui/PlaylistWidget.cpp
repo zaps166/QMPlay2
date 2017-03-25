@@ -103,8 +103,8 @@ void UpdateEntryThr::run()
 
 		if (itu.name.isNull() && itu.length == -2.0)
 		{
-			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.img, &ioCtrl);
-			iu.updateImg = true;
+			Functions::getDataIfHasPluginPrefix(url, &url, &itu.name, &iu.icon, &ioCtrl);
+			iu.updateIcon = true;
 
 			IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 			if (Demuxer::create(url, demuxer))
@@ -118,7 +118,9 @@ void UpdateEntryThr::run()
 				updateTitle = false;
 		}
 		else
-			iu.updateImg = false;
+		{
+			iu.updateIcon = false;
+		}
 
 		//Don't update title for network streams if title exists and new title doesn't exists
 		if (updateTitle && (displayOnlyFileName || url.startsWith("file://") || !itu.name.isEmpty()))
@@ -164,8 +166,8 @@ void UpdateEntryThr::stop()
 
 void UpdateEntryThr::updateItem(ItemUpdated iu)
 {
-	if (iu.updateImg)
-		pLW.setEntryIcon(iu.img, iu.item);
+	if (iu.updateIcon)
+		pLW.setEntryIcon(iu.icon, iu.item);
 	if (!iu.name.isNull())
 		iu.item->setText(0, iu.name);
 	if (iu.updateLength)
@@ -293,7 +295,7 @@ void AddThr::run()
 	for (Module *module : QMPlay2Core.getPluginsInstance())
 		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER)
-				demuxersInfo += {mod.name, mod.img.isNull() ? module->image() : mod.img, mod.extensions};
+				demuxersInfo += {mod.name, mod.icon.isNull() ? module->icon() : mod.icon, mod.extensions};
 	add(urls, par, demuxersInfo, existingEntries.isEmpty() ? nullptr : &existingEntries, loadList);
 	if (currentThread() == pLW.thread()) //jeżeli funkcja działa w głównym wątku
 		finished();
@@ -655,18 +657,8 @@ void PlaylistWidget::setCurrentPlaying(QTreeWidgetItem *tWI)
 		return;
 	currentPlaying = tWI;
 	/* Ikona */
-	currentPlayingItemIcon = currentPlaying->icon(0);
-	QIcon play_icon = QMPlay2Core.getIconFromTheme("media-playback-start");
-	if (!play_icon.availableSizes().isEmpty() && !play_icon.availableSizes().contains(iconSize()))
-	{
-		const QPixmap playPix = play_icon.pixmap(play_icon.availableSizes().at(0));
-		QPixmap pix(iconSize());
-		pix.fill(Qt::transparent);
-		QPainter p(&pix);
-		p.drawPixmap(iconSize().width() / 2 - playPix.width() / 2, iconSize().height() / 2 - playPix.height() / 2, playPix);
-		play_icon = QIcon(pix);
-	}
-	currentPlaying->setIcon(0, play_icon);
+	currentPlayingItemIcon = currentPlaying->data(0, Qt::DecorationRole);
+	QMPlay2GUI.setTreeWidgetItemIcon(currentPlaying, QMPlay2Core.getIconFromTheme("media-playback-start"), 0, this);
 }
 
 void PlaylistWidget::clear()
@@ -682,7 +674,7 @@ void PlaylistWidget::clearCurrentPlaying(bool url)
 	currentPlaying = nullptr;
 	if (url)
 		currentPlayingUrl.clear();
-	currentPlayingItemIcon = QIcon();
+	currentPlayingItemIcon.clear();
 	modifyMenu();
 }
 
@@ -890,7 +882,7 @@ QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &ur
 	QTreeWidgetItem *tWI = new QTreeWidgetItem;
 
 	tWI->setFlags(tWI->flags() | Qt::ItemIsEditable);
-	tWI->setIcon(0, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon);
+	QMPlay2GUI.setTreeWidgetItemIcon(tWI, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon, 0, this);
 	tWI->setText(0, name);
 	tWI->setData(0, Qt::UserRole, url);
 
@@ -904,9 +896,9 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 {
 	QTreeWidgetItem *tWI = new QTreeWidgetItem;
 
-	QImage img;
-	Functions::getDataIfHasPluginPrefix(entry.url, nullptr, nullptr, &img, nullptr, demuxersInfo);
-	setEntryIcon(img, tWI);
+	QIcon icon;
+	Functions::getDataIfHasPluginPrefix(entry.url, nullptr, nullptr, &icon, nullptr, demuxersInfo);
+	setEntryIcon(icon, tWI);
 
 	tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
 	tWI->setText(0, entry.name);
@@ -921,21 +913,18 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 	return tWI;
 }
 
-void PlaylistWidget::setEntryIcon(const QImage &origImg, QTreeWidgetItem *tWI)
+void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
 {
-	QImage img = origImg;
-	if (img.isNull())
+	if (icon.isNull())
 	{
 		if (tWI == currentPlaying)
 			currentPlayingItemIcon = *QMPlay2GUI.mediaIcon;
 		else
-			tWI->setIcon(0, *QMPlay2GUI.mediaIcon);
+			QMPlay2GUI.setTreeWidgetItemIcon(tWI, *QMPlay2GUI.mediaIcon, 0, this);
 	}
 	else
 	{
-		if (img.size() != iconSize())
-			img = img.scaled(iconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? nullptr : tWI), Q_ARG(QImage, img));
+		QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? nullptr : tWI), Q_ARG(QIcon, icon));
 	}
 }
 
@@ -998,7 +987,7 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 			if (currI && currI != currentPlaying)
 				pix = Functions::getPixmapFromIcon(currI->icon(0), iconSize(), this);
 			if (pix.isNull())
-				pix = Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("applications-multimedia"), iconSize(), this);
+				pix = Functions::getPixmapFromIcon(*QMPlay2GUI.mediaIcon, iconSize(), this);
 			drag->setPixmap(pix);
 
 			drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction, Qt::CopyAction);
@@ -1105,27 +1094,12 @@ void PlaylistWidget::popupContextMenu(const QPoint &p)
 {
 	playlistMenu()->popup(mapToGlobal(p));
 }
-void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QImage &img)
+void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QIcon &icon)
 {
-	if (img.size() == iconSize())
-	{
-		if (tWI)
-			tWI->setIcon(0, QPixmap::fromImage(img));
-		else
-			currentPlayingItemIcon = QPixmap::fromImage(img);
-	}
+	if (tWI)
+		QMPlay2GUI.setTreeWidgetItemIcon(tWI, icon, 0, this);
 	else
-	{
-		QPixmap canvas(iconSize());
-		canvas.fill(Qt::transparent);
-		QPainter p(&canvas);
-		p.drawImage(iconSize().width() / 2 - img.width() / 2, iconSize().height() / 2 - img.height() / 2, img);
-		p.end();
-		if (tWI)
-			tWI->setIcon(0, canvas);
-		else
-			currentPlayingItemIcon = canvas;
-	}
+		currentPlayingItemIcon = icon;
 }
 void PlaylistWidget::animationUpdate()
 {

@@ -52,7 +52,7 @@ QList<QMPlay2Extensions::AddressPrefix> QMPlay2Extensions::addressPrefixList(boo
 	Q_UNUSED(img)
 	return {};
 }
-void QMPlay2Extensions::convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *extension, IOController<> *ioCtrl)
+void QMPlay2Extensions::convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(extension)
 	Q_UNUSED(ioCtrl)

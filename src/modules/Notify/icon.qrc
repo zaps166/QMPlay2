@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="Notify">Notify.png</file>
+		<file alias="Notify.svgz">Notify.svgz</file>
 	</qresource>
 </RCC>

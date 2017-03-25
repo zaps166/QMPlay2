@@ -1,35 +1,35 @@
 <RCC>
 	<qresource>
-		<file alias="QMPlay2">Icons/hicolor/128x128/apps/QMPlay2.png</file>
+		<file alias="QMPlay2.svgz">Icons/hicolor/scalable/apps/QMPlay2.svgz</file>
 
-		<file alias="media-playback-start">Icons/media-playback-start.png</file>
-		<file alias="media-playback-stop">Icons/media-playback-stop.png</file>
-		<file alias="media-skip-backward">Icons/media-skip-backward.png</file>
-		<file alias="media-skip-forward">Icons/media-skip-forward.png</file>
-		<file alias="media-playback-pause">Icons/media-playback-pause.png</file>
+		<file alias="media-playback-start.svgz">Icons/media-playback-start.svgz</file>
+		<file alias="media-playback-stop.svgz">Icons/media-playback-stop.svgz</file>
+		<file alias="media-skip-backward.svgz">Icons/media-skip-backward.svgz</file>
+		<file alias="media-skip-forward.svgz">Icons/media-skip-forward.svgz</file>
+		<file alias="media-playback-pause.svgz">Icons/media-playback-pause.svgz</file>
 
-		<file alias="folder-orange">Icons/folder-orange.png</file>
-		<file alias="folder">Icons/folder.png</file>
-		<file alias="folder-new">Icons/folder-new.png</file>
-		<file alias="applications-multimedia">Icons/applications-multimedia.png</file>
-		<file alias="archive-remove">Icons/archive-remove.png</file>
-		<file alias="list-remove">Icons/list-remove.png</file>
-		<file alias="list-add">Icons/list-add.png</file>
-		<file alias="edit-clear">Icons/edit-clear.png</file>
-		<file alias="folder-open">Icons/folder-open.png</file>
-		<file alias="view-refresh">Icons/view-refresh.png</file>
-		<file alias="audio-volume-muted">Icons/audio-volume-muted.png</file>
-		<file alias="audio-volume-high">Icons/audio-volume-high.png</file>
-		<file alias="view-fullscreen">Icons/view-fullscreen.png</file>
-		<file alias="configure">Icons/configure.png</file>
-		<file alias="application-exit">Icons/application-exit.png</file>
-		<file alias="process-stop">Icons/process-stop.png</file>
-		<file alias="edit-copy">Icons/edit-copy.png</file>
-		<file alias="edit-paste">Icons/edit-paste.png</file>
-		<file alias="edit-find">Icons/edit-find.png</file>
-		<file alias="document-properties">Icons/document-properties.png</file>
-		<file alias="application-x-mswinurl">Icons/application-x-mswinurl.png</file>
-		<file alias="video-display">Icons/video-display.png</file>
+		<file alias="folder-orange.svgz">Icons/folder-orange.svgz</file>
+		<file alias="folder.svgz">Icons/folder.svgz</file>
+		<file alias="folder-new.svgz">Icons/folder-new.svgz</file>
+		<file alias="applications-multimedia.svgz">Icons/applications-multimedia.svgz</file>
+		<file alias="archive-remove.svgz">Icons/archive-remove.svgz</file>
+		<file alias="list-remove.svgz">Icons/list-remove.svgz</file>
+		<file alias="list-add.svgz">Icons/list-add.svgz</file>
+		<file alias="edit-clear.svgz">Icons/edit-clear.svgz</file>
+		<file alias="folder-open.svgz">Icons/folder-open.svgz</file>
+		<file alias="view-refresh.svgz">Icons/view-refresh.svgz</file>
+		<file alias="audio-volume-muted.svgz">Icons/audio-volume-muted.svgz</file>
+		<file alias="audio-volume-high.svgz">Icons/audio-volume-high.svgz</file>
+		<file alias="view-fullscreen.svgz">Icons/view-fullscreen.svgz</file>
+		<file alias="configure.svgz">Icons/configure.svgz</file>
+		<file alias="application-exit.svgz">Icons/application-exit.svgz</file>
+		<file alias="process-stop.svgz">Icons/process-stop.svgz</file>
+		<file alias="edit-copy.svgz">Icons/edit-copy.svgz</file>
+		<file alias="edit-paste.svgz">Icons/edit-paste.svgz</file>
+		<file alias="edit-find.svgz">Icons/edit-find.svgz</file>
+		<file alias="document-properties.svgz">Icons/document-properties.svgz</file>
+		<file alias="application-x-mswinurl.svgz">Icons/application-x-mswinurl.svgz</file>
+		<file alias="video-display.svgz">Icons/video-display.svgz</file>
 
 		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
 	</qresource>

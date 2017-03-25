@@ -93,7 +93,7 @@ public:
 
 	virtual QAction *getAction() const = 0;
 
-	virtual bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl) = 0;
+	virtual bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) = 0;
 
 signals:
 	void gotCompleterList();
@@ -101,7 +101,7 @@ signals:
 protected:
 	NetworkAccess &m_net;
 	const QString m_name;
-	const QImage m_img;
+	const QIcon m_icon;
 };
 
 /* Inline implementation */
@@ -112,5 +112,5 @@ QString MediaBrowserCommon::name() const
 }
 QIcon MediaBrowserCommon::icon() const
 {
-	return QPixmap::fromImage(m_img);
+	return m_icon;
 }

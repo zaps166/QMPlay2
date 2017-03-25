@@ -65,9 +65,9 @@ private:
 	{
 		QTreeWidgetItem *item;
 		QString name;
-		QImage img;
+		QIcon icon;
 
-		bool updateLength, updateImg;
+		bool updateLength, updateIcon;
 		double length;
 
 		QMutex *mutex;
@@ -158,7 +158,7 @@ public:
 
 	QString currentPlayingUrl;
 	QTreeWidgetItem *currentPlaying;
-	QIcon currentPlayingItemIcon;
+	QVariant currentPlayingItemIcon;
 
 	QList<QTreeWidgetItem *> queue;
 
@@ -181,7 +181,7 @@ private:
 	QTreeWidgetItem *newGroup(const QString &name, const QString &url, QTreeWidgetItem *parent, int insertChildAt, QStringList *existingEntries);
 	QTreeWidgetItem *newEntry(const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries);
 
-	void setEntryIcon(const QImage &, QTreeWidgetItem *);
+	void setEntryIcon(const QIcon &icon, QTreeWidgetItem *);
 
 	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
 
@@ -210,7 +210,7 @@ private:
 private slots:
 	void insertItem(QTreeWidgetItem *, QTreeWidgetItem *, int insertChildAt);
 	void popupContextMenu(const QPoint &);
-	void setItemIcon(QTreeWidgetItem *, const QImage &);
+	void setItemIcon(QTreeWidgetItem *, const QIcon &icon);
 	void animationUpdate();
 	void addTimerElapsed();
 public slots:

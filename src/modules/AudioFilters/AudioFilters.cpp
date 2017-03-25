@@ -49,7 +49,7 @@ enum Defaults
 AudioFilters::AudioFilters() :
 	Module("AudioFilters")
 {
-	moduleImg = QImage(":/AudioFilters");
+	m_icon = QIcon(":/AudioFilters.svgz");
 
 	init("BS2B", false);
 	init("BS2B/Fcut", BS2B_FCUT);

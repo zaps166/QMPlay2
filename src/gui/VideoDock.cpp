@@ -39,7 +39,7 @@ constexpr int g_hideCursorTimeout = 750;
 
 VideoDock::VideoDock() :
 	isTouch(false), touchEnded(false),
-	iDW(QMPlay2Core.getQMPlay2Pixmap(), QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt),
+	iDW(QMPlay2GUI.grad1, QMPlay2GUI.grad2, QMPlay2GUI.qmpTxt),
 	pixels(0),
 	canPopup(true), is_floating(false),
 	touchZoom(0.0)

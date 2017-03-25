@@ -29,7 +29,7 @@
 
 Radio::Radio(Module &module) :
 	once(false), net(nullptr),
-	qmp2Icon(QMPlay2Core.getQMPlay2Pixmap()),
+	qmp2Icon(QMPlay2Core.getQMPlay2Icon()),
 	wlasneStacje(tr("Own radio stations"))
 {
 	SetModule(module);
@@ -47,7 +47,7 @@ Radio::Radio(Module &module) :
 	lW->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 	lW->setResizeMode(QListView::Adjust);
 	lW->setWrapping(true);
-	lW->setIconSize(QSize(32, 32));
+	lW->setIconSize({32, 32});
 
 	QAction *act = new QAction(lW);
 	act->setShortcuts(QList<QKeySequence>() << QKeySequence("Return") << QKeySequence("Enter"));
@@ -222,7 +222,7 @@ void Radio::addGroup(const QString &groupName)
 
 	QListWidgetItem *lWI = new QListWidgetItem("\n-- " + groupName + " --\n", lW);
 	lWI->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
-	lWI->setIcon(QIcon(":/radio"));
+	lWI->setIcon(QIcon(":/radio.svgz"));
 	lWI->setFont(groupFont);
 }
 void Radio::addStation(const QString &nazwa, const QString &URL, const QString &groupName, const QByteArray &img)

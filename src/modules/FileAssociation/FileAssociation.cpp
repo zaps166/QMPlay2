@@ -30,7 +30,7 @@
 FileAssociation::FileAssociation() :
 	Module("FileAssociation")
 {
-	moduleImg = QImage(":/FileAssociation");
+	m_icon = QIcon(":/FileAssociation.svgz");
 
 	init("Associate", true);
 	init("Dirs", true);

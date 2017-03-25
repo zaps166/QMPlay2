@@ -46,23 +46,18 @@ extern "C"
 
 FFmpeg::FFmpeg() :
 	Module("FFmpeg"),
-	demuxIcon(":/FFDemux")
+	demuxIcon(":/FFDemux.svgz")
 {
-	moduleImg = QImage(":/FFmpeg");
-	moduleImg.setText("Path", ":/FFmpeg");
+	m_icon = QIcon(":/FFmpeg.svgz");
 
-	demuxIcon.setText("Path", ":/FFDemux");
 #ifdef QMPlay2_VDPAU
-	vdpauIcon = QImage(":/VDPAU");
-	vdpauIcon.setText("Path", ":/VDPAU");
+	vdpauIcon = QIcon(":/VDPAU.svgz");
 #endif
 #ifdef QMPlay2_VAAPI
-	vaapiIcon = QImage(":/VAAPI");
-	vaapiIcon.setText("Path", ":/VAAPI");
+	vaapiIcon = QIcon(":/VAAPI.svgz");
 #endif
 #ifdef QMPlay2_DXVA2
-	dxva2Icon = QImage(":/DXVA2");
-	dxva2Icon.setText("Path", ":/DXVA2");
+	dxva2Icon = QIcon(":/DXVA2.svgz");
 	dxva2Loaded = FFDecDXVA2::loadLibraries();
 #endif
 
@@ -148,7 +143,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || getBool("DemuxerEnabled"))
 		modulesInfo += Info(DemuxerName, DEMUXER, demuxIcon);
 	if (showDisabled || getBool("DecoderEnabled"))
-		modulesInfo += Info(DecoderName, DECODER, moduleImg);
+		modulesInfo += Info(DecoderName, DECODER, m_icon);
 #ifdef QMPlay2_VDPAU
 	if (showDisabled || getBool("DecoderVDPAUEnabled"))
 	{
@@ -169,7 +164,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
 		modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
 #endif
-	modulesInfo += Info(FFReaderName, READER, {"http", "https", "mms", "rtmp", "rtsp"}, moduleImg);
+	modulesInfo += Info(FFReaderName, READER, {"http", "https", "mms", "rtmp", "rtsp"}, m_icon);
 	return modulesInfo;
 }
 void *FFmpeg::createInstance(const QString &name)

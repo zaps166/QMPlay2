@@ -26,9 +26,10 @@
 
 LineEditButton::LineEditButton()
 {
+	const QSize iconSize(16, 16);
 	setToolTip(tr("Clear"));
-	setPixmap(Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("edit-clear"), QSize(16, 16), this));
-	resize(pixmap()->size());
+	setPixmap(Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("edit-clear"), iconSize, this));
+	resize(iconSize);
 	setCursor(Qt::ArrowCursor);
 }
 

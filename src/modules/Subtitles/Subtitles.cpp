@@ -24,7 +24,7 @@
 Subtitles::Subtitles() :
 	Module("Subtitles")
 {
-	moduleImg = QImage(":/Subtitles");
+	m_icon = QIcon(":/Subtitles.svgz");
 
 	init("SRT_enabled", true);
 	init("Classic_enabled", true);

@@ -181,7 +181,7 @@ static QString getGamedorUsermdUrl(const QByteArray &data)
 /**/
 
 AnimeOdcinki::AnimeOdcinki(NetworkAccess &net) :
-	MediaBrowserCommon(net, "AnimeOdcinki", ":/video")
+	MediaBrowserCommon(net, "AnimeOdcinki", ":/video.svgz")
 {}
 AnimeOdcinki::~AnimeOdcinki()
 {}
@@ -288,15 +288,15 @@ QAction *AnimeOdcinki::getAction() const
 	return nullptr;
 }
 
-bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(param)
 
 	if (prefix != m_name)
 		return false;
 
-	if (img)
-		*img = m_img;
+	if (icon)
+		*icon = m_icon;
 	if (ioCtrl && streamUrl)
 	{
 		NetworkAccess net;

@@ -30,9 +30,9 @@ private:
 
 	SettingsWidget *getSettingsWidget() override final;
 
-	QImage downloader, youtube, radio;
+	QIcon downloader, youtube, radio;
 #ifdef USE_LASTFM
-	QImage lastfm;
+	QIcon lastfm;
 #endif
 };
 

@@ -3,6 +3,8 @@ CONFIG += plugin #Don't create symlinks to library
 
 QT += widgets
 
+!qtHaveModule(svg): message("Missing QtSvg module - SVG icons will not be visible!")
+
 TARGET = qmplay2
 
 DESTDIR = ../../app/lib

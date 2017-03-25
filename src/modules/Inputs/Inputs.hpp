@@ -33,7 +33,7 @@ private:
 
 	SettingsWidget *getSettingsWidget() override final;
 
-	QImage toneIcon, pcmIcon, rayman2Icon;
+	QIcon toneIcon, pcmIcon, rayman2Icon;
 private slots:
 	void add();
 };

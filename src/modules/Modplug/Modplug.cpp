@@ -21,11 +21,9 @@
 
 Modplug::Modplug() :
 	Module("Modplug"),
-	modIcon(":/MOD")
+	modIcon(":/MOD.svgz")
 {
-	moduleImg = QImage(":/Modplug");
-
-	modIcon.setText("Path", ":/MOD");
+	m_icon = QIcon(":/Modplug.svgz");
 
 	init("ModplugEnabled", true);
 	init("ModplugResamplingMethod", 3);

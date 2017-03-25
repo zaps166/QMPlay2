@@ -27,25 +27,25 @@
 
 AddressBox::AddressBox(Qt::Orientation o, QString url)
 {
-	pB.addItem(QMPlay2Core.getQMPlay2Pixmap(), tr("Direct address"), DIRECT);
+	pB.addItem(QMPlay2Core.getQMPlay2Icon(), tr("Direct address"), DIRECT);
 
 	for (Module *module : QMPlay2Core.getPluginsInstance())
 		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && !mod.name.contains(' '))
 			{
 				QIcon icon;
-				if (!mod.img.isNull())
-					icon = QPixmap::fromImage(mod.img);
-				else if (!module->image().isNull())
-					icon = QPixmap::fromImage(module->image());
+				if (!mod.icon.isNull())
+					icon = mod.icon;
+				else if (!module->icon().isNull())
+					icon = module->icon();
 				else
-					icon = QMPlay2Core.getQMPlay2Pixmap();
+					icon = QMPlay2Core.getQMPlay2Icon();
 				pB.addItem(icon, mod.name, MODULE);
 			}
 
 	for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		for (const QMPlay2Extensions::AddressPrefix &addressPrefix : QMPlay2Ext->addressPrefixList())
-			pB.addItem(QPixmap::fromImage(addressPrefix.img), addressPrefix, MODULE);
+			pB.addItem(addressPrefix.icon, addressPrefix, MODULE);
 
 	if (!url.isEmpty())
 	{

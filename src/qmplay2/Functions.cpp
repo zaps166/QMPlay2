@@ -25,6 +25,10 @@
 #include <Version.hpp>
 #include <Reader.hpp>
 
+#include <QGraphicsDropShadowEffect>
+#include <QGraphicsBlurEffect>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
 #include <QHeaderView>
 #include <QMimeData>
 #include <QPainter>
@@ -267,12 +271,13 @@ void Functions::getImageSize(const double aspect_ratio, const double zoom, const
 
 QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 {
-	const QList<QSize> sizes = icon.availableSizes();
-	if (sizes.isEmpty() || (size.width() <= 0 && size.height() <= 0))
+	if (icon.isNull() || (size.width() <= 0 && size.height() <= 0))
 		return QPixmap();
 
+	const QList<QSize> sizes = icon.availableSizes();
+
 	QSize imgSize;
-	if (sizes.contains(size))
+	if (sizes.isEmpty() || sizes.contains(size))
 		imgSize = size;
 	else
 	{
@@ -281,13 +286,11 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 	}
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
-	if (QWindow *win = Functions::getNativeWindow(w))
-		return icon.pixmap(win, imgSize);
+	return icon.pixmap(Functions::getNativeWindow(w), imgSize);
 #else
 	Q_UNUSED(w)
-#endif
-
 	return icon.pixmap(imgSize);
+#endif
 }
 void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
@@ -478,6 +481,48 @@ void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, 
 	}
 }
 
+QPixmap Functions::applyDropShadow(const QPixmap &input, const qreal blurRadius, const QPointF &offset, const QColor &color)
+{
+	QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect;
+	shadow->setBlurRadius(blurRadius);
+	shadow->setOffset(offset);
+	shadow->setColor(color);
+
+	QGraphicsPixmapItem *item = new QGraphicsPixmapItem(input);
+	item->setGraphicsEffect(shadow);
+
+	QGraphicsScene scene;
+	scene.addItem(item);
+
+	QPixmap output(input.size());
+	output.fill(Qt::transparent);
+
+	QPainter p(&output);
+	scene.render(&p);
+
+	return output;
+}
+QPixmap Functions::applyBlur(const QPixmap &input, const qreal blurRadius)
+{
+	QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
+	blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+	blur->setBlurRadius(blurRadius);
+
+	QGraphicsPixmapItem *item = new QGraphicsPixmapItem(input);
+	item->setGraphicsEffect(blur);
+
+	QGraphicsScene scene;
+	scene.addItem(item);
+
+	QPixmap blurred(input.size());
+	blurred.fill(Qt::black);
+
+	QPainter p(&blurred);
+	scene.render(&p);
+
+	return blurred;
+}
+
 void Functions::ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount)
 {
 	for (unsigned i = 0; i < bitsCount; i += 4)
@@ -587,19 +632,19 @@ bool Functions::splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QSt
 	}
 	return false;
 }
-void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url, QString *name, QImage *img, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo)
+void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url, QString *name, QIcon *icon, IOController<> *ioCtrl, const DemuxersInfo &demuxersInfo)
 {
 	QString addressPrefixName, realUrl, param;
-	if ((url || img) && splitPrefixAndUrlIfHasPluginPrefix(entireUrl, &addressPrefixName, &realUrl, &param))
+	if ((url || icon) && splitPrefixAndUrlIfHasPluginPrefix(entireUrl, &addressPrefixName, &realUrl, &param))
 	{
 		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 			if (QMPlay2Ext->addressPrefixList(false).contains(addressPrefixName))
 			{
-				QMPlay2Ext->convertAddress(addressPrefixName, realUrl, param, url, name, img, nullptr, ioCtrl);
+				QMPlay2Ext->convertAddress(addressPrefixName, realUrl, param, url, name, icon, nullptr, ioCtrl);
 				return;
 			}
 	}
-	if (img)
+	if (icon)
 	{
 		const QString scheme = getUrlScheme(entireUrl);
 		const QString extension = fileExt(entireUrl).toLower();
@@ -609,7 +654,7 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 				for (const Module::Info &mod : module->getModulesInfo())
 					if (mod.type == Module::DEMUXER && (mod.name == scheme || mod.extensions.contains(extension)))
 					{
-						*img = !mod.img.isNull() ? mod.img : module->image();
+						*icon = !mod.icon.isNull() ? mod.icon : module->icon();
 						return;
 					}
 		}
@@ -618,7 +663,7 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 			for (const DemuxerInfo &demuxerInfo : demuxersInfo)
 				if (demuxerInfo.name == scheme || demuxerInfo.extensions.contains(extension))
 				{
-					*img = demuxerInfo.img;
+					*icon = demuxerInfo.icon;
 					return;
 				}
 		}

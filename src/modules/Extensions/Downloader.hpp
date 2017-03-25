@@ -35,7 +35,7 @@ class DownloadItemW : public QWidget
 {
 	Q_OBJECT
 public:
-	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img = QImage(), QDataStream *stream = nullptr);
+	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon = QIcon(), QDataStream *stream = nullptr);
 	~DownloadItemW() final;
 
 	void setName(const QString &);
@@ -126,7 +126,7 @@ private slots:
 private:
 	void run() override final;
 
-	QImage getImage();
+	QIcon getIcon();
 
 	QString url, name, prefix, param;
 	DownloadItemW *downloadItemW;

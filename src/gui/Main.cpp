@@ -32,6 +32,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QImageReader>
+#include <QTreeWidget>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPainter>
@@ -92,6 +93,29 @@ void QMPlay2GUIClass::saveCover(QByteArray cover)
 	}
 }
 
+void QMPlay2GUIClass::setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &icon, const int column, QTreeWidget *treeWidget)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+	bool setDefaultIcon = icon.name().isEmpty();
+	if (!setDefaultIcon)
+	{
+		// Icons from theme may not be in correct size in tree widget, so do a workaround.
+		if (!treeWidget)
+			treeWidget = tWI->treeWidget();
+		if (treeWidget)
+			tWI->setData(column, Qt::DecorationRole, icon.pixmap(treeWidget->window()->windowHandle(), treeWidget->iconSize()));
+		else
+			setDefaultIcon = true;
+	}
+	if (setDefaultIcon)
+#else
+	Q_UNUSED(treeWidget)
+#endif
+	{
+		tWI->setIcon(column, icon);
+	}
+}
+
 #ifdef UPDATER
 void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 {
@@ -108,12 +132,29 @@ void QMPlay2GUIClass::setStyle()
 #endif
 	QApplication::setStyle(settings->getString("Style", defaultStyle));
 }
+
 void QMPlay2GUIClass::loadIcons()
 {
 	deleteIcons();
+
+	// QtSvg doesn't support effects. This workaround generates drop shadow effect similar to
+	// drop shadow in SVG file. Remove / modify this workaround if QMPlay2 SVG icon changes!
+	const QSize size(128, 128);
+	const QPixmap pixmap = QIcon(":/QMPlay2.svgz").pixmap(size);
+	const qreal sizeRatio = (((qreal)pixmap.size().width()  / (qreal)size.width()) + ((qreal)pixmap.size().height() / (qreal)size.height())) / 2.0;
+	qmplay2Icon = new QIcon(Functions::applyDropShadow(pixmap, 10.0 * sizeRatio, QPointF(3.0 * sizeRatio, 3.0 * sizeRatio), QColor(0, 0, 0, 127)));
+
 	groupIcon = new QIcon(getIconFromTheme("folder-orange"));
 	mediaIcon = new QIcon(getIconFromTheme("applications-multimedia"));
 	folderIcon = new QIcon(getIconFromTheme("folder"));
+}
+void QMPlay2GUIClass::deleteIcons()
+{
+	delete qmplay2Icon;
+	delete groupIcon;
+	delete mediaIcon;
+	delete folderIcon;
+	groupIcon = mediaIcon = folderIcon = nullptr;
 }
 
 QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
@@ -158,25 +199,9 @@ QMPlay2GUIClass::QMPlay2GUIClass() :
 	mainW(nullptr),
 	screenSaver(nullptr),
 	shortcutHandler(nullptr)
-{
-	qmp2Pixmap = g_useGui ? new QPixmap(":/QMPlay2") : nullptr;
-}
+{}
 QMPlay2GUIClass::~QMPlay2GUIClass()
-{
-	if (g_useGui)
-	{
-		delete qmp2Pixmap;
-		deleteIcons();
-	}
-}
-
-void QMPlay2GUIClass::deleteIcons()
-{
-	delete groupIcon;
-	delete mediaIcon;
-	delete folderIcon;
-	groupIcon = mediaIcon = folderIcon = nullptr;
-}
+{}
 
 /**/
 
@@ -607,7 +632,7 @@ int main(int argc, char *argv[])
 #endif
 		}
 
-		QApplication::setWindowIcon(QMPlay2Core.getIconFromTheme("QMPlay2", QMPlay2Core.getQMPlay2Pixmap()));
+		QApplication::setWindowIcon(QMPlay2Core.getIconFromTheme("QMPlay2", QMPlay2Core.getQMPlay2Icon()));
 		qmplay2Gui.setStyle();
 
 #ifdef UPDATER
@@ -685,6 +710,8 @@ int main(int argc, char *argv[])
 			noAutoPlay();
 
 		delete qmplay2Gui.pipe;
+
+		qmplay2Gui.deleteIcons();
 	} while (qmplay2Gui.restartApp);
 
 #ifdef Q_OS_WIN

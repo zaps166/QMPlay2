@@ -50,6 +50,7 @@
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QSpinBox>
+#include <QBuffer>
 #include <QLabel>
 
 #include <KeyBindingsDialog.hpp>
@@ -484,25 +485,35 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		tabW->addTab(page3, tr("Modules"));
 
 		page3->listW = new QListWidget;
-		page3->listW->setIconSize(QSize(32, 32));
+		page3->listW->setIconSize({32, 32});
 		page3->listW->setMinimumSize(200, 0);
 		page3->listW->setMaximumSize(200, 16777215);
 		for (Module *module : QMPlay2Core.getPluginsInstance())
 		{
 			QListWidgetItem *tWI = new QListWidgetItem(module->name());
 			tWI->setData(Qt::UserRole, qVariantFromValue((void *)module));
-			QString toolTip = tr("Contains") + ":";
+			QString toolTip = "<html>" + tr("Contains") + ":";
 			for (const Module::Info &mod : module->getModulesInfo(true))
 			{
+				const QPixmap moduleIcon = Functions::getPixmapFromIcon(mod.icon, QSize(22, 22), this);
 				toolTip += "<p>&nbsp;&nbsp;&nbsp;&nbsp;";
-				if (!mod.imgPath().isEmpty())
-					toolTip += "<img width='22' height='22' src='" + mod.imgPath() + "'/> ";
-				else
+				bool hasIcon = false;
+				if (!moduleIcon.isNull())
+				{
+					QBuffer buffer;
+					if (buffer.open(QBuffer::WriteOnly) && moduleIcon.save(&buffer, "PNG"))
+					{
+						toolTip += "<img width='22' height='22' src='data:image/png;base64, " + buffer.data().toBase64() + "'/> ";
+						hasIcon = true;
+					}
+				}
+				if (!hasIcon)
 					toolTip += "- ";
 				toolTip += mod.name + "</p>";
 			}
-			tWI->setToolTip("<html>" + toolTip + "</html>");
-			tWI->setIcon(QMPlay2GUI.getIcon(module->image()));
+			toolTip += "</html>";
+			tWI->setToolTip(toolTip);
+			tWI->setIcon(QMPlay2GUI.getIcon(module->icon()));
 			page3->listW->addItem(tWI);
 			if (page == 2 && !moduleName.isEmpty() && module->name() == moduleName)
 				moduleIndex = page3->listW->count() - 1;
@@ -915,7 +926,7 @@ void SettingsWidget::tabCh(int idx)
 			{
 				QListWidgetItem *wI = new QListWidgetItem(writers[m][i]);
 				wI->setData(Qt::UserRole, pluginsInstances[m][i].first->name());
-				wI->setIcon(QMPlay2GUI.getIcon(pluginsInstances[m][i].second.img.isNull() ? pluginsInstances[m][i].first->image() : pluginsInstances[m][i].second.img));
+				wI->setIcon(QMPlay2GUI.getIcon(pluginsInstances[m][i].second.icon.isNull() ? pluginsInstances[m][i].first->icon() : pluginsInstances[m][i].second.icon));
 				page2ModulesList[m]->list->addItem(wI);
 				if (writers[m][i] == lastM[m])
 					page2ModulesList[m]->list->setCurrentItem(wI);

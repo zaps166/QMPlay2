@@ -99,7 +99,7 @@ bool NotifiesFreedesktop::doNotify(const QString &title, const QString &message,
 	{
 		// Set QMPlay2 icon explicitly when it can't be found in system icons.
 		// Otherwise it will be set by the Freedesktop notifications automatically.
-		hints["image_data"] = QMPlay2Core.getQMPlay2Pixmap().toImage();
+		hints["image_data"] = QMPlay2Core.getQMPlay2Icon().pixmap(100, 100).toImage();
 	}
 
 	int id = 0;

@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="XVideo">XVideo.png</file>
+		<file alias="XVideo.svgz">XVideo.svgz</file>
 	</qresource>
 </RCC>

@@ -22,7 +22,7 @@
 OpenSLES::OpenSLES() :
 	Module("OpenSLES")
 {
-	moduleImg = QImage(":/OpenSLES");
+	m_icon = QIcon(":/OpenSLES.svgz");
 
 	init("WriterEnabled", true);
 }

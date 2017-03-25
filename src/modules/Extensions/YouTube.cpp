@@ -384,6 +384,9 @@ YouTube::YouTube(Module &module) :
 	currPage(1),
 	net(this)
 {
+	youtubeIcon = QIcon(":/youtube.svgz");
+	videoIcon = QIcon(":/video.svgz");
+
 	dw = new DockWidget;
 	connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(setEnabled(bool)));
 	dw->setWindowTitle("YouTube");
@@ -567,18 +570,18 @@ DockWidget *YouTube::getDockWidget()
 QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
 	return {
-		AddressPrefix("YouTube", img ? QImage(":/youtube") : QImage()),
-		AddressPrefix("youtube-dl", img ? QImage(":/video") : QImage())
+		AddressPrefix("YouTube", img ? youtubeIcon : QIcon()),
+		AddressPrefix("youtube-dl", img ? videoIcon : QIcon())
 	};
 }
-void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+void YouTube::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *stream_url, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
-	if (!stream_url && !name && !img)
+	if (!stream_url && !name && !icon)
 		return;
 	if (prefix == "YouTube")
 	{
-		if (img)
-			*img = QImage(":/youtube");
+		if (icon)
+			*icon = youtubeIcon;
 		if (ioCtrl && (stream_url || name))
 		{
 			NetworkAccess net;
@@ -612,8 +615,8 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 	}
 	else if (prefix == "youtube-dl")
 	{
-		if (img)
-			*img = QImage(":/video");
+		if (icon)
+			*icon = videoIcon;
 		if (ioCtrl)
 		{
 			IOController<YouTubeDL> &youtube_dl = ioCtrl->toRef<YouTubeDL>();
@@ -632,7 +635,7 @@ QVector<QAction *> YouTube::getActions(const QString &name, double, const QStrin
 	{
 		QAction *act = new QAction(YouTube::tr("Search on YouTube"), nullptr);
 		act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
-		act->setIcon(QIcon(":/youtube"));
+		act->setIcon(youtubeIcon);
 		act->setProperty("name", name);
 		return {act};
 	}

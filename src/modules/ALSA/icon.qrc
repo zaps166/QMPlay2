@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="ALSA">ALSA.png</file>
+		<file alias="ALSA.svgz">ALSA.svgz</file>
 	</qresource>
 </RCC>

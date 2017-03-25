@@ -45,7 +45,7 @@
 
 /**/
 
-DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QImage &img, QDataStream *stream) :
+DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream) :
 	dontDeleteDownloadThr(false), downloaderThr(downloaderThr), finished(false), readyToPlay(false)
 {
 	QString sizeLText;
@@ -78,7 +78,7 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 
 	iconL = new QLabel;
 	iconL->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-	iconL->setPixmap(img.isNull() ? QPixmap(":/media") : QPixmap::fromImage(img));
+	iconL->setPixmap(Functions::getPixmapFromIcon(icon.isNull() ? QMPlay2Core.getIconFromTheme("applications-multimedia") : icon, QSize(22, 22), this));
 
 	ssB = new QToolButton;
 	if (readyToPlay)
@@ -241,7 +241,7 @@ DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, Down
 	{
 		*stream >> this->url >> this->prefix >> this->param;
 		item = new QTreeWidgetItem(downloadLW);
-		downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, QString(), getImage(), stream)));
+		downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, QString(), getIcon(), stream)));
 		connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 		connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
 	}
@@ -271,7 +271,7 @@ void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
 				downloadItemW->dontDeleteDownloadThr = true;
 				downloadItemW->deleteLater();
 			}
-			downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getImage())));
+			downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon())));
 			connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 			connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
 			break;
@@ -421,7 +421,7 @@ void DownloaderThread::run()
 	QMPlay2Core.setWorking(false);
 }
 
-QImage DownloaderThread::getImage()
+QIcon DownloaderThread::getIcon()
 {
 	if (!prefix.isEmpty())
 	{
@@ -430,10 +430,10 @@ QImage DownloaderThread::getImage()
 			const QList<QMPlay2Extensions::AddressPrefix> addressPrefixList = QMPlay2Ext->addressPrefixList();
 			const int idx = addressPrefixList.indexOf(prefix);
 			if (idx > -1)
-				return addressPrefixList[idx].img;
+				return addressPrefixList[idx].icon;
 		}
 	}
-	return QImage();
+	return QIcon();
 }
 
 /**/
@@ -541,7 +541,7 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
 				return {};
 	QAction *act = new QAction(Downloader::tr("Download"), nullptr);
-	act->setIcon(QIcon(":/downloader"));
+	act->setIcon(QIcon(":/downloader.svgz"));
 	act->connect(act, SIGNAL(triggered()), this, SLOT(download()));
 	if (!prefix.isEmpty())
 	{

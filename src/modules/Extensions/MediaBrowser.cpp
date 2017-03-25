@@ -440,11 +440,11 @@ QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img
 		ret.append(m->addressPrefix(img));
 	return ret;
 }
-void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
-	if (streamUrl || img)
+	if (streamUrl || icon)
 		for (const auto &m : m_mediaBrowsers)
-			if (m->convertAddress(prefix, url, param, streamUrl, name, img, extension, ioCtrl))
+			if (m->convertAddress(prefix, url, param, streamUrl, name, icon, extension, ioCtrl))
 				break;
 }
 

@@ -26,12 +26,9 @@
 
 Chiptune::Chiptune() :
 	Module("Chiptune"),
-	GMEIcon(":/GME"), SIDIcon(":/SID")
+	GMEIcon(":/GME.svgz"), SIDIcon(":/SID.svgz")
 {
-	GMEIcon.setText("Path", ":/GME");
-	SIDIcon.setText("Path", ":/SID");
-
-	moduleImg = QImage(":/Chiptune");
+	m_icon = QIcon(":/Chiptune.svgz");
 
 #ifdef USE_GME
 	init("GME", true);

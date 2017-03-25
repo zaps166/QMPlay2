@@ -177,7 +177,7 @@ MenuBar::Playlist::Add::Add(QMenu *parent) :
 	QMenu(Add::tr("&Add"), parent)
 {
 	setIcon(QMPlay2Core.getIconFromTheme("list-add"));
-	newAction(Add::tr("&Files"), this, file, false, QMPlay2Core.getIconFromTheme("applications-multimedia"), false);
+	newAction(Add::tr("&Files"), this, file, false, *QMPlay2GUI.mediaIcon, false);
 	newAction(Add::tr("&Directory"), this, dir, false, QMPlay2Core.getIconFromTheme("folder"), false);
 	newAction(Add::tr("&Address"), this, address, false, QMPlay2Core.getIconFromTheme("application-x-mswinurl"), false);
 	addSeparator();

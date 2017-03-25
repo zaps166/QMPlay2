@@ -1,8 +1,8 @@
 <RCC>
 	<qresource>
-		<file alias="Inputs">Inputs.png</file>
-		<file alias="PCM">PCM.png</file>
-		<file alias="ToneGenerator">ToneGenerator.png</file>
+		<file alias="Inputs.svgz">Inputs.svgz</file>
+		<file alias="PCM.svgz">PCM.svgz</file>
+		<file alias="ToneGenerator.svgz">ToneGenerator.svgz</file>
 		<file alias="Rayman2">Rayman2.png</file>
 	</qresource>
 </RCC>

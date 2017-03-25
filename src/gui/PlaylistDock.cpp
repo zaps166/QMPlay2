@@ -224,7 +224,7 @@ void PlaylistDock::doGroupSync(bool quick)
 	if (!possibleModuleScheme && !pthInfo.isDir() && !pthInfo.isFile())
 	{
 		tWI->setData(0, Qt::UserRole, QString());
-		tWI->setIcon(0, *QMPlay2GUI.groupIcon);
+		QMPlay2GUI.setTreeWidgetItemIcon(tWI, *QMPlay2GUI.groupIcon, 0, list);
 		return;
 	}
 	if (pthInfo.isDir() && !pth.endsWith("/"))
@@ -441,7 +441,12 @@ void PlaylistDock::start()
 void PlaylistDock::clearCurrentPlaying()
 {
 	if (list->currentPlaying)
-		list->currentPlaying->setIcon(0, list->currentPlayingItemIcon);
+	{
+		if (list->currentPlayingItemIcon.type() == QVariant::Icon)
+			QMPlay2GUI.setTreeWidgetItemIcon(list->currentPlaying, list->currentPlayingItemIcon.value<QIcon>(), 0, list);
+		else
+			list->currentPlaying->setData(0, Qt::DecorationRole, list->currentPlayingItemIcon);
+	}
 	list->clearCurrentPlaying();
 }
 void PlaylistDock::setCurrentPlaying()

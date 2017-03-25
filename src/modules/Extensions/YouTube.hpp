@@ -105,7 +105,7 @@ public:
 	DockWidget *getDockWidget() override final;
 
 	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QImage *, QString *, IOController<> *ioCtrl) override final;
+	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *, IOController<> *ioCtrl) override final;
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
 
@@ -140,6 +140,8 @@ private:
 	void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
 
 	DockWidget *dw;
+
+	QIcon youtubeIcon, videoIcon;
 
 	LineEdit *searchE;
 	QToolButton *searchB;

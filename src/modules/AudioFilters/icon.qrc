@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="AudioFilters">AudioFilters.png</file>
+		<file alias="AudioFilters.svgz">AudioFilters.svgz</file>
 	</qresource>
 </RCC>

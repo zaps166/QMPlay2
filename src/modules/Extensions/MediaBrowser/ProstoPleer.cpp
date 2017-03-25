@@ -33,7 +33,7 @@ constexpr char g_url[]  = "http://pleer.net";
 /**/
 
 ProstoPleer::ProstoPleer(NetworkAccess &net) :
-	MediaBrowserCommon(net, "Prostopleer", ":/prostopleer")
+	MediaBrowserCommon(net, "Prostopleer", ":/prostopleer.svgz")
 {
 	m_net.setRetries(5);
 }
@@ -157,7 +157,7 @@ QAction *ProstoPleer::getAction() const
 	return act;
 }
 
-bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QImage *img, QString *extension, IOController<> *ioCtrl)
+bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
 	Q_UNUSED(param)
 	Q_UNUSED(name)
@@ -165,10 +165,10 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 	if (prefix != m_name)
 		return false;
 
-	if (streamUrl || img)
+	if (streamUrl || icon)
 	{
-		if (img)
-			*img = m_img;
+		if (icon)
+			*icon = m_icon;
 		if (extension)
 			*extension = ".mp3";
 		if (ioCtrl && streamUrl)

@@ -30,7 +30,7 @@ private:
 
 	SettingsWidget *getSettingsWidget() override final;
 
-	QImage modIcon;
+	QIcon modIcon;
 };
 
 /**/

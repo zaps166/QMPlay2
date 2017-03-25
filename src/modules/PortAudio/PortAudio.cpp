@@ -22,7 +22,7 @@
 PortAudio::PortAudio() :
 	Module("PortAudio")
 {
-	moduleImg = QImage(":/PortAudio");
+	m_icon = QIcon(":/PortAudio.svgz");
 
 	initialized = (Pa_Initialize() == paNoError);
 	init("WriterEnabled", true);

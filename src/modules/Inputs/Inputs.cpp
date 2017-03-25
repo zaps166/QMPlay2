@@ -43,13 +43,9 @@ constexpr const char *g_formatName[PCM::FORMAT_COUNT] = {
 
 Inputs::Inputs() :
 	Module("Inputs"),
-	toneIcon(":/ToneGenerator"), pcmIcon(":/PCM"), rayman2Icon(":/Rayman2")
+	toneIcon(":/ToneGenerator.svgz"), pcmIcon(":/PCM.svgz"), rayman2Icon(":/Rayman2")
 {
-	moduleImg = QImage(":/Inputs");
-
-	toneIcon.setText("Path", ":/ToneGenerator");
-	pcmIcon.setText("Path", ":/PCM");
-	rayman2Icon.setText("Path", ":/Rayman2");
+	m_icon = QIcon(":/Inputs.svgz");
 
 	init("ToneGenerator/srate", 48000);
 	init("ToneGenerator/freqs", 440);
@@ -89,7 +85,7 @@ void *Inputs::createInstance(const QString &name)
 QList<QAction *> Inputs::getAddActions()
 {
 	QAction *actTone = new QAction(nullptr);
-	actTone->setIcon(QIcon(":/ToneGenerator"));
+	actTone->setIcon(toneIcon);
 	actTone->setText(tr("Tone generator"));
 	actTone->connect(actTone, SIGNAL(triggered()), this, SLOT(add()));
 	return QList<QAction *>() << actTone;
@@ -151,7 +147,7 @@ AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
 	if (parent)
 	{
 		setWindowTitle(tr("Tone generator"));
-		setWindowIcon(QIcon(":/sine"));
+		setWindowIcon(QIcon(":/sine.svgz"));
 	}
 	else
 		gB = new QGroupBox(tr("Tone generator"));

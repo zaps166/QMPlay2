@@ -1,5 +1,5 @@
 <RCC>
 	<qresource>
-		<file alias="Subtitles">Subtitles.png</file>
+		<file alias="Subtitles.svgz">Subtitles.svgz</file>
 	</qresource>
 </RCC>

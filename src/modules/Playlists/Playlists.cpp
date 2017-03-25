@@ -24,7 +24,7 @@
 Playlists::Playlists() :
 	Module("Playlists")
 {
-	moduleImg = QImage(":/Playlists");
+	m_icon = QIcon(":/Playlists.svgz");
 
 	init("M3U_enabled", true);
 	init("XSPF_enabled", true);

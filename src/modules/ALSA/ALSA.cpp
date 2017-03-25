@@ -22,7 +22,7 @@
 ALSA::ALSA() :
 	Module("ALSA")
 {
-	moduleImg = QImage(":/ALSA");
+	m_icon = QIcon(":/ALSA.svgz");
 
 	init("WriterEnabled", true);
 	init("AutoFindMultichnDev", true);

@@ -18,6 +18,7 @@
 
 #include <AboutWidget.hpp>
 
+#include <Functions.hpp>
 #include <Settings.hpp>
 #include <Main.hpp>
 
@@ -44,7 +45,7 @@ AboutWidget::AboutWidget()
 	QLabel *label = new QLabel(labelText);
 
 	QLabel *iconL = new QLabel;
-	iconL->setPixmap(QMPlay2Core.getQMPlay2Pixmap());
+	iconL->setPixmap(Functions::getPixmapFromIcon(QMPlay2Core.getQMPlay2Icon(), QSize(128, 128), this));
 
 	QPalette palette;
 	palette.setBrush(QPalette::Base, palette.window());

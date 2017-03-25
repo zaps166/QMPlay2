@@ -21,45 +21,15 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QGraphicsBlurEffect>
-#include <QGraphicsPixmapItem>
 #include <QCoreApplication>
-#include <QGraphicsScene>
 #include <QDockWidget>
 #include <QPainter>
 #include <QVariant>
 
 #include <cmath>
 
-static QPixmap getBlurred(const QPixmap &input, Qt::TransformationMode &blurredTransformation)
-{
-	const qreal blurRadius = qBound(10.0, sqrt(input.width() * input.width() + input.height() * input.height()) / 4.0, 300.0);
-	blurredTransformation = (blurRadius < 80.0) ? Qt::SmoothTransformation : Qt::FastTransformation;
-
-	QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
-	blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-	blur->setBlurRadius(blurRadius);
-
-	QGraphicsPixmapItem *item = new QGraphicsPixmapItem(input);
-	item->setGraphicsEffect(blur);
-
-	QGraphicsScene scene;
-	scene.addItem(item);
-
-	QPixmap blurred(input.size());
-	blurred.fill(Qt::black);
-
-	QPainter p(&blurred);
-	scene.render(&p);
-
-	return blurred;
-}
-
-/**/
-
-InDockW::InDockW(const QPixmap &qmp2Pixmap, const QColor &grad1, const QColor &grad2, const QColor &qmpTxt) :
+InDockW::InDockW(const QColor &grad1, const QColor &grad2, const QColor &qmpTxt) :
 	grad1(grad1), grad2(grad2), qmpTxt(qmpTxt),
-	qmp2Pixmap(qmp2Pixmap),
 	hasWallpaper(false),
 	loseHeight(0),
 	w(nullptr)
@@ -86,7 +56,11 @@ void InDockW::setCustomPixmap(const QPixmap &pix)
 	if (customPixmap.isNull() || !QMPlay2Core.getSettings().getBool("BlurCovers"))
 		customPixmapBlurred = QPixmap();
 	else
-		customPixmapBlurred = getBlurred(pix, blurredTransformation);
+	{
+		const qreal blurRadius = qBound(10.0, sqrt(pix.width() * pix.width() + pix.height() * pix.height()) / 4.0, 300.0);
+		blurredTransformation = (blurRadius < 80.0) ? Qt::SmoothTransformation : Qt::FastTransformation;
+		customPixmapBlurred = Functions::applyBlur(pix, blurRadius);
+	}
 	emit hasCoverImage(!customPixmap.isNull());
 	update();
 }
@@ -196,15 +170,17 @@ void InDockW::paintEvent(QPaintEvent *)
 
 		if (customPixmap.isNull())
 		{
-			p.setRenderHint(QPainter::SmoothPixmapTransform);
-			p.drawPixmap(width() / 2 - qmp2Pixmap.width() / 2, fullHeight / 2 - qmp2Pixmap.height() / 2, qmp2Pixmap);
+			const QSize size(128, 128);
+			QPixmap qmp2Pixmap = Functions::getPixmapFromIcon(QMPlay2Core.getQMPlay2Icon(), size, this);
+
+			p.drawPixmap(width() / 2 - size.width() / 2, fullHeight / 2 - size.height() / 2, qmp2Pixmap);
 
 			QFont font = p.font();
 			font.setPointSize(22);
 			font.setItalic(true);
 			p.setFont(font);
 			p.setPen(qmpTxt);
-			p.drawText(0, fullHeight / 2 + qmp2Pixmap.height() / 2, width(), 100, Qt::AlignHCenter | Qt::AlignTop, "QMPlay2");
+			p.drawText(0, fullHeight / 2 + size.height() / 2, width(), 100, Qt::AlignHCenter | Qt::AlignTop, "QMPlay2");
 		}
 		else
 		{
