@@ -154,7 +154,7 @@ void QMPlay2GUIClass::deleteIcons()
 	delete groupIcon;
 	delete mediaIcon;
 	delete folderIcon;
-	groupIcon = mediaIcon = folderIcon = nullptr;
+	qmplay2Icon = groupIcon = mediaIcon = folderIcon = nullptr;
 }
 
 QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
@@ -710,9 +710,9 @@ int main(int argc, char *argv[])
 			noAutoPlay();
 
 		delete qmplay2Gui.pipe;
-
-		qmplay2Gui.deleteIcons();
 	} while (qmplay2Gui.restartApp);
+
+	qmplay2Gui.deleteIcons();
 
 #ifdef Q_OS_WIN
 	UnhookWindowsHookEx(keyboardHook);
