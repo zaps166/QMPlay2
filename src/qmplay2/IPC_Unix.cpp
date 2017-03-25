@@ -30,7 +30,7 @@ static sockaddr_un getSockAddr(const QString &fileName)
 	sockaddr_un sockAddr;
 	sockAddr.sun_family = AF_UNIX;
 	strncpy(sockAddr.sun_path, fileName.toLocal8Bit(), sizeof sockAddr.sun_path);
-#ifdef SUN_LEN
+#ifdef Q_OS_MAC
 	sockAddr.sun_len = SUN_LEN(&sockAddr);
 #endif
 	return sockAddr;
