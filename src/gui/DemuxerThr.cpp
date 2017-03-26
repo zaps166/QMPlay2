@@ -130,12 +130,14 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 {
 	if (!doDemuxerSeek && skipBufferSeek)
 		return;
-	if (playC.seekTo >= 0 || playC.seekTo == SEEK_STREAM_RELOAD)
+	if (playC.seekTo >= 0 || (playC.seekTo == SEEK_STREAM_RELOAD || playC.seekTo == SEEK_REPEAT))
 	{
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 
 		emit playC.chText(tr("Seeking"));
 		playC.canUpdatePos = false;
+
+		bool repeat = false;
 
 		bool seekInBuffer = !skipBufferSeek;
 		if (playC.seekTo == SEEK_STREAM_RELOAD) //po zmianie strumienia audio, wideo lub napisów lub po ponownym uruchomieniu odtwarzania
@@ -143,8 +145,13 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.seekTo = playC.pos;
 			seekInBuffer = false;
 		}
+		else if (playC.seekTo == SEEK_REPEAT)
+		{
+			playC.seekTo = 0;
+			repeat = true;
+		}
 
-		const bool backward = playC.seekTo < (int)playC.pos;
+		const bool backward = repeat || (playC.seekTo < (int)playC.pos);
 		bool flush = false, aLocked = false, vLocked = false;
 
 		skipBufferSeek = false;
@@ -188,9 +195,15 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			if (!localStream && !unknownLength)
 				demuxer->abort(); //Abort only the Demuxer, not IOController
 		}
+		else if (repeat && doDemuxerSeek)
+		{
+			playC.seekTo = SEEK_REPEAT; //Notify that repeat seek failed
+		}
 
 		if (flush)
 		{
+			if (repeat)
+				playC.emptyBufferCond.wakeAll(); //Weak AV threads
 			playC.endOfStream = false;
 			if (doDemuxerSeek)
 				clearBuffers();
@@ -213,7 +226,8 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 		if (!skipBufferSeek)
 		{
 			playC.canUpdatePos = true;
-			playC.seekTo = SEEK_NOWHERE;
+			if (playC.seekTo != SEEK_REPEAT) //Don't reset variable if repeat seek failed
+				playC.seekTo = SEEK_NOWHERE;
 			if (!playC.paused)
 				emit playC.chText(tr("Playback"));
 			else
@@ -384,9 +398,12 @@ void DemuxerThr::run()
 
 	while (!demuxer.isAborted())
 	{
-		seekMutex.lock();
-		seek(true);
-		seekMutex.unlock();
+		{
+			QMutexLocker seekLocker(&seekMutex);
+			seek(true);
+			if (playC.seekTo == SEEK_REPEAT)
+				break; //Repeat seek failed - break.
+		}
 
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 
@@ -403,7 +420,14 @@ void DemuxerThr::run()
 		if (playC.endOfStream && !vS && !aS && canBreak(aThr, vThr))
 		{
 			if (!stillImage)
+			{
+				if (!unknownLength && playC.doRepeat)
+				{
+					playC.seekTo = SEEK_REPEAT;
+					continue;
+				}
 				break;
+			}
 			else
 			{
 				if (playC.paused)
@@ -518,8 +542,10 @@ void DemuxerThr::run()
 				if (!localStream)
 					ensureTrueUpdateBuffered();
 			}
-			else
+			else if (!stillImage && !playC.doRepeat)
+			{
 				break;
+			}
 		}
 	}
 

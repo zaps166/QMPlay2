@@ -36,7 +36,12 @@ class Demuxer;
 class Slider;
 class LibASS;
 
-enum {SEEK_NOWHERE = -1, SEEK_STREAM_RELOAD = -2 /* Seeks to current position after stream reload */};
+enum
+{
+	SEEK_NOWHERE = -1,
+	SEEK_STREAM_RELOAD = -2, /* Seeks to current position after stream reload */
+	SEEK_REPEAT = -3
+};
 
 class PlayClass : public QObject
 {
@@ -133,7 +138,7 @@ private:
 
 	double maxThreshold, fps;
 
-	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend;
+	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat;
 	QTimer timTerminate;
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
@@ -148,6 +153,7 @@ private:
 	QString fileSubs;
 private slots:
 	void suspendWhenFinished(bool b);
+	void repeatEntry(bool b);
 
 	void saveCover();
 	void settingsChanged(int, bool);

@@ -652,6 +652,7 @@ void PlaylistDock::repeat()
 		repeatMode = (RepeatMode)act->property("enumValue").toInt();
 		if (lastRepeatMode != repeatMode)
 		{
+			emit repeatEntry(repeatMode == RepeatEntry);
 			switch (lastRepeatMode)
 			{
 				case RandomMode:

@@ -111,7 +111,7 @@ PlayClass::PlayClass() :
 	videoSync = subtitlesSync = 0.0;
 	videoEnabled = audioEnabled = subtitlesEnabled = true;
 
-	doSuspend = false;
+	doSuspend = doRepeat = false;
 
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
@@ -630,6 +630,10 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
 void PlayClass::suspendWhenFinished(bool b)
 {
 	doSuspend = b;
+}
+void PlayClass::repeatEntry(bool b)
+{
+	doRepeat = b;
 }
 
 void PlayClass::saveCover()

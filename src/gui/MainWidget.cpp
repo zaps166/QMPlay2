@@ -287,6 +287,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	connect(videoDock, SIGNAL(itemDropped(const QString &, bool)), this, SLOT(itemDropped(const QString &, bool)));
 
 	connect(playlistDock, SIGNAL(play(const QString &)), &playC, SLOT(play(const QString &)));
+	connect(playlistDock, SIGNAL(repeatEntry(bool)), &playC, SLOT(repeatEntry(bool)));
 	connect(playlistDock, SIGNAL(stop()), &playC, SLOT(stop()));
 
 	connect(seekS, SIGNAL(valueChanged(int)), this, SLOT(seek(int)));

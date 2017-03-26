@@ -110,5 +110,6 @@ public slots:
 	void updateCurrentEntry(const QString &, double);
 signals:
 	void play(const QString &);
+	void repeatEntry(bool b);
 	void stop();
 };
