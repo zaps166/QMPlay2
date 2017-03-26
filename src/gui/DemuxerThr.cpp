@@ -156,6 +156,8 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 
 		skipBufferSeek = false;
 
+		bool cantSeek = false;
+
 		if (seekInBuffer && (!localStream || !backward))
 		{
 			playC.vPackets.lock();
@@ -179,8 +181,18 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			}
 			else
 			{
-				emit playC.updateBufferedRange(-1, -1);
-				updateBufferedTime = 0.0;
+				if (!localStream && playC.endOfStream)
+				{
+					// Don't seek in demuxer on network streams if we can't seek in buffer
+					// and we have end of stream which means that everything is buffered.
+					doDemuxerSeek = false;
+					cantSeek = true;
+				}
+				else
+				{
+					emit playC.updateBufferedRange(-1, -1);
+					updateBufferedTime = 0.0;
+				}
 			}
 			playC.vPackets.unlock();
 			playC.aPackets.unlock();
@@ -189,7 +201,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 
 		if (doDemuxerSeek && demuxer->seek(playC.seekTo, backward))
 			flush = true;
-		else if (!doDemuxerSeek && !flush)
+		else if (!doDemuxerSeek && !flush && !cantSeek)
 		{
 			skipBufferSeek = true;
 			if (!localStream && !unknownLength)

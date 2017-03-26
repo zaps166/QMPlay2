@@ -5,6 +5,7 @@ Changes in QMPlay2 build 17.03.26:
 	- high dpi scaling enabled only for macOS,
 	- use SVG icons (new QtSvg dependency),
 	- fixed "QMPlay2.appdata.xml" file,
+	- minor network seeking fixes,
 	- bugfix,
 
 Changes in QMPlay2 build 17.03.17:
