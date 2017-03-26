@@ -1,9 +1,10 @@
-Changes in QMPlay2 build 17.03.25:
+Changes in QMPlay2 build 17.03.26:
+	- seek to 0 position when repeat entry is enabled,
 	- fix drawing smooth cover images (regression),
 	- updated Russian translation (victorr2007),
 	- high dpi scaling enabled only for macOS,
+	- use SVG icons (new QtSvg dependency),
 	- fixed "QMPlay2.appdata.xml" file,
-	- use SVG icons,
 	- bugfix,
 
 Changes in QMPlay2 build 17.03.17:
