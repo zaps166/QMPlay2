@@ -2453,6 +2453,18 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>QMPlay2 nie został zaktualizowany. Czy chcesz uruchomić aktualizację (zalecane)?</translation>
     </message>
+    <message>
+        <source>QtSvg icon engine plugin doesn&apos;t exist.
+QMPlay2 will not scale up icons!</source>
+        <translation>Plugin QtSvg icon engine nie istnieje.
+QMPlay2 nie będzie skalować ikon!</translation>
+    </message>
+    <message>
+        <source>QtSvg module doesn&apos;t exist.
+QMPlay2 will not display icons!</source>
+        <translation>Moduł QtSvg nie istnieje.
+QMPlay2 nie będzie wyświetlać ikon!</translation>
+    </message>
 </context>
 <context>
     <name>Radio</name>

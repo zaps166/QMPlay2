@@ -605,6 +605,14 @@ int main(int argc, char *argv[])
 		}
 
 		qmplay2Gui.loadIcons();
+		{
+			const QIcon scaledIcon = QMPlay2Core.getQMPlay2Icon();
+			const QIcon    svgIcon = *qmplay2Gui.mediaIcon;
+			if (scaledIcon.isNull() && !svgIcon.isNull())
+				QMessageBox::critical(nullptr, QString(), QObject::tr("QtSvg module doesn't exist.\nQMPlay2 will not display icons!"));
+			else if (!svgIcon.availableSizes().isEmpty())
+				QMessageBox::warning(nullptr, QString(), QObject::tr("QtSvg icon engine plugin doesn't exist.\nQMPlay2 will not scale up icons!"));
+		}
 
 		qmplay2Gui.pipe = new IPCServer(qmplay2Gui.getPipe());
 		if

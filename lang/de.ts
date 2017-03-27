@@ -2453,6 +2453,16 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>QMPlay2 wurde n&apos;icht aktualisiert. Möchten Sie das Update ausführen (empfohlen)?</translation>
     </message>
+    <message>
+        <source>QtSvg icon engine plugin doesn&apos;t exist.
+QMPlay2 will not scale up icons!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QtSvg module doesn&apos;t exist.
+QMPlay2 will not display icons!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Radio</name>
