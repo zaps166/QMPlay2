@@ -392,7 +392,11 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 					if (add(dirEntries, p, demuxersInfo))
 						added = true;
 					else
+					{
+						if (existingEntries)
+							existingEntries->removeOne(p->text(0));
 						QMetaObject::invokeMethod(this, "deleteTreeWidgetItem", Q_ARG(QTreeWidgetItem *, p));
+					}
 				}
 			}
 			else
