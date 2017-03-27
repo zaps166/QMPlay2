@@ -232,6 +232,9 @@ elseif(APPLE)
         ${QT_PLUGINS_DIR}/imageformats/libqwbmp.dylib
         ${QT_PLUGINS_DIR}/imageformats/libqwebp.dylib
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
+    install(FILES
+        ${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib
+        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/iconengines)
     if(Qt5Widgets_VERSION VERSION_LESS 5.8.0)
         install(FILES
             ${QT_PLUGINS_DIR}/imageformats/libqdds.dylib
