@@ -36,7 +36,7 @@ FileAssociation::FileAssociation() :
 	init("Dirs", true);
 	init("Drvs", true);
 	init("AudioCD", true);
-	if (!Version::isPortable() && getUInt("Ver") < VER)
+	if (!Version::isPortable() && QMPlay2Core.getSettingsProfile() == "/" && getUInt("Ver") < VER)
 	{
 		reallyFirsttime = contains("Ver");
 		set("Ver", VER);
