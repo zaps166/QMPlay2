@@ -18,7 +18,16 @@
 
 #pragma once
 
+#include <functional>
+
+class QString;
+
 namespace QMPlay2MacExtensions
 {
+	using MediaKeysCallback = std::function<void(const QString &param)>;
+
 	void setApplicationVisible(bool visible);
+
+	void registerMacOSMediaKeys(const MediaKeysCallback &fn);
+	void unregisterMacOSMediaKeys();
 }

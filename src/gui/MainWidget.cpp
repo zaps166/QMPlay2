@@ -414,6 +414,8 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	qApp->installEventFilter(this);
 	fileOpenTimer.setSingleShot(true);
 	connect(&fileOpenTimer, &QTimer::timeout, this, &MainWidget::fileOpenTimerTimeout);
+	if (QMPlay2GUI.pipe) // Register media keys only for first QMPlay2 instance
+		QMPlay2MacExtensions::registerMacOSMediaKeys(std::bind(&MainWidget::processParam, this, std::placeholders::_1, QString()));
 #endif
 
 	if (settings.getBool("AutoUpdates"))
@@ -421,6 +423,9 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 }
 MainWidget::~MainWidget()
 {
+#ifdef Q_OS_MAC
+	QMPlay2MacExtensions::unregisterMacOSMediaKeys();
+#endif
 	QMPlay2Extensions::closeExtensions();
 	emit QMPlay2Core.restoreCursor();
 	Notifies::finalize();

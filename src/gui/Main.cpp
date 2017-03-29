@@ -42,6 +42,9 @@
 #if QT_VERSION < 0x050000
 	#include <QTextCodec>
 #endif
+#ifdef Q_OS_MAC
+	#include <QProcess>
+#endif
 
 #include <csignal>
 #include <ctime>
@@ -49,6 +52,10 @@
 static QPair<QStringList, QStringList> g_arguments;
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
+#ifdef Q_OS_MAC
+	static QByteArray g_rcdPath("/System/Library/LaunchAgents/com.apple.rcd.plist");
+	static bool g_rcdLoad;
+#endif
 
 /**/
 
@@ -299,9 +306,17 @@ static bool writeToSocket(IPCSocket &socket)
 	return ret;
 }
 
-static inline void unInhibitScreenSaver()
+static inline void exitProcedure()
 {
-	/* Current implementation doesn't need this */
+#ifdef Q_OS_MAC
+	if (g_rcdLoad)
+	{
+		// Load RCD service again (allow to run iTunes on "Play" key)
+		QProcess::startDetached("launchctl load " + g_rcdPath);
+		g_rcdLoad = false;
+	}
+#endif
+
 	delete g_screenSaver;
 	g_screenSaver = nullptr;
 }
@@ -321,12 +336,12 @@ static inline void forceKill()
 #else
 	const int s = SIGKILL;
 #endif
-	unInhibitScreenSaver();
+	exitProcedure();
 	raise(s);
 }
 static inline void callDefaultSignalHandler(int s)
 {
-	unInhibitScreenSaver();
+	exitProcedure();
 	signal(s, SIG_DFL);
 	raise(s);
 }
@@ -442,7 +457,7 @@ int main(int argc, char *argv[])
 #endif
 	signal(SIGSEGV, signal_handler);
 	signal(SIGTERM, signal_handler);
-	atexit(unInhibitScreenSaver);
+	atexit(exitProcedure);
 
 #if defined(Q_OS_MAC) && (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
 	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -567,6 +582,16 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
 	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(nullptr), 0);
+#endif
+
+#ifdef Q_OS_MAC
+	// Unload RCD service (prevent run iTunes on "Play" key)
+	{
+		QProcess launchctl;
+		launchctl.start("launchctl unload " + g_rcdPath);
+		if (launchctl.waitForFinished() && launchctl.exitStatus() == QProcess::NormalExit)
+			g_rcdLoad = !launchctl.readAllStandardError().startsWith(g_rcdPath);
+	}
 #endif
 
 	qsrand(time(nullptr));
@@ -726,7 +751,7 @@ int main(int argc, char *argv[])
 	UnhookWindowsHookEx(keyboardHook);
 #endif
 
-	unInhibitScreenSaver();
+	exitProcedure();
 
 #ifdef QT5_NOT_WIN
 	if (canDeleteApp)
