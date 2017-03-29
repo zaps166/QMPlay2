@@ -486,6 +486,9 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
 	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");
 	shortcuts->appendAction(window->close, "KeyBindings/Window-close", "Alt+F4");
+#ifdef Q_OS_MAC
+	window->toggleVisibility->setShortcuts({window->toggleVisibility->shortcut(), QKeySequence("Ctrl+W")});
+#endif
 
 
 	if (widgets->hideMenuAct)
