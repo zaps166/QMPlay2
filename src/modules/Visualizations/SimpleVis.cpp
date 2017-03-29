@@ -131,7 +131,7 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 }
 void SimpleVisW::resizeEvent(QResizeEvent *e)
 {
-	fullScreen = parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->isFullScreen();
+	fullScreen = (parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->property("fullScreen").toBool());
 	VisWidget::resizeEvent(e);
 }
 

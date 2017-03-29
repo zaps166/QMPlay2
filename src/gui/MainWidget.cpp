@@ -33,6 +33,8 @@
 #include <QDesktopWidget>
 #ifdef Q_OS_MAC
 	#include <QProcess>
+	#include <QScreen>
+	#include <QWindow>
 #endif
 #include <qevent.h>
 
@@ -933,6 +935,13 @@ void MainWidget::toggleFullScreen()
 #ifndef Q_OS_ANDROID
 	static bool maximized;
 #endif
+#ifdef Q_OS_MAC
+	if (isFullScreen())
+	{
+		showNormal();
+		return;
+	}
+#endif
 	if (!fullScreen)
 	{
 		visible = isVisible();
@@ -992,7 +1001,14 @@ void MainWidget::toggleFullScreen()
 		menuBar->window->toggleCompactView->setEnabled(false);
 		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut() << QKeySequence("ESC"));
 		fullScreen = true;
+
+#ifndef Q_OS_MAC
 		showFullScreen();
+#else
+		setWindowFlags(Qt::SplashScreen);
+		setGeometry(window()->windowHandle()->screen()->geometry());
+		show();
+#endif
 
 		if (playC.isPlaying())
 			QMPlay2GUI.screenSaver->inhibit(1);
@@ -1009,12 +1025,21 @@ void MainWidget::toggleFullScreen()
 		fullScreen = false;
 
 #ifndef Q_OS_ANDROID
+#ifdef Q_OS_MAC
+		setWindowFlags(Qt::Window);
+#else
 		showNormal();
+#endif
 		if (maximized)
 			showMaximized();
 		else
+		{
+#ifdef Q_OS_MAC
+			showNormal();
+#endif
 			setGeometry(savedGeo);
-#else
+		}
+#else // Q_OS_ANDROID
 		showMaximized();
 #endif
 #ifdef QT5_WINDOWS
