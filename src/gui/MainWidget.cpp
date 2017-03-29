@@ -652,11 +652,20 @@ void MainWidget::resetRotate90()
 
 void MainWidget::visualizationFullScreen()
 {
-	if (!fullScreen)
-	{
-		videoDock->setWidget((QWidget *)sender());
-		toggleFullScreen();
-	}
+	QWidget *senderW = (QWidget *)sender();
+	const auto maybeGoFullScreen = [this, senderW] {
+		if (!fullScreen)
+		{
+			videoDock->setWidget(senderW);
+			toggleFullScreen();
+		}
+	};
+#ifdef Q_OS_MAC
+	// On macOS if full screen is toggled to fast after double click, mouse remains in clicked state...
+	QTimer::singleShot(200, maybeGoFullScreen);
+#else
+	maybeGoFullScreen();
+#endif
 }
 void MainWidget::hideAllExtensions()
 {
