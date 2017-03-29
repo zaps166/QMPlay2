@@ -576,7 +576,7 @@ int main(int argc, char *argv[])
 
 	if (g_useGui)
 	{
-		QMPlay2GUI.screenSaver = g_screenSaver = new ScreenSaver;
+		qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
 	}
 
