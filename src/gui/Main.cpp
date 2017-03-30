@@ -638,7 +638,7 @@ int main(int argc, char *argv[])
 		qmplay2Gui.loadIcons();
 		{
 			const QIcon scaledIcon = QMPlay2Core.getQMPlay2Icon();
-			const QIcon    svgIcon = *qmplay2Gui.mediaIcon;
+			const QIcon    svgIcon = QIcon(":/QMPlay2.svgz");
 			if (scaledIcon.isNull() && !svgIcon.isNull())
 				QMessageBox::critical(nullptr, QString(), QObject::tr("QtSvg module doesn't exist.\nQMPlay2 will not display icons!"));
 			else if (!svgIcon.availableSizes().isEmpty())
