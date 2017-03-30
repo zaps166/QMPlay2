@@ -704,7 +704,7 @@ void SettingsWidget::showEvent(QShowEvent *)
 {
 	if (!wasShow)
 	{
-		QMPlay2GUI.restoreGeometry("SettingsWidget/Geometry", this, QSize(900, 560));
+		QMPlay2GUI.restoreGeometry("SettingsWidget/Geometry", this, 65);
 		page3->listW->setCurrentRow(moduleIndex);
 		wasShow = true;
 	}

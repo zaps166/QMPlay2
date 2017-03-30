@@ -55,7 +55,7 @@ public:
 	QString getCurrentPth(QString pth = QString(), bool leaveFilename = false);
 	void setCurrentPth(const QString &);
 
-	void restoreGeometry(const QString &pth, QWidget *w, const QSize &def_size);
+	void restoreGeometry(const QString &pth, QWidget *w, const int defaultSizePercent);
 
 	inline QIcon getIcon(const QIcon &icon)
 	{

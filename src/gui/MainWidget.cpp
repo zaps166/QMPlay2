@@ -30,7 +30,6 @@
 #include <QFileDialog>
 #include <QTreeWidget>
 #include <QListWidget>
-#include <QDesktopWidget>
 #ifdef Q_OS_MAC
 	#include <QProcess>
 	#include <QScreen>
@@ -1558,7 +1557,7 @@ void MainWidget::showEvent(QShowEvent *)
 	if (!wasShow)
 	{
 #ifndef Q_OS_ANDROID
-		QMPlay2GUI.restoreGeometry("MainWidget/Geometry", this, QApplication::desktop()->availableGeometry(this).size() * 4 / 5);
+		QMPlay2GUI.restoreGeometry("MainWidget/Geometry", this, 80);
 		savedGeo = geometry();
 		if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
 #endif

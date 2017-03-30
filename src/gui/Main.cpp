@@ -179,15 +179,21 @@ void QMPlay2GUIClass::setCurrentPth(const QString &pth)
 	settings->set("currPth", Functions::cleanPath(pth));
 }
 
-void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const QSize &def_size)
+void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const int defaultSizePercent)
 {
 	const QRect geo = settings->getRect(pth);
+	QDesktopWidget *desktop = QApplication::desktop();
 	if (geo.isValid())
+	{
 		w->setGeometry(geo);
+		if (!desktop->screenGeometry(w).contains(w->pos()))
+			w->move(desktop->width() / 2 - w->width() / 2, desktop->height() / 2 - w->height() / 2);
+	}
 	else
 	{
-		w->move(QApplication::desktop()->width()/2 - def_size.width()/2, QApplication::desktop()->height()/2 - def_size.height()/2);
-		w->resize(def_size);
+		const QSize defaultSize = desktop->availableGeometry(w).size() * defaultSizePercent / 100;
+		w->move(desktop->width() / 2 - defaultSize.width() / 2, desktop->height() / 2 - defaultSize.height() / 2);
+		w->resize(defaultSize);
 	}
 }
 
