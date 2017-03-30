@@ -1,10 +1,12 @@
-Changes in QMPlay2 build 17.03.26:
+Changes in QMPlay2 build 17.03.30:
+	- full screen on macOS doesn't open on new desktop,
 	- seek to 0 position when repeat entry is enabled,
 	- fix drawing smooth cover images (regression),
 	- updated Russian translation (victorr2007),
 	- high dpi scaling enabled only for macOS,
 	- use SVG icons (new QtSvg dependency),
 	- fixed "QMPlay2.appdata.xml" file,
+	- handle multimedia keys on macOS,
 	- minor network seeking fixes,
 	- bugfix,
 
