@@ -221,25 +221,13 @@ elseif(APPLE)
         ${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/platforms)
     install(FILES
-        ${QT_PLUGINS_DIR}/imageformats/libqgif.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqjpeg.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqicns.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqico.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqmacjp2.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqsvg.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqtga.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqtiff.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqwbmp.dylib
-        ${QT_PLUGINS_DIR}/imageformats/libqwebp.dylib
-        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
-    install(FILES
         ${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/iconengines)
-    if(Qt5Widgets_VERSION VERSION_LESS 5.8.0)
-        install(FILES
-            ${QT_PLUGINS_DIR}/imageformats/libqdds.dylib
-            DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/imageformats)
-    endif()
+    install(DIRECTORY
+        ${QT_PLUGINS_DIR}/imageformats
+        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins
+        FILES_MATCHING REGEX "libq.+[^_debug]\\.dylib"
+        PATTERN "*.dSYM" EXCLUDE)
     install(CODE "
         include(BundleUtilities)
         set(BU_CHMOD_BUNDLE_ITEMS ON)
@@ -248,8 +236,7 @@ elseif(APPLE)
             \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
             \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
         fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
-
-     ")
+    ")
 else()
     # executable
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
