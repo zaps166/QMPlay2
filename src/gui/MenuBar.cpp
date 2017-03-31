@@ -419,7 +419,7 @@ MenuBar::Options::Options(MenuBar *parent) :
 	QMenu(Options::tr("Op&tions"), parent)
 {
 	const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
-	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false, QAction::TextHeuristicRole);
+	newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false, QAction::PreferencesRole);
 	newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
 	addSeparator();
 
