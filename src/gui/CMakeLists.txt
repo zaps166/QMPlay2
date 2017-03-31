@@ -226,7 +226,7 @@ elseif(APPLE)
     install(DIRECTORY
         ${QT_PLUGINS_DIR}/imageformats
         DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins
-        FILES_MATCHING REGEX "libq.+[^_debug]\\.dylib"
+        PATTERN "*_debug.dylib" EXCLUDE
         PATTERN "*.dSYM" EXCLUDE)
     install(CODE "
         include(BundleUtilities)
