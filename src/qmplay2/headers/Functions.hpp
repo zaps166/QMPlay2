@@ -65,12 +65,6 @@ namespace Functions
 	QString Url(QString, const QString &pth = QString());
 	QString getUrlScheme(const QString &url);
 
-	static inline void getHMS(int t, int &H, int &M, int &S)
-	{
-		H = t / 3600;
-		M = t % 3600 / 60;
-		S = t % 60;
-	}
 	QString timeToStr(double t, bool space = false);
 
 	QString filePath(const QString &);

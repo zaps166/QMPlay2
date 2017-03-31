@@ -58,6 +58,13 @@ static inline void swapArray(quint8 *a, quint8 *b, int size)
 	memcpy(b, t, size);
 }
 
+static inline void getHMS(int t, int &H, int &M, int &S)
+{
+	H = t / 3600;
+	M = t % 3600 / 60;
+	S = t % 60;
+}
+
 /**/
 
 QDate Functions::parseVersion(const QString &dateTxt)
