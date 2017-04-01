@@ -866,7 +866,10 @@ void MainWidget::createMenuBar()
 	secondMenu->addSeparator();
 	secondMenu->addAction(menuBar->player->toggleMute);
 	secondMenu->addSeparator();
-	secondMenu->addAction(menuBar->options->settings);
+	// Copy action, because PreferencesRole doesn't show in dock menu.
+	QAction *settings = new QAction(menuBar->options->settings->icon(), menuBar->options->settings->text(), menuBar->options->settings->parent());
+	connect(settings, &QAction::triggered, menuBar->options->settings, &QAction::trigger);
+	secondMenu->addAction(settings);
 
 	QAction *newInstanceAct = new QAction(tr("New window"), secondMenu);
 	connect(newInstanceAct, &QAction::triggered, [] {
