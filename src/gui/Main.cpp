@@ -445,15 +445,6 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_MAC) && QT_VERSION < QT_VERSION_CHECK(5, 8, 0)
-	{
-		QByteArray pth = QByteArray(argv[0]);
-		const int idx = pth.lastIndexOf('/');
-		if (idx > -1)
-			qputenv("QT_PLUGIN_PATH", pth.left(idx + 1) + "../plugins");
-	}
-#endif
-
 	signal(SIGINT, signal_handler);
 	signal(SIGABRT, signal_handler);
 	signal(SIGILL, signal_handler);

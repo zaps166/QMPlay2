@@ -218,16 +218,21 @@ elseif(APPLE)
     set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
     set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
     install(FILES
-        ${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib
-        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/platforms)
+        "${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib"
+        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/platforms")
     install(FILES
-        ${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib
-        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins/iconengines)
+        "${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib"
+        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/iconengines")
     install(DIRECTORY
-        ${QT_PLUGINS_DIR}/imageformats
-        DESTINATION ${MAC_BUNDLE_PATH}/Contents/plugins
+        "${QT_PLUGINS_DIR}/imageformats"
+        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins"
         PATTERN "*_debug.dylib" EXCLUDE
         PATTERN "*.dSYM" EXCLUDE)
+    install(DIRECTORY
+        "${QT_LIBS_DIR}/../translations"
+        DESTINATION "${MAC_BUNDLE_PATH}/Contents"
+        FILES_MATCHING
+        PATTERN "qtbase_*.qm")
     install(CODE "
         include(BundleUtilities)
         set(BU_CHMOD_BUNDLE_ITEMS ON)
@@ -235,6 +240,7 @@ elseif(APPLE)
         file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
             \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
             \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
+        file(WRITE \"${MAC_BUNDLE_PATH}/Contents/Resources/qt.conf\")
         fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
     ")
 else()
