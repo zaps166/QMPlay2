@@ -802,6 +802,10 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 
 		if (!cookies.isEmpty())
 			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
+
+#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(56, 36, 100)
+		av_dict_set(&options, "reconnect", "1", 0);
+#endif
 	}
 	return url;
 }
