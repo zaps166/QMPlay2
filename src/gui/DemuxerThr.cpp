@@ -181,7 +181,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			}
 			else
 			{
-				if (!localStream && playC.endOfStream)
+				if (!backward && !localStream && playC.endOfStream)
 				{
 					// Don't seek in demuxer on network streams if we can't seek in buffer
 					// and we have end of stream which means that everything is buffered.
