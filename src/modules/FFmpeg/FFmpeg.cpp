@@ -62,6 +62,7 @@ FFmpeg::FFmpeg() :
 #endif
 
 	init("DemuxerEnabled", true);
+	init("ReconnectStreammes", false);
 	init("DecoderEnabled", true);
 #ifdef QMPlay2_VDPAU
 	init("DecoderVDPAUEnabled", true);
@@ -233,8 +234,15 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 	Module::SettingsWidget(module)
 {
-	demuxerEB = new QCheckBox(tr("Demuxer"));
-	demuxerEB->setChecked(sets().getBool("DemuxerEnabled"));
+	demuxerB = new QGroupBox(tr("Demuxer"));
+	demuxerB->setCheckable(true);
+	demuxerB->setChecked(sets().getBool("DemuxerEnabled"));
+
+	reconnectStreamedB = new QCheckBox(tr("Try to automatically reconnect live streams on error"));
+	reconnectStreamedB->setChecked(sets().getBool("ReconnectStreamed"));
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 25, 100)
+		reconnectStreamedB->setEnabled(false);
+#endif
 
 	decoderB = new QGroupBox(tr("Software decoder"));
 	decoderB->setCheckable(true);
@@ -355,6 +363,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		sets().set("ThreadTypeSlice", 0);
 	}
 
+	QFormLayout *demuxerLayout = new QFormLayout(demuxerB);
+	demuxerLayout->addRow(nullptr, reconnectStreamedB);
+
 	QFormLayout *decoderLayout = new QFormLayout(decoderB);
 	decoderLayout->addRow(tr("Number of threads used to decode video") + ": ", threadsB);
 	decoderLayout->addRow(tr("Low resolution decoding (only some codecs)") + ": ", lowresB);
@@ -366,7 +377,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 		forceSkipFramesB->setEnabled(skipFramesB->isChecked());
 
 	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(demuxerEB);
+	layout->addWidget(demuxerB);
 #ifdef QMPlay2_VDPAU
 	layout->addWidget(decoderVDPAUB);
 	layout->addWidget(decoderVDPAU_NWB);
@@ -395,7 +406,8 @@ void ModuleSettingsWidget::checkEnables()
 
 void ModuleSettingsWidget::saveSettings()
 {
-	sets().set("DemuxerEnabled", demuxerEB->isChecked());
+	sets().set("DemuxerEnabled", demuxerB->isChecked());
+	sets().set("ReconnectStreamed", reconnectStreamedB->isChecked());
 	sets().set("DecoderEnabled", decoderB->isChecked());
 	sets().set("HurryUP", hurryUpB ->isChecked());
 	sets().set("SkipFrames", skipFramesB->isChecked());

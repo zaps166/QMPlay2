@@ -1635,6 +1635,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Additional notifications</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Try to automatically reconnect live streams on error</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

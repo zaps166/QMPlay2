@@ -218,13 +218,14 @@ private:
 
 /**/
 
-FormatContext::FormatContext(QMutex &avcodec_mutex) :
+FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
 	isError(false),
 	currPos(0.0),
 	abortCtx(new AbortContext),
 	formatCtx(nullptr),
 	packet(nullptr),
 	oggHelper(nullptr),
+	reconnectStreamed(reconnectStreamed),
 	isPaused(false), fixMkvAss(false),
 	isMetadataChanged(false),
 	lastTime(0.0),
@@ -726,7 +727,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	AVDictionary *options = nullptr;
 	if (!inputFmt)
+	{
 		url = Functions::prepareFFmpegUrl(_url, options);
+#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 25, 100)
+		if (!isLocal && reconnectStreamed)
+			av_dict_set(&options, "reconnect_streamed", "1", 0);
+#endif
+	}
 
 	formatCtx = avformat_alloc_context();
 	formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;

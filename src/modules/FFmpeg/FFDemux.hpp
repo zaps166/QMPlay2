@@ -68,4 +68,5 @@ private:
 	QMutex mutex;
 
 	bool abortFetchTracks;
+	bool reconnectStreamed;
 };

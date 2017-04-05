@@ -26,7 +26,8 @@
 
 FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
 	avcodec_mutex(avcodec_mutex),
-	abortFetchTracks(false)
+	abortFetchTracks(false),
+	reconnectStreamed(false)
 {
 	SetModule(module);
 }
@@ -39,7 +40,16 @@ FFDemux::~FFDemux()
 
 bool FFDemux::set()
 {
-	return sets().getBool("DemuxerEnabled");
+	bool restartPlayback = false;
+
+	const bool tmpReconnectStreamed = sets().getBool("ReconnectStreamed");
+	if (tmpReconnectStreamed != reconnectStreamed)
+	{
+		reconnectStreamed = tmpReconnectStreamed;
+		restartPlayback = true;
+	}
+
+	return sets().getBool("DemuxerEnabled") && !restartPlayback;
 }
 
 bool FFDemux::metadataChanged() const
@@ -269,7 +279,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 
 void FFDemux::addFormatContext(QString url, const QString &param)
 {
-	FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
+	FormatContext *fmtCtx = new FormatContext(avcodec_mutex, reconnectStreamed);
 	{
 		QMutexLocker mL(&mutex);
 		formatContexts.append(fmtCtx);

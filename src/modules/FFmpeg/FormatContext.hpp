@@ -45,7 +45,7 @@ class FormatContext
 {
 	Q_DECLARE_TR_FUNCTIONS(FormatContext)
 public:
-	FormatContext(QMutex &avcodec_mutex);
+	FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed = false);
 	~FormatContext();
 
 	bool metadataChanged() const;
@@ -90,6 +90,7 @@ private:
 
 	OggHelper *oggHelper;
 
+	bool reconnectStreamed;
 	bool isPaused, fixMkvAss;
 	mutable bool isMetadataChanged;
 	double lastTime, startTime;

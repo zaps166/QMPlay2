@@ -85,8 +85,10 @@ private slots:
 private:
 	void saveSettings() override final;
 
+	QGroupBox *demuxerB;
+	QCheckBox *reconnectStreamedB;
 	QGroupBox *hurryUpB;
-	QCheckBox *demuxerEB, *skipFramesB, *forceSkipFramesB;
+	QCheckBox *skipFramesB, *forceSkipFramesB;
 	QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
 	QGroupBox *decoderVDPAUB;

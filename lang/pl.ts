@@ -1635,6 +1635,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Additional notifications</source>
         <translation>Dodatkowe powiadomienia</translation>
     </message>
+    <message>
+        <source>Try to automatically reconnect live streams on error</source>
+        <translation>Spróbuj automatycznie wznowić połączenie dla strumieni na żywo w przypadku błędu</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
