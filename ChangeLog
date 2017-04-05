@@ -1,3 +1,8 @@
+Changes in QMPlay2 build 17.04.05:
+	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
+	- minor network backward seeking bugfix (regression),
+	- option to reconnect live network streams on error,
+
 Changes in QMPlay2 build 17.04.02:
 	- seek to 0 position when repeat entry is enabled,
 	- fix drawing smooth cover images (regression),
