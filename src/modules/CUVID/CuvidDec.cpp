@@ -482,9 +482,11 @@ bool CuvidDec::canCreateInstance()
 CuvidDec::CuvidDec(Module &module) :
 	m_writer(nullptr),
 	m_cuvidHWAccel(nullptr),
+	m_lastCuvidTS(0),
 	m_deintMethod(cudaVideoDeinterlaceMode_Weave),
 	m_copyVideo(Qt::PartiallyChecked),
 	m_forceFlush(false),
+	m_tsWorkaround(false),
 	m_nv12Chroma(nullptr),
 	m_bsfCtx(nullptr),
 	m_swsCtx(nullptr),
@@ -562,7 +564,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 	m_width = format->display_area.right;
 	m_height = format->display_area.bottom;
 	m_codedHeight = format->coded_height;
-	resetLastTS();
+	resetTimeStampHelpers();
 
 	destroyCuvid(false);
 
@@ -593,8 +595,13 @@ int CuvidDec::pictureDecode(CUVIDPICPARAMS *picParams)
 }
 int CuvidDec::pictureDisplay(CUVIDPARSERDISPINFO *dispInfo)
 {
+	if (dispInfo->timestamp >= 0 && dispInfo->timestamp < m_lastCuvidTS)
+		m_tsWorkaround = true;
+	m_lastCuvidTS = dispInfo->timestamp;
+
 	//"m_cuvidSurfaces" shouldn't be larger than "MaxSurfaces"
 	m_cuvidSurfaces.enqueue(*dispInfo);
+
 	return 1;
 }
 
@@ -613,28 +620,49 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	Q_UNUSED(newPixFmt)
 
 	cu::ContextGuard cuCtxGuard(m_cuCtx);
+	CUVIDSOURCEDATAPACKET cuvidPkt;
 
 	if (flush || m_forceFlush)
 	{
-		m_cuvidSurfaces.clear();
-		m_forceFlush = false;
-		destroyCuvid(true);
-		resetLastTS();
-		if (!createCuvidVideoParser())
+		quint32 e = 0;
+		while (!m_forceFlush)
 		{
-			encodedPacket.ts.setInvalid();
-			return 0;
+			memset(&cuvidPkt, 0, sizeof cuvidPkt);
+			cuvidPkt.flags = CUVID_PKT_ENDOFSTREAM;
+			m_cuvidSurfaces.clear();
+			if (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) != CUDA_SUCCESS)
+				m_forceFlush = true;
+			else if (m_cuvidSurfaces.isEmpty())
+			{
+				if (++e > m_cuvidParserParams.ulMaxDisplayDelay) //Is it necessary to check it here?
+					break;
+			}
+			else
+			{
+				e = 0;
+			}
+		}
+		resetTimeStampHelpers();
+		if (m_forceFlush)
+		{
+			m_cuvidSurfaces.clear();
+			m_forceFlush = false;
+			destroyCuvid(true);
+			if (!createCuvidVideoParser())
+			{
+				encodedPacket.ts.setInvalid();
+				return 0;
+			}
 		}
 	}
 
-	CUVIDSOURCEDATAPACKET cuvidPkt;
 	memset(&cuvidPkt, 0, sizeof cuvidPkt);
 	if (encodedPacket.isEmpty())
 		cuvidPkt.flags = CUVID_PKT_ENDOFSTREAM;
 	else
 	{
 		cuvidPkt.flags = CUVID_PKT_TIMESTAMP;
-		cuvidPkt.timestamp = encodedPacket.ts.ptsDts() * 10000000.0 + 0.5;
+		cuvidPkt.timestamp = encodedPacket.ts.pts() * 10000000.0 + 0.5;
 #ifdef NEW_BSF_API
 		if (m_bsfCtx)
 		{
@@ -667,6 +695,9 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	const bool videoDataParsed = (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) == CUDA_SUCCESS);
 
+	if (cuvidPkt.flags == CUVID_PKT_TIMESTAMP && videoDataParsed)
+		m_timestamps.enqueue(encodedPacket.ts);
+
 #ifdef NEW_BSF_API
 	if (m_pkt)
 		av_packet_unref(m_pkt);
@@ -674,97 +705,106 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	if (m_cuvidSurfaces.isEmpty())
 		encodedPacket.ts.setInvalid();
-	else if (~hurry_up)
+	else
 	{
 		const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
-		const VideoFrameSize frameSize(m_width, m_height);
 
-		encodedPacket.ts = dispInfo.timestamp / 10000000.0;
-
-		//Sometimes (MPEG1, MPEG2) CUVID provides incorrect timestamp, so compare the
-		//current timestamp with the previous timestamp and calculate the correct one.
-		if (encodedPacket.ts > m_lastTS[0])
+		double ts = dispInfo.timestamp / 10000000.0;
+		if (!m_timestamps.isEmpty())
+		{
+			const double dequeuedTS = m_timestamps.dequeue();
+			if (!m_timestamps.isEmpty() && !dispInfo.progressive_frame)
+				m_timestamps.dequeue();
+			if (m_tsWorkaround)
+				ts = dequeuedTS;
+		}
+		if (ts >= 0.0)
 		{
 			m_lastTS[1] = m_lastTS[0];
-			m_lastTS[0] = encodedPacket.ts;
+			m_lastTS[0] = ts;
 		}
-		else if (m_lastTS[0] >= 0.0 && m_lastTS[1] >= 0.0 && m_lastTS[0] > m_lastTS[1])
+		else if (m_lastTS[0] >= 0.0 && m_lastTS[1] >= 0.0)
 		{
 			const double diff = m_lastTS[0] - m_lastTS[1];
 			m_lastTS[1] = m_lastTS[0];
 			m_lastTS[0] += diff;
-			encodedPacket.ts = m_lastTS[0];
+			ts = m_lastTS[0];
 		}
+		encodedPacket.ts = ts;
 
-		if (m_cuvidHWAccel)
-			decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
-		else
+		if (~hurry_up)
 		{
-			CUdeviceptr mappedFrame = 0;
-			unsigned int pitch = 0;
-
-			CUVIDPROCPARAMS vidProcParams;
-			memset(&vidProcParams, 0, sizeof vidProcParams);
-			vidProcParams.progressive_frame = dispInfo.progressive_frame;
-			vidProcParams.second_field = 0;
-			vidProcParams.top_field_first = dispInfo.top_field_first;
-			if (cuvid::mapVideoFrame(m_cuvidDec, dispInfo.picture_index, &mappedFrame, &pitch, &vidProcParams) == CUDA_SUCCESS)
+			const VideoFrameSize frameSize(m_width, m_height);
+			if (m_cuvidHWAccel)
+				decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			else
 			{
-				const int size = pitch * m_height;
-				const int halfSize = pitch * ((m_height + 1) >> 1);
+				CUdeviceptr mappedFrame = 0;
+				unsigned int pitch = 0;
 
-				if (!m_nv12Chroma || m_nv12Chroma->size != size)
+				CUVIDPROCPARAMS vidProcParams;
+				memset(&vidProcParams, 0, sizeof vidProcParams);
+				vidProcParams.progressive_frame = dispInfo.progressive_frame;
+				vidProcParams.second_field = 0;
+				vidProcParams.top_field_first = dispInfo.top_field_first;
+				if (cuvid::mapVideoFrame(m_cuvidDec, dispInfo.picture_index, &mappedFrame, &pitch, &vidProcParams) == CUDA_SUCCESS)
 				{
-					av_buffer_unref(&m_nv12Chroma);
-					m_nv12Chroma = av_buffer_alloc(size);
-				}
+					const int size = pitch * m_height;
+					const int halfSize = pitch * ((m_height + 1) >> 1);
 
-				for (int p = 0; p < 3; ++p)
-				{
-					const int planeSize = p ? halfSize : size;
-					if (!m_frameBuffer[p] || m_frameBuffer[p]->size != planeSize)
+					if (!m_nv12Chroma || m_nv12Chroma->size != size)
 					{
-						av_buffer_unref(&m_frameBuffer[p]);
-						m_frameBuffer[p] = av_buffer_alloc(planeSize);
+						av_buffer_unref(&m_nv12Chroma);
+						m_nv12Chroma = av_buffer_alloc(size);
 					}
-				}
 
-				bool copied = (cu::memcpyDtoH(m_frameBuffer[0]->data, mappedFrame, size) == CUDA_SUCCESS);
-				if (copied)
-					copied &= (cu::memcpyDtoH(m_nv12Chroma->data, mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
-
-				cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame);
-
-				if (copied)
-				{
-					const uint8_t *srcData[2] =
+					for (int p = 0; p < 3; ++p)
 					{
-						m_frameBuffer[0]->data,
-						m_nv12Chroma->data
-					};
-					const qint32 srcLinesize[2] =
-					{
-						(int)pitch,
-						(int)pitch
-					};
+						const int planeSize = p ? halfSize : size;
+						if (!m_frameBuffer[p] || m_frameBuffer[p]->size != planeSize)
+						{
+							av_buffer_unref(&m_frameBuffer[p]);
+							m_frameBuffer[p] = av_buffer_alloc(planeSize);
+						}
+					}
 
-					uint8_t *dtsData[3] =
-					{
-						m_frameBuffer[0]->data,
-						m_frameBuffer[1]->data,
-						m_frameBuffer[2]->data
-					};
-					qint32 dstLinesize[3] =
-					{
-						(qint32)pitch,
-						(qint32)(pitch >> 1),
-						(qint32)(pitch >> 1)
-					};
+					bool copied = (cu::memcpyDtoH(m_frameBuffer[0]->data, mappedFrame, size) == CUDA_SUCCESS);
+					if (copied)
+						copied &= (cu::memcpyDtoH(m_nv12Chroma->data, mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
 
-					if (m_swsCtx)
-						sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dtsData, dstLinesize);
+					cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame);
 
-					decoded = VideoFrame(frameSize, m_frameBuffer, dstLinesize, !dispInfo.progressive_frame, dispInfo.top_field_first);
+					if (copied)
+					{
+						const uint8_t *srcData[2] =
+						{
+							m_frameBuffer[0]->data,
+							m_nv12Chroma->data
+						};
+						const qint32 srcLinesize[2] =
+						{
+							(int)pitch,
+							(int)pitch
+						};
+
+						uint8_t *dtsData[3] =
+						{
+							m_frameBuffer[0]->data,
+							m_frameBuffer[1]->data,
+							m_frameBuffer[2]->data
+						};
+						qint32 dstLinesize[3] =
+						{
+							(qint32)pitch,
+							(qint32)(pitch >> 1),
+							(qint32)(pitch >> 1)
+						};
+
+						if (m_swsCtx)
+							sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dtsData, dstLinesize);
+
+						decoded = VideoFrame(frameSize, m_frameBuffer, dstLinesize, !dispInfo.progressive_frame, dispInfo.top_field_first);
+					}
 				}
 			}
 		}
@@ -1017,9 +1057,12 @@ void CuvidDec::destroyCuvid(bool all)
 	}
 }
 
-inline void CuvidDec::resetLastTS()
+inline void CuvidDec::resetTimeStampHelpers()
 {
 	m_lastTS[0] = m_lastTS[1] = -1.0;
+	m_tsWorkaround = false;
+	m_timestamps.clear();
+	m_lastCuvidTS = 0;
 }
 
 bool CuvidDec::loadLibrariesAndInit()

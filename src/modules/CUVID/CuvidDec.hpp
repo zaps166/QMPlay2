@@ -68,7 +68,7 @@ private:
 	bool createCuvidVideoParser();
 	void destroyCuvid(bool all);
 
-	inline void resetLastTS();
+	inline void resetTimeStampHelpers();
 
 	bool loadLibrariesAndInit();
 
@@ -76,11 +76,14 @@ private:
 	CuvidHWAccel *m_cuvidHWAccel;
 
 	int m_width, m_height, m_codedHeight;
+	CUvideotimestamp m_lastCuvidTS;
+	QQueue<double> m_timestamps;
 	double m_lastTS[2];
 
 	cudaVideoDeinterlaceMode m_deintMethod;
 	Qt::CheckState m_copyVideo;
 	bool m_forceFlush;
+	bool m_tsWorkaround;
 
 	QQueue<CUVIDPARSERDISPINFO> m_cuvidSurfaces;
 
