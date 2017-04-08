@@ -2740,7 +2740,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
-Partially checked - only for network streams and A-B repeat.</source>
+Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

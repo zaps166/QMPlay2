@@ -461,7 +461,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->leftMouseTogglePlay->setChecked(QMPSettings.getBool("LeftMouseTogglePlay"));
 
 		page2->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
-		page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked - only for network streams and A-B repeat."));
+		page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
 
 		const QString modulesListTitle[3] = {
 			tr("Video output priority"),

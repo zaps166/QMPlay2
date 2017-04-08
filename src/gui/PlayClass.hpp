@@ -56,12 +56,12 @@ public:
 
 	Q_SLOT void play(const QString &);
 	Q_SLOT void stop(bool quitApp = false);
-	Q_SLOT void restart();
+	void restart();
 
 	void chPos(double, bool updateGUI = true);
 
 	void togglePause();
-	void seek(int);
+	void seek(int pos, bool allowAccurate = true);
 	Q_SLOT void chStream(const QString &s);
 	void setSpeed(double);
 
@@ -86,8 +86,6 @@ public:
 	}
 
 private:
-	bool isABRepeat() const;
-
 	inline bool hasVideoStream();
 	inline bool hasAudioStream();
 
@@ -140,7 +138,7 @@ private:
 
 	double maxThreshold, fps;
 
-	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat;
+	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat, allowAccurateSeek;
 	QTimer timTerminate;
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64

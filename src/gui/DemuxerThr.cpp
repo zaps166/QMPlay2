@@ -152,7 +152,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 		}
 
 		const Qt::CheckState accurateSeek = (Qt::CheckState)QMPlay2Core.getSettings().getInt("AccurateSeek");
-		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.isABRepeat())));
+		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.allowAccurateSeek)));
 
 		const bool backward = doAccurateSeek || repeat || (playC.seekTo < (int)playC.pos);
 		bool flush = false, aLocked = false, vLocked = false;

@@ -561,8 +561,9 @@ void MainWidget::togglePlay()
 }
 void MainWidget::seek(int i)
 {
-	if (!seekS->ignoringValueChanged())
-		playC.seek(i);
+	const bool allowAccurate = (sender() != seekS);
+	if (!seekS->ignoringValueChanged() && (allowAccurate || seekS->maximum() > seekS->minimum()))
+		playC.seek(i, allowAccurate);
 }
 void MainWidget::playStateChanged(bool b)
 {

@@ -176,6 +176,7 @@ void PlayClass::play(const QString &_url)
 			{
 				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
 			}
+			allowAccurateSeek = true;
 
 			QMPlay2Core.setVideoDevicePixelRatio();
 			demuxThr->start();
@@ -232,7 +233,7 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 			emit updatePos(newPos);
 		pos = newPos;
 		lastSeekTo = SEEK_NOWHERE;
-		if (isABRepeat())
+		if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
 			seek(seekA);
 	}
 }
@@ -250,12 +251,13 @@ void PlayClass::togglePause()
 		stopPauseMutex.unlock();
 	}
 }
-void PlayClass::seek(int pos)
+void PlayClass::seek(int pos, bool allowAccurate)
 {
 	if (pos < 0)
 		pos = 0;
 	if (lastSeekTo == pos)
 		return;
+	allowAccurateSeek = allowAccurate;
 	if ((seekA > -1 && pos < seekA) || (seekB > -1 && pos > seekB))
 	{
 		const bool showDisabledInfo = (seekA > 0 || seekB > 0);
@@ -435,11 +437,6 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 	}
 	if (onStatusBar)
 		emit QMPlay2Core.statusBarMessage(txt, duration * 1000);
-}
-
-bool PlayClass::isABRepeat() const
-{
-	return (seekA >= 0 && seekB > seekA && pos >= seekB);
 }
 
 inline bool PlayClass::hasVideoStream()
@@ -1309,7 +1306,10 @@ void PlayClass::load(Demuxer *demuxer)
 						emit videoStarted();
 
 					if (reload)
+					{
 						seekTo = SEEK_STREAM_RELOAD;
+						allowAccurateSeek = true;
+					}
 				}
 				vThr->unlock();
 			}
@@ -1346,7 +1346,10 @@ void PlayClass::load(Demuxer *demuxer)
 					dec = nullptr;
 
 				else if (reload)
+				{
 					seekTo = SEEK_STREAM_RELOAD;
+					allowAccurateSeek = true;
+				}
 				if (doSilenceOnStart)
 				{
 					aThr->silence(true);
@@ -1411,7 +1414,10 @@ void PlayClass::load(Demuxer *demuxer)
 						assHeader.clear();
 					ass->initASS(assHeader);
 					if (reload)
+					{
 						seekTo = SEEK_STREAM_RELOAD;
+						allowAccurateSeek = true;
+					}
 					subsMutex.unlock();
 				}
 				else
