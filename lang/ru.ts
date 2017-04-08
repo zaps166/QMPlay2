@@ -2103,6 +2103,10 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
         <source>Left mouse button on video dock toggles playback</source>
         <translation>Левая кнопка мыши на видео панели переключает воспроизведен</translation>
     </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2733,6 +2737,11 @@ QMPlay2 will not display icons!</source>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
         <translation>Удалить «youtube-dl»?</translation>
+    </message>
+    <message>
+        <source>Slower, but more accurate seeking.
+Partially checked - only for network streams and A-B repeat.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

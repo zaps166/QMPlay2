@@ -87,6 +87,19 @@
          </layout>
         </widget>
        </item>
+       <item row="18" column="0" colspan="3">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="1" column="1">
         <widget class="QGroupBox" name="wheelActionB">
          <property name="title">
@@ -119,23 +132,17 @@
          </layout>
         </widget>
        </item>
-       <item row="17" column="0" colspan="3">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="15" column="0" colspan="2">
         <widget class="QCheckBox" name="ignorePlaybackError">
          <property name="text">
           <string>Play next entry after playback error</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0" colspan="2">
+        <widget class="QCheckBox" name="restoreVideoEq">
+         <property name="text">
+          <string>Remember video equalizer settings</string>
          </property>
         </widget>
        </item>
@@ -409,17 +416,20 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="0" colspan="2">
-        <widget class="QCheckBox" name="restoreVideoEq">
-         <property name="text">
-          <string>Remember video equalizer settings</string>
-         </property>
-        </widget>
-       </item>
        <item row="16" column="0">
         <widget class="QCheckBox" name="leftMouseTogglePlay">
          <property name="text">
           <string>Left mouse button on video dock toggles playback</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QCheckBox" name="accurateSeekB">
+         <property name="text">
+          <string>Accurate seeking</string>
+         </property>
+         <property name="tristate">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

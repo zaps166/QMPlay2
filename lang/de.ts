@@ -2103,6 +2103,10 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Left mouse button on video dock toggles playback</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2732,6 +2736,11 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slower, but more accurate seeking.
+Partially checked - only for network streams and A-B repeat.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

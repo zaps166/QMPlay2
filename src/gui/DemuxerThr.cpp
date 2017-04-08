@@ -151,25 +151,43 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			repeat = true;
 		}
 
-		const bool backward = repeat || (playC.seekTo < (int)playC.pos);
+		const Qt::CheckState accurateSeek = (Qt::CheckState)QMPlay2Core.getSettings().getInt("AccurateSeek");
+		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.isABRepeat())));
+
+		const bool backward = doAccurateSeek || repeat || (playC.seekTo < (int)playC.pos);
 		bool flush = false, aLocked = false, vLocked = false;
 
 		skipBufferSeek = false;
 
 		bool cantSeek = false;
 
-		if (seekInBuffer && (!localStream || !backward))
+		if (seekInBuffer)
 		{
 			playC.vPackets.lock();
 			playC.aPackets.lock();
 			playC.sPackets.lock();
-			if
-			(
-				(playC.vPackets.packetsCount() || playC.aPackets.packetsCount()) &&
-				playC.vPackets.seekTo(playC.seekTo, backward) &&
-				playC.aPackets.seekTo(playC.seekTo, backward) &&
-				playC.sPackets.seekTo(playC.seekTo, backward)
-			)
+
+			const auto doSeekInBuffer = [&] {
+				double seekTo = playC.seekTo;
+				bool ok = (!playC.vPackets.isEmpty() || !playC.aPackets.isEmpty());
+
+				if (ok && !playC.vPackets.isEmpty())
+				{
+					ok &= playC.vPackets.seekTo(seekTo, backward);
+					if (ok)
+						seekTo = playC.vPackets.currentPacketTime(); // Use video position for audio seeking
+				}
+
+				if (ok && !playC.aPackets.isEmpty())
+					ok &= playC.aPackets.seekTo(seekTo, backward);
+
+				if (ok && !playC.sPackets.isEmpty())
+					ok &= playC.sPackets.seekTo(seekTo, backward);
+
+				return ok;
+			};
+
+			if (doSeekInBuffer())
 			{
 				doDemuxerSeek = false;
 				flush = true;
@@ -181,7 +199,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			}
 			else
 			{
-				if (!backward && !localStream && playC.endOfStream)
+				if (!accurateSeek && !backward && !localStream && playC.endOfStream)
 				{
 					// Don't seek in demuxer on network streams if we can't seek in buffer
 					// and we have end of stream which means that everything is buffered.
@@ -194,6 +212,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 					updateBufferedTime = 0.0;
 				}
 			}
+
 			playC.vPackets.unlock();
 			playC.aPackets.unlock();
 			playC.sPackets.unlock();
@@ -214,8 +233,6 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 
 		if (flush)
 		{
-			if (repeat)
-				playC.emptyBufferCond.wakeAll(); //Weak AV threads
 			playC.endOfStream = false;
 			if (doDemuxerSeek)
 				clearBuffers();
@@ -229,6 +246,13 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.flushVideo = playC.flushAudio = true;
 			if (playC.pos < 0.0) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
 				emit playC.updatePos(playC.seekTo); //uaktualnia suwak na pasku do wskazanej pozycji
+			if (repeat || playC.videoSeekPos > -1 || playC.audioSeekPos > -1)
+				playC.emptyBufferCond.wakeAll(); //Weak AV threads
+			const int seekPos = (doAccurateSeek && playC.seekTo > 0) ? playC.seekTo : -1;
+			if (vThr)
+				playC.videoSeekPos = seekPos;
+			if (aThr)
+				playC.audioSeekPos = seekPos;
 			if (aLocked)
 				aThr->unlock();
 			if (vLocked)
@@ -548,9 +572,9 @@ void DemuxerThr::run()
 		else if (!skipBufferSeek)
 		{
 			getAVBuffersSize(vS, aS);
+			playC.endOfStream = true;
 			if (vS || aS || !canBreak(aThr, vThr))
 			{
-				playC.endOfStream = true;
 				if (!localStream)
 					ensureTrueUpdateBuffered();
 			}

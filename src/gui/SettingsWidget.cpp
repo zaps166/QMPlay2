@@ -188,6 +188,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("WheelAction", true);
 	QMPSettings.init("WheelSeek", true);
 	QMPSettings.init("LeftMouseTogglePlay", false);
+	QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
 	QMPSettings.init("SavePos", false);
 	QMPSettings.init("KeepZoom", false);
 	QMPSettings.init("KeepARatio", false);
@@ -458,6 +459,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
 		page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
 		page2->leftMouseTogglePlay->setChecked(QMPSettings.getBool("LeftMouseTogglePlay"));
+
+		page2->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
+		page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked - only for network streams and A-B repeat."));
 
 		const QString modulesListTitle[3] = {
 			tr("Video output priority"),
@@ -826,6 +830,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
 			QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->isChecked());
+			QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
 
 			QStringList videoWriters, audioWriters, decoders;
 			for (QListWidgetItem *wI : page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))

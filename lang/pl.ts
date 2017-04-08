@@ -2103,6 +2103,10 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Left mouse button on video dock toggles playback</source>
         <translation>Lewy przycisk myszy w oknie wideo przełącza odtwarzanie</translation>
     </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Dokładne przewijanie</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2735,6 +2739,12 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
         <translation>Czy na pewno chcesz usunąć program &quot;youtube-dl&quot;?</translation>
+    </message>
+    <message>
+        <source>Slower, but more accurate seeking.
+Partially checked - only for network streams and A-B repeat.</source>
+        <translation>Wolniejsze, ale bardziej dokładne przewijanie.
+Częściowo zaznaczone - dotyczy tylko strumieni sieciowych i powtarzania A-B.</translation>
     </message>
 </context>
 <context>

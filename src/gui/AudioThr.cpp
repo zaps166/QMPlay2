@@ -193,7 +193,8 @@ void AudioThr::run()
 						hasBufferedSamples = true;
 						break;
 					}
-			if (playC.paused || (!hasAPackets && !hasBufferedSamples) || playC.waitForData)
+
+			if (playC.paused || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0 && playC.videoSeekPos > 0))
 			{
 #ifdef Q_OS_WIN
 				canUpdatePos = canUpdateBitrate = false;
@@ -278,7 +279,6 @@ void AudioThr::run()
 
 			if (flushAudio)
 				playC.flushAudio = false;
-
 			int decodedSize = decoded.size();
 			int decodedPos = 0;
 			while (decodedSize > 0 && !playC.paused && !br && !br2)
@@ -306,13 +306,27 @@ void AudioThr::run()
 				if (packet.ts.isValid())
 				{
 					audio_pts = playC.audio_current_pts = packet.ts - delay;
-					if (!playC.vThr)
+					if (!playC.vThr && playC.audioSeekPos <= 0)
 					{
 #ifdef Q_OS_WIN
 						playC.chPos(playC.audio_current_pts, playC.flushAudio);
 #else
 						playC.chPos(playC.audio_current_pts);
 #endif
+					}
+				}
+
+				if (playC.audioSeekPos > 0)
+				{
+					if (audio_pts >= playC.audioSeekPos)
+					{
+						tmp_br = 0;
+						playC.audioSeekPos = -1;
+						playC.emptyBufferCond.wakeAll();
+					}
+					else
+					{
+						break;
 					}
 				}
 

@@ -24,66 +24,73 @@ int PacketBuffer::backwardPackets;
 
 bool PacketBuffer::seekTo(double seekPos, bool backward)
 {
-	if (isEmpty())
-		return true;
+	const int count = packetsCount();
+	if (count == 0)
+		return false;
 
-	if (backward && at(0).ts > seekPos)
+	const bool findBackwards = (m_pos > 0 && seekPos < at(m_pos - 1).ts);
+
+	if (findBackwards && at(0).ts > seekPos)
 	{
 		if (floor(at(0).ts) > seekPos)
-			return false; //Brak paczek do skoku w tył
+			return false; // No packets for backward seek
 		seekPos = at(0).ts;
+	}
+	else if (!findBackwards && at(count - 1).ts < seekPos)
+	{
+		if (ceil(at(count - 1).ts) < seekPos)
+			return false; // No packets for forward seek
+		seekPos = at(count - 1).ts;
 	}
 
 	double durationToChange = 0.0;
 	qint64 sizeToChange = 0;
+	int tmpPos;
 
-	if (!backward) //Skok do przodu
-	{
-		const int count = packetsCount();
-		for (int i = 0; i < count; ++i)
+	const auto doSeek = [&](const int currPos, const bool forward, const bool keyFrame) {
+		tmpPos = -1;
+		if (forward)
 		{
-			const Packet &pkt = at(i);
-			if (pkt.ts < seekPos || !pkt.hasKeyFrame)
+			for (int i = currPos; i < count; ++i)
 			{
-				if (i >= pos)
+				const Packet &pkt = at(i);
+				if (pkt.ts >= seekPos && (!keyFrame || pkt.hasKeyFrame))
+				{
+					tmpPos = i;
+					return true;
+				}
+				else
 				{
 					durationToChange += pkt.duration;
 					sizeToChange += pkt.size();
 				}
 			}
-			else
+		}
+		else for (int i = currPos - 1; i >= 0; --i)
+		{
+			const Packet &pkt = at(i);
+			durationToChange -= pkt.duration;
+			sizeToChange -= pkt.size();
+			if (pkt.ts <= seekPos && (!keyFrame || pkt.hasKeyFrame))
 			{
-				if (i < pos)
-				{
-					//Behaves as backward seeking
-					for (int j = i; j < pos; ++j)
-					{
-						const Packet &pkt = at(j);
-						durationToChange -= pkt.duration;
-						sizeToChange -= pkt.size();
-					}
-				}
-				remaining_duration -= durationToChange;
-				backward_duration += durationToChange;
-				remaining_bytes -= sizeToChange;
-				backward_bytes += sizeToChange;
-				pos = i;
+				tmpPos = i;
 				return true;
 			}
 		}
-	}
-	else for (int i = pos - 1; i >= 0; --i) //Skok do tyłu
+		return false;
+	};
+
+	if (doSeek(m_pos, !findBackwards, false))
 	{
-		const Packet &pkt = at(i);
-		durationToChange += pkt.duration;
-		sizeToChange += pkt.size();
-		if (pkt.hasKeyFrame && pkt.ts <= seekPos)
+		if (at(tmpPos).hasKeyFrame || doSeek(tmpPos, !backward, true))
 		{
-			remaining_duration += durationToChange;
-			backward_duration -= durationToChange;
-			remaining_bytes += sizeToChange;
-			backward_bytes -= sizeToChange;
-			pos = i;
+			m_remainingDuration -= durationToChange;
+			m_backwardDuration += durationToChange;
+			m_remainingBytes -= sizeToChange;
+			m_backwardBytes += sizeToChange;
+
+			m_pos = tmpPos;
+
 			return true;
 		}
 	}
@@ -94,9 +101,9 @@ void PacketBuffer::clear()
 {
 	lock();
 	QList<Packet>::clear();
-	remaining_duration = backward_duration = 0.0;
-	remaining_bytes = backward_bytes = 0;
-	pos = 0;
+	m_remainingDuration = m_backwardDuration = 0.0;
+	m_remainingBytes = m_backwardBytes = 0;
+	m_pos = 0;
 	unlock();
 }
 
@@ -105,28 +112,28 @@ void PacketBuffer::put(const Packet &packet)
 	lock();
 	clearBackwards();
 	append(packet);
-	remaining_bytes += packet.size();
-	remaining_duration += packet.duration;
+	m_remainingBytes += packet.size();
+	m_remainingDuration += packet.duration;
 	unlock();
 }
 Packet PacketBuffer::fetch()
 {
-	const Packet &packet = at(pos++);
-	remaining_duration -= packet.duration;
-	backward_duration += packet.duration;
-	remaining_bytes -= packet.size();
-	backward_bytes += packet.size();
+	const Packet &packet = at(m_pos++);
+	m_remainingDuration -= packet.duration;
+	m_backwardDuration += packet.duration;
+	m_remainingBytes -= packet.size();
+	m_backwardBytes += packet.size();
 	return packet;
 }
 
 void PacketBuffer::clearBackwards()
 {
-	while (pos > backwardPackets)
+	while (m_pos > backwardPackets)
 	{
 		const Packet &tmpPacket = first();
-		backward_duration -= tmpPacket.duration;
-		backward_bytes -= tmpPacket.size();
+		m_backwardDuration -= tmpPacket.duration;
+		m_backwardBytes -= tmpPacket.size();
 		removeFirst();
-		--pos;
+		--m_pos;
 	}
 }

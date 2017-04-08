@@ -158,6 +158,7 @@ void PlayClass::play(const QString &_url)
 			canUpdatePos = true;
 			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
+			videoSeekPos = audioSeekPos = -1;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
 			stillImage = false;
 
@@ -231,7 +232,7 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 			emit updatePos(newPos);
 		pos = newPos;
 		lastSeekTo = SEEK_NOWHERE;
-		if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
+		if (isABRepeat())
 			seek(seekA);
 	}
 }
@@ -434,6 +435,11 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 	}
 	if (onStatusBar)
 		emit QMPlay2Core.statusBarMessage(txt, duration * 1000);
+}
+
+bool PlayClass::isABRepeat() const
+{
+	return (seekA >= 0 && seekB > seekA && pos >= seekB);
 }
 
 inline bool PlayClass::hasVideoStream()

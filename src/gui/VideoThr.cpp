@@ -221,6 +221,15 @@ void VideoThr::run()
 	int tmp_br = 0, frames = 0, framesDisplayed = 0;
 	canWrite = true;
 
+	const auto resetVariables = [&] {
+		tmp_br = tmp_time = frames = 0;
+		skip = false;
+		fast = 0;
+
+		if (frame_timer != -1.0)
+			frame_timer = gettime();
+	};
+
 	while (!br)
 	{
 		if (deleteFrame)
@@ -242,7 +251,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrame && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData)
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0 && playC.audioSeekPos > 0))
 		{
 			if (playC.paused && !paused)
 			{
@@ -253,10 +262,6 @@ void VideoThr::run()
 			}
 			playC.vPackets.unlock();
 
-			tmp_br = tmp_time = frames = 0;
-			skip = false;
-			fast = 0;
-
 			if (!playC.paused)
 				waiting = playC.fillBufferB = true;
 
@@ -264,8 +269,7 @@ void VideoThr::run()
 			playC.emptyBufferCond.wait(&emptyBufferMutex, MUTEXWAIT_TIMEOUT);
 			emptyBufferMutex.unlock();
 
-			if (frame_timer != -1.0)
-				frame_timer = gettime();
+			resetVariables();
 
 			continue;
 		}
@@ -418,6 +422,22 @@ void VideoThr::run()
 				lastSampleAspectRatio = -1.0; //Needs to be updated later
 				emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets "lastSampleAspectRatio", because it calls "setARatio()";
 			}
+
+			if (playC.videoSeekPos > 0)
+			{
+				if (packet.ts >= playC.videoSeekPos)
+				{
+					resetVariables();
+					playC.videoSeekPos = -1;
+					playC.emptyBufferCond.wakeAll();
+				}
+				else
+				{
+					mutex.unlock();
+					continue;
+				}
+			}
+
 			if (ptsIsValid || packet.ts > playC.pos)
 				playC.chPos(packet.ts);
 

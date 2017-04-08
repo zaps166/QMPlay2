@@ -51,7 +51,7 @@ public:
 	}
 	inline int remainingPacketsCount() const
 	{
-		return packetsCount() - pos;
+		return packetsCount() - m_pos;
 	}
 	inline int packetsCount() const
 	{
@@ -62,6 +62,10 @@ public:
 	{
 		return begin()->ts;
 	}
+	inline double currentPacketTime() const
+	{
+		return at(m_pos).ts;
+	}
 	inline double lastPacketTime() const
 	{
 		return (--end())->ts;
@@ -69,33 +73,33 @@ public:
 
 	inline double remainingDuration() const
 	{
-		return remaining_duration;
+		return m_remainingDuration;
 	}
 	inline double backwardDuration() const
 	{
-		return backward_duration;
+		return m_backwardDuration;
 	}
 
 	inline qint64 remainingBytes() const
 	{
-		return remaining_bytes;
+		return m_remainingBytes;
 	}
 	inline qint64 backwardBytes() const
 	{
-		return backward_bytes;
+		return m_backwardBytes;
 	}
 
 	inline void lock()
 	{
-		mutex.lock();
+		m_mutex.lock();
 	}
 	inline void unlock()
 	{
-		mutex.unlock();
+		m_mutex.unlock();
 	}
 private:
-	double remaining_duration = 0.0, backward_duration = 0.0;
-	qint64 remaining_bytes = 0, backward_bytes = 0;
-	QMutex mutex;
-	int pos = 0;
+	double m_remainingDuration = 0.0, m_backwardDuration = 0.0;
+	qint64 m_remainingBytes = 0, m_backwardBytes = 0;
+	QMutex m_mutex;
+	int m_pos = 0;
 };
