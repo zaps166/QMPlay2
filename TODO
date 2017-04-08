@@ -15,8 +15,8 @@ Add audio filters:
 	- "Tempo".
 
 HWAccel:
-	- use VDPAU and VA-API for software decoded video - ?,
-	- use VDPAU with OpenGL.
+	- VDA/VideoToolbox for macOS,
+	- use VDPAU with OpenGL,
 
 Exporting audio during playback - ?
 Users can resume downloading - ?
