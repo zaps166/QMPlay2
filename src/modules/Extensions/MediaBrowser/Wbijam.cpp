@@ -383,7 +383,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 						int idxRelEnd = section.indexOf('"', idxRel);
 						int idxIdEnd  = section.indexOf('"', idxId);
 						if (idxRelEnd > -1 && idxIdEnd > -1)
-							videoPriorityUrls[0].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
+							videoPriorityUrls[1].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
 					}
 				}
 				else
@@ -398,10 +398,10 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 
 						if (urlSection.contains("openload")) // Causes problems very often
 							videoPriorityUrls[3].emplace_back(urlDest, false);
-						else if (urlSection.contains("google")) // Currently (13.03.2017) "youtube-dl" has a bug which gets the lowest video quality
+						else if (urlSection.contains("google") || urlSection.contains("-gd-")) // Currently (13.03.2017) "youtube-dl" has a bug which gets the lowest video quality
 							videoPriorityUrls[2].emplace_back(urlDest, false);
 						else if (!urlSection.contains("mp4up") && !urlSection.contains("sibnet")) // Those servers doesn't work properly
-							videoPriorityUrls[1].emplace_back(urlDest, false); // vidfile, d-on, ...
+							videoPriorityUrls[0].emplace_back(urlDest, false); // vidfile, d-on, ...
 					}
 				}
 			};
