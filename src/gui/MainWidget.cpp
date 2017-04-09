@@ -561,7 +561,7 @@ void MainWidget::togglePlay()
 }
 void MainWidget::seek(int i)
 {
-	const bool allowAccurate = (sender() != seekS);
+	const bool allowAccurate = (!sender() || sender() == infoDock);
 	if (!seekS->ignoringValueChanged() && (allowAccurate || seekS->maximum() > seekS->minimum()))
 		playC.seek(i, allowAccurate);
 }
