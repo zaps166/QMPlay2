@@ -59,6 +59,12 @@ VideoThr::~VideoThr()
 	delete sDec;
 }
 
+void VideoThr::stop(bool terminate)
+{
+	playC.videoSeekPos = -1;
+	AVThread::stop(terminate);
+}
+
 QMPlay2PixelFormats VideoThr::getSupportedPixelFormats() const
 {
 	return videoWriter()->supportedPixelFormats();

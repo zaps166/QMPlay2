@@ -63,6 +63,7 @@ void AudioThr::stop(bool terminate)
 		vis->visState(false);
 	for (AudioFilter *filter : filters)
 		delete filter;
+	playC.audioSeekPos = -1;
 	AVThread::stop(terminate);
 }
 void AudioThr::clearVisualizations()

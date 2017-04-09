@@ -30,6 +30,9 @@ class VideoThr : public AVThread
 	Q_OBJECT
 public:
 	VideoThr(PlayClass &, VideoWriter *, const QStringList &pluginsName = {});
+	~VideoThr() final;
+
+	void stop(bool terminate = false) override final;
 
 	inline VideoWriter *getHWAccelWriter() const
 	{
@@ -70,9 +73,8 @@ public:
 	bool processParams();
 
 	void updateSubs();
-private:
-	~VideoThr() final;
 
+private:
 	inline VideoWriter *videoWriter() const;
 
 	void run() override final;
