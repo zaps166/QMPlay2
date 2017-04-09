@@ -624,35 +624,14 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	if (flush || m_forceFlush)
 	{
-		quint32 e = 0;
-		while (!m_forceFlush)
-		{
-			memset(&cuvidPkt, 0, sizeof cuvidPkt);
-			cuvidPkt.flags = CUVID_PKT_ENDOFSTREAM;
-			m_cuvidSurfaces.clear();
-			if (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) != CUDA_SUCCESS)
-				m_forceFlush = true;
-			else if (m_cuvidSurfaces.isEmpty())
-			{
-				if (++e > m_cuvidParserParams.ulMaxDisplayDelay) //Is it necessary to check it here?
-					break;
-			}
-			else
-			{
-				e = 0;
-			}
-		}
+		destroyCuvid(true);
 		resetTimeStampHelpers();
-		if (m_forceFlush)
+		m_cuvidSurfaces.clear();
+		m_forceFlush = false;
+		if (!createCuvidVideoParser())
 		{
-			m_cuvidSurfaces.clear();
-			m_forceFlush = false;
-			destroyCuvid(true);
-			if (!createCuvidVideoParser())
-			{
-				encodedPacket.ts.setInvalid();
-				return 0;
-			}
+			encodedPacket.ts.setInvalid();
+			return 0;
 		}
 	}
 
