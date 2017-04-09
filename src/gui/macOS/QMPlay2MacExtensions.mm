@@ -21,7 +21,11 @@ private:
 		if (eventType == "mac_generic_NSEvent")
 		{
 			NSEvent *event = static_cast<NSEvent *>(message);
+#if defined(MAC_OS_X_VERSION_10_12) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_12)
 			if ([event type] == NSEventTypeSystemDefined)
+#else
+			if ([event type] == NSSystemDefined)
+#endif
 			{
 				const int  keyCode   = ([event data1] & 0xFFFF0000) >> 16;
 				const int  keyFlags  = ([event data1] & 0x0000FFFF);
