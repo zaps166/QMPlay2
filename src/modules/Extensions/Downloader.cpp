@@ -274,6 +274,11 @@ void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
 			downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon())));
 			connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 			connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
+
+			// Workaround: Resize the widget twice to get correct item size
+			downloadLW->resize(downloadLW->size() + QSize(0, 1));
+			downloadLW->resize(downloadLW->size() - QSize(0, 1));
+
 			break;
 		case NAME:
 			downloadItemW->setName(name);
