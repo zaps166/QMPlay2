@@ -242,7 +242,7 @@ $ sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevi
 You can install it again after compilation.
 - Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
 ```
-$ ./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --disable-programs
+$ ./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --enable-muxer=matroska --disable-programs
 $ make -j4
 $ sudo make -j4 install
 ```
