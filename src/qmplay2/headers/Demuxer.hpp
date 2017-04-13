@@ -67,6 +67,7 @@ public:
 		Q_UNUSED(peak)
 		return false;
 	}
+	virtual qint64 size() const;
 	virtual double length() const = 0;
 	virtual int bitrate() const = 0;
 	virtual QByteArray image(bool forceCopy = false) const;

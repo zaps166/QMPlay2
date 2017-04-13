@@ -63,6 +63,7 @@ set(QMPLAY2_HDR
     headers/YouTubeDL.hpp
     headers/Notifies.hpp
     headers/NotifiesTray.hpp
+    headers/MkvMuxer.hpp
 )
 
 set(QMPLAY2_SRC
@@ -103,6 +104,7 @@ set(QMPLAY2_SRC
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
+    MkvMuxer.cpp
 )
 
 if(WIN32)

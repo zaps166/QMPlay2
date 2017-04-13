@@ -111,6 +111,18 @@ bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 		return formatContexts.at(0)->getReplayGain(album, gain_db, peak);
 	return false;
 }
+qint64 FFDemux::size() const
+{
+	qint64 bytes = -1;
+	for (const FormatContext *fmtCtx : formatContexts)
+	{
+		const qint64 s = fmtCtx->size();
+		if (s < 0)
+			return -1;
+		bytes += s;
+	}
+	return bytes;
+}
 double FFDemux::length() const
 {
 	double length = -1.0;

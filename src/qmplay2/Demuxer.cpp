@@ -91,6 +91,11 @@ QList<QMPlay2Tag> Demuxer::tags() const
 	return QList<QMPlay2Tag>();
 }
 
+qint64 Demuxer::size() const
+{
+	return -1;
+}
+
 QByteArray Demuxer::image(bool forceCopy) const
 {
 	Q_UNUSED(forceCopy)

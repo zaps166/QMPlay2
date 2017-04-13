@@ -18,11 +18,13 @@
 
 #include <Downloader.hpp>
 
-#include <Reader.hpp>
-#include <Settings.hpp>
 #include <Functions.hpp>
+#include <Settings.hpp>
+#include <MkvMuxer.hpp>
+#include <Demuxer.hpp>
+#include <Packet.hpp>
+#include <Reader.hpp>
 
-#include <QTime>
 #include <QTimer>
 #include <QLabel>
 #include <QAction>
@@ -37,11 +39,14 @@
 #include <QInputDialog>
 #include <QProgressBar>
 #include <QApplication>
+#include <QElapsedTimer>
 #if QT_VERSION < 0x050000
 	#include <QDesktopServices>
 #else
 	#include <QStandardPaths>
 #endif
+
+#include <functional>
 
 /**/
 
@@ -139,7 +144,7 @@ void DownloadItemW::setSizeAndFilePath(qint64 size, const QString &filePath)
 	if (!finished)
 	{
 		sizeL->setText(tr("Size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
-		speedProgressW->progressB->setRange(0, size > -1 ? 100 : 0);
+		speedProgressW->progressB->setRange(0, (size != -1) ? 100 : 0);
 		this->filePath = filePath;
 	}
 }
@@ -339,6 +344,93 @@ void DownloaderThread::run()
 				break;
 			}
 
+	const auto getFilePath = [&]()->QString {
+		QString filePath;
+		quint16 num = 0;
+		do
+			filePath = downloadLW->getDownloadsDirPath() + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
+		while (QFile::exists(filePath) && ++num < 0xFFFF);
+		if (num == 0xFFFF)
+			filePath.clear();
+		return filePath;
+	};
+
+	QElapsedTimer speedT;
+	const auto setBitRate = [&](const std::function<qint64()> &getPosDiff) {
+		const int elapsed = speedT.elapsed();
+		if (elapsed >= 1000)
+		{
+			emit listSig(SET_SPEED, getPosDiff() * 1000 / elapsed);
+			speedT.restart();
+		}
+	};
+
+	bool err = true;
+
+	if (newUrl.startsWith("FFmpeg://"))
+	{
+		IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
+		QMPlay2Core.setWorking(true);
+		if (Demuxer::create(newUrl, demuxer) && !demuxer.isAborted())
+		{
+			if (name.isEmpty())
+				name = demuxer->title();
+			name += ".mkv";
+			emit listSig(NAME);
+
+			QString filePath = getFilePath();
+			if (!filePath.isEmpty())
+			{
+				const QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
+				MkvMuxer muxer(filePath, streamsInfo);
+				if (muxer.isOk())
+				{
+					const double length = demuxer->length();
+					const qint64 size = demuxer->size();
+					double lastBytesPos = 0.0;
+					double bytePos = 0.0;
+					double pos = 0.0;
+
+					emit listSig(SET, (size < 0) ? (length < 0 ? -1 : -2) : size, filePath);
+					err = false;
+					speedT.start();
+					while (!demuxer.isAborted())
+					{
+						Packet packet;
+						int idx = -1;
+						if (!demuxer->read(packet, idx))
+							break;
+						if (idx < 0 || idx >= streamsInfo.count())
+							continue;
+
+						if (!muxer.write(packet, idx))
+						{
+							err = true;
+							break;
+						}
+
+						bytePos += packet.size();
+						setBitRate([&] {
+							const qint64 tmp = bytePos - lastBytesPos;
+							lastBytesPos = bytePos;
+							return tmp;
+						});
+
+						if (length > 0.0)
+						{
+							pos = qMax<double>(pos, packet.ts);
+							emit listSig(SET_POS, pos * 100 / length);
+						}
+					}
+				}
+			}
+			demuxer.clear();
+		}
+		emit listSig(err ? DOWNLOAD_ERROR : FINISH);
+		QMPlay2Core.setWorking(false);
+		return;
+	}
+
 	if (name.isEmpty())
 	{
 		name = Functions::fileName(newUrl);
@@ -348,13 +440,10 @@ void DownloaderThread::run()
 	}
 	if (!name.isEmpty() && !extension.isEmpty())
 		name += extension;
-
 	emit listSig(NAME);
 
 	if (ioCtrl.isAborted())
 		return;
-
-	bool err = true;
 
 	QMPlay2Core.setWorking(true);
 
@@ -363,23 +452,14 @@ void DownloaderThread::run()
 		Reader::create(newUrl, reader);
 	if (reader && reader->readyRead() && !reader->atEnd())
 	{
-		QString filePath;
-		quint16 num = 0;
-		do
-			filePath = downloadLW->getDownloadsDirPath() + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
-		while (QFile::exists(filePath) && ++num < 0xFFFF);
-		if (num == 0xFFFF)
-			filePath.clear();
-
-		QFile file(filePath);
+		QFile file(getFilePath());
 		if (!file.fileName().isEmpty() && file.open(QFile::WriteOnly))
 		{
-			err = false;
-			QTime speedT;
-			int lastPos = -1;
 			qint64 lastBytesPos = 0;
+			int lastPos = -1;
 
-			emit listSig(SET, reader->size(), filePath);
+			emit listSig(SET, qMax<qint64>(-1, reader->size()), file.fileName());
+			err = false;
 			speedT.start();
 			while (!reader.isAborted() && !(err = !reader->readyRead()) && !reader->atEnd())
 			{
@@ -400,13 +480,11 @@ void DownloaderThread::run()
 				}
 
 				const qint64 bytesPos = reader->pos();
-				const int elapsed = speedT.elapsed();
-				if (elapsed >= 1000)
-				{
-					emit listSig(SET_SPEED, (bytesPos - lastBytesPos) * 1000 / elapsed);
+				setBitRate([&] {
+					const qint64 tmp = bytesPos - lastBytesPos;
 					lastBytesPos = bytesPos;
-					speedT.restart();
-				}
+					return tmp;
+				});
 				if (reader->size() > 0)
 				{
 					const int pos = bytesPos * 100 / reader->size();
@@ -418,7 +496,6 @@ void DownloaderThread::run()
 				}
 			}
 		}
-		file.close();
 		reader.clear();
 	}
 	emit listSig(err ? DOWNLOAD_ERROR : FINISH);

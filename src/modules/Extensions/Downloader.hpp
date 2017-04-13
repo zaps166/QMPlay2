@@ -110,7 +110,7 @@ class DownloaderThread : public QThread
 	Q_OBJECT
 	enum {ADD_ENTRY, NAME, SET, SET_POS, SET_SPEED, DOWNLOAD_ERROR, FINISH};
 public:
-	DownloaderThread(QDataStream *, const QString &, DownloadListW *, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString());
+	DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString());
 	~DownloaderThread() final;
 
 	void write(QDataStream &stream)

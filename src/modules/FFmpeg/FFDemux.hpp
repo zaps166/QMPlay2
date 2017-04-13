@@ -43,6 +43,7 @@ private:
 	QString title() const override final;
 	QList<QMPlay2Tag> tags() const override final;
 	bool getReplayGain(bool album, float &gain_db, float &peak) const override final;
+	qint64 size() const override final;
 	double length() const override final;
 	int bitrate() const override final;
 	QByteArray image(bool forceCopy) const override final;

@@ -59,6 +59,7 @@ public:
 	QString title() const;
 	QList<QMPlay2Tag> tags() const;
 	bool getReplayGain(bool album, float &gain_db, float &peak) const;
+	qint64 size() const;
 	double length() const;
 	int bitrate() const;
 	QByteArray image(bool forceCopy) const;

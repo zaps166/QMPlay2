@@ -590,16 +590,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
 			if (net.startAndWait(netReply, url))
 			{
-				const bool tmpMultiStream = multiStream;
-				const bool tmpSubtitles = subtitles;
-				if (extension) //Don't use multi stream and subtitles when downloading
-				{
-					multiStream = false;
-					subtitles = false;
-				}
 				const QStringList youTubeVideo = getYouTubeVideo(netReply->readAll(), param, nullptr, url, ioCtrl->toPtr<YouTubeDL>());
-				multiStream = tmpMultiStream;
-				subtitles = tmpSubtitles;
 				if (youTubeVideo.count() == 3)
 				{
 					if (stream_url)

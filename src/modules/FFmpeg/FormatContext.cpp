@@ -466,6 +466,12 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 #endif
 	return false;
 }
+qint64 FormatContext::size() const
+{
+	if (!isStreamed && !stillImage && formatCtx->pb)
+		return avio_size(formatCtx->pb);
+	return -1;
+}
 double FormatContext::length() const
 {
 	if (!isStreamed && !stillImage && formatCtx->duration != QMPLAY2_NOPTS_VALUE)
