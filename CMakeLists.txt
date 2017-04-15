@@ -384,6 +384,6 @@ if(NOT SVG_MODULE_FOUND)
     endif()
 endif()
 
-PRINT_ENABLED_FEATURES()
-PRINT_DISABLED_FEATURES()
+feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")
+feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features:")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
