@@ -1,8 +1,9 @@
-Changes in QMPlay2 build 17.04.13:
+Changes in QMPlay2 build 17.04.15:
 	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
 	- accurate seeking (available in playback settings, enabled for network streams by default),
 	- minor network backward seeking bugfix (regression),
 	- option to reconnect live network streams on error,
+	- add experimental VideoToolBox decoder for macOS,
 	- improve downloading from YouTube,
 	- CUVID bugfix,
 

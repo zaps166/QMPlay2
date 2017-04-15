@@ -13,9 +13,7 @@ Add audio filters:
 	- AVFilter,
 	- "Tempo".
 
-HWAccel:
-	- VDA/VideoToolbox for macOS,
-	- use VDPAU with OpenGL,
+HWAccel: use VDPAU with OpenGL.
 
 Exporting audio during playback - ?
 Users can resume downloading - ?
