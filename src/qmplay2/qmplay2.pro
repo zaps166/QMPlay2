@@ -10,10 +10,10 @@ TARGET = qmplay2
 DESTDIR = ../../app/lib
 
 android {
-	LIBS += -lavformat -lswscale -lswresample -lavutil #-lass
+	LIBS += -lavformat -lavcodec -lswscale -lswresample -lavutil #-lass
 } else {
 	CONFIG += link_pkgconfig
-	PKGCONFIG += libavformat libswscale libswresample libavutil libass
+	PKGCONFIG += libavformat libavcodec libswscale libswresample libavutil libass
 }
 
 RESOURCES += languages.qrc
