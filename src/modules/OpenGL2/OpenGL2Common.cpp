@@ -68,6 +68,9 @@
 #ifndef GL_RG
 	#define GL_RG 0x8227
 #endif
+#ifndef GL_TEXTURE_RECTANGLE_ARB
+	#define GL_TEXTURE_RECTANGLE_ARB 0x84F5
+#endif
 
 /* RotAnimation */
 
@@ -97,6 +100,7 @@ OpenGL2Common::OpenGL2Common() :
 	shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
 	numPlanes(0),
+	target(0),
 	Deinterlace(0),
 	allowPBO(true), hasPbo(false),
 #ifdef Q_OS_WIN
@@ -237,6 +241,8 @@ void OpenGL2Common::initializeGL()
 			if (numPlanes == 2)
 				VideoFrag.prepend("#define NV12\n");
 		}
+		if (target == GL_TEXTURE_RECTANGLE_ARB)
+			VideoFrag.prepend("#define TEXTURE_RECTANGLE\n");
 		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, VideoFrag);
 	}
 	if (shaderProgramVideo->bind())
@@ -302,11 +308,13 @@ void OpenGL2Common::initializeGL()
 	glGenTextures(numPlanes + 1, textures);
 	for (int i = 0; i < numPlanes + 1; ++i)
 	{
-		glBindTexture(GL_TEXTURE_2D, textures[i]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, i == 0 ? GL_NEAREST : GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, i == 0 ? GL_NEAREST : GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		const quint32 tmpTarget = (i == 0) ? GL_TEXTURE_2D : target;
+		qint32 tmpParam  = (i == 0) ? GL_NEAREST : GL_LINEAR;
+		glBindTexture(tmpTarget, textures[i]);
+		glTexParameteri(tmpTarget, GL_TEXTURE_MIN_FILTER, tmpParam);
+		glTexParameteri(tmpTarget, GL_TEXTURE_MAG_FILTER, tmpParam);
+		glTexParameteri(tmpTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(tmpTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
 	if (hasPbo)
@@ -357,20 +365,23 @@ void OpenGL2Common::paintGL()
 				/* Release HWAccell resources */
 				hwAccellnterface->clear(false);
 
-				if (numPlanes == 2)
+				if (hwAccellnterface->canInitializeTextures())
 				{
-					//NV12
-					for (int p = 0; p < 2; ++p)
+					if (numPlanes == 2)
 					{
-						glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-						glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
+						//NV12
+						for (int p = 0; p < 2; ++p)
+						{
+							glBindTexture(target, textures[p + 1]);
+							glTexImage2D(target, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
+						}
 					}
-				}
-				else if (numPlanes == 1)
-				{
-					//RGB32
-					glBindTexture(GL_TEXTURE_2D, textures[1]);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+					else if (numPlanes == 1)
+					{
+						//RGB32
+						glBindTexture(target, textures[1]);
+						glTexImage2D(target, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+					}
 				}
 
 				/* Prepare textures, register GL textures */
@@ -436,7 +447,7 @@ void OpenGL2Common::paintGL()
 			for (int p = 0; p < numPlanes; ++p)
 			{
 				glActiveTexture(GL_TEXTURE0 + p);
-				glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
+				glBindTexture(target, textures[p + 1]);
 			}
 		}
 		else
@@ -705,6 +716,7 @@ void OpenGL2Common::testGLInternal()
 #endif
 
 	numPlanes = 3;
+	target = GL_TEXTURE_2D;
 	if (hwAccellnterface)
 	{
 		switch (hwAccellnterface->getFormat())
@@ -717,44 +729,57 @@ void OpenGL2Common::testGLInternal()
 				break;
 		}
 
-		quint32 textures[numPlanes];
-		memset(textures, 0, sizeof textures);
-		glGenTextures(numPlanes, textures);
-		for (int p = 0; p < numPlanes; ++p)
+		if (hwAccellnterface->isTextureRectangle())
 		{
-			glBindTexture(GL_TEXTURE_2D, textures[p]);
-			if (numPlanes == 2)
-				glTexImage2D(GL_TEXTURE_2D, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
-			else if (numPlanes == 1)
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			target = GL_TEXTURE_RECTANGLE_ARB;
+			if (numPlanes == 1)
+				isOK = false; // Not used and not supported
 		}
 
-		if (!hwAccellnterface->lock())
-			isOK = false;
-		else
+		if (isOK)
 		{
-			if (!hwAccellnterface->init(textures))
-				isOK = false;
-			if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
+			quint32 textures[numPlanes];
+			memset(textures, 0, sizeof textures);
+			glGenTextures(numPlanes, textures);
+			if (hwAccellnterface->canInitializeTextures())
 			{
-				VideoAdjustment videoAdjustmentCap;
-				hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
-				if (videoAdjustmentCap.brightness)
-					videoAdjustmentKeys += "Brightness";
-				if (videoAdjustmentCap.contrast)
-					videoAdjustmentKeys += "Contrast";
-				if (videoAdjustmentCap.saturation)
-					videoAdjustmentKeys += "Saturation";
-				if (videoAdjustmentCap.hue)
-					videoAdjustmentKeys += "Hue";
-				if (videoAdjustmentCap.sharpness)
-					videoAdjustmentKeys += "Sharpness";
+				for (int p = 0; p < numPlanes; ++p)
+				{
+					glBindTexture(target, textures[p]);
+					if (numPlanes == 2)
+						glTexImage2D(target, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
+					else if (numPlanes == 1)
+						glTexImage2D(target, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				}
 			}
-			hwAccellnterface->clear(true);
-			hwAccellnterface->unlock();
-		}
 
-		glDeleteTextures(numPlanes, textures);
+			if (!hwAccellnterface->lock())
+				isOK = false;
+			else
+			{
+				if (!hwAccellnterface->init(textures))
+					isOK = false;
+				if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
+				{
+					VideoAdjustment videoAdjustmentCap;
+					hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
+					if (videoAdjustmentCap.brightness)
+						videoAdjustmentKeys += "Brightness";
+					if (videoAdjustmentCap.contrast)
+						videoAdjustmentKeys += "Contrast";
+					if (videoAdjustmentCap.saturation)
+						videoAdjustmentKeys += "Saturation";
+					if (videoAdjustmentCap.hue)
+						videoAdjustmentKeys += "Hue";
+					if (videoAdjustmentCap.sharpness)
+						videoAdjustmentKeys += "Sharpness";
+				}
+				hwAccellnterface->clear(true);
+				hwAccellnterface->unlock();
+			}
+
+			glDeleteTextures(numPlanes, textures);
+		}
 	}
 
 	QWidget *w = widget();

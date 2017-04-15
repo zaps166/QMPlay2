@@ -51,6 +51,10 @@ public:
 	virtual QString name() const = 0;
 
 	virtual Format getFormat() const = 0;
+	virtual bool isTextureRectangle() const
+	{
+		return false;
+	}
 
 	virtual bool lock()
 	{
@@ -58,6 +62,11 @@ public:
 	}
 	virtual void unlock()
 	{}
+
+	virtual bool canInitializeTextures() const
+	{
+		return true;
+	}
 
 	virtual bool init(quint32 *textures) = 0;
 	virtual void clear(bool contextChange) = 0;

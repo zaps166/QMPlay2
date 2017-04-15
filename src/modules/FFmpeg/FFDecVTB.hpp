@@ -18,25 +18,26 @@
 
 #pragma once
 
-#define QMPLAY2_NOPTS_VALUE ((qint64)AV_NOPTS_VALUE)
+#include <FFDecHWAccel.hpp>
 
-#define DecoderName "FFmpeg Decoder"
-#define DecoderVAAPIName "FFmpeg VA-API Decoder"
-#define DecoderVDPAUName "FFmpeg VDPAU Decoder"
-#define DecoderVDPAU_NWName DecoderVDPAUName " (no output)"
-#define DecoderDXVA2Name "FFmpeg DXVA2 Decoder"
-#define DecoderVTBName "FFmpeg VideoToolbox Decoder"
-#define DemuxerName "FFmpeg"
-#define VAAPIWriterName "VA-API"
-#define VDPAUWriterName "VDPAU"
-#define FFReaderName "FFmpeg Reader"
+struct SwsContext;
 
-struct AVDictionary;
-struct AVPacket;
-class VideoFrame;
-
-namespace FFCommon
+class FFDecVTB final : public FFDecHWAccel
 {
-	AVPacket *createAVPacket();
-	void freeAVPacket(AVPacket *&packet);
-}
+public:
+	FFDecVTB(QMutex &avcodec_mutex, Module &module);
+	~FFDecVTB();
+
+	bool set() override;
+
+	QString name() const override;
+
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+	void downloadVideoFrame(VideoFrame &decoded) override;
+
+	bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
+
+private:
+	SwsContext *m_swsCtx;
+	bool m_copyVideo;
+};

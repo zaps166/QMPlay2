@@ -53,6 +53,9 @@ private:
 	QIcon dxva2Icon;
 	bool dxva2Loaded;
 #endif
+#ifdef QMPlay2_VTB
+	QIcon vtbIcon;
+#endif
 
 	QMutex mutex;
 };
@@ -106,6 +109,10 @@ private:
 #ifdef QMPlay2_DXVA2
 	QGroupBox *decoderDXVA2EB;
 	QCheckBox *copyVideoDXVA2;
+#endif
+#ifdef QMPlay2_VTB
+	QGroupBox *decoderVTBEB;
+	QCheckBox *copyVideoVTB;
 #endif
 	QSpinBox *threadsB;
 	QComboBox *lowresB, *thrTypeB;

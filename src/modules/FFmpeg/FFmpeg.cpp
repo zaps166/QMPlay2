@@ -31,6 +31,9 @@
 #ifdef QMPlay2_DXVA2
 	#include <FFDecDXVA2.hpp>
 #endif
+#ifdef QMPlay2_VTB
+	#include <FFDecVTB.hpp>
+#endif
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
@@ -60,6 +63,9 @@ FFmpeg::FFmpeg() :
 	dxva2Icon = QIcon(":/DXVA2.svgz");
 	dxva2Loaded = FFDecDXVA2::loadLibraries();
 #endif
+#ifdef QMPlay2_VTB
+	vtbIcon = QIcon(":/VAAPI.svgz");
+#endif
 
 	init("DemuxerEnabled", true);
 	init("ReconnectStreammes", false);
@@ -88,6 +94,10 @@ FFmpeg::FFmpeg() :
 #ifdef QMPlay2_DXVA2
 	init("DecoderDXVA2Enabled", true);
 	init("CopyVideoDXVA2", Qt::Unchecked);
+#endif
+#ifdef QMPlay2_VTB
+	init("DecoderVTBEnabled", true);
+	init("CopyVideoVTB", false);
 #endif
 	init("HurryUP", true);
 	init("SkipFrames", true);
@@ -165,6 +175,10 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 	if (showDisabled || (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
 		modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
 #endif
+#ifdef QMPlay2_VTB
+	if (showDisabled || getBool("DecoderVTBEnabled"))
+		modulesInfo += Info(DecoderVTBName, DECODER, vtbIcon);
+#endif
 	modulesInfo += Info(FFReaderName, READER, {"http", "https", "mms", "rtmp", "rtsp"}, m_icon);
 	return modulesInfo;
 }
@@ -187,6 +201,10 @@ void *FFmpeg::createInstance(const QString &name)
 #ifdef QMPlay2_DXVA2
 	else if (name == DecoderDXVA2Name && (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
 		return new FFDecDXVA2(mutex, *this);
+#endif
+#ifdef QMPlay2_VTB
+	else if (name == DecoderVTBName && getBool("DecoderVTBEnabled"))
+		return new FFDecVTB(mutex, *this);
 #endif
 	else if (name == FFReaderName)
 		return new FFReader;
@@ -324,6 +342,18 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	}
 #endif
 
+#ifdef QMPlay2_VTB
+	decoderVTBEB = new QGroupBox(tr("Decoder") + " VideoToolBox - " + tr("hardware decoding"));
+	decoderVTBEB->setCheckable(true);
+	decoderVTBEB->setChecked(sets().getBool("DecoderVTBEnabled"));
+
+	copyVideoVTB = new QCheckBox("Copy decoded video to CPU memory (not recommended)");
+	copyVideoVTB->setChecked(sets().getBool("CopyVideoVTB"));
+
+	QFormLayout *vtbLayout = new QFormLayout(decoderVTBEB);
+	vtbLayout->addRow(copyVideoVTB);
+#endif
+
 	/* Hurry up */
 	hurryUpB = new QGroupBox(tr("Hurry up"));
 	hurryUpB->setCheckable(true);
@@ -388,6 +418,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #ifdef QMPlay2_DXVA2
 	layout->addWidget(decoderDXVA2EB);
 #endif
+#ifdef QMPlay2_VTB
+	layout->addWidget(decoderVTBEB);
+#endif
 	layout->addWidget(decoderB);
 }
 
@@ -432,5 +465,9 @@ void ModuleSettingsWidget::saveSettings()
 		sets().set("DecoderDXVA2Enabled", decoderDXVA2EB->isChecked());
 		sets().set("CopyVideoDXVA2", copyVideoDXVA2->checkState());
 	}
+#endif
+#ifdef QMPlay2_VTB
+	sets().set("DecoderVTBEnabled", decoderVTBEB->isChecked());
+	sets().set("CopyVideoVTB", copyVideoVTB->checkState());
 #endif
 }

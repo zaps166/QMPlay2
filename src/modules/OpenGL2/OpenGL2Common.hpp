@@ -145,6 +145,7 @@ public:
 	QVector2D pixelStep;
 	quint32 textures[4];
 	qint32 numPlanes;
+	quint32 target;
 	int Deinterlace;
 
 	quint32 pbo[4];

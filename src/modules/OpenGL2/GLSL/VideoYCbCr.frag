@@ -1,12 +1,26 @@
+#ifdef TEXTURE_RECTANGLE
+	#define sampler sampler2DRect
+	#define texCoordY  (vTexCoord / uStep)
+	#define texCoordUV (vTexCoord / uStep / 2.0)
+	#define texCoordYWithOffset(offset) ((vTexCoord + offset) / uStep)
+	#define texture texture2DRect
+#else
+	#define sampler sampler2D
+	#define texCoordY  (vTexCoord)
+	#define texCoordUV (vTexCoord)
+	#define texCoordYWithOffset(offset) (vTexCoord + offset)
+	#define texture texture2D
+#endif
+
 varying vec2 vTexCoord;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
 uniform vec2 uStep;
-uniform sampler2D uY;
+uniform sampler uY;
 #ifdef NV12
-	uniform sampler2D uCbCr;
+	uniform sampler uCbCr;
 #else
-	uniform sampler2D uCb, uCr;
+	uniform sampler uCb, uCr;
 #endif
 
 const mat3 YUVtoRGB = mat3(
@@ -18,7 +32,7 @@ const mat3 YUVtoRGB = mat3(
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
-	return texture2D(uY, vTexCoord + vec2(x, y))[0] - 0.0625;
+	return texture(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
 }
 #endif
 
@@ -33,15 +47,15 @@ void main()
 
 #ifdef NV12
 	vec3 YCbCr = vec3(
-		texture2D(uY   , vTexCoord)[0] - 0.0625,
-		texture2D(uCbCr, vTexCoord)[0] - 0.5,
-		texture2D(uCbCr, vTexCoord)[1] - 0.5
+		texture(uY   , texCoordY)[0] - 0.0625,
+		texture(uCbCr, texCoordUV)[0] - 0.5,
+		texture(uCbCr, texCoordUV)[1] - 0.5
 	);
 #else
 	vec3 YCbCr = vec3(
-		texture2D(uY , vTexCoord)[0] - 0.0625,
-		texture2D(uCb, vTexCoord)[0] - 0.5,
-		texture2D(uCr, vTexCoord)[0] - 0.5
+		texture(uY , texCoordY)[0] - 0.0625,
+		texture(uCb, texCoordUV)[0] - 0.5,
+		texture(uCr, texCoordUV)[0] - 0.5
 	);
 #endif
 

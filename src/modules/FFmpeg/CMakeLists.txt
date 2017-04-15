@@ -65,7 +65,7 @@ if(USE_FFMPEG_AVDEVICE)
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2) # Common HWAccel
+if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
 
@@ -100,6 +100,16 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2) # Common HWAccel
         add_definitions(-DQMPlay2_DXVA2)
         list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
         list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
+    endif()
+
+    if(USE_FFMPEG_VTB)
+        add_definitions(-DQMPlay2_VTB)
+        list(APPEND FFmpeg_HDR FFDecVTB.hpp)
+        list(APPEND FFmpeg_SRC FFDecVTB.cpp)
+        find_library(OPENGL_LIBRARY OpenGL)
+        find_library(COREVIDEO_LIBRARY CoreVideo)
+        find_library(IOSURFACE_LIBRARY IOSurface)
+        list(APPEND FFmpeg_LIBS ${OPENGL_LIBRARY} ${COREVIDEO_LIBRARY} ${IOSURFACE_LIBRARY})
     endif()
 endif()
 
