@@ -22,7 +22,7 @@
 
 struct AVFormatContext;
 class StreamInfo;
-class Packet;
+struct Packet;
 
 class MkvMuxer
 {
