@@ -79,7 +79,7 @@ private:
 
 	void run() override final;
 
-	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrame;
+	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError;
 	double lastSampleAspectRatio;
 	int W, H;
 	quint32 seq;

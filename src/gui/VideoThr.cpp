@@ -43,7 +43,7 @@ using Functions::gettime;
 VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
-	deleteOSD(false), deleteFrame(false), gotFrame(false),
+	deleteOSD(false), deleteFrame(false), gotFrameOrError(false),
 	W(0), H(0), seq(0),
 	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
@@ -103,7 +103,7 @@ void VideoThr::setFrameSize(int w, int h)
 	writer->modParam("W", W);
 	writer->modParam("H", H);
 	deleteSubs = deleteOSD = deleteFrame = true;
-	gotFrame = false;
+	gotFrameOrError = false;
 	++seq;
 }
 void VideoThr::setARatio(double aRatio, double sar)
@@ -260,7 +260,7 @@ void VideoThr::run()
 		const bool mustFetchNewPacket = !filters.readyRead();
 		playC.vPackets.lock();
 		const bool hasVPackets = playC.vPackets.canFetch();
-		if (maybeFlush || (!gotFrame && !err && mustFetchNewPacket))
+		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
 		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0 && playC.audioSeekPos > 0))
@@ -416,14 +416,19 @@ void VideoThr::run()
 				}
 				interlaced = decoded.interlaced;
 				filters.addFrame(decoded, packet.ts);
-				gotFrame = true;
+				gotFrameOrError = true;
 			}
 			else if (skip)
 				filters.removeLastFromInputBuffer();
 			if (bytes_consumed < 0)
+			{
+				gotFrameOrError = true;
 				err = true;
+			}
 			else
+			{
 				tmp_br += bytes_consumed;
+			}
 		}
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
