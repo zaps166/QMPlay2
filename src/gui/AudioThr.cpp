@@ -319,16 +319,17 @@ void AudioThr::run()
 
 				if (playC.audioSeekPos > 0)
 				{
+					bool cont = true;
 					if (audio_pts >= playC.audioSeekPos)
 					{
 						tmp_br = 0;
 						playC.audioSeekPos = -1;
 						playC.emptyBufferCond.wakeAll();
+						if (playC.videoSeekPos <= 0)
+							cont = false; // Don't play if video is not ready
 					}
-					else
-					{
+					if (cont)
 						break;
-					}
 				}
 
 				tmp_time += playC.audio_last_delay * 1000.0;

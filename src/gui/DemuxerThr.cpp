@@ -161,7 +161,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 
 		bool cantSeek = false;
 
-		if (seekInBuffer)
+		if (seekInBuffer && (!localStream || !backward))
 		{
 			playC.vPackets.lock();
 			playC.aPackets.lock();
@@ -577,6 +577,14 @@ void DemuxerThr::run()
 			{
 				if (!localStream)
 					ensureTrueUpdateBuffered();
+				if (!vS || !aS)
+				{
+					if (!vS)
+						playC.videoSeekPos = -1;
+					if (!aS)
+						playC.audioSeekPos = -1;
+					playC.emptyBufferCond.wakeAll();
+				}
 			}
 			else if (!stillImage && !playC.doRepeat)
 			{

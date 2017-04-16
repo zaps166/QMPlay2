@@ -236,6 +236,12 @@ void VideoThr::run()
 			frame_timer = gettime();
 	};
 
+	const auto finishAccurateSeek = [&] {
+		resetVariables();
+		playC.videoSeekPos = -1;
+		playC.emptyBufferCond.wakeAll();
+	};
+
 	while (!br)
 	{
 		if (deleteFrame)
@@ -392,6 +398,8 @@ void VideoThr::run()
 				useLastDelay = true; //if seeking
 				playC.flushVideo = false;
 			}
+			if (playC.videoSeekPos > 0 && bytes_consumed <= 0 && !packet.ts.isValid() && decoded.isEmpty())
+				finishAccurateSeek();
 			if (!decoded.isEmpty())
 			{
 				if (decoded.size.width != W || decoded.size.height != H)
@@ -431,13 +439,14 @@ void VideoThr::run()
 
 			if (playC.videoSeekPos > 0)
 			{
+				bool cont = true;
 				if (packet.ts >= playC.videoSeekPos)
 				{
-					resetVariables();
-					playC.videoSeekPos = -1;
-					playC.emptyBufferCond.wakeAll();
+					finishAccurateSeek();
+					if (playC.audioSeekPos <= 0)
+						cont = false; // Don't play if audio is not ready
 				}
-				else
+				if (cont)
 				{
 					mutex.unlock();
 					continue;
