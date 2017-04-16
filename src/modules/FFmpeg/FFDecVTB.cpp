@@ -53,6 +53,7 @@ class VTBHwaccel final : public HWAccelInterface
 {
 public:
 	inline VTBHwaccel() :
+		m_pixelBufferToRelease(nullptr),
 		m_glTextures(nullptr)
 	{}
 	~VTBHwaccel()
@@ -60,6 +61,7 @@ public:
 		QMutexLocker locker(&m_buffersMutex);
 		for (quintptr buffer : m_buffers)
 			CVPixelBufferRelease((CVPixelBufferRef)buffer);
+		CVPixelBufferRelease(m_pixelBufferToRelease);
 	}
 
 	QString name() const override
@@ -89,6 +91,8 @@ public:
 	void clear(bool contextChange) override
 	{
 		Q_UNUSED(contextChange)
+		CVPixelBufferRelease(m_pixelBufferToRelease);
+		m_pixelBufferToRelease = nullptr;
 		m_glTextures = nullptr;
 	}
 
@@ -132,7 +136,8 @@ public:
 			return CopyError;
 		}
 
-		CVPixelBufferRelease(pixelBuffer);
+		CVPixelBufferRelease(m_pixelBufferToRelease);
+		m_pixelBufferToRelease = pixelBuffer;
 
 		return CopyOk;
 	}
@@ -178,6 +183,7 @@ public:
 	}
 
 private:
+	CVPixelBufferRef m_pixelBufferToRelease;
 	QList<quintptr> m_buffers;
 	QMutex m_buffersMutex;
 	quint32 *m_glTextures;
