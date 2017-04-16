@@ -647,7 +647,7 @@ void YouTube::setQualityFromMenu() //Call it only from quality menu!
 	const int qualityIdx = sender()->objectName().toInt();
 	sets().set("YouTube/MultiStream", true);
 	sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
-	sets().set("YouTube/ItagAudioList", QStringList{"171", "251", "140"});
+	sets().set("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
 	setItags();
 }
 
