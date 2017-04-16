@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-!lessThan(QT_VERSION, 5.6.0):android: DEFINES += USE_OPENGL
+!lessThan(QT_VERSION, 5.6.0): DEFINES += USE_OPENGL
 QT += widgets
 
 DESTDIR = ../../../app/lib/qmplay2/modules

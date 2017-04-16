@@ -62,10 +62,8 @@ FFTSpectrumW::FFTSpectrumW(FFTSpectrum &fftSpectrum) :
 	linearGrad.setColorAt(0.9, Qt::blue);
 }
 
-void FFTSpectrumW::paintEvent(QPaintEvent *)
+void FFTSpectrumW::paint(QPainter &p)
 {
-	QPainter p(this);
-
 	bool canStop = true;
 
 	const int size = spectrumData.size();
@@ -153,6 +151,9 @@ void FFTSpectrum::soundBuffer(const bool enable)
 
 bool FFTSpectrum::set()
 {
+#ifdef USE_OPENGL
+	w.setUseOpenGL(sets().getBool("UseOpenGL"));
+#endif
 	w.fftSize = sets().getInt("FFTSpectrum/Size");
 	if (w.fftSize > 16)
 		w.fftSize = 16;

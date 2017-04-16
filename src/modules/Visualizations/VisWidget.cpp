@@ -21,7 +21,11 @@
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 
+#ifdef USE_OPENGL
+	#include <QGuiApplication>
+#endif
 #include <QMouseEvent>
+#include <QPainter>
 #include <QMenu>
 
 #include <cmath>
@@ -47,6 +51,9 @@ void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
 VisWidget::VisWidget() :
 	stopped(true),
 	dw(new DockWidget)
+#ifdef USE_OPENGL
+	, glW(nullptr)
+#endif
 {
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	setFocusPolicy(Qt::StrongFocus);
@@ -54,7 +61,7 @@ VisWidget::VisWidget() :
 	setMouseTracking(true);
 	setPalette(Qt::black);
 
-	connect(&tim, SIGNAL(timeout()), this, SLOT(update()));
+	connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
 	connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
 #if QT_VERSION >= 0x050000
 	connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(visibilityChanged(bool)));
@@ -65,7 +72,45 @@ VisWidget::VisWidget() :
 
 bool VisWidget::regionIsVisible() const
 {
-	return dw->visibleRegion() != QRegion() || visibleRegion() != QRegion();
+	const QWidget *widgetToCheck = this;
+#ifdef USE_OPENGL
+	if (glW)
+		widgetToCheck = glW;
+#endif
+	return (dw->visibleRegion() != QRegion() || widgetToCheck->visibleRegion() != QRegion());
+}
+
+#ifdef USE_OPENGL
+void VisWidget::setUseOpenGL(bool b)
+{
+	if (!b)
+		b = (QGuiApplication::platformName() == "wayland");
+	if (b && !glW)
+	{
+		glW = new QOpenGLWidget(this);
+		glW->setAttribute(Qt::WA_TransparentForMouseEvents);
+		glW->setContextMenuPolicy(Qt::NoContextMenu);
+		glW->setFocusPolicy(Qt::NoFocus);
+		glW->setAutoFillBackground(true);
+		glW->show();
+		glW->installEventFilter(this);
+		glW->setGeometry(geometry());
+	}
+	else if (!b && glW)
+	{
+		delete glW;
+		glW = nullptr;
+	}
+}
+#endif
+
+void VisWidget::resizeEvent(QResizeEvent *e)
+{
+#ifdef USE_OPENGL
+	if (glW)
+		glW->setGeometry(geometry());
+#endif
+	QWidget::resizeEvent(e);
 }
 
 void VisWidget::mouseDoubleClickEvent(QMouseEvent *e)
@@ -75,11 +120,33 @@ void VisWidget::mouseDoubleClickEvent(QMouseEvent *e)
 	else
 		QWidget::mouseDoubleClickEvent(e);
 }
+void VisWidget::paintEvent(QPaintEvent *)
+{
+#ifdef USE_OPENGL
+	if (glW)
+		return;
+#endif
+	QPainter p(this);
+	paint(p);
+}
 void VisWidget::changeEvent(QEvent *event)
 {
 	if (event->type() == QEvent::ParentChange && !parent())
 		dw->setWidget(this);
 	QWidget::changeEvent(event);
+}
+
+bool VisWidget::eventFilter(QObject *watched, QEvent *event)
+{
+#ifdef USE_OPENGL
+	if (glW && watched == glW && event->type() == QEvent::Paint)
+	{
+		QPainter p(glW);
+		paint(p);
+		return true;
+	}
+#endif
+	return QWidget::eventFilter(watched, event);
 }
 
 void VisWidget::wallpaperChanged(bool hasWallpaper, double alpha)
@@ -113,6 +180,17 @@ void VisWidget::visibilityChanged(bool v)
 		//"fromMainWindow" ensures that visualization won't start on Qt5 when is not visible and main window is not minimized!
 		start(v && (!fromMainWindow || regionIsVisible()), fromMainWindow);
 	}
+}
+void VisWidget::updateVisualization()
+{
+#ifdef USE_OPENGL
+	if (glW)
+	{
+		glW->update();
+		return;
+	}
+#endif
+	update();
 }
 void VisWidget::showSettings()
 {

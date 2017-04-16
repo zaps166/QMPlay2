@@ -62,10 +62,8 @@ SimpleVisW::SimpleVisW(SimpleVis &simpleVis) :
 	linearGrad.setColorAt(0.8, Qt::red);
 }
 
-void SimpleVisW::paintEvent(QPaintEvent *)
+void SimpleVisW::paint(QPainter &p)
 {
-	QPainter p(this);
-
 	const int size = soundData.size() / sizeof(float);
 	if (size >= chn)
 	{
@@ -129,6 +127,7 @@ void SimpleVisW::paintEvent(QPaintEvent *)
 			tim.stop();
 	}
 }
+
 void SimpleVisW::resizeEvent(QResizeEvent *e)
 {
 	fullScreen = (parentWidget() && parentWidget()->parentWidget() && parentWidget()->parentWidget()->property("fullScreen").toBool());
@@ -182,6 +181,9 @@ void SimpleVis::soundBuffer(const bool enable)
 
 bool SimpleVis::set()
 {
+#ifdef USE_OPENGL
+	w.setUseOpenGL(sets().getBool("UseOpenGL"));
+#endif
 	w.interval = sets().getInt("RefreshTime");
 	sndLen = sets().getInt("SimpleVis/SoundLength") / 1000.0f;
 	if (w.tim.isActive())

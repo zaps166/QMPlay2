@@ -1639,6 +1639,18 @@ Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powoln
         <source>Try to automatically reconnect live streams on error</source>
         <translation>Spróbuj automatycznie wznowić połączenie dla strumieni na żywo w przypadku błędu</translation>
     </message>
+    <message>
+        <source>Always enabled on Wayland and Android platforms.
+Set visualizations to OpenGL mode if enabled.</source>
+        <translation>Zawsze włączone dla platform Wayland i Android.
+Jeżeli włączone, włącz także OpenGL w wizualizacjach.</translation>
+    </message>
+    <message>
+        <source>Always enabled on Wayland platform.
+Recommended to use when OpenGL video output is in RTT mode.</source>
+        <translation>Zawsze włączone dla platformy Wayland.
+Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

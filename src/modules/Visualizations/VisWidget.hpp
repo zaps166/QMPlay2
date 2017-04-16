@@ -18,18 +18,16 @@
 
 #pragma once
 
+#include <QWidget>
+#include <QTimer>
+
 #ifdef USE_OPENGL
 	#include <QOpenGLWidget>
-	#define BaseWidget QOpenGLWidget
-#else
-	#include <QWidget>
-	#define BaseWidget QWidget
 #endif
-#include <QTimer>
 
 class DockWidget;
 
-class VisWidget : public BaseWidget
+class VisWidget : public QWidget
 {
 	Q_OBJECT
 protected:
@@ -40,8 +38,16 @@ protected:
 
 	bool regionIsVisible() const;
 
+	virtual void paint(QPainter &p) = 0;
+
 	virtual void start(bool v, bool dontCheckRegion) = 0;
 	virtual void stop() = 0;
+
+#ifdef USE_OPENGL
+	void setUseOpenGL(bool b);
+#endif
+
+	void resizeEvent(QResizeEvent *e) override;
 
 	QTimer tim;
 	bool stopped;
@@ -49,11 +55,19 @@ protected:
 	double time;
 private:
 	void mouseDoubleClickEvent(QMouseEvent *) override final;
+	void paintEvent(QPaintEvent *) override final;
 	void changeEvent(QEvent *) override final;
+
+	bool eventFilter(QObject *watched, QEvent *event) override final;
+
+#ifdef USE_OPENGL
+	QOpenGLWidget *glW;
+#endif
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void contextMenu(const QPoint &point);
 	void visibilityChanged(bool v);
+	void updateVisualization();
 	void showSettings();
 signals:
 	void doubleClicked();

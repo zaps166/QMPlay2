@@ -1639,6 +1639,16 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
         <source>Try to automatically reconnect live streams on error</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Always enabled on Wayland and Android platforms.
+Set visualizations to OpenGL mode if enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always enabled on Wayland platform.
+Recommended to use when OpenGL video output is in RTT mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

@@ -107,8 +107,4 @@ elseif(WIN32)
     endif()
 endif()
 
-if(USE_OPENGL_FOR_VISUALIZATIONS)
-    add_definitions(-DDEFAULT_RTT)
-endif()
-
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

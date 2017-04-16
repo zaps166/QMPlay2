@@ -216,16 +216,6 @@ add_feature_info(CUVID USE_CUVID "Build with CUVID module")
 option(USE_NOTIFY "Build additional notifications module" ON)
 add_feature_info(Notifications USE_NOTIFY "Build additional notifications module")
 
-if(USE_QT5 AND NOT (Qt5Widgets_VERSION VERSION_LESS 5.6.0))
-    if(APPLE)
-        set(DEFAULT_OPENGL_FOR_VISUALIZATIONS ON)
-    else()
-        set(DEFAULT_OPENGL_FOR_VISUALIZATIONS OFF)
-    endif()
-    option(USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations" ${DEFAULT_OPENGL_FOR_VISUALIZATIONS})
-    add_feature_info(VisualizationsOpenGL USE_OPENGL_FOR_VISUALIZATIONS "Use \"QOpenGLWidget\" for Visualizations")
-endif()
-
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
 if(NOT WIN32)

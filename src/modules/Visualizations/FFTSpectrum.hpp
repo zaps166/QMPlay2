@@ -33,7 +33,7 @@ class FFTSpectrumW : public VisWidget
 public:
 	FFTSpectrumW(FFTSpectrum &);
 private:
-	void paintEvent(QPaintEvent *) override final;
+	void paint(QPainter &p) override final;
 
 	void start(bool v = false, bool dontCheckRegion = false) override final;
 	void stop() override final;

@@ -34,7 +34,8 @@ class SimpleVisW : public VisWidget
 public:
 	SimpleVisW(SimpleVis &);
 private:
-	void paintEvent(QPaintEvent *) override final;
+	void paint(QPainter &p) override final;
+
 	void resizeEvent(QResizeEvent *) override final;
 
 	void start(bool v = false, bool dontCheckRegion = false) override final;

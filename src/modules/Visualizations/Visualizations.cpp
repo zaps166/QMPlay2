@@ -17,19 +17,34 @@
 */
 
 #include <Visualizations.hpp>
+
 #include <SimpleVis.hpp>
 #include <FFTSpectrum.hpp>
+
+#ifdef USE_OPENGL
+	#include <QGuiApplication>
+#endif
 
 Visualizations::Visualizations() :
 	Module("Visualizations")
 {
 	m_icon = QIcon(":/Visualizations.svgz");
 
+	int ms = 22;
+
 #ifdef USE_OPENGL
-	const int ms = 10; //Should rely on VSync
-#else
-	const int ms = 22;
+	const QString platformName = QGuiApplication::platformName();
+	if (platformName == "cocoa" || platformName == "android")
+	{
+		ms = 10; // Rely on V-Sync
+		init("UseOpenGL", true);
+	}
+	else
+	{
+		init("UseOpenGL", false);
+	}
 #endif
+
 	init("RefreshTime", ms);
 	init("SimpleVis/SoundLength", ms);
 	init("FFTSpectrum/Size", 7);
@@ -64,10 +79,22 @@ QMPLAY2_EXPORT_MODULE(Visualizations)
 #include <QFormLayout>
 #include <QSpinBox>
 #include <QLabel>
+#ifdef USE_OPENGL
+	#include <QCheckBox>
+#endif
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	Module::SettingsWidget(module)
 {
+#ifdef USE_OPENGL
+	useOpenGLB = new QCheckBox(tr("Use OpenGL"));
+	useOpenGLB->setChecked(sets().getBool("UseOpenGL"));
+	useOpenGLB->setToolTip(tr("Always enabled on Wayland platform.\nRecommended to use when OpenGL video output is in RTT mode."));
+	connect(useOpenGLB, &QCheckBox::toggled, [this](bool checked) {
+		refTimeB->setValue(checked ? 10 : 22);
+	});
+#endif
+
 	refTimeB = new QSpinBox;
 	refTimeB->setRange(1, 500);
 	refTimeB->setSuffix(" " + tr("ms"));
@@ -88,6 +115,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	fftScaleB->setValue(sets().getInt("FFTSpectrum/Scale"));
 
 	QFormLayout *layout = new QFormLayout(this);
+#ifdef USE_OPENGL
+	layout->addRow(useOpenGLB);
+#endif
 	layout->addRow(tr("Refresh time") + ": ", refTimeB);
 	layout->addRow(tr("Displayed sound length") + ": ", sndLenB);
 	layout->addRow(tr("FFT spectrum size") + ": ", fftSizeB);
@@ -98,6 +128,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 void ModuleSettingsWidget::saveSettings()
 {
+#ifdef USE_OPENGL
+	sets().set("UseOpenGL", useOpenGLB->isChecked());
+#endif
 	sets().set("RefreshTime", refTimeB->value());
 	sets().set("SimpleVis/SoundLength", sndLenB->value());
 	sets().set("FFTSpectrum/Size", fftSizeB->value());

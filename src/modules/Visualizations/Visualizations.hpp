@@ -35,6 +35,9 @@ private:
 
 #include <QCoreApplication>
 
+#ifdef USE_OPENGL
+	class QCheckBox;
+#endif
 class QSpinBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
@@ -45,5 +48,8 @@ public:
 private:
 	void saveSettings() override final;
 
+#ifdef USE_OPENGL
+	QCheckBox *useOpenGLB;
+#endif
 	QSpinBox *refTimeB, *sndLenB, *fftSizeB, *fftScaleB;
 };
