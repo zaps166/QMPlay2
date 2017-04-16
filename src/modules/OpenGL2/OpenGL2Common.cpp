@@ -424,6 +424,7 @@ void OpenGL2Common::paintGL()
 				texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
 			}
 			resetDone = true;
+			hasImage = false;
 		}
 
 		if (hwAccellnterface)
