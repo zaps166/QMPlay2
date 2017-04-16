@@ -631,7 +631,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		if (!createCuvidVideoParser())
 		{
 			encodedPacket.ts.setInvalid();
-			return 0;
+			return -1;
 		}
 	}
 
@@ -652,13 +652,13 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 			if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
 			{
 				encodedPacket.ts.setInvalid();
-				return 0;
+				return -1;
 			}
 
 			if (av_bsf_receive_packet(m_bsfCtx, m_pkt) < 0) //Can it return more than one packet in this case?
 			{
 				encodedPacket.ts.setInvalid();
-				return 0;
+				return -1;
 			}
 
 			cuvidPkt.payload = m_pkt->data;
@@ -790,7 +790,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	}
 
 	if (!videoDataParsed)
-		return 0;
+		return -1;
 
 	return encodedPacket.size();
 }
