@@ -460,6 +460,10 @@ int main(int argc, char *argv[])
 	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+	QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
+
 #ifdef Q_WS_X11
 	g_useGui = getenv("DISPLAY");
 #endif
