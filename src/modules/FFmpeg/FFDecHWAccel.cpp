@@ -72,7 +72,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 		decodeLastStep(encodedPacket, frame);
 	else
 		encodedPacket.ts.setInvalid();
-	return bytes_consumed > 0 ? bytes_consumed : 0;
+	return bytes_consumed < 0 ? -1 : bytes_consumed;
 }
 void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
 {
