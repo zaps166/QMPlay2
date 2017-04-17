@@ -116,6 +116,7 @@ void FFTSpectrumW::stop()
 {
 	tim.stop();
 	fftSpectrum.soundBuffer(false);
+	VisWidget::stop();
 }
 
 /**/

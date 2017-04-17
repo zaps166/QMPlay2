@@ -148,6 +148,7 @@ void SimpleVisW::stop()
 	tim.stop();
 	simpleVis.soundBuffer(false);
 	leftBar = rightBar = leftLine.first = rightLine.first = 0.0f;
+	VisWidget::stop();
 }
 
 /**/

@@ -80,6 +80,18 @@ bool VisWidget::regionIsVisible() const
 	return (dw->visibleRegion() != QRegion() || widgetToCheck->visibleRegion() != QRegion());
 }
 
+void VisWidget::stop()
+{
+#ifdef USE_OPENGL
+	if (glW)
+	{
+		glW->update();
+		return;
+	}
+#endif
+	update();
+}
+
 #ifdef USE_OPENGL
 void VisWidget::setUseOpenGL(bool b)
 {
@@ -94,7 +106,7 @@ void VisWidget::setUseOpenGL(bool b)
 		glW->setAutoFillBackground(true);
 		glW->show();
 		glW->installEventFilter(this);
-		glW->setGeometry(geometry());
+		glW->setGeometry(QRect(QPoint(), size()));
 	}
 	else if (!b && glW)
 	{
@@ -108,7 +120,7 @@ void VisWidget::resizeEvent(QResizeEvent *e)
 {
 #ifdef USE_OPENGL
 	if (glW)
-		glW->setGeometry(geometry());
+		glW->setGeometry(QRect(QPoint(), size()));
 #endif
 	QWidget::resizeEvent(e);
 }
