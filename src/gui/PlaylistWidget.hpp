@@ -23,6 +23,7 @@
 #include <Playlist.hpp>
 
 #include <QTreeWidget>
+#include <QAtomicInt>
 #include <QThread>
 #include <QQueue>
 #include <QMutex>
@@ -36,15 +37,27 @@ class Demuxer;
 class UpdateEntryThr : public QThread
 {
 	Q_OBJECT
+
 public:
 	UpdateEntryThr(PlaylistWidget &pLW);
 
 	void updateEntry(QTreeWidgetItem *item, const QString &name = QString(), double length = -2.0);
 
 	void stop();
+
+	inline bool hasPendingUpdates() const
+	{
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+		return pendingUpdates > 0;
+#else
+		return pendingUpdates.load() > 0; //For Qt5 <= 5.2
+#endif
+	}
+
 private:
 	void run() override final;
 
+	QAtomicInt pendingUpdates;
 	IOController<> ioCtrl;
 	PlaylistWidget &pLW;
 	bool timeChanged;
@@ -69,8 +82,6 @@ private:
 
 		bool updateLength, updateIcon;
 		double length;
-
-		QMutex *mutex;
 	};
 private slots:
 	void updateItem(ItemUpdated iu);

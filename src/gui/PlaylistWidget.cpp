@@ -59,6 +59,7 @@ static inline MenuBar::Playlist *playlistMenu()
 
 /* UpdateEntryThr class */
 UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :
+	pendingUpdates(0),
 	pLW(pLW),
 	timeChanged(false)
 {
@@ -80,10 +81,10 @@ void UpdateEntryThr::updateEntry(QTreeWidgetItem *item, const QString &name, dou
 		start();
 	}
 }
+
 void UpdateEntryThr::run()
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
-	QList<QMutex *> mutexesToDelete;
 	while (!ioCtrl.isAborted())
 	{
 		mutex.lock();
@@ -140,16 +141,8 @@ void UpdateEntryThr::run()
 			timeChanged = true;
 		}
 
-		iu.mutex = new QMutex;
-		iu.mutex->lock();
+		pendingUpdates.ref();
 		QMetaObject::invokeMethod(this, "updateItem", Q_ARG(ItemUpdated, iu));
-		mutexesToDelete.append(iu.mutex);
-	}
-	for (QMutex *mutex : mutexesToDelete)
-	{
-		mutex->lock(); // Wait for "updateItem()", because thread mustn't be finished earlier
-		mutex->unlock();
-		delete mutex;
 	}
 }
 void UpdateEntryThr::stop()
@@ -177,7 +170,7 @@ void UpdateEntryThr::updateItem(ItemUpdated iu)
 	}
 	if (iu.item == pLW.currentPlaying)
 		QMetaObject::invokeMethod(QMPlay2GUI.mainW, "updateWindowTitle", Q_ARG(QString, iu.item->text(0)));
-	iu.mutex->unlock();
+	pendingUpdates.deref();
 }
 void UpdateEntryThr::finished()
 {
@@ -757,7 +750,7 @@ bool PlaylistWidget::canModify(bool all) const
 		return false;
 	if (all)
 	{
-		if (updateEntryThr.isRunning())
+		if (updateEntryThr.isRunning() || updateEntryThr.hasPendingUpdates())
 			return false;
 		switch (QAbstractItemView::state())
 		{
