@@ -30,4 +30,6 @@ namespace QMPlay2MacExtensions
 
 	void registerMacOSMediaKeys(const MediaKeysCallback &fn);
 	void unregisterMacOSMediaKeys();
+
+	void showSystemUi(bool visible);
 }

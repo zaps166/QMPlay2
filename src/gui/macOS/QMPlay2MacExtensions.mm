@@ -86,3 +86,13 @@ void QMPlay2MacExtensions::unregisterMacOSMediaKeys()
 		g_mediaKeysFilter = nullptr;
 	}
 }
+
+void QMPlay2MacExtensions::showSystemUi(bool visible)
+{
+	unsigned long flags;
+	if (visible)
+		flags = NSApplicationPresentationDefault;
+	else
+		flags = NSApplicationPresentationHideDock | NSApplicationPresentationAutoHideMenuBar;
+	[NSApp setPresentationOptions:flags];
+}
