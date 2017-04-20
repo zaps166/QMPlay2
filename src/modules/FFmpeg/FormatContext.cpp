@@ -420,7 +420,7 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 			return true;
 		}
 	}
-#else
+#endif
 	if (AVDictionary *dict = getMetadata())
 	{
 		QString album_gain_db = getTag(dict, "REPLAYGAIN_ALBUM_GAIN", false);
@@ -463,7 +463,6 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 
 		return ok;
 	}
-#endif
 	return false;
 }
 qint64 FormatContext::size() const
