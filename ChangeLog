@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.04.16:
+Changes in QMPlay2 build 17.04.21:
 	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
 	- accurate seeking (available in playback settings, enabled for network streams by default),
 	- minor network backward seeking bugfix (regression),
@@ -7,6 +7,8 @@ Changes in QMPlay2 build 17.04.16:
 	- use Opus as default codec for YouTube videos,
 	- use OpenGL as option for visualizations,
 	- improve downloading from YouTube,
+	- improve full screen on macOS,
+	- fix ReplayGain in APE,
 	- CUVID bugfix,
 
 Changes in QMPlay2 build 17.04.02:
