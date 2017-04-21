@@ -1019,7 +1019,7 @@ void MainWidget::toggleFullScreen()
 #else
 		setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 		setGeometry(window()->windowHandle()->screen()->geometry());
-		QMPlay2MacExtensions::showSystemUi(false);
+		QMPlay2MacExtensions::showSystemUi(windowHandle(), false);
 		show();
 #endif
 
@@ -1039,7 +1039,7 @@ void MainWidget::toggleFullScreen()
 
 #ifndef Q_OS_ANDROID
 #ifdef Q_OS_MAC
-		QMPlay2MacExtensions::showSystemUi(true);
+		QMPlay2MacExtensions::showSystemUi(windowHandle(), true);
 		setWindowFlags(Qt::Window);
 #else
 		showNormal();

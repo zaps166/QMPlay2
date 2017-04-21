@@ -1,10 +1,12 @@
 #include "QMPlay2MacExtensions.hpp"
 
 #include <QAbstractNativeEventFilter>
-#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QWindow>
 
 #include <IOKit/hidsystem/ev_keymap.h>
 #include <AppKit/NSApplication.h>
+#include <AppKit/NSScreen.h>
 #include <AppKit/NSEvent.h>
 
 class MediaKeysFilter : public QAbstractNativeEventFilter
@@ -87,8 +89,12 @@ void QMPlay2MacExtensions::unregisterMacOSMediaKeys()
 	}
 }
 
-void QMPlay2MacExtensions::showSystemUi(bool visible)
+void QMPlay2MacExtensions::showSystemUi(QWindow *mainWindow, bool visible)
 {
+#if defined(MAC_OS_X_VERSION_10_9) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9)
+	if (mainWindow && mainWindow->screen() != QGuiApplication::primaryScreen() && ![NSScreen screensHaveSeparateSpaces])
+		return;
+#endif
 	unsigned long flags;
 	if (visible)
 		flags = NSApplicationPresentationDefault;
