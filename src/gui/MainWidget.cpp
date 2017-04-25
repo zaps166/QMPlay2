@@ -817,7 +817,6 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playback->speedUpSubtitles, SIGNAL(triggered()), &playC, SLOT(speedUpSubs()));
 	connect(menuBar->playback->biggerSubtitles, SIGNAL(triggered()), &playC, SLOT(biggerSubs()));
 	connect(menuBar->playback->smallerSubtitles, SIGNAL(triggered()), &playC, SLOT(smallerSubs()));
-	connect(menuBar->playback->playbackSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	connect(menuBar->playback->screenShot, SIGNAL(triggered()), &playC, SLOT(screenShot()));
 	connect(menuBar->playback->subsFromFile, SIGNAL(triggered()), this, SLOT(browseSubsFile()));
 	connect(menuBar->playback->subtitlesSync, SIGNAL(triggered()), &playC, SLOT(setSubtitlesSync()));
@@ -831,6 +830,7 @@ void MainWidget::createMenuBar()
 	SettingsWidget::SetAudioChannelsMenu();
 
 	connect(menuBar->options->settings, SIGNAL(triggered()), this, SLOT(showSettings()));
+	connect(menuBar->options->playbackSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	connect(menuBar->options->modulesSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
 	if (tray)
 		connect(menuBar->options->trayVisible, SIGNAL(triggered(bool)), tray, SLOT(setVisible(bool)));
@@ -1154,7 +1154,7 @@ void MainWidget::showSettings(const QString &moduleName)
 {
 	if (!settingsW)
 	{
-		settingsW = new SettingsWidget(sender() == menuBar->playback->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName, QMPlay2GUI.videoAdjustment);
+		settingsW = new SettingsWidget(sender() == menuBar->options->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName, QMPlay2GUI.videoAdjustment);
 		connect(settingsW, SIGNAL(settingsChanged(int, bool)), &playC, SLOT(settingsChanged(int, bool)));
 		connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
 		connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));

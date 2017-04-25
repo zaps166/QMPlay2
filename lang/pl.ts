@@ -1814,6 +1814,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Enter new profile name:</source>
         <translation>Wprowadź nazwę nowego profilu:</translation>
     </message>
+    <message>
+        <source>&amp;Playback settings</source>
+        <translation>Ustawienia &amp;odtwarzania</translation>
+    </message>
 </context>
 <context>
     <name>PlayClass</name>
@@ -1987,10 +1991,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Set &amp;video delay</source>
         <translation>Ustaw opóźn&amp;ienie obrazu</translation>
-    </message>
-    <message>
-        <source>&amp;Playback settings</source>
-        <translation>&amp;Ustawienia odtwarzania</translation>
     </message>
 </context>
 <context>

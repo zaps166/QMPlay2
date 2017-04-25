@@ -129,7 +129,7 @@ public:
 		};
 		AudioChannels *audioChannels;
 		VideoFilters *videoFilters;
-		QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *playbackSettings, *screenShot;
+		QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *screenShot;
 	};
 
 	class Options : public QMenu
@@ -137,7 +137,7 @@ public:
 		Q_DECLARE_TR_FUNCTIONS(Options)
 	public:
 		Options(MenuBar *parent);
-		QAction *settings, *modulesSettings, *trayVisible;
+		QAction *settings, *playbackSettings, *modulesSettings, *trayVisible;
 		QMenu *removeProfileMenu;
 		QActionGroup *profilesGroup;
 	};

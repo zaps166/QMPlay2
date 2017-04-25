@@ -1811,6 +1811,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Enter new profile name:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Playback settings</source>
+        <translation type="unfinished">Ajustes del &amp;Reproductor</translation>
+    </message>
 </context>
 <context>
     <name>PlayClass</name>
@@ -1932,10 +1936,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>&amp;Audio enabled</source>
         <translation>Audio &amp;habilitado</translation>
-    </message>
-    <message>
-        <source>&amp;Playback settings</source>
-        <translation>Ajustes del &amp;Reproductor</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>

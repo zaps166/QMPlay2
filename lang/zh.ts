@@ -1811,6 +1811,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Enter new profile name:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Playback settings</source>
+        <translation type="unfinished">回放设定</translation>
+    </message>
 </context>
 <context>
     <name>PlayClass</name>
@@ -1980,10 +1984,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Scale down sub&amp;titles</source>
         <translation>缩小字幕</translation>
-    </message>
-    <message>
-        <source>&amp;Playback settings</source>
-        <translation>回放设定</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
