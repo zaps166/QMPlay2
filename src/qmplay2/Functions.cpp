@@ -829,10 +829,7 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 #endif
 	;
 
-	struct EVP_CIPHER_CTX
-	{
-		quint8 data[256];
-	};
+	using EVP_CIPHER_CTX = void;
 	using EVP_CIPHER = void;
 	using EVP_MD = void;
 	using ENGINE = void;
@@ -841,42 +838,75 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 	using EVP_aes_256_cbc_Type = const EVP_CIPHER *(*)(void);
 	using EVP_BytesToKey_Type = int(*)(const EVP_CIPHER *type, const EVP_MD *md, const unsigned char *salt, const unsigned char *data, int datal, int count, unsigned char *key, unsigned char *iv);
 	using EVP_CIPHER_CTX_init_Type = void(*)(EVP_CIPHER_CTX *a);
+	using EVP_CIPHER_CTX_new_Type = EVP_CIPHER_CTX *(*)();
 	using EVP_DecryptUpdate_Type = int(*)(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, const unsigned char *in, int inl);
 	using EVP_DecryptInit_ex_Type = int(*)(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *impl, const unsigned char *key, const unsigned char *iv);
 	using EVP_DecryptFinal_ex_Type = int(*)(EVP_CIPHER_CTX *ctx, unsigned char *outm, int *outl);
 	using EVP_CIPHER_CTX_cleanup_Type = int(*)(EVP_CIPHER_CTX *a);
+	using EVP_CIPHER_CTX_reset_Type = int(*)(EVP_CIPHER_CTX *a);
 
 	QLibrary libssl(libsslFileName);
 	if (!libssl.load())
+	{
+		QMPlay2Core.logError("Cannot load OpenSSL library", true, true);
 		return QByteArray();
+	}
 
 	EVP_md5_Type EVP_md5 = (EVP_md5_Type)libssl.resolve("EVP_md5");
 	EVP_aes_256_cbc_Type EVP_aes_256_cbc = (EVP_aes_256_cbc_Type)libssl.resolve("EVP_aes_256_cbc");
 	EVP_BytesToKey_Type EVP_BytesToKey = (EVP_BytesToKey_Type)libssl.resolve("EVP_BytesToKey");
 	EVP_CIPHER_CTX_init_Type EVP_CIPHER_CTX_init = (EVP_CIPHER_CTX_init_Type)libssl.resolve("EVP_CIPHER_CTX_init");
+	EVP_CIPHER_CTX_new_Type EVP_CIPHER_CTX_new = (EVP_CIPHER_CTX_new_Type)libssl.resolve("EVP_CIPHER_CTX_new");
 	EVP_DecryptUpdate_Type EVP_DecryptUpdate = (EVP_DecryptUpdate_Type)libssl.resolve("EVP_DecryptUpdate");
 	EVP_DecryptInit_ex_Type EVP_DecryptInit_ex = (EVP_DecryptInit_ex_Type)libssl.resolve("EVP_DecryptInit_ex");
 	EVP_DecryptFinal_ex_Type EVP_DecryptFinal_ex = (EVP_DecryptFinal_ex_Type)libssl.resolve("EVP_DecryptFinal_ex");
 	EVP_CIPHER_CTX_cleanup_Type EVP_CIPHER_CTX_cleanup = (EVP_CIPHER_CTX_cleanup_Type)libssl.resolve("EVP_CIPHER_CTX_cleanup");
+	EVP_CIPHER_CTX_reset_Type EVP_CIPHER_CTX_reset = (EVP_CIPHER_CTX_reset_Type)libssl.resolve("EVP_CIPHER_CTX_reset");
 
-	if (!EVP_md5 || !EVP_aes_256_cbc || !EVP_BytesToKey || !EVP_CIPHER_CTX_init || !EVP_DecryptUpdate || !EVP_DecryptInit_ex || !EVP_DecryptFinal_ex || !EVP_CIPHER_CTX_cleanup)
+	if (!EVP_md5 || !EVP_aes_256_cbc || !EVP_BytesToKey || !EVP_DecryptUpdate || !EVP_DecryptInit_ex || !EVP_DecryptFinal_ex)
+	{
+		QMPlay2Core.logError("Cannot resolve OpenSSL methods", true, true);
 		return QByteArray();
+	}
+	if ((!EVP_CIPHER_CTX_init && !EVP_CIPHER_CTX_new) || (!EVP_CIPHER_CTX_cleanup && !EVP_CIPHER_CTX_reset))
+	{
+		QMPlay2Core.logError("Cannot resolve OpenSSL EVP new/reset methods", true, true);
+		return QByteArray();
+	}
 
 	quint8 key[32], iv[32];
 	const int keyLen = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_md5(), (const quint8 *)salt.constData(), (const quint8 *)password.constData(), password.length(), 1, key, iv);
 	if (keyLen != 32)
 		return QByteArray();
 
+	const bool newLibrary = (EVP_CIPHER_CTX_new && EVP_CIPHER_CTX_reset);
+
 	int decryptedLen = ciphered.length(), finalizeLen = 0;
 	QByteArray deciphered(decryptedLen, Qt::Uninitialized);
 
-	EVP_CIPHER_CTX ctx;
-	EVP_CIPHER_CTX_init(&ctx);
-	EVP_DecryptInit_ex(&ctx, EVP_aes_256_cbc(), nullptr, key, iv);
-	EVP_DecryptInit_ex(&ctx, nullptr, nullptr, nullptr, nullptr);
-	EVP_DecryptUpdate(&ctx, (quint8 *)deciphered.data(), &decryptedLen, (const quint8 *)ciphered.constData(), decryptedLen);
-	EVP_DecryptFinal_ex(&ctx, (quint8 *)deciphered.data() + decryptedLen, &finalizeLen);
-	EVP_CIPHER_CTX_cleanup(&ctx);
+	EVP_CIPHER_CTX *ctx;
+	if (newLibrary)
+	{
+		ctx = EVP_CIPHER_CTX_new();
+	}
+	else
+	{
+		ctx = malloc(256);
+		EVP_CIPHER_CTX_init(ctx);
+	}
+	EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, key, iv);
+	EVP_DecryptInit_ex(ctx, nullptr, nullptr, nullptr, nullptr);
+	EVP_DecryptUpdate(ctx, (quint8 *)deciphered.data(), &decryptedLen, (const quint8 *)ciphered.constData(), decryptedLen);
+	EVP_DecryptFinal_ex(ctx, (quint8 *)deciphered.data() + decryptedLen, &finalizeLen);
+	if (newLibrary)
+	{
+		EVP_CIPHER_CTX_reset(ctx);
+	}
+	else
+	{
+		EVP_CIPHER_CTX_cleanup(ctx);
+		free(ctx);
+	}
 
 	deciphered.resize(decryptedLen + finalizeLen);
 	return deciphered;
