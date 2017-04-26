@@ -626,15 +626,16 @@ void MainWidget::switchARatio()
 	QAction *checked = menuBar->player->aRatio->choice->checkedAction();
 	if (!checked)
 		return;
-	const int count = menuBar->player->aRatio->choice->actions().count();
-	const int idx = menuBar->player->aRatio->choice->actions().indexOf(checked);
-	const int checkNewIdx = (idx == count - 1) ? 0 : (idx+1);
-	menuBar->player->aRatio->choice->actions()[checkNewIdx]->trigger();
+	const QList<QAction *> actions = menuBar->player->aRatio->choice->actions();
+	const int idx = actions.indexOf(checked);
+	const int checkNewIdx = (idx == actions.count() - 1) ? 0 : (idx + 1);
+	actions[checkNewIdx]->trigger();
 }
 void MainWidget::resetARatio()
 {
-	if (menuBar->player->aRatio->choice->checkedAction() != menuBar->player->aRatio->choice->actions()[0])
-		menuBar->player->aRatio->choice->actions()[0]->trigger();
+	QAction *firstAct = menuBar->player->aRatio->choice->actions().at(0);
+	if (menuBar->player->aRatio->choice->checkedAction() != firstAct)
+		firstAct->trigger();
 }
 void MainWidget::resetFlip()
 {
@@ -1090,7 +1091,7 @@ void MainWidget::toggleFullScreen()
 
 		setFocus();
 	}
-	QMPlay2Core.fullScreenChanged(fullScreen);
+	emit QMPlay2Core.fullScreenChanged(fullScreen);
 }
 void MainWidget::showMessage(const QString &msg, const QString &title, int messageIcon, int ms)
 {

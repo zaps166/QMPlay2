@@ -254,7 +254,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 				if (fmtCtx->open(url, param))
 				{
 					Playlist::Entry entry;
-					entry.url = DemuxerName + QString("://{%1}%2").arg(url).arg(param);
+					entry.url = QString("%1://{%2}%3").arg(DemuxerName, url, param);
 					entry.name = fmtCtx->title();
 					entry.length = fmtCtx->length();
 					entries.append(entry);

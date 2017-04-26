@@ -662,7 +662,7 @@ void TagEditor::loadImage()
 			const QByteArray fmt = QImageReader::imageFormat(&f);
 			if (fmt == "jpeg" || fmt == "png" || fmt == "gif" || fmt == "bmp")
 			{
-				picture->setData(f.readAll().data(), f.size());
+				picture->setData(f.readAll().constData(), f.size());
 				pictureMimeType = "image/" + fmt;
 				pictureModificated = true;
 				pictureW->update();

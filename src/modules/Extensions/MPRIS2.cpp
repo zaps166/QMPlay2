@@ -61,7 +61,7 @@ void MediaPlayer2Root::setFullscreen(bool fs)
 {
 	if (fullScreen != fs)
 	{
-		QMPlay2Core.processParam("fullscreen");
+		emit QMPlay2Core.processParam("fullscreen");
 		fullScreen = fs;
 	}
 }
@@ -89,11 +89,11 @@ QStringList MediaPlayer2Root::supportedUriSchemes() const
 
 void MediaPlayer2Root::Quit()
 {
-	QMPlay2Core.processParam("quit");
+	emit QMPlay2Core.processParam("quit");
 }
 void MediaPlayer2Root::Raise()
 {
-	QMPlay2Core.processParam("show");
+	emit QMPlay2Core.processParam("show");
 }
 
 void MediaPlayer2Root::fullScreenChanged(bool fs)
@@ -183,7 +183,7 @@ double MediaPlayer2Player::rate() const
 void MediaPlayer2Player::setRate(double rate)
 {
 	if (rate >= minimumRate() && rate <= maximumRate())
-		QMPlay2Core.processParam("speed", QString::number(rate));
+		emit QMPlay2Core.processParam("speed", QString::number(rate));
 }
 
 double MediaPlayer2Player::volume() const
@@ -192,34 +192,34 @@ double MediaPlayer2Player::volume() const
 }
 void MediaPlayer2Player::setVolume(double value)
 {
-	QMPlay2Core.processParam("volume", QString::number((int)(value * 100)));
+	emit QMPlay2Core.processParam("volume", QString::number((int)(value * 100)));
 }
 
 void MediaPlayer2Player::Next()
 {
-	QMPlay2Core.processParam("next");
+	emit QMPlay2Core.processParam("next");
 }
 void MediaPlayer2Player::Previous()
 {
-	QMPlay2Core.processParam("prev");
+	emit QMPlay2Core.processParam("prev");
 }
 void MediaPlayer2Player::Pause()
 {
 	if (playState == "Playing")
-		QMPlay2Core.processParam("toggle");
+		emit QMPlay2Core.processParam("toggle");
 }
 void MediaPlayer2Player::PlayPause()
 {
-	QMPlay2Core.processParam("toggle");
+	emit QMPlay2Core.processParam("toggle");
 }
 void MediaPlayer2Player::Stop()
 {
-	QMPlay2Core.processParam("stop");
+	emit QMPlay2Core.processParam("stop");
 }
 void MediaPlayer2Player::Play()
 {
 	if (playState != "Playing")
-		QMPlay2Core.processParam("toggle");
+		emit QMPlay2Core.processParam("toggle");
 }
 void MediaPlayer2Player::Seek(qint64 Offset)
 {
@@ -232,11 +232,11 @@ void MediaPlayer2Player::Seek(qint64 Offset)
 void MediaPlayer2Player::SetPosition(const QDBusObjectPath &TrackId, qint64 Position)
 {
 	if (trackID == TrackId && Position != position() && Position >= 0 && Position <= m_data["mpris:length"].toLongLong())
-		QMPlay2Core.processParam("seek", QString::number(Position / 1000000LL));
+		emit QMPlay2Core.processParam("seek", QString::number(Position / 1000000LL));
 }
 void MediaPlayer2Player::OpenUri(const QString &Uri)
 {
-	QMPlay2Core.processParam("open", Uri);
+	emit QMPlay2Core.processParam("open", Uri);
 }
 
 void MediaPlayer2Player::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName)

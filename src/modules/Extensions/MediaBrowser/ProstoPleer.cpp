@@ -195,7 +195,7 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 				}
 				else if (!netReply.isAborted())
 				{
-					QMPlay2Core.sendMessage(tr("Try again later"), m_name);
+					emit QMPlay2Core.sendMessage(tr("Try again later"), m_name);
 				}
 			}
 		}

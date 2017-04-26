@@ -170,7 +170,7 @@ QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
 		pth.remove(0, 7);
 	if (!leaveFilename)
 		pth = Functions::filePath(pth);
-	if (!QFileInfo(pth).exists())
+	if (!QFileInfo::exists(pth))
 		pth = settings->getString("currPth");
 	return pth;
 }

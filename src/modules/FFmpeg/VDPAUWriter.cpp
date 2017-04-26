@@ -655,7 +655,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 			}
 			else if (mustRestartPlaying)
 			{
-				QMPlay2Core.processParam("RestartPlaying");
+				emit QMPlay2Core.processParam("RestartPlaying");
 				mustRestartPlaying = false;
 			}
 		}

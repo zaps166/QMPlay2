@@ -96,7 +96,7 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
 		url += QString("/?method=%1.getInfo").arg(trackOrAlbum);
 		url += QString("&api_key=%1").arg(api_key);
 		url += QString("&artist=%1").arg(artistEncoded);
-		url += QString("&%1=%2").arg(trackOrAlbum).arg(albumEncoded.isEmpty() ? titleEncoded : albumEncoded);
+		url += QString("&%1=%2").arg(trackOrAlbum, albumEncoded.isEmpty() ? titleEncoded : albumEncoded);
 
 		if (coverReply)
 		{
@@ -156,14 +156,14 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 			duration = 0;
 
 		//updateNowPlaying
-		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		NetworkReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(duration).arg(session_key).arg(scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
+		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7").arg(scrobble.album, api_key, scrobble.artist).arg(duration).arg(session_key, scrobble.title, secret).toUtf8(), QCryptographicHash::Md5).toHex();
+		NetworkReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album, api_key, api_sig, scrobble.artist).arg(duration).arg(session_key, scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
 		connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
 
 		//scrobble
 		const QString ts = QString::number(scrobble.startTime);
-		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7").arg(scrobble.album).arg(api_key).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).arg(secret).toUtf8(), QCryptographicHash::Md5).toHex();
-		scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album).arg(api_key).arg(api_sig).arg(scrobble.artist).arg(session_key).arg(ts).arg(scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
+		api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7").arg(scrobble.album, api_key, scrobble.artist, session_key, ts, scrobble.title, secret).toUtf8(), QCryptographicHash::Md5).toHex();
+		scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album, api_key, api_sig, scrobble.artist, session_key, ts, scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
 		scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
 		connect(scrobbleReply, SIGNAL(finished()), this, SLOT(scrobbleFinished()));
 	}

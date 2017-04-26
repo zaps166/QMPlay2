@@ -128,7 +128,7 @@ void SettingsWidget::InitSettings()
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 
 	QTextCodec *codec = QTextCodec::codecForLocale();
-	QMPSettings.init("FallbackSubtitlesEncoding", codec ? codec->name().data() : "System");
+	QMPSettings.init("FallbackSubtitlesEncoding", codec ? codec->name().constData() : "System");
 
 	QMPSettings.init("AudioLanguage", QString());
 	QMPSettings.init("SubtitlesLanguage", QString());
