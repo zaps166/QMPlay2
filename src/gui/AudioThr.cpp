@@ -195,7 +195,7 @@ void AudioThr::run()
 						break;
 					}
 
-			if (playC.paused || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0 && playC.videoSeekPos > 0))
+			if (playC.paused || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
 			{
 #ifdef Q_OS_WIN
 				canUpdatePos = canUpdateBitrate = false;
@@ -325,7 +325,7 @@ void AudioThr::run()
 						tmp_br = 0;
 						playC.audioSeekPos = -1;
 						playC.emptyBufferCond.wakeAll();
-						if (playC.videoSeekPos <= 0)
+						if (playC.videoSeekPos <= 0.0)
 							cont = false; // Don't play if video is not ready
 					}
 					if (cont)

@@ -134,10 +134,11 @@ int MPDemux::bitrate() const
 	return -1;
 }
 
-bool MPDemux::seek(int val, bool)
+bool MPDemux::seek(double val, bool)
 {
-	if (val >= length())
-		val = length()-1;
+	const double len = length();
+	if (val >= len)
+		val = len - 1.0;
 	QMPlay2ModPlug::Seek(mpfile, val * 1000);
 	pos = val;
 	return true;

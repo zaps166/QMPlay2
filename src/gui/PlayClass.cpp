@@ -158,7 +158,7 @@ void PlayClass::play(const QString &_url)
 			canUpdatePos = true;
 			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
-			videoSeekPos = audioSeekPos = -1;
+			videoSeekPos = audioSeekPos = -1.0;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
 			stillImage = false;
 
@@ -229,11 +229,11 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 {
 	if (canUpdatePos)
 	{
-		if ((updateGUI || pos == -1) && ((int)newPos != (int)pos))
+		if ((updateGUI || pos == -1.0) && ((int)newPos != (int)pos))
 			emit updatePos(newPos);
 		pos = newPos;
 		lastSeekTo = SEEK_NOWHERE;
-		if (seekA >= 0 && seekB > seekA && pos >= seekB) //A-B Repeat
+		if (seekA >= 0.0 && seekB > seekA && pos >= seekB) //A-B Repeat
 			seek(seekA);
 	}
 }
@@ -251,17 +251,17 @@ void PlayClass::togglePause()
 		stopPauseMutex.unlock();
 	}
 }
-void PlayClass::seek(int pos, bool allowAccurate)
+void PlayClass::seek(double pos, bool allowAccurate)
 {
-	if (pos < 0)
-		pos = 0;
-	if (lastSeekTo == pos)
+	if (pos < 0.0)
+		pos = 0.0;
+	if (qFuzzyCompare(lastSeekTo, pos))
 		return;
 	allowAccurateSeek = allowAccurate;
-	if ((seekA > -1 && pos < seekA) || (seekB > -1 && pos > seekB))
+	if ((seekA > -1.0 && pos < seekA) || (seekB > -1.0 && pos > seekB))
 	{
-		const bool showDisabledInfo = (seekA > 0 || seekB > 0);
-		seekA = seekB = -1;
+		const bool showDisabledInfo = (seekA > 0.0 || seekB > 0.0);
+		seekA = seekB = -1.0;
 		updateABRepeatInfo(showDisabledInfo);
 	}
 	bool locked = false;
@@ -604,7 +604,7 @@ void PlayClass::clearPlayInfo()
 void PlayClass::updateABRepeatInfo(bool showDisabledInfo)
 {
 	QString abMsg;
-	if (seekA < 0 && seekB < 0)
+	if (seekA < 0.0 && seekB < 0.0)
 	{
 		if (showDisabledInfo)
 			abMsg = tr("disabled");
@@ -724,15 +724,15 @@ void PlayClass::setAB()
 	if (demuxThr && demuxThr->isDemuxerReady() && demuxThr->canSeek())
 	{
 		const int intPos = pos;
-		if (seekA < 0)
+		if (seekA < 0.0)
 			seekA = intPos;
-		else if (seekB < 0)
+		else if (seekB < 0.0)
 		{
 			if (seekA != intPos)
 				seekB = intPos;
 		}
 		else
-			seekA = seekB = -1;
+			seekA = seekB = -1.0;
 		updateABRepeatInfo(true);
 	}
 }
@@ -1110,8 +1110,8 @@ void PlayClass::demuxThrFinished()
 		fileSubsList.clear(); //czyści listę napisów z pliku
 	fileSubs.clear();
 
-	const bool showDisabledInfo = (seekA > 0 || seekB > 0);
-	seekA = seekB = -1;
+	const bool showDisabledInfo = (seekA > 0.0 || seekB > 0.0);
+	seekA = seekB = -1.0;
 	updateABRepeatInfo(showDisabledInfo);
 
 	url.clear();
@@ -1119,7 +1119,7 @@ void PlayClass::demuxThrFinished()
 
 	emit updateBufferedRange(-1, -1);
 	emit updateLength(0);
-	emit updatePos(0);
+	emit updatePos(0.0);
 
 	bool clr = true, canDoSuspend = !br;
 

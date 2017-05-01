@@ -261,7 +261,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	seekS->setMaximum(0);
 	seekS->setWheelStep(settings.getInt("ShortSeek"));
 	mainTB->addWidget(seekS);
-	updatePos(0);
+	updatePos(0.0);
 
 	vLine = new QFrame;
 	vLine->setFrameShape(QFrame::VLine);
@@ -280,7 +280,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 	/* Connects */
 	connect(qApp, SIGNAL(focusChanged(QWidget *, QWidget *)), this, SLOT(focusChanged(QWidget *, QWidget *)));
 
-	connect(infoDock, SIGNAL(seek(int)), this, SLOT(seek(int)));
+	connect(infoDock, SIGNAL(seek(double)), this, SLOT(seek(double)));
 	connect(infoDock, SIGNAL(chStream(const QString &)), &playC, SLOT(chStream(const QString &)));
 	connect(infoDock, SIGNAL(saveCover()), &playC, SLOT(saveCover()));
 
@@ -308,7 +308,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
 	connect(&playC, SIGNAL(updateLength(int)), this, SLOT(setSeekSMaximum(int)));
-	connect(&playC, SIGNAL(updatePos(int)), this, SLOT(updatePos(int)));
+	connect(&playC, SIGNAL(updatePos(double)), this, SLOT(updatePos(double)));
 	connect(&playC, SIGNAL(playStateChanged(bool)), this, SLOT(playStateChanged(bool)));
 	connect(&playC, SIGNAL(setCurrentPlaying()), playlistDock, SLOT(setCurrentPlaying()));
 	connect(&playC, SIGNAL(setInfo(const QString &, bool, bool)), infoDock, SLOT(setInfo(const QString &, bool, bool)));
@@ -401,7 +401,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
 		const QString url = settings.getString("Url");
 		if (!url.isEmpty() && url == playlistDock->getUrl())
 		{
-			const double pos = settings.getInt("Pos", 0);
+			const double pos = settings.getDouble("Pos", 0.0);
 			playC.setDoSilenceOnStart();
 			playlistDock->start();
 			if (pos > 0.0)
@@ -561,10 +561,17 @@ void MainWidget::togglePlay()
 	else
 		playlistDock->start();
 }
-void MainWidget::seek(int i)
+void MainWidget::seek(int pos)
+{
+	if (QMPlay2Core.getSettings().getInt("AccurateSeek") == Qt::Checked)
+		seek(pos / 10.0);
+	else
+		seek((double)(pos / 10));
+}
+void MainWidget::seek(double pos)
 {
 	if (!seekS->ignoringValueChanged() && playC.isPlaying())
-		playC.seek(i, (!sender() || sender() == infoDock));
+		playC.seek(pos, (!sender() || sender() == infoDock));
 }
 void MainWidget::playStateChanged(bool b)
 {
@@ -595,7 +602,7 @@ void MainWidget::toggleMuteIcon()
 }
 void MainWidget::actionSeek()
 {
-	qint64 seekTo = 0;
+	double seekTo = 0.0;
 	if (sender() == menuBar->player->seekB)
 		seekTo = playC.getPos() - QMPlay2Core.getSettings().getInt("ShortSeek");
 	else if (sender() == menuBar->player->seekF)
@@ -608,7 +615,7 @@ void MainWidget::actionSeek()
 
 	if (!mainTB->isVisible() && !statusBar->isVisible())
 	{
-		const int max = seekS->maximum();
+		const int max = seekS->maximum() / 10;
 		if (max > 0)
 		{
 			const int count = 50;
@@ -1203,7 +1210,7 @@ void MainWidget::browseSubsFile()
 
 void MainWidget::setSeekSMaximum(int max)
 {
-	seekS->setMaximum(qMax(0, max));
+	seekS->setMaximum(qMax(0, max * 10));
 	if (max >= 0)
 	{
 		seekS->setEnabled(true);
@@ -1219,16 +1226,17 @@ void MainWidget::setSeekSMaximum(int max)
 		seekS->setEnabled(false);
 	}
 }
-void MainWidget::updatePos(int pos)
+void MainWidget::updatePos(double pos)
 {
-	const QString remainingTime = (seekS->maximum() - pos > -1) ? timeToStr(seekS->maximum() - pos) : timeToStr(0);
-	timeL->setText(timeToStr(pos) + " ; -" + remainingTime + " / " + timeToStr(seekS->maximum()));
+	const double max = seekS->maximum() / 10.0;
+	const QString remainingTime = (max - pos > -1) ? timeToStr(max - pos) : timeToStr(0.0);
+	timeL->setText(timeToStr(pos) + " ; -" + remainingTime + " / " + timeToStr(max));
 	emit QMPlay2Core.posChanged(pos);
-	seekS->setValue(pos);
+	seekS->setValue(pos * 10.0);
 }
 void MainWidget::mousePositionOnSlider(int pos)
 {
-	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos), 750);
+	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos / 10.0), 750);
 }
 
 void MainWidget::newConnection(IPCSocket *socket)
@@ -1532,7 +1540,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
 	if (playC.isPlaying() && settings.getBool("SavePos"))
 	{
-		settings.set("Pos", seekS->value());
+		settings.set("Pos", playC.getPos());
 		settings.set("Url", playC.getUrl());
 	}
 	else

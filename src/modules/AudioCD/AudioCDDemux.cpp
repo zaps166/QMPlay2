@@ -164,9 +164,9 @@ int AudioCDDemux::bitrate() const
 	return 8 * (srate * chn * 2) / 1000;
 }
 
-bool AudioCDDemux::seek(int s, bool)
+bool AudioCDDemux::seek(double s, bool)
 {
-	return (sector = s / duration) < numSectors;
+	return (sector = (s / duration)) < numSectors;
 }
 bool AudioCDDemux::read(Packet &decoded, int &idx)
 {

@@ -59,7 +59,8 @@ private slots:
 	void videoStarted();
 
 	void togglePlay();
-	void seek(int);
+	void seek(int pos);
+	void seek(double pos);
 	void playStateChanged(bool);
 
 	void volUpDown();
@@ -93,7 +94,7 @@ private slots:
 	void browseSubsFile();
 
 	void setSeekSMaximum(int);
-	void updatePos(int);
+	void updatePos(double pos);
 	void mousePositionOnSlider(int);
 
 	void newConnection(IPCSocket *socket);

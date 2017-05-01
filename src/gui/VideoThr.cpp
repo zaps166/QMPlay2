@@ -238,7 +238,7 @@ void VideoThr::run()
 
 	const auto finishAccurateSeek = [&] {
 		resetVariables();
-		playC.videoSeekPos = -1;
+		playC.videoSeekPos = -1.0;
 		playC.emptyBufferCond.wakeAll();
 	};
 
@@ -263,7 +263,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0 && playC.audioSeekPos > 0))
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0))
 		{
 			if (playC.paused && !paused)
 			{
@@ -398,7 +398,7 @@ void VideoThr::run()
 				useLastDelay = true; //if seeking
 				playC.flushVideo = false;
 			}
-			if (playC.videoSeekPos > 0 && bytes_consumed <= 0 && !packet.ts.isValid() && decoded.isEmpty())
+			if (playC.videoSeekPos > 0.0 && bytes_consumed <= 0 && !packet.ts.isValid() && decoded.isEmpty())
 				finishAccurateSeek();
 			if (!decoded.isEmpty())
 			{
@@ -442,7 +442,7 @@ void VideoThr::run()
 				emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets "lastSampleAspectRatio", because it calls "setARatio()";
 			}
 
-			if (playC.videoSeekPos > 0)
+			if (playC.videoSeekPos > 0.0)
 			{
 				bool cont = true;
 				if (packet.ts >= playC.videoSeekPos)

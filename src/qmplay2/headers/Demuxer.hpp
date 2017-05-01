@@ -75,7 +75,7 @@ public:
 	virtual bool localStream() const;
 	virtual bool dontUseBuffer() const;
 
-	virtual bool seek(int pos, bool backward) = 0;
+	virtual bool seek(double pos, bool backward) = 0;
 	virtual bool read(Packet &, int &) = 0;
 
 private:

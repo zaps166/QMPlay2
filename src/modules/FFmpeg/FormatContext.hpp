@@ -64,7 +64,7 @@ public:
 	int bitrate() const;
 	QByteArray image(bool forceCopy) const;
 
-	bool seek(int pos, bool backward);
+	bool seek(double pos, bool backward);
 	bool read(Packet &encoded, int &idx);
 	void pause();
 	void abort();

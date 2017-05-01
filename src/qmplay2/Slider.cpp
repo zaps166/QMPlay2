@@ -123,7 +123,7 @@ void Slider::mouseMoveEvent(QMouseEvent *e)
 {
 	if (maximum() > 0)
 	{
-		int pos = getMousePos(e->pos().x());
+		int pos = getMousePos(e->pos());
 		if (pos != lastMousePos)
 		{
 			lastMousePos = pos;
@@ -150,8 +150,30 @@ void Slider::enterEvent(QEvent *e)
 	QSlider::enterEvent(e);
 }
 
-int Slider::getMousePos(int X)
+int Slider::getMousePos(const QPoint &pos)
 {
-	const int o = style()->pixelMetric(QStyle::PM_SliderLength) - 1;
-	return QStyle::sliderValueFromPosition(minimum(), maximum(), X - o / 2, width() - o, false);
+	QStyleOptionSlider opt;
+	initStyleOption(&opt);
+
+	const QRect gr = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderGroove, this);
+	const QRect sr = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
+	const QPoint center = sr.center() - sr.topLeft();
+
+	int sliderMin, sliderMax, sliderLength, p;
+	if (orientation() == Qt::Horizontal)
+	{
+		sliderLength = sr.width();
+		sliderMin = gr.x();
+		sliderMax = gr.right() - sliderLength + 1;
+		p = pos.x() - center.x() - sliderMin;
+	}
+	else
+	{
+		sliderLength = sr.height();
+		sliderMin = gr.y();
+		sliderMax = gr.bottom() - sliderLength + 1;
+		p = pos.y() - center.y() - sliderMin;
+	}
+
+	return QStyle::sliderValueFromPosition(minimum(), maximum(), p, sliderMax - sliderMin, opt.upsideDown);
 }

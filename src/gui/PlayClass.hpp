@@ -61,7 +61,7 @@ public:
 	void chPos(double, bool updateGUI = true);
 
 	void togglePause();
-	void seek(int pos, bool allowAccurate = true);
+	void seek(double pos, bool allowAccurate = true);
 	Q_SLOT void chStream(const QString &s);
 	void setSpeed(double);
 
@@ -125,7 +125,7 @@ private:
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
 	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
-	int seekTo, lastSeekTo, restartSeekTo, seekA, seekB, videoSeekPos, audioSeekPos;
+	double seekTo, lastSeekTo, restartSeekTo, seekA, seekB, videoSeekPos, audioSeekPos;
 	double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
 	bool rotate90, spherical, stillImage;
@@ -205,7 +205,7 @@ signals:
 	void pixelFormatUpdate(const QByteArray &pixFmt);
 	void chText(const QString &);
 	void updateLength(int);
-	void updatePos(int);
+	void updatePos(double);
 	void playStateChanged(bool);
 	void setCurrentPlaying();
 	void setInfo(const QString &, bool, bool);

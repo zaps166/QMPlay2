@@ -69,18 +69,19 @@ int SIDPlay::bitrate() const
 	return -1;
 }
 
-bool SIDPlay::seek(int s, bool backward)
+bool SIDPlay::seek(double s, bool backward)
 {
 	m_time = -1.0;
 
 	if (backward && !m_sidplay.load(m_tune)) //backward
 		return false;
 
-	if (s > 0)
+	if (s > 0.0)
 	{
+		const int pos = s;
 		const int bufferSize = m_chn * m_srate;
 		qint16 *buff1sec = new qint16[bufferSize];
-		for (int i = m_sidplay.time(); i <= s && !m_aborted; ++i)
+		for (int i = m_sidplay.time(); i <= pos && !m_aborted; ++i)
 			m_sidplay.play(buff1sec, bufferSize);
 		delete[] buff1sec;
 	}

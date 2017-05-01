@@ -135,7 +135,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 {
 	if (!doDemuxerSeek && skipBufferSeek)
 		return;
-	if (playC.seekTo >= 0 || (playC.seekTo == SEEK_STREAM_RELOAD || playC.seekTo == SEEK_REPEAT))
+	if (playC.seekTo >= 0.0 || (playC.seekTo == SEEK_STREAM_RELOAD || playC.seekTo == SEEK_REPEAT))
 	{
 		AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 
@@ -152,14 +152,14 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 		}
 		else if (playC.seekTo == SEEK_REPEAT)
 		{
-			playC.seekTo = 0;
+			playC.seekTo = 0.0;
 			repeat = true;
 		}
 
 		const Qt::CheckState accurateSeek = (Qt::CheckState)QMPlay2Core.getSettings().getInt("AccurateSeek");
 		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.allowAccurateSeek)));
 
-		const bool backward = doAccurateSeek || repeat || (playC.seekTo < (int)playC.pos);
+		const bool backward = doAccurateSeek || repeat || (playC.seekTo < playC.pos);
 		bool flush = false, aLocked = false, vLocked = false;
 
 		skipBufferSeek = false;
@@ -251,9 +251,9 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.flushVideo = playC.flushAudio = true;
 			if (playC.pos < 0.0) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
 				emit playC.updatePos(playC.seekTo); //uaktualnia suwak na pasku do wskazanej pozycji
-			if (repeat || playC.videoSeekPos > -1 || playC.audioSeekPos > -1)
+			if (repeat || playC.videoSeekPos > -1.0 || playC.audioSeekPos > -1.0)
 				playC.emptyBufferCond.wakeAll(); //Weak AV threads
-			const int seekPos = (doAccurateSeek && playC.seekTo > 0) ? playC.seekTo : -1;
+			const double seekPos = (doAccurateSeek && playC.seekTo > 0.0) ? playC.seekTo : -1.0;
 			if (vThr)
 				playC.videoSeekPos = seekPos;
 			if (aThr)
@@ -585,9 +585,9 @@ void DemuxerThr::run()
 				if (!vS || !aS)
 				{
 					if (!vS)
-						playC.videoSeekPos = -1;
+						playC.videoSeekPos = -1.0;
 					if (!aS)
-						playC.audioSeekPos = -1;
+						playC.audioSeekPos = -1.0;
 					playC.emptyBufferCond.wakeAll();
 				}
 			}
@@ -636,7 +636,7 @@ void DemuxerThr::emitBufferInfo(bool clearBackwards)
 {
 	const BufferInfo bufferInfo = getBufferInfo(clearBackwards);
 	if (updateBufferedSeconds)
-		emit playC.updateBufferedRange(bufferInfo.firstPacketTime, bufferInfo.lastPacketTime);
+		emit playC.updateBufferedRange(bufferInfo.firstPacketTime * 10, bufferInfo.lastPacketTime * 10);
 	emit playC.updateBuffered(bufferInfo.backwardBytes, bufferInfo.remainingBytes, bufferInfo.backwardDuration, bufferInfo.remainingDuration);
 	waitingForFillBufferB = true;
 	if (updateBufferedTime < 1.0)

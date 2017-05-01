@@ -50,7 +50,7 @@ private:
 
 	bool localStream() const override final;
 
-	bool seek(int pos, bool backward) override final;
+	bool seek(double pos, bool backward) override final;
 	bool read(Packet &encoded, int &idx) override final;
 	void pause() override final;
 	void abort() override final;

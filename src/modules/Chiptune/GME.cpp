@@ -62,7 +62,7 @@ int GME::bitrate() const
 	return -1;
 }
 
-bool GME::seek(int s, bool)
+bool GME::seek(double s, bool)
 {
 	return !gme_seek(m_gme, s * 1000);
 }

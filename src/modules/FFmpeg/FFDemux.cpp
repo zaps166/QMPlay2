@@ -152,7 +152,7 @@ bool FFDemux::localStream() const
 	return true;
 }
 
-bool FFDemux::seek(int pos, bool backward)
+bool FFDemux::seek(double pos, bool backward)
 {
 	bool seeked = false;
 	for (FormatContext *fmtCtx : formatContexts)

@@ -50,7 +50,7 @@ protected:
 	void wheelEvent(QWheelEvent *) override final;
 	void enterEvent(QEvent *) override final;
 private:
-	int getMousePos(int X);
+	int getMousePos(const QPoint &pos);
 
 	bool canSetValue, ignoreValueChanged;
 	int lastMousePos, wheelStep, firstLine, secondLine;

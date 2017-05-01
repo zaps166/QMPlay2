@@ -489,30 +489,29 @@ QByteArray FormatContext::image(bool forceCopy) const
 	return QByteArray();
 }
 
-bool FormatContext::seek(int pos, bool backward)
+bool FormatContext::seek(double pos, bool backward)
 {
 	bool isOk = false;
 	abortCtx->isAborted = false;
 	if (!isStreamed)
 	{
-		const int len = length();
-		if (pos < 0)
-			pos = 0;
-		else if (len > 0 && pos > len)
+		const double len = length();
+		if (pos < 0.0)
+			pos = 0.0;
+		else if (len > 0.0 && pos > len)
 			pos = len;
-		pos += startTime;
 #ifndef MP3_FAST_SEEK
 		if (seekByByteOffset < 0)
 		{
 #endif
-			const qint64 timestamp = (qint64)pos * AV_TIME_BASE + 250000LL;
+			const qint64 timestamp = (qint64)(pos * AV_TIME_BASE);
 			isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
 			if (!isOk)
 			{
 				const int ret = av_read_frame(formatCtx, packet);
 				if (ret == AVERROR_EOF || ret == 0)
 				{
-					if (len <= 0 || pos < len)
+					if (len <= 0.0 || pos < len)
 						isOk = av_seek_frame(formatCtx, -1, timestamp, !backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0; //Negate "backward" and try again
 					else if (ret == AVERROR_EOF)
 						isOk = true; //Allow seek to the end of the file, clear buffers and finish the playback

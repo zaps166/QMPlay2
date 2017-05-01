@@ -61,7 +61,7 @@ private:
 	qint64 bytes1, bytes2;
 	double seconds1, seconds2;
 signals:
-	void seek(int);
+	void seek(double pos);
 	void chStream(const QString &);
 	void saveCover();
 };

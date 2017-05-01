@@ -38,7 +38,7 @@ private:
 	double length() const override final;
 	int bitrate() const override final;
 
-	bool seek(int, bool) override final;
+	bool seek(double, bool) override final;
 	bool read(Packet &, int &) override final;
 	void abort() override final;
 
