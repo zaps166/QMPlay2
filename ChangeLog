@@ -1,3 +1,8 @@
+Changes in QMPlay2 build 17.05.01:
+	- more accurate seeking (use double type instead of seconds in integer),
+	- allow to automatically remove ungrouped playlist entries,
+	- stepping to previous frame,
+
 Changes in QMPlay2 build 17.04.21:
 	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
 	- accurate seeking (available in playback settings, enabled for network streams by default),
