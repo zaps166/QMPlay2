@@ -488,11 +488,11 @@ void PlaylistDock::delEntries()
 		list->processItems();
 	}
 }
-void PlaylistDock::delNonGroupEntries()
+void PlaylistDock::delNonGroupEntries(bool force)
 {
 	if (!list->canModify()) //jeżeli jest np. drag and drop to nie wolno usuwać
 		return;
-	if (QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to delete not grouped entries?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+	if (force || QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to delete ungrouped entries?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		list->setItemsResizeToContents(false);
 		for (QTreeWidgetItem *tWI : list->topLevelNonGroupsItems())

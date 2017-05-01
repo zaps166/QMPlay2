@@ -1551,6 +1551,9 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	}
 
 	playlistDock->stopThreads();
+
+	if (settings.getBool("AutoDelNonGroupEntries"))
+		playlistDock->delNonGroupEntries(true);
 	playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	playC.stop(true);

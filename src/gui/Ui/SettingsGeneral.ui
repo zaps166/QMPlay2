@@ -24,9 +24,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-134</y>
+        <y>0</y>
         <width>454</width>
-        <height>710</height>
+        <height>731</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -68,14 +68,14 @@
          </layout>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item row="13" column="0">
         <widget class="QPushButton" name="setKeyBindingsB">
          <property name="text">
           <string>Set key bindings</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>3</number>
@@ -299,7 +299,7 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="11" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -364,7 +364,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="10">
+       <item row="1" column="1" rowspan="11">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -377,7 +377,7 @@
          </property>
         </spacer>
        </item>
-       <item row="13" column="0" colspan="2">
+       <item row="14" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -401,6 +401,13 @@
         <widget class="QCheckBox" name="trayNotifiesDefault">
          <property name="text">
           <string>Use tray notifications as default</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QCheckBox" name="autoDelNonGroupEntries">
+         <property name="text">
+          <string>Automatically delete ungrouped entries</string>
          </property>
         </widget>
        </item>
@@ -433,6 +440,7 @@
   <tabstop>restoreRepeatMode</tabstop>
   <tabstop>stillImages</tabstop>
   <tabstop>trayNotifiesDefault</tabstop>
+  <tabstop>autoDelNonGroupEntries</tabstop>
   <tabstop>proxyB</tabstop>
   <tabstop>proxyLoginB</tabstop>
   <tabstop>proxyUserE</tabstop>
@@ -443,6 +451,8 @@
   <tabstop>removeYtDlB</tabstop>
   <tabstop>resetSettingsB</tabstop>
   <tabstop>setKeyBindingsB</tabstop>
+  <tabstop>profileB</tabstop>
+  <tabstop>profileRemoveB</tabstop>
  </tabstops>
  <resources/>
  <connections/>

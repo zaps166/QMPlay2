@@ -932,6 +932,10 @@
         <source>Remove youtube-dl</source>
         <translation>Usuń youtube-dl</translation>
     </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>Automatycznie usuwaj niepogrupowane wpisy</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -2333,7 +2337,7 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <translation>Czy na pewno chcesz wyczyścić listę?</translation>
     </message>
     <message>
-        <source>Are you sure you want to delete not grouped entries?</source>
+        <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>Czy na pewno chcesz usunąć niepogrupowane wpisy?</translation>
     </message>
 </context>

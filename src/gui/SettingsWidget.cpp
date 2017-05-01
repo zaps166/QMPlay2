@@ -161,6 +161,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
 	QMPSettings.init("TrayNotifiesDefault", false);
+	QMPSettings.init("AutoDelNonGroupEntries", false);
 	QMPSettings.init("Proxy/Use", false);
 	QMPSettings.init("Proxy/Host", QString());
 	QMPSettings.init("Proxy/Port", 80);
@@ -366,6 +367,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 			delete page1->trayNotifiesDefault;
 			page1->trayNotifiesDefault = nullptr;
 		}
+
+		page1->autoDelNonGroupEntries->setChecked(QMPSettings.getBool("AutoDelNonGroupEntries"));
 
 		page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
 
@@ -775,6 +778,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());
 			if (page1->trayNotifiesDefault)
 				QMPSettings.set("TrayNotifiesDefault", page1->trayNotifiesDefault->isChecked());
+			QMPSettings.set("AutoDelNonGroupEntries", page1->autoDelNonGroupEntries->isChecked());
 			QMPSettings.set("Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty());
 			QMPSettings.set("Proxy/Host", page1->proxyHostE->text());
 			QMPSettings.set("Proxy/Port", page1->proxyPortB->value());

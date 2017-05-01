@@ -932,6 +932,10 @@
         <source>Remove youtube-dl</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -2330,7 +2334,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>确定要清除列表?</translation>
     </message>
     <message>
-        <source>Are you sure you want to delete not grouped entries?</source>
+        <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>确定要删除非分组目录?</translation>
     </message>
 </context>

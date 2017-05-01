@@ -932,6 +932,10 @@
         <source>Remove youtube-dl</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -2318,10 +2322,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>Lista de reproducción cargada...</translation>
     </message>
     <message>
-        <source>Are you sure you want to delete not grouped entries?</source>
-        <translation>¿Seguro que desea eliminar entradas no agrupadas?</translation>
-    </message>
-    <message>
         <source>Are you sure you want to clear the list?</source>
         <translation>¿Seguro que desea borrar la lista?</translation>
     </message>
@@ -2332,6 +2332,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Visible entries</source>
         <translation>Entradas visibles</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete ungrouped entries?</source>
+        <translation>¿Seguro que desea eliminar entradas no agrupadas?</translation>
     </message>
 </context>
 <context>

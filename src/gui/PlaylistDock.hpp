@@ -87,7 +87,7 @@ public slots:
 	void setCurrentPlaying();
 	void newGroup();
 	void delEntries();
-	void delNonGroupEntries();
+	void delNonGroupEntries(bool force = false);
 	void clear();
 	void copy();
 	void paste();
