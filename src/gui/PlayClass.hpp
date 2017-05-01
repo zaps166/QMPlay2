@@ -185,6 +185,7 @@ private slots:
 	void setVFlip(bool);
 	void setRotate90(bool);
 	void screenShot();
+	void prevFrame();
 	void nextFrame();
 
 	void frameSizeUpdated(int w, int h);

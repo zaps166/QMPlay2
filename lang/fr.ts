@@ -2215,6 +2215,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>&amp;Stop after</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Previous &amp;frame</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

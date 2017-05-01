@@ -2218,6 +2218,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>&amp;Stop after</source>
         <translation>Z&amp;atrzymaj po</translation>
     </message>
+    <message>
+        <source>Previous &amp;frame</source>
+        <translation>Poprzednia &amp;klatka</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

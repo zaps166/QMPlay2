@@ -1014,6 +1014,15 @@ void PlayClass::screenShot()
 		emptyBufferCond.wakeAll();
 	}
 }
+void PlayClass::prevFrame()
+{
+	if (videoStream > -1 && videoSeekPos <= 0.0 && stopPauseMutex.tryLock())
+	{
+		seek(frame_last_pts - frame_last_delay * 1.5);
+		nextFrameB = true;
+		stopPauseMutex.unlock();
+	}
+}
 void PlayClass::nextFrame()
 {
 	if (videoStream > -1 && stopPauseMutex.tryLock())

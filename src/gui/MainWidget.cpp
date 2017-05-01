@@ -782,6 +782,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->stop, SIGNAL(triggered()), &playC, SLOT(stop()));
 	connect(menuBar->player->next, SIGNAL(triggered()), playlistDock, SLOT(next()));
 	connect(menuBar->player->prev, SIGNAL(triggered()), playlistDock, SLOT(prev()));
+	connect(menuBar->player->prevFrame, SIGNAL(triggered()), &playC, SLOT(prevFrame()));
 	connect(menuBar->player->nextFrame, SIGNAL(triggered()), &playC, SLOT(nextFrame()));
 	for (QAction *act : menuBar->player->repeat->actions())
 		connect(act, SIGNAL(triggered()), playlistDock, SLOT(repeat()));

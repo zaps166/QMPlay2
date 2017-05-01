@@ -236,6 +236,15 @@ void VideoThr::run()
 			frame_timer = gettime();
 	};
 
+	const auto processOneFrame = [&] {
+		if (playC.nextFrameB && playC.seekTo < 0.0 && playC.videoSeekPos <= 0.0)
+		{
+			skip = playC.nextFrameB = false;
+			oneFrame = playC.paused = true;
+			fast = 0;
+		}
+	};
+
 	const auto finishAccurateSeek = [&] {
 		resetVariables();
 		playC.videoSeekPos = -1.0;
@@ -292,12 +301,7 @@ void VideoThr::run()
 		else
 			packet.ts.setInvalid();
 		playC.vPackets.unlock();
-		if (playC.nextFrameB)
-		{
-			skip = playC.nextFrameB = false;
-			oneFrame = playC.paused = true;
-			fast = 0;
-		}
+		processOneFrame();
 		playC.fillBufferB = true;
 
 		/* Subtitles packet */
@@ -448,8 +452,9 @@ void VideoThr::run()
 				if (packet.ts >= playC.videoSeekPos)
 				{
 					finishAccurateSeek();
-					if (playC.audioSeekPos <= 0)
-						cont = false; // Don't play if audio is not ready
+					processOneFrame();
+					if (playC.audioSeekPos <= 0.0 || oneFrame)
+						cont = false; // Play only if audio is ready or if still frame should be displayed
 				}
 				if (cont)
 				{
