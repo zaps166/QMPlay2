@@ -1,7 +1,9 @@
-Changes in QMPlay2 build 17.05.01:
+Changes in QMPlay2 build 17.05.03:
 	- more accurate seeking (use double type instead of seconds in integer),
 	- allow to automatically remove ungrouped playlist entries,
+	- move playback settings to options menu,
 	- stepping to previous frame,
+	- support for OpenSSL 1.1,
 
 Changes in QMPlay2 build 17.04.21:
 	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
