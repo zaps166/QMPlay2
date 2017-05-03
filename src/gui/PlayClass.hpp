@@ -58,6 +58,11 @@ public:
 	Q_SLOT void stop(bool quitApp = false);
 	void restart();
 
+	inline bool canUpdatePosition() const
+	{
+		return canUpdatePos;
+	}
+
 	void chPos(double, bool updateGUI = true);
 
 	void togglePause();

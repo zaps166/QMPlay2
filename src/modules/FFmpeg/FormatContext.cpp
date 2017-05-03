@@ -504,7 +504,7 @@ bool FormatContext::seek(double pos, bool backward)
 		if (seekByByteOffset < 0)
 		{
 #endif
-			const qint64 timestamp = (qint64)(pos * AV_TIME_BASE);
+			const qint64 timestamp = (pos + startTime) * AV_TIME_BASE;
 			isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
 			if (!isOk)
 			{
@@ -532,8 +532,8 @@ bool FormatContext::seek(double pos, bool backward)
 		if (isOk)
 		{
 			for (int i = 0; i < streamsTS.count(); ++i)
-				streamsTS[i] = pos;
-			currPos = pos;
+				streamsTS[i] = pos + startTime;
+			currPos = pos + startTime;
 			isError = false;
 		}
 	}

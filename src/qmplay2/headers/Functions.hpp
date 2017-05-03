@@ -65,7 +65,7 @@ namespace Functions
 	QString Url(QString, const QString &pth = QString());
 	QString getUrlScheme(const QString &url);
 
-	QString timeToStr(double t, bool space = false);
+	QString timeToStr(const double t, const bool decimals = false);
 
 	QString filePath(const QString &);
 	QString fileName(QString, bool extension = true);

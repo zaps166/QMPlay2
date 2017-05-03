@@ -430,8 +430,8 @@ void AudioThr::timerEvent(QTimerEvent *)
 		return;
 	if (canUpdatePos)
 	{
-		if (!playC.vThr && playC.canUpdatePos)
-			emit playC.updatePos(round(playC.pos));
+		if (!playC.vThr)
+			emit playC.updatePos(playC.pos);
 		canUpdatePos = false;
 	}
 	if (canUpdateBitrate)

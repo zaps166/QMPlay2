@@ -58,13 +58,6 @@ static inline void swapArray(quint8 *a, quint8 *b, int size)
 	memcpy(b, t, size);
 }
 
-static inline void getHMS(int t, int &H, int &M, int &S)
-{
-	H = t / 3600;
-	M = t % 3600 / 60;
-	S = t % 60;
-}
-
 /**/
 
 QDate Functions::parseVersion(const QString &dateTxt)
@@ -142,20 +135,22 @@ QString Functions::getUrlScheme(const QString &url)
 	return QString();
 }
 
-QString Functions::timeToStr(double t, bool space)
+QString Functions::timeToStr(const double t, const bool decimals)
 {
 	if (t < 0.0)
 		return QString();
 
-	const QString separator = (space ? " : " : ":");
-
-	int h, m, s;
-	getHMS(t + 0.5, h, m, s);
+	const int intT = t;
+	const int h = intT / 3600;
+	const int m = intT % 3600 / 60;
+	const int s = intT % 60;
 
 	QString timStr;
-	if (h)
-		timStr = QString("%1" + separator).arg(h, 2, 10, QChar('0'));
-	timStr += QString("%1" + separator + "%2").arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
+	if (h > 0)
+		timStr = QString("%1:").arg(h, 2, 10, QChar('0'));
+	timStr += QString("%1:%2").arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
+	if (decimals)
+		timStr += QString(".%1").arg(qRound((t - floor(t)) * 10.0), 1, 10);
 
 	return timStr;
 }

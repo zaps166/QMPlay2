@@ -115,8 +115,8 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments)
-	: updater(this)
+MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
+	updater(this)
 {
 	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
@@ -1229,15 +1229,24 @@ void MainWidget::setSeekSMaximum(int max)
 }
 void MainWidget::updatePos(double pos)
 {
-	const double max = seekS->maximum() / 10.0;
-	const QString remainingTime = (max - pos > -1) ? timeToStr(max - pos) : timeToStr(0.0);
-	timeL->setText(timeToStr(pos) + " ; -" + remainingTime + " / " + timeToStr(max));
-	emit QMPlay2Core.posChanged(pos);
-	seekS->setValue(pos * 10.0);
+	static int currPos;
+	if (!playC.isPlaying() || playC.canUpdatePosition())
+	{
+		const int intPos = pos;
+		if (pos <= 0.0 || currPos != intPos)
+		{
+			const double max = seekS->maximum() / 10.0;
+			const QString remainingTime = (max - pos > 0.0) ? timeToStr(max - pos) : timeToStr(0.0);
+			timeL->setText(timeToStr(pos) + " ; -" + remainingTime + " / " + timeToStr(max));
+			emit QMPlay2Core.posChanged(intPos);
+			currPos = intPos;
+		}
+		seekS->setValue(pos * 10.0);
+	}
 }
 void MainWidget::mousePositionOnSlider(int pos)
 {
-	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos / 10.0), 750);
+	statusBar->showMessage(tr("Pointed position") + ": " + timeToStr(pos / 10.0, true), 750);
 }
 
 void MainWidget::newConnection(IPCSocket *socket)

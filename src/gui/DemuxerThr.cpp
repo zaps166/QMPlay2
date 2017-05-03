@@ -156,8 +156,10 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			repeat = true;
 		}
 
+		const bool stepBackwards = (playC.allowAccurateSeek && playC.nextFrameB);
+
 		const Qt::CheckState accurateSeek = (Qt::CheckState)QMPlay2Core.getSettings().getInt("AccurateSeek");
-		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.allowAccurateSeek)) || (playC.allowAccurateSeek && playC.nextFrameB));
+		const bool doAccurateSeek = (accurateSeek == Qt::Checked || (accurateSeek == Qt::PartiallyChecked && (!localStream || playC.allowAccurateSeek)) || stepBackwards);
 
 		const bool backward = doAccurateSeek || repeat || (playC.seekTo < playC.pos);
 		bool flush = false, aLocked = false, vLocked = false;
@@ -223,7 +225,8 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.sPackets.unlock();
 		}
 
-		if (doDemuxerSeek && demuxer->seek(playC.seekTo, backward))
+		// Workaround: subtract 1 second for stepping backwards - sometimes FFmpeg doesn't seek to key frame (why?)
+		if (doDemuxerSeek && demuxer->seek(playC.seekTo - (stepBackwards ? 1.0 : 0.0), backward))
 			flush = true;
 		else if (!doDemuxerSeek && !flush && !cantSeek)
 		{
@@ -252,7 +255,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			if (playC.pos < 0.0) //skok po rozpoczęciu odtwarzania po uruchomieniu programu
 				emit playC.updatePos(playC.seekTo); //uaktualnia suwak na pasku do wskazanej pozycji
 			if (repeat || playC.videoSeekPos > -1.0 || playC.audioSeekPos > -1.0)
-				playC.emptyBufferCond.wakeAll(); //Weak AV threads
+				playC.emptyBufferCond.wakeAll(); //Wake AV threads
 			const double seekPos = (doAccurateSeek && playC.seekTo > 0.0) ? playC.seekTo : -1.0;
 			if (vThr)
 				playC.videoSeekPos = seekPos;

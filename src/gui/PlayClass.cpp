@@ -94,6 +94,7 @@ PlayClass::PlayClass() :
 	ass(nullptr), osd(nullptr)
 {
 	doSilenceBreak = doSilenceOnStart = false;
+	canUpdatePos = false;
 
 	maxThreshold = 60.0;
 	vol[0] = vol[1] = 1.0;
@@ -229,7 +230,7 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 {
 	if (canUpdatePos)
 	{
-		if ((updateGUI || pos == -1.0) && ((int)newPos != (int)pos))
+		if (updateGUI || pos == -1.0)
 			emit updatePos(newPos);
 		pos = newPos;
 		lastSeekTo = SEEK_NOWHERE;
@@ -1018,8 +1019,8 @@ void PlayClass::prevFrame()
 {
 	if (videoStream > -1 && videoSeekPos <= 0.0 && stopPauseMutex.tryLock())
 	{
-		seek(frame_last_pts - frame_last_delay * 1.5);
 		nextFrameB = true;
+		seek(frame_last_pts - frame_last_delay * 1.5);
 		stopPauseMutex.unlock();
 	}
 }
