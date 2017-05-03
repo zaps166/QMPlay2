@@ -563,10 +563,7 @@ void MainWidget::togglePlay()
 }
 void MainWidget::seek(int pos)
 {
-	if (QMPlay2Core.getSettings().getInt("AccurateSeek") == Qt::Checked)
-		seek(pos / 10.0);
-	else
-		seek((double)(pos / 10));
+	seek(pos / 10.0);
 }
 void MainWidget::seek(double pos)
 {
