@@ -25,6 +25,10 @@
 
 #include <QCoreApplication>
 
+#ifdef Q_OS_MACOS
+class AudioDevice;
+#endif
+
 class PortAudioWriter : public Writer
 {
 	Q_DECLARE_TR_FUNCTIONS(PortAudioWriter)
@@ -66,6 +70,11 @@ private:
 	double outputLatency;
 	bool err, fullBufferReached;
 	int underflows;
+#ifdef Q_OS_MACOS
+	AudioDevice *coreAudioDevice;
+#endif
 };
 
 #define PortAudioWriterName "PortAudio"
+
+// kate: replace-tabs false;

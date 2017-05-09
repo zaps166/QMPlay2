@@ -88,10 +88,19 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	int idx = devicesB->findText(sets().getString("OutputDevice"));
 	devicesB->setCurrentIndex(idx < 0 ? 0 : idx);
 
-	QFormLayout *layout = new QFormLayout(this);
+	bitPerfect = new QCheckBox(tr("Bit-perfect audio"));
+	bitPerfect->setChecked(sets().getBool("BitPerfect"));
+    bitPerfect->setToolTip(tr("This sets the selected output device to the sample rate of the content being played.\n"
+        "Supported on Mac."));
+#if !defined(Q_OS_MACOS)
+    bitPerfect->setEnabled(false);
+#endif
+
+    QFormLayout *layout = new QFormLayout(this);
 	layout->addRow(enabledB);
 	layout->addRow(tr("Playback device") + ": ", devicesB);
 	layout->addRow(tr("Delay") + ": ", delayB);
+	layout->addRow(bitPerfect);
 }
 
 void ModuleSettingsWidget::saveSettings()
@@ -99,4 +108,5 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("WriterEnabled", enabledB->isChecked());
 	sets().set("OutputDevice", devicesB->currentIndex() == 0 ? QString() : devicesB->currentText());
 	sets().set("Delay", delayB->value());
+	sets().set("BitPerfect", bitPerfect->isChecked());
 }
