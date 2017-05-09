@@ -215,7 +215,7 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
 		const int size = qMin((data.size() - newDataPos) / (int)sizeof(float), (tmpDataSize - tmpDataPos) * w.chn);
 		if (!size)
 			break;
-		fltmix(tmpData + tmpDataPos, (const float *)(data.data() + newDataPos), size, w.chn);
+		fltmix(tmpData + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
 		newDataPos += size * sizeof(float);
 		tmpDataPos += size / w.chn;
 		if (tmpDataPos == tmpDataSize)
