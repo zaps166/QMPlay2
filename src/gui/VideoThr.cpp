@@ -475,12 +475,6 @@ void VideoThr::run()
 
 			tmp_time += delay;
 			++frames;
-			if (tmp_time >= 1.0)
-			{
-				emit playC.updateBitrateAndFPS(-1, round((tmp_br << 3) / (tmp_time * 1000.0)), frames / tmp_time, framesDisplayed / framesDisplayedTime, interlaced);
-				frames = tmp_br = framesDisplayed = 0;
-				tmp_time = framesDisplayedTime = 0.0;
-			}
 
 			delay /= playC.speed;
 
@@ -493,7 +487,14 @@ void VideoThr::run()
 			const double true_delay = delay;
 
 			const double audioCurrentPts = playC.audio_current_pts;
-			bool canSkipFrames = syncVtoA && audioCurrentPts > 0.0;
+			const bool canSkipFrames = syncVtoA && audioCurrentPts > 0.0;
+
+			if (tmp_time >= 1.0)
+			{
+				emit playC.updateBitrateAndFPS(-1, round((tmp_br << 3) / (tmp_time * 1000.0)), frames / tmp_time, canSkipFrames ? framesDisplayed / framesDisplayedTime : qQNaN(), interlaced);
+				frames = tmp_br = framesDisplayed = 0;
+				tmp_time = framesDisplayedTime = 0.0;
+			}
 
 			if (canSkipFrames && !oneFrame)
 			{
@@ -597,9 +598,11 @@ void VideoThr::run()
 				{
 					oneFrame = canWrite = false;
 					QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame), Q_ARG(quint32, seq));
-					++framesDisplayed;
+					if (canSkipFrames)
+						++framesDisplayed;
 				}
-				framesDisplayedTime += true_delay;
+				if (canSkipFrames)
+					framesDisplayedTime += true_delay;
 			}
 			if (updateFrameTimer)
 				frame_timer = gettime();

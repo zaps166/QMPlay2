@@ -116,6 +116,8 @@ void InfoDock::updateBitrateAndFPS(int a, int v, double fps, double realFPS, boo
 			videoFPS = fps;
 		if (realFPS >= 0.0)
 			videoRealFPS = realFPS;
+		else if (qIsNaN(realFPS))
+			videoRealFPS = -1.0;
 		if (v >= 0 || fps >= 0.0 || realFPS >= 0.0)
 			interlacedVideo = interlaced;
 	}
