@@ -5,6 +5,6 @@ uniform mat4 uMatrix;
 
 void main()
 {
-	vTexCoord = aTexCoord;
-	gl_Position = uMatrix * aPosition;
+    vTexCoord = aTexCoord;
+    gl_Position = uMatrix * aPosition;
 }
