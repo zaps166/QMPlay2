@@ -22,6 +22,8 @@
 #include <QScrollBar>
 #include <QLabel>
 
+#include <cmath>
+
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
 	if (!anchorAt(e->pos()).isEmpty())
@@ -116,7 +118,7 @@ void InfoDock::updateBitrateAndFPS(int a, int v, double fps, double realFPS, boo
 			videoFPS = fps;
 		if (realFPS >= 0.0)
 			videoRealFPS = realFPS;
-		else if (qIsNaN(realFPS))
+		else if (std::isnan(realFPS))
 			videoRealFPS = -1.0;
 		if (v >= 0 || fps >= 0.0 || realFPS >= 0.0)
 			interlacedVideo = interlaced;
