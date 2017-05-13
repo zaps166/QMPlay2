@@ -23,11 +23,11 @@ uniform sampler uY;
     uniform sampler uCb, uCr;
 #endif
 
-const mat3 YUVtoRGB = mat3(
-    1.16430,  1.16430, 1.16430,
-    0.00000, -0.39173, 2.01700,
-    1.59580, -0.81290, 0.00000
-);
+const mat3 YUVtoRGB = transpose(mat3(
+    1.16430,  0.00000,  1.59580,
+    1.16430, -0.39173, -0.81290,
+    1.16430,  2.01700,  0.00000
+));
 
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
