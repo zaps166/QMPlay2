@@ -231,7 +231,7 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 	if (canUpdatePos)
 	{
 		if (updateGUI || pos == -1.0)
-			emit updatePos(newPos);
+			emit updatePos(qMax(0.0, newPos));
 		pos = newPos;
 		lastSeekTo = SEEK_NOWHERE;
 		if (seekA >= 0.0 && seekB > seekA && pos >= seekB) //A-B Repeat
