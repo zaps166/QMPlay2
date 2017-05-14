@@ -599,8 +599,9 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 	{
 		for (const QUrl &url : mimeData->urls())
 		{
-			QString u = url.toLocalFile();
-			if (u.length() > 1 && u.endsWith("/"))
+			const bool isLocalFile = url.isLocalFile();
+			QString u = isLocalFile ? url.toLocalFile() : url.toString();
+			if (isLocalFile && u.length() > 1 && u.endsWith("/"))
 				u.chop(1);
 			if (!u.isEmpty())
 				urls += u;
