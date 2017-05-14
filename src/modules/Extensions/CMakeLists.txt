@@ -20,6 +20,7 @@ set(Extensions_HDR
     YouTube.hpp
     Downloader.hpp
     Radio.hpp
+    Radio/RadioBrowserModel.hpp
 )
 
 set(Extensions_SRC
@@ -27,6 +28,11 @@ set(Extensions_SRC
     YouTube.cpp
     Downloader.cpp
     Radio.cpp
+    Radio/RadioBrowserModel.cpp
+)
+
+set(Extensions_FORMS
+    Radio/Radio.ui
 )
 
 set(Extensions_RESOURCES
@@ -88,8 +94,10 @@ endif()
 
 if(USE_QT5)
     qt5_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
+    qt5_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
 else()
     qt4_add_resources(Extensions_RESOURCES_RCC ${Extensions_RESOURCES})
+    qt4_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
 endif()
 
 include_directories(../../qmplay2/headers)
@@ -97,6 +105,7 @@ include_directories(../../qmplay2/headers)
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Extensions_HDR}
     ${Extensions_SRC}
+    ${Extensions_FORM_HDR}
     ${Extensions_RESOURCES_RCC}
 )
 

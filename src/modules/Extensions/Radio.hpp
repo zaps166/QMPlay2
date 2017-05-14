@@ -20,50 +20,88 @@
 
 #include <QMPlay2Extensions.hpp>
 
-class QListWidgetItem;
-class QProgressBar;
-class QListWidget;
-class QLabel;
-class NetworkAccess;
-
-#include <QMenu>
+#include <QPointer>
 #include <QIcon>
+#include <QMap>
 
-class Radio : public QWidget, public QMPlay2Extensions
+#include "ui_Radio.h"
+
+namespace Ui {
+	class Radio;
+}
+
+class RadioBrowserModel;
+class NetworkAccess;
+class NetworkReply;
+class QTimer;
+class QMenu;
+
+class Radio : public QTabWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
+
 public:
 	Radio(Module &);
 	~Radio() final;
 
 	DockWidget *getDockWidget() override final;
+
 private slots:
-	void visibilityChanged(bool);
-	void popup(const QPoint &);
-	void removeStation();
+	void visibilityChanged(const bool v);
 
-	void openLink();
+	void tabChanged(int index);
 
-	void downloadProgress(int bytesReceived, int bytesTotal);
-	void finished();
+	void qmplay2RadioStationsFinished();
+
+	void searchData();
+	void searchFinished();
+
+	void loadIcons();
+
+	void replyFinished(NetworkReply *reply);
+
+	void on_addMyRadioStationButton_clicked();
+	void on_editMyRadioStationButton_clicked();
+	void on_removeMyRadioStationButton_clicked();
+
+	void on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item);
+	void on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item);
+
+	void on_searchByComboBox_activated(int idx);
+	void on_addRadioBrowserStationButton_clicked();
+	void on_radioView_doubleClicked(const QModelIndex &index);
+	void on_radioView_customContextMenuRequested(const QPoint &pos);
+
+	void radioBrowserPlay();
+	void radioBrowserAdd();
+	void radioBrowserEnqueue();
+	void radioBrowserOpenHomePage();
+	void radioBrowserEdit();
+
 private:
-	void addGroup(const QString &);
-	void addStation(const QString &nazwa, const QString &URL, const QString &groupName, const QByteArray &img = QByteArray());
+	void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
-	DockWidget *dw;
+	void addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item = nullptr);
 
-	bool once;
-	NetworkAccess *net;
+	void setSearchInfo(const QStringList &list);
 
-	QListWidget *lW;
-	QLabel *infoL;
-	QProgressBar *progressB;
+	void restoreSettings();
 
-	QMenu popupMenu;
+	const QString m_newStationTxt;
+	const QIcon m_radioIcon;
 
-	QIcon qmp2Icon;
-	const QString wlasneStacje;
-	QListWidgetItem *nowaStacjaLWI;
+	Ui::Radio *ui;
+
+	QPointer<NetworkReply> m_qmplay2RadioStationsReply;
+	bool m_once = false;
+	DockWidget *m_dw;
+
+	QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
+	RadioBrowserModel *m_radioBrowserModel;
+	QMenu *m_radioBrowserMenu;
+	QTimer *m_loadIconsTimer;
+	QStringList m_nameItems;
+	NetworkAccess *m_net;
 };
 
 #define RadioName "Radio Browser"

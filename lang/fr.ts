@@ -2496,26 +2496,6 @@ QMPlay2 will not display icons!</source>
         <translation>Radios internet</translation>
     </message>
     <message>
-        <source>Downloading list, please wait...</source>
-        <translation>Téléchargement de la liste, veuillez patienter...</translation>
-    </message>
-    <message>
-        <source>Number of radio stations</source>
-        <translation>Nombre de stations de radio</translation>
-    </message>
-    <message>
-        <source>Error while downloading list</source>
-        <translation>Erreur pendant le téléchargement de la liste</translation>
-    </message>
-    <message>
-        <source>Own radio stations</source>
-        <translation>Stations radio personnelles</translation>
-    </message>
-    <message>
-        <source>Remove the radio station</source>
-        <translation>Supprimer la station radio</translation>
-    </message>
-    <message>
         <source>Adding a new radio station</source>
         <translation>Ajout d&apos;une nouvelle station radio</translation>
     </message>
@@ -2530,6 +2510,77 @@ QMPlay2 will not display icons!</source>
     <message>
         <source>Address</source>
         <translation>Adresse</translation>
+    </message>
+    <message>
+        <source>QMPlay2 radio stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>My radio stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit selected radio station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected radio station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio Browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enqueue</source>
+        <translation type="unfinished">Mettre dans la file d&apos;attente</translation>
+    </message>
+    <message>
+        <source>Add to my radio stations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open radio website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Editing selected radio station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radio station with given name already exists!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RadioBrowserModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <source>Stream info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

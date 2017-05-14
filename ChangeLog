@@ -1,6 +1,7 @@
 Changes in QMPlay2 build 17.05.03:
 	- more accurate seeking (use double type instead of seconds in integer),
 	- allow to automatically remove ungrouped playlist entries,
+	- improve Radio module, add Radio Browser,
 	- move playback settings to options menu,
 	- stepping to previous frame,
 	- support for OpenSSL 1.1,
