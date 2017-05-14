@@ -72,7 +72,7 @@ private:
 	void handlePause();
 	void emitBufferInfo(bool clearBackwards);
 
-	void updateCoverAndPlaying();
+	void updateCoverAndPlaying(bool doCompare);
 
 	void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
 
