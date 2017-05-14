@@ -294,7 +294,7 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 	return icon.pixmap(imgSize);
 #endif
 }
-void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
+void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
 	if (Q_UNLIKELY(scale <= 0.0))
 		return;
