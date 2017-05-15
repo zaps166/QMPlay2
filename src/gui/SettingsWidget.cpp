@@ -170,8 +170,8 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("Proxy/Password", QString());
 	QMPSettings.init("ShortSeek", 5);
 	QMPSettings.init("LongSeek", 30);
-	QMPSettings.init("AVBufferLocal", 75);
-	QMPSettings.init("AVBufferNetwork", 25000);
+	QMPSettings.init("AVBufferLocal", 100);
+	QMPSettings.init("AVBufferNetwork", 50000);
 	QMPSettings.init("BackwardBuffer", 1);
 	QMPSettings.init("PlayIfBuffered", 1.75);
 	QMPSettings.init("MaxVol", 100);
