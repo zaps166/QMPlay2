@@ -123,8 +123,10 @@ QString Functions::Url(QString url, const QString &pth)
 				addPth += '/';
 			url.prepend(addPth);
 		}
+#ifndef Q_OS_WIN
 		if (hasBackslash && !QFileInfo(url).exists())
 			url.replace("\\", "/");
+#endif
 		url.prepend("file://");
 	}
 	return url;
