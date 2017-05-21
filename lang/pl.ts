@@ -2501,26 +2501,6 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
         <translation>Radia internetowe</translation>
     </message>
     <message>
-        <source>Downloading list, please wait...</source>
-        <translation>Pobieranie listy, czekaj...</translation>
-    </message>
-    <message>
-        <source>Number of radio stations</source>
-        <translation>Liczba stacji radiowych</translation>
-    </message>
-    <message>
-        <source>Error while downloading list</source>
-        <translation>Błąd podczas pobierania listy</translation>
-    </message>
-    <message>
-        <source>Own radio stations</source>
-        <translation>Własne stacje radiowe</translation>
-    </message>
-    <message>
-        <source>Remove the radio station</source>
-        <translation>Usuń stację radiową</translation>
-    </message>
-    <message>
         <source>Adding a new radio station</source>
         <translation>Dodawanie nowej stacji radiowej</translation>
     </message>
@@ -2535,6 +2515,77 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
     <message>
         <source>Address</source>
         <translation>Adres</translation>
+    </message>
+    <message>
+        <source>QMPlay2 radio stations</source>
+        <translation>Stacje radiowe QMPlay2</translation>
+    </message>
+    <message>
+        <source>My radio stations</source>
+        <translation>Moje stacje radiowe</translation>
+    </message>
+    <message>
+        <source>Edit selected radio station</source>
+        <translation>Edytuj zaznaczoną stację radiową</translation>
+    </message>
+    <message>
+        <source>Remove selected radio station</source>
+        <translation>Usuń zaznaczoną stację radiową</translation>
+    </message>
+    <message>
+        <source>Radio Browser</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Odtwórz</translation>
+    </message>
+    <message>
+        <source>Enqueue</source>
+        <translation>Kolejkuj</translation>
+    </message>
+    <message>
+        <source>Add to my radio stations</source>
+        <translation>Dodaj do moich stacji radiowych</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Edytuj</translation>
+    </message>
+    <message>
+        <source>Open radio website</source>
+        <translation>Otwórz strone internetową radia</translation>
+    </message>
+    <message>
+        <source>Editing selected radio station</source>
+        <translation>Edytowanie zaznaczonej stacji radiowej</translation>
+    </message>
+    <message>
+        <source>Radio station with given name already exists!</source>
+        <translation>Stacja radiowa z podaną nazwą już istnieje!</translation>
+    </message>
+</context>
+<context>
+    <name>RadioBrowserModel</name>
+    <message>
+        <source>Name</source>
+        <translation>Nazwa</translation>
+    </message>
+    <message>
+        <source>Stream info</source>
+        <translation>Informacje</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Kraj</translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation>Tagi</translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation>Ocena</translation>
     </message>
 </context>
 <context>

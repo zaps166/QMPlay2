@@ -113,8 +113,8 @@ QString Functions::Url(QString url, const QString &pth)
 #ifdef Q_OS_WIN
 		if (url.startsWith("/"))
 			url.remove(0, 1);
-#endif
-#ifndef Q_OS_WIN
+#else
+		const bool hasBackslash = url.contains('\\');
 		if (!url.startsWith("/"))
 #endif
 		{
@@ -123,6 +123,10 @@ QString Functions::Url(QString url, const QString &pth)
 				addPth += '/';
 			url.prepend(addPth);
 		}
+#ifndef Q_OS_WIN
+		if (hasBackslash && !QFileInfo(url).exists())
+			url.replace("\\", "/");
+#endif
 		url.prepend("file://");
 	}
 	return url;
@@ -294,7 +298,7 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 	return icon.pixmap(imgSize);
 #endif
 }
-void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
+void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
 	if (Q_UNLIKELY(scale <= 0.0))
 		return;
@@ -599,8 +603,9 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 	{
 		for (const QUrl &url : mimeData->urls())
 		{
-			QString u = url.toLocalFile();
-			if (u.length() > 1 && u.endsWith("/"))
+			const bool isLocalFile = url.isLocalFile();
+			QString u = isLocalFile ? url.toLocalFile() : url.toString();
+			if (isLocalFile && u.length() > 1 && u.endsWith("/"))
 				u.chop(1);
 			if (!u.isEmpty())
 				urls += u;

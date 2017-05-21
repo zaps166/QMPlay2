@@ -411,7 +411,7 @@ void DemuxerThr::run()
 
 	demuxerReady = true;
 
-	updateCoverAndPlaying();
+	updateCoverAndPlaying(false);
 	connect(&QMPlay2Core, SIGNAL(updateCover(QString, QString, QString, QByteArray)), this, SLOT(updateCover(QString, QString, QString, QByteArray)));
 
 	if (forwardPackets == 1 || localStream || unknownLength)
@@ -485,10 +485,10 @@ void DemuxerThr::run()
 		{
 			emitBufferInfo(false);
 			if (demuxer->metadataChanged())
-				updateCoverAndPlaying();
+				updateCoverAndPlaying(true);
 		}
 		else if (localStream && demuxer->metadataChanged())
-			updateCoverAndPlaying();
+			updateCoverAndPlaying(true);
 
 		if (!localStream && !playC.waitForData && !playC.endOfStream && playIfBuffered > 0.0 && emptyBuffers(vS, aS))
 		{
@@ -647,8 +647,11 @@ void DemuxerThr::emitBufferInfo(bool clearBackwards)
 	time = Functions::gettime();
 }
 
-void DemuxerThr::updateCoverAndPlaying()
+void DemuxerThr::updateCoverAndPlaying(bool doCompare)
 {
+	const QString prevTitle  = title;
+	const QString prevArtist = artist;
+	const QString prevAlbum  = album;
 	title.clear();
 	artist.clear();
 	album.clear();
@@ -670,11 +673,14 @@ void DemuxerThr::updateCoverAndPlaying()
 				break;
 		}
 	}
-	const bool showCovers = QMPlay2Core.getSettings().getBool("ShowCovers");
-	if (showCovers)
-		loadImage();
-	emitInfo();
-	emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName);
+	if (!doCompare || prevTitle != title || prevArtist != artist || prevAlbum != album)
+	{
+		const bool showCovers = QMPlay2Core.getSettings().getBool("ShowCovers");
+		if (showCovers)
+			loadImage();
+		emitInfo();
+		emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName);
+	}
 }
 
 static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str)
