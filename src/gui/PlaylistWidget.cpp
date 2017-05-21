@@ -341,22 +341,22 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		const Playlist::Entries entries = Playlist::read(url, &name);
 		if (!name.isEmpty()) //Loading playlist
 		{
+			QTreeWidgetItem *playlistParent = currentItem;
 			if (loadList) //Loading QMPlay2 playlist on startup
 				pLW.clear(); //This can be executed only from GUI thread!
 			else
 			{
 				const QString groupName = Functions::fileName(url, false);
 				if (sync != FILE_SYNC)
-					currentItem = pLW.newGroup(groupName, url, currentItem, insertChildAt, existingEntries); //Adding a new playlist group
+					playlistParent = pLW.newGroup(groupName, url, currentItem, insertChildAt, existingEntries); //Adding a new playlist group
 				else
 				{
 					//Reuse current playlist group
-					QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, parent), Q_ARG(QString, groupName));
-					currentItem = parent;
+					QMetaObject::invokeMethod(this, "changeItemText0", Q_ARG(QTreeWidgetItem *, currentItem), Q_ARG(QString, groupName));
 					sync = NO_SYNC;
 				}
 			}
-			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, currentItem, demuxersInfo, insertChildAt, existingEntries);
+			QTreeWidgetItem *tmpFirstItem = insertPlaylistEntries(entries, playlistParent, demuxersInfo, insertChildAt, existingEntries);
 			if (!firstItem)
 				firstItem = tmpFirstItem;
 			added = !entries.isEmpty();
