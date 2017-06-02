@@ -375,7 +375,8 @@ void DownloaderThread::run()
 		{
 			if (name.isEmpty())
 				name = demuxer->title();
-			name += ".mkv";
+			if (!name.endsWith(".mkv", Qt::CaseInsensitive))
+				name += ".mkv";
 			emit listSig(NAME);
 
 			QString filePath = getFilePath();
