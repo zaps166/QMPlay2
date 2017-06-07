@@ -30,7 +30,7 @@ Visualizations::Visualizations() :
 {
 	m_icon = QIcon(":/Visualizations.svgz");
 
-	int ms = 22;
+	int ms = 17;
 
 #ifdef USE_OPENGL
 	const QString platformName = QGuiApplication::platformName();
