@@ -20,6 +20,7 @@
 
 #include <PacketBuffer.hpp>
 
+#include <QSet>
 #include <QSize>
 #include <QTimer>
 #include <QMutex>
@@ -129,7 +130,7 @@ private:
 	PacketBuffer aPackets, vPackets, sPackets;
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
-	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError;
+	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError, videoDecErrorLoad;
 	double seekTo, lastSeekTo, restartSeekTo, seekA, seekB, videoSeekPos, audioSeekPos;
 	double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
@@ -140,6 +141,9 @@ private:
 	int audioStream, videoStream, subtitlesStream;
 	int choosenAudioStream, choosenVideoStream, choosenSubtitlesStream;
 	QString choosenAudioLang, choosenSubtitlesLang;
+
+	QSet<QString> videoDecodersError;
+	QString videoDecoderModuleName;
 
 	double maxThreshold, fps;
 

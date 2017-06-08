@@ -34,7 +34,7 @@ class QMPlay2DummyDecoder : public Decoder
 	}
 };
 
-Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStringList &modNames)
+Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStringList &modNames, QString *modNameOutput)
 {
 	if (!streamInfo.must_decode)
 	{
@@ -66,7 +66,11 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
 		if (!decoder)
 			continue;
 		if (decoder->open(streamInfo, writer))
+		{
+			if (modNameOutput)
+				*modNameOutput = moduleInfo.name;
 			return decoder;
+		}
 		delete decoder;
 	}
 	return nullptr;
@@ -105,5 +109,10 @@ bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
 	Q_UNUSED(osd)
 	Q_UNUSED(w)
 	Q_UNUSED(h)
+	return false;
+}
+
+bool Decoder::hasCriticalError() const
+{
 	return false;
 }

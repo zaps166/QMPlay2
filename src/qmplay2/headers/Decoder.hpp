@@ -34,7 +34,7 @@ class LibASS;
 class Decoder : public ModuleCommon
 {
 public:
-	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {});
+	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {}, QString *modNameOutput = nullptr);
 
 	virtual ~Decoder() = default;
 
@@ -52,6 +52,8 @@ public:
 	virtual int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
 	virtual int decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush = false);
 	virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h);
+
+	virtual bool hasCriticalError() const;
 
 private:
 	virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) = 0;

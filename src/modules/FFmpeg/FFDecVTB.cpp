@@ -194,7 +194,8 @@ private:
 FFDecVTB::FFDecVTB(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex),
 	m_swsCtx(nullptr),
-	m_copyVideo(false)
+	m_copyVideo(false),
+	m_hasCriticalError(false)
 {
 	SetModule(module);
 }
@@ -233,6 +234,10 @@ int FFDecVTB::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		CVPixelBufferRef pixelBuffer = CVPixelBufferRetain((CVPixelBufferRef)decoded.surfaceId);
 		((VTBHwaccel *)m_hwAccelWriter->getHWAccelInterface())->addBuffer(pixelBuffer);
 		decoded.surfaceId = (quintptr)pixelBuffer;
+	}
+	if (ret < 0 && !codec_ctx->hwaccel)
+	{
+		m_hasCriticalError = true;
 	}
 	return ret;
 }
@@ -282,6 +287,11 @@ void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)
 
 		decoded = VideoFrame(VideoFrameSize(w, h), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
 	}
+}
+
+bool FFDecVTB::hasCriticalError() const
+{
+	return m_hasCriticalError;
 }
 
 bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)

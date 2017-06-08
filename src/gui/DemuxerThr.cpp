@@ -147,7 +147,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 		bool seekInBuffer = !skipBufferSeek;
 		if (playC.seekTo == SEEK_STREAM_RELOAD) //po zmianie strumienia audio, wideo lub napisów lub po ponownym uruchomieniu odtwarzania
 		{
-			playC.seekTo = playC.pos;
+			playC.seekTo = qMax(0.0, playC.pos);
 			seekInBuffer = false;
 		}
 		else if (playC.seekTo == SEEK_REPEAT)
@@ -456,6 +456,17 @@ void DemuxerThr::run()
 
 		if (demuxer.isAborted() || err)
 			break;
+
+		if (vThr && vThr->dec->hasCriticalError())
+		{
+			playC.videoDecodersError.insert(playC.videoDecoderModuleName);
+			playC.reload = playC.videoDecErrorLoad = true;
+			if (!load())
+			{
+				err = true;
+				break;
+			}
+		}
 
 		handlePause();
 
