@@ -1,10 +1,16 @@
-Changes in QMPlay2 build 17.05.03:
+Changes in QMPlay2 build 17.06.08:
+	- load next video decoder if current video decoder fails (fixes some VideoToolBox problems),
 	- more accurate seeking (use double type instead of seconds in integer),
+	- 17 ms is now default value for visualizations refresh time,
 	- allow to automatically remove ungrouped playlist entries,
-	- improve Radio module, add Radio Browser,
+	- stepping to previous frame (experimental),
+	- improve Radio module - add Radio Browser,
 	- move playback settings to options menu,
-	- stepping to previous frame,
+	- use name from playlist for downloader,
+	- accurate playback position on slider,
+	- increase default buffer sizes,
 	- support for OpenSSL 1.1,
+	- bugfix,
 
 Changes in QMPlay2 build 17.04.21:
 	- automatically reconnect network streams on error (fixes some problems with YouTube playback),
