@@ -225,7 +225,8 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.sPackets.unlock();
 		}
 
-		// Workaround: subtract 1 second for stepping backwards - sometimes FFmpeg doesn't seek to key frame (why?)
+		// Workaround: subtract 1 second for stepping backwards - sometimes FFmpeg doesn't seek to
+		// key frame (why?) or PTS is higher than DTS. This also doesn't resolve all rare issues.
 		if (doDemuxerSeek && demuxer->seek(playC.seekTo - (stepBackwards ? 1.0 : 0.0), backward))
 			flush = true;
 		else if (!doDemuxerSeek && !flush && !cantSeek)
