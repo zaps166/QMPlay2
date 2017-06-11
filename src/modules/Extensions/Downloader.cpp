@@ -375,7 +375,15 @@ void DownloaderThread::run()
 		{
 			if (name.isEmpty())
 				name = demuxer->title();
-			name += ".mkv";
+			if (name.isEmpty())
+			{
+				name = Functions::fileName(newUrl);
+				int idx = name.indexOf("?");
+				if (idx > -1)
+					name.remove(idx, name.size() - idx);
+			}
+			if (!name.endsWith(".mkv", Qt::CaseInsensitive))
+				name += ".mkv";
 			emit listSig(NAME);
 
 			QString filePath = getFilePath();
@@ -437,6 +445,18 @@ void DownloaderThread::run()
 		int idx = name.indexOf("?");
 		if (idx > -1)
 			name.remove(idx, name.size() - idx);
+	}
+	else if (param.isEmpty() && extension.isEmpty())
+	{
+		// Extract file extension from URL if exists
+		QString tmp = newUrl;
+		int idx = tmp.indexOf("?");
+		if (idx > -1)
+			tmp.remove(idx, tmp.size() - idx);
+		const int idx1 = tmp.indexOf("://");
+		const int idx2 = tmp.lastIndexOf(".");
+		if (idx1 > -1 && idx2 > -1 && tmp.lastIndexOf('/', idx2) != idx1 + 2)
+			name += tmp.mid(idx2);
 	}
 	if (!name.isEmpty() && !extension.isEmpty())
 		name += extension;
@@ -625,9 +645,9 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 	QAction *act = new QAction(Downloader::tr("Download"), nullptr);
 	act->setIcon(QIcon(":/downloader.svgz"));
 	act->connect(act, SIGNAL(triggered()), this, SLOT(download()));
+	act->setProperty("name", name);
 	if (!prefix.isEmpty())
 	{
-		act->setProperty("name", name);
 		act->setProperty("prefix", prefix);
 		act->setProperty("param", param);
 	}

@@ -99,7 +99,7 @@ PlayClass::PlayClass() :
 	maxThreshold = 60.0;
 	vol[0] = vol[1] = 1.0;
 
-	quitApp = muted = reload = false;
+	quitApp = muted = reload = videoDecErrorLoad = false;
 
 	speed = subtitlesScale = zoom = 1.0;
 	flip = 0;
@@ -191,6 +191,7 @@ void PlayClass::play(const QString &_url)
 }
 void PlayClass::stop(bool _quitApp)
 {
+	videoDecodersError.clear();
 	quitApp = _quitApp;
 	if (stopPauseMutex.tryLock())
 	{
@@ -526,6 +527,7 @@ void PlayClass::stopVDec()
 			vThr->stop(true);
 			vThr = nullptr;
 		}
+		videoDecoderModuleName.clear();
 	}
 	frame_last_pts = frame_last_delay = 0.0;
 	subtitlesStream = -1;
@@ -1198,14 +1200,21 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, VideoWriter *writer = nullptr)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
 {
+	QStringList decoders = QMPlay2Core.getModules("decoders", 7);
+	const bool decodersListEmpty = decoders.isEmpty();
+	for (const QString &blacklisted : blacklist)
+		decoders.removeOne(blacklisted);
+	if (decoders.isEmpty() && !decodersListEmpty)
+		return nullptr;
+
 	Decoder *dec = nullptr;
-	const bool subtitles = type == QMPLAY2_TYPE_SUBTITLE;
+	const bool subtitles = (type == QMPLAY2_TYPE_SUBTITLE);
 	if (choosenStream >= 0 && choosenStream < streams.count() && streams[choosenStream]->type == type)
 	{
 		if (streams[choosenStream]->must_decode || !subtitles)
-			dec = Decoder::create(*streams[choosenStream], writer, QMPlay2Core.getModules("decoders", 7));
+			dec = Decoder::create(*streams[choosenStream], writer, decoders, modNameOutput);
 		if (dec || subtitles)
 			stream = choosenStream;
 	}
@@ -1240,7 +1249,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 			if (streamInfo.type == type && (defaultStream == -1 || i == defaultStream))
 			{
 				if (streamInfo.must_decode || !subtitles)
-					dec = Decoder::create(streamInfo, writer, QMPlay2Core.getModules("decoders", 7));
+					dec = Decoder::create(streamInfo, writer, decoders, modNameOutput);
 				if (dec || subtitles)
 				{
 					stream = i;
@@ -1256,12 +1265,12 @@ void PlayClass::load(Demuxer *demuxer)
 	const QList<StreamInfo *> streams = demuxer->streamsInfo();
 	Decoder *dec = nullptr;
 
-	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream)) //load video
+	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream) || videoDecErrorLoad) //load video
 	{
 		vPackets.clear();
 		stopVDec(); //lock
 		if (videoEnabled)
-			dec = loadStream(streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), vThr ? vThr->getHWAccelWriter() : nullptr);
+			dec = loadStream(streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
 		else
 			dec = nullptr;
 		if (dec)
@@ -1443,6 +1452,6 @@ void PlayClass::load(Demuxer *demuxer)
 		}
 	}
 
-	reload = false;
+	reload = videoDecErrorLoad = false;
 	loadMutex.unlock();
 }

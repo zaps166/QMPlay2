@@ -272,7 +272,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0))
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || dec->hasCriticalError())
 		{
 			if (playC.paused && !paused)
 			{
