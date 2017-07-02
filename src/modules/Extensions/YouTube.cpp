@@ -883,10 +883,12 @@ void YouTube::setSearchResults(QString data)
 				if (imgEndIdx > -1)
 				{
 					image = entry.mid(imgIdx, imgEndIdx - imgIdx);
-					if (image.endsWith(".gif")) //GIF nie jest miniaturką - jest to pojedynczy piksel :D
+					if (image.endsWith(".gif")) //GIF nie jest miniaturką - jest to pojedynczy piksel :D (very old code, is it still relevant?)
 						image.clear();
 					else if (image.startsWith("//"))
 						image.prepend("https:");
+					if ((idx = image.indexOf("?")) > 0)
+						image.truncate(idx);
 				}
 			}
 		}
