@@ -25,12 +25,14 @@
 	#include <QGuiApplication>
 #endif
 
+constexpr int g_ms = 17;
+
 Visualizations::Visualizations() :
 	Module("Visualizations")
 {
 	m_icon = QIcon(":/Visualizations.svgz");
 
-	int ms = 17;
+	int ms = g_ms;
 
 #ifdef USE_OPENGL
 	const QString platformName = QGuiApplication::platformName();
@@ -91,7 +93,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	useOpenGLB->setChecked(sets().getBool("UseOpenGL"));
 	useOpenGLB->setToolTip(tr("Always enabled on Wayland platform.\nRecommended to use when OpenGL video output is in RTT mode."));
 	connect(useOpenGLB, &QCheckBox::toggled, [this](bool checked) {
-		refTimeB->setValue(checked ? 10 : 22);
+		refTimeB->setValue(checked ? 10 : g_ms);
 	});
 #endif
 
