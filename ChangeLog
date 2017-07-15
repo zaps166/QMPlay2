@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 17.07.02:
+	- fix YouTube images,
+
 Changes in QMPlay2 build 17.06.09:
 	- load next video decoder if current video decoder fails (fixes some VideoToolBox problems),
 	- more accurate seeking (use double type instead of seconds in integer),
