@@ -157,6 +157,7 @@ void SettingsWidget::InitSettings()
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 	QMPSettings.init("AllowOnlyOneInstance", false);
 #endif
+	QMPSettings.init("HideArtistMetadata", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
@@ -379,6 +380,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->allowOnlyOneInstance = nullptr;
 #endif
 
+		page1->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
 		page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
 		page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
 		page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
@@ -773,6 +775,7 @@ void SettingsWidget::apply()
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 			QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
 #endif
+			QMPSettings.set("HideArtistMetadata", page1->hideArtistMetadata->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());

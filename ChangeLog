@@ -1,4 +1,5 @@
 Changes in QMPlay2 build 17.07.20:
+	- added option to hide metadata for playlist entries,
 	- Tekstowo: minor improvement,
 	- don't delete Radio settings,
 	- fix YouTube images,

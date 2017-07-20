@@ -231,6 +231,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
 	lastTime(0.0),
 	invalErrCount(0), errFromSeek(0),
 	maybeHasFrame(false),
+	artistWithTitle(true),
 	stillImage(false),
 	avcodec_mutex(avcodec_mutex)
 {}
@@ -332,7 +333,7 @@ QString FormatContext::title() const
 	if (AVDictionary *dict = getMetadata())
 	{
 		const QString title  = getTag(dict, "title");
-		const QString artist = getTag(dict, "artist");
+		const QString artist = artistWithTitle ? getTag(dict, "artist") : QString();
 		if (!title.isEmpty() && !artist.isEmpty())
 			return artist + " - " + title;
 		else if (title.isEmpty() && !artist.isEmpty())
@@ -704,6 +705,10 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	if (scheme.isEmpty())
 		return false;
 
+	const Settings &settings = QMPlay2Core.getSettings();
+
+	artistWithTitle = !settings.getBool("HideArtistMetadata");
+
 	qint64 oggOffset = -1, oggSize = -1;
 	int oggTrack = -1;
 	QString url;
@@ -762,7 +767,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	if (name().startsWith("image2") || name().endsWith("_pipe"))
 	{
-		if (!QMPlay2Core.getSettings().getBool("StillImages"))
+		if (!settings.getBool("StillImages"))
 			return false;
 		stillImage = true;
 	}

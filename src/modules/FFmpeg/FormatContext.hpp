@@ -104,6 +104,7 @@ private:
 	int invalErrCount, errFromSeek;
 	bool maybeHasFrame;
 
+	bool artistWithTitle;
 	bool stillImage;
 
 #if LIBAVFORMAT_VERSION_MAJOR <= 55

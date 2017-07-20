@@ -936,6 +936,10 @@
         <source>Automatically delete ungrouped entries</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

@@ -131,14 +131,15 @@ QString AudioCDDemux::name() const
 QString AudioCDDemux::title() const
 {
 	QString prefix, suffix;
+	const QString artist = QMPlay2Core.getSettings().getBool("HideArtistMetadata") ? QString() : Artist;
 	if (isData)
 		suffix = " - " + tr("Data");
-	else if (!Title.isEmpty() && !Artist.isEmpty())
-		return Artist + " - " + Title;
+	else if (!Title.isEmpty() && !artist.isEmpty())
+		return artist + " - " + Title;
 	else if (!Title.isEmpty())
 		return Title;
-	else if (!Artist.isEmpty())
-		prefix = Artist + " - ";
+	else if (!artist.isEmpty())
+		prefix = artist + " - ";
 	return prefix + tr("Track") + " " + QString::number(trackNo) + suffix;
 }
 QList<QMPlay2Tag> AudioCDDemux::tags() const
