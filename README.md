@@ -288,7 +288,7 @@ CMake options (option - default value: description):
 	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
 	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
 	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
-	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module.
+	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module and OpenGL in Visualizations.
 	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
 	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
 	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
