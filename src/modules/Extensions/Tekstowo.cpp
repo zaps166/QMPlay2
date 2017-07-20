@@ -146,18 +146,34 @@ void Tekstowo::finished(NetworkReply *reply)
 				quint8 artistScore = 0, titleScore = 0;
 
 				if (artist == m_artist)
-					artistScore += 3;
+					artistScore += 4;
 				else if (m_artist.contains(artist))
-					artistScore += 2;
+					artistScore += 3;
 				else if (artist.contains(m_artist))
-					artistScore += 1;
+					artistScore += 2;
+				else
+				{
+					// Compare all words separately - useful if artist words are in different order
+					const QStringList words = artist.split(' ');
+					if (words.count() > 1)
+					{
+						int matchWords = 0;
+						for (const QString &word : words)
+						{
+							if (m_artist.contains(word))
+								++matchWords;
+						}
+						if (matchWords == words.count())
+							artistScore += 1;
+					}
+				}
 
 				if (title == m_title)
-					titleScore += 3;
+					titleScore += 4;
 				else if (m_title.contains(title))
-					titleScore += 2;
+					titleScore += 3;
 				else if (title.contains(m_title))
-					titleScore += 1;
+					titleScore += 2;
 
 				if (artistScore > 0 && titleScore > 0)
 				{
