@@ -759,6 +759,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		av_dict_set(&options, "skip_initial_bytes", QString::number(oggOffset).toLatin1(), 0);
 	}
 
+	// Useful, e.g. CUVID decoder needs valid PTS
+	formatCtx->flags |= AVFMT_FLAG_GENPTS;
+
 	OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);
 	formatCtx = openThr->getFormatCtx();
 	openThr->drop();
