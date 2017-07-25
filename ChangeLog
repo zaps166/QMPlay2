@@ -3,6 +3,7 @@ Changes in QMPlay2 build 17.07.20:
 	- added option to hide artist metadata,
 	- Tekstowo: minor improvement,
 	- don't delete Radio settings,
+	- minor QPainter bugfix,
 	- fix YouTube images,
 
 Changes in QMPlay2 build 17.06.09:
