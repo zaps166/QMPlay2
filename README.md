@@ -74,7 +74,7 @@ Some YouTube videos don't work without external "youtube-dl" software, so QMPlay
 
 - Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
 
-##Spherical view
+## Spherical view
 
 QMPlay2 supports spherical view on OpenGL video output. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
