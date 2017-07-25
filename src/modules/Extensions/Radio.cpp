@@ -97,32 +97,34 @@ Radio::Radio(Module &module) :
 }
 Radio::~Radio()
 {
-	QStringList myRadios;
-	for (QListWidgetItem *item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
-		myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
-	Settings("Radio").set("Radia", myRadios);
-
+	if (m_once)
 	{
-		const QList<int> splitterSizesInt = ui->splitter->sizes();
-		QByteArray splitterSizes;
-		QDataStream stream(&splitterSizes, QIODevice::WriteOnly);
-		for (int i = 0; i < splitterSizesInt.count(); ++i)
-			stream << splitterSizesInt[i];
-		sets().set("Radio/SplitterSizes", splitterSizes.toBase64());
+		QStringList myRadios;
+		for (QListWidgetItem *item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
+			myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
+		Settings("Radio").set("Radia", myRadios);
+
+		{
+			const QList<int> splitterSizesInt = ui->splitter->sizes();
+			QByteArray splitterSizes;
+			QDataStream stream(&splitterSizes, QIODevice::WriteOnly);
+			for (int i = 0; i < splitterSizesInt.count(); ++i)
+				stream << splitterSizesInt[i];
+			sets().set("Radio/SplitterSizes", splitterSizes.toBase64());
+		}
+
+		{
+			QByteArray columnSizes;
+			QDataStream stream(&columnSizes, QIODevice::WriteOnly);
+			const int columnCount = m_radioBrowserModel->columnCount(QModelIndex());
+			for (int i = 0; i < columnCount; ++i)
+				stream << ui->radioView->columnWidth(i);
+			sets().set("Radio/ColumnSizes", columnSizes.toBase64());
+		}
+
+		sets().set("Radio/CurrentTab", currentIndex());
+		sets().set("Radio/SearchByIndex", ui->searchByComboBox->currentIndex());
 	}
-
-	{
-		QByteArray columnSizes;
-		QDataStream stream(&columnSizes, QIODevice::WriteOnly);
-		const int columnCount = m_radioBrowserModel->columnCount(QModelIndex());
-		for (int i = 0; i < columnCount; ++i)
-			stream << ui->radioView->columnWidth(i);
-		sets().set("Radio/ColumnSizes", columnSizes.toBase64());
-	}
-
-	sets().set("Radio/CurrentTab", currentIndex());
-	sets().set("Radio/SearchByIndex", ui->searchByComboBox->currentIndex());
-
 	delete ui;
 }
 

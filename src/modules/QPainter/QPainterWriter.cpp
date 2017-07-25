@@ -90,7 +90,7 @@ void Drawable::paintEvent(QPaintEvent *)
 	QPainter p(this);
 
 	p.translate(X, Y);
-	p.drawImage(0, 0, img);
+	p.drawImage(QRect(0, 0, W, H), img);
 
 	osd_mutex.lock();
 	if (!osd_list.isEmpty())

@@ -74,7 +74,7 @@ Some YouTube videos don't work without external "youtube-dl" software, so QMPlay
 
 - Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
 
-##Spherical view
+## Spherical view
 
 QMPlay2 supports spherical view on OpenGL video output. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
@@ -288,7 +288,7 @@ CMake options (option - default value: description):
 	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
 	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
 	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
-	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module.
+	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module and OpenGL in Visualizations.
 	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
 	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
 	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
@@ -313,6 +313,7 @@ Using other Qt installation using CMake:
 - Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.
 - Qt5:
 	- `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
+	- `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
 	- `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.

@@ -936,6 +936,10 @@
         <source>Automatically delete ungrouped entries</source>
         <translation>Automatycznie usuwaj niepogrupowane wpisy</translation>
     </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Ukryj metadane artysty</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

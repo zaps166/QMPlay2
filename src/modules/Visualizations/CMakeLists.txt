@@ -33,7 +33,7 @@ set(Visualizations_RESOURCES
     icon.qrc
 )
 
-if(USE_QT5 AND NOT Qt5Widgets_VERSION LESS 5.6.0)
+if(USE_OPENGL2 AND USE_QT5 AND NOT Qt5Widgets_VERSION LESS 5.6.0)
     add_definitions(-DUSE_OPENGL)
 endif()
 
