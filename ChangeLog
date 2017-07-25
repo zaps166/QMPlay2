@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.07.20:
+Changes in QMPlay2 build 17.07.25:
 	- minor CUVID bugfix (missing PTS in some videos),
 	- added option to hide artist metadata,
 	- Tekstowo: minor improvement,
