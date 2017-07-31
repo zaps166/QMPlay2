@@ -117,7 +117,7 @@
     </message>
     <message>
         <source>Additional module parameter</source>
-        <translation>Erweiterte Parameter für das Module</translation>
+        <translation>Erweiterte Modulparameter</translation>
     </message>
 </context>
 <context>
@@ -135,7 +135,7 @@
     <name>AnimeOdcinki</name>
     <message>
         <source>Episode name</source>
-        <translation type="unfinished"></translation>
+        <translation>Episodenname</translation>
     </message>
 </context>
 <context>
@@ -190,15 +190,15 @@
     </message>
     <message>
         <source>Highlighted text color</source>
-        <translation>Farbe von markierten Text</translation>
+        <translation>Hervorgehobene Textfarbe</translation>
     </message>
     <message>
         <source>Slider button color</source>
-        <translation>Farbregulierung</translation>
+        <translation>Farbregler</translation>
     </message>
     <message>
         <source>Gradient in the video window</source>
-        <translation>Gradient im Videofenster</translation>
+        <translation>Farbabstufung im Videofenster</translation>
     </message>
     <message>
         <source>The color on the top and bottom</source>
@@ -218,7 +218,7 @@
     </message>
     <message>
         <source>Select wallpaper</source>
-        <translation>Wähle Hintergrund</translation>
+        <translation>Wähle Hintergrundbild</translation>
     </message>
     <message>
         <source>Name</source>
@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Loading wallpaper</source>
-        <translation>Hintergrund laden</translation>
+        <translation>Hintergrundbild laden</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -619,35 +619,35 @@
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation type="unfinished">Downloads</translation>
+        <translation>Downloads</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation type="unfinished">Download Verzeichnis</translation>
+        <translation>Download Verzeichnis</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation type="unfinished">Verzeichnis für die Downloads wählen</translation>
+        <translation>Verzeichnis für die Downloads wählen</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation type="unfinished">Lösche komplette Downloads</translation>
+        <translation>Lösche komplette Downloads</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation type="unfinished">Adresse für den Download eingeben</translation>
+        <translation>Adresse für den Download eingeben</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Download</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation type="unfinished">Verzeichnis für Downloads konnte nicht geändert werden</translation>
+        <translation>Downloadverzeichnis konnte nicht geändert werden</translation>
     </message>
     <message>
         <source>Enter address</source>
-        <translation type="unfinished">Adresse eingeben</translation>
+        <translation>Adresse eingeben</translation>
     </message>
 </context>
 <context>
@@ -918,27 +918,27 @@
     </message>
     <message>
         <source>Selected Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profile wählen</translation>
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilder lesen und anzeigen</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende Tray-Benachrichtigungen als Standard</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation type="unfinished"></translation>
+        <translation>youtube-dl löschen</translation>
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Löschung von nicht gruppierten Einträgen</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>Künstler-Metadaten ausblenden</translation>
     </message>
 </context>
 <context>
@@ -1114,7 +1114,7 @@
     </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation>Fehler beim speichern der Wiedergabeliste</translation>
+        <translation>Fehler beim Speichern der Wiedergabeliste</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
@@ -1122,7 +1122,7 @@
     </message>
     <message>
         <source>New window</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Fenster</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
@@ -1133,38 +1133,38 @@
     <name>MediaBrowser</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Suchen</translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Fehler beim verbinden</translation>
+        <translation>Fehler beim Verbinden</translation>
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>Website existiert nich&apos;t</translation>
     </message>
     <message>
         <source>Play all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles wiedergeben</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Warteschlange</translation>
+        <translation>Warteschlange</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Wiedergabe</translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation type="unfinished">Seite öffnen im Browser</translation>
+        <translation>Seite öffnen im Browser</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation type="unfinished">Kopiere Seiten Adresse</translation>
+        <translation>Kopiere Seiten Adresse</translation>
     </message>
 </context>
 <context>
@@ -1211,7 +1211,7 @@
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
-        <translation>Suche automatische nach Mehrkanal-Geräte</translation>
+        <translation>Suche automatisch nach Mehrkanal-Geräten</translation>
     </message>
     <message>
         <source>Playback device</source>
@@ -1633,29 +1633,31 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Try to prevent exclusive full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Versuche den exklusiven Vollbildschirm zu verhindern</translation>
     </message>
     <message>
         <source>XSPF support</source>
-        <translation type="unfinished"></translation>
+        <translation>XSPF Unterstützung</translation>
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Mitteilungen</translation>
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation type="unfinished"></translation>
+        <translation>Versuche Live-Streams automatisch bei Fehler zu schließen</translation>
     </message>
     <message>
         <source>Always enabled on Wayland and Android platforms.
 Set visualizations to OpenGL mode if enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Immer ativiert bei Wayland und Android Plattformen.
+Setze Visualisierung in den OpenGL-Modus, wenn aktiviert.</translation>
     </message>
     <message>
         <source>Always enabled on Wayland platform.
 Recommended to use when OpenGL video output is in RTT mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Immer aktiviert auf Wayland-Plattform.
+Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</translation>
     </message>
 </context>
 <context>
@@ -1794,35 +1796,35 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Create new profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Profil erstellen</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profile</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Profil</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil kopieren</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuen Profilnamen eingeben</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation type="unfinished">&amp;Wiedergabe Einstellungen</translation>
+        <translation>&amp;Wiedergabe Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -1861,7 +1863,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>Verzöger Untertitel (sek.)</translation>
+        <translation>Verzögere Untertitel (sek.)</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
@@ -1885,7 +1887,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>Video verzögern (sek.)</translation>
+        <translation>Video Wiedergabe verzögern (sek.)</translation>
     </message>
     <message>
         <source>Set playback speed (sec.)</source>
@@ -1937,7 +1939,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Audio off</source>
-        <translation>Sound aus</translation>
+        <translation>Ton aus</translation>
     </message>
 </context>
 <context>
@@ -2015,7 +2017,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Use replay gain if available</source>
-        <translation>Verwenden Lautstärkenregulierung, wenn verfügbar</translation>
+        <translation>Lautstärkenregulierung verwenden, wenn verfügbar</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
@@ -2027,7 +2029,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
-        <translation>Mit dem Mausrad im Musik/Film scrollen</translation>
+        <translation>Mit dem Mausrad Musik/Film scrollen</translation>
     </message>
     <message>
         <source>Keep zoom</source>
@@ -2035,7 +2037,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Show buffered data indicator on slider</source>
-        <translation>Zwischengespeicherten Daten anzeigen in der Bildlaufleiste</translation>
+        <translation>Zwischengespeicherte Daten in der Bildlaufleiste anzeigen</translation>
     </message>
     <message>
         <source>Keep aspect ratio</source>
@@ -2051,11 +2053,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Keep subtitles scale</source>
-        <translation>Untertitel Skalierung beibehalten</translation>
+        <translation>Untertitel-Skalierung beibehalten</translation>
     </message>
     <message>
         <source>Keep speed</source>
-        <translation>Geschwindigkeit beibehalten</translation>
+        <translation>Wiedergabe-Geschwindigkeit beibehalten</translation>
     </message>
     <message>
         <source>Keep video delay</source>
@@ -2067,7 +2069,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Fade sound</source>
-        <translation>Sound ausblenden</translation>
+        <translation>Ton ausblenden</translation>
     </message>
     <message>
         <source>Remember video equalizer settings</source>
@@ -2075,15 +2077,15 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation>Spielen nächsten Titel nach einem Wiedergabefehler</translation>
+        <translation>nächsten Titel nach einem Wiedergabefehler abspielen</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
-        <translation>Kurze Scrollen (Pfeil: links und rechts)</translation>
+        <translation>Kurzes Suchen (Pfeil: links und rechts)</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows)</source>
-        <translation>Langes Scrollen (Pfeil: hoch und runter)</translation>
+        <translation>Langes Suchen (Pfeil: hoch und runter)</translation>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
@@ -2119,11 +2121,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Left mouse button on video dock toggles playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Linke Maustaste auf Video-Dock schaltet die Wiedergabe um</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>Genaue Suche</translation>
     </message>
 </context>
 <context>
@@ -2218,15 +2220,15 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Überspringen</translation>
     </message>
     <message>
         <source>&amp;Stop after</source>
-        <translation type="unfinished"></translation>
+        <translation>Danach Stoppen</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriges &amp;Bild</translation>
     </message>
 </context>
 <context>
@@ -2313,7 +2315,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Schnelle Gruppensynchronisation</translation>
     </message>
 </context>
 <context>
@@ -2347,11 +2349,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Freischalten</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperren</translation>
     </message>
 </context>
 <context>
@@ -2369,27 +2371,27 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>ProstoPleer</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Titel</translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artist</translation>
+        <translation>Artist</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Länge</translation>
+        <translation>Länge</translation>
     </message>
     <message>
         <source>Bitrate</source>
-        <translation type="unfinished">Bitrate</translation>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <source>Search on Prostopleer</source>
-        <translation type="unfinished">Suchen bei Prostopleer</translation>
+        <translation>Suchen bei Prostopleer</translation>
     </message>
     <message>
         <source>Try again later</source>
-        <translation type="unfinished">Versuchen Sie es später erneut</translation>
+        <translation>Versuchen Sie es später erneut</translation>
     </message>
 </context>
 <context>
@@ -2415,19 +2417,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation type="unfinished"></translation>
+        <translation>zu alte QMPlay2 Bibliothek</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>nicht übereinstimmende Modul-API-Version</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation type="unfinished"></translation>
+        <translation>doppelter Modulname</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>nicht mit übereinstimmende Qt Modul Version</translation>
     </message>
 </context>
 <context>
@@ -2486,12 +2488,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
-        <translation type="unfinished"></translation>
+        <translation>QtSvg Icon Engine Plugin ist nicht vorhanden.
+QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>QtSvg module doesn&apos;t exist.
 QMPlay2 will not display icons!</source>
-        <translation type="unfinished"></translation>
+        <translation>QtSvg-Modul existiert nicht.
+QMPlay2 zeigt keine Icons an!</translation>
     </message>
 </context>
 <context>
@@ -2518,74 +2522,74 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>QMPlay2 radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlayer Radio Station</translation>
     </message>
     <message>
         <source>My radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>Meine Radio Station</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeite gewählte Radio Station</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösche gewählte Radio Station</translation>
     </message>
     <message>
         <source>Radio Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio-Browser </translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Wiedergabe</translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Warteschlange</translation>
+        <translation>Warteschlange</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen zu meinen Radiosendern</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <source>Open radio website</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffne Radio Webseite</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten des ausgewählten Radiosenders</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiosender mit genanntem Namen existiert bereits!</translation>
     </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation type="unfinished"></translation>
+        <translation>Stream Info</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Land</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tags</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewertung</translation>
     </message>
 </context>
 <context>
@@ -2797,24 +2801,25 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standard</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>Automatically check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch nach Updates suchen</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestätige &quot;youtube-dl&quot; Löschung</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie &quot;youtube-dl&quot; Software entfernen?</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation type="unfinished"></translation>
+        <translation>Langsamer, aber genauer suchend
+Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</translation>
     </message>
 </context>
 <context>
@@ -2862,23 +2867,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>SoundCloud</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Titel</translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artist</translation>
+        <translation>Artist</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="unfinished">Genre</translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Länge</translation>
+        <translation>Länge</translation>
     </message>
     <message>
         <source>Search on SoundCloud</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2975,11 +2980,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Tekstowo</name>
     <message>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzung</translation>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>Liedtext</translation>
     </message>
 </context>
 <context>
@@ -3041,11 +3046,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Update ist für QMPlay2 verfügbar!</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue QMPlay2 Version: %1</translation>
     </message>
 </context>
 <context>
@@ -3079,7 +3084,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Not enough memory</source>
-        <translation>Nicht genÜgend Speicher</translation>
+        <translation>Nicht genügend Speicher</translation>
     </message>
 </context>
 <context>
@@ -3187,15 +3192,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Wbijam</name>
     <message>
         <source>Episode name</source>
-        <translation type="unfinished"></translation>
+        <translation>Episodenname</translation>
     </message>
     <message>
         <source>Episode type</source>
-        <translation type="unfinished"></translation>
+        <translation>Episodenart</translation>
     </message>
     <message>
         <source>Episode date</source>
-        <translation type="unfinished"></translation>
+        <translation>Episodendatum</translation>
     </message>
 </context>
 <context>
@@ -3228,58 +3233,58 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Suchen</translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Einstellungen</translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished">Qualität</translation>
+        <translation>Qualität</translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation type="unfinished">Bei YouTube suchen</translation>
+        <translation>Bei YouTube suchen</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Fehler beim verbinden</translation>
+        <translation>Fehler beim Verbinden</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Wiedergabeliste</translation>
+        <translation>Wiedergabeliste</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="unfinished">ja</translation>
+        <translation>ja</translation>
     </message>
 </context>
 <context>
     <name>YouTubeDL</name>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully updated!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; wurde erfolgreich aktualisiert!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished">&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
+        <translation>&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisieren &quot;youtube-dl&quot;, bitte warten...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; Update wurde abgebrochen!</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen &quot;youtube-dl&quot;, bitte warten...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; Download wurde abgebrochen!</translation>
     </message>
 </context>
 </TS>
