@@ -33,6 +33,10 @@ public:
 		m_dts = dts - start_time;
 		m_pts = pts - start_time;
 	}
+	inline void setDts(double dts)
+	{
+		m_dts = dts;
+	}
 	inline void setInvalid()
 	{
 		m_dts = m_pts = qQNaN();

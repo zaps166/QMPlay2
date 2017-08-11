@@ -680,6 +680,11 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	if (streams.at(ff_idx)->sample_aspect_ratio.num)
 		encoded.sampleAspectRatio = av_q2d(streams.at(ff_idx)->sample_aspect_ratio);
 
+	// Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
+	if (encoded.hasKeyFrame && encoded.ts.dts() < 0)
+		encoded.ts.setDts(nextDts.at(ff_idx));
+	nextDts[ff_idx] = encoded.ts + encoded.duration;
+
 	idx = index_map.at(ff_idx);
 
 	return true;
@@ -808,6 +813,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	index_map.resize(formatCtx->nb_streams);
 	streamsTS.resize(formatCtx->nb_streams);
 	streamsOffset.resize(formatCtx->nb_streams);
+	nextDts.resize(formatCtx->nb_streams);
 	for (unsigned i = 0; i < formatCtx->nb_streams; ++i)
 	{
 		StreamInfo *streamInfo = getStreamInfo(formatCtx->streams[i]);

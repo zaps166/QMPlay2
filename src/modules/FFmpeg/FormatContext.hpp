@@ -86,6 +86,7 @@ private:
 	QVector<AVStream *> streams;
 	QVector<TimeStamp> streamsTS;
 	QVector<double> streamsOffset;
+	QVector<double> nextDts;
 	AVFormatContext *formatCtx;
 	AVPacket *packet;
 
