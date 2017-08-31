@@ -219,7 +219,7 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false, hasCriticalError = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
 	QMutex emptyBufferMutex;
 	VideoFrame videoFrame;
@@ -272,7 +272,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || dec->hasCriticalError())
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || hasCriticalError)
 		{
 			if (playC.paused && !paused)
 			{
@@ -434,6 +434,8 @@ void VideoThr::run()
 				tmp_br += bytes_consumed;
 			}
 		}
+
+		hasCriticalError = dec->hasCriticalError();
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
 		filtersMutex.unlock();
