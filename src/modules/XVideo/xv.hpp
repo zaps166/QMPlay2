@@ -19,8 +19,8 @@
 #pragma once
 
 #include <QString>
+#include <QVector>
 #include <QMutex>
-#include <QList>
 
 class QRect;
 class VideoFrame;
@@ -73,7 +73,7 @@ private:
 
 	unsigned int adaptors;
 
-	QList<QByteArray> osd_checksums;
+	QVector<quint64> osd_ids;
 
 	XVideoPrivate *priv;
 };

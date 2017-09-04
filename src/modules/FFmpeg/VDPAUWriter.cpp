@@ -610,7 +610,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 					};
 					QRect bounds;
 					const qreal scaleW = (qreal)W / outW, scaleH = (qreal)H / outH;
-					bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_checksums, &scaleW, &scaleH, &bounds);
+					bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_ids, &scaleW, &scaleH, &bounds);
 					if (!mustRepaint)
 						mustRepaint = bitmapSurfaceSize != bounds.size();
 					if (mustRepaint)
@@ -620,7 +620,7 @@ void VDPAUWriter::draw(VdpVideoSurface surface_id)
 						osdImg.fill(0);
 						QPainter p(&osdImg);
 						p.translate(-bounds.topLeft());
-						Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
+						Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_ids);
 						if (bitmapSurfaceSize != bounds.size())
 						{
 							if (bitmapSurface != VDP_INVALID_HANDLE)
@@ -773,7 +773,7 @@ void VDPAUWriter::clr()
 	bitmapSurfaceSize = QSize();
 	outputSurfacesSize = QSize();
 	surfacesCreated = outputSurfacesCreated = ok = paused = hasImage = false;
-	osd_checksums.clear();
+	osd_ids.clear();
 	outputSurfaceIdx = 0;
 	osdImg = QImage();
 	decoder = 0;

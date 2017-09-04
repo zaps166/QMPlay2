@@ -18,14 +18,17 @@
 
 #include <QMPlay2OSD.hpp>
 
-#include <QCryptographicHash>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	#include <QAtomicInteger>
+	static QAtomicInteger<quint64> g_id;
+#else
+	#include <QAtomicInt>
+	static QAtomicInt g_id;
+#endif
 
-void QMPlay2OSD::genChecksum()
+void QMPlay2OSD::genId()
 {
-	QCryptographicHash hash(QCryptographicHash::Md4);
-	for (const Image &img : m_images)
-		hash.addData(img.data);
-	m_checksum = hash.result();
+	m_id = g_id.fetchAndAddOrdered(1) + 1;
 }
 
 void QMPlay2OSD::clear(bool all)
@@ -35,7 +38,7 @@ void QMPlay2OSD::clear(bool all)
 	if (all)
 		m_pts = m_duration = -1.0;
 	m_needsRescale = m_started = false;
-	m_checksum.clear();
+	m_id = 0;
 }
 
 void QMPlay2OSD::start()

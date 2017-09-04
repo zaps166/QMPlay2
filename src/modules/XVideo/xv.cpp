@@ -236,7 +236,7 @@ void XVIDEO::draw(const VideoFrame &videoFrame, const QRect &srcRect, const QRec
 
 	osd_mutex.lock();
 	if (!osd_list.isEmpty())
-		Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, image->pitches[0], image->pitches[1], osd_list, osd_checksums);
+		Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, image->pitches[0], image->pitches[1], osd_list, osd_ids);
 	osd_mutex.unlock();
 
 	putImage(srcRect, dstRect);
@@ -336,5 +336,5 @@ void XVIDEO::clrVars()
 	hasImage = false;
 	fo = nullptr;
 	osdImg = QImage();
-	osd_checksums.clear();
+	osd_ids.clear();
 }

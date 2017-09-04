@@ -166,7 +166,7 @@ void OpenGL2Common::clearImg()
 	hasImage = false;
 	osdImg = QImage();
 	videoFrame.clear();
-	osdChecksums.clear();
+	osd_ids.clear();
 }
 
 void OpenGL2Common::setSpherical(bool spherical)
@@ -594,7 +594,7 @@ void OpenGL2Common::paintGL()
 
 		QRect bounds;
 		const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
-		bool mustRepaint = Functions::mustRepaintOSD(osdList, osdChecksums, &scaleW, &scaleH, &bounds);
+		bool mustRepaint = Functions::mustRepaintOSD(osdList, osd_ids, &scaleW, &scaleH, &bounds);
 		bool hasNewSize = false;
 		if (!mustRepaint)
 			mustRepaint = osdImg.size() != bounds.size();
@@ -609,7 +609,7 @@ void OpenGL2Common::paintGL()
 			osdImg.fill(0);
 			QPainter p(&osdImg);
 			p.translate(-bounds.topLeft());
-			Functions::paintOSD(false, osdList, scaleW, scaleH, p, &osdChecksums);
+			Functions::paintOSD(false, osdList, scaleW, scaleH, p, &osd_ids);
 			const quint8 *data = osdImg.constBits();
 			if (hasPbo)
 			{

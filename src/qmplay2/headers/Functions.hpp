@@ -58,7 +58,7 @@ namespace Functions
 		QStringList extensions;
 	};
 	using DemuxersInfo = QVector<DemuxerInfo>;
-	using ChecksumList = QList<QByteArray>;
+	using ChecksumList = QVector<quint64>;
 
 	QDate parseVersion(const QString &dateTxt);
 
@@ -120,9 +120,9 @@ namespace Functions
 	QPixmap getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w = nullptr);
 	void drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w = nullptr, Qt::TransformationMode transformationMode = Qt::SmoothTransformation, Qt::AspectRatioMode aRatioMode = Qt::KeepAspectRatio, QSize size = QSize(), qreal scale = 1.0);
 
-	bool mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_checksums, const qreal *scaleW = nullptr, const qreal *scaleH = nullptr, QRect *bounds = nullptr);
-	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_checksums = nullptr);
-	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_checksums);
+	bool mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_ids, const qreal *scaleW = nullptr, const qreal *scaleH = nullptr, QRect *bounds = nullptr);
+	void paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_ids = nullptr);
+	void paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_ids);
 
 	QPixmap applyDropShadow(const QPixmap &input, const qreal blurRadius, const QPointF &offset, const QColor &color);
 	QPixmap applyBlur(const QPixmap &input, const qreal blurRadius);

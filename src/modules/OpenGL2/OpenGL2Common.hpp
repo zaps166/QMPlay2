@@ -164,7 +164,7 @@ public:
 	QList<const QMPlay2OSD *> osdList;
 	QMutex osdMutex;
 
-	QList<QByteArray> osdChecksums;
+	QVector<quint64> osd_ids;
 	QImage osdImg;
 
 	QTimer updateTimer;

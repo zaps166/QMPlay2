@@ -26,8 +26,6 @@
 class QMPlay2OSD
 {
 public:
-	using Checksum = QByteArray;
-
 	class Image
 	{
 	public:
@@ -76,7 +74,7 @@ public:
 		m_images.push_back(Image(rect, data));
 	}
 
-	void genChecksum();
+	void genId();
 
 	void clear(bool all = true);
 
@@ -111,9 +109,9 @@ public:
 		return m_needsRescale;
 	}
 
-	inline Checksum getChecksum() const
+	inline quint64 getId() const
 	{
-		return m_checksum;
+		return m_id;
 	}
 
 	void start(); //for OSD: start counting leftDuration; for subtitles: marks that subtitles are displayed
@@ -128,5 +126,5 @@ private:
 	bool m_started, m_needsRescale;
 	QTime m_timer;
 	mutable QMutex m_mutex;
-	Checksum m_checksum;
+	quint64 m_id;
 };
