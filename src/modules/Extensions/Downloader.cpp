@@ -367,7 +367,9 @@ void DownloaderThread::run()
 
 	bool err = true;
 
-	if (newUrl.startsWith("FFmpeg://") || newUrl.endsWith(".m3u8", Qt::CaseInsensitive) || newUrl.contains(".m3u8?", Qt::CaseInsensitive))
+	const bool isFFmpeg = newUrl.startsWith("FFmpeg://");
+	const bool isHLS = (!isFFmpeg && (newUrl.endsWith(".m3u8", Qt::CaseInsensitive) || newUrl.contains(".m3u8?", Qt::CaseInsensitive)));
+	if (isFFmpeg || isHLS)
 	{
 		IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 		QMPlay2Core.setWorking(true);
@@ -399,7 +401,7 @@ void DownloaderThread::run()
 					double bytePos = 0.0;
 					double pos = 0.0;
 
-					emit listSig(SET, (size < 0) ? (length < 0 ? -1 : -2) : size, filePath);
+					emit listSig(SET, (size < 0 || isHLS) ? (length < 0 ? -1 : -2) : size, filePath);
 					err = false;
 					speedT.start();
 					while (!demuxer.isAborted())
