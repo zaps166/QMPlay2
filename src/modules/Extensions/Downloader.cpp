@@ -356,7 +356,7 @@ void DownloaderThread::run()
 	};
 
 	QElapsedTimer speedT;
-	const auto setBitRate = [&](const std::function<qint64()> &getPosDiff) {
+	const auto setByteRate = [&](const std::function<qint64()> &getPosDiff) {
 		const int elapsed = speedT.elapsed();
 		if (elapsed >= 1000)
 		{
@@ -418,7 +418,7 @@ void DownloaderThread::run()
 						}
 
 						bytePos += packet.size();
-						setBitRate([&] {
+						setByteRate([&] {
 							const qint64 tmp = bytePos - lastBytesPos;
 							lastBytesPos = bytePos;
 							return tmp;
@@ -500,7 +500,7 @@ void DownloaderThread::run()
 				}
 
 				const qint64 bytesPos = reader->pos();
-				setBitRate([&] {
+				setByteRate([&] {
 					const qint64 tmp = bytesPos - lastBytesPos;
 					lastBytesPos = bytesPos;
 					return tmp;
