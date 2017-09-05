@@ -1,5 +1,6 @@
 Changes in QMPlay2 build 17.09.04:
 	- update German translation (martinkg),
+	- allow to downloading HLS streams,
 	- speed-up subtitles rendering,
 	- fix seeking on M3U8 streams,
 	- fix in VideoThr crash,

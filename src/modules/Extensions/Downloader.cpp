@@ -367,7 +367,7 @@ void DownloaderThread::run()
 
 	bool err = true;
 
-	if (newUrl.startsWith("FFmpeg://"))
+	if (newUrl.startsWith("FFmpeg://") || newUrl.endsWith(".m3u8", Qt::CaseInsensitive) || newUrl.contains(".m3u8?", Qt::CaseInsensitive))
 	{
 		IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 		QMPlay2Core.setWorking(true);

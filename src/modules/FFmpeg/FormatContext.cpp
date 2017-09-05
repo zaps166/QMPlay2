@@ -537,6 +537,7 @@ bool FormatContext::seek(double pos, bool backward)
 			for (int i = 0; i < streamsTS.count(); ++i)
 				streamsTS[i] = pos;
 			currPos = pos;
+			nextDts.fill(pos);
 			isError = false;
 		}
 	}
@@ -649,7 +650,13 @@ bool FormatContext::read(Packet &encoded, int &idx)
 #ifndef MP3_FAST_SEEK
 	if (seekByByteOffset < 0)
 #endif
-		encoded.ts.set(packet->dts * time_base, packet->pts * time_base, startTime);
+	{
+		encoded.ts.setInvalid();
+		if (packet->dts != QMPLAY2_NOPTS_VALUE)
+			encoded.ts.setDts(packet->dts * time_base, startTime);
+		if (packet->pts != QMPLAY2_NOPTS_VALUE)
+			encoded.ts.setPts(packet->pts * time_base, startTime);
+	}
 #ifndef MP3_FAST_SEEK
 	else if (packet->pos > -1 && length() > 0.0)
 		lastTime = encoded.ts = ((packet->pos - seekByByteOffset) * length()) / (avio_size(formatCtx->pb) - seekByByteOffset);
@@ -681,7 +688,7 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		encoded.sampleAspectRatio = av_q2d(streams.at(ff_idx)->sample_aspect_ratio);
 
 	// Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
-	if (encoded.hasKeyFrame && encoded.ts.dts() < 0)
+	if (encoded.hasKeyFrame && !encoded.ts.hasDts())
 		encoded.ts.setDts(nextDts.at(ff_idx));
 	nextDts[ff_idx] = encoded.ts + encoded.duration;
 
@@ -831,9 +838,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 #endif
 		streams += formatCtx->streams[i];
 
-		TimeStamp ts;
-		ts.set(0.0, 0.0);
-		streamsTS[i] = ts;
+		streamsTS[i] = 0.0;
 	}
 	if (streamsInfo.isEmpty())
 		return false;
