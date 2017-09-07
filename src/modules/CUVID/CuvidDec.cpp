@@ -812,7 +812,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		return false;
 
 	const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
-	if (pixFmt != AV_PIX_FMT_YUV420P && pixFmt != AV_PIX_FMT_YUV420P10 && pixFmt != AV_PIX_FMT_YUVJ420P)
+	if (!(pixFmt == AV_PIX_FMT_YUV420P || pixFmt == AV_PIX_FMT_YUV420P10 || pixFmt == AV_PIX_FMT_YUVJ420P || avCodec->id == AV_CODEC_ID_MJPEG))
 		return false;
 
 	int depth = 8;
@@ -833,6 +833,9 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 			break;
 		case AV_CODEC_ID_MPEG2VIDEO:
 			codec = cudaVideoCodec_MPEG2;
+			break;
+		case AV_CODEC_ID_MJPEG:
+			codec = cudaVideoCodec_JPEG;
 			break;
 		case AV_CODEC_ID_MPEG4:
 			codec = cudaVideoCodec_MPEG4;
