@@ -36,6 +36,8 @@ private:
 
 	bool readyWrite() const override final;
 
+	bool hwAccelError() const override final;
+
 	bool processParams(bool *paramsCorrected) override final;
 
 	QMPlay2PixelFormats supportedPixelFormats() const override final;

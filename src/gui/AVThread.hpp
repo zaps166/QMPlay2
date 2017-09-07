@@ -56,6 +56,8 @@ public:
 
 	virtual void stop(bool terminate = false);
 
+	virtual bool hasDecoderError() const;
+
 	Decoder *dec;
 	Writer *writer;
 protected:

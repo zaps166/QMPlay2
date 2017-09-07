@@ -43,7 +43,7 @@ using Functions::gettime;
 VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
-	deleteOSD(false), deleteFrame(false), gotFrameOrError(false),
+	deleteOSD(false), deleteFrame(false), gotFrameOrError(false), decoderError(false),
 	W(0), H(0), seq(0),
 	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
@@ -63,6 +63,11 @@ void VideoThr::stop(bool terminate)
 {
 	playC.videoSeekPos = -1;
 	AVThread::stop(terminate);
+}
+
+bool VideoThr::hasDecoderError() const
+{
+	return decoderError;
 }
 
 QMPlay2PixelFormats VideoThr::getSupportedPixelFormats() const
@@ -219,7 +224,7 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false, hasCriticalError = false;
+	bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
 	double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
 	QMutex emptyBufferMutex;
 	VideoFrame videoFrame;
@@ -272,7 +277,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || hasCriticalError)
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || decoderError)
 		{
 			if (playC.paused && !paused)
 			{
@@ -435,7 +440,8 @@ void VideoThr::run()
 			}
 		}
 
-		hasCriticalError = dec->hasCriticalError();
+		// This thread will wait for "DemuxerThr" which'll detect this error and restart with new decoder.
+		decoderError = (dec->hasCriticalError() || videoWriter()->hwAccelError());
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
 		filtersMutex.unlock();
@@ -617,7 +623,7 @@ void VideoThr::run()
 void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
 {
 	canWrite = true;
-	if (lastSeq == seq && writer->readyWrite())
+	if (lastSeq == seq && writer->readyWrite() && !videoWriter()->hwAccelError())
 	{
 		QMPlay2GUI.screenSaver->inhibit(0);
 		videoWriter()->writeVideo(videoFrame);

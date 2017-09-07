@@ -235,10 +235,7 @@ int FFDecVTB::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		((VTBHwaccel *)m_hwAccelWriter->getHWAccelInterface())->addBuffer(pixelBuffer);
 		decoded.surfaceId = (quintptr)pixelBuffer;
 	}
-	if (ret < 0 && !codec_ctx->hwaccel)
-	{
-		m_hasCriticalError = true;
-	}
+	m_hasCriticalError = (ret < 0 && !codec_ctx->hwaccel);
 	return ret;
 }
 void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)

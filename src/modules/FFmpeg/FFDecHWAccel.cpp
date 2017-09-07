@@ -28,7 +28,8 @@ extern "C"
 
 FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
 	FFDec(mutex),
-	m_hwAccelWriter(nullptr)
+	m_hwAccelWriter(nullptr),
+	m_hasCriticalError(false)
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {
@@ -72,9 +73,15 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 		decodeLastStep(encodedPacket, frame);
 	else
 		encodedPacket.ts.setInvalid();
+	m_hasCriticalError = (bytes_consumed < 0);
 	return bytes_consumed < 0 ? -1 : bytes_consumed;
 }
 void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
 {
 	Q_UNUSED(decoded)
+}
+
+bool FFDecHWAccel::hasCriticalError() const
+{
+	return m_hasCriticalError;
 }

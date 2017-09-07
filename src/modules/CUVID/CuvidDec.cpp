@@ -493,7 +493,8 @@ CuvidDec::CuvidDec(Module &module) :
 	m_pkt(nullptr),
 	m_cuCtx(nullptr),
 	m_cuvidParser(nullptr),
-	m_cuvidDec(nullptr)
+	m_cuvidDec(nullptr),
+	m_hasCriticalError(false)
 {
 	memset(m_frameBuffer, 0, sizeof m_frameBuffer);
 	SetModule(module);
@@ -579,6 +580,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 	if (ret != CUDA_SUCCESS)
 	{
 		QMPlay2Core.logError("CUVID :: Error '" + QString::number(ret) + "' while creating decoder");
+		m_hasCriticalError = true;
 		return 0;
 	}
 
@@ -793,6 +795,11 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		return -1;
 
 	return encodedPacket.size();
+}
+
+bool CuvidDec::hasCriticalError() const
+{
+	return m_hasCriticalError;
 }
 
 bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)

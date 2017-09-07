@@ -33,7 +33,10 @@ protected:
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
 	virtual void downloadVideoFrame(VideoFrame &decoded);
 
+	bool hasCriticalError() const override;
+
 	/**/
 
 	VideoWriter *m_hwAccelWriter;
+	bool m_hasCriticalError;
 };

@@ -89,6 +89,11 @@ bool OpenGL2Writer::readyWrite() const
 	return drawable->isOK;
 }
 
+bool OpenGL2Writer::hwAccelError() const
+{
+	return drawable->hwAccelError;
+}
+
 bool OpenGL2Writer::processParams(bool *)
 {
 	bool doResizeEvent = false;
