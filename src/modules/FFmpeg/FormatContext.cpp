@@ -714,7 +714,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	};
 
 	const QByteArray scheme = Functions::getUrlScheme(_url).toUtf8();
-	if (scheme.isEmpty())
+	if (scheme.isEmpty() || scheme == "sftp")
 		return false;
 
 	const Settings &settings = QMPlay2Core.getSettings();
