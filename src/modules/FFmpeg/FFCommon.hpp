@@ -31,6 +31,10 @@
 #define VDPAUWriterName "VDPAU"
 #define FFReaderName "FFmpeg Reader"
 
+#ifdef QMPlay2_VDPAU
+	struct AVVDPAUContext;
+	struct AVCodecContext;
+#endif
 struct AVDictionary;
 struct AVPacket;
 class VideoFrame;
@@ -39,4 +43,8 @@ namespace FFCommon
 {
 	AVPacket *createAVPacket();
 	void freeAVPacket(AVPacket *&packet);
+
+#ifdef QMPlay2_VDPAU
+	AVVDPAUContext *allocAVVDPAUContext(AVCodecContext *codecCtx);
+#endif
 }
