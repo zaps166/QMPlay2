@@ -385,8 +385,9 @@ void OpenGL2Common::paintGL()
 				}
 
 				/* Prepare textures, register GL textures */
+				const bool hasHwAccelError = hwAccelError;
 				hwAccelError = !hwAccellnterface->init(&textures[1]);
-				if (hwAccelError)
+				if (hwAccelError && !hasHwAccelError)
 					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
 				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
