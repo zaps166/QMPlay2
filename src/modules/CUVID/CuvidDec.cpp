@@ -494,6 +494,7 @@ CuvidDec::CuvidDec(Module &module) :
 	m_cuCtx(nullptr),
 	m_cuvidParser(nullptr),
 	m_cuvidDec(nullptr),
+	m_decodeMPEG4(true),
 	m_hasCriticalError(false)
 {
 	memset(m_frameBuffer, 0, sizeof m_frameBuffer);
@@ -525,16 +526,31 @@ bool CuvidDec::set()
 {
 	if (sets().getBool("Enabled"))
 	{
+		bool restart = false;
+
 		const cudaVideoDeinterlaceMode deintMethod = (cudaVideoDeinterlaceMode)sets().getInt("DeintMethod");
-		const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
 		if (deintMethod != m_deintMethod)
 		{
 			m_forceFlush = true;
 			m_deintMethod = deintMethod;
 		}
-		if (copyVideo == m_copyVideo)
+
+		const bool decodeMPEG4 = sets().getBool("DecodeMPEG4");
+		if (decodeMPEG4 != m_decodeMPEG4)
+		{
+			m_decodeMPEG4 = decodeMPEG4;
+			restart = true;
+		}
+
+		const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
+		if (copyVideo != m_copyVideo)
+		{
+			m_copyVideo = copyVideo;
+			restart = true;
+		}
+
+		if (!restart)
 			return true;
-		m_copyVideo = copyVideo;
 	}
 	return false;
 }
@@ -838,6 +854,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 			codec = cudaVideoCodec_JPEG;
 			break;
 		case AV_CODEC_ID_MPEG4:
+			if (!m_decodeMPEG4)
+				return false;
 			codec = cudaVideoCodec_MPEG4;
 			break;
 		case AV_CODEC_ID_H264:

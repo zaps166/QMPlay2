@@ -29,6 +29,7 @@ Cuvid::Cuvid() :
 	init("Enabled", true);
 	init("DeintMethod", 2);
 	init("CopyVideo", Qt::PartiallyChecked);
+	init("DecodeMPEG4", true);
 #ifdef Q_OS_WIN
 	init("CheckFirstGPU", true);
 #endif
@@ -96,6 +97,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	m_copyVideoB->setCheckState((Qt::CheckState)sets().getInt("CopyVideo"));
 	m_copyVideoB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
 
+	m_decodeMPEG4 = new QCheckBox(tr("Decode MPEG4 videos"));
+	m_decodeMPEG4->setChecked(sets().getBool("DecodeMPEG4"));
+	m_decodeMPEG4->setToolTip(tr("Disable if you have problems with decoding MPEG4 (DivX5) videos"));
+
 #ifdef Q_OS_WIN
 	m_checkFirstGPU = new QCheckBox(tr("Use CUVID only when primary GPU is NVIDIA"));
 	m_checkFirstGPU->setChecked(sets().getBool("CheckFirstGPU"));
@@ -107,6 +112,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(m_enabledB);
 	layout->addWidget(m_copyVideoB);
+	layout->addWidget(m_decodeMPEG4);
 #ifdef Q_OS_WIN
 	layout->addWidget(m_checkFirstGPU);
 #endif
@@ -116,6 +122,7 @@ void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", m_enabledB->isChecked());
 	sets().set("CopyVideo", m_copyVideoB->checkState());
+	sets().set("DecodeMPEG4", m_decodeMPEG4->isChecked());
 #ifdef Q_OS_WIN
 	sets().set("CheckFirstGPU", m_checkFirstGPU->isChecked());
 #endif

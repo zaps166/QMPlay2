@@ -74,6 +74,7 @@ private:
 
 	bool loadLibrariesAndInit();
 
+private:
 	VideoWriter *m_writer;
 	CuvidHWAccel *m_cuvidHWAccel;
 
@@ -103,6 +104,7 @@ private:
 	CUvideoparser m_cuvidParser;
 	CUvideodecoder m_cuvidDec;
 
+	bool m_decodeMPEG4;
 	bool m_hasCriticalError;
 };
 

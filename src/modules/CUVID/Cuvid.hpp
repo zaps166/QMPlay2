@@ -60,7 +60,7 @@ public:
 private:
 	void saveSettings() override final;
 
-	QCheckBox *m_enabledB, *m_copyVideoB;
+	QCheckBox *m_enabledB, *m_copyVideoB, *m_decodeMPEG4;
 #ifdef Q_OS_WIN
 	QCheckBox *m_checkFirstGPU;
 #endif

@@ -1659,6 +1659,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>Zawsze włączone dla platformy Wayland.
 Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     </message>
+    <message>
+        <source>Decode MPEG4 videos</source>
+        <translation>Dekoduj filmy MPEG4</translation>
+    </message>
+    <message>
+        <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
+        <translation>Wyłącz, jeżeli masz problemy z dekodowaniem filmów MPEG4 (DivX5)</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
