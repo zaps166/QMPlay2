@@ -24,11 +24,15 @@
 
 /**/
 
-constexpr char g_url[] = "http://www.tekstowo.pl/";
+constexpr char g_tekstowoUrl[] = "http://www.tekstowo.pl/";
 
-static inline QString getSearchUrl(const QString &artist, const QString &title)
+static inline QString getTekstowoSearchUrl(const QString &artist, const QString &title)
 {
-	return QString("%1szukaj,wykonawca,%2,tytul,%3.html").arg(g_url, artist.toUtf8().toPercentEncoding(), title.toUtf8().toPercentEncoding());
+	return QString("%1szukaj,wykonawca,%2,tytul,%3.html").arg(g_tekstowoUrl, artist.toUtf8().toPercentEncoding(), title.toUtf8().toPercentEncoding());
+}
+static inline QString getMakeitpersonalUrl(const QString &artist, const QString &title)
+{
+	return QString("https://makeitpersonal.co/lyrics?artist=%1&title=%2").arg((QString)artist.toUtf8().toPercentEncoding()).arg((QString)title.toUtf8().toPercentEncoding());
 }
 
 static QString simplifyString(const QString &str)
@@ -86,10 +90,12 @@ void Tekstowo::updatePlaying(bool play, const QString &title, const QString &art
 	Q_UNUSED(fileName)
 
 	m_pending = false;
-	if (m_searchReply)
-		m_searchReply->deleteLater();
-	if (m_lyricsReply)
-		m_lyricsReply->deleteLater();
+	if (m_tekstowoSearchReply)
+		m_tekstowoSearchReply->deleteLater();
+	if (m_tekstowoLyricsReply)
+		m_tekstowoLyricsReply->deleteLater();
+	m_realTitle.clear();
+	m_realArtist.clear();
 	m_title.clear();
 	m_artist.clear();
 	m_name.clear();
@@ -97,6 +103,8 @@ void Tekstowo::updatePlaying(bool play, const QString &title, const QString &art
 
 	if (play)
 	{
+		m_realTitle = title;
+		m_realArtist = artist;
 		m_title  = simplifyString(title);
 		m_artist = simplifyString(artist);
 		search();
@@ -108,14 +116,18 @@ void Tekstowo::finished(NetworkReply *reply)
 	const QByteArray data = reply->readAll();
 	reply->deleteLater();
 	if (reply->hasError())
+	{
+		if (reply == m_tekstowoSearchReply || reply == m_tekstowoLyricsReply)
+			m_makeitpersonalLyricsReply = m_net.start(getMakeitpersonalUrl(m_artist, m_title));
 		return;
-	if (reply == m_searchReply)
+	}
+	if (reply == m_tekstowoSearchReply)
 	{
 		int idx1 = data.indexOf("class=\"content\"");
 		int idx2 = data.indexOf("class=\"t-artists\"", idx1);
 		if (idx1 > -1 && (idx2 > idx1 || idx2 < 0))
 		{
-			const auto extractTag = [](const QString &data, const QString &tag)->QString {
+			const auto extractTag = [](const QString &data, const QString &tag) {
 				int idx1 = data.indexOf(tag + "=\"");
 				if (idx1 > -1)
 				{
@@ -186,18 +198,22 @@ void Tekstowo::finished(NetworkReply *reply)
 				}
 			}
 
-			if (!guesses.empty())
+			if (guesses.empty())
+			{
+				m_makeitpersonalLyricsReply = m_net.start(getMakeitpersonalUrl(m_artist, m_title));
+			}
+			else
 			{
 				std::sort(guesses.begin(), guesses.end(), [](const Guess &a, const Guess &b)->bool {
 					return (std::get<2>(a) > std::get<2>(b));
 				});
 
-				m_lyricsReply = m_net.start(g_url + std::get<1>(guesses[0]));
+				m_tekstowoLyricsReply = m_net.start(g_tekstowoUrl + std::get<1>(guesses[0]));
 				m_name = std::get<0>(guesses[0]);
 			}
 		}
 	}
-	else if (reply == m_lyricsReply)
+	else if (reply == m_tekstowoLyricsReply)
 	{
 		const auto getLyrics = [data](const QString &type)->QString {
 			int idx1 = data.indexOf("class=\"" + type + "\"");
@@ -225,6 +241,11 @@ void Tekstowo::finished(NetworkReply *reply)
 			setHtml(html);
 		}
 	}
+	else if (reply == m_makeitpersonalLyricsReply)
+	{
+		if (data != "Sorry, We don't have lyrics for this song yet.")
+			setHtml("<center><b>" + m_realTitle + " - " + m_realArtist + "</b><br/>" + QByteArray(data).replace("\n", "<br/>") + "</center>");
+	}
 }
 
 void Tekstowo::search()
@@ -236,7 +257,7 @@ void Tekstowo::search()
 		m_pending = true;
 	else
 	{
-		m_searchReply = m_net.start(getSearchUrl(m_artist, m_title));
+		m_tekstowoSearchReply = m_net.start(getTekstowoSearchUrl(m_artist, m_title));
 		m_pending = false;
 	}
 }
