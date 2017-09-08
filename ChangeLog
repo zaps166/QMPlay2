@@ -1,6 +1,8 @@
 Changes in QMPlay2 build 17.09.04:
+	- play JPEG videos and photos using CUVID,
 	- update German translation (martinkg),
-	- allow to downloading HLS streams,
+	- better handling HWAccel errors,
+	- allow downloading HLS streams,
 	- speed-up subtitles rendering,
 	- fix seeking on M3U8 streams,
 	- fix crashes:
