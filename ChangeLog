@@ -1,5 +1,7 @@
-Changes in QMPlay2 build 17.09.04:
+Changes in QMPlay2 build 17.09.08:
+	- add "makeitpersonal.co" fallback to Tekstowo,
 	- play JPEG videos and photos using CUVID,
+	- option to disable MPEG4 videos in CUVID,
 	- update German translation (martinkg),
 	- better handling HWAccel errors,
 	- allow downloading HLS streams,
