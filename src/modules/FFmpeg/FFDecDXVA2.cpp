@@ -214,7 +214,7 @@ public:
 		return m_d3d9Device;
 	}
 
-	bool setNewData(const Size &size, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
+	void setNewData(const Size &size, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
 	{
 		releaseSurfacesAndDecoder();
 
@@ -226,8 +226,6 @@ public:
 			surface->AddRef();
 
 		m_size = size;
-
-		return true;
 	}
 
 private:
@@ -624,13 +622,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	{
 		if (!dxva2Hwaccel)
 			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device);
-		if (!dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces))
-		{
-			if (m_hwAccelWriter)
-				return false;
-			delete dxva2Hwaccel;
-			dxva2Hwaccel = NULL;
-		}
+		dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces);
 		if (!m_hwAccelWriter && dxva2Hwaccel)
 			m_hwAccelWriter = VideoWriter::createOpenGL2(dxva2Hwaccel);
 		if (!m_hwAccelWriter && m_copyVideo == Qt::Unchecked)
