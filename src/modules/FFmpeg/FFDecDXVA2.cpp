@@ -75,7 +75,8 @@ static QMultiMap<AVCodecID, const GUID *> GUIDToAVCodec;
 class DXVA2Hwaccel : public HWAccelInterface
 {
 public:
-	inline DXVA2Hwaccel(IDirect3DDevice9 *d3d9Device) :
+	inline DXVA2Hwaccel(IDirect3DDevice9 *d3d9Device, const bool dontReleaseRenderTarget) :
+		m_dontReleaseRenderTarget(dontReleaseRenderTarget),
 		m_d3d9Device(d3d9Device),
 		m_glHandleD3D(nullptr),
 		m_videoDecoder(nullptr),
@@ -87,8 +88,11 @@ public:
 	~DXVA2Hwaccel() final
 	{
 		releaseSurfacesAndDecoder();
-		for (auto it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
-			it.value()->Release();
+		if (m_dontReleaseRenderTarget)
+		{
+			for (auto it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
+				it.value()->Release();
+		}
 		m_d3d9Device->Release();
 	}
 
@@ -119,7 +123,8 @@ public:
 		if (!wglDXOpenDeviceNV || !wglDXSetResourceShareHandleNV || !wglDXRegisterObjectNV || !wglDXLockObjectsNV || !wglDXUnlockObjectsNV || !wglDXUnregisterObjectNV || !wglDXCloseDeviceNV)
 			return false;
 
-		m_renderTarget = m_renderTargets.value(m_size);
+		if (m_dontReleaseRenderTarget)
+			m_renderTarget = m_renderTargets.value(m_size);
 
 		if (!m_renderTarget)
 		{
@@ -130,8 +135,10 @@ public:
 			if (FAILED(hr))
 				return false;
 
-			//Don't release render target here, otherwise on Intel drivers "wglDXSetResourceShareHandleNV()" can fail.
-			m_renderTargets[m_size] = m_renderTarget;
+			// Don't release render target on Intel drivers, bacause "wglDXSetResourceShareHandleNV()" can fail.
+			// Render target must be created here on Radeon drivers, otherwise "wglDXRegisterObjectNV()" will fail.
+			if (m_dontReleaseRenderTarget)
+				m_renderTargets[m_size] = m_renderTarget;
 
 			if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHande))
 				return false;
@@ -165,6 +172,11 @@ public:
 		{
 			wglDXCloseDeviceNV(m_glHandleD3D);
 			m_glHandleD3D = nullptr;
+		}
+		if (!m_dontReleaseRenderTarget && m_renderTarget)
+		{
+			m_renderTarget->Release();
+			m_renderTarget = nullptr;
 		}
 	}
 
@@ -239,6 +251,9 @@ private:
 		if (m_videoDecoder)
 			m_videoDecoder->Release();
 	}
+
+private:
+	const bool m_dontReleaseRenderTarget;
 
 	PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV;
 	PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV;
@@ -417,6 +432,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 		}
 	}
 
+	QString deviceDescription;
 	HRESULT hr;
 
 	if (!m_d3d9Device)
@@ -434,6 +450,17 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 			d3d9->Release();
 			return false;
 		}
+
+		D3DADAPTER_IDENTIFIER9 adapterIdentifier;
+		memset(&adapterIdentifier, 0, sizeof adapterIdentifier);
+		hr = d3d9->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &adapterIdentifier);
+		if (FAILED(hr))
+		{
+			d3d9->Release();
+			return false;
+		}
+
+		deviceDescription = adapterIdentifier.Description;
 
 		D3DPRESENT_PARAMETERS d3dpp;
 		memset(&d3dpp, 0, sizeof d3dpp);
@@ -621,7 +648,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (m_copyVideo != Qt::Checked)
 	{
 		if (!dxva2Hwaccel)
-			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device);
+			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device, deviceDescription.contains("Intel", Qt::CaseInsensitive));
 		dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces);
 		if (!m_hwAccelWriter && dxva2Hwaccel)
 			m_hwAccelWriter = VideoWriter::createOpenGL2(dxva2Hwaccel);
