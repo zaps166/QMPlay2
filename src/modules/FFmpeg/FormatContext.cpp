@@ -157,6 +157,19 @@ static QByteArray getTag(AVDictionary *metadata, const char *key, const bool ded
 	return QByteArray();
 }
 
+static void fixFontsAttachment(AVStream *stream)
+{
+	if (codecParams(stream)->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecParams(stream)->codec_id == AV_CODEC_ID_NONE)
+	{
+		// If codec for fonts is unknown - check the attachment file name extension
+		const QString attachmentFileName = getTag(stream->metadata, "filename", false);
+		if (attachmentFileName.endsWith(".otf", Qt::CaseInsensitive))
+			codecParams(stream)->codec_id = AV_CODEC_ID_OTF;
+		else if (attachmentFileName.endsWith(".ttf", Qt::CaseInsensitive))
+			codecParams(stream)->codec_id = AV_CODEC_ID_TTF;
+	}
+}
+
 static bool streamNotValid(AVStream *stream)
 {
 	return
@@ -823,6 +836,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	nextDts.resize(formatCtx->nb_streams);
 	for (unsigned i = 0; i < formatCtx->nb_streams; ++i)
 	{
+		fixFontsAttachment(formatCtx->streams[i]);
 		StreamInfo *streamInfo = getStreamInfo(formatCtx->streams[i]);
 		if (!streamInfo)
 			index_map[i] = -1;
