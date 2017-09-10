@@ -1,4 +1,5 @@
 Changes in QMPlay2 build 17.09.08:
+	- add frame skipping for HWAccel (except CUVID),
 	- add "makeitpersonal.co" fallback to Tekstowo,
 	- play JPEG videos and photos using CUVID,
 	- option to disable MPEG4 videos in CUVID,
@@ -6,7 +7,8 @@ Changes in QMPlay2 build 17.09.08:
 	- better handling HWAccel errors,
 	- allow downloading HLS streams,
 	- speed-up subtitles rendering,
-	- fix seeking on M3U8 streams,
+	- fix seeking on HLS streams,
+	- fix DXVA2 for Radeon GPUs,
 	- fix crashes:
 		- double-free when VA-API can't be initialized in new video and it was already used in previous video,
 		- possible nullptr dereference in VideoThr (since 17.06.09),
