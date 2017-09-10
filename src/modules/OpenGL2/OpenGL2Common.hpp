@@ -42,14 +42,14 @@ class OpenGL2Common;
 class QMPlay2OSD;
 class QMouseEvent;
 
-class RotAnimation : public QVariantAnimation
+class RotAnimation final : public QVariantAnimation
 {
 public:
 	inline RotAnimation(OpenGL2Common &glCommon) :
 		glCommon(glCommon)
 	{}
 private:
-	void updateCurrentValue(const QVariant &value) override final;
+	void updateCurrentValue(const QVariant &value) override;
 
 	OpenGL2Common &glCommon;
 };

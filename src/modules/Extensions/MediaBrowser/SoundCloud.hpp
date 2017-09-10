@@ -22,34 +22,34 @@
 
 #include <QCoreApplication>
 
-class SoundCloud : public MediaBrowserCommon
+class SoundCloud final : public MediaBrowserCommon
 {
 	Q_DECLARE_TR_FUNCTIONS(SoundCloud)
 
 public:
 	SoundCloud(NetworkAccess &net);
-	~SoundCloud() final;
+	~SoundCloud();
 
 
-	void prepareWidget(QTreeWidget *treeW) override final;
+	void prepareWidget(QTreeWidget *treeW) override;
 
 
-	QString getQMPlay2Url(const QString &text) const override final;
+	QString getQMPlay2Url(const QString &text) const override;
 
-	NetworkReply *getSearchReply(const QString &text, const qint32 page) override final;
-	Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override final;
+	NetworkReply *getSearchReply(const QString &text, const qint32 page) override;
+	Description addSearchResults(const QByteArray &reply, QTreeWidget *treeW) override;
 
-	PagesMode pagesMode() const override final;
+	PagesMode pagesMode() const override;
 
-	bool hasWebpage() const override final;
-	QString getWebpageUrl(const QString &text) const override final;
+	bool hasWebpage() const override;
+	QString getWebpageUrl(const QString &text) const override;
 
-	CompleterMode completerMode() const override final;
-	NetworkReply *getCompleterReply(const QString &text) override final;
-	QStringList getCompletions(const QByteArray &reply) override final;
+	CompleterMode completerMode() const override;
+	NetworkReply *getCompleterReply(const QString &text) override;
+	QStringList getCompletions(const QByteArray &reply) override;
 
 
-	QAction *getAction() const override final;
+	QAction *getAction() const override;
 
-	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override final;
+	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override;
 };

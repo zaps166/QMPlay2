@@ -35,7 +35,7 @@ class VideoDock;
 class MenuBar;
 class QWidget;
 
-class QMPlay2GUIClass : private QMPlay2CoreClass
+class QMPlay2GUIClass final : private QMPlay2CoreClass
 {
 	Q_DECLARE_TR_FUNCTIONS(QMPlay2GUIClass)
 
@@ -68,7 +68,7 @@ public:
 
 	void updateInDockW();
 
-	const QWidget *getVideoDock() const override final;
+	const QWidget *getVideoDock() const override;
 
 	QColor grad1, grad2, qmpTxt;
 	QIcon *groupIcon, *mediaIcon, *folderIcon;
@@ -84,7 +84,7 @@ public:
 	QString newProfileName, cmdLineProfile;
 private:
 	QMPlay2GUIClass();
-	~QMPlay2GUIClass() final;
+	~QMPlay2GUIClass();
 };
 
 #define QMPlay2GUI \

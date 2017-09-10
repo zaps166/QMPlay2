@@ -28,16 +28,16 @@ public:
 	FFDecVTB(QMutex &avcodec_mutex, Module &module);
 	~FFDecVTB();
 
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override final;
-	void downloadVideoFrame(VideoFrame &decoded) override final;
+	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+	void downloadVideoFrame(VideoFrame &decoded) override;
 
-	bool hasCriticalError() const override final;
+	bool hasCriticalError() const override;
 
-	bool open(StreamInfo &streamInfo, VideoWriter *writer) override final;
+	bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 
 private:
 	SwsContext *m_swsCtx;

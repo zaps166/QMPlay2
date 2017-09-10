@@ -27,32 +27,32 @@
 	#define PASS_EVENTS_TO_PARENT
 #endif
 
-class OpenGL2Window : private QOpenGLWindow, public OpenGL2Common
+class OpenGL2Window final : private QOpenGLWindow, public OpenGL2Common
 {
 	Q_OBJECT
 public:
 	OpenGL2Window();
-	~OpenGL2Window() final;
+	~OpenGL2Window();
 
-	void deleteMe() override final;
+	void deleteMe() override;
 
-	QWidget *widget() override final;
+	QWidget *widget() override;
 
-	bool setVSync(bool enable) override final;
-	void updateGL(bool requestDelayed) override final;
+	bool setVSync(bool enable) override;
+	void updateGL(bool requestDelayed) override;
 
-	void initializeGL() override final;
-	void paintGL() override final;
+	void initializeGL() override;
+	void paintGL() override;
 
 private slots:
 	void doUpdateGL(bool queued = false);
 	void aboutToBeDestroyed();
 	void videoVisible(bool v);
 private:
-	bool eventFilter(QObject *o, QEvent *e) override final;
+	bool eventFilter(QObject *o, QEvent *e) override;
 
 #ifdef PASS_EVENTS_TO_PARENT
-	bool event(QEvent *e) override final;
+	bool event(QEvent *e) override;
 #endif
 
 	QWidget *container;

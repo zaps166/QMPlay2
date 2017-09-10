@@ -24,14 +24,14 @@
 class QPlainTextEdit;
 class QPushButton;
 
-class AboutWidget : public QWidget
+class AboutWidget final : public QWidget
 {
 	Q_OBJECT
 public:
 	AboutWidget();
 private:
-	void showEvent(QShowEvent *) override final;
-	void closeEvent(QCloseEvent *) override final;
+	void showEvent(QShowEvent *) override;
+	void closeEvent(QCloseEvent *) override;
 
 	QPlainTextEdit *logE, *clE, *auE;
 	QPushButton *clrLogB;

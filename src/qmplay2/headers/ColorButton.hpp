@@ -20,7 +20,7 @@
 
 #include <QPushButton>
 
-class ColorButton : public QPushButton
+class ColorButton final : public QPushButton
 {
 	Q_OBJECT
 public:
@@ -32,7 +32,7 @@ public:
 		return m_color;
 	}
 protected:
-	void paintEvent(QPaintEvent *) override final;
+	void paintEvent(QPaintEvent *) override;
 private:
 	QColor m_color;
 	bool m_alphaChannel;

@@ -38,14 +38,14 @@ class PlaylistDock;
 class SettingsWidget;
 class QMPlay2Extensions;
 
-class MainWidget : public QMainWindow
+class MainWidget final : public QMainWindow
 {
 	friend class QMPlay2GUIClass;
 	Q_PROPERTY(bool fullScreen READ getFullScreen)
 	Q_OBJECT
 public:
 	MainWidget(QPair<QStringList, QStringList> &argument);
-	~MainWidget() final;
+	~MainWidget();
 private slots:
 	void detachFromPipe();
 
@@ -116,7 +116,7 @@ private slots:
 private:
 	void savePlistHelper(const QString &, const QString &, bool);
 
-	QMenu *createPopupMenu() override final;
+	QMenu *createPopupMenu() override;
 
 	void showToolBar(bool);
 	void hideDocks();
@@ -125,16 +125,16 @@ private:
 
 	bool getFullScreen() const;
 
-	void keyPressEvent(QKeyEvent *) override final;
-	void mouseMoveEvent(QMouseEvent *) override final;
-	void leaveEvent(QEvent *) override final;
-	void closeEvent(QCloseEvent *) override final;
-	void moveEvent(QMoveEvent *) override final;
-	void showEvent(QShowEvent *) override final;
-	void hideEvent(QHideEvent *) override final;
+	void keyPressEvent(QKeyEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void leaveEvent(QEvent *) override;
+	void closeEvent(QCloseEvent *) override;
+	void moveEvent(QMoveEvent *) override;
+	void showEvent(QShowEvent *) override;
+	void hideEvent(QHideEvent *) override;
 
 #ifdef Q_OS_MAC
-	bool eventFilter(QObject *obj, QEvent *event) override final;
+	bool eventFilter(QObject *obj, QEvent *event) override;
 
 	void fileOpenTimerTimeout();
 

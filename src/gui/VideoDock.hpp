@@ -26,7 +26,7 @@
 
 class QMenu;
 
-class VideoDock : public DockWidget
+class VideoDock final : public DockWidget
 {
 	Q_OBJECT
 public:
@@ -49,17 +49,17 @@ private:
 
 	void unsetCursor(QWidget *w);
 
-	void dragEnterEvent(QDragEnterEvent *) override final;
-	void dropEvent(QDropEvent *) override final;
-	void mouseMoveEvent(QMouseEvent *) override final;
-	void mouseDoubleClickEvent(QMouseEvent *) override final;
-	void mousePressEvent(QMouseEvent *) override final;
-	void mouseReleaseEvent(QMouseEvent *) override final;
-	void moveEvent(QMoveEvent *) override final;
-	void wheelEvent(QWheelEvent *) override final;
-	void leaveEvent(QEvent *) override final;
-	void enterEvent(QEvent *) override final;
-	bool event(QEvent *) override final;
+	void dragEnterEvent(QDragEnterEvent *) override;
+	void dropEvent(QDropEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void mouseDoubleClickEvent(QMouseEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
+	void mouseReleaseEvent(QMouseEvent *) override;
+	void moveEvent(QMoveEvent *) override;
+	void wheelEvent(QWheelEvent *) override;
+	void leaveEvent(QEvent *) override;
+	void enterEvent(QEvent *) override;
+	bool event(QEvent *) override;
 
 	QTimer hideCursorTim, leftButtonPlayTim;
 	InDockW iDW;

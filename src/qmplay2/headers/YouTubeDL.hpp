@@ -25,7 +25,7 @@
 
 class NetworkReply;
 
-class YouTubeDL : public BasicIO
+class YouTubeDL final : public BasicIO
 {
 	Q_DECLARE_TR_FUNCTIONS(YouTubeDL)
 	Q_DISABLE_COPY(YouTubeDL)
@@ -36,14 +36,14 @@ public:
 	static bool fixUrl(const QString &url, QString &outUrl, IOController<> *ioCtrl, QString *name, QString *extension, QString *error);
 
 	YouTubeDL();
-	~YouTubeDL() final;
+	~YouTubeDL();
 
 	void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr);
 
 	QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true);
 
 private:
-	void abort() override final;
+	void abort() override;
 
 	IOController<NetworkReply> m_reply;
 	QProcess m_process;

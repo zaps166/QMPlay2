@@ -24,12 +24,12 @@
 #include <QCheckBox>
 #include <QDialog>
 
-class AddressDialog : public QDialog
+class AddressDialog final : public QDialog
 {
 	Q_DECLARE_TR_FUNCTIONS(AddressDialog)
 public:
 	AddressDialog(QWidget *);
-	~AddressDialog() final;
+	~AddressDialog();
 
 	inline bool addAndPlay() const
 	{

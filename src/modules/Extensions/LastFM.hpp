@@ -29,7 +29,7 @@
 
 class QImage;
 
-class LastFM : public QObject, public QMPlay2Extensions
+class LastFM final : public QObject, public QMPlay2Extensions
 {
 	Q_OBJECT
 public:
@@ -48,7 +48,7 @@ public:
 
 	LastFM(Module &module);
 private:
-	bool set() override final;
+	bool set() override;
 
 	void getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum = false);
 

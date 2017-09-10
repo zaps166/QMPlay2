@@ -20,10 +20,10 @@
 
 #include <Playlist.hpp>
 
-class PLS : public Playlist
+class PLS final : public Playlist
 {
-	Entries read() override final;
-	bool write(const Entries &) override final;
+	Entries read() override;
+	bool write(const Entries &) override;
 };
 
 #define PLSName "PLS"

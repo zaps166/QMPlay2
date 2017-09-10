@@ -20,10 +20,10 @@
 
 #include <Playlist.hpp>
 
-class M3U : public Playlist
+class M3U final : public Playlist
 {
-	Entries read() override final;
-	bool write(const Entries &) override final;
+	Entries read() override;
+	bool write(const Entries &) override;
 };
 
 #define M3UName "M3U"

@@ -20,16 +20,16 @@
 
 #include <Notifies.hpp>
 
-class NotifiesTray : public Notifies
+class NotifiesTray final : public Notifies
 {
 public:
 	NotifiesTray(QSystemTrayIcon *tray);
 	~NotifiesTray() final = default;
 
 private:
-	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId) override final;
-	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId) override final;
-	bool doNotify(const QString &title, const QString &message, const int ms, const int iconId) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId) override;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId) override;
+	bool doNotify(const QString &title, const QString &message, const int ms, const int iconId) override;
 
 	QSystemTrayIcon *m_tray;
 };

@@ -21,7 +21,7 @@
 #include <QPointer>
 #include <QWidget>
 
-class InDockW : public QWidget
+class InDockW final : public QWidget
 {
 	Q_OBJECT
 public:
@@ -41,9 +41,9 @@ private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void setWidget(QWidget *newW);
 protected:
-	void resizeEvent(QResizeEvent *) override final;
-	void paintEvent(QPaintEvent *) override final;
-	bool event(QEvent *) override final;
+	void resizeEvent(QResizeEvent *) override;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 signals:
 	void resized(int, int);
 	void itemDropped(const QString &);

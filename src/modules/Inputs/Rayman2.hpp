@@ -24,23 +24,23 @@
 
 class Reader;
 
-class Rayman2 : public Demuxer
+class Rayman2 final : public Demuxer
 {
 public:
 	Rayman2(Module &);
 private:
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
-	QString title() const override final;
-	double length() const override final;
-	int bitrate() const override final;
+	QString name() const override;
+	QString title() const override;
+	double length() const override;
+	int bitrate() const override;
 
-	bool seek(double pos, bool backward) override final;
-	bool read(Packet &, int &) override final;
-	void abort() override final;
+	bool seek(double pos, bool backward) override;
+	bool read(Packet &, int &) override;
+	void abort() override;
 
-	bool open(const QString &) override final;
+	bool open(const QString &) override;
 
 	/**/
 

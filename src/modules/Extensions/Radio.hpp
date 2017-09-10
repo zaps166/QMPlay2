@@ -36,15 +36,15 @@ class NetworkReply;
 class QTimer;
 class QMenu;
 
-class Radio : public QTabWidget, public QMPlay2Extensions
+class Radio final : public QTabWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
 
 public:
 	Radio(Module &);
-	~Radio() final;
+	~Radio();
 
-	DockWidget *getDockWidget() override final;
+	DockWidget *getDockWidget() override;
 
 private slots:
 	void visibilityChanged(const bool v);

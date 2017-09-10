@@ -20,14 +20,14 @@
 
 #include <DeintFilter.hpp>
 
-class BlendDeint : public DeintFilter
+class BlendDeint final : public DeintFilter
 {
 public:
 	BlendDeint();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define BlendDeintName "Blend"

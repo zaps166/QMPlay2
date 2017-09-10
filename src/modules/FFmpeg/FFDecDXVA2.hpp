@@ -30,7 +30,7 @@ extern "C"
 class DXVA2Surfaces;
 struct SwsContext;
 
-class FFDecDXVA2 : public FFDecHWAccel
+class FFDecDXVA2 final : public FFDecHWAccel
 {
 public:
 	using Surfaces = QSharedPointer<QVector<IDirect3DSurface9 *>>;
@@ -38,15 +38,15 @@ public:
 	static bool loadLibraries();
 
 	FFDecDXVA2(QMutex &avcodec_mutex, Module &module);
-        ~FFDecDXVA2() final;
+        ~FFDecDXVA2();
 
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	void downloadVideoFrame(VideoFrame &decoded) override final;
+	void downloadVideoFrame(VideoFrame &decoded) override;
 
-	bool open(StreamInfo &streamInfo, VideoWriter *writer) override final;
+	bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 
 private:
 	Qt::CheckState m_copyVideo;

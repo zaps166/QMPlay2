@@ -20,16 +20,16 @@
 
 #include <DeintFilter.hpp>
 
-class BobDeint : public DeintFilter
+class BobDeint final : public DeintFilter
 {
 public:
 	BobDeint();
 
-	void clearBuffer() override final;
+	void clearBuffer() override;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 private:
 	bool secondFrame;
 	double lastTS;

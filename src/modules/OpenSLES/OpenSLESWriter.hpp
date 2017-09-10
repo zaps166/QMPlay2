@@ -24,24 +24,24 @@
 
 #include <SLES/OpenSLES.h>
 
-class OpenSLESWriter : public Writer
+class OpenSLESWriter final : public Writer
 {
 public:
 	OpenSLESWriter(Module &);
 private:
-        ~OpenSLESWriter() final;
+        ~OpenSLESWriter();
 
-	bool set() override final;
+	bool set() override;
 
-	bool readyWrite() const override final;
+	bool readyWrite() const override;
 
-	bool processParams(bool *paramsCorrected) override final;
-	qint64 write(const QByteArray &) override final;
-	void pause() override final;
+	bool processParams(bool *paramsCorrected) override;
+	qint64 write(const QByteArray &) override;
+	void pause() override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	bool open() override final;
+	bool open() override;
 
 	/**/
 

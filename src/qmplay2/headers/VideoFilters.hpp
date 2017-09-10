@@ -29,7 +29,7 @@
 class VideoFilters;
 class TimeStamp;
 
-class VideoFiltersThr : public QThread
+class VideoFiltersThr final : public QThread
 {
 public:
 	VideoFiltersThr(VideoFilters &videoFilters);
@@ -47,7 +47,7 @@ public:
 
 	QMutex bufferMutex;
 private:
-	void run() override final;
+	void run() override;
 
 	VideoFilters &videoFilters;
 

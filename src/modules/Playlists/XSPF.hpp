@@ -20,10 +20,10 @@
 
 #include <Playlist.hpp>
 
-class XSPF : public Playlist
+class XSPF final : public Playlist
 {
-	Entries read() override final;
-	bool write(const Entries &) override final;
+	Entries read() override;
+	bool write(const Entries &) override;
 };
 
 #define XSPFName "XSPF"

@@ -20,15 +20,15 @@
 
 #include <Module.hpp>
 
-class Extensions : public Module
+class Extensions final : public Module
 {
 public:
 	Extensions();
 private:
-	QList<Info> getModulesInfo(const bool) const override final;
-	void *createInstance(const QString &) override final;
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget() override final;
+	SettingsWidget *getSettingsWidget() override;
 
 	QIcon downloader, youtube, radio;
 #ifdef USE_LASTFM
@@ -44,7 +44,7 @@ class QGroupBox;
 class QCheckBox;
 class LineEdit;
 
-class ModuleSettingsWidget : public Module::SettingsWidget
+class ModuleSettingsWidget final : public Module::SettingsWidget
 {
 	Q_OBJECT
 public:
@@ -56,7 +56,7 @@ private slots:
 	void passwordEdited();
 #endif
 private:
-	void saveSettings() override final;
+	void saveSettings() override;
 
 #ifdef USE_MPRIS2
 	QCheckBox *MPRIS2B;

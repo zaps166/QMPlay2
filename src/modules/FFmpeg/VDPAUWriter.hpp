@@ -28,27 +28,27 @@
 
 struct _XDisplay;
 
-class VDPAUWriter : public QWidget, public VideoWriter
+class VDPAUWriter final : public QWidget, public VideoWriter
 {
 	Q_OBJECT
 public:
 	VDPAUWriter(Module &module);
-	~VDPAUWriter() final;
+	~VDPAUWriter();
 
-	bool set() override final;
+	bool set() override;
 
-	bool readyWrite() const override final;
+	bool readyWrite() const override;
 
-	bool processParams(bool *paramsCorrected) override final;
-	void writeVideo(const VideoFrame &videoFrame) override final;
-	void writeOSD(const QList<const QMPlay2OSD *> &osd) override final;
-	void pause() override final;
+	bool processParams(bool *paramsCorrected) override;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &osd) override;
+	void pause() override;
 
-	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const override final;
+	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	bool open() override final;
+	bool open() override;
 
 	/**/
 
@@ -78,11 +78,11 @@ private:
 	Q_SLOT void draw(VdpVideoSurface surface_id = VDP_INVALID_HANDLE);
 	void vdpau_display();
 
-	void resizeEvent(QResizeEvent *) override final;
-	void paintEvent(QPaintEvent *) override final;
-	bool event(QEvent *) override final;
+	void resizeEvent(QResizeEvent *) override;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
-	QPaintEngine *paintEngine() const override final;
+	QPaintEngine *paintEngine() const override;
 
 	void destroyOutputSurfaces();
 	void clr();

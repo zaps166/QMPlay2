@@ -26,17 +26,17 @@
 class OrgFreedesktopNotificationsInterface;
 class QDBusPendingCallWatcher;
 
-class NotifiesFreedesktop : public QObject, public Notifies
+class NotifiesFreedesktop final : public QObject, public Notifies
 {
 	Q_OBJECT
 
 public:
 	NotifiesFreedesktop();
-	~NotifiesFreedesktop() final;
+	~NotifiesFreedesktop();
 
 private:
-	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId = 0) override final;
-	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId = 0) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId = 0) override;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId = 0) override;
 
 private slots:
 	void callFinished(QDBusPendingCallWatcher *watcher);

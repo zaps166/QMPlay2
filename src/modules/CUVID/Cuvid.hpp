@@ -24,21 +24,21 @@
 
 class QComboBox;
 
-class Cuvid : public Module
+class Cuvid final : public Module
 {
 	Q_DECLARE_TR_FUNCTIONS(Cuvid)
 
 public:
 	Cuvid();
-	~Cuvid() final;
+	~Cuvid();
 
 private:
-	QList<Info> getModulesInfo(const bool showDisabled) const override final;
-	void *createInstance(const QString &name) override final;
+	QList<Info> getModulesInfo(const bool showDisabled) const override;
+	void *createInstance(const QString &name) override;
 
-	SettingsWidget *getSettingsWidget() override final;
+	SettingsWidget *getSettingsWidget() override;
 
-	void videoDeintSave() override final;
+	void videoDeintSave() override;
 
 	/**/
 
@@ -58,7 +58,7 @@ public:
 	ModuleSettingsWidget(Module &module);
 
 private:
-	void saveSettings() override final;
+	void saveSettings() override;
 
 	QCheckBox *m_enabledB, *m_copyVideoB, *m_decodeMPEG4;
 #ifdef Q_OS_WIN

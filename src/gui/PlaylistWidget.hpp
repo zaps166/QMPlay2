@@ -34,7 +34,7 @@ class QTreeWidgetItem;
 class PlaylistWidget;
 class Demuxer;
 
-class UpdateEntryThr : public QThread
+class UpdateEntryThr final : public QThread
 {
 	Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
 	}
 
 private:
-	void run() override final;
+	void run() override;
 
 	QAtomicInt pendingUpdates;
 	IOController<> ioCtrl;
@@ -84,7 +84,7 @@ private slots:
 	void finished();
 };
 
-class AddThr : public QThread
+class AddThr final : public QThread
 {
 	Q_OBJECT
 public:
@@ -101,7 +101,7 @@ private slots:
 	void modifyItemFlags(QTreeWidgetItem *tWI, int flags);
 	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
 private:
-	void run() override final;
+	void run() override;
 
 	bool add(const QStringList &urls, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, QStringList *existingEntries = nullptr, bool loadList = false);
 	QTreeWidgetItem *insertPlaylistEntries(const Playlist::Entries &entries, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries);
@@ -120,7 +120,7 @@ signals:
 	void status(bool s);
 };
 
-class PlaylistWidget : public QTreeWidget
+class PlaylistWidget final : public QTreeWidget
 {
 	friend class AddThr;
 	friend class UpdateEntryThr;
@@ -192,12 +192,12 @@ private:
 
 	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
 
-	void mouseMoveEvent(QMouseEvent *) override final;
-	void dragEnterEvent(QDragEnterEvent *) override final;
-	void dragMoveEvent(QDragMoveEvent *) override final;
-	void dropEvent(QDropEvent *) override final;
-	void paintEvent(QPaintEvent *) override final;
-	void scrollContentsBy(int dx, int dy) override final;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void dragEnterEvent(QDragEnterEvent *) override;
+	void dragMoveEvent(QDragMoveEvent *) override;
+	void dropEvent(QDropEvent *) override;
+	void paintEvent(QPaintEvent *) override;
+	void scrollContentsBy(int dx, int dy) override;
 
 	QRect getArcRect(int size);
 

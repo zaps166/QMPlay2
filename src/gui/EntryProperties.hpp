@@ -30,7 +30,7 @@ class QCheckBox;
 #endif
 class QLabel;
 
-class EntryProperties : public QDialog
+class EntryProperties final : public QDialog
 {
 	Q_OBJECT
 public:
@@ -53,6 +53,6 @@ private slots:
 	void directAddressChanged();
 #endif
 	void browse();
-	void accept() override final;
-	void reject() override final;
+	void accept() override;
+	void reject() override;
 };

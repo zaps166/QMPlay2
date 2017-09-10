@@ -20,15 +20,15 @@
 
 #include <Module.hpp>
 
-class ALSA : public Module
+class ALSA final : public Module
 {
 public:
 	ALSA();
 private:
-	QList<Info> getModulesInfo(const bool) const override final;
-	void *createInstance(const QString &) override final;
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget() override final;
+	SettingsWidget *getSettingsWidget() override;
 };
 
 /**/
@@ -39,13 +39,13 @@ class QDoubleSpinBox;
 class QCheckBox;
 class QComboBox;
 
-class ModuleSettingsWidget : public Module::SettingsWidget
+class ModuleSettingsWidget final : public Module::SettingsWidget
 {
 	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 public:
 	ModuleSettingsWidget(Module &);
 private:
-	void saveSettings() override final;
+	void saveSettings() override;
 
 	QCheckBox *enabledB, *autoMultichnB;
 	QDoubleSpinBox *delayB;

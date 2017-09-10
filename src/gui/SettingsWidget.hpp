@@ -35,7 +35,7 @@ namespace Ui {
 	class ModulesList;
 }
 
-class SettingsWidget : public QWidget
+class SettingsWidget final : public QWidget
 {
 	Q_OBJECT
 public:
@@ -44,7 +44,7 @@ public:
 	static void SetAudioChannels(int chn);
 
 	SettingsWidget(int page, const QString &module, QWidget *videoEq);
-	~SettingsWidget() final;
+	~SettingsWidget();
 
 	void setAudioChannels();
 private:
@@ -56,8 +56,8 @@ private:
 
 	inline QString getSelectedProfile();
 
-	void showEvent(QShowEvent *) override final;
-	void closeEvent(QCloseEvent *) override final;
+	void showEvent(QShowEvent *) override;
+	void closeEvent(QCloseEvent *) override;
 
 	Ui::GeneralSettings *page1;
 	Ui::PlaybackSettings *page2;

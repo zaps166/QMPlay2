@@ -23,7 +23,7 @@
 class NetworkReplyPriv;
 struct NetworkAccessParams;
 
-class NetworkReply : public QObject, public BasicIO
+class NetworkReply final : public QObject, public BasicIO
 {
 	Q_OBJECT
 
@@ -56,11 +56,11 @@ public:
 	};
 	Q_ENUM(Wait)
 
-	~NetworkReply() final;
+	~NetworkReply();
 
 	QString url() const;
 
-	void abort() override final;
+	void abort() override;
 
 	bool hasError() const;
 	Error error() const;

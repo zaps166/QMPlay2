@@ -22,12 +22,12 @@
 
 #include <QCoreApplication>
 
-class VFilters : public Module
+class VFilters final : public Module
 {
 	Q_DECLARE_TR_FUNCTIONS(VFilters)
 public:
 	VFilters();
 private:
-	QList<Info> getModulesInfo(const bool) const override final;
-	void *createInstance(const QString &) override final;
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 };
