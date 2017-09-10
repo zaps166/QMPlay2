@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <OpenGL2CommonQt5.hpp>
+#include <OpenGL2Common.hpp>
 
 #include <QOpenGLWindow>
 #include <QWidget>
@@ -27,7 +27,7 @@
 	#define PASS_EVENTS_TO_PARENT
 #endif
 
-class OpenGL2Window : private QOpenGLWindow, public OpenGL2CommonQt5
+class OpenGL2Window : private QOpenGLWindow, public OpenGL2Common
 {
 	Q_OBJECT
 public:

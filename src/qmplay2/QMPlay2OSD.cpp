@@ -18,17 +18,12 @@
 
 #include <QMPlay2OSD.hpp>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-	#include <QAtomicInteger>
-	static QAtomicInteger<quint64> g_id;
-#else
-	#include <QAtomicInt>
-	static QAtomicInt g_id;
-#endif
+#include <QAtomicInteger>
+static QAtomicInteger<quint64> g_id;
 
 void QMPlay2OSD::genId()
 {
-	m_id = g_id.fetchAndAddOrdered(1) + 1;
+	m_id = ++g_id;
 }
 
 void QMPlay2OSD::clear(bool all)

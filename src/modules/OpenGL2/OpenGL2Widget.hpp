@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <OpenGL2CommonQt5.hpp>
+#include <OpenGL2Common.hpp>
 
 #include <QSurfaceFormat>
 #include <QOpenGLWidget>
 
-class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
+class OpenGL2Widget : public QOpenGLWidget, public OpenGL2Common
 {
 	Q_OBJECT
 public:

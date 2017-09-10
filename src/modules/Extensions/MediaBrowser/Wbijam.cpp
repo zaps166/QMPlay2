@@ -110,8 +110,8 @@ void Wbijam::prepareWidget(QTreeWidget *treeW)
 	m_treeW->headerItem()->setText(1, tr("Episode type"));
 	m_treeW->headerItem()->setText(2, tr("Episode date"));
 
-	Functions::setHeaderSectionResizeMode(m_treeW->header(), 1, QHeaderView::ResizeToContents);
-	Functions::setHeaderSectionResizeMode(m_treeW->header(), 2, QHeaderView::ResizeToContents);
+	m_treeW->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	m_treeW->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 
 	m_polecaneSeries.clear();
 	m_innePages.clear();

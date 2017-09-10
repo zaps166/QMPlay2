@@ -46,12 +46,8 @@ private:
 	void saveSettings() override final;
 
 	QCheckBox *enabledB, *allowPboB;
-#ifdef OPENGL_NEW_API
 	QCheckBox *forceRttB;
-#endif
-#ifdef VSYNC_SETTINGS
 	QCheckBox *vsyncB;
-#endif
 #ifdef Q_OS_WIN
 	QCheckBox *preventFullScreenB;
 #endif

@@ -40,11 +40,7 @@
 #include <QProgressBar>
 #include <QApplication>
 #include <QElapsedTimer>
-#if QT_VERSION < 0x050000
-	#include <QDesktopServices>
-#else
-	#include <QStandardPaths>
-#endif
+#include <QStandardPaths>
 
 #include <functional>
 
@@ -605,16 +601,7 @@ void Downloader::init()
 
 	Settings sets("Downloader");
 
-	QString defDownloadPath;
-#if QT_VERSION < 0x050000
-	#ifdef Q_OS_WIN
-		defDownloadPath = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-		if (defDownloadPath.isEmpty())
-	#endif
-			defDownloadPath = QDir::homePath();
-#else
-	defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath());
-#endif
+	QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath());
 #ifdef Q_OS_WIN
 	defDownloadPath.replace('\\', '/');
 #endif

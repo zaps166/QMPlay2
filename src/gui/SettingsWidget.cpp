@@ -26,11 +26,7 @@
 #include <Notifies.hpp>
 #include <Main.hpp>
 
-#if QT_VERSION < 0x050000
-	#include <QDesktopServices>
-#else
-	#include <QStandardPaths>
-#endif
+#include <QStandardPaths>
 #include <QStyleFactory>
 #include <QRadioButton>
 #include <QApplication>
@@ -132,11 +128,7 @@ void SettingsWidget::InitSettings()
 
 	QMPSettings.init("AudioLanguage", QString());
 	QMPSettings.init("SubtitlesLanguage", QString());
-#if QT_VERSION < 0x050000
-	QMPSettings.init("screenshotPth", QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-#else
 	QMPSettings.init("screenshotPth", QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).value(0, QDir::homePath()));
-#endif
 #ifdef Q_OS_WIN
 	QMPSettings.init("screenshotFormat", ".bmp");
 #else

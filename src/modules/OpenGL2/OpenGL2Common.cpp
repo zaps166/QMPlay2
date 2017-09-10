@@ -26,15 +26,9 @@
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
-#ifdef OPENGL_NEW_API
-	#include <QOpenGLContext>
-	#include <QOpenGLShader>
-#else
-	#include <QGLContext>
-	#include <QGLShader>
-	#define QOpenGLContext QGLContext
-	#define QOpenGLShader QGLShader
-#endif
+#include <QOffscreenSurface>
+#include <QOpenGLContext>
+#include <QOpenGLShader>
 #include <QResizeEvent>
 #include <QMatrix4x4>
 #include <QResource>
@@ -93,9 +87,7 @@ OpenGL2Common::OpenGL2Common() :
 	supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
 	glActiveTexture(nullptr),
 #endif
-#ifdef VSYNC_SETTINGS
 	vSync(true),
-#endif
 	hwAccellnterface(nullptr),
 	shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
 	texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
@@ -135,6 +127,19 @@ OpenGL2Common::~OpenGL2Common()
 void OpenGL2Common::deleteMe()
 {
 	delete this;
+}
+
+bool OpenGL2Common::testGL()
+{
+	QOpenGLContext glCtx;
+	if ((isOK = glCtx.create()))
+	{
+		QOffscreenSurface offscreenSurface;
+		offscreenSurface.create();
+		if ((isOK = glCtx.makeCurrent(&offscreenSurface)))
+			testGLInternal();
+	}
+	return isOK;
 }
 
 void OpenGL2Common::newSize(const QSize &size)
@@ -323,9 +328,7 @@ void OpenGL2Common::initializeGL()
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	}
 
-#ifdef VSYNC_SETTINGS
 	setVSync(vSync);
-#endif
 
 	doReset = true;
 	resetSphereVbo();
@@ -961,9 +964,7 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
 		mouseTime = currTime;
 
 		mousePos = newMousePos;
-#if QT_VERSION >= 0x050300
 		if (e->source() == Qt::MouseEventNotSynthesized)
-#endif
 		{
 			if (canWrapMouse)
 				mouseWrapped = Functions::wrapMouse(widget(), mousePos, 1);

@@ -1,18 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
-if(COMMAND cmake_policy)
-    if(POLICY CMP0003)
-        cmake_policy(SET CMP0003 NEW)
-    endif()
-    if(POLICY CMP0020)
-        cmake_policy(SET CMP0020 NEW)
-    endif()
-    if(POLICY CMP0042)
-        cmake_policy(SET CMP0042 NEW)
-    endif()
-    if(POLICY CMP0043)
-        cmake_policy(SET CMP0043 NEW)
-    endif()
-endif()
+cmake_minimum_required(VERSION 3.1)
 project(FFmpeg)
 
 set(FFmpeg_HDR
@@ -113,12 +99,6 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     endif()
 endif()
 
-if(USE_QT5)
-    qt5_add_resources(FFmpeg_RESOURCES_RCC ${FFmpeg_RESOURCES})
-else()
-    qt4_add_resources(FFmpeg_RESOURCES_RCC ${FFmpeg_RESOURCES})
-endif()
-
 include_directories(../../qmplay2/headers
     ${LIBAVFORMAT_INCLUDE_DIRS}
     ${LIBAVCODEC_INCLUDE_DIRS}
@@ -129,19 +109,12 @@ include_directories(../../qmplay2/headers
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${FFmpeg_HDR}
     ${FFmpeg_SRC}
-    ${FFmpeg_RESOURCES_RCC}
+    ${FFmpeg_RESOURCES}
 )
 
-if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
-else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
-endif()
-
-add_dependencies(${PROJECT_NAME} libqmplay2)
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
-    ${qmplay2lib}
+    libqmplay2
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

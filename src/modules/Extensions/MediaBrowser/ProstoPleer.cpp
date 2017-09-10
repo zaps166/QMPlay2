@@ -49,8 +49,8 @@ void ProstoPleer::prepareWidget(QTreeWidget *treeW)
 	treeW->headerItem()->setText(2, tr("Length"));
 	treeW->headerItem()->setText(3, tr("Bitrate"));
 
-	Functions::setHeaderSectionResizeMode(treeW->header(), 2, QHeaderView::ResizeToContents);
-	Functions::setHeaderSectionResizeMode(treeW->header(), 3, QHeaderView::ResizeToContents);
+	treeW->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+	treeW->header()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
 }
 
 QString ProstoPleer::getQMPlay2Url(const QString &text) const

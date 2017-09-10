@@ -21,12 +21,7 @@
 #include <VideoFrame.hpp>
 #include <VideoAdjustment.hpp>
 
-#ifdef OPENGL_NEW_API
-	#include <QOpenGLShaderProgram>
-#else
-	#include <QGLShaderProgram>
-	#define QOpenGLShaderProgram QGLShaderProgram
-#endif
+#include <QOpenGLShaderProgram>
 
 #include <QVariantAnimation>
 #include <QCoreApplication>
@@ -82,7 +77,7 @@ public:
 
 	virtual QWidget *widget() = 0;
 
-	virtual bool testGL() = 0;
+	bool testGL();
 	virtual bool setVSync(bool enable) = 0;
 	virtual void updateGL(bool requestDelayed) = 0;
 
@@ -113,9 +108,7 @@ protected:
 	GLMapBuffer glMapBuffer;
 	GLUnmapBuffer glUnmapBuffer;
 
-#ifdef VSYNC_SETTINGS
 	bool vSync;
-#endif
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:

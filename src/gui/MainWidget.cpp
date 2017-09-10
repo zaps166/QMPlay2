@@ -70,21 +70,11 @@ using Functions::timeToStr;
 
 #include <cmath>
 
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
-	#define QT5_WINDOWS
-#endif
-
-/* Qt5 or (Qt4 in Windows) */
-#if (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
-	#define UseMainWidgetTmpStyle
-#endif
-
-#ifdef UseMainWidgetTmpStyle
 /* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
-class MainWidgetTmpStyle : public QCommonStyle
+class MainWidgetTmpStyle final : public QCommonStyle
 {
 public:
-	~MainWidgetTmpStyle() final = default;
+	~MainWidgetTmpStyle() = default;
 
 	int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override
 	{
@@ -94,7 +84,6 @@ public:
 		return pM;
 	}
 };
-#endif
 
 #ifndef Q_OS_MAC
 static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
@@ -122,25 +111,16 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 
-#ifdef UseMainWidgetTmpStyle
-	#if QT_VERSION >= 0x050000
-		bool createTmpStyle = false;
-		/* Looking for touch screen */
-		for (const QTouchDevice *touchDev : QTouchDevice::devices())
+	/* Looking for touch screen */
+	for (const QTouchDevice *touchDev : QTouchDevice::devices())
+	{
+		/* Touchscreen found */
+		if (touchDev->type() == QTouchDevice::TouchScreen)
 		{
-			/* Touchscreen found */
-			if (touchDev->type() == QTouchDevice::TouchScreen)
-			{
-				createTmpStyle = true;
-				break;
-			}
-		}
-		if (createTmpStyle)
-	#elif defined Q_OS_WIN
-		if (QSysInfo::windowsVersion() > QSysInfo::WV_6_1) //Qt4 can't detect touchscreen, so MainWidgetTmpStyle will be used only with Windows >= 8.0
-	#endif
 			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
-#endif
+			break;
+		}
+	}
 
 	setObjectName("MainWidget");
 
@@ -970,7 +950,7 @@ void MainWidget::toggleFullScreen()
 		maximized = isMaximized();
 
 #ifndef Q_OS_MAC
-#ifndef QT5_WINDOWS
+#ifndef Q_OS_WIN
 		if (isFullScreen())
 #endif
 			showNormal();
@@ -1061,7 +1041,7 @@ void MainWidget::toggleFullScreen()
 #else // Q_OS_ANDROID
 		showMaximized();
 #endif
-#ifdef QT5_WINDOWS
+#ifdef Q_OS_WIN
 		QCoreApplication::processEvents();
 #endif
 		restoreState(dockWidgetState);

@@ -46,9 +46,7 @@ public:
 		Download,
 		Aborted
 	};
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 	Q_ENUM(Error)
-#endif
 
 	enum class Wait
 	{
@@ -56,9 +54,7 @@ public:
 		Timeout,
 		Error
 	};
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 	Q_ENUM(Wait)
-#endif
 
 	~NetworkReply() final;
 

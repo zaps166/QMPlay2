@@ -1,15 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
-if(COMMAND cmake_policy)
-    if(POLICY CMP0003)
-        cmake_policy(SET CMP0003 NEW)
-    endif()
-    if(POLICY CMP0020)
-        cmake_policy(SET CMP0020 NEW)
-    endif()
-    if(POLICY CMP0043)
-        cmake_policy(SET CMP0043 NEW)
-    endif()
-endif()
+cmake_minimum_required(VERSION 3.1)
 project(QMPlay2)
 
 set(GUI_HDR
@@ -93,13 +82,7 @@ if(APPLE)
     include_directories("macOS")
 endif()
 
-if(USE_QT5)
-    qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt5_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
-else()
-    qt4_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt4_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
-endif()
+qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
 
 include_directories(../qmplay2/headers)
 
@@ -179,21 +162,16 @@ add_executable(${PROJECT_NAME}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
-    ${GUI_RESOURCES_RCC}
+    ${GUI_RESOURCES}
 )
 
 if(USE_JEMALLOC)
     target_link_libraries(${PROJECT_NAME} ${JEMALLOC_LIBRARIES})
 endif()
 
-if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
-else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
-endif()
-
-add_dependencies(${PROJECT_NAME} libqmplay2)
-target_link_libraries(${PROJECT_NAME} ${qmplay2lib})
+target_link_libraries(${PROJECT_NAME}
+    libqmplay2
+)
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")

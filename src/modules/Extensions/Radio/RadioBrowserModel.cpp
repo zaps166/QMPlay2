@@ -24,10 +24,8 @@
 #include <Json11.hpp>
 
 #include <QPainter>
+#include <QWindow>
 #include <QUrl>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-	#include <QWindow>
-#endif
 
 #include <algorithm>
 
@@ -395,15 +393,11 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 							const int s = elementHeight();
 							qreal devicePixelRatio = 1.0;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 							if (QWindow *win = Functions::getNativeWindow(m_widget))
 								devicePixelRatio = win->devicePixelRatio();
-#endif
 
 							column->icon = QPixmap(s * devicePixelRatio, s * devicePixelRatio);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 							column->icon.setDevicePixelRatio(devicePixelRatio);
-#endif
 							column->icon.fill(Qt::transparent);
 
 							QPainter painter(&column->icon);

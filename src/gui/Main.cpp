@@ -39,9 +39,6 @@
 #include <QBuffer>
 #include <QFile>
 #include <QDir>
-#if QT_VERSION < 0x050000
-	#include <QTextCodec>
-#endif
 #ifdef Q_OS_MAC
 	#include <QProcess>
 #endif
@@ -102,7 +99,6 @@ void QMPlay2GUIClass::saveCover(QByteArray cover)
 
 void QMPlay2GUIClass::setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &icon, const int column, QTreeWidget *treeWidget)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	bool setDefaultIcon = icon.name().isEmpty();
 	if (!setDefaultIcon)
 	{
@@ -115,12 +111,7 @@ void QMPlay2GUIClass::setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &i
 			setDefaultIcon = true;
 	}
 	if (setDefaultIcon)
-#else
-	Q_UNUSED(treeWidget)
-#endif
-	{
 		tWI->setIcon(column, icon);
-	}
 }
 
 #ifdef UPDATER
@@ -170,7 +161,7 @@ QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
 		pth.remove(0, 7);
 	if (!leaveFilename)
 		pth = Functions::filePath(pth);
-	if (!QFileInfo(pth).exists())
+	if (!QFileInfo::exists(pth))
 		pth = settings->getString("currPth");
 	return pth;
 }
@@ -327,8 +318,7 @@ static inline void exitProcedure()
 	g_screenSaver = nullptr;
 }
 
-#if QT_VERSION >= 0x050000 && !defined Q_OS_WIN
-	#define QT5_NOT_WIN
+#ifndef Q_OS_WIN
 	#include <csetjmp>
 	static jmp_buf env;
 	static bool qAppOK;
@@ -376,7 +366,7 @@ static void signal_handler(int s)
 			}
 			break;
 		case SIGABRT:
-#ifdef QT5_NOT_WIN
+#ifndef Q_OS_WIN
 			if (!qAppOK && g_useGui)
 			{
 				canDeleteApp = g_useGui = false;
@@ -456,31 +446,17 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, signal_handler);
 	atexit(exitProcedure);
 
-#if (defined(Q_OS_MAC) || defined(Q_OS_WIN)) && (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
 	QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
-#if !defined(Q_OS_WIN) && (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
+#ifndef Q_OS_WIN
 	QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 #endif
 
-#ifdef Q_WS_X11
-	g_useGui = getenv("DISPLAY");
-#endif
-#ifdef QT5_NOT_WIN
+#ifndef Q_OS_WIN
 	if (!setjmp(env))
 #endif
-#if QT_VERSION < 0x050000
-		new QApplication(argc, argv, g_useGui);
-#else
-		new QApplication(argc, argv);
-#endif
-#ifdef QT5_NOT_WIN
+	new QApplication(argc, argv);
+#ifndef Q_OS_WIN
 	qAppOK = true;
-#endif
-#if QT_VERSION < 0x050000
-	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 	QCoreApplication::setApplicationName("QMPlay2");
 
@@ -509,7 +485,7 @@ int main(int argc, char *argv[])
 
 		if (!g_useGui)
 		{
-#ifdef QT5_NOT_WIN
+#ifndef Q_OS_WIN
 			if (canDeleteApp)
 #endif
 				delete qApp;
@@ -568,9 +544,7 @@ int main(int argc, char *argv[])
 
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
 	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
@@ -754,7 +728,7 @@ int main(int argc, char *argv[])
 
 	exitProcedure();
 
-#ifdef QT5_NOT_WIN
+#ifndef Q_OS_WIN
 	if (canDeleteApp)
 #endif
 		delete qApp;

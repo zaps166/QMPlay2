@@ -54,9 +54,7 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
 		if (img.isNull())
 		{
 			img = QImage(imgW, imgH, QImage::Format_RGB32);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 			img.setDevicePixelRatio(QMPlay2Core.getVideoDevicePixelRatio());
-#endif
 		}
 		imgScaler.scale(videoFrame, img.bits());
 		if (writer.flip)

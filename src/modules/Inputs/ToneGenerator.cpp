@@ -21,12 +21,7 @@
 #include <Functions.hpp>
 #include <Packet.hpp>
 
-#include <QUrl>
-#if QT_VERSION < 0x050000
-	#define QUrlQuery(url) url
-#else
-	#include <QUrlQuery>
-#endif
+#include <QUrlQuery>
 
 #include <cmath>
 

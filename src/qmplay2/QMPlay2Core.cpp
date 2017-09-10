@@ -31,6 +31,7 @@
 #include <QLibrary>
 #include <QPointer>
 #include <QLocale>
+#include <QWindow>
 #include <QFile>
 #include <QDir>
 #if defined Q_OS_WIN
@@ -38,13 +39,6 @@
 	#include <powrprof.h>
 #elif defined Q_OS_MAC
 	#include <QStandardPaths>
-#endif
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	#define QT_VERSION_MAJOR 4
-	#define QT_VERSION_MINOR 8 // Qt 4.8.0 is the oldest supported Qt version
-#else
-	#include <QWindow>
 #endif
 
 #include <cstdio>
@@ -260,10 +254,8 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
 				QLibrary lib(fInfo.filePath());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 				// Don't override global symbols if they are different in libraries (e.g. Qt5 vs Qt4)
 				lib.setLoadHints(QLibrary::DeepBindHint);
-#endif
 				if (!lib.load())
 					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else
@@ -281,7 +273,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 							log(fInfo.fileName() + " - " + tr("mismatch module API version"), AddTimeToLog | ErrorLog | SaveLog);
 							return false;
 						}
-#if defined(QT_VERSION_MAJOR) && defined(QT_VERSION_MINOR)
 						const quint8   qtMajorVersion = ((v >> 24) & 0xFF);
 						const quint8   qtMinorVersion = ((v >> 16) & 0xFF);
 						if (qtMajorVersion != QT_VERSION_MAJOR || qtMinorVersion < QT_VERSION_MINOR)
@@ -289,7 +280,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 							log(fInfo.fileName() + " - " + tr("mismatch module Qt version"), AddTimeToLog | ErrorLog | SaveLog);
 							return false;
 						}
-#endif
 						return true;
 					};
 
@@ -387,13 +377,11 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 
 void QMPlay2CoreClass::setVideoDevicePixelRatio()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	if (QWindow *win = Functions::getNativeWindow(getVideoDock()))
 		videoDevicePixelRatio = win->devicePixelRatio();
 	else
 		videoDevicePixelRatio = qApp->devicePixelRatio();
 	videoDevicePixelRatio = qMax(1.0, videoDevicePixelRatio);
-#endif
 }
 
 QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &fallback)
@@ -465,14 +453,7 @@ void QMPlay2CoreClass::setLanguage()
 		lang = systemLang;
 	if (!translator->load(lang, langDir))
 		lang = "en";
-	const QString qtLangPrefix =
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-		"qt_";
-#else
-		"qtbase_";
-#endif
-	;
-	qtTranslator->load(qtLangPrefix + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	qtTranslator->load("qtbase_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 }
 
 void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)

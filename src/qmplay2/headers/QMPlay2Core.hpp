@@ -146,11 +146,7 @@ public:
 	}
 	inline bool isWorking()
 	{
-#if QT_VERSION < 0x050000
 		return working > 0;
-#else
-		return working.load() > 0; //For Qt5 <= 5.2
-#endif
 	}
 
 	QStringList getLanguages() const;
