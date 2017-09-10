@@ -45,7 +45,6 @@ set(QMPLAY2_HDR
     headers/PixelFormats.hpp
     headers/HWAccelInterface.hpp
     headers/VideoAdjustment.hpp
-    headers/Json11.hpp
     headers/YouTubeDL.hpp
     headers/Notifies.hpp
     headers/NotifiesTray.hpp
@@ -86,7 +85,6 @@ set(QMPLAY2_SRC
     Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
-    Json11.cpp
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp

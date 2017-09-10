@@ -21,12 +21,13 @@
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
 #include <YouTubeDL.hpp>
-#include <Json11.hpp>
 
 #include <QTextDocumentFragment>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTreeWidget>
 
-using EmbeddedPlayers = std::vector<Json>;
+using EmbeddedPlayers = std::vector<QJsonObject>;
 
 constexpr char g_url[] = "https://a-o.ninja/anime/";
 constexpr char g_linkexpander[] = "http://www.linkexpander.com/get_url.php";
@@ -130,8 +131,8 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 		if (idx2 < 0)
 			break;
 
-		Json json = Json::parse(data.mid(idx1, idx2 - idx1));
-		if (json.is_object())
+		QJsonDocument json = QJsonDocument::fromJson(data.mid(idx1, idx2 - idx1));
+		if (json.isObject())
 		{
 			idx1 = idx2 + 2;
 			idx2 = data.indexOf("<", idx1);
@@ -146,9 +147,9 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 				const bool isVIDFile  = (name == "vidfile");
 
 				if (isGoogle || isOpenload)
-					ret.insert(ret.end(), std::move(json));
+					ret.insert(ret.end(), json.object());
 				else if (isVk || isVIDFile)
-					ret.push_back(std::move(json));
+					ret.push_back(json.object());
 			}
 		}
 
@@ -157,9 +158,15 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 
 	return ret;
 }
-static inline QString decryptUrl(const QByteArray &saltHex, const QByteArray &cipheredBase64)
+
+static inline QString decryptUrl(const QString &saltHex, const QString &cipheredBase64)
 {
-	return Json::parse(Functions::decryptAes256Cbc(QByteArray::fromBase64("czA1ejlHcGQ9c3lHXjd7"), QByteArray::fromHex(saltHex), QByteArray::fromBase64(cipheredBase64))).string_value();
+	const QByteArray json = "{\"url\":" + Functions::decryptAes256Cbc(
+		QByteArray::fromBase64("czA1ejlHcGQ9c3lHXjd7"),
+		QByteArray::fromHex(saltHex.toLatin1()),
+		QByteArray::fromBase64(cipheredBase64.toLatin1())
+	) + "}";
+	return QJsonDocument::fromJson(json).object()["url"].toString();
 }
 
 static QString getGamedorUsermdUrl(const QByteArray &data)
@@ -387,9 +394,9 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 
 			if (!hasStreamUrl && !ioCtrl->isAborted())
 			{
-				for (const Json &json : getEmbeddedPlayers(reply))
+				for (const QJsonObject &json : getEmbeddedPlayers(reply))
 				{
-					QString playerUrl = decryptUrl(json["v"].string_value(), json["a"].string_value());
+					QString playerUrl = decryptUrl(json["v"].toString(), json["a"].toString());
 					if (!playerUrl.isEmpty())
 					{
 						if (playerUrl.contains("gamedor.usermd.net") && net.startAndWait(netReply, playerUrl, QByteArray(), "Referer: " + url.toUtf8()))

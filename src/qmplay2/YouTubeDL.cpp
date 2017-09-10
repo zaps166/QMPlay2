@@ -21,12 +21,14 @@
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
 #include <Version.hpp>
-#include <Json11.hpp>
 #ifdef Q_OS_WIN
 	#include <Functions.hpp>
 #endif
 
 #include <QReadWriteLock>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QFile>
 
 constexpr char g_name[] = "YouTubeDL";
@@ -37,12 +39,11 @@ static QReadWriteLock g_lock;
 
 static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 {
-	const Json json = Json::parse(jsonData.toUtf8());
-	const QByteArray urlData = url.toUtf8();
-	for (const Json &formats : json["formats"].array_items())
+	const QJsonDocument json = QJsonDocument::fromJson(jsonData.toUtf8());
+	for (const QJsonValue &formats : json.object()["formats"].toArray())
 	{
-		if (urlData == formats["url"].string_value())
-			QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].string_value());
+		if (url == formats.toObject()["url"].toString())
+			QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
 	}
 }
 

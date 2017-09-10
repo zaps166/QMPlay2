@@ -21,12 +21,14 @@
 #include <Radio/RadioBrowserModel.hpp>
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
-#include <Json11.hpp>
 
 #include <QDesktopServices>
+#include <QJsonDocument>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QJsonObject>
 #include <QScrollBar>
+#include <QJsonArray>
 #include <QTimer>
 #include <QMenu>
 #include <QUrl>
@@ -161,17 +163,18 @@ void Radio::qmplay2RadioStationsFinished()
 	NetworkReply *reply = qobject_cast<NetworkReply *>(sender());
 	if (!reply->hasError())
 	{
-		const Json json = Json::parse(reply->readAll());
-		if (json.is_array())
+		const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
+		if (json.isArray())
 		{
 			QString groupName;
-			for (const Json &radioItem : json.array_items())
+			for (const QJsonValue &radioItemValue : json.array())
 			{
-				const QString name = radioItem["Name"].string_value();
+				const QJsonObject &radioItem = radioItemValue.toObject();
+				const QString name = radioItem["Name"].toString();
 				if (!name.isEmpty())
 				{
 					QListWidgetItem *item = new QListWidgetItem(ui->qmplay2RadioListWidget);
-					const QString url = radioItem["Url"].string_value();
+					const QString url = radioItem["Url"].toString();
 					if (url.isEmpty())
 					{
 						QFont groupFont;
@@ -187,7 +190,7 @@ void Radio::qmplay2RadioStationsFinished()
 					}
 					else
 					{
-						const QImage icon = QImage::fromData(QByteArray::fromBase64(radioItem["Icon"].string_value()));
+						const QImage icon = QImage::fromData(QByteArray::fromBase64(radioItem["Icon"].toString().toLatin1()));
 						item->setIcon(icon.isNull() ? m_radioIcon : QPixmap::fromImage(icon));
 						item->setData(Qt::ToolTipRole, groupName);
 						item->setData(Qt::UserRole, url);
@@ -241,14 +244,14 @@ void Radio::replyFinished(NetworkReply *reply)
 		const int idx = m_searchInfo.key({{}, reply}, -1);
 		if (idx > -1)
 		{
-			const Json json = Json::parse(reply->readAll());
-			if (json.is_array())
+			const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
+			if (json.isArray())
 			{
 				QStringList list;
-				for (const Json &data : json.array_items())
+				for (const QJsonValue &data : json.array())
 				{
-					if (data.is_object())
-						list += data["name"].string_value();
+					if (data.isObject())
+						list += data.toObject()["name"].toString();
 				}
 				m_searchInfo[idx].first = list;
 				if (ui->searchByComboBox->currentIndex() == idx)

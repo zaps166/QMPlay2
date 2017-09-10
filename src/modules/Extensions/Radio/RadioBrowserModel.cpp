@@ -21,8 +21,10 @@
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
-#include <Json11.hpp>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QPainter>
 #include <QWindow>
 #include <QUrl>
@@ -31,9 +33,9 @@
 
 struct Column
 {
-	QByteArray url, homePageUrl, id;
+	QString url, homePageUrl, id;
 
-	QByteArray iconUrl;
+	QString iconUrl;
 	QPointer<NetworkReply> iconReply;
 	QPixmap icon;
 
@@ -299,77 +301,77 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 	{
 		if (reply == m_replySearch)
 		{
-			const Json json = Json::parse(reply->readAll());
-			if (!json.is_null() && json.type() == Json::ARRAY)
+			const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
+			if (json.isArray())
 			{
-				const Json::array &arrayItems = json.array_items();
+				const QJsonArray arrayItems = json.array();
 				beginInsertRows(QModelIndex(), m_rows.size(), m_rows.size() + arrayItems.size() - 1);
 				m_rowsToDisplay.clear();
 
 				const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
 
-				for (auto &&item : arrayItems)
+				for (auto &&itemValue : arrayItems)
 				{
-					if (item.type() == Json::OBJECT)
+					if (!itemValue.isObject())
+						continue;
+					const QJsonObject item = itemValue.toObject();
+					QString streamInfo = item["codec"].toString();
+					if (!streamInfo.isEmpty())
 					{
-						QString streamInfo = item["codec"].string_value();
-						if (!streamInfo.isEmpty())
+						if (streamInfo.compare("unknown", Qt::CaseInsensitive) == 0)
 						{
-							if (streamInfo.compare("unknown", Qt::CaseInsensitive) == 0)
-							{
-								if (item["hls"].string_value() != "0")
-									streamInfo = "HLS";
-								else
-									streamInfo.clear();
-							}
+							if (item["hls"].toString() != "0")
+								streamInfo = "HLS";
 							else
-							{
-								const int bitrate = item["bitrate"].string_value().toInt();
-								if (bitrate > 0)
-									streamInfo += QString("\n%1 kbps").arg(bitrate);
-							}
+								streamInfo.clear();
 						}
-
-						QString country = item["country"].string_value();
-						if (!country.isEmpty())
+						else
 						{
-							const QString state = item["state"].string_value();
-							if (!state.isEmpty() && country.compare(state, Qt::CaseInsensitive) != 0)
-								country += "\n" + state;
+							const int bitrate = item["bitrate"].toString().toInt();
+							if (bitrate > 0)
+								streamInfo += QString("\n%1 kbps").arg(bitrate);
 						}
-
-						const QList<QByteArray> tagsList = item["tags"].string_value().split(',');
-						QString tags;
-						for (const QByteArray &tagArr : tagsList)
-						{
-							QString tag = tagArr;
-							if (!tag.isEmpty())
-							{
-								tag[0] = tag.at(0).toUpper();
-								if (!tags.isEmpty())
-									tags += ", ";
-								tags += tag;
-							}
-						}
-
-						const qint32 rating = item["votes"].string_value().toInt() - item["negativevotes"].string_value().toInt();
-
-						m_rows.append(QSharedPointer<Column>(new Column {
-							item["url"].string_value(),
-							item["homepage"].string_value(),
-							item["id"].string_value(),
-
-							item["favicon"].string_value(),
-							nullptr,
-							radioIcon,
-
-							item["name"].string_value(),
-							streamInfo,
-							country,
-							tags,
-							rating
-						}));
 					}
+
+					QString country = item["country"].toString();
+					if (!country.isEmpty())
+					{
+						const QString state = item["state"].toString();
+						if (!state.isEmpty() && country.compare(state, Qt::CaseInsensitive) != 0)
+							country += "\n" + state;
+					}
+
+					const QStringList tagsList = item["tags"].toString().split(',');
+					QString tags;
+					for (const QString &tagArr : tagsList)
+					{
+						QString tag = tagArr;
+						if (!tag.isEmpty())
+						{
+							tag[0] = tag.at(0).toUpper();
+							if (!tags.isEmpty())
+								tags += ", ";
+							tags += tag;
+						}
+					}
+
+					const qint32 rating = item["votes"].toString().toInt() - item["negativevotes"].toString().toInt();
+
+					m_rows.append(QSharedPointer<Column>(new Column {
+						item["url"].toString(),
+						item["homepage"].toString(),
+						item["id"].toString(),
+
+						item["favicon"].toString(),
+						nullptr,
+						radioIcon,
+
+						item["name"].toString(),
+						streamInfo,
+						country,
+						tags,
+						rating
+					}));
 				}
 				m_rowsToDisplay = m_rows;
 				sort(m_sortColumnIdx, m_sortOrder);

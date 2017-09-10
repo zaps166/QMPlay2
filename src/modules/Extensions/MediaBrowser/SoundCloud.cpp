@@ -21,11 +21,14 @@
 #include <QMPlay2Extensions.hpp>
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
-#include <Json11.hpp>
 
+#include <QJsonDocument>
 #include <QTextDocument>
 #include <QHeaderView>
 #include <QTreeWidget>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
 #include <QAction>
 #include <QUrl>
 
@@ -63,33 +66,35 @@ NetworkReply *SoundCloud::getSearchReply(const QString &text, const qint32 page)
 }
 MediaBrowserCommon::Description SoundCloud::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
-	const Json json = Json::parse(reply);
-	if (json.is_array())
+	const QJsonDocument json = QJsonDocument::fromJson(reply);
+	if (json.isArray())
 	{
 		const QIcon soundcloudIcon = icon();
 
-		for (const Json &track : json.array_items())
+		for (const QJsonValue &trackValue : json.array())
 		{
-			if (!track.is_object())
+			if (!trackValue.isObject())
 				continue;
 
+			const QJsonObject track = trackValue.toObject();
+
 			QTreeWidgetItem *tWI = new QTreeWidgetItem(treeW);
-			tWI->setData(0, Qt::UserRole, QString::number(track["id"].int_value()));
+			tWI->setData(0, Qt::UserRole, QString::number(track["id"].toInt()));
 			tWI->setIcon(0, soundcloudIcon);
 
-			const QString title = track["title"].string_value();
+			const QString title = track["title"].toString();
 			tWI->setText(0, title);
 			tWI->setToolTip(0, title);
 
-			const QString artist = track["user"]["username"].string_value();
+			const QString artist = track["user"].toObject()["username"].toString();
 			tWI->setText(1, artist);
 			tWI->setToolTip(1, artist);
 
-			const QString genre = track["genre"].string_value();
+			const QString genre = track["genre"].toString();
 			tWI->setText(2, genre);
 			tWI->setToolTip(2, genre);
 
-			const QString duration = Functions::timeToStr(track["duration"].int_value() / 1000.0);
+			const QString duration = Functions::timeToStr(track["duration"].toInt() / 1000.0);
 			tWI->setText(3, duration);
 			tWI->setToolTip(3, duration);
 		}
@@ -153,13 +158,13 @@ bool SoundCloud::convertAddress(const QString &prefix, const QString &url, const
 		IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
 		if (net.startAndWait(netReply, g_url + QString("/resolve?url=%1&client_id=%2").arg(url, client_id)))
 		{
-			const Json json = Json::parse(netReply->readAll());
-			if (json.is_object())
+			const QJsonDocument json = QJsonDocument::fromJson(netReply->readAll());
+			if (json.isObject())
 			{
 				if (streamUrl)
-					*streamUrl = QString("%1?client_id=%2").arg(json["stream_url"].string_value(), client_id);
+					*streamUrl = QString("%1?client_id=%2").arg(json.object()["stream_url"].toString(), client_id);
 				if (name)
-					*name = json["title"].string_value();
+					*name = json.object()["title"].toString();
 			}
 			netReply.clear();
 		}

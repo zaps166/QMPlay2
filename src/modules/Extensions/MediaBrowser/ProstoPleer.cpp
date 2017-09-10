@@ -21,9 +21,10 @@
 #include <QMPlay2Extensions.hpp>
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
-#include <Json11.hpp>
 
+#include <QJsonDocument>
 #include <QTextDocument>
+#include <QJsonObject>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QAction>
@@ -187,8 +188,8 @@ bool ProstoPleer::convertAddress(const QString &prefix, const QString &url, cons
 				IOController<NetworkReply> &netReply = ioCtrl->toRef<NetworkReply>();
 				if (net.startAndWait(netReply, QString("%1/site_api/files/get_url?id=%2").arg(g_url, fileId.mid(idx + 1))))
 				{
-					const Json json = Json::parse(netReply->readAll());
-					const QString tmpStreamUrl = json["track_link"].string_value();
+					const QJsonDocument json = QJsonDocument::fromJson(netReply->readAll());
+					const QString tmpStreamUrl = json.object()["track_link"].toString();
 					if (!tmpStreamUrl.isEmpty())
 						*streamUrl = tmpStreamUrl;
 					netReply.clear();
