@@ -39,24 +39,15 @@ Table of Contents
 $ yaourt -S qmplay2
 ```
 
-#### Easy installation on openSUSE Leap 42.1
+#### Easy installation on openSUSE Leap 42.3
 
 - Run the following commands:
 ```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.3 Packman
 $ sudo zypper in QMPlay2
 ```
-- The "multimedia" repository uses Qt5 for QMPlay2, so it may be buggy on Qt5 <= 5.6.1 and its FFmpeg doesn't have all codecs.
+- QMPlay2 from openSUSE repositories might lack some features.
 - Don't use official package, because it is obsolete.
-- Don't mix FFmpeg from different repositories!
-
-#### Easy installation on openSUSE 13.2
-
-- Run the following commands:
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman
-$ sudo zypper in QMPlay2 QMPlay2-kde-integration
-```
 - Don't mix FFmpeg from different repositories!
 
 #### Easy installation on Gentoo Linux
@@ -107,7 +98,7 @@ Hardware acceleration important information:
 - VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 - CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support (requirement during compilation)!
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
-- VideoToolBox doesn't support deinterlacing and it is in currently in experimental state.
+- VideoToolBox doesn't support deinterlacing.
 
 ## Deinterlacing
 
@@ -140,7 +131,7 @@ Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe
 
 ## Multimedia keys
 
-In Windows multimedia keys should work automatically.
+In Windows and macOS multimedia keys should work automatically.
 
 In Linux/BSD you must associate keys with commands:
 - using QMPlay2 binary, see: `QMPlay2 -h`,
