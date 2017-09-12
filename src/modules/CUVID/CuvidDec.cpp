@@ -608,7 +608,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 }
 int CuvidDec::pictureDecode(CUVIDPICPARAMS *picParams)
 {
-	if (m_skipFrames && picParams->ref_pic_flag == 0)
+	if (m_skipFrames && picParams->ref_pic_flag == 0 && picParams->intra_pic_flag == 0)
 		return 0;
 	if (cuvid::decodePicture(m_cuvidDec, picParams) != CUDA_SUCCESS)
 		return 0;
