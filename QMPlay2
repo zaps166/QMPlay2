@@ -1,2 +1,0 @@
-#!/bin/sh
-LD_LIBRARY_PATH="$(dirname "$0")"/app/lib:$LD_LIBRARY_PATH exec "$(dirname "$0")"/app/bin/QMPlay2 "$@"
