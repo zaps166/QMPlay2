@@ -106,6 +106,7 @@ private:
 
 	bool m_decodeMPEG4;
 	bool m_hasCriticalError;
+	bool m_skipFrames;
 };
 
 #define CuvidName "CUVID decoder"

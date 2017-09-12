@@ -495,7 +495,8 @@ CuvidDec::CuvidDec(Module &module) :
 	m_cuvidParser(nullptr),
 	m_cuvidDec(nullptr),
 	m_decodeMPEG4(true),
-	m_hasCriticalError(false)
+	m_hasCriticalError(false),
+	m_skipFrames(false)
 {
 	memset(m_frameBuffer, 0, sizeof m_frameBuffer);
 	SetModule(module);
@@ -607,6 +608,8 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 }
 int CuvidDec::pictureDecode(CUVIDPICPARAMS *picParams)
 {
+	if (m_skipFrames && picParams->ref_pic_flag == 0)
+		return 0;
 	if (cuvid::decodePicture(m_cuvidDec, picParams) != CUDA_SUCCESS)
 		return 0;
 	return 1;
@@ -639,6 +642,8 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	cu::ContextGuard cuCtxGuard(m_cuCtx);
 	CUVIDSOURCEDATAPACKET cuvidPkt;
+
+	m_skipFrames = (hurry_up > 1);
 
 	if (flush || m_forceFlush)
 	{

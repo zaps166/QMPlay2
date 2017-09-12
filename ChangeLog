@@ -1,9 +1,9 @@
 Changes in QMPlay2 build 17.09.08:
-	- add frame skipping for HWAccel (except CUVID),
 	- add "makeitpersonal.co" fallback to Tekstowo,
 	- play JPEG videos and photos using CUVID,
 	- option to disable MPEG4 videos in CUVID,
 	- update German translation (martinkg),
+	- add frame skipping for HWAccel,
 	- better handling HWAccel errors,
 	- allow downloading HLS streams,
 	- speed-up subtitles rendering,
