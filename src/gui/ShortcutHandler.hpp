@@ -19,11 +19,14 @@
 #pragma once
 
 #include <QAbstractTableModel>
+#include <QCoreApplication>
 
 class QAction;
 
 class ShortcutHandler : public QAbstractTableModel
 {
+	Q_DECLARE_TR_FUNCTIONS(ShortcutHandler)
+
 public:
 	ShortcutHandler(QObject *parent);
 	~ShortcutHandler() final;
