@@ -10,7 +10,7 @@
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Fehler beim abspielen</translation>
+        <translation>Fehler beim Abspielen</translation>
     </message>
     <message>
         <source>Cannot open</source>
@@ -18,7 +18,7 @@
     </message>
     <message>
         <source>back to</source>
-        <translation>Zurück setzen</translation>
+        <translation>Zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -113,7 +113,7 @@
     <name>AddressBox</name>
     <message>
         <source>Direct address</source>
-        <translation>Eingabe-hinzufügen</translation>
+        <translation>Eingabe hinzufügen</translation>
     </message>
     <message>
         <source>Additional module parameter</source>
@@ -304,7 +304,7 @@
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>Unterstützte AudioCD Image</translation>
+        <translation>Unterstützte AudioCD Images</translation>
     </message>
     <message>
         <source>Choose the drive</source>
@@ -331,7 +331,7 @@
     </message>
     <message>
         <source>Invalid path to CD drive</source>
-        <translation>Ungültige Pfad zum CD-Laufwerk</translation>
+        <translation>Ungültiger Pfad zum CD-Laufwerk</translation>
     </message>
     <message>
         <source>No AudioCD found!</source>
@@ -381,7 +381,7 @@
     </message>
     <message>
         <source>requires a change in one of the forced parameters, sound disabled ...</source>
-        <translation>erfordert eine Änderung in einem der obligatorischen Parameter, Ton ausschalten ...</translation>
+        <translation>erfordert eine Änderung in einem der obligatorischen Parameter, Ton deaktiviert ...</translation>
     </message>
     <message>
         <source>sets the parameters to</source>
@@ -509,7 +509,7 @@
     </message>
     <message>
         <source>loaded from file</source>
-        <translation>Von Datei geladen</translation>
+        <translation>Aus Datei geladen</translation>
     </message>
     <message>
         <source>File path</source>
@@ -623,19 +623,19 @@
     </message>
     <message>
         <source>Download directory</source>
-        <translation>Download Verzeichnis</translation>
+        <translation>Downloadverzeichnis</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation>Verzeichnis für die Downloads wählen</translation>
+        <translation>Downloadverzeichnis wählen</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation>Lösche komplette Downloads</translation>
+        <translation>Alle Downloads löschen</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation>Adresse für den Download eingeben</translation>
+        <translation>Downloadadresse eingeben</translation>
     </message>
     <message>
         <source>Download</source>
@@ -732,7 +732,7 @@
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation>Gebe einen neuen Profilnamen ein</translation>
+        <translation>Neuen Profilnamen eingeben</translation>
     </message>
     <message>
         <source>Preamp</source>
@@ -799,7 +799,7 @@
     </message>
     <message>
         <source>Voices</source>
-        <translation>Glossen</translation>
+        <translation>Stimmen</translation>
     </message>
 </context>
 <context>
@@ -814,11 +814,11 @@
     </message>
     <message>
         <source>Use system icon set</source>
-        <translation>Verwenden die Symbole vom System</translation>
+        <translation>Verwende System Icons</translation>
     </message>
     <message>
         <source>Set appearance</source>
-        <translation>Verhalten festlegen</translation>
+        <translation>Aussehen festlegen</translation>
     </message>
     <message>
         <source>Show covers</source>
@@ -830,15 +830,15 @@
     </message>
     <message>
         <source>Show covers from directory if there aren&apos;t in the music file</source>
-        <translation>Covers entnehmen aus dem Verzeichnis, sofern diese nicht in den Metadaten angegeben sind</translation>
+        <translation>Zeige Covers aus dem Verzeichnis, sofern diese nicht in den Metadaten enthalten sind</translation>
     </message>
     <message>
         <source>Automatically opening video window</source>
-        <translation>Automatisches öffnen des Videofenster</translation>
+        <translation>Videofenster automatisch öffnen</translation>
     </message>
     <message>
         <source>Automatically check and download updates</source>
-        <translation>Automatisches prüfen und herunterladen von Aktualisierungen</translation>
+        <translation>Automatische Überprüfung und Download von Updates</translation>
     </message>
     <message>
         <source>Show tabs at the top of the main window</source>
@@ -850,7 +850,7 @@
     </message>
     <message>
         <source>Always display only file names in playlist</source>
-        <translation>Immer nur Dateinamen in der Wiedergabeliste anzuzeigen</translation>
+        <translation>Immer nur Dateinamen in der Wiedergabeliste anzeigen</translation>
     </message>
     <message>
         <source>Remember repeat mode</source>
@@ -922,7 +922,7 @@
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation>Bilder lesen und anzeigen</translation>
+        <translation>Lesen und Anzeigen von Standbildern</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
@@ -930,7 +930,7 @@
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation>youtube-dl löschen</translation>
+        <translation>Lösche youtube-dl</translation>
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
@@ -1118,7 +1118,7 @@
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation>&amp;Verstecke Menubar</translation>
+        <translation>&amp;Verstecke Menübar</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1191,7 +1191,7 @@
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Die maximale Dauer des Untertitels, ohne eine bestimmte Längeangabe</translation>
+        <translation>Die maximale Dauer der Untertitel, ohne eine bestimmte Länge</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1199,7 +1199,7 @@
     </message>
     <message>
         <source>Use shared memory</source>
-        <translation>Verwenden den gemeinsamen Speicher</translation>
+        <translation>Verwende gemeinsamen Speicher</translation>
     </message>
     <message>
         <source>XVideo outputs</source>
@@ -1223,7 +1223,7 @@
     </message>
     <message>
         <source>Vertical sync</source>
-        <translation>Vertical sync</translation>
+        <translation>Vertikale Synchronisation</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1275,7 +1275,7 @@
     </message>
     <message>
         <source>Sound equalizer quality</source>
-        <translation>Ton Qualität des Equalizer</translation>
+        <translation>Tonqualität des Equalizer</translation>
     </message>
     <message>
         <source>Low</source>
@@ -1335,11 +1335,11 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation>Fügen Sie ein Verzeichnis in das Kontextmenu</translation>
+        <translation>Füge Verzeichnis in das Kontextmenu ein</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation>Fügen Sie ein Festplatteneintrag in das Kontextmenu</translation>
+        <translation>Füge Festplatteneintrag in das Kontextmenu ein</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
@@ -1363,7 +1363,7 @@
     </message>
     <message>
         <source>Skip some frames</source>
-        <translation>Einige Bilder übersprungen</translation>
+        <translation>Einige Bilder überspringen</translation>
     </message>
     <message>
         <source>Force frame skipping</source>
@@ -1371,7 +1371,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>Niedrige Auflösung Decodierung (nur einige Codecs)</translation>
+        <translation>Decodierung mit niedriger Auflösung (nur bei einigen Codecs)</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1407,7 +1407,7 @@
     </message>
     <message>
         <source>Reverse the right channel phase</source>
-        <translation>Kehren den rechten Kanal um</translation>
+        <translation>Phasenumkehr im rechten Kanal</translation>
     </message>
     <message>
         <source>Downloads covers</source>
@@ -1431,7 +1431,7 @@
     </message>
     <message>
         <source>Allow to download big covers</source>
-        <translation>Erlaube das herunterladen von großen Covers</translation>
+        <translation>Erlaube das Herunterladen von großen Covers</translation>
     </message>
     <message>
         <source>Software decoder</source>
@@ -1519,12 +1519,12 @@
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation>Erzwinge, wenn möglich in Textur zu rendern (nicht empfohlen)</translation>
+        <translation>Erzwinge Texturrendering, wenn möglich (nicht empfohlen)</translation>
     </message>
     <message>
         <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Dieser Decoder verfügt nicht über einen eigenen Videoausgang, so dass er mit jedem Videoausgang verwendet werden kann.
+        <translation>Dieser Decoder verfügt nicht über einen eigenen Videoausgang, also kann er mit jedem Videoausgang verwendet werden.
 Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam sein!</translation>
     </message>
     <message>
@@ -1650,22 +1650,22 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     <message>
         <source>Always enabled on Wayland and Android platforms.
 Set visualizations to OpenGL mode if enabled.</source>
-        <translation>Immer ativiert bei Wayland und Android Plattformen.
-Setze Visualisierung in den OpenGL-Modus, wenn aktiviert.</translation>
+        <translation>Immer ativiert auf Wayland und Android Plattformen.
+Visualisierung im OpenGL-Modus, wenn aktiviert.</translation>
     </message>
     <message>
         <source>Always enabled on Wayland platform.
 Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>Immer aktiviert auf Wayland-Plattform.
-Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</translation>
+Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Decodiere MPEG4 Videos</translation>
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktivieren, wenn Sie Probleme mit der Decodierung von MPEG4 (DivX5) Videos haben</translation>
     </message>
 </context>
 <context>
@@ -1781,7 +1781,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>texture copy error</source>
-        <translation>Fehler beim kopieren von Textur</translation>
+        <translation>Fehler beim Kopieren von Textur</translation>
     </message>
 </context>
 <context>
@@ -1832,7 +1832,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>&amp;Wiedergabe Einstellungen</translation>
+        <translation>&amp;Wiedergabeeinstellungen</translation>
     </message>
 </context>
 <context>
@@ -1847,7 +1847,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>Play speed</source>
-        <translation>Wiedergabe Geschwindigkeit</translation>
+        <translation>Wiedergabegeschwindigkeit</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1855,7 +1855,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>Muted sound</source>
-        <translation>Audio Stummschalten</translation>
+        <translation>Audio stummschalten</translation>
     </message>
     <message>
         <source>Video delay</source>
@@ -2029,7 +2029,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>Album mode for replay gain</source>
-        <translation>Lautstärkeregelung für Album Modus</translation>
+        <translation>Album Modus für Lautstärkeregelung</translation>
     </message>
     <message>
         <source>Prevent clipping</source>
@@ -2216,7 +2216,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Anh&amp;alten nach der Wiedergabe ist beendet</translation>
+        <translation>Nach Wiedergabe anh&amp;alten</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2319,7 +2319,7 @@ Wird empfohlen zu verwenden, wenn OpenGL Video-Ausgabe im RTT-Modus ist.</transl
     </message>
     <message>
         <source>&amp;Synchronize group</source>
-        <translation>&amp;synchronisiere Gruppe </translation>
+        <translation>&amp;synchronisiere Gruppe</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
@@ -2745,7 +2745,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Use the same size</source>
-        <translation>Verwenden Sie die gleiche Größe</translation>
+        <translation>Verwende die gleiche Größe</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
@@ -2785,7 +2785,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>To apply the icons change program will start again!</source>
-        <translation>starten Sie jetzt neu, um die neuen Symbole zu nutzen!</translation>
+        <translation>Starten Sie jetzt neu, um die neuen Symbole zu nutzen!</translation>
     </message>
     <message>
         <source>Default or first stream</source>
@@ -2852,11 +2852,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     <name>Sort</name>
     <message>
         <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Vom kürzesten zum längsten</translation>
+        <translation>&amp;Vom kürzesten zum Längsten</translation>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>V&amp;om längsten zum kürzesten</translation>
+        <translation>V&amp;om längsten zum Kürzesten</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
@@ -3030,11 +3030,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Error checking for updates</source>
-        <translation>Fehler beim suchen nach Aktualisierungen</translation>
+        <translation>Fehler beim Suchen nach Aktualisierungen</translation>
     </message>
     <message>
         <source>Error downloading the update</source>
-        <translation>Fehler beim herunterladen der Aktualisierung</translation>
+        <translation>Fehler beim Herunterladen der Aktualisierung</translation>
     </message>
     <message>
         <source>Checking for updates</source>
@@ -3179,7 +3179,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Error initializing filter</source>
-        <translation>Fehler beim initialisieren des Filter</translation>
+        <translation>Fehler beim Initialisieren des Filter</translation>
     </message>
 </context>
 <context>
@@ -3193,7 +3193,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation>splitte Kanäle</translation>
+        <translation>Splitte Kanäle</translation>
     </message>
 </context>
 <context>
