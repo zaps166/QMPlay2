@@ -27,6 +27,8 @@ extern "C"
 	#include <libavutil/pixdesc.h>
 }
 
+#include <cmath>
+
 FFDec::FFDec(QMutex &avcodec_mutex) :
 	codec_ctx(nullptr),
 	packet(nullptr),
@@ -100,9 +102,9 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 	packet->data = (quint8 *)encodedPacket.data();
 	packet->size = encodedPacket.size();
 	if (encodedPacket.ts.hasDts())
-		packet->dts = qRound(encodedPacket.ts.dts() / time_base);
+		packet->dts = std::round(encodedPacket.ts.dts() / time_base);
 	if (encodedPacket.ts.hasPts())
-		packet->pts = qRound(encodedPacket.ts.pts() / time_base);
+		packet->pts = std::round(encodedPacket.ts.pts() / time_base);
 	if (flush)
 		avcodec_flush_buffers(codec_ctx);
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
