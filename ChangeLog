@@ -1,3 +1,7 @@
+Changes in QMPlay2 build 17.09.16:
+	- fix playback position regression introduced in 17.09.13,
+	- update German translation (martinkg),
+
 Changes in QMPlay2 build 17.09.13:
 	- add "makeitpersonal.co" fallback to Tekstowo,
 	- play JPEG videos and photos using CUVID,
