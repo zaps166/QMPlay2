@@ -34,7 +34,7 @@
 	#define GL_TEXTURE_2D 0x0DE1
 #endif
 
-static QMutex cudaMutex(QMutex::Recursive);
+static QMutex g_cudaMutex(QMutex::Recursive);
 
 extern "C"
 {
@@ -157,7 +157,7 @@ namespace cu
 		inline ContextGuard(CUcontext ctx) :
 			m_locked(true)
 		{
-			cudaMutex.lock();
+			g_cudaMutex.lock();
 			ctxPushCurrent(ctx);
 		}
 		inline ~ContextGuard()
@@ -171,7 +171,7 @@ namespace cu
 			{
 				CUcontext ctx;
 				ctxPopCurrent(&ctx);
-				cudaMutex.unlock();
+				g_cudaMutex.unlock();
 				m_locked = false;
 			}
 		}
@@ -283,17 +283,17 @@ public:
 
 	bool lock() override
 	{
-		cudaMutex.lock();
+		g_cudaMutex.lock();
 		if (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS)
 			return true;
-		cudaMutex.unlock();
+		g_cudaMutex.unlock();
 		return false;
 	}
 	void unlock() override
 	{
 		CUcontext cuCtx;
 		cu::ctxPopCurrent(&cuCtx);
-		cudaMutex.unlock();
+		g_cudaMutex.unlock();
 	}
 
 	bool init(quint32 *textures) override
