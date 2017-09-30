@@ -320,7 +320,7 @@ public:
 
 	CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
 	{
-		if (!m_cuvidDec)
+		if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.surfaceId))
 			return CopyNotReady;
 
 		CUVIDPROCPARAMS vidProcParams;
@@ -446,10 +446,18 @@ public:
 		return m_cuCtx;
 	}
 
-	inline void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
+	inline void setAvailableSurface(quintptr surfaceId)
+	{
+		m_validSurfaces.insert(surfaceId);
+	}
+
+	void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
 	{
 		m_codedHeight = codedHeight;
+		m_lastId = 0;
+		m_tff = false;
 		m_cuvidDec = cuvidDec;
+		m_validSurfaces.clear();
 	}
 
 private:
@@ -464,6 +472,8 @@ private:
 	CUvideodecoder m_cuvidDec;
 
 	CUgraphicsResource m_res[2];
+
+	QSet<quintptr> m_validSurfaces;
 };
 
 /**/
@@ -738,7 +748,11 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		{
 			const VideoFrameSize frameSize(m_width, m_height);
 			if (m_cuvidHWAccel)
-				decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			{
+				const quintptr surfaceId = dispInfo.picture_index + 1;
+				m_cuvidHWAccel->setAvailableSurface(surfaceId);
+				decoded = VideoFrame(frameSize, surfaceId, (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			}
 			else
 			{
 				CUdeviceptr mappedFrame = 0;
