@@ -653,7 +653,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	cu::ContextGuard cuCtxGuard(m_cuCtx);
 	CUVIDSOURCEDATAPACKET cuvidPkt;
 
-	m_skipFrames = (hurry_up > 1);
+	m_skipFrames = (m_cuvidParserParams.CodecType != cudaVideoCodec_VP9 && hurry_up > 1);
 
 	if (flush || m_forceFlush)
 	{
