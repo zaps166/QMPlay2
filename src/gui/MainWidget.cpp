@@ -523,7 +523,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 	else if (param == "speed")
 		playC.setSpeed(data.toDouble());
 	else if (param == "seek")
-		seek(data.toInt());
+		seek(data.toDouble());
 	else if (param == "RestartPlaying")
 		playC.restart();
 }
