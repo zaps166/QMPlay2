@@ -44,7 +44,7 @@ class MainWidget final : public QMainWindow
 	Q_PROPERTY(bool fullScreen READ getFullScreen)
 	Q_OBJECT
 public:
-	MainWidget(QPair<QStringList, QStringList> &argument);
+	MainWidget(QList<QPair<QString, QString>> &argument);
 	~MainWidget();
 private slots:
 	void detachFromPipe();

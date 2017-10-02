@@ -104,7 +104,7 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
+MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	updater(this)
 {
 	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
@@ -368,13 +368,14 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
-	while (!arguments.first.isEmpty())
+	for (const auto &argument : arguments)
 	{
-		const QString param = arguments.first.takeFirst();
-		const QString data  = arguments.second.takeFirst();
+		const QString &param = argument.first;
+		const QString &data  = argument.second;
 		noplay |= (param == "open" || param == "noplay");
 		processParam(param, data);
 	}
+	arguments.clear();
 
 	if (!noplay)
 	{
@@ -471,6 +472,8 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		else
 			playlistDock->add(data);
 	}
+	else if (param == "play")
+		playlistDock->start();
 	else if (param == "toggle")
 		togglePlay();
 	else if (param == "show")

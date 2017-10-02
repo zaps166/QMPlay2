@@ -958,6 +958,70 @@
         <source>&amp;Updates</source>
         <translation>&amp;Mises à jour</translation>
     </message>
+    <message>
+        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ensures that the window will be visible if the application is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggles fullscreen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seeks to the specified value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starts playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stops playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggles playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminates the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displays this help.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opens and plays specified &lt;url&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sets specified volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sets specified playback speed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plays next entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plays previous entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
@@ -2452,38 +2516,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 a été mis à jour à la version</translation>
-    </message>
-    <message>
-        <source>  Parameters list:
-    -open         &quot;address&quot;
-    -enqueue      &quot;address&quot;
-    -profile      &quot;name&quot; - starts application with given profile name
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
-    -toggle     - toggles play/pause
-    -show       - ensures that the window will be visible if the application is running
-    -fullscreen - toggles fullscreen
-    -volume     - sets volume [0..100]
-    -speed      - sets playback speed [0.05..100.0]
-    -seek       - seeks to the specified value [s]
-    -stop       - stops playback
-    -next       - plays next on the list
-    -prev       - plays previous on the list
-    -quit       - terminates the application</source>
-        <translation>  Parameters list:
-    -open         &quot;adresse&quot;
-    -enqueue      &quot;adresse&quot;
-    -profile      &quot;name&quot; - starts application with given profile name
-    -noplay     - ne joue p&apos;as après (passer outre l&apos;option &quot;mémoriser la position de lecture&quot;)
-    -toggle     - bascule entre lecture/pause
-    -show       - Assure que la fenêtre sera visible si l&apos;application tourne
-    -fullscreen - bascule en plein écran
-    -volume     - règle le volume [0..100]
-    -speed      - règle la vitesse de lecture [0.05..100.0]
-    -seek       - cherche la[les] valeur[s] spécifiée[s]
-    -stop       - cesse la lecture
-    -next       - joue le morceau suivant dans la liste
-    -prev       - joue le morceau précédent dans la liste
-    -quit       - termine l&apos;application</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>

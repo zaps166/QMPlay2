@@ -29,6 +29,7 @@
 #include <Module.hpp>
 #include <IPC.hpp>
 
+#include <QCommandLineParser>
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QImageReader>
@@ -46,7 +47,6 @@
 #include <csignal>
 #include <ctime>
 
-static QPair<QStringList, QStringList> g_arguments;
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
 #ifdef Q_OS_MAC
@@ -209,6 +209,56 @@ QMPlay2GUIClass::~QMPlay2GUIClass()
 
 /**/
 
+static QCommandLineParser *createCmdParser(bool descriptions)
+{
+	static constexpr const char *translations[] = {
+		QT_TRANSLATE_NOOP("Help", "Opens and plays specified <url>."),
+		QT_TRANSLATE_NOOP("Help", "Adds specified <url> to playlist."),
+		QT_TRANSLATE_NOOP("Help", "Starts the application with given <profile name>."),
+		QT_TRANSLATE_NOOP("Help", "Doesn't play after run (bypass \"Remember playback position\" option)."),
+		QT_TRANSLATE_NOOP("Help", "Toggles playback."),
+		QT_TRANSLATE_NOOP("Help", "Starts playback."),
+		QT_TRANSLATE_NOOP("Help", "Stops playback."),
+		QT_TRANSLATE_NOOP("Help", "Ensures that the window will be visible if the application is running."),
+		QT_TRANSLATE_NOOP("Help", "Toggles fullscreen."),
+		QT_TRANSLATE_NOOP("Help", "Sets specified volume."),
+		QT_TRANSLATE_NOOP("Help", "Sets specified playback speed."),
+		QT_TRANSLATE_NOOP("Help", "Seeks to the specified value."),
+		QT_TRANSLATE_NOOP("Help", "Plays next entry on playlist."),
+		QT_TRANSLATE_NOOP("Help", "Plays previous entry on playlist."),
+		QT_TRANSLATE_NOOP("Help", "Terminates the application."),
+		QT_TRANSLATE_NOOP("Help", "Displays this help."),
+	};
+
+	const auto maybeGetTranslatedText = [&](const char *text) {
+		if (descriptions)
+			return QCoreApplication::translate("Help", text);
+		return QString();
+	};
+
+	QCommandLineParser *parser = new QCommandLineParser;
+	parser->addPositionalArgument("<url>", maybeGetTranslatedText(translations[0]), "[url]");
+	parser->addOptions({
+		{"open", maybeGetTranslatedText(translations[0]), "url"},
+		{"enqueue", maybeGetTranslatedText(translations[1]), "url"},
+		{"profile", maybeGetTranslatedText(translations[2]), "profile name"},
+		{"noplay", maybeGetTranslatedText(translations[3])},
+		{"toggle", maybeGetTranslatedText(translations[4])},
+		{"play", maybeGetTranslatedText(translations[5])},
+		{"stop", maybeGetTranslatedText(translations[6])},
+		{"show", maybeGetTranslatedText(translations[7])},
+		{"fullscreen", maybeGetTranslatedText(translations[8])},
+		{"volume", maybeGetTranslatedText(translations[9]), "0..100"},
+		{"speed", maybeGetTranslatedText(translations[10]), "0.05..100.0"},
+		{"seek", maybeGetTranslatedText(translations[11]), "s"},
+		{"next", maybeGetTranslatedText(translations[12])},
+		{"prev", maybeGetTranslatedText(translations[13])},
+		{"quit", maybeGetTranslatedText(translations[14])},
+		{{"h", "help"}, maybeGetTranslatedText(translations[15])},
+	});
+
+	return parser;
+}
 static QString fileArg(const QString &arg)
 {
 	if (!arg.contains("://"))
@@ -219,87 +269,61 @@ static QString fileArg(const QString &arg)
 	}
 	return arg;
 }
-static void parseArguments(QStringList &arguments)
+static QList<QPair<QString, QString>> parseArguments(const QCommandLineParser &parser)
 {
-	QString param;
-	while (arguments.count())
+	QList<QPair<QString, QString>> arguments;
+	for (const QString &option : parser.optionNames())
 	{
-		const QString arg = arguments.takeFirst();
-		if (arg.startsWith('-'))
-		{
-			param = arg;
-			while (param.startsWith('-'))
-				param.remove(0, 1);
-			if (!param.isEmpty() && !g_arguments.first.contains(param))
-			{
-				g_arguments.first  += param;
-				g_arguments.second += QString();
-			}
-			else
-			{
-				param.clear();
-			}
-		}
-		else if (!param.isEmpty())
-		{
-			QString &data = g_arguments.second.last();
-			if (!data.isEmpty())
-				data += '\n';
-			if (param == "open" || param == "enqueue")
-				data += fileArg(arg);
-			else
-				data += arg;
-		}
-		else if (!g_arguments.first.contains("open"))
-		{
-			param = "open";
-			g_arguments.first  += param;
-			g_arguments.second += fileArg(arg);
-		}
+		QString value = parser.value(option);
+		if (option == "open" || option == "enqueue")
+			value = fileArg(value);
+		arguments += {option, value};
 	}
+
+	QString urlLines;
+	for (const QString &url : parser.positionalArguments())
+		urlLines += fileArg(url) + "\n";
+	if (!urlLines.isEmpty())
+	{
+		bool found = false;
+		for (int i = arguments.count() - 1; i >= 0; --i)
+		{
+			if (arguments.at(i).first == "open" || arguments.at(i).first == "enqueue")
+			{
+				arguments[i].second += "\n" + urlLines;
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			arguments += {"open", urlLines};
+	}
+
+	return arguments;
 }
-static void showHelp()
-{
-	QFile f;
-	f.open(stdout, QFile::WriteOnly);
-	f.write("QMPlay2 - Qt Media Player 2 (" + Version::get() + ")\n");
-	f.write(QObject::tr(
-"  Parameters list:\n"
-"    -open         \"address\"\n"
-"    -enqueue      \"address\"\n"
-"    -profile      \"name\" - starts application with given profile name\n"
-"    -noplay     - doesn't play after run (bypass \"Remember playback position\" option)\n"
-"    -toggle     - toggles play/pause\n"
-"    -show       - ensures that the window will be visible if the application is running\n"
-"    -fullscreen - toggles fullscreen\n"
-"    -volume     - sets volume [0..100]\n"
-"    -speed      - sets playback speed [0.05..100.0]\n"
-"    -seek       - seeks to the specified value [s]\n"
-"    -stop       - stops playback\n"
-"    -next       - plays next on the list\n"
-"    -prev       - plays previous on the list\n"
-"    -quit       - terminates the application"
-	).toLocal8Bit() + "\n");
-}
-static bool writeToSocket(IPCSocket &socket)
+
+static bool writeToSocket(IPCSocket &socket, QList<QPair<QString, QString>> &arguments)
 {
 	bool ret = false;
-	for (int i = g_arguments.first.count() - 1; i >= 0; i--)
+
+	for (auto &&argument : arguments)
 	{
-		if (g_arguments.first[i] == "noplay" || g_arguments.first[i] == "profile")
+		if (argument.first == "noplay" || argument.first == "profile")
 			continue;
-		else if (g_arguments.first[i] == "open" || g_arguments.first[i] == "enqueue")
+
+		if (argument.first == "open" || argument.first == "enqueue")
 		{
-			if (!g_arguments.second[i].isEmpty())
-				g_arguments.second[i] = Functions::Url(g_arguments.second[i]);
+			if (!argument.second.isEmpty())
+				argument.second = Functions::Url(argument.second);
 #ifdef Q_OS_WIN
-			if (g_arguments.second[i].startsWith("file://"))
-				g_arguments.second[i].remove(0, 7);
+			if (argument.second.startsWith("file://"))
+				argument.second.remove(0, 7);
 #endif
 		}
-		socket.write(QString(g_arguments.first[i] + '\t' + g_arguments.second[i]).toUtf8() + '\0');
+		socket.write(QString(argument.first + '\t' + argument.second).toUtf8() + '\0');
 		ret = true;
 	}
+
 	return ret;
 }
 
@@ -398,12 +422,6 @@ static void signal_handler(int s)
 	}
 }
 
-static inline void noAutoPlay()
-{
-	g_arguments.first += "noplay";
-	g_arguments.second += QString();
-}
-
 #ifdef Q_OS_WIN
 static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 {
@@ -462,16 +480,20 @@ int main(int argc, char *argv[])
 
 	QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
 
-	QStringList arguments = QCoreApplication::arguments();
-	arguments.removeFirst();
-	const bool help = arguments.contains("-help") || arguments.contains("-h");
+	QCommandLineParser *parser = createCmdParser(false);
+	parser->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+	parser->process(*qApp);
+	QList<QPair<QString, QString>> arguments = parseArguments(*parser);
+	const bool help = parser->isSet("help");
+	QString cmdLineProfile = parser->value("profile");
+	delete parser;
+
 	if (!help)
 	{
 		IPCSocket socket(qmplay2Gui.getPipe());
-		parseArguments(arguments);
 		if (socket.open(IPCSocket::WriteOnly))
 		{
-			if (writeToSocket(socket))
+			if (writeToSocket(socket, arguments))
 				g_useGui = false;
 			socket.close();
 		}
@@ -479,7 +501,7 @@ int main(int argc, char *argv[])
 		else if (QFile::exists(qmplay2Gui.getPipe()))
 		{
 			QFile::remove(qmplay2Gui.getPipe());
-			noAutoPlay();
+			arguments.append({"noplay", QString()});
 		}
 #endif
 
@@ -493,16 +515,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (int i = 0; i < g_arguments.first.count(); ++i)
-	{
-		if (g_arguments.first.at(i) == "profile")
-		{
-			qmplay2Gui.cmdLineProfile = g_arguments.second.at(i);
-			g_arguments.first.removeAt(i);
-			g_arguments.second.removeAt(i);
-			break;
-		}
-	}
+	qmplay2Gui.cmdLineProfile = std::move(cmdLineProfile);
 
 	QString libPath, sharePath = QCoreApplication::applicationDirPath();
 	bool cmakeBuildFound = false;
@@ -576,6 +589,16 @@ int main(int argc, char *argv[])
 		/* QMPlay2GUI musi być stworzone już wcześniej */
 		QMPlay2Core.init(!help, cmakeBuildFound, libPath, sharePath, qmplay2Gui.cmdLineProfile);
 
+		if (help)
+		{
+			parser = createCmdParser(true);
+			parser->setApplicationDescription(QString("QMPlay2 - Qt Media Player 2 (%1)").arg((QString)Version::get()));
+			printf("%s", parser->helpText().toLocal8Bit().constData());
+			fflush(stdout);
+			delete parser;
+			break;
+		}
+
 		if (!qmplay2Gui.cmdLineProfile.isEmpty() && QMPlay2Core.getSettingsProfile() == "/")
 			qmplay2Gui.cmdLineProfile = QMPlay2Core.getSettingsProfile(); // Default profile
 
@@ -596,12 +619,6 @@ int main(int argc, char *argv[])
 			settings.set("VolumeL", vol);
 			settings.set("VolumeR", vol);
 			settings.remove("Volume");
-		}
-
-		if (help)
-		{
-			showHelp();
-			break;
 		}
 
 		qmplay2Gui.loadIcons();
@@ -682,7 +699,7 @@ int main(int argc, char *argv[])
 
 		qmplay2Gui.restartApp = qmplay2Gui.removeSettings = qmplay2Gui.noAutoPlay = false;
 		qmplay2Gui.newProfileName.clear();
-		new MainWidget(g_arguments);
+		new MainWidget(arguments);
 		do
 		{
 			QCoreApplication::exec();
@@ -715,7 +732,7 @@ int main(int argc, char *argv[])
 		}
 
 		if (qmplay2Gui.noAutoPlay)
-			noAutoPlay();
+			arguments.append({"noplay", QString()});
 
 		delete qmplay2Gui.pipe;
 	} while (qmplay2Gui.restartApp);

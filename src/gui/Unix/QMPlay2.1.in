@@ -3,25 +3,25 @@
 QMPlay2 — Qt Media Player 2
 .br
 .SH "SYNTAX"
-QMPlay2 [\fIoption\fR]
+QMPlay2 [\fIoptions\fR] [\fIurl\fR]
 .br
 .SH "DESCRIPTION"
 QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube browser.
 .br
 .SH "OPTIONS"
--open <\fIaddress\fR>
+-open <\fIurl\fR>
 .br
-		Opens specified <\fIaddress\fR>.
-.br
-
--enqueue <\fIaddress\fR>
-.br
-		Adds specified <\fIaddress\fR> to playlist.
+		Opens and plays specified <\fIurl\fR>.
 .br
 
--profile <\fIname\fR>
+-enqueue <\fIurl\fR>
 .br
-		Starts application with given profile name.
+		Adds specified <\fIurl\fR> to playlist.
+.br
+
+-profile <\fIprofile name\fR>
+.br
+		Starts the application with given <\fIprofile name\fR>.
 .br
 
 -noplay
@@ -31,7 +31,17 @@ QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg
 
 -toggle
 .br
-		Toggles play/pause.
+		Toggles playback.
+.br
+
+-play
+.br
+		Starts playback.
+.br
+
+-stop
+.br
+		Stops playback.
 .br
 
 -show
@@ -59,19 +69,14 @@ QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg
 		Seeks to the specified value <\fIs\fR>.
 .br
 
--stop
-.br
-		Stops playback.
-.br
-
 -next
 .br
-		Plays next on the list.
+		Plays next entry on playlist.
 .br
 
 -prev
 .br
-		Plays previous on the list.
+		Plays previous entry on playlist.
 .br
 
 -quit
