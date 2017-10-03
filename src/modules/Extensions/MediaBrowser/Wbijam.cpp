@@ -424,12 +424,19 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 
 								QRegExp videoRx("<iframe.+src=\"(.*)\"");
 								videoRx.setMinimal(true);
-								if (videoRx.indexIn(replyData) != -1)
+								int pos = 0;
+								while ((pos = videoRx.indexIn(replyData, pos)) != -1)
 								{
-									animeUrl = videoRx.cap(1);
-									if (animeUrl.startsWith("//"))
-										animeUrl.prepend("http:");
-									ok = true;
+									QString url = videoRx.cap(1);
+									if (url.startsWith("//"))
+										url.prepend("http:");
+									if (!url.contains("facebook.com/"))
+									{
+										animeUrl = url;
+										ok = true;
+										break;
+									}
+									pos += videoRx.matchedLength();
 								}
 							}
 						}
