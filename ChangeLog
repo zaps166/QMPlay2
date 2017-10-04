@@ -1,3 +1,8 @@
+Changes in QMPlay2 build 17.10.04:
+	- command line seeking bugfix,
+	- update for Wbijam changes,
+	- CUVID bugfix,
+
 Changes in QMPlay2 build 17.09.16:
 	- fix playback position regression introduced in 17.09.13,
 	- update German translation (martinkg),
