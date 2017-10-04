@@ -306,6 +306,8 @@ void DemuxerThr::end()
 
 	if (endMutexLocked)
 		endMutex.unlock(); //Jeżeli był zablokowany, odblokuje mutex
+
+	playC.videoDecodersError.clear();
 }
 
 bool DemuxerThr::load(bool canEmitInfo)
@@ -458,11 +460,11 @@ void DemuxerThr::run()
 		if (demuxer.isAborted() || err)
 			break;
 
-		if (vThr && vThr->dec->hasCriticalError())
+		if (vThr && vThr->hasDecoderError())
 		{
 			playC.videoDecodersError.insert(playC.videoDecoderModuleName);
 			playC.reload = playC.videoDecErrorLoad = true;
-			if (!load())
+			if (!load() || playC.videoStream < 0)
 			{
 				err = true;
 				break;

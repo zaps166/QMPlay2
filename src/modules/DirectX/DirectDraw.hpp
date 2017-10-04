@@ -70,7 +70,7 @@ private:
 	QPaintEngine *paintEngine() const override final;
 
 	QImage osdImg;
-	QList<QByteArray> osd_checksums;
+	QVector<quint64> osd_ids;
 
 	QTimer visibleTim;
 

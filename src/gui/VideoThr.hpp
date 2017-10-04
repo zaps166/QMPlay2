@@ -34,6 +34,8 @@ public:
 
 	void stop(bool terminate = false) override final;
 
+	bool hasDecoderError() const override final;
+
 	inline VideoWriter *getHWAccelWriter() const
 	{
 		return hwAccelWriter;
@@ -79,7 +81,7 @@ private:
 
 	void run() override final;
 
-	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError;
+	bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError;
 	double lastSampleAspectRatio;
 	int W, H;
 	quint32 seq;

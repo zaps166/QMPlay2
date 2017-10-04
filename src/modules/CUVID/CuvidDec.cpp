@@ -34,7 +34,7 @@
 	#define GL_TEXTURE_2D 0x0DE1
 #endif
 
-static QMutex cudaMutex(QMutex::Recursive);
+static QMutex g_cudaMutex(QMutex::Recursive);
 
 extern "C"
 {
@@ -157,7 +157,7 @@ namespace cu
 		inline ContextGuard(CUcontext ctx) :
 			m_locked(true)
 		{
-			cudaMutex.lock();
+			g_cudaMutex.lock();
 			ctxPushCurrent(ctx);
 		}
 		inline ~ContextGuard()
@@ -171,7 +171,7 @@ namespace cu
 			{
 				CUcontext ctx;
 				ctxPopCurrent(&ctx);
-				cudaMutex.unlock();
+				g_cudaMutex.unlock();
 				m_locked = false;
 			}
 		}
@@ -283,17 +283,17 @@ public:
 
 	bool lock() override
 	{
-		cudaMutex.lock();
+		g_cudaMutex.lock();
 		if (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS)
 			return true;
-		cudaMutex.unlock();
+		g_cudaMutex.unlock();
 		return false;
 	}
 	void unlock() override
 	{
 		CUcontext cuCtx;
 		cu::ctxPopCurrent(&cuCtx);
-		cudaMutex.unlock();
+		g_cudaMutex.unlock();
 	}
 
 	bool init(quint32 *textures) override
@@ -320,7 +320,7 @@ public:
 
 	CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
 	{
-		if (!m_cuvidDec)
+		if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.surfaceId))
 			return CopyNotReady;
 
 		CUVIDPROCPARAMS vidProcParams;
@@ -446,10 +446,18 @@ public:
 		return m_cuCtx;
 	}
 
-	inline void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
+	inline void setAvailableSurface(quintptr surfaceId)
+	{
+		m_validSurfaces.insert(surfaceId);
+	}
+
+	void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
 	{
 		m_codedHeight = codedHeight;
+		m_lastId = 0;
+		m_tff = false;
 		m_cuvidDec = cuvidDec;
+		m_validSurfaces.clear();
 	}
 
 private:
@@ -464,6 +472,8 @@ private:
 	CUvideodecoder m_cuvidDec;
 
 	CUgraphicsResource m_res[2];
+
+	QSet<quintptr> m_validSurfaces;
 };
 
 /**/
@@ -493,7 +503,10 @@ CuvidDec::CuvidDec(Module &module) :
 	m_pkt(nullptr),
 	m_cuCtx(nullptr),
 	m_cuvidParser(nullptr),
-	m_cuvidDec(nullptr)
+	m_cuvidDec(nullptr),
+	m_decodeMPEG4(true),
+	m_hasCriticalError(false),
+	m_skipFrames(false)
 {
 	memset(m_frameBuffer, 0, sizeof m_frameBuffer);
 	SetModule(module);
@@ -524,16 +537,31 @@ bool CuvidDec::set()
 {
 	if (sets().getBool("Enabled"))
 	{
+		bool restart = false;
+
 		const cudaVideoDeinterlaceMode deintMethod = (cudaVideoDeinterlaceMode)sets().getInt("DeintMethod");
-		const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
 		if (deintMethod != m_deintMethod)
 		{
 			m_forceFlush = true;
 			m_deintMethod = deintMethod;
 		}
-		if (copyVideo == m_copyVideo)
+
+		const bool decodeMPEG4 = sets().getBool("DecodeMPEG4");
+		if (decodeMPEG4 != m_decodeMPEG4)
+		{
+			m_decodeMPEG4 = decodeMPEG4;
+			restart = true;
+		}
+
+		const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
+		if (copyVideo != m_copyVideo)
+		{
+			m_copyVideo = copyVideo;
+			restart = true;
+		}
+
+		if (!restart)
 			return true;
-		m_copyVideo = copyVideo;
 	}
 	return false;
 }
@@ -579,6 +607,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 	if (ret != CUDA_SUCCESS)
 	{
 		QMPlay2Core.logError("CUVID :: Error '" + QString::number(ret) + "' while creating decoder");
+		m_hasCriticalError = true;
 		return 0;
 	}
 
@@ -589,6 +618,8 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 }
 int CuvidDec::pictureDecode(CUVIDPICPARAMS *picParams)
 {
+	if (m_skipFrames && picParams->ref_pic_flag == 0 && picParams->intra_pic_flag == 0)
+		return 0;
 	if (cuvid::decodePicture(m_cuvidDec, picParams) != CUDA_SUCCESS)
 		return 0;
 	return 1;
@@ -621,6 +652,8 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
 	cu::ContextGuard cuCtxGuard(m_cuCtx);
 	CUVIDSOURCEDATAPACKET cuvidPkt;
+
+	m_skipFrames = (m_cuvidParserParams.CodecType != cudaVideoCodec_VP9 && hurry_up > 1);
 
 	if (flush || m_forceFlush)
 	{
@@ -715,7 +748,11 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		{
 			const VideoFrameSize frameSize(m_width, m_height);
 			if (m_cuvidHWAccel)
-				decoded = VideoFrame(frameSize, (quintptr)(dispInfo.picture_index + 1), (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			{
+				const quintptr surfaceId = dispInfo.picture_index + 1;
+				m_cuvidHWAccel->setAvailableSurface(surfaceId);
+				decoded = VideoFrame(frameSize, surfaceId, (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+			}
 			else
 			{
 				CUdeviceptr mappedFrame = 0;
@@ -795,6 +832,11 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 	return encodedPacket.size();
 }
 
+bool CuvidDec::hasCriticalError() const
+{
+	return m_hasCriticalError;
+}
+
 bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
 	if (streamInfo.type != QMPLAY2_TYPE_VIDEO)
@@ -805,7 +847,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		return false;
 
 	const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
-	if (pixFmt != AV_PIX_FMT_YUV420P && pixFmt != AV_PIX_FMT_YUV420P10 && pixFmt != AV_PIX_FMT_YUVJ420P)
+	if (!(pixFmt == AV_PIX_FMT_YUV420P || pixFmt == AV_PIX_FMT_YUV420P10 || pixFmt == AV_PIX_FMT_YUVJ420P || avCodec->id == AV_CODEC_ID_MJPEG))
 		return false;
 
 	int depth = 8;
@@ -827,7 +869,12 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 		case AV_CODEC_ID_MPEG2VIDEO:
 			codec = cudaVideoCodec_MPEG2;
 			break;
+		case AV_CODEC_ID_MJPEG:
+			codec = cudaVideoCodec_JPEG;
+			break;
 		case AV_CODEC_ID_MPEG4:
+			if (!m_decodeMPEG4)
+				return false;
 			codec = cudaVideoCodec_MPEG4;
 			break;
 		case AV_CODEC_ID_H264:

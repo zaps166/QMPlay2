@@ -429,7 +429,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 				osd->setPTS(buff->pts);
 				osd->addImage(QRect(buff->x, buff->y, buff->w, buff->h), buff->bitmap);
 				osd->setNeedsRescale();
-				osd->genChecksum();
+				osd->genId();
 				if (old_osd)
 					osd->unlock();
 				cantDelete = true;

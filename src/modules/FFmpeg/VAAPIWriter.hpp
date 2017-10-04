@@ -73,7 +73,7 @@ private:
 	static constexpr int drawTimeout = 40;
 	QList<const QMPlay2OSD *> osd_list;
 	bool subpict_dest_is_screen_coord;
-	QList<QByteArray> osd_checksums;
+	QVector<quint64> osd_ids;
 	VASubpictureID vaSubpicID;
 	VAImageFormat *rgbImgFmt;
 	QMutex osd_mutex;

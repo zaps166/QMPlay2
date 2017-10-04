@@ -75,20 +75,24 @@ static QMultiMap<AVCodecID, const GUID *> GUIDToAVCodec;
 class DXVA2Hwaccel : public HWAccelInterface
 {
 public:
-	inline DXVA2Hwaccel(IDirect3DDevice9 *d3d9Device) :
+	inline DXVA2Hwaccel(IDirect3DDevice9 *d3d9Device, const bool dontReleaseRenderTarget) :
+		m_dontReleaseRenderTarget(dontReleaseRenderTarget),
 		m_d3d9Device(d3d9Device),
-		m_glHandleD3D(NULL),
-		m_videoDecoder(NULL),
-		m_renderTarget(NULL),
-		m_glHandleSurface(NULL)
+		m_glHandleD3D(nullptr),
+		m_videoDecoder(nullptr),
+		m_renderTarget(nullptr),
+		m_glHandleSurface(nullptr)
 	{
 		m_d3d9Device->AddRef();
 	}
 	~DXVA2Hwaccel() final
 	{
 		releaseSurfacesAndDecoder();
-		for (auto it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
-			it.value()->Release();
+		if (m_dontReleaseRenderTarget)
+		{
+			for (auto it = m_renderTargets.constBegin(), itEnd = m_renderTargets.constEnd(); it != itEnd; ++it)
+				it.value()->Release();
+		}
 		m_d3d9Device->Release();
 	}
 
@@ -119,19 +123,22 @@ public:
 		if (!wglDXOpenDeviceNV || !wglDXSetResourceShareHandleNV || !wglDXRegisterObjectNV || !wglDXLockObjectsNV || !wglDXUnlockObjectsNV || !wglDXUnregisterObjectNV || !wglDXCloseDeviceNV)
 			return false;
 
-		m_renderTarget = m_renderTargets.value(m_size);
+		if (m_dontReleaseRenderTarget)
+			m_renderTarget = m_renderTargets.value(m_size);
 
 		if (!m_renderTarget)
 		{
-			HANDLE sharedHande = NULL;
+			HANDLE sharedHande = nullptr;
 			HRESULT hr;
 
 			hr = m_d3d9Device->CreateRenderTarget(m_size.first, m_size.second, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &m_renderTarget, &sharedHande);
 			if (FAILED(hr))
 				return false;
 
-			//Don't release render target here, otherwise on Intel drivers "wglDXSetResourceShareHandleNV()" can fail.
-			m_renderTargets[m_size] = m_renderTarget;
+			// Don't release render target on Intel drivers, bacause "wglDXSetResourceShareHandleNV()" can fail.
+			// Render target must be created here on Radeon drivers, otherwise "wglDXRegisterObjectNV()" will fail.
+			if (m_dontReleaseRenderTarget)
+				m_renderTargets[m_size] = m_renderTarget;
 
 			if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHande))
 				return false;
@@ -159,12 +166,17 @@ public:
 		{
 			wglDXUnlockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface);
 			wglDXUnregisterObjectNV(m_glHandleD3D, m_glHandleSurface);
-			m_glHandleSurface = NULL;
+			m_glHandleSurface = nullptr;
 		}
 		if (contextChange && m_glHandleD3D)
 		{
 			wglDXCloseDeviceNV(m_glHandleD3D);
-			m_glHandleD3D = NULL;
+			m_glHandleD3D = nullptr;
+		}
+		if (!m_dontReleaseRenderTarget && m_renderTarget)
+		{
+			m_renderTarget->Release();
+			m_renderTarget = nullptr;
 		}
 	}
 
@@ -190,7 +202,7 @@ public:
 		D3DSURFACE_DESC desc;
 		D3DLOCKED_RECT lockedRect;
 		IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.surfaceId;
-		if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, NULL, D3DLOCK_READONLY)))
+		if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
 		{
 			const void *src[2] = {
 				lockedRect.pBits,
@@ -214,7 +226,7 @@ public:
 		return m_d3d9Device;
 	}
 
-	bool setNewData(const Size &size, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
+	void setNewData(const Size &size, IDirectXVideoDecoder *videoDecoder, FFDecDXVA2::Surfaces &surfaces)
 	{
 		releaseSurfacesAndDecoder();
 
@@ -226,8 +238,6 @@ public:
 			surface->AddRef();
 
 		m_size = size;
-
-		return true;
 	}
 
 private:
@@ -241,6 +251,9 @@ private:
 		if (m_videoDecoder)
 			m_videoDecoder->Release();
 	}
+
+private:
+	const bool m_dontReleaseRenderTarget;
 
 	PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV;
 	PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV;
@@ -301,12 +314,12 @@ bool FFDecDXVA2::loadLibraries()
 FFDecDXVA2::FFDecDXVA2(QMutex &avcodec_mutex, Module &module) :
 	FFDecHWAccel(avcodec_mutex),
 	m_copyVideo(Qt::Unchecked),
-	m_d3d9Device(NULL),
-	m_devMgr(NULL),
+	m_d3d9Device(nullptr),
+	m_devMgr(nullptr),
 	m_devHandle(INVALID_HANDLE_VALUE),
-	m_decoderService(NULL),
-	m_videoDecoder(NULL),
-	m_swsCtx(NULL)
+	m_decoderService(nullptr),
+	m_videoDecoder(nullptr),
+	m_swsCtx(nullptr)
 {
 	SetModule(module);
 }
@@ -357,7 +370,7 @@ void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
 	D3DSURFACE_DESC desc;
 	D3DLOCKED_RECT lockedRect;
 	IDirect3DSurface9 *surface = (IDirect3DSurface9 *)frame->data[3];
-	if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, NULL, D3DLOCK_READONLY)))
+	if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
 	{
 		AVBufferRef *dstBuffer[3] = {
 			av_buffer_alloc(lockedRect.Pitch * frame->height),
@@ -385,7 +398,7 @@ void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
 			lockedRect.Pitch / 2
 		};
 
-		m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, NULL, NULL, NULL);
+		m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
 		sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
 		decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
@@ -407,7 +420,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (codecGUIDs.isEmpty())
 		return false;
 
-	DXVA2Hwaccel *dxva2Hwaccel = NULL;
+	DXVA2Hwaccel *dxva2Hwaccel = nullptr;
 	if (writer)
 	{
 		dxva2Hwaccel = dynamic_cast<DXVA2Hwaccel *>(writer->getHWAccelInterface());
@@ -419,11 +432,12 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 		}
 	}
 
+	QString deviceDescription;
 	HRESULT hr;
 
 	if (!m_d3d9Device)
 	{
-		IDirect3D9Ex *d3d9 = NULL;
+		IDirect3D9Ex *d3d9 = nullptr;
 
 		hr = DX::Direct3DCreate9Ex(D3D_SDK_VERSION, &d3d9);
 		if (FAILED(hr))
@@ -436,6 +450,17 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 			d3d9->Release();
 			return false;
 		}
+
+		D3DADAPTER_IDENTIFIER9 adapterIdentifier;
+		memset(&adapterIdentifier, 0, sizeof adapterIdentifier);
+		hr = d3d9->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &adapterIdentifier);
+		if (FAILED(hr))
+		{
+			d3d9->Release();
+			return false;
+		}
+
+		deviceDescription = adapterIdentifier.Description;
 
 		D3DPRESENT_PARAMETERS d3dpp;
 		memset(&d3dpp, 0, sizeof d3dpp);
@@ -481,14 +506,14 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	m_devHandle = INVALID_HANDLE_VALUE;
 
 	m_devMgr->Release();
-	m_devMgr = NULL;
+	m_devMgr = nullptr;
 
 	const quint32 requiredFormat = (codec_ctx->pix_fmt == AV_PIX_FMT_YUV420P || codec_ctx->pix_fmt == AV_PIX_FMT_YUVJ420P) ? MAKEFOURCC('N', 'V', '1', '2') : MAKEFOURCC('P', '0', '1', '0');
 	D3DFORMAT targetFmt = D3DFMT_UNKNOWN;
-	const GUID *deviceGUID = NULL;
+	const GUID *deviceGUID = nullptr;
 
 	unsigned codecGUIDCount = 0;
-	GUID *codecGUIDList = NULL;
+	GUID *codecGUIDList = nullptr;
 	hr = m_decoderService->GetDecoderDeviceGuids(&codecGUIDCount, &codecGUIDList);
 	if (FAILED(hr))
 		return false;
@@ -501,7 +526,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 			if (IsEqualGUID(codecGUIDList[i], *codecGUID))
 			{
 				unsigned d3dFormatCount = 0;
-				D3DFORMAT *d3dFmt = NULL;
+				D3DFORMAT *d3dFmt = nullptr;
 				hr = m_decoderService->GetDecoderRenderTargets(*codecGUID, &d3dFormatCount, &d3dFmt);
 				if (SUCCEEDED(hr))
 				{
@@ -536,8 +561,8 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	desc.Format = targetFmt;
 
 	quint32 configCount = 0;
-	DXVA2_ConfigPictureDecode *configList = NULL;
-	hr = m_decoderService->GetDecoderConfigurations(*deviceGUID, &desc, NULL, &configCount, &configList);
+	DXVA2_ConfigPictureDecode *configList = nullptr;
+	hr = m_decoderService->GetDecoderConfigurations(*deviceGUID, &desc, nullptr, &configCount, &configList);
 	if (FAILED(hr))
 		return false;
 
@@ -590,7 +615,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	const quint32 surfaceH = FFALIGN(codec_ctx->coded_height, surfaceAlignment);
 	m_surfaces = Surfaces(new QVector<IDirect3DSurface9 *>(numSurfaces));
 
-	hr = m_decoderService->CreateSurface(surfaceW, surfaceH, m_surfaces->count() - 1, targetFmt, D3DPOOL_DEFAULT, 0, DXVA2_VideoDecoderRenderTarget, m_surfaces->data(), NULL);
+	hr = m_decoderService->CreateSurface(surfaceW, surfaceH, m_surfaces->count() - 1, targetFmt, D3DPOOL_DEFAULT, 0, DXVA2_VideoDecoderRenderTarget, m_surfaces->data(), nullptr);
 	if (FAILED(hr))
 	{
 		m_surfaces.clear();
@@ -602,7 +627,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 		return false;
 
 	m_decoderService->Release();
-	m_decoderService = NULL;
+	m_decoderService = nullptr;
 
 	dxva_context *dxva2Ctx  = (dxva_context *)av_mallocz(sizeof(dxva_context));
 	dxva2Ctx->decoder       = m_videoDecoder;
@@ -623,14 +648,8 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (m_copyVideo != Qt::Checked)
 	{
 		if (!dxva2Hwaccel)
-			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device);
-		if (!dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces))
-		{
-			if (m_hwAccelWriter)
-				return false;
-			delete dxva2Hwaccel;
-			dxva2Hwaccel = NULL;
-		}
+			dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device, deviceDescription.contains("Intel", Qt::CaseInsensitive));
+		dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces);
 		if (!m_hwAccelWriter && dxva2Hwaccel)
 			m_hwAccelWriter = VideoWriter::createOpenGL2(dxva2Hwaccel);
 		if (!m_hwAccelWriter && m_copyVideo == Qt::Unchecked)

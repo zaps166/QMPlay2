@@ -236,7 +236,9 @@ bool FFDecVDPAU_NW::open(StreamInfo &streamInfo, VideoWriter *)
 			vdpau = new VDPAU(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id));
 			if (vdpau->ok)
 			{
-				AVVDPAUContext *vdpauCtx = (AVVDPAUContext *)av_mallocz(sizeof(AVVDPAUContext));
+				AVVDPAUContext *vdpauCtx = FFCommon::allocAVVDPAUContext(codec_ctx);
+				if (!vdpauCtx)
+					return false;
 				vdpauCtx->decoder = vdpau->decoder;
 				vdpauCtx->render  = vdpau->vpd_decoder_render;
 

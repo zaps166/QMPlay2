@@ -56,6 +56,11 @@ QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
 	return {QMPlay2PixelFormat::YUV420P};
 }
 
+bool VideoWriter::hwAccelError() const
+{
+	return false;
+}
+
 void VideoWriter::setHWAccelInterface(HWAccelInterface *hwAccelInterface)
 {
 	m_hwAccelInterface = hwAccelInterface;

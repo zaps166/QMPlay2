@@ -25,12 +25,23 @@ class TimeStamp
 public:
 	inline bool isValid() const
 	{
-		return !qIsNaN(m_pts) && !qIsNaN(m_dts);
+		return hasDts() || hasPts();
+	}
+	inline bool hasDts() const
+	{
+		return !qIsNaN(m_dts);
+	}
+	inline bool hasPts() const
+	{
+		return !qIsNaN(m_pts);
 	}
 
-	inline void set(double dts, double pts, double start_time = 0.0)
+	inline void setDts(double dts, double start_time = 0.0)
 	{
 		m_dts = dts - start_time;
+	}
+	inline void setPts(double pts, double start_time = 0.0)
+	{
 		m_pts = pts - start_time;
 	}
 	inline void setInvalid()
@@ -44,12 +55,19 @@ public:
 	}
 	inline void operator +=(double t)
 	{
-		m_dts += t;
-		m_pts += t;
+		if (hasDts())
+			m_dts += t;
+		if (hasPts())
+			m_pts += t;
 	}
 	inline operator double() const
 	{
-		return dtsPts();
+		// XXX: Should it always return "m_dts"?
+		if (m_dts >= 0.0)
+			return m_dts;
+		if (m_pts >= 0.0)
+			return m_pts;
+		return 0.0;
 	}
 
 	inline double pts() const
@@ -59,23 +77,6 @@ public:
 	inline double dts() const
 	{
 		return m_dts;
-	}
-
-	inline double ptsDts() const
-	{
-		if (m_pts >= 0.0)
-			return m_pts;
-		if (m_dts >= 0.0)
-			return m_dts;
-		return 0.0;
-	}
-	inline double dtsPts() const
-	{
-		if (m_dts >= 0.0)
-			return m_dts;
-		if (m_pts >= 0.0)
-			return m_pts;
-		return 0.0;
 	}
 
 private:

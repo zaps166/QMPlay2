@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <QPointer>
 #include <QWidget>
 
 class InDockW : public QWidget
@@ -35,11 +36,10 @@ private:
 	QPixmap customPixmap, customPixmapBlurred;
 	bool hasWallpaper;
 	int loseHeight;
-	QWidget *w;
+	QPointer<QWidget> w;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
-	void setWidget(QWidget *);
-	void nullWidget();
+	void setWidget(QWidget *newW);
 protected:
 	void resizeEvent(QResizeEvent *) override final;
 	void paintEvent(QPaintEvent *) override final;

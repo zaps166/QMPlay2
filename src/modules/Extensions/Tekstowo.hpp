@@ -51,10 +51,12 @@ private:
 
 	NetworkAccess m_net;
 
+	QString m_realTitle, m_realArtist;
 	QString m_title, m_artist, m_name;
 
-	QPointer<NetworkReply> m_searchReply;
-	QPointer<NetworkReply> m_lyricsReply;
+	QPointer<NetworkReply> m_tekstowoSearchReply;
+	QPointer<NetworkReply> m_tekstowoLyricsReply;
+	QPointer<NetworkReply> m_makeitpersonalLyricsReply;
 };
 
 #define TekstowoName "Tekstowo"

@@ -87,6 +87,11 @@ void AVThread::stop(bool _terminate)
 		terminate();
 }
 
+bool AVThread::hasDecoderError() const
+{
+	return false;
+}
+
 void AVThread::terminate()
 {
 	disconnect(this, SIGNAL(finished()), this, SLOT(deleteLater()));

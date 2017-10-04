@@ -150,7 +150,7 @@ private:
 
 	static constexpr int drawTimeout = 40;
 	QList<const QMPlay2OSD *> osd_list;
-	QList<QByteArray> osd_checksums;
+	QVector<quint64> osd_ids;
 	VdpBitmapSurface bitmapSurface;
 	QTimer visibleTim, drawTim;
 	QSize bitmapSurfaceSize;

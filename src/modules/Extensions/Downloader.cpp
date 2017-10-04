@@ -356,7 +356,7 @@ void DownloaderThread::run()
 	};
 
 	QElapsedTimer speedT;
-	const auto setBitRate = [&](const std::function<qint64()> &getPosDiff) {
+	const auto setByteRate = [&](const std::function<qint64()> &getPosDiff) {
 		const int elapsed = speedT.elapsed();
 		if (elapsed >= 1000)
 		{
@@ -367,7 +367,9 @@ void DownloaderThread::run()
 
 	bool err = true;
 
-	if (newUrl.startsWith("FFmpeg://"))
+	const bool isFFmpeg = newUrl.startsWith("FFmpeg://");
+	const bool isHLS = (!isFFmpeg && (newUrl.endsWith(".m3u8", Qt::CaseInsensitive) || newUrl.contains(".m3u8?", Qt::CaseInsensitive)));
+	if (isFFmpeg || isHLS)
 	{
 		IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
 		QMPlay2Core.setWorking(true);
@@ -399,7 +401,7 @@ void DownloaderThread::run()
 					double bytePos = 0.0;
 					double pos = 0.0;
 
-					emit listSig(SET, (size < 0) ? (length < 0 ? -1 : -2) : size, filePath);
+					emit listSig(SET, (size < 0 || isHLS) ? (length < 0 ? -1 : -2) : size, filePath);
 					err = false;
 					speedT.start();
 					while (!demuxer.isAborted())
@@ -418,7 +420,7 @@ void DownloaderThread::run()
 						}
 
 						bytePos += packet.size();
-						setBitRate([&] {
+						setByteRate([&] {
 							const qint64 tmp = bytePos - lastBytesPos;
 							lastBytesPos = bytePos;
 							return tmp;
@@ -500,7 +502,7 @@ void DownloaderThread::run()
 				}
 
 				const qint64 bytesPos = reader->pos();
-				setBitRate([&] {
+				setByteRate([&] {
 					const qint64 tmp = bytesPos - lastBytesPos;
 					lastBytesPos = bytesPos;
 					return tmp;

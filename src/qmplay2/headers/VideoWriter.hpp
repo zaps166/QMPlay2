@@ -36,6 +36,8 @@ public:
 
 	virtual QMPlay2PixelFormats supportedPixelFormats() const;
 
+	virtual bool hwAccelError() const; // Must be thread-safe
+
 	qint64 write(const QByteArray &) override final;
 
 	virtual void writeVideo(const VideoFrame &videoFrame) = 0;

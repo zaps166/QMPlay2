@@ -283,7 +283,8 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 				m_vaapi->vpp_deint_type = m_vppDeintType;
 				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id), (m_copyVideo != Qt::Checked)))
 				{
-					delete m_vaapi;
+					if (!m_hwAccelWriter)
+						delete m_vaapi;
 					m_vaapi = nullptr;
 				}
 			}

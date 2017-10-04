@@ -72,11 +72,13 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
 		codecParams(stream)->codec_type = (AVMediaType)streamInfo->type;
 		codecParams(stream)->codec_id = codec->id;
-		codecParams(stream)->codec_tag = streamInfo->codec_tag;
 
-		codecParams(stream)->extradata = (uint8_t *)av_mallocz(streamInfo->data.capacity());
-		codecParams(stream)->extradata_size = streamInfo->data.size();
-		memcpy(codecParams(stream)->extradata, streamInfo->data.constData(), codecParams(stream)->extradata_size);
+		if (streamInfo->data.size() > 0)
+		{
+			codecParams(stream)->extradata = (uint8_t *)av_mallocz(streamInfo->data.capacity());
+			codecParams(stream)->extradata_size = streamInfo->data.size();
+			memcpy(codecParams(stream)->extradata, streamInfo->data.constData(), codecParams(stream)->extradata_size);
+		}
 
 		switch (streamInfo->type)
 		{
@@ -119,8 +121,11 @@ MkvMuxer::~MkvMuxer()
 	{
 		if (m_ctx->pb)
 		{
-			av_interleaved_write_frame(m_ctx, nullptr); // Flush interleaving queue
-			av_write_trailer(m_ctx);
+			if (m_ok)
+			{
+				av_interleaved_write_frame(m_ctx, nullptr); // Flush interleaving queue
+				av_write_trailer(m_ctx);
+			}
 			avio_close(m_ctx->pb);
 			m_ctx->pb = nullptr;
 		}
@@ -136,9 +141,11 @@ bool MkvMuxer::write(Packet &packet, const int idx)
 	AVPacket pkt;
 	av_init_packet(&pkt);
 
-	pkt.duration = round(packet.duration / timeBase);
-	pkt.dts = round(packet.ts.dts() / timeBase);
-	pkt.pts = round(packet.ts.pts() / timeBase);
+	pkt.duration = std::round(packet.duration / timeBase);
+	if (packet.ts.hasDts())
+		pkt.dts = std::round(packet.ts.dts() / timeBase);
+	if (packet.ts.hasPts())
+		pkt.pts = std::round(packet.ts.pts() / timeBase);
 	pkt.flags = packet.hasKeyFrame ? AV_PKT_FLAG_KEY : 0;
 	pkt.buf = packet.toAvBufferRef();
 	pkt.data = pkt.buf->data;

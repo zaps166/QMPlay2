@@ -267,7 +267,7 @@ void Drawable::draw(const VideoFrame &videoFrame)
 				osdImg = QImage(ddsd.dwWidth, ddsd.dwHeight, QImage::Format_ARGB32);
 				osdImg.fill(0);
 			}
-			Functions::paintOSDtoYV12(dest, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_checksums);
+			Functions::paintOSDtoYV12(dest, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_ids);
 		}
 		osd_mutex.unlock();
 

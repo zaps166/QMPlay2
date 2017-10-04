@@ -43,7 +43,7 @@ using Functions::gettime;
 VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
 	AVThread(playC, "video:", hwAccelWriter, pluginsName),
 	doScreenshot(false),
-	deleteOSD(false), deleteFrame(false), gotFrameOrError(false),
+	deleteOSD(false), deleteFrame(false), gotFrameOrError(false), decoderError(false),
 	W(0), H(0), seq(0),
 	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
@@ -63,6 +63,11 @@ void VideoThr::stop(bool terminate)
 {
 	playC.videoSeekPos = -1;
 	AVThread::stop(terminate);
+}
+
+bool VideoThr::hasDecoderError() const
+{
+	return decoderError;
 }
 
 QMPlay2PixelFormats VideoThr::getSupportedPixelFormats() const
@@ -272,7 +277,7 @@ void VideoThr::run()
 		if (maybeFlush || (!gotFrameOrError && !err && mustFetchNewPacket))
 			maybeFlush = playC.endOfStream && !hasVPackets;
 		err = false;
-		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || dec->hasCriticalError())
+		if ((playC.paused && !oneFrame) || (!(maybeFlush || hasVPackets) && mustFetchNewPacket) || playC.waitForData || (playC.videoSeekPos <= 0.0 && playC.audioSeekPos > 0.0) || decoderError)
 		{
 			if (playC.paused && !paused)
 			{
@@ -434,6 +439,9 @@ void VideoThr::run()
 				tmp_br += bytes_consumed;
 			}
 		}
+
+		// This thread will wait for "DemuxerThr" which'll detect this error and restart with new decoder.
+		decoderError = (dec->hasCriticalError() || videoWriter()->hwAccelError());
 
 		const bool ptsIsValid = filters.getFrame(videoFrame, packet.ts);
 		filtersMutex.unlock();
@@ -615,7 +623,7 @@ void VideoThr::run()
 void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
 {
 	canWrite = true;
-	if (lastSeq == seq && writer->readyWrite())
+	if (lastSeq == seq && writer->readyWrite() && !videoWriter()->hwAccelError())
 	{
 		QMPlay2GUI.screenSaver->inhibit(0);
 		videoWriter()->writeVideo(videoFrame);

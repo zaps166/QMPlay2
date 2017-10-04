@@ -28,7 +28,8 @@ extern "C"
 
 FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
 	FFDec(mutex),
-	m_hwAccelWriter(nullptr)
+	m_hwAccelWriter(nullptr),
+	m_hasCriticalError(false)
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {
@@ -59,8 +60,16 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 {
 	Q_UNUSED(newPixFmt)
 	int frameFinished = 0;
+
 	decodeFirstStep(encodedPacket, flush);
+
+	if (hurryUp > 1)
+		codec_ctx->skip_frame = AVDISCARD_NONREF;
+	else if (hurryUp == 0)
+		codec_ctx->skip_frame = AVDISCARD_DEFAULT;
+
 	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
+
 	if (frameFinished && ~hurryUp)
 	{
 		if (m_hwAccelWriter)
@@ -68,13 +77,22 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 		else
 			downloadVideoFrame(decoded);
 	}
+
 	if (frameFinished)
 		decodeLastStep(encodedPacket, frame);
 	else
 		encodedPacket.ts.setInvalid();
+
+	m_hasCriticalError = (bytes_consumed < 0);
+
 	return bytes_consumed < 0 ? -1 : bytes_consumed;
 }
 void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
 {
 	Q_UNUSED(decoded)
+}
+
+bool FFDecHWAccel::hasCriticalError() const
+{
+	return m_hasCriticalError;
 }

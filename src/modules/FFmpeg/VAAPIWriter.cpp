@@ -184,7 +184,7 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 	{
 		QRect bounds;
 		const qreal scaleW = (qreal)W / vaapi->outW, scaleH = (qreal)H / vaapi->outH;
-		bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_checksums, &scaleW, &scaleH, &bounds);
+		bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_ids, &scaleW, &scaleH, &bounds);
 		if (!mustRepaint)
 			mustRepaint = vaImgSize != bounds.size();
 		bool canAssociate = !mustRepaint;
@@ -211,7 +211,7 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 					osdImg.fill(0);
 					QPainter p(&osdImg);
 					p.translate(-bounds.topLeft());
-					Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_checksums);
+					Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_ids);
 					vaUnmapBuffer(vaapi->VADisp, vaImg.buf);
 					canAssociate = true;
 				}

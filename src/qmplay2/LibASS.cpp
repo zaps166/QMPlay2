@@ -58,6 +58,7 @@ static void addImgs(ASS_Image *img, QMPlay2OSD *osd)
 
 		img = img->next;
 	}
+	osd->genId();
 }
 static inline quint32 assColorFromQColor(const QColor &color, bool invert = false)
 {
@@ -214,10 +215,7 @@ bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
 	osd->setText(txt);
 	osd->setDuration(duration);
 	if (ch || !old_osd)
-	{
 		addImgs(img, osd);
-		osd->genChecksum();
-	}
 	if (old_osd)
 		osd->unlock();
 	osd->start();
@@ -462,10 +460,7 @@ bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
 	}
 	osd->setPTS(pos);
 	if (ch || !old_osd)
-	{
 		addImgs(img, osd);
-		osd->genChecksum();
-	}
 	if (old_osd)
 		osd->unlock();
 	return true;

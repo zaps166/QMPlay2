@@ -74,16 +74,14 @@ void InDockW::wallpaperChanged(bool wallpaper, double alpha)
 		c.setAlphaF(alpha);
 	setPalette(c);
 }
-void InDockW::setWidget(QWidget *_w)
+void InDockW::setWidget(QWidget *newW)
 {
-	if (w == _w)
+	if (w == newW)
 		return;
 	if (w)
-	{
-		disconnect(w, SIGNAL(destroyed()), this, SLOT(nullWidget()));
-		w->setParent(nullptr);
-	}
-	if ((w = _w))
+		w->hide();
+	w = newW;
+	if (w)
 	{
 #if QT_VERSION < 0x050000
 		//Workaround for BUG in Qt4
@@ -99,13 +97,7 @@ void InDockW::setWidget(QWidget *_w)
 		w->setParent(this);
 		resizeEvent(nullptr);
 		w->show();
-		connect(w, SIGNAL(destroyed()), this, SLOT(nullWidget()));
 	}
-}
-
-void InDockW::nullWidget()
-{
-	w = nullptr;
 }
 
 void InDockW::resizeEvent(QResizeEvent *)

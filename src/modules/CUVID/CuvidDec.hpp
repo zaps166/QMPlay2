@@ -59,6 +59,8 @@ private:
 
 	int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override final;
 
+	bool hasCriticalError() const override final;
+
 	bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) override final;
 
 	/**/
@@ -72,6 +74,7 @@ private:
 
 	bool loadLibrariesAndInit();
 
+private:
 	VideoWriter *m_writer;
 	CuvidHWAccel *m_cuvidHWAccel;
 
@@ -100,6 +103,10 @@ private:
 	CUVIDPARSERPARAMS m_cuvidParserParams;
 	CUvideoparser m_cuvidParser;
 	CUvideodecoder m_cuvidDec;
+
+	bool m_decodeMPEG4;
+	bool m_hasCriticalError;
+	bool m_skipFrames;
 };
 
 #define CuvidName "CUVID decoder"

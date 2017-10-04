@@ -106,7 +106,7 @@ OpenGL2Common::OpenGL2Common() :
 #ifdef Q_OS_WIN
 	preventFullScreen(false),
 #endif
-	isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
+	isPaused(false), isOK(false), hwAccelError(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
 	subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
 	glVer(0),
 	aspectRatio(0.0), zoom(0.0),
@@ -166,7 +166,7 @@ void OpenGL2Common::clearImg()
 	hasImage = false;
 	osdImg = QImage();
 	videoFrame.clear();
-	osdChecksums.clear();
+	osd_ids.clear();
 }
 
 void OpenGL2Common::setSpherical(bool spherical)
@@ -385,8 +385,9 @@ void OpenGL2Common::paintGL()
 				}
 
 				/* Prepare textures, register GL textures */
-				isOK = hwAccellnterface->init(&textures[1]);
-				if (!isOK)
+				const bool hasHwAccelError = hwAccelError;
+				hwAccelError = !hwAccellnterface->init(&textures[1]);
+				if (hwAccelError && !hasHwAccelError)
 					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
 				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
@@ -431,7 +432,7 @@ void OpenGL2Common::paintGL()
 		{
 			const HWAccelInterface::Field field = (HWAccelInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccelInterface::FullFrame, HWAccelInterface::TopField, HWAccelInterface::BottomField);
 			bool imageReady = false;
-			if (isOK)
+			if (!hwAccelError)
 			{
 				const HWAccelInterface::CopyResult res = hwAccellnterface->copyFrame(videoFrame, field);
 				if (res == HWAccelInterface::CopyOk)
@@ -439,7 +440,7 @@ void OpenGL2Common::paintGL()
 				else if (res == HWAccelInterface::CopyError)
 				{
 					QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
-					isOK = false;
+					hwAccelError = true;
 				}
 			}
 			hwAccellnterface->unlock();
@@ -594,7 +595,7 @@ void OpenGL2Common::paintGL()
 
 		QRect bounds;
 		const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
-		bool mustRepaint = Functions::mustRepaintOSD(osdList, osdChecksums, &scaleW, &scaleH, &bounds);
+		bool mustRepaint = Functions::mustRepaintOSD(osdList, osd_ids, &scaleW, &scaleH, &bounds);
 		bool hasNewSize = false;
 		if (!mustRepaint)
 			mustRepaint = osdImg.size() != bounds.size();
@@ -609,7 +610,7 @@ void OpenGL2Common::paintGL()
 			osdImg.fill(0);
 			QPainter p(&osdImg);
 			p.translate(-bounds.topLeft());
-			Functions::paintOSD(false, osdList, scaleW, scaleH, p, &osdChecksums);
+			Functions::paintOSD(false, osdList, scaleW, scaleH, p, &osd_ids);
 			const quint8 *data = osdImg.constBits();
 			if (hasPbo)
 			{
@@ -908,7 +909,7 @@ inline bool OpenGL2Common::hwAccellPossibleLock()
 	if (hwAccellnterface && !hwAccellnterface->lock())
 	{
 		QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("error"));
-		isOK = false;
+		hwAccelError = true;
 		return false;
 	}
 	return true;

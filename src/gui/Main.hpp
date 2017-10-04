@@ -23,6 +23,8 @@
 
 #include <QMPlay2Core.hpp>
 
+#include <QCoreApplication>
+
 class VideoAdjustment;
 class ShortcutHandler;
 class QTreeWidgetItem;
@@ -35,6 +37,8 @@ class QWidget;
 
 class QMPlay2GUIClass : private QMPlay2CoreClass
 {
+	Q_DECLARE_TR_FUNCTIONS(QMPlay2GUIClass)
+
 public:
 	static QMPlay2GUIClass &instance();
 

@@ -191,7 +191,6 @@ void PlayClass::play(const QString &_url)
 }
 void PlayClass::stop(bool _quitApp)
 {
-	videoDecodersError.clear();
 	quitApp = _quitApp;
 	if (stopPauseMutex.tryLock())
 	{

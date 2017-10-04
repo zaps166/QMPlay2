@@ -155,7 +155,7 @@ public:
 	bool preventFullScreen;
 #endif
 
-	bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
+	bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
 	int glVer;
 
@@ -164,7 +164,7 @@ public:
 	QList<const QMPlay2OSD *> osdList;
 	QMutex osdMutex;
 
-	QList<QByteArray> osdChecksums;
+	QVector<quint64> osd_ids;
 	QImage osdImg;
 
 	QTimer updateTimer;
