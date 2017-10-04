@@ -25,23 +25,13 @@
 #include <Settings.hpp>
 #include <Packet.hpp>
 
-#if LIBAVFORMAT_VERSION_INT >= 0x373000 // >= 55.48.00
-	#define HAS_REPLAY_GAIN
-#endif
-
 extern "C"
 {
 	#include <libavformat/avformat.h>
-#ifdef HAS_REPLAY_GAIN
 	#include <libavutil/replaygain.h>
-#endif
 	#include <libavutil/pixdesc.h>
-#if LIBAVFORMAT_VERSION_MAJOR <= 55
-	#include <libavutil/opt.h>
-#endif
 }
 
-#if LIBAVFORMAT_VERSION_MAJOR > 55
 static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 {
 	AVBufferRef *line;
@@ -80,7 +70,6 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 		pkt->size = strlen((char *)line->data);
 	}
 }
-#endif
 
 #if LIBAVFORMAT_VERSION_INT >= 0x392900
 	static inline AVCodecParameters *codecParams(AVStream *stream)
@@ -269,13 +258,11 @@ FormatContext::~FormatContext()
 
 bool FormatContext::metadataChanged() const
 {
-#if LIBAVFORMAT_VERSION_MAJOR > 55
 	if (formatCtx->event_flags & AVFMT_EVENT_FLAG_METADATA_UPDATED)
 	{
 		formatCtx->event_flags = 0;
 		isMetadataChanged = true;
 	}
-#endif
 	if (isMetadataChanged)
 	{
 		isMetadataChanged = false;
@@ -399,7 +386,6 @@ QList<QMPlay2Tag> FormatContext::tags() const
 }
 bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 {
-#ifdef HAS_REPLAY_GAIN
 	const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
 	if (streamIdx > -1)
 	{
@@ -434,7 +420,7 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
 			return true;
 		}
 	}
-#endif
+
 	if (AVDictionary *dict = getMetadata())
 	{
 		QString album_gain_db = getTag(dict, "REPLAYGAIN_ALBUM_GAIN", false);
@@ -609,7 +595,6 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		return true;
 	}
 
-#if LIBAVFORMAT_VERSION_MAJOR > 55
 	if (streams.at(ff_idx)->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
 	{
 		streams.at(ff_idx)->event_flags = 0;
@@ -617,38 +602,6 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	}
 	if (fixMkvAss && codecParams(streams.at(ff_idx))->codec_id == AV_CODEC_ID_ASS)
 		matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
-#else
-	if (isStreamed)
-	{
-		char *value = nullptr;
-		av_opt_get(formatCtx, "icy_metadata_packet", AV_OPT_SEARCH_CHILDREN, (quint8 **)&value);
-		QString icyPacket = value;
-		av_free(value);
-		int idx = icyPacket.indexOf("StreamTitle='");
-		if (idx > -1)
-		{
-			int idx2 = icyPacket.indexOf("';", idx += 13);
-			if (idx2 > -1)
-			{
-				AVDictionaryEntry *e = av_dict_get(formatCtx->metadata, "StreamTitle", nullptr, AV_DICT_IGNORE_SUFFIX);
-				icyPacket = icyPacket.mid(idx, idx2-idx);
-				if (!e || QString(e->value) != icyPacket)
-				{
-					av_dict_set(&formatCtx->metadata, "StreamTitle", icyPacket.toUtf8(), 0);
-					isMetadataChanged = true;
-				}
-			}
-		}
-		else if (AVDictionary *dict = getMetadata())
-		{
-			if (metadata != dict)
-			{
-				metadata = dict;
-				isMetadataChanged = true;
-			}
-		}
-	}
-#endif
 
 	if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
 		encoded.assign(packet->data, packet->size, packet->size + FF_INPUT_BUFFER_PADDING_SIZE);
@@ -845,11 +798,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
 			index_map[i] = streamsInfo.count();
 			streamsInfo += streamInfo;
 		}
-#if LIBAVFORMAT_VERSION_MAJOR > 55
 		if (!fixMkvAss && codecParams(formatCtx->streams[i])->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
 			fixMkvAss = true;
 		formatCtx->streams[i]->event_flags = 0;
-#endif
 		streams += formatCtx->streams[i];
 
 		streamsTS[i] = 0.0;
@@ -862,27 +813,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->type == QMPLAY2_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
 		isStreamed = false; //Allow subtitles streams to be non-streamed if size is known
 
-#if LIBAVFORMAT_VERSION_MAJOR > 55
 	formatCtx->event_flags = 0;
-#else
-	if (!isStreamed)
-		metadata = nullptr;
-	else
-	{
-		char *value = nullptr;
-		av_opt_get(formatCtx, "icy_metadata_headers", AV_OPT_SEARCH_CHILDREN, (quint8 **)&value);
-		QStringList icyHeaders = QString(value).split("\n", QString::SkipEmptyParts);
-		av_free(value);
-		for (const QString &icy : icyHeaders)
-		{
-			if (icy.startsWith("icy-name: "))
-				av_dict_set(&formatCtx->metadata, "icy-name", icy.mid(10).toUtf8(), 0);
-			else if (icy.startsWith("icy-description: "))
-				av_dict_set(&formatCtx->metadata, "icy-description", icy.mid(17).toUtf8(), 0);
-		}
-		metadata = getMetadata();
-	}
-#endif
 
 	packet = FFCommon::createAVPacket();
 

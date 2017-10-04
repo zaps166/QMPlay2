@@ -135,7 +135,6 @@ private:
 				}
 				switch (ret)
 				{
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 15, 100)
 					case AVERROR_HTTP_BAD_REQUEST:
 						m_error = NetworkReply::Error::Connection400;
 						break;
@@ -154,7 +153,6 @@ private:
 					case AVERROR_HTTP_SERVER_ERROR:
 						m_error = NetworkReply::Error::Connection5XX;
 						continue; // Continue if server error (e.g. Service Temporarily Unavailable)
-#endif
 					default:
 						m_error = NetworkReply::Error::Connection;
 						continue; // Continue if connection error
