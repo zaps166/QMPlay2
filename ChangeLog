@@ -1,3 +1,9 @@
+Changes in QMPlay2 build xx.xx.x:
+	- drop support for Qt < 5.6, CMake < 3.1, and FFmpeg < 2.5,
+	- remove already fixed Qt bug workarounds,
+	- use Qt5 JSON parser instead of Json11,
+	- use "QCommandLineParser",
+
 Changes in QMPlay2 build 17.10.04:
 	- command line seeking bugfix,
 	- update for Wbijam changes,
