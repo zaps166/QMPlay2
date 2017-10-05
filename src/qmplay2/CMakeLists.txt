@@ -118,10 +118,10 @@ set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
-pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+pkg_check_modules(LIBAVFORMAT libavformat>=56.15.102 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=56.13.100 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=54.15.100 REQUIRED)
 
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
