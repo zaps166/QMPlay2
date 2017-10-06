@@ -20,7 +20,7 @@ else()
 endif()
 
 find_package(Qt5Widgets 5.6 REQUIRED)
-if(Qt5Widgets_VERSION VERSION_LESS 5.6.1)
+if(Qt5Widgets_VERSION VERSION_LESS 5.6.3)
     message(AUTHOR_WARNING "Qt5 >= 5.6.3, >= 5.9.1 is recommended")
 endif()
 
