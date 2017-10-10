@@ -416,7 +416,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(decoderVAAPIEB);
 #endif
 #ifdef QMPlay2_DXVA2
-	layout->addWidget(decoderDXVA2EB);
+	if (decoderDXVA2EB)
+		layout->addWidget(decoderDXVA2EB);
 #endif
 #ifdef QMPlay2_VTB
 	layout->addWidget(decoderVTBEB);
