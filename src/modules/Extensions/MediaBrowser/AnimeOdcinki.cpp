@@ -145,10 +145,10 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 				const bool isVk       = (name == "vk");
 				const bool isVIDFile  = (name == "vidfile");
 
-				if (isGoogle || isOpenload)
-					ret.insert(ret.end(), std::move(json));
-				else if (isVk || isVIDFile)
+				if (isOpenload || isVIDFile)
 					ret.push_back(std::move(json));
+				else if (isVk || isGoogle)
+					ret.insert(ret.begin(), std::move(json));
 			}
 		}
 
@@ -339,6 +339,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 			};
 
 			const auto getDownloadButtonUrl = [&](bool allowGDriveRawFile) {
+				// Might not work due to linkexpander problems.
 				const QByteArray adFlyUrl = getAdFlyUrl(reply).toPercentEncoding();
 				if (!adFlyUrl.isEmpty() && net.startAndWait(netReply, g_linkexpander, "url=" + adFlyUrl, NetworkAccess::UrlEncoded, 3))
 				{
@@ -346,7 +347,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 					const int idx = data.indexOf("<");
 					if (idx > -1)
 					{
-						const QString &animeUrl = data.left(idx);
+						const QString animeUrl = data.left(idx);
 						if (!allowGDriveRawFile || !animeUrl.contains("docs.google.com"))
 							hasStreamUrl = getStreamUrl(animeUrl);
 						else if (net.startAndWait(netReply, animeUrl))
