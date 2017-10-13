@@ -145,8 +145,9 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 				const bool isOpenload = (name == "openload");
 				const bool isVk       = (name == "vk");
 				const bool isVIDFile  = (name == "vidfile");
+				const bool isTune     = (name == "tune");
 
-				if (isOpenload || isVIDFile)
+				if (isOpenload || isVIDFile || isTune)
 					ret.push_back(json.object());
 				else if (isVk || isGoogle)
 					ret.insert(ret.begin(), json.object());
