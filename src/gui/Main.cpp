@@ -283,6 +283,7 @@ static QList<QPair<QString, QString>> parseArguments(const QCommandLineParser &p
 	QString urlLines;
 	for (const QString &url : parser.positionalArguments())
 		urlLines += fileArg(url) + "\n";
+	urlLines.chop(1);
 	if (!urlLines.isEmpty())
 	{
 		bool found = false;
