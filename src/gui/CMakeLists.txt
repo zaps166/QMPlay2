@@ -40,6 +40,7 @@ set(GUI_HDR
     ShortcutHandler.hpp
     KeyBindingsDialog.hpp
     Updater.hpp
+    RepeatMode.hpp
 )
 
 set(GUI_SRC

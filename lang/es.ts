@@ -2633,6 +2633,10 @@ QMPlay2 will not display icons!</source>
         <source>Random in group and repea&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Stop playback after every file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ResultsYoutube</name>

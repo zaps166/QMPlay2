@@ -362,7 +362,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 
 	RepeatMode repeatMode = RepeatNormal;
 	if (settings.getBool("RestoreRepeatMode"))
-		repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
+		repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatStopAfter);
 	menuBar->player->repeat->repeatActions[repeatMode]->trigger();
 
 	if (settings.getBool("RestoreVideoEqualizer"))

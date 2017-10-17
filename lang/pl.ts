@@ -2638,6 +2638,10 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
         <source>Random in group and repea&amp;t</source>
         <translation>Z&amp;apętlone losowe odtwarzanie grupy</translation>
     </message>
+    <message>
+        <source>&amp;Stop playback after every file</source>
+        <translation>&amp;Zatrzymaj odtwarzanie po każdym pliku</translation>
+    </message>
 </context>
 <context>
     <name>ResultsYoutube</name>
