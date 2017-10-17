@@ -2669,6 +2669,10 @@ QMPlay2 zeigt keine Icons an!</translation>
         <source>Random in group and repea&amp;t</source>
         <translation>Zufällige Wiedergabe der Gruppe und wiederholen</translation>
     </message>
+    <message>
+        <source>&amp;Stop playback after every file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ResultsYoutube</name>
