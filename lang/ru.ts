@@ -934,11 +934,11 @@
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически удалять негруппированные записи</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>Скрыть метаданные исполнителя</translation>
     </message>
 </context>
 <context>
@@ -1645,25 +1645,27 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation type="unfinished"></translation>
+        <translation>Попробуйте автоматически переподключать потоки при ошибке</translation>
     </message>
     <message>
         <source>Always enabled on Wayland and Android platforms.
 Set visualizations to OpenGL mode if enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Всегда включен на платформах Wayland и Android.
+Установите отображение в режим OpenGL включено.</translation>
     </message>
     <message>
         <source>Always enabled on Wayland platform.
 Recommended to use when OpenGL video output is in RTT mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Всегда включен на платформе Wayland.
+Рекомендуется использовать, когда видеовыход OpenGL находится в режиме RTT.</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Декодирование видео MPEG4</translation>
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключите, если у вас возникнут проблемы с декодированием видео MPEG4 (DivX5)</translation>
     </message>
 </context>
 <context>
@@ -1830,7 +1832,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation type="unfinished">&amp;Настройка воспроизведения</translation>
+        <translation>&amp;Настройка воспроизведения</translation>
     </message>
 </context>
 <context>
@@ -2131,7 +2133,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>Точный поиск</translation>
     </message>
 </context>
 <context>
@@ -2230,11 +2232,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Stop after</source>
-        <translation type="unfinished">&amp;Остановить после этого</translation>
+        <translation>&amp;Остановить после этого</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Предыдущий &amp;кадр</translation>
     </message>
 </context>
 <context>
@@ -2348,7 +2350,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>Вы уверены, что хотите удалить записи без группы?</translation>
+        <translation>Удалить негруппированные записи?</translation>
     </message>
 </context>
 <context>
@@ -2453,7 +2455,23 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>QMPlay2 has been updated to version</source>
-        <translation>QMPlay2 был обновлен ​​до версии</translation>
+        <translation>QMPlay2 был обновлен до версии</translation>
+    </message>
+    <message>
+        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
+        <translation>QMPlay2 не был обновлен. Хотите запустить обновление (рекомендуется)?</translation>
+    </message>
+    <message>
+        <source>QtSvg icon engine plugin doesn&apos;t exist.
+QMPlay2 will not scale up icons!</source>
+        <translation>Плагин для значков QtSvg не установлен.
+QMPlay2 не будет отображать значки!</translation>
+    </message>
+    <message>
+        <source>QtSvg module doesn&apos;t exist.
+QMPlay2 will not display icons!</source>
+        <translation>Модуль QtSvg не установлен.
+QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>  Parameters list:
@@ -2487,20 +2505,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
      -prev       - воспроизвести предыдущий в списке
      -quit       - завершить работу приложений</translation>
     </message>
-    <message>
-        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 не был обновлен. Хотите запустить обновление (рекомендуется)?</translation>
-    </message>
-    <message>
-        <source>QtSvg icon engine plugin doesn&apos;t exist.
-QMPlay2 will not scale up icons!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>
@@ -2526,74 +2530,74 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>QMPlay2 radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>Радиостанции QMPlay2</translation>
     </message>
     <message>
         <source>My radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>Мои радиостанции</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить выбранную радиостанцию</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить выбранную радиостанцию</translation>
     </message>
     <message>
         <source>Radio Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Обзор радио</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Воспроизведение</translation>
+        <translation>Воспроизведение</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Очередь</translation>
+        <translation>Очередь</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить мою радиостанцию</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить</translation>
     </message>
     <message>
         <source>Open radio website</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть веб-сайт радио</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактирование выбранной радиостанции</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Радиостанция с заданным именем уже существует!</translation>
     </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация о потоке</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Страна</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Теги</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Рейтинг</translation>
     </message>
 </context>
 <context>
@@ -2826,7 +2830,8 @@ QMPlay2 will not display icons!</source>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation type="unfinished"></translation>
+        <translation>Медленный, но более точный поиск.
+Частично проверенное не влияет на поиск на слайдере.</translation>
     </message>
 </context>
 <context>
