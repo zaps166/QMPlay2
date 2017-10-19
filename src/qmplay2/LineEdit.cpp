@@ -18,59 +18,21 @@
 
 #include <LineEdit.hpp>
 
-
 #include <QMPlay2Core.hpp>
-#include <Functions.hpp>
 
-#include <QResizeEvent>
-
-LineEditButton::LineEditButton()
-{
-	const QSize iconSize(16, 16);
-	setToolTip(tr("Clear"));
-	setPixmap(Functions::getPixmapFromIcon(QMPlay2Core.getIconFromTheme("edit-clear"), iconSize, this));
-	resize(iconSize);
-	setCursor(Qt::ArrowCursor);
-}
-
-void LineEditButton::mousePressEvent(QMouseEvent *e)
-{
-	if (e->button() & Qt::LeftButton)
-		emit clicked();
-}
-
-/**/
+#include <QAction>
 
 LineEdit::LineEdit(QWidget *parent)
 	: QLineEdit(parent)
 {
-	connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(textChangedSlot(const QString &)));
-	connect(&b, SIGNAL(clicked()), this, SLOT(clearText()));
-	setMinimumWidth(b.width() * 2.5);
-	setTextMargins(0, 0, b.width() * 1.5, 0);
-	b.setParent(this);
-	b.hide();
+	QAction *clearAct = addAction(QMPlay2Core.getIconFromTheme("edit-clear"), TrailingPosition);
+	connect(clearAct, &QAction::triggered, this, &LineEdit::clearText);
+	connect(this, &LineEdit::textChanged, this, [=](const QString &text) {
+		clearAct->setVisible(!text.isEmpty());
+	});;
+	clearAct->setVisible(false);
 }
 
-void LineEdit::resizeEvent(QResizeEvent *e)
-{
-	b.move(e->size().width() - b.width() * 1.5, e->size().height() / 2 - b.height() / 2);
-}
-void LineEdit::mousePressEvent(QMouseEvent *e)
-{
-	if (!b.underMouse())
-		QLineEdit::mousePressEvent(e);
-}
-void LineEdit::mouseMoveEvent(QMouseEvent *e)
-{
-	if (!b.underMouse())
-		QLineEdit::mouseMoveEvent(e);
-}
-
-void LineEdit::textChangedSlot(const QString &str)
-{
-	b.setVisible(!str.isEmpty());
-}
 void LineEdit::clearText()
 {
 	clear();
