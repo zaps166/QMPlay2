@@ -67,7 +67,7 @@ QString Datmusic::getQMPlay2Url(const QString &text) const
 
 NetworkReply *Datmusic::getSearchReply(const QString &text, const qint32 page)
 {
-	return m_net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text.toUtf8().toPercentEncoding().constData()).arg(page - 1), QByteArray(), g_referUrlRawHeader);
+	return m_net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text).arg(page - 1), QByteArray(), g_referUrlRawHeader);
 }
 MediaBrowserCommon::Description Datmusic::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
