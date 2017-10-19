@@ -45,6 +45,8 @@ void Datmusic::prepareWidget(QTreeWidget *treeW)
 {
 	MediaBrowserCommon::prepareWidget(treeW);
 
+	treeW->sortByColumn(0, Qt::AscendingOrder);
+
 	treeW->headerItem()->setText(0, tr("Title"));
 	treeW->headerItem()->setText(1, tr("Artist"));
 	treeW->headerItem()->setText(2, tr("Length"));
