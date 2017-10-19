@@ -1118,7 +1118,7 @@
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation> &amp;Скрыть меню</translation>
+        <translation>&amp;Скрыть меню</translation>
     </message>
     <message>
         <source>New window</source>
@@ -2640,7 +2640,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Останавливать воспроизведение после каждого файла</translation>
     </message>
 </context>
 <context>
