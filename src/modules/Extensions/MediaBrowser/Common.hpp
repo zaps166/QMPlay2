@@ -71,6 +71,7 @@ public:
 
 	virtual void prepareWidget(QTreeWidget *treeW);
 
+	virtual void finalize();
 
 	virtual QString getQMPlay2Url(const QString &text) const = 0;
 

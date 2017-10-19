@@ -50,6 +50,12 @@ void Datmusic::prepareWidget(QTreeWidget *treeW)
 
 	Functions::setHeaderSectionResizeMode(treeW->header(), 2, QHeaderView::ResizeToContents);
 }
+void Datmusic::finalize()
+{
+	for (const QString &url : m_urlNames)
+		QMPlay2Core.addNameForUrl(url, QString());
+	m_urlNames.clear();
+}
 
 QString Datmusic::getQMPlay2Url(const QString &text) const
 {
@@ -72,8 +78,10 @@ MediaBrowserCommon::Description Datmusic::addSearchResults(const QByteArray &rep
 		if (entry.empty())
 			continue;
 
+		const QString url = entry["download"].string_value();
+
 		QTreeWidgetItem *tWI = new QTreeWidgetItem(treeW);
-		tWI->setData(0, Qt::UserRole, entry["download"].string_value());
+		tWI->setData(0, Qt::UserRole, url);
 		tWI->setIcon(0, datmusicIcon);
 
 		tWI->setText(0, entry["title"].string_value());
@@ -83,6 +91,9 @@ MediaBrowserCommon::Description Datmusic::addSearchResults(const QByteArray &rep
 		tWI->setToolTip(1, tWI->text(1));
 
 		tWI->setText(2, Functions::timeToStr(entry["duration"].int_value()));
+
+		QMPlay2Core.addNameForUrl(getQMPlay2Url(url), tWI->text(1) + " - " + tWI->text(0), false);
+		m_urlNames.append(url);
 	}
 
 	return {};

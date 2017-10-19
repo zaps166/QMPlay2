@@ -292,13 +292,11 @@ void Radio::on_removeMyRadioStationButton_clicked()
 
 void Radio::on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-	if (item)
-		emit QMPlay2Core.processParam("open", "QMPlay2EntryName://{" + item->data(Qt::UserRole).toString() + "}" + item->text());
+	firstTabItemDoubleClicked(item);
 }
 void Radio::on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-	if (item)
-		emit QMPlay2Core.processParam("open", "QMPlay2EntryName://{" + item->data(Qt::UserRole).toString() + "}" + item->text());
+	firstTabItemDoubleClicked(item);
 }
 
 void Radio::on_searchByComboBox_activated(int idx)
@@ -375,24 +373,34 @@ void Radio::radioBrowserEnqueue()
 	if (index.isValid())
 		radioBrowserPlayOrEnqueue(index, "enqueue");
 }
-void Radio::radioBrowserEdit()
-{
-	const QModelIndex index = ui->radioView->currentIndex();
-	if (index.isValid())
-		QDesktopServices::openUrl(m_radioBrowserModel->getEditUrl(index));
-}
 void Radio::radioBrowserOpenHomePage()
 {
 	const QModelIndex index = ui->radioView->currentIndex();
 	if (index.isValid())
 		QDesktopServices::openUrl(m_radioBrowserModel->getHomePageUrl(index));
 }
+void Radio::radioBrowserEdit()
+{
+	const QModelIndex index = ui->radioView->currentIndex();
+	if (index.isValid())
+		QDesktopServices::openUrl(m_radioBrowserModel->getEditUrl(index));
+}
+
+void Radio::firstTabItemDoubleClicked(QListWidgetItem *item)
+{
+	if (item)
+	{
+		QMPlay2Core.addNameForUrl(item->data(Qt::UserRole).toString(), item->text());
+		emit QMPlay2Core.processParam("open", item->data(Qt::UserRole).toString());
+	}
+}
 
 void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param)
 {
 	const QString title = m_radioBrowserModel->getName(index);
 	const QString url = m_radioBrowserModel->getUrl(index).toString();
-	emit QMPlay2Core.processParam(param, "QMPlay2EntryName://{" + url + "}" + title);
+	QMPlay2Core.addNameForUrl(url, title);
+	emit QMPlay2Core.processParam(param, url);
 }
 
 void Radio::addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item)

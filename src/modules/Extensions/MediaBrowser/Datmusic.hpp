@@ -33,6 +33,7 @@ public:
 
 	void prepareWidget(QTreeWidget *treeW) override;
 
+	void finalize() override;
 
 	QString getQMPlay2Url(const QString &text) const override;
 
@@ -52,4 +53,7 @@ public:
 	QAction *getAction() const override;
 
 	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override;
+
+private:
+	QStringList m_urlNames;
 };

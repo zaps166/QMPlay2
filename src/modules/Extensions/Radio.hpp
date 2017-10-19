@@ -79,6 +79,8 @@ private slots:
 	void radioBrowserEdit();
 
 private:
+	void firstTabItemDoubleClicked(QListWidgetItem *item);
+
 	void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
 	void addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item = nullptr);

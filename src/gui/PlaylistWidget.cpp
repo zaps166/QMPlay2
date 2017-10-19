@@ -304,17 +304,9 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		if (ioCtrl.isAborted())
 			break;
 
-		QString url, entryName;
-		{
-			//Get the default entry name - it'll be used if doesn't exist in stream
-			QString addressPrefixName;
-			Functions::splitPrefixAndUrlIfHasPluginPrefix(urls.at(i), &addressPrefixName, &url, &entryName);
-			if (addressPrefixName != "QMPlay2EntryName")
-			{
-				url = Functions::Url(urls.at(i));
-				entryName.clear();
-			}
-		}
+		const QString entryName = QMPlay2Core.getNameForUrl(urls.at(i)); // Get the default entry name - it'll be used if doesn't exist in stream
+
+		QString url = Functions::Url(urls.at(i));
 
 		int insertChildAt = -1;
 		if (existingEntries)

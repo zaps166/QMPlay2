@@ -141,16 +141,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
 		return;
 	/* If the entry exists, find and play it */
 	const QList<QTreeWidgetItem *> items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
-
-	QString url = Functions::Url(_url);
-	{
-		//Extract real URL if it also contains default entry name
-		QString addressPrefixName, url2;
-		Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &addressPrefixName, &url2, nullptr);
-		if (addressPrefixName == "QMPlay2EntryName")
-			url = url2;
-	}
-
+	const QString url = Functions::Url(_url);
 	for (QTreeWidgetItem *item : items)
 	{
 		QString itemUrl = item->data(0, Qt::UserRole).toString();
