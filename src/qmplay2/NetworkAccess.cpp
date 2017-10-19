@@ -112,7 +112,7 @@ private:
 		else
 		{
 			AVDictionary *options = nullptr;
-			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
+			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
 			av_dict_set(&options, "seekable", "0", 0);
 			if (!m_postData.isNull())
 			{
@@ -321,7 +321,7 @@ NetworkReply::~NetworkReply()
 
 /**/
 
-const char *const NetworkAccess::UrlEncoded = "Content-Type: application/x-www-form-urlencoded; charset=utf-8";
+const char *const NetworkAccess::UrlEncoded = "Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n";
 
 NetworkAccess::NetworkAccess(QObject *parent) :
 	QObject(parent),

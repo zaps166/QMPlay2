@@ -180,6 +180,9 @@ public:
 	bool hasResource(const QString &url) const;
 	QByteArray getResource(const QString &url);
 
+	void addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse = true);
+	QByteArray getRawheaders(const QString &url);
+
 	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
 
 private slots:
@@ -211,7 +214,7 @@ private:
 	{
 		mutable QMutex mutex;
 		QHash<QString, QPair<QByteArray, bool>> data;
-	} cookies, resources;
+	} cookies, resources, rawHeaders;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

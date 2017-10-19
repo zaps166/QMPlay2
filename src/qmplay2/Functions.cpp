@@ -781,13 +781,14 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 	return doWrap;
 }
 
-QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool icy, const QByteArray &userAgent)
+QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool setRawHeaders, bool icy, const QByteArray &userAgent)
 {
 	if (url.startsWith("file://"))
 		url.remove(0, 7);
 	else
 	{
 		const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
+		const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawheaders(url) : QByteArray();
 
 		if (url.startsWith("mms:"))
 			url.insert(3, 'h');
@@ -802,6 +803,8 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 
 		if (!cookies.isEmpty())
 			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
+		if (!rawHeaders.isEmpty())
+			av_dict_set(&options, "headers", rawHeaders, 0);
 
 #if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(56, 36, 100)
 		av_dict_set(&options, "reconnect", "1", 0);
