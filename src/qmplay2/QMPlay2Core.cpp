@@ -515,6 +515,23 @@ QByteArray QMPlay2CoreClass::getResource(const QString &url)
 	return getCookiesOrResource(url, resources.data);
 }
 
+void QMPlay2CoreClass::addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse)
+{
+	if (!url.isEmpty())
+	{
+		QMutexLocker locker(&rawHeaders.mutex);
+		if (data.isEmpty())
+			rawHeaders.data.remove(url);
+		else
+			rawHeaders.data[url] = {data, removeAfterUse};
+	}
+}
+QByteArray QMPlay2CoreClass::getRawheaders(const QString &url)
+{
+	QMutexLocker locker(&rawHeaders.mutex);
+	return getCookiesOrResource(url, rawHeaders.data);
+}
+
 void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue)
 {
 	if (!entries.isEmpty())
