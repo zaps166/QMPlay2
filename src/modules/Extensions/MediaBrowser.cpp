@@ -23,6 +23,9 @@
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 
+#ifdef USE_DATMUSIC
+	#include <MediaBrowser/Datmusic.hpp>
+#endif
 #ifdef USE_PROSTOPLEER
 	#include <MediaBrowser/ProstoPleer.hpp>
 #endif
@@ -329,6 +332,9 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_net(this),
 	m_visible(false), m_first(true), m_overrideVisibility(false)
 {
+#ifdef USE_DATMUSIC
+	m_mediaBrowsers.emplace_back(new Datmusic(m_net));
+#endif
 #ifdef USE_PROSTOPLEER
 	m_mediaBrowsers.emplace_back(new ProstoPleer(m_net));
 #endif
@@ -564,6 +570,7 @@ void MediaBrowser::search()
 	{
 		switch (m_mediaBrowser->completerMode())
 		{
+			case MediaBrowserCommon::CompleterMode::None:
 			case MediaBrowserCommon::CompleterMode::Continuous:
 				searchW = m_searchE;
 				name = m_searchE->text();
