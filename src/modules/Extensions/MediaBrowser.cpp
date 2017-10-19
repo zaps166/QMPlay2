@@ -145,7 +145,9 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 			m_menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 			m_menu.addSeparator();
 		}
-		const QString name = tWI->text(0);
+		QString name = tWI->data(0, Qt::UserRole + 1).toString();
+		if (name.isEmpty())
+			name = tWI->text(0);
 		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
 			QString addressPrefixName, url, param;

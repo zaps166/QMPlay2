@@ -81,21 +81,25 @@ MediaBrowserCommon::Description Datmusic::addSearchResults(const QByteArray &rep
 		if (entry.isEmpty())
 			continue;
 
+		const QString title = entry["title"].toString();
+		const QString artist = entry["artist"].toString();
 		const QString url = entry["download"].toString();
+		const QString fullName = artist + " - " + title;
 
 		QTreeWidgetItem *tWI = new QTreeWidgetItem(treeW);
+		tWI->setData(0, Qt::UserRole + 1, fullName);
 		tWI->setData(0, Qt::UserRole, url);
 		tWI->setIcon(0, datmusicIcon);
 
-		tWI->setText(0, entry["title"].toString());
+		tWI->setText(0, title);
 		tWI->setToolTip(0, tWI->text(0));
 
-		tWI->setText(1, entry["artist"].toString());
+		tWI->setText(1, artist);
 		tWI->setToolTip(1, tWI->text(1));
 
 		tWI->setText(2, Functions::timeToStr(entry["duration"].toInt()));
 
-		QMPlay2Core.addNameForUrl(getQMPlay2Url(url), tWI->text(1) + " - " + tWI->text(0), false);
+		QMPlay2Core.addNameForUrl(getQMPlay2Url(url), fullName, false);
 		m_urlNames.append(url);
 	}
 
