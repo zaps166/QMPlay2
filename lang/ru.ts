@@ -996,15 +996,15 @@
     </message>
     <message>
         <source>Opens and plays specified &lt;url&gt;.</source>
-        <translation>Открывает и воспроизводит указанный &lt;адрес&gt;.</translation>
+        <translation>Открывает и воспроизводит указанный &lt;url&gt;.</translation>
     </message>
     <message>
         <source>Adds specified &lt;url&gt; to playlist.</source>
-        <translation>Добавляет указанный &lt;адрес&gt; в список воспроизведения</translation>
+        <translation>Добавляет указанный &lt;url&gt; в список воспроизведения.</translation>
     </message>
     <message>
         <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation>Запускает приложение с заданным &lt;Профилем&gt;.</translation>
+        <translation>Запускает приложение с заданным &lt;profile name&gt;.</translation>
     </message>
     <message>
         <source>Sets specified volume.</source>
@@ -1181,7 +1181,7 @@
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation> &amp;Скрыть меню</translation>
+        <translation>&amp;Скрыть меню</translation>
     </message>
     <message>
         <source>New window</source>
@@ -2671,7 +2671,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Останавливать воспроизведение после каждого файла</translation>
     </message>
 </context>
 <context>
