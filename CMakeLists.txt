@@ -58,7 +58,7 @@ if(NOT WIN32 AND NOT APPLE)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 endif()
 
-option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
+option(USE_PROSTOPLEER "Build with ProstoPleer support" OFF)
 add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
 option(USE_SOUNDCLOUD "Build with SoundCloud support" OFF)
 add_feature_info(SoundCloud USE_SOUNDCLOUD "Build with SoundCloud support")
