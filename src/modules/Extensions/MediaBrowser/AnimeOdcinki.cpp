@@ -29,8 +29,8 @@
 
 using EmbeddedPlayers = std::vector<QJsonObject>;
 
-constexpr char g_url[] = "https://a-o.ninja/anime/";
-constexpr char g_linkexpander[] = "http://www.linkexpander.com/get_url.php";
+constexpr const char *g_url = "https://a-o.ninja/anime/";
+constexpr const char *g_linkexpander = "http://www.linkexpander.com/get_url.php";
 
 static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeOdcinki::AnimePair *episodeImgDescr)
 {

@@ -32,8 +32,8 @@
 #include <QAction>
 #include <QUrl>
 
-constexpr char client_id[] = "2add0f709fcfae1fd7a198ec7573d2d4";
-constexpr char g_url[]  = "http://api.soundcloud.com";
+constexpr const char *client_id = "2add0f709fcfae1fd7a198ec7573d2d4";
+constexpr const char *g_url = "http://api.soundcloud.com";
 
 /**/
 

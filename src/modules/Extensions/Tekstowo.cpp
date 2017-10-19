@@ -24,7 +24,7 @@
 
 /**/
 
-constexpr char g_tekstowoUrl[] = "http://www.tekstowo.pl/";
+constexpr const char *g_tekstowoUrl = "http://www.tekstowo.pl/";
 
 static inline QString getTekstowoSearchUrl(const QString &artist, const QString &title)
 {

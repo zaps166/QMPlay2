@@ -31,7 +31,7 @@
 #include <QJsonArray>
 #include <QFile>
 
-constexpr char g_name[] = "YouTubeDL";
+constexpr const char *g_name = "YouTubeDL";
 
 static QReadWriteLock g_lock;
 

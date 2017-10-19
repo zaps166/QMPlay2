@@ -30,8 +30,8 @@
 #include <QJsonArray>
 #include <QAction>
 
-constexpr char g_url[]  = "http://api.datmusic.xyz";
-constexpr char g_referUrlRawHeader[] = "Referer: https://datmusic.xyz/\r\n";
+constexpr const char *g_url  = "http://api.datmusic.xyz";
+constexpr const char *g_referUrlRawHeader = "Referer: https://datmusic.xyz/\r\n";
 
 /**/
 

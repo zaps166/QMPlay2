@@ -48,7 +48,7 @@
 
 #define YOUTUBE_URL "https://www.youtube.com"
 
-constexpr char g_cantFindTheTitle[] = "(Can't find the title)";
+constexpr const char *g_cantFindTheTitle = "(Can't find the title)";
 static QMap<int, QString> g_itagArr;
 
 static inline QString toPercentEncoding(const QString &txt)

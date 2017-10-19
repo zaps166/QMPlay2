@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-constexpr char g_inneUrl[] = "http://www.inne.wbijam.pl/";
+constexpr const char *g_inneUrl = "http://www.inne.wbijam.pl/";
 
 static inline QString getName(const Wbijam::AnimeTuple &tuple)
 {
