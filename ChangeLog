@@ -1,8 +1,10 @@
-Changes in QMPlay2 build xx.xx.x:
+Changes in QMPlay2 build 17.10.19:
 	- drop support for Qt < 5.6, CMake < 3.1, and FFmpeg < 2.5,
 	- add option to stop playback after every file,
 	- remove already fixed Qt bug workarounds,
+	- add Datmusic (VK) as Pleer replacement,
 	- use Qt5 JSON parser instead of Json11,
+	- simplify LineEdit using Qt 5.2 API,
 	- use "QCommandLineParser",
 
 Changes in QMPlay2 build 17.10.04:
