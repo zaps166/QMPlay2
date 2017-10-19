@@ -106,17 +106,23 @@ QString Datmusic::getWebpageUrl(const QString &text) const
 
 MediaBrowserCommon::CompleterMode Datmusic::completerMode() const
 {
-	return CompleterMode::None;
+	return CompleterMode::Continuous;
 }
 NetworkReply *Datmusic::getCompleterReply(const QString &text)
 {
-	Q_UNUSED(text)
-	return nullptr;
+	return m_net.start("https://my-free-mp3.net/api/autocomplete.php", "query=" + text.toUtf8().toPercentEncoding(), NetworkAccess::UrlEncoded);
 }
 QStringList Datmusic::getCompletions(const QByteArray &reply)
 {
-	Q_UNUSED(reply)
-	return {};
+	const QJsonArray jsonArray = QJsonDocument::fromJson(reply).array();
+	QStringList completions;
+	for (int i = 0; i < jsonArray.count(); ++i)
+	{
+		const QString name = jsonArray[i].toObject()["name"].toString();
+		if (!name.isEmpty())
+			completions += name;
+	}
+	return completions;
 }
 
 QAction *Datmusic::getAction() const
