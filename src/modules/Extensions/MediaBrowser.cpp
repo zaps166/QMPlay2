@@ -423,7 +423,10 @@ MediaBrowser::MediaBrowser(Module &module) :
 	SetModule(module);
 }
 MediaBrowser::~MediaBrowser()
-{}
+{
+	for (const auto &m : m_mediaBrowsers)
+		m->finalize();
+}
 
 bool MediaBrowser::set()
 {
@@ -509,7 +512,10 @@ void MediaBrowser::providerChanged(int idx)
 		if (idx > -1)
 		{
 			if (m_mediaBrowser)
+			{
 				m_mediaBrowser->setCompleterListCallback(nullptr);
+				m_mediaBrowser->finalize();
+			}
 
 			m_searchCB->blockSignals(true);
 			m_searchCB->clear();
@@ -591,6 +597,8 @@ void MediaBrowser::search()
 		m_searchReply->deleteLater();
 	if (m_imageReply)
 		m_imageReply->deleteLater();
+	if (m_mediaBrowser)
+		m_mediaBrowser->finalize();
 	m_resultsW->clear();
 	if (!name.isEmpty())
 	{

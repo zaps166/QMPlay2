@@ -52,14 +52,24 @@ extern "C"
 /**/
 
 template<typename Data>
-static QByteArray getCookiesOrResource(const QString &url, Data &data)
+static void setDataToHash(const QString &url, const QByteArray &value, const bool removeAfterUse, Data &data)
 {
-	auto it = data.find(url);
-	if (it == data.end())
+	QMutexLocker locker(&data.mutex);
+	if (value.isEmpty())
+		data.data.remove(url);
+	else
+		data.data[url] = {value, removeAfterUse};
+}
+template<typename Data>
+static QByteArray getDataFromHash(const QString &url, Data &data)
+{
+	QMutexLocker locker(&data.mutex);
+	auto it = data.data.find(url);
+	if (it == data.data.end())
 		return QByteArray();
 	const QByteArray ret = it.value().first;
 	if (it.value().second)
-		data.erase(it);
+		data.data.erase(it);
 	return ret;
 }
 
@@ -472,30 +482,17 @@ QList<QWidget *> QMPlay2CoreClass::getVideoDeintMethods() const
 void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCookies, const bool removeAfterUse)
 {
 	if (!url.isEmpty())
-	{
-		QMutexLocker locker(&cookies.mutex);
-		if (newCookies.isEmpty())
-			cookies.data.remove(url);
-		else
-			cookies.data[url] = {newCookies, removeAfterUse};
-	}
+		setDataToHash(url, newCookies, removeAfterUse, cookies);
 }
 QByteArray QMPlay2CoreClass::getCookies(const QString &url)
 {
-	QMutexLocker locker(&cookies.mutex);
-	return getCookiesOrResource(url, cookies.data);
+	return getDataFromHash(url, cookies);
 }
 
 void QMPlay2CoreClass::addResource(const QString &url, const QByteArray &data)
 {
 	if (url.length() > 10 && url.startsWith("QMPlay2://"))
-	{
-		QMutexLocker locker(&resources.mutex);
-		if (data.isNull())
-			resources.data.remove(url);
-		else
-			resources.data[url] = {data, false};
-	}
+		setDataToHash(url, data, false, resources);
 }
 void QMPlay2CoreClass::modResource(const QString &url, const bool removeAfterUse)
 {
@@ -511,25 +508,27 @@ bool QMPlay2CoreClass::hasResource(const QString &url) const
 }
 QByteArray QMPlay2CoreClass::getResource(const QString &url)
 {
-	QMutexLocker locker(&resources.mutex);
-	return getCookiesOrResource(url, resources.data);
+	return getDataFromHash(url, resources);
 }
 
 void QMPlay2CoreClass::addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse)
 {
 	if (!url.isEmpty())
-	{
-		QMutexLocker locker(&rawHeaders.mutex);
-		if (data.isEmpty())
-			rawHeaders.data.remove(url);
-		else
-			rawHeaders.data[url] = {data, removeAfterUse};
-	}
+		setDataToHash(url, data, removeAfterUse, rawHeaders);
 }
 QByteArray QMPlay2CoreClass::getRawheaders(const QString &url)
 {
-	QMutexLocker locker(&rawHeaders.mutex);
-	return getCookiesOrResource(url, rawHeaders.data);
+	return getDataFromHash(url, rawHeaders);
+}
+
+void QMPlay2CoreClass::addNameForUrl(const QString &url, const QString &name, const bool removeAfterUse)
+{
+	if (!url.isEmpty())
+		setDataToHash(url, name.toUtf8(), removeAfterUse, namesForUrl);
+}
+QString QMPlay2CoreClass::getNameForUrl(const QString &url)
+{
+	return getDataFromHash(url, namesForUrl);
 }
 
 void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue)
