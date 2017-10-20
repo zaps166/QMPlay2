@@ -24,7 +24,7 @@
 
 class Datmusic final : public MediaBrowserCommon
 {
-	Q_DECLARE_TR_FUNCTIONS(ProstoPleer)
+	Q_DECLARE_TR_FUNCTIONS(Datmusic)
 
 public:
 	Datmusic(NetworkAccess &net);
