@@ -29,7 +29,8 @@ LineEdit::LineEdit(QWidget *parent)
 	connect(clearAct, &QAction::triggered, this, &LineEdit::clearText);
 	connect(this, &LineEdit::textChanged, this, [=](const QString &text) {
 		clearAct->setVisible(!text.isEmpty());
-	});;
+	});
+	clearAct->setToolTip(tr("Clear"));
 	clearAct->setVisible(false);
 }
 

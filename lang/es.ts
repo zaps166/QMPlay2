@@ -1080,7 +1080,7 @@
     </message>
 </context>
 <context>
-    <name>LineEditButton</name>
+    <name>LineEdit</name>
     <message>
         <source>Clear</source>
         <translation>Borrar</translation>
