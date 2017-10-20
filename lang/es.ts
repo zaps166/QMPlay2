@@ -2455,33 +2455,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Longitud</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation type="unfinished">Tasa de bits</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation type="unfinished">Buscar en Prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation type="unfinished">Inténtelo más tarde</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2917,29 +2890,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="unfinished">Género</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Longitud</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

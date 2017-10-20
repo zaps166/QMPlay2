@@ -2458,33 +2458,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Продолжительность</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Битрейт</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Поиск на prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Повторите попытку позже</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2923,29 +2896,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Я-А</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation>Жанр</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Продолжительность</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation>Поиск на SoundCloud</translation>
     </message>
 </context>
 <context>

@@ -26,12 +26,6 @@
 #ifdef USE_DATMUSIC
 	#include <MediaBrowser/Datmusic.hpp>
 #endif
-#ifdef USE_PROSTOPLEER
-	#include <MediaBrowser/ProstoPleer.hpp>
-#endif
-#ifdef USE_SOUNDCLOUD
-	#include <MediaBrowser/SoundCloud.hpp>
-#endif
 #ifdef USE_ANIMEODCINKI
 	#include <MediaBrowser/AnimeOdcinki.hpp>
 #endif
@@ -336,12 +330,6 @@ MediaBrowser::MediaBrowser(Module &module) :
 {
 #ifdef USE_DATMUSIC
 	m_mediaBrowsers.emplace_back(new Datmusic(m_net));
-#endif
-#ifdef USE_PROSTOPLEER
-	m_mediaBrowsers.emplace_back(new ProstoPleer(m_net));
-#endif
-#ifdef USE_SOUNDCLOUD
-	m_mediaBrowsers.emplace_back(new SoundCloud(m_net));
 #endif
 #ifdef USE_ANIMEODCINKI
 	m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));

@@ -5,6 +5,7 @@ Changes in QMPlay2 build 17.10.19:
 	- add Datmusic (VK) as Pleer replacement,
 	- use Qt5 JSON parser instead of Json11,
 	- simplify LineEdit using Qt 5.2 API,
+	- remove SoundCloud and ProstoPleer,
 	- use "QCommandLineParser",
 
 Changes in QMPlay2 build 17.10.04:

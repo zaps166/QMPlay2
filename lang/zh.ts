@@ -2455,33 +2455,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">标题</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">艺术家</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">长度</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation type="unfinished">比特率</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation type="unfinished">搜索于 Prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation type="unfinished">稍候重试</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2917,29 +2890,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">标题</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">艺术家</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="unfinished">流派</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">长度</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

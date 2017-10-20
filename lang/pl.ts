@@ -2458,33 +2458,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Wykonawca</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Wyszukaj w Prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Spróbuj ponownie później</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2923,29 +2896,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Wykonwaca</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation>Gatunek</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation>Wyszukaj w SoundCloud</translation>
     </message>
 </context>
 <context>

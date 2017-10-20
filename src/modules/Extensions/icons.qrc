@@ -1,8 +1,6 @@
 <RCC>
 	<qresource>
 		<file alias="Extensions.svgz">Extensions.svgz</file>
-		<file alias="prostopleer.svgz">MediaBrowser/prostopleer.svgz</file>
-		<file alias="soundcloud">MediaBrowser/soundcloud.png</file>
 		<file alias="downloader.svgz">downloader.svgz</file>
 		<file alias="youtube.svgz">youtube.svgz</file>
 		<file alias="lastfm.svgz">lastfm.svgz</file>
