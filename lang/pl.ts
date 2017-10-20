@@ -410,6 +410,25 @@
     </message>
 </context>
 <context>
+    <name>Datmusic</name>
+    <message>
+        <source>Title</source>
+        <translation>Tytuł</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation>Wykonawca</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation>Długość</translation>
+    </message>
+    <message>
+        <source>Search on Datmusic</source>
+        <translation>Wyszukaj w Datmusic</translation>
+    </message>
+</context>
+<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>

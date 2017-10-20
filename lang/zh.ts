@@ -410,6 +410,25 @@
     </message>
 </context>
 <context>
+    <name>Datmusic</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">标题</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">艺术家</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">长度</translation>
+    </message>
+    <message>
+        <source>Search on Datmusic</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
