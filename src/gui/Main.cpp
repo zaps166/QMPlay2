@@ -18,6 +18,7 @@
 
 #include <Main.hpp>
 
+#include <PanGestureEventFilter.hpp>
 #include <ScreenSaver.hpp>
 #include <VideoFrame.hpp>
 #include <MainWidget.hpp>
@@ -575,6 +576,7 @@ int main(int argc, char *argv[])
 	{
 		qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
+		PanGestureEventFilter::install();
 	}
 
 #ifdef Q_OS_WIN

@@ -30,6 +30,7 @@ set(GUI_HDR
     KeyBindingsDialog.hpp
     Updater.hpp
     RepeatMode.hpp
+    PanGestureEventFilter.hpp
 )
 
 set(GUI_SRC
@@ -71,6 +72,12 @@ set(GUI_FORMS # *.ui files
 set(GUI_RESOURCES
     resources.qrc
 )
+
+if(NOT WIN32)
+    list(APPEND GUI_SRC
+        PanGestureEventFilter.cpp
+    )
+endif()
 
 if(APPLE)
     list(APPEND GUI_HDR
@@ -118,8 +125,11 @@ if(WIN32)
     # updater
     add_definitions(-DUPDATER)
 
-    # screen saver
-    list(APPEND GUI_SRC Windows/ScreenSaver.cpp)
+    # additional Windows sources
+    list(APPEND GUI_SRC
+        Windows/ScreenSaver.cpp
+        Windows/PanGestureEventFilter.cpp
+    )
 elseif(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
