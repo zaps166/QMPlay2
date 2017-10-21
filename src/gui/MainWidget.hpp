@@ -110,7 +110,7 @@ private slots:
 	void lockWidgets(bool);
 
 	void hideDocksSlot();
-	void delayedRestore(QByteArray data);
+	void doRestoreState(const QByteArray &data);
 
 	void uncheckSuspend();
 private:

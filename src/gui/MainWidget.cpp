@@ -701,8 +701,7 @@ void MainWidget::toggleVisibility()
 			showMaximized();
 			if (!isCompactView && !dockWidgetState.isEmpty())
 			{
-				restoreState(dockWidgetState);
-				QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, dockWidgetState));
+				doRestoreState(dockWidgetState);
 				dockWidgetState.clear();
 			}
 			maximized = false;
@@ -1307,10 +1306,23 @@ void MainWidget::hideDocksSlot()
 			hideDocks();
 	}
 }
-void MainWidget::delayedRestore(QByteArray data)
+void MainWidget::doRestoreState(const QByteArray &data)
 {
-	QCoreApplication::processEvents();
-	restoreState(data);
+	if (isMaximized())
+	{
+		setUpdatesEnabled(false);
+		QTimer::singleShot(0, this, [=] {
+			QTimer::singleShot(0, this, [=] {
+				restoreState(data);
+				setUpdatesEnabled(true);
+				repaint();
+			});
+		});
+	}
+	else
+	{
+		restoreState(data);
+	}
 }
 
 void MainWidget::uncheckSuspend()
@@ -1563,10 +1575,7 @@ void MainWidget::showEvent(QShowEvent *)
 		if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
 #endif
 			showMaximized();
-		const QByteArray restoreData = QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState");
-		restoreState(restoreData);
-		if (isMaximized())
-			QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, restoreData));
+		doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
 		wasShow = true;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));
