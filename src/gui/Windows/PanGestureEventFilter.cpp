@@ -54,6 +54,17 @@ namespace User32 {
 	static CloseGestureInfoHandleFunc CloseGestureInfoHandle;
 }
 
+namespace UxTheme {
+	using BeginPanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd);
+	static BeginPanningFeedbackFunc BeginPanningFeedback;
+
+	using UpdatePanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd, LONG lTotalOverpanOffsetX, LONG lTotalOverpanOffsetY, WINBOOL fInInertia);
+	static UpdatePanningFeedbackFunc UpdatePanningFeedback;
+
+	using EndPanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd, WINBOOL fAnimateBack);
+	static EndPanningFeedbackFunc EndPanningFeedback;
+}
+
 class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEventFilter
 {
 	bool eventFilter(QObject *watched, QEvent *event)
@@ -138,12 +149,22 @@ class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEv
 						{
 							m_scrollArea = qobject_cast<QAbstractScrollArea *>(widget->parentWidget());
 							m_lastPos = pos;
+							if (UxTheme::BeginPanningFeedback)
+							{
+								UxTheme::BeginPanningFeedback(winMsg->hwnd);
+								m_xOverPan = m_yOverPan = 0;
+							}
 						}
 					}
 					else if (gi.dwID == GID_END)
 					{
 						m_scrollArea.clear();
 						m_lastPos = QPoint();
+						if (UxTheme::EndPanningFeedback)
+						{
+							UxTheme::EndPanningFeedback(winMsg->hwnd, true);
+							m_xOverPan = m_yOverPan = 0;
+						}
 					}
 					else if (m_scrollArea)
 					{
@@ -152,8 +173,33 @@ class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEv
 						QScrollBar *verticalScrollBar = m_scrollArea->verticalScrollBar();
 						QScrollBar *horizontalScrollBar = m_scrollArea->horizontalScrollBar();
 
-						verticalScrollBar->setValue(verticalScrollBar->value() + diff.y());
-						horizontalScrollBar->setValue(horizontalScrollBar->value() + diff.x());
+						if (m_xOverPan == 0)
+							horizontalScrollBar->setValue(horizontalScrollBar->value() + diff.x());
+						if (m_yOverPan == 0)
+							verticalScrollBar->setValue(verticalScrollBar->value() + diff.y());
+
+						if (UxTheme::UpdatePanningFeedback)
+						{
+							const auto calcOverPan = [](const QScrollBar *scrollBar, int &overPan, const int diff) {
+								if (scrollBar->minimum() != scrollBar->maximum() && (scrollBar->value() == scrollBar->minimum() || scrollBar->value() == scrollBar->maximum()))
+								{
+									const bool isPositive = (overPan > 0);
+									const bool isNegative = (overPan < 0);
+									overPan -= diff;
+									if ((isPositive && overPan < 0) || (isNegative && overPan > 0))
+										overPan = 0;
+								}
+								else
+								{
+									overPan = 0;
+								}
+							};
+							if (horizontalScrollBar->minimum() != horizontalScrollBar->maximum())
+								calcOverPan(horizontalScrollBar, m_xOverPan, diff.x());
+							if (verticalScrollBar->minimum() != verticalScrollBar->maximum())
+								calcOverPan(verticalScrollBar, m_yOverPan, diff.y());
+							UxTheme::UpdatePanningFeedback(winMsg->hwnd, m_xOverPan, m_yOverPan, gi.dwFlags & GF_INERTIA);
+						}
 
 						m_lastPos = pos;
 					}
@@ -167,6 +213,7 @@ class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEv
 
 	QSet<QAbstractScrollArea *> m_installedGestures;
 	QPointer<QAbstractScrollArea> m_scrollArea;
+	int m_xOverPan = 0, m_yOverPan = 0;
 	QPoint m_lastPos;
 };
 
@@ -191,6 +238,13 @@ void PanGestureEventFilter::install()
 		User32::CloseGestureInfoHandle = (User32::CloseGestureInfoHandleFunc)user32.resolve("CloseGestureInfoHandle");
 		if (User32::UnregisterTouchWindow && User32::SetGestureConfig && User32::GetGestureInfo && User32::CloseGestureInfoHandle)
 		{
+			QLibrary uxtheme("uxtheme");
+			if (uxtheme.load())
+			{
+				UxTheme::BeginPanningFeedback = (UxTheme::BeginPanningFeedbackFunc)uxtheme.resolve("BeginPanningFeedback");
+				UxTheme::UpdatePanningFeedback = (UxTheme::UpdatePanningFeedbackFunc)uxtheme.resolve("UpdatePanningFeedback");
+				UxTheme::EndPanningFeedback = (UxTheme::EndPanningFeedbackFunc)uxtheme.resolve("EndPanningFeedback");
+			}
 			PanGestureEventFilterPriv *panGestureEventFilter = new PanGestureEventFilterPriv;
 			qApp->installNativeEventFilter(panGestureEventFilter);
 			qApp->installEventFilter(panGestureEventFilter);
