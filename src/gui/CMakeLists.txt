@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 project(QMPlay2)
 
+if(WIN32)
+    find_package(Qt5WinExtras 5.6 REQUIRED)
+endif()
+
 set(GUI_HDR
     Main.hpp
     MenuBar.hpp
@@ -187,6 +191,7 @@ target_link_libraries(${PROJECT_NAME}
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     mark_as_advanced(CUSTOM_GUI_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} Qt5::WinExtras)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")

@@ -38,6 +38,10 @@ class PlaylistDock;
 class SettingsWidget;
 class QMPlay2Extensions;
 
+#ifdef Q_OS_WIN
+	class QWinTaskbarProgress;
+#endif
+
 class MainWidget final : public QMainWindow
 {
 	friend class QMPlay2GUIClass;
@@ -125,6 +129,10 @@ private:
 
 	bool getFullScreen() const;
 
+#ifdef Q_OS_WIN
+	void setWindowsTaskBarFeatures();
+#endif
+
 	void keyPressEvent(QKeyEvent *) override;
 	void mouseMoveEvent(QMouseEvent *) override;
 	void leaveEvent(QEvent *) override;
@@ -176,4 +184,8 @@ private:
 	QAction *lockWidgetsAct;
 
 	Updater updater;
+
+#ifdef Q_OS_WIN
+	QWinTaskbarProgress *m_taskBarProgress = nullptr;
+#endif
 };

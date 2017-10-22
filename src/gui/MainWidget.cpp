@@ -35,6 +35,12 @@
 	#include <QScreen>
 	#include <QWindow>
 #endif
+#ifdef Q_OS_WIN
+	#include <QWinThumbnailToolButton>
+	#include <QWinThumbnailToolBar>
+	#include <QWinTaskbarProgress>
+	#include <QWinTaskbarButton>
+#endif
 #include <qevent.h>
 
 /* QMPlay2 gui */
@@ -565,6 +571,10 @@ void MainWidget::playStateChanged(bool b)
 		menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
 		menuBar->player->togglePlay->setText(tr("&Play"));
 	}
+#ifdef Q_OS_WIN
+	if (m_taskBarProgress)
+		m_taskBarProgress->setPaused(!b);
+#endif
 	emit QMPlay2Core.playStateChanged(playC.isPlaying() ? (b ? "Playing" : "Paused") : "Stopped");
 }
 
@@ -577,8 +587,7 @@ void MainWidget::volUpDown()
 }
 void MainWidget::toggleMuteIcon()
 {
-	if (QAction *toggleMuteAct = qobject_cast<QAction *>(sender()))
-		toggleMuteAct->setIcon(QMPlay2Core.getIconFromTheme(toggleMuteAct->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
+	menuBar->player->toggleMute->setIcon(QMPlay2Core.getIconFromTheme(menuBar->player->toggleMute->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
 }
 void MainWidget::actionSeek()
 {
@@ -1191,6 +1200,13 @@ void MainWidget::browseSubsFile()
 void MainWidget::setSeekSMaximum(int max)
 {
 	seekS->setMaximum(qMax(0, max * 10));
+#ifdef Q_OS_WIN
+	if (m_taskBarProgress)
+	{
+		m_taskBarProgress->setMaximum(seekS->maximum() / 10);
+		m_taskBarProgress->setVisible(m_taskBarProgress->maximum() > 0);
+	}
+#endif
 	if (max >= 0)
 	{
 		seekS->setEnabled(true);
@@ -1221,6 +1237,10 @@ void MainWidget::updatePos(double pos)
 			currPos = intPos;
 		}
 		seekS->setValue(pos * 10.0);
+#ifdef Q_OS_WIN
+		if (m_taskBarProgress)
+			m_taskBarProgress->setValue(pos);
+#endif
 	}
 }
 void MainWidget::mousePositionOnSlider(int pos)
@@ -1406,6 +1426,74 @@ bool MainWidget::getFullScreen() const
 	return fullScreen;
 }
 
+#ifdef Q_OS_WIN
+void MainWidget::setWindowsTaskBarFeatures()
+{
+	if (QSysInfo::windowsVersion() < QSysInfo::WV_6_1)
+		return;
+
+
+	QWinTaskbarButton *button = new QWinTaskbarButton(this);
+	button->setWindow(windowHandle());
+
+	m_taskBarProgress = button->progress();
+
+
+	QWinThumbnailToolBar *thumbnailToolBar = new QWinThumbnailToolBar(this);
+	thumbnailToolBar->setWindow(windowHandle());
+
+	QWinThumbnailToolButton *togglePlay = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(togglePlay, &QWinThumbnailToolButton::clicked, menuBar->player->togglePlay, &QAction::trigger);
+	connect(menuBar->player->togglePlay, &QAction::changed, togglePlay, [=] {
+		togglePlay->setToolTip(menuBar->player->togglePlay->toolTip());
+		togglePlay->setIcon(menuBar->player->togglePlay->icon());
+	});
+
+	QWinThumbnailToolButton *stop = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(stop, &QWinThumbnailToolButton::clicked, menuBar->player->stop, &QAction::trigger);
+	stop->setToolTip(menuBar->player->stop->toolTip());
+	stop->setIcon(menuBar->player->stop->icon());
+
+	QWinThumbnailToolButton *prev = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(prev, &QWinThumbnailToolButton::clicked, menuBar->player->prev, &QAction::trigger);
+	prev->setToolTip(menuBar->player->prev->toolTip());
+	prev->setIcon(menuBar->player->prev->icon());
+
+	QWinThumbnailToolButton *next = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(next, &QWinThumbnailToolButton::clicked, menuBar->player->next, &QAction::trigger);
+	next->setToolTip(menuBar->player->next->toolTip());
+	next->setIcon(menuBar->player->next->icon());
+
+	QWinThumbnailToolButton *toggleFullScreen = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(toggleFullScreen, &QWinThumbnailToolButton::clicked, menuBar->window->toggleFullScreen, &QAction::trigger);
+	toggleFullScreen->setToolTip(menuBar->window->toggleFullScreen->toolTip());
+	toggleFullScreen->setIcon(menuBar->window->toggleFullScreen->icon());
+	toggleFullScreen->setDismissOnClick(true);
+
+	QWinThumbnailToolButton *toggleMute = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(toggleMute, &QWinThumbnailToolButton::clicked, menuBar->player->toggleMute, &QAction::trigger);
+	connect(menuBar->player->toggleMute, &QAction::changed, toggleMute, [=] {
+		toggleMute->setIcon(menuBar->player->toggleMute->icon());
+	});
+	toggleMute->setToolTip(menuBar->player->toggleMute->toolTip());
+	toggleMute->setIcon(menuBar->player->toggleMute->icon());
+
+	QWinThumbnailToolButton *settings = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(settings, &QWinThumbnailToolButton::clicked, menuBar->options->settings, &QAction::trigger);
+	settings->setToolTip(menuBar->options->settings->toolTip());
+	settings->setIcon(menuBar->options->settings->icon());
+	settings->setDismissOnClick(true);
+
+	thumbnailToolBar->addButton(togglePlay);
+	thumbnailToolBar->addButton(stop);
+	thumbnailToolBar->addButton(prev);
+	thumbnailToolBar->addButton(next);
+	thumbnailToolBar->addButton(toggleFullScreen);
+	thumbnailToolBar->addButton(toggleMute);
+	thumbnailToolBar->addButton(settings);
+}
+#endif
+
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
 	// Trigger group sync on quick group sync key shortcut if quick group sync is unavailable.
@@ -1576,6 +1664,9 @@ void MainWidget::showEvent(QShowEvent *)
 #endif
 			showMaximized();
 		doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
+#ifdef Q_OS_WIN
+		setWindowsTaskBarFeatures();
+#endif
 		wasShow = true;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));
