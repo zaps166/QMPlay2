@@ -31,6 +31,8 @@ extern "C"
 
 #include <cmath>
 
+using namespace std;
+
 #if LIBAVFORMAT_VERSION_INT >= 0x392900
 	static inline AVCodecParameters *codecParams(AVStream *stream)
 	{
@@ -141,11 +143,11 @@ bool MkvMuxer::write(Packet &packet, const int idx)
 	AVPacket pkt;
 	av_init_packet(&pkt);
 
-	pkt.duration = std::round(packet.duration / timeBase);
+	pkt.duration = round(packet.duration / timeBase);
 	if (packet.ts.hasDts())
-		pkt.dts = std::round(packet.ts.dts() / timeBase);
+		pkt.dts = round(packet.ts.dts() / timeBase);
 	if (packet.ts.hasPts())
-		pkt.pts = std::round(packet.ts.pts() / timeBase);
+		pkt.pts = round(packet.ts.pts() / timeBase);
 	pkt.flags = packet.hasKeyFrame ? AV_PKT_FLAG_KEY : 0;
 	pkt.buf = packet.toAvBufferRef();
 	pkt.data = pkt.buf->data;
