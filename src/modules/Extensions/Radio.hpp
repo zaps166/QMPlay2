@@ -100,6 +100,7 @@ private:
 
 	QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
 	RadioBrowserModel *m_radioBrowserModel;
+	QTimer *m_tabChangedOnVisibilityTimer;
 	QMenu *m_radioBrowserMenu;
 	QTimer *m_loadIconsTimer;
 	QStringList m_nameItems;

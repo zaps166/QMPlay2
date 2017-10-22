@@ -39,10 +39,10 @@ Radio::Radio(Module &module) :
 	ui(new Ui::Radio),
 	m_dw(new DockWidget),
 	m_radioBrowserModel(new RadioBrowserModel(this)),
+	m_tabChangedOnVisibilityTimer(new QTimer(this)),
 	m_radioBrowserMenu(new QMenu(this)),
 	m_loadIconsTimer(new QTimer(this)),
-	m_net(new NetworkAccess(this)),
-	m_tabChangedOnVisibilityTimer(new QTimer(this))
+	m_net(new NetworkAccess(this))
 {
 	SetModule(module);
 
