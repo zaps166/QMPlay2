@@ -236,6 +236,8 @@ void Radio::loadIcons()
 
 void Radio::replyFinished(NetworkReply *reply)
 {
+	if (reply == m_qmplay2RadioStationsReply)
+		return;
 	if (!reply->hasError())
 	{
 		const int idx = m_searchInfo.key({{}, reply}, -1);
