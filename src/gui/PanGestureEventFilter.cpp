@@ -51,7 +51,72 @@ class PanGestureEventFilterPriv : public QObject
 			{
 				QMouseEvent *me = static_cast<QMouseEvent *>(event);
 				const bool hasScroller = QScroller::hasScroller(watched);
-				if (!hasScroller && (event->type() != QEvent::MouseMove || me->buttons() != Qt::NoButton))
+				if (hasScroller && me->source() != Qt::MouseEventNotSynthesized && me->source() != Qt::MouseEventSynthesizedByApplication)
+				{
+					switch (event->type())
+					{
+						case QEvent::MouseButtonPress:
+						{
+							// Copy mouse press event
+							QMouseEvent *newMe = new QMouseEvent
+							(
+								me->type(),
+								me->localPos(),
+								me->windowPos(),
+								me->screenPos(),
+								me->button(),
+								me->buttons(),
+								me->modifiers(),
+								Qt::MouseEventSynthesizedByApplication
+							);
+							QScroller::scroller(watched)->handleInput(QScroller::InputPress, me->localPos());
+							m_mouseEvent.reset(newMe);
+							m_pressed = false;
+							return true;
+						}
+						case QEvent::MouseButtonRelease:
+						{
+							if (m_mouseEvent || m_pressed)
+							{
+								if (m_mouseEvent)
+								{
+									// Simulate mouse press event before mouse release event
+									sendMousePressEvent(watched);
+								}
+								m_pressed = false;
+								break;
+							}
+							return true;
+						}
+						case QEvent::MouseMove:
+						{
+							switch (QScroller::scroller(watched)->state())
+							{
+								case QScroller::Inactive:
+									if (m_pressed)
+										break;
+									return true;
+								case QScroller::Pressed:
+									if (m_mouseEvent)
+									{
+										sendMousePressEvent(watched);
+										m_pressed = true;
+										break;
+									}
+									return true;
+								case QScroller::Dragging:
+								case QScroller::Scrolling:
+									m_mouseEvent.reset();
+									return true;
+								default:
+									break;
+							}
+						}
+						default:
+							break;
+					}
+				}
+				else if (!hasScroller && (event->type() != QEvent::MouseMove || me->buttons() != Qt::NoButton))
 				{
 					// Stop scrolling when using scroll bar
 					if (QScrollBar *scrollBar = qobject_cast<QScrollBar *>(watched))
@@ -75,6 +140,14 @@ class PanGestureEventFilterPriv : public QObject
 		return QObject::eventFilter(watched, event);
 	}
 
+	void sendMousePressEvent(QObject *watched)
+	{
+		QCoreApplication::sendEvent(watched, m_mouseEvent.data());
+		m_mouseEvent.reset();
+	}
+
+	QScopedPointer<QMouseEvent> m_mouseEvent;
+	bool m_pressed = false;
 #ifdef Q_OS_ANDROID
 	const QScroller::ScrollerGestureType m_gestureType = QScroller::LeftMouseButtonGesture;
 #else
@@ -87,10 +160,6 @@ class PanGestureEventFilterPriv : public QObject
 void PanGestureEventFilter::install()
 {
 	static bool installed;
-
-#ifndef Q_OS_ANDROID
-	return; // TODO
-#endif
 
 	if (installed)
 		return;
