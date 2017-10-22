@@ -2,6 +2,9 @@ TEMPLATE = lib
 CONFIG += plugin #Don't create symlinks to library
 
 QT += widgets
+android {
+	QT += androidextras
+}
 
 !qtHaveModule(svg): message("Missing QtSvg module - SVG icons will not be visible!")
 
@@ -33,6 +36,11 @@ unix:!android {
 	DBUS_INTERFACES += org.freedesktop.Notifications.xml
 	HEADERS += headers/NotifiesFreedesktop.hpp
 	SOURCES +=         NotifiesFreedesktop.cpp
+}
+android {
+	DEFINES += NOTIFIES_ANDROID
+	HEADERS += headers/NotifiesAndroid.hpp
+	SOURCES +=         NotifiesAndroid.cpp
 }
 
 DEFINES += __STDC_CONSTANT_MACROS
