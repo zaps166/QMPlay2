@@ -453,11 +453,13 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 }
 #endif
 
+#ifndef Q_OS_ANDROID
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
 	fprintf(stderr, "%s\n", qFormatLogMessage(type, context, message).toLocal8Bit().constData());
 	fflush(stderr);
 }
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -486,7 +488,9 @@ int main(int argc, char *argv[])
 #endif
 	QCoreApplication::setApplicationName("QMPlay2");
 
+#ifndef Q_OS_ANDROID
 	qInstallMessageHandler(messageHandler);
+#endif
 
 	QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
 
