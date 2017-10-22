@@ -41,7 +41,8 @@ Radio::Radio(Module &module) :
 	m_radioBrowserModel(new RadioBrowserModel(this)),
 	m_radioBrowserMenu(new QMenu(this)),
 	m_loadIconsTimer(new QTimer(this)),
-	m_net(new NetworkAccess(this))
+	m_net(new NetworkAccess(this)),
+	m_tabChangedOnVisibilityTimer(new QTimer(this))
 {
 	SetModule(module);
 
@@ -96,6 +97,11 @@ Radio::Radio(Module &module) :
 	connect(ui->searchComboBox->lineEdit(), SIGNAL(returnPressed()), this, SLOT(searchData()));
 	connect(ui->searchComboBox, SIGNAL(activated(int)), this, SLOT(searchData()));
 	connect(m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(replyFinished(NetworkReply *)));
+
+	m_tabChangedOnVisibilityTimer->setSingleShot(true);
+	connect(m_tabChangedOnVisibilityTimer, &QTimer::timeout, this, [=] {
+		tabChanged(currentIndex());
+	});
 }
 Radio::~Radio()
 {
@@ -144,7 +150,11 @@ void Radio::visibilityChanged(const bool v)
 			restoreSettings();
 			m_once = true;
 		}
-		tabChanged(currentIndex());
+		m_tabChangedOnVisibilityTimer->start(0);
+	}
+	else
+	{
+		m_tabChangedOnVisibilityTimer->stop();
 	}
 }
 
