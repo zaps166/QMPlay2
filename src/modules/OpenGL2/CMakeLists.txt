@@ -20,11 +20,13 @@ set(OpenGL2_RESOURCES
     resources.qrc
 )
 
-if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
-    set(QT_USES_OPENGLES ON)
-    add_definitions(-DOPENGL_ES2)
-elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
-    message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+if(NOT WIN32)
+    if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+        set(QT_USES_OPENGLES ON)
+        add_definitions(-DOPENGL_ES2)
+    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+        message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+    endif()
 endif()
 
 list(APPEND OpenGL2_HDR OpenGL2Window.hpp OpenGL2Widget.hpp)
