@@ -59,7 +59,7 @@
 #include "ui_SettingsPlayback.h"
 #include "ui_SettingsPlaybackModulesList.h"
 
-#if !defined(Q_OS_WIN) /*&& !defined(Q_OS_MAC)*/ && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	#define ICONS_FROM_THEME
 #endif
 

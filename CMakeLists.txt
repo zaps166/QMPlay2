@@ -211,7 +211,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
     add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
 
-    set(CMAKE_CXX_FLAGS            "-fno-exceptions ${CMAKE_CXX_FLAGS}")
     # QMPlay2 doesn't use exceptions - disable it and also make sure that debugging symbols are disabled
     set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
@@ -229,9 +228,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     endif()
 
     if(USE_LINK_TIME_OPTIMIZATION)
-        set(CMAKE_CXX_FLAGS            "-flto ${CMAKE_CXX_FLAGS}")
         set(CMAKE_CXX_FLAGS_RELEASE    "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
-        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
     endif()
 
     if(CMAKE_MODULE_LINKER_FLAGS)
@@ -254,22 +252,19 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 endif()
 
 if(APPLE)
-    set(MAC_BUNDLE_PATH "${BUNDLE_INSTALL_DIR}/QMPlay2.app")
+    set(MAC_BUNDLE_PATH "${CMAKE_INSTALL_PREFIX}/QMPlay2.app")
 
     # set paths to Bundle
     set(CMAKE_INSTALL_DATAROOTDIR "${MAC_BUNDLE_PATH}/Contents/share")
     set(CMAKE_INSTALL_LIBDIR      "${MAC_BUNDLE_PATH}/Contents/MacOS")
-    if(NOT APPLE_STANDALONE_BUNDLE)
-        include(GNUInstallDirs)
-    endif()
 elseif(NOT WIN32)
     include(GNUInstallDirs)
 endif()
 
-# if(NOT APPLE)
+if(NOT APPLE)
     set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_DATAROOTDIR}/icons")
     set(INSTALL_PATH_MIME "${CMAKE_INSTALL_DATAROOTDIR}/mime")
-# endif()
+endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
     set(INSTALL_PATH_MAN "man") # exception for FreeBSD
@@ -309,7 +304,7 @@ else()
     install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 endif()
 
-# if(NOT APPLE AND NOT WIN32)
+if(NOT APPLE AND NOT WIN32)
     # uninstall target
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/Uninstall.cmake.in"
@@ -318,7 +313,7 @@ endif()
 
     add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-# endif()
+endif()
 
 # Detect QtSvg and show warning if it doesn't exist
 if(NOT SVG_MODULE_FOUND)
