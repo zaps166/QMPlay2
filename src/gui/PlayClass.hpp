@@ -44,7 +44,7 @@ enum
 	SEEK_REPEAT = -3
 };
 
-class PlayClass : public QObject
+class PlayClass final : public QObject
 {
 	Q_OBJECT
 	friend class DemuxerThr;
@@ -53,7 +53,7 @@ class PlayClass : public QObject
 	friend class AudioThr;
 public:
 	PlayClass();
-	~PlayClass() final;
+	~PlayClass();
 
 	Q_SLOT void play(const QString &);
 	Q_SLOT void stop(bool quitApp = false);

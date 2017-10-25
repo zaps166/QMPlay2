@@ -25,15 +25,15 @@
 #include <QTextEdit>
 #include <QPointer>
 
-class Tekstowo : public QTextEdit, public QMPlay2Extensions
+class Tekstowo final : public QTextEdit, public QMPlay2Extensions
 {
 	Q_OBJECT
 
 public:
 	Tekstowo(Module &module);
-	~Tekstowo() final;
+	~Tekstowo();
 
-	DockWidget *getDockWidget() override final;
+	DockWidget *getDockWidget() override;
 
 private slots:
 	void visibilityChanged(bool v);

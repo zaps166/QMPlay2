@@ -28,16 +28,16 @@
 
 class YadifDeint;
 
-class YadifThr : public QThread
+class YadifThr final : public QThread
 {
 public:
 	YadifThr(const YadifDeint &yadifDeint);
-	~YadifThr() final;
+	~YadifThr();
 
 	void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
 	void waitForFinished();
 private:
-	void run() override final;
+	void run() override;
 
 	const YadifDeint &yadifDeint;
 
@@ -50,17 +50,17 @@ private:
 	QMutex mutex;
 };
 
-class YadifDeint : public DeintFilter
+class YadifDeint final : public DeintFilter
 {
 	friend class YadifThr;
 public:
 	YadifDeint(bool doubler, bool spatialCheck);
 
-	void clearBuffer() override final;
+	void clearBuffer() override;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 private:
 	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 

@@ -20,13 +20,13 @@
 
 #include <QMPlay2Extensions.hpp>
 
-class NotifyService : public QObject
+class NotifyService final : public QObject
 {
 	Q_OBJECT
 
 public:
 	NotifyService(Settings &settings);
-	~NotifyService() final;
+	~NotifyService();
 
 private slots:
 	void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
@@ -44,14 +44,14 @@ private:
 
 /**/
 
-class NotifyExtension : public QMPlay2Extensions
+class NotifyExtension final : public QMPlay2Extensions
 {
 public:
 	NotifyExtension(Module &module);
-	~NotifyExtension() final;
+	~NotifyExtension();
 
 private:
-	bool set() override final;
+	bool set() override;
 
 	QScopedPointer<NotifyService> m_notifyService;
 };

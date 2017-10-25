@@ -105,11 +105,7 @@ void FFReader::pause()
 }
 bool FFReader::atEnd() const
 {
-#if LIBAVFORMAT_VERSION_MAJOR >= 56
 	return avio_feof(avioCtx);
-#else
-	return url_feof(avioCtx);
-#endif
 }
 void FFReader::abort()
 {

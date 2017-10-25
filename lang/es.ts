@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es_ES" sourcelanguage="en">
-<defaultcodec>UTF-8</defaultcodec>
+<TS version="2.1" language="es_ES" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -407,6 +406,25 @@
     </message>
     <message>
         <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Datmusic</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Título</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artista</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Longitud</translation>
+    </message>
+    <message>
+        <source>Search on Datmusic</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -959,6 +977,70 @@
         <source>&amp;Updates</source>
         <translation>&amp;Actualizaciónes</translation>
     </message>
+    <message>
+        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ensures that the window will be visible if the application is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggles fullscreen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seeks to the specified value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starts playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stops playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggles playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminates the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displays this help.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opens and plays specified &lt;url&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sets specified volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sets specified playback speed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plays next entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plays previous entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
@@ -1017,7 +1099,7 @@
     </message>
 </context>
 <context>
-    <name>LineEditButton</name>
+    <name>LineEdit</name>
     <message>
         <source>Clear</source>
         <translation>Borrar</translation>
@@ -2373,33 +2455,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Longitud</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation type="unfinished">Tasa de bits</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation type="unfinished">Buscar en Prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation type="unfinished">Inténtelo más tarde</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2449,38 +2504,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 ha sido actualizado a la versión</translation>
-    </message>
-    <message>
-        <source>  Parameters list:
-    -open         &quot;address&quot;
-    -enqueue      &quot;address&quot;
-    -profile      &quot;name&quot; - starts application with given profile name
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
-    -toggle     - toggles play/pause
-    -show       - ensures that the window will be visible if the application is running
-    -fullscreen - toggles fullscreen
-    -volume     - sets volume [0..100]
-    -speed      - sets playback speed [0.05..100.0]
-    -seek       - seeks to the specified value [s]
-    -stop       - stops playback
-    -next       - plays next on the list
-    -prev       - plays previous on the list
-    -quit       - terminates the application</source>
-        <translation>  Lista de parámetros:
-    -open         &quot;añadirress&quot;
-    -enqueue      &quot;direccións&quot;
-    -profile      &quot;name&quot; - starts application with given profile name
-    -noplay     - no se reproduce después de la ejecución (opción derivación &quot;Recordar posición de reproducción&quot;)
-    -toggle     - conmuta pausa/reproducción
-    -show       - asegura que la ventana será visible si se ejecuta la aplicación
-    -fullscreen - conmuta pantalla completa
-    -volume     - ajusta volumen [0..100]
-    -speed      - ajusta velocidad de reproducción [0.05..100.0]
-    -seek       - busca el valor especificado [s]
-    -stop       - detiene reproducción
-    -next       - reproduce el siguiente en la lista
-    -prev       - reproduce el anterior en la lista
-    -quit       - cierra la aplicación</translation>
     </message>
     <message>
         <source>Font cache is updating, please wait</source>
@@ -2631,6 +2654,10 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Stop playback after every file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2863,29 +2890,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="unfinished">Género</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Longitud</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

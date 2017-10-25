@@ -20,15 +20,15 @@
 
 #include <Module.hpp>
 
-class AudioFilters : public Module
+class AudioFilters final : public Module
 {
 public:
 	AudioFilters();
 private:
-	QList<Info> getModulesInfo(const bool) const override final;
-	void *createInstance(const QString &) override final;
+	QList<Info> getModulesInfo(const bool) const override;
+	void *createInstance(const QString &) override;
 
-	SettingsWidget *getSettingsWidget() override final;
+	SettingsWidget *getSettingsWidget() override;
 };
 
 /**/
@@ -41,7 +41,7 @@ class QComboBox;
 class QSpinBox;
 class Slider;
 
-class ModuleSettingsWidget : public Module::SettingsWidget
+class ModuleSettingsWidget final : public Module::SettingsWidget
 {
 	Q_OBJECT
 public:
@@ -54,7 +54,7 @@ private slots:
 	void compressor();
 	void defaultSettings();
 private:
-	void saveSettings() override final;
+	void saveSettings() override;
 
 	bool restoringDefault;
 

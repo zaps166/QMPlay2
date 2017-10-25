@@ -26,19 +26,19 @@
 #include <cdio/cdio.h>
 #include <cddb/cddb.h>
 
-class CDIODestroyTimer : public QObject
+class CDIODestroyTimer final : public QObject
 {
 	Q_OBJECT
 public:
 	CDIODestroyTimer();
-	~CDIODestroyTimer() final;
+	~CDIODestroyTimer();
 
 	Q_SIGNAL void setInstance(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 	CdIo_t *getInstance(const QString &_device, unsigned &_discID);
 private slots:
 	void setInstanceSlot(CdIo_t *_cdio, const QString &_device, unsigned _discID);
 private:
-	void timerEvent(QTimerEvent *e) override final;
+	void timerEvent(QTimerEvent *e) override;
 
 	QAtomicInt timerId;
 	CdIo_t *cdio;
@@ -48,7 +48,7 @@ private:
 
 /**/
 
-class AudioCDDemux : public Demuxer
+class AudioCDDemux final : public Demuxer
 {
 	Q_DECLARE_TR_FUNCTIONS(AudioCDDemux)
 public:
@@ -56,23 +56,23 @@ public:
 
 	AudioCDDemux(Module &, CDIODestroyTimer &destroyTimer);
 private:
-	~AudioCDDemux() final;
+	~AudioCDDemux();
 
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
-	QString title() const override final;
-	QList<QMPlay2Tag> tags() const override final;
-	double length() const override final;
-	int bitrate() const override final;
+	QString name() const override;
+	QString title() const override;
+	QList<QMPlay2Tag> tags() const override;
+	double length() const override;
+	int bitrate() const override;
 
-	bool seek(double, bool) override final;
-	bool read(Packet &, int & ) override final;
-	void abort() override final;
+	bool seek(double, bool) override;
+	bool read(Packet &, int & ) override;
+	void abort() override;
 
-	bool open(const QString &) override final;
+	bool open(const QString &) override;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok) override final;
+	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
 	/**/
 

@@ -38,12 +38,12 @@ class QMenu;
 
 /**/
 
-class ResultsYoutube : public QTreeWidget
+class ResultsYoutube final : public QTreeWidget
 {
 	Q_OBJECT
 public:
 	ResultsYoutube();
-	~ResultsYoutube() final;
+	~ResultsYoutube();
 
 	QList<int> itags, itagsVideo, itagsAudio;
 private:
@@ -51,8 +51,8 @@ private:
 
 	void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI);
 
-	void mouseMoveEvent(QMouseEvent *) override final;
-	void mouseReleaseEvent(QMouseEvent *) override final;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void mouseReleaseEvent(QMouseEvent *) override;
 
 	QMenu *menu;
 	int pixels;
@@ -70,7 +70,7 @@ private slots:
 
 /**/
 
-class PageSwitcher : public QWidget
+class PageSwitcher final : public QWidget
 {
 	Q_OBJECT
 public:
@@ -84,7 +84,7 @@ public:
 
 using ItagNames = QPair<QStringList, QList<int>>;
 
-class YouTube : public QWidget, public QMPlay2Extensions
+class YouTube final : public QWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
 
@@ -95,19 +95,19 @@ public:
 	static QStringList getQualityPresetString(int qualityIdx);
 
 	YouTube(Module &module);
-	~YouTube() final;
+	~YouTube();
 
 	enum MediaType {MEDIA_AV, MEDIA_VIDEO, MEDIA_AUDIO};
 	static ItagNames getItagNames(const QStringList &itagList, MediaType mediaType);
 
-	bool set() override final;
+	bool set() override;
 
-	DockWidget *getDockWidget() override final;
+	DockWidget *getDockWidget() override;
 
-	QList<AddressPrefix> addressPrefixList(bool) const override final;
-	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *, IOController<> *ioCtrl) override final;
+	QList<AddressPrefix> addressPrefixList(bool) const override;
+	void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *, IOController<> *ioCtrl) override;
 
-	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override final;
+	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
 	inline QString getYtDlPath() const;
 

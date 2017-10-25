@@ -20,14 +20,14 @@
 
 #include <DeintFilter.hpp>
 
-class DiscardDeint : public DeintFilter
+class DiscardDeint final : public DeintFilter
 {
 public:
 	DiscardDeint();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define DiscardDeintName "Discard"

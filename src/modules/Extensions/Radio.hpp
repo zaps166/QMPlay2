@@ -36,15 +36,15 @@ class NetworkReply;
 class QTimer;
 class QMenu;
 
-class Radio : public QTabWidget, public QMPlay2Extensions
+class Radio final : public QTabWidget, public QMPlay2Extensions
 {
 	Q_OBJECT
 
 public:
 	Radio(Module &);
-	~Radio() final;
+	~Radio();
 
-	DockWidget *getDockWidget() override final;
+	DockWidget *getDockWidget() override;
 
 private slots:
 	void visibilityChanged(const bool v);
@@ -79,6 +79,8 @@ private slots:
 	void radioBrowserEdit();
 
 private:
+	void firstTabItemDoubleClicked(QListWidgetItem *item);
+
 	void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
 	void addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item = nullptr);
@@ -98,6 +100,7 @@ private:
 
 	QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
 	RadioBrowserModel *m_radioBrowserModel;
+	QTimer *m_tabChangedOnVisibilityTimer;
 	QMenu *m_radioBrowserMenu;
 	QTimer *m_loadIconsTimer;
 	QStringList m_nameItems;

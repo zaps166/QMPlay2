@@ -24,14 +24,14 @@ class QCheckBox;
 class QComboBox;
 class Module;
 
-class DeintSettingsW : public QGroupBox
+class DeintSettingsW final : public QGroupBox
 {
 	Q_OBJECT
 public:
 	static void init();
 
 	DeintSettingsW();
-	~DeintSettingsW() final;
+	~DeintSettingsW();
 
 	void writeSettings();
 private slots:

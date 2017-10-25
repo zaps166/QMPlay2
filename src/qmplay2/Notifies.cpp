@@ -25,6 +25,9 @@
 #ifdef NOTIFIES_MACOS
 	#include <NotifiesMacOS.hpp>
 #endif
+#ifdef NOTIFIES_ANDROID
+	#include <NotifiesAndroid.hpp>
+#endif
 
 #include <QApplication>
 #include <QStyle>
@@ -42,6 +45,9 @@ void Notifies::initialize(QSystemTrayIcon *tray)
 #endif
 #ifdef NOTIFIES_MACOS
 		s_notifies[0] = new NotifiesMacOS;
+#endif
+#ifdef NOTIFIES_ANDROID
+		s_notifies[0] = new NotifiesAndroid;
 #endif
 	}
 	if (!s_notifies[1] && tray)

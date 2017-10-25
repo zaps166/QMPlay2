@@ -24,27 +24,27 @@
 #include <QWidget>
 #include <QTimer>
 
-class VAAPIWriter : public QWidget, public VideoWriter
+class VAAPIWriter final : public QWidget, public VideoWriter
 {
 	Q_OBJECT
 public:
 	VAAPIWriter(Module &module, VAAPI *vaapi);
-	~VAAPIWriter() final;
+	~VAAPIWriter();
 
-	bool set() override final;
+	bool set() override;
 
-	bool readyWrite() const override final;
+	bool readyWrite() const override;
 
-	bool processParams(bool *paramsCorrected) override final;
-	void writeVideo(const VideoFrame &videoFrame) override final;
-	void writeOSD(const QList<const QMPlay2OSD *> &osd) override final;
-	void pause() override final;
+	bool processParams(bool *paramsCorrected) override;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &osd) override;
+	void pause() override;
 
-	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const override final;
+	bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	bool open() override final;
+	bool open() override;
 
 	/**/
 
@@ -58,11 +58,11 @@ public:
 private:
 	Q_SLOT void draw(VASurfaceID _id = -1, int _field = -1);
 
-	void resizeEvent(QResizeEvent *) override final;
-	void paintEvent(QPaintEvent *) override final;
-	bool event(QEvent *) override final;
+	void resizeEvent(QResizeEvent *) override;
+	void paintEvent(QPaintEvent *) override;
+	bool event(QEvent *) override;
 
-	QPaintEngine *paintEngine() const override final;
+	QPaintEngine *paintEngine() const override;
 
 	void clearRGBImage();
 

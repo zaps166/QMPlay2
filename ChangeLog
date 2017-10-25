@@ -1,3 +1,25 @@
+Changes in QMPlay2 build 17.10.25:
+	- use pan gesture for scrolling on Windows (native) and Android (QScroller),
+	- add task bar playback progress and tool buttons on Windows,
+	- drop support for Qt < 5.6, CMake < 3.1, and FFmpeg < 2.5,
+	- remove already fixed Qt bug workarounds,
+	- use Qt5 JSON parser instead of Json11,
+	- add Toast notifications for Android,
+	- simplify LineEdit using Qt 5.2 API,
+	- remove SoundCloud and ProstoPleer,
+	- use "QCommandLineParser",
+
+Changes in QMPlay2 build 17.10.24:
+	- add option to stop playback after every file,
+	- fix crash in FFmpeg settings on Windows XP,
+	- add Datmusic (VK) as Pleer replacement,
+	- fix possible crash in RadioBrowser,
+
+Changes in QMPlay2 build 17.10.04:
+	- command line seeking bugfix,
+	- update for Wbijam changes,
+	- CUVID bugfix,
+
 Changes in QMPlay2 build 17.09.16:
 	- fix playback position regression introduced in 17.09.13,
 	- update German translation (martinkg),

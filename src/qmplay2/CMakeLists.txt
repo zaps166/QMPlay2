@@ -1,18 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
-if(COMMAND cmake_policy)
-    if(POLICY CMP0003)
-        cmake_policy(SET CMP0003 NEW)
-    endif()
-    if(POLICY CMP0020)
-        cmake_policy(SET CMP0020 NEW)
-    endif()
-    if(POLICY CMP0042)
-        cmake_policy(SET CMP0042 NEW)
-    endif()
-    if(POLICY CMP0043)
-        cmake_policy(SET CMP0043 NEW)
-    endif()
-endif()
+cmake_minimum_required(VERSION 3.1)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
@@ -59,7 +45,6 @@ set(QMPLAY2_HDR
     headers/PixelFormats.hpp
     headers/HWAccelInterface.hpp
     headers/VideoAdjustment.hpp
-    headers/Json11.hpp
     headers/YouTubeDL.hpp
     headers/Notifies.hpp
     headers/NotifiesTray.hpp
@@ -100,7 +85,6 @@ set(QMPLAY2_SRC
     Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
-    Json11.cpp
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
@@ -120,16 +104,9 @@ endif()
 if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_HDR headers/NotifiesFreedesktop.hpp)
     list(APPEND QMPLAY2_SRC NotifiesFreedesktop.cpp)
-    if(USE_QT5)
-        set(DBUS DBus)
-        find_package(Qt5DBus REQUIRED)
-        qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
-    else()
-        set(DBUS Qt4::QtDBus)
-        find_package(Qt4 REQUIRED QtDBus)
-        qt4_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
-    endif()
+    qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
     add_definitions(-DNOTIFIES_FREEDESKTOP)
+    set(DBUS Qt5::DBus)
 elseif(APPLE)
     list(APPEND QMPLAY2_HDR headers/NotifiesMacOS.hpp)
     list(APPEND QMPLAY2_SRC NotifiesMacOS.mm)
@@ -141,10 +118,10 @@ set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
-pkg_check_modules(LIBAVFORMAT libavformat>=55.33.100 REQUIRED)
-pkg_check_modules(LIBAVCODEC libavcodec>=55.52.102 REQUIRED)
+pkg_check_modules(LIBAVFORMAT libavformat>=56.15.102 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=56.13.100 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=52.66.100 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=54.15.100 REQUIRED)
 
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
@@ -189,32 +166,28 @@ else()
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
 endif()
 
-if(USE_QT5)
-    qt5_add_resources(QMPLAY2_RESOURCES_RCC ${QMPLAY2_RESOURCES})
-else()
-    qt4_add_resources(QMPLAY2_RESOURCES_RCC ${QMPLAY2_RESOURCES})
-endif()
-
 add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
     ${QMPLAY2_SRC}
-    ${QMPLAY2_RESOURCES_RCC}
+    ${QMPLAY2_RESOURCES}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets ${DBUS})
-    if(APPLE)
-        qt5_use_modules(${PROJECT_NAME} MacExtras)
-        target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY})
-    endif()
-else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui ${DBUS})
+if(APPLE)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        Qt5::MacExtras
+        ${APPKIT_LIBRARY}
+    )
 endif()
 
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} powrprof winmm)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        powrprof
+        winmm
+    )
     set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
     mark_as_advanced(CUSTOM_LIBQMPLAY2_LIBRARIES)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
@@ -227,7 +200,7 @@ if(WIN32)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 else()
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    if(NOT APPLE)
+    if(NOT APPLE_STANDALONE_BUNDLE)
         install(FILES ${QMPLAY2_HDR} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2")
     endif()
 
@@ -236,4 +209,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} ${LIBQMPLAY2_LIBS})
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    PRIVATE
+    ${DBUS}
+    ${LIBQMPLAY2_LIBS}
+)

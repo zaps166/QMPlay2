@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.1)
 project(QMPlay2)
 
-# set default build type as Release
+# Set default build type as Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
+
+# Silence warning about unused variable in QtCreator
+set(QT_QMAKE_EXECUTABLE)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/src/cmake/Modules")
 
@@ -16,39 +19,15 @@ else()
     find_package(DummyPkgConfig REQUIRED)
 endif()
 
-if(CMAKE_VERSION VERSION_LESS 2.8.9)
-    # use Qt5 only if CMake >= 2.8.9
-    set(DEFAULT_QT5 OFF)
-elseif(NOT DEFINED USE_QT5)
-    if(QT_QMAKE_EXECUTABLE)
-        # detect Qt version using QMake executable (if specified)
-        execute_process(
-            COMMAND ${QT_QMAKE_EXECUTABLE} -v
-            OUTPUT_VARIABLE QMAKE_VERSION_STRING
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-        if(QMAKE_VERSION_STRING)
-            if(QMAKE_VERSION_STRING MATCHES "Qt version 4")
-                set(DEFAULT_QT5 OFF)
-            elseif(QMAKE_VERSION_STRING MATCHES "Qt version 5")
-                set(DEFAULT_QT5 ON)
-            endif()
-        endif()
-    endif()
-    if(NOT DEFINED DEFAULT_QT5)
-        # use Qt5 by default if it is greater than 5.6.0, otherwise use Qt4 by default
-        find_package(Qt5Widgets QUIET)
-        if(Qt5Widgets_FOUND AND (Qt5Widgets_VERSION VERSION_GREATER 5.6.0))
-            set(DEFAULT_QT5 ON)
-        else()
-            find_package(Qt4 QUIET)
-            if(NOT Qt4_FOUND AND Qt5Widgets_FOUND)
-                set(DEFAULT_QT5 ON)
-            else()
-                set(DEFAULT_QT5 OFF)
-            endif()
-        endif()
-    endif()
+find_package(Qt5Widgets 5.6 REQUIRED)
+if(Qt5Widgets_VERSION VERSION_LESS 5.6.3)
+    message(AUTHOR_WARNING "Qt5 >= 5.6.3, >= 5.9.1 is recommended")
 endif()
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(DEFAULT_ALSA ON)
@@ -74,22 +53,13 @@ endif()
 
 option(USE_JEMALLOC "Link to jemalloc" OFF)
 
-option(USE_QT5 "Build with Qt5" ${DEFAULT_QT5})
-add_feature_info(Qt5 USE_QT5 "Build with Qt5")
-
-if(USE_QT5 AND NOT Qt5Widgets_FOUND)
-    find_package(Qt5Widgets REQUIRED)
-endif()
-
 if(NOT WIN32 AND NOT APPLE)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 endif()
 
-option(USE_PROSTOPLEER "Build with ProstoPleer support" ON)
-add_feature_info(ProstoPleer USE_PROSTOPLEER "Build with ProstoPleer support")
-option(USE_SOUNDCLOUD "Build with SoundCloud support" OFF)
-add_feature_info(SoundCloud USE_SOUNDCLOUD "Build with SoundCloud support")
+option(USE_DATMUSIC "Build with Datmusic support" ON)
+add_feature_info(Datmusic USE_DATMUSIC "Build with Datmusic support")
 option(USE_ANIMEODCINKI "Build with AnimeOdcinki support" ON)
 add_feature_info(AnimeOdcinki USE_ANIMEODCINKI "Build with AnimeOdcinki support")
 option(USE_WBIJAM "Build with Wbijam (anime) support" ON)
@@ -237,27 +207,11 @@ if(USE_GIT_VERSION)
 endif()
 add_feature_info("Git version" QMPLAY2_GIT_HEAD "Append Git HEAD to QMPlay2 version")
 
-if(USE_QT5)
-    if(CMAKE_VERSION VERSION_LESS 2.8.12)
-        set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
-    endif()
-    if(Qt5Widgets_VERSION VERSION_LESS 5.6.1)
-        message(AUTHOR_WARNING "Qt5 >= 5.6.1 is recommended for stable usage")
-    endif()
-else()
-    if(NOT Qt4_FOUND)
-        find_package(Qt4 REQUIRED QtCore QtGui)
-    endif()
-    include("${QT_USE_FILE}")
-endif()
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang") # GCC or Clang
     option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
     add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
 
-    # enable C++11
-    set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")
-
+    set(CMAKE_CXX_FLAGS            "-fno-exceptions ${CMAKE_CXX_FLAGS}")
     # QMPlay2 doesn't use exceptions - disable it and also make sure that debugging symbols are disabled
     set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
@@ -275,8 +229,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     endif()
 
     if(USE_LINK_TIME_OPTIMIZATION)
+        set(CMAKE_CXX_FLAGS            "-flto ${CMAKE_CXX_FLAGS}")
         set(CMAKE_CXX_FLAGS_RELEASE    "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
-        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
+        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_MINSIZEREL}")
     endif()
 
     if(CMAKE_MODULE_LINKER_FLAGS)
@@ -299,19 +254,22 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 endif()
 
 if(APPLE)
-    set(MAC_BUNDLE_PATH "${CMAKE_INSTALL_PREFIX}/QMPlay2.app")
+    set(MAC_BUNDLE_PATH "${BUNDLE_INSTALL_DIR}/QMPlay2.app")
 
     # set paths to Bundle
     set(CMAKE_INSTALL_DATAROOTDIR "${MAC_BUNDLE_PATH}/Contents/share")
     set(CMAKE_INSTALL_LIBDIR      "${MAC_BUNDLE_PATH}/Contents/MacOS")
+    if(NOT APPLE_STANDALONE_BUNDLE)
+        include(GNUInstallDirs)
+    endif()
 elseif(NOT WIN32)
     include(GNUInstallDirs)
 endif()
 
-if(NOT APPLE)
+# if(NOT APPLE)
     set(INSTALL_PATH_ICONS "${CMAKE_INSTALL_DATAROOTDIR}/icons")
     set(INSTALL_PATH_MIME "${CMAKE_INSTALL_DATAROOTDIR}/mime")
-endif()
+# endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
     set(INSTALL_PATH_MAN "man") # exception for FreeBSD
@@ -334,7 +292,13 @@ if(NOT WIN32 AND NOT APPLE)
     set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 endif()
 
-add_subdirectory(src)
+if(USE_FREEDESKTOP_NOTIFICATION OR USE_MPRIS2)
+    find_package(Qt5DBus REQUIRED)
+endif()
+
+add_subdirectory(src/qmplay2)
+add_subdirectory(src/modules)
+add_subdirectory(src/gui)
 if(LANGUAGES)
     add_subdirectory(lang)
 endif()
@@ -345,7 +309,7 @@ else()
     install(FILES AUTHORS ChangeLog LICENSE TODO README.md DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/qmplay2")
 endif()
 
-if(NOT APPLE AND NOT WIN32)
+# if(NOT APPLE AND NOT WIN32)
     # uninstall target
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/Uninstall.cmake.in"
@@ -354,20 +318,13 @@ if(NOT APPLE AND NOT WIN32)
 
     add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-endif()
+# endif()
 
 # Detect QtSvg and show warning if it doesn't exist
 if(NOT SVG_MODULE_FOUND)
-    if(USE_QT5)
-        find_package(Qt5Svg QUIET)
-        if(Qt5Svg_FOUND)
-            set(SVG_MODULE_FOUND ON CACHE INTERNAL "")
-        endif()
-    else()
-        find_package(Qt4 QUIET OPTIONAL_COMPONENTS QtSvg)
-        if(Qt4_FOUND)
-            set(SVG_MODULE_FOUND ON CACHE INTERNAL "")
-        endif()
+    find_package(Qt5Svg QUIET)
+    if(Qt5Svg_FOUND)
+        set(SVG_MODULE_FOUND ON CACHE INTERNAL "")
     endif()
     if(NOT SVG_MODULE_FOUND)
         message(WARNING "Missing QtSvg module - SVG icons will not be visible!")

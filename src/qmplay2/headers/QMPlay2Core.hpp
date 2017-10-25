@@ -104,7 +104,6 @@ public:
 	Q_SIGNAL void showSettings(const QString &moduleName);
 
 	Q_SIGNAL void videoDockMoved();
-	Q_SIGNAL void mainWidgetNotMinimized(bool);
 	Q_SIGNAL void videoDockVisible(bool);
 
 	Q_SIGNAL void statusBarMessage(const QString &txt, int ms);
@@ -147,11 +146,7 @@ public:
 	}
 	inline bool isWorking()
 	{
-#if QT_VERSION < 0x050000
 		return working > 0;
-#else
-		return working.load() > 0; //For Qt5 <= 5.2
-#endif
 	}
 
 	QStringList getLanguages() const;
@@ -179,6 +174,12 @@ public:
 	void modResource(const QString &url, const bool removeAfterUse);
 	bool hasResource(const QString &url) const;
 	QByteArray getResource(const QString &url);
+
+	void addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse = true);
+	QByteArray getRawheaders(const QString &url);
+
+	void addNameForUrl(const QString &url, const QString &name, const bool removeAfterUse = true);
+	QString getNameForUrl(const QString &url);
 
 	void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
 
@@ -211,7 +212,7 @@ private:
 	{
 		mutable QMutex mutex;
 		QHash<QString, QPair<QByteArray, bool>> data;
-	} cookies, resources;
+	} cookies, resources, rawHeaders, namesForUrl;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

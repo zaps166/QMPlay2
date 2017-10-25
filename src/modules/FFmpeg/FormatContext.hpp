@@ -108,9 +108,5 @@ private:
 	bool artistWithTitle;
 	bool stillImage;
 
-#if LIBAVFORMAT_VERSION_MAJOR <= 55
-	AVDictionary *metadata;
-#endif
-
 	QMutex &avcodec_mutex;
 };

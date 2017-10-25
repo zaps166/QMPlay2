@@ -16,8 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REPEATMODE_HPP
-#define REPEATMODE_HPP
+#pragma once
 
 enum RepeatMode
 {
@@ -33,8 +32,8 @@ enum RepeatMode
 	RepeatRandom,
 	RepeatRandomGroup,
 
+	RepeatStopAfter,
+
 	//Number of items in enum
 	RepeatModeCount
 };
-
-#endif // REPEATMODE_HPP

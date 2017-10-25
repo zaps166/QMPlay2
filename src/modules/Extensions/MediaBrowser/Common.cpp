@@ -39,8 +39,11 @@ void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 
 	treeW->setColumnCount(1);
 	treeW->header()->setStretchLastSection(false);
-	Functions::setHeaderSectionResizeMode(treeW->header(), 0, QHeaderView::Stretch);
+	treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 }
+
+void MediaBrowserCommon::finalize()
+{}
 
 QStringList MediaBrowserCommon::getPagesList() const
 {

@@ -27,27 +27,27 @@ namespace QMPlay2ModPlug {
 }
 class Reader;
 
-class MPDemux : public Demuxer
+class MPDemux final : public Demuxer
 {
 	Q_DECLARE_TR_FUNCTIONS(MPDemux)
 public:
 	MPDemux(Module &);
 private:
-	~MPDemux() final;
+	~MPDemux();
 
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
-	QString title() const override final;
-	QList<QMPlay2Tag> tags() const override final;
-	double length() const override final;
-	int bitrate() const override final;
+	QString name() const override;
+	QString title() const override;
+	QList<QMPlay2Tag> tags() const override;
+	double length() const override;
+	int bitrate() const override;
 
-	bool seek(double, bool) override final;
-	bool read(Packet &, int &) override final;
-	void abort() override final;
+	bool seek(double, bool) override;
+	bool read(Packet &, int &) override;
+	void abort() override;
 
-	bool open(const QString &) override final;
+	bool open(const QString &) override;
 
 	/**/
 

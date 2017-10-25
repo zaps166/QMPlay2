@@ -23,11 +23,8 @@
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 
-#ifdef USE_PROSTOPLEER
-	#include <MediaBrowser/ProstoPleer.hpp>
-#endif
-#ifdef USE_SOUNDCLOUD
-	#include <MediaBrowser/SoundCloud.hpp>
+#ifdef USE_DATMUSIC
+	#include <MediaBrowser/Datmusic.hpp>
 #endif
 #ifdef USE_ANIMEODCINKI
 	#include <MediaBrowser/AnimeOdcinki.hpp>
@@ -142,7 +139,9 @@ void MediaBrowserResults::contextMenu(const QPoint &point)
 			m_menu.addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
 			m_menu.addSeparator();
 		}
-		const QString name = tWI->text(0);
+		QString name = tWI->data(0, Qt::UserRole + 1).toString();
+		if (name.isEmpty())
+			name = tWI->text(0);
 		for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		{
 			QString addressPrefixName, url, param;
@@ -329,11 +328,8 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_net(this),
 	m_visible(false), m_first(true), m_overrideVisibility(false)
 {
-#ifdef USE_PROSTOPLEER
-	m_mediaBrowsers.emplace_back(new ProstoPleer(m_net));
-#endif
-#ifdef USE_SOUNDCLOUD
-	m_mediaBrowsers.emplace_back(new SoundCloud(m_net));
+#ifdef USE_DATMUSIC
+	m_mediaBrowsers.emplace_back(new Datmusic(m_net));
 #endif
 #ifdef USE_ANIMEODCINKI
 	m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));
@@ -417,7 +413,10 @@ MediaBrowser::MediaBrowser(Module &module) :
 	SetModule(module);
 }
 MediaBrowser::~MediaBrowser()
-{}
+{
+	for (const auto &m : m_mediaBrowsers)
+		m->finalize();
+}
 
 bool MediaBrowser::set()
 {
@@ -503,7 +502,10 @@ void MediaBrowser::providerChanged(int idx)
 		if (idx > -1)
 		{
 			if (m_mediaBrowser)
+			{
 				m_mediaBrowser->setCompleterListCallback(nullptr);
+				m_mediaBrowser->finalize();
+			}
 
 			m_searchCB->blockSignals(true);
 			m_searchCB->clear();
@@ -564,6 +566,7 @@ void MediaBrowser::search()
 	{
 		switch (m_mediaBrowser->completerMode())
 		{
+			case MediaBrowserCommon::CompleterMode::None:
 			case MediaBrowserCommon::CompleterMode::Continuous:
 				searchW = m_searchE;
 				name = m_searchE->text();
@@ -584,6 +587,8 @@ void MediaBrowser::search()
 		m_searchReply->deleteLater();
 	if (m_imageReply)
 		m_imageReply->deleteLater();
+	if (m_mediaBrowser)
+		m_mediaBrowser->finalize();
 	m_resultsW->clear();
 	if (!name.isEmpty())
 	{

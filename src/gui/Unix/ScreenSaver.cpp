@@ -18,11 +18,9 @@
 
 #include <ScreenSaver.hpp>
 
-#if defined(Q_WS_X11) || (QT_VERSION >= 0x050000 && defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID))
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 
-#if QT_VERSION >= 0x050000
-	#include <QGuiApplication>
-#endif
+#include <QGuiApplication>
 #include <QLibrary>
 
 class ScreenSaverPriv : public QObject
@@ -93,11 +91,8 @@ private:
 ScreenSaver::ScreenSaver() :
 	m_priv(new ScreenSaverPriv)
 {
-#if QT_VERSION >= 0x050000
-	if (QGuiApplication::platformName() != "xcb")
-		return;
-#endif
-	m_priv->load();
+	if (QGuiApplication::platformName() == "xcb")
+		m_priv->load();
 }
 ScreenSaver::~ScreenSaver()
 {

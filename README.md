@@ -145,16 +145,12 @@ In Linux/BSD you must associate keys with commands:
 
 ### CMake requirements
 
-For CMake build be sure that you have correct CMake version:
-- CMake 2.8.11 or higher is recommended,
-- CMake 2.8.9 is the lowest version for Qt5,
-- CMake 2.8.6 is the lowest version for Qt4.
+For CMake build be sure that you have CMake 3.1 or higher.
 
 ### You need devel packages:
 
 #### Necessary:
-- Qt4 >= 4.8.0 or Qt5 >= 5.0.0 (>= 5.6.1; >= 5.7.1 recommended):
-	- QtOpenGL - not used since Qt 5.6.0,
+- Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended):
 	- QtDBus - Linux/BSD only,
 	- QtSvg - for SVG icons,
 - FFmpeg >= 2.2 (>= 2.5.x recommended; >= 3.1.x recommended for CUVID):
@@ -185,62 +181,8 @@ For CMake build be sure that you have correct CMake version:
 
 - Common packages:
 ```
-$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp
+$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt5-base qt5-tools
 ```
-- Qt:
-	- for Qt5 build (recommend for Qt5 >= 5.6.1): `sudo pacman -S qt5-base qt5-tools`,
-	- for Qt4 build: `sudo pacman -S qt4`.
-
-##### OpenSUSE dependencies (for Qt4 build)
-
-- Add Packman repository for FFmpeg with all codecs (don't mix FFmpeg from different repositories!):
-	- openSUSE Leap 42.1: `sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.1 Packman`
-	- openSUSE 13.2: `sudo zypper ar http://packman.inode.at/suse/openSUSE_13.2 Packman`
-- Install dependencies:
-```
-$ sudo zypper in cmake libqt4-devel gcc-c++ alsa-devel libpulse-devel libass-devel libtag-devel libcdio-devel libcddb-devel libXv-devel Mesa-devel libsidplayfp-devel libgme-devel libva-devel libvdpau-devel libavcodec-devel libavformat-devel libavutil-devel libswscale-devel libswresample-devel libavdevice-devel
-```
-
-##### Ubuntu
-
-- Open "Software & Updates" and select the "Universe" repository.
-
-##### Ubuntu 16.04 and higher dependencies (Qt4 build)
-
-- Install dependencies from the package manager:
-```
-$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavdevice-dev
-```
-
-##### Ubuntu 15.04 and 15.10 dependencies (Qt4 build)
-
-- Install dependencies from the package manager:
-```
-$ sudo apt-get install cmake g++ libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libva-dev libvdpau-dev libavcodec-ffmpeg-dev libavformat-ffmpeg-dev libavutil-ffmpeg-dev libswscale-ffmpeg-dev libswresample-ffmpeg-dev libavdevice-ffmpeg-dev
-```
-
-##### Ubuntu 14.10 and older dependencies (Qt4 build)
-
-Ubuntu <= 14.10 uses old LibAV instead of the new FFmpeg (>= 2.2 is necessary), so the FFmpeg must be compiled from sources and the LibAV development files must be removed!
-
-- Install dependencies from the package manager:
-```
-$ sudo apt-get install cmake g++ yasm libqt4-dev libasound2-dev libass-dev libcdio-dev libcddb2-dev libsidplayfp-dev libgme-dev libxv-dev libtag1-dev libpulse-dev libssl-dev libva-dev libvdpau-dev
-```
-- Remove LibAV devel files for the compilation time (this is mandatory, otherwise QMPlay2 will link to the old LibAV libraries and it will crash at runtime!):
-```
-$ sudo apt-get remove libavformat-dev libavcodec-dev libavresample-dev libavdevice-dev libavutil-dev
-```
-You can install it again after compilation.
-- Download the newest FFmpeg from http://ffmpeg.org/download.html and unpack it. Then write a command:
-```
-$ ./configure --prefix=/usr/local --enable-shared --disable-static --enable-openssl --disable-avfilter --disable-encoders --disable-muxers --enable-muxer=matroska --disable-programs
-$ make -j4
-$ sudo make -j4 install
-```
-This will compile and install the newest FFmpeg without features that are not supported in QMPlay2.
-- Run: `sudo ldconfig`
-- Before QMPlay2 compilation please be sure that you have removed LibAV development packages from repositories!
 
 #### PC-BSD 10.3
 
@@ -248,7 +190,6 @@ This will compile and install the newest FFmpeg without features that are not su
 ```
 $ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio libcddb libass portaudio taglib libvdpau libva
 ```
-For Qt4 build install also `qt4` package.
 
 ### Running the compilation for Linux/BSD using CMake:
 
@@ -267,7 +208,6 @@ CMake options (option - default value: description):
 	- `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
 	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
-	- `USE_QT5` - autodetect: if Qt >= 5.6.1 is found then it uses Qt5, otherwise it uses Qt4.
 	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
 	- `USE_FFMPEG_VAAPI`: autodetect: enabled on X11 if libva and libva-x11 exist.
 	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exist.
@@ -291,8 +231,6 @@ CMake options (option - default value: description):
 	- `USE_AVRESAMPLE` - `OFF`: use libavresample instead of libswresample.
 	- `USE_JEMALLOC` - `OFF`: link to jemalloc memory allocator which can reduce memory usage.
 	- `USE_CMD` - Windows only, `OFF`.
-	- `USE_PROSTOPLEER` - `ON`: enable/disable Prostopleer in Extensions module.
-	- `USE_SOUNDCLOUD` - `OFF`: enable/disable SoundCloud in Extensions module.
 	- `USE_ANIMEODCINKI` - `ON`: enable/disable AnimeOdcinki in Extensions module.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
@@ -301,12 +239,10 @@ CMake options (option - default value: description):
 	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
 
 Using other Qt installation using CMake:
-- Qt4: `QT_QMAKE_EXECUTABLE`: path to the `qmake` executable from Qt4.
-- Qt5:
-	- `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
-	- `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
-	- `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
-	- `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
+- `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
+- `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
+- `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
+- `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 
@@ -324,12 +260,12 @@ $ make -j8
 $ sudo make -j8 install/strip
 ```
 
-- Use manually-specified install prefix, force Qt4, disable SID, enable jemalloc, use Polish language only and use manually-specified Solid actions path:
+- Use manually-specified install prefix, disable SID, enable jemalloc, use Polish language only and use manually-specified Solid actions path:
 
 ```sh
 $ mkdir build
 $ cd build
-$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT5=NO -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
 $ make -j8
 $ sudo make -j8 install
 ```
@@ -383,4 +319,3 @@ Use CMake. You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/
 
 - QMPlay2 contains modified libmodplug sources which are used by Modplug module.
 - QMPlay2 uses Concept icons created by Alexey Varfolomeev.
-- QMPlay2 uses modified [json11](https://github.com/dropbox/json11) sources.

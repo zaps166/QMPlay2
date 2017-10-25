@@ -23,7 +23,7 @@
 class NetworkReplyPriv;
 struct NetworkAccessParams;
 
-class NetworkReply : public QObject, public BasicIO
+class NetworkReply final : public QObject, public BasicIO
 {
 	Q_OBJECT
 
@@ -46,9 +46,7 @@ public:
 		Download,
 		Aborted
 	};
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 	Q_ENUM(Error)
-#endif
 
 	enum class Wait
 	{
@@ -56,15 +54,13 @@ public:
 		Timeout,
 		Error
 	};
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 	Q_ENUM(Wait)
-#endif
 
-	~NetworkReply() final;
+	~NetworkReply();
 
 	QString url() const;
 
-	void abort() override final;
+	void abort() override;
 
 	bool hasError() const;
 	Error error() const;

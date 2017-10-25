@@ -20,12 +20,12 @@
 
 #include <SubsDec.hpp>
 
-class Classic : public SubsDec
+class Classic final : public SubsDec
 {
 public:
 	Classic(bool, double);
 private:
-	bool toASS(const QByteArray &, class LibASS *, double) override final;
+	bool toASS(const QByteArray &, class LibASS *, double) override;
 
 	/**/
 

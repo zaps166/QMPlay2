@@ -19,9 +19,7 @@
 #include <OpenGL2.hpp>
 #include <OpenGL2Writer.hpp>
 
-#ifdef OPENGL_NEW_API
-	#include <QGuiApplication>
-#endif
+#include <QGuiApplication>
 
 OpenGL2::OpenGL2() :
 	Module("OpenGL2")
@@ -30,13 +28,9 @@ OpenGL2::OpenGL2() :
 
 	init("Enabled", true);
 	init("AllowPBO", true);
-#ifdef OPENGL_NEW_API
 	const QString platformName = QGuiApplication::platformName();
 	init("ForceRtt", (platformName == "cocoa" || platformName == "android"));
-#endif
-#ifdef VSYNC_SETTINGS
 	init("VSync", true);
-#endif
 #ifdef Q_OS_WIN
 	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
 		init("PreventFullScreen", true);
@@ -78,16 +72,12 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	allowPboB = new QCheckBox(tr("Allow to use PBO (if available)"));
 	allowPboB->setChecked(sets().getBool("AllowPBO"));
 
-#ifdef OPENGL_NEW_API
 	forceRttB = new QCheckBox(tr("Force render to texture if possible (not recommended)"));
 	forceRttB->setToolTip(tr("Always enabled on Wayland and Android platforms.\nSet visualizations to OpenGL mode if enabled."));
 	forceRttB->setChecked(sets().getBool("ForceRtt"));
-#endif
 
-#ifdef VSYNC_SETTINGS
 	vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
 	vsyncB->setChecked(sets().getBool("VSync"));
-#endif
 
 #ifdef Q_OS_WIN
 	if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
@@ -104,12 +94,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(enabledB);
 	layout->addWidget(allowPboB);
-#ifdef OPENGL_NEW_API
 	layout->addWidget(forceRttB);
-#endif
-#ifdef VSYNC_SETTINGS
 	layout->addWidget(vsyncB);
-#endif
 #ifdef Q_OS_WIN
 	if (preventFullScreenB)
 		layout->addWidget(preventFullScreenB);
@@ -120,12 +106,8 @@ void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", enabledB->isChecked());
 	sets().set("AllowPBO", allowPboB->isChecked());
-#ifdef OPENGL_NEW_API
 	sets().set("ForceRtt", forceRttB->isChecked());
-#endif
-#ifdef VSYNC_SETTINGS
 	sets().set("VSync", vsyncB->isChecked());
-#endif
 #ifdef Q_OS_WIN
 	if (preventFullScreenB)
 		sets().set("PreventFullScreen", preventFullScreenB->isChecked());

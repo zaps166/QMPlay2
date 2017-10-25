@@ -263,6 +263,8 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 	addSeparator();
 	choice->addAction(newAction(Repeat::tr("Random and &repeat"), this, repeatActions[RepeatRandom], false, QIcon(), true));
 	choice->addAction(newAction(Repeat::tr("Random in group and repea&t"), this, repeatActions[RepeatRandomGroup], false, QIcon(), true));
+	addSeparator();
+	choice->addAction(newAction(Repeat::tr("&Stop playback after every file"), this, repeatActions[RepeatStopAfter], false, QIcon(), true));
 
 	for (int i = 0; i < RepeatModeCount; ++i)
 		repeatActions[i]->setProperty("enumValue", i);
@@ -563,6 +565,7 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(player->repeat->repeatActions[RandomGroupMode], "KeyBindings/Player-Repeat-RandomGroupMode", "Alt+5");
 	shortcuts->appendAction(player->repeat->repeatActions[RepeatRandom], "KeyBindings/Player-Repeat-RepeatRandom", "Alt+6");
 	shortcuts->appendAction(player->repeat->repeatActions[RepeatRandomGroup], "KeyBindings/Player-Repeat-RepeatRandomGroup", "Alt+7");
+	shortcuts->appendAction(player->repeat->repeatActions[RepeatStopAfter], "KeyBindings/Player-Repeat-RepeatStopAfter", "Alt+8");
 
 
 	shortcuts->appendAction(playback->toggleAudio, "KeyBindings/Playback-toggleAudio", "D");

@@ -24,45 +24,41 @@
 
 class OpenGL2Common;
 
-class OpenGL2Writer : public VideoWriter
+class OpenGL2Writer final : public VideoWriter
 {
 	Q_DECLARE_TR_FUNCTIONS(OpenGL2Writer)
 public:
 	OpenGL2Writer(Module &);
 private:
-	~OpenGL2Writer() final;
+	~OpenGL2Writer();
 
-	bool set() override final;
+	bool set() override;
 
-	bool readyWrite() const override final;
+	bool readyWrite() const override;
 
-	bool hwAccelError() const override final;
+	bool hwAccelError() const override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 
-	QMPlay2PixelFormats supportedPixelFormats() const override final;
+	QMPlay2PixelFormats supportedPixelFormats() const override;
 
-	void writeVideo(const VideoFrame &videoFrame) override final;
-	void writeOSD(const QList<const QMPlay2OSD *> &) override final;
+	void writeVideo(const VideoFrame &videoFrame) override;
+	void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-	void setHWAccelInterface(HWAccelInterface *hwAccelInterface) override final;
+	void setHWAccelInterface(HWAccelInterface *hwAccelInterface) override;
 
-	void pause() override final;
+	void pause() override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	bool open() override final;
+	bool open() override;
 
 	/**/
 
 	OpenGL2Common *drawable;
 	bool allowPBO;
-#ifdef OPENGL_NEW_API
 	bool forceRtt, useRtt;
-#endif
-#ifdef VSYNC_SETTINGS
 	bool vSync;
-#endif
 #ifdef Q_OS_WIN
 	bool preventFullScreen;
 #endif

@@ -20,14 +20,14 @@
 
 #include <VideoFilter.hpp>
 
-class MotionBlur : public VideoFilter
+class MotionBlur final : public VideoFilter
 {
 public:
 	MotionBlur();
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override final;
+	bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override final;
+	bool processParams(bool *paramsCorrected) override;
 };
 
 #define MotionBlurName "Motion Blur"

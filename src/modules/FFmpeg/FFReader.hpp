@@ -24,29 +24,29 @@
 
 struct AVIOContext;
 
-class FFReader : public Reader
+class FFReader final : public Reader
 {
 public:
 	FFReader();
 private:
-	bool readyRead() const override final;
-	bool canSeek() const override final;
+	bool readyRead() const override;
+	bool canSeek() const override;
 
-	bool seek(qint64) override final;
-	QByteArray read(qint64) override final;
-	void pause() override final;
-	bool atEnd() const override final;
-	void abort() override final;
+	bool seek(qint64) override;
+	QByteArray read(qint64) override;
+	void pause() override;
+	bool atEnd() const override;
+	void abort() override;
 
-	qint64 size() const override final;
-	qint64 pos() const override final;
-	QString name() const override final;
+	qint64 size() const override;
+	qint64 pos() const override;
+	QString name() const override;
 
-	bool open() override final;
+	bool open() override;
 
 	/**/
 
-	~FFReader() final;
+	~FFReader();
 
 	AVIOContext *avioCtx;
 	bool paused, canRead;

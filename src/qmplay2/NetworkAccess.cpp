@@ -112,7 +112,7 @@ private:
 		else
 		{
 			AVDictionary *options = nullptr;
-			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
+			const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
 			av_dict_set(&options, "seekable", "0", 0);
 			if (!m_postData.isNull())
 			{
@@ -135,7 +135,6 @@ private:
 				}
 				switch (ret)
 				{
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 15, 100)
 					case AVERROR_HTTP_BAD_REQUEST:
 						m_error = NetworkReply::Error::Connection400;
 						break;
@@ -154,7 +153,6 @@ private:
 					case AVERROR_HTTP_SERVER_ERROR:
 						m_error = NetworkReply::Error::Connection5XX;
 						continue; // Continue if server error (e.g. Service Temporarily Unavailable)
-#endif
 					default:
 						m_error = NetworkReply::Error::Connection;
 						continue; // Continue if connection error
@@ -321,7 +319,7 @@ NetworkReply::~NetworkReply()
 
 /**/
 
-const char *const NetworkAccess::UrlEncoded = "Content-Type: application/x-www-form-urlencoded; charset=utf-8";
+const char *const NetworkAccess::UrlEncoded = "Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n";
 
 NetworkAccess::NetworkAccess(QObject *parent) :
 	QObject(parent),

@@ -36,13 +36,9 @@ public:
 		setTitleBarVisible(titleBarVisible);
 	}
 private:
-	class EmptyW : public QWidget
+	class EmptyW final : public QWidget
 	{
-#if QT_VERSION >= 0x050000 && QT_VERSION < 0x050600
-		void showEvent(QShowEvent *);
-#endif
-
-		QSize sizeHint() const override final;
+		QSize sizeHint() const override;
 	} emptyW;
 	bool titleBarVisible, globalTitleBarVisible;
 };

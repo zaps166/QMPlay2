@@ -23,19 +23,19 @@
 
 struct SwsContext;
 
-class FFDecVAAPI : public FFDecHWAccel
+class FFDecVAAPI final : public FFDecHWAccel
 {
 public:
 	FFDecVAAPI(QMutex &, Module &);
-	~FFDecVAAPI() final;
+	~FFDecVAAPI();
 
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
+	QString name() const override;
 
-	void downloadVideoFrame(VideoFrame &decoded) override final;
+	void downloadVideoFrame(VideoFrame &decoded) override;
 
-	bool open(StreamInfo &, VideoWriter *) override final;
+	bool open(StreamInfo &, VideoWriter *) override;
 
 private:
 	bool m_useOpenGL, m_allowVDPAU;

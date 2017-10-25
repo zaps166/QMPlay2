@@ -19,36 +19,16 @@
 #pragma once
 
 #include <QLineEdit>
-#include <QLabel>
 
-class LineEditButton : public QLabel
+class LineEdit final : public QLineEdit
 {
 	Q_OBJECT
-public:
-	LineEditButton();
-private:
-	void mousePressEvent(QMouseEvent *) override final;
-signals:
-	void clicked();
-};
 
-/**/
-
-class LineEdit : public QLineEdit
-{
-	Q_OBJECT
 public:
 	LineEdit(QWidget *parent = nullptr);
-private:
-	void resizeEvent(QResizeEvent *) override final;
-	void mousePressEvent(QMouseEvent *) override final;
-	void mouseMoveEvent(QMouseEvent *) override final;
 
-	LineEditButton b;
-private slots:
-	void textChangedSlot(const QString &);
-public slots:
 	void clearText();
+
 signals:
 	void clearButtonClicked();
 };

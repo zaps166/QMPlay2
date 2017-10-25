@@ -89,7 +89,6 @@ Drawable::Drawable(DirectDrawWriter &writer) :
 							setPalette(QColor(ColorKEY));
 							connect(&QMPlay2Core, SIGNAL(videoDockMoved()), this, SLOT(updateOverlay()));
 							connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(overlayVisible(bool)));
-							connect(&QMPlay2Core, SIGNAL(mainWidgetNotMinimized(bool)), this, SLOT(overlayVisible(bool)));
 							connect(&visibleTim, SIGNAL(timeout()), this, SLOT(doOverlayVisible()));
 							visibleTim.setSingleShot(true);
 

@@ -1,16 +1,9 @@
-cmake_minimum_required(VERSION 2.8.6)
-if(COMMAND cmake_policy)
-    if(POLICY CMP0003)
-        cmake_policy(SET CMP0003 NEW)
-    endif()
-    if(POLICY CMP0020)
-        cmake_policy(SET CMP0020 NEW)
-    endif()
-    if(POLICY CMP0043)
-        cmake_policy(SET CMP0043 NEW)
-    endif()
-endif()
+cmake_minimum_required(VERSION 3.1)
 project(QMPlay2)
+
+if(WIN32)
+    find_package(Qt5WinExtras 5.6 REQUIRED)
+endif()
 
 set(GUI_HDR
     Main.hpp
@@ -40,6 +33,8 @@ set(GUI_HDR
     ShortcutHandler.hpp
     KeyBindingsDialog.hpp
     Updater.hpp
+    RepeatMode.hpp
+    PanGestureEventFilter.hpp
 )
 
 set(GUI_SRC
@@ -82,6 +77,12 @@ set(GUI_RESOURCES
     resources.qrc
 )
 
+if(NOT WIN32)
+    list(APPEND GUI_SRC
+        PanGestureEventFilter.cpp
+    )
+endif()
+
 if(APPLE)
     list(APPEND GUI_HDR
         macOS/QMPlay2MacExtensions.hpp
@@ -93,13 +94,7 @@ if(APPLE)
     include_directories("macOS")
 endif()
 
-if(USE_QT5)
-    qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt5_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
-else()
-    qt4_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-    qt4_add_resources(GUI_RESOURCES_RCC ${GUI_RESOURCES})
-endif()
+qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
 
 include_directories(../qmplay2/headers)
 
@@ -134,8 +129,11 @@ if(WIN32)
     # updater
     add_definitions(-DUPDATER)
 
-    # screen saver
-    list(APPEND GUI_SRC Windows/ScreenSaver.cpp)
+    # additional Windows sources
+    list(APPEND GUI_SRC
+        Windows/ScreenSaver.cpp
+        Windows/PanGestureEventFilter.cpp
+    )
 elseif(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
@@ -179,25 +177,21 @@ add_executable(${PROJECT_NAME}
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
-    ${GUI_RESOURCES_RCC}
+    ${GUI_RESOURCES}
 )
 
 if(USE_JEMALLOC)
     target_link_libraries(${PROJECT_NAME} ${JEMALLOC_LIBRARIES})
 endif()
 
-if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets)
-else()
-    target_link_libraries(${PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
-endif()
-
-add_dependencies(${PROJECT_NAME} libqmplay2)
-target_link_libraries(${PROJECT_NAME} ${qmplay2lib})
+target_link_libraries(${PROJECT_NAME}
+    libqmplay2
+)
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     mark_as_advanced(CUSTOM_GUI_LIBRARIES)
+    target_link_libraries(${PROJECT_NAME} Qt5::WinExtras)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
@@ -213,39 +207,45 @@ endif()
 if(WIN32)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 elseif(APPLE)
-    install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+    install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${BUNDLE_INSTALL_DIR})
 
     set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
     set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
-    install(FILES
-        "${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib"
-        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/platforms")
-    install(FILES
-        "${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib"
-        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/iconengines")
-    install(DIRECTORY
-        "${QT_PLUGINS_DIR}/imageformats"
-        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins"
-        PATTERN "*_debug.dylib" EXCLUDE
-        PATTERN "*.dSYM" EXCLUDE)
-    install(DIRECTORY
-        "${QT_LIBS_DIR}/../translations"
-        DESTINATION "${MAC_BUNDLE_PATH}/Contents"
-        FILES_MATCHING
-        PATTERN "qtbase_*.qm")
-    install(CODE "
-        include(BundleUtilities)
-        set(BU_CHMOD_BUNDLE_ITEMS ON)
-        list(APPEND DIRS /usr/local/lib ${QT_LIBS_DIR})
-        file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
-            \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
-            \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
-        file(WRITE \"${MAC_BUNDLE_PATH}/Contents/Resources/qt.conf\")
-        fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
-    ")
+    if(APPLE_STANDALONE_BUNDLE)
+        install(FILES
+            "${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/platforms")
+        install(FILES
+            "${QT_PLUGINS_DIR}/iconengines/libqsvgicon.dylib"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/iconengines")
+        install(DIRECTORY
+            "${QT_PLUGINS_DIR}/imageformats"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins"
+            PATTERN "*_debug.dylib" EXCLUDE
+            PATTERN "*.dSYM" EXCLUDE)
+        install(DIRECTORY
+            "${QT_LIBS_DIR}/../translations"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents"
+            FILES_MATCHING
+            PATTERN "qtbase_*.qm")
+        install(CODE "
+            include(BundleUtilities)
+            set(BU_CHMOD_BUNDLE_ITEMS ON)
+            list(APPEND DIRS /usr/local/lib ${QT_LIBS_DIR})
+            file(GLOB_RECURSE QMPLAY2_MODULES_AND_QT_PLUGINS
+                \"${MAC_BUNDLE_PATH}/Contents/MacOS/modules/*\"
+                \"${MAC_BUNDLE_PATH}/Contents/plugins/*.dylib\")
+            file(WRITE \"${MAC_BUNDLE_PATH}/Contents/Resources/qt.conf\")
+            fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
+        ")
+    endif()
 else()
     # executable
-    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    if(APPLE)
+        install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${BUNDLE_INSTALL_DIR})
+    else()
+        install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    endif()
 
     # desktop files
     file(GLOB DESKTOP_FILES Unix/QMPlay2*.desktop)

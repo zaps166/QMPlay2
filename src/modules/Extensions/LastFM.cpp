@@ -18,9 +18,9 @@
 
 #include <LastFM.hpp>
 
-constexpr char audioScrobbler2URL[] = "https://ws.audioscrobbler.com/2.0";
-constexpr char api_key[] = "b1165c9688c2fcf29fc74c2ab62ffd90";
-constexpr char secret[]  = "e36ce24a59f45514daad8fccec294c34";
+constexpr const char *audioScrobbler2URL = "https://ws.audioscrobbler.com/2.0";
+constexpr const char *api_key = "b1165c9688c2fcf29fc74c2ab62ffd90";
+constexpr const char *secret = "e36ce24a59f45514daad8fccec294c34";
 constexpr int scrobbleSec = 5;
 
 Q_DECLARE_METATYPE(LastFM::Scrobble)

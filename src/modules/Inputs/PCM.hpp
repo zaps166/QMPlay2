@@ -24,25 +24,25 @@
 
 class Reader;
 
-class PCM : public Demuxer
+class PCM final : public Demuxer
 {
 public:
 	enum FORMAT {PCM_U8, PCM_S8, PCM_S16, PCM_S24, PCM_S32, PCM_FLT, FORMAT_COUNT};
 
 	PCM(Module &);
 private:
-	bool set() override final;
+	bool set() override;
 
-	QString name() const override final;
-	QString title() const override final;
-	double length() const override final;
-	int bitrate() const override final;
+	QString name() const override;
+	QString title() const override;
+	double length() const override;
+	int bitrate() const override;
 
-	bool seek(double, bool) override final;
-	bool read(Packet &, int &) override final;
-	void abort() override final;
+	bool seek(double, bool) override;
+	bool read(Packet &, int &) override;
+	void abort() override;
 
-	bool open(const QString &) override final;
+	bool open(const QString &) override;
 
 	/**/
 

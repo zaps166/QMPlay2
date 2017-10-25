@@ -134,7 +134,7 @@ void Module::setInstance()
 
 /**/
 
-#define QMPLAY2_MODULES_API_VERSION 5
+#define QMPLAY2_MODULES_API_VERSION 6
 
 #define QMPLAY2_EXPORT_MODULE(ModuleClass) \
 	extern "C" quint32 getQMPlay2ModuleAPIVersion() \

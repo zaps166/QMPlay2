@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.1)
 project(langs)
 
 if(LANGUAGES STREQUAL "All")
@@ -12,12 +12,8 @@ else()
     endforeach()
 endif()
 
-if(USE_QT5)
-    find_package(Qt5LinguistTools REQUIRED)
-    qt5_add_translation(QM_FILES ${QMPLAY2_TSS})
-else()
-    qt4_add_translation(QM_FILES ${QMPLAY2_TSS})
-endif()
+find_package(Qt5LinguistTools REQUIRED)
+qt5_add_translation(QM_FILES ${QMPLAY2_TSS})
 
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 

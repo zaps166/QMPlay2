@@ -16,20 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <OpenGL2CommonQt5.hpp>
+#pragma once
 
-#include <QOffscreenSurface>
-#include <QOpenGLContext>
-
-bool OpenGL2CommonQt5::testGL()
+namespace PanGestureEventFilter
 {
-	QOpenGLContext glCtx;
-	if ((isOK = glCtx.create()))
-	{
-		QOffscreenSurface offscreenSurface;
-		offscreenSurface.create();
-		if ((isOK = glCtx.makeCurrent(&offscreenSurface)))
-			testGLInternal();
-	}
-	return isOK;
+	void install();
 }

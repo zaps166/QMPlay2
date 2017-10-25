@@ -18,27 +18,27 @@
 
 #pragma once
 
-#include <OpenGL2CommonQt5.hpp>
+#include <OpenGL2Common.hpp>
 
 #include <QSurfaceFormat>
 #include <QOpenGLWidget>
 
-class OpenGL2Widget : public QOpenGLWidget, public OpenGL2CommonQt5
+class OpenGL2Widget final : public QOpenGLWidget, public OpenGL2Common
 {
 	Q_OBJECT
 public:
 	OpenGL2Widget();
-	~OpenGL2Widget() final;
+	~OpenGL2Widget();
 
-	QWidget *widget() override final;
+	QWidget *widget() override;
 
-	bool setVSync(bool enable) override final;
-	void updateGL(bool requestDelayed) override final;
+	bool setVSync(bool enable) override;
+	void updateGL(bool requestDelayed) override;
 
-	void initializeGL() override final;
-	void paintGL() override final;
+	void initializeGL() override;
+	void paintGL() override;
 private slots:
 	void aboutToBeDestroyed();
 private:
-	bool event(QEvent *e) override final;
+	bool event(QEvent *e) override;
 };

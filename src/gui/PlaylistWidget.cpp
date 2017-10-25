@@ -304,17 +304,9 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 		if (ioCtrl.isAborted())
 			break;
 
-		QString url, entryName;
-		{
-			//Get the default entry name - it'll be used if doesn't exist in stream
-			QString addressPrefixName;
-			Functions::splitPrefixAndUrlIfHasPluginPrefix(urls.at(i), &addressPrefixName, &url, &entryName);
-			if (addressPrefixName != "QMPlay2EntryName")
-			{
-				url = Functions::Url(urls.at(i));
-				entryName.clear();
-			}
-		}
+		const QString entryName = QMPlay2Core.getNameForUrl(urls.at(i)); // Get the default entry name - it'll be used if doesn't exist in stream
+
+		QString url = Functions::Url(urls.at(i));
 
 		int insertChildAt = -1;
 		if (existingEntries)
@@ -570,7 +562,7 @@ PlaylistWidget::PlaylistWidget() :
 	setAnimated(true);
 	header()->setStretchLastSection(false);
 	setHeaderHidden(true);
-	Functions::setHeaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
+	header()->setSectionResizeMode(0, QHeaderView::Stretch);
 	header()->hideSection(1);
 	setItemsResizeToContents(true);
 	setIconSize({22, 22});
@@ -596,7 +588,7 @@ void PlaylistWidget::setItemsResizeToContents(bool b)
 {
 	const QHeaderView::ResizeMode rm = b ? QHeaderView::ResizeToContents : QHeaderView::Fixed;
 	for (int i = 1; i <= 2; ++i)
-		Functions::setHeaderSectionResizeMode(header(), i, rm);
+		header()->setSectionResizeMode(i, rm);
 }
 
 void PlaylistWidget::sortCurrentGroup(int column, Qt::SortOrder sortOrder)

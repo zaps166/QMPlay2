@@ -22,11 +22,11 @@
 
 #include <DockWidget.hpp>
 
-class TextEdit : public QTextEdit
+class TextEdit final : public QTextEdit
 {
 private:
-	void mouseMoveEvent(QMouseEvent *) override final;
-	void mousePressEvent(QMouseEvent *) override final;
+	void mouseMoveEvent(QMouseEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
 };
 
 /**/

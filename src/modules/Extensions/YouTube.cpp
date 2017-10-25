@@ -48,7 +48,7 @@
 
 #define YOUTUBE_URL "https://www.youtube.com"
 
-constexpr char g_cantFindTheTitle[] = "(Can't find the title)";
+constexpr const char *g_cantFindTheTitle = "(Can't find the title)";
 static QMap<int, QString> g_itagArr;
 
 static inline QString toPercentEncoding(const QString &txt)
@@ -136,8 +136,8 @@ ResultsYoutube::ResultsYoutube() :
 	headerItem()->setText(2, tr("User"));
 
 	header()->setStretchLastSection(false);
-	Functions::setHeaderSectionResizeMode(header(), 0, QHeaderView::Stretch);
-	Functions::setHeaderSectionResizeMode(header(), 1, QHeaderView::ResizeToContents);
+	header()->setSectionResizeMode(0, QHeaderView::Stretch);
+	header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
 	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(playEntry(QTreeWidgetItem *)));
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));

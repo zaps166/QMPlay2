@@ -35,6 +35,12 @@
 	#include <QScreen>
 	#include <QWindow>
 #endif
+#ifdef Q_OS_WIN
+	#include <QWinThumbnailToolButton>
+	#include <QWinThumbnailToolBar>
+	#include <QWinTaskbarProgress>
+	#include <QWinTaskbarButton>
+#endif
 #include <qevent.h>
 
 /* QMPlay2 gui */
@@ -70,21 +76,11 @@ using Functions::timeToStr;
 
 #include <cmath>
 
-#if QT_VERSION >= 0x050000 && defined Q_OS_WIN
-	#define QT5_WINDOWS
-#endif
-
-/* Qt5 or (Qt4 in Windows) */
-#if (QT_VERSION >= 0x050000 || defined Q_OS_WIN)
-	#define UseMainWidgetTmpStyle
-#endif
-
-#ifdef UseMainWidgetTmpStyle
 /* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
-class MainWidgetTmpStyle : public QCommonStyle
+class MainWidgetTmpStyle final : public QCommonStyle
 {
 public:
-	~MainWidgetTmpStyle() final = default;
+	~MainWidgetTmpStyle() = default;
 
 	int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override
 	{
@@ -94,9 +90,8 @@ public:
 		return pM;
 	}
 };
-#endif
 
-#ifndef Q_OS_MAC
+// #ifndef Q_OS_MAC
 static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 {
 	QMenu *newMenu = new QMenu(src->title(), dest);
@@ -112,35 +107,26 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 	}
 	dest->addMenu(newMenu);
 }
-#endif
+// #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
+MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	updater(this)
 {
 	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 
-#ifdef UseMainWidgetTmpStyle
-	#if QT_VERSION >= 0x050000
-		bool createTmpStyle = false;
-		/* Looking for touch screen */
-		for (const QTouchDevice *touchDev : QTouchDevice::devices())
+	/* Looking for touch screen */
+	for (const QTouchDevice *touchDev : QTouchDevice::devices())
+	{
+		/* Touchscreen found */
+		if (touchDev->type() == QTouchDevice::TouchScreen)
 		{
-			/* Touchscreen found */
-			if (touchDev->type() == QTouchDevice::TouchScreen)
-			{
-				createTmpStyle = true;
-				break;
-			}
-		}
-		if (createTmpStyle)
-	#elif defined Q_OS_WIN
-		if (QSysInfo::windowsVersion() > QSysInfo::WV_6_1) //Qt4 can't detect touchscreen, so MainWidgetTmpStyle will be used only with Windows >= 8.0
-	#endif
 			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
-#endif
+			break;
+		}
+	}
 
 	setObjectName("MainWidget");
 
@@ -166,7 +152,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 
 	QMPlay2GUI.menuBar = new MenuBar;
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Icon()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
@@ -330,7 +316,7 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 	if (settings.getBool("MainWidget/TabPositionNorth"))
 		setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 	const bool menuHidden = settings.getBool("MainWidget/MenuHidden", false);
 	menuBar->setVisible(!menuHidden);
 	hideMenuAct = new QAction(tr("&Hide menu bar"), menuBar);
@@ -362,14 +348,14 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 
 	RepeatMode repeatMode = RepeatNormal;
 	if (settings.getBool("RestoreRepeatMode"))
-		repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatRandomGroup);
+		repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatStopAfter);
 	menuBar->player->repeat->repeatActions[repeatMode]->trigger();
 
 	if (settings.getBool("RestoreVideoEqualizer"))
 		QMPlay2GUI.videoAdjustment->restoreValues();
 
 	fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
-#if defined Q_OS_MAC || defined Q_OS_ANDROID
+#if /*defined Q_OS_MAC ||*/ defined Q_OS_ANDROID
 	show();
 #else
 	setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !isTrayVisible());
@@ -388,13 +374,14 @@ MainWidget::MainWidget(QPair<QStringList, QStringList> &arguments) :
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
-	while (!arguments.first.isEmpty())
+	for (const auto &argument : arguments)
 	{
-		const QString param = arguments.first.takeFirst();
-		const QString data  = arguments.second.takeFirst();
+		const QString &param = argument.first;
+		const QString &data  = argument.second;
 		noplay |= (param == "open" || param == "noplay");
 		processParam(param, data);
 	}
+	arguments.clear();
 
 	if (!noplay)
 	{
@@ -491,6 +478,8 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		else
 			playlistDock->add(data);
 	}
+	else if (param == "play")
+		playlistDock->start();
 	else if (param == "toggle")
 		togglePlay();
 	else if (param == "show")
@@ -582,6 +571,10 @@ void MainWidget::playStateChanged(bool b)
 		menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
 		menuBar->player->togglePlay->setText(tr("&Play"));
 	}
+#ifdef Q_OS_WIN
+	if (m_taskBarProgress)
+		m_taskBarProgress->setPaused(!b);
+#endif
 	emit QMPlay2Core.playStateChanged(playC.isPlaying() ? (b ? "Playing" : "Paused") : "Stopped");
 }
 
@@ -594,8 +587,7 @@ void MainWidget::volUpDown()
 }
 void MainWidget::toggleMuteIcon()
 {
-	if (QAction *toggleMuteAct = qobject_cast<QAction *>(sender()))
-		toggleMuteAct->setIcon(QMPlay2Core.getIconFromTheme(toggleMuteAct->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
+	menuBar->player->toggleMute->setIcon(QMPlay2Core.getIconFromTheme(menuBar->player->toggleMute->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
 }
 void MainWidget::actionSeek()
 {
@@ -718,8 +710,7 @@ void MainWidget::toggleVisibility()
 			showMaximized();
 			if (!isCompactView && !dockWidgetState.isEmpty())
 			{
-				restoreState(dockWidgetState);
-				QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, dockWidgetState));
+				doRestoreState(dockWidgetState);
 				dockWidgetState.clear();
 			}
 			maximized = false;
@@ -856,7 +847,7 @@ void MainWidget::createMenuBar()
 	setMenuBar(menuBar);
 
 	QMenu *secondMenu = new QMenu(this);
-#ifndef Q_OS_MAC
+// #ifndef Q_OS_MAC
 	copyMenu(secondMenu, menuBar->window);
 	secondMenu->addMenu(menuBar->widgets);
 	copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
@@ -866,32 +857,32 @@ void MainWidget::createMenuBar()
 	copyMenu(secondMenu, menuBar->help);
 	if (tray)
 		tray->setContextMenu(secondMenu);
-#else //On OS X add only the most important menu actions to dock menu
-	secondMenu->addAction(menuBar->player->togglePlay);
-	secondMenu->addAction(menuBar->player->stop);
-	secondMenu->addAction(menuBar->player->next);
-	secondMenu->addAction(menuBar->player->prev);
-	secondMenu->addSeparator();
-	secondMenu->addAction(menuBar->player->toggleMute);
-	secondMenu->addSeparator();
-	// Copy action, because PreferencesRole doesn't show in dock menu.
-	QAction *settings = new QAction(menuBar->options->settings->icon(), menuBar->options->settings->text(), menuBar->options->settings->parent());
-	connect(settings, &QAction::triggered, menuBar->options->settings, &QAction::trigger);
-	secondMenu->addAction(settings);
-
-	QAction *newInstanceAct = new QAction(tr("New window"), secondMenu);
-	connect(newInstanceAct, &QAction::triggered, [] {
-		QProcess::startDetached(QCoreApplication::applicationFilePath(), {"-noplay"}, QCoreApplication::applicationDirPath());
-	});
-	secondMenu->addSeparator();
-	secondMenu->addAction(newInstanceAct);
-
-	qt_mac_set_dock_menu(secondMenu);
-#endif
+// #else //On OS X add only the most important menu actions to dock menu
+// 	secondMenu->addAction(menuBar->player->togglePlay);
+// 	secondMenu->addAction(menuBar->player->stop);
+// 	secondMenu->addAction(menuBar->player->next);
+// 	secondMenu->addAction(menuBar->player->prev);
+// 	secondMenu->addSeparator();
+// 	secondMenu->addAction(menuBar->player->toggleMute);
+// 	secondMenu->addSeparator();
+// 	// Copy action, because PreferencesRole doesn't show in dock menu.
+// 	QAction *settings = new QAction(menuBar->options->settings->icon(), menuBar->options->settings->text(), menuBar->options->settings->parent());
+// 	connect(settings, &QAction::triggered, menuBar->options->settings, &QAction::trigger);
+// 	secondMenu->addAction(settings);
+// 
+// 	QAction *newInstanceAct = new QAction(tr("New window"), secondMenu);
+// 	connect(newInstanceAct, &QAction::triggered, [] {
+// 		QProcess::startDetached(QCoreApplication::applicationFilePath(), {"-noplay"}, QCoreApplication::applicationDirPath());
+// 	});
+// 	secondMenu->addSeparator();
+// 	secondMenu->addAction(newInstanceAct);
+// 
+// 	qt_mac_set_dock_menu(secondMenu);
+// #endif
 }
 void MainWidget::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 {
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 	switch (reason)
 	{
 		case QSystemTrayIcon::Trigger:
@@ -916,7 +907,7 @@ void MainWidget::toggleCompactView()
 
 		hideAllExtensions();
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 		menuBar->hide();
 #endif
 		mainTB->hide();
@@ -939,7 +930,7 @@ void MainWidget::toggleCompactView()
 
 		videoDock->fullScreen(false);
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 		menuBar->setVisible(!hideMenuAct->isChecked());
 #endif
 
@@ -970,7 +961,7 @@ void MainWidget::toggleFullScreen()
 		maximized = isMaximized();
 
 #ifndef Q_OS_MAC
-#ifndef QT5_WINDOWS
+#ifndef Q_OS_WIN
 		if (isFullScreen())
 #endif
 			showNormal();
@@ -983,7 +974,7 @@ void MainWidget::toggleFullScreen()
 		dockWidgetState = saveState();
 #endif // Q_OS_ANDROID
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if /*!defined Q_OS_MAC &&*/ !defined Q_OS_ANDROID
 		menuBar->hide();
 #endif
 		statusBar->hide();
@@ -1012,9 +1003,9 @@ void MainWidget::toggleFullScreen()
 		videoDock->fullScreen(true);
 		videoDock->show();
 
-#ifdef Q_OS_MAC
+// #ifdef Q_OS_MAC
 		menuBar->window->toggleVisibility->setEnabled(false);
-#endif
+// #endif
 		menuBar->window->toggleCompactView->setEnabled(false);
 		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut() << QKeySequence("ESC"));
 		fullScreen = true;
@@ -1033,9 +1024,9 @@ void MainWidget::toggleFullScreen()
 	}
 	else
 	{
-#ifdef Q_OS_MAC
+// #ifdef Q_OS_MAC
 		menuBar->window->toggleVisibility->setEnabled(true);
-#endif
+// #endif
 		menuBar->window->toggleCompactView->setEnabled(true);
 		menuBar->window->toggleFullScreen->setShortcuts(QList<QKeySequence>() << menuBar->window->toggleFullScreen->shortcut());
 
@@ -1061,7 +1052,7 @@ void MainWidget::toggleFullScreen()
 #else // Q_OS_ANDROID
 		showMaximized();
 #endif
-#ifdef QT5_WINDOWS
+#ifdef Q_OS_WIN
 		QCoreApplication::processEvents();
 #endif
 		restoreState(dockWidgetState);
@@ -1078,9 +1069,9 @@ void MainWidget::toggleFullScreen()
 			if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
 				dw->setFeatures(QDockWidget::AllDockWidgetFeatures);
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+// #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		menuBar->setVisible(!hideMenuAct->isChecked());
-#endif
+// #endif
 		statusBar->show();
 
 		mainTB->setMovable(tb_movable);
@@ -1209,6 +1200,13 @@ void MainWidget::browseSubsFile()
 void MainWidget::setSeekSMaximum(int max)
 {
 	seekS->setMaximum(qMax(0, max * 10));
+#ifdef Q_OS_WIN
+	if (m_taskBarProgress)
+	{
+		m_taskBarProgress->setMaximum(seekS->maximum() / 10);
+		m_taskBarProgress->setVisible(m_taskBarProgress->maximum() > 0);
+	}
+#endif
 	if (max >= 0)
 	{
 		seekS->setEnabled(true);
@@ -1239,6 +1237,10 @@ void MainWidget::updatePos(double pos)
 			currPos = intPos;
 		}
 		seekS->setValue(pos * 10.0);
+#ifdef Q_OS_WIN
+		if (m_taskBarProgress)
+			m_taskBarProgress->setValue(pos);
+#endif
 	}
 }
 void MainWidget::mousePositionOnSlider(int pos)
@@ -1281,7 +1283,7 @@ void MainWidget::about()
 	}
 }
 
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+// #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 void MainWidget::hideMenu(bool h)
 {
 	if (fullScreen || isCompactView)
@@ -1292,7 +1294,7 @@ void MainWidget::hideMenu(bool h)
 		QMPlay2Core.getSettings().set("MainWidget/MenuHidden", h);
 	}
 }
-#endif
+// #endif
 void MainWidget::lockWidgets(bool l)
 {
 	if (fullScreen || isCompactView)
@@ -1324,10 +1326,23 @@ void MainWidget::hideDocksSlot()
 			hideDocks();
 	}
 }
-void MainWidget::delayedRestore(QByteArray data)
+void MainWidget::doRestoreState(const QByteArray &data)
 {
-	QCoreApplication::processEvents();
-	restoreState(data);
+	if (isMaximized())
+	{
+		setUpdatesEnabled(false);
+		QTimer::singleShot(0, this, [=] {
+			QTimer::singleShot(0, this, [=] {
+				restoreState(data);
+				setUpdatesEnabled(true);
+				repaint();
+			});
+		});
+	}
+	else
+	{
+		restoreState(data);
+	}
 }
 
 void MainWidget::uncheckSuspend()
@@ -1363,11 +1378,11 @@ QMenu *MainWidget::createPopupMenu()
 	QMenu *popupMenu = QMainWindow::createPopupMenu();
 	if (!fullScreen && !isCompactView)
 	{
-#if !defined Q_OS_MAC && !defined Q_OS_ANDROID
+// #if !defined Q_OS_MAC && !defined Q_OS_ANDROID
 		popupMenu->insertAction(popupMenu->actions().value(0), hideMenuAct);
 		popupMenu->insertSeparator(popupMenu->actions().value(1));
 		popupMenu->addSeparator();
-#endif
+// #endif
 		popupMenu->addAction(lockWidgetsAct);
 	}
 	for (QAction *act : popupMenu->actions())
@@ -1410,6 +1425,74 @@ bool MainWidget::getFullScreen() const
 {
 	return fullScreen;
 }
+
+#ifdef Q_OS_WIN
+void MainWidget::setWindowsTaskBarFeatures()
+{
+	if (QSysInfo::windowsVersion() < QSysInfo::WV_6_1)
+		return;
+
+
+	QWinTaskbarButton *button = new QWinTaskbarButton(this);
+	button->setWindow(windowHandle());
+
+	m_taskBarProgress = button->progress();
+
+
+	QWinThumbnailToolBar *thumbnailToolBar = new QWinThumbnailToolBar(this);
+	thumbnailToolBar->setWindow(windowHandle());
+
+	QWinThumbnailToolButton *togglePlay = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(togglePlay, &QWinThumbnailToolButton::clicked, menuBar->player->togglePlay, &QAction::trigger);
+	connect(menuBar->player->togglePlay, &QAction::changed, togglePlay, [=] {
+		togglePlay->setToolTip(menuBar->player->togglePlay->toolTip());
+		togglePlay->setIcon(menuBar->player->togglePlay->icon());
+	});
+
+	QWinThumbnailToolButton *stop = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(stop, &QWinThumbnailToolButton::clicked, menuBar->player->stop, &QAction::trigger);
+	stop->setToolTip(menuBar->player->stop->toolTip());
+	stop->setIcon(menuBar->player->stop->icon());
+
+	QWinThumbnailToolButton *prev = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(prev, &QWinThumbnailToolButton::clicked, menuBar->player->prev, &QAction::trigger);
+	prev->setToolTip(menuBar->player->prev->toolTip());
+	prev->setIcon(menuBar->player->prev->icon());
+
+	QWinThumbnailToolButton *next = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(next, &QWinThumbnailToolButton::clicked, menuBar->player->next, &QAction::trigger);
+	next->setToolTip(menuBar->player->next->toolTip());
+	next->setIcon(menuBar->player->next->icon());
+
+	QWinThumbnailToolButton *toggleFullScreen = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(toggleFullScreen, &QWinThumbnailToolButton::clicked, menuBar->window->toggleFullScreen, &QAction::trigger);
+	toggleFullScreen->setToolTip(menuBar->window->toggleFullScreen->toolTip());
+	toggleFullScreen->setIcon(menuBar->window->toggleFullScreen->icon());
+	toggleFullScreen->setDismissOnClick(true);
+
+	QWinThumbnailToolButton *toggleMute = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(toggleMute, &QWinThumbnailToolButton::clicked, menuBar->player->toggleMute, &QAction::trigger);
+	connect(menuBar->player->toggleMute, &QAction::changed, toggleMute, [=] {
+		toggleMute->setIcon(menuBar->player->toggleMute->icon());
+	});
+	toggleMute->setToolTip(menuBar->player->toggleMute->toolTip());
+	toggleMute->setIcon(menuBar->player->toggleMute->icon());
+
+	QWinThumbnailToolButton *settings = new QWinThumbnailToolButton(thumbnailToolBar);
+	connect(settings, &QWinThumbnailToolButton::clicked, menuBar->options->settings, &QAction::trigger);
+	settings->setToolTip(menuBar->options->settings->toolTip());
+	settings->setIcon(menuBar->options->settings->icon());
+	settings->setDismissOnClick(true);
+
+	thumbnailToolBar->addButton(togglePlay);
+	thumbnailToolBar->addButton(stop);
+	thumbnailToolBar->addButton(prev);
+	thumbnailToolBar->addButton(next);
+	thumbnailToolBar->addButton(toggleFullScreen);
+	thumbnailToolBar->addButton(toggleMute);
+	thumbnailToolBar->addButton(settings);
+}
+#endif
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
@@ -1527,9 +1610,9 @@ void MainWidget::closeEvent(QCloseEvent *e)
 	else
 		settings.set("MainWidget/DockWidgetState", dockWidgetState);
 	settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
-#ifndef Q_OS_MAC
+// #ifndef Q_OS_MAC
 	settings.set("MainWidget/isVisible", isVisible());
-#endif
+// #endif
 	if (tray)
 		settings.set("TrayVisible", tray->isVisible());
 	settings.set("VolumeL", volW->volumeL());
@@ -1564,12 +1647,6 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
 	playC.stop(true);
 }
-void MainWidget::changeEvent(QEvent *e)
-{
-	if (e->type() == QEvent::WindowStateChange)
-		emit QMPlay2Core.mainWidgetNotMinimized(!windowState().testFlag(Qt::WindowMinimized)); //Mainly for workaround the QTBUG-50589
-	QMainWindow::changeEvent(e);
-}
 void MainWidget::moveEvent(QMoveEvent *e)
 {
 	if (videoDock->isVisible() && !videoDock->isFloating())
@@ -1586,10 +1663,10 @@ void MainWidget::showEvent(QShowEvent *)
 		if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
 #endif
 			showMaximized();
-		const QByteArray restoreData = QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState");
-		restoreState(restoreData);
-		if (isMaximized())
-			QMetaObject::invokeMethod(this, "delayedRestore", Qt::QueuedConnection, Q_ARG(QByteArray, restoreData));
+		doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
+#ifdef Q_OS_WIN
+		setWindowsTaskBarFeatures();
+#endif
 		wasShow = true;
 	}
 	menuBar->window->toggleVisibility->setText(tr("&Hide"));

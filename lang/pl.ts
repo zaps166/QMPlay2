@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pl_PL" sourcelanguage="en">
-<defaultcodec>UTF-8</defaultcodec>
+<TS version="2.1" language="pl_PL" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -408,6 +407,25 @@
     <message>
         <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
         <translation>Kompilacja z FFmpeg 3.1 lub nowszym jest wymagana do obsługi H264 i HEVC!</translation>
+    </message>
+</context>
+<context>
+    <name>Datmusic</name>
+    <message>
+        <source>Title</source>
+        <translation>Tytuł</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation>Wykonawca</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation>Długość</translation>
+    </message>
+    <message>
+        <source>Search on Datmusic</source>
+        <translation>Wyszukaj w Datmusic</translation>
     </message>
 </context>
 <context>
@@ -959,6 +977,70 @@
         <source>&amp;Updates</source>
         <translation>&amp;Aktualizacje</translation>
     </message>
+    <message>
+        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation>Nie odtwarza muzyki po uruchomieniu (omija opcję &quot;Zapamiętaj pozycję odtwarzania&quot;).</translation>
+    </message>
+    <message>
+        <source>Ensures that the window will be visible if the application is running.</source>
+        <translation>Zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona.</translation>
+    </message>
+    <message>
+        <source>Toggles fullscreen.</source>
+        <translation>Przełącza z/do pełnego ekranu.</translation>
+    </message>
+    <message>
+        <source>Seeks to the specified value.</source>
+        <translation>Przewija do podanej wartości.</translation>
+    </message>
+    <message>
+        <source>Starts playback.</source>
+        <translation>Rozpoczyna odtwarzanie.</translation>
+    </message>
+    <message>
+        <source>Stops playback.</source>
+        <translation>Zatrzymuje odtwarzanie.</translation>
+    </message>
+    <message>
+        <source>Toggles playback.</source>
+        <translation>Przełącza play/pause.</translation>
+    </message>
+    <message>
+        <source>Terminates the application.</source>
+        <translation>Zakańcza działanie aplikacji.</translation>
+    </message>
+    <message>
+        <source>Displays this help.</source>
+        <translation>Wyświetla tę pomoc.</translation>
+    </message>
+    <message>
+        <source>Opens and plays specified &lt;url&gt;.</source>
+        <translation>Otwiera i odtwarza podany &lt;url&gt;.</translation>
+    </message>
+    <message>
+        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <translation>Dodaje podany &lt;url&gt; do playlisty.</translation>
+    </message>
+    <message>
+        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <translation>Uruchamia aplikację z podanym &lt;profile name&gt;.</translation>
+    </message>
+    <message>
+        <source>Sets specified volume.</source>
+        <translation>Ustawia podany poziom głośności.</translation>
+    </message>
+    <message>
+        <source>Sets specified playback speed.</source>
+        <translation>Ustawia podaną szybkość odtwarzania.</translation>
+    </message>
+    <message>
+        <source>Plays next entry on playlist.</source>
+        <translation>Odtwarza następny wpis na liście odtwarzania.</translation>
+    </message>
+    <message>
+        <source>Plays previous entry on playlist.</source>
+        <translation>Odtwarza poprzedni wpis na liście odtwarzania.</translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
@@ -1017,7 +1099,7 @@
     </message>
 </context>
 <context>
-    <name>LineEditButton</name>
+    <name>LineEdit</name>
     <message>
         <source>Clear</source>
         <translation>Wyczyść</translation>
@@ -2376,33 +2458,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     </message>
 </context>
 <context>
-    <name>ProstoPleer</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Wykonawca</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>Bitrate</translation>
-    </message>
-    <message>
-        <source>Search on Prostopleer</source>
-        <translation>Wyszukaj w Prostopleer</translation>
-    </message>
-    <message>
-        <source>Try again later</source>
-        <translation>Spróbuj ponownie później</translation>
-    </message>
-</context>
-<context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
@@ -2456,38 +2511,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 został zaktualizowany do wersji</translation>
-    </message>
-    <message>
-        <source>  Parameters list:
-    -open         &quot;address&quot;
-    -enqueue      &quot;address&quot;
-    -profile      &quot;name&quot; - starts application with given profile name
-    -noplay     - doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option)
-    -toggle     - toggles play/pause
-    -show       - ensures that the window will be visible if the application is running
-    -fullscreen - toggles fullscreen
-    -volume     - sets volume [0..100]
-    -speed      - sets playback speed [0.05..100.0]
-    -seek       - seeks to the specified value [s]
-    -stop       - stops playback
-    -next       - plays next on the list
-    -prev       - plays previous on the list
-    -quit       - terminates the application</source>
-        <translation>  Lista parametrów:
-    -open         &quot;adres&quot;
-    -enqueue      &quot;adres&quot;
-    -profile      &quot;nazwa&quot; - uruchamia aplikację z podaną nazwą profilu
-    -noplay     - nie odtwarza muzyki po uruchomieniu (omija opcję &quot;Zapamiętaj pozycję odtwarzania&quot;)
-    -toggle     - przełącza play/pause
-    -show       - zapewnia, że okno będzie widoczne, jeżeli aplikacja jest uruchomiona
-    -fullscreen - przełącza z/do pełnego ekranu
-    -volume     - ustawia głośność [0..100]
-    -speed      - ustawia szybkość odtwarzania [0.05..100.0]
-    -seek       - przewija do podanej wartości [s]
-    -stop       - zatrzymuje odtwarzanie
-    -next       - odtwarza następny na liście
-    -prev       - odtwarza poprzedni na liście
-    -quit       - zakańcza działanie aplikacji</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
@@ -2637,6 +2660,10 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
     <message>
         <source>Random in group and repea&amp;t</source>
         <translation>Z&amp;apętlone losowe odtwarzanie grupy</translation>
+    </message>
+    <message>
+        <source>&amp;Stop playback after every file</source>
+        <translation>&amp;Zatrzymaj odtwarzanie po każdym pliku</translation>
     </message>
 </context>
 <context>
@@ -2869,29 +2896,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>&amp;Z-A</source>
         <translation>&amp;Z-A</translation>
-    </message>
-</context>
-<context>
-    <name>SoundCloud</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Wykonwaca</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation>Gatunek</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Search on SoundCloud</source>
-        <translation>Wyszukaj w SoundCloud</translation>
     </message>
 </context>
 <context>

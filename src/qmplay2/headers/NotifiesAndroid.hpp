@@ -16,32 +16,16 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OPENGL2OLDWIDGET_HPP
-#define OPENGL2OLDWIDGET_HPP
+#pragma once
 
-#include <OpenGL2Common.hpp>
+#include <Notifies.hpp>
 
-#include <QGLWidget>
+#include <QObject>
 
-class OpenGL2OldWidget : public QGLWidget, public OpenGL2Common
+class NotifiesAndroid final : public QObject, public Notifies
 {
 	Q_OBJECT
-public:
-	OpenGL2OldWidget();
-        ~OpenGL2OldWidget() final;
 
-	QWidget *widget() override final;
-
-	bool testGL() override final;
-	bool setVSync(bool enable) override final;
-	void updateGL(bool requestDelayed) override final;
-
-	void initializeGL() override final;
-	void paintGL() override final;
-private:
-	void resizeGL(int w, int h) override final;
-
-	bool event(QEvent *e) override final;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QPixmap &pixmap, const int iconId = 0) override;
+	bool doNotify(const QString &title, const QString &message, const int ms, const QImage &image, const int iconId = 0) override;
 };
-
-#endif // OPENGL2OLDWIDGET_HPP

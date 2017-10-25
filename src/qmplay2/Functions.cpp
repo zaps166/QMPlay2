@@ -35,12 +35,10 @@
 #include <QDir>
 #include <QUrl>
 #include <QRegExp>
+#include <QWindow>
 #include <QLibrary>
 #include <QMessageBox>
 #include <QStyleOption>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-	#include <QWindow>
-#endif
 
 extern "C"
 {
@@ -291,12 +289,7 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 		imgSize.scale(size, size.isEmpty() ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio);
 	}
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	return icon.pixmap(Functions::getNativeWindow(w), imgSize);
-#else
-	Q_UNUSED(w)
-	return icon.pixmap(imgSize);
-#endif
 }
 void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
@@ -345,15 +338,11 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w,
 	}
 
 	qreal devicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	if (QWindow *win = getNativeWindow(w))
 		devicePixelRatio = win->devicePixelRatio();
-#endif
 
 	pixmapToDraw = pixmapToDraw.scaled(pixmapSize * devicePixelRatio, Qt::IgnoreAspectRatio, transformationMode);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	pixmapToDraw.setDevicePixelRatio(devicePixelRatio);
-#endif
 
 	const QPoint pixmapPos {
 		size.width()  / 2 - int(pixmapToDraw.width()  / (devicePixelRatio * 2)),
@@ -736,7 +725,6 @@ quint32 Functions::getBestSampleRate()
 	return srate;
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 QWindow *Functions::getNativeWindow(const QWidget *w)
 {
 	if (w)
@@ -746,7 +734,6 @@ QWindow *Functions::getNativeWindow(const QWidget *w)
 	}
 	return nullptr;
 }
-#endif
 
 bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {
@@ -781,13 +768,14 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 	return doWrap;
 }
 
-QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool icy, const QByteArray &userAgent)
+QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool setRawHeaders, bool icy, const QByteArray &userAgent)
 {
 	if (url.startsWith("file://"))
 		url.remove(0, 7);
 	else
 	{
 		const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
+		const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawheaders(url) : QByteArray();
 
 		if (url.startsWith("mms:"))
 			url.insert(3, 'h');
@@ -802,21 +790,14 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 
 		if (!cookies.isEmpty())
 			av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
+		if (!rawHeaders.isEmpty())
+			av_dict_set(&options, "headers", rawHeaders, 0);
 
 #if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(56, 36, 100)
 		av_dict_set(&options, "reconnect", "1", 0);
 #endif
 	}
 	return url;
-}
-
-void Functions::setHeaderSectionResizeMode(QHeaderView *header, int index, int resizeMode)
-{
-#if QT_VERSION < 0x050000
-	header->setResizeMode(index, (QHeaderView::ResizeMode)resizeMode);
-#else
-	header->setSectionResizeMode(index, (QHeaderView::ResizeMode)resizeMode);
-#endif
 }
 
 QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)

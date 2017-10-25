@@ -22,42 +22,42 @@
 
 class FormatContext;
 
-class FFDemux : public Demuxer
+class FFDemux final : public Demuxer
 {
 	Q_DECLARE_TR_FUNCTIONS(FFDemux)
 public:
 	FFDemux(QMutex &, Module &);
 private:
-	~FFDemux() final;
+	~FFDemux();
 
-	bool set() override final;
+	bool set() override;
 
-	bool metadataChanged() const override final;
+	bool metadataChanged() const override;
 
-	bool isStillImage() const override final;
+	bool isStillImage() const override;
 
-	QList<ProgramInfo> getPrograms() const override final;
-	QList<ChapterInfo> getChapters() const override final;
+	QList<ProgramInfo> getPrograms() const override;
+	QList<ChapterInfo> getChapters() const override;
 
-	QString name() const override final;
-	QString title() const override final;
-	QList<QMPlay2Tag> tags() const override final;
-	bool getReplayGain(bool album, float &gain_db, float &peak) const override final;
-	qint64 size() const override final;
-	double length() const override final;
-	int bitrate() const override final;
-	QByteArray image(bool forceCopy) const override final;
+	QString name() const override;
+	QString title() const override;
+	QList<QMPlay2Tag> tags() const override;
+	bool getReplayGain(bool album, float &gain_db, float &peak) const override;
+	qint64 size() const override;
+	double length() const override;
+	int bitrate() const override;
+	QByteArray image(bool forceCopy) const override;
 
-	bool localStream() const override final;
+	bool localStream() const override;
 
-	bool seek(double pos, bool backward) override final;
-	bool read(Packet &encoded, int &idx) override final;
-	void pause() override final;
-	void abort() override final;
+	bool seek(double pos, bool backward) override;
+	bool read(Packet &encoded, int &idx) override;
+	void pause() override;
+	void abort() override;
 
-	bool open(const QString &entireUrl) override final;
+	bool open(const QString &entireUrl) override;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok) override final;
+	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
 	/**/
 
