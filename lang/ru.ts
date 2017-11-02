@@ -413,19 +413,19 @@
     <name>Datmusic</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Исполнитель</translation>
+        <translation>Исполнитель</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Продолжительность</translation>
+        <translation>Продолжительность</translation>
     </message>
     <message>
         <source>Search on Datmusic</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск на Datmusic</translation>
     </message>
 </context>
 <context>
@@ -1015,15 +1015,15 @@
     </message>
     <message>
         <source>Opens and plays specified &lt;url&gt;.</source>
-        <translation>Открывает и воспроизводит указанный &lt;url&gt;.</translation>
+        <translation>Открывает и воспроизводит указанный &lt;адрес&gt;.</translation>
     </message>
     <message>
         <source>Adds specified &lt;url&gt; to playlist.</source>
-        <translation>Добавляет указанный &lt;url&gt; в список воспроизведения.</translation>
+        <translation>Добавляет указанный &lt;адрес&gt; в список воспроизведения</translation>
     </message>
     <message>
         <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation>Запускает приложение с заданным &lt;profile name&gt;.</translation>
+        <translation>Запускает приложение с заданным &lt;Профилем&gt;.</translation>
     </message>
     <message>
         <source>Sets specified volume.</source>
@@ -1102,7 +1102,7 @@
     <name>LineEdit</name>
     <message>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="unfinished">Очистить</translation>
     </message>
 </context>
 <context>
