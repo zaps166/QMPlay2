@@ -138,8 +138,10 @@ static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
 			idx2 = data.indexOf("<", idx1);
 			if (idx2 > -1)
 			{
-				QByteArray name = data.mid(idx1, idx2 - idx1).simplified();
-				name = name.left(name.indexOf(' ')).toLower();
+				QByteArray name = data.mid(idx1, idx2 - idx1).simplified().toLower();
+				const int idx = name.indexOf(' ');
+				if (idx > -1)
+					name = name.left(name.indexOf(' '));
 
 				const bool isGoogle   = (name == "google");
 				const bool isOpenload = (name == "openload");
