@@ -83,8 +83,13 @@ DeintSettingsW::DeintSettingsW()
 DeintSettingsW::~DeintSettingsW()
 {
 	for (QObject *obj : children())
-		if (obj->isWidgetType() && !obj->property("module").isNull())
-			obj->setParent(nullptr);
+	{
+		if (QWidget *w = qobject_cast<QWidget *>(obj))
+		{
+			if (!w->property("module").isNull())
+				w->setParent(nullptr);
+		}
+	}
 }
 
 void DeintSettingsW::writeSettings()
