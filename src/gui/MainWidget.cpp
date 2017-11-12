@@ -156,6 +156,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	tray = new QSystemTrayIcon(this);
 	tray->setIcon(QMPlay2Core.getIconFromTheme("QMPlay2-panel", QMPlay2Core.getQMPlay2Icon()));
 	tray->setVisible(settings.getBool("TrayVisible", true));
+	tray->installEventFilter(this);
 #else
 	tray = nullptr;
 #endif
@@ -1683,17 +1684,24 @@ void MainWidget::hideEvent(QHideEvent *)
 	menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
 
-#ifdef Q_OS_MAC
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {
-	if (event->type() == QEvent::FileOpen)
+	if (tray && obj == tray && event->type() == QEvent::Wheel)
+	{
+		QWheelEvent *we = static_cast<QWheelEvent *>(event);
+		volW->changeVolume(we->angleDelta().y() / 30);
+	}
+#ifdef Q_OS_MAC
+	else if (event->type() == QEvent::FileOpen)
 	{
 		filesToAdd.append(((QFileOpenEvent *)event)->file());
 		fileOpenTimer.start(10);
 	}
+#endif
 	return QMainWindow::eventFilter(obj, event);
 }
 
+#ifdef Q_OS_MAC
 void MainWidget::fileOpenTimerTimeout()
 {
 	if (filesToAdd.count() == 1)
