@@ -891,7 +891,10 @@ void MainWidget::trayIconClicked(QSystemTrayIcon::ActivationReason reason)
 			toggleVisibility();
 			break;
 		case QSystemTrayIcon::MiddleClick:
-			menuBar->window->toggleCompactView->trigger();
+			if (isVisible())
+				menuBar->window->toggleCompactView->trigger();
+			else
+				togglePlay();
 			break;
 		default:
 			break;
