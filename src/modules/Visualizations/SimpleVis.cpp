@@ -68,6 +68,7 @@ void SimpleVisW::paint(QPainter &p)
 	if (size >= chn)
 	{
 		const float *samples = (const float *)soundData.constData();
+		const qreal dpr = devicePixelRatioF();
 
 		qreal lr[2] = {0.0f, 0.0f};
 
@@ -80,7 +81,7 @@ void SimpleVisW::paint(QPainter &p)
 			p.setPen(QColor(102, 51, 128));
 			p.drawLine(t.map(QLineF(0.0, 1.0, 1.0, 1.0)));
 
-			p.setPen(QColor(102, 179, 102));
+			p.setPen(QPen(QColor(102, 179, 102), 1.0 / dpr));
 			QPainterPath path(t.map(QPointF(0.0, 1.0 - samples[c])));
 			for (int i = chn; i < size; i += chn)
 				path.lineTo(t.map(QPointF(i / (qreal)(size - chn), 1.0 - samples[i + c])));
