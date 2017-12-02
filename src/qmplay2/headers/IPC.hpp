@@ -29,7 +29,7 @@ class IPCServerPriv;
 
 class QSocketNotifier;
 
-class IPCSocket final : public QIODevice
+class Q_DECL_EXPORT IPCSocket final : public QIODevice
 {
 	Q_OBJECT
 	friend class IPCServer;
@@ -60,7 +60,7 @@ private:
 
 /**/
 
-class IPCServer final : public QObject
+class Q_DECL_EXPORT IPCServer final : public QObject
 {
 	Q_OBJECT
 public:

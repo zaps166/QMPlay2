@@ -49,7 +49,7 @@ enum QMPlay2Tags
 	QMPLAY2_TAG_COMMENT
 };
 
-class StreamInfo
+class Q_DECL_EXPORT StreamInfo
 {
 	Q_DECLARE_TR_FUNCTIONS(StreamInfo)
 public:
@@ -84,7 +84,7 @@ public:
 	int W, H;
 };
 
-class StreamsInfo : public QList<StreamInfo *>
+class Q_DECL_EXPORT StreamsInfo : public QList<StreamInfo *>
 {
 	Q_DISABLE_COPY(StreamsInfo)
 public:

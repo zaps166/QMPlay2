@@ -36,7 +36,7 @@ class QWidget;
 class QPixmap;
 class Module;
 
-class QMPlay2CoreClass : public QObject
+class Q_DECL_EXPORT QMPlay2CoreClass : public QObject
 {
 	Q_OBJECT
 

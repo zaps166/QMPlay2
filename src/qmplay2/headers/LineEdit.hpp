@@ -20,7 +20,7 @@
 
 #include <QLineEdit>
 
-class LineEdit final : public QLineEdit
+class Q_DECL_EXPORT LineEdit final : public QLineEdit
 {
 	Q_OBJECT
 

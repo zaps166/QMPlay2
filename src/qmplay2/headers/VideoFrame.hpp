@@ -21,7 +21,7 @@
 #include <Buffer.hpp>
 #include <PixelFormats.hpp>
 
-class VideoFrameSize
+class Q_DECL_EXPORT VideoFrameSize
 {
 	friend class VideoFrame;
 public:
@@ -56,7 +56,7 @@ public:
 
 /**/
 
-class VideoFrame
+class Q_DECL_EXPORT VideoFrame
 {
 public:
 	VideoFrame(const VideoFrameSize &size, AVBufferRef *bufferRef[], const qint32 newLinesize[], bool interlaced, bool tff);

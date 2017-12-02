@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <stddef.h>
+#include <QtGlobal>
 
 /* YUV planar to RGB32 */
 
@@ -26,7 +26,7 @@ class VideoFrameSize;
 struct SwsContext;
 class VideoFrame;
 
-class ImgScaler
+class Q_DECL_EXPORT ImgScaler
 {
 public:
 	ImgScaler();

@@ -23,7 +23,7 @@
 #include <QRect>
 #include <QTime>
 
-class QMPlay2OSD
+class Q_DECL_EXPORT QMPlay2OSD
 {
 public:
 	class Image

@@ -23,7 +23,7 @@
 
 #include <QQueue>
 
-class VideoFilter : public ModuleParams
+class Q_DECL_EXPORT VideoFilter : public ModuleParams
 {
 public:
 	class FrameBuffer

@@ -26,41 +26,12 @@
 #include <QMutex>
 #include <QQueue>
 
-class VideoFilters;
+class VideoFiltersThr;
 class TimeStamp;
 
-class VideoFiltersThr final : public QThread
+class Q_DECL_EXPORT VideoFilters
 {
-public:
-	VideoFiltersThr(VideoFilters &videoFilters);
-	inline ~VideoFiltersThr()
-	{
-		stop();
-	}
-
-	void start();
-	void stop();
-
-	void filterFrame(const VideoFilter::FrameBuffer &frame);
-
-	void waitForFinished(bool waitForAllFrames);
-
-	QMutex bufferMutex;
-private:
-	void run() override;
-
-	VideoFilters &videoFilters;
-
-	bool br, filtering;
-
-	QWaitCondition cond;
-	QMutex mutex;
-
-	VideoFilter::FrameBuffer frameToFilter;
-};
-
-class VideoFilters
-{
+	Q_DISABLE_COPY(VideoFilters)
 	friend class VideoFiltersThr;
 public:
 	static void init();
@@ -70,14 +41,8 @@ public:
 		averageTwoLinesPtr(dest, src1, src2, linesize);
 	}
 
-	inline VideoFilters() :
-		filtersThr(*this),
-		outputNotEmpty(false)
-	{}
-	inline ~VideoFilters()
-	{
-		clear();
-	}
+	VideoFilters();
+	~VideoFilters();
 
 	void start();
 	void clear();
@@ -97,6 +62,6 @@ private:
 
 	QQueue<VideoFilter::FrameBuffer> outputQueue;
 	QVector<VideoFilter *> filters;
-	VideoFiltersThr filtersThr;
-	bool outputNotEmpty;
+	VideoFiltersThr &filtersThr;
+	bool outputNotEmpty = false;
 };

@@ -21,7 +21,7 @@
 #include <TimeStamp.hpp>
 #include <Buffer.hpp>
 
-struct Packet : public Buffer
+struct Q_DECL_EXPORT Packet : public Buffer
 {
 	TimeStamp ts;
 	double duration, sampleAspectRatio = 0.0;

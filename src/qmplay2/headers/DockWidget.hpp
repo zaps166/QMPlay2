@@ -36,7 +36,7 @@ public:
 		setTitleBarVisible(titleBarVisible);
 	}
 private:
-	class EmptyW final : public QWidget
+	class Q_DECL_EXPORT EmptyW final : public QWidget
 	{
 		QSize sizeHint() const override;
 	} emptyW;

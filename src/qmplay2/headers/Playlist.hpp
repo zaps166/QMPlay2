@@ -23,7 +23,7 @@
 #include <QString>
 #include <QList>
 
-class Playlist
+class Q_DECL_EXPORT Playlist
 {
 public:
 	class Entry

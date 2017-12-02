@@ -22,7 +22,7 @@
 
 struct AVBufferRef;
 
-class Buffer
+class Q_DECL_EXPORT Buffer
 {
 	AVBufferRef *m_bufferRef = nullptr;
 	qint32 m_size = 0;

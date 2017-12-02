@@ -24,7 +24,7 @@
 
 class Buffer;
 
-class AudioFilter : public ModuleCommon
+class Q_DECL_EXPORT AudioFilter : public ModuleCommon
 {
 public:
 	virtual ~AudioFilter() = default;

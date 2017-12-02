@@ -140,99 +140,117 @@ private:
 
 /**/
 
-VideoFiltersThr::VideoFiltersThr(VideoFilters &videoFilters) :
-	videoFilters(videoFilters),
-	br(false), filtering(false)
+class VideoFiltersThr final : public QThread
 {
-	setObjectName("VideoFiltersThr");
-}
-
-void VideoFiltersThr::start()
-{
-	br = filtering = false;
-	QThread::start();
-}
-void VideoFiltersThr::stop()
-{
+public:
+	VideoFiltersThr(VideoFilters &videoFilters) :
+		videoFilters(videoFilters)
 	{
-		QMutexLocker locker(&mutex);
-		br = true;
-		cond.wakeOne();
+		setObjectName("VideoFiltersThr");
 	}
-	wait();
-}
-
-void VideoFiltersThr::filterFrame(const VideoFilter::FrameBuffer &frame)
-{
-	QMutexLocker locker(&mutex);
-	frameToFilter = frame;
-	filtering = true;
-	cond.wakeOne();
-}
-
-void VideoFiltersThr::waitForFinished(bool waitForAllFrames)
-{
-	bufferMutex.lock();
-	while (filtering && !br)
+	~VideoFiltersThr()
 	{
-		if (!waitForAllFrames && !videoFilters.outputQueue.isEmpty())
-			break;
-		cond.wait(&bufferMutex);
+		stop();
 	}
-	if (waitForAllFrames)
-		bufferMutex.unlock();
-}
 
-void VideoFiltersThr::run()
-{
-	while (!br)
+	void start()
 	{
-		QMutexLocker locker(&mutex);
-
-		if (frameToFilter.frame.isEmpty() && !br)
-			cond.wait(&mutex);
-		if (frameToFilter.frame.isEmpty() || br)
-			continue;
-
-		QQueue<VideoFilter::FrameBuffer> queue;
-		queue.enqueue(frameToFilter);
-		frameToFilter.frame.clear();
-
-		bool pending = false;
-		do
+		br = filtering = false;
+		QThread::start();
+	}
+	void stop()
+	{
 		{
-			for (VideoFilter *vFilter : videoFilters.filters)
-			{
-				pending |= vFilter->filter(queue);
-				if (queue.isEmpty())
-				{
-					pending = false;
-					break;
-				}
-			}
-
-			{
-				QMutexLocker locker(&bufferMutex);
-				if (!queue.isEmpty())
-				{
-					videoFilters.outputQueue.append(queue);
-					videoFilters.outputNotEmpty = true;
-					queue.clear();
-				}
-				if (!pending)
-					filtering = false;
-			}
-
+			QMutexLocker locker(&mutex);
+			br = true;
 			cond.wakeOne();
-		} while (pending && !br);
+		}
+		wait();
 	}
-	if (br)
+
+	void filterFrame(const VideoFilter::FrameBuffer &frame)
 	{
-		QMutexLocker locker(&bufferMutex);
-		filtering = false;
+		QMutexLocker locker(&mutex);
+		frameToFilter = frame;
+		filtering = true;
 		cond.wakeOne();
 	}
-}
+
+	void waitForFinished(bool waitForAllFrames)
+	{
+		bufferMutex.lock();
+		while (filtering && !br)
+		{
+			if (!waitForAllFrames && !videoFilters.outputQueue.isEmpty())
+				break;
+			cond.wait(&bufferMutex);
+		}
+		if (waitForAllFrames)
+			bufferMutex.unlock();
+	}
+
+	QMutex bufferMutex;
+private:
+	void run() override
+	{
+		while (!br)
+		{
+			QMutexLocker locker(&mutex);
+
+			if (frameToFilter.frame.isEmpty() && !br)
+				cond.wait(&mutex);
+			if (frameToFilter.frame.isEmpty() || br)
+				continue;
+
+			QQueue<VideoFilter::FrameBuffer> queue;
+			queue.enqueue(frameToFilter);
+			frameToFilter.frame.clear();
+
+			bool pending = false;
+			do
+			{
+				for (VideoFilter *vFilter : videoFilters.filters)
+				{
+					pending |= vFilter->filter(queue);
+					if (queue.isEmpty())
+					{
+						pending = false;
+						break;
+					}
+				}
+
+				{
+					QMutexLocker locker(&bufferMutex);
+					if (!queue.isEmpty())
+					{
+						videoFilters.outputQueue.append(queue);
+						videoFilters.outputNotEmpty = true;
+						queue.clear();
+					}
+					if (!pending)
+						filtering = false;
+				}
+
+				cond.wakeOne();
+			} while (pending && !br);
+		}
+		if (br)
+		{
+			QMutexLocker locker(&bufferMutex);
+			filtering = false;
+			cond.wakeOne();
+		}
+	}
+
+	VideoFilters &videoFilters;
+
+	bool br = false, filtering = false;
+
+	QWaitCondition cond;
+	QMutex mutex;
+
+	VideoFilter::FrameBuffer frameToFilter;
+};
 
 /**/
 
@@ -248,6 +266,16 @@ void VideoFilters::init()
 		averageTwoLinesPtr = averageTwoLines_MMXEXT;
 #endif // QMPLAY2_CPU_X86_32
 #endif // QMPLAY2_CPU_X86
+}
+
+VideoFilters::VideoFilters() :
+	filtersThr(*(new VideoFiltersThr(*this))),
+	outputNotEmpty(false)
+{}
+VideoFilters::~VideoFilters()
+{
+	clear();
+	delete &filtersThr;
 }
 
 void VideoFilters::start()

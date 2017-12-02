@@ -20,7 +20,7 @@
 
 #include <QPushButton>
 
-class ColorButton final : public QPushButton
+class Q_DECL_EXPORT ColorButton final : public QPushButton
 {
 	Q_OBJECT
 public:

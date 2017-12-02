@@ -24,7 +24,7 @@ struct AVFormatContext;
 class StreamInfo;
 struct Packet;
 
-class MkvMuxer
+class Q_DECL_EXPORT MkvMuxer
 {
 	MkvMuxer(const MkvMuxer &) = delete;
 	MkvMuxer &operator =(const MkvMuxer &) = delete;
