@@ -803,8 +803,10 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
 {
 	constexpr char libsslFileName[] =
-#ifdef Q_OS_WIN
-		"libeay32"
+#if defined(Q_OS_WIN64)
+		"libcrypto-1_1-x64"
+#elif defined(Q_OS_WIN32)
+		"libcrypto-1_1"
 #else
 		"ssl"
 #endif
