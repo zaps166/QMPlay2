@@ -368,7 +368,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 		if (tabBar && tabBar->property("changeCurrentOnDrag").isValid())
 		{
 			tabBar->setAcceptDrops(true);
-			tabBar->setProperty("changeCurrentOnDrag", true);
+			tabBar->setChangeCurrentOnDrag(true);
 		}
 	}
 
