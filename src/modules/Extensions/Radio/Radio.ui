@@ -11,6 +11,76 @@
   <property name="documentMode">
    <bool>true</bool>
   </property>
+  <widget class="QWidget" name="radioBrowserTab">
+   <attribute name="title">
+    <string>Radio Browser</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>4</number>
+    </property>
+    <item row="1" column="0" colspan="3">
+     <widget class="QTreeView" name="radioView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="indentation">
+       <number>0</number>
+      </property>
+      <property name="rootIsDecorated">
+       <bool>false</bool>
+      </property>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
+      </property>
+      <attribute name="headerStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QToolButton" name="addRadioBrowserStationButton">
+      <property name="toolTip">
+       <string>Add new radio station</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="searchComboBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QComboBox" name="searchByComboBox"/>
+    </item>
+    <item row="2" column="0" colspan="3">
+     <widget class="LineEdit" name="filterEdit"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QWidget" name="qmplay2Tab">
    <attribute name="title">
     <string>QMPlay2 radio stations</string>
@@ -132,76 +202,6 @@
        </layout>
       </widget>
      </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="radioBrowserTab">
-   <attribute name="title">
-    <string>Radio Browser</string>
-   </attribute>
-   <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
-     <number>4</number>
-    </property>
-    <item row="1" column="0" colspan="3">
-     <widget class="QTreeView" name="radioView">
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="verticalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
-      <property name="horizontalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
-      <property name="indentation">
-       <number>0</number>
-      </property>
-      <property name="rootIsDecorated">
-       <bool>false</bool>
-      </property>
-      <property name="uniformRowHeights">
-       <bool>true</bool>
-      </property>
-      <property name="itemsExpandable">
-       <bool>false</bool>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="expandsOnDoubleClick">
-       <bool>false</bool>
-      </property>
-      <attribute name="headerStretchLastSection">
-       <bool>false</bool>
-      </attribute>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QToolButton" name="addRadioBrowserStationButton">
-      <property name="toolTip">
-       <string>Add new radio station</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="searchComboBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="editable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QComboBox" name="searchByComboBox"/>
-    </item>
-    <item row="2" column="0" colspan="3">
-     <widget class="LineEdit" name="filterEdit"/>
     </item>
    </layout>
   </widget>
