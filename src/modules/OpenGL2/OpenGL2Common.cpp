@@ -211,15 +211,10 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
-#ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramVideo;
 	delete shaderProgramOSD;
-	shaderProgramVideo = shaderProgramOSD = nullptr;
-#endif
-	if (!shaderProgramVideo)
-		shaderProgramVideo = new QOpenGLShaderProgram;
-	if (!shaderProgramOSD)
-		shaderProgramOSD = new QOpenGLShaderProgram;
+	shaderProgramVideo = new QOpenGLShaderProgram;
+	shaderProgramOSD = new QOpenGLShaderProgram;
 
 	/* YCbCr shader */
 	if (shaderProgramVideo->shaders().isEmpty())
