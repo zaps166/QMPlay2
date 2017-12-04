@@ -86,6 +86,7 @@ void InDockW::setWidget(QWidget *newW)
 		w->setMinimumSize(2, 2);
 		w->setParent(this);
 		resizeEvent(nullptr);
+		w->setCursor(w->cursor()); // Force cursor shape
 		w->show();
 	}
 }
