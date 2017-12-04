@@ -36,14 +36,14 @@ Drawable::Drawable(XVideoWriter &writer) :
 
 void Drawable::resizeEvent(QResizeEvent *)
 {
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
-	getImageSize(writer.aspect_ratio, writer.zoom, width() * scale, height() * scale, W, H, &X, &Y, &dstRect, &writer.outW, &writer.outH, &srcRect);
+	const qreal dpr = devicePixelRatioF();
+	getImageSize(writer.aspect_ratio, writer.zoom, width() * dpr, height() * dpr, W, H, &X, &Y, &dstRect, &writer.outW, &writer.outH, &srcRect);
 	update();
 }
 void Drawable::paintEvent(QPaintEvent *)
 {
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
-	writer.xv->redraw(srcRect, dstRect, X, Y, W, H, width() * scale, height() * scale);
+	const qreal dpr = devicePixelRatioF();
+	writer.xv->redraw(srcRect, dstRect, X, Y, W, H, width() * dpr, height() * dpr);
 }
 bool Drawable::event(QEvent *e)
 {

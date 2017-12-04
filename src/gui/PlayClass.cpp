@@ -179,7 +179,6 @@ void PlayClass::play(const QString &_url)
 			}
 			allowAccurateSeek = true;
 
-			QMPlay2Core.setVideoDevicePixelRatio();
 			demuxThr->start();
 		}
 	}

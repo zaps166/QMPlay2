@@ -291,8 +291,8 @@ void Drawable::draw(const VideoFrame &videoFrame)
 
 void Drawable::resizeEvent(QResizeEvent *e)
 {
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
-	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width() * scale, height() * scale, W, H, &X, &Y);
+	const qreal dpr = devicePixelRatioF();
+	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width() * dpr, height() * dpr, W, H, &X, &Y);
 
 	if (isOverlay)
 		updateOverlay();
@@ -305,7 +305,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
 
 void Drawable::getRects(RECT &srcRect, RECT &dstRect)
 {
-	const QPoint point = mapToGlobal(QPoint()) * QMPlay2Core.getVideoDevicePixelRatio() + QPoint(X, Y);
+	const QPoint point = mapToGlobal(QPoint()) * devicePixelRatioF() + QPoint(X, Y);
 	const RECT videoRect = {point.x(), point.y(), point.x() + W + 1, point.y() + H + 1};
 	const RECT screenRect = {0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
 
@@ -323,22 +323,22 @@ void Drawable::getRects(RECT &srcRect, RECT &dstRect)
 }
 void Drawable::fillRects()
 {
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
+	const qreal dpr = devicePixelRatioF();
 	HWND hwnd = (HWND)winId();
 	HDC hdc = GetDC(hwnd);
 	RECT rect;
 	if (Y > 0)
 	{
-		SetRect(&rect, 0, 0, width() * scale, Y);
+		SetRect(&rect, 0, 0, width() * dpr, Y);
 		FillRect(hdc, &rect, blackBrush);
-		SetRect(&rect, 0, Y + H, width() * scale, 2 * Y + H + 1);
+		SetRect(&rect, 0, Y + H, width() * dpr, 2 * Y + H + 1);
 		FillRect(hdc, &rect, blackBrush);
 	}
 	if (X > 0)
 	{
-		SetRect(&rect, 0, 0, X, height() * scale);
+		SetRect(&rect, 0, 0, X, height() * dpr);
 		FillRect(hdc, &rect, blackBrush);
-		SetRect(&rect, X + W, 0, 2 * X + W + 1, height() * scale);
+		SetRect(&rect, X + W, 0, 2 * X + W + 1, height() * dpr);
 		FillRect(hdc, &rect, blackBrush);
 	}
 	ReleaseDC(hwnd, hdc);
