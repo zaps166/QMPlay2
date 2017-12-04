@@ -305,7 +305,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
 
 void Drawable::getRects(RECT &srcRect, RECT &dstRect)
 {
-	const QPoint point = mapToGlobal(QPoint(X, Y));
+	const QPoint point = mapToGlobal(QPoint()) * QMPlay2Core.getVideoDevicePixelRatio() + QPoint(X, Y);
 	const RECT videoRect = {point.x(), point.y(), point.x() + W + 1, point.y() + H + 1};
 	const RECT screenRect = {0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
 
