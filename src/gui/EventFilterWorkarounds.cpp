@@ -62,12 +62,7 @@ bool EventFilterWorkarounds::eventFilter(QObject *watched, QEvent *event)
 	if (watched->isWindowType())
 	{
 		QWindow *win = (QWindow *)watched;
-		if (QCoreApplication::testAttribute(Qt::AA_DontCreateNativeWidgetSiblings) && (event->type() == QEvent::Show || event->type() == QEvent::CursorChange))
-		{
-			if (win->cursor().shape() == Qt::ArrowCursor)
-				win->setCursor(Qt::ArrowCursor);
-		}
-		else if (win->devicePixelRatio() > 1.0)
+		if (win->devicePixelRatio() > 1.0)
 		{
 			switch (event->type())
 			{
