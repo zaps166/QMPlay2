@@ -135,9 +135,9 @@ void SimpleVisW::resizeEvent(QResizeEvent *e)
 	VisWidget::resizeEvent(e);
 }
 
-void SimpleVisW::start(bool v)
+void SimpleVisW::start()
 {
-	if (v || regionIsVisible())
+	if (canStart())
 	{
 		simpleVis.soundBuffer(true);
 		tim.start(interval);

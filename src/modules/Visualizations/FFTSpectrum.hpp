@@ -36,7 +36,7 @@ private:
 	void paint(QPainter &p) override;
 
 
-	void start(bool v = false) override;
+	void start() override;
 	void stop() override;
 
 	QVector<float> spectrumData;
