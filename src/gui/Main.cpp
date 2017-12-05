@@ -120,7 +120,9 @@ void QMPlay2GUIClass::setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &i
 void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 {
 	settings->set("UpdateFile", QString("remove:" + UpdateFile));
-	ShellExecuteW(nullptr, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", nullptr, SW_SHOWNORMAL);
+	connect(qApp, &QApplication::destroyed, [=] {
+		ShellExecuteW(nullptr, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", nullptr, SW_SHOWNORMAL);
+	});
 }
 #endif
 
