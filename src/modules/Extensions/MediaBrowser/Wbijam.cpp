@@ -190,7 +190,7 @@ MediaBrowserCommon::Description Wbijam::addSearchResults(const QByteArray &reply
 
 				tWI->setText(1, rx.cap(3));
 
-				tWI->setText(2, rx.cap(4));
+				tWI->setData(2, Qt::DisplayRole, QDate::fromString(rx.cap(4), "d.M.yyyy"));
 
 				pos += rx.matchedLength();
 			}
