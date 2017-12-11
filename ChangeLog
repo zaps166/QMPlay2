@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.12.03:
+Changes in QMPlay2 build 17.12.11:
 	- use pan gesture for scrolling on Windows (native) and Android (QScroller),
 	- add task bar playback progress and tool buttons on Windows,
 	- drop support for Qt < 5.6, CMake < 3.1, and FFmpeg < 2.5,
