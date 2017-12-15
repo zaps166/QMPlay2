@@ -108,5 +108,7 @@ private:
 	bool artistWithTitle;
 	bool stillImage;
 
+	double lengthToPlay;
+
 	QMutex &avcodec_mutex;
 };

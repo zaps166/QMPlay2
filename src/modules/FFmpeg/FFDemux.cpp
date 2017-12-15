@@ -24,6 +24,8 @@
 #include <OggHelper.hpp>
 #include <Packet.hpp>
 
+#include <QFile>
+
 FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
 	avcodec_mutex(avcodec_mutex),
 	abortFetchTracks(false),
@@ -234,59 +236,219 @@ bool FFDemux::open(const QString &entireUrl)
 
 Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 {
-	Playlist::Entries entries;
-	if (!url.contains("://{") && url.startsWith("file://"))
-	{
-		OggHelper oggHelper(url.mid(7), abortFetchTracks);
-		if (oggHelper.io)
+	if (url.contains("://{") || !url.startsWith("file://"))
+		return {};
+
+	const auto createFmtCtx = [&] {
+		FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
 		{
-			int i = 0;
-			for (const OggHelper::Chain &chains : oggHelper.getOggChains(ok))
+			QMutexLocker mL(&mutex);
+			formatContexts.append(fmtCtx);
+		}
+		return fmtCtx;
+	};
+	const auto destroyFmtCtx = [&](FormatContext *fmtCtx) {
+		{
+			QMutexLocker mL(&mutex);
+			const int idx = formatContexts.indexOf(fmtCtx);
+			if (idx > -1)
+				formatContexts.remove(idx);
+		}
+		delete fmtCtx;
+	};
+
+	if (url.endsWith(".cue", Qt::CaseInsensitive))
+	{
+		QFile cue(url.mid(7));
+		if (cue.size() <= 0xFFFF && cue.open(QFile::ReadOnly | QFile::Text))
+		{
+			QList<QByteArray> data = cue.readAll().split('\n');
+			QString title, performer, audioUrl;
+			double index0 = -1.0, index1 = -1.0;
+			QHash<int, QPair<double, double>> indexes;
+			Playlist::Entries entries;
+			Playlist::Entry entry;
+			int track = -1;
+			const auto maybeFlushTrack = [&](int prevTrack) {
+				if (track <= 0)
+					return;
+				const auto cutFromQuotation = [](QString &str) {
+					const int idx1 = str.indexOf('"');
+					const int idx2 = str.lastIndexOf('"');
+					if (idx1 > -1 && idx2 > idx1)
+						str = str.mid(idx1 + 1, idx2 - idx1 - 1);
+					else
+						str.clear();
+				};
+				cutFromQuotation(title);
+				cutFromQuotation(performer);
+				if (!title.isEmpty() && !performer.isEmpty())
+					entry.name = performer + " - " + title;
+				else if (title.isEmpty() && !performer.isEmpty())
+					entry.name = performer;
+				else if (!title.isEmpty() && performer.isEmpty())
+					entry.name = title;
+				if (entry.name.isEmpty())
+				{
+					if (entry.parent == 1)
+						entry.name = tr("Track") + " " + QString::number(prevTrack);
+					else
+						entry.name = Functions::fileName(entry.url, false);
+				}
+				title.clear();
+				performer.clear();
+				if (prevTrack > 0)
+				{
+					if (index0 <= 0.0)
+						index0 = index1; // "INDEX 00" doesn't exist, use "INDEX 01"
+					indexes[prevTrack].first = index0;
+					indexes[prevTrack].second = index1;
+					if (entries.count() <= prevTrack)
+						entries.resize(prevTrack + 1);
+					entries[prevTrack] = entry;
+				}
+				else
+				{
+					entries.prepend(entry);
+				}
+				entry = Playlist::Entry();
+				entry.parent = 1;
+				entry.url = audioUrl;
+				index0 = index1 = -1.0;
+			};
+			const auto parseTime = [](const QByteArray &time) {
+				int m = 0, s = 0, f = 0;
+				if (sscanf(time.constData(), "%2d:%2d:%2d", &m, &s, &f) == 3)
+					return m * 60.0 + s + f / 75.0;
+				return -1.0;
+			};
+			entry.url = url;
+			entry.GID = 1;
+			for (QByteArray &line : data)
 			{
-				const QString param = QString("OGG:%1:%2:%3").arg(++i).arg(chains.first).arg(chains.second);
-
-				FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
+				line = line.trimmed();
+				if (track < 0)
 				{
-					QMutexLocker mL(&mutex);
-					formatContexts.append(fmtCtx);
+					if (line.startsWith("TITLE "))
+						title = line;
+					else if (line.startsWith("PERFORMER "))
+						performer = line;
+					else if (line.startsWith("FILE "))
+					{
+						const int idx = line.lastIndexOf('"');
+						if (idx > -1)
+						{
+							audioUrl = line.mid(6, idx - 6);
+							if (!audioUrl.isEmpty())
+								audioUrl.prepend(Functions::filePath(url));
+						}
+					}
 				}
-
-				if (fmtCtx->open(url, param))
+				if (line.startsWith("TRACK "))
 				{
-					Playlist::Entry entry;
-					entry.url = QString("%1://{%2}%3").arg(DemuxerName, url, param);
-					entry.name = fmtCtx->title();
-					entry.length = fmtCtx->length();
-					entries.append(entry);
+					if (entries.isEmpty() && audioUrl.isEmpty())
+						break;
+					if (line.endsWith(" AUDIO"))
+					{
+						const int prevTrack = track;
+						track = line.mid(6, 2).toInt();
+						if (track < 99)
+							maybeFlushTrack(prevTrack);
+						else
+							track = 0;
+					}
+					else
+					{
+						track = 0;
+					}
 				}
-
+				else if (track > 0)
 				{
-					QMutexLocker mL(&mutex);
-					const int idx = formatContexts.indexOf(fmtCtx);
-					if (idx > -1)
-						formatContexts.remove(idx);
-				}
-				delete fmtCtx;
-
-				if (abortFetchTracks)
-				{
-					ok = false;
-					break;
+					if (line.startsWith("TITLE "))
+						title = line;
+					else if (line.startsWith("PERFORMER "))
+						performer = line;
+					else if (line.startsWith("INDEX 00 "))
+						index0 = parseTime(line.mid(9));
+					else if (line.startsWith("INDEX 01 "))
+						index1 = parseTime(line.mid(9));
 				}
 			}
-			if (ok && !entries.isEmpty())
+			maybeFlushTrack(track);
+			for (int i = entries.count() - 1; i >= 1; --i)
 			{
-				for (int i = 0; i < entries.count(); ++i)
-					entries[i].parent = 1;
-				Playlist::Entry entry;
-				entry.name = Functions::fileName(url, false);
-				entry.url = url;
-				entry.GID = 1;
-				entries.prepend(entry);
+				Playlist::Entry &entry = entries[i];
+				const bool lastItem = (i == entries.count() - 1);
+				const double start = indexes.value(i).second;
+				const double end = indexes.value(i + 1, {-1.0, -1.0}).first;
+				if (entry.url.isEmpty() || start < 0.0 || (end <= 0.0 && !lastItem))
+				{
+					entries.removeAt(i);
+					continue;
+				}
+				const QString param = QString("CUE:%1:%2").arg(start).arg(end);
+				if (lastItem && end < 0.0) // Last entry doesn't have specified length in CUE file
+				{
+					FormatContext *fmtCtx = createFmtCtx();
+					if (fmtCtx->open(entry.url, param))
+						entry.length = fmtCtx->length();
+					destroyFmtCtx(fmtCtx);
+					if (abortFetchTracks)
+					{
+						ok = false;
+						return {};
+					}
+				}
+				else
+				{
+					entry.length = end - start;
+				}
+				entry.url = QString("%1://{%2}%3").arg(DemuxerName, entry.url, param);
 			}
+			if (!entries.isEmpty())
+				return entries;
 		}
 	}
-	return entries;
+
+	OggHelper oggHelper(url.mid(7), abortFetchTracks);
+	if (oggHelper.io)
+	{
+		Playlist::Entries entries;
+		int i = 0;
+		for (const OggHelper::Chain &chains : oggHelper.getOggChains(ok))
+		{
+			const QString param = QString("OGG:%1:%2:%3").arg(++i).arg(chains.first).arg(chains.second);
+
+			FormatContext *fmtCtx = createFmtCtx();
+			if (fmtCtx->open(url, param))
+			{
+				Playlist::Entry entry;
+				entry.url = QString("%1://{%2}%3").arg(DemuxerName, url, param);
+				entry.name = fmtCtx->title();
+				entry.length = fmtCtx->length();
+				entries.append(entry);
+			}
+			destroyFmtCtx(fmtCtx);
+			if (abortFetchTracks)
+			{
+				ok = false;
+				return {};
+			}
+		}
+		if (ok && !entries.isEmpty())
+		{
+			for (int i = 0; i < entries.count(); ++i)
+				entries[i].parent = 1;
+			Playlist::Entry entry;
+			entry.name = Functions::fileName(url, false);
+			entry.url = url;
+			entry.GID = 1;
+			entries.prepend(entry);
+			return entries;
+		}
+	}
+
+	return {};
 }
 
 void FFDemux::addFormatContext(QString url, const QString &param)
