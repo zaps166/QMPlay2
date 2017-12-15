@@ -1,3 +1,6 @@
+Changes in QMPlay2 build 17.12.15:
+	- add reading of CUE files,
+
 Changes in QMPlay2 build 17.12.11:
 	- use pan gesture for scrolling on Windows (native) and Android (QScroller),
 	- add task bar playback progress and tool buttons on Windows,
