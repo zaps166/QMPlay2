@@ -23,7 +23,7 @@
 #include <QMutex>
 #include <QList>
 
-class PacketBuffer : private QList<Packet>
+class Q_DECL_EXPORT PacketBuffer : private QList<Packet>
 {
 	static int backwardPackets;
 public:

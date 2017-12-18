@@ -21,7 +21,7 @@
 #include <QPointer>
 #include <QWidget>
 
-class InDockW final : public QWidget
+class Q_DECL_EXPORT InDockW final : public QWidget
 {
 	Q_OBJECT
 public:

@@ -22,7 +22,7 @@
 
 namespace Version
 {
-	QByteArray get();
-	QByteArray userAgent();
-	bool isPortable();
+	Q_DECL_EXPORT QByteArray get();
+	Q_DECL_EXPORT QByteArray userAgent();
+	Q_DECL_EXPORT bool isPortable();
 }

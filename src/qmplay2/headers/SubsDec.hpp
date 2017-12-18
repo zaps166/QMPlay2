@@ -22,7 +22,7 @@
 
 class LibASS;
 
-class SubsDec
+class Q_DECL_EXPORT SubsDec
 {
 public:
 	static SubsDec *create(const QString &);

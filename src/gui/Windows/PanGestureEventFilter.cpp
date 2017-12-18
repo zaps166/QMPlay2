@@ -40,28 +40,30 @@
 	#define WM_GESTURENOTIFY 0x011A
 #endif
 
+namespace PanGestureEventFilter {
+
 namespace User32 {
-	using UnregisterTouchWindowFunc = WINBOOL WINAPI (*)(HWND hwnd);
+	using UnregisterTouchWindowFunc = BOOL (WINAPI *)(HWND hwnd);
 	static UnregisterTouchWindowFunc UnregisterTouchWindow;
 
-	using SetGestureConfigFunc = WINBOOL WINAPI (*)(HWND hwnd, DWORD dwReserved, UINT cIDs, PGESTURECONFIG pGestureConfig, UINT cbSize);
+	using SetGestureConfigFunc = BOOL (WINAPI *)(HWND hwnd, DWORD dwReserved, UINT cIDs, PGESTURECONFIG pGestureConfig, UINT cbSize);
 	static SetGestureConfigFunc SetGestureConfig;
 
-	using GetGestureInfoFunc = WINBOOL WINAPI (*)(HGESTUREINFO hGestureInfo, PGESTUREINFO pGestureInfo);
+	using GetGestureInfoFunc = BOOL (WINAPI *)(HGESTUREINFO hGestureInfo, PGESTUREINFO pGestureInfo);
 	static GetGestureInfoFunc GetGestureInfo;
 
-	using CloseGestureInfoHandleFunc = WINBOOL WINAPI (*)(HGESTUREINFO hGestureInfo);
+	using CloseGestureInfoHandleFunc = BOOL (WINAPI *)(HGESTUREINFO hGestureInfo);
 	static CloseGestureInfoHandleFunc CloseGestureInfoHandle;
 }
 
 namespace UxTheme {
-	using BeginPanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd);
+	using BeginPanningFeedbackFunc = BOOL (WINAPI *)(HWND hwnd);
 	static BeginPanningFeedbackFunc BeginPanningFeedback;
 
-	using UpdatePanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd, LONG lTotalOverpanOffsetX, LONG lTotalOverpanOffsetY, WINBOOL fInInertia);
+	using UpdatePanningFeedbackFunc = BOOL (WINAPI *)(HWND hwnd, LONG lTotalOverpanOffsetX, LONG lTotalOverpanOffsetY, BOOL fInInertia);
 	static UpdatePanningFeedbackFunc UpdatePanningFeedback;
 
-	using EndPanningFeedbackFunc = WINBOOL WINAPI (*)(HWND hwnd, WINBOOL fAnimateBack);
+	using EndPanningFeedbackFunc = BOOL (WINAPI *)(HWND hwnd, BOOL fAnimateBack);
 	static EndPanningFeedbackFunc EndPanningFeedback;
 }
 
@@ -82,9 +84,9 @@ class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEv
 					if (HWND winId = (HWND)scrollArea->viewport()->winId())
 					{
 						GESTURECONFIG gc = {
-							.dwID    = GID_PAN,
-							.dwWant  = 0,
-							.dwBlock = 0,
+							GID_PAN,
+							0,
+							0,
 						};
 
 						if (scrollArea->horizontalScrollBar()->maximum() > 0)
@@ -219,7 +221,7 @@ class PanGestureEventFilterPriv final : public QObject, public QAbstractNativeEv
 
 /**/
 
-void PanGestureEventFilter::install()
+void install()
 {
 	static bool installed;
 
@@ -251,4 +253,6 @@ void PanGestureEventFilter::install()
 			installed = true;
 		}
 	}
+}
+
 }

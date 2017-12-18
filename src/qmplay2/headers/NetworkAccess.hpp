@@ -23,7 +23,7 @@
 class NetworkReplyPriv;
 struct NetworkAccessParams;
 
-class NetworkReply final : public QObject, public BasicIO
+class Q_DECL_EXPORT NetworkReply final : public QObject, public BasicIO
 {
 	Q_OBJECT
 
@@ -83,7 +83,7 @@ private:
 
 /**/
 
-class NetworkAccess : public QObject
+class Q_DECL_EXPORT NetworkAccess : public QObject
 {
 	Q_OBJECT
 

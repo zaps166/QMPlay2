@@ -141,9 +141,9 @@ private:
 	void showEvent(QShowEvent *) override;
 	void hideEvent(QHideEvent *) override;
 
-#ifdef Q_OS_MAC
 	bool eventFilter(QObject *obj, QEvent *event) override;
 
+#ifdef Q_OS_MAC
 	void fileOpenTimerTimeout();
 
 	QTimer fileOpenTimer;

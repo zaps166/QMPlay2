@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QSet>
 
-class Settings : protected QSettings
+class Q_DECL_EXPORT Settings : protected QSettings
 {
 	using SettingsMap = QMap<QString, QVariant>;
 public:

@@ -18,6 +18,7 @@
 
 #include <Main.hpp>
 
+#include <EventFilterWorkarounds.hpp>
 #include <PanGestureEventFilter.hpp>
 #include <ScreenSaver.hpp>
 #include <VideoFrame.hpp>
@@ -119,7 +120,9 @@ void QMPlay2GUIClass::setTreeWidgetItemIcon(QTreeWidgetItem *tWI, const QIcon &i
 void QMPlay2GUIClass::runUpdate(const QString &UpdateFile)
 {
 	settings->set("UpdateFile", QString("remove:" + UpdateFile));
-	ShellExecuteW(nullptr, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", nullptr, SW_SHOWNORMAL);
+	connect(qApp, &QApplication::destroyed, [=] {
+		ShellExecuteW(nullptr, L"open", (const wchar_t *)UpdateFile.utf16(), L"--Auto", nullptr, SW_SHOWNORMAL);
+	});
 }
 #endif
 
@@ -572,7 +575,10 @@ int main(int argc, char *argv[])
 	qRegisterMetaType<VideoFrame>("VideoFrame");
 
 	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-	QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+	QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+	QApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);
+#endif
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
@@ -580,6 +586,7 @@ int main(int argc, char *argv[])
 	{
 		qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
+		qApp->installEventFilter(new EventFilterWorkarounds);
 		PanGestureEventFilter::install();
 	}
 

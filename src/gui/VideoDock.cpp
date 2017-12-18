@@ -151,7 +151,7 @@ void VideoDock::unsetCursor(QWidget *w)
 	if (ok && cursorShape >= 0 && cursorShape <= Qt::LastCursor)
 		w->setCursor((Qt::CursorShape)cursorShape);
 	else
-		w->unsetCursor();
+		w->setCursor(Qt::ArrowCursor);
 }
 
 void VideoDock::dragEnterEvent(QDragEnterEvent *e)

@@ -19,14 +19,13 @@
 #include <Radio/RadioBrowserModel.hpp>
 
 #include <NetworkAccess.hpp>
-#include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QPainter>
-#include <QWindow>
+#include <QWidget>
 #include <QUrl>
 
 #include <algorithm>
@@ -393,13 +392,10 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 						if (!image.isNull())
 						{
 							const int s = elementHeight();
-							qreal devicePixelRatio = 1.0;
+							const qreal dpr = m_widget->devicePixelRatioF();
 
-							if (QWindow *win = Functions::getNativeWindow(m_widget))
-								devicePixelRatio = win->devicePixelRatio();
-
-							column->icon = QPixmap(s * devicePixelRatio, s * devicePixelRatio);
-							column->icon.setDevicePixelRatio(devicePixelRatio);
+							column->icon = QPixmap(s * dpr, s * dpr);
+							column->icon.setDevicePixelRatio(dpr);
 							column->icon.fill(Qt::transparent);
 
 							QPainter painter(&column->icon);

@@ -29,7 +29,7 @@ struct ass_track;
 struct ass_event;
 struct ass_renderer;
 
-class LibASS
+class Q_DECL_EXPORT LibASS
 {
 public:
 #if defined Q_OS_WIN && !defined Q_OS_WIN64

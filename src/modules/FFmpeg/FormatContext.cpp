@@ -235,6 +235,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
 	maybeHasFrame(false),
 	artistWithTitle(true),
 	stillImage(false),
+	lengthToPlay(-1),
 	avcodec_mutex(avcodec_mutex)
 {}
 FormatContext::~FormatContext()
@@ -474,7 +475,11 @@ qint64 FormatContext::size() const
 double FormatContext::length() const
 {
 	if (!isStreamed && !stillImage && formatCtx->duration != QMPLAY2_NOPTS_VALUE)
+	{
+		if (lengthToPlay > 0.0)
+			return lengthToPlay;
 		return formatCtx->duration / (double)AV_TIME_BASE;
+	}
 	return -1.0;
 }
 int FormatContext::bitrate() const
@@ -646,8 +651,11 @@ bool FormatContext::read(Packet &encoded, int &idx)
 			lastTime += encoded.duration;
 		}
 	}
-
-	currPos = encoded.ts;
+	else if (lengthToPlay > 0.0 && encoded.ts > lengthToPlay)
+	{
+		isError = true;
+		return false;
+	}
 
 	encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
 	if (streams.at(ff_idx)->sample_aspect_ratio.num)
@@ -657,6 +665,8 @@ bool FormatContext::read(Packet &encoded, int &idx)
 	if (encoded.hasKeyFrame && !encoded.ts.hasDts())
 		encoded.ts.setDts(nextDts.at(ff_idx));
 	nextDts[ff_idx] = encoded.ts + encoded.duration;
+
+	currPos = encoded.ts;
 
 	idx = index_map.at(ff_idx);
 
@@ -687,11 +697,26 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	artistWithTitle = !settings.getBool("HideArtistMetadata");
 
+	bool limitedLength = false;
 	qint64 oggOffset = -1, oggSize = -1;
 	int oggTrack = -1;
 	QString url;
 
-	if (param.startsWith("OGG:")) //For chained OGG files
+	if (param.startsWith("CUE:")) //For CUE files
+	{
+		const QStringList splitted = param.split(':');
+		if (splitted.count() != 3)
+			return false;
+		bool ok1 = false, ok2 = false;
+		startTime = splitted[1].toDouble(&ok1);
+		lengthToPlay = splitted[2].toDouble(&ok2);
+		if (!ok1 || !ok2 || startTime < 0.0 || (!qFuzzyCompare(lengthToPlay, -1.0) && lengthToPlay <= 0.0))
+			return false;
+		if (lengthToPlay > 0.0)
+			lengthToPlay -= startTime;
+		limitedLength = true;
+	}
+	else if (param.startsWith("OGG:")) //For chained OGG files
 	{
 		const QStringList splitted = param.split(':');
 		if (splitted.count() != 4)
@@ -780,8 +805,15 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	forceCopy = false;
 #endif
 
-	if ((startTime = formatCtx->start_time / (double)AV_TIME_BASE) < 0.0)
+	if (!limitedLength && (startTime = formatCtx->start_time / (double)AV_TIME_BASE) < 0.0)
 		startTime = 0.0;
+
+	if (limitedLength && lengthToPlay < 0.0)
+	{
+		lengthToPlay = length() - startTime;
+		if (lengthToPlay <= 0.0)
+			return false;
+	}
 
 	index_map.resize(formatCtx->nb_streams);
 	streamsTS.resize(formatCtx->nb_streams);
@@ -817,6 +849,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	packet = FFCommon::createAVPacket();
 
+	if (lengthToPlay > 0.0)
+		return seek(0.0, false);
 	return true;
 }
 

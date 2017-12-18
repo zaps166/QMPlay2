@@ -18,33 +18,16 @@
 
 #pragma once
 
-#include <QList>
+#include <QObject>
 
-struct AVFormatContext;
-class StreamInfo;
-struct Packet;
-
-class Q_DECL_EXPORT MkvMuxer
+class EventFilterWorkarounds final : public QObject
 {
-	MkvMuxer(const MkvMuxer &) = delete;
-	MkvMuxer &operator =(const MkvMuxer &) = delete;
+	Q_OBJECT
 
 public:
-	MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo);
-	~MkvMuxer();
-
-	inline bool isOk() const;
-
-	bool write(Packet &packet, const int idx);
+	EventFilterWorkarounds(QObject *parent = nullptr);
+	~EventFilterWorkarounds();
 
 private:
-	AVFormatContext *m_ctx = nullptr;
-	bool m_ok = false;
+	bool eventFilter(QObject *watched, QEvent *event) override;
 };
-
-/* Inline implementation */
-
-bool MkvMuxer::isOk() const
-{
-	return m_ok;
-}

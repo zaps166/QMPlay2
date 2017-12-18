@@ -36,11 +36,11 @@ protected:
 
 	VisWidget();
 
-	bool regionIsVisible() const;
+	bool canStart() const;
 
 	virtual void paint(QPainter &p) = 0;
 
-	virtual void start(bool v) = 0;
+	virtual void start() = 0;
 	virtual void stop();
 
 #ifdef USE_OPENGL
@@ -63,6 +63,7 @@ private:
 #ifdef USE_OPENGL
 	QOpenGLWidget *glW;
 #endif
+	bool dockWidgetVisible = false;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
 	void contextMenu(const QPoint &point);

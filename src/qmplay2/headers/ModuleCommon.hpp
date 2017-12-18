@@ -20,7 +20,7 @@
 
 #include <Module.hpp>
 
-class ModuleCommon
+class Q_DECL_EXPORT ModuleCommon
 {
 public:
 	virtual bool set();

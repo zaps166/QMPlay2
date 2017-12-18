@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <stddef.h>
+#include <QtGlobal>
 
 class QByteArray;
 
-class SndResampler
+class Q_DECL_EXPORT SndResampler
 {
 public:
 	SndResampler() = default;

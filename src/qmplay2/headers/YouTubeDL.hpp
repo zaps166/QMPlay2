@@ -25,7 +25,7 @@
 
 class NetworkReply;
 
-class YouTubeDL final : public BasicIO
+class Q_DECL_EXPORT YouTubeDL final : public BasicIO
 {
 	Q_DECLARE_TR_FUNCTIONS(YouTubeDL)
 	Q_DISABLE_COPY(YouTubeDL)

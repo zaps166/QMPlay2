@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVariant>
 
-class ModuleParams
+class Q_DECL_EXPORT ModuleParams
 {
 	Q_DISABLE_COPY(ModuleParams)
 public:

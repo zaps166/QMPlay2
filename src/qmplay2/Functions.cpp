@@ -56,6 +56,16 @@ static inline void swapArray(quint8 *a, quint8 *b, int size)
 	memcpy(b, t, size);
 }
 
+static inline QWindow *getNativeWindow(const QWidget *w)
+{
+	if (w)
+	{
+		if (QWidget *winW = w->window())
+			return winW->windowHandle();
+	}
+	return nullptr;
+}
+
 /**/
 
 QDate Functions::parseVersion(const QString &dateTxt)
@@ -289,22 +299,20 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 		imgSize.scale(size, size.isEmpty() ? Qt::KeepAspectRatioByExpanding : Qt::KeepAspectRatio);
 	}
 
-	return icon.pixmap(Functions::getNativeWindow(w), imgSize);
+	return icon.pixmap(getNativeWindow(w), imgSize);
 }
 void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
 {
 	if (Q_UNLIKELY(scale <= 0.0))
 		return;
 
+	Q_ASSERT(w);
+
 	if (!size.isValid())
-	{
-		if (Q_UNLIKELY(!w))
-			return;
 		size = w->size();
-	}
 
 	QPixmap pixmapToDraw;
-	if (w && !w->isEnabled())
+	if (!w->isEnabled())
 	{
 		QStyleOption opt;
 		opt.initFrom(w);
@@ -337,16 +345,14 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w,
 		pixmapSize = pixmap.size();
 	}
 
-	qreal devicePixelRatio = QMPlay2Core.getVideoDevicePixelRatio();
-	if (QWindow *win = getNativeWindow(w))
-		devicePixelRatio = win->devicePixelRatio();
+	const qreal dpr = w->devicePixelRatioF();
 
-	pixmapToDraw = pixmapToDraw.scaled(pixmapSize * devicePixelRatio, Qt::IgnoreAspectRatio, transformationMode);
-	pixmapToDraw.setDevicePixelRatio(devicePixelRatio);
+	pixmapToDraw = pixmapToDraw.scaled(pixmapSize * dpr, Qt::IgnoreAspectRatio, transformationMode);
+	pixmapToDraw.setDevicePixelRatio(dpr);
 
 	const QPoint pixmapPos {
-		size.width()  / 2 - int(pixmapToDraw.width()  / (devicePixelRatio * 2)),
-		size.height() / 2 - int(pixmapToDraw.height() / (devicePixelRatio * 2))
+		size.width()  / 2 - int(pixmapToDraw.width()  / (dpr * 2)),
+		size.height() / 2 - int(pixmapToDraw.height() / (dpr * 2))
 	};
 
 	p.drawPixmap(pixmapPos, pixmapToDraw);
@@ -725,16 +731,6 @@ quint32 Functions::getBestSampleRate()
 	return srate;
 }
 
-QWindow *Functions::getNativeWindow(const QWidget *w)
-{
-	if (w)
-	{
-		if (QWidget *winW = w->window())
-			return winW->windowHandle();
-	}
-	return nullptr;
-}
-
 bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {
 	const QSize winSize = widget->size();
@@ -803,8 +799,10 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
 {
 	constexpr char libsslFileName[] =
-#ifdef Q_OS_WIN
-		"libeay32"
+#if defined(Q_OS_WIN64)
+		"libcrypto-1_1-x64"
+#elif defined(Q_OS_WIN32)
+		"libcrypto-1_1"
 #else
 		"ssl"
 #endif

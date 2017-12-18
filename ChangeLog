@@ -1,7 +1,13 @@
-Changes in QMPlay2 build 17.10.25:
+Changes in QMPlay2 build 17.12.15:
+	- add reading of CUE files,
+
+Changes in QMPlay2 build 17.12.11:
 	- use pan gesture for scrolling on Windows (native) and Android (QScroller),
 	- add task bar playback progress and tool buttons on Windows,
 	- drop support for Qt < 5.6, CMake < 3.1, and FFmpeg < 2.5,
+	- add Ukrainian translation file (Alexey Lugin),
+	- update Russian translation file (victorr2007),
+	- more mouse interaction with system tray,
 	- remove already fixed Qt bug workarounds,
 	- use Qt5 JSON parser instead of Json11,
 	- add Toast notifications for Android,

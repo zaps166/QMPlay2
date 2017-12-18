@@ -54,8 +54,8 @@ Radio::Radio(Module &module) :
 
 	ui->setupUi(this);
 
-	setTabIcon(0, QMPlay2Core.getQMPlay2Icon());
-	setTabIcon(1, m_radioIcon);
+	setTabIcon(0, m_radioIcon);
+	setTabIcon(1, QMPlay2Core.getQMPlay2Icon());
 
 	ui->addMyRadioStationButton->setIcon(QIcon(":/list-add.svgz"));
 	ui->editMyRadioStationButton->setIcon(QIcon(":/document-properties.svgz"));
@@ -160,7 +160,7 @@ void Radio::visibilityChanged(const bool v)
 
 void Radio::tabChanged(int index)
 {
-	if (index == 0 && !m_qmplay2RadioStationsReply && ui->qmplay2RadioListWidget->count() == 0)
+	if (index == 1 && !m_qmplay2RadioStationsReply && ui->qmplay2RadioListWidget->count() == 0)
 	{
 		m_qmplay2RadioStationsReply = m_net->start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList.json");
 		connect(m_qmplay2RadioStationsReply, SIGNAL(finished()), this, SLOT(qmplay2RadioStationsFinished()));

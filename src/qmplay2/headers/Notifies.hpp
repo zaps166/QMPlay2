@@ -18,12 +18,13 @@
 
 #pragma once
 
+#include <QtGlobal>
+
 class QSystemTrayIcon;
-class QString;
 class QPixmap;
 class QImage;
 
-class Notifies
+class Q_DECL_EXPORT Notifies
 {
 public:
 	static void initialize(QSystemTrayIcon *tray);

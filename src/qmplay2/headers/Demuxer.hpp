@@ -26,7 +26,7 @@
 
 struct Packet;
 
-class Demuxer : protected ModuleCommon, public BasicIO
+class Q_DECL_EXPORT Demuxer : protected ModuleCommon, public BasicIO
 {
 public:
 	class FetchTracks

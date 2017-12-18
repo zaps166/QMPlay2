@@ -82,8 +82,6 @@ QMPlay2CoreClass::QMPlay2CoreClass() :
 {
 	qmplay2Core = this;
 
-	videoDevicePixelRatio = 1.0;
-
 	QFile f(":/Languages.csv");
 	if (f.open(QFile::ReadOnly))
 	{
@@ -385,13 +383,9 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 	return modules + availableModules;
 }
 
-void QMPlay2CoreClass::setVideoDevicePixelRatio()
+qreal QMPlay2CoreClass::getVideoDevicePixelRatio() const
 {
-	if (QWindow *win = Functions::getNativeWindow(getVideoDock()))
-		videoDevicePixelRatio = win->devicePixelRatio();
-	else
-		videoDevicePixelRatio = qApp->devicePixelRatio();
-	videoDevicePixelRatio = qMax(1.0, videoDevicePixelRatio);
+	return getVideoDock()->devicePixelRatioF();
 }
 
 QIcon QMPlay2CoreClass::getIconFromTheme(const QString &iconName, const QIcon &fallback)

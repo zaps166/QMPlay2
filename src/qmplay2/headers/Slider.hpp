@@ -20,7 +20,7 @@
 
 #include <QSlider>
 
-class Slider final : public QSlider
+class Q_DECL_EXPORT Slider final : public QSlider
 {
 	Q_OBJECT
 public:

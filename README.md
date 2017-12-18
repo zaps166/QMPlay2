@@ -184,13 +184,6 @@ For CMake build be sure that you have CMake 3.1 or higher.
 $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt5-base qt5-tools
 ```
 
-#### PC-BSD 10.3
-
-- Install dependencies form the package manager:
-```
-$ sudo pkg install cmake pkgconf libgme libsidplayfp libcdio libcddb libcdio libcddb libass portaudio taglib libvdpau libva
-```
-
 ### Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.

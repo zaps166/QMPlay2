@@ -22,7 +22,7 @@
 
 #include <string.h>
 
-class VideoAdjustment
+class Q_DECL_EXPORT VideoAdjustment
 {
 public:
 	inline void unset()

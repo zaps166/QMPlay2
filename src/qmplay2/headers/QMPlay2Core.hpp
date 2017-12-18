@@ -36,7 +36,7 @@ class QWidget;
 class QPixmap;
 class Module;
 
-class QMPlay2CoreClass : public QObject
+class Q_DECL_EXPORT QMPlay2CoreClass : public QObject
 {
 	Q_OBJECT
 
@@ -89,11 +89,7 @@ public:
 		return *settings;
 	}
 
-	inline qreal getVideoDevicePixelRatio() const
-	{
-		return videoDevicePixelRatio;
-	}
-	void setVideoDevicePixelRatio();
+	qreal getVideoDevicePixelRatio() const;
 
 	QIcon getIconFromTheme(const QString &iconName, const QIcon &fallback = QIcon());
 
@@ -205,7 +201,6 @@ private:
 	QStringList logs;
 	QMap<QString, QString> languages;
 	QList<QPointer<QWidget>> videoFilters;
-	qreal videoDevicePixelRatio;
 	QString lang;
 
 	struct

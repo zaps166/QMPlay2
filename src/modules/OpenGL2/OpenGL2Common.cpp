@@ -146,16 +146,16 @@ void OpenGL2Common::newSize(const QSize &size)
 {
 	const bool canUpdate = !size.isValid();
 	const QSize winSize = canUpdate ? widget()->size() : size;
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
+	const qreal dpr = widget()->devicePixelRatioF();
 	if (!isRotate90())
 	{
 		Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &subsX, &subsY);
-		Functions::getImageSize(aspectRatio, zoom, winSize.width() * scale, winSize.height() * scale, subsW, subsH, &subsX, &subsY);
+		Functions::getImageSize(aspectRatio, zoom, winSize.width() * dpr, winSize.height() * dpr, subsW, subsH, &subsX, &subsY);
 	}
 	else
 	{
 		Functions::getImageSize(aspectRatio, zoom, winSize.height(), winSize.width(), H, W);
-		Functions::getImageSize(aspectRatio, zoom, winSize.width() * scale, winSize.height() * scale, subsW, subsH, &subsX, &subsY);
+		Functions::getImageSize(aspectRatio, zoom, winSize.width() * dpr, winSize.height() * dpr, subsW, subsH, &subsX, &subsY);
 	}
 	doReset = true;
 	if (canUpdate)
@@ -211,15 +211,10 @@ void OpenGL2Common::initializeGL()
 	}
 #endif
 
-#ifndef DONT_RECREATE_SHADERS
 	delete shaderProgramVideo;
 	delete shaderProgramOSD;
-	shaderProgramVideo = shaderProgramOSD = nullptr;
-#endif
-	if (!shaderProgramVideo)
-		shaderProgramVideo = new QOpenGLShaderProgram;
-	if (!shaderProgramOSD)
-		shaderProgramOSD = new QOpenGLShaderProgram;
+	shaderProgramVideo = new QOpenGLShaderProgram;
+	shaderProgramOSD = new QOpenGLShaderProgram;
 
 	/* YCbCr shader */
 	if (shaderProgramVideo->shaders().isEmpty())
@@ -640,7 +635,7 @@ void OpenGL2Common::paintGL()
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		}
 
-		const QSizeF winSizeSubs = winSize * QMPlay2Core.getVideoDevicePixelRatio();
+		const QSizeF winSizeSubs = winSize * widget()->devicePixelRatioF();
 		const float left   = (bounds.left() + subsX) * 2.0f / winSizeSubs.width();
 		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSizeSubs.width();
 		const float top    = (bounds.top() + subsY) * 2.0f / winSizeSubs.height();

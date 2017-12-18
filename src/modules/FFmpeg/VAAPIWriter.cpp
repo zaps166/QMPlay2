@@ -232,9 +232,9 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 			else
 			{
 				const double sW = (double)vaapi->outW / dstQRect.width(), sH = (double)vaapi->outH / dstQRect.height();
-				const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
-				const int Xoffset = (dstQRect.width() == width() * scale) ? X : 0;
-				const int Yoffset = (dstQRect.height() == height() * scale) ? Y : 0;
+				const qreal dpr = devicePixelRatioF();
+				const int Xoffset = (dstQRect.width() == width() * dpr) ? X : 0;
+				const int Yoffset = (dstQRect.height() == height() * dpr) ? Y : 0;
 				associated = vaAssociateSubpicture
 				(
 					vaapi->VADisp, vaSubpicID, &id, 1,
@@ -272,8 +272,8 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
 
 void VAAPIWriter::resizeEvent(QResizeEvent *)
 {
-	const qreal scale = QMPlay2Core.getVideoDevicePixelRatio();
-	Functions::getImageSize(aspect_ratio, zoom, width() * scale, height() * scale, W, H, &X, &Y, &dstQRect, &vaapi->outW, &vaapi->outH, &srcQRect);
+	const qreal dpr = devicePixelRatioF();
+	Functions::getImageSize(aspect_ratio, zoom, width() * dpr, height() * dpr, W, H, &X, &Y, &dstQRect, &vaapi->outW, &vaapi->outH, &srcQRect);
 }
 void VAAPIWriter::paintEvent(QPaintEvent *)
 {

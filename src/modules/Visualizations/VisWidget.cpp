@@ -67,14 +67,9 @@ VisWidget::VisWidget() :
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 }
 
-bool VisWidget::regionIsVisible() const
+bool VisWidget::canStart() const
 {
-	const QWidget *widgetToCheck = this;
-#ifdef USE_OPENGL
-	if (glW)
-		widgetToCheck = glW;
-#endif
-	return (dw->visibleRegion() != QRegion() || widgetToCheck->visibleRegion() != QRegion());
+	return ((dockWidgetVisible && isVisible()) || parentWidget() != dw);
 }
 
 void VisWidget::stop()
@@ -174,10 +169,11 @@ void VisWidget::contextMenu(const QPoint &point)
 }
 void VisWidget::visibilityChanged(bool v)
 {
-	if (!v && parent() == dw)
+	dockWidgetVisible = v;
+	if (!canStart())
 		stop();
 	else if (!stopped)
-		start(v);
+		start();
 }
 void VisWidget::updateVisualization()
 {
