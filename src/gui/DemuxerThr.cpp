@@ -97,14 +97,16 @@ void DemuxerThr::loadImage()
 			emit QMPlay2Core.coverDataFromMediaFile(demuxerImage);
 		else
 		{
-			if (url.startsWith("file://") && QMPlay2Core.getSettings().getBool("ShowDirCovers")) //Ładowanie okładki z katalogu
+			QString realUrl = url;
+			Functions::splitPrefixAndUrlIfHasPluginPrefix(realUrl, nullptr, &realUrl);
+			if (realUrl.startsWith("file://") && QMPlay2Core.getSettings().getBool("ShowDirCovers")) //Ładowanie okładki z katalogu
 			{
 				const QStringList nameFilters {
 					"folder", "folder.*",
 					"front", "front.*",
 					"cover", "cover.*"
 				};
-				const QString directory = Functions::filePath(url.mid(7));
+				const QString directory = Functions::filePath(realUrl.mid(7));
 				for (const QString &cover : QDir(directory).entryList(nameFilters, QDir::Files))
 				{
 					const QString coverPath = directory + cover;
