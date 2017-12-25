@@ -36,7 +36,6 @@
 #include <QCoreApplication>
 #include <QInputDialog>
 #include <QMessageBox>
-#include <QTextCodec>
 #include <QRawFont>
 #include <QAction>
 #include <QDir>
@@ -348,18 +347,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 		IOController<Reader> reader;
 		if (Reader::create(fileName, reader) && reader->size() > 0)
 		{
-			QByteArray fileData = reader->read(reader->size());
-
-			QTextCodec *codec = QTextCodec::codecForUtfText(fileData, QTextCodec::codecForName(QMPlay2Core.getSettings().getByteArray("FallbackSubtitlesEncoding")));
-			if (codec && codec->name() != "UTF-8")
-			{
-				QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
-				QTextCodec::ConverterState state;
-				if (utf8Codec)
-					utf8Codec->toUnicode(fileData, fileData.size(), &state); //Try to detect if it is a UTF-8 text
-				if (!utf8Codec || state.invalidChars > 0) //Not a UTF-8 text, use a fallback text codec
-					fileData = codec->toUnicode(fileData).toUtf8();
-			}
+			const QByteArray fileData = Functions::textWithFallbackEncoding(reader->read(reader->size()));
 
 			sPackets.clear();
 			subsMutex.lock();
