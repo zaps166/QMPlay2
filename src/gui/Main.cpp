@@ -576,9 +576,6 @@ int main(int argc, char *argv[])
 
 	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-	QApplication::setAttribute(Qt::AA_DontShowShortcutsInContextMenus, false);
-#endif
 
 	QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
 
