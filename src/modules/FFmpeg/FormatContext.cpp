@@ -29,6 +29,9 @@ extern "C"
 {
 	#include <libavformat/avformat.h>
 	#include <libavutil/replaygain.h>
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 58, 100)
+	#include <libavutil/spherical.h>
+#endif
 	#include <libavutil/pixdesc.h>
 }
 
@@ -934,6 +937,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->block_align = codecParams(stream)->block_align;
 			break;
 		case QMPLAY2_TYPE_VIDEO:
+		{
 			streamInfo->format = getPixelFormat(stream);
 			if (stream->sample_aspect_ratio.num)
 				streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
@@ -943,7 +947,21 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->H = codecParams(stream)->height;
 			if (!stillImage)
 				streamInfo->FPS = av_q2d(stream->r_frame_rate);
+
+			bool ok = false;
+			const double rotation = getTag(stream->metadata, "rotate", false).toDouble(&ok);
+			if (ok)
+				streamInfo->rotation = rotation;
+
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 58, 100)
+			if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_SPHERICAL, nullptr))
+			{
+				streamInfo->spherical = (((AVSphericalMapping *)sideData)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
+			}
+#endif
+
 			break;
+		}
 		case AVMEDIA_TYPE_ATTACHMENT:
 			streamInfo->title = getTag(stream->metadata, "filename", false);
 			switch (codecParams(stream)->codec_id)

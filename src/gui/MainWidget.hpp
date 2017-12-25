@@ -74,6 +74,7 @@ private slots:
 	void resetARatio();
 	void resetFlip();
 	void resetRotate90();
+	void resetSpherical();
 
 	void visualizationFullScreen();
 	void hideAllExtensions();

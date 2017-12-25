@@ -153,6 +153,15 @@ void PlayClass::play(const QString &_url)
 			if (!QMPlay2Core.getSettings().getBool("KeepSpeed"))
 				speed = 1.0;
 
+			if (paramsForced)
+			{
+				flip = 0;
+				rotate90 = false;
+				spherical = false;
+				paramsForced = false;
+				emitSetVideoCheckState();
+			}
+
 			replayGain = 1.0;
 
 			canUpdatePos = true;
@@ -619,6 +628,11 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
 	return aThr->setParams(realChannels, realSampleRate, chn, srate);
 }
 
+inline void PlayClass::emitSetVideoCheckState()
+{
+	emit setVideoCheckState(rotate90, flip & Qt::Horizontal, flip & Qt::Vertical, spherical);
+}
+
 void PlayClass::suspendWhenFinished(bool b)
 {
 	doSuspend = b;
@@ -943,6 +957,7 @@ void PlayClass::toggleAVS(bool b)
 }
 void PlayClass::setSpherical(bool b)
 {
+	paramsForced = false;
 	spherical = b;
 	if (vThr)
 	{
@@ -959,6 +974,7 @@ void PlayClass::setSpherical(bool b)
 }
 void PlayClass::setHFlip(bool b)
 {
+	paramsForced = false;
 	if (b)
 		flip |= Qt::Horizontal;
 	else
@@ -967,6 +983,7 @@ void PlayClass::setHFlip(bool b)
 }
 void PlayClass::setVFlip(bool b)
 {
+	paramsForced = false;
 	if (b)
 		flip |= Qt::Vertical;
 	else
@@ -975,6 +992,7 @@ void PlayClass::setVFlip(bool b)
 }
 void PlayClass::setRotate90(bool b)
 {
+	paramsForced = false;
 	rotate90 = b;
 	if (vThr)
 	{
@@ -1273,15 +1291,50 @@ void PlayClass::load(Demuxer *demuxer)
 			{
 				const double aspect_ratio = getARatio();
 
+				if (!qIsNaN(streams[videoStream]->rotation))
+				{
+					const bool is270 = qFuzzyCompare(streams[videoStream]->rotation, 270.0);
+					if (is270 || qFuzzyCompare(streams[videoStream]->rotation, 180.0))
+						flip = Qt::Horizontal | Qt::Vertical;
+					else
+						flip = 0;
+					rotate90 = (is270 || qFuzzyCompare(streams[videoStream]->rotation, 90.0));
+					spherical = false;
+					paramsForced = true;
+				}
+				else if (streams[videoStream]->spherical)
+				{
+					flip = 0;
+					rotate90 = false;
+					spherical = true;
+					paramsForced = true;
+				}
+				if (paramsForced)
+					emitSetVideoCheckState();
+
 				vThr->setFrameSize(streams[videoStream]->W, streams[videoStream]->H);
 				vThr->setARatio(aspect_ratio, getSAR());
 				vThr->setVideoAdjustment();
 				vThr->setDec(dec);
 				vThr->setZoom();
-				vThr->setSpherical(); //TODO: Disable when not supported
-				vThr->setRotate90(); //TODO: Disable when not supported
+				const bool hasSpherical = vThr->setSpherical();
+				const bool hasRotate90 = vThr->setRotate90();
 				vThr->setFlip();
 				vThr->initFilters(false);
+
+				bool mustEmitSetVideoCheckState = false;
+				if (spherical && !hasSpherical)
+				{
+					spherical = false;
+					mustEmitSetVideoCheckState = true;
+				}
+				if (rotate90 && !hasRotate90)
+				{
+					rotate90 = false;
+					mustEmitSetVideoCheckState = true;
+				}
+				if (mustEmitSetVideoCheckState)
+					emitSetVideoCheckState();
 
 				if (!vThr->processParams())
 					dec = nullptr;
