@@ -762,6 +762,13 @@
     </message>
 </context>
 <context>
+    <name>FFDemux</name>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Ścieżka</translation>
+    </message>
+</context>
+<context>
     <name>FFTSpectrumW</name>
     <message>
         <source>FFT Spectrum</source>
