@@ -31,6 +31,10 @@ extern "C"
 	#include <libavutil/pixdesc.h>
 }
 
+#ifndef AV_CODEC_FLAG2_FAST
+	#define AV_CODEC_FLAG2_FAST CODEC_FLAG2_FAST
+#endif
+
 FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
 	FFDec(avcodec_mutex),
 	threads(0), lowres(0),
@@ -213,14 +217,14 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 			codec_ctx->skip_loop_filter = AVDISCARD_ALL;
 			if (hurry_up > 1)
 				codec_ctx->skip_idct = AVDISCARD_NONREF;
-			codec_ctx->flags2 |= CODEC_FLAG2_FAST;
+			codec_ctx->flags2 |= AV_CODEC_FLAG2_FAST;
 		}
 		else
 		{
 			if (!forceSkipFrames)
 				codec_ctx->skip_frame = AVDISCARD_DEFAULT;
 			codec_ctx->skip_loop_filter = codec_ctx->skip_idct = AVDISCARD_DEFAULT;
-			codec_ctx->flags2 &= ~CODEC_FLAG2_FAST;
+			codec_ctx->flags2 &= ~AV_CODEC_FLAG2_FAST;
 		}
 
 		bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
