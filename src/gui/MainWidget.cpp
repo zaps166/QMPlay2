@@ -1512,6 +1512,14 @@ void MainWidget::setWindowsTaskBarFeatures()
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
+#ifdef Q_OS_ANDROID
+	if (e->key() == Qt::Key_Back && fullScreen)
+	{
+		toggleFullScreen();
+		e->accept();
+		return;
+	}
+#endif
 	// Trigger group sync on quick group sync key shortcut if quick group sync is unavailable.
 	// This works only in quick group sync has only one key shourtcut.
 	QAction *sync = menuBar->playlist->sync;
