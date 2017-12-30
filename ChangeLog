@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 17.12.25:
+Changes in QMPlay2 build 17.12.31:
 	- automaticaly rotate movie or set spherical view if is set in metadata,
 	- update Ukrainian translation file (Alexey Lugin),
 	- add reading of CUE files,
