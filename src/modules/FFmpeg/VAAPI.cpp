@@ -22,6 +22,8 @@
 #include <VideoFrame.hpp>
 #include <QMPlay2Core.hpp>
 
+#include <QX11Info>
+
 #include <va/va_x11.h>
 #include <va/va_glx.h>
 
@@ -33,8 +35,7 @@ VAAPI::VAAPI() :
 	vpp_deint_type(VAProcDeinterlacingNone),
 	use_vpp(false),
 #endif
-	version(0),
-	display(nullptr)
+	version(0)
 {
 	memset(&nv12ImageFmt, 0, sizeof nv12ImageFmt);
 }
@@ -43,15 +44,13 @@ VAAPI::~VAAPI()
 	clr();
 	if (VADisp)
 		vaTerminate(VADisp);
-	if (display)
-		XCloseDisplay(display);
 }
 
 bool VAAPI::open(bool allowVDPAU, bool &openGL)
 {
 	clr();
 
-	display = XOpenDisplay(nullptr);
+	Display *display = QX11Info::display();
 	if (!display)
 		return false;
 
