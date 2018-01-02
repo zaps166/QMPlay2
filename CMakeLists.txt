@@ -289,7 +289,7 @@ if(NOT WIN32 AND NOT APPLE)
     set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 endif()
 
-if(USE_FREEDESKTOP_NOTIFICATION OR USE_MPRIS2)
+if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_MPRIS2)
     find_package(Qt5DBus REQUIRED)
 endif()
 
