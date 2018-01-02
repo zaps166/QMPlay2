@@ -312,6 +312,12 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(&playC, SIGNAL(updateImage(const QImage &)), videoDock, SLOT(updateImage(const QImage &)));
 	connect(&playC, SIGNAL(videoStarted()), this, SLOT(videoStarted()));
 	connect(&playC, SIGNAL(uncheckSuspend()), this, SLOT(uncheckSuspend()));
+	connect(&playC, &PlayClass::setVideoCheckState, this, [this](bool rotate90, bool hFlip, bool vFlip, bool spherical) {
+		menuBar->playback->videoFilters->rotate90->setChecked(rotate90);
+		menuBar->playback->videoFilters->hFlip->setChecked(hFlip);
+		menuBar->playback->videoFilters->vFlip->setChecked(vFlip);
+		menuBar->playback->videoFilters->spherical->setChecked(spherical);
+	});
 	/**/
 
 	if (settings.getBool("MainWidget/TabPositionNorth"))
@@ -646,6 +652,11 @@ void MainWidget::resetRotate90()
 	if (menuBar->playback->videoFilters->rotate90->isChecked())
 		menuBar->playback->videoFilters->rotate90->trigger();
 }
+void MainWidget::resetSpherical()
+{
+	if (menuBar->playback->videoFilters->spherical->isChecked())
+		menuBar->playback->videoFilters->spherical->trigger();
+}
 
 void MainWidget::visualizationFullScreen()
 {
@@ -794,6 +805,7 @@ void MainWidget::createMenuBar()
 	}
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetFlip()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetRotate90()));
+	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetSpherical()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetARatio()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(zoomReset()));
 	connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
@@ -1500,6 +1512,14 @@ void MainWidget::setWindowsTaskBarFeatures()
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
+#ifdef Q_OS_ANDROID
+	if (e->key() == Qt::Key_Back && fullScreen)
+	{
+		toggleFullScreen();
+		e->accept();
+		return;
+	}
+#endif
 	// Trigger group sync on quick group sync key shortcut if quick group sync is unavailable.
 	// This works only in quick group sync has only one key shourtcut.
 	QAction *sync = menuBar->playlist->sync;

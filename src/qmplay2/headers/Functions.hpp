@@ -149,4 +149,6 @@ namespace Functions
 	Q_DECL_EXPORT bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 
 	Q_DECL_EXPORT QByteArray decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered);
+
+	Q_DECL_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 }

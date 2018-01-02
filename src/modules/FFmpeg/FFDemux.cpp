@@ -262,7 +262,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 		QFile cue(url.mid(7));
 		if (cue.size() <= 0xFFFF && cue.open(QFile::ReadOnly | QFile::Text))
 		{
-			QList<QByteArray> data = cue.readAll().split('\n');
+			QList<QByteArray> data = Functions::textWithFallbackEncoding(cue.readAll()).split('\n');
 			QString title, performer, audioUrl;
 			double index0 = -1.0, index1 = -1.0;
 			QHash<int, QPair<double, double>> indexes;

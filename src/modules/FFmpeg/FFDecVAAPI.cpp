@@ -280,7 +280,9 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 			if (m_vaapi) //Initialize VA-API context
 			{
+#ifdef HAVE_VPP
 				m_vaapi->vpp_deint_type = m_vppDeintType;
+#endif
 				if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id), (m_copyVideo != Qt::Checked)))
 				{
 					if (!m_hwAccelWriter)

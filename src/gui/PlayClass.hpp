@@ -119,6 +119,8 @@ private:
 
 	bool setAudioParams(quint8 realChannels, quint32 realSampleRate);
 
+	inline void emitSetVideoCheckState();
+
 	DemuxerThr *demuxThr;
 	VideoThr *vThr;
 	AudioThr *aThr;
@@ -147,7 +149,7 @@ private:
 
 	double maxThreshold, fps;
 
-	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat, allowAccurateSeek;
+	bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat, allowAccurateSeek, paramsForced = false;
 	QTimer timTerminate;
 
 #if defined Q_OS_WIN && !defined Q_OS_WIN64
@@ -232,4 +234,5 @@ signals:
 	void updateImage(const QImage &img = QImage());
 	void videoStarted();
 	void uncheckSuspend();
+	void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
 };

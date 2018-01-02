@@ -37,6 +37,7 @@
 #include <QRegExp>
 #include <QWindow>
 #include <QLibrary>
+#include <QTextCodec>
 #include <QMessageBox>
 #include <QStyleOption>
 
@@ -889,4 +890,19 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 
 	deciphered.resize(decryptedLen + finalizeLen);
 	return deciphered;
+}
+
+QByteArray Functions::textWithFallbackEncoding(const QByteArray &data)
+{
+	QTextCodec *codec = QTextCodec::codecForUtfText(data, QTextCodec::codecForName(QMPlay2Core.getSettings().getByteArray("FallbackSubtitlesEncoding")));
+	if (codec && codec->name() != "UTF-8")
+	{
+		QTextCodec *utf8Codec = QTextCodec::codecForName("UTF-8");
+		QTextCodec::ConverterState state;
+		if (utf8Codec)
+			utf8Codec->toUnicode(data, data.size(), &state); //Try to detect if it is a UTF-8 text
+		if (!utf8Codec || state.invalidChars > 0) //Not a UTF-8 text, use a fallback text codec
+			return codec->toUnicode(data).toUtf8();
+	}
+	return data;
 }

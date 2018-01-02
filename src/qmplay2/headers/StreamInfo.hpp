@@ -68,20 +68,22 @@ public:
 		return sample_aspect_ratio * W / H;
 	}
 
-	QMPlay2MediaType type;
+	QMPlay2MediaType type = QMPLAY2_TYPE_UNKNOWN;
 	QByteArray codec_name, title, artist, format;
 	QVector<QMPlay2Tag> other_info;
 	QByteArray data; //subtitles header or extradata for some codecs
-	bool is_default, must_decode;
-	struct {int num, den;} time_base;
-	int bitrate, bpcs;
-	unsigned codec_tag;
+	bool is_default = true, must_decode = false;
+	struct {int num, den;} time_base = {0, 0};
+	int bitrate = 0, bpcs = 0;
+	unsigned codec_tag = 0;
 	/* audio only */
-	quint32 sample_rate, block_align;
-	quint8 channels;
+	quint32 sample_rate = 0, block_align = 0;
+	quint8 channels = 0;
 	/* video only */
-	double sample_aspect_ratio, FPS;
-	int W, H;
+	double sample_aspect_ratio = 1.0, FPS = 0.0;
+	int W = 0, H = 0;
+	double rotation = qQNaN();
+	bool spherical = false;
 };
 
 class Q_DECL_EXPORT StreamsInfo : public QList<StreamInfo *>

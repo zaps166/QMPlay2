@@ -1,5 +1,8 @@
-Changes in QMPlay2 build 17.12.15:
+Changes in QMPlay2 build 17.12.31:
+	- automaticaly rotate movie or set spherical view if is set in metadata,
+	- update Ukrainian translation file (Alexey Lugin),
 	- add reading of CUE files,
+	- VA-API/OpenGL fixes,
 
 Changes in QMPlay2 build 17.12.11:
 	- use pan gesture for scrolling on Windows (native) and Android (QScroller),

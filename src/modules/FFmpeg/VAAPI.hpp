@@ -31,7 +31,6 @@
 	#define HAVE_VPP
 #endif
 
-struct _XDisplay;
 class VideoFrame;
 class ImgScaler;
 
@@ -83,7 +82,6 @@ public:
 private:
 	int version;
 
-	_XDisplay *display;
 	VAProfile profile;
 
 	QList<VAProfile> profileList;
