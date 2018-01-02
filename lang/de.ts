@@ -380,11 +380,11 @@
     </message>
     <message>
         <source>requires a change in one of the forced parameters, sound disabled ...</source>
-        <translation>erfordert eine Änderung in einem der obligatorischen Parameter, Ton deaktiviert ...</translation>
+        <translation>Erfordert eine Änderung in einem der obligatorischen Parameter, Ton deaktiviert ...</translation>
     </message>
     <message>
         <source>sets the parameters to</source>
-        <translation>die Parameter für</translation>
+        <translation>Setzt die Parameter auf</translation>
     </message>
 </context>
 <context>
@@ -402,7 +402,7 @@
     <name>CuvidDec</name>
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
-        <translation>kann OpenGL 2-Modul nicht öffnen</translation>
+        <translation>Kann OpenGL 2-Modul nicht öffnen</translation>
     </message>
     <message>
         <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
@@ -413,19 +413,19 @@
     <name>Datmusic</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Titel</translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artist</translation>
+        <translation>Artist</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Länge</translation>
+        <translation>Länge</translation>
     </message>
     <message>
         <source>Search on Datmusic</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche auf Datmusic</translation>
     </message>
 </context>
 <context>
@@ -765,7 +765,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Spur</translation>
     </message>
 </context>
 <context>
@@ -986,67 +986,67 @@
     </message>
     <message>
         <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Wiegergabe nach dem Ausführen von (Bypass-Option &quot;Wiedergabe-Position merken&quot;).</translation>
     </message>
     <message>
         <source>Ensures that the window will be visible if the application is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stellt sicher, dass das Fenster sichtbar ist, wenn die Anwendung ausgeführt wird.</translation>
     </message>
     <message>
         <source>Toggles fullscreen.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaltet den Vollbildmodus um.</translation>
     </message>
     <message>
         <source>Seeks to the specified value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sucht nach dem angegebenen Wert.</translation>
     </message>
     <message>
         <source>Starts playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startet die Wiedergabe.</translation>
     </message>
     <message>
         <source>Stops playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppt die Wiedergabe.</translation>
     </message>
     <message>
         <source>Toggles playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaltet die Wiedergabe um.</translation>
     </message>
     <message>
         <source>Terminates the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Beendet die Anwendung.</translation>
     </message>
     <message>
         <source>Displays this help.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigt diese Hilfe an.</translation>
     </message>
     <message>
         <source>Opens and plays specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet und spielt die angegebene &lt;url&gt; ab.</translation>
     </message>
     <message>
         <source>Adds specified &lt;url&gt; to playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fügt die angegebene &lt;url&gt; zur Wiedergabeliste.</translation>
     </message>
     <message>
         <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Startet die Anwendung mit dem angegebenen Profilnamen.</translation>
     </message>
     <message>
         <source>Sets specified volume.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legt das angegebene Volumen fest.</translation>
     </message>
     <message>
         <source>Sets specified playback speed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legt die angegebene Wiedergabegeschwindigkeit fest.</translation>
     </message>
     <message>
         <source>Plays next entry on playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielt den nächsten Eintrag in der Playlist ab.</translation>
     </message>
     <message>
         <source>Plays previous entry on playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielt den vorherigen Eintrag in der Wiedergabeliste ab.</translation>
     </message>
 </context>
 <context>
@@ -1073,7 +1073,7 @@
     </message>
     <message>
         <source>visible</source>
-        <translation>sichtbar</translation>
+        <translation>Sichtbar</translation>
     </message>
 </context>
 <context>
@@ -1230,7 +1230,7 @@
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation>Website existiert nich&apos;t</translation>
+        <translation>Website existiert nicht</translation>
     </message>
     <message>
         <source>Play all</source>
@@ -1249,11 +1249,11 @@
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation>Seite öffnen im Browser</translation>
+        <translation>Seite im Browser öffnen</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>Kopiere Seiten Adresse</translation>
+        <translation>Kopiere Seitenadresse</translation>
     </message>
 </context>
 <context>
@@ -1276,7 +1276,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>Verwenden die angegebene FPS in MicroDVD Untertitel (falls vorhanden)</translation>
+        <translation>Verwende den angegebenen FPS in MicroDVD Untertitel (falls vorhanden)</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1300,7 +1300,7 @@
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
-        <translation>Suche automatisch nach Mehrkanal-Geräten</translation>
+        <translation>Automatische Suche nach einem Mehrkanalgerät</translation>
     </message>
     <message>
         <source>Playback device</source>
@@ -1332,7 +1332,7 @@
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
-        <translation>Methode für Multithread Decodierung</translation>
+        <translation>Methode für Multithread Dekodierung</translation>
     </message>
     <message>
         <source>Frames</source>
@@ -1416,7 +1416,7 @@
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
-        <translation>Verknüpfte Dateien mit QMPlay2</translation>
+        <translation>Verknüpfe Dateien mit QMPlay2</translation>
     </message>
     <message>
         <source>Select all</source>
@@ -1468,7 +1468,7 @@
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation>Anzahl der Threads die verwendet werden, um das Video zu decodieren</translation>
+        <translation>Anzahl der Threads die verwendet werden, um das Video zu dekodieren</translation>
     </message>
     <message>
         <source>Show additional search information</source>
@@ -1650,7 +1650,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Verwende CUVID nur wenn primäre GPU NVIDIA ist</translation>
+        <translation>Verwende CUVID nur wenn die primäre GPU NVIDIA ist</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1662,7 +1662,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation>Benachrichtigung anzeigen, wenn Medien ändern</translation>
+        <translation>Benachrichtigung anzeigen, wenn sich Wiedergabemedium ändert</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
@@ -1698,7 +1698,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Overall compression ratio</source>
-        <translation>Gesamtverdichtungsverhältnis</translation>
+        <translation>Gesamtkompressionsverhältnis</translation>
     </message>
     <message>
         <source>Dynamic range compression</source>
@@ -1734,7 +1734,7 @@ Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam 
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation>Versuche Live-Streams automatisch bei Fehler zu schließen</translation>
+        <translation> Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
     </message>
     <message>
         <source>Always enabled on Wayland and Android platforms.
@@ -1858,7 +1858,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation>Treiber sollte Multitexturing, Shader und Non-Potenz von Zwei Texturgröße unterstützen</translation>
+        <translation>Der Treiber muss Multitexturing, Shader und Non-Power-Of-Two Texturgröße unterstützen</translation>
     </message>
     <message>
         <source>Can&apos;t init textures for</source>
@@ -1877,7 +1877,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Op&amp;tionen</translation>
+        <translation>Optionen</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -2043,7 +2043,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>Wieder&amp;gabe</translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <source>&amp;Audio enabled</source>
@@ -2055,7 +2055,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Vi&amp;deo Verzögerung angeben</translation>
+        <translation>Video Verzögerung angeben</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2063,7 +2063,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>V&amp;ideo Abspielgeschwindigkeit erhöhen</translation>
+        <translation>Video Abspielgeschwindigkeit erhöhen</translation>
     </message>
     <message>
         <source>&amp;Subtitles enabled</source>
@@ -2071,27 +2071,27 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Unter&amp;titel Datei hinzufügen</translation>
+        <translation>Untertitel Datei hinzufügen</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Untert&amp;itel Verzögerung angeben</translation>
+        <translation>Untertitel Verzögerung angeben</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>U&amp;ntertitel verzögern</translation>
+        <translation>Untertitel verzögern</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>Un&amp;tertitel Anzeigegeschwindigkeit erhöhen</translation>
+        <translation>Untertitel Anzeigegeschwindigkeit erhöhen</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Unt&amp;ertitel vergrößern</translation>
+        <translation>Untertitel vergrößern</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Unte&amp;rtitel verkleinern</translation>
+        <translation>Untertitel verkleinern</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2241,43 +2241,43 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>&amp;Vorige</translation>
+        <translation>&amp;Vorherige</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>&amp;Vorwärts Scrollen</translation>
+        <translation>&amp;Vorwärts Suchen</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>&amp;Zurück Scrollen</translation>
+        <translation>&amp;Rückwärts Suchen</translation>
     </message>
     <message>
         <source>Long &amp;seek &amp;forward</source>
-        <translation>L&amp;anges Scrollen Vorwärts</translation>
+        <translation>Langes Suchen Vorwärts</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>L&amp;anges Scrollen Rückwärts</translation>
+        <translation>Langes Suchen Rückwärts</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Schn&amp;eller</translation>
+        <translation>Schneller</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>L&amp;angsamer</translation>
+        <translation>Langsamer</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Re&amp;in Zoomen</translation>
+        <translation>Reinzoomen</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Herau&amp;s Zoomen</translation>
+        <translation>Rauszoomen</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>&amp;Mute</translation>
+        <translation>Stumm</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
@@ -2301,11 +2301,11 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>Lautstärke a&amp;bsenken</translation>
+        <translation>Lautstärke absenken</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Nach Wiedergabe anh&amp;alten</translation>
+        <translation>Nach Wiedergabe anhalten</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2344,7 +2344,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>L&amp;iste speichern</translation>
+        <translation>Liste speichern</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
@@ -2400,15 +2400,15 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>E&amp;rweiterungen</translation>
+        <translation>Erweiterungen</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>&amp;Gruppe speichern</translation>
+        <translation>Gruppe speichern</translation>
     </message>
     <message>
         <source>&amp;Synchronize group</source>
-        <translation>&amp;synchronisiere Gruppe</translation>
+        <translation>&amp;Synchronisiere Gruppe</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
@@ -2487,19 +2487,19 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation>zu alte QMPlay2 Bibliothek</translation>
+        <translation>Zu alte QMPlay2 Bibliothek</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation>nicht übereinstimmende Modul-API-Version</translation>
+        <translation>Nicht übereinstimmende Modul-API-Version</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation>doppelter Modulname</translation>
+        <translation>Doppelter Modulname</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation>nicht mit übereinstimmende Qt Modul Version</translation>
+        <translation>Nicht mit übereinstimmende Qt Modul Version</translation>
     </message>
 </context>
 <context>
@@ -2521,7 +2521,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 wurde n&apos;icht aktualisiert. Möchten Sie das Update ausführen (empfohlen)?</translation>
+        <translation>QMPlay2 wurde nicht aktualisiert. Möchten Sie das Update ausführen (empfohlen)?</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
@@ -2615,7 +2615,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation>Stream Info</translation>
+        <translation>Stream-Informationen</translation>
     </message>
     <message>
         <source>Country</source>
@@ -2634,7 +2634,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>&amp;wiederholen</translation>
+        <translation>&amp;Wiederholen</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
@@ -2650,7 +2650,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>W&amp;iedergabeliste wiederholen</translation>
+        <translation>Wiedergabeliste wiederholen</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2658,7 +2658,7 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Z&amp;ufällige Wiedergabe der Gruppe</translation>
+        <translation>Zufällige Wiedergabe der Gruppe</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -2666,11 +2666,11 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Zufällige Wiedergabe der Gruppe und wiederholen</translation>
+        <translation>Zufällig in der Gruppe und wiederholen</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Wiedergabe nach jeder Datei stoppen</translation>
     </message>
 </context>
 <context>
@@ -2697,15 +2697,15 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation>Seite öffnen im Browser</translation>
+        <translation>Seite im Browser öffnen</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>Kopiere Seiten Adresse</translation>
+        <translation>Kopiere Seitenadresse</translation>
     </message>
     <message>
         <source>Copy stream address</source>
-        <translation>Kopiere Stream Adresse</translation>
+        <translation>Kopiere Streamadresse</translation>
     </message>
 </context>
 <context>
@@ -2819,11 +2819,11 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>To apply the icons change program will start again!</source>
-        <translation>Starten Sie jetzt neu, um die neuen Symbole zu nutzen!</translation>
+        <translation>Um die Icons zu ändern, wird das Programm neu gestartet!</translation>
     </message>
     <message>
         <source>Default or first stream</source>
-        <translation>Standard oder ersten Stream</translation>
+        <translation>Standard oder erster Stream</translation>
     </message>
     <message>
         <source>Video output priority</source>
@@ -2860,8 +2860,8 @@ QMPlay2 zeigt keine Icons an!</translation>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation>Langsamer, aber genauer suchend
-Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</translation>
+        <translation>Langsameres, aber genaueres Suchen.
+Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
@@ -2886,11 +2886,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     <name>Sort</name>
     <message>
         <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Vom kürzesten zum Längsten</translation>
+        <translation>&amp;Vom Kürzesten zum Längsten</translation>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>V&amp;om längsten zum Kürzesten</translation>
+        <translation>&amp;Vom Längsten zum Kürzesten</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
@@ -2980,11 +2980,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Load cover picture</source>
-        <translation>Letztes Cover</translation>
+        <translation>Cover laden</translation>
     </message>
     <message>
         <source>Save cover picture</source>
-        <translation>Cover speichern</translation>
+        <translation>Speichere Cover</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -2992,7 +2992,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Loading cover picture</source>
-        <translation>Covers laden</translation>
+        <translation>Cover wird geladen</translation>
     </message>
 </context>
 <context>
@@ -3029,7 +3029,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Download update</source>
-        <translation>Download Aktualisierung</translation>
+        <translation>Aktualisierung herunterladen</translation>
     </message>
     <message>
         <source>Apply update</source>
@@ -3037,7 +3037,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>No update available</source>
-        <translation>keine Aktualisierung vorhanden</translation>
+        <translation>Keine Aktualisierung vorhanden</translation>
     </message>
     <message>
         <source>Error checking for updates</source>
@@ -3091,11 +3091,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Unsupported noisy reduction filter</source>
-        <translation>Nicht unterstützt Rauschunterdrückungsfilter</translation>
+        <translation>Nicht unterstützter Rauschunterdrückungsfilter</translation>
     </message>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Nicht unterstützt Schärfefilter</translation>
+        <translation>Nicht unterstützter Schärfefilter</translation>
     </message>
     <message>
         <source>Unsupported image scaling level</source>
@@ -3110,7 +3110,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     <name>VFilters</name>
     <message>
         <source>Produces one extra frame which is average of two neighbour frames</source>
-        <translation>Erzeugt ein extra Bild, der dem Mittelwert von den beiden Nachbarn Bildern entspricht</translation>
+        <translation>Erzeugt ein zusätzliches Bild, das dem Mittelwert aus beiden Nachbar Bildern entspricht</translation>
     </message>
 </context>
 <context>
@@ -3252,7 +3252,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation>Suchen</translation>
+        <translation>Suche</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -3268,7 +3268,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Connection error</source>
-        <translation>Fehler beim Verbinden</translation>
+        <translation>Verbindungsfehler</translation>
     </message>
     <message>
         <source>Playlist</source>
@@ -3287,11 +3287,11 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot; Wurde erfolgreich heruntergeladen!</translation>
+        <translation>&quot;youtube-dl&quot; wurde erfolgreich heruntergeladen!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Aktualisieren &quot;youtube-dl&quot;, bitte warten...</translation>
+        <translation>Aktualisiere &quot;youtube-dl&quot;, bitte warten...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
@@ -3299,7 +3299,7 @@ Teilweise überprüft, beeinflusst nich&apos;t die Suche über Schieberegler.</t
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Herunterladen &quot;youtube-dl&quot;, bitte warten...</translation>
+        <translation>&quot;youtube-dl&quot; wird heruntergeladen, bitte warten...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
