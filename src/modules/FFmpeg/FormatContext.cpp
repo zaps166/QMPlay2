@@ -338,6 +338,8 @@ QString FormatContext::title() const
 		if (!icyName.isEmpty())
 			return icyName;
 	}
+	if (lengthToPlay > 0.0)
+		return QString();
 	if (AVDictionary *dict = getMetadata())
 	{
 		const QString title  = getTag(dict, "title");
