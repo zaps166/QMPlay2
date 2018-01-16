@@ -239,9 +239,8 @@ void AudioDevice::Init(AudioPropertyListenerProc lProc = DefaultListener)
             if (err == noErr) {
                 UInt32 i;
                 NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-                NSMutableArray *a = [NSMutableArray arrayWithCapacity:nominalSampleRates];
                 nominalSampleRates = propsize / sizeof(AudioValueRange);
-                a = [NSMutableArray arrayWithCapacity:nominalSampleRates];
+                NSMutableArray *a = [NSMutableArray arrayWithCapacity:nominalSampleRates];
                 minNominalSR = list[0].mMinimum;
                 maxNominalSR = list[0].mMaximum;
                 // store the returned sample rates in [a] and record the extreme values
