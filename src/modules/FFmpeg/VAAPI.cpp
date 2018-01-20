@@ -50,6 +50,9 @@ bool VAAPI::open(bool allowVDPAU, bool &openGL)
 {
 	clr();
 
+	if (!QX11Info::isPlatformX11())
+		return false;
+
 	Display *display = QX11Info::display();
 	if (!display)
 		return false;
