@@ -1756,6 +1756,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Вимкніть, якщо у вас виникнуть проблеми з декодуванням відео MPEG4 (DivX5)</translation>
     </message>
+    <message>
+        <source>Sort search results by date</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

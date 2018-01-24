@@ -62,7 +62,7 @@ private:
 	QCheckBox *MPRIS2B;
 #endif
 
-	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;
+	QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB, *sortByDateB;
 	QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
 
 #ifdef USE_LASTFM

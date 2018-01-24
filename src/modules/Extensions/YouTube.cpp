@@ -56,9 +56,9 @@ static inline QString toPercentEncoding(const QString &txt)
 	return txt.toUtf8().toPercentEncoding();
 }
 
-static inline QString getYtUrl(const QString &title, const int page)
+static inline QString getYtUrl(const QString &title, const int page, const bool sortByDate)
 {
-	return QString(YOUTUBE_URL "/results?search_query=%1&page=%2").arg(toPercentEncoding(title)).arg(page);
+	return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortByDate ? "&sp=CAI%253D" : QString()).arg(page);
 }
 static inline QString getAutocompleteUrl(const QString &text)
 {
@@ -692,7 +692,7 @@ void YouTube::search()
 	{
 		if (lastTitle != title || sender() == searchE || sender() == searchB)
 			currPage = 1;
-		searchReply = net.start(getYtUrl(title, currPage));
+		searchReply = net.start(getYtUrl(title, currPage, sets().getBool("YouTube/SortByDate")));
 		progressB->setRange(0, 0);
 		progressB->show();
 	}
