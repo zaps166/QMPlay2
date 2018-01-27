@@ -20,17 +20,17 @@
 
 #include <QMPlay2Extensions.hpp>
 
+#include <QTabWidget>
 #include <QPointer>
 #include <QIcon>
 #include <QMap>
-
-#include "ui_Radio.h"
 
 namespace Ui {
 	class Radio;
 }
 
 class RadioBrowserModel;
+class QListWidgetItem;
 class NetworkAccess;
 class NetworkReply;
 class QTimer;
@@ -89,6 +89,10 @@ private:
 
 	void restoreSettings();
 
+private:
+	bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
 	const QString m_newStationTxt;
 	const QIcon m_radioIcon;
 
