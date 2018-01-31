@@ -17,6 +17,7 @@
 */
 
 #include <Radio.hpp>
+#include <ui_Radio.h>
 
 #include <Radio/RadioBrowserModel.hpp>
 #include <NetworkAccess.hpp>
@@ -29,6 +30,8 @@
 #include <QJsonObject>
 #include <QScrollBar>
 #include <QJsonArray>
+#include <QMimeData>
+#include <qevent.h>
 #include <QTimer>
 #include <QMenu>
 #include <QUrl>
@@ -62,6 +65,8 @@ Radio::Radio(Module &module) :
 	ui->removeMyRadioStationButton->setIcon(QIcon(":/list-remove.svgz"));
 
 	ui->addRadioBrowserStationButton->setIcon(ui->addMyRadioStationButton->icon());
+
+	ui->myRadioListWidget->installEventFilter(this);
 
 	// Texts must be compatible with Radio Browser API
 	ui->searchByComboBox->addItem("Name");
@@ -112,14 +117,7 @@ Radio::~Radio()
 			myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
 		Settings("Radio").set("Radia", myRadios);
 
-		{
-			const QList<int> splitterSizesInt = ui->splitter->sizes();
-			QByteArray splitterSizes;
-			QDataStream stream(&splitterSizes, QIODevice::WriteOnly);
-			for (int i = 0; i < splitterSizesInt.count(); ++i)
-				stream << splitterSizesInt[i];
-			sets().set("Radio/SplitterSizes", splitterSizes.toBase64());
-		}
+		sets().set("Radio/RadioBrowserSplitter", ui->radioBrowserSplitter->saveState().toBase64());
 
 		{
 			QByteArray columnSizes;
@@ -429,6 +427,7 @@ void Radio::addMyRadioStation(const QString &name, const QString &address, QList
 		}
 		item = new QListWidgetItem(ui->myRadioListWidget);
 		item->setIcon(m_radioIcon);
+		ui->myRadioListWidget->setCurrentItem(item);
 	}
 	item->setText(name);
 	item->setData(Qt::UserRole, address);
@@ -461,18 +460,8 @@ void Radio::restoreSettings()
 		}
 	}
 
-	{
-		QList<int> splitterSizesInt;
-		QDataStream stream(QByteArray::fromBase64(sets().getByteArray("Radio/SplitterSizes")));
-		while (!stream.atEnd())
-		{
-			int w;
-			stream >> w;
-			splitterSizesInt.append(w);
-		}
-		if (splitterSizesInt.count() == ui->splitter->sizes().count())
-			ui->splitter->setSizes(splitterSizesInt);
-	}
+	if (!ui->radioBrowserSplitter->restoreState(QByteArray::fromBase64(sets().getByteArray("Radio/RadioBrowserSplitter"))))
+		ui->radioBrowserSplitter->setSizes({width() * 1 / 4, width() * 3 / 4});
 
 	setCurrentIndex(sets().getInt("Radio/CurrentTab"));
 
@@ -482,4 +471,36 @@ void Radio::restoreSettings()
 		ui->searchByComboBox->setCurrentIndex(searchByIdx);
 		on_searchByComboBox_activated(searchByIdx);
 	}
+}
+
+bool Radio::eventFilter(QObject *watched, QEvent *event)
+{
+	if (watched == ui->myRadioListWidget)
+	{
+		switch (event->type())
+		{
+			case QEvent::DragEnter:
+			{
+				QDragEnterEvent *dee = (QDragEnterEvent *)event;
+				if (dee->source() == ui->radioView)
+				{
+					dee->accept();
+					return true;
+				}
+			}
+			case QEvent::Drop:
+			{
+				QDropEvent *de = (QDropEvent *)event;
+				if (de->source() == ui->radioView)
+				{
+					radioBrowserAdd();
+					de->accept();
+					return true;
+				}
+			}
+			default:
+				break;
+		}
+	}
+	return QTabWidget::eventFilter(watched, event);
 }

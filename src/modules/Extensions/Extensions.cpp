@@ -52,6 +52,7 @@ Extensions::Extensions() :
 	init("YouTube/ItagVideoList", YouTube::getQualityPresetString(YouTube::_1080p60));
 	init("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
 	init("YouTube/ItagList", QStringList{"22", "43", "18"});
+	init("YouTube/SortByDate", false);
 
 #ifdef USE_LASTFM
 	init("LastFM/DownloadCovers", true);
@@ -160,6 +161,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	subtitlesB->setToolTip(tr("Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language."));
 	subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
 
+	sortByDateB = new QCheckBox(tr("Sort search results by date"));
+	sortByDateB->setChecked(sets().getBool("YouTube/SortByDate"));
+
 
 	QLabel *itagL = new QLabel(tr("Priority of default video/audio quality") + ": ");
 
@@ -214,7 +218,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addWidget(additionalInfoB, 0, 0, 1, 3);
 	layout->addWidget(multiStreamB, 1, 0, 1, 3);
 	layout->addWidget(subtitlesB, 2, 0, 1, 3);
-	layout->addLayout(itagLayout, 3, 0, 1, 3);
+	layout->addWidget(sortByDateB, 3, 0, 1, 3);
+	layout->addLayout(itagLayout, 4, 0, 1, 3);
 	layout->setMargin(2);
 
 #ifdef USE_LASTFM
@@ -293,6 +298,7 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("YouTube/ShowAdditionalInfo", additionalInfoB->isChecked());
 	sets().set("YouTube/MultiStream", multiStreamB->isChecked());
 	sets().set("YouTube/Subtitles", subtitlesB->isChecked());
+	sets().set("YouTube/SortByDate", sortByDateB->isChecked());
 
 	QStringList itagsVideo, itagsAudio, itags;
 	for (int i = 0; i < itagVideoLW->count(); ++i)

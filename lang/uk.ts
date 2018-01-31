@@ -24,7 +24,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>Аудіо/відеопотік зупинений некоректно!</translation>
+        <translation>Потік аудіо/відео зупинений некоректно!</translation>
     </message>
 </context>
 <context>
@@ -157,7 +157,7 @@
     </message>
     <message>
         <source>Use custom colors</source>
-        <translation>Використовувати власний колір</translation>
+        <translation>Використовувати власні кольори</translation>
     </message>
     <message>
         <source>Gradient in the video window</source>
@@ -177,7 +177,7 @@
     </message>
     <message>
         <source>Enter the name for a color scheme</source>
-        <translation>Wprowadź nazwę dla schematu kolorów</translation>
+        <translation>Введіть ім&apos;я для колірної схеми</translation>
     </message>
     <message>
         <source>The specified name already exists!</source>
@@ -185,7 +185,7 @@
     </message>
     <message>
         <source>Removing</source>
-        <translation>Видалено</translation>
+        <translation>Видалення</translation>
     </message>
     <message>
         <source>Do you want to remove</source>
@@ -229,7 +229,7 @@
     </message>
     <message>
         <source>Highlight color</source>
-        <translation>Колір підсвічування</translation>
+        <translation>Колір виділення</translation>
     </message>
     <message>
         <source>Base color</source>
@@ -241,7 +241,7 @@
     </message>
     <message>
         <source>Highlighted text color</source>
-        <translation>Колір підсвіченого тексту</translation>
+        <translation>Колір виділеного тексту</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -303,11 +303,11 @@
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>Підтримуваний образ аудіодиска</translation>
+        <translation>Підтримувані образи аудіодиска</translation>
     </message>
     <message>
         <source>Choose the drive</source>
-        <translation>Вибрати диск</translation>
+        <translation>Вибрати дисковод</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>Канали</translation>
+        <translation>канали</translation>
     </message>
     <message>
         <source>mono</source>
@@ -765,7 +765,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Доріжка</translation>
+        <translation>Доріжка</translation>
     </message>
 </context>
 <context>
@@ -851,7 +851,7 @@
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation>Розмиті обладинки в якості фону</translation>
+        <translation>Розмиті обкладинки в якості фону</translation>
     </message>
     <message>
         <source>Show covers from directory if there aren&apos;t in the music file</source>
@@ -1706,11 +1706,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Cut frequency</source>
-        <translation>Обрізати частоти</translation>
+        <translation>Гранична частота</translation>
     </message>
     <message>
         <source>Feed level</source>
-        <translation>Рівень каналу</translation>
+        <translation>Рівень подачі</translation>
     </message>
     <message>
         <source>Equalizer</source>
@@ -1755,6 +1755,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Вимкніть, якщо у вас виникнуть проблеми з декодуванням відео MPEG4 (DivX5)</translation>
+    </message>
+    <message>
+        <source>Sort search results by date</source>
+        <translation>Сортувати результати пошуку за датою</translation>
     </message>
 </context>
 <context>
@@ -2020,7 +2024,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation>Обертання не підтримується в цьому модулі виведення відео</translation>
+        <translation>Обертання не підтримується цим модулем виведення відео</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
@@ -2130,7 +2134,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
-        <translation>Коліща миші прокручує музику/відео</translation>
+        <translation>Коліща миші прокручує музику/фільм</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
@@ -2194,19 +2198,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
-        <translation>Розмір локального буфера (кількість пакетів A/V)</translation>
+        <translation>Розмір локального буфера (кількість пакетів аудіо/відео)</translation>
     </message>
     <message>
         <source>Network buffer size (A/V packages count)</source>
-        <translation>Розмір мережевого буфера (кількість пакетів A/V)</translation>
+        <translation>Розмір мережевого буфера (кількість пакетів аудіо/відео)</translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation>Відсоток пакетів A/V при зворотному перемотуванні</translation>
+        <translation>Відсоток пакетів аудіо/відео при зворотному перемотуванні</translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation>Розпочинати відтворювати інтернет-потік якщо він буферизований</translation>
+        <translation>Розпочинати відтворювати інтернет-потік при його буферизації</translation>
     </message>
     <message>
         <source>sec</source>
@@ -2544,7 +2548,7 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Adding a new radio station</source>
-        <translation>Dodawanie nowej stacji radiowej</translation>
+        <translation>Додавання нової радіостанції</translation>
     </message>
     <message>
         <source>Add new radio station</source>
@@ -2568,7 +2572,7 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation>Змінити вибрану радіостанцію</translation>
+        <translation>Редагувати вибрану радіостанцію</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
@@ -2759,7 +2763,7 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Fonts and spacing</source>
-        <translation>Шрифти і відстань</translation>
+        <translation>Шрифти і відступ</translation>
     </message>
     <message>
         <source>Margins and alignment</source>
@@ -2783,11 +2787,11 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
-        <translation>Підтвердити видалення налаштувань</translation>
+        <translation>Підтвердити видалення параметрів</translation>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>Дійсно скинути всі налаштування?</translation>
+        <translation>Дійсно скинути всі параметри?</translation>
     </message>
     <message>
         <source>New language</source>
@@ -3061,7 +3065,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation>Це авнооновлення проігнороване, натисніть кнопку для оновлення</translation>
+        <translation>Це автооновлення проігнороване, натисніть кнопку для оновлення</translation>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>

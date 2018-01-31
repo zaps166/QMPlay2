@@ -23,7 +23,7 @@ Exec=QMPlay2 -stop
 TargetEnvironment=Unity
 
 [Prev Shortcut Group]
-Name=Previuos
+Name=Previous
 Exec=QMPlay2 -prev
 TargetEnvironment=Unity
 
