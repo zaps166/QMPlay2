@@ -30,6 +30,7 @@
 		<file alias="document-properties.svgz">Icons/document-properties.svgz</file>
 		<file alias="application-x-mswinurl.svgz">Icons/application-x-mswinurl.svgz</file>
 		<file alias="video-display.svgz">Icons/video-display.svgz</file>
+		<file alias="document-save.svgz">Icons/document-save.svgz</file>
 
 		<file>Colors/QMPlay1_dark.QMPlay2Color</file>
 	</qresource>

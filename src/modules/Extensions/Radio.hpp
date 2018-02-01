@@ -63,6 +63,8 @@ private slots:
 	void on_addMyRadioStationButton_clicked();
 	void on_editMyRadioStationButton_clicked();
 	void on_removeMyRadioStationButton_clicked();
+	void on_loadMyRadioStationButton_clicked();
+	void on_saveMyRadioStationButton_clicked();
 
 	void on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item);
 	void on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item);
@@ -88,6 +90,9 @@ private:
 	void setSearchInfo(const QStringList &list);
 
 	void restoreSettings();
+
+	QStringList getMyRadios() const;
+	void loadMyRadios(const QStringList &radios);
 
 private:
 	bool eventFilter(QObject *watched, QEvent *event) override;
