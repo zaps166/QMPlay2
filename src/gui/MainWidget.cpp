@@ -797,11 +797,26 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
 	connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
 	connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));
-	for (QAction *act : menuBar->player->aRatio->actions())
 	{
-		connect(act, SIGNAL(triggered()), &playC, SLOT(aRatio()));
-		if (act->objectName() == "auto")
-			act->trigger();
+		const Settings &QMPSettings = QMPlay2Core.getSettings();
+		const QString initialAspectRatio = QMPSettings.getBool("StoreARatioAndZoom") ? QMPSettings.getString("AspectRatio") : QString();
+		QAction *autoARatioAct = nullptr;
+		bool aRatioTriggered = false;
+		for (QAction *act : menuBar->player->aRatio->actions())
+		{
+			connect(act, SIGNAL(triggered()), &playC, SLOT(aRatio()));
+			if (aRatioTriggered)
+				continue;
+			if (act->objectName() == "auto")
+				autoARatioAct = act;
+			if (!initialAspectRatio.isEmpty() && act->objectName() == initialAspectRatio)
+			{
+				act->trigger();
+				aRatioTriggered = true;
+			}
+		}
+		if (!aRatioTriggered && autoARatioAct)
+			autoARatioAct->trigger();
 	}
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetFlip()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetRotate90()));
