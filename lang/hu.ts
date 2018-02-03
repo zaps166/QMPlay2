@@ -475,7 +475,7 @@
     </message>
     <message>
         <source>Cannot open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nem sikerült megnyitni</translation>
     </message>
     <message>
         <source>Paused</source>
@@ -2225,6 +2225,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Accurate seeking</source>
         <translation>Pontos tekerés</translation>
     </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2606,6 +2610,22 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     <message>
         <source>Radio station with given name already exists!</source>
         <translation>A megadott névvel már létezik rádióállomás!</translation>
+    </message>
+    <message>
+        <source>Load radio station list from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save radio station list to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load radio station list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save radio station list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
