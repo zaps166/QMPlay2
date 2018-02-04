@@ -38,7 +38,7 @@ class QRect;
 #ifdef Q_OS_WIN
 	#include <windows.h>
 #else
-	#ifdef Q_OS_MAC
+	#ifdef Q_OS_MACOS
 		#include <mach/mach_time.h>
 	#else
 		#include <time.h>
@@ -80,7 +80,7 @@ namespace Functions
 		QueryPerformanceFrequency(&Frequency);
 		QueryPerformanceCounter(&Counter);
 		return (double)Counter.QuadPart / (double)Frequency.QuadPart;
-#elif defined Q_OS_MAC
+#elif defined Q_OS_MACOS
 		mach_timebase_info_data_t mach_base_info;
 		mach_timebase_info(&mach_base_info);
 		return ((double)mach_absolute_time() * (double)mach_base_info.numer) / (1000000000.0 * (double)mach_base_info.denom);

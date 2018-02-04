@@ -122,6 +122,11 @@ void VideoThr::setZoom()
 	updateSubs();
 	writer->modParam("Zoom", playC.zoom);
 }
+void VideoThr::otherReset()
+{
+	if (writer->hasParam("ResetOther"))
+		writer->modParam("ResetOther", true);
+}
 
 void VideoThr::initFilters(bool processParams)
 {

@@ -29,7 +29,7 @@
 #include <QInputDialog>
 #include <QMainWindow>
 #include <QDir>
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	#include <QTimer>
 #endif
 
@@ -87,7 +87,7 @@ MenuBar::MenuBar()
 	addMenu(options = new Options(this));
 	addMenu(help = new Help(this));
 	connect(widgets, SIGNAL(aboutToShow()), this, SLOT(widgetsMenuShow()));
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown
 #endif
 }
@@ -298,7 +298,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 
 void MenuBar::Player::seekActionsEnable(bool e)
 {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_MACOS
 	Qt::ShortcutContext ctx = e ? Qt::WindowShortcut : Qt::WidgetShortcut;
 	seekF->setShortcutContext(ctx);
 	seekB->setShortcutContext(ctx);
@@ -313,7 +313,7 @@ void MenuBar::Player::seekActionsEnable(bool e)
 }
 void MenuBar::Player::playActionEnable(bool e)
 {
-#ifndef Q_OS_MAC
+#ifndef Q_OS_MACOS
 	togglePlay->setShortcutContext(e ? Qt::WindowShortcut : Qt::WidgetShortcut);
 #else
 	togglePlay->setEnabled(e);
@@ -362,7 +362,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 	widgetAction->setDefaultWidget(QMPlay2GUI.videoAdjustment);
 	QMPlay2GUI.videoAdjustment->setObjectName(videoAdjustmentMenu->title().remove('&'));
 	videoAdjustmentMenu->addAction(widgetAction);
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	// Update visibility and update geometry of video adjustment widget
 	connect(videoAdjustmentMenu, &VideoFilters::aboutToShow, [] {
 		QWidget *parent = QMPlay2GUI.videoAdjustment->parentWidget();
@@ -488,7 +488,7 @@ void MenuBar::setKeyShortcuts()
 	shortcuts->appendAction(window->toggleFullScreen, "KeyBindings/Window-toggleFullScreen", "F");
 	shortcuts->appendAction(window->toggleCompactView, "KeyBindings/Window-toggleCompactView", "Alt+V");
 	shortcuts->appendAction(window->close, "KeyBindings/Window-close", "Alt+F4");
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	window->toggleVisibility->setShortcuts({window->toggleVisibility->shortcut(), QKeySequence("Ctrl+W")});
 #endif
 

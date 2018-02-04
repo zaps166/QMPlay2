@@ -765,7 +765,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Ścieżka</translation>
+        <translation>Ścieżka</translation>
     </message>
 </context>
 <context>
@@ -2228,6 +2228,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Accurate seeking</source>
         <translation>Dokładne przewijanie</translation>
     </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>Zapisz współczynnik proporcji i zoom w pliku konfiguracyjnym</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2609,6 +2613,22 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
     <message>
         <source>Radio station with given name already exists!</source>
         <translation>Stacja radiowa z podaną nazwą już istnieje!</translation>
+    </message>
+    <message>
+        <source>Load radio station list from file</source>
+        <translation>Załaduj listę stacji radiowych z pliku</translation>
+    </message>
+    <message>
+        <source>Save radio station list to file</source>
+        <translation>Zapisz listę stacji radiowych do pliku</translation>
+    </message>
+    <message>
+        <source>Load radio station list</source>
+        <translation>Załaduj listę stacji radiowych</translation>
+    </message>
+    <message>
+        <source>Save radio station list</source>
+        <translation>Zapisz listę stacji radiowych</translation>
     </message>
 </context>
 <context>

@@ -59,7 +59,7 @@
 #include "ui_SettingsPlayback.h"
 #include "ui_SettingsPlaybackModulesList.h"
 
-#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
 	#define ICONS_FROM_THEME
 #endif
 
@@ -183,6 +183,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("WheelSeek", true);
 	QMPSettings.init("LeftMouseTogglePlay", false);
 	QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
+	QMPSettings.init("StoreARatioAndZoom", false);
 	QMPSettings.init("SavePos", false);
 	QMPSettings.init("KeepZoom", false);
 	QMPSettings.init("KeepARatio", false);
@@ -443,10 +444,33 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
 		page2->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
 
+		page2->storeARatioAndZoomB->setChecked(QMPSettings.getBool("StoreARatioAndZoom"));
+		connect(page2->storeARatioAndZoomB, &QCheckBox::toggled, this, [this](bool checked) {
+			if (checked)
+			{
+				page2->keepZoom->setChecked(true);
+				page2->keepARatio->setChecked(true);
+			}
+		});
+
+		page2->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
+		connect(page2->keepZoom, &QCheckBox::toggled, this, [this](bool checked) {
+			if (!checked && !page2->keepARatio->isChecked())
+			{
+				page2->storeARatioAndZoomB->setChecked(false);
+			}
+		});
+
+		page2->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
+		connect(page2->keepARatio, &QCheckBox::toggled, this, [this](bool checked) {
+			if (!checked && !page2->keepZoom->isChecked())
+			{
+				page2->storeARatioAndZoomB->setChecked(false);
+			}
+		});
+
 		page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
 		page2->savePos->setChecked(QMPSettings.getBool("SavePos"));
-		page2->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
-		page2->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
 		page2->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
 		page2->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
 		page2->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
@@ -830,6 +854,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
 			QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->isChecked());
 			QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
+			QMPSettings.set("StoreARatioAndZoom", page2->storeARatioAndZoomB->isChecked());
 
 			QStringList videoWriters, audioWriters, decoders;
 			for (QListWidgetItem *wI : page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))

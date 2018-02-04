@@ -229,6 +229,8 @@ bool FFDemux::open(const QString &entireUrl)
 			stream.remove('[');
 			stream.remove(']');
 			addFormatContext(stream);
+			if (abortFetchTracks)
+				break;
 		}
 	}
 	return !formatContexts.isEmpty();

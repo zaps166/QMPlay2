@@ -2225,6 +2225,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Accurate seeking</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2603,6 +2607,22 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load radio station list from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save radio station list to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load radio station list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save radio station list</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

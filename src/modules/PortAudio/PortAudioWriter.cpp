@@ -33,7 +33,7 @@
 #endif
 
 PortAudioWriter::PortAudioWriter(Module &module) :
-	stream(NULL),
+	stream(nullptr),
 	sample_rate(0),
 	err(false)
 {
@@ -44,10 +44,10 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 
 	memset(&outputParameters, 0, sizeof outputParameters);
 	outputParameters.sampleFormat = paFloat32;
-	outputParameters.hostApiSpecificStreamInfo = NULL;
+	outputParameters.hostApiSpecificStreamInfo = nullptr;
 
 #ifdef Q_OS_MACOS
-	coreAudioDevice = NULL;
+	coreAudioDevice = nullptr;
 #endif
 
 	SetModule(module);
@@ -244,8 +244,8 @@ bool PortAudioWriter::openStream()
 		int chn = getParam("chn").toInt();
 		outputParameters.device = PortAudioCommon::getDeviceIndexForOutput(outputDevice, chn);
 	}
-	PaStream *newStream = NULL;
-	if (Pa_OpenStream(&newStream, NULL, &outputParameters, sample_rate, 0, paDitherOff, NULL, NULL) == paNoError)
+	PaStream *newStream = nullptr;
+	if (Pa_OpenStream(&newStream, nullptr, &outputParameters, sample_rate, 0, paDitherOff, nullptr, nullptr) == paNoError)
 	{
 		stream = newStream;
 		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
@@ -321,7 +321,7 @@ bool PortAudioWriter::reopenStream()
 	Pa_CloseStream(stream);
 	if (openStream())
 		return (Pa_StartStream(stream) == paNoError);
-	stream = NULL;
+	stream = nullptr;
 	return false;
 }
 
@@ -332,7 +332,7 @@ void PortAudioWriter::close()
 		if (!err && getParam("drain").toBool())
 			Pa_StopStream(stream);
 		Pa_CloseStream(stream);
-		stream = NULL;
+		stream = nullptr;
 	}
 	err = false;
 }

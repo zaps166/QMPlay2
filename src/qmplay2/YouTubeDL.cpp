@@ -37,6 +37,7 @@ static QReadWriteLock g_lock;
 
 /**/
 
+#ifndef Q_OS_ANDROID
 static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 {
 	const QJsonDocument json = QJsonDocument::fromJson(jsonData.toUtf8());
@@ -46,6 +47,7 @@ static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
 			QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
 	}
 }
+#endif
 
 /**/
 

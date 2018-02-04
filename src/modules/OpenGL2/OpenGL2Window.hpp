@@ -23,7 +23,7 @@
 #include <QOpenGLWindow>
 #include <QWidget>
 
-#if defined Q_OS_MAC || defined Q_OS_WIN //QTBUG-50505
+#if defined Q_OS_MACOS || defined Q_OS_WIN //QTBUG-50505
 	#define PASS_EVENTS_TO_PARENT
 #endif
 

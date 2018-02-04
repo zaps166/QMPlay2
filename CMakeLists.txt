@@ -211,28 +211,24 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
     add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
 
-    # QMPlay2 doesn't use exceptions - disable it and also make sure that debugging symbols are disabled
-    set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_RELEASE}")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+    # Disable exceptions, hide symbols, and also make sure that debugging symbols are disabled
+    set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
 
-    # disable deprecated declarations warnings for Release build
     if(NOT CMAKE_BUILD_TYPE MATCHES "Deb")
-        set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}")
+        if(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
+            # remove '-rdynamic' for Release build
+            string(REPLACE "-rdynamic" "" CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS})
+        endif()
+        set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}") # disable deprecated declarations warnings for Release build
     endif()
     # enable warnings
     set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
-
-    if(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-        # remove '-rdynamic'
-        string(REPLACE "-rdynamic" "" CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS})
-    endif()
 
     if(USE_LINK_TIME_OPTIMIZATION)
         set(CMAKE_CXX_FLAGS_RELEASE    "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
         set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
     endif()
-
-    set(CMAKE_CXX_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS}")
 
     if(CMAKE_MODULE_LINKER_FLAGS)
         # allow undefined references for modules

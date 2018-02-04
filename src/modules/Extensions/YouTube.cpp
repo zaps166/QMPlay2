@@ -1041,7 +1041,9 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 	}
 
 	QStringList ret;
-	for (int i = 0; i <= 1; ++i)
+	const int hlsvpIdx = data.indexOf("\"hlsvp\":\"");
+	const bool isLive = (hlsvpIdx > -1) && data.indexOf(".m3u8", hlsvpIdx, Qt::CaseInsensitive);
+	for (int i = 0; i <= 1 && !isLive; ++i)
 	{
 		const QString fmts = QString(i ? "adaptive_fmts" : "url_encoded_fmt_stream_map") + "\":\""; //"adaptive_fmts" contains audio or video urls
 		int streamsIdx = data.indexOf(fmts);

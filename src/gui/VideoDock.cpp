@@ -210,7 +210,7 @@ void VideoDock::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	if (e->buttons() == Qt::LeftButton)
 	{
-#ifndef Q_OS_MAC
+#ifndef Q_OS_MACOS
 		QMPlay2GUI.menuBar->window->toggleFullScreen->trigger();
 #else
 		// On macOS if full screen is toggled to fast after double click, mouse remains in clicked state...
@@ -242,7 +242,7 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 			doubleClicked = false;
 			leftButtonPlayTim.stop();
 		}
-		else if (QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
+		else if ((e->modifiers() == Qt::NoModifier) && QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
 		{
 			leftButtonPlayTim.start(300);
 		}
@@ -335,7 +335,7 @@ void VideoDock::popup(const QPoint &p)
 {
 	if (canPopup)
 	{
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 		// Move parent of video adjustment widget from native Mac widget to QMenu
 		QWidget *videoAdj = (QWidget *)QMPlay2GUI.videoAdjustment;
 		QWidget *parent = videoAdj->parentWidget();

@@ -100,7 +100,16 @@ PlayClass::PlayClass() :
 
 	quitApp = muted = reload = videoDecErrorLoad = false;
 
-	speed = subtitlesScale = zoom = 1.0;
+	if (QMPlay2Core.getSettings().getBool("StoreARatioAndZoom"))
+	{
+		zoom = qBound(0.05, QMPlay2Core.getSettings().getDouble("Zoom", 1.0), 100.0);
+	}
+	else
+	{
+		zoom = 1.0;
+	}
+
+	speed = subtitlesScale = 1.0;
 	flip = 0;
 	rotate90 = spherical = false;
 
@@ -113,6 +122,7 @@ PlayClass::PlayClass() :
 
 	doSuspend = doRepeat = false;
 
+
 	connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
 	connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
 	connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
@@ -120,7 +130,13 @@ PlayClass::PlayClass() :
 	connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
 }
 PlayClass::~PlayClass()
-{}
+{
+	if (QMPlay2Core.getSettings().getBool("StoreARatioAndZoom"))
+	{
+		QMPlay2Core.getSettings().set("AspectRatio", aRatioName);
+		QMPlay2Core.getSettings().set("Zoom", zoom);
+	}
+}
 
 void PlayClass::play(const QString &_url)
 {
@@ -803,6 +819,11 @@ void PlayClass::zoomReset()
 			vThr->processParams();
 		}
 	}
+}
+void PlayClass::otherReset()
+{
+	vThr->otherReset();
+	vThr->processParams();
 }
 void PlayClass::aRatio()
 {

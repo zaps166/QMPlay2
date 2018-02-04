@@ -27,6 +27,7 @@
 #include <QJsonDocument>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <QJsonObject>
 #include <QScrollBar>
 #include <QJsonArray>
@@ -35,6 +36,8 @@
 #include <QTimer>
 #include <QMenu>
 #include <QUrl>
+
+constexpr const char *g_fileDialogFilter = "QMPlay2 radio station list (*.qmplay2radio)";
 
 Radio::Radio(Module &module) :
 	m_newStationTxt(tr("Adding a new radio station")),
@@ -60,9 +63,11 @@ Radio::Radio(Module &module) :
 	setTabIcon(0, m_radioIcon);
 	setTabIcon(1, QMPlay2Core.getQMPlay2Icon());
 
-	ui->addMyRadioStationButton->setIcon(QIcon(":/list-add.svgz"));
-	ui->editMyRadioStationButton->setIcon(QIcon(":/document-properties.svgz"));
-	ui->removeMyRadioStationButton->setIcon(QIcon(":/list-remove.svgz"));
+	ui->addMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("list-add"));
+	ui->editMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("document-properties"));
+	ui->removeMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+	ui->loadMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+	ui->saveMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("document-save"));
 
 	ui->addRadioBrowserStationButton->setIcon(ui->addMyRadioStationButton->icon());
 
@@ -112,10 +117,7 @@ Radio::~Radio()
 {
 	if (m_once)
 	{
-		QStringList myRadios;
-		for (QListWidgetItem *item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
-			myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
-		Settings("Radio").set("Radia", myRadios);
+		Settings("Radio").set("Radia", getMyRadios());
 
 		sets().set("Radio/RadioBrowserSplitter", ui->radioBrowserSplitter->saveState().toBase64());
 
@@ -302,6 +304,24 @@ void Radio::on_removeMyRadioStationButton_clicked()
 {
 	delete ui->myRadioListWidget->currentItem();
 }
+void Radio::on_loadMyRadioStationButton_clicked()
+{
+	const QString filePath = QFileDialog::getOpenFileName(this, tr("Load radio station list"), QString(), g_fileDialogFilter);
+	if (!filePath.isEmpty())
+	{
+		loadMyRadios(QSettings(filePath, QSettings::IniFormat).value("Radia").toStringList());
+	}
+}
+void Radio::on_saveMyRadioStationButton_clicked()
+{
+	QString filePath = QFileDialog::getSaveFileName(this, tr("Save radio station list"), QString(), g_fileDialogFilter);
+	if (!filePath.isEmpty())
+	{
+		if (!filePath.endsWith(".qmplay2radio", Qt::CaseInsensitive))
+			filePath += ".qmplay2radio";
+		QSettings(filePath, QSettings::IniFormat).setValue("Radia", getMyRadios());
+	}
+}
 
 void Radio::on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
@@ -442,12 +462,7 @@ void Radio::setSearchInfo(const QStringList &list)
 
 void Radio::restoreSettings()
 {
-	for (const QString &entry : Settings("Radio").getStringList("Radia"))
-	{
-		const QStringList radioDescr = entry.split('\n');
-		if (radioDescr.count() == 2)
-			addMyRadioStation(radioDescr[0], radioDescr[1]);
-	}
+	loadMyRadios(Settings("Radio").getStringList("Radia"));
 
 	{
 		QDataStream stream(QByteArray::fromBase64(sets().getByteArray("Radio/ColumnSizes")));
@@ -470,6 +485,24 @@ void Radio::restoreSettings()
 	{
 		ui->searchByComboBox->setCurrentIndex(searchByIdx);
 		on_searchByComboBox_activated(searchByIdx);
+	}
+}
+
+QStringList Radio::getMyRadios() const
+{
+	QStringList myRadios;
+	for (QListWidgetItem *item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
+		myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
+	return myRadios;
+}
+void Radio::loadMyRadios(const QStringList &radios)
+{
+	ui->myRadioListWidget->clear();
+	for (const QString &entry : radios)
+	{
+		const QStringList radioDescr = entry.split('\n');
+		if (radioDescr.count() == 2)
+			addMyRadioStation(radioDescr[0], radioDescr[1]);
 	}
 }
 
