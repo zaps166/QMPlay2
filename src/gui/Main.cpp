@@ -42,7 +42,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QDir>
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	#include <QProcess>
 #endif
 
@@ -51,7 +51,7 @@
 
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	static QByteArray g_rcdPath("/System/Library/LaunchAgents/com.apple.rcd.plist");
 	static bool g_rcdLoad;
 #endif
@@ -68,7 +68,7 @@ QString QMPlay2GUIClass::getPipe()
 {
 #if defined Q_OS_WIN
 	return "\\\\.\\pipe\\QMPlay2";
-#elif defined Q_OS_MAC
+#elif defined Q_OS_MACOS
 	return "/tmp/QMPlay2." + QString(getenv("USER"));
 #else
 	return QDir::tempPath() + "/QMPlay2." + QString(getenv("USER"));
@@ -334,7 +334,7 @@ static bool writeToSocket(IPCSocket &socket, QList<QPair<QString, QString>> &arg
 
 static inline void exitProcedure()
 {
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	if (g_rcdLoad)
 	{
 		// Load RCD service again (allow to run iTunes on "Play" key)
@@ -536,7 +536,7 @@ int main(int argc, char *argv[])
 
 	QString libPath, sharePath = QCoreApplication::applicationDirPath();
 	bool cmakeBuildFound = false;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	if (QDir(sharePath).exists("../../../CMakeFiles/QMPlay2.dir"))
 		sharePath += "/../../.."; //Probably CMake not-installed build in Bundle
 #endif
@@ -550,7 +550,7 @@ int main(int argc, char *argv[])
 	}
 	if (!cmakeBuildFound)
 	{
-#if !defined Q_OS_WIN && !defined Q_OS_MAC && !defined Q_OS_ANDROID
+#if !defined Q_OS_WIN && !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 		sharePath = QCoreApplication::applicationDirPath() + "/../share/qmplay2";
 		libPath = QMPlay2CoreClass::getLibDir();
 		if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
@@ -564,7 +564,7 @@ int main(int argc, char *argv[])
 				libPath += "lib";
 		}
 		libPath += "/qmplay2";
-#elif defined Q_OS_MAC
+#elif defined Q_OS_MACOS
 		libPath = QCoreApplication::applicationDirPath();
 		sharePath += "/../share/qmplay2";
 #else
@@ -591,7 +591,7 @@ int main(int argc, char *argv[])
 	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(nullptr), 0);
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	// Unload RCD service (prevent run iTunes on "Play" key)
 	{
 		QProcess launchctl;

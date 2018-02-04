@@ -690,7 +690,7 @@ void OpenGL2Common::testGLInternal()
 	glGetIntegerv(GL_MAJOR_VERSION, &glMajor);
 	glGetIntegerv(GL_MINOR_VERSION, &glMinor);
 #endif
-#ifndef Q_OS_MAC //On macOS I have always OpenGL 2.1...
+#ifndef Q_OS_MACOS //On macOS I have always OpenGL 2.1...
 	if (!glMajor)
 	{
 		const QString glVersionStr = (const char *)glGetString(GL_VERSION);

@@ -23,7 +23,7 @@
 	#define MMSYSERR_NODRIVER 6
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
 #else
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.1

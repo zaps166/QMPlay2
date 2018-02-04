@@ -37,7 +37,7 @@
 #if defined Q_OS_WIN
 	#include <windows.h>
 	#include <powrprof.h>
-#elif defined Q_OS_MAC
+#elif defined Q_OS_MACOS
 	#include <QStandardPaths>
 #endif
 
@@ -139,7 +139,7 @@ bool QMPlay2CoreClass::canSuspend()
 {
 #if defined Q_OS_LINUX
 	return !system("systemctl --help 2> /dev/null | grep -q suspend");
-#elif defined Q_OS_WIN || defined Q_OS_MAC
+#elif defined Q_OS_WIN || defined Q_OS_MACOS
 	return true;
 #else
 	return false;
@@ -151,7 +151,7 @@ void QMPlay2CoreClass::suspend()
 	Q_UNUSED(system("systemctl suspend > /dev/null 2>&1 &"));
 #elif defined Q_OS_WIN
 	SetSuspendState(false, false, false);
-#elif defined Q_OS_MAC
+#elif defined Q_OS_MACOS
 	Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
 #endif
 }
@@ -171,7 +171,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 	{
 #if defined(Q_OS_WIN)
 		settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MACOS)
 		settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
 #else
 		settingsDir = QDir::homePath() + "/.qmplay2/";

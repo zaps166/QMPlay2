@@ -26,7 +26,7 @@ PortAudio::PortAudio() :
 
 	initialized = (Pa_Initialize() == paNoError);
 	init("WriterEnabled", true);
-#if defined Q_OS_MAC
+#if defined Q_OS_MACOS
 	init("Delay", 0.03);
 #elif defined Q_OS_WIN
 	init("Delay", 0.15);

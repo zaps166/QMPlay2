@@ -29,7 +29,7 @@
 #include <QMutex>
 #include <QTimer>
 
-#if !defined OPENGL_ES2 && !defined Q_OS_MAC
+#if !defined OPENGL_ES2 && !defined Q_OS_MACOS
 	#include <GL/glext.h>
 #endif
 
