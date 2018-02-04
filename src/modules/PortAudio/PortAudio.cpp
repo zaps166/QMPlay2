@@ -52,7 +52,7 @@ void *PortAudio::createInstance(const QString &name)
 {
 	if (name == PortAudioWriterName && initialized && getBool("WriterEnabled"))
 		return new PortAudioWriter(*this);
-	return NULL;
+	return nullptr;
 }
 
 PortAudio::SettingsWidget *PortAudio::getSettingsWidget()
