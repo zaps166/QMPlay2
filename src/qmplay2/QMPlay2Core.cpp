@@ -229,7 +229,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #endif
 
 #ifndef QT_DEBUG
-	av_log_set_level(AV_LOG_FATAL);
+	av_log_set_level(AV_LOG_ERROR);
 #endif
 	av_register_all();
 	avformat_network_init();
