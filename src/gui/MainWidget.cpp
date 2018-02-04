@@ -823,6 +823,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetSpherical()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetARatio()));
 	connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(zoomReset()));
+	connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(otherReset()));
 	connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
 	connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));

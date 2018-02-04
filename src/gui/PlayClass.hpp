@@ -179,6 +179,7 @@ private slots:
 	void zoomIn();
 	void zoomOut();
 	void zoomReset();
+	void otherReset();
 	void aRatio();
 	void volume(int, int);
 	void toggleMute();

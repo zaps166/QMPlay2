@@ -558,7 +558,11 @@ void OpenGL2Common::paintGL()
 	{
 		QMatrix4x4 matrix;
 		if (!sphericalView)
+		{
 			matrix.scale(W / (qreal)winSize.width(), H / (qreal)winSize.height());
+			if (!videoOffset.isNull())
+				matrix.translate(-videoOffset.x(), videoOffset.y());
+		}
 		else
 		{
 			const double z = qBound(-1.0, (zoom > 1.0 ? log10(zoom) : zoom - 1.0), 0.99);
@@ -636,10 +640,10 @@ void OpenGL2Common::paintGL()
 		}
 
 		const QSizeF winSizeSubs = winSize * widget()->devicePixelRatioF();
-		const float left   = (bounds.left() + subsX) * 2.0f / winSizeSubs.width();
-		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSizeSubs.width();
-		const float top    = (bounds.top() + subsY) * 2.0f / winSizeSubs.height();
-		const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSizeSubs.height();
+		const float left   = (bounds.left() + subsX) * 2.0f / winSizeSubs.width() - osdOffset.x();
+		const float right  = (bounds.right() + subsX + 1) * 2.0f / winSizeSubs.width() - osdOffset.x();
+		const float top    = (bounds.top() + subsY) * 2.0f / winSizeSubs.height() - osdOffset.y();
+		const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSizeSubs.height() - osdOffset.y();
 		const float verticesOSD[8] = {
 			left  - 1.0f, -bottom + 1.0f,
 			right - 1.0f, -bottom + 1.0f,
@@ -871,14 +875,20 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 		case QEvent::MouseButtonPress:
 			if (sphericalView)
 				mousePress360((QMouseEvent *)e);
+			else
+				mousePress((QMouseEvent *)e);
 			break;
 		case QEvent::MouseButtonRelease:
 			if (sphericalView)
 				mouseRelease360((QMouseEvent *)e);
+			else
+				mouseRelease((QMouseEvent *)e);
 			break;
 		case QEvent::MouseMove:
 			if (sphericalView)
 				mouseMove360((QMouseEvent *)e);
+			else
+				mouseMove((QMouseEvent *)e);
 			break;
 		case QEvent::Resize:
 			newSize(((QResizeEvent *)e)->size());
@@ -923,6 +933,53 @@ QByteArray OpenGL2Common::readShader(const QString &fileName)
 	shader.append("#line 1\n");
 	shader.append((const char *)res.data(), res.size());
 	return shader;
+}
+
+void OpenGL2Common::mousePress(QMouseEvent *e)
+{
+	if (e->buttons() & Qt::LeftButton)
+	{
+		moveVideo = (e->modifiers() & Qt::ShiftModifier);
+		moveOSD = (e->modifiers() & Qt::ControlModifier);
+		if (moveVideo || moveOSD)
+		{
+			QWidget *w = widget();
+			w->setProperty("customCursor", (int)Qt::ArrowCursor);
+			w->setCursor(Qt::ClosedHandCursor);
+			mousePos = e->pos();
+		}
+	}
+}
+void OpenGL2Common::mouseMove(QMouseEvent *e)
+{
+	if ((moveVideo || moveOSD) && (e->buttons() & Qt::LeftButton))
+	{
+		const QPoint newMousePos = e->pos();
+		const QPointF mouseDiff = mousePos - newMousePos;
+
+		if (moveVideo)
+			videoOffset += QPointF(mouseDiff.x() * 2.0 / W, mouseDiff.y() * 2.0 / H);
+		if (moveOSD)
+		{
+			QWidget *w = widget();
+			osdOffset += QPointF(mouseDiff.x() * 2.0 / w->width(), mouseDiff.y() * 2.0 / w->height());
+		}
+
+		mousePos = newMousePos;
+
+		setMatrix = true;
+		updateGL(true);
+	}
+}
+void OpenGL2Common::mouseRelease(QMouseEvent *e)
+{
+	if ((moveVideo || moveOSD) && e->button() == Qt::LeftButton)
+	{
+		QWidget *w = widget();
+		w->unsetCursor();
+		w->setProperty("customCursor", QVariant());
+		moveVideo = moveOSD = false;
+	}
 }
 
 /* 360 */

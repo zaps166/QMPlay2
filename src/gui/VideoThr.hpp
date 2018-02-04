@@ -69,6 +69,7 @@ public:
 	void setFrameSize(int w, int h);
 	void setARatio(double aRatio, double sar);
 	void setZoom();
+	void otherReset();
 
 	void initFilters(bool processParams = true);
 

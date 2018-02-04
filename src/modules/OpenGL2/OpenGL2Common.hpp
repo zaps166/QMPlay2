@@ -118,6 +118,10 @@ private:
 
 	QByteArray readShader(const QString &fileName);
 
+	void mousePress(QMouseEvent *e);
+	void mouseMove(QMouseEvent *e);
+	void mouseRelease(QMouseEvent *e);
+
 	/* Spherical view */
 	void mousePress360(QMouseEvent *e);
 	void mouseMove360(QMouseEvent *e);
@@ -154,6 +158,9 @@ public:
 
 	double aspectRatio, zoom;
 
+	bool moveVideo = false, moveOSD = false;
+	QPointF videoOffset, osdOffset;
+
 	QList<const QMPlay2OSD *> osdList;
 	QMutex osdMutex;
 
@@ -168,6 +175,6 @@ public:
 	quint32 sphereVbo[3];
 	quint32 nIndices;
 	double mouseTime;
-	QPoint mousePos;
+	QPoint mousePos; // also for moving video/subtitles
 	QPointF rot;
 };

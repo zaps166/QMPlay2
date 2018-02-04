@@ -38,6 +38,7 @@ OpenGL2Writer::OpenGL2Writer(Module &module) :
 	addParam("Spherical");
 	addParam("Flip");
 	addParam("Rotate90");
+	addParam("ResetOther");
 
 	SetModule(module);
 }
@@ -110,6 +111,11 @@ bool OpenGL2Writer::processParams(bool *)
 		drawable->videoAdjustment = videoAdjustment;
 		drawable->setSpherical(spherical);
 		doResizeEvent = drawable->widget()->isVisible();
+	}
+	if (getParam("ResetOther").toBool())
+	{
+		drawable->videoOffset = drawable->osdOffset = QPointF();
+		modParam("ResetOther", false);
 	}
 
 	const int outW = getParam("W").toInt();

@@ -820,6 +820,11 @@ void PlayClass::zoomReset()
 		}
 	}
 }
+void PlayClass::otherReset()
+{
+	vThr->otherReset();
+	vThr->processParams();
+}
 void PlayClass::aRatio()
 {
 	aRatioName = sender()->objectName();
