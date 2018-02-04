@@ -242,7 +242,7 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 			doubleClicked = false;
 			leftButtonPlayTim.stop();
 		}
-		else if (QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
+		else if ((e->modifiers() == Qt::NoModifier) && QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
 		{
 			leftButtonPlayTim.start(300);
 		}
