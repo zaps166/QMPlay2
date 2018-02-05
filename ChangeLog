@@ -1,9 +1,10 @@
-Changes in QMPlay2 build 18.02.03:
+Changes in QMPlay2 build 18.02.05:
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
-	- add YouTube option which allows to sort search results by date,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
 	- allow to move video and subtitles in OpenGL2 video output,
+	- add sorting YouTube search results,
 	- add Hungarian translation file,
+	- fix subtitles on YouTube,
 
 Changes in QMPlay2 build 17.12.31:
 	- automaticaly rotate movie or set spherical view if is set in metadata,
