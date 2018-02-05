@@ -63,9 +63,16 @@ static inline QString toPercentEncoding(const QString &txt)
 	return txt.toUtf8().toPercentEncoding();
 }
 
-static inline QString getYtUrl(const QString &title, const int page, const bool sortByDate)
+static inline QString getYtUrl(const QString &title, const int page, const int sortByIdx)
 {
-	return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortByDate ? "&sp=CAI%253D" : QString()).arg(page);
+	static constexpr const char *sortBy[4] {
+		"",             // Relevance ("&sp=CAA%253D")
+		"&sp=CAI%253D", // Upload date
+		"&sp=CAM%253D", // View count
+		"&sp=CAE%253D", // Rating
+	};
+	Q_ASSERT(sortByIdx >= 0 && sortByIdx <= 3);
+	return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortBy[sortByIdx]).arg(page);
 }
 static inline QString getAutocompleteUrl(const QString &text)
 {
@@ -394,28 +401,35 @@ YouTube::YouTube(Module &module) :
 	searchB->setAutoRaise(true);
 
 	QToolButton *showSettingsB = new QToolButton;
-	connect(showSettingsB, SIGNAL(clicked()), this, SLOT(showSettings()));
+	connect(showSettingsB, &QToolButton::clicked, this, [] {
+		emit QMPlay2Core.showSettings("Extensions");
+	});
 	showSettingsB->setIcon(QMPlay2Core.getIconFromTheme("configure"));
 	showSettingsB->setToolTip(tr("Settings"));
 	showSettingsB->setAutoRaise(true);
 
-	QActionGroup *qualityGroup = new QActionGroup(this);
-	qualityGroup->addAction("2160p 60FPS");
-	qualityGroup->addAction("1080p 60FPS");
-	qualityGroup->addAction("720p 60FPS");
-	qualityGroup->addAction("2160p");
-	qualityGroup->addAction("1080p");
-	qualityGroup->addAction("720p");
-	qualityGroup->addAction("480p");
+	m_qualityGroup = new QActionGroup(this);
+	m_qualityGroup->addAction("2160p 60FPS");
+	m_qualityGroup->addAction("1080p 60FPS");
+	m_qualityGroup->addAction("720p 60FPS");
+	m_qualityGroup->addAction("2160p");
+	m_qualityGroup->addAction("1080p");
+	m_qualityGroup->addAction("720p");
+	m_qualityGroup->addAction("480p");
 
-	qualityMenu = new QMenu(this);
+	QMenu *qualityMenu = new QMenu(this);
 	int qualityIdx = 0;
-	for (QAction *act : qualityGroup->actions())
+	for (QAction *act : m_qualityGroup->actions())
 	{
-		connect(act, SIGNAL(triggered(bool)), this, SLOT(setQualityFromMenu()));
-		act->setObjectName(QString::number(qualityIdx++));
+		connect(act, &QAction::triggered, this, [=] {
+			sets().set("YouTube/MultiStream", true);
+			sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
+			sets().set("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
+			setItags();
+		});
 		act->setCheckable(true);
 		qualityMenu->addAction(act);
+		++qualityIdx;
 	}
 	qualityMenu->insertSeparator(qualityMenu->actions().at(3));
 
@@ -425,6 +439,43 @@ YouTube::YouTube(Module &module) :
 	qualityB->setIcon(QMPlay2Core.getIconFromTheme("video-display"));
 	qualityB->setMenu(qualityMenu);
 	qualityB->setAutoRaise(true);
+
+	m_sortByGroup = new QActionGroup(this);
+	m_sortByGroup->addAction(tr("Relevance"));
+	m_sortByGroup->addAction(tr("Upload date"));
+	m_sortByGroup->addAction(tr("View count"));
+	m_sortByGroup->addAction(tr("Rating"));
+
+	QMenu *sortByMenu = new QMenu(this);
+	int sortByIdx = 0;
+	for (QAction *act : m_sortByGroup->actions())
+	{
+		connect(act, &QAction::triggered, this, [=] {
+			if (m_sortByIdx != sortByIdx)
+			{
+				m_sortByIdx = sortByIdx;
+				sets().set("YouTube/SortBy", m_sortByIdx);
+				search();
+			}
+		});
+		act->setCheckable(true);
+		sortByMenu->addAction(act);
+		++sortByIdx;
+	}
+
+	QToolButton *sortByB = new QToolButton;
+	sortByB->setPopupMode(QToolButton::InstantPopup);
+	sortByB->setToolTip(tr("Sort search results by ..."));
+	{
+		// FIXME: Add icon
+		QFont f(sortByB->font());
+		f.setBold(true);
+		f.setPointSize(f.pointSize() - 1);
+		sortByB->setFont(f);
+		sortByB->setText("A-z");
+	}
+	sortByB->setMenu(sortByMenu);
+	sortByB->setAutoRaise(true);
 
 	resultsW = new ResultsYoutube;
 
@@ -439,11 +490,13 @@ YouTube::YouTube(Module &module) :
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(showSettingsB, 0, 0, 1, 1);
 	layout->addWidget(qualityB, 0, 1, 1, 1);
-	layout->addWidget(searchE, 0, 2, 1, 1);
-	layout->addWidget(searchB, 0, 3, 1, 1);
-	layout->addWidget(pageSwitcher, 0, 4, 1, 1);
-	layout->addWidget(resultsW, 1, 0, 1, 5);
-	layout->addWidget(progressB, 2, 0, 1, 5);
+	layout->addWidget(sortByB, 0, 2, 1, 1);
+	layout->addWidget(searchE, 0, 3, 1, 1);
+	layout->addWidget(searchB, 0, 4, 1, 1);
+	layout->addWidget(pageSwitcher, 0, 5, 1, 1);
+	layout->addWidget(resultsW, 1, 0, 1, 6);
+	layout->addWidget(progressB, 2, 0, 1, 6);
+	layout->setSpacing(3);
 	setLayout(layout);
 
 	SetModule(module);
@@ -545,6 +598,8 @@ bool YouTube::set()
 #ifdef Q_OS_WIN
 	youtubedl.replace('\\', '/');
 #endif
+	m_sortByIdx = qBound(0, sets().getInt("YouTube/SortBy"), 3);
+	m_sortByGroup->actions().at(m_sortByIdx)->setChecked(true);
 	return true;
 }
 
@@ -624,19 +679,6 @@ inline QString YouTube::getYtDlPath() const
 	return youtubedl;
 }
 
-void YouTube::showSettings()
-{
-	emit QMPlay2Core.showSettings("Extensions");
-}
-void YouTube::setQualityFromMenu() //Call it only from quality menu!
-{
-	const int qualityIdx = sender()->objectName().toInt();
-	sets().set("YouTube/MultiStream", true);
-	sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
-	sets().set("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
-	setItags();
-}
-
 void YouTube::next()
 {
 	pageSwitcher->currPageB->setValue(pageSwitcher->currPageB->value() + 1);
@@ -676,9 +718,9 @@ void YouTube::search()
 	resultsW->clear();
 	if (!title.isEmpty())
 	{
-		if (lastTitle != title || sender() == searchE || sender() == searchB)
+		if (lastTitle != title || sender() == searchE || sender() == searchB || qobject_cast<QAction *>(sender()))
 			currPage = 1;
-		searchReply = net.start(getYtUrl(title, currPage, sets().getBool("YouTube/SortByDate")));
+		searchReply = net.start(getYtUrl(title, currPage, m_sortByIdx));
 		progressB->setRange(0, 0);
 		progressB->show();
 	}
@@ -774,14 +816,14 @@ void YouTube::setItags()
 				const QList<int> *qualityPresets = getQualityPresets();
 				if (resultsW->itagsVideo.mid(0, qualityPresets[i].count()) == qualityPresets[i])
 				{
-					qualityMenu->actions().at(i > _720p60 ? i + 1 : i /* Avoid separator */)->setChecked(true);
+					m_qualityGroup->actions().at(i)->setChecked(true);
 					return;
 				}
 			}
 		}
 	}
 
-	for (QAction *act : qualityMenu->actions())
+	for (QAction *act : m_qualityGroup->actions())
 		if (act->isChecked())
 			act->setChecked(false);
 }

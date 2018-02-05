@@ -1753,10 +1753,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Sort search results by date</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3294,6 +3290,26 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Relevance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort search results by ...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

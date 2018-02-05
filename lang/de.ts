@@ -1756,10 +1756,6 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Deaktivieren, wenn Sie Probleme mit der Decodierung von MPEG4 (DivX5) Videos haben</translation>
     </message>
-    <message>
-        <source>Sort search results by date</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3301,6 +3297,26 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>yes</source>
         <translation>ja</translation>
+    </message>
+    <message>
+        <source>Relevance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation type="unfinished">Bewertung</translation>
+    </message>
+    <message>
+        <source>Sort search results by ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

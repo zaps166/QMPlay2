@@ -1756,10 +1756,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Wyłącz, jeżeli masz problemy z dekodowaniem filmów MPEG4 (DivX5)</translation>
     </message>
-    <message>
-        <source>Sort search results by date</source>
-        <translation>Sortuj wyniki wyszukiwania według daty</translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3301,6 +3297,26 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>yes</source>
         <translation>tak</translation>
+    </message>
+    <message>
+        <source>Relevance</source>
+        <translation>Trafność</translation>
+    </message>
+    <message>
+        <source>Upload date</source>
+        <translation>Data przesłania</translation>
+    </message>
+    <message>
+        <source>View count</source>
+        <translation>Liczba wyświetleń</translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation>Ocena</translation>
+    </message>
+    <message>
+        <source>Sort search results by ...</source>
+        <translation>Sortuj wyniki wyszukiwania po ...</translation>
     </message>
 </context>
 <context>

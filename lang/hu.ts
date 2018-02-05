@@ -1447,10 +1447,6 @@
         <translation>Feliratok megjelenítése a YouTube-ról, az alapértelmezett feliratnyelv és a QMPlay2 nyelve szerint.</translation>
     </message>
     <message>
-        <source>Sort search results by date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Priority of default video/audio quality</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3297,6 +3293,26 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>yes</source>
         <translation>igen</translation>
+    </message>
+    <message>
+        <source>Relevance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation type="unfinished">Értékelés</translation>
+    </message>
+    <message>
+        <source>Sort search results by ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
