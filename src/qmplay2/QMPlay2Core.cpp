@@ -423,7 +423,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 	if (logFlags & SaveLog)
 	{
 		QFile logFile(logFilePath);
-		if (logFile.open(QFile::Append))
+		if (!logFilePath.isEmpty() && logFile.open(QFile::Append))
 		{
 			logFile.write(date.toUtf8() + txt.toUtf8() + '\n');
 			logFile.close();

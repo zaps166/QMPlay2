@@ -51,7 +51,7 @@
 #include <QDir>
 #include <QUrl>
 
-Q_LOGGING_CATEGORY(youtube, "Extensions::YouTube")
+Q_LOGGING_CATEGORY(youtube, "Extensions/YouTube")
 
 #define YOUTUBE_URL "https://www.youtube.com"
 
@@ -800,13 +800,13 @@ void YouTube::setAutocomplete(const QByteArray &data)
 	const QJsonDocument json = QJsonDocument::fromJson(data, &jsonErr);
 	if (jsonErr.error != QJsonParseError::NoError)
 	{
-		qWarning(youtube) << "Cannot parse autocomplete JSON:" << jsonErr.errorString();
+		qCWarning(youtube) << "Cannot parse autocomplete JSON:" << jsonErr.errorString();
 		return;
 	}
 	const QJsonArray mainArr = json.array();
 	if (mainArr.count() < 2)
 	{
-		qWarning(youtube) << "Invalid autocomplete JSON array";
+		qCWarning(youtube) << "Invalid autocomplete JSON array";
 		return;
 	}
 	const QJsonArray arr = mainArr.at(1).toArray();
@@ -979,7 +979,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 					const QJsonDocument json = QJsonDocument::fromJson(data.midRef(idx, i - idx + 1).toUtf8(), &jsonErr);
 					if (!json.isObject())
 					{
-						qWarning(youtube) << "Cannot parse JSON:" << jsonErr.errorString();
+						qCWarning(youtube) << "Cannot parse JSON:" << jsonErr.errorString();
 						return {};
 					}
 					else
@@ -993,7 +993,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 	}
 	if (args.isEmpty())
 	{
-		qWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
+		qCWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
 		return {};
 	}
 
