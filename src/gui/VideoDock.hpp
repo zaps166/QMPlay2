@@ -66,6 +66,7 @@ private:
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
+	Qt::KeyboardModifiers m_pressedKeyModifiers = Qt::NoModifier;
 	bool canPopup, is_floating, isBreeze, canHideIDWCursor, doubleClicked;
 	double touchZoom;
 private slots:
