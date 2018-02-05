@@ -53,5 +53,5 @@ private:
 	QCheckBox *enabledB;
 	QComboBox *devicesB;
 	QDoubleSpinBox *delayB;
-    QCheckBox *bitPerfect;
+	QCheckBox *bitPerfect;
 };

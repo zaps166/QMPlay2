@@ -14,10 +14,11 @@ set(PortAudio_SRC
 )
 
 if(APPLE)
-    set(PortAudio_SRC ${PortAudio_SRC}
-        Mac/AudioDevice.mm
-        Mac/AudioDeviceList.cpp
+    list(APPEND PortAudio_SRC
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio/AudioDevice.mm
+        ${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio/AudioDeviceList.cpp
     )
+    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio)
 endif()
 
 set(PortAudio_RESOURCES
@@ -49,9 +50,9 @@ if(WIN32 AND CUSTOM_PORTAUDIO_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} ${CUSTOM_PORTAUDIO_LIBRARIES})
 else()
     target_link_libraries(${PROJECT_NAME} ${LIBPORTAUDIO_LIBRARIES})
-endif()
-if(APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework CoreAudio -framework Foundation")
+    if(APPLE)
+        target_link_libraries(${PROJECT_NAME} "-framework CoreAudio -framework Foundation")
+    endif()
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

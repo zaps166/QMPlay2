@@ -42,7 +42,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 
  Copyright (C) 2013 Apple Inc. All Rights Reserved.
- Copyright (C) 2017 René J.V. Bertin All Rights Reserved.
+ Copyright (C) 2017,18 René J.V. Bertin All Rights Reserved.
 
 */
 
@@ -106,7 +106,7 @@ OSStatus DefaultListener(AudioDeviceID inDevice, UInt32 inChannel, Boolean forIn
             break;
         default:
             if ((dev && !dev->listenerSilentFor)) {
-                NSLog(msg);
+                NSLog(@"%@", msg);
             }
             break;
     }
@@ -291,11 +291,11 @@ void AudioDevice::Init(AudioPropertyListenerProc lProc = DefaultListener)
                             nominalSampleRateList[i] = [[a objectAtIndex:i] doubleValue];
                         }
                     }
-                    NSLog(@"Using audio device %u \"%s\", %u sample rates in %u range(s); [%g,%g] %@; current sample rate %gHz",
+                    NSLog(@"Using audio device %u \"%s\", %u sample rates in %lu range(s); [%g,%g] %@; current sample rate %gHz",
                           mID, GetName(), nominalSampleRates, propsize / sizeof(AudioValueRange),
                           minNominalSR, maxNominalSR, (discreteSampleRateList) ? [a description] : @"continuous", currentNominalSR);
                 } else {
-                    NSLog(@"Using audio device %u \"%s\", %u sample rates in %u range(s); [%g,%g] %s; current sample rate %gHz",
+                    NSLog(@"Using audio device %u \"%s\", %u sample rates in %lu range(s); [%g,%g] %s; current sample rate %gHz",
                           mID, GetName(), nominalSampleRates, propsize / sizeof(AudioValueRange),
                           minNominalSR, maxNominalSR, (discreteSampleRateList) ? "" : "continuous", currentNominalSR);
                 }

@@ -42,7 +42,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 
  Copyright (C) 2013 Apple Inc. All Rights Reserved.
- Copyright (C) 2017 René J.V. Bertin All Rights Reserved.
+ Copyright (C) 2017,18 René J.V. Bertin All Rights Reserved.
 
 */
 

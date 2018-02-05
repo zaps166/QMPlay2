@@ -25,8 +25,8 @@
 
 #ifdef Q_OS_MACOS
 	#include <QDebug>
-	#include "Mac/AudioDeviceList.h"
-	#include "Mac/AudioDevice.h"
+	#include "AudioDeviceList.h"
+	#include "AudioDevice.h"
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
 #else
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
@@ -55,7 +55,8 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 PortAudioWriter::~PortAudioWriter()
 {
 #ifdef Q_OS_MACOS
-	if (coreAudioDevice) {
+	if (coreAudioDevice)
+	{
 		coreAudioDevice->ResetNominalSampleRate();
 	}
 	delete coreAudioDevice;
@@ -204,7 +205,7 @@ void PortAudioWriter::pause()
 
 QString PortAudioWriter::name() const
 {
-	QString name = QStringLiteral(PortAudioWriterName);
+	QString name = PortAudioWriterName;
 	if (stream)
 	{
 		if (const PaDeviceInfo *dInfo = Pa_GetDeviceInfo(outputParameters.device))
@@ -214,13 +215,13 @@ QString PortAudioWriter::name() const
 			{
 				name += QStringLiteral("; %1").arg(hInfo->name);
 			}
-			name += QStringLiteral(")");
+			name += ")";
 		}
+#ifdef Q_OS_MACOS
 		if (const PaStreamInfo *strInfo = Pa_GetStreamInfo(stream))
 		{
 			name += QStringLiteral(", %1Hz").arg(strInfo->sampleRate);
 		}
-#ifdef Q_OS_MACOS
 		if (coreAudioDevice)
 		{
 			name += QStringLiteral(" -> %1Hz").arg(coreAudioDevice->CurrentNominalSampleRate());
@@ -239,11 +240,14 @@ bool PortAudioWriter::open()
 
 bool PortAudioWriter::openStream()
 {
-	if (outputDevice.isEmpty() || outputDevice == QStringLiteral("Default"))
+#ifdef Q_OS_MACOS
+	bool bitPerfectMode = sets().getBool("BitPerfect");
+	if (bitPerfectMode && (outputDevice.isEmpty() || outputDevice == "Default"))
 	{
 		int chn = getParam("chn").toInt();
 		outputParameters.device = PortAudioCommon::getDeviceIndexForOutput(outputDevice, chn);
 	}
+#endif
 	PaStream *newStream = nullptr;
 	if (Pa_OpenStream(&newStream, nullptr, &outputParameters, sample_rate, 0, paDitherOff, nullptr, nullptr) == paNoError)
 	{
@@ -252,14 +256,17 @@ bool PortAudioWriter::openStream()
 		modParam("delay", outputLatency);
 #ifdef Q_OS_MACOS
 		modParam("rate", Pa_GetStreamInfo(stream)->sampleRate);
-		QString devName = QString::fromUtf8(Pa_GetDeviceInfo(outputParameters.device)->name);
-		AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
-		if (devDict.contains(devName))
+		if (bitPerfectMode)
 		{
-			coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
-			if (coreAudioDevice && sets().getBool("BitPerfect"))
+			const QString devName = QString::fromUtf8(Pa_GetDeviceInfo(outputParameters.device)->name);
+			AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
+			if (devDict.contains(devName))
 			{
-				coreAudioDevice->SetNominalSampleRate(sample_rate);
+				coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
+				if (coreAudioDevice && bitPerfectMode)
+				{
+					coreAudioDevice->SetNominalSampleRate(sample_rate);
+				}
 			}
 		}
 #endif
@@ -282,7 +289,7 @@ bool PortAudioWriter::startStream()
 }
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-	const PaError e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
+	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e != paNoError)
 		fullBufferReached = false;
 	if (e == paOutputUnderflowed)
@@ -336,6 +343,3 @@ void PortAudioWriter::close()
 	}
 	err = false;
 }
-
-
-// kate: replace-tabs false;
