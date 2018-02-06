@@ -98,7 +98,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	layout->addRow(enabledB);
 	layout->addRow(tr("Playback device") + ": ", devicesB);
 	layout->addRow(tr("Delay") + ": ", delayB);
+#ifdef Q_OS_MACOS
 	layout->addRow(bitPerfect);
+#endif
 }
 
 void ModuleSettingsWidget::saveSettings()

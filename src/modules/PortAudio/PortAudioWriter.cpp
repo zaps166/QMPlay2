@@ -36,6 +36,9 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 	stream(nullptr),
 	sample_rate(0),
 	err(false)
+#ifdef Q_OS_MACOS
+	, coreAudioDevice(nullptr)
+#endif
 {
 	addParam("delay");
 	addParam("chn");
@@ -46,10 +49,6 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 	outputParameters.sampleFormat = paFloat32;
 	outputParameters.hostApiSpecificStreamInfo = nullptr;
 
-#ifdef Q_OS_MACOS
-	coreAudioDevice = nullptr;
-#endif
-
 	SetModule(module);
 }
 PortAudioWriter::~PortAudioWriter()
@@ -58,8 +57,8 @@ PortAudioWriter::~PortAudioWriter()
 	if (coreAudioDevice)
 	{
 		coreAudioDevice->ResetNominalSampleRate();
+        delete coreAudioDevice;
 	}
-	delete coreAudioDevice;
 #endif
 	close();
 }
@@ -240,14 +239,6 @@ bool PortAudioWriter::open()
 
 bool PortAudioWriter::openStream()
 {
-#ifdef Q_OS_MACOS
-	bool bitPerfectMode = sets().getBool("BitPerfect");
-	if (bitPerfectMode && (outputDevice.isEmpty() || outputDevice == "Default"))
-	{
-		int chn = getParam("chn").toInt();
-		outputParameters.device = PortAudioCommon::getDeviceIndexForOutput(outputDevice, chn);
-	}
-#endif
 	PaStream *newStream = nullptr;
 	if (Pa_OpenStream(&newStream, nullptr, &outputParameters, sample_rate, 0, paDitherOff, nullptr, nullptr) == paNoError)
 	{
@@ -255,15 +246,14 @@ bool PortAudioWriter::openStream()
 		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
 		modParam("delay", outputLatency);
 #ifdef Q_OS_MACOS
-		modParam("rate", Pa_GetStreamInfo(stream)->sampleRate);
-		if (bitPerfectMode)
+		if (sets().getBool("BitPerfect"))
 		{
-			const QString devName = QString::fromUtf8(Pa_GetDeviceInfo(outputParameters.device)->name);
-			AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
+			const QString devName(Pa_GetDeviceInfo(outputParameters.device)->name);
+			const AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
 			if (devDict.contains(devName))
 			{
 				coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
-				if (coreAudioDevice && bitPerfectMode)
+				if (coreAudioDevice)
 				{
 					coreAudioDevice->SetNominalSampleRate(sample_rate);
 				}

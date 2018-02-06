@@ -15,10 +15,10 @@ set(PortAudio_SRC
 
 if(APPLE)
     list(APPEND PortAudio_SRC
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio/AudioDevice.mm
-        ${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio/AudioDeviceList.cpp
+        3rdparty/CoreAudio/AudioDevice.mm
+        3rdparty/CoreAudio/AudioDeviceList.cpp
     )
-    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/CoreAudio)
+    include_directories(3rdparty/CoreAudio)
 endif()
 
 set(PortAudio_RESOURCES
