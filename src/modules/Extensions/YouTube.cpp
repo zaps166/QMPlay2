@@ -1036,7 +1036,6 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 	if (args.isEmpty())
 	{
 		qCWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
-		return {};
 	}
 
 	QString subsUrl;
