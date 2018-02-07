@@ -603,7 +603,7 @@ int main(int argc, char *argv[])
 	{
 		qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
-		qApp->installEventFilter(new EventFilterWorkarounds);
+		qApp->installEventFilter(new EventFilterWorkarounds(qApp));
 		PanGestureEventFilter::install();
 	}
 
