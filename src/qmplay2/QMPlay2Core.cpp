@@ -263,7 +263,9 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 			{
 				QLibrary lib(fInfo.filePath());
 				// Don't override global symbols if they are different in libraries (e.g. Qt5 vs Qt4)
+#ifndef ADDRESS_SANITIZER
 				lib.setLoadHints(QLibrary::DeepBindHint);
+#endif
 				if (!lib.load())
 					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else

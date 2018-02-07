@@ -211,9 +211,27 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
     add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
 
+    option(USE_ASAN "Use Address Sanitizer" OFF)
+    add_feature_info("Address Sanitizer" USE_ASAN "Use Address Sanitizer")
+
+    option(USE_UBSAN "Use Undefined Behavior Sanitizer" OFF)
+    add_feature_info("Undefined Behavior Sanitizer" USE_UBSAN "Use Undefined Behavior Sanitizer")
+
+    if(USE_ASAN)
+        set(CMAKE_CXX_FLAGS "-fsanitize=address -fno-omit-frame-pointer ${CMAKE_CXX_FLAGS}")
+        add_definitions(-DADDRESS_SANITIZER)
+        set(RELEASE_DEBUG_FLAG "-g")
+    else()
+        set(RELEASE_DEBUG_FLAG "-g0")
+    endif()
+
+    if(USE_UBSAN)
+        set(CMAKE_CXX_FLAGS "-fsanitize=undefined ${CMAKE_CXX_FLAGS}")
+    endif()
+
     # Disable exceptions, hide symbols, and also make sure that debugging symbols are disabled
-    set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -g0 -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -g0 -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+    set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions ${RELEASE_DEBUG_FLAG} -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions ${RELEASE_DEBUG_FLAG} -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
 
     if(NOT CMAKE_BUILD_TYPE MATCHES "Deb")
         if(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
