@@ -34,7 +34,7 @@ class RadioBrowserModel final : public QAbstractItemModel
 	Q_OBJECT
 
 public:
-	RadioBrowserModel(const QWidget *widget);
+	RadioBrowserModel(QWidget *widget);
 	~RadioBrowserModel();
 
 	inline int elementHeight() const;

@@ -44,7 +44,8 @@ struct Column
 
 /**/
 
-RadioBrowserModel::RadioBrowserModel(const QWidget *widget) :
+RadioBrowserModel::RadioBrowserModel(QWidget *widget) :
+	QAbstractItemModel(widget),
 	m_widget(widget),
 	m_net(new NetworkAccess),
 	m_sortColumnIdx(0),
