@@ -20,6 +20,8 @@
 
 #include <IOController.hpp>
 
+#include <QObject>
+
 class NetworkReplyPriv;
 struct NetworkAccessParams;
 
