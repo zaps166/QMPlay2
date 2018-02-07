@@ -20,11 +20,12 @@
 
 #include <DeintFilter.hpp>
 
-#include <QSharedPointer>
 #include <QWaitCondition>
 #include <QVector>
 #include <QThread>
 #include <QMutex>
+
+#include <memory>
 
 class YadifDeint;
 
@@ -64,7 +65,7 @@ public:
 private:
 	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 
-	using YadifThrPtr = QSharedPointer<YadifThr>;
+	using YadifThrPtr = std::shared_ptr<YadifThr>;
 	QVector<YadifThrPtr> threads;
 
 	const bool doubler, spatialCheck;

@@ -80,7 +80,7 @@ private:
 	StreamInfo *getStreamInfo(AVStream *stream) const;
 	AVDictionary *getMetadata() const;
 
-	QSharedPointer<AbortContext> abortCtx;
+	std::shared_ptr<AbortContext> abortCtx;
 
 	QVector<int> index_map;
 	QVector<AVStream *> streams;

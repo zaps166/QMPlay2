@@ -113,7 +113,7 @@ void UpdateEntryThr::run()
 				if (!displayOnlyFileName && itu.name.isEmpty())
 					itu.name = demuxer->title();
 				itu.length = demuxer->length();
-				demuxer.clear();
+				demuxer.reset();
 			}
 			else
 				updateTitle = false;
@@ -153,7 +153,7 @@ void UpdateEntryThr::stop()
 	{
 		terminate();
 		wait(1000);
-		ioCtrl.clear();
+		ioCtrl.reset();
 	}
 }
 
@@ -262,7 +262,7 @@ void AddThr::stop()
 	{
 		terminate();
 		wait(1000);
-		ioCtrl.clear();
+		ioCtrl.reset();
 	}
 }
 
@@ -415,7 +415,7 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 						hasOneEntry = false;
 						tracksAdded = true;
 					}
-					demuxer.clear();
+					demuxer.reset();
 				}
 				else if (!fetchTracks.isOK)
 					hasOneEntry = false; //Don't add entry to list if error occured

@@ -422,7 +422,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 			if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
 				emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 
-			ioCtrl->clear();
+			ioCtrl->reset();
 		}
 	}
 	return true;

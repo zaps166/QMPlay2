@@ -50,5 +50,5 @@ private:
 
 	AVIOContext *avioCtx;
 	bool paused, canRead;
-	QSharedPointer<AbortContext> abortCtx;
+	std::shared_ptr<AbortContext> abortCtx;
 };

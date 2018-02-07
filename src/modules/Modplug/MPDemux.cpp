@@ -178,7 +178,7 @@ bool MPDemux::open(const QString &url)
 	{
 		if (reader->size() > 0)
 			mpfile = QMPlay2ModPlug::Load(reader->read(reader->size()), reader->size());
-		reader.clear();
+		reader.reset();
 		if (mpfile && QMPlay2ModPlug::GetModuleType(mpfile))
 		{
 			streams_info += new StreamInfo(srate, 2);

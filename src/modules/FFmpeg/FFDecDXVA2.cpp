@@ -618,7 +618,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	hr = m_decoderService->CreateSurface(surfaceW, surfaceH, m_surfaces->count() - 1, targetFmt, D3DPOOL_DEFAULT, 0, DXVA2_VideoDecoderRenderTarget, m_surfaces->data(), nullptr);
 	if (FAILED(hr))
 	{
-		m_surfaces.clear();
+		m_surfaces.reset();
 		return false;
 	}
 

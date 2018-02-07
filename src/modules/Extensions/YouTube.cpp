@@ -642,7 +642,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 						*extension = youTubeVideo[1];
 				}
 			}
-			netReply.clear();
+			netReply.reset();
 		}
 	}
 	else if (prefix == "youtube-dl")
@@ -655,7 +655,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			if (ioCtrl->assign(new YouTubeDL))
 			{
 				youtube_dl->addr(url, param, stream_url, name, extension);
-				ioCtrl->clear();
+				ioCtrl->reset();
 			}
 		}
 	}
@@ -1259,7 +1259,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 					ret[0] += "}";
 				}
 			}
-			youtube_dl->clear();
+			youtube_dl->reset();
 		}
 	}
 	else if (!tWI && ret.isEmpty() && youtube_dl->assign(new YouTubeDL)) //cannot find URL at normal way
@@ -1279,7 +1279,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 				name = g_cantFindTheTitle;
 			ret << stream_url << extension << name;
 		}
-		youtube_dl->clear();
+		youtube_dl->reset();
 	}
 
 	return ret;

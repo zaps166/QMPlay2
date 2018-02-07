@@ -67,7 +67,7 @@ bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCt
 	{
 		QString newUrl, newError;
 		ytDl->addr(url, QString(), &newUrl, name, extension, error ? &newError : nullptr);
-		ytDl.clear();
+		ytDl.reset();
 		if (!newError.isEmpty() && !error->contains(newError))
 		{
 			if (!error->isEmpty())
@@ -353,7 +353,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		{
 			if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
 			{
-				m_reply.clear();
+				m_reply.reset();
 				return {};
 			}
 			QMPlay2Core.setWorking(true);
@@ -361,7 +361,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			m_reply->waitForFinished();
 			const QByteArray replyData = m_reply->readAll();
 			const bool hasError = m_reply->hasError();
-			m_reply.clear();
+			m_reply.reset();
 			if (m_aborted)
 				emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has been aborted!"), g_name, 2);
 			else if (!hasError)

@@ -197,7 +197,7 @@ bool SIDPlay::open(const QString &_url, bool tracksOnly)
 	if (Reader::create(url, m_reader))
 	{
 		const QByteArray data = m_reader->read(m_reader->size());
-		m_reader.clear();
+		m_reader.reset();
 
 		m_tune = new SidTune((const quint8 *)data.data(), data.length());
 		if (!m_tune->getStatus())

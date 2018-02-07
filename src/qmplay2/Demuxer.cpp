@@ -43,12 +43,12 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 						{
 							if (!fetchTracks->tracks.isEmpty()) //Return tracks list
 							{
-								demuxer.clear();
+								demuxer.reset();
 								return true;
 							}
 							if (fetchTracks->onlyTracks) //If there are no tracks and we want only track list - return false
 							{
-								demuxer.clear();
+								demuxer.reset();
 								return false;
 							}
 						}
@@ -60,7 +60,7 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 					}
 					if (canDoOpen && demuxer->open(url))
 						return true;
-					demuxer.clear();
+					demuxer.reset();
 					if (mod.name == scheme || demuxer.isAborted())
 						return false;
 				}

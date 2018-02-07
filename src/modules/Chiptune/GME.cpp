@@ -173,7 +173,7 @@ bool GME::open(const QString &_url, bool tracksOnly)
 	if (Reader::create(url, m_reader))
 	{
 		const QByteArray data = m_reader->read(m_reader->size());
-		m_reader.clear();
+		m_reader.reset();
 
 		gme_open_data(data.data(), data.size(), &m_gme, m_srate);
 		if (!m_gme)

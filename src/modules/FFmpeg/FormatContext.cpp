@@ -203,7 +203,7 @@ class OpenFmtCtxThr : public OpenThr
 	AVInputFormat *m_inputFmt;
 
 public:
-	inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+	inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
 		OpenThr(url, options, abortCtx),
 		m_formatCtx(formatCtx),
 		m_inputFmt(inputFmt)

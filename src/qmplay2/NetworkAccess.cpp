@@ -374,7 +374,7 @@ bool NetworkAccess::startAndWait(IOController<NetworkReply> &ioCtrl, const QStri
 	{
 		if (ioCtrl->waitForFinished() == NetworkReply::Wait::Ok)
 			return true;
-		ioCtrl.clear();
+		ioCtrl.reset();
 	}
 	return false;
 }

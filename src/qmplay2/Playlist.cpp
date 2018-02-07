@@ -80,7 +80,7 @@ Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 						IOController<Reader> &reader = playlist->ioCtrl.toRef<Reader>();
 						Reader::create(url, reader); //TODO przerywanie (po co?)
 						if (reader && reader->size() <= 0)
-							reader.clear();
+							reader.reset();
 					} break;
 					case WriteOnly:
 						playlist->ioCtrl.assign(Writer::create(url));

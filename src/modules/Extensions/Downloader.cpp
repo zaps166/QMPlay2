@@ -430,7 +430,7 @@ void DownloaderThread::run()
 					}
 				}
 			}
-			demuxer.clear();
+			demuxer.reset();
 		}
 		emit listSig(err ? DOWNLOAD_ERROR : FINISH);
 		QMPlay2Core.setWorking(false);
@@ -514,7 +514,7 @@ void DownloaderThread::run()
 				}
 			}
 		}
-		reader.clear();
+		reader.reset();
 	}
 	emit listSig(err ? DOWNLOAD_ERROR : FINISH);
 

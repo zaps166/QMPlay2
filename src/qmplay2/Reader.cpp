@@ -117,12 +117,12 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 			reader.assign(new QMPlay2FileReader);
 		else if (scheme == "QMPlay2")
 			reader.assign(new QMPlay2ResourceReader);
-		if (!reader.isNull())
+		if (reader)
 		{
 			reader->_url = url;
 			if (reader->open())
 				return true;
-			reader.clear();
+			reader.reset();
 		}
 	}
 	for (Module *module : QMPlay2Core.getPluginsInstance())
@@ -134,7 +134,7 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 					reader->_url = url;
 					if (reader->open())
 						return true;
-					reader.clear();
+					reader.reset();
 				}
 				if (reader.isAborted())
 					break;

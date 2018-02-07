@@ -25,7 +25,7 @@ extern "C"
 	#include <libavcodec/dxva2.h>
 }
 
-#include <QSharedPointer>
+#include <memory>
 
 class DXVA2Surfaces;
 struct SwsContext;
@@ -33,7 +33,7 @@ struct SwsContext;
 class FFDecDXVA2 final : public FFDecHWAccel
 {
 public:
-	using Surfaces = QSharedPointer<QVector<IDirect3DSurface9 *>>;
+	using Surfaces = std::shared_ptr<QVector<IDirect3DSurface9 *>>;
 
 	static bool loadLibraries();
 

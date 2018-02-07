@@ -304,7 +304,7 @@ void DemuxerThr::end()
 	else //wywołane z głównego wątku
 		stopVADec();
 
-	demuxer.clear();
+	demuxer.reset();
 
 	if (endMutexLocked)
 		endMutex.unlock(); //Jeżeli był zablokowany, odblokuje mutex

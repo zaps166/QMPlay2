@@ -39,7 +39,7 @@ void OpenThr::drop()
 	moveToThread(qApp->thread()); //Execute "deleteLater()" in main thread, because in this thread "processEvents()" might not be called.
 }
 
-OpenThr::OpenThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+OpenThr::OpenThr(const QByteArray &url, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
 	m_url(url),
 	m_options(options),
 	m_abortCtx(abortCtx),

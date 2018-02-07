@@ -19,9 +19,10 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include <QSharedPointer>
 #include <QPointer>
 #include <QVector>
+
+#include <memory>
 
 constexpr const char *g_radioBrowserBaseApiUrl = "http://www.radio-browser.info/webservice/json";
 
@@ -73,8 +74,8 @@ private:
 	NetworkAccess *m_net;
 	QPointer<NetworkReply> m_replySearch;
 
-	QVector<QSharedPointer<Column>> m_rows;
-	QVector<QSharedPointer<Column>> m_rowsToDisplay;
+	QVector<std::shared_ptr<Column>> m_rows;
+	QVector<std::shared_ptr<Column>> m_rowsToDisplay;
 
 	int m_sortColumnIdx;
 	Qt::SortOrder m_sortOrder;
