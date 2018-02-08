@@ -23,7 +23,7 @@
 #include <QBuffer>
 #include <QFile>
 
-#include <QDebug>
+#include <memory>
 
 class IODeviceWriter : public Writer
 {
@@ -43,7 +43,7 @@ protected:
 		return m_io->open(QIODevice::WriteOnly);
 	}
 
-	QScopedPointer<QIODevice> m_io;
+	std::unique_ptr<QIODevice> m_io;
 };
 
 /**/

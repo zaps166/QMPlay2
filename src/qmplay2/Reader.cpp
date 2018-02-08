@@ -23,6 +23,8 @@
 #include <QBuffer>
 #include <QFile>
 
+#include <memory>
+
 class IODeviceReader : public Reader
 {
 	bool readyRead() const override final
@@ -62,7 +64,7 @@ protected:
 		return m_io->open(QIODevice::ReadOnly);
 	}
 
-	QScopedPointer<QIODevice> m_io;
+	std::unique_ptr<QIODevice> m_io;
 };
 
 /**/

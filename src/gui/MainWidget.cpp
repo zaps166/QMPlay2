@@ -123,7 +123,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 		/* Touchscreen found */
 		if (touchDev->type() == QTouchDevice::TouchScreen)
 		{
-			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
+			MainWidgetTmpStyle mainWidgetTmpStyle;
+			setStyle(&mainWidgetTmpStyle);
 			break;
 		}
 	}
