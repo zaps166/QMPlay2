@@ -387,7 +387,7 @@ void EqualizerGUI::addPreset()
 		QByteArray dataArr;
 		QDataStream stream(&dataArr, QIODevice::WriteOnly);
 		stream << values;
-		sets().set("Equalizer/Preset" + name, dataArr.toBase64().data());
+		sets().set("Equalizer/Preset" + name, dataArr.toBase64().constData());
 
 		loadPresets();
 	}

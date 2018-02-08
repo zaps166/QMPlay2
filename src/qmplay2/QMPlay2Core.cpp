@@ -113,7 +113,7 @@ QString QMPlay2CoreClass::getLibDir()
 			{
 				quintptr addrBegin, addrEnd;
 				char c; //'-' on Linux, ' ' on FreeBSD
-				const int n = sscanf(line.data(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
+				const int n = sscanf(line.constData(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
 				if (n != 3)
 					continue;
 				if (funcAddr >= addrBegin && funcAddr <= addrEnd)
@@ -415,12 +415,12 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss") + "] ";
 	if (logFlags & InfoLog)
 	{
-		fprintf(stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stdout, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stdout);
 	}
 	else if (logFlags & ErrorLog)
 	{
-		fprintf(stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stderr, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stderr);
 	}
 	if (logFlags & SaveLog)

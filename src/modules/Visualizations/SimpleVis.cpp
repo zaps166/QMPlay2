@@ -239,7 +239,7 @@ void SimpleVis::sendSoundData(const QByteArray &data)
 	while (newDataPos < data.size())
 	{
 		const int size = qMin(data.size() - newDataPos, tmpData.size() - tmpDataPos);
-		fltcpy((float *)(tmpData.data() + tmpDataPos), (const float *)(data.data() + newDataPos), size);
+		fltcpy((float *)(tmpData.data() + tmpDataPos), (const float *)(data.constData() + newDataPos), size);
 		newDataPos += size;
 		tmpDataPos += size;
 		if (tmpDataPos == tmpData.size())

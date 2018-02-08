@@ -228,7 +228,7 @@ bool PortAudioWriter::startStream()
 }
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
+	const PaError e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e != paNoError)
 		fullBufferReached = false;
 	if (e == paOutputUnderflowed)

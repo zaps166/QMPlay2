@@ -698,7 +698,7 @@ void OpenGL2Common::testGLInternal()
 		if (dotIdx > 0)
 		{
 			const int vIdx = glVersionStr.lastIndexOf(' ', dotIdx);
-			if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().data(), "%d.%d", &glMajor, &glMinor) != 2)
+			if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().constData(), "%d.%d", &glMajor, &glMinor) != 2)
 				glMajor = glMinor = 0;
 		}
 	}
