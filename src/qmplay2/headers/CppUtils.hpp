@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+	Copyright (C) 2010-2017  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -16,26 +16,21 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Module.hpp>
-#include <ModuleCommon.hpp>
+#pragma once
 
-QList<QAction *> Module::getAddActions()
+#include <type_traits>
+
+template<typename T>
+void asConst(const T &t) = delete;
+
+template<typename T>
+constexpr typename std::add_const<T>::type &asConst(T &t) noexcept
 {
-	return QList<QAction *>();
+	return t;
 }
 
-Module::SettingsWidget *Module::getSettingsWidget()
-{
-	return nullptr;
-}
+template<typename T>
+void asConst(const T &&t) = delete;
 
-void Module::videoDeintSave()
-{}
-
-void Module::setInstances(bool &restartPlaying)
-{
-	QMutexLocker locker(&mutex);
-	for (ModuleCommon *mc : asConst(instances))
-		if (!mc->set())
-			restartPlaying = true;
-}
+template<typename T>
+void asConst(T &&t) = delete;

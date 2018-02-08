@@ -230,7 +230,7 @@ void LastFM::albumFinished()
 			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
 		else
 		{
-			for (const QString &size : imageSizes)
+			for (const QString &size : asConst(imageSizes))
 			{
 				int idx = reply.indexOf(size);
 				if (idx > -1)

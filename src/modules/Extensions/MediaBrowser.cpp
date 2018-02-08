@@ -361,7 +361,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_searchCB->setEditable(true);
 
 	m_providersB = new QComboBox;
-	for (const auto &m : m_mediaBrowsers)
+	for (const auto &m : asConst(m_mediaBrowsers))
 		m_providersB->addItem(m->icon(), m->name());
 	connect(m_providersB, SIGNAL(currentIndexChanged(int)), this, SLOT(providerChanged(int)));
 
@@ -414,7 +414,7 @@ MediaBrowser::MediaBrowser(Module &module) :
 }
 MediaBrowser::~MediaBrowser()
 {
-	for (const auto &m : m_mediaBrowsers)
+	for (const auto &m : asConst(m_mediaBrowsers))
 		m->finalize();
 }
 
@@ -442,7 +442,7 @@ QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img
 void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
 	if (streamUrl || icon)
-		for (const auto &m : m_mediaBrowsers)
+		for (const auto &m : asConst(m_mediaBrowsers))
 			if (m->convertAddress(prefix, url, param, streamUrl, name, icon, extension, ioCtrl))
 				break;
 }

@@ -143,7 +143,7 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
 	if (!tWI->childCount())
 		return nullptr;
-	for (int itag : itags)
+	for (int itag : asConst(itags))
 		for (int i = 0; i < tWI->childCount(); ++i)
 			if (tWI->child(i)->data(0, Qt::UserRole + 2).toInt() == itag)
 				return tWI->child(i);
@@ -367,7 +367,7 @@ QList<int> *YouTube::getQualityPresets()
 QStringList YouTube::getQualityPresetString(int qualityIdx)
 {
 	QStringList videoItags;
-	for (int itag : getQualityPresets()[qualityIdx])
+	for (int itag : asConst(getQualityPresets()[qualityIdx]))
 		videoItags.append(QString::number(itag));
 	return videoItags;
 }
@@ -1055,7 +1055,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 		{
 			QStringList simplifiedLangCodes;
 			int idx = url.indexOf("v=");
-			for (const QString &lc : langCodes)
+			for (const QString &lc : asConst(langCodes))
 			{
 				// Remove language suffix after "-" - not supported in QMPlay2
 				const int idx = lc.indexOf('-');
@@ -1112,7 +1112,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 			args["adaptive_fmts"].toString(), // contains audio or video urls
 		};
 	}
-	for (const QString &fmt : fmts)
+	for (const QString &fmt : asConst(fmts))
 	{
 		bool br = false;
 		for (const QString &stream : fmt.split(','))
@@ -1318,7 +1318,7 @@ void YouTube::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 		const QString tags[2] = {"video-id", "video-title"};
 		QStringList playlist, entries = data.mid(idx).split("yt-uix-scroller-scroll-unit", QString::SkipEmptyParts);
 		entries.removeFirst();
-		for (const QString &entry : entries)
+		for (const QString &entry : asConst(entries))
 		{
 			QStringList plistEntry;
 			for (int i = 0; i < 2; ++i)

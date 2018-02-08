@@ -234,7 +234,7 @@ public:
 		m_surfaces = surfaces;
 
 		m_videoDecoder->AddRef();
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->AddRef();
 
 		m_size = size;
@@ -245,7 +245,7 @@ private:
 	{
 		if (m_surfaces)
 		{
-			for (IDirect3DSurface9 *surface : *m_surfaces)
+			for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 				surface->Release();
 		}
 		if (m_videoDecoder)
@@ -329,7 +329,7 @@ FFDecDXVA2::~FFDecDXVA2()
 		avcodec_flush_buffers(codec_ctx);
 
 	if (m_surfaces)
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->Release();
 
 	if (m_videoDecoder)

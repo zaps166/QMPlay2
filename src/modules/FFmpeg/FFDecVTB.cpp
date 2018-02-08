@@ -59,7 +59,7 @@ public:
 	~VTBHwaccel()
 	{
 		QMutexLocker locker(&m_buffersMutex);
-		for (quintptr buffer : m_buffers)
+		for (quintptr buffer : asConst(m_buffers))
 			CVPixelBufferRelease((CVPixelBufferRef)buffer);
 		CVPixelBufferRelease(m_pixelBufferToRelease);
 	}

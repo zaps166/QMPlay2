@@ -106,7 +106,7 @@ void DeintSettingsW::writeSettings()
 	for (QObject *obj : children())
 		if (obj->isWidgetType() && !obj->property("module").isNull())
 			videoDeintModules.insert((Module *)obj->property("module").value<void *>());
-	for (Module *module : videoDeintModules)
+	for (Module *module : asConst(videoDeintModules))
 		module->videoDeintSave();
 }
 

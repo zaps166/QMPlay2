@@ -109,7 +109,7 @@ QString Functions::Url(QString url, const QString &pth)
 
 	QStringList drives;
 	QFileInfoList fIL = QDir::drives();
-	for (const QFileInfo &fI : fIL)
+	for (const QFileInfo &fI : asConst(fIL))
 		drives += getUrlScheme(fI.path());
 	if (drives.contains(scheme))
 	{

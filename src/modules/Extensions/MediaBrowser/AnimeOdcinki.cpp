@@ -216,7 +216,7 @@ NetworkReply *AnimeOdcinki::getSearchReply(const QString &text, const qint32 pag
 {
 	Q_UNUSED(page)
 	m_currentAnime.clear();
-	for (const auto &animePair : m_animePairList)
+	for (const auto &animePair : asConst(m_animePairList))
 	{
 		if (animePair.first == text)
 		{
@@ -273,7 +273,7 @@ QStringList AnimeOdcinki::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	for (const auto &animePair : m_animePairList)
+	for (const auto &animePair : asConst(m_animePairList))
 		completions.append(animePair.first);
 	return completions;
 }

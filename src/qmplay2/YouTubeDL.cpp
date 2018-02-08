@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
+#include <CppUtils.hpp>
 #include <Version.hpp>
 #ifdef Q_OS_WIN
 	#include <Functions.hpp>
@@ -109,7 +110,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				else
 				{
 					*streamUrl = "FFmpeg://{";
-					for (const QString &tmpUrl : ytdlStdout)
+					for (const QString &tmpUrl : asConst(ytdlStdout))
 						*streamUrl += "[" + tmpUrl + "]";
 					*streamUrl += "}";
 				}
@@ -119,7 +120,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 			if (extension)
 			{
 				QStringList extensions;
-				for (const QString &tmpUrl : ytdlStdout)
+				for (const QString &tmpUrl : asConst(ytdlStdout))
 				{
 					if (tmpUrl.contains("mp4"))
 						extensions += ".mp4";
@@ -136,7 +137,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				}
 				if (extensions.count() == 1)
 					*extension = extensions.at(0);
-				else for (const QString &tmpExt : extensions)
+				else for (const QString &tmpExt : asConst(extensions))
 					*extension += "[" + tmpExt + "]";
 			}
 		}
@@ -238,7 +239,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
 			// Verify if URLs has printable characters, because sometimes we
 			// can get binary garbage at output (especially on Openload).
-			for (const QString &line : result)
+			for (const QString &line : asConst(result))
 			{
 				if (line.startsWith("http"))
 				{

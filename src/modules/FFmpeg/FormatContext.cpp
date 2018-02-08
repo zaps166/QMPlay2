@@ -22,6 +22,7 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
+#include <CppUtils.hpp>
 #include <Settings.hpp>
 #include <Packet.hpp>
 
@@ -249,7 +250,7 @@ FormatContext::~FormatContext()
 {
 	if (formatCtx)
 	{
-		for (AVStream *stream : streams)
+		for (AVStream *stream : asConst(streams))
 		{
 			if (codecParams(stream) && !streamNotValid(stream))
 			{

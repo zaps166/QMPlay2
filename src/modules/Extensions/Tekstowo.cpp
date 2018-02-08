@@ -145,7 +145,7 @@ void Tekstowo::finished(NetworkReply *reply)
 			using Guess = std::tuple<QString, QString, quint8>;
 			std::vector<Guess> guesses;
 
-			for (const QString &chunk : list)
+			for (const QString &chunk : asConst(list))
 			{
 				const QString name = extractTag(chunk, "title");
 

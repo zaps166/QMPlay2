@@ -135,7 +135,7 @@ NetworkReply *Wbijam::getSearchReply(const QString &text, const qint32 page)
 	const qint32 lastTupleIdx = m_tupleIdx;
 
 	m_tupleIdx = 0;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 	{
 		const QString &name = getName(tuple);
 		const QString &url  = getUrl(tuple);
@@ -317,7 +317,7 @@ QStringList Wbijam::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 		completions += getName(tuple);
 	return completions;
 }

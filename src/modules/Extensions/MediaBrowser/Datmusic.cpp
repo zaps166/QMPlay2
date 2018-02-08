@@ -55,7 +55,7 @@ void Datmusic::prepareWidget(QTreeWidget *treeW)
 }
 void Datmusic::finalize()
 {
-	for (const QString &url : m_urlNames)
+	for (const QString &url : asConst(m_urlNames))
 		QMPlay2Core.addNameForUrl(url, QString());
 	m_urlNames.clear();
 }

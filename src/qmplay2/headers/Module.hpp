@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QMutex>
 
+#include <CppUtils.hpp>
 #include <Settings.hpp>
 
 class ModuleCommon;
@@ -124,7 +125,7 @@ template<typename T>
 void Module::setInstance()
 {
 	QMutexLocker locker(&mutex);
-	for (ModuleCommon *mc : instances)
+	for (ModuleCommon *mc : asConst(instances))
 	{
 		T *t = dynamic_cast<T *>(mc);
 		if (t)

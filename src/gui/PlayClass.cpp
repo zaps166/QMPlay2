@@ -1254,7 +1254,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 					defaultStream = i;
 				if (!lang.isEmpty() && choosenLangStream < 0)
 				{
-					for (const QMPlay2Tag &tag : streams[i]->other_info)
+					for (const QMPlay2Tag &tag : asConst(streams[i]->other_info))
 					{
 						if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
 						{

@@ -214,7 +214,7 @@ bool OpenGL2Writer::open()
 		bool hasBrightness = false, hasContrast = false, hasSharpness = false;
 		if (!drawable->videoAdjustmentKeys.isEmpty())
 		{
-			for (const QString &key : drawable->videoAdjustmentKeys)
+			for (const QString &key : asConst(drawable->videoAdjustmentKeys))
 			{
 				if (key == "Brightness")
 					hasBrightness = true;

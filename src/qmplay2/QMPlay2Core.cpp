@@ -20,6 +20,7 @@
 
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 #include <Playlist.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
@@ -257,7 +258,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		}
 
 		QStringList pluginsName;
-		for (const QFileInfo &fInfo : pluginsList)
+		for (const QFileInfo &fInfo : asConst(pluginsList))
 		{
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
@@ -334,7 +335,7 @@ void QMPlay2CoreClass::quit()
 {
 	if (settingsDir.isEmpty())
 		return;
-	for (Module *pluginInstance : pluginsInstance)
+	for (Module *pluginInstance : asConst(pluginsInstance))
 		delete pluginInstance;
 	pluginsInstance.clear();
 	videoFilters.clear();
