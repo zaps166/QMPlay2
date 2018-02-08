@@ -48,7 +48,9 @@ VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringLi
 	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
 	subtitles(nullptr)
-{}
+{
+	maybeStartThread();
+}
 VideoThr::~VideoThr()
 {
 	QMPlay2GUI.videoAdjustment->enableControls();

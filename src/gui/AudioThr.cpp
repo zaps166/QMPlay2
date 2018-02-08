@@ -51,6 +51,8 @@ AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
 
 	if (QMPlay2GUI.mainW->property("fullScreen").toBool())
 		QMPlay2GUI.screenSaver->inhibit(1);
+
+	maybeStartThread();
 }
 AudioThr::~AudioThr()
 {
