@@ -64,6 +64,8 @@ protected:
 	AVThread(PlayClass &, const QString &, Writer *writer = nullptr, const QStringList &pluginsName = {});
 	virtual ~AVThread();
 
+	void maybeStartThread();
+
 	void terminate();
 
 	PlayClass &playC;
