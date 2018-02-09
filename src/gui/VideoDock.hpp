@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -66,6 +66,7 @@ private:
 	QMenu *popupMenu;
 	QCommonStyle commonStyle;
 	int pixels;
+	Qt::KeyboardModifiers m_pressedKeyModifiers = Qt::NoModifier;
 	bool canPopup, is_floating, isBreeze, canHideIDWCursor, doubleClicked;
 	double touchZoom;
 private slots:

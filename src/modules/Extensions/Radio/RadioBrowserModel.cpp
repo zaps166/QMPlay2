@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -44,7 +45,8 @@ struct Column
 
 /**/
 
-RadioBrowserModel::RadioBrowserModel(const QWidget *widget) :
+RadioBrowserModel::RadioBrowserModel(QWidget *widget) :
+	QAbstractItemModel(widget),
 	m_widget(widget),
 	m_net(new NetworkAccess),
 	m_sortColumnIdx(0),
@@ -61,7 +63,7 @@ void RadioBrowserModel::searchRadios(const QString &text, const QString &searchB
 {
 	const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
 
-	for (const QSharedPointer<Column> &column : m_rows)
+	for (const std::shared_ptr<Column> &column : asConst(m_rows))
 		delete column->iconReply;
 	delete m_replySearch;
 
@@ -78,13 +80,13 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
 {
 	for (int i = first; i <= last; ++i)
 	{
-		Column *column = m_rowsToDisplay[i].data();
+		Column *column = m_rowsToDisplay[i].get();
 		if (!column->iconReply && !column->iconUrl.isEmpty())
 		{
 			column->iconReply = m_net->start(column->iconUrl);
-			for (QSharedPointer<Column> &c : m_rows)
+			for (const std::shared_ptr<Column> &c : asConst(m_rows))
 			{
-				if (c == column)
+				if (c.get() == column)
 					continue;
 				if (c->iconUrl == column->iconUrl)
 				{
@@ -139,7 +141,7 @@ QVariant RadioBrowserModel::data(const QModelIndex &index, int role) const
 {
 	if (index.isValid())
 	{
-		const Column *column = m_rowsToDisplay[index.row()].data();
+		const Column *column = m_rowsToDisplay[index.row()].get();
 		const int col = index.column();
 		switch (role)
 		{
@@ -211,7 +213,7 @@ Qt::ItemFlags RadioBrowserModel::flags(const QModelIndex &index) const
 }
 void RadioBrowserModel::sort(int columnIdx, Qt::SortOrder order)
 {
-	const auto sortCallback = [=](const QSharedPointer<Column> &a, const QSharedPointer<Column> &b) {
+	const auto sortCallback = [=](const std::shared_ptr<Column> &a, const std::shared_ptr<Column> &b) {
 		QString *str1 = nullptr;
 		QString *str2 = nullptr;
 		switch (columnIdx)
@@ -285,7 +287,7 @@ void RadioBrowserModel::setFiltrText(const QString &text)
 	else
 	{
 		m_rowsToDisplay.clear();
-		for (const QSharedPointer<Column> &column : m_rows)
+		for (const std::shared_ptr<Column> &column : asConst(m_rows))
 		{
 			if (column->name.contains(text, Qt::CaseInsensitive))
 				m_rowsToDisplay.append(column);
@@ -356,7 +358,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 
 					const qint32 rating = item["votes"].toString().toInt() - item["negativevotes"].toString().toInt();
 
-					m_rows.append(QSharedPointer<Column>(new Column {
+					m_rows.append(std::shared_ptr<Column>(new Column {
 						item["url"].toString(),
 						item["homepage"].toString(),
 						item["id"].toString(),
@@ -383,7 +385,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 			QPixmap *icon = nullptr;
 			for (int r = 0; r < m_rows.size(); ++r)
 			{
-				Column *column = m_rows.at(r).data();
+				Column *column = m_rows.at(r).get();
 				if (column->iconReply == reply)
 				{
 					if (!icon)

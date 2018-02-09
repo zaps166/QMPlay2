@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -216,7 +216,7 @@ NetworkReply *AnimeOdcinki::getSearchReply(const QString &text, const qint32 pag
 {
 	Q_UNUSED(page)
 	m_currentAnime.clear();
-	for (const auto &animePair : m_animePairList)
+	for (const auto &animePair : asConst(m_animePairList))
 	{
 		if (animePair.first == text)
 		{
@@ -273,7 +273,7 @@ QStringList AnimeOdcinki::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	for (const auto &animePair : m_animePairList)
+	for (const auto &animePair : asConst(m_animePairList))
 		completions.append(animePair.first);
 	return completions;
 }
@@ -422,7 +422,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 			if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
 				emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 
-			ioCtrl->clear();
+			ioCtrl->reset();
 		}
 	}
 	return true;

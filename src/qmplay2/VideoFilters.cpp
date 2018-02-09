@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -209,7 +209,7 @@ private:
 			bool pending = false;
 			do
 			{
-				for (VideoFilter *vFilter : videoFilters.filters)
+				for (VideoFilter *vFilter : asConst(videoFilters.filters))
 				{
 					pending |= vFilter->filter(queue);
 					if (queue.isEmpty())
@@ -288,7 +288,7 @@ void VideoFilters::clear()
 	if (!filters.isEmpty())
 	{
 		filtersThr.stop();
-		for (VideoFilter *vFilter : filters)
+		for (VideoFilter *vFilter : asConst(filters))
 			delete vFilter;
 		filters.clear();
 	}
@@ -327,7 +327,7 @@ void VideoFilters::clearBuffers()
 	if (!filters.isEmpty())
 	{
 		filtersThr.waitForFinished(true);
-		for (VideoFilter *vFilter : filters)
+		for (VideoFilter *vFilter : asConst(filters))
 			vFilter->clearBuffer();
 	}
 	outputQueue.clear();

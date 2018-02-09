@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -91,7 +91,7 @@ bool PCM::read(Packet &decoded, int &idx)
 	const int samples_with_channels = dataBA.size() / bytes[fmt];
 	decoded.resize(samples_with_channels * sizeof(float));
 	float *decoded_data = (float *)decoded.data();
-	ByteArray data(dataBA.data(), dataBA.size(), bigEndian);
+	ByteArray data(dataBA.constData(), dataBA.size(), bigEndian);
 	switch (fmt)
 	{
 		case PCM_U8:

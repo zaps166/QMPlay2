@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -106,7 +106,7 @@ void DeintSettingsW::writeSettings()
 	for (QObject *obj : children())
 		if (obj->isWidgetType() && !obj->property("module").isNull())
 			videoDeintModules.insert((Module *)obj->property("module").value<void *>());
-	for (Module *module : videoDeintModules)
+	for (Module *module : asConst(videoDeintModules))
 		module->videoDeintSave();
 }
 

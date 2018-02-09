@@ -49,6 +49,7 @@ set(QMPLAY2_HDR
     headers/Notifies.hpp
     headers/NotifiesTray.hpp
     headers/MkvMuxer.hpp
+    headers/CppUtils.hpp
 )
 
 set(QMPLAY2_SRC

@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -51,7 +51,7 @@
 #include <QDir>
 #include <QUrl>
 
-Q_LOGGING_CATEGORY(youtube, "Extensions::YouTube")
+Q_LOGGING_CATEGORY(youtube, "Extensions/YouTube")
 
 #define YOUTUBE_URL "https://www.youtube.com"
 
@@ -63,9 +63,16 @@ static inline QString toPercentEncoding(const QString &txt)
 	return txt.toUtf8().toPercentEncoding();
 }
 
-static inline QString getYtUrl(const QString &title, const int page, const bool sortByDate)
+static inline QString getYtUrl(const QString &title, const int page, const int sortByIdx)
 {
-	return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortByDate ? "&sp=CAI%253D" : QString()).arg(page);
+	static constexpr const char *sortBy[4] {
+		"",             // Relevance ("&sp=CAA%253D")
+		"&sp=CAI%253D", // Upload date
+		"&sp=CAM%253D", // View count
+		"&sp=CAE%253D", // Rating
+	};
+	Q_ASSERT(sortByIdx >= 0 && sortByIdx <= 3);
+	return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortBy[sortByIdx]).arg(page);
 }
 static inline QString getAutocompleteUrl(const QString &text)
 {
@@ -136,7 +143,7 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
 	if (!tWI->childCount())
 		return nullptr;
-	for (int itag : itags)
+	for (int itag : asConst(itags))
 		for (int i = 0; i < tWI->childCount(); ++i)
 			if (tWI->child(i)->data(0, Qt::UserRole + 2).toInt() == itag)
 				return tWI->child(i);
@@ -360,7 +367,7 @@ QList<int> *YouTube::getQualityPresets()
 QStringList YouTube::getQualityPresetString(int qualityIdx)
 {
 	QStringList videoItags;
-	for (int itag : getQualityPresets()[qualityIdx])
+	for (int itag : asConst(getQualityPresets()[qualityIdx]))
 		videoItags.append(QString::number(itag));
 	return videoItags;
 }
@@ -394,28 +401,35 @@ YouTube::YouTube(Module &module) :
 	searchB->setAutoRaise(true);
 
 	QToolButton *showSettingsB = new QToolButton;
-	connect(showSettingsB, SIGNAL(clicked()), this, SLOT(showSettings()));
+	connect(showSettingsB, &QToolButton::clicked, this, [] {
+		emit QMPlay2Core.showSettings("Extensions");
+	});
 	showSettingsB->setIcon(QMPlay2Core.getIconFromTheme("configure"));
 	showSettingsB->setToolTip(tr("Settings"));
 	showSettingsB->setAutoRaise(true);
 
-	QActionGroup *qualityGroup = new QActionGroup(this);
-	qualityGroup->addAction("2160p 60FPS");
-	qualityGroup->addAction("1080p 60FPS");
-	qualityGroup->addAction("720p 60FPS");
-	qualityGroup->addAction("2160p");
-	qualityGroup->addAction("1080p");
-	qualityGroup->addAction("720p");
-	qualityGroup->addAction("480p");
+	m_qualityGroup = new QActionGroup(this);
+	m_qualityGroup->addAction("2160p 60FPS");
+	m_qualityGroup->addAction("1080p 60FPS");
+	m_qualityGroup->addAction("720p 60FPS");
+	m_qualityGroup->addAction("2160p");
+	m_qualityGroup->addAction("1080p");
+	m_qualityGroup->addAction("720p");
+	m_qualityGroup->addAction("480p");
 
-	qualityMenu = new QMenu(this);
+	QMenu *qualityMenu = new QMenu(this);
 	int qualityIdx = 0;
-	for (QAction *act : qualityGroup->actions())
+	for (QAction *act : m_qualityGroup->actions())
 	{
-		connect(act, SIGNAL(triggered(bool)), this, SLOT(setQualityFromMenu()));
-		act->setObjectName(QString::number(qualityIdx++));
+		connect(act, &QAction::triggered, this, [=] {
+			sets().set("YouTube/MultiStream", true);
+			sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
+			sets().set("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
+			setItags();
+		});
 		act->setCheckable(true);
 		qualityMenu->addAction(act);
+		++qualityIdx;
 	}
 	qualityMenu->insertSeparator(qualityMenu->actions().at(3));
 
@@ -425,6 +439,43 @@ YouTube::YouTube(Module &module) :
 	qualityB->setIcon(QMPlay2Core.getIconFromTheme("video-display"));
 	qualityB->setMenu(qualityMenu);
 	qualityB->setAutoRaise(true);
+
+	m_sortByGroup = new QActionGroup(this);
+	m_sortByGroup->addAction(tr("Relevance"));
+	m_sortByGroup->addAction(tr("Upload date"));
+	m_sortByGroup->addAction(tr("View count"));
+	m_sortByGroup->addAction(tr("Rating"));
+
+	QMenu *sortByMenu = new QMenu(this);
+	int sortByIdx = 0;
+	for (QAction *act : m_sortByGroup->actions())
+	{
+		connect(act, &QAction::triggered, this, [=] {
+			if (m_sortByIdx != sortByIdx)
+			{
+				m_sortByIdx = sortByIdx;
+				sets().set("YouTube/SortBy", m_sortByIdx);
+				search();
+			}
+		});
+		act->setCheckable(true);
+		sortByMenu->addAction(act);
+		++sortByIdx;
+	}
+
+	QToolButton *sortByB = new QToolButton;
+	sortByB->setPopupMode(QToolButton::InstantPopup);
+	sortByB->setToolTip(tr("Sort search results by ..."));
+	{
+		// FIXME: Add icon
+		QFont f(sortByB->font());
+		f.setBold(true);
+		f.setPointSize(f.pointSize() - 1);
+		sortByB->setFont(f);
+		sortByB->setText("A-z");
+	}
+	sortByB->setMenu(sortByMenu);
+	sortByB->setAutoRaise(true);
 
 	resultsW = new ResultsYoutube;
 
@@ -439,11 +490,13 @@ YouTube::YouTube(Module &module) :
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(showSettingsB, 0, 0, 1, 1);
 	layout->addWidget(qualityB, 0, 1, 1, 1);
-	layout->addWidget(searchE, 0, 2, 1, 1);
-	layout->addWidget(searchB, 0, 3, 1, 1);
-	layout->addWidget(pageSwitcher, 0, 4, 1, 1);
-	layout->addWidget(resultsW, 1, 0, 1, 5);
-	layout->addWidget(progressB, 2, 0, 1, 5);
+	layout->addWidget(sortByB, 0, 2, 1, 1);
+	layout->addWidget(searchE, 0, 3, 1, 1);
+	layout->addWidget(searchB, 0, 4, 1, 1);
+	layout->addWidget(pageSwitcher, 0, 5, 1, 1);
+	layout->addWidget(resultsW, 1, 0, 1, 6);
+	layout->addWidget(progressB, 2, 0, 1, 6);
+	layout->setSpacing(3);
 	setLayout(layout);
 
 	SetModule(module);
@@ -545,6 +598,8 @@ bool YouTube::set()
 #ifdef Q_OS_WIN
 	youtubedl.replace('\\', '/');
 #endif
+	m_sortByIdx = qBound(0, sets().getInt("YouTube/SortBy"), 3);
+	m_sortByGroup->actions().at(m_sortByIdx)->setChecked(true);
 	return true;
 }
 
@@ -587,7 +642,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 						*extension = youTubeVideo[1];
 				}
 			}
-			netReply.clear();
+			netReply.reset();
 		}
 	}
 	else if (prefix == "youtube-dl")
@@ -600,7 +655,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
 			if (ioCtrl->assign(new YouTubeDL))
 			{
 				youtube_dl->addr(url, param, stream_url, name, extension);
-				ioCtrl->clear();
+				ioCtrl->reset();
 			}
 		}
 	}
@@ -622,19 +677,6 @@ QVector<QAction *> YouTube::getActions(const QString &name, double, const QStrin
 inline QString YouTube::getYtDlPath() const
 {
 	return youtubedl;
-}
-
-void YouTube::showSettings()
-{
-	emit QMPlay2Core.showSettings("Extensions");
-}
-void YouTube::setQualityFromMenu() //Call it only from quality menu!
-{
-	const int qualityIdx = sender()->objectName().toInt();
-	sets().set("YouTube/MultiStream", true);
-	sets().set("YouTube/ItagVideoList", getQualityPresetString(qualityIdx));
-	sets().set("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
-	setItags();
 }
 
 void YouTube::next()
@@ -676,9 +718,9 @@ void YouTube::search()
 	resultsW->clear();
 	if (!title.isEmpty())
 	{
-		if (lastTitle != title || sender() == searchE || sender() == searchB)
+		if (lastTitle != title || sender() == searchE || sender() == searchB || qobject_cast<QAction *>(sender()))
 			currPage = 1;
-		searchReply = net.start(getYtUrl(title, currPage, sets().getBool("YouTube/SortByDate")));
+		searchReply = net.start(getYtUrl(title, currPage, m_sortByIdx));
 		progressB->setRange(0, 0);
 		progressB->show();
 	}
@@ -774,14 +816,14 @@ void YouTube::setItags()
 				const QList<int> *qualityPresets = getQualityPresets();
 				if (resultsW->itagsVideo.mid(0, qualityPresets[i].count()) == qualityPresets[i])
 				{
-					qualityMenu->actions().at(i > _720p60 ? i + 1 : i /* Avoid separator */)->setChecked(true);
+					m_qualityGroup->actions().at(i)->setChecked(true);
 					return;
 				}
 			}
 		}
 	}
 
-	for (QAction *act : qualityMenu->actions())
+	for (QAction *act : m_qualityGroup->actions())
 		if (act->isChecked())
 			act->setChecked(false);
 }
@@ -800,13 +842,13 @@ void YouTube::setAutocomplete(const QByteArray &data)
 	const QJsonDocument json = QJsonDocument::fromJson(data, &jsonErr);
 	if (jsonErr.error != QJsonParseError::NoError)
 	{
-		qWarning(youtube) << "Cannot parse autocomplete JSON:" << jsonErr.errorString();
+		qCWarning(youtube) << "Cannot parse autocomplete JSON:" << jsonErr.errorString();
 		return;
 	}
 	const QJsonArray mainArr = json.array();
 	if (mainArr.count() < 2)
 	{
-		qWarning(youtube) << "Invalid autocomplete JSON array";
+		qCWarning(youtube) << "Invalid autocomplete JSON array";
 		return;
 	}
 	const QJsonArray arr = mainArr.at(1).toArray();
@@ -979,7 +1021,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 					const QJsonDocument json = QJsonDocument::fromJson(data.midRef(idx, i - idx + 1).toUtf8(), &jsonErr);
 					if (!json.isObject())
 					{
-						qWarning(youtube) << "Cannot parse JSON:" << jsonErr.errorString();
+						qCWarning(youtube) << "Cannot parse JSON:" << jsonErr.errorString();
 						return {};
 					}
 					else
@@ -993,8 +1035,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 	}
 	if (args.isEmpty())
 	{
-		qWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
-		return {};
+		qCWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
 	}
 
 	QString subsUrl;
@@ -1014,7 +1055,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 		{
 			QStringList simplifiedLangCodes;
 			int idx = url.indexOf("v=");
-			for (const QString &lc : langCodes)
+			for (const QString &lc : asConst(langCodes))
 			{
 				// Remove language suffix after "-" - not supported in QMPlay2
 				const int idx = lc.indexOf('-');
@@ -1071,7 +1112,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 			args["adaptive_fmts"].toString(), // contains audio or video urls
 		};
 	}
-	for (const QString &fmt : fmts)
+	for (const QString &fmt : asConst(fmts))
 	{
 		bool br = false;
 		for (const QString &stream : fmt.split(','))
@@ -1218,7 +1259,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 					ret[0] += "}";
 				}
 			}
-			youtube_dl->clear();
+			youtube_dl->reset();
 		}
 	}
 	else if (!tWI && ret.isEmpty() && youtube_dl->assign(new YouTubeDL)) //cannot find URL at normal way
@@ -1238,7 +1279,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 				name = g_cantFindTheTitle;
 			ret << stream_url << extension << name;
 		}
-		youtube_dl->clear();
+		youtube_dl->reset();
 	}
 
 	return ret;
@@ -1277,7 +1318,7 @@ void YouTube::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 		const QString tags[2] = {"video-id", "video-title"};
 		QStringList playlist, entries = data.mid(idx).split("yt-uix-scroller-scroll-unit", QString::SkipEmptyParts);
 		entries.removeFirst();
-		for (const QString &entry : entries)
+		for (const QString &entry : asConst(entries))
 		{
 			QStringList plistEntry;
 			for (int i = 0; i < 2; ++i)

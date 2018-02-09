@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -36,14 +36,17 @@ AVThread::AVThread(PlayClass &playC, const QString &writer_type, Writer *_writer
 		writer = Writer::create(writer_type, pluginsName);
 
 	mutex.lock();
-
-	if (writer)
-		start();
 }
 AVThread::~AVThread()
 {
 	delete dec;
 	delete writer;
+}
+
+void AVThread::maybeStartThread()
+{
+	if (writer)
+		start();
 }
 
 void AVThread::destroyDec()

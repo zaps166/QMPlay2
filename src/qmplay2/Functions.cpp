@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -109,7 +109,7 @@ QString Functions::Url(QString url, const QString &pth)
 
 	QStringList drives;
 	QFileInfoList fIL = QDir::drives();
-	for (const QFileInfo &fI : fIL)
+	for (const QFileInfo &fI : asConst(fIL))
 		drives += getUrlScheme(fI.path());
 	if (drives.contains(scheme))
 	{
@@ -404,7 +404,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
 		for (int j = 0; j < osd->imageCount(); j++)
 		{
 			const QMPlay2OSD::Image &img = osd->getImage(j);
-			const QImage qImg = QImage((uchar *)img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32);
+			const QImage qImg = QImage((const uchar *)img.data.constData(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32);
 			painter.drawImage(img.rect.topLeft(), rgbSwapped ? qImg.rgbSwapped() : qImg);
 		}
 		if (osd->needsRescale())

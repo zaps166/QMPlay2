@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -43,12 +43,12 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 						{
 							if (!fetchTracks->tracks.isEmpty()) //Return tracks list
 							{
-								demuxer.clear();
+								demuxer.reset();
 								return true;
 							}
 							if (fetchTracks->onlyTracks) //If there are no tracks and we want only track list - return false
 							{
-								demuxer.clear();
+								demuxer.reset();
 								return false;
 							}
 						}
@@ -60,7 +60,7 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 					}
 					if (canDoOpen && demuxer->open(url))
 						return true;
-					demuxer.clear();
+					demuxer.reset();
 					if (mod.name == scheme || demuxer.isAborted())
 						return false;
 				}

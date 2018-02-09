@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
+#include <CppUtils.hpp>
 #include <Version.hpp>
 #ifdef Q_OS_WIN
 	#include <Functions.hpp>
@@ -67,7 +68,7 @@ bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCt
 	{
 		QString newUrl, newError;
 		ytDl->addr(url, QString(), &newUrl, name, extension, error ? &newError : nullptr);
-		ytDl.clear();
+		ytDl.reset();
 		if (!newError.isEmpty() && !error->contains(newError))
 		{
 			if (!error->isEmpty())
@@ -109,7 +110,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				else
 				{
 					*streamUrl = "FFmpeg://{";
-					for (const QString &tmpUrl : ytdlStdout)
+					for (const QString &tmpUrl : asConst(ytdlStdout))
 						*streamUrl += "[" + tmpUrl + "]";
 					*streamUrl += "}";
 				}
@@ -119,7 +120,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 			if (extension)
 			{
 				QStringList extensions;
-				for (const QString &tmpUrl : ytdlStdout)
+				for (const QString &tmpUrl : asConst(ytdlStdout))
 				{
 					if (tmpUrl.contains("mp4"))
 						extensions += ".mp4";
@@ -136,7 +137,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				}
 				if (extensions.count() == 1)
 					*extension = extensions.at(0);
-				else for (const QString &tmpExt : extensions)
+				else for (const QString &tmpExt : asConst(extensions))
 					*extension += "[" + tmpExt + "]";
 			}
 		}
@@ -238,7 +239,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
 			// Verify if URLs has printable characters, because sometimes we
 			// can get binary garbage at output (especially on Openload).
-			for (const QString &line : result)
+			for (const QString &line : asConst(result))
 			{
 				if (line.startsWith("http"))
 				{
@@ -353,7 +354,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		{
 			if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
 			{
-				m_reply.clear();
+				m_reply.reset();
 				return {};
 			}
 			QMPlay2Core.setWorking(true);
@@ -361,7 +362,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 			m_reply->waitForFinished();
 			const QByteArray replyData = m_reply->readAll();
 			const bool hasError = m_reply->hasError();
-			m_reply.clear();
+			m_reply.reset();
 			if (m_aborted)
 				emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has been aborted!"), g_name, 2);
 			else if (!hasError)

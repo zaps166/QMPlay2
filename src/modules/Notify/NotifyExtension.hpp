@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -19,6 +19,8 @@
 #pragma once
 
 #include <QMPlay2Extensions.hpp>
+
+#include <memory>
 
 class NotifyService final : public QObject
 {
@@ -53,7 +55,7 @@ public:
 private:
 	bool set() override;
 
-	QScopedPointer<NotifyService> m_notifyService;
+	std::unique_ptr<NotifyService> m_notifyService;
 };
 
 #define NotifyExtensionName "Aditional Notifications"

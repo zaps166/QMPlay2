@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -304,7 +304,7 @@ void DemuxerThr::end()
 	else //wywołane z głównego wątku
 		stopVADec();
 
-	demuxer.clear();
+	demuxer.reset();
 
 	if (endMutexLocked)
 		endMutex.unlock(); //Jeżeli był zablokowany, odblokuje mutex
@@ -936,7 +936,7 @@ void DemuxerThr::emitInfo()
 		++i;
 	}
 	i = 0;
-	for (const QString &fName : playC.fileSubsList)
+	for (const QString &fName : asConst(playC.fileSubsList))
 		addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
 
 	if (!videoStreams.isEmpty())

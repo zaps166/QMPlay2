@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -45,7 +45,7 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
 				for (int i = 0; i < 2; ++i)
 				{
 					int h = -1, m = -1, s = -1, ms = -1;
-					sscanf(time[i].toLatin1().data(), scanfFmt, &h, &m, &s, &ms);
+					sscanf(time[i].toLatin1().constData(), scanfFmt, &h, &m, &s, &ms);
 					if (h > -1 && m > -1 && s > -1 && ms > -1)
 						time_double[i] = h*3600 + m*60 + s + ms/1000.0;
 					else

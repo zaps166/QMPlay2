@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -123,7 +123,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 		/* Touchscreen found */
 		if (touchDev->type() == QTouchDevice::TouchScreen)
 		{
-			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
+			MainWidgetTmpStyle mainWidgetTmpStyle;
+			setStyle(&mainWidgetTmpStyle);
 			break;
 		}
 	}
@@ -381,7 +382,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
-	for (const auto &argument : arguments)
+	for (const auto &argument : asConst(arguments))
 	{
 		const QString &param = argument.first;
 		const QString &data  = argument.second;
@@ -1601,7 +1602,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 				playlistDock->show();
 				infoDock->show();
 
-				for (QMPlay2Extensions *QMPlay2Ext : visibleQMPlay2Extensions)
+				for (QMPlay2Extensions *QMPlay2Ext : asConst(visibleQMPlay2Extensions))
 					if (!QMPlay2Ext->isVisualization())
 						if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 						{

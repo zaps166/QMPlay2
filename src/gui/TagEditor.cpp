@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -422,27 +422,27 @@ bool TagEditor::save()
 		Tag &tag = getTag(*fRef, file);
 		if (titleE->text() != tag.title().toCString(true))
 		{
-			tag.setTitle(String(titleE->text().toUtf8().data(), String::UTF8));
+			tag.setTitle(String(titleE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (artistE->text() != tag.artist().toCString(true))
 		{
-			tag.setArtist(String(artistE->text().toUtf8().data(), String::UTF8));
+			tag.setArtist(String(artistE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (albumE->text() != tag.album().toCString(true))
 		{
-			tag.setAlbum(String(albumE->text().toUtf8().data(), String::UTF8));
+			tag.setAlbum(String(albumE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (commentE->text() != tag.comment().toCString(true))
 		{
-			tag.setComment(String(commentE->text().toUtf8().data(), String::UTF8));
+			tag.setComment(String(commentE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (genreE->text() != tag.genre().toCString(true))
 		{
-			tag.setGenre(String(genreE->text().toUtf8().data(), String::UTF8));
+			tag.setGenre(String(genreE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if ((uint)yearB->value() != tag.year())
@@ -473,7 +473,7 @@ bool TagEditor::save()
 					{
 						ID3v2::AttachedPictureFrame *pictureFrame = new ID3v2::AttachedPictureFrame;
 						pictureFrame->setType(ID3v2::AttachedPictureFrame::FrontCover);
-						pictureFrame->setMimeType(pictureMimeType.data());
+						pictureFrame->setMimeType(pictureMimeType.constData());
 						pictureFrame->setPicture(*picture);
 						id3v2->addFrame(pictureFrame);
 					}
@@ -487,7 +487,7 @@ bool TagEditor::save()
 				if (hasPicture)
 				{
 					FLAC::Picture *flacPicture = new FLAC::Picture;
-					flacPicture->setMimeType(pictureMimeType.data());
+					flacPicture->setMimeType(pictureMimeType.constData());
 					flacPicture->setType(FLAC::Picture::FrontCover);
 					flacPicture->setData(*picture);
 					flacF.addPicture(flacPicture);
@@ -530,7 +530,7 @@ bool TagEditor::save()
 					if (hasPicture)
 					{
 						flacPicture = new FLAC::Picture;
-						flacPicture->setMimeType(pictureMimeType.data());
+						flacPicture->setMimeType(pictureMimeType.constData());
 						flacPicture->setType(FLAC::Picture::FrontCover);
 						flacPicture->setData(*picture);
 					}

@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -22,6 +22,7 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
+#include <CppUtils.hpp>
 #include <Settings.hpp>
 #include <Packet.hpp>
 
@@ -203,7 +204,7 @@ class OpenFmtCtxThr : public OpenThr
 	AVInputFormat *m_inputFmt;
 
 public:
-	inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+	inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
 		OpenThr(url, options, abortCtx),
 		m_formatCtx(formatCtx),
 		m_inputFmt(inputFmt)
@@ -249,7 +250,7 @@ FormatContext::~FormatContext()
 {
 	if (formatCtx)
 	{
-		for (AVStream *stream : streams)
+		for (AVStream *stream : asConst(streams))
 		{
 			if (codecParams(stream) && !streamNotValid(stream))
 			{

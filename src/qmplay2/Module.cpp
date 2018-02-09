@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -35,7 +35,7 @@ void Module::videoDeintSave()
 void Module::setInstances(bool &restartPlaying)
 {
 	QMutexLocker locker(&mutex);
-	for (ModuleCommon *mc : instances)
+	for (ModuleCommon *mc : asConst(instances))
 		if (!mc->set())
 			restartPlaying = true;
 }

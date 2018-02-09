@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -36,7 +36,7 @@ class OpenAvioThr : public OpenThr
 	AVIOContext *m_avioCtx;
 
 public:
-	inline OpenAvioThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx) :
+	inline OpenAvioThr(const QByteArray &url, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
 		OpenThr(url, options, abortCtx),
 		m_avioCtx(nullptr)
 	{

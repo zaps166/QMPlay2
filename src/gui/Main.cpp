@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -456,13 +456,36 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 }
 #endif
 
-#ifndef Q_OS_ANDROID
+static QtMessageHandler g_defaultMsgHandler = nullptr;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
-	fprintf(stderr, "%s\n", qFormatLogMessage(type, context, message).toLocal8Bit().constData());
-	fflush(stderr);
-}
+	bool qmplay2Log = false;
+	switch (type)
+	{
+		case QtWarningMsg:
+		case QtCriticalMsg:
+		case QtFatalMsg:
+			QMPlay2Core.logError(qFormatLogMessage(type, context, message), false);
+			qmplay2Log = true;
+			break;
+		case QtInfoMsg:
+			QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
+			qmplay2Log = true;
+			break;
+		default:
+			break;
+	}
+	if (!qmplay2Log)
+	{
+#ifdef Q_OS_ANDROID
+		if (g_defaultMsgHandler)
+			g_defaultMsgHandler(type, context, message);
+#else
+		fprintf(stderr, "%s\n", qFormatLogMessage(type, context, message).toLocal8Bit().constData());
+		fflush(stderr);
 #endif
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -491,11 +514,8 @@ int main(int argc, char *argv[])
 #endif
 	QCoreApplication::setApplicationName("QMPlay2");
 
-#ifndef Q_OS_ANDROID
-	qInstallMessageHandler(messageHandler);
-#endif
-
 	QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
+	g_defaultMsgHandler = qInstallMessageHandler(messageHandler);
 
 	QCommandLineParser *parser = createCmdParser(false);
 	parser->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
@@ -583,7 +603,7 @@ int main(int argc, char *argv[])
 	{
 		qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
 		QApplication::setQuitOnLastWindowClosed(false);
-		qApp->installEventFilter(new EventFilterWorkarounds);
+		qApp->installEventFilter(new EventFilterWorkarounds(qApp));
 		PanGestureEventFilter::install();
 	}
 

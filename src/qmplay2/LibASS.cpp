@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -153,7 +153,7 @@ void LibASS::setFontScale(double fs)
 
 void LibASS::addFont(const QByteArray &name, const QByteArray &data)
 {
-	ass_add_font(ass, (char *)name.data(), (char *)data.data(), data.size());
+	ass_add_font(ass, (char *)name.constData(), (char *)data.constData(), data.size());
 }
 void LibASS::clearFonts()
 {
@@ -199,7 +199,7 @@ bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
 	osd_track->PlayResY = H / dpr;
 	ass_set_frame_size(osd_renderer, W, H);
 
-	osd_event->Text = (char *)txt.data();
+	osd_event->Text = (char *)txt.constData();
 	int ch;
 	ASS_Image *img = ass_render_frame(osd_renderer, osd_track, 0, &ch);
 	osd_event->Text = nullptr;
@@ -243,7 +243,7 @@ void LibASS::initASS(const QByteArray &ass_data)
 	ass_sub_track = ass_new_track(ass);
 	if (!ass_data.isEmpty())
 	{
-		ass_process_data(ass_sub_track, (char *)ass_data.data(), ass_data.size());
+		ass_process_data(ass_sub_track, (char *)ass_data.constData(), ass_data.size());
 		hasASSData = true;
 		setASSStyle();
 	}
@@ -348,7 +348,7 @@ void LibASS::setASSStyle()
 			free(style.FontName);
 		if (fontsAndSpacing)
 		{
-			style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().data());
+			style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().constData());
 			style.FontSize = settings.getInt("Subtitles/FontSize");
 			style.Spacing = settings.getDouble("Subtitles/Linespace");
 			style.ScaleX = style.ScaleY = 1;
@@ -375,7 +375,7 @@ void LibASS::addASSEvent(const QByteArray &event)
 {
 	if (!ass_sub_track || !ass_sub_renderer || event.isEmpty())
 		return;
-	ass_process_data(ass_sub_track, (char *)event.data(), event.size());
+	ass_process_data(ass_sub_track, (char *)event.constData(), event.size());
 }
 void LibASS::addASSEvent(const QByteArray &text, double Start, double Duration)
 {
@@ -383,7 +383,7 @@ void LibASS::addASSEvent(const QByteArray &text, double Start, double Duration)
 		return;
 	int eventID = ass_alloc_event(ass_sub_track);
 	ASS_Event *event = &ass_sub_track->events[eventID];
-	event->Text = strdup(text.data());
+	event->Text = strdup(text.constData());
 	event->Start = Start * 1000;
 	event->Duration = Duration * 1000;
 	event->Style = 0;
@@ -488,7 +488,7 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 {
 	if (style->FontName)
 		free(style->FontName);
-	style->FontName = strdup(settings.getString(prefix + "/FontName").toUtf8().data());
+	style->FontName = strdup(settings.getString(prefix + "/FontName").toUtf8().constData());
 	style->FontSize = settings.getInt(prefix + "/FontSize");
 	style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.getColor(prefix + "/TextColor"));
 	style->OutlineColour = assColorFromQColor(settings.getColor(prefix + "/OutlineColor"));

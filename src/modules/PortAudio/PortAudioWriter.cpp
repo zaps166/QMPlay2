@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -279,7 +279,7 @@ bool PortAudioWriter::startStream()
 }
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
+	const PaError e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e != paNoError)
 		fullBufferReached = false;
 	if (e == paOutputUnderflowed)

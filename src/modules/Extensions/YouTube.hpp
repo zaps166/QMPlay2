@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -26,10 +26,11 @@
 #include <QPointer>
 #include <QMap>
 
+class NetworkReply;
 class QProgressBar;
+class QActionGroup;
 class QToolButton;
 class QCompleter;
-class NetworkReply;
 class YouTubeDL;
 class QSpinBox;
 class LineEdit;
@@ -112,9 +113,6 @@ public:
 	inline QString getYtDlPath() const;
 
 private slots:
-	void showSettings();
-	void setQualityFromMenu();
-
 	void next();
 	void prev();
 	void chPage();
@@ -145,7 +143,6 @@ private:
 
 	LineEdit *searchE;
 	QToolButton *searchB;
-	QMenu *qualityMenu;
 	ResultsYoutube *resultsW;
 	QProgressBar *progressB;
 	PageSwitcher *pageSwitcher;
@@ -160,6 +157,10 @@ private:
 
 	QString youtubedl;
 	bool multiStream, subtitles;
+
+	QActionGroup *m_qualityGroup = nullptr, *m_sortByGroup = nullptr;
+
+	int m_sortByIdx = 0;
 };
 
 #define YouTubeName "YouTube Browser"

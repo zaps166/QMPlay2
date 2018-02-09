@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -173,9 +173,9 @@ bool GME::open(const QString &_url, bool tracksOnly)
 	if (Reader::create(url, m_reader))
 	{
 		const QByteArray data = m_reader->read(m_reader->size());
-		m_reader.clear();
+		m_reader.reset();
 
-		gme_open_data(data.data(), data.size(), &m_gme, m_srate);
+		gme_open_data(data.constData(), data.size(), &m_gme, m_srate);
 		if (!m_gme)
 			return false;
 

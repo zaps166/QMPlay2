@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -135,7 +135,7 @@ NetworkReply *Wbijam::getSearchReply(const QString &text, const qint32 page)
 	const qint32 lastTupleIdx = m_tupleIdx;
 
 	m_tupleIdx = 0;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 	{
 		const QString &name = getName(tuple);
 		const QString &url  = getUrl(tuple);
@@ -317,7 +317,7 @@ QStringList Wbijam::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 		completions += getName(tuple);
 	return completions;
 }
@@ -521,7 +521,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 			if (!hasStreamUrl && !error.isEmpty() && !ioCtrl->isAborted())
 				emit QMPlay2Core.sendMessage(error, m_name, 3, 0);
 
-			ioCtrl->clear();
+			ioCtrl->reset();
 		}
 	}
 	return true;

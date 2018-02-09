@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -25,7 +25,7 @@ extern "C"
 	#include <libavcodec/dxva2.h>
 }
 
-#include <QSharedPointer>
+#include <memory>
 
 class DXVA2Surfaces;
 struct SwsContext;
@@ -33,12 +33,12 @@ struct SwsContext;
 class FFDecDXVA2 final : public FFDecHWAccel
 {
 public:
-	using Surfaces = QSharedPointer<QVector<IDirect3DSurface9 *>>;
+	using Surfaces = std::shared_ptr<QVector<IDirect3DSurface9 *>>;
 
 	static bool loadLibraries();
 
 	FFDecDXVA2(QMutex &avcodec_mutex, Module &module);
-        ~FFDecDXVA2();
+	~FFDecDXVA2();
 
 	bool set() override;
 

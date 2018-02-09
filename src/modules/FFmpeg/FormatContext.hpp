@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -80,7 +80,7 @@ private:
 	StreamInfo *getStreamInfo(AVStream *stream) const;
 	AVDictionary *getMetadata() const;
 
-	QSharedPointer<AbortContext> abortCtx;
+	std::shared_ptr<AbortContext> abortCtx;
 
 	QVector<int> index_map;
 	QVector<AVStream *> streams;

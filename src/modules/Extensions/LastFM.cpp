@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -230,7 +230,7 @@ void LastFM::albumFinished()
 			emit QMPlay2Core.updateCover(taa[0], taa[1], taa[2], reply);
 		else
 		{
-			for (const QString &size : imageSizes)
+			for (const QString &size : asConst(imageSizes))
 			{
 				int idx = reply.indexOf(size);
 				if (idx > -1)

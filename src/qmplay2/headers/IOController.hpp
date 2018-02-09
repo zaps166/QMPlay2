@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -27,12 +27,14 @@ public:
 	virtual void abort() {} //must be thread-safe!
 };
 
-#include <QSharedPointer>
+#include <memory>
 
 template<typename T = BasicIO>
-class IOController : public QSharedPointer<BasicIO>
+class IOController : public std::shared_ptr<BasicIO>
 {
-	Q_DISABLE_COPY(IOController)
+	IOController(const IOController &) = delete;
+	IOController &operator=(const IOController &) = delete;
+
 public:
 	IOController() = default;
 
@@ -43,7 +45,7 @@ public:
 	void abort()
 	{
 		br = true;
-		if (QSharedPointer<BasicIO> strongThis = *this)
+		if (std::shared_ptr<BasicIO> strongThis = *this)
 			strongThis->abort();
 	}
 	inline void resetAbort()
@@ -55,11 +57,11 @@ public:
 	{
 		if (br)
 		{
-			clear();
+			reset();
 			delete ptr;
 			return false;
 		}
-		QSharedPointer<BasicIO> sPtr(ptr);
+		std::shared_ptr<BasicIO> sPtr(ptr);
 		swap(sPtr);
 		return (bool)ptr;
 	}
@@ -67,11 +69,11 @@ public:
 	template<typename objT>
 	inline objT *rawPtr()
 	{
-		return static_cast<objT *>(data());
+		return static_cast<objT *>(get());
 	}
 	inline T *rawPtr()
 	{
-		return static_cast<T *>(data());
+		return static_cast<T *>(get());
 	}
 
 	template<typename objT>
@@ -87,11 +89,11 @@ public:
 
 	inline T *operator ->()
 	{
-		return static_cast<T *>(data());
+		return static_cast<T *>(get());
 	}
 	inline const T *operator ->() const
 	{
-		return static_cast<const T *>(data());
+		return static_cast<const T *>(get());
 	}
 private:
 	volatile bool br = false;

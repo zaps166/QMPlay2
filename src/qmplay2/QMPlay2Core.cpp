@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -20,6 +20,7 @@
 
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 #include <Playlist.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
@@ -112,7 +113,7 @@ QString QMPlay2CoreClass::getLibDir()
 			{
 				quintptr addrBegin, addrEnd;
 				char c; //'-' on Linux, ' ' on FreeBSD
-				const int n = sscanf(line.data(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
+				const int n = sscanf(line.constData(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
 				if (n != 3)
 					continue;
 				if (funcAddr >= addrBegin && funcAddr <= addrEnd)
@@ -257,13 +258,15 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		}
 
 		QStringList pluginsName;
-		for (const QFileInfo &fInfo : pluginsList)
+		for (const QFileInfo &fInfo : asConst(pluginsList))
 		{
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
 				QLibrary lib(fInfo.filePath());
 				// Don't override global symbols if they are different in libraries (e.g. Qt5 vs Qt4)
+#ifndef ADDRESS_SANITIZER
 				lib.setLoadHints(QLibrary::DeepBindHint);
+#endif
 				if (!lib.load())
 					log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
 				else
@@ -332,7 +335,7 @@ void QMPlay2CoreClass::quit()
 {
 	if (settingsDir.isEmpty())
 		return;
-	for (Module *pluginInstance : pluginsInstance)
+	for (Module *pluginInstance : asConst(pluginsInstance))
 		delete pluginInstance;
 	pluginsInstance.clear();
 	videoFilters.clear();
@@ -412,18 +415,18 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss") + "] ";
 	if (logFlags & InfoLog)
 	{
-		fprintf(stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stdout, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stdout);
 	}
 	else if (logFlags & ErrorLog)
 	{
-		fprintf(stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stderr, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stderr);
 	}
 	if (logFlags & SaveLog)
 	{
 		QFile logFile(logFilePath);
-		if (logFile.open(QFile::Append))
+		if (!logFilePath.isEmpty() && logFile.open(QFile::Append))
 		{
 			logFile.write(date.toUtf8() + txt.toUtf8() + '\n');
 			logFile.close();

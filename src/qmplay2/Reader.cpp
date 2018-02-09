@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -22,6 +22,8 @@
 
 #include <QBuffer>
 #include <QFile>
+
+#include <memory>
 
 class IODeviceReader : public Reader
 {
@@ -62,7 +64,7 @@ protected:
 		return m_io->open(QIODevice::ReadOnly);
 	}
 
-	QScopedPointer<QIODevice> m_io;
+	std::unique_ptr<QIODevice> m_io;
 };
 
 /**/
@@ -117,12 +119,12 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 			reader.assign(new QMPlay2FileReader);
 		else if (scheme == "QMPlay2")
 			reader.assign(new QMPlay2ResourceReader);
-		if (!reader.isNull())
+		if (reader)
 		{
 			reader->_url = url;
 			if (reader->open())
 				return true;
-			reader.clear();
+			reader.reset();
 		}
 	}
 	for (Module *module : QMPlay2Core.getPluginsInstance())
@@ -134,7 +136,7 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
 					reader->_url = url;
 					if (reader->open())
 						return true;
-					reader.clear();
+					reader.reset();
 				}
 				if (reader.isAborted())
 					break;

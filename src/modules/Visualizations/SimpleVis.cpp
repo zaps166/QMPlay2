@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -239,7 +239,7 @@ void SimpleVis::sendSoundData(const QByteArray &data)
 	while (newDataPos < data.size())
 	{
 		const int size = qMin(data.size() - newDataPos, tmpData.size() - tmpDataPos);
-		fltcpy((float *)(tmpData.data() + tmpDataPos), (const float *)(data.data() + newDataPos), size);
+		fltcpy((float *)(tmpData.data() + tmpDataPos), (const float *)(data.constData() + newDataPos), size);
 		newDataPos += size;
 		tmpDataPos += size;
 		if (tmpDataPos == tmpData.size())

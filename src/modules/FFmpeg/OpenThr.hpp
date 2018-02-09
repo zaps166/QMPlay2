@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -18,10 +18,11 @@
 
 #pragma once
 
-#include <QSharedPointer>
 #include <QWaitCondition>
 #include <QThread>
 #include <QMutex>
+
+#include <memory>
 
 class AbortContext
 {
@@ -45,7 +46,7 @@ public:
 	void drop();
 
 protected:
-	OpenThr(const QByteArray &url, AVDictionary *options, QSharedPointer<AbortContext> &abortCtx);
+	OpenThr(const QByteArray &url, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx);
 
 	bool waitForOpened() const;
 
@@ -55,7 +56,7 @@ protected:
 	AVInputFormat *m_inputFmt;
 	AVDictionary *m_options;
 
-	QSharedPointer<AbortContext> m_abortCtx;
+	std::shared_ptr<AbortContext> m_abortCtx;
 
 private:
 	bool m_finished;

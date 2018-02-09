@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -130,7 +130,7 @@ bool Pulse::write(const QByteArray &arr, bool &showError)
 {
 	int error = 0;
 	writing = true;
-	const bool ret = pa_simple_write(pulse, arr.data(), arr.size(), &error) >= 0;
+	const bool ret = pa_simple_write(pulse, arr.constData(), arr.size(), &error) >= 0;
 	writing = false;
 	if (error == PA_ERR_KILLED)
 		showError = false;

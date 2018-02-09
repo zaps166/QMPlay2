@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -230,6 +230,7 @@ void VideoDock::mousePressEvent(QMouseEvent *e)
 		QMPlay2GUI.menuBar->player->reset->trigger();
 	else if ((e->buttons() & (Qt::LeftButton | Qt::RightButton)) == (Qt::LeftButton | Qt::RightButton))
 		QMPlay2GUI.menuBar->player->switchARatio->trigger();
+	m_pressedKeyModifiers = e->modifiers();
 	DockWidget::mousePressEvent(e);
 }
 void VideoDock::mouseReleaseEvent(QMouseEvent *e)
@@ -242,7 +243,7 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 			doubleClicked = false;
 			leftButtonPlayTim.stop();
 		}
-		else if ((e->modifiers() == Qt::NoModifier) && QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
+		else if ((m_pressedKeyModifiers == Qt::NoModifier) && QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
 		{
 			leftButtonPlayTim.start(300);
 		}

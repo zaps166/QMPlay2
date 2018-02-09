@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -234,7 +234,7 @@ public:
 		m_surfaces = surfaces;
 
 		m_videoDecoder->AddRef();
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->AddRef();
 
 		m_size = size;
@@ -245,7 +245,7 @@ private:
 	{
 		if (m_surfaces)
 		{
-			for (IDirect3DSurface9 *surface : *m_surfaces)
+			for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 				surface->Release();
 		}
 		if (m_videoDecoder)
@@ -329,7 +329,7 @@ FFDecDXVA2::~FFDecDXVA2()
 		avcodec_flush_buffers(codec_ctx);
 
 	if (m_surfaces)
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->Release();
 
 	if (m_videoDecoder)
@@ -618,7 +618,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 	hr = m_decoderService->CreateSurface(surfaceW, surfaceH, m_surfaces->count() - 1, targetFmt, D3DPOOL_DEFAULT, 0, DXVA2_VideoDecoderRenderTarget, m_surfaces->data(), nullptr);
 	if (FAILED(hr))
 	{
-		m_surfaces.clear();
+		m_surfaces.reset();
 		return false;
 	}
 

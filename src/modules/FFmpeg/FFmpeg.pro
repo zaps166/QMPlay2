@@ -36,6 +36,7 @@ unix:!android {
 	SOURCES   += FFDecHWAccel.cpp HWAccelHelper.cpp
 
 #VAAPI
+	QT        += x11extras
 	PKGCONFIG += libva libva-x11 libva-glx
 	HEADERS   += FFDecVAAPI.hpp VAAPI.hpp VAAPIWriter.hpp
 	SOURCES   += FFDecVAAPI.cpp VAAPI.cpp VAAPIWriter.cpp

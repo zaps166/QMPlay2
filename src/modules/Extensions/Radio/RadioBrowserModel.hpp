@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -19,9 +19,10 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include <QSharedPointer>
 #include <QPointer>
 #include <QVector>
+
+#include <memory>
 
 constexpr const char *g_radioBrowserBaseApiUrl = "http://www.radio-browser.info/webservice/json";
 
@@ -34,7 +35,7 @@ class RadioBrowserModel final : public QAbstractItemModel
 	Q_OBJECT
 
 public:
-	RadioBrowserModel(const QWidget *widget);
+	RadioBrowserModel(QWidget *widget);
 	~RadioBrowserModel();
 
 	inline int elementHeight() const;
@@ -73,8 +74,8 @@ private:
 	NetworkAccess *m_net;
 	QPointer<NetworkReply> m_replySearch;
 
-	QVector<QSharedPointer<Column>> m_rows;
-	QVector<QSharedPointer<Column>> m_rowsToDisplay;
+	QVector<std::shared_ptr<Column>> m_rows;
+	QVector<std::shared_ptr<Column>> m_rowsToDisplay;
 
 	int m_sortColumnIdx;
 	Qt::SortOrder m_sortOrder;

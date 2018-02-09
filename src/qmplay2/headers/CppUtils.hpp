@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+	Copyright (C) 2010-2017  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -18,32 +18,19 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <type_traits>
 
-class QPainterSW final : public Module
+template<typename T>
+void asConst(const T &t) = delete;
+
+template<typename T>
+constexpr typename std::add_const<T>::type &asConst(T &t) noexcept
 {
-public:
-	QPainterSW();
-private:
-	QList<Info> getModulesInfo(const bool) const override;
-	void *createInstance(const QString &) override;
+	return t;
+}
 
-	SettingsWidget *getSettingsWidget() override;
-};
+template<typename T>
+void asConst(const T &&t) = delete;
 
-/**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-
-class ModuleSettingsWidget final : public Module::SettingsWidget
-{
-	Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
-public:
-	ModuleSettingsWidget(Module &);
-private:
-	void saveSettings() override;
-
-	QCheckBox *enabledB;
-};
+template<typename T>
+void asConst(T &&t) = delete;

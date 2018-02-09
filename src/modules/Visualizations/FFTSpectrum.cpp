@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -215,7 +215,7 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
 		const int size = qMin((data.size() - newDataPos) / (int)sizeof(float), (tmpDataSize - tmpDataPos) * w.chn);
 		if (!size)
 			break;
-		fltmix(tmpData + tmpDataPos, (const float *)(data.data() + newDataPos), size, w.chn);
+		fltmix(tmpData + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
 		newDataPos += size * sizeof(float);
 		tmpDataPos += size / w.chn;
 		if (tmpDataPos == tmpDataSize)

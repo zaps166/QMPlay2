@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -51,6 +51,8 @@ AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
 
 	if (QMPlay2GUI.mainW->property("fullScreen").toBool())
 		QMPlay2GUI.screenSaver->inhibit(1);
+
+	maybeStartThread();
 }
 AudioThr::~AudioThr()
 {
@@ -59,16 +61,16 @@ AudioThr::~AudioThr()
 
 void AudioThr::stop(bool terminate)
 {
-	for (QMPlay2Extensions *vis : visualizations)
+	for (QMPlay2Extensions *vis : asConst(visualizations))
 		vis->visState(false);
-	for (AudioFilter *filter : filters)
+	for (AudioFilter *filter : asConst(filters))
 		delete filter;
 	playC.audioSeekPos = -1;
 	AVThread::stop(terminate);
 }
 void AudioThr::clearVisualizations()
 {
-	for (QMPlay2Extensions *vis : visualizations)
+	for (QMPlay2Extensions *vis : asConst(visualizations))
 		vis->clearSoundData();
 }
 
@@ -109,9 +111,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 			sample_rate = realSample_rate;
 		}
 
-		for (QMPlay2Extensions *vis : visualizations)
+		for (QMPlay2Extensions *vis : asConst(visualizations))
 			vis->visState(true, realChannels, realSample_rate);
-		for (AudioFilter *filter : filters)
+		for (AudioFilter *filter : asConst(filters))
 			filter->setAudioParameters(realChannels, realSample_rate);
 
 		return true;
@@ -188,7 +190,7 @@ void AudioThr::run()
 			const bool hasAPackets = playC.aPackets.canFetch();
 			bool hasBufferedSamples = false;
 			if (playC.endOfStream && !hasAPackets)
-				for (AudioFilter *filter : filters)
+				for (AudioFilter *filter : asConst(filters))
 					if (filter->bufferedSamples())
 					{
 						hasBufferedSamples = true;
@@ -271,7 +273,7 @@ void AudioThr::run()
 			}
 
 			delay = writer->getParam("delay").toDouble();
-			for (AudioFilter *filter : filters)
+			for (AudioFilter *filter : asConst(filters))
 			{
 				if (flushAudio)
 					filter->clearBuffers();
@@ -356,7 +358,7 @@ void AudioThr::run()
 							data[i] *= vol[i & 1];
 					}
 
-					for (QMPlay2Extensions *vis : visualizations)
+					for (QMPlay2Extensions *vis : asConst(visualizations))
 						vis->sendSoundData(decodedChunk);
 
 					QByteArray dataToWrite;
@@ -445,6 +447,6 @@ void AudioThr::timerEvent(QTimerEvent *)
 
 void AudioThr::pauseVis(bool b)
 {
-	for (QMPlay2Extensions *vis : visualizations)
+	for (QMPlay2Extensions *vis : asConst(visualizations))
 		vis->visState(!b, realChannels, realSample_rate);
 }

@@ -1,6 +1,6 @@
 /*
 	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2017  Błażej Szczygieł
+	Copyright (C) 2010-2018  Błażej Szczygieł
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published
@@ -17,6 +17,8 @@
 */
 
 #include <Settings.hpp>
+
+#include <CppUtils.hpp>
 
 Settings::Settings(const QString &name) :
 	QSettings(QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + name + ".ini", QSettings::IniFormat)
@@ -76,7 +78,7 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 
 void Settings::flushCache()
 {
-	for (const QString &key : toRemove)
+	for (const QString &key : asConst(toRemove))
 		QSettings::remove(key);
 	toRemove.clear();
 
