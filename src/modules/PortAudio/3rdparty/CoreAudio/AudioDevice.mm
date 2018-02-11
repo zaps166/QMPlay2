@@ -153,7 +153,7 @@ static OSStatus DefaultListener(AudioObjectID inObjectID, UInt32 inNumberPropert
                 break;
             default:
                 if ((dev && !dev->listenerSilentFor)) {
-                    NSLog(msg);
+                    NSLog(@"%@", msg);
                 }
                 break;
         }
@@ -173,10 +173,10 @@ void AudioDevice::Init(AudioPropertyListenerProc lProc = DefaultListener)
     if (mID == kAudioDeviceUnknown) {
         return;
     }
-	OSStatus err = noErr;
+    OSStatus err = noErr;
 
-	// getting the device name can be surprisingly slow, so we get and cache it here
-	GetName();
+    // getting the device name can be surprisingly slow, so we get and cache it here
+    GetName();
 
     UInt32 propsize = sizeof(Float32);
 
@@ -342,9 +342,9 @@ AudioDevice::~AudioDevice()
 {
     if (mID != kAudioDeviceUnknown && mInitialised) {
         OSStatus err;
-		AudioDeviceID devId = mID;
+        AudioDeviceID devId = mID;
         // RJVB 20120902: setting the StreamFormat to the initially read values will set the channel bitdepth to 16??
-		// so we reset just the nominal sample rate.
+        // so we reset just the nominal sample rate.
         err = SetNominalSampleRate(mInitialFormat.mSampleRate);
         if (err != noErr) {
             fprintf(stderr, "Cannot reset initial settings for device %u (%s): err %s, %ld\n",
@@ -582,9 +582,9 @@ char *AudioDevice::GetName(char *buf, UInt32 maxlen)
     if (!buf) {
         buf = mDevName;
         maxlen = sizeof(mDevName) / sizeof(char);
-		if (*buf) {
-			return buf;
-		}
+        if (*buf) {
+            return buf;
+        }
     }
     AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyDeviceName,
                                               mForInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput,

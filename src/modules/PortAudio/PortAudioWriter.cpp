@@ -24,9 +24,8 @@
 #endif
 
 #ifdef Q_OS_MACOS
-	#include <QDebug>
-	#include "AudioDeviceList.h"
-	#include "AudioDevice.h"
+	#include "3rdparty/CoreAudio/AudioDeviceList.h"
+	#include "3rdparty/CoreAudio/AudioDevice.h"
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
 #else
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
@@ -36,9 +35,6 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 	stream(nullptr),
 	sample_rate(0),
 	err(false)
-#ifdef Q_OS_MACOS
-	, coreAudioDevice(nullptr)
-#endif
 {
 	addParam("delay");
 	addParam("chn");
@@ -57,7 +53,7 @@ PortAudioWriter::~PortAudioWriter()
 	if (coreAudioDevice)
 	{
 		coreAudioDevice->ResetNominalSampleRate();
-        delete coreAudioDevice;
+		delete coreAudioDevice;
 	}
 #endif
 	close();

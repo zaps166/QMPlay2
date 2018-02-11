@@ -55,6 +55,12 @@
 #include <qglobal.h>
 
 #ifndef DEPRECATED_LISTENER_API
+#	if !defined(__MAC_10_11)
+#		define __MAC_10_11 101100
+#	endif
+#	if !defined(MAC_OS_X_VERSION_10_11)
+#		define MAC_OS_X_VERSION_10_11 101100
+#	endif
 #	if !QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__MAC_10_11)
 #		define DEPRECATED_LISTENER_API
 #		warning "Using the deprecated PropertyListener API; at least it works"

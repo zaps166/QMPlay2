@@ -71,7 +71,7 @@ private:
 	bool err, fullBufferReached;
 	int underflows;
 #ifdef Q_OS_MACOS
-	AudioDevice *coreAudioDevice;
+	AudioDevice *coreAudioDevice = nullptr;
 #endif
 };
 

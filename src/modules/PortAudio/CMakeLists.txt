@@ -18,7 +18,6 @@ if(APPLE)
         3rdparty/CoreAudio/AudioDevice.mm
         3rdparty/CoreAudio/AudioDeviceList.cpp
     )
-    include_directories(3rdparty/CoreAudio)
 endif()
 
 set(PortAudio_RESOURCES

@@ -108,5 +108,7 @@ void ModuleSettingsWidget::saveSettings()
 	sets().set("WriterEnabled", enabledB->isChecked());
 	sets().set("OutputDevice", devicesB->currentIndex() == 0 ? QString() : devicesB->currentText());
 	sets().set("Delay", delayB->value());
+#ifdef Q_OS_MACOS
 	sets().set("BitPerfect", bitPerfect->isChecked());
+#endif
 }
