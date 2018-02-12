@@ -34,3 +34,20 @@ void asConst(const T &&t) = delete;
 
 template<typename T>
 void asConst(T &&t) = delete;
+
+
+template <typename... Args>
+struct Overload
+{
+	template <typename R, typename T>
+	constexpr auto operator()(R (T::*ptr)(Args...)) const noexcept -> decltype(ptr)
+	{
+		return ptr;
+	}
+
+	template <typename R, typename T>
+	static constexpr auto of(R (T::*ptr)(Args...)) noexcept -> decltype(ptr)
+	{
+		return ptr;
+	}
+};
