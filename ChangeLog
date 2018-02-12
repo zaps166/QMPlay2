@@ -1,4 +1,6 @@
-Changes in QMPlay2 build 18.02.05:
+Changes in QMPlay2 build 18.02.12:
+	- add option to automatically perform non-recursive quick sync on playlist group,
+	- add bit-perfect audio option for PortAudio module on macOS (René Bertin),
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
 	- allow to move video and subtitles in OpenGL2 video output,
