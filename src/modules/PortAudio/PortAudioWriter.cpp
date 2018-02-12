@@ -26,9 +26,9 @@
 #ifdef Q_OS_MACOS
 	#include "3rdparty/CoreAudio/AudioDeviceList.h"
 	#include "3rdparty/CoreAudio/AudioDevice.h"
-	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
+	constexpr double g_defaultHighAudioDelay = 0.2;
 #else
-	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
+	constexpr double g_defaultHighAudioDelay = 0.1;
 #endif
 
 PortAudioWriter::PortAudioWriter(Module &module) :
@@ -280,10 +280,10 @@ inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 		fullBufferReached = false;
 	if (e == paOutputUnderflowed)
 	{
-		if (outputParameters.suggestedLatency < DEFAULT_HIGH_AUDIO_DELAY && ++underflows >= 10)
+		if (outputParameters.suggestedLatency < g_defaultHighAudioDelay && ++underflows >= 10)
 		{
 			// Increase delay and try again - useful e.g. on VirtualBox and Bluetooth audio.
-			outputParameters.suggestedLatency = DEFAULT_HIGH_AUDIO_DELAY;
+			outputParameters.suggestedLatency = g_defaultHighAudioDelay;
 			if (!reopenStream())
 				return false;
 			return true;
