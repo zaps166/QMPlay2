@@ -26,6 +26,7 @@
 #include <QThread>
 
 class QLabel;
+class QProcess;
 class QGridLayout;
 class QProgressBar;
 class QTreeWidgetItem;
@@ -35,7 +36,7 @@ class DownloadItemW final : public QWidget
 {
 	Q_OBJECT
 public:
-	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon = QIcon(), QDataStream *stream = nullptr);
+	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString command);
 	~DownloadItemW();
 
 	void setName(const QString &);
@@ -71,6 +72,9 @@ private slots:
 private:
 	void downloadStop(bool);
 
+	void startConversion();
+	void deleteConvertProcess();
+
 	DownloaderThread *downloaderThr;
 
 	QLabel *titleL, *sizeL, *iconL;
@@ -83,10 +87,14 @@ private:
 
 		QLabel *speedL;
 		QProgressBar *progressB;
-	} *speedProgressW;
+	} *speedProgressW = nullptr;
 
-	bool finished, readyToPlay;
+	QProcess *m_convertProcess = nullptr;
+	QMetaObject::Connection m_convertProcessConn[2];
+	bool finished, readyToPlay, m_needsConversion = false;
+	QString m_convertCommand;
 	QString filePath;
+	QString m_convertedFilePath;
 };
 
 /**/
@@ -110,13 +118,10 @@ class DownloaderThread final : public QThread
 	Q_OBJECT
 	enum {ADD_ENTRY, NAME, SET, SET_POS, SET_SPEED, DOWNLOAD_ERROR, FINISH};
 public:
-	DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString());
+	DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString(), const QString &command = QString());
 	~DownloaderThread();
 
-	void write(QDataStream &stream)
-	{
-		stream << url << prefix << param;
-	}
+	void serialize(QDataStream &stream);
 signals:
 	void listSig(int, qint64 val = 0, const QString &filePath = QString());
 private slots:
@@ -128,7 +133,7 @@ private:
 
 	QIcon getIcon();
 
-	QString url, name, prefix, param;
+	QString url, name, prefix, param, command;
 	DownloadItemW *downloadItemW;
 	DownloadListW *downloadLW;
 	QTreeWidgetItem *item;
@@ -151,6 +156,11 @@ public:
 
 	QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
+private:
+	void addConvertPreset();
+	void editConvertAction();
+	bool modifyConvertAction(QAction *action, bool addRemoveButton = true);
+
 private slots:
 	void setDownloadsDir();
 	void clearFinished();
@@ -159,11 +169,16 @@ private slots:
 	void itemDoubleClicked(QTreeWidgetItem *);
 
 private:
+	Settings m_sets;
+
 	DockWidget *dw;
 
 	QGridLayout *layout;
 	DownloadListW *downloadLW;
 	QToolButton *setDownloadsDirB, *clearFinishedB, *addUrlB;
+
+	QToolButton *m_convertsPresetsB;
+	QMenu *m_convertsMenu;
 };
 
 #define DownloaderName "QMPlay2 Downloader"
