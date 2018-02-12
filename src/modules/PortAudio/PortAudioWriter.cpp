@@ -24,6 +24,8 @@
 #endif
 
 #ifdef Q_OS_MACOS
+	#include "3rdparty/CoreAudio/AudioDeviceList.h"
+	#include "3rdparty/CoreAudio/AudioDevice.h"
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
 #else
 	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
@@ -47,6 +49,13 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 }
 PortAudioWriter::~PortAudioWriter()
 {
+#ifdef Q_OS_MACOS
+	if (coreAudioDevice)
+	{
+		coreAudioDevice->ResetNominalSampleRate();
+		delete coreAudioDevice;
+	}
+#endif
 	close();
 }
 
@@ -191,7 +200,30 @@ void PortAudioWriter::pause()
 
 QString PortAudioWriter::name() const
 {
-	return PortAudioWriterName;
+	QString name = PortAudioWriterName;
+	if (stream)
+	{
+		if (const PaDeviceInfo *dInfo = Pa_GetDeviceInfo(outputParameters.device))
+		{
+			name += QStringLiteral(" (%1").arg(dInfo->name);
+			if (const PaHostApiInfo *hInfo = Pa_GetHostApiInfo(dInfo->hostApi))
+			{
+				name += QStringLiteral("; %1").arg(hInfo->name);
+			}
+			name += ")";
+		}
+#ifdef Q_OS_MACOS
+		if (const PaStreamInfo *strInfo = Pa_GetStreamInfo(stream))
+		{
+			name += QStringLiteral(", %1Hz").arg(strInfo->sampleRate);
+		}
+		if (coreAudioDevice)
+		{
+			name += QStringLiteral(" -> %1Hz").arg(coreAudioDevice->CurrentNominalSampleRate());
+		}
+#endif
+	}
+	return name;
 }
 
 bool PortAudioWriter::open()
@@ -209,6 +241,21 @@ bool PortAudioWriter::openStream()
 		stream = newStream;
 		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
 		modParam("delay", outputLatency);
+#ifdef Q_OS_MACOS
+		if (sets().getBool("BitPerfect"))
+		{
+			const QString devName(Pa_GetDeviceInfo(outputParameters.device)->name);
+			const AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
+			if (devDict.contains(devName))
+			{
+				coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
+				if (coreAudioDevice)
+				{
+					coreAudioDevice->SetNominalSampleRate(sample_rate);
+				}
+			}
+		}
+#endif
 		return true;
 	}
 	return false;

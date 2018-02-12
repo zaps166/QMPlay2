@@ -53,4 +53,7 @@ private:
 	QCheckBox *enabledB;
 	QComboBox *devicesB;
 	QDoubleSpinBox *delayB;
+#ifdef Q_OS_MACOS
+	QCheckBox *bitPerfect;
+#endif
 };
