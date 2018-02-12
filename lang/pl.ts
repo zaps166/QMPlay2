@@ -1756,6 +1756,14 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Wyłącz, jeżeli masz problemy z dekodowaniem filmów MPEG4 (DivX5)</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation>Ustawia wybrane urządzenie wyjściowe na częstotliwość próbkowania odtwarzanej zawartości</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2417,6 +2425,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>&amp;Quick group synchronization</source>
         <translation>&amp;Szybka synchronizacja grupy</translation>
+    </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation>&amp;Zawsze synchronizuj</translation>
     </message>
 </context>
 <context>

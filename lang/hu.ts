@@ -1753,6 +1753,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>XVideo outputs</source>
         <translation>XVideo kimenetek</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2414,6 +2422,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>&amp;Properties</source>
         <translation>&amp;Tulajdonságok</translation>
+    </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

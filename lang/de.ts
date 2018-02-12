@@ -1756,6 +1756,14 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Deaktivieren, wenn Sie Probleme mit der Decodierung von MPEG4 (DivX5) Videos haben</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2417,6 +2425,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <message>
         <source>&amp;Quick group synchronization</source>
         <translation>&amp;Schnelle Gruppensynchronisation</translation>
+    </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
