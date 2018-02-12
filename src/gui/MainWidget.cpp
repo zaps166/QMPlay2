@@ -761,6 +761,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playlist->newGroup, SIGNAL(triggered()), playlistDock, SLOT(newGroup()));
 	connect(menuBar->playlist->renameGroup, SIGNAL(triggered()), playlistDock, SLOT(renameGroup()));
 	connect(menuBar->playlist->lock, SIGNAL(triggered()), playlistDock, SLOT(toggleLock()));
+	connect(menuBar->playlist->alwaysSync, &QAction::triggered, playlistDock, &PlaylistDock::alwaysSyncTriggered);
 	connect(menuBar->playlist->delEntries, SIGNAL(triggered()), playlistDock, SLOT(delEntries()));
 	connect(menuBar->playlist->delNonGroupEntries, SIGNAL(triggered()), playlistDock, SLOT(delNonGroupEntries()));
 	connect(menuBar->playlist->clear, SIGNAL(triggered()), playlistDock, SLOT(clear()));

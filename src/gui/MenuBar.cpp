@@ -138,6 +138,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
 	newAction(Playlist::tr("Save &group"), this, saveGroup, false, QIcon(), false);
 	addSeparator();
 	newAction(QString(), this, lock, false, QIcon(), false);
+	newAction(Playlist::tr("&Always sync"), this, alwaysSync, false, QIcon(), true);
 	addSeparator();
 	newAction(Playlist::tr("&Remove selected entries"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
 	newAction(Playlist::tr("Remove entries &without groups"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);

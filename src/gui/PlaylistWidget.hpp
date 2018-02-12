@@ -92,6 +92,11 @@ public:
 
 	AddThr(PlaylistWidget &pLW);
 
+	inline bool isInProgress() const
+	{
+		return inProgress;
+	}
+
 	void setData(const QStringList &_urls, const QStringList &_existingEntries, QTreeWidgetItem *_par, bool _loadList, SYNC = NO_SYNC);
 	void setDataForSync(const QString &, QTreeWidgetItem *, bool);
 
@@ -140,7 +145,7 @@ public:
 	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = {}, bool loadList = false, bool forceEnqueue = false);
 	bool add(const QStringList &, bool atEndOfList = false);
 	void sync(const QString &pth, QTreeWidgetItem *par, bool notDir);
-	void quickSync(const QString &pth, QTreeWidgetItem *par);
+	void quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive);
 
 	void setCurrentPlaying(QTreeWidgetItem *tWI);
 
@@ -183,6 +188,8 @@ public:
 		return tWI ? tWI->data(0, Qt::UserRole + 1).toInt() : 0;
 	}
 
+	static bool isAlwaysSynced(QTreeWidgetItem *tWI, bool parentOnly = false);
+
 	static void setEntryFont(QTreeWidgetItem *tWI, const int flags);
 private:
 	QTreeWidgetItem *newGroup(const QString &name, const QString &url, QTreeWidgetItem *parent, int insertChildAt, QStringList *existingEntries);
@@ -190,7 +197,7 @@ private:
 
 	void setEntryIcon(const QIcon &icon, QTreeWidgetItem *);
 
-	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh);
+	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive);
 
 	void mouseMoveEvent(QMouseEvent *) override;
 	void dragEnterEvent(QDragEnterEvent *) override;

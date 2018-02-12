@@ -58,7 +58,7 @@ private:
 
 	inline bool isRandomPlayback() const;
 
-	void doGroupSync(bool quick);
+	void doGroupSync(bool quick, QTreeWidgetItem *tWI, bool quickRecursive = true);
 
 	void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
 
@@ -75,6 +75,7 @@ private:
 private slots:
 	void itemDoubleClicked(QTreeWidgetItem *);
 	void addAndPlay(QTreeWidgetItem *);
+	void maybeDoQuickSync(QTreeWidgetItem *item);
 public slots:
 	void stopLoading();
 	void next(bool playingError = false);
@@ -82,6 +83,7 @@ public slots:
 	void skip();
 	void stopAfter();
 	void toggleLock();
+	void alwaysSyncTriggered(bool checked);
 	void start();
 	void clearCurrentPlaying();
 	void setCurrentPlaying();

@@ -56,6 +56,7 @@ PlaylistDock::PlaylistDock() :
 
 	connect(list, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(itemDoubleClicked(QTreeWidgetItem *)));
 	connect(list, SIGNAL(returnItem(QTreeWidgetItem *)), this, SLOT(addAndPlay(QTreeWidgetItem *)));
+	connect(list, &PlaylistWidget::itemExpanded, this, &PlaylistDock::maybeDoQuickSync);
 	connect(list, SIGNAL(visibleItemsCount(int)), this, SLOT(visibleItemsCount(int)));
 	connect(list, SIGNAL(addStatus(bool)), findE, SLOT(setDisabled(bool)));
 	connect(findE, SIGNAL(textChanged(const QString &)), this, SLOT(findItems(const QString &)));
@@ -200,9 +201,8 @@ inline bool PlaylistDock::isRandomPlayback() const
 	return (repeatMode == RandomMode || repeatMode == RandomGroupMode || repeatMode == RepeatRandom || repeatMode == RepeatRandomGroup);
 }
 
-void PlaylistDock::doGroupSync(bool quick)
+void PlaylistDock::doGroupSync(bool quick, QTreeWidgetItem *tWI, bool quickRecursive)
 {
-	QTreeWidgetItem *tWI = list->currentItem();
 	if (!tWI || !PlaylistWidget::isGroup(tWI))
 		return;
 	QString pth = tWI->data(0, Qt::UserRole).toString();
@@ -228,7 +228,7 @@ void PlaylistDock::doGroupSync(bool quick)
 	else if (pthInfo.isDir())
 	{
 		findE->clear();
-		list->quickSync(pth, tWI);
+		list->quickSync(pth, tWI, quickRecursive);
 	}
 }
 
@@ -275,6 +275,13 @@ void PlaylistDock::addAndPlay(QTreeWidgetItem *tWI)
 	playAfterAdd = false;
 	list->setCurrentItem(tWI);
 	start();
+}
+void PlaylistDock::maybeDoQuickSync(QTreeWidgetItem *item)
+{
+	QTimer::singleShot(0, this, [=] { // Go through event queue
+		if (list->canModify() && PlaylistWidget::isAlwaysSynced(item) && list->getChildren(PlaylistWidget::ONLY_GROUPS).contains(item))
+			doGroupSync(true, item, false);
+	});
 }
 
 void PlaylistDock::stopLoading()
@@ -429,6 +436,26 @@ void PlaylistDock::toggleLock()
 		tWI->setData(0, Qt::UserRole + 1, entryFlags);
 	}
 	list->modifyMenu();
+}
+void PlaylistDock::alwaysSyncTriggered(bool checked)
+{
+	bool mustUpdateMenu = false;
+	for (QTreeWidgetItem *tWI : list->selectedItems())
+	{
+		int entryFlags = PlaylistWidget::getFlags(tWI);
+		if (PlaylistWidget::isAlwaysSynced(tWI, true))
+		{
+			mustUpdateMenu = (list->currentItem() == tWI);
+			continue;
+		}
+		if (checked)
+			entryFlags |= Playlist::Entry::AlwaysSync;
+		else
+			entryFlags &= ~Playlist::Entry::AlwaysSync;
+		tWI->setData(0, Qt::UserRole + 1, entryFlags);
+	}
+	if (mustUpdateMenu)
+		list->modifyMenu();
 }
 void PlaylistDock::start()
 {
@@ -634,11 +661,11 @@ void PlaylistDock::visibleItemsCount(int count)
 }
 void PlaylistDock::syncCurrentFolder()
 {
-	doGroupSync(false);
+	doGroupSync(false, list->currentItem());
 }
 void PlaylistDock::quickSyncCurrentFolder()
 {
-	doGroupSync(true);
+	doGroupSync(true, list->currentItem());
 }
 void PlaylistDock::repeat()
 {

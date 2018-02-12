@@ -34,7 +34,8 @@ public:
 			Selected = 0x1,
 			Skip = 0x2,
 			StopAfter = 0x4,
-			Locked = 0x8
+			Locked = 0x8,
+			AlwaysSync = 0x10,
 		};
 
 		Entry() = default;

@@ -626,12 +626,12 @@ void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 	if (canModify())
 		addThr.setDataForSync(pth, par, notDir);
 }
-void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par)
+void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive)
 {
 	if (canModify())
 	{
 		bool mustRefresh = false;
-		quickSyncScanDirs(pth, par, mustRefresh);
+		quickSyncScanDirs(pth, par, mustRefresh, recursive);
 		if (mustRefresh && canModify())
 		{
 			refresh();
@@ -738,7 +738,7 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const 
 
 bool PlaylistWidget::canModify(bool all) const
 {
-	if (addThr.isRunning())
+	if (addThr.isInProgress())
 		return false;
 	if (all)
 	{
@@ -857,6 +857,19 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 	}
 }
 
+bool PlaylistWidget::isAlwaysSynced(QTreeWidgetItem *tWI, bool parentOnly)
+{
+	if (QTreeWidgetItem *item = ((parentOnly && tWI) ? tWI->parent() : tWI))
+	{
+		do
+		{
+			if (PlaylistWidget::getFlags(item) & Playlist::Entry::AlwaysSync)
+				return true;
+		} while ((item = item->parent()));
+	}
+	return false;
+}
+
 void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
 {
 	QFont font = tWI->font(0);
@@ -917,7 +930,7 @@ void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
 	}
 }
 
-void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh)
+void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive)
 {
 	QStringList dirEntries = getDirEntries(pth);
 	QStringList existingEntries;
@@ -935,11 +948,11 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 		{
 			existingEntries.prepend(itemFileName);
 			dirEntries.removeAt(urlIdx);
-			if (isGroup)
+			if (isGroup && recursive)
 			{
 				if (!fullPth.endsWith('/'))
 					fullPth.append('/');
-				quickSyncScanDirs(fullPth, item, mustRefresh);
+				quickSyncScanDirs(fullPth, item, mustRefresh, recursive);
 			}
 		}
 		else
@@ -1117,24 +1130,28 @@ void PlaylistWidget::modifyMenu()
 	QString entryUrl = getUrl();
 	QString entryName;
 	double entryLength = -2.0;
-	if (currentItem())
-	{
-		entryName = currentItem()->text(0);
-		entryLength = currentItem()->data(2, Qt::UserRole).toDouble();
-	}
 
 	QTreeWidgetItem *currItem = currentItem();
 
+	if (currItem)
+	{
+		entryName = currItem->text(0);
+		entryLength = currItem->data(2, Qt::UserRole).toDouble();
+	}
+
 	const bool isLocked = (getFlags(currItem) & Playlist::Entry::Locked);
 	const bool isItemGroup = isGroup(currItem);
-	const bool syncVisible = (currItem && isItemGroup && !entryUrl.isEmpty());
+	const bool syncVisible = (isItemGroup && !entryUrl.isEmpty());
 
-	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->saveGroup->setVisible(isItemGroup);
 	playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
 	playlistMenu()->lock->setVisible(currItem);
+	playlistMenu()->alwaysSync->setChecked(isItemGroup && isAlwaysSynced(currItem));
+	playlistMenu()->alwaysSync->setVisible(isItemGroup);
+	playlistMenu()->alwaysSync->setEnabled(isItemGroup && !isAlwaysSynced(currItem, true));
 	playlistMenu()->sync->setVisible(syncVisible);
 	playlistMenu()->quickSync->setVisible(syncVisible && QFileInfo(QString(entryUrl).remove("file://")).isDir());
-	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->renameGroup->setVisible(isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
 	playlistMenu()->queue->setVisible(currItem && !isItemGroup);
 	playlistMenu()->skip->setVisible(currItem && !isItemGroup);
