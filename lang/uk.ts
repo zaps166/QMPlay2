@@ -5,7 +5,7 @@
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -1758,11 +1758,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Звук BitPerfect</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлює вибраний вихідний пристрій на частоту дискретизації відтворюваного вмісту</translation>
     </message>
 </context>
 <context>
@@ -2234,7 +2234,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
     </message>
 </context>
 <context>
@@ -2428,7 +2428,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Завжди синхронізувати</translation>
     </message>
 </context>
 <context>
@@ -2473,7 +2473,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2484,7 +2484,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2624,19 +2624,19 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити список радіостанцій з файлу</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберети список радіостанцій у файл</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити список радіостанцій</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберети список радіостанцій</translation>
     </message>
 </context>
 <context>
@@ -3312,23 +3312,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Relevance</source>
-        <translation type="unfinished"></translation>
+        <translation>Точність</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата завантаження</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість переглядів</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished">Рейтинг</translation>
+        <translation>Рейтинг</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортувати результати пошуку за...</translation>
     </message>
 </context>
 <context>
