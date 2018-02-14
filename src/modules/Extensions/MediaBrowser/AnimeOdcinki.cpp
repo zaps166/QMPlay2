@@ -23,14 +23,17 @@
 #include <YouTubeDL.hpp>
 
 #include <QTextDocumentFragment>
+#include <QLoggingCategory>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTreeWidget>
+#include <QJsonArray>
 
-using EmbeddedPlayers = std::vector<QJsonObject>;
+Q_LOGGING_CATEGORY(animeodcinki, "AnimeOdcinki")
 
 constexpr const char *g_url = "https://a-o.ninja/anime/";
 constexpr const char *g_linkexpander = "http://www.linkexpander.com/get_url.php";
+constexpr const char *g_serverPrioritiesUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/AnimeOdcinki.json";
 
 static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeOdcinki::AnimePair *episodeImgDescr)
 {
@@ -113,53 +116,6 @@ static QByteArray getAdFlyUrl(const QByteArray &data)
 			return data.mid(idx1, idx2 - idx1);
 	}
 	return QByteArray();
-}
-
-static EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data)
-{
-	EmbeddedPlayers ret;
-
-	for (int pos = 0; ;)
-	{
-		int idx1 = data.indexOf("data-hash='", pos);
-		if (idx1 < 0)
-			break;
-
-		idx1 += 11;
-
-		int idx2 = data.indexOf("'", idx1);
-		if (idx2 < 0)
-			break;
-
-		QJsonDocument json = QJsonDocument::fromJson(data.mid(idx1, idx2 - idx1));
-		if (json.isObject())
-		{
-			idx1 = idx2 + 2;
-			idx2 = data.indexOf("<", idx1);
-			if (idx2 > -1)
-			{
-				QByteArray name = data.mid(idx1, idx2 - idx1).simplified().toLower();
-				const int idx = name.indexOf(' ');
-				if (idx > -1)
-					name = name.left(name.indexOf(' '));
-
-				const bool isGoogle   = (name == "google");
-				const bool isOpenload = (name == "openload");
-				const bool isVk       = (name == "vk");
-				const bool isVIDFile  = (name == "vidfile");
-				const bool isTune     = (name == "tune");
-
-				if (isOpenload || isVIDFile || isTune)
-					ret.push_back(json.object());
-				else if (isVk || isGoogle)
-					ret.insert(ret.begin(), json.object());
-			}
-		}
-
-		pos = idx2;
-	}
-
-	return ret;
 }
 
 static inline QString decryptUrl(const QString &saltHex, const QString &cipheredBase64)
@@ -285,7 +241,7 @@ void AnimeOdcinki::setCompleterListCallback(const CompleterReadyCallback &callba
 		if (m_animePairList.isEmpty() && !m_animeListReply)
 		{
 			m_animeListReply = start(g_url);
-			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
+			connect(m_animeListReply.data(), &NetworkReply::finished, this, &AnimeOdcinki::gotAnimeList);
 		}
 		else if (!m_animePairList.isEmpty())
 		{
@@ -398,6 +354,7 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 
 			if (!hasStreamUrl && !ioCtrl->isAborted())
 			{
+				maybeFetchConfiguration(netReply);
 				for (const QJsonObject &json : getEmbeddedPlayers(reply))
 				{
 					QString playerUrl = decryptUrl(json["v"].toString(), json["a"].toString());
@@ -426,6 +383,71 @@ bool AnimeOdcinki::convertAddress(const QString &prefix, const QString &url, con
 		}
 	}
 	return true;
+}
+
+void AnimeOdcinki::maybeFetchConfiguration(IOController<NetworkReply> &netReply)
+{
+	if (!m_serverPriorities.isEmpty())
+		return;
+
+	NetworkAccess net;
+	if (net.startAndWait(netReply, g_serverPrioritiesUrl))
+	{
+		const QJsonArray array = QJsonDocument::fromJson(netReply->readAll()).array();
+		for (const QJsonValue &v : array)
+		{
+			const QJsonObject o = v.toObject();
+			const QString name = o["Name"].toString();
+			const int priority = o["Priority"].toInt(-1);
+			if (!name.isEmpty() && (priority == 0 || priority == 1))
+				m_serverPriorities[name] = priority;
+		}
+		netReply.reset();
+	}
+
+	if (m_serverPriorities.isEmpty())
+		qCWarning(animeodcinki) << "Can't fetch server priorities";
+}
+AnimeOdcinki::EmbeddedPlayers AnimeOdcinki::getEmbeddedPlayers(const QByteArray &data) const
+{
+	EmbeddedPlayers ret;
+
+	for (int pos = 0; ;)
+	{
+		int idx1 = data.indexOf("data-hash='", pos);
+		if (idx1 < 0)
+			break;
+
+		idx1 += 11;
+
+		int idx2 = data.indexOf("'", idx1);
+		if (idx2 < 0)
+			break;
+
+		QJsonDocument json = QJsonDocument::fromJson(data.mid(idx1, idx2 - idx1));
+		if (json.isObject())
+		{
+			idx1 = idx2 + 2;
+			idx2 = data.indexOf("<", idx1);
+			if (idx2 > -1)
+			{
+				QByteArray name = data.mid(idx1, idx2 - idx1).simplified().toLower();
+				const int idx = name.indexOf(' ');
+				if (idx > -1)
+					name = name.left(name.indexOf(' '));
+
+				const int priority = m_serverPriorities.value(name, -1);
+				if (m_serverPriorities.isEmpty() || priority == 1)
+					ret.push_back(json.object());
+				else if (priority == 0)
+					ret.push_front(json.object());
+			}
+		}
+
+		pos = idx2;
+	}
+
+	return ret;
 }
 
 void AnimeOdcinki::gotAnimeList()
