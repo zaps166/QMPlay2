@@ -23,12 +23,19 @@
 #include <YouTubeDL.hpp>
 
 #include <QTextDocumentFragment>
+#include <QLoggingCategory>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QJsonArray>
 #include <QRegExp>
 
 #include <algorithm>
 
+Q_LOGGING_CATEGORY(wbijam, "Wbijam")
+
+constexpr const char *g_serverPrioritiesUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Wbijam.json";
 constexpr const char *g_inneUrl = "http://www.inne.wbijam.pl/";
 
 static inline QString getName(const Wbijam::AnimeTuple &tuple)
@@ -329,7 +336,7 @@ void Wbijam::setCompleterListCallback(const CompleterReadyCallback &callback)
 		if (m_animeTupleList.empty() && !m_animeListReply)
 		{
 			m_animeListReply = start(g_inneUrl);
-			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
+			connect(m_animeListReply.data(), &NetworkReply::finished, this, &Wbijam::gotAnimeList);
 		}
 		else if (!m_animeTupleList.empty())
 		{
@@ -368,12 +375,21 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, extension, &error);
 			};
 
-			std::vector<std::tuple<QString, bool>> videoPriorityUrls[4];
+			maybeFetchConfiguration(netReply);
+
+			int maxPriority = 0;
+			for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+				maxPriority = qMax(maxPriority, it.value());
+
+			std::vector<std::vector<std::tuple<QString, bool>>> videoPriorityUrls(maxPriority + 1);
 
 			const auto extractUrl = [&](const QString section) {
 				int idx1 = section.indexOf("a href=\"");
 				if (idx1 < 0)
 				{
+					const int priority = m_serverPriorities.isEmpty() ? 0 : m_serverPriorities.value("vk", -1);
+					if (priority == -1)
+						return;
 					int idxRel = section.indexOf("rel=\"");
 					int idxId  = section.indexOf("id=\"");
 					if (idxRel > -1 && idxId > -1)
@@ -383,7 +399,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 						int idxRelEnd = section.indexOf('"', idxRel);
 						int idxIdEnd  = section.indexOf('"', idxId);
 						if (idxRelEnd > -1 && idxIdEnd > -1)
-							videoPriorityUrls[1].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
+							videoPriorityUrls[priority].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
 					}
 				}
 				else
@@ -395,13 +411,17 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 					{
 						const QString urlSection = section.mid(idx1, idx2 - idx1);
 						const QString urlDest = url.left(url.indexOf("wbijam.pl/") + 10) + urlSection;
-
-						if (urlSection.contains("openload")) // Causes problems very often
-							videoPriorityUrls[3].emplace_back(urlDest, false);
-						else if (urlSection.contains("google") || urlSection.contains("-gd-")) // Currently (13.03.2017) "youtube-dl" has a bug which gets the lowest video quality
-							videoPriorityUrls[2].emplace_back(urlDest, false);
-						else if (!urlSection.contains("mp4up") && !urlSection.contains("sibnet")) // Those servers doesn't work properly
-							videoPriorityUrls[0].emplace_back(urlDest, false); // vidfile, d-on, ...
+						if (m_serverPriorities.isEmpty())
+						{
+							videoPriorityUrls[0].emplace_back(urlDest, false);
+						}
+						else for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+						{
+							if (urlSection.contains(it.key()))
+							{
+								videoPriorityUrls[it.value()].emplace_back(urlDest, false);
+							}
+						}
 					}
 				}
 			};
@@ -525,6 +545,30 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 		}
 	}
 	return true;
+}
+
+void Wbijam::maybeFetchConfiguration(IOController<NetworkReply> &netReply)
+{
+	if (!m_serverPriorities.isEmpty())
+		return;
+
+	NetworkAccess net;
+	if (net.startAndWait(netReply, g_serverPrioritiesUrl))
+	{
+		const QJsonArray array = QJsonDocument::fromJson(netReply->readAll()).array();
+		for (const QJsonValue &v : array)
+		{
+			const QJsonObject o = v.toObject();
+			const QString name = o["Name"].toString();
+			const int priority = o["Priority"].toInt(-1);
+			if (!name.isEmpty() && priority >= 0)
+				m_serverPriorities[name] = qMin(priority, 9);
+		}
+		netReply.reset();
+	}
+
+	if (m_serverPriorities.isEmpty())
+		qCWarning(wbijam) << "Can't fetch server priorities";
 }
 
 void Wbijam::gotAnimeList()
