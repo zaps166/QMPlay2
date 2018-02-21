@@ -460,20 +460,25 @@ static QtMessageHandler g_defaultMsgHandler = nullptr;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
 	bool qmplay2Log = false;
-	switch (type)
+	if (QCoreApplication::instance())
 	{
-		case QtWarningMsg:
-		case QtCriticalMsg:
-		case QtFatalMsg:
-			QMPlay2Core.logError(qFormatLogMessage(type, context, message), false);
-			qmplay2Log = true;
-			break;
-		case QtInfoMsg:
-			QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
-			qmplay2Log = true;
-			break;
-		default:
-			break;
+		// Use QMPlay2 logger only when we have a "QApplication" instance (we're still executing "main()"),
+		// so any static data including "QSystemLocaleSingleton" and "QMPlay2CoreClass" are still valid.
+		switch (type)
+		{
+			case QtWarningMsg:
+			case QtCriticalMsg:
+			case QtFatalMsg:
+				QMPlay2Core.logError(qFormatLogMessage(type, context, message), false);
+				qmplay2Log = true;
+				break;
+			case QtInfoMsg:
+				QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
+				qmplay2Log = true;
+				break;
+			default:
+				break;
+		}
 	}
 	if (!qmplay2Log)
 	{
