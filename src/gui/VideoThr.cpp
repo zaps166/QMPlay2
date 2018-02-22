@@ -18,7 +18,7 @@
 
 #include <VideoThr.hpp>
 
-#include <VideoAdjustment.hpp>
+#include <VideoAdjustmentW.hpp>
 #include <PlayClass.hpp>
 #include <Main.hpp>
 

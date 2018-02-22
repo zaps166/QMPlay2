@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <VideoAdjustment.hpp>
+#include <VideoAdjustmentW.hpp>
 
 #include <ModuleParams.hpp>
 #include <Settings.hpp>
@@ -45,7 +45,7 @@ constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
 	QT_TRANSLATE_NOOP("VideoAdjustment", "Sharpness")
 };
 
-VideoAdjustment::VideoAdjustment() :
+VideoAdjustmentW::VideoAdjustmentW() :
 	sliders(new Slider[CONTROLS_COUNT])
 {
 	QGridLayout *layout = new QGridLayout;
@@ -81,23 +81,23 @@ VideoAdjustment::VideoAdjustment() :
 
 	setLayout(layout);
 }
-VideoAdjustment::~VideoAdjustment()
+VideoAdjustmentW::~VideoAdjustmentW()
 {
 	delete[] sliders;
 }
 
-void VideoAdjustment::restoreValues()
+void VideoAdjustmentW::restoreValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + g_controlsNames[i]));
 }
-void VideoAdjustment::saveValues()
+void VideoAdjustmentW::saveValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + g_controlsNames[i], sliders[i].value());
 }
 
-void VideoAdjustment::setModuleParam(ModuleParams *writer)
+void VideoAdjustmentW::setModuleParam(ModuleParams *writer)
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
@@ -106,18 +106,18 @@ void VideoAdjustment::setModuleParam(ModuleParams *writer)
 	}
 }
 
-void VideoAdjustment::enableControls()
+void VideoAdjustmentW::enableControls()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		sliders[i].setEnabled(true);
 }
 
-void VideoAdjustment::setValue(int v)
+void VideoAdjustmentW::setValue(int v)
 {
 	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v));
 	emit videoAdjustmentChanged();
 }
-void VideoAdjustment::reset()
+void VideoAdjustmentW::reset()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		sliders[i].setValue(0);

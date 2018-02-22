@@ -26,7 +26,7 @@ set(GUI_HDR
     EntryProperties.hpp
     AboutWidget.hpp
     AddressDialog.hpp
-    VideoAdjustment.hpp
+    VideoAdjustmentW.hpp
     Appearance.hpp
     VolWidget.hpp
     ScreenSaver.hpp
@@ -59,7 +59,7 @@ set(GUI_SRC
     EntryProperties.cpp
     AboutWidget.cpp
     AddressDialog.cpp
-    VideoAdjustment.cpp
+    VideoAdjustmentW.cpp
     Appearance.cpp
     VolWidget.cpp
     ShortcutHandler.cpp

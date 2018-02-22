@@ -57,7 +57,7 @@
 #include <Playlist.hpp>
 #include <AboutWidget.hpp>
 #include <AddressDialog.hpp>
-#include <VideoAdjustment.hpp>
+#include <VideoAdjustmentW.hpp>
 #include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
 #include <ScreenSaver.hpp>
@@ -113,7 +113,7 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	updater(this)
 {
-	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
+	QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 

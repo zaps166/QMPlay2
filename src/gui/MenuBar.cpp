@@ -18,8 +18,8 @@
 
 #include <MenuBar.hpp>
 
+#include <VideoAdjustmentW.hpp>
 #include <ShortcutHandler.hpp>
-#include <VideoAdjustment.hpp>
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
