@@ -205,10 +205,11 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		"--no-check-certificate", //Ignore SSL errors
 	};
 
-	const bool useQMPlay2UserAgent = url.contains("vidfile.net/");
+	const bool isVIDFile = url.contains("vidfile.net/");
+	constexpr const char *mozillaUserAgent = "Mozilla";
 
-	if (useQMPlay2UserAgent)
-		commonArgs += {"--user-agent", Version::userAgent()};
+	if (isVIDFile)
+		commonArgs += {"--user-agent", mozillaUserAgent};
 
 	const char *httpProxy = getenv("http_proxy");
 	if (httpProxy && *httpProxy)
@@ -333,7 +334,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		{
 			if (i > 0 && result.at(i).startsWith('{'))
 			{
-				exportCookiesFromJSON(result.at(i), result.at(i - 1));
+				const QString url = result.at(i - 1);
+				if (isVIDFile)
+					QMPlay2Core.addRawHeaders(url, QString("User-Agent: %1\r\nReferer: https://vidfile.net/v/\r\n").arg(mozillaUserAgent).toUtf8());
+				exportCookiesFromJSON(result.at(i), url);
 				result.removeAt(i);
 			}
 		}
