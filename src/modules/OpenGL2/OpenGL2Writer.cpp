@@ -51,25 +51,37 @@ OpenGL2Writer::~OpenGL2Writer()
 bool OpenGL2Writer::set()
 {
 	bool doReset = false;
-	bool newAllowPBO = sets().getBool("AllowPBO");
+
+	const bool newAllowPBO = sets().getBool("AllowPBO");
 	if (newAllowPBO != allowPBO)
 	{
 		allowPBO = newAllowPBO;
 		doReset = true;
 	}
+
+	const Qt::CheckState newHqScaling = sets().getWithBounds("HQScaling", Qt::Unchecked, Qt::Checked, Qt::PartiallyChecked);
+	if (newHqScaling != m_allowHqScaling)
+	{
+		m_allowHqScaling = newHqScaling;
+		doReset = true;
+	}
+
 	vSync = sets().getBool("VSync");
 	if (drawable && !drawable->setVSync(vSync))
 		doReset = true;
-	bool newForceRtt = sets().getBool("ForceRtt");
+
+	const bool newForceRtt = sets().getBool("ForceRtt");
 	if (forceRtt != newForceRtt)
 		doReset = true;
 	forceRtt = newForceRtt;
+
 #ifdef Q_OS_WIN
 	bool newPreventFullScreen = sets().getBool("PreventFullScreen");
 	if (preventFullScreen != newPreventFullScreen)
 		doReset = true;
 	preventFullScreen = newPreventFullScreen;
 #endif
+
 	return !doReset && sets().getBool("Enabled");
 }
 
@@ -208,6 +220,7 @@ bool OpenGL2Writer::open()
 	drawable->preventFullScreen = preventFullScreen;
 #endif
 	drawable->allowPBO = allowPBO;
+	drawable->allowHqScaling = m_allowHqScaling;
 	if (drawable->testGL())
 	{
 		drawable->setVSync(vSync);

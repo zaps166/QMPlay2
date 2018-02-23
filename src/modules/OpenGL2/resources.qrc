@@ -3,6 +3,7 @@
 		<file alias="OpenGL2.svgz">OpenGL2.svgz</file>
 
 		<file alias="Video.vert">GLSL/Video.vert</file>
+		<file alias="Bicubic.frag">GLSL/Bicubic.frag</file>
 		<file alias="VideoYCbCr.frag">GLSL/VideoYCbCr.frag</file>
 		<file alias="VideoRGB.frag">GLSL/VideoRGB.frag</file>
 
