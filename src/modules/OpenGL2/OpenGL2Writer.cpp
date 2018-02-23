@@ -26,9 +26,9 @@
 
 #include <QGuiApplication>
 
-OpenGL2Writer::OpenGL2Writer(Module &module) :
-	drawable(nullptr),
-	allowPBO(true)
+OpenGL2Writer::OpenGL2Writer(Module &module)
+	: drawable(nullptr)
+	, allowPBO(true)
 	, forceRtt(false)
 {
 	addParam("W");

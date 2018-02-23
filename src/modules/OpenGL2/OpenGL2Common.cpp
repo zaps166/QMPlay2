@@ -217,43 +217,35 @@ void OpenGL2Common::initializeGL()
 	shaderProgramOSD = new QOpenGLShaderProgram;
 
 	/* YCbCr shader */
-	if (shaderProgramVideo->shaders().isEmpty())
+	shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
+	QByteArray videoFrag;
+	if (numPlanes == 1)
 	{
-		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
-		QByteArray VideoFrag;
-		if (numPlanes == 1)
+		videoFrag = readShader(":/VideoRGB.frag");
+		if (canUseHueSharpness)
 		{
-			VideoFrag = readShader(":/VideoRGB.frag");
-			if (canUseHueSharpness)
-			{
-				//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-				VideoFrag.prepend("#define Sharpness\n");
-			}
+			//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			videoFrag.prepend("#define Sharpness\n");
 		}
-		else
-		{
-			VideoFrag = readShader(":/VideoYCbCr.frag");
-			if (canUseHueSharpness)
-			{
-				//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-				VideoFrag.prepend("#define HueAndSharpness\n");
-			}
-			if (numPlanes == 2)
-				VideoFrag.prepend("#define NV12\n");
-		}
-		if (target == GL_TEXTURE_RECTANGLE_ARB)
-			VideoFrag.prepend("#define TEXTURE_RECTANGLE\n");
-		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, VideoFrag);
 	}
+	else
+	{
+		videoFrag = readShader(":/VideoYCbCr.frag");
+		if (canUseHueSharpness)
+		{
+			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			videoFrag.prepend("#define HueAndSharpness\n");
+		}
+		if (numPlanes == 2)
+			videoFrag.prepend("#define NV12\n");
+	}
+	if (target == GL_TEXTURE_RECTANGLE_ARB)
+		videoFrag.prepend("#define TEXTURE_RECTANGLE\n");
+	shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, videoFrag);
 	if (shaderProgramVideo->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramVideo->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramVideo->attributeLocation("aPosition");
-		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
-		{
-			texCoordYCbCrLoc = newTexCoordLoc;
-			positionYCbCrLoc = newPositionLoc;
-		}
+		texCoordYCbCrLoc = shaderProgramVideo->attributeLocation("aTexCoord");
+		positionYCbCrLoc = shaderProgramVideo->attributeLocation("aPosition");
 		shaderProgramVideo->setUniformValue((numPlanes == 1) ? "uRGB" : "uY" , 0);
 		if (numPlanes == 2)
 			shaderProgramVideo->setUniformValue("uCbCr", 1);
@@ -272,20 +264,12 @@ void OpenGL2Common::initializeGL()
 	}
 
 	/* OSD shader */
-	if (shaderProgramOSD->shaders().isEmpty())
-	{
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
-	}
+	shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
+	shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
 	if (shaderProgramOSD->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramOSD->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramOSD->attributeLocation("aPosition");
-		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
-		{
-			texCoordOSDLoc = newTexCoordLoc;
-			positionOSDLoc = newPositionLoc;
-		}
+		texCoordOSDLoc = shaderProgramOSD->attributeLocation("aTexCoord");
+		positionOSDLoc = shaderProgramOSD->attributeLocation("aPosition");
 		shaderProgramOSD->setUniformValue("uTex", 3);
 		shaderProgramOSD->release();
 	}
