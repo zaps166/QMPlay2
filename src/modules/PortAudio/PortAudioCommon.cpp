@@ -21,13 +21,10 @@
 
 #include <portaudio.h>
 
-static inline QString getOutputDeviceName(const PaDeviceInfo *deviceInfo)
+QString PortAudioCommon::getOutputDeviceName(const PaDeviceInfo *deviceInfo)
 {
 	return QString(Pa_GetHostApiInfo(deviceInfo->hostApi)->name) + ": " + QString::fromLocal8Bit(deviceInfo->name);
 }
-
-/**/
-
 QStringList PortAudioCommon::getOutputDeviceNames()
 {
 	QStringList outputDeviceNames;

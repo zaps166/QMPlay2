@@ -20,8 +20,11 @@
 
 #include <QStringList>
 
+struct PaDeviceInfo;
+
 namespace PortAudioCommon
 {
+	QString getOutputDeviceName(const PaDeviceInfo *deviceInfo);
 	QStringList getOutputDeviceNames();
 	int getDeviceIndexForOutput(const QString &name, const int chn);
 }

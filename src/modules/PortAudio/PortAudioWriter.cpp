@@ -203,15 +203,8 @@ QString PortAudioWriter::name() const
 	QString name = PortAudioWriterName;
 	if (stream)
 	{
-		if (const PaDeviceInfo *dInfo = Pa_GetDeviceInfo(outputParameters.device))
-		{
-			name += QStringLiteral(" (%1").arg(dInfo->name);
-			if (const PaHostApiInfo *hInfo = Pa_GetHostApiInfo(dInfo->hostApi))
-			{
-				name += QStringLiteral("; %1").arg(hInfo->name);
-			}
-			name += ")";
-		}
+		if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(outputParameters.device))
+			name += " (" + PortAudioCommon::getOutputDeviceName(deviceInfo) + ")";
 #ifdef Q_OS_MACOS
 		if (const PaStreamInfo *strInfo = Pa_GetStreamInfo(stream))
 		{
