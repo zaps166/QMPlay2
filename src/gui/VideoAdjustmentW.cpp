@@ -38,11 +38,11 @@ enum CONTROLS
 	CONTROLS_COUNT
 };
 constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
-	QT_TRANSLATE_NOOP("VideoAdjustment", "Brightness"),
-	QT_TRANSLATE_NOOP("VideoAdjustment", "Contrast"),
-	QT_TRANSLATE_NOOP("VideoAdjustment", "Saturation"),
-	QT_TRANSLATE_NOOP("VideoAdjustment", "Hue"),
-	QT_TRANSLATE_NOOP("VideoAdjustment", "Sharpness")
+	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Brightness"),
+	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Contrast"),
+	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Saturation"),
+	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Hue"),
+	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness")
 };
 
 VideoAdjustmentW::VideoAdjustmentW() :
