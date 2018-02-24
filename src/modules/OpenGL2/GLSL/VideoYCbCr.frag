@@ -85,5 +85,5 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(clamp(YUVtoRGB * (YCbCr * contrastSaturation), 0.0, 1.0) + brightness, 1.0);
+    gl_FragColor = vec4(clamp(YUVtoRGB * ((YCbCr - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
 }

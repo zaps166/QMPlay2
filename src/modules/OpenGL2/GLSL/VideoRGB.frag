@@ -32,5 +32,5 @@ void main()
         RGB = clamp(RGB + (RGB - blur) * sharpness, 0.0, 1.0);
     }
 #endif
-    gl_FragColor = clamp(RGB * contrast, 0.0, 1.0) + brightness;
+    gl_FragColor = clamp((RGB - 0.5) * contrast + 0.5, 0.0, 1.0) + brightness;
 }

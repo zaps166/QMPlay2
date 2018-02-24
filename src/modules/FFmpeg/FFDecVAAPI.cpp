@@ -91,15 +91,15 @@ public:
 
 	void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override
 	{
-		videoAdjustmentCap.brightness = true;
-		videoAdjustmentCap.contrast = true;
+		videoAdjustmentCap.brightness = false;
+		videoAdjustmentCap.contrast = false;
 		videoAdjustmentCap.saturation = true;
 		videoAdjustmentCap.hue = true;
 		videoAdjustmentCap.sharpness = false;
 	}
 	void setVideAdjustment(const VideoAdjustment &videoAdjustment) override
 	{
-		m_vaapi->applyVideoAdjustment(videoAdjustment.brightness, videoAdjustment.contrast, videoAdjustment.saturation, videoAdjustment.hue);
+		m_vaapi->applyVideoAdjustment(0, 0, videoAdjustment.saturation, videoAdjustment.hue);
 	}
 
 	/**/
