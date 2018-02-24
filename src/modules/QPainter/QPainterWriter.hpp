@@ -34,7 +34,6 @@ public:
 	~Drawable();
 
 	void draw(const VideoFrame &newVideoFrame, bool, bool);
-	void clr();
 
 	void resizeEvent(QResizeEvent *) override;
 
@@ -50,6 +49,7 @@ private:
 	QPainterWriter &writer;
 	QImage img;
 	ImgScaler imgScaler;
+	bool m_scaleByQt = false;
 };
 
 /**/

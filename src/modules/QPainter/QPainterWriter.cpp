@@ -36,9 +36,7 @@ Drawable::Drawable(QPainterWriter &writer) :
 	setPalette(Qt::black);
 }
 Drawable::~Drawable()
-{
-	clr();
-}
+{}
 
 void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entireScreen)
 {
@@ -49,28 +47,27 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
 		update();
 		return;
 	}
-	if (imgScaler.create(videoFrame.size, imgW, imgH))
+	m_scaleByQt = (imgW > videoFrame.size.width) || (imgH > videoFrame.size.height);
+	if (imgScaler.create(videoFrame.size, m_scaleByQt ? videoFrame.size.width : imgW, m_scaleByQt ? videoFrame.size.height : imgH))
 	{
-		if (img.isNull())
+		if (m_scaleByQt && (img.width() != videoFrame.size.width || img.height() != videoFrame.size.height))
+		{
+			img = QImage(videoFrame.size.width, videoFrame.size.height, QImage::Format_RGB32);
+		}
+		else if (!m_scaleByQt && (img.width() != imgW || img.height() != imgH))
 		{
 			img = QImage(imgW, imgH, QImage::Format_RGB32);
-			img.setDevicePixelRatio(devicePixelRatioF());
 		}
 		imgScaler.scale(videoFrame, img.bits());
 		if (writer.flip)
 			img = img.mirrored(writer.flip & Qt::Horizontal, writer.flip & Qt::Vertical);
 		if (Brightness != 0 || Contrast != 100)
-			Functions::ImageEQ(Contrast, Brightness, img.bits(), imgW * imgH << 2);
+			Functions::ImageEQ(Contrast, Brightness, img.bits(), img.bytesPerLine() * img.height());
 	}
 	if (canRepaint && !entireScreen)
 		update(X, Y, W, H);
 	else if (canRepaint && entireScreen)
 		update();
-}
-void Drawable::clr()
-{
-	imgScaler.destroy();
-	img = QImage();
 }
 
 void Drawable::resizeEvent(QResizeEvent *e)
@@ -80,13 +77,17 @@ void Drawable::resizeEvent(QResizeEvent *e)
 	Functions::getImageSize(writer.aspect_ratio, writer.zoom, width() * dpr, height() * dpr, imgW, imgH);
 	imgW = Functions::aligned(imgW, 8);
 
-	clr();
+	imgScaler.destroy();
+	img = QImage();
+
 	draw(VideoFrame(), e ? false : true, true);
 }
 void Drawable::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
 
+	if (m_scaleByQt)
+		p.setRenderHint(QPainter::SmoothPixmapTransform);
 	p.translate(X, Y);
 	p.drawImage(QRect(0, 0, W, H), img);
 
