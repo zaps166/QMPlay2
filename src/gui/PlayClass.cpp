@@ -822,8 +822,11 @@ void PlayClass::zoomReset()
 }
 void PlayClass::otherReset()
 {
-	vThr->otherReset();
-	vThr->processParams();
+	if (vThr)
+	{
+		vThr->otherReset();
+		vThr->processParams();
+	}
 }
 void PlayClass::aRatio()
 {
