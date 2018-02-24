@@ -950,7 +950,7 @@ QByteArray OpenGL2Common::readShader(const QString &fileName, bool pure)
 	if (!pure)
 	{
 #ifdef OPENGL_ES2
-		shader = "precision lowp float;\n";
+		shader = "precision highp float;\n";
 #endif
 		shader.append("#line 1\n");
 	}
