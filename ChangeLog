@@ -1,12 +1,15 @@
-Changes in QMPlay2 build 18.02.12:
+Changes in QMPlay2 build 18.02.24:
+	- allow to move video and subtitles in OpenGL2 video output (Ctrl and Shift key modifiers),
 	- add option to automatically perform non-recursive quick sync on playlist group,
+	- add high quality video scaling in OpenGL2 video output (disabled by default),
 	- add bit-perfect audio option for PortAudio module on macOS (René Bertin),
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
-	- allow to move video and subtitles in OpenGL2 video output,
+	- QPainter video output optimizations,
 	- add sorting YouTube search results,
 	- add Hungarian translation file,
 	- fix subtitles on YouTube,
+	- contrast improvements,
 
 Changes in QMPlay2 build 17.12.31:
 	- automaticaly rotate movie or set spherical view if is set in metadata,
