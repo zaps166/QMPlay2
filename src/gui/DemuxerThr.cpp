@@ -275,10 +275,16 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.canUpdatePos = true;
 			if (playC.seekTo != SEEK_REPEAT) //Don't reset variable if repeat seek failed
 				playC.seekTo = SEEK_NOWHERE;
-			if (!playC.paused)
-				emit playC.chText(tr("Playback"));
-			else
+			if (playC.paused)
+			{
+				if (!QMPlay2Core.getSettings().getBool("UnpauseWhenSeeking"))
+					playC.pauseAfterFirstFrame = true;
 				playC.paused = false;
+			}
+			else
+			{
+				emit playC.chText(tr("Playback"));
+			}
 		}
 	}
 }
@@ -589,6 +595,12 @@ void DemuxerThr::run()
 				playC.vPackets.put(packet);
 			else if (streamIdx == playC.subtitlesStream)
 				playC.sPackets.put(packet);
+
+			if (playC.pauseAfterFirstFrame)
+			{
+				playC.nextFrame();
+				playC.pauseAfterFirstFrame = false;
+			}
 
 			if (!paused && !playC.waitForData)
 				playC.emptyBufferCond.wakeAll();

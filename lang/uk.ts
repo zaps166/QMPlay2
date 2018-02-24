@@ -2244,6 +2244,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Store aspect ratio and zoom in config file</source>
         <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
     </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

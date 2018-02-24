@@ -174,6 +174,7 @@ void AudioThr::run()
 
 	QMutex emptyBufferMutex;
 	bool paused = false;
+	bool oneFrame = false;
 	tmp_br = tmp_time = 0;
 #ifdef Q_OS_WIN
 	canUpdatePos = canUpdateBitrate = false;
@@ -197,7 +198,7 @@ void AudioThr::run()
 						break;
 					}
 
-			if (playC.paused || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
+			if ((playC.paused && !oneFrame) || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
 			{
 #ifdef Q_OS_WIN
 				canUpdatePos = canUpdateBitrate = false;
@@ -234,6 +235,13 @@ void AudioThr::run()
 			else if (hasBufferedSamples)
 				packet.ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
 			playC.aPackets.unlock();
+
+			if (playC.nextFrameB && playC.seekTo < 0.0 && playC.audioSeekPos <= 0.0 && playC.frame_last_pts <= 0.0)
+			{
+				playC.nextFrameB = false;
+				oneFrame = playC.paused = true;
+			}
+
 			playC.fillBufferB = true;
 
 			mutex.lock();
@@ -284,7 +292,7 @@ void AudioThr::run()
 				playC.flushAudio = false;
 			int decodedSize = decoded.size();
 			int decodedPos = 0;
-			while (decodedSize > 0 && !playC.paused && !br && !br2)
+			while (decodedSize > 0 && (!playC.paused || oneFrame) && !br && !br2)
 			{
 				const double max_len = 0.02; //TODO: zrobić opcje?
 				const int chunk = qMin(decodedSize, (int)(ceil(realSample_rate * max_len) * realChannels * sizeof(float)));
@@ -319,13 +327,13 @@ void AudioThr::run()
 					}
 				}
 
-				if (playC.audioSeekPos > 0)
+				if (playC.audioSeekPos > 0.0)
 				{
 					bool cont = true;
 					if (audio_pts >= playC.audioSeekPos)
 					{
 						tmp_br = 0;
-						playC.audioSeekPos = -1;
+						playC.audioSeekPos = -1.0;
 						playC.emptyBufferCond.wakeAll();
 						if (playC.videoSeekPos <= 0.0)
 							cont = false; // Don't play if video is not ready
@@ -341,7 +349,7 @@ void AudioThr::run()
 				canUpdatePos = true;
 #endif
 
-				if (playC.skipAudioFrame <= 0.0)
+				if (playC.skipAudioFrame <= 0.0 || oneFrame)
 				{
 					const double speed = playC.speed;
 					if (speed != lastSpeed)
@@ -391,10 +399,13 @@ void AudioThr::run()
 						silenceChMutex.unlock();
 					}
 
+					oneFrame = false;
 					writer->write(dataToWrite);
 				}
 				else
+				{
 					playC.skipAudioFrame -= playC.audio_last_delay;
+				}
 			}
 
 			mutex.unlock();

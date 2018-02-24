@@ -181,7 +181,7 @@ void PlayClass::play(const QString &_url)
 			replayGain = 1.0;
 
 			canUpdatePos = true;
-			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
+			waitForData = flushVideo = flushAudio = endOfStream = false;
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			videoSeekPos = audioSeekPos = -1.0;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
@@ -196,12 +196,16 @@ void PlayClass::play(const QString &_url)
 			{
 				seekTo = restartSeekTo;
 				restartSeekTo = SEEK_NOWHERE;
+				pauseAfterFirstFrame = paused;
 			}
 			else
 			{
 				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
+				pauseAfterFirstFrame = false;
 			}
 			allowAccurateSeek = true;
+
+			paused = false;
 
 			demuxThr->start();
 		}
@@ -560,6 +564,7 @@ void PlayClass::stopADec()
 		}
 	}
 	audio_current_pts = skipAudioFrame = audio_last_delay = 0.0;
+	nextFrameB = false;
 }
 
 void PlayClass::setFlip()
@@ -1056,7 +1061,7 @@ void PlayClass::prevFrame()
 }
 void PlayClass::nextFrame()
 {
-	if (videoStream > -1 && stopPauseMutex.tryLock())
+	if (stopPauseMutex.tryLock())
 	{
 		paused = false;
 		nextFrameB = fillBufferB = true;

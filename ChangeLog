@@ -5,6 +5,7 @@ Changes in QMPlay2 build 18.02.24:
 	- add bit-perfect audio option for PortAudio module on macOS (René Bertin),
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
+	- don't unpause when seeking (default option),
 	- QPainter video output optimizations,
 	- add sorting YouTube search results,
 	- add Hungarian translation file,

@@ -2244,6 +2244,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Store aspect ratio and zoom in config file</source>
         <translation>Zapisz współczynnik proporcji i zoom w pliku konfiguracyjnym</translation>
     </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Wznów odtwarzanie podczas przewijania</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

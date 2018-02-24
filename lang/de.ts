@@ -2244,6 +2244,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Store aspect ratio and zoom in config file</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
