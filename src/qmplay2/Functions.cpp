@@ -529,9 +529,9 @@ void Functions::ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigne
 {
 	for (unsigned i = 0; i < bitsCount; i += 4)
 	{
-		imageBits[i+0] = clip8(imageBits[i+0] * Contrast / 100 + Brightness);
-		imageBits[i+1] = clip8(imageBits[i+1] * Contrast / 100 + Brightness);
-		imageBits[i+2] = clip8(imageBits[i+2] * Contrast / 100 + Brightness);
+		imageBits[i+0] = clip8((imageBits[i+0] - 127) * Contrast / 100 + 127 + Brightness);
+		imageBits[i+1] = clip8((imageBits[i+1] - 127) * Contrast / 100 + 127 + Brightness);
+		imageBits[i+2] = clip8((imageBits[i+2] - 127) * Contrast / 100 + 127 + Brightness);
 	}
 }
 int Functions::scaleEQValue(int val, int min, int max)
