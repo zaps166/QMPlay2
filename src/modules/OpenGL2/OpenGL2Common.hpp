@@ -114,6 +114,8 @@ protected:
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:
+	void maybeSetMipmaps(qreal dpr);
+
 	inline bool isRotate90() const;
 
 	inline bool hwAccellPossibleLock();

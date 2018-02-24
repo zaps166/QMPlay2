@@ -372,13 +372,17 @@ void OpenGL2Common::paintGL()
 					}
 				}
 
+				m_textureSize = QSize(widths[0], heights[0]);
+
+				// Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
+				maybeSetMipmaps(widget()->devicePixelRatioF());
+
 				/* Prepare textures, register GL textures */
 				const bool hasHwAccelError = hwAccelError;
 				hwAccelError = !hwAccellnterface->init(&textures[1]);
 				if (hwAccelError && !hasHwAccelError)
 					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
-				m_textureSize = QSize(widths[0], heights[0]);
 
 				/* Prepare texture coordinates */
 				texCoordYCbCr[2] = texCoordYCbCr[6] = 1.0f;
@@ -411,6 +415,8 @@ void OpenGL2Common::paintGL()
 
 				/* Prepare texture coordinates */
 				texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
+
+				maybeSetMipmaps(widget()->devicePixelRatioF());
 			}
 			resetDone = true;
 			hasImage = false;
@@ -546,27 +552,8 @@ void OpenGL2Common::paintGL()
 		if (hqScaling)
 		{
 			const qreal dpr = widget()->devicePixelRatioF();
-
-			const bool lastUseMipmaps = m_useMipmaps;
-			m_useMipmaps = (W * dpr < m_textureSize.width() || H * dpr < m_textureSize.height());
-#ifndef OPENGL_ES2
-			if (m_useMipmaps && !glGenerateMipmap)
-			{
-				QMPlay2Core.logError("OpenGL 2 :: Mipmaps requested, but driver doesn't support it!", true, true);
-				m_useMipmaps = false;
-			}
-#endif
-			if (m_useMipmaps != lastUseMipmaps)
-			{
-				for (int p = 0; p < numPlanes; ++p)
-				{
-					glBindTexture(target, textures[p + 1]);
-					glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-					if (m_useMipmaps)
-						glGenerateMipmap(target);
-				}
-			}
-
+			if (!resetDone)
+				maybeSetMipmaps(dpr);
 			const bool useBicubic = (W * dpr > m_textureSize.width() || H * dpr > m_textureSize.height());
 			shaderProgramVideo->setUniformValue("uBicubic", useBicubic ? 1 : 0);
 		}
@@ -924,6 +911,29 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 			break;
 		default:
 			break;
+	}
+}
+
+void OpenGL2Common::maybeSetMipmaps(qreal dpr)
+{
+	const bool lastUseMipmaps = m_useMipmaps;
+	m_useMipmaps = (W * dpr < m_textureSize.width() || H * dpr < m_textureSize.height());
+#ifndef OPENGL_ES2
+	if (m_useMipmaps && !glGenerateMipmap)
+	{
+		QMPlay2Core.logError("OpenGL 2 :: Mipmaps requested, but driver doesn't support it!", true, true);
+		m_useMipmaps = false;
+	}
+#endif
+	if (m_useMipmaps != lastUseMipmaps)
+	{
+		for (int p = 0; p < numPlanes; ++p)
+		{
+			glBindTexture(target, textures[p + 1]);
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+			if (m_useMipmaps)
+				glGenerateMipmap(target);
+		}
 	}
 }
 
