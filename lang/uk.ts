@@ -1764,6 +1764,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Встановлює вибраний вихідний пристрій на частоту дискретизації відтворюваного вмісту</translation>
     </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3146,30 +3154,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Скинути</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>Яскравість</translation>
+        <translation type="unfinished">Яскравість</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Контрастність</translation>
+        <translation type="unfinished">Контрастність</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Насиченість</translation>
+        <translation type="unfinished">Насиченість</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Відтінок</translation>
+        <translation type="unfinished">Відтінок</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Чіткість</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>Скинути</translation>
+        <translation type="unfinished">Чіткість</translation>
     </message>
 </context>
 <context>

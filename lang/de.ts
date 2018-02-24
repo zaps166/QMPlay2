@@ -1764,6 +1764,14 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3146,30 +3154,30 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Zurücksetzen</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>Helligkeit</translation>
+        <translation type="unfinished">Helligkeit</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Kontrast</translation>
+        <translation type="unfinished">Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Sättigung</translation>
+        <translation type="unfinished">Sättigung</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Farbton</translation>
+        <translation type="unfinished">Farbton</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Schärfe</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>Zurücksetzen</translation>
+        <translation type="unfinished">Schärfe</translation>
     </message>
 </context>
 <context>

@@ -1761,6 +1761,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3140,30 +3148,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Reiniciar</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>Brillo</translation>
+        <translation type="unfinished">Brillo</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Contraste</translation>
+        <translation type="unfinished">Contraste</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Saturación</translation>
+        <translation type="unfinished">Saturación</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Matiz</translation>
+        <translation type="unfinished">Matiz</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Nitidez</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>Reiniciar</translation>
+        <translation type="unfinished">Nitidez</translation>
     </message>
 </context>
 <context>

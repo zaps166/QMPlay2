@@ -1761,6 +1761,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3140,30 +3148,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">重置</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>亮度</translation>
+        <translation type="unfinished">亮度</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>对比度</translation>
+        <translation type="unfinished">对比度</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>饱和度</translation>
+        <translation type="unfinished">饱和度</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>色调</translation>
+        <translation type="unfinished">色调</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>锐化</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>重置</translation>
+        <translation type="unfinished">锐化</translation>
     </message>
 </context>
 <context>

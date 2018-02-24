@@ -1764,6 +1764,14 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Ustawia wybrane urządzenie wyjściowe na częstotliwość próbkowania odtwarzanej zawartości</translation>
     </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation>Skalowanie wideo wysokiej jakości</translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation>Filtrowanie trójliniowe dla pomniejszania i filtrowanie dwusześcienne dla powiększenia.</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3146,7 +3154,11 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation>Resetuj</translation>
+    </message>
     <message>
         <source>Brightness</source>
         <translation>Jasność</translation>
@@ -3166,10 +3178,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Sharpness</source>
         <translation>Ostrość</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>Resetuj</translation>
     </message>
 </context>
 <context>
