@@ -3,19 +3,19 @@ uniform int uBicubic;
 // w0, w1, w2, and w3 are the four cubic B-spline basis functions
 float w0(float a)
 {
-    return (1.0/6.0)*(a*(a*(-a + 3.0) - 3.0) + 1.0);
+    return (1.0 / 6.0) * (a * (a * (-a + 3.0) - 3.0) + 1.0);
 }
 float w1(float a)
 {
-    return (1.0/6.0)*(a*a*(3.0*a - 6.0) + 4.0);
+    return (1.0 / 6.0) * (a * a * (3.0 * a - 6.0) + 4.0);
 }
 float w2(float a)
 {
-    return (1.0/6.0)*(a*(a*(-3.0*a + 3.0) + 3.0) + 1.0);
+    return (1.0 / 6.0) * (a * (a * (-3.0 * a + 3.0) + 3.0) + 1.0);
 }
 float w3(float a)
 {
-    return (1.0/6.0)*(a*a*a);
+    return (1.0 / 6.0) * (a * a * a);
 }
 
 // g0 and g1 are the two amplitude functions
@@ -50,6 +50,8 @@ vec4 getTexel(sampler2D tex, vec2 st)
 
     float g0x = g0(fSt.x);
     float g1x = g1(fSt.x);
+    float g0y = g0(fSt.y);
+    float g1y = g1(fSt.y);
     float h0x = h0(fSt.x);
     float h1x = h1(fSt.x);
     float h0y = h0(fSt.y);
@@ -60,8 +62,6 @@ vec4 getTexel(sampler2D tex, vec2 st)
     vec2 p2 = (vec2(iSt.x + h0x, iSt.y + h1y) - 0.5) / uTextureSize;
     vec2 p3 = (vec2(iSt.x + h1x, iSt.y + h1y) - 0.5) / uTextureSize;
 
-    return g0(fSt.y) * (g0x * texture(tex, p0)  +
-                        g1x * texture(tex, p1)) +
-                        g1(fSt.y) * (g0x * texture(tex, p2)  +
-                        g1x * texture(tex, p3));
+    return g0y * (g0x * texture(tex, p0) + g1x * texture(tex, p1)) +
+           g1y * (g0x * texture(tex, p2) + g1x * texture(tex, p3));
 }
