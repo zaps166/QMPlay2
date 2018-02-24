@@ -34,7 +34,7 @@ const mat3 YUVtoRGB = mat3(
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
-    return texture(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
+    return getTexel(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
 }
 #endif
 
@@ -71,7 +71,7 @@ void main()
         vec2 single = 1.0 / uTextureSize;
         float lumaBlur = (
             getLumaAtOffset(-single.x, -single.y) / 16.0 + getLumaAtOffset(0.0, -single.y) / 8.0 + getLumaAtOffset(single.x, -single.y) / 16.0 +
-            getLumaAtOffset(-single.x,  0.0     ) /  8.0 + getLumaAtOffset(0.0,  0.0     ) / 4.0 + getLumaAtOffset(single.x,  0.0     ) /  8.0 +
+            getLumaAtOffset(-single.x,  0.0     ) /  8.0 + YCbCr[0]                        / 4.0 + getLumaAtOffset(single.x,  0.0     ) /  8.0 +
             getLumaAtOffset(-single.x,  single.y) / 16.0 + getLumaAtOffset(0.0,  single.y) / 8.0 + getLumaAtOffset(single.x,  single.y) / 16.0
         );
         // Subtract blur from original image, multiply and then add it to the original image

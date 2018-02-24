@@ -10,7 +10,7 @@ uniform sampler2D uRGB;
 #ifdef Sharpness
 vec4 getRGBAtOffset(float x, float y)
 {
-    return texture(uRGB, vTexCoord + vec2(x, y));
+    return getTexel(uRGB, vTexCoord + vec2(x, y));
 }
 #endif
 
@@ -30,7 +30,7 @@ void main()
         vec2 single = 1.0 / uTextureSize;
         vec4 blur = (
             getRGBAtOffset(-single.x, -single.y) / 16.0 + getRGBAtOffset(0.0, -single.y) / 8.0 + getRGBAtOffset(single.x, -single.y) / 16.0 +
-            getRGBAtOffset(-single.x,  0.0     ) /  8.0 + getRGBAtOffset(0.0,  0.0     ) / 4.0 + getRGBAtOffset(single.x,  0.0     ) /  8.0 +
+            getRGBAtOffset(-single.x,  0.0     ) /  8.0 + RGB                            / 4.0 + getRGBAtOffset(single.x,  0.0     ) /  8.0 +
             getRGBAtOffset(-single.x,  single.y) / 16.0 + getRGBAtOffset(0.0,  single.y) / 8.0 + getRGBAtOffset(single.x,  single.y) / 16.0
         );
         // Subtract blur from original image, multiply and then add it to the original image
