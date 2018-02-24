@@ -59,10 +59,10 @@ bool OpenGL2Writer::set()
 		doReset = true;
 	}
 
-	const Qt::CheckState newHqScaling = sets().getWithBounds("HQScaling", Qt::Unchecked, Qt::Checked, Qt::PartiallyChecked);
-	if (newHqScaling != m_allowHqScaling)
+	const bool newHqScaling = sets().getBool("HQScaling");
+	if (newHqScaling != m_hqScaling)
 	{
-		m_allowHqScaling = newHqScaling;
+		m_hqScaling = newHqScaling;
 		doReset = true;
 	}
 
@@ -222,7 +222,7 @@ bool OpenGL2Writer::open()
 	drawable->preventFullScreen = preventFullScreen;
 #endif
 	drawable->allowPBO = allowPBO;
-	drawable->allowHqScaling = m_allowHqScaling;
+	drawable->hqScaling = m_hqScaling;
 	if (drawable->testGL())
 	{
 		drawable->setVSync(vSync);

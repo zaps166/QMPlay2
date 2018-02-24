@@ -150,8 +150,7 @@ public:
 	int Deinterlace;
 
 	quint32 pbo[4];
-	bool allowPBO, hasPbo, hqScaling = true;
-	Qt::CheckState allowHqScaling = Qt::PartiallyChecked;
+	bool allowPBO, hasPbo, hqScaling = false;
 
 #ifdef Q_OS_WIN
 	bool preventFullScreen;

@@ -713,9 +713,6 @@ void OpenGL2Common::testGLInternal()
 	if (glMajor)
 		glVer = glMajor * 10 + glMinor;
 	canUseHueSharpness = (glVer >= 30);
-	hqScaling = (allowHqScaling == Qt::Checked || (allowHqScaling == Qt::PartiallyChecked && glVer >= 30));
-#else
-	hqScaling = (allowHqScaling != Qt::Unchecked);
 #endif
 
 #ifndef OPENGL_ES2

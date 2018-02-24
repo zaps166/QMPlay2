@@ -57,7 +57,7 @@ private:
 
 	OpenGL2Common *drawable;
 	bool allowPBO;
-	Qt::CheckState m_allowHqScaling = Qt::PartiallyChecked;
+	bool m_hqScaling = false;
 	bool forceRtt, useRtt;
 	bool vSync;
 #ifdef Q_OS_WIN
