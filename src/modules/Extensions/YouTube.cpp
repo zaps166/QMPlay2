@@ -389,7 +389,9 @@ YouTube::YouTube(Module &module) :
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	searchE = new LineEdit;
+#ifndef Q_OS_ANDROID
 	connect(searchE, SIGNAL(textEdited(const QString &)), this, SLOT(searchTextEdited(const QString &)));
+#endif
 	connect(searchE, SIGNAL(clearButtonClicked()), this, SLOT(search()));
 	connect(searchE, SIGNAL(returnPressed()), this, SLOT(search()));
 	searchE->setCompleter(completer);

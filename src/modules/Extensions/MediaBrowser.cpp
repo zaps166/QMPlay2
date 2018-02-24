@@ -544,12 +544,14 @@ void MediaBrowser::searchTextEdited(const QString &text)
 {
 	if (sender() == m_searchE)
 	{
+#ifndef Q_OS_ANDROID
 		if (m_autocompleteReply)
 			m_autocompleteReply->deleteLater();
 		if (text.isEmpty())
 			m_completerModel->setStringList({});
 		else if (m_mediaBrowser && m_mediaBrowser->completerMode() == MediaBrowserCommon::CompleterMode::Continuous)
 			m_autocompleteReply = m_mediaBrowser->getCompleterReply(text);
+#endif
 	}
 	else if (sender() == m_searchCB && m_searchCB->count() == 0)
 	{
