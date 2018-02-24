@@ -128,6 +128,8 @@ bool OpenGL2Writer::processParams(bool *)
 	{
 		drawable->videoOffset = drawable->osdOffset = QPointF();
 		modParam("ResetOther", false);
+		if (!doResizeEvent)
+			doResizeEvent = drawable->widget()->isVisible();
 	}
 
 	const int outW = getParam("W").toInt();
