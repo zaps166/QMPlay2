@@ -254,7 +254,9 @@ void VideoThr::run()
 			skip = playC.nextFrameB = false;
 			oneFrame = playC.paused = true;
 			fast = 0;
+			return true;
 		}
+		return false;
 	};
 
 	const auto finishAccurateSeek = [&] {
@@ -467,7 +469,8 @@ void VideoThr::run()
 				if (packet.ts >= playC.videoSeekPos)
 				{
 					finishAccurateSeek();
-					processOneFrame();
+					if (processOneFrame())
+						playC.fillBufferB = true;
 					if (playC.audioSeekPos <= 0.0 || oneFrame)
 						cont = false; // Play only if audio is ready or if still frame should be displayed
 				}

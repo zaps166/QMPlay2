@@ -481,6 +481,12 @@ void DemuxerThr::run()
 
 		handlePause();
 
+		if (playC.pauseAfterFirstFrame)
+		{
+			playC.nextFrame();
+			playC.pauseAfterFirstFrame = false;
+		}
+
 		const bool updateBuffered = localStream ? false : canUpdateBuffered();
 		const double remainingDuration = getAVBuffersSize(vS, aS);
 		if (playC.endOfStream && !vS && !aS && canBreak(aThr, vThr))
@@ -595,12 +601,6 @@ void DemuxerThr::run()
 				playC.vPackets.put(packet);
 			else if (streamIdx == playC.subtitlesStream)
 				playC.sPackets.put(packet);
-
-			if (playC.pauseAfterFirstFrame)
-			{
-				playC.nextFrame();
-				playC.pauseAfterFirstFrame = false;
-			}
 
 			if (!paused && !playC.waitForData)
 				playC.emptyBufferCond.wakeAll();
