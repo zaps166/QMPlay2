@@ -834,10 +834,6 @@
         <translation>Огляд</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Use system icon set</source>
         <translation>Використовувати системний набір іконок</translation>
     </message>
@@ -964,6 +960,10 @@
     <message>
         <source>Hide artist metadata</source>
         <translation>Приховати метадані виконавця</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

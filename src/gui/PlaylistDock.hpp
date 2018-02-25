@@ -114,4 +114,5 @@ signals:
 	void play(const QString &);
 	void repeatEntry(bool b);
 	void stop();
+	void addAndPlayRestoreWindow();
 };

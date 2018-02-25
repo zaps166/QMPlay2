@@ -834,10 +834,6 @@
         <translation>Blättern</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Use system icon set</source>
         <translation>Verwende System Icons</translation>
     </message>
@@ -964,6 +960,10 @@
     <message>
         <source>Hide artist metadata</source>
         <translation>Künstler-Metadaten ausblenden</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

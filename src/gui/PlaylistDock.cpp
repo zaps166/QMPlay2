@@ -274,6 +274,7 @@ void PlaylistDock::addAndPlay(QTreeWidgetItem *tWI)
 		return;
 	playAfterAdd = false;
 	list->setCurrentItem(tWI);
+	emit addAndPlayRestoreWindow();
 	start();
 }
 void PlaylistDock::maybeDoQuickSync(QTreeWidgetItem *item)

@@ -1308,7 +1308,7 @@ void PlayClass::load(Demuxer *demuxer)
 			dec = nullptr;
 		if (dec)
 		{
-			const bool canEmitVideoStarted = !vThr;
+			const bool noVideo = !vThr;
 			if (vThr && (vThr->getHWAccelWriter() != dec->HWAccel()))
 				stopVThr();
 			if (!vThr)
@@ -1389,8 +1389,7 @@ void PlayClass::load(Demuxer *demuxer)
 #endif
 						ass->initOSD();
 
-					if (canEmitVideoStarted)
-						emit videoStarted();
+					emit videoStarted(noVideo);
 
 					if (reload)
 					{
@@ -1412,6 +1411,8 @@ void PlayClass::load(Demuxer *demuxer)
 			stopVThr();
 		}
 	}
+	if (!dec)
+		emit videoNotStarted();
 
 	if (audioStream < 0 || (choosenAudioStream > -1 && choosenAudioStream != audioStream)) //load audio
 	{

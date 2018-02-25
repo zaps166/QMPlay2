@@ -834,10 +834,6 @@
         <translation>Przeglądaj</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Use system icon set</source>
         <translation>Użyj systemowego zestawu ikon</translation>
     </message>
@@ -964,6 +960,10 @@
     <message>
         <source>Hide artist metadata</source>
         <translation>Ukryj metadane artysty</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Automatycznie przywróć główne okno po załadowaniu nowego pliku wideo</translation>
     </message>
 </context>
 <context>

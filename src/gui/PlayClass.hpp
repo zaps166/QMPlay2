@@ -233,7 +233,8 @@ signals:
 	void updateBufferedRange(int, int);
 	void updateWindowTitle(const QString &t = QString());
 	void updateImage(const QImage &img = QImage());
-	void videoStarted();
+	void videoStarted(bool hasVideo);
+	void videoNotStarted();
 	void uncheckSuspend();
 	void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
 };

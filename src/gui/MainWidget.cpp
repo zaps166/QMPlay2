@@ -278,6 +278,9 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(playlistDock, SIGNAL(play(const QString &)), &playC, SLOT(play(const QString &)));
 	connect(playlistDock, SIGNAL(repeatEntry(bool)), &playC, SLOT(repeatEntry(bool)));
 	connect(playlistDock, SIGNAL(stop()), &playC, SLOT(stop()));
+	connect(playlistDock, &PlaylistDock::addAndPlayRestoreWindow, this, [this] {
+		m_restoreWindowOnVideo = true;
+	});
 
 	connect(seekS, SIGNAL(valueChanged(int)), this, SLOT(seek(int)));
 	connect(seekS, SIGNAL(mousePosition(int)), this, SLOT(mousePositionOnSlider(int)));
@@ -311,7 +314,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(&playC, SIGNAL(updateBufferedRange(int, int)), seekS, SLOT(drawRange(int, int)));
 	connect(&playC, SIGNAL(updateWindowTitle(const QString &)), this, SLOT(updateWindowTitle(const QString &)));
 	connect(&playC, SIGNAL(updateImage(const QImage &)), videoDock, SLOT(updateImage(const QImage &)));
-	connect(&playC, SIGNAL(videoStarted()), this, SLOT(videoStarted()));
+	connect(&playC, &PlayClass::videoStarted, this, &MainWidget::videoStarted);
+	connect(&playC, &PlayClass::videoNotStarted, this, [this] {
+		m_restoreWindowOnVideo = false;
+	});
 	connect(&playC, SIGNAL(uncheckSuspend()), this, SLOT(uncheckSuspend()));
 	connect(&playC, &PlayClass::setVideoCheckState, this, [this](bool rotate90, bool hFlip, bool vFlip, bool spherical) {
 		menuBar->playback->videoFilters->rotate90->setChecked(rotate90);
@@ -498,6 +504,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		{
 			showNormal();
 			activateWindow();
+			raise();
 		}
 	}
 	else if (param == "stop")
@@ -541,14 +548,29 @@ void MainWidget::updateWindowTitle(const QString &t)
 	title.replace('\n', ' ');
 	setWindowTitle(title);
 }
-void MainWidget::videoStarted()
+void MainWidget::videoStarted(bool noVideo)
 {
-	if (QMPlay2Core.getSettings().getBool("AutoOpenVideoWindow"))
+	const bool autoRestoreMainWindowOnVideo = m_restoreWindowOnVideo ? QMPlay2Core.getSettings().getBool("AutoRestoreMainWindowOnVideo") : false;
+	const bool autoOpenVideoWindow = QMPlay2Core.getSettings().getBool("AutoOpenVideoWindow");
+	if (autoRestoreMainWindowOnVideo || (noVideo && autoOpenVideoWindow))
 	{
 		if (!videoDock->isVisible())
 			videoDock->show();
 		videoDock->raise();
 	}
+	if (autoRestoreMainWindowOnVideo)
+	{
+		if (!isVisible())
+		{
+			toggleVisibility();
+		}
+		else
+		{
+			activateWindow();
+			raise();
+		}
+	}
+	m_restoreWindowOnVideo = false;
 }
 
 void MainWidget::togglePlay()
@@ -729,6 +751,7 @@ void MainWidget::toggleVisibility()
 			maximized = false;
 		}
 		activateWindow();
+		raise();
 	}
 #endif
 }

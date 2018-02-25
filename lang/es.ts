@@ -834,10 +834,6 @@
         <translation>Explorar</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Use system icon set</source>
         <translation>Usar iconos del sistema</translation>
     </message>
@@ -963,6 +959,10 @@
     </message>
     <message>
         <source>Hide artist metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

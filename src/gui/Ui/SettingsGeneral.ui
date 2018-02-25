@@ -25,8 +25,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>454</width>
-        <height>731</height>
+        <width>798</width>
+        <height>1076</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -68,14 +68,14 @@
          </layout>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="15" column="0">
         <widget class="QPushButton" name="setKeyBindingsB">
          <property name="text">
           <string>Set key bindings</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="14" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>3</number>
@@ -213,9 +213,6 @@
              <property name="toolTip">
               <string>Browse</string>
              </property>
-             <property name="text">
-              <string>...</string>
-             </property>
             </widget>
            </item>
           </layout>
@@ -247,11 +244,7 @@
             <widget class="QComboBox" name="profileB"/>
            </item>
            <item>
-            <widget class="QToolButton" name="profileRemoveB">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
+            <widget class="QToolButton" name="profileRemoveB"/>
            </item>
           </layout>
          </item>
@@ -271,35 +264,35 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QCheckBox" name="tabsNorths">
          <property name="text">
           <string>Show tabs at the top of the main window</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QCheckBox" name="allowOnlyOneInstance">
          <property name="text">
           <string>Allow only one instance</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <widget class="QCheckBox" name="displayOnlyFileName">
          <property name="text">
           <string>Always display only file names in playlist</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="9" column="0">
         <widget class="QCheckBox" name="restoreRepeatMode">
          <property name="text">
           <string>Remember repeat mode</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item row="13" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -364,7 +357,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="12">
+       <item row="1" column="1" rowspan="13">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -377,7 +370,7 @@
          </property>
         </spacer>
        </item>
-       <item row="15" column="0" colspan="2">
+       <item row="16" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -390,31 +383,38 @@
          </property>
         </spacer>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QCheckBox" name="stillImages">
          <property name="text">
           <string>Read and display still images</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="11" column="0">
         <widget class="QCheckBox" name="trayNotifiesDefault">
          <property name="text">
           <string>Use tray notifications as default</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <widget class="QCheckBox" name="autoDelNonGroupEntries">
          <property name="text">
           <string>Automatically delete ungrouped entries</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="7" column="0">
         <widget class="QCheckBox" name="hideArtistMetadata">
          <property name="text">
           <string>Hide artist metadata</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="autoRestoreMainWindowOnVideoB">
+         <property name="text">
+          <string>Automatically restore main window when new video file is loaded</string>
          </property>
         </widget>
        </item>
@@ -436,11 +436,14 @@
   <tabstop>screenshotB</tabstop>
   <tabstop>iconsFromTheme</tabstop>
   <tabstop>setAppearanceB</tabstop>
+  <tabstop>profileB</tabstop>
+  <tabstop>profileRemoveB</tabstop>
   <tabstop>showCoversGB</tabstop>
   <tabstop>blurCoversB</tabstop>
   <tabstop>showDirCoversB</tabstop>
   <tabstop>autoUpdatesB</tabstop>
   <tabstop>autoOpenVideoWindowB</tabstop>
+  <tabstop>autoRestoreMainWindowOnVideoB</tabstop>
   <tabstop>tabsNorths</tabstop>
   <tabstop>allowOnlyOneInstance</tabstop>
   <tabstop>hideArtistMetadata</tabstop>
@@ -459,8 +462,6 @@
   <tabstop>removeYtDlB</tabstop>
   <tabstop>resetSettingsB</tabstop>
   <tabstop>setKeyBindingsB</tabstop>
-  <tabstop>profileB</tabstop>
-  <tabstop>profileRemoveB</tabstop>
  </tabstops>
  <resources/>
  <connections/>
