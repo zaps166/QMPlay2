@@ -374,8 +374,11 @@ void OpenGL2Common::paintGL()
 
 				m_textureSize = QSize(widths[0], heights[0]);
 
-				// Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
-				maybeSetMipmaps(widget()->devicePixelRatioF());
+				if (hqScaling)
+				{
+					// Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
+					maybeSetMipmaps(widget()->devicePixelRatioF());
+				}
 
 				/* Prepare textures, register GL textures */
 				const bool hasHwAccelError = hwAccelError;
@@ -416,7 +419,8 @@ void OpenGL2Common::paintGL()
 				/* Prepare texture coordinates */
 				texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
 
-				maybeSetMipmaps(widget()->devicePixelRatioF());
+				if (hqScaling)
+					maybeSetMipmaps(widget()->devicePixelRatioF());
 			}
 			resetDone = true;
 			hasImage = false;
