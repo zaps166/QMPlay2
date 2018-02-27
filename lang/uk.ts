@@ -963,7 +963,7 @@
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
     </message>
 </context>
 <context>
@@ -1766,11 +1766,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>High quality video scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштабування відео високої якості</translation>
     </message>
     <message>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation type="unfinished"></translation>
+        <translation>Трилінійна фільтрація при зменшенні і бікубічна фільтрація при збільшенні.</translation>
     </message>
 </context>
 <context>
@@ -2246,7 +2246,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>Поновити відтворення під час прокрутки</translation>
     </message>
 </context>
 <context>
@@ -3161,27 +3161,27 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Скинути</translation>
+        <translation>Скинути</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation type="unfinished">Яскравість</translation>
+        <translation>Яскравість</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation type="unfinished">Контрастність</translation>
+        <translation>Контрастність</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation type="unfinished">Насиченість</translation>
+        <translation>Насиченість</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation type="unfinished">Відтінок</translation>
+        <translation>Відтінок</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation type="unfinished">Чіткість</translation>
+        <translation>Чіткість</translation>
     </message>
 </context>
 <context>
