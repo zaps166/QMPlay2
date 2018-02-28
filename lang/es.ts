@@ -605,6 +605,14 @@
         <translation>Detener la descarga</translation>
     </message>
     <message>
+        <source>Download aborted</source>
+        <translation>Descarga abortada</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Error de descarga</translation>
+    </message>
+    <message>
         <source>Waiting for connection</source>
         <translation>Esperando la conexión</translation>
     </message>
@@ -613,12 +621,24 @@
         <translation>Tamaño</translation>
     </message>
     <message>
+        <source>Download complete</source>
+        <translation>Descarga completada</translation>
+    </message>
+    <message>
         <source>Download again</source>
         <translation>Descargar de nuevo</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>

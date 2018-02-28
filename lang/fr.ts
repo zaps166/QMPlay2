@@ -613,12 +613,32 @@
         <translation>Taille</translation>
     </message>
     <message>
+        <source>Download complete</source>
+        <translation>Téléchargement terminé</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>Téléchargement abandonné</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Erreur de téléchargement</translation>
+    </message>
+    <message>
         <source>Download again</source>
         <translation>Télécharger à nouveau</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Lire</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>

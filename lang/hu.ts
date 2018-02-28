@@ -601,6 +601,18 @@
 <context>
     <name>DownloadItemW</name>
     <message>
+        <source>Download complete</source>
+        <translation>A letöltés kész</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>A letöltés meg lett szakítva</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Hiba a letöltés közben</translation>
+    </message>
+    <message>
         <source>Waiting for connection</source>
         <translation>Várakozás a kapcsolatra</translation>
     </message>
@@ -619,6 +631,14 @@
     <message>
         <source>Size</source>
         <translation>Méret</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>

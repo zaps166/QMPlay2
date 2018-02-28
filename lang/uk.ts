@@ -613,12 +613,32 @@
         <translation>Розмір</translation>
     </message>
     <message>
+        <source>Download complete</source>
+        <translation>Завантаження завершене</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>Завантаження перерване</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Помилка завантаження</translation>
+    </message>
+    <message>
         <source>Download again</source>
         <translation>Завантажити знову</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Відтворення</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>

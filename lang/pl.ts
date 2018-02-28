@@ -628,6 +628,26 @@
         <source>Stop conversion</source>
         <translation>Zatrzymaj konwersję</translation>
     </message>
+    <message>
+        <source>Download complete</source>
+        <translation>Pobieranie ukończone</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>Pobieranie przerwane</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Błąd pobierania</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation>Konwersja przerwana</translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation>Błąd konwersji</translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>

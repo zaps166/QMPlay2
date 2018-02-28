@@ -58,11 +58,11 @@ Q_LOGGING_CATEGORY(downloader, "Downloader")
 
 constexpr const char *g_defaultMp3ConvertCommand = "ffmpeg -i <input/> -vn -sn -c:a libmp3lame -ab 224k -f mp3 -y <output>%f.mp3</output>";
 
-constexpr const char *g_downloadComplete = QT_TRANSLATE_NOOP(DownloadItemW, "Download complete");
-constexpr const char *g_downloadAborted = QT_TRANSLATE_NOOP(DownloadItemW, "Download aborted");
-constexpr const char *g_downloadError = QT_TRANSLATE_NOOP(DownloadItemW, "Download error");
-constexpr const char *g_conversionAborted = QT_TRANSLATE_NOOP(DownloadItemW, "Conversion aborted");
-constexpr const char *g_conversionError = QT_TRANSLATE_NOOP(DownloadItemW, "Conversion error");
+constexpr const char *g_downloadComplete = QT_TRANSLATE_NOOP("DownloadItemW", "Download complete");
+constexpr const char *g_downloadAborted = QT_TRANSLATE_NOOP("DownloadItemW", "Download aborted");
+constexpr const char *g_downloadError = QT_TRANSLATE_NOOP("DownloadItemW", "Download error");
+constexpr const char *g_conversionAborted = QT_TRANSLATE_NOOP("DownloadItemW", "Conversion aborted");
+constexpr const char *g_conversionError = QT_TRANSLATE_NOOP("DownloadItemW", "Conversion error");
 
 /**/
 

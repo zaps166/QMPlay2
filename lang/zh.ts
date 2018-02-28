@@ -613,12 +613,32 @@
         <translation type="unfinished">尺寸</translation>
     </message>
     <message>
+        <source>Download complete</source>
+        <translation>下载完成</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>下载终止</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>下载错误</translation>
+    </message>
+    <message>
         <source>Download again</source>
         <translation>重试下载</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>播放</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>

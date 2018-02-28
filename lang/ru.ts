@@ -613,12 +613,32 @@
         <translation>Размер</translation>
     </message>
     <message>
+        <source>Download complete</source>
+        <translation>Загрузка завершена</translation>
+    </message>
+    <message>
+        <source>Download aborted</source>
+        <translation>Загрузка прервана</translation>
+    </message>
+    <message>
+        <source>Download error</source>
+        <translation>Ошибка загрузки</translation>
+    </message>
+    <message>
         <source>Download again</source>
         <translation>Загрузить снова</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Воспроизведение</translation>
+    </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Converting...</source>
