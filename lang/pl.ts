@@ -613,24 +613,20 @@
         <translation>Rozmiar</translation>
     </message>
     <message>
-        <source>Download complete</source>
-        <translation>Pobieranie ukończone</translation>
-    </message>
-    <message>
-        <source>Download aborted</source>
-        <translation>Pobieranie przerwane</translation>
-    </message>
-    <message>
-        <source>Download error</source>
-        <translation>Błąd pobierania</translation>
-    </message>
-    <message>
         <source>Download again</source>
         <translation>Pobierz ponownie</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Odtwarzaj</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation>Konwertowanie...</translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation>Zatrzymaj konwersję</translation>
     </message>
 </context>
 <context>
@@ -666,6 +662,60 @@
     <message>
         <source>Enter address</source>
         <translation>Wprowadź adres</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation>&amp;Dodaj</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation>Dodaj, zmodyfikuj lub usuń ustawienia konwersji</translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation>Pobierz i skonwertuj do &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation>Ustawienie konwertera</translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation>Linia poleceń do wykonania po ukończeniu pobierania.
+
+&lt;input/&gt; - określa pobrany plik.
+&lt;output&gt;%f.mp3&lt;/output&gt; - skonwertowany plik będzie plikiem wejściowym z rozszerzeniem &quot;mp3&quot;.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Usuń</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>Nazwa ustawienia</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation>Linia poleceń</translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation>Nieprawidłowa/pusta nazwa lub linia poleceń!</translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation>Polecenie musi zawierać znacznik &lt;input/&gt;!</translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation>Polecenie musi zawierać poprawny znacznik &lt;output&gt;file&lt;/output/&gt;!</translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation>Nazwa ustawienia już istnieje!</translation>
     </message>
 </context>
 <context>

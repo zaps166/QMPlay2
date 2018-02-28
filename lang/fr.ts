@@ -613,24 +613,20 @@
         <translation>Taille</translation>
     </message>
     <message>
-        <source>Download complete</source>
-        <translation>Téléchargement terminé</translation>
-    </message>
-    <message>
-        <source>Download aborted</source>
-        <translation>Téléchargement abandonné</translation>
-    </message>
-    <message>
-        <source>Download error</source>
-        <translation>Erreur de téléchargement</translation>
-    </message>
-    <message>
         <source>Download again</source>
         <translation>Télécharger à nouveau</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>Lire</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -666,6 +662,57 @@
     <message>
         <source>Enter address</source>
         <translation type="unfinished">Entrer une adresse</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="unfinished">&amp;Ajouter</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Supprimer</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

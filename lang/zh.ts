@@ -613,24 +613,20 @@
         <translation type="unfinished">尺寸</translation>
     </message>
     <message>
-        <source>Download complete</source>
-        <translation>下载完成</translation>
-    </message>
-    <message>
-        <source>Download aborted</source>
-        <translation>下载终止</translation>
-    </message>
-    <message>
-        <source>Download error</source>
-        <translation>下载错误</translation>
-    </message>
-    <message>
         <source>Download again</source>
         <translation>重试下载</translation>
     </message>
     <message>
         <source>Play</source>
         <translation>播放</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -666,6 +662,57 @@
     <message>
         <source>Enter address</source>
         <translation type="unfinished">输入地址</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="unfinished">添加</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">移除</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
