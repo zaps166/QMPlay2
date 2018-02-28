@@ -6,6 +6,7 @@ Changes in QMPlay2 build 18.02.24:
 	- automatically restore main window when new video file is loaded (option),
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
+	- option to convert media file after download (e.g. to MP3),
 	- don't unpause when seeking (default option),
 	- QPainter video output optimizations,
 	- add sorting YouTube search results,
