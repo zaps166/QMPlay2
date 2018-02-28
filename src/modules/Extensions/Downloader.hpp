@@ -36,7 +36,7 @@ class DownloadItemW final : public QWidget
 {
 	Q_OBJECT
 public:
-	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString command);
+	DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString preset);
 	~DownloadItemW();
 
 	void setName(const QString &);
@@ -92,7 +92,7 @@ private:
 	QProcess *m_convertProcess = nullptr;
 	QMetaObject::Connection m_convertProcessConn[2];
 	bool finished, readyToPlay, m_needsConversion = false;
-	QString m_convertCommand;
+	QString m_convertPreset;
 	QString filePath;
 	QString m_convertedFilePath;
 };
@@ -118,10 +118,12 @@ class DownloaderThread final : public QThread
 	Q_OBJECT
 	enum {ADD_ENTRY, NAME, SET, SET_POS, SET_SPEED, DOWNLOAD_ERROR, FINISH};
 public:
-	DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString(), const QString &command = QString());
+	DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QMenu *convertsMenu, const QString &name = QString(), const QString &prefix = QString(), const QString &param = QString(), const QString &preset = QString());
 	~DownloaderThread();
 
 	void serialize(QDataStream &stream);
+
+	const QList<QAction *> convertActions();
 signals:
 	void listSig(int, qint64 val = 0, const QString &filePath = QString());
 private slots:
@@ -133,10 +135,11 @@ private:
 
 	QIcon getIcon();
 
-	QString url, name, prefix, param, command;
+	QString url, name, prefix, param, preset;
 	DownloadItemW *downloadItemW;
 	DownloadListW *downloadLW;
 	QTreeWidgetItem *item;
+	const QMenu *m_convertsMenu;
 	IOController<> ioCtrl;
 };
 

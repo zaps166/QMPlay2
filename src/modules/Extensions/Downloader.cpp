@@ -81,7 +81,7 @@ static QStringRef getCommandOutput(const QString &command)
 
 /**/
 
-DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString command) :
+DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString preset) :
 	dontDeleteDownloadThr(false), downloaderThr(downloaderThr), finished(false), readyToPlay(false)
 {
 	QString sizeLText;
@@ -89,7 +89,7 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	if (stream)
 	{
 		quint8 type;
-		*stream >> filePath >> type >> name >> command;
+		*stream >> filePath >> type >> name >> preset;
 		finished = true;
 		switch (type)
 		{
@@ -166,7 +166,7 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	}
 	layout->addWidget(ssB, 2, 2, 1, 1);
 
-	m_convertCommand = command;
+	m_convertPreset = preset;
 }
 DownloadItemW::~DownloadItemW()
 {
@@ -211,7 +211,7 @@ void DownloadItemW::finish(bool f)
 		speedProgressW = nullptr;
 		if (f)
 		{
-			if (m_convertCommand.isEmpty())
+			if (m_convertPreset.isEmpty())
 			{
 				sizeL->setText(tr(g_downloadComplete));
 			}
@@ -259,7 +259,7 @@ void DownloadItemW::write(QDataStream &stream)
 		else
 			type = 2;
 	}
-	stream << filePath << type << titleL->text() << m_convertCommand;
+	stream << filePath << type << titleL->text() << m_convertPreset;
 }
 
 void DownloadItemW::toggleStartStop()
@@ -361,7 +361,21 @@ void DownloadItemW::startConversion()
 		qCWarning(downloader).noquote() << errStr;
 	};
 
-	QString convertCommand = m_convertCommand;
+	QString convertCommand;
+	for (QAction *a : downloaderThr->convertActions())
+	{
+		if (a->text() == m_convertPreset)
+		{
+			convertCommand = a->data().toString();
+			break;
+		}
+	}
+	if (convertCommand.isEmpty())
+	{
+		conversionError(QString("Can't convert, because preset \"%1\" not found or invalid!").arg(m_convertPreset));
+		return;
+	}
+
 	if (!convertCommand.contains("<input/>"))
 	{
 		conversionError("Can't convert, because \"<input/>\" tag doesn't exist!");
@@ -404,8 +418,8 @@ void DownloadItemW::deleteConvertProcess()
 
 /**/
 
-DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name, const QString &prefix, const QString &param, const QString &command) :
-	url(url), name(name), prefix(prefix), param(param), command(command), downloadItemW(nullptr), downloadLW(downloadLW), item(nullptr)
+DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QMenu *convertsMenu, const QString &name, const QString &prefix, const QString &param, const QString &preset) :
+	url(url), name(name), prefix(prefix), param(param), preset(preset), downloadItemW(nullptr), downloadLW(downloadLW), item(nullptr), m_convertsMenu(convertsMenu)
 {
 	connect(this, SIGNAL(listSig(int, qint64, const QString &)), this, SLOT(listSlot(int, qint64, const QString &)));
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
@@ -413,7 +427,7 @@ DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, Down
 	{
 		*stream >> this->url >> this->prefix >> this->param;
 		item = new QTreeWidgetItem(downloadLW);
-		downloadItemW = new DownloadItemW(this, QString(), getIcon(), stream, command);
+		downloadItemW = new DownloadItemW(this, QString(), getIcon(), stream, preset);
 		downloadLW->setItemWidget(item, 0, downloadItemW);
 		connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 		connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
@@ -439,6 +453,13 @@ void DownloaderThread::serialize(QDataStream &stream)
 	stream << url << prefix << param;
 }
 
+const QList<QAction *> DownloaderThread::convertActions()
+{
+	QList<QAction *> actions = m_convertsMenu->actions();
+	actions.removeFirst();
+	return actions;
+}
+
 void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
 {
 	switch (param)
@@ -451,7 +472,7 @@ void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
 				downloadItemW->dontDeleteDownloadThr = true;
 				downloadItemW->deleteLater();
 			}
-			downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon(), nullptr, command);
+			downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon(), nullptr, preset);
 			downloadLW->setItemWidget(item, 0, downloadItemW);
 			connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 			connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
@@ -836,7 +857,7 @@ void Downloader::init()
 		{
 			QDataStream stream(QByteArray::fromBase64(m_sets.getByteArray("Items/Data")));
 			for (int i = 0; i < count; ++i)
-				new DownloaderThread(&stream, QString(), downloadLW);
+				new DownloaderThread(&stream, QString(), downloadLW, m_convertsMenu);
 			downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 		}
 	}
@@ -888,7 +909,7 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
 				return {};
 
-	const auto createAction = [&](const QString &actionName, const QString &command) {
+	const auto createAction = [&](const QString &actionName, const QString &preset) {
 		QAction *act = new QAction(actionName, nullptr);
 		act->setIcon(QIcon(":/downloader.svgz"));
 		act->connect(act, &QAction::triggered, this, &Downloader::download);
@@ -899,8 +920,8 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 			act->setProperty("param", param);
 		}
 		act->setProperty("url", url);
-		if (!command.isEmpty())
-			act->setProperty("command", command);
+		if (!preset.isEmpty())
+			act->setProperty("preset", preset);
 		return act;
 	};
 
@@ -913,7 +934,7 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 		const QString name = a->text();
 		if (command.isEmpty() || name.isEmpty())
 			continue;
-		actions += createAction(Downloader::tr("Download and convert to \"%1\"").arg(name), command);
+		actions += createAction(Downloader::tr("Download and convert to \"%1\"").arg(name), name);
 	}
 
 	return actions;
@@ -1054,7 +1075,7 @@ void Downloader::addUrl()
 	}
 	QString url = QInputDialog::getText(this, DownloaderName, tr("Enter address"), QLineEdit::Normal, clipboardUrl);
 	if (!url.isEmpty())
-		new DownloaderThread(nullptr, url, downloadLW);
+		new DownloaderThread(nullptr, url, downloadLW, m_convertsMenu);
 }
 void Downloader::download()
 {
@@ -1065,10 +1086,11 @@ void Downloader::download()
 		nullptr,
 		action->property("url").toString(),
 		downloadLW,
+		m_convertsMenu,
 		action->property("name").toString(),
 		action->property("prefix").toString(),
 		action->property("param").toString(),
-		action->property("command").toString()
+		action->property("preset").toString()
 	);
 	downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 }
