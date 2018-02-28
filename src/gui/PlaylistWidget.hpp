@@ -199,6 +199,8 @@ private:
 
 	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive);
 
+	void createExtensionsMenu();
+
 	void mouseMoveEvent(QMouseEvent *) override;
 	void dragEnterEvent(QDragEnterEvent *) override;
 	void dragMoveEvent(QDragMoveEvent *) override;

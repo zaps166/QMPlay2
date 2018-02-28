@@ -575,6 +575,7 @@ PlaylistWidget::PlaylistWidget() :
 	connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animationUpdate()));
 	connect(&addTimer, SIGNAL(timeout()), this, SLOT(addTimerElapsed()));
 	connect(&addThr, SIGNAL(status(bool)), this, SIGNAL(addStatus(bool)));
+	connect(playlistMenu(), &MenuBar::Playlist::aboutToShow, this, &PlaylistWidget::createExtensionsMenu);
 }
 
 QString PlaylistWidget::getUrl(QTreeWidgetItem *tWI) const
@@ -970,6 +971,38 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 	}
 }
 
+void PlaylistWidget::createExtensionsMenu()
+{
+	QTreeWidgetItem *currItem = currentItem();
+	const QString entryUrl = getUrl();
+	if (!currItem || entryUrl.isEmpty())
+		return;
+
+	QMenu *extensions = playlistMenu()->extensions;
+	extensions->clear();
+
+	const QString entryName = currItem->text(0);
+	const double entryLength = currItem->data(2, Qt::UserRole).toDouble();
+
+	QString addressPrefixName, url, param;
+	const bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+	{
+		QVector<QAction *> actions;
+		if (splitFlag)
+			actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
+		else
+			actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
+		for (QAction *act : asConst(actions))
+		{
+			act->setParent(extensions);
+			extensions->addAction(act);
+		}
+	}
+
+	extensions->setEnabled(!extensions->isEmpty());
+}
+
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	const bool modifier = (e->modifiers() == Qt::MetaModifier) || (e->modifiers() == Qt::AltModifier);
@@ -1127,17 +1160,9 @@ void PlaylistWidget::addTimerElapsed()
 
 void PlaylistWidget::modifyMenu()
 {
-	QString entryUrl = getUrl();
-	QString entryName;
-	double entryLength = -2.0;
+	const QString entryUrl = getUrl();
 
 	QTreeWidgetItem *currItem = currentItem();
-
-	if (currItem)
-	{
-		entryName = currItem->text(0);
-		entryLength = currItem->data(2, Qt::UserRole).toDouble();
-	}
 
 	const bool isLocked = (getFlags(currItem) & Playlist::Entry::Locked);
 	const bool isItemGroup = isGroup(currItem);
@@ -1158,22 +1183,4 @@ void PlaylistWidget::modifyMenu()
 	playlistMenu()->stopAfter->setVisible(currItem && !isItemGroup);
 	playlistMenu()->goToPlayback->setVisible(currentPlaying);
 	playlistMenu()->copy->setVisible(selectedItems().count());
-
-	playlistMenu()->extensions->clear();
-	QString addressPrefixName, url, param;
-	bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
-	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
-	{
-		QVector<QAction *> actions;
-		if (splitFlag)
-			actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
-		else
-			actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
-		for (QAction *act : asConst(actions))
-		{
-			act->setParent(playlistMenu()->extensions);
-			playlistMenu()->extensions->addAction(act);
-		}
-	}
-	playlistMenu()->extensions->setEnabled(playlistMenu()->extensions->actions().count());
 }
