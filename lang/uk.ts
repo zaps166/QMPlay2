@@ -634,19 +634,19 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертування перерване</translation>
     </message>
     <message>
         <source>Conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка конвертування</translation>
     </message>
     <message>
         <source>Converting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертування...</translation>
     </message>
     <message>
         <source>Stop conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Зупинити конвертування</translation>
     </message>
 </context>
 <context>
@@ -685,54 +685,57 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Додати</translation>
+        <translation>&amp;Додати</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати, змінити або видалити передустановки конвертування</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити і конвертувати до &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Converter preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Передустановка конвертера</translation>
     </message>
     <message>
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>Командний рядок для виконання після завантаження.
+
+&lt;input/&gt; - вказує завантажений файл.
+&lt;output&gt;%f.mp3&lt;/output&gt; - конвертований файл буде вхідним файлом з розширенням &quot;mp3&quot;.</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва передустановки</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Командний рядок</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation>Неправильне/пусте ім&apos;я або командний рядок!</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда повинна містити тег &lt;input/&gt;!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда повинна містити правильний тег  &lt;output&gt;file&lt;/output/&gt;!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва передустановки вже існує!</translation>
     </message>
 </context>
 <context>
