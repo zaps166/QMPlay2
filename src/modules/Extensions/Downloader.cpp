@@ -79,6 +79,52 @@ static QStringRef getCommandOutput(const QString &command)
 	return command.midRef(idx1 + 8, idx2 - idx1 - 8);
 }
 
+static void maybeAddAbsolutePath(QString &convertCommand)
+{
+	int idx = -1;
+	int quotes = 0;
+
+	if (convertCommand.startsWith('"'))
+	{
+		idx = convertCommand.indexOf('"', 1); // Quotes in executable name are not supported
+		quotes = true;
+	}
+	else
+	{
+		idx = convertCommand.indexOf(' '); // I assume that command has at least one argument (so space is required)
+	}
+
+	if (idx <= 0)
+		return;
+
+	const QString program = convertCommand.mid(quotes, idx - quotes);
+	if (program.isEmpty() || QFileInfo(program).isAbsolute())
+		return;
+
+	const auto checkExecutableFile = [](const QString &path) {
+		const QFileInfo info(path);
+		const bool isExecutable =
+#ifdef Q_OS_WIN
+			true;
+#else
+			info.isExecutable();
+#endif
+		return isExecutable && info.isFile();
+	};
+
+	QString absolutePathProgram = QMPlay2Core.getSettingsDir() + program;
+	if (!checkExecutableFile(absolutePathProgram))
+	{
+		absolutePathProgram = QCoreApplication::applicationDirPath() + "/" + program;
+		if (!checkExecutableFile(absolutePathProgram))
+			return;
+	}
+
+	if (absolutePathProgram.contains(' '))
+		absolutePathProgram = "\"" + absolutePathProgram + "\"";
+	convertCommand.replace(0, idx + quotes, absolutePathProgram);
+}
+
 /**/
 
 DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString preset) :
@@ -400,6 +446,7 @@ void DownloadItemW::startConversion()
 	}
 
 	convertCommand.replace(idx1, idx2 - idx1 + 9, "\"" + m_convertedFilePath + "\"");
+	maybeAddAbsolutePath(convertCommand);
 
 	qDebug() << "Starting conversion:" << convertCommand.toUtf8().constData();
 	m_convertProcess->start(convertCommand);
@@ -1033,7 +1080,7 @@ bool Downloader::modifyConvertAction(QAction *action, bool addRemoveButton)
 		}
 
 		action->setText(name);
-		action->setData(command);
+		action->setData(command.trimmed());
 
 		return true;
 	}
