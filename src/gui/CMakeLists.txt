@@ -230,6 +230,13 @@ elseif(APPLE)
         DESTINATION "${MAC_BUNDLE_PATH}/Contents"
         FILES_MATCHING
         PATTERN "qtbase_*.qm")
+    if(EXISTS "/usr/local/bin/ffmpeg")
+        install(PROGRAMS
+            "/usr/local/bin/ffmpeg"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents/MacOS")
+    else()
+        message(WARNING "FFmpeg executable not copied!")
+    endif()
     install(CODE "
         include(BundleUtilities)
         set(BU_CHMOD_BUNDLE_ITEMS ON)
