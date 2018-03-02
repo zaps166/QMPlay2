@@ -3439,5 +3439,9 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
         <translation>Pobieranie &quot;youtube-dl&quot; zostało przerwane!</translation>
     </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation>Pobieranie &quot;youtube-dl&quot; nie powiodło się!</translation>
+    </message>
 </context>
 </TS>

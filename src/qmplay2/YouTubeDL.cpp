@@ -378,6 +378,8 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 					}
 				}
 			}
+			if (!m_aborted)
+				emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has failed!"), g_name, 3);
 			QMPlay2Core.setWorking(false);
 		}
 	}

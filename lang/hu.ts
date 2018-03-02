@@ -3432,5 +3432,9 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation>A &quot;youtube-dl&quot; letöltése sikeresen befejeződött!</translation>
     </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -3436,5 +3436,9 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
         <translation>&quot;youtube-dl&quot; Download wurde abgebrochen!</translation>
     </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
