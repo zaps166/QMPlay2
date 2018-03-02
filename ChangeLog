@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 18.02.24:
+Changes in QMPlay2 build 18.03.02:
 	- allow to move video and subtitles in OpenGL2 video output (Ctrl and Shift key modifiers),
 	- add option to automatically perform non-recursive quick sync on playlist group,
 	- add high quality video scaling in OpenGL2 video output (disabled by default),
