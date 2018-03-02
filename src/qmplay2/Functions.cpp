@@ -799,16 +799,6 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 
 QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
 {
-	constexpr char libsslFileName[] =
-#if defined(Q_OS_WIN64)
-		"libcrypto-1_1-x64"
-#elif defined(Q_OS_WIN32)
-		"libcrypto-1_1"
-#else
-		"ssl"
-#endif
-	;
-
 	using EVP_CIPHER_CTX = void;
 	using EVP_CIPHER = void;
 	using EVP_MD = void;
@@ -825,8 +815,26 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 	using EVP_CIPHER_CTX_cleanup_Type = int(*)(EVP_CIPHER_CTX *a);
 	using EVP_CIPHER_CTX_reset_Type = int(*)(EVP_CIPHER_CTX *a);
 
-	QLibrary libssl(libsslFileName);
+	QLibrary libssl;
+#if defined(Q_OS_WIN64)
+	libssl.setFileName("libcrypto-1_1-x64");
+	libssl.load();
+#elif defined(Q_OS_WIN32)
+	libssl.setFileName("libcrypto-1_1");
+	libssl.load();
+#else
+	libssl.setFileName("ssl");
 	if (!libssl.load())
+	{
+		libssl.setFileNameAndVersion("ssl", "1.1");
+		if (!libssl.load())
+		{
+			libssl.setFileNameAndVersion("ssl", "1.0.0");
+			libssl.load();
+		}
+	}
+#endif
+	if (!libssl.isLoaded())
 	{
 		QMPlay2Core.logError("Cannot load OpenSSL library", true, true);
 		return QByteArray();
