@@ -241,7 +241,7 @@ void AnimeOdcinki::setCompleterListCallback(const CompleterReadyCallback &callba
 		if (m_animePairList.isEmpty() && !m_animeListReply)
 		{
 			m_animeListReply = start(g_url);
-			connect(m_animeListReply.data(), &NetworkReply::finished, this, &AnimeOdcinki::gotAnimeList);
+			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
 		}
 		else if (!m_animePairList.isEmpty())
 		{

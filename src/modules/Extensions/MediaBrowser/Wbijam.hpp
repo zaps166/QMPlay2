@@ -71,6 +71,7 @@ public:
 private:
 	void maybeFetchConfiguration(IOController<NetworkReply> &netReply);
 
+private slots:
 	void gotAnimeList();
 
 private:
