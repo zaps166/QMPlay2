@@ -32,7 +32,7 @@
 Q_LOGGING_CATEGORY(animeodcinki, "AnimeOdcinki")
 
 constexpr const char *g_url = "https://a-o.ninja/anime/";
-constexpr const char *g_linkexpander = "http://www.linkexpander.com/get_url.php";
+constexpr const char *g_linkexpander = "https://linkexpander.com/get_url.php";
 constexpr const char *g_serverPrioritiesUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/AnimeOdcinki.json";
 
 static AnimeOdcinki::AnimePairList parseAnimeList(const QByteArray &data, AnimeOdcinki::AnimePair *episodeImgDescr)
