@@ -98,6 +98,7 @@ Hardware acceleration important information:
 - VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 - CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support (requirement during compilation)!
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
+- VideoToolBox doesn't support OpenGL high quality video scaling yet.
 - VideoToolBox doesn't support deinterlacing.
 
 ## Deinterlacing

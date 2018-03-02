@@ -750,6 +750,7 @@ void OpenGL2Common::testGLInternal()
 			target = GL_TEXTURE_RECTANGLE_ARB;
 			if (numPlanes == 1)
 				isOK = false; // Not used and not supported
+			hqScaling = false; // Not yet supported
 		}
 
 		if (isOK)

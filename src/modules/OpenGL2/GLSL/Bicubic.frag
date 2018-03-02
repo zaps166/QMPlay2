@@ -1,7 +1,3 @@
-#ifndef sampler
-    #define sampler sampler2D
-#endif
-
 uniform int uBicubic;
 
 // w0, w1, w2, and w3 are the four cubic B-spline basis functions
@@ -42,7 +38,7 @@ float h1(float a)
     return 1.0 + w3(a) / (w2(a) + w3(a));
 }
 
-vec4 getTexel(sampler tex, vec2 st)
+vec4 getTexel(sampler2D tex, vec2 st)
 {
     if (uBicubic == 0)
         return texture(tex, st);
