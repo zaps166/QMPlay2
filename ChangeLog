@@ -7,6 +7,7 @@ Changes in QMPlay2 build 18.02.24:
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
 	- option to convert media file after download (e.g. to MP3),
+	- audio fade in/out is now disabled for video contents,
 	- don't unpause when seeking (default option),
 	- QPainter video output optimizations,
 	- add sorting YouTube search results,
