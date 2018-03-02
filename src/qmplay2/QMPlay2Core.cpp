@@ -25,6 +25,7 @@
 #include <Version.hpp>
 #include <Module.hpp>
 
+#include <QLoggingCategory>
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
@@ -42,12 +43,30 @@
 	#include <QStandardPaths>
 #endif
 
+#include <cstdarg>
 #include <cstdio>
 
 extern "C"
 {
 	#include <libavformat/avformat.h>
 	#include <libavutil/log.h>
+}
+
+/**/
+
+Q_LOGGING_CATEGORY(ffmpeglog, "FFmpegLog")
+
+static void avQMPlay2LogHandler(void *avcl, int level, const char *fmt, va_list vl)
+{
+	if (level <= AV_LOG_FATAL)
+	{
+		const QByteArray msg = QString::vasprintf(fmt, vl).trimmed().toUtf8();
+		qCCritical(ffmpeglog) << msg.constData();
+	}
+	else
+	{
+		av_log_default_callback(avcl, level, fmt, vl);
+	}
 }
 
 /**/
@@ -232,6 +251,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #ifndef QT_DEBUG
 	av_log_set_level(AV_LOG_ERROR);
 #endif
+	av_log_set_callback(avQMPlay2LogHandler);
 	av_register_all();
 	avformat_network_init();
 
@@ -412,7 +432,7 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 			logs.append(txt);
 	}
 	if (logFlags & AddTimeToLog)
-		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss") + "] ";
+		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss.zzz") + "] ";
 	if (logFlags & InfoLog)
 	{
 		fprintf(stdout, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
