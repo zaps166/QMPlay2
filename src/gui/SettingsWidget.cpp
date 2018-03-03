@@ -671,11 +671,7 @@ void SettingsWidget::applyProxy()
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	if (!QMPSettings.getBool("Proxy/Use"))
 	{
-#ifdef Q_OS_WIN
-		SetEnvironmentVariableA("http_proxy", nullptr);
-#else
-		unsetenv("http_proxy");
-#endif
+		qunsetenv("http_proxy");
 	}
 	else
 	{
@@ -698,11 +694,7 @@ void SettingsWidget::applyProxy()
 			auth += '@';
 			proxyEnv.insert(7, auth);
 		}
-#ifdef Q_OS_WIN
-		SetEnvironmentVariableA("http_proxy", proxyEnv.toLocal8Bit());
-#else
-		setenv("http_proxy", proxyEnv.toLocal8Bit(), true);
-#endif
+		qputenv("http_proxy", proxyEnv.toLocal8Bit());
 	}
 }
 
