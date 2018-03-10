@@ -63,10 +63,6 @@
 	#define ICONS_FROM_THEME
 #endif
 
-#ifdef Q_OS_WIN
-	#include <windows.h>
-#endif
-
 class Page3 : public QWidget
 {
 public:
