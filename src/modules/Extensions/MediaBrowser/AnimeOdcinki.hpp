@@ -68,7 +68,6 @@ private:
 	void maybeFetchConfiguration(IOController<NetworkReply> &netReply);
 	EmbeddedPlayers getEmbeddedPlayers(const QByteArray &data) const;
 
-private slots:
 	void gotAnimeList();
 
 private:

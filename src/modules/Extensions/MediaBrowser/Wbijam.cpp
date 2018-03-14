@@ -336,7 +336,7 @@ void Wbijam::setCompleterListCallback(const CompleterReadyCallback &callback)
 		if (m_animeTupleList.empty() && !m_animeListReply)
 		{
 			m_animeListReply = start(g_inneUrl);
-			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
+			connect(m_animeListReply.data(), &NetworkReply::finished, this, &Wbijam::gotAnimeList);
 		}
 		else if (!m_animeTupleList.empty())
 		{
