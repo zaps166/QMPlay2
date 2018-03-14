@@ -18,11 +18,13 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QByteArray>
 
 namespace Version
 {
-	Q_DECL_EXPORT QByteArray get();
-	Q_DECL_EXPORT QByteArray userAgent();
-	Q_DECL_EXPORT bool isPortable();
+	QMPLAY2SHAREDLIB_EXPORT QByteArray get();
+	QMPLAY2SHAREDLIB_EXPORT QByteArray userAgent();
+	QMPLAY2SHAREDLIB_EXPORT bool isPortable();
 }

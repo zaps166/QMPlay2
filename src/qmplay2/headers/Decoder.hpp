@@ -31,7 +31,7 @@ class VideoWriter;
 class StreamInfo;
 class LibASS;
 
-class Q_DECL_EXPORT Decoder : public ModuleCommon
+class QMPLAY2SHAREDLIB_EXPORT Decoder : public ModuleCommon
 {
 public:
 	static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {}, QString *modNameOutput = nullptr);

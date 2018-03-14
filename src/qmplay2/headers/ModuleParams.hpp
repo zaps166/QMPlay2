@@ -18,11 +18,13 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QHash>
 #include <QString>
 #include <QVariant>
 
-class Q_DECL_EXPORT ModuleParams
+class QMPLAY2SHAREDLIB_EXPORT ModuleParams
 {
 	Q_DISABLE_COPY(ModuleParams)
 public:

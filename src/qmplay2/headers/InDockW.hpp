@@ -18,10 +18,12 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QPointer>
 #include <QWidget>
 
-class Q_DECL_EXPORT InDockW final : public QWidget
+class QMPLAY2SHAREDLIB_EXPORT InDockW final : public QWidget
 {
 	Q_OBJECT
 public:

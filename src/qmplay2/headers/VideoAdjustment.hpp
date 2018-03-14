@@ -22,7 +22,7 @@
 
 #include <string.h>
 
-class Q_DECL_EXPORT VideoAdjustment
+class QMPLAY2SHAREDLIB_EXPORT VideoAdjustment
 {
 public:
 	inline void unset()

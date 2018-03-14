@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QMPlay2Lib.hpp>
 
 class QByteArray;
 
-class Q_DECL_EXPORT SndResampler
+class QMPLAY2SHAREDLIB_EXPORT SndResampler
 {
 public:
 	SndResampler() = default;

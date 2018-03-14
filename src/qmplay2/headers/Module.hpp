@@ -27,7 +27,7 @@
 
 class ModuleCommon;
 
-class Q_DECL_EXPORT Module : public Settings
+class QMPLAY2SHAREDLIB_EXPORT Module : public Settings
 {
 	friend class ModuleCommon;
 public:

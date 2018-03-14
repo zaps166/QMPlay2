@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QIODevice>
 #include <QString>
 
@@ -29,7 +31,7 @@ class IPCServerPriv;
 
 class QSocketNotifier;
 
-class Q_DECL_EXPORT IPCSocket final : public QIODevice
+class QMPLAY2SHAREDLIB_EXPORT IPCSocket final : public QIODevice
 {
 	Q_OBJECT
 	friend class IPCServer;
@@ -60,7 +62,7 @@ private:
 
 /**/
 
-class Q_DECL_EXPORT IPCServer final : public QObject
+class QMPLAY2SHAREDLIB_EXPORT IPCServer final : public QObject
 {
 	Q_OBJECT
 public:

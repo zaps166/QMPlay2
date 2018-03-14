@@ -21,7 +21,7 @@
 #include <TimeStamp.hpp>
 #include <Buffer.hpp>
 
-struct Q_DECL_EXPORT Packet : public Buffer
+struct QMPLAY2SHAREDLIB_EXPORT Packet : public Buffer
 {
 	TimeStamp ts;
 	double duration, sampleAspectRatio = 0.0;

@@ -29,7 +29,7 @@
 class VideoFiltersThr;
 class TimeStamp;
 
-class Q_DECL_EXPORT VideoFilters
+class QMPLAY2SHAREDLIB_EXPORT VideoFilters
 {
 	Q_DISABLE_COPY(VideoFilters)
 	friend class VideoFiltersThr;

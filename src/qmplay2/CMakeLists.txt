@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
+    headers/QMPlay2Lib.hpp
     headers/QMPlay2Core.hpp
     headers/Functions.hpp
     headers/Settings.hpp
@@ -101,6 +102,8 @@ endif()
 if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
     set_source_files_properties(Version.cpp PROPERTIES COMPILE_DEFINITIONS QMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
 endif()
+
+add_definitions(-DQMPLAY2SHAREDLIB_LIBRARY)
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_HDR headers/NotifiesFreedesktop.hpp)

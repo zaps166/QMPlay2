@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QMPlay2Lib.hpp>
 
 /* YUV planar to RGB32 */
 
@@ -26,7 +26,7 @@ class VideoFrameSize;
 struct SwsContext;
 class VideoFrame;
 
-class Q_DECL_EXPORT ImgScaler
+class QMPLAY2SHAREDLIB_EXPORT ImgScaler
 {
 public:
 	ImgScaler();

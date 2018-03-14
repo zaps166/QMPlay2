@@ -18,19 +18,10 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QtGlobal>
 
-#include <QStringList>
-
-class LibASS;
-
-class QMPLAY2SHAREDLIB_EXPORT SubsDec
-{
-public:
-	static SubsDec *create(const QString &);
-	static QStringList extensions();
-
-	virtual ~SubsDec() = default;
-
-	virtual bool toASS(const QByteArray &, LibASS *, double) = 0;
-};
+#if defined(QMPLAY2SHAREDLIB_LIBRARY)
+	#define QMPLAY2SHAREDLIB_EXPORT Q_DECL_EXPORT
+#else
+	#define QMPLAY2SHAREDLIB_EXPORT Q_DECL_IMPORT
+#endif

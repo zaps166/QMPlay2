@@ -18,12 +18,14 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QMutex>
 #include <QList>
 #include <QRect>
 #include <QTime>
 
-class Q_DECL_EXPORT QMPlay2OSD
+class QMPLAY2SHAREDLIB_EXPORT QMPlay2OSD
 {
 public:
 	class Image

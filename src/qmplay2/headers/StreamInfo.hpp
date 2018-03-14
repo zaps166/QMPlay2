@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QCoreApplication>
 #include <QByteArray>
 #include <QVector>
@@ -49,7 +51,7 @@ enum QMPlay2Tags
 	QMPLAY2_TAG_COMMENT
 };
 
-class Q_DECL_EXPORT StreamInfo
+class QMPLAY2SHAREDLIB_EXPORT StreamInfo
 {
 	Q_DECLARE_TR_FUNCTIONS(StreamInfo)
 public:
@@ -86,7 +88,7 @@ public:
 	bool spherical = false;
 };
 
-class Q_DECL_EXPORT StreamsInfo : public QList<StreamInfo *>
+class QMPLAY2SHAREDLIB_EXPORT StreamsInfo : public QList<StreamInfo *>
 {
 	Q_DISABLE_COPY(StreamsInfo)
 public:

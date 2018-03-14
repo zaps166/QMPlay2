@@ -19,11 +19,12 @@
 #pragma once
 
 #include <IOController.hpp>
+#include <QMPlay2Lib.hpp>
 
 #include <QString>
 #include <QList>
 
-class Q_DECL_EXPORT Playlist
+class QMPLAY2SHAREDLIB_EXPORT Playlist
 {
 public:
 	class Entry
