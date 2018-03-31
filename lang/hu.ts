@@ -3118,6 +3118,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <source>Translation</source>
         <translation>Fordítás</translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>

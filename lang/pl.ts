@@ -3123,6 +3123,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>Lyrics</source>
         <translation>Tekstowo</translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation>Nie znaleziono tekstu piosenki</translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>

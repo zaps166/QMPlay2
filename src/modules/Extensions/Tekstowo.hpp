@@ -45,6 +45,9 @@ private slots:
 private:
 	void search();
 
+	void lyricsNotFound();
+
+private:
 	DockWidget *m_dW;
 
 	bool m_visible, m_pending;

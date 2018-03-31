@@ -240,11 +240,17 @@ void Tekstowo::finished(NetworkReply *reply)
 			html += "</center>";
 			setHtml(html);
 		}
+		else
+		{
+			lyricsNotFound();
+		}
 	}
 	else if (reply == m_makeitpersonalLyricsReply)
 	{
 		if (data != "Sorry, We don't have lyrics for this song yet.")
 			setHtml("<center><b>" + m_realTitle + " - " + m_realArtist + "</b><br/>" + QByteArray(data).replace("\n", "<br/>") + "</center>");
+		else
+			lyricsNotFound();
 	}
 }
 
@@ -260,4 +266,9 @@ void Tekstowo::search()
 		m_tekstowoSearchReply = m_net.start(getTekstowoSearchUrl(m_artist, m_title));
 		m_pending = false;
 	}
+}
+
+void Tekstowo::lyricsNotFound()
+{
+	setHtml(QString("<center><i>%1</i></center>").arg(tr("Lyrics not found")));
 }

@@ -3114,6 +3114,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>

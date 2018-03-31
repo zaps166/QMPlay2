@@ -3120,6 +3120,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>Lyrics</source>
         <translation>Liedtext</translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>
