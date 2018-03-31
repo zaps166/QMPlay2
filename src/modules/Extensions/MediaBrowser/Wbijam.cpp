@@ -30,6 +30,7 @@
 #include <QHeaderView>
 #include <QJsonArray>
 #include <QRegExp>
+#include <QUrl>
 
 #include <algorithm>
 
@@ -383,45 +384,30 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 
 			std::vector<std::vector<std::tuple<QString, bool>>> videoPriorityUrls(maxPriority + 1);
 
-			const auto extractUrl = [&](const QString section) {
-				int idx1 = section.indexOf("a href=\"");
-				if (idx1 < 0)
-				{
-					const int priority = m_serverPriorities.isEmpty() ? 0 : m_serverPriorities.value("vk", -1);
-					if (priority == -1)
-						return;
-					int idxRel = section.indexOf("rel=\"");
-					int idxId  = section.indexOf("id=\"");
-					if (idxRel > -1 && idxId > -1)
-					{
-						idxRel += 5;
-						idxId  += 4;
-						int idxRelEnd = section.indexOf('"', idxRel);
-						int idxIdEnd  = section.indexOf('"', idxId);
-						if (idxRelEnd > -1 && idxIdEnd > -1)
-							videoPriorityUrls[priority].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
-					}
-				}
-				else
-				{
-					idx1 += 8;
+			const auto extractUrl = [&](const QString &section) {
+				int idxRel = section.indexOf("rel=\"");
+				if (idxRel < 0)
+					return;
 
-					int idx2 = section.indexOf('"', idx1);
-					if (idx2 > -1)
+				idxRel += 5;
+				int idxRelEnd = section.indexOf("\">", idxRel);
+				if (idxRelEnd < 0)
+					return;
+
+				const QUrl qurl(url);
+				const QStringRef rel = section.midRef(idxRel, idxRelEnd - idxRel);
+				const QString urlDest = qurl.scheme() + "://" + qurl.host() + "/odtwarzacz-" + rel + ".html";
+				const bool isVk = section.contains("vk</td>");
+
+				if (m_serverPriorities.isEmpty())
+				{
+					videoPriorityUrls[0].emplace_back(urlDest, isVk);
+				}
+				else for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+				{
+					if (section.contains(it.key() + "</td>"))
 					{
-						const QString urlSection = section.mid(idx1, idx2 - idx1);
-						const QString urlDest = url.left(url.indexOf("wbijam.pl/") + 10) + urlSection;
-						if (m_serverPriorities.isEmpty())
-						{
-							videoPriorityUrls[0].emplace_back(urlDest, false);
-						}
-						else for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
-						{
-							if (urlSection.contains(it.key()))
-							{
-								videoPriorityUrls[it.value()].emplace_back(urlDest, false);
-							}
-						}
+						videoPriorityUrls[it.value()].emplace_back(urlDest, isVk);
 					}
 				}
 			};
@@ -434,14 +420,33 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 					for (const auto &tuple : videoUrls)
 					{
 						QString animeUrl = std::get<0>(tuple);
-						bool ok = std::get<1>(tuple);
+						const bool isVk = std::get<1>(tuple);
+						bool ok = false;
 
-						if (!ok) // iframe
+						// iframe
+						if (net.startAndWait(netReply, animeUrl))
 						{
-							if (net.startAndWait(netReply, animeUrl))
+							const QString replyData = netReply->readAll();
+							if (isVk)
 							{
-								const QString replyData = netReply->readAll();
-
+								QRegExp videoRx("class=\"odtwarzaj_vk\".+rel=\"(.*)\".+id=\"(.*)\"");
+								videoRx.setMinimal(true);
+								int pos = 0;
+								while ((pos = videoRx.indexIn(replyData, pos)) != -1)
+								{
+									const QString rel = videoRx.cap(1);
+									const QString id = videoRx.cap(2);
+									if (!rel.isEmpty() && !id.isEmpty())
+									{
+										animeUrl = QString("https://vk.com/video%1_%2").arg(rel, id);
+										ok = true;
+										break;
+									}
+									pos += videoRx.matchedLength();
+								}
+							}
+							else
+							{
 								QRegExp videoRx("<iframe.+src=\"(.*)\"");
 								videoRx.setMinimal(true);
 								int pos = 0;
