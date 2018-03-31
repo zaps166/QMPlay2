@@ -739,7 +739,7 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const 
 
 bool PlaylistWidget::canModify(bool all) const
 {
-	if (addThr.isInProgress())
+	if (addThr.isRunning())
 		return false;
 	if (all)
 	{

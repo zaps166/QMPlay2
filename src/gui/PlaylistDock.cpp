@@ -279,10 +279,8 @@ void PlaylistDock::addAndPlay(QTreeWidgetItem *tWI)
 }
 void PlaylistDock::maybeDoQuickSync(QTreeWidgetItem *item)
 {
-	QTimer::singleShot(0, this, [=] { // Go through event queue
-		if (list->canModify() && PlaylistWidget::isAlwaysSynced(item) && list->getChildren(PlaylistWidget::ONLY_GROUPS).contains(item))
-			doGroupSync(true, item, false);
-	});
+	if (list->canModify() && PlaylistWidget::isAlwaysSynced(item) && list->getChildren(PlaylistWidget::ONLY_GROUPS).contains(item))
+		doGroupSync(true, item, false);
 }
 
 void PlaylistDock::stopLoading()

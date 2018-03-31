@@ -92,11 +92,6 @@ public:
 
 	AddThr(PlaylistWidget &pLW);
 
-	inline bool isInProgress() const
-	{
-		return inProgress;
-	}
-
 	void setData(const QStringList &_urls, const QStringList &_existingEntries, QTreeWidgetItem *_par, bool _loadList, SYNC = NO_SYNC);
 	void setDataForSync(const QString &, QTreeWidgetItem *, bool);
 
