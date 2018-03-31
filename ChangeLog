@@ -1,3 +1,9 @@
+Changes in QMPlay2 build 18.03.31:
+	- fix problems with playlist quick sync,
+	- update Hungarian translation file,
+	- update for Wbijam changes,
+	- fix proxy on Windows,
+
 Changes in QMPlay2 build 18.03.02:
 	- allow to move video and subtitles in OpenGL2 video output (Ctrl and Shift key modifiers),
 	- add option to automatically perform non-recursive quick sync on playlist group,
