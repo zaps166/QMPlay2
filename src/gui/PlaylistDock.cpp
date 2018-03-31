@@ -56,7 +56,7 @@ PlaylistDock::PlaylistDock() :
 
 	connect(list, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(itemDoubleClicked(QTreeWidgetItem *)));
 	connect(list, SIGNAL(returnItem(QTreeWidgetItem *)), this, SLOT(addAndPlay(QTreeWidgetItem *)));
-	connect(list, &PlaylistWidget::itemExpanded, this, &PlaylistDock::maybeDoQuickSync);
+	connect(list, &PlaylistWidget::itemExpanded, this, &PlaylistDock::maybeDoQuickSync, Qt::QueuedConnection); // Must be queued to not crash at startup in some cases
 	connect(list, SIGNAL(visibleItemsCount(int)), this, SLOT(visibleItemsCount(int)));
 	connect(list, SIGNAL(addStatus(bool)), findE, SLOT(setDisabled(bool)));
 	connect(findE, SIGNAL(textChanged(const QString &)), this, SLOT(findItems(const QString &)));
