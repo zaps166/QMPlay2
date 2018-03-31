@@ -40,7 +40,7 @@ public:
 
 	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
 
-	void silence(bool invert = false);
+	void silence(bool invert, bool fromPause);
 
 	inline void setAllowAudioDrain()
 	{

@@ -122,9 +122,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 	return false;
 }
 
-void AudioThr::silence(bool invert)
+void AudioThr::silence(bool invert, bool fromPause)
 {
-	if (QMPlay2Core.getSettings().getBool("Silence") && playC.frame_last_pts <= 0.0 && doSilence == -1.0 && isRunning() && (invert || !playC.paused))
+	if (QMPlay2Core.getSettings().getBool("Silence") && (!fromPause || playC.frame_last_pts <= 0.0) && doSilence == -1.0 && isRunning() && (invert || !playC.paused))
 	{
 		playC.doSilenceBreak = false;
 		allowAudioDrain |= !invert;

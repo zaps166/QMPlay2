@@ -224,7 +224,7 @@ void PlayClass::stop(bool _quitApp)
 		if (isPlaying())
 		{
 			if (aThr && newUrl.isEmpty())
-				 aThr->silence();
+				 aThr->silence(false, false);
 			if (isPlaying())
 			{
 				timTerminate.start(TERMINATE_TIMEOUT * 5 / 3);
@@ -271,11 +271,11 @@ void PlayClass::togglePause()
 	if (stopPauseMutex.tryLock())
 	{
 		if (aThr && !paused)
-			aThr->silence();
+			aThr->silence(false, true);
 		paused = !paused;
 		fillBufferB = true;
 		if (aThr && !paused)
-			aThr->silence(true);
+			aThr->silence(true, true);
 		stopPauseMutex.unlock();
 	}
 }
@@ -305,7 +305,7 @@ void PlayClass::seek(double pos, bool allowAccurate)
 	emit QMPlay2Core.seeked(pos); //Signal for MPRIS2
 	fillBufferB = true;
 	if (aThr && paused)
-		aThr->silence(true);
+		aThr->silence(true, true);
 }
 void PlayClass::chStream(const QString &s)
 {
@@ -1440,7 +1440,7 @@ void PlayClass::load(Demuxer *demuxer)
 				}
 				if (doSilenceOnStart)
 				{
-					aThr->silence(true);
+					aThr->silence(true, false);
 					doSilenceOnStart = false;
 				}
 				aThr->unlock();
