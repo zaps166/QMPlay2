@@ -2313,6 +2313,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Unpause when seeking</source>
         <translation>Lejátszás indítása léptetéskor</translation>
     </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

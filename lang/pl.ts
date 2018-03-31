@@ -2318,6 +2318,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Unpause when seeking</source>
         <translation>Wznów odtwarzanie podczas przewijania</translation>
     </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation>Częściowo zaznaczone oznacza, że występuje przerwa między kliknięciem a pauzą</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

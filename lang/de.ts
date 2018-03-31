@@ -2315,6 +2315,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Unpause when seeking</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
