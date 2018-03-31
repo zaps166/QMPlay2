@@ -1,4 +1,6 @@
 Changes in QMPlay2 build 18.03.31:
+	- enable audio fade in/out on play/stop for video contents,
+	- move main window by dragging menu bar or status bar,
 	- fix problems with playlist quick sync,
 	- update Hungarian translation file,
 	- update for Wbijam changes,
