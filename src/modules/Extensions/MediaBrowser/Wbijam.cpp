@@ -382,9 +382,9 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 			for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
 				maxPriority = qMax(maxPriority, it.value());
 
-			std::vector<std::vector<std::tuple<QString, bool>>> videoPriorityUrls(maxPriority + 1);
+			std::vector<QStringList> videoPriorityUrls(maxPriority + 1);
 
-			const auto extractUrl = [&](const QString &section) {
+			const auto extractUrl = [&](const QString &section, bool useServerPriorities) {
 				int idxRel = section.indexOf("rel=\"");
 				if (idxRel < 0)
 					return;
@@ -397,38 +397,34 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				const QUrl qurl(url);
 				const QStringRef rel = section.midRef(idxRel, idxRelEnd - idxRel);
 				const QString urlDest = qurl.scheme() + "://" + qurl.host() + "/odtwarzacz-" + rel + ".html";
-				const bool isVk = section.contains("vk</td>");
 
-				if (m_serverPriorities.isEmpty())
+				if (!useServerPriorities || m_serverPriorities.isEmpty())
 				{
-					videoPriorityUrls[0].emplace_back(urlDest, isVk);
+					videoPriorityUrls[0].push_back(urlDest);
 				}
 				else for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
 				{
 					if (section.contains(it.key() + "</td>"))
 					{
-						videoPriorityUrls[it.value()].emplace_back(urlDest, isVk);
+						videoPriorityUrls[it.value()].push_back(urlDest);
 					}
 				}
 			};
 
 			bool hasStreamUrl = false;
 
-			const auto processUrls = [&] {
+			const auto processUrls = [&](bool useServerPriorities) {
 				for (const auto &videoUrls : videoPriorityUrls)
 				{
-					for (const auto &tuple : videoUrls)
+					for (QString animeUrl : videoUrls)
 					{
-						QString animeUrl = std::get<0>(tuple);
-						const bool isVk = std::get<1>(tuple);
 						bool ok = false;
 
 						// iframe
 						if (net.startAndWait(netReply, animeUrl))
 						{
 							const QString replyData = netReply->readAll();
-							if (isVk)
-							{
+							{ // Check for VK
 								QRegExp videoRx("class=\"odtwarzaj_vk\".+rel=\"(.*)\".+id=\"(.*)\"");
 								videoRx.setMinimal(true);
 								int pos = 0;
@@ -445,7 +441,7 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 									pos += videoRx.matchedLength();
 								}
 							}
-							else
+							if (!ok) // Not VK, try other players
 							{
 								QRegExp videoRx("<iframe.+src=\"(.*)\"");
 								videoRx.setMinimal(true);
@@ -462,6 +458,20 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 										break;
 									}
 									pos += videoRx.matchedLength();
+								}
+							}
+
+							if (ok && useServerPriorities && !m_serverPriorities.isEmpty())
+							{
+								// Don't use priorities, only check if URL can be used (if exists in server priorities)
+								ok = false;
+								for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+								{
+									if (animeUrl.contains(it.key()))
+									{
+										ok = true;
+										break;
+									}
 								}
 							}
 						}
@@ -500,11 +510,11 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				int pos = 0;
 				while ((pos = videoRx.indexIn(replyData, pos)) != -1)
 				{
-					extractUrl(videoRx.cap(1));
+					extractUrl(videoRx.cap(1), true);
 					pos += videoRx.matchedLength();
 				}
 
-				processUrls();
+				processUrls(false);
 			}
 			else // Inne
 			{
@@ -531,11 +541,11 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 						int pos = 0;
 						while ((pos = videoRx.indexIn(section, pos)) != -1)
 						{
-							extractUrl(videoRx.cap(1));
+							extractUrl(videoRx.cap(1), false);
 							pos += videoRx.matchedLength();
 						}
 
-						processUrls();
+						processUrls(true);
 					}
 				}
 			}
