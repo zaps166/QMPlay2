@@ -179,7 +179,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	QLabel *stateL = new QLabel(tr("Stopped"));
 	statusBar->addWidget(stateL);
 	setStatusBar(statusBar);
-#if !defined Q_OS_ANDROID
+#if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	statusBar->installEventFilter(this);
 #endif
 
@@ -1768,7 +1768,7 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 		fileOpenTimer.start(10);
 	}
 #endif
-	else if (!isFullScreen() && (obj == menuBar || obj == statusBar))
+	else if ((obj == menuBar || obj == statusBar) && !isFullScreen())
 	{
 		if (event->type() == QEvent::MouseButtonPress)
 		{
