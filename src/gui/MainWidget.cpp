@@ -152,9 +152,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 #endif
 
 	QMPlay2GUI.menuBar = new MenuBar;
-#if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
-	QMPlay2GUI.menuBar->installEventFilter(this);
-#endif
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	tray = new QSystemTrayIcon(this);
@@ -179,9 +176,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	QLabel *stateL = new QLabel(tr("Stopped"));
 	statusBar->addWidget(stateL);
 	setStatusBar(statusBar);
-#if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
-	statusBar->installEventFilter(this);
-#endif
 
 	videoDock = new VideoDock;
 	videoDock->setObjectName("videoDock");
@@ -1768,30 +1762,6 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 		fileOpenTimer.start(10);
 	}
 #endif
-	else if ((obj == menuBar || obj == statusBar) && !isFullScreen())
-	{
-		if (event->type() == QEvent::MouseButtonPress)
-		{
-			QMouseEvent *me = (QMouseEvent *)event;
-			if (me->button() == Qt::LeftButton && (obj != menuBar || !menuBar->actionAt(me->pos())))
-			{
-				m_pressedPos = me->pos();
-				m_pressed = true;
-			}
-		}
-		else if (m_pressed && event->type() == QEvent::MouseMove)
-		{
-			QMouseEvent *me = (QMouseEvent *)event;
-			if (me->buttons() & Qt::LeftButton)
-				move(pos() + me->pos() - m_pressedPos);
-		}
-		else if (m_pressed && event->type() == QEvent::MouseButtonRelease)
-		{
-			QMouseEvent *me = (QMouseEvent *)event;
-			if (me->button() == Qt::LeftButton)
-				m_pressed = false;
-		}
-	}
 	return QMainWindow::eventFilter(obj, event);
 }
 

@@ -189,7 +189,4 @@ private:
 #ifdef Q_OS_WIN
 	QWinTaskbarProgress *m_taskBarProgress = nullptr;
 #endif
-
-	QPoint m_pressedPos;
-	bool m_pressed = false;
 };
