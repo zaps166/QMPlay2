@@ -150,7 +150,7 @@ bool MkvMuxer::write(Packet &packet, const int idx)
 		pkt.pts = round(packet.ts.pts() / timeBase);
 	pkt.flags = packet.hasKeyFrame ? AV_PKT_FLAG_KEY : 0;
 	pkt.buf = packet.toAvBufferRef();
-	pkt.data = pkt.buf->data;
+	pkt.data = pkt.buf->data + packet.offset();
 	pkt.size = packet.size();
 	pkt.stream_index = idx;
 

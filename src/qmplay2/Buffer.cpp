@@ -24,10 +24,6 @@ extern "C"
 	#include <libavutil/mem.h>
 }
 
-Buffer::Buffer(const Buffer &other) :
-	m_bufferRef(other.m_bufferRef ? av_buffer_ref(other.m_bufferRef) : nullptr),
-	m_size(other.m_size)
-{}
 Buffer::~Buffer()
 {
 	av_buffer_unref(&m_bufferRef);
@@ -45,50 +41,56 @@ bool Buffer::isWritable() const
 	return !isNull() && av_buffer_is_writable(m_bufferRef);
 }
 
-void Buffer::resize(qint32 len)
+bool Buffer::resize(qint32 len)
 {
+	if (m_offset > 0)
+		return false;
 	if (capacity() < len)
 		av_buffer_realloc(&m_bufferRef, len);
 	m_size = len;
+	return true;
 }
 
-void Buffer::remove(qint32 pos, qint32 len)
+bool Buffer::remove(qint32 pos, qint32 len)
 {
-	if (pos < 0 || pos >= m_size || len < 0)
-		return;
-	quint8 *bufferData = data();
-	if (bufferData)
+	if (pos < 0 || pos >= m_size || len < 0 || m_offset > 0)
+		return false;
+	if (quint8 *bufferData = data())
 	{
 		if (pos + len > m_size)
 			len = m_size - pos;
 		m_size -= len;
 		memmove(bufferData + pos, bufferData + pos + len, m_size - pos);
+		return true;
 	}
+	return false;
 }
 
 void Buffer::clear()
 {
 	av_buffer_unref(&m_bufferRef);
 	m_size = 0;
+	m_offset = 0;
 }
 
 const quint8 *Buffer::data() const
 {
-	return !isNull() ? m_bufferRef->data : nullptr;
+	return !isNull() ? (m_bufferRef->data + m_offset) : nullptr;
 }
 quint8 *Buffer::data()
 {
 	if (isNull())
 		return nullptr;
 	av_buffer_make_writable(&m_bufferRef);
-	return m_bufferRef->data;
+	return m_bufferRef->data + m_offset;
 }
 
-void Buffer::assign(AVBufferRef *otherBufferRef, qint32 len)
+void Buffer::assign(AVBufferRef *otherBufferRef, qint32 len, qint32 offset)
 {
 	av_buffer_unref(&m_bufferRef);
 	m_bufferRef = otherBufferRef;
 	m_size = (len >= 0 && len <= m_bufferRef->size) ? len : m_bufferRef->size;
+	m_offset = (offset > 0 && m_size + offset <= m_bufferRef->size) ? offset : 0;
 }
 void Buffer::assign(const void *data, qint32 len, qint32 mem)
 {
@@ -102,27 +104,19 @@ void Buffer::assign(const void *data, qint32 len, qint32 mem)
 	memcpy(m_bufferRef->data, data, len);
 	memset(m_bufferRef->data + len, 0, mem - len);
 	m_size = len;
+	m_offset = 0;
 }
 
-AVBufferRef *Buffer::toAvBufferRef()
+AVBufferRef *Buffer::toAvBufferRef() const
 {
 	return av_buffer_ref(m_bufferRef);
 }
 
-#if 0
-void Buffer::append(const void *data, qint32 len)
-{
-	av_buffer_realloc(&m_bufferRef, m_size + len);
-	memcpy(m_bufferRef->data + m_size, data, len);
-	m_size += len;
-}
-#endif
-
-Buffer &Buffer::operator =(const Buffer &other)
+void Buffer::copy(const Buffer &other)
 {
 	av_buffer_unref(&m_bufferRef);
 	if (other.m_bufferRef)
-		m_bufferRef = av_buffer_ref(other.m_bufferRef);
+		m_bufferRef = other.toAvBufferRef();
 	m_size = other.m_size;
-	return *this;
+	m_offset = other.m_offset;
 }

@@ -619,10 +619,12 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
 
 	if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
+	{
 		encoded.assign(packet->data, packet->size, packet->size + AV_INPUT_BUFFER_PADDING_SIZE);
+	}
 	else
 	{
-		encoded.assign(packet->buf, packet->size);
+		encoded.assign(packet->buf, packet->size, packet->data - packet->buf->data);
 		packet->buf = nullptr;
 	}
 
