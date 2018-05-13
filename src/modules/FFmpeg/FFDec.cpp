@@ -39,11 +39,32 @@ FFDec::FFDec() :
 {}
 FFDec::~FFDec()
 {
+	destroyDecoder();
+}
+
+int FFDec::pendingFrames() const
+{
+	return m_frames.count();
+}
+
+void FFDec::destroyDecoder()
+{
+	clearFrames();
 	av_frame_free(&frame);
 	av_packet_free(&packet);
 	if (codecIsOpen)
+	{
 		avcodec_close(codec_ctx);
-	av_free(codec_ctx);
+		codecIsOpen = false;
+	}
+	av_freep(&codec_ctx);
+}
+
+void FFDec::clearFrames()
+{
+	for (AVFrame *&frame : m_frames)
+		av_frame_free(&frame);
+	m_frames.clear();
 }
 
 
@@ -98,9 +119,47 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 	if (encodedPacket.ts.hasPts())
 		packet->pts = round(encodedPacket.ts.pts() / time_base);
 	if (flush)
+	{
 		avcodec_flush_buffers(codec_ctx);
+		clearFrames();
+	}
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 		memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
+}
+int FFDec::decodeStep(bool &frameFinished)
+{
+	int bytesConsumed = 0;
+	bool sendOk = false;
+
+	int sendErr = avcodec_send_packet(codec_ctx, packet);
+	if (sendErr == 0 || sendErr == AVERROR(EAGAIN))
+	{
+		bytesConsumed = packet->size;
+		sendOk = true;
+	}
+
+	for (;;)
+	{
+		int recvErr = avcodec_receive_frame(codec_ctx, frame);
+		if (recvErr == 0)
+		{
+			m_frames.push_back(frame);
+			frame = av_frame_alloc();
+		}
+		else
+		{
+			if ((recvErr != AVERROR_EOF && recvErr != AVERROR(EAGAIN)) || (!sendOk && sendErr != AVERROR_EOF))
+			{
+				bytesConsumed = -1;
+				clearFrames();
+			}
+			break;
+		}
+	}
+
+	frameFinished = maybeTakeFrame();
+
+	return bytesConsumed;
 }
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
@@ -114,4 +173,15 @@ void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 		if (qFuzzyIsNull(sampleAspectRatio) && frame->sample_aspect_ratio.num)
 			encodedPacket.sampleAspectRatio = av_q2d(frame->sample_aspect_ratio);
 	}
+}
+
+bool FFDec::maybeTakeFrame()
+{
+	if (!m_frames.isEmpty())
+	{
+		av_frame_free(&frame);
+		frame = m_frames.takeFirst();
+		return true;
+	}
+	return false;
 }

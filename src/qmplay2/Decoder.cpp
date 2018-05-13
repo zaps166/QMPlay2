@@ -112,6 +112,11 @@ bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
 	return false;
 }
 
+int Decoder::pendingFrames() const
+{
+	return 0;
+}
+
 bool Decoder::hasCriticalError() const
 {
 	return false;

@@ -34,17 +34,27 @@ protected:
 	FFDec();
 	virtual ~FFDec();
 
+	int pendingFrames() const override;
+
 	/**/
+
+	void destroyDecoder();
+
+	void clearFrames();
 
 	AVCodec *init(StreamInfo &streamInfo);
 	bool openCodec(AVCodec *codec);
 
 	void decodeFirstStep(const Packet &encodedPacket, bool flush);
+	int decodeStep(bool &frameFinished);
 	void decodeLastStep(Packet &encodedPacket, AVFrame *frame);
+
+	bool maybeTakeFrame();
 
 	AVCodecContext *codec_ctx;
 	AVPacket *packet;
 	AVFrame *frame;
+	QList<AVFrame *> m_frames;
 	double time_base;
 	bool codecIsOpen;
 };

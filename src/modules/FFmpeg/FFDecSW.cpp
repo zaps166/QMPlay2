@@ -103,12 +103,20 @@ void FFDecSW::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)
 
 int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
 {
-	int bytes_consumed = 0, frameFinished = 0;
+	const bool onlyPendingFrames = (!flush && encodedPacket.isEmpty() && pendingFrames() > 0);
 
-	decodeFirstStep(encodedPacket, flush);
+	bool frameFinished = false;
+	int bytesConsumed = 0;
+
+	if (!onlyPendingFrames)
+		decodeFirstStep(encodedPacket, flush);
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_AUDIO)
 	{
-		bytes_consumed = avcodec_decode_audio4(codec_ctx, frame, &frameFinished, packet);
+		if (onlyPendingFrames)
+			frameFinished = maybeTakeFrame();
+		else
+			bytesConsumed = decodeStep(frameFinished);
+
 		if (frameFinished)
 		{
 			const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
@@ -197,13 +205,12 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channel
 	else
 		encodedPacket.ts.setInvalid();
 
-	if (bytes_consumed < 0)
-		bytes_consumed = 0;
-	return bytes_consumed;
+	return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }
 int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
 {
-	int bytes_consumed = 0, frameFinished = 0;
+	bool frameFinished = false;
+	int bytesConsumed = 0;
 
 	decodeFirstStep(encodedPacket, flush);
 
@@ -226,7 +233,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 			codec_ctx->flags2 &= ~AV_CODEC_FLAG2_FAST;
 		}
 
-		bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
+		bytesConsumed = decodeStep(frameFinished);
 
 		if (forceSkipFrames) //Nie możemy pomijać na pierwszej klatce, ponieważ wtedy może nie być odczytany przeplot
 			codec_ctx->skip_frame = AVDISCARD_NONREF;
@@ -277,7 +284,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
 	else
 		encodedPacket.ts.setInvalid();
 
-	return bytes_consumed < 0 ? -1 : bytes_consumed;
+	return bytesConsumed < 0 ? -1 : bytesConsumed;
 }
 bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h)
 {
@@ -344,7 +351,6 @@ bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
 				codec_ctx->thread_type = FF_THREAD_SLICE;
 		}
 		codec_ctx->lowres = qMin<int>(codec->max_lowres, lowres);
-		codec_ctx->refcounted_frames = true;
 		lastPixFmt = codec_ctx->pix_fmt;
 	}
 	if (!FFDec::openCodec(codec))

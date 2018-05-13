@@ -34,10 +34,11 @@ FFDecHWAccel::~FFDecHWAccel()
 {
 	if (codec_ctx)
 	{
-		if (codec_ctx->hwaccel_context)
-			av_free(codec_ctx->hwaccel_context);
-		if (codec_ctx->opaque)
-			delete (HWAccelHelper *)codec_ctx->opaque;
+		void *hwaccelContext = codec_ctx->hwaccel_context;
+		HWAccelHelper *hqAccelHelper = (HWAccelHelper *)codec_ctx->opaque;
+		destroyDecoder();
+		av_free(hwaccelContext);
+		delete hqAccelHelper;
 	}
 }
 
@@ -62,7 +63,7 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
 	Q_UNUSED(newPixFmt)
-	int frameFinished = 0;
+	bool frameFinished = false;
 
 	decodeFirstStep(encodedPacket, flush);
 
@@ -71,7 +72,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 	else if (hurryUp == 0)
 		codec_ctx->skip_frame = AVDISCARD_DEFAULT;
 
-	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
+	const int bytesConsumed = decodeStep(frameFinished);
 
 	if (frameFinished && ~hurryUp)
 	{
@@ -86,9 +87,9 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 	else
 		encodedPacket.ts.setInvalid();
 
-	m_hasCriticalError = (bytes_consumed < 0);
+	m_hasCriticalError = (bytesConsumed < 0);
 
-	return bytes_consumed < 0 ? -1 : bytes_consumed;
+	return m_hasCriticalError ? -1 : bytesConsumed;
 }
 void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
 {

@@ -181,10 +181,8 @@ void AudioThr::run()
 #endif
 	while (!br)
 	{
-		Packet packet;
 		double delay = 0.0, audio_pts = 0.0; //"audio_pts" odporny na zerowanie przy przewijaniu
 		Decoder *last_dec = dec;
-		int bytes_consumed = -1;
 		while (!br && dec == last_dec)
 		{
 			playC.aPackets.lock();
@@ -230,7 +228,8 @@ void AudioThr::run()
 
 			const bool flushAudio = playC.flushAudio;
 
-			if (!hasBufferedSamples && (bytes_consumed < 0 || flushAudio))
+			Packet packet;
+			if (!hasBufferedSamples && (dec->pendingFrames() == 0 || flushAudio))
 				packet = playC.aPackets.fetch();
 			else if (hasBufferedSamples)
 				packet.ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
@@ -256,8 +255,8 @@ void AudioThr::run()
 			{
 				quint8 newChannels = 0;
 				quint32 newSampleRate = 0;
-				bytes_consumed = dec->decodeAudio(packet, decoded, newChannels, newSampleRate, flushAudio);
-				tmp_br += bytes_consumed;
+				const int bytesConsumed = dec->decodeAudio(packet, decoded, newChannels, newSampleRate, flushAudio);
+				tmp_br += bytesConsumed;
 				if (newChannels && newSampleRate && (newChannels != realChannels || newSampleRate != realSample_rate))
 				{
 					//Audio parameters has been changed
@@ -409,14 +408,6 @@ void AudioThr::run()
 			}
 
 			mutex.unlock();
-
-			if (playC.flushAudio || packet.size() == bytes_consumed || (!bytes_consumed && !decoded.size()))
-			{
-				bytes_consumed = -1;
-				packet = Packet();
-			}
-			else if (bytes_consumed != packet.size())
-				packet.remove(0, bytes_consumed);
 		}
 	}
 	writer->modParam("drain", allowAudioDrain);
