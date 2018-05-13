@@ -350,7 +350,7 @@ bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
 			else
 				codec_ctx->thread_type = FF_THREAD_SLICE;
 		}
-		av_codec_set_lowres(codec_ctx, qMin(av_codec_get_max_lowres(codec), lowres));
+		codec_ctx->lowres = qMin<int>(codec->max_lowres, lowres);
 		codec_ctx->refcounted_frames = true;
 		lastPixFmt = codec_ctx->pix_fmt;
 	}

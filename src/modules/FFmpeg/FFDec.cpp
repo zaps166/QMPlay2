@@ -114,7 +114,7 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 }
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
-	const int64_t ts = av_frame_get_best_effort_timestamp(frame);
+	const int64_t ts = frame->best_effort_timestamp;
 	if (ts != QMPLAY2_NOPTS_VALUE)
 		encodedPacket.ts = ts * time_base;
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
