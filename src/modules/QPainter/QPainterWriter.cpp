@@ -98,7 +98,7 @@ void Drawable::paintEvent(QPaintEvent *)
 		if (!qFuzzyCompare(dpr, 1.0))
 			p.scale(1.0 / dpr, 1.0 / dpr);
 		p.setClipRect(0, 0, imgW, imgH);
-		Functions::paintOSD(true, osd_list, (qreal)W / writer.outW, (qreal)H / writer.outH, p);
+		Functions::paintOSD(true, osd_list, W * dpr / writer.outW, H * dpr / writer.outH, p);
 	}
 	osd_mutex.unlock();
 }
