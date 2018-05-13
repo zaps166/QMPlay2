@@ -49,11 +49,15 @@ VideoWriter *FFDecHWAccel::HWAccel() const
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 9, 100)
+	return (av_hwdevice_find_type_by_name(hwaccelName) != AV_HWDEVICE_TYPE_NONE);
+#else
 	AVHWAccel *hwAccel = nullptr;
 	while ((hwAccel = av_hwaccel_next(hwAccel)))
 		if (hwAccel->id == codec_ctx->codec_id && strstr(hwAccel->name, hwaccelName))
 			break;
 	return hwAccel;
+#endif
 }
 
 int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
