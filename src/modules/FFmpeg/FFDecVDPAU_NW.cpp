@@ -186,8 +186,7 @@ public:
 
 /**/
 
-FFDecVDPAU_NW::FFDecVDPAU_NW(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex),
+FFDecVDPAU_NW::FFDecVDPAU_NW(Module &module) :
 	vdpau(nullptr)
 {
 	SetModule(module);

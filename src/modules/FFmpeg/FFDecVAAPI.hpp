@@ -26,7 +26,7 @@ struct SwsContext;
 class FFDecVAAPI final : public FFDecHWAccel
 {
 public:
-	FFDecVAAPI(QMutex &, Module &);
+	FFDecVAAPI(Module &);
 	~FFDecVAAPI();
 
 	bool set() override;

@@ -56,8 +56,6 @@ private:
 #ifdef QMPlay2_VTB
 	QIcon vtbIcon;
 #endif
-
-	QMutex mutex;
 };
 
 /**/

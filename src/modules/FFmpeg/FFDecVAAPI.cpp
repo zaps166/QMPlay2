@@ -122,8 +122,7 @@ private:
 
 /**/
 
-FFDecVAAPI::FFDecVAAPI(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex),
+FFDecVAAPI::FFDecVAAPI(Module &module) :
 	m_useOpenGL(true), m_allowVDPAU(false),
 	m_copyVideo(Qt::Unchecked),
 	m_vaapi(nullptr),

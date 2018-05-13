@@ -196,7 +196,7 @@ private:
 
 /**/
 
-FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
+FormatContext::FormatContext(bool reconnectStreamed) :
 	isError(false),
 	currPos(0.0),
 	abortCtx(new AbortContext),
@@ -211,8 +211,7 @@ FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
 	maybeHasFrame(false),
 	artistWithTitle(true),
 	stillImage(false),
-	lengthToPlay(-1),
-	avcodec_mutex(avcodec_mutex)
+	lengthToPlay(-1)
 {}
 FormatContext::~FormatContext()
 {
@@ -740,13 +739,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	if (name() == "mp3")
 		formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
 
-	avcodec_mutex.lock();
 	if (avformat_find_stream_info(formatCtx, nullptr) < 0)
-	{
-		avcodec_mutex.unlock();
 		return false;
-	}
-	avcodec_mutex.unlock();
 
 	isStreamed = !isLocal && formatCtx->duration <= 0; //QMPLAY2_NOPTS_VALUE is negative
 

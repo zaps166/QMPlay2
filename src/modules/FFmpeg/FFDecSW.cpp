@@ -35,8 +35,7 @@ extern "C"
 	#define AV_CODEC_FLAG2_FAST CODEC_FLAG2_FAST
 #endif
 
-FFDecSW::FFDecSW(QMutex &avcodec_mutex, Module &module) :
-	FFDec(avcodec_mutex),
+FFDecSW::FFDecSW(Module &module) :
 	threads(0), lowres(0),
 	thread_type_slice(false),
 	lastFrameW(-1), lastFrameH(-1),

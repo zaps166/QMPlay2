@@ -30,8 +30,7 @@ extern "C"
 	#include <libavcodec/vdpau.h>
 }
 
-FFDecVDPAU::FFDecVDPAU(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex)
+FFDecVDPAU::FFDecVDPAU(Module &module)
 {
 	SetModule(module);
 }

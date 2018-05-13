@@ -311,8 +311,7 @@ bool FFDecDXVA2::loadLibraries()
 	return false;
 }
 
-FFDecDXVA2::FFDecDXVA2(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex),
+FFDecDXVA2::FFDecDXVA2(Module &module) :
 	m_copyVideo(Qt::Unchecked),
 	m_d3d9Device(nullptr),
 	m_devMgr(nullptr),

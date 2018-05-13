@@ -26,7 +26,7 @@ class FFDemux final : public Demuxer
 {
 	Q_DECLARE_TR_FUNCTIONS(FFDemux)
 public:
-	FFDemux(QMutex &, Module &);
+	FFDemux(Module &);
 private:
 	~FFDemux();
 
@@ -65,7 +65,6 @@ private:
 
 	QVector<FormatContext *> formatContexts;
 
-	QMutex &avcodec_mutex;
 	QMutex mutex;
 
 	bool abortFetchTracks;

@@ -41,7 +41,7 @@ class FormatContext
 {
 	Q_DECLARE_TR_FUNCTIONS(FormatContext)
 public:
-	FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed = false);
+	FormatContext(bool reconnectStreamed = false);
 	~FormatContext();
 
 	bool metadataChanged() const;
@@ -102,6 +102,4 @@ private:
 	bool stillImage;
 
 	double lengthToPlay;
-
-	QMutex &avcodec_mutex;
 };

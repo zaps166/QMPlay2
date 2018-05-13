@@ -185,26 +185,26 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 void *FFmpeg::createInstance(const QString &name)
 {
 	if (name == DemuxerName && getBool("DemuxerEnabled"))
-		return new FFDemux(mutex, *this);
+		return new FFDemux(*this);
 	else if (name == DecoderName && getBool("DecoderEnabled"))
-		return new FFDecSW(mutex, *this);
+		return new FFDecSW(*this);
 #ifdef QMPlay2_VDPAU
 	else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled"))
-		return new FFDecVDPAU(mutex, *this);
+		return new FFDecVDPAU(*this);
 	else if (name == DecoderVDPAU_NWName && getBool("DecoderVDPAU_NWEnabled"))
-		return new FFDecVDPAU_NW(mutex, *this);
+		return new FFDecVDPAU_NW(*this);
 #endif
 #ifdef QMPlay2_VAAPI
 	else if (name == DecoderVAAPIName && getBool("DecoderVAAPIEnabled"))
-		return new FFDecVAAPI(mutex, *this);
+		return new FFDecVAAPI(*this);
 #endif
 #ifdef QMPlay2_DXVA2
 	else if (name == DecoderDXVA2Name && (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
-		return new FFDecDXVA2(mutex, *this);
+		return new FFDecDXVA2(*this);
 #endif
 #ifdef QMPlay2_VTB
 	else if (name == DecoderVTBName && getBool("DecoderVTBEnabled"))
-		return new FFDecVTB(mutex, *this);
+		return new FFDecVTB(*this);
 #endif
 	else if (name == FFReaderName)
 		return new FFReader;

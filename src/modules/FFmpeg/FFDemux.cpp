@@ -26,8 +26,7 @@
 
 #include <QFile>
 
-FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
-	avcodec_mutex(avcodec_mutex),
+FFDemux::FFDemux(Module &module) :
 	abortFetchTracks(false),
 	reconnectStreamed(false)
 {
@@ -242,7 +241,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 		return {};
 
 	const auto createFmtCtx = [&] {
-		FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
+		FormatContext *fmtCtx = new FormatContext;
 		{
 			QMutexLocker mL(&mutex);
 			formatContexts.append(fmtCtx);
@@ -455,7 +454,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 
 void FFDemux::addFormatContext(QString url, const QString &param)
 {
-	FormatContext *fmtCtx = new FormatContext(avcodec_mutex, reconnectStreamed);
+	FormatContext *fmtCtx = new FormatContext(reconnectStreamed);
 	{
 		QMutexLocker mL(&mutex);
 		formatContexts.append(fmtCtx);

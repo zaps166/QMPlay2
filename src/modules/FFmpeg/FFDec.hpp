@@ -23,7 +23,6 @@
 #include <QString>
 #include <QList>
 
-class QMutex;
 struct AVCodecContext;
 struct AVPacket;
 struct AVCodec;
@@ -32,7 +31,7 @@ struct AVFrame;
 class FFDec : public Decoder
 {
 protected:
-	FFDec(QMutex &);
+	FFDec();
 	virtual ~FFDec();
 
 	/**/
@@ -48,6 +47,4 @@ protected:
 	AVFrame *frame;
 	double time_base;
 	bool codecIsOpen;
-
-	QMutex &avcodec_mutex;
 };

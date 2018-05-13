@@ -28,7 +28,7 @@ struct SwsContext;
 class FFDecSW final : public FFDec
 {
 public:
-	FFDecSW(QMutex &, Module &);
+	FFDecSW(Module &);
 private:
 	class BitmapSubBuffer
 	{

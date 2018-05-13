@@ -23,7 +23,7 @@
 class FFDecHWAccel : public FFDec
 {
 protected:
-	FFDecHWAccel(QMutex &mutex);
+	FFDecHWAccel();
 	virtual ~FFDecHWAccel();
 
 	VideoWriter *HWAccel() const override final;

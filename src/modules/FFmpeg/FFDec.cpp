@@ -31,23 +31,18 @@ extern "C"
 
 using namespace std;
 
-FFDec::FFDec(QMutex &avcodec_mutex) :
+FFDec::FFDec() :
 	codec_ctx(nullptr),
 	packet(nullptr),
 	frame(nullptr),
-	codecIsOpen(false),
-	avcodec_mutex(avcodec_mutex)
+	codecIsOpen(false)
 {}
 FFDec::~FFDec()
 {
 	av_frame_free(&frame);
 	av_packet_free(&packet);
 	if (codecIsOpen)
-	{
-		avcodec_mutex.lock();
 		avcodec_close(codec_ctx);
-		avcodec_mutex.unlock();
-	}
 	av_free(codec_ctx);
 }
 
@@ -79,13 +74,8 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 }
 bool FFDec::openCodec(AVCodec *codec)
 {
-	avcodec_mutex.lock();
 	if (avcodec_open2(codec_ctx, codec, nullptr))
-	{
-		avcodec_mutex.unlock();
 		return false;
-	}
-	avcodec_mutex.unlock();
 	packet = av_packet_alloc();
 	switch (codec_ctx->codec_type)
 	{

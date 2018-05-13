@@ -191,8 +191,7 @@ private:
 
 /**/
 
-FFDecVTB::FFDecVTB(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex),
+FFDecVTB::FFDecVTB(Module &module) :
 	m_swsCtx(nullptr),
 	m_copyVideo(false),
 	m_hasCriticalError(false)

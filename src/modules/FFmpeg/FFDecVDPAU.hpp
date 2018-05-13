@@ -25,7 +25,7 @@ class VDPAUWriter;
 class FFDecVDPAU final : public FFDecHWAccel
 {
 public:
-	FFDecVDPAU(QMutex &, Module &);
+	FFDecVDPAU(Module &);
 	~FFDecVDPAU();
 
 	bool set() override;

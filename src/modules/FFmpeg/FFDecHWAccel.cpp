@@ -26,8 +26,7 @@ extern "C"
 	#include <libavformat/avformat.h>
 }
 
-FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
-	FFDec(mutex),
+FFDecHWAccel::FFDecHWAccel() :
 	m_hwAccelWriter(nullptr),
 	m_hasCriticalError(false)
 {}

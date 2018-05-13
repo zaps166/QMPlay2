@@ -25,7 +25,7 @@ struct SwsContext;
 class FFDecVTB final : public FFDecHWAccel
 {
 public:
-	FFDecVTB(QMutex &avcodec_mutex, Module &module);
+	FFDecVTB(Module &module);
 	~FFDecVTB();
 
 	bool set() override;
