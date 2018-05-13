@@ -371,7 +371,7 @@ void FFDecSW::setPixelFormat()
 	const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
 	if (!pixDesc) //Invalid pixel format
 		return;
-	dontConvert = supportedPixelFormats.contains((QMPlay2PixelFormat)codec_ctx->pix_fmt);
+	dontConvert = supportedPixelFormats.contains(QMPlay2PixelFormatConvert::fromFFmpeg(codec_ctx->pix_fmt));
 	if (dontConvert)
 	{
 		chromaShiftW = pixDesc->log2_chroma_w;
@@ -380,14 +380,15 @@ void FFDecSW::setPixelFormat()
 	}
 	else for (int i = 0; i < supportedPixelFormats.count(); ++i)
 	{
-		const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get((AVPixelFormat)supportedPixelFormats.at(i));
+		const AVPixelFormat pixFmt = (AVPixelFormat)QMPlay2PixelFormatConvert::toFFmpeg(supportedPixelFormats.at(i));
+		const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get(pixFmt);
 		if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
 		{
 			//Use first format as default (mostly QMPlay2PixelFormat::YUV420P) and look at next formats,
 			//otherwise break the loop if found proper format.
 			chromaShiftW = supportedPixDesc->log2_chroma_w;
 			chromaShiftH = supportedPixDesc->log2_chroma_h;
-			desiredPixFmt = (int)supportedPixelFormats.at(i);
+			desiredPixFmt = pixFmt;
 			if (i != 0)
 				break;
 		}

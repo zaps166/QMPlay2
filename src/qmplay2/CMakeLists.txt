@@ -87,6 +87,7 @@ set(QMPLAY2_SRC
     Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
+    PixelFormats.cpp
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
