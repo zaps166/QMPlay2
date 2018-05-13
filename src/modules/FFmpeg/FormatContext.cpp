@@ -971,7 +971,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
 			break;
 		}
-		case AVMEDIA_TYPE_ATTACHMENT:
+		case QMPLAY2_TYPE_ATTACHMENT:
 			streamInfo->title = getTag(stream->metadata, "filename", false);
 			switch (codecParams(stream)->codec_id)
 			{
