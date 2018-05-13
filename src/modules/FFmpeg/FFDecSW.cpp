@@ -308,15 +308,9 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
 			buff->y = av_clip(rect->y, 0, h - buff->h);
 			buff->bitmap.resize((buff->w * buff->h) << 2);
 
-#if LIBAVCODEC_VERSION_MAJOR >= 57
 			const uint8_t  *source   = (uint8_t  *)rect->data[0];
 			const uint32_t *palette  = (uint32_t *)rect->data[1];
 			const int       linesize = rect->linesize[0];
-#else
-			const uint8_t  *source   = (uint8_t  *)rect->pict.data[0];
-			const uint32_t *palette  = (uint32_t *)rect->pict.data[1];
-			const int       linesize = rect->pict.linesize[0];
-#endif
 
 			uint32_t       *dest     = (uint32_t *)buff->bitmap.data();
 			for (int y = 0; y < buff->h; ++y)

@@ -156,7 +156,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 	- Qt5Svg - for SVG icons,
 	- Qt5X11Extras - for X11 and VA-API,
 	- Qt5WinExtras - for Windows,
-- FFmpeg >= 2.5 (>= 3.1.x recommended for CUVID):
+- FFmpeg >= 3.1:
 	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,

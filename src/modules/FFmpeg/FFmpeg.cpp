@@ -258,9 +258,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	reconnectStreamedB = new QCheckBox(tr("Try to automatically reconnect live streams on error"));
 	reconnectStreamedB->setChecked(sets().getBool("ReconnectStreamed"));
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 25, 100)
-		reconnectStreamedB->setEnabled(false);
-#endif
+	reconnectStreamedB->setEnabled(false);
 
 	decoderB = new QGroupBox(tr("Software decoder"));
 	decoderB->setCheckable(true);

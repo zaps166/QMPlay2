@@ -75,7 +75,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 
 				new HWAccelHelper(codec_ctx, AV_PIX_FMT_VDPAU, vdpauCtx, vdpauWriter->getSurfacesQueue());
 
-				if (pix_fmt == AV_PIX_FMT_YUVJ420P && avcodec_version() >= 0x383C64)
+				if (pix_fmt == AV_PIX_FMT_YUVJ420P)
 					codec_ctx->pix_fmt = AV_PIX_FMT_YUV420P; //Force full color range
 
 				if (openCodec(codec))
