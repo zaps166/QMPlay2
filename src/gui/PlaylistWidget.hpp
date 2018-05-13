@@ -140,7 +140,7 @@ public:
 	bool add(const QStringList &, QTreeWidgetItem *par, const QStringList &existingEntries = {}, bool loadList = false, bool forceEnqueue = false);
 	bool add(const QStringList &, bool atEndOfList = false);
 	void sync(const QString &pth, QTreeWidgetItem *par, bool notDir);
-	void quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive);
+	void quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive, QTreeWidgetItem *&itemToNull);
 
 	void setCurrentPlaying(QTreeWidgetItem *tWI);
 
@@ -192,7 +192,7 @@ private:
 
 	void setEntryIcon(const QIcon &icon, QTreeWidgetItem *);
 
-	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive);
+	void quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive, QTreeWidgetItem *&itemToNull);
 
 	void createExtensionsMenu();
 

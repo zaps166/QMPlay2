@@ -228,7 +228,7 @@ void PlaylistDock::doGroupSync(bool quick, QTreeWidgetItem *tWI, bool quickRecur
 	else if (pthInfo.isDir())
 	{
 		findE->clear();
-		list->quickSync(pth, tWI, quickRecursive);
+		list->quickSync(pth, tWI, quickRecursive, lastPlaying);
 	}
 }
 

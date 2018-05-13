@@ -627,12 +627,12 @@ void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 	if (canModify())
 		addThr.setDataForSync(pth, par, notDir);
 }
-void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive)
+void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive, QTreeWidgetItem *&itemToNull)
 {
 	if (canModify())
 	{
 		bool mustRefresh = false;
-		quickSyncScanDirs(pth, par, mustRefresh, recursive);
+		quickSyncScanDirs(pth, par, mustRefresh, recursive, itemToNull);
 		if (mustRefresh && canModify())
 		{
 			refresh();
@@ -931,7 +931,7 @@ void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
 	}
 }
 
-void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive)
+void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive, QTreeWidgetItem *&itemToNull)
 {
 	QStringList dirEntries = getDirEntries(pth);
 	QStringList existingEntries;
@@ -953,12 +953,14 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 			{
 				if (!fullPth.endsWith('/'))
 					fullPth.append('/');
-				quickSyncScanDirs(fullPth, item, mustRefresh, recursive);
+				quickSyncScanDirs(fullPth, item, mustRefresh, recursive, itemToNull);
 			}
 		}
 		else
 		{
 			mustRefresh = true;
+			if (itemToNull == item)
+				itemToNull = nullptr;
 			delete item;
 		}
 	}
