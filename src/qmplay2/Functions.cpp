@@ -404,8 +404,8 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
 		for (int j = 0; j < osd->imageCount(); j++)
 		{
 			const QMPlay2OSD::Image &img = osd->getImage(j);
-			const QImage qImg = QImage((const uchar *)img.data.constData(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32);
-			painter.drawImage(img.rect.topLeft(), rgbSwapped ? qImg.rgbSwapped() : qImg);
+			const QImage qImg = QImage((const uchar *)img.data.constData(), img.rect.width(), img.rect.height(), rgbSwapped ? QImage::Format_RGBA8888 : QImage::Format_ARGB32);
+			painter.drawImage(img.rect.topLeft(), qImg);
 		}
 		if (osd->needsRescale())
 			painter.restore();
