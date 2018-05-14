@@ -1,3 +1,10 @@
+Changes in QMPlay2 build 18.05.14:
+	- fix possible crash when group is synchronized,
+	- use new FFmpeg 3.1 API for decoding frames,
+	- drop support for FFmpeg < 3.1,
+	- add FFmpeg 4.0 compatibility,
+	- minor QPainter HiDPI fix,
+
 Changes in QMPlay2 build 18.04.01:
 	- enable audio fade in/out on play/stop for video contents,
 	- fix problems with playlist quick sync,
