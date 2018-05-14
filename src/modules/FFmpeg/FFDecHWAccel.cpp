@@ -50,7 +50,19 @@ VideoWriter *FFDecHWAccel::HWAccel() const
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 9, 100)
-	return (av_hwdevice_find_type_by_name(hwaccelName) != AV_HWDEVICE_TYPE_NONE);
+	const AVHWDeviceType requestedType = av_hwdevice_find_type_by_name(hwaccelName);
+	if (requestedType == AV_HWDEVICE_TYPE_NONE)
+		return false;
+	AVHWDeviceType hwType = AV_HWDEVICE_TYPE_NONE;
+	for (;;)
+	{
+		hwType = av_hwdevice_iterate_types(hwType);
+		if (hwType == AV_HWDEVICE_TYPE_NONE)
+			break;
+		if (hwType == requestedType)
+			return true;
+	}
+	return false;
 #else
 	AVHWAccel *hwAccel = nullptr;
 	while ((hwAccel = av_hwaccel_next(hwAccel)))
