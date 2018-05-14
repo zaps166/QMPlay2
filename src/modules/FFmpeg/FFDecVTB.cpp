@@ -298,23 +298,6 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 	if (!codec || !hasHWAccel("videotoolbox"))
 		return false;
 
-	/* Workaround: check if decoder can be used. */
-	const int extradataSize = codec_ctx->extradata_size;
-	if (codec->id == AV_CODEC_ID_H264 || codec->id == AV_CODEC_ID_HEVC)
-	{
-		// Prevent crash for H.264 codec. HEVC is currently unimplemented in FFmpeg.
-		codec_ctx->extradata_size = 0;
-	}
-	int ret = av_videotoolbox_default_init(codec_ctx);
-	av_videotoolbox_default_free(codec_ctx);
-	codec_ctx->extradata_size = extradataSize;
-	if (ret != 0 && ret != AVERROR(ENOSYS))
-	{
-		// For H.264 we have ENOSYS, because extradata doesn't exist. This is the only way to check it before decoding first video frame.
-		return false;
-	}
-	/**/
-
 	VTBHwaccel *vtbHwaccel = nullptr;
 	if (writer)
 	{
