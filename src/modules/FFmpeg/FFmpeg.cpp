@@ -258,7 +258,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
 	reconnectStreamedB = new QCheckBox(tr("Try to automatically reconnect live streams on error"));
 	reconnectStreamedB->setChecked(sets().getBool("ReconnectStreamed"));
-	reconnectStreamedB->setEnabled(false);
 
 	decoderB = new QGroupBox(tr("Software decoder"));
 	decoderB->setCheckable(true);
