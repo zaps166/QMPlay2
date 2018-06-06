@@ -31,7 +31,9 @@
 #include <QAction>
 
 constexpr const char *g_url = "https://api-2.datmusic.xyz";
-constexpr const char *g_referUrlRawHeader = "Referer: https://datmusic.xyz/\r\n";
+constexpr const char *g_rawHeaders =
+	"Referer: https://datmusic.xyz/\r\n"
+	"User-Agent: Mozilla\r\n";
 
 /**/
 
@@ -67,7 +69,7 @@ QString Datmusic::getQMPlay2Url(const QString &text) const
 
 NetworkReply *Datmusic::getSearchReply(const QString &text, const qint32 page)
 {
-	return m_net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text).arg(page - 1), QByteArray(), g_referUrlRawHeader);
+	return m_net.start(QString("%1/search?q=%2&page=%3").arg(g_url, text).arg(page - 1), QByteArray(), g_rawHeaders);
 }
 MediaBrowserCommon::Description Datmusic::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
@@ -167,7 +169,7 @@ bool Datmusic::convertAddress(const QString &prefix, const QString &url, const Q
 			*extension = ".mp3";
 		if (ioCtrl && streamUrl)
 		{
-			QMPlay2Core.addRawHeaders(url, g_referUrlRawHeader);
+			QMPlay2Core.addRawHeaders(url, g_rawHeaders);
 			*streamUrl = url;
 		}
 	}
