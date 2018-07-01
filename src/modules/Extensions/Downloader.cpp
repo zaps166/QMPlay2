@@ -879,11 +879,28 @@ void Downloader::init()
 	layout->addItem(new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Minimum), 1, 4, 1, 1);
 	layout->addWidget(m_convertsPresetsB, 1, 5, 1, 1);
 
-	QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath());
+	QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath()) + "/";
 #ifdef Q_OS_WIN
 	defDownloadPath.replace('\\', '/');
 #endif
-	downloadLW->downloadsDirPath = Functions::cleanPath(m_sets.getString("DownloadsDirPath", defDownloadPath));
+	downloadLW->downloadsDirPath = Functions::cleanPath(m_sets.getString("DownloadsDirPath"));
+	if (downloadLW->downloadsDirPath.isEmpty())
+	{
+		downloadLW->downloadsDirPath = defDownloadPath;
+	}
+	else if (downloadLW->downloadsDirPath != defDownloadPath)
+	{
+		const QFileInfo dir(downloadLW->downloadsDirPath);
+#ifndef Q_OS_WIN
+		if (!dir.isDir() || !dir.isWritable())
+#else
+		if (!dir.isDir())
+#endif
+		{
+			downloadLW->downloadsDirPath = defDownloadPath;
+			m_sets.set("DownloadsDirPath", defDownloadPath);
+		}
+	}
 
 	// Compatibility
 	{
