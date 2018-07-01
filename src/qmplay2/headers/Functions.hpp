@@ -132,8 +132,10 @@ namespace Functions
 
 	QMPLAY2SHAREDLIB_EXPORT QByteArray convertToASS(QString txt);
 
-	QMPLAY2SHAREDLIB_EXPORT bool chkMimeData(const QMimeData *);
-	QMPLAY2SHAREDLIB_EXPORT QStringList getUrlsFromMimeData(const QMimeData *);
+	QMPLAY2SHAREDLIB_EXPORT bool chkMimeData(const QMimeData *mimeData);
+	QMPLAY2SHAREDLIB_EXPORT QStringList getUrlsFromMimeData(const QMimeData *mimeData, const bool checkExtensionsForUrl = true);
+
+	QMPLAY2SHAREDLIB_EXPORT QString maybeExtensionAddress(const QString &url);
 
 	QMPLAY2SHAREDLIB_EXPORT bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
 	QMPLAY2SHAREDLIB_EXPORT void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QIcon *icon = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());

@@ -169,7 +169,7 @@ void VideoDock::dropEvent(QDropEvent *e)
 		const QMimeData *mimeData = e->mimeData();
 		if (Functions::chkMimeData(mimeData))
 		{
-			const QStringList urls = Functions::getUrlsFromMimeData(mimeData);
+			const QStringList urls = Functions::getUrlsFromMimeData(mimeData, false);
 			if (urls.size() == 1)
 			{
 				QString url = Functions::Url(urls[0]);

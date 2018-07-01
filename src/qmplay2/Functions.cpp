@@ -592,7 +592,7 @@ bool Functions::chkMimeData(const QMimeData *mimeData)
 {
 	return mimeData && ((mimeData->hasUrls() && !mimeData->urls().isEmpty()) || (mimeData->hasText() && !mimeData->text().isEmpty()));
 }
-QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
+QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData, const bool checkExtensionsForUrl)
 {
 	QStringList urls;
 	if (mimeData->hasUrls())
@@ -608,8 +608,26 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 		}
 	}
 	else if (mimeData->hasText())
+	{
 		urls = mimeData->text().remove('\r').split('\n', QString::SkipEmptyParts);
+	}
+	if (checkExtensionsForUrl)
+	{
+		for (QString &url : urls)
+			url = Functions::maybeExtensionAddress(url);
+	}
 	return urls;
+}
+
+QString Functions::maybeExtensionAddress(const QString &url)
+{
+	for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+	{
+		const QString prefix = QMPlay2Ext->matchAddress(url);
+		if (!prefix.isEmpty())
+			return prefix + "://{" + url + "}";
+	}
+	return url;
 }
 
 bool Functions::splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param)

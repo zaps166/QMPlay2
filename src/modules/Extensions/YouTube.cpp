@@ -610,6 +610,13 @@ DockWidget *YouTube::getDockWidget()
 	return dw;
 }
 
+QString YouTube::matchAddress(const QString &url) const
+{
+	const QUrl qurl(url);
+	if (qurl.scheme().startsWith("http") && qurl.host().contains("youtube."))
+		return "YouTube";
+	return QString();
+}
 QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
 	return {

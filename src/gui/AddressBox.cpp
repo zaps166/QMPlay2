@@ -27,6 +27,8 @@
 
 AddressBox::AddressBox(Qt::Orientation o, QString url)
 {
+	if (url.isNull())
+		pB.addItem(QMPlay2Core.getQMPlay2Icon(), tr("Autodetect address"), AUTODETECT);
 	pB.addItem(QMPlay2Core.getQMPlay2Icon(), tr("Direct address"), DIRECT);
 
 	for (Module *module : QMPlay2Core.getPluginsInstance())
@@ -100,12 +102,15 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
 
 QString AddressBox::url() const
 {
+	const QString url = filePrefix + cleanUrl();
 	switch (currentPrefixType())
 	{
+		case AddressBox::AUTODETECT:
+			return Functions::maybeExtensionAddress(url);
 		case AddressBox::DIRECT:
-			return filePrefix + cleanUrl();
+			return url;
 		case AddressBox::MODULE:
-			return pB.currentText() + "://{" + filePrefix + cleanUrl() + "}" + pE.text();
+			return pB.currentText() + "://{" + url + "}" + pE.text();
 	}
 	return QString();
 }
@@ -116,6 +121,7 @@ QString AddressBox::cleanUrl() const
 
 void AddressBox::pBIdxChanged()
 {
-	pE.setVisible(currentPrefixType() != DIRECT);
+	const PrefixType prefixType = currentPrefixType();
+	pE.setVisible(prefixType != AUTODETECT && prefixType != DIRECT);
 	emit directAddressChanged();
 }

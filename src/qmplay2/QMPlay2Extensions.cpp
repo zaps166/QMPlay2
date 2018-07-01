@@ -47,6 +47,11 @@ DockWidget *QMPlay2Extensions::getDockWidget()
 	return nullptr;
 }
 
+QString QMPlay2Extensions::matchAddress(const QString &url) const
+{
+	Q_UNUSED(url);
+	return QString();
+}
 QList<QMPlay2Extensions::AddressPrefix> QMPlay2Extensions::addressPrefixList(bool img) const
 {
 	Q_UNUSED(img)
