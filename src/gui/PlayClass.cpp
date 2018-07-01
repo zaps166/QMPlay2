@@ -371,7 +371,7 @@ bool PlayClass::isPlaying() const
 void PlayClass::loadSubsFile(const QString &fileName)
 {
 	bool subsLoaded = false;
-	if (demuxThr && vThr && ass)
+	if (demuxThr && vThr && ass && subtitlesEnabled)
 	{
 		IOController<Reader> reader;
 		if (Reader::create(fileName, reader) && reader->size() > 0)
