@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>További modul paraméter</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -400,10 +404,6 @@
 </context>
 <context>
     <name>CuvidDec</name>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>Az FFmpeg 3.1 vagy újabb verziójával való fordítás szükséges a H264 és HEVC támogatáshoz!</translation>
-    </message>
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>Nem sikerült az OpenGL2 modul megnyitása</translation>
@@ -783,6 +783,10 @@
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
         <translation>Hiba a címkék írásakor, ellenőrizd le, hogy van-e megfelelő jogosultságod a fájl módosításához!</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

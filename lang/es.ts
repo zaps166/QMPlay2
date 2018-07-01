@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>Parámetro adicional del módulo</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -403,10 +407,6 @@
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>No se puede abrir el módulo OpenGL 2</translation>
-    </message>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>¡Estar compilado con FFmpeg 3.1 o superior es obligatorio para el soporte de H264 y HEVC!</translation>
     </message>
 </context>
 <context>
@@ -786,6 +786,10 @@
     <message>
         <source>Choose a file that contains more than one track</source>
         <translation>Elija un archivo que contenga más de una pista</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

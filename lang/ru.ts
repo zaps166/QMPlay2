@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>Дополнительный параметр модуль</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -403,10 +407,6 @@
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>Не удалось открыть модуль OpenGL 2</translation>
-    </message>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>Компиляция с FFmpeg 3.1 или выше требуется для поддержки H264 и HEVC!</translation>
     </message>
 </context>
 <context>
@@ -783,6 +783,10 @@
     <message>
         <source>Choose a file that contains more than one track</source>
         <translation>Выберите файл, который содержит более одного трека</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
