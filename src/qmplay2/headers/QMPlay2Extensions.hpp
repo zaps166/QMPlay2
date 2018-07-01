@@ -29,7 +29,7 @@ class QMPLAY2SHAREDLIB_EXPORT QMPlay2Extensions : public ModuleCommon
 {
 public:
 	static void openExtensions();
-	static inline QList<QMPlay2Extensions *> QMPlay2ExtensionsList()
+	static inline const QList<QMPlay2Extensions *> QMPlay2ExtensionsList()
 	{
 		return guiExtensionsList;
 	}
