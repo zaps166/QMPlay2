@@ -26,6 +26,7 @@
 #include <Functions.hpp>
 #include <Main.hpp>
 
+#include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QToolButton>
@@ -35,6 +36,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QLabel>
+#include <QUrl>
 
 EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, bool &accepted) :
 	QDialog(p), sync(sync)
@@ -45,7 +47,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		return;
 
 	catalogCB = nullptr;
-	browseDirB = browseFileB = nullptr;
+	browseDirB = browseFileB = openUrlB = nullptr;
 	pthE = nullptr;
 	addrB = nullptr;
 #ifdef QMPlay2_TagEditor
@@ -97,10 +99,16 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	}
 	else
 	{
-		layout.addWidget(nameE, row++, 0, 1, 2);
+		layout.addWidget(nameE, row++, 0, 1, 3);
 
 		addrB = new AddressBox(Qt::Horizontal, url);
 		layout.addWidget(addrB, row, 0, 1, 2);
+
+		openUrlB = new QToolButton;
+		openUrlB->setToolTip(tr("Open URL or directory containing chosen file"));
+		openUrlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+		connect(openUrlB, &QToolButton::clicked, this, &EntryProperties::openUrl);
+		layout.addWidget(openUrlB, row, 2, 1, 1);
 
 		fileSizeL = new QLabel;
 
@@ -108,7 +116,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 		tagEditor = new TagEditor;
 		connect(addrB, SIGNAL(directAddressChanged()), this, SLOT(directAddressChanged()));
 		directAddressChanged();
-		layout.addWidget(tagEditor, ++row, 0, 1, 2);
+		layout.addWidget(tagEditor, ++row, 0, 1, 3);
 #endif
 	}
 
@@ -120,7 +128,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 	if (!tagEditor)
 #endif
 		layout.addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), ++row, 0, 1, 2); //vSpacer
-	layout.addWidget(buttonBox, ++row, isGroup ? 0 : 1, 1, isGroup ? 3 : 1);
+	layout.addWidget(buttonBox, ++row, isGroup ? 0 : 1, 1, isGroup ? 3 : 2);
 	if (fileSizeL)
 		layout.addWidget(fileSizeL, row, 0, 1, 1);
 	layout.setSpacing(3);
@@ -178,6 +186,20 @@ void EntryProperties::browse()
 		if (nameE->text().isEmpty())
 			nameE->setText(Functions::fileName(pth));
 		pthE->setText(pth);
+	}
+}
+void EntryProperties::openUrl()
+{
+	const QString url = addrB->cleanUrl();
+	const QUrl qurl = QUrl(url);
+	if (qurl.scheme().isEmpty())
+	{
+		const QFileInfo fileInfo(url);
+		QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.isDir() ? url : fileInfo.path()));
+	}
+	else
+	{
+		QDesktopServices::openUrl(qurl);
 	}
 }
 void EntryProperties::accept()
