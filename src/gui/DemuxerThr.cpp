@@ -969,9 +969,9 @@ bool DemuxerThr::mustReloadStreams()
 	if
 	(
 		playC.reload ||
-		(playC.choosenAudioStream     > -1 && playC.choosenAudioStream     != playC.audioStream    ) ||
-		(playC.choosenVideoStream     > -1 && playC.choosenVideoStream     != playC.videoStream    ) ||
-		(playC.choosenSubtitlesStream > -1 && playC.choosenSubtitlesStream != playC.subtitlesStream)
+		(playC.chosenAudioStream     > -1 && playC.chosenAudioStream     != playC.audioStream    ) ||
+		(playC.chosenVideoStream     > -1 && playC.chosenVideoStream     != playC.videoStream    ) ||
+		(playC.chosenSubtitlesStream > -1 && playC.chosenSubtitlesStream != playC.subtitlesStream)
 	)
 	{
 		if (playC.frame_last_delay <= 0.0 && playC.videoStream > -1)

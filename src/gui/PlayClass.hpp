@@ -141,8 +141,8 @@ private:
 	QString url, newUrl, aRatioName;
 
 	int audioStream, videoStream, subtitlesStream;
-	int choosenAudioStream, choosenVideoStream, choosenSubtitlesStream;
-	QString choosenAudioLang, choosenSubtitlesLang;
+	int chosenAudioStream, chosenVideoStream, chosenSubtitlesStream;
+	QString chosenAudioLang, chosenSubtitlesLang;
 
 	QSet<QString> videoDecodersError;
 	QString videoDecoderModuleName;

@@ -743,8 +743,8 @@ quint32 Functions::getBestSampleRate()
 	quint32 srate = 48000; //Use 48kHz as default
 	if (QMPlay2Core.getSettings().getBool("ForceSamplerate"))
 	{
-		const quint32 choosenSrate = QMPlay2Core.getSettings().getUInt("Samplerate");
-		if ((choosenSrate % 11025) == 0)
+		const quint32 chosenSrate = QMPlay2Core.getSettings().getUInt("Samplerate");
+		if ((chosenSrate % 11025) == 0)
 			srate = 44100;
 	}
 	return srate;
