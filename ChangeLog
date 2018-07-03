@@ -1,6 +1,9 @@
-Changes in QMPlay2 build 18.05.14:
+Changes in QMPlay2 build 18.07.03:
+	- added button to open URL from playlist entry properties,
 	- fix possible crash when group is synchronized,
 	- use new FFmpeg 3.1 API for decoding frames,
+	- autodetection of pasted YouTube address,
+	- fix sorting playlist items by length,
 	- drop support for FFmpeg < 3.1,
 	- add FFmpeg 4.0 compatibility,
 	- minor QPainter HiDPI fix,
