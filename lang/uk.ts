@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>Автовизначення адреси</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>канали</translation>
+        <translation>Канали</translation>
     </message>
     <message>
         <source>mono</source>
@@ -789,7 +789,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити адресу або каталог з вказаним файлом</translation>
     </message>
 </context>
 <context>
@@ -2324,7 +2324,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
+        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
     </message>
 </context>
 <context>
@@ -3129,7 +3129,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Тексту пісні не знайдено</translation>
     </message>
 </context>
 <context>
@@ -3453,7 +3453,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка завантаження &quot;youtube-dl&quot;!</translation>
     </message>
 </context>
 </TS>
