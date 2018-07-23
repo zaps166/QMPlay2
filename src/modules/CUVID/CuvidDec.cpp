@@ -652,7 +652,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 		if (m_bsfCtx)
 		{
 			m_pkt->buf = encodedPacket.toAvBufferRef();
-			m_pkt->data = m_pkt->buf->data;
+			m_pkt->data = m_pkt->buf->data + encodedPacket.offset();
 			m_pkt->size = encodedPacket.size();
 
 			if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
