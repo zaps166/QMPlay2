@@ -22,13 +22,17 @@
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
 
+#include <QLoggingCategory>
 #include <QJsonDocument>
 #include <QTextDocument>
 #include <QJsonObject>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QJsonArray>
+#include <QProcess>
 #include <QAction>
+
+Q_LOGGING_CATEGORY(datmusic, "Datmusic")
 
 constexpr const char *g_url = "https://api-2.datmusic.xyz";
 constexpr const char *g_rawHeaders =
@@ -169,8 +173,44 @@ bool Datmusic::convertAddress(const QString &prefix, const QString &url, const Q
 			*extension = ".mp3";
 		if (ioCtrl && streamUrl)
 		{
-			QMPlay2Core.addRawHeaders(url, g_rawHeaders);
-			*streamUrl = url;
+			QProcess process;
+			process.setProgram("curl");
+			process.setArguments({
+				"-I",
+				"-H", QString(g_rawHeaders).replace("\r\n", "\\r\\n"),
+				url,
+			});
+			process.start();
+			do
+			{
+				process.waitForFinished(10);
+			} while (process.state() != QProcess::NotRunning && !ioCtrl->isAborted());
+			if (ioCtrl->isAborted())
+			{
+				process.kill();
+				process.waitForFinished(250);
+			}
+			else if (process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0)
+			{
+				const QStringList response = QString(process.readAllStandardOutput()).split("\r\n", QString::SkipEmptyParts);
+				for (const QString &line : response)
+				{
+					if (line.startsWith("location:", Qt::CaseInsensitive))
+					{
+						const int idx = line.indexOf("https://");
+						if (idx > -1)
+						{
+							*streamUrl = line.right(line.length() - idx);
+							QMPlay2Core.addRawHeaders(*streamUrl, g_rawHeaders);
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				qCCritical(datmusic) << "cURL error";
+			}
 		}
 	}
 	return true;
