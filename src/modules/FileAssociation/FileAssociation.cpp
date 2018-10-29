@@ -181,7 +181,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	extensionLW->setWrapping(true);
 
 	static constexpr const char *defaultVideoExtensions[] = {"mkv", "mp4", "mpg", "mpeg", "asf", "wmv", "ogv", "ogm", "webm", "3gp", "dv", "mts", "m2t", "m2ts", "ts", "m4v", "vob", "qt", "mov", "flv", "avi", "divx", "rmvb", "rm", "bik"};
-	static constexpr const char *defaultAudioExtensions[] = {"ogg", "mp3", "m4a", "wma", "aac", "ac3", "amr", "wav", "flac", "alac", "ape", "wv", "wvp", "mp2", "aiff", "aif", "mus", "cue"};
+	static constexpr const char *defaultAudioExtensions[] = {"ogg", "mp3", "m4a", "wma", "aac", "ac3", "amr", "wav", "flac", "alac", "ape", "wv", "wvp", "mp2", "aiff", "aif", "mus", "cue", "opus"};
 	static constexpr size_t defaultVideoCount = sizeof defaultVideoExtensions / sizeof *defaultVideoExtensions;
 	static constexpr size_t defaultAudioCount = sizeof defaultAudioExtensions / sizeof *defaultAudioExtensions;
 
