@@ -191,7 +191,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 					ok &= playC.aPackets.seekTo(seekTo, backward);
 
 				if (ok && !playC.sPackets.isEmpty())
-					ok &= playC.sPackets.seekTo(seekTo, backward);
+					playC.sPackets.seekTo(seekTo, backward); // Ignore error on subtitles stream (subtitles can be missing near to specified timestamp)
 
 				return ok;
 			};
