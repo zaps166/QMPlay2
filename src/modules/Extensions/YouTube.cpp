@@ -613,7 +613,7 @@ DockWidget *YouTube::getDockWidget()
 QString YouTube::matchAddress(const QString &url) const
 {
 	const QUrl qurl(url);
-	if (qurl.scheme().startsWith("http") && qurl.host().contains("youtube."))
+	if (qurl.scheme().startsWith("http") && (qurl.host().contains("youtube.") || qurl.host().contains("youtu.be")))
 		return "YouTube";
 	return QString();
 }
