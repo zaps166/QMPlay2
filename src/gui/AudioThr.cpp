@@ -297,9 +297,22 @@ void AudioThr::run()
 				const int chunk = qMin(decodedSize, (int)(ceil(realSample_rate * max_len) * realChannels * sizeof(float)));
 				float vol[2] = {0.0f, 0.0f};
 				if (!playC.muted)
-					for (int c = 0; c < 2; ++c)
+				{
+					const auto getVolume = [this](double vol) {
+						return playC.replayGain * (qFuzzyCompare(vol, 1.0) ? 1.0 : vol * vol);
+					};
+					if (realChannels == 1)
+					{
+						const double monoVol = (playC.vol[0] + playC.vol[1]) / 2.0;
+						if (monoVol > 0.0)
+							vol[0] = vol[1] = getVolume(monoVol);
+					}
+					else for (int c = 0; c < 2; ++c)
+					{
 						if (playC.vol[c] > 0.0)
-							vol[c] = playC.replayGain * (playC.vol[c] == 1.0 ? 1.0 : playC.vol[c] * playC.vol[c]);
+							vol[c] = getVolume(playC.vol[c]);
+					}
+				}
 
 				const bool isMuted = qFuzzyIsNull(vol[0]) && qFuzzyIsNull(vol[1]);
 
