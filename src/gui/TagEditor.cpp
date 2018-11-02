@@ -234,6 +234,28 @@ bool TagEditor::open(const QString &fileName)
 #else
 	fRef = new FileRef(fileName.toLocal8Bit(), false);
 #endif
+
+#if TAGLIB19
+	// TagLib can't load Ogg Opus file if file extension is ".ogg"
+	if (fRef->isNull() && fileName.endsWith(".ogg", Qt::CaseInsensitive))
+	{
+#ifdef Q_OS_WIN
+		auto file = new Ogg::Opus::File((const wchar_t *)fileName.utf16(), false);
+#else
+		auto file = new Ogg::Opus::File(fileName.toLocal8Bit(), false);
+#endif
+		if (file->isValid())
+		{
+			delete fRef;
+			fRef = new FileRef(file);
+		}
+		else
+		{
+			delete file;
+		}
+	}
+#endif
+
 	if (!fRef->isNull() && fRef->tag())
 	{
 		File &file = *fRef->file();
