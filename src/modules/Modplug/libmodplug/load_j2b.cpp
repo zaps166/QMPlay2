@@ -103,8 +103,7 @@ struct RIFF
 class RIFFList
 {
 public:
-	RIFFList(const BYTE *lpStream, const DWORD dwMemLength, const bool skip1B) :
-		riff_arr(NULL), riff_count(0)
+	RIFFList(const BYTE *lpStream, const DWORD dwMemLength, const bool skip1B)
 	{
 		ByteArray data(lpStream, dwMemLength);
 		while (!data.atEnd())
@@ -119,7 +118,7 @@ public:
 			RIFF &riff = riff_arr[riff_count-1];
 			riff.type = data.getDWORD();
 			riff.chunk_count = 0;
-			riff.chunk_arr = NULL;
+			riff.chunk_arr = nullptr;
 
 			while (!data.atEnd())
 			{
@@ -163,8 +162,8 @@ public:
 		return riff_arr[idx];
 	}
 private:
-	RIFF *riff_arr;
-	DWORD riff_count;
+	RIFF *riff_arr = nullptr;
+	DWORD riff_count = 0;
 };
 
 static inline BYTE ClipBYTE(const BYTE &src, const BYTE &max)
@@ -246,8 +245,8 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 		enum { J2B_AM_ENV_VOL, J2B_AM_ENV_PITCH, J2B_AM_ENV_PAN };
 		for (BYTE t = J2B_AM_ENV_VOL; t <= J2B_AM_ENV_PAN; ++t)
 		{
-			WORD *Points = NULL;
-			BYTE *Env = NULL;
+			WORD *Points = nullptr;
+			BYTE *Env = nullptr;
 			switch (t)
 			{
 				case J2B_AM_ENV_VOL:
@@ -365,7 +364,7 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 	bool isAM = false;
 
 	DWORD uncompressed_size = 0;
-	BYTE *uncompressed_arr = NULL;
+	BYTE *uncompressed_arr = nullptr;
 
 	if (!strncmp((const char *)lpStream, "MUSE", 4))
 	{
