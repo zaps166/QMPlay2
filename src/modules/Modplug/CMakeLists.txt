@@ -55,11 +55,6 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Modplug_RESOURCES}
 )
 
-if(WIN32 OR APPLE)
-    find_package(ZLIB REQUIRED)
-    target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY})
-endif()
-
 target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )
