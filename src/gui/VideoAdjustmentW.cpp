@@ -18,12 +18,15 @@
 
 #include <VideoAdjustmentW.hpp>
 
+#include <ShortcutHandler.hpp>
 #include <ModuleParams.hpp>
 #include <Settings.hpp>
 #include <Slider.hpp>
+#include <Main.hpp>
 
 #include <QGridLayout>
 #include <QPushButton>
+#include <QAction>
 #include <QLabel>
 
 enum CONTROLS
@@ -43,12 +46,14 @@ constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
 	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Hue"),
 	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness")
 };
+constexpr int g_step = 5;
 
 VideoAdjustmentW::VideoAdjustmentW()
 {
 	QGridLayout *layout = new QGridLayout;
 
 	m_sliders.reserve(CONTROLS_COUNT);
+	m_actions.reserve(CONTROLS_COUNT);
 
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
@@ -66,9 +71,21 @@ VideoAdjustmentW::VideoAdjustmentW()
 		slider->setValue(0);
 		connect(slider, &Slider::valueChanged, this, [=](int v) {
 			valueL->setText(QString::number(v));
-			emit videoAdjustmentChanged();
+			emit videoAdjustmentChanged(titleL->text() + QString::number(v));
 		});
 		m_sliders.push_back(slider);
+
+		QAction *actionDown = new QAction(this);
+		connect(actionDown, &QAction::triggered, this, [=] {
+			slider->setValue(slider->value() - g_step);
+		});
+
+		QAction *actionUp = new QAction(this);
+		connect(actionUp, &QAction::triggered, this, [=] {
+			slider->setValue(slider->value() + g_step);
+		});
+
+		m_actions.push_back({actionDown, actionUp});
 
 		layout->addWidget(titleL, i, 0);
 		layout->addWidget(slider, i, 1);
@@ -80,6 +97,9 @@ VideoAdjustmentW::VideoAdjustmentW()
 		for (int i = 0; i < CONTROLS_COUNT; ++i)
 			m_sliders[i]->setValue(0);
 	});
+
+	m_resetAction = new QAction(tr("Reset video adjustments"), this);
+	connect(m_resetAction, &QAction::triggered, resetB, &QPushButton::click);
 
 	layout->addWidget(resetB, layout->rowCount(), 0, 1, 3);
 	layout->addItem(new QSpacerItem(40, 0, QSizePolicy::Maximum, QSizePolicy::Minimum), layout->rowCount(), 2);
@@ -113,4 +133,41 @@ void VideoAdjustmentW::enableControls()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 		m_sliders[i]->setEnabled(true);
+}
+
+void VideoAdjustmentW::setKeyShortcuts()
+{
+	ShortcutHandler *shortcuts = QMPlay2GUI.shortcutHandler;
+
+	const auto appendAction = [&](QAction *action, const QString &text, const QString &settingsName, const QString &key) {
+		if (!text.isEmpty())
+			action->setText(text);
+		shortcuts->appendAction(action, "KeyBindings/VideoAdjustment-" + settingsName, key.isEmpty() ? QString() : "Shift+" + key);
+	};
+
+	appendAction(m_actions[BRIGHTNESS][0], tr("Brightness down"), "brightnessDown", "1");
+	appendAction(m_actions[BRIGHTNESS][1], tr("Brightness up"), "brightnessUp", "2");
+
+	appendAction(m_actions[CONTRAST][0], tr("Contrast down"), "contrastDown", "3");
+	appendAction(m_actions[CONTRAST][1], tr("Contrastup"), "contrastUp", "4");
+
+	appendAction(m_actions[SATURATION][0], tr("Saturation down"), "saturationDown", "5");
+	appendAction(m_actions[SATURATION][1], tr("Saturation up"), "saturationUp", "6");
+
+	appendAction(m_actions[HUE][0], tr("Hue down"), "hueDown", QString());
+	appendAction(m_actions[HUE][1], tr("Hue up"), "hueUp", QString());
+
+	appendAction(m_actions[SHARPNESS][0], tr("Sharpness down"), "sharpnessDown", "7");
+	appendAction(m_actions[SHARPNESS][1], tr("Sharpness up"), "sharpnessUp", "9");
+
+	appendAction(m_resetAction, QString(), "reset", "0");
+}
+void VideoAdjustmentW::addActionsToWidget(QWidget *w)
+{
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+	{
+		for (int j = 0; j < 2; ++j)
+			w->addAction(m_actions[i][j]);
+	}
+	w->addAction(m_resetAction);
 }

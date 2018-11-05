@@ -295,7 +295,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(&QMPlay2Core, SIGNAL(statusBarMessage(const QString &, int)), this, SLOT(statusBarMessage(const QString &, int)));
 	connect(&QMPlay2Core, SIGNAL(showSettings(const QString &)), this, SLOT(showSettings(const QString &)));
 
-	connect(QMPlay2GUI.videoAdjustment, SIGNAL(videoAdjustmentChanged()), &playC, SLOT(videoAdjustmentChanged()));
+	connect(QMPlay2GUI.videoAdjustment, SIGNAL(videoAdjustmentChanged(const QString &)), &playC, SLOT(videoAdjustmentChanged(const QString &)));
 
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
 	connect(&playC, SIGNAL(updateLength(int)), this, SLOT(setSeekSMaximum(int)));
@@ -355,6 +355,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	QMPlay2GUI.menuBar->widgets->lockWidgetsAct = lockWidgetsAct;
 
 	QMPlay2GUI.menuBar->setKeyShortcuts();
+	QMPlay2GUI.videoAdjustment->setKeyShortcuts();
 
 	volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
 	if (settings.getBool("Mute"))

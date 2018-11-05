@@ -734,12 +734,13 @@ void PlayClass::videoResized(int w, int h)
 	videoWinH = h;
 }
 
-void PlayClass::videoAdjustmentChanged()
+void PlayClass::videoAdjustmentChanged(const QString &osdText)
 {
 	if (vThr)
 	{
 		vThr->setVideoAdjustment();
 		vThr->processParams();
+		messageAndOSD(osdText);
 	}
 }
 

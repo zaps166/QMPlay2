@@ -18,6 +18,7 @@
 
 #include <VideoDock.hpp>
 
+#include <VideoAdjustmentW.hpp>
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <Main.hpp>
@@ -68,6 +69,7 @@ VideoDock::VideoDock() :
 		addAction(act);
 	for (QAction *act : QMPlay2GUI.menuBar->help->actions())
 		addAction(act);
+	QMPlay2GUI.videoAdjustment->addActionsToWidget(this);
 	/**/
 
 	setMouseTracking(true);

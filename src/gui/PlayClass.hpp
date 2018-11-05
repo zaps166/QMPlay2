@@ -170,7 +170,7 @@ private slots:
 	void settingsChanged(int, bool);
 	void videoResized(int, int);
 
-	void videoAdjustmentChanged();
+	void videoAdjustmentChanged(const QString &osdText);
 
 	void setAB();
 	void speedUp();
