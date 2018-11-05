@@ -24,7 +24,6 @@
 
 #include <QGridLayout>
 #include <QPushButton>
-#include <QVariant>
 #include <QLabel>
 
 enum CONTROLS
@@ -45,28 +44,31 @@ constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
 	QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness")
 };
 
-VideoAdjustmentW::VideoAdjustmentW() :
-	sliders(new Slider[CONTROLS_COUNT])
+VideoAdjustmentW::VideoAdjustmentW()
 {
 	QGridLayout *layout = new QGridLayout;
-	int i;
-	for (i = 0; i < CONTROLS_COUNT; ++i)
-	{
 
+	m_sliders.reserve(CONTROLS_COUNT);
+
+	for (int i = 0; i < CONTROLS_COUNT; ++i)
+	{
 		QLabel *titleL = new QLabel(tr(g_controlsNames[i]) + ": ");
 		titleL->setAlignment(Qt::AlignRight);
 
 		QLabel *valueL = new QLabel("0");
 
-		Slider *slider = &sliders[i];
-		slider->setProperty("valueL", qVariantFromValue((void *)valueL));
+		Slider *slider = new Slider;
 		slider->setTickPosition(QSlider::TicksBelow);
 		slider->setMinimumWidth(50);
 		slider->setTickInterval(25);
 		slider->setRange(-100, 100);
 		slider->setWheelStep(1);
 		slider->setValue(0);
-		connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
+		connect(slider, &Slider::valueChanged, this, [=](int v) {
+			valueL->setText(QString::number(v));
+			emit videoAdjustmentChanged();
+		});
+		m_sliders.push_back(slider);
 
 		layout->addWidget(titleL, i, 0);
 		layout->addWidget(slider, i, 1);
@@ -74,51 +76,41 @@ VideoAdjustmentW::VideoAdjustmentW() :
 	}
 
 	QPushButton *resetB = new QPushButton(tr("Reset"));
-	connect(resetB, SIGNAL(clicked()), this, SLOT(reset()));
+	connect(resetB, &QPushButton::clicked, this, [this] {
+		for (int i = 0; i < CONTROLS_COUNT; ++i)
+			m_sliders[i]->setValue(0);
+	});
 
-	layout->addWidget(resetB, i++, 0, 1, 3);
-	layout->addItem(new QSpacerItem(40, 0, QSizePolicy::Maximum, QSizePolicy::Minimum), i, 2);
+	layout->addWidget(resetB, layout->rowCount(), 0, 1, 3);
+	layout->addItem(new QSpacerItem(40, 0, QSizePolicy::Maximum, QSizePolicy::Minimum), layout->rowCount(), 2);
 
 	setLayout(layout);
 }
 VideoAdjustmentW::~VideoAdjustmentW()
-{
-	delete[] sliders;
-}
+{}
 
 void VideoAdjustmentW::restoreValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i].setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + g_controlsNames[i]));
+		m_sliders[i]->setValue(QMPlay2Core.getSettings().getInt(QString("VideoAdjustment/") + g_controlsNames[i]));
 }
 void VideoAdjustmentW::saveValues()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + g_controlsNames[i], sliders[i].value());
+		QMPlay2Core.getSettings().set(QString("VideoAdjustment/") + g_controlsNames[i], m_sliders[i]->value());
 }
 
 void VideoAdjustmentW::setModuleParam(ModuleParams *writer)
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
 	{
-		sliders[i].setEnabled(writer->hasParam(g_controlsNames[i]));
-		writer->modParam(g_controlsNames[i], sliders[i].value());
+		m_sliders[i]->setEnabled(writer->hasParam(g_controlsNames[i]));
+		writer->modParam(g_controlsNames[i], m_sliders[i]->value());
 	}
 }
 
 void VideoAdjustmentW::enableControls()
 {
 	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i].setEnabled(true);
-}
-
-void VideoAdjustmentW::setValue(int v)
-{
-	((QLabel *)sender()->property("valueL").value<void *>())->setText(QString::number(v));
-	emit videoAdjustmentChanged();
-}
-void VideoAdjustmentW::reset()
-{
-	for (int i = 0; i < CONTROLS_COUNT; ++i)
-		sliders[i].setValue(0);
+		m_sliders[i]->setEnabled(true);
 }
