@@ -26,6 +26,7 @@
 #endif
 
 constexpr int g_ms = 17;
+constexpr int g_msGL = 10; // Rely on V-Sync
 
 Visualizations::Visualizations() :
 	Module("Visualizations")
@@ -38,7 +39,7 @@ Visualizations::Visualizations() :
 	const QString platformName = QGuiApplication::platformName();
 	if (platformName == "cocoa" || platformName == "android")
 	{
-		ms = 10; // Rely on V-Sync
+		ms = g_msGL;
 		init("UseOpenGL", true);
 	}
 	else
@@ -93,7 +94,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	useOpenGLB->setChecked(sets().getBool("UseOpenGL"));
 	useOpenGLB->setToolTip(tr("Always enabled on Wayland platform.\nRecommended to use when OpenGL video output is in RTT mode."));
 	connect(useOpenGLB, &QCheckBox::toggled, [this](bool checked) {
-		refTimeB->setValue(checked ? 10 : g_ms);
+		QSignalBlocker blocker(refTimeB);
+		refTimeB->setValue(checked ? g_msGL : g_ms);
 	});
 #endif
 
