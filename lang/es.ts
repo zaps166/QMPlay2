@@ -410,25 +410,6 @@
     </message>
 </context>
 <context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artista</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Duración</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Buscar en Datmusic</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Parity (if not detected automatically)</source>
@@ -1863,6 +1844,25 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
 </context>
 <context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Título</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artista</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Duración</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -3263,6 +3263,50 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <message>
         <source>Sharpness</source>
         <translation>Nitidez</translation>
+    </message>
+    <message>
+        <source>Reset video adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrastup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

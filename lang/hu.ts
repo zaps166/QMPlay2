@@ -410,25 +410,6 @@
     </message>
 </context>
 <context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Cím</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Előadó</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Hossz</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Keresés a Datmusic-on</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1858,6 +1839,25 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Cím</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Előadó</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Hossz</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Stopped</source>
@@ -3259,6 +3259,50 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Sharpness</source>
         <translation>Élesség</translation>
+    </message>
+    <message>
+        <source>Reset video adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrastup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

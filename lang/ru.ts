@@ -410,25 +410,6 @@
     </message>
 </context>
 <context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Исполнитель</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Продолжительность</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Поиск на Datmusic</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1860,6 +1841,25 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
 </context>
 <context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Исполнитель</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Продолжительность</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -3261,6 +3261,50 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Sharpness</source>
         <translation type="unfinished">Резкость</translation>
+    </message>
+    <message>
+        <source>Reset video adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrastup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
