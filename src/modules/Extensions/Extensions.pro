@@ -22,9 +22,9 @@ HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp Radio/RadioBrowse
 SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp Radio/RadioBrowserModel.cpp
 FORMS += Radio/Radio.ui
 
-HEADERS += MediaBrowser.hpp MediaBrowser/Common.hpp MediaBrowser/Datmusic.hpp MediaBrowser/AnimeOdcinki.hpp MediaBrowser/Wbijam.hpp
-SOURCES += MediaBrowser.cpp MediaBrowser/Common.cpp MediaBrowser/Datmusic.cpp MediaBrowser/AnimeOdcinki.cpp MediaBrowser/Wbijam.cpp
-DEFINES += USE_MEDIABROWSER USE_DATMUSIC USE_ANIMEODCINKI USE_WBIJAM
+HEADERS += MediaBrowser.hpp MediaBrowser/Common.hpp MediaBrowser/MyFreeMP3.hpp MediaBrowser/AnimeOdcinki.hpp MediaBrowser/Wbijam.hpp
+SOURCES += MediaBrowser.cpp MediaBrowser/Common.cpp MediaBrowser/MyFreeMP3.cpp MediaBrowser/AnimeOdcinki.cpp MediaBrowser/Wbijam.cpp
+DEFINES += USE_MEDIABROWSER USE_MYFREEMP3 USE_ANIMEODCINKI USE_WBIJAM
 
 HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp

@@ -23,8 +23,8 @@
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 
-#ifdef USE_DATMUSIC
-	#include <MediaBrowser/Datmusic.hpp>
+#ifdef USE_MYFREEMP3
+	#include <MediaBrowser/MyFreeMp3.hpp>
 #endif
 #ifdef USE_ANIMEODCINKI
 	#include <MediaBrowser/AnimeOdcinki.hpp>
@@ -328,8 +328,8 @@ MediaBrowser::MediaBrowser(Module &module) :
 	m_net(this),
 	m_visible(false), m_first(true), m_overrideVisibility(false)
 {
-#ifdef USE_DATMUSIC
-	m_mediaBrowsers.emplace_back(new Datmusic(m_net));
+#ifdef USE_MYFREEMP3
+	m_mediaBrowsers.emplace_back(new MyFreeMP3(m_net));
 #endif
 #ifdef USE_ANIMEODCINKI
 	m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));
