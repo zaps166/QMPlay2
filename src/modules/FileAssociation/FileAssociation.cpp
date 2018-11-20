@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#define VER 5
+#define VER 6
 
 FileAssociation::FileAssociation() :
 	Module("FileAssociation")
