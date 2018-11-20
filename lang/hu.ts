@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>Cím automatikus felismerése</translation>
     </message>
 </context>
 <context>
@@ -615,19 +615,19 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>A konvertálás megszakítva</translation>
     </message>
     <message>
         <source>Conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a konvertálás közben</translation>
     </message>
     <message>
         <source>Converting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertálás...</translation>
     </message>
     <message>
         <source>Stop conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertálás megszakítása</translation>
     </message>
 </context>
 <context>
@@ -666,54 +666,57 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Hozzáadás</translation>
+        <translation>&amp;Hozzáadás</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertálási előbeállítás hozzáadásaa, módosítása, vagy törlése</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Letöltés és konvertálás &quot;%1&quot; formátumba</translation>
     </message>
     <message>
         <source>Converter preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertálási előbeállítás</translation>
     </message>
     <message>
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parancssor, ami letöltés után lesz futtatva.
+
+&lt;input/&gt; - megadja a letöltött fájlt
+&lt;output&gt;%f.mp3&lt;/output&gt; - a konvertált fájl a bemeneti fájl lesz, &quot;mp3&quot; kiterjesztéssel.</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Előbeállítás neve</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Parancssor</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation>Érvénytelen/üres név vagy parancssor!</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>A parancsnak tartalmaznia kell az &lt;input/&gt; taget!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>A parancsnak érvényes &lt;output&gt;file&lt;/output/&gt; taget kell tartalmaznia!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezzel a névvel már létezik előbeállítás!</translation>
     </message>
 </context>
 <context>
@@ -739,7 +742,7 @@
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Több számot tartalmazó file keresése</translation>
     </message>
     <message>
         <source>File size</source>
@@ -767,7 +770,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>A kijelölt fájlt tartalmazó könyvtár vagy URL megnyitása</translation>
     </message>
 </context>
 <context>
@@ -1842,19 +1845,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>MyFreeMP3</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Cím</translation>
+        <translation>Cím</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Előadó</translation>
+        <translation>Előadó</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Hossz</translation>
+        <translation>Hossz</translation>
     </message>
     <message>
         <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
+        <translation>Keresés a MyFreeMP3-on</translation>
     </message>
 </context>
 <context>
@@ -1920,7 +1923,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Körvonal</translation>
     </message>
     <message>
         <source>Shadow</source>
@@ -1947,7 +1950,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>texture copy error</source>
-        <translation type="unfinished"></translation>
+        <translation>textúra másolási hiba</translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
@@ -2319,7 +2322,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
     </message>
 </context>
 <context>
@@ -2513,7 +2516,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mindig szinkronizál</translation>
     </message>
 </context>
 <context>
@@ -2580,11 +2583,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>QMPlay2CoreClass</name>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>nem egyező modul API verzió</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>nem egyező modul Qt verzió</translation>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
@@ -2596,7 +2599,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation type="unfinished"></translation>
+        <translation>ismétlődő modul név</translation>
     </message>
     <message>
         <source>Can&apos;t open log file</source>
@@ -3120,11 +3123,11 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Translation</source>
-        <translation>Fordítás</translation>
+        <translation>Lengyel fordítás</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
+        <translation>A szöveg nem található</translation>
     </message>
 </context>
 <context>
@@ -3262,47 +3265,47 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Videó megjelenítés vissszaállítása</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Fényerő csökkentése</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Fényerő növelése</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontraszt csökkentése</translation>
     </message>
     <message>
         <source>Contrastup</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontraszt növelése</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Telítettség csökkentése</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Telítettség növelése</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Árnyalat csökkentése</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Árnyalat növelése</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Élesség csökkentése</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Élesség növelése</translation>
     </message>
 </context>
 <context>
