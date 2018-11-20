@@ -1,3 +1,16 @@
+Changes in QMPlay2 build 18.11.20:
+	- fixed loading Ogg Opus file when file extension is "ogg" in tag editor,
+	- improved Youtube detection by YouTube extension (youtu.be),
+	- fixed mono playback with different volume per channel,
+	- added key shortcuts and OSD for video adjustments,
+	- updated Ukrainian and Hungarian translation files,
+	- fixed YouTube seeking on streams with subtitles,
+	- added *.opus to Windows file association,
+	- replaced Datmusic by MyFreeMP3,
+	- removed direct zlib dependency,
+	- CUVID fixes for FFmpeg 4.0,
+	- minor bugfix,
+
 Changes in QMPlay2 build 18.07.03:
 	- added button to open URL from playlist entry properties,
 	- fix possible crash when group is synchronized,
