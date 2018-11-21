@@ -376,7 +376,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>Канали</translation>
+        <translation>канали</translation>
     </message>
     <message>
         <source>Hz</source>
@@ -548,7 +548,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>Канали</translation>
+        <translation>канали</translation>
     </message>
     <message>
         <source>mono</source>
@@ -1847,19 +1847,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>MyFreeMP3</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Назва</translation>
+        <translation>Назва</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Виконавець</translation>
+        <translation>Виконавець</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Тривалість</translation>
+        <translation>Тривалість</translation>
     </message>
     <message>
         <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук на MyFreeMP3</translation>
     </message>
 </context>
 <context>
@@ -3267,47 +3267,47 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинути регулювання відео</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Яскравість нижче</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Яскравість вище</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>Контрастність нижче</translation>
     </message>
     <message>
         <source>Contrastup</source>
-        <translation type="unfinished"></translation>
+        <translation>Контрастність вище</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Насиченість нижче</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Насиченість вище</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Відтінок нижче</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Відтінок вище</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Чіткість нижче</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Чіткість вище</translation>
     </message>
 </context>
 <context>
