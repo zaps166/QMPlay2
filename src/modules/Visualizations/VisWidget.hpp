@@ -62,6 +62,7 @@ private:
 
 #ifdef USE_OPENGL
 	QOpenGLWidget *glW;
+	bool m_pendingUpdate = false;
 #endif
 	bool dockWidgetVisible = false;
 private slots:
