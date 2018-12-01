@@ -1015,7 +1015,7 @@
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation type="unfinished"></translation>
+	<translation>Hauptfenster automatisch wiederherstellen, wenn eine neue Videodatei geladen wird</translation>
     </message>
 </context>
 <context>
@@ -1516,7 +1516,7 @@
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>Hurry Up</translation>
+        <translation>Beschleunigen</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
@@ -1620,7 +1620,7 @@
     </message>
     <message>
         <source>Noise reduction</source>
-        <translation>Noise Reduction</translation>
+        <translation>Rauschunterdrückung</translation>
     </message>
     <message>
         <source>Using the program via MPRIS2 interface</source>
@@ -1818,11 +1818,11 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>High quality video scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstklassige Videoskalierung</translation>
     </message>
     <message>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trilineare Filterung zur Reduktion und bikubische Filterung zur Vergrößerung.</translation>
     </message>
 </context>
 <context>
@@ -2313,15 +2313,15 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere Seitenverhältnis und Vergrößerung in der Konfigurationsdatei</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsetzen der Suche</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilweise geprüft bedeutet, dass es eine Verzögerung zwischen Klicken und Pause gibt</translation>
     </message>
 </context>
 <context>
