@@ -2326,6 +2326,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Partially checked means that there is a delay between click na pausing</source>
         <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
     </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3282,10 +3286,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Контрастність нижче</translation>
     </message>
     <message>
-        <source>Contrastup</source>
-        <translation>Контрастність вище</translation>
-    </message>
-    <message>
         <source>Saturation down</source>
         <translation>Насиченість нижче</translation>
     </message>
@@ -3308,6 +3308,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Sharpness up</source>
         <translation>Чіткість вище</translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

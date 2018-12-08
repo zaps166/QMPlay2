@@ -149,7 +149,7 @@ void VideoAdjustmentW::setKeyShortcuts()
 	appendAction(m_actions[BRIGHTNESS][1], tr("Brightness up"), "brightnessUp", "2");
 
 	appendAction(m_actions[CONTRAST][0], tr("Contrast down"), "contrastDown", "3");
-	appendAction(m_actions[CONTRAST][1], tr("Contrastup"), "contrastUp", "4");
+	appendAction(m_actions[CONTRAST][1], tr("Contrast up"), "contrastUp", "4");
 
 	appendAction(m_actions[SATURATION][0], tr("Saturation down"), "saturationDown", "5");
 	appendAction(m_actions[SATURATION][1], tr("Saturation up"), "saturationUp", "6");

@@ -1847,19 +1847,19 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <name>MyFreeMP3</name>
     <message>
         <source>Title</source>
-        <translation type="unfinished">Tytuł</translation>
+        <translation>Tytuł</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished"></translation>
+        <translation>Artysta</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation type="unfinished">Długość</translation>
+        <translation>Długość</translation>
     </message>
     <message>
         <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyszukaj w MyFreeMP3</translation>
     </message>
 </context>
 <context>
@@ -2325,6 +2325,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Partially checked means that there is a delay between click na pausing</source>
         <translation>Częściowo zaznaczone oznacza, że występuje przerwa między kliknięciem a pauzą</translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Użyj resamplera audio i konwersji kanałów przed filtrami i wizualizacjmi</translation>
     </message>
 </context>
 <context>
@@ -3267,47 +3271,47 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyzeruj regulację wideo</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciemniej</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Jaśniej</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contrastup</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmniejsz kontrast</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmniejsz nasycenie</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwiększ nasycenie</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień odcień (-)</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień odcień (+)</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmniejsz ostrość</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwiększ ostrość</translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation>Zwiększ kontrast</translation>
     </message>
 </context>
 <context>

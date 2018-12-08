@@ -1015,7 +1015,7 @@
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-	<translation>Hauptfenster automatisch wiederherstellen, wenn eine neue Videodatei geladen wird</translation>
+        <translation>Hauptfenster automatisch wiederherstellen, wenn eine neue Videodatei geladen wird</translation>
     </message>
 </context>
 <context>
@@ -2323,6 +2323,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Partially checked means that there is a delay between click na pausing</source>
         <translation>Teilweise geprüft bedeutet, dass es eine Verzögerung zwischen Klicken und Pause gibt</translation>
     </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3279,10 +3283,6 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Contrastup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Saturation down</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3304,6 +3304,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
