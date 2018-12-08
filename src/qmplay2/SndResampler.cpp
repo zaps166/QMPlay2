@@ -18,6 +18,8 @@
 
 #include <SndResampler.hpp>
 
+#include <Buffer.hpp>
+
 #include <QByteArray>
 
 #include <cmath>
@@ -95,6 +97,24 @@ bool SndResampler::create(int _src_samplerate, int _src_channels, int _dst_sampl
 }
 void SndResampler::convert(const QByteArray &src, QByteArray &dst)
 {
+	convertInternal(src, dst);
+}
+void SndResampler::convert(const Buffer &src, Buffer &dst)
+{
+	convertInternal(src, dst);
+}
+void SndResampler::destroy()
+{
+#ifdef QMPLAY2_AVRESAMPLE
+	avresample_free(&snd_convert_ctx);
+#else
+	swr_free(&snd_convert_ctx);
+#endif
+}
+
+template<typename T>
+void SndResampler::convertInternal(const T &src, T &dst)
+{
 	const int in_size = src.size() / src_channels / sizeof(float);
 	const int out_size = ceil(in_size * (double)dst_samplerate / (double)src_samplerate);
 
@@ -112,12 +132,4 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst)
 		dst.resize(converted * sizeof(float) * dst_channels);
 	else
 		dst.clear();
-}
-void SndResampler::destroy()
-{
-#ifdef QMPLAY2_AVRESAMPLE
-	avresample_free(&snd_convert_ctx);
-#else
-	swr_free(&snd_convert_ctx);
-#endif
 }

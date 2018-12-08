@@ -646,7 +646,7 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
 		srate = QMPlay2Core.getSettings().getUInt("Samplerate");
 	if (QMPlay2Core.getSettings().getBool("ForceChannels"))
 		chn = QMPlay2Core.getSettings().getUInt("Channels");
-	return aThr->setParams(realChannels, realSampleRate, chn, srate);
+	return aThr->setParams(realChannels, realSampleRate, chn, srate, QMPlay2Core.getSettings().getBool("ResamplerFirst"));
 }
 
 inline void PlayClass::emitSetVideoCheckState()

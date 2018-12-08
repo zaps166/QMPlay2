@@ -347,6 +347,13 @@
            </property>
           </widget>
          </item>
+         <item row="9" column="0" colspan="2">
+          <widget class="QCheckBox" name="resamplerFirst">
+           <property name="text">
+            <string>Use audio resampler and channel conversion before filters and visualizations</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="5" column="0" colspan="2">
@@ -474,6 +481,7 @@
   <tabstop>samplerateB</tabstop>
   <tabstop>forceChannels</tabstop>
   <tabstop>channelsB</tabstop>
+  <tabstop>resamplerFirst</tabstop>
   <tabstop>replayGain</tabstop>
   <tabstop>replayGainAlbum</tabstop>
   <tabstop>replayGainPreventClipping</tabstop>
@@ -497,6 +505,7 @@
   <tabstop>ignorePlaybackError</tabstop>
   <tabstop>leftMouseTogglePlay</tabstop>
   <tabstop>accurateSeekB</tabstop>
+  <tabstop>unpauseWhenSeekingB</tabstop>
  </tabstops>
  <resources/>
  <connections/>

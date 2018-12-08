@@ -35,8 +35,6 @@
 AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
 	AVThread(playC, "audio:", nullptr, pluginsName)
 {
-	allowAudioDrain = false;
-
 	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
 		if (QMPlay2Ext->isVisualization())
 			visualizations += QMPlay2Ext;
@@ -74,8 +72,10 @@ void AudioThr::clearVisualizations()
 		vis->clearSoundData();
 }
 
-bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
+bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, bool resamplerFirst)
 {
+	m_resamplerFirst = resamplerFirst;
+
 	doSilence = -1.0;
 	lastSpeed = playC.speed;
 
@@ -112,9 +112,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate)
 		}
 
 		for (QMPlay2Extensions *vis : asConst(visualizations))
-			vis->visState(true, realChannels, realSample_rate);
+			vis->visState(true, currentChannels(), currentSampleRate());
 		for (AudioFilter *filter : asConst(filters))
-			filter->setAudioParameters(realChannels, realSample_rate);
+			filter->setAudioParameters(currentChannels(), currentSampleRate());
 
 		return true;
 	}
@@ -279,6 +279,13 @@ void AudioThr::run()
 #endif
 			}
 
+			if (m_resamplerFirst && sndResampler.isOpen())
+			{
+				Buffer converted;
+				sndResampler.convert(decoded, converted);
+				decoded = std::move(converted);
+			}
+
 			delay = writer->getParam("delay").toDouble();
 			for (AudioFilter *filter : asConst(filters))
 			{
@@ -294,14 +301,14 @@ void AudioThr::run()
 			while (decodedSize > 0 && (!playC.paused || oneFrame) && !br && !br2)
 			{
 				const double max_len = 0.02; //TODO: zrobić opcje?
-				const int chunk = qMin(decodedSize, (int)(ceil(realSample_rate * max_len) * realChannels * sizeof(float)));
+				const int chunk = qMin(decodedSize, (int)(ceil(currentSampleRate() * max_len) * currentChannels() * sizeof(float)));
 				float vol[2] = {0.0f, 0.0f};
 				if (!playC.muted)
 				{
 					const auto getVolume = [this](double vol) {
 						return playC.replayGain * (qFuzzyCompare(vol, 1.0) ? 1.0 : vol * vol);
 					};
-					if (realChannels == 1)
+					if (currentChannels() == 1)
 					{
 						const double monoVol = (playC.vol[0] + playC.vol[1]) / 2.0;
 						if (monoVol > 0.0)
@@ -325,7 +332,7 @@ void AudioThr::run()
 				decodedPos += chunk;
 				decodedSize -= chunk;
 
-				playC.audio_last_delay = (double)decodedChunk.size() / (double)(sizeof(float) * realChannels * realSample_rate);
+				playC.audio_last_delay = (double)decodedChunk.size() / (double)(sizeof(float) * currentChannels() * currentSampleRate());
 				if (packet.ts.isValid())
 				{
 					audio_pts = playC.audio_current_pts = packet.ts - delay;
@@ -382,7 +389,7 @@ void AudioThr::run()
 						vis->sendSoundData(decodedChunk);
 
 					QByteArray dataToWrite;
-					if (sndResampler.isOpen())
+					if (!m_resamplerFirst && sndResampler.isOpen())
 						sndResampler.convert(decodedChunk, dataToWrite);
 					else
 						dataToWrite = decodedChunk;
@@ -440,6 +447,15 @@ bool AudioThr::resampler_create()
 	return true;
 }
 
+inline uchar AudioThr::currentChannels() const
+{
+	return m_resamplerFirst ? channels : realChannels;
+}
+inline uint AudioThr::currentSampleRate() const
+{
+	return m_resamplerFirst ? sample_rate : realSample_rate;
+}
+
 #ifdef Q_OS_WIN
 void AudioThr::timerEvent(QTimerEvent *)
 {
@@ -463,5 +479,5 @@ void AudioThr::timerEvent(QTimerEvent *)
 void AudioThr::pauseVis(bool b)
 {
 	for (QMPlay2Extensions *vis : asConst(visualizations))
-		vis->visState(!b, realChannels, realSample_rate);
+		vis->visState(!b, currentChannels(), currentSampleRate());
 }

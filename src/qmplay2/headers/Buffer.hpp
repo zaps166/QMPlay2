@@ -43,6 +43,7 @@ public:
 
 	bool isWritable() const;
 
+	bool reserve(qint32 len);
 	bool resize(qint32 len);
 	bool remove(qint32 pos, qint32 len);
 	void clear();

@@ -38,7 +38,7 @@ public:
 	void stop(bool terminate = false) override;
 	void clearVisualizations();
 
-	bool setParams(uchar realChn, uint realSRate, uchar chn = 0, uint sRate = 0);
+	bool setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, bool resamplerFirst);
 
 	void silence(bool invert, bool fromPause);
 
@@ -51,6 +51,9 @@ private:
 
 	bool resampler_create();
 
+	inline uchar currentChannels() const;
+	inline uint currentSampleRate() const;
+
 #ifdef Q_OS_WIN
 	void timerEvent(QTimerEvent *) override;
 #endif
@@ -58,6 +61,7 @@ private:
 	SndResampler sndResampler;
 	uchar realChannels, channels;
 	uint  realSample_rate, sample_rate;
+	bool m_resamplerFirst;
 	double lastSpeed;
 
 	int tmp_br;
@@ -67,7 +71,7 @@ private:
 #ifdef Q_OS_WIN
 	bool canUpdatePos, canUpdateBitrate;
 #endif
-	bool allowAudioDrain;
+	bool allowAudioDrain = false;
 
 	QVector<QMPlay2Extensions *> visualizations;
 	QVector<AudioFilter *> filters;

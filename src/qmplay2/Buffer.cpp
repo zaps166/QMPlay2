@@ -41,12 +41,18 @@ bool Buffer::isWritable() const
 	return !isNull() && av_buffer_is_writable(m_bufferRef);
 }
 
-bool Buffer::resize(qint32 len)
+bool Buffer::reserve(qint32 len)
 {
 	if (m_offset > 0)
 		return false;
 	if (capacity() < len)
 		av_buffer_realloc(&m_bufferRef, len);
+	return true;
+}
+bool Buffer::resize(qint32 len)
+{
+	if (!reserve(len))
+		return false;
 	m_size = len;
 	return true;
 }

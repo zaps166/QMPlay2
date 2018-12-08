@@ -171,6 +171,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("Samplerate", 48000);
 	QMPSettings.init("ForceChannels", false);
 	QMPSettings.init("Channels", 2);
+	QMPSettings.init("ResamplerFirst", true);
 	QMPSettings.init("ReplayGain/Enabled", false);
 	QMPSettings.init("ReplayGain/Album", false);
 	QMPSettings.init("ReplayGain/PreventClipping", true);
@@ -433,6 +434,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->channelsB->setValue(QMPSettings.getInt("Channels"));
 		connect(page2->forceChannels, SIGNAL(toggled(bool)), page2->channelsB, SLOT(setEnabled(bool)));
 		page2->channelsB->setEnabled(page2->forceChannels->isChecked());
+
+		page2->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
 
 		page2->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
 		page2->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
@@ -827,6 +830,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("MaxVol", page2->maxVolB->value());
 			QMPSettings.set("ForceChannels", page2->forceChannels->isChecked());
 			QMPSettings.set("Channels", page2->channelsB->value());
+			QMPSettings.set("ResamplerFirst", page2->resamplerFirst->isChecked());
 			QMPSettings.set("ReplayGain/Enabled", page2->replayGain->isChecked());
 			QMPSettings.set("ReplayGain/Album", page2->replayGainAlbum->isChecked());
 			QMPSettings.set("ReplayGain/PreventClipping", page2->replayGainPreventClipping->isChecked());
