@@ -90,7 +90,7 @@ class YouTube final : public QWidget, public QMPlay2Extensions
 	Q_OBJECT
 
 public:
-	enum QUALITY_PRESETS {_2160p60, _1080p60, _720p60, _2160p, _1080p, _720p, _480p, QUALITY_PRESETS_COUNT};
+	enum QUALITY_PRESETS {_2160p60, _1440p60, _1080p60, _720p60, _2160p, _1440p, _1080p, _720p, _480p, QUALITY_PRESETS_COUNT};
 
 	static QList<int> *getQualityPresets();
 	static QStringList getQualityPresetString(int qualityIdx);
