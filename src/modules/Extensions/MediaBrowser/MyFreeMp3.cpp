@@ -31,6 +31,9 @@
 #include <QJsonArray>
 #include <QAction>
 
+Q_LOGGING_CATEGORY(myfreemp3, "MyFreeMp3")
+
+constexpr const char *g_streamHostContainer = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/MyFreeMp3";
 constexpr const char *g_url = "https://my-free-mp3s.com/api";
 
 /**/
@@ -89,12 +92,11 @@ MediaBrowserCommon::Description MyFreeMP3::addSearchResults(const QByteArray &re
 
 		const QString title = entry["title"].toString();
 		const QString artist = entry["artist"].toString();
-		const QString url = "https://newtabz.stream/stream/" + id;
 		const QString fullName = artist + " - " + title;
 
 		QTreeWidgetItem *tWI = new QTreeWidgetItem(treeW);
 		tWI->setData(0, Qt::UserRole + 1, fullName);
-		tWI->setData(0, Qt::UserRole, url);
+		tWI->setData(0, Qt::UserRole, id);
 		tWI->setIcon(0, MyFreeMP3Icon);
 
 		tWI->setText(0, title);
@@ -105,8 +107,8 @@ MediaBrowserCommon::Description MyFreeMP3::addSearchResults(const QByteArray &re
 
 		tWI->setText(2, Functions::timeToStr(entry["duration"].toInt()));
 
-		QMPlay2Core.addNameForUrl(getQMPlay2Url(url), fullName, false);
-		m_urlNames.append(url);
+		QMPlay2Core.addNameForUrl(getQMPlay2Url(id), fullName, false);
+		m_urlNames.append(id);
 	}
 
 	return {};
@@ -169,11 +171,31 @@ bool MyFreeMP3::convertAddress(const QString &prefix, const QString &url, const 
 		if (icon)
 			*icon = m_icon;
 #endif
+
 		if (extension)
 			*extension = ".mp3";
+
 		if (ioCtrl && streamUrl)
-			*streamUrl = url;
+		{
+			if (m_streamHost.isEmpty())
+			{
+				auto &netReply = ioCtrl->toRef<NetworkReply>();
+				NetworkAccess net;
+				if (net.startAndWait(netReply, g_streamHostContainer))
+				{
+					m_streamHost = netReply->readAll().trimmed();
+					netReply.reset();
+				}
+				else
+				{
+					qCWarning(myfreemp3) << "Can't obtain host stream url";
+				}
+			}
+			if (!m_streamHost.isEmpty())
+				*streamUrl = "https://" + m_streamHost + "/stream/" + url;
+		}
 	}
+
 	return true;
 }
 

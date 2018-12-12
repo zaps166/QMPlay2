@@ -58,4 +58,5 @@ private:
 
 private:
 	QStringList m_urlNames;
+	QString m_streamHost;
 };
