@@ -345,6 +345,11 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 						}
 					}
 				}
+				else if (line.startsWith("FILE "))
+				{
+					// QMPlay2 supports CUE files which uses only single audio file
+					return {};
+				}
 				if (line.startsWith("TRACK "))
 				{
 					if (entries.isEmpty() && audioUrl.isEmpty())
