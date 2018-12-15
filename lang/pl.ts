@@ -1020,6 +1020,10 @@
         <source>Automatically restore main window when new video file is loaded</source>
         <translation>Automatycznie przywróć główne okno po załadowaniu nowego pliku wideo</translation>
     </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Pomijaj ładowanie plików playlist między innymi plikami</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

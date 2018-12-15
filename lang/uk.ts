@@ -1020,6 +1020,10 @@
         <source>Automatically restore main window when new video file is loaded</source>
         <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
     </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

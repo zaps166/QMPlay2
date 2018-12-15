@@ -312,11 +312,30 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	QTreeWidgetItem *currentItem = parent;
+	QSet<int> playlistIndexesToSkip;
 	bool added = false;
+
+	if (!loadList && QMPlay2Core.getSettings().getBool("SkipPlaylistsWithinFiles"))
+	{
+		// Don't load playlist within other files
+		const auto e = Playlist::extensions();
+		for (int i = 0; i < urls.size(); ++i)
+		{
+			const QString ext = Functions::fileExt(urls.at(i)).toLower();
+			if (e.contains(ext))
+				playlistIndexesToSkip.insert(i);
+		}
+		if (playlistIndexesToSkip.count() == urls.count())
+			playlistIndexesToSkip.clear();
+	}
+
 	for (int i = 0; i < urls.size(); ++i)
 	{
 		if (ioCtrl.isAborted())
 			break;
+
+		if (playlistIndexesToSkip.contains(i))
+			continue;
 
 		const QString entryName = QMPlay2Core.getNameForUrl(urls.at(i)); // Get the default entry name - it'll be used if doesn't exist in stream
 

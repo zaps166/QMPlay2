@@ -148,6 +148,7 @@ void SettingsWidget::InitSettings()
 #endif
 	QMPSettings.init("HideArtistMetadata", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
+	QMPSettings.init("SkipPlaylistsWithinFiles", true);
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
 	QMPSettings.init("TrayNotifiesDefault", false);
@@ -375,6 +376,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
 		page1->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
 		page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
+		page1->skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
 		page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
 		page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
 
@@ -790,6 +792,7 @@ void SettingsWidget::apply()
 #endif
 			QMPSettings.set("HideArtistMetadata", page1->hideArtistMetadata->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
+			QMPSettings.set("SkipPlaylistsWithinFiles", page1->skipPlaylistsWithinFiles->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());
 			if (page1->trayNotifiesDefault)

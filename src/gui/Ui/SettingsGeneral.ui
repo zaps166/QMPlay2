@@ -68,14 +68,14 @@
          </layout>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="16" column="0">
         <widget class="QPushButton" name="setKeyBindingsB">
          <property name="text">
           <string>Set key bindings</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="15" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>3</number>
@@ -285,14 +285,14 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QCheckBox" name="restoreRepeatMode">
          <property name="text">
           <string>Remember repeat mode</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="14" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -357,7 +357,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="13">
+       <item row="1" column="1" rowspan="14">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -370,7 +370,7 @@
          </property>
         </spacer>
        </item>
-       <item row="16" column="0" colspan="2">
+       <item row="17" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -383,21 +383,21 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="0">
+       <item row="11" column="0">
         <widget class="QCheckBox" name="stillImages">
          <property name="text">
           <string>Read and display still images</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <widget class="QCheckBox" name="trayNotifiesDefault">
          <property name="text">
           <string>Use tray notifications as default</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item row="13" column="0">
         <widget class="QCheckBox" name="autoDelNonGroupEntries">
          <property name="text">
           <string>Automatically delete ungrouped entries</string>
@@ -415,6 +415,13 @@
         <widget class="QCheckBox" name="autoRestoreMainWindowOnVideoB">
          <property name="text">
           <string>Automatically restore main window when new video file is loaded</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QCheckBox" name="skipPlaylistsWithinFiles">
+         <property name="text">
+          <string>Don't load playlist files within other files</string>
          </property>
         </widget>
        </item>
@@ -448,6 +455,7 @@
   <tabstop>allowOnlyOneInstance</tabstop>
   <tabstop>hideArtistMetadata</tabstop>
   <tabstop>displayOnlyFileName</tabstop>
+  <tabstop>skipPlaylistsWithinFiles</tabstop>
   <tabstop>restoreRepeatMode</tabstop>
   <tabstop>stillImages</tabstop>
   <tabstop>trayNotifiesDefault</tabstop>
