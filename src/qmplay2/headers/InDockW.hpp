@@ -41,6 +41,7 @@ private:
 	QPointer<QWidget> w;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
+public:
 	void setWidget(QWidget *newW);
 protected:
 	void resizeEvent(QResizeEvent *) override;

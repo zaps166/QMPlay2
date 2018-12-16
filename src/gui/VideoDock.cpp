@@ -88,7 +88,10 @@ VideoDock::VideoDock() :
 	connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
 	connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
 	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
-	connect(&QMPlay2Core, SIGNAL(dockVideo(QWidget *)), &iDW, SLOT(setWidget(QWidget *)));
+	connect(&QMPlay2Core, &QMPlay2CoreClass::dockVideo, this, [this](QWidget *w) {
+		iDW.setWidget(w);
+		mouseMoveEvent(nullptr);
+	});
 
 	if ((isBreeze = QApplication::style()->objectName() == "breeze"))
 		setStyle(&commonStyle);
