@@ -1069,6 +1069,7 @@ void MainWidget::toggleFullScreen()
 		fullScreen = true;
 
 #ifndef Q_OS_MACOS
+		hide();
 		showFullScreen();
 #else
 		setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
