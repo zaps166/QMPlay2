@@ -634,11 +634,11 @@
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation>Завантажувач файлів з Інтернету</translation>
+        <translation>Завантажувач</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation>Папка завантаження</translation>
+        <translation>Каталог завантаження</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
@@ -1022,7 +1022,7 @@
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
+        <translation>Не завантажувати файли списку відтворення до інших файлів</translation>
     </message>
 </context>
 <context>
@@ -2332,7 +2332,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
     </message>
 </context>
 <context>
@@ -3315,7 +3315,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation type="unfinished"></translation>
+        <translation>Контрастність вище</translation>
     </message>
 </context>
 <context>
