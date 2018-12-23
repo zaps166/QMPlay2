@@ -132,7 +132,7 @@ private:
 	PacketBuffer aPackets, vPackets, sPackets;
 
 	double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
-	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError, videoDecErrorLoad;
+	bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError, videoDecErrorLoad, pauseAfterFirstFrame = false;
 	double seekTo, lastSeekTo, restartSeekTo, seekA, seekB, videoSeekPos, audioSeekPos;
 	double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
 	int flip;
@@ -141,8 +141,8 @@ private:
 	QString url, newUrl, aRatioName;
 
 	int audioStream, videoStream, subtitlesStream;
-	int choosenAudioStream, choosenVideoStream, choosenSubtitlesStream;
-	QString choosenAudioLang, choosenSubtitlesLang;
+	int chosenAudioStream, chosenVideoStream, chosenSubtitlesStream;
+	QString chosenAudioLang, chosenSubtitlesLang;
 
 	QSet<QString> videoDecodersError;
 	QString videoDecoderModuleName;
@@ -170,7 +170,7 @@ private slots:
 	void settingsChanged(int, bool);
 	void videoResized(int, int);
 
-	void videoAdjustmentChanged();
+	void videoAdjustmentChanged(const QString &osdText);
 
 	void setAB();
 	void speedUp();
@@ -233,7 +233,8 @@ signals:
 	void updateBufferedRange(int, int);
 	void updateWindowTitle(const QString &t = QString());
 	void updateImage(const QImage &img = QImage());
-	void videoStarted();
+	void videoStarted(bool hasVideo);
+	void videoNotStarted();
 	void uncheckSuspend();
 	void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
 };

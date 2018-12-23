@@ -112,8 +112,6 @@ bool VAAPI::init(int width, int height, const char *codecName, bool initFilters)
 			p = VAProfileH264High;
 		else if (profileList.contains(VAProfileH264Main))
 			p = VAProfileH264Main;
-		else if (profileList.contains(VAProfileH264Baseline))
-			p = VAProfileH264Baseline;
 	}
 #if VA_VERSION_HEX >= 0x230000 // 1.3.0
 	else if (!qstrcmp(codecName, "vp8")) //Not supported in FFmpeg (06.12.2015)

@@ -26,7 +26,7 @@ set(GUI_HDR
     EntryProperties.hpp
     AboutWidget.hpp
     AddressDialog.hpp
-    VideoAdjustment.hpp
+    VideoAdjustmentW.hpp
     Appearance.hpp
     VolWidget.hpp
     ScreenSaver.hpp
@@ -59,7 +59,7 @@ set(GUI_SRC
     EntryProperties.cpp
     AboutWidget.cpp
     AddressDialog.cpp
-    VideoAdjustment.cpp
+    VideoAdjustmentW.cpp
     Appearance.cpp
     VolWidget.cpp
     ShortcutHandler.cpp
@@ -230,6 +230,13 @@ elseif(APPLE)
         DESTINATION "${MAC_BUNDLE_PATH}/Contents"
         FILES_MATCHING
         PATTERN "qtbase_*.qm")
+    if(EXISTS "/usr/local/bin/ffmpeg")
+        install(PROGRAMS
+            "/usr/local/bin/ffmpeg"
+            DESTINATION "${MAC_BUNDLE_PATH}/Contents/MacOS")
+    else()
+        message(WARNING "FFmpeg executable not copied!")
+    endif()
     install(CODE "
         include(BundleUtilities)
         set(BU_CHMOD_BUNDLE_ITEMS ON)

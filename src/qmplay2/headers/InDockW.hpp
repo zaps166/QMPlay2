@@ -18,10 +18,12 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QPointer>
 #include <QWidget>
 
-class Q_DECL_EXPORT InDockW final : public QWidget
+class QMPLAY2SHAREDLIB_EXPORT InDockW final : public QWidget
 {
 	Q_OBJECT
 public:
@@ -39,6 +41,7 @@ private:
 	QPointer<QWidget> w;
 private slots:
 	void wallpaperChanged(bool hasWallpaper, double alpha);
+public:
 	void setWidget(QWidget *newW);
 protected:
 	void resizeEvent(QResizeEvent *) override;

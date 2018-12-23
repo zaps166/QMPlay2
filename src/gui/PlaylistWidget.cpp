@@ -57,6 +57,20 @@ static inline MenuBar::Playlist *playlistMenu()
 	return QMPlay2GUI.menuBar->playlist;
 }
 
+/* PlaylistItem class */
+class PlaylistItem : public QTreeWidgetItem
+{
+public:
+	bool operator <(const QTreeWidgetItem &other) const override
+	{
+		if (treeWidget() && treeWidget()->sortColumn() == 2)
+		{
+			return (data(2, Qt::UserRole) < other.data(2, Qt::UserRole));
+		}
+		return QTreeWidgetItem::operator <(other);
+	}
+};
+
 /* UpdateEntryThr class */
 UpdateEntryThr::UpdateEntryThr(PlaylistWidget &pLW) :
 	pendingUpdates(0),
@@ -298,11 +312,30 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
 {
 	const bool displayOnlyFileName = QMPlay2Core.getSettings().getBool("DisplayOnlyFileName");
 	QTreeWidgetItem *currentItem = parent;
+	QSet<int> playlistIndexesToSkip;
 	bool added = false;
+
+	if (!loadList && QMPlay2Core.getSettings().getBool("SkipPlaylistsWithinFiles"))
+	{
+		// Don't load playlist within other files
+		const auto e = Playlist::extensions();
+		for (int i = 0; i < urls.size(); ++i)
+		{
+			const QString ext = Functions::fileExt(urls.at(i)).toLower();
+			if (e.contains(ext))
+				playlistIndexesToSkip.insert(i);
+		}
+		if (playlistIndexesToSkip.count() == urls.count())
+			playlistIndexesToSkip.clear();
+	}
+
 	for (int i = 0; i < urls.size(); ++i)
 	{
 		if (ioCtrl.isAborted())
 			break;
+
+		if (playlistIndexesToSkip.contains(i))
+			continue;
 
 		const QString entryName = QMPlay2Core.getNameForUrl(urls.at(i)); // Get the default entry name - it'll be used if doesn't exist in stream
 
@@ -575,6 +608,7 @@ PlaylistWidget::PlaylistWidget() :
 	connect(&animationTimer, SIGNAL(timeout()), this, SLOT(animationUpdate()));
 	connect(&addTimer, SIGNAL(timeout()), this, SLOT(addTimerElapsed()));
 	connect(&addThr, SIGNAL(status(bool)), this, SIGNAL(addStatus(bool)));
+	connect(playlistMenu(), &MenuBar::Playlist::aboutToShow, this, &PlaylistWidget::createExtensionsMenu);
 }
 
 QString PlaylistWidget::getUrl(QTreeWidgetItem *tWI) const
@@ -626,12 +660,12 @@ void PlaylistWidget::sync(const QString &pth, QTreeWidgetItem *par, bool notDir)
 	if (canModify())
 		addThr.setDataForSync(pth, par, notDir);
 }
-void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par)
+void PlaylistWidget::quickSync(const QString &pth, QTreeWidgetItem *par, bool recursive, QTreeWidgetItem *&itemToNull)
 {
 	if (canModify())
 	{
 		bool mustRefresh = false;
-		quickSyncScanDirs(pth, par, mustRefresh);
+		quickSyncScanDirs(pth, par, mustRefresh, recursive, itemToNull);
 		if (mustRefresh && canModify())
 		{
 			refresh();
@@ -857,6 +891,19 @@ void PlaylistWidget::processItems(QList<QTreeWidgetItem *> *itemsToShow, bool hi
 	}
 }
 
+bool PlaylistWidget::isAlwaysSynced(QTreeWidgetItem *tWI, bool parentOnly)
+{
+	if (QTreeWidgetItem *item = ((parentOnly && tWI) ? tWI->parent() : tWI))
+	{
+		do
+		{
+			if (PlaylistWidget::getFlags(item) & Playlist::Entry::AlwaysSync)
+				return true;
+		} while ((item = item->parent()));
+	}
+	return false;
+}
+
 void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
 {
 	QFont font = tWI->font(0);
@@ -868,7 +915,7 @@ void PlaylistWidget::setEntryFont(QTreeWidgetItem *tWI, const int flags)
 
 QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &url, QTreeWidgetItem *parent, int insertChildAt, QStringList *existingEntries)
 {
-	QTreeWidgetItem *tWI = new QTreeWidgetItem;
+	QTreeWidgetItem *tWI = new PlaylistItem;
 
 	tWI->setFlags(tWI->flags() | Qt::ItemIsEditable);
 	QMPlay2GUI.setTreeWidgetItemIcon(tWI, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon, 0, this);
@@ -883,7 +930,7 @@ QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &ur
 }
 QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries)
 {
-	QTreeWidgetItem *tWI = new QTreeWidgetItem;
+	QTreeWidgetItem *tWI = new PlaylistItem;
 
 	QIcon icon;
 	Functions::getDataIfHasPluginPrefix(entry.url, nullptr, nullptr, &icon, nullptr, demuxersInfo);
@@ -917,7 +964,7 @@ void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
 	}
 }
 
-void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh)
+void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par, bool &mustRefresh, bool recursive, QTreeWidgetItem *&itemToNull)
 {
 	QStringList dirEntries = getDirEntries(pth);
 	QStringList existingEntries;
@@ -935,16 +982,18 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 		{
 			existingEntries.prepend(itemFileName);
 			dirEntries.removeAt(urlIdx);
-			if (isGroup)
+			if (isGroup && recursive)
 			{
 				if (!fullPth.endsWith('/'))
 					fullPth.append('/');
-				quickSyncScanDirs(fullPth, item, mustRefresh);
+				quickSyncScanDirs(fullPth, item, mustRefresh, recursive, itemToNull);
 			}
 		}
 		else
 		{
 			mustRefresh = true;
+			if (itemToNull == item)
+				itemToNull = nullptr;
 			delete item;
 		}
 	}
@@ -955,6 +1004,38 @@ void PlaylistWidget::quickSyncScanDirs(const QString &pth, QTreeWidgetItem *par,
 		add(dirEntries, par, existingEntries, false, true);
 		mustRefresh = false;
 	}
+}
+
+void PlaylistWidget::createExtensionsMenu()
+{
+	QTreeWidgetItem *currItem = currentItem();
+	const QString entryUrl = getUrl();
+	if (!currItem || entryUrl.isEmpty())
+		return;
+
+	QMenu *extensions = playlistMenu()->extensions;
+	extensions->clear();
+
+	const QString entryName = currItem->text(0);
+	const double entryLength = currItem->data(2, Qt::UserRole).toDouble();
+
+	QString addressPrefixName, url, param;
+	const bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
+	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+	{
+		QVector<QAction *> actions;
+		if (splitFlag)
+			actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
+		else
+			actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
+		for (QAction *act : asConst(actions))
+		{
+			act->setParent(extensions);
+			extensions->addAction(act);
+		}
+	}
+
+	extensions->setEnabled(!extensions->isEmpty());
 }
 
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
@@ -1114,49 +1195,27 @@ void PlaylistWidget::addTimerElapsed()
 
 void PlaylistWidget::modifyMenu()
 {
-	QString entryUrl = getUrl();
-	QString entryName;
-	double entryLength = -2.0;
-	if (currentItem())
-	{
-		entryName = currentItem()->text(0);
-		entryLength = currentItem()->data(2, Qt::UserRole).toDouble();
-	}
+	const QString entryUrl = getUrl();
 
 	QTreeWidgetItem *currItem = currentItem();
 
 	const bool isLocked = (getFlags(currItem) & Playlist::Entry::Locked);
 	const bool isItemGroup = isGroup(currItem);
-	const bool syncVisible = (currItem && isItemGroup && !entryUrl.isEmpty());
+	const bool syncVisible = (isItemGroup && !entryUrl.isEmpty());
 
-	playlistMenu()->saveGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->saveGroup->setVisible(isItemGroup);
 	playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
 	playlistMenu()->lock->setVisible(currItem);
+	playlistMenu()->alwaysSync->setChecked(isItemGroup && isAlwaysSynced(currItem));
+	playlistMenu()->alwaysSync->setVisible(isItemGroup);
+	playlistMenu()->alwaysSync->setEnabled(isItemGroup && !isAlwaysSynced(currItem, true));
 	playlistMenu()->sync->setVisible(syncVisible);
 	playlistMenu()->quickSync->setVisible(syncVisible && QFileInfo(QString(entryUrl).remove("file://")).isDir());
-	playlistMenu()->renameGroup->setVisible(currItem && isItemGroup);
+	playlistMenu()->renameGroup->setVisible(isItemGroup);
 	playlistMenu()->entryProperties->setVisible(currItem);
 	playlistMenu()->queue->setVisible(currItem && !isItemGroup);
 	playlistMenu()->skip->setVisible(currItem && !isItemGroup);
 	playlistMenu()->stopAfter->setVisible(currItem && !isItemGroup);
 	playlistMenu()->goToPlayback->setVisible(currentPlaying);
 	playlistMenu()->copy->setVisible(selectedItems().count());
-
-	playlistMenu()->extensions->clear();
-	QString addressPrefixName, url, param;
-	bool splitFlag = Functions::splitPrefixAndUrlIfHasPluginPrefix(entryUrl, &addressPrefixName, &url, &param);
-	for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
-	{
-		QVector<QAction *> actions;
-		if (splitFlag)
-			actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
-		else
-			actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
-		for (QAction *act : actions)
-		{
-			act->setParent(playlistMenu()->extensions);
-			playlistMenu()->extensions->addAction(act);
-		}
-	}
-	playlistMenu()->extensions->setEnabled(playlistMenu()->extensions->actions().count());
 }

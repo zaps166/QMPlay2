@@ -25,7 +25,7 @@ class AddressBox : public QWidget
 {
 	Q_OBJECT
 public:
-	enum PrefixType {DIRECT = 'A', MODULE = 'M'};
+	enum PrefixType {AUTODETECT = 'D', DIRECT = 'A', MODULE = 'M'};
 
 	AddressBox(Qt::Orientation, QString url = QString());
 

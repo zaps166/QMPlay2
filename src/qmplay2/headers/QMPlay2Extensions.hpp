@@ -25,11 +25,11 @@
 #include <QString>
 #include <QImage>
 
-class Q_DECL_EXPORT QMPlay2Extensions : public ModuleCommon
+class QMPLAY2SHAREDLIB_EXPORT QMPlay2Extensions : public ModuleCommon
 {
 public:
 	static void openExtensions();
-	static inline QList<QMPlay2Extensions *> QMPlay2ExtensionsList()
+	static inline const QList<QMPlay2Extensions *> QMPlay2ExtensionsList()
 	{
 		return guiExtensionsList;
 	}
@@ -58,6 +58,7 @@ public:
 
 	virtual DockWidget *getDockWidget();
 
+	virtual QString matchAddress(const QString &url) const;
 	virtual QList<AddressPrefix> addressPrefixList(bool img = true) const;
 	virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *extension, IOController<> *ioCtrl);
 

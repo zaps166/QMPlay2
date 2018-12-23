@@ -22,7 +22,7 @@
 #include <ModuleParams.hpp>
 #include <IOController.hpp>
 
-class Q_DECL_EXPORT Reader : protected ModuleCommon, public ModuleParams, public BasicIO
+class QMPLAY2SHAREDLIB_EXPORT Reader : protected ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
 	static bool create(const QString &url, IOController<Reader> &reader, const QString &plugName = QString());

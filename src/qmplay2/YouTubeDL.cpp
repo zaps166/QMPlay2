@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
+#include <CppUtils.hpp>
 #include <Version.hpp>
 #ifdef Q_OS_WIN
 	#include <Functions.hpp>
@@ -34,22 +35,6 @@
 constexpr const char *g_name = "YouTubeDL";
 
 static QReadWriteLock g_lock;
-
-/**/
-
-#ifndef Q_OS_ANDROID
-static void exportCookiesFromJSON(const QString &jsonData, const QString &url)
-{
-	const QJsonDocument json = QJsonDocument::fromJson(jsonData.toUtf8());
-	for (const QJsonValue &formats : json.object()["formats"].toArray())
-	{
-		if (url == formats.toObject()["url"].toString())
-			QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
-	}
-}
-#endif
-
-/**/
 
 QString YouTubeDL::getFilePath()
 {
@@ -109,7 +94,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				else
 				{
 					*streamUrl = "FFmpeg://{";
-					for (const QString &tmpUrl : ytdlStdout)
+					for (const QString &tmpUrl : asConst(ytdlStdout))
 						*streamUrl += "[" + tmpUrl + "]";
 					*streamUrl += "}";
 				}
@@ -119,7 +104,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 			if (extension)
 			{
 				QStringList extensions;
-				for (const QString &tmpUrl : ytdlStdout)
+				for (const QString &tmpUrl : asConst(ytdlStdout))
 				{
 					if (tmpUrl.contains("mp4"))
 						extensions += ".mp4";
@@ -136,7 +121,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 				}
 				if (extensions.count() == 1)
 					*extension = extensions.at(0);
-				else for (const QString &tmpExt : extensions)
+				else for (const QString &tmpExt : asConst(extensions))
 					*extension += "[" + tmpExt + "]";
 			}
 		}
@@ -204,10 +189,11 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		"--no-check-certificate", //Ignore SSL errors
 	};
 
-	const bool useQMPlay2UserAgent = url.contains("vidfile.net/");
+	const bool isVIDFile = url.contains("vidfile.net/");
+	constexpr const char *mozillaUserAgent = "Mozilla";
 
-	if (useQMPlay2UserAgent)
-		commonArgs += {"--user-agent", Version::userAgent()};
+	if (isVIDFile)
+		commonArgs += {"--user-agent", mozillaUserAgent};
 
 	const char *httpProxy = getenv("http_proxy");
 	if (httpProxy && *httpProxy)
@@ -238,7 +224,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
 			// Verify if URLs has printable characters, because sometimes we
 			// can get binary garbage at output (especially on Openload).
-			for (const QString &line : result)
+			for (const QString &line : asConst(result))
 			{
 				if (line.startsWith("http"))
 				{
@@ -332,7 +318,18 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 		{
 			if (i > 0 && result.at(i).startsWith('{'))
 			{
-				exportCookiesFromJSON(result.at(i), result.at(i - 1));
+				const QString url = result.at(i - 1);
+
+				if (isVIDFile)
+					QMPlay2Core.addRawHeaders(url, QString("User-Agent: %1\r\nReferer: https://vidfile.net/v/\r\n").arg(mozillaUserAgent).toUtf8());
+
+				const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
+				for (const QJsonValue &formats : json.object()["formats"].toArray())
+				{
+					if (url == formats.toObject()["url"].toString())
+						QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+				}
+
 				result.removeAt(i);
 			}
 		}
@@ -381,6 +378,8 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 					}
 				}
 			}
+			if (!m_aborted)
+				emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has failed!"), g_name, 3);
 			QMPlay2Core.setWorking(false);
 		}
 	}

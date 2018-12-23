@@ -18,11 +18,13 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QStringList>
 
 class LibASS;
 
-class Q_DECL_EXPORT SubsDec
+class QMPLAY2SHAREDLIB_EXPORT SubsDec
 {
 public:
 	static SubsDec *create(const QString &);

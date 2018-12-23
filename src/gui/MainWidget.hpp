@@ -60,7 +60,7 @@ private slots:
 	void audioChannelsChanged();
 
 	void updateWindowTitle(const QString &t = QString());
-	void videoStarted();
+	void videoStarted(bool noVideo);
 
 	void togglePlay();
 	void seek(int pos);
@@ -177,7 +177,8 @@ private:
 
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
-	bool isCompactView, wasShow, fullScreen, seekSFocus;
+	bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
+	QTimer m_fullScreenTimer;
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	QAction *hideMenuAct;

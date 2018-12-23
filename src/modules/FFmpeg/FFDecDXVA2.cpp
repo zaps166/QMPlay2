@@ -234,7 +234,7 @@ public:
 		m_surfaces = surfaces;
 
 		m_videoDecoder->AddRef();
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->AddRef();
 
 		m_size = size;
@@ -245,7 +245,7 @@ private:
 	{
 		if (m_surfaces)
 		{
-			for (IDirect3DSurface9 *surface : *m_surfaces)
+			for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 				surface->Release();
 		}
 		if (m_videoDecoder)
@@ -311,8 +311,7 @@ bool FFDecDXVA2::loadLibraries()
 	return false;
 }
 
-FFDecDXVA2::FFDecDXVA2(QMutex &avcodec_mutex, Module &module) :
-	FFDecHWAccel(avcodec_mutex),
+FFDecDXVA2::FFDecDXVA2(Module &module) :
 	m_copyVideo(Qt::Unchecked),
 	m_d3d9Device(nullptr),
 	m_devMgr(nullptr),
@@ -329,7 +328,7 @@ FFDecDXVA2::~FFDecDXVA2()
 		avcodec_flush_buffers(codec_ctx);
 
 	if (m_surfaces)
-		for (IDirect3DSurface9 *surface : *m_surfaces)
+		for (IDirect3DSurface9 *surface : asConst(*m_surfaces))
 			surface->Release();
 
 	if (m_videoDecoder)

@@ -26,7 +26,7 @@
 class OrgFreedesktopNotificationsInterface;
 class QDBusPendingCallWatcher;
 
-class Q_DECL_EXPORT NotifiesFreedesktop final : public QObject, public Notifies
+class QMPLAY2SHAREDLIB_EXPORT NotifiesFreedesktop final : public QObject, public Notifies
 {
 	Q_OBJECT
 

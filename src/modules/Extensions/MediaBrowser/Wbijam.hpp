@@ -68,14 +68,15 @@ public:
 
 	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override;
 
-private slots:
+private:
+	void maybeFetchConfiguration(IOController<NetworkReply> &netReply);
+
 	void gotAnimeList();
 
 private:
-	void maybeDownloadAnimeList();
-
 	CompleterReadyCallback m_completerListCallback;
 	QPointer<NetworkReply> m_animeListReply;
+	QHash<QString, int> m_serverPriorities;
 	AnimeTupleList m_animeTupleList;
 
 	AnimeTupleList m_polecaneSeries;

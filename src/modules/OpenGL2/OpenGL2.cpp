@@ -28,6 +28,7 @@ OpenGL2::OpenGL2() :
 
 	init("Enabled", true);
 	init("AllowPBO", true);
+	init("HQScaling", false);
 	const QString platformName = QGuiApplication::platformName();
 	init("ForceRtt", (platformName == "cocoa" || platformName == "android"));
 	init("VSync", true);
@@ -72,6 +73,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	allowPboB = new QCheckBox(tr("Allow to use PBO (if available)"));
 	allowPboB->setChecked(sets().getBool("AllowPBO"));
 
+	hqScalingB = new QCheckBox(tr("High quality video scaling"));
+	hqScalingB->setToolTip(tr("Trilinear filtering for minification and bicubic filtering for magnification."));
+	hqScalingB->setChecked(sets().getBool("HQScaling"));
+
 	forceRttB = new QCheckBox(tr("Force render to texture if possible (not recommended)"));
 	forceRttB->setToolTip(tr("Always enabled on Wayland and Android platforms.\nSet visualizations to OpenGL mode if enabled."));
 	forceRttB->setChecked(sets().getBool("ForceRtt"));
@@ -94,6 +99,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(enabledB);
 	layout->addWidget(allowPboB);
+	layout->addWidget(hqScalingB);
 	layout->addWidget(forceRttB);
 	layout->addWidget(vsyncB);
 #ifdef Q_OS_WIN
@@ -106,6 +112,7 @@ void ModuleSettingsWidget::saveSettings()
 {
 	sets().set("Enabled", enabledB->isChecked());
 	sets().set("AllowPBO", allowPboB->isChecked());
+	sets().set("HQScaling", hqScalingB->isChecked());
 	sets().set("ForceRtt", forceRttB->isChecked());
 	sets().set("VSync", vsyncB->isChecked());
 #ifdef Q_OS_WIN

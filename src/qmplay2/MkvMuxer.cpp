@@ -33,21 +33,6 @@ extern "C"
 
 using namespace std;
 
-#if LIBAVFORMAT_VERSION_INT >= 0x392900
-	static inline AVCodecParameters *codecParams(AVStream *stream)
-	{
-		return stream->codecpar;
-	}
-	#define HAS_CODECPAR
-#else
-	static inline AVCodecContext *codecParams(AVStream *stream)
-	{
-		return stream->codec;
-	}
-#endif
-
-/**/
-
 MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo)
 {
 	if (avformat_alloc_output_context2(&m_ctx, nullptr, "matroska", nullptr) < 0)
@@ -66,46 +51,33 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
 		stream->time_base.num = streamInfo->time_base.num;
 		stream->time_base.den = streamInfo->time_base.den;
-#ifndef HAS_CODECPAR
-		stream->codec->time_base = stream->time_base;
-		if (m_ctx->oformat->flags & AVFMT_GLOBALHEADER)
-			stream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
-#endif
 
-		codecParams(stream)->codec_type = (AVMediaType)streamInfo->type;
-		codecParams(stream)->codec_id = codec->id;
+		stream->codecpar->codec_type = (AVMediaType)streamInfo->type;
+		stream->codecpar->codec_id = codec->id;
 
 		if (streamInfo->data.size() > 0)
 		{
-			codecParams(stream)->extradata = (uint8_t *)av_mallocz(streamInfo->data.capacity());
-			codecParams(stream)->extradata_size = streamInfo->data.size();
-			memcpy(codecParams(stream)->extradata, streamInfo->data.constData(), codecParams(stream)->extradata_size);
+			stream->codecpar->extradata = (uint8_t *)av_mallocz(streamInfo->data.capacity());
+			stream->codecpar->extradata_size = streamInfo->data.size();
+			memcpy(stream->codecpar->extradata, streamInfo->data.constData(), stream->codecpar->extradata_size);
 		}
 
 		switch (streamInfo->type)
 		{
 			case QMPLAY2_TYPE_VIDEO:
-				codecParams(stream)->width = streamInfo->W;
-				codecParams(stream)->height = streamInfo->H;
-#ifdef HAS_CODECPAR
-				codecParams(stream)->format = av_get_pix_fmt(streamInfo->format);
-#else
-				codecParams(stream)->pix_fmt = av_get_pix_fmt(streamInfo->format);
-#endif
-				codecParams(stream)->sample_aspect_ratio = av_d2q(streamInfo->sample_aspect_ratio, 10000);
+				stream->codecpar->width = streamInfo->W;
+				stream->codecpar->height = streamInfo->H;
+				stream->codecpar->format = av_get_pix_fmt(streamInfo->format);
+				stream->codecpar->sample_aspect_ratio = av_d2q(streamInfo->sample_aspect_ratio, 10000);
 				stream->avg_frame_rate = av_d2q(streamInfo->FPS, 10000);
 				if (streamInfo->is_default)
 					stream->disposition |= AV_DISPOSITION_DEFAULT;
 				break;
 			case QMPLAY2_TYPE_AUDIO:
-				codecParams(stream)->channels = streamInfo->channels;
-				codecParams(stream)->sample_rate = streamInfo->sample_rate;
-				codecParams(stream)->block_align = streamInfo->block_align;
-#ifdef HAS_CODECPAR
-				codecParams(stream)->format = av_get_sample_fmt(streamInfo->format);
-#else
-				codecParams(stream)->sample_fmt = av_get_sample_fmt(streamInfo->format);
-#endif
+				stream->codecpar->channels = streamInfo->channels;
+				stream->codecpar->sample_rate = streamInfo->sample_rate;
+				stream->codecpar->block_align = streamInfo->block_align;
+				stream->codecpar->format = av_get_sample_fmt(streamInfo->format);
 				break;
 			default:
 				break;
@@ -150,7 +122,7 @@ bool MkvMuxer::write(Packet &packet, const int idx)
 		pkt.pts = round(packet.ts.pts() / timeBase);
 	pkt.flags = packet.hasKeyFrame ? AV_PKT_FLAG_KEY : 0;
 	pkt.buf = packet.toAvBufferRef();
-	pkt.data = pkt.buf->data;
+	pkt.data = pkt.buf->data + packet.offset();
 	pkt.size = packet.size();
 	pkt.stream_index = idx;
 

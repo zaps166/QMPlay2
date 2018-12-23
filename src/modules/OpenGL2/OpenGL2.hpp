@@ -45,7 +45,7 @@ public:
 private:
 	void saveSettings() override;
 
-	QCheckBox *enabledB, *allowPboB;
+	QCheckBox *enabledB, *allowPboB, *hqScalingB;
 	QCheckBox *forceRttB;
 	QCheckBox *vsyncB;
 #ifdef Q_OS_WIN

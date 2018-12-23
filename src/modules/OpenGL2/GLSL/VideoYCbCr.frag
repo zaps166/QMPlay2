@@ -1,8 +1,8 @@
 #ifdef TEXTURE_RECTANGLE
     #define sampler sampler2DRect
-    #define texCoordY  (vTexCoord / uStep)
-    #define texCoordUV (vTexCoord / uStep / 2.0)
-    #define texCoordYWithOffset(offset) ((vTexCoord + offset) / uStep)
+    #define texCoordY  (vTexCoord * uTextureSize)
+    #define texCoordUV (vTexCoord * uTextureSize / 2.0)
+    #define texCoordYWithOffset(offset) ((vTexCoord + offset) * uTextureSize)
     #define texture texture2DRect
 #else
     #define sampler sampler2D
@@ -15,7 +15,7 @@
 varying vec2 vTexCoord;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
-uniform vec2 uStep;
+uniform vec2 uTextureSize;
 uniform sampler uY;
 #ifdef NV12
     uniform sampler uCbCr;
@@ -29,10 +29,12 @@ const mat3 YUVtoRGB = mat3(
     1.59580, -0.81290, 0.00000
 );
 
+#define getTexel texture
+
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
-    return texture(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
+    return getTexel(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
 }
 #endif
 
@@ -47,15 +49,15 @@ void main()
 
 #ifdef NV12
     vec3 YCbCr = vec3(
-        texture(uY   , texCoordY )[0] - 0.0625,
-        texture(uCbCr, texCoordUV)[0] - 0.5,
-        texture(uCbCr, texCoordUV)[1] - 0.5
+        getTexel(uY   , texCoordY )[0] - 0.0625,
+        getTexel(uCbCr, texCoordUV)[0] - 0.5,
+        getTexel(uCbCr, texCoordUV)[1] - 0.5
     );
 #else
     vec3 YCbCr = vec3(
-        texture(uY , texCoordY )[0] - 0.0625,
-        texture(uCb, texCoordUV)[0] - 0.5,
-        texture(uCr, texCoordUV)[0] - 0.5
+        getTexel(uY , texCoordY )[0] - 0.0625,
+        getTexel(uCb, texCoordUV)[0] - 0.5,
+        getTexel(uCr, texCoordUV)[0] - 0.5
     );
 #endif
 
@@ -66,10 +68,11 @@ void main()
         // 1 2 1
         // 2 4 2
         // 1 2 1
+        vec2 single = 1.0 / uTextureSize;
         float lumaBlur = (
-            getLumaAtOffset(-uStep.x, -uStep.y) / 16.0 + getLumaAtOffset(0.0, -uStep.y) / 8.0 + getLumaAtOffset(uStep.x, -uStep.y) / 16.0 +
-            getLumaAtOffset(-uStep.x,  0.0    ) /  8.0 + getLumaAtOffset(0.0,  0.0    ) / 4.0 + getLumaAtOffset(uStep.x,  0.0    ) /  8.0 +
-            getLumaAtOffset(-uStep.x,  uStep.y) / 16.0 + getLumaAtOffset(0.0,  uStep.y) / 8.0 + getLumaAtOffset(uStep.x,  uStep.y) / 16.0
+            getLumaAtOffset(-single.x, -single.y) / 16.0 + getLumaAtOffset(0.0, -single.y) / 8.0 + getLumaAtOffset(single.x, -single.y) / 16.0 +
+            getLumaAtOffset(-single.x,  0.0     ) /  8.0 + YCbCr[0]                        / 4.0 + getLumaAtOffset(single.x,  0.0     ) /  8.0 +
+            getLumaAtOffset(-single.x,  single.y) / 16.0 + getLumaAtOffset(0.0,  single.y) / 8.0 + getLumaAtOffset(single.x,  single.y) / 16.0
         );
         // Subtract blur from original image, multiply and then add it to the original image
         YCbCr[0] = clamp(YCbCr[0] + (YCbCr[0] - lumaBlur) * uSharpness, 0.0, 1.0);
@@ -85,5 +88,5 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(clamp(YUVtoRGB * (YCbCr * contrastSaturation), 0.0, 1.0) + brightness, 1.0);
+    gl_FragColor = vec4(clamp(YUVtoRGB * ((YCbCr - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
 }

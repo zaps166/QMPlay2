@@ -19,11 +19,12 @@
 #pragma once
 
 #include <IOController.hpp>
+#include <QMPlay2Lib.hpp>
 
 #include <QString>
 #include <QList>
 
-class Q_DECL_EXPORT Playlist
+class QMPLAY2SHAREDLIB_EXPORT Playlist
 {
 public:
 	class Entry
@@ -34,7 +35,8 @@ public:
 			Selected = 0x1,
 			Skip = 0x2,
 			StopAfter = 0x4,
-			Locked = 0x8
+			Locked = 0x8,
+			AlwaysSync = 0x10,
 		};
 
 		Entry() = default;

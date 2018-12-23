@@ -19,6 +19,7 @@
 #include <Classic.hpp>
 
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 #include <LibASS.hpp>
 
 #include <QStringList>
@@ -116,7 +117,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		if ((idx = line.indexOf(TMPRegExp)) > -1)
 		{
 			int h = -1, m = -1, s = -1;
-			sscanf(line.toLatin1().data() + idx, "%d:%d:%d", &h, &m, &s);
+			sscanf(line.toLatin1().constData() + idx, "%d:%d:%d", &h, &m, &s);
 			if (h > -1 && m > -1 && s > -1)
 			{
 				start = h*3600 + m*60 + s;
@@ -126,7 +127,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		else if ((idx = line.indexOf(MPL2RegExp)) > -1)
 		{
 			int s = -1, e = -1;
-			sscanf(line.toLatin1().data() + idx, "[%d][%d]", &s, &e);
+			sscanf(line.toLatin1().constData() + idx, "[%d][%d]", &s, &e);
 			if (s > -1)
 			{
 				for (const QString &l : convertLine(MPL2RegExp, line).split('\n'))
@@ -158,7 +159,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		else if ((idx = line.indexOf(MicroDVDRegExp)) > -1)
 		{
 			int s = -1, e = -1;
-			sscanf(line.toLatin1().data() + idx, "{%d}{%d}", &s, &e);
+			sscanf(line.toLatin1().constData() + idx, "{%d}{%d}", &s, &e);
 			if (s > -1)
 			{
 				sub = convertLine(MicroDVDRegExp, line);
@@ -245,7 +246,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 		}
 
 		initOnce(ok, ass);
-		for (const SubWithoutEnd &sub : subsWithoutEnd)
+		for (const SubWithoutEnd &sub : asConst(subsWithoutEnd))
 			ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
 	}
 

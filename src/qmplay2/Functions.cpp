@@ -109,7 +109,7 @@ QString Functions::Url(QString url, const QString &pth)
 
 	QStringList drives;
 	QFileInfoList fIL = QDir::drives();
-	for (const QFileInfo &fI : fIL)
+	for (const QFileInfo &fI : asConst(fIL))
 		drives += getUrlScheme(fI.path());
 	if (drives.contains(scheme))
 	{
@@ -404,8 +404,8 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
 		for (int j = 0; j < osd->imageCount(); j++)
 		{
 			const QMPlay2OSD::Image &img = osd->getImage(j);
-			const QImage qImg = QImage((uchar *)img.data.data(), img.rect.width(), img.rect.height(), QImage::Format_ARGB32);
-			painter.drawImage(img.rect.topLeft(), rgbSwapped ? qImg.rgbSwapped() : qImg);
+			const QImage qImg = QImage((const uchar *)img.data.constData(), img.rect.width(), img.rect.height(), rgbSwapped ? QImage::Format_RGBA8888 : QImage::Format_ARGB32);
+			painter.drawImage(img.rect.topLeft(), qImg);
 		}
 		if (osd->needsRescale())
 			painter.restore();
@@ -529,9 +529,9 @@ void Functions::ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigne
 {
 	for (unsigned i = 0; i < bitsCount; i += 4)
 	{
-		imageBits[i+0] = clip8(imageBits[i+0] * Contrast / 100 + Brightness);
-		imageBits[i+1] = clip8(imageBits[i+1] * Contrast / 100 + Brightness);
-		imageBits[i+2] = clip8(imageBits[i+2] * Contrast / 100 + Brightness);
+		imageBits[i+0] = clip8((imageBits[i+0] - 127) * Contrast / 100 + 127 + Brightness);
+		imageBits[i+1] = clip8((imageBits[i+1] - 127) * Contrast / 100 + 127 + Brightness);
+		imageBits[i+2] = clip8((imageBits[i+2] - 127) * Contrast / 100 + 127 + Brightness);
 	}
 }
 int Functions::scaleEQValue(int val, int min, int max)
@@ -592,7 +592,7 @@ bool Functions::chkMimeData(const QMimeData *mimeData)
 {
 	return mimeData && ((mimeData->hasUrls() && !mimeData->urls().isEmpty()) || (mimeData->hasText() && !mimeData->text().isEmpty()));
 }
-QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
+QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData, const bool checkExtensionsForUrl)
 {
 	QStringList urls;
 	if (mimeData->hasUrls())
@@ -608,8 +608,26 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData)
 		}
 	}
 	else if (mimeData->hasText())
+	{
 		urls = mimeData->text().remove('\r').split('\n', QString::SkipEmptyParts);
+	}
+	if (checkExtensionsForUrl)
+	{
+		for (QString &url : urls)
+			url = Functions::maybeExtensionAddress(url);
+	}
 	return urls;
+}
+
+QString Functions::maybeExtensionAddress(const QString &url)
+{
+	for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+	{
+		const QString prefix = QMPlay2Ext->matchAddress(url);
+		if (!prefix.isEmpty())
+			return prefix + "://{" + url + "}";
+	}
+	return url;
 }
 
 bool Functions::splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param)
@@ -725,8 +743,8 @@ quint32 Functions::getBestSampleRate()
 	quint32 srate = 48000; //Use 48kHz as default
 	if (QMPlay2Core.getSettings().getBool("ForceSamplerate"))
 	{
-		const quint32 choosenSrate = QMPlay2Core.getSettings().getUInt("Samplerate");
-		if ((choosenSrate % 11025) == 0)
+		const quint32 chosenSrate = QMPlay2Core.getSettings().getUInt("Samplerate");
+		if ((chosenSrate % 11025) == 0)
 			srate = 44100;
 	}
 	return srate;
@@ -790,25 +808,13 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 		if (!rawHeaders.isEmpty())
 			av_dict_set(&options, "headers", rawHeaders, 0);
 
-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(56, 36, 100)
 		av_dict_set(&options, "reconnect", "1", 0);
-#endif
 	}
 	return url;
 }
 
 QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
 {
-	constexpr char libsslFileName[] =
-#if defined(Q_OS_WIN64)
-		"libcrypto-1_1-x64"
-#elif defined(Q_OS_WIN32)
-		"libcrypto-1_1"
-#else
-		"ssl"
-#endif
-	;
-
 	using EVP_CIPHER_CTX = void;
 	using EVP_CIPHER = void;
 	using EVP_MD = void;
@@ -825,8 +831,26 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 	using EVP_CIPHER_CTX_cleanup_Type = int(*)(EVP_CIPHER_CTX *a);
 	using EVP_CIPHER_CTX_reset_Type = int(*)(EVP_CIPHER_CTX *a);
 
-	QLibrary libssl(libsslFileName);
+	QLibrary libssl;
+#if defined(Q_OS_WIN64)
+	libssl.setFileName("libcrypto-1_1-x64");
+	libssl.load();
+#elif defined(Q_OS_WIN32)
+	libssl.setFileName("libcrypto-1_1");
+	libssl.load();
+#else
+	libssl.setFileName("ssl");
 	if (!libssl.load())
+	{
+		libssl.setFileNameAndVersion("ssl", "1.1");
+		if (!libssl.load())
+		{
+			libssl.setFileNameAndVersion("ssl", "1.0.0");
+			libssl.load();
+		}
+	}
+#endif
+	if (!libssl.isLoaded())
 	{
 		QMPlay2Core.logError("Cannot load OpenSSL library", true, true);
 		return QByteArray();

@@ -234,6 +234,28 @@ bool TagEditor::open(const QString &fileName)
 #else
 	fRef = new FileRef(fileName.toLocal8Bit(), false);
 #endif
+
+#if TAGLIB19
+	// TagLib can't load Ogg Opus file if file extension is ".ogg"
+	if (fRef->isNull() && fileName.endsWith(".ogg", Qt::CaseInsensitive))
+	{
+#ifdef Q_OS_WIN
+		auto file = new Ogg::Opus::File((const wchar_t *)fileName.utf16(), false);
+#else
+		auto file = new Ogg::Opus::File(fileName.toLocal8Bit(), false);
+#endif
+		if (file->isValid())
+		{
+			delete fRef;
+			fRef = new FileRef(file);
+		}
+		else
+		{
+			delete file;
+		}
+	}
+#endif
+
 	if (!fRef->isNull() && fRef->tag())
 	{
 		File &file = *fRef->file();
@@ -422,27 +444,27 @@ bool TagEditor::save()
 		Tag &tag = getTag(*fRef, file);
 		if (titleE->text() != tag.title().toCString(true))
 		{
-			tag.setTitle(String(titleE->text().toUtf8().data(), String::UTF8));
+			tag.setTitle(String(titleE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (artistE->text() != tag.artist().toCString(true))
 		{
-			tag.setArtist(String(artistE->text().toUtf8().data(), String::UTF8));
+			tag.setArtist(String(artistE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (albumE->text() != tag.album().toCString(true))
 		{
-			tag.setAlbum(String(albumE->text().toUtf8().data(), String::UTF8));
+			tag.setAlbum(String(albumE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (commentE->text() != tag.comment().toCString(true))
 		{
-			tag.setComment(String(commentE->text().toUtf8().data(), String::UTF8));
+			tag.setComment(String(commentE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if (genreE->text() != tag.genre().toCString(true))
 		{
-			tag.setGenre(String(genreE->text().toUtf8().data(), String::UTF8));
+			tag.setGenre(String(genreE->text().toUtf8().constData(), String::UTF8));
 			mustSave = true;
 		}
 		if ((uint)yearB->value() != tag.year())
@@ -473,7 +495,7 @@ bool TagEditor::save()
 					{
 						ID3v2::AttachedPictureFrame *pictureFrame = new ID3v2::AttachedPictureFrame;
 						pictureFrame->setType(ID3v2::AttachedPictureFrame::FrontCover);
-						pictureFrame->setMimeType(pictureMimeType.data());
+						pictureFrame->setMimeType(pictureMimeType.constData());
 						pictureFrame->setPicture(*picture);
 						id3v2->addFrame(pictureFrame);
 					}
@@ -487,7 +509,7 @@ bool TagEditor::save()
 				if (hasPicture)
 				{
 					FLAC::Picture *flacPicture = new FLAC::Picture;
-					flacPicture->setMimeType(pictureMimeType.data());
+					flacPicture->setMimeType(pictureMimeType.constData());
 					flacPicture->setType(FLAC::Picture::FrontCover);
 					flacPicture->setData(*picture);
 					flacF.addPicture(flacPicture);
@@ -530,7 +552,7 @@ bool TagEditor::save()
 					if (hasPicture)
 					{
 						flacPicture = new FLAC::Picture;
-						flacPicture->setMimeType(pictureMimeType.data());
+						flacPicture->setMimeType(pictureMimeType.constData());
 						flacPicture->setType(FLAC::Picture::FrontCover);
 						flacPicture->setData(*picture);
 					}

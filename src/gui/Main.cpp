@@ -457,23 +457,33 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 #endif
 
 static QtMessageHandler g_defaultMsgHandler = nullptr;
+static QMutex g_messageHandlerMutex;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
 	bool qmplay2Log = false;
-	switch (type)
+	if (QCoreApplication::instance())
 	{
-		case QtWarningMsg:
-		case QtCriticalMsg:
-		case QtFatalMsg:
-			QMPlay2Core.logError(qFormatLogMessage(type, context, message), false);
-			qmplay2Log = true;
-			break;
-		case QtInfoMsg:
-			QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
-			qmplay2Log = true;
-			break;
-		default:
-			break;
+		// Use QMPlay2 logger only when we have a "QApplication" instance (we're still executing "main()"),
+		// so any static data including "QSystemLocaleSingleton" and "QMPlay2CoreClass" are still valid.
+		switch (type)
+		{
+			case QtWarningMsg:
+			case QtCriticalMsg:
+			case QtFatalMsg:
+				g_messageHandlerMutex.lock();
+				QMPlay2Core.logError(qFormatLogMessage(type, context, message), false);
+				g_messageHandlerMutex.unlock();
+				qmplay2Log = true;
+				break;
+			case QtInfoMsg:
+				g_messageHandlerMutex.lock();
+				QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
+				g_messageHandlerMutex.unlock();
+				qmplay2Log = true;
+				break;
+			default:
+				break;
+		}
 	}
 	if (!qmplay2Log)
 	{
@@ -481,8 +491,10 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
 		if (g_defaultMsgHandler)
 			g_defaultMsgHandler(type, context, message);
 #else
+		g_messageHandlerMutex.lock();
 		fprintf(stderr, "%s\n", qFormatLogMessage(type, context, message).toLocal8Bit().constData());
 		fflush(stderr);
+		g_messageHandlerMutex.unlock();
 #endif
 	}
 }

@@ -19,13 +19,14 @@
 #pragma once
 
 #include <IOController.hpp>
+#include <QMPlay2Lib.hpp>
 
 #include <QObject>
 
 class NetworkReplyPriv;
 struct NetworkAccessParams;
 
-class Q_DECL_EXPORT NetworkReply final : public QObject, public BasicIO
+class QMPLAY2SHAREDLIB_EXPORT NetworkReply final : public QObject, public BasicIO
 {
 	Q_OBJECT
 
@@ -85,7 +86,7 @@ private:
 
 /**/
 
-class Q_DECL_EXPORT NetworkAccess : public QObject
+class QMPLAY2SHAREDLIB_EXPORT NetworkAccess : public QObject
 {
 	Q_OBJECT
 

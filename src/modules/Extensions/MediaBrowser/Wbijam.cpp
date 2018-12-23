@@ -23,12 +23,20 @@
 #include <YouTubeDL.hpp>
 
 #include <QTextDocumentFragment>
+#include <QLoggingCategory>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QJsonArray>
 #include <QRegExp>
+#include <QUrl>
 
 #include <algorithm>
 
+Q_LOGGING_CATEGORY(wbijam, "Wbijam")
+
+constexpr const char *g_serverPrioritiesUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/Wbijam.json";
 constexpr const char *g_inneUrl = "http://www.inne.wbijam.pl/";
 
 static inline QString getName(const Wbijam::AnimeTuple &tuple)
@@ -135,7 +143,7 @@ NetworkReply *Wbijam::getSearchReply(const QString &text, const qint32 page)
 	const qint32 lastTupleIdx = m_tupleIdx;
 
 	m_tupleIdx = 0;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 	{
 		const QString &name = getName(tuple);
 		const QString &url  = getUrl(tuple);
@@ -317,7 +325,7 @@ QStringList Wbijam::getCompletions(const QByteArray &reply)
 {
 	Q_UNUSED(reply)
 	QStringList completions;
-	for (const AnimeTuple &tuple : m_animeTupleList)
+	for (const AnimeTuple &tuple : asConst(m_animeTupleList))
 		completions += getName(tuple);
 	return completions;
 }
@@ -329,7 +337,7 @@ void Wbijam::setCompleterListCallback(const CompleterReadyCallback &callback)
 		if (m_animeTupleList.empty() && !m_animeListReply)
 		{
 			m_animeListReply = start(g_inneUrl);
-			connect(m_animeListReply, SIGNAL(finished()), this, SLOT(gotAnimeList()));
+			connect(m_animeListReply.data(), &NetworkReply::finished, this, &Wbijam::gotAnimeList);
 		}
 		else if (!m_animeTupleList.empty())
 		{
@@ -368,60 +376,73 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				return YouTubeDL::fixUrl(animeUrl, *streamUrl, ioCtrl, hasName ? nullptr : name, extension, &error);
 			};
 
-			std::vector<std::tuple<QString, bool>> videoPriorityUrls[4];
+			maybeFetchConfiguration(netReply);
 
-			const auto extractUrl = [&](const QString section) {
-				int idx1 = section.indexOf("a href=\"");
-				if (idx1 < 0)
+			int maxPriority = 0;
+			for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+				maxPriority = qMax(maxPriority, it.value());
+
+			std::vector<QStringList> videoPriorityUrls(maxPriority + 1);
+
+			const auto extractUrl = [&](const QString &section, bool useServerPriorities) {
+				int idxRel = section.indexOf("rel=\"");
+				if (idxRel < 0)
+					return;
+
+				idxRel += 5;
+				int idxRelEnd = section.indexOf("\">", idxRel);
+				if (idxRelEnd < 0)
+					return;
+
+				const QUrl qurl(url);
+				const QStringRef rel = section.midRef(idxRel, idxRelEnd - idxRel);
+				const QString urlDest = qurl.scheme() + "://" + qurl.host() + "/odtwarzacz-" + rel + ".html";
+
+				if (!useServerPriorities || m_serverPriorities.isEmpty())
 				{
-					int idxRel = section.indexOf("rel=\"");
-					int idxId  = section.indexOf("id=\"");
-					if (idxRel > -1 && idxId > -1)
-					{
-						idxRel += 5;
-						idxId  += 4;
-						int idxRelEnd = section.indexOf('"', idxRel);
-						int idxIdEnd  = section.indexOf('"', idxId);
-						if (idxRelEnd > -1 && idxIdEnd > -1)
-							videoPriorityUrls[1].emplace_back(QString("https://vk.com/video%1_%2").arg(section.mid(idxRel, idxRelEnd - idxRel), section.mid(idxId, idxIdEnd - idxId)), true);
-					}
+					videoPriorityUrls[0].push_back(urlDest);
 				}
-				else
+				else for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
 				{
-					idx1 += 8;
-
-					int idx2 = section.indexOf('"', idx1);
-					if (idx2 > -1)
+					if (section.contains(it.key() + "</td>"))
 					{
-						const QString urlSection = section.mid(idx1, idx2 - idx1);
-						const QString urlDest = url.left(url.indexOf("wbijam.pl/") + 10) + urlSection;
-
-						if (urlSection.contains("openload")) // Causes problems very often
-							videoPriorityUrls[3].emplace_back(urlDest, false);
-						else if (urlSection.contains("google") || urlSection.contains("-gd-")) // Currently (13.03.2017) "youtube-dl" has a bug which gets the lowest video quality
-							videoPriorityUrls[2].emplace_back(urlDest, false);
-						else if (!urlSection.contains("mp4up") && !urlSection.contains("sibnet")) // Those servers doesn't work properly
-							videoPriorityUrls[0].emplace_back(urlDest, false); // vidfile, d-on, ...
+						videoPriorityUrls[it.value()].push_back(urlDest);
 					}
 				}
 			};
 
 			bool hasStreamUrl = false;
 
-			const auto processUrls = [&] {
+			const auto processUrls = [&](bool useServerPriorities) {
 				for (const auto &videoUrls : videoPriorityUrls)
 				{
-					for (const auto &tuple : videoUrls)
+					for (QString animeUrl : videoUrls)
 					{
-						QString animeUrl = std::get<0>(tuple);
-						bool ok = std::get<1>(tuple);
+						bool ok = false;
 
-						if (!ok) // iframe
+						// iframe
+						if (net.startAndWait(netReply, animeUrl))
 						{
-							if (net.startAndWait(netReply, animeUrl))
+							const QString replyData = netReply->readAll();
+							{ // Check for VK
+								QRegExp videoRx("class=\"odtwarzaj_vk\".+rel=\"(.*)\".+id=\"(.*)\"");
+								videoRx.setMinimal(true);
+								int pos = 0;
+								while ((pos = videoRx.indexIn(replyData, pos)) != -1)
+								{
+									const QString rel = videoRx.cap(1);
+									const QString id = videoRx.cap(2);
+									if (!rel.isEmpty() && !id.isEmpty())
+									{
+										animeUrl = QString("https://vk.com/video%1_%2").arg(rel, id);
+										ok = true;
+										break;
+									}
+									pos += videoRx.matchedLength();
+								}
+							}
+							if (!ok) // Not VK, try other players
 							{
-								const QString replyData = netReply->readAll();
-
 								QRegExp videoRx("<iframe.+src=\"(.*)\"");
 								videoRx.setMinimal(true);
 								int pos = 0;
@@ -437,6 +458,20 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 										break;
 									}
 									pos += videoRx.matchedLength();
+								}
+							}
+
+							if (ok && useServerPriorities && !m_serverPriorities.isEmpty())
+							{
+								// Don't use priorities, only check if URL can be used (if exists in server priorities)
+								ok = false;
+								for (auto it = m_serverPriorities.constBegin(), itEnd = m_serverPriorities.constEnd(); it != itEnd; ++it)
+								{
+									if (animeUrl.contains(it.key()))
+									{
+										ok = true;
+										break;
+									}
 								}
 							}
 						}
@@ -475,11 +510,11 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 				int pos = 0;
 				while ((pos = videoRx.indexIn(replyData, pos)) != -1)
 				{
-					extractUrl(videoRx.cap(1));
+					extractUrl(videoRx.cap(1), true);
 					pos += videoRx.matchedLength();
 				}
 
-				processUrls();
+				processUrls(false);
 			}
 			else // Inne
 			{
@@ -506,11 +541,11 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 						int pos = 0;
 						while ((pos = videoRx.indexIn(section, pos)) != -1)
 						{
-							extractUrl(videoRx.cap(1));
+							extractUrl(videoRx.cap(1), false);
 							pos += videoRx.matchedLength();
 						}
 
-						processUrls();
+						processUrls(true);
 					}
 				}
 			}
@@ -525,6 +560,30 @@ bool Wbijam::convertAddress(const QString &prefix, const QString &url, const QSt
 		}
 	}
 	return true;
+}
+
+void Wbijam::maybeFetchConfiguration(IOController<NetworkReply> &netReply)
+{
+	if (!m_serverPriorities.isEmpty())
+		return;
+
+	NetworkAccess net;
+	if (net.startAndWait(netReply, g_serverPrioritiesUrl))
+	{
+		const QJsonArray array = QJsonDocument::fromJson(netReply->readAll()).array();
+		for (const QJsonValue &v : array)
+		{
+			const QJsonObject o = v.toObject();
+			const QString name = o["Name"].toString();
+			const int priority = o["Priority"].toInt(-1);
+			if (!name.isEmpty() && priority >= 0)
+				m_serverPriorities[name] = qMin(priority, 9);
+		}
+		netReply.reset();
+	}
+
+	if (m_serverPriorities.isEmpty())
+		qCWarning(wbijam) << "Can't fetch server priorities";
 }
 
 void Wbijam::gotAnimeList()

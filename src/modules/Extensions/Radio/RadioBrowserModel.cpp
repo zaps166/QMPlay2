@@ -20,6 +20,7 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -62,7 +63,7 @@ void RadioBrowserModel::searchRadios(const QString &text, const QString &searchB
 {
 	const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
 
-	for (const std::shared_ptr<Column> &column : m_rows)
+	for (const std::shared_ptr<Column> &column : asConst(m_rows))
 		delete column->iconReply;
 	delete m_replySearch;
 
@@ -83,7 +84,7 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
 		if (!column->iconReply && !column->iconUrl.isEmpty())
 		{
 			column->iconReply = m_net->start(column->iconUrl);
-			for (std::shared_ptr<Column> &c : m_rows)
+			for (const std::shared_ptr<Column> &c : asConst(m_rows))
 			{
 				if (c.get() == column)
 					continue;
@@ -286,7 +287,7 @@ void RadioBrowserModel::setFiltrText(const QString &text)
 	else
 	{
 		m_rowsToDisplay.clear();
-		for (const std::shared_ptr<Column> &column : m_rows)
+		for (const std::shared_ptr<Column> &column : asConst(m_rows))
 		{
 			if (column->name.contains(text, Qt::CaseInsensitive))
 				m_rowsToDisplay.append(column);

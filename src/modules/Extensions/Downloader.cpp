@@ -19,15 +19,19 @@
 #include <Downloader.hpp>
 
 #include <Functions.hpp>
-#include <Settings.hpp>
+#include <CppUtils.hpp>
 #include <MkvMuxer.hpp>
 #include <Demuxer.hpp>
 #include <Packet.hpp>
 #include <Reader.hpp>
 
+#include <QMenu>
 #include <QTimer>
 #include <QLabel>
 #include <QAction>
+#include <QScreen>
+#include <QWindow>
+#include <QProcess>
 #include <QMimeData>
 #include <QClipboard>
 #include <QFileDialog>
@@ -36,17 +40,94 @@
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QMessageBox>
+#include <QFormLayout>
+#include <QPushButton>
 #include <QInputDialog>
 #include <QProgressBar>
 #include <QApplication>
 #include <QElapsedTimer>
 #include <QStandardPaths>
+#include <QLoggingCategory>
+#include <QDialogButtonBox>
 
 #include <functional>
 
+Q_LOGGING_CATEGORY(downloader, "Downloader")
+
 /**/
 
-DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream) :
+constexpr const char *g_defaultMp3ConvertCommand = "ffmpeg -i <input/> -vn -sn -c:a libmp3lame -ab 224k -f mp3 -y <output>%f.mp3</output>";
+
+constexpr const char *g_downloadComplete = QT_TRANSLATE_NOOP("DownloadItemW", "Download complete");
+constexpr const char *g_downloadAborted = QT_TRANSLATE_NOOP("DownloadItemW", "Download aborted");
+constexpr const char *g_downloadError = QT_TRANSLATE_NOOP("DownloadItemW", "Download error");
+constexpr const char *g_conversionAborted = QT_TRANSLATE_NOOP("DownloadItemW", "Conversion aborted");
+constexpr const char *g_conversionError = QT_TRANSLATE_NOOP("DownloadItemW", "Conversion error");
+
+/**/
+
+static QStringRef getCommandOutput(const QString &command)
+{
+	const int idx1 = command.indexOf("<output>");
+	if (idx1 < 0)
+		return {};
+
+	const int idx2 = command.indexOf("</output>");
+	if (idx2 < 0)
+		return {};
+
+	return command.midRef(idx1 + 8, idx2 - idx1 - 8);
+}
+
+static void maybeAddAbsolutePath(QString &convertCommand)
+{
+	int idx = -1;
+	int quotes = 0;
+
+	if (convertCommand.startsWith('"'))
+	{
+		idx = convertCommand.indexOf('"', 1); // Quotes in executable name are not supported
+		quotes = true;
+	}
+	else
+	{
+		idx = convertCommand.indexOf(' '); // I assume that command has at least one argument (so space is required)
+	}
+
+	if (idx <= 0)
+		return;
+
+	const QString program = convertCommand.mid(quotes, idx - quotes);
+	if (program.isEmpty() || QFileInfo(program).isAbsolute())
+		return;
+
+	const auto checkExecutableFile = [](const QString &path) {
+		const QFileInfo info(path);
+		const bool isExecutable =
+#ifdef Q_OS_WIN
+			true;
+#else
+			info.isExecutable();
+#endif
+		return isExecutable && info.isFile();
+	};
+
+	QString absolutePathProgram = QMPlay2Core.getSettingsDir() + program;
+	if (!checkExecutableFile(absolutePathProgram))
+	{
+		absolutePathProgram = QCoreApplication::applicationDirPath() + "/" + program;
+		if (!checkExecutableFile(absolutePathProgram))
+			return;
+	}
+
+	if (absolutePathProgram.contains(' '))
+		absolutePathProgram = "\"" + absolutePathProgram + "\"";
+	convertCommand.replace(0, idx + quotes, absolutePathProgram);
+}
+
+/**/
+
+DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, const QIcon &icon, QDataStream *stream, QString preset) :
 	dontDeleteDownloadThr(false), downloaderThr(downloaderThr), finished(false), readyToPlay(false)
 {
 	QString sizeLText;
@@ -54,24 +135,34 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 	if (stream)
 	{
 		quint8 type;
-		*stream >> filePath >> type >> name;
+		*stream >> filePath >> type >> name >> preset;
 		finished = true;
 		switch (type)
 		{
 			case 1:
 				readyToPlay = true;
-				sizeLText = tr("Download complete");
+				sizeLText = tr(g_downloadComplete);
 				break;
 			case 2:
-				sizeLText = tr("Download aborted");
+				sizeLText = tr(g_downloadAborted);
 				break;
 			case 3:
-				sizeLText = tr("Download error");
+				sizeLText = tr(g_downloadError);
+				break;
+			case 4:
+				sizeLText = tr(g_conversionAborted);
+				m_needsConversion = true;
+				break;
+			case 5:
+				sizeLText = tr(g_conversionError);
+				m_needsConversion = true;
 				break;
 		}
 	}
 	else
+	{
 		sizeLText = tr("Waiting for connection");
+	}
 
 	titleL = new QLabel(name);
 
@@ -120,9 +211,12 @@ DownloadItemW::DownloadItemW(DownloaderThread *downloaderThr, QString name, cons
 		layout->addWidget(speedProgressW, 2, 0, 1, 2);
 	}
 	layout->addWidget(ssB, 2, 2, 1, 1);
+
+	m_convertPreset = preset;
 }
 DownloadItemW::~DownloadItemW()
 {
+	deleteConvertProcess();
 	if (!dontDeleteDownloadThr)
 	{
 		finish(false);
@@ -158,12 +252,30 @@ void DownloadItemW::finish(bool f)
 {
 	if (!finished)
 	{
+		bool canStop = true;
 		delete speedProgressW;
+		speedProgressW = nullptr;
 		if (f)
-			sizeL->setText(tr("Download complete"));
+		{
+			if (m_convertPreset.isEmpty())
+			{
+				sizeL->setText(tr(g_downloadComplete));
+			}
+			else
+			{
+				startConversion();
+				canStop = false;
+			}
+		}
 		else
-			sizeL->setText(tr("Download aborted"));
-		downloadStop(f);
+		{
+			if (m_needsConversion)
+				sizeL->setText(tr(g_conversionAborted));
+			else
+				sizeL->setText(tr(g_downloadAborted));
+		}
+		if (canStop)
+			downloadStop(f);
 	}
 }
 void DownloadItemW::error()
@@ -173,23 +285,27 @@ void DownloadItemW::error()
 		if (speedProgressW->progressB->minimum() == speedProgressW->progressB->maximum())
 			speedProgressW->progressB->setRange(-1, 0);
 		speedProgressW->setEnabled(false);
-		sizeL->setText(tr("Download error"));
+		sizeL->setText(tr(g_downloadError));
 		downloadStop(false);
 	}
 }
 
 void DownloadItemW::write(QDataStream &stream)
 {
-	downloaderThr->write(stream);
+	downloaderThr->serialize(stream);
 	quint8 type = readyToPlay;
 	if (!type)
 	{
-		if (sizeL->text() == tr("Download error"))
+		if (sizeL->text() == tr(g_conversionError))
+			type = 5;
+		else if (m_needsConversion)
+			type = 4;
+		else if (sizeL->text() == tr(g_downloadError))
 			type = 3;
 		else
 			type = 2;
 	}
-	stream << filePath << type << titleL->text();
+	stream << filePath << type << titleL->text() << m_convertPreset;
 }
 
 void DownloadItemW::toggleStartStop()
@@ -198,18 +314,31 @@ void DownloadItemW::toggleStartStop()
 	{
 		if (!filePath.isEmpty())
 			emit QMPlay2Core.processParam("open", filePath);
-		return;
 	}
-	if (finished)
+	else if (finished)
 	{
-		filePath.clear();
-		emit start();
+		if (m_needsConversion)
+		{
+			startConversion();
+		}
+		else
+		{
+			filePath.clear();
+			emit start();
+		}
 	}
 	else
 	{
 		finish(false);
-		ssB->setEnabled(false);
-		emit stop();
+		if (m_convertProcess)
+		{
+			deleteConvertProcess();
+		}
+		else
+		{
+			ssB->setEnabled(false);
+			emit stop();
+		}
 	}
 }
 
@@ -227,14 +356,117 @@ void DownloadItemW::downloadStop(bool ok)
 		readyToPlay = true;
 	}
 	finished = true;
-	if (!dontDeleteDownloadThr && visibleRegion() == QRegion())
-		emit QMPlay2Core.sendMessage(titleL->text(), sizeL->text());
+	if (!dontDeleteDownloadThr)
+	{
+		if (visibleRegion().isNull())
+			emit QMPlay2Core.sendMessage(titleL->text(), sizeL->text());
+	}
+}
+
+void DownloadItemW::startConversion()
+{
+	deleteConvertProcess();
+
+	m_convertProcess = new QProcess(this);
+	m_convertProcessConn[0] = connect(m_convertProcess, Overload<int>::of(&QProcess::finished), this, [this](int exitCode) {
+		if (exitCode == 0)
+		{
+			sizeL->setText(tr(g_downloadComplete));
+			QFile::remove(filePath);
+			m_needsConversion = false;
+			filePath = m_convertedFilePath;
+			downloadStop(true);
+		}
+		else
+		{
+			sizeL->setText(tr(g_conversionError));
+			qCWarning(downloader) << "Failed to convert:" << m_convertProcess->program() << m_convertProcess->arguments() << m_convertProcess->readAllStandardError().constData();
+			downloadStop(false);
+		}
+	});
+	m_convertProcessConn[1] = connect(m_convertProcess, &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
+		if (error == QProcess::FailedToStart)
+		{
+			sizeL->setText(tr(g_conversionError));
+			downloadStop(false);
+			qCWarning(downloader) << "Failed to start process:" << m_convertProcess->program();
+		}
+	});
+
+	m_needsConversion = true;
+	finished = false;
+
+	sizeL->setText(tr("Converting..."));
+
+	ssB->setIcon(QMPlay2Core.getIconFromTheme("media-playback-stop"));
+	ssB->setToolTip(tr("Stop conversion"));
+
+	const auto conversionError = [&](const QString &errStr) {
+		sizeL->setText(tr(g_conversionError));
+		downloadStop(false);
+		qCWarning(downloader).noquote() << errStr;
+	};
+
+	QString convertCommand;
+	for (QAction *a : downloaderThr->convertActions())
+	{
+		if (a->text() == m_convertPreset)
+		{
+			convertCommand = a->data().toString();
+			break;
+		}
+	}
+	if (convertCommand.isEmpty())
+	{
+		conversionError(QString("Can't convert, because preset \"%1\" not found or invalid!").arg(m_convertPreset));
+		return;
+	}
+
+	if (!convertCommand.contains("<input/>"))
+	{
+		conversionError("Can't convert, because \"<input/>\" tag doesn't exist!");
+		return;
+	}
+	convertCommand.replace("<input/>", "\"" + filePath + "\"");
+
+	const int idx1 = convertCommand.indexOf("<output>");
+	const int idx2 = convertCommand.indexOf("</output>", idx1);
+
+	m_convertedFilePath = getCommandOutput(convertCommand).toString();
+	m_convertedFilePath.replace("%f", Functions::filePath(filePath) + Functions::fileName(filePath, false));
+	if (m_convertedFilePath.isEmpty() || idx1 < 0 || idx2 < idx1)
+	{
+		conversionError("Can't convert, because output file path is empty!");
+		return;
+	}
+	if (m_convertedFilePath.compare(filePath, Qt::CaseInsensitive) == 0)
+	{
+		conversionError("Can't convert, because source and destination path is the same: " + m_convertedFilePath);
+		return;
+	}
+
+	convertCommand.replace(idx1, idx2 - idx1 + 9, "\"" + m_convertedFilePath + "\"");
+	maybeAddAbsolutePath(convertCommand);
+
+	qDebug() << "Starting conversion:" << convertCommand.toUtf8().constData();
+	m_convertProcess->start(convertCommand);
+}
+void DownloadItemW::deleteConvertProcess()
+{
+	if (m_convertProcess)
+	{
+		disconnect(m_convertProcessConn[0]);
+		disconnect(m_convertProcessConn[1]);
+		m_convertProcess->close();
+		delete m_convertProcess;
+		m_convertProcess = nullptr;
+	}
 }
 
 /**/
 
-DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QString &name, const QString &prefix, const QString &param) :
-	url(url), name(name), prefix(prefix), param(param), downloadItemW(nullptr), downloadLW(downloadLW), item(nullptr)
+DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, DownloadListW *downloadLW, const QMenu *convertsMenu, const QString &name, const QString &prefix, const QString &param, const QString &preset) :
+	url(url), name(name), prefix(prefix), param(param), preset(preset), downloadItemW(nullptr), downloadLW(downloadLW), item(nullptr), m_convertsMenu(convertsMenu)
 {
 	connect(this, SIGNAL(listSig(int, qint64, const QString &)), this, SLOT(listSlot(int, qint64, const QString &)));
 	connect(this, SIGNAL(finished()), this, SLOT(finished()));
@@ -242,12 +474,15 @@ DownloaderThread::DownloaderThread(QDataStream *stream, const QString &url, Down
 	{
 		*stream >> this->url >> this->prefix >> this->param;
 		item = new QTreeWidgetItem(downloadLW);
-		downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, QString(), getIcon(), stream)));
+		downloadItemW = new DownloadItemW(this, QString(), getIcon(), stream, preset);
+		downloadLW->setItemWidget(item, 0, downloadItemW);
 		connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 		connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
 	}
 	else
+	{
 		start();
+	}
 }
 DownloaderThread::~DownloaderThread()
 {
@@ -258,6 +493,18 @@ DownloaderThread::~DownloaderThread()
 		terminate();
 		wait(500);
 	}
+}
+
+void DownloaderThread::serialize(QDataStream &stream)
+{
+	stream << url << prefix << param;
+}
+
+const QList<QAction *> DownloaderThread::convertActions()
+{
+	QList<QAction *> actions = m_convertsMenu->actions();
+	actions.removeFirst();
+	return actions;
 }
 
 void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
@@ -272,7 +519,8 @@ void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
 				downloadItemW->dontDeleteDownloadThr = true;
 				downloadItemW->deleteLater();
 			}
-			downloadLW->setItemWidget(item, 0, (downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon())));
+			downloadItemW = new DownloadItemW(this, name.isEmpty() ? url : name, getIcon(), nullptr, preset);
+			downloadLW->setItemWidget(item, 0, downloadItemW);
 			connect(downloadItemW, SIGNAL(start()), this, SLOT(start()));
 			connect(downloadItemW, SIGNAL(stop()), this, SLOT(stop()));
 
@@ -538,27 +786,47 @@ QIcon DownloaderThread::getIcon()
 
 /**/
 
-Downloader::Downloader(Module &module) :
-	downloadLW(nullptr)
+Downloader::Downloader(Module &module)
+	: m_sets("Downloader")
+	, downloadLW(nullptr)
 {
 	SetModule(module);
 }
 Downloader::~Downloader()
 {
-	if (downloadLW)
+	if (!downloadLW)
+		return;
+
 	{
 		int count = 0;
-		QByteArray arr;
-		QDataStream stream(&arr, QIODevice::WriteOnly);
+		QByteArray data;
+		QDataStream stream(&data, QIODevice::WriteOnly);
 		for (QTreeWidgetItem *item : downloadLW->findItems(QString(), Qt::MatchContains))
 		{
 			DownloadItemW *downloadItemW = (DownloadItemW *)downloadLW->itemWidget(item, 0);
 			downloadItemW->write(stream);
 			++count;
 		}
-		Settings sets("Downloader");
-		sets.set("Count", count);
-		sets.set("Items", arr);
+		m_sets.set("Items/Count", count);
+		m_sets.set("Items/Data", data.toBase64().constData());
+	}
+
+	{
+		int count = 0;
+		QByteArray data;
+		QDataStream stream(&data, QIODevice::WriteOnly);
+		for (QAction *act : m_convertsMenu->actions())
+		{
+			const QString name = act->text();
+			const QString command = act->data().toString();
+			if (!name.isEmpty() && !command.isEmpty())
+			{
+				stream << name << command;
+				++count;
+			}
+		}
+		m_sets.set("Presets/Count", count);
+		m_sets.set("Presets/Data", data.toBase64().constData());
 	}
 }
 
@@ -573,6 +841,10 @@ void Downloader::init()
 	downloadLW->setHeaderHidden(true);
 	downloadLW->setRootIsDecorated(false);
 	connect(downloadLW, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(itemDoubleClicked(QTreeWidgetItem *)));
+
+	m_convertsMenu = new QMenu(this);
+	connect(m_convertsMenu->addAction(tr("&Add")), &QAction::triggered, this, &Downloader::addConvertPreset);
+	m_convertsMenu->addSeparator();
 
 	setDownloadsDirB = new QToolButton;
 	setDownloadsDirB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
@@ -591,30 +863,99 @@ void Downloader::init()
 	addUrlB->setToolTip(tr("Enter the address for download"));
 	connect(addUrlB, SIGNAL(clicked()), this, SLOT(addUrl()));
 
+	m_convertsPresetsB = new QToolButton;
+	m_convertsPresetsB->setIcon(QMPlay2Core.getIconFromTheme("list-add"));
+	m_convertsPresetsB->setToolTip(tr("Add, modify, or remove conversion presets"));
+	m_convertsPresetsB->setPopupMode(QToolButton::InstantPopup);
+	m_convertsPresetsB->setMenu(m_convertsMenu);
+
 	layout = new QGridLayout(this);
 	layout->setMargin(0);
-	layout->addWidget(downloadLW, 0, 0, 1, 4);
+	layout->addWidget(downloadLW, 0, 0, 1, 6);
 	layout->addWidget(setDownloadsDirB, 1, 0, 1, 1);
 	layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 1, 1, 1);
 	layout->addWidget(clearFinishedB, 1, 2, 1, 1);
 	layout->addWidget(addUrlB, 1, 3, 1, 1);
+	layout->addItem(new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Minimum), 1, 4, 1, 1);
+	layout->addWidget(m_convertsPresetsB, 1, 5, 1, 1);
 
-	Settings sets("Downloader");
-
-	QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath());
+	QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath()) + "/";
 #ifdef Q_OS_WIN
 	defDownloadPath.replace('\\', '/');
 #endif
-	downloadLW->downloadsDirPath = Functions::cleanPath(sets.getString("DownloadsDirPath", defDownloadPath));
-
-	const int count = sets.getInt("Count");
-	if (count > 0)
+	downloadLW->downloadsDirPath = Functions::cleanPath(m_sets.getString("DownloadsDirPath"));
+	if (downloadLW->downloadsDirPath.isEmpty())
 	{
-		const QByteArray arr = sets.getByteArray("Items");
-		QDataStream stream(arr);
-		for (int i = 0; i < count; ++i)
-			new DownloaderThread(&stream, QString(), downloadLW);
-		downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
+		downloadLW->downloadsDirPath = defDownloadPath;
+	}
+	else if (downloadLW->downloadsDirPath != defDownloadPath)
+	{
+		const QFileInfo dir(downloadLW->downloadsDirPath);
+#ifndef Q_OS_WIN
+		if (!dir.isDir() || !dir.isWritable())
+#else
+		if (!dir.isDir())
+#endif
+		{
+			downloadLW->downloadsDirPath = defDownloadPath;
+			m_sets.set("DownloadsDirPath", defDownloadPath);
+		}
+	}
+
+	// Compatibility
+	{
+		const int count = m_sets.getInt("Count");
+		if (count > 0)
+		{
+			const QByteArray data = m_sets.getByteArray("Items");
+			m_sets.remove("Count");
+			m_sets.remove("Items");
+			m_sets.set("Items/Count", count);
+			m_sets.set("Items/Data", data.toBase64().constData());
+		}
+	}
+	// Items
+	{
+		const int count = m_sets.getInt("Items/Count");
+		if (count > 0)
+		{
+			QDataStream stream(QByteArray::fromBase64(m_sets.getByteArray("Items/Data")));
+			for (int i = 0; i < count; ++i)
+				new DownloaderThread(&stream, QString(), downloadLW, m_convertsMenu);
+			downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
+		}
+	}
+	// Presets
+	{
+		const auto createPreset = [this](const QString &name, const QString &data) {
+			QAction *act = m_convertsMenu->addAction(name);
+			act->setData(data);
+			connect(act, &QAction::triggered, this, &Downloader::editConvertAction);
+			return act;
+		};
+
+		const int count = m_sets.getInt("Presets/Count");
+		bool presetsRestored = false;
+		if (count > 0)
+		{
+			QDataStream stream(QByteArray::fromBase64(m_sets.getByteArray("Presets/Data")));
+			for (int i = 0; i < count; ++i)
+			{
+				QString name, data;
+				stream >> name >> data;
+				if (name.isEmpty() || data.isEmpty())
+					continue;
+				createPreset(name, data);
+				presetsRestored = true;
+			}
+
+		}
+		if (!presetsRestored)
+		{
+			// Create default presets
+			createPreset("MP3 224k", g_defaultMp3ConvertCommand);
+			createPreset("OGG container", "ffmpeg -i <input/> -vn -sn -c:a copy -f ogg -y <output>%f.ogg</output>");
+		}
 	}
 }
 
@@ -631,17 +972,137 @@ QVector<QAction *> Downloader::getActions(const QString &name, double, const QSt
 		for (const Module::Info &mod : module->getModulesInfo())
 			if (mod.type == Module::DEMUXER && mod.name == prefix)
 				return {};
-	QAction *act = new QAction(Downloader::tr("Download"), nullptr);
-	act->setIcon(QIcon(":/downloader.svgz"));
-	act->connect(act, SIGNAL(triggered()), this, SLOT(download()));
-	act->setProperty("name", name);
-	if (!prefix.isEmpty())
+
+	const auto createAction = [&](const QString &actionName, const QString &preset) {
+		QAction *act = new QAction(actionName, nullptr);
+		act->setIcon(QIcon(":/downloader.svgz"));
+		act->connect(act, &QAction::triggered, this, &Downloader::download);
+		act->setProperty("name", name);
+		if (!prefix.isEmpty())
+		{
+			act->setProperty("prefix", prefix);
+			act->setProperty("param", param);
+		}
+		act->setProperty("url", url);
+		if (!preset.isEmpty())
+			act->setProperty("preset", preset);
+		return act;
+	};
+
+	QVector<QAction *> actions;
+
+	actions += createAction(Downloader::tr("Download"), QString());
+	for (QAction *a : m_convertsMenu->actions())
 	{
-		act->setProperty("prefix", prefix);
-		act->setProperty("param", param);
+		const QString command = a->data().toString();
+		const QString name = a->text();
+		if (command.isEmpty() || name.isEmpty())
+			continue;
+		actions += createAction(Downloader::tr("Download and convert to \"%1\"").arg(name), name);
 	}
-	act->setProperty("url", url);
-	return {act};
+
+	return actions;
+}
+
+void Downloader::addConvertPreset()
+{
+	QAction *action = m_convertsMenu->addAction("MP3 224k");
+	action->setData(g_defaultMp3ConvertCommand);
+	if (modifyConvertAction(action, false))
+		connect(action, &QAction::triggered, this, &Downloader::editConvertAction);
+	else
+		action->deleteLater();
+}
+void Downloader::editConvertAction()
+{
+	if (QAction *action = qobject_cast<QAction *>(sender()))
+		modifyConvertAction(action);
+}
+bool Downloader::modifyConvertAction(QAction *action, bool addRemoveButton)
+{
+	QDialog dialog(this);
+	dialog.setWindowTitle(tr("Converter preset"));
+
+	QLineEdit *nameE = new QLineEdit(action->text());
+	QLineEdit *commandE = new QLineEdit(action->data().toString());
+
+	commandE->setToolTip(tr("Command line to execute after download.\n\n<input/> - specifies downloaded file.\n<output>%f.mp3</output> - converted file will be input file with \"mp3\" extension."));
+
+	QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+	connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+	if (addRemoveButton)
+	{
+		QPushButton *removeB = buttons->addButton(tr("Remove"), QDialogButtonBox::DestructiveRole);
+		removeB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+		connect(buttons, &QDialogButtonBox::clicked, &dialog, [&](QAbstractButton *button) {
+			if (button == removeB)
+			{
+				action->deleteLater();
+				dialog.reject();
+			}
+		});
+	}
+
+	QFormLayout *layout = new QFormLayout(&dialog);
+	layout->setMargin(4);
+	layout->setSpacing(4);
+	layout->addRow(tr("Preset name"), nameE);
+	layout->addRow(tr("Command line"), commandE);
+	layout->addRow(buttons);
+
+	if (QWindow *win = window()->windowHandle())
+	{
+		if (QScreen *screen = win->screen())
+			dialog.resize(screen->availableGeometry().width() / 2, 1);
+	}
+
+	while (dialog.exec() == QDialog::Accepted)
+	{
+		const QString name = nameE->text().simplified();
+		const QString command = commandE->text();
+
+		if (name.isEmpty() || !command.contains(' '))
+		{
+			QMessageBox::warning(this, dialog.windowTitle(), tr("Incorrect/empty name or command line!"));
+			continue;
+		}
+
+		if (!command.contains("<input/>"))
+		{
+			QMessageBox::warning(this, dialog.windowTitle(), tr("Command must contain <input/> tag!"));
+			continue;
+		}
+		if (getCommandOutput(command).isEmpty())
+		{
+			QMessageBox::warning(this, dialog.windowTitle(), tr("Command must contain correct <output>file</output/> tag!"));
+			continue;
+		}
+
+		const QList<QAction *> actions = m_convertsMenu->actions();
+		bool ok = true;
+		for (int i = 1; i < actions.count(); ++i) // Skip first "Add" action
+		{
+			if (actions[i] != action && actions[i]->text().compare(name, Qt::CaseInsensitive) == 0)
+			{
+				ok = false;
+				break;
+			}
+		}
+
+		if (!ok)
+		{
+			QMessageBox::warning(this, dialog.windowTitle(), tr("Preset name already exists!"));
+			continue;
+		}
+
+		action->setText(name);
+		action->setData(command.trimmed());
+
+		return true;
+	}
+
+	return false;
 }
 
 void Downloader::setDownloadsDir()
@@ -654,7 +1115,7 @@ void Downloader::setDownloadsDir()
 #endif
 	{
 		downloadLW->downloadsDirPath = Functions::cleanPath(dir.filePath());
-		Settings("Downloader").set("DownloadsDirPath", downloadLW->downloadsDirPath);
+		m_sets.set("DownloadsDirPath", downloadLW->downloadsDirPath);
 	}
 	else if (dir.filePath() != QString())
 		QMessageBox::warning(this, DownloaderName, tr("Cannot change downloading files directory"));
@@ -678,18 +1139,22 @@ void Downloader::addUrl()
 	}
 	QString url = QInputDialog::getText(this, DownloaderName, tr("Enter address"), QLineEdit::Normal, clipboardUrl);
 	if (!url.isEmpty())
-		new DownloaderThread(nullptr, url, downloadLW);
+		new DownloaderThread(nullptr, url, downloadLW, m_convertsMenu);
 }
 void Downloader::download()
 {
+	QAction *action = qobject_cast<QAction *>(sender());
+	Q_ASSERT(action);
 	new DownloaderThread
 	(
 		nullptr,
-		sender()->property("url").toString(),
+		action->property("url").toString(),
 		downloadLW,
-		sender()->property("name").toString(),
-		sender()->property("prefix").toString(),
-		sender()->property("param").toString()
+		m_convertsMenu,
+		action->property("name").toString(),
+		action->property("prefix").toString(),
+		action->property("param").toString(),
+		action->property("preset").toString()
 	);
 	downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 }

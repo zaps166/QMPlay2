@@ -18,9 +18,11 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QLineEdit>
 
-class Q_DECL_EXPORT LineEdit final : public QLineEdit
+class QMPLAY2SHAREDLIB_EXPORT LineEdit final : public QLineEdit
 {
 	Q_OBJECT
 

@@ -20,7 +20,7 @@
 
 #include <Notifies.hpp>
 
-class Q_DECL_EXPORT NotifiesTray final : public Notifies
+class QMPLAY2SHAREDLIB_EXPORT NotifiesTray final : public Notifies
 {
 public:
 	NotifiesTray(QSystemTrayIcon *tray);

@@ -24,9 +24,11 @@
 #endif
 
 #ifdef Q_OS_MACOS
-	#define DEFAULT_HIGH_AUDIO_DELAY 0.2
+	#include "3rdparty/CoreAudio/AudioDeviceList.h"
+	#include "3rdparty/CoreAudio/AudioDevice.h"
+	constexpr double g_defaultHighAudioDelay = 0.2;
 #else
-	#define DEFAULT_HIGH_AUDIO_DELAY 0.1
+	constexpr double g_defaultHighAudioDelay = 0.1;
 #endif
 
 PortAudioWriter::PortAudioWriter(Module &module) :
@@ -47,6 +49,13 @@ PortAudioWriter::PortAudioWriter(Module &module) :
 }
 PortAudioWriter::~PortAudioWriter()
 {
+#ifdef Q_OS_MACOS
+	if (coreAudioDevice)
+	{
+		coreAudioDevice->ResetNominalSampleRate();
+		delete coreAudioDevice;
+	}
+#endif
 	close();
 }
 
@@ -191,7 +200,23 @@ void PortAudioWriter::pause()
 
 QString PortAudioWriter::name() const
 {
-	return PortAudioWriterName;
+	QString name = PortAudioWriterName;
+	if (stream)
+	{
+		if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(outputParameters.device))
+			name += " (" + PortAudioCommon::getOutputDeviceName(deviceInfo) + ")";
+#ifdef Q_OS_MACOS
+		if (const PaStreamInfo *strInfo = Pa_GetStreamInfo(stream))
+		{
+			name += QStringLiteral(", %1Hz").arg(strInfo->sampleRate);
+		}
+		if (coreAudioDevice)
+		{
+			name += QStringLiteral(" -> %1Hz").arg(coreAudioDevice->CurrentNominalSampleRate());
+		}
+#endif
+	}
+	return name;
 }
 
 bool PortAudioWriter::open()
@@ -209,6 +234,21 @@ bool PortAudioWriter::openStream()
 		stream = newStream;
 		outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
 		modParam("delay", outputLatency);
+#ifdef Q_OS_MACOS
+		if (sets().getBool("BitPerfect"))
+		{
+			const QString devName(Pa_GetDeviceInfo(outputParameters.device)->name);
+			const AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
+			if (devDict.contains(devName))
+			{
+				coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
+				if (coreAudioDevice)
+				{
+					coreAudioDevice->SetNominalSampleRate(sample_rate);
+				}
+			}
+		}
+#endif
 		return true;
 	}
 	return false;
@@ -228,15 +268,15 @@ bool PortAudioWriter::startStream()
 }
 inline bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-	const PaError e = Pa_WriteStream(stream, arr.data(), arr.size() / outputParameters.channelCount / sizeof(float));
+	const PaError e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
 	if (e != paNoError)
 		fullBufferReached = false;
 	if (e == paOutputUnderflowed)
 	{
-		if (outputParameters.suggestedLatency < DEFAULT_HIGH_AUDIO_DELAY && ++underflows >= 10)
+		if (outputParameters.suggestedLatency < g_defaultHighAudioDelay && ++underflows >= 10)
 		{
 			// Increase delay and try again - useful e.g. on VirtualBox and Bluetooth audio.
-			outputParameters.suggestedLatency = DEFAULT_HIGH_AUDIO_DELAY;
+			outputParameters.suggestedLatency = g_defaultHighAudioDelay;
 			if (!reopenStream())
 				return false;
 			return true;

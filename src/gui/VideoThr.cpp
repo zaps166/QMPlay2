@@ -18,7 +18,7 @@
 
 #include <VideoThr.hpp>
 
-#include <VideoAdjustment.hpp>
+#include <VideoAdjustmentW.hpp>
 #include <PlayClass.hpp>
 #include <Main.hpp>
 
@@ -48,7 +48,9 @@ VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringLi
 	sDec(nullptr),
 	hwAccelWriter(hwAccelWriter),
 	subtitles(nullptr)
-{}
+{
+	maybeStartThread();
+}
 VideoThr::~VideoThr()
 {
 	QMPlay2GUI.videoAdjustment->enableControls();
@@ -252,7 +254,9 @@ void VideoThr::run()
 			skip = playC.nextFrameB = false;
 			oneFrame = playC.paused = true;
 			fast = 0;
+			return true;
 		}
+		return false;
 	};
 
 	const auto finishAccurateSeek = [&] {
@@ -465,7 +469,8 @@ void VideoThr::run()
 				if (packet.ts >= playC.videoSeekPos)
 				{
 					finishAccurateSeek();
-					processOneFrame();
+					if (processOneFrame())
+						playC.fillBufferB = true;
 					if (playC.audioSeekPos <= 0.0 || oneFrame)
 						cont = false; // Play only if audio is ready or if still frame should be displayed
 				}

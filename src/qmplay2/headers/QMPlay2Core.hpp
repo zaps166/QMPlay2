@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QAtomicInt>
 #include <QObject>
 #include <QMutex>
@@ -36,7 +38,7 @@ class QWidget;
 class QPixmap;
 class Module;
 
-class Q_DECL_EXPORT QMPlay2CoreClass : public QObject
+class QMPLAY2SHAREDLIB_EXPORT QMPlay2CoreClass : public QObject
 {
 	Q_OBJECT
 

@@ -18,9 +18,11 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QSlider>
 
-class Q_DECL_EXPORT Slider final : public QSlider
+class QMPLAY2SHAREDLIB_EXPORT Slider final : public QSlider
 {
 	Q_OBJECT
 public:

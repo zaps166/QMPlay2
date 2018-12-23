@@ -24,7 +24,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Az A/V szál hibásan lett megszakítva!</translation>
     </message>
 </context>
 <context>
@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>További modul paraméter</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation>Cím automatikus felismerése</translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -201,15 +205,15 @@
     </message>
     <message>
         <source>The color on the top and bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Szín a tetején és az alján</translation>
     </message>
     <message>
         <source>Color in the middle</source>
-        <translation type="unfinished"></translation>
+        <translation>Szín középen</translation>
     </message>
     <message>
         <source>Wallpaper in the main window</source>
-        <translation type="unfinished"></translation>
+        <translation>Háttérkép a főablakban</translation>
     </message>
     <message>
         <source>Transparency</source>
@@ -401,31 +405,8 @@
 <context>
     <name>CuvidDec</name>
     <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>Az FFmpeg 3.1 vagy újabb verziójával való fordítás szükséges a H264 és HEVC támogatáshoz!</translation>
-    </message>
-    <message>
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>Nem sikerült az OpenGL2 modul megnyitása</translation>
-    </message>
-</context>
-<context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Cím</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Előadó</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Hossz</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Keresés a Datmusic-on</translation>
     </message>
 </context>
 <context>
@@ -475,7 +456,7 @@
     </message>
     <message>
         <source>Cannot open</source>
-        <translation type="unfinished">Nem sikerült megnyitni</translation>
+        <translation>Nem sikerült megnyitni</translation>
     </message>
     <message>
         <source>Paused</source>
@@ -632,6 +613,22 @@
         <source>Size</source>
         <translation>Méret</translation>
     </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation>A konvertálás megszakítva</translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation>Hiba a konvertálás közben</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation>Konvertálás...</translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation>Konvertálás megszakítása</translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -661,11 +658,65 @@
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Nem sikerült a letöltendő fájlok könyvtárának megváltoztatása</translation>
     </message>
     <message>
         <source>Enter address</source>
         <translation>Add met a címet</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation>&amp;Hozzáadás</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation>Konvertálási előbeállítás hozzáadásaa, módosítása, vagy törlése</translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation>Letöltés és konvertálás &quot;%1&quot; formátumba</translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation>Konvertálási előbeállítás</translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation>Parancssor, ami letöltés után lesz futtatva.
+
+&lt;input/&gt; - megadja a letöltött fájlt
+&lt;output&gt;%f.mp3&lt;/output&gt; - a konvertált fájl a bemeneti fájl lesz, &quot;mp3&quot; kiterjesztéssel.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Eltávolítás</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>Előbeállítás neve</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation>Parancssor</translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation>Érvénytelen/üres név vagy parancssor!</translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation>A parancsnak tartalmaznia kell az &lt;input/&gt; taget!</translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation>A parancsnak érvényes &lt;output&gt;file&lt;/output/&gt; taget kell tartalmaznia!</translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation>Ezzel a névvel már létezik előbeállítás!</translation>
     </message>
 </context>
 <context>
@@ -691,7 +742,7 @@
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Több számot tartalmazó file keresése</translation>
     </message>
     <message>
         <source>File size</source>
@@ -703,7 +754,7 @@
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassz egy fájlt, ami egynél több számot tartalmaz</translation>
     </message>
     <message>
         <source>Incorrect path</source>
@@ -715,7 +766,11 @@
     </message>
     <message>
         <source>Error while writing tags, check that you have permission to modify the file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a címkék írásakor, ellenőrizd le, hogy van-e megfelelő jogosultságod a fájl módosításához!</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation>A kijelölt fájlt tartalmazó könyvtár vagy URL megnyitása</translation>
     </message>
 </context>
 <context>
@@ -886,10 +941,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Use system icon set</source>
         <translation>Rendszer ikonkészletének használata</translation>
     </message>
@@ -965,6 +1016,14 @@
         <source>Hide artist metadata</source>
         <translation>Előadó metaadat elrejtése</translation>
     </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Fő ablak visszaállítása, ha új videó fájl van betöltve</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -978,11 +1037,11 @@
     </message>
     <message>
         <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alkalmazás indítása a megadott &lt;profil név&gt;-vel.</translation>
     </message>
     <message>
         <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne kezdje el a lejátszást elindítás után (figyelmen kívül hagyja a &quot;Lejátszás pozíciójának megjegyzése&quot; opciót).</translation>
     </message>
     <message>
         <source>Toggles playback.</source>
@@ -998,7 +1057,7 @@
     </message>
     <message>
         <source>Ensures that the window will be visible if the application is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ablak láthatóvá tétele, ha az alkalmazás fut.</translation>
     </message>
     <message>
         <source>Toggles fullscreen.</source>
@@ -1448,15 +1507,15 @@
     </message>
     <message>
         <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Az alapértelmezett hang/kép minőség prioritása</translation>
     </message>
     <message>
         <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Az alapértelmezett videó minőség prioritása</translation>
     </message>
     <message>
         <source>Priority of default audio quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Az alapértelmezett hangminőség prioritása</translation>
     </message>
     <message>
         <source>Downloads covers</source>
@@ -1464,11 +1523,11 @@
     </message>
     <message>
         <source>Allow to download big covers</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagyméretű borítókat is töltse le</translation>
     </message>
     <message>
         <source>Scrobble</source>
-        <translation type="unfinished"></translation>
+        <translation>Scrobble</translation>
     </message>
     <message>
         <source>User name</source>
@@ -1488,7 +1547,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus újracsatlakozási próbálkozás élő adásokhoz hiba esetén</translation>
     </message>
     <message>
         <source>Software decoder</source>
@@ -1513,7 +1572,8 @@
     <message>
         <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
 It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ennek a dekódolónak nincs saját videó kimenete, ezért bármely videó kimenettel használható.
+A dekódolt videó képkockákat a rendszermemóriába másolja, ezért lassú lehet!</translation>
     </message>
     <message>
         <source>Use OpenGL</source>
@@ -1533,15 +1593,15 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Skip some frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Néhány képkocka eldobása</translation>
     </message>
     <message>
         <source>Force frame skipping</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőltetett képkockaeldobás</translation>
     </message>
     <message>
         <source>Autodetect</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus felismerés</translation>
     </message>
     <message>
         <source>Normal size</source>
@@ -1557,7 +1617,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Képkockák</translation>
     </message>
     <message>
         <source>Slices</source>
@@ -1565,7 +1625,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation type="unfinished"></translation>
+        <translation>Videó dekódolásához használt szálak</translation>
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
@@ -1577,7 +1637,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájltípusok hozzárendelése a QMPlay2-hoz</translation>
     </message>
     <message>
         <source>Select all</source>
@@ -1609,7 +1669,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>File extensions (semicolon separated)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájlnév kiterjesztések (pontosvesszövel elválasztva)</translation>
     </message>
     <message>
         <source>Format</source>
@@ -1617,7 +1677,7 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Channel count</source>
-        <translation type="unfinished"></translation>
+        <translation>Csatornák száma</translation>
     </message>
     <message>
         <source>Sample rate</source>
@@ -1633,11 +1693,11 @@ It copies decoded video frame to system RAM, so it can be slow!</source>
     </message>
     <message>
         <source>Resampling method</source>
-        <translation type="unfinished"></translation>
+        <translation>Újramintavételezési módszer</translation>
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>További értesítések</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1753,6 +1813,22 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>XVideo outputs</source>
         <translation>XVideo kimenetek</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1767,6 +1843,25 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Move down</source>
         <translation>Lefelé mozgatás</translation>
+    </message>
+</context>
+<context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation>Cím</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation>Előadó</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation>Hossz</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation>Keresés a MyFreeMP3-on</translation>
     </message>
 </context>
 <context>
@@ -1832,7 +1927,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Körvonal</translation>
     </message>
     <message>
         <source>Shadow</source>
@@ -1859,7 +1954,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>texture copy error</source>
-        <translation type="unfinished"></translation>
+        <translation>textúra másolási hiba</translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
@@ -2159,7 +2254,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation type="unfinished"></translation>
+        <translation>Lejátszás indítása, ha az internetes adatfolyamból már ennyi be van töltve</translation>
     </message>
     <message>
         <source>Maximum volume</source>
@@ -2167,19 +2262,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Force samplerate</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőltetett mintavételezési sebesség</translation>
     </message>
     <message>
         <source>Force channels conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Erőltetett hang csatorna szám</translation>
     </message>
     <message>
         <source>Show buffered data indicator on slider</source>
-        <translation type="unfinished"></translation>
+        <translation>Betöltött rész mutatása a csúszkán</translation>
     </message>
     <message>
         <source>Keep aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Oldalarány megtartása</translation>
     </message>
     <message>
         <source>Keep zoom</source>
@@ -2191,11 +2286,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Keep subtitles delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Felirat késleltetés megtartása</translation>
     </message>
     <message>
         <source>Keep subtitles scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Felirat nagyításának megtartása</translation>
     </message>
     <message>
         <source>Keep speed</source>
@@ -2223,6 +2318,18 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
+        <translation>Oldalarány és nagyítás tárolása a beállítófájlban</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Lejátszás indítása léptetéskor</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2415,6 +2522,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>&amp;Properties</source>
         <translation>&amp;Tulajdonságok</translation>
     </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation>&amp;Mindig szinkronizál</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2480,11 +2591,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>QMPlay2CoreClass</name>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>nem egyező modul API verzió</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>nem egyező modul Qt verzió</translation>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
@@ -2496,7 +2607,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation type="unfinished"></translation>
+        <translation>ismétlődő modul név</translation>
     </message>
     <message>
         <source>Can&apos;t open log file</source>
@@ -2530,11 +2641,11 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation type="unfinished"></translation>
+        <translation>A QMPlay2 nincs frissítve. Szeretnéd elindítani a frissítést (ajánlott)?</translation>
     </message>
     <message>
         <source>Font cache is updating, please wait</source>
-        <translation type="unfinished"></translation>
+        <translation>A betűtípus gyorsítótár frissítése folyamatban van, kérlek várj</translation>
     </message>
 </context>
 <context>
@@ -2609,19 +2720,19 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Rádióállomás lista betöltése fájlból</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Rádióállomás lista mentése fájlba</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Rádióállomás lista betöltése</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Rádióállomás lista mentése</translation>
     </message>
 </context>
 <context>
@@ -2659,7 +2770,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fájl ismétlése</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
@@ -2675,7 +2786,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation type="unfinished"></translation>
+        <translation>Véletlenszerűen a &amp;csoportból</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -2683,7 +2794,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Véletlenszerűen a csoportb&amp;ól, és ismétlés</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
@@ -2769,7 +2880,8 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lassabb, de pontosabb léptetés.
+Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.</translation>
     </message>
     <message>
         <source>Video output priority</source>
@@ -3019,7 +3131,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Translation</source>
-        <translation>Fordítás</translation>
+        <translation>Lengyel fordítás</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation>A szöveg nem található</translation>
     </message>
 </context>
 <context>
@@ -3130,7 +3246,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation>Visszaállítás</translation>
+    </message>
     <message>
         <source>Brightness</source>
         <translation>Fényerő</translation>
@@ -3152,8 +3272,48 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Élesség</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation>Visszaállítás</translation>
+        <source>Reset video adjustments</source>
+        <translation>Videó megjelenítés vissszaállítása</translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation>Fényerő csökkentése</translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation>Fényerő növelése</translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation>Kontraszt csökkentése</translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation>Telítettség csökkentése</translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation>Telítettség növelése</translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation>Árnyalat csökkentése</translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation>Árnyalat növelése</translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation>Élesség csökkentése</translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation>Élesség növelése</translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3296,23 +3456,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Relevance</source>
-        <translation type="unfinished"></translation>
+        <translation>Relevancia</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation type="unfinished"></translation>
+        <translation>Feltöltés ideje</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation type="unfinished"></translation>
+        <translation>Nézettség</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished">Értékelés</translation>
+        <translation>Értékelés</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Találatok rendezése ...</translation>
     </message>
 </context>
 <context>
@@ -3340,6 +3500,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
         <translation>A &quot;youtube-dl&quot; letöltése sikeresen befejeződött!</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation>A &quot;youtube-dl&quot; letöltése sikertelen!</translation>
     </message>
 </context>
 </TS>

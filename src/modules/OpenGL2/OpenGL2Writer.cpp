@@ -26,9 +26,9 @@
 
 #include <QGuiApplication>
 
-OpenGL2Writer::OpenGL2Writer(Module &module) :
-	drawable(nullptr),
-	allowPBO(true)
+OpenGL2Writer::OpenGL2Writer(Module &module)
+	: drawable(nullptr)
+	, allowPBO(true)
 	, forceRtt(false)
 {
 	addParam("W");
@@ -51,25 +51,37 @@ OpenGL2Writer::~OpenGL2Writer()
 bool OpenGL2Writer::set()
 {
 	bool doReset = false;
-	bool newAllowPBO = sets().getBool("AllowPBO");
+
+	const bool newAllowPBO = sets().getBool("AllowPBO");
 	if (newAllowPBO != allowPBO)
 	{
 		allowPBO = newAllowPBO;
 		doReset = true;
 	}
+
+	const bool newHqScaling = sets().getBool("HQScaling");
+	if (newHqScaling != m_hqScaling)
+	{
+		m_hqScaling = newHqScaling;
+		doReset = true;
+	}
+
 	vSync = sets().getBool("VSync");
 	if (drawable && !drawable->setVSync(vSync))
 		doReset = true;
-	bool newForceRtt = sets().getBool("ForceRtt");
+
+	const bool newForceRtt = sets().getBool("ForceRtt");
 	if (forceRtt != newForceRtt)
 		doReset = true;
 	forceRtt = newForceRtt;
+
 #ifdef Q_OS_WIN
 	bool newPreventFullScreen = sets().getBool("PreventFullScreen");
 	if (preventFullScreen != newPreventFullScreen)
 		doReset = true;
 	preventFullScreen = newPreventFullScreen;
 #endif
+
 	return !doReset && sets().getBool("Enabled");
 }
 
@@ -116,6 +128,8 @@ bool OpenGL2Writer::processParams(bool *)
 	{
 		drawable->videoOffset = drawable->osdOffset = QPointF();
 		modParam("ResetOther", false);
+		if (!doResizeEvent)
+			doResizeEvent = drawable->widget()->isVisible();
 	}
 
 	const int outW = getParam("W").toInt();
@@ -208,13 +222,14 @@ bool OpenGL2Writer::open()
 	drawable->preventFullScreen = preventFullScreen;
 #endif
 	drawable->allowPBO = allowPBO;
+	drawable->hqScaling = m_hqScaling;
 	if (drawable->testGL())
 	{
 		drawable->setVSync(vSync);
 		bool hasBrightness = false, hasContrast = false, hasSharpness = false;
 		if (!drawable->videoAdjustmentKeys.isEmpty())
 		{
-			for (const QString &key : drawable->videoAdjustmentKeys)
+			for (const QString &key : asConst(drawable->videoAdjustmentKeys))
 			{
 				if (key == "Brightness")
 					hasBrightness = true;

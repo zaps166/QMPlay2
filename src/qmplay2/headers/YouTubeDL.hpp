@@ -19,13 +19,14 @@
 #pragma once
 
 #include <IOController.hpp>
+#include <QMPlay2Lib.hpp>
 
 #include <QCoreApplication>
 #include <QProcess>
 
 class NetworkReply;
 
-class Q_DECL_EXPORT YouTubeDL final : public BasicIO
+class QMPLAY2SHAREDLIB_EXPORT YouTubeDL final : public BasicIO
 {
 	Q_DECLARE_TR_FUNCTIONS(YouTubeDL)
 	Q_DISABLE_COPY(YouTubeDL)

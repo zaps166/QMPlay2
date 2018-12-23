@@ -20,7 +20,8 @@
 
 #include <QDBusAbstractAdaptor>
 #include <QDBusObjectPath>
-#include <QScopedPointer>
+
+#include <memory>
 
 class MediaPlayer2Root final : public QDBusAbstractAdaptor
 {
@@ -164,7 +165,7 @@ public:
 private:
 	bool set() override;
 
-	QScopedPointer<MPRIS2Interface> mpris2Interface;
+	std::unique_ptr<MPRIS2Interface> mpris2Interface;
 };
 
 #define MPRIS2Name "MPRIS2"

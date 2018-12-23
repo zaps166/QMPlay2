@@ -31,24 +31,40 @@ extern "C"
 
 using namespace std;
 
-FFDec::FFDec(QMutex &avcodec_mutex) :
+FFDec::FFDec() :
 	codec_ctx(nullptr),
 	packet(nullptr),
 	frame(nullptr),
-	codecIsOpen(false),
-	avcodec_mutex(avcodec_mutex)
+	codecIsOpen(false)
 {}
 FFDec::~FFDec()
 {
+	destroyDecoder();
+}
+
+int FFDec::pendingFrames() const
+{
+	return m_frames.count();
+}
+
+void FFDec::destroyDecoder()
+{
+	clearFrames();
 	av_frame_free(&frame);
-	FFCommon::freeAVPacket(packet);
+	av_packet_free(&packet);
 	if (codecIsOpen)
 	{
-		avcodec_mutex.lock();
 		avcodec_close(codec_ctx);
-		avcodec_mutex.unlock();
+		codecIsOpen = false;
 	}
-	av_free(codec_ctx);
+	av_freep(&codec_ctx);
+}
+
+void FFDec::clearFrames()
+{
+	for (AVFrame *&frame : m_frames)
+		av_frame_free(&frame);
+	m_frames.clear();
 }
 
 
@@ -79,14 +95,9 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 }
 bool FFDec::openCodec(AVCodec *codec)
 {
-	avcodec_mutex.lock();
 	if (avcodec_open2(codec_ctx, codec, nullptr))
-	{
-		avcodec_mutex.unlock();
 		return false;
-	}
-	avcodec_mutex.unlock();
-	packet = FFCommon::createAVPacket();
+	packet = av_packet_alloc();
 	switch (codec_ctx->codec_type)
 	{
 		case AVMEDIA_TYPE_VIDEO:
@@ -108,13 +119,51 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 	if (encodedPacket.ts.hasPts())
 		packet->pts = round(encodedPacket.ts.pts() / time_base);
 	if (flush)
+	{
 		avcodec_flush_buffers(codec_ctx);
+		clearFrames();
+	}
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
 		memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
 }
+int FFDec::decodeStep(bool &frameFinished)
+{
+	int bytesConsumed = 0;
+	bool sendOk = false;
+
+	int sendErr = avcodec_send_packet(codec_ctx, packet);
+	if (sendErr == 0 || sendErr == AVERROR(EAGAIN))
+	{
+		bytesConsumed = packet->size;
+		sendOk = true;
+	}
+
+	for (;;)
+	{
+		int recvErr = avcodec_receive_frame(codec_ctx, frame);
+		if (recvErr == 0)
+		{
+			m_frames.push_back(frame);
+			frame = av_frame_alloc();
+		}
+		else
+		{
+			if ((recvErr != AVERROR_EOF && recvErr != AVERROR(EAGAIN)) || (!sendOk && sendErr != AVERROR_EOF))
+			{
+				bytesConsumed = -1;
+				clearFrames();
+			}
+			break;
+		}
+	}
+
+	frameFinished = maybeTakeFrame();
+
+	return bytesConsumed;
+}
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
-	const int64_t ts = av_frame_get_best_effort_timestamp(frame);
+	const int64_t ts = frame->best_effort_timestamp;
 	if (ts != QMPLAY2_NOPTS_VALUE)
 		encodedPacket.ts = ts * time_base;
 	if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -124,4 +173,15 @@ void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 		if (qFuzzyIsNull(sampleAspectRatio) && frame->sample_aspect_ratio.num)
 			encodedPacket.sampleAspectRatio = av_q2d(frame->sample_aspect_ratio);
 	}
+}
+
+bool FFDec::maybeTakeFrame()
+{
+	if (!m_frames.isEmpty())
+	{
+		av_frame_free(&frame);
+		frame = m_frames.takeFirst();
+		return true;
+	}
+	return false;
 }

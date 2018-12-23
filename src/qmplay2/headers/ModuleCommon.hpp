@@ -20,7 +20,7 @@
 
 #include <Module.hpp>
 
-class Q_DECL_EXPORT ModuleCommon
+class QMPLAY2SHAREDLIB_EXPORT ModuleCommon
 {
 public:
 	virtual bool set();

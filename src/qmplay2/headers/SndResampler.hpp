@@ -18,11 +18,12 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QMPlay2Lib.hpp>
 
 class QByteArray;
+class Buffer;
 
-class Q_DECL_EXPORT SndResampler
+class QMPLAY2SHAREDLIB_EXPORT SndResampler
 {
 public:
 	SndResampler() = default;
@@ -40,7 +41,13 @@ public:
 
 	bool create(int _src_samplerate, int _src_channels, int _dst_samplerate, int _dst_channels);
 	void convert(const QByteArray &src, QByteArray &dst);
+	void convert(const Buffer &src, Buffer &dst);
 	void destroy();
+
+private:
+	template<typename T>
+	void convertInternal(const T &src, T &dst);
+
 private:
 #ifdef QMPLAY2_AVRESAMPLE
 	struct AVAudioResampleContext *snd_convert_ctx = nullptr;

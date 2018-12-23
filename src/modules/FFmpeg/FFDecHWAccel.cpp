@@ -26,8 +26,7 @@ extern "C"
 	#include <libavformat/avformat.h>
 }
 
-FFDecHWAccel::FFDecHWAccel(QMutex &mutex) :
-	FFDec(mutex),
+FFDecHWAccel::FFDecHWAccel() :
 	m_hwAccelWriter(nullptr),
 	m_hasCriticalError(false)
 {}
@@ -35,10 +34,11 @@ FFDecHWAccel::~FFDecHWAccel()
 {
 	if (codec_ctx)
 	{
-		if (codec_ctx->hwaccel_context)
-			av_free(codec_ctx->hwaccel_context);
-		if (codec_ctx->opaque)
-			delete (HWAccelHelper *)codec_ctx->opaque;
+		void *hwaccelContext = codec_ctx->hwaccel_context;
+		HWAccelHelper *hqAccelHelper = (HWAccelHelper *)codec_ctx->opaque;
+		destroyDecoder();
+		av_free(hwaccelContext);
+		delete hqAccelHelper;
 	}
 }
 
@@ -49,17 +49,33 @@ VideoWriter *FFDecHWAccel::HWAccel() const
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 9, 100)
+	const AVHWDeviceType requestedType = av_hwdevice_find_type_by_name(hwaccelName);
+	if (requestedType == AV_HWDEVICE_TYPE_NONE)
+		return false;
+	AVHWDeviceType hwType = AV_HWDEVICE_TYPE_NONE;
+	for (;;)
+	{
+		hwType = av_hwdevice_iterate_types(hwType);
+		if (hwType == AV_HWDEVICE_TYPE_NONE)
+			break;
+		if (hwType == requestedType)
+			return true;
+	}
+	return false;
+#else
 	AVHWAccel *hwAccel = nullptr;
 	while ((hwAccel = av_hwaccel_next(hwAccel)))
 		if (hwAccel->id == codec_ctx->codec_id && strstr(hwAccel->name, hwaccelName))
 			break;
 	return hwAccel;
+#endif
 }
 
 int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
 	Q_UNUSED(newPixFmt)
-	int frameFinished = 0;
+	bool frameFinished = false;
 
 	decodeFirstStep(encodedPacket, flush);
 
@@ -68,7 +84,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 	else if (hurryUp == 0)
 		codec_ctx->skip_frame = AVDISCARD_DEFAULT;
 
-	const int bytes_consumed = avcodec_decode_video2(codec_ctx, frame, &frameFinished, packet);
+	const int bytesConsumed = decodeStep(frameFinished);
 
 	if (frameFinished && ~hurryUp)
 	{
@@ -83,9 +99,9 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 	else
 		encodedPacket.ts.setInvalid();
 
-	m_hasCriticalError = (bytes_consumed < 0);
+	m_hasCriticalError = (bytesConsumed < 0);
 
-	return bytes_consumed < 0 ? -1 : bytes_consumed;
+	return m_hasCriticalError ? -1 : bytesConsumed;
 }
 void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
 {

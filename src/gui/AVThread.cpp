@@ -36,14 +36,17 @@ AVThread::AVThread(PlayClass &playC, const QString &writer_type, Writer *_writer
 		writer = Writer::create(writer_type, pluginsName);
 
 	mutex.lock();
-
-	if (writer)
-		start();
 }
 AVThread::~AVThread()
 {
 	delete dec;
 	delete writer;
+}
+
+void AVThread::maybeStartThread()
+{
+	if (writer)
+		start();
 }
 
 void AVThread::destroyDec()

@@ -65,6 +65,7 @@ class OpenGL2Common
 	using GLBindBuffer     = void  (APIENTRY *)(GLenum, GLuint);
 	using GLBufferData     = void  (APIENTRY *)(GLenum, GLsizeiptr, const void *, GLenum);
 	using GLDeleteBuffers  = void  (APIENTRY *)(GLsizei, const GLuint *);
+	using GLGenerateMipmap = void  (APIENTRY *)(GLenum);
 #endif
 	using GLMapBufferRange = void *(APIENTRY *)(GLenum, GLintptr, GLsizeiptr, GLbitfield);
 	using GLMapBuffer      = void *(APIENTRY *)(GLenum, GLbitfield);
@@ -103,20 +104,23 @@ protected:
 	GLBindBuffer glBindBuffer;
 	GLBufferData glBufferData;
 	GLDeleteBuffers glDeleteBuffers;
+	GLGenerateMipmap glGenerateMipmap = nullptr;
 #endif
-	GLMapBufferRange glMapBufferRange;
-	GLMapBuffer glMapBuffer;
-	GLUnmapBuffer glUnmapBuffer;
+	GLMapBufferRange glMapBufferRange = nullptr;
+	GLMapBuffer glMapBuffer = nullptr;
+	GLUnmapBuffer glUnmapBuffer = nullptr;
 
 	bool vSync;
 
 	void dispatchEvent(QEvent *e, QObject *p);
 private:
+	void maybeSetMipmaps(qreal dpr);
+
 	inline bool isRotate90() const;
 
 	inline bool hwAccellPossibleLock();
 
-	QByteArray readShader(const QString &fileName);
+	QByteArray readShader(const QString &fileName, bool pure = false);
 
 	void mousePress(QMouseEvent *e);
 	void mouseMove(QMouseEvent *e);
@@ -139,20 +143,20 @@ public:
 	qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
 	VideoAdjustment videoAdjustment;
 	float texCoordYCbCr[8];
-	QVector2D pixelStep;
 	quint32 textures[4];
+	QSize m_textureSize;
 	qint32 numPlanes;
 	quint32 target;
 	int Deinterlace;
 
 	quint32 pbo[4];
-	bool allowPBO, hasPbo;
+	bool allowPBO, hasPbo, hqScaling = false;
 
 #ifdef Q_OS_WIN
 	bool preventFullScreen;
 #endif
 
-	bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
+	bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness, m_useMipmaps = false;
 	int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
 	int glVer;
 

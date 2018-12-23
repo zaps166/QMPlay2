@@ -22,11 +22,12 @@
 #include <QWidget>
 #include <QMutex>
 
+#include <CppUtils.hpp>
 #include <Settings.hpp>
 
 class ModuleCommon;
 
-class Q_DECL_EXPORT Module : public Settings
+class QMPLAY2SHAREDLIB_EXPORT Module : public Settings
 {
 	friend class ModuleCommon;
 public:
@@ -124,7 +125,7 @@ template<typename T>
 void Module::setInstance()
 {
 	QMutexLocker locker(&mutex);
-	for (ModuleCommon *mc : instances)
+	for (ModuleCommon *mc : asConst(instances))
 	{
 		T *t = dynamic_cast<T *>(mc);
 		if (t)
@@ -134,7 +135,7 @@ void Module::setInstance()
 
 /**/
 
-#define QMPLAY2_MODULES_API_VERSION 7
+#define QMPLAY2_MODULES_API_VERSION 9
 
 #define QMPLAY2_EXPORT_MODULE(ModuleClass) \
 	extern "C" Q_DECL_EXPORT quint32 getQMPlay2ModuleAPIVersion() \

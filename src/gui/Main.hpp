@@ -25,7 +25,7 @@
 
 #include <QCoreApplication>
 
-class VideoAdjustment;
+class VideoAdjustmentW;
 class ShortcutHandler;
 class QTreeWidgetItem;
 class QTreeWidget;
@@ -77,7 +77,7 @@ public:
 	QWidget *mainW;
 	IPCServer *pipe;
 	ScreenSaver *screenSaver;
-	VideoAdjustment *videoAdjustment;
+	VideoAdjustmentW *videoAdjustment;
 	ShortcutHandler *shortcutHandler;
 
 	bool restartApp, removeSettings, noAutoPlay;

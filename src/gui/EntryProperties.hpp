@@ -43,7 +43,7 @@ private:
 #endif
 	QLabel *fileSizeL;
 	QCheckBox *catalogCB;
-	QToolButton *browseDirB, *browseFileB;
+	QToolButton *browseDirB, *browseFileB, *openUrlB;
 	AddressBox *addrB;
 	QString origDirPth;
 	bool &sync;
@@ -53,6 +53,7 @@ private slots:
 	void directAddressChanged();
 #endif
 	void browse();
+	void openUrl();
 	void accept() override;
 	void reject() override;
 };

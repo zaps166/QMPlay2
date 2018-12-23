@@ -18,18 +18,19 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QMPlay2Lib.hpp>
 
 struct AVBufferRef;
 
-class Q_DECL_EXPORT Buffer
+class QMPLAY2SHAREDLIB_EXPORT Buffer
 {
 	AVBufferRef *m_bufferRef = nullptr;
 	qint32 m_size = 0;
+	qint32 m_offset = 0;
 
 public:
 	Buffer() = default;
-	Buffer(const Buffer &other);
+	inline Buffer(const Buffer &other);
 	inline Buffer(Buffer &&other);
 	~Buffer();
 
@@ -37,37 +38,40 @@ public:
 	inline bool isEmpty() const;
 
 	inline qint32 size() const;
+	inline qint32 offset() const;
 	qint32 capacity() const;
 
 	bool isWritable() const;
 
-	void resize(qint32 len);
-	void remove(qint32 pos, qint32 len);
+	bool reserve(qint32 len);
+	bool resize(qint32 len);
+	bool remove(qint32 pos, qint32 len);
 	void clear();
 
 	const quint8 *data() const;
 	inline const quint8 *constData() const;
 	quint8 *data(); //Automatically detaches the buffer if necessary
 
-	void assign(AVBufferRef *otherBufferRef, qint32 len = -1);
+	void assign(AVBufferRef *otherBufferRef, qint32 len = -1, qint32 offset = 0);
 	void assign(const void *data, qint32 len, qint32 mem);
 	inline void assign(const void *data, qint32 len);
 
-	AVBufferRef *toAvBufferRef();
+	AVBufferRef *toAvBufferRef() const;
 
-#if 0
-	void append(const void *data, qint32 len);
-#endif
-
-	Buffer &operator =(const Buffer &other);
+	inline Buffer &operator =(const Buffer &other);
 	inline Buffer &operator =(Buffer &&other);
 
 private:
+	void copy(const Buffer &other);
 	inline void move(Buffer &other);
 };
 
 /* Inline implementation */
 
+Buffer::Buffer(const Buffer &other)
+{
+	copy(other);
+}
 Buffer::Buffer(Buffer &&other)
 {
 	move(other);
@@ -86,6 +90,10 @@ qint32 Buffer::size() const
 {
 	return m_size;
 }
+qint32 Buffer::offset() const
+{
+	return m_offset;
+}
 
 const quint8 *Buffer::constData() const
 {
@@ -97,6 +105,11 @@ void Buffer::assign(const void *data, qint32 len)
 	assign(data, len, len);
 }
 
+Buffer &Buffer::operator =(const Buffer &other)
+{
+	copy(other);
+	return *this;
+}
 Buffer &Buffer::operator =(Buffer &&other)
 {
 	move(other);
@@ -107,4 +120,5 @@ void Buffer::move(Buffer &other)
 {
 	qSwap(m_bufferRef, other.m_bufferRef);
 	qSwap(m_size, other.m_size);
+	qSwap(m_offset, other.m_offset);
 }

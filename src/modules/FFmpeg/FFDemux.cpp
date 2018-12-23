@@ -26,8 +26,7 @@
 
 #include <QFile>
 
-FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
-	avcodec_mutex(avcodec_mutex),
+FFDemux::FFDemux(Module &module) :
 	abortFetchTracks(false),
 	reconnectStreamed(false)
 {
@@ -36,7 +35,7 @@ FFDemux::FFDemux(QMutex &avcodec_mutex, Module &module) :
 FFDemux::~FFDemux()
 {
 	streams_info.clear();
-	for (const FormatContext *fmtCtx : formatContexts)
+	for (const FormatContext *fmtCtx : asConst(formatContexts))
 		delete fmtCtx;
 }
 
@@ -157,7 +156,7 @@ bool FFDemux::localStream() const
 bool FFDemux::seek(double pos, bool backward)
 {
 	bool seeked = false;
-	for (FormatContext *fmtCtx : formatContexts)
+	for (FormatContext *fmtCtx : asConst(formatContexts))
 	{
 		if (fmtCtx->seek(pos, backward))
 			seeked |= true;
@@ -204,13 +203,13 @@ bool FFDemux::read(Packet &encoded, int &idx)
 }
 void FFDemux::pause()
 {
-	for (FormatContext *fmtCtx : formatContexts)
+	for (FormatContext *fmtCtx : asConst(formatContexts))
 		fmtCtx->pause();
 }
 void FFDemux::abort()
 {
 	QMutexLocker mL(&mutex);
-	for (FormatContext *fmtCtx : formatContexts)
+	for (FormatContext *fmtCtx : asConst(formatContexts))
 		fmtCtx->abort();
 	abortFetchTracks = true;
 }
@@ -242,7 +241,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 		return {};
 
 	const auto createFmtCtx = [&] {
-		FormatContext *fmtCtx = new FormatContext(avcodec_mutex);
+		FormatContext *fmtCtx = new FormatContext;
 		{
 			QMutexLocker mL(&mutex);
 			formatContexts.append(fmtCtx);
@@ -345,6 +344,11 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 								audioUrl.prepend(Functions::filePath(url));
 						}
 					}
+				}
+				else if (line.startsWith("FILE "))
+				{
+					// QMPlay2 supports CUE files which uses only single audio file
+					return {};
 				}
 				if (line.startsWith("TRACK "))
 				{
@@ -455,7 +459,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 
 void FFDemux::addFormatContext(QString url, const QString &param)
 {
-	FormatContext *fmtCtx = new FormatContext(avcodec_mutex, reconnectStreamed);
+	FormatContext *fmtCtx = new FormatContext(reconnectStreamed);
 	{
 		QMutexLocker mL(&mutex);
 		formatContexts.append(fmtCtx);

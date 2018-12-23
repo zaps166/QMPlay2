@@ -18,6 +18,7 @@
 
 #include <VideoDock.hpp>
 
+#include <VideoAdjustmentW.hpp>
 #include <Settings.hpp>
 #include <MenuBar.hpp>
 #include <Main.hpp>
@@ -68,6 +69,7 @@ VideoDock::VideoDock() :
 		addAction(act);
 	for (QAction *act : QMPlay2GUI.menuBar->help->actions())
 		addAction(act);
+	QMPlay2GUI.videoAdjustment->addActionsToWidget(this);
 	/**/
 
 	setMouseTracking(true);
@@ -86,7 +88,10 @@ VideoDock::VideoDock() :
 	connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
 	connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
 	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
-	connect(&QMPlay2Core, SIGNAL(dockVideo(QWidget *)), &iDW, SLOT(setWidget(QWidget *)));
+	connect(&QMPlay2Core, &QMPlay2CoreClass::dockVideo, this, [this](QWidget *w) {
+		iDW.setWidget(w);
+		mouseMoveEvent(nullptr);
+	});
 
 	if ((isBreeze = QApplication::style()->objectName() == "breeze"))
 		setStyle(&commonStyle);
@@ -169,7 +174,7 @@ void VideoDock::dropEvent(QDropEvent *e)
 		const QMimeData *mimeData = e->mimeData();
 		if (Functions::chkMimeData(mimeData))
 		{
-			const QStringList urls = Functions::getUrlsFromMimeData(mimeData);
+			const QStringList urls = Functions::getUrlsFromMimeData(mimeData, false);
 			if (urls.size() == 1)
 			{
 				QString url = Functions::Url(urls[0]);
@@ -243,9 +248,11 @@ void VideoDock::mouseReleaseEvent(QMouseEvent *e)
 			doubleClicked = false;
 			leftButtonPlayTim.stop();
 		}
-		else if ((m_pressedKeyModifiers == Qt::NoModifier) && QMPlay2Core.getSettings().getBool("LeftMouseTogglePlay"))
+		else if (m_pressedKeyModifiers == Qt::NoModifier)
 		{
-			leftButtonPlayTim.start(300);
+			const int val = QMPlay2Core.getSettings().getInt("LeftMouseTogglePlay");
+			if (val > 0)
+				leftButtonPlayTim.start((val == 1) ? 300 : 0);
 		}
 	}
 	if (QWidget *internalW = internalWidget())

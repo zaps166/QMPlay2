@@ -20,26 +20,35 @@
 
 #include <QWidget>
 
+#include <vector>
+#include <array>
+
 class ModuleParams;
+class QAction;
 class Slider;
 
-class VideoAdjustment final : public QWidget
+class VideoAdjustmentW final : public QWidget
 {
 	Q_OBJECT
+
 public:
-	VideoAdjustment();
-	~VideoAdjustment();
+	VideoAdjustmentW();
+	~VideoAdjustmentW();
 
 	void restoreValues();
 	void saveValues();
 
 	void setModuleParam(ModuleParams *writer);
 	void enableControls();
+
+	void setKeyShortcuts();
+	void addActionsToWidget(QWidget *w);
+
 signals:
-	void videoAdjustmentChanged();
-private slots:
-	void setValue(int);
-	void reset();
+	void videoAdjustmentChanged(const QString &osdText);
+
 private:
-	Slider *sliders;
+	std::vector<Slider *> m_sliders;
+	std::vector<std::array<QAction *, 2>> m_actions;
+	QAction *m_resetAction = nullptr;
 };

@@ -143,7 +143,7 @@ QTreeWidgetItem *ResultsYoutube::getDefaultQuality(const QTreeWidgetItem *tWI)
 {
 	if (!tWI->childCount())
 		return nullptr;
-	for (int itag : itags)
+	for (int itag : asConst(itags))
 		for (int i = 0; i < tWI->childCount(); ++i)
 			if (tWI->child(i)->data(0, Qt::UserRole + 2).toInt() == itag)
 				return tWI->child(i);
@@ -346,19 +346,22 @@ QList<int> *YouTube::getQualityPresets()
 	static bool firstTime = true;
 	if (firstTime)
 	{
-		qualityPresets[_2160p60] << 315 << 299 << 303 << 298 << 302;
-		qualityPresets[_1080p60] << 299 << 303 << 298 << 302;
-		qualityPresets[_720p60] << 298 << 302;
+		qualityPresets[_720p60]  << 298 << 302;
+		qualityPresets[_1080p60] << 299 << 303 << qualityPresets[_720p60];
+		qualityPresets[_1440p60] << 308 << qualityPresets[_1080p60];
+		qualityPresets[_2160p60] << 315 << qualityPresets[_1440p60];
 
-		qualityPresets[_2160p] << 266 << 313 << 137 << 248 << 136 << 247 << 135;
-		qualityPresets[_1080p] << 137 << 248 << 136 << 247 << 135;
-		qualityPresets[_720p] << 136 << 247 << 135;
-		qualityPresets[_480p] << 135;
+		qualityPresets[_480p]  << 135;
+		qualityPresets[_720p]  << 136 << 247 << qualityPresets[_480p];
+		qualityPresets[_1080p] << 137 << 248 << qualityPresets[_720p];
+		qualityPresets[_1440p] << 264 << 271 << qualityPresets[_1080p];
+		qualityPresets[_2160p] << 266 << 313 << qualityPresets[_1440p];
 
 		//Append also non-60 FPS itags to 60 FPS itags
-		qualityPresets[_2160p60] += qualityPresets[_2160p];
+		qualityPresets[_720p60]  += qualityPresets[_720p];
 		qualityPresets[_1080p60] += qualityPresets[_1080p];
-		qualityPresets[_720p60] += qualityPresets[_720p];
+		qualityPresets[_1440p60] += qualityPresets[_1440p];
+		qualityPresets[_2160p60] += qualityPresets[_2160p];
 
 		firstTime = false;
 	}
@@ -367,7 +370,7 @@ QList<int> *YouTube::getQualityPresets()
 QStringList YouTube::getQualityPresetString(int qualityIdx)
 {
 	QStringList videoItags;
-	for (int itag : getQualityPresets()[qualityIdx])
+	for (int itag : asConst(getQualityPresets()[qualityIdx]))
 		videoItags.append(QString::number(itag));
 	return videoItags;
 }
@@ -389,7 +392,9 @@ YouTube::YouTube(Module &module) :
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	searchE = new LineEdit;
+#ifndef Q_OS_ANDROID
 	connect(searchE, SIGNAL(textEdited(const QString &)), this, SLOT(searchTextEdited(const QString &)));
+#endif
 	connect(searchE, SIGNAL(clearButtonClicked()), this, SLOT(search()));
 	connect(searchE, SIGNAL(returnPressed()), this, SLOT(search()));
 	searchE->setCompleter(completer);
@@ -410,9 +415,11 @@ YouTube::YouTube(Module &module) :
 
 	m_qualityGroup = new QActionGroup(this);
 	m_qualityGroup->addAction("2160p 60FPS");
+	m_qualityGroup->addAction("1440p 60FPS");
 	m_qualityGroup->addAction("1080p 60FPS");
 	m_qualityGroup->addAction("720p 60FPS");
 	m_qualityGroup->addAction("2160p");
+	m_qualityGroup->addAction("1440p");
 	m_qualityGroup->addAction("1080p");
 	m_qualityGroup->addAction("720p");
 	m_qualityGroup->addAction("480p");
@@ -431,7 +438,7 @@ YouTube::YouTube(Module &module) :
 		qualityMenu->addAction(act);
 		++qualityIdx;
 	}
-	qualityMenu->insertSeparator(qualityMenu->actions().at(3));
+	qualityMenu->insertSeparator(qualityMenu->actions().at(4));
 
 	QToolButton *qualityB = new QToolButton;
 	qualityB->setPopupMode(QToolButton::InstantPopup);
@@ -608,6 +615,13 @@ DockWidget *YouTube::getDockWidget()
 	return dw;
 }
 
+QString YouTube::matchAddress(const QString &url) const
+{
+	const QUrl qurl(url);
+	if (qurl.scheme().startsWith("http") && (qurl.host().contains("youtube.") || qurl.host().contains("youtu.be")))
+		return "YouTube";
+	return QString();
+}
 QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
 {
 	return {
@@ -1032,10 +1046,10 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 				}
 			}
 		}
-	}
-	if (args.isEmpty())
-	{
-		qCWarning(youtube) << "Invalid JSON or JSON not found at \"ytplayer.config\"";
+		if (args.isEmpty())
+		{
+			qCWarning(youtube) << "Invalid JSON at \"ytplayer.config\"";
+		}
 	}
 
 	QString subsUrl;
@@ -1055,7 +1069,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 		{
 			QStringList simplifiedLangCodes;
 			int idx = url.indexOf("v=");
-			for (const QString &lc : langCodes)
+			for (const QString &lc : asConst(langCodes))
 			{
 				// Remove language suffix after "-" - not supported in QMPlay2
 				const int idx = lc.indexOf('-');
@@ -1112,7 +1126,7 @@ QStringList YouTube::getYouTubeVideo(const QString &data, const QString &PARAM, 
 			args["adaptive_fmts"].toString(), // contains audio or video urls
 		};
 	}
-	for (const QString &fmt : fmts)
+	for (const QString &fmt : asConst(fmts))
 	{
 		bool br = false;
 		for (const QString &stream : fmt.split(','))
@@ -1318,7 +1332,7 @@ void YouTube::preparePlaylist(const QString &data, QTreeWidgetItem *tWI)
 		const QString tags[2] = {"video-id", "video-title"};
 		QStringList playlist, entries = data.mid(idx).split("yt-uix-scroller-scroll-unit", QString::SkipEmptyParts);
 		entries.removeFirst();
-		for (const QString &entry : entries)
+		for (const QString &entry : asConst(entries))
 		{
 			QStringList plistEntry;
 			for (int i = 0; i < 2; ++i)

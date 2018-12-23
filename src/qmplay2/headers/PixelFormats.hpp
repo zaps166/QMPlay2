@@ -18,17 +18,29 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QVector>
 
-enum class QMPlay2PixelFormat //Compatible with FFmpeg
+enum class QMPlay2PixelFormat
 {
-	YUV420P =  0,
-	YUV422P =  4,
-	YUV444P =  5,
-	YUV410P =  6,
-	YUV411P =  7,
-	YUV440P = 33,
+	None = -1,
 
-	Count   =  6
+	YUV420P,
+	YUV422P,
+	YUV444P,
+
+	YUV410P,
+	YUV411P,
+	YUV440P,
+
+	Count,
 };
 using QMPlay2PixelFormats = QVector<QMPlay2PixelFormat>;
+
+namespace QMPlay2PixelFormatConvert {
+
+QMPLAY2SHAREDLIB_EXPORT int toFFmpeg(QMPlay2PixelFormat pixFmt);
+QMPLAY2SHAREDLIB_EXPORT QMPlay2PixelFormat fromFFmpeg(int pixFmt);
+
+}

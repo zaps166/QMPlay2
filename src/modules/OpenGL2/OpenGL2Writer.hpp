@@ -57,6 +57,7 @@ private:
 
 	OpenGL2Common *drawable;
 	bool allowPBO;
+	bool m_hqScaling = false;
 	bool forceRtt, useRtt;
 	bool vSync;
 #ifdef Q_OS_WIN

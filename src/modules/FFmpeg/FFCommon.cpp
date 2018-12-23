@@ -31,32 +31,9 @@ extern "C"
 #endif
 }
 
-AVPacket *FFCommon::createAVPacket()
-{
-	AVPacket *packet;
-#if LIBAVCODEC_VERSION_MAJOR >= 57
-	packet = av_packet_alloc();
-#else
-	packet = (AVPacket *)av_malloc(sizeof(AVPacket));
-	av_init_packet(packet);
-#endif
-	return packet;
-}
-void FFCommon::freeAVPacket(AVPacket *&packet)
-{
-#if LIBAVCODEC_VERSION_MAJOR >= 57
-	av_packet_free(&packet);
-#else
-	if (packet)
-		av_packet_unref(packet);
-	av_freep(&packet);
-#endif
-}
-
 #ifdef QMPlay2_VDPAU
 AVVDPAUContext *FFCommon::allocAVVDPAUContext(AVCodecContext *codecCtx)
 {
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(56, 13, 100) // FFmpeg 2.5.0
 	// Since FFmpeg 3.3 we must not use "av_vdpau_alloc_context()" or "AVVDPAUContext" structure size
 	// for allocating "AVCodecContext::hwaccel_context", because internally it always uses field from
 	// different internal structure which is larger. Using different struct inside FFmpeg was provided
@@ -67,8 +44,5 @@ AVVDPAUContext *FFCommon::allocAVVDPAUContext(AVCodecContext *codecCtx)
 	if (av_vdpau_bind_context(codecCtx, 0, nullptr, 0) == 0)
 		return (AVVDPAUContext *)codecCtx->hwaccel_context;
 	return nullptr;
-#else
-	return av_vdpau_alloc_context();
-#endif
 }
 #endif

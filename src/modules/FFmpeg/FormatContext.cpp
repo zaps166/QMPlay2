@@ -22,6 +22,7 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
+#include <CppUtils.hpp>
 #include <Settings.hpp>
 #include <Packet.hpp>
 
@@ -34,10 +35,6 @@ extern "C"
 #endif
 	#include <libavutil/pixdesc.h>
 }
-
-#ifndef AV_INPUT_BUFFER_PADDING_SIZE
-	#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
-#endif
 
 static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 {
@@ -77,34 +74,6 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 		pkt->size = strlen((char *)line->data);
 	}
 }
-
-#if LIBAVFORMAT_VERSION_INT >= 0x392900
-	static inline AVCodecParameters *codecParams(AVStream *stream)
-	{
-		return stream->codecpar;
-	}
-	static inline const char *getPixelFormat(AVStream *stream)
-	{
-		return av_get_pix_fmt_name((AVPixelFormat)stream->codecpar->format);
-	}
-	static inline const char *getSampleFormat(AVStream *stream)
-	{
-		return av_get_sample_fmt_name((AVSampleFormat)stream->codecpar->format);
-	}
-#else
-	static inline AVCodecContext *codecParams(AVStream *stream)
-	{
-		return stream->codec;
-	}
-	static inline const char *getPixelFormat(AVStream *stream)
-	{
-		return av_get_pix_fmt_name(stream->codec->pix_fmt);
-	}
-	static inline const char *getSampleFormat(AVStream *stream)
-	{
-		return av_get_sample_fmt_name(stream->codec->sample_fmt);
-	}
-#endif
 
 static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
 {
@@ -155,14 +124,14 @@ static QByteArray getTag(AVDictionary *metadata, const char *key, const bool ded
 
 static void fixFontsAttachment(AVStream *stream)
 {
-	if (codecParams(stream)->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecParams(stream)->codec_id == AV_CODEC_ID_NONE)
+	if (stream->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT && stream->codecpar->codec_id == AV_CODEC_ID_NONE)
 	{
 		// If codec for fonts is unknown - check the attachment file name extension
 		const QString attachmentFileName = getTag(stream->metadata, "filename", false);
 		if (attachmentFileName.endsWith(".otf", Qt::CaseInsensitive))
-			codecParams(stream)->codec_id = AV_CODEC_ID_OTF;
+			stream->codecpar->codec_id = AV_CODEC_ID_OTF;
 		else if (attachmentFileName.endsWith(".ttf", Qt::CaseInsensitive))
-			codecParams(stream)->codec_id = AV_CODEC_ID_TTF;
+			stream->codecpar->codec_id = AV_CODEC_ID_TTF;
 	}
 }
 
@@ -171,8 +140,8 @@ static bool streamNotValid(AVStream *stream)
 	return
 	(
 		(stream->disposition & AV_DISPOSITION_ATTACHED_PIC)    ||
-		(codecParams(stream)->codec_type == AVMEDIA_TYPE_DATA) ||
-		(codecParams(stream)->codec_type == AVMEDIA_TYPE_ATTACHMENT && codecParams(stream)->codec_id != AV_CODEC_ID_TTF && codecParams(stream)->codec_id != AV_CODEC_ID_OTF)
+		(stream->codecpar->codec_type == AVMEDIA_TYPE_DATA) ||
+		(stream->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT && stream->codecpar->codec_id != AV_CODEC_ID_TTF && stream->codecpar->codec_id != AV_CODEC_ID_OTF)
 	);
 }
 
@@ -227,7 +196,7 @@ private:
 
 /**/
 
-FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
+FormatContext::FormatContext(bool reconnectStreamed) :
 	isError(false),
 	currPos(0.0),
 	abortCtx(new AbortContext),
@@ -242,24 +211,23 @@ FormatContext::FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed) :
 	maybeHasFrame(false),
 	artistWithTitle(true),
 	stillImage(false),
-	lengthToPlay(-1),
-	avcodec_mutex(avcodec_mutex)
+	lengthToPlay(-1)
 {}
 FormatContext::~FormatContext()
 {
 	if (formatCtx)
 	{
-		for (AVStream *stream : streams)
+		for (AVStream *stream : asConst(streams))
 		{
-			if (codecParams(stream) && !streamNotValid(stream))
+			if (stream->codecpar && !streamNotValid(stream))
 			{
 				//Data is allocated in QByteArray, so FFmpeg mustn't free it!
-				codecParams(stream)->extradata = nullptr;
-				codecParams(stream)->extradata_size = 0;
+				stream->codecpar->extradata = nullptr;
+				stream->codecpar->extradata_size = 0;
 			}
 		}
 		avformat_close_input(&formatCtx);
-		FFCommon::freeAVPacket(packet);
+		av_packet_free(&packet);
 	}
 	delete oggHelper;
 }
@@ -301,7 +269,7 @@ QList<ProgramInfo> FormatContext::getPrograms() const
 					const int idx = index_map[ff_idx];
 					if (idx > -1)
 					{
-						const QMPlay2MediaType type = (QMPlay2MediaType)codecParams(streams[ff_idx])->codec_type;
+						const QMPlay2MediaType type = (QMPlay2MediaType)streams[ff_idx]->codecpar->codec_type;
 						if (type != QMPLAY2_TYPE_UNKNOWN)
 							programInfo.streams += {idx, type};
 					}
@@ -514,37 +482,29 @@ bool FormatContext::seek(double pos, bool backward)
 			pos = 0.0;
 		else if (len > 0.0 && pos > len)
 			pos = len;
-#ifndef MP3_FAST_SEEK
-		if (seekByByteOffset < 0)
-		{
-#endif
-			const double posToSeek = pos + startTime;
-			const qint64 timestamp = ((streamsInfo.count() == 1) ? posToSeek : (backward ? floor(posToSeek) : ceil(posToSeek))) * AV_TIME_BASE;
 
-			isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
-			if (!isOk)
+		const double posToSeek = pos + startTime;
+		const qint64 timestamp = ((streamsInfo.count() == 1) ? posToSeek : (backward ? floor(posToSeek) : ceil(posToSeek))) * AV_TIME_BASE;
+
+		isOk = av_seek_frame(formatCtx, -1, timestamp, backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0;
+		if (!isOk)
+		{
+			const int ret = av_read_frame(formatCtx, packet);
+			if (ret == AVERROR_EOF || ret == 0)
 			{
-				const int ret = av_read_frame(formatCtx, packet);
-				if (ret == AVERROR_EOF || ret == 0)
-				{
-					if (len <= 0.0 || pos < len)
-						isOk = av_seek_frame(formatCtx, -1, timestamp, !backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0; //Negate "backward" and try again
-					else if (ret == AVERROR_EOF)
-						isOk = true; //Allow seek to the end of the file, clear buffers and finish the playback
-					if (isOk)
-						av_packet_unref(packet);
-				}
-				if (!isOk) //If seek failed - allow to use the packet
-				{
-					errFromSeek = ret;
-					maybeHasFrame = true;
-				}
+				if (len <= 0.0 || pos < len)
+					isOk = av_seek_frame(formatCtx, -1, timestamp, !backward ? AVSEEK_FLAG_BACKWARD : 0) >= 0; //Negate "backward" and try again
+				else if (ret == AVERROR_EOF)
+					isOk = true; //Allow seek to the end of the file, clear buffers and finish the playback
+				if (isOk)
+					av_packet_unref(packet);
 			}
-#ifndef MP3_FAST_SEEK
+			if (!isOk) //If seek failed - allow to use the packet
+			{
+				errFromSeek = ret;
+				maybeHasFrame = true;
+			}
 		}
-		else if (length() > 0)
-			isOk = av_seek_frame(formatCtx, -1, (qint64)pos * (avio_size(formatCtx->pb) - seekByByteOffset) / length() + seekByByteOffset, AVSEEK_FLAG_BYTE | (backward ? AVSEEK_FLAG_BACKWARD : 0)) >= 0;
-#endif
 		if (isOk)
 		{
 			for (int i = 0; i < streamsTS.count(); ++i)
@@ -614,35 +574,26 @@ bool FormatContext::read(Packet &encoded, int &idx)
 		streams.at(ff_idx)->event_flags = 0;
 		isMetadataChanged = true;
 	}
-	if (fixMkvAss && codecParams(streams.at(ff_idx))->codec_id == AV_CODEC_ID_ASS)
+	if (fixMkvAss && streams.at(ff_idx)->codecpar->codec_id == AV_CODEC_ID_ASS)
 		matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
 
 	if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
+	{
 		encoded.assign(packet->data, packet->size, packet->size + AV_INPUT_BUFFER_PADDING_SIZE);
+	}
 	else
 	{
-		encoded.assign(packet->buf, packet->size);
+		encoded.assign(packet->buf, packet->size, packet->data - packet->buf->data);
 		packet->buf = nullptr;
 	}
 
 	const double time_base = av_q2d(streams.at(ff_idx)->time_base);
 
-#ifndef MP3_FAST_SEEK
-	if (seekByByteOffset < 0)
-#endif
-	{
-		encoded.ts.setInvalid();
-		if (packet->dts != QMPLAY2_NOPTS_VALUE)
-			encoded.ts.setDts(packet->dts * time_base, startTime);
-		if (packet->pts != QMPLAY2_NOPTS_VALUE)
-			encoded.ts.setPts(packet->pts * time_base, startTime);
-	}
-#ifndef MP3_FAST_SEEK
-	else if (packet->pos > -1 && length() > 0.0)
-		lastTime = encoded.ts = ((packet->pos - seekByByteOffset) * length()) / (avio_size(formatCtx->pb) - seekByByteOffset);
-	else
-		encoded.ts = lastTime;
-#endif
+	encoded.ts.setInvalid();
+	if (packet->dts != QMPLAY2_NOPTS_VALUE)
+		encoded.ts.setDts(packet->dts * time_base, startTime);
+	if (packet->pts != QMPLAY2_NOPTS_VALUE)
+		encoded.ts.setPts(packet->pts * time_base, startTime);
 
 	if (packet->duration > 0)
 		encoded.duration = packet->duration * time_base;
@@ -752,10 +703,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
 	if (!inputFmt)
 	{
 		url = Functions::prepareFFmpegUrl(_url, options);
-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 25, 100)
 		if (!isLocal && reconnectStreamed)
 			av_dict_set(&options, "reconnect_streamed", "1", 0);
-#endif
 	}
 
 	formatCtx = avformat_alloc_context();
@@ -787,26 +736,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
 		stillImage = true;
 	}
 
-#ifdef MP3_FAST_SEEK
 	if (name() == "mp3")
 		formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
-#else
-	seekByByteOffset = formatCtx->pb ? avio_tell(formatCtx->pb) : -1; //formatCtx->data_offset, moved to private since FFmpeg 2.6
-#endif
 
-	avcodec_mutex.lock();
 	if (avformat_find_stream_info(formatCtx, nullptr) < 0)
-	{
-		avcodec_mutex.unlock();
 		return false;
-	}
-	avcodec_mutex.unlock();
 
 	isStreamed = !isLocal && formatCtx->duration <= 0; //QMPLAY2_NOPTS_VALUE is negative
-#ifndef MP3_FAST_SEEK
-	if (seekByByteOffset > -1 && (isStreamed || name() != "mp3"))
-		seekByByteOffset = -1;
-#endif
 
 #ifdef QMPlay2_libavdevice
 	forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).
@@ -839,7 +775,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 			index_map[i] = streamsInfo.count();
 			streamsInfo += streamInfo;
 		}
-		if (!fixMkvAss && codecParams(formatCtx->streams[i])->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
+		if (!fixMkvAss && formatCtx->streams[i]->codecpar->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
 			fixMkvAss = true;
 		formatCtx->streams[i]->event_flags = 0;
 		streams += formatCtx->streams[i];
@@ -856,7 +792,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
 	formatCtx->event_flags = 0;
 
-	packet = FFCommon::createAVPacket();
+	packet = av_packet_alloc();
 
 	if (lengthToPlay > 0.0)
 		return seek(0.0, false);
@@ -884,11 +820,11 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
 	StreamInfo *streamInfo = new StreamInfo;
 
-	if (const AVCodec *codec = avcodec_find_decoder(codecParams(stream)->codec_id))
+	if (const AVCodec *codec = avcodec_find_decoder(stream->codecpar->codec_id))
 		streamInfo->codec_name = codec->name;
 
 	streamInfo->must_decode = true;
-	if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(codecParams(stream)->codec_id))
+	if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(stream->codecpar->codec_id))
 	{
 		if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
 			streamInfo->must_decode = false;
@@ -897,21 +833,21 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 			streamInfo->codec_name = codecDescr->name;
 	}
 
-	streamInfo->bitrate = codecParams(stream)->bit_rate;
-	streamInfo->bpcs = codecParams(stream)->bits_per_coded_sample;
-	streamInfo->codec_tag = codecParams(stream)->codec_tag;
+	streamInfo->bitrate = stream->codecpar->bit_rate;
+	streamInfo->bpcs = stream->codecpar->bits_per_coded_sample;
+	streamInfo->codec_tag = stream->codecpar->codec_tag;
 	streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
 	streamInfo->time_base.num = stream->time_base.num;
 	streamInfo->time_base.den = stream->time_base.den;
-	streamInfo->type = (QMPlay2MediaType)codecParams(stream)->codec_type; //Enumy są takie same
+	streamInfo->type = (QMPlay2MediaType)stream->codecpar->codec_type; //Enumy są takie same
 
-	if (codecParams(stream)->extradata_size)
+	if (stream->codecpar->extradata_size)
 	{
-		streamInfo->data.reserve(codecParams(stream)->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
-		streamInfo->data.resize(codecParams(stream)->extradata_size);
-		memcpy(streamInfo->data.data(), codecParams(stream)->extradata, streamInfo->data.capacity());
-		av_free(codecParams(stream)->extradata);
-		codecParams(stream)->extradata = (quint8 *)streamInfo->data.data();
+		streamInfo->data.reserve(stream->codecpar->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
+		streamInfo->data.resize(stream->codecpar->extradata_size);
+		memcpy(streamInfo->data.data(), stream->codecpar->extradata, streamInfo->data.capacity());
+		av_free(stream->codecpar->extradata);
+		stream->codecpar->extradata = (quint8 *)streamInfo->data.data();
 	}
 
 	if (streamInfo->type != QMPLAY2_TYPE_ATTACHMENT)
@@ -937,20 +873,20 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 	switch (streamInfo->type)
 	{
 		case QMPLAY2_TYPE_AUDIO:
-			streamInfo->format = getSampleFormat(stream);
-			streamInfo->channels = codecParams(stream)->channels;
-			streamInfo->sample_rate = codecParams(stream)->sample_rate;
-			streamInfo->block_align = codecParams(stream)->block_align;
+			streamInfo->format = av_get_sample_fmt_name((AVSampleFormat)stream->codecpar->format);
+			streamInfo->channels = stream->codecpar->channels;
+			streamInfo->sample_rate = stream->codecpar->sample_rate;
+			streamInfo->block_align = stream->codecpar->block_align;
 			break;
 		case QMPLAY2_TYPE_VIDEO:
 		{
-			streamInfo->format = getPixelFormat(stream);
+			streamInfo->format = av_get_pix_fmt_name((AVPixelFormat)stream->codecpar->format);
 			if (stream->sample_aspect_ratio.num)
 				streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
-			else if (codecParams(stream)->sample_aspect_ratio.num)
-				streamInfo->sample_aspect_ratio = av_q2d(codecParams(stream)->sample_aspect_ratio);
-			streamInfo->W = codecParams(stream)->width;
-			streamInfo->H = codecParams(stream)->height;
+			else if (stream->codecpar->sample_aspect_ratio.num)
+				streamInfo->sample_aspect_ratio = av_q2d(stream->codecpar->sample_aspect_ratio);
+			streamInfo->W = stream->codecpar->width;
+			streamInfo->H = stream->codecpar->height;
 			if (!stillImage)
 				streamInfo->FPS = av_q2d(stream->r_frame_rate);
 
@@ -968,9 +904,9 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
 			break;
 		}
-		case AVMEDIA_TYPE_ATTACHMENT:
+		case QMPLAY2_TYPE_ATTACHMENT:
 			streamInfo->title = getTag(stream->metadata, "filename", false);
-			switch (codecParams(stream)->codec_id)
+			switch (stream->codecpar->codec_id)
 			{
 				case AV_CODEC_ID_TTF:
 					streamInfo->codec_name = "TTF";

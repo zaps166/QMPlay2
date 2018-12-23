@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
+    headers/QMPlay2Lib.hpp
     headers/QMPlay2Core.hpp
     headers/Functions.hpp
     headers/Settings.hpp
@@ -49,6 +50,7 @@ set(QMPLAY2_HDR
     headers/Notifies.hpp
     headers/NotifiesTray.hpp
     headers/MkvMuxer.hpp
+    headers/CppUtils.hpp
 )
 
 set(QMPLAY2_SRC
@@ -85,6 +87,7 @@ set(QMPLAY2_SRC
     Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
+    PixelFormats.cpp
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
@@ -100,6 +103,8 @@ endif()
 if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
     set_source_files_properties(Version.cpp PROPERTIES COMPILE_DEFINITIONS QMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
 endif()
+
+add_definitions(-DQMPLAY2SHAREDLIB_LIBRARY)
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_HDR headers/NotifiesFreedesktop.hpp)
@@ -118,10 +123,10 @@ set(QMPLAY2_RESOURCES
     languages.qrc
 )
 
-pkg_check_modules(LIBAVFORMAT libavformat>=56.15.102 REQUIRED)
-pkg_check_modules(LIBAVCODEC libavcodec>=56.13.100 REQUIRED)
-pkg_check_modules(LIBSWSCALE libswscale>=2.5.102 REQUIRED)
-pkg_check_modules(LIBAVUTIL libavutil>=54.15.100 REQUIRED)
+pkg_check_modules(LIBAVFORMAT libavformat>=57.40.101 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=57.48.101 REQUIRED)
+pkg_check_modules(LIBSWSCALE libswscale>=4.1.100 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=55.27.100 REQUIRED)
 
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
@@ -155,12 +160,12 @@ include_directories(
 
 if(USE_AVRESAMPLE)
     add_definitions(-DQMPLAY2_AVRESAMPLE)
-    pkg_check_modules(LIBAVRESAMPLE libavresample>=1.2.0 REQUIRED)
+    pkg_check_modules(LIBAVRESAMPLE libavresample>=4.0.0 REQUIRED)
     list(APPEND LIBQMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
     include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
 else()
-    pkg_check_modules(LIBSWRESAMPLE libswresample>=0.18.100 REQUIRED)
+    pkg_check_modules(LIBSWRESAMPLE libswresample>=2.1.100 REQUIRED)
     list(APPEND LIBQMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
     include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})

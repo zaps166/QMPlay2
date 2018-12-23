@@ -63,10 +63,6 @@
 	#define ICONS_FROM_THEME
 #endif
 
-#ifdef Q_OS_WIN
-	#include <windows.h>
-#endif
-
 class Page3 : public QWidget
 {
 public:
@@ -143,6 +139,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("BlurCovers", true);
 	QMPSettings.init("ShowDirCovers", true);
 	QMPSettings.init("AutoOpenVideoWindow", true);
+	QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
 	if (!QMPSettings.contains("AutoUpdates"))
 		QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
 	QMPSettings.init("MainWidget/TabPositionNorth", false);
@@ -151,6 +148,7 @@ void SettingsWidget::InitSettings()
 #endif
 	QMPSettings.init("HideArtistMetadata", false);
 	QMPSettings.init("DisplayOnlyFileName", false);
+	QMPSettings.init("SkipPlaylistsWithinFiles", true);
 	QMPSettings.init("RestoreRepeatMode", false);
 	QMPSettings.init("StillImages", false);
 	QMPSettings.init("TrayNotifiesDefault", false);
@@ -174,6 +172,7 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("Samplerate", 48000);
 	QMPSettings.init("ForceChannels", false);
 	QMPSettings.init("Channels", 2);
+	QMPSettings.init("ResamplerFirst", true);
 	QMPSettings.init("ReplayGain/Enabled", false);
 	QMPSettings.init("ReplayGain/Album", false);
 	QMPSettings.init("ReplayGain/PreventClipping", true);
@@ -181,8 +180,9 @@ void SettingsWidget::InitSettings()
 	QMPSettings.init("ShowBufferedTimeOnSlider", true);
 	QMPSettings.init("WheelAction", true);
 	QMPSettings.init("WheelSeek", true);
-	QMPSettings.init("LeftMouseTogglePlay", false);
+	QMPSettings.init("LeftMouseTogglePlay", 0);
 	QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
+	QMPSettings.init("UnpauseWhenSeeking", false);
 	QMPSettings.init("StoreARatioAndZoom", false);
 	QMPSettings.init("SavePos", false);
 	QMPSettings.init("KeepZoom", false);
@@ -348,6 +348,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
 
 		page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
+		page1->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
 
 		page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
 #ifndef UPDATER
@@ -375,6 +376,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
 		page1->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
 		page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
+		page1->skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
 		page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
 		page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
 
@@ -435,6 +437,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		connect(page2->forceChannels, SIGNAL(toggled(bool)), page2->channelsB, SLOT(setEnabled(bool)));
 		page2->channelsB->setEnabled(page2->forceChannels->isChecked());
 
+		page2->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
+
 		page2->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
 		page2->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
 		page2->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
@@ -479,10 +483,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 		page2->silence->setChecked(QMPSettings.getBool("Silence"));
 		page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
 		page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
-		page2->leftMouseTogglePlay->setChecked(QMPSettings.getBool("LeftMouseTogglePlay"));
+		page2->leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
 
 		page2->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
 		page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
+
+		page2->unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
 
 		const QString modulesListTitle[3] = {
 			tr("Video output priority"),
@@ -666,11 +672,7 @@ void SettingsWidget::applyProxy()
 	Settings &QMPSettings = QMPlay2Core.getSettings();
 	if (!QMPSettings.getBool("Proxy/Use"))
 	{
-#ifdef Q_OS_WIN
-		SetEnvironmentVariableA("http_proxy", nullptr);
-#else
-		unsetenv("http_proxy");
-#endif
+		qunsetenv("http_proxy");
 	}
 	else
 	{
@@ -693,11 +695,7 @@ void SettingsWidget::applyProxy()
 			auth += '@';
 			proxyEnv.insert(7, auth);
 		}
-#ifdef Q_OS_WIN
-		SetEnvironmentVariableA("http_proxy", proxyEnv.toLocal8Bit());
-#else
-		setenv("http_proxy", proxyEnv.toLocal8Bit(), true);
-#endif
+		qputenv("http_proxy", proxyEnv.toLocal8Bit());
 	}
 }
 
@@ -786,6 +784,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("BlurCovers", page1->blurCoversB->isChecked());
 			QMPSettings.set("ShowDirCovers", page1->showDirCoversB->isChecked());
 			QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
+			QMPSettings.set("AutoRestoreMainWindowOnVideo", page1->autoRestoreMainWindowOnVideoB->isChecked());
 			QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());
 			QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
@@ -793,6 +792,7 @@ void SettingsWidget::apply()
 #endif
 			QMPSettings.set("HideArtistMetadata", page1->hideArtistMetadata->isChecked());
 			QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
+			QMPSettings.set("SkipPlaylistsWithinFiles", page1->skipPlaylistsWithinFiles->isChecked());
 			QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
 			QMPSettings.set("StillImages", page1->stillImages->isChecked());
 			if (page1->trayNotifiesDefault)
@@ -833,6 +833,7 @@ void SettingsWidget::apply()
 			QMPSettings.set("MaxVol", page2->maxVolB->value());
 			QMPSettings.set("ForceChannels", page2->forceChannels->isChecked());
 			QMPSettings.set("Channels", page2->channelsB->value());
+			QMPSettings.set("ResamplerFirst", page2->resamplerFirst->isChecked());
 			QMPSettings.set("ReplayGain/Enabled", page2->replayGain->isChecked());
 			QMPSettings.set("ReplayGain/Album", page2->replayGainAlbum->isChecked());
 			QMPSettings.set("ReplayGain/PreventClipping", page2->replayGainPreventClipping->isChecked());
@@ -852,8 +853,9 @@ void SettingsWidget::apply()
 			QMPSettings.set("Silence", page2->silence->isChecked());
 			QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
 			QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
-			QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->isChecked());
+			QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->checkState());
 			QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
+			QMPSettings.set("UnpauseWhenSeeking", page2->unpauseWhenSeekingB->isChecked());
 			QMPSettings.set("StoreARatioAndZoom", page2->storeARatioAndZoomB->isChecked());
 
 			QStringList videoWriters, audioWriters, decoders;

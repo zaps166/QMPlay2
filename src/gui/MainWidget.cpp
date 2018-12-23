@@ -57,7 +57,7 @@
 #include <Playlist.hpp>
 #include <AboutWidget.hpp>
 #include <AddressDialog.hpp>
-#include <VideoAdjustment.hpp>
+#include <VideoAdjustmentW.hpp>
 #include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
 #include <ScreenSaver.hpp>
@@ -113,7 +113,7 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	updater(this)
 {
-	QMPlay2GUI.videoAdjustment = new VideoAdjustment;
+	QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
 	QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
 	QMPlay2GUI.mainW = this;
 
@@ -123,7 +123,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 		/* Touchscreen found */
 		if (touchDev->type() == QTouchDevice::TouchScreen)
 		{
-			setStyle(QScopedPointer<MainWidgetTmpStyle>(new MainWidgetTmpStyle).data()); //Is it always OK?
+			MainWidgetTmpStyle mainWidgetTmpStyle;
+			setStyle(&mainWidgetTmpStyle);
 			break;
 		}
 	}
@@ -277,6 +278,9 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(playlistDock, SIGNAL(play(const QString &)), &playC, SLOT(play(const QString &)));
 	connect(playlistDock, SIGNAL(repeatEntry(bool)), &playC, SLOT(repeatEntry(bool)));
 	connect(playlistDock, SIGNAL(stop()), &playC, SLOT(stop()));
+	connect(playlistDock, &PlaylistDock::addAndPlayRestoreWindow, this, [this] {
+		m_restoreWindowOnVideo = true;
+	});
 
 	connect(seekS, SIGNAL(valueChanged(int)), this, SLOT(seek(int)));
 	connect(seekS, SIGNAL(mousePosition(int)), this, SLOT(mousePositionOnSlider(int)));
@@ -291,7 +295,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(&QMPlay2Core, SIGNAL(statusBarMessage(const QString &, int)), this, SLOT(statusBarMessage(const QString &, int)));
 	connect(&QMPlay2Core, SIGNAL(showSettings(const QString &)), this, SLOT(showSettings(const QString &)));
 
-	connect(QMPlay2GUI.videoAdjustment, SIGNAL(videoAdjustmentChanged()), &playC, SLOT(videoAdjustmentChanged()));
+	connect(QMPlay2GUI.videoAdjustment, SIGNAL(videoAdjustmentChanged(const QString &)), &playC, SLOT(videoAdjustmentChanged(const QString &)));
 
 	connect(&playC, SIGNAL(chText(const QString &)), stateL, SLOT(setText(const QString &)));
 	connect(&playC, SIGNAL(updateLength(int)), this, SLOT(setSeekSMaximum(int)));
@@ -310,7 +314,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	connect(&playC, SIGNAL(updateBufferedRange(int, int)), seekS, SLOT(drawRange(int, int)));
 	connect(&playC, SIGNAL(updateWindowTitle(const QString &)), this, SLOT(updateWindowTitle(const QString &)));
 	connect(&playC, SIGNAL(updateImage(const QImage &)), videoDock, SLOT(updateImage(const QImage &)));
-	connect(&playC, SIGNAL(videoStarted()), this, SLOT(videoStarted()));
+	connect(&playC, &PlayClass::videoStarted, this, &MainWidget::videoStarted);
+	connect(&playC, &PlayClass::videoNotStarted, this, [this] {
+		m_restoreWindowOnVideo = false;
+	});
 	connect(&playC, SIGNAL(uncheckSuspend()), this, SLOT(uncheckSuspend()));
 	connect(&playC, &PlayClass::setVideoCheckState, this, [this](bool rotate90, bool hFlip, bool vFlip, bool spherical) {
 		menuBar->playback->videoFilters->rotate90->setChecked(rotate90);
@@ -322,6 +329,11 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 
 	if (settings.getBool("MainWidget/TabPositionNorth"))
 		setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
+
+	connect(&m_fullScreenTimer, &QTimer::timeout,
+			this, &MainWidget::showFullScreen);
+	m_fullScreenTimer.setSingleShot(true);
+	m_fullScreenTimer.setInterval(10);
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	const bool menuHidden = settings.getBool("MainWidget/MenuHidden", false);
@@ -348,6 +360,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	QMPlay2GUI.menuBar->widgets->lockWidgetsAct = lockWidgetsAct;
 
 	QMPlay2GUI.menuBar->setKeyShortcuts();
+	QMPlay2GUI.videoAdjustment->setKeyShortcuts();
 
 	volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
 	if (settings.getBool("Mute"))
@@ -381,7 +394,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
 	bool noplay = false;
-	for (const auto &argument : arguments)
+	for (const auto &argument : asConst(arguments))
 	{
 		const QString &param = argument.first;
 		const QString &data  = argument.second;
@@ -497,6 +510,7 @@ void MainWidget::processParam(const QString &param, const QString &data)
 		{
 			showNormal();
 			activateWindow();
+			raise();
 		}
 	}
 	else if (param == "stop")
@@ -540,14 +554,29 @@ void MainWidget::updateWindowTitle(const QString &t)
 	title.replace('\n', ' ');
 	setWindowTitle(title);
 }
-void MainWidget::videoStarted()
+void MainWidget::videoStarted(bool noVideo)
 {
-	if (QMPlay2Core.getSettings().getBool("AutoOpenVideoWindow"))
+	const bool autoRestoreMainWindowOnVideo = m_restoreWindowOnVideo ? QMPlay2Core.getSettings().getBool("AutoRestoreMainWindowOnVideo") : false;
+	const bool autoOpenVideoWindow = QMPlay2Core.getSettings().getBool("AutoOpenVideoWindow");
+	if (autoRestoreMainWindowOnVideo || (noVideo && autoOpenVideoWindow))
 	{
 		if (!videoDock->isVisible())
 			videoDock->show();
 		videoDock->raise();
 	}
+	if (autoRestoreMainWindowOnVideo)
+	{
+		if (!isVisible())
+		{
+			toggleVisibility();
+		}
+		else
+		{
+			activateWindow();
+			raise();
+		}
+	}
+	m_restoreWindowOnVideo = false;
 }
 
 void MainWidget::togglePlay()
@@ -728,6 +757,7 @@ void MainWidget::toggleVisibility()
 			maximized = false;
 		}
 		activateWindow();
+		raise();
 	}
 #endif
 }
@@ -760,6 +790,7 @@ void MainWidget::createMenuBar()
 	connect(menuBar->playlist->newGroup, SIGNAL(triggered()), playlistDock, SLOT(newGroup()));
 	connect(menuBar->playlist->renameGroup, SIGNAL(triggered()), playlistDock, SLOT(renameGroup()));
 	connect(menuBar->playlist->lock, SIGNAL(triggered()), playlistDock, SLOT(toggleLock()));
+	connect(menuBar->playlist->alwaysSync, &QAction::triggered, playlistDock, &PlaylistDock::alwaysSyncTriggered);
 	connect(menuBar->playlist->delEntries, SIGNAL(triggered()), playlistDock, SLOT(delEntries()));
 	connect(menuBar->playlist->delNonGroupEntries, SIGNAL(triggered()), playlistDock, SLOT(delNonGroupEntries()));
 	connect(menuBar->playlist->clear, SIGNAL(triggered()), playlistDock, SLOT(clear()));
@@ -975,6 +1006,7 @@ void MainWidget::toggleFullScreen()
 #ifndef Q_OS_ANDROID
 	static bool maximized;
 #endif
+	m_fullScreenTimer.stop();
 #ifdef Q_OS_MACOS
 	if (isFullScreen())
 	{
@@ -1043,7 +1075,11 @@ void MainWidget::toggleFullScreen()
 		fullScreen = true;
 
 #ifndef Q_OS_MACOS
-		showFullScreen();
+		hide();
+		if (underMouse())
+			m_fullScreenTimer.start();
+		else
+			showFullScreen();
 #else
 		setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 		setGeometry(window()->windowHandle()->screen()->geometry());
@@ -1601,7 +1637,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 				playlistDock->show();
 				infoDock->show();
 
-				for (QMPlay2Extensions *QMPlay2Ext : visibleQMPlay2Extensions)
+				for (QMPlay2Extensions *QMPlay2Ext : asConst(visibleQMPlay2Extensions))
 					if (!QMPlay2Ext->isVisualization())
 						if (DockWidget *dw = QMPlay2Ext->getDockWidget())
 						{
@@ -1618,8 +1654,15 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 }
 void MainWidget::leaveEvent(QEvent *e)
 {
-	if (fullScreen || isCompactView)
+	if (m_fullScreenTimer.isActive())
+	{
+		m_fullScreenTimer.stop();
+		showFullScreen();
+	}
+	else if (fullScreen || isCompactView)
+	{
 		QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); //Qt5 can't hide docks properly here
+	}
 	QMainWindow::leaveEvent(e);
 }
 void MainWidget::closeEvent(QCloseEvent *e)

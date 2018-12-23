@@ -76,17 +76,15 @@ void VisWidget::stop()
 {
 #ifdef USE_OPENGL
 	if (glW)
-	{
-		glW->update();
-		return;
-	}
+		m_pendingUpdate = true;
 #endif
-	update();
+	updateVisualization();
 }
 
 #ifdef USE_OPENGL
 void VisWidget::setUseOpenGL(bool b)
 {
+	m_pendingUpdate = false;
 	if (!b)
 		b = (QGuiApplication::platformName() == "wayland");
 	if (b && !glW)
@@ -147,6 +145,7 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
 	{
 		QPainter p(glW);
 		paint(p);
+		m_pendingUpdate = false;
 		return true;
 	}
 #endif
@@ -174,6 +173,10 @@ void VisWidget::visibilityChanged(bool v)
 		stop();
 	else if (!stopped)
 		start();
+#ifdef USE_OPENGL
+	else if (dockWidgetVisible && m_pendingUpdate)
+		updateVisualization();
+#endif
 }
 void VisWidget::updateVisualization()
 {

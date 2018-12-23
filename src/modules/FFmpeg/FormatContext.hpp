@@ -30,10 +30,6 @@ extern "C"
 	#include <libavformat/version.h>
 }
 
-#if LIBAVFORMAT_VERSION_INT >= 0x382400 // >= 56.36.00
-	#define MP3_FAST_SEEK
-#endif
-
 struct AVFormatContext;
 struct AVDictionary;
 struct AVStream;
@@ -45,7 +41,7 @@ class FormatContext
 {
 	Q_DECLARE_TR_FUNCTIONS(FormatContext)
 public:
-	FormatContext(QMutex &avcodec_mutex, bool reconnectStreamed = false);
+	FormatContext(bool reconnectStreamed = false);
 	~FormatContext();
 
 	bool metadataChanged() const;
@@ -96,9 +92,6 @@ private:
 	bool isPaused, fixMkvAss;
 	mutable bool isMetadataChanged;
 	double lastTime, startTime;
-#ifndef MP3_FAST_SEEK
-	qint64 seekByByteOffset;
-#endif
 	bool isOneStreamOgg;
 	bool forceCopy;
 
@@ -109,6 +102,4 @@ private:
 	bool stillImage;
 
 	double lengthToPlay;
-
-	QMutex &avcodec_mutex;
 };

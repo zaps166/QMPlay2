@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QDockWidget>
 
 class DockWidget : public QDockWidget
@@ -36,7 +38,7 @@ public:
 		setTitleBarVisible(titleBarVisible);
 	}
 private:
-	class Q_DECL_EXPORT EmptyW final : public QWidget
+	class QMPLAY2SHAREDLIB_EXPORT EmptyW final : public QWidget
 	{
 		QSize sizeHint() const override;
 	} emptyW;

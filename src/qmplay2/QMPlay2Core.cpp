@@ -20,10 +20,12 @@
 
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
+#include <CppUtils.hpp>
 #include <Playlist.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
 
+#include <QLoggingCategory>
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
@@ -41,12 +43,30 @@
 	#include <QStandardPaths>
 #endif
 
+#include <cstdarg>
 #include <cstdio>
 
 extern "C"
 {
 	#include <libavformat/avformat.h>
 	#include <libavutil/log.h>
+}
+
+/**/
+
+Q_LOGGING_CATEGORY(ffmpeglog, "FFmpegLog")
+
+static void avQMPlay2LogHandler(void *avcl, int level, const char *fmt, va_list vl)
+{
+	if (level <= AV_LOG_FATAL)
+	{
+		const QByteArray msg = QString::vasprintf(fmt, vl).trimmed().toUtf8();
+		qCCritical(ffmpeglog) << msg.constData();
+	}
+	else
+	{
+		av_log_default_callback(avcl, level, fmt, vl);
+	}
 }
 
 /**/
@@ -112,7 +132,7 @@ QString QMPlay2CoreClass::getLibDir()
 			{
 				quintptr addrBegin, addrEnd;
 				char c; //'-' on Linux, ' ' on FreeBSD
-				const int n = sscanf(line.data(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
+				const int n = sscanf(line.constData(), "%p%c%p", (void **)&addrBegin, &c, (void **)&addrEnd);
 				if (n != 3)
 					continue;
 				if (funcAddr >= addrBegin && funcAddr <= addrEnd)
@@ -231,7 +251,10 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #ifndef QT_DEBUG
 	av_log_set_level(AV_LOG_ERROR);
 #endif
+	av_log_set_callback(avQMPlay2LogHandler);
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
 	av_register_all();
+#endif
 	avformat_network_init();
 
 	if (loadModules)
@@ -257,7 +280,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 		}
 
 		QStringList pluginsName;
-		for (const QFileInfo &fInfo : pluginsList)
+		for (const QFileInfo &fInfo : asConst(pluginsList))
 		{
 			if (QLibrary::isLibrary(fInfo.filePath()))
 			{
@@ -334,7 +357,7 @@ void QMPlay2CoreClass::quit()
 {
 	if (settingsDir.isEmpty())
 		return;
-	for (Module *pluginInstance : pluginsInstance)
+	for (Module *pluginInstance : asConst(pluginsInstance))
 		delete pluginInstance;
 	pluginsInstance.clear();
 	videoFilters.clear();
@@ -411,15 +434,15 @@ void QMPlay2CoreClass::log(const QString &txt, int logFlags)
 			logs.append(txt);
 	}
 	if (logFlags & AddTimeToLog)
-		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss") + "] ";
+		date = "[" + QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss.zzz") + "] ";
 	if (logFlags & InfoLog)
 	{
-		fprintf(stdout, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stdout, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stdout);
 	}
 	else if (logFlags & ErrorLog)
 	{
-		fprintf(stderr, "%s%s\n", date.toLocal8Bit().data(), txt.toLocal8Bit().data());
+		fprintf(stderr, "%s%s\n", date.toLocal8Bit().constData(), txt.toLocal8Bit().constData());
 		fflush(stderr);
 	}
 	if (logFlags & SaveLog)

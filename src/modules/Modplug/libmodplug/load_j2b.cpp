@@ -14,76 +14,10 @@
 #include "stdafx.hpp"
 #include "sndfile.hpp"
 
-/* ZLIB */
-#include <zlib.h>
+#include <QByteArray>
+#include <QtEndian>
 
 namespace QMPlay2ModPlug {
-
-static bool Inflate(const BYTE *data, DWORD size, BYTE *&out_arr, const DWORD out_size)
-{
-	const DWORD CHUNK = 16384;
-	DWORD bytes_done = 0;
-	Bytef out[CHUNK];
-	int err;
-
-	out_arr = NULL;
-
-	/* Obsługa biblioteki zlib do dekompresji danych */
-
-	z_stream strm;
-	strm.zalloc = Z_NULL;
-	strm.zfree = Z_NULL;
-	strm.opaque = Z_NULL;
-
-	if (!out_size || inflateInit(&strm) != Z_OK)
-		return false;
-
-	do
-	{
-		strm.avail_in = size > CHUNK ? CHUNK : size;
-		strm.next_in = (Bytef *)data;
-		data += strm.avail_in;
-		size -= strm.avail_in;
-
-		do
-		{
-			strm.avail_out = CHUNK;
-			strm.next_out = out;
-
-			err = inflate(&strm, Z_NO_FLUSH);
-			if (err != Z_STREAM_END && err != Z_OK) //Jakikolwiek błąd
-				break;
-
-			DWORD to_append = CHUNK-strm.avail_out;
-			if (to_append + bytes_done > out_size)
-			{
-				err = Z_BUF_ERROR;
-				break;
-			}
-			BYTE *out_arr_2 = (BYTE *)realloc(out_arr, to_append + bytes_done);
-			if (!out_arr_2)
-			{
-				err = Z_MEM_ERROR;
-				break;
-			}
-			out_arr = out_arr_2;
-			memcpy(out_arr + bytes_done, out, to_append);
-			bytes_done += to_append;
-		} while (!strm.avail_out);
-	} while (err == Z_OK);
-
-	inflateEnd(&strm);
-
-	if ((err != Z_STREAM_END && err != Z_OK) || out_size != bytes_done)
-	{
-		free(out_arr);
-		out_arr = NULL;
-		return false;
-	}
-
-	return true;
-}
-/**/
 
 #include <ByteArray.hpp>
 
@@ -103,8 +37,7 @@ struct RIFF
 class RIFFList
 {
 public:
-	RIFFList(const BYTE *lpStream, const DWORD dwMemLength, const bool skip1B) :
-		riff_arr(NULL), riff_count(0)
+	RIFFList(const BYTE *lpStream, const DWORD dwMemLength, const bool skip1B)
 	{
 		ByteArray data(lpStream, dwMemLength);
 		while (!data.atEnd())
@@ -119,7 +52,7 @@ public:
 			RIFF &riff = riff_arr[riff_count-1];
 			riff.type = data.getDWORD();
 			riff.chunk_count = 0;
-			riff.chunk_arr = NULL;
+			riff.chunk_arr = nullptr;
 
 			while (!data.atEnd())
 			{
@@ -163,8 +96,8 @@ public:
 		return riff_arr[idx];
 	}
 private:
-	RIFF *riff_arr;
-	DWORD riff_count;
+	RIFF *riff_arr = nullptr;
+	DWORD riff_count = 0;
 };
 
 static inline BYTE ClipBYTE(const BYTE &src, const BYTE &max)
@@ -246,8 +179,8 @@ static void LoadInstrument(CSoundFile &c, const BYTE inst_idx, const BYTE *const
 		enum { J2B_AM_ENV_VOL, J2B_AM_ENV_PITCH, J2B_AM_ENV_PAN };
 		for (BYTE t = J2B_AM_ENV_VOL; t <= J2B_AM_ENV_PAN; ++t)
 		{
-			WORD *Points = NULL;
-			BYTE *Env = NULL;
+			WORD *Points = nullptr;
+			BYTE *Env = nullptr;
 			switch (t)
 			{
 				case J2B_AM_ENV_VOL:
@@ -362,37 +295,44 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 	if (dwMemLength <= 24)
 		return false;
 
-	bool isAM = false;
-
+	QByteArray uncompressed_qbytearray;
 	DWORD uncompressed_size = 0;
-	BYTE *uncompressed_arr = NULL;
+	const BYTE *uncompressed_arr = nullptr;
 
-	if (!strncmp((const char *)lpStream, "MUSE", 4))
+	if (strncmp((const char *)lpStream, "MUSE", 4) == 0)
 	{
 		ByteArray data(lpStream, dwMemLength);
 		data += 20;
 		uncompressed_size = data.getDWORD();
 		if (uncompressed_size < 12)
 			return false;
-		if (!Inflate(data, data.remaining(), uncompressed_arr, uncompressed_size))
+
+		QByteArray compressed(sizeof(uncompressed_size), Qt::Uninitialized);
+		qToBigEndian(uncompressed_size, (uchar *)compressed.data());
+		compressed.append(data, data.remaining());
+
+		uncompressed_qbytearray = qUncompress(compressed);
+		if (uncompressed_size != (DWORD)uncompressed_qbytearray.size())
 			return false;
-		isAM = !strncmp((const char *)uncompressed_arr + 8, "AM  ", 4);
-		if (!isAM && strncmp((const char *)uncompressed_arr + 8, "AMFF", 4))
-		{
-			delete[] uncompressed_arr;
-			return false;
-		}
+
+		uncompressed_arr = (const BYTE *)uncompressed_qbytearray.constData();
+		uncompressed_size = uncompressed_qbytearray.size();
 	}
-	else if (!strncmp((const char *)lpStream, "RIFF", 4))
+	else if (strncmp((const char *)lpStream, "RIFF", 4) == 0)
 	{
-		isAM = !strncmp((const char *)lpStream + 8, "AM  ", 4);
-		if (!isAM && strncmp((const char *)lpStream + 8, "AMFF", 4))
-			return false;
+		uncompressed_arr = lpStream;
+		uncompressed_size = dwMemLength;
 	}
 	else
+	{
+		return false;
+	}
+
+	const bool isAM = (strncmp((const char *)uncompressed_arr + 8, "AM  ", 4) == 0);
+	if (!isAM && strncmp((const char *)uncompressed_arr + 8, "AMFF", 4) != 0)
 		return false;
 
-	RIFFList riff_list(uncompressed_arr ? uncompressed_arr : lpStream, uncompressed_arr ? uncompressed_size : dwMemLength, isAM);
+	RIFFList riff_list(uncompressed_arr, uncompressed_size, isAM);
 	for (DWORD i = 0; i < riff_list.count(); ++i)
 	{
 		for (DWORD j = 0; j < riff_list[i].chunk_count; ++j)
@@ -548,7 +488,6 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 		}
 	}
 
-	delete[] uncompressed_arr;
 	return m_nPattern && m_nChannels && m_nInstruments && m_nSamples;
 }
 

@@ -1,10 +1,49 @@
-Changes in QMPlay2 build 18.02.05:
+Changes in QMPlay2 build 18.11.20:
+	- fixed loading Ogg Opus file when file extension is "ogg" in tag editor,
+	- improved Youtube detection by YouTube extension (youtu.be),
+	- fixed mono playback with different volume per channel,
+	- added key shortcuts and OSD for video adjustments,
+	- updated Ukrainian and Hungarian translation files,
+	- fixed YouTube seeking on streams with subtitles,
+	- added *.opus to Windows file association,
+	- replaced Datmusic by MyFreeMP3,
+	- removed direct zlib dependency,
+	- CUVID fixes for FFmpeg 4.0,
+	- minor bugfix,
+
+Changes in QMPlay2 build 18.07.03:
+	- added button to open URL from playlist entry properties,
+	- fix possible crash when group is synchronized,
+	- use new FFmpeg 3.1 API for decoding frames,
+	- autodetection of pasted YouTube address,
+	- fix sorting playlist items by length,
+	- drop support for FFmpeg < 3.1,
+	- add FFmpeg 4.0 compatibility,
+	- minor QPainter HiDPI fix,
+
+Changes in QMPlay2 build 18.04.01:
+	- enable audio fade in/out on play/stop for video contents,
+	- fix problems with playlist quick sync,
+	- update Hungarian translation file,
+	- update for Wbijam changes,
+	- fix proxy on Windows,
+
+Changes in QMPlay2 build 18.03.02:
+	- allow to move video and subtitles in OpenGL2 video output (Ctrl and Shift key modifiers),
+	- add option to automatically perform non-recursive quick sync on playlist group,
+	- add high quality video scaling in OpenGL2 video output (disabled by default),
+	- add bit-perfect audio option for PortAudio module on macOS (René Bertin),
+	- automatically restore main window when new video file is loaded (option),
 	- move "My radio stations" into "Radio Browser" tab and add Drag and drop,
 	- properly open YouTube M3U8 live streams (through youtube-dl),
-	- allow to move video and subtitles in OpenGL2 video output,
+	- option to convert media file after download (e.g. to MP3),
+	- audio fade in/out is now disabled for video contents,
+	- don't unpause when seeking (default option),
+	- QPainter video output optimizations,
 	- add sorting YouTube search results,
 	- add Hungarian translation file,
 	- fix subtitles on YouTube,
+	- contrast improvements,
 
 Changes in QMPlay2 build 17.12.31:
 	- automaticaly rotate movie or set spherical view if is set in metadata,

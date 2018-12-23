@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>Paramètres du module additionnel</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -404,29 +408,6 @@
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Titre</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artiste</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Durée</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DeintSettingsW</name>
@@ -632,6 +613,22 @@
         <source>Play</source>
         <translation>Lire</translation>
     </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -666,6 +663,57 @@
     <message>
         <source>Enter address</source>
         <translation type="unfinished">Entrer une adresse</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="unfinished">&amp;Ajouter</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Supprimer</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -715,6 +763,10 @@
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -832,10 +884,6 @@
     <message>
         <source>Browse</source>
         <translation>Parcourir</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Use system icon set</source>
@@ -963,6 +1011,14 @@
     </message>
     <message>
         <source>Hide artist metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1753,6 +1809,22 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1766,6 +1838,25 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Move down</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Titre</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artiste</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Durée</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2225,6 +2316,18 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Store aspect ratio and zoom in config file</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2413,6 +2516,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Always sync</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3019,6 +3126,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>
@@ -3128,30 +3239,74 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Réinitialiser</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>Brillance</translation>
+        <translation type="unfinished">Brillance</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Contraste</translation>
+        <translation type="unfinished">Contraste</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Saturation</translation>
+        <translation type="unfinished">Saturation</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Teinte</translation>
+        <translation type="unfinished">Teinte</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Résolution</translation>
+        <translation type="unfinished">Résolution</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation>Réinitialiser</translation>
+        <source>Reset video adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3337,6 +3492,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

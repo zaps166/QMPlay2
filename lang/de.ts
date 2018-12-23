@@ -118,6 +118,10 @@
         <source>Additional module parameter</source>
         <translation>Erweiterte Modulparameter</translation>
     </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddressDialog</name>
@@ -404,29 +408,6 @@
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>Kann OpenGL 2-Modul nicht öffnen</translation>
     </message>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>Für die H264- und HEVC-Unterstützung ist eine Kompilierung mit FFmpeg 3.1 oder höher erforderlich!</translation>
-    </message>
-</context>
-<context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artist</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Länge</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Suche auf Datmusic</translation>
-    </message>
 </context>
 <context>
     <name>DeintSettingsW</name>
@@ -632,6 +613,22 @@
         <source>Play</source>
         <translation>Wiedergabe</translation>
     </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -666,6 +663,57 @@
     <message>
         <source>Enter address</source>
         <translation>Adresse eingeben</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="unfinished">&amp;Hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Entfernen</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -716,6 +764,10 @@
     <message>
         <source>Choose a file that contains more than one track</source>
         <translation>Wähle eine Datei, die mehr als eine Spur enthält</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -832,10 +884,6 @@
     <message>
         <source>Browse</source>
         <translation>Blättern</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Use system icon set</source>
@@ -964,6 +1012,14 @@
     <message>
         <source>Hide artist metadata</source>
         <translation>Künstler-Metadaten ausblenden</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Hauptfenster automatisch wiederherstellen, wenn eine neue Videodatei geladen wird</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1464,7 +1520,7 @@
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>Hurry Up</translation>
+        <translation>Beschleunigen</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
@@ -1568,7 +1624,7 @@
     </message>
     <message>
         <source>Noise reduction</source>
-        <translation>Noise Reduction</translation>
+        <translation>Rauschunterdrückung</translation>
     </message>
     <message>
         <source>Using the program via MPRIS2 interface</source>
@@ -1756,6 +1812,22 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Deaktivieren, wenn Sie Probleme mit der Decodierung von MPEG4 (DivX5) Videos haben</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation>Erstklassige Videoskalierung</translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation>Trilineare Filterung zur Reduktion und bikubische Filterung zur Vergrößerung.</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1770,6 +1842,25 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <message>
         <source>Move down</source>
         <translation>Absenken</translation>
+    </message>
+</context>
+<context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished">Titel</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="unfinished">Artist</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation type="unfinished">Länge</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2226,6 +2317,18 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
+        <translation>Speichere Seitenverhältnis und Vergrößerung in der Konfigurationsdatei</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Fortsetzen der Suche</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation>Teilweise geprüft bedeutet, dass es eine Verzögerung zwischen Klicken und Pause gibt</translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2417,6 +2520,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <message>
         <source>&amp;Quick group synchronization</source>
         <translation>&amp;Schnelle Gruppensynchronisation</translation>
+    </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3025,6 +3132,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>Lyrics</source>
         <translation>Liedtext</translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>
@@ -3134,30 +3245,74 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Zurücksetzen</translation>
+    </message>
     <message>
         <source>Brightness</source>
-        <translation>Helligkeit</translation>
+        <translation type="unfinished">Helligkeit</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Kontrast</translation>
+        <translation type="unfinished">Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Sättigung</translation>
+        <translation type="unfinished">Sättigung</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Farbton</translation>
+        <translation type="unfinished">Farbton</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Schärfe</translation>
+        <translation type="unfinished">Schärfe</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation>Zurücksetzen</translation>
+        <source>Reset video adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3344,6 +3499,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
         <translation>&quot;youtube-dl&quot; Download wurde abgebrochen!</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

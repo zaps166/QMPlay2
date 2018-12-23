@@ -217,43 +217,41 @@ void OpenGL2Common::initializeGL()
 	shaderProgramOSD = new QOpenGLShaderProgram;
 
 	/* YCbCr shader */
-	if (shaderProgramVideo->shaders().isEmpty())
+	shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
+	QByteArray videoFrag;
+	if (numPlanes == 1)
 	{
-		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
-		QByteArray VideoFrag;
-		if (numPlanes == 1)
+		videoFrag = readShader(":/VideoRGB.frag");
+		if (canUseHueSharpness)
 		{
-			VideoFrag = readShader(":/VideoRGB.frag");
-			if (canUseHueSharpness)
-			{
-				//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-				VideoFrag.prepend("#define Sharpness\n");
-			}
+			//Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			videoFrag.prepend("#define Sharpness\n");
 		}
-		else
-		{
-			VideoFrag = readShader(":/VideoYCbCr.frag");
-			if (canUseHueSharpness)
-			{
-				//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-				VideoFrag.prepend("#define HueAndSharpness\n");
-			}
-			if (numPlanes == 2)
-				VideoFrag.prepend("#define NV12\n");
-		}
-		if (target == GL_TEXTURE_RECTANGLE_ARB)
-			VideoFrag.prepend("#define TEXTURE_RECTANGLE\n");
-		shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, VideoFrag);
 	}
+	else
+	{
+		videoFrag = readShader(":/VideoYCbCr.frag");
+		if (canUseHueSharpness)
+		{
+			//Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
+			videoFrag.prepend("#define HueAndSharpness\n");
+		}
+		if (numPlanes == 2)
+			videoFrag.prepend("#define NV12\n");
+	}
+	if (target == GL_TEXTURE_RECTANGLE_ARB)
+		videoFrag.prepend("#define TEXTURE_RECTANGLE\n");
+	if (hqScaling)
+	{
+		constexpr const char *getTexelDefine = "#define getTexel texture\n";
+		Q_ASSERT(videoFrag.contains(getTexelDefine));
+		videoFrag.replace(getTexelDefine, readShader(":/Bicubic.frag", true));
+	}
+	shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, videoFrag);
 	if (shaderProgramVideo->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramVideo->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramVideo->attributeLocation("aPosition");
-		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
-		{
-			texCoordYCbCrLoc = newTexCoordLoc;
-			positionYCbCrLoc = newPositionLoc;
-		}
+		texCoordYCbCrLoc = shaderProgramVideo->attributeLocation("aTexCoord");
+		positionYCbCrLoc = shaderProgramVideo->attributeLocation("aPosition");
 		shaderProgramVideo->setUniformValue((numPlanes == 1) ? "uRGB" : "uY" , 0);
 		if (numPlanes == 2)
 			shaderProgramVideo->setUniformValue("uCbCr", 1);
@@ -272,20 +270,12 @@ void OpenGL2Common::initializeGL()
 	}
 
 	/* OSD shader */
-	if (shaderProgramOSD->shaders().isEmpty())
-	{
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
-		shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
-	}
+	shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
+	shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
 	if (shaderProgramOSD->bind())
 	{
-		const qint32 newTexCoordLoc = shaderProgramOSD->attributeLocation("aTexCoord");
-		const qint32 newPositionLoc = shaderProgramOSD->attributeLocation("aPosition");
-		if (newTexCoordLoc != newPositionLoc) //If new locations are invalid, just leave them untouched...
-		{
-			texCoordOSDLoc = newTexCoordLoc;
-			positionOSDLoc = newPositionLoc;
-		}
+		texCoordOSDLoc = shaderProgramOSD->attributeLocation("aTexCoord");
+		positionOSDLoc = shaderProgramOSD->attributeLocation("aPosition");
 		shaderProgramOSD->setUniformValue("uTex", 3);
 		shaderProgramOSD->release();
 	}
@@ -382,13 +372,20 @@ void OpenGL2Common::paintGL()
 					}
 				}
 
+				m_textureSize = QSize(widths[0], heights[0]);
+
+				if (hqScaling)
+				{
+					// Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
+					maybeSetMipmaps(widget()->devicePixelRatioF());
+				}
+
 				/* Prepare textures, register GL textures */
 				const bool hasHwAccelError = hwAccelError;
 				hwAccelError = !hwAccellnterface->init(&textures[1]);
 				if (hwAccelError && !hasHwAccelError)
 					QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
-				pixelStep = QVector2D(1.0f / widths[0], 1.0f / heights[0]);
 
 				/* Prepare texture coordinates */
 				texCoordYCbCr[2] = texCoordYCbCr[6] = 1.0f;
@@ -409,7 +406,7 @@ void OpenGL2Common::paintGL()
 					const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
 					const GLsizei h = heights[p];
 					if (p == 0)
-						pixelStep = QVector2D(1.0f / w, 1.0f / h);
+						m_textureSize = QSize(w, h);
 					if (hasPbo)
 					{
 						glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
@@ -421,6 +418,9 @@ void OpenGL2Common::paintGL()
 
 				/* Prepare texture coordinates */
 				texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
+
+				if (hqScaling)
+					maybeSetMipmaps(widget()->devicePixelRatioF());
 			}
 			resetDone = true;
 			hasImage = false;
@@ -448,6 +448,8 @@ void OpenGL2Common::paintGL()
 			{
 				glActiveTexture(GL_TEXTURE0 + p);
 				glBindTexture(target, textures[p + 1]);
+				if (m_useMipmaps)
+					glGenerateMipmap(target);
 			}
 		}
 		else
@@ -491,6 +493,8 @@ void OpenGL2Common::paintGL()
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
 					data += videoFrame.linesize[p];
 				}
+				if (m_useMipmaps)
+					glGenerateMipmap(GL_TEXTURE_2D);
 			}
 			if (hasPbo)
 				glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
@@ -549,7 +553,15 @@ void OpenGL2Common::paintGL()
 			shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
 			shaderProgramVideo->setUniformValue("uSharpness", sharpness);
 		}
-		shaderProgramVideo->setUniformValue("uStep", pixelStep);
+		if (hqScaling)
+		{
+			const qreal dpr = widget()->devicePixelRatioF();
+			if (!resetDone)
+				maybeSetMipmaps(dpr);
+			const bool useBicubic = (W * dpr > m_textureSize.width() || H * dpr > m_textureSize.height());
+			shaderProgramVideo->setUniformValue("uBicubic", useBicubic ? 1 : 0);
+		}
+		shaderProgramVideo->setUniformValue("uTextureSize", m_textureSize);
 
 		doReset = !resetDone;
 		setMatrix = true;
@@ -698,7 +710,7 @@ void OpenGL2Common::testGLInternal()
 		if (dotIdx > 0)
 		{
 			const int vIdx = glVersionStr.lastIndexOf(' ', dotIdx);
-			if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().data(), "%d.%d", &glMajor, &glMinor) != 2)
+			if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().constData(), "%d.%d", &glMajor, &glMinor) != 2)
 				glMajor = glMinor = 0;
 		}
 	}
@@ -738,6 +750,7 @@ void OpenGL2Common::testGLInternal()
 			target = GL_TEXTURE_RECTANGLE_ARB;
 			if (numPlanes == 1)
 				isOK = false; // Not used and not supported
+			hqScaling = false; // Not yet supported
 		}
 
 		if (isOK)
@@ -835,6 +848,8 @@ void OpenGL2Common::initGLProc()
 	glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
 	glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
 	glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
+	if (hqScaling)
+		glGenerateMipmap = (GLGenerateMipmap)QOpenGLContext::currentContext()->getProcAddress("glGenerateMipmap");
 	hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
 #endif
 	if (allowPBO)
@@ -842,12 +857,6 @@ void OpenGL2Common::initGLProc()
 		glMapBufferRange = (GLMapBufferRange)QOpenGLContext::currentContext()->getProcAddress("glMapBufferRange");
 		glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
 		glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
-	}
-	else
-	{
-		glMapBufferRange = nullptr;
-		glMapBuffer = nullptr;
-		glUnmapBuffer = nullptr;
 	}
 	hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
 }
@@ -907,6 +916,29 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 	}
 }
 
+void OpenGL2Common::maybeSetMipmaps(qreal dpr)
+{
+	const bool lastUseMipmaps = m_useMipmaps;
+	m_useMipmaps = (W * dpr < m_textureSize.width() || H * dpr < m_textureSize.height());
+#ifndef OPENGL_ES2
+	if (m_useMipmaps && !glGenerateMipmap)
+	{
+		QMPlay2Core.logError("OpenGL 2 :: Mipmaps requested, but driver doesn't support it!", true, true);
+		m_useMipmaps = false;
+	}
+#endif
+	if (m_useMipmaps != lastUseMipmaps)
+	{
+		for (int p = 0; p < numPlanes; ++p)
+		{
+			glBindTexture(target, textures[p + 1]);
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+			if (m_useMipmaps)
+				glGenerateMipmap(target);
+		}
+	}
+}
+
 inline bool OpenGL2Common::isRotate90() const
 {
 	return verticesIdx >= 4 && !sphericalView;
@@ -923,14 +955,17 @@ inline bool OpenGL2Common::hwAccellPossibleLock()
 	return true;
 }
 
-QByteArray OpenGL2Common::readShader(const QString &fileName)
+QByteArray OpenGL2Common::readShader(const QString &fileName, bool pure)
 {
 	QResource res(fileName);
 	QByteArray shader;
+	if (!pure)
+	{
 #ifdef OPENGL_ES2
-	shader = "precision lowp float;\n";
+		shader = "precision highp float;\n";
 #endif
-	shader.append("#line 1\n");
+		shader.append("#line 1\n");
+	}
 	shader.append((const char *)res.data(), res.size());
 	return shader;
 }

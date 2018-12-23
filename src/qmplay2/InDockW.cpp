@@ -74,6 +74,7 @@ void InDockW::wallpaperChanged(bool wallpaper, double alpha)
 		c.setAlphaF(alpha);
 	setPalette(c);
 }
+
 void InDockW::setWidget(QWidget *newW)
 {
 	if (w == newW)

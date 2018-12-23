@@ -18,9 +18,11 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QPushButton>
 
-class Q_DECL_EXPORT ColorButton final : public QPushButton
+class QMPLAY2SHAREDLIB_EXPORT ColorButton final : public QPushButton
 {
 	Q_OBJECT
 public:

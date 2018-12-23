@@ -191,7 +191,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 					ok &= playC.aPackets.seekTo(seekTo, backward);
 
 				if (ok && !playC.sPackets.isEmpty())
-					ok &= playC.sPackets.seekTo(seekTo, backward);
+					playC.sPackets.seekTo(seekTo, backward); // Ignore error on subtitles stream (subtitles can be missing near to specified timestamp)
 
 				return ok;
 			};
@@ -275,10 +275,16 @@ void DemuxerThr::seek(bool doDemuxerSeek)
 			playC.canUpdatePos = true;
 			if (playC.seekTo != SEEK_REPEAT) //Don't reset variable if repeat seek failed
 				playC.seekTo = SEEK_NOWHERE;
-			if (!playC.paused)
-				emit playC.chText(tr("Playback"));
-			else
+			if (playC.paused)
+			{
+				if (!QMPlay2Core.getSettings().getBool("UnpauseWhenSeeking"))
+					playC.pauseAfterFirstFrame = true;
 				playC.paused = false;
+			}
+			else
+			{
+				emit playC.chText(tr("Playback"));
+			}
 		}
 	}
 }
@@ -474,6 +480,12 @@ void DemuxerThr::run()
 		}
 
 		handlePause();
+
+		if (playC.pauseAfterFirstFrame)
+		{
+			playC.nextFrame();
+			playC.pauseAfterFirstFrame = false;
+		}
 
 		const bool updateBuffered = localStream ? false : canUpdateBuffered();
 		const double remainingDuration = getAVBuffersSize(vS, aS);
@@ -936,7 +948,7 @@ void DemuxerThr::emitInfo()
 		++i;
 	}
 	i = 0;
-	for (const QString &fName : playC.fileSubsList)
+	for (const QString &fName : asConst(playC.fileSubsList))
 		addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
 
 	if (!videoStreams.isEmpty())
@@ -957,9 +969,9 @@ bool DemuxerThr::mustReloadStreams()
 	if
 	(
 		playC.reload ||
-		(playC.choosenAudioStream     > -1 && playC.choosenAudioStream     != playC.audioStream    ) ||
-		(playC.choosenVideoStream     > -1 && playC.choosenVideoStream     != playC.videoStream    ) ||
-		(playC.choosenSubtitlesStream > -1 && playC.choosenSubtitlesStream != playC.subtitlesStream)
+		(playC.chosenAudioStream     > -1 && playC.chosenAudioStream     != playC.audioStream    ) ||
+		(playC.chosenVideoStream     > -1 && playC.chosenVideoStream     != playC.videoStream    ) ||
+		(playC.chosenSubtitlesStream > -1 && playC.chosenSubtitlesStream != playC.subtitlesStream)
 	)
 	{
 		if (playC.frame_last_delay <= 0.0 && playC.videoStream > -1)

@@ -41,9 +41,6 @@ class VideoFrame;
 
 namespace FFCommon
 {
-	AVPacket *createAVPacket();
-	void freeAVPacket(AVPacket *&packet);
-
 #ifdef QMPlay2_VDPAU
 	AVVDPAUContext *allocAVVDPAUContext(AVCodecContext *codecCtx);
 #endif

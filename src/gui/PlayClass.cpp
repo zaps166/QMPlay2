@@ -181,7 +181,7 @@ void PlayClass::play(const QString &_url)
 			replayGain = 1.0;
 
 			canUpdatePos = true;
-			waitForData = paused = flushVideo = flushAudio = endOfStream = false;
+			waitForData = flushVideo = flushAudio = endOfStream = false;
 			lastSeekTo = seekTo = pos = SEEK_NOWHERE;
 			videoSeekPos = audioSeekPos = -1.0;
 			skipAudioFrame = audio_current_pts = frame_last_pts = frame_last_delay = audio_last_delay = 0.0;
@@ -189,19 +189,23 @@ void PlayClass::play(const QString &_url)
 
 			ignorePlaybackError = QMPlay2Core.getSettings().getBool("IgnorePlaybackError");
 
-			choosenAudioLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("AudioLanguage"));
-			choosenSubtitlesLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("SubtitlesLanguage"));
+			chosenAudioLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("AudioLanguage"));
+			chosenSubtitlesLang = QMPlay2Core.getLanguagesMap().key(QMPlay2Core.getSettings().getString("SubtitlesLanguage"));
 
 			if (restartSeekTo >= 0.0) //jeżeli restart odtwarzania
 			{
 				seekTo = restartSeekTo;
 				restartSeekTo = SEEK_NOWHERE;
+				pauseAfterFirstFrame = paused;
 			}
 			else
 			{
-				choosenAudioStream = choosenVideoStream = choosenSubtitlesStream = -1;
+				chosenAudioStream = chosenVideoStream = chosenSubtitlesStream = -1;
+				pauseAfterFirstFrame = false;
 			}
 			allowAccurateSeek = true;
+
+			paused = false;
 
 			demuxThr->start();
 		}
@@ -220,7 +224,7 @@ void PlayClass::stop(bool _quitApp)
 		if (isPlaying())
 		{
 			if (aThr && newUrl.isEmpty())
-				 aThr->silence();
+				 aThr->silence(false, false);
 			if (isPlaying())
 			{
 				timTerminate.start(TERMINATE_TIMEOUT * 5 / 3);
@@ -267,11 +271,11 @@ void PlayClass::togglePause()
 	if (stopPauseMutex.tryLock())
 	{
 		if (aThr && !paused)
-			aThr->silence();
+			aThr->silence(false, true);
 		paused = !paused;
 		fillBufferB = true;
 		if (aThr && !paused)
-			aThr->silence(true);
+			aThr->silence(true, true);
 		stopPauseMutex.unlock();
 	}
 }
@@ -301,16 +305,16 @@ void PlayClass::seek(double pos, bool allowAccurate)
 	emit QMPlay2Core.seeked(pos); //Signal for MPRIS2
 	fillBufferB = true;
 	if (aThr && paused)
-		aThr->silence(true);
+		aThr->silence(true, true);
 }
 void PlayClass::chStream(const QString &s)
 {
 	if (s.startsWith("audio"))
-		choosenAudioStream = s.rightRef(s.length() - 5).toInt();
+		chosenAudioStream = s.rightRef(s.length() - 5).toInt();
 	else if (s.startsWith("video"))
-		choosenVideoStream = s.rightRef(s.length() - 5).toInt();
+		chosenVideoStream = s.rightRef(s.length() - 5).toInt();
 	else if (s.startsWith("subtitles"))
-		choosenSubtitlesStream = s.rightRef(s.length() - 9).toInt();
+		chosenSubtitlesStream = s.rightRef(s.length() - 9).toInt();
 	else if (s.startsWith("fileSubs"))
 	{
 		int idx = s.rightRef(s.length() - 8).toInt();
@@ -320,9 +324,9 @@ void PlayClass::chStream(const QString &s)
 	else
 	{
 		//TODO: What if one of type will not be found in next program?
-		choosenAudioStream = -1;
-		choosenVideoStream = -1;
-		choosenSubtitlesStream = -1;
+		chosenAudioStream = -1;
+		chosenVideoStream = -1;
+		chosenSubtitlesStream = -1;
 		for (const QString &streamPair : s.split(','))
 		{
 			const QStringList splitted = streamPair.split(':');
@@ -333,16 +337,16 @@ void PlayClass::chStream(const QString &s)
 			switch (type)
 			{
 				case QMPLAY2_TYPE_VIDEO:
-					if (choosenVideoStream == -1)
-						choosenVideoStream = stream;
+					if (chosenVideoStream == -1)
+						chosenVideoStream = stream;
 					break;
 				case QMPLAY2_TYPE_AUDIO:
-					if (choosenAudioStream == -1)
-						choosenAudioStream = stream;
+					if (chosenAudioStream == -1)
+						chosenAudioStream = stream;
 					break;
 				case QMPLAY2_TYPE_SUBTITLE:
-					if (choosenSubtitlesStream == -1)
-						choosenSubtitlesStream = stream;
+					if (chosenSubtitlesStream == -1)
+						chosenSubtitlesStream = stream;
 					break;
 				default:
 					break;
@@ -367,7 +371,7 @@ bool PlayClass::isPlaying() const
 void PlayClass::loadSubsFile(const QString &fileName)
 {
 	bool subsLoaded = false;
-	if (demuxThr && vThr && ass)
+	if (demuxThr && vThr && ass && subtitlesEnabled)
 	{
 		IOController<Reader> reader;
 		if (Reader::create(fileName, reader) && reader->size() > 0)
@@ -417,7 +421,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 			if (loaded)
 			{
 				fileSubs = fileName;
-				subtitlesStream = choosenSubtitlesStream = -2; //"subtitlesStream < -1" oznacza, że wybrano napisy z pliku
+				subtitlesStream = chosenSubtitlesStream = -2; //"subtitlesStream < -1" oznacza, że wybrano napisy z pliku
 				if (!fileSubsList.contains(fileName))
 				{
 					subsLoaded = true;
@@ -427,7 +431,7 @@ void PlayClass::loadSubsFile(const QString &fileName)
 			else
 			{
 				fileSubs.clear();
-				subtitlesStream = choosenSubtitlesStream = -1;
+				subtitlesStream = chosenSubtitlesStream = -1;
 				ass->closeASS();
 			}
 
@@ -560,6 +564,7 @@ void PlayClass::stopADec()
 		}
 	}
 	audio_current_pts = skipAudioFrame = audio_last_delay = 0.0;
+	nextFrameB = false;
 }
 
 void PlayClass::setFlip()
@@ -641,7 +646,7 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
 		srate = QMPlay2Core.getSettings().getUInt("Samplerate");
 	if (QMPlay2Core.getSettings().getBool("ForceChannels"))
 		chn = QMPlay2Core.getSettings().getUInt("Channels");
-	return aThr->setParams(realChannels, realSampleRate, chn, srate);
+	return aThr->setParams(realChannels, realSampleRate, chn, srate, QMPlay2Core.getSettings().getBool("ResamplerFirst"));
 }
 
 inline void PlayClass::emitSetVideoCheckState()
@@ -729,12 +734,13 @@ void PlayClass::videoResized(int w, int h)
 	videoWinH = h;
 }
 
-void PlayClass::videoAdjustmentChanged()
+void PlayClass::videoAdjustmentChanged(const QString &osdText)
 {
 	if (vThr)
 	{
 		vThr->setVideoAdjustment();
 		vThr->processParams();
+		messageAndOSD(osdText);
 	}
 }
 
@@ -822,8 +828,11 @@ void PlayClass::zoomReset()
 }
 void PlayClass::otherReset()
 {
-	vThr->otherReset();
-	vThr->processParams();
+	if (vThr)
+	{
+		vThr->otherReset();
+		vThr->processParams();
+	}
 }
 void PlayClass::aRatio()
 {
@@ -1053,7 +1062,7 @@ void PlayClass::prevFrame()
 }
 void PlayClass::nextFrame()
 {
-	if (videoStream > -1 && stopPauseMutex.tryLock())
+	if (stopPauseMutex.tryLock())
 	{
 		paused = false;
 		nextFrameB = fillBufferB = true;
@@ -1225,7 +1234,7 @@ void PlayClass::timTerminateFinished()
 	emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
 {
 	QStringList decoders = QMPlay2Core.getModules("decoders", 7);
 	const bool decodersListEmpty = decoders.isEmpty();
@@ -1236,38 +1245,38 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int choosen
 
 	Decoder *dec = nullptr;
 	const bool subtitles = (type == QMPLAY2_TYPE_SUBTITLE);
-	if (choosenStream >= 0 && choosenStream < streams.count() && streams[choosenStream]->type == type)
+	if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->type == type)
 	{
-		if (streams[choosenStream]->must_decode || !subtitles)
-			dec = Decoder::create(*streams[choosenStream], writer, decoders, modNameOutput);
+		if (streams[chosenStream]->must_decode || !subtitles)
+			dec = Decoder::create(*streams[chosenStream], writer, decoders, modNameOutput);
 		if (dec || subtitles)
-			stream = choosenStream;
+			stream = chosenStream;
 	}
 	else
 	{
-		int defaultStream = -1, choosenLangStream = -1;
+		int defaultStream = -1, chosenLangStream = -1;
 		for (int i = 0; i < streams.count(); ++i)
 		{
 			if (streams[i]->type == type)
 			{
 				if (defaultStream < 0 && streams[i]->is_default)
 					defaultStream = i;
-				if (!lang.isEmpty() && choosenLangStream < 0)
+				if (!lang.isEmpty() && chosenLangStream < 0)
 				{
-					for (const QMPlay2Tag &tag : streams[i]->other_info)
+					for (const QMPlay2Tag &tag : asConst(streams[i]->other_info))
 					{
 						if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
 						{
 							if (tag.second == lang || QMPlay2Core.getLanguagesMap().key(tag.second) == lang)
-								choosenLangStream = i;
+								chosenLangStream = i;
 							break;
 						}
 					}
 				}
 			}
 		}
-		if (choosenLangStream > -1)
-			defaultStream = choosenLangStream;
+		if (chosenLangStream > -1)
+			defaultStream = chosenLangStream;
 		for (int i = 0; i < streams.count(); ++i)
 		{
 			StreamInfo &streamInfo = *streams[i];
@@ -1290,17 +1299,17 @@ void PlayClass::load(Demuxer *demuxer)
 	const QList<StreamInfo *> streams = demuxer->streamsInfo();
 	Decoder *dec = nullptr;
 
-	if (videoStream < 0 || (choosenVideoStream > -1 && choosenVideoStream != videoStream) || videoDecErrorLoad) //load video
+	if (videoStream < 0 || (chosenVideoStream > -1 && chosenVideoStream != videoStream) || videoDecErrorLoad) //load video
 	{
 		vPackets.clear();
 		stopVDec(); //lock
 		if (videoEnabled)
-			dec = loadStream(streams, choosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
+			dec = loadStream(streams, chosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
 		else
 			dec = nullptr;
 		if (dec)
 		{
-			const bool canEmitVideoStarted = !vThr;
+			const bool noVideo = !vThr;
 			if (vThr && (vThr->getHWAccelWriter() != dec->HWAccel()))
 				stopVThr();
 			if (!vThr)
@@ -1381,8 +1390,7 @@ void PlayClass::load(Demuxer *demuxer)
 #endif
 						ass->initOSD();
 
-					if (canEmitVideoStarted)
-						emit videoStarted();
+					emit videoStarted(noVideo);
 
 					if (reload)
 					{
@@ -1400,17 +1408,19 @@ void PlayClass::load(Demuxer *demuxer)
 		}
 		if (!dec)
 		{
-			choosenVideoStream = videoStream = -1;
+			chosenVideoStream = videoStream = -1;
 			stopVThr();
 		}
 	}
+	if (!dec)
+		emit videoNotStarted();
 
-	if (audioStream < 0 || (choosenAudioStream > -1 && choosenAudioStream != audioStream)) //load audio
+	if (audioStream < 0 || (chosenAudioStream > -1 && chosenAudioStream != audioStream)) //load audio
 	{
 		aPackets.clear();
 		stopADec(); //lock
 		if (audioEnabled)
-			dec = loadStream(streams, choosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO, choosenAudioLang);
+			dec = loadStream(streams, chosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO, chosenAudioLang);
 		else
 			dec = nullptr;
 		if (dec)
@@ -1431,7 +1441,7 @@ void PlayClass::load(Demuxer *demuxer)
 				}
 				if (doSilenceOnStart)
 				{
-					aThr->silence(true);
+					aThr->silence(true, false);
 					doSilenceOnStart = false;
 				}
 				aThr->unlock();
@@ -1444,13 +1454,13 @@ void PlayClass::load(Demuxer *demuxer)
 		}
 		if (!dec)
 		{
-			choosenAudioStream = audioStream = -1;
+			chosenAudioStream = audioStream = -1;
 			stopAThr();
 		}
 	}
 
 	//load subtitles
-	if (subtitlesStream == -1 || (choosenSubtitlesStream > -1 && choosenSubtitlesStream != subtitlesStream))
+	if (subtitlesStream == -1 || (chosenSubtitlesStream > -1 && chosenSubtitlesStream != subtitlesStream))
 	{
 		if (!QMPlay2Core.getSettings().getBool("KeepSubtitlesDelay"))
 			subtitlesSync = 0.0;
@@ -1464,12 +1474,12 @@ void PlayClass::load(Demuxer *demuxer)
 			ass->clearFonts();
 			subsMutex.unlock();
 
-			if (subtitlesEnabled && fileSubsList.count() && choosenSubtitlesStream < 0)
+			if (subtitlesEnabled && fileSubsList.count() && chosenSubtitlesStream < 0)
 				loadSubsFile(fileSubsList[fileSubsList.count() - 1]);
 			else
 			{
 				if (subtitlesEnabled)
-					dec = loadStream(streams, choosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, choosenSubtitlesLang);
+					dec = loadStream(streams, chosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, chosenSubtitlesLang);
 				if (!subtitlesEnabled || (!dec && subtitlesStream > -1 && streams[subtitlesStream]->must_decode))
 				{
 					subtitlesStream = -1;
@@ -1501,7 +1511,7 @@ void PlayClass::load(Demuxer *demuxer)
 				}
 				else
 				{
-					subtitlesStream = choosenSubtitlesStream = -1;
+					subtitlesStream = chosenSubtitlesStream = -1;
 					if (dec)
 					{
 						delete dec;

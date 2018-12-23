@@ -20,6 +20,8 @@
 
 #include <QMPlay2Extensions.hpp>
 
+#include <memory>
+
 class NotifyService final : public QObject
 {
 	Q_OBJECT
@@ -53,7 +55,7 @@ public:
 private:
 	bool set() override;
 
-	QScopedPointer<NotifyService> m_notifyService;
+	std::unique_ptr<NotifyService> m_notifyService;
 };
 
 #define NotifyExtensionName "Aditional Notifications"

@@ -29,7 +29,7 @@ static sockaddr_un getSockAddr(const QString &fileName)
 {
 	sockaddr_un sockAddr;
 	sockAddr.sun_family = AF_UNIX;
-	strncpy(sockAddr.sun_path, fileName.toLocal8Bit(), sizeof sockAddr.sun_path);
+	strncpy(sockAddr.sun_path, fileName.toLocal8Bit(), sizeof sockAddr.sun_path - 1);
 #ifdef Q_OS_MACOS
 	sockAddr.sun_len = SUN_LEN(&sockAddr);
 #endif
@@ -98,7 +98,7 @@ bool IPCSocket::open(QIODevice::OpenMode mode)
 
 	if (m_priv->fd > 0)
 	{
-		const u_long on = 1;
+		const unsigned long on = 1;
 		ioctl(m_priv->fd, FIONBIO, &on);
 		m_priv->socketNotifier = new QSocketNotifier(m_priv->fd, QSocketNotifier::Read, this);
 		connect(m_priv->socketNotifier, SIGNAL(activated(int)), this, SLOT(socketReadActive()));

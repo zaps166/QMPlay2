@@ -22,14 +22,13 @@
 
 #include <QCoreApplication>
 
-class Datmusic final : public MediaBrowserCommon
+class MyFreeMP3 final : public MediaBrowserCommon
 {
-	Q_DECLARE_TR_FUNCTIONS(Datmusic)
+	Q_DECLARE_TR_FUNCTIONS(MyFreeMP3)
 
 public:
-	Datmusic(NetworkAccess &net);
-	~Datmusic();
-
+	MyFreeMP3(NetworkAccess &net);
+	~MyFreeMP3();
 
 	void prepareWidget(QTreeWidget *treeW) override;
 
@@ -55,5 +54,9 @@ public:
 	bool convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override;
 
 private:
+	QString encode(int input);;
+
+private:
 	QStringList m_urlNames;
+	QString m_streamHost;
 };
