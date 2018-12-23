@@ -5,7 +5,7 @@
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -117,6 +117,10 @@
     <message>
         <source>Additional module parameter</source>
         <translation>Додатковий параметр модуля</translation>
+    </message>
+    <message>
+        <source>Autodetect address</source>
+        <translation>Автовизначення адреси</translation>
     </message>
 </context>
 <context>
@@ -372,7 +376,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>Канали</translation>
+        <translation>канали</translation>
     </message>
     <message>
         <source>Hz</source>
@@ -403,29 +407,6 @@
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
         <translation>Неможливо відкрити модуль OpenGL 2</translation>
-    </message>
-    <message>
-        <source>Compilation with FFmpeg 3.1 or higher is required for H264 and HEVC support!</source>
-        <translation>Для підтримки H264 і HEVC необхідна FFmpeg 3.1 або новішої версії!</translation>
-    </message>
-</context>
-<context>
-    <name>Datmusic</name>
-    <message>
-        <source>Title</source>
-        <translation>Назва</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Виконавець</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Тривалість</translation>
-    </message>
-    <message>
-        <source>Search on Datmusic</source>
-        <translation>Пошук в Datmusic</translation>
     </message>
 </context>
 <context>
@@ -632,16 +613,32 @@
         <source>Play</source>
         <translation>Відтворення</translation>
     </message>
+    <message>
+        <source>Conversion aborted</source>
+        <translation>Конвертування перерване</translation>
+    </message>
+    <message>
+        <source>Conversion error</source>
+        <translation>Помилка конвертування</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation>Конвертування...</translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation>Зупинити конвертування</translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation>Завантажувач файлів з Інтернету</translation>
+        <translation>Завантажувач</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation>Папка завантаження</translation>
+        <translation>Каталог завантаження</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
@@ -666,6 +663,60 @@
     <message>
         <source>Enter address</source>
         <translation>Введіть адресу</translation>
+    </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation>&amp;Додати</translation>
+    </message>
+    <message>
+        <source>Add, modify, or remove conversion presets</source>
+        <translation>Додати, змінити або видалити передустановки конвертування</translation>
+    </message>
+    <message>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation>Завантажити і конвертувати до &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Converter preset</source>
+        <translation>Передустановка конвертера</translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation>Командний рядок для виконання після завантаження.
+
+&lt;input/&gt; - вказує завантажений файл.
+&lt;output&gt;%f.mp3&lt;/output&gt; - конвертований файл буде вхідним файлом з розширенням &quot;mp3&quot;.</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Видалити</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>Назва передустановки</translation>
+    </message>
+    <message>
+        <source>Command line</source>
+        <translation>Командний рядок</translation>
+    </message>
+    <message>
+        <source>Incorrect/empty name or command line!</source>
+        <translation>Неправильне/пусте ім&apos;я або командний рядок!</translation>
+    </message>
+    <message>
+        <source>Command must contain &lt;input/&gt; tag!</source>
+        <translation>Команда повинна містити тег &lt;input/&gt;!</translation>
+    </message>
+    <message>
+        <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
+        <translation>Команда повинна містити правильний тег  &lt;output&gt;file&lt;/output/&gt;!</translation>
+    </message>
+    <message>
+        <source>Preset name already exists!</source>
+        <translation>Назва передустановки вже існує!</translation>
     </message>
 </context>
 <context>
@@ -716,6 +767,10 @@
     <message>
         <source>Choose a file that contains more than one track</source>
         <translation>Виберіть файл, що містить більш ніж одну доріжку</translation>
+    </message>
+    <message>
+        <source>Open URL or directory containing chosen file</source>
+        <translation>Відкрити адресу або каталог з вказаним файлом</translation>
     </message>
 </context>
 <context>
@@ -832,10 +887,6 @@
     <message>
         <source>Browse</source>
         <translation>Огляд</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Use system icon set</source>
@@ -964,6 +1015,14 @@
     <message>
         <source>Hide artist metadata</source>
         <translation>Приховати метадані виконавця</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Не завантажувати файли списку відтворення до інших файлів</translation>
     </message>
 </context>
 <context>
@@ -1756,6 +1815,22 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
         <translation>Вимкніть, якщо у вас виникнуть проблеми з декодуванням відео MPEG4 (DivX5)</translation>
     </message>
+    <message>
+        <source>Bit-perfect audio</source>
+        <translation>Звук BitPerfect</translation>
+    </message>
+    <message>
+        <source>This sets the selected output device to the sample rate of the content being played</source>
+        <translation>Встановлює вибраний вихідний пристрій на частоту дискретизації відтворюваного вмісту</translation>
+    </message>
+    <message>
+        <source>High quality video scaling</source>
+        <translation>Масштабування відео високої якості</translation>
+    </message>
+    <message>
+        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
+        <translation>Трилінійна фільтрація при зменшенні і бікубічна фільтрація при збільшенні.</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1770,6 +1845,25 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Move down</source>
         <translation>Нижче</translation>
+    </message>
+</context>
+<context>
+    <name>MyFreeMP3</name>
+    <message>
+        <source>Title</source>
+        <translation>Назва</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation>Виконавець</translation>
+    </message>
+    <message>
+        <source>Length</source>
+        <translation>Тривалість</translation>
+    </message>
+    <message>
+        <source>Search on MyFreeMP3</source>
+        <translation>Пошук на MyFreeMP3</translation>
     </message>
 </context>
 <context>
@@ -2228,6 +2322,18 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Store aspect ratio and zoom in config file</source>
         <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
     </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Поновити відтворення під час прокрутки</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click na pausing</source>
+        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2418,6 +2524,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>&amp;Quick group synchronization</source>
         <translation>&amp;Швидка синхронізація групи</translation>
     </message>
+    <message>
+        <source>&amp;Always sync</source>
+        <translation>&amp;Завжди синхронізувати</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2461,7 +2571,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2472,7 +2582,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити потік виведення звуку</translation>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2612,20 +2722,20 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation>Завантажити список радіостанцій з файлу</translation>    
-    </message>    
-    <message>        
-        <source>Save radio station list to file</source>        
-        <translation>Зберети список радіостанцій у файл</translation>    
-    </message>    
-    <message>        
-        <source>Load radio station list</source>        
-        <translation>Завантажити список радіостанцій</translation>    
-    </message>    
-    <message>        
-        <source>Save radio station list</source>        
+        <translation>Завантажити список радіостанцій з файлу</translation>
+    </message>
+    <message>
+        <source>Save radio station list to file</source>
+        <translation>Зберети список радіостанцій у файл</translation>
+    </message>
+    <message>
+        <source>Load radio station list</source>
+        <translation>Завантажити список радіостанцій</translation>
+    </message>
+    <message>
+        <source>Save radio station list</source>
         <translation>Зберети список радіостанцій</translation>
-   </message>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -3025,6 +3135,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Lyrics</source>
         <translation>Тексти пісні</translation>
     </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation>Тексту пісні не знайдено</translation>
+    </message>
 </context>
 <context>
     <name>ToneGenerator</name>
@@ -3134,7 +3248,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VideoAdjustment</name>
+    <name>VideoAdjustmentW</name>
+    <message>
+        <source>Reset</source>
+        <translation>Скинути</translation>
+    </message>
     <message>
         <source>Brightness</source>
         <translation>Яскравість</translation>
@@ -3156,8 +3274,48 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Чіткість</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation>Скинути</translation>
+        <source>Reset video adjustments</source>
+        <translation>Скинути регулювання відео</translation>
+    </message>
+    <message>
+        <source>Brightness down</source>
+        <translation>Яскравість нижче</translation>
+    </message>
+    <message>
+        <source>Brightness up</source>
+        <translation>Яскравість вище</translation>
+    </message>
+    <message>
+        <source>Contrast down</source>
+        <translation>Контрастність нижче</translation>
+    </message>
+    <message>
+        <source>Saturation down</source>
+        <translation>Насиченість нижче</translation>
+    </message>
+    <message>
+        <source>Saturation up</source>
+        <translation>Насиченість вище</translation>
+    </message>
+    <message>
+        <source>Hue down</source>
+        <translation>Відтінок нижче</translation>
+    </message>
+    <message>
+        <source>Hue up</source>
+        <translation>Відтінок вище</translation>
+    </message>
+    <message>
+        <source>Sharpness down</source>
+        <translation>Чіткість нижче</translation>
+    </message>
+    <message>
+        <source>Sharpness up</source>
+        <translation>Чіткість вище</translation>
+    </message>
+    <message>
+        <source>Contrast up</source>
+        <translation>Контрастність вище</translation>
     </message>
 </context>
 <context>
@@ -3300,22 +3458,22 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Relevance</source>
-        <translation>Точність</translation>    
-    </message>    
-    <message>        
-        <source>Upload date</source>        
-        <translation>Дата завантаження</translation>    
-    </message>    
-    <message>        
-        <source>View count</source>        
-        <translation>Кількість переглядів</translation>    
-    </message>    
-    <message>        
-        <source>Rating</source>        
-        <translation>Рейтинг</translation>    
-    </message>    
-    <message>        
-        <source>Sort search results by ...</source>        
+        <translation>Точність</translation>
+    </message>
+    <message>
+        <source>Upload date</source>
+        <translation>Дата завантаження</translation>
+    </message>
+    <message>
+        <source>View count</source>
+        <translation>Кількість переглядів</translation>
+    </message>
+    <message>
+        <source>Rating</source>
+        <translation>Рейтинг</translation>
+    </message>
+    <message>
+        <source>Sort search results by ...</source>
         <translation>Сортувати результати пошуку за...</translation>
     </message>
 </context>
@@ -3344,6 +3502,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
         <translation>Завантаження &quot;youtube-dl&quot; перервано!</translation>
+    </message>
+    <message>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation>Помилка завантаження &quot;youtube-dl&quot;!</translation>
     </message>
 </context>
 </TS>
