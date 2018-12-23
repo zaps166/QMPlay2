@@ -33,6 +33,7 @@
 	#include <QLabel>
 #endif
 #include <QCoreApplication>
+#include <QSysInfo>
 #include <QDir>
 
 #ifdef UPDATER
@@ -145,10 +146,22 @@ void Updater::infoFinished()
 						settings.set("UpdateVersion", NewVersion);
 					};
 
-					QString FileURL = info.value(QString("Win%1").arg(sizeof(void *) << 3)).toString();
+#ifdef UPDATER
+					QString winSuffix;
+					if (QSysInfo::windowsVersion() != QSysInfo::WV_XP && QSysInfo::windowsVersion() != QSysInfo::WV_2003)
+					{
+						if (QSysInfo::WordSize == 32)
+							winSuffix = "New32";
+						else
+							winSuffix = QString::number(QSysInfo::WordSize);
+					}
+					else
+					{
+						winSuffix = "32";
+					}
+					QString FileURL = info.value("Win" + winSuffix).toString();
 					if (FileURL.isEmpty())
 						endWork(tr("No update available"));
-#ifdef UPDATER
 					else if (Version::isPortable())
 					{
 						notify();
@@ -159,8 +172,7 @@ void Updater::infoFinished()
 					else
 						endWork(tr("Error creating update file"));
 #else
-					else
-						notify();
+					notify();
 #endif
 				}
 				else
