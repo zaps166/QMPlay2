@@ -178,6 +178,7 @@ private:
 	SettingsWidget *settingsW;
 	AboutWidget *aboutW;
 	bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
+	QTimer m_fullScreenTimer;
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	QAction *hideMenuAct;
