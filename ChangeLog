@@ -1,13 +1,20 @@
-Changes in QMPlay2 build 18.11.20:
+Changes in QMPlay2 build 18.12.26:
+	- use audio resampler/channel converter before filters/visualization (default option),
 	- fixed loading Ogg Opus file when file extension is "ogg" in tag editor,
 	- improved Youtube detection by YouTube extension (youtu.be),
+	- don't load CUE files which uses more then one audio file,
 	- fixed mono playback with different volume per channel,
 	- added key shortcuts and OSD for video adjustments,
 	- updated Ukrainian and Hungarian translation files,
 	- fixed YouTube seeking on streams with subtitles,
+	- update Ukrainian and German translation files,
+	- don't load playlist files within other files,
 	- added *.opus to Windows file association,
+	- use QSaveFile for QMPlay2FileWriter,
+	- add 1440p into YouTube presets,
 	- replaced Datmusic by MyFreeMP3,
 	- removed direct zlib dependency,
+	- minor workarounds for Qt 5.12,
 	- CUVID fixes for FFmpeg 4.0,
 	- minor bugfix,
 
