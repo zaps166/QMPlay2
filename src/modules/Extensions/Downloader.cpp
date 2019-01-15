@@ -884,7 +884,7 @@ void Downloader::init()
 	defDownloadPath.replace('\\', '/');
 #endif
 	downloadLW->downloadsDirPath = Functions::cleanPath(m_sets.getString("DownloadsDirPath"));
-	if (downloadLW->downloadsDirPath.isEmpty())
+	if (downloadLW->downloadsDirPath == "/")
 	{
 		downloadLW->downloadsDirPath = defDownloadPath;
 	}
