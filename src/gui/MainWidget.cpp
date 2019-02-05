@@ -330,11 +330,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 	if (settings.getBool("MainWidget/TabPositionNorth"))
 		setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
-	connect(&m_fullScreenTimer, &QTimer::timeout,
-			this, &MainWidget::showFullScreen);
-	m_fullScreenTimer.setSingleShot(true);
-	m_fullScreenTimer.setInterval(10);
-
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
 	const bool menuHidden = settings.getBool("MainWidget/MenuHidden", false);
 	menuBar->setVisible(!menuHidden);
@@ -1006,7 +1001,6 @@ void MainWidget::toggleFullScreen()
 #ifndef Q_OS_ANDROID
 	static bool maximized;
 #endif
-	m_fullScreenTimer.stop();
 #ifdef Q_OS_MACOS
 	if (isFullScreen())
 	{
@@ -1075,11 +1069,7 @@ void MainWidget::toggleFullScreen()
 		fullScreen = true;
 
 #ifndef Q_OS_MACOS
-		hide();
-		if (underMouse())
-			m_fullScreenTimer.start();
-		else
-			showFullScreen();
+		showFullScreen();
 #else
 		setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 		setGeometry(window()->windowHandle()->screen()->geometry());
@@ -1654,15 +1644,8 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 }
 void MainWidget::leaveEvent(QEvent *e)
 {
-	if (m_fullScreenTimer.isActive())
-	{
-		m_fullScreenTimer.stop();
-		showFullScreen();
-	}
-	else if (fullScreen || isCompactView)
-	{
+	if (fullScreen || isCompactView)
 		QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); //Qt5 can't hide docks properly here
-	}
 	QMainWindow::leaveEvent(e);
 }
 void MainWidget::closeEvent(QCloseEvent *e)

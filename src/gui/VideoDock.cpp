@@ -333,6 +333,21 @@ bool VideoDock::event(QEvent *e)
 				}
 			}
 			break;
+		case QEvent::Move:
+			if (window()->property("fullScreen").toBool())
+			{
+				const auto versionSplitted = QString(qVersion()).split('.');
+				if (versionSplitted.count() == 3 && versionSplitted[0].toInt() * 0x100 + versionSplitted[1].toInt() >= 0x050C)
+				{
+					// Something is wrong with enter/leave events after going full screen in some configurations since Qt 5.12,
+					// do some mouse movements - Qt will see this as mouse move enter and move events.
+					const auto currPos = QCursor::pos();
+					QCursor::setPos(currPos + QPoint(1, 1));
+					QCursor::setPos(currPos - QPoint(1, 1));
+					QCursor::setPos(currPos);
+				}
+			}
+			break;
 		default:
 			break;
 	}
