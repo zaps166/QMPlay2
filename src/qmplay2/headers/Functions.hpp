@@ -140,7 +140,7 @@ namespace Functions
 	QMPLAY2SHAREDLIB_EXPORT bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
 	QMPLAY2SHAREDLIB_EXPORT void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QIcon *icon = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
 
-	QMPLAY2SHAREDLIB_EXPORT QString prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies = true, bool setRawHeaders = true, bool icy = true, const QByteArray &userAgent = QByteArray());
+	QMPLAY2SHAREDLIB_EXPORT QString prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies = true, bool setRawHeaders = true, bool icy = true, const QByteArray &userAgentArg = QByteArray());
 
 	QMPLAY2SHAREDLIB_EXPORT void hFlip(quint8 *data, int linesize, int height, int width);
 	QMPLAY2SHAREDLIB_EXPORT void vFlip(quint8 *data, int linesize, int height);

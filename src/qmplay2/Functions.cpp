@@ -783,7 +783,7 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 	return doWrap;
 }
 
-QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool setRawHeaders, bool icy, const QByteArray &userAgent)
+QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool setRawHeaders, bool icy, const QByteArray &userAgentArg)
 {
 	if (url.startsWith("file://"))
 		url.remove(0, 7);
@@ -791,6 +791,14 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 	{
 		const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
 		const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawheaders(url) : QByteArray();
+		const QByteArray userAgent = [&] {
+			if (!userAgentArg.isNull())
+				return userAgentArg;
+			const auto customUserAgent = QMPlay2Core.getSettings().getString("CustomUserAgent");
+			if (!customUserAgent.isEmpty())
+				return customUserAgent.toUtf8();
+			return Version::userAgent();
+		}();
 
 		if (url.startsWith("mms:"))
 			url.insert(3, 'h');
@@ -798,9 +806,9 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
 		if (url.startsWith("http"))
 			av_dict_set(&options, "icy", icy ? "1" : "0", 0);
 #if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
-		av_dict_set(&options, "user_agent", userAgent.isNull() ? Version::userAgent() : userAgent, 0);
+		av_dict_set(&options, "user_agent", userAgent, 0);
 #else
-		av_dict_set(&options, "user-agent", userAgent.isNull() ? Version::userAgent() : userAgent, 0);
+		av_dict_set(&options, "user-agent", userAgent, 0);
 #endif
 
 		if (!cookies.isEmpty())
