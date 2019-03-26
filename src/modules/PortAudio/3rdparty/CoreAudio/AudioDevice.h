@@ -55,16 +55,16 @@
 #include <qglobal.h>
 
 #ifndef DEPRECATED_LISTENER_API
-#	if !defined(__MAC_10_11)
-#		define __MAC_10_11 101100
-#	endif
-#	ifndef QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE
-#		define QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE QT_OSX_PLATFORM_SDK_EQUAL_OR_ABOVE
-#	endif
-#	if !QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__MAC_10_11)
-#		define DEPRECATED_LISTENER_API
-#		warning "Using the deprecated PropertyListener API; at least it works"
-#	endif
+#    if !defined(__MAC_10_11)
+#        define __MAC_10_11 101100
+#    endif
+#    ifndef QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE
+#        define QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE QT_OSX_PLATFORM_SDK_EQUAL_OR_ABOVE
+#    endif
+#    if !QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__MAC_10_11)
+#        define DEPRECATED_LISTENER_API
+#        warning "Using the deprecated PropertyListener API; at least it works"
+#    endif
 #endif
 
 #ifdef DEPRECATED_LISTENER_API
@@ -77,65 +77,65 @@ class AudioDeviceList;
 
 class AudioDevice {
 public:
-	AudioDevice();
-	AudioDevice(AudioDeviceID devid, bool isInput=false);
-	AudioDevice(AudioDeviceID devid, AudioPropertyListenerProc lProc, bool isInput=false);
-	~AudioDevice();
+    AudioDevice();
+    AudioDevice(AudioDeviceID devid, bool isInput=false);
+    AudioDevice(AudioDeviceID devid, AudioPropertyListenerProc lProc, bool isInput=false);
+    ~AudioDevice();
 
-	void Init(AudioPropertyListenerProc lProc);
+    void Init(AudioPropertyListenerProc lProc);
 
-	bool Valid() { return mID != kAudioDeviceUnknown; }
+    bool Valid() { return mID != kAudioDeviceUnknown; }
 
-	void SetBufferSize(UInt32 size);
-	OSStatus NominalSampleRate(Float64 &sampleRate);
-	inline Float64 ClosestNominalSampleRate(Float64 sampleRate);
-	OSStatus SetNominalSampleRate(Float64 sampleRate, Boolean force=false);
-	OSStatus ResetNominalSampleRate(Boolean force=false);
-	OSStatus SetStreamBasicDescription(AudioStreamBasicDescription *desc);
-	int CountChannels();
-	char *GetName(char *buf=NULL, UInt32 maxlen=0);
+    void SetBufferSize(UInt32 size);
+    OSStatus NominalSampleRate(Float64 &sampleRate);
+    inline Float64 ClosestNominalSampleRate(Float64 sampleRate);
+    OSStatus SetNominalSampleRate(Float64 sampleRate, Boolean force=false);
+    OSStatus ResetNominalSampleRate(Boolean force=false);
+    OSStatus SetStreamBasicDescription(AudioStreamBasicDescription *desc);
+    int CountChannels();
+    char *GetName(char *buf=NULL, UInt32 maxlen=0);
 
-	void SetInitialNominalSampleRate(Float64 sampleRate)
-	{
-		mInitialFormat.mSampleRate = sampleRate;
-	}
+    void SetInitialNominalSampleRate(Float64 sampleRate)
+    {
+        mInitialFormat.mSampleRate = sampleRate;
+    }
 
     Float64 CurrentNominalSampleRate()
     {
         return currentNominalSR;
     }
 
-	AudioDeviceID ID()
-	{
-		return mID;
-	}
+    AudioDeviceID ID()
+    {
+        return mID;
+    }
 
-	static AudioDevice *GetDefaultDevice(Boolean forInput, OSStatus &err, AudioDevice *dev=NULL);
-	static AudioDevice *GetDevice(AudioDeviceID devId, Boolean forInput, AudioDevice *dev=NULL);
+    static AudioDevice *GetDefaultDevice(Boolean forInput, OSStatus &err, AudioDevice *dev=NULL);
+    static AudioDevice *GetDevice(AudioDeviceID devId, Boolean forInput, AudioDevice *dev=NULL);
 
 protected:
-	AudioDevice(AudioDeviceID devid, bool quick, bool isInput);
-	AudioStreamBasicDescription mInitialFormat;
-	AudioPropertyListenerProc listenerProc;
-	OSStatus GetPropertyDataSize( AudioObjectPropertySelector property, UInt32 *size, AudioObjectPropertyAddress *propertyAddress=NULL );
-	Float64 currentNominalSR;
-	Float64 minNominalSR, maxNominalSR;
-	UInt32 nominalSampleRates;
-	Float64 *nominalSampleRateList = NULL;
-	bool discreteSampleRateList;
-	const AudioDeviceID mID;
-	const bool mForInput;
-	UInt32 mSafetyOffset;
-	UInt32 mBufferSizeFrames;
-	AudioStreamBasicDescription mFormat;
-	char mDevName[256] = "";
+    AudioDevice(AudioDeviceID devid, bool quick, bool isInput);
+    AudioStreamBasicDescription mInitialFormat;
+    AudioPropertyListenerProc listenerProc;
+    OSStatus GetPropertyDataSize( AudioObjectPropertySelector property, UInt32 *size, AudioObjectPropertyAddress *propertyAddress=NULL );
+    Float64 currentNominalSR;
+    Float64 minNominalSR, maxNominalSR;
+    UInt32 nominalSampleRates;
+    Float64 *nominalSampleRateList = NULL;
+    bool discreteSampleRateList;
+    const AudioDeviceID mID;
+    const bool mForInput;
+    UInt32 mSafetyOffset;
+    UInt32 mBufferSizeFrames;
+    AudioStreamBasicDescription mFormat;
+    char mDevName[256] = "";
 
-	bool mInitialised = false;
+    bool mInitialised = false;
 
 friend class AudioDeviceList;
 
 public:
-	UInt32 listenerSilentFor;
+    UInt32 listenerSilentFor;
 };
 
 

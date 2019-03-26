@@ -35,8 +35,8 @@ SOURCES += Tekstowo.cpp
 DEFINES += USE_TEKSTOWO
 
 unix:!android {
-	QT += dbus
-	HEADERS += MPRIS2.hpp
-	SOURCES += MPRIS2.cpp
-	DEFINES += USE_MPRIS2
+    QT += dbus
+    HEADERS += MPRIS2.hpp
+    SOURCES += MPRIS2.cpp
+    DEFINES += USE_MPRIS2
 }

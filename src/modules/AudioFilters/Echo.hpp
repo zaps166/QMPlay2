@@ -1,19 +1,19 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2018  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
@@ -23,25 +23,25 @@
 class Echo final : public AudioFilter
 {
 public:
-	Echo(Module &);
+    Echo(Module &);
 
-	bool set() override;
+    bool set() override;
 private:
-	bool setAudioParameters(uchar, uint) override;
-	double filter(Buffer &, bool) override;
+    bool setAudioParameters(uchar, uint) override;
+    double filter(Buffer &, bool) override;
 
-	void alloc(bool);
+    void alloc(bool);
 
-	bool enabled, hasParameters, canFilter;
+    bool enabled, hasParameters, canFilter;
 
-	uint echo_delay, echo_volume, echo_repeat;
-	bool echo_surround;
+    uint echo_delay, echo_volume, echo_repeat;
+    bool echo_surround;
 
-	uchar chn;
-	uint srate;
+    uchar chn;
+    uint srate;
 
-	int w_ofs;
-	QVector<float> sampleBuffer;
+    int w_ofs;
+    QVector<float> sampleBuffer;
 };
 
 #define EchoName "Echo"

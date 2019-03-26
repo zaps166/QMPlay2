@@ -1,19 +1,19 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2018  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
@@ -34,89 +34,89 @@ class BasicIO;
 
 class DemuxerThr final : public QThread
 {
-	friend class DemuxerTimer;
-	friend class PlayClass;
-	Q_OBJECT
+    friend class DemuxerTimer;
+    friend class PlayClass;
+    Q_OBJECT
 private:
-	DemuxerThr(PlayClass &);
-	~DemuxerThr();
+    DemuxerThr(PlayClass &);
+    ~DemuxerThr();
 
-	QByteArray getCoverFromStream() const;
+    QByteArray getCoverFromStream() const;
 
-	inline bool isDemuxerReady() const
-	{
-		return demuxerReady;
-	}
-	inline bool canSeek() const
-	{
-		return !unknownLength;
-	}
+    inline bool isDemuxerReady() const
+    {
+        return demuxerReady;
+    }
+    inline bool canSeek() const
+    {
+        return !unknownLength;
+    }
 
-	void loadImage();
+    void loadImage();
 
-	void seek(bool doDemuxerSeek);
+    void seek(bool doDemuxerSeek);
 
-	void stop();
-	void end();
+    void stop();
+    void end();
 
-	void emitInfo();
+    void emitInfo();
 
-	bool load(bool canEmitInfo = true);
+    bool load(bool canEmitInfo = true);
 
-	void checkReadyWrite(AVThread *avThr);
+    void checkReadyWrite(AVThread *avThr);
 
-	void run() override;
+    void run() override;
 
-	inline void ensureTrueUpdateBuffered();
-	inline bool canUpdateBuffered() const;
-	void handlePause();
-	void emitBufferInfo(bool clearBackwards);
+    inline void ensureTrueUpdateBuffered();
+    inline bool canUpdateBuffered() const;
+    void handlePause();
+    void emitBufferInfo(bool clearBackwards);
 
-	void updateCoverAndPlaying(bool doCompare);
+    void updateCoverAndPlaying(bool doCompare);
 
-	void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
+    void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
 
-	bool mustReloadStreams();
-	bool bufferedAllPackets(int vS, int aS, int p);
-	bool emptyBuffers(int vS, int aS);
-	bool canBreak(const AVThread *avThr1, const AVThread *avThr2);
-	double getAVBuffersSize(int &vS, int &aS);
-	BufferInfo getBufferInfo(bool clearBackwards);
-	void clearBuffers();
+    bool mustReloadStreams();
+    bool bufferedAllPackets(int vS, int aS, int p);
+    bool emptyBuffers(int vS, int aS);
+    bool canBreak(const AVThread *avThr1, const AVThread *avThr2);
+    double getAVBuffersSize(int &vS, int &aS);
+    BufferInfo getBufferInfo(bool clearBackwards);
+    void clearBuffers();
 
-	double getFrameDelay() const;
+    double getFrameDelay() const;
 
-	PlayClass &playC;
+    PlayClass &playC;
 
-	QString name, url, updatePlayingName;
+    QString name, url, updatePlayingName;
 
-	int minBuffSizeLocal, minBuffSizeNetwork;
-	bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength, waitingForFillBufferB, paused, demuxerPaused;
-	QMutex stopVAMutex, endMutex, seekMutex;
-	IOController<> ioCtrl;
-	IOController<Demuxer> demuxer;
-	QString title, artist, album;
-	double playIfBuffered, time, updateBufferedTime;
+    int minBuffSizeLocal, minBuffSizeNetwork;
+    bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength, waitingForFillBufferB, paused, demuxerPaused;
+    QMutex stopVAMutex, endMutex, seekMutex;
+    IOController<> ioCtrl;
+    IOController<Demuxer> demuxer;
+    QString title, artist, album;
+    double playIfBuffered, time, updateBufferedTime;
 private slots:
-	void stopVADec();
-	void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
+    void stopVADec();
+    void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
 signals:
-	void load(Demuxer *);
+    void load(Demuxer *);
 };
 
 /**/
 
 class DemuxerTimer : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DemuxerTimer(DemuxerThr &demuxerThr);
+    DemuxerTimer(DemuxerThr &demuxerThr);
 
-	inline void start();
-	inline void stop();
+    inline void start();
+    inline void stop();
 private slots:
-	void timeout();
+    void timeout();
 private:
-	DemuxerThr &demuxerThr;
-	QTimer t;
+    DemuxerThr &demuxerThr;
+    QTimer t;
 };

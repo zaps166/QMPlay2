@@ -49,9 +49,9 @@
 #include "AudioDeviceList.h"
 
 AudioDeviceList::AudioDeviceList(bool forInput)
-	: mForInput(forInput)
+    : mForInput(forInput)
 {
-	BuildList();
+    BuildList();
 }
 
 AudioDeviceList::~AudioDeviceList()
@@ -60,34 +60,34 @@ AudioDeviceList::~AudioDeviceList()
 
 void AudioDeviceList::BuildList()
 {
-	mDeviceList.clear();
-	mDeviceDict.clear();
+    mDeviceList.clear();
+    mDeviceDict.clear();
 
-	UInt32 propsize;
+    UInt32 propsize;
 
-	AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDevices,
-											  kAudioObjectPropertyScopeGlobal,
-											  kAudioObjectPropertyElementMaster
-											};
+    AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDevices,
+                                              kAudioObjectPropertyScopeGlobal,
+                                              kAudioObjectPropertyElementMaster
+                                            };
 
-	verify_noerr(AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &theAddress, 0, NULL, &propsize));
-	int nDevices = propsize / sizeof(AudioDeviceID);
-	AudioDeviceID *devids = new AudioDeviceID[nDevices];
-	verify_noerr(AudioObjectGetPropertyData(kAudioObjectSystemObject, &theAddress, 0, NULL, &propsize, devids));
+    verify_noerr(AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &theAddress, 0, NULL, &propsize));
+    int nDevices = propsize / sizeof(AudioDeviceID);
+    AudioDeviceID *devids = new AudioDeviceID[nDevices];
+    verify_noerr(AudioObjectGetPropertyData(kAudioObjectSystemObject, &theAddress, 0, NULL, &propsize, devids));
 
-	for (int i = 0; i < nDevices; ++i) {
-		AudioDevice dev(devids[i], true, mForInput);
-		if (dev.CountChannels() > 0) {
-			Device d;
+    for (int i = 0; i < nDevices; ++i) {
+        AudioDevice dev(devids[i], true, mForInput);
+        if (dev.CountChannels() > 0) {
+            Device d;
 
-			d.mID = devids[i];
-			dev.GetName(d.mName, sizeof(d.mName));
-			mDeviceList.push_back(d);
-			QString name = QString::fromUtf8(d.mName);
-			if (!mDeviceDict.contains(name)) {
-				mDeviceDict[name] = d.mID;
-			}
-		}
-	}
-	delete[] devids;
+            d.mID = devids[i];
+            dev.GetName(d.mName, sizeof(d.mName));
+            mDeviceList.push_back(d);
+            QString name = QString::fromUtf8(d.mName);
+            if (!mDeviceDict.contains(name)) {
+                mDeviceDict[name] = d.mID;
+            }
+        }
+    }
+    delete[] devids;
 }

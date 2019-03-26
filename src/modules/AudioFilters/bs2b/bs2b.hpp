@@ -65,13 +65,13 @@
 
 typedef struct
 {
-	uint32_t level;              /* Crossfeed level */
-	uint32_t srate;              /* Sample rate (Hz) */
-	double a0_lo, b1_lo;         /* Lowpass IIR filter coefficients */
-	double a0_hi, a1_hi, b1_hi;  /* Highboost IIR filter coefficients */
-	double gain;                 /* Global gain against overloading */
-	/* Buffer of last filtered sample: [0] 1-st channel, [1] 2-d channel */
-	struct { double asis[ 2 ], lo[ 2 ], hi[ 2 ]; } lfs;
+    uint32_t level;              /* Crossfeed level */
+    uint32_t srate;              /* Sample rate (Hz) */
+    double a0_lo, b1_lo;         /* Lowpass IIR filter coefficients */
+    double a0_hi, a1_hi, b1_hi;  /* Highboost IIR filter coefficients */
+    double gain;                 /* Global gain against overloading */
+    /* Buffer of last filtered sample: [0] 1-st channel, [1] 2-d channel */
+    struct { double asis[ 2 ], lo[ 2 ], hi[ 2 ]; } lfs;
 } t_bs2bd;
 
 typedef t_bs2bd *t_bs2bdp;

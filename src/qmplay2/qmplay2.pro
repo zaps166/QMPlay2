@@ -3,7 +3,7 @@ CONFIG += plugin #Don't create symlinks to library
 
 QT += widgets
 android {
-	QT += androidextras
+    QT += androidextras
 }
 
 !qtHaveModule(svg): message("Missing QtSvg module - SVG icons will not be visible!")
@@ -13,10 +13,10 @@ TARGET = qmplay2
 DESTDIR = ../../app/lib
 
 android {
-	LIBS += -lavformat -lavcodec -lswscale -lswresample -lavutil #-lass
+    LIBS += -lavformat -lavcodec -lswscale -lswresample -lavutil #-lass
 } else {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += libavformat libavcodec libswscale libswresample libavutil libass
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libavformat libavcodec libswscale libswresample libavutil libass
 }
 
 RESOURCES += languages.qrc
@@ -32,15 +32,15 @@ HEADERS += headers/QMPlay2Core.hpp headers/Functions.hpp headers/Settings.hpp he
 SOURCES +=         QMPlay2Core.cpp         Functions.cpp         Settings.cpp         Module.cpp         ModuleParams.cpp         ModuleCommon.cpp         Playlist.cpp         Reader.cpp         Demuxer.cpp         Decoder.cpp         VideoFilters.cpp         VideoFilter.cpp         DeintFilter.cpp         AudioFilter.cpp         Writer.cpp         QMPlay2Extensions.cpp         LineEdit.cpp         Slider.cpp         QMPlay2OSD.cpp         InDockW.cpp         LibASS.cpp         ColorButton.cpp         ImgScaler.cpp         SndResampler.cpp         VideoWriter.cpp         SubsDec.cpp                                                                        VideoFrame.cpp         StreamInfo.cpp         DockWidget.cpp                                                                 PacketBuffer.cpp         Buffer.cpp         NetworkAccess.cpp         YouTubeDL.cpp         Notifies.cpp         NotifiesTray.cpp         Version.cpp    IPC_Unix.cpp         MkvMuxer.cpp PixelFormats.cpp
 
 unix:!android {
-	QT += dbus
-	DBUS_INTERFACES += org.freedesktop.Notifications.xml
-	HEADERS += headers/NotifiesFreedesktop.hpp
-	SOURCES +=         NotifiesFreedesktop.cpp
+    QT += dbus
+    DBUS_INTERFACES += org.freedesktop.Notifications.xml
+    HEADERS += headers/NotifiesFreedesktop.hpp
+    SOURCES +=         NotifiesFreedesktop.cpp
 }
 android {
-	DEFINES += NOTIFIES_ANDROID
-	HEADERS += headers/NotifiesAndroid.hpp
-	SOURCES +=         NotifiesAndroid.cpp
+    DEFINES += NOTIFIES_ANDROID
+    HEADERS += headers/NotifiesAndroid.hpp
+    SOURCES +=         NotifiesAndroid.cpp
 }
 
 DEFINES += __STDC_CONSTANT_MACROS

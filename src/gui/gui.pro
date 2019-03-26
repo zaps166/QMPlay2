@@ -4,8 +4,8 @@ CONFIG += link_pkgconfig
 QT += widgets
 
 android {
-	QT += svg androidextras
-	QTPLUGIN += svg
+    QT += svg androidextras
+    QTPLUGIN += svg
 }
 
 TARGET = QMPlay2
@@ -30,15 +30,15 @@ SOURCES += Main.cpp MenuBar.cpp MainWidget.cpp AddressBox.cpp VideoDock.cpp Info
 FORMS += Ui/SettingsGeneral.ui Ui/SettingsPlayback.ui Ui/SettingsPlaybackModulesList.ui Ui/OSDSettings.ui
 
 !android {
-	SOURCES += Unix/ScreenSaver.cpp
+    SOURCES += Unix/ScreenSaver.cpp
 
-	DEFINES += QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
+    DEFINES += QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
 
-	DEFINES += QMPlay2_TagEditor
-	HEADERS += TagEditor.hpp
-	SOURCES += TagEditor.cpp
+    DEFINES += QMPlay2_TagEditor
+    HEADERS += TagEditor.hpp
+    SOURCES += TagEditor.cpp
 } else {
-	SOURCES += Android/ScreenSaver.cpp
+    SOURCES += Android/ScreenSaver.cpp
 }
 
 !android: PKGCONFIG += taglib

@@ -1,19 +1,19 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2018  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
@@ -32,44 +32,44 @@ class YadifDeint;
 class YadifThr final : public QThread
 {
 public:
-	YadifThr(const YadifDeint &yadifDeint);
-	~YadifThr();
+    YadifThr(const YadifDeint &yadifDeint);
+    ~YadifThr();
 
-	void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
-	void waitForFinished();
+    void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
+    void waitForFinished();
 private:
-	void run() override;
+    void run() override;
 
-	const YadifDeint &yadifDeint;
+    const YadifDeint &yadifDeint;
 
-	VideoFrame *dest;
-	const VideoFrame *prev, *curr, *next;
-	int jobId, jobsCount;
-	bool hasNewData, br;
+    VideoFrame *dest;
+    const VideoFrame *prev, *curr, *next;
+    int jobId, jobsCount;
+    bool hasNewData, br;
 
-	QWaitCondition cond;
-	QMutex mutex;
+    QWaitCondition cond;
+    QMutex mutex;
 };
 
 class YadifDeint final : public DeintFilter
 {
-	friend class YadifThr;
+    friend class YadifThr;
 public:
-	YadifDeint(bool doubler, bool spatialCheck);
+    YadifDeint(bool doubler, bool spatialCheck);
 
-	void clearBuffer() override;
+    void clearBuffer() override;
 
-	bool filter(QQueue<FrameBuffer> &framesQueue) override;
+    bool filter(QQueue<FrameBuffer> &framesQueue) override;
 
-	bool processParams(bool *paramsCorrected) override;
+    bool processParams(bool *paramsCorrected) override;
 private:
-	inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
+    inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
 
-	using YadifThrPtr = std::shared_ptr<YadifThr>;
-	QVector<YadifThrPtr> threads;
+    using YadifThrPtr = std::shared_ptr<YadifThr>;
+    QVector<YadifThrPtr> threads;
 
-	const bool doubler, spatialCheck;
-	bool secondFrame;
+    const bool doubler, spatialCheck;
+    bool secondFrame;
 };
 
 #define YadifDeintName "Yadif"

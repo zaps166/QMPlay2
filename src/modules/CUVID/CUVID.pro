@@ -8,8 +8,8 @@ QMAKE_LIBDIR += ../../../app/lib
 
 android: LIBS += -lavcodec -lswscale -lavutil
 else {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += libavcodec libswscale libavutil
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libavcodec libswscale libavutil
 }
 LIBS += -lqmplay2
 

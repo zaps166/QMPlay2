@@ -1,19 +1,19 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2018  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <MediaBrowser/Common.hpp>
@@ -24,22 +24,22 @@
 #include <QTreeWidget>
 
 MediaBrowserCommon::MediaBrowserCommon(NetworkAccess &net, const QString &name, const QString &imgPath) :
-	m_net(net),
-	m_name(name),
-	m_icon(imgPath)
+    m_net(net),
+    m_name(name),
+    m_icon(imgPath)
 {}
 
 void MediaBrowserCommon::prepareWidget(QTreeWidget *treeW)
 {
-	treeW->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	treeW->headerItem()->setHidden(false);
-	treeW->setSortingEnabled(true);
-	treeW->setIconSize({22, 22});
-	treeW->setIndentation(0);
+    treeW->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    treeW->headerItem()->setHidden(false);
+    treeW->setSortingEnabled(true);
+    treeW->setIconSize({22, 22});
+    treeW->setIndentation(0);
 
-	treeW->setColumnCount(1);
-	treeW->header()->setStretchLastSection(false);
-	treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    treeW->setColumnCount(1);
+    treeW->header()->setStretchLastSection(false);
+    treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 }
 
 void MediaBrowserCommon::finalize()
@@ -47,15 +47,15 @@ void MediaBrowserCommon::finalize()
 
 QStringList MediaBrowserCommon::getPagesList() const
 {
-	return {};
+    return {};
 }
 
 void MediaBrowserCommon::setCompleterListCallback(const CompleterReadyCallback &callback)
 {
-	Q_UNUSED(callback)
+    Q_UNUSED(callback)
 }
 
 QMPlay2Extensions::AddressPrefix MediaBrowserCommon::addressPrefix(bool img) const
 {
-	return QMPlay2Extensions::AddressPrefix(m_name, img ? m_icon : QIcon());
+    return QMPlay2Extensions::AddressPrefix(m_name, img ? m_icon : QIcon());
 }

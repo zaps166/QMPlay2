@@ -58,25 +58,25 @@
 
 class AudioDeviceList {
 public:
-	struct Device {
-		char mName[256];
-		AudioDeviceID mID;
-	};
-	typedef QList<Device> DeviceList;
-	typedef QHash<QString,AudioDeviceID> DeviceDict;
+    struct Device {
+        char mName[256];
+        AudioDeviceID mID;
+    };
+    typedef QList<Device> DeviceList;
+    typedef QHash<QString,AudioDeviceID> DeviceDict;
 
-	AudioDeviceList(bool forInput=false);
-	~AudioDeviceList();
+    AudioDeviceList(bool forInput=false);
+    ~AudioDeviceList();
 
-	DeviceList &GetList() { return mDeviceList; }
-	DeviceDict &GetDict() { return mDeviceDict; }
+    DeviceList &GetList() { return mDeviceList; }
+    DeviceDict &GetDict() { return mDeviceDict; }
 
 protected:
-	void BuildList();
+    void BuildList();
 
-	bool mForInput;
-	DeviceList mDeviceList;
-	DeviceDict mDeviceDict;
+    bool mForInput;
+    DeviceList mDeviceList;
+    DeviceDict mDeviceDict;
 };
 
 #endif // __AudioDeviceList_h__
