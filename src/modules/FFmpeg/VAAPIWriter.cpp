@@ -157,12 +157,6 @@ void VAAPIWriter::init()
     clearRGBImage();
     id = VA_INVALID_SURFACE;
     field = -1;
-
-    if (vaapi->isXvBA) //Not tested for many years...
-    {
-        QWidget::destroy();
-        QWidget::create();
-    }
 }
 
 void VAAPIWriter::draw(VASurfaceID _id, int _field)
@@ -247,21 +241,15 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
     }
     osd_mutex.unlock();
 
-    for (int i = 0; i <= 1; ++i)
-    {
-        const int err = vaPutSurface
-        (
-            vaapi->VADisp, id, winId(),
-            srcQRect.x(), srcQRect.y(), srcQRect.width(), srcQRect.height(),
-            dstQRect.x(), dstQRect.y(), dstQRect.width(), dstQRect.height(),
-            nullptr, 0, field | VA_CLEAR_DRAWABLE
-        );
-        if (err != VA_STATUS_SUCCESS)
-            QMPlay2Core.log(QString("vaPutSurface() - ") + vaErrorStr(err));
-        VASurfaceStatus status;
-        if (!vaapi->isVDPAU || i || vaQuerySurfaceStatus(vaapi->VADisp, id, &status) != VA_STATUS_SUCCESS || status != VASurfaceReady)
-            break;
-    }
+    const int err = vaPutSurface
+    (
+        vaapi->VADisp, id, winId(),
+        srcQRect.x(), srcQRect.y(), srcQRect.width(), srcQRect.height(),
+        dstQRect.x(), dstQRect.y(), dstQRect.width(), dstQRect.height(),
+        nullptr, 0, field | VA_CLEAR_DRAWABLE
+    );
+    if (err != VA_STATUS_SUCCESS)
+        QMPlay2Core.log(QString("vaPutSurface() - ") + vaErrorStr(err));
 
     if (associated)
         vaDeassociateSubpicture(vaapi->VADisp, vaSubpicID, &id, 1);

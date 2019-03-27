@@ -85,7 +85,6 @@ FFmpeg::FFmpeg() :
 #ifdef QMPlay2_VAAPI
     init("DecoderVAAPIEnabled", true);
     init("UseOpenGLinVAAPI", true);
-    init("AllowVDPAUinVAAPI", false);
     init("CopyVideoVAAPI", Qt::Unchecked);
     init("VAAPIDeintMethod", 1);
     if (getUInt("VAAPIDeintMethod") > 2)
@@ -118,7 +117,7 @@ FFmpeg::FFmpeg() :
     vdpauDeintMethodB->setProperty("module", self);
     QMPlay2Core.addVideoDeintMethod(vdpauDeintMethodB);
 #endif
-#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+#if defined(QMPlay2_VAAPI)
     vaapiDeintMethodB = new QComboBox;
     vaapiDeintMethodB->addItems({tr("None"), "Motion adaptive", "Motion compensated"});
     vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
@@ -143,7 +142,7 @@ FFmpeg::~FFmpeg()
 #ifdef QMPlay2_VDPAU
     delete vdpauDeintMethodB;
 #endif
-#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+#if defined(QMPlay2_VAAPI)
     delete vaapiDeintMethodB;
 #endif
 }
@@ -226,7 +225,7 @@ void FFmpeg::videoDeintSave()
     set("VDPAUDeintMethod", vdpauDeintMethodB->currentIndex());
     setInstance<VDPAUWriter>();
 #endif
-#if defined(QMPlay2_VAAPI) && defined(HAVE_VPP)
+#if defined(QMPlay2_VAAPI)
     set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
     setInstance<FFDecVAAPI>();
 #endif
@@ -303,9 +302,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     useOpenGLinVAAPIB = new QCheckBox(tr("Use OpenGL"));
     useOpenGLinVAAPIB->setChecked(sets().getBool("UseOpenGLinVAAPI"));
 
-    allowVDPAUinVAAPIB = new QCheckBox(tr("Allow VDPAU"));
-    allowVDPAUinVAAPIB->setChecked(sets().getBool("AllowVDPAUinVAAPI"));
-
     copyVideoVAAPIB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
     copyVideoVAAPIB->setTristate(true);
     copyVideoVAAPIB->setCheckState((Qt::CheckState)sets().getInt("CopyVideoVAAPI"));
@@ -313,7 +309,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
     vaapiLayout->addRow(useOpenGLinVAAPIB);
-    vaapiLayout->addRow(allowVDPAUinVAAPIB);
     vaapiLayout->addRow(copyVideoVAAPIB);
 #endif
 
@@ -454,7 +449,6 @@ void ModuleSettingsWidget::saveSettings()
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
     sets().set("UseOpenGLinVAAPI", useOpenGLinVAAPIB->isChecked());
-    sets().set("AllowVDPAUinVAAPI", allowVDPAUinVAAPIB->isChecked());
     sets().set("CopyVideoVAAPI", copyVideoVAAPIB->checkState());
 #endif
 #ifdef QMPlay2_DXVA2

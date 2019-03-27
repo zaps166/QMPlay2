@@ -18,18 +18,10 @@
 
 #pragma once
 
-#include <HWAccelHelper.hpp>
-
 #include <QCoreApplication>
 
 #include <va/va.h>
-
-#if VA_VERSION_HEX >= 0x220000 // 1.2.0
-    #include <va/va_vpp.h>
-
-    #define NEW_CREATESURFACES
-    #define HAVE_VPP
-#endif
+#include <va/va_vpp.h>
 
 class VideoFrame;
 class ImgScaler;
@@ -37,23 +29,19 @@ class ImgScaler;
 class VAAPI
 {
     Q_DECLARE_TR_FUNCTIONS(VAAPI)
+
 public:
     VAAPI();
     ~VAAPI();
 
-    bool open(bool allowVDPAU, bool &openGL);
+    bool open(const char *codecName, bool &openGL);
 
-    bool init(int width, int height, const char *codecName, bool initFilters);
+    void init(int width, int height, bool allowFilters);
 
-    SurfacesQueue getSurfacesQueue() const;
+    bool vaapiCreateSurface(VASurfaceID &surface, int w, int h);
 
-    inline bool vaCreateConfigAndContext();
-    bool vaapiCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, bool useAttr);
-
-    void init_vpp();
-
-    void clr_vpp();
-    void clr();
+    void maybeInitVPP(int surfaceW, int surfaceH);
+    void clearVPP(bool resetAllowFilters = true);
 
     void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
@@ -62,40 +50,30 @@ public:
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
-    /**/
+private:
+    bool hasProfile(const char *codecName) const;
 
-    bool ok, isXvBA, isVDPAU;
+public:
+    bool ok = false;
 
-    VADisplay VADisp;
-    VAContextID context;
-    VAConfigID config;
+    VADisplay VADisp = nullptr;
 
-    VAImageFormat nv12ImageFmt;
+    VAImageFormat nv12ImageFmt = {};
 
-    int outW, outH;
+    int outW = 0, outH = 0;
 
-#ifdef HAVE_VPP //Postprocessing
-    VAProcDeinterlacingType vpp_deint_type;
-    bool use_vpp;
-#endif
+    // Postprocessing
+    VAProcDeinterlacingType vpp_deint_type = VAProcDeinterlacingNone;
+    bool use_vpp = false;
 
 private:
-    int version;
+    int version = 0;
 
-    VAProfile profile;
-
-    QList<VAProfile> profileList;
-
-    static constexpr int surfacesCount = 20;
-    VASurfaceID surfaces[surfacesCount];
-    bool surfacesCreated;
-
-
-#ifdef HAVE_VPP //Postprocessing
+    // Postprocessing
+    bool m_allowFilters = false;
     VAContextID context_vpp;
     VAConfigID config_vpp;
     VABufferID vpp_buffers[VAProcFilterCount]; //TODO implement all filters
     VASurfaceID id_vpp, forward_reference;
     bool vpp_second;
-#endif
 };

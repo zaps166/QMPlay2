@@ -27,28 +27,18 @@
 #include <va/va_x11.h>
 #include <va/va_glx.h>
 
-VAAPI::VAAPI() :
-    ok(false),
-    VADisp(nullptr),
-    outW(0), outH(0),
-#ifdef HAVE_VPP
-    vpp_deint_type(VAProcDeinterlacingNone),
-    use_vpp(false),
-#endif
-    version(0)
-{
-    memset(&nv12ImageFmt, 0, sizeof nv12ImageFmt);
-}
+VAAPI::VAAPI()
+{}
 VAAPI::~VAAPI()
 {
-    clr();
+    clearVPP();
     if (VADisp)
         vaTerminate(VADisp);
 }
 
-bool VAAPI::open(bool allowVDPAU, bool &openGL)
+bool VAAPI::open(const char *codecName, bool &openGL)
 {
-    clr();
+    clearVPP();
 
     if (!QX11Info::isPlatformX11())
         return false;
@@ -70,192 +60,84 @@ bool VAAPI::open(bool allowVDPAU, bool &openGL)
     }
 
     int major = 0, minor = 0;
-    if (vaInitialize(VADisp, &major, &minor) == VA_STATUS_SUCCESS)
+    if (vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
+        return false;
+
+    version = (major << 8) | minor;
+
+    const QString vendor = vaQueryVendorString(VADisp);
+    if (vendor.contains("VDPAU")) // Not supported in FFmpeg due to "vaQuerySurfaceAttributes()"
+        return false;
+
+    if (!hasProfile(codecName))
+        return false;
+
+    int fmtCount = vaMaxNumImageFormats(VADisp);
+    VAImageFormat imgFmt[fmtCount];
+    if (vaQueryImageFormats(VADisp, imgFmt, &fmtCount) == VA_STATUS_SUCCESS)
     {
-        const QString vendor = vaQueryVendorString(VADisp);
-        isVDPAU = vendor.contains("VDPAU");
-        if (isVDPAU && !allowVDPAU)
-            return false;
-        isXvBA = vendor.contains("XvBA");
-
-        int numProfiles = vaMaxNumProfiles(VADisp);
-        VAProfile profiles[numProfiles];
-        if (vaQueryConfigProfiles(VADisp, profiles, &numProfiles) == VA_STATUS_SUCCESS)
+        for (int i = 0; i < fmtCount; ++i)
         {
-            for (int i = 0; i < numProfiles; ++i)
-                profileList.push_back(profiles[i]);
-
-            version = (major << 8) | minor;
-
-            int fmtCount = vaMaxNumImageFormats(VADisp);
-            VAImageFormat imgFmt[fmtCount];
-            if (vaQueryImageFormats(VADisp, imgFmt, &fmtCount) == VA_STATUS_SUCCESS)
-                for (int i = 0; i < fmtCount; ++i)
-                    if (imgFmt[i].fourcc == VA_FOURCC_NV12)
-                    {
-                        nv12ImageFmt = imgFmt[i];
-                        break;
-                    }
-
-            return true;
+            if (imgFmt[i].fourcc == VA_FOURCC_NV12)
+            {
+                nv12ImageFmt = imgFmt[i];
+                break;
+            }
         }
     }
-    return false;
+
+    return true;
 }
 
-bool VAAPI::init(int width, int height, const char *codecName, bool initFilters)
+void VAAPI::init(int width, int height,  bool allowFilters)
 {
-    VAProfile p = (VAProfile)-1; //VAProfileNone
-    if (!qstrcmp(codecName, "h264"))
+    if (!ok || outW != width || outH != height)
     {
-        if (profileList.contains(VAProfileH264High))
-            p = VAProfileH264High;
-        else if (profileList.contains(VAProfileH264Main))
-            p = VAProfileH264Main;
-    }
-#if VA_VERSION_HEX >= 0x230000 // 1.3.0
-    else if (!qstrcmp(codecName, "vp8")) //Not supported in FFmpeg (06.12.2015)
-    {
-        if (profileList.contains(VAProfileVP8Version0_3))
-            p = VAProfileVP8Version0_3;
-    }
-#endif
-#if VA_VERSION_HEX >= 0x250000 // 1.5.0
-    else if (!qstrcmp(codecName, "hevc"))
-    {
-        if (profileList.contains(VAProfileHEVCMain))
-            p = VAProfileHEVCMain;
-    }
-#endif
-#if VA_VERSION_HEX >= 0x260000 // 1.6.0
-    else if (!qstrcmp(codecName, "vp9")) //Supported in FFmpeg >= 3.0, not tested
-    {
-        if (profileList.contains(VAProfileVP9Profile0))
-            p = VAProfileVP9Profile0;
-    }
-#endif
-    else if (!qstrcmp(codecName, "mpeg2video"))
-    {
-        if (profileList.contains(VAProfileMPEG2Main))
-            p = VAProfileMPEG2Main;
-        else if (profileList.contains(VAProfileMPEG2Simple))
-            p = VAProfileMPEG2Simple;
-    }
-    else if (!qstrcmp(codecName, "mpeg4"))
-    {
-        if (profileList.contains(VAProfileMPEG4Main))
-            p = VAProfileMPEG4Main;
-        else if (profileList.contains(VAProfileMPEG4Simple))
-            p = VAProfileMPEG4Simple;
-    }
-    else if (!qstrcmp(codecName, "vc1"))
-    {
-        if (profileList.contains(VAProfileVC1Advanced))
-            p = VAProfileVC1Advanced;
-        else if (profileList.contains(VAProfileVC1Main))
-            p = VAProfileVC1Main;
-        else if (profileList.contains(VAProfileVC1Simple))
-            p = VAProfileVC1Simple;
-    }
-    else if (!qstrcmp(codecName, "h263"))
-    {
-        if (profileList.contains(VAProfileH263Baseline))
-            p = VAProfileH263Baseline;
-    }
+        clearVPP();
 
-    if (!ok || profile != p || outW != width || outH != height)
-    {
-        clr();
-
-        profile = p;
         outW = width;
         outH = height;
 
-        if (!vaapiCreateSurfaces(surfaces, surfacesCount, false))
-            return false;
-        surfacesCreated = true;
-
-        if (!vaCreateConfigAndContext())
-            return false;
-
-        if (initFilters)
-            init_vpp();
+        m_allowFilters = allowFilters;
 
         ok = true;
     }
     else
     {
-#ifdef HAVE_VPP
         forward_reference = VA_INVALID_SURFACE;
         vpp_second = false;
-#endif
-        if (isVDPAU)
-        {
-            if (context)
-            {
-                vaDestroyContext(VADisp, context);
-                context = 0;
-            }
-            if (config)
-            {
-                vaDestroyConfig(VADisp, config);
-                config = 0;
-            }
-            if (!vaCreateConfigAndContext())
-                return false;
-        }
     }
-
-    return ok;
 }
 
-SurfacesQueue VAAPI::getSurfacesQueue() const
+bool VAAPI::vaapiCreateSurface(VASurfaceID &surface, int w, int h)
 {
-    SurfacesQueue surfacesQueue;
-    for (int i = 0; i < surfacesCount; ++i)
-        surfacesQueue.enqueue((QMPlay2SurfaceID)surfaces[i]);
-    return surfacesQueue;
+    VASurfaceAttrib attrib;
+    attrib.type = VASurfaceAttribPixelFormat;
+    attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+    attrib.value.type = VAGenericValueTypeInteger;
+    attrib.value.value.i = VA_FOURCC_NV12;
+    return vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, w, h, &surface, 1, &attrib, 1) == VA_STATUS_SUCCESS;
 }
 
-inline bool VAAPI::vaCreateConfigAndContext()
+void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
 {
-    return vaCreateConfig(VADisp, profile, VAEntrypointVLD, nullptr, 0, &config) == VA_STATUS_SUCCESS && vaCreateContext(VADisp, config, outW, outH, VA_PROGRESSIVE, surfaces, surfacesCount, &context) == VA_STATUS_SUCCESS;
-}
-bool VAAPI::vaapiCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, bool useAttr)
-{
-#ifdef NEW_CREATESURFACES
-    VASurfaceAttrib attrib, *attribs = nullptr;
-    if (useAttr)
-    {
-        attrib.type = VASurfaceAttribPixelFormat;
-        attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
-        attrib.value.type = VAGenericValueTypeInteger;
-        attrib.value.value.i = VA_FOURCC_NV12;
-        attribs = &attrib;
-    }
-    return vaCreateSurfaces(VADisp, VA_RT_FORMAT_YUV420, outW, outH, surfaces, surfacesCount, attribs, attribs ? 1 : 0) == VA_STATUS_SUCCESS;
-#else
-    Q_UNUSED(useAttr)
-    return vaCreateSurfaces(VADisp, outW, outH, VA_RT_FORMAT_YUV420, surfacesCount, surfaces) == VA_STATUS_SUCCESS;
-#endif
-}
+    if (!m_allowFilters || use_vpp)
+        return;
 
-void VAAPI::init_vpp()
-{
-#ifdef HAVE_VPP
     use_vpp = true;
+
     if
     (
-        vaCreateConfig(VADisp, (VAProfile)-1, VAEntrypointVideoProc, nullptr, 0, &config_vpp) == VA_STATUS_SUCCESS &&
+        vaCreateConfig(VADisp, VAProfileNone, VAEntrypointVideoProc, nullptr, 0, &config_vpp) == VA_STATUS_SUCCESS &&
         vaCreateContext(VADisp, config_vpp, 0, 0, 0, nullptr, 0, &context_vpp) == VA_STATUS_SUCCESS &&
-        vaapiCreateSurfaces(&id_vpp, 1, true)
+        vaapiCreateSurface(id_vpp, surfaceW, surfaceH)
     )
     {
         unsigned num_filters = VAProcFilterCount;
         VAProcFilterType filters[VAProcFilterCount];
         if (vaQueryVideoProcFilters(VADisp, context_vpp, filters, &num_filters) != VA_STATUS_SUCCESS)
             num_filters = 0;
-        if (num_filters)
+        if (num_filters > 0)
         {
             /* Creating dummy filter (some drivers/api versions (1.6.x and Ivy Bridge) crashes without any filter) - this is unreachable now */
             VAProcFilterParameterBufferBase none_params = {VAProcFilterNone};
@@ -263,7 +145,9 @@ void VAAPI::init_vpp()
                 vpp_buffers[VAProcFilterNone] = VA_INVALID_ID;
             /* Searching deinterlacing filter */
             if (vpp_deint_type != VAProcDeinterlacingNone)
+            {
                 for (unsigned i = 0; i < num_filters; ++i)
+                {
                     if (filters[i] == VAProcFilterDeinterlacing)
                     {
                         VAProcFilterCapDeinterlacing deinterlacing_caps[VAProcDeinterlacingCount];
@@ -287,34 +171,40 @@ void VAAPI::init_vpp()
                         }
                         if (vpp_deint_type == VAProcDeinterlacingMotionCompensated && !vpp_deint_types[1])
                         {
-                            QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
+                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
                             vpp_deint_type = VAProcDeinterlacingMotionAdaptive;
                         }
                         if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[0])
                         {
-                            QMPlay2Core.log(tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
-                            vpp_deint_type = VAProcDeinterlacingNone;
+                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
+                            vpp_deint_type = VAProcDeinterlacingBob;
                         }
                         if (vpp_deint_type != VAProcDeinterlacingNone)
                         {
-                            VAProcFilterParameterBufferDeinterlacing deint_params = {VAProcFilterDeinterlacing, vpp_deint_type, 0};
+                            VAProcFilterParameterBufferDeinterlacing deint_params = {
+                                VAProcFilterDeinterlacing,
+                                vpp_deint_type,
+                                0,
+                                {}
+                            };
                             if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_buffers[VAProcFilterDeinterlacing]) != VA_STATUS_SUCCESS)
                                 vpp_buffers[VAProcFilterDeinterlacing] = VA_INVALID_ID;
                         }
                         break;
                     }
+                }
+            }
             return;
         }
     }
+
     if (vpp_deint_type != VAProcDeinterlacingNone) //Show error only when filter is required
         QMPlay2Core.log("VA-API :: " + tr("Cannot open video filters"), ErrorLog | LogOnce);
-    clr_vpp();
-#endif
-}
 
-void VAAPI::clr_vpp()
+    clearVPP();
+}
+void VAAPI::clearVPP(bool resetAllowFilters)
 {
-#ifdef HAVE_VPP
     if (use_vpp)
     {
         for (int i = 0; i < VAProcFilterCount; ++i)
@@ -334,24 +224,8 @@ void VAAPI::clr_vpp()
     vpp_second = false;
     context_vpp = 0;
     config_vpp = 0;
-#endif
-}
-void VAAPI::clr()
-{
-    clr_vpp();
-    if (VADisp)
-    {
-        if (surfacesCreated)
-            vaDestroySurfaces(VADisp, surfaces, surfacesCount);
-        if (context)
-            vaDestroyContext(VADisp, context);
-        if (config)
-            vaDestroyConfig(VADisp, config);
-    }
-    surfacesCreated = ok = false;
-    profile = (VAProfile)-1; //VAProfileNone
-    context = 0;
-    config = 0;
+    if (resetAllowFilters)
+        m_allowFilters = false;
 }
 
 void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, int hue)
@@ -387,7 +261,6 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
 bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field)
 {
     const VASurfaceID curr_id = videoFrame.surfaceId;
-#ifdef HAVE_VPP
     const bool do_vpp_deint = (field != 0) && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
     if (use_vpp && !do_vpp_deint)
     {
@@ -462,8 +335,9 @@ bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &fiel
         return false;
     }
     else
-#endif
+    {
         id = curr_id;
+    }
     return true;
 }
 
@@ -501,5 +375,69 @@ bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12To
         vaDestroyImage(VADisp, image.image_id);
         return true;
     }
+    return false;
+}
+
+bool VAAPI::hasProfile(const char *codecName) const
+{
+    // Optional check - FFmpeg opens VA-API when first frame is given to the codec,
+    // so check here if codec is supported to not open VideoWriter unnecessarily.
+
+    int numProfiles = vaMaxNumProfiles(VADisp);
+    QVector<VAProfile> vaProfiles(numProfiles);
+    if (vaQueryConfigProfiles(VADisp, vaProfiles.data(), &numProfiles) != VA_STATUS_SUCCESS)
+        return false;
+    vaProfiles.resize(numProfiles);
+
+    if (qstrcmp(codecName, "h264") == 0)
+    {
+        return vaProfiles.contains(VAProfileH264High)
+                || vaProfiles.contains(VAProfileH264Main)
+                || vaProfiles.contains(VAProfileH264ConstrainedBaseline);
+    }
+#if VA_VERSION_HEX >= 0x230000 // 1.3.0
+    else if (qstrcmp(codecName, "vp8") == 0)
+    {
+        return vaProfiles.contains(VAProfileVP8Version0_3);
+    }
+#endif
+#if VA_VERSION_HEX >= 0x250000 // 1.5.0
+    else if (qstrcmp(codecName, "hevc") == 0)
+    {
+        return vaProfiles.contains(VAProfileHEVCMain);
+    }
+#endif
+#if VA_VERSION_HEX >= 0x260000 // 1.6.0
+    else if (qstrcmp(codecName, "vp9") == 0)
+    {
+        return vaProfiles.contains(VAProfileVP9Profile0)
+#   if VA_VERSION_HEX >= 0x270000
+                || vaProfiles.contains(VAProfileVP9Profile2)
+#   endif
+        ;
+    }
+#endif
+    else if (qstrcmp(codecName, "mpeg2video") == 0)
+    {
+        return vaProfiles.contains(VAProfileMPEG2Main)
+                || vaProfiles.contains(VAProfileMPEG2Simple);
+    }
+    else if (qstrcmp(codecName, "mpeg4") == 0)
+    {
+        return vaProfiles.contains(VAProfileMPEG4Main)
+                || vaProfiles.contains(VAProfileMPEG4Simple)
+                || vaProfiles.contains(VAProfileMPEG4AdvancedSimple);
+    }
+    else if (qstrcmp(codecName, "vc1") == 0 || qstrcmp(codecName, "wmv3") == 0)
+    {
+        return vaProfiles.contains(VAProfileVC1Advanced)
+                || vaProfiles.contains(VAProfileVC1Main)
+                || vaProfiles.contains(VAProfileVC1Simple);
+    }
+    else if (qstrcmp(codecName, "h263") == 0)
+    {
+        return vaProfiles.contains(VAProfileH263Baseline);
+    }
+
     return false;
 }

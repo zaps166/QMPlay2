@@ -27,7 +27,7 @@ extern "C"
 {
     #include <libavformat/avformat.h>
     #include <libavutil/pixdesc.h>
-    #include <libavcodec/vaapi.h>
+    #include <libavutil/hwcontext_vaapi.h>
     #include <libswscale/swscale.h>
 }
 
@@ -125,8 +125,22 @@ private:
 
 /**/
 
+static AVPixelFormat vaapiGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
+{
+    Q_UNUSED(codecCtx)
+    while (*pixFmt != AV_PIX_FMT_NONE)
+    {
+        if (*pixFmt == AV_PIX_FMT_VAAPI)
+            return *pixFmt;
+        ++pixFmt;
+    }
+    return AV_PIX_FMT_NONE;
+}
+
+/**/
+
 FFDecVAAPI::FFDecVAAPI(Module &module) :
-    m_useOpenGL(true), m_allowVDPAU(false),
+    m_useOpenGL(true),
     m_copyVideo(Qt::Unchecked),
     m_vaapi(nullptr),
     m_swsCtx(nullptr)
@@ -152,13 +166,6 @@ bool FFDecVAAPI::set()
         ret = false;
     }
 
-    const bool allowVDPAU = sets().getBool("AllowVDPAUinVAAPI");
-    if (allowVDPAU != m_allowVDPAU)
-    {
-        m_allowVDPAU = allowVDPAU;
-        ret = false;
-    }
-
     const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideoVAAPI");
     if (copyVideo != m_copyVideo)
     {
@@ -166,7 +173,6 @@ bool FFDecVAAPI::set()
         ret = false;
     }
 
-#ifdef HAVE_VPP
     switch (sets().getInt("VAAPIDeintMethod"))
     {
         case 0:
@@ -183,13 +189,8 @@ bool FFDecVAAPI::set()
         const bool reloadVpp = m_vaapi->ok && m_vaapi->use_vpp && (m_vaapi->vpp_deint_type != m_vppDeintType);
         m_vaapi->vpp_deint_type = m_vppDeintType;
         if (reloadVpp)
-        {
-            m_vaapi->clr_vpp();
-            if (m_hwAccelWriter)
-                m_vaapi->init_vpp();
-        }
+            m_vaapi->clearVPP(false);
     }
-#endif
 
     return sets().getBool("DecoderVAAPIEnabled") && ret;
 }
@@ -199,6 +200,13 @@ QString FFDecVAAPI::name() const
     return "FFmpeg/" VAAPIWriterName;
 }
 
+int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+{
+    int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
+    if (m_hwAccelWriter && ret > -1)
+        m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
+    return ret;
+}
 void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
 {
     VAImage image;
@@ -244,103 +252,109 @@ void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
 bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
     const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
-    if ((pix_fmt == AV_PIX_FMT_YUV420P || pix_fmt == AV_PIX_FMT_YUVJ420P))
+    if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
+        return false;
+
+    AVCodec *codec = init(streamInfo);
+    if (!codec || !hasHWAccel("vaapi"))
+        return false;
+
+    if (writer) //Writer is already created
     {
-        AVCodec *codec = init(streamInfo);
-        if (codec && hasHWAccel("vaapi"))
+        VAAPIOpenGL *vaapiOpenGL = dynamic_cast<VAAPIOpenGL *>(writer->getHWAccelInterface());
+        if (vaapiOpenGL) //Check if it is OpenGL 2
         {
-            if (writer) //Writer is already created
+            m_vaapi = vaapiOpenGL->getVAAPI();
+            m_hwAccelWriter = writer;
+        }
+        else if (writer->name() == VAAPIWriterName) //Check if it is VA-API
+        {
+            VAAPIWriter *vaapiWriter = (VAAPIWriter *)writer;
+            m_vaapi = vaapiWriter->getVAAPI();
+            if (m_vaapi)
+                m_hwAccelWriter = vaapiWriter;
+        }
+        if (!m_hwAccelWriter)
+            writer = nullptr;
+    }
+
+    bool useOpenGL = m_useOpenGL;
+
+    if (!m_vaapi) //VA-API is not open yet, so open it now
+    {
+        m_vaapi = new VAAPI;
+        if (!m_vaapi->open(avcodec_get_name(codec_ctx->codec_id), useOpenGL))
+        {
+            delete m_vaapi;
+            m_vaapi = nullptr;
+        }
+    }
+
+    if (m_vaapi) //Initialize VA-API
+    {
+        auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
+        if (bufferRef)
+        {
+            auto vaapiDevCtx = (AVVAAPIDeviceContext *)((AVHWDeviceContext *)bufferRef->data)->hwctx;
+            vaapiDevCtx->display = m_vaapi->VADisp;
+        }
+        if (bufferRef && av_hwdevice_ctx_init(bufferRef) == 0)
+        {
+            codec_ctx->hw_device_ctx = bufferRef;
+            m_vaapi->vpp_deint_type = m_vppDeintType;
+            m_vaapi->init(codec_ctx->width, codec_ctx->height, (m_copyVideo != Qt::Checked));
+        }
+        else
+        {
+            if (!m_hwAccelWriter)
+                delete m_vaapi;
+            m_vaapi = nullptr;
+        }
+    }
+
+    if (!m_vaapi)
+        return false;
+
+    //VA-API initialized
+    if (m_copyVideo != Qt::Checked && !m_hwAccelWriter) //Open writer if doesn't exist yet and if we don't want to copy the video
+    {
+        if (useOpenGL)
+        {
+            VAAPIOpenGL *vaapiOpengGL = new VAAPIOpenGL(m_vaapi);
+            m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
+            if (m_hwAccelWriter)
+                vaapiOpengGL->allowDeleteVAAPI();
+        }
+        if (!m_hwAccelWriter)
+        {
+            VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
+            if (!vaapiWriter->open())
+                delete vaapiWriter;
+            else
             {
-                VAAPIOpenGL *vaapiOpenGL = dynamic_cast<VAAPIOpenGL *>(writer->getHWAccelInterface());
-                if (vaapiOpenGL) //Check if it is OpenGL 2
-                {
-                    m_vaapi = vaapiOpenGL->getVAAPI();
-                    m_hwAccelWriter = writer;
-                }
-                else if (writer->name() == VAAPIWriterName) //Check if it is VA-API
-                {
-                    VAAPIWriter *vaapiWriter = (VAAPIWriter *)writer;
-                    m_vaapi = vaapiWriter->getVAAPI();
-                    if (m_vaapi)
-                        m_hwAccelWriter = vaapiWriter;
-                }
-                if (!m_hwAccelWriter)
-                    writer = nullptr;
-            }
-
-            bool useOpenGL = m_useOpenGL;
-
-            if (!m_vaapi) //VA-API context doesn't exist yet, so create it
-            {
-                m_vaapi = new VAAPI;
-                if (!m_vaapi->open(m_allowVDPAU, useOpenGL))
-                {
-                    delete m_vaapi;
-                    m_vaapi = nullptr;
-                }
-            }
-
-            if (m_vaapi) //Initialize VA-API context
-            {
-#ifdef HAVE_VPP
-                m_vaapi->vpp_deint_type = m_vppDeintType;
-#endif
-                if (!m_vaapi->init(codec_ctx->width, codec_ctx->height, avcodec_get_name(codec_ctx->codec_id), (m_copyVideo != Qt::Checked)))
-                {
-                    if (!m_hwAccelWriter)
-                        delete m_vaapi;
-                    m_vaapi = nullptr;
-                }
-            }
-
-            if (m_vaapi) //VA-API context is properly initialized
-            {
-                if (m_copyVideo != Qt::Checked && !m_hwAccelWriter) //Open writer if doesn't exist yet and if we don't want to copy the video
-                {
-                    if (useOpenGL)
-                    {
-                        VAAPIOpenGL *vaapiOpengGL = new VAAPIOpenGL(m_vaapi);
-                        m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
-                        if (m_hwAccelWriter)
-                            vaapiOpengGL->allowDeleteVAAPI();
-                    }
-                    if (!m_hwAccelWriter)
-                    {
-                        VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
-                        if (!vaapiWriter->open())
-                            delete vaapiWriter;
-                        else
-                        {
-                            vaapiWriter->init();
-                            m_hwAccelWriter = vaapiWriter;
-                        }
-                    }
-                }
-
-                if (m_copyVideo != Qt::Unchecked || m_hwAccelWriter)
-                {
-                    vaapi_context *vaapiCtx = (vaapi_context *)av_mallocz(sizeof(vaapi_context));
-                    vaapiCtx->display    = m_vaapi->VADisp;
-                    vaapiCtx->context_id = m_vaapi->context;
-                    vaapiCtx->config_id  = m_vaapi->config;
-
-                    new HWAccelHelper(codec_ctx, AV_PIX_FMT_VAAPI_VLD, vaapiCtx, m_vaapi->getSurfacesQueue());
-
-                    if (openCodec(codec))
-                    {
-                        time_base = streamInfo.getTimeBase();
-                        if (m_hwAccelWriter || m_vaapi->nv12ImageFmt.fourcc == VA_FOURCC_NV12)
-                            return true;
-                    }
-                }
-
-                if (!m_hwAccelWriter)
-                {
-                    delete m_vaapi;
-                    m_vaapi = nullptr;
-                }
+                vaapiWriter->init();
+                m_hwAccelWriter = vaapiWriter;
             }
         }
     }
+
+    if (m_copyVideo != Qt::Unchecked || m_hwAccelWriter)
+    {
+        codec_ctx->get_format = vaapiGetFormat;
+        codec_ctx->thread_count = 1;
+        if (openCodec(codec))
+        {
+            time_base = streamInfo.getTimeBase();
+            if (m_hwAccelWriter || m_vaapi->nv12ImageFmt.fourcc == VA_FOURCC_NV12)
+                return true;
+        }
+    }
+
+    if (!m_hwAccelWriter)
+    {
+        delete m_vaapi;
+        m_vaapi = nullptr;
+    }
+
     return false;
 }

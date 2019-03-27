@@ -33,16 +33,15 @@ public:
 
     QString name() const override;
 
+    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(VideoFrame &decoded) override;
 
     bool open(StreamInfo &, VideoWriter *) override;
 
 private:
-    bool m_useOpenGL, m_allowVDPAU;
+    bool m_useOpenGL;
     Qt::CheckState m_copyVideo;
-#ifdef HAVE_VPP
     VAProcDeinterlacingType m_vppDeintType;
-#endif
     VAAPI *m_vaapi;
     SwsContext *m_swsCtx;
 };
