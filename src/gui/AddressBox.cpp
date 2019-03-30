@@ -24,6 +24,7 @@
 #include <Main.hpp>
 
 #include <QGridLayout>
+#include <QDir>
 
 AddressBox::AddressBox(Qt::Orientation o, QString url)
 {
@@ -52,10 +53,12 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
     if (!url.isEmpty())
     {
         QString prefix, param;
+        bool hasPrefix = false, isFile = false;
         if (Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &prefix, &url, &param))
         {
             pB.setCurrentIndex(pB.findText(prefix));
             pE.setText(param);
+            hasPrefix = true;
         }
         else
         {
@@ -65,14 +68,20 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
             {
                 pB.setCurrentIndex(idx);
                 url.remove(scheme + "://");
+                hasPrefix = true;
             }
         }
         if (url.startsWith("file://"))
         {
             url.remove(0, 7);
             filePrefix = "file://";
+            isFile = true;
         }
-        aE.setText(url);
+        else if (!hasPrefix && !url.contains("://"))
+        {
+            isFile = true;
+        }
+        aE.setText(isFile ? QDir::toNativeSeparators(url) : url);
     }
 
     connect(&pB, SIGNAL(currentIndexChanged(int)), this, SLOT(pBIdxChanged()));

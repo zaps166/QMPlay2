@@ -789,7 +789,7 @@ void DemuxerThr::emitInfo()
     else
     {
         const QString pth = realUrl.right(realUrl.length() - 7);
-        info += "<b>" + tr("File path") + ": </b> " + Functions::filePath(pth) + "<br/>";
+        info += "<b>" + tr("File path") + ": </b> " + QDir::toNativeSeparators(Functions::filePath(pth)) + "<br/>";
         info += "<b>" + tr("File name") + ": </b> " + Functions::fileName(pth) + "<br/>";
     }
 
