@@ -64,7 +64,10 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
 
     QString url = tWI->data(0, Qt::UserRole).toString();
     if (url.startsWith("file://"))
+    {
         url.remove(0, 7);
+        url = QDir::toNativeSeparators(url);
+    }
 
     const bool isGroup = PlaylistWidget::isGroup(tWI);
 
@@ -185,7 +188,7 @@ void EntryProperties::browse()
     {
         if (nameE->text().isEmpty())
             nameE->setText(Functions::fileName(pth));
-        pthE->setText(pth);
+        pthE->setText(QDir::toNativeSeparators(pth));
     }
 }
 void EntryProperties::openUrl()
