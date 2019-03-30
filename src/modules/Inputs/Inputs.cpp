@@ -100,6 +100,7 @@ void Inputs::add()
 {
     QWidget *parent = qobject_cast<QWidget *>(sender()->parent());
     AddD d(*this, parent);
+    d.setWindowIcon(toneIcon);
     const QString params = d.execAndGet();
     if (!params.isEmpty())
         emit QMPlay2Core.processParam("open", ToneGeneratorName "://" + params);
@@ -145,10 +146,7 @@ AddD::AddD(Settings &sets, QWidget *parent, QObject *moduleSetsW) :
 {
     QGroupBox *gB = nullptr;
     if (parent)
-    {
         setWindowTitle(tr("Tone generator"));
-        setWindowIcon(QIcon(":/sine.svgz"));
-    }
     else
         gB = new QGroupBox(tr("Tone generator"));
 
