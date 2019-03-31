@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file alias="DirectX.svgz">DirectX.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="DirectX.svgz">DirectX.svgz</file>
+    </qresource>
 </RCC>

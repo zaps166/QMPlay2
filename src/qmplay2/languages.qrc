@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file>Languages.csv</file>
-	</qresource>
+    <qresource>
+        <file>Languages.csv</file>
+    </qresource>
 </RCC>

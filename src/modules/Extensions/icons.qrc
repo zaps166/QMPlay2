@@ -1,10 +1,10 @@
 <RCC>
-	<qresource>
-		<file alias="Extensions.svgz">Extensions.svgz</file>
-		<file alias="downloader.svgz">downloader.svgz</file>
-		<file alias="youtube.svgz">youtube.svgz</file>
-		<file alias="lastfm.svgz">lastfm.svgz</file>
-		<file alias="radio.svgz">radio.svgz</file>
-		<file alias="video.svgz">video.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="Extensions.svgz">Extensions.svgz</file>
+        <file alias="downloader.svgz">downloader.svgz</file>
+        <file alias="youtube.svgz">youtube.svgz</file>
+        <file alias="lastfm.svgz">lastfm.svgz</file>
+        <file alias="radio.svgz">radio.svgz</file>
+        <file alias="video.svgz">video.svgz</file>
+    </qresource>
 </RCC>

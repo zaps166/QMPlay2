@@ -1,9 +1,9 @@
 <RCC>
-	<qresource>
-		<file alias="FFmpeg.svgz">FFmpeg.svgz</file>
-		<file alias="FFDemux.svgz">FFDemux.svgz</file>
-		<file alias="VAAPI.svgz">VAAPI.svgz</file>
-		<file alias="VDPAU.svgz">VDPAU.svgz</file>
-		<file alias="DXVA2.svgz">DXVA2.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="FFmpeg.svgz">FFmpeg.svgz</file>
+        <file alias="FFDemux.svgz">FFDemux.svgz</file>
+        <file alias="VAAPI.svgz">VAAPI.svgz</file>
+        <file alias="VDPAU.svgz">VDPAU.svgz</file>
+        <file alias="DXVA2.svgz">DXVA2.svgz</file>
+    </qresource>
 </RCC>

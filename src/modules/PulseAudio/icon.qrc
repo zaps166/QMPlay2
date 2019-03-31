@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file alias="PulseAudio.svgz">PulseAudio.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="PulseAudio.svgz">PulseAudio.svgz</file>
+    </qresource>
 </RCC>
