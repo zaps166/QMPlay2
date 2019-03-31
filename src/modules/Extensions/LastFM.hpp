@@ -44,6 +44,7 @@ public:
         QString title, artist, album;
         time_t startTime;
         int duration;
+        bool first;
     };
 
     LastFM(Module &module);
@@ -67,7 +68,8 @@ private slots:
 
     void processScrobbleQueue();
 private:
-    NetworkReply *coverReply, *loginReply, *scrobbleReply;
+    NetworkReply *coverReply, *loginReply;
+    QList<NetworkReply *> m_scrobbleReplies;
     bool downloadCovers, dontShowLoginError, firstTime;
     QString user, md5pass, session_key;
     QQueue<Scrobble> scrobbleQueue;

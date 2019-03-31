@@ -35,7 +35,6 @@ Q_DECLARE_METATYPE(LastFM::Scrobble)
 LastFM::LastFM(Module &module) :
     coverReply(nullptr),
     loginReply(nullptr),
-    scrobbleReply(nullptr),
     dontShowLoginError(false),
     firstTime(true)
 {
@@ -135,10 +134,9 @@ void LastFM::logout(bool canClear)
         loginReply->deleteLater();
         loginReply = nullptr;
     }
-    if (scrobbleReply)
+    while (!m_scrobbleReplies.isEmpty())
     {
-        scrobbleReply->deleteLater();
-        scrobbleReply = nullptr;
+        m_scrobbleReplies.takeLast()->deleteLater();
     }
     if (canClear)
         clear();
@@ -150,6 +148,8 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 {
     if (session_key.isEmpty())
         return;
+
+    NetworkReply *reply = nullptr;
 
     // updateNowPlaying
     const auto duration = QString::number(qMax<int>(0, scrobble.duration - (time(nullptr) - scrobble.startTime)));
@@ -171,7 +171,7 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
     updateNowPlayingQuery.addQueryItem("api_sig", apiSig);
     updateNowPlayingQuery.addQueryItem("sk", session_key);
 
-    auto reply = net.start(audioScrobbler2URL, updateNowPlayingQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
+    reply = net.start(audioScrobbler2URL, updateNowPlayingQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
     connect(reply, &NetworkReply::finished,
             reply, &NetworkReply::deleteLater);
 
@@ -195,9 +195,14 @@ void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
     scrobbleQuery.addQueryItem("api_sig", apiSig);
     scrobbleQuery.addQueryItem("sk", session_key);
 
-    scrobbleReply = net.start(audioScrobbler2URL, scrobbleQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
-    scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
-    connect(scrobbleReply, &NetworkReply::finished,
+    reply = net.start(audioScrobbler2URL, scrobbleQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
+    reply->setProperty("scrobble", QVariant::fromValue(scrobble));
+    m_scrobbleReplies.push_back(reply);
+    connect(reply, &NetworkReply::destroyed,
+            this, [=] {
+        m_scrobbleReplies.removeOne(reply);
+    });
+    connect(reply, &NetworkReply::finished,
             this, &LastFM::scrobbleFinished);
 }
 
@@ -225,7 +230,8 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
                 artist,
                 album,
                 currTime,
-                length
+                length,
+                true,
             };
             if (play)
             {
@@ -347,16 +353,25 @@ void LastFM::loginFinished()
 }
 void LastFM::scrobbleFinished()
 {
-    if (scrobbleReply->hasError())
+    const auto reply = qobject_cast<NetworkReply *>(sender());
+    if (reply->hasError())
     {
-        scrobbleQueue.enqueue(scrobbleReply->property("scrobble").value<Scrobble>());
-        logout(false);
-        login();
+        auto scrobble = reply->property("scrobble").value<Scrobble>();
+        if (scrobble.first)
+        {
+            scrobble.first = false;
+            scrobbleQueue.enqueue(scrobble);
+            logout(false);
+            login();
+        }
+        else
+        {
+            reply->deleteLater();
+        }
     }
     else
     {
-        scrobbleReply->deleteLater();
-        scrobbleReply = nullptr;
+        reply->deleteLater();
     }
 }
 
