@@ -46,7 +46,7 @@ Updater::Updater(QObject *parent) :
     net(this),
     busy(false)
 {
-    infoFile.setFileName(QString("%1/%2.%3.%4").arg(QDir::tempPath(), "QMPlay2UpdaterURLs").arg(QCoreApplication::applicationPid()));
+    infoFile.setFileName(QString("%1/%2.%3").arg(QDir::tempPath(), "QMPlay2UpdaterURLs").arg(QCoreApplication::applicationPid()));
 #ifdef UPDATER
     updateFile.setFileName(QMPlay2Core.getSettingsDir() + "QMPlay2Installer.exe");
 
