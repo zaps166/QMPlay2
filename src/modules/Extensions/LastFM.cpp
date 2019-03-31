@@ -29,6 +29,7 @@ Q_DECLARE_METATYPE(LastFM::Scrobble)
 
 #include <QCryptographicHash>
 #include <QStringList>
+#include <QUrlQuery>
 #include <QImage>
 
 LastFM::LastFM(Module &module) :
@@ -147,26 +148,57 @@ void LastFM::logout(bool canClear)
 
 void LastFM::updateNowPlayingAndScrobble(const Scrobble &scrobble)
 {
-    if (!session_key.isEmpty())
-    {
-        QString api_sig;
+    if (session_key.isEmpty())
+        return;
 
-        int duration = scrobble.duration - (time(nullptr) - scrobble.startTime);
-        if (duration < 0)
-            duration = 0;
+    // updateNowPlaying
+    const auto duration = QString::number(qMax<int>(0, scrobble.duration - (time(nullptr) - scrobble.startTime)));
 
-        //updateNowPlaying
-        api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7").arg(scrobble.album, api_key, scrobble.artist).arg(duration).arg(session_key, scrobble.title, secret).toUtf8(), QCryptographicHash::Md5).toHex();
-        NetworkReply *reply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&duration=%5&method=track.updatenowplaying&sk=%6&track=%7").arg(scrobble.album, api_key, api_sig, scrobble.artist).arg(duration).arg(session_key, scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
-        connect(reply, SIGNAL(finished()), reply, SLOT(deleteLater()));
+    auto apiSig = QCryptographicHash::hash(
+        QString("album%1api_key%2artist%3duration%4methodtrack.updatenowplayingsk%5track%6%7")
+            .arg(scrobble.album, api_key, scrobble.artist, duration, session_key, scrobble.title, secret)
+            .toUtf8(),
+        QCryptographicHash::Md5
+    ).toHex();
 
-        //scrobble
-        const QString ts = QString::number(scrobble.startTime);
-        api_sig = QCryptographicHash::hash(QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7").arg(scrobble.album, api_key, scrobble.artist, session_key, ts, scrobble.title, secret).toUtf8(), QCryptographicHash::Md5).toHex();
-        scrobbleReply = net.start(audioScrobbler2URL, QString("album=%1&api_key=%2&api_sig=%3&artist=%4&method=track.scrobble&sk=%5&timestamp=%6&track=%7").arg(scrobble.album, api_key, api_sig, scrobble.artist, session_key, ts, scrobble.title).toUtf8(), NetworkAccess::UrlEncoded);
-        scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
-        connect(scrobbleReply, SIGNAL(finished()), this, SLOT(scrobbleFinished()));
-    }
+    QUrlQuery updateNowPlayingQuery;
+    updateNowPlayingQuery.addQueryItem("method", "track.updatenowplaying");
+    updateNowPlayingQuery.addQueryItem("artist", scrobble.artist);
+    updateNowPlayingQuery.addQueryItem("track", scrobble.title);
+    updateNowPlayingQuery.addQueryItem("album", scrobble.album.isEmpty() ? "" : scrobble.album);
+    updateNowPlayingQuery.addQueryItem("duration", duration);
+    updateNowPlayingQuery.addQueryItem("api_key", api_key);
+    updateNowPlayingQuery.addQueryItem("api_sig", apiSig);
+    updateNowPlayingQuery.addQueryItem("sk", session_key);
+
+    auto reply = net.start(audioScrobbler2URL, updateNowPlayingQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
+    connect(reply, &NetworkReply::finished,
+            reply, &NetworkReply::deleteLater);
+
+    // scrobble
+    const auto ts = QString::number(scrobble.startTime);
+
+    apiSig = QCryptographicHash::hash(
+        QString("album%1api_key%2artist%3methodtrack.scrobblesk%4timestamp%5track%6%7")
+            .arg(scrobble.album, api_key, scrobble.artist, session_key, ts, scrobble.title, secret)
+            .toUtf8(),
+        QCryptographicHash::Md5
+    ).toHex();
+
+    QUrlQuery scrobbleQuery;
+    scrobbleQuery.addQueryItem("method", "track.scrobble");
+    scrobbleQuery.addQueryItem("artist", scrobble.artist);
+    scrobbleQuery.addQueryItem("track", scrobble.title);
+    scrobbleQuery.addQueryItem("timestamp", ts);
+    scrobbleQuery.addQueryItem("album", scrobble.album.isEmpty() ? "" : scrobble.album);
+    scrobbleQuery.addQueryItem("api_key", api_key);
+    scrobbleQuery.addQueryItem("api_sig", apiSig);
+    scrobbleQuery.addQueryItem("sk", session_key);
+
+    scrobbleReply = net.start(audioScrobbler2URL, scrobbleQuery.toString(QUrl::EncodeDelimiters).toUtf8(), NetworkAccess::UrlEncoded);
+    scrobbleReply->setProperty("scrobble", QVariant::fromValue(scrobble));
+    connect(scrobbleReply, &NetworkReply::finished,
+            this, &LastFM::scrobbleFinished);
 }
 
 void LastFM::clear()
@@ -188,7 +220,13 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
         if (!user.isEmpty() && !md5pass.isEmpty())
         {
             const time_t currTime = time(nullptr);
-            const Scrobble scrobble = {title, artist, album, currTime, length};
+            const Scrobble scrobble = {
+                title,
+                artist,
+                album,
+                currTime,
+                length
+            };
             if (play)
             {
                 if (!scrobbleQueue.isEmpty() && currTime - scrobbleQueue.last().startTime < scrobbleSec)
