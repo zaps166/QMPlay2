@@ -77,7 +77,7 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 
 static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
 {
-    AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, AV_DICT_IGNORE_SUFFIX);
+    AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, 0);
     if (avTag && avTag->value)
     {
         const QByteArray tag = QByteArray(avTag->value);
