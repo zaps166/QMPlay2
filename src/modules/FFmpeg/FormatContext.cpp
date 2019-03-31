@@ -30,9 +30,7 @@ extern "C"
 {
     #include <libavformat/avformat.h>
     #include <libavutil/replaygain.h>
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 58, 100)
     #include <libavutil/spherical.h>
-#endif
     #include <libavutil/pixdesc.h>
 }
 
@@ -895,12 +893,10 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             if (ok)
                 streamInfo->rotation = rotation;
 
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 58, 100)
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_SPHERICAL, nullptr))
             {
                 streamInfo->spherical = (((AVSphericalMapping *)sideData)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
             }
-#endif
 
             break;
         }
