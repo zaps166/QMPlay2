@@ -70,7 +70,7 @@ QString MyFreeMP3::getQMPlay2Url(const QString &text) const
 
 NetworkReply *MyFreeMP3::getSearchReply(const QString &text, const qint32 page)
 {
-    return m_net.start(QString("%1/search.php").arg(g_url), QString("q=%1&page=%2").arg(QString(text.toUtf8().toPercentEncoding())).arg(page - 1).toUtf8(), NetworkAccess::UrlEncoded);
+    return m_net.start(QString("%1/search.php?callback=").arg(g_url), QString("q=%1&page=%2").arg(QString(text.toUtf8().toPercentEncoding())).arg(page - 1).toUtf8(), NetworkAccess::UrlEncoded);
 }
 MediaBrowserCommon::Description MyFreeMP3::addSearchResults(const QByteArray &reply, QTreeWidget *treeW)
 {
