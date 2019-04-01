@@ -261,6 +261,8 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
 bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field)
 {
     const VASurfaceID curr_id = videoFrame.surfaceId;
+    if (!checkSurface(curr_id))
+        return false;
     const bool do_vpp_deint = (field != 0) && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
     if (use_vpp && !do_vpp_deint)
     {
@@ -376,6 +378,22 @@ bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12To
         return true;
     }
     return false;
+}
+
+void VAAPI::clearSurfaces()
+{
+    QMutexLocker locker(&m_surfacesMutex);
+    m_surfaces.clear();
+}
+void VAAPI::insertSurface(quintptr id)
+{
+    QMutexLocker locker(&m_surfacesMutex);
+    m_surfaces.insert(id);
+}
+bool VAAPI::checkSurface(quintptr id)
+{
+    QMutexLocker locker(&m_surfacesMutex);
+    return m_surfaces.contains(id);
 }
 
 bool VAAPI::hasProfile(const char *codecName) const

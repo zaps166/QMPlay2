@@ -149,6 +149,8 @@ FFDecVAAPI::FFDecVAAPI(Module &module) :
 }
 FFDecVAAPI::~FFDecVAAPI()
 {
+    if (m_vaapi)
+        m_vaapi->clearSurfaces();
     if (codecIsOpen)
         avcodec_flush_buffers(codec_ctx);
     if (m_swsCtx)
@@ -202,9 +204,16 @@ QString FFDecVAAPI::name() const
 
 int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
+    if (flush)
+        m_vaapi->clearSurfaces();
+
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)
+    {
+        m_vaapi->insertSurface(decoded.surfaceId);
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
+    }
+
     return ret;
 }
 void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)

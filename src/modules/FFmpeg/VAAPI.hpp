@@ -19,6 +19,8 @@
 #pragma once
 
 #include <QCoreApplication>
+#include <QMutex>
+#include <QSet>
 
 #include <va/va.h>
 #include <va/va_vpp.h>
@@ -50,6 +52,10 @@ public:
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
+    void clearSurfaces();
+    void insertSurface(quintptr id);
+    bool checkSurface(quintptr id);
+
 private:
     bool hasProfile(const char *codecName) const;
 
@@ -68,6 +74,9 @@ public:
 
 private:
     int version = 0;
+
+    QSet<quintptr> m_surfaces;
+    QMutex m_surfacesMutex;
 
     // Postprocessing
     bool m_allowFilters = false;
