@@ -177,7 +177,7 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                         if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[0])
                         {
                             QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
-                            vpp_deint_type = VAProcDeinterlacingBob;
+                            vpp_deint_type = VAProcDeinterlacingNone;
                         }
                         if (vpp_deint_type != VAProcDeinterlacingNone)
                         {
