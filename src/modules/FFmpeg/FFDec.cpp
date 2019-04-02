@@ -114,6 +114,11 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 {
     packet->data = (quint8 *)encodedPacket.data();
     packet->size = encodedPacket.size();
+    if (!encodedPacket.palette.isEmpty())
+    {
+        if (auto data = av_packet_new_side_data(packet, AV_PKT_DATA_PALETTE, encodedPacket.palette.size()))
+            memcpy(data, encodedPacket.palette.constData(), encodedPacket.palette.size());
+    }
     if (encodedPacket.ts.hasDts())
         packet->dts = round(encodedPacket.ts.dts() / time_base);
     if (encodedPacket.ts.hasPts())

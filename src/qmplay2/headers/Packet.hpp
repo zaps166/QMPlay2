@@ -21,9 +21,12 @@
 #include <TimeStamp.hpp>
 #include <Buffer.hpp>
 
+#include <QByteArray>
+
 struct QMPLAY2SHAREDLIB_EXPORT Packet : public Buffer
 {
     TimeStamp ts;
     double duration, sampleAspectRatio = 0.0;
     bool hasKeyFrame = true;
+    QByteArray palette;
 };

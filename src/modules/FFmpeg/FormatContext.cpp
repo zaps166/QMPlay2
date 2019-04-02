@@ -567,13 +567,15 @@ bool FormatContext::read(Packet &encoded, int &idx)
         return true;
     }
 
-    if (streams.at(ff_idx)->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
+    const auto stream = streams.at(ff_idx);
+
+    if (stream->event_flags & AVSTREAM_EVENT_FLAG_METADATA_UPDATED)
     {
-        streams.at(ff_idx)->event_flags = 0;
+        stream->event_flags = 0;
         isMetadataChanged = true;
     }
-    if (fixMkvAss && streams.at(ff_idx)->codecpar->codec_id == AV_CODEC_ID_ASS)
-        matroska_fix_ass_packet(streams.at(ff_idx)->time_base, packet);
+    if (fixMkvAss && stream->codecpar->codec_id == AV_CODEC_ID_ASS)
+        matroska_fix_ass_packet(stream->time_base, packet);
 
     if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
     {
@@ -585,7 +587,15 @@ bool FormatContext::read(Packet &encoded, int &idx)
         packet->buf = nullptr;
     }
 
-    const double time_base = av_q2d(streams.at(ff_idx)->time_base);
+    if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO && stream->codecpar->format == AV_PIX_FMT_PAL8)
+    {
+        int size = 0;
+        const auto data = av_packet_get_side_data(packet, AV_PKT_DATA_PALETTE, &size);
+        if (size > 0 && data)
+            encoded.palette = QByteArray((const char *)data, size);
+    }
+
+    const double time_base = av_q2d(stream->time_base);
 
     encoded.ts.setInvalid();
     if (packet->dts != QMPLAY2_NOPTS_VALUE)
@@ -616,8 +626,8 @@ bool FormatContext::read(Packet &encoded, int &idx)
     }
 
     encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
-    if (streams.at(ff_idx)->sample_aspect_ratio.num)
-        encoded.sampleAspectRatio = av_q2d(streams.at(ff_idx)->sample_aspect_ratio);
+    if (stream->sample_aspect_ratio.num)
+        encoded.sampleAspectRatio = av_q2d(stream->sample_aspect_ratio);
 
     // Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
     if (encoded.hasKeyFrame && !encoded.ts.hasDts())
