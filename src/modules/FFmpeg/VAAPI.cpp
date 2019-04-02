@@ -91,6 +91,7 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
 void VAAPI::init(int width, int height,  bool allowFilters)
 {
+    clearSurfaces();
     if (!ok || outW != width || outH != height)
     {
         clearVPP();
@@ -101,11 +102,6 @@ void VAAPI::init(int width, int height,  bool allowFilters)
         m_allowFilters = allowFilters;
 
         ok = true;
-    }
-    else
-    {
-        forward_reference = VA_INVALID_SURFACE;
-        vpp_second = false;
     }
 }
 
@@ -121,7 +117,7 @@ bool VAAPI::vaapiCreateSurface(VASurfaceID &surface, int w, int h)
 
 void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
 {
-    if (!m_allowFilters || use_vpp)
+    if (!m_allowFilters || use_vpp || surfaceW < outW || surfaceH < outH)
         return;
 
     use_vpp = true;
@@ -258,11 +254,8 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
     }
 }
 
-bool VAAPI::filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field)
+bool VAAPI::filterVideo(const VASurfaceID curr_id, VASurfaceID &id, int &field)
 {
-    const VASurfaceID curr_id = videoFrame.surfaceId;
-    if (!checkSurface(curr_id))
-        return false;
     const bool do_vpp_deint = (field != 0) && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
     if (use_vpp && !do_vpp_deint)
     {
@@ -384,16 +377,21 @@ void VAAPI::clearSurfaces()
 {
     QMutexLocker locker(&m_surfacesMutex);
     m_surfaces.clear();
+
+    forward_reference = VA_INVALID_SURFACE;
+    vpp_second = false;
 }
 void VAAPI::insertSurface(quintptr id)
 {
     QMutexLocker locker(&m_surfacesMutex);
     m_surfaces.insert(id);
 }
-bool VAAPI::checkSurface(quintptr id)
+std::unique_ptr<QMutexLocker> VAAPI::checkSurfaceAndLock(quintptr id)
 {
-    QMutexLocker locker(&m_surfacesMutex);
-    return m_surfaces.contains(id);
+    std::unique_ptr<QMutexLocker> lockerPtr(new QMutexLocker(&m_surfacesMutex));
+    if (m_surfaces.contains(id))
+        return lockerPtr;
+    return nullptr;
 }
 
 bool VAAPI::hasProfile(const char *codecName) const

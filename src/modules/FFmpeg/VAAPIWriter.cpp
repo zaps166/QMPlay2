@@ -55,7 +55,19 @@ VAAPIWriter::VAAPIWriter(Module &module, VAAPI *vaapi) :
     grabGesture(Qt::PinchGesture);
     setMouseTracking(true);
 
-    connect(&drawTim, SIGNAL(timeout()), this, SLOT(draw()));
+    connect(&drawTim, &QTimer::timeout,
+            this, [this] {
+        if (id == VA_INVALID_SURFACE)
+            return;
+        if (this->vaapi->getIdVpp() == id)
+        {
+            draw();
+        }
+        else if (auto lock = this->vaapi->checkSurfaceAndLock(id))
+        {
+            draw();
+        }
+    });
     drawTim.setSingleShot(true);
 
     SetModule(module);
@@ -109,10 +121,18 @@ bool VAAPIWriter::processParams(bool *)
 }
 void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 {
-    VASurfaceID id;
-    int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
-    if (vaapi->filterVideo(videoFrame, id, field))
-        draw(id, field);
+    const VASurfaceID currId = videoFrame.surfaceId;
+    if (auto lock = vaapi->checkSurfaceAndLock(currId))
+    {
+        VASurfaceID id;
+        int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
+        if (vaapi->filterVideo(currId, id, field))
+        {
+            if (id != currId)
+                lock.reset();
+            draw(id, field);
+        }
+    }
     paused = false;
 }
 void VAAPIWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)

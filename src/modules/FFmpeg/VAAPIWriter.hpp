@@ -56,7 +56,7 @@ public:
     void init();
 
 private:
-    Q_SLOT void draw(VASurfaceID _id = -1, int _field = -1);
+    void draw(VASurfaceID _id = -1, int _field = -1);
 
     void resizeEvent(QResizeEvent *) override;
     void paintEvent(QPaintEvent *) override;

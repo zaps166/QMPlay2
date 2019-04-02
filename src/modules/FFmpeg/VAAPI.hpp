@@ -25,6 +25,8 @@
 #include <va/va.h>
 #include <va/va_vpp.h>
 
+#include <memory>
+
 class VideoFrame;
 class ImgScaler;
 
@@ -47,14 +49,19 @@ public:
 
     void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
-    bool filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field);
+    bool filterVideo(const VASurfaceID curr_id, VASurfaceID &id, int &field);
 
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
     void clearSurfaces();
     void insertSurface(quintptr id);
-    bool checkSurface(quintptr id);
+    std::unique_ptr<QMutexLocker> checkSurfaceAndLock(quintptr id);
+
+    inline VASurfaceID getIdVpp() const
+    {
+        return id_vpp;
+    }
 
 private:
     bool hasProfile(const char *codecName) const;

@@ -76,13 +76,19 @@ public:
 
     CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
     {
-        VASurfaceID id;
-        int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
-        if (m_vaapi->filterVideo(videoFrame, id, vaField))
+        const VASurfaceID currId = videoFrame.surfaceId;
+        if (auto lock = m_vaapi->checkSurfaceAndLock(currId))
         {
-            if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
-                return CopyOk;
-            return CopyError;
+            VASurfaceID id;
+            int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
+            if (m_vaapi->filterVideo(currId, id, vaField))
+            {
+                if (currId != id)
+                    lock.reset();
+                if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
+                    return CopyOk;
+                return CopyError;
+            }
         }
         return CopyNotReady;
     }
