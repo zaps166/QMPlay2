@@ -56,6 +56,27 @@ public:
 
 /**/
 
+struct AVFrame;
+
+class QMPLAY2SHAREDLIB_EXPORT AVFrameHolder
+{
+public:
+    AVFrameHolder() = default;
+    AVFrameHolder(std::nullptr_t) {}
+    AVFrameHolder(AVFrame *frame);
+    AVFrameHolder(AVFrameHolder &&other);
+    AVFrameHolder(const AVFrameHolder &other);
+    ~AVFrameHolder();
+
+    AVFrameHolder &operator =(AVFrameHolder &&other);
+    AVFrameHolder &operator =(const AVFrameHolder &other);
+
+private:
+    AVFrame *m_frame = nullptr;
+};
+
+/**/
+
 class QMPLAY2SHAREDLIB_EXPORT VideoFrame
 {
 public:
@@ -63,6 +84,7 @@ public:
     VideoFrame(const VideoFrameSize &size, const qint32 newLinesize[], bool interlaced = false, bool tff = false);
     VideoFrame(const VideoFrameSize &size, quintptr surfaceId, bool interlaced, bool tff);
     VideoFrame();
+    ~VideoFrame();
 
     inline bool hasNoData() const
     {
@@ -78,13 +100,19 @@ public:
         interlaced = tff = false;
     }
 
+    void setAVFrame(AVFrame *frame);
+
     void clear();
 
     void copy(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
     VideoFrameSize size;
     Buffer buffer[3];
-    qint32 linesize[3];
-    bool interlaced, tff;
-    quintptr surfaceId;
+    qint32 linesize[3] = {};
+    bool interlaced = false;
+    bool tff = false;
+    quintptr surfaceId = 0;
+
+private:
+    AVFrameHolder m_frameRef;
 };

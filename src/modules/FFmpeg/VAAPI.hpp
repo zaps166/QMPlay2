@@ -19,16 +19,15 @@
 #pragma once
 
 #include <QCoreApplication>
-#include <QMutex>
-#include <QSet>
+#include <QVector>
+#include <QHash>
 
 #include <va/va.h>
 #include <va/va_vpp.h>
 
-#include <memory>
-
 class VideoFrame;
 class ImgScaler;
+struct AVFrame;
 
 class VAAPI
 {
@@ -49,22 +48,17 @@ public:
 
     void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
-    bool filterVideo(const VASurfaceID curr_id, VASurfaceID &id, int &field);
+    bool filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field);
 
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
-    void clearSurfaces();
-    void insertSurface(quintptr id);
-    std::unique_ptr<QMutexLocker> checkSurfaceAndLock(quintptr id);
-
-    inline VASurfaceID getIdVpp() const
-    {
-        return id_vpp;
-    }
+    void insertFrame(VASurfaceID id, AVFrame *frame);
 
 private:
     bool hasProfile(const char *codecName) const;
+
+    void clearVPPFrames();
 
 public:
     bool ok = false;
@@ -80,16 +74,17 @@ public:
     bool use_vpp = false;
 
 private:
-    int version = 0;
-
-    QSet<quintptr> m_surfaces;
-    QMutex m_surfacesMutex;
+    int m_version = 0;
 
     // Postprocessing
     bool m_allowFilters = false;
     VAContextID context_vpp;
     VAConfigID config_vpp;
-    VABufferID vpp_buffers[VAProcFilterCount]; //TODO implement all filters
-    VASurfaceID id_vpp, forward_reference;
-    bool vpp_second;
+    VABufferID m_vppDeintBuff;
+    VASurfaceID id_vpp;
+    QVector<VASurfaceID> m_refs;
+    VASurfaceID m_lastVppSurface;
+    int m_nBackwardRefs, m_nForwardRefs;
+
+    QHash<VASurfaceID, VideoFrame> m_vppFrames;
 };

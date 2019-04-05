@@ -76,19 +76,13 @@ public:
 
     CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
     {
-        const VASurfaceID currId = videoFrame.surfaceId;
-        if (auto lock = m_vaapi->checkSurfaceAndLock(currId))
+        VASurfaceID id;
+        int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
+        if (m_vaapi->filterVideo(videoFrame, id, vaField))
         {
-            VASurfaceID id;
-            int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
-            if (m_vaapi->filterVideo(currId, id, vaField))
-            {
-                if (currId != id)
-                    lock.reset();
-                if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
-                    return CopyOk;
-                return CopyError;
-            }
+            if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
+                return CopyOk;
+            return CopyError;
         }
         return CopyNotReady;
     }
@@ -155,8 +149,6 @@ FFDecVAAPI::FFDecVAAPI(Module &module) :
 }
 FFDecVAAPI::~FFDecVAAPI()
 {
-    if (m_vaapi)
-        m_vaapi->clearSurfaces();
     if (codecIsOpen)
         avcodec_flush_buffers(codec_ctx);
     if (m_swsCtx)
@@ -210,13 +202,10 @@ QString FFDecVAAPI::name() const
 
 int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
-    if (flush)
-        m_vaapi->clearSurfaces();
-
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)
     {
-        m_vaapi->insertSurface(decoded.surfaceId);
+        decoded.setAVFrame(frame);
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
     }
 
@@ -343,13 +332,10 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
         if (!m_hwAccelWriter)
         {
             VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
-            if (!vaapiWriter->open())
-                delete vaapiWriter;
-            else
-            {
-                vaapiWriter->init();
+            if (vaapiWriter->open())
                 m_hwAccelWriter = vaapiWriter;
-            }
+            else
+                delete vaapiWriter;
         }
     }
 

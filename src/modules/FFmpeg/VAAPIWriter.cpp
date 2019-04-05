@@ -26,30 +26,31 @@
 
 #include <QCoreApplication>
 #include <QPainter>
+#include <QtMath>
+#include <QDebug>
 
 #include <va/va_x11.h>
 
 VAAPIWriter::VAAPIWriter(Module &module, VAAPI *vaapi) :
-    vaapi(vaapi),
-    rgbImgFmt(nullptr),
-    aspect_ratio(0.0), zoom(0.0),
-    Hue(0), Saturation(0), Brightness(0), Contrast(0)
+    vaapi(vaapi)
 {
     unsigned numSubpicFmts = vaMaxNumSubpictureFormats(vaapi->VADisp);
     VAImageFormat subpicFmtList[numSubpicFmts];
-    unsigned subpic_flags[numSubpicFmts];
-    if (vaQuerySubpictureFormats(vaapi->VADisp, subpicFmtList, subpic_flags, &numSubpicFmts) == VA_STATUS_SUCCESS)
+    unsigned subpicFlags[numSubpicFmts];
+    if (vaQuerySubpictureFormats(vaapi->VADisp, subpicFmtList, subpicFlags, &numSubpicFmts) == VA_STATUS_SUCCESS)
     {
         for (unsigned i = 0; i < numSubpicFmts; ++i)
-            if (!qstrncmp((const char *)&subpicFmtList[i].fourcc, "RGBA", 4))
+        {
+            if (!qstrncmp((const char *)&subpicFmtList[i].fourcc, "BGRA", 4))
             {
-                subpict_dest_is_screen_coord = subpic_flags[i] & VA_SUBPICTURE_DESTINATION_IS_SCREEN_COORD;
-                rgbImgFmt = new VAImageFormat(subpicFmtList[i]);
+                m_subpictDestIsScreenCoord = (subpicFlags[i] & VA_SUBPICTURE_DESTINATION_IS_SCREEN_COORD);
+                memcpy(&m_rgbImgFmt, &subpicFmtList[i], sizeof(VAImageFormat));
                 break;
             }
+        }
     }
 
-    vaImg.image_id = vaSubpicID = 0;
+    m_vaImg.image_id = VA_INVALID_ID;
 
     setAttribute(Qt::WA_PaintOnScreen);
     grabGesture(Qt::PinchGesture);
@@ -57,16 +58,7 @@ VAAPIWriter::VAAPIWriter(Module &module, VAAPI *vaapi) :
 
     connect(&drawTim, &QTimer::timeout,
             this, [this] {
-        if (id == VA_INVALID_SURFACE)
-            return;
-        if (this->vaapi->getIdVpp() == id)
-        {
-            draw();
-        }
-        else if (auto lock = this->vaapi->checkSurfaceAndLock(id))
-        {
-            draw();
-        }
+        draw();
     });
     drawTim.setSingleShot(true);
 
@@ -74,8 +66,8 @@ VAAPIWriter::VAAPIWriter(Module &module, VAAPI *vaapi) :
 }
 VAAPIWriter::~VAAPIWriter()
 {
-    clearRGBImage();
-    delete rgbImgFmt;
+    m_frames.clear(); // Must be freed before destroying vaapi
+    clearVaImage();
     delete vaapi;
 }
 
@@ -121,23 +113,20 @@ bool VAAPIWriter::processParams(bool *)
 }
 void VAAPIWriter::writeVideo(const VideoFrame &videoFrame)
 {
-    const VASurfaceID currId = videoFrame.surfaceId;
-    if (auto lock = vaapi->checkSurfaceAndLock(currId))
+    VASurfaceID id;
+    int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
+    if (vaapi->filterVideo(videoFrame, id, field))
     {
-        VASurfaceID id;
-        int field = Functions::getField(videoFrame, deinterlace, 0, VA_TOP_FIELD, VA_BOTTOM_FIELD);
-        if (vaapi->filterVideo(currId, id, field))
-        {
-            if (id != currId)
-                lock.reset();
-            draw(id, field);
-        }
+        m_frames.remove(this->m_id);
+        if (videoFrame.surfaceId == id)
+            m_frames.insert(id, videoFrame);
+        draw(id, field);
     }
     paused = false;
 }
 void VAAPIWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {
-    if (rgbImgFmt)
+    if (m_rgbImgFmt.fourcc)
     {
         osd_mutex.lock();
         osd_list = osds;
@@ -172,23 +161,16 @@ bool VAAPIWriter::open()
     return true;
 }
 
-void VAAPIWriter::init()
+void VAAPIWriter::draw(VASurfaceID id, int field)
 {
-    clearRGBImage();
-    id = VA_INVALID_SURFACE;
-    field = -1;
-}
-
-void VAAPIWriter::draw(VASurfaceID _id, int _field)
-{
-    if (_id != VA_INVALID_SURFACE && _field > -1)
+    if (id != VA_INVALID_SURFACE && field > -1)
     {
-        if (id != _id || _field == field)
-            vaSyncSurface(vaapi->VADisp, _id);
-        id = _id;
-        field = _field;
+        if (m_id != id || field == m_field)
+            vaSyncSurface(vaapi->VADisp, id);
+        m_id = id;
+        m_field = field;
     }
-    if (id == VA_INVALID_SURFACE)
+    if (m_id == VA_INVALID_SURFACE || visibleRegion().isNull())
         return;
 
     bool associated = false;
@@ -196,64 +178,97 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
     osd_mutex.lock();
     if (!osd_list.isEmpty())
     {
+        const auto scaleW = (qreal)W / vaapi->outW;
+        const auto scaleH = (qreal)H / vaapi->outH;
+
         QRect bounds;
-        const qreal scaleW = (qreal)W / vaapi->outW, scaleH = (qreal)H / vaapi->outH;
         bool mustRepaint = Functions::mustRepaintOSD(osd_list, osd_ids, &scaleW, &scaleH, &bounds);
+
+        const QSize newImgSize = m_subpictDestIsScreenCoord
+            ? bounds.size()
+            : QSize(qCeil(bounds.width() / scaleW), qCeil(bounds.height() / scaleH));
+
         if (!mustRepaint)
-            mustRepaint = vaImgSize != bounds.size();
+            mustRepaint = (QSize(m_vaImg.width, m_vaImg.height) != newImgSize);
+
         bool canAssociate = !mustRepaint;
+
         if (mustRepaint)
         {
-            if (vaImgSize != bounds.size())
+            clearVaImage();
+            if (vaCreateImage(vaapi->VADisp, &m_rgbImgFmt, newImgSize.width(), newImgSize.height(), &m_vaImg) == VA_STATUS_SUCCESS)
             {
-                clearRGBImage();
-                vaImgSize = QSize();
-                if (vaCreateImage(vaapi->VADisp, rgbImgFmt, bounds.width(), bounds.height(), &vaImg) == VA_STATUS_SUCCESS)
-                {
-                    if (vaCreateSubpicture(vaapi->VADisp, vaImg.image_id, &vaSubpicID) == VA_STATUS_SUCCESS)
-                        vaImgSize = bounds.size();
-                    else
-                        clearRGBImage();
-                }
+                if (vaCreateSubpicture(vaapi->VADisp, m_vaImg.image_id, &m_vaSubpicID) != VA_STATUS_SUCCESS)
+                    clearVaImage();
             }
-            if (vaSubpicID)
+            if (m_vaSubpicID != VA_INVALID_ID)
             {
-                quint8 *buff;
-                if (vaMapBuffer(vaapi->VADisp, vaImg.buf, (void **)&buff) == VA_STATUS_SUCCESS)
+                quint8 *buff = nullptr;
+                if (vaMapBuffer(vaapi->VADisp, m_vaImg.buf, (void **)&buff) == VA_STATUS_SUCCESS)
                 {
-                    QImage osdImg(buff += vaImg.offsets[0], vaImg.pitches[0] >> 2, bounds.height(), QImage::Format_ARGB32);
+                    QImage osdImg(buff + m_vaImg.offsets[0], m_vaImg.width, m_vaImg.height, m_vaImg.pitches[0], QImage::Format_ARGB32);
                     osdImg.fill(0);
                     QPainter p(&osdImg);
+                    if (!m_subpictDestIsScreenCoord)
+                    {
+                        p.scale(1.0 / scaleW, 1.0 / scaleH);
+                        p.setRenderHint(QPainter::SmoothPixmapTransform);
+                    }
                     p.translate(-bounds.topLeft());
-                    Functions::paintOSD(false, osd_list, scaleW, scaleH, p, &osd_ids);
-                    vaUnmapBuffer(vaapi->VADisp, vaImg.buf);
+                    Functions::paintOSD(true, osd_list, scaleW, scaleH, p, &osd_ids);
+                    vaUnmapBuffer(vaapi->VADisp, m_vaImg.buf);
                     canAssociate = true;
                 }
             }
         }
-        if (vaSubpicID && canAssociate)
+        if (m_vaSubpicID != VA_INVALID_ID && canAssociate)
         {
-            if (subpict_dest_is_screen_coord)
+            if (m_subpictDestIsScreenCoord)
             {
-                associated = vaAssociateSubpicture
-                (
-                    vaapi->VADisp, vaSubpicID, &id, 1,
-                    0,              0,              bounds.width(), bounds.height(),
-                    bounds.x() + X, bounds.y() + Y, bounds.width(), bounds.height(),
+                associated = vaAssociateSubpicture(
+                    vaapi->VADisp,
+                    m_vaSubpicID,
+                    &m_id,
+                    1,
+
+                    0,
+                    0,
+                    bounds.width(),
+                    bounds.height(),
+
+                    bounds.x() + X,
+                    bounds.y() + Y,
+                    bounds.width(),
+                    bounds.height(),
+
                     VA_SUBPICTURE_DESTINATION_IS_SCREEN_COORD
                 ) == VA_STATUS_SUCCESS;
             }
             else
             {
-                const double sW = (double)vaapi->outW / dstQRect.width(), sH = (double)vaapi->outH / dstQRect.height();
+                // 05.04.2019: AMDGPU driver doesn't allow to change image size in dest rect. Driver crashes
+                // or paints garbage. As a workaround, scale image to fit the surface size (lower quality).
+                const double sW = (double)srcQRect.width()  / dstQRect.width();
+                const double sH = (double)srcQRect.height() / dstQRect.height();
                 const qreal dpr = devicePixelRatioF();
-                const int Xoffset = (dstQRect.width() == width() * dpr) ? X : 0;
-                const int Yoffset = (dstQRect.height() == height() * dpr) ? Y : 0;
-                associated = vaAssociateSubpicture
-                (
-                    vaapi->VADisp, vaSubpicID, &id, 1,
-                    0,                           0,                           bounds.width(),      bounds.height(),
-                    (bounds.x() + Xoffset) * sW, (bounds.y() + Yoffset) * sH, bounds.width() * sW, bounds.height() * sH,
+                const int Xoffset = (dstQRect.width()  == int(width()  * dpr)) ? X : 0;
+                const int Yoffset = (dstQRect.height() == int(height() * dpr)) ? Y : 0;
+                associated = vaAssociateSubpicture(
+                    vaapi->VADisp,
+                    m_vaSubpicID,
+                    &m_id,
+                    1,
+
+                    0,
+                    0,
+                    m_vaImg.width,
+                    m_vaImg.height,
+
+                    (bounds.x() + Xoffset) * sW,
+                    (bounds.y() + Yoffset) * sH,
+                    m_vaImg.width,
+                    m_vaImg.height,
+
                     0
                 ) == VA_STATUS_SUCCESS;
             }
@@ -261,18 +276,30 @@ void VAAPIWriter::draw(VASurfaceID _id, int _field)
     }
     osd_mutex.unlock();
 
-    const int err = vaPutSurface
-    (
-        vaapi->VADisp, id, winId(),
-        srcQRect.x(), srcQRect.y(), srcQRect.width(), srcQRect.height(),
-        dstQRect.x(), dstQRect.y(), dstQRect.width(), dstQRect.height(),
-        nullptr, 0, field | VA_CLEAR_DRAWABLE
+    const int err = vaPutSurface(
+        vaapi->VADisp,
+        m_id,
+        winId(),
+
+        srcQRect.x(),
+        srcQRect.y(),
+        srcQRect.width(),
+        srcQRect.height(),
+
+        dstQRect.x(),
+        dstQRect.y(),
+        dstQRect.width(),
+        dstQRect.height(),
+
+        nullptr,
+        0,
+        m_field | VA_CLEAR_DRAWABLE
     );
     if (err != VA_STATUS_SUCCESS)
         QMPlay2Core.log(QString("vaPutSurface() - ") + vaErrorStr(err));
 
     if (associated)
-        vaDeassociateSubpicture(vaapi->VADisp, vaSubpicID, &id, 1);
+        vaDeassociateSubpicture(vaapi->VADisp, m_vaSubpicID, &m_id, 1);
 
     if (drawTim.isActive())
         drawTim.stop();
@@ -308,11 +335,17 @@ QPaintEngine *VAAPIWriter::paintEngine() const
     return nullptr;
 }
 
-void VAAPIWriter::clearRGBImage()
+void VAAPIWriter::clearVaImage()
 {
-    if (vaSubpicID)
-        vaDestroySubpicture(vaapi->VADisp, vaSubpicID);
-    if (vaImg.image_id)
-        vaDestroyImage(vaapi->VADisp, vaImg.image_id);
-    vaImg.image_id = vaSubpicID = 0;
+    if (m_vaSubpicID != VA_INVALID_ID)
+    {
+        vaDestroySubpicture(vaapi->VADisp, m_vaSubpicID);
+        m_vaSubpicID = VA_INVALID_ID;
+    }
+    if (m_vaImg.image_id != VA_INVALID_ID)
+    {
+        vaDestroyImage(vaapi->VADisp, m_vaImg.image_id);
+        m_vaImg.width = m_vaImg.height = 0;
+        m_vaImg.image_id = VA_INVALID_ID;
+    }
 }

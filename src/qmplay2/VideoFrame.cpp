@@ -20,6 +20,7 @@
 
 extern "C"
 {
+    #include <libavcodec/avcodec.h>
     #include <libavutil/common.h>
 }
 
@@ -58,11 +59,42 @@ void VideoFrameSize::clear()
 
 /**/
 
+AVFrameHolder::AVFrameHolder(AVFrame *frame)
+    : m_frame(av_frame_alloc())
+{
+    av_frame_ref(m_frame, frame);
+}
+AVFrameHolder::AVFrameHolder(AVFrameHolder &&other)
+{
+    *this = std::move(other);
+}
+AVFrameHolder::AVFrameHolder(const AVFrameHolder &other)
+{
+    *this = other;
+}
+AVFrameHolder::~AVFrameHolder()
+{
+    av_frame_free(&m_frame);
+}
+
+AVFrameHolder &AVFrameHolder::operator =(AVFrameHolder &&other)
+{
+    qSwap(m_frame, other.m_frame);
+    return *this;
+}
+AVFrameHolder &AVFrameHolder::operator =(const AVFrameHolder &other)
+{
+    if (other.m_frame)
+        *this = other.m_frame;
+    return *this;
+}
+
+/**/
+
 VideoFrame::VideoFrame(const VideoFrameSize &size, AVBufferRef *bufferRef[], const qint32 newLinesize[], bool interlaced, bool tff) :
     size(size),
     interlaced(interlaced),
-    tff(tff),
-    surfaceId(0)
+    tff(tff)
 {
     for (qint32 p = 0; p < 3 && bufferRef[p]; ++p)
     {
@@ -74,8 +106,7 @@ VideoFrame::VideoFrame(const VideoFrameSize &size, AVBufferRef *bufferRef[], con
 VideoFrame::VideoFrame(const VideoFrameSize &size, const qint32 newLinesize[], bool interlaced, bool tff) :
     size(size),
     interlaced(interlaced),
-    tff(tff),
-    surfaceId(0)
+    tff(tff)
 {
     for (qint32 p = 0; p < 3; ++p)
     {
@@ -88,17 +119,15 @@ VideoFrame::VideoFrame(const VideoFrameSize &size, quintptr surfaceId, bool inte
     interlaced(interlaced),
     tff(tff),
     surfaceId(surfaceId)
+{}
+VideoFrame::VideoFrame()
+{}
+VideoFrame::~VideoFrame()
+{}
+
+void VideoFrame::setAVFrame(AVFrame *frame)
 {
-    for (qint32 i = 0; i < 3; ++i)
-        linesize[i] = 0;
-}
-VideoFrame::VideoFrame() :
-    interlaced(false),
-    tff(false),
-    surfaceId(0)
-{
-    for (qint32 i = 0; i < 3; ++i)
-        linesize[i] = 0;
+    m_frameRef = frame;
 }
 
 void VideoFrame::clear()
@@ -111,6 +140,7 @@ void VideoFrame::clear()
     setNoInterlaced();
     surfaceId = 0;
     size.clear();
+    m_frameRef = nullptr;
 }
 
 void VideoFrame::copy(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const

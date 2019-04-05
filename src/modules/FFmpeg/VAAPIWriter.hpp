@@ -53,10 +53,8 @@ public:
         return vaapi;
     }
 
-    void init();
-
 private:
-    void draw(VASurfaceID _id = -1, int _field = -1);
+    void draw(VASurfaceID id = -1, int field = -1);
 
     void resizeEvent(QResizeEvent *) override;
     void paintEvent(QPaintEvent *) override;
@@ -64,7 +62,7 @@ private:
 
     QPaintEngine *paintEngine() const override;
 
-    void clearRGBImage();
+    void clearVaImage();
 
     VAAPI *vaapi;
 
@@ -72,17 +70,18 @@ private:
 
     static constexpr int drawTimeout = 40;
     QList<const QMPlay2OSD *> osd_list;
-    bool subpict_dest_is_screen_coord;
+    bool m_subpictDestIsScreenCoord = false;
     QVector<quint64> osd_ids;
-    VASubpictureID vaSubpicID;
-    VAImageFormat *rgbImgFmt;
+    VASubpictureID m_vaSubpicID = VA_INVALID_ID;
+    VAImageFormat m_rgbImgFmt = {};
     QMutex osd_mutex;
     QTimer drawTim;
-    QSize vaImgSize;
-    VAImage vaImg;
+    VAImage m_vaImg = {};
 
     QRect dstQRect, srcQRect;
-    double aspect_ratio, zoom;
-    VASurfaceID id;
-    int field, X, Y, W, H, deinterlace, Hue, Saturation, Brightness, Contrast;
+    double aspect_ratio = 0.0, zoom = 0.0;
+    VASurfaceID m_id = VA_INVALID_SURFACE;
+    int m_field = -1, X = 0, Y = 0, W = 0, H = 0, deinterlace, Hue = 0, Saturation = 0, Brightness = 0, Contrast = 0;
+
+    QHash<VASurfaceID, VideoFrame> m_frames;
 };

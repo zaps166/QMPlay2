@@ -23,6 +23,7 @@
 #include <QMPlay2Core.hpp>
 
 #include <QX11Info>
+#include <QDebug>
 
 #include <va/va_x11.h>
 #include <va/va_glx.h>
@@ -31,6 +32,7 @@ VAAPI::VAAPI()
 {}
 VAAPI::~VAAPI()
 {
+    m_vppFrames.clear(); // Must be freed before destroying VADisplay
     clearVPP();
     if (VADisp)
         vaTerminate(VADisp);
@@ -63,7 +65,7 @@ bool VAAPI::open(const char *codecName, bool &openGL)
     if (vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
         return false;
 
-    version = (major << 8) | minor;
+    m_version = (major << 8) | minor;
 
     const QString vendor = vaQueryVendorString(VADisp);
     if (vendor.contains("VDPAU")) // Not supported in FFmpeg due to "vaQuerySurfaceAttributes()"
@@ -91,18 +93,15 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
 void VAAPI::init(int width, int height,  bool allowFilters)
 {
-    clearSurfaces();
-    if (!ok || outW != width || outH != height)
-    {
-        clearVPP();
+    clearVPP();
 
-        outW = width;
-        outH = height;
+    outW = width;
+    outH = height;
 
-        m_allowFilters = allowFilters;
+    m_allowFilters = allowFilters;
 
-        ok = true;
-    }
+    ok = true;
+
 }
 
 bool VAAPI::vaapiCreateSurface(VASurfaceID &surface, int w, int h)
@@ -135,11 +134,6 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
             num_filters = 0;
         if (num_filters > 0)
         {
-            /* Creating dummy filter (some drivers/api versions (1.6.x and Ivy Bridge) crashes without any filter) - this is unreachable now */
-            VAProcFilterParameterBufferBase none_params = {VAProcFilterNone};
-            if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof none_params, 1, &none_params, &vpp_buffers[VAProcFilterNone]) != VA_STATUS_SUCCESS)
-                vpp_buffers[VAProcFilterNone] = VA_INVALID_ID;
-            /* Searching deinterlacing filter */
             if (vpp_deint_type != VAProcDeinterlacingNone)
             {
                 for (unsigned i = 0; i < num_filters; ++i)
@@ -183,11 +177,18 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                                 0,
                                 {}
                             };
-                            if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &vpp_buffers[VAProcFilterDeinterlacing]) != VA_STATUS_SUCCESS)
-                                vpp_buffers[VAProcFilterDeinterlacing] = VA_INVALID_ID;
+                            if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &m_vppDeintBuff) != VA_STATUS_SUCCESS)
+                                m_vppDeintBuff = VA_INVALID_ID;
                         }
                         break;
                     }
+                }
+
+                VAProcPipelineCaps caps = {};
+                if (vaQueryVideoProcPipelineCaps(VADisp, config_vpp, &m_vppDeintBuff, 1, &caps) == VA_STATUS_SUCCESS)
+                {
+                    m_nBackwardRefs = caps.num_backward_references;
+                    m_nForwardRefs = caps.num_forward_references;
                 }
             }
             return;
@@ -203,9 +204,8 @@ void VAAPI::clearVPP(bool resetAllowFilters)
 {
     if (use_vpp)
     {
-        for (int i = 0; i < VAProcFilterCount; ++i)
-            if (vpp_buffers[i] != VA_INVALID_ID)
-                vaDestroyBuffer(VADisp, vpp_buffers[i]);
+        if (m_vppDeintBuff != VA_INVALID_ID)
+            vaDestroyBuffer(VADisp, m_vppDeintBuff);
         if (id_vpp != VA_INVALID_SURFACE)
             vaDestroySurfaces(VADisp, &id_vpp, 1);
         if (context_vpp)
@@ -214,12 +214,12 @@ void VAAPI::clearVPP(bool resetAllowFilters)
             vaDestroyConfig(VADisp, config_vpp);
         use_vpp = false;
     }
-    id_vpp = forward_reference = VA_INVALID_SURFACE;
-    for (int i = 0; i < VAProcFilterCount; ++i)
-        vpp_buffers[i] = VA_INVALID_ID;
-    vpp_second = false;
+    clearVPPFrames();
+    m_vppDeintBuff = VA_INVALID_ID;
     context_vpp = 0;
     config_vpp = 0;
+    m_nBackwardRefs = m_nForwardRefs = 0;
+    m_lastVppSurface = VA_INVALID_SURFACE;
     if (resetAllowFilters)
         m_allowFilters = false;
 }
@@ -254,85 +254,92 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
     }
 }
 
-bool VAAPI::filterVideo(const VASurfaceID curr_id, VASurfaceID &id, int &field)
+bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
 {
-    const bool do_vpp_deint = (field != 0) && vpp_buffers[VAProcFilterDeinterlacing] != VA_INVALID_ID;
-    if (use_vpp && !do_vpp_deint)
+    const bool doDeint = (field != 0 && m_vppDeintBuff != VA_INVALID_ID);
+
+    if (use_vpp && !doDeint)
+        clearVPPFrames();
+
+    const VASurfaceID currId = frame.surfaceId;
+
+    if (!use_vpp || !doDeint)
     {
-        forward_reference = VA_INVALID_SURFACE;
-        vpp_second = false;
+        id = currId;
+        return true;
     }
-    if (use_vpp && (do_vpp_deint || version <= 0x0023))
+
+    const bool firstField = (m_lastVppSurface != currId);
+    m_lastVppSurface = currId;
+
+    const int requiredRefs = m_nForwardRefs + 1 + m_nBackwardRefs;
+    if (m_refs.count() != requiredRefs)
     {
-        bool vpp_ok = false;
+        m_refs.fill(currId, requiredRefs);
+    }
+    else if (firstField)
+    {
+        m_vppFrames.remove(m_refs.takeFirst());
+        m_vppFrames.insert(currId, frame);
+        m_refs.push_back(currId);
+    }
 
-        if (do_vpp_deint && forward_reference == VA_INVALID_SURFACE)
-            forward_reference = curr_id;
-        if (!vpp_second && forward_reference == curr_id)
-            return false;
-
-        if (do_vpp_deint)
-        {
-            VAProcFilterParameterBufferDeinterlacing *deint_params = nullptr;
-            if (vaMapBuffer(VADisp, vpp_buffers[VAProcFilterDeinterlacing], (void **)&deint_params) == VA_STATUS_SUCCESS)
-            {
-                if (version > 0x0025 || !vpp_second)
-                    deint_params->flags = (field == VA_TOP_FIELD) ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
-                vaUnmapBuffer(VADisp, vpp_buffers[VAProcFilterDeinterlacing]);
-            }
-        }
-
-        VABufferID pipeline_buf;
-        if (vaCreateBuffer(VADisp, context_vpp, VAProcPipelineParameterBufferType, sizeof(VAProcPipelineParameterBuffer), 1, nullptr, &pipeline_buf) == VA_STATUS_SUCCESS)
-        {
-            VAProcPipelineParameterBuffer *pipeline_param = nullptr;
-            if (vaMapBuffer(VADisp, pipeline_buf, (void **)&pipeline_param) == VA_STATUS_SUCCESS)
-            {
-                memset(pipeline_param, 0, sizeof *pipeline_param);
-                pipeline_param->surface = curr_id;
-                pipeline_param->output_background_color = 0xFF000000;
-
-                pipeline_param->num_filters = 1;
-                if (!do_vpp_deint)
-                    pipeline_param->filters = &vpp_buffers[VAProcFilterNone]; //Sometimes it can prevent crash, but sometimes it can produce green image, so it is disabled for newer VA-API versions which don't crash without VPP
-                else
-                {
-                    pipeline_param->filters = &vpp_buffers[VAProcFilterDeinterlacing];
-                    pipeline_param->num_forward_references = 1;
-                    pipeline_param->forward_references = &forward_reference;
-                }
-
-                vaUnmapBuffer(VADisp, pipeline_buf);
-
-                if (vaBeginPicture(VADisp, context_vpp, id_vpp) == VA_STATUS_SUCCESS)
-                {
-                    vpp_ok = vaRenderPicture(VADisp, context_vpp, &pipeline_buf, 1) == VA_STATUS_SUCCESS;
-                    vaEndPicture(VADisp, context_vpp);
-                }
-            }
-            if (!vpp_ok)
-                vaDestroyBuffer(VADisp, pipeline_buf);
-        }
-
-        if (vpp_second)
-            forward_reference = curr_id;
-        if (do_vpp_deint)
-            vpp_second = !vpp_second;
-
-        if ((ok = vpp_ok))
-        {
-            id = id_vpp;
-            if (do_vpp_deint)
-                field = 0;
-            return true;
-        }
-
+    VAProcFilterParameterBufferDeinterlacing *deintParams = nullptr;
+    if (vaMapBuffer(VADisp, m_vppDeintBuff, (void **)&deintParams) != VA_STATUS_SUCCESS)
+    {
+        ok = false;
         return false;
     }
-    else
+
+    deintParams->flags = (field == VA_TOP_FIELD) ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
+    if (firstField == (field != VA_TOP_FIELD))
+        deintParams->flags |= VA_DEINTERLACING_BOTTOM_FIELD_FIRST;
+    vaUnmapBuffer(VADisp, m_vppDeintBuff);
+
+    VAProcPipelineParameterBuffer pipelineParam = {};
+
+    pipelineParam.surface = m_refs[m_nForwardRefs];
+    pipelineParam.output_background_color = 0xFF000000;
+
+    pipelineParam.num_filters = 1;
+    pipelineParam.filters = &m_vppDeintBuff;
+
+    pipelineParam.forward_references = m_refs.data();
+    pipelineParam.num_forward_references = m_nForwardRefs;
+
+    pipelineParam.backward_references = m_refs.data() + m_nForwardRefs + 1;
+    pipelineParam.num_backward_references = m_nBackwardRefs;
+
+    VABufferID pipelineBuf = VA_INVALID_ID;
+    if (vaCreateBuffer(VADisp,
+                       context_vpp,
+                       VAProcPipelineParameterBufferType,
+                       sizeof(pipelineParam),
+                       1,
+                       &pipelineParam,
+                       &pipelineBuf) != VA_STATUS_SUCCESS)
     {
-        id = curr_id;
+        ok = false;
+        return false;
     }
+
+    if (vaBeginPicture(VADisp, context_vpp, id_vpp) != VA_STATUS_SUCCESS)
+    {
+        ok = false;
+        return false;
+    }
+
+    ok = (vaRenderPicture(VADisp, context_vpp, &pipelineBuf, 1) == VA_STATUS_SUCCESS);
+    vaEndPicture(VADisp, context_vpp);
+
+    if (!ok || m_version >= 0x0028)
+        vaDestroyBuffer(VADisp, pipelineBuf);
+
+    if (!ok)
+        return false;
+
+    id = id_vpp;
+    field = 0;
     return true;
 }
 
@@ -371,27 +378,6 @@ bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12To
         return true;
     }
     return false;
-}
-
-void VAAPI::clearSurfaces()
-{
-    QMutexLocker locker(&m_surfacesMutex);
-    m_surfaces.clear();
-
-    forward_reference = VA_INVALID_SURFACE;
-    vpp_second = false;
-}
-void VAAPI::insertSurface(quintptr id)
-{
-    QMutexLocker locker(&m_surfacesMutex);
-    m_surfaces.insert(id);
-}
-std::unique_ptr<QMutexLocker> VAAPI::checkSurfaceAndLock(quintptr id)
-{
-    std::unique_ptr<QMutexLocker> lockerPtr(new QMutexLocker(&m_surfacesMutex));
-    if (m_surfaces.contains(id))
-        return lockerPtr;
-    return nullptr;
 }
 
 bool VAAPI::hasProfile(const char *codecName) const
@@ -456,4 +442,10 @@ bool VAAPI::hasProfile(const char *codecName) const
     }
 
     return false;
+}
+
+void VAAPI::clearVPPFrames()
+{
+    m_refs.clear();
+    m_vppFrames.clear();
 }
