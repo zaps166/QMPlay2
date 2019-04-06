@@ -50,6 +50,7 @@ private slots:
     void bs2b();
     void voiceRemovalToggle();
     void phaseReverse();
+    void swapStereo();
     void echo();
     void compressor();
     void defaultSettings();
@@ -66,6 +67,8 @@ private:
 
     QGroupBox *phaseReverseB;
     QCheckBox *phaseReverseRightB;
+
+    QCheckBox *swapStereoB;
 
     QGroupBox *echoB;
     Slider *echoDelayS, *echoVolumeS, *echoFeedbackS;

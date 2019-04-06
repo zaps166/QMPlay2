@@ -22,6 +22,7 @@
 #include <EqualizerGUI.hpp>
 #include <VoiceRemoval.hpp>
 #include <PhaseReverse.hpp>
+#include <SwapStereo.hpp>
 #include <Echo.hpp>
 #include <DysonCompressor.hpp>
 
@@ -77,6 +78,8 @@ AudioFilters::AudioFilters() :
     init("PhaseReverse", false);
     init("PhaseReverse/ReverseRight", false);
 
+    init("SwapStereo", false);
+
     init("Echo", false);
     init("Echo/Delay", ECHO_DELAY);
     init("Echo/Volume", ECHO_VOLUME);
@@ -110,6 +113,7 @@ QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
     modulesInfo += Info(EqualizerGUIName, QMPLAY2EXTENSION);
     modulesInfo += Info(VoiceRemovalName, AUDIOFILTER);
     modulesInfo += Info(PhaseReverseName, AUDIOFILTER);
+    modulesInfo += Info(SwapStereoName, AUDIOFILTER);
     modulesInfo += Info(EchoName, AUDIOFILTER);
     modulesInfo += Info(DysonCompressorName, AUDIOFILTER);
     return modulesInfo;
@@ -126,6 +130,8 @@ void *AudioFilters::createInstance(const QString &name)
         return new VoiceRemoval(*this);
     else if (name == PhaseReverseName)
         return new PhaseReverse(*this);
+    else if (name == SwapStereoName)
+        return new SwapStereo(*this);
     else if (name == EchoName)
         return new Echo(*this);
     else if (name == DysonCompressorName)
@@ -203,6 +209,12 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QGridLayout *phaseReverseLayout = new QGridLayout(phaseReverseB);
     phaseReverseLayout->addWidget(phaseReverseRightB);
     phaseReverseLayout->setMargin(3);
+
+
+    swapStereoB = new QCheckBox(tr("Swap stereo channels"));
+    swapStereoB->setCheckable(true);
+    swapStereoB->setChecked(sets().getBool("SwapStereo"));
+    connect(swapStereoB, SIGNAL(clicked()), this, SLOT(swapStereo()));
 
 
     echoB = new QGroupBox(tr("Echo"));
@@ -324,6 +336,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(bs2bB);
     layout->addWidget(voiceRemovalB);
     layout->addWidget(phaseReverseB);
+    layout->addWidget(swapStereoB);
     layout->addWidget(echoB);
     layout->addWidget(compressorB);
     layout->addWidget(eqGroupB);
@@ -353,6 +366,13 @@ void ModuleSettingsWidget::phaseReverse()
     sets().set("PhaseReverse", phaseReverseB->isChecked());
     sets().set("PhaseReverse/ReverseRight", phaseReverseRightB->isChecked());
     SetInstance<PhaseReverse>();
+}
+void ModuleSettingsWidget::swapStereo()
+{
+    if (restoringDefault)
+        return;
+    sets().set("SwapStereo", swapStereoB->isChecked());
+    SetInstance<SwapStereo>();
 }
 void ModuleSettingsWidget::echo()
 {
@@ -394,6 +414,8 @@ void ModuleSettingsWidget::defaultSettings()
     phaseReverseB->setChecked(false);
     phaseReverseRightB->setChecked(false);
 
+    swapStereoB->setChecked(false);
+
     echoB->setChecked(false);
     echoDelayS->setValue(ECHO_DELAY);
     echoVolumeS->setValue(ECHO_VOLUME);
@@ -414,6 +436,7 @@ void ModuleSettingsWidget::defaultSettings()
     SetInstance<Equalizer>();
     voiceRemovalToggle();
     phaseReverse();
+    swapStereo();
     echo();
     compressor();
 }

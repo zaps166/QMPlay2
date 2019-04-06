@@ -7,6 +7,7 @@ set(AudioFilters_HDR
     EqualizerGUI.hpp
     VoiceRemoval.hpp
     PhaseReverse.hpp
+    SwapStereo.hpp
     Echo.hpp
     DysonCompressor.hpp
     BS2B.hpp
@@ -19,6 +20,7 @@ set(AudioFilters_SRC
     EqualizerGUI.cpp
     VoiceRemoval.cpp
     PhaseReverse.cpp
+    SwapStereo.cpp
     Echo.cpp
     DysonCompressor.cpp
     BS2B.cpp
