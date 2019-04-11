@@ -771,6 +771,7 @@ void MainWidget::createMenuBar()
     connect(menuBar->window->toggleVisibility, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
     connect(menuBar->window->toggleFullScreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
     connect(menuBar->window->toggleCompactView, SIGNAL(triggered()), this, SLOT(toggleCompactView()));
+    connect(menuBar->window->alwaysOnTop, &QAction::triggered, this, &MainWidget::toggleAlwaysOnTop);
     connect(menuBar->window->close, SIGNAL(triggered()), this, SLOT(close()));
 
     connect(menuBar->playlist->add->address, SIGNAL(triggered()), this, SLOT(openUrl()));
@@ -994,6 +995,18 @@ void MainWidget::toggleCompactView()
 
         statusBar->show();
     }
+}
+void MainWidget::toggleAlwaysOnTop(bool checked)
+{
+    auto flags = windowFlags();
+    if (checked)
+        flags |= Qt::WindowStaysOnTopHint;
+    else
+        flags &= ~Qt::WindowStaysOnTopHint;
+    const auto visible = isVisible();
+    setWindowFlags(flags);
+    if (visible)
+        show();
 }
 void MainWidget::toggleFullScreen()
 {

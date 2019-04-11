@@ -97,7 +97,9 @@ MenuBar::Window::Window(MenuBar *parent) :
 {
     newAction(QString(), this, toggleVisibility, false, QIcon(), false);
     newAction(Window::tr("&Full screen"), this, toggleFullScreen, false, QMPlay2Core.getIconFromTheme("view-fullscreen"), false);
-    newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true );
+    newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true);
+    addSeparator();
+    newAction(Window::tr("&Always on top"), this, alwaysOnTop, false, QIcon(), true);
     addSeparator();
     newAction(Window::tr("&Close"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false, QAction::QuitRole);
 }

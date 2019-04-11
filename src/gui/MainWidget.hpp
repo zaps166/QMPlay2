@@ -82,6 +82,7 @@ private slots:
     void createMenuBar();
     void trayIconClicked(QSystemTrayIcon::ActivationReason);
     void toggleCompactView();
+    void toggleAlwaysOnTop(bool checked);
     void toggleFullScreen();
     void showMessage(const QString &, const QString &, int, int);
     void statusBarMessage(const QString &, int ms);
