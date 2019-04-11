@@ -654,7 +654,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
 {
     static const QStringList disabledDemuxers {
         "ass",
-        "tty" //txt files
+        "tty", //txt files
+        "srt",
     };
 
     const QByteArray scheme = Functions::getUrlScheme(_url).toUtf8();
