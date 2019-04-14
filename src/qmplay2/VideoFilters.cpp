@@ -24,10 +24,7 @@
 #include <Module.hpp>
 #include <CPU.hpp>
 
-extern "C"
-{
-    #include <libavutil/cpu.h>
-}
+#include <libavutil/cpu.h>
 
 #ifdef QMPLAY2_CPU_X86
 #ifdef QMPLAY2_CPU_X86_32 //Every x86-64 CPU has SSE2, so MMXEXT is unused there
@@ -258,7 +255,7 @@ void VideoFilters::init()
 {
     averageTwoLinesPtr = averageTwoLines_C;
 #ifdef QMPLAY2_CPU_X86
-    const int cpuFlags = av_get_cpu_flags();
+    const int cpuFlags = QMPlay2CoreClass::getCPUFlags();
     if (cpuFlags & AV_CPU_FLAG_SSE2)
         averageTwoLinesPtr = averageTwoLines_SSE2;
 #ifdef QMPLAY2_CPU_X86_32

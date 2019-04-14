@@ -52,6 +52,7 @@
 extern "C"
 {
     #include <libavformat/avformat.h>
+    #include <libavutil/cpu.h>
     #include <libavutil/log.h>
 }
 
@@ -180,6 +181,11 @@ void QMPlay2CoreClass::suspend()
 #elif defined Q_OS_MACOS
     Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
 #endif
+}
+
+bool QMPlay2CoreClass::getCPUFlags()
+{
+    return av_get_cpu_flags();
 }
 
 void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName)

@@ -29,12 +29,10 @@
 
 #include <YadifDeint.hpp>
 
+#include <QMPlay2Core.hpp>
 #include <CPU.hpp>
 
-extern "C"
-{
-    #include <libavutil/cpu.h>
-}
+#include <libavutil/cpu.h>
 
 #include <algorithm>
 
@@ -559,7 +557,7 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
         filterLinePtr = filterLine_CPP;
         alignment = 1;
 #ifdef QMPLAY2_CPU_X86
-        const int cpuFlags = av_get_cpu_flags();
+        const int cpuFlags = QMPlay2CoreClass::getCPUFlags();
         if (cpuFlags & AV_CPU_FLAG_SSE2)
         {
             filterLinePtr = filterLine_SSE2;

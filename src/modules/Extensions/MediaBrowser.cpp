@@ -22,6 +22,7 @@
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
+#include <CPU.hpp>
 
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -48,6 +49,10 @@
 #include <QJsonArray>
 
 #include <algorithm>
+
+#include <libavutil/cpu.h>
+#ifdef QMPLAY2_CPU_X86_32
+#endif
 
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
@@ -478,6 +483,14 @@ void MediaBrowser::completionsReady()
 
 bool MediaBrowser::scanScripts()
 {
+#ifdef QMPLAY2_CPU_X86_32
+    if (!(QMPlay2CoreClass::getCPUFlags() & AV_CPU_FLAG_SSE2))
+    {
+        qCCritical(mb) << "SSE2 capable CPU is required";
+        return false;
+    }
+#endif
+
     const auto lastName = m_providersB->currentText();
 
     m_providersB->clear();
