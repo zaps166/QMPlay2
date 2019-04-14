@@ -748,6 +748,10 @@ void MediaBrowser::netFinished(NetworkReply *reply)
             else
                 emit QMPlay2Core.sendMessage(tr("Connection error"), MediaBrowserName, 3);
         }
+        else if (reply == m_jsonReply)
+        {
+            m_first = true;
+        }
         else if (m_scriptReplies.contains(reply))
         {
             const auto fileName = Functions::fileName(reply->url());
