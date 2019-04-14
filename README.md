@@ -231,6 +231,9 @@ CMake options (option - default value: description):
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.
+	- `USE_TEKSTOWO` - `ON`: enable/disable lyrics module.
+	- `USE_ASAN` - `OFF`: enable/disable address sanitizer.
+	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
 	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
 	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
 
