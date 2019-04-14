@@ -21,6 +21,9 @@
 #include <VideoFilters.hpp>
 #include <Functions.hpp>
 #include <CppUtils.hpp>
+#ifdef USE_QML
+#   include <CommonJS.hpp>
+#endif
 #include <Playlist.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
@@ -97,8 +100,11 @@ static QByteArray getDataFromHash(const QString &url, Data &data)
 
 QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
-QMPlay2CoreClass::QMPlay2CoreClass() :
-    qmplay2Icon(nullptr)
+QMPlay2CoreClass::QMPlay2CoreClass()
+    : qmplay2Icon(nullptr)
+#ifdef USE_QML
+    , m_commonJS(new CommonJS(this))
+#endif
 {
     qmplay2Core = this;
 
@@ -535,7 +541,7 @@ void QMPlay2CoreClass::addRawHeaders(const QString &url, const QByteArray &data,
     if (!url.isEmpty())
         setDataToHash(url, data, removeAfterUse, rawHeaders);
 }
-QByteArray QMPlay2CoreClass::getRawheaders(const QString &url)
+QByteArray QMPlay2CoreClass::getRawHeaders(const QString &url)
 {
     return getDataFromHash(url, rawHeaders);
 }

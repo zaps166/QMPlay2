@@ -20,8 +20,8 @@
 
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
+#include <Functions.hpp>
 #include <CppUtils.hpp>
-#include <Version.hpp>
 #ifdef Q_OS_WIN
     #include <Functions.hpp>
 #endif
@@ -187,13 +187,8 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
     QStringList commonArgs {
         "--no-check-certificate", //Ignore SSL errors
+        "--user-agent", Functions::getUserAgent(),
     };
-
-    const bool isVIDFile = url.contains("vidfile.net/");
-    constexpr const char *mozillaUserAgent = "Mozilla";
-
-    if (isVIDFile)
-        commonArgs += {"--user-agent", mozillaUserAgent};
 
     const char *httpProxy = getenv("http_proxy");
     if (httpProxy && *httpProxy)
@@ -319,9 +314,6 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
             if (i > 0 && result.at(i).startsWith('{'))
             {
                 const QString url = result.at(i - 1);
-
-                if (isVIDFile)
-                    QMPlay2Core.addRawHeaders(url, QString("User-Agent: %1\r\nReferer: https://vidfile.net/v/\r\n").arg(mozillaUserAgent).toUtf8());
 
                 const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
                 for (const QJsonValue &formats : json.object()["formats"].toArray())

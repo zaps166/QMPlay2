@@ -18,23 +18,14 @@
 
 #include <MediaBrowser.hpp>
 
-#include <MediaBrowser/Common.hpp>
+#include <MediaBrowserJS.hpp>
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 
-#ifdef USE_MYFREEMP3
-    #include <MediaBrowser/MyFreeMp3.hpp>
-#endif
-#ifdef USE_ANIMEODCINKI
-    #include <MediaBrowser/AnimeOdcinki.hpp>
-#endif
-#ifdef USE_WBIJAM
-    #include <MediaBrowser/Wbijam.hpp>
-#endif
-
 #include <QStringListModel>
 #include <QDesktopServices>
+#include <QLoggingCategory>
 #include <QApplication>
 #include <QProgressBar>
 #include <QGridLayout>
@@ -47,10 +38,25 @@
 #include <QComboBox>
 #include <QMimeData>
 #include <QSpinBox>
+#include <QFile>
 #include <QDir>
 #include <QUrl>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+
 #include <algorithm>
+
+Q_LOGGING_CATEGORY(mb, "MediaBrowser")
+
+constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";
+
+static inline QString getScriptsPath()
+{
+    return QMPlay2Core.getSettingsDir() + MediaBrowserName;
+}
 
 static inline QString getStringFromItem(QTreeWidgetItem *tWI)
 {
@@ -59,7 +65,7 @@ static inline QString getStringFromItem(QTreeWidgetItem *tWI)
 
 /**/
 
-MediaBrowserResults::MediaBrowserResults(MediaBrowserCommon *&mediaBrowser) :
+MediaBrowserResults::MediaBrowserResults(MediaBrowserJS *&mediaBrowser) :
     m_mediaBrowser(mediaBrowser)
 {
     headerItem()->setHidden(true);
@@ -322,22 +328,12 @@ int MediaBrowserPages::getPageFromUi() const
 /**/
 
 MediaBrowser::MediaBrowser(Module &module) :
-    m_mediaBrowser(nullptr),
+    m_resultsW(new MediaBrowserResults(m_mediaBrowser)),
     m_completerModel(new QStringListModel(this)),
     m_completer(new QCompleter(m_completerModel, this)),
     m_net(this),
     m_visible(false), m_first(true), m_overrideVisibility(false)
 {
-#ifdef USE_MYFREEMP3
-    m_mediaBrowsers.emplace_back(new MyFreeMP3(m_net));
-#endif
-#ifdef USE_ANIMEODCINKI
-    m_mediaBrowsers.emplace_back(new AnimeOdcinki(m_net));
-#endif
-#ifdef USE_WBIJAM
-    m_mediaBrowsers.emplace_back(new Wbijam(m_net));
-#endif
-
     m_dW = new DockWidget;
     connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     m_dW->setWindowTitle(MediaBrowserName);
@@ -361,8 +357,7 @@ MediaBrowser::MediaBrowser(Module &module) :
     m_searchCB->setEditable(true);
 
     m_providersB = new QComboBox;
-    for (const auto &m : asConst(m_mediaBrowsers))
-        m_providersB->addItem(m->icon(), m->name());
+    m_providersB->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(m_providersB, SIGNAL(currentIndexChanged(int)), this, SLOT(providerChanged(int)));
 
     m_searchB = new QToolButton;
@@ -387,13 +382,12 @@ MediaBrowser::MediaBrowser(Module &module) :
     m_progressB->setRange(0, 0);
     m_progressB->hide();
 
-    m_resultsW = new MediaBrowserResults(m_mediaBrowser);
-    connect(m_loadAllB, SIGNAL(clicked()), m_resultsW, SLOT(playAll()));
-
     m_descr = new QTextEdit;
     m_descr->setSizePolicy({QSizePolicy::Preferred, QSizePolicy::Fixed});
     m_descr->setReadOnly(true);
     m_descr->hide();
+
+    connect(m_loadAllB, SIGNAL(clicked()), m_resultsW, SLOT(playAll()));
 
     connect(&m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(netFinished(NetworkReply *)));
 
@@ -413,19 +407,7 @@ MediaBrowser::MediaBrowser(Module &module) :
     SetModule(module);
 }
 MediaBrowser::~MediaBrowser()
-{
-    for (const auto &m : asConst(m_mediaBrowsers))
-        m->finalize();
-}
-
-bool MediaBrowser::set()
-{
-    const QString provider = sets().getString("MediaBrowser/Provider");
-    const int idx = m_providersB->findText(provider, Qt::MatchExactly);
-    if (idx > -1)
-        m_providersB->setCurrentIndex(idx);
-    return true;
-}
+{}
 
 DockWidget *MediaBrowser::getDockWidget()
 {
@@ -442,9 +424,13 @@ QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img
 void MediaBrowser::convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl)
 {
     if (streamUrl || icon)
-        for (const auto &m : asConst(m_mediaBrowsers))
+    {
+        for (const auto &m : m_mediaBrowsers)
+        {
             if (m->convertAddress(prefix, url, param, streamUrl, name, icon, extension, ioCtrl))
                 break;
+        }
+    }
 }
 
 QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const QString &url, const QString &, const QString &)
@@ -452,17 +438,20 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
     QVector<QAction *> actions;
     if (name != url)
     {
-        for (size_t i = 0; i < m_mediaBrowsers.size(); ++i)
+        for (quint32 i = 0; i < m_mediaBrowsers.size(); ++i)
         {
-            MediaBrowserCommon *m = m_mediaBrowsers[i].get();
-            if (QAction *act = m->getAction())
-            {
-                act->connect(act, SIGNAL(triggered()), this, SLOT(searchMenu()));
-                act->setProperty("ptr", (quintptr)m);
-                act->setProperty("idx", (quint32)i);
-                act->setProperty("name", name);
-                actions.append(act);
-            }
+            const auto m = m_mediaBrowsers[i];
+            if (!m->hasAction())
+                continue;
+
+            auto act = new QAction(tr("Search on %1").arg(m->name()), nullptr);
+            act->setIcon(m->icon());
+            act->setProperty("ptr", (quintptr)m);
+            act->setProperty("idx", i);
+            act->setProperty("name", name);
+            connect(act, &QAction::triggered,
+                    this, &MediaBrowser::searchMenu);
+            actions.append(act);
         }
     }
     return actions;
@@ -487,57 +476,172 @@ void MediaBrowser::completionsReady()
     }
 }
 
+bool MediaBrowser::scanScripts()
+{
+    const auto lastName = m_providersB->currentText();
+
+    m_providersB->clear();
+    m_mediaBrowser = nullptr;
+    for (const auto &m : m_mediaBrowsers)
+        delete m;
+    m_mediaBrowsers.clear();
+
+    QDir scriptsDir(getScriptsPath());
+    if (!scriptsDir.mkpath("."))
+    {
+        qCCritical(mb) << "Unable to create directory" << scriptsDir.path();
+        return false;
+    }
+
+    const auto files = scriptsDir.entryInfoList({"*.js"}, QDir::Files, QDir::Name);
+    if (files.isEmpty())
+        return true;
+
+    const auto jsCommonCode = []()->QString {
+        QFile jsCommon(":/MediaBrowserJSCommon.js");
+        if (jsCommon.open(QFile::ReadOnly))
+            return jsCommon.readAll();
+        return QString();
+    }();
+    if (jsCommonCode.isEmpty())
+        return false;
+
+    const int lineNumber = 1 - jsCommonCode.split('\n').indexOf("%1");
+    QSet<QString> names;
+
+    for (auto &&file : files)
+    {
+        const auto js = new MediaBrowserJS(jsCommonCode, lineNumber, file.filePath(), m_net, m_resultsW, this);
+        if (js->version() > 0)
+        {
+            const auto name = js->name();
+            if (!names.contains(name))
+            {
+                m_mediaBrowsers.push_back(js);
+                names.insert(name);
+                continue;
+            }
+        }
+        delete js;
+    }
+
+    m_providersB->blockSignals(true);
+    for (const auto &m : m_mediaBrowsers)
+        m_providersB->addItem(m->icon(), m->name());
+    m_providersB->setCurrentIndex(-1);
+    m_providersB->blockSignals(false);
+
+    if (!lastName.isEmpty())
+    {
+        const int idx = m_providersB->findText(lastName, Qt::MatchExactly);
+        if (idx > -1)
+            m_providersB->setCurrentIndex(idx);
+    }
+    if (m_providersB->currentIndex() < 0)
+    {
+        const int idx = m_providersB->findText(sets().getString("MediaBrowser/Provider"), Qt::MatchExactly);
+        m_providersB->setCurrentIndex(idx < 0 ? 0 : idx);
+    }
+
+    return true;
+}
+void MediaBrowser::downloadScripts(const QByteArray &jsonData)
+{
+    const auto jsonDoc = QJsonDocument::fromJson(jsonData);
+    if (!jsonDoc.isArray())
+        return;
+
+    const auto jsonArr = jsonDoc.array();
+    if (jsonArr.isEmpty())
+        return;
+
+    const auto currentScripts = [this] {
+        QHash<QString, int> currentScripts;
+        for (const auto &m : m_mediaBrowsers)
+            currentScripts[m->name()] = m->version();
+        return currentScripts;
+    }();
+
+    for (auto &&jsonVal : jsonArr)
+    {
+        const auto jsonObj = jsonVal.toObject();
+        const auto name = jsonObj["Name"].toString();
+        const auto path = jsonObj["Path"].toString();
+        const auto version = jsonObj["Version"].toInt();
+        if (name.isEmpty() || path.isEmpty() || version <= 0 || !path.endsWith(".js"))
+            continue;
+
+        if (currentScripts[name] < version)
+        {
+            m_scriptReplies.insert(m_net.start(g_mediaBrowserBaseUrl + path));
+            qCInfo(mb) << "Downloading script" << Functions::fileName(path);
+        }
+    }
+}
+void MediaBrowser::saveScript(const QByteArray &data, const QString &fileName)
+{
+    QFile f(getScriptsPath() + "/" + fileName);
+    if (f.open(QFile::WriteOnly))
+    {
+        if (f.write(data) == data.size())
+        {
+            return;
+        }
+    }
+    qCCritical(mb) << "Unable to write file" << f.fileName();
+}
+
 void MediaBrowser::visibilityChanged(bool v)
 {
     setEnabled(v);
     m_visible = v;
-    if (m_first)
-        providerChanged(m_providersB->currentIndex());
+    if (m_first && m_visible)
+    {
+        m_first = false;
+        if (scanScripts())
+            m_jsonReply = m_net.start(g_mediaBrowserBaseUrl + QString("MediaBrowser.json"));
+    }
 }
 
 void MediaBrowser::providerChanged(int idx)
 {
-    if (m_visible || m_overrideVisibility)
+    if (idx < 0 || (!m_visible && !m_overrideVisibility))
+        return;
+
+    if (m_mediaBrowser)
     {
-        if (idx > -1)
-        {
-            if (m_mediaBrowser)
-            {
-                m_mediaBrowser->setCompleterListCallback(nullptr);
-                m_mediaBrowser->finalize();
-            }
-
-            m_searchCB->blockSignals(true);
-            m_searchCB->clear();
-            m_searchCB->blockSignals(false);
-            m_searchE->blockSignals(true);
-            m_searchE->clearText();
-            m_searchE->blockSignals(false);
-
-            // Clear list and cancel all network actions.
-            m_mediaBrowser = nullptr;
-            search();
-
-            m_mediaBrowser = m_mediaBrowsers[idx].get();
-            switch (m_mediaBrowser->completerMode())
-            {
-                case MediaBrowserCommon::CompleterMode::None:
-                case MediaBrowserCommon::CompleterMode::Continuous:
-                    m_searchE->setVisible(true);
-                    m_searchCB->setVisible(false);
-                    break;
-                case MediaBrowserCommon::CompleterMode::All:
-                    m_searchE->setVisible(false);
-                    m_searchCB->setVisible(true);
-                    setCompleterListCallback();
-                    break;
-            }
-            m_mediaBrowser->prepareWidget(m_resultsW);
-
-            sets().set("MediaBrowser/Provider", m_providersB->currentText());
-        }
-        m_first = false;
+        m_mediaBrowser->setCompleterListCallback(nullptr);
+        m_mediaBrowser->finalize();
     }
+
+    m_searchCB->blockSignals(true);
+    m_searchCB->clear();
+    m_searchCB->blockSignals(false);
+    m_searchE->blockSignals(true);
+    m_searchE->clearText();
+    m_searchE->blockSignals(false);
+
+    // Clear list and cancel all network actions.
+    m_mediaBrowser = nullptr;
+    search();
+
+    m_mediaBrowser = m_mediaBrowsers[idx];
+    switch (m_mediaBrowser->completerMode())
+    {
+        case MediaBrowserJS::CompleterMode::None:
+        case MediaBrowserJS::CompleterMode::Continuous:
+            m_searchE->setVisible(true);
+            m_searchCB->setVisible(false);
+            break;
+        case MediaBrowserJS::CompleterMode::All:
+            m_searchE->setVisible(false);
+            m_searchCB->setVisible(true);
+            setCompleterListCallback();
+            break;
+    }
+    m_mediaBrowser->prepareWidget();
+
+    sets().set("MediaBrowser/Provider", m_providersB->currentText());
 }
 
 void MediaBrowser::searchTextEdited(const QString &text)
@@ -549,7 +653,7 @@ void MediaBrowser::searchTextEdited(const QString &text)
             m_autocompleteReply->deleteLater();
         if (text.isEmpty())
             m_completerModel->setStringList({});
-        else if (m_mediaBrowser && m_mediaBrowser->completerMode() == MediaBrowserCommon::CompleterMode::Continuous)
+        else if (m_mediaBrowser && m_mediaBrowser->completerMode() == MediaBrowserJS::CompleterMode::Continuous)
             m_autocompleteReply = m_mediaBrowser->getCompleterReply(text);
 #endif
     }
@@ -568,12 +672,12 @@ void MediaBrowser::search()
     {
         switch (m_mediaBrowser->completerMode())
         {
-            case MediaBrowserCommon::CompleterMode::None:
-            case MediaBrowserCommon::CompleterMode::Continuous:
+            case MediaBrowserJS::CompleterMode::None:
+            case MediaBrowserJS::CompleterMode::Continuous:
                 searchW = m_searchE;
                 name = m_searchE->text();
                 break;
-            case MediaBrowserCommon::CompleterMode::All:
+            case MediaBrowserJS::CompleterMode::All:
                 searchW = m_searchCB;
                 name = m_searchCB->currentText();
                 break;
@@ -595,7 +699,7 @@ void MediaBrowser::search()
     if (!name.isEmpty())
     {
         if (m_lastName != name || sender() == searchW || sender() == m_searchB)
-            m_pages->setPage(1, m_mediaBrowser && m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::Multi);
+            m_pages->setPage(1, m_mediaBrowser && m_mediaBrowser->pagesMode() == MediaBrowserJS::PagesMode::Multi);
         if (m_mediaBrowser)
             m_searchReply = m_mediaBrowser->getSearchReply(name, m_pages->getCurrentPage());
         if (m_searchReply)
@@ -625,6 +729,12 @@ void MediaBrowser::search()
 
 void MediaBrowser::netFinished(NetworkReply *reply)
 {
+    const auto finalizeScriptsReply = [=] {
+        m_scriptReplies.remove(reply);
+        if (m_scriptReplies.isEmpty())
+            scanScripts();
+    };
+
     if (reply->hasError())
     {
         if (reply == m_searchReply)
@@ -637,6 +747,12 @@ void MediaBrowser::netFinished(NetworkReply *reply)
                 emit QMPlay2Core.sendMessage(tr("Website doesn't exist"), MediaBrowserName, 3);
             else
                 emit QMPlay2Core.sendMessage(tr("Connection error"), MediaBrowserName, 3);
+        }
+        else if (m_scriptReplies.contains(reply))
+        {
+            const auto fileName = Functions::fileName(reply->url());
+            qCWarning(mb) << "Unable to download script" << fileName;
+            finalizeScriptsReply();
         }
     }
     else
@@ -676,6 +792,17 @@ void MediaBrowser::netFinished(NetworkReply *reply)
                 cursor.insertBlock();
             }
         }
+        else if (reply == m_jsonReply)
+        {
+            downloadScripts(replyData);
+        }
+        else if (m_scriptReplies.contains(reply))
+        {
+            const auto fileName = Functions::fileName(reply->url());
+            if (!fileName.isEmpty())
+                saveScript(replyData, fileName);
+            finalizeScriptsReply();
+        }
     }
 
     if (reply == m_searchReply)
@@ -702,7 +829,7 @@ void MediaBrowser::searchMenu()
 
 void MediaBrowser::loadSearchResults(const QByteArray &replyData)
 {
-    const MediaBrowserCommon::Description descr = m_mediaBrowser->addSearchResults(replyData, m_resultsW);
+    const MediaBrowserJS::Description descr = m_mediaBrowser->addSearchResults(replyData);
     if (!descr.description.isEmpty())
     {
         m_descr->setHtml(descr.description);
@@ -718,7 +845,7 @@ void MediaBrowser::loadSearchResults(const QByteArray &replyData)
         m_searchReply = descr.nextReply;
     else
     {
-        if (m_mediaBrowser->pagesMode() == MediaBrowserCommon::PagesMode::List)
+        if (m_mediaBrowser->pagesMode() == MediaBrowserJS::PagesMode::List)
         {
             const QStringList pages = m_mediaBrowser->getPagesList();
             m_pages->setPages(pages);
@@ -726,9 +853,9 @@ void MediaBrowser::loadSearchResults(const QByteArray &replyData)
         }
         else
         {
-            m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Single && m_resultsW->topLevelItemCount());
+            m_pages->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserJS::PagesMode::Single && m_resultsW->topLevelItemCount());
         }
-        m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserCommon::PagesMode::Multi && m_resultsW->topLevelItemCount());
+        m_loadAllB->setVisible(m_mediaBrowser->pagesMode() != MediaBrowserJS::PagesMode::Multi && m_resultsW->topLevelItemCount());
         m_resultsW->setCurrentName(m_lastName, m_pages->getCurrentPageName());
     }
 }

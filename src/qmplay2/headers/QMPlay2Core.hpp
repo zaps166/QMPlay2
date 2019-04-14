@@ -32,6 +32,7 @@ enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8,
 template<typename T>
 class QPointer;
 
+class CommonJS;
 class QTranslator;
 class Settings;
 class QWidget;
@@ -174,12 +175,17 @@ public:
     QByteArray getResource(const QString &url);
 
     void addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse = true);
-    QByteArray getRawheaders(const QString &url);
+    QByteArray getRawHeaders(const QString &url);
 
     void addNameForUrl(const QString &url, const QString &name, const bool removeAfterUse = true);
     QString getNameForUrl(const QString &url);
 
     void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
+
+    inline CommonJS *getCommonJS() const
+    {
+        return m_commonJS;
+    }
 
 private slots:
     void restoreCursorSlot();
@@ -210,6 +216,8 @@ private:
         mutable QMutex mutex;
         QHash<QString, QPair<QByteArray, bool>> data;
     } cookies, resources, rawHeaders, namesForUrl;
+
+    CommonJS *m_commonJS = nullptr;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

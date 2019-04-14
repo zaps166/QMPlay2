@@ -119,6 +119,21 @@ elseif(APPLE)
     add_definitions(-DNOTIFIES_MACOS)
 endif()
 
+if(USE_QML)
+    list(APPEND QMPLAY2_HDR
+        headers/CommonJS.hpp
+        headers/TreeWidgetJS.hpp
+        headers/NetworkAccessJS.hpp
+    )
+    list(APPEND QMPLAY2_SRC
+        CommonJS.cpp
+        TreeWidgetJS.cpp
+        NetworkAccessJS.cpp
+    )
+    add_definitions(-DUSE_QML)
+    set(QML Qt5::Qml)
+endif()
+
 set(QMPLAY2_RESOURCES
     languages.qrc
 )
@@ -221,5 +236,6 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Widgets
     PRIVATE
     ${DBUS}
+    ${QML}
     ${LIBQMPLAY2_LIBS}
 )

@@ -25,11 +25,11 @@
 #include <QTreeWidget>
 #include <QPointer>
 #include <QMenu>
+#include <QSet>
 
-#include <memory>
 #include <vector>
 
-class MediaBrowserCommon;
+class MediaBrowserJS;
 
 /**/
 
@@ -38,7 +38,7 @@ class MediaBrowserResults final : public QTreeWidget
     Q_OBJECT
 
 public:
-    MediaBrowserResults(MediaBrowserCommon *&mediaBrowser);
+    MediaBrowserResults(MediaBrowserJS *&mediaBrowser);
     ~MediaBrowserResults();
 
     void setCurrentName(const QString &name, const QString &pageName);
@@ -59,7 +59,7 @@ private:
 
     void QMPlay2Action(const QString &action, const QList<QTreeWidgetItem *> &items);
 
-    MediaBrowserCommon *&m_mediaBrowser;
+    MediaBrowserJS *&m_mediaBrowser;
     QString m_currentName;
     QMenu m_menu;
 };
@@ -123,8 +123,6 @@ public:
     ~MediaBrowser();
 
 private:
-    bool set() override;
-
     DockWidget *getDockWidget() override;
 
     QList<AddressPrefix> addressPrefixList(bool) const override;
@@ -135,6 +133,10 @@ private:
 
     inline void setCompleterListCallback();
     void completionsReady();
+
+    bool scanScripts();
+    void downloadScripts(const QByteArray &jsonData);
+    void saveScript(const QByteArray &data, const QString &fileName);
 
 private slots:
     void visibilityChanged(bool v);
@@ -151,11 +153,10 @@ private slots:
 private:
     void loadSearchResults(const QByteArray &replyData = QByteArray());
 
-    std::vector<std::unique_ptr<MediaBrowserCommon>> m_mediaBrowsers;
-    MediaBrowserCommon *m_mediaBrowser;
+    std::vector<MediaBrowserJS *> m_mediaBrowsers;
+    MediaBrowserJS *m_mediaBrowser = nullptr;
 
     DockWidget *m_dW;
-
 
     QComboBox *m_providersB, *m_searchCB;
     LineEdit *m_searchE;
@@ -169,7 +170,8 @@ private:
     QCompleter *m_completer;
     QString m_lastName;
 
-    QPointer<NetworkReply> m_autocompleteReply, m_searchReply, m_imageReply;
+    QPointer<NetworkReply> m_jsonReply, m_autocompleteReply, m_searchReply, m_imageReply;
+    QSet<NetworkReply *> m_scriptReplies;
     NetworkAccess m_net;
 
     bool m_visible, m_first, m_overrideVisibility;

@@ -783,6 +783,13 @@ bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
     return doWrap;
 }
 
+QByteArray Functions::getUserAgent()
+{
+    const auto customUserAgent = QMPlay2Core.getSettings().getString("CustomUserAgent");
+    if (!customUserAgent.isEmpty())
+        return customUserAgent.toUtf8();
+    return Version::userAgent();
+}
 QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool setCookies, bool setRawHeaders, bool icy, const QByteArray &userAgentArg)
 {
     if (url.startsWith("file://"))
@@ -790,14 +797,11 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool se
     else
     {
         const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
-        const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawheaders(url) : QByteArray();
+        const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawHeaders(url) : QByteArray();
         const QByteArray userAgent = [&] {
             if (!userAgentArg.isNull())
                 return userAgentArg;
-            const auto customUserAgent = QMPlay2Core.getSettings().getString("CustomUserAgent");
-            if (!customUserAgent.isEmpty())
-                return customUserAgent.toUtf8();
-            return Version::userAgent();
+            return getUserAgent();
         }();
 
         if (url.startsWith("mms:"))
