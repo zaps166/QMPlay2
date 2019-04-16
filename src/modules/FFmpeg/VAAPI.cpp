@@ -175,7 +175,9 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                                 VAProcFilterDeinterlacing,
                                 vpp_deint_type,
                                 0,
+#if VA_MAJOR_VERSION >= 1
                                 {}
+#endif
                             };
                             if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &m_vppDeintBuff) != VA_STATUS_SUCCESS)
                                 m_vppDeintBuff = VA_INVALID_ID;
