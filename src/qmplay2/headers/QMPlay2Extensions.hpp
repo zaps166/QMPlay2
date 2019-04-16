@@ -58,6 +58,8 @@ public:
 
     virtual DockWidget *getDockWidget();
 
+    virtual bool canConvertAddress() const;
+
     virtual QString matchAddress(const QString &url) const;
     virtual QList<AddressPrefix> addressPrefixList(bool img = true) const;
     virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *extension, IOController<> *ioCtrl);

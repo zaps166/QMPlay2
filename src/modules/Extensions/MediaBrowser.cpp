@@ -336,8 +336,7 @@ MediaBrowser::MediaBrowser(Module &module) :
     m_resultsW(new MediaBrowserResults(m_mediaBrowser)),
     m_completerModel(new QStringListModel(this)),
     m_completer(new QCompleter(m_completerModel, this)),
-    m_net(this),
-    m_visible(false), m_first(true), m_overrideVisibility(false)
+    m_net(this)
 {
     m_dW = new DockWidget;
     connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
@@ -419,9 +418,15 @@ DockWidget *MediaBrowser::getDockWidget()
     return m_dW;
 }
 
+bool MediaBrowser::canConvertAddress() const
+{
+    return true;
+}
+
 QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img) const
 {
     QList<AddressPrefix> ret;
+    const_cast<MediaBrowser *>(this)->initScripts();
     for (const auto &m : m_mediaBrowsers)
         ret.append(m->addressPrefix(img));
     return ret;
@@ -430,6 +435,7 @@ void MediaBrowser::convertAddress(const QString &prefix, const QString &url, con
 {
     if (streamUrl || icon)
     {
+        initScripts();
         for (const auto &m : m_mediaBrowsers)
         {
             if (m->convertAddress(prefix, url, param, streamUrl, name, icon, extension, ioCtrl))
@@ -443,6 +449,7 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
     QVector<QAction *> actions;
     if (name != url)
     {
+        initScripts();
         for (quint32 i = 0; i < m_mediaBrowsers.size(); ++i)
         {
             const auto m = m_mediaBrowsers[i];
@@ -460,6 +467,16 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
         }
     }
     return actions;
+}
+
+void MediaBrowser::initScripts()
+{
+    if (m_loadScripts)
+    {
+        m_loadScripts = false;
+        if (scanScripts())
+            m_canUpdateScripts = true;
+    }
 }
 
 inline void MediaBrowser::setCompleterListCallback()
@@ -632,18 +649,20 @@ void MediaBrowser::saveScript(const QByteArray &data, const QString &scriptPath)
 void MediaBrowser::visibilityChanged(bool v)
 {
     setEnabled(v);
-    m_visible = v;
-    if (m_first && m_visible)
+    if (v)
     {
-        m_first = false;
-        if (scanScripts())
+        initScripts();
+        if (m_canUpdateScripts && m_updateScripts)
+        {
+            m_updateScripts = false;
             m_jsonReply = m_net.start(g_mediaBrowserBaseUrl + QString("MediaBrowser.json"));
+        }
     }
 }
 
 void MediaBrowser::providerChanged(int idx)
 {
-    if (idx < 0 || (!m_visible && !m_overrideVisibility))
+    if (idx < 0)
         return;
 
     if (m_mediaBrowser)
@@ -788,7 +807,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
         }
         else if (reply == m_jsonReply)
         {
-            m_first = true;
+            m_updateScripts = true;
         }
         else if (m_scriptReplies.contains(reply))
         {
@@ -858,9 +877,7 @@ void MediaBrowser::searchMenu()
     const QString name = sender()->property("name").toString();
     if (!name.isEmpty())
     {
-        m_overrideVisibility = true;
         m_providersB->setCurrentIndex(sender()->property("idx").toUInt());
-        m_overrideVisibility = false;
         if (!m_dW->isVisible())
             m_dW->show();
         m_dW->raise();

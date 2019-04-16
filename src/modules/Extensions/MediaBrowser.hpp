@@ -125,11 +125,15 @@ public:
 private:
     DockWidget *getDockWidget() override;
 
+    bool canConvertAddress() const override;
+
     QList<AddressPrefix> addressPrefixList(bool) const override;
     void convertAddress(const QString &prefix, const QString &url, const QString &param, QString *streamUrl, QString *name, QIcon *icon, QString *extension, IOController<> *ioCtrl) override;
 
     QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
+private:
+    void initScripts();
 
     inline void setCompleterListCallback();
     void completionsReady();
@@ -174,7 +178,7 @@ private:
     QSet<NetworkReply *> m_scriptReplies;
     NetworkAccess m_net;
 
-    bool m_visible, m_first, m_overrideVisibility;
+    bool m_loadScripts = true, m_canUpdateScripts = false, m_updateScripts = true;
 };
 
 #define MediaBrowserName "MediaBrowser"

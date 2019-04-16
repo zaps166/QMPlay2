@@ -194,6 +194,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
     addDockWidget(Qt::RightDockWidgetArea, playlistDock);
     DockWidget *firstVisualization = nullptr;
     for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList()) //GUI Extensions
+    {
         if (DockWidget *dw = QMPlay2Ext->getDockWidget())
         {
             dw->setVisible(false);
@@ -206,12 +207,17 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
                 else
                     addDockWidget(Qt::LeftDockWidgetArea, firstVisualization = dw);
             }
-            else if (QMPlay2Ext->addressPrefixList(false).isEmpty())
-                tabifyDockWidget(videoDock, dw);
-            else
+            else if (QMPlay2Ext->canConvertAddress())
+            {
                 tabifyDockWidget(playlistDock, dw);
+            }
+            else
+            {
+                tabifyDockWidget(videoDock, dw);
+            }
             dw->setVisible(true);
         }
+    }
 #else //On Android tabify docks (usually screen is too small)
     addDockWidget(Qt::TopDockWidgetArea, videoDock);
     addDockWidget(Qt::BottomDockWidgetArea, playlistDock);

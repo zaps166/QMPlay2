@@ -105,6 +105,8 @@ public:
 
     DockWidget *getDockWidget() override;
 
+    bool canConvertAddress() const override;
+
     QString matchAddress(const QString &url) const override;
     QList<AddressPrefix> addressPrefixList(bool) const override;
     void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *, IOController<> *ioCtrl) override;

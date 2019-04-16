@@ -615,6 +615,11 @@ DockWidget *YouTube::getDockWidget()
     return dw;
 }
 
+bool YouTube::canConvertAddress() const
+{
+    return true;
+}
+
 QString YouTube::matchAddress(const QString &url) const
 {
     const QUrl qurl(url);

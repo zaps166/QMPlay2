@@ -47,6 +47,11 @@ DockWidget *QMPlay2Extensions::getDockWidget()
     return nullptr;
 }
 
+bool QMPlay2Extensions::canConvertAddress() const
+{
+    return false;
+}
+
 QString QMPlay2Extensions::matchAddress(const QString &url) const
 {
     Q_UNUSED(url);
