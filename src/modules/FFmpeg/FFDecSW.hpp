@@ -20,8 +20,8 @@
 
 #include <FFDec.hpp>
 
-#include <QString>
-#include <QList>
+#include <vector>
+#include <deque>
 
 struct SwsContext;
 
@@ -29,23 +29,21 @@ class FFDecSW final : public FFDec
 {
 public:
     FFDecSW(Module &);
-private:
-    class BitmapSubBuffer
-    {
-    public:
-        inline BitmapSubBuffer(double pts, double duration) :
-            pts(pts), duration(duration)
-        {}
-        inline BitmapSubBuffer(double pts) :
-            x(0), y(0), w(0), h(0),
-            pts(pts), duration(0.0)
-        {}
 
-        int x, y, w, h;
+private:
+    struct Subtitle
+    {
+        struct Rect
+        {
+            int x, y, w, h;
+            QByteArray data;
+        };
+
         double pts, duration;
-        QByteArray bitmap;
+        std::vector<Rect> rects;
     };
 
+private:
     ~FFDecSW();
 
     bool set() override;
@@ -56,7 +54,7 @@ private:
 
     int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush) override;
     int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
-    bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h) override;
+    bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush) override;
 
     bool open(StreamInfo &, VideoWriter *) override;
 
@@ -64,10 +62,9 @@ private:
 
     void setPixelFormat();
 
-    inline void addBitmapSubBuffer(BitmapSubBuffer *buff, double pos);
     bool getFromBitmapSubsBuffer(QMPlay2OSD *&, double pts);
-    inline void clearBitmapSubsBuffer();
 
+private:
     int threads, lowres;
     bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;
     int lastFrameW, lastFrameH, lastPixFmt;
@@ -78,5 +75,5 @@ private:
     int desiredPixFmt;
     bool dontConvert;
 
-    QList<BitmapSubBuffer *> bitmapSubsBuffer;
+    std::deque<Subtitle> m_subtitles;
 };

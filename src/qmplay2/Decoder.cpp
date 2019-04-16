@@ -102,13 +102,13 @@ int Decoder::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channel
     Q_UNUSED(flush)
     return (decoded = encodedPacket).size();
 }
-bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, int w, int h)
+bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
 {
     Q_UNUSED(encodedPacket)
     Q_UNUSED(pos)
     Q_UNUSED(osd)
-    Q_UNUSED(w)
-    Q_UNUSED(h)
+    Q_UNUSED(size)
+    Q_UNUSED(flush)
     return false;
 }
 

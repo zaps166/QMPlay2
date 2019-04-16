@@ -338,7 +338,7 @@ void VideoThr::run()
         playC.subsMutex.lock();
         if (sDec) //Image subs (pgssub, dvdsub, ...)
         {
-            if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, W, H))
+            if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, QSize(W, H), playC.flushVideo))
             {
                 osdListToDelete += subtitles;
                 subtitles = nullptr;
