@@ -61,6 +61,8 @@ public:
     MediaBrowserJS(const QString &commonCode, const int lineNumber, const QString &scriptPath, NetworkAccess &net, QTreeWidget *treeW, QObject *parent = nullptr);
     ~MediaBrowserJS();
 
+    QString scriptPath() const;
+
     int version() const;
 
     QString name() const;
@@ -120,6 +122,8 @@ private:
     E toEnum(const QJSValue &value) const;
 
 private:
+    const QString m_scriptPath;
+
     QString m_name;
     int m_version = 0;
     QIcon m_icon;

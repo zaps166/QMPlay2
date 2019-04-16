@@ -136,7 +136,7 @@ private:
 
     bool scanScripts();
     void downloadScripts(const QByteArray &jsonData);
-    void saveScript(const QByteArray &data, const QString &fileName);
+    void saveScript(const QByteArray &data, const QString &scriptPath);
 
 private slots:
     void visibilityChanged(bool v);

@@ -22,6 +22,7 @@ Q_DECLARE_LOGGING_CATEGORY(mb)
 
 MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, const QString &scriptPath, NetworkAccess &net, QTreeWidget *treeW, QObject *parent)
     : QObject(parent)
+    , m_scriptPath(scriptPath)
     , m_engine(*(new QJSEngine(this)))
     , m_commonJS(*QMPlay2Core.getCommonJS())
     , m_treeW(treeW)
@@ -44,10 +45,10 @@ MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, 
         m_engine.newQObject(this)
     );
 
-    QFile scriptFile(scriptPath);
+    QFile scriptFile(m_scriptPath);
     if (scriptFile.open(QFile::ReadOnly))
     {
-        m_script = m_engine.evaluate(commonCode.arg(scriptFile.readAll().constData()), QFileInfo(scriptPath).fileName(), lineNumber);
+        m_script = m_engine.evaluate(commonCode.arg(scriptFile.readAll().constData()), QFileInfo(m_scriptPath).fileName(), lineNumber);
         if (m_script.isError())
         {
             qCWarning(mb).nospace().noquote()
@@ -96,6 +97,11 @@ MediaBrowserJS::~MediaBrowserJS()
     finalize();
     if (!m_iconFile.fileName().isEmpty())
         m_iconFile.remove();
+}
+
+QString MediaBrowserJS::scriptPath() const
+{
+    return m_scriptPath;
 }
 
 int MediaBrowserJS::version() const

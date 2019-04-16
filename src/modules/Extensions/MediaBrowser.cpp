@@ -569,31 +569,56 @@ void MediaBrowser::downloadScripts(const QByteArray &jsonData)
         return;
 
     const auto currentScripts = [this] {
-        QHash<QString, int> currentScripts;
+        QHash<QString, MediaBrowserJS *> currentScripts;
         for (const auto &m : m_mediaBrowsers)
-            currentScripts[m->name()] = m->version();
+            currentScripts[m->name()] = m;
         return currentScripts;
     }();
 
+    bool removed = false, downloading = false;
     for (auto &&jsonVal : jsonArr)
     {
         const auto jsonObj = jsonVal.toObject();
         const auto name = jsonObj["Name"].toString();
         const auto path = jsonObj["Path"].toString();
         const auto version = jsonObj["Version"].toInt();
-        if (name.isEmpty() || path.isEmpty() || version <= 0 || !path.endsWith(".js"))
+        if (name.isEmpty() || version <= 0)
             continue;
 
-        if (currentScripts[name] < version)
+        const auto m = currentScripts[name];
+        const auto scriptVersion = m ? m->version() : 0;
+        auto scriptPath = m ? currentScripts[name]->scriptPath() : QString();
+
+        if (path.endsWith(".js") && scriptVersion < version)
         {
-            m_scriptReplies.insert(m_net.start(g_mediaBrowserBaseUrl + path));
-            qCInfo(mb) << "Downloading script" << Functions::fileName(path);
+            if (scriptPath.isEmpty())
+                scriptPath = getScriptsPath() + "/" + Functions::fileName(path);
+            auto reply = m_net.start(g_mediaBrowserBaseUrl + path);
+            reply->setProperty("scriptPath", scriptPath);
+            m_scriptReplies.insert(reply);
+            downloading = true;
+            qCInfo(mb) << "Downloading script" << Functions::fileName(scriptPath);
+        }
+        else if (path.isEmpty() && !scriptPath.isEmpty() && scriptVersion <= version)
+        {
+            const auto scriptName = Functions::fileName(scriptPath);
+            if (QFile::remove(scriptPath))
+            {
+                qCInfo(mb) << "Removed script" << scriptName;
+                removed = true;
+            }
+            else
+            {
+                qCInfo(mb) << "Unable to remove script" << scriptName;
+            }
         }
     }
+    if (removed && !downloading)
+        scanScripts();
 }
-void MediaBrowser::saveScript(const QByteArray &data, const QString &fileName)
+void MediaBrowser::saveScript(const QByteArray &data, const QString &scriptPath)
 {
-    QFile f(getScriptsPath() + "/" + fileName);
+    QFile f(scriptPath);
     if (f.open(QFile::WriteOnly))
     {
         if (f.write(data) == data.size())
@@ -601,7 +626,7 @@ void MediaBrowser::saveScript(const QByteArray &data, const QString &fileName)
             return;
         }
     }
-    qCCritical(mb) << "Unable to write file" << f.fileName();
+    qCCritical(mb) << "Unable to write file" << scriptPath;
 }
 
 void MediaBrowser::visibilityChanged(bool v)
@@ -815,9 +840,9 @@ void MediaBrowser::netFinished(NetworkReply *reply)
         }
         else if (m_scriptReplies.contains(reply))
         {
-            const auto fileName = Functions::fileName(reply->url());
-            if (!fileName.isEmpty())
-                saveScript(replyData, fileName);
+            const auto scriptPath = reply->property("scriptPath").toString();
+            Q_ASSERT(!scriptPath.isEmpty());
+            saveScript(replyData, scriptPath);
             finalizeScriptsReply();
         }
     }
