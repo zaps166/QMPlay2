@@ -59,7 +59,7 @@ public:
 
     bool init(quint32 *textures) override
     {
-        static bool isEGL = (qgetenv("QT_XCB_GL_INTEGRATION").compare("xcb_egl", Qt::CaseInsensitive) == 0);
+        static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
         if (isEGL)
             return false; // Not supported
         return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
