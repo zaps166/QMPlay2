@@ -135,13 +135,6 @@
     </message>
 </context>
 <context>
-    <name>AnimeOdcinki</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Epizódnév</translation>
-    </message>
-</context>
-<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -1295,6 +1288,10 @@
         <source>Connection error</source>
         <translation>Csatlakozási hiba</translation>
     </message>
+    <message>
+        <source>Search on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
@@ -1580,10 +1577,6 @@ A dekódolt videó képkockákat a rendszermemóriába másolja, ezért lassú l
         <translation>OpenGL használata</translation>
     </message>
     <message>
-        <source>Allow VDPAU</source>
-        <translation>VDPAU engedélyezése</translation>
-    </message>
-    <message>
         <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
         <translation>Dekódolt videó másolása a CPU memóriába (nem ajánlott, nagyon lassú Intel processzorokon)</translation>
     </message>
@@ -1829,6 +1822,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1843,25 +1840,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Move down</source>
         <translation>Lefelé mozgatás</translation>
-    </message>
-</context>
-<context>
-    <name>MyFreeMP3</name>
-    <message>
-        <source>Title</source>
-        <translation>Cím</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Előadó</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Hossz</translation>
-    </message>
-    <message>
-        <source>Search on MyFreeMP3</source>
-        <translation>Keresés a MyFreeMP3-on</translation>
     </message>
 </context>
 <context>
@@ -3384,21 +3362,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
 </context>
 <context>
-    <name>Wbijam</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Epizódnév</translation>
-    </message>
-    <message>
-        <source>Episode type</source>
-        <translation>Epizódtípus</translation>
-    </message>
-    <message>
-        <source>Episode date</source>
-        <translation>Epizód dátum</translation>
-    </message>
-</context>
-<context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
@@ -3422,6 +3385,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>&amp;Close</source>
         <translation>&amp;Bezárás</translation>
+    </message>
+    <message>
+        <source>&amp;Always on top</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

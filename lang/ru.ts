@@ -135,13 +135,6 @@
     </message>
 </context>
 <context>
-    <name>AnimeOdcinki</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Название эпизода</translation>
-    </message>
-</context>
-<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -1292,6 +1285,10 @@
         <source>Play all</source>
         <translation>Воспроизвести все</translation>
     </message>
+    <message>
+        <source>Search on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
@@ -1583,10 +1580,6 @@
         <translation>Опрокидывание фазы в правом канале</translation>
     </message>
     <message>
-        <source>Allow VDPAU</source>
-        <translation>Разрешить VDPAU</translation>
-    </message>
-    <message>
         <source>Use CDDB if CD-TEXT is not available</source>
         <translation>Использовать CDDB, если CD-TEXT не доступен</translation>
     </message>
@@ -1828,6 +1821,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1842,25 +1839,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     <message>
         <source>Move down</source>
         <translation>Переместить вниз</translation>
-    </message>
-</context>
-<context>
-    <name>MyFreeMP3</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Название</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Исполнитель</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Продолжительность</translation>
-    </message>
-    <message>
-        <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3383,21 +3361,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>Wbijam</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Название эпизода</translation>
-    </message>
-    <message>
-        <source>Episode type</source>
-        <translation>Тип эпизода</translation>
-    </message>
-    <message>
-        <source>Episode date</source>
-        <translation>Дата эпизода</translation>
-    </message>
-</context>
-<context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
@@ -3421,6 +3384,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
+    </message>
+    <message>
+        <source>&amp;Always on top</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

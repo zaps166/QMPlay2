@@ -135,13 +135,6 @@
     </message>
 </context>
 <context>
-    <name>AnimeOdcinki</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Nombre del episodio</translation>
-    </message>
-</context>
-<context>
     <name>Appearance</name>
     <message>
         <source>New</source>
@@ -1295,6 +1288,10 @@
         <source>Play all</source>
         <translation>Reproducir todo</translation>
     </message>
+    <message>
+        <source>Search on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
@@ -1552,10 +1549,6 @@
     <message>
         <source>Downloads covers</source>
         <translation>Descargas de portadas</translation>
-    </message>
-    <message>
-        <source>Allow VDPAU</source>
-        <translation>Permitir VDPAU</translation>
     </message>
     <message>
         <source>Allow to download big covers</source>
@@ -1831,6 +1824,10 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation>Filtrado trilinear para la reducción y bicúbico para la ampliación.</translation>
     </message>
+    <message>
+        <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1845,25 +1842,6 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     <message>
         <source>Move down</source>
         <translation>Mover hacia abajo</translation>
-    </message>
-</context>
-<context>
-    <name>MyFreeMP3</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Título</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artista</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Duración</translation>
-    </message>
-    <message>
-        <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3385,21 +3363,6 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
 </context>
 <context>
-    <name>Wbijam</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Nombre del episodio</translation>
-    </message>
-    <message>
-        <source>Episode type</source>
-        <translation>Tipo de episodio</translation>
-    </message>
-    <message>
-        <source>Episode date</source>
-        <translation>Fecha del episodio</translation>
-    </message>
-</context>
-<context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
@@ -3423,6 +3386,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <message>
         <source>&amp;Compact view</source>
         <translation>&amp;Vista compacta</translation>
+    </message>
+    <message>
+        <source>&amp;Always on top</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

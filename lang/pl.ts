@@ -135,13 +135,6 @@
     </message>
 </context>
 <context>
-    <name>AnimeOdcinki</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Nazwa odcinka</translation>
-    </message>
-</context>
-<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -1295,6 +1288,10 @@
         <source>Play all</source>
         <translation>Odtwórz wszystkie</translation>
     </message>
+    <message>
+        <source>Search on %1</source>
+        <translation>Wyszukaj w %1</translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
@@ -1586,10 +1583,6 @@
         <translation>Dekoder programowy</translation>
     </message>
     <message>
-        <source>Allow VDPAU</source>
-        <translation>Zezwalaj na VDPAU</translation>
-    </message>
-    <message>
         <source>Use CDDB if CD-TEXT is not available</source>
         <translation>Używaj CDDB, jeżeli CD-TEXT jest niedostępny</translation>
     </message>
@@ -1831,6 +1824,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation>Filtrowanie trójliniowe dla pomniejszania i filtrowanie dwusześcienne dla powiększenia.</translation>
     </message>
+    <message>
+        <source>Swap stereo channels</source>
+        <translation>Zamień kanały stereo</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1845,25 +1842,6 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Move down</source>
         <translation>Przenieś niżej</translation>
-    </message>
-</context>
-<context>
-    <name>MyFreeMP3</name>
-    <message>
-        <source>Title</source>
-        <translation>Tytuł</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation>Artysta</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation>Długość</translation>
-    </message>
-    <message>
-        <source>Search on MyFreeMP3</source>
-        <translation>Wyszukaj w MyFreeMP3</translation>
     </message>
 </context>
 <context>
@@ -3386,21 +3364,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
 </context>
 <context>
-    <name>Wbijam</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Nazwa odcinka</translation>
-    </message>
-    <message>
-        <source>Episode type</source>
-        <translation>Typ odcinka</translation>
-    </message>
-    <message>
-        <source>Episode date</source>
-        <translation>Data odcinka</translation>
-    </message>
-</context>
-<context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
@@ -3424,6 +3387,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>&amp;Close</source>
         <translation>&amp;Zamknij</translation>
+    </message>
+    <message>
+        <source>&amp;Always on top</source>
+        <translation>Z&amp;awsze na wierzchu</translation>
     </message>
 </context>
 <context>
