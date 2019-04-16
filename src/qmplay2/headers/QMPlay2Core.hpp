@@ -60,7 +60,7 @@ public:
     static bool canSuspend();
     static void suspend();
 
-    static bool getCPUFlags();
+    static int getCPUFlags();
 
     void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
     void quit();

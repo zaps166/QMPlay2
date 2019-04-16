@@ -183,7 +183,7 @@ void QMPlay2CoreClass::suspend()
 #endif
 }
 
-bool QMPlay2CoreClass::getCPUFlags()
+int QMPlay2CoreClass::getCPUFlags()
 {
     return av_get_cpu_flags();
 }
