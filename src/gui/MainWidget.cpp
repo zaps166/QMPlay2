@@ -376,6 +376,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
         QMPlay2GUI.videoAdjustment->restoreValues();
 
     fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
+    if (settings.getBool("MainWidget/AlwaysOnTop"))
+        menuBar->window->alwaysOnTop->trigger();
 #if defined Q_OS_MACOS || defined Q_OS_ANDROID
     show();
 #else
@@ -1695,6 +1697,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
     else
         settings.set("MainWidget/DockWidgetState", dockWidgetState);
     settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
+    settings.set("MainWidget/AlwaysOnTop", !!(windowFlags() & Qt::WindowStaysOnTopHint));
 #ifndef Q_OS_MACOS
     settings.set("MainWidget/isVisible", isVisible());
 #endif
