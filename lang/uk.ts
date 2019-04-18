@@ -1290,7 +1290,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук на %1</translation>
     </message>
 </context>
 <context>
@@ -1826,7 +1826,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Поміняти місцями стереоканали</translation>
     </message>
 </context>
 <context>
@@ -3390,7 +3390,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Завжди зверху</translation>
     </message>
 </context>
 <context>
