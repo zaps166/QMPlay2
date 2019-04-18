@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>Autodetectar la dirección</translation>
     </message>
 </context>
 <context>
@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>&amp;Stereo</source>
-        <translation>&amp;Estereo</translation>
+        <translation>&amp;Estéreo</translation>
     </message>
 </context>
 <context>
@@ -513,7 +513,7 @@
     </message>
     <message>
         <source>Playback</source>
-        <translation>Reproducción</translation>
+        <translation>Reproduciendo</translation>
     </message>
     <message>
         <source>bitrate</source>
@@ -697,7 +697,7 @@
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El nombre o la línea de comandos son incojrrectos o están vacíos.</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
@@ -763,7 +763,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir el URL o directorio que contiene el archivo elegido</translation>
     </message>
 </context>
 <context>
@@ -827,7 +827,7 @@
     <name>FFmpeg</name>
     <message>
         <source>None</source>
-        <translation>Nada</translation>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
@@ -995,7 +995,7 @@
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar por defecto las notificaciones de la bandeja</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
@@ -1015,7 +1015,7 @@
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
+        <translation>No cargar archivos de listas de reproducción contenidos en otros archivos</translation>
     </message>
 </context>
 <context>
@@ -1038,7 +1038,7 @@
     </message>
     <message>
         <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation type="unfinished"></translation>
+        <translation>No reproduce tras iniciar (ignora la opción «Recordar la posición de reproducción»).</translation>
     </message>
     <message>
         <source>Ensures that the window will be visible if the application is running.</source>
@@ -1290,7 +1290,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar en %1</translation>
     </message>
 </context>
 <context>
@@ -1616,7 +1616,7 @@
     </message>
     <message>
         <source>Force frame skipping</source>
-        <translation>Forzar salto de fotogramas</translation>
+        <translation>Forzar el salto de fotogramas</translation>
     </message>
     <message>
         <source>Select all</source>
@@ -1826,7 +1826,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Intercambiar los canales estéreo</translation>
     </message>
 </context>
 <context>
@@ -1953,15 +1953,15 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Op&amp;tions</source>
-        <translation>&amp;Configurar</translation>
+        <translation>&amp;Opciones</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;General</translation>
+        <translation>&amp;Configuración</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Módulos</translation>
+        <translation>Configuración de los &amp;módulos</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -2028,7 +2028,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>Fijar demora de los subtítulos (seg.)</translation>
+        <translation>Fijar el retraso de los subtítulos (seg.)</translation>
     </message>
     <message>
         <source>No image rotation</source>
@@ -2052,7 +2052,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Subtitles delay</source>
-        <translation>Demora de los subtítulos</translation>
+        <translation>Retraso de los subtítulos</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
@@ -2119,7 +2119,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>&amp;Delay video</source>
-        <translation>&amp;Demora del vídeo</translation>
+        <translation>&amp;Retrasar el vídeo</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
@@ -2139,7 +2139,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>Dem&amp;ora de los subtítulos</translation>
+        <translation>Retrasar los subtítulos</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2147,11 +2147,11 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>&amp;Establecer retardo de subtítulos</translation>
+        <translation>&amp;Establecer retardo de los subtítulos</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>&amp;Acelerar el vídeo</translation>
+        <translation>&amp;Adelantar el vídeo</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -2167,7 +2167,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>Acelerar los su&amp;btítulos</translation>
+        <translation>Adelantar los su&amp;btítulos</translation>
     </message>
 </context>
 <context>
@@ -2214,7 +2214,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Remember playback position</source>
-        <translation>Recordar la posición al reproducir</translation>
+        <translation>Recordar la posición de reproducción</translation>
     </message>
     <message>
         <source>Keep subtitles delay</source>
@@ -2306,11 +2306,11 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcado parcialmente, significa que hay un retraso entre el clic y la pausa</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar el remuestreo de audio y la conversión de canales antes que los filtros y visualizaciones</translation>
     </message>
 </context>
 <context>
@@ -2325,7 +2325,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Restablecer a&amp;justes de imagen</translation>
+        <translation>Restablecer los a&amp;justes de imagen</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
@@ -2583,7 +2583,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>la versión de la API del módulo no coincide</translation>
     </message>
     <message>
         <source>duplicated module name</source>
@@ -2591,7 +2591,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>la versión de Qt del módulo no coincide</translation>
     </message>
 </context>
 <context>
@@ -2618,7 +2618,8 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
-        <translation type="unfinished"></translation>
+        <translation>El complemento del motor de iconos QtSvg no existe.
+¡QMPlay2 no cambiará el tamaño de los iconos!</translation>
     </message>
     <message>
         <source>QtSvg module doesn&apos;t exist.
@@ -3051,7 +3052,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>None</source>
-        <translation>Nada</translation>
+        <translation>No disponible</translation>
     </message>
     <message>
         <source>Album</source>
@@ -3244,7 +3245,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Hue</source>
-        <translation>Matiz</translation>
+        <translation>Tinte</translation>
     </message>
     <message>
         <source>Sharpness</source>
@@ -3252,47 +3253,47 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar los ajustes de vídeo</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar el brillo</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Subir el brillo</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar el contraste</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar la saturación</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Subir la saturación</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar el tinte</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Subir el tinte</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar la nitidez</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Subir la nitidez</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajar el contraste</translation>
     </message>
 </context>
 <context>
@@ -3389,7 +3390,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Siempre encima</translation>
     </message>
 </context>
 <context>
