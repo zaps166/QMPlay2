@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file alias="PortAudio.svgz">PortAudio.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="PortAudio.svgz">PortAudio.svgz</file>
+    </qresource>
 </RCC>

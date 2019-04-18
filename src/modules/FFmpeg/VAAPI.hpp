@@ -1,101 +1,90 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2019  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include <HWAccelHelper.hpp>
-
 #include <QCoreApplication>
+#include <QVector>
+#include <QHash>
 
 #include <va/va.h>
-
-#if VA_VERSION_HEX >= 0x220000 // 1.2.0
-	#include <va/va_vpp.h>
-
-	#define NEW_CREATESURFACES
-	#define HAVE_VPP
-#endif
+#include <va/va_vpp.h>
 
 class VideoFrame;
 class ImgScaler;
+struct AVFrame;
 
 class VAAPI
 {
-	Q_DECLARE_TR_FUNCTIONS(VAAPI)
+    Q_DECLARE_TR_FUNCTIONS(VAAPI)
+
 public:
-	VAAPI();
-	~VAAPI();
+    VAAPI();
+    ~VAAPI();
 
-	bool open(bool allowVDPAU, bool &openGL);
+    bool open(const char *codecName, bool &openGL);
 
-	bool init(int width, int height, const char *codecName, bool initFilters);
+    void init(int width, int height, bool allowFilters);
 
-	SurfacesQueue getSurfacesQueue() const;
+    bool vaapiCreateSurface(VASurfaceID &surface, int w, int h);
 
-	inline bool vaCreateConfigAndContext();
-	bool vaapiCreateSurfaces(VASurfaceID *surfaces, int surfacesCount, bool useAttr);
+    void maybeInitVPP(int surfaceW, int surfaceH);
+    void clearVPP(bool resetAllowFilters = true);
 
-	void init_vpp();
+    void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
-	void clr_vpp();
-	void clr();
+    bool filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field);
 
-	void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
+    quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
+    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
-	bool filterVideo(const VideoFrame &videoFrame, VASurfaceID &id, int &field);
-
-	quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
-	bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
-
-	/**/
-
-	bool ok, isXvBA, isVDPAU;
-
-	VADisplay VADisp;
-	VAContextID context;
-	VAConfigID config;
-
-	VAImageFormat nv12ImageFmt;
-
-	int outW, outH;
-
-#ifdef HAVE_VPP //Postprocessing
-	VAProcDeinterlacingType vpp_deint_type;
-	bool use_vpp;
-#endif
+    void insertFrame(VASurfaceID id, AVFrame *frame);
 
 private:
-	int version;
+    bool hasProfile(const char *codecName) const;
 
-	VAProfile profile;
+    void clearVPPFrames();
 
-	QList<VAProfile> profileList;
+public:
+    bool ok = false;
 
-	static constexpr int surfacesCount = 20;
-	VASurfaceID surfaces[surfacesCount];
-	bool surfacesCreated;
+    VADisplay VADisp = nullptr;
 
+    VAImageFormat nv12ImageFmt = {};
 
-#ifdef HAVE_VPP //Postprocessing
-	VAContextID context_vpp;
-	VAConfigID config_vpp;
-	VABufferID vpp_buffers[VAProcFilterCount]; //TODO implement all filters
-	VASurfaceID id_vpp, forward_reference;
-	bool vpp_second;
-#endif
+    int outW = 0, outH = 0;
+
+    // Postprocessing
+    VAProcDeinterlacingType vpp_deint_type = VAProcDeinterlacingNone;
+    bool use_vpp = false;
+
+private:
+    int m_version = 0;
+
+    // Postprocessing
+    bool m_allowFilters = false;
+    VAContextID context_vpp;
+    VAConfigID config_vpp;
+    VABufferID m_vppDeintBuff;
+    VASurfaceID id_vpp;
+    QVector<VASurfaceID> m_refs;
+    VASurfaceID m_lastVppSurface;
+    int m_nBackwardRefs, m_nForwardRefs;
+
+    QHash<VASurfaceID, VideoFrame> m_vppFrames;
 };

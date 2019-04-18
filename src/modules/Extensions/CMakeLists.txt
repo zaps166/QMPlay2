@@ -23,6 +23,7 @@ set(Extensions_FORMS
 
 set(Extensions_RESOURCES
     icons.qrc
+    js.qrc
 )
 
 if(USE_MPRIS2)
@@ -44,25 +45,11 @@ if(USE_TEKSTOWO)
     add_definitions(-DUSE_TEKSTOWO)
 endif()
 
-if(USE_MYFREEMP3)
-    list(APPEND Extensions_HDR MediaBrowser/MyFreeMp3.hpp)
-    list(APPEND Extensions_SRC MediaBrowser/MyFreeMp3.cpp)
-    add_definitions(-DUSE_MYFREEMP3)
-endif()
-if(USE_ANIMEODCINKI)
-    list(APPEND Extensions_HDR MediaBrowser/AnimeOdcinki.hpp)
-    list(APPEND Extensions_SRC MediaBrowser/AnimeOdcinki.cpp)
-    add_definitions(-DUSE_ANIMEODCINKI)
-endif()
-if(USE_WBIJAM)
-    list(APPEND Extensions_HDR MediaBrowser/Wbijam.hpp)
-    list(APPEND Extensions_SRC MediaBrowser/Wbijam.cpp)
-    add_definitions(-DUSE_WBIJAM)
-endif()
-if(USE_MYFREEMP3 OR USE_ANIMEODCINKI OR USE_WBIJAM)
-    list(APPEND Extensions_HDR MediaBrowser.hpp MediaBrowser/Common.hpp)
-    list(APPEND Extensions_SRC MediaBrowser.cpp MediaBrowser/Common.cpp)
+if(USE_MEDIABROWSER)
+    list(APPEND Extensions_HDR MediaBrowser.hpp MediaBrowserJS.hpp)
+    list(APPEND Extensions_SRC MediaBrowser.cpp MediaBrowserJS.cpp)
     add_definitions(-DUSE_MEDIABROWSER)
+    set(QML Qt5::Qml)
 endif()
 
 qt5_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
@@ -79,6 +66,7 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 
 target_link_libraries(${PROJECT_NAME}
     ${DBUS}
+    ${QML}
     libqmplay2
 )
 

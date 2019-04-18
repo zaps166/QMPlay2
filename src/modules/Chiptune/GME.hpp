@@ -1,19 +1,19 @@
 /*
-	QMPlay2 is a video and audio player.
-	Copyright (C) 2010-2018  Błażej Szczygieł
+    QMPlay2 is a video and audio player.
+    Copyright (C) 2010-2019  Błażej Szczygieł
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Lesser General Public License as published
-	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
 
-	You should have received a copy of the GNU Lesser General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
@@ -26,43 +26,43 @@ class Reader;
 
 class GME final : public Demuxer
 {
-	Q_DECLARE_TR_FUNCTIONS(GME)
+    Q_DECLARE_TR_FUNCTIONS(GME)
 public:
-	GME(Module &);
-	~GME();
+    GME(Module &);
+    ~GME();
 private:
-	bool set() override;
+    bool set() override;
 
-	QString name() const override;
-	QString title() const override;
-	QList<QMPlay2Tag> tags() const override;
-	double length() const override;
-	int bitrate() const override;
+    QString name() const override;
+    QString title() const override;
+    QList<QMPlay2Tag> tags() const override;
+    double length() const override;
+    int bitrate() const override;
 
-	bool seek(double, bool) override;
-	bool read(Packet &, int &) override;
-	void abort() override;
+    bool seek(double, bool) override;
+    bool read(Packet &, int &) override;
+    void abort() override;
 
-	bool open(const QString &) override;
+    bool open(const QString &) override;
 
-	Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
-
-
-	bool open(const QString &url, bool tracksOnly);
-
-	QString getTitle(gme_info_t *info, int track) const;
-	int getLength(gme_info_t *info) const;
+    Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
 
-	IOController<Reader> m_reader;
-	quint32 m_srate;
-	bool m_aborted;
-	int m_length;
+    bool open(const QString &url, bool tracksOnly);
 
-	QList<QMPlay2Tag> m_tags;
-	QString m_url, m_title;
+    QString getTitle(gme_info_t *info, int track) const;
+    int getLength(gme_info_t *info) const;
 
-	Music_Emu *m_gme;
+
+    IOController<Reader> m_reader;
+    quint32 m_srate;
+    bool m_aborted;
+    int m_length;
+
+    QList<QMPlay2Tag> m_tags;
+    QString m_url, m_title;
+
+    Music_Emu *m_gme;
 };
 
 #define GMEName "Game-Music-Emu"

@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-QT += widgets
+QT += widgets qml
 
 DESTDIR = ../../../app/lib/qmplay2/modules
 QMAKE_LIBDIR += ../../../app/lib
@@ -13,7 +13,7 @@ RCC_DIR = build/rcc
 MOC_DIR = build/moc
 UI_DIR = build/ui
 
-RESOURCES += icons.qrc
+RESOURCES += icons.qrc js.qrc
 
 INCLUDEPATH += . ../../qmplay2/headers
 DEPENDPATH  += . ../../qmplay2/headers
@@ -22,9 +22,9 @@ HEADERS += Extensions.hpp YouTube.hpp Downloader.hpp Radio.hpp Radio/RadioBrowse
 SOURCES += Extensions.cpp YouTube.cpp Downloader.cpp Radio.cpp Radio/RadioBrowserModel.cpp
 FORMS += Radio/Radio.ui
 
-HEADERS += MediaBrowser.hpp MediaBrowser/Common.hpp MediaBrowser/MyFreeMP3.hpp MediaBrowser/AnimeOdcinki.hpp MediaBrowser/Wbijam.hpp
-SOURCES += MediaBrowser.cpp MediaBrowser/Common.cpp MediaBrowser/MyFreeMP3.cpp MediaBrowser/AnimeOdcinki.cpp MediaBrowser/Wbijam.cpp
-DEFINES += USE_MEDIABROWSER USE_MYFREEMP3 USE_ANIMEODCINKI USE_WBIJAM
+HEADERS += MediaBrowser.hpp MediaBrowserJS.hpp
+SOURCES += MediaBrowser.cpp MediaBrowserJS.cpp
+DEFINES += USE_MEDIABROWSER
 
 HEADERS += LastFM.hpp
 SOURCES += LastFM.cpp
@@ -35,8 +35,8 @@ SOURCES += Tekstowo.cpp
 DEFINES += USE_TEKSTOWO
 
 unix:!android {
-	QT += dbus
-	HEADERS += MPRIS2.hpp
-	SOURCES += MPRIS2.cpp
-	DEFINES += USE_MPRIS2
+    QT += dbus
+    HEADERS += MPRIS2.hpp
+    SOURCES += MPRIS2.cpp
+    DEFINES += USE_MPRIS2
 }

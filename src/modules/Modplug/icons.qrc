@@ -1,6 +1,6 @@
 <RCC>
-	<qresource>
-		<file alias="Modplug.svgz">Modplug.svgz</file>
-		<file alias="MOD.svgz">MOD.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="Modplug.svgz">Modplug.svgz</file>
+        <file alias="MOD.svgz">MOD.svgz</file>
+    </qresource>
 </RCC>

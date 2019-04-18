@@ -154,6 +154,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 - Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended):
 	- Qt5DBus - Linux/BSD only,
 	- Qt5Svg - for SVG icons,
+	- Qt5Qml - for MediaBrowser,
 	- Qt5X11Extras - for X11 and VA-API,
 	- Qt5WinExtras - for Windows,
 - FFmpeg >= 3.1:
@@ -231,6 +232,10 @@ CMake options (option - default value: description):
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.
+	- `USE_TEKSTOWO` - `ON`: enable/disable lyrics module.
+	- `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
+	- `USE_ASAN` - `OFF`: enable/disable address sanitizer.
+	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
 	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
 	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
 
@@ -239,6 +244,7 @@ Using other Qt installation using CMake:
 - `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
 - `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
 - `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
+- `Qt5Qml_DIR`: path to the Qt5Qml cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Qml`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 

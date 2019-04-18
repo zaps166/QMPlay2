@@ -8,23 +8,23 @@ QMAKE_LIBDIR += ../../../app/lib
 
 CONFIG += link_pkgconfig
 packagesExist(libgme) {
-	PKGCONFIG += libgme
-	DEFINES += USE_GME
+    PKGCONFIG += libgme
+    DEFINES += USE_GME
 } else {
-	#Some distributions (e.g. Ubuntu) doesn't provide pkg-config for libgme
-	exists("/usr/include/gme") {
-		LIBS += -lgme
-		DEFINES += USE_GME
-	}
-	else {
-		message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
-	}
+    #Some distributions (e.g. Ubuntu) doesn't provide pkg-config for libgme
+    exists("/usr/include/gme") {
+        LIBS += -lgme
+        DEFINES += USE_GME
+    }
+    else {
+        message("Game-Music-Emu will not be compiled, because libgme doesn't exist")
+    }
 }
 packagesExist(libsidplayfp) {
-	PKGCONFIG += libsidplayfp
-	DEFINES += USE_SIDPLAY
+    PKGCONFIG += libsidplayfp
+    DEFINES += USE_SIDPLAY
 } else {
-	message("SID will not be compiled, because libsidplayfp doesn't exist")
+    message("SID will not be compiled, because libsidplayfp doesn't exist")
 }
 
 LIBS += -lqmplay2
@@ -42,10 +42,10 @@ HEADERS += Chiptune.hpp Common.hpp
 SOURCES += Chiptune.cpp Common.cpp
 
 contains(DEFINES, USE_SIDPLAY) {
-	HEADERS += SIDPlay.hpp
-	SOURCES += SIDPlay.cpp
+    HEADERS += SIDPlay.hpp
+    SOURCES += SIDPlay.cpp
 }
 contains(DEFINES, USE_GME) {
-	HEADERS += GME.hpp
-	SOURCES += GME.cpp
+    HEADERS += GME.hpp
+    SOURCES += GME.cpp
 }

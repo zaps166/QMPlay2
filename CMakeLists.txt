@@ -59,12 +59,8 @@ if(NOT WIN32 AND NOT APPLE)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 endif()
 
-option(USE_MYFREEMP3 "Build with MyFreeMp3 support" ON)
-add_feature_info(MyFreeMp3 USE_MYFREEMP3 "Build with MyFreeMp3 support")
-option(USE_ANIMEODCINKI "Build with AnimeOdcinki support" ON)
-add_feature_info(AnimeOdcinki USE_ANIMEODCINKI "Build with AnimeOdcinki support")
-option(USE_WBIJAM "Build with Wbijam (anime) support" ON)
-add_feature_info(Wbijam USE_WBIJAM "Build with Wbijam (anime) support")
+option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
+add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
 
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
@@ -306,6 +302,11 @@ endif()
 
 if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_MPRIS2)
     find_package(Qt5DBus REQUIRED)
+endif()
+
+if(USE_MEDIABROWSER)
+    find_package(Qt5Qml REQUIRED)
+    set(USE_QML ON)
 endif()
 
 add_subdirectory(src/qmplay2)

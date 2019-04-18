@@ -3,13 +3,13 @@ CONFIG += plugin
 
 QT += widgets
 
-	DESTDIR = ../../../app/lib/qmplay2/modules
-	QMAKE_LIBDIR += ../../../app/lib
+    DESTDIR = ../../../app/lib/qmplay2/modules
+    QMAKE_LIBDIR += ../../../app/lib
 
 android: LIBS += -lavutil
 else {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += libavutil
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libavutil
 }
 LIBS += -lqmplay2
 

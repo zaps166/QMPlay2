@@ -1,13 +1,13 @@
 <RCC>
-	<qresource>
-		<file alias="OpenGL2.svgz">OpenGL2.svgz</file>
+    <qresource>
+        <file alias="OpenGL2.svgz">OpenGL2.svgz</file>
 
-		<file alias="Video.vert">GLSL/Video.vert</file>
-		<file alias="Bicubic.frag">GLSL/Bicubic.frag</file>
-		<file alias="VideoYCbCr.frag">GLSL/VideoYCbCr.frag</file>
-		<file alias="VideoRGB.frag">GLSL/VideoRGB.frag</file>
+        <file alias="Video.vert">GLSL/Video.vert</file>
+        <file alias="Bicubic.frag">GLSL/Bicubic.frag</file>
+        <file alias="VideoYCbCr.frag">GLSL/VideoYCbCr.frag</file>
+        <file alias="VideoRGB.frag">GLSL/VideoRGB.frag</file>
 
-		<file alias="OSD.vert">GLSL/OSD.vert</file>
-		<file alias="OSD.frag">GLSL/OSD.frag</file>
-	</qresource>
+        <file alias="OSD.vert">GLSL/OSD.vert</file>
+        <file alias="OSD.frag">GLSL/OSD.frag</file>
+    </qresource>
 </RCC>

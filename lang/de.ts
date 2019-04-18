@@ -135,13 +135,6 @@
     </message>
 </context>
 <context>
-    <name>AnimeOdcinki</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Episodenname</translation>
-    </message>
-</context>
-<context>
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
@@ -1292,6 +1285,10 @@
         <source>Play all</source>
         <translation>Alles wiedergeben</translation>
     </message>
+    <message>
+        <source>Search on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
@@ -1583,10 +1580,6 @@
         <translation>Software Decoder</translation>
     </message>
     <message>
-        <source>Allow VDPAU</source>
-        <translation>VDPAU benutzen</translation>
-    </message>
-    <message>
         <source>Use CDDB if CD-TEXT is not available</source>
         <translation>Verwenden CDDB, wenn kein CD-TEXT vorhanden ist</translation>
     </message>
@@ -1828,6 +1821,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation>Trilineare Filterung zur Reduktion und bikubische Filterung zur Vergrößerung.</translation>
     </message>
+    <message>
+        <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1842,25 +1839,6 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <message>
         <source>Move down</source>
         <translation>Absenken</translation>
-    </message>
-</context>
-<context>
-    <name>MyFreeMP3</name>
-    <message>
-        <source>Title</source>
-        <translation type="unfinished">Titel</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="unfinished">Artist</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="unfinished">Länge</translation>
-    </message>
-    <message>
-        <source>Search on MyFreeMP3</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3383,21 +3361,6 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
-    <name>Wbijam</name>
-    <message>
-        <source>Episode name</source>
-        <translation>Episodenname</translation>
-    </message>
-    <message>
-        <source>Episode type</source>
-        <translation>Episodenart</translation>
-    </message>
-    <message>
-        <source>Episode date</source>
-        <translation>Episodendatum</translation>
-    </message>
-</context>
-<context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
@@ -3421,6 +3384,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>&amp;Close</source>
         <translation>&amp;Schließen</translation>
+    </message>
+    <message>
+        <source>&amp;Always on top</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

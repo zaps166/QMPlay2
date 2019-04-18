@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file alias="Visualizations.svgz">Visualizations.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="Visualizations.svgz">Visualizations.svgz</file>
+    </qresource>
 </RCC>

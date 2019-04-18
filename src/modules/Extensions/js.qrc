@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+        <file alias="MediaBrowserJSCommon.js">MediaBrowserJSCommon.js</file>
+    </qresource>
+</RCC>

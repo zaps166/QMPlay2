@@ -1,5 +1,5 @@
 <RCC>
-	<qresource>
-		<file alias="OpenSLES.svgz">OpenSLES.svgz</file>
-	</qresource>
+    <qresource>
+        <file alias="OpenSLES.svgz">OpenSLES.svgz</file>
+    </qresource>
 </RCC>
