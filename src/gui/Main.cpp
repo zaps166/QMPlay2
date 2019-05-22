@@ -217,6 +217,7 @@ static QCommandLineParser *createCmdParser(bool descriptions)
 {
     static constexpr const char *translations[] = {
         QT_TRANSLATE_NOOP("Help", "Opens and plays specified <url>."),
+        QT_TRANSLATE_NOOP("Help", "Opens new QMPlay2 instance and plays specified <url>."),
         QT_TRANSLATE_NOOP("Help", "Adds specified <url> to playlist."),
         QT_TRANSLATE_NOOP("Help", "Starts the application with given <profile name>."),
         QT_TRANSLATE_NOOP("Help", "Doesn't play after run (bypass \"Remember playback position\" option)."),
@@ -244,21 +245,22 @@ static QCommandLineParser *createCmdParser(bool descriptions)
     parser->addPositionalArgument("<url>", maybeGetTranslatedText(translations[0]), "[url]");
     parser->addOptions({
         {"open", maybeGetTranslatedText(translations[0]), "url"},
-        {"enqueue", maybeGetTranslatedText(translations[1]), "url"},
-        {"profile", maybeGetTranslatedText(translations[2]), "profile name"},
-        {"noplay", maybeGetTranslatedText(translations[3])},
-        {"toggle", maybeGetTranslatedText(translations[4])},
-        {"play", maybeGetTranslatedText(translations[5])},
-        {"stop", maybeGetTranslatedText(translations[6])},
-        {"show", maybeGetTranslatedText(translations[7])},
-        {"fullscreen", maybeGetTranslatedText(translations[8])},
-        {"volume", maybeGetTranslatedText(translations[9]), "0..100"},
-        {"speed", maybeGetTranslatedText(translations[10]), "0.05..100.0"},
-        {"seek", maybeGetTranslatedText(translations[11]), "s"},
-        {"next", maybeGetTranslatedText(translations[12])},
-        {"prev", maybeGetTranslatedText(translations[13])},
-        {"quit", maybeGetTranslatedText(translations[14])},
-        {{"h", "help"}, maybeGetTranslatedText(translations[15])},
+        {"opennew", maybeGetTranslatedText(translations[1]), "url"},
+        {"enqueue", maybeGetTranslatedText(translations[2]), "url"},
+        {"profile", maybeGetTranslatedText(translations[3]), "profile name"},
+        {"noplay", maybeGetTranslatedText(translations[4])},
+        {"toggle", maybeGetTranslatedText(translations[5])},
+        {"play", maybeGetTranslatedText(translations[6])},
+        {"stop", maybeGetTranslatedText(translations[7])},
+        {"show", maybeGetTranslatedText(translations[8])},
+        {"fullscreen", maybeGetTranslatedText(translations[9])},
+        {"volume", maybeGetTranslatedText(translations[10]), "0..100"},
+        {"speed", maybeGetTranslatedText(translations[11]), "0.05..100.0"},
+        {"seek", maybeGetTranslatedText(translations[12]), "s"},
+        {"next", maybeGetTranslatedText(translations[13])},
+        {"prev", maybeGetTranslatedText(translations[14])},
+        {"quit", maybeGetTranslatedText(translations[15])},
+        {{"h", "help"}, maybeGetTranslatedText(translations[16])},
     });
 
     return parser;
@@ -539,20 +541,35 @@ int main(int argc, char *argv[])
 
     if (!help)
     {
-        IPCSocket socket(qmplay2Gui.getPipe());
-        if (socket.open(IPCSocket::WriteOnly))
+        bool useSocket = true;
+
+        for (auto &&argument : arguments)
         {
-            if (writeToSocket(socket, arguments))
-                g_useGui = false;
-            socket.close();
+            if (argument.first == "opennew")
+            {
+                argument.first = "open";
+                useSocket = false;
+                break;
+            }
         }
+
+        if (useSocket)
+        {
+            IPCSocket socket(qmplay2Gui.getPipe());
+            if (socket.open(IPCSocket::WriteOnly))
+            {
+                if (writeToSocket(socket, arguments))
+                    g_useGui = false;
+                socket.close();
+            }
 #ifndef Q_OS_WIN
-        else if (QFile::exists(qmplay2Gui.getPipe()))
-        {
-            QFile::remove(qmplay2Gui.getPipe());
-            arguments.append({"noplay", QString()});
-        }
+            else if (QFile::exists(qmplay2Gui.getPipe()))
+            {
+                QFile::remove(qmplay2Gui.getPipe());
+                arguments.append({"noplay", QString()});
+            }
 #endif
+        }
 
         if (!g_useGui)
         {
