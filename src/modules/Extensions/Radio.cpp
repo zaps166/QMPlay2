@@ -520,6 +520,7 @@ bool Radio::eventFilter(QObject *watched, QEvent *event)
                     dee->accept();
                     return true;
                 }
+                break;
             }
             case QEvent::Drop:
             {
@@ -530,6 +531,7 @@ bool Radio::eventFilter(QObject *watched, QEvent *event)
                     de->accept();
                     return true;
                 }
+                break;
             }
             default:
                 break;
