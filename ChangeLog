@@ -1,3 +1,18 @@
+Changes in QMPlay2 build 19.05.27:
+	- a lot of VA-API improvements (some old drivers might cease to work - I can't test them),
+	- improve full screen switching (fixes regression since 18.12.26),
+	- add "CustomUserAgent" into a "General" section in QMPlay2.ini,
+	- fix black video when decoding videos with color palette,
+	- improve displaying of graphical subtitles,
+	- rewrite MediaBrowser, now use JavaScript,
+	- show native window file path separator,
+	- add "opennew" command line argument,
+	- add stereo channels swapping,
+	- add "always on top" option,
+	- LastFM scrobble fixes,
+	- require FFmpeg 3.3,
+	- minor bugfix,
+
 Changes in QMPlay2 build 18.12.26:
 	- use audio resampler/channel converter before filters/visualization (default option),
 	- fixed loading Ogg Opus file when file extension is "ogg" in tag editor,
