@@ -260,9 +260,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     timeBeginPeriod(1); //Set the timer for 1ms resolution (for Sleep ())
 #endif
 
-#ifndef QT_DEBUG
     av_log_set_level(AV_LOG_ERROR);
-#endif
     av_log_set_callback(avQMPlay2LogHandler);
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
     av_register_all();

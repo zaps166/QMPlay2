@@ -477,11 +477,15 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
                 g_messageHandlerMutex.unlock();
                 qmplay2Log = true;
                 break;
+            case QtDebugMsg:
             case QtInfoMsg:
-                g_messageHandlerMutex.lock();
-                QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
-                g_messageHandlerMutex.unlock();
-                qmplay2Log = true;
+                if (type != QtDebugMsg || qstrcmp(context.category, "js") == 0)
+                {
+                    g_messageHandlerMutex.lock();
+                    QMPlay2Core.logInfo(qFormatLogMessage(type, context, message), false);
+                    g_messageHandlerMutex.unlock();
+                    qmplay2Log = true;
+                }
                 break;
             default:
                 break;
