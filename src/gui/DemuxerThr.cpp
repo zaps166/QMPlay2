@@ -785,7 +785,15 @@ void DemuxerThr::emitInfo()
     if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, nullptr, &realUrl, nullptr))
         realUrl = url;
     if (!realUrl.startsWith("file://"))
+    {
+        QString ytUrl;
+        if (playC.url.startsWith("YouTube://")
+            && Functions::splitPrefixAndUrlIfHasPluginPrefix(playC.url, nullptr, &ytUrl, nullptr))
+        {
+            realUrl = ytUrl;
+        }
         info += "<b>" + tr("Address") + ":</b> " + realUrl + "<br>";
+    }
     else
     {
         const QString pth = realUrl.right(realUrl.length() - 7);

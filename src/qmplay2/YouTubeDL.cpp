@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include <QDebug>
 
 constexpr const char *g_name = "YouTubeDL";
 
@@ -194,8 +195,14 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
     if (httpProxy && *httpProxy)
         commonArgs += {"--proxy", httpProxy};
 
+    emit QMPlay2Core.statusBarMessage(tr("youtube-dl fetching streams for") + " " + url, 0);
+
     m_process.start(ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
-    if (m_process.waitForFinished() && !m_aborted)
+    bool isStarted = m_process.waitForStarted();
+    if (!isStarted) {
+        qWarning() << ytDlPath << "failed to start:" << m_process.errorString() << m_process.exitCode();
+    }
+    if (isStarted && m_process.waitForFinished() && !m_aborted)
     {
         const auto finishWithError = [&](const QString &error) {
             if (!m_aborted)
@@ -308,26 +315,38 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
             return {};
         }
 
-        //[Title], url, JSON, [url, JSON]
-        for (int i = result.count() - 1; i >= 0; --i)
+        // construct a sorted map of the available heights and the corresponding stream URLs
+        QMap<int,QString> height2Url;
+        for (int i = 1 ; i < result.count(); ++i)
         {
             if (i > 0 && result.at(i).startsWith('{'))
             {
-                const QString url = result.at(i - 1);
-
                 const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
                 for (const QJsonValue &formats : json.object()["formats"].toArray())
                 {
-                    if (url == formats.toObject()["url"].toString())
-                        QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                    const auto streamUrl = formats.toObject()["url"].toString();
+                    const int height = formats.toObject()["height"].toInt();
+                    QMPlay2Core.addCookies(streamUrl, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                    // there can be multiple formats with the same height
+                    height2Url.insertMulti(height, streamUrl);
                 }
-
-                result.removeAt(i);
             }
         }
 
+        // construct the return list
+        QStringList retList;
+        const auto urlList = height2Url.values();
+        // reverse-sort the URL list so that the higher resolutions get priority
+        for (const auto streamUrl : urlList)
+        {
+            retList.prepend(streamUrl);
+        }
+        retList.prepend(result.at(0));
+
+        // clear the status bar message, we're done.
+        emit QMPlay2Core.statusBarMessage(QString(), 0);
         g_lock.unlock(); // Unlock for read
-        return result;
+        return retList;
     }
     else if (canUpdate && !m_aborted && m_process.error() == QProcess::FailedToStart)
     {
