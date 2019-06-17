@@ -788,6 +788,7 @@ void DemuxerThr::emitInfo()
     {
         QString ytUrl;
         if (playC.url.startsWith("YouTube://")
+            && realUrl.startsWith("[")
             && Functions::splitPrefixAndUrlIfHasPluginPrefix(playC.url, nullptr, &ytUrl, nullptr))
         {
             realUrl = ytUrl;

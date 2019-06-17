@@ -25,6 +25,7 @@
 #ifdef Q_OS_WIN
     #include <Functions.hpp>
 #endif
+#include <Module.hpp>
 
 #include <QReadWriteLock>
 #include <QJsonDocument>
@@ -315,33 +316,102 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
             return {};
         }
 
-        // construct a sorted map of the available heights and the corresponding stream URLs
-        QMap<int,QString> height2Url;
-        for (int i = 1 ; i < result.count(); ++i)
+        QStringList retList;
+        static bool oldParser = false;
+        if ((args.count() > 0 && args.at(0) == "-f"
+            && !result.at(1).contains("://manifest.googlevideo.com"))
+            || oldParser)
         {
-            if (i > 0 && result.at(i).startsWith('{'))
+            //[Title], url, JSON, [url, JSON]
+            for (int i = result.count() - 1; i >= 0; --i)
             {
-                const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
-                for (const QJsonValue &formats : json.object()["formats"].toArray())
+                if (i > 0 && result.at(i).startsWith('{'))
                 {
-                    const auto streamUrl = formats.toObject()["url"].toString();
-                    const int height = formats.toObject()["height"].toInt();
-                    QMPlay2Core.addCookies(streamUrl, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
-                    // there can be multiple formats with the same height
-                    height2Url.insertMulti(height, streamUrl);
+                    const QString url = result.at(i - 1);
+
+                    const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
+                    for (const QJsonValue &formats : json.object()["formats"].toArray())
+                    {
+                        if (url == formats.toObject()["url"].toString())
+                            QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                    }
+
+                    result.removeAt(i);
                 }
             }
+            retList = result;
         }
-
-        // construct the return list
-        QStringList retList;
-        const auto urlList = height2Url.values();
-        // reverse-sort the URL list so that the higher resolutions get priority
-        for (const auto streamUrl : urlList)
+        else
         {
-            retList.prepend(streamUrl);
+            QStringList formatPrefs;
+			// y
+            for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
+            {
+                if (pluginInstance->name() == "Extensions")
+                {
+                    formatPrefs = pluginInstance->getStringList("YouTube/ItagList");
+                    // append the other itags (is there a point?)
+                    for (const auto iTag : pluginInstance->getString("YouTube/ItagVideoList"))
+                    {
+                        if (!formatPrefs.contains(iTag))
+                        {
+                            qWarning() << "video itag" << iTag;
+                            formatPrefs << iTag;
+                        }
+                    }
+                    for (const auto iTag : pluginInstance->getString("YouTube/ItagAudioList"))
+                    {
+                        if (!formatPrefs.contains(iTag))
+                        {
+                            qWarning() << "audio itag" << iTag;
+                            formatPrefs << iTag;
+                        }
+                    }
+                    break;
+                }
+            }
+            // construct a sorted map of the available heights and the corresponding stream URLs
+            QMap<int,QString> height2Url;
+            for (int i = 1 ; i < result.count(); ++i)
+            {
+                if (i > 0 && result.at(i).startsWith('{'))
+                {
+                    const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
+                    for (const QJsonValue &formats : json.object()["formats"].toArray())
+                    {
+                        const auto object = formats.toObject();
+                        if (object.contains("url") && object.contains("height"))
+                        {
+                            const auto streamUrl = object["url"].toString();
+                            const int height = object["height"].toInt();
+                            // add the URL if its format_id is not blacklisted
+                            if (formatPrefs.count() == 0 || formatPrefs.contains(object["format_id"].toString()))
+                            {
+                                if (object.contains("http_headers"))
+                                {
+                                    QMPlay2Core.addCookies(streamUrl, object["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                                }
+                                // there can be multiple formats with the same height
+                                height2Url.insertMulti(height, streamUrl);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // construct the return list
+            const auto urlList = height2Url.values();
+            // reverse-sort the URL list so that the higher resolutions get priority
+            for (const auto streamUrl : urlList)
+            {
+                retList.prepend(streamUrl);
+            }
+            if (!result.at(0).contains("://"))
+            {
+                // this is probably the video title: prepend it.
+                retList.prepend(result.at(0));
+            }
         }
-        retList.prepend(result.at(0));
 
         // clear the status bar message, we're done.
         emit QMPlay2Core.statusBarMessage(QString(), 0);
