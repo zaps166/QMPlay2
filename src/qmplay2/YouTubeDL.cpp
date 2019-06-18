@@ -38,13 +38,19 @@ constexpr const char *g_name = "YouTubeDL";
 
 static QReadWriteLock g_lock;
 
+QString YouTubeDL::s_ytDlPath;
+
 QString YouTubeDL::getFilePath()
 {
-    return QMPlay2Core.getSettingsDir() + "youtube-dl"
+    if (s_ytDlPath.isEmpty())
+    {
+        s_ytDlPath = QMPlay2Core.getSettingsDir() + "youtube-dl"
 #ifdef Q_OS_WIN
-    ".exe"
+        ".exe"
 #endif
-    ;
+        ;
+    }
+    return s_ytDlPath;
 }
 
 bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCtrl, QString *name, QString *extension, QString *error)
@@ -72,7 +78,10 @@ bool YouTubeDL::fixUrl(const QString &url, QString &outUrl, IOController<> *ioCt
 
 YouTubeDL::YouTubeDL() :
     m_aborted(false)
-{}
+{
+    getFilePath();
+}
+
 YouTubeDL::~YouTubeDL()
 {}
 
@@ -130,6 +139,103 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     }
 }
 
+bool YouTubeDL::doUpdate(const QStringList &commonArgs, QString &error)
+{
+    QMPlay2Core.setWorking(true);
+    m_process.start(s_ytDlPath, QStringList() << "-U" << commonArgs);
+    QString updateOutput;
+    bool updating = false;
+    if (m_process.waitForStarted() && m_process.waitForReadyRead() && !m_aborted)
+    {
+        updateOutput = m_process.readAllStandardOutput();
+        if (updateOutput.contains("Updating"))
+        {
+            emit QMPlay2Core.sendMessage(tr("Updating \"youtube-dl\", please wait..."), g_name);
+            updating = true;
+        }
+    }
+    if (!m_aborted && m_process.waitForFinished(-1) && !m_aborted)
+    {
+        updateOutput += m_process.readAllStandardOutput() + m_process.readAllStandardError();
+        if (updateOutput.contains("ERROR:") || updateOutput.contains("package manager"))
+            error += "\n" + updateOutput;
+        else if (m_process.exitCode() == 0 && !updateOutput.contains("up-to-date"))
+        {
+#ifdef Q_OS_WIN
+            const QString updatedFile = s_ytDlPath + ".new";
+            QFile::remove(Functions::filePath(s_ytDlPath) + "youtube-dl-updater.bat");
+            if (QFile::exists(updatedFile))
+            {
+                Functions::s_wait(0.2); //Wait 200 ms to be sure that file is closed
+                QFile::remove(s_ytDlPath);
+                if (QFile::rename(updatedFile, s_ytDlPath))
+#endif
+                {
+                    QMPlay2Core.setWorking(false);
+                    emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
+                    g_lock.unlock(); // Unlock for write
+                    return true;
+                }
+#ifdef Q_OS_WIN
+            }
+            else
+            {
+                error += "\nUpdated youtube-dl file: \"" + updatedFile + "\" not found!";
+            }
+#endif
+        }
+    }
+    else if (updating && m_aborted)
+    {
+        emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" update has been aborted!"), g_name, 2);
+    }
+    QMPlay2Core.setWorking(false);
+    return false;
+}
+
+bool YouTubeDL::doInstall()
+{
+    const QString downloadUrl = "https://yt-dl.org/downloads/latest/youtube-dl"
+#ifdef Q_OS_WIN
+    ".exe"
+#endif
+    ;
+
+    NetworkAccess net;
+    if (net.start(m_reply, downloadUrl))
+    {
+        QMPlay2Core.setWorking(true);
+        emit QMPlay2Core.sendMessage(tr("Downloading \"youtube-dl\", please wait..."), g_name);
+        m_reply->waitForFinished();
+        const QByteArray replyData = m_reply->readAll();
+        const bool hasError = m_reply->hasError();
+        m_reply.reset();
+        if (m_aborted)
+            emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has been aborted!"), g_name, 2);
+        else if (!hasError)
+        {
+            QFile f(s_ytDlPath);
+            if (f.open(QFile::WriteOnly | QFile::Truncate))
+            {
+                if (f.write(replyData) != replyData.size())
+                    f.remove();
+                else
+                {
+                    f.close();
+                    emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
+                    QMPlay2Core.setWorking(false);
+                    g_lock.unlock(); // Unlock for write
+                    return true;
+                }
+            }
+        }
+        if (!m_aborted)
+            emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has failed!"), g_name, 3);
+        QMPlay2Core.setWorking(false);
+    }
+    return false;
+}
+
 QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
 {
 #ifndef Q_OS_ANDROID
@@ -168,13 +274,11 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
         return true;
     };
 
-    const QString ytDlPath = getFilePath();
-
     if (!doLock(Lock::Read, false))
         return {};
 
 #ifndef Q_OS_WIN
-    QFile file(ytDlPath);
+    QFile file(s_ytDlPath);
     if (file.exists())
     {
         if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
@@ -198,10 +302,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
     emit QMPlay2Core.statusBarMessage(tr("youtube-dl fetching streams for") + " " + url, 0);
 
-    m_process.start(ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
+    m_process.start(s_ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
     bool isStarted = m_process.waitForStarted();
     if (!isStarted) {
-        qWarning() << ytDlPath << "failed to start:" << m_process.errorString() << m_process.exitCode();
+        qWarning() << s_ytDlPath << "failed to start:" << m_process.errorString() << m_process.exitCode();
     }
     if (isStarted && m_process.waitForFinished() && !m_aborted)
     {
@@ -260,55 +364,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
             {
                 if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
                     return {};
-                QMPlay2Core.setWorking(true);
-                m_process.start(ytDlPath, QStringList() << "-U" << commonArgs);
-                QString updateOutput;
-                bool updating = false;
-                if (m_process.waitForStarted() && m_process.waitForReadyRead() && !m_aborted)
+                if (doUpdate(commonArgs, error))
                 {
-                    updateOutput = m_process.readAllStandardOutput();
-                    if (updateOutput.contains("Updating"))
-                    {
-                        emit QMPlay2Core.sendMessage(tr("Updating \"youtube-dl\", please wait..."), g_name);
-                        updating = true;
-                    }
+                    return exec(url, args, silentErr, false);
                 }
-                if (!m_aborted && m_process.waitForFinished(-1) && !m_aborted)
-                {
-                    updateOutput += m_process.readAllStandardOutput() + m_process.readAllStandardError();
-                    if (updateOutput.contains("ERROR:") || updateOutput.contains("package manager"))
-                        error += "\n" + updateOutput;
-                    else if (m_process.exitCode() == 0 && !updateOutput.contains("up-to-date"))
-                    {
-#ifdef Q_OS_WIN
-                        const QString updatedFile = ytDlPath + ".new";
-                        QFile::remove(Functions::filePath(ytDlPath) + "youtube-dl-updater.bat");
-                        if (QFile::exists(updatedFile))
-                        {
-                            Functions::s_wait(0.2); //Wait 200 ms to be sure that file is closed
-                            QFile::remove(ytDlPath);
-                            if (QFile::rename(updatedFile, ytDlPath))
-#endif
-                            {
-                                QMPlay2Core.setWorking(false);
-                                emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
-                                g_lock.unlock(); // Unlock for write
-                                return exec(url, args, silentErr, false);
-                            }
-#ifdef Q_OS_WIN
-                        }
-                        else
-                        {
-                            error += "\nUpdated youtube-dl file: \"" + updatedFile + "\" not found!";
-                        }
-#endif
-                    }
-                }
-                else if (updating && m_aborted)
-                {
-                    emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" update has been aborted!"), g_name, 2);
-                }
-                QMPlay2Core.setWorking(false);
                 if (!doLock(Lock::Read, true)) // Unlock for write and lock for read
                     return {};
             }
@@ -420,48 +479,14 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
     }
     else if (canUpdate && !m_aborted && m_process.error() == QProcess::FailedToStart)
     {
-        const QString downloadUrl = "https://yt-dl.org/downloads/latest/youtube-dl"
-#ifdef Q_OS_WIN
-        ".exe"
-#endif
-        ;
-
-        NetworkAccess net;
-        if (net.start(m_reply, downloadUrl))
+        if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
         {
-            if (!doLock(Lock::Write, true)) // Unlock for read and lock for write
-            {
-                m_reply.reset();
-                return {};
-            }
-            QMPlay2Core.setWorking(true);
-            emit QMPlay2Core.sendMessage(tr("Downloading \"youtube-dl\", please wait..."), g_name);
-            m_reply->waitForFinished();
-            const QByteArray replyData = m_reply->readAll();
-            const bool hasError = m_reply->hasError();
             m_reply.reset();
-            if (m_aborted)
-                emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has been aborted!"), g_name, 2);
-            else if (!hasError)
-            {
-                QFile f(ytDlPath);
-                if (f.open(QFile::WriteOnly | QFile::Truncate))
-                {
-                    if (f.write(replyData) != replyData.size())
-                        f.remove();
-                    else
-                    {
-                        f.close();
-                        emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully downloaded!"), g_name);
-                        QMPlay2Core.setWorking(false);
-                        g_lock.unlock(); // Unlock for write
-                        return exec(url, args, silentErr, false);
-                    }
-                }
-            }
-            if (!m_aborted)
-                emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has failed!"), g_name, 3);
-            QMPlay2Core.setWorking(false);
+            return {};
+        }
+        if (doInstall())
+        {
+            return exec(url, args, silentErr, false);
         }
     }
 

@@ -44,9 +44,12 @@ public:
     QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true);
 
 private:
+    bool doUpdate(const QStringList &commonArgs, QString &error);
+    bool doInstall();
     void abort() override;
 
     IOController<NetworkReply> m_reply;
     QProcess m_process;
     bool m_aborted;
+    static QString s_ytDlPath;
 };
