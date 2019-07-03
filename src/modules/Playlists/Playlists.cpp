@@ -35,7 +35,7 @@ QList<Playlists::Info> Playlists::getModulesInfo(const bool showDisabled) const
     QList<Info> modulesInfo;
     modulesInfo += Info(PLSName, PLAYLIST, QStringList{"pls"});
     if (showDisabled || getBool("M3U_enabled"))
-        modulesInfo += Info(M3UName, PLAYLIST, QStringList{"m3u"});
+        modulesInfo += Info(M3UName, PLAYLIST, QStringList{"m3u", "m3u8"});
     if (showDisabled || getBool("XSPF_enabled"))
         modulesInfo += Info(XSPFName, PLAYLIST, QStringList{"xspf"});
     return modulesInfo;
