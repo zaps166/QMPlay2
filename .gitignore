@@ -21,7 +21,7 @@
 *.app
 
 #Project config
-CMakeLists.txt.user
+*.txt.user*
 *.pro.user
 
 #Build Directories
