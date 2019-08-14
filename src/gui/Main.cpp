@@ -45,6 +45,9 @@
 #ifdef Q_OS_MACOS
     #include <QProcess>
 #endif
+#ifdef CHECK_FOR_EGL
+    #include <QLibrary>
+#endif
 
 #include <csignal>
 #include <ctime>
@@ -505,6 +508,58 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
     }
 }
 
+#ifdef CHECK_FOR_EGL
+static void checkForEGL()
+{
+    if (qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION") || !qEnvironmentVariableIsSet("DISPLAY"))
+        return;
+
+    QLibrary libX11("X11");
+    QLibrary libEGL("EGL");
+    if (!libX11.load() || !libEGL.load())
+        return;
+
+    using XOpenDisplayType = void *(*)(const char *name);
+    using XCloseDisplayType = int (*)(void *display);
+
+    auto XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
+    auto XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
+    if (!XOpenDisplayFunc || !XCloseDisplayFunc)
+        return;
+
+    using eglGetDisplayType = void *(*)(void *);
+    using eglInitializeType = unsigned (*)(void *, int *, int *);
+    using eglQueryStringType = const char *(*)(void *, int);
+    using eglTerminateType = unsigned (*)(void *);
+
+    auto eglGetDisplayFunc = (eglGetDisplayType)libEGL.resolve("eglGetDisplay");
+    auto eglInitializeFunc = (eglInitializeType)libEGL.resolve("eglInitialize");
+    auto eglQueryStringFunc = (eglQueryStringType)libEGL.resolve("eglQueryString");
+    auto eglTerminateFunc = (eglTerminateType)libEGL.resolve("eglTerminate");
+    if (!eglGetDisplayFunc || !eglInitializeFunc || !eglQueryStringFunc || !eglTerminateFunc)
+        return;
+
+    auto dpy = XOpenDisplayFunc(nullptr);
+    if (!dpy)
+        return;
+
+    QByteArray eglVendor;
+
+    auto eglDpy = eglGetDisplayFunc(dpy);
+    if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
+    {
+        constexpr int EGLVendor = 0x3053;
+        eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
+        eglTerminateFunc(eglDpy);
+    }
+
+    XCloseDisplayFunc(dpy);
+
+    if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
+        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+}
+#endif
+
 int main(int argc, char *argv[])
 {
     signal(SIGINT, signal_handler);
@@ -517,6 +572,10 @@ int main(int argc, char *argv[])
     signal(SIGSEGV, signal_handler);
     signal(SIGTERM, signal_handler);
     atexit(exitProcedure);
+
+#ifdef CHECK_FOR_EGL
+    checkForEGL();
+#endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifndef Q_OS_WIN

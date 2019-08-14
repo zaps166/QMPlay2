@@ -150,6 +150,8 @@ QString VAAPIWriter::name() const
 
 bool VAAPIWriter::open()
 {
+    if (vaapi->m_fd > -1)
+        return false;
     addParam("Zoom");
     addParam("AspectRatio");
     addParam("Deinterlace");

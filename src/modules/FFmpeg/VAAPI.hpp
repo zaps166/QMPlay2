@@ -63,6 +63,7 @@ private:
 public:
     bool ok = false;
 
+    int m_fd = -1;
     VADisplay VADisp = nullptr;
 
     VAImageFormat nv12ImageFmt = {};

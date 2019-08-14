@@ -22,11 +22,17 @@
 #include <VideoFrame.hpp>
 #include <QMPlay2Core.hpp>
 
+#include <QGuiApplication>
 #include <QX11Info>
 #include <QDebug>
+#include <QDir>
 
+#include <va/va_drm.h>
 #include <va/va_x11.h>
 #include <va/va_glx.h>
+
+#include <unistd.h>
+#include <fcntl.h>
 
 VAAPI::VAAPI()
 {}
@@ -35,31 +41,66 @@ VAAPI::~VAAPI()
     m_vppFrames.clear(); // Must be freed before destroying VADisplay
     clearVPP();
     if (VADisp)
+    {
         vaTerminate(VADisp);
+        if (m_fd > -1)
+            ::close(m_fd);
+    }
 }
 
 bool VAAPI::open(const char *codecName, bool &openGL)
 {
     clearVPP();
 
-    if (!QX11Info::isPlatformX11())
+    const bool isX11 = QX11Info::isPlatformX11();
+    if (!isX11 && !openGL)
         return false;
 
-    Display *display = QX11Info::display();
-    if (!display)
-        return false;
+    const bool isEGL = (
+        QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0 ||
+        QGuiApplication::platformName().startsWith("wayland")
+    );
 
-    VADisp = openGL ? vaGetDisplayGLX(display) : vaGetDisplay(display);
-    if (!VADisp)
+    if (openGL && isEGL)
     {
+        const auto devs = QDir("/dev/dri/").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
+        for (auto &&dev : devs)
+        {
+            const int  fd = ::open(dev.filePath().toLocal8Bit().constData(), O_RDWR);
+            if (fd < 0)
+                continue;
+
+            // FIXME: What if "fd" device differs from OpenGL device?
+
+            if (auto disp = vaGetDisplayDRM(fd))
+            {
+                m_fd = fd;
+                VADisp = disp;
+                break;
+            }
+
+            ::close(fd);
+        }
+    }
+
+    if (!VADisp && isX11)
+    {
+        Display *display = QX11Info::display();
+        if (!display)
+            return false;
+
         if (openGL)
+            VADisp = vaGetDisplayGLX(display);
+
+        if (!VADisp)
         {
             VADisp = vaGetDisplay(display);
             openGL = false;
         }
-        if (!VADisp)
-            return false;
     }
+
+    if (!VADisp)
+        return false;
 
     int major = 0, minor = 0;
     if (vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
@@ -144,29 +185,37 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                         unsigned num_deinterlacing_caps = VAProcDeinterlacingCount;
                         if (vaQueryVideoProcFilterCaps(VADisp, context_vpp, VAProcFilterDeinterlacing, &deinterlacing_caps, &num_deinterlacing_caps) != VA_STATUS_SUCCESS)
                             num_deinterlacing_caps = 0;
-                        bool vpp_deint_types[2] = {false};
+                        bool vpp_deint_types[3] = {false};
                         for (unsigned j = 0; j < num_deinterlacing_caps; ++j)
                         {
                             switch (deinterlacing_caps[j].type)
                             {
-                                case VAProcDeinterlacingMotionAdaptive:
+                                case VAProcDeinterlacingBob:
                                     vpp_deint_types[0] = true;
                                     break;
-                                case VAProcDeinterlacingMotionCompensated:
+                                case VAProcDeinterlacingMotionAdaptive:
                                     vpp_deint_types[1] = true;
+                                    break;
+                                case VAProcDeinterlacingMotionCompensated:
+                                    vpp_deint_types[2] = true;
                                     break;
                                 default:
                                     break;
                             }
                         }
-                        if (vpp_deint_type == VAProcDeinterlacingMotionCompensated && !vpp_deint_types[1])
+                        if (vpp_deint_type == VAProcDeinterlacingMotionCompensated && !vpp_deint_types[2])
                         {
                             QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
                             vpp_deint_type = VAProcDeinterlacingMotionAdaptive;
                         }
-                        if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[0])
+                        if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[1])
                         {
                             QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
+                            vpp_deint_type = (m_fd > -1) ? VAProcDeinterlacingBob : VAProcDeinterlacingNone;
+                        }
+                        if (vpp_deint_type == VAProcDeinterlacingBob && !vpp_deint_types[0])
+                        {
+                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Bob", ErrorLog | LogOnce);
                             vpp_deint_type = VAProcDeinterlacingNone;
                         }
                         if (vpp_deint_type != VAProcDeinterlacingNone)
@@ -204,6 +253,8 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
 }
 void VAAPI::clearVPP(bool resetAllowFilters)
 {
+    if (vpp_deint_type == VAProcDeinterlacingBob && m_fd < 0)
+        vpp_deint_type = VAProcDeinterlacingNone;
     if (use_vpp)
     {
         if (m_vppDeintBuff != VA_INVALID_ID)

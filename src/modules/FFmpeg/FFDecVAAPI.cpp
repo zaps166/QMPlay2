@@ -23,6 +23,8 @@
 
 #include <StreamInfo.hpp>
 
+#include <QDebug>
+
 extern "C"
 {
     #include <libavformat/avformat.h>
@@ -32,14 +34,28 @@ extern "C"
 }
 
 #include <va/va_glx.h>
+#include <va/va_version.h>
+
+#if VA_CHECK_VERSION(1, 1, 0) // >= 2.1.0
+#   define VAAPI_HAS_ESH
+
+#   include <QOpenGLContext>
+
+#   include <va/va_drmcommon.h>
+#   include <unistd.h>
+
+#   include <EGL/egl.h>
+#   include <EGL/eglext.h>
+
+#   include <GL/gl.h>
+#endif
 
 class VAAPIOpenGL : public HWAccelInterface
 {
 public:
-    VAAPIOpenGL(VAAPI *vaapi) :
-        m_vaapi(vaapi),
-        m_glSurface(nullptr),
-        m_canDeleteVAAPI(false)
+    VAAPIOpenGL(VAAPI *vaapi)
+        : m_vaapi(vaapi)
+        , m_isEGL(m_vaapi->m_fd > -1)
     {}
     ~VAAPIOpenGL() final
     {
@@ -49,24 +65,93 @@ public:
 
     QString name() const override
     {
-        return VAAPIWriterName;
+        QString name(VAAPIWriterName);
+        if (!m_isEGL)
+            name += " (GLX)";
+        return name;
     }
 
     Format getFormat() const override
     {
-        return RGB32;
+        return m_isEGL ? NV12 : RGB32;
+    }
+
+    bool canInitializeTextures() const override
+    {
+        return true;
     }
 
     bool init(quint32 *textures) override
     {
-        static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
-        if (isEGL)
-            return false; // Not supported
-        return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
+        if (!m_isEGL)
+            return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
+
+#ifdef VAAPI_HAS_ESH
+        const auto context = QOpenGLContext::currentContext();
+        if (!context)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to get OpenGL context");
+            return false;
+        }
+
+        m_eglDpy = eglGetCurrentDisplay();
+        if (!m_eglDpy)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to get EGL display");
+            return false;
+        }
+
+        const auto extensionsRaw = eglQueryString(m_eglDpy, EGL_EXTENSIONS);
+        if (!extensionsRaw)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to get EGL extensions");
+            return false;
+        }
+
+        const auto extensions = QByteArray::fromRawData(extensionsRaw, qstrlen(extensionsRaw));
+        if (!extensions.contains("EGL_EXT_image_dma_buf_import"))
+        {
+            QMPlay2Core.logError("VA-API :: EGL_EXT_image_dma_buf_import extension is not available");
+            return false;
+        }
+
+        eglCreateImageKHR = (PFNEGLCREATEIMAGEKHRPROC)context->getProcAddress("eglCreateImageKHR");
+        eglDestroyImageKHR = (PFNEGLDESTROYIMAGEKHRPROC)context->getProcAddress("eglDestroyImageKHR");
+        glEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC)context->getProcAddress("glEGLImageTargetTexture2DOES");
+        if (!eglCreateImageKHR || !eglDestroyImageKHR || !glEGLImageTargetTexture2DOES)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to get EGL function pointers");
+            return false;
+        }
+
+        m_hasDmaBufImportModifiers = extensions.contains("EGL_EXT_image_dma_buf_import_modifiers");
+
+        m_textures = textures;
+
+        return true;
+#else
+        return false;
+#endif
     }
     void clear(bool contextChange) override
     {
         Q_UNUSED(contextChange)
+
+#ifdef VAAPI_HAS_ESH
+        if (m_isEGL)
+        {
+            m_eglDpy = EGL_NO_DISPLAY;
+
+            eglCreateImageKHR = nullptr;
+            eglDestroyImageKHR = nullptr;
+            glEGLImageTargetTexture2DOES = nullptr;
+
+            m_hasDmaBufImportModifiers = false;
+
+            m_textures = nullptr;
+
+        }
+#endif
         if (m_glSurface)
         {
             vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
@@ -77,14 +162,86 @@ public:
     CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
     {
         VASurfaceID id;
-        int vaField = field; //VA-API field codes are compatible with "HWAccelInterface::Field" codes.
-        if (m_vaapi->filterVideo(videoFrame, id, vaField))
+        int vaField = field; // VA-API field codes are compatible with "HWAccelInterface::Field" codes.
+        if (!m_vaapi->filterVideo(videoFrame, id, vaField))
+            return CopyNotReady;
+
+        if (!m_isEGL)
         {
             if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
                 return CopyOk;
             return CopyError;
         }
-        return CopyNotReady;
+
+#ifdef VAAPI_HAS_ESH
+        VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
+        if (vaExportSurfaceHandle(
+                m_vaapi->VADisp,
+                id,
+                VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2,
+                VA_EXPORT_SURFACE_READ_ONLY | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
+                &vaSurfaceDescr
+            ) != VA_STATUS_SUCCESS)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to export surface handle");
+            return CopyError;
+        }
+
+        if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to sync surface");
+            return CopyError;
+        }
+
+        for (uint32_t p = 0; p < vaSurfaceDescr.num_layers; ++p)
+        {
+            const auto &layer = vaSurfaceDescr.layers[p];
+            const auto &object = vaSurfaceDescr.objects[layer.object_index[0]];
+
+            EGLint attribs[] = {
+                EGL_LINUX_DRM_FOURCC_EXT, (EGLint)layer.drm_format,
+                EGL_WIDTH, (EGLint)videoFrame.size.getWidth(p),
+                EGL_HEIGHT, (EGLint)videoFrame.size.getHeight(p),
+                EGL_DMA_BUF_PLANE0_FD_EXT, object.fd,
+                EGL_DMA_BUF_PLANE0_OFFSET_EXT, (EGLint)layer.offset[0],
+                EGL_DMA_BUF_PLANE0_PITCH_EXT, (EGLint)layer.pitch[0],
+                EGL_NONE, 0,
+                EGL_NONE, 0,
+                EGL_NONE
+            };
+            if (m_hasDmaBufImportModifiers)
+            {
+                attribs[12] = EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT;
+                attribs[13] = static_cast<EGLint>(object.drm_format_modifier);
+                attribs[14] = EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT;
+                attribs[15] = static_cast<EGLint>(object.drm_format_modifier >> 32);
+            }
+
+            const auto image = eglCreateImageKHR(
+                m_eglDpy,
+                EGL_NO_CONTEXT,
+                EGL_LINUX_DMA_BUF_EXT,
+                nullptr,
+                attribs
+            );
+            if (!image)
+            {
+                QMPlay2Core.logError("VA-API :: Unable to create EGL image");
+                return CopyError;
+            }
+
+            glBindTexture(GL_TEXTURE_2D, m_textures[p]);
+            glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+
+            eglDestroyImageKHR(m_eglDpy, image);
+
+            ::close(object.fd);
+        }
+
+        return CopyOk;
+#else
+        return CopyError;
+#endif
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
@@ -118,9 +275,26 @@ public:
     }
 
 private:
-    VAAPI *m_vaapi;
-    void *m_glSurface;
-    bool m_canDeleteVAAPI;
+    VAAPI *const m_vaapi;
+    const bool m_isEGL;
+
+    bool m_canDeleteVAAPI = false;
+
+    // GLX
+    void *m_glSurface = nullptr;
+
+#ifdef VAAPI_HAS_ESH
+    // EGL
+    EGLDisplay m_eglDpy = EGL_NO_DISPLAY;
+
+    PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHR = nullptr;
+    PFNEGLDESTROYIMAGEKHRPROC eglDestroyImageKHR = nullptr;
+    PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES = nullptr;
+
+    bool m_hasDmaBufImportModifiers = false;
+
+    quint32 *m_textures = nullptr;
+#endif
 };
 
 /**/
@@ -176,7 +350,7 @@ bool FFDecVAAPI::set()
     switch (sets().getInt("VAAPIDeintMethod"))
     {
         case 0:
-            m_vppDeintType = VAProcDeinterlacingNone;
+            m_vppDeintType = VAProcDeinterlacingBob;
             break;
         case 2:
             m_vppDeintType = VAProcDeinterlacingMotionCompensated;
@@ -333,9 +507,14 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
         {
             VAAPIWriter *vaapiWriter = new VAAPIWriter(getModule(), m_vaapi);
             if (vaapiWriter->open())
+            {
                 m_hwAccelWriter = vaapiWriter;
+            }
             else
+            {
                 delete vaapiWriter;
+                m_vaapi = nullptr;
+            }
         }
     }
 

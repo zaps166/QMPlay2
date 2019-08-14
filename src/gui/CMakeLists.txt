@@ -125,6 +125,10 @@ if(NOT APPLE)
     add_definitions(-DQMPLAY2_ALLOW_ONLY_ONE_INSTANCE)
 endif()
 
+if(USE_FFMPEG_VAAPI)
+    set_source_files_properties(Main.cpp PROPERTIES COMPILE_DEFINITIONS CHECK_FOR_EGL)
+endif()
+
 if(WIN32)
     # set RC file
     list(APPEND GUI_SRC Windows/icons.rc)
