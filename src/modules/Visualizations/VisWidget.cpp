@@ -86,7 +86,7 @@ void VisWidget::setUseOpenGL(bool b)
 {
     m_pendingUpdate = false;
     if (!b)
-        b = (QGuiApplication::platformName() == "wayland");
+        b = (QGuiApplication::platformName().startsWith("wayland"));
     if (b && !glW)
     {
         glW = new QOpenGLWidget(this);

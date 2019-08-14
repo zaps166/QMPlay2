@@ -206,7 +206,7 @@ QString OpenGL2Writer::name() const
 bool OpenGL2Writer::open()
 {
     static const QString platformName = QGuiApplication::platformName();
-    useRtt = platformName == "wayland" || platformName == "android" || forceRtt;
+    useRtt = platformName.startsWith("wayland") || platformName == "android" || forceRtt;
     if (useRtt)
     {
         //Don't use rtt when videoDock has native window
