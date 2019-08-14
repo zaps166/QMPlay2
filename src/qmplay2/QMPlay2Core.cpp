@@ -99,7 +99,7 @@ static QByteArray getDataFromHash(const QString &url, Data &data)
 
 /**/
 
-QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
+static QMPlay2CoreClass *g_qmplay2Core = nullptr;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
     : qmplay2Icon(nullptr)
@@ -107,7 +107,7 @@ QMPlay2CoreClass::QMPlay2CoreClass()
     , m_commonJS(new CommonJS(this))
 #endif
 {
-    qmplay2Core = this;
+    g_qmplay2Core = this;
 
     QFile f(":/Languages.csv");
     if (f.open(QFile::ReadOnly))
@@ -121,7 +121,14 @@ QMPlay2CoreClass::QMPlay2CoreClass()
     }
 }
 QMPlay2CoreClass::~QMPlay2CoreClass()
-{}
+{
+    g_qmplay2Core = nullptr;
+}
+
+QMPlay2CoreClass &QMPlay2CoreClass::instance()
+{
+    return *g_qmplay2Core;
+}
 
 #ifdef Q_OS_UNIX
 QString QMPlay2CoreClass::getLibDir()
