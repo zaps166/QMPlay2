@@ -73,6 +73,10 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
         link_directories(${LIBX11_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
 
+        if(USE_OPENGL2)
+            add_definitions(-DUSE_OPENGL)
+        endif()
+
         add_definitions(-DQMPlay2_VDPAU)
         list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
         list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)

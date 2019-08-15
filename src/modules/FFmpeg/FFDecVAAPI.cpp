@@ -36,7 +36,7 @@ extern "C"
 #include <va/va_glx.h>
 #include <va/va_version.h>
 
-#if VA_CHECK_VERSION(1, 1, 0) // >= 2.1.0
+#if defined(USE_OPENGL) && VA_CHECK_VERSION(1, 1, 0) // >= 2.1.0
 #   define VAAPI_HAS_ESH
 
 #   include <QOpenGLContext>
