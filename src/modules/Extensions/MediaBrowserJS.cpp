@@ -6,7 +6,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QRegularExpression>
 #include <QCoreApplication>
 #include <QLoggingCategory>
 #include <QMimeDatabase>
@@ -62,7 +61,7 @@ MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, 
         }
     }
 
-    const auto map = callJSFunction("getInfo").toVariant().toMap();
+    const auto map = callJS("getInfo").toVariant().toMap();
 
     m_name = map["name"].toString();
     if (m_name.simplified().isEmpty())
@@ -130,26 +129,26 @@ void MediaBrowserJS::prepareWidget()
     m_treeW->header()->setStretchLastSection(false);
     m_treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
-    callJS(Q_FUNC_INFO, {m_treeWidgetJS});
+    callJS("prepareWidget", {m_treeWidgetJS});
 }
 
 void MediaBrowserJS::finalize()
 {
-    callJS(Q_FUNC_INFO);
+    callJS("finalize");
 }
 
 QString MediaBrowserJS::getQMPlay2Url(const QString &text) const
 {
-    return toString(callJS(Q_FUNC_INFO, {text}));
+    return toString(callJS("getQMPlay2Url", {text}));
 }
 
 NetworkReply *MediaBrowserJS::getSearchReply(const QString &text, const qint32 page)
 {
-    return toNetworkReply(callJS(Q_FUNC_INFO, {text, page}));
+    return toNetworkReply(callJS("getSearchReply", {text, page}));
 }
 MediaBrowserJS::Description MediaBrowserJS::addSearchResults(const QByteArray &reply)
 {
-    const auto map = callJS(Q_FUNC_INFO, {QString(reply)}).toVariant().toMap();
+    const auto map = callJS("addSearchResults", {QString(reply)}).toVariant().toMap();
 
     const int count = m_treeW->topLevelItemCount();
     for (int i = 0; i < count; ++i)
@@ -179,39 +178,39 @@ MediaBrowserJS::Description MediaBrowserJS::addSearchResults(const QByteArray &r
 
 MediaBrowserJS::PagesMode MediaBrowserJS::pagesMode() const
 {
-    return toEnum<PagesMode>(callJS(Q_FUNC_INFO));
+    return toEnum<PagesMode>(callJS("pagesMode"));
 }
 QStringList MediaBrowserJS::getPagesList() const
 {
-    return toStringList(callJS(Q_FUNC_INFO));
+    return toStringList(callJS("getPagesList"));
 }
 
 bool MediaBrowserJS::hasWebpage() const
 {
-    return toBool(callJS(Q_FUNC_INFO));
+    return toBool(callJS("hasWebpage"));
 }
 QString MediaBrowserJS::getWebpageUrl(const QString &text) const
 {
-    return toString(callJS(Q_FUNC_INFO, {text}));
+    return toString(callJS("getWebpageUrl", {text}));
 }
 
 MediaBrowserJS::CompleterMode MediaBrowserJS::completerMode() const
 {
-    return toEnum<CompleterMode>(callJS(Q_FUNC_INFO));
+    return toEnum<CompleterMode>(callJS("completerMode"));
 }
 NetworkReply *MediaBrowserJS::getCompleterReply(const QString &text)
 {
-    return toNetworkReply(callJS(Q_FUNC_INFO, {text}));
+    return toNetworkReply(callJS("getCompleterReply", {text}));
 }
 QStringList MediaBrowserJS::getCompletions(const QByteArray &reply)
 {
-    return toStringList(callJS(Q_FUNC_INFO, {QString(reply)}));
+    return toStringList(callJS("getCompletions", {QString(reply)}));
 }
 
 void MediaBrowserJS::setCompleterListCallback(const CompleterReadyCallback &callback)
 {
     m_completerListCallback = callback;
-    callJSFunction("completerListCallbackSet");
+    callJS("completerListCallbackSet");
 }
 
 QMPlay2Extensions::AddressPrefix MediaBrowserJS::addressPrefix(bool img) const
@@ -224,7 +223,7 @@ QMPlay2Extensions::AddressPrefix MediaBrowserJS::addressPrefix(bool img) const
 
 bool MediaBrowserJS::hasAction() const
 {
-    return toBool(callJS(Q_FUNC_INFO));
+    return toBool(callJS("hasAction"));
 }
 
 bool MediaBrowserJS::convertAddress(const QString &prefix,
@@ -250,7 +249,7 @@ bool MediaBrowserJS::convertAddress(const QString &prefix,
         return false;
 
     m_mutex.lock();
-    const auto map = callJS(Q_FUNC_INFO, {prefix, url, param, !!name, !!extension, ioCtrlId}).toVariant().toMap();
+    const auto map = callJS("convertAddress", {prefix, url, param, !!name, !!extension, ioCtrlId}).toVariant().toMap();
     m_mutex.unlock();
 
     m_commonJS.removeIOController(ioCtrlId);
@@ -300,14 +299,7 @@ void MediaBrowserJS::completerListCallback()
         m_completerListCallback();
 }
 
-QJSValue MediaBrowserJS::callJS(const char *const funcInfo, const QJSValueList &args) const
-{
-    return callJSFunction(
-        QRegularExpression(QString(R"(\ %1::(.+)\()").arg(metaObject()->className())).match(funcInfo).captured(1),
-        args
-    );
-}
-QJSValue MediaBrowserJS::callJSFunction(const QString &funcName, const QJSValueList &args) const
+QJSValue MediaBrowserJS::callJS(const QString &funcName, const QJSValueList &args) const
 {
     const auto value = m_script.property(funcName).call(args);
     if (value.isError())

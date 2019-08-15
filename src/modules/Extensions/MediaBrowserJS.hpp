@@ -109,8 +109,7 @@ public:
     Q_INVOKABLE void completerListCallback();
 
 private:
-    QJSValue callJS(const char * const funcInfo, const QJSValueList &args = {}) const;
-    QJSValue callJSFunction(const QString &funcName, const QJSValueList &args = {}) const;
+    QJSValue callJS(const QString &funcName, const QJSValueList &args = {}) const;
 
 private:
     bool toBool(const QJSValue &value) const;
