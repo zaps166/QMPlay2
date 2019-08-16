@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QMPlay2Lib.hpp>
 
 #include <string.h>
 
