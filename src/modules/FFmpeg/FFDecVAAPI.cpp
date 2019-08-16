@@ -75,6 +75,10 @@ public:
     {
         return m_isEGL ? NV12 : RGB32;
     }
+    bool isCopy() const override
+    {
+        return false;
+    }
 
     bool canInitializeTextures() const override
     {

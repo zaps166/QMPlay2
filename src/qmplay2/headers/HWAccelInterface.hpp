@@ -55,6 +55,10 @@ public:
     {
         return false;
     }
+    virtual bool isCopy() const
+    {
+        return true;
+    }
 
     virtual bool lock()
     {

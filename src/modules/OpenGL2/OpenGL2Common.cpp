@@ -500,7 +500,8 @@ void OpenGL2Common::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
         }
 
-        videoFrame.clear();
+        if (!hwAccellnterface || hwAccellnterface->isCopy())
+            videoFrame.clear();
         hasImage = true;
     }
 
