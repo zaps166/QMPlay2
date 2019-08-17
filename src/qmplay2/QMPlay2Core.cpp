@@ -99,7 +99,7 @@ static QByteArray getDataFromHash(const QString &url, Data &data)
 
 /**/
 
-static QMPlay2CoreClass *g_qmplay2Core = nullptr;
+QMPlay2CoreClass *QMPlay2CoreClass::qmplay2Core;
 
 QMPlay2CoreClass::QMPlay2CoreClass()
     : qmplay2Icon(nullptr)
@@ -107,7 +107,7 @@ QMPlay2CoreClass::QMPlay2CoreClass()
     , m_commonJS(new CommonJS(this))
 #endif
 {
-    g_qmplay2Core = this;
+    qmplay2Core = this;
 
     QFile f(":/Languages.csv");
     if (f.open(QFile::ReadOnly))
@@ -121,14 +121,7 @@ QMPlay2CoreClass::QMPlay2CoreClass()
     }
 }
 QMPlay2CoreClass::~QMPlay2CoreClass()
-{
-    g_qmplay2Core = nullptr;
-}
-
-QMPlay2CoreClass &QMPlay2CoreClass::instance()
-{
-    return *g_qmplay2Core;
-}
+{}
 
 #ifdef Q_OS_UNIX
 QString QMPlay2CoreClass::getLibDir()
@@ -302,10 +295,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
             if (QLibrary::isLibrary(fInfo.filePath()))
             {
                 QLibrary lib(fInfo.filePath());
-                // Don't override global symbols if they are different in libraries (e.g. Qt5 vs Qt4)
-#ifndef ADDRESS_SANITIZER
-                lib.setLoadHints(QLibrary::DeepBindHint);
-#endif
                 if (!lib.load())
                     log(lib.errorString(), AddTimeToLog | ErrorLog | SaveLog);
                 else
@@ -323,8 +312,8 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
                             log(fInfo.fileName() + " - " + tr("mismatch module API version"), AddTimeToLog | ErrorLog | SaveLog);
                             return false;
                         }
-                        const quint8   qtMajorVersion = ((v >> 24) & 0xFF);
-                        const quint8   qtMinorVersion = ((v >> 16) & 0xFF);
+                        const quint8 qtMajorVersion = ((v >> 24) & 0xFF);
+                        const quint8 qtMinorVersion = ((v >> 16) & 0xFF);
                         if (qtMajorVersion != QT_VERSION_MAJOR || qtMinorVersion < QT_VERSION_MINOR)
                         {
                             log(fInfo.fileName() + " - " + tr("mismatch module Qt version"), AddTimeToLog | ErrorLog | SaveLog);

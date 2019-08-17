@@ -46,7 +46,10 @@ class QMPLAY2SHAREDLIB_EXPORT QMPlay2CoreClass : public QObject
 public:
     using GroupEntries = QVector<QPair<QString, QString>>;
 
-    static QMPlay2CoreClass &instance();
+    static inline QMPlay2CoreClass &instance()
+    {
+        return *qmplay2Core;
+    }
 
 #ifdef Q_OS_UNIX
     static QString getLibDir();
@@ -199,6 +202,8 @@ protected:
     Settings *settings;
 
 private:
+    static QMPlay2CoreClass *qmplay2Core;
+
     QVector<Module *> pluginsInstance;
     QTranslator *translator, *qtTranslator;
     QString shareDir, langDir, settingsDir, logFilePath, settingsProfile;

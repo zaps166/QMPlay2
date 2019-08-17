@@ -5,6 +5,8 @@ set(OpenGL2_HDR
     OpenGL2.hpp
     OpenGL2Writer.hpp
     OpenGL2Common.hpp
+    OpenGL2Window.hpp
+    OpenGL2Widget.hpp
     Sphere.hpp
     Vertices.hpp
 )
@@ -13,11 +15,13 @@ set(OpenGL2_SRC
     OpenGL2.cpp
     OpenGL2Writer.cpp
     OpenGL2Common.cpp
+    OpenGL2Window.cpp
+    OpenGL2Widget.cpp
     Sphere.cpp
 )
 
 set(OpenGL2_RESOURCES
-    resources.qrc
+    res.qrc
 )
 
 if(NOT WIN32)
@@ -28,9 +32,6 @@ if(NOT WIN32)
         message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
     endif()
 endif()
-
-list(APPEND OpenGL2_HDR OpenGL2Window.hpp OpenGL2Widget.hpp)
-list(APPEND OpenGL2_SRC OpenGL2Window.cpp OpenGL2Widget.cpp)
 
 include_directories(../../qmplay2/headers)
 

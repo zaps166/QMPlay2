@@ -216,7 +216,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 
     if(USE_ASAN)
         set(CMAKE_CXX_FLAGS "-fsanitize=address -fno-omit-frame-pointer ${CMAKE_CXX_FLAGS}")
-        add_definitions(-DADDRESS_SANITIZER)
         set(RELEASE_DEBUG_FLAG "-g")
     else()
         set(RELEASE_DEBUG_FLAG "-g0")
