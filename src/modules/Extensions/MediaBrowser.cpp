@@ -50,6 +50,10 @@
 
 #include <algorithm>
 
+#ifdef QMPLAY2_CPU_X86_32
+#   include <libavutil/cpu.h>
+#endif
+
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
 constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";

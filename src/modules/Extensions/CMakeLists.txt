@@ -55,7 +55,9 @@ endif()
 qt5_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
 set_property(SOURCE ${Extensions_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
-include_directories(../../qmplay2/headers)
+include_directories(../../qmplay2/headers
+    ${LIBAVUTIL_INCLUDE_DIRS}
+)
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Extensions_HDR}
