@@ -86,7 +86,7 @@ You can force single instance for QMPlay2: set "Allow only one instance" in "Set
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), VDPAU/VA-API (X11, Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
@@ -96,7 +96,6 @@ Hardware acceleration important information:
 - CUVID, DXVA2 and VA-API uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension and currently it doesn't support hue, saturation adjustment and video deinterlacing.
 - VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
-- CUVID requires FFmpeg 3.1 or higher for H264 and HEVC support (requirement during compilation)!
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 - VideoToolBox doesn't support OpenGL high quality video scaling yet.
 - VideoToolBox doesn't support deinterlacing.
@@ -157,7 +156,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 	- Qt5Qml - for MediaBrowser,
 	- Qt5X11Extras - for X11 and VA-API,
 	- Qt5WinExtras - for Windows,
-- FFmpeg >= 3.1:
+- FFmpeg >= 3.3:
 	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
@@ -170,7 +169,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 - libass - for OSD and every subtitles.
 
 #### For modules (some of them can be automatically not used if not found):
-- FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU) - only on X11,
+- FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
 - Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
 - AudioCD: libcdio and libcddb,
@@ -206,8 +205,8 @@ CMake options (option - default value: description):
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
 	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
 	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
-	- `USE_FFMPEG_VAAPI`: autodetect: enabled on X11 if libva and libva-x11 exist.
-	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exist.
+	- `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-x11, libva-glx, libva-drm, and egl exist.
+	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
 	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
 	- `USE_INPUTS` - ON: enable/disable Inputs module.
 	- `USE_MODPLUG` - ON: enable/disable Modplug module.
