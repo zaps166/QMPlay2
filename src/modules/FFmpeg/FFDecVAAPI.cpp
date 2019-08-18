@@ -29,6 +29,7 @@ extern "C"
 {
     #include <libavformat/avformat.h>
     #include <libavutil/pixdesc.h>
+    #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_vaapi.h>
     #include <libswscale/swscale.h>
 }
