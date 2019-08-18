@@ -61,7 +61,7 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
         add_definitions(-DQMPlay2_VAAPI)
         list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp VAAPIWriter.hpp)
         list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp VAAPIWriter.cpp)
-        pkg_check_modules(LBVA libva libva-x11 libva-glx egl REQUIRED)
+        pkg_check_modules(LBVA libva libva-x11 libva-glx libva-drm egl REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
         list(APPEND FFmpeg_LIBS ${LBVA_LIBRARIES})
