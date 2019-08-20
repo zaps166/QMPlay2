@@ -1100,6 +1100,10 @@
         <source>Plays previous entry on playlist.</source>
         <translation>Reproduce la entrada anterior de la lista de reproducción.</translation>
     </message>
+    <message>
+        <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
