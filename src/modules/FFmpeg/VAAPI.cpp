@@ -61,6 +61,9 @@ bool VAAPI::open(const char *codecName, bool &openGL)
         QGuiApplication::platformName().startsWith("wayland")
     );
 
+    int major = 0, minor = 0;
+    bool initialized = false;
+
     if (openGL && isEGL)
     {
         const auto devs = QDir("/dev/dri/").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
@@ -74,9 +77,16 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
             if (auto disp = vaGetDisplayDRM(fd))
             {
-                m_fd = fd;
-                VADisp = disp;
-                break;
+                if (vaInitialize(disp, &major, &minor) == VA_STATUS_SUCCESS)
+                {
+                    m_fd = fd;
+                    VADisp = disp;
+                    initialized = true;
+                    qDebug().noquote() << "VA-API :: Initialize device:" << dev.fileName();
+                    break;
+                }
+                qDebug().noquote() << "VA-API :: Unable to initialize device:" << dev.fileName();
+                vaTerminate(disp);
             }
 
             ::close(fd);
@@ -85,6 +95,8 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
     if (!VADisp && isX11)
     {
+        Q_ASSERT(!initialized);
+
         Display *display = QX11Info::display();
         if (!display)
             return false;
@@ -102,8 +114,7 @@ bool VAAPI::open(const char *codecName, bool &openGL)
     if (!VADisp)
         return false;
 
-    int major = 0, minor = 0;
-    if (vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
+    if (!initialized && vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
         return false;
 
     m_version = (major << 8) | minor;

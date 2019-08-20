@@ -192,9 +192,15 @@ public:
             return CopyError;
         }
 
+        auto closeFDs = [&] {
+            for (uint32_t o = 0; o < vaSurfaceDescr.num_objects; ++o)
+                ::close(vaSurfaceDescr.objects[o].fd);
+        };
+
         if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
         {
             QMPlay2Core.logError("VA-API :: Unable to sync surface");
+            closeFDs();
             return CopyError;
         }
 
@@ -232,6 +238,7 @@ public:
             if (!image)
             {
                 QMPlay2Core.logError("VA-API :: Unable to create EGL image");
+                closeFDs();
                 return CopyError;
             }
 
@@ -239,10 +246,9 @@ public:
             glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
 
             eglDestroyImageKHR(m_eglDpy, image);
-
-            ::close(object.fd);
         }
 
+        closeFDs();
         return CopyOk;
 #else
         return CopyError;
