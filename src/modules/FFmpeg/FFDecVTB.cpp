@@ -96,7 +96,7 @@ public:
         m_glTextures = nullptr;
     }
 
-    CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         Q_UNUSED(field)
 
@@ -104,7 +104,7 @@ public:
             QMutexLocker locker(&m_buffersMutex);
             const int idx = m_buffers.indexOf(videoFrame.surfaceId);
             if (idx < 0)
-                return CopyNotReady;
+                return MapNotReady;
             m_buffers.removeAt(idx);
             while (m_buffers.size() > 5)
                 CVPixelBufferRelease((CVPixelBufferRef)m_buffers.takeFirst());
@@ -119,27 +119,27 @@ public:
         if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
         {
             CVPixelBufferRelease(pixelBuffer);
-            return CopyError;
+            return MapError;
         }
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[0]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.size.getWidth(0), videoFrame.size.getHeight(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
         {
             CVPixelBufferRelease(pixelBuffer);
-            return CopyError;
+            return MapError;
         }
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[1]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.size.getWidth(1), videoFrame.size.getHeight(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
         {
             CVPixelBufferRelease(pixelBuffer);
-            return CopyError;
+            return MapError;
         }
 
         CVPixelBufferRelease(m_pixelBufferToRelease);
         m_pixelBufferToRelease = pixelBuffer;
 
-        return CopyOk;
+        return MapOk;
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override

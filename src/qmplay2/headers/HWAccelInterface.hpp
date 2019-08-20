@@ -39,11 +39,11 @@ public:
         TopField,
         BottomField
     };
-    enum CopyResult
+    enum MapResult
     {
-        CopyNotReady = -1,
-        CopyOk,
-        CopyError,
+        MapNotReady = -1,
+        MapOk,
+        MapError,
     };
 
     virtual ~HWAccelInterface() = default;
@@ -75,7 +75,7 @@ public:
     virtual bool init(quint32 *textures) = 0;
     virtual void clear(bool contextChange) = 0;
 
-    virtual CopyResult copyFrame(const VideoFrame &videoFrame, Field field) = 0;
+    virtual MapResult mapFrame(const VideoFrame &videoFrame, Field field) = 0;
 
     virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = nullptr) = 0;
 

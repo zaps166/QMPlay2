@@ -296,10 +296,10 @@ public:
         }
     }
 
-    CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.surfaceId))
-            return CopyNotReady;
+            return MapNotReady;
 
         CUVIDPROCPARAMS vidProcParams;
         memset(&vidProcParams, 0, sizeof vidProcParams);
@@ -326,7 +326,7 @@ public:
         unsigned pitch = 0;
 
         if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-            return CopyError;
+            return MapError;
 
         if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
         {
@@ -362,10 +362,10 @@ public:
             cu::graphicsUnmapResources(2, m_res, nullptr);
 
             if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
-                return CopyOk;
+                return MapOk;
         }
 
-        return CopyError;
+        return MapError;
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override

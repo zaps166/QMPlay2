@@ -432,10 +432,10 @@ void OpenGL2Common::paintGL()
             bool imageReady = false;
             if (!hwAccelError)
             {
-                const HWAccelInterface::CopyResult res = hwAccellnterface->copyFrame(videoFrame, field);
-                if (res == HWAccelInterface::CopyOk)
+                const HWAccelInterface::MapResult res = hwAccellnterface->mapFrame(videoFrame, field);
+                if (res == HWAccelInterface::MapOk)
                     imageReady = true;
-                else if (res == HWAccelInterface::CopyError)
+                else if (res == HWAccelInterface::MapError)
                 {
                     QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
                     hwAccelError = true;

@@ -164,18 +164,18 @@ public:
         }
     }
 
-    CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         VASurfaceID id;
         int vaField = field; // VA-API field codes are compatible with "HWAccelInterface::Field" codes.
         if (!m_vaapi->filterVideo(videoFrame, id, vaField))
-            return CopyNotReady;
+            return MapNotReady;
 
         if (!m_isEGL)
         {
             if (vaCopySurfaceGLX(m_vaapi->VADisp, m_glSurface, id, vaField) == VA_STATUS_SUCCESS)
-                return CopyOk;
-            return CopyError;
+                return MapOk;
+            return MapError;
         }
 
 #ifdef VAAPI_HAS_ESH
@@ -189,7 +189,7 @@ public:
             ) != VA_STATUS_SUCCESS)
         {
             QMPlay2Core.logError("VA-API :: Unable to export surface handle");
-            return CopyError;
+            return MapError;
         }
 
         auto closeFDs = [&] {
@@ -201,7 +201,7 @@ public:
         {
             QMPlay2Core.logError("VA-API :: Unable to sync surface");
             closeFDs();
-            return CopyError;
+            return MapError;
         }
 
         for (uint32_t p = 0; p < vaSurfaceDescr.num_layers; ++p)
@@ -239,7 +239,7 @@ public:
             {
                 QMPlay2Core.logError("VA-API :: Unable to create EGL image");
                 closeFDs();
-                return CopyError;
+                return MapError;
             }
 
             glBindTexture(GL_TEXTURE_2D, m_textures[p]);
@@ -249,9 +249,9 @@ public:
         }
 
         closeFDs();
-        return CopyOk;
+        return MapOk;
 #else
-        return CopyError;
+        return MapError;
 #endif
     }
 

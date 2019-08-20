@@ -180,21 +180,21 @@ public:
         }
     }
 
-    CopyResult copyFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         Q_UNUSED(field);
 
         if (!wglDXUnlockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface))
-            return CopyError;
+            return MapError;
 
         IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.surfaceId;
         const RECT rect = {0, 0, videoFrame.size.width, videoFrame.size.height};
         HRESULT hr = m_d3d9Device->StretchRect(surface, &rect, m_renderTarget, &rect, D3DTEXF_NONE);
 
         if (!wglDXLockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface) || FAILED(hr))
-            return CopyError;
+            return MapError;
 
-        return CopyOk;
+        return MapOk;
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
