@@ -477,7 +477,7 @@ YouTube::YouTube(Module &module) :
         // FIXME: Add icon
         QFont f(sortByB->font());
         f.setBold(true);
-        f.setPointSize(f.pointSize() - 1);
+        f.setPointSize(qMax(7, f.pointSize() - 1));
         sortByB->setFont(f);
         sortByB->setText("A-z");
     }
