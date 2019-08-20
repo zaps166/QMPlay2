@@ -23,6 +23,7 @@
 #include <QMPlay2Core.hpp>
 
 #include <QGuiApplication>
+#include <QFileInfo>
 #include <QX11Info>
 #include <QDebug>
 #include <QDir>
@@ -66,14 +67,31 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
     if (openGL && isEGL)
     {
-        const auto devs = QDir("/dev/dri/").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
+        QString devFilePath;
+
+        const auto eglCardFilePath = qgetenv("QMPLAY2_EGL_CARD_FILE_PATH");
+        if (!eglCardFilePath.isEmpty())
+        {
+            const auto cards = QDir("/dev/dri/by-path").entryInfoList({"*-card"}, QDir::Files | QDir::System);
+            for (auto &&card : cards)
+            {
+                if (card.symLinkTarget() == eglCardFilePath)
+                {
+                    devFilePath = QFileInfo(card.filePath().replace("-card", "-render")).symLinkTarget();
+                    break;
+                }
+            }
+        }
+
+        const auto devs = QDir("/dev/dri").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
         for (auto &&dev : devs)
         {
+            if (!devFilePath.isEmpty() && devFilePath != dev.filePath())
+                continue;
+
             const int  fd = ::open(dev.filePath().toLocal8Bit().constData(), O_RDWR);
             if (fd < 0)
                 continue;
-
-            // FIXME: What if "fd" device differs from OpenGL device?
 
             if (auto disp = vaGetDisplayDRM(fd))
             {
@@ -82,7 +100,7 @@ bool VAAPI::open(const char *codecName, bool &openGL)
                     m_fd = fd;
                     VADisp = disp;
                     initialized = true;
-                    qDebug().noquote() << "VA-API :: Initialize device:" << dev.fileName();
+                    qDebug().noquote() << "VA-API :: Initialized device:" << dev.fileName();
                     break;
                 }
                 qDebug().noquote() << "VA-API :: Unable to initialize device:" << dev.fileName();

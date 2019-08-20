@@ -527,36 +527,55 @@ static void checkForEGL()
     if (!XOpenDisplayFunc || !XCloseDisplayFunc)
         return;
 
+    using eglGetProcAddressType = void *(*)(const char *);
     using eglGetDisplayType = void *(*)(void *);
     using eglInitializeType = unsigned (*)(void *, int *, int *);
     using eglQueryStringType = const char *(*)(void *, int);
+    using eglQueryDisplayAttribEXTType = unsigned (*)(void *, int, void *);
     using eglTerminateType = unsigned (*)(void *);
 
+    auto eglGetProcAddress = (eglGetProcAddressType)libEGL.resolve("eglGetProcAddress");
     auto eglGetDisplayFunc = (eglGetDisplayType)libEGL.resolve("eglGetDisplay");
     auto eglInitializeFunc = (eglInitializeType)libEGL.resolve("eglInitialize");
     auto eglQueryStringFunc = (eglQueryStringType)libEGL.resolve("eglQueryString");
     auto eglTerminateFunc = (eglTerminateType)libEGL.resolve("eglTerminate");
-    if (!eglGetDisplayFunc || !eglInitializeFunc || !eglQueryStringFunc || !eglTerminateFunc)
+    if (!eglGetProcAddress || !eglGetDisplayFunc || !eglInitializeFunc || !eglQueryStringFunc || !eglTerminateFunc)
         return;
 
     auto dpy = XOpenDisplayFunc(nullptr);
     if (!dpy)
         return;
 
-    QByteArray eglVendor;
+    QByteArray eglVendor, cardFilePath;
 
     auto eglDpy = eglGetDisplayFunc(dpy);
     if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
     {
         constexpr int EGLVendor = 0x3053;
         eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
+
+        auto eglQueryDeviceStringEXT = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
+        auto eglQueryDisplayAttribEXT = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
+        if (eglQueryDeviceStringEXT && eglQueryDisplayAttribEXT)
+        {
+            constexpr int EGLDeviceExt = 0x322C;
+            constexpr int EGLDrmDeviceFileExt = 0x3233;
+            void *eglDev = nullptr;
+            if (eglQueryDisplayAttribEXT(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
+                cardFilePath = eglQueryDeviceStringEXT(eglDev, EGLDrmDeviceFileExt);
+        }
+
         eglTerminateFunc(eglDpy);
     }
 
     XCloseDisplayFunc(dpy);
 
     if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
+    {
         qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+        if (!cardFilePath.isEmpty())
+            qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
+    }
 }
 #endif
 
