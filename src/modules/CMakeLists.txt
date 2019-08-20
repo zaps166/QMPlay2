@@ -84,3 +84,7 @@ endif()
 if(USE_NOTIFY)
     add_subdirectory(Notify)
 endif()
+
+if(ANDROID)
+    add_subdirectory(OpenSLES)
+endif()

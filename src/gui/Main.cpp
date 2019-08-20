@@ -560,6 +560,9 @@ static void checkForEGL()
 }
 #endif
 
+#ifdef Q_OS_ANDROID
+Q_DECL_EXPORT
+#endif
 int main(int argc, char *argv[])
 {
     signal(SIGINT, signal_handler);

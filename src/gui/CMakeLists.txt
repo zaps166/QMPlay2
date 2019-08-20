@@ -178,14 +178,23 @@ if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
 
-add_executable(${PROJECT_NAME}
-    ${WIN32_EXE}
-    MACOSX_BUNDLE ${ICNS_FILE_PATH} ${ICNS_FILE_FILE_PATH} ${ICNS_PLAYLIST_FILE_PATH}
+set(GUI_FILES
     ${GUI_HDR}
     ${GUI_SRC}
     ${GUI_FORM_HDR}
     ${GUI_RESOURCES}
 )
+if(NOT ANDROID)
+    add_executable(${PROJECT_NAME}
+        ${WIN32_EXE}
+        MACOSX_BUNDLE ${ICNS_FILE_PATH} ${ICNS_FILE_FILE_PATH} ${ICNS_PLAYLIST_FILE_PATH}
+        ${GUI_FILES}
+    )
+else()
+    add_library(${PROJECT_NAME} SHARED
+        ${GUI_FILES}
+    )
+endif()
 
 if(USE_JEMALLOC)
     target_link_libraries(${PROJECT_NAME} ${JEMALLOC_LIBRARIES})
