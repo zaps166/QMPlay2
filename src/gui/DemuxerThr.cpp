@@ -680,6 +680,7 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
     const QString prevTitle  = title;
     const QString prevArtist = artist;
     const QString prevAlbum  = album;
+    QString lyrics;
     title.clear();
     artist.clear();
     album.clear();
@@ -697,6 +698,9 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
             case QMPLAY2_TAG_ALBUM:
                 album = tag.second;
                 break;
+            case QMPLAY2_TAG_LYRICS:
+                lyrics = tag.second;
+                break;
             default:
                 break;
         }
@@ -707,7 +711,7 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
         if (showCovers)
             loadImage();
         emitInfo();
-        emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName);
+        emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName, lyrics);
     }
 }
 
@@ -760,8 +764,16 @@ void DemuxerThr::emitInfo()
     for (const QMPlay2Tag &tag : demuxer->tags())
         if (!tag.first.isEmpty())
         {
-            QString txt = tag.second;
-            txt.replace("<", "&#60;"); //Don't recognize as HTML tag
+            QString txt;
+            if (StreamInfo::getTag(tag.first) != QMPLAY2_TAG_LYRICS)
+            {
+                txt = tag.second;
+                txt.replace("<", "&#60;"); //Don't recognize as HTML tag
+            }
+            else
+            {
+                txt = tr("Available");
+            }
             if (tag.first == "0" || tag.first == "1") //Name and description
             {
                 info += "<b>" + txt + "</b><br/>";

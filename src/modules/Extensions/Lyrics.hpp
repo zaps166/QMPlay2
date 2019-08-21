@@ -25,20 +25,20 @@
 #include <QTextEdit>
 #include <QPointer>
 
-class Tekstowo final : public QTextEdit, public QMPlay2Extensions
+class Lyrics final : public QTextEdit, public QMPlay2Extensions
 {
     Q_OBJECT
 
 public:
-    Tekstowo(Module &module);
-    ~Tekstowo();
+    Lyrics(Module &module);
+    ~Lyrics();
 
     DockWidget *getDockWidget() override;
 
 private slots:
     void visibilityChanged(bool v);
 
-    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
+    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &lyrics);
 
     void finished(NetworkReply *reply);
 
@@ -62,4 +62,4 @@ private:
     QPointer<NetworkReply> m_makeitpersonalLyricsReply;
 };
 
-#define TekstowoName "Tekstowo"
+#define LyricsName "Lyrics"

@@ -22,7 +22,7 @@ QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;
     const int tagID = tag.toInt(&ok);
-    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_COMMENT)
+    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_LYRICS)
         return (QMPlay2Tags)tagID;
     return QMPLAY2_TAG_UNKNOWN;
 }
@@ -45,6 +45,8 @@ QString StreamInfo::getTagName(const QString &tag)
             return tr("Date");
         case QMPLAY2_TAG_COMMENT:
             return tr("Comment");
+        case QMPLAY2_TAG_LYRICS:
+            return tr("Lyrics");
         default:
             return tag;
     }

@@ -68,8 +68,8 @@ add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support"
 option(USE_LASTFM "Build with LastFM support" ON)
 add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
 
-option(USE_TEKSTOWO "Build with Tekstowo lyrics support" ON)
-add_feature_info(Tekstowo USE_TEKSTOWO "Build with Tekstowo lyrics support")
+option(USE_LYRICS "Build with lyrics support" ON)
+add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
 
 option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
 add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")

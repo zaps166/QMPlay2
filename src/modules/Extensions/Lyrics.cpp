@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Tekstowo.hpp>
+#include <Lyrics.hpp>
 
 #include <algorithm>
 #include <vector>
@@ -51,38 +51,39 @@ static QString simplifyString(const QString &str)
 
 /**/
 
-Tekstowo::Tekstowo(Module &module) :
+Lyrics::Lyrics(Module &module) :
     m_visible(false), m_pending(false)
 {
     SetModule(module);
 
-    connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, QString, QString, QString, int, bool, QString)), this, SLOT(updatePlaying(bool, QString, QString, QString, int, bool, QString)));
+    connect(&QMPlay2Core, &QMPlay2CoreClass::updatePlaying,
+            this, &Lyrics::updatePlaying);
     connect(&m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(finished(NetworkReply *)));
 
     m_dW = new DockWidget;
     connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     m_dW->setWindowTitle(tr("Lyrics"));
-    m_dW->setObjectName(TekstowoName);
+    m_dW->setObjectName(LyricsName);
     m_dW->setWidget(this);
 
     setReadOnly(true);
 }
-Tekstowo::~Tekstowo()
+Lyrics::~Lyrics()
 {}
 
-DockWidget *Tekstowo::getDockWidget()
+DockWidget *Lyrics::getDockWidget()
 {
     return m_dW;
 }
 
-void Tekstowo::visibilityChanged(bool v)
+void Lyrics::visibilityChanged(bool v)
 {
     m_visible = v;
     if (m_visible && m_pending)
         search();
 }
 
-void Tekstowo::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName)
+void Lyrics::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &lyrics)
 {
     Q_UNUSED(album)
     Q_UNUSED(length)
@@ -103,6 +104,16 @@ void Tekstowo::updatePlaying(bool play, const QString &title, const QString &art
 
     if (play)
     {
+        if (!lyrics.isEmpty())
+        {
+            QString html = "<center>";
+            if (!title.isEmpty() && !artist.isEmpty())
+                html += "<b>" + title + " - " + artist + "</b><br/><br/>";
+            html += QString(lyrics).replace("\n", "<br/>") + "</center>";
+            setHtml(html);
+            return;
+        }
+
         m_realTitle = title;
         m_realArtist = artist;
         m_title  = simplifyString(title);
@@ -111,7 +122,7 @@ void Tekstowo::updatePlaying(bool play, const QString &title, const QString &art
     }
 }
 
-void Tekstowo::finished(NetworkReply *reply)
+void Lyrics::finished(NetworkReply *reply)
 {
     const QByteArray data = reply->readAll();
     reply->deleteLater();
@@ -254,7 +265,7 @@ void Tekstowo::finished(NetworkReply *reply)
     }
 }
 
-void Tekstowo::search()
+void Lyrics::search()
 {
     if (m_title.isEmpty() || m_artist.isEmpty())
         return;
@@ -268,7 +279,7 @@ void Tekstowo::search()
     }
 }
 
-void Tekstowo::lyricsNotFound()
+void Lyrics::lyricsNotFound()
 {
     setHtml(QString("<center><i>%1</i></center>").arg(tr("Lyrics not found")));
 }

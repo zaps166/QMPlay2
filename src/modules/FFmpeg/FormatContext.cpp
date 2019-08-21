@@ -357,6 +357,8 @@ QList<QMPlay2Tag> FormatContext::tags() const
             tagList += {QString::number(QMPLAY2_TAG_DATE), value};
         if (!(value = getTag(dict, "comment")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_COMMENT), value};
+        if (!(value = getTag(dict, "lyrics")).isEmpty())
+            tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
     }
     return tagList;
 }

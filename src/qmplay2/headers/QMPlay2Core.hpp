@@ -115,7 +115,7 @@ public:
     Q_SIGNAL void waitCursor();
     Q_SIGNAL void busyCursor();
 
-    Q_SIGNAL void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
+    Q_SIGNAL void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &lyrics = QString());
     Q_SIGNAL void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
     Q_SIGNAL void coverDataFromMediaFile(const QByteArray &cover);
     Q_SIGNAL void coverFile(const QString &filePath);
