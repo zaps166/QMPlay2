@@ -251,7 +251,10 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
             {
                 const VideoFrameSize frameSize(frame->width, frame->height, chromaShiftW, chromaShiftH);
                 if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
+                {
                     decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
+                    decoded.limited = (frame->color_range != AVCOL_RANGE_JPEG);
+                }
                 else
                 {
                     const int aligned8W = Functions::aligned(frame->width, 8);
@@ -274,6 +277,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
                     };
                     sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
                 }
+                decoded.colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(frame->colorspace, frame->height);
             }
         }
     }

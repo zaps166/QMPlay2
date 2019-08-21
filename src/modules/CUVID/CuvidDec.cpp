@@ -470,6 +470,8 @@ bool CuvidDec::canCreateInstance()
 CuvidDec::CuvidDec(Module &module) :
     m_writer(nullptr),
     m_cuvidHWAccel(nullptr),
+    m_limited(false),
+    m_colorSpace(QMPlay2ColorSpace::Unknown),
     m_lastCuvidTS(0),
     m_deintMethod(cudaVideoDeinterlaceMode_Weave),
     m_copyVideo(Qt::PartiallyChecked),
@@ -793,6 +795,8 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
                     }
                 }
             }
+            decoded.limited = m_limited;
+            decoded.colorSpace = m_colorSpace;
         }
     }
 
@@ -973,6 +977,9 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (m_cuvidHWAccel)
         m_cuvidHWAccel->allowDestroyCuda();
+
+    m_limited = streamInfo.limited;
+    m_colorSpace = streamInfo.colorSpace;
 
     return true;
 }

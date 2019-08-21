@@ -643,7 +643,7 @@ void VideoThr::screenshot(VideoFrame videoFrame)
 {
     ImgScaler imgScaler;
     const int aligned8W = Functions::aligned(W, 8);
-    if (imgScaler.create(videoFrame.size, aligned8W, H, (bool)hwAccelWriter))
+    if (imgScaler.create(videoFrame, aligned8W, H, (bool)hwAccelWriter))
     {
         QImage img(aligned8W, H, QImage::Format_RGB32);
         bool ok = true;

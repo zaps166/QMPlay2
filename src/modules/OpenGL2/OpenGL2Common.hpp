@@ -138,6 +138,9 @@ public:
     QStringList videoAdjustmentKeys;
     VideoFrame videoFrame;
 
+    bool m_limited = false;
+    QMPlay2ColorSpace m_colorSpace = QMPlay2ColorSpace::Unknown;
+
     QOpenGLShaderProgram *shaderProgramVideo, *shaderProgramOSD;
 
     qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;

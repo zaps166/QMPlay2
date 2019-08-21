@@ -31,6 +31,7 @@
 #include <QOpenGLShader>
 #include <QResizeEvent>
 #include <QMatrix4x4>
+#include <QMatrix3x3>
 #include <QResource>
 #include <QPainter>
 #include <QWidget>
@@ -549,6 +550,11 @@ void OpenGL2Common::paintGL()
         }
         else
         {
+            const auto lumaCoeff = QMPlay2PixelFormatConvert::getLumaCoeff(m_colorSpace);
+            const auto mat = Functions::getYUVtoRGBmatrix(lumaCoeff.cR, lumaCoeff.cG, lumaCoeff.cB, m_limited);
+            shaderProgramVideo->setUniformValue("uYUVtRGB", mat);
+            shaderProgramVideo->setUniformValue("uBL", m_limited ? 16.0f / 255.0f : 0.0f);
+
             const float saturation = (videoAdjustment.saturation + 100) / 100.0f;
             const float hue = videoAdjustment.hue / -31.831f;
             shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);

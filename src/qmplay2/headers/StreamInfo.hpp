@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QMPlay2Lib.hpp>
+#include <PixelFormats.hpp>
 
 #include <QCoreApplication>
 #include <QByteArray>
@@ -86,6 +87,8 @@ public:
     int W = 0, H = 0;
     double rotation = qQNaN();
     bool spherical = false;
+    bool limited = true;
+    QMPlay2ColorSpace colorSpace = QMPlay2ColorSpace::Unknown;
 };
 
 class QMPLAY2SHAREDLIB_EXPORT StreamsInfo : public QList<StreamInfo *>

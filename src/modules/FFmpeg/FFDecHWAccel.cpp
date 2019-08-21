@@ -89,9 +89,15 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
     if (frameFinished && ~hurryUp)
     {
         if (m_hwAccelWriter)
+        {
             decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
+        }
         else
+        {
             downloadVideoFrame(decoded);
+        }
+        decoded.limited = (frame->color_range != AVCOL_RANGE_JPEG);
+        decoded.colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(frame->colorspace, frame->height);
     }
 
     if (frameFinished)

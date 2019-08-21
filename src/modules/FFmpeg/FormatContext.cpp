@@ -909,6 +909,9 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
                 streamInfo->spherical = (((AVSphericalMapping *)sideData)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
             }
 
+            streamInfo->limited = (stream->codecpar->color_range != AVCOL_RANGE_JPEG);
+            streamInfo->colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(stream->codecpar->color_space, stream->codecpar->height);
+
             break;
         }
         case QMPLAY2_TYPE_ATTACHMENT:

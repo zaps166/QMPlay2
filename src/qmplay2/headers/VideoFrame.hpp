@@ -23,7 +23,6 @@
 
 class QMPLAY2SHAREDLIB_EXPORT VideoFrameSize
 {
-    friend class VideoFrame;
 public:
     inline VideoFrameSize(qint32 width, qint32 height, quint8 chromaShiftW = 1, quint8 chromaShiftH = 1) :
         width(width), height(height),
@@ -45,8 +44,6 @@ public:
     {
         return plane ? chromaHeight() : height;
     }
-
-    QMPlay2PixelFormat getFormat() const;
 
     void clear();
 
@@ -100,6 +97,8 @@ public:
         interlaced = tff = false;
     }
 
+    QMPlay2PixelFormat getFormat() const;
+
     void setAVFrame(AVFrame *frame);
 
     void clear();
@@ -111,6 +110,8 @@ public:
     qint32 linesize[3] = {};
     bool interlaced = false;
     bool tff = false;
+    bool limited = false;
+    QMPlay2ColorSpace colorSpace = QMPlay2ColorSpace::Unknown;
     quintptr surfaceId = 0;
 
 private:

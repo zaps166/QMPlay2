@@ -13,6 +13,8 @@
 #endif
 
 varying vec2 vTexCoord;
+uniform mat3 uYUVtRGB;
+uniform float uBL;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
 uniform vec2 uTextureSize;
@@ -23,18 +25,12 @@ uniform sampler uY;
     uniform sampler uCb, uCr;
 #endif
 
-const mat3 YUVtoRGB = mat3(
-    1.16430,  1.16430, 1.16430,
-    0.00000, -0.39173, 2.01700,
-    1.59580, -0.81290, 0.00000
-);
-
 #define getTexel texture
 
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
-    return getTexel(uY, texCoordYWithOffset(vec2(x, y)))[0] - 0.0625;
+    return getTexel(uY, texCoordYWithOffset(vec2(x, y)))[0] - uBL;
 }
 #endif
 
@@ -49,17 +45,17 @@ void main()
 
 #ifdef NV12
     vec3 YCbCr = vec3(
-        getTexel(uY   , texCoordY )[0] - 0.0625,
-        getTexel(uCbCr, texCoordUV)[0] - 0.5,
-        getTexel(uCbCr, texCoordUV)[1] - 0.5
+        getTexel(uY   , texCoordY )[0],
+        getTexel(uCbCr, texCoordUV).xy
     );
 #else
     vec3 YCbCr = vec3(
-        getTexel(uY , texCoordY )[0] - 0.0625,
-        getTexel(uCb, texCoordUV)[0] - 0.5,
-        getTexel(uCr, texCoordUV)[0] - 0.5
+        getTexel(uY , texCoordY )[0],
+        getTexel(uCb, texCoordUV)[0],
+        getTexel(uCr, texCoordUV)[0]
     );
 #endif
+    YCbCr -= vec3(uBL, vec2(128.0 / 255.0));
 
 #ifdef HueAndSharpness
     if (uSharpness != 0.0)
@@ -88,5 +84,5 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(clamp(YUVtoRGB * ((YCbCr - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
+    gl_FragColor = vec4(clamp(uYUVtRGB * ((YCbCr - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
 }

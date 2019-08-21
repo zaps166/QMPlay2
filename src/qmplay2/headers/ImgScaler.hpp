@@ -22,7 +22,6 @@
 
 /* YUV planar to RGB32 */
 
-class VideoFrameSize;
 struct SwsContext;
 class VideoFrame;
 
@@ -35,7 +34,7 @@ public:
         destroy();
     }
 
-    bool create(const VideoFrameSize &size, int newWdst, int newHdst, bool isNV12 = false);
+    bool create(const VideoFrame &videoFrame, int newWdst, int newHdst, bool isNV12 = false);
     void scale(const VideoFrame &videoFrame, void *dst = nullptr);
     void scale(const void *src[], const int srcLinesize[], void *dst);
     void destroy();

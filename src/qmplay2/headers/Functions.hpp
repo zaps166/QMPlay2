@@ -22,6 +22,7 @@
 #include <QMPlay2Lib.hpp>
 
 #include <QStringList>
+#include <QMatrix3x3>
 #include <QIcon>
 #include <QDate>
 
@@ -155,4 +156,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QByteArray decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered);
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
+
+    QMPLAY2SHAREDLIB_EXPORT QMatrix3x3 getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited);
 }

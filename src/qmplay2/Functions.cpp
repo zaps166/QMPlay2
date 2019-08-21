@@ -30,6 +30,7 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QHeaderView>
+#include <QMatrix4x4>
 #include <QMimeData>
 #include <QPainter>
 #include <QDir>
@@ -941,4 +942,34 @@ QByteArray Functions::textWithFallbackEncoding(const QByteArray &data)
             return codec->toUnicode(data).toUtf8();
     }
     return data;
+}
+
+QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited)
+{
+    const float bscale = 0.5f / (cb - 1.0f);
+    const float rscale = 0.5f / (cr - 1.0f);
+
+    auto mat = QMatrix4x4(
+        cr,
+        cg,
+        cb,
+        0.0f,
+        bscale * cr,
+        bscale * cg,
+        0.5f,
+        0.0f,
+        0.5f,
+        rscale * cg,
+        rscale * cb,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        1.0f
+    ).inverted();
+
+    if (limited)
+        mat *= 255.0f / (235.0f - 16.0f);
+
+    return mat.toGenericMatrix<3, 3>();
 }

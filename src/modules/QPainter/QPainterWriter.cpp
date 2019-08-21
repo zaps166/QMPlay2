@@ -48,7 +48,7 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
         return;
     }
     m_scaleByQt = (imgW > videoFrame.size.width) || (imgH > videoFrame.size.height);
-    if (imgScaler.create(videoFrame.size, m_scaleByQt ? videoFrame.size.width : imgW, m_scaleByQt ? videoFrame.size.height : imgH))
+    if (imgScaler.create(videoFrame, m_scaleByQt ? videoFrame.size.width : imgW, m_scaleByQt ? videoFrame.size.height : imgH))
     {
         if (m_scaleByQt && (img.width() != videoFrame.size.width || img.height() != videoFrame.size.height))
         {
@@ -192,14 +192,19 @@ bool QPainterWriter::processParams(bool *)
 
 QMPlay2PixelFormats QPainterWriter::supportedPixelFormats() const
 {
-    return QMPlay2PixelFormats()
-            << QMPlay2PixelFormat::YUV420P
-            << QMPlay2PixelFormat::YUV422P
-            << QMPlay2PixelFormat::YUV444P
-            << QMPlay2PixelFormat::YUV410P
-            << QMPlay2PixelFormat::YUV411P
-            << QMPlay2PixelFormat::YUV440P
-    ;
+    return {
+        QMPlay2PixelFormat::YUV420P,
+        QMPlay2PixelFormat::YUVJ420P,
+        QMPlay2PixelFormat::YUV422P,
+        QMPlay2PixelFormat::YUVJ422P,
+        QMPlay2PixelFormat::YUV444P,
+        QMPlay2PixelFormat::YUVJ444P,
+        QMPlay2PixelFormat::YUV410P,
+        QMPlay2PixelFormat::YUV411P,
+        QMPlay2PixelFormat::YUVJ411P,
+        QMPlay2PixelFormat::YUV440P,
+        QMPlay2PixelFormat::YUVJ440P,
+    };
 }
 
 void QPainterWriter::writeVideo(const VideoFrame &videoFrame)

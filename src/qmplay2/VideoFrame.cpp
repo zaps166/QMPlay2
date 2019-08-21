@@ -33,24 +33,6 @@ qint32 VideoFrameSize::chromaHeight() const
     return FF_CEIL_RSHIFT(height, chromaShiftH);
 }
 
-QMPlay2PixelFormat VideoFrameSize::getFormat() const
-{
-    switch ((chromaShiftW << 8) | chromaShiftH)
-    {
-        case 0x0000:
-            return QMPlay2PixelFormat::YUV444P;
-        case 0x0001:
-            return QMPlay2PixelFormat::YUV440P;
-        case 0x0100:
-            return QMPlay2PixelFormat::YUV422P;
-        case 0x0200:
-            return QMPlay2PixelFormat::YUV411P;
-        case 0x0202:
-            return QMPlay2PixelFormat::YUV410P;
-    }
-    return QMPlay2PixelFormat::YUV420P;
-}
-
 void VideoFrameSize::clear()
 {
     width = height = 0;
@@ -124,6 +106,24 @@ VideoFrame::VideoFrame()
 {}
 VideoFrame::~VideoFrame()
 {}
+
+QMPlay2PixelFormat VideoFrame::getFormat() const
+{
+    switch ((size.chromaShiftW << 8) | size.chromaShiftH)
+    {
+        case 0x0000:
+            return limited ? QMPlay2PixelFormat::YUV444P : QMPlay2PixelFormat::YUVJ444P;
+        case 0x0001:
+            return limited ? QMPlay2PixelFormat::YUV440P : QMPlay2PixelFormat::YUVJ440P;
+        case 0x0100:
+            return limited ? QMPlay2PixelFormat::YUV422P : QMPlay2PixelFormat::YUVJ422P;
+        case 0x0200:
+            return limited ? QMPlay2PixelFormat::YUV411P : QMPlay2PixelFormat::YUVJ411P;
+        case 0x0202:
+            return QMPlay2PixelFormat::YUV410P;
+    }
+    return limited ? QMPlay2PixelFormat::YUV420P : QMPlay2PixelFormat::YUVJ420P;
+}
 
 void VideoFrame::setAVFrame(AVFrame *frame)
 {

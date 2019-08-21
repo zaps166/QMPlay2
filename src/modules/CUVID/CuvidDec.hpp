@@ -78,6 +78,9 @@ private:
     VideoWriter *m_writer;
     CuvidHWAccel *m_cuvidHWAccel;
 
+    bool m_limited;
+    QMPlay2ColorSpace m_colorSpace;
+
     int m_width, m_height, m_codedHeight;
     CUvideotimestamp m_lastCuvidTS;
     QQueue<double> m_timestamps;

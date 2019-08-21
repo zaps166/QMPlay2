@@ -27,20 +27,43 @@ enum class QMPlay2PixelFormat
     None = -1,
 
     YUV420P,
+    YUVJ420P,
     YUV422P,
+    YUVJ422P,
     YUV444P,
+    YUVJ444P,
 
     YUV410P,
     YUV411P,
+    YUVJ411P,
     YUV440P,
+    YUVJ440P,
 
     Count,
 };
 using QMPlay2PixelFormats = QVector<QMPlay2PixelFormat>;
 
+enum class QMPlay2ColorSpace
+{
+    Unknown = -1,
+
+    BT709,
+    BT470BG,
+    SMPTE170M,
+    SMPTE240M,
+    BT2020,
+};
+struct LumaCoefficients
+{
+    float cR, cG, cB;
+};
+
 namespace QMPlay2PixelFormatConvert {
 
 QMPLAY2SHAREDLIB_EXPORT int toFFmpeg(QMPlay2PixelFormat pixFmt);
 QMPLAY2SHAREDLIB_EXPORT QMPlay2PixelFormat fromFFmpeg(int pixFmt);
+
+QMPLAY2SHAREDLIB_EXPORT QMPlay2ColorSpace fromFFmpegColorSpace(int colorSpace, int h);
+QMPLAY2SHAREDLIB_EXPORT LumaCoefficients getLumaCoeff(QMPlay2ColorSpace colorSpace);
 
 }

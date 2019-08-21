@@ -155,20 +155,31 @@ bool OpenGL2Writer::processParams(bool *)
 
 QMPlay2PixelFormats OpenGL2Writer::supportedPixelFormats() const
 {
-    return QMPlay2PixelFormats()
-            << QMPlay2PixelFormat::YUV420P
-            << QMPlay2PixelFormat::YUV422P
-            << QMPlay2PixelFormat::YUV444P
-            << QMPlay2PixelFormat::YUV410P
-            << QMPlay2PixelFormat::YUV411P
-            << QMPlay2PixelFormat::YUV440P
-    ;
+    return {
+        QMPlay2PixelFormat::YUV420P,
+        QMPlay2PixelFormat::YUVJ420P,
+        QMPlay2PixelFormat::YUV422P,
+        QMPlay2PixelFormat::YUVJ422P,
+        QMPlay2PixelFormat::YUV444P,
+        QMPlay2PixelFormat::YUVJ444P,
+        QMPlay2PixelFormat::YUV410P,
+        QMPlay2PixelFormat::YUV411P,
+        QMPlay2PixelFormat::YUVJ411P,
+        QMPlay2PixelFormat::YUV440P,
+        QMPlay2PixelFormat::YUVJ440P,
+    };
 }
 
 void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
 {
     drawable->isPaused = false;
     drawable->videoFrame = videoFrame;
+    if (drawable->m_limited != drawable->videoFrame.limited || drawable->m_colorSpace != drawable->videoFrame.colorSpace)
+    {
+        drawable->m_limited = drawable->videoFrame.limited;
+        drawable->m_colorSpace = drawable->videoFrame.colorSpace;
+        drawable->doReset = true;
+    }
     drawable->updateGL(drawable->sphericalView);
 }
 void OpenGL2Writer::writeOSD(const QList<const QMPlay2OSD *> &osds)
