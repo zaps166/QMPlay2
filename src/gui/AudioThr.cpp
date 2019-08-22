@@ -394,9 +394,11 @@ void AudioThr::run()
                     else
                         dataToWrite = decodedChunk;
 
-                    if (!isMuted && doSilence >= 0.0)
+                    if (doSilence >= 0.0)
                     {
                         silenceChMutex.lock();
+                        if (isMuted)
+                            doSilence = -1.0;
                         if (doSilence >= 0.0)
                         {
                             float *data = (float *)dataToWrite.data();
