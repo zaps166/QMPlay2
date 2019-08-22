@@ -345,7 +345,8 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
     addSeparator();
     newAction(Playback::tr("&Subtitles enabled"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
-    toggleSubtitles->setChecked(true);
+    if (!QMPlay2Core.getSettings().getBool("DisableSubtitlesAtStartup"))
+        toggleSubtitles->setChecked(true);
     newAction(Playback::tr("Add &subtities from file"), this, subsFromFile, false, QIcon(), false);
     newAction(Playback::tr("Set &subtitles delay"), this, subtitlesSync, true, QIcon(), false);
     newAction(Playback::tr("&Delay subtitiles") + " (100ms)", this, slowDownSubtitles, true, QIcon(), false);

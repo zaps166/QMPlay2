@@ -467,6 +467,13 @@
          </property>
         </widget>
        </item>
+       <item row="22" column="0">
+        <widget class="QCheckBox" name="disableSubtitlesAtStartup">
+         <property name="text">
+          <string>Disable subtitles at program startup</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -514,6 +521,7 @@
   <tabstop>middleMouseToggleFullscreen</tabstop>
   <tabstop>accurateSeekB</tabstop>
   <tabstop>unpauseWhenSeekingB</tabstop>
+  <tabstop>disableSubtitlesAtStartup</tabstop>
  </tabstops>
  <resources/>
  <connections/>

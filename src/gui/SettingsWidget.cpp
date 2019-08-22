@@ -184,6 +184,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("MiddleMouseToggleFullscreen", false);
     QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
     QMPSettings.init("UnpauseWhenSeeking", false);
+    QMPSettings.init("DisableSubtitlesAtStartup", false);
     QMPSettings.init("StoreARatioAndZoom", false);
     QMPSettings.init("SavePos", false);
     QMPSettings.init("KeepZoom", false);
@@ -491,6 +492,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
 
         page2->unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
+
+        page2->disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
 
         const QString modulesListTitle[3] = {
             tr("Video output priority"),
@@ -859,6 +862,7 @@ void SettingsWidget::apply()
             QMPSettings.set("MiddleMouseToggleFullscreen", page2->middleMouseToggleFullscreen->isChecked());
             QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
             QMPSettings.set("UnpauseWhenSeeking", page2->unpauseWhenSeekingB->isChecked());
+            QMPSettings.set("DisableSubtitlesAtStartup", page2->disableSubtitlesAtStartup->isChecked());
             QMPSettings.set("StoreARatioAndZoom", page2->storeARatioAndZoomB->isChecked());
 
             QStringList videoWriters, audioWriters, decoders;
