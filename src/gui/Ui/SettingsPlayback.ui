@@ -100,6 +100,13 @@
          </property>
         </widget>
        </item>
+       <item row="19" column="0">
+        <widget class="QCheckBox" name="middleMouseToggleFullscreen">
+         <property name="text">
+          <string>Middle mouse button on video dock toggles fullscreen</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="2">
         <spacer name="horizontalSpacer">
          <property name="orientation">
@@ -363,7 +370,7 @@
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
+       <item row="20" column="0">
         <widget class="QCheckBox" name="accurateSeekB">
          <property name="text">
           <string>Accurate seeking</string>
@@ -453,7 +460,7 @@
          </property>
         </widget>
        </item>
-       <item row="20" column="0">
+       <item row="21" column="0">
         <widget class="QCheckBox" name="unpauseWhenSeekingB">
          <property name="text">
           <string>Unpause when seeking</string>
@@ -504,6 +511,7 @@
   <tabstop>restoreVideoEq</tabstop>
   <tabstop>ignorePlaybackError</tabstop>
   <tabstop>leftMouseTogglePlay</tabstop>
+  <tabstop>middleMouseToggleFullscreen</tabstop>
   <tabstop>accurateSeekB</tabstop>
   <tabstop>unpauseWhenSeekingB</tabstop>
  </tabstops>

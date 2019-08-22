@@ -230,7 +230,7 @@ void VideoDock::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
         canPopup = false;
     if (e->buttons() == Qt::MiddleButton)
-        QMPlay2GUI.menuBar->player->togglePlay->trigger();
+        (!QMPlay2Core.getSettings().getBool("MiddleMouseToggleFullscreen") ? QMPlay2GUI.menuBar->player->togglePlay : QMPlay2GUI.menuBar->window->toggleFullScreen)->trigger();
     else if ((e->buttons() & (Qt::LeftButton | Qt::MiddleButton)) == (Qt::LeftButton | Qt::MiddleButton))
         QMPlay2GUI.menuBar->player->reset->trigger();
     else if ((e->buttons() & (Qt::LeftButton | Qt::RightButton)) == (Qt::LeftButton | Qt::RightButton))

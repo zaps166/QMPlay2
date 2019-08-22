@@ -181,6 +181,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("WheelAction", true);
     QMPSettings.init("WheelSeek", true);
     QMPSettings.init("LeftMouseTogglePlay", 0);
+    QMPSettings.init("MiddleMouseToggleFullscreen", false);
     QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
     QMPSettings.init("UnpauseWhenSeeking", false);
     QMPSettings.init("StoreARatioAndZoom", false);
@@ -484,6 +485,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
         page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
         page2->leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
+        page2->middleMouseToggleFullscreen->setChecked(QMPSettings.getBool("MiddleMouseToggleFullscreen"));
 
         page2->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
         page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
@@ -854,6 +856,7 @@ void SettingsWidget::apply()
             QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
             QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
             QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->checkState());
+            QMPSettings.set("MiddleMouseToggleFullscreen", page2->middleMouseToggleFullscreen->isChecked());
             QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
             QMPSettings.set("UnpauseWhenSeeking", page2->unpauseWhenSeekingB->isChecked());
             QMPSettings.set("StoreARatioAndZoom", page2->storeARatioAndZoomB->isChecked());
