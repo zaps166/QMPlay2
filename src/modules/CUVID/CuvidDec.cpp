@@ -602,7 +602,7 @@ int CuvidDec::pictureDecode(CUVIDPICPARAMS *picParams)
 }
 int CuvidDec::pictureDisplay(CUVIDPARSERDISPINFO *dispInfo)
 {
-    if (dispInfo->timestamp >= 0 && dispInfo->timestamp < m_lastCuvidTS)
+    if (dispInfo->timestamp > 0 && dispInfo->timestamp <= m_lastCuvidTS)
         m_tsWorkaround = true;
     m_lastCuvidTS = dispInfo->timestamp;
 
