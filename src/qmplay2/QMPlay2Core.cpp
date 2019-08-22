@@ -109,12 +109,12 @@ QMPlay2CoreClass::QMPlay2CoreClass()
 {
     qmplay2Core = this;
 
-    QFile f(":/Languages.csv");
+    QFile f(":/Languages.txt");
     if (f.open(QFile::ReadOnly))
     {
         for (const QByteArray &line : f.readAll().split('\n'))
         {
-            const QList<QByteArray> lineSplitted = line.split(',');
+            const QList<QByteArray> lineSplitted = line.split(':');
             if (lineSplitted.count() == 2)
                 languages[lineSplitted[0]] = lineSplitted[1];
         }
