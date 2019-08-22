@@ -1169,6 +1169,21 @@
     </message>
 </context>
 <context>
+    <name>Lyrics</name>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Тексти пісні</translation>
+    </message>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished">Переклад</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished">Тексту пісні не знайдено</translation>
+    </message>
+</context>
+<context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
@@ -2316,6 +2331,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
     </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3047,6 +3070,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Comment</source>
         <translation>Коментар</translation>
     </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Тексти пісні</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
@@ -3105,21 +3132,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Loading cover picture</source>
         <translation>Завантаження обкладинки</translation>
-    </message>
-</context>
-<context>
-    <name>Tekstowo</name>
-    <message>
-        <source>Translation</source>
-        <translation>Переклад</translation>
-    </message>
-    <message>
-        <source>Lyrics</source>
-        <translation>Тексти пісні</translation>
-    </message>
-    <message>
-        <source>Lyrics not found</source>
-        <translation>Тексту пісні не знайдено</translation>
     </message>
 </context>
 <context>

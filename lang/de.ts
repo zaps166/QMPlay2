@@ -1166,6 +1166,21 @@
     </message>
 </context>
 <context>
+    <name>Lyrics</name>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Liedtext</translation>
+    </message>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished">Übersetzung</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
@@ -2313,6 +2328,14 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3044,6 +3067,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>Comment</source>
         <translation>Kommentar</translation>
     </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Liedtext</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
@@ -3102,21 +3129,6 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>Loading cover picture</source>
         <translation>Cover wird geladen</translation>
-    </message>
-</context>
-<context>
-    <name>Tekstowo</name>
-    <message>
-        <source>Translation</source>
-        <translation>Übersetzung</translation>
-    </message>
-    <message>
-        <source>Lyrics</source>
-        <translation>Liedtext</translation>
-    </message>
-    <message>
-        <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

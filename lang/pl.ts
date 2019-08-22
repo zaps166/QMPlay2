@@ -1169,6 +1169,21 @@
     </message>
 </context>
 <context>
+    <name>Lyrics</name>
+    <message>
+        <source>Lyrics</source>
+        <translation>Tekst piosenki</translation>
+    </message>
+    <message>
+        <source>Translation</source>
+        <translation>Tłumaczenie</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation>Nie znaleziono tekstu piosenki</translation>
+    </message>
+</context>
+<context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
@@ -2316,6 +2331,14 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Użyj resamplera audio i konwersji kanałów przed filtrami i wizualizacjmi</translation>
     </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>Środkowy przycisk myszy w oknie wideo przełącza pełny ekran</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Wyłącz napisy podczas uruchamiania programu</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3047,6 +3070,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>Comment</source>
         <translation>Komentarz</translation>
     </message>
+    <message>
+        <source>Lyrics</source>
+        <translation>Tekst piosenki</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
@@ -3105,21 +3132,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Loading cover picture</source>
         <translation>Wczytywanie okładki</translation>
-    </message>
-</context>
-<context>
-    <name>Tekstowo</name>
-    <message>
-        <source>Translation</source>
-        <translation>Tłumaczenie</translation>
-    </message>
-    <message>
-        <source>Lyrics</source>
-        <translation>Tekstowo</translation>
-    </message>
-    <message>
-        <source>Lyrics not found</source>
-        <translation>Nie znaleziono tekstu piosenki</translation>
     </message>
 </context>
 <context>

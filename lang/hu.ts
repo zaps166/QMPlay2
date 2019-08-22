@@ -1169,6 +1169,21 @@
     </message>
 </context>
 <context>
+    <name>Lyrics</name>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Szöveg</translation>
+    </message>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished">Lengyel fordítás</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished">A szöveg nem található</translation>
+    </message>
+</context>
+<context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
@@ -2314,6 +2329,14 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3045,6 +3068,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <source>Comment</source>
         <translation>Megjegyzés</translation>
     </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Szöveg</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
@@ -3103,21 +3130,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Pictures</source>
         <translation>Képek</translation>
-    </message>
-</context>
-<context>
-    <name>Tekstowo</name>
-    <message>
-        <source>Lyrics</source>
-        <translation>Szöveg</translation>
-    </message>
-    <message>
-        <source>Translation</source>
-        <translation>Lengyel fordítás</translation>
-    </message>
-    <message>
-        <source>Lyrics not found</source>
-        <translation>A szöveg nem található</translation>
     </message>
 </context>
 <context>

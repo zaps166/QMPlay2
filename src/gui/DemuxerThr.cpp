@@ -772,7 +772,7 @@ void DemuxerThr::emitInfo()
             }
             else
             {
-                txt = tr("Available");
+                txt.clear();
             }
             if (tag.first == "0" || tag.first == "1") //Name and description
             {
@@ -786,7 +786,12 @@ void DemuxerThr::emitInfo()
                     info += "<br/>";
                     nameOrDescr = false;
                 }
-                info += "<b>" + StreamInfo::getTagName(tag.first) + ":</b> " + txt + "<br/>";
+                info += "<b>" + StreamInfo::getTagName(tag.first);
+                if (!txt.isEmpty())
+                    info += ":</b> " + txt;
+                else
+                    info += "</b>";
+                info += "<br/>";
             }
         }
 

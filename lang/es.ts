@@ -1169,6 +1169,21 @@
     </message>
 </context>
 <context>
+    <name>Lyrics</name>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Letras</translation>
+    </message>
+    <message>
+        <source>Translation</source>
+        <translation type="unfinished">Traducción</translation>
+    </message>
+    <message>
+        <source>Lyrics not found</source>
+        <translation type="unfinished">Letras no encontradas</translation>
+    </message>
+</context>
+<context>
     <name>MPDemux</name>
     <message>
         <source>Channels</source>
@@ -2316,6 +2331,14 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Usar el remuestreo de audio y la conversión de canales antes que los filtros y visualizaciones</translation>
     </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -3047,6 +3070,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <source>Genre</source>
         <translation>Género</translation>
     </message>
+    <message>
+        <source>Lyrics</source>
+        <translation type="unfinished">Letras</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
@@ -3105,21 +3132,6 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <message>
         <source>Genre</source>
         <translation>Género</translation>
-    </message>
-</context>
-<context>
-    <name>Tekstowo</name>
-    <message>
-        <source>Translation</source>
-        <translation>Traducción</translation>
-    </message>
-    <message>
-        <source>Lyrics</source>
-        <translation>Letras</translation>
-    </message>
-    <message>
-        <source>Lyrics not found</source>
-        <translation>Letras no encontradas</translation>
     </message>
 </context>
 <context>
