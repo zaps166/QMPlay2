@@ -33,10 +33,10 @@ Table of Contents
 
 #### Easy installation on Arch Linux / Manjaro Linux
 
-- Arch Linux only: Install AUR client (e.g. yaourt),
+- Arch Linux only: Install AUR client (e.g. yay),
 - run the following command:
 ```
-$ yaourt -S qmplay2
+$ yay -S qmplay2
 ```
 
 #### Easy installation on openSUSE Leap 42.3
@@ -128,6 +128,10 @@ Go to "Options->Modules settings" and click "Extensions" on the list. Find "Last
 Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe`):
 - `portable` - runs QMPlay2 in portable mode (settings are stored in applications directory),
 - `noautoupdates` - disables auto-updates at first run.
+
+### Custom user agent
+
+You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
 
 ## Multimedia keys
 
