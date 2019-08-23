@@ -662,29 +662,56 @@ void YouTube::setItags(int qualityIdx)
     };
 
     QList<int> qualityPresets[QualityPresetsCount];
+    {
+        qualityPresets[_720p60]  << 298 << 302;
+        qualityPresets[_1080p60] << 299 << 303 << qualityPresets[_720p60];
+        qualityPresets[_1440p60] << 308 << qualityPresets[_1080p60];
+        qualityPresets[_2160p60] << 315 << qualityPresets[_1440p60];
+        qualityPresets[_4320p60] << 272 << qualityPresets[_2160p60];
 
-    qualityPresets[_720p60]  << 298 << 302;
-    qualityPresets[_1080p60] << 299 << 303 << qualityPresets[_720p60];
-    qualityPresets[_1440p60] << 308 << qualityPresets[_1080p60];
-    qualityPresets[_2160p60] << 315 << qualityPresets[_1440p60];
-    qualityPresets[_4320p60] << 272 << qualityPresets[_2160p60];
+        qualityPresets[_480p]  << 135 << 134 << 133;
+        qualityPresets[_720p]  << 136 << 247 << qualityPresets[_480p];
+        qualityPresets[_1080p] << 137 << 248 << qualityPresets[_720p];
+        qualityPresets[_1440p] << 264 << 271 << qualityPresets[_1080p];
+        qualityPresets[_2160p] << 266 << 313 << qualityPresets[_1440p];
 
-    qualityPresets[_480p]  << 135 << 134 << 133;
-    qualityPresets[_720p]  << 136 << 247 << qualityPresets[_480p];
-    qualityPresets[_1080p] << 137 << 248 << qualityPresets[_720p];
-    qualityPresets[_1440p] << 264 << 271 << qualityPresets[_1080p];
-    qualityPresets[_2160p] << 266 << 313 << qualityPresets[_1440p];
+        // Append also non-60 FPS itags to 60 FPS itags
+        qualityPresets[_720p60]  += qualityPresets[_720p];
+        qualityPresets[_1080p60] += qualityPresets[_1080p];
+        qualityPresets[_1440p60] += qualityPresets[_1440p];
+        qualityPresets[_2160p60] += qualityPresets[_2160p];
+        qualityPresets[_4320p60] += qualityPresets[_2160p];
+    }
 
-    // Append also non-60 FPS itags to 60 FPS itags
-    qualityPresets[_720p60]  += qualityPresets[_720p];
-    qualityPresets[_1080p60] += qualityPresets[_1080p];
-    qualityPresets[_1440p60] += qualityPresets[_1440p];
-    qualityPresets[_2160p60] += qualityPresets[_2160p];
-    qualityPresets[_4320p60] += qualityPresets[_2160p];
+    QList<int> liveQualityPresets[QualityPresetsCount];
+    {
+        liveQualityPresets[_720p60]  << 300;
+        liveQualityPresets[_1080p60] << 301 << liveQualityPresets[_720p60];
+        liveQualityPresets[_1440p60] << liveQualityPresets[_1080p60];
+        liveQualityPresets[_2160p60] << liveQualityPresets[_1440p60];
+        liveQualityPresets[_4320p60] << liveQualityPresets[_2160p60];
+
+        liveQualityPresets[_480p]  << 94 << 93 << 92 << 91;
+        liveQualityPresets[_720p]  << 95 << liveQualityPresets[_480p];
+        liveQualityPresets[_1080p] << 96 << liveQualityPresets[_720p];
+        liveQualityPresets[_1440p] << 265 << liveQualityPresets[_1080p];
+        liveQualityPresets[_2160p] << 267 << liveQualityPresets[_1440p];
+
+        // Append also non-60 FPS itags to 60 FPS itags
+        liveQualityPresets[_720p60]  += liveQualityPresets[_720p];
+        liveQualityPresets[_1080p60] += liveQualityPresets[_1080p];
+        liveQualityPresets[_1440p60] += liveQualityPresets[_1440p];
+        liveQualityPresets[_2160p60] += liveQualityPresets[_2160p];
+        liveQualityPresets[_4320p60] += liveQualityPresets[_2160p];
+    }
 
     QMutexLocker locker(&m_itagsMutex);
     m_videoItags = qualityPresets[qualityIdx];
     m_audioItags = {251, 171, 140, 250, 249};
+    m_hlsItags = liveQualityPresets[qualityIdx];
+    m_singleUrlItags = {43, 18};
+    if (qualityIdx != _480p)
+        m_singleUrlItags.prepend(22);
 }
 
 void YouTube::deleteReplies()
@@ -881,7 +908,6 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         return {};
 
     const auto &rawErrOutput = rawOutputs[1];
-    const bool hasTitle = !rawErrOutput.contains("Unable to extract video title", Qt::CaseInsensitive);
 
     const auto o = QJsonDocument::fromJson(rawOutput).object();
     if (o.isEmpty())
@@ -891,16 +917,20 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     if (formats.isEmpty())
         return {};
 
+    const bool hasTitle = !rawErrOutput.contains("Unable to extract video title", Qt::CaseInsensitive);
     const auto title = hasTitle ? o["title"].toString() : QString();
 
     const bool audioOnly = (param.compare("audio", Qt::CaseInsensitive) == 0);
+    const bool isLive = o["is_live"].toBool();
 
     QStringList urls;
     QStringList exts;
 
     m_itagsMutex.lock();
-    const auto videoItags = audioOnly ? decltype(m_videoItags)() : m_videoItags;
+    const auto videoItags = m_videoItags;
     const auto audioItags = m_audioItags;
+    const auto hlsItags = m_hlsItags;
+    const auto singleUrlItags = m_singleUrlItags;
     m_itagsMutex.unlock();
 
     QHash<int, QPair<QString, QString>> itagsData;
@@ -911,6 +941,13 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (format.isEmpty())
             continue;
 
+        const auto container = format["container"].toString();
+        if (container.contains("dash", Qt::CaseInsensitive))
+        {
+            // Skip MP4 DASH, because it doesn't work properly
+            continue;
+        }
+
         const auto itag = format["format_id"].toString().toInt();
         const auto url = format["url"].toString();
         const auto ext = format["ext"].toString();
@@ -918,29 +955,39 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             itagsData[itag] = {url, "." + ext};
     }
 
-    for (auto &&videoItag : videoItags)
-    {
-        auto it = itagsData.constFind(videoItag);
-        if (it != itagsData.cend())
+    auto appendUrl = [&](const QList<int> &itags) {
+        for (auto &&itag : itags)
         {
-            urls += it->first;
-            exts += it->second;
-            break;
+            auto it = itagsData.constFind(itag);
+            if (it != itagsData.cend())
+            {
+                urls += it->first;
+                exts += it->second;
+                break;
+            }
         }
+    };
+
+    if (!isLive)
+    {
+        if (!audioOnly)
+            appendUrl(videoItags);
+        appendUrl(audioItags);
     }
-    for (auto &&audioItag : audioItags)
+    if (urls.count() != 1 + (audioOnly ? 0 : 1))
     {
-        auto it = itagsData.constFind(audioItag);
-        if (it != itagsData.cend())
-        {
-            urls += it->first;
-            exts += it->second;
-            break;
-        }
+        if (!urls.isEmpty())
+            urls.clear();
+        appendUrl(hlsItags);
+        if (urls.isEmpty())
+            appendUrl(singleUrlItags);
     }
 
     if (urls.isEmpty())
+    {
+        qCritical() << "YouTube :: Can't find desired format, available:" << itagsData.keys();
         return {};
+    }
 
     const auto subtitles = o["subtitles"].toObject();
     QString lang = QMPlay2Core.getSettings().getString("SubtitlesLanguage");
