@@ -341,7 +341,30 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
                         {
                             audioUrl = line.mid(6, idx - 6);
                             if (!audioUrl.isEmpty())
-                                audioUrl.prepend(Functions::filePath(url));
+                            {
+                                audioUrl.prepend(Functions::filePath(url.mid(7)));
+                                if (!QFile::exists(audioUrl))
+                                {
+                                    const QStringList knownExts {"wav", "WAV", "flac", "FLAC", "alac", "ALAC", "ape", "APE"};
+                                    const auto ext = Functions::fileExt(audioUrl);
+                                    if (!ext.isEmpty() && knownExts.contains(ext))
+                                    {
+                                        for (auto &&knownExt : knownExts)
+                                        {
+                                            if (knownExt == ext)
+                                                continue;
+
+                                            const QString tmpAudioUrl = audioUrl.mid(0, audioUrl.length() - ext.length()) + knownExt;
+                                            if (QFile::exists(tmpAudioUrl))
+                                            {
+                                                audioUrl = tmpAudioUrl;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                audioUrl.prepend("file://");
+                            }
                         }
                     }
                 }
