@@ -55,8 +55,6 @@ if(WIN32)
     add_feature_info(CMD USE_CMD "Show CMD when running QMPlay2")
 endif()
 
-option(USE_JEMALLOC "Link to jemalloc" OFF)
-
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
@@ -254,15 +252,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
         string(REPLACE "--no-undefined," "" CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS})
         string(REPLACE ",--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS})
         string(REPLACE "--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS})
-    endif()
-
-    if(USE_JEMALLOC AND CMAKE_EXE_LINKER_FLAGS)
-        # link to all libraries also when unneeded (allows to use jemalloc)
-        string(REPLACE "-Wl,--as-needed," "-Wl," CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
-        string(REPLACE "-Wl,--as-needed" "" CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
-        string(REPLACE "--as-needed," "" CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
-        string(REPLACE ",--as-needed" "" CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
-        string(REPLACE "--as-needed" "" CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
     endif()
 endif()
 

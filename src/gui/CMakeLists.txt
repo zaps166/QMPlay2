@@ -169,11 +169,6 @@ if(SET_INSTALL_RPATH)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
 
-if(USE_JEMALLOC)
-    pkg_check_modules(JEMALLOC jemalloc REQUIRED)
-    link_directories(${JEMALLOC_LIBRARY_DIRS})
-endif()
-
 if(WIN32 AND NOT USE_CMD)
     set(WIN32_EXE WIN32) # don't show CMD when running on windows
 endif()
@@ -194,10 +189,6 @@ else()
     add_library(${PROJECT_NAME} SHARED
         ${GUI_FILES}
     )
-endif()
-
-if(USE_JEMALLOC)
-    target_link_libraries(${PROJECT_NAME} ${JEMALLOC_LIBRARIES})
 endif()
 
 target_link_libraries(${PROJECT_NAME}
