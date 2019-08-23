@@ -33,6 +33,7 @@ class QMPLAY2SHAREDLIB_EXPORT YouTubeDL final : public BasicIO
 
 public:
     static QString getFilePath();
+    static QStringList getCommonArgs();
 
     static bool fixUrl(const QString &url, QString &outUrl, IOController<> *ioCtrl, QString *name, QString *extension, QString *error);
 
@@ -41,11 +42,24 @@ public:
 
     void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr);
 
-    QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true, bool rawOutput = false);
+    QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool rawOutput = false);
 
 private:
     void abort() override;
 
+private:
+    bool prepare();
+
+    bool download();
+    bool update();
+
+    void ensureExecutable();
+
+    bool onProcessCantStart();
+
+private:
+    const QString m_ytDlPath;
+    const QStringList m_commonArgs;
     IOController<NetworkReply> m_reply;
     QProcess m_process;
     bool m_aborted;

@@ -872,9 +872,16 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     if (!youTubeDL.assign(new YouTubeDL))
         return {};
 
-    const auto rawOutput = youTubeDL->exec(url, {"--flat-playlist", "--write-sub", "-J"}, nullptr, true, true).value(0).toUtf8();
+    const auto rawOutputs = youTubeDL->exec(url, {"--flat-playlist", "--write-sub", "-J"}, nullptr, true);
+    if (rawOutputs.count() != 2)
+        return {};
+
+    const auto rawOutput = rawOutputs[0].toUtf8();
     if (rawOutput.isEmpty())
         return {};
+
+    const auto &rawErrOutput = rawOutputs[1];
+    const bool hasTitle = !rawErrOutput.contains("Unable to extract video title", Qt::CaseInsensitive);
 
     const auto o = QJsonDocument::fromJson(rawOutput).object();
     if (o.isEmpty())
@@ -884,7 +891,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     if (formats.isEmpty())
         return {};
 
-    const auto title = o["title"].toString();
+    const auto title = hasTitle ? o["title"].toString() : QString();
 
     const bool audioOnly = (param.compare("audio", Qt::CaseInsensitive) == 0);
 
