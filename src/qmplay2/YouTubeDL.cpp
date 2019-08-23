@@ -32,7 +32,7 @@
 
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
-static QMutex g_mutex;
+static QMutex g_mutex(QMutex::Recursive);
 
 QString YouTubeDL::getFilePath()
 {
@@ -261,13 +261,18 @@ bool YouTubeDL::prepare()
     return false;
 #endif
 
-    QMutexLocker locker(&g_mutex);
+    while (!g_mutex.tryLock(100))
+    {
+        if (m_aborted)
+            return false;
+    }
 
     if (!QFileInfo(m_ytDlPath).exists())
     {
         if (!download())
         {
             qCritical() << "Unable to download \"youtube-dl\"";
+            g_mutex.unlock();
             return false;
         }
         g_mustUpdate = false;
@@ -277,14 +282,22 @@ bool YouTubeDL::prepare()
     {
         const bool processOk = update();
         if (m_aborted)
+        {
+            g_mutex.unlock();
             return false;
+        }
         if (!processOk)
-            return onProcessCantStart();
+        {
+            const bool ret = onProcessCantStart();
+            g_mutex.unlock();
+            return ret;
+        }
         g_mustUpdate = false;
     }
 
     ensureExecutable();
 
+    g_mutex.unlock();
     return true;
 }
 
