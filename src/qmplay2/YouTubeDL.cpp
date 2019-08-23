@@ -128,7 +128,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     }
 }
 
-QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate)
+QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString *silentErr, bool canUpdate, bool rawOutput)
 {
 #ifndef Q_OS_ANDROID
     enum class Lock
@@ -194,7 +194,15 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
     if (httpProxy && *httpProxy)
         commonArgs += {"--proxy", httpProxy};
 
-    m_process.start(ytDlPath, QStringList() << url << "-g" << args << commonArgs << "-j");
+    QStringList processArgs;
+    processArgs += url;
+    if (!rawOutput)
+        processArgs += "-g";
+    processArgs += args;
+    processArgs += commonArgs;
+    if (!rawOutput)
+        processArgs += "-j";
+    m_process.start(ytDlPath, processArgs);
     if (m_process.waitForFinished() && !m_aborted)
     {
         const auto finishWithError = [&](const QString &error) {
@@ -215,25 +223,29 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
         if (isExitOk)
         {
-            result = QString(m_process.readAllStandardOutput()).split('\n', QString::SkipEmptyParts);
-
-            // Verify if URLs has printable characters, because sometimes we
-            // can get binary garbage at output (especially on Openload).
-            for (const QString &line : asConst(result))
+            result = QStringList(m_process.readAllStandardOutput());
+            if (!rawOutput)
             {
-                if (line.startsWith("http"))
+                result = result[0].split('\n', QString::SkipEmptyParts);
+
+                // Verify if URLs has printable characters, because sometimes we
+                // can get binary garbage at output (especially on Openload).
+                for (const QString &line : asConst(result))
                 {
-                    for (const QChar &c : line)
+                    if (line.startsWith("http"))
                     {
-                        if (!c.isPrint())
+                        for (const QChar &c : line)
                         {
-                            error = "Invalid stream URL";
-                            isExitOk = false;
-                            break;
+                            if (!c.isPrint())
+                            {
+                                error = "Invalid stream URL";
+                                isExitOk = false;
+                                break;
+                            }
                         }
+                        if (!isExitOk)
+                            break;
                     }
-                    if (!isExitOk)
-                        break;
                 }
             }
         }
@@ -308,21 +320,24 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
             return {};
         }
 
-        //[Title], url, JSON, [url, JSON]
-        for (int i = result.count() - 1; i >= 0; --i)
+        if (!rawOutput)
         {
-            if (i > 0 && result.at(i).startsWith('{'))
+            //[Title], url, JSON, [url, JSON]
+            for (int i = result.count() - 1; i >= 0; --i)
             {
-                const QString url = result.at(i - 1);
-
-                const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
-                for (const QJsonValue &formats : json.object()["formats"].toArray())
+                if (i > 0 && result.at(i).startsWith('{'))
                 {
-                    if (url == formats.toObject()["url"].toString())
-                        QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
-                }
+                    const QString url = result.at(i - 1);
 
-                result.removeAt(i);
+                    const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
+                    for (const QJsonValue &formats : json.object()["formats"].toArray())
+                    {
+                        if (url == formats.toObject()["url"].toString())
+                            QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                    }
+
+                    result.removeAt(i);
+                }
             }
         }
 

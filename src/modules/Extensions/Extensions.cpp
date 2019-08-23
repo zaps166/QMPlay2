@@ -46,12 +46,8 @@ Extensions::Extensions() :
     lastfm = QIcon(":/lastfm.svgz");
 #endif
 
-    init("YouTube/ShowAdditionalInfo", false);
-    init("YouTube/MultiStream", true);
+    init("YouTube/ShowUserName", false);
     init("YouTube/Subtitles", true);
-    init("YouTube/ItagVideoList", YouTube::getQualityPresetString(YouTube::_1080p60));
-    init("YouTube/ItagAudioList", QStringList{"251", "171", "140"});
-    init("YouTube/ItagList", QStringList{"22", "43", "18"});
     init("YouTube/SortBy", 0);
 
 #ifdef USE_LASTFM
@@ -144,78 +140,18 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 #endif
 
-    const ItagNames itagVideoNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagVideoList"), YouTube::MEDIA_VIDEO);
-    const ItagNames itagAudioNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagAudioList"), YouTube::MEDIA_AUDIO);
-    const ItagNames itagNames = YouTube::getItagNames(sets().getStringList("YouTube/ItagList"), YouTube::MEDIA_AV);
-
     QGroupBox *youTubeB = new QGroupBox("YouTube");
 
-    additionalInfoB = new QCheckBox(tr("Show additional search information"));
-    additionalInfoB->setChecked(sets().getBool("YouTube/ShowAdditionalInfo"));
-
-    multiStreamB = new QCheckBox(tr("Use different audio and video streams"));
-    multiStreamB->setChecked(sets().getBool("YouTube/MultiStream"));
-    connect(multiStreamB, SIGNAL(clicked(bool)), this, SLOT(enableItagLists(bool)));
+    userNameB = new QCheckBox(tr("Show user name in search results"));
+    userNameB->setChecked(sets().getBool("YouTube/ShowUserName"));
 
     subtitlesB = new QCheckBox(tr("Display subtitles if available"));
     subtitlesB->setToolTip(tr("Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language."));
     subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
 
-
-    QLabel *itagL = new QLabel(tr("Priority of default video/audio quality") + ": ");
-
-    itagLW = new QListWidget;
-    itagLW->setDragDropMode(QListWidget::InternalMove);
-    itagLW->setSelectionMode(QListWidget::ExtendedSelection);
-
-    QLabel *itagVideoL = new QLabel(tr("Priority of default video quality") + ": ");
-
-    itagVideoLW = new QListWidget;
-    itagVideoLW->setDragDropMode(QListWidget::InternalMove);
-    itagVideoLW->setSelectionMode(QListWidget::ExtendedSelection);
-
-    QLabel *itagAudioL = new QLabel(tr("Priority of default audio quality") + ": ");
-
-    itagAudioLW = new QListWidget;
-    itagAudioLW->setDragDropMode(QListWidget::InternalMove);
-    itagAudioLW->setSelectionMode(QListWidget::ExtendedSelection);
-
-    for (int i = 0; i < itagVideoNames.first.count(); ++i)
-    {
-        QListWidgetItem *lWI = new QListWidgetItem(itagVideoLW);
-        lWI->setText(itagVideoNames.first[i]);
-        lWI->setData(Qt::UserRole, itagVideoNames.second[i]);
-    }
-    for (int i = 0; i < itagAudioNames.first.count(); ++i)
-    {
-        QListWidgetItem *lWI = new QListWidgetItem(itagAudioLW);
-        lWI->setText(itagAudioNames.first[i]);
-        lWI->setData(Qt::UserRole, itagAudioNames.second[i]);
-    }
-    for (int i = 0; i < itagNames.first.count(); ++i)
-    {
-        QListWidgetItem *lWI = new QListWidgetItem(itagLW);
-        lWI->setText(itagNames.first[i]);
-        lWI->setData(Qt::UserRole, itagNames.second[i]);
-    }
-
-    enableItagLists(multiStreamB->isChecked());
-
-    QGridLayout *itagLayout = new QGridLayout;
-    itagLayout->addWidget(itagVideoL, 0, 0, 1, 1);
-    itagLayout->addWidget(itagVideoLW, 1, 0, 1, 1);
-    itagLayout->addWidget(itagAudioL, 0, 1, 1, 1);
-    itagLayout->addWidget(itagAudioLW, 1, 1, 1, 1);
-    itagLayout->addWidget(itagL, 0, 2, 1, 1);
-    itagLayout->addWidget(itagLW, 1, 2, 1, 1);
-    itagLayout->setMargin(0);
-
-
     layout = new QGridLayout(youTubeB);
-    layout->addWidget(additionalInfoB, 0, 0, 1, 3);
-    layout->addWidget(multiStreamB, 1, 0, 1, 3);
-    layout->addWidget(subtitlesB, 2, 0, 1, 3);
-    layout->addLayout(itagLayout, 3, 0, 1, 3);
+    layout->addWidget(userNameB);
+    layout->addWidget(subtitlesB);
     layout->setMargin(2);
 
 #ifdef USE_LASTFM
@@ -257,7 +193,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 
     QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setProperty("NoVHSpacer", true);
+    mainLayout->setProperty("NoVHSpacer", false);
 #ifdef USE_MPRIS2
     mainLayout->addWidget(MPRIS2B);
 #endif
@@ -267,12 +203,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 }
 
-void ModuleSettingsWidget::enableItagLists(bool b)
-{
-    itagVideoLW->setEnabled(b);
-    itagAudioLW->setEnabled(b);
-    itagLW->setDisabled(b);
-}
 #ifdef USE_LASTFM
 void ModuleSettingsWidget::loginPasswordEnable(bool checked)
 {
@@ -291,20 +221,8 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("MPRIS2/Enabled", MPRIS2B->isChecked());
 #endif
 
-    sets().set("YouTube/ShowAdditionalInfo", additionalInfoB->isChecked());
-    sets().set("YouTube/MultiStream", multiStreamB->isChecked());
+    sets().set("YouTube/ShowUserName", userNameB->isChecked());
     sets().set("YouTube/Subtitles", subtitlesB->isChecked());
-
-    QStringList itagsVideo, itagsAudio, itags;
-    for (int i = 0; i < itagVideoLW->count(); ++i)
-        itagsVideo += itagVideoLW->item(i)->data(Qt::UserRole).toString();
-    for (int i = 0; i < itagAudioLW->count(); ++i)
-        itagsAudio += itagAudioLW->item(i)->data(Qt::UserRole).toString();
-    for (int i = 0; i < itagLW->count(); ++i)
-        itags += itagLW->item(i)->data(Qt::UserRole).toString();
-    sets().set("YouTube/ItagVideoList", itagsVideo);
-    sets().set("YouTube/ItagAudioList", itagsAudio);
-    sets().set("YouTube/ItagList", itags);
 
 #ifdef USE_LASTFM
     sets().set("LastFM/DownloadCovers", downloadCoversGB->isChecked());

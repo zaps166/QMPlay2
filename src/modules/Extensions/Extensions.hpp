@@ -50,7 +50,6 @@ class ModuleSettingsWidget final : public Module::SettingsWidget
 public:
     ModuleSettingsWidget(Module &);
 private slots:
-    void enableItagLists(bool b);
 #ifdef USE_LASTFM
     void loginPasswordEnable(bool checked);
     void passwordEdited();
@@ -62,8 +61,7 @@ private:
     QCheckBox *MPRIS2B;
 #endif
 
-    QCheckBox *additionalInfoB, *multiStreamB, *subtitlesB;
-    QListWidget *itagLW, *itagVideoLW, *itagAudioLW;
+    QCheckBox *userNameB, *subtitlesB;
 
 #ifdef USE_LASTFM
     QGroupBox *downloadCoversGB;

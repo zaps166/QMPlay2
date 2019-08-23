@@ -41,7 +41,7 @@ public:
 
     void addr(const QString &url, const QString &param, QString *streamUrl, QString *name, QString *extension, QString *err = nullptr);
 
-    QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true);
+    QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool canUpdate = true, bool rawOutput = false);
 
 private:
     void abort() override;
