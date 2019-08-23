@@ -1506,32 +1506,12 @@
         <translation>A program használata MPRIS2 felületen keresztül</translation>
     </message>
     <message>
-        <source>Show additional search information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use different audio and video streams</source>
-        <translation>Különböző hang és kép csatornák használata</translation>
-    </message>
-    <message>
         <source>Display subtitles if available</source>
         <translation>Feliratok megjelenítése, ha elérhetők</translation>
     </message>
     <message>
         <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
         <translation>Feliratok megjelenítése a YouTube-ról, az alapértelmezett feliratnyelv és a QMPlay2 nyelve szerint.</translation>
-    </message>
-    <message>
-        <source>Priority of default video/audio quality</source>
-        <translation>Az alapértelmezett hang/kép minőség prioritása</translation>
-    </message>
-    <message>
-        <source>Priority of default video quality</source>
-        <translation>Az alapértelmezett videó minőség prioritása</translation>
-    </message>
-    <message>
-        <source>Priority of default audio quality</source>
-        <translation>Az alapértelmezett hangminőség prioritása</translation>
     </message>
     <message>
         <source>Downloads covers</source>
@@ -1843,6 +1823,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show user name in search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2837,8 +2821,12 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <translation>Oldal címének másolása</translation>
     </message>
     <message>
-        <source>Copy stream address</source>
-        <translation>Adatfolyam címének másolása</translation>
+        <source>Audio and video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

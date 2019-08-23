@@ -1543,10 +1543,6 @@
         <translation>用于解码视频时的线程数</translation>
     </message>
     <message>
-        <source>Show additional search information</source>
-        <translation>显示额外的搜索信息</translation>
-    </message>
-    <message>
         <source>FFT spectrum scale</source>
         <translation>FFT 频谱仪缩放</translation>
     </message>
@@ -1657,22 +1653,6 @@
     <message>
         <source>Default length</source>
         <translation>默认长度</translation>
-    </message>
-    <message>
-        <source>Use different audio and video streams</source>
-        <translation>使用不同的音视频流</translation>
-    </message>
-    <message>
-        <source>Priority of default video/audio quality</source>
-        <translation>默认的视频/音频质量的优先级</translation>
-    </message>
-    <message>
-        <source>Priority of default video quality</source>
-        <translation>默认视频质量优先级</translation>
-    </message>
-    <message>
-        <source>Priority of default audio quality</source>
-        <translation>默认音频质量优先级</translation>
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
@@ -1839,6 +1819,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show user name in search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2831,8 +2815,12 @@ QMPlay2 will not display icons!</source>
         <translation>复制网址</translation>
     </message>
     <message>
-        <source>Copy stream address</source>
-        <translation>复制流地址</translation>
+        <source>Audio and video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

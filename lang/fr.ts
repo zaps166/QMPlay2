@@ -1543,10 +1543,6 @@
         <translation>Nom de fils utilisés pour décoder la vidéo</translation>
     </message>
     <message>
-        <source>Show additional search information</source>
-        <translation>Afficher des informations de recherche supplémentaires</translation>
-    </message>
-    <message>
         <source>FFT spectrum scale</source>
         <translation>Echelle du spectre FFT</translation>
     </message>
@@ -1656,22 +1652,6 @@
     </message>
     <message>
         <source>Default length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use different audio and video streams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Priority of default video/audio quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Priority of default video quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Priority of default audio quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1839,6 +1819,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Swap stereo channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show user name in search results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2831,8 +2815,12 @@ QMPlay2 will not display icons!</source>
         <translation>Copier l&apos;adresse de la page</translation>
     </message>
     <message>
-        <source>Copy stream address</source>
-        <translation>Copier l&apos;adresse du flux</translation>
+        <source>Audio and video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

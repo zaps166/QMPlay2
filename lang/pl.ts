@@ -1546,10 +1546,6 @@
         <translation>Ilość wątków użytych do dekodowania wideo</translation>
     </message>
     <message>
-        <source>Show additional search information</source>
-        <translation>Pokazuj dodatkowe informacje wyszukiwania</translation>
-    </message>
-    <message>
         <source>FFT spectrum scale</source>
         <translation>Skala widma FFT</translation>
     </message>
@@ -1660,22 +1656,6 @@
     <message>
         <source>Default length</source>
         <translation>Domyślna długość</translation>
-    </message>
-    <message>
-        <source>Use different audio and video streams</source>
-        <translation>Użyj różnych strumieni obrazu i dźwięku</translation>
-    </message>
-    <message>
-        <source>Priority of default video/audio quality</source>
-        <translation>Priorytet domyślnej jakości obrazu/dźwięku</translation>
-    </message>
-    <message>
-        <source>Priority of default video quality</source>
-        <translation>Priorytet domyślnej jakości obrazu</translation>
-    </message>
-    <message>
-        <source>Priority of default audio quality</source>
-        <translation>Priorytet domyślnej jakości dźwięku</translation>
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
@@ -1846,6 +1826,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Swap stereo channels</source>
         <translation>Zamień kanały stereo</translation>
+    </message>
+    <message>
+        <source>Show user name in search results</source>
+        <translation>Pokazuj nazwę użytkownika w wynikach wyszukiwania</translation>
     </message>
 </context>
 <context>
@@ -2839,8 +2823,12 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
         <translation>Kopiuj adres strony</translation>
     </message>
     <message>
-        <source>Copy stream address</source>
-        <translation>Kopiuj adres strumienia</translation>
+        <source>Audio and video</source>
+        <translation>Dźwięk i obraz</translation>
+    </message>
+    <message>
+        <source>Audio only</source>
+        <translation>Tylko dźwięk</translation>
     </message>
 </context>
 <context>

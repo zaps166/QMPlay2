@@ -1442,10 +1442,6 @@
         <translation>Formato</translation>
     </message>
     <message>
-        <source>Show additional search information</source>
-        <translation>Mostrar información de búsqueda adicional</translation>
-    </message>
-    <message>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
@@ -1662,22 +1658,6 @@
         <translation>Sincronización vertical</translation>
     </message>
     <message>
-        <source>Use different audio and video streams</source>
-        <translation>Usar flujos de audio y vídeo distintos</translation>
-    </message>
-    <message>
-        <source>Priority of default video/audio quality</source>
-        <translation>Prioridad de la calidad de vídeo/audio por omisión</translation>
-    </message>
-    <message>
-        <source>Priority of default video quality</source>
-        <translation>Prioridad de la calidad de vídeo por omisión</translation>
-    </message>
-    <message>
-        <source>Priority of default audio quality</source>
-        <translation>Prioridad de la calidad de audio por omisión</translation>
-    </message>
-    <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Forzar el renderizado a textura si es posible (no recomendado)</translation>
     </message>
@@ -1846,6 +1826,10 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     <message>
         <source>Swap stereo channels</source>
         <translation>Intercambiar los canales estéreo</translation>
+    </message>
+    <message>
+        <source>Show user name in search results</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2839,8 +2823,12 @@ QMPlay2 will not display icons!</source>
         <translation>Duración</translation>
     </message>
     <message>
-        <source>Copy stream address</source>
-        <translation>Copiar dirección de la secuencia</translation>
+        <source>Audio and video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
