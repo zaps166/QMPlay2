@@ -1,17 +1,24 @@
-Changes in QMPlay2 build 19.05.27:
-	- a lot of VA-API improvements (some old drivers might cease to work - I can't test them),
+Changes in QMPlay2 build 19.08.23:
+	- a lot of VA-API improvements including zero-copy on OpenGL (some old drivers might cease to work - I can't test them),
+	- fix loading of QMPlay2 modules (on some OS'es it leads to crash),
 	- improve full screen switching (fixes regression since 18.12.26),
 	- add "CustomUserAgent" into a "General" section in QMPlay2.ini,
 	- fix black video when decoding videos with color palette,
+	- add option to disable subtitles at program startup,
+	- remove QMake build system, added Android to CMake,
 	- improve displaying of graphical subtitles,
 	- rewrite MediaBrowser, now use JavaScript,
+	- a lot of YouTube and youtube-dl changes,
 	- show native window file path separator,
 	- add "opennew" command line argument,
+	- display lyrics from file metadata,
+	- fix language codes for MKV files,
+	- add initial colorspace support,
 	- add stereo channels swapping,
 	- add "always on top" option,
+	- bugfixes and improvements,
 	- LastFM scrobble fixes,
 	- require FFmpeg 3.3,
-	- minor bugfix,
 
 Changes in QMPlay2 build 18.12.26:
 	- use audio resampler/channel converter before filters/visualization (default option),
