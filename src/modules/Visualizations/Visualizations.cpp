@@ -50,7 +50,7 @@ Visualizations::Visualizations() :
 
     init("RefreshTime", ms);
     init("SimpleVis/SoundLength", ms);
-    init("FFTSpectrum/Size", 7);
+    init("FFTSpectrum/Size", 8);
 }
 
 QList<Visualizations::Info> Visualizations::getModulesInfo(const bool) const
@@ -107,7 +107,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     sndLenB->setValue(sets().getInt("SimpleVis/SoundLength"));
 
     fftSizeB = new QSpinBox;
-    fftSizeB->setRange(5, 10);
+    fftSizeB->setRange(5, 12);
     fftSizeB->setPrefix("2^");
     fftSizeB->setValue(sets().getInt("FFTSpectrum/Size"));
 
