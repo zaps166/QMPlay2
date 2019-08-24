@@ -35,6 +35,7 @@ public:
 private:
     void paint(QPainter &p) override;
 
+    void mouseMoveEvent(QMouseEvent *e) override;
 
     void start() override;
     void stop() override;

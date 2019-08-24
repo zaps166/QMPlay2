@@ -20,6 +20,7 @@
 #include <Functions.hpp>
 
 #include <QPainter>
+#include <qevent.h>
 
 extern "C"
 {
@@ -103,6 +104,16 @@ void FFTSpectrumW::paint(QPainter &p)
 
     if (stopped && tim.isActive() && canStop)
         tim.stop();
+}
+
+void FFTSpectrumW::mouseMoveEvent(QMouseEvent *e)
+{
+    if (srate > 0)
+    {
+        const int freq = qRound((e->pos().x() + 0.5) * srate / width() / 2.0);
+        QMPlay2Core.statusBarMessage(tr("Pointed frequency: %1 Hz").arg(freq), 2000);
+    }
+    VisWidget::mouseMoveEvent(e);
 }
 
 void FFTSpectrumW::start()
