@@ -84,7 +84,7 @@ int NetworkAccessJS::start(QJSValue args, QJSValue onFinished, QJSValue onProgre
     const auto id = QMPlay2Core.getCommonJS()->insertNetworkReply(reply);
 
     connect(reply, &NetworkReply::finished,
-            this, [=]() mutable {
+            reply, [=]() mutable {
         if (onFinished.isCallable())
         {
             onFinished.call({
