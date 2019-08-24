@@ -819,6 +819,10 @@
         <source>FFT Spectrum</source>
         <translation>FFT Spektrum</translation>
     </message>
+    <message>
+        <source>Pointed frequency: %1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFmpeg</name>
@@ -1543,10 +1547,6 @@
         <translation>Anzahl der Threads die verwendet werden, um das Video zu dekodieren</translation>
     </message>
     <message>
-        <source>FFT spectrum scale</source>
-        <translation>FFT Spektrum Skala</translation>
-    </message>
-    <message>
         <source>Demuxer</source>
         <translation>Demuxer</translation>
     </message>
@@ -1826,6 +1826,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

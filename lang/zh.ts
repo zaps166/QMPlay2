@@ -819,6 +819,10 @@
         <source>FFT Spectrum</source>
         <translation>FFT 频谱仪</translation>
     </message>
+    <message>
+        <source>Pointed frequency: %1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFmpeg</name>
@@ -1543,10 +1547,6 @@
         <translation>用于解码视频时的线程数</translation>
     </message>
     <message>
-        <source>FFT spectrum scale</source>
-        <translation>FFT 频谱仪缩放</translation>
-    </message>
-    <message>
         <source>Demuxer</source>
         <translation>解复用器</translation>
     </message>
@@ -1823,6 +1823,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Show user name in search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

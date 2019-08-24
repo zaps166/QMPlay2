@@ -822,6 +822,10 @@
         <source>FFT Spectrum</source>
         <translation>FFT Spektrum</translation>
     </message>
+    <message>
+        <source>Pointed frequency: %1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFmpeg</name>
@@ -1794,10 +1798,6 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>FFT spectrum scale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Use shared memory</source>
         <translation>Megosztott memória használata</translation>
     </message>
@@ -1827,6 +1827,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Show user name in search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

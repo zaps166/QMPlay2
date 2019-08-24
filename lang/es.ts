@@ -822,6 +822,10 @@
         <source>FFT Spectrum</source>
         <translation>Espectro FFT</translation>
     </message>
+    <message>
+        <source>Pointed frequency: %1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFmpeg</name>
@@ -1386,10 +1390,6 @@
         <translation>Nombre de usuario</translation>
     </message>
     <message>
-        <source>FFT spectrum scale</source>
-        <translation>Escala del espectro FFT</translation>
-    </message>
-    <message>
         <source>Autodetect</source>
         <translation>Autodetectar</translation>
     </message>
@@ -1829,6 +1829,10 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Show user name in search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

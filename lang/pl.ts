@@ -822,6 +822,10 @@
         <source>FFT Spectrum</source>
         <translation>Widmo FFT</translation>
     </message>
+    <message>
+        <source>Pointed frequency: %1 Hz</source>
+        <translation>Wskazana częstotliwość: %1 Hz</translation>
+    </message>
 </context>
 <context>
     <name>FFmpeg</name>
@@ -1546,10 +1550,6 @@
         <translation>Ilość wątków użytych do dekodowania wideo</translation>
     </message>
     <message>
-        <source>FFT spectrum scale</source>
-        <translation>Skala widma FFT</translation>
-    </message>
-    <message>
         <source>Demuxer</source>
         <translation>Demuxer</translation>
     </message>
@@ -1830,6 +1830,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Show user name in search results</source>
         <translation>Pokazuj nazwę użytkownika w wynikach wyszukiwania</translation>
+    </message>
+    <message>
+        <source>Linear scale</source>
+        <translation>Skala liniowa</translation>
     </message>
 </context>
 <context>
