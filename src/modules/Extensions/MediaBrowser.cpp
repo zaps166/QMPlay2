@@ -50,8 +50,8 @@
 
 #include <algorithm>
 
-#ifdef QMPLAY2_CPU_X86_32
-#   include <libavutil/cpu.h>
+#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
+#    include <libavutil/cpu.h>
 #endif
 
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
@@ -500,7 +500,7 @@ void MediaBrowser::completionsReady()
 
 bool MediaBrowser::scanScripts()
 {
-#ifdef QMPLAY2_CPU_X86_32
+#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
     if (!(QMPlay2CoreClass::getCPUFlags() & AV_CPU_FLAG_SSE2))
     {
         qCCritical(mb) << "SSE2 capable CPU is required";
