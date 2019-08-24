@@ -35,9 +35,7 @@ private:
 
 #include <QCoreApplication>
 
-#ifdef USE_OPENGL
-    class QCheckBox;
-#endif
+class QCheckBox;
 class QSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
@@ -51,5 +49,6 @@ private:
 #ifdef USE_OPENGL
     QCheckBox *useOpenGLB;
 #endif
-    QSpinBox *refTimeB, *sndLenB, *fftSizeB, *fftScaleB;
+    QSpinBox *refTimeB, *sndLenB, *fftSizeB;
+    QCheckBox *m_fftLinearScaleB;
 };

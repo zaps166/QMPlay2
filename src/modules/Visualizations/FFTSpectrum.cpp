@@ -27,16 +27,18 @@ extern "C"
     #include <libavcodec/avfft.h>
 }
 
-static inline void fltmix(FFTComplex *dest, const float *src, const int size, const uchar chn)
+static inline void fltmix(FFTComplex *dest, const float *winFunc, const float *src, const int size, const uchar chn)
 {
     for (int i = 0, j = 0; i < size; i += chn)
     {
-        dest[j].re = dest[j].im = 0.0;
-        for (uchar c = 0; c < chn; ++c)
+        dest[j].re = dest[j].im = 0.0f;
+        uchar c = 0;
+        for (; c < chn; ++c)
         {
             if (src[i+c] == src[i+c]) //not NaN
                 dest[j].re += src[i+c];
         }
+        dest[j].re *= winFunc[j] / c;
         ++j;
     }
 }
@@ -122,7 +124,7 @@ void FFTSpectrumW::stop()
 /**/
 
 FFTSpectrum::FFTSpectrum(Module &module) :
-    w(*this), fft_ctx(nullptr), tmpData(nullptr), tmpDataSize(0), tmpDataPos(0)
+    w(*this), fft_ctx(nullptr), tmpData(nullptr), tmpDataSize(0), tmpDataPos(0), m_linearScale(false)
 {
     SetModule(module);
 }
@@ -136,6 +138,7 @@ void FFTSpectrum::soundBuffer(const bool enable)
         tmpDataPos = 0;
         av_free(tmpData);
         tmpData = nullptr;
+        m_winFunc.clear();
         w.spectrumData.clear();
         w.lastData.clear();
         av_fft_end(fft_ctx);
@@ -144,6 +147,9 @@ void FFTSpectrum::soundBuffer(const bool enable)
         {
             fft_ctx = av_fft_init(w.fftSize, false);
             tmpData = (FFTComplex *)av_malloc(tmpDataSize * sizeof(FFTComplex));
+            m_winFunc.resize(tmpDataSize);
+            for (int i = 0; i < tmpDataSize; ++i)
+                m_winFunc[i] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (tmpDataSize - 1));
             w.spectrumData.resize(tmpDataSize / 2);
             w.lastData.resize(tmpDataSize / 2);
         }
@@ -161,7 +167,7 @@ bool FFTSpectrum::set()
     else if (w.fftSize < 3)
         w.fftSize = 3;
     w.interval = sets().getInt("RefreshTime");
-    scale = sets().getInt("FFTSpectrum/Scale");
+    m_linearScale = sets().getBool("FFTSpectrum/LinearScale");
     if (w.tim.isActive())
         w.start();
     return true;
@@ -215,7 +221,7 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
         const int size = qMin((data.size() - newDataPos) / (int)sizeof(float), (tmpDataSize - tmpDataPos) * w.chn);
         if (!size)
             break;
-        fltmix(tmpData + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
+        fltmix(tmpData + tmpDataPos, m_winFunc.data() + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
         newDataPos += size * sizeof(float);
         tmpDataPos += size / w.chn;
         if (tmpDataPos == tmpDataSize)
@@ -226,9 +232,11 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
             float *spectrumData = w.spectrumData.data();
             for (int i = 0; i < tmpDataPos; ++i)
             {
-                spectrumData[i] = sqrt(tmpData[i].re * tmpData[i].re + tmpData[i].im * tmpData[i].im) / tmpDataPos * scale;
-                if (spectrumData[i] > 1.0)
-                    spectrumData[i] = 1.0;
+                spectrumData[i] = sqrt(tmpData[i].re * tmpData[i].re + tmpData[i].im * tmpData[i].im) / tmpDataPos;
+                if (m_linearScale)
+                    spectrumData[i] *= 2.0f;
+                else
+                    spectrumData[i] = qBound(0.0f, (20.0f * log10(spectrumData[i]) + 65.0f) / 59.0f, 1.0f);
             }
             tmpDataPos = 0;
         }

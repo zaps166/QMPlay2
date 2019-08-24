@@ -51,7 +51,6 @@ Visualizations::Visualizations() :
     init("RefreshTime", ms);
     init("SimpleVis/SoundLength", ms);
     init("FFTSpectrum/Size", 7);
-    init("FFTSpectrum/Scale", 3);
 }
 
 QList<Visualizations::Info> Visualizations::getModulesInfo(const bool) const
@@ -80,11 +79,9 @@ QMPLAY2_EXPORT_MODULE(Visualizations)
 /**/
 
 #include <QFormLayout>
+#include <QCheckBox>
 #include <QSpinBox>
 #include <QLabel>
-#ifdef USE_OPENGL
-    #include <QCheckBox>
-#endif
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
@@ -114,9 +111,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     fftSizeB->setPrefix("2^");
     fftSizeB->setValue(sets().getInt("FFTSpectrum/Size"));
 
-    fftScaleB = new QSpinBox;
-    fftScaleB->setRange(1, 20);
-    fftScaleB->setValue(sets().getInt("FFTSpectrum/Scale"));
+    m_fftLinearScaleB = new QCheckBox(tr("Linear scale"));
+    m_fftLinearScaleB->setChecked(sets().getBool("FFTSpectrum/LinearScale"));
 
     QFormLayout *layout = new QFormLayout(this);
 #ifdef USE_OPENGL
@@ -125,7 +121,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addRow(tr("Refresh time") + ": ", refTimeB);
     layout->addRow(tr("Displayed sound length") + ": ", sndLenB);
     layout->addRow(tr("FFT spectrum size") + ": ", fftSizeB);
-    layout->addRow(tr("FFT spectrum scale") + ": ", fftScaleB);
+    layout->addRow(m_fftLinearScaleB);
 
     connect(refTimeB, SIGNAL(valueChanged(int)), sndLenB, SLOT(setValue(int)));
 }
@@ -138,5 +134,5 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("RefreshTime", refTimeB->value());
     sets().set("SimpleVis/SoundLength", sndLenB->value());
     sets().set("FFTSpectrum/Size", fftSizeB->value());
-    sets().set("FFTSpectrum/Scale", fftScaleB->value());
+    sets().set("FFTSpectrum/LinearScale", m_fftLinearScaleB->isChecked());
 }

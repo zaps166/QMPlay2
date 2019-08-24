@@ -76,7 +76,9 @@ private:
 
     FFTContext *fft_ctx;
     FFTComplex *tmpData;
-    int tmpDataSize, tmpDataPos, scale;
+    std::vector<float> m_winFunc;
+    int tmpDataSize, tmpDataPos;
+    bool m_linearScale;
     QMutex mutex;
 };
 
