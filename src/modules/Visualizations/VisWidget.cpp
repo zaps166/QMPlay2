@@ -53,6 +53,7 @@ VisWidget::VisWidget() :
     dw(new DockWidget)
 #ifdef USE_OPENGL
     , glW(nullptr)
+    , m_isWL(QGuiApplication::platformName().startsWith("wayland"))
 #endif
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -86,7 +87,7 @@ void VisWidget::setUseOpenGL(bool b)
 {
     m_pendingUpdate = false;
     if (!b)
-        b = (QGuiApplication::platformName().startsWith("wayland"));
+        b = m_isWL;
     if (b && !glW)
     {
         glW = new QOpenGLWidget(this);
@@ -144,6 +145,8 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
+        if (m_isWL)
+            p.fillRect(rect(), Qt::black);
         paint(p);
         m_pendingUpdate = false;
         return true;
