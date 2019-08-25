@@ -57,6 +57,7 @@
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
 constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";
+constexpr int g_mediaBrowserApiVersion = 1;
 
 static inline QString getScriptsPath()
 {
@@ -599,7 +600,8 @@ void MediaBrowser::downloadScripts(const QByteArray &jsonData)
         const auto name = jsonObj["Name"].toString();
         const auto path = jsonObj["Path"].toString();
         const auto version = jsonObj["Version"].toInt();
-        if (name.isEmpty() || version <= 0)
+        const auto apiVersion = jsonObj["ApiVersion"].toInt();
+        if (name.isEmpty() || version <= 0 || apiVersion != g_mediaBrowserApiVersion)
             continue;
 
         const auto m = currentScripts[name];
