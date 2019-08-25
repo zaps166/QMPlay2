@@ -111,7 +111,7 @@ void FFTSpectrumW::mouseMoveEvent(QMouseEvent *e)
     if (srate > 0)
     {
         const int freq = qRound((e->pos().x() + 0.5) * srate / width() / 2.0);
-        QMPlay2Core.statusBarMessage(tr("Pointed frequency: %1 Hz").arg(freq), 2000);
+        QMPlay2Core.statusBarMessage(tr("Pointed frequency: %1 Hz").arg(freq), 1000);
     }
     VisWidget::mouseMoveEvent(e);
 }
