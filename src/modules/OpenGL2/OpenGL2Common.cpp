@@ -202,7 +202,12 @@ void OpenGL2Common::setSpherical(bool spherical)
 
 void OpenGL2Common::initializeGL()
 {
-    initGLProc();
+    if (!initGLProc())
+    {
+        isOK = false;
+        return;
+    }
+
 #ifndef OPENGL_ES2
     if (!glActiveTexture) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
     {
@@ -727,8 +732,11 @@ void OpenGL2Common::testGLInternal()
 #endif
 
 #ifndef OPENGL_ES2
-    initGLProc(); //No need to call it here for OpenGL|ES
-    if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
+    if (!initGLProc()) //No need to call it here for OpenGL|ES
+    {
+        isOK = false;
+    }
+    else if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
     {
         showOpenGLMissingFeaturesMessage();
         isOK = false;
@@ -841,8 +849,12 @@ void OpenGL2Common::testGLInternal()
 #endif
 }
 
-void OpenGL2Common::initGLProc()
+bool OpenGL2Common::initGLProc()
 {
+    const auto context = QOpenGLContext::currentContext();
+    if (!context)
+        return false;
+
 #ifndef OPENGL_ES2
     const char *glExtensions = (const char *)glGetString(GL_EXTENSIONS);
     if (glExtensions)
@@ -850,22 +862,24 @@ void OpenGL2Common::initGLProc()
         supportsShaders = !!strstr(glExtensions, "GL_ARB_vertex_shader") && !!strstr(glExtensions, "GL_ARB_fragment_shader") && !!strstr(glExtensions, "GL_ARB_shader_objects");
         canCreateNonPowerOfTwoTextures = !!strstr(glExtensions, "GL_ARB_texture_non_power_of_two");
     }
-    glActiveTexture = (GLActiveTexture)QOpenGLContext::currentContext()->getProcAddress("glActiveTexture");
-    glGenBuffers = (GLGenBuffers)QOpenGLContext::currentContext()->getProcAddress("glGenBuffers");
-    glBindBuffer = (GLBindBuffer)QOpenGLContext::currentContext()->getProcAddress("glBindBuffer");
-    glBufferData = (GLBufferData)QOpenGLContext::currentContext()->getProcAddress("glBufferData");
-    glDeleteBuffers = (GLDeleteBuffers)QOpenGLContext::currentContext()->getProcAddress("glDeleteBuffers");
+    glActiveTexture = (GLActiveTexture)context->getProcAddress("glActiveTexture");
+    glGenBuffers = (GLGenBuffers)context->getProcAddress("glGenBuffers");
+    glBindBuffer = (GLBindBuffer)context->getProcAddress("glBindBuffer");
+    glBufferData = (GLBufferData)context->getProcAddress("glBufferData");
+    glDeleteBuffers = (GLDeleteBuffers)context->getProcAddress("glDeleteBuffers");
     if (hqScaling)
-        glGenerateMipmap = (GLGenerateMipmap)QOpenGLContext::currentContext()->getProcAddress("glGenerateMipmap");
+        glGenerateMipmap = (GLGenerateMipmap)context->getProcAddress("glGenerateMipmap");
     hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
 #endif
     if (allowPBO)
     {
-        glMapBufferRange = (GLMapBufferRange)QOpenGLContext::currentContext()->getProcAddress("glMapBufferRange");
-        glMapBuffer = (GLMapBuffer)QOpenGLContext::currentContext()->getProcAddress("glMapBuffer");
-        glUnmapBuffer = (GLUnmapBuffer)QOpenGLContext::currentContext()->getProcAddress("glUnmapBuffer");
+        glMapBufferRange = (GLMapBufferRange)context->getProcAddress("glMapBufferRange");
+        glMapBuffer = (GLMapBuffer)context->getProcAddress("glMapBuffer");
+        glUnmapBuffer = (GLUnmapBuffer)context->getProcAddress("glUnmapBuffer");
     }
     hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
+
+    return true;
 }
 #ifndef OPENGL_ES2
 void OpenGL2Common::showOpenGLMissingFeaturesMessage()

@@ -94,7 +94,7 @@ protected:
 
     void testGLInternal();
 
-    void initGLProc();
+    bool initGLProc();
 #ifndef OPENGL_ES2
     void showOpenGLMissingFeaturesMessage();
 
