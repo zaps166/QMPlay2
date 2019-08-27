@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 19.08.23:
+Changes in QMPlay2 build 19.08.27:
 	- a lot of VA-API improvements including zero-copy on OpenGL (some old drivers might cease to work - I can't test them),
 	- fix loading of QMPlay2 modules (on some OS'es it leads to crash),
 	- improve full screen switching (fixes regression since 18.12.26),
@@ -6,6 +6,7 @@ Changes in QMPlay2 build 19.08.23:
 	- fix black video when decoding videos with color palette,
 	- add option to disable subtitles at program startup,
 	- remove QMake build system, added Android to CMake,
+	- display FFT spectrum in logarithmic scale,
 	- improve displaying of graphical subtitles,
 	- rewrite MediaBrowser, now use JavaScript,
 	- a lot of YouTube and youtube-dl changes,
