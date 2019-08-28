@@ -12,22 +12,22 @@ MimeType=inode/directory;video/mp4;video/mpeg;video/ogg;video/quicktime;video/x-
 
 X-Ayatana-Desktop-Shortcuts=PlayPause;Stop;Prev;Next;
 
-[PlayPause Shortcut Group]
+[X-PlayPause Shortcut Group]
 Name=Play/Pause
 Exec=QMPlay2 -toggle
 TargetEnvironment=Unity
 
-[Stop Shortcut Group]
+[X-Stop Shortcut Group]
 Name=Stop
 Exec=QMPlay2 -stop
 TargetEnvironment=Unity
 
-[Prev Shortcut Group]
+[X-Prev Shortcut Group]
 Name=Previous
 Exec=QMPlay2 -prev
 TargetEnvironment=Unity
 
-[Next Shortcut Group]
+[X-Next Shortcut Group]
 Name=Next
 Exec=QMPlay2 -next
 TargetEnvironment=Unity
