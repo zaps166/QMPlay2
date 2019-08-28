@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Adresserkennung</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@
     </message>
     <message>
         <source>Save</source>
-        <translation>Liste</translation>
+        <translation>Sichern</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -319,7 +319,7 @@
     </message>
     <message>
         <source>Error reading track</source>
-        <translation>Fehler beim lesen des Titels</translation>
+        <translation>Fehler beim Lesen des Titels</translation>
     </message>
     <message>
         <source>No CD</source>
@@ -565,11 +565,11 @@
     </message>
     <message>
         <source>Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Programme</translation>
     </message>
     <message>
         <source>Program</source>
-        <translation type="unfinished"></translation>
+        <translation>Programm</translation>
     </message>
 </context>
 <context>
@@ -608,19 +608,19 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertierung abgebrochen</translation>
     </message>
     <message>
         <source>Conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertierungsfehler</translation>
     </message>
     <message>
         <source>Converting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertiere...</translation>
     </message>
     <message>
         <source>Stop conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppe Konvertierung</translation>
     </message>
 </context>
 <context>
@@ -659,54 +659,56 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Hinzufügen</translation>
+        <translation>&amp;Hinzufügen</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen, Ändern oder Entfernen von Konvertierungsvorgaben</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade herunter und konvertieren in &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Converter preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertervoreinstellung</translation>
     </message>
     <message>
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>Befehlszeile, die nach dem Download ausgeführt werden soll.
+&lt;input/&gt; - Gibt die heruntergeladene Datei an.
+&lt;output&gt;%f.mp3&lt;/output&gt; - Die konvertierte Datei wird eine Eingabedatei mit &quot;mp3&quot; Erweiterung.</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorgabe</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Befehlszeile</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation>Falscher/leerer Name oder Befehlszeile!</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Befehl muss &lt;input/&gt; Etikett enthalten!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Befehl muss das richtige &lt;output&gt;file&lt;/output/&gt; Etikett enthalten!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Der voreingestellte Name existiert bereits!</translation>
     </message>
 </context>
 <context>
@@ -760,7 +762,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen Sie die URL oder das Verzeichnis mit der ausgewählten Datei</translation>
     </message>
 </context>
 <context>
@@ -799,11 +801,11 @@
     </message>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorverstärker</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
 </context>
 <context>
@@ -821,7 +823,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Spitzenfrequenz: %1 Hz</translation>
     </message>
 </context>
 <context>
@@ -1016,7 +1018,7 @@
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
+        <translation>Laden Sie k&apos;eine Wiedergabelistendateien in andere Dateien</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1105,7 @@
     </message>
     <message>
         <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet eine neue QMPlay2-Instanz und gibt die angegebene &lt;url&gt; wieder.</translation>
     </message>
 </context>
 <context>
@@ -1173,15 +1175,15 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Liedtext</translation>
+        <translation>Liedtext</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished">Übersetzung</translation>
+        <translation>Übersetzung</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Liedtext nicht gefunden</translation>
     </message>
 </context>
 <context>
@@ -1310,7 +1312,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche auf %1</translation>
     </message>
 </context>
 <context>
@@ -1806,11 +1808,11 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Bit-perfektes Audio</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
+        <translation>Dadurch wird das ausgewählte Ausgabegerät auf die Abtastrate des wiedergegebenen Inhalts eingestellt</translation>
     </message>
     <message>
         <source>High quality video scaling</source>
@@ -1822,15 +1824,15 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereokanäle tauschen</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername in Suchergebnissen anzeigen</translation>
     </message>
     <message>
         <source>Linear scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineare Skalierung</translation>
     </message>
 </context>
 <context>
@@ -2314,15 +2316,15 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende Audio-Resampler und Kanalumwandlung vor Filtern und Visualisierungen</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Die mittlere Maustaste auf dem Videodock schaltet auf Vollbildmodus um</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviere Untertitel beim Programmstart</translation>
     </message>
 </context>
 <context>
@@ -2516,7 +2518,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Immer synchronisieren</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2563,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Kann nicht den Audio Ausgabestrom öffnen</translation>
+        <translation>Kann den Audio Ausgabestrom nicht öffnen</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2712,19 +2714,19 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiosenderliste aus Datei laden</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiosenderliste in Datei speichern</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiosenderliste laden</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Radiosenderliste speichern</translation>
     </message>
 </context>
 <context>
@@ -2825,11 +2827,11 @@ QMPlay2 zeigt keine Icons an!</translation>
     </message>
     <message>
         <source>Audio and video</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio und Video</translation>
     </message>
     <message>
         <source>Audio only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Audio</translation>
     </message>
 </context>
 <context>
@@ -3061,7 +3063,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Liedtext</translation>
+        <translation>Liedtext</translation>
     </message>
 </context>
 <context>
@@ -3234,71 +3236,71 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Zurücksetzen</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation type="unfinished">Helligkeit</translation>
+        <translation>Helligkeit</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation type="unfinished">Kontrast</translation>
+        <translation>Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation type="unfinished">Sättigung</translation>
+        <translation>Sättigung</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation type="unfinished">Farbton</translation>
+        <translation>Farbton</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation type="unfinished">Schärfe</translation>
+        <translation>Schärfe</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Videoeinstellungen zurücksetzen</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Helligkeit verringern</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Helligkeit erhöhen</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>iKontrast verringern</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Sättigung verringern</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Sättigung erhöhen</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbton verringern</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbton erhöhen</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Schärfe verringern</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Schärfe erhöhen</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrast erhöhen</translation>
     </message>
 </context>
 <context>
@@ -3395,7 +3397,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Immer oben</translation>
     </message>
 </context>
 <context>
@@ -3430,23 +3432,23 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Relevance</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualität</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochladedatum</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation type="unfinished"></translation>
+        <translation>Anzahl anzeigen</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished">Bewertung</translation>
+        <translation>Bewertung</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchergebnisse sortieren nach ...</translation>
     </message>
 </context>
 <context>
@@ -3477,7 +3479,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; Download fehlgeschlagen!</translation>
     </message>
 </context>
 </TS>
