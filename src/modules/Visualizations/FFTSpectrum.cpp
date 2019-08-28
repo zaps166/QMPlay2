@@ -28,6 +28,8 @@ extern "C"
     #include <libavcodec/avfft.h>
 }
 
+#include <cmath>
+
 static inline void fltmix(FFTComplex *dest, const float *winFunc, const float *src, const int size, const uchar chn)
 {
     for (int i = 0, j = 0; i < size; i += chn)
@@ -247,7 +249,7 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
                 if (m_linearScale)
                     spectrumData[i] *= 2.0f;
                 else
-                    spectrumData[i] = qBound(0.0f, (20.0f * log10(spectrumData[i]) + 65.0f) / 59.0f, 1.0f);
+                    spectrumData[i] = qBound(0.0f, (20.0f * std::log10(spectrumData[i]) + 65.0f) / 59.0f, 1.0f);
             }
             tmpDataPos = 0;
         }
