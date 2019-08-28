@@ -14,6 +14,11 @@ QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg
 		Opens and plays specified <\fIurl\fR>.
 .br
 
+-opennew <\fIurl\fR>
+.br
+		Opens new QMPlay2 instance and plays specified <\fIurl\fR>.
+.br
+
 -enqueue <\fIurl\fR>
 .br
 		Adds specified <\fIurl\fR> to playlist.
@@ -90,5 +95,5 @@ Creator and developer
 .br
 E-Mail: spaz16@wp.pl
 .br
-Web page: http://zaps166.sourceforge.net
+Web page: https://github.com/zaps166/QMPlay2
 .br
