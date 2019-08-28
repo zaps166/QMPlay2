@@ -824,7 +824,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Вказана частота: %1 Гц</translation>
     </message>
 </context>
 <context>
@@ -1829,11 +1829,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Show user name in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати ім&apos;я користувача в результатах пошуку</translation>
     </message>
     <message>
         <source>Linear scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Лінійна шкала</translation>
     </message>
 </context>
 <context>
