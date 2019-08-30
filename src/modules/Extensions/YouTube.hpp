@@ -96,8 +96,6 @@ public:
 
     QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
-    inline QString getYtDlPath() const;
-
 private slots:
     void next();
     void prev();
@@ -140,7 +138,6 @@ private:
     QList<NetworkReply *> linkReplies, imageReplies;
     NetworkAccess net;
 
-    QString youtubedl;
     bool m_allowSubtitles;
 
     QActionGroup *m_qualityGroup = nullptr, *m_sortByGroup = nullptr;

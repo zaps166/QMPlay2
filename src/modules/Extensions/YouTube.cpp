@@ -383,12 +383,6 @@ bool YouTube::set()
 
     resultsW->setColumnCount(sets().getBool("YouTube/ShowUserName") ? 3 : 2);
     m_allowSubtitles = sets().getBool("YouTube/Subtitles");
-    youtubedl = sets().getString("YouTube/youtubedl");
-    if (youtubedl.isEmpty())
-        youtubedl = "youtube-dl";
-#ifdef Q_OS_WIN
-    youtubedl.replace('\\', '/');
-#endif
     m_sortByIdx = qBound(0, sets().getInt("YouTube/SortBy"), 3);
     m_sortByGroup->actions().at(m_sortByIdx)->setChecked(true);
     return true;
@@ -469,11 +463,6 @@ QVector<QAction *> YouTube::getActions(const QString &name, double, const QStrin
         return {act};
     }
     return {};
-}
-
-inline QString YouTube::getYtDlPath() const
-{
-    return youtubedl;
 }
 
 void YouTube::next()
