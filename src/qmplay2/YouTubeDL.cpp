@@ -23,6 +23,7 @@
 #include <Functions.hpp>
 #include <CppUtils.hpp>
 
+#include <QStandardPaths>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -155,12 +156,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
     if (!rawOutput)
         processArgs += "-j";
 
-    m_process.start(m_ytDlPath, processArgs);
+    startProcess(processArgs);
     if (!m_process.waitForStarted() && !m_aborted)
     {
         if (!onProcessCantStart())
             return {};
-        m_process.start(m_ytDlPath, processArgs);
+        startProcess(processArgs);
     }
 
     if (!m_process.waitForFinished() || m_aborted)
@@ -362,7 +363,7 @@ bool YouTubeDL::update()
     QMPlay2Core.setWorking(true);
 
     ensureExecutable();
-    m_process.start(m_ytDlPath, QStringList() << "-U" << m_commonArgs);
+    startProcess(QStringList() << "-U" << m_commonArgs);
     if (!m_process.waitForStarted())
     {
         QMPlay2Core.setWorking(false);
@@ -444,4 +445,43 @@ bool YouTubeDL::onProcessCantStart()
 
     qCritical() << "Can't start \"youtube-dl\" process, forced \"youtube-dl\" download";
     return prepare();
+}
+
+void YouTubeDL::startProcess(QStringList args)
+{
+    QString program = m_ytDlPath;
+
+#ifndef Q_OS_WIN
+    QFile ytDlFile(program);
+    if (ytDlFile.open(QFile::ReadOnly))
+    {
+        const auto shebang = ytDlFile.readLine(99).trimmed();
+        const int idx = shebang.lastIndexOf("python");
+        if (shebang.startsWith("#!") && idx > -1)
+        {
+            const auto pythonCmd = shebang.mid(idx);
+            if (!QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
+            {
+                QStringList pythonCmdsToCheck {
+                    "python",
+                    "python2",
+                    "python3",
+                };
+                pythonCmdsToCheck.removeOne(pythonCmd);
+                for (auto &&pythonCmd : asConst(pythonCmdsToCheck))
+                {
+                    if (QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
+                    {
+                        args.prepend(program);
+                        program = pythonCmd;
+                        break;
+                    }
+                }
+            }
+        }
+        ytDlFile.close();
+    }
+#endif
+
+    m_process.start(program, args);
 }

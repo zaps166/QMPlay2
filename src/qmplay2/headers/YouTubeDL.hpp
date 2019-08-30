@@ -57,6 +57,8 @@ private:
 
     bool onProcessCantStart();
 
+    void startProcess(QStringList args);
+
 private:
     const QString m_ytDlPath;
     const QStringList m_commonArgs;
