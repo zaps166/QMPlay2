@@ -511,7 +511,9 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
 #ifdef CHECK_FOR_EGL
 static void checkForEGL()
 {
-    if (qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION") || !qEnvironmentVariableIsSet("DISPLAY"))
+    // FIXME: Non-X11 environment must also get the device file.
+
+    if (!qEnvironmentVariableIsSet("DISPLAY"))
         return;
 
     QLibrary libX11("X11");
@@ -572,7 +574,8 @@ static void checkForEGL()
 
     if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
     {
-        qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+        if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+            qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
         if (!cardFilePath.isEmpty())
             qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
     }
