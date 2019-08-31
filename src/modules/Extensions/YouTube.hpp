@@ -81,6 +81,9 @@ class YouTube final : public QWidget, public QMPlay2Extensions
     Q_OBJECT
 
 public:
+    static const QStringList getQualityPresets();
+
+public:
     YouTube(Module &module);
     ~YouTube();
 

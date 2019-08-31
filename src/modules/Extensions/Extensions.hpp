@@ -40,6 +40,7 @@ private:
 
 class QToolButton;
 class QListWidget;
+class QComboBox;
 class QGroupBox;
 class QCheckBox;
 class LineEdit;
@@ -62,6 +63,7 @@ private:
 #endif
 
     QCheckBox *userNameB, *subtitlesB;
+    QComboBox *qualityPreset;
 
 #ifdef USE_LASTFM
     QGroupBox *downloadCoversGB;

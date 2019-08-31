@@ -223,6 +223,22 @@ PageSwitcher::PageSwitcher(QWidget *youTubeW)
 
 /**/
 
+const QStringList YouTube::getQualityPresets()
+{
+    return {
+        "4320p 60FPS",
+        "2160p 60FPS",
+        "1440p 60FPS",
+        "1080p 60FPS",
+        "720p 60FPS",
+        "2160p",
+        "1440p",
+        "1080p",
+        "720p",
+        "480p",
+    };
+}
+
 YouTube::YouTube(Module &module) :
     completer(new QCompleter(new QStringListModel(this), this)),
     currPage(1),
@@ -262,16 +278,8 @@ YouTube::YouTube(Module &module) :
     showSettingsB->setAutoRaise(true);
 
     m_qualityGroup = new QActionGroup(this);
-    m_qualityGroup->addAction("4320p 60FPS");
-    m_qualityGroup->addAction("2160p 60FPS");
-    m_qualityGroup->addAction("1440p 60FPS");
-    m_qualityGroup->addAction("1080p 60FPS");
-    m_qualityGroup->addAction("720p 60FPS");
-    m_qualityGroup->addAction("2160p");
-    m_qualityGroup->addAction("1440p");
-    m_qualityGroup->addAction("1080p");
-    m_qualityGroup->addAction("720p");
-    m_qualityGroup->addAction("480p");
+    for (auto &&qualityPreset : getQualityPresets())
+        m_qualityGroup->addAction(qualityPreset);
 
     QMenu *qualityMenu = new QMenu(this);
     int qualityIdx = 0;
@@ -292,7 +300,7 @@ YouTube::YouTube(Module &module) :
 
     QToolButton *qualityB = new QToolButton;
     qualityB->setPopupMode(QToolButton::InstantPopup);
-    qualityB->setToolTip(tr("Quality"));
+    qualityB->setToolTip(tr("Preferred quality"));
     qualityB->setIcon(QMPlay2Core.getIconFromTheme("video-display"));
     qualityB->setMenu(qualityMenu);
     qualityB->setAutoRaise(true);
