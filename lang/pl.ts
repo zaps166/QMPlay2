@@ -1835,6 +1835,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <source>Linear scale</source>
         <translation>Skala liniowa</translation>
     </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation>Preferowana jakość</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3412,10 +3416,6 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Jakość</translation>
-    </message>
-    <message>
         <source>Search on YouTube</source>
         <translation>Wyszukaj w YouTube</translation>
     </message>
@@ -3450,6 +3450,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Sort search results by ...</source>
         <translation>Sortuj wyniki wyszukiwania po ...</translation>
+    </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation>Preferowana jakość</translation>
     </message>
 </context>
 <context>

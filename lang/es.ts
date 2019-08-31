@@ -1835,6 +1835,10 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
         <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3412,10 +3416,6 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <translation>Configuración</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Calidad</translation>
-    </message>
-    <message>
         <source>Search on YouTube</source>
         <translation>Buscar en YouTube</translation>
     </message>
@@ -3450,6 +3450,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <message>
         <source>Sort search results by ...</source>
         <translation>Ordenar los resultados de la búsqueda por...</translation>
+    </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1833,6 +1833,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Linear scale</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3410,10 +3414,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Beállítások</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Minőség</translation>
-    </message>
-    <message>
         <source>Search on YouTube</source>
         <translation>Keresés a YouTube-on</translation>
     </message>
@@ -3448,6 +3448,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Sort search results by ...</source>
         <translation>Találatok rendezése ...</translation>
+    </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

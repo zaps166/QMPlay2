@@ -1835,6 +1835,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Linear scale</source>
         <translation>Лінійна шкала</translation>
     </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3412,10 +3416,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Параметри</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Якість</translation>
-    </message>
-    <message>
         <source>Search on YouTube</source>
         <translation>Пошук на YouTube</translation>
     </message>
@@ -3450,6 +3450,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Sort search results by ...</source>
         <translation>Сортувати результати пошуку за...</translation>
+    </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

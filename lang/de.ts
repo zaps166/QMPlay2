@@ -1834,6 +1834,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <source>Linear scale</source>
         <translation>Lineare Skalierung</translation>
     </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3411,10 +3415,6 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <source>Quality</source>
-        <translation>Qualität</translation>
-    </message>
-    <message>
         <source>Search on YouTube</source>
         <translation>Bei YouTube suchen</translation>
     </message>
@@ -3449,6 +3449,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>Sort search results by ...</source>
         <translation>Suchergebnisse sortieren nach ...</translation>
+    </message>
+    <message>
+        <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
