@@ -10,7 +10,7 @@
             It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube and Prostopleer browser.
         </p>
     </description>
-    <url type="homepage">http://zaps166.sourceforge.net/?app=QMPlay2</url>
+    <url type="homepage">https://github.com/zaps166/QMPlay2</url>
     <url type="bugtracker">https://github.com/zaps166/QMPlay2/issues</url>
     <categories>
         <category>AudioVideo</category>
@@ -24,8 +24,12 @@
         <keyword>audio</keyword>
         <keyword>video</keyword>
     </keywords>
-    <release version="@QMPLAY2_VERSION@"/>
+    <releases>
+        <release version="@QMPLAY2_VERSION@"/>
+    </releases>
     <project_license>LGPL-3.0</project_license>
     <developer_name>Błażej Szczygieł</developer_name>
-    <screenshot type="default">https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.png</screenshot>
+    <screenshots>
+        <screenshot type="default">https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.png</screenshot>
+    </screenshots>
 </component>
