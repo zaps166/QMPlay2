@@ -516,8 +516,8 @@ static void checkForEGL()
     if (!qEnvironmentVariableIsSet("DISPLAY"))
         return;
 
-    QLibrary libX11("X11");
-    QLibrary libEGL("EGL");
+    QLibrary libX11("libX11.so.6");
+    QLibrary libEGL("libEGL.so.1");
     if (!libX11.load() || !libEGL.load())
         return;
 
