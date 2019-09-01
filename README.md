@@ -39,11 +39,11 @@ Table of Contents
 $ yay -S qmplay2
 ```
 
-#### Easy installation on openSUSE Leap 42.3
+#### Easy installation on openSUSE Leap 15.1
 
 - Run the following commands:
 ```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_42.3 Packman
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
 $ sudo zypper in QMPlay2
 ```
 - QMPlay2 from openSUSE repositories might lack some features.
@@ -170,7 +170,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 
 #### Important:
 - TagLib >= 1.7 (>= 1.9 recommended),
-- libass - for OSD and every subtitles.
+- libass - for OSD and non-graphical subtitles.
 
 #### For modules (some of them can be automatically not used if not found):
 - FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
@@ -198,8 +198,8 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 	- create a "build" directory and go to it: `mkdir build && cd build`,
 	- run CMake (also you can run with arguments which you want): `cmake ..`,
 	- check the summary - which features are enabled - you can set/force them manually,
-	- if CMake finishes wihout errors, run: `make -j4` (replace 4 with numbers of CPU threads),
-	- if compiling finishes wihout errors, install it: `sudo make -j4 install`.
+	- if CMake finishes wihout errors, run: `make -j8` (replace 8 with numbers of CPU threads),
+	- if compiling finishes wihout errors, install it: `sudo make -j8 install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
@@ -229,7 +229,6 @@ CMake options (option - default value: description):
 	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
 	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
 	- `USE_AVRESAMPLE` - `OFF`: use libavresample instead of libswresample.
-	- `USE_JEMALLOC` - `OFF`: link to jemalloc memory allocator which can reduce memory usage.
 	- `USE_CMD` - Windows only, `OFF`.
 	- `USE_ANIMEODCINKI` - `ON`: enable/disable AnimeOdcinki in Extensions module.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
@@ -241,6 +240,7 @@ CMake options (option - default value: description):
 	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
 	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
 	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
+	- `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
 
 Using other Qt installation using CMake:
 - `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
@@ -248,10 +248,11 @@ Using other Qt installation using CMake:
 - `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
 - `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
 - `Qt5Qml_DIR`: path to the Qt5Qml cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Qml`).
+- `Qt5X11Extras_DIR`: path to the Qt5X11Extras cmake directory (e.g. `~/qtbase/lib/cmake/Qt5X11Extras`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 
-You can strip binaries during installation to save disk space: `sudo make -j4 install/strip`.
+You can strip binaries during installation to save disk space: `sudo make -j8 install/strip`.
 
 Example commands (execute it in QMPlay2 directory with source code):
 
@@ -265,12 +266,12 @@ $ make -j8
 $ sudo make -j8 install/strip
 ```
 
-- Use manually-specified install prefix, disable SID, enable jemalloc, use Polish language only and use manually-specified Solid actions path:
+- Use manually-specified install prefix, disable SID, use Polish language only and use manually-specified Solid actions path:
 
 ```sh
 $ mkdir build
 $ cd build
-$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DUSE_JEMALLOC=ON -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
 $ make -j8
 $ sudo make -j8 install
 ```
@@ -296,8 +297,8 @@ $ sudo make uninstall
 - Download and install CMake for macOS:
  - create symlink for `cmake` CLI (from Bundle) to `/usr/local/bin`.
 - Install `pkg-config` and all dependencies from Brew.
- - you can also compile them manually (especially `libass`, `ffmpeg` (w/o encoders), `fribidi` (w/o `glib`) and `libsidplayfp`):
-- Use CMake and set missing directories for dependencies (QtCreator is recommended or at least CMake GUI):
+ - you can also compile them manually (especially `libass`, `ffmpeg` (w/o most encoders), `fribidi` (w/o `glib`) and `libsidplayfp`).
+- Set missing directories for dependencies (QtCreator or CMake GUI are recommended):
  - set install prefix e.g. to Desktop directory (for Bundle),
  - install via `make install` - this creates a Bundle.
 
@@ -318,7 +319,7 @@ $ sudo make uninstall
 
 ## Building package RPM, DEB or any other
 
-Use CMake. You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2).
+You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2).
 
 ## Other information
 
