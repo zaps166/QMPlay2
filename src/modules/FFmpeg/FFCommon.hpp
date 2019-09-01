@@ -35,13 +35,18 @@
     struct AVVDPAUContext;
     struct AVCodecContext;
 #endif
-struct AVDictionary;
-struct AVPacket;
-class VideoFrame;
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+    class QByteArray;
+    class QString;
+#endif
 
 namespace FFCommon
 {
 #ifdef QMPlay2_VDPAU
     AVVDPAUContext *allocAVVDPAUContext(AVCodecContext *codecCtx);
+#endif
+
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+    void setDriversPath(const QString &dirName, const QByteArray &envVar);
 #endif
 }

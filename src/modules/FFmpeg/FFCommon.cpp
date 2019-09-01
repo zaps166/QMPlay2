@@ -18,14 +18,13 @@
 
 #include <FFCommon.hpp>
 
-#include <QMPlay2Core.hpp>
-#include <Version.hpp>
+#include <QProcess>
+#include <QDebug>
+#include <QDir>
 
 extern "C"
 {
-    #include <libavformat/version.h>
     #include <libavcodec/avcodec.h>
-    #include <libavutil/dict.h>
 #ifdef QMPlay2_VDPAU
     #include <libavcodec/vdpau.h>
 #endif
@@ -44,5 +43,25 @@ AVVDPAUContext *FFCommon::allocAVVDPAUContext(AVCodecContext *codecCtx)
     if (av_vdpau_bind_context(codecCtx, 0, nullptr, 0) == 0)
         return (AVVDPAUContext *)codecCtx->hwaccel_context;
     return nullptr;
+}
+#endif
+
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
+{
+    if (qEnvironmentVariableIsSet(envVar))
+        return;
+
+    QProcess whereis;
+    whereis.start("whereis", {"-b", dirName});
+    if (whereis.waitForStarted() && whereis.waitForFinished() && whereis.exitCode() == 0)
+    {
+        const auto path = whereis.readAllStandardOutput().trimmed().split(' ').value(1);
+        if (!path.isEmpty() && QDir(path).entryList({"*.so*"}, QDir::Files).count() > 0)
+        {
+            qputenv(envVar, path);
+            qDebug().noquote() << "Set" << envVar << "to" << path;
+        }
+    }
 }
 #endif

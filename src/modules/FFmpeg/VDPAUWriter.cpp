@@ -47,6 +47,10 @@ VDPAUWriter::VDPAUWriter(Module &module) :
     aspect_ratio(0.0), zoom(0.0),
     flip(0), outW(0), outH(0), Hue(0), Saturation(0), Brightness(0), Contrast(0)
 {
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+    FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
+#endif
+
     setAttribute(Qt::WA_PaintOnScreen);
     grabGesture(Qt::PinchGesture);
     setMouseTracking(true);

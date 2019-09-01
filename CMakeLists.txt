@@ -186,6 +186,11 @@ add_feature_info(Notifications USE_NOTIFY "Build additional notifications module
 
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
+if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU)
+    option(FIND_HWACCEL_DRIVERS_PATH "Find drivers path for hwaccel, useful for universal package" OFF)
+    add_feature_info(FindHwaccelDrivers FIND_HWACCEL_DRIVERS_PATH "Find drivers path for hwaccel")
+endif()
+
 if(NOT WIN32)
     # get QMPlay2 version by running the version script
     execute_process(

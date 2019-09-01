@@ -17,6 +17,7 @@
 */
 
 #include <VAAPI.hpp>
+#include <FFCommon.hpp>
 #include <Functions.hpp>
 #include <ImgScaler.hpp>
 #include <VideoFrame.hpp>
@@ -36,7 +37,11 @@
 #include <fcntl.h>
 
 VAAPI::VAAPI()
-{}
+{
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+    FFCommon::setDriversPath("dri", "LIBVA_DRIVERS_PATH");
+#endif
+}
 VAAPI::~VAAPI()
 {
     m_vppFrames.clear(); // Must be freed before destroying VADisplay
