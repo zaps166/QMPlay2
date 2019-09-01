@@ -1837,7 +1837,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажана якість</translation>
     </message>
 </context>
 <context>
@@ -3453,7 +3453,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажана якість</translation>
     </message>
 </context>
 <context>
