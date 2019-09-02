@@ -548,35 +548,41 @@ static void checkForEGL()
     if (!dpy)
         return;
 
-    QByteArray eglVendor, cardFilePath;
+    QByteArray cardFilePath;
 
     auto eglDpy = eglGetDisplayFunc(dpy);
-    if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
+    int major = 0, minor = 0;
+    if (eglDpy && eglInitializeFunc(eglDpy, &major, &minor))
     {
         constexpr int EGLVendor = 0x3053;
-        eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
-
-        auto eglQueryDeviceStringEXT = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
-        auto eglQueryDisplayAttribEXT = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
-        if (eglQueryDeviceStringEXT && eglQueryDisplayAttribEXT)
+        const QByteArray eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
+        if (major > 0 && (major > 1 || minor >= 5) && eglVendor == "Mesa Project") // EGL >= 1.5, don't allow to run Qt over EGL on NVIDIA
         {
-            constexpr int EGLDeviceExt = 0x322C;
-            constexpr int EGLDrmDeviceFileExt = 0x3233;
-            void *eglDev = nullptr;
-            if (eglQueryDisplayAttribEXT(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
-                cardFilePath = eglQueryDeviceStringEXT(eglDev, EGLDrmDeviceFileExt);
-        }
+            constexpr int EGLExtensions = 0x3055;
+            const bool hasDeviceQuery = QByteArray(eglQueryStringFunc(nullptr, EGLExtensions)).contains("EGL_EXT_device_query");
 
+            auto eglQueryDisplayAttribEXTFunc = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
+            auto eglQueryDeviceStringEXTFunc = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
+
+            if (hasDeviceQuery && eglQueryDisplayAttribEXTFunc && eglQueryDeviceStringEXTFunc)
+            {
+                constexpr int EGLDeviceExt = 0x322C;
+                constexpr int EGLDrmDeviceFileExt = 0x3233;
+                void *eglDev = nullptr;
+                if (eglQueryDisplayAttribEXTFunc(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
+                    cardFilePath = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt);
+            }
+        }
         eglTerminateFunc(eglDpy);
     }
 
     XCloseDisplayFunc(dpy);
 
-    if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
+    if (!cardFilePath.isEmpty())
     {
         if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
             qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
-        if (!cardFilePath.isEmpty())
+        if (!qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH"))
             qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
     }
 }
