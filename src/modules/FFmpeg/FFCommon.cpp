@@ -19,6 +19,7 @@
 #include <FFCommon.hpp>
 
 #include <QProcess>
+#include <QSysInfo>
 #include <QDebug>
 #include <QDir>
 
@@ -52,15 +53,38 @@ void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
     if (qEnvironmentVariableIsSet(envVar))
         return;
 
-    QProcess whereis;
-    whereis.start("whereis", {"-b", dirName});
-    if (whereis.waitForStarted() && whereis.waitForFinished() && whereis.exitCode() == 0)
-    {
-        const auto path = whereis.readAllStandardOutput().trimmed().split(' ').value(1);
-        if (!path.isEmpty() && QDir(path).entryList({"*.so*"}, QDir::Files).count() > 0)
+    static const auto libDirs = [] {
+        QList<QByteArray> dirsWithWordSize, dirs;
+
+        QProcess whereis;
+        whereis.start("whereis", {"-l"});
+        if (whereis.waitForStarted() && whereis.waitForFinished() && whereis.exitCode() == 0)
         {
-            qputenv(envVar, path);
+            const auto wordSizeStr = QByteArray::number(QSysInfo::WordSize);
+            for (const auto &entry : whereis.readAllStandardOutput().split('\n'))
+            {
+                if (!entry.startsWith("bin: "))
+                    continue;
+
+                const auto path = entry.mid(5);
+                if (path.contains("/lib" + wordSizeStr))
+                    dirsWithWordSize.append(path);
+                else if (path.contains("/lib/") || path.endsWith("/lib"))
+                    dirs.append(path);
+            }
+        }
+
+        return dirsWithWordSize + dirs;
+    }();
+
+    for (auto &&dir : libDirs)
+    {
+        const QString path = dir + "/" + dirName;
+        if (QDir(path).entryList({"*.so*"}, QDir::Files).count() > 0)
+        {
+            qputenv(envVar, path.toLocal8Bit());
             qDebug().noquote() << "Set" << envVar << "to" << path;
+            break;
         }
     }
 }
