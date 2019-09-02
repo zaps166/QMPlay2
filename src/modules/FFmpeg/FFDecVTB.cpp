@@ -292,8 +292,10 @@ bool FFDecVTB::hasCriticalError() const
 
 bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    if (streamInfo.type != QMPLAY2_TYPE_VIDEO)
+    const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
+    if (pix_fmt != AV_PIX_FMT_YUV420P)
         return false;
+
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("videotoolbox"))
         return false;
