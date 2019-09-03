@@ -28,6 +28,7 @@
 
 extern "C"
 {
+    #include <libavutil/pixdesc.h>
     #include <libavcodec/avcodec.h>
     #include <libswscale/swscale.h>
     #include <libavcodec/videotoolbox.h>
