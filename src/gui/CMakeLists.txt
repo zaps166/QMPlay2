@@ -226,7 +226,8 @@ elseif(APPLE)
         DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/iconengines")
     install(FILES
         "${QT_PLUGINS_DIR}/styles/libqmacstyle.dylib"
-        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/styles")
+        DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins/styles"
+        OPTIONAL)
     install(DIRECTORY
         "${QT_PLUGINS_DIR}/imageformats"
         DESTINATION "${MAC_BUNDLE_PATH}/Contents/plugins"
