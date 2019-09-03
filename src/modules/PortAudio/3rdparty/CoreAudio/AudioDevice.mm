@@ -184,11 +184,11 @@ void AudioDevice::Init(AudioPropertyListenerProc lProc = DefaultListener)
                                               mForInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput,
                                               kAudioObjectPropertyElementMaster
                                             }; // channel
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mSafetyOffset));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mSafetyOffset));
 
     propsize = sizeof(UInt32);
     theAddress.mSelector = kAudioDevicePropertyBufferFrameSize;
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mBufferSizeFrames));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mBufferSizeFrames));
 
     listenerProc = lProc;
     listenerSilentFor = 0;
@@ -219,10 +219,10 @@ void AudioDevice::Init(AudioPropertyListenerProc lProc = DefaultListener)
     }
     propsize = sizeof(Float64);
     theAddress.mSelector = kAudioDevicePropertyNominalSampleRate;
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &currentNominalSR));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &currentNominalSR));
     propsize = sizeof(AudioStreamBasicDescription);
     theAddress.mSelector = kAudioDevicePropertyStreamFormat;
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mInitialFormat));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mInitialFormat));
     mFormat = mInitialFormat;
     propsize = 0;
     theAddress.mSelector = kAudioDevicePropertyAvailableNominalSampleRates;
@@ -360,11 +360,11 @@ AudioDevice::~AudioDevice()
                                                 kAudioObjectPropertyScopeGlobal,
                                                 kAudioObjectPropertyElementMaster
                                               };
-            verify_noerr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
+            __Verify_noErr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
             prop.mElement = kAudioDevicePropertyNominalSampleRate;
-            verify_noerr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
+            __Verify_noErr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
             prop.mElement = kAudioHardwarePropertyDefaultOutputDevice;
-            verify_noerr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
+            __Verify_noErr(AudioObjectRemovePropertyListener(mID, &prop, listenerProc, this));
 #endif
         }
         if (nominalSampleRateList) {
@@ -382,8 +382,8 @@ void AudioDevice::SetBufferSize(UInt32 size)
                                               kAudioObjectPropertyElementMaster
                                             }; // channel
 
-    verify_noerr(AudioObjectSetPropertyData(mID, &theAddress, 0, NULL, propsize, &size));
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mBufferSizeFrames));
+    __Verify_noErr(AudioObjectSetPropertyData(mID, &theAddress, 0, NULL, propsize, &size));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mBufferSizeFrames));
 }
 
 OSStatus AudioDevice::NominalSampleRate(Float64 &sampleRate)
@@ -591,7 +591,7 @@ char *AudioDevice::GetName(char *buf, UInt32 maxlen)
                                               kAudioObjectPropertyElementMaster
                                             }; // channel
 
-    verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &maxlen, buf));
+    __Verify_noErr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &maxlen, buf));
 
     return buf;
 }
