@@ -1,3 +1,12 @@
+Changes in QMPlay2 build 19.09.03:
+    - fix possible compilation error with FFTSpectrum (all OSes) and PortAudio (macOS),
+    - add code for finding VA-API and VDPAU drivers directory (useful for AppImage),
+    - fixes in "QMPlay2.1", "QMPlay2.desktop", "QMPlay2.appdata.xml",
+    - improve checking for EGL in X11 - less possibility to fail,
+    - add (again) YouTube quality settings into settings widget,
+    - update translation files (martinkg, Alexey Lugin),
+    - allow only YUV420P videos in VideoToolBox,
+
 Changes in QMPlay2 build 19.08.27:
 	- a lot of VA-API improvements including zero-copy on OpenGL (some old drivers might cease to work - I can't test them),
 	- fix loading of QMPlay2 modules (on some OS'es it leads to crash),
