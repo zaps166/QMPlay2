@@ -551,12 +551,11 @@ static void checkForEGL()
     QByteArray cardFilePath;
 
     auto eglDpy = eglGetDisplayFunc(dpy);
-    int major = 0, minor = 0;
-    if (eglDpy && eglInitializeFunc(eglDpy, &major, &minor))
+    if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
     {
         constexpr int EGLVendor = 0x3053;
         const QByteArray eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
-        if (major > 0 && (major > 1 || minor >= 5) && eglVendor == "Mesa Project") // EGL >= 1.5, don't allow to run Qt over EGL on NVIDIA
+        if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
         {
             constexpr int EGLExtensions = 0x3055;
             const bool hasDeviceQuery = QByteArray(eglQueryStringFunc(nullptr, EGLExtensions)).contains("EGL_EXT_device_query");
