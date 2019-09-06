@@ -496,17 +496,27 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
     QTreeWidgetItem *firstItem = nullptr;
     for (const Playlist::Entry &entry : entries)
     {
-        QTreeWidgetItem *currentItem = nullptr, *tmpParent = nullptr, *createdItem = nullptr;
+        QTreeWidgetItem *currentItem = nullptr, *tmpParent, *createdItem = nullptr;
+        int insertCurrChildAt;
+        QStringList *currExistingEntries;
         const int idx = entry.parent - 1;
         if (idx >= 0 && groupList.size() > idx)
+        {
             tmpParent = groupList.at(idx);
+            insertCurrChildAt = -1;
+            currExistingEntries = nullptr;
+        }
         else
+        {
             tmpParent = parent;
+            insertCurrChildAt = insertChildAt;
+            currExistingEntries = existingEntries;
+        }
         if (entry.GID)
         {
             if (sync != FILE_SYNC)
             {
-                createdItem = pLW.newGroup(entry.name, entry.url, tmpParent, insertChildAt, existingEntries);
+                createdItem = pLW.newGroup(entry.name, entry.url, tmpParent, insertCurrChildAt, currExistingEntries);
                 groupList += createdItem;
             }
             else
@@ -518,7 +528,7 @@ QTreeWidgetItem *AddThr::insertPlaylistEntries(const Playlist::Entries &entries,
         }
         else
         {
-            currentItem = createdItem = pLW.newEntry(entry, tmpParent, demuxersInfo, -1, existingEntries);
+            currentItem = createdItem = pLW.newEntry(entry, tmpParent, demuxersInfo, insertCurrChildAt, currExistingEntries);
             if (entry.queue) //Rebuild queue
             {
                 for (int j = pLW.queue.size(); j <= queueSize + entry.queue - 1; ++j)
