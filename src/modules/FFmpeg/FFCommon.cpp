@@ -18,9 +18,11 @@
 
 #include <FFCommon.hpp>
 
+#include <QRegularExpression>
 #include <QProcess>
 #include <QSysInfo>
 #include <QDebug>
+#include <QFile>
 #include <QDir>
 
 extern "C"
@@ -54,7 +56,7 @@ void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
         return;
 
     static const auto libDirs = [] {
-        QList<QByteArray> dirsWithWordSize, dirs;
+        QStringList dirsWithWordSize, dirs;
 
         QProcess whereis;
         whereis.start("whereis", {"-l"});
@@ -73,6 +75,24 @@ void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
                     dirs.append(path);
             }
         }
+
+#ifdef Q_OS_LINUX
+        QFile maps("/proc/self/maps");
+        if (maps.open(QFile::ReadOnly | QFile::Text))
+        {
+            const auto lines = maps.readAll().split('\n');
+            for (auto &&line : lines)
+            {
+                const auto dir = QRegularExpression(R"((\/usr\/lib\/\S+-linux-gnu)\/.+\.so($|\.))").match(line).captured(1).toUtf8();
+                if (!dir.isEmpty())
+                {
+                    if (!dirs.contains(dir))
+                        dirs.append(dir);
+                    break;
+                }
+            }
+        }
+#endif
 
         return dirsWithWordSize + dirs;
     }();
