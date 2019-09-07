@@ -12,7 +12,6 @@ Table of Contents
 * [YouTube](#youtube)
 * [Spherical view](#spherical-view)
 * [ALSA](#alsa)
-* [Ubuntu Unity](#ubuntu-unity)
 * [Hardware acceleration](#hardware-acceleration)
 * [Deinterlacing](#deinterlacing)
 * [Hidden features](#hidden-features)
@@ -25,19 +24,16 @@ Table of Contents
 
 #### Easy installation on Windows (XP or higher)
 
-- [Download the newest Windows installer](https://github.com/zaps166/QMPlay2/releases).
+- [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Windows installer.
 
-#### Easy installation on Ubuntu / Mint
+#### Easy installation on Linux (AppImage)
 
-- [Download the newest Ubuntu DEB package](https://github.com/zaps166/QMPlay2/releases).
+- [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Linux AppImage.
 
 #### Easy installation on Arch Linux / Manjaro Linux
 
-- Arch Linux only: Install AUR client (e.g. yay),
-- run the following command:
-```
-$ yay -S qmplay2
-```
+- Install AUR client (e.g. yay),
+- run the following command: `yay -S qmplay2`
 
 #### Easy installation on openSUSE Leap 15.1
 
@@ -73,16 +69,6 @@ QMPlay2 supports spherical view on OpenGL video output. You can watch e.g. YouTu
 
 If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you should also append:
 `defaults.namehint.!showall on` to the configuration file. Otherwise devices which were added may not be visible!
-
-## Ubuntu Unity
-
-QMPlay2 should be visible in sound indicator via MPRIS2 interface. Be sure that it is enabled in "Settings->Modules->Extensions"!
-
-Tray tooltip and mouse interactions with tray icon (show/hide, compact view) doesn't work.
-
-You can disable tray icon via "Ctrl+T" key shortcut or from menu: "Options->Show tray icon".
-
-You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ## Hardware acceleration
 
@@ -132,6 +118,10 @@ Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe
 ### Custom user agent
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
+
+### Signle instance
+
+You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ## Multimedia keys
 
