@@ -73,11 +73,11 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 ## Hardware acceleration
 
 QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
-Hardware acceleration is disabled by default, you can enable it in "Settings->Playback settings":
+Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
 
-Hardware acceleration important information:
+### Hardware acceleration important information:
 - VDPAU uses only its own video output, so OpenGL features and CPU filters won't work.
 - CUVID, DXVA2 and VA-API uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension and currently it doesn't support hue, saturation adjustment and video deinterlacing.
@@ -85,6 +85,15 @@ Hardware acceleration important information:
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 - VideoToolBox doesn't support OpenGL high quality video scaling yet.
 - VideoToolBox doesn't support deinterlacing.
+
+### VA-API information:
+
+VA-API + OpenGL can run it two modes:
+- *GLX* which uses GLX for OpenGL context creation - this is slower because of in-memory YUV->RGB conversion by a driver. QMPlay2 displays the "(GLX)" in Information panel, e.g. "FFmpeg/VA-API, OpenGL 3.0 VA-API (GLX)".
+- *EGL* which uses EGL for OpenGL context creation - this is faster and default for Wayland. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers.
+
+EGL only:
+- in case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
 
 ## Deinterlacing
 
