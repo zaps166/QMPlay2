@@ -704,9 +704,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
         isLocal = true;
     else
     {
-        inputFmt = av_find_input_format(scheme);
-        if (inputFmt)
-            url = _url.right(_url.length() - scheme.length() - 3);
+        if (scheme != "rtsp")
+        {
+            // It is needed for QMPlay2 schemes like "alsa://", "v4l2://", etc.
+            inputFmt = av_find_input_format(scheme);
+            if (inputFmt)
+                url = _url.right(_url.length() - scheme.length() - 3);
+        }
         isLocal = false;
     }
 
