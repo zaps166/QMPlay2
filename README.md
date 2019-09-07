@@ -115,6 +115,10 @@ Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe
 - `portable` - runs QMPlay2 in portable mode (settings are stored in applications directory),
 - `noautoupdates` - disables auto-updates at first run.
 
+### Still images
+
+Go to "Options->settings" and check "Read and display still images".
+
 ### Custom user agent
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
