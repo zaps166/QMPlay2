@@ -89,7 +89,7 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 ### VA-API information:
 
 VA-API + OpenGL can run it two modes:
-- *GLX* which uses GLX for OpenGL context creation - this is slower because of in-memory YUV->RGB conversion by a driver. QMPlay2 displays the "(GLX)" in Information panel, e.g. "FFmpeg/VA-API, OpenGL 3.0 VA-API (GLX)".
+- *GLX* which uses GLX for OpenGL context creation - this is slower because of in-memory YUV->RGB conversion by a driver. QMPlay2 displays the "(GLX)" in Information panel, e.g. "FFmpeg/VA-API, OpenGL 3.0 VA-API (GLX)". The image on AMD drivers can be corrupted.
 - *EGL* which uses EGL for OpenGL context creation - this is faster and default for Wayland. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers.
 
 EGL only:
