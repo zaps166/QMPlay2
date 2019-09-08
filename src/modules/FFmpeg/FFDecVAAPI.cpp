@@ -49,6 +49,13 @@ extern "C"
 #   include <EGL/eglext.h>
 
 #   include <GL/gl.h>
+
+#   ifndef EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT
+#       define EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT 0x3443
+#   endif
+#   ifndef EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT
+#       define EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT 0x3444
+#   endif
 #endif
 
 class VAAPIOpenGL : public HWAccelInterface
