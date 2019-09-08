@@ -223,7 +223,12 @@ bool GME::open(const QString &_url, bool tracksOnly)
 
         streams_info += new StreamInfo(m_srate, 2);
 
-        gme_set_stereo_depth(m_gme, 0.5);
+        gme_effects_t effects = {};
+        effects.echo = 0.25;
+        effects.stereo = 0.5;
+        effects.enabled = true;
+        gme_set_effects(m_gme, &effects);
+
         return !gme_start_track(m_gme, track);
     }
 
