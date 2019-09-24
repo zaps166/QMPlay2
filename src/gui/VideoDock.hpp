@@ -69,6 +69,7 @@ private:
     Qt::KeyboardModifiers m_pressedKeyModifiers = Qt::NoModifier;
     bool canPopup, is_floating, isBreeze, canHideIDWCursor, doubleClicked;
     double touchZoom;
+    bool m_workaround = false;
 private slots:
     void popup(const QPoint &);
     void hideCursor();

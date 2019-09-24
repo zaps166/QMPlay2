@@ -32,6 +32,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QGesture>
+#include <QWindow>
 #include <QMenu>
 
 #include <cmath>
@@ -112,6 +113,8 @@ void VideoDock::fullScreen(bool b)
 
         if (!isBreeze)
             setStyle(&commonStyle);
+
+        m_workaround = true;
     }
     else
     {
@@ -133,6 +136,8 @@ void VideoDock::fullScreen(bool b)
 
         if (!isBreeze)
             setStyle(nullptr);
+
+        m_workaround = false;
     }
 }
 
@@ -334,18 +339,22 @@ bool VideoDock::event(QEvent *e)
             }
             break;
         case QEvent::Move:
-            if (window()->property("fullScreen").toBool())
+            if (m_workaround)
             {
                 const auto versionSplitted = QString(qVersion()).split('.');
                 if (versionSplitted.count() == 3 && versionSplitted[0].toInt() * 0x100 + versionSplitted[1].toInt() >= 0x050C)
                 {
                     // Something is wrong with enter/leave events after going full screen in some configurations since Qt 5.12,
                     // do some mouse movements - Qt will see this as mouse move enter and move events.
-                    const auto currPos = QCursor::pos();
-                    QCursor::setPos(currPos + QPoint(1, 1));
-                    QCursor::setPos(currPos - QPoint(1, 1));
-                    QCursor::setPos(currPos);
+                    QScreen *screen = nullptr;
+                    if (auto winHandle = window()->windowHandle())
+                        screen = winHandle->screen();
+                    const auto currPos = QCursor::pos(screen);
+                    QCursor::setPos(screen, currPos + QPoint(1, 1));
+                    QCursor::setPos(screen, currPos - QPoint(1, 1));
+                    QCursor::setPos(screen, currPos);
                 }
+                m_workaround = false;
             }
             break;
         default:
