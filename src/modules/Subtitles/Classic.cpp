@@ -25,6 +25,7 @@
 #include <QStringList>
 #include <QRegExp>
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstdio>
 
@@ -230,7 +231,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
     if (!subsWithoutEnd.isEmpty())
     {
-        qSort(subsWithoutEnd);
+        std::sort(subsWithoutEnd.begin(), subsWithoutEnd.end());
 
         for (int i = 0; i < subsWithoutEnd.size()-1; ++i)
         {
