@@ -1021,6 +1021,10 @@
         <source>Don&apos;t load playlist files within other files</source>
         <translation>Pomijaj ładowanie plików playlist między innymi plikami</translation>
     </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Powiększaj małe okładki</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>

@@ -1020,6 +1020,10 @@
         <source>Don&apos;t load playlist files within other files</source>
         <translation>Laden Sie k&apos;eine Wiedergabelistendateien in andere Dateien</translation>
     </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
