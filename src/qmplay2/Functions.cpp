@@ -303,7 +303,7 @@ QPixmap Functions::getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w)
 
     return icon.pixmap(getNativeWindow(w), imgSize);
 }
-void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale)
+void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w, Qt::TransformationMode transformationMode, Qt::AspectRatioMode aRatioMode, QSize size, qreal scale, bool alwaysAllowEnlarge)
 {
     if (Q_UNLIKELY(scale <= 0.0))
         return;
@@ -325,39 +325,35 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w,
         pixmapToDraw = pixmap;
     }
 
-    const qreal aRatio = (qreal)pixmap.width() / (qreal)pixmap.height();
     QSize pixmapSize = size * scale;
-
-    if (aRatioMode == Qt::KeepAspectRatioByExpanding)
+    if (!alwaysAllowEnlarge && aRatioMode == Qt::KeepAspectRatio)
     {
-        if (pixmapSize.width() / aRatio < pixmapSize.height())
-            pixmapSize.rwidth() = pixmapSize.height() * aRatio;
-        else
-            pixmapSize.rheight() = pixmapSize.width() / aRatio;
+        if (pixmapSize.width() > pixmap.width())
+            pixmapSize.setWidth(pixmap.width());
+        if (pixmapSize.height() > pixmap.height())
+            pixmapSize.setHeight(pixmap.height());
     }
-    else if (aRatioMode == Qt::KeepAspectRatio && (pixmap.width() > pixmapSize.width() || pixmap.height() > pixmapSize.height()))
+    pixmapSize = pixmap.size().scaled(pixmapSize, aRatioMode);
+
+    const bool isSmooth = (transformationMode == Qt::SmoothTransformation);
+    const QPoint pixmapPos {
+        size.width()  / 2 - pixmapSize.width()  / 2,
+        size.height() / 2 - pixmapSize.height() / 2
+    };
+    if (isSmooth && (pixmapSize.width() < pixmap.width() / 2 || pixmapSize.height() < pixmap.height() / 2))
     {
-        if (pixmapSize.width() / aRatio > pixmapSize.height())
-            pixmapSize.rwidth() = pixmapSize.height() * aRatio;
-        else
-            pixmapSize.rheight() = pixmapSize.width() / aRatio;
+        const qreal dpr = w->devicePixelRatioF();
+        pixmapToDraw = pixmapToDraw.scaled(pixmapSize * dpr, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        pixmapToDraw.setDevicePixelRatio(dpr);
+        p.drawPixmap(pixmapPos, pixmapToDraw);
     }
     else
     {
-        pixmapSize = pixmap.size();
+        p.save();
+        p.setRenderHint(QPainter::SmoothPixmapTransform, isSmooth);
+        p.drawPixmap(QRect(pixmapPos, pixmapSize), pixmapToDraw);
+        p.restore();
     }
-
-    const qreal dpr = w->devicePixelRatioF();
-
-    pixmapToDraw = pixmapToDraw.scaled(pixmapSize * dpr, Qt::IgnoreAspectRatio, transformationMode);
-    pixmapToDraw.setDevicePixelRatio(dpr);
-
-    const QPoint pixmapPos {
-        size.width()  / 2 - int(pixmapToDraw.width()  / (dpr * 2)),
-        size.height() / 2 - int(pixmapToDraw.height() / (dpr * 2))
-    };
-
-    p.drawPixmap(pixmapPos, pixmapToDraw);
 }
 
 bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_ids, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
