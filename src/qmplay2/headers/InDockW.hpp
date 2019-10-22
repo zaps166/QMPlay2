@@ -36,6 +36,7 @@ private:
     const QColor &grad1, &grad2, &qmpTxt;
     Qt::TransformationMode blurredTransformation;
     QPixmap customPixmap, customPixmapBlurred;
+    bool m_enlargeCovers = false;
     bool hasWallpaper;
     int loseHeight;
     QPointer<QWidget> w;

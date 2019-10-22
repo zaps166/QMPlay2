@@ -137,6 +137,7 @@ void SettingsWidget::InitSettings()
 #endif
     QMPSettings.init("ShowCovers", true);
     QMPSettings.init("BlurCovers", true);
+    QMPSettings.init("EnlargeCovers", false);
     QMPSettings.init("ShowDirCovers", true);
     QMPSettings.init("AutoOpenVideoWindow", true);
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
@@ -348,6 +349,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page1->showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
         page1->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
         page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
+        page1->enlargeSmallCoversB->setChecked(QMPSettings.getBool("EnlargeCovers"));
 
         page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
         page1->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
@@ -788,6 +790,7 @@ void SettingsWidget::apply()
             QMPSettings.set("ShowCovers", page1->showCoversGB->isChecked());
             QMPSettings.set("BlurCovers", page1->blurCoversB->isChecked());
             QMPSettings.set("ShowDirCovers", page1->showDirCoversB->isChecked());
+            QMPSettings.set("EnlargeCovers", page1->enlargeSmallCoversB->isChecked());
             QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
             QMPSettings.set("AutoRestoreMainWindowOnVideo", page1->autoRestoreMainWindowOnVideoB->isChecked());
             QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());

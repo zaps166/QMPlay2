@@ -51,17 +51,24 @@
           <property name="spacing">
            <number>3</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="blurCoversB">
-            <property name="text">
-             <string>Blurred covers as background</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="showDirCoversB">
             <property name="text">
              <string>Show covers from directory if there aren't in the music file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="enlargeSmallCoversB">
+            <property name="text">
+             <string>Enlarge small covers</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="blurCoversB">
+            <property name="text">
+             <string>Blurred covers as background</string>
             </property>
            </widget>
           </item>
@@ -448,6 +455,7 @@
   <tabstop>showCoversGB</tabstop>
   <tabstop>blurCoversB</tabstop>
   <tabstop>showDirCoversB</tabstop>
+  <tabstop>enlargeSmallCoversB</tabstop>
   <tabstop>autoUpdatesB</tabstop>
   <tabstop>autoOpenVideoWindowB</tabstop>
   <tabstop>autoRestoreMainWindowOnVideoB</tabstop>
