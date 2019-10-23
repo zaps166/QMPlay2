@@ -295,6 +295,9 @@ bool VDPAUWriter::open()
 #ifdef VDP_DECODER_PROFILE_HEVC_MAIN
                 << VDP_DECODER_PROFILE_HEVC_MAIN
 #endif
+#ifdef VDP_DECODER_PROFILE_VP9_PROFILE_0
+                << VDP_DECODER_PROFILE_VP9_PROFILE_0
+#endif
                 << VDP_DECODER_PROFILE_MPEG2_MAIN << VDP_DECODER_PROFILE_MPEG2_SIMPLE
                 << VDP_DECODER_PROFILE_MPEG4_PART2_ASP << VDP_DECODER_PROFILE_MPEG4_PART2_SP
                 << VDP_DECODER_PROFILE_VC1_ADVANCED << VDP_DECODER_PROFILE_VC1_MAIN << VDP_DECODER_PROFILE_VC1_SIMPLE
@@ -343,6 +346,13 @@ bool VDPAUWriter::hwAccelInit(int W, int H, const char *codec_name)
     {
         if (profileList.contains(VDP_DECODER_PROFILE_HEVC_MAIN))
             p = VDP_DECODER_PROFILE_HEVC_MAIN;
+    }
+#endif
+#ifdef VDP_DECODER_PROFILE_VP9_PROFILE_0
+    else if (!qstrcmp(codec_name, "vp9"))
+    {
+        if (profileList.contains(VDP_DECODER_PROFILE_VP9_PROFILE_0))
+            p = VDP_DECODER_PROFILE_VP9_PROFILE_0;
     }
 #endif
     else if (!qstrcmp(codec_name, "mpeg2video"))
