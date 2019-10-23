@@ -41,6 +41,8 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
         const VideoFrame &sourceFrame = sourceBuffer.frame;
         VideoFrame destFrame(sourceFrame.size, sourceFrame.linesize);
+        destFrame.limited = sourceFrame.limited;
+        destFrame.colorSpace = sourceFrame.colorSpace;
 
         const bool parity = (isTopFieldFirst(sourceFrame) == secondFrame);
 

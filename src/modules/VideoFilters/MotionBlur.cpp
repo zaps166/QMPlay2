@@ -37,6 +37,8 @@ bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
         const VideoFrame &videoFrame1 = dequeued.frame;
         VideoFrame videoFrame2(videoFrame1.size, videoFrame1.linesize);
         const VideoFrame &videoFrame3 = lookup.frame;
+        videoFrame2.limited = videoFrame1.limited;
+        videoFrame2.colorSpace = videoFrame1.colorSpace;
 
         for (int p = 0; p < 3; ++p)
         {
