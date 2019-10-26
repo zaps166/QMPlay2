@@ -25,7 +25,6 @@
 #endif
 #ifdef QMPlay2_VDPAU
     #include <FFDecVDPAU.hpp>
-    #include <FFDecVDPAU_NW.hpp>
     #include <VDPAUWriter.hpp>
 #endif
 #ifdef QMPlay2_DXVA2
@@ -72,7 +71,6 @@ FFmpeg::FFmpeg() :
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VDPAU
     init("DecoderVDPAUEnabled", true);
-    init("DecoderVDPAU_NWEnabled", false);
     init("VDPAUDeintMethod", 1);
     if (getUInt("VDPAUDeintMethod") > 2)
         set("VDPAUDeintMethod", 1);
@@ -160,8 +158,6 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
         modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
         modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
     }
-    if (showDisabled || getBool("DecoderVDPAU_NWEnabled"))
-        modulesInfo += Info(DecoderVDPAU_NWName, DECODER, vdpauIcon);
 #endif
 #ifdef QMPlay2_VAAPI
     if (showDisabled || getBool("DecoderVAAPIEnabled"))
@@ -190,8 +186,6 @@ void *FFmpeg::createInstance(const QString &name)
 #ifdef QMPlay2_VDPAU
     else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled"))
         return new FFDecVDPAU(*this);
-    else if (name == DecoderVDPAU_NWName && getBool("DecoderVDPAU_NWEnabled"))
-        return new FFDecVDPAU_NW(*this);
 #endif
 #ifdef QMPlay2_VAAPI
     else if (name == DecoderVAAPIName && getBool("DecoderVAAPIEnabled"))
@@ -288,10 +282,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
     vdpauLayout->addRow(tr("Image scaling level") + ": ", vdpauHQScalingB);
     vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
-
-    decoderVDPAU_NWB = new QCheckBox(tr("Decoder") + " VDPAU (no output) - " + tr("hardware decoding"));
-    decoderVDPAU_NWB->setToolTip(tr("This decoder doesn't have its own video output, so it can be used with any video output.\nIt copies decoded video frame to system RAM, so it can be slow!"));
-    decoderVDPAU_NWB->setChecked(sets().getBool("DecoderVDPAU_NWEnabled"));
 #endif
 
 #ifdef QMPlay2_VAAPI
@@ -402,7 +392,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(demuxerB);
 #ifdef QMPlay2_VDPAU
     layout->addWidget(decoderVDPAUB);
-    layout->addWidget(decoderVDPAU_NWB);
 #endif
 #ifdef QMPlay2_VAAPI
     layout->addWidget(decoderVAAPIEB);
@@ -444,7 +433,6 @@ void ModuleSettingsWidget::saveSettings()
 #ifdef QMPlay2_VDPAU
     sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
     sets().set("VDPAUHQScaling", vdpauHQScalingB->currentIndex());
-    sets().set("DecoderVDPAU_NWEnabled", decoderVDPAU_NWB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());

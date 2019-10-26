@@ -96,7 +96,6 @@ private:
     QComboBox *vdpauHQScalingB;
     QCheckBox *noisereductionVDPAUB;
     Slider *noisereductionLvlVDPAUS;
-    QCheckBox *decoderVDPAU_NWB;
 #endif
 #ifdef QMPlay2_VAAPI
     QGroupBox *decoderVAAPIEB;

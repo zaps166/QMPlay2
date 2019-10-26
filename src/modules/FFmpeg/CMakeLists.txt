@@ -78,8 +78,8 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
         endif()
 
         add_definitions(-DQMPlay2_VDPAU)
-        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp FFDecVDPAU_NW.hpp)
-        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp FFDecVDPAU_NW.cpp)
+        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAUWriter.hpp)
+        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAUWriter.cpp)
         pkg_check_modules(LIBVDPAU vdpau REQUIRED)
         include_directories(${LIBVDPAU_INCLUDE_DIRS})
         link_directories(${LIBVDPAU_LIBRARY_DIRS})
