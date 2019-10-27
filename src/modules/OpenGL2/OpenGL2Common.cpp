@@ -443,7 +443,7 @@ void OpenGL2Common::paintGL()
                     imageReady = true;
                 else if (res == HWAccelInterface::MapError)
                 {
-                    QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture copy error"));
+                    QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture map error"));
                     hwAccelError = true;
                 }
             }
