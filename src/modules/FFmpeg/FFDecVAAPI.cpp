@@ -85,7 +85,7 @@ public:
     }
     bool isCopy() const override
     {
-        return false;
+        return m_isEGL ? false : true;
     }
 
     bool canInitializeTextures() const override
