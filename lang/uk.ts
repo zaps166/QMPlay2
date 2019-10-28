@@ -1023,7 +1023,7 @@
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation type="unfinished"></translation>
+        <translation>Збільшити маленькі обкладинки</translation>
     </message>
 </context>
 <context>
