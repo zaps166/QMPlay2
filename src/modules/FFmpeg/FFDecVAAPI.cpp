@@ -497,6 +497,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
         if (bufferRef && av_hwdevice_ctx_init(bufferRef) == 0)
         {
             codec_ctx->hw_device_ctx = bufferRef;
+            codec_ctx->extra_hw_frames = 3;
             m_vaapi->vpp_deint_type = m_vppDeintType;
             m_vaapi->init(codec_ctx->width, codec_ctx->height, (m_copyVideo != Qt::Checked));
         }
