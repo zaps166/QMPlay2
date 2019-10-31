@@ -62,15 +62,10 @@ bool VAAPI::open(const char *codecName, bool &openGL)
     if (!isX11 && !openGL)
         return false;
 
-    const bool isEGL = (
-        QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0 ||
-        QGuiApplication::platformName().startsWith("wayland")
-    );
-
     int major = 0, minor = 0;
     bool initialized = false;
 
-    if (openGL && isEGL)
+    if (openGL && Functions::isEGL())
     {
         QString devFilePath;
 

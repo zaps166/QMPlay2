@@ -158,4 +158,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
     QMPLAY2SHAREDLIB_EXPORT QMatrix3x3 getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited);
+
+    QMPLAY2SHAREDLIB_EXPORT bool isEGL();
 }

@@ -41,6 +41,7 @@
 #include <QTextCodec>
 #include <QMessageBox>
 #include <QStyleOption>
+#include <QGuiApplication>
 
 extern "C"
 {
@@ -968,4 +969,13 @@ QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limit
         mat *= 255.0f / (235.0f - 16.0f);
 
     return mat.toGenericMatrix<3, 3>();
+}
+
+bool Functions::isEGL()
+{
+    static bool isEGL = (
+        QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0 ||
+        QGuiApplication::platformName().startsWith("wayland")
+    );
+    return isEGL;
 }
