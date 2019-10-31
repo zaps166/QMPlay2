@@ -392,6 +392,8 @@ void OpenGL2Common::paintGL()
                 if (hwAccelError && !hasHwAccelError)
                     QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
+                if (numPlanes == 1)
+                    hwAccellnterface->setVideoAdjustment(videoAdjustment);
 
                 /* Prepare texture coordinates */
                 texCoordYCbCr[2] = texCoordYCbCr[6] = 1.0f;
@@ -541,7 +543,6 @@ void OpenGL2Common::paintGL()
         const float sharpness  = videoAdjustment.sharpness / 50.0f;
         if (hwAccellnterface && numPlanes == 1)
         {
-            hwAccellnterface->setVideAdjustment(videoAdjustment);
             const bool hasBrightness = videoAdjustmentKeys.contains("Brightness");
             const bool hasContrast   = videoAdjustmentKeys.contains("Contrast");
             const bool hasSharpness  = videoAdjustmentKeys.contains("Sharpness");

@@ -83,7 +83,7 @@ public:
     {
         videoAdjustmentCap.zero();
     }
-    virtual void setVideAdjustment(const VideoAdjustment &videoAdjustment)
+    virtual void setVideoAdjustment(const VideoAdjustment &videoAdjustment)
     {
         Q_UNUSED(videoAdjustment)
     }

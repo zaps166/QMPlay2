@@ -275,9 +275,10 @@ public:
         videoAdjustmentCap.hue = true;
         videoAdjustmentCap.sharpness = false;
     }
-    void setVideAdjustment(const VideoAdjustment &videoAdjustment) override
+    void setVideoAdjustment(const VideoAdjustment &videoAdjustment) override
     {
-        m_vaapi->applyVideoAdjustment(0, 0, videoAdjustment.saturation, videoAdjustment.hue);
+        if (!m_isEGL)
+            m_vaapi->applyVideoAdjustment(0, 0, videoAdjustment.saturation, videoAdjustment.hue);
     }
 
     /**/
