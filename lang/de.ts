@@ -1633,10 +1633,6 @@
         <translation>Echo-Surround-Sound</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Bild Skalierung</translation>
-    </message>
-    <message>
         <source>Noise reduction</source>
         <translation>Rauschunterdrückung</translation>
     </message>
@@ -1663,12 +1659,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Erzwinge Texturrendering, wenn möglich (nicht empfohlen)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Dieser Decoder verfügt nicht über einen eigenen Videoausgang, also kann er mit jedem Videoausgang verwendet werden.
-Er kopiert dekodierte Video-Frames in den Systemspeicher, daher kann es langsam sein!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1955,8 +1945,8 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>Fehler beim Kopieren von Textur</translation>
+        <source>texture map error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3211,26 +3201,18 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Nicht unterstützter De-Interlacing-Algorithmus</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Nicht unterstützter Rauschunterdrückungsfilter</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Nicht unterstützter Schärfefilter</translation>
+        <translation type="unfinished">Nicht unterstützter Schärfefilter</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Nicht unterstützte Bildskalierung</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough memory</source>
-        <translation>Nicht genügend Speicher</translation>
+        <source>Unsupported noise reduction filter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

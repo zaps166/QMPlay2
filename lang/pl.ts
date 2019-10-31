@@ -1642,10 +1642,6 @@
         <translation>Redukcja szumu</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Poziom skalowania obrazu</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Liczba suwaków w korektorze dźwięku</translation>
     </message>
@@ -1664,12 +1660,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Ten dekoder nie posiada własnego wyjścia obrazu, więc może być użyty z dowolnym wyjściem obrazu.
-Kopiuje on zdekodowany obraz do systemowej pamięci RAM, więc może być powolny!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1956,8 +1946,8 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <translation>błąd</translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>błąd kopiowania tekstury</translation>
+        <source>texture map error</source>
+        <translation>błąd mapowania tekstury</translation>
     </message>
 </context>
 <context>
@@ -3212,26 +3202,18 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Nie obsługiwany filtr redukcji szumów</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
         <translation>Nie obsługiwany filtr ostrości obrazu</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Nieobsługiwany poziom skalowania obrazu</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
     </message>
     <message>
-        <source>Not enough memory</source>
-        <translation>Brakuje wolnej pamięci</translation>
+        <source>Unsupported noise reduction filter</source>
+        <translation>Nie obsługiwany filtr redukcji szumów</translation>
     </message>
 </context>
 <context>

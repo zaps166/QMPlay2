@@ -1631,10 +1631,6 @@
         <translation>Эхо окружающего звука</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Уровень масштабирования изображения</translation>
-    </message>
-    <message>
         <source>Noise reduction</source>
         <translation>Шумоподавление</translation>
     </message>
@@ -1661,12 +1657,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Принудительный рендеринг текстур если возможно (не рекомендуется)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Этот декодер не имеет собственного видеовыхода, так что он может быть использован с любым видеовыходом.
-Он копирует декодированные видеокадры в системную память, поэтому может быть медленным!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1953,8 +1943,8 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>ошибка</translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>Ошибка копирования текстур</translation>
+        <source>texture map error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3209,26 +3199,18 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Алгоритм деинтерлейсинга не поддерживается</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Неподдерживаемый фильтр шумоподавлния</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Неподдерживаемый фильтр резкости</translation>
+        <translation type="unfinished">Неподдерживаемый фильтр резкости</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Неподдерживаемый уровень масштабирования изображения</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough memory</source>
-        <translation>Недостаточно памяти</translation>
+        <source>Unsupported noise reduction filter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

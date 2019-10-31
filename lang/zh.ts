@@ -1631,10 +1631,6 @@
         <translation>回声环绕</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>图像缩放级别</translation>
-    </message>
-    <message>
         <source>Noise reduction</source>
         <translation>降噪</translation>
     </message>
@@ -1661,11 +1657,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>如果可能的话,强制渲染纹理(不推荐)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1950,7 +1941,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>texture copy error</source>
+        <source>texture map error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3203,25 +3194,17 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>不支持的去隔行算法</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>不支持的减噪滤镜</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>不支持的图像锐化滤镜</translation>
+        <translation type="unfinished">不支持的图像锐化滤镜</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>不支持的图像比例级别</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough memory</source>
+        <source>Unsupported noise reduction filter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

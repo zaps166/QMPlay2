@@ -1642,10 +1642,6 @@
         <translation>Шумоприглушення</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Рівень масштабування зображення</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Кількість повзунків в еквалайзері звуку</translation>
     </message>
@@ -1664,12 +1660,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Примусовий рендеринг текстур по можливості (не рекомендовано)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Цей декодер не має власного відеовиходу, тому може бути використаний з будь-яким відеовиходом.
-Він копіює декодовані відеокадри до системної пам&apos;яті, тому може бути повільним!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1956,8 +1946,8 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>помилка</translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>помилка копіювання текстури</translation>
+        <source>texture map error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3212,26 +3202,18 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Алгоритм усунення черезрядковості не підтримується</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Непідтримуваний фільтр шумоприглушення</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Непідтримуваний фільтр чіткості</translation>
+        <translation type="unfinished">Непідтримуваний фільтр чіткості</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Непідтримуваний рівень масштабування зображень</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough memory</source>
-        <translation>Бракує вільної пам&apos;яті</translation>
+        <source>Unsupported noise reduction filter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1582,10 +1582,6 @@
         <translation>Método de decodificación multiproceso</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Nivel de escalado de imagen</translation>
-    </message>
-    <message>
         <source>Uncompressed PCM sound</source>
         <translation>Sonido PCM sin comprimir</translation>
     </message>
@@ -1664,12 +1660,6 @@
     <message>
         <source>Force render to texture if possible (not recommended)</source>
         <translation>Forzar el renderizado a textura si es posible (no recomendado)</translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Este decodificador no tiene su propia salida de vídeo, así que se puede usar con cualquier salida de vídeo.
-Copia el fotograma de vídeo descodificado a la RAM del systema, ¡así que puede ser lento!</translation>
     </message>
     <message>
         <source>Display subtitles if available</source>
@@ -1956,8 +1946,8 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
         <translation>error</translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>error de copia de textura</translation>
+        <source>texture map error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3212,26 +3202,18 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Filtro de nitidez de imagen no soportado</translation>
+        <translation type="unfinished">Filtro de nitidez de imagen no soportado</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Nivel de escalado de imagen no soportado</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Filtro de reducción de ruido no soportado</translation>
-    </message>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Algoritmo de desentrelazado no soportado</translation>
-    </message>
-    <message>
-        <source>Not enough memory</source>
-        <translation>No hay bastante memoria</translation>
+        <source>Unsupported noise reduction filter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

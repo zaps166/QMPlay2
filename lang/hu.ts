@@ -1570,16 +1570,6 @@
         <translation>Zajcsökkentés</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
-        <translation>Ennek a dekódolónak nincs saját videó kimenete, ezért bármely videó kimenettel használható.
-A dekódolt videó képkockákat a rendszermemóriába másolja, ezért lassú lehet!</translation>
-    </message>
-    <message>
         <source>Use OpenGL</source>
         <translation>OpenGL használata</translation>
     </message>
@@ -1946,16 +1936,16 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>texture copy error</source>
-        <translation>textúra másolási hiba</translation>
-    </message>
-    <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>error</source>
         <translation>hiba</translation>
+    </message>
+    <message>
+        <source>texture map error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3210,26 +3200,18 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not enough memory</source>
-        <translation>Nincs elég memória</translation>
-    </message>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Nem támogatott váltottsorosság-megszüntetési algoritmus</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Nem támogatott zajcsökkentési szűrő</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Nem támogatott élességi szűrő</translation>
+        <translation type="unfinished">Nem támogatott élességi szűrő</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Nem támogatott nagyítási szint</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported noise reduction filter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

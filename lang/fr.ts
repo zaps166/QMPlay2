@@ -1631,10 +1631,6 @@
         <translation>Echo multicanal</translation>
     </message>
     <message>
-        <source>Image scaling level</source>
-        <translation>Niveau de mise à l&apos;échelle de l&apos;image</translation>
-    </message>
-    <message>
         <source>Noise reduction</source>
         <translation>Réduction du bruit</translation>
     </message>
@@ -1660,11 +1656,6 @@
     </message>
     <message>
         <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This decoder doesn&apos;t have its own video output, so it can be used with any video output.
-It copies decoded video frame to system RAM, so it can be slow!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1950,7 +1941,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>texture copy error</source>
+        <source>texture map error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3203,25 +3194,17 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
-    <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>Algorithme de désentrelacement non supporté</translation>
-    </message>
-    <message>
-        <source>Unsupported noisy reduction filter</source>
-        <translation>Filtre de réduction du bruit non supporté</translation>
-    </message>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Filtre de résolution d&apos;image non supporté</translation>
+        <translation type="unfinished">Filtre de résolution d&apos;image non supporté</translation>
     </message>
     <message>
-        <source>Unsupported image scaling level</source>
-        <translation>Niveau de mise à l&apos;échelle de l&apos;image non supporté</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough memory</source>
+        <source>Unsupported noise reduction filter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
