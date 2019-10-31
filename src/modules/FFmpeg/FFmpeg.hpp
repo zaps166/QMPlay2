@@ -93,7 +93,7 @@ private:
     QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
     QGroupBox *decoderVDPAUB;
-    QComboBox *vdpauHQScalingB;
+    QCheckBox *useOpenGLVDPAUB;
     QCheckBox *noisereductionVDPAUB;
     Slider *noisereductionLvlVDPAUS;
 #endif

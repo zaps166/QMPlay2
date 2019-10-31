@@ -20,7 +20,7 @@
 
 #include <FFDecHWAccel.hpp>
 
-class VDPAUWriter;
+class VDPAU;
 
 class FFDecVDPAU final : public FFDecHWAccel
 {
@@ -32,5 +32,22 @@ public:
 
     QString name() const override;
 
+    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+    void downloadVideoFrame(VideoFrame &decoded) override;
+
     bool open(StreamInfo &, VideoWriter *) override;
+
+private:
+    static void preemptionCallback(uint32_t device, void *context);
+
+private:
+    VDPAU *m_vdpau = nullptr;
+
+    bool m_useOpenGL = true;
+
+    bool m_limitedRange = true;
+
+    int m_deintMethod = 0;
+    bool m_nrEnabled = false;
+    float m_nrLevel = 0.0f;
 };

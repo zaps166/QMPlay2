@@ -25,7 +25,6 @@
 #endif
 #ifdef QMPlay2_VDPAU
     #include <FFDecVDPAU.hpp>
-    #include <VDPAUWriter.hpp>
 #endif
 #ifdef QMPlay2_DXVA2
     #include <FFDecDXVA2.hpp>
@@ -71,14 +70,12 @@ FFmpeg::FFmpeg() :
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VDPAU
     init("DecoderVDPAUEnabled", true);
+    init("VDPAUUseOpenGL", true);
     init("VDPAUDeintMethod", 1);
     if (getUInt("VDPAUDeintMethod") > 2)
         set("VDPAUDeintMethod", 1);
     init("VDPAUNoiseReductionEnabled", false);
     init("VDPAUNoiseReductionLvl", 0.0);
-    init("VDPAUHQScaling", 0);
-    if (getUInt("VDPAUHQScaling") > 9)
-        set("VDPAUHQScaling", 0);
 #endif
 #ifdef QMPlay2_VAAPI
     init("DecoderVAAPIEnabled", true);
@@ -217,7 +214,7 @@ void FFmpeg::videoDeintSave()
 {
 #ifdef QMPlay2_VDPAU
     set("VDPAUDeintMethod", vdpauDeintMethodB->currentIndex());
-    setInstance<VDPAUWriter>();
+    setInstance<FFDecVDPAU>();
 #endif
 #if defined(QMPlay2_VAAPI)
     set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
@@ -261,11 +258,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     decoderVDPAUB->setCheckable(true);
     decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
 
-    vdpauHQScalingB = new QComboBox;
-    for (int i = 0; i <= 9; ++i)
-        vdpauHQScalingB->addItem(QString("Level %1").arg(i));
-    vdpauHQScalingB->setCurrentIndex(sets().getUInt("VDPAUHQScaling"));
-
+    useOpenGLVDPAUB = new QCheckBox(tr("Use OpenGL"));
+    useOpenGLVDPAUB->setChecked(sets().getBool("VDPAUUseOpenGL"));
     noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
     noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
     connect(noisereductionVDPAUB, SIGNAL(clicked()), this, SLOT(checkEnables()));
@@ -280,7 +274,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     checkEnables();
 
     QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
-    vdpauLayout->addRow(tr("Image scaling level") + ": ", vdpauHQScalingB);
+    vdpauLayout->addRow(useOpenGLVDPAUB);
     vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
 #endif
 
@@ -411,7 +405,7 @@ void ModuleSettingsWidget::setVDPAU()
 {
     sets().set("VDPAUNoiseReductionEnabled", noisereductionVDPAUB->isChecked());
     sets().set("VDPAUNoiseReductionLvl", noisereductionLvlVDPAUS->value() / 50.0);
-    SetInstance<VDPAUWriter>();
+    SetInstance<FFDecVDPAU>();
 }
 void ModuleSettingsWidget::checkEnables()
 {
@@ -432,7 +426,7 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
 #ifdef QMPlay2_VDPAU
     sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
-    sets().set("VDPAUHQScaling", vdpauHQScalingB->currentIndex());
+    sets().set("VDPAUUseOpenGL", useOpenGLVDPAUB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
