@@ -354,16 +354,17 @@ bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
     const bool firstField = (m_lastVppSurface != currId);
     m_lastVppSurface = currId;
 
-    const int requiredRefs = m_nForwardRefs + 1 + m_nBackwardRefs;
+    // Example: {future(backward ref, frame 3), current(frame 2), past(forward ref, frame 1), past (forward ref, frame 0)}
+    const int requiredRefs = m_nBackwardRefs + 1 + m_nForwardRefs;
     if (m_refs.count() != requiredRefs)
     {
         m_refs.fill(currId, requiredRefs);
     }
     else if (firstField)
     {
-        m_vppFrames.remove(m_refs.takeFirst());
+        m_vppFrames.remove(m_refs.takeLast());
         m_vppFrames.insert(currId, frame);
-        m_refs.push_back(currId);
+        m_refs.push_front(currId);
     }
 
     VAProcFilterParameterBufferDeinterlacing *deintParams = nullptr;
@@ -380,16 +381,16 @@ bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
 
     VAProcPipelineParameterBuffer pipelineParam = {};
 
-    pipelineParam.surface = m_refs[m_nForwardRefs];
+    pipelineParam.surface = m_refs[m_nBackwardRefs];
     pipelineParam.output_background_color = 0xFF000000;
 
     pipelineParam.num_filters = 1;
     pipelineParam.filters = &m_vppDeintBuff;
 
-    pipelineParam.forward_references = m_refs.data();
+    pipelineParam.forward_references = &m_refs[m_nBackwardRefs + 1];
     pipelineParam.num_forward_references = m_nForwardRefs;
 
-    pipelineParam.backward_references = m_refs.data() + m_nForwardRefs + 1;
+    pipelineParam.backward_references = &m_refs[0];
     pipelineParam.num_backward_references = m_nBackwardRefs;
 
     VABufferID pipelineBuf = VA_INVALID_ID;
