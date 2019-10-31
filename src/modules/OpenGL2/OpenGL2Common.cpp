@@ -456,7 +456,7 @@ void OpenGL2Common::paintGL()
             {
                 glActiveTexture(GL_TEXTURE0 + p);
                 glBindTexture(target, textures[p + 1]);
-                if (m_useMipmaps)
+                if (m_useMipmaps && imageReady)
                     glGenerateMipmap(target);
             }
         }
