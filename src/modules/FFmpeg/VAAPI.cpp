@@ -170,7 +170,6 @@ void VAAPI::init(int width, int height,  bool allowFilters)
     m_allowFilters = allowFilters;
 
     ok = true;
-
 }
 
 bool VAAPI::vaapiCreateSurface(VASurfaceID &surface, int w, int h)
