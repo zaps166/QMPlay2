@@ -333,7 +333,7 @@ void FFDecVDPAU::downloadVideoFrame(VideoFrame &decoded)
     decoded.size.width = frame->width;
     decoded.size.height = frame->height;
 
-    if (!m_vdpau->getNV12(decoded, (quintptr)frame->data[3]))
+    if (!m_vdpau->getYV12(decoded, (quintptr)frame->data[3]))
         decoded.clear();
 }
 

@@ -50,7 +50,7 @@ public:
 
     bool videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure);
 
-    bool getNV12(VideoFrame &decoded, VdpVideoSurface id);
+    bool getYV12(VideoFrame &decoded, VdpVideoSurface id);
     bool getRGB(uint8_t *dest, const VideoFrameSize &size);
 
 private:

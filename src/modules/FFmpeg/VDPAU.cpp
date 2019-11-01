@@ -316,7 +316,7 @@ bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id,
     return true;
 }
 
-bool VDPAU::getNV12(VideoFrame &decoded, VdpVideoSurface id)
+bool VDPAU::getYV12(VideoFrame &decoded, VdpVideoSurface id)
 {
     void *data[] = {
         decoded.buffer[0].data(),
