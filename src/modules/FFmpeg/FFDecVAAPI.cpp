@@ -161,7 +161,6 @@ public:
             m_hasDmaBufImportModifiers = false;
 
             m_textures = nullptr;
-
         }
 #endif
         if (m_glSurface)

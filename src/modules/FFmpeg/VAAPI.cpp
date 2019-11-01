@@ -44,8 +44,7 @@ VAAPI::VAAPI()
 }
 VAAPI::~VAAPI()
 {
-    m_vppFrames.clear(); // Must be freed before destroying VADisplay
-    clearVPP();
+    clearVPP(); // Must be freed before destroying VADisplay
     if (VADisp)
     {
         vaTerminate(VADisp);
@@ -387,11 +386,17 @@ bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
     pipelineParam.num_filters = 1;
     pipelineParam.filters = &m_vppDeintBuff;
 
-    pipelineParam.forward_references = &m_refs[m_nBackwardRefs + 1];
-    pipelineParam.num_forward_references = m_nForwardRefs;
+    if (m_nForwardRefs > 0)
+    {
+        pipelineParam.forward_references = &m_refs[m_nBackwardRefs + 1];
+        pipelineParam.num_forward_references = m_nForwardRefs;
+    }
 
-    pipelineParam.backward_references = &m_refs[0];
-    pipelineParam.num_backward_references = m_nBackwardRefs;
+    if (m_nBackwardRefs > 0)
+    {
+        pipelineParam.backward_references = &m_refs[0];
+        pipelineParam.num_backward_references = m_nBackwardRefs;
+    }
 
     VABufferID pipelineBuf = VA_INVALID_ID;
     if (vaCreateBuffer(VADisp,
@@ -423,6 +428,7 @@ bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
 
     id = id_vpp;
     field = 0;
+    m_hasVppFrame = true;
     return true;
 }
 
@@ -448,7 +454,7 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
 bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
     VAImage image;
-    quint8 *vaData = getNV12Image(image, videoFrame.surfaceId);
+    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.surfaceId);
     if (vaData)
     {
         const void *data[2] = {
@@ -531,4 +537,5 @@ void VAAPI::clearVPPFrames()
 {
     m_refs.clear();
     m_vppFrames.clear();
+    m_hasVppFrame = false;
 }

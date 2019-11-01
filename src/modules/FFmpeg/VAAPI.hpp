@@ -86,6 +86,7 @@ private:
     QVector<VASurfaceID> m_refs;
     VASurfaceID m_lastVppSurface;
     int m_nBackwardRefs, m_nForwardRefs;
+    bool m_hasVppFrame = false;
 
     QHash<VASurfaceID, VideoFrame> m_vppFrames;
 };
