@@ -62,9 +62,6 @@ public:
 
     bool init(quint32 *textures) override
     {
-        if (Functions::isEGL())
-            return false;
-
         if (m_isInitialized)
         {
             m_textures = textures;
@@ -339,6 +336,9 @@ void FFDecVDPAU::downloadVideoFrame(VideoFrame &decoded)
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
+    if (m_useOpenGL && Functions::isEGL())
+        return false;
+
     const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
     if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
         return false;
