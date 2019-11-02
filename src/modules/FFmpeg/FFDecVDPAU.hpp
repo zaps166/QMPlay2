@@ -20,6 +20,8 @@
 
 #include <FFDecHWAccel.hpp>
 
+#include <memory>
+
 class VDPAU;
 
 class FFDecVDPAU final : public FFDecHWAccel
@@ -41,9 +43,9 @@ private:
     static void preemptionCallback(uint32_t device, void *context);
 
 private:
-    VDPAU *m_vdpau = nullptr;
+    std::shared_ptr<VDPAU> m_vdpau;
 
-    bool m_useOpenGL = true;
+    bool m_copyVideo = true;
 
     bool m_limitedRange = true;
 

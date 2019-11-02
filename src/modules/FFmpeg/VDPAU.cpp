@@ -23,6 +23,7 @@
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
+#include <QX11Info>
 #include <QDebug>
 
 #include <vdpau/vdpau_x11.h>
@@ -39,19 +40,17 @@ VDPAU::~VDPAU()
     clearBufferedFrames();
     if (m_device != VDP_INVALID_HANDLE && vdp_device_destroy)
         vdp_device_destroy(m_device);
-    if (m_display)
-        XCloseDisplay(m_display);
 }
 
 bool VDPAU::open(const char *codecName)
 {
-    Q_ASSERT(!m_display);
+    Q_ASSERT(m_device == VDP_INVALID_HANDLE);
 
-    m_display = XOpenDisplay(nullptr);
-    if (!m_display)
+    auto display = QX11Info::display();
+    if (!display)
         return false;
 
-    if (vdp_device_create_x11(m_display, 0, &m_device, &vdp_get_proc_address) != VDP_STATUS_OK)
+    if (vdp_device_create_x11(display, 0, &m_device, &vdp_get_proc_address) != VDP_STATUS_OK)
         return false;
 
     int status = VDP_STATUS_OK;

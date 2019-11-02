@@ -971,11 +971,8 @@ QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limit
     return mat.toGenericMatrix<3, 3>();
 }
 
-bool Functions::isEGL()
+bool Functions::isX11EGL()
 {
-    static bool isEGL = (
-        QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0 ||
-        QGuiApplication::platformName().startsWith("wayland")
-    );
+    static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
     return isEGL;
 }

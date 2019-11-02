@@ -52,15 +52,22 @@ if(USE_FFMPEG_AVDEVICE)
 endif()
 
 if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) # Common HWAccel
-    list(APPEND FFmpeg_HDR FFDecHWAccel.hpp HWAccelHelper.hpp)
-    list(APPEND FFmpeg_SRC FFDecHWAccel.cpp HWAccelHelper.cpp)
+    list(APPEND FFmpeg_HDR FFDecHWAccel.hpp)
+    list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
 
-    if(USE_FFMPEG_VAAPI) # VA-API
+    if(USE_OPENGL2)
+        add_definitions(-DUSE_OPENGL)
+    endif()
+
+    if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU)
         find_package(Qt5X11Extras 5.6 REQUIRED)
         set(X11Extras Qt5::X11Extras)
+    endif()
+
+    if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)
-        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp VAAPIWriter.hpp)
-        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp VAAPIWriter.cpp)
+        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp)
+        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp)
         pkg_check_modules(LBVA libva libva-x11 libva-glx libva-drm egl REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
@@ -68,15 +75,6 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     endif()
 
     if(USE_FFMPEG_VDPAU) # VDPAU
-        pkg_check_modules(LIBX11 x11 REQUIRED)
-        include_directories(${LIBX11_INCLUDE_DIRS})
-        link_directories(${LIBX11_LIBRARY_DIRS})
-        list(APPEND FFmpeg_LIBS ${LIBX11_LIBRARIES})
-
-        if(USE_OPENGL2)
-            add_definitions(-DUSE_OPENGL)
-        endif()
-
         add_definitions(-DQMPlay2_VDPAU)
         list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp)
         list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp)
@@ -92,8 +90,8 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
 
     if(USE_FFMPEG_DXVA2) # DXVA2
         add_definitions(-DQMPlay2_DXVA2)
-        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
-        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
+        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp HWAccelHelper.hpp)
+        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp HWAccelHelper.cpp)
     endif()
 
     if(USE_FFMPEG_VTB)

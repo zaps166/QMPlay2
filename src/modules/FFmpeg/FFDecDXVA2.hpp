@@ -49,7 +49,7 @@ public:
     bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 
 private:
-    Qt::CheckState m_copyVideo;
+    bool m_copyVideo;
 
     Surfaces m_surfaces;
 

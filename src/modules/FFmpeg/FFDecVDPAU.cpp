@@ -38,13 +38,11 @@ extern "C"
 class VDPAUOpenGL : public HWAccelInterface
 {
 public:
-    VDPAUOpenGL(VDPAU *vdpau)
+    VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau)
         : m_vdpau(vdpau)
     {}
     ~VDPAUOpenGL() final
-    {
-        delete m_vdpau;
-    }
+    {}
 
     QString name() const override
     {
@@ -208,7 +206,7 @@ public:
         m_glSurface = 0;
     }
 
-    inline VDPAU *getVDPAU() const
+    inline std::shared_ptr<VDPAU> getVDPAU() const
     {
         return m_vdpau;
     }
@@ -216,7 +214,7 @@ public:
 private:
     using GLvdpauSurfaceNV = GLintptr;
 
-    VDPAU *const m_vdpau;
+    std::shared_ptr<VDPAU> m_vdpau;
 
     bool m_isInitialized = false;
     uint32_t *m_textures = nullptr;
@@ -278,13 +276,18 @@ FFDecVDPAU::~FFDecVDPAU()
 {
     if (codecIsOpen)
         avcodec_flush_buffers(codec_ctx);
+    destroyDecoder(); // Destroy before deleting "m_vdpau"
 }
 
 bool FFDecVDPAU::set()
 {
-    const bool useOpenGL = sets().getBool("VDPAUUseOpenGL");
-    const bool openGLChanged = (m_useOpenGL != useOpenGL);
-    m_useOpenGL = useOpenGL;
+    bool ret = true;
+
+#ifdef USE_OPENGL
+    const bool copyVideo = sets().getBool("CopyVideoVDPAU");
+    if (m_copyVideo != copyVideo)
+        ret = false;
+    m_copyVideo = copyVideo;
 
     m_deintMethod = sets().getInt("VDPAUDeintMethod");
     m_nrEnabled = sets().getBool("VDPAUNoiseReductionEnabled");
@@ -292,8 +295,11 @@ bool FFDecVDPAU::set()
 
     if (m_vdpau)
         m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
+#else
+    m_useOpenGL = false;
+#endif
 
-    return (sets().getBool("DecoderVDPAUEnabled") && !openGLChanged);
+    return (sets().getBool("DecoderVDPAUEnabled") && ret);
 }
 
 QString FFDecVDPAU::name() const
@@ -336,7 +342,7 @@ void FFDecVDPAU::downloadVideoFrame(VideoFrame &decoded)
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    if (m_useOpenGL && Functions::isEGL())
+    if (!m_copyVideo && Functions::isX11EGL())
         return false;
 
     const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
@@ -354,32 +360,19 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
             m_vdpau = vdpauOpenGL->getVDPAU();
             m_hwAccelWriter = writer;
         }
-        else
-        {
-            writer = nullptr;
-        }
     }
 
     if (!m_vdpau)
     {
-        m_vdpau = new VDPAU;
+        m_vdpau = std::make_shared<VDPAU>();
         if (!m_vdpau->open(streamInfo.codec_name.constData()))
-        {
-            if (!m_hwAccelWriter)
-                delete m_vdpau;
             return false;
-        }
         m_vdpau->registerPreemptionCallback(preemptionCallback, this);
-        m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
     }
 
     auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VDPAU);
     if (!bufferRef)
-    {
-        if (!m_hwAccelWriter)
-            delete m_vdpau;
         return false;
-    }
 
     auto vdpauDevCtx = (AVVDPAUDeviceContext *)((AVHWDeviceContext *)bufferRef->data)->hwctx;
     vdpauDevCtx->device = m_vdpau->m_device;
@@ -387,12 +380,10 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (av_hwdevice_ctx_init(bufferRef) != 0)
     {
         av_buffer_unref(&bufferRef);
-        if (!m_hwAccelWriter)
-            delete m_vdpau;
         return false;
     }
 
-    if (!m_hwAccelWriter && m_useOpenGL)
+    if (!m_hwAccelWriter && !m_copyVideo)
     {
         auto vdpauOpenGL = new VDPAUOpenGL(m_vdpau);
         m_hwAccelWriter = VideoWriter::createOpenGL2(vdpauOpenGL);
@@ -401,6 +392,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
             av_buffer_unref(&bufferRef);
             return false;
         }
+        m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
     }
 
     YUVjToYUV(codec_ctx->pix_fmt);
@@ -411,8 +403,6 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!openCodec(codec))
     {
         av_buffer_unref(&bufferRef);
-        if (!m_hwAccelWriter)
-            delete m_vdpau;
         return false;
     }
 

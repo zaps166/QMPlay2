@@ -79,7 +79,7 @@ public:
     ModuleSettingsWidget(Module &module);
 #endif
 #ifdef QMPlay2_VDPAU
-private slots:
+private:
     void setVDPAU();
     void checkEnables();
 #endif
@@ -93,13 +93,12 @@ private:
     QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
     QGroupBox *decoderVDPAUB;
-    QCheckBox *useOpenGLVDPAUB;
+    QCheckBox *copyVideoVDPAUB;
     QCheckBox *noisereductionVDPAUB;
     Slider *noisereductionLvlVDPAUS;
 #endif
 #ifdef QMPlay2_VAAPI
     QGroupBox *decoderVAAPIEB;
-    QCheckBox *useOpenGLinVAAPIB;
     QCheckBox *copyVideoVAAPIB;
 #endif
 #ifdef QMPlay2_DXVA2

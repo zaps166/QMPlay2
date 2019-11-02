@@ -21,7 +21,6 @@
 #include <FFDecSW.hpp>
 #ifdef QMPlay2_VAAPI
     #include <FFDecVAAPI.hpp>
-    #include <VAAPIWriter.hpp>
 #endif
 #ifdef QMPlay2_VDPAU
     #include <FFDecVDPAU.hpp>
@@ -70,7 +69,7 @@ FFmpeg::FFmpeg() :
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VDPAU
     init("DecoderVDPAUEnabled", true);
-    init("VDPAUUseOpenGL", true);
+    init("CopyVideoVDPAU", false);
     init("VDPAUDeintMethod", 1);
     if (getUInt("VDPAUDeintMethod") > 2)
         set("VDPAUDeintMethod", 1);
@@ -79,15 +78,18 @@ FFmpeg::FFmpeg() :
 #endif
 #ifdef QMPlay2_VAAPI
     init("DecoderVAAPIEnabled", true);
-    init("UseOpenGLinVAAPI", true);
-    init("CopyVideoVAAPI", Qt::Unchecked);
+    if (getString("CopyVideoVAAPI") == "1") // Backward compatibility
+        remove("CopyVideoVAAPI");
+    init("CopyVideoVAAPI", false);
     init("VAAPIDeintMethod", 1);
     if (getUInt("VAAPIDeintMethod") > 2)
         set("VAAPIDeintMethod", 1);
 #endif
 #ifdef QMPlay2_DXVA2
     init("DecoderDXVA2Enabled", true);
-    init("CopyVideoDXVA2", Qt::Unchecked);
+    if (getString("CopyVideoDXVA2") == "1") // Backward compatibility
+        remove("CopyVideoDXVA2");
+    init("CopyVideoDXVA2", false);
 #endif
 #ifdef QMPlay2_VTB
     init("DecoderVTBEnabled", true);
@@ -123,14 +125,14 @@ FFmpeg::FFmpeg() :
     QMPlay2Core.addVideoDeintMethod(vaapiDeintMethodB);
 #endif
 
+#ifdef QMPlay2_libavdevice
     static bool firstTime = true;
     if (firstTime)
     {
-#ifdef QMPlay2_libavdevice
         avdevice_register_all();
-#endif
         firstTime = false;
     }
+#endif
 }
 FFmpeg::~FFmpeg()
 {
@@ -253,28 +255,39 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     decoderB->setCheckable(true);
     decoderB->setChecked(sets().getBool("DecoderEnabled"));
 
+    const auto copyVideoText = tr("Copy decoded video to CPU memory (slow)");
+
 #ifdef QMPlay2_VDPAU
     decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
     decoderVDPAUB->setCheckable(true);
     decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
 
-    useOpenGLVDPAUB = new QCheckBox(tr("Use OpenGL"));
-    useOpenGLVDPAUB->setChecked(sets().getBool("VDPAUUseOpenGL"));
+    copyVideoVDPAUB = new QCheckBox(copyVideoText);
+    copyVideoVDPAUB->setChecked(sets().getBool("CopyVideoVDPAU"));
+    connect(copyVideoVDPAUB, &QCheckBox::clicked,
+            this, &ModuleSettingsWidget::checkEnables);
+#ifndef USE_OPENGL
+    copyVideoVDPAUB->setEnabled(false);
+#endif
     noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
     noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
-    connect(noisereductionVDPAUB, SIGNAL(clicked()), this, SLOT(checkEnables()));
-    connect(noisereductionVDPAUB, SIGNAL(clicked()), this, SLOT(setVDPAU()));
+    connect(noisereductionVDPAUB, &QCheckBox::clicked,
+            this, [this] {
+        checkEnables();
+        setVDPAU();
+    });
     noisereductionLvlVDPAUS = new Slider;
     noisereductionLvlVDPAUS->setRange(0, 50);
     noisereductionLvlVDPAUS->setTickInterval(50);
     noisereductionLvlVDPAUS->setTickPosition(QSlider::TicksBelow);
     noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
-    connect(noisereductionLvlVDPAUS, SIGNAL(valueChanged(int)), this, SLOT(setVDPAU()));
+    connect(noisereductionLvlVDPAUS, &Slider::valueChanged,
+            this, &ModuleSettingsWidget::setVDPAU);
 
     checkEnables();
 
     QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
-    vdpauLayout->addRow(useOpenGLVDPAUB);
+    vdpauLayout->addRow(copyVideoVDPAUB);
     vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
 #endif
 
@@ -283,16 +296,13 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     decoderVAAPIEB->setCheckable(true);
     decoderVAAPIEB->setChecked(sets().getBool("DecoderVAAPIEnabled"));
 
-    useOpenGLinVAAPIB = new QCheckBox(tr("Use OpenGL"));
-    useOpenGLinVAAPIB->setChecked(sets().getBool("UseOpenGLinVAAPI"));
-
-    copyVideoVAAPIB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
-    copyVideoVAAPIB->setTristate(true);
-    copyVideoVAAPIB->setCheckState((Qt::CheckState)sets().getInt("CopyVideoVAAPI"));
-    copyVideoVAAPIB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
+    copyVideoVAAPIB = new QCheckBox(copyVideoText);
+    copyVideoVAAPIB->setChecked(sets().getBool("CopyVideoVAAPI"));
+#ifndef USE_OPENGL
+    copyVideoVAAPIB->setEnabled(false);
+#endif
 
     QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
-    vaapiLayout->addRow(useOpenGLinVAAPIB);
     vaapiLayout->addRow(copyVideoVAAPIB);
 #endif
 
@@ -303,10 +313,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         decoderDXVA2EB->setCheckable(true);
         decoderDXVA2EB->setChecked(sets().getBool("DecoderDXVA2Enabled"));
 
-        copyVideoDXVA2 = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended, very slow on Intel)"));
-        copyVideoDXVA2->setTristate(true);
-        copyVideoDXVA2->setCheckState((Qt::CheckState)sets().getInt("CopyVideoDXVA2"));
-        copyVideoDXVA2->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
+        copyVideoDXVA2 = new QCheckBox(copyVideoText);
+        copyVideoDXVA2->setChecked(sets().getBool("CopyVideoDXVA2"));
 
         QFormLayout *dxva2Layout = new QFormLayout(decoderDXVA2EB);
         dxva2Layout->addRow(copyVideoDXVA2);
@@ -323,7 +331,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     decoderVTBEB->setCheckable(true);
     decoderVTBEB->setChecked(sets().getBool("DecoderVTBEnabled"));
 
-    copyVideoVTB = new QCheckBox("Copy decoded video to CPU memory (not recommended)");
+    copyVideoVTB = new QCheckBox(copyVideoText);
     copyVideoVTB->setChecked(sets().getBool("CopyVideoVTB"));
 
     QFormLayout *vtbLayout = new QFormLayout(decoderVTBEB);
@@ -409,7 +417,8 @@ void ModuleSettingsWidget::setVDPAU()
 }
 void ModuleSettingsWidget::checkEnables()
 {
-    noisereductionLvlVDPAUS->setEnabled(noisereductionVDPAUB->isChecked());
+    noisereductionVDPAUB->setEnabled(!copyVideoVDPAUB->isChecked());
+    noisereductionLvlVDPAUS->setEnabled(noisereductionVDPAUB->isEnabled() && noisereductionVDPAUB->isChecked());
 }
 #endif
 
@@ -426,22 +435,21 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
 #ifdef QMPlay2_VDPAU
     sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
-    sets().set("VDPAUUseOpenGL", useOpenGLVDPAUB->isChecked());
+    sets().set("CopyVideoVDPAU", copyVideoVDPAUB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());
-    sets().set("UseOpenGLinVAAPI", useOpenGLinVAAPIB->isChecked());
-    sets().set("CopyVideoVAAPI", copyVideoVAAPIB->checkState());
+    sets().set("CopyVideoVAAPI", copyVideoVAAPIB->isChecked());
 #endif
 #ifdef QMPlay2_DXVA2
     if (decoderDXVA2EB)
     {
         sets().set("DecoderDXVA2Enabled", decoderDXVA2EB->isChecked());
-        sets().set("CopyVideoDXVA2", copyVideoDXVA2->checkState());
+        sets().set("CopyVideoDXVA2", copyVideoDXVA2->isChecked());
     }
 #endif
 #ifdef QMPlay2_VTB
     sets().set("DecoderVTBEnabled", decoderVTBEB->isChecked());
-    sets().set("CopyVideoVTB", copyVideoVTB->checkState());
+    sets().set("CopyVideoVTB", copyVideoVTB->isChecked());
 #endif
 }

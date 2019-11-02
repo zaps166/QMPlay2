@@ -37,7 +37,7 @@ public:
     VAAPI();
     ~VAAPI();
 
-    bool open(const char *codecName, bool &openGL);
+    bool open(const char *codecName, bool openGL);
 
     void init(int width, int height, bool allowFilters);
 

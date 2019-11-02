@@ -31,10 +31,6 @@
 #define VDPAUWriterName "VDPAU"
 #define FFReaderName "FFmpeg Reader"
 
-#ifdef QMPlay2_VDPAU
-    struct AVVDPAUContext;
-    struct AVCodecContext;
-#endif
 #ifdef FIND_HWACCEL_DRIVERS_PATH
     class QByteArray;
     class QString;
@@ -42,10 +38,6 @@
 
 namespace FFCommon
 {
-#ifdef QMPlay2_VDPAU
-    AVVDPAUContext *allocAVVDPAUContext(AVCodecContext *codecCtx);
-#endif
-
 #ifdef FIND_HWACCEL_DRIVERS_PATH
     void setDriversPath(const QString &dirName, const QByteArray &envVar);
 #endif

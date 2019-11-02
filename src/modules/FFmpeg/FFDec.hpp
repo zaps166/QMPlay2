@@ -32,7 +32,7 @@ class FFDec : public Decoder
 {
 protected:
     FFDec();
-    virtual ~FFDec();
+    ~FFDec();
 
     int pendingFrames() const override;
 

@@ -312,7 +312,7 @@ bool FFDecDXVA2::loadLibraries()
 }
 
 FFDecDXVA2::FFDecDXVA2(Module &module) :
-    m_copyVideo(Qt::Unchecked),
+    m_copyVideo(false),
     m_d3d9Device(nullptr),
     m_devMgr(nullptr),
     m_devHandle(INVALID_HANDLE_VALUE),
@@ -346,11 +346,20 @@ FFDecDXVA2::~FFDecDXVA2()
 
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
+
+    if (codec_ctx)
+    {
+        void *hwaccelContext = codec_ctx->hwaccel_context;
+        HWAccelHelper *hwAccelHelper = (HWAccelHelper *)codec_ctx->opaque;
+        destroyDecoder();
+        av_free(hwaccelContext);
+        delete hwAccelHelper;
+    }
 }
 
 bool FFDecDXVA2::set()
 {
-    const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideoDXVA2");
+    const bool copyVideo = sets().getBool("CopyVideoDXVA2");
     if (copyVideo != m_copyVideo)
     {
         m_copyVideo = copyVideo;
@@ -556,7 +565,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
     memset(&desc, 0, sizeof desc);
     desc.SampleWidth = codec_ctx->coded_width;
     desc.SampleHeight = codec_ctx->coded_height;
-    desc.SampleFormat.NominalRange = DXVA2_NominalRange_0_255; //Does it work?
+    desc.SampleFormat.NominalRange = streamInfo.limited ? DXVA2_NominalRange_16_235 : DXVA2_NominalRange_0_255;
     desc.Format = targetFmt;
 
     quint32 configCount = 0;
@@ -644,15 +653,17 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!openCodec(codec))
         return false;
 
-    if (m_copyVideo != Qt::Checked)
+    if (!m_copyVideo || m_hwAccelWriter)
     {
         if (!dxva2Hwaccel)
             dxva2Hwaccel = new DXVA2Hwaccel(m_d3d9Device, deviceDescription.contains("Intel", Qt::CaseInsensitive));
         dxva2Hwaccel->setNewData(Size(streamInfo.W, streamInfo.H), m_videoDecoder, m_surfaces);
-        if (!m_hwAccelWriter && dxva2Hwaccel)
+        if (!m_hwAccelWriter)
+        {
             m_hwAccelWriter = VideoWriter::createOpenGL2(dxva2Hwaccel);
-        if (!m_hwAccelWriter && m_copyVideo == Qt::Unchecked)
-            return false;
+            if (!m_hwAccelWriter)
+                return false;
+        }
     }
 
     time_base = streamInfo.getTimeBase();

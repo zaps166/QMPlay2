@@ -21,6 +21,8 @@
 #include <FFDecHWAccel.hpp>
 #include <VAAPI.hpp>
 
+#include <memory>
+
 struct SwsContext;
 
 class FFDecVAAPI final : public FFDecHWAccel
@@ -39,9 +41,8 @@ public:
     bool open(StreamInfo &, VideoWriter *) override;
 
 private:
-    bool m_useOpenGL;
-    Qt::CheckState m_copyVideo;
-    VAProcDeinterlacingType m_vppDeintType;
-    VAAPI *m_vaapi;
-    SwsContext *m_swsCtx;
+    bool m_copyVideo = false;
+    VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
+    std::shared_ptr<VAAPI> m_vaapi;
+    SwsContext *m_swsCtx = nullptr;
 };

@@ -24,7 +24,7 @@ class FFDecHWAccel : public FFDec
 {
 protected:
     FFDecHWAccel();
-    virtual ~FFDecHWAccel();
+    ~FFDecHWAccel();
 
     VideoWriter *HWAccel() const override final;
 

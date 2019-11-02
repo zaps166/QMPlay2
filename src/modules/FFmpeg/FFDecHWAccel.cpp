@@ -17,7 +17,6 @@
 */
 
 #include <FFDecHWAccel.hpp>
-#include <HWAccelHelper.hpp>
 
 #include <VideoFrame.hpp>
 
@@ -31,16 +30,7 @@ FFDecHWAccel::FFDecHWAccel() :
     m_hasCriticalError(false)
 {}
 FFDecHWAccel::~FFDecHWAccel()
-{
-    if (codec_ctx)
-    {
-        void *hwaccelContext = codec_ctx->hwaccel_context;
-        HWAccelHelper *hqAccelHelper = (HWAccelHelper *)codec_ctx->opaque;
-        destroyDecoder();
-        av_free(hwaccelContext);
-        delete hqAccelHelper;
-    }
-}
+{}
 
 VideoWriter *FFDecHWAccel::HWAccel() const
 {

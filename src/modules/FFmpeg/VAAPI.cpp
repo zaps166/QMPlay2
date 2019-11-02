@@ -53,18 +53,15 @@ VAAPI::~VAAPI()
     }
 }
 
-bool VAAPI::open(const char *codecName, bool &openGL)
+bool VAAPI::open(const char *codecName, bool openGL)
 {
     clearVPP();
 
     const bool isX11 = QX11Info::isPlatformX11();
-    if (!isX11 && !openGL)
-        return false;
 
     int major = 0, minor = 0;
-    bool initialized = false;
 
-    if (openGL && Functions::isEGL())
+    if (!isX11 || (openGL && Functions::isX11EGL()))
     {
         QString devFilePath;
 
@@ -98,7 +95,6 @@ bool VAAPI::open(const char *codecName, bool &openGL)
                 {
                     m_fd = fd;
                     VADisp = disp;
-                    initialized = true;
                     qDebug().noquote() << "VA-API :: Initialized device:" << dev.fileName();
                     break;
                 }
@@ -108,31 +104,24 @@ bool VAAPI::open(const char *codecName, bool &openGL)
 
             ::close(fd);
         }
+
+        if (!VADisp)
+            return false;
     }
-
-    if (!VADisp && isX11)
+    else
     {
-        Q_ASSERT(!initialized);
-
         Display *display = QX11Info::display();
         if (!display)
             return false;
 
         if (openGL)
             VADisp = vaGetDisplayGLX(display);
-
-        if (!VADisp)
-        {
+        else
             VADisp = vaGetDisplay(display);
-            openGL = false;
-        }
+
+        if (!VADisp || vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
+            return false;
     }
-
-    if (!VADisp)
-        return false;
-
-    if (!initialized && vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
-        return false;
 
     m_version = (major << 8) | minor;
 
@@ -156,6 +145,8 @@ bool VAAPI::open(const char *codecName, bool &openGL)
             }
         }
     }
+    if (!openGL && nv12ImageFmt.fourcc != VA_FOURCC_NV12)
+        return false;
 
     return true;
 }

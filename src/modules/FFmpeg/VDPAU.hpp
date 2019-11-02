@@ -26,7 +26,6 @@
 
 #include <vdpau/vdpau.h>
 
-struct _XDisplay;
 class VideoFrame;
 
 class VDPAU
@@ -58,9 +57,6 @@ private:
     void applyVideoMixerFeatures();
 
     bool setVideoMixerFeature(VdpBool enabled, VdpVideoMixerFeature feature, VdpVideoMixerAttribute attribute = VDP_INVALID_HANDLE, float value = 0.0f);
-
-private:
-    _XDisplay *m_display = nullptr;
 
 public:
     VdpDevice m_device = VDP_INVALID_HANDLE;
