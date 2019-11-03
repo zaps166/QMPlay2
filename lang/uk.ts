@@ -2963,10 +2963,6 @@ QMPlay2 не відображатиме іконки!</translation>
         <translation>Пріоритет декодерів</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Апаратне прискорення виведення відео</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation>За замовчуванням</translation>
     </message>
@@ -2987,6 +2983,10 @@ QMPlay2 не відображатиме іконки!</translation>
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Повільніше, але точніший пошук.
 Частково зазначене не впливає на пошук на повзунку.</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

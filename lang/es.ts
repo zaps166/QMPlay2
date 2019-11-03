@@ -2963,10 +2963,6 @@ QMPlay2 will not display icons!</source>
         <translation>Filtros de vídeo</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Salidas de vídeo aceleradas por hardware</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation>Por omisión</translation>
     </message>
@@ -2987,6 +2983,10 @@ QMPlay2 will not display icons!</source>
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Búsqueda más lenta, pero más precisa.
 Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

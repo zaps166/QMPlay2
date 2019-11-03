@@ -2956,10 +2956,6 @@ QMPlay2 will not display icons!</source>
         <translation>解码器优先级</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation type="unfinished">默认</translation>
     </message>
@@ -2978,6 +2974,10 @@ QMPlay2 will not display icons!</source>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

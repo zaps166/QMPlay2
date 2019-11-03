@@ -2962,10 +2962,6 @@ QMPlay2 zeigt keine Icons an!</translation>
         <translation>Dekoder Priorität</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Hardware beschleunigte Videoausgabe</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -2986,6 +2982,10 @@ QMPlay2 zeigt keine Icons an!</translation>
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Langsameres, aber genaueres Suchen.
 Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

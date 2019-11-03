@@ -2963,10 +2963,6 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
         <translation>Priorytet dekoderów</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Wyjścia obrazu dla akceleracji sprzętowej</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation>Domyślny</translation>
     </message>
@@ -2987,6 +2983,10 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Wolniejsze, ale bardziej dokładne przewijanie.
 Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation>Filtry wideo dla akceleracji sprzętowej</translation>
     </message>
 </context>
 <context>

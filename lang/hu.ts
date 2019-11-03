@@ -2939,10 +2939,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Szoftveres videoszűrők</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Hardveresen gyorsított videokimenetek</translation>
-    </message>
-    <message>
         <source>New language</source>
         <translation>Új nyelv</translation>
     </message>
@@ -2985,6 +2981,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Do you really want to clear all settings?</source>
         <translation>Biztosan törölni szeretnéd az összes beállítást?</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

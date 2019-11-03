@@ -2960,10 +2960,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Приоритет декодеров</translation>
     </message>
     <message>
-        <source>Hardware accelerated video outputs</source>
-        <translation>Аппаратное ускорение вывода видео</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
@@ -2984,6 +2980,10 @@ QMPlay2 не будет отображать значки!</translation>
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Медленный, но более точный поиск.
 Частично проверенное не влияет на поиск на слайдере.</translation>
+    </message>
+    <message>
+        <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
