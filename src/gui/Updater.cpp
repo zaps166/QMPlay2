@@ -151,9 +151,21 @@ void Updater::infoFinished()
                     if (QSysInfo::windowsVersion() != QSysInfo::WV_XP && QSysInfo::windowsVersion() != QSysInfo::WV_2003)
                     {
                         if (QSysInfo::WordSize == 32)
-                            winSuffix = "New32";
+                        {
+                            using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
+                            if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
+                            {
+                                BOOL bIsWow64 = FALSE;
+                                if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
+                                    winSuffix = "64";
+                            }
+                            if (winSuffix.isEmpty())
+                                winSuffix = "New32";
+                        }
                         else
+                        {
                             winSuffix = QString::number(QSysInfo::WordSize);
+                        }
                     }
                     else
                     {
