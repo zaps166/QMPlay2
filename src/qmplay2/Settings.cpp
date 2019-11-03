@@ -39,9 +39,12 @@ void Settings::flush()
 void Settings::init(const QString &key, const QVariant &val)
 {
     QMutexLocker mL(&mutex);
-    if (!cache.contains(key) && !QSettings::contains(key))
+    const auto it = toRemove.find(key);
+    const bool foundInToRemove = (it != toRemove.end());
+    if (!cache.contains(key) && (foundInToRemove || !QSettings::contains(key)))
         cache[key] = val;
-    toRemove.remove(key);
+    if (foundInToRemove)
+        toRemove.erase(it);
 }
 bool Settings::contains(const QString &key) const
 {
