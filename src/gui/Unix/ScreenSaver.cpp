@@ -37,7 +37,7 @@ public:
 
     inline void load()
     {
-        QLibrary libX11("X11");
+        QLibrary libX11("libX11.so.6");
         if (libX11.load())
         {
             XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
