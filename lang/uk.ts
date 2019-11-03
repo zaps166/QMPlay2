@@ -1947,7 +1947,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished"></translation>
+        <translation>помилка відображення текстури></translation>
     </message>
 </context>
 <context>
@@ -3205,15 +3205,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Непідтримуваний фільтр чіткості</translation>
+        <translation>Непідтримуваний фільтр чіткості зображення</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Непідтримуваний алгоритм усунення черезрядковості</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Непідтримуваний фільтр шумоприглушення></translation>
     </message>
 </context>
 <context>
