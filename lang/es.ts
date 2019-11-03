@@ -1686,10 +1686,6 @@
         <translation>Parcialmente marcado significa que solo copia un dato de vídeo si el método rápido falla</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation>Copiar el vídeo decodificado a la memoria de la CPU (no recomendado, muy lento para Intel)</translation>
-    </message>
-    <message>
         <source>Use OpenGL</source>
         <translation>Usar OpenGL</translation>
     </message>
@@ -1831,6 +1827,10 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

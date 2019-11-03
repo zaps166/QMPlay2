@@ -1683,10 +1683,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Use OpenGL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1826,6 +1822,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

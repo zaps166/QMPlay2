@@ -1686,10 +1686,6 @@
         <translation>Часткова перевірка означає, що копіювання відеоданих відбуватиметься, коли не працюватиме швидкий метод</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation>Копіювати декодоваане відео в пам&apos;ять процесора (не рекомендовано, дуже повільно на Intel)</translation>
-    </message>
-    <message>
         <source>Use OpenGL</source>
         <translation>Використовувати OpenGL</translation>
     </message>
@@ -1833,6 +1829,10 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <source>Preferred quality</source>
         <translation>Бажана якість</translation>
     </message>
+    <message>
+        <source>Copy decoded video to CPU memory (slow)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1947,7 +1947,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>texture map error</source>
-        <translation>помилка відображення текстури></translation>
+        <translation>помилка відображення текстури</translation>
     </message>
 </context>
 <context>
@@ -3213,7 +3213,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation>Непідтримуваний фільтр шумоприглушення></translation>
+        <translation>Непідтримуваний фільтр шумоприглушення</translation>
     </message>
 </context>
 <context>

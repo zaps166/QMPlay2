@@ -1689,10 +1689,6 @@
         <translation>Verwende OpenGL</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation>Kopiere decodiertes Video in den CPU-Speicher (nicht empfohlen, sehr langsam auf Intel)</translation>
-    </message>
-    <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>Verwende CUVID nur wenn die primäre GPU NVIDIA ist</translation>
     </message>
@@ -1830,6 +1826,10 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

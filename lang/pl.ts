@@ -1686,10 +1686,6 @@
         <translation>Częściowo zaznaczone oznacza, że kopiowanie obrazu nastąpi, gdy szybka metoda nie zadziała</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended, very slow on Intel)</source>
-        <translation>Kopiuj obraz do pamięci CPU (nie zalecane, bardzo wolne na GPU Intel&apos;a)</translation>
-    </message>
-    <message>
         <source>Use OpenGL</source>
         <translation>Użyj OpenGL</translation>
     </message>
@@ -1832,6 +1828,10 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Preferred quality</source>
         <translation>Preferowana jakość</translation>
+    </message>
+    <message>
+        <source>Copy decoded video to CPU memory (slow)</source>
+        <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
     </message>
 </context>
 <context>
