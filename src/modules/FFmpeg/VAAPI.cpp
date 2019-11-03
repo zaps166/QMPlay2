@@ -30,7 +30,6 @@
 #include <QDir>
 
 #include <va/va_drm.h>
-#include <va/va_x11.h>
 #include <va/va_glx.h>
 
 #include <unistd.h>
@@ -61,7 +60,7 @@ bool VAAPI::open(const char *codecName, bool openGL)
 
     int major = 0, minor = 0;
 
-    if (!isX11 || (openGL && Functions::isX11EGL()))
+    if (!isX11 || !openGL || Functions::isX11EGL())
     {
         QString devFilePath;
 
@@ -114,11 +113,7 @@ bool VAAPI::open(const char *codecName, bool openGL)
         if (!display)
             return false;
 
-        if (openGL)
-            VADisp = vaGetDisplayGLX(display);
-        else
-            VADisp = vaGetDisplay(display);
-
+        VADisp = vaGetDisplayGLX(display);
         if (!VADisp || vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
             return false;
     }
