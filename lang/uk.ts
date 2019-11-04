@@ -1831,7 +1831,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation>Обходити композитного менеджера вікон при повноекранному режимі></translation>
+        <translation>Обходити композитного менеджера вікон при повноекранному режимі</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
