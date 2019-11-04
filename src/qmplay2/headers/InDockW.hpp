@@ -47,6 +47,8 @@ public:
 protected:
     void resizeEvent(QResizeEvent *) override;
     void paintEvent(QPaintEvent *) override;
+    void enterEvent(QEvent *) override;
+    void leaveEvent(QEvent *) override;
     bool event(QEvent *) override;
 signals:
     void resized(int, int);

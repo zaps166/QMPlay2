@@ -60,9 +60,7 @@ private:
     bool m_hqScaling = false;
     bool forceRtt, useRtt;
     bool vSync;
-#ifdef Q_OS_WIN
-    bool preventFullScreen;
-#endif
+    Qt::CheckState m_bypassCompositor = Qt::PartiallyChecked;
 };
 
 #define OpenGL2WriterName "OpenGL 2"

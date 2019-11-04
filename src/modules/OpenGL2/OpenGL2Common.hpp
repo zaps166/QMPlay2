@@ -82,6 +82,11 @@ public:
     virtual bool setVSync(bool enable) = 0;
     virtual void updateGL(bool requestDelayed) = 0;
 
+    void setX11BypassCompositor(bool bypassCompositor);
+#ifdef Q_OS_WIN
+    void setWindowsBypassCompositor(Qt::CheckState bypassCompositor);
+#endif
+
     void newSize(const QSize &size = QSize());
     void clearImg();
 
@@ -155,13 +160,16 @@ public:
     quint32 pbo[4];
     bool allowPBO, hasPbo, hqScaling = false;
 
-#ifdef Q_OS_WIN
-    bool preventFullScreen;
-#endif
+    bool m_bypassCompositor = false;
+    bool m_compositorBypassed = false;
+    bool m_isFullScreen = false;
+    QMetaObject::Connection m_fullScreenChangedConn;
 
     bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness, m_useMipmaps = false;
     int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
     int glVer;
+
+    QString m_glVendor;
 
     double aspectRatio, zoom;
 

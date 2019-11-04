@@ -34,6 +34,7 @@
 #include <QMatrix3x3>
 #include <QResource>
 #include <QPainter>
+#include <QLibrary>
 #include <QWidget>
 
 #include <cmath>
@@ -96,9 +97,6 @@ OpenGL2Common::OpenGL2Common() :
     target(0),
     Deinterlace(0),
     allowPBO(true), hasPbo(false),
-#ifdef Q_OS_WIN
-    preventFullScreen(false),
-#endif
     isPaused(false), isOK(false), hwAccelError(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
     subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
     glVer(0),
@@ -120,6 +118,11 @@ OpenGL2Common::OpenGL2Common() :
 }
 OpenGL2Common::~OpenGL2Common()
 {
+    if (m_fullScreenChangedConn)
+    {
+        setX11BypassCompositor(false);
+        QObject::disconnect(m_fullScreenChangedConn);
+    }
     contextAboutToBeDestroyed();
     delete shaderProgramVideo;
     delete shaderProgramOSD;
@@ -142,6 +145,82 @@ bool OpenGL2Common::testGL()
     }
     return isOK;
 }
+
+void OpenGL2Common::setX11BypassCompositor(bool bypassCompositor)
+{
+    if (!m_fullScreenChangedConn)
+    {
+        m_fullScreenChangedConn = QObject::connect(&QMPlay2Core, &QMPlay2CoreClass::fullScreenChanged, [this](bool fullScreen) {
+            m_isFullScreen = fullScreen;
+            setX11BypassCompositor(m_bypassCompositor);
+        });
+        m_isFullScreen = QMPlay2Core.getMainWindow()->property("fullScreen").toBool();
+    }
+
+    m_bypassCompositor = bypassCompositor;
+
+    const bool compositorBypassed = (m_isFullScreen && m_bypassCompositor);
+    if (m_compositorBypassed == compositorBypassed)
+        return;
+
+    using XOpenDisplayType = void *(*)(const char *name);
+    using XInternAtomType = unsigned long (*)(void *display, const char *atomName, int onlyIfExists);
+    using XChangePropertyType = int *(*)(void *display, unsigned long window, unsigned long atom, unsigned long type, int format, int mode, const uint8_t *data, int nElements);
+    using XCloseDisplayType = int (*)(void *display);
+
+    QLibrary libX11("libX11.so.6");
+    if (!libX11.load())
+        return;
+
+    auto XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
+    auto XInternAtomFunc = (XInternAtomType)libX11.resolve("XInternAtom");
+    auto XChangePropertyFunc = (XChangePropertyType)libX11.resolve("XChangeProperty");
+    auto XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
+    if (!XOpenDisplayFunc || !XInternAtomFunc || !XChangePropertyFunc || !XCloseDisplayFunc)
+        return;
+
+    auto disp = XOpenDisplayFunc(nullptr);
+    if (!disp)
+        return;
+
+    if (auto atom = XInternAtomFunc(disp, "_NET_WM_BYPASS_COMPOSITOR", true))
+    {
+        m_compositorBypassed = compositorBypassed;
+
+        const int value = m_compositorBypassed ? 1 : 0;
+        XChangePropertyFunc(
+            disp,
+            QMPlay2Core.getMainWindow()->internalWinId(),
+            atom,
+            6 /* XA_CARDINAL */,
+            32,
+            0 /* PropModeReplace */,
+            (const uint8_t *)&value,
+            1
+        );
+    }
+
+    XCloseDisplayFunc(disp);
+}
+#ifdef Q_OS_WIN
+void OpenGL2Common::setWindowsBypassCompositor(Qt::CheckState bypassCompositor)
+{
+    bool bBypassCompositor;
+    switch (bypassCompositor)
+    {
+        case Qt::Unchecked:
+            bBypassCompositor = false;
+            break;
+        case Qt::Checked:
+            bBypassCompositor = true;
+            break;
+        default:
+            bBypassCompositor = m_glVendor.contains("intel", Qt::CaseInsensitive);
+            break;
+    }
+    widget()->setProperty("bypassCompositor", bBypassCompositor);
+}
+#endif
 
 void OpenGL2Common::newSize(const QSize &size)
 {
@@ -732,6 +811,8 @@ void OpenGL2Common::testGLInternal()
     canUseHueSharpness = (glVer >= 30);
 #endif
 
+    m_glVendor = (const char *)glGetString(GL_VENDOR);
+
 #ifndef OPENGL_ES2
     if (!initGLProc()) //No need to call it here for OpenGL|ES
     {
@@ -818,36 +899,6 @@ void OpenGL2Common::testGLInternal()
     QWidget *w = widget();
     w->grabGesture(Qt::PinchGesture);
     w->setMouseTracking(true);
-#ifdef Q_OS_WIN
-    /*
-     * This property is read by QMPlay2 and it ensures that toolbar will be visible
-     * on fullscreen in Windows Vista and newer on nVidia and AMD drivers.
-    */
-    const bool canPreventFullScreen = (qstrcmp(w->metaObject()->className(), "QOpenGLWidget") != 0);
-    const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
-    if (canPreventFullScreen && winVer >= QSysInfo::WV_6_0)
-    {
-        Qt::CheckState compositionEnabled;
-        if (!preventFullScreen)
-            compositionEnabled = Qt::PartiallyChecked;
-        else
-        {
-            compositionEnabled = Qt::Checked;
-            if (winVer <= QSysInfo::WV_6_1) //Windows 8 and 10 can't disable DWM composition
-            {
-                using DwmIsCompositionEnabledProc = HRESULT (WINAPI *)(BOOL *pfEnabled);
-                DwmIsCompositionEnabledProc DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled");
-                if (DwmIsCompositionEnabled)
-                {
-                    BOOL enabled = false;
-                    if (DwmIsCompositionEnabled(&enabled) == S_OK && !enabled)
-                        compositionEnabled = Qt::PartiallyChecked;
-                }
-            }
-        }
-        w->setProperty("preventFullScreen", (int)compositionEnabled);
-    }
-#endif
 }
 
 bool OpenGL2Common::initGLProc()

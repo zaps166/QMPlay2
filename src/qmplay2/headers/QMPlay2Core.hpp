@@ -164,6 +164,7 @@ public:
     }
 
     virtual const QWidget *getVideoDock() const = 0;
+    virtual const QWidget *getMainWindow() const = 0;
 
     void addVideoDeintMethod(QWidget *w); //Needed properties: "text", "module"
     QList<QWidget *> getVideoDeintMethods() const;

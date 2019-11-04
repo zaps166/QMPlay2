@@ -22,6 +22,9 @@
 #include <Settings.hpp>
 
 #include <QCoreApplication>
+#ifdef Q_OS_WIN
+#   include <QApplication>
+#endif
 #include <QDockWidget>
 #include <QPainter>
 #include <QVariant>
@@ -109,14 +112,13 @@ void InDockW::resizeEvent(QResizeEvent *)
             Y -= mappedY;
         }
 
-        const Qt::CheckState preventFullScreen = (Qt::CheckState)w->property("preventFullScreen").value<int>();
-        if ((preventFullScreen == Qt::Checked || (loseHeight && preventFullScreen == Qt::PartiallyChecked)) && window()->property("fullScreen").toBool())
+#ifdef Q_OS_WIN
+        if ((!w->property("bypassCompositor").toBool() || (loseHeight > 0 || QApplication::activePopupWidget())) && window()->property("fullScreen").toBool())
         {
             X -= 1;
-            Y -= 1;
             W += 2;
-            H += 2;
         }
+#endif
 
         if (w->geometry() != QRect(X, Y, W, H))
         {
@@ -180,7 +182,20 @@ void InDockW::paintEvent(QPaintEvent *)
         }
     }
 }
-
+void InDockW::enterEvent(QEvent *)
+{
+#ifdef Q_OS_WIN
+    // For context menu
+    resizeEvent(nullptr);
+#endif
+}
+void InDockW::leaveEvent(QEvent *)
+{
+#ifdef Q_OS_WIN
+    // For context menu
+    resizeEvent(nullptr);
+#endif
+}
 bool InDockW::event(QEvent *e)
 {
     /* Pass gesture and touch event to the parent */

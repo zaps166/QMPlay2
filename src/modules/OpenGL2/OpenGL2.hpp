@@ -48,7 +48,5 @@ private:
     QCheckBox *enabledB, *allowPboB, *hqScalingB;
     QCheckBox *forceRttB;
     QCheckBox *vsyncB;
-#ifdef Q_OS_WIN
-    QCheckBox *preventFullScreenB;
-#endif
+    QCheckBox *bypassCompositorB = nullptr;
 };

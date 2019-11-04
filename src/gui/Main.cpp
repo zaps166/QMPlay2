@@ -204,6 +204,10 @@ const QWidget *QMPlay2GUIClass::getVideoDock() const
 {
     return qobject_cast<MainWidget *>(mainW)->videoDock;
 }
+const QWidget *QMPlay2GUIClass::getMainWindow() const
+{
+    return mainW;
+}
 
 QMPlay2GUIClass::QMPlay2GUIClass() :
     groupIcon(nullptr), mediaIcon(nullptr), folderIcon(nullptr),

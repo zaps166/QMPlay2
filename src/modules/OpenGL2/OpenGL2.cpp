@@ -20,22 +20,23 @@
 #include <OpenGL2Writer.hpp>
 
 #include <QGuiApplication>
+#ifdef Q_OS_WIN
+#   include <QSysInfo>
+#endif
 
 OpenGL2::OpenGL2() :
     Module("OpenGL2")
 {
     m_icon = QIcon(":/OpenGL2.svgz");
 
+    const QString platformName = QGuiApplication::platformName();
+
     init("Enabled", true);
     init("AllowPBO", true);
     init("HQScaling", false);
-    const QString platformName = QGuiApplication::platformName();
     init("ForceRtt", (platformName == "cocoa" || platformName == "android"));
     init("VSync", true);
-#ifdef Q_OS_WIN
-    if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
-        init("PreventFullScreen", true);
-#endif
+    init("BypassCompositor", Qt::PartiallyChecked);
 }
 
 QList<OpenGL2::Info> OpenGL2::getModulesInfo(const bool showDisabled) const
@@ -84,15 +85,27 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
     vsyncB->setChecked(sets().getBool("VSync"));
 
-#ifdef Q_OS_WIN
-    if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+    const auto bypassCompositor = (Qt::CheckState)sets().getInt("BypassCompositor");
+    const auto platformName = QGuiApplication::platformName();
+    auto createBypassCompositorB = [this] {
+        bypassCompositorB = new QCheckBox(tr("Bypass compositor in full screen"));
+    };
+    if (platformName == "xcb")
     {
-        preventFullScreenB = new QCheckBox(tr("Try to prevent exclusive full screen"));
-        preventFullScreenB->setChecked(sets().getBool("PreventFullScreen"));
+        createBypassCompositorB();
+        bypassCompositorB->setToolTip(tr("This can improve performance if X11 compositor supports it"));
+        bypassCompositorB->setChecked(bypassCompositor == Qt::Checked);
     }
-    else
+#ifdef Q_OS_WIN
+    else if (platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
     {
-        preventFullScreenB = nullptr;
+        createBypassCompositorB();
+        connect(forceRttB, &QCheckBox::toggled,
+                bypassCompositorB, &QCheckBox::setDisabled);
+        bypassCompositorB->setDisabled(forceRttB->isChecked());
+        bypassCompositorB->setToolTip(tr("This can improve performance. Partially checked bypasses compositor only on Intel drivers."));
+        bypassCompositorB->setTristate(true);
+        bypassCompositorB->setCheckState(bypassCompositor);
     }
 #endif
 
@@ -102,10 +115,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(hqScalingB);
     layout->addWidget(forceRttB);
     layout->addWidget(vsyncB);
-#ifdef Q_OS_WIN
-    if (preventFullScreenB)
-        layout->addWidget(preventFullScreenB);
-#endif
+    if (bypassCompositorB)
+        layout->addWidget(bypassCompositorB);
 }
 
 void ModuleSettingsWidget::saveSettings()
@@ -115,8 +126,6 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("HQScaling", hqScalingB->isChecked());
     sets().set("ForceRtt", forceRttB->isChecked());
     sets().set("VSync", vsyncB->isChecked());
-#ifdef Q_OS_WIN
-    if (preventFullScreenB)
-        sets().set("PreventFullScreen", preventFullScreenB->isChecked());
-#endif
+    if (bypassCompositorB)
+        sets().set("BypassCompositor", bypassCompositorB->checkState());
 }

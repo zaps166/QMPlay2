@@ -25,6 +25,9 @@
 #include <VideoFrame.hpp>
 
 #include <QGuiApplication>
+#ifdef Q_OS_WIN
+#   include <QSysInfo>
+#endif
 
 OpenGL2Writer::OpenGL2Writer(Module &module)
     : drawable(nullptr)
@@ -75,12 +78,24 @@ bool OpenGL2Writer::set()
         doReset = true;
     forceRtt = newForceRtt;
 
+    const auto bypassCompositor = (Qt::CheckState)sets().getInt("BypassCompositor");
+    if (m_bypassCompositor != bypassCompositor)
+    {
+        m_bypassCompositor = bypassCompositor;
+
+        const auto platformName = QGuiApplication::platformName();
+        if (platformName == "xcb")
+        {
+            if (drawable)
+                drawable->setX11BypassCompositor(m_bypassCompositor == Qt::Checked);
+        }
 #ifdef Q_OS_WIN
-    bool newPreventFullScreen = sets().getBool("PreventFullScreen");
-    if (preventFullScreen != newPreventFullScreen)
-        doReset = true;
-    preventFullScreen = newPreventFullScreen;
+        else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        {
+            doReset = true;
+        }
 #endif
+    }
 
     return !doReset && sets().getBool("Enabled");
 }
@@ -229,14 +244,20 @@ bool OpenGL2Writer::open()
     else
         drawable = new OpenGL2Window;
     drawable->hwAccellnterface = m_hwAccelInterface;
-#ifdef Q_OS_WIN
-    drawable->preventFullScreen = preventFullScreen;
-#endif
     drawable->allowPBO = allowPBO;
     drawable->hqScaling = m_hqScaling;
     if (drawable->testGL())
     {
         drawable->setVSync(vSync);
+
+        const auto platformName = QGuiApplication::platformName();
+        if (platformName == "xcb")
+            drawable->setX11BypassCompositor(m_bypassCompositor == Qt::Checked);
+#ifdef Q_OS_WIN
+        else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+            drawable->setWindowsBypassCompositor(m_bypassCompositor);
+#endif
+
         bool hasBrightness = false, hasContrast = false, hasSharpness = false;
         if (!drawable->videoAdjustmentKeys.isEmpty())
         {
