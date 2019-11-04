@@ -1827,19 +1827,19 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати декодоване відео в пам&apos;ять процесора (повільно)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Обходити композитного менеджера вікон при повноекранному режимі</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
+        <translation>Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
     </message>
     <message>
         <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Може підвищити продуктивність. Частково відмічений обходить композитного менеджера лише для драйверів Intel.</translation>
     </message>
 </context>
 <context>
