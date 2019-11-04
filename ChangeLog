@@ -1,3 +1,20 @@
+Changes in QMPlay2 build 19.11.xx:
+    - remove dedicated VDPAU video output and add VDPAU interoperation with OpenGL,
+    - add more search patch for VA-API and VDPAU drivers (for AppImage),
+    - fix colorspace issues when using CPU deinterlacing filters,
+    - improve bypassing compositor on Windows platform and OpenGL,
+    - remove dedicated VA-API video output (use OpenGL instead),
+    - add bypass compositor option on X11 platform and OpenGL,
+    - fix playback error with VA-API deinterlacing filters,
+    - always download x86-64 installer on x86-64 Windows,
+    - fix EGL detection on X11/Intel (for VA-API),
+    - allow to enlarge small cover images,
+    - update Ukrainian translation file,
+    - add VP9 codec support for VDPAU,
+    - playlist quick sync fixes,
+    - fix RTSP playback,
+    - other minor fixes,
+
 Changes in QMPlay2 build 19.09.03:
     - fix possible compilation error with FFTSpectrum (all OSes) and PortAudio (macOS),
     - add code for finding VA-API and VDPAU drivers directory (useful for AppImage),
