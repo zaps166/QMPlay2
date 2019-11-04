@@ -1762,10 +1762,6 @@
         <translation>Параметри за замовчуванням</translation>
     </message>
     <message>
-        <source>Try to prevent exclusive full screen</source>
-        <translation>Намагатися запобігати ексклюзивний повноекранний режим</translation>
-    </message>
-    <message>
         <source>XSPF support</source>
         <translation>Підтримка XSPF</translation>
     </message>
@@ -1831,6 +1827,18 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

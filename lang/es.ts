@@ -1762,10 +1762,6 @@
         <translation>Ajustes por omisión</translation>
     </message>
     <message>
-        <source>Try to prevent exclusive full screen</source>
-        <translation>Intentar evitar el modo exclusivo a pantalla completa</translation>
-    </message>
-    <message>
         <source>XSPF support</source>
         <translation>Soporte para XSPF</translation>
     </message>
@@ -1831,6 +1827,18 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

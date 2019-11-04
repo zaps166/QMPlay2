@@ -1761,10 +1761,6 @@
         <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <source>Try to prevent exclusive full screen</source>
-        <translation>Versuche den exklusiven Vollbildschirm zu verhindern</translation>
-    </message>
-    <message>
         <source>XSPF support</source>
         <translation>XSPF Unterstützung</translation>
     </message>
@@ -1830,6 +1826,18 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

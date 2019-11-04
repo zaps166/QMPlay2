@@ -1762,10 +1762,6 @@
         <translation>Domyślne ustawienia</translation>
     </message>
     <message>
-        <source>Try to prevent exclusive full screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>XSPF support</source>
         <translation>Obsługa formatu XSPF</translation>
     </message>
@@ -1832,6 +1828,18 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation>Omiń kompozytor na pełnym ekranie</translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation>Może zwiększyć wydajność, jeżeli kompozytor X11 obsługuje tę funkcję</translation>
+    </message>
+    <message>
+        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
+        <translation>Może zwiększyć wydajność. Częściowo zaznaczone omija kompozytor tylko dla sterowników firmy Intel.</translation>
     </message>
 </context>
 <context>
