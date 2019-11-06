@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 19.11.xx:
+Changes in QMPlay2 build 19.11.06:
     - remove dedicated VDPAU video output and add VDPAU interoperation with OpenGL,
     - add more search patch for VA-API and VDPAU drivers (for AppImage),
     - fix colorspace issues when using CPU deinterlacing filters,
