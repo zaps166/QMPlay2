@@ -162,7 +162,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 	- Qt5Qml - for MediaBrowser,
 	- Qt5X11Extras - for X11 and VA-API,
 	- Qt5WinExtras - for Windows,
-- FFmpeg >= 3.3:
+- FFmpeg >= 3.3 (>= 4.0 is recommended at compilation time for VA-API and VDPAU deinterlacing filters):
 	- libavformat - requires OpenSSL or GnuTLS for https support,
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
