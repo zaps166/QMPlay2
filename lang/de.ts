@@ -1022,7 +1022,7 @@
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleine Covers vergrößern</translation>
     </message>
 </context>
 <context>
@@ -1822,23 +1822,23 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevorzugte Qualität</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiere dekodiertes Video in den CPU-Speicher (langsam)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Compositor im Vollbildmodus umgehen</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
     </message>
     <message>
         <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies kann die Leistung verbessern. Teilweise überprüft, umgeht Compositor nur bei Intel-Treibern.</translation>
     </message>
 </context>
 <context>
@@ -1954,7 +1954,7 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished"></translation>
+        <translation>Textur-Map-Fehler</translation>
     </message>
 </context>
 <context>
@@ -2258,15 +2258,15 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation>nächsten Titel nach einem Wiedergabefehler abspielen</translation>
+        <translation>Nächsten Titel nach einem Wiedergabefehler abspielen</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
-        <translation>Kurzes Suchen (Pfeil: links und rechts)</translation>
+        <translation>Kurze Suche (Pfeil: links und rechts)</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows)</source>
-        <translation>Langes Suchen (Pfeil: hoch und runter)</translation>
+        <translation>Lange Suche (Pfeil: hoch und runter)</translation>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
@@ -2993,7 +2993,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware beschleunigte Videofilter</translation>
     </message>
 </context>
 <context>
@@ -3212,15 +3212,15 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Nicht unterstützter Schärfefilter</translation>
+        <translation>Nicht unterstützter Schärfefilter</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstützter Deinterlacing-Algorithmus</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstützter Rauschunterdrückungsfilter</translation>
     </message>
 </context>
 <context>
@@ -3446,7 +3446,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevorzugte Qualität</translation>
     </message>
 </context>
 <context>
