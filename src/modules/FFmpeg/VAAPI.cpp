@@ -52,7 +52,7 @@ VAAPI::~VAAPI()
     }
 }
 
-bool VAAPI::open(const char *codecName, bool openGL)
+bool VAAPI::open(bool openGL)
 {
     clearVPP();
 
@@ -122,9 +122,6 @@ bool VAAPI::open(const char *codecName, bool openGL)
 
     const QString vendor = vaQueryVendorString(VADisp);
     if (vendor.contains("VDPAU")) // Not supported in FFmpeg due to "vaQuerySurfaceAttributes()"
-        return false;
-
-    if (!hasProfile(codecName))
         return false;
 
     int fmtCount = vaMaxNumImageFormats(VADisp);
@@ -454,7 +451,7 @@ bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12To
     return false;
 }
 
-bool VAAPI::hasProfile(const char *codecName) const
+bool VAAPI::checkCodec(const char *codecName) const
 {
     // Optional check - FFmpeg opens VA-API when first frame is given to the codec,
     // so check here if codec is supported to not open VideoWriter unnecessarily.

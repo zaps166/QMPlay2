@@ -452,9 +452,12 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_vaapi)
     {
         m_vaapi = std::make_shared<VAAPI>();
-        if (!m_vaapi->open(avcodec_get_name(codec_ctx->codec_id), !m_copyVideo))
+        if (!m_vaapi->open(!m_copyVideo))
             return false;
     }
+
+    if (!m_vaapi->checkCodec(avcodec_get_name(codec_ctx->codec_id)))
+        return false;
 
     auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
     if (!bufferRef)

@@ -37,7 +37,7 @@ public:
     VAAPI();
     ~VAAPI();
 
-    bool open(const char *codecName, bool openGL);
+    bool open(bool openGL);
 
     void init(int width, int height, bool allowFilters);
 
@@ -55,9 +55,9 @@ public:
 
     void insertFrame(VASurfaceID id, AVFrame *frame);
 
-private:
-    bool hasProfile(const char *codecName) const;
+    bool checkCodec(const char *codecName) const;
 
+private:
     void clearVPPFrames();
 
 public:
