@@ -42,7 +42,7 @@ VDPAU::~VDPAU()
         vdp_device_destroy(m_device);
 }
 
-bool VDPAU::open(const char *codecName)
+bool VDPAU::open()
 {
     Q_ASSERT(m_device == VDP_INVALID_HANDLE);
 
@@ -71,6 +71,10 @@ bool VDPAU::open(const char *codecName)
     if (status != VDP_STATUS_OK)
         return false;
 
+    return true;
+}
+bool VDPAU::checkCodec(const char *codecName)
+{
     auto checkCodecAvailability = [this](const std::initializer_list<VdpDecoderProfile> &profiles) {
         VdpBool isSupported = false;
         uint32_t out[4] = {};
@@ -112,10 +116,7 @@ bool VDPAU::open(const char *codecName)
     else if (qstrcmp(codecName, "mpeg1video") == 0)
         supported = checkCodecAvailability({VDP_DECODER_PROFILE_MPEG1});
 
-    if (!supported)
-        return false;
-
-    return true;
+    return supported;
 }
 
 void VDPAU::registerPreemptionCallback(VdpPreemptionCallback callback, void *context)

@@ -365,10 +365,13 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_vdpau)
     {
         m_vdpau = std::make_shared<VDPAU>();
-        if (!m_vdpau->open(streamInfo.codec_name.constData()))
+        if (!m_vdpau->open())
             return false;
         m_vdpau->registerPreemptionCallback(preemptionCallback, this);
     }
+
+    if (!m_vdpau->checkCodec(streamInfo.codec_name.constData()))
+        return false;
 
     auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VDPAU);
     if (!bufferRef)

@@ -36,7 +36,8 @@ public:
     VDPAU();
     ~VDPAU();
 
-    bool open(const char *codecName);
+    bool open();
+    bool checkCodec(const char *codecName);
 
     void registerPreemptionCallback(VdpPreemptionCallback callback, void *context);
 
