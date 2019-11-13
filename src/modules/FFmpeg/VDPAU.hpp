@@ -33,10 +33,10 @@ class VDPAU
     Q_DECLARE_TR_FUNCTIONS(VDPAU)
 
 public:
-    VDPAU();
+    VDPAU(AVBufferRef *hwDeviceBufferRef);
     ~VDPAU();
 
-    bool open();
+    bool init();
     bool checkCodec(const char *codecName);
 
     void registerPreemptionCallback(VdpPreemptionCallback callback, void *context);
@@ -60,6 +60,8 @@ private:
     bool setVideoMixerFeature(VdpBool enabled, VdpVideoMixerFeature feature, VdpVideoMixerAttribute attribute = VDP_INVALID_HANDLE, float value = 0.0f);
 
 public:
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
+
     VdpDevice m_device = VDP_INVALID_HANDLE;
 
     VdpVideoMixer m_mixer = VDP_INVALID_HANDLE;

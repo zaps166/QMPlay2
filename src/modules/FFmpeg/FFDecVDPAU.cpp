@@ -273,11 +273,7 @@ FFDecVDPAU::FFDecVDPAU(Module &module)
     SetModule(module);
 }
 FFDecVDPAU::~FFDecVDPAU()
-{
-    if (codecIsOpen)
-        avcodec_flush_buffers(codec_ctx);
-    destroyDecoder(); // Destroy before deleting "m_vdpau"
-}
+{}
 
 bool FFDecVDPAU::set()
 {
@@ -362,54 +358,43 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
         }
     }
 
+    AVBufferRef *hwDeviceBufferRef = nullptr;
     if (!m_vdpau)
     {
-        m_vdpau = std::make_shared<VDPAU>();
-        if (!m_vdpau->open())
+        if (av_hwdevice_ctx_create(&hwDeviceBufferRef, AV_HWDEVICE_TYPE_VDPAU, nullptr, nullptr, 0) != 0)
             return false;
-        m_vdpau->registerPreemptionCallback(preemptionCallback, this);
+
+        m_vdpau = std::make_shared<VDPAU>(hwDeviceBufferRef);
+        if (!m_vdpau->init())
+            return false;
+
+        m_vdpau->registerPreemptionCallback(preemptionCallback, m_vdpau.get());
+    }
+    else
+    {
+        hwDeviceBufferRef = av_buffer_ref(m_vdpau->m_hwDeviceBufferRef);
     }
 
     if (!m_vdpau->checkCodec(streamInfo.codec_name.constData()))
         return false;
 
-    auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VDPAU);
-    if (!bufferRef)
-        return false;
-
-    auto vdpauDevCtx = (AVVDPAUDeviceContext *)((AVHWDeviceContext *)bufferRef->data)->hwctx;
-    vdpauDevCtx->device = m_vdpau->m_device;
-    vdpauDevCtx->get_proc_address = m_vdpau->vdp_get_proc_address;
-    if (av_hwdevice_ctx_init(bufferRef) != 0)
-    {
-        av_buffer_unref(&bufferRef);
-        return false;
-    }
-
     if (!m_hwAccelWriter && !m_copyVideo)
     {
-        auto vdpauOpenGL = new VDPAUOpenGL(m_vdpau);
-        m_hwAccelWriter = VideoWriter::createOpenGL2(vdpauOpenGL);
+        m_hwAccelWriter = VideoWriter::createOpenGL2(new VDPAUOpenGL(m_vdpau));
         if (!m_hwAccelWriter)
-        {
-            av_buffer_unref(&bufferRef);
             return false;
-        }
         m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
     }
 
     YUVjToYUV(codec_ctx->pix_fmt);
-    codec_ctx->hw_device_ctx = bufferRef;
+    codec_ctx->hw_device_ctx = hwDeviceBufferRef;
     codec_ctx->get_format = vdpauGetFormat;
     codec_ctx->thread_count = 1;
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 18, 100)
     codec_ctx->extra_hw_frames = 3;
 #endif
     if (!openCodec(codec))
-    {
-        av_buffer_unref(&bufferRef);
         return false;
-    }
 
     if (pix_fmt == AV_PIX_FMT_YUVJ420P)
         m_limitedRange = false;

@@ -23,13 +23,24 @@
 #include <VideoFrame.hpp>
 #include <Functions.hpp>
 
-#include <QX11Info>
+extern "C"
+{
+    #include <libavutil/hwcontext.h>
+    #include <libavutil/hwcontext_vdpau.h>
+}
+
 #include <QDebug>
 
-#include <vdpau/vdpau_x11.h>
-
-VDPAU::VDPAU()
+VDPAU::VDPAU(AVBufferRef *hwDeviceBufferRef)
+    : m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
 {
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+    FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
+#endif
+
+    auto vdpauDevCtx = (AVVDPAUDeviceContext *)((AVHWDeviceContext *)m_hwDeviceBufferRef->data)->hwctx;
+    m_device = vdpauDevCtx->device;
+    vdp_get_proc_address = vdpauDevCtx->get_proc_address;
 }
 VDPAU::~VDPAU()
 {
@@ -38,19 +49,12 @@ VDPAU::~VDPAU()
     if (m_mixer != VDP_INVALID_HANDLE)
         vdp_video_mixer_destroy(m_mixer);
     clearBufferedFrames();
-    if (m_device != VDP_INVALID_HANDLE && vdp_device_destroy)
-        vdp_device_destroy(m_device);
+    av_buffer_unref(&m_hwDeviceBufferRef);
 }
 
-bool VDPAU::open()
+bool VDPAU::init()
 {
-    Q_ASSERT(m_device == VDP_INVALID_HANDLE);
-
-    auto display = QX11Info::display();
-    if (!display)
-        return false;
-
-    if (vdp_device_create_x11(display, 0, &m_device, &vdp_get_proc_address) != VDP_STATUS_OK)
+    if (!m_device || !vdp_get_proc_address)
         return false;
 
     int status = VDP_STATUS_OK;
@@ -68,10 +72,7 @@ bool VDPAU::open()
     status |= vdp_get_proc_address(m_device, VDP_FUNC_ID_DECODER_QUERY_CAPABILITIES, (void **)&vdp_decoder_query_capabilities);
     status |= vdp_get_proc_address(m_device, VDP_FUNC_ID_PREEMPTION_CALLBACK_REGISTER, (void **)&vdp_preemption_callback_register);
     status |= vdp_get_proc_address(m_device, VDP_FUNC_ID_VIDEO_MIXER_QUERY_FEATURE_SUPPORT, (void **)&vdp_video_mixer_query_feature_support);
-    if (status != VDP_STATUS_OK)
-        return false;
-
-    return true;
+    return (status == VDP_STATUS_OK);
 }
 bool VDPAU::checkCodec(const char *codecName)
 {
