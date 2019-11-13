@@ -59,12 +59,9 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
         add_definitions(-DUSE_OPENGL)
     endif()
 
-    if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU)
+    if(USE_FFMPEG_VAAPI) # VA-API
         find_package(Qt5X11Extras 5.6 REQUIRED)
         set(X11Extras Qt5::X11Extras)
-    endif()
-
-    if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)
         list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp)
         list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp)
