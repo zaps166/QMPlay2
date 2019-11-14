@@ -36,7 +36,9 @@ OpenGL2::OpenGL2() :
     init("HQScaling", false);
     init("ForceRtt", (platformName == "cocoa" || platformName == "android"));
     init("VSync", true);
-    init("BypassCompositor", Qt::PartiallyChecked);
+    if (getString("BypassCompositor") == "1") // Backward compatibility
+        remove("BypassCompositor");
+    init("BypassCompositor", false);
 }
 
 QList<OpenGL2::Info> OpenGL2::getModulesInfo(const bool showDisabled) const
@@ -85,7 +87,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
     vsyncB->setChecked(sets().getBool("VSync"));
 
-    const auto bypassCompositor = (Qt::CheckState)sets().getInt("BypassCompositor");
     const auto platformName = QGuiApplication::platformName();
     auto createBypassCompositorB = [this] {
         bypassCompositorB = new QCheckBox(tr("Bypass compositor in full screen"));
@@ -94,7 +95,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     {
         createBypassCompositorB();
         bypassCompositorB->setToolTip(tr("This can improve performance if X11 compositor supports it"));
-        bypassCompositorB->setChecked(bypassCompositor == Qt::Checked);
     }
 #ifdef Q_OS_WIN
     else if (platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
@@ -103,11 +103,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         connect(forceRttB, &QCheckBox::toggled,
                 bypassCompositorB, &QCheckBox::setDisabled);
         bypassCompositorB->setDisabled(forceRttB->isChecked());
-        bypassCompositorB->setToolTip(tr("This can improve performance. Partially checked bypasses compositor only on Intel drivers."));
-        bypassCompositorB->setTristate(true);
-        bypassCompositorB->setCheckState(bypassCompositor);
+        bypassCompositorB->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
     }
 #endif
+    if (bypassCompositorB)
+        bypassCompositorB->setChecked(sets().getBool("BypassCompositor"));
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(enabledB);
@@ -127,5 +127,5 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("ForceRtt", forceRttB->isChecked());
     sets().set("VSync", vsyncB->isChecked());
     if (bypassCompositorB)
-        sets().set("BypassCompositor", bypassCompositorB->checkState());
+        sets().set("BypassCompositor", bypassCompositorB->isChecked());
 }

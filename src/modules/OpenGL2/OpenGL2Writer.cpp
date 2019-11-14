@@ -78,7 +78,7 @@ bool OpenGL2Writer::set()
         doReset = true;
     forceRtt = newForceRtt;
 
-    const auto bypassCompositor = (Qt::CheckState)sets().getInt("BypassCompositor");
+    const auto bypassCompositor = sets().getBool("BypassCompositor");
     if (m_bypassCompositor != bypassCompositor)
     {
         m_bypassCompositor = bypassCompositor;
@@ -87,7 +87,7 @@ bool OpenGL2Writer::set()
         if (platformName == "xcb")
         {
             if (drawable)
-                drawable->setX11BypassCompositor(m_bypassCompositor == Qt::Checked);
+                drawable->setX11BypassCompositor(m_bypassCompositor);
         }
 #ifdef Q_OS_WIN
         else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
@@ -252,7 +252,7 @@ bool OpenGL2Writer::open()
 
         const auto platformName = QGuiApplication::platformName();
         if (platformName == "xcb")
-            drawable->setX11BypassCompositor(m_bypassCompositor == Qt::Checked);
+            drawable->setX11BypassCompositor(m_bypassCompositor);
 #ifdef Q_OS_WIN
         else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
             drawable->setWindowsBypassCompositor(m_bypassCompositor);

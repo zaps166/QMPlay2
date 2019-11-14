@@ -203,22 +203,19 @@ void OpenGL2Common::setX11BypassCompositor(bool bypassCompositor)
     XCloseDisplayFunc(disp);
 }
 #ifdef Q_OS_WIN
-void OpenGL2Common::setWindowsBypassCompositor(Qt::CheckState bypassCompositor)
+void OpenGL2Common::setWindowsBypassCompositor(bool bypassCompositor)
 {
-    bool bBypassCompositor;
-    switch (bypassCompositor)
+    if (!bypassCompositor && QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) // Windows 7 and Vista can disable DWM composition, so check it
     {
-        case Qt::Unchecked:
-            bBypassCompositor = false;
-            break;
-        case Qt::Checked:
-            bBypassCompositor = true;
-            break;
-        default:
-            bBypassCompositor = m_glVendor.contains("intel", Qt::CaseInsensitive);
-            break;
+        using DwmIsCompositionEnabledProc = HRESULT (WINAPI *)(BOOL *pfEnabled);
+        if (auto DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled"))
+        {
+            BOOL enabled = false;
+            if (DwmIsCompositionEnabled(&enabled) == S_OK && !enabled)
+                bypassCompositor = true; // Don't try to avoid compositor bypass if compositor is disabled
+        }
     }
-    widget()->setProperty("bypassCompositor", bBypassCompositor);
+    widget()->setProperty("bypassCompositor", bypassCompositor);
 }
 #endif
 
@@ -810,8 +807,6 @@ void OpenGL2Common::testGLInternal()
         glVer = glMajor * 10 + glMinor;
     canUseHueSharpness = (glVer >= 30);
 #endif
-
-    m_glVendor = (const char *)glGetString(GL_VENDOR);
 
 #ifndef OPENGL_ES2
     if (!initGLProc()) //No need to call it here for OpenGL|ES

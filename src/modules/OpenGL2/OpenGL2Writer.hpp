@@ -60,7 +60,7 @@ private:
     bool m_hqScaling = false;
     bool forceRtt, useRtt;
     bool vSync;
-    Qt::CheckState m_bypassCompositor = Qt::PartiallyChecked;
+    bool m_bypassCompositor = false;
 };
 
 #define OpenGL2WriterName "OpenGL 2"

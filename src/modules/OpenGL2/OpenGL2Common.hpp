@@ -84,7 +84,7 @@ public:
 
     void setX11BypassCompositor(bool bypassCompositor);
 #ifdef Q_OS_WIN
-    void setWindowsBypassCompositor(Qt::CheckState bypassCompositor);
+    void setWindowsBypassCompositor(bool bypassCompositor);
 #endif
 
     void newSize(const QSize &size = QSize());
@@ -168,8 +168,6 @@ public:
     bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness, m_useMipmaps = false;
     int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
     int glVer;
-
-    QString m_glVendor;
 
     double aspectRatio, zoom;
 
