@@ -1837,8 +1837,8 @@ Die OpenGL Video-Ausgabe wird im RTT-Modus empfohlen.</translation>
         <translation>Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
     </message>
     <message>
-        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
-        <translation>Dies kann die Leistung verbessern. Teilweise überprüft, umgeht Compositor nur bei Intel-Treibern.</translation>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

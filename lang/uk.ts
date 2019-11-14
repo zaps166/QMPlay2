@@ -1838,8 +1838,8 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation>Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
     </message>
     <message>
-        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
-        <translation>Може підвищити продуктивність. Частково відмічений обходить композитного менеджера лише для драйверів Intel.</translation>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

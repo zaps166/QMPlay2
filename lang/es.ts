@@ -1838,7 +1838,7 @@ Se recomienda su uso cuando la salida de vídeo OpenGL está en modo RTT.</trans
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

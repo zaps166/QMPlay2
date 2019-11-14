@@ -1838,8 +1838,8 @@ Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
         <translation>Może zwiększyć wydajność, jeżeli kompozytor X11 obsługuje tę funkcję</translation>
     </message>
     <message>
-        <source>This can improve performance. Partially checked bypasses compositor only on Intel drivers.</source>
-        <translation>Może zwiększyć wydajność. Częściowo zaznaczone omija kompozytor tylko dla sterowników firmy Intel.</translation>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation>Może zwiększyć wydajność. Niektóre sterowniki kart graficznych mogą działać niestabilnie jeżeli ta opcja jest załączona.</translation>
     </message>
 </context>
 <context>
