@@ -327,8 +327,6 @@ FFDecVAAPI::FFDecVAAPI(Module &module)
 }
 FFDecVAAPI::~FFDecVAAPI()
 {
-    if (codecIsOpen)
-        avcodec_flush_buffers(codec_ctx);
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
     destroyDecoder(); // Destroy before deleting "m_vaapi"
@@ -454,48 +452,39 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
         m_vaapi = std::make_shared<VAAPI>();
         if (!m_vaapi->open(!m_copyVideo))
             return false;
+
+        m_vaapi->m_hwDeviceBufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
+        if (!m_vaapi->m_hwDeviceBufferRef)
+            return false;
+
+        auto vaapiDevCtx = (AVVAAPIDeviceContext *)((AVHWDeviceContext *)m_vaapi->m_hwDeviceBufferRef->data)->hwctx;
+        vaapiDevCtx->display = m_vaapi->VADisp;
+        if (av_hwdevice_ctx_init(m_vaapi->m_hwDeviceBufferRef) != 0)
+            return false;
     }
 
     if (!m_vaapi->checkCodec(avcodec_get_name(codec_ctx->codec_id)))
         return false;
-
-    auto bufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
-    if (!bufferRef)
-        return false;
-
-    auto vaapiDevCtx = (AVVAAPIDeviceContext *)((AVHWDeviceContext *)bufferRef->data)->hwctx;
-    vaapiDevCtx->display = m_vaapi->VADisp;
-    if (av_hwdevice_ctx_init(bufferRef) != 0)
-    {
-        av_buffer_unref(&bufferRef);
-        return false;
-    }
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
         auto vaapiOpengGL = new VAAPIOpenGL(m_vaapi);
         m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
         if (!m_hwAccelWriter)
-        {
-            av_buffer_unref(&bufferRef);
             return false;
-        }
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
 
     m_vaapi->init(codec_ctx->width, codec_ctx->height, !m_copyVideo);
 
-    codec_ctx->hw_device_ctx = bufferRef;
+    codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;
     codec_ctx->thread_count = 1;
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 18, 100)
     codec_ctx->extra_hw_frames = 3;
 #endif
     if (!openCodec(codec))
-    {
-        av_buffer_unref(&bufferRef);
         return false;
-    }
 
     time_base = streamInfo.getTimeBase();
     return true;

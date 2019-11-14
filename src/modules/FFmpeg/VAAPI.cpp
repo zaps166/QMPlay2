@@ -23,6 +23,11 @@
 #include <VideoFrame.hpp>
 #include <QMPlay2Core.hpp>
 
+extern "C"
+{
+    #include <libavutil/buffer.h>
+}
+
 #include <QGuiApplication>
 #include <QFileInfo>
 #include <QX11Info>
@@ -44,6 +49,7 @@ VAAPI::VAAPI()
 VAAPI::~VAAPI()
 {
     clearVPP(); // Must be freed before destroying VADisplay
+    av_buffer_unref(&m_hwDeviceBufferRef);
     if (VADisp)
     {
         vaTerminate(VADisp);

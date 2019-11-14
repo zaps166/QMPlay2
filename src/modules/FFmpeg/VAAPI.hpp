@@ -25,6 +25,7 @@
 #include <va/va.h>
 #include <va/va_vpp.h>
 
+struct AVBufferRef;
 class VideoFrame;
 class ImgScaler;
 struct AVFrame;
@@ -61,6 +62,8 @@ private:
     void clearVPPFrames();
 
 public:
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
+
     bool ok = false;
 
     int m_fd = -1;
