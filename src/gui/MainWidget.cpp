@@ -398,18 +398,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
     }
 
 #ifdef Q_OS_ANDROID
-    const QStringList wantedPermissions {
+    QtAndroid::requestPermissionsSync({
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
-    };
-    QStringList permissions;
-    for (auto &&permission : wantedPermissions)
-    {
-        if (QtAndroid::shouldShowRequestPermissionRationale(permission))
-            permissions.append(permission);
-    }
-    if (!permissions.isEmpty())
-        QtAndroid::requestPermissionsSync(permissions);
+    });
 #endif
 
     playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
