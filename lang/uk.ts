@@ -587,6 +587,22 @@
         <translation>Розмір</translation>
     </message>
     <message>
+        <source>Download again</source>
+        <translation>Завантажити знову</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Відтворення</translation>
+    </message>
+    <message>
+        <source>Converting...</source>
+        <translation>Конвертування...</translation>
+    </message>
+    <message>
+        <source>Stop conversion</source>
+        <translation>Зупинити конвертування</translation>
+    </message>
+    <message>
         <source>Download complete</source>
         <translation>Завантаження завершене</translation>
     </message>
@@ -599,28 +615,12 @@
         <translation>Помилка завантаження</translation>
     </message>
     <message>
-        <source>Download again</source>
-        <translation>Завантажити знову</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>Відтворення</translation>
-    </message>
-    <message>
         <source>Conversion aborted</source>
         <translation>Конвертування перерване</translation>
     </message>
     <message>
         <source>Conversion error</source>
         <translation>Помилка конвертування</translation>
-    </message>
-    <message>
-        <source>Converting...</source>
-        <translation>Конвертування...</translation>
-    </message>
-    <message>
-        <source>Stop conversion</source>
-        <translation>Зупинити конвертування</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1110,7 @@
     </message>
     <message>
         <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкриває нову копію QMPlay2 і відтворює вказану &lt;url&gt;.</translation>
     </message>
 </context>
 <context>
@@ -1180,15 +1180,15 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Тексти пісні</translation>
+        <translation>Тексти пісні</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished">Переклад</translation>
+        <translation>Переклад</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished">Тексту пісні не знайдено</translation>
+        <translation>Тексту пісні не знайдено</translation>
     </message>
 </context>
 <context>
@@ -1839,7 +1839,7 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
     </message>
 </context>
 <context>
@@ -2327,11 +2327,11 @@ Recommended to use when OpenGL video output is in RTT mode.</source>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Середня кнопка миші у вікні відео перемикає повноекранний режим</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимкнути субтитри при запуску програми</translation>
     </message>
 </context>
 <context>
@@ -2834,11 +2834,11 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>Audio and video</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудіо і відео</translation>
     </message>
     <message>
         <source>Audio only</source>
-        <translation type="unfinished"></translation>
+        <translation>Лише аудіо</translation>
     </message>
 </context>
 <context>
@@ -2994,7 +2994,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Відеофільтри для апаратного прискорення</translation>
     </message>
 </context>
 <context>
@@ -3070,7 +3070,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Тексти пісні</translation>
+        <translation>Текст пісні</translation>
     </message>
 </context>
 <context>
