@@ -988,6 +988,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     const auto subtitles = o["subtitles"].toObject();
     QString lang = QMPlay2Core.getSettings().getString("SubtitlesLanguage");
+    if (lang.isEmpty()) // Default language
+        lang = QLocale::languageToString(QLocale::system().language());
     if (!audioOnly && m_allowSubtitles && !subtitles.isEmpty() && !lang.isEmpty())
     {
         // Try to convert full language name into short language code
