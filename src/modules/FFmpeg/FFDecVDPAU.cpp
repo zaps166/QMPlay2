@@ -88,7 +88,7 @@ public:
         VDPAUUnmapSurfacesNV = (PFNVDPAUMapUnmapSurfacesNVPROC)context->getProcAddress("VDPAUUnmapSurfacesNV");
         if (!VDPAUInitNV || !VDPAUFiniNV || !VDPAURegisterOutputSurfaceNV || !VDPAUUnregisterSurfaceNV || !VDPAUSurfaceAccessNV || !VDPAUMapSurfacesNV || !VDPAUUnmapSurfacesNV)
         {
-            QMPlay2Core.logError("VDPAU :: Unable to get VDPAU function pointers");
+            QMPlay2Core.logError("VDPAU :: Unable to get VDPAU interop function pointers");
             return false;
         }
 
