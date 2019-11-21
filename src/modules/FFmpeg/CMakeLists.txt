@@ -86,9 +86,10 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     endif()
 
     if(USE_FFMPEG_DXVA2) # DXVA2
-        add_definitions(-DQMPlay2_DXVA2)
-        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp HWAccelHelper.hpp)
-        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp HWAccelHelper.cpp)
+        add_definitions(-DQMPlay2_DXVA2 -DINITGUID)
+        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
+        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
+        set(DXVA2 dxva2)
     endif()
 
     if(USE_FFMPEG_VTB)
@@ -118,6 +119,7 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
     ${X11Extras}
+    ${DXVA2}
     libqmplay2
 )
 

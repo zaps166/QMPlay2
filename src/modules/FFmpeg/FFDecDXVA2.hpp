@@ -20,23 +20,11 @@
 
 #include <FFDecHWAccel.hpp>
 
-extern "C"
-{
-    #include <libavcodec/dxva2.h>
-}
-
-#include <memory>
-
-class DXVA2Surfaces;
 struct SwsContext;
 
 class FFDecDXVA2 final : public FFDecHWAccel
 {
 public:
-    using Surfaces = std::shared_ptr<QVector<IDirect3DSurface9 *>>;
-
-    static bool loadLibraries();
-
     FFDecDXVA2(Module &module);
     ~FFDecDXVA2();
 
@@ -44,21 +32,13 @@ public:
 
     QString name() const override;
 
+    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(VideoFrame &decoded) override;
 
     bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 
 private:
-    bool m_copyVideo;
-
-    Surfaces m_surfaces;
-
-    IDirect3DDevice9 *m_d3d9Device;
-    IDirect3DDeviceManager9 *m_devMgr;
-    HANDLE m_devHandle;
-    IDirectXVideoDecoderService *m_decoderService;
-    IDirectXVideoDecoder *m_videoDecoder;
-    DXVA2_ConfigPictureDecode m_config;
-
-    SwsContext *m_swsCtx;
+    bool m_copyVideo = false;
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
+    SwsContext *m_swsCtx = nullptr;
 };

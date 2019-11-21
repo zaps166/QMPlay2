@@ -79,7 +79,7 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 
 ### Hardware acceleration important information:
 - CUVID, DXVA2, VDPAU and VA-API uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
-- DXVA2 requires "WGL_NV_DX_interop" extension and currently it doesn't support hue, saturation adjustment and video deinterlacing.
+- DXVA2 requires "WGL_NV_DX_interop" extension. Known issues: possible stuttering on NVIDIA GPUs, deinterlacing might not work on AMD GPUs.
 - VDPAU, VA-API and CUVID has its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 - VideoToolBox doesn't support OpenGL high quality video scaling yet.

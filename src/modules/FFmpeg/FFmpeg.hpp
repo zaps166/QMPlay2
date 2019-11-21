@@ -51,7 +51,7 @@ private:
 #endif
 #ifdef QMPlay2_DXVA2
     QIcon dxva2Icon;
-    bool dxva2Loaded;
+    bool dxva2Supported;
 #endif
 #ifdef QMPlay2_VTB
     QIcon vtbIcon;

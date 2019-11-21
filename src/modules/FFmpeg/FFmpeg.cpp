@@ -58,7 +58,7 @@ FFmpeg::FFmpeg() :
 #endif
 #ifdef QMPlay2_DXVA2
     dxva2Icon = QIcon(":/DXVA2.svgz");
-    dxva2Loaded = FFDecDXVA2::loadLibraries();
+    dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
 #endif
 #ifdef QMPlay2_VTB
     vtbIcon = QIcon(":/VAAPI.svgz");
@@ -166,7 +166,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
     }
 #endif
 #ifdef QMPlay2_DXVA2
-    if (showDisabled || (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
+    if (showDisabled || (dxva2Supported && getBool("DecoderDXVA2Enabled")))
         modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
 #endif
 #ifdef QMPlay2_VTB
@@ -191,7 +191,7 @@ void *FFmpeg::createInstance(const QString &name)
         return new FFDecVAAPI(*this);
 #endif
 #ifdef QMPlay2_DXVA2
-    else if (name == DecoderDXVA2Name && (dxva2Loaded && getBool("DecoderDXVA2Enabled")))
+    else if (name == DecoderDXVA2Name && (dxva2Supported && getBool("DecoderDXVA2Enabled")))
         return new FFDecDXVA2(*this);
 #endif
 #ifdef QMPlay2_VTB
@@ -206,7 +206,7 @@ void *FFmpeg::createInstance(const QString &name)
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
 #ifdef QMPlay2_DXVA2
-    return new ModuleSettingsWidget(*this, dxva2Loaded);
+    return new ModuleSettingsWidget(*this, dxva2Supported);
 #else
     return new ModuleSettingsWidget(*this);
 #endif
