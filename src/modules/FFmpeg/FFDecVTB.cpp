@@ -31,38 +31,37 @@ extern "C"
     #include <libavutil/pixdesc.h>
     #include <libavcodec/avcodec.h>
     #include <libswscale/swscale.h>
-    #include <libavcodec/videotoolbox.h>
+    #include <libavutil/hwcontext.h>
+    #include <libavutil/hwcontext_videotoolbox.h>
 }
 
 #include <gl.h>
 
 /**/
 
-static AVPixelFormat getVTBFormat(AVCodecContext *ctx, const AVPixelFormat *fmt)
+static AVPixelFormat vtbGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
-    Q_UNUSED(fmt)
-    av_videotoolbox_default_free(ctx);
-    const int ret = av_videotoolbox_default_init(ctx);
-    if (ret < 0)
-        return AV_PIX_FMT_NONE;
-    return AV_PIX_FMT_VIDEOTOOLBOX;
-};
+    Q_UNUSED(codecCtx)
+    while (*pixFmt != AV_PIX_FMT_NONE)
+    {
+        if (*pixFmt == AV_PIX_FMT_VIDEOTOOLBOX)
+            return *pixFmt;
+        ++pixFmt;
+    }
+    return AV_PIX_FMT_NONE;
+}
 
 /**/
 
-class VTBHwaccel final : public HWAccelInterface
+class VTBOpenGL final : public HWAccelInterface
 {
 public:
-    inline VTBHwaccel() :
-        m_pixelBufferToRelease(nullptr),
-        m_glTextures(nullptr)
+    VTBOpenGL(AVBufferRef *hwDeviceBufferRef)
+        : m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
     {}
-    ~VTBHwaccel()
+    ~VTBOpenGL()
     {
-        QMutexLocker locker(&m_buffersMutex);
-        for (quintptr buffer : asConst(m_buffers))
-            CVPixelBufferRelease((CVPixelBufferRef)buffer);
-        CVPixelBufferRelease(m_pixelBufferToRelease);
+        av_buffer_unref(&m_hwDeviceBufferRef);
     }
 
     QString name() const override
@@ -78,6 +77,10 @@ public:
     {
         return true;
     }
+    bool isCopy() const override
+    {
+        return false;
+    }
 
     bool canInitializeTextures() const override
     {
@@ -92,24 +95,12 @@ public:
     void clear(bool contextChange) override
     {
         Q_UNUSED(contextChange)
-        CVPixelBufferRelease(m_pixelBufferToRelease);
-        m_pixelBufferToRelease = nullptr;
         m_glTextures = nullptr;
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         Q_UNUSED(field)
-
-        {
-            QMutexLocker locker(&m_buffersMutex);
-            const int idx = m_buffers.indexOf(videoFrame.surfaceId);
-            if (idx < 0)
-                return MapNotReady;
-            m_buffers.removeAt(idx);
-            while (m_buffers.size() > 5)
-                CVPixelBufferRelease((CVPixelBufferRef)m_buffers.takeFirst());
-        }
 
         CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.surfaceId;
         CGLContextObj glCtx = CGLGetCurrentContext();
@@ -118,39 +109,21 @@ public:
 
         const OSType pixelFormat = IOSurfaceGetPixelFormat(surface);
         if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
-        {
-            CVPixelBufferRelease(pixelBuffer);
             return MapError;
-        }
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[0]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.size.getWidth(0), videoFrame.size.getHeight(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
-        {
-            CVPixelBufferRelease(pixelBuffer);
             return MapError;
-        }
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[1]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.size.getWidth(1), videoFrame.size.getHeight(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
-        {
-            CVPixelBufferRelease(pixelBuffer);
             return MapError;
-        }
-
-        CVPixelBufferRelease(m_pixelBufferToRelease);
-        m_pixelBufferToRelease = pixelBuffer;
 
         return MapOk;
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
-        {
-            QMutexLocker locker(&m_buffersMutex);
-            if (m_buffers.indexOf(videoFrame.surfaceId) < 0)
-                return false;
-        }
-
         CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.surfaceId;
         if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
         {
@@ -175,39 +148,24 @@ public:
         return false;
     }
 
-    /**/
-
-    void addBuffer(CVPixelBufferRef pixelBuffer)
-    {
-        QMutexLocker locker(&m_buffersMutex);
-        m_buffers.append((quintptr)pixelBuffer);
-    }
+public:
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
 
 private:
-    CVPixelBufferRef m_pixelBufferToRelease;
-    QList<quintptr> m_buffers;
-    QMutex m_buffersMutex;
-    quint32 *m_glTextures;
+    quint32 *m_glTextures = nullptr;
 };
 
 /**/
 
-FFDecVTB::FFDecVTB(Module &module) :
-    m_swsCtx(nullptr),
-    m_copyVideo(false),
-    m_hasCriticalError(false)
+FFDecVTB::FFDecVTB(Module &module)
 {
     SetModule(module);
 }
 FFDecVTB::~FFDecVTB()
 {
-    if (codecIsOpen)
-    {
-        avcodec_flush_buffers(codec_ctx);
-        av_videotoolbox_default_free(codec_ctx);
-    }
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
+    av_buffer_unref(&m_hwDeviceBufferRef);
 }
 
 bool FFDecVTB::set()
@@ -226,18 +184,6 @@ QString FFDecVTB::name() const
     return "FFmpeg/VideoToolBox";
 }
 
-int FFDecVTB::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
-{
-    const int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    if (m_hwAccelWriter && decoded.surfaceId != 0)
-    {
-        CVPixelBufferRef pixelBuffer = CVPixelBufferRetain((CVPixelBufferRef)decoded.surfaceId);
-        ((VTBHwaccel *)m_hwAccelWriter->getHWAccelInterface())->addBuffer(pixelBuffer);
-        decoded.surfaceId = (quintptr)pixelBuffer;
-    }
-    m_hasCriticalError = (ret < 0 && !codec_ctx->hwaccel);
-    return ret;
-}
 void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)
 {
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)frame->data[3];
@@ -286,11 +232,6 @@ void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)
     }
 }
 
-bool FFDecVTB::hasCriticalError() const
-{
-    return m_hasCriticalError;
-}
-
 bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
     const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
@@ -301,26 +242,33 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!codec || !hasHWAccel("videotoolbox"))
         return false;
 
-    VTBHwaccel *vtbHwaccel = nullptr;
     if (writer)
     {
-        vtbHwaccel = dynamic_cast<VTBHwaccel *>(writer->getHWAccelInterface());
-        if (vtbHwaccel)
+        if (auto vtbOpenGL = dynamic_cast<VTBOpenGL *>(writer->getHWAccelInterface()))
+        {
+            m_hwDeviceBufferRef = av_buffer_ref(vtbOpenGL->m_hwDeviceBufferRef);
             m_hwAccelWriter = writer;
+        }
     }
 
-    codec_ctx->get_format = getVTBFormat;
-    codec_ctx->thread_count = 1;
-
-    if (!openCodec(codec))
-        return false;
-
-    if (!m_copyVideo && !m_hwAccelWriter)
+    if (!m_hwDeviceBufferRef)
     {
-        m_hwAccelWriter = VideoWriter::createOpenGL2(new VTBHwaccel);
+        if (av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_VIDEOTOOLBOX, nullptr, nullptr, 0) != 0)
+            return false;
+    }
+
+    if (!m_hwAccelWriter && !m_copyVideo)
+    {
+        m_hwAccelWriter = VideoWriter::createOpenGL2(new VTBOpenGL(m_hwDeviceBufferRef));
         if (!m_hwAccelWriter)
             return false;
     }
+
+    codec_ctx->hw_device_ctx = av_buffer_ref(m_hwDeviceBufferRef);
+    codec_ctx->get_format = vtbGetFormat;
+    codec_ctx->thread_count = 1;
+    if (!openCodec(codec))
+        return false;
 
     time_base = streamInfo.getTimeBase();
     return true;

@@ -32,15 +32,12 @@ public:
 
     QString name() const override;
 
-    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(VideoFrame &decoded) override;
-
-    bool hasCriticalError() const override;
 
     bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 
 private:
-    SwsContext *m_swsCtx;
-    bool m_copyVideo;
-    bool m_hasCriticalError;
+    bool m_copyVideo = false;
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
+    SwsContext *m_swsCtx = nullptr;
 };
