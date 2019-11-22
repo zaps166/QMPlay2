@@ -79,7 +79,7 @@ public:
     virtual QWidget *widget() = 0;
 
     bool testGL();
-    virtual bool setVSync(bool enable) = 0;
+    virtual void setVSync(bool enable) = 0;
     virtual void updateGL(bool requestDelayed) = 0;
 
     void setX11BypassCompositor(bool bypassCompositor);

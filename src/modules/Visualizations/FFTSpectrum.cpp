@@ -171,15 +171,14 @@ void FFTSpectrum::soundBuffer(const bool enable)
 
 bool FFTSpectrum::set()
 {
-#ifdef USE_OPENGL
-    w.setUseOpenGL(sets().getBool("UseOpenGL"));
-#endif
+    const bool isGlOnWindow = QMPlay2Core.isGlOnWindow();
+    w.setUseOpenGL(isGlOnWindow);
     w.fftSize = sets().getInt("FFTSpectrum/Size");
     if (w.fftSize > 16)
         w.fftSize = 16;
     else if (w.fftSize < 3)
         w.fftSize = 3;
-    w.interval = sets().getInt("RefreshTime");
+    w.interval = isGlOnWindow ? 1 : sets().getInt("RefreshTime");
     m_linearScale = sets().getBool("FFTSpectrum/LinearScale");
     if (w.tim.isActive())
         w.start();

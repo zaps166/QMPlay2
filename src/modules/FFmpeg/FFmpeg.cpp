@@ -266,9 +266,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     copyVideoVDPAUB->setChecked(sets().getBool("CopyVideoVDPAU"));
     connect(copyVideoVDPAUB, &QCheckBox::clicked,
             this, &ModuleSettingsWidget::checkEnables);
-#ifndef USE_OPENGL
-    copyVideoVDPAUB->setEnabled(false);
-#endif
     noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
     noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
     connect(noisereductionVDPAUB, &QCheckBox::clicked,
@@ -298,9 +295,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     copyVideoVAAPIB = new QCheckBox(copyVideoText);
     copyVideoVAAPIB->setChecked(sets().getBool("CopyVideoVAAPI"));
-#ifndef USE_OPENGL
-    copyVideoVAAPIB->setEnabled(false);
-#endif
 
     QFormLayout *vaapiLayout = new QFormLayout(decoderVAAPIEB);
     vaapiLayout->addRow(copyVideoVAAPIB);

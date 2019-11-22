@@ -279,7 +279,6 @@ bool FFDecVDPAU::set()
 {
     bool ret = true;
 
-#ifdef USE_OPENGL
     const bool copyVideo = sets().getBool("CopyVideoVDPAU");
     if (m_copyVideo != copyVideo)
         ret = false;
@@ -291,9 +290,6 @@ bool FFDecVDPAU::set()
 
     if (m_vdpau)
         m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
-#else
-    m_useOpenGL = false;
-#endif
 
     return (sets().getBool("DecoderVDPAUEnabled") && ret);
 }

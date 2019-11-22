@@ -46,7 +46,6 @@ private:
     void saveSettings() override;
 
     QCheckBox *enabledB, *allowPboB, *hqScalingB;
-    QCheckBox *forceRttB;
-    QCheckBox *vsyncB;
+    QCheckBox *vsyncB = nullptr;
     QCheckBox *bypassCompositorB = nullptr;
 };

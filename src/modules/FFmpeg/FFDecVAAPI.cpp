@@ -37,7 +37,7 @@ extern "C"
 #include <va/va_glx.h>
 #include <va/va_version.h>
 
-#if defined(USE_OPENGL) && VA_CHECK_VERSION(1, 1, 0) // >= 2.1.0
+#if VA_CHECK_VERSION(1, 1, 0) // >= 2.1.0
 #   define VAAPI_HAS_ESH
 
 #   include <QOpenGLContext>
@@ -336,7 +336,6 @@ bool FFDecVAAPI::set()
 {
     bool ret = true;
 
-#ifdef USE_OPENGL
     const bool copyVideo = sets().getBool("CopyVideoVAAPI");
     if (copyVideo != m_copyVideo)
     {
@@ -362,9 +361,6 @@ bool FFDecVAAPI::set()
         if (reloadVpp)
             m_vaapi->clearVPP(false);
     }
-#else
-    m_useOpenGL = false;
-#endif
 
     return sets().getBool("DecoderVAAPIEnabled") && ret;
 }

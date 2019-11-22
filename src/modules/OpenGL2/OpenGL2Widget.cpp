@@ -34,18 +34,10 @@ QWidget *OpenGL2Widget::widget()
     return this;
 }
 
-bool OpenGL2Widget::setVSync(bool enable)
+void OpenGL2Widget::setVSync(bool enable)
 {
-    QSurfaceFormat fmt = format();
-    vSync = enable;
-    if (!isValid())
-    {
-        fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer); //Probably it doesn't work
-        fmt.setSwapInterval(enable); //Does it work on QOpenGLWidget?
-        setFormat(fmt);
-        return true;
-    }
-    return (fmt.swapInterval() == enable);
+    Q_UNUSED(enable)
+    // Not supported
 }
 void OpenGL2Widget::updateGL(bool requestDelayed)
 {

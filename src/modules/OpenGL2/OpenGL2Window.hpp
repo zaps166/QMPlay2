@@ -38,7 +38,7 @@ public:
 
     QWidget *widget() override;
 
-    bool setVSync(bool enable) override;
+    void setVSync(bool enable) override;
     void updateGL(bool requestDelayed) override;
 
     void initializeGL() override;

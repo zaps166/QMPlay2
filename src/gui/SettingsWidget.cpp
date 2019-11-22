@@ -143,6 +143,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
     if (!QMPSettings.contains("AutoUpdates"))
         QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
+    QMPSettings.init("UseGLOnWindow", false);
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
@@ -358,6 +359,16 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 #ifndef UPDATER
         page1->autoUpdatesB->setText(tr("Automatically check for updates"));
 #endif
+
+        if (QMPlay2CoreClass::isGlOnWindowForced())
+        {
+            delete page1->glOnWindowB;
+            page1->glOnWindowB = nullptr;
+        }
+        else
+        {
+            page1->glOnWindowB->setChecked(QMPlay2Core.isGlOnWindow());
+        }
 
         if (Notifies::hasBoth())
             page1->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
@@ -794,6 +805,16 @@ void SettingsWidget::apply()
             QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
             QMPSettings.set("AutoRestoreMainWindowOnVideo", page1->autoRestoreMainWindowOnVideoB->isChecked());
             QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());
+            if (page1->glOnWindowB)
+            {
+                const bool glOnWindow = page1->glOnWindowB->isChecked();
+                if (QMPSettings.getBool("UseGLOnWindow") != glOnWindow)
+                {
+                    QMPSettings.set("UseGLOnWindow", glOnWindow);
+                    QMessageBox::information(this, tr("Changing OpenGL mode"), tr("To set up a new OpenGL mode, the program will start again!"));
+                    restartApp();
+                }
+            }
             QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
             QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());

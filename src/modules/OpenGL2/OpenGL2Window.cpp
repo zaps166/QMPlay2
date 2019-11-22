@@ -54,7 +54,7 @@ QWidget *OpenGL2Window::widget()
     return container;
 }
 
-bool OpenGL2Window::setVSync(bool enable)
+void OpenGL2Window::setVSync(bool enable)
 {
     QSurfaceFormat fmt = format();
     if (!handle())
@@ -72,7 +72,6 @@ bool OpenGL2Window::setVSync(bool enable)
         setVisible(true);
     }
     vSync = enable;
-    return true;
 }
 void OpenGL2Window::updateGL(bool requestDelayed)
 {

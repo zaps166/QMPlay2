@@ -32,7 +32,6 @@
 OpenGL2Writer::OpenGL2Writer(Module &module)
     : drawable(nullptr)
     , allowPBO(true)
-    , forceRtt(false)
 {
     addParam("W");
     addParam("H");
@@ -70,27 +69,21 @@ bool OpenGL2Writer::set()
     }
 
     vSync = sets().getBool("VSync");
-    if (drawable && !drawable->setVSync(vSync))
-        doReset = true;
-
-    const bool newForceRtt = sets().getBool("ForceRtt");
-    if (forceRtt != newForceRtt)
-        doReset = true;
-    forceRtt = newForceRtt;
+    if (drawable)
+        drawable->setVSync(vSync);
 
     const auto bypassCompositor = sets().getBool("BypassCompositor");
     if (m_bypassCompositor != bypassCompositor)
     {
         m_bypassCompositor = bypassCompositor;
 
-        const auto platformName = QGuiApplication::platformName();
-        if (platformName == "xcb")
+        if (QGuiApplication::platformName() == "xcb")
         {
             if (drawable)
                 drawable->setX11BypassCompositor(m_bypassCompositor);
         }
 #ifdef Q_OS_WIN
-        else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        else if (!QMPlay2Core.isGlOnWindow() && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
         {
             doReset = true;
         }
@@ -231,8 +224,7 @@ QString OpenGL2Writer::name() const
 
 bool OpenGL2Writer::open()
 {
-    static const QString platformName = QGuiApplication::platformName();
-    useRtt = platformName.startsWith("wayland") || platformName == "android" || forceRtt;
+    useRtt = QMPlay2Core.isGlOnWindow();
     if (useRtt)
     {
         //Don't use rtt when videoDock has native window
@@ -250,11 +242,10 @@ bool OpenGL2Writer::open()
     {
         drawable->setVSync(vSync);
 
-        const auto platformName = QGuiApplication::platformName();
-        if (platformName == "xcb")
+        if (QGuiApplication::platformName() == "xcb")
             drawable->setX11BypassCompositor(m_bypassCompositor);
 #ifdef Q_OS_WIN
-        else if (!forceRtt && platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        else if (!QMPlay2Core.isGlOnWindow() && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
             drawable->setWindowsBypassCompositor(m_bypassCompositor);
 #endif
 

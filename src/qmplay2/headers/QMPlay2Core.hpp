@@ -62,6 +62,8 @@ public:
 
     static int getCPUFlags();
 
+    static bool isGlOnWindowForced();
+
     void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
     void quit();
 
@@ -184,6 +186,8 @@ public:
     QString getNameForUrl(const QString &url);
 
     void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
+
+    bool isGlOnWindow() const;
 
     inline CommonJS *getCommonJS() const
     {

@@ -21,9 +21,7 @@
 #include <QWidget>
 #include <QTimer>
 
-#ifdef USE_OPENGL
-    #include <QOpenGLWidget>
-#endif
+#include <QOpenGLWidget>
 
 class DockWidget;
 
@@ -43,9 +41,7 @@ protected:
     virtual void start() = 0;
     virtual void stop();
 
-#ifdef USE_OPENGL
     void setUseOpenGL(bool b);
-#endif
 
     void resizeEvent(QResizeEvent *e) override;
 
@@ -60,11 +56,9 @@ private:
 
     bool eventFilter(QObject *watched, QEvent *event) override final;
 
-#ifdef USE_OPENGL
     QOpenGLWidget *glW;
     bool m_pendingUpdate = false;
     const bool m_isWL;
-#endif
     bool dockWidgetVisible = false;
 private slots:
     void wallpaperChanged(bool hasWallpaper, double alpha);

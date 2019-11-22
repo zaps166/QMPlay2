@@ -46,9 +46,6 @@ public:
 private:
     void saveSettings() override;
 
-#ifdef USE_OPENGL
-    QCheckBox *useOpenGLB;
-#endif
-    QSpinBox *refTimeB, *sndLenB, *fftSizeB;
+    QSpinBox *refTimeB = nullptr, *sndLenB, *fftSizeB;
     QCheckBox *m_fftLinearScaleB;
 };

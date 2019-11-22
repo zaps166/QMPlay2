@@ -21,9 +21,7 @@
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 
-#ifdef USE_OPENGL
-    #include <QGuiApplication>
-#endif
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QMenu>
@@ -48,13 +46,11 @@ void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
     }
 }
 
-VisWidget::VisWidget() :
-    stopped(true),
-    dw(new DockWidget)
-#ifdef USE_OPENGL
+VisWidget::VisWidget()
+    : stopped(true)
+    , dw(new DockWidget)
     , glW(nullptr)
     , m_isWL(QGuiApplication::platformName().startsWith("wayland"))
-#endif
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFocusPolicy(Qt::StrongFocus);
@@ -75,19 +71,14 @@ bool VisWidget::canStart() const
 
 void VisWidget::stop()
 {
-#ifdef USE_OPENGL
     if (glW)
         m_pendingUpdate = true;
-#endif
     updateVisualization();
 }
 
-#ifdef USE_OPENGL
 void VisWidget::setUseOpenGL(bool b)
 {
     m_pendingUpdate = false;
-    if (!b)
-        b = m_isWL;
     if (b && !glW)
     {
         glW = new QOpenGLWidget(this);
@@ -105,14 +96,11 @@ void VisWidget::setUseOpenGL(bool b)
         glW = nullptr;
     }
 }
-#endif
 
 void VisWidget::resizeEvent(QResizeEvent *e)
 {
-#ifdef USE_OPENGL
     if (glW)
         glW->setGeometry(QRect(QPoint(), size()));
-#endif
     QWidget::resizeEvent(e);
 }
 
@@ -125,10 +113,8 @@ void VisWidget::mouseDoubleClickEvent(QMouseEvent *e)
 }
 void VisWidget::paintEvent(QPaintEvent *)
 {
-#ifdef USE_OPENGL
     if (glW)
         return;
-#endif
     QPainter p(this);
     paint(p);
 }
@@ -141,7 +127,6 @@ void VisWidget::changeEvent(QEvent *event)
 
 bool VisWidget::eventFilter(QObject *watched, QEvent *event)
 {
-#ifdef USE_OPENGL
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
@@ -151,7 +136,6 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
         m_pendingUpdate = false;
         return true;
     }
-#endif
     return QWidget::eventFilter(watched, event);
 }
 
@@ -176,20 +160,16 @@ void VisWidget::visibilityChanged(bool v)
         stop();
     else if (!stopped)
         start();
-#ifdef USE_OPENGL
     else if (dockWidgetVisible && m_pendingUpdate)
         updateVisualization();
-#endif
 }
 void VisWidget::updateVisualization()
 {
-#ifdef USE_OPENGL
     if (glW)
     {
         glW->update();
         return;
     }
-#endif
     update();
 }
 void VisWidget::showSettings()

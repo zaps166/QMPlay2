@@ -55,10 +55,6 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
 
-    if(USE_OPENGL2)
-        add_definitions(-DUSE_OPENGL)
-    endif()
-
     if(USE_FFMPEG_VAAPI) # VA-API
         find_package(Qt5X11Extras 5.6 REQUIRED)
         set(X11Extras Qt5::X11Extras)

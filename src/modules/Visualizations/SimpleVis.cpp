@@ -183,10 +183,9 @@ void SimpleVis::soundBuffer(const bool enable)
 
 bool SimpleVis::set()
 {
-#ifdef USE_OPENGL
-    w.setUseOpenGL(sets().getBool("UseOpenGL"));
-#endif
-    w.interval = sets().getInt("RefreshTime");
+    const bool isGlOnWindow = QMPlay2Core.isGlOnWindow();
+    w.setUseOpenGL(isGlOnWindow);
+    w.interval = isGlOnWindow ? 1 : sets().getInt("RefreshTime");
     sndLen = sets().getInt("SimpleVis/SoundLength") / 1000.0f;
     if (w.tim.isActive())
         w.start();

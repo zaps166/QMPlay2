@@ -58,7 +58,7 @@ private:
     OpenGL2Common *drawable;
     bool allowPBO;
     bool m_hqScaling = false;
-    bool forceRtt, useRtt;
+    bool useRtt = false;
     bool vSync;
     bool m_bypassCompositor = false;
 };

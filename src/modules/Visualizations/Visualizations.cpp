@@ -21,32 +21,13 @@
 #include <SimpleVis.hpp>
 #include <FFTSpectrum.hpp>
 
-#ifdef USE_OPENGL
-    #include <QGuiApplication>
-#endif
-
-constexpr int g_ms = 17;
-constexpr int g_msGL = 10; // Rely on V-Sync
 
 Visualizations::Visualizations() :
     Module("Visualizations")
 {
     m_icon = QIcon(":/Visualizations.svgz");
 
-    int ms = g_ms;
-
-#ifdef USE_OPENGL
-    const QString platformName = QGuiApplication::platformName();
-    if (platformName == "cocoa" || platformName == "android")
-    {
-        ms = g_msGL;
-        init("UseOpenGL", true);
-    }
-    else
-    {
-        init("UseOpenGL", false);
-    }
-#endif
+    constexpr int ms = 17;
 
     init("RefreshTime", ms);
     init("SimpleVis/SoundLength", ms);
@@ -86,20 +67,13 @@ QMPLAY2_EXPORT_MODULE(Visualizations)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {
-#ifdef USE_OPENGL
-    useOpenGLB = new QCheckBox(tr("Use OpenGL"));
-    useOpenGLB->setChecked(sets().getBool("UseOpenGL"));
-    useOpenGLB->setToolTip(tr("Always enabled on Wayland platform.\nRecommended to use when OpenGL video output is in RTT mode."));
-    connect(useOpenGLB, &QCheckBox::toggled, [this](bool checked) {
-        QSignalBlocker blocker(refTimeB);
-        refTimeB->setValue(checked ? g_msGL : g_ms);
-    });
-#endif
-
-    refTimeB = new QSpinBox;
-    refTimeB->setRange(1, 500);
-    refTimeB->setSuffix(" " + tr("ms"));
-    refTimeB->setValue(sets().getInt("RefreshTime"));
+    if (!QMPlay2Core.isGlOnWindow())
+    {
+        refTimeB = new QSpinBox;
+        refTimeB->setRange(1, 500);
+        refTimeB->setSuffix(" " + tr("ms"));
+        refTimeB->setValue(sets().getInt("RefreshTime"));
+    }
 
     sndLenB = new QSpinBox;
     sndLenB->setRange(1, 500);
@@ -115,23 +89,20 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     m_fftLinearScaleB->setChecked(sets().getBool("FFTSpectrum/LinearScale"));
 
     QFormLayout *layout = new QFormLayout(this);
-#ifdef USE_OPENGL
-    layout->addRow(useOpenGLB);
-#endif
-    layout->addRow(tr("Refresh time") + ": ", refTimeB);
+    if (refTimeB)
+        layout->addRow(tr("Refresh time") + ": ", refTimeB);
     layout->addRow(tr("Displayed sound length") + ": ", sndLenB);
     layout->addRow(tr("FFT spectrum size") + ": ", fftSizeB);
     layout->addRow(m_fftLinearScaleB);
 
-    connect(refTimeB, SIGNAL(valueChanged(int)), sndLenB, SLOT(setValue(int)));
+    if (refTimeB)
+        connect(refTimeB, SIGNAL(valueChanged(int)), sndLenB, SLOT(setValue(int)));
 }
 
 void ModuleSettingsWidget::saveSettings()
 {
-#ifdef USE_OPENGL
-    sets().set("UseOpenGL", useOpenGLB->isChecked());
-#endif
-    sets().set("RefreshTime", refTimeB->value());
+    if (refTimeB)
+        sets().set("RefreshTime", refTimeB->value());
     sets().set("SimpleVis/SoundLength", sndLenB->value());
     sets().set("FFTSpectrum/Size", fftSizeB->value());
     sets().set("FFTSpectrum/LinearScale", m_fftLinearScaleB->isChecked());

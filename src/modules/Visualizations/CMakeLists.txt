@@ -19,10 +19,6 @@ set(Visualizations_RESOURCES
     icon.qrc
 )
 
-if(USE_OPENGL2)
-    add_definitions(-DUSE_OPENGL)
-endif()
-
 link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
 
 include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})

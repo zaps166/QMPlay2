@@ -29,12 +29,9 @@ OpenGL2::OpenGL2() :
 {
     m_icon = QIcon(":/OpenGL2.svgz");
 
-    const QString platformName = QGuiApplication::platformName();
-
     init("Enabled", true);
     init("AllowPBO", true);
     init("HQScaling", false);
-    init("ForceRtt", (platformName == "cocoa" || platformName == "android"));
     init("VSync", true);
     if (getString("BypassCompositor") == "1") // Backward compatibility
         remove("BypassCompositor");
@@ -70,6 +67,8 @@ QMPLAY2_EXPORT_MODULE(OpenGL2)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {
+    const bool isGlOnWindow = QMPlay2Core.isGlOnWindow();
+
     enabledB = new QCheckBox(tr("Enabled"));
     enabledB->setChecked(sets().getBool("Enabled"));
 
@@ -80,29 +79,24 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     hqScalingB->setToolTip(tr("Trilinear filtering for minification and bicubic filtering for magnification."));
     hqScalingB->setChecked(sets().getBool("HQScaling"));
 
-    forceRttB = new QCheckBox(tr("Force render to texture if possible (not recommended)"));
-    forceRttB->setToolTip(tr("Always enabled on Wayland and Android platforms.\nSet visualizations to OpenGL mode if enabled."));
-    forceRttB->setChecked(sets().getBool("ForceRtt"));
+    if (!isGlOnWindow)
+    {
+        vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
+        vsyncB->setChecked(sets().getBool("VSync"));
+    }
 
-    vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
-    vsyncB->setChecked(sets().getBool("VSync"));
-
-    const auto platformName = QGuiApplication::platformName();
     auto createBypassCompositorB = [this] {
         bypassCompositorB = new QCheckBox(tr("Bypass compositor in full screen"));
     };
-    if (platformName == "xcb")
+    if (QGuiApplication::platformName() == "xcb")
     {
         createBypassCompositorB();
         bypassCompositorB->setToolTip(tr("This can improve performance if X11 compositor supports it"));
     }
 #ifdef Q_OS_WIN
-    else if (platformName == "windows" && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+    else if (!isGlOnWindow && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
     {
         createBypassCompositorB();
-        connect(forceRttB, &QCheckBox::toggled,
-                bypassCompositorB, &QCheckBox::setDisabled);
-        bypassCompositorB->setDisabled(forceRttB->isChecked());
         bypassCompositorB->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
     }
 #endif
@@ -113,8 +107,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(enabledB);
     layout->addWidget(allowPboB);
     layout->addWidget(hqScalingB);
-    layout->addWidget(forceRttB);
-    layout->addWidget(vsyncB);
+    if (vsyncB)
+        layout->addWidget(vsyncB);
     if (bypassCompositorB)
         layout->addWidget(bypassCompositorB);
 }
@@ -124,8 +118,8 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("Enabled", enabledB->isChecked());
     sets().set("AllowPBO", allowPboB->isChecked());
     sets().set("HQScaling", hqScalingB->isChecked());
-    sets().set("ForceRtt", forceRttB->isChecked());
-    sets().set("VSync", vsyncB->isChecked());
+    if (vsyncB)
+        sets().set("VSync", vsyncB->isChecked());
     if (bypassCompositorB)
         sets().set("BypassCompositor", bypassCompositorB->isChecked());
 }
