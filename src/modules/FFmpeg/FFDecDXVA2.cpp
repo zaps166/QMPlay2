@@ -536,6 +536,7 @@ private:
 
 static AVPixelFormat dxva2GetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
+    Q_UNUSED(codecCtx)
     while (*pixFmt != AV_PIX_FMT_NONE)
     {
         if (*pixFmt == AV_PIX_FMT_DXVA2_VLD)
