@@ -1025,6 +1025,14 @@
         <source>Enlarge small covers</source>
         <translation>Powiększaj małe okładki</translation>
     </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation>Używaj OpenGL dla całego okna</translation>
+    </message>
+    <message>
+        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation>Wykorzystuje QOpenGLWidget (renderowanie do tekstury), włącza także OpenGL dla wizualizacji. Używaj ostrożnie, ponieważ może to obniżyć wydajność odtwarzania wideo.</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1658,10 +1666,6 @@
         <translation>Domyślna długość</translation>
     </message>
     <message>
-        <source>Force render to texture if possible (not recommended)</source>
-        <translation>Wymuś renderowanie do tekstury jeżeli możliwe (niezalecane)</translation>
-    </message>
-    <message>
         <source>Display subtitles if available</source>
         <translation>Wyświetlaj napisy, jeżeli są dostępne</translation>
     </message>
@@ -1684,10 +1688,6 @@
     <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
         <translation>Częściowo zaznaczone oznacza, że kopiowanie obrazu nastąpi, gdy szybka metoda nie zadziała</translation>
-    </message>
-    <message>
-        <source>Use OpenGL</source>
-        <translation>Użyj OpenGL</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
@@ -1772,18 +1772,6 @@
     <message>
         <source>Try to automatically reconnect live streams on error</source>
         <translation>Spróbuj automatycznie wznowić połączenie dla strumieni na żywo w przypadku błędu</translation>
-    </message>
-    <message>
-        <source>Always enabled on Wayland and Android platforms.
-Set visualizations to OpenGL mode if enabled.</source>
-        <translation>Zawsze włączone dla platform Wayland i Android.
-Jeżeli włączone, włącz także OpenGL w wizualizacjach.</translation>
-    </message>
-    <message>
-        <source>Always enabled on Wayland platform.
-Recommended to use when OpenGL video output is in RTT mode.</source>
-        <translation>Zawsze włączone dla platformy Wayland.
-Zalecane użycie jeżeli wyjście wideo OpenGL jest w trybie RTT.</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -2995,6 +2983,14 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Hardware accelerated video filters</source>
         <translation>Filtry wideo dla akceleracji sprzętowej</translation>
+    </message>
+    <message>
+        <source>Changing OpenGL mode</source>
+        <translation>Zmiana trybu pracy OpenGL</translation>
+    </message>
+    <message>
+        <source>To set up a new OpenGL mode, the program will start again!</source>
+        <translation>Aby zastosować nowy tryb pracy OpenGL, program uruchomi się ponownie!</translation>
     </message>
 </context>
 <context>

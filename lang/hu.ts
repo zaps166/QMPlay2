@@ -1025,6 +1025,14 @@
         <source>Enlarge small covers</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1570,10 +1578,6 @@
         <translation>Zajcsökkentés</translation>
     </message>
     <message>
-        <source>Use OpenGL</source>
-        <translation>OpenGL használata</translation>
-    </message>
-    <message>
         <source>Hurry up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1722,15 +1726,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Force render to texture if possible (not recommended)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Always enabled on Wayland and Android platforms.
-Set visualizations to OpenGL mode if enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Vertical sync</source>
         <translation>Vertikális szinkronizáció</translation>
     </message>
@@ -1760,11 +1755,6 @@ Set visualizations to OpenGL mode if enabled.</source>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Always enabled on Wayland platform.
-Recommended to use when OpenGL video output is in RTT mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2992,6 +2982,14 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing OpenGL mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
