@@ -29,6 +29,9 @@
 #include <QInputDialog>
 #include <QMainWindow>
 #include <QDir>
+#ifdef Q_OS_MACOS
+    #include <QTimer>
+#endif
 
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable, QAction::MenuRole role = QAction::NoRole)
 {
@@ -363,6 +366,20 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
     widgetAction->setDefaultWidget(QMPlay2GUI.videoAdjustment);
     QMPlay2GUI.videoAdjustment->setObjectName(videoAdjustmentMenu->title().remove('&'));
     videoAdjustmentMenu->addAction(widgetAction);
+#ifdef Q_OS_MACOS
+    // Update visibility and update geometry of video adjustment widget
+    connect(videoAdjustmentMenu, &VideoFilters::aboutToShow, [] {
+        if (QWidget *parent = QMPlay2GUI.videoAdjustment->parentWidget())
+        {
+            if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
+            {
+                QTimer::singleShot(0, [parent] {
+                    QMPlay2GUI.videoAdjustment->setGeometry(QRect(QPoint(), parent->sizeHint()));
+                });
+            }
+        }
+    });
+#endif
     /**/
     addSeparator();
     newAction(VideoFilters::tr("&Spherical view"), this, spherical, true, QIcon(), true);
