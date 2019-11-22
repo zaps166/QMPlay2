@@ -42,9 +42,6 @@
 #include <QBuffer>
 #include <QFile>
 #include <QDir>
-#ifdef Q_OS_MACOS
-    #include <QProcess>
-#endif
 #ifdef CHECK_FOR_EGL
     #include <QLibrary>
 #endif
@@ -54,10 +51,6 @@
 
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
-#ifdef Q_OS_MACOS
-    static QByteArray g_rcdPath("/System/Library/LaunchAgents/com.apple.rcd.plist");
-    static bool g_rcdLoad;
-#endif
 
 /**/
 
@@ -343,15 +336,6 @@ static bool writeToSocket(IPCSocket &socket, QList<QPair<QString, QString>> &arg
 
 static inline void exitProcedure()
 {
-#ifdef Q_OS_MACOS
-    if (g_rcdLoad)
-    {
-        // Load RCD service again (allow to run iTunes on "Play" key)
-        QProcess::startDetached("launchctl load " + g_rcdPath);
-        g_rcdLoad = false;
-    }
-#endif
-
     delete g_screenSaver;
     g_screenSaver = nullptr;
 }
@@ -735,16 +719,6 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(nullptr), 0);
-#endif
-
-#ifdef Q_OS_MACOS
-    // Unload RCD service (prevent run iTunes on "Play" key)
-    {
-        QProcess launchctl;
-        launchctl.start("launchctl unload " + g_rcdPath);
-        if (launchctl.waitForFinished() && launchctl.exitStatus() == QProcess::NormalExit)
-            g_rcdLoad = !launchctl.readAllStandardError().startsWith(g_rcdPath);
-    }
 #endif
 
     qsrand(time(nullptr));
