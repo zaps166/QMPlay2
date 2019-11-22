@@ -110,6 +110,7 @@ public:
         Q_DECLARE_TR_FUNCTIONS(Playback)
     public:
         Playback(MenuBar *parent);
+        ~Playback();
 
         class VideoFilters : public QMenu
         {

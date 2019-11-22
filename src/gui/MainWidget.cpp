@@ -375,6 +375,20 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
         repeatMode = settings.getWithBounds("RepeatMode", RepeatNormal, RepeatStopAfter);
     menuBar->player->repeat->repeatActions[repeatMode]->trigger();
 
+    if (settings.getBool("RestoreAVSState"))
+    {
+        if (!settings.getBool("AudioEnabled"))
+            menuBar->playback->toggleAudio->trigger();
+        if (!settings.getBool("VideoEnabled"))
+            menuBar->playback->toggleVideo->trigger();
+        if (!settings.getBool("SubtitlesEnabled"))
+            menuBar->playback->toggleSubtitles->trigger();
+    }
+    else if (settings.getBool("DisableSubtitlesAtStartup"))
+    {
+        menuBar->playback->toggleSubtitles->trigger();
+    }
+
     if (settings.getBool("RestoreVideoEqualizer"))
         QMPlay2GUI.videoAdjustment->restoreValues();
 

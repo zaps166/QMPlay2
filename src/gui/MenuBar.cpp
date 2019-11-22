@@ -345,8 +345,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
     addSeparator();
     newAction(Playback::tr("&Subtitles enabled"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
-    if (!QMPlay2Core.getSettings().getBool("DisableSubtitlesAtStartup"))
-        toggleSubtitles->setChecked(true);
+    toggleSubtitles->setChecked(true);
     newAction(Playback::tr("Add &subtities from file"), this, subsFromFile, false, QIcon(), false);
     newAction(Playback::tr("Set &subtitles delay"), this, subtitlesSync, true, QIcon(), false);
     newAction(Playback::tr("&Delay subtitiles") + " (100ms)", this, slowDownSubtitles, true, QIcon(), false);
@@ -356,6 +355,23 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     addSeparator();
     newAction(Playback::tr("&Screen shot"), this, screenShot, true, QIcon(), false);
 }
+MenuBar::Playback::~Playback()
+{
+    Settings &QMPSettings = QMPlay2Core.getSettings();
+    if (QMPSettings.getBool("RestoreAVSState"))
+    {
+        QMPSettings.set("AudioEnabled", toggleAudio->isChecked());
+        QMPSettings.set("VideoEnabled", toggleVideo->isChecked());
+        QMPSettings.set("SubtitlesEnabled", toggleSubtitles->isChecked());
+    }
+    else
+    {
+        QMPSettings.remove("AudioEnabled");
+        QMPSettings.remove("VideoEnabled");
+        QMPSettings.remove("SubtitlesEnabled");
+    }
+}
+
 MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
     QMenu(VideoFilters::tr("Video &filters"), parent)
 {

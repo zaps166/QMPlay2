@@ -433,19 +433,6 @@
          </property>
         </widget>
        </item>
-       <item row="22" column="0" colspan="3">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="7" column="0">
         <widget class="QCheckBox" name="showBufferedTimeOnSlider">
          <property name="text">
@@ -467,10 +454,30 @@
          </property>
         </widget>
        </item>
-       <item row="22" column="0">
+       <item row="23" column="0">
         <widget class="QCheckBox" name="disableSubtitlesAtStartup">
          <property name="text">
           <string>Disable subtitles at program startup</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="22" column="0">
+        <widget class="QCheckBox" name="restoreAVSStateB">
+         <property name="text">
+          <string>Remember audio/video/subtitles enabled state</string>
          </property>
         </widget>
        </item>
@@ -521,8 +528,26 @@
   <tabstop>middleMouseToggleFullscreen</tabstop>
   <tabstop>accurateSeekB</tabstop>
   <tabstop>unpauseWhenSeekingB</tabstop>
+  <tabstop>restoreAVSStateB</tabstop>
   <tabstop>disableSubtitlesAtStartup</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>restoreAVSStateB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>disableSubtitlesAtStartup</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>322</x>
+     <y>1113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>1147</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

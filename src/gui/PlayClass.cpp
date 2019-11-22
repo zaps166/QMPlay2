@@ -118,8 +118,7 @@ PlayClass::PlayClass() :
 
     subtitlesStream = -1;
     videoSync = subtitlesSync = 0.0;
-    videoEnabled = audioEnabled = true;
-    subtitlesEnabled = !QMPlay2Core.getSettings().getBool("DisableSubtitlesAtStartup");
+    videoEnabled = audioEnabled = subtitlesEnabled = true;
 
     doSuspend = doRepeat = false;
 
