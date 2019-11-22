@@ -25,6 +25,7 @@
 
 #include <QOpenGLContext>
 #include <QDebug>
+#include <QHash>
 
 #include <functional>
 #include <memory>
@@ -78,6 +79,11 @@ public:
     }
     ~DXVA2OpenGL() final
     {
+        if (m_dontReleaseRenderTarget)
+        {
+            for (auto &&renderTarget : asConst(m_renderTargets))
+                renderTarget->Release();
+        }
         if (m_videoProcessor)
             m_videoProcessor->Release();
         if (m_videoProcessorService)
@@ -124,7 +130,22 @@ public:
         }
 
         if (auto d3dDev9 = getD3dDevice9())
+        {
             m_glHandleD3D = wglDXOpenDeviceNV(d3dDev9.get());
+
+            IDirect3D9 *d3d9 = nullptr;
+            if (SUCCEEDED(d3dDev9->GetDirect3D(&d3d9)))
+            {
+                D3DADAPTER_IDENTIFIER9 adapterIdentifier = {};
+                if (SUCCEEDED(d3d9->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &adapterIdentifier)))
+                {
+                    // Don't release render target on old Intel drivers, bacause "wglDXSetResourceShareHandleNV()" can fail.
+                    // Render target must be recreated on Radeon drivers, otherwise "wglDXRegisterObjectNV()" will fail.
+                    m_dontReleaseRenderTarget = (strstr(adapterIdentifier.Description, "Intel") != nullptr);
+                }
+                d3d9->Release();
+            }
+        }
         if (!m_glHandleD3D)
         {
             QMPlay2Core.logError("DXVA2 :: Unable to initialize DXVA2 <-> GL interop");
@@ -399,41 +420,51 @@ private:
 
         Q_ASSERT(!m_glHandleSurface);
 
-        HANDLE sharedHandle = nullptr;
+        const auto size = qMakePair(m_width, m_height);
+
+        if (m_dontReleaseRenderTarget)
+            m_renderTarget = m_renderTargets.value(size);
+        if (!m_renderTarget)
+        {
+            HANDLE sharedHandle = nullptr;
 
 #if 1
-        auto d3dDev9 = getD3dDevice9();
-        if (!d3dDev9)
-            return false;
+            auto d3dDev9 = getD3dDevice9();
+            if (!d3dDev9)
+                return false;
 
-        HRESULT hr = d3dDev9->CreateRenderTarget(
-            m_width,
-            m_height,
-            D3DFMT_X8R8G8B8,
-            D3DMULTISAMPLE_NONE,
-            0,
-            false,
-            &m_renderTarget,
-            &sharedHandle
-        );
+            HRESULT hr = d3dDev9->CreateRenderTarget(
+                m_width,
+                m_height,
+                D3DFMT_X8R8G8B8,
+                D3DMULTISAMPLE_NONE,
+                0,
+                false,
+                &m_renderTarget,
+                &sharedHandle
+            );
 #else
-        HRESULT hr = m_videoProcessorService->CreateSurface(
-            m_width,
-            m_height,
-            0,
-            D3DFMT_X8R8G8B8,
-            D3DPOOL_DEFAULT,
-            0,
-            DXVA2_VideoProcessorRenderTarget,
-            &m_renderTarget,
-            &sharedHandle
-        );
+            HRESULT hr = m_videoProcessorService->CreateSurface(
+                m_width,
+                m_height,
+                0,
+                D3DFMT_X8R8G8B8,
+                D3DPOOL_DEFAULT,
+                0,
+                DXVA2_VideoProcessorRenderTarget,
+                &m_renderTarget,
+                &sharedHandle
+            );
 #endif
-        if (FAILED(hr))
-            return false;
+            if (FAILED(hr))
+                return false;
 
-        if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHandle))
-            return false;
+            if (m_dontReleaseRenderTarget)
+                m_renderTargets[size] = m_renderTarget;
+
+            if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHandle))
+                return false;
+        }
 
         m_glHandleSurface = wglDXRegisterObjectNV(m_glHandleD3D, m_renderTarget, m_textures[0], GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
         if (!m_glHandleSurface)
@@ -465,7 +496,8 @@ private:
         }
         if (m_renderTarget)
         {
-            m_renderTarget->Release();
+            if (!m_dontReleaseRenderTarget)
+                m_renderTarget->Release();
             m_renderTarget = nullptr;
         }
         m_width = m_height = 0;
@@ -487,6 +519,9 @@ private:
     IDirectXVideoProcessor *m_videoProcessor = nullptr;
     DXVA2_VideoSample m_videoSample = {};
     DXVA2_VideoProcessBltParams m_bltParams = {};
+
+    QHash<QPair<int, int>, IDirect3DSurface9 *> m_renderTargets;
+    bool m_dontReleaseRenderTarget = false;
 
     quint32 *m_textures = nullptr;
 
