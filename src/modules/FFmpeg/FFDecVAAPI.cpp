@@ -379,7 +379,6 @@ int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArr
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)
     {
-        decoded.setAVFrame(frame);
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
     }
 

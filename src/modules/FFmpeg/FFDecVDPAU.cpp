@@ -309,7 +309,6 @@ int FFDecVDPAU::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArr
     decoded.limited = m_limitedRange;
     if (m_hwAccelWriter && ret > -1)
     {
-        decoded.setAVFrame(frame);
         if (flush)
             m_vdpau->clearBufferedFrames();
         if (!decoded.isEmpty())

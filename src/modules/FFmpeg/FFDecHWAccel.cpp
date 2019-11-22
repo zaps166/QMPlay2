@@ -75,12 +75,15 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
         codec_ctx->skip_frame = AVDISCARD_DEFAULT;
 
     const int bytesConsumed = decodeStep(frameFinished);
+    m_hasCriticalError = (bytesConsumed < 0);
 
     if (frameFinished && ~hurryUp)
     {
         if (m_hwAccelWriter)
         {
             decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
+            if (m_hwAccelWriter && !m_hasCriticalError)
+                decoded.setAVFrame(frame);
         }
         else
         {
@@ -94,8 +97,6 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
         decodeLastStep(encodedPacket, frame);
     else
         encodedPacket.ts.setInvalid();
-
-    m_hasCriticalError = (bytesConsumed < 0);
 
     return m_hasCriticalError ? -1 : bytesConsumed;
 }

@@ -575,15 +575,6 @@ QString FFDecDXVA2::name() const
     return "FFmpeg/DXVA2";
 }
 
-int FFDecDXVA2::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
-{
-    int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    if (m_hwAccelWriter && ret > -1)
-    {
-        decoded.setAVFrame(frame);
-    }
-    return ret;
-}
 void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
 {
     D3DSURFACE_DESC desc;
