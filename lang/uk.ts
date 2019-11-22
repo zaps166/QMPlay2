@@ -2321,6 +2321,10 @@
         <source>Disable subtitles at program startup</source>
         <translation>Вимкнути субтитри при запуску програми</translation>
     </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

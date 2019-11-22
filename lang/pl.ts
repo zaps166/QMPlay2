@@ -2321,6 +2321,10 @@
         <source>Disable subtitles at program startup</source>
         <translation>Wyłącz napisy podczas uruchamiania programu</translation>
     </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Zapamiętaj, czy audio/wideo/napisy są włączone</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
