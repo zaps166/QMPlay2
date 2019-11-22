@@ -22,25 +22,19 @@
 
 #include <QDockWidget>
 
-class DockWidget : public QDockWidget
+class QMPLAY2SHAREDLIB_EXPORT DockWidget : public QDockWidget
 {
+    Q_OBJECT
+
 public:
-    inline DockWidget() :
-        titleBarVisible(true), globalTitleBarVisible(true)
-    {}
-    inline void setTitleBarVisible(bool v = true)
-    {
-        setTitleBarWidget((titleBarVisible = v) && globalTitleBarVisible ? nullptr : &emptyW);
-    }
-    inline void setGlobalTitleBarVisible(bool v)
-    {
-        globalTitleBarVisible = v;
-        setTitleBarVisible(titleBarVisible);
-    }
+    DockWidget();
+    ~DockWidget();
+
+    void setTitleBarVisible(bool v);
+    void setGlobalTitleBarVisible(bool v);
+
 private:
-    class QMPLAY2SHAREDLIB_EXPORT EmptyW final : public QWidget
-    {
-        QSize sizeHint() const override;
-    } emptyW;
-    bool titleBarVisible, globalTitleBarVisible;
+    QWidget *const m_emptyW;
+    bool m_titleBarVisible = true;
+    bool m_globalTitleBarVisible = true;
 };

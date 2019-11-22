@@ -130,7 +130,7 @@ void VideoDock::fullScreen(bool b)
             setWidget(&iDW);
         }
 
-        setTitleBarVisible();
+        setTitleBarVisible(true);
         setFeatures(DockWidget::AllDockWidgetFeatures);
         setFloating(is_floating);
 

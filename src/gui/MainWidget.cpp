@@ -1392,7 +1392,7 @@ void MainWidget::lockWidgets(bool l)
     {
         for (QObject *o : children())
         {
-            DockWidget *dW = dynamic_cast<DockWidget *>(o);
+            DockWidget *dW = qobject_cast<DockWidget *>(o);
             if (dW)
             {
                 if (dW->isFloating())

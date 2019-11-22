@@ -18,7 +18,31 @@
 
 #include <DockWidget.hpp>
 
-QSize DockWidget::EmptyW::sizeHint() const
+class EmptyW final : public QWidget
 {
-    return QSize(0, 0);
+    QSize sizeHint() const override
+    {
+        return QSize(0, 0);
+    }
+};
+
+/**/
+
+DockWidget::DockWidget()
+    : m_emptyW(new EmptyW)
+{}
+DockWidget::~DockWidget()
+{
+    delete m_emptyW;
+}
+
+void DockWidget::setTitleBarVisible(bool v)
+{
+    m_titleBarVisible = v;
+    setTitleBarWidget((m_titleBarVisible && m_globalTitleBarVisible) ? nullptr : m_emptyW);
+}
+void DockWidget::setGlobalTitleBarVisible(bool v)
+{
+    m_globalTitleBarVisible = v;
+    setTitleBarVisible(m_titleBarVisible);
 }
