@@ -1,3 +1,14 @@
+Changes in QMPlay2 build 19.11.xx:
+    - move OpenGL mode check boxes from visualizations and OpenGL2 settings into general settings,
+    - improve (again) bypassing compositor on Windows platform and OpenGL,
+    - fix YouTube subtitles if default subtitles language is set,
+    - fix FFmpeg < 4.0 compilation for VDPAU and VA-API,
+    - add option to store playback enabled state,
+    - DXVA2 improvements; add video filtering,
+    - add submenus for YouTube context menu,
+    - minor VDPAU and VA-API fixes,
+    - minor macOS improvements,
+
 Changes in QMPlay2 build 19.11.06:
     - remove dedicated VDPAU video output and add VDPAU interoperation with OpenGL,
     - add more search patch for VA-API and VDPAU drivers (for AppImage),
