@@ -157,7 +157,10 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
     for (int i = 0; i < 2; ++i)
     {
-        auto subMenu = menu->addMenu(i == 0 ? tr("Audio and video") : tr("Audio only"));
+        auto subMenu = menu->addMenu(
+            (i == 0) ? QIcon(":/video.svgz") : QIcon(":/audio.svgz"),
+            (i == 0) ? tr("Audio and video") : tr("Audio only")
+        );
 
         if (!tWI->isDisabled())
         {
