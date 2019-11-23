@@ -1027,7 +1027,7 @@
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translatio>Використовувати OpenGL для всього вікна</translation>
+        <translation>Використовувати OpenGL для всього вікна</translation>
     </message>
     <message>
         <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
