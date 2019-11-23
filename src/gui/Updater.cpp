@@ -119,15 +119,41 @@ void Updater::infoFinished()
         infoFile.write(reply->readAll());
         infoFile.close();
 
-        QSettings info(infoFile.fileName(), QSettings::IniFormat, this);
+        const QSettings info(infoFile.fileName(), QSettings::IniFormat, this);
 
-        Settings &settings = QMPlay2Core.getSettings();
+        QString osName;
+#ifdef Q_OS_WIN
+        if (QSysInfo::windowsVersion() != QSysInfo::WV_XP && QSysInfo::windowsVersion() != QSysInfo::WV_2003)
+        {
+            if (QSysInfo::WordSize == 32)
+            {
+                using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
+                if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
+                {
+                    BOOL bIsWow64 = FALSE;
+                    if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
+                        osName = "Win64";
+                }
+                if (osName.isEmpty())
+                    osName = "WinNew32";
+            }
+            else
+            {
+                osName = "Win64";
+            }
+        }
+        else
+        {
+            osName = "Win32";
+        }
+#endif
 
-        const QString NewVersion  = info.value("Version").toString();
+        const QString NewVersion = info.value("Version" + osName).toString();
         const QDate NewVersionDate = Functions::parseVersion(NewVersion);
 
         if (NewVersionDate.isValid())
         {
+            Settings &settings = QMPlay2Core.getSettings();
             if (NewVersionDate > Functions::parseVersion(settings.getString("Version")))
             {
                 bool canUpdate = true;
@@ -147,31 +173,7 @@ void Updater::infoFinished()
                     };
 
 #ifdef UPDATER
-                    QString winSuffix;
-                    if (QSysInfo::windowsVersion() != QSysInfo::WV_XP && QSysInfo::windowsVersion() != QSysInfo::WV_2003)
-                    {
-                        if (QSysInfo::WordSize == 32)
-                        {
-                            using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
-                            if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
-                            {
-                                BOOL bIsWow64 = FALSE;
-                                if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
-                                    winSuffix = "64";
-                            }
-                            if (winSuffix.isEmpty())
-                                winSuffix = "New32";
-                        }
-                        else
-                        {
-                            winSuffix = QString::number(QSysInfo::WordSize);
-                        }
-                    }
-                    else
-                    {
-                        winSuffix = "32";
-                    }
-                    QString FileURL = info.value("Win" + winSuffix).toString();
+                    QString FileURL = info.value(osName).toString();
                     if (FileURL.isEmpty())
                         endWork(tr("No update available"));
                     else if (Version::isPortable())
