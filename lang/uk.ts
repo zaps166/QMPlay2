@@ -1031,7 +1031,7 @@
     </message>
     <message>
         <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>Використовує QOpenGLWidget (візуалізація текстури), також дозволяє OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
+        <translation>Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
     </message>
 </context>
 <context>
