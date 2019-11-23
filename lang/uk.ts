@@ -1027,11 +1027,11 @@
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translatio>Використовувати OpenGL для всього вікна</translation>
     </message>
     <message>
         <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовує QOpenGLWidget (візуалізація текстури), також дозволяє OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
     </message>
 </context>
 <context>
@@ -2323,7 +2323,7 @@
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам&apos;ятати, чи увімкнено аудіо/відео/субтитри</translation>
     </message>
 </context>
 <context>
@@ -2920,7 +2920,7 @@ QMPlay2 не відображатиме іконки!</translation>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation>Для встановлення нової мови програма перезапуститься!</translation>
+        <translation>Для застосування нової мови програма перезапуститься!</translation>
     </message>
     <message>
         <source>Video filters</source>
@@ -2990,11 +2990,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити режим OpenGL</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Для застосування нового режиму OpenGL програма перезапуститься!</translation>
     </message>
 </context>
 <context>
