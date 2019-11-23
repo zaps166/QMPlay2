@@ -847,6 +847,10 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         if (streamInfo->codec_name.isEmpty())
             streamInfo->codec_name = codecDescr->name;
     }
+    else if (stream->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
+    {
+        streamInfo->must_decode = false;
+    }
 
     streamInfo->bitrate = stream->codecpar->bit_rate;
     streamInfo->bpcs = stream->codecpar->bits_per_coded_sample;
