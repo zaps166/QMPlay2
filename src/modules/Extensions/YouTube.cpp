@@ -75,7 +75,6 @@ static inline bool isPlaylist(QTreeWidgetItem *tWI)
 /**/
 
 ResultsYoutube::ResultsYoutube()
-    : menu(new QMenu(this))
 {
     setAnimated(true);
     setIndentation(12);
@@ -145,7 +144,6 @@ void ResultsYoutube::copyPageURL()
 
 void ResultsYoutube::contextMenu(const QPoint &point)
 {
-    menu->clear();
     QTreeWidgetItem *tWI = currentItem();
     if (!tWI)
         return;
@@ -153,27 +151,31 @@ void ResultsYoutube::contextMenu(const QPoint &point)
     const QString name = tWI->text(0);
     const QString url = tWI->data(0, Qt::UserRole).toString();
 
+    auto menu = new QMenu(this);
+    connect(menu, &QMenu::aboutToHide,
+            menu, &QMenu::deleteLater);
+
     for (int i = 0; i < 2; ++i)
     {
-        menu->addSection(i == 0 ? tr("Audio and video") : tr("Audio only"));
+        auto subMenu = menu->addMenu(i == 0 ? tr("Audio and video") : tr("Audio only"));
 
         if (!tWI->isDisabled())
         {
             const auto param = i == 0 ? QString() : QString("audio");
-            menu->addAction(tr("Play"), this, [=] {
+            subMenu->addAction(tr("Play"), this, [=] {
                 playOrEnqueue("open", currentItem(), param);
             });
-            menu->addAction(tr("Enqueue"), this, [=] {
+            subMenu->addAction(tr("Enqueue"), this, [=] {
                 playOrEnqueue("enqueue", currentItem(), param);
             });
-            menu->addSeparator();
+            subMenu->addSeparator();
         }
 
         if (i == 0)
         {
-            menu->addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
-            menu->addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
-            menu->addSeparator();
+            subMenu->addAction(tr("Open the page in the browser"), this, SLOT(openPage()));
+            subMenu->addAction(tr("Copy page address"), this, SLOT(copyPageURL()));
+            subMenu->addSeparator();
         }
 
         if (isPlaylist(tWI))
@@ -186,8 +188,8 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
             for (QAction *act : QMPlay2Ext->getActions(name, -2, url, "YouTube", i == 0 ? QString() : QString("audio")))
             {
-                act->setParent(menu);
-                menu->addAction(act);
+                act->setParent(subMenu);
+                subMenu->addAction(act);
             }
         }
     }

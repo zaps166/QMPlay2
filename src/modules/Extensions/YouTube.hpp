@@ -35,7 +35,6 @@ class YouTubeDL;
 class QSpinBox;
 class LineEdit;
 class QLabel;
-class QMenu;
 
 /**/
 
@@ -48,8 +47,6 @@ public:
 
 private:
     void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI, const QString &addrParam = QString());
-
-    QMenu *menu;
 
 private slots:
     void playEntry(QTreeWidgetItem *tWI);
