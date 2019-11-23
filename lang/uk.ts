@@ -1188,7 +1188,7 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation>Тексти пісні</translation>
+        <translation>Текст пісні</translation>
     </message>
     <message>
         <source>Translation</source>
