@@ -1,4 +1,4 @@
-Changes in QMPlay2 build 19.11.xx:
+Changes in QMPlay2 build 19.11.26:
     - move OpenGL mode check boxes from visualizations and OpenGL2 settings into general settings,
     - improve (again) bypassing compositor on Windows platform and OpenGL,
     - fix YouTube subtitles if default subtitles language is set,
