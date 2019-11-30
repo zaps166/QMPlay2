@@ -47,21 +47,18 @@ Playlist::Entries M3U::read()
             extinf[1] = line.right(line.length() - idx - 1);
             hasExtinf = true;
         }
-        else
+        else if (!line.startsWith("#"))
         {
-            if (!line.startsWith("#"))
+            Entry entry;
+            if (!hasExtinf)
+                entry.name = Functions::fileName(line, false);
+            else
             {
-                Entry entry;
-                if (!hasExtinf)
-                    entry.name = Functions::fileName(line, false);
-                else
-                {
-                    entry.length = extinf[0].toInt();
-                    entry.name = extinf[1].replace('\001', '\n');
-                }
-                entry.url = Functions::Url(line, playlistPath);
-                list += entry;
+                entry.length = extinf[0].toInt();
+                entry.name = extinf[1].replace('\001', '\n');
             }
+            entry.url = Functions::Url(line, playlistPath);
+            list += entry;
             hasExtinf = false;
         }
     }
