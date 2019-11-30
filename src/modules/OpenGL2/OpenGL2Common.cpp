@@ -987,7 +987,7 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
 void OpenGL2Common::maybeSetMipmaps(qreal dpr)
 {
     const bool lastUseMipmaps = m_useMipmaps;
-    m_useMipmaps = (W * dpr < m_textureSize.width() || H * dpr < m_textureSize.height());
+    m_useMipmaps = (W * dpr < m_textureSize.width() / 2.0 || H * dpr < m_textureSize.height() / 2.0);
 #ifndef OPENGL_ES2
     if (m_useMipmaps && !glGenerateMipmap)
     {
