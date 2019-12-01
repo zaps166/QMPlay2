@@ -52,18 +52,6 @@
 #ifndef GL_PIXEL_UNPACK_BUFFER
     #define GL_PIXEL_UNPACK_BUFFER 0x88EC
 #endif
-#ifndef GL_R8
-    #define GL_R8 0x8229
-#endif
-#ifndef GL_RG8
-    #define GL_RG8 0x822B
-#endif
-#ifndef GL_RED
-    #define GL_RED 0x1903
-#endif
-#ifndef GL_RG
-    #define GL_RG 0x8227
-#endif
 #ifndef GL_TEXTURE_RECTANGLE_ARB
     #define GL_TEXTURE_RECTANGLE_ARB 0x84F5
 #endif
@@ -276,6 +264,14 @@ void OpenGL2Common::setSpherical(bool spherical)
     }
 }
 
+void OpenGL2Common::setTextureParameters(GLenum target, GLint param)
+{
+    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, param);
+    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, param);
+    glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
 void OpenGL2Common::initializeGL()
 {
     if (!initGLProc())
@@ -377,21 +373,18 @@ void OpenGL2Common::initializeGL()
     glDisable(GL_DITHER);
 
     /* Prepare textures */
-    glGenTextures(numPlanes + 1, textures);
-    for (int i = 0; i < numPlanes + 1; ++i)
+    const int texturesToGen = hwAccellnterface ? 0 : numPlanes;
+    glGenTextures(texturesToGen + 1, textures);
+    for (int i = 0; i < texturesToGen + 1; ++i)
     {
         const quint32 tmpTarget = (i == 0) ? GL_TEXTURE_2D : target;
-        qint32 tmpParam  = (i == 0) ? GL_NEAREST : GL_LINEAR;
         glBindTexture(tmpTarget, textures[i]);
-        glTexParameteri(tmpTarget, GL_TEXTURE_MIN_FILTER, tmpParam);
-        glTexParameteri(tmpTarget, GL_TEXTURE_MAG_FILTER, tmpParam);
-        glTexParameteri(tmpTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(tmpTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        setTextureParameters(tmpTarget, (i == 0) ? GL_NEAREST : GL_LINEAR);
     }
 
     if (hasPbo)
     {
-        glGenBuffers(1 + (hwAccellnterface ? 0 : numPlanes), pbo);
+        glGenBuffers(1 + texturesToGen, pbo);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     }
 
@@ -415,7 +408,7 @@ void OpenGL2Common::paintGL()
 
     bool resetDone = false;
 
-    if (!frameIsEmpty && hwAccellPossibleLock())
+    if (!frameIsEmpty)
     {
         const GLsizei widths[3] = {
             videoFrame.size.width,
@@ -432,39 +425,24 @@ void OpenGL2Common::paintGL()
         {
             if (hwAccellnterface)
             {
-                /* Release HWAccell resources */
-                hwAccellnterface->clear(false);
-
-                if (hwAccellnterface->canInitializeTextures())
-                {
-                    if (numPlanes == 2)
-                    {
-                        //NV12
-                        for (int p = 0; p < 2; ++p)
-                        {
-                            glBindTexture(target, textures[p + 1]);
-                            glTexImage2D(target, 0, !p ? GL_R8 : GL_RG8, widths[p], heights[p], 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
-                        }
-                    }
-                    else if (numPlanes == 1)
-                    {
-                        //RGB32
-                        glBindTexture(target, textures[1]);
-                        glTexImage2D(target, 0, GL_RGBA, widths[0], heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-                    }
-                }
-
                 m_textureSize = QSize(widths[0], heights[0]);
 
-                if (hqScaling)
-                {
-                    // Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
-                    maybeSetMipmaps(widget()->devicePixelRatioF());
-                }
-
-                /* Prepare textures, register GL textures */
+                /* Initialize hw accell and prepare GL textures */
                 const bool hasHwAccelError = hwAccelError;
-                hwAccelError = !hwAccellnterface->init(&textures[1]);
+                hwAccelError = !hwAccellnterface->init(widths, heights, [this] {
+                    const auto textures = hwAccellnterface->getTextures();
+                    for (int i = 0; i < textures.second; ++i)
+                    {
+                        glBindTexture(target, textures.first[i]);
+                        setTextureParameters(target, GL_LINEAR);
+                    }
+                    glBindTexture(target, 0);
+                    if (hqScaling)
+                    {
+                        // Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
+                        maybeSetMipmaps(widget()->devicePixelRatioF());
+                    }
+                });
                 if (hwAccelError && !hasHwAccelError)
                     QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
 
@@ -525,13 +503,12 @@ void OpenGL2Common::paintGL()
                     hwAccelError = true;
                 }
             }
-            hwAccellnterface->unlock();
             if (!imageReady && !hasImage)
                 return;
             for (int p = 0; p < numPlanes; ++p)
             {
                 glActiveTexture(GL_TEXTURE0 + p);
-                glBindTexture(target, textures[p + 1]);
+                glBindTexture(target, hwAccellnterface->getTexture(p));
                 if (m_useMipmaps && imageReady)
                     glGenerateMipmap(target);
             }
@@ -773,15 +750,13 @@ void OpenGL2Common::paintGL()
 
 void OpenGL2Common::contextAboutToBeDestroyed()
 {
-    if (hwAccellnterface && hwAccellnterface->lock())
-    {
-        hwAccellnterface->clear(true);
-        hwAccellnterface->unlock();
-    }
+    if (hwAccellnterface)
+        hwAccellnterface->clear();
     deleteSphereVbo();
+    const int texturesToDel = hwAccellnterface ? 0 : numPlanes;
     if (hasPbo)
-        glDeleteBuffers(1 + (hwAccellnterface ? 0 : numPlanes), pbo);
-    glDeleteTextures(numPlanes + 1, textures);
+        glDeleteBuffers(1 + texturesToDel, pbo);
+    glDeleteTextures(texturesToDel + 1, textures);
 }
 
 void OpenGL2Common::testGLInternal()
@@ -847,47 +822,25 @@ void OpenGL2Common::testGLInternal()
 
         if (isOK)
         {
-            quint32 textures[numPlanes];
-            memset(textures, 0, sizeof textures);
-            glGenTextures(numPlanes, textures);
-            if (hwAccellnterface->canInitializeTextures())
-            {
-                for (int p = 0; p < numPlanes; ++p)
-                {
-                    glBindTexture(target, textures[p]);
-                    if (numPlanes == 2)
-                        glTexImage2D(target, 0, !p ? GL_R8 : GL_RG8, 1, 1, 0, !p ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
-                    else if (numPlanes == 1)
-                        glTexImage2D(target, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-                }
-            }
-
-            if (!hwAccellnterface->lock())
+            const QVector<int> sizes(numPlanes * 2, 1);
+            if (!hwAccellnterface->init(&sizes[0], &sizes[numPlanes], []{}))
                 isOK = false;
-            else
+            if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
             {
-                if (!hwAccellnterface->init(textures))
-                    isOK = false;
-                if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
-                {
-                    VideoAdjustment videoAdjustmentCap;
-                    hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
-                    if (videoAdjustmentCap.brightness)
-                        videoAdjustmentKeys += "Brightness";
-                    if (videoAdjustmentCap.contrast)
-                        videoAdjustmentKeys += "Contrast";
-                    if (videoAdjustmentCap.saturation)
-                        videoAdjustmentKeys += "Saturation";
-                    if (videoAdjustmentCap.hue)
-                        videoAdjustmentKeys += "Hue";
-                    if (videoAdjustmentCap.sharpness)
-                        videoAdjustmentKeys += "Sharpness";
-                }
-                hwAccellnterface->clear(true);
-                hwAccellnterface->unlock();
+                VideoAdjustment videoAdjustmentCap;
+                hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
+                if (videoAdjustmentCap.brightness)
+                    videoAdjustmentKeys += "Brightness";
+                if (videoAdjustmentCap.contrast)
+                    videoAdjustmentKeys += "Contrast";
+                if (videoAdjustmentCap.saturation)
+                    videoAdjustmentKeys += "Saturation";
+                if (videoAdjustmentCap.hue)
+                    videoAdjustmentKeys += "Hue";
+                if (videoAdjustmentCap.sharpness)
+                    videoAdjustmentKeys += "Sharpness";
             }
-
-            glDeleteTextures(numPlanes, textures);
+            hwAccellnterface->clear();
         }
     }
 
@@ -995,32 +948,36 @@ void OpenGL2Common::maybeSetMipmaps(qreal dpr)
         m_useMipmaps = false;
     }
 #endif
-    if (m_useMipmaps != lastUseMipmaps)
+    if (hwAccellnterface || m_useMipmaps != lastUseMipmaps)
     {
-        for (int p = 0; p < numPlanes; ++p)
-        {
-            glBindTexture(target, textures[p + 1]);
+        auto setTextureFiltering = [this] {
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
             if (m_useMipmaps)
                 glGenerateMipmap(target);
+        };
+
+        if (hwAccellnterface)
+        {
+            const auto textures = hwAccellnterface->getTextures();
+            for (int i = 0; i < textures.second; ++i)
+            {
+                glBindTexture(target, textures.first[i]);
+                setTextureFiltering();
+            }
         }
+        else for (int p = 0; p < numPlanes; ++p)
+        {
+            glBindTexture(target, textures[p + 1]);
+            setTextureFiltering();
+        }
+
+        glBindTexture(target, 0);
     }
 }
 
 inline bool OpenGL2Common::isRotate90() const
 {
     return verticesIdx >= 4 && !sphericalView;
-}
-
-inline bool OpenGL2Common::hwAccellPossibleLock()
-{
-    if (hwAccellnterface && !hwAccellnterface->lock())
-    {
-        QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("error"));
-        hwAccelError = true;
-        return false;
-    }
-    return true;
 }
 
 QByteArray OpenGL2Common::readShader(const QString &fileName, bool pure)

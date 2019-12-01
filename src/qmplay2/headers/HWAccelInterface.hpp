@@ -21,6 +21,9 @@
 #include <VideoAdjustment.hpp>
 
 #include <QString>
+#include <QPair>
+
+#include <functional>
 
 class VideoFrame;
 class ImgScaler;
@@ -46,6 +49,9 @@ public:
         MapError,
     };
 
+    using SetTextureParamsFn = std::function<void()>;
+
+public:
     virtual ~HWAccelInterface() = default;
 
     virtual QString name() const = 0;
@@ -60,22 +66,12 @@ public:
         return true;
     }
 
-    virtual bool lock()
-    {
-        return true;
-    }
-    virtual void unlock()
-    {}
-
-    virtual bool canInitializeTextures() const
-    {
-        return true;
-    }
-
-    virtual bool init(quint32 *textures) = 0;
-    virtual void clear(bool contextChange) = 0;
+    virtual bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) = 0;
+    virtual QPair<const quint32 *, int> getTextures() = 0;
+    virtual void clear() = 0;
 
     virtual MapResult mapFrame(const VideoFrame &videoFrame, Field field) = 0;
+    virtual quint32 getTexture(int plane) = 0;
 
     virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = nullptr) = 0;
 

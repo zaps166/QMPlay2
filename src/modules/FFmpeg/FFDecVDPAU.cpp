@@ -53,18 +53,22 @@ public:
     {
         return RGB32;
     }
-    bool isCopy() const override
-    {
-        return true;
-    }
 
-    bool init(quint32 *textures) override
+    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        if (m_isInitialized)
+        if (m_width != widths[0] || m_height != heights[0])
         {
-            m_textures = textures;
-            return true;
+            clearTextures();
+
+            m_width = widths[0];
+            m_height = heights[0];
+
+            glGenTextures(1, &m_texture);
+            setTextureParamsFn();
         }
+
+        if (m_isInitialized)
+            return true;
 
         const auto context = QOpenGLContext::currentContext();
         if (!context)
@@ -100,29 +104,30 @@ public:
         }
 
         m_isInitialized = true;
-
-        m_textures = textures;
         return true;
     }
-    void clear(bool contextChange) override
+    QPair<const quint32 *, int> getTextures() override
     {
-        maybeUnmapOutputSurface();
-        maybeUnregisterOutputSurface();
-        if (m_isInitialized && contextChange)
-        {
-            VDPAUFiniNV();
+        return {&m_texture, 1};
+    }
+    void clear() override
+    {
+        clearTextures();
 
-            VDPAUInitNV = nullptr;
-            VDPAUFiniNV = nullptr;
-            VDPAURegisterOutputSurfaceNV = nullptr;
-            VDPAUUnregisterSurfaceNV = nullptr;
-            VDPAUSurfaceAccessNV = nullptr;
-            VDPAUMapSurfacesNV = nullptr;
-            VDPAUUnmapSurfacesNV = nullptr;
+        if (!m_isInitialized)
+            return;
 
-            m_isInitialized = false;
-        }
-        m_textures = nullptr;
+        VDPAUFiniNV();
+
+        VDPAUInitNV = nullptr;
+        VDPAUFiniNV = nullptr;
+        VDPAURegisterOutputSurfaceNV = nullptr;
+        VDPAUUnregisterSurfaceNV = nullptr;
+        VDPAUSurfaceAccessNV = nullptr;
+        VDPAUMapSurfacesNV = nullptr;
+        VDPAUUnmapSurfacesNV = nullptr;
+
+        m_isInitialized = false;
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
@@ -151,7 +156,7 @@ public:
         {
             maybeUnregisterOutputSurface();
 
-            m_glSurface = VDPAURegisterOutputSurfaceNV(id, GL_TEXTURE_2D, 1, m_textures);
+            m_glSurface = VDPAURegisterOutputSurfaceNV(id, GL_TEXTURE_2D, 1, &m_texture);
             if (!m_glSurface)
                 return MapError;
 
@@ -165,6 +170,11 @@ public:
 
         m_isSurfaceMapped = true;
         return MapOk;
+    }
+    quint32 getTexture(int plane) override
+    {
+        Q_UNUSED(plane)
+        return m_texture;
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
@@ -212,12 +222,28 @@ public:
     }
 
 private:
+    void clearTextures()
+    {
+        maybeUnmapOutputSurface();
+        maybeUnregisterOutputSurface();
+        if (m_texture)
+        {
+            glDeleteTextures(1, &m_texture);
+            m_texture = 0;
+        }
+        m_width = m_height = 0;
+    }
+
+private:
     using GLvdpauSurfaceNV = GLintptr;
 
     std::shared_ptr<VDPAU> m_vdpau;
 
     bool m_isInitialized = false;
-    uint32_t *m_textures = nullptr;
+    uint32_t m_texture = 0;
+
+    int m_width = 0;
+    int m_height = 0;
 
     VdpOutputSurface m_registeredOutputSurface = VDP_INVALID_HANDLE;
     GLvdpauSurfaceNV m_glSurface = 0;

@@ -21,6 +21,7 @@
 #include <VideoFrame.hpp>
 
 #include <QCoreApplication>
+#include <QMutex>
 
 #include <deque>
 
@@ -87,6 +88,7 @@ public:
     bool m_mustSetCSCMatrix = false;
     bool m_mustApplyVideoMixerFeatures = false;
 
+    QMutex m_framesMutex;
     std::deque<VideoFrame> m_bufferedFrames;
 
     VdpGetProcAddress *vdp_get_proc_address = nullptr;

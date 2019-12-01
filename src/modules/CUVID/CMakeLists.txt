@@ -44,4 +44,8 @@ target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )
 
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} opengl32)
+endif()
+
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

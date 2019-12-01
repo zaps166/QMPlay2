@@ -127,6 +127,7 @@ void VDPAU::registerPreemptionCallback(VdpPreemptionCallback callback, void *con
 
 void VDPAU::clearBufferedFrames()
 {
+    QMutexLocker locker(&m_framesMutex);
     m_bufferedFrames.clear();
 }
 
@@ -268,6 +269,8 @@ bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id,
     }
     else
     {
+        QMutexLocker locker(&m_framesMutex);
+
         if (m_bufferedFrames.empty() || m_bufferedFrames[0].surfaceId != videoFrame.surfaceId)
         {
             while (m_bufferedFrames.size() >= numVideoFrames)

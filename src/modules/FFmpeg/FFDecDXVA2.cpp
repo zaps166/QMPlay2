@@ -81,13 +81,14 @@ public:
     {
         if (m_dontReleaseRenderTarget)
         {
-            for (auto &&renderTarget : asConst(m_renderTargets))
-                renderTarget->Release();
+            for (int i = 0; i < s_numRenderTargets; ++i)
+            {
+                for (auto &&renderTarget : asConst(m_renderTargets[i].surfaces))
+                    renderTarget->Release();
+            }
         }
         if (m_videoProcessor)
             m_videoProcessor->Release();
-        if (m_videoProcessorService)
-            m_videoProcessorService->Release();
         av_buffer_unref(&m_hwDeviceBufferRef);
     }
 
@@ -101,13 +102,21 @@ public:
         return RGB32;
     }
 
-    bool init(quint32 *textures) override
+    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        if (m_glHandleD3D)
+        if (m_width != widths[0] || m_height != heights[0])
         {
-            m_textures = textures;
-            return true;
+            clearTextures();
+
+            m_width = widths[0];
+            m_height = heights[0];
+
+            glGenTextures(2, m_textures);
+            setTextureParamsFn();
         }
+
+        if (m_glHandleD3D)
+            return ensureRenderTargets();
 
         auto context = QOpenGLContext::currentContext();
         if (!context)
@@ -152,37 +161,30 @@ public:
             return false;
         }
 
-        m_textures = textures;
+        if (!ensureRenderTargets())
+            return false;
+
         return true;
     }
-    void clear(bool contextChange) override
+    QPair<const quint32 *, int> getTextures() override
     {
-        releaseRenderTarget();
-        if (m_glHandleD3D && contextChange)
+        return {m_textures, 2};
+    }
+    void clear() override
+    {
+        clearTextures();
+        if (m_glHandleD3D)
         {
             wglDXCloseDeviceNV(m_glHandleD3D);
             m_glHandleD3D = nullptr;
         }
-        m_textures = nullptr;
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
         Q_UNUSED(field)
 
-        if (!unlockRenderTarget())
-            return MapError;
-
-        const int width = videoFrame.size.width;
-        const int height = videoFrame.size.height;
-        if (m_width != width || m_height != height)
-        {
-            releaseRenderTarget();
-            m_width = width;
-            m_height = height;
-        }
-
-        if (!ensureRenderTarget())
+        if (!unlockRenderTargets())
             return MapError;
 
         const RECT rect = {
@@ -233,14 +235,21 @@ public:
             : DXVA2_NominalRange_16_235
         ;
 
-        if (FAILED(m_videoProcessor->VideoProcessBlt(m_renderTarget, &m_bltParams, &m_videoSample, 1, nullptr)))
+        if (FAILED(m_videoProcessor->VideoProcessBlt(m_renderTargets[m_renderTargetIdx].surface, &m_bltParams, &m_videoSample, 1, nullptr)))
             return MapError;
 
-        if (!wglDXLockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface))
+        m_renderTargetIdx = (m_renderTargetIdx + 1) % s_numRenderTargets;
+
+        if (!wglDXLockObjectsNV(m_glHandleD3D, 1, &m_renderTargets[m_renderTargetIdx].glSurface))
             return MapError;
 
-        m_surfaceLocked = true;
+        m_renderTargets[m_renderTargetIdx].locked = true;
         return MapOk;
+    }
+    quint32 getTexture(int plane) override
+    {
+        Q_UNUSED(plane)
+        return m_textures[m_renderTargetIdx];
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
@@ -375,18 +384,22 @@ public:
         if (!d3dDev9)
             return false;
 
-        if (FAILED(DXVA2CreateVideoService(d3dDev9.get(), IID_IDirectXVideoProcessorService, (void **)&m_videoProcessorService)))
+        IDirectXVideoProcessorService *videoProcessorService = nullptr;
+        if (FAILED(DXVA2CreateVideoService(d3dDev9.get(), IID_IDirectXVideoProcessorService, (void **)&videoProcessorService)))
         {
             QMPlay2Core.logError("DXVA2 :: Unable to create video processor service");
             return false;
         }
 
         DXVA2_VideoDesc videoDesc = {};
-        if (FAILED(m_videoProcessorService->CreateVideoProcessor(QMPlay2_DXVA2_VideoProcProgressiveDevice, &videoDesc, D3DFMT_X8R8G8B8, 0, &m_videoProcessor)))
+        if (FAILED(videoProcessorService->CreateVideoProcessor(QMPlay2_DXVA2_VideoProcProgressiveDevice, &videoDesc, D3DFMT_X8R8G8B8, 0, &m_videoProcessor)))
         {
             QMPlay2Core.logError("DXVA2 :: Unable to create video processor");
+            videoProcessorService->Release();
             return false;
         }
+
+        videoProcessorService->Release();
 
         return true;
     }
@@ -413,93 +426,94 @@ private:
         });
     }
 
-    bool ensureRenderTarget()
+    bool ensureRenderTargets()
     {
-        if (m_renderTarget)
-            return true;
-
-        Q_ASSERT(!m_glHandleSurface);
-
-        const auto size = qMakePair(m_width, m_height);
-
-        if (m_dontReleaseRenderTarget)
-            m_renderTarget = m_renderTargets.value(size);
-        if (!m_renderTarget)
+        for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            HANDLE sharedHandle = nullptr;
+            auto &surface = m_renderTargets[i].surface;
+            if (surface)
+                continue;
 
-#if 1
-            auto d3dDev9 = getD3dDevice9();
-            if (!d3dDev9)
-                return false;
+            auto &glSurface = m_renderTargets[i].glSurface;
+            Q_ASSERT(!glSurface);
 
-            HRESULT hr = d3dDev9->CreateRenderTarget(
-                m_width,
-                m_height,
-                D3DFMT_X8R8G8B8,
-                D3DMULTISAMPLE_NONE,
-                0,
-                false,
-                &m_renderTarget,
-                &sharedHandle
-            );
-#else
-            HRESULT hr = m_videoProcessorService->CreateSurface(
-                m_width,
-                m_height,
-                0,
-                D3DFMT_X8R8G8B8,
-                D3DPOOL_DEFAULT,
-                0,
-                DXVA2_VideoProcessorRenderTarget,
-                &m_renderTarget,
-                &sharedHandle
-            );
-#endif
-            if (FAILED(hr))
-                return false;
+            const auto size = qMakePair(m_width, m_height);
+            auto &surfaces = m_renderTargets[i].surfaces;
 
             if (m_dontReleaseRenderTarget)
-                m_renderTargets[size] = m_renderTarget;
+                surface = surfaces.value(size);
+            if (!surface)
+            {
+                HANDLE sharedHandle = nullptr;
 
-            if (!wglDXSetResourceShareHandleNV(m_renderTarget, sharedHandle))
+                auto d3dDev9 = getD3dDevice9();
+                if (!d3dDev9)
+                    return false;
+
+                HRESULT hr = d3dDev9->CreateRenderTarget(
+                    m_width,
+                    m_height,
+                    D3DFMT_X8R8G8B8,
+                    D3DMULTISAMPLE_NONE,
+                    0,
+                    false,
+                    &surface,
+                    &sharedHandle
+                );
+                if (FAILED(hr))
+                    return false;
+
+                if (m_dontReleaseRenderTarget)
+                    surfaces[size] = surface;
+
+                if (!wglDXSetResourceShareHandleNV(surface, sharedHandle))
+                    return false;
+            }
+
+            glSurface = wglDXRegisterObjectNV(m_glHandleD3D, surface, m_textures[i], GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
+            if (!glSurface)
                 return false;
         }
-
-        m_glHandleSurface = wglDXRegisterObjectNV(m_glHandleD3D, m_renderTarget, m_textures[0], GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
-        if (!m_glHandleSurface)
-            return false;
 
         return true;
     }
-    bool unlockRenderTarget()
+    bool unlockRenderTargets()
     {
-        if (!m_surfaceLocked)
-            return true;
-
-        Q_ASSERT(m_glHandleSurface);
-        if (wglDXUnlockObjectsNV(m_glHandleD3D, 1, &m_glHandleSurface))
+        bool ok = true;
+        for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            m_surfaceLocked = false;
-            return true;
-        }
+            if (!m_renderTargets[i].locked)
+                continue;
 
-        return false;
+            Q_ASSERT(m_renderTargets[i].glSurface);
+            if (wglDXUnlockObjectsNV(m_glHandleD3D, 1, &m_renderTargets[i].glSurface))
+                m_renderTargets[i].locked = false;
+            else
+                ok = false;
+        }
+        return ok;
     }
-    void releaseRenderTarget()
+
+    void clearTextures()
     {
-        unlockRenderTarget();
-        if (m_glHandleSurface)
+        unlockRenderTargets();
+        for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            wglDXUnregisterObjectNV(m_glHandleD3D, m_glHandleSurface);
-            m_glHandleSurface = nullptr;
+            if (m_renderTargets[i].glSurface)
+            {
+                wglDXUnregisterObjectNV(m_glHandleD3D, m_renderTargets[i].glSurface);
+                m_renderTargets[i].glSurface = nullptr;
+            }
+            if (m_renderTargets[i].surface)
+            {
+                if (!m_dontReleaseRenderTarget)
+                    m_renderTargets[i].surface->Release();
+                m_renderTargets[i].surface = nullptr;
+            }
         }
-        if (m_renderTarget)
-        {
-            if (!m_dontReleaseRenderTarget)
-                m_renderTarget->Release();
-            m_renderTarget = nullptr;
-        }
+
+        glDeleteTextures(2, m_textures);
+        memset(m_textures, 0, sizeof(m_textures));
         m_width = m_height = 0;
     }
 
@@ -515,21 +529,24 @@ private:
     PFNWGLDXUNREGISTEROBJECTNVPROC wglDXUnregisterObjectNV = nullptr;
     PFNWGLDXCLOSEDEVICENVPROC wglDXCloseDeviceNV = nullptr;
 
-    IDirectXVideoProcessorService *m_videoProcessorService = nullptr;
     IDirectXVideoProcessor *m_videoProcessor = nullptr;
     DXVA2_VideoSample m_videoSample = {};
     DXVA2_VideoProcessBltParams m_bltParams = {};
 
-    QHash<QPair<int, int>, IDirect3DSurface9 *> m_renderTargets;
     bool m_dontReleaseRenderTarget = false;
-
-    quint32 *m_textures = nullptr;
 
     HANDLE m_glHandleD3D = nullptr;
 
-    IDirect3DSurface9 *m_renderTarget = nullptr;
-    HANDLE m_glHandleSurface = nullptr;
-    bool m_surfaceLocked = false;
+    static constexpr int s_numRenderTargets = 2;
+    struct RenderTarget
+    {
+        QHash<QPair<int, int>, IDirect3DSurface9 *> surfaces;
+        IDirect3DSurface9 *surface = nullptr;
+        HANDLE glSurface = nullptr;
+        bool locked = false;
+    } m_renderTargets[s_numRenderTargets];
+    quint32 m_textures[2] = {};
+    int m_renderTargetIdx = 0;
     int m_width = 0;
     int m_height = 0;
 };

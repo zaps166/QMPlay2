@@ -25,13 +25,25 @@
 
 #include <QLibrary>
 #include <QMutex>
+#include <QDebug>
+
+#include <GL/gl.h>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
 #endif
 
-#ifndef GL_TEXTURE_2D
-    #define GL_TEXTURE_2D 0x0DE1
+#ifndef GL_R8
+    #define GL_R8 0x8229
+#endif
+#ifndef GL_RG8
+    #define GL_RG8 0x822B
+#endif
+#ifndef GL_RED
+    #define GL_RED 0x1903
+#endif
+#ifndef GL_RG
+    #define GL_RG 0x8227
 #endif
 
 static QMutex g_cudaMutex(QMutex::Recursive);
@@ -230,16 +242,9 @@ namespace cuvid
 class CuvidHWAccel : public HWAccelInterface
 {
 public:
-    CuvidHWAccel(CUcontext cuCtx) :
-        m_canDestroyCuda(false),
-        m_codedHeight(0),
-        m_lastId(0),
-        m_tff(false),
-        m_cuCtx(cuCtx),
-        m_cuvidDec(nullptr)
-    {
-        memset(m_res, 0, sizeof m_res);
-    }
+    CuvidHWAccel(CUcontext cuCtx)
+        : m_cuCtx(cuCtx)
+    {}
     ~CuvidHWAccel() final
     {
         if (m_canDestroyCuda)
@@ -259,33 +264,45 @@ public:
         return NV12;
     }
 
-    bool lock() override
+    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        g_cudaMutex.lock();
-        if (cu::ctxPushCurrent(m_cuCtx) == CUDA_SUCCESS)
-            return true;
-        g_cudaMutex.unlock();
-        return false;
-    }
-    void unlock() override
-    {
-        CUcontext cuCtx;
-        cu::ctxPopCurrent(&cuCtx);
-        g_cudaMutex.unlock();
-    }
+        cu::ContextGuard cuCtxGuard(m_cuCtx);
 
-    bool init(quint32 *textures) override
-    {
         for (int p = 0; p < 2; ++p)
         {
-            if (cu::graphicsGLRegisterImage(&m_res[p], textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) != CUDA_SUCCESS)
+            if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
+            {
+                clear();
+                for (int p = 0; p < 2; ++p)
+                {
+                    m_widths[p] = widths[p];
+                    m_heights[p] = heights[p];
+
+                    glGenTextures(1, &m_textures[p]);
+                    glBindTexture(GL_TEXTURE_2D, m_textures[p]);
+                    glTexImage2D(GL_TEXTURE_2D, 0, (p == 0) ? GL_R8 : GL_RG8, widths[p], heights[p], 0, (p == 0) ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
+                }
+                glBindTexture(GL_TEXTURE_2D, 0);
+                setTextureParamsFn();
+                break;
+            }
+        }
+
+        for (int p = 0; p < 2; ++p)
+        {
+            if (cu::graphicsGLRegisterImage(&m_res[p], m_textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) != CUDA_SUCCESS)
                 return false;
         }
+
         return true;
     }
-    void clear(bool contextChange) override
+    QPair<const quint32 *, int> getTextures() override
     {
-        Q_UNUSED(contextChange)
+        return {m_textures, 2};
+    }
+    void clear() override
+    {
+        cu::ContextGuard cuCtxGuard(m_cuCtx);
         for (int p = 0; p < 2; ++p)
         {
             if (m_res[p])
@@ -293,11 +310,20 @@ public:
                 cu::graphicsUnregisterResource(m_res[p]);
                 m_res[p] = nullptr;
             }
+            if (m_textures[p])
+            {
+                glDeleteTextures(1, &m_textures[p]);
+                m_textures[p] = 0;
+            }
+            m_widths[p] = 0;
+            m_heights[p] = 0;
         }
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
     {
+        cu::ContextGuard cuCtxGuard(m_cuCtx);
+
         if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.surfaceId))
             return MapNotReady;
 
@@ -366,6 +392,10 @@ public:
         }
 
         return MapError;
+    }
+    quint32 getTexture(int plane) override
+    {
+        return m_textures[plane];
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
@@ -439,17 +469,22 @@ public:
     }
 
 private:
-    bool m_canDestroyCuda;
+    bool m_canDestroyCuda = false;
 
-    int m_codedHeight;
+    int m_codedHeight = 0;
 
-    quintptr m_lastId;
-    bool m_tff;
+    quint32 m_textures[2] = {};
 
-    CUcontext m_cuCtx;
-    CUvideodecoder m_cuvidDec;
+    int m_widths[2] = {};
+    int m_heights[2] = {};
 
-    CUgraphicsResource m_res[2];
+    quintptr m_lastId = 0;
+    bool m_tff = false;
+
+    const CUcontext m_cuCtx;
+    CUvideodecoder m_cuvidDec = nullptr;
+
+    CUgraphicsResource m_res[2] = {};
 
     QSet<quintptr> m_validSurfaces;
 };

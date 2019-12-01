@@ -82,20 +82,35 @@ public:
         return false;
     }
 
-    bool canInitializeTextures() const override
+    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        return false;
-    }
-
-    bool init(quint32 *textures) override
-    {
-        m_glTextures = textures;
+        for (int p = 0; p < 2; ++p)
+        {
+            if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
+            {
+                clear();
+                for (int p = 0; p < 2; ++p)
+                {
+                    m_widths[p] = widths[p];
+                    m_heights[p] = heights[p];
+                }
+                glGenTextures(2, m_textures);
+                setTextureParamsFn();
+                break;
+            }
+        }
         return true;
     }
-    void clear(bool contextChange) override
+    QPair<const quint32 *, int> getTextures() override
     {
-        Q_UNUSED(contextChange)
-        m_glTextures = nullptr;
+        return {m_textures, 2};
+    }
+    void clear() override
+    {
+        glDeleteTextures(2, m_textures);
+        memset(m_textures, 0, sizeof(m_textures));
+        memset(m_widths, 0, sizeof(m_widths));
+        memset(m_heights, 0, sizeof(m_heights));
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
@@ -111,15 +126,19 @@ public:
         if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
             return MapError;
 
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[0]);
+        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[0]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.size.getWidth(0), videoFrame.size.getHeight(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
             return MapError;
 
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_glTextures[1]);
+        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[1]);
         if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.size.getWidth(1), videoFrame.size.getHeight(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
             return MapError;
 
         return MapOk;
+    }
+    quint32 getTexture(int plane) override
+    {
+        return m_textures[plane];
     }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
@@ -152,7 +171,10 @@ public:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
 
 private:
-    quint32 *m_glTextures = nullptr;
+    quint32 m_textures[2] = {};
+
+    int m_widths[2] = {};
+    int m_heights[2] = {};
 };
 
 /**/

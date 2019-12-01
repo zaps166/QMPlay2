@@ -48,8 +48,6 @@ extern "C"
 #   include <EGL/egl.h>
 #   include <EGL/eglext.h>
 
-#   include <GL/gl.h>
-
 #   ifndef EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT
 #       define EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT 0x3443
 #   endif
@@ -58,12 +56,15 @@ extern "C"
 #   endif
 #endif
 
+#include <GL/gl.h>
+
 class VAAPIOpenGL : public HWAccelInterface
 {
 public:
     VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi)
         : m_vaapi(vaapi)
         , m_isEGL(m_vaapi->m_fd > -1)
+        , m_numPlanes(m_isEGL ? 2 : 1)
     {}
     ~VAAPIOpenGL() final
     {}
@@ -85,17 +86,31 @@ public:
         return m_isEGL ? false : true;
     }
 
-    bool canInitializeTextures() const override
+    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        return true;
-    }
+        for (int p = 0; p < m_numPlanes; ++p)
+        {
+            if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
+            {
+                clearTextures();
+                for (int p = 0; p < m_numPlanes; ++p)
+                {
+                    m_widths[p] = widths[p];
+                    m_heights[p] = heights[p];
+                }
+                glGenTextures(m_numPlanes, m_textures);
+                setTextureParamsFn();
+                break;
+            }
+        }
 
-    bool init(quint32 *textures) override
-    {
         if (!m_isEGL)
-            return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, *textures, &m_glSurface) == VA_STATUS_SUCCESS);
+            return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, m_textures[0], &m_glSurface) == VA_STATUS_SUCCESS);
 
 #ifdef VAAPI_HAS_ESH
+        if (m_eglDpy != EGL_NO_DISPLAY && eglCreateImageKHR && eglDestroyImageKHR && glEGLImageTargetTexture2DOES)
+            return true;
+
         const auto context = QOpenGLContext::currentContext();
         if (!context)
         {
@@ -135,17 +150,17 @@ public:
 
         m_hasDmaBufImportModifiers = extensions.contains("EGL_EXT_image_dma_buf_import_modifiers");
 
-        m_textures = textures;
-
         return true;
 #else
         return false;
 #endif
     }
-    void clear(bool contextChange) override
+    QPair<const quint32 *, int> getTextures() override
     {
-        Q_UNUSED(contextChange)
-
+        return {m_textures, m_numPlanes};
+    }
+    void clear() override
+    {
 #ifdef VAAPI_HAS_ESH
         if (m_isEGL)
         {
@@ -156,15 +171,9 @@ public:
             glEGLImageTargetTexture2DOES = nullptr;
 
             m_hasDmaBufImportModifiers = false;
-
-            m_textures = nullptr;
         }
 #endif
-        if (m_glSurface)
-        {
-            vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
-            m_glSurface = nullptr;
-        }
+        clearTextures();
     }
 
     MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
@@ -257,6 +266,10 @@ public:
         return MapError;
 #endif
     }
+    quint32 getTexture(int plane) override
+    {
+        return m_textures[plane];
+    }
 
     bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
@@ -265,6 +278,9 @@ public:
 
     void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override
     {
+        if (m_isEGL)
+            return;
+
         videoAdjustmentCap.brightness = false;
         videoAdjustmentCap.contrast = false;
         videoAdjustmentCap.saturation = true;
@@ -285,8 +301,29 @@ public:
     }
 
 private:
+    void clearTextures()
+    {
+        if (m_glSurface)
+        {
+            vaDestroySurfaceGLX(m_vaapi->VADisp, m_glSurface);
+            m_glSurface = nullptr;
+        }
+
+        glDeleteTextures(m_numPlanes, m_textures);
+        memset(m_textures, 0, sizeof(m_textures));
+        memset(m_widths, 0, sizeof(m_widths));
+        memset(m_heights, 0, sizeof(m_heights));
+    }
+
+private:
     const std::shared_ptr<VAAPI> m_vaapi;
     const bool m_isEGL;
+    const int m_numPlanes;
+
+    quint32 m_textures[2] = {};
+
+    int m_widths[2] = {};
+    int m_heights[2] = {};
 
     // GLX
     void *m_glSurface = nullptr;
@@ -300,8 +337,6 @@ private:
     PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES = nullptr;
 
     bool m_hasDmaBufImportModifiers = false;
-
-    quint32 *m_textures = nullptr;
 #endif
 };
 

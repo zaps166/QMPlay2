@@ -92,6 +92,8 @@ public:
 
     void setSpherical(bool spherical);
 protected:
+    static void setTextureParameters(GLenum target, GLint param);
+
     void initializeGL();
     void paintGL();
 
@@ -122,8 +124,6 @@ private:
     void maybeSetMipmaps(qreal dpr);
 
     inline bool isRotate90() const;
-
-    inline bool hwAccellPossibleLock();
 
     QByteArray readShader(const QString &fileName, bool pure = false);
 
