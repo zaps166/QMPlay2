@@ -1935,10 +1935,6 @@
         <translation>Не удается инициализировать текстуры для</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>ошибка</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation type="unfinished"></translation>
     </message>

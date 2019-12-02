@@ -1938,10 +1938,6 @@
         <translation>Неможливо ініціалізувати текстури для</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>помилка</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation>помилка відображення текстури</translation>
     </message>

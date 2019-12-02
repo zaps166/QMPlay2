@@ -1938,10 +1938,6 @@
         <translation>Nie udało się zainicjalizować tekstur dla</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>błąd</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation>błąd mapowania tekstury</translation>
     </message>

@@ -1938,10 +1938,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>hiba</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation type="unfinished"></translation>
     </message>

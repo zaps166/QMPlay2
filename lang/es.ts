@@ -1938,10 +1938,6 @@
         <translation>No se pueden iniciar texturas para</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>error</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation type="unfinished"></translation>
     </message>

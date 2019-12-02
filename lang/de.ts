@@ -1937,10 +1937,6 @@
         <translation>Kann Texturen nicht initialisieren für</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>Fehler</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation>Textur-Map-Fehler</translation>
     </message>
