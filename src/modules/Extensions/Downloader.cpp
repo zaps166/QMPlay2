@@ -528,6 +528,11 @@ void DownloaderThread::listSlot(int param, qint64 val, const QString &filePath)
             downloadLW->resize(downloadLW->size() + QSize(0, 1));
             downloadLW->resize(downloadLW->size() - QSize(0, 1));
 
+            if (!downloadLW->currentItem())
+                downloadLW->setCurrentItem(item);
+            else
+                downloadLW->scrollToItem(item, QAbstractItemView::EnsureVisible);
+
             break;
         case NAME:
             downloadItemW->setName(name);
@@ -1156,7 +1161,6 @@ void Downloader::download()
         action->property("param").toString(),
         action->property("preset").toString()
     );
-    downloadLW->setCurrentItem(downloadLW->invisibleRootItem()->child(0));
 }
 void Downloader::itemDoubleClicked(QTreeWidgetItem *item)
 {
