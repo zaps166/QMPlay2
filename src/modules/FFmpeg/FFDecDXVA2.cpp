@@ -112,8 +112,10 @@ public:
             m_height = heights[0];
 
             glGenTextures(2, m_textures);
-            setTextureParamsFn();
         }
+
+        for (int i = 0; i < 2; ++i)
+            setTextureParamsFn(m_textures[i]);
 
         if (m_glHandleD3D)
             return ensureRenderTargets();
@@ -165,10 +167,6 @@ public:
             return false;
 
         return true;
-    }
-    QPair<const quint32 *, int> getTextures() override
-    {
-        return {m_textures, 2};
     }
     void clear() override
     {

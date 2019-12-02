@@ -21,7 +21,6 @@
 #include <VideoAdjustment.hpp>
 
 #include <QString>
-#include <QPair>
 
 #include <functional>
 
@@ -49,7 +48,7 @@ public:
         MapError,
     };
 
-    using SetTextureParamsFn = std::function<void()>;
+    using SetTextureParamsFn = std::function<void(quint32 texture)>;
 
 public:
     virtual ~HWAccelInterface() = default;
@@ -67,7 +66,6 @@ public:
     }
 
     virtual bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) = 0;
-    virtual QPair<const quint32 *, int> getTextures() = 0;
     virtual void clear() = 0;
 
     virtual MapResult mapFrame(const VideoFrame &videoFrame, Field field) = 0;

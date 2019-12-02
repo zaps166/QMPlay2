@@ -64,8 +64,9 @@ public:
             m_height = heights[0];
 
             glGenTextures(1, &m_texture);
-            setTextureParamsFn();
         }
+
+        setTextureParamsFn(m_texture);
 
         if (m_isInitialized)
             return true;
@@ -105,10 +106,6 @@ public:
 
         m_isInitialized = true;
         return true;
-    }
-    QPair<const quint32 *, int> getTextures() override
-    {
-        return {&m_texture, 1};
     }
     void clear() override
     {

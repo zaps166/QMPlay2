@@ -92,7 +92,7 @@ public:
 
     void setSpherical(bool spherical);
 protected:
-    static void setTextureParameters(GLenum target, GLint param);
+    static void setTextureParameters(GLenum target, quint32 texture, GLint param);
 
     void initializeGL();
     void paintGL();
@@ -121,7 +121,7 @@ protected:
 
     void dispatchEvent(QEvent *e, QObject *p);
 private:
-    void maybeSetMipmaps(qreal dpr);
+    void maybeSetMipmaps(qreal dpr, quint32 texture = 0);
 
     inline bool isRotate90() const;
 

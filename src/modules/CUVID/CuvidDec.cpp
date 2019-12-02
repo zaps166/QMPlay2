@@ -268,6 +268,7 @@ public:
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
 
+        bool mustRegister = false;
         for (int p = 0; p < 2; ++p)
         {
             if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
@@ -282,11 +283,16 @@ public:
                     glBindTexture(GL_TEXTURE_2D, m_textures[p]);
                     glTexImage2D(GL_TEXTURE_2D, 0, (p == 0) ? GL_R8 : GL_RG8, widths[p], heights[p], 0, (p == 0) ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
                 }
-                glBindTexture(GL_TEXTURE_2D, 0);
-                setTextureParamsFn();
+                mustRegister = true;
                 break;
             }
         }
+
+        for (int p = 0; p < 2; ++p)
+            setTextureParamsFn(m_textures[p]);
+
+        if (!mustRegister)
+            return true;
 
         for (int p = 0; p < 2; ++p)
         {
@@ -295,10 +301,6 @@ public:
         }
 
         return true;
-    }
-    QPair<const quint32 *, int> getTextures() override
-    {
-        return {m_textures, 2};
     }
     void clear() override
     {

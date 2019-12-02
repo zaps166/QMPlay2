@@ -264,12 +264,14 @@ void OpenGL2Common::setSpherical(bool spherical)
     }
 }
 
-void OpenGL2Common::setTextureParameters(GLenum target, GLint param)
+void OpenGL2Common::setTextureParameters(GLenum target, quint32 texture, GLint param)
 {
+    glBindTexture(target, texture);
     glTexParameteri(target, GL_TEXTURE_MIN_FILTER, param);
     glTexParameteri(target, GL_TEXTURE_MAG_FILTER, param);
     glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindTexture(target, 0);
 }
 
 void OpenGL2Common::initializeGL()
@@ -378,8 +380,7 @@ void OpenGL2Common::initializeGL()
     for (int i = 0; i < texturesToGen + 1; ++i)
     {
         const quint32 tmpTarget = (i == 0) ? GL_TEXTURE_2D : target;
-        glBindTexture(tmpTarget, textures[i]);
-        setTextureParameters(tmpTarget, (i == 0) ? GL_NEAREST : GL_LINEAR);
+        setTextureParameters(tmpTarget, textures[i], (i == 0) ? GL_NEAREST : GL_LINEAR);
     }
 
     if (hasPbo)
@@ -429,19 +430,10 @@ void OpenGL2Common::paintGL()
 
                 /* Initialize hw accell and prepare GL textures */
                 const bool hasHwAccelError = hwAccelError;
-                hwAccelError = !hwAccellnterface->init(widths, heights, [this] {
-                    const auto textures = hwAccellnterface->getTextures();
-                    for (int i = 0; i < textures.second; ++i)
-                    {
-                        glBindTexture(target, textures.first[i]);
-                        setTextureParameters(target, GL_LINEAR);
-                    }
-                    glBindTexture(target, 0);
+                hwAccelError = !hwAccellnterface->init(widths, heights, [this](quint32 texture) {
+                    setTextureParameters(target, texture, GL_LINEAR);
                     if (hqScaling)
-                    {
-                        // Must be set before "HWAccelInterface::init()" and must have "m_textureSize"
-                        maybeSetMipmaps(widget()->devicePixelRatioF());
-                    }
+                        maybeSetMipmaps(widget()->devicePixelRatioF(), texture);
                 });
                 if (hwAccelError && !hasHwAccelError)
                     QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
@@ -823,7 +815,7 @@ void OpenGL2Common::testGLInternal()
         if (isOK)
         {
             const QVector<int> sizes(numPlanes * 2, 1);
-            if (!hwAccellnterface->init(&sizes[0], &sizes[numPlanes], []{}))
+            if (!hwAccellnterface->init(&sizes[0], &sizes[numPlanes], [](quint32){}))
                 isOK = false;
             if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
             {
@@ -937,7 +929,7 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
     }
 }
 
-void OpenGL2Common::maybeSetMipmaps(qreal dpr)
+void OpenGL2Common::maybeSetMipmaps(qreal dpr, quint32 texture)
 {
     const bool lastUseMipmaps = m_useMipmaps;
     m_useMipmaps = (W * dpr < m_textureSize.width() / 2.0 || H * dpr < m_textureSize.height() / 2.0);
@@ -948,29 +940,16 @@ void OpenGL2Common::maybeSetMipmaps(qreal dpr)
         m_useMipmaps = false;
     }
 #endif
-    if (hwAccellnterface || m_useMipmaps != lastUseMipmaps)
+    if (texture || m_useMipmaps != lastUseMipmaps)
     {
-        auto setTextureFiltering = [this] {
+        const int n = texture ? 1 : numPlanes;
+        for (int p = 0; p < n; ++p)
+        {
+            glBindTexture(target, texture ? texture : (hwAccellnterface ? hwAccellnterface->getTexture(p) : textures[p + 1]));
             glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
             if (m_useMipmaps)
                 glGenerateMipmap(target);
-        };
-
-        if (hwAccellnterface)
-        {
-            const auto textures = hwAccellnterface->getTextures();
-            for (int i = 0; i < textures.second; ++i)
-            {
-                glBindTexture(target, textures.first[i]);
-                setTextureFiltering();
-            }
         }
-        else for (int p = 0; p < numPlanes; ++p)
-        {
-            glBindTexture(target, textures[p + 1]);
-            setTextureFiltering();
-        }
-
         glBindTexture(target, 0);
     }
 }

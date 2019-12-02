@@ -95,15 +95,12 @@ public:
                     m_heights[p] = heights[p];
                 }
                 glGenTextures(2, m_textures);
-                setTextureParamsFn();
                 break;
             }
         }
+        for (int p = 0; p < 2; ++p)
+            setTextureParamsFn(m_textures[p]);
         return true;
-    }
-    QPair<const quint32 *, int> getTextures() override
-    {
-        return {m_textures, 2};
     }
     void clear() override
     {

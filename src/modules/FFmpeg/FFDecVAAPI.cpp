@@ -99,10 +99,12 @@ public:
                     m_heights[p] = heights[p];
                 }
                 glGenTextures(m_numPlanes, m_textures);
-                setTextureParamsFn();
                 break;
             }
         }
+
+        for (int p = 0; p < m_numPlanes; ++p)
+            setTextureParamsFn(m_textures[p]);
 
         if (!m_isEGL)
             return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, m_textures[0], &m_glSurface) == VA_STATUS_SUCCESS);
@@ -154,10 +156,6 @@ public:
 #else
         return false;
 #endif
-    }
-    QPair<const quint32 *, int> getTextures() override
-    {
-        return {m_textures, m_numPlanes};
     }
     void clear() override
     {
