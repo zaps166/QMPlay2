@@ -107,7 +107,12 @@ public:
             setTextureParamsFn(m_textures[p]);
 
         if (!m_isEGL)
+        {
+            glBindTexture(GL_TEXTURE_2D, m_textures[0]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_widths[0], m_heights[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glBindTexture(GL_TEXTURE_2D, m_textures[0]);
             return (vaCreateSurfaceGLX(m_vaapi->VADisp, GL_TEXTURE_2D, m_textures[0], &m_glSurface) == VA_STATUS_SUCCESS);
+        }
 
 #ifdef VAAPI_HAS_ESH
         if (m_eglDpy != EGL_NO_DISPLAY && eglCreateImageKHR && eglDestroyImageKHR && glEGLImageTargetTexture2DOES)
