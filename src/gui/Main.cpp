@@ -46,6 +46,7 @@
     #include <QLibrary>
 #endif
 
+#include <clocale>
 #include <csignal>
 #include <ctime>
 
@@ -604,6 +605,11 @@ int main(int argc, char *argv[])
     if (!setjmp(env))
 #endif
     new QApplication(argc, argv);
+
+    // Qt sets this to system locale. Mesa Radeon VA-API driver lowers the image quality
+    // on some locales in some cases. Reset it for all platforms for consistency.
+    std::setlocale(LC_NUMERIC, "C");
+
 #ifndef Q_OS_WIN
     qAppOK = true;
 #endif
