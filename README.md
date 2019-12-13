@@ -35,15 +35,23 @@ Table of Contents
 - Install AUR client (e.g. yay),
 - run the following command: `yay -S qmplay2`
 
-#### Easy installation on openSUSE Leap 15.1
-
+#### Easy installation on openSUSE
+##### For openSUSE Leap 15.1:
 - Run the following commands:
 ```
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
+$ suod zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
+$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.1
+$ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
 $ sudo zypper in QMPlay2
 ```
-- QMPlay2 from openSUSE repositories might lack some features.
-- Don't use official package, because it is obsolete.
+##### For openSUSE Tumbleweed:
+- Run the following commands:
+```
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Tumbleweed Packman
+$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Tumbleweed
+$ sudo zypper in QMPlay2
+```
 - Don't mix FFmpeg from different repositories!
 
 #### Easy installation on Gentoo Linux
