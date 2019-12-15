@@ -39,12 +39,9 @@ void OpenGL2Widget::setVSync(bool enable)
     Q_UNUSED(enable)
     // Not supported
 }
-void OpenGL2Widget::updateGL(bool requestDelayed)
+void OpenGL2Widget::updateGL()
 {
-    if (requestDelayed)
-        QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
-    else
-        update();
+    update();
 }
 
 void OpenGL2Widget::initializeGL()

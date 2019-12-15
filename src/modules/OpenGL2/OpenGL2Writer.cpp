@@ -188,7 +188,7 @@ void OpenGL2Writer::writeVideo(const VideoFrame &videoFrame)
         drawable->m_colorSpace = drawable->videoFrame.colorSpace;
         drawable->doReset = true;
     }
-    drawable->updateGL(drawable->sphericalView);
+    drawable->updateGL();
 }
 void OpenGL2Writer::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {

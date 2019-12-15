@@ -80,7 +80,7 @@ public:
 
     bool testGL();
     virtual void setVSync(bool enable) = 0;
-    virtual void updateGL(bool requestDelayed) = 0;
+    virtual void updateGL() = 0;
 
     void setX11BypassCompositor(bool bypassCompositor);
 #ifdef Q_OS_WIN
