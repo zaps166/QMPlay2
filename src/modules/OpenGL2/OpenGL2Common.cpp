@@ -224,12 +224,7 @@ void OpenGL2Common::newSize(const QSize &size)
     }
     doReset = true;
     if (canUpdate)
-    {
-        if (isPaused)
-            updateGL();
-        else if (!updateTimer.isActive())
-            updateTimer.start(40);
-    }
+        updateGL();
 }
 void OpenGL2Common::clearImg()
 {
@@ -398,10 +393,6 @@ void OpenGL2Common::initializeGL()
 void OpenGL2Common::paintGL()
 {
     const bool frameIsEmpty = videoFrame.isEmpty();
-
-    if (updateTimer.isActive())
-        updateTimer.stop();
-
     if (frameIsEmpty && !hasImage)
         return;
 
