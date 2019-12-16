@@ -26,6 +26,8 @@
 OpenGL2Window::OpenGL2Window() :
     visible(true)
 {
+    connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
+
 #ifndef PASS_EVENTS_TO_PARENT
     setFlags(Qt::WindowTransparentForInput);
 #endif
@@ -71,10 +73,10 @@ void OpenGL2Window::setVSync(bool enable)
     }
     vSync = enable;
 }
-void OpenGL2Window::updateGL()
+void OpenGL2Window::updateGL(bool requestDelayed)
 {
     if (visible && isExposed())
-        requestUpdate();
+        QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
 }
 
 void OpenGL2Window::initializeGL()
@@ -91,6 +93,17 @@ void OpenGL2Window::paintGL()
     }
 }
 
+void OpenGL2Window::doUpdateGL(bool queued)
+{
+    if (queued)
+        QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
+    else
+    {
+        //sendEvent() doesn't enqueue the event here
+        QEvent updateEvent(QEvent::UpdateRequest);
+        QCoreApplication::sendEvent(this, &updateEvent);
+    }
+}
 void OpenGL2Window::aboutToBeDestroyed()
 {
     makeCurrent();

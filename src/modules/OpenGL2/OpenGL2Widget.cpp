@@ -22,6 +22,7 @@
 
 OpenGL2Widget::OpenGL2Widget()
 {
+    connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 OpenGL2Widget::~OpenGL2Widget()
 {
@@ -38,9 +39,12 @@ void OpenGL2Widget::setVSync(bool enable)
     Q_UNUSED(enable)
     // Not supported
 }
-void OpenGL2Widget::updateGL()
+void OpenGL2Widget::updateGL(bool requestDelayed)
 {
-    update();
+    if (requestDelayed)
+        QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
+    else
+        update();
 }
 
 void OpenGL2Widget::initializeGL()

@@ -66,7 +66,7 @@ void RotAnimation::updateCurrentValue(const QVariant &value)
         glCommon.rot.setX(qBound<qreal>(0.0, newRot.x(), 180.0));
         glCommon.rot.setY(newRot.y());
         glCommon.setMatrix = true;
-        glCommon.updateGL();
+        glCommon.updateGL(true);
     }
 }
 
@@ -224,7 +224,12 @@ void OpenGL2Common::newSize(const QSize &size)
     }
     doReset = true;
     if (canUpdate)
-        updateGL();
+    {
+        if (isPaused)
+            updateGL(false);
+        else if (!updateTimer.isActive())
+            updateTimer.start(40);
+    }
 }
 void OpenGL2Common::clearImg()
 {
@@ -393,6 +398,10 @@ void OpenGL2Common::initializeGL()
 void OpenGL2Common::paintGL()
 {
     const bool frameIsEmpty = videoFrame.isEmpty();
+
+    if (updateTimer.isActive())
+        updateTimer.stop();
+
     if (frameIsEmpty && !hasImage)
         return;
 
@@ -998,7 +1007,7 @@ void OpenGL2Common::mouseMove(QMouseEvent *e)
         mousePos = newMousePos;
 
         setMatrix = true;
-        updateGL();
+        updateGL(true);
     }
 }
 void OpenGL2Common::mouseRelease(QMouseEvent *e)
@@ -1055,7 +1064,7 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
         }
 
         setMatrix = true;
-        updateGL();
+        updateGL(true);
     }
 }
 void OpenGL2Common::mouseRelease360(QMouseEvent *e)

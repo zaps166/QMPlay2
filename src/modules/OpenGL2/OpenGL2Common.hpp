@@ -27,6 +27,7 @@
 #include <QCoreApplication>
 #include <QImage>
 #include <QMutex>
+#include <QTimer>
 
 #if !defined OPENGL_ES2 && !defined Q_OS_MACOS
     #include <GL/glext.h>
@@ -79,7 +80,7 @@ public:
 
     bool testGL();
     virtual void setVSync(bool enable) = 0;
-    virtual void updateGL() = 0;
+    virtual void updateGL(bool requestDelayed) = 0;
 
     void setX11BypassCompositor(bool bypassCompositor);
 #ifdef Q_OS_WIN
@@ -178,6 +179,8 @@ public:
 
     QVector<quint64> osd_ids;
     QImage osdImg;
+
+    QTimer updateTimer;
 
     /* Spherical view */
     bool sphericalView, buttonPressed, hasVbo, mouseWrapped, canWrapMouse;

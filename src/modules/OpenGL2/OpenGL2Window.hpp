@@ -39,12 +39,13 @@ public:
     QWidget *widget() override;
 
     void setVSync(bool enable) override;
-    void updateGL() override;
+    void updateGL(bool requestDelayed) override;
 
     void initializeGL() override;
     void paintGL() override;
 
 private slots:
+    void doUpdateGL(bool queued = false);
     void aboutToBeDestroyed();
     void videoVisible(bool v);
 private:

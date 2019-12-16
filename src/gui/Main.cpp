@@ -597,8 +597,6 @@ int main(int argc, char *argv[])
     signal(SIGTERM, signal_handler);
     atexit(exitProcedure);
 
-    qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
-
 #ifdef CHECK_FOR_EGL
     checkForEGL();
 #endif
