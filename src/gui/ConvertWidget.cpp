@@ -17,6 +17,24 @@
 #include <QLineEdit>
 #include <QLayout>
 #include <QComboBox>
+#include <iostream>
+#include <string>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
+
+#define DIV 1048576
+#define WIDTH 7
+#endif
+
+#ifdef linux
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#endif
 
 ConvertWidget::ConvertWidget()
 {
@@ -52,7 +70,7 @@ void ConvertWidget::browseVideo()
 
 void ConvertWidget::browseSubs()
 {
-    QString subsPath = QFileDialog::getOpenFileName(this, tr("Select a subtitle file"), "directoryToOpen",tr( "*.srt"));
+    QString subsPath = QFileDialog::getOpenFileName(this, tr("Select a subtitle file"), "directoryToOpen",tr( "*.srt;;*.ass"));
     subsLinePath->setText(subsPath);
 }
 
@@ -64,6 +82,28 @@ void ConvertWidget::browseOutput()
 
 void ConvertWidget::convert()
 {
+#ifdef _WIN32
+
+#endif
+
+#ifdef linux
+    QString video = videoLinePath->text();
+    QString subs = subsLinePath->text();
+    std::string newSubs = subs.toUtf8().constData();
+    newSubs = newSubs.substr(0, newSubs.length()-4)+".ass";
+    QString outputPath = outputLinePath->text();
+    QString outputName = outputFileName->text();
+    std::string command;
+    command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
+    command = command+subs.toUtf8().constData()+" ";
+    command = command+newSubs+" && ffmpeg -i ";
+    command = command+video.toUtf8().constData()+" -vf ass=";
+    command = command+newSubs+" ";
+    command = command+outputPath.toUtf8().constData()+"/";
+    command = command+outputName.toUtf8().constData()+".mp4\"'";
+    std::cout<<command<<std::endl;
+    system(command.c_str());
+#endif
 }
 
 void ConvertWidget::videoArea()
@@ -114,7 +154,7 @@ void ConvertWidget::outputArea()
     outputLayout->addWidget(outputFileName, 1, 1);
     QComboBox *outputComboBox = new QComboBox;
     outputComboBox->addItem(tr(".mp4"));
-    outputComboBox->addItem(tr(".avi"));
+    //outputComboBox->addItem(tr(".avi"));
     outputLayout->addWidget(outputComboBox, 1, 2);
     outputBox->setLayout(outputLayout);
     window->addWidget(outputBox);
