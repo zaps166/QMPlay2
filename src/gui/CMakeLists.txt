@@ -36,6 +36,7 @@ set(GUI_HDR
     RepeatMode.hpp
     PanGestureEventFilter.hpp
     EventFilterWorkarounds.hpp
+    ConvertWidget.hpp
 )
 
 set(GUI_SRC
@@ -66,6 +67,7 @@ set(GUI_SRC
     KeyBindingsDialog.cpp
     Updater.cpp
     EventFilterWorkarounds.cpp
+    ConvertWidget.cpp
 )
 
 set(GUI_FORMS # *.ui files

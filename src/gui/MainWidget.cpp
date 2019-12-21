@@ -64,6 +64,7 @@
 #include <ShortcutHandler.hpp>
 #include <VolWidget.hpp>
 #include <ScreenSaver.hpp>
+#include <ConvertWidget.hpp>
 #ifdef Q_OS_MACOS
     #include <QMPlay2MacExtensions.hpp>
 #endif
@@ -136,6 +137,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
 
     settingsW = nullptr;
     aboutW = nullptr;
+    convertW = nullptr;
 
     isCompactView = wasShow = fullScreen = seekSFocus = false;
 
@@ -902,6 +904,7 @@ void MainWidget::createMenuBar()
     connect(menuBar->playback->speedUpSubtitles, SIGNAL(triggered()), &playC, SLOT(speedUpSubs()));
     connect(menuBar->playback->biggerSubtitles, SIGNAL(triggered()), &playC, SLOT(biggerSubs()));
     connect(menuBar->playback->smallerSubtitles, SIGNAL(triggered()), &playC, SLOT(smallerSubs()));
+    connect(menuBar->playback->convert, SIGNAL(triggered()), this, SLOT(convert()));
     connect(menuBar->playback->screenShot, SIGNAL(triggered()), &playC, SLOT(screenShot()));
     connect(menuBar->playback->subsFromFile, SIGNAL(triggered()), this, SLOT(browseSubsFile()));
     connect(menuBar->playback->subtitlesSync, SIGNAL(triggered()), &playC, SLOT(setSubtitlesSync()));
@@ -1383,6 +1386,19 @@ void MainWidget::about()
     {
         aboutW->close();
         aboutW = nullptr;
+    }
+}
+
+void MainWidget::convert()
+{
+    if (!convertW)
+    {
+        convertW = new ConvertWidget;
+        connect(convertW, SIGNAL(destroyed()), this, SLOT(convert()));
+    } else
+    {
+        convertW->close();
+        convertW = nullptr;
     }
 }
 

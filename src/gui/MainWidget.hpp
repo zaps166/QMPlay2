@@ -23,6 +23,7 @@
 
 #include <PlayClass.hpp>
 #include <Updater.hpp>
+#include "ConvertWidget.hpp"
 
 class QFrame;
 class QLabel;
@@ -37,6 +38,7 @@ class AboutWidget;
 class PlaylistDock;
 class SettingsWidget;
 class QMPlay2Extensions;
+class ConvertWidget;
 
 #ifdef Q_OS_WIN
     class QWinTaskbarProgress;
@@ -108,6 +110,8 @@ private slots:
 
     void about();
 
+    void convert();
+
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
     void hideMenu(bool);
 #else
@@ -178,6 +182,7 @@ private:
 
     SettingsWidget *settingsW;
     AboutWidget *aboutW;
+    ConvertWidget *convertW;
     bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID

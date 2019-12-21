@@ -353,6 +353,8 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("Scale up subt&itles"), this, biggerSubtitles, true, QIcon(), false);
     newAction(Playback::tr("Scale down sub&titles"), this, smallerSubtitles, true, QIcon(), false);
     addSeparator();
+    newAction(Playback::tr("&Convert"), this, convert, true, QIcon(), false);
+    addSeparator();
     newAction(Playback::tr("&Screen shot"), this, screenShot, true, QIcon(), false);
 }
 MenuBar::Playback::~Playback()
@@ -598,6 +600,7 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(playback->speedUpSubtitles, "KeyBindings/Playback-speedUpSubtitles", "Shift+X");
     shortcuts->appendAction(playback->biggerSubtitles, "KeyBindings/Playback-biggerSubtitles", "Shift+R");
     shortcuts->appendAction(playback->smallerSubtitles, "KeyBindings/Playback-smallerSubtitles", "Shift+T");
+    shortcuts->appendAction(playback->convert, "KeyBindings/Playback-convert", "Alt+C");
     shortcuts->appendAction(playback->screenShot, "KeyBindings/Playback-screenShot", "Alt+S");
 
     shortcuts->appendAction(playback->videoFilters->spherical, "KeyBindings/Playback-VideoFilters-spherical", "Ctrl+3");
