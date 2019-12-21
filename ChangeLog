@@ -1,3 +1,8 @@
+Changes in QMPlay2 19.12.19:
+    - fix VA-API low quality deinterlaced image on AMD GPUs (workaround for driver bug),
+    - fix VA-API GLX regression,
+    - fix VA-API EGL detection,
+
 Changes in QMPlay2 build 19.12.04:
     - fix reading of titles for some M3U playlists,
     - fix possible corrupted DXVA2 video playback,

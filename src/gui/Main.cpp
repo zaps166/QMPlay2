@@ -558,7 +558,12 @@ static void checkForEGL()
                 constexpr int EGLDrmDeviceFileExt = 0x3233;
                 void *eglDev = nullptr;
                 if (eglQueryDisplayAttribEXTFunc(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
-                    cardFilePath = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt);
+                {
+                    if (const char *file = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt))
+                        cardFilePath = file;
+                    else
+                        cardFilePath = "";
+                }
             }
         }
         eglTerminateFunc(eglDpy);
@@ -566,11 +571,11 @@ static void checkForEGL()
 
     XCloseDisplayFunc(dpy);
 
-    if (!cardFilePath.isEmpty())
+    if (!cardFilePath.isNull())
     {
         if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
             qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
-        if (!qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH"))
+        if (!qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH") && !cardFilePath.isEmpty())
             qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
     }
 }
