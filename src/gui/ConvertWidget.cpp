@@ -1,6 +1,8 @@
-//
-// Created by dimitris on 21/12/19.
-//
+/*
+ * This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the
+ * <a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its
+ * source can be downloaded <a href=link_to_your_sources>here</a>
+ * */
 
 #include "ConvertWidget.hpp"
 
@@ -17,25 +19,15 @@
 #include <QLineEdit>
 #include <QLayout>
 #include <QComboBox>
-#include <iostream>
 #include <string>
-
-#ifdef _WIN32
-#include <windows.h>
-#include <stdio.h>
-#include <tchar.h>
-
-#define DIV 1048576
-#define WIDTH 7
-#endif
+#include <QMessageBox>
 
 #ifdef linux
-#include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #endif
 
+/*
+ * Constructor creates the window and shows the areas.*/
 ConvertWidget::ConvertWidget()
 {
     setWindowTitle(tr("Convert"));
@@ -49,8 +41,9 @@ ConvertWidget::ConvertWidget()
     outputLinePath = new QLineEdit;
     outputLinePath->setText("");
     outputFileName = new QLineEdit;
-    outputLinePath->setText("");
+    outputFileName->setText("");
 
+    aboutArea();
     videoArea();
     subsArea();
     outputArea();
@@ -62,50 +55,106 @@ ConvertWidget::ConvertWidget()
 
 }
 
+/*
+ * The SLOT opens the file manager in order to give the chance to user to choose a video file.
+ * */
 void ConvertWidget::browseVideo()
 {
     QString videoPath = QFileDialog::getOpenFileName(this, tr("Select a video file"), "directoryToOpen",tr( "*.mp4;;*.avi"));
     videoLinePath->setText(videoPath);
 }
 
+/*
+ * The SLOT opens the file manager in order to give the chance to user to choose a subtitle file.
+ * */
 void ConvertWidget::browseSubs()
 {
-    QString subsPath = QFileDialog::getOpenFileName(this, tr("Select a subtitle file"), "directoryToOpen",tr( "*.srt;;*.ass"));
+    QString subsPath = QFileDialog::getOpenFileName(this, tr("Select a subtitle file"), "directoryToOpen",tr( "*.srt"));
     subsLinePath->setText(subsPath);
 }
 
+/*
+ * The SLOT opens the file manager in order to give the chance to user to choose a directory to save the new video file.
+ * */
 void ConvertWidget::browseOutput()
 {
     QString outputPath = QFileDialog::getExistingDirectory(this, "Where do you want to save the file");
     outputLinePath->setText(outputPath);
 }
 
+/*
+ * Works ONLY in LINUX.
+ * The SLOT checks if the areas are empty. If they are empty then pop-up a warning. If they are not empty then convert the video file.
+ * */
 void ConvertWidget::convert()
 {
-#ifdef _WIN32
-
-#endif
-
+    // Print a pop-up window if the video path and/or output path and/or output name is empty.
+    if (videoLinePath->text().isEmpty() || outputLinePath->text().isEmpty() || outputFileName->text().isEmpty())
+    {
+        QMessageBox::warning(
+                this,
+                tr("Convert Warning"),
+                tr("Video File Selection and/or Export File Selection are/is empty.") );
+        return;
+    }
+    // this code works ONLY on LINUX
 #ifdef linux
+    std::string command;
+
     QString video = videoLinePath->text();
-    QString subs = subsLinePath->text();
-    std::string newSubs = subs.toUtf8().constData();
-    newSubs = newSubs.substr(0, newSubs.length()-4)+".ass";
     QString outputPath = outputLinePath->text();
     QString outputName = outputFileName->text();
-    std::string command;
-    command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
-    command = command+subs.toUtf8().constData()+" ";
-    command = command+newSubs+" && ffmpeg -i ";
-    command = command+video.toUtf8().constData()+" -vf ass=";
-    command = command+newSubs+" ";
-    command = command+outputPath.toUtf8().constData()+"/";
-    command = command+outputName.toUtf8().constData()+".mp4\"'";
-    std::cout<<command<<std::endl;
-    system(command.c_str());
+    QString outputType = outputFileType->currentText();
+    QString outputFile = outputPath + "/" + outputName + outputType;
+
+    if (subsBox->isEnabled()) {
+        QString subs = subsLinePath->text();
+        std::string newSubs = subs.toUtf8().constData();
+        newSubs = newSubs.substr(0, newSubs.length()-4) + ".ass";
+
+        // merge the video file with the subtitle file
+        // opens a terminal window and runs the command: ffmpeg -i subtitleFile subtitle.ass && ffmpeg -i videoFile -vf ass=subtitle.ass newVideoFile && rm subtitle.ass && exit
+        // subtitleFile is the path of the subtitle file that the user has choose
+        // videoFile is the path of the video file that the user has choose
+        // newVideoFile is the path of the newVideo file that the user has choose
+        command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
+        command = command + subs.toUtf8().constData() + " ";
+        command = command + newSubs + " && ffmpeg -i ";
+        command = command + video.toUtf8().constData() + " -vf ass=";
+        command = command + newSubs + " ";
+        command = command + outputFile.toUtf8().constData() + " && rm ";
+        command = command + newSubs + " && exit\"'";
+        system(command.c_str());
+    } else {
+        // convert a video file to another video type
+        // opens a terminal window and runs the command: ffmpeg -i videoFile newVideoFile && exit
+        // videoFile is the path of the video file that the user has choose
+        // newVideoFile is the path of the newVideo file that the user has choose
+        command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
+        command = command + video.toUtf8().constData() + " ";
+        command = command + outputFile.toUtf8().constData() + " && exit\"'";
+        system(command.c_str());
+    }
 #endif
+    close();
 }
 
+/*
+ * This function creates a label.
+ * */
+void ConvertWidget::aboutArea()
+{
+    QLabel *about = new QLabel(tr("This is a plugin that can merge a video file with \na subtitle file and/or can "
+                                  "change the type of a video file. \nThe plugin use the ffmpeg which is under the \n"
+                                  "GNU Lesser General Public License (LGPL) version 2.1 or later and \nGNU General "
+                                  "Public License (GPL) version 2 or later. \n\nImportant: Paths and names can not "
+                                  "contain spaces!\nImportant: Works only for LINUX!\n"));
+    window->addWidget(about);
+}
+
+/*
+ * This function creates a group box with a button and a line edit.
+ * */
 void ConvertWidget::videoArea()
 {
     QPushButton *videoB = new QPushButton;
@@ -120,13 +169,16 @@ void ConvertWidget::videoArea()
     window->addWidget(videoBox);
 }
 
+/*
+ * This function creates a group box with a button and a line edit.
+ * */
 void ConvertWidget::subsArea()
 {
     QPushButton *subsB = new QPushButton;
     subsB->setText("Browse");
     connect(subsB, SIGNAL(clicked()), this, SLOT(browseSubs()));
 
-    QGroupBox *subsBox = new QGroupBox(tr("Do you want to use a subtitle file?"));
+    subsBox = new QGroupBox(tr("Do you want to use a subtitle file?"));
     subsBox->setCheckable(true);
     subsBox->setChecked(false);
     QGridLayout *subsLayout = new QGridLayout;
@@ -137,6 +189,9 @@ void ConvertWidget::subsArea()
 
 }
 
+/*
+ * This function creates a group box with buttons, lines edit, labels and combo box.
+ * */
 void ConvertWidget::outputArea()
 {
     QPushButton *outputB = new QPushButton;
@@ -152,14 +207,17 @@ void ConvertWidget::outputArea()
     QLabel *outputName = new QLabel(tr("Give a name to the new file and select the type:"));
     outputLayout->addWidget(outputName, 1, 0);
     outputLayout->addWidget(outputFileName, 1, 1);
-    QComboBox *outputComboBox = new QComboBox;
-    outputComboBox->addItem(tr(".mp4"));
-    //outputComboBox->addItem(tr(".avi"));
-    outputLayout->addWidget(outputComboBox, 1, 2);
+    outputFileType = new QComboBox;
+    outputFileType->addItem(tr(".mp4"));
+    outputFileType->addItem(tr(".avi"));
+    outputLayout->addWidget(outputFileType, 1, 2);
     outputBox->setLayout(outputLayout);
     window->addWidget(outputBox);
 }
 
+/*
+ * This function creates a group box with buttons.
+ * */
 void ConvertWidget::buttonsArea()
 {
     QGroupBox *buttonsBox = new QGroupBox(tr("Select"));

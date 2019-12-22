@@ -51,7 +51,7 @@ set(QMPLAY2_HDR
     headers/NotifiesTray.hpp
     headers/MkvMuxer.hpp
     headers/CppUtils.hpp
-)
+        )
 
 set(QMPLAY2_SRC
     QMPlay2Core.cpp
@@ -92,7 +92,7 @@ set(QMPLAY2_SRC
     Notifies.cpp
     NotifiesTray.cpp
     MkvMuxer.cpp
-)
+        )
 
 if(WIN32)
     list(APPEND QMPLAY2_SRC IPC_Windows.cpp)
