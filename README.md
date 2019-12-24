@@ -56,7 +56,7 @@ $ sudo zypper in QMPlay2
 
 #### Easy installation on Gentoo Linux
 
-[Gentoo Linux repository](https://github.com/reagentoo/gentoo-overlay/tree/master/media-video/qmplay2)
+- Run the following command: `emerge --ask media-video/qmplay2`
 
 ## YouTube
 
