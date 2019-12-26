@@ -23,6 +23,7 @@
 Packet::Packet()
     : m_packet(av_packet_alloc())
 {
+    m_packet->flags = AV_PKT_FLAG_KEY;
 }
 Packet::Packet(AVPacket *packet, bool forceCopy)
     : Packet()
