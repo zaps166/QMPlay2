@@ -204,11 +204,11 @@ bool Frame::isLimited() const
 
 int Frame::chromaShiftW() const
 {
-    return m_pixelFormat ? m_pixelFormat->log2_chroma_h : 0;
+    return m_pixelFormat ? m_pixelFormat->log2_chroma_w : 0;
 }
 int Frame::chromaShiftH() const
 {
-    return m_pixelFormat ? m_pixelFormat->log2_chroma_w : 0;
+    return m_pixelFormat ? m_pixelFormat->log2_chroma_h : 0;
 }
 int Frame::numPlanes() const
 {
