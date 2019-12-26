@@ -22,6 +22,8 @@ extern "C" {
     #include <libavutil/pixdesc.h>
 }
 
+#include <QDebug>
+
 QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;
@@ -59,9 +61,7 @@ QString StreamInfo::getTagName(const QString &tag)
 StreamInfo::StreamInfo()
 {
     memset(static_cast<AVCodecParameters *>(this), 0, sizeof(AVCodecParameters));
-
-    sample_aspect_ratio.num = 1;
-    sample_aspect_ratio.den = 1;
+    resetSAR();
 }
 StreamInfo::StreamInfo(AVCodecParameters *codecpar)
     : StreamInfo()
@@ -70,6 +70,9 @@ StreamInfo::StreamInfo(AVCodecParameters *codecpar)
 
     if (const AVCodec *codec = avcodec_find_decoder(codec_id))
         codec_name = codec->name;
+
+    if (sample_aspect_ratio.num == 0)
+        resetSAR();
 }
 StreamInfo::StreamInfo(quint32 sampleRateArg, quint8 channelsArg)
     : StreamInfo()
@@ -104,4 +107,9 @@ void StreamInfo::setFormat(const QByteArray &formatName)
         default:
             break;
     }
+}
+
+inline void StreamInfo::resetSAR()
+{
+    sample_aspect_ratio.num = sample_aspect_ratio.den = 1;
 }

@@ -49,6 +49,7 @@ enum QMPlay2Tags
 class QMPLAY2SHAREDLIB_EXPORT StreamInfo : public AVCodecParameters
 {
     Q_DECLARE_TR_FUNCTIONS(StreamInfo)
+
 public:
     static QMPlay2Tags getTag(const QString &tag);
     static QString getTagName(const QString &tag);
@@ -108,4 +109,7 @@ public:
     AVRational fps = {0, 1};
     double rotation = qQNaN();
     bool spherical = false;
+
+private:
+    inline void resetSAR();
 };
