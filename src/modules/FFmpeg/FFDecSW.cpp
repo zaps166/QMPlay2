@@ -275,9 +275,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
         }
     }
 
-    decoded.setTimeBase(time_base);
-    if (frameFinished && !decoded.isTsValid())
-        decoded.setTS(encodedPacket.ts());
+    decodeLastStep(encodedPacket, decoded, frameFinished);
 
     return bytesConsumed < 0 ? -1 : bytesConsumed;
 }

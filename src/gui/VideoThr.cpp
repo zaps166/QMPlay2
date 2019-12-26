@@ -315,7 +315,8 @@ void VideoThr::run()
         if (hasVPackets && mustFetchNewPacket)
         {
             packet = playC.vPackets.fetch();
-            ts = packet.ts();
+            if (packet.isTsValid())
+                ts = packet.ts();
         }
         playC.vPackets.unlock();
         processOneFrame();
@@ -420,7 +421,7 @@ void VideoThr::run()
                 useLastDelay = true; //if seeking
                 playC.flushVideo = false;
             }
-            if (playC.videoSeekPos > 0.0 && bytes_consumed <= 0 && qIsNaN(ts) && decoded.isEmpty())
+            if (playC.videoSeekPos > 0.0 && bytes_consumed <= 0 && !decoded.isTsValid() && decoded.isEmpty())
                 finishAccurateSeek();
             if (!decoded.isEmpty())
             {

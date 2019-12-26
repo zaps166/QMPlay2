@@ -89,9 +89,7 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
         }
     }
 
-    decoded.setTimeBase(time_base);
-    if (frameFinished && !decoded.isTsValid())
-        decoded.setTS(encodedPacket.ts());
+    decodeLastStep(encodedPacket, decoded, frameFinished);
 
     return m_hasCriticalError ? -1 : bytesConsumed;
 }

@@ -113,7 +113,7 @@ private:
 
 private:
     AVFrame *m_frame = nullptr;
-    double m_timeBase = 1.0 / 10000.0;
+    double m_timeBase = qQNaN();
 
     // Video only
     const AVPixFmtDescriptor *m_pixelFormat = nullptr;

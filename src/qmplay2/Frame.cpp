@@ -146,6 +146,7 @@ double Frame::ts() const
 }
 void Frame::setTS(double ts)
 {
+    m_timeBase = 1.0 / 10000.0;
     m_frame->best_effort_timestamp = std::round(ts / m_timeBase);
 }
 
