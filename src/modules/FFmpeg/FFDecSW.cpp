@@ -254,8 +254,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newP
                 }
                 else
                 {
-                    decoded = Frame::createEmpty(frame);
-                    decoded.setPixelFormat(desiredPixFmt);
+                    decoded = Frame::createEmpty(frame, true, desiredPixFmt);
                     if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
                     {
                         sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
@@ -390,7 +389,7 @@ void FFDecSW::setPixelFormat()
         const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get(pixFmt);
         if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
         {
-            //Use first format as default (mostly QMPlay2PixelFormat::YUV420P) and look at next formats,
+            //Use first format as default (mostly AV_PIX_FMT_YUV420P) and look at next formats,
             //otherwise break the loop if found proper format.
             desiredPixFmt = pixFmt;
             if (i != 0)

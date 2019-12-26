@@ -81,7 +81,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray 
     {
         if (m_hwAccelWriter)
         {
-            decoded = frame;
+            decoded = Frame(frame);
         }
         else
         {

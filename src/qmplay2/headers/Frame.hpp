@@ -39,7 +39,7 @@ public:
 
 public:
     static Frame createEmpty(const Frame &other);
-    static Frame createEmpty(const AVFrame *other, bool allocBuffers);
+    static Frame createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     static Frame createEmpty(
         int width,
         int height,
@@ -52,7 +52,7 @@ public:
 
 public:
     Frame();
-    Frame(AVFrame *avFrame);
+    explicit Frame(AVFrame *avFrame);
     Frame(const Frame &other);
     Frame(Frame &&other);
     ~Frame();
@@ -72,7 +72,6 @@ public: // Video
     quintptr hwSurface() const;
 
     AVPixelFormat pixelFormat() const;
-    void setPixelFormat(AVPixelFormat pixelFormat);
 
     AVColorSpace colorSpace() const;
     bool isLimited() const;

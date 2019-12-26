@@ -247,8 +247,7 @@ void FFDecVTB::downloadVideoFrame(Frame &decoded)
 
         CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
 
-        decoded = Frame::createEmpty(frame, false);
-        decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+        decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
         decoded.setVideoData(dstBuffer, dstLinesize, false);
     }
 }

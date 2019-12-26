@@ -455,8 +455,7 @@ void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
         m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
-        decoded = Frame::createEmpty(frame, false);
-        decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+        decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
         decoded.setVideoData(dstBuffer, dstLinesize, false);
 
         vaUnmapBuffer(m_vaapi->VADisp, image.buf);

@@ -30,27 +30,33 @@ Frame Frame::createEmpty(const Frame &other)
 {
     return createEmpty(other.m_frame, true);
 }
-Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers)
+Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
     Frame frame;
     if (other)
     {
         frame.copyAVFrameInfo(other);
+        if (newPixelFormat != AV_PIX_FMT_NONE)
+            frame.m_frame->format = newPixelFormat;
         frame.obtainPixelFormat();
         if (allocBuffers)
         {
-#if 0 // OpenGL2 writer doesn't like when linesize changes
-            av_frame_get_buffer(frame.m_frame, 0);
-#else
-            for (int i = frame.numPlanes() - 1; i >= 0; --i)
+            if (newPixelFormat != AV_PIX_FMT_NONE)
             {
-                frame.m_frame->linesize[i] = other->linesize[i];
-                frame.m_frame->buf[i] = av_buffer_alloc(other->buf[i] ? other->buf[i]->size : frame.m_frame->linesize[i] * frame.height(i));
-                frame.m_frame->data[i] = frame.m_frame->buf[i]->data;
+                av_frame_get_buffer(frame.m_frame, 0);
             }
-            frame.m_frame->extended_data = frame.m_frame->data;
+            else
+            {
+                // OpenGL2 writer doesn't like when linesize changes
+                for (int i = frame.numPlanes() - 1; i >= 0; --i)
+                {
+                    frame.m_frame->linesize[i] = other->linesize[i];
+                    frame.m_frame->buf[i] = av_buffer_alloc(other->buf[i] ? other->buf[i]->size : frame.m_frame->linesize[i] * frame.height(i));
+                    frame.m_frame->data[i] = frame.m_frame->buf[i]->data;
+                }
+                frame.m_frame->extended_data = frame.m_frame->data;
+            }
         }
-#endif
     }
     return frame;
 }
@@ -183,11 +189,6 @@ AVPixelFormat Frame::pixelFormat() const
     if (isHW())
         return AV_PIX_FMT_NONE;
     return static_cast<AVPixelFormat>(m_frame->format);
-}
-void Frame::setPixelFormat(AVPixelFormat pixelFormat)
-{
-    m_frame->format = pixelFormat;
-    obtainPixelFormat();
 }
 
 AVColorSpace Frame::colorSpace() const
