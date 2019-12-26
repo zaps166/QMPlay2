@@ -40,9 +40,9 @@ private:
 
     bool processParams(bool *paramsCorrected) override;
 
-    QMPlay2PixelFormats supportedPixelFormats() const override;
+    AVPixelFormats supportedPixelFormats() const override;
 
-    void writeVideo(const VideoFrame &videoFrame) override;
+    void writeVideo(const Frame &videoFrame) override;
     void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
     void setHWAccelInterface(HWAccelInterface *hwAccelInterface) override;

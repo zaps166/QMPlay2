@@ -32,7 +32,7 @@ public:
 
     QString name() const override;
 
-    void downloadVideoFrame(VideoFrame &decoded) override;
+    void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
 

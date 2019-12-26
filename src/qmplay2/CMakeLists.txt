@@ -32,7 +32,7 @@ set(QMPLAY2_HDR
     headers/ByteArray.hpp
     headers/TimeStamp.hpp
     headers/Packet.hpp
-    headers/VideoFrame.hpp
+    headers/Frame.hpp
     headers/StreamInfo.hpp
     headers/DockWidget.hpp
     headers/IOController.hpp
@@ -43,7 +43,6 @@ set(QMPLAY2_HDR
     headers/IPC.hpp
     headers/CPU.hpp
     headers/Version.hpp
-    headers/PixelFormats.hpp
     headers/HWAccelInterface.hpp
     headers/VideoAdjustment.hpp
     headers/YouTubeDL.hpp
@@ -80,14 +79,13 @@ set(QMPLAY2_SRC
     SndResampler.cpp
     VideoWriter.cpp
     SubsDec.cpp
-    VideoFrame.cpp
+    Frame.cpp
     StreamInfo.cpp
     DockWidget.cpp
     PacketBuffer.cpp
     Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
-    PixelFormats.cpp
     YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp

@@ -24,7 +24,7 @@
 
 #include <VideoWriter.hpp>
 #include <QMPlay2OSD.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Settings.hpp>
 #include <Decoder.hpp>
 #include <LibASS.hpp>
@@ -72,7 +72,7 @@ bool VideoThr::hasDecoderError() const
     return decoderError;
 }
 
-QMPlay2PixelFormats VideoThr::getSupportedPixelFormats() const
+AVPixelFormats VideoThr::getSupportedPixelFormats() const
 {
     return videoWriter()->supportedPixelFormats();
 }
@@ -234,7 +234,7 @@ void VideoThr::run()
     bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
     double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
     QMutex emptyBufferMutex;
-    VideoFrame videoFrame;
+    Frame videoFrame;
     unsigned fast = 0;
     int tmp_br = 0, frames = 0, framesDisplayed = 0;
     canWrite = true;
@@ -276,7 +276,7 @@ void VideoThr::run()
 
         if (doScreenshot && !videoFrame.isEmpty())
         {
-            QMetaObject::invokeMethod(this, "screenshot", Q_ARG(VideoFrame, videoFrame));
+            QMetaObject::invokeMethod(this, "screenshot", Q_ARG(Frame, videoFrame));
             doScreenshot = false;
         }
 
@@ -406,7 +406,7 @@ void VideoThr::run()
 
         if (!packet.isEmpty() || maybeFlush)
         {
-            VideoFrame decoded;
+            Frame decoded;
             QByteArray newPixelFormat;
             const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, playC.flushVideo, skip ? ~0 : (fast >> 1));
             if (!newPixelFormat.isEmpty())
@@ -420,19 +420,19 @@ void VideoThr::run()
                 finishAccurateSeek();
             if (!decoded.isEmpty())
             {
-                if (decoded.size.width != W || decoded.size.height != H)
+                if (decoded.width() != W || decoded.height() != H)
                 {
                     //Frame size has been changed
                     filtersMutex.unlock();
                     updateMutex.lock();
                     mutex.unlock();
-                    emit playC.frameSizeUpdate(decoded.size.width, decoded.size.height);
+                    emit playC.frameSizeUpdate(decoded.width(), decoded.height());
                     updateMutex.lock(); //Wait for "frameSizeUpdate()" to be finished
                     mutex.lock();
                     updateMutex.unlock();
                     filtersMutex.lock();
                 }
-                interlaced = decoded.interlaced;
+                interlaced = decoded.isInterlaced();
                 filters.addFrame(decoded, packet.ts);
                 gotFrameOrError = true;
             }
@@ -615,7 +615,7 @@ void VideoThr::run()
                 if (!skip && canWrite)
                 {
                     oneFrame = canWrite = false;
-                    QMetaObject::invokeMethod(this, "write", Q_ARG(VideoFrame, videoFrame), Q_ARG(quint32, seq));
+                    QMetaObject::invokeMethod(this, "write", Q_ARG(Frame, videoFrame), Q_ARG(quint32, seq));
                     if (canSkipFrames)
                         ++framesDisplayed;
                 }
@@ -630,7 +630,7 @@ void VideoThr::run()
     }
 }
 
-void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
+void VideoThr::write(Frame videoFrame, quint32 lastSeq)
 {
     canWrite = true;
     if (lastSeq == seq && writer->readyWrite() && !videoWriter()->hwAccelError())
@@ -639,7 +639,7 @@ void VideoThr::write(VideoFrame videoFrame, quint32 lastSeq)
         videoWriter()->writeVideo(videoFrame);
     }
 }
-void VideoThr::screenshot(VideoFrame videoFrame)
+void VideoThr::screenshot(Frame videoFrame)
 {
     ImgScaler imgScaler;
     const int aligned8W = Functions::aligned(W, 8);

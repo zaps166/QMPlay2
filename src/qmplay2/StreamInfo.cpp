@@ -18,6 +18,10 @@
 
 #include <StreamInfo.hpp>
 
+extern "C" {
+    #include <libavutil/pixdesc.h>
+}
+
 QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;
@@ -53,12 +57,59 @@ QString StreamInfo::getTagName(const QString &tag)
 }
 
 StreamInfo::StreamInfo()
-{}
-StreamInfo::StreamInfo(quint32 sample_rate, quint8 channels) :
-    type(QMPLAY2_TYPE_AUDIO),
-    sample_rate(sample_rate),
-    channels(channels)
-{}
+{
+    memset(static_cast<AVCodecParameters *>(this), 0, sizeof(AVCodecParameters));
+
+    sample_aspect_ratio.num = 1;
+    sample_aspect_ratio.den = 1;
+}
+StreamInfo::StreamInfo(AVCodecParameters *codecpar)
+    : StreamInfo()
+{
+    avcodec_parameters_copy(static_cast<AVCodecParameters *>(this), codecpar);
+
+    if (const AVCodec *codec = avcodec_find_decoder(codec_id))
+        codec_name = codec->name;
+}
+StreamInfo::StreamInfo(quint32 sampleRateArg, quint8 channelsArg)
+    : StreamInfo()
+{
+    codec_type = AVMEDIA_TYPE_AUDIO;
+    sample_rate = sampleRateArg;
+    channels = channelsArg;
+}
+
+void StreamInfo::setSampleAspectRatio(double sar)
+{
+    sample_aspect_ratio = av_d2q(sar, 10000);
+}
+
+QByteArray StreamInfo::getFormatName() const
+{
+    switch (codec_type)
+    {
+        case AVMEDIA_TYPE_AUDIO:
+            return av_get_sample_fmt_name(sampleFormat());
+        case AVMEDIA_TYPE_VIDEO:
+            return av_get_pix_fmt_name(pixelFormat());
+        default:
+            break;
+    }
+    return QByteArray();
+}
+void StreamInfo::setFormat(const QByteArray &formatName)
+{
+    switch (codec_type)
+    {
+        case AVMEDIA_TYPE_AUDIO:
+            format = av_get_sample_fmt(formatName.constData());
+        case AVMEDIA_TYPE_VIDEO:
+            format = av_get_pix_fmt(formatName.constData());
+            break;
+        default:
+            break;
+    }
+}
 
 /**/
 

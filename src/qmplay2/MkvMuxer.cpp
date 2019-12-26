@@ -49,35 +49,34 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
         if (!stream)
             return;
 
-        stream->time_base.num = streamInfo->time_base.num;
-        stream->time_base.den = streamInfo->time_base.den;
+        stream->time_base = streamInfo->time_base;
 
-        stream->codecpar->codec_type = (AVMediaType)streamInfo->type;
+        stream->codecpar->codec_type = streamInfo->codec_type;
         stream->codecpar->codec_id = codec->id;
 
-        if (streamInfo->data.size() > 0)
+        if (streamInfo->extradata_size > 0)
         {
-            stream->codecpar->extradata = (uint8_t *)av_mallocz(streamInfo->data.capacity());
-            stream->codecpar->extradata_size = streamInfo->data.size();
-            memcpy(stream->codecpar->extradata, streamInfo->data.constData(), stream->codecpar->extradata_size);
+            stream->codecpar->extradata = (uint8_t *)av_mallocz(streamInfo->getExtraDataCapacity());
+            stream->codecpar->extradata_size = streamInfo->extradata_size;
+            memcpy(stream->codecpar->extradata, streamInfo->extradata, stream->codecpar->extradata_size);
         }
 
-        switch (streamInfo->type)
+        switch (streamInfo->codec_type)
         {
-            case QMPLAY2_TYPE_VIDEO:
-                stream->codecpar->width = streamInfo->W;
-                stream->codecpar->height = streamInfo->H;
-                stream->codecpar->format = av_get_pix_fmt(streamInfo->format);
-                stream->codecpar->sample_aspect_ratio = av_d2q(streamInfo->sample_aspect_ratio, 10000);
-                stream->avg_frame_rate = av_d2q(streamInfo->FPS, 10000);
+            case AVMEDIA_TYPE_VIDEO:
+                stream->codecpar->width = streamInfo->width;
+                stream->codecpar->height = streamInfo->height;
+                stream->codecpar->format = streamInfo->format;
+                stream->codecpar->sample_aspect_ratio = streamInfo->sample_aspect_ratio;
+                stream->avg_frame_rate = streamInfo->fps;
                 if (streamInfo->is_default)
                     stream->disposition |= AV_DISPOSITION_DEFAULT;
                 break;
-            case QMPLAY2_TYPE_AUDIO:
+            case AVMEDIA_TYPE_AUDIO:
                 stream->codecpar->channels = streamInfo->channels;
                 stream->codecpar->sample_rate = streamInfo->sample_rate;
                 stream->codecpar->block_align = streamInfo->block_align;
-                stream->codecpar->format = av_get_sample_fmt(streamInfo->format);
+                stream->codecpar->format = streamInfo->format;
                 break;
             default:
                 break;

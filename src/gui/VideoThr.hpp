@@ -20,7 +20,6 @@
 
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
-#include <PixelFormats.hpp>
 
 class QMPlay2OSD;
 class VideoWriter;
@@ -41,7 +40,7 @@ public:
         return hwAccelWriter;
     }
 
-    QMPlay2PixelFormats getSupportedPixelFormats() const;
+    AVPixelFormats getSupportedPixelFormats() const;
 
     inline void setDoScreenshot()
     {
@@ -93,7 +92,7 @@ private:
     VideoFilters filters;
     QMutex filtersMutex;
 private slots:
-    void write(VideoFrame videoFrame, quint32 lastSeq);
-    void screenshot(VideoFrame videoFrame);
+    void write(Frame videoFrame, quint32 lastSeq);
+    void screenshot(Frame videoFrame);
     void pause();
 };

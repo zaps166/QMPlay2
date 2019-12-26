@@ -127,7 +127,7 @@ public:
         m_isInitialized = false;
     }
 
-    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const Frame &videoFrame, Field field) override
     {
         maybeUnmapOutputSurface();
 
@@ -174,10 +174,10 @@ public:
         return m_texture;
     }
 
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
         Q_UNUSED(nv12ToRGB32) // FIXME: Don't use ImgScaler in VideoThe if not needed
-        return m_vdpau->getRGB((uint8_t *)dest, videoFrame.size);
+        return m_vdpau->getRGB((uint8_t *)dest, videoFrame.width(), videoFrame.height());
     }
 
     void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override
@@ -322,10 +322,9 @@ QString FFDecVDPAU::name() const
     return "FFmpeg/" VDPAUWriterName;
 }
 
-int FFDecVDPAU::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecVDPAU::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    decoded.limited = m_limitedRange;
     if (m_hwAccelWriter && ret > -1)
     {
         if (flush)
@@ -335,7 +334,7 @@ int FFDecVDPAU::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArr
     }
     return ret;
 }
-void FFDecVDPAU::downloadVideoFrame(VideoFrame &decoded)
+void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
 {
     if (codec_ctx->coded_width <= 0 || codec_ctx->coded_height <= 0)
         return;
@@ -345,10 +344,15 @@ void FFDecVDPAU::downloadVideoFrame(VideoFrame &decoded)
         (codec_ctx->coded_width + 1) / 2,
         (codec_ctx->coded_width + 1) / 2,
     };
+    AVBufferRef *buffer[] = {
+        av_buffer_alloc(linesize[0] * codec_ctx->coded_height),
+        av_buffer_alloc(linesize[1] * (codec_ctx->coded_height + 1) / 2),
+        av_buffer_alloc(linesize[2] * (codec_ctx->coded_height + 1) / 2),
+    };
 
-    decoded = VideoFrame({codec_ctx->coded_width, codec_ctx->coded_height}, linesize, frame->interlaced_frame, frame->top_field_first);
-    decoded.size.width = frame->width;
-    decoded.size.height = frame->height;
+    decoded = Frame::createEmpty(frame, false);
+    decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+    decoded.setVideoData(buffer, linesize, false);
 
     if (!m_vdpau->getYV12(decoded, (quintptr)frame->data[3]))
         decoded.clear();
@@ -359,7 +363,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_copyVideo && Functions::isX11EGL())
         return false;
 
-    const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
+    const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
         return false;
 
@@ -413,9 +417,6 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 #endif
     if (!openCodec(codec))
         return false;
-
-    if (pix_fmt == AV_PIX_FMT_YUVJ420P)
-        m_limitedRange = false;
 
     time_base = streamInfo.getTimeBase();
     return true;

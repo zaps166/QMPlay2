@@ -19,7 +19,7 @@
 #include <QPainterWriter.hpp>
 
 #include <QMPlay2OSD.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Functions.hpp>
 
 #include <QCoreApplication>
@@ -38,7 +38,7 @@ Drawable::Drawable(QPainterWriter &writer) :
 Drawable::~Drawable()
 {}
 
-void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entireScreen)
+void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScreen)
 {
     if (!newVideoFrame.isEmpty())
         videoFrame = newVideoFrame;
@@ -47,12 +47,12 @@ void Drawable::draw(const VideoFrame &newVideoFrame, bool canRepaint, bool entir
         update();
         return;
     }
-    m_scaleByQt = (imgW > videoFrame.size.width) || (imgH > videoFrame.size.height);
-    if (imgScaler.create(videoFrame, m_scaleByQt ? videoFrame.size.width : imgW, m_scaleByQt ? videoFrame.size.height : imgH))
+    m_scaleByQt = (imgW > videoFrame.width()) || (imgH > videoFrame.height());
+    if (imgScaler.create(videoFrame, m_scaleByQt ? videoFrame.width() : imgW, m_scaleByQt ? videoFrame.height() : imgH))
     {
-        if (m_scaleByQt && (img.width() != videoFrame.size.width || img.height() != videoFrame.size.height))
+        if (m_scaleByQt && (img.width() != videoFrame.width() || img.height() != videoFrame.height()))
         {
-            img = QImage(videoFrame.size.width, videoFrame.size.height, QImage::Format_RGB32);
+            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
         }
         else if (!m_scaleByQt && (img.width() != imgW || img.height() != imgH))
         {
@@ -80,7 +80,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
     imgScaler.destroy();
     img = QImage();
 
-    draw(VideoFrame(), e ? false : true, true);
+    draw(Frame(), e ? false : true, true);
 }
 void Drawable::paintEvent(QPaintEvent *)
 {
@@ -190,24 +190,24 @@ bool QPainterWriter::processParams(bool *)
     return readyWrite();
 }
 
-QMPlay2PixelFormats QPainterWriter::supportedPixelFormats() const
+AVPixelFormats QPainterWriter::supportedPixelFormats() const
 {
     return {
-        QMPlay2PixelFormat::YUV420P,
-        QMPlay2PixelFormat::YUVJ420P,
-        QMPlay2PixelFormat::YUV422P,
-        QMPlay2PixelFormat::YUVJ422P,
-        QMPlay2PixelFormat::YUV444P,
-        QMPlay2PixelFormat::YUVJ444P,
-        QMPlay2PixelFormat::YUV410P,
-        QMPlay2PixelFormat::YUV411P,
-        QMPlay2PixelFormat::YUVJ411P,
-        QMPlay2PixelFormat::YUV440P,
-        QMPlay2PixelFormat::YUVJ440P,
+        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUVJ420P,
+        AV_PIX_FMT_YUV422P,
+        AV_PIX_FMT_YUVJ422P,
+        AV_PIX_FMT_YUV444P,
+        AV_PIX_FMT_YUVJ444P,
+        AV_PIX_FMT_YUV410P,
+        AV_PIX_FMT_YUV411P,
+        AV_PIX_FMT_YUVJ411P,
+        AV_PIX_FMT_YUV440P,
+        AV_PIX_FMT_YUVJ440P,
     };
 }
 
-void QPainterWriter::writeVideo(const VideoFrame &videoFrame)
+void QPainterWriter::writeVideo(const Frame &videoFrame)
 {
     drawable->draw(videoFrame, true, false);
 }

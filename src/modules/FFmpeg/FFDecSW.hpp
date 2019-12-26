@@ -50,10 +50,10 @@ private:
 
     QString name() const override;
 
-    void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats) override;
+    void setSupportedPixelFormats(const AVPixelFormats &pixelFormats) override;
 
     int  decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush) override;
-    int  decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
+    int  decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
     bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush) override;
 
     bool open(StreamInfo &, VideoWriter *) override;
@@ -70,9 +70,8 @@ private:
     int lastFrameW, lastFrameH, lastPixFmt;
     SwsContext *sws_ctx;
 
-    QMPlay2PixelFormats supportedPixelFormats;
-    quint8 chromaShiftW, chromaShiftH;
-    int desiredPixFmt;
+    AVPixelFormats supportedPixelFormats;
+    AVPixelFormat desiredPixFmt = AV_PIX_FMT_NONE;
     bool dontConvert;
 
     std::deque<Subtitle> m_subtitles;

@@ -20,7 +20,7 @@
 #include <FFCommon.hpp>
 
 #include <QMPlay2Core.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Functions.hpp>
 
 extern "C"
@@ -147,25 +147,25 @@ void VDPAU::setVideoMixerDeintNr(int deintMethod, bool nrEnabled, float nrLevel)
     m_mustApplyVideoMixerFeatures = true;
 }
 
-void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const VideoFrame &decoded)
+void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decoded)
 {
     VdpColorStandard colorStandard;
-    switch (decoded.colorSpace)
+    switch (decoded.colorSpace())
     {
-        case QMPlay2ColorSpace::BT709:
+        case AVCOL_SPC_BT709:
             colorStandard = VDP_COLOR_STANDARD_ITUR_BT_709;
             break;
-        case QMPlay2ColorSpace::SMPTE240M:
+        case AVCOL_SPC_SMPTE240M:
             colorStandard = VDP_COLOR_STANDARD_SMPTE_240M;
             break;
         default:
             colorStandard = VDP_COLOR_STANDARD_ITUR_BT_601;
             break;
     }
-    if (m_colorStandard != colorStandard || m_isLimitedRange != decoded.limited)
+    if (m_colorStandard != colorStandard || m_isLimitedRange != decoded.isLimited())
     {
         m_colorStandard = colorStandard;
-        m_isLimitedRange = decoded.limited;
+        m_isLimitedRange = decoded.isLimited();
         m_mustSetCSCMatrix = true;
     }
 
@@ -220,12 +220,12 @@ void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const VideoFrame &
     m_mustSetCSCMatrix = true;
 }
 
-bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure)
+bool VDPAU::videoMixerRender(const Frame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure)
 {
-    if (m_frameW != videoFrame.size.width || m_frameH != videoFrame.size.height)
+    if (m_frameW != videoFrame.width() || m_frameH != videoFrame.height())
     {
-        m_frameW = videoFrame.size.width;
-        m_frameH = videoFrame.size.height;
+        m_frameW = videoFrame.width();
+        m_frameH = videoFrame.height();
         if (m_outputSurface != VDP_INVALID_HANDLE)
         {
             vdp_output_surface_destroy(m_outputSurface);
@@ -265,13 +265,13 @@ bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id,
     {
         clearBufferedFrames();
         for (size_t i = 0; i < numVideoFrames; ++i)
-            surfaces[i] = (i == 1) ? videoFrame.surfaceId : VDP_INVALID_HANDLE;
+            surfaces[i] = (i == 1) ? videoFrame.hwSurface() : VDP_INVALID_HANDLE;
     }
     else
     {
         QMutexLocker locker(&m_framesMutex);
 
-        if (m_bufferedFrames.empty() || m_bufferedFrames[0].surfaceId != videoFrame.surfaceId)
+        if (m_bufferedFrames.empty() || m_bufferedFrames[0].hwSurface() != videoFrame.hwSurface())
         {
             while (m_bufferedFrames.size() >= numVideoFrames)
                 m_bufferedFrames.pop_back();
@@ -281,7 +281,7 @@ bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id,
         for (size_t i = 0; i < numVideoFrames; ++i)
         {
             surfaces[i] = (m_bufferedFrames.size() > i)
-                ? m_bufferedFrames[i].surfaceId
+                ? m_bufferedFrames[i].hwSurface()
                 : VDP_INVALID_HANDLE
             ;
         }
@@ -320,21 +320,21 @@ bool VDPAU::videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id,
     return true;
 }
 
-bool VDPAU::getYV12(VideoFrame &decoded, VdpVideoSurface id)
+bool VDPAU::getYV12(Frame &decoded, VdpVideoSurface id)
 {
     void *data[] = {
-        decoded.buffer[0].data(),
-        decoded.buffer[2].data(),
-        decoded.buffer[1].data()
+        decoded.data(0),
+        decoded.data(2),
+        decoded.data(1),
     };
-    return (vdp_surface_get_bits_ycbcr(id, VDP_YCBCR_FORMAT_YV12, data, (uint32_t *)decoded.linesize) == VDP_STATUS_OK);
+    return (vdp_surface_get_bits_ycbcr(id, VDP_YCBCR_FORMAT_YV12, data, (uint32_t *)decoded.linesize()) == VDP_STATUS_OK);
 }
-bool VDPAU::getRGB(uint8_t *dest, const VideoFrameSize &size)
+bool VDPAU::getRGB(uint8_t *dest, int width, int height)
 {
     if (m_outputSurface == VDP_INVALID_HANDLE || !dest)
         return false;
 
-    if (size.width != m_frameW || size.height != m_frameH)
+    if (width != m_frameW || height != m_frameH)
         return false;
 
     const uint32_t lineSize = Functions::aligned(m_frameW, 8) * 4;

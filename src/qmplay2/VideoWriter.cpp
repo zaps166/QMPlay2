@@ -51,9 +51,9 @@ VideoWriter::~VideoWriter()
     delete m_hwAccelInterface;
 }
 
-QMPlay2PixelFormats VideoWriter::supportedPixelFormats() const
+AVPixelFormats VideoWriter::supportedPixelFormats() const
 {
-    return {QMPlay2PixelFormat::YUV420P};
+    return {AV_PIX_FMT_YUV420P};
 }
 
 bool VideoWriter::hwAccelError() const
@@ -71,7 +71,7 @@ qint64 VideoWriter::write(const QByteArray &)
     return -1;
 }
 
-bool VideoWriter::hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VideoWriter::hwAccelGetImg(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
     if (m_hwAccelInterface)
         return m_hwAccelInterface->getImage(videoFrame, dest, nv12ToRGB32);

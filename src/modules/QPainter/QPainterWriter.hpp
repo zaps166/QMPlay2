@@ -19,7 +19,7 @@
 #pragma once
 
 #include <VideoWriter.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <ImgScaler.hpp>
 
 #include <QWidget>
@@ -33,11 +33,11 @@ public:
     Drawable(class QPainterWriter &);
     ~Drawable();
 
-    void draw(const VideoFrame &newVideoFrame, bool, bool);
+    void draw(const Frame &newVideoFrame, bool, bool);
 
     void resizeEvent(QResizeEvent *) override;
 
-    VideoFrame videoFrame;
+    Frame videoFrame;
     QList<const QMPlay2OSD *> osd_list;
     int Brightness, Contrast;
     QMutex osd_mutex;
@@ -68,9 +68,9 @@ private:
 
     bool processParams(bool *paramsCorrected) override;
 
-    QMPlay2PixelFormats supportedPixelFormats() const override;
+    AVPixelFormats supportedPixelFormats() const override;
 
-    void writeVideo(const VideoFrame &videoFrame) override;
+    void writeVideo(const Frame &videoFrame) override;
     void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
     QString name() const override;

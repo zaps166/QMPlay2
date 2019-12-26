@@ -19,24 +19,17 @@
 #pragma once
 
 #include <QMPlay2Lib.hpp>
-#include <PixelFormats.hpp>
 
 #include <QCoreApplication>
 #include <QByteArray>
 #include <QVector>
 #include <QPair>
 
-using QMPlay2Tag = QPair<QString, QString>;
+extern "C" {
+    #include <libavcodec/avcodec.h>
+}
 
-enum QMPlay2MediaType
-{
-    QMPLAY2_TYPE_UNKNOWN = -1,
-    QMPLAY2_TYPE_VIDEO,
-    QMPLAY2_TYPE_AUDIO,
-    QMPLAY2_TYPE_DATA,
-    QMPLAY2_TYPE_SUBTITLE,
-    QMPLAY2_TYPE_ATTACHMENT
-};
+using QMPlay2Tag = QPair<QString, QString>;
 
 enum QMPlay2Tags
 {
@@ -53,7 +46,7 @@ enum QMPlay2Tags
     QMPLAY2_TAG_LYRICS,
 };
 
-class QMPLAY2SHAREDLIB_EXPORT StreamInfo
+class QMPLAY2SHAREDLIB_EXPORT StreamInfo : public AVCodecParameters
 {
     Q_DECLARE_TR_FUNCTIONS(StreamInfo)
 public:
@@ -61,35 +54,61 @@ public:
     static QString getTagName(const QString &tag);
 
     StreamInfo();
-    StreamInfo(quint32 sample_rate, quint8 channels);
+    StreamInfo(AVCodecParameters *codecpar);
+    StreamInfo(quint32 sampleRateArg, quint8 channelsArg);
 
     inline double getTimeBase() const
     {
-        return (double)time_base.num / (double)time_base.den;
-    }
-    inline double getAspectRatio() const
-    {
-        return sample_aspect_ratio * W / H;
+        return av_q2d(time_base);
     }
 
-    QMPlay2MediaType type = QMPLAY2_TYPE_UNKNOWN;
-    QByteArray codec_name, title, artist, format;
+    void setSampleAspectRatio(double sar);
+    inline double getSampleAspectRatio() const
+    {
+        return av_q2d(sample_aspect_ratio);
+    }
+
+    inline double getAspectRatio() const
+    {
+        return getSampleAspectRatio() * width / height;
+    }
+
+    inline double getFPS() const
+    {
+        return av_q2d(fps);
+    }
+
+    inline int getExtraDataCapacity() const
+    {
+        return extradata_size + AV_INPUT_BUFFER_PADDING_SIZE;
+    }
+    inline const QByteArray getExtraData() const
+    {
+        return QByteArray::fromRawData((const char *)extradata, extradata_size);
+    }
+
+    inline AVPixelFormat pixelFormat() const
+    {
+        return static_cast<AVPixelFormat>(format);
+    }
+    inline AVSampleFormat sampleFormat() const
+    {
+        return static_cast<AVSampleFormat>(format);
+    }
+
+    QByteArray getFormatName() const;
+    void setFormat(const QByteArray &getFormatName);
+
+    QByteArray codec_name, title, artist;
     QVector<QMPlay2Tag> other_info;
-    QByteArray data; //subtitles header or extradata for some codecs
-    bool is_default = true, must_decode = false;
-    struct {int num, den;} time_base = {0, 0};
-    int bitrate = 0, bpcs = 0;
-    unsigned codec_tag = 0;
-    /* audio only */
-    quint32 sample_rate = 0, block_align = 0;
-    quint8 channels = 0;
-    /* video only */
-    double sample_aspect_ratio = 1.0, FPS = 0.0;
-    int W = 0, H = 0;
+    bool is_default = true;
+    bool must_decode = false;
+    AVRational time_base = {0, 0};
+
+    // Video only
+    AVRational fps = {0, 1};
     double rotation = qQNaN();
     bool spherical = false;
-    bool limited = true;
-    QMPlay2ColorSpace colorSpace = QMPlay2ColorSpace::Unknown;
 };
 
 class QMPLAY2SHAREDLIB_EXPORT StreamsInfo : public QList<StreamInfo *>

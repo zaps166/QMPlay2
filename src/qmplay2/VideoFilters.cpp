@@ -19,7 +19,7 @@
 #include <VideoFilters.hpp>
 
 #include <DeintFilter.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <TimeStamp.hpp>
 #include <Module.hpp>
 #include <CPU.hpp>
@@ -104,7 +104,7 @@ public:
         {
             FrameBuffer frameBuffer = internalQueue.at(0);
 
-            frameBuffer.frame.tff = (isTopFieldFirst(frameBuffer.frame) != secondFrame);
+            frameBuffer.frame.setInterlaced(isTopFieldFirst(frameBuffer.frame) != secondFrame);
             if (secondFrame)
                 frameBuffer.ts += halfDelay(frameBuffer.ts, lastTS);
 
@@ -341,7 +341,7 @@ void VideoFilters::removeLastFromInputBuffer()
     }
 }
 
-void VideoFilters::addFrame(const VideoFrame &videoFrame, double ts)
+void VideoFilters::addFrame(const Frame &videoFrame, double ts)
 {
     const VideoFilter::FrameBuffer frame(videoFrame, ts);
     if (!filters.isEmpty())
@@ -352,7 +352,7 @@ void VideoFilters::addFrame(const VideoFrame &videoFrame, double ts)
         outputNotEmpty = true;
     }
 }
-bool VideoFilters::getFrame(VideoFrame &videoFrame, TimeStamp &ts)
+bool VideoFilters::getFrame(Frame &videoFrame, TimeStamp &ts)
 {
     bool locked, ret;
     if ((locked = !filters.isEmpty()))

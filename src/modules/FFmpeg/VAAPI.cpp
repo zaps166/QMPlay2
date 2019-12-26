@@ -20,7 +20,7 @@
 #include <FFCommon.hpp>
 #include <Functions.hpp>
 #include <ImgScaler.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <QMPlay2Core.hpp>
 
 extern "C"
@@ -323,14 +323,14 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
     }
 }
 
-bool VAAPI::filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field)
+bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
 {
     const bool doDeint = (field != 0 && m_vppDeintBuff != VA_INVALID_ID);
 
     if (use_vpp && !doDeint)
         clearVPPFrames();
 
-    const VASurfaceID currId = frame.surfaceId;
+    const VASurfaceID currId = frame.hwSurface();
 
     if (!use_vpp || !doDeint)
     {
@@ -439,10 +439,10 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
     }
     return nullptr;
 }
-bool VAAPI::getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
 {
     VAImage image;
-    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.surfaceId);
+    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwSurface());
     if (vaData)
     {
         const void *data[2] = {

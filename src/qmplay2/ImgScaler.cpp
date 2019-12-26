@@ -18,7 +18,7 @@
 
 #include <ImgScaler.hpp>
 
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 extern "C"
 {
@@ -30,15 +30,15 @@ ImgScaler::ImgScaler() :
     m_srcH(0), m_dstLinesize(0)
 {}
 
-bool ImgScaler::create(const VideoFrame &videoFrame, int newWdst, int newHdst, bool isNV12)
+bool ImgScaler::create(const Frame &videoFrame, int newWdst, int newHdst, bool isNV12)
 {
-    m_srcH = videoFrame.size.height;
+    m_srcH = videoFrame.height();
     m_dstLinesize = newWdst << 2;
     m_swsCtx = sws_getCachedContext(
         m_swsCtx,
-        videoFrame.size.width,
+        videoFrame.width(),
         m_srcH,
-        isNV12 ? AV_PIX_FMT_NV12 : (AVPixelFormat)QMPlay2PixelFormatConvert::toFFmpeg(videoFrame.getFormat()),
+        isNV12 ? AV_PIX_FMT_NV12 : videoFrame.pixelFormat(),
         newWdst,
         newHdst,
         AV_PIX_FMT_RGB32,
@@ -49,14 +49,14 @@ bool ImgScaler::create(const VideoFrame &videoFrame, int newWdst, int newHdst, b
     );
     return (bool)m_swsCtx;
 }
-void ImgScaler::scale(const VideoFrame &src, void *dst)
+void ImgScaler::scale(const Frame &src, void *dst)
 {
     const quint8 *srcData[3] = {
-        src.buffer[0].constData(),
-        src.buffer[1].constData(),
-        src.buffer[2].constData() //Ignored for NV12
+        src.constData(0),
+        src.constData(1),
+        src.constData(2), // Ignored for NV12
     };
-    sws_scale(m_swsCtx, srcData, src.linesize, 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
+    sws_scale(m_swsCtx, srcData, src.linesize(), 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
 }
 void ImgScaler::scale(const void *src[], const int srcLinesize[], void *dst)
 {

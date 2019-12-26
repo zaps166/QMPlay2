@@ -322,19 +322,19 @@ public:
         }
     }
 
-    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const Frame &videoFrame, Field field) override
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
 
-        if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.surfaceId))
+        if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.hwSurface()))
             return MapNotReady;
 
         CUVIDPROCPARAMS vidProcParams;
         memset(&vidProcParams, 0, sizeof vidProcParams);
 
-        if (m_lastId != videoFrame.surfaceId)
-            m_tff = videoFrame.tff;
-        m_lastId = videoFrame.surfaceId;
+        if (m_lastId != videoFrame.hwSurface())
+            m_tff = videoFrame.isTopFieldFirst();
+        m_lastId = videoFrame.hwSurface();
 
         vidProcParams.top_field_first = m_tff;
         switch (field)
@@ -353,7 +353,7 @@ public:
         quintptr mappedFrame = 0;
         unsigned pitch = 0;
 
-        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
+        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
             return MapError;
 
         if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
@@ -366,7 +366,7 @@ public:
             cpy.dstMemoryType = CU_MEMORYTYPE_ARRAY;
             cpy.srcDevice = mappedFrame;
             cpy.srcPitch = pitch;
-            cpy.WidthInBytes = videoFrame.size.width;
+            cpy.WidthInBytes = videoFrame.width();
             for (int p = 0; p < 2; ++p)
             {
                 CUarray array = nullptr;
@@ -378,7 +378,7 @@ public:
 
                 cpy.srcY = p ? m_codedHeight : 0;
                 cpy.dstArray = array;
-                cpy.Height = videoFrame.size.getHeight(p);
+                cpy.Height = videoFrame.height(p);
 
                 if (cu::memcpy2D(&cpy) != CUDA_SUCCESS)
                 {
@@ -400,7 +400,7 @@ public:
         return m_textures[plane];
     }
 
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
 
@@ -409,14 +409,14 @@ public:
 
         CUVIDPROCPARAMS vidProcParams;
         memset(&vidProcParams, 0, sizeof vidProcParams);
-        vidProcParams.progressive_frame = !videoFrame.interlaced;
+        vidProcParams.progressive_frame = !videoFrame.isInterlaced();
         vidProcParams.top_field_first = m_tff;
 
-        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.surfaceId - 1, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
+        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
             return false;
 
-        const size_t size = pitch * videoFrame.size.height;
-        const size_t halfSize = pitch * ((videoFrame.size.height + 1) >> 1);
+        const size_t size = pitch * videoFrame.height();
+        const size_t halfSize = pitch * ((videoFrame.height() + 1) >> 1);
 
         const qint32 linesize[2] = {
             (qint32)pitch,
@@ -508,13 +508,12 @@ CuvidDec::CuvidDec(Module &module) :
     m_writer(nullptr),
     m_cuvidHWAccel(nullptr),
     m_limited(false),
-    m_colorSpace(QMPlay2ColorSpace::Unknown),
+    m_colorSpace(AVCOL_SPC_UNSPECIFIED),
     m_lastCuvidTS(0),
     m_deintMethod(cudaVideoDeinterlaceMode_Weave),
     m_copyVideo(Qt::PartiallyChecked),
     m_forceFlush(false),
     m_tsWorkaround(false),
-    m_nv12Chroma(nullptr),
     m_bsfCtx(nullptr),
     m_swsCtx(nullptr),
     m_pkt(nullptr),
@@ -525,7 +524,6 @@ CuvidDec::CuvidDec(Module &module) :
     m_hasCriticalError(false),
     m_skipFrames(false)
 {
-    memset(m_frameBuffer, 0, sizeof m_frameBuffer);
     SetModule(module);
 }
 CuvidDec::~CuvidDec()
@@ -541,9 +539,6 @@ CuvidDec::~CuvidDec()
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
     av_packet_free(&m_pkt);
-    av_buffer_unref(&m_nv12Chroma);
-    for (int p = 0; p < 3; ++p)
-        av_buffer_unref(&m_frameBuffer[p]);
 }
 
 bool CuvidDec::set()
@@ -659,7 +654,7 @@ VideoWriter *CuvidDec::HWAccel() const
     return m_writer;
 }
 
-int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
+int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
 {
     Q_UNUSED(newPixFmt)
 
@@ -755,12 +750,22 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
 
         if (~hurry_up)
         {
-            const VideoFrameSize frameSize(m_width, m_height);
+            auto createFrame = [&] {
+                decoded = Frame::createEmpty(
+                    m_width,
+                    m_height,
+                    m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P,
+                    !dispInfo.progressive_frame,
+                    dispInfo.top_field_first,
+                    m_colorSpace,
+                    m_limited
+                );
+            };
             if (m_cuvidHWAccel)
             {
-                const quintptr surfaceId = dispInfo.picture_index + 1;
-                m_cuvidHWAccel->setAvailableSurface(surfaceId);
-                decoded = VideoFrame(frameSize, surfaceId, (bool)!dispInfo.progressive_frame, (bool)dispInfo.top_field_first);
+                m_cuvidHWAccel->setAvailableSurface(dispInfo.picture_index);
+                createFrame();
+                decoded.setCustomHwSurface(dispInfo.picture_index);
             }
             else
             {
@@ -777,63 +782,53 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray
                     const int size = pitch * m_height;
                     const int halfSize = pitch * ((m_height + 1) >> 1);
 
-                    if (!m_nv12Chroma || m_nv12Chroma->size != size)
-                    {
-                        av_buffer_unref(&m_nv12Chroma);
-                        m_nv12Chroma = av_buffer_alloc(size);
-                    }
+                    auto nv12Luma = new quint8[size];
+                    auto nv12Chroma = new quint8[halfSize];
 
-                    for (int p = 0; p < 3; ++p)
-                    {
-                        const int planeSize = p ? halfSize : size;
-                        if (!m_frameBuffer[p] || m_frameBuffer[p]->size != planeSize)
-                        {
-                            av_buffer_unref(&m_frameBuffer[p]);
-                            m_frameBuffer[p] = av_buffer_alloc(planeSize);
-                        }
-                    }
-
-                    bool copied = (cu::memcpyDtoH(m_frameBuffer[0]->data, mappedFrame, size) == CUDA_SUCCESS);
+                    bool copied = (cu::memcpyDtoH(nv12Luma, mappedFrame, size) == CUDA_SUCCESS);
                     if (copied)
-                        copied &= (cu::memcpyDtoH(m_nv12Chroma->data, mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
+                        copied &= (cu::memcpyDtoH(nv12Chroma, mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
 
                     cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame);
 
                     if (copied)
                     {
-                        const uint8_t *srcData[2] =
-                        {
-                            m_frameBuffer[0]->data,
-                            m_nv12Chroma->data
+                        const uint8_t *srcData[2] = {
+                            nv12Luma,
+                            nv12Chroma,
                         };
-                        const qint32 srcLinesize[2] =
-                        {
+                        const qint32 srcLinesize[2] = {
                             (int)pitch,
-                            (int)pitch
+                            (int)pitch,
                         };
 
-                        uint8_t *dtsData[3] =
-                        {
-                            m_frameBuffer[0]->data,
-                            m_frameBuffer[1]->data,
-                            m_frameBuffer[2]->data
+                        AVBufferRef *frameBuffer[3] = {
+                            av_buffer_alloc(size),
+                            av_buffer_alloc((halfSize + 1) >> 1),
+                            av_buffer_alloc((halfSize + 1) >> 1),
                         };
-                        qint32 dstLinesize[3] =
-                        {
+                        uint8_t *dstData[3] = {
+                            frameBuffer[0]->data,
+                            frameBuffer[1]->data,
+                            frameBuffer[2]->data,
+                        };
+                        qint32 dstLinesize[3] = {
                             (qint32)pitch,
                             (qint32)(pitch >> 1),
-                            (qint32)(pitch >> 1)
+                            (qint32)(pitch >> 1),
                         };
 
                         if (m_swsCtx)
-                            sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dtsData, dstLinesize);
+                            sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dstData, dstLinesize);
 
-                        decoded = VideoFrame(frameSize, m_frameBuffer, dstLinesize, !dispInfo.progressive_frame, dispInfo.top_field_first);
+                        createFrame();
+                        decoded.setVideoData(frameBuffer, dstLinesize, true);
                     }
+
+                    delete[] nv12Luma;
+                    delete[] nv12Chroma;
                 }
             }
-            decoded.limited = m_limited;
-            decoded.colorSpace = m_colorSpace;
         }
     }
 
@@ -850,14 +845,14 @@ bool CuvidDec::hasCriticalError() const
 
 bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    if (streamInfo.type != QMPLAY2_TYPE_VIDEO)
+    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
     AVCodec *avCodec = avcodec_find_decoder_by_name(streamInfo.codec_name);
     if (!avCodec)
         return false;
 
-    const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
+    const AVPixelFormat pixFmt = streamInfo.pixelFormat();
     if (!(pixFmt == AV_PIX_FMT_YUV420P || pixFmt == AV_PIX_FMT_YUV420P10 || pixFmt == AV_PIX_FMT_YUVJ420P || avCodec->id == AV_CODEC_ID_MJPEG))
         return false;
 
@@ -930,16 +925,17 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
     QByteArray extraData;
 
     if (!bsf)
-        extraData = streamInfo.data;
+    {
+        extraData = streamInfo.getExtraData();
+    }
     else
     {
         av_bsf_alloc(bsf, &m_bsfCtx);
 
         m_bsfCtx->par_in->codec_id = avCodec->id;
-        m_bsfCtx->par_in->extradata_size = streamInfo.data.size();
-        m_bsfCtx->par_in->extradata = (uint8_t *)av_malloc(m_bsfCtx->par_in->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
-        memcpy(m_bsfCtx->par_in->extradata, streamInfo.data.constData(), m_bsfCtx->par_in->extradata_size);
-        memset(m_bsfCtx->par_in->extradata + m_bsfCtx->par_in->extradata_size, 0, AV_INPUT_BUFFER_PADDING_SIZE);
+        m_bsfCtx->par_in->extradata_size = streamInfo.extradata_size;
+        m_bsfCtx->par_in->extradata = (uint8_t *)av_mallocz(streamInfo.getExtraDataCapacity());
+        memcpy(m_bsfCtx->par_in->extradata, streamInfo.extradata, m_bsfCtx->par_in->extradata_size);
 
         if (av_bsf_init(m_bsfCtx) < 0)
             return false;
@@ -949,8 +945,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
         m_pkt = av_packet_alloc();
     }
 
-    m_width = streamInfo.W;
-    m_height = streamInfo.H;
+    m_width = streamInfo.width;
+    m_height = streamInfo.height;
     m_codedHeight = m_height;
 
     if (writer)
@@ -1015,8 +1011,8 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (m_cuvidHWAccel)
         m_cuvidHWAccel->allowDestroyCuda();
 
-    m_limited = streamInfo.limited;
-    m_colorSpace = streamInfo.colorSpace;
+    m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
+    m_colorSpace = streamInfo.color_space;
 
     return true;
 }

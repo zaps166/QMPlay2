@@ -23,7 +23,7 @@
 
 #include <HWAccelInterface.hpp>
 #include <QMPlay2Core.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Functions.hpp>
 
 #include <QOffscreenSurface>
@@ -412,14 +412,14 @@ void OpenGL2Common::paintGL()
     if (!frameIsEmpty)
     {
         const GLsizei widths[3] = {
-            videoFrame.size.width,
-            videoFrame.size.chromaWidth(),
-            videoFrame.size.chromaWidth(),
+            videoFrame.width(0),
+            videoFrame.width(1),
+            videoFrame.width(2),
         };
         const GLsizei heights[3] = {
-            videoFrame.size.height,
-            videoFrame.size.chromaHeight(),
-            videoFrame.size.chromaHeight()
+            videoFrame.height(0),
+            videoFrame.height(1),
+            videoFrame.height(2),
         };
 
         if (doReset)
@@ -447,17 +447,17 @@ void OpenGL2Common::paintGL()
             else
             {
                 /* Check linesize */
-                const qint32 halfLinesize = (videoFrame.linesize[0] >> videoFrame.size.chromaShiftW);
+                const qint32 halfLinesize = (videoFrame.linesize(0) >> videoFrame.chromaShiftW());
                 correctLinesize =
                 (
-                    (halfLinesize == videoFrame.linesize[1] && videoFrame.linesize[1] == videoFrame.linesize[2]) &&
-                    (!sphericalView ? (videoFrame.linesize[1] == halfLinesize) : (videoFrame.linesize[0] == widths[0]))
+                    (halfLinesize == videoFrame.linesize(1) && videoFrame.linesize(1) == videoFrame.linesize(2)) &&
+                    (!sphericalView ? (videoFrame.linesize(1) == halfLinesize) : (videoFrame.linesize(0) == widths[0]))
                 );
 
                 /* Prepare textures */
                 for (qint32 p = 0; p < 3; ++p)
                 {
-                    const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
+                    const GLsizei w = correctLinesize ? videoFrame.linesize(p) : widths[p];
                     const GLsizei h = heights[p];
                     if (p == 0)
                         m_textureSize = QSize(w, h);
@@ -471,7 +471,7 @@ void OpenGL2Common::paintGL()
                 }
 
                 /* Prepare texture coordinates */
-                texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize[0] == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize[0] + 1.0f));
+                texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize(0) == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize(0) + 1.0f));
 
                 if (hqScaling)
                     maybeSetMipmaps(widget()->devicePixelRatioF());
@@ -510,8 +510,8 @@ void OpenGL2Common::paintGL()
             /* Load textures */
             for (qint32 p = 0; p < 3; ++p)
             {
-                const quint8 *data = videoFrame.buffer[p].constData();
-                const GLsizei w = correctLinesize ? videoFrame.linesize[p] : widths[p];
+                const quint8 *data = videoFrame.constData(p);
+                const GLsizei w = correctLinesize ? videoFrame.linesize(p) : widths[p];
                 const GLsizei h = heights[p];
                 if (hasPbo)
                 {
@@ -530,7 +530,7 @@ void OpenGL2Common::paintGL()
                         else for (int y = 0; y < h; ++y)
                         {
                             memcpy(dst, data, w);
-                            data += videoFrame.linesize[p];
+                            data += videoFrame.linesize(p);
                             dst  += w;
                         }
                         glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
@@ -544,7 +544,7 @@ void OpenGL2Common::paintGL()
                 else for (int y = 0; y < h; ++y)
                 {
                     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
-                    data += videoFrame.linesize[p];
+                    data += videoFrame.linesize(p);
                 }
                 if (m_useMipmaps)
                     glGenerateMipmap(GL_TEXTURE_2D);
@@ -601,7 +601,7 @@ void OpenGL2Common::paintGL()
         }
         else
         {
-            const auto lumaCoeff = QMPlay2PixelFormatConvert::getLumaCoeff(m_colorSpace);
+            const auto lumaCoeff = Functions::getLumaCoeff(m_colorSpace);
             const auto mat = Functions::getYUVtoRGBmatrix(lumaCoeff.cR, lumaCoeff.cG, lumaCoeff.cB, m_limited);
             shaderProgramVideo->setUniformValue("uYUVtRGB", mat);
             shaderProgramVideo->setUniformValue("uBL", m_limited ? 16.0f / 255.0f : 0.0f);

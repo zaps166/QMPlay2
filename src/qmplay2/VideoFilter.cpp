@@ -17,7 +17,7 @@
 */
 
 #include <VideoFilter.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 void VideoFilter::clearBuffer()
 {

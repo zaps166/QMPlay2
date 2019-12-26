@@ -18,12 +18,11 @@
 
 #pragma once
 
-#include <PixelFormats.hpp>
+#include <Frame.hpp>
 #include <Writer.hpp>
 
 class HWAccelInterface;
 class QMPlay2OSD;
-class VideoFrame;
 class ImgScaler;
 
 class QMPLAY2SHAREDLIB_EXPORT VideoWriter : public Writer
@@ -34,13 +33,13 @@ public:
     VideoWriter();
     virtual ~VideoWriter();
 
-    virtual QMPlay2PixelFormats supportedPixelFormats() const;
+    virtual AVPixelFormats supportedPixelFormats() const;
 
     virtual bool hwAccelError() const; // Must be thread-safe
 
     qint64 write(const QByteArray &) override final;
 
-    virtual void writeVideo(const VideoFrame &videoFrame) = 0;
+    virtual void writeVideo(const Frame &videoFrame) = 0;
     virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;
 
     virtual void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
@@ -49,7 +48,7 @@ public:
         return m_hwAccelInterface;
     }
 
-    virtual bool hwAccelGetImg(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+    virtual bool hwAccelGetImg(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
     virtual bool open() override = 0;
 

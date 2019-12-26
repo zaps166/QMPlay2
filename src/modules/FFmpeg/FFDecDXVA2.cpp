@@ -178,7 +178,7 @@ public:
         }
     }
 
-    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const Frame &videoFrame, Field field) override
     {
         Q_UNUSED(field)
 
@@ -206,29 +206,29 @@ public:
                 m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleProgressiveFrame;
                 break;
         }
-        m_videoSample.SampleFormat.NominalRange = videoFrame.limited
+        m_videoSample.SampleFormat.NominalRange = videoFrame.isLimited()
             ? DXVA2_NominalRange_16_235
             : DXVA2_NominalRange_0_255
         ;
-        switch (videoFrame.colorSpace)
+        switch (videoFrame.colorSpace())
         {
-            case QMPlay2ColorSpace::BT709:
+            case AVCOL_SPC_BT709:
                 m_videoSample.SampleFormat.VideoTransferMatrix = DXVA2_VideoTransferMatrix_BT709;
                 break;
-            case QMPlay2ColorSpace::SMPTE240M:
+            case AVCOL_SPC_SMPTE240M:
                 m_videoSample.SampleFormat.VideoTransferMatrix = DXVA2_VideoTransferMatrix_SMPTE240M;
                 break;
             default:
                 m_videoSample.SampleFormat.VideoTransferMatrix = DXVA2_VideoTransferMatrix_BT601;
                 break;
         }
-        m_videoSample.SrcSurface = reinterpret_cast<IDirect3DSurface9 *>(videoFrame.surfaceId);
+        m_videoSample.SrcSurface = reinterpret_cast<IDirect3DSurface9 *>(videoFrame.hwSurface());
         m_videoSample.SrcRect = rect;
         m_videoSample.DstRect = rect;
 
         m_bltParams.TargetFrame = m_videoSample.Start;
         m_bltParams.TargetRect = rect;
-        m_bltParams.DestFormat.NominalRange = videoFrame.limited
+        m_bltParams.DestFormat.NominalRange = videoFrame.isLimited()
             ? DXVA2_NominalRange_0_255
             : DXVA2_NominalRange_16_235
         ;
@@ -250,11 +250,11 @@ public:
         return m_textures[m_renderTargetIdx];
     }
 
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
         D3DSURFACE_DESC desc;
         D3DLOCKED_RECT lockedRect;
-        IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.surfaceId;
+        IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.hwSurface();
         if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
         {
             const void *src[2] = {
@@ -590,7 +590,7 @@ QString FFDecDXVA2::name() const
     return "FFmpeg/DXVA2";
 }
 
-void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
+void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
 {
     D3DSURFACE_DESC desc;
     D3DLOCKED_RECT lockedRect;
@@ -626,7 +626,9 @@ void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
         m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
-        decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
+        decoded = Frame::createEmpty(frame, false);
+        decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+        decoded.setVideoData(dstBuffer, dstLinesize, false);
 
         surface->UnlockRect();
     }
@@ -634,7 +636,7 @@ void FFDecDXVA2::downloadVideoFrame(VideoFrame &decoded)
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    const AVPixelFormat pixFmt = av_get_pix_fmt(streamInfo.format);
+    const AVPixelFormat pixFmt = streamInfo.pixelFormat();
     if (pixFmt != AV_PIX_FMT_YUV420P && (pixFmt != AV_PIX_FMT_YUV420P10 || m_copyVideo))
         return false;
 

@@ -46,7 +46,7 @@ public:
     void videoEqSet();
     void setFlip();
 
-    void draw(const VideoFrame &videoFrame);
+    void draw(const Frame &videoFrame);
 
     void resizeEvent(QResizeEvent *) override;
 
@@ -103,7 +103,7 @@ private:
     bool readyWrite() const override;
 
     bool processParams(bool *paramsCorrected) override;
-    void writeVideo(const VideoFrame &videoFrame) override;
+    void writeVideo(const Frame &videoFrame) override;
     void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
     void pause() override;

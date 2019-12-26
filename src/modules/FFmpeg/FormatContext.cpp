@@ -215,15 +215,6 @@ FormatContext::~FormatContext()
 {
     if (formatCtx)
     {
-        for (AVStream *stream : asConst(streams))
-        {
-            if (stream->codecpar && !streamNotValid(stream))
-            {
-                //Data is allocated in QByteArray, so FFmpeg mustn't free it!
-                stream->codecpar->extradata = nullptr;
-                stream->codecpar->extradata_size = 0;
-            }
-        }
         avformat_close_input(&formatCtx);
         av_packet_free(&packet);
     }
@@ -267,8 +258,8 @@ QList<ProgramInfo> FormatContext::getPrograms() const
                     const int idx = index_map[ff_idx];
                     if (idx > -1)
                     {
-                        const QMPlay2MediaType type = (QMPlay2MediaType)streams[ff_idx]->codecpar->codec_type;
-                        if (type != QMPLAY2_TYPE_UNKNOWN)
+                        const AVMediaType type = streams[ff_idx]->codecpar->codec_type;
+                        if (type != AVMEDIA_TYPE_UNKNOWN)
                             programInfo.streams += {idx, type};
                     }
                 }
@@ -802,7 +793,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
     isOneStreamOgg = (name() == "ogg" && streamsInfo.count() == 1); //Workaround for OGG network streams
 
-    if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->type == QMPLAY2_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
+    if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->codec_type == AVMEDIA_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
         isStreamed = false; //Allow subtitles streams to be non-streamed if size is known
 
     formatCtx->event_flags = 0;
@@ -833,13 +824,10 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
     if (streamNotValid(stream))
         return nullptr;
 
-    StreamInfo *streamInfo = new StreamInfo;
-
-    if (const AVCodec *codec = avcodec_find_decoder(stream->codecpar->codec_id))
-        streamInfo->codec_name = codec->name;
+    StreamInfo *streamInfo = new StreamInfo(stream->codecpar);
 
     streamInfo->must_decode = true;
-    if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(stream->codecpar->codec_id))
+    if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(streamInfo->codec_id))
     {
         if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
             streamInfo->must_decode = false;
@@ -847,29 +835,15 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         if (streamInfo->codec_name.isEmpty())
             streamInfo->codec_name = codecDescr->name;
     }
-    else if (stream->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
+    else if (streamInfo->codec_type == AVMEDIA_TYPE_SUBTITLE)
     {
         streamInfo->must_decode = false;
     }
 
-    streamInfo->bitrate = stream->codecpar->bit_rate;
-    streamInfo->bpcs = stream->codecpar->bits_per_coded_sample;
-    streamInfo->codec_tag = stream->codecpar->codec_tag;
     streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
-    streamInfo->time_base.num = stream->time_base.num;
-    streamInfo->time_base.den = stream->time_base.den;
-    streamInfo->type = (QMPlay2MediaType)stream->codecpar->codec_type; //Enumy są takie same
+    streamInfo->time_base = stream->time_base;
 
-    if (stream->codecpar->extradata_size)
-    {
-        streamInfo->data.reserve(stream->codecpar->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE);
-        streamInfo->data.resize(stream->codecpar->extradata_size);
-        memcpy(streamInfo->data.data(), stream->codecpar->extradata, streamInfo->data.capacity());
-        av_free(stream->codecpar->extradata);
-        stream->codecpar->extradata = (quint8 *)streamInfo->data.data();
-    }
-
-    if (streamInfo->type != QMPLAY2_TYPE_ATTACHMENT)
+    if (streamInfo->codec_type != AVMEDIA_TYPE_ATTACHMENT)
     {
         QString value;
         if (streamsInfo.count() > 1)
@@ -889,25 +863,16 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), value};
     }
 
-    switch (streamInfo->type)
+    switch (streamInfo->codec_type)
     {
-        case QMPLAY2_TYPE_AUDIO:
-            streamInfo->format = av_get_sample_fmt_name((AVSampleFormat)stream->codecpar->format);
-            streamInfo->channels = stream->codecpar->channels;
-            streamInfo->sample_rate = stream->codecpar->sample_rate;
-            streamInfo->block_align = stream->codecpar->block_align;
-            break;
-        case QMPLAY2_TYPE_VIDEO:
+        case AVMEDIA_TYPE_VIDEO:
         {
-            streamInfo->format = av_get_pix_fmt_name((AVPixelFormat)stream->codecpar->format);
             if (stream->sample_aspect_ratio.num)
-                streamInfo->sample_aspect_ratio = av_q2d(stream->sample_aspect_ratio);
+                streamInfo->sample_aspect_ratio = stream->sample_aspect_ratio;
             else if (stream->codecpar->sample_aspect_ratio.num)
-                streamInfo->sample_aspect_ratio = av_q2d(stream->codecpar->sample_aspect_ratio);
-            streamInfo->W = stream->codecpar->width;
-            streamInfo->H = stream->codecpar->height;
+                streamInfo->sample_aspect_ratio = stream->codecpar->sample_aspect_ratio;
             if (!stillImage)
-                streamInfo->FPS = av_q2d(stream->r_frame_rate);
+                streamInfo->fps = stream->r_frame_rate;
 
             bool ok = false;
             const double rotation = getTag(stream->metadata, "rotate", false).toDouble(&ok);
@@ -919,14 +884,12 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
                 streamInfo->spherical = (((AVSphericalMapping *)sideData)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
             }
 
-            streamInfo->limited = (stream->codecpar->color_range != AVCOL_RANGE_JPEG);
-            streamInfo->colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(stream->codecpar->color_space, stream->codecpar->height);
-
             break;
         }
-        case QMPLAY2_TYPE_ATTACHMENT:
+        case AVMEDIA_TYPE_ATTACHMENT:
+        {
             streamInfo->title = getTag(stream->metadata, "filename", false);
-            switch (stream->codecpar->codec_id)
+            switch (streamInfo->codec_id)
             {
                 case AV_CODEC_ID_TTF:
                     streamInfo->codec_name = "TTF";
@@ -938,8 +901,11 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
                     break;
             }
             break;
+        }
         default:
+        {
             break;
+        }
     }
 
     return streamInfo;

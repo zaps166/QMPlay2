@@ -23,7 +23,7 @@
 /* YUV planar to RGB32 */
 
 struct SwsContext;
-class VideoFrame;
+class Frame;
 
 class QMPLAY2SHAREDLIB_EXPORT ImgScaler
 {
@@ -34,8 +34,8 @@ public:
         destroy();
     }
 
-    bool create(const VideoFrame &videoFrame, int newWdst, int newHdst, bool isNV12 = false);
-    void scale(const VideoFrame &videoFrame, void *dst = nullptr);
+    bool create(const Frame &videoFrame, int newWdst, int newHdst, bool isNV12 = false);
+    void scale(const Frame &videoFrame, void *dst = nullptr);
     void scale(const void *src[], const int srcLinesize[], void *dst);
     void destroy();
 private:

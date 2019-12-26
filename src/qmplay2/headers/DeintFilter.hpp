@@ -19,7 +19,7 @@
 #pragma once
 
 #include <VideoFilter.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT DeintFilter : public VideoFilter
 {
@@ -33,9 +33,9 @@ public:
 protected:
     void addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize = true);
 
-    inline bool isTopFieldFirst(const VideoFrame &videoFrame) const
+    inline bool isTopFieldFirst(const Frame &videoFrame) const
     {
-        return ((deintFlags & AutoParity) && videoFrame.interlaced) ? videoFrame.tff : (deintFlags & TopFieldFirst);
+        return ((deintFlags & AutoParity) && videoFrame.isInterlaced()) ? videoFrame.isTopFieldFirst() : (deintFlags & TopFieldFirst);
     }
 
     quint8 deintFlags;

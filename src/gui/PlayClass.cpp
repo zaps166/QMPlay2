@@ -25,7 +25,7 @@
 #include <LibASS.hpp>
 #include <Main.hpp>
 
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
 #include <SubsDec.hpp>
@@ -332,19 +332,19 @@ void PlayClass::chStream(const QString &s)
             const QStringList splitted = streamPair.split(':');
             if (splitted.count() != 2)
                 return;
-            const QMPlay2MediaType type = (QMPlay2MediaType)splitted[0].toInt();
+            const AVMediaType type = (AVMediaType)splitted[0].toInt();
             const int stream = splitted[1].toInt();
             switch (type)
             {
-                case QMPLAY2_TYPE_VIDEO:
+                case AVMEDIA_TYPE_VIDEO:
                     if (chosenVideoStream == -1)
                         chosenVideoStream = stream;
                     break;
-                case QMPLAY2_TYPE_AUDIO:
+                case AVMEDIA_TYPE_AUDIO:
                     if (chosenAudioStream == -1)
                         chosenAudioStream = stream;
                     break;
-                case QMPLAY2_TYPE_SUBTITLE:
+                case AVMEDIA_TYPE_SUBTITLE:
                     if (chosenSubtitlesStream == -1)
                         chosenSubtitlesStream = stream;
                     break;
@@ -476,12 +476,12 @@ double PlayClass::getARatio()
     if (aRatioName == "auto")
         return demuxThr->demuxer->streamsInfo().at(videoStream)->getAspectRatio();
     if (aRatioName == "sizeDep")
-        return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->W / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->H;
+        return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->width / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->height;
     return aRatioName.toDouble();
 }
 inline double PlayClass::getSAR()
 {
-    return demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio;
+    return demuxThr->demuxer->streamsInfo().at(videoStream)->getSampleAspectRatio();
 }
 
 void PlayClass::flushAssEvents()
@@ -1075,8 +1075,8 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
     if (hasVideoStream())
     {
         StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
-        streamInfo->W = w;
-        streamInfo->H = h;
+        streamInfo->width = w;
+        streamInfo->height = h;
         const double aspect_ratio = getARatio();
         if (ass)
             ass->setARatio(aspect_ratio);
@@ -1095,7 +1095,7 @@ void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmi
 {
     if (hasVideoStream())
     {
-        demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio = sar;
+        demuxThr->demuxer->streamsInfo().at(videoStream)->setSampleAspectRatio(sar);
         const double aspect_ratio = getARatio();
         if (ass)
             ass->setARatio(aspect_ratio);
@@ -1111,7 +1111,7 @@ void PlayClass::pixelFormatUpdated(const QByteArray &pixFmt)
 {
     if (hasVideoStream())
     {
-        demuxThr->demuxer->streamsInfo().at(videoStream)->format = pixFmt;
+        demuxThr->demuxer->streamsInfo().at(videoStream)->setFormat(pixFmt);
         demuxThr->emitInfo();
     }
 }
@@ -1234,7 +1234,7 @@ void PlayClass::timTerminateFinished()
     emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenStream, int &stream, const QMPlay2MediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
+static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenStream, int &stream, const AVMediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
 {
     QStringList decoders = QMPlay2Core.getModules("decoders", 7);
     const bool decodersListEmpty = decoders.isEmpty();
@@ -1244,8 +1244,8 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenS
         return nullptr;
 
     Decoder *dec = nullptr;
-    const bool subtitles = (type == QMPLAY2_TYPE_SUBTITLE);
-    if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->type == type)
+    const bool subtitles = (type == AVMEDIA_TYPE_SUBTITLE);
+    if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->codec_type == type)
     {
         if (streams[chosenStream]->must_decode || !subtitles)
             dec = Decoder::create(*streams[chosenStream], writer, decoders, modNameOutput);
@@ -1257,7 +1257,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenS
         int defaultStream = -1, chosenLangStream = -1;
         for (int i = 0; i < streams.count(); ++i)
         {
-            if (streams[i]->type == type)
+            if (streams[i]->codec_type == type)
             {
                 if (defaultStream < 0 && streams[i]->is_default)
                     defaultStream = i;
@@ -1280,7 +1280,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenS
         for (int i = 0; i < streams.count(); ++i)
         {
             StreamInfo &streamInfo = *streams[i];
-            if (streamInfo.type == type && (defaultStream == -1 || i == defaultStream))
+            if (streamInfo.codec_type == type && (defaultStream == -1 || i == defaultStream))
             {
                 if (streamInfo.must_decode || !subtitles)
                     dec = Decoder::create(streamInfo, writer, decoders, modNameOutput);
@@ -1304,7 +1304,7 @@ void PlayClass::load(Demuxer *demuxer)
         vPackets.clear();
         stopVDec(); //lock
         if (videoEnabled)
-            dec = loadStream(streams, chosenVideoStream, videoStream, QMPLAY2_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
+            dec = loadStream(streams, chosenVideoStream, videoStream, AVMEDIA_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
         else
             dec = nullptr;
         if (dec)
@@ -1342,7 +1342,7 @@ void PlayClass::load(Demuxer *demuxer)
                 if (paramsForced)
                     emitSetVideoCheckState();
 
-                vThr->setFrameSize(streams[videoStream]->W, streams[videoStream]->H);
+                vThr->setFrameSize(streams[videoStream]->width, streams[videoStream]->height);
                 vThr->setARatio(aspect_ratio, getSAR());
                 vThr->setVideoAdjustment();
                 vThr->setDec(dec);
@@ -1373,7 +1373,7 @@ void PlayClass::load(Demuxer *demuxer)
                     if (!vThr->getHWAccelWriter())
                         dec->setSupportedPixelFormats(vThr->getSupportedPixelFormats());
 
-                    fps = streams[videoStream]->FPS;
+                    fps = streams[videoStream]->getFPS();
                     ass = new LibASS(QMPlay2Core.getSettings());
                     ass->setWindowSize(videoWinW, videoWinH);
                     ass->setFontScale(subtitlesScale);
@@ -1420,7 +1420,7 @@ void PlayClass::load(Demuxer *demuxer)
         aPackets.clear();
         stopADec(); //lock
         if (audioEnabled)
-            dec = loadStream(streams, chosenAudioStream, audioStream, QMPLAY2_TYPE_AUDIO, chosenAudioLang);
+            dec = loadStream(streams, chosenAudioStream, audioStream, AVMEDIA_TYPE_AUDIO, chosenAudioLang);
         else
             dec = nullptr;
         if (dec)
@@ -1479,7 +1479,7 @@ void PlayClass::load(Demuxer *demuxer)
             else
             {
                 if (subtitlesEnabled)
-                    dec = loadStream(streams, chosenSubtitlesStream, subtitlesStream, QMPLAY2_TYPE_SUBTITLE, chosenSubtitlesLang);
+                    dec = loadStream(streams, chosenSubtitlesStream, subtitlesStream, AVMEDIA_TYPE_SUBTITLE, chosenSubtitlesLang);
                 if (!subtitlesEnabled || (!dec && subtitlesStream > -1 && streams[subtitlesStream]->must_decode))
                 {
                     subtitlesStream = -1;
@@ -1492,15 +1492,17 @@ void PlayClass::load(Demuxer *demuxer)
                     subsMutex.lock();
                     if (dec)
                         vThr->setSubtitlesDecoder(dec);
-                    QByteArray assHeader = streams[subtitlesStream]->data;
+                    QByteArray assHeader = streams[subtitlesStream]->getExtraData();
                     if (!assHeader.isEmpty() && (streams[subtitlesStream]->codec_name == "ssa" || streams[subtitlesStream]->codec_name == "ass"))
                     {
                         for (int i = 0; i < streams.count(); ++i)
-                            if (streams[i]->type == QMPLAY2_TYPE_ATTACHMENT && (streams[i]->codec_name == "TTF" || streams[i]->codec_name == "OTF") && streams[i]->data.size())
-                                ass->addFont(streams[i]->title, streams[i]->data);
+                            if (streams[i]->codec_type == AVMEDIA_TYPE_ATTACHMENT && (streams[i]->codec_name == "TTF" || streams[i]->codec_name == "OTF") && streams[i]->extradata_size > 0)
+                                ass->addFont(streams[i]->title, streams[i]->getExtraData());
                     }
                     else
+                    {
                         assHeader.clear();
+                    }
                     ass->initASS(assHeader);
                     if (reload)
                     {

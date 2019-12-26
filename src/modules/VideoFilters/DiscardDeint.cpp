@@ -31,14 +31,14 @@ bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
     if (!internalQueue.isEmpty())
     {
         FrameBuffer dequeued = internalQueue.dequeue();
-        VideoFrame &videoFrame = dequeued.frame;
+        Frame &videoFrame = dequeued.frame;
         const bool TFF = isTopFieldFirst(videoFrame);
         videoFrame.setNoInterlaced();
         for (int p = 0; p < 3; ++p)
         {
-            const int linesize = videoFrame.linesize[p];
-            quint8 *data = videoFrame.buffer[p].data();
-            const int lines = (videoFrame.size.getHeight(p) >> 1) - 1;
+            const int linesize = videoFrame.linesize(p);
+            quint8 *data = videoFrame.data(p);
+            const int lines = (videoFrame.height(p) >> 1) - 1;
             if (!TFF)
             {
                 memcpy(data, data + linesize, linesize);

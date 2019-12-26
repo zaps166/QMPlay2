@@ -21,7 +21,7 @@
 #include <QMPlay2Extensions.hpp>
 #include <DeintFilter.hpp>
 #include <QMPlay2OSD.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Version.hpp>
 #include <Reader.hpp>
 
@@ -537,16 +537,16 @@ int Functions::scaleEQValue(int val, int min, int max)
     return (val + 100) * ((abs(min) + abs(max))) / 200 - abs(min);
 }
 
-int Functions::getField(const VideoFrame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField)
+int Functions::getField(const Frame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField)
 {
     if (deinterlace)
     {
         const quint8 deintFlags = deinterlace >> 1;
-        if (videoFrame.interlaced || !(deintFlags & DeintFilter::AutoDeinterlace))
+        if (videoFrame.isInterlaced() || !(deintFlags & DeintFilter::AutoDeinterlace))
         {
             bool topFieldFirst;
-            if ((deintFlags & DeintFilter::DoubleFramerate) || ((deintFlags & DeintFilter::AutoParity) && videoFrame.interlaced))
-                topFieldFirst = videoFrame.tff;
+            if ((deintFlags & DeintFilter::DoubleFramerate) || ((deintFlags & DeintFilter::AutoParity) && videoFrame.isInterlaced()))
+                topFieldFirst = videoFrame.isTopFieldFirst();
             else
                 topFieldFirst = deintFlags & DeintFilter::TopFieldFirst;
             return topFieldFirst ? topField : bottomField;
@@ -941,6 +941,24 @@ QByteArray Functions::textWithFallbackEncoding(const QByteArray &data)
     return data;
 }
 
+Functions::LumaCoefficients Functions::getLumaCoeff(AVColorSpace colorSpace)
+{
+    switch (colorSpace)
+    {
+        case AVCOL_SPC_BT709:
+            return {0.2126f, 0.7152f, 0.0722f};
+        case AVCOL_SPC_SMPTE170M:
+            return {0.299f, 0.587f, 0.114f};
+        case AVCOL_SPC_SMPTE240M:
+            return {0.212f, 0.701f, 0.087f};
+        case AVCOL_SPC_BT2020_CL:
+        case AVCOL_SPC_BT2020_NCL:
+            return {0.2627f, 0.6780f, 0.0593f};
+        default:
+            break;
+    }
+    return {0.299f, 0.587f, 0.114f}; // AVCOL_SPC_BT470BG
+}
 QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited)
 {
     const float bscale = 0.5f / (cb - 1.0f);

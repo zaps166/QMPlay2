@@ -74,22 +74,8 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
     if (codec)
     {
         codec_ctx = avcodec_alloc_context3(codec);
-        codec_ctx->codec_id = codec->id;
-        codec_ctx->codec_tag = streamInfo.codec_tag;
-        codec_ctx->bit_rate = streamInfo.bitrate;
-        codec_ctx->channels = streamInfo.channels;
-        codec_ctx->sample_rate = streamInfo.sample_rate;
-        codec_ctx->block_align = streamInfo.block_align;
-        codec_ctx->bits_per_coded_sample = streamInfo.bpcs;
-        codec_ctx->pix_fmt = av_get_pix_fmt(streamInfo.format);
-        codec_ctx->coded_width = codec_ctx->width = streamInfo.W;
-        codec_ctx->coded_height = codec_ctx->height = streamInfo.H;
+        avcodec_parameters_to_context(codec_ctx, &streamInfo);
 //        codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR | FF_DEBUG_VIS_MV_B_BACK;
-        if (!streamInfo.data.isEmpty())
-        {
-            codec_ctx->extradata = (uint8_t *)streamInfo.data.data();
-            codec_ctx->extradata_size = streamInfo.data.size();
-        }
     }
     return codec;
 }

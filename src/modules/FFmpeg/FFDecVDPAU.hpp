@@ -34,8 +34,8 @@ public:
 
     QString name() const override;
 
-    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
-    void downloadVideoFrame(VideoFrame &decoded) override;
+    int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+    void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &, VideoWriter *) override;
 
@@ -46,8 +46,6 @@ private:
     std::shared_ptr<VDPAU> m_vdpau;
 
     bool m_copyVideo = true;
-
-    bool m_limitedRange = true;
 
     int m_deintMethod = 0;
     bool m_nrEnabled = false;

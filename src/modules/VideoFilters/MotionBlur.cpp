@@ -18,7 +18,9 @@
 
 #include <MotionBlur.hpp>
 #include <VideoFilters.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
+
+#include <algorithm>
 
 MotionBlur::MotionBlur()
 {
@@ -34,25 +36,26 @@ bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
         FrameBuffer dequeued      = internalQueue.dequeue();
         const FrameBuffer &lookup = internalQueue.at(0);
 
-        const VideoFrame &videoFrame1 = dequeued.frame;
-        VideoFrame videoFrame2(videoFrame1.size, videoFrame1.linesize);
-        const VideoFrame &videoFrame3 = lookup.frame;
-        videoFrame2.limited = videoFrame1.limited;
-        videoFrame2.colorSpace = videoFrame1.colorSpace;
+        const Frame &videoFrame1 = dequeued.frame;
+        Frame videoFrame2 = Frame::createEmpty(videoFrame1);
+        const Frame &videoFrame3 = lookup.frame;
 
         for (int p = 0; p < 3; ++p)
         {
-            const quint8 *src1 = videoFrame1.buffer[p].data();
-            const quint8 *src2 = videoFrame3.buffer[p].data();
-            quint8 *dest = videoFrame2.buffer[p].data();
-            const int linesize = videoFrame1.linesize[p];
-            const int h = videoFrame1.size.getHeight(p);
+            const quint8 *src1 = videoFrame1.constData(p);
+            const quint8 *src2 = videoFrame3.constData(p);
+            quint8 *dest = videoFrame2.data(p);
+            const int linesizeSrc1 = videoFrame1.linesize(p);
+            const int linesizeDest = videoFrame2.linesize(p);
+            const int linesizeSrc2 = videoFrame3.linesize(p);
+            const int minLinesize = std::min({linesizeSrc1, linesizeDest, linesizeSrc2});
+            const int h = videoFrame1.height(p);
             for (int i = 0; i < h; ++i)
             {
-                VideoFilters::averageTwoLines(dest, src1, src2, linesize);
-                dest += linesize;
-                src1 += linesize;
-                src2 += linesize;
+                VideoFilters::averageTwoLines(dest, src1, src2, minLinesize);
+                dest += linesizeDest;
+                src1 += linesizeSrc1;
+                src2 += linesizeSrc2;
             }
         }
 

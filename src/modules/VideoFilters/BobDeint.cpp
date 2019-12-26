@@ -19,6 +19,8 @@
 #include <BobDeint.hpp>
 #include <VideoFilters.hpp>
 
+#include <algorithm>
+
 BobDeint::BobDeint()
 {
     addParam("W");
@@ -39,46 +41,47 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
     {
         const FrameBuffer &sourceBuffer = internalQueue.at(0);
 
-        const VideoFrame &sourceFrame = sourceBuffer.frame;
-        VideoFrame destFrame(sourceFrame.size, sourceFrame.linesize);
-        destFrame.limited = sourceFrame.limited;
-        destFrame.colorSpace = sourceFrame.colorSpace;
+        const Frame &sourceFrame = sourceBuffer.frame;
+        Frame destFrame = Frame::createEmpty(sourceFrame);
+        destFrame.setNoInterlaced();
 
         const bool parity = (isTopFieldFirst(sourceFrame) == secondFrame);
 
         for (int p = 0; p < 3; ++p)
         {
-            const int linesize = sourceFrame.linesize[p];
-            const quint8 *src = sourceFrame.buffer[p].data();
-            quint8 *dst = destFrame.buffer[p].data();
+            const int linesizeSrc = sourceFrame.linesize(p);
+            const int linesizeDst = destFrame.linesize(p);
+            const int minLinesize = std::min(linesizeSrc, linesizeDst);
+            const quint8 *src = sourceFrame.constData(p);
+            quint8 *dst = destFrame.data(p);
 
-            const int h = sourceFrame.size.getHeight(p);
+            const int h = sourceFrame.height(p);
             const int halfH = (h >> 1) - 1;
 
             if (parity)
             {
-                src += linesize;
-                memcpy(dst, src, linesize); //Duplicate first line (simple deshake)
-                dst += linesize;
+                src += linesizeSrc;
+                memcpy(dst, src, minLinesize); //Duplicate first line (simple deshake)
+                dst += linesizeDst;
             }
             for (int y = 0; y < halfH; ++y)
             {
-                memcpy(dst, src, linesize);
-                dst += linesize;
+                memcpy(dst, src, minLinesize);
+                dst += linesizeDst;
 
-                VideoFilters::averageTwoLines(dst, src, src + (linesize << 1), linesize);
-                dst += linesize;
+                VideoFilters::averageTwoLines(dst, src, src + (linesizeSrc << 1), minLinesize);
+                dst += linesizeDst;
 
-                src += linesize << 1;
+                src += linesizeSrc << 1;
             }
-            memcpy(dst, src, linesize); //Copy last line
+            memcpy(dst, src, minLinesize); //Copy last line
             if (!parity)
-                memcpy(dst + linesize, dst, linesize);
+                memcpy(dst + linesizeDst, dst, linesizeDst);
             if (h & 1) //Duplicate last line for odd height
             {
                 if (!parity)
-                    dst += linesize;
-                memcpy(dst + linesize, dst, linesize);
+                    dst += linesizeDst;
+                memcpy(dst + linesizeDst, dst, linesizeDst);
             }
         }
 

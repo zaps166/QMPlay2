@@ -24,8 +24,8 @@
 
 #include <functional>
 
-class VideoFrame;
 class ImgScaler;
+class Frame;
 
 class HWAccelInterface
 {
@@ -68,10 +68,10 @@ public:
     virtual bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) = 0;
     virtual void clear() = 0;
 
-    virtual MapResult mapFrame(const VideoFrame &videoFrame, Field field) = 0;
+    virtual MapResult mapFrame(const Frame &videoFrame, Field field) = 0;
     virtual quint32 getTexture(int plane) = 0;
 
-    virtual bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = nullptr) = 0;
+    virtual bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = nullptr) = 0;
 
     virtual void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
     {

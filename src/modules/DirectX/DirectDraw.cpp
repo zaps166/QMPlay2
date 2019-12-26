@@ -19,7 +19,7 @@
 #include <DirectDraw.hpp>
 
 #include <QMPlay2OSD.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Functions.hpp>
 
 #include <QCoreApplication>
@@ -237,7 +237,7 @@ void Drawable::setFlip()
     }
 }
 
-void Drawable::draw(const VideoFrame &videoFrame)
+void Drawable::draw(const Frame &videoFrame)
 {
     DDSURFACEDESC ddsd = {sizeof ddsd};
     if (restoreLostSurface() && isOverlay)
@@ -250,7 +250,7 @@ void Drawable::draw(const VideoFrame &videoFrame)
         osd_mutex.lock();
         BYTE *dest = ((flip && !isOverlay) || !osd_list.isEmpty()) ? new BYTE[dataSize] : surface;
 
-        videoFrame.copy(dest, ddsd.lPitch, ddsd.lPitch >> 1);
+        videoFrame.copyYV12(dest, ddsd.lPitch, ddsd.lPitch >> 1);
         if (!isOverlay)
         {
             if (flip & Qt::Horizontal)
@@ -516,7 +516,7 @@ bool DirectDrawWriter::processParams(bool *)
     return readyWrite();
 }
 
-void DirectDrawWriter::writeVideo(const VideoFrame &videoFrame)
+void DirectDrawWriter::writeVideo(const Frame &videoFrame)
 {
     drawable->paused = false;
     if (drawable->canDraw())

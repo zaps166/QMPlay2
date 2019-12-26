@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ModuleParams.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 #include <QQueue>
 
@@ -30,12 +30,12 @@ public:
     {
     public:
         FrameBuffer() = default;
-        inline FrameBuffer(const VideoFrame &frame, double ts) :
+        inline FrameBuffer(const Frame &frame, double ts) :
             frame(frame),
             ts(ts)
         {}
 
-        VideoFrame frame;
+        Frame frame;
         double ts = 0.0;
     };
 

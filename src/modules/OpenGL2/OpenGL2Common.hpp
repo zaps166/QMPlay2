@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <VideoAdjustment.hpp>
 
 #include <QOpenGLShaderProgram>
@@ -141,10 +141,10 @@ private:
 public:
     HWAccelInterface *hwAccellnterface;
     QStringList videoAdjustmentKeys;
-    VideoFrame videoFrame;
+    Frame videoFrame;
 
     bool m_limited = false;
-    QMPlay2ColorSpace m_colorSpace = QMPlay2ColorSpace::Unknown;
+    AVColorSpace m_colorSpace = AVCOL_SPC_UNSPECIFIED;
 
     QOpenGLShaderProgram *shaderProgramVideo, *shaderProgramOSD;
 

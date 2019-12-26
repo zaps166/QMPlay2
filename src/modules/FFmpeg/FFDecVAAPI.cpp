@@ -181,7 +181,7 @@ public:
         clearTextures();
     }
 
-    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const Frame &videoFrame, Field field) override
     {
         VASurfaceID id;
         int vaField = field; // VA-API field codes are compatible with "HWAccelInterface::Field" codes.
@@ -228,8 +228,8 @@ public:
 
             EGLint attribs[] = {
                 EGL_LINUX_DRM_FOURCC_EXT, (EGLint)layer.drm_format,
-                EGL_WIDTH, (EGLint)videoFrame.size.getWidth(p),
-                EGL_HEIGHT, (EGLint)videoFrame.size.getHeight(p),
+                EGL_WIDTH, (EGLint)videoFrame.width(p),
+                EGL_HEIGHT, (EGLint)videoFrame.height(p),
                 EGL_DMA_BUF_PLANE0_FD_EXT, object.fd,
                 EGL_DMA_BUF_PLANE0_OFFSET_EXT, (EGLint)layer.offset[0],
                 EGL_DMA_BUF_PLANE0_PITCH_EXT, (EGLint)layer.pitch[0],
@@ -276,7 +276,7 @@ public:
         return m_textures[plane];
     }
 
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
         return m_vaapi->getImage(videoFrame, dest, nv12ToRGB32);
     }
@@ -410,7 +410,7 @@ QString FFDecVAAPI::name() const
     return "FFmpeg/" VAAPIWriterName;
 }
 
-int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecVAAPI::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)
@@ -420,7 +420,7 @@ int FFDecVAAPI::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArr
 
     return ret;
 }
-void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
+void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
 {
     VAImage image;
     quint8 *vaData = m_vaapi->getNV12Image(image, (quintptr)frame->data[3]);
@@ -455,7 +455,9 @@ void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
         m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
-        decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
+        decoded = Frame::createEmpty(frame, false);
+        decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+        decoded.setVideoData(dstBuffer, dstLinesize, false);
 
         vaUnmapBuffer(m_vaapi->VADisp, image.buf);
         vaDestroyImage(m_vaapi->VADisp, image.image_id);
@@ -464,7 +466,7 @@ void FFDecVAAPI::downloadVideoFrame(VideoFrame &decoded)
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
+    const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
         return false;
 

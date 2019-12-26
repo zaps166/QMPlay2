@@ -20,7 +20,7 @@
 #include <FFCommon.hpp>
 
 #include <QMPlay2OSD.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <StreamInfo.hpp>
 #include <Functions.hpp>
 
@@ -39,8 +39,7 @@ FFDecSW::FFDecSW(Module &module) :
     threads(0), lowres(0),
     thread_type_slice(false),
     lastFrameW(-1), lastFrameH(-1),
-    sws_ctx(nullptr),
-    desiredPixFmt(-1)
+    sws_ctx(nullptr)
 {
     SetModule(module);
 }
@@ -94,7 +93,7 @@ QString FFDecSW::name() const
     return "FFmpeg";
 }
 
-void FFDecSW::setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats)
+void FFDecSW::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
 {
     supportedPixelFormats = pixelFormats;
     setPixelFormat();
@@ -206,7 +205,7 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channel
 
     return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }
-int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
+int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
 {
     bool frameFinished = false;
     int bytesConsumed = 0;
@@ -249,21 +248,14 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
             }
             if (desiredPixFmt != AV_PIX_FMT_NONE)
             {
-                const VideoFrameSize frameSize(frame->width, frame->height, chromaShiftW, chromaShiftH);
                 if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
                 {
-                    decoded = VideoFrame(frameSize, frame->buf, frame->linesize, frame->interlaced_frame, frame->top_field_first);
-                    decoded.limited = (frame->color_range != AVCOL_RANGE_JPEG);
+                    decoded = Frame(frame);
                 }
                 else
                 {
-                    const int aligned8W = Functions::aligned(frame->width, 8);
-                    const int linesize[] = {
-                        aligned8W,
-                        aligned8W >> chromaShiftW,
-                        aligned8W >> chromaShiftW
-                    };
-                    decoded = VideoFrame(frameSize, linesize, frame->interlaced_frame, frame->top_field_first);
+                    decoded = Frame::createEmpty(frame);
+                    decoded.setPixelFormat(desiredPixFmt);
                     if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
                     {
                         sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
@@ -271,13 +263,12 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray 
                         lastFrameH = frame->height;
                     }
                     quint8 *decodedData[] = {
-                        decoded.buffer[0].data(),
-                        decoded.buffer[1].data(),
-                        decoded.buffer[2].data()
+                        decoded.data(0),
+                        decoded.data(1),
+                        decoded.data(2),
                     };
-                    sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize);
+                    sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize());
                 }
-                decoded.colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(frame->colorspace, frame->height);
             }
         }
     }
@@ -376,8 +367,8 @@ bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
     time_base = streamInfo.getTimeBase();
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO && codec_ctx->lowres)
     {
-        streamInfo.W = codec_ctx->width;
-        streamInfo.H = codec_ctx->height;
+        streamInfo.width = codec_ctx->width;
+        streamInfo.height = codec_ctx->height;
     }
     return true;
 }
@@ -388,23 +379,19 @@ void FFDecSW::setPixelFormat()
     const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
     if (!pixDesc) //Invalid pixel format
         return;
-    dontConvert = supportedPixelFormats.contains(QMPlay2PixelFormatConvert::fromFFmpeg(codec_ctx->pix_fmt));
+    dontConvert = supportedPixelFormats.contains(codec_ctx->pix_fmt);
     if (dontConvert)
     {
-        chromaShiftW = pixDesc->log2_chroma_w;
-        chromaShiftH = pixDesc->log2_chroma_h;
         desiredPixFmt = codec_ctx->pix_fmt;
     }
     else for (int i = 0; i < supportedPixelFormats.count(); ++i)
     {
-        const AVPixelFormat pixFmt = (AVPixelFormat)QMPlay2PixelFormatConvert::toFFmpeg(supportedPixelFormats.at(i));
+        const AVPixelFormat pixFmt = supportedPixelFormats.at(i);
         const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get(pixFmt);
         if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
         {
             //Use first format as default (mostly QMPlay2PixelFormat::YUV420P) and look at next formats,
             //otherwise break the loop if found proper format.
-            chromaShiftW = supportedPixDesc->log2_chroma_w;
-            chromaShiftH = supportedPixDesc->log2_chroma_h;
             desiredPixFmt = pixFmt;
             if (i != 0)
                 break;

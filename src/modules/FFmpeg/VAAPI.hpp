@@ -26,9 +26,9 @@
 #include <va/va_vpp.h>
 
 struct AVBufferRef;
-class VideoFrame;
 class ImgScaler;
 struct AVFrame;
+class Frame;
 
 class VAAPI
 {
@@ -49,10 +49,10 @@ public:
 
     void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
-    bool filterVideo(const VideoFrame &frame, VASurfaceID &id, int &field);
+    bool filterVideo(const Frame &frame, VASurfaceID &id, int &field);
 
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
 
     void insertFrame(VASurfaceID id, AVFrame *frame);
 
@@ -91,5 +91,5 @@ private:
     int m_nBackwardRefs, m_nForwardRefs;
     bool m_hasVppFrame = false;
 
-    QHash<VASurfaceID, VideoFrame> m_vppFrames;
+    QHash<VASurfaceID, Frame> m_vppFrames;
 };

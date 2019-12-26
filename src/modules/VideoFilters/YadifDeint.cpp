@@ -404,22 +404,22 @@ static void filterLine_CPP(quint8 *dest, const void *const destEnd,
 }
 
 static void filterSlice(const int plane, const int parity, const int tff, const bool spatialCheck,
-                        VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame,
+                        Frame &destFrame, const Frame &prevFrame, const Frame &currFrame, const Frame &nextFrame,
                         const int jobId, const int jobsCount)
 {
-    const int w = currFrame.size.getWidth(plane);
-    const int h = currFrame.size.getHeight(plane);
+    const int w = currFrame.width(plane);
+    const int h = currFrame.height(plane);
 
     const int sliceStart   = (h *  jobId   ) / jobsCount;
     const int sliceEnd     = (h * (jobId+1)) / jobsCount;
-    const int refs         = currFrame.linesize[plane];
-    const int destLinesize = destFrame.linesize[plane];
+    const int refs         = currFrame.linesize(plane);
+    const int destLinesize = destFrame.linesize(plane);
     const int filterParity = parity ^ tff;
 
-    const quint8 *const prevData = prevFrame.buffer[plane].data();
-    const quint8 *const currData = currFrame.buffer[plane].data();
-    const quint8 *const nextData = nextFrame.buffer[plane].data();
-    quint8 *const destData = destFrame.buffer[plane].data();
+    const quint8 *const prevData = prevFrame.constData(plane);
+    const quint8 *const currData = currFrame.constData(plane);
+    const quint8 *const nextData = nextFrame.constData(plane);
+    quint8 *const destData = destFrame.data(plane);
 
     const int toSub = 3 + alignment - 1;
 
@@ -512,7 +512,7 @@ YadifThr::~YadifThr()
     wait();
 }
 
-void YadifThr::start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n)
+void YadifThr::start(Frame &destFrame, const Frame &prevFrame, const Frame &currFrame, const Frame &nextFrame, const int id, const int n)
 {
     QMutexLocker locker(&mutex);
     dest = &destFrame;
@@ -591,11 +591,10 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
         const FrameBuffer &currBuffer = internalQueue.at(1);
         const FrameBuffer &nextBuffer = internalQueue.at(2);
 
-        VideoFrame destFrame(currBuffer.frame.size, currBuffer.frame.linesize);
-        destFrame.limited = currBuffer.frame.limited;
-        destFrame.colorSpace = currBuffer.frame.colorSpace;
+        Frame destFrame = Frame::createEmpty(currBuffer.frame);
+        destFrame.setNoInterlaced();
 
-        const int halfH = destFrame.size.chromaHeight();
+        const int halfH = destFrame.height(1);
 
         if (threads.isEmpty())
         {
@@ -634,7 +633,7 @@ bool YadifDeint::processParams(bool *)
     return true;
 }
 
-inline void YadifDeint::doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int jobId, const int jobsCount) const
+inline void YadifDeint::doFilter(Frame &dest, const Frame &prev, const Frame &curr, const Frame &next, const int jobId, const int jobsCount) const
 {
     const bool tff = isTopFieldFirst(curr);
     for (int p = 0; p < 3; ++p)

@@ -57,7 +57,7 @@ private:
 
     VideoWriter *HWAccel() const override;
 
-    int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
+    int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
 
     bool hasCriticalError() const override;
 
@@ -79,7 +79,7 @@ private:
     CuvidHWAccel *m_cuvidHWAccel;
 
     bool m_limited;
-    QMPlay2ColorSpace m_colorSpace;
+    AVColorSpace m_colorSpace;
 
     int m_width, m_height, m_codedHeight;
     CUvideotimestamp m_lastCuvidTS;
@@ -92,9 +92,6 @@ private:
     bool m_tsWorkaround;
 
     QQueue<CUVIDPARSERDISPINFO> m_cuvidSurfaces;
-
-    AVBufferRef *m_nv12Chroma;
-    AVBufferRef *m_frameBuffer[3];
 
     AVBSFContext *m_bsfCtx;
     SwsContext *m_swsCtx;

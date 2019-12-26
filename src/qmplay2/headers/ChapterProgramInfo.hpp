@@ -41,5 +41,5 @@ public:
     {}
 
     int number;
-    QVector<QPair<int, QMPlay2MediaType>> streams;
+    QVector<QPair<int, AVMediaType>> streams;
 };

@@ -367,7 +367,8 @@ void DemuxerThr::run()
         for (const QString &ext : SubsDec::extensions())
             filter << "*." + ext;
         for (StreamInfo *streamInfo : demuxer->streamsInfo())
-            if (streamInfo->type == QMPLAY2_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
+        {
+            if (streamInfo->codec_type == AVMEDIA_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
             {
                 const QString directory = Functions::filePath(url.mid(7));
                 const QString fName = Functions::fileName(url, false).replace('_', ' ');
@@ -383,6 +384,7 @@ void DemuxerThr::run()
                 }
                 break;
             }
+        }
     }
 
     bool stillImage = playC.stillImage = demuxer->isStillImage();
@@ -833,7 +835,7 @@ void DemuxerThr::emitInfo()
         for (int i = 0; i < program.streams.count(); ++i)
         {
             const int stream = program.streams.at(i).first;
-            const QMPlay2MediaType type = program.streams.at(i).second;
+            const AVMediaType type = program.streams.at(i).second;
             streams += QString::number(type) + ":" + QString::number(stream) + ",";
             if (stream == playC.videoStream || stream == playC.audioStream || stream == playC.subtitlesStream)
                 ++currentPlaying;
@@ -875,9 +877,9 @@ void DemuxerThr::emitInfo()
     int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
     for (StreamInfo *streamInfo : streamsInfo)
     {
-        switch (streamInfo->type)
+        switch (streamInfo->codec_type)
         {
-            case QMPLAY2_TYPE_VIDEO:
+            case AVMEDIA_TYPE_VIDEO:
             {
                 const bool currentPlaying = getCurrentPlaying(playC.videoStream, streamsInfo, streamInfo);
                 videoStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
@@ -898,18 +900,20 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<li><b>" + tr("title") + ":</b> " + streamInfo->title + "</li>";
                 if (!streamInfo->codec_name.isEmpty())
                     videoStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
-                videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->W) + "x" + QString::number(streamInfo->H) + "</li>";
+                videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->width) + "x" + QString::number(streamInfo->height) + "</li>";
                 videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->getAspectRatio()) + "</li>";
-                if (streamInfo->FPS)
-                    videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(streamInfo->FPS) + "</li>";
-                if (streamInfo->bitrate)
-                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bitrate / 1000) + "kbps</li>";
-                if (!streamInfo->format.isEmpty())
-                    videoStreams += "<li><b>" + tr("format") + ":</b> " + streamInfo->format + "</li>";
+                const double FPS = streamInfo->getFPS();
+                if (FPS)
+                    videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(FPS) + "</li>";
+                if (streamInfo->bit_rate)
+                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bit_rate / 1000) + "kbps</li>";
+                const auto formatName = streamInfo->getFormatName();
+                if (!formatName.isEmpty())
+                    videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
                 printOtherInfo(streamInfo->other_info, videoStreams);
                 videoStreams += "</ul></ul>";
             } break;
-            case QMPLAY2_TYPE_AUDIO:
+            case AVMEDIA_TYPE_AUDIO:
             {
                 const bool currentPlaying = getCurrentPlaying(playC.audioStream, streamsInfo, streamInfo);
                 audioStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
@@ -943,20 +947,21 @@ void DemuxerThr::emitInfo()
                     channels = QString::number(streamInfo->channels);
                 audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
-                if (streamInfo->bitrate)
-                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bitrate / 1000) + "kbps</li>";
-                if (!streamInfo->format.isEmpty())
-                    audioStreams += "<li><b>" + tr("format") + ":</b> " + streamInfo->format + "</li>";
+                if (streamInfo->bit_rate)
+                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bit_rate / 1000) + "kbps</li>";
+                const auto formatName = streamInfo->getFormatName();
+                if (!formatName.isEmpty())
+                    audioStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
                 printOtherInfo(streamInfo->other_info, audioStreams);
                 audioStreams += "</ul></ul>";
             } break;
-            case QMPLAY2_TYPE_SUBTITLE:
+            case AVMEDIA_TYPE_SUBTITLE:
                 addSubtitleStream(getCurrentPlaying(playC.subtitlesStream, streamsInfo, streamInfo), subtitlesStreams, i, ++subtitlesStreamCount, "subtitles", streamInfo->codec_name, streamInfo->title, streamInfo->other_info);
                 break;
-            case QMPLAY2_TYPE_ATTACHMENT:
+            case AVMEDIA_TYPE_ATTACHMENT:
             {
                 attachmentStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-                attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + Functions::sizeString(streamInfo->data.size()) + "</li>";
+                attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + Functions::sizeString(streamInfo->extradata_size) + "</li>";
                 attachmentStreams += "</ul>";
             } break;
             default:
@@ -1104,7 +1109,7 @@ void DemuxerThr::clearBuffers()
 
 double DemuxerThr::getFrameDelay() const
 {
-    return 1.0 / demuxer->streamsInfo().at(playC.videoStream)->FPS;
+    return 1.0 / demuxer->streamsInfo().at(playC.videoStream)->getFPS();
 }
 
 void DemuxerThr::stopVADec()

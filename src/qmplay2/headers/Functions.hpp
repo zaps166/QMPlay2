@@ -26,14 +26,18 @@
 #include <QIcon>
 #include <QDate>
 
+extern "C" {
+    #include <libavutil/pixfmt.h>
+}
+
 struct AVDictionary;
 
 class QHeaderView;
 class QMPlay2OSD;
-class VideoFrame;
 class QMimeData;
 class QPainter;
 class QPixmap;
+class Frame;
 class QIcon;
 class QRect;
 
@@ -129,7 +133,7 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
     QMPLAY2SHAREDLIB_EXPORT int scaleEQValue(int val, int min, int max);
 
-    QMPLAY2SHAREDLIB_EXPORT int getField(const VideoFrame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
+    QMPLAY2SHAREDLIB_EXPORT int getField(const Frame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray convertToASS(QString txt);
 
@@ -157,6 +161,11 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
+    struct LumaCoefficients
+    {
+        float cR, cG, cB;
+    };
+    QMPLAY2SHAREDLIB_EXPORT LumaCoefficients getLumaCoeff(AVColorSpace colorSpace);
     QMPLAY2SHAREDLIB_EXPORT QMatrix3x3 getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();

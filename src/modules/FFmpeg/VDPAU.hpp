@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 #include <QCoreApplication>
 #include <QMutex>
@@ -26,8 +26,6 @@
 #include <deque>
 
 #include <vdpau/vdpau.h>
-
-class VideoFrame;
 
 class VDPAU
 {
@@ -47,12 +45,12 @@ public:
     void applyVideoAdjustment(int saturation, int hue, int sharpness);
     void setVideoMixerDeintNr(int deintMethod, bool nrEnabled, float nrLevel);
 
-    void maybeCreateVideoMixer(int surfaceW, int surfaceH, const VideoFrame &decoded);
+    void maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decoded);
 
-    bool videoMixerRender(const VideoFrame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure);
+    bool videoMixerRender(const Frame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure);
 
-    bool getYV12(VideoFrame &decoded, VdpVideoSurface id);
-    bool getRGB(uint8_t *dest, const VideoFrameSize &size);
+    bool getYV12(Frame &decoded, VdpVideoSurface id);
+    bool getRGB(uint8_t *dest, int width, int height);
 
 private:
     void setCSCMatrix();
@@ -89,7 +87,7 @@ public:
     bool m_mustApplyVideoMixerFeatures = false;
 
     QMutex m_framesMutex;
-    std::deque<VideoFrame> m_bufferedFrames;
+    std::deque<Frame> m_bufferedFrames;
 
     VdpGetProcAddress *vdp_get_proc_address = nullptr;
     VdpOutputSurfaceCreate *vdp_output_surface_create = nullptr;

@@ -19,8 +19,7 @@
 #pragma once
 
 #include <ModuleCommon.hpp>
-#include <PixelFormats.hpp>
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 #include <Packet.hpp>
 
 #include <QByteArray>
@@ -42,14 +41,14 @@ public:
 
     virtual VideoWriter *HWAccel() const;
 
-    virtual void setSupportedPixelFormats(const QMPlay2PixelFormats &pixelFormats);
+    virtual void setSupportedPixelFormats(const AVPixelFormats &pixelFormats);
 
     /*
      * hurry_up ==  0 -> no frame skipping, normal quality
      * hurry_up >=  1 -> faster decoding, lower image quality, frame skipping during decode
      * hurry_up == ~0 -> much faster decoding, no frame copying
     */
-    virtual int decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
+    virtual int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
     virtual int decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush = false);
     virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush = false);
 

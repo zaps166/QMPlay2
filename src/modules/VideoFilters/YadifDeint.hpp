@@ -35,15 +35,15 @@ public:
     YadifThr(const YadifDeint &yadifDeint);
     ~YadifThr();
 
-    void start(VideoFrame &destFrame, const VideoFrame &prevFrame, const VideoFrame &currFrame, const VideoFrame &nextFrame, const int id, const int n);
+    void start(Frame &destFrame, const Frame &prevFrame, const Frame &currFrame, const Frame &nextFrame, const int id, const int n);
     void waitForFinished();
 private:
     void run() override;
 
     const YadifDeint &yadifDeint;
 
-    VideoFrame *dest;
-    const VideoFrame *prev, *curr, *next;
+    Frame *dest;
+    const Frame *prev, *curr, *next;
     int jobId, jobsCount;
     bool hasNewData, br;
 
@@ -63,7 +63,7 @@ public:
 
     bool processParams(bool *paramsCorrected) override;
 private:
-    inline void doFilter(VideoFrame &dest, const VideoFrame &prev, const VideoFrame &curr, const VideoFrame &next, const int id, const int jobsCount) const;
+    inline void doFilter(Frame &dest, const Frame &prev, const Frame &curr, const Frame &next, const int id, const int jobsCount) const;
 
     using YadifThrPtr = std::shared_ptr<YadifThr>;
     QVector<YadifThrPtr> threads;

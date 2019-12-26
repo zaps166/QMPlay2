@@ -53,8 +53,8 @@ public:
     void clearBuffers();
     void removeLastFromInputBuffer();
 
-    void addFrame(const VideoFrame &videoFrame, double ts);
-    bool getFrame(VideoFrame &videoFrame, TimeStamp &ts);
+    void addFrame(const Frame &videoFrame, double ts);
+    bool getFrame(Frame &videoFrame, TimeStamp &ts);
 
     bool readyRead();
 private:

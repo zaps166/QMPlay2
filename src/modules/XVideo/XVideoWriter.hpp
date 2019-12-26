@@ -59,7 +59,7 @@ private:
     bool readyWrite() const override;
 
     bool processParams(bool *paramsCorrected) override;
-    void writeVideo(const VideoFrame &videoFrame) override;
+    void writeVideo(const Frame &videoFrame) override;
     void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
     QString name() const override;

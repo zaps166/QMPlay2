@@ -110,11 +110,11 @@ public:
         memset(m_heights, 0, sizeof(m_heights));
     }
 
-    MapResult mapFrame(const VideoFrame &videoFrame, Field field) override
+    MapResult mapFrame(const Frame &videoFrame, Field field) override
     {
         Q_UNUSED(field)
 
-        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.surfaceId;
+        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
         CGLContextObj glCtx = CGLGetCurrentContext();
 
         IOSurfaceRef surface = CVPixelBufferGetIOSurface(pixelBuffer);
@@ -124,11 +124,11 @@ public:
             return MapError;
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[0]);
-        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.size.getWidth(0), videoFrame.size.getHeight(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
+        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.width(0), videoFrame.height(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
             return MapError;
 
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[1]);
-        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.size.getWidth(1), videoFrame.size.getHeight(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
+        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.width(1), videoFrame.height(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
             return MapError;
 
         return MapOk;
@@ -138,9 +138,9 @@ public:
         return m_textures[plane];
     }
 
-    bool getImage(const VideoFrame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
-        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.surfaceId;
+        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
         if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
         {
             CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
@@ -203,7 +203,7 @@ QString FFDecVTB::name() const
     return "FFmpeg/VideoToolBox";
 }
 
-void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)
+void FFDecVTB::downloadVideoFrame(Frame &decoded)
 {
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)frame->data[3];
     if (!pixelBuffer)
@@ -242,18 +242,20 @@ void FFDecVTB::downloadVideoFrame(VideoFrame &decoded)
             srcLinesize[1] / 2
         };
 
-        m_swsCtx = sws_getCachedContext(m_swsCtx, w, h, AV_PIX_FMT_NV12, w, h, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
+        m_swsCtx = sws_getCachedContext(m_swsCtx, w, h, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, h, dstData, dstLinesize);
 
         CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
 
-        decoded = VideoFrame(VideoFrameSize(w, h), dstBuffer, dstLinesize, frame->interlaced_frame, frame->top_field_first);
+        decoded = Frame::createEmpty(frame, false);
+        decoded.setPixelFormat(AV_PIX_FMT_YUV420P);
+        decoded.setVideoData(dstBuffer, dstLinesize, false);
     }
 }
 
 bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 {
-    const AVPixelFormat pix_fmt = av_get_pix_fmt(streamInfo.format);
+    const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P)
         return false;
 

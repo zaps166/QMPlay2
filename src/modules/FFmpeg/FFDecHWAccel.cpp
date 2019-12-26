@@ -18,7 +18,7 @@
 
 #include <FFDecHWAccel.hpp>
 
-#include <VideoFrame.hpp>
+#include <Frame.hpp>
 
 extern "C"
 {
@@ -62,7 +62,7 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 #endif
 }
 
-int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecHWAccel::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
 {
     Q_UNUSED(newPixFmt)
     bool frameFinished = false;
@@ -81,16 +81,12 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
     {
         if (m_hwAccelWriter)
         {
-            decoded = VideoFrame(VideoFrameSize(frame->width, frame->height), (quintptr)frame->data[3], (bool)frame->interlaced_frame, (bool)frame->top_field_first);
-            if (m_hwAccelWriter && !m_hasCriticalError)
-                decoded.setAVFrame(frame);
+            decoded = frame;
         }
         else
         {
             downloadVideoFrame(decoded);
         }
-        decoded.limited = (frame->color_range != AVCOL_RANGE_JPEG);
-        decoded.colorSpace = QMPlay2PixelFormatConvert::fromFFmpegColorSpace(frame->colorspace, frame->height);
     }
 
     if (frameFinished)
@@ -100,7 +96,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, VideoFrame &decoded, QByteA
 
     return m_hasCriticalError ? -1 : bytesConsumed;
 }
-void FFDecHWAccel::downloadVideoFrame(VideoFrame &decoded)
+void FFDecHWAccel::downloadVideoFrame(Frame &decoded)
 {
     Q_UNUSED(decoded)
 }

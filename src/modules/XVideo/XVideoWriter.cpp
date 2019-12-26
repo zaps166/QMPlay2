@@ -177,7 +177,7 @@ bool XVideoWriter::processParams(bool *)
     return readyWrite();
 }
 
-void XVideoWriter::writeVideo(const VideoFrame &videoFrame)
+void XVideoWriter::writeVideo(const Frame &videoFrame)
 {
     xv->draw(videoFrame, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list, osd_mutex);
 }
