@@ -86,7 +86,7 @@ void Decoder::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
     Q_UNUSED(pixelFormats)
 }
 
-int Decoder::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
+int Decoder::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up)
 {
     Q_UNUSED(encodedPacket)
     Q_UNUSED(decoded)

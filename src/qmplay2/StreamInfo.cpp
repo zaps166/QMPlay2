@@ -95,18 +95,9 @@ QByteArray StreamInfo::getFormatName() const
     }
     return QByteArray();
 }
-void StreamInfo::setFormat(const QByteArray &formatName)
+void StreamInfo::setFormat(int newFormat)
 {
-    switch (codec_type)
-    {
-        case AVMEDIA_TYPE_AUDIO:
-            format = av_get_sample_fmt(formatName.constData());
-        case AVMEDIA_TYPE_VIDEO:
-            format = av_get_pix_fmt(formatName.constData());
-            break;
-        default:
-            break;
-    }
+    format = newFormat;
 }
 
 inline void StreamInfo::resetSAR()

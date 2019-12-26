@@ -26,9 +26,13 @@ extern "C"
     #include <libavutil/pixdesc.h>
 }
 
+#include <cmath>
+
 Frame Frame::createEmpty(const Frame &other)
 {
-    return createEmpty(other.m_frame, true);
+    Frame frame = createEmpty(other.m_frame, true);
+    frame.m_timeBase = other.m_timeBase;
+    return frame;
 }
 Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
@@ -125,6 +129,24 @@ void Frame::clear()
     av_frame_unref(m_frame);
     m_pixelFormat = nullptr;
     m_customHwSurface = s_invalidHwSurface;
+}
+
+void Frame::setTimeBase(double timeBase)
+{
+    m_timeBase = timeBase;
+}
+
+bool Frame::isTsValid() const
+{
+    return (m_frame->best_effort_timestamp != AV_NOPTS_VALUE);
+}
+double Frame::ts() const
+{
+    return m_frame->best_effort_timestamp * m_timeBase;
+}
+void Frame::setTS(double ts)
+{
+    m_frame->best_effort_timestamp = std::round(ts / m_timeBase);
 }
 
 bool Frame::isInterlaced() const
@@ -236,6 +258,11 @@ int Frame::height(int plane) const
     return FF_CEIL_RSHIFT(m_frame->height, chromaShiftH());
 }
 
+AVRational Frame::sampleAspectRatio() const
+{
+    return m_frame->sample_aspect_ratio;
+}
+
 const quint8 *Frame::constData(int plane) const
 {
     return m_frame->data[plane];
@@ -323,6 +350,8 @@ Frame &Frame::operator =(const Frame &other)
     else
         av_frame_ref(m_frame, other.m_frame);
 
+    m_timeBase = other.m_timeBase;
+
     m_pixelFormat = other.m_pixelFormat;
     m_customHwSurface = other.m_customHwSurface;
 
@@ -332,6 +361,8 @@ Frame &Frame::operator =(Frame &&other)
 {
     av_frame_unref(m_frame);
     av_frame_move_ref(m_frame, other.m_frame);
+
+    qSwap(m_timeBase, other.m_timeBase);
 
     qSwap(m_pixelFormat, other.m_pixelFormat);
     qSwap(m_customHwSurface, other.m_customHwSurface);

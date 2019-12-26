@@ -126,7 +126,7 @@ PlayClass::PlayClass() :
     connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
     connect(this, &PlayClass::aRatioUpdate, this, &PlayClass::aRatioUpdated);
     connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
-    connect(this, SIGNAL(pixelFormatUpdate(const QByteArray &)), this, SLOT(pixelFormatUpdated(const QByteArray &)));
+    connect(this, &PlayClass::pixelFormatUpdate, this, &PlayClass::pixelFormatUpdated);
     connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
 }
 PlayClass::~PlayClass()
@@ -1107,7 +1107,7 @@ void PlayClass::aRatioUpdated(const AVRational &sar) //jeżeli współczynnik pr
         demuxThr->emitInfo();
     }
 }
-void PlayClass::pixelFormatUpdated(const QByteArray &pixFmt)
+void PlayClass::pixelFormatUpdated(int pixFmt)
 {
     if (hasVideoStream())
     {

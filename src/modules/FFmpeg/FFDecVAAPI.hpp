@@ -35,7 +35,7 @@ public:
 
     QString name() const override;
 
-    int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+    int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &, VideoWriter *) override;

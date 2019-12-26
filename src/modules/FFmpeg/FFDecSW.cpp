@@ -208,14 +208,14 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
 
     return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }
-int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
+int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up)
 {
     bool frameFinished = false;
     int bytesConsumed = 0;
 
     decodeFirstStep(encodedPacket, flush);
 
-    if  (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
+    if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
     {
         if (respectHurryUP && hurry_up)
         {
@@ -244,7 +244,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newP
             bool newFormat = false;
             if (codec_ctx->pix_fmt != lastPixFmt)
             {
-                newPixFmt = av_get_pix_fmt_name(codec_ctx->pix_fmt);
+                newPixFmt = codec_ctx->pix_fmt;
                 lastPixFmt = codec_ctx->pix_fmt;
                 setPixelFormat();
                 newFormat = true;
@@ -275,10 +275,9 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newP
         }
     }
 
-    if (frameFinished)
-        decodeLastStep(encodedPacket, frame);
-    else
-        encodedPacket.setTsInvalid();
+    decoded.setTimeBase(time_base);
+    if (frameFinished && !decoded.isTsValid())
+        decoded.setTS(encodedPacket.ts());
 
     return bytesConsumed < 0 ? -1 : bytesConsumed;
 }

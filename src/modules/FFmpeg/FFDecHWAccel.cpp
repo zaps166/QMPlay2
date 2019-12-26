@@ -62,7 +62,7 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 #endif
 }
 
-int FFDecHWAccel::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     Q_UNUSED(newPixFmt)
     bool frameFinished = false;
@@ -89,10 +89,9 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray 
         }
     }
 
-    if (frameFinished)
-        decodeLastStep(encodedPacket, frame);
-    else
-        encodedPacket.setTsInvalid();
+    decoded.setTimeBase(time_base);
+    if (frameFinished && !decoded.isTsValid())
+        decoded.setTS(encodedPacket.ts());
 
     return m_hasCriticalError ? -1 : bytesConsumed;
 }

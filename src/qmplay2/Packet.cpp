@@ -167,14 +167,12 @@ inline int64_t Packet::d2i(double value)
 Packet &Packet::operator =(const Packet &other)
 {
     av_packet_ref(m_packet, other.m_packet);
-    sampleAspectRatio = other.sampleAspectRatio;
     m_timeBase = other.m_timeBase;
     return *this;
 }
 Packet &Packet::operator =(Packet &&other)
 {
     av_packet_move_ref(m_packet, other.m_packet);
-    qSwap(sampleAspectRatio, other.sampleAspectRatio);
     qSwap(m_timeBase, other.m_timeBase);
     return *this;
 }

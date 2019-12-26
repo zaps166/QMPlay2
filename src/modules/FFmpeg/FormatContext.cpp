@@ -610,9 +610,6 @@ bool FormatContext::read(Packet &encoded, int &idx)
         return false;
     }
 
-    if (stream->sample_aspect_ratio.num)
-        encoded.sampleAspectRatio = stream->sample_aspect_ratio;
-
     // Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
     if (encoded.hasKeyFrame() && !encoded.hasDts())
         encoded.setDts(nextDts.at(ff_idx));

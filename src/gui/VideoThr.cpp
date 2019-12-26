@@ -309,11 +309,14 @@ void VideoThr::run()
             continue;
         }
         paused = waiting = false;
+
         Packet packet;
+        double ts = qQNaN();
         if (hasVPackets && mustFetchNewPacket)
+        {
             packet = playC.vPackets.fetch();
-        else
-            packet.setTsInvalid();
+            ts = packet.ts();
+        }
         playC.vPackets.unlock();
         processOneFrame();
         playC.fillBufferB = true;
@@ -407,16 +410,17 @@ void VideoThr::run()
         if (!packet.isEmpty() || maybeFlush)
         {
             Frame decoded;
-            QByteArray newPixelFormat;
+            AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE;
             const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, playC.flushVideo, skip ? ~0 : (fast >> 1));
-            if (!newPixelFormat.isEmpty())
+            ts = decoded.isTsValid() ? decoded.ts() : qQNaN();
+            if (newPixelFormat != AV_PIX_FMT_NONE)
                 emit playC.pixelFormatUpdate(newPixelFormat);
             if (playC.flushVideo)
             {
                 useLastDelay = true; //if seeking
                 playC.flushVideo = false;
             }
-            if (playC.videoSeekPos > 0.0 && bytes_consumed <= 0 && !packet.isTsValid() && decoded.isEmpty())
+            if (playC.videoSeekPos > 0.0 && bytes_consumed <= 0 && qIsNaN(ts) && decoded.isEmpty())
                 finishAccurateSeek();
             if (!decoded.isEmpty())
             {
@@ -433,7 +437,7 @@ void VideoThr::run()
                     filtersMutex.lock();
                 }
                 interlaced = decoded.isInterlaced();
-                filters.addFrame(decoded, packet.ts());
+                filters.addFrame(decoded, ts);
                 gotFrameOrError = true;
             }
             else if (skip)
@@ -455,21 +459,22 @@ void VideoThr::run()
         double newTs;
         const bool ptsIsValid = filters.getFrame(videoFrame, newTs);
         if (ptsIsValid)
-            packet.setTS(newTs);
+            ts = newTs;
         filtersMutex.unlock();
 
-        if ((maybeFlush = packet.isTsValid()))
+        if ((maybeFlush = !qIsNaN(ts)))
         {
-            if (packet.sampleAspectRatio.num != 0 && packet.sampleAspectRatio.den != 0 && lastSAR.num != 0 && lastSAR.den != 0 && av_cmp_q(lastSAR, packet.sampleAspectRatio) != 0) //Aspect ratio has been changed
+            const AVRational currSAR = videoFrame.sampleAspectRatio();
+            if (currSAR.num != 0 && currSAR.den != 0 && lastSAR.num != 0 && lastSAR.den != 0 && av_cmp_q(lastSAR, currSAR) != 0) //Aspect ratio has been changed
             {
                 lastSAR = {0, 0}; //Needs to be updated later
-                emit playC.aRatioUpdate(packet.sampleAspectRatio); //Sets "lastSAR", because it calls "setARatio()";
+                emit playC.aRatioUpdate(currSAR); //Sets "lastSAR", because it calls "setARatio()";
             }
 
             if (playC.videoSeekPos > 0.0)
             {
                 bool cont = true;
-                if (packet.ts() >= playC.videoSeekPos)
+                if (ts >= playC.videoSeekPos)
                 {
                     finishAccurateSeek();
                     if (processOneFrame())
@@ -484,10 +489,10 @@ void VideoThr::run()
                 }
             }
 
-            if (ptsIsValid || packet.ts() > playC.pos)
-                playC.chPos(packet.ts());
+            if (ptsIsValid || ts > playC.pos)
+                playC.chPos(ts);
 
-            double delay = packet.ts() - playC.frame_last_pts;
+            double delay = ts - playC.frame_last_pts;
             if (useLastDelay || delay <= 0.0 || (playC.frame_last_pts <= 0.0 && delay > playC.frame_last_delay))
             {
                 delay = playC.frame_last_delay;
@@ -500,7 +505,7 @@ void VideoThr::run()
             delay /= playC.speed;
 
             playC.frame_last_delay = delay;
-            playC.frame_last_pts = packet.ts();
+            playC.frame_last_pts = ts;
 
             if (playC.skipAudioFrame < 0.0)
                 playC.skipAudioFrame = 0.0;
@@ -528,7 +533,7 @@ void VideoThr::run()
                     sync_timer = gettime();
                 }
 
-                const double diff = packet.ts() - (delay + sync_pts - playC.videoSync);
+                const double diff = ts - (delay + sync_pts - playC.videoSync);
                 const double sync_threshold = qMax(delay, playC.audio_last_delay);
                 const double max_threshold = qMax(sync_threshold * 2.0, 0.15);
                 const double fDiff = qAbs(diff);

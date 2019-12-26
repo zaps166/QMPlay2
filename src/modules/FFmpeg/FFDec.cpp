@@ -102,8 +102,6 @@ void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
         avcodec_flush_buffers(codec_ctx);
         clearFrames();
     }
-    if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
-        memcpy(&codec_ctx->reordered_opaque, &encodedPacket.sampleAspectRatio, 8);
 }
 int FFDec::decodeStep(bool &frameFinished)
 {
@@ -139,19 +137,6 @@ int FFDec::decodeStep(bool &frameFinished)
     frameFinished = maybeTakeFrame();
 
     return bytesConsumed;
-}
-void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
-{
-    const int64_t ts = frame->best_effort_timestamp;
-    if (ts != AV_NOPTS_VALUE)
-        encodedPacket.setTS(ts * time_base);
-    if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
-    {
-        double sampleAspectRatio;
-        memcpy(&sampleAspectRatio, &frame->reordered_opaque, 8);
-        if (qFuzzyIsNull(sampleAspectRatio) && frame->sample_aspect_ratio.num)
-            encodedPacket.sampleAspectRatio = frame->sample_aspect_ratio;
-    }
 }
 
 bool FFDec::maybeTakeFrame()

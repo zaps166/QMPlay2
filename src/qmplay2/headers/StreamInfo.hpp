@@ -97,7 +97,7 @@ public:
     }
 
     QByteArray getFormatName() const;
-    void setFormat(const QByteArray &getFormatName);
+    void setFormat(int newFormat);
 
     QByteArray codec_name, title, artist;
     QVector<QMPlay2Tag> other_info;

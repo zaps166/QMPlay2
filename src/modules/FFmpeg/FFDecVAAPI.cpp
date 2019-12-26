@@ -410,7 +410,7 @@ QString FFDecVAAPI::name() const
     return "FFmpeg/" VAAPIWriterName;
 }
 
-int FFDecVAAPI::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)

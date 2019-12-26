@@ -53,7 +53,7 @@ private:
     void setSupportedPixelFormats(const AVPixelFormats &pixelFormats) override;
 
     int  decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush) override;
-    int  decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
+    int  decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
     bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush) override;
 
     bool open(StreamInfo &, VideoWriter *) override;

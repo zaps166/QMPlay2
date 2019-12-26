@@ -654,7 +654,7 @@ VideoWriter *CuvidDec::HWAccel() const
     return m_writer;
 }
 
-int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up)
+int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up)
 {
     Q_UNUSED(newPixFmt)
 
@@ -670,10 +670,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
         m_cuvidSurfaces.clear();
         m_forceFlush = false;
         if (!createCuvidVideoParser())
-        {
-            encodedPacket.setTsInvalid();
             return -1;
-        }
     }
 
     memset(&cuvidPkt, 0, sizeof cuvidPkt);
@@ -690,16 +687,10 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
             m_pkt->size = encodedPacket.size();
 
             if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
-            {
-                encodedPacket.setTsInvalid();
                 return -1;
-            }
 
             if (av_bsf_receive_packet(m_bsfCtx, m_pkt) < 0) //Can it return more than one packet in this case?
-            {
-                encodedPacket.setTsInvalid();
                 return -1;
-            }
 
             cuvidPkt.payload = m_pkt->data;
             cuvidPkt.payload_size = m_pkt->size;
@@ -719,9 +710,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
     if (m_pkt)
         av_packet_unref(m_pkt);
 
-    if (m_cuvidSurfaces.isEmpty())
-        encodedPacket.setTsInvalid();
-    else
+    if (!m_cuvidSurfaces.isEmpty())
     {
         const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
 
@@ -746,7 +735,6 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
             m_lastTS[0] += diff;
             ts = m_lastTS[0];
         }
-        encodedPacket.setTS(ts);
 
         if (~hurry_up)
         {
@@ -830,6 +818,8 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
                 }
             }
         }
+
+        decoded.setTS(ts);
     }
 
     if (!videoDataParsed)

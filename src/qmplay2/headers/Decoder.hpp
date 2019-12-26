@@ -48,7 +48,7 @@ public:
      * hurry_up >=  1 -> faster decoding, lower image quality, frame skipping during decode
      * hurry_up == ~0 -> much faster decoding, no frame copying
     */
-    virtual int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up);
+    virtual int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up);
     virtual int decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush = false);
     virtual bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush = false);
 

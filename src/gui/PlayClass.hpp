@@ -202,7 +202,7 @@ private slots:
 
     void frameSizeUpdated(int w, int h);
     void aRatioUpdated(const AVRational &sar);
-    void pixelFormatUpdated(const QByteArray &pixFmt);
+    void pixelFormatUpdated(int pixFmt);
 
     void audioParamsUpdated(quint8 channels, quint32 sampleRate);
 
@@ -215,7 +215,7 @@ signals:
     void frameSizeUpdate(int w, int h);
     void audioParamsUpdate(quint8 channels, quint32 sampleRate);
     void aRatioUpdate(const AVRational &sar);
-    void pixelFormatUpdate(const QByteArray &pixFmt);
+    void pixelFormatUpdate(int pixFmt);
     void chText(const QString &);
     void updateLength(int);
     void updatePos(double);

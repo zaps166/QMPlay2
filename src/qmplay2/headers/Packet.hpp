@@ -76,9 +76,6 @@ public: // Operators
     Packet &operator =(const Packet &other);
     Packet &operator =(Packet &&other);
 
-public:
-    AVRational sampleAspectRatio = {0, 1};
-
 private:
     AVPacket *m_packet = nullptr;
     AVRational m_timeBase = {1, 10000};

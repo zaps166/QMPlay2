@@ -322,7 +322,7 @@ QString FFDecVDPAU::name() const
     return "FFmpeg/" VDPAUWriterName;
 }
 
-int FFDecVDPAU::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp)
+int FFDecVDPAU::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)

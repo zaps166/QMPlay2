@@ -47,7 +47,6 @@ protected:
 
     void decodeFirstStep(const Packet &encodedPacket, bool flush);
     int decodeStep(bool &frameFinished);
-    void decodeLastStep(Packet &encodedPacket, AVFrame *frame);
 
     bool maybeTakeFrame();
 

@@ -24,6 +24,7 @@
 
 extern "C" {
     #include <libavutil/pixfmt.h>
+    #include <libavutil/rational.h>
 }
 
 struct AVPixFmtDescriptor;
@@ -61,6 +62,12 @@ public:
     bool isEmpty() const;
     void clear();
 
+    void setTimeBase(double timeBase);
+
+    bool isTsValid() const;
+    double ts() const;
+    void setTS(double ts);
+
 public: // Video
     bool isInterlaced() const;
     bool isTopFieldFirst() const;
@@ -85,6 +92,8 @@ public: // Video
     int width(int plane = 0) const;
     int height(int plane = 0) const;
 
+    AVRational sampleAspectRatio() const;
+
     const quint8 *constData(int plane = 0) const;
     quint8 *data(int plane = 0);
 
@@ -104,6 +113,7 @@ private:
 
 private:
     AVFrame *m_frame = nullptr;
+    double m_timeBase = 1.0 / 10000.0;
 
     // Video only
     const AVPixFmtDescriptor *m_pixelFormat = nullptr;

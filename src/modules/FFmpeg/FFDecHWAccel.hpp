@@ -30,7 +30,7 @@ protected:
 
     bool hasHWAccel(const char *hwaccelName) const;
 
-    int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurryUp) override;
+    int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     virtual void downloadVideoFrame(Frame &decoded);
 
     bool hasCriticalError() const override;

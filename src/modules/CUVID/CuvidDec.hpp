@@ -57,7 +57,7 @@ private:
 
     VideoWriter *HWAccel() const override;
 
-    int decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newPixFmt, bool flush, unsigned hurry_up) override;
+    int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
 
     bool hasCriticalError() const override;
 
