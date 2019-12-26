@@ -18,9 +18,12 @@
 
 #pragma once
 
-#include <StreamInfo.hpp>
-
 #include <QString>
+#include <QVector>
+
+extern "C" {
+    #include <libavutil/avutil.h>
+}
 
 class ChapterInfo
 {

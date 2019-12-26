@@ -109,11 +109,3 @@ public:
     double rotation = qQNaN();
     bool spherical = false;
 };
-
-class QMPLAY2SHAREDLIB_EXPORT StreamsInfo : public QList<StreamInfo *>
-{
-    Q_DISABLE_COPY(StreamsInfo)
-public:
-    StreamsInfo() = default;
-    ~StreamsInfo();
-};

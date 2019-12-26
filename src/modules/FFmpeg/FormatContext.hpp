@@ -21,6 +21,7 @@
 #include <OpenThr.hpp>
 
 #include <ChapterProgramInfo.hpp>
+#include <StreamInfo.hpp>
 
 #include <QCoreApplication>
 
@@ -69,7 +70,7 @@ public:
     void setStreamOffset(double offset);
 
     bool isLocal, isStreamed, isError;
-    StreamsInfo streamsInfo;
+    QList<StreamInfo *> streamsInfo;
     double currPos;
 private:
     StreamInfo *getStreamInfo(AVStream *stream) const;

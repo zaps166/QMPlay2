@@ -219,6 +219,8 @@ FormatContext::~FormatContext()
         av_packet_free(&packet);
     }
     delete oggHelper;
+    for (StreamInfo *streamInfo : asConst(streamsInfo))
+        delete streamInfo;
 }
 
 bool FormatContext::metadataChanged() const

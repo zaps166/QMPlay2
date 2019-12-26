@@ -490,7 +490,9 @@ void FFDemux::addFormatContext(QString url, const QString &param)
     if (!url.contains("://"))
         url.prepend("file://");
     if (fmtCtx->open(url, param))
+    {
         streams_info.append(fmtCtx->streamsInfo);
+    }
     else
     {
         {

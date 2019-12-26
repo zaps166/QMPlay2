@@ -20,6 +20,7 @@
 
 #include <ChapterProgramInfo.hpp>
 #include <ModuleCommon.hpp>
+#include <StreamInfo.hpp>
 #include <Playlist.hpp>
 
 #include <QString>
@@ -43,7 +44,7 @@ public:
 
     static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = nullptr);
 
-    virtual ~Demuxer() = default;
+    virtual ~Demuxer();
 
     virtual bool metadataChanged() const;
 
@@ -84,5 +85,5 @@ private:
     virtual Playlist::Entries fetchTracks(const QString &url, bool &ok);
 
 protected:
-    StreamsInfo streams_info;
+    QList<StreamInfo *> streams_info;
 };

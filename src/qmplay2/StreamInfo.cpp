@@ -105,11 +105,3 @@ void StreamInfo::setFormat(const QByteArray &formatName)
             break;
     }
 }
-
-/**/
-
-StreamsInfo::~StreamsInfo()
-{
-    for (int i = 0; i < count(); ++i)
-        delete at(i);
-}

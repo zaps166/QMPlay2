@@ -67,6 +67,12 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
     return false;
 }
 
+Demuxer::~Demuxer()
+{
+    for (StreamInfo *streamInfo : asConst(streams_info))
+        delete streamInfo;
+}
+
 bool Demuxer::metadataChanged() const
 {
     return false;
