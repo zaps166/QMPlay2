@@ -31,10 +31,6 @@ extern "C"
     #include <libavutil/pixdesc.h>
 }
 
-#ifndef AV_CODEC_FLAG2_FAST
-    #define AV_CODEC_FLAG2_FAST CODEC_FLAG2_FAST
-#endif
-
 FFDecSW::FFDecSW(Module &module) :
     threads(0), lowres(0),
     thread_type_slice(false),
