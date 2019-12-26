@@ -95,12 +95,13 @@ int Decoder::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newP
     Q_UNUSED(hurry_up)
     return 0;
 }
-int Decoder::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
+int Decoder::decodeAudio(Packet &encodedPacket, QByteArray &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
 {
     Q_UNUSED(channels)
     Q_UNUSED(sampleRate)
     Q_UNUSED(flush)
-    return (decoded = encodedPacket).size();
+    decoded = QByteArray::fromRawData((const char *)encodedPacket.data(), encodedPacket.size());
+    return decoded.size();
 }
 bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
 {

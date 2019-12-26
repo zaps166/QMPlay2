@@ -85,7 +85,7 @@ bool PCM::read(Packet &decoded, int &idx)
     if (reader.isAborted())
         return false;
 
-    decoded.ts = (reader->pos() - offset) / (double)bytes[fmt] / chn / srate;
+    decoded.setTS((reader->pos() - offset) / (double)bytes[fmt] / chn / srate);
 
     const QByteArray dataBA = reader->read(chn * bytes[fmt] * 256);
     const int samples_with_channels = dataBA.size() / bytes[fmt];
@@ -123,7 +123,7 @@ bool PCM::read(Packet &decoded, int &idx)
     }
 
     idx = 0;
-    decoded.duration = decoded.size() / chn / sizeof(float) / (double)srate;
+    decoded.setDuration(decoded.size() / chn / sizeof(float) / (double)srate);
 
     return decoded.size();
 }

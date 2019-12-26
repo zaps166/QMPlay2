@@ -92,8 +92,8 @@ bool GME::read(Packet &decoded, int &idx)
     if (fadePos >= 0)
         ChiptuneCommon::doFadeOut(dstData, chunkSize, 2, m_srate, fadePos, 5.0);
 
-    decoded.ts = t;
-    decoded.duration = chunkSize / 2 / (double)m_srate;
+    decoded.setTS(t);
+    decoded.setDuration(chunkSize / 2 / (double)m_srate);
 
     idx = 0;
 

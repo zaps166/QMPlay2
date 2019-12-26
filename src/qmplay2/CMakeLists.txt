@@ -30,7 +30,6 @@ set(QMPLAY2_HDR
     headers/VideoWriter.hpp
     headers/SubsDec.hpp
     headers/ByteArray.hpp
-    headers/TimeStamp.hpp
     headers/Packet.hpp
     headers/Frame.hpp
     headers/StreamInfo.hpp
@@ -38,7 +37,6 @@ set(QMPLAY2_HDR
     headers/IOController.hpp
     headers/ChapterProgramInfo.hpp
     headers/PacketBuffer.hpp
-    headers/Buffer.hpp
     headers/NetworkAccess.hpp
     headers/IPC.hpp
     headers/CPU.hpp
@@ -79,11 +77,11 @@ set(QMPLAY2_SRC
     SndResampler.cpp
     VideoWriter.cpp
     SubsDec.cpp
+    Packet.cpp
     Frame.cpp
     StreamInfo.cpp
     DockWidget.cpp
     PacketBuffer.cpp
-    Buffer.cpp
     NetworkAccess.cpp
     Version.cpp
     YouTubeDL.cpp

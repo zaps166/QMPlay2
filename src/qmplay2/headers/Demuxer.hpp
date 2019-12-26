@@ -24,7 +24,7 @@
 
 #include <QString>
 
-struct Packet;
+class Packet;
 
 class QMPLAY2SHAREDLIB_EXPORT Demuxer : protected ModuleCommon, public BasicIO
 {

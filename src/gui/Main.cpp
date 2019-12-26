@@ -713,6 +713,7 @@ int main(int argc, char *argv[])
 #endif
     }
 
+    qRegisterMetaType<AVRational>("AVRational");
     qRegisterMetaType<Frame>("Frame");
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

@@ -92,7 +92,7 @@ int FFDecHWAccel::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray 
     if (frameFinished)
         decodeLastStep(encodedPacket, frame);
     else
-        encodedPacket.ts.setInvalid();
+        encodedPacket.setTsInvalid();
 
     return m_hasCriticalError ? -1 : bytesConsumed;
 }

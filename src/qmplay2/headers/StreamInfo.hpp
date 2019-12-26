@@ -62,7 +62,6 @@ public:
         return av_q2d(time_base);
     }
 
-    void setSampleAspectRatio(double sar);
     inline double getSampleAspectRatio() const
     {
         return av_q2d(sample_aspect_ratio);
@@ -103,7 +102,7 @@ public:
     QVector<QMPlay2Tag> other_info;
     bool is_default = true;
     bool must_decode = false;
-    AVRational time_base = {0, 0};
+    AVRational time_base = {1, 10000};
 
     // Video only
     AVRational fps = {0, 1};

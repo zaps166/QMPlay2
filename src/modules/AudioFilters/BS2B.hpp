@@ -32,7 +32,7 @@ public:
 private:
     bool setAudioParameters(uchar, uint srate) override;
     void clearBuffers() override;
-    double filter(Buffer &data, bool flush) override;
+    double filter(QByteArray &data, bool flush) override;
 
     void alloc();
 

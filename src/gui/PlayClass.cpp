@@ -124,7 +124,7 @@ PlayClass::PlayClass() :
 
 
     connect(&timTerminate, SIGNAL(timeout()), this, SLOT(timTerminateFinished()));
-    connect(this, SIGNAL(aRatioUpdate(double)), this, SLOT(aRatioUpdated(double)));
+    connect(this, &PlayClass::aRatioUpdate, this, &PlayClass::aRatioUpdated);
     connect(this, SIGNAL(frameSizeUpdate(int, int)), this, SLOT(frameSizeUpdated(int, int)));
     connect(this, SIGNAL(pixelFormatUpdate(const QByteArray &)), this, SLOT(pixelFormatUpdated(const QByteArray &)));
     connect(this, SIGNAL(audioParamsUpdate(quint8, quint32)), this, SLOT(audioParamsUpdated(quint8, quint32)));
@@ -479,9 +479,9 @@ double PlayClass::getARatio()
         return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->width / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->height;
     return aRatioName.toDouble();
 }
-inline double PlayClass::getSAR()
+inline AVRational PlayClass::getSAR()
 {
-    return demuxThr->demuxer->streamsInfo().at(videoStream)->getSampleAspectRatio();
+    return demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio;
 }
 
 void PlayClass::flushAssEvents()
@@ -1091,11 +1091,11 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
         vThr->updateUnlock();
     }
 }
-void PlayClass::aRatioUpdated(double sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
+void PlayClass::aRatioUpdated(const AVRational &sar) //jeżeli współczynnik proporcji zmieni się podczas odtwarzania
 {
     if (hasVideoStream())
     {
-        demuxThr->demuxer->streamsInfo().at(videoStream)->setSampleAspectRatio(sar);
+        demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio = sar;
         const double aspect_ratio = getARatio();
         if (ass)
             ass->setARatio(aspect_ratio);

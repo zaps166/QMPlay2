@@ -17,7 +17,6 @@
 */
 
 #include <SwapStereo.hpp>
-#include <Buffer.hpp>
 
 SwapStereo::SwapStereo(Module &module)
 {
@@ -40,7 +39,7 @@ bool SwapStereo::setAudioParameters(uchar chn, uint srate)
     m_canFilter = (m_enabled && m_hasParameters);
     return m_hasParameters;
 }
-double SwapStereo::filter(Buffer &data, bool)
+double SwapStereo::filter(QByteArray &data, bool)
 {
     if (m_canFilter)
     {

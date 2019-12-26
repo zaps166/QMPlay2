@@ -160,9 +160,9 @@ bool MPDemux::read(Packet &decoded, int &idx)
         decodedFloat[i] = decodedInt[i] / 2147483648.0;
 
     idx = 0;
-    decoded.ts = pos;
-    decoded.duration = (double)decoded.size() / (srate * 2 * 4); //SRATE * CHN * BITS/8
-    pos += decoded.duration;
+    decoded.setTS(pos);
+    decoded.setDuration((double)decoded.size() / (srate * 2 * 4)); //SRATE * CHN * BITS/8
+    pos += decoded.duration();
 
     return true;
 }

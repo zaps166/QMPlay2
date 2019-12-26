@@ -17,7 +17,6 @@
 */
 
 #include <PhaseReverse.hpp>
-#include <Buffer.hpp>
 
 PhaseReverse::PhaseReverse(Module &module) :
     hasParameters(false), canFilter(false)
@@ -41,7 +40,7 @@ bool PhaseReverse::setAudioParameters(uchar chn, uint /*srate*/)
     canFilter = enabled && hasParameters;
     return hasParameters;
 }
-double PhaseReverse::filter(Buffer &data, bool)
+double PhaseReverse::filter(QByteArray &data, bool)
 {
     if (canFilter)
     {

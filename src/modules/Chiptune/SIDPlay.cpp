@@ -115,12 +115,12 @@ bool SIDPlay::read(Packet &decoded, int &idx)
     if (fadePos >= 0)
         ChiptuneCommon::doFadeOut(dstData, chunkSize, m_chn, m_srate, fadePos, 5.0);
 
-    decoded.ts = m_time;
-    decoded.duration = chunkSize / m_chn / (double)m_srate;
+    decoded.setTS(m_time);
+    decoded.setDuration(chunkSize / m_chn / (double)m_srate);
 
     idx = 0;
 
-    m_time += decoded.duration;
+    m_time += decoded.duration();
 
     return true;
 }

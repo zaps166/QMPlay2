@@ -21,6 +21,8 @@
 #include <StreamInfo.hpp>
 #include <Packet.hpp>
 
+#include <QDebug>
+
 extern "C"
 {
     #include <libavformat/avformat.h>
@@ -108,20 +110,19 @@ MkvMuxer::~MkvMuxer()
 
 bool MkvMuxer::write(Packet &packet, const int idx)
 {
-    const AVStream *stream = m_ctx->streams[idx];
-    const double timeBase = (double)stream->time_base.num / (double)stream->time_base.den;
+    const double timeBase = av_q2d(m_ctx->streams[idx]->time_base);
 
     AVPacket pkt;
     av_init_packet(&pkt);
 
-    pkt.duration = round(packet.duration / timeBase);
-    if (packet.ts.hasDts())
-        pkt.dts = round(packet.ts.dts() / timeBase);
-    if (packet.ts.hasPts())
-        pkt.pts = round(packet.ts.pts() / timeBase);
-    pkt.flags = packet.hasKeyFrame ? AV_PKT_FLAG_KEY : 0;
-    pkt.buf = packet.toAvBufferRef();
-    pkt.data = pkt.buf->data + packet.offset();
+    pkt.duration = round(packet.duration() / timeBase);
+    if (packet.hasDts())
+        pkt.dts = round(packet.dts() / timeBase);
+    if (packet.hasPts())
+        pkt.pts = round(packet.pts() / timeBase);
+    pkt.flags = packet.hasKeyFrame() ? AV_PKT_FLAG_KEY : 0;
+    pkt.buf = packet.getBufferRef();
+    pkt.data = packet.data();
     pkt.size = packet.size();
     pkt.stream_index = idx;
 

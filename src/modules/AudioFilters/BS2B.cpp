@@ -17,7 +17,6 @@
 */
 
 #include <BS2B.hpp>
-#include <Buffer.hpp>
 
 BS2B::BS2B(Module &module) :
     m_hasParameters(false), m_canFilter(false),
@@ -54,7 +53,7 @@ void BS2B::clearBuffers()
     if (m_bs2b)
         bs2b_clear(m_bs2b);
 }
-double BS2B::filter(Buffer &data, bool flush)
+double BS2B::filter(QByteArray &data, bool flush)
 {
     Q_UNUSED(flush)
     if (m_canFilter)

@@ -21,6 +21,10 @@
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
 
+extern "C" {
+    #include <libavutil/rational.h>
+}
+
 class QMPlay2OSD;
 class VideoWriter;
 
@@ -66,7 +70,7 @@ public:
     bool setRotate90();
     void setVideoAdjustment();
     void setFrameSize(int w, int h);
-    void setARatio(double aRatio, double sar);
+    void setARatio(double aRatio, const AVRational &sar);
     void setZoom();
     void otherReset();
 
@@ -82,7 +86,7 @@ private:
     void run() override;
 
     bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError;
-    double lastSampleAspectRatio;
+    AVRational lastSAR;
     int W, H;
     quint32 seq;
 

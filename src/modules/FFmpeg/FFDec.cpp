@@ -27,10 +27,6 @@ extern "C"
     #include <libavutil/pixdesc.h>
 }
 
-#include <cmath>
-
-using namespace std;
-
 FFDec::FFDec() :
     codec_ctx(nullptr),
     packet(nullptr),
@@ -98,17 +94,9 @@ bool FFDec::openCodec(AVCodec *codec)
 
 void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
 {
+    av_packet_copy_props(packet, encodedPacket);
     packet->data = (quint8 *)encodedPacket.data();
     packet->size = encodedPacket.size();
-    if (!encodedPacket.palette.isEmpty())
-    {
-        if (auto data = av_packet_new_side_data(packet, AV_PKT_DATA_PALETTE, encodedPacket.palette.size()))
-            memcpy(data, encodedPacket.palette.constData(), encodedPacket.palette.size());
-    }
-    if (encodedPacket.ts.hasDts())
-        packet->dts = round(encodedPacket.ts.dts() / time_base);
-    if (encodedPacket.ts.hasPts())
-        packet->pts = round(encodedPacket.ts.pts() / time_base);
     if (flush)
     {
         avcodec_flush_buffers(codec_ctx);
@@ -156,13 +144,13 @@ void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
     const int64_t ts = frame->best_effort_timestamp;
     if (ts != QMPLAY2_NOPTS_VALUE)
-        encodedPacket.ts = ts * time_base;
+        encodedPacket.setTS(ts * time_base);
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
     {
         double sampleAspectRatio;
         memcpy(&sampleAspectRatio, &frame->reordered_opaque, 8);
         if (qFuzzyIsNull(sampleAspectRatio) && frame->sample_aspect_ratio.num)
-            encodedPacket.sampleAspectRatio = av_q2d(frame->sample_aspect_ratio);
+            encodedPacket.sampleAspectRatio = frame->sample_aspect_ratio;
     }
 }
 

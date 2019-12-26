@@ -232,7 +232,7 @@ void AudioThr::run()
             if (!hasBufferedSamples && (dec->pendingFrames() == 0 || flushAudio))
                 packet = playC.aPackets.fetch();
             else if (hasBufferedSamples)
-                packet.ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
+                packet.setTS(audio_pts + playC.audio_last_delay + delay); //szacowanie czasu
             playC.aPackets.unlock();
 
             if (playC.nextFrameB && playC.seekTo < 0.0 && playC.audioSeekPos <= 0.0 && playC.frame_last_pts <= 0.0)
@@ -250,7 +250,7 @@ void AudioThr::run()
                 break;
             }
 
-            Buffer decoded;
+            QByteArray decoded;
             if (!hasBufferedSamples)
             {
                 quint8 newChannels = 0;
@@ -281,7 +281,7 @@ void AudioThr::run()
 
             if (m_resamplerFirst && sndResampler.isOpen())
             {
-                Buffer converted;
+                QByteArray converted;
                 sndResampler.convert(decoded, converted);
                 decoded = std::move(converted);
             }
@@ -333,9 +333,9 @@ void AudioThr::run()
                 decodedSize -= chunk;
 
                 playC.audio_last_delay = (double)decodedChunk.size() / (double)(sizeof(float) * currentChannels() * currentSampleRate());
-                if (packet.ts.isValid())
+                if (packet.isTsValid())
                 {
-                    audio_pts = playC.audio_current_pts = packet.ts - delay;
+                    audio_pts = playC.audio_current_pts = packet.ts() - delay;
                     if (!playC.vThr && playC.audioSeekPos <= 0)
                     {
 #ifdef Q_OS_WIN
@@ -362,7 +362,7 @@ void AudioThr::run()
                 }
 
                 tmp_time += playC.audio_last_delay * 1000.0;
-                packet.ts += playC.audio_last_delay;
+                packet.setTS(packet.ts() + playC.audio_last_delay);
 
 #ifdef Q_OS_WIN
                 canUpdatePos = true;

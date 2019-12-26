@@ -525,7 +525,9 @@ bool FormatContext::read(Packet &encoded, int &idx)
 
     int ret;
     if (!maybeHasFrame)
+    {
         ret = av_read_frame(formatCtx, packet);
+    }
     else
     {
         maybeHasFrame = false;
@@ -570,64 +572,48 @@ bool FormatContext::read(Packet &encoded, int &idx)
     if (fixMkvAss && stream->codecpar->codec_id == AV_CODEC_ID_ASS)
         matroska_fix_ass_packet(stream->time_base, packet);
 
-    if (!packet->buf || forceCopy) //Buffer isn't reference-counted, so copy the data
+    encoded = Packet(packet, forceCopy);
+    encoded.setTimeBase(stream->time_base);
+
+    if (packet->duration <= 0)
     {
-        encoded.assign(packet->data, packet->size, packet->size + AV_INPUT_BUFFER_PADDING_SIZE);
+        double newDuration = 0.0;
+        if (encoded.ts())
+        {
+            // Calculate packet duration if doesn't exist
+            newDuration = qMax(0.0, encoded.ts() - streamsTS.at(ff_idx));
+        }
+        encoded.setDuration(newDuration);
     }
-    else
-    {
-        encoded.assign(packet->buf, packet->size, packet->data - packet->buf->data);
-        packet->buf = nullptr;
-    }
-
-    if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO && stream->codecpar->format == AV_PIX_FMT_PAL8)
-    {
-        int size = 0;
-        const auto data = av_packet_get_side_data(packet, AV_PKT_DATA_PALETTE, &size);
-        if (size > 0 && data)
-            encoded.palette = QByteArray((const char *)data, size);
-    }
-
-    const double time_base = av_q2d(stream->time_base);
-
-    encoded.ts.setInvalid();
-    if (packet->dts != QMPLAY2_NOPTS_VALUE)
-        encoded.ts.setDts(packet->dts * time_base, startTime);
-    if (packet->pts != QMPLAY2_NOPTS_VALUE)
-        encoded.ts.setPts(packet->pts * time_base, startTime);
-
-    if (packet->duration > 0)
-        encoded.duration = packet->duration * time_base;
-    else if (!encoded.ts || (encoded.duration = encoded.ts - streamsTS.at(ff_idx)) < 0.0 /* Calculate packet duration if doesn't exists */)
-        encoded.duration = 0.0;
-    streamsTS[ff_idx] = encoded.ts;
+    streamsTS[ff_idx] = encoded.ts();
 
     if (isStreamed)
     {
         if (!isOneStreamOgg)
-            encoded.ts += streamsOffset.at(ff_idx);
+        {
+            encoded.setTS(encoded.ts() + streamsOffset.at(ff_idx));
+        }
         else
         {
-            encoded.ts = lastTime;
-            lastTime += encoded.duration;
+            encoded.setTS(lastTime);
+            lastTime += encoded.duration();
         }
     }
-    else if (lengthToPlay > 0.0 && encoded.ts > lengthToPlay)
+    else if (lengthToPlay > 0.0 && encoded.ts() > lengthToPlay)
     {
         isError = true;
         return false;
     }
 
-    encoded.hasKeyFrame = packet->flags & AV_PKT_FLAG_KEY;
     if (stream->sample_aspect_ratio.num)
-        encoded.sampleAspectRatio = av_q2d(stream->sample_aspect_ratio);
+        encoded.sampleAspectRatio = stream->sample_aspect_ratio;
 
     // Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
-    if (encoded.hasKeyFrame && !encoded.ts.hasDts())
-        encoded.ts.setDts(nextDts.at(ff_idx));
-    nextDts[ff_idx] = encoded.ts + encoded.duration;
+    if (encoded.hasKeyFrame() && !encoded.hasDts())
+        encoded.setDts(nextDts.at(ff_idx));
+    nextDts[ff_idx] = encoded.ts() + encoded.duration();
 
-    currPos = encoded.ts;
+    currPos = encoded.ts();
 
     idx = index_map.at(ff_idx);
 

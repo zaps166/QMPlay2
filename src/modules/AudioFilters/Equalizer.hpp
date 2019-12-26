@@ -38,7 +38,7 @@ private:
     bool setAudioParameters(uchar, uint) override;
     int bufferedSamples() const override;
     void clearBuffers() override;
-    double filter(Buffer &data, bool flush) override;
+    double filter(QByteArray &data, bool flush) override;
 
     /**/
 

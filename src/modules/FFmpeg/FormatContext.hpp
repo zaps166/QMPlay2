@@ -21,7 +21,6 @@
 #include <OpenThr.hpp>
 
 #include <ChapterProgramInfo.hpp>
-#include <TimeStamp.hpp>
 
 #include <QCoreApplication>
 
@@ -35,7 +34,7 @@ struct AVDictionary;
 struct AVStream;
 struct AVPacket;
 class OggHelper;
-struct Packet;
+class Packet;
 
 class FormatContext
 {
@@ -80,7 +79,7 @@ private:
 
     QVector<int> index_map;
     QVector<AVStream *> streams;
-    QVector<TimeStamp> streamsTS;
+    QVector<double> streamsTS;
     QVector<double> streamsOffset;
     QVector<double> nextDts;
     AVFormatContext *formatCtx;

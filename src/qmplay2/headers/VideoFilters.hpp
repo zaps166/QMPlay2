@@ -27,7 +27,6 @@
 #include <QQueue>
 
 class VideoFiltersThr;
-class TimeStamp;
 
 class QMPLAY2SHAREDLIB_EXPORT VideoFilters
 {
@@ -54,7 +53,7 @@ public:
     void removeLastFromInputBuffer();
 
     void addFrame(const Frame &videoFrame, double ts);
-    bool getFrame(Frame &videoFrame, TimeStamp &ts);
+    bool getFrame(Frame &videoFrame, double &ts);
 
     bool readyRead();
 private:

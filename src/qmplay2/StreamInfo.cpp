@@ -79,11 +79,6 @@ StreamInfo::StreamInfo(quint32 sampleRateArg, quint8 channelsArg)
     channels = channelsArg;
 }
 
-void StreamInfo::setSampleAspectRatio(double sar)
-{
-    sample_aspect_ratio = av_d2q(sar, 10000);
-}
-
 QByteArray StreamInfo::getFormatName() const
 {
     switch (codec_type)

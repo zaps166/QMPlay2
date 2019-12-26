@@ -99,7 +99,7 @@ void FFDecSW::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
     setPixelFormat();
 }
 
-int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
+int FFDecSW::decodeAudio(Packet &encodedPacket, QByteArray &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
 {
     const bool onlyPendingFrames = (!flush && encodedPacket.isEmpty() && pendingFrames() > 0);
 
@@ -201,7 +201,7 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, Buffer &decoded, quint8 &channel
     if (frameFinished)
         decodeLastStep(encodedPacket, frame);
     else
-        encodedPacket.ts.setInvalid();
+        encodedPacket.setTsInvalid();
 
     return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }
@@ -275,7 +275,7 @@ int FFDecSW::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &newP
     if (frameFinished)
         decodeLastStep(encodedPacket, frame);
     else
-        encodedPacket.ts.setInvalid();
+        encodedPacket.setTsInvalid();
 
     return bytesConsumed < 0 ? -1 : bytesConsumed;
 }
@@ -303,7 +303,7 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
         m_subtitles.emplace_back();
         auto &subtitle = *m_subtitles.rbegin();
 
-        subtitle.pts = avSubtitle.start_display_time + encodedPacket.ts;
+        subtitle.pts = avSubtitle.start_display_time + encodedPacket.ts();
         subtitle.duration = (avSubtitle.end_display_time != static_cast<uint32_t>(-1))
             ? (avSubtitle.end_display_time - avSubtitle.start_display_time) / 1000.0
             : -1.0;

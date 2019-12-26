@@ -183,8 +183,8 @@ bool AudioCDDemux::read(Packet &decoded, int &idx)
             decoded_data[i] = cd_samples[i] / 32768.0f;
 
         idx = 0;
-        decoded.ts = sector * duration;
-        decoded.duration = duration;
+        decoded.setTS(sector * duration);
+        decoded.setDuration(duration);
 
         ++sector;
         return true;

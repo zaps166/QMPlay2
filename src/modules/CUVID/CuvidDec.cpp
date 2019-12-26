@@ -671,7 +671,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
         m_forceFlush = false;
         if (!createCuvidVideoParser())
         {
-            encodedPacket.ts.setInvalid();
+            encodedPacket.setTsInvalid();
             return -1;
         }
     }
@@ -682,22 +682,22 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
     else
     {
         cuvidPkt.flags = CUVID_PKT_TIMESTAMP;
-        cuvidPkt.timestamp = encodedPacket.ts.pts() * 10000000.0 + 0.5;
+        cuvidPkt.timestamp = encodedPacket.pts() * 10000000.0 + 0.5;
         if (m_bsfCtx)
         {
-            m_pkt->buf = encodedPacket.toAvBufferRef();
-            m_pkt->data = m_pkt->buf->data + encodedPacket.offset();
+            m_pkt->buf = encodedPacket.getBufferRef();
+            m_pkt->data = encodedPacket.data();
             m_pkt->size = encodedPacket.size();
 
             if (av_bsf_send_packet(m_bsfCtx, m_pkt) < 0) //It unrefs "pkt"
             {
-                encodedPacket.ts.setInvalid();
+                encodedPacket.setTsInvalid();
                 return -1;
             }
 
             if (av_bsf_receive_packet(m_bsfCtx, m_pkt) < 0) //Can it return more than one packet in this case?
             {
-                encodedPacket.ts.setInvalid();
+                encodedPacket.setTsInvalid();
                 return -1;
             }
 
@@ -706,7 +706,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
         }
         else
         {
-            cuvidPkt.payload = encodedPacket.constData();
+            cuvidPkt.payload = encodedPacket.data();
             cuvidPkt.payload_size = encodedPacket.size();
         }
     }
@@ -714,13 +714,13 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
     const bool videoDataParsed = (cuvid::parseVideoData(m_cuvidParser, &cuvidPkt) == CUDA_SUCCESS);
 
     if (cuvidPkt.flags == CUVID_PKT_TIMESTAMP && videoDataParsed)
-        m_timestamps.enqueue(encodedPacket.ts);
+        m_timestamps.enqueue(encodedPacket.ts());
 
     if (m_pkt)
         av_packet_unref(m_pkt);
 
     if (m_cuvidSurfaces.isEmpty())
-        encodedPacket.ts.setInvalid();
+        encodedPacket.setTsInvalid();
     else
     {
         const CUVIDPARSERDISPINFO dispInfo = m_cuvidSurfaces.dequeue();
@@ -746,7 +746,7 @@ int CuvidDec::decodeVideo(Packet &encodedPacket, Frame &decoded, QByteArray &new
             m_lastTS[0] += diff;
             ts = m_lastTS[0];
         }
-        encodedPacket.ts = ts;
+        encodedPacket.setTS(ts);
 
         if (~hurry_up)
         {

@@ -20,7 +20,6 @@
 
 #include <DeintFilter.hpp>
 #include <Frame.hpp>
-#include <TimeStamp.hpp>
 #include <Module.hpp>
 #include <CPU.hpp>
 
@@ -352,7 +351,7 @@ void VideoFilters::addFrame(const Frame &videoFrame, double ts)
         outputNotEmpty = true;
     }
 }
-bool VideoFilters::getFrame(Frame &videoFrame, TimeStamp &ts)
+bool VideoFilters::getFrame(Frame &videoFrame, double &ts)
 {
     bool locked, ret;
     if ((locked = !filters.isEmpty()))

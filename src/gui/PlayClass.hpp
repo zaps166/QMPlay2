@@ -98,7 +98,7 @@ private:
     void speedMessageAndOSD();
 
     double getARatio();
-    inline double getSAR();
+    inline AVRational getSAR();
 
     void flushAssEvents();
     void clearSubtitlesBuffer();
@@ -201,7 +201,7 @@ private slots:
     void nextFrame();
 
     void frameSizeUpdated(int w, int h);
-    void aRatioUpdated(double sar);
+    void aRatioUpdated(const AVRational &sar);
     void pixelFormatUpdated(const QByteArray &pixFmt);
 
     void audioParamsUpdated(quint8 channels, quint32 sampleRate);
@@ -214,7 +214,7 @@ private slots:
 signals:
     void frameSizeUpdate(int w, int h);
     void audioParamsUpdate(quint8 channels, quint32 sampleRate);
-    void aRatioUpdate(double sar);
+    void aRatioUpdate(const AVRational &sar);
     void pixelFormatUpdate(const QByteArray &pixFmt);
     void chText(const QString &);
     void updateLength(int);

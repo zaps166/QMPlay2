@@ -28,7 +28,7 @@ public:
     bool set() override;
 private:
     bool setAudioParameters(uchar, uint) override;
-    double filter(Buffer &, bool) override;
+    double filter(QByteArray &, bool) override;
 
     bool enabled, hasParameters, canFilter, reverseRight;
     uchar chn;

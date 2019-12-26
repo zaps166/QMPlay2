@@ -46,7 +46,6 @@
 */
 
 #include <DysonCompressor.hpp>
-#include <Buffer.hpp>
 
 #include <cmath>
 
@@ -142,7 +141,7 @@ void DysonCompressor::clearBuffers()
             samplesdelayed.append(FloatVector(NDELAY));
     }
 }
-double DysonCompressor::filter(Buffer &data, bool flush)
+double DysonCompressor::filter(QByteArray &data, bool flush)
 {
     if (!enabled)
         return 0.0;

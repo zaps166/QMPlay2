@@ -123,7 +123,7 @@ bool Rayman2::read(Packet &decoded, int &idx)
     if (reader.isAborted())
         return false;
 
-    decoded.ts = (reader->pos() - 0x64) * 2.0 / chn / srate;
+    decoded.setTS((reader->pos() - 0x64) * 2.0 / chn / srate);
 
     const QByteArray sampleCodes = reader->read(chn * 256);
 
@@ -145,7 +145,7 @@ bool Rayman2::read(Packet &decoded, int &idx)
         return false;
 
     idx = 0;
-    decoded.duration = decoded.size() / chn / sizeof(float) / (double)srate;
+    decoded.setDuration(decoded.size() / chn / sizeof(float) / (double)srate);
 
     return !reader.isAborted();
 }

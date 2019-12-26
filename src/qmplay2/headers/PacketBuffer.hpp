@@ -60,15 +60,15 @@ public:
 
     inline double firstPacketTime() const
     {
-        return begin()->ts;
+        return begin()->ts();
     }
     inline double currentPacketTime() const
     {
-        return at(m_pos).ts;
+        return at(m_pos).ts();
     }
     inline double lastPacketTime() const
     {
-        return (--end())->ts;
+        return (--end())->ts();
     }
 
     inline double remainingDuration() const

@@ -18,15 +18,64 @@
 
 #pragma once
 
-#include <TimeStamp.hpp>
-#include <Buffer.hpp>
+#include <QMPlay2Lib.hpp>
 
-#include <QByteArray>
+extern "C" {
+    #include <libavcodec/avcodec.h>
+}
 
-struct QMPLAY2SHAREDLIB_EXPORT Packet : public Buffer
+class QMPLAY2SHAREDLIB_EXPORT Packet
 {
-    TimeStamp ts;
-    double duration, sampleAspectRatio = 0.0;
-    bool hasKeyFrame = true;
-    QByteArray palette;
+public:
+    Packet();
+    explicit Packet(AVPacket *packet, bool forceCopy = false);
+    Packet(const Packet &other);
+    Packet(Packet &&other);
+    ~Packet();
+
+    bool isEmpty() const;
+    void clear();
+
+    void setTimeBase(const AVRational &timeBase);
+
+    void resize(int size);
+    int size() const;
+
+    AVBufferRef *getBufferRef() const;
+    uint8_t *data() const;
+
+    double duration() const;
+    void setDuration(double duration);
+
+    bool hasKeyFrame() const;
+
+    bool isTsValid() const;
+    void setTsInvalid();
+
+    bool hasDts() const;
+    double dts() const;
+    void setDts(double dts);
+
+    bool hasPts() const;
+    double pts() const;
+    void setPts(double pts);
+
+    double ts() const;
+    void setTS(double ts);
+
+public: // Operators
+    inline operator const AVPacket *() const
+    {
+        return m_packet;
+    }
+
+    Packet &operator =(const Packet &other);
+    Packet &operator =(Packet &&other);
+
+public:
+    AVRational sampleAspectRatio = {0, 1};
+
+private:
+    AVPacket *m_packet = nullptr;
+    AVRational m_timeBase = {1, 10000};
 };

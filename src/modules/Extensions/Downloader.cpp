@@ -677,7 +677,7 @@ void DownloaderThread::run()
 
                         if (length > 0.0)
                         {
-                            pos = qMax<double>(pos, packet.ts);
+                            pos = qMax<double>(pos, packet.ts());
                             emit listSig(SET_POS, pos * 100 / length);
                         }
                     }

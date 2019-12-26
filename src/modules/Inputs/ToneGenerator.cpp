@@ -107,9 +107,9 @@ bool ToneGenerator::read(Packet &decoded, int &idx)
             samples[i + c] = sin(2.0 * M_PI * freqs[c] * i / srate / chn); //don't use sinf()!
 
     idx = 0;
-    decoded.ts = pos;
-    decoded.duration = 1.0;
-    pos += decoded.duration;
+    decoded.setTS(pos);
+    decoded.setDuration(1.0);
+    pos += decoded.duration();
 
     return true;
 }

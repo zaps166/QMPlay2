@@ -37,7 +37,7 @@ private:
     bool setAudioParameters(uchar chn, uint srate) override;
     int bufferedSamples() const override;
     void clearBuffers() override;
-    double filter(Buffer &data, bool flush) override;
+    double filter(QByteArray &data, bool flush) override;
 
     using FloatVector = QVector<float>;
 
