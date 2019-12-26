@@ -18,8 +18,6 @@
 
 #pragma once
 
-#define QMPLAY2_NOPTS_VALUE ((qint64)AV_NOPTS_VALUE)
-
 #define DecoderName "FFmpeg Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"

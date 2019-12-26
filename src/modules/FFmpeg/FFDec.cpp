@@ -143,7 +143,7 @@ int FFDec::decodeStep(bool &frameFinished)
 void FFDec::decodeLastStep(Packet &encodedPacket, AVFrame *frame)
 {
     const int64_t ts = frame->best_effort_timestamp;
-    if (ts != QMPLAY2_NOPTS_VALUE)
+    if (ts != AV_NOPTS_VALUE)
         encodedPacket.setTS(ts * time_base);
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
     {

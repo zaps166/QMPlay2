@@ -444,7 +444,7 @@ qint64 FormatContext::size() const
 }
 double FormatContext::length() const
 {
-    if (!isStreamed && !stillImage && formatCtx->duration != QMPLAY2_NOPTS_VALUE)
+    if (!isStreamed && !stillImage && formatCtx->duration != AV_NOPTS_VALUE)
     {
         if (lengthToPlay > 0.0)
             return lengthToPlay;

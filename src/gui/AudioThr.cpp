@@ -227,12 +227,13 @@ void AudioThr::run()
             waiting = false;
 
             const bool flushAudio = playC.flushAudio;
+            double ts = qQNaN();
 
             Packet packet;
             if (!hasBufferedSamples && (dec->pendingFrames() == 0 || flushAudio))
                 packet = playC.aPackets.fetch();
             else if (hasBufferedSamples)
-                packet.setTS(audio_pts + playC.audio_last_delay + delay); //szacowanie czasu
+                ts = audio_pts + playC.audio_last_delay + delay; //szacowanie czasu
             playC.aPackets.unlock();
 
             if (playC.nextFrameB && playC.seekTo < 0.0 && playC.audioSeekPos <= 0.0 && playC.frame_last_pts <= 0.0)
@@ -255,7 +256,7 @@ void AudioThr::run()
             {
                 quint8 newChannels = 0;
                 quint32 newSampleRate = 0;
-                const int bytesConsumed = dec->decodeAudio(packet, decoded, newChannels, newSampleRate, flushAudio);
+                const int bytesConsumed = dec->decodeAudio(packet, decoded, ts, newChannels, newSampleRate, flushAudio);
                 tmp_br += bytesConsumed;
                 if (newChannels && newSampleRate && (newChannels != realChannels || newSampleRate != realSample_rate))
                 {
@@ -333,9 +334,9 @@ void AudioThr::run()
                 decodedSize -= chunk;
 
                 playC.audio_last_delay = (double)decodedChunk.size() / (double)(sizeof(float) * currentChannels() * currentSampleRate());
-                if (packet.isTsValid())
+                if (!qIsNaN(ts))
                 {
-                    audio_pts = playC.audio_current_pts = packet.ts() - delay;
+                    audio_pts = playC.audio_current_pts = ts - delay;
                     if (!playC.vThr && playC.audioSeekPos <= 0)
                     {
 #ifdef Q_OS_WIN
@@ -362,7 +363,8 @@ void AudioThr::run()
                 }
 
                 tmp_time += playC.audio_last_delay * 1000.0;
-                packet.setTS(packet.ts() + playC.audio_last_delay);
+                if (!qIsNaN(ts))
+                    ts += playC.audio_last_delay;
 
 #ifdef Q_OS_WIN
                 canUpdatePos = true;

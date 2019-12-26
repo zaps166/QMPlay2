@@ -95,7 +95,7 @@ void FFDecSW::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
     setPixelFormat();
 }
 
-int FFDecSW::decodeAudio(Packet &encodedPacket, QByteArray &decoded, quint8 &channels, quint32 &sampleRate, bool flush)
+int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush)
 {
     const bool onlyPendingFrames = (!flush && encodedPacket.isEmpty() && pendingFrames() > 0);
 
@@ -195,9 +195,16 @@ int FFDecSW::decodeAudio(Packet &encodedPacket, QByteArray &decoded, quint8 &cha
     }
 
     if (frameFinished)
-        decodeLastStep(encodedPacket, frame);
+    {
+        if (frame->best_effort_timestamp != AV_NOPTS_VALUE)
+            ts = frame->best_effort_timestamp * time_base;
+        else
+            ts = encodedPacket.ts();
+    }
     else
-        encodedPacket.setTsInvalid();
+    {
+        ts = qQNaN();
+    }
 
     return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }
