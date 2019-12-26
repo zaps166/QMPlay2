@@ -577,6 +577,9 @@ bool FormatContext::read(Packet &encoded, int &idx)
     encoded = Packet(packet, forceCopy);
     encoded.setTimeBase(stream->time_base);
 
+    if (!qFuzzyIsNull(startTime))
+        encoded.setOffsetTS(startTime);
+
     if (packet->duration <= 0)
     {
         double newDuration = 0.0;

@@ -20,6 +20,8 @@
 
 #include <QDebug>
 
+#include <cmath>
+
 Packet::Packet()
     : m_packet(av_packet_alloc())
 {
@@ -64,6 +66,14 @@ void Packet::setTimeBase(const AVRational &timeBase)
 {
     m_timeBase = timeBase;
 }
+void Packet::setOffsetTS(double offsetTS)
+{
+    const qint64 offsetTSInt = d2i(offsetTS);
+    if (hasPts())
+        m_packet->pts -= offsetTSInt;
+    if (hasDts())
+        m_packet->dts -= offsetTSInt;
+}
 
 void Packet::resize(int size)
 {
@@ -91,7 +101,7 @@ double Packet::duration() const
 }
 void Packet::setDuration(double duration)
 {
-    m_packet->duration = qRound64(duration / av_q2d(m_timeBase));
+    m_packet->duration = d2i(duration);
 }
 
 bool Packet::hasKeyFrame() const
@@ -118,7 +128,7 @@ double Packet::dts() const
 }
 void Packet::setDts(double dts)
 {
-    m_packet->dts = qRound64(dts / av_q2d(m_timeBase));
+    m_packet->dts = d2i(dts);
 }
 
 bool Packet::hasPts() const
@@ -131,7 +141,7 @@ double Packet::pts() const
 }
 void Packet::setPts(double pts)
 {
-    m_packet->pts = qRound64(pts / av_q2d(m_timeBase));
+    m_packet->pts = d2i(pts);
 }
 
 double Packet::ts() const
@@ -147,6 +157,11 @@ void Packet::setTS(double ts)
 {
     setDts(ts);
     setPts(ts);
+}
+
+inline int64_t Packet::d2i(double value)
+{
+    return std::round(value / av_q2d(m_timeBase));
 }
 
 Packet &Packet::operator =(const Packet &other)

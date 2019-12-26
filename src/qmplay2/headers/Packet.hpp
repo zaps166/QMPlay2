@@ -37,6 +37,7 @@ public:
     void clear();
 
     void setTimeBase(const AVRational &timeBase);
+    void setOffsetTS(double offsetTS);
 
     void resize(int size);
     int size() const;
@@ -62,6 +63,9 @@ public:
 
     double ts() const;
     void setTS(double ts);
+
+private:
+    inline int64_t d2i(double value);
 
 public: // Operators
     inline operator const AVPacket *() const
