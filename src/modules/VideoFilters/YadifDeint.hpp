@@ -20,40 +20,10 @@
 
 #include <DeintFilter.hpp>
 
-#include <QWaitCondition>
-#include <QVector>
-#include <QThread>
-#include <QMutex>
-
-#include <memory>
-
-class YadifDeint;
-
-class YadifThr final : public QThread
-{
-public:
-    YadifThr(const YadifDeint &yadifDeint);
-    ~YadifThr();
-
-    void start(Frame &destFrame, const Frame &prevFrame, const Frame &currFrame, const Frame &nextFrame, const int id, const int n);
-    void waitForFinished();
-private:
-    void run() override;
-
-    const YadifDeint &yadifDeint;
-
-    Frame *dest;
-    const Frame *prev, *curr, *next;
-    int jobId, jobsCount;
-    bool hasNewData, br;
-
-    QWaitCondition cond;
-    QMutex mutex;
-};
+#include <QThreadPool>
 
 class YadifDeint final : public DeintFilter
 {
-    friend class YadifThr;
 public:
     YadifDeint(bool doubler, bool spatialCheck);
 
@@ -63,10 +33,7 @@ public:
 
     bool processParams(bool *paramsCorrected) override;
 private:
-    inline void doFilter(Frame &dest, const Frame &prev, const Frame &curr, const Frame &next, const int id, const int jobsCount) const;
-
-    using YadifThrPtr = std::shared_ptr<YadifThr>;
-    QVector<YadifThrPtr> threads;
+    QThreadPool m_threadsPool;
 
     const bool doubler, spatialCheck;
     bool secondFrame;

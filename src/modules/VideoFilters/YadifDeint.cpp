@@ -32,12 +32,16 @@
 #include <QMPlay2Core.hpp>
 #include <CPU.hpp>
 
-#include <libavutil/cpu.h>
+#include <QtConcurrent/QtConcurrentRun>
+
+extern "C" {
+    #include <libavutil/cpu.h>
+}
 
 #include <algorithm>
+#include <vector>
 
-using std::min;
-using std::max;
+using namespace std;
 
 static void (*filterLinePtr)(quint8 *, const void *const,
                              const quint8 *, const quint8 *, const quint8 *,
@@ -493,65 +497,13 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
     }
 }
 
-/* Yadif thread */
-
-YadifThr::YadifThr(const YadifDeint &yadifDeint) :
-    yadifDeint(yadifDeint),
-    hasNewData(false), br(false)
-{
-    setObjectName("YadifThr");
-    QThread::start();
-}
-YadifThr::~YadifThr()
-{
-    {
-        QMutexLocker locker(&mutex);
-        br = true;
-        cond.wakeOne();
-    }
-    wait();
-}
-
-void YadifThr::start(Frame &destFrame, const Frame &prevFrame, const Frame &currFrame, const Frame &nextFrame, const int id, const int n)
-{
-    QMutexLocker locker(&mutex);
-    dest = &destFrame;
-    prev = &prevFrame;
-    curr = &currFrame;
-    next = &nextFrame;
-    jobId = id;
-    jobsCount = n;
-    hasNewData = true;
-    cond.wakeOne();
-}
-void YadifThr::waitForFinished()
-{
-    QMutexLocker locker(&mutex);
-    while (hasNewData)
-        cond.wait(&mutex);
-}
-
-void YadifThr::run()
-{
-    while (!br)
-    {
-        QMutexLocker locker(&mutex);
-        if (!hasNewData && !br)
-            cond.wait(&mutex);
-        if (!hasNewData || br)
-            continue;
-        yadifDeint.doFilter(*dest, *prev, *curr, *next, jobId, jobsCount);
-        hasNewData = false;
-        cond.wakeOne();
-    }
-}
-
 /* Yadif deint filter */
 
 YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
     doubler(doubler),
     spatialCheck(spatialCheck)
 {
+    m_threadsPool.setMaxThreadCount(min(QThread::idealThreadCount(), 18));
     if (!filterLinePtr)
     {
         filterLinePtr = filterLine_CPP;
@@ -594,22 +546,32 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         Frame destFrame = Frame::createEmpty(currFrame);
         destFrame.setNoInterlaced();
 
-        const int halfH = destFrame.height(1);
+        auto doFilter = [&](const int jobId, const int jobsCount) {
+            const bool tff = isTopFieldFirst(currFrame);
+            for (int p = 0; p < 3; ++p)
+            {
+                filterSlice
+                (
+                    p,
+                    secondFrame == tff, tff,
+                    spatialCheck,
+                    destFrame, prevFrame, currFrame, nextFrame,
+                    jobId, jobsCount
+                );
+            }
+        };
 
-        if (threads.isEmpty())
-        {
-            threads.resize(min(QThread::idealThreadCount(), 18));
-            for (int i = 0; i < threads.count(); ++i)
-                threads[i] = YadifThrPtr(new YadifThr(*this));
-        }
+        const int threadsCount = min(m_threadsPool.maxThreadCount(), destFrame.height(1));
 
-        const int threadsCount = min(threads.count(), halfH);
+        vector<QFuture<void>> threads;
+        threads.reserve(threadsCount);
+
         for (int i = 1; i < threadsCount; ++i)
-            threads[i]->start(destFrame, prevFrame, currFrame, nextFrame, i, threadsCount);
-        doFilter(destFrame, prevFrame, currFrame, nextFrame, 0, threadsCount);
+            threads.push_back(QtConcurrent::run(&m_threadsPool, doFilter, i, threadsCount));
+        doFilter(0, threadsCount);
 
-        for (int i = 0; i < threadsCount; ++i)
-            threads[i]->waitForFinished();
+        for (auto &&thread : threads)
+            thread.waitForFinished();
 
         if (secondFrame)
         {
@@ -633,20 +595,4 @@ bool YadifDeint::processParams(bool *)
         return false;
     secondFrame = false;
     return true;
-}
-
-inline void YadifDeint::doFilter(Frame &dest, const Frame &prev, const Frame &curr, const Frame &next, const int jobId, const int jobsCount) const
-{
-    const bool tff = isTopFieldFirst(curr);
-    for (int p = 0; p < 3; ++p)
-    {
-        filterSlice
-        (
-            p,
-            secondFrame == tff, tff,
-            spatialCheck,
-            dest, prev, curr, next,
-            jobId, jobsCount
-        );
-    }
 }
