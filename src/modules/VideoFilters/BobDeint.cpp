@@ -34,14 +34,13 @@ void BobDeint::clearBuffer()
     DeintFilter::clearBuffer();
 }
 
-bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
+bool BobDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
     if (internalQueue.count() >= 1)
     {
-        const FrameBuffer &sourceBuffer = internalQueue.at(0);
+        const Frame &sourceFrame = internalQueue.at(0);
 
-        const Frame &sourceFrame = sourceBuffer.frame;
         Frame destFrame = Frame::createEmpty(sourceFrame);
         destFrame.setNoInterlaced();
 
@@ -85,13 +84,15 @@ bool BobDeint::filter(QQueue<FrameBuffer> &framesQueue)
             }
         }
 
-        double ts = sourceBuffer.ts;
         if (secondFrame)
-            ts += halfDelay(ts, lastTS);
-        framesQueue.enqueue(FrameBuffer(destFrame, ts));
+        {
+            const double ts = destFrame.ts();
+            destFrame.setTS(ts + halfDelay(ts, lastTS));
+        }
+        framesQueue.enqueue(destFrame);
 
         if (secondFrame || lastTS < 0.0)
-            lastTS = sourceBuffer.ts;
+            lastTS = sourceFrame.ts();
 
         if (secondFrame)
             internalQueue.removeFirst();

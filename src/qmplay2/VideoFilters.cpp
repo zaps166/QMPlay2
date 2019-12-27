@@ -96,21 +96,24 @@ public:
         DeintFilter::clearBuffer();
     }
 
-    bool filter(QQueue<FrameBuffer> &framesQueue) override
+    bool filter(QQueue<Frame> &framesQueue) override
     {
-        addFramesToDeinterlace(framesQueue, false);
+        addFramesToDeinterlace(framesQueue);
         if (internalQueue.count() >= 1)
         {
-            FrameBuffer frameBuffer = internalQueue.at(0);
+            Frame frame = internalQueue.at(0);
 
-            frameBuffer.frame.setInterlaced(isTopFieldFirst(frameBuffer.frame) != secondFrame);
+            frame.setInterlaced(isTopFieldFirst(frame) != secondFrame);
             if (secondFrame)
-                frameBuffer.ts += halfDelay(frameBuffer.ts, lastTS);
+            {
+                const double ts = frame.ts();
+                frame.setTS(ts + halfDelay(ts, lastTS));
+            }
 
-            framesQueue.enqueue(frameBuffer);
+            framesQueue.enqueue(frame);
 
             if (secondFrame || lastTS < 0.0)
-                lastTS = frameBuffer.ts;
+                lastTS = frame.ts();
 
             if (secondFrame)
                 internalQueue.removeFirst();
@@ -164,7 +167,7 @@ public:
         wait();
     }
 
-    void filterFrame(const VideoFilter::FrameBuffer &frame)
+    void filterFrame(const Frame &frame)
     {
         QMutexLocker locker(&mutex);
         frameToFilter = frame;
@@ -193,14 +196,14 @@ private:
         {
             QMutexLocker locker(&mutex);
 
-            if (frameToFilter.frame.isEmpty() && !br)
+            if (frameToFilter.isEmpty() && !br)
                 cond.wait(&mutex);
-            if (frameToFilter.frame.isEmpty() || br)
+            if (frameToFilter.isEmpty() || br)
                 continue;
 
-            QQueue<VideoFilter::FrameBuffer> queue;
+            QQueue<Frame> queue;
             queue.enqueue(frameToFilter);
-            frameToFilter.frame.clear();
+            frameToFilter.clear();
 
             bool pending = false;
             do
@@ -245,7 +248,7 @@ private:
     QWaitCondition cond;
     QMutex mutex;
 
-    VideoFilter::FrameBuffer frameToFilter;
+    Frame frameToFilter;
 };
 
 /**/
@@ -340,26 +343,26 @@ void VideoFilters::removeLastFromInputBuffer()
     }
 }
 
-void VideoFilters::addFrame(const Frame &videoFrame, double ts)
+void VideoFilters::addFrame(const Frame &videoFrame)
 {
-    const VideoFilter::FrameBuffer frame(videoFrame, ts);
     if (!filters.isEmpty())
-        filtersThr.filterFrame(frame);
+    {
+        filtersThr.filterFrame(videoFrame);
+    }
     else
     {
-        outputQueue.enqueue(frame);
+        outputQueue.enqueue(videoFrame);
         outputNotEmpty = true;
     }
 }
-bool VideoFilters::getFrame(Frame &videoFrame, double &ts)
+bool VideoFilters::getFrame(Frame &videoFrame)
 {
     bool locked, ret;
     if ((locked = !filters.isEmpty()))
         filtersThr.waitForFinished(false);
     if ((ret = !outputQueue.isEmpty()))
     {
-        videoFrame = outputQueue.at(0).frame;
-        ts = outputQueue.at(0).ts;
+        videoFrame = outputQueue.at(0);
         outputQueue.removeFirst();
         outputNotEmpty = !outputQueue.isEmpty();
     }

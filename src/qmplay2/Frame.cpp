@@ -116,13 +116,9 @@ Frame::~Frame()
     av_frame_free(&m_frame);
 }
 
-bool Frame::hasNoData() const
-{
-    return (m_frame->data[0] == nullptr);
-}
 bool Frame::isEmpty() const
 {
-    return (hasNoData() && !isHW());
+    return (m_frame->data[0] == nullptr && !isHW());
 }
 void Frame::clear()
 {

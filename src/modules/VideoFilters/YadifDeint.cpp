@@ -582,16 +582,16 @@ void YadifDeint::clearBuffer()
     DeintFilter::clearBuffer();
 }
 
-bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
+bool YadifDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
     if (internalQueue.count() >= 3)
     {
-        const FrameBuffer &prevBuffer = internalQueue.at(0);
-        const FrameBuffer &currBuffer = internalQueue.at(1);
-        const FrameBuffer &nextBuffer = internalQueue.at(2);
+        const Frame &prevFrame = internalQueue.at(0);
+        const Frame &currFrame = internalQueue.at(1);
+        const Frame &nextFrame = internalQueue.at(2);
 
-        Frame destFrame = Frame::createEmpty(currBuffer.frame);
+        Frame destFrame = Frame::createEmpty(currFrame);
         destFrame.setNoInterlaced();
 
         const int halfH = destFrame.height(1);
@@ -605,16 +605,18 @@ bool YadifDeint::filter(QQueue<FrameBuffer> &framesQueue)
 
         const int threadsCount = min(threads.count(), halfH);
         for (int i = 1; i < threadsCount; ++i)
-            threads[i]->start(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, i, threadsCount);
-        doFilter(destFrame, prevBuffer.frame, currBuffer.frame, nextBuffer.frame, 0, threadsCount);
+            threads[i]->start(destFrame, prevFrame, currFrame, nextFrame, i, threadsCount);
+        doFilter(destFrame, prevFrame, currFrame, nextFrame, 0, threadsCount);
 
         for (int i = 0; i < threadsCount; ++i)
             threads[i]->waitForFinished();
 
-        double ts = currBuffer.ts;
         if (secondFrame)
-            ts += halfDelay(nextBuffer.ts, ts);
-        framesQueue.enqueue(FrameBuffer(destFrame, ts));
+        {
+            const double ts = destFrame.ts();
+            destFrame.setTS(ts + halfDelay(nextFrame.ts(), ts));
+        }
+        framesQueue.enqueue(destFrame);
 
         if (secondFrame || !doubler)
             internalQueue.removeFirst();

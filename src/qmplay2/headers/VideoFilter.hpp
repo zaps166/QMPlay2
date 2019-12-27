@@ -26,34 +26,21 @@
 class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleParams
 {
 public:
-    class FrameBuffer
-    {
-    public:
-        FrameBuffer() = default;
-        inline FrameBuffer(const Frame &frame, double ts) :
-            frame(frame),
-            ts(ts)
-        {}
-
-        Frame frame;
-        double ts = 0.0;
-    };
-
     virtual ~VideoFilter() = default;
 
     virtual void clearBuffer();
 
     bool removeLastFromInternalBuffer();
 
-    virtual bool filter(QQueue<FrameBuffer> &framesQueue) = 0;
+    virtual bool filter(QQueue<Frame> &framesQueue) = 0;
 
 protected:
-    void addFramesToInternalQueue(QQueue<FrameBuffer> &framesQueue);
+    void addFramesToInternalQueue(QQueue<Frame> &framesQueue);
 
     inline double halfDelay(double f1_ts, double f2_ts) const
     {
         return (f1_ts - f2_ts) / 2.0;
     }
 
-    QQueue<FrameBuffer> internalQueue;
+    QQueue<Frame> internalQueue;
 };

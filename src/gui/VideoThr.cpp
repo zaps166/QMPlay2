@@ -438,7 +438,7 @@ void VideoThr::run()
                     filtersMutex.lock();
                 }
                 interlaced = decoded.isInterlaced();
-                filters.addFrame(decoded, ts);
+                filters.addFrame(decoded);
                 gotFrameOrError = true;
             }
             else if (skip)
@@ -457,10 +457,9 @@ void VideoThr::run()
         // This thread will wait for "DemuxerThr" which'll detect this error and restart with new decoder.
         decoderError = (dec->hasCriticalError() || videoWriter()->hwAccelError());
 
-        double newTs;
-        const bool ptsIsValid = filters.getFrame(videoFrame, newTs);
+        const bool ptsIsValid = filters.getFrame(videoFrame);
         if (ptsIsValid)
-            ts = newTs;
+            ts = videoFrame.ts();
         filtersMutex.unlock();
 
         if ((maybeFlush = !qIsNaN(ts)))

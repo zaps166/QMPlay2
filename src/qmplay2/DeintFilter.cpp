@@ -18,12 +18,12 @@
 
 #include <DeintFilter.hpp>
 
-void DeintFilter::addFramesToDeinterlace(QQueue<FrameBuffer> &framesQueue, bool checkSize)
+void DeintFilter::addFramesToDeinterlace(QQueue<Frame> &framesQueue)
 {
     while (!framesQueue.isEmpty())
     {
-        const Frame &videoFrame = framesQueue.at(0).frame;
-        if (((deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced()) || (checkSize && videoFrame.hasNoData()))
+        const Frame &videoFrame = framesQueue.at(0);
+        if (((deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced()) || videoFrame.isEmpty())
             break;
         internalQueue.enqueue(framesQueue.dequeue());
     }

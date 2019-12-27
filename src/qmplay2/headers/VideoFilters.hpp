@@ -52,14 +52,14 @@ public:
     void clearBuffers();
     void removeLastFromInputBuffer();
 
-    void addFrame(const Frame &videoFrame, double ts);
-    bool getFrame(Frame &videoFrame, double &ts);
+    void addFrame(const Frame &videoFrame);
+    bool getFrame(Frame &videoFrame);
 
     bool readyRead();
 private:
     static void (*averageTwoLinesPtr)(quint8 *, const quint8 *, const quint8 *, int);
 
-    QQueue<VideoFilter::FrameBuffer> outputQueue;
+    QQueue<Frame> outputQueue;
     QVector<VideoFilter *> filters;
     VideoFiltersThr &filtersThr;
     bool outputNotEmpty = false;

@@ -25,13 +25,12 @@ BlendDeint::BlendDeint()
     addParam("H");
 }
 
-bool BlendDeint::filter(QQueue<FrameBuffer> &framesQueue)
+bool BlendDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
     while (!internalQueue.isEmpty())
     {
-        FrameBuffer dequeued = internalQueue.dequeue();
-        Frame &videoFrame = dequeued.frame;
+        Frame videoFrame = internalQueue.dequeue();
         videoFrame.setNoInterlaced();
         for (int p = 0; p < 3; ++p)
         {
@@ -44,7 +43,7 @@ bool BlendDeint::filter(QQueue<FrameBuffer> &framesQueue)
                 data += linesize;
             }
         }
-        framesQueue.enqueue(dequeued);
+        framesQueue.enqueue(videoFrame);
     }
     return !internalQueue.isEmpty();
 }

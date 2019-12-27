@@ -58,7 +58,6 @@ public:
     Frame(Frame &&other);
     ~Frame();
 
-    bool hasNoData() const;
     bool isEmpty() const;
     void clear();
 

@@ -25,13 +25,12 @@ DiscardDeint::DiscardDeint()
     addParam("H");
 }
 
-bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
+bool DiscardDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
     if (!internalQueue.isEmpty())
     {
-        FrameBuffer dequeued = internalQueue.dequeue();
-        Frame &videoFrame = dequeued.frame;
+        Frame videoFrame = internalQueue.dequeue();
         const bool TFF = isTopFieldFirst(videoFrame);
         videoFrame.setNoInterlaced();
         for (int p = 0; p < 3; ++p)
@@ -53,7 +52,7 @@ bool DiscardDeint::filter(QQueue<FrameBuffer> &framesQueue)
             if (TFF)
                 memcpy(data, data - linesize, linesize);
         }
-        framesQueue.enqueue(dequeued);
+        framesQueue.enqueue(videoFrame);
     }
     return !internalQueue.isEmpty();
 }

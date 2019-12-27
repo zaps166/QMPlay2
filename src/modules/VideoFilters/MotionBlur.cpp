@@ -28,17 +28,14 @@ MotionBlur::MotionBlur()
     addParam("H");
 }
 
-bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
+bool MotionBlur::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToInternalQueue(framesQueue);
     if (internalQueue.count() >= 2)
     {
-        FrameBuffer dequeued      = internalQueue.dequeue();
-        const FrameBuffer &lookup = internalQueue.at(0);
-
-        const Frame &videoFrame1 = dequeued.frame;
+        const Frame videoFrame1 = internalQueue.dequeue();
         Frame videoFrame2 = Frame::createEmpty(videoFrame1);
-        const Frame &videoFrame3 = lookup.frame;
+        const Frame &videoFrame3 = internalQueue.at(0);
 
         for (int p = 0; p < 3; ++p)
         {
@@ -59,8 +56,11 @@ bool MotionBlur::filter(QQueue<FrameBuffer> &framesQueue)
             }
         }
 
-        framesQueue.enqueue(dequeued);
-        framesQueue.enqueue(FrameBuffer(videoFrame2, dequeued.ts + halfDelay(lookup.ts, dequeued.ts)));
+        const double ts = videoFrame2.ts();
+        videoFrame2.setTS(ts + halfDelay(videoFrame3.ts(), ts));
+
+        framesQueue.enqueue(videoFrame1);
+        framesQueue.enqueue(videoFrame2);
     }
     return internalQueue.count() >= 2;
 }
