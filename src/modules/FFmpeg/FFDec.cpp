@@ -140,16 +140,13 @@ int FFDec::decodeStep(bool &frameFinished)
 }
 void FFDec::decodeLastStep(const Packet &encodedPacket, Frame &decoded, bool frameFinished)
 {
+    decoded.setTimeBase(m_timeBase);
     if (frameFinished && !decoded.isTsValid())
     {
         if (frame->best_effort_timestamp != AV_NOPTS_VALUE)
-            decoded.setTS(frame->best_effort_timestamp * time_base);
+            decoded.setTSInt(frame->best_effort_timestamp);
         else
             decoded.setTS(encodedPacket.ts());
-    }
-    else
-    {
-        decoded.setTimeBase(time_base);
     }
 }
 

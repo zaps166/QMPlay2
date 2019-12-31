@@ -55,6 +55,6 @@ protected:
     AVPacket *packet;
     AVFrame *frame;
     QList<AVFrame *> m_frames;
-    double time_base;
+    AVRational m_timeBase;
     bool codecIsOpen;
 };

@@ -522,6 +522,6 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!openCodec(codec))
         return false;
 
-    time_base = streamInfo.getTimeBase();
+    m_timeBase = streamInfo.time_base;
     return true;
 }

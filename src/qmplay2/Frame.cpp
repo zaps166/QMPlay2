@@ -127,23 +127,37 @@ void Frame::clear()
     m_customHwSurface = s_invalidHwSurface;
 }
 
-void Frame::setTimeBase(double timeBase)
+void Frame::setTimeBase(const AVRational &timeBase)
 {
     m_timeBase = timeBase;
+}
+AVRational Frame::timeBase() const
+{
+    return m_timeBase;
 }
 
 bool Frame::isTsValid() const
 {
     return (m_frame->best_effort_timestamp != AV_NOPTS_VALUE);
 }
+
 double Frame::ts() const
 {
-    return m_frame->best_effort_timestamp * m_timeBase;
+    return m_frame->best_effort_timestamp * av_q2d(m_timeBase);
 }
+qint64 Frame::tsInt() const
+{
+    return m_frame->best_effort_timestamp;
+}
+
 void Frame::setTS(double ts)
 {
-    m_timeBase = 1.0 / 10000.0;
-    m_frame->best_effort_timestamp = std::round(ts / m_timeBase);
+    m_timeBase = {1, 10000};
+    m_frame->best_effort_timestamp = std::round(ts / av_q2d(m_timeBase));
+}
+void Frame::setTSInt(qint64 ts)
+{
+    m_frame->best_effort_timestamp = ts;
 }
 
 bool Frame::isInterlaced() const

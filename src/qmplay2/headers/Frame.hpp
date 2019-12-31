@@ -61,11 +61,16 @@ public:
     bool isEmpty() const;
     void clear();
 
-    void setTimeBase(double timeBase);
+    void setTimeBase(const AVRational &timeBase);
+    AVRational timeBase() const;
 
     bool isTsValid() const;
+
     double ts() const;
+    qint64 tsInt() const;
+
     void setTS(double ts);
+    void setTSInt(qint64 ts);
 
 public: // Video
     bool isInterlaced() const;
@@ -112,7 +117,7 @@ private:
 
 private:
     AVFrame *m_frame = nullptr;
-    double m_timeBase = qQNaN();
+    AVRational m_timeBase = {};
 
     // Video only
     const AVPixFmtDescriptor *m_pixelFormat = nullptr;

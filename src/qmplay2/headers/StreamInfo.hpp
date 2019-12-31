@@ -58,11 +58,6 @@ public:
     StreamInfo(AVCodecParameters *codecpar);
     StreamInfo(quint32 sampleRateArg, quint8 channelsArg);
 
-    inline double getTimeBase() const
-    {
-        return av_q2d(time_base);
-    }
-
     inline double getSampleAspectRatio() const
     {
         return av_q2d(sample_aspect_ratio);

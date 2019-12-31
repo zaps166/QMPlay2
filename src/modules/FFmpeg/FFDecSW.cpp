@@ -197,7 +197,7 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     if (frameFinished)
     {
         if (frame->best_effort_timestamp != AV_NOPTS_VALUE)
-            ts = frame->best_effort_timestamp * time_base;
+            ts = frame->best_effort_timestamp * av_q2d(m_timeBase);
         else
             ts = encodedPacket.ts();
     }
@@ -363,7 +363,7 @@ bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
     }
     if (!FFDec::openCodec(codec))
         return false;
-    time_base = streamInfo.getTimeBase();
+    m_timeBase = streamInfo.time_base;
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO && codec_ctx->lowres)
     {
         streamInfo.width = codec_ctx->width;
