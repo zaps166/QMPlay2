@@ -546,7 +546,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         for (Module *module : QMPlay2Core.getPluginsInstance())
         {
             QListWidgetItem *tWI = new QListWidgetItem(module->name());
-            tWI->setData(Qt::UserRole, qVariantFromValue((void *)module));
+            tWI->setData(Qt::UserRole, QVariant::fromValue((void *)module));
             QString toolTip = "<html>" + tr("Contains") + ":";
             for (const Module::Info &mod : module->getModulesInfo(true))
             {

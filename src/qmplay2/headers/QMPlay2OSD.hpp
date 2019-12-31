@@ -20,10 +20,10 @@
 
 #include <QMPlay2Lib.hpp>
 
+#include <QElapsedTimer>
 #include <QMutex>
 #include <QList>
 #include <QRect>
-#include <QTime>
 
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2OSD
 {
@@ -126,7 +126,7 @@ private:
     QByteArray m_text;
     double m_duration, m_pts;
     bool m_started, m_needsRescale;
-    QTime m_timer;
+    QElapsedTimer m_timer;
     mutable QMutex m_mutex;
     quint64 m_id;
 };

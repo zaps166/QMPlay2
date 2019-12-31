@@ -872,12 +872,12 @@ void YouTube::setSearchResults(QString data)
                 tWI->setDisabled(true);
 
                 NetworkReply *linkReply = net.start(videoInfoLink);
-                linkReply->setProperty("tWI", qVariantFromValue((void *)tWI));
+                linkReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
                 linkReplies += linkReply;
             }
 
             NetworkReply *imageReply = net.start(image);
-            imageReply->setProperty("tWI", qVariantFromValue((void *)tWI));
+            imageReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
             imageReplies += imageReply;
         }
     }
