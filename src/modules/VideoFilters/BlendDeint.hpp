@@ -18,9 +18,9 @@
 
 #pragma once
 
-#include <DeintFilter.hpp>
+#include <VideoFilter.hpp>
 
-class BlendDeint final : public DeintFilter
+class BlendDeint final : public VideoFilter
 {
 public:
     BlendDeint();

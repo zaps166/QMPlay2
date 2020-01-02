@@ -21,6 +21,8 @@
 #include <Frame.hpp>
 #include <Writer.hpp>
 
+#include <memory>
+
 class HWAccelInterface;
 class QMPlay2OSD;
 class ImgScaler;
@@ -28,7 +30,7 @@ class ImgScaler;
 class QMPLAY2SHAREDLIB_EXPORT VideoWriter : public Writer
 {
 public:
-    static VideoWriter *createOpenGL2(HWAccelInterface *hwAccelInterface);
+    static VideoWriter *createOpenGL2(const std::shared_ptr<HWAccelInterface> &hwAccelInterface);
 
     VideoWriter();
     virtual ~VideoWriter();
@@ -42,10 +44,10 @@ public:
     virtual void writeVideo(const Frame &videoFrame) = 0;
     virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;
 
-    virtual void setHWAccelInterface(HWAccelInterface *hwAccelInterface);
-    inline HWAccelInterface *getHWAccelInterface() const
+    template<typename T = HWAccelInterface>
+    inline std::shared_ptr<T> getHWAccelInterface() const
     {
-        return m_hwAccelInterface;
+        return std::dynamic_pointer_cast<T>(m_hwAccelInterface);
     }
 
     virtual bool hwAccelGetImg(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
@@ -53,5 +55,5 @@ public:
     virtual bool open() override = 0;
 
 protected:
-    HWAccelInterface *m_hwAccelInterface;
+    std::shared_ptr<HWAccelInterface> m_hwAccelInterface;
 };

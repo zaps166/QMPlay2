@@ -78,12 +78,10 @@ OpenGL2Common::OpenGL2Common() :
     glActiveTexture(nullptr),
 #endif
     vSync(true),
-    hwAccellnterface(nullptr),
     shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
     texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
     numPlanes(0),
     target(0),
-    Deinterlace(0),
     allowPBO(true), hasPbo(false),
     isPaused(false), isOK(false), hwAccelError(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
     subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
@@ -482,11 +480,10 @@ void OpenGL2Common::paintGL()
 
         if (hwAccellnterface)
         {
-            const HWAccelInterface::Field field = (HWAccelInterface::Field)Functions::getField(videoFrame, Deinterlace, HWAccelInterface::FullFrame, HWAccelInterface::TopField, HWAccelInterface::BottomField);
             bool imageReady = false;
             if (!hwAccelError)
             {
-                const HWAccelInterface::MapResult res = hwAccellnterface->mapFrame(videoFrame, field);
+                const HWAccelInterface::MapResult res = hwAccellnterface->mapFrame(videoFrame);
                 if (res == HWAccelInterface::MapOk)
                     imageReady = true;
                 else if (res == HWAccelInterface::MapError)

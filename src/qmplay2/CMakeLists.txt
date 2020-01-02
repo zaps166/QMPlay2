@@ -15,7 +15,7 @@ set(QMPLAY2_HDR
     headers/Decoder.hpp
     headers/VideoFilters.hpp
     headers/VideoFilter.hpp
-    headers/DeintFilter.hpp
+    headers/DeintHWPrepareFilter.hpp
     headers/AudioFilter.hpp
     headers/Writer.hpp
     headers/QMPlay2Extensions.hpp
@@ -63,7 +63,7 @@ set(QMPLAY2_SRC
     Decoder.cpp
     VideoFilters.cpp
     VideoFilter.cpp
-    DeintFilter.cpp
+    DeintHWPrepareFilter.cpp
     AudioFilter.cpp
     Writer.cpp
     QMPlay2Extensions.cpp

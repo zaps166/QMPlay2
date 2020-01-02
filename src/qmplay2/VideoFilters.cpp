@@ -18,7 +18,6 @@
 
 #include <VideoFilters.hpp>
 
-#include <DeintFilter.hpp>
 #include <Frame.hpp>
 #include <Module.hpp>
 #include <CPU.hpp>
@@ -83,61 +82,6 @@ static void averageTwoLines_C(quint8 *dest, const quint8 *src1, const quint8 *sr
 }
 
 void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize);
-
-/**/
-
-class PrepareForHWBobDeint : public DeintFilter
-{
-public:
-    void clearBuffer() override
-    {
-        secondFrame = false;
-        lastTS = -1.0;
-        DeintFilter::clearBuffer();
-    }
-
-    bool filter(QQueue<Frame> &framesQueue) override
-    {
-        addFramesToDeinterlace(framesQueue);
-        if (internalQueue.count() >= 1)
-        {
-            Frame frame = internalQueue.at(0);
-
-            frame.setInterlaced(isTopFieldFirst(frame) != secondFrame);
-            if (secondFrame)
-            {
-                const double ts = frame.ts();
-                frame.setTS(ts + halfDelay(ts, lastTS));
-            }
-
-            framesQueue.enqueue(frame);
-
-            if (secondFrame || lastTS < 0.0)
-                lastTS = frame.ts();
-
-            if (secondFrame)
-                internalQueue.removeFirst();
-            secondFrame = !secondFrame;
-        }
-        return internalQueue.count() >= 1;
-    }
-
-    bool processParams(bool *) override
-    {
-        deintFlags = getParam("DeinterlaceFlags").toInt();
-        if (!(deintFlags & DoubleFramerate))
-            return false;
-        secondFrame = false;
-        lastTS = -1.0;
-        return true;
-    }
-
-private:
-    bool secondFrame;
-    double lastTS;
-};
-
-/**/
 
 class VideoFiltersThr final : public QThread
 {
@@ -208,7 +152,7 @@ private:
             bool pending = false;
             do
             {
-                for (VideoFilter *vFilter : asConst(videoFilters.filters))
+                for (const std::shared_ptr<VideoFilter> &vFilter : asConst(videoFilters.filters))
                 {
                     pending |= vFilter->filter(queue);
                     if (queue.isEmpty())
@@ -287,37 +231,42 @@ void VideoFilters::clear()
     if (!filters.isEmpty())
     {
         filtersThr.stop();
-        for (VideoFilter *vFilter : asConst(filters))
-            delete vFilter;
         filters.clear();
     }
     clearBuffers();
 }
 
-VideoFilter *VideoFilters::on(const QString &filterName)
+std::shared_ptr<VideoFilter> VideoFilters::on(const QString &filterName)
 {
-    VideoFilter *filter = nullptr;
-    if (filterName == "PrepareForHWBobDeint")
-        filter = new PrepareForHWBobDeint;
-    else for (Module *module : QMPlay2Core.getPluginsInstance())
+    if (filterName.isEmpty())
+        return nullptr;
+    std::shared_ptr<VideoFilter> filter;
+    for (Module *module : QMPlay2Core.getPluginsInstance())
+    {
         for (const Module::Info &mod : module->getModulesInfo())
+        {
             if ((mod.type & 0xF) == Module::VIDEOFILTER && mod.name == filterName)
             {
-                filter = (VideoFilter *)module->createInstance(mod.name);
+                filter.reset(reinterpret_cast<VideoFilter *>(module->createInstance(mod.name)));
                 break;
             }
-    if (filter)
-        filters.append(filter);
+        }
+    }
+    on(filter);
     return filter;
 }
-void VideoFilters::off(VideoFilter *&videoFilter)
+void VideoFilters::on(const std::shared_ptr<VideoFilter> &videoFilter)
+{
+    if (videoFilter)
+        filters.append(videoFilter);
+}
+void VideoFilters::off(std::shared_ptr<VideoFilter> &videoFilter)
 {
     const int idx = filters.indexOf(videoFilter);
     if (idx > -1)
     {
         filters.remove(idx);
-        delete videoFilter;
-        videoFilter = nullptr;
+        videoFilter.reset();
     }
 }
 
@@ -326,7 +275,7 @@ void VideoFilters::clearBuffers()
     if (!filters.isEmpty())
     {
         filtersThr.waitForFinished(true);
-        for (VideoFilter *vFilter : asConst(filters))
+        for (auto &&vFilter : asConst(filters))
             vFilter->clearBuffer();
     }
     outputQueue.clear();

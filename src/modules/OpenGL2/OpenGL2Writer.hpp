@@ -45,8 +45,6 @@ private:
     void writeVideo(const Frame &videoFrame) override;
     void writeOSD(const QList<const QMPlay2OSD *> &) override;
 
-    void setHWAccelInterface(HWAccelInterface *hwAccelInterface) override;
-
     void pause() override;
 
     QString name() const override;

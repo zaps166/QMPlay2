@@ -18,6 +18,7 @@
 
 #include <CuvidDec.hpp>
 
+#include <DeintHWPrepareFilter.hpp>
 #include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
@@ -45,6 +46,10 @@
 #ifndef GL_RG
     #define GL_RG 0x8227
 #endif
+
+#include <unordered_set>
+
+using namespace std;
 
 static QMutex g_cudaMutex(QMutex::Recursive);
 
@@ -322,38 +327,28 @@ public:
         }
     }
 
-    MapResult mapFrame(const Frame &videoFrame, Field field) override
+    MapResult mapFrame(Frame &videoFrame) override
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
 
-        if (!m_cuvidDec || !m_validSurfaces.contains(videoFrame.hwSurface()))
+        const int pictureIdx = videoFrame.customID();
+
+        if (!m_cuvidDec || !m_validPictures.contains(pictureIdx))
             return MapNotReady;
 
         CUVIDPROCPARAMS vidProcParams;
         memset(&vidProcParams, 0, sizeof vidProcParams);
 
-        if (m_lastId != videoFrame.hwSurface())
-            m_tff = videoFrame.isTopFieldFirst();
-        m_lastId = videoFrame.hwSurface();
-
-        vidProcParams.top_field_first = m_tff;
-        switch (field)
-        {
-            case FullFrame:
-                vidProcParams.progressive_frame = true;
-                break;
-            case TopField:
-                vidProcParams.second_field = false;
-                break;
-            case BottomField:
-                vidProcParams.second_field = true;
-                break;
-        }
+        vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
+        if (videoFrame.isInterlaced())
+            vidProcParams.second_field = videoFrame.isSecondField();
+        else
+            vidProcParams.progressive_frame = true;
 
         quintptr mappedFrame = 0;
         unsigned pitch = 0;
 
-        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
+        if (cuvid::mapVideoFrame(m_cuvidDec, pictureIdx, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
             return MapError;
 
         if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
@@ -410,7 +405,7 @@ public:
         CUVIDPROCPARAMS vidProcParams;
         memset(&vidProcParams, 0, sizeof vidProcParams);
         vidProcParams.progressive_frame = !videoFrame.isInterlaced();
-        vidProcParams.top_field_first = m_tff;
+        vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
 
         if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
             return false;
@@ -458,16 +453,14 @@ public:
 
     inline void setAvailableSurface(quintptr surfaceId)
     {
-        m_validSurfaces.insert(surfaceId);
+        m_validPictures.insert(surfaceId);
     }
 
     void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
     {
         m_codedHeight = codedHeight;
-        m_lastId = 0;
-        m_tff = false;
         m_cuvidDec = cuvidDec;
-        m_validSurfaces.clear();
+        m_validPictures.clear();
     }
 
 private:
@@ -480,15 +473,12 @@ private:
     int m_widths[2] = {};
     int m_heights[2] = {};
 
-    quintptr m_lastId = 0;
-    bool m_tff = false;
-
     const CUcontext m_cuCtx;
     CUvideodecoder m_cuvidDec = nullptr;
 
     CUgraphicsResource m_res[2] = {};
 
-    QSet<quintptr> m_validSurfaces;
+    QSet<int> m_validPictures;
 };
 
 /**/
@@ -506,7 +496,6 @@ bool CuvidDec::canCreateInstance()
 
 CuvidDec::CuvidDec(Module &module) :
     m_writer(nullptr),
-    m_cuvidHWAccel(nullptr),
     m_limited(false),
     m_colorSpace(AVCOL_SPC_UNSPECIFIED),
     m_lastCuvidTS(0),
@@ -653,6 +642,10 @@ VideoWriter *CuvidDec::HWAccel() const
 {
     return m_writer;
 }
+shared_ptr<VideoFilter> CuvidDec::hwAccelFilter() const
+{
+    return m_filter;
+}
 
 int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up)
 {
@@ -742,7 +735,7 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
                 decoded = Frame::createEmpty(
                     m_width,
                     m_height,
-                    m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P,
+                    m_cuvidHWAccel ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
                     !dispInfo.progressive_frame,
                     dispInfo.top_field_first,
                     m_colorSpace,
@@ -753,7 +746,7 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
             {
                 m_cuvidHWAccel->setAvailableSurface(dispInfo.picture_index);
                 createFrame();
-                decoded.setCustomHwSurface(dispInfo.picture_index);
+                decoded.setCustomID(dispInfo.picture_index);
             }
             else
             {
@@ -941,7 +934,7 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer)
     {
-        m_cuvidHWAccel = dynamic_cast<CuvidHWAccel *>(writer->getHWAccelInterface());
+        m_cuvidHWAccel = writer->getHWAccelInterface<CuvidHWAccel>();
         if (m_cuvidHWAccel)
         {
             m_cuCtx = m_cuvidHWAccel->getCudaContext();
@@ -954,9 +947,9 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_writer && m_copyVideo != Qt::Checked)
     {
-        m_writer = VideoWriter::createOpenGL2(new CuvidHWAccel(m_cuCtx));
+        m_writer = VideoWriter::createOpenGL2(make_shared<CuvidHWAccel>(m_cuCtx));
         if (m_writer)
-            m_cuvidHWAccel = (CuvidHWAccel *)m_writer->getHWAccelInterface();
+            m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidHWAccel>();
         else if (m_copyVideo == Qt::Unchecked)
         {
             QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
@@ -999,7 +992,10 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
     }
 
     if (m_cuvidHWAccel)
+    {
         m_cuvidHWAccel->allowDestroyCuda();
+        m_filter = make_shared<DeintHWPrepareFilter>();
+    }
 
     m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
     m_colorSpace = streamInfo.color_space;

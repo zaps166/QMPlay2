@@ -50,8 +50,6 @@ Cuvid::~Cuvid()
 
 QList<Module::Info> Cuvid::getModulesInfo(const bool showDisabled) const
 {
-    Q_UNUSED(showDisabled)
-
     QList<Info> modulesInfo;
     if (showDisabled || getBool("Enabled"))
         modulesInfo += Info(CuvidName, DECODER, m_icon);

@@ -20,8 +20,8 @@
 #include <FFCommon.hpp>
 
 #include <QMPlay2Core.hpp>
-#include <Frame.hpp>
 #include <Functions.hpp>
+#include <Frame.hpp>
 
 extern "C"
 {
@@ -38,17 +38,18 @@ VDPAU::VDPAU(AVBufferRef *hwDeviceBufferRef)
     FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
 #endif
 
+    addParam("Deinterlace");
+    addParam("DeinterlaceFlags");
+
     auto vdpauDevCtx = (AVVDPAUDeviceContext *)((AVHWDeviceContext *)m_hwDeviceBufferRef->data)->hwctx;
     m_device = vdpauDevCtx->device;
     vdp_get_proc_address = vdpauDevCtx->get_proc_address;
 }
 VDPAU::~VDPAU()
 {
-    if (m_outputSurface != VDP_INVALID_HANDLE)
-        vdp_output_surface_destroy(m_outputSurface);
+    clearBuffer();
     if (m_mixer != VDP_INVALID_HANDLE)
         vdp_video_mixer_destroy(m_mixer);
-    clearBufferedFrames();
     av_buffer_unref(&m_hwDeviceBufferRef);
 }
 
@@ -125,10 +126,9 @@ void VDPAU::registerPreemptionCallback(VdpPreemptionCallback callback, void *con
     vdp_preemption_callback_register(m_device, callback, context);
 }
 
-void VDPAU::clearBufferedFrames()
+bool VDPAU::hasError() const
 {
-    QMutexLocker locker(&m_framesMutex);
-    m_bufferedFrames.clear();
+    return m_error;
 }
 
 void VDPAU::applyVideoAdjustment(int saturation, int hue, int sharpness)
@@ -169,16 +169,16 @@ void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decod
         m_mustSetCSCMatrix = true;
     }
 
-    if (m_surfaceW != surfaceW || m_surfaceH != surfaceH)
+    const QSize surfaceSize(surfaceW, surfaceH);
+    if (m_surfaceSize != surfaceSize)
     {
-        m_surfaceW = surfaceW;
-        m_surfaceH = surfaceH;
+        m_surfaceSize = surfaceSize;
         if (m_mixer != VDP_INVALID_HANDLE)
         {
             vdp_video_mixer_destroy(m_mixer);
             m_mixer = VDP_INVALID_HANDLE;
         }
-        clearBufferedFrames();
+        clearBuffer();
     }
 
     if (m_mixer != VDP_INVALID_HANDLE)
@@ -220,106 +220,6 @@ void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decod
     m_mustSetCSCMatrix = true;
 }
 
-bool VDPAU::videoMixerRender(const Frame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure)
-{
-    if (m_frameW != videoFrame.width() || m_frameH != videoFrame.height())
-    {
-        m_frameW = videoFrame.width();
-        m_frameH = videoFrame.height();
-        if (m_outputSurface != VDP_INVALID_HANDLE)
-        {
-            vdp_output_surface_destroy(m_outputSurface);
-            m_outputSurface = VDP_INVALID_HANDLE;
-        }
-        clearBufferedFrames();
-    }
-
-    if (m_outputSurface == VDP_INVALID_HANDLE)
-    {
-        VdpStatus status = vdp_output_surface_create(
-            m_device,
-            VDP_RGBA_FORMAT_B8G8R8A8,
-            m_frameW,
-            m_frameH,
-            &m_outputSurface
-        );
-        if (status != VDP_STATUS_OK)
-            return false;
-    }
-
-    if (m_mustSetCSCMatrix)
-    {
-        setCSCMatrix();
-        m_mustSetCSCMatrix = false;
-    }
-    if (m_mustApplyVideoMixerFeatures)
-    {
-        applyVideoMixerFeatures();
-        m_mustApplyVideoMixerFeatures = false;
-    }
-
-    constexpr size_t numVideoFrames = 4; // 2 past, 1 current, 1 future
-    VdpVideoSurface surfaces[numVideoFrames];
-
-    if ((videoMixerPictureStructure == VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME || m_deintMethod == 0) && !m_nrEnabled)
-    {
-        clearBufferedFrames();
-        for (size_t i = 0; i < numVideoFrames; ++i)
-            surfaces[i] = (i == 1) ? videoFrame.hwSurface() : VDP_INVALID_HANDLE;
-    }
-    else
-    {
-        QMutexLocker locker(&m_framesMutex);
-
-        if (m_bufferedFrames.empty() || m_bufferedFrames[0].hwSurface() != videoFrame.hwSurface())
-        {
-            while (m_bufferedFrames.size() >= numVideoFrames)
-                m_bufferedFrames.pop_back();
-            m_bufferedFrames.push_front(videoFrame);
-        }
-
-        for (size_t i = 0; i < numVideoFrames; ++i)
-        {
-            surfaces[i] = (m_bufferedFrames.size() > i)
-                ? m_bufferedFrames[i].hwSurface()
-                : VDP_INVALID_HANDLE
-            ;
-        }
-        if (surfaces[1] == VDP_INVALID_HANDLE)
-            surfaces[1] = surfaces[0];
-    }
-
-    const VdpRect srcRect {
-        0u,
-        0u,
-        (uint32_t)m_frameW,
-        (uint32_t)m_frameH,
-    };
-    VdpStatus status = vdp_video_mixer_render(
-        m_mixer,
-        VDP_INVALID_HANDLE, nullptr,
-        videoMixerPictureStructure,
-        2, &surfaces[2],
-        surfaces[1],
-        1, &surfaces[0],
-        &srcRect,
-        m_outputSurface, nullptr, nullptr,
-        0, nullptr
-    );
-    if (status != VDP_STATUS_OK)
-    {
-        if (status == VDP_STATUS_INVALID_HANDLE)
-        {
-            id = VDP_INVALID_HANDLE;
-            return true;
-        }
-        return false;
-    }
-
-    id = m_outputSurface;
-    return true;
-}
-
 bool VDPAU::getYV12(Frame &decoded, VdpVideoSurface id)
 {
     void *data[] = {
@@ -331,19 +231,22 @@ bool VDPAU::getYV12(Frame &decoded, VdpVideoSurface id)
 }
 bool VDPAU::getRGB(uint8_t *dest, int width, int height)
 {
-    if (m_outputSurface == VDP_INVALID_HANDLE || !dest)
+    QMutexLocker locker(&m_outputSurfacesMutex);
+
+    if (!dest || QSize(width, height) != m_outputSurfaceSize)
         return false;
 
-    if (width != m_frameW || height != m_frameH)
-        return false;
+    auto displayingOutputSurface = getDisplayingOutputSurface();
+    if (!displayingOutputSurface)
+        return false;;
 
-    const uint32_t lineSize = Functions::aligned(m_frameW, 8) * 4;
-    if (vdp_surface_get_bits_native(m_outputSurface, nullptr, (void **)&dest, &lineSize) == VDP_STATUS_OK)
+    const uint32_t lineSize = Functions::aligned(m_outputSurfaceSize.width(), 8) * 4;
+    if (vdp_surface_get_bits_native(displayingOutputSurface->surface, nullptr, (void **)&dest, &lineSize) == VDP_STATUS_OK)
     {
         // FIXME: Don't align RGB frame in VideoThr
-        for (int y = 0; y < m_frameH; ++y)
+        for (int y = 0; y < m_outputSurfaceSize.height(); ++y)
         {
-            for (uint32_t x = m_frameW * 4; x < lineSize; ++x)
+            for (uint32_t x = m_outputSurfaceSize.width() * 4; x < lineSize; ++x)
             {
                 dest[y * lineSize + x] = 0;
             }
@@ -352,6 +255,204 @@ bool VDPAU::getRGB(uint8_t *dest, int width, int height)
     }
 
     return false;
+}
+
+VDPAUOutputSurface *VDPAU::getDisplayingOutputSurface()
+{
+    for (auto &&outputSurfacePair : m_outputSurfacesMap)
+    {
+        if (outputSurfacePair.second.displaying)
+            return &outputSurfacePair.second;
+    }
+    return nullptr;
+}
+
+void VDPAU::clearBuffer()
+{
+    VideoFilter::clearBuffer();
+
+    QMutexLocker locker(&m_outputSurfacesMutex);
+    for (auto it = m_outputSurfacesMap.begin(); it != m_outputSurfacesMap.end();)
+    {
+        auto &outputSurface = it->second;
+        if (outputSurface.glSurface != 0 || outputSurface.glTexture != 0 || outputSurface.busy)
+        {
+            outputSurface.obsolete = true;
+            ++it;
+            continue;
+        }
+        vdp_output_surface_destroy(outputSurface.surface);
+        it = m_outputSurfacesMap.erase(it);
+    }
+}
+
+bool VDPAU::filter(QQueue<Frame> &framesQueue)
+{
+    if (m_error)
+        return false;
+
+    addFramesToInternalQueue(framesQueue);
+
+    bool doDeinterlace = false;
+    if (m_deinterlace)
+    {
+        if (!(m_deintFlags & AutoDeinterlace))
+        {
+            doDeinterlace = true;
+        }
+        else for (auto &&frame : qAsConst(m_internalQueue))
+        {
+            if (frame.isInterlaced())
+            {
+                doDeinterlace = true;
+                break;
+            }
+        }
+    }
+
+    const int nFrames = ((doDeinterlace && m_deintMethod != 0) || m_nrEnabled)
+        ? 4
+        : 1;
+
+    if (m_internalQueue.count() >= nFrames)
+    {
+        const Frame &currFrame = m_internalQueue.at((nFrames == 4) ? 2 : 0);
+
+        quintptr currID = Frame::s_invalidID;
+        VDPAUOutputSurface *outputSurfacePtr = nullptr;
+
+        QMutexLocker locker(&m_outputSurfacesMutex);
+
+        m_outputSurfaceSize = QSize(currFrame.width(), currFrame.height());
+
+        for (auto &&outputSurfacePair : m_outputSurfacesMap)
+        {
+            auto &&outputSurface = outputSurfacePair.second;
+            if (!outputSurface.busy && !outputSurface.displaying && !outputSurface.obsolete)
+            {
+                outputSurfacePtr = &outputSurface;
+                currID = outputSurfacePair.first;
+                break;
+            }
+        }
+
+        if (!outputSurfacePtr)
+        {
+            VdpOutputSurface outputSurfaceID = VDP_INVALID_HANDLE;
+            vdp_output_surface_create(
+                m_device,
+                VDP_RGBA_FORMAT_B8G8R8A8,
+                m_outputSurfaceSize.width(),
+                m_outputSurfaceSize.height(),
+                &outputSurfaceID
+            );
+            if (outputSurfaceID != VDP_INVALID_HANDLE)
+            {
+                currID = m_id++;
+                auto &outputSurface = m_outputSurfacesMap[currID];
+                outputSurface.surface = outputSurfaceID;
+                outputSurfacePtr = &outputSurface;
+            }
+        }
+
+        if (!outputSurfacePtr)
+        {
+            m_error = true;
+            return false;
+        }
+
+        Frame destFrame = Frame::createEmpty(currFrame, false, AV_PIX_FMT_BGRA);
+
+        VdpVideoMixerPictureStructure videoMixerPictureStructure = VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME;
+        if (doDeinterlace)
+        {
+            if (!(m_deintFlags & AutoParity))
+                destFrame.setInterlaced(m_deintFlags & TopFieldFirst);
+
+            videoMixerPictureStructure = (destFrame.isTopFieldFirst() != m_secondFrame)
+                ? VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD
+                : VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD;
+
+            destFrame.setNoInterlaced();
+        }
+
+        if (m_mustSetCSCMatrix)
+        {
+            setCSCMatrix();
+            m_mustSetCSCMatrix = false;
+        }
+        if (m_mustApplyVideoMixerFeatures)
+        {
+            applyVideoMixerFeatures();
+            m_mustApplyVideoMixerFeatures = false;
+        }
+
+        VdpVideoSurface surfaces[4];
+        surfaces[1] = currFrame.hwSurface();
+        if (nFrames == 4)
+        {
+            // 2 past, 1 current, 1 future
+            surfaces[3] = m_internalQueue.at(0).hwSurface();
+            surfaces[2] = m_internalQueue.at(1).hwSurface();
+            surfaces[0] = m_internalQueue.at(3).hwSurface();
+        }
+        else
+        {
+            surfaces[3] = VDP_INVALID_HANDLE;
+            surfaces[2] = VDP_INVALID_HANDLE;
+            surfaces[0] = VDP_INVALID_HANDLE;
+        }
+        const VdpRect srcRect {
+            0u,
+            0u,
+            static_cast<uint32_t>(m_outputSurfaceSize.width()),
+            static_cast<uint32_t>(m_outputSurfaceSize.height()),
+        };
+        VdpStatus status = vdp_video_mixer_render(
+            m_mixer,
+            VDP_INVALID_HANDLE, nullptr,
+            videoMixerPictureStructure,
+            2, &surfaces[2],
+            surfaces[1],
+            1, &surfaces[0],
+            &srcRect,
+            outputSurfacePtr->surface, nullptr, nullptr,
+            0, nullptr
+        );
+        if (status != VDP_STATUS_OK)
+        {
+            m_error = true;
+            return false;
+        }
+
+        outputSurfacePtr->busy = true;
+        destFrame.setCustomID(currID);
+        destFrame.setOnDestroyFn([self = shared_from_this(), currID] {
+            QMutexLocker locker(&self->m_outputSurfacesMutex);
+            auto it = self->m_outputSurfacesMap.find(currID);
+            if (it != self->m_outputSurfacesMap.end())
+                it->second.busy = false;
+        });
+
+        if (doDeinterlace && (m_deintFlags & DoubleFramerate))
+            deinterlaceDoublerCommon(destFrame);
+        else
+            m_internalQueue.removeFirst();
+
+        framesQueue.enqueue(destFrame);
+    }
+
+    return m_internalQueue.count() >= nFrames;
+}
+
+bool VDPAU::processParams(bool *paramsCorrected)
+{
+    Q_UNUSED(paramsCorrected)
+
+    m_deinterlace = getParam("Deinterlace").toBool();
+    processParamsDeint();
+
+    return true;
 }
 
 void VDPAU::setCSCMatrix()

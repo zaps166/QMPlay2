@@ -18,6 +18,7 @@
 
 #include <FFDecDXVA2.hpp>
 
+#include <DeintHWPrepareFilter.hpp>
 #include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
@@ -178,10 +179,8 @@ public:
         }
     }
 
-    MapResult mapFrame(const Frame &videoFrame, Field field) override
+    MapResult mapFrame(Frame &videoFrame) override
     {
-        Q_UNUSED(field)
-
         if (!unlockRenderTargets())
             return MapError;
 
@@ -193,18 +192,18 @@ public:
         };
 
         m_videoSample.Start = 0;
-        m_videoSample.End = (field == Field::FullFrame) ? 0 : 100;
-        switch (field)
+        if (videoFrame.isInterlaced())
         {
-            case Field::TopField:
-                m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleFieldInterleavedEvenFirst;
-                break;
-            case Field::BottomField:
+            m_videoSample.End = 100;
+            if (videoFrame.isTopFieldFirst() == videoFrame.isSecondField())
                 m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleFieldInterleavedOddFirst;
-                break;
-            default:
-                m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleProgressiveFrame;
-                break;
+            else
+                m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleFieldInterleavedEvenFirst;
+        }
+        else
+        {
+            m_videoSample.End = 0;
+            m_videoSample.SampleFormat.SampleFormat = DXVA2_SampleProgressiveFrame;
         }
         m_videoSample.SampleFormat.NominalRange = videoFrame.isLimited()
             ? DXVA2_NominalRange_16_235
@@ -590,6 +589,11 @@ QString FFDecDXVA2::name() const
     return "FFmpeg/DXVA2";
 }
 
+std::shared_ptr<VideoFilter> FFDecDXVA2::hwAccelFilter() const
+{
+    return m_filter;
+}
+
 void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
 {
     D3DSURFACE_DESC desc;
@@ -643,11 +647,11 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!codec || !hasHWAccel("dxva2"))
         return false;
 
-    DXVA2OpenGL *dxva2OpenGL = nullptr;
+    std::shared_ptr<DXVA2OpenGL> dxva2OpenGL;
 
     if (writer)
     {
-        dxva2OpenGL = dynamic_cast<DXVA2OpenGL *>(writer->getHWAccelInterface());
+        dxva2OpenGL = writer->getHWAccelInterface<DXVA2OpenGL>();
         if (dxva2OpenGL)
         {
             m_hwDeviceBufferRef = av_buffer_ref(dxva2OpenGL->m_hwDeviceBufferRef);
@@ -660,12 +664,9 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
         if (av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_DXVA2, nullptr, nullptr, 0) != 0)
             return false;
 
-        dxva2OpenGL = new DXVA2OpenGL(m_hwDeviceBufferRef);
+        dxva2OpenGL = std::make_shared<DXVA2OpenGL>(m_hwDeviceBufferRef);
         if (!dxva2OpenGL->initVideoProcessor())
-        {
-            delete dxva2OpenGL;
             return false;
-        }
     }
 
     if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, pixFmt == AV_PIX_FMT_YUV420P10))
@@ -683,6 +684,9 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
     codec_ctx->thread_count = 1;
     if (!openCodec(codec))
         return false;
+
+    if (m_hwAccelWriter)
+        m_filter = std::make_shared<DeintHWPrepareFilter>();
 
     m_timeBase = streamInfo.time_base;
     return true;

@@ -80,6 +80,10 @@ VideoWriter *Decoder::HWAccel() const
 {
     return nullptr;
 }
+std::shared_ptr<VideoFilter> Decoder::hwAccelFilter() const
+{
+    return nullptr;
+}
 
 void Decoder::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
 {

@@ -1350,7 +1350,7 @@ void PlayClass::load(Demuxer *demuxer)
                 const bool hasSpherical = vThr->setSpherical();
                 const bool hasRotate90 = vThr->setRotate90();
                 vThr->setFlip();
-                vThr->initFilters(false);
+                vThr->initFilters();
 
                 bool mustEmitSetVideoCheckState = false;
                 if (spherical && !hasSpherical)

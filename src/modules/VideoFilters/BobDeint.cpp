@@ -23,28 +23,22 @@
 
 BobDeint::BobDeint()
 {
+    addParam("DeinterlaceFlags");
     addParam("W");
     addParam("H");
-}
-
-void BobDeint::clearBuffer()
-{
-    secondFrame = false;
-    lastTS = -1.0;
-    DeintFilter::clearBuffer();
 }
 
 bool BobDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
-    if (internalQueue.count() >= 1)
+    if (!m_internalQueue.isEmpty())
     {
-        const Frame &sourceFrame = internalQueue.at(0);
+        const Frame &sourceFrame = m_internalQueue.at(0);
 
-        Frame destFrame = Frame::createEmpty(sourceFrame);
+        Frame destFrame = Frame::createEmpty(sourceFrame, true);
         destFrame.setNoInterlaced();
 
-        const bool parity = (isTopFieldFirst(sourceFrame) == secondFrame);
+        const bool parity = (isTopFieldFirst(sourceFrame) == m_secondFrame);
 
         for (int p = 0; p < 3; ++p)
         {
@@ -84,29 +78,16 @@ bool BobDeint::filter(QQueue<Frame> &framesQueue)
             }
         }
 
-        if (secondFrame)
-        {
-            const double ts = destFrame.ts();
-            destFrame.setTS(ts + halfDelay(ts, lastTS));
-        }
+        deinterlaceDoublerCommon(destFrame);
         framesQueue.enqueue(destFrame);
-
-        if (secondFrame || lastTS < 0.0)
-            lastTS = sourceFrame.ts();
-
-        if (secondFrame)
-            internalQueue.removeFirst();
-        secondFrame = !secondFrame;
     }
-    return internalQueue.count() >= 1;
+    return !m_internalQueue.isEmpty();
 }
 
 bool BobDeint::processParams(bool *)
 {
-    deintFlags = getParam("DeinterlaceFlags").toInt();
-    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || !(deintFlags & DoubleFramerate))
+    processParamsDeint();
+    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || !(m_deintFlags & DoubleFramerate))
         return false;
-    secondFrame = false;
-    lastTS = -1.0;
     return true;
 }

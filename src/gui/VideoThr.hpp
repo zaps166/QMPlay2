@@ -74,7 +74,7 @@ public:
     void setZoom();
     void otherReset();
 
-    void initFilters(bool processParams = true);
+    void initFilters();
 
     bool processParams();
 

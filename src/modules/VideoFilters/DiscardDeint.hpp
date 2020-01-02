@@ -18,9 +18,9 @@
 
 #pragma once
 
-#include <DeintFilter.hpp>
+#include <VideoFilter.hpp>
 
-class DiscardDeint final : public DeintFilter
+class DiscardDeint final : public VideoFilter
 {
 public:
     DiscardDeint();

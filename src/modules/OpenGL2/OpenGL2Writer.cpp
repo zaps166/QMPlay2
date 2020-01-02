@@ -122,7 +122,6 @@ bool OpenGL2Writer::processParams(bool *)
     };
 
     const int verticesIdx = rotate90 * 4 + flip;
-    drawable->Deinterlace = getParam("Deinterlace").toInt();
     if (drawable->aspectRatio != aspectRatio || drawable->zoom != zoom || drawable->sphericalView != spherical || drawable->verticesIdx != verticesIdx || drawable->videoAdjustment != videoAdjustment)
     {
         drawable->zoom = zoom;
@@ -194,13 +193,6 @@ void OpenGL2Writer::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {
     QMutexLocker mL(&drawable->osdMutex);
     drawable->osdList = osds;
-}
-
-void OpenGL2Writer::setHWAccelInterface(HWAccelInterface *hwAccelInterface)
-{
-    addParam("Deinterlace");
-    addParam("PrepareForHWBobDeint", true);
-    VideoWriter::setHWAccelInterface(hwAccelInterface);
 }
 
 void OpenGL2Writer::pause()

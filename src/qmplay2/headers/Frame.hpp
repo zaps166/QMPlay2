@@ -22,6 +22,9 @@
 
 #include <QVector>
 
+#include <functional>
+#include <memory>
+
 extern "C" {
     #include <libavutil/pixfmt.h>
     #include <libavutil/rational.h>
@@ -36,10 +39,11 @@ using AVPixelFormats = QVector<AVPixelFormat>;
 class QMPLAY2SHAREDLIB_EXPORT Frame
 {
 public:
-    static constexpr quintptr s_invalidHwSurface = ~static_cast<quintptr>(0);
+    static constexpr quintptr s_invalidID = ~static_cast<quintptr>(0);
+    using OnDestroyFn = std::function<void()>;
 
 public:
-    static Frame createEmpty(const Frame &other);
+    static Frame createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     static Frame createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     static Frame createEmpty(
         int width,
@@ -75,12 +79,17 @@ public:
 public: // Video
     bool isInterlaced() const;
     bool isTopFieldFirst() const;
+    bool isSecondField() const;
 
     void setInterlaced(bool topFieldFirst);
     void setNoInterlaced();
+    void setIsSecondField(bool secondField);
 
     bool isHW() const;
     quintptr hwSurface() const;
+
+    bool isCustom() const;
+    quintptr customID() const;
 
     AVPixelFormat pixelFormat() const;
 
@@ -102,7 +111,9 @@ public: // Video
     quint8 *data(int plane = 0);
 
     bool setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref);
-    bool setCustomHwSurface(quintptr hwSurface);
+    bool setCustomID(quintptr customID);
+
+    void setOnDestroyFn(const OnDestroyFn &onDestroyFn);
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
@@ -119,7 +130,10 @@ private:
     AVFrame *m_frame = nullptr;
     AVRational m_timeBase = {};
 
+    quintptr m_customID = s_invalidID;
+    std::shared_ptr<OnDestroyFn> m_onDestroyFn;
+
     // Video only
     const AVPixFmtDescriptor *m_pixelFormat = nullptr;
-    quintptr m_customHwSurface = s_invalidHwSurface;
+    bool m_isSecondField = false;
 };

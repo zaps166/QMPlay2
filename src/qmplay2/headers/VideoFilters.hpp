@@ -26,6 +26,8 @@
 #include <QMutex>
 #include <QQueue>
 
+#include <memory>
+
 class VideoFiltersThr;
 
 class QMPLAY2SHAREDLIB_EXPORT VideoFilters
@@ -46,8 +48,9 @@ public:
     void start();
     void clear();
 
-    VideoFilter *on(const QString &filterName);
-    void off(VideoFilter *&videoFilter);
+    std::shared_ptr<VideoFilter> on(const QString &filterName);
+    void on(const std::shared_ptr<VideoFilter> &videoFilter);
+    void off(std::shared_ptr<VideoFilter> &videoFilter);
 
     void clearBuffers();
     void removeLastFromInputBuffer();
@@ -60,7 +63,7 @@ private:
     static void (*averageTwoLinesPtr)(quint8 *, const quint8 *, const quint8 *, int);
 
     QQueue<Frame> outputQueue;
-    QVector<VideoFilter *> filters;
+    QVector<std::shared_ptr<VideoFilter>> filters;
     VideoFiltersThr &filtersThr;
     bool outputNotEmpty = false;
 };

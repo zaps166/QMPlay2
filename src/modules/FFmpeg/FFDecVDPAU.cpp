@@ -56,17 +56,17 @@ public:
 
     bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
     {
-        if (m_width != widths[0] || m_height != heights[0])
+        m_setTextureParamsFn = setTextureParamsFn;
+
+        m_vdpau->m_outputSurfacesMutex.lock();
+        clearObsoleteSurfaces();
+        for (auto &&outputSurfacePair : m_vdpau->m_outputSurfacesMap)
         {
-            clearTextures();
-
-            m_width = widths[0];
-            m_height = heights[0];
-
-            glGenTextures(1, &m_texture);
+            auto &outputSurface = outputSurfacePair.second;
+            if (outputSurface.glTexture != 0)
+                m_setTextureParamsFn(outputSurface.glTexture);
         }
-
-        setTextureParamsFn(m_texture);
+        m_vdpau->m_outputSurfacesMutex.unlock();
 
         if (m_isInitialized)
             return true;
@@ -109,7 +109,8 @@ public:
     }
     void clear() override
     {
-        clearTextures();
+        clearSurfaces();
+        m_setTextureParamsFn = nullptr;
 
         if (!m_isInitialized)
             return;
@@ -127,56 +128,61 @@ public:
         m_isInitialized = false;
     }
 
-    MapResult mapFrame(const Frame &videoFrame, Field field) override
+    MapResult mapFrame(Frame &videoFrame) override
     {
-        maybeUnmapOutputSurface();
+        QMutexLocker locker(&m_vdpau->m_outputSurfacesMutex);
 
-        VdpOutputSurface id = 0;
-        VdpVideoMixerPictureStructure videoMixerPictureStructure = VDP_VIDEO_MIXER_PICTURE_STRUCTURE_FRAME;
-        switch (field)
+        clearObsoleteSurfaces();
+
+        if (auto displayingOutputSurface = m_vdpau->getDisplayingOutputSurface())
         {
-            case Field::TopField:
-                videoMixerPictureStructure = VDP_VIDEO_MIXER_PICTURE_STRUCTURE_TOP_FIELD;
-                break;
-            case Field::BottomField:
-                videoMixerPictureStructure = VDP_VIDEO_MIXER_PICTURE_STRUCTURE_BOTTOM_FIELD;
-                break;
-            default:
-                break;
+            VDPAUUnmapSurfacesNV(1, &displayingOutputSurface->glSurface);
+            displayingOutputSurface->displaying = false;
         }
-        if (!m_vdpau->videoMixerRender(videoFrame, id, videoMixerPictureStructure))
-            return MapError;
-        if (id == VDP_INVALID_HANDLE)
+
+        auto it = m_vdpau->m_outputSurfacesMap.find(videoFrame.customID());
+        if (it == m_vdpau->m_outputSurfacesMap.end())
             return MapNotReady;
 
-        if (id != m_registeredOutputSurface)
+        auto &outputSurface = it->second;
+
+        videoFrame.setOnDestroyFn(nullptr);
+        outputSurface.busy = false;
+
+        if (outputSurface.glTexture == 0)
         {
-            maybeUnregisterOutputSurface();
-
-            m_glSurface = VDPAURegisterOutputSurfaceNV(id, GL_TEXTURE_2D, 1, &m_texture);
-            if (!m_glSurface)
-                return MapError;
-
-            VDPAUSurfaceAccessNV(m_glSurface, GL_READ_ONLY);
-            m_registeredOutputSurface = id;
+            glGenTextures(1, &outputSurface.glTexture);
+            m_setTextureParamsFn(outputSurface.glTexture);
         }
 
-        VDPAUMapSurfacesNV(1, &m_glSurface);
+        if (outputSurface.glSurface == 0)
+        {
+            outputSurface.glSurface = VDPAURegisterOutputSurfaceNV(outputSurface.surface, GL_TEXTURE_2D, 1, &outputSurface.glTexture);
+            if (outputSurface.glSurface == 0)
+                return MapError;
+            VDPAUSurfaceAccessNV(outputSurface.glSurface, GL_READ_ONLY);
+        }
+
+        Q_ASSERT(!outputSurface.displaying);
+        VDPAUMapSurfacesNV(1, &outputSurface.glSurface);
         if (glGetError() != 0)
             return MapError;
+        outputSurface.displaying = true;
 
-        m_isSurfaceMapped = true;
         return MapOk;
     }
     quint32 getTexture(int plane) override
     {
         Q_UNUSED(plane)
-        return m_texture;
+        QMutexLocker locker(&m_vdpau->m_outputSurfacesMutex);
+        if (auto displayingOutputSurface = m_vdpau->getDisplayingOutputSurface())
+            return displayingOutputSurface->glTexture;
+        return 0;
     }
 
     bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
     {
-        Q_UNUSED(nv12ToRGB32) // FIXME: Don't use ImgScaler in VideoThe if not needed
+        Q_UNUSED(nv12ToRGB32) // FIXME: Don't use ImgScaler in VideoThr if not needed
         return m_vdpau->getRGB((uint8_t *)dest, videoFrame.width(), videoFrame.height());
     }
 
@@ -195,40 +201,55 @@ public:
 
     /**/
 
-    void maybeUnmapOutputSurface()
-    {
-        if (!m_isSurfaceMapped)
-            return;
-
-        VDPAUUnmapSurfacesNV(1, &m_glSurface);
-        m_isSurfaceMapped = false;
-    }
-    void maybeUnregisterOutputSurface()
-    {
-        if (!m_glSurface)
-            return;
-
-        VDPAUUnregisterSurfaceNV(m_glSurface);
-        m_registeredOutputSurface = VDP_INVALID_HANDLE;
-        m_glSurface = 0;
-    }
-
     inline std::shared_ptr<VDPAU> getVDPAU() const
     {
         return m_vdpau;
     }
 
 private:
-    void clearTextures()
+    void clearSurfaces()
     {
-        maybeUnmapOutputSurface();
-        maybeUnregisterOutputSurface();
-        if (m_texture)
+        QMutexLocker locker(&m_vdpau->m_outputSurfacesMutex);
+        for (auto &&outputSurfacePair : m_vdpau->m_outputSurfacesMap)
+            deleteGlSurface(outputSurfacePair.second);
+        clearObsoleteSurfaces();
+    }
+
+    void clearObsoleteSurfaces()
+    {
+        for (auto it = m_vdpau->m_outputSurfacesMap.begin(); it != m_vdpau->m_outputSurfacesMap.end();)
         {
-            glDeleteTextures(1, &m_texture);
-            m_texture = 0;
+            auto &outputSurface = it->second;
+            if (outputSurface.obsolete && !outputSurface.busy && !outputSurface.displaying)
+            {
+                deleteGlSurface(outputSurface);
+                m_vdpau->vdp_output_surface_destroy(outputSurface.surface);
+                it = m_vdpau->m_outputSurfacesMap.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
         }
-        m_width = m_height = 0;
+    }
+
+    void deleteGlSurface(VDPAUOutputSurface &surface)
+    {
+        if (surface.displaying)
+        {
+            VDPAUUnmapSurfacesNV(1, &surface.glSurface);
+            surface.displaying = false;
+        }
+        if (surface.glSurface != 0)
+        {
+            VDPAUUnregisterSurfaceNV(surface.glSurface);
+            surface.glSurface = 0;
+        }
+        if (surface.glTexture != 0)
+        {
+            glDeleteTextures(1, &surface.glTexture);
+            surface.glTexture = 0;
+        }
     }
 
 private:
@@ -237,14 +258,7 @@ private:
     std::shared_ptr<VDPAU> m_vdpau;
 
     bool m_isInitialized = false;
-    uint32_t m_texture = 0;
-
-    int m_width = 0;
-    int m_height = 0;
-
-    VdpOutputSurface m_registeredOutputSurface = VDP_INVALID_HANDLE;
-    GLvdpauSurfaceNV m_glSurface = 0;
-    bool m_isSurfaceMapped = false;
+    SetTextureParamsFn m_setTextureParamsFn;
 
     using PFNVDPAUInitNVPROC = void(*)(uintptr_t vdpDevice, VdpGetProcAddress getProcAddress);
     PFNVDPAUInitNVPROC VDPAUInitNV = nullptr;
@@ -322,16 +336,26 @@ QString FFDecVDPAU::name() const
     return "FFmpeg/" VDPAUWriterName;
 }
 
+std::shared_ptr<VideoFilter> FFDecVDPAU::hwAccelFilter() const
+{
+    return m_vdpau;
+}
+
 int FFDecVDPAU::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
+    if (m_vdpau->hasError())
+    {
+        m_hasCriticalError = true;
+        return -1;
+    }
+
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hwAccelWriter && ret > -1)
     {
-        if (flush)
-            m_vdpau->clearBufferedFrames();
         if (!decoded.isEmpty())
             m_vdpau->maybeCreateVideoMixer(codec_ctx->coded_width, codec_ctx->coded_height, decoded);
     }
+
     return ret;
 }
 void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
@@ -372,7 +396,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer) // Writer is already created
     {
-        if (auto vdpauOpenGL = dynamic_cast<VDPAUOpenGL *>(writer->getHWAccelInterface()))
+        if (auto vdpauOpenGL = writer->getHWAccelInterface<VDPAUOpenGL>())
         {
             m_vdpau = vdpauOpenGL->getVDPAU();
             m_hwAccelWriter = writer;
@@ -393,6 +417,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     }
     else
     {
+        m_vdpau->clearBuffer();
         hwDeviceBufferRef = av_buffer_ref(m_vdpau->m_hwDeviceBufferRef);
     }
 
@@ -401,7 +426,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
-        m_hwAccelWriter = VideoWriter::createOpenGL2(new VDPAUOpenGL(m_vdpau));
+        m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VDPAUOpenGL>(m_vdpau));
         if (!m_hwAccelWriter)
             return false;
         m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);

@@ -32,6 +32,8 @@ public:
 
     QString name() const override;
 
+    std::shared_ptr<VideoFilter> hwAccelFilter() const override;
+
     void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
@@ -39,5 +41,6 @@ public:
 private:
     bool m_copyVideo = false;
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
+    std::shared_ptr<VideoFilter> m_filter;
     SwsContext *m_swsCtx = nullptr;
 };

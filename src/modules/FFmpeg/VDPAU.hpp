@@ -18,16 +18,27 @@
 
 #pragma once
 
-#include <Frame.hpp>
+#include <VideoFilter.hpp>
 
 #include <QCoreApplication>
 #include <QMutex>
+#include <QSize>
 
-#include <deque>
+#include <unordered_map>
 
 #include <vdpau/vdpau.h>
 
-class VDPAU
+struct VDPAUOutputSurface
+{
+    VdpOutputSurface surface = VDP_INVALID_HANDLE;
+    uint32_t glTexture = 0;
+    intptr_t glSurface = 0;
+    bool busy = false;
+    bool displaying = false;
+    bool obsolete = false;
+};
+
+class VDPAU : public VideoFilter, public std::enable_shared_from_this<VDPAU>
 {
     Q_DECLARE_TR_FUNCTIONS(VDPAU)
 
@@ -40,17 +51,24 @@ public:
 
     void registerPreemptionCallback(VdpPreemptionCallback callback, void *context);
 
-    void clearBufferedFrames();
+    bool hasError() const;
 
     void applyVideoAdjustment(int saturation, int hue, int sharpness);
     void setVideoMixerDeintNr(int deintMethod, bool nrEnabled, float nrLevel);
 
     void maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decoded);
 
-    bool videoMixerRender(const Frame &videoFrame, VdpOutputSurface &id, VdpVideoMixerPictureStructure videoMixerPictureStructure);
-
     bool getYV12(Frame &decoded, VdpVideoSurface id);
     bool getRGB(uint8_t *dest, int width, int height);
+
+    VDPAUOutputSurface *getDisplayingOutputSurface();
+
+public:
+    void clearBuffer() override;
+
+    bool filter(QQueue<Frame> &framesQueue) override;
+
+    bool processParams(bool *paramsCorrected) override;
 
 private:
     void setCSCMatrix();
@@ -64,13 +82,7 @@ public:
     VdpDevice m_device = VDP_INVALID_HANDLE;
 
     VdpVideoMixer m_mixer = VDP_INVALID_HANDLE;
-    VdpOutputSurface m_outputSurface = VDP_INVALID_HANDLE;
-
-    int m_surfaceW = 0;
-    int m_surfaceH = 0;
-
-    int m_frameW = 0;
-    int m_frameH = 0;
+    QSize m_surfaceSize;
 
     VdpColorStandard m_colorStandard = VDP_COLOR_STANDARD_ITUR_BT_601;
     bool m_isLimitedRange = true;
@@ -86,8 +98,13 @@ public:
     bool m_mustSetCSCMatrix = false;
     bool m_mustApplyVideoMixerFeatures = false;
 
-    QMutex m_framesMutex;
-    std::deque<Frame> m_bufferedFrames;
+    QMutex m_outputSurfacesMutex;
+    std::unordered_map<quintptr, VDPAUOutputSurface> m_outputSurfacesMap;
+    quintptr m_id = 0;
+    QSize m_outputSurfaceSize;
+
+    bool m_deinterlace = false;
+    std::atomic_bool m_error {false};
 
     VdpGetProcAddress *vdp_get_proc_address = nullptr;
     VdpOutputSurfaceCreate *vdp_output_surface_create = nullptr;

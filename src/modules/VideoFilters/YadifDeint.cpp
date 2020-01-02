@@ -500,8 +500,8 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
 /* Yadif deint filter */
 
 YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
-    doubler(doubler),
-    spatialCheck(spatialCheck)
+    m_doubler(doubler),
+    m_spatialCheck(spatialCheck)
 {
     m_threadsPool.setMaxThreadCount(min(QThread::idealThreadCount(), 18));
     if (!filterLinePtr)
@@ -524,26 +524,21 @@ YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
 #endif // QMPLAY2_CPU_X86_32
 #endif // QMPLAY2_CPU_X86
     }
+    addParam("DeinterlaceFlags");
     addParam("W");
     addParam("H");
-}
-
-void YadifDeint::clearBuffer()
-{
-    secondFrame = false;
-    DeintFilter::clearBuffer();
 }
 
 bool YadifDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
-    if (internalQueue.count() >= 3)
+    if (m_internalQueue.count() >= 3)
     {
-        const Frame &prevFrame = internalQueue.at(0);
-        const Frame &currFrame = internalQueue.at(1);
-        const Frame &nextFrame = internalQueue.at(2);
+        const Frame &prevFrame = m_internalQueue.at(0);
+        const Frame &currFrame = m_internalQueue.at(1);
+        const Frame &nextFrame = m_internalQueue.at(2);
 
-        Frame destFrame = Frame::createEmpty(currFrame);
+        Frame destFrame = Frame::createEmpty(currFrame, true);
         destFrame.setNoInterlaced();
 
         auto doFilter = [&](const int jobId, const int jobsCount) {
@@ -553,8 +548,8 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 filterSlice
                 (
                     p,
-                    secondFrame == tff, tff,
-                    spatialCheck,
+                    m_secondFrame == tff, tff,
+                    m_spatialCheck,
                     destFrame, prevFrame, currFrame, nextFrame,
                     jobId, jobsCount
                 );
@@ -573,26 +568,20 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         for (auto &&thread : threads)
             thread.waitForFinished();
 
-        if (secondFrame)
-        {
-            const double ts = destFrame.ts();
-            destFrame.setTS(ts + halfDelay(nextFrame.ts(), ts));
-        }
-        framesQueue.enqueue(destFrame);
+        if (m_doubler)
+            deinterlaceDoublerCommon(destFrame);
+        else
+            m_internalQueue.removeFirst();
 
-        if (secondFrame || !doubler)
-            internalQueue.removeFirst();
-        if (doubler)
-            secondFrame = !secondFrame;
+        framesQueue.enqueue(destFrame);
     }
-    return internalQueue.count() >= 3;
+    return m_internalQueue.count() >= 3;
 }
 
 bool YadifDeint::processParams(bool *)
 {
-    deintFlags = getParam("DeinterlaceFlags").toInt();
-    if (getParam("W").toInt() < 3 || getParam("H").toInt() < 3 || (doubler == !(deintFlags & DoubleFramerate)))
+    processParamsDeint();
+    if (getParam("W").toInt() < 3 || getParam("H").toInt() < 3 || (m_doubler == !(m_deintFlags & DoubleFramerate)))
         return false;
-    secondFrame = false;
     return true;
 }

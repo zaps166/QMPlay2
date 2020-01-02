@@ -35,6 +35,8 @@ public:
 
     QString name() const override;
 
+    std::shared_ptr<VideoFilter> hwAccelFilter() const override;
+
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(Frame &decoded) override;
 
@@ -44,5 +46,6 @@ private:
     bool m_copyVideo = false;
     VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
     std::shared_ptr<VAAPI> m_vaapi;
+    std::shared_ptr<VideoFilter> m_filter;
     SwsContext *m_swsCtx = nullptr;
 };

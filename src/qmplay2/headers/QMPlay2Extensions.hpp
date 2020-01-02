@@ -71,10 +71,10 @@ public:
     virtual void visState(bool, uchar chn = 0, uint srate = 0);
     virtual void sendSoundData(const QByteArray &);
     virtual void clearSoundData();
-protected:
-    virtual ~QMPlay2Extensions() = default;
 
+protected:
     virtual void init(); //Jeżeli jakieś rozszerzenie używa innego podczas inicjalizacji. Wywoływane po załadowaniu wszystkich.
+
 private:
     static QList<QMPlay2Extensions *> guiExtensionsList;
 };

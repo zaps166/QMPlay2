@@ -26,8 +26,15 @@
 class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleParams
 {
 public:
-    virtual ~VideoFilter() = default;
+    enum DeintFlags
+    {
+        AutoDeinterlace = 0x1,
+        DoubleFramerate = 0x2,
+        AutoParity = 0x4,
+        TopFieldFirst = 0x8
+    };
 
+public:
     virtual void clearBuffer();
 
     bool removeLastFromInternalBuffer();
@@ -35,12 +42,23 @@ public:
     virtual bool filter(QQueue<Frame> &framesQueue) = 0;
 
 protected:
+    void processParamsDeint();
+
     void addFramesToInternalQueue(QQueue<Frame> &framesQueue);
+    void addFramesToDeinterlace(QQueue<Frame> &framesQueue);
 
-    inline double halfDelay(double f1_ts, double f2_ts) const
-    {
-        return (f1_ts - f2_ts) / 2.0;
-    }
+    void deinterlaceDoublerCommon(Frame &frame);
 
-    QQueue<Frame> internalQueue;
+    bool isTopFieldFirst(const Frame &videoFrame) const;
+
+    double getMidFrameTS(double ts1, double ts2) const;
+
+protected:
+    QQueue<Frame> m_internalQueue;
+
+    quint8 m_deintFlags = 0;
+
+    // For doubler
+    bool m_secondFrame = false;
+    double m_lastTS = qQNaN();
 };

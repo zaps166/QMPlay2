@@ -21,6 +21,7 @@
 
 BlendDeint::BlendDeint()
 {
+    addParam("DeinterlaceFlags");
     addParam("W");
     addParam("H");
 }
@@ -28,9 +29,9 @@ BlendDeint::BlendDeint()
 bool BlendDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
-    while (!internalQueue.isEmpty())
+    if (!m_internalQueue.isEmpty())
     {
-        Frame videoFrame = internalQueue.dequeue();
+        Frame videoFrame = m_internalQueue.dequeue();
         videoFrame.setNoInterlaced();
         for (int p = 0; p < 3; ++p)
         {
@@ -45,13 +46,13 @@ bool BlendDeint::filter(QQueue<Frame> &framesQueue)
         }
         framesQueue.enqueue(videoFrame);
     }
-    return !internalQueue.isEmpty();
+    return !m_internalQueue.isEmpty();
 }
 
 bool BlendDeint::processParams(bool *)
 {
-    deintFlags = getParam("DeinterlaceFlags").toInt();
-    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || (deintFlags & DoubleFramerate))
+    processParamsDeint();
+    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || (m_deintFlags & DoubleFramerate))
         return false;
     return true;
 }

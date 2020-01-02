@@ -18,21 +18,16 @@
 
 #pragma once
 
-#include <DeintFilter.hpp>
+#include <VideoFilter.hpp>
 
-class BobDeint final : public DeintFilter
+class BobDeint final : public VideoFilter
 {
 public:
     BobDeint();
 
-    void clearBuffer() override;
-
     bool filter(QQueue<Frame> &framesQueue) override;
 
     bool processParams(bool *paramsCorrected) override;
-private:
-    bool secondFrame;
-    double lastTS;
 };
 
 #define BobDeintName "Bob"

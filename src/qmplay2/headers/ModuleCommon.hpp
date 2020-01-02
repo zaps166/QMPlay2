@@ -24,9 +24,10 @@ class QMPLAY2SHAREDLIB_EXPORT ModuleCommon
 {
 public:
     virtual bool set();
+
 protected:
     ModuleCommon() = default;
-    ~ModuleCommon();
+    virtual ~ModuleCommon();
 
     void SetModule(Module &m);
 
@@ -45,6 +46,7 @@ protected:
     {
         module->setInstance<T>();
     }
+
 private:
     Module *module = nullptr;
 };

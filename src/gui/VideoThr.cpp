@@ -130,81 +130,76 @@ void VideoThr::otherReset()
         writer->modParam("ResetOther", true);
 }
 
-void VideoThr::initFilters(bool processParams)
+void VideoThr::initFilters()
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
 
-    if (processParams)
-        filtersMutex.lock();
-
+    filtersMutex.lock();
     filters.clear();
 
-    if (!playC.stillImage && QMPSettings.getBool("Deinterlace/ON")) //Deinterlacing filters as first
+    if (!playC.stillImage)
     {
+        const bool deint = QMPSettings.getBool("Deinterlace/ON");
         const bool autoDeint = QMPSettings.getBool("Deinterlace/Auto");
         const bool doubleFramerate = QMPSettings.getBool("Deinterlace/Doubler");
         const bool autoParity = QMPSettings.getBool("Deinterlace/AutoParity");
         const bool topFieldFirst = QMPSettings.getBool("Deinterlace/TFF");
         const quint8 deintFlags = autoDeint | doubleFramerate << 1 | autoParity << 2 | topFieldFirst << 3;
-        bool HWDeint = false, PrepareForHWBobDeint = false;
-        if ((HWDeint = writer->modParam("Deinterlace", 1 | deintFlags << 1)))
-            PrepareForHWBobDeint = doubleFramerate && writer->getParam("PrepareForHWBobDeint").toBool();
-        if (!HWDeint || PrepareForHWBobDeint)
+        if (hwAccelWriter)
         {
-            const QString deintFilterName = PrepareForHWBobDeint ? "PrepareForHWBobDeint" : QMPSettings.getString("Deinterlace/SoftwareMethod");
-            if (!deintFilterName.isEmpty())
+            if (auto hwFilter = dec->hwAccelFilter())
             {
-                VideoFilter *deintFilter = filters.on(deintFilterName);
-                bool ok = false;
-                if (deintFilter && deintFilter->modParam("DeinterlaceFlags", deintFlags))
+                hwFilter->modParam("Deinterlace", deint);
+                hwFilter->modParam("DeinterlaceFlags", deintFlags);
+                hwFilter->modParam("W", W);
+                hwFilter->modParam("H", H);
+                if (hwFilter->processParams())
+                    filters.on(hwFilter);
+            }
+        }
+        else
+        {
+            if (deint) // Deinterlacing filters as first
+            {
+                const QString deintFilterName = QMPSettings.getString("Deinterlace/SoftwareMethod");
+                if (auto deintFilter = filters.on(deintFilterName))
                 {
-                    deintFilter->modParam("W", W);
-                    deintFilter->modParam("H", H);
-                    ok = deintFilter->processParams();
-                }
-                if (!ok)
-                {
-                    if (deintFilter)
+                    bool ok = false;
+                    if (deintFilter->modParam("DeinterlaceFlags", deintFlags))
+                    {
+                        deintFilter->modParam("W", W);
+                        deintFilter->modParam("H", H);
+                        ok = deintFilter->processParams();
+                    }
+                    if (!ok)
+                    {
                         filters.off(deintFilter);
-                    if (W > 0 && H > 0)
-                        QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"', true, true);
+                        if (W > 0 && H > 0)
+                            QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"', true, true);
+                    }
                 }
             }
-        }
-    }
-    else
-    {
-        writer->modParam("Deinterlace", 0);
-    }
-
-    if (!playC.stillImage && !hwAccelWriter)
-    {
-        for (QString filterName : QMPSettings.getStringList("VideoFilters"))
-        {
-            if (filterName.leftRef(1).toInt()) //if filter is enabled
+            for (QString filterName : QMPSettings.getStringList("VideoFilters"))
             {
-                VideoFilter *filter = filters.on((filterName = filterName.mid(1)));
-                bool ok = false;
-                if (filter)
+                if (filterName.leftRef(1).toInt()) //if filter is enabled
                 {
-                    filter->modParam("W", W);
-                    filter->modParam("H", H);
-                    if (!(ok = filter->processParams()))
-                        filters.off(filter);
+                    bool ok = false;
+                    filterName = filterName.mid(1);
+                    if (auto filter = filters.on(filterName))
+                    {
+                        filter->modParam("W", W);
+                        filter->modParam("H", H);
+                        if (!(ok = filter->processParams()))
+                            filters.off(filter);
+                    }
+                    if (!ok && W > 0 && H > 0)
+                        QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
                 }
-                if (!ok && W > 0 && H > 0)
-                    QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
             }
         }
     }
 
-    if (processParams)
-    {
-        filtersMutex.unlock();
-        if (writer->hasParam("Deinterlace"))
-            writer->processParams();
-    }
-
+    filtersMutex.unlock();
     filters.start();
 }
 

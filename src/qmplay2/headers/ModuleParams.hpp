@@ -27,6 +27,7 @@
 class QMPLAY2SHAREDLIB_EXPORT ModuleParams
 {
     Q_DISABLE_COPY(ModuleParams)
+
 public:
     bool modParam(const QString &key, const QVariant &val);
     inline QVariant getParam(const QString &key) const
@@ -39,14 +40,16 @@ public:
     }
 
     virtual bool processParams(bool *paramsCorrected = nullptr);
+
 protected:
     ModuleParams() = default;
-    ~ModuleParams() = default;
+    virtual ~ModuleParams() = default;
 
     inline void addParam(const QString &key, const QVariant &val = QVariant())
     {
         paramList.insert(key, val);
     }
+
 private:
     QHash<QString, QVariant> paramList;
 };

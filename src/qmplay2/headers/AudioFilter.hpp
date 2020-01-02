@@ -25,8 +25,6 @@
 class QMPLAY2SHAREDLIB_EXPORT AudioFilter : public ModuleCommon
 {
 public:
-    virtual ~AudioFilter() = default;
-
     static QVector<AudioFilter *> open();
 
     virtual bool setAudioParameters(uchar chn, uint srate) = 0;

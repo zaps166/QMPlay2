@@ -288,7 +288,6 @@ void VAAPI::clearVPP(bool resetAllowFilters)
     context_vpp = 0;
     config_vpp = 0;
     m_nBackwardRefs = m_nForwardRefs = 0;
-    m_lastVppSurface = VA_INVALID_SURFACE;
     if (resetAllowFilters)
         m_allowFilters = false;
 }
@@ -325,7 +324,7 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
 
 bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
 {
-    const bool doDeint = (field != 0 && m_vppDeintBuff != VA_INVALID_ID);
+    const bool doDeint = (field != VA_FRAME_PICTURE && m_vppDeintBuff != VA_INVALID_ID);
 
     if (use_vpp && !doDeint)
         clearVPPFrames();
@@ -338,16 +337,13 @@ bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
         return true;
     }
 
-    const bool firstField = (m_lastVppSurface != currId);
-    m_lastVppSurface = currId;
-
     // Example: {future(backward ref, frame 3), current(frame 2), past(forward ref, frame 1), past (forward ref, frame 0)}
     const int requiredRefs = m_nBackwardRefs + 1 + m_nForwardRefs;
     if (m_refs.count() != requiredRefs)
     {
         m_refs.fill(currId, requiredRefs);
     }
-    else if (firstField)
+    else if (!frame.isSecondField())
     {
         m_vppFrames.remove(m_refs.takeLast());
         m_vppFrames.insert(currId, frame);
@@ -362,7 +358,7 @@ bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
     }
 
     deintParams->flags = (field == VA_TOP_FIELD) ? 0 : VA_DEINTERLACING_BOTTOM_FIELD;
-    if (firstField == (field != VA_TOP_FIELD))
+    if (frame.isSecondField() == (field == VA_TOP_FIELD))
         deintParams->flags |= VA_DEINTERLACING_BOTTOM_FIELD_FIRST;
     vaUnmapBuffer(VADisp, m_vppDeintBuff);
 

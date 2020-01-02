@@ -19,24 +19,18 @@
 #pragma once
 
 #include <VideoFilter.hpp>
-#include <Frame.hpp>
+#include <QMPlay2Lib.hpp>
 
-class QMPLAY2SHAREDLIB_EXPORT DeintFilter : public VideoFilter
+class QMPLAY2SHAREDLIB_EXPORT DeintHWPrepareFilter : public VideoFilter
 {
 public:
-    enum DeintFlags {AutoDeinterlace = 0x1, DoubleFramerate = 0x2, AutoParity = 0x4, TopFieldFirst = 0x8};
+    DeintHWPrepareFilter();
+    ~DeintHWPrepareFilter();
 
-    inline DeintFilter()
-    {
-        addParam("DeinterlaceFlags");
-    }
-protected:
-    void addFramesToDeinterlace(QQueue<Frame> &framesQueue);
+    bool filter(QQueue<Frame> &framesQueue) override;
 
-    inline bool isTopFieldFirst(const Frame &videoFrame) const
-    {
-        return ((deintFlags & AutoParity) && videoFrame.isInterlaced()) ? videoFrame.isTopFieldFirst() : (deintFlags & TopFieldFirst);
-    }
+    bool processParams(bool *paramsCorrected) override;
 
-    quint8 deintFlags;
+private:
+    bool m_deinterlace = false;
 };

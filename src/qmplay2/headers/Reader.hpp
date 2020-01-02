@@ -27,8 +27,6 @@ class QMPLAY2SHAREDLIB_EXPORT Reader : protected ModuleCommon, public ModulePara
 public:
     static bool create(const QString &url, IOController<Reader> &reader, const QString &plugName = QString());
 
-    virtual ~Reader() = default;
-
     inline QString getUrl() const
     {
         return _url;

@@ -28,9 +28,9 @@ extern "C"
 
 #include <cmath>
 
-Frame Frame::createEmpty(const Frame &other)
+Frame Frame::createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
-    Frame frame = createEmpty(other.m_frame, true);
+    Frame frame = createEmpty(other.m_frame, allocBuffers, newPixelFormat);
     frame.m_timeBase = other.m_timeBase;
     return frame;
 }
@@ -118,13 +118,19 @@ Frame::~Frame()
 
 bool Frame::isEmpty() const
 {
-    return (m_frame->data[0] == nullptr && !isHW());
+    return (m_frame->data[0] == nullptr && !isHW() && !isCustom());
 }
 void Frame::clear()
 {
     av_frame_unref(m_frame);
+
+    m_timeBase = {};
+
+    m_customID = s_invalidID;
+    m_onDestroyFn.reset();
+
     m_pixelFormat = nullptr;
-    m_customHwSurface = s_invalidHwSurface;
+    m_isSecondField = false;
 }
 
 void Frame::setTimeBase(const AVRational &timeBase)
@@ -168,6 +174,10 @@ bool Frame::isTopFieldFirst() const
 {
     return static_cast<bool>(m_frame->top_field_first);
 }
+bool Frame::isSecondField() const
+{
+    return m_isSecondField;
+}
 
 void Frame::setInterlaced(bool topFieldFirst)
 {
@@ -179,12 +189,13 @@ void Frame::setNoInterlaced()
     m_frame->interlaced_frame = 0;
     m_frame->top_field_first = 0;
 }
+void Frame::setIsSecondField(bool secondField)
+{
+    m_isSecondField = secondField;
+}
 
 bool Frame::isHW() const
 {
-    if (m_customHwSurface != s_invalidHwSurface)
-        return true;
-
     switch (m_frame->format)
     {
         case AV_PIX_FMT_DXVA2_VLD:
@@ -197,14 +208,10 @@ bool Frame::isHW() const
 //        case AV_PIX_FMT_OPENCL:
             return true;
     }
-
     return false;
 }
 quintptr Frame::hwSurface() const
 {
-    if (m_customHwSurface != s_invalidHwSurface)
-        return m_customHwSurface;
-
     switch (m_frame->format)
     {
         case AV_PIX_FMT_DXVA2_VLD:
@@ -213,8 +220,16 @@ quintptr Frame::hwSurface() const
         case AV_PIX_FMT_VIDEOTOOLBOX:
             return reinterpret_cast<quintptr>(m_frame->data[3]);
     }
+    return s_invalidID;
+}
 
-    return s_invalidHwSurface;
+bool Frame::isCustom() const
+{
+    return (m_customID != s_invalidID);
+}
+quintptr Frame::customID() const
+{
+    return m_customID;
 }
 
 AVPixelFormat Frame::pixelFormat() const
@@ -310,18 +325,34 @@ bool Frame::setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref)
 
     return true;
 }
-bool Frame::setCustomHwSurface(quintptr hwSurface)
+bool Frame::setCustomID(quintptr customID)
 {
-    if (m_customHwSurface == s_invalidHwSurface && !isEmpty())
+    if (!isCustom() && !isEmpty())
         return false;
 
-    m_customHwSurface = hwSurface;
+    m_customID = customID;
     return true;
+}
+
+void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
+{
+    if (onDestroyFn && !m_onDestroyFn)
+    {
+        m_onDestroyFn = std::shared_ptr<OnDestroyFn>(new OnDestroyFn(onDestroyFn), [](OnDestroyFn *ptr) {
+            if (*ptr)
+                (*ptr)();
+            delete ptr;
+        });
+    }
+    else if (m_onDestroyFn)
+    {
+        *m_onDestroyFn = onDestroyFn;
+    }
 }
 
 bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const
 {
-    if (isHW() || (m_frame->format != AV_PIX_FMT_YUV420P && m_frame->format != AV_PIX_FMT_YUVJ420P))
+    if (isHW() || isCustom() || (m_frame->format != AV_PIX_FMT_YUV420P && m_frame->format != AV_PIX_FMT_YUVJ420P))
         return false;
 
     const qint32 height = this->height(0);
@@ -357,14 +388,22 @@ Frame &Frame::operator =(const Frame &other)
 {
     av_frame_unref(m_frame);
     if (!other.m_frame->buf[0] && !other.m_frame->data[0])
+    {
         copyAVFrameInfo(other.m_frame);
+        memcpy(m_frame->linesize, other.m_frame->linesize, sizeof(AVFrame::linesize));
+    }
     else
+    {
         av_frame_ref(m_frame, other.m_frame);
+    }
 
     m_timeBase = other.m_timeBase;
 
+    m_customID = other.m_customID;
+    m_onDestroyFn = other.m_onDestroyFn;
+
     m_pixelFormat = other.m_pixelFormat;
-    m_customHwSurface = other.m_customHwSurface;
+    m_isSecondField = other.m_isSecondField;
 
     return *this;
 }
@@ -375,8 +414,11 @@ Frame &Frame::operator =(Frame &&other)
 
     qSwap(m_timeBase, other.m_timeBase);
 
+    qSwap(m_customID, other.m_customID);
+    m_onDestroyFn = std::move(other.m_onDestroyFn);
+
     qSwap(m_pixelFormat, other.m_pixelFormat);
-    qSwap(m_customHwSurface, other.m_customHwSurface);
+    qSwap(m_isSecondField, other.m_isSecondField);
 
     return *this;
 }

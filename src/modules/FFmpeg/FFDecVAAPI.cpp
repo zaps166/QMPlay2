@@ -17,6 +17,7 @@
 */
 
 #include <FFDecVAAPI.hpp>
+#include <DeintHWPrepareFilter.hpp>
 #include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <FFCommon.hpp>
@@ -181,10 +182,15 @@ public:
         clearTextures();
     }
 
-    MapResult mapFrame(const Frame &videoFrame, Field field) override
+    MapResult mapFrame(Frame &videoFrame) override
     {
         VASurfaceID id;
-        int vaField = field; // VA-API field codes are compatible with "HWAccelInterface::Field" codes.
+        int vaField = videoFrame.isInterlaced()
+            ? (videoFrame.isTopFieldFirst() != videoFrame.isSecondField())
+              ? VA_TOP_FIELD
+              : VA_BOTTOM_FIELD
+            : VA_FRAME_PICTURE
+        ;
         if (!m_vaapi->filterVideo(videoFrame, id, vaField))
             return MapNotReady;
 
@@ -410,6 +416,11 @@ QString FFDecVAAPI::name() const
     return "FFmpeg/" VAAPIWriterName;
 }
 
+std::shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
+{
+    return m_filter;
+}
+
 int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
@@ -475,7 +486,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer) //Writer is already created
     {
-        VAAPIOpenGL *vaapiOpenGL = dynamic_cast<VAAPIOpenGL *>(writer->getHWAccelInterface());
+        auto vaapiOpenGL = writer->getHWAccelInterface<VAAPIOpenGL>();
         if (vaapiOpenGL)
         {
             m_vaapi = vaapiOpenGL->getVAAPI();
@@ -504,7 +515,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
-        auto vaapiOpengGL = new VAAPIOpenGL(m_vaapi);
+        auto vaapiOpengGL = std::make_shared<VAAPIOpenGL>(m_vaapi);
         m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
         if (!m_hwAccelWriter)
             return false;
@@ -521,6 +532,9 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 #endif
     if (!openCodec(codec))
         return false;
+
+    if (m_hwAccelWriter)
+        m_filter = std::make_shared<DeintHWPrepareFilter>();
 
     m_timeBase = streamInfo.time_base;
     return true;

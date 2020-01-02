@@ -21,6 +21,7 @@
 
 DiscardDeint::DiscardDeint()
 {
+    addParam("DeinterlaceFlags");
     addParam("W");
     addParam("H");
 }
@@ -28,9 +29,9 @@ DiscardDeint::DiscardDeint()
 bool DiscardDeint::filter(QQueue<Frame> &framesQueue)
 {
     addFramesToDeinterlace(framesQueue);
-    if (!internalQueue.isEmpty())
+    if (!m_internalQueue.isEmpty())
     {
-        Frame videoFrame = internalQueue.dequeue();
+        Frame videoFrame = m_internalQueue.dequeue();
         const bool TFF = isTopFieldFirst(videoFrame);
         videoFrame.setNoInterlaced();
         for (int p = 0; p < 3; ++p)
@@ -54,13 +55,13 @@ bool DiscardDeint::filter(QQueue<Frame> &framesQueue)
         }
         framesQueue.enqueue(videoFrame);
     }
-    return !internalQueue.isEmpty();
+    return !m_internalQueue.isEmpty();
 }
 
 bool DiscardDeint::processParams(bool *)
 {
-    deintFlags = getParam("DeinterlaceFlags").toInt();
-    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || (deintFlags & DoubleFramerate))
+    processParamsDeint();
+    if (getParam("W").toInt() < 2 || getParam("H").toInt() < 4 || (m_deintFlags & DoubleFramerate))
         return false;
     return true;
 }

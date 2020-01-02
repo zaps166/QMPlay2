@@ -44,7 +44,7 @@ public:
 
     static bool create(const QString &url, IOController<Demuxer> &demuxer, FetchTracks *fetchTracks = nullptr);
 
-    virtual ~Demuxer();
+    ~Demuxer();
 
     virtual bool metadataChanged() const;
 

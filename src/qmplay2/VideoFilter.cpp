@@ -17,29 +17,82 @@
 */
 
 #include <VideoFilter.hpp>
-#include <Frame.hpp>
+
+#include <QDebug>
 
 void VideoFilter::clearBuffer()
 {
-    internalQueue.clear();
+    m_internalQueue.clear();
+
+    m_secondFrame = false;
+    m_lastTS = qQNaN();
 }
 
 bool VideoFilter::removeLastFromInternalBuffer()
 {
-    if (!internalQueue.isEmpty())
+    if (!m_internalQueue.isEmpty())
     {
-        internalQueue.removeLast();
+        m_internalQueue.removeLast();
         return true;
     }
     return false;
+}
+
+void VideoFilter::processParamsDeint()
+{
+    m_secondFrame = false;
+    m_lastTS = qQNaN();
+
+    m_deintFlags = getParam("DeinterlaceFlags").toInt();
 }
 
 void VideoFilter::addFramesToInternalQueue(QQueue<Frame> &framesQueue)
 {
     while (!framesQueue.isEmpty())
     {
-        if (framesQueue.at(0).isEmpty())
+        const Frame &videoFrame = framesQueue.constFirst();
+        if (videoFrame.isEmpty())
             break;
-        internalQueue.enqueue(framesQueue.dequeue());
+        m_internalQueue.enqueue(framesQueue.dequeue());
     }
+}
+void VideoFilter::addFramesToDeinterlace(QQueue<Frame> &framesQueue)
+{
+    while (!framesQueue.isEmpty())
+    {
+        const Frame &videoFrame = framesQueue.constFirst();
+        if (((m_deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced()) || videoFrame.isEmpty())
+            break;
+        m_internalQueue.enqueue(framesQueue.dequeue());
+    }
+}
+
+void VideoFilter::deinterlaceDoublerCommon(Frame &frame)
+{
+    const double initialTS = frame.ts();
+
+    if (m_secondFrame)
+    {
+        frame.setTS(getMidFrameTS(frame.ts(), m_lastTS));
+        frame.setIsSecondField(true);
+        m_internalQueue.removeFirst();
+    }
+
+    if (m_secondFrame || qIsNaN(m_lastTS))
+        m_lastTS = initialTS;
+
+    m_secondFrame = !m_secondFrame;
+}
+
+bool VideoFilter::isTopFieldFirst(const Frame &videoFrame) const
+{
+    return ((m_deintFlags & AutoParity) && videoFrame.isInterlaced())
+        ? videoFrame.isTopFieldFirst()
+        : (m_deintFlags & TopFieldFirst)
+    ;
+}
+
+double VideoFilter::getMidFrameTS(double ts1, double ts2) const
+{
+    return ts1 + qAbs(ts1 - ts2) / 2.0;
 }

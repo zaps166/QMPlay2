@@ -56,6 +56,7 @@ private:
     QString name() const override;
 
     VideoWriter *HWAccel() const override;
+    std::shared_ptr<VideoFilter> hwAccelFilter() const override;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
 
@@ -76,7 +77,8 @@ private:
 
 private:
     VideoWriter *m_writer;
-    CuvidHWAccel *m_cuvidHWAccel;
+    std::shared_ptr<VideoFilter> m_filter;
+    std::shared_ptr<CuvidHWAccel> m_cuvidHWAccel;
 
     bool m_limited;
     AVColorSpace m_colorSpace;

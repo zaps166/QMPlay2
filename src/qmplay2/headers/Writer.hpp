@@ -29,8 +29,6 @@ class QMPLAY2SHAREDLIB_EXPORT Writer : public ModuleCommon, public ModuleParams,
 public:
     static Writer *create(const QString &, const QStringList &modNames = {});
 
-    virtual ~Writer() = default;
-
     inline QString getUrl() const
     {
         return _url;

@@ -139,7 +139,7 @@ private:
     inline void deleteSphereVbo();
     void loadSphere();
 public:
-    HWAccelInterface *hwAccellnterface;
+    std::shared_ptr<HWAccelInterface> hwAccellnterface;
     QStringList videoAdjustmentKeys;
     Frame videoFrame;
 
@@ -155,7 +155,6 @@ public:
     QSize m_textureSize;
     qint32 numPlanes;
     quint32 target;
-    int Deinterlace;
 
     quint32 pbo[4];
     bool allowPBO, hasPbo, hqScaling = false;

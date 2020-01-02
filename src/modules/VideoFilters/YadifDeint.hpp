@@ -18,25 +18,22 @@
 
 #pragma once
 
-#include <DeintFilter.hpp>
+#include <VideoFilter.hpp>
 
 #include <QThreadPool>
 
-class YadifDeint final : public DeintFilter
+class YadifDeint final : public VideoFilter
 {
 public:
-    YadifDeint(bool doubler, bool spatialCheck);
-
-    void clearBuffer() override;
+    YadifDeint(bool m_doubler, bool m_spatialCheck);
 
     bool filter(QQueue<Frame> &framesQueue) override;
 
     bool processParams(bool *paramsCorrected) override;
 private:
+    const bool m_doubler;
+    const bool m_spatialCheck;
     QThreadPool m_threadsPool;
-
-    const bool doubler, spatialCheck;
-    bool secondFrame;
 };
 
 #define YadifDeintName "Yadif"

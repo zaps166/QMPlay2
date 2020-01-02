@@ -133,8 +133,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
     QMPLAY2SHAREDLIB_EXPORT int scaleEQValue(int val, int min, int max);
 
-    QMPLAY2SHAREDLIB_EXPORT int getField(const Frame &videoFrame, int deinterlace, int fullFrame, int topField, int bottomField);
-
     QMPLAY2SHAREDLIB_EXPORT QByteArray convertToASS(QString txt);
 
     QMPLAY2SHAREDLIB_EXPORT bool chkMimeData(const QMimeData *mimeData);

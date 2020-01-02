@@ -25,8 +25,11 @@
 #include <QByteArray>
 #include <QString>
 
+#include <memory>
+
 class QMPlay2OSD;
 class VideoWriter;
+class VideoFilter;
 class StreamInfo;
 class LibASS;
 
@@ -35,11 +38,10 @@ class QMPLAY2SHAREDLIB_EXPORT Decoder : public ModuleCommon
 public:
     static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {}, QString *modNameOutput = nullptr);
 
-    virtual ~Decoder() = default;
-
     virtual QString name() const = 0;
 
     virtual VideoWriter *HWAccel() const;
+    virtual std::shared_ptr<VideoFilter> hwAccelFilter() const;
 
     virtual void setSupportedPixelFormats(const AVPixelFormats &pixelFormats);
 

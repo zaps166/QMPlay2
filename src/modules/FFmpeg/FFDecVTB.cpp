@@ -110,10 +110,8 @@ public:
         memset(m_heights, 0, sizeof(m_heights));
     }
 
-    MapResult mapFrame(const Frame &videoFrame, Field field) override
+    MapResult mapFrame(Frame &videoFrame) override
     {
-        Q_UNUSED(field)
-
         CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
         CGLContextObj glCtx = CGLGetCurrentContext();
 
@@ -264,7 +262,7 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer)
     {
-        if (auto vtbOpenGL = dynamic_cast<VTBOpenGL *>(writer->getHWAccelInterface()))
+        if (auto vtbOpenGL = writer->getHWAccelInterface<VTBOpenGL>())
         {
             m_hwDeviceBufferRef = av_buffer_ref(vtbOpenGL->m_hwDeviceBufferRef);
             m_hwAccelWriter = writer;
@@ -279,7 +277,7 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
-        m_hwAccelWriter = VideoWriter::createOpenGL2(new VTBOpenGL(m_hwDeviceBufferRef));
+        m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VTBOpenGL>(m_hwDeviceBufferRef));
         if (!m_hwAccelWriter)
             return false;
     }
