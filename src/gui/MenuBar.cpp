@@ -132,7 +132,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addSeparator();
     newAction(Playlist::tr("&Stop loading"), this, stopLoading, false, QMPlay2Core.getIconFromTheme("process-stop"), false);
     addSeparator();
-    newAction(Playlist::tr("&Synchronize group"), this, sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
+    newAction(Playlist::tr("&Synchronize groups"), this, sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
     newAction(Playlist::tr("&Quick group synchronization"), this, quickSync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
     addSeparator();
     newAction(Playlist::tr("Load &list"), this, loadPlist, false, QIcon(), false);
@@ -285,7 +285,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
     choice->addAction(newAction("&3:2", this, _3x2, false, QIcon(), true));
     choice->addAction(newAction("&21:9", this, _21x9, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(AspectRatio::tr("D&epends on size"), this, sizeDep, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("D&epend on size"), this, sizeDep, false, QIcon(), true));
     choice->addAction(newAction(AspectRatio::tr("&Disabled"), this, off, false, QIcon(), true));
 
     _auto->setObjectName("auto");
@@ -326,7 +326,7 @@ void MenuBar::Player::playActionEnable(bool e)
 MenuBar::Playback::Playback(MenuBar *parent) :
     QMenu(Playback::tr("&Playback"), parent)
 {
-    newAction(Playback::tr("&Audio enabled"), this, toggleAudio, false, QIcon(), true)->setObjectName("toggleAudio");
+    newAction(Playback::tr("&Enable audio"), this, toggleAudio, false, QIcon(), true)->setObjectName("toggleAudio");
     toggleAudio->setChecked(true);
 
     audioChannels = new AudioChannels(this);
@@ -334,7 +334,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
 
     addSeparator();
 
-    newAction(Playback::tr("&Video enabled"), this, toggleVideo, false, QIcon(), true)->setObjectName("toggleVideo");
+    newAction(Playback::tr("&Enable video"), this, toggleVideo, false, QIcon(), true)->setObjectName("toggleVideo");
     toggleVideo->setChecked(true);
 
     videoFilters = new VideoFilters(this);
@@ -344,7 +344,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Delay video") + " (100ms)", this, slowDownVideo, true, QIcon(), false);
     newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
     addSeparator();
-    newAction(Playback::tr("&Subtitles enabled"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
+    newAction(Playback::tr("&Enable subtitles"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
     toggleSubtitles->setChecked(true);
     newAction(Playback::tr("Add &subtities from file"), this, subsFromFile, false, QIcon(), false);
     newAction(Playback::tr("Set &subtitles delay"), this, subtitlesSync, true, QIcon(), false);

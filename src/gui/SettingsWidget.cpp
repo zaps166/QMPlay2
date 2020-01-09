@@ -1072,7 +1072,7 @@ void SettingsWidget::setKeyBindings()
 }
 void SettingsWidget::clearCoversCache()
 {
-    if (QMessageBox::question(this, tr("Confirm clearing the cache covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+    if (QMessageBox::question(this, tr("Confirm clearing the cached covers"), tr("Do you want to delete all cached covers?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
     {
         QDir dir(QMPlay2Core.getSettingsDir());
         if (dir.cd("Covers"))
