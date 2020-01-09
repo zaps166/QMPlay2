@@ -276,7 +276,7 @@
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
+        <source>D&amp;epend on size</source>
         <translation>&amp;En fonction de la taille</translation>
     </message>
 </context>
@@ -731,7 +731,7 @@
         <translation>Taille du fichier</translation>
     </message>
     <message>
-        <source>Error while writing tags, check that you have permission to modify the file!</source>
+        <source>Error while writing tags, please check if you have permission to modify the file!</source>
         <translation>Erreur lors de l&apos;écriture des tags, vérifiez que vous avez la permission de modifier le fichier!</translation>
     </message>
     <message>
@@ -739,7 +739,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The specified path does not exists</source>
+        <source>The specified path does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -899,11 +899,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
         <translation>Montrer la pochette depuis le dossier s&apos;ils ne sont pas dans le fichier</translation>
     </message>
     <message>
-        <source>Automatically opening video window</source>
+        <source>Automatically open video window</source>
         <translation>Ouvre automatiquement une fenêtre vidéo</translation>
     </message>
     <message>
@@ -919,7 +919,7 @@
         <translation>N&apos;autorise qu&apos;une seule instance</translation>
     </message>
     <message>
-        <source>Always display only file names in playlist</source>
+        <source>Always only display file names in playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1027,7 +1027,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1050,71 +1050,71 @@
         <translation>&amp;Mises à jour</translation>
     </message>
     <message>
-        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ensures that the window will be visible if the application is running.</source>
+        <source>Ensure that the window will be visible if the application is running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Toggles fullscreen.</source>
+        <source>Toggle fullscreen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seeks to the specified value.</source>
+        <source>Seek to the specified value.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starts playback.</source>
+        <source>Start playback.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stops playback.</source>
+        <source>Stop playback.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Toggles playback.</source>
+        <source>Toggle playback.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Terminates the application.</source>
+        <source>Terminate the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Displays this help.</source>
+        <source>Display this help.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Opens and plays specified &lt;url&gt;.</source>
+        <source>Open and play specified &lt;url&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <source>Add specified &lt;url&gt; to playlist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <source>Start the application with given &lt;profile name&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sets specified volume.</source>
+        <source>Set specified volume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sets specified playback speed.</source>
+        <source>Set specified playback speed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plays next entry on playlist.</source>
+        <source>Play next entry on playlist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plays previous entry on playlist.</source>
+        <source>Play previous entry on playlist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
+        <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1274,7 +1274,7 @@
         <translation>QMPlay2 est actif en arrière-plan.</translation>
     </message>
     <message>
-        <source>The update is downloading now.</source>
+        <source>The update is being downloaded now.</source>
         <translation>La mise à jour est en cours de téléchargement.</translation>
     </message>
     <message>
@@ -1579,7 +1579,7 @@
         <translation>Inverser la phase du canal de droite</translation>
     </message>
     <message>
-        <source>Downloads covers</source>
+        <source>Download covers</source>
         <translation>Télécharge les pochettes</translation>
     </message>
     <message>
@@ -1643,7 +1643,7 @@
         <translation>Réduction du bruit</translation>
     </message>
     <message>
-        <source>Using the program via MPRIS2 interface</source>
+        <source>Use the program via MPRIS2 interface</source>
         <translation>Utilise le programme via l&apos;interface MPRIS2</translation>
     </message>
     <message>
@@ -1663,15 +1663,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Display subtitles if available</source>
+        <source>Display available subtitles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
+        <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Allow to use PBO (if available)</source>
+        <source>Allow to use available PBO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2112,11 +2112,11 @@
         <translation>&amp;Lecture en cours</translation>
     </message>
     <message>
-        <source>&amp;Audio enabled</source>
+        <source>&amp;Enable audio</source>
         <translation>&amp;Audio activé</translation>
     </message>
     <message>
-        <source>&amp;Video enabled</source>
+        <source>&amp;Enable video</source>
         <translation>&amp;Vidéo activée</translation>
     </message>
     <message>
@@ -2132,7 +2132,7 @@
         <translation>&amp;Accélérer la vidéo</translation>
     </message>
     <message>
-        <source>&amp;Subtitles enabled</source>
+        <source>&amp;Enable subtitles</source>
         <translation>&amp;Sous-titres activés</translation>
     </message>
     <message>
@@ -2179,7 +2179,7 @@
         <translation>Forcer la conversion des chaînes</translation>
     </message>
     <message>
-        <source>Use replay gain if available</source>
+        <source>Use available replay gain</source>
         <translation>Utilise replay gain si disponible</translation>
     </message>
     <message>
@@ -2501,7 +2501,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Synchronize group</source>
+        <source>&amp;Synchronize groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2524,7 +2524,7 @@
         <translation>Filtrer les entrées</translation>
     </message>
     <message>
-        <source>Playlist is loading now...</source>
+        <source>Playlist is being loaded now...</source>
         <translation>La liste de lecture est en cours de chargement...</translation>
     </message>
     <message>
@@ -2610,7 +2610,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is updating, please wait</source>
+        <source>Font cache is being updated, please wait</source>
         <translation>Mise à jour du cache des polices, veuillez patienter</translation>
     </message>
     <message>
@@ -2922,7 +2922,7 @@ QMPlay2 will not display icons!</source>
         <translation>Programme de filtres vidéos</translation>
     </message>
     <message>
-        <source>Confirm clearing the cache covers</source>
+        <source>Confirm clearing the cached covers</source>
         <translation>Confirmer le nettoyage du cache des pochettes</translation>
     </message>
     <message>
@@ -3191,7 +3191,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VAAPI</name>
     <message>
-        <source>Not supported deinterlacing algorithm</source>
+        <source>Unsupported deinterlacing algorithm</source>
         <translation>Algorithme de désentrelacement non supporté</translation>
     </message>
     <message>
@@ -3217,7 +3217,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VFilters</name>
     <message>
-        <source>Produces one extra frame which is average of two neighbour frames</source>
+        <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>Produit une trame supplémentaire qui est à la moyenne des deux trames voisinnes</translation>
     </message>
 </context>

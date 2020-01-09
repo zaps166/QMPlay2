@@ -276,7 +276,7 @@
         <translation>&amp;Automático</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
+        <source>D&amp;epend on size</source>
         <translation>Dependiente del &amp;tamaño</translation>
     </message>
 </context>
@@ -722,7 +722,7 @@
 <context>
     <name>EntryProperties</name>
     <message>
-        <source>Error while writing tags, check that you have permission to modify the file!</source>
+        <source>Error while writing tags, please check if you have permission to modify the file!</source>
         <translation>¡Error al escribir las etiquetas, compruebe que tiene permiso para modificar el archivo!</translation>
     </message>
     <message>
@@ -742,7 +742,7 @@
         <translation>Sincronizar con archivo o directorio</translation>
     </message>
     <message>
-        <source>The specified path does not exists</source>
+        <source>The specified path does not exist</source>
         <translation>La ruta especificada no existe</translation>
     </message>
     <message>
@@ -902,11 +902,11 @@
         <translation>Cubiertas difuminadas como fondo</translation>
     </message>
     <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
         <translation>Mostrar las cubiertas desde el directorio si no hay en el archivo de sonido</translation>
     </message>
     <message>
-        <source>Automatically opening video window</source>
+        <source>Automatically open video window</source>
         <translation>Abrir automáticamente la ventana de vídeo</translation>
     </message>
     <message>
@@ -922,7 +922,7 @@
         <translation>Permitir una sola instancia</translation>
     </message>
     <message>
-        <source>Always display only file names in playlist</source>
+        <source>Always only display file names in playlist</source>
         <translation>Mostrar siempre solo los nombres de archivo en la lista de reproducción</translation>
     </message>
     <message>
@@ -1030,7 +1030,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1053,71 +1053,71 @@
         <translation>&amp;Actualizaciónes</translation>
     </message>
     <message>
-        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
         <translation>No reproduce tras iniciar (ignora la opción «Recordar la posición de reproducción»).</translation>
     </message>
     <message>
-        <source>Ensures that the window will be visible if the application is running.</source>
+        <source>Ensure that the window will be visible if the application is running.</source>
         <translation>Garantiza que la ventana es visible si la aplicación está funcionando.</translation>
     </message>
     <message>
-        <source>Toggles fullscreen.</source>
+        <source>Toggle fullscreen.</source>
         <translation>Alterna entre ventana y pantalla completa.</translation>
     </message>
     <message>
-        <source>Seeks to the specified value.</source>
+        <source>Seek to the specified value.</source>
         <translation>Salta hasta el valor especificado.</translation>
     </message>
     <message>
-        <source>Starts playback.</source>
+        <source>Start playback.</source>
         <translation>Inicia la reproducción.</translation>
     </message>
     <message>
-        <source>Stops playback.</source>
+        <source>Stop playback.</source>
         <translation>Detiene la reproducción.</translation>
     </message>
     <message>
-        <source>Toggles playback.</source>
+        <source>Toggle playback.</source>
         <translation>Alterna pausa/reproducción.</translation>
     </message>
     <message>
-        <source>Terminates the application.</source>
+        <source>Terminate the application.</source>
         <translation>Sale de la aplicación.</translation>
     </message>
     <message>
-        <source>Displays this help.</source>
+        <source>Display this help.</source>
         <translation>Muestra esta ayuda.</translation>
     </message>
     <message>
-        <source>Opens and plays specified &lt;url&gt;.</source>
+        <source>Open and play specified &lt;url&gt;.</source>
         <translation>Abre y reproduce el &lt;url&gt; especificado.</translation>
     </message>
     <message>
-        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <source>Add specified &lt;url&gt; to playlist.</source>
         <translation>Añade el &lt;url&gt; especificado a la lista de reproducción.</translation>
     </message>
     <message>
-        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <source>Start the application with given &lt;profile name&gt;.</source>
         <translation>Inicia la aplicación con el &lt;profile name&gt; dado.</translation>
     </message>
     <message>
-        <source>Sets specified volume.</source>
+        <source>Set specified volume.</source>
         <translation>Establece el volumen especificado.</translation>
     </message>
     <message>
-        <source>Sets specified playback speed.</source>
+        <source>Set specified playback speed.</source>
         <translation>Establece la velocidad de reproducción especificada.</translation>
     </message>
     <message>
-        <source>Plays next entry on playlist.</source>
+        <source>Play next entry on playlist.</source>
         <translation>Reproduce la siguiente entrada de la lista de reproducción.</translation>
     </message>
     <message>
-        <source>Plays previous entry on playlist.</source>
+        <source>Play previous entry on playlist.</source>
         <translation>Reproduce la entrada anterior de la lista de reproducción.</translation>
     </message>
     <message>
-        <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
+        <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1293,7 +1293,7 @@
         <translation>&amp;Bloquear los componentes</translation>
     </message>
     <message>
-        <source>The update is downloading now.</source>
+        <source>The update is being downloaded now.</source>
         <translation>La actualización se está descargando ahora.</translation>
     </message>
     <message>
@@ -1574,7 +1574,7 @@
         <translation>Demultiplexor</translation>
     </message>
     <message>
-        <source>Downloads covers</source>
+        <source>Download covers</source>
         <translation>Descargas de portadas</translation>
     </message>
     <message>
@@ -1582,7 +1582,7 @@
         <translation>Permitir descargar portadas grandes</translation>
     </message>
     <message>
-        <source>Using the program via MPRIS2 interface</source>
+        <source>Use the program via MPRIS2 interface</source>
         <translation>Utilizando el programa a través de interfaz MPRIS2</translation>
     </message>
     <message>
@@ -1666,15 +1666,15 @@
         <translation>Sincronización vertical</translation>
     </message>
     <message>
-        <source>Display subtitles if available</source>
+        <source>Display available subtitles</source>
         <translation>Mostrar subtítulos si están disponibles</translation>
     </message>
     <message>
-        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
+        <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
         <translation>Muestra subtítulos de YouTube. Respeta el idioma predefinido para subtítulos y el idioma de QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use PBO (if available)</source>
+        <source>Allow to use available PBO</source>
         <translation>Permitir el uso de PBO (si está disponible)</translation>
     </message>
     <message>
@@ -2111,7 +2111,7 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>&amp;Audio enabled</source>
+        <source>&amp;Enable audio</source>
         <translation>Audio &amp;habilitado</translation>
     </message>
     <message>
@@ -2123,11 +2123,11 @@
         <translation>R&amp;educir los subtítulos</translation>
     </message>
     <message>
-        <source>&amp;Video enabled</source>
+        <source>&amp;Enable video</source>
         <translation>&amp;Vídeo habilitado</translation>
     </message>
     <message>
-        <source>&amp;Subtitles enabled</source>
+        <source>&amp;Enable subtitles</source>
         <translation>&amp;Subtítulos habilitados</translation>
     </message>
     <message>
@@ -2182,7 +2182,7 @@
         <translation>Forzar conversión de canales</translation>
     </message>
     <message>
-        <source>Use replay gain if available</source>
+        <source>Use available replay gain</source>
         <translation>Usar ganancia de la reproducción si está disponible</translation>
     </message>
     <message>
@@ -2504,7 +2504,7 @@
         <translation>&amp;Cargar lista</translation>
     </message>
     <message>
-        <source>&amp;Synchronize group</source>
+        <source>&amp;Synchronize groups</source>
         <translation>&amp;Sincronizar el grupo</translation>
     </message>
     <message>
@@ -2523,7 +2523,7 @@
         <translation>Filtrar entradas</translation>
     </message>
     <message>
-        <source>Playlist is loading now...</source>
+        <source>Playlist is being loaded now...</source>
         <translation>Lista de reproducción cargada...</translation>
     </message>
     <message>
@@ -2617,7 +2617,7 @@
         <translation>QMPlay2 ha sido actualizado a la versión</translation>
     </message>
     <message>
-        <source>Font cache is updating, please wait</source>
+        <source>Font cache is being updated, please wait</source>
         <translation>La caché de fuentes se está actualizando, por favor espere</translation>
     </message>
     <message>
@@ -2935,7 +2935,7 @@ QMPlay2 will not display icons!</source>
         <translation>Predeterminado o primera secuencia</translation>
     </message>
     <message>
-        <source>Confirm clearing the cache covers</source>
+        <source>Confirm clearing the cached covers</source>
         <translation>Confirme borrar las cubiertas de caché</translation>
     </message>
     <message>
@@ -3197,7 +3197,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
 <context>
     <name>VAAPI</name>
     <message>
-        <source>Not supported deinterlacing algorithm</source>
+        <source>Unsupported deinterlacing algorithm</source>
         <translation>Algoritmo de desentrelazado no soportado</translation>
     </message>
     <message>
@@ -3223,7 +3223,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
 <context>
     <name>VFilters</name>
     <message>
-        <source>Produces one extra frame which is average of two neighbour frames</source>
+        <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>Produce un fotograma extra que es la media de dos fotogramas contiguos</translation>
     </message>
 </context>

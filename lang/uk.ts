@@ -276,7 +276,7 @@
         <translation>&amp;Авто</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
+        <source>D&amp;epend on size</source>
         <translation>&amp;Залежно від розміру</translation>
     </message>
 </context>
@@ -734,7 +734,7 @@
         <translation>Розмір файлу</translation>
     </message>
     <message>
-        <source>Error while writing tags, check that you have permission to modify the file!</source>
+        <source>Error while writing tags, please check if you have permission to modify the file!</source>
         <translation>Помилка запису тегів, переконайтеся що у вас є права на зміну файлу!</translation>
     </message>
     <message>
@@ -742,7 +742,7 @@
         <translation>Синхронізувати з файлом або каталогом</translation>
     </message>
     <message>
-        <source>The specified path does not exists</source>
+        <source>The specified path does not exist</source>
         <translation>Вказаного шляху не існує</translation>
     </message>
     <message>
@@ -902,11 +902,11 @@
         <translation>Розмиті обкладинки в якості фону</translation>
     </message>
     <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
         <translation>Показати обкладинки з каталогу, якщо вони не знаходяться в музичному файлі</translation>
     </message>
     <message>
-        <source>Automatically opening video window</source>
+        <source>Automatically open video window</source>
         <translation>Автоматичне відкриття вікна відео</translation>
     </message>
     <message>
@@ -922,7 +922,7 @@
         <translation>Дозволити лише одну копію програми</translation>
     </message>
     <message>
-        <source>Always display only file names in playlist</source>
+        <source>Always only display file names in playlist</source>
         <translation>Завжди відображати тільки імена файлів в списку відтворення</translation>
     </message>
     <message>
@@ -1030,7 +1030,7 @@
         <translation>Використовувати OpenGL для всього вікна</translation>
     </message>
     <message>
-        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
         <translation>Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
     </message>
 </context>
@@ -1053,71 +1053,71 @@
         <translation>&amp;Оновити</translation>
     </message>
     <message>
-        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
         <translation>Не відтворювати після запуску (в обхід опції &quot;Пам&apos;ятати позицію відтворення&quot;).</translation>
     </message>
     <message>
-        <source>Ensures that the window will be visible if the application is running.</source>
+        <source>Ensure that the window will be visible if the application is running.</source>
         <translation>Забезпечує видимість вікна, якщо програму запущено.</translation>
     </message>
     <message>
-        <source>Toggles fullscreen.</source>
+        <source>Toggle fullscreen.</source>
         <translation>Перемикає повноекранний режим.</translation>
     </message>
     <message>
-        <source>Seeks to the specified value.</source>
+        <source>Seek to the specified value.</source>
         <translation>Прокручує до заданого значення.</translation>
     </message>
     <message>
-        <source>Starts playback.</source>
+        <source>Start playback.</source>
         <translation>Розпочинає відтворення.</translation>
     </message>
     <message>
-        <source>Stops playback.</source>
+        <source>Stop playback.</source>
         <translation>Зупиняє відтворення.</translation>
     </message>
     <message>
-        <source>Toggles playback.</source>
+        <source>Toggle playback.</source>
         <translation>Перемикає відтворення/пауза.</translation>
     </message>
     <message>
-        <source>Terminates the application.</source>
+        <source>Terminate the application.</source>
         <translation>Завершує програму.</translation>
     </message>
     <message>
-        <source>Displays this help.</source>
+        <source>Display this help.</source>
         <translation>Відображує цю довідку.</translation>
     </message>
     <message>
-        <source>Opens and plays specified &lt;url&gt;.</source>
+        <source>Open and play specified &lt;url&gt;.</source>
         <translation>Відкриває і відтворює вказану &lt;url&gt;.</translation>
     </message>
     <message>
-        <source>Adds specified &lt;url&gt; to playlist.</source>
+        <source>Add specified &lt;url&gt; to playlist.</source>
         <translation>Додає вказану &lt;url&gt; до списку відтворення.</translation>
     </message>
     <message>
-        <source>Starts the application with given &lt;profile name&gt;.</source>
+        <source>Start the application with given &lt;profile name&gt;.</source>
         <translation>Запускає програму з вказаним &lt;profile name&gt;.</translation>
     </message>
     <message>
-        <source>Sets specified volume.</source>
+        <source>Set specified volume.</source>
         <translation>Встановлює вказаний рівень гучності.</translation>
     </message>
     <message>
-        <source>Sets specified playback speed.</source>
+        <source>Set specified playback speed.</source>
         <translation>Встановлює вказану швидкість відтворення.</translation>
     </message>
     <message>
-        <source>Plays next entry on playlist.</source>
+        <source>Play next entry on playlist.</source>
         <translation>Відтворює наступний запис у списку відтворення.</translation>
     </message>
     <message>
-        <source>Plays previous entry on playlist.</source>
+        <source>Play previous entry on playlist.</source>
         <translation>Відтворює попередній запис у списку відтворення.</translation>
     </message>
     <message>
-        <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
+        <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation>Відкриває нову копію QMPlay2 і відтворює вказану &lt;url&gt;.</translation>
     </message>
 </context>
@@ -1277,7 +1277,7 @@
         <translation>QMPlay2 працює у фоновому режимі.</translation>
     </message>
     <message>
-        <source>The update is downloading now.</source>
+        <source>The update is being downloaded now.</source>
         <translation>Зараз завантажується оновлення.</translation>
     </message>
     <message>
@@ -1582,7 +1582,7 @@
         <translation>Реверс фази в правому каналі</translation>
     </message>
     <message>
-        <source>Downloads covers</source>
+        <source>Download covers</source>
         <translation>Завантаження обкладинок</translation>
     </message>
     <message>
@@ -1642,7 +1642,7 @@
         <translation>Відлуння звуку оточення</translation>
     </message>
     <message>
-        <source>Using the program via MPRIS2 interface</source>
+        <source>Use the program via MPRIS2 interface</source>
         <translation>Використання програми через інтерфейс MPRIS2</translation>
     </message>
     <message>
@@ -1666,15 +1666,15 @@
         <translation>Тривалість за замовчуванням</translation>
     </message>
     <message>
-        <source>Display subtitles if available</source>
+        <source>Display available subtitles</source>
         <translation>Показувати субтитри, якщо можливо</translation>
     </message>
     <message>
-        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
+        <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
         <translation>Показувати субтитри з YouTube. Враховується мова за замовчуванням субтитрів та QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use PBO (if available)</source>
+        <source>Allow to use available PBO</source>
         <translation>Дозволити використовувати PBO (якщо можливо)</translation>
     </message>
     <message>
@@ -2115,11 +2115,11 @@
         <translation>&amp;Відтворення</translation>
     </message>
     <message>
-        <source>&amp;Audio enabled</source>
+        <source>&amp;Enable audio</source>
         <translation>&amp;Аудіо увімкнене</translation>
     </message>
     <message>
-        <source>&amp;Video enabled</source>
+        <source>&amp;Enable video</source>
         <translation>&amp;Відео увімкнене</translation>
     </message>
     <message>
@@ -2131,7 +2131,7 @@
         <translation>&amp;Прискорення відео</translation>
     </message>
     <message>
-        <source>&amp;Subtitles enabled</source>
+        <source>&amp;Enable subtitles</source>
         <translation>&amp;Субтитри увімкнені</translation>
     </message>
     <message>
@@ -2182,7 +2182,7 @@
         <translation>Примусове перетворення каналів</translation>
     </message>
     <message>
-        <source>Use replay gain if available</source>
+        <source>Use available replay gain</source>
         <translation>По можливості вирівнювати гучність</translation>
     </message>
     <message>
@@ -2504,7 +2504,7 @@
         <translation>Зберегти &amp;групу</translation>
     </message>
     <message>
-        <source>&amp;Synchronize group</source>
+        <source>&amp;Synchronize groups</source>
         <translation>&amp;Синхронізувати групу</translation>
     </message>
     <message>
@@ -2527,7 +2527,7 @@
         <translation>Фільтр записів</translation>
     </message>
     <message>
-        <source>Playlist is loading now...</source>
+        <source>Playlist is being loaded now...</source>
         <translation>Список завантажується...</translation>
     </message>
     <message>
@@ -2613,7 +2613,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is updating, please wait</source>
+        <source>Font cache is being updated, please wait</source>
         <translation>Зачекайте, оновлюється кеш шрифту</translation>
     </message>
     <message>
@@ -2927,7 +2927,7 @@ QMPlay2 не відображатиме іконки!</translation>
         <translation>Програмні відеофільтри</translation>
     </message>
     <message>
-        <source>Confirm clearing the cache covers</source>
+        <source>Confirm clearing the cached covers</source>
         <translation>Підтвердження очищення кеша обкладинок</translation>
     </message>
     <message>
@@ -3197,7 +3197,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VAAPI</name>
     <message>
-        <source>Not supported deinterlacing algorithm</source>
+        <source>Unsupported deinterlacing algorithm</source>
         <translation>Алгоритм усунення черезрядковості не підтримується</translation>
     </message>
     <message>
@@ -3223,7 +3223,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VFilters</name>
     <message>
-        <source>Produces one extra frame which is average of two neighbour frames</source>
+        <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>Створює один додатковий кадр, який є середнім з двох сусідніх кадрів</translation>
     </message>
 </context>
