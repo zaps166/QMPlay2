@@ -7,7 +7,6 @@ set(OpenGL2_HDR
     OpenGL2Common.hpp
     OpenGL2Window.hpp
     OpenGL2Widget.hpp
-    Sphere.hpp
     Vertices.hpp
 )
 
@@ -17,7 +16,6 @@ set(OpenGL2_SRC
     OpenGL2Common.cpp
     OpenGL2Window.cpp
     OpenGL2Widget.cpp
-    Sphere.cpp
 )
 
 set(OpenGL2_RESOURCES
