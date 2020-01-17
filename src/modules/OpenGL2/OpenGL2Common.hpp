@@ -20,6 +20,7 @@
 
 #include <Frame.hpp>
 #include <VideoAdjustment.hpp>
+#include <X11BypassCompositor.hpp>
 
 #include <QOpenGLShaderProgram>
 
@@ -56,7 +57,7 @@ private:
 
 /**/
 
-class OpenGL2Common
+class OpenGL2Common : public X11BypassCompositor
 {
     Q_DECLARE_TR_FUNCTIONS(OpenGL2Common)
 #ifndef OPENGL_ES2
@@ -82,7 +83,6 @@ public:
     virtual void setVSync(bool enable) = 0;
     virtual void updateGL(bool requestDelayed) = 0;
 
-    void setX11BypassCompositor(bool bypassCompositor);
 #ifdef Q_OS_WIN
     void setWindowsBypassCompositor(bool bypassCompositor);
 #endif
@@ -155,11 +155,6 @@ public:
 
     quint32 pbo[4];
     bool hasPbo;
-
-    bool m_bypassCompositor = false;
-    bool m_compositorBypassed = false;
-    bool m_isFullScreen = false;
-    QMetaObject::Connection m_fullScreenChangedConn;
 
     bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
     int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;

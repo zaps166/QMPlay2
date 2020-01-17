@@ -49,6 +49,7 @@ set(QMPLAY2_HDR
     headers/MkvMuxer.hpp
     headers/CppUtils.hpp
     headers/Sphere.hpp
+    headers/X11BypassCompositor.hpp
 )
 
 set(QMPLAY2_SRC
@@ -90,6 +91,7 @@ set(QMPLAY2_SRC
     NotifiesTray.cpp
     MkvMuxer.cpp
     Sphere.cpp
+    X11BypassCompositor.cpp
 )
 
 if(WIN32)
