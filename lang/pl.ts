@@ -276,7 +276,7 @@
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Zależne od rozmiaru</translation>
     </message>
 </context>
@@ -1674,10 +1674,6 @@
         <translation>Wyświetla napisy z YouTube. Uwzględnia domyślny język dla napisów oraz język QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>Zezwalaj na wykorzystanie PBO (jeżeli dostępny)</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>Dekoder włączony</translation>
     </message>
@@ -1788,14 +1784,6 @@
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Ustawia wybrane urządzenie wyjściowe na częstotliwość próbkowania odtwarzanej zawartości</translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation>Skalowanie wideo wysokiej jakości</translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation>Filtrowanie trójliniowe dla pomniejszania i filtrowanie dwusześcienne dla powiększenia.</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2302,10 +2290,6 @@
         <translation>Wznów odtwarzanie podczas przewijania</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation>Częściowo zaznaczone oznacza, że występuje przerwa między kliknięciem a pauzą</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Użyj resamplera audio i konwersji kanałów przed filtrami i wizualizacjmi</translation>
     </message>
@@ -2320,6 +2304,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation>Zapamiętaj, czy audio/wideo/napisy są włączone</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Częściowo zaznaczone oznacza, że występuje przerwa między kliknięciem a pauzą</translation>
     </message>
 </context>
 <context>
@@ -2939,10 +2927,6 @@ QMPlay2 nie będzie wyświetlać ikon!</translation>
         <translation>Zmiana ikon</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>Aby zastosować zmianę ikon program zostanie uruchomiony ponownie!</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>Domyślna lub pierwsza ścieżka</translation>
     </message>
@@ -2991,6 +2975,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation>Aby zastosować nowy tryb pracy OpenGL, program uruchomi się ponownie!</translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>Aby zastosować zmianę ikon, program zostanie uruchomiony ponownie!</translation>
     </message>
 </context>
 <context>

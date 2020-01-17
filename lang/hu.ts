@@ -272,12 +272,12 @@
         <translation>&amp;Automatikus</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
-        <translation>&amp;Video méretétől függ</translation>
-    </message>
-    <message>
         <source>&amp;Disabled</source>
         <translation>&amp;Kikapcsolva</translation>
+    </message>
+    <message>
+        <source>D&amp;epends on size</source>
+        <translation>&amp;Video méretétől függ</translation>
     </message>
 </context>
 <context>
@@ -1722,10 +1722,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Vertical sync</source>
         <translation>Vertikális szinkronizáció</translation>
     </message>
@@ -1787,14 +1783,6 @@
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2302,10 +2290,6 @@
         <translation>Lejátszás indítása léptetéskor</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2320,6 +2304,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
     </message>
 </context>
 <context>
@@ -2949,10 +2937,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Ikonok megváltoztatása</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>Az ikonváltoztatás alkalmazásához a program újra fog indulni!</translation>
-    </message>
-    <message>
         <source>Choose directory</source>
         <translation>Könyvtár választása</translation>
     </message>
@@ -2991,6 +2975,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>Az ikonváltoztatás alkalmazásához a program újra fog indulni!</translation>
     </message>
 </context>
 <context>
@@ -3213,7 +3201,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nem támogatott váltottsorosság-megszüntetési algoritmus</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>

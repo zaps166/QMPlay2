@@ -90,7 +90,7 @@
        <item row="18" column="0">
         <widget class="QCheckBox" name="leftMouseTogglePlay">
          <property name="toolTip">
-          <string>Partially checked means that there is a delay between click na pausing</string>
+          <string>Partially checked means that there is a delay between click and pausing</string>
          </property>
          <property name="text">
           <string>Left mouse button on video dock toggles playback</string>

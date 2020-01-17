@@ -276,7 +276,7 @@
         <translation>&amp;Авто</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Залежно від розміру</translation>
     </message>
 </context>
@@ -1674,10 +1674,6 @@
         <translation>Показувати субтитри з YouTube. Враховується мова за замовчуванням субтитрів та QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>Дозволити використовувати PBO (якщо можливо)</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>Декодер увімкнений</translation>
     </message>
@@ -1788,14 +1784,6 @@
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Встановлює вибраний вихідний пристрій на частоту дискретизації відтворюваного вмісту</translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation>Масштабування відео високої якості</translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation>Трилінійна фільтрація при зменшенні і бікубічна фільтрація при збільшенні.</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2302,10 +2290,6 @@
         <translation>Поновити відтворення під час прокрутки</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
     </message>
@@ -2320,6 +2304,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation>Пам&apos;ятати, чи увімкнено аудіо/відео/субтитри</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
     </message>
 </context>
 <context>
@@ -2939,10 +2927,6 @@ QMPlay2 не відображатиме іконки!</translation>
         <translation>Зміна іконок</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>Для застосування зміни іконок програма перезапуститься!</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>За замовчуванням або перший потік</translation>
     </message>
@@ -2991,6 +2975,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation>Для застосування нового режиму OpenGL програма перезапуститься!</translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>Для застосування зміни іконок програма перезапуститься!</translation>
     </message>
 </context>
 <context>

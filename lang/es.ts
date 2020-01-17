@@ -276,8 +276,8 @@
         <translation>&amp;Automático</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
-        <translation>Dependiente del &amp;tamaño</translation>
+        <source>D&amp;epends on size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1674,10 +1674,6 @@
         <translation>Muestra subtítulos de YouTube. Respeta el idioma predefinido para subtítulos y el idioma de QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>Permitir el uso de PBO (si está disponible)</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>Decodificador habilitado</translation>
     </message>
@@ -1788,14 +1784,6 @@
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Esto ajusta el dispositivo de salida seleccionado a la tasa de muestreo del contenido en reproducción</translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation>Escalado de vídeo de alta calidad</translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation>Filtrado trilinear para la reducción y bicúbico para la ampliación.</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2302,10 +2290,6 @@
         <translation>Anular la pausa al buscar</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation>Marcado parcialmente, significa que hay un retraso entre el clic y la pausa</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Usar el remuestreo de audio y la conversión de canales antes que los filtros y visualizaciones</translation>
     </message>
@@ -2320,6 +2304,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Marcado parcialmente, significa que hay un retraso entre el clic y la pausa</translation>
     </message>
 </context>
 <context>
@@ -2879,10 +2867,6 @@ QMPlay2 will not display icons!</source>
         <translation>Valores de reproducción</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>¡El programa reiniciará para aplicar los cambios en los iconos!</translation>
-    </message>
-    <message>
         <source>Changing icons</source>
         <translation>Cambiando iconos</translation>
     </message>
@@ -2991,6 +2975,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>¡El programa reiniciará para aplicar los cambios en los iconos!</translation>
     </message>
 </context>
 <context>
@@ -3213,7 +3201,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Algoritmo de desentrelazado no soportado</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>

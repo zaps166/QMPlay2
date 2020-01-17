@@ -1674,10 +1674,6 @@
         <translation>显示 YouTube 字幕。跟随默认语言和 QMPlay2 语言。</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>允许使用可用 PBO</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>启用解码器</translation>
     </message>
@@ -1788,14 +1784,6 @@
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>将正在播放内容的采样率设置到所选输出设备</translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation>高质量视频缩放</translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation>减少三线性滤波并放大双三次滤波。</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2302,10 +2290,6 @@
         <translation>跳转时不暂停</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>半选中代表点击暂停延时</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>在滤镜和可视化效果前使用音频重采样器和声道转换</translation>
     </message>
@@ -2320,6 +2304,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation>记住音频/视频/字幕启用状态</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>半选中代表点击暂停延时</translation>
     </message>
 </context>
 <context>
@@ -2939,10 +2927,6 @@ QMPlay2 将不会显示图标！</translation>
         <translation>正在更改图标</translation>
     </message>
     <message>
-        <source>To apply the icons change, the program will start again!</source>
-        <translation>更改图标后程序将重启！</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>默认或第一个流媒体</translation>
     </message>
@@ -2991,6 +2975,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation>设置新 OpenGL 模式后程序将重启！</translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>更改图标后程序将重启！</translation>
     </message>
 </context>
 <context>

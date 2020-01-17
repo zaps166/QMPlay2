@@ -285,7 +285,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
     choice->addAction(newAction("&3:2", this, _3x2, false, QIcon(), true));
     choice->addAction(newAction("&21:9", this, _21x9, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(AspectRatio::tr("D&epend on size"), this, sizeDep, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("D&epends on size"), this, sizeDep, false, QIcon(), true));
     choice->addAction(newAction(AspectRatio::tr("&Disabled"), this, off, false, QIcon(), true));
 
     _auto->setObjectName("auto");

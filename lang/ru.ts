@@ -276,7 +276,7 @@
         <translation>&amp;Авто</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
+        <source>D&amp;epends on size</source>
         <translation>&amp;В зависимости от размера</translation>
     </message>
 </context>
@@ -1671,10 +1671,6 @@
         <translation>Отображать субтитры из YouTube. Придерживаться языку субтитров по умолчанию и языку QMPlay2.</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>Всегда использовать PBO (если доступно)</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>Декодер включен</translation>
     </message>
@@ -1784,14 +1780,6 @@
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2299,10 +2287,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2316,6 +2300,10 @@
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2936,10 +2924,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Изменение значков</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>Чтобы применить изменение значков, программа запустится снова!</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>По умолчанию или первый поток</translation>
     </message>
@@ -2988,6 +2972,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>Чтобы применить изменение значков, программа запустится снова!</translation>
     </message>
 </context>
 <context>
@@ -3210,7 +3198,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Алгоритм деинтерлейсинга не поддерживается</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>

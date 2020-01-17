@@ -276,7 +276,7 @@
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <source>D&amp;epend on size</source>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Abhängig von der Größe</translation>
     </message>
 </context>
@@ -1116,7 +1116,7 @@
         <translation>Spielt den vorherigen Eintrag in der Wiedergabeliste ab.</translation>
     </message>
     <message>
-        <source>Open new QMPlay2 instance and plays specified &lt;url&gt;.</source>
+        <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation>Öffnet eine neue QMPlay2-Instanz und gibt die angegebene &lt;url&gt; wieder.</translation>
     </message>
 </context>
@@ -1673,10 +1673,6 @@
         <translation>Zeigt Untertitel von YouTube an. Übernimmt die Standard-Untertitelsprache und QMPlay2-Sprache.</translation>
     </message>
     <message>
-        <source>Allow to use available PBO</source>
-        <translation>PBO verwenden (falls vorhanden)</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>Decoder aktiviert</translation>
     </message>
@@ -1787,14 +1783,6 @@
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
         <translation>Dadurch wird das ausgewählte Ausgabegerät auf die Abtastrate des wiedergegebenen Inhalts eingestellt</translation>
-    </message>
-    <message>
-        <source>High quality video scaling</source>
-        <translation>Erstklassige Videoskalierung</translation>
-    </message>
-    <message>
-        <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation>Trilineare Filterung zur Reduktion und bikubische Filterung zur Vergrößerung.</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2301,10 +2289,6 @@
         <translation>Fortsetzen der Suche</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation>Teilweise geprüft bedeutet, dass es eine Verzögerung zwischen Klicken und Pause gibt</translation>
-    </message>
-    <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
         <translation>Verwende Audio-Resampler und Kanalumwandlung vor Filtern und Visualisierungen</translation>
     </message>
@@ -2319,6 +2303,10 @@
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Teilweise geprüft bedeutet, dass es eine Verzögerung zwischen Klicken und Pause gibt</translation>
     </message>
 </context>
 <context>
@@ -2938,10 +2926,6 @@ QMPlay2 zeigt keine Icons an!</translation>
         <translation>Symbole ändern</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>Um die Icons zu ändern, wird das Programm neu gestartet!</translation>
-    </message>
-    <message>
         <source>Default or first stream</source>
         <translation>Standard oder erster Stream</translation>
     </message>
@@ -2990,6 +2974,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>Um die Icons zu ändern, wird das Programm neu gestartet!</translation>
     </message>
 </context>
 <context>

@@ -794,7 +794,7 @@ void SettingsWidget::apply()
                 QMPSettings.set("IconsFromTheme", page1->iconsFromTheme->isChecked());
                 if (!QMPlay2GUI.restartApp)
                 {
-                    QMessageBox::information(this, tr("Changing icons"), tr("To apply the icons change program will start again!"));
+                    QMessageBox::information(this, tr("Changing icons"), tr("To apply the icons change, the program will start again!"));
                     restartApp();
                 }
             }
