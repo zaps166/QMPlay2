@@ -12,9 +12,7 @@ else()
     set(QMPLAY2_MODULE MODULE)
 endif()
 
-if(USE_FFMPEG)
-    add_subdirectory(FFmpeg)
-endif()
+add_subdirectory(FFmpeg)
 
 if(USE_INPUTS)
     add_subdirectory(Inputs)
