@@ -30,8 +30,6 @@ OpenGL2::OpenGL2() :
     m_icon = QIcon(":/OpenGL2.svgz");
 
     init("Enabled", true);
-    init("AllowPBO", true);
-    init("HQScaling", false);
     init("VSync", true);
     if (getString("BypassCompositor") == "1") // Backward compatibility
         remove("BypassCompositor");
@@ -72,13 +70,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     enabledB = new QCheckBox(tr("Enabled"));
     enabledB->setChecked(sets().getBool("Enabled"));
 
-    allowPboB = new QCheckBox(tr("Allow to use available PBO"));
-    allowPboB->setChecked(sets().getBool("AllowPBO"));
-
-    hqScalingB = new QCheckBox(tr("High quality video scaling"));
-    hqScalingB->setToolTip(tr("Trilinear filtering for minification and bicubic filtering for magnification."));
-    hqScalingB->setChecked(sets().getBool("HQScaling"));
-
     if (!isGlOnWindow)
     {
         vsyncB = new QCheckBox(tr("Vertical sync") +  " (VSync)");
@@ -105,8 +96,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(enabledB);
-    layout->addWidget(allowPboB);
-    layout->addWidget(hqScalingB);
     if (vsyncB)
         layout->addWidget(vsyncB);
     if (bypassCompositorB)
@@ -116,8 +105,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::saveSettings()
 {
     sets().set("Enabled", enabledB->isChecked());
-    sets().set("AllowPBO", allowPboB->isChecked());
-    sets().set("HQScaling", hqScalingB->isChecked());
     if (vsyncB)
         sets().set("VSync", vsyncB->isChecked());
     if (bypassCompositorB)

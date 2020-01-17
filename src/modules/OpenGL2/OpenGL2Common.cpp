@@ -82,7 +82,7 @@ OpenGL2Common::OpenGL2Common() :
     texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
     numPlanes(0),
     target(0),
-    allowPBO(true), hasPbo(false),
+    hasPbo(false),
     isPaused(false), isOK(false), hwAccelError(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
     subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
     glVer(0),
@@ -319,12 +319,6 @@ void OpenGL2Common::initializeGL()
     }
     if (target == GL_TEXTURE_RECTANGLE_ARB)
         videoFrag.prepend("#define TEXTURE_RECTANGLE\n");
-    if (hqScaling)
-    {
-        constexpr const char *getTexelDefine = "#define getTexel texture\n";
-        Q_ASSERT(videoFrag.contains(getTexelDefine));
-        videoFrag.replace(getTexelDefine, readShader(":/Bicubic.frag", true));
-    }
     shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Fragment, videoFrag);
     if (shaderProgramVideo->bind())
     {
@@ -430,8 +424,6 @@ void OpenGL2Common::paintGL()
                 const bool hasHwAccelError = hwAccelError;
                 hwAccelError = !hwAccellnterface->init(widths, heights, [this](quint32 texture) {
                     setTextureParameters(target, texture, GL_LINEAR);
-                    if (hqScaling)
-                        maybeSetMipmaps(widget()->devicePixelRatioF(), texture);
                 });
                 if (hwAccelError && !hasHwAccelError)
                     QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
@@ -470,9 +462,6 @@ void OpenGL2Common::paintGL()
 
                 /* Prepare texture coordinates */
                 texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize(0) == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize(0) + 1.0f));
-
-                if (hqScaling)
-                    maybeSetMipmaps(widget()->devicePixelRatioF());
             }
             resetDone = true;
             hasImage = false;
@@ -498,8 +487,6 @@ void OpenGL2Common::paintGL()
             {
                 glActiveTexture(GL_TEXTURE0 + p);
                 glBindTexture(target, hwAccellnterface->getTexture(p));
-                if (m_useMipmaps && imageReady)
-                    glGenerateMipmap(target);
             }
         }
         else
@@ -543,8 +530,6 @@ void OpenGL2Common::paintGL()
                     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
                     data += videoFrame.linesize(p);
                 }
-                if (m_useMipmaps)
-                    glGenerateMipmap(GL_TEXTURE_2D);
             }
             if (hasPbo)
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
@@ -607,14 +592,6 @@ void OpenGL2Common::paintGL()
             const float hue = videoAdjustment.hue / -31.831f;
             shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
             shaderProgramVideo->setUniformValue("uSharpness", sharpness);
-        }
-        if (hqScaling)
-        {
-            const qreal dpr = widget()->devicePixelRatioF();
-            if (!resetDone)
-                maybeSetMipmaps(dpr);
-            const bool useBicubic = (W * dpr > m_textureSize.width() || H * dpr > m_textureSize.height());
-            shaderProgramVideo->setUniformValue("uBicubic", useBicubic ? 1 : 0);
         }
         shaderProgramVideo->setUniformValue("uTextureSize", m_textureSize);
 
@@ -806,7 +783,6 @@ void OpenGL2Common::testGLInternal()
             target = GL_TEXTURE_RECTANGLE_ARB;
             if (numPlanes == 1)
                 isOK = false; // Not used and not supported
-            hqScaling = false; // Not yet supported
         }
 
         if (isOK)
@@ -856,16 +832,11 @@ bool OpenGL2Common::initGLProc()
     glBindBuffer = (GLBindBuffer)context->getProcAddress("glBindBuffer");
     glBufferData = (GLBufferData)context->getProcAddress("glBufferData");
     glDeleteBuffers = (GLDeleteBuffers)context->getProcAddress("glDeleteBuffers");
-    if (hqScaling)
-        glGenerateMipmap = (GLGenerateMipmap)context->getProcAddress("glGenerateMipmap");
     hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
 #endif
-    if (allowPBO)
-    {
-        glMapBufferRange = (GLMapBufferRange)context->getProcAddress("glMapBufferRange");
-        glMapBuffer = (GLMapBuffer)context->getProcAddress("glMapBuffer");
-        glUnmapBuffer = (GLUnmapBuffer)context->getProcAddress("glUnmapBuffer");
-    }
+    glMapBufferRange = (GLMapBufferRange)context->getProcAddress("glMapBufferRange");
+    glMapBuffer = (GLMapBuffer)context->getProcAddress("glMapBuffer");
+    glUnmapBuffer = (GLUnmapBuffer)context->getProcAddress("glUnmapBuffer");
     hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
 
     return true;
@@ -923,31 +894,6 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
             break;
         default:
             break;
-    }
-}
-
-void OpenGL2Common::maybeSetMipmaps(qreal dpr, quint32 texture)
-{
-    const bool lastUseMipmaps = m_useMipmaps;
-    m_useMipmaps = (W * dpr < m_textureSize.width() / 2.0 || H * dpr < m_textureSize.height() / 2.0);
-#ifndef OPENGL_ES2
-    if (m_useMipmaps && !glGenerateMipmap)
-    {
-        QMPlay2Core.logError("OpenGL 2 :: Mipmaps requested, but driver doesn't support it!", true, true);
-        m_useMipmaps = false;
-    }
-#endif
-    if (texture || m_useMipmaps != lastUseMipmaps)
-    {
-        const int n = texture ? 1 : numPlanes;
-        for (int p = 0; p < n; ++p)
-        {
-            glBindTexture(target, texture ? texture : (hwAccellnterface ? hwAccellnterface->getTexture(p) : textures[p + 1]));
-            glTexParameteri(target, GL_TEXTURE_MIN_FILTER, m_useMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-            if (m_useMipmaps)
-                glGenerateMipmap(target);
-        }
-        glBindTexture(target, 0);
     }
 }
 

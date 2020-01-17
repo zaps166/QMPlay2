@@ -5,12 +5,10 @@ uniform vec3 uVideoAdj;
 uniform vec2 uTextureSize;
 uniform sampler2D uRGB;
 
-#define getTexel texture
-
 #ifdef Sharpness
 vec4 getRGBAtOffset(float x, float y)
 {
-    return getTexel(uRGB, vTexCoord + vec2(x, y));
+    return texture(uRGB, vTexCoord + vec2(x, y));
 }
 #endif
 
@@ -18,7 +16,7 @@ void main()
 {
     float brightness = uVideoAdj[0];
     float contrast = uVideoAdj[1];
-    vec4 RGB = getTexel(uRGB, vTexCoord);
+    vec4 RGB = texture(uRGB, vTexCoord);
 #ifdef Sharpness
     float sharpness = uVideoAdj[2];
     if (sharpness != 0.0)

@@ -31,7 +31,6 @@
 
 OpenGL2Writer::OpenGL2Writer(Module &module)
     : drawable(nullptr)
-    , allowPBO(true)
 {
     addParam("W");
     addParam("H");
@@ -53,20 +52,6 @@ OpenGL2Writer::~OpenGL2Writer()
 bool OpenGL2Writer::set()
 {
     bool doReset = false;
-
-    const bool newAllowPBO = sets().getBool("AllowPBO");
-    if (newAllowPBO != allowPBO)
-    {
-        allowPBO = newAllowPBO;
-        doReset = true;
-    }
-
-    const bool newHqScaling = sets().getBool("HQScaling");
-    if (newHqScaling != m_hqScaling)
-    {
-        m_hqScaling = newHqScaling;
-        doReset = true;
-    }
 
     vSync = sets().getBool("VSync");
     if (drawable)
@@ -228,8 +213,6 @@ bool OpenGL2Writer::open()
     else
         drawable = new OpenGL2Window;
     drawable->hwAccellnterface = m_hwAccelInterface;
-    drawable->allowPBO = allowPBO;
-    drawable->hqScaling = m_hqScaling;
     if (drawable->testGL())
     {
         drawable->setVSync(vSync);

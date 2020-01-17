@@ -25,12 +25,10 @@ uniform sampler uY;
     uniform sampler uCb, uCr;
 #endif
 
-#define getTexel texture
-
 #ifdef HueAndSharpness
 float getLumaAtOffset(float x, float y)
 {
-    return getTexel(uY, texCoordYWithOffset(vec2(x, y)))[0] - uBL;
+    return texture(uY, texCoordYWithOffset(vec2(x, y)))[0] - uBL;
 }
 #endif
 
@@ -45,14 +43,14 @@ void main()
 
 #ifdef NV12
     vec3 YCbCr = vec3(
-        getTexel(uY   , texCoordY )[0],
-        getTexel(uCbCr, texCoordUV).xy
+        texture(uY   , texCoordY )[0],
+        texture(uCbCr, texCoordUV).xy
     );
 #else
     vec3 YCbCr = vec3(
-        getTexel(uY , texCoordY )[0],
-        getTexel(uCb, texCoordUV)[0],
-        getTexel(uCr, texCoordUV)[0]
+        texture(uY , texCoordY )[0],
+        texture(uCb, texCoordUV)[0],
+        texture(uCr, texCoordUV)[0]
     );
 #endif
     YCbCr -= vec3(uBL, vec2(128.0 / 255.0));

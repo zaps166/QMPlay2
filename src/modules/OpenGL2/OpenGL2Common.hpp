@@ -111,7 +111,6 @@ protected:
     GLBindBuffer glBindBuffer;
     GLBufferData glBufferData;
     GLDeleteBuffers glDeleteBuffers;
-    GLGenerateMipmap glGenerateMipmap = nullptr;
 #endif
     GLMapBufferRange glMapBufferRange = nullptr;
     GLMapBuffer glMapBuffer = nullptr;
@@ -121,8 +120,6 @@ protected:
 
     void dispatchEvent(QEvent *e, QObject *p);
 private:
-    void maybeSetMipmaps(qreal dpr, quint32 texture = 0);
-
     inline bool isRotate90() const;
 
     QByteArray readShader(const QString &fileName, bool pure = false);
@@ -157,14 +154,14 @@ public:
     quint32 target;
 
     quint32 pbo[4];
-    bool allowPBO, hasPbo, hqScaling = false;
+    bool hasPbo;
 
     bool m_bypassCompositor = false;
     bool m_compositorBypassed = false;
     bool m_isFullScreen = false;
     QMetaObject::Connection m_fullScreenChangedConn;
 
-    bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness, m_useMipmaps = false;
+    bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
     int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
     int glVer;
 
