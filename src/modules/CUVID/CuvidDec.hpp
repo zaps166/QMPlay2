@@ -89,7 +89,7 @@ private:
     double m_lastTS[2];
 
     cudaVideoDeinterlaceMode m_deintMethod;
-    Qt::CheckState m_copyVideo;
+    bool m_copyVideo;
     bool m_forceFlush;
     bool m_tsWorkaround;
 

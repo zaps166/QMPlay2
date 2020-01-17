@@ -396,13 +396,6 @@
     </message>
 </context>
 <context>
-    <name>CuvidDec</name>
-    <message>
-        <source>Can&apos;t open OpenGL 2 module</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1676,10 +1669,6 @@
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

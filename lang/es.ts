@@ -396,13 +396,6 @@
     </message>
 </context>
 <context>
-    <name>CuvidDec</name>
-    <message>
-        <source>Can&apos;t open OpenGL 2 module</source>
-        <translation>No se puede abrir el módulo OpenGL 2</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Parity (if not detected automatically)</source>
@@ -1680,10 +1673,6 @@
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
         <translation>Copiar el vídeo decodificado a la memoria de la CPU (no recomendado)</translation>
-    </message>
-    <message>
-        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation>Parcialmente marcado significa que solo copia un dato de vídeo si el método rápido falla</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>

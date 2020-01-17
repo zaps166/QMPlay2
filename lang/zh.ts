@@ -396,13 +396,6 @@
     </message>
 </context>
 <context>
-    <name>CuvidDec</name>
-    <message>
-        <source>Can&apos;t open OpenGL 2 module</source>
-        <translation>无法打开 OpenGL 2 模块</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1680,10 +1673,6 @@
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
         <translation>复制解码视频到 CPU 存储（不推荐）</translation>
-    </message>
-    <message>
-        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation>半选中代表如果最快方法失败则仅复制视频数据</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>

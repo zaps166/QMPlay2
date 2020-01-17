@@ -500,7 +500,7 @@ CuvidDec::CuvidDec(Module &module) :
     m_colorSpace(AVCOL_SPC_UNSPECIFIED),
     m_lastCuvidTS(0),
     m_deintMethod(cudaVideoDeinterlaceMode_Weave),
-    m_copyVideo(Qt::PartiallyChecked),
+    m_copyVideo(false),
     m_forceFlush(false),
     m_tsWorkaround(false),
     m_bsfCtx(nullptr),
@@ -550,7 +550,7 @@ bool CuvidDec::set()
             restart = true;
         }
 
-        const Qt::CheckState copyVideo = (Qt::CheckState)sets().getInt("CopyVideo");
+        const bool copyVideo = (Qt::CheckState)sets().getBool("CopyVideo");
         if (copyVideo != m_copyVideo)
         {
             m_copyVideo = copyVideo;
@@ -945,16 +945,12 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_cuCtx && !(m_cuCtx = cu::createContext()))
         return false;
 
-    if (!m_writer && m_copyVideo != Qt::Checked)
+    if (!m_writer && !m_copyVideo)
     {
         m_writer = VideoWriter::createOpenGL2(make_shared<CuvidHWAccel>(m_cuCtx));
-        if (m_writer)
-            m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidHWAccel>();
-        else if (m_copyVideo == Qt::Unchecked)
-        {
-            QMPlay2Core.logError("CUVID :: " + tr("Can't open OpenGL 2 module"), true, true);
+        if (!m_writer)
             return false;
-        }
+        m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidHWAccel>();
     }
 
     cu::ContextGuard cuCtxGuard(m_cuCtx);

@@ -28,7 +28,9 @@ Cuvid::Cuvid() :
 
     init("Enabled", true);
     init("DeintMethod", 2);
-    init("CopyVideo", Qt::PartiallyChecked);
+    if (getString("CopyVideo") == "1") // Backward compatibility
+        remove("CopyVideo");
+    init("CopyVideo", false);
     init("DecodeMPEG4", true);
 #ifdef Q_OS_WIN
     init("CheckFirstGPU", true);
@@ -91,9 +93,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     m_enabledB->setChecked(sets().getBool("Enabled"));
 
     m_copyVideoB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
-    m_copyVideoB->setTristate();
-    m_copyVideoB->setCheckState((Qt::CheckState)sets().getInt("CopyVideo"));
-    m_copyVideoB->setToolTip(tr("Partially checked means that it will copy a video data only if the fast method fails"));
+    m_copyVideoB->setChecked(sets().getBool("CopyVideo"));
 
     m_decodeMPEG4 = new QCheckBox(tr("Decode MPEG4 videos"));
     m_decodeMPEG4->setChecked(sets().getBool("DecodeMPEG4"));
@@ -119,7 +119,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::saveSettings()
 {
     sets().set("Enabled", m_enabledB->isChecked());
-    sets().set("CopyVideo", m_copyVideoB->checkState());
+    sets().set("CopyVideo", m_copyVideoB->isChecked());
     sets().set("DecodeMPEG4", m_decodeMPEG4->isChecked());
 #ifdef Q_OS_WIN
     sets().set("CheckFirstGPU", m_checkFirstGPU->isChecked());

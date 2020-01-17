@@ -396,13 +396,6 @@
     </message>
 </context>
 <context>
-    <name>CuvidDec</name>
-    <message>
-        <source>Can&apos;t open OpenGL 2 module</source>
-        <translation>Kann OpenGL 2-Modul nicht öffnen</translation>
-    </message>
-</context>
-<context>
     <name>DeintSettingsW</name>
     <message>
         <source>Remove interlacing</source>
@@ -1679,10 +1672,6 @@
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
         <translation>Decodiertes Video in den CPU-Speicher kopieren (nicht empfohlen)</translation>
-    </message>
-    <message>
-        <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation>Teilweise geprüft bedeutet, dass es nur dann Videodaten kopiert, wenn die schnelle Methode fehlschlägt</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
