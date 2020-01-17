@@ -221,17 +221,17 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                         }
                         if (vpp_deint_type == VAProcDeinterlacingMotionCompensated && !vpp_deint_types[2])
                         {
-                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
+                            QMPlay2Core.log("VA-API :: " + tr("Unsupported deinterlacing algorithm") + " - Motion compensated", ErrorLog | LogOnce);
                             vpp_deint_type = VAProcDeinterlacingMotionAdaptive;
                         }
                         if (vpp_deint_type == VAProcDeinterlacingMotionAdaptive && !vpp_deint_types[1])
                         {
-                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
+                            QMPlay2Core.log("VA-API :: " + tr("Unsupported deinterlacing algorithm") + " - Motion adaptive", ErrorLog | LogOnce);
                             vpp_deint_type = (m_fd > -1) ? VAProcDeinterlacingBob : VAProcDeinterlacingNone;
                         }
                         if (vpp_deint_type == VAProcDeinterlacingBob && !vpp_deint_types[0])
                         {
-                            QMPlay2Core.log("VA-API :: " + tr("Not supported deinterlacing algorithm") + " - Bob", ErrorLog | LogOnce);
+                            QMPlay2Core.log("VA-API :: " + tr("Unsupported deinterlacing algorithm") + " - Bob", ErrorLog | LogOnce);
                             vpp_deint_type = VAProcDeinterlacingNone;
                         }
                         if (vpp_deint_type != VAProcDeinterlacingNone)

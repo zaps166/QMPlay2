@@ -72,7 +72,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     enabledB = new QCheckBox(tr("Enabled"));
     enabledB->setChecked(sets().getBool("Enabled"));
 
-    allowPboB = new QCheckBox(tr("Allow to use PBO (if available)"));
+    allowPboB = new QCheckBox(tr("Allow to use available PBO"));
     allowPboB->setChecked(sets().getBool("AllowPBO"));
 
     hqScalingB = new QCheckBox(tr("High quality video scaling"));

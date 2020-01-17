@@ -54,7 +54,7 @@
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="showDirCoversB">
             <property name="text">
-             <string>Show covers from directory if there aren't in the music file</string>
+             <string>Show covers from directory if they aren't in the music file</string>
             </property>
            </widget>
           </item>
@@ -267,7 +267,7 @@
        <item row="4" column="0">
         <widget class="QCheckBox" name="autoOpenVideoWindowB">
          <property name="text">
-          <string>Automatically opening video window</string>
+          <string>Automatically open video window</string>
          </property>
         </widget>
        </item>
@@ -288,7 +288,7 @@
        <item row="9" column="0">
         <widget class="QCheckBox" name="displayOnlyFileName">
          <property name="text">
-          <string>Always display only file names in playlist</string>
+          <string>Always only display file names in playlist</string>
          </property>
         </widget>
        </item>
@@ -435,7 +435,7 @@
        <item row="3" column="0">
         <widget class="QCheckBox" name="glOnWindowB">
          <property name="toolTip">
-          <string>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</string>
+          <string>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</string>
          </property>
          <property name="text">
           <string>Use OpenGL on entire window</string>

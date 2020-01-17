@@ -226,7 +226,7 @@ void EntryProperties::accept()
             }
             else
             {
-                QMessageBox::information(this, tr("Incorrect path"), tr("The specified path does not exists"));
+                QMessageBox::information(this, tr("Incorrect path"), tr("The specified path does not exist"));
                 return;
             }
         }
@@ -249,7 +249,7 @@ void EntryProperties::accept()
         tWI->setData(0, Qt::UserRole, url);
 #ifdef QMPlay2_TagEditor
         if (tagEditor->isEnabled() && !tagEditor->save())
-            QMessageBox::critical(this, tagEditor->title(), tr("Error while writing tags, check that you have permission to modify the file!"));
+            QMessageBox::critical(this, tagEditor->title(), tr("Error while writing tags, please check if you have permission to modify the file!"));
 #endif
     }
     QDialog::accept();

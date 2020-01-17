@@ -42,7 +42,7 @@
        <item row="1" column="0">
         <widget class="QGroupBox" name="replayGain">
          <property name="title">
-          <string>Use replay gain if available</string>
+          <string>Use available replay gain</string>
          </property>
          <property name="checkable">
           <bool>true</bool>

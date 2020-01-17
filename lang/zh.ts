@@ -24,14 +24,14 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>A/V 线程被错误终止！</translation>
     </message>
 </context>
 <context>
     <name>AboutWidget</name>
     <message>
         <source>About QMPlay2</source>
-        <translation>关于QMPlay2</translation>
+        <translation>关于 QMPlay2</translation>
     </message>
     <message>
         <source>Logs</source>
@@ -59,15 +59,15 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation type="unfinished"></translation>
+        <translation>视频和音频播放器</translation>
     </message>
     <message>
         <source>Programmer</source>
-        <translation type="unfinished"></translation>
+        <translation>开发人员</translation>
     </message>
     <message>
         <source>Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>协助开发人员</translation>
     </message>
 </context>
 <context>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>自动检测地址</translation>
     </message>
 </context>
 <context>
@@ -138,7 +138,7 @@
     <name>Appearance</name>
     <message>
         <source>Appearance settings</source>
-        <translation>外观设定</translation>
+        <translation>外观设置</translation>
     </message>
     <message>
         <source>Manage color schemes</source>
@@ -186,11 +186,11 @@
     </message>
     <message>
         <source>Highlighted text color</source>
-        <translation>文本高亮颜色</translation>
+        <translation>高亮文本颜色</translation>
     </message>
     <message>
         <source>Slider button color</source>
-        <translation>滚动条颜色</translation>
+        <translation>滑块颜色</translation>
     </message>
     <message>
         <source>Gradient in the video window</source>
@@ -202,7 +202,7 @@
     </message>
     <message>
         <source>Color in the middle</source>
-        <translation>中间的颜色</translation>
+        <translation>中间颜色</translation>
     </message>
     <message>
         <source>Wallpaper in the main window</source>
@@ -210,7 +210,7 @@
     </message>
     <message>
         <source>Transparency</source>
-        <translation>透明</translation>
+        <translation>透明度</translation>
     </message>
     <message>
         <source>Select wallpaper</source>
@@ -218,27 +218,27 @@
     </message>
     <message>
         <source>Name</source>
-        <translation>姓名</translation>
+        <translation>名称</translation>
     </message>
     <message>
         <source>Enter the name for a color scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>输入色彩方案名称</translation>
     </message>
     <message>
         <source>The specified name already exists!</source>
-        <translation>名字已经存在!</translation>
+        <translation>指定名称已存在！</translation>
     </message>
     <message>
         <source>Removing</source>
-        <translation>移除</translation>
+        <translation>正在移除</translation>
     </message>
     <message>
         <source>Do you want to remove</source>
-        <translation>想要移除吗</translation>
+        <translation>您想要移除吗</translation>
     </message>
     <message>
         <source>Loading wallpaper</source>
-        <translation>载入墙纸</translation>
+        <translation>正在载入墙纸</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -254,11 +254,11 @@
     </message>
     <message>
         <source>Volatile settings</source>
-        <translation type="unfinished"></translation>
+        <translation>易失性设置</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
-        <translation type="unfinished"></translation>
+        <translation>无法写入，设置将会在重新启动后丢失。请考虑创建一个新色彩方案！</translation>
     </message>
 </context>
 <context>
@@ -284,34 +284,34 @@
     <name>AudioCD</name>
     <message>
         <source>Path</source>
-        <translation>目录</translation>
+        <translation>路径</translation>
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>音频CD</translation>
+        <translation>音频 CD</translation>
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
-        <translation>未发现CD/DVD驱动器!</translation>
+        <translation>未发现 CD/DVD 驱动器！</translation>
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>选择 AudioCD image</translation>
+        <translation>选择音频 CD 图片</translation>
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>支持的 AudioCD images</translation>
+        <translation>支持的音频 CD 图片</translation>
     </message>
     <message>
         <source>Choose the drive</source>
-        <translation type="unfinished"></translation>
+        <translation>选择驱动器</translation>
     </message>
 </context>
 <context>
     <name>AudioCDDemux</name>
     <message>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation>数据</translation>
     </message>
     <message>
         <source>Track</source>
@@ -323,15 +323,15 @@
     </message>
     <message>
         <source>No CD</source>
-        <translation type="unfinished"></translation>
+        <translation>无 CD</translation>
     </message>
     <message>
         <source>Invalid path to CD drive</source>
-        <translation type="unfinished"></translation>
+        <translation>CD 驱动器路径无效</translation>
     </message>
     <message>
         <source>No AudioCD found!</source>
-        <translation>未发现音频CD!</translation>
+        <translation>未发现音频 CD！</translation>
     </message>
 </context>
 <context>
@@ -373,33 +373,33 @@
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished">Hz</translation>
+        <translation>赫兹</translation>
     </message>
     <message>
         <source>requires a change in one of the forced parameters, sound disabled ...</source>
-        <translation type="unfinished"></translation>
+        <translation>一个强制参数需要修改，声音已禁用 ...</translation>
     </message>
     <message>
         <source>sets the parameters to</source>
-        <translation type="unfinished"></translation>
+        <translation>设置参数为</translation>
     </message>
 </context>
 <context>
     <name>Cuvid</name>
     <message>
         <source>Adaptive</source>
-        <translation type="unfinished"></translation>
+        <translation>自适应</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">去隔行方法</translation>
+        <translation>反交错方法</translation>
     </message>
 </context>
 <context>
     <name>CuvidDec</name>
     <message>
         <source>Can&apos;t open OpenGL 2 module</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开 OpenGL 2 模块</translation>
     </message>
 </context>
 <context>
@@ -410,7 +410,7 @@
     </message>
     <message>
         <source>Automatically detect interlaced frames</source>
-        <translation>自动检测隔行扫描</translation>
+        <translation>自动检测隔行帧</translation>
     </message>
     <message>
         <source>Doubles the the number of frames per second</source>
@@ -426,7 +426,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>去隔行方法</translation>
+        <translation>反交错方法</translation>
     </message>
     <message>
         <source>software decoding</source>
@@ -437,7 +437,7 @@
     <name>DemuxerThr</name>
     <message>
         <source>Opening</source>
-        <translation>打开</translation>
+        <translation>正在打开</translation>
     </message>
     <message>
         <source>Playback</source>
@@ -445,11 +445,11 @@
     </message>
     <message>
         <source>Seeking</source>
-        <translation>搜寻</translation>
+        <translation>正在跳转</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation>暂停</translation>
+        <translation>已暂停</translation>
     </message>
     <message>
         <source>Address</source>
@@ -533,7 +533,7 @@
     </message>
     <message>
         <source>Attached files</source>
-        <translation type="unfinished"></translation>
+        <translation>附件</translation>
     </message>
     <message>
         <source>bitrate</source>
@@ -553,7 +553,7 @@
     </message>
     <message>
         <source>size</source>
-        <translation type="unfinished"></translation>
+        <translation>尺寸</translation>
     </message>
     <message>
         <source>Cannot open</source>
@@ -565,11 +565,11 @@
     </message>
     <message>
         <source>Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>程序</translation>
     </message>
     <message>
         <source>Program</source>
-        <translation type="unfinished"></translation>
+        <translation>程序</translation>
     </message>
 </context>
 <context>
@@ -584,7 +584,7 @@
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished">尺寸</translation>
+        <translation>尺寸</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -600,7 +600,7 @@
     </message>
     <message>
         <source>Download again</source>
-        <translation>重试下载</translation>
+        <translation>重新下载</translation>
     </message>
     <message>
         <source>Play</source>
@@ -608,105 +608,108 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>转换终止</translation>
     </message>
     <message>
         <source>Conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>转换错误</translation>
     </message>
     <message>
         <source>Converting...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在转换...</translation>
     </message>
     <message>
         <source>Stop conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>停止转换</translation>
     </message>
 </context>
 <context>
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation type="unfinished">下载器</translation>
+        <translation>下载器</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation type="unfinished">下载目录</translation>
+        <translation>下载目录</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation type="unfinished">选择目录用来保存下载的文件</translation>
+        <translation>选择下载文件目录</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation type="unfinished">清除已完成的下载记录</translation>
+        <translation>清除已完成的下载</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation type="unfinished">输入下载地址</translation>
+        <translation>输入下载地址</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">下载</translation>
+        <translation>下载</translation>
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation type="unfinished">无法更改下载文件的目录</translation>
+        <translation>无法更改正在下载的文件目录</translation>
     </message>
     <message>
         <source>Enter address</source>
-        <translation type="unfinished">输入地址</translation>
+        <translation>输入地址</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">添加</translation>
+        <translation>添加</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation type="unfinished"></translation>
+        <translation>增加、编辑或移除转换预设</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>下载并转换为 &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Converter preset</source>
-        <translation type="unfinished"></translation>
+        <translation>转换预设</translation>
     </message>
     <message>
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>下载后执行的命令行。
+
+&lt;input/&gt; - 指定下载文件
+&lt;output&gt;%f.mp3&lt;/output&gt; - 转换的文件将会加入&quot;mp3&quot;扩展名。</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">移除</translation>
+        <translation>移除</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>预设名</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>命令行</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation>错误/空白名或命令行！</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>命令行必须包含&lt;input/&gt;标签！</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>命令行必须包含正确的&lt;output&gt;file&lt;/output/&gt;标签！</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>预设名已存在！</translation>
     </message>
 </context>
 <context>
@@ -731,36 +734,36 @@
         <translation>文件大小</translation>
     </message>
     <message>
-        <source>Error while writing tags, check that you have permission to modify the file!</source>
-        <translation>拒绝访问，请检查权限！写入标签失败!</translation>
+        <source>Error while writing tags, please check if you have permission to modify the file!</source>
+        <translation>写入标签失败，请检查您是否有权限编辑此文件！</translation>
     </message>
     <message>
         <source>Synchronize with file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation>同步文件或目录</translation>
     </message>
     <message>
-        <source>The specified path does not exists</source>
-        <translation type="unfinished"></translation>
+        <source>The specified path does not exist</source>
+        <translation>指定的路径不存在</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>浏览目录</translation>
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>浏览超过一个音轨的文件</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>选择目录</translation>
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
-        <translation type="unfinished"></translation>
+        <translation>选择超过一个音轨的文件</translation>
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>打开包含选定文件的网址或目录</translation>
     </message>
 </context>
 <context>
@@ -775,42 +778,42 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>删除</translation>
     </message>
     <message>
         <source>Add new preset</source>
-        <translation type="unfinished"></translation>
+        <translation>增加新预设</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>预设</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>New preset</source>
-        <translation type="unfinished"></translation>
+        <translation>新预设</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>输入新预设名</translation>
     </message>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation>前置放大器</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>自动</translation>
     </message>
 </context>
 <context>
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">音轨</translation>
+        <translation>音轨</translation>
     </message>
 </context>
 <context>
@@ -821,7 +824,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>指向性频率: %1 赫兹</translation>
     </message>
 </context>
 <context>
@@ -832,7 +835,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>去隔行方法</translation>
+        <translation>反交错方法</translation>
     </message>
 </context>
 <context>
@@ -843,7 +846,7 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>想让QMPlay2关联此文件吗</translation>
+        <translation>您想让 QMPlay2 关联文件吗</translation>
     </message>
 </context>
 <context>
@@ -873,7 +876,7 @@
     </message>
     <message>
         <source>Voices</source>
-        <translation type="unfinished"></translation>
+        <translation>人声</translation>
     </message>
 </context>
 <context>
@@ -888,7 +891,7 @@
     </message>
     <message>
         <source>Set appearance</source>
-        <translation>外观设定</translation>
+        <translation>外观设置</translation>
     </message>
     <message>
         <source>Show covers</source>
@@ -896,14 +899,14 @@
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
+        <translation>将模糊封面作为背景</translation>
     </message>
     <message>
-        <source>Show covers from directory if there aren&apos;t in the music file</source>
-        <translation>从文件目录里显示封面(如果音乐文件中不包含封面)</translation>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>如果音乐文件中不包含封面，从目录里显示</translation>
     </message>
     <message>
-        <source>Automatically opening video window</source>
+        <source>Automatically open video window</source>
         <translation>自动打开视频窗口</translation>
     </message>
     <message>
@@ -919,16 +922,16 @@
         <translation>仅允许运行一个实例</translation>
     </message>
     <message>
-        <source>Always display only file names in playlist</source>
-        <translation type="unfinished"></translation>
+        <source>Always only display file names in playlist</source>
+        <translation>只在播放列表里显示文件名</translation>
     </message>
     <message>
         <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
+        <translation>记住重复模式</translation>
     </message>
     <message>
         <source>Use proxy server</source>
-        <translation>使用代理</translation>
+        <translation>使用代理服务器</translation>
     </message>
     <message>
         <source>Proxy server needs login</source>
@@ -956,7 +959,7 @@
     </message>
     <message>
         <source>Reset settings</source>
-        <translation>重置设定</translation>
+        <translation>重置设置</translation>
     </message>
     <message>
         <source>Language</source>
@@ -964,7 +967,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation>部件样式</translation>
+        <translation>样式</translation>
     </message>
     <message>
         <source>Subtitles encoding</source>
@@ -980,55 +983,55 @@
     </message>
     <message>
         <source>Screenshots path</source>
-        <translation>截图保存路径</translation>
+        <translation>截图路径</translation>
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation type="unfinished"></translation>
+        <translation>设置键盘绑定</translation>
     </message>
     <message>
         <source>Selected Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>选定的配置</translation>
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation type="unfinished"></translation>
+        <translation>读取并显示静态图像</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation type="unfinished"></translation>
+        <translation>默认使用托盘区通知</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation type="unfinished"></translation>
+        <translation>移除 youtube-dl</translation>
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>自动删除未分组项</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏艺术家元数据</translation>
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>新视频文件载入时自动重置主窗口</translation>
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
+        <translation>不在其它文件内载入播放列表</translation>
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation type="unfinished"></translation>
+        <translation>放大小尺寸封面</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translation>在整个窗口使用 OpenGL</translation>
     </message>
     <message>
-        <source>Uses QOpenGLWidget (render-to-texture), also enables OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation>使用 QOpenGLWidget（渲染到纹理）, 并为可视化效果启用 OpenGL。请谨慎使用，这会降低视频回放性能。</translation>
     </message>
 </context>
 <context>
@@ -1043,79 +1046,79 @@
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>关于 Qt</translation>
+        <translation>关于 &amp;Qt</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation type="unfinished"></translation>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation>运行后不播放（忽略&quot;记住回放位置&quot;选项）。</translation>
     </message>
     <message>
-        <source>Ensures that the window will be visible if the application is running.</source>
-        <translation type="unfinished"></translation>
+        <source>Ensure that the window will be visible if the application is running.</source>
+        <translation>请确认如果程序运行时窗口可见。</translation>
     </message>
     <message>
-        <source>Toggles fullscreen.</source>
-        <translation type="unfinished"></translation>
+        <source>Toggle fullscreen.</source>
+        <translation>切换全屏。</translation>
     </message>
     <message>
-        <source>Seeks to the specified value.</source>
-        <translation type="unfinished"></translation>
+        <source>Seek to the specified value.</source>
+        <translation>跳转到指定值。</translation>
     </message>
     <message>
-        <source>Starts playback.</source>
-        <translation type="unfinished"></translation>
+        <source>Start playback.</source>
+        <translation>开始回放。</translation>
     </message>
     <message>
-        <source>Stops playback.</source>
-        <translation type="unfinished"></translation>
+        <source>Stop playback.</source>
+        <translation>停止回放。</translation>
     </message>
     <message>
-        <source>Toggles playback.</source>
-        <translation type="unfinished"></translation>
+        <source>Toggle playback.</source>
+        <translation>切换回放。</translation>
     </message>
     <message>
-        <source>Terminates the application.</source>
-        <translation type="unfinished"></translation>
+        <source>Terminate the application.</source>
+        <translation>终止程序。</translation>
     </message>
     <message>
-        <source>Displays this help.</source>
-        <translation type="unfinished"></translation>
+        <source>Display this help.</source>
+        <translation>显示帮助。</translation>
     </message>
     <message>
-        <source>Opens and plays specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <source>Open and play specified &lt;url&gt;.</source>
+        <translation>打开并播放指定的&lt;网址&gt;。</translation>
     </message>
     <message>
-        <source>Adds specified &lt;url&gt; to playlist.</source>
-        <translation type="unfinished"></translation>
+        <source>Add specified &lt;url&gt; to playlist.</source>
+        <translation>将指定的&lt;网址&gt;添加到播放列表。</translation>
     </message>
     <message>
-        <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation type="unfinished"></translation>
+        <source>Start the application with given &lt;profile name&gt;.</source>
+        <translation>使用指定的&lt;配置&gt;启动程序。</translation>
     </message>
     <message>
-        <source>Sets specified volume.</source>
-        <translation type="unfinished"></translation>
+        <source>Set specified volume.</source>
+        <translation>设置指定音量。</translation>
     </message>
     <message>
-        <source>Sets specified playback speed.</source>
-        <translation type="unfinished"></translation>
+        <source>Set specified playback speed.</source>
+        <translation>设置指定回放速度。</translation>
     </message>
     <message>
-        <source>Plays next entry on playlist.</source>
-        <translation type="unfinished"></translation>
+        <source>Play next entry on playlist.</source>
+        <translation>播放列表的下一项。</translation>
     </message>
     <message>
-        <source>Plays previous entry on playlist.</source>
-        <translation type="unfinished"></translation>
+        <source>Play previous entry on playlist.</source>
+        <translation>播放列表的上一项。</translation>
     </message>
     <message>
-        <source>Opens new QMPlay2 instance and plays specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
+        <translation>打开新 QMPlay2 实例并播放指定&lt;网址&gt;。</translation>
     </message>
 </context>
 <context>
@@ -1138,11 +1141,11 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation type="unfinished"></translation>
+        <translation>交错</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation type="unfinished"></translation>
+        <translation>可见</translation>
     </message>
 </context>
 <context>
@@ -1156,22 +1159,22 @@
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation type="unfinished"></translation>
+        <translation>键盘绑定设置</translation>
     </message>
 </context>
 <context>
     <name>LastFM</name>
     <message>
         <source>LastFM login error.</source>
-        <translation>登录LastFM时发生错误.</translation>
+        <translation>LastFM 登录错误。</translation>
     </message>
     <message>
         <source>Check login and password!</source>
-        <translation>请检查登录帐号或密码!</translation>
+        <translation>请检查用户名和密码！</translation>
     </message>
     <message>
         <source>Logged in to LastFM!</source>
-        <translation>已登录LastFM!</translation>
+        <translation>已登录 LastFM！</translation>
     </message>
 </context>
 <context>
@@ -1185,26 +1188,26 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>歌词</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>翻译</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
+        <translation>未发现歌词</translation>
     </message>
 </context>
 <context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>示例</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>模式</translation>
     </message>
     <message>
         <source>Channels</source>
@@ -1231,7 +1234,7 @@
     </message>
     <message>
         <source>Pointed position</source>
-        <translation type="unfinished"></translation>
+        <translation>指定位置</translation>
     </message>
     <message>
         <source>&amp;Hide</source>
@@ -1243,7 +1246,7 @@
     </message>
     <message>
         <source>Stopped</source>
-        <translation>停止</translation>
+        <translation>已停止</translation>
     </message>
     <message>
         <source>Choose subtitles</source>
@@ -1267,15 +1270,15 @@
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
-        <translation>确定要退出?</translation>
+        <translation>您确定要退出吗?</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
-        <translation>QMPlay2正在后台处理某些工作.</translation>
+        <translation>QMPlay2 正在后台运行任务。</translation>
     </message>
     <message>
-        <source>The update is downloading now.</source>
-        <translation>正在下载更新.</translation>
+        <source>The update is being downloaded now.</source>
+        <translation>正在下载更新。</translation>
     </message>
     <message>
         <source>&amp;Lock widgets</source>
@@ -1283,11 +1286,11 @@
     </message>
     <message>
         <source>Save group</source>
-        <translation>保存组</translation>
+        <translation>保存分组</translation>
     </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation>保存播放列表时遇刺错误</translation>
+        <translation>保存播放列表错误</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
@@ -1295,7 +1298,7 @@
     </message>
     <message>
         <source>New window</source>
-        <translation type="unfinished"></translation>
+        <translation>新窗口</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
@@ -1306,49 +1309,49 @@
     <name>MediaBrowser</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">搜索</translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">连接错误</translation>
+        <translation>连接错误</translation>
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>网站不存在</translation>
     </message>
     <message>
         <source>Play all</source>
-        <translation type="unfinished"></translation>
+        <translation>播放全部</translation>
     </message>
     <message>
         <source>Search on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索 %1</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">入队</translation>
+        <translation>加入队列</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">播放</translation>
+        <translation>播放</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation type="unfinished">用浏览器打开</translation>
+        <translation>用浏览器打开页面</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation type="unfinished">复制网址</translation>
+        <translation>复制页面网址</translation>
     </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
-        <translation>已启用</translation>
+        <translation>启用</translation>
     </message>
     <message>
         <source>M3U support</source>
@@ -1364,15 +1367,15 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD的字幕使用指定的FPS (如果存在)</translation>
+        <translation>MicroDVD 字幕使用指定的帧率 (如果存在)</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>没有指定字长时字幕的最大长度</translation>
+        <translation>未指定时字幕的最大持续时间</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>已启用</translation>
+        <translation>启用</translation>
     </message>
     <message>
         <source>Use shared memory</source>
@@ -1412,15 +1415,15 @@
     </message>
     <message>
         <source>4x smaller</source>
-        <translation type="unfinished"></translation>
+        <translation>缩小4倍</translation>
     </message>
     <message>
         <source>16x smaller</source>
-        <translation type="unfinished"></translation>
+        <translation>缩小16倍</translation>
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
-        <translation>多线程解码方式</translation>
+        <translation>多线程解码方法</translation>
     </message>
     <message>
         <source>Frames</source>
@@ -1428,7 +1431,7 @@
     </message>
     <message>
         <source>Slices</source>
-        <translation type="unfinished"></translation>
+        <translation>片</translation>
     </message>
     <message>
         <source>Delay</source>
@@ -1460,7 +1463,7 @@
     </message>
     <message>
         <source>filter size</source>
-        <translation type="unfinished"></translation>
+        <translation>滤镜尺寸</translation>
     </message>
     <message>
         <source>Medium</source>
@@ -1476,15 +1479,15 @@
     </message>
     <message>
         <source>Rayman2 music (*.apm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rayman2 music (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
-        <translation>未经压缩的 PCM 音频</translation>
+        <translation>未压缩的 PCM 音频</translation>
     </message>
     <message>
         <source>File extensions (semicolon separated)</source>
-        <translation>文件扩展名</translation>
+        <translation>文件扩展名（用分号分隔）</translation>
     </message>
     <message>
         <source>Format</source>
@@ -1512,19 +1515,19 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation type="unfinished"></translation>
+        <translation>增加目录快捷菜单项</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation type="unfinished"></translation>
+        <translation>增加驱动器快捷菜单项</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>加入QMPlay2播放队列 </translation>
+        <translation>加入 QMPlay2 播放队列</translation>
     </message>
     <message>
         <source>Play in QMPlay2</source>
-        <translation>用QMPlay2播放</translation>
+        <translation>用 QMPlay2 播放</translation>
     </message>
     <message>
         <source>FFT spectrum size</source>
@@ -1536,7 +1539,7 @@
     </message>
     <message>
         <source>Set as default AudioCD player</source>
-        <translation>设为默认的音频播放器</translation>
+        <translation>设为默认音频 CD 播放器</translation>
     </message>
     <message>
         <source>Skip some frames</source>
@@ -1552,11 +1555,11 @@
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>性能</translation>
+        <translation>加速</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation>用于解码视频时的线程数</translation>
+        <translation>解码视频线程数</translation>
     </message>
     <message>
         <source>Demuxer</source>
@@ -1579,12 +1582,12 @@
         <translation>右声道反相</translation>
     </message>
     <message>
-        <source>Downloads covers</source>
+        <source>Download covers</source>
         <translation>下载封面</translation>
     </message>
     <message>
         <source>Scrobble</source>
-        <translation type="unfinished"></translation>
+        <translation>分享</translation>
     </message>
     <message>
         <source>User name</source>
@@ -1596,7 +1599,7 @@
     </message>
     <message>
         <source>Last password</source>
-        <translation type="unfinished"></translation>
+        <translation>上次密码</translation>
     </message>
     <message>
         <source>Allow to download big covers</source>
@@ -1608,11 +1611,11 @@
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
-        <translation>使用 CDDB 如果 CD-TEXT 不可用</translation>
+        <translation>如果 CD-TEXT 不可用则使用 CDDB</translation>
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>音频CD</translation>
+        <translation>音频 CD</translation>
     </message>
     <message>
         <source>Use CD-TEXT</source>
@@ -1632,7 +1635,7 @@
     </message>
     <message>
         <source>Echo repeat</source>
-        <translation>重复回声</translation>
+        <translation>回声重复</translation>
     </message>
     <message>
         <source>Echo surround</source>
@@ -1643,8 +1646,8 @@
         <translation>降噪</translation>
     </message>
     <message>
-        <source>Using the program via MPRIS2 interface</source>
-        <translation>通过MPRIS2接口使用程序</translation>
+        <source>Use the program via MPRIS2 interface</source>
+        <translation>通过 MPRIS2 接口使用程序</translation>
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
@@ -1663,206 +1666,206 @@
         <translation>默认长度</translation>
     </message>
     <message>
-        <source>Display subtitles if available</source>
-        <translation type="unfinished"></translation>
+        <source>Display available subtitles</source>
+        <translation>显示可用字幕</translation>
     </message>
     <message>
-        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
-        <translation type="unfinished"></translation>
+        <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
+        <translation>显示 YouTube 字幕。跟随默认语言和 QMPlay2 语言。</translation>
     </message>
     <message>
-        <source>Allow to use PBO (if available)</source>
-        <translation type="unfinished"></translation>
+        <source>Allow to use available PBO</source>
+        <translation>允许使用可用 PBO</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>启用解码器</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>复制解码视频到 CPU 存储（不推荐）</translation>
     </message>
     <message>
         <source>Partially checked means that it will copy a video data only if the fast method fails</source>
-        <translation type="unfinished"></translation>
+        <translation>半选中代表如果最快方法失败则仅复制视频数据</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation type="unfinished"></translation>
+        <translation>仅当主 GPU 为英伟达时使用 CUVID</translation>
     </message>
     <message>
         <source>Infinite</source>
-        <translation type="unfinished"></translation>
+        <translation>无限</translation>
     </message>
     <message>
         <source>Show notification when volume changes</source>
-        <translation type="unfinished"></translation>
+        <translation>当音量改变时显示通知</translation>
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation type="unfinished"></translation>
+        <translation>当媒体改变时显示通知</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
-        <translation type="unfinished"></translation>
+        <translation>当播放状态改变时显示通知</translation>
     </message>
     <message>
         <source>Use a custom message for media change notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>使用自定义媒体改变通知</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>概要</translation>
     </message>
     <message>
         <source>Body</source>
-        <translation type="unfinished"></translation>
+        <translation>主体</translation>
     </message>
     <message>
         <source>Notification timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>通知超时</translation>
     </message>
     <message>
         <source>Peak limit</source>
-        <translation type="unfinished"></translation>
+        <translation>峰值限值</translation>
     </message>
     <message>
         <source>Release time</source>
-        <translation type="unfinished"></translation>
+        <translation>发布时间</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>快速压缩比</translation>
     </message>
     <message>
         <source>Overall compression ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>总压缩比</translation>
     </message>
     <message>
         <source>Dynamic range compression</source>
-        <translation type="unfinished"></translation>
+        <translation>动态范围压缩</translation>
     </message>
     <message>
         <source>Cut frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>截断频率</translation>
     </message>
     <message>
         <source>Feed level</source>
-        <translation type="unfinished"></translation>
+        <translation>传送级别</translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation type="unfinished">均衡器</translation>
+        <translation>均衡器</translation>
     </message>
     <message>
         <source>Default settings</source>
-        <translation type="unfinished"></translation>
+        <translation>默认设置</translation>
     </message>
     <message>
         <source>XSPF support</source>
-        <translation type="unfinished"></translation>
+        <translation>XSPF 支持</translation>
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>附加通知</translation>
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation type="unfinished"></translation>
+        <translation>出错时尝试自动重连直播流</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>解码 MPEG4 视频</translation>
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您遇到 (DivX5) 视频解码问题则停用</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Bit-perfect 音频</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
+        <translation>将正在播放内容的采样率设置到所选输出设备</translation>
     </message>
     <message>
         <source>High quality video scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>高质量视频缩放</translation>
     </message>
     <message>
         <source>Trilinear filtering for minification and bicubic filtering for magnification.</source>
-        <translation type="unfinished"></translation>
+        <translation>减少三线性滤波并放大双三次滤波。</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation type="unfinished"></translation>
+        <translation>交换立体声声道</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>在搜索结果里显示用户名</translation>
     </message>
     <message>
         <source>Linear scale</source>
-        <translation type="unfinished"></translation>
+        <translation>线性标度</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>首选质量</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
+        <translation>复制解码视频到 CPU 存储（缓慢）</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>全屏时忽略合成器</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
+        <translation>如果 X11 合成器支持则会提升性能</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>这将提升性能。启用时某些视频驱动程序会崩溃。</translation>
     </message>
 </context>
 <context>
     <name>ModulesList</name>
     <message>
         <source>Move up</source>
-        <translation type="unfinished"></translation>
+        <translation>上移</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Move down</source>
-        <translation type="unfinished"></translation>
+        <translation>下移</translation>
     </message>
 </context>
 <context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>音量: %1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
-        <translation type="unfinished"></translation>
+        <translation>音量已改变</translation>
     </message>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">停止</translation>
+        <translation>已停止</translation>
     </message>
     <message>
         <source>Playing</source>
-        <translation type="unfinished"></translation>
+        <translation>正在播放</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">暂停</translation>
+        <translation>已暂停</translation>
     </message>
 </context>
 <context>
@@ -1924,19 +1927,19 @@
     <name>OpenGL2Common</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished"></translation>
+        <translation>著色器编译/连接错误</translation>
     </message>
     <message>
         <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation type="unfinished"></translation>
+        <translation>驱动程序必须支持多纹理，著色器和非二次幂纹理尺寸</translation>
     </message>
     <message>
         <source>Can&apos;t init textures for</source>
-        <translation type="unfinished"></translation>
+        <translation>无法初始化纹理到</translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished"></translation>
+        <translation>纹理贴图错误</translation>
     </message>
 </context>
 <context>
@@ -1955,46 +1958,46 @@
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>模块设定</translation>
+        <translation>模块设置</translation>
     </message>
     <message>
         <source>Create new profile</source>
-        <translation type="unfinished"></translation>
+        <translation>创建新配置</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation type="unfinished"></translation>
+        <translation>配置</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>新配置</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>复制配置</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>默认</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">移除</translation>
+        <translation>移除</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation type="unfinished"></translation>
+        <translation>输入新配置名：</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation type="unfinished">回放设定</translation>
+        <translation>回放设置</translation>
     </message>
 </context>
 <context>
     <name>PlayClass</name>
     <message>
         <source>Stopped</source>
-        <translation>停止</translation>
+        <translation>已停止</translation>
     </message>
     <message>
         <source>Aspect ratio</source>
@@ -2010,7 +2013,7 @@
     </message>
     <message>
         <source>Muted sound</source>
-        <translation>静音</translation>
+        <translation>已静音</translation>
     </message>
     <message>
         <source>Video delay</source>
@@ -2030,7 +2033,7 @@
     </message>
     <message>
         <source>Loaded subtitles</source>
-        <translation>载入字幕</translation>
+        <translation>已载入字幕</translation>
     </message>
     <message>
         <source>Subtitles off</source>
@@ -2046,7 +2049,7 @@
     </message>
     <message>
         <source>No image rotation</source>
-        <translation>无图旋转</translation>
+        <translation>无图像旋转</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
@@ -2054,15 +2057,15 @@
     </message>
     <message>
         <source>Set playback speed (sec.)</source>
-        <translation>设定回放速度(秒)</translation>
+        <translation>设置回放速度(秒)</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation>A-B 区间重复</translation>
+        <translation>A-B 重复</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>禁止</translation>
+        <translation>已禁用</translation>
     </message>
     <message>
         <source>from</source>
@@ -2070,35 +2073,35 @@
     </message>
     <message>
         <source>to</source>
-        <translation>至</translation>
+        <translation>到</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation>翻转 270°</translation>
+        <translation>翻转 270 度</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation>翻转 180°</translation>
+        <translation>翻转 180 度</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>翻转 90°</translation>
+        <translation>翻转 90 度</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation>不支持此视频输出模块的旋转</translation>
+        <translation>此视频输出模块不支持旋转</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>此视频输出模块不支持球面视图</translation>
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>回放被错误终止！</translation>
     </message>
     <message>
         <source>Video off</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭视频</translation>
     </message>
     <message>
         <source>Audio off</source>
@@ -2109,15 +2112,15 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>播放</translation>
+        <translation>回放</translation>
     </message>
     <message>
-        <source>&amp;Audio enabled</source>
-        <translation>音频已启用</translation>
+        <source>&amp;Enable audio</source>
+        <translation>启用音频</translation>
     </message>
     <message>
-        <source>&amp;Video enabled</source>
-        <translation>视频已启用</translation>
+        <source>&amp;Enable video</source>
+        <translation>启用视频</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
@@ -2132,7 +2135,7 @@
         <translation>视频加速</translation>
     </message>
     <message>
-        <source>&amp;Subtitles enabled</source>
+        <source>&amp;Enable subtitles</source>
         <translation>启用字幕</translation>
     </message>
     <message>
@@ -2179,8 +2182,8 @@
         <translation>强制声道转换</translation>
     </message>
     <message>
-        <source>Use replay gain if available</source>
-        <translation>使用重放(如果可用)</translation>
+        <source>Use available replay gain</source>
+        <translation>使用可用回放增益</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
@@ -2192,7 +2195,7 @@
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
-        <translation>鼠标滚轮控制音乐/视频</translation>
+        <translation>鼠标滚轮滚动音乐/电影</translation>
     </message>
     <message>
         <source>Keep zoom</source>
@@ -2208,7 +2211,7 @@
     </message>
     <message>
         <source>Remember playback position</source>
-        <translation>记住播放位置</translation>
+        <translation>记住回放位置</translation>
     </message>
     <message>
         <source>Keep subtitles delay</source>
@@ -2232,15 +2235,15 @@
     </message>
     <message>
         <source>Fade sound</source>
-        <translation>淡入淡出声音</translation>
+        <translation>声音渐变</translation>
     </message>
     <message>
         <source>Remember video equalizer settings</source>
-        <translation>记住视频均衡器设定</translation>
+        <translation>记住视频均衡器设置</translation>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation>当回放错误时自动播放下一个</translation>
+        <translation>回放错误后播放下一项</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
@@ -2260,11 +2263,11 @@
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation>回退时流的百分比</translation>
+        <translation>回退时数据包的百分比</translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation>如果缓冲完毕，开始播放网络流</translation>
+        <translation>如果缓冲完毕，开始回放网络流</translation>
     </message>
     <message>
         <source>sec</source>
@@ -2276,47 +2279,47 @@
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
+        <translation>鼠标滚轮控制视频</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
+        <translation>鼠标滚轮更改音量</translation>
     </message>
     <message>
         <source>Left mouse button on video dock toggles playback</source>
-        <translation type="unfinished"></translation>
+        <translation>鼠标左键点击视频切换回放</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>精确跳转</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation type="unfinished"></translation>
+        <translation>存储纵横比和放大配置文件</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>跳转时不暂停</translation>
     </message>
     <message>
-        <source>Partially checked means that there is a delay between click na pausing</source>
-        <translation type="unfinished"></translation>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>半选中代表点击暂停延时</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
+        <translation>在滤镜和可视化效果前使用音频重采样器和声道转换</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>鼠标中键点击视频切换全屏</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
-        <translation type="unfinished"></translation>
+        <translation>程序开始时禁用字幕</translation>
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
+        <translation>记住音频/视频/字幕启用状态</translation>
     </message>
 </context>
 <context>
@@ -2355,7 +2358,7 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>增速</translation>
+        <translation>加速</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
@@ -2363,11 +2366,11 @@
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>缩小</translation>
+        <translation>放大</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>放大</translation>
+        <translation>缩小</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
@@ -2375,11 +2378,11 @@
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>切换视频纵横比</translation>
+        <translation>切换纵横比</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>重置图像设定</translation>
+        <translation>重置图像设置</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
@@ -2399,27 +2402,27 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>播放结束后休眠计算机</translation>
+        <translation>回放结束后待机</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>区间重复</translation>
+        <translation>A&amp;-B 重复</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation type="unfinished"></translation>
+        <translation>从收到的命令中分离</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>跳过</translation>
     </message>
     <message>
         <source>&amp;Stop after</source>
-        <translation type="unfinished"></translation>
+        <translation>停止于</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation type="unfinished"></translation>
+        <translation>上一帧</translation>
     </message>
 </context>
 <context>
@@ -2446,7 +2449,7 @@
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>删除非分组的项</translation>
+        <translation>删除未分组项</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
@@ -2474,19 +2477,19 @@
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>折叠所有</translation>
+        <translation>全部折叠</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>展开所有</translation>
+        <translation>全部展开</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
-        <translation>定位于正在播放的曲目</translation>
+        <translation>定位于正在回放的曲目</translation>
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>进入播放队列</translation>
+        <translation>加入队列</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
@@ -2501,16 +2504,16 @@
         <translation>保存组</translation>
     </message>
     <message>
-        <source>&amp;Synchronize group</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Synchronize groups</source>
+        <translation>同步组</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>快速同步组</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>始终同步</translation>
     </message>
 </context>
 <context>
@@ -2524,7 +2527,7 @@
         <translation>过滤项</translation>
     </message>
     <message>
-        <source>Playlist is loading now...</source>
+        <source>Playlist is being loaded now...</source>
         <translation>正在载入播放列表...</translation>
     </message>
     <message>
@@ -2533,22 +2536,22 @@
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
-        <translation>确定要清除列表?</translation>
+        <translation>您确定要清除列表吗?</translation>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>确定要删除非分组目录?</translation>
+        <translation>您确定要删除非分组项吗?</translation>
     </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation type="unfinished"></translation>
+        <translation>解锁</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>锁定</translation>
     </message>
 </context>
 <context>
@@ -2585,51 +2588,53 @@
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 库过旧</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation type="unfinished"></translation>
+        <translation>不匹配的模块 API 版本</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation type="unfinished"></translation>
+        <translation>模块名重复</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation>不匹配的模块 Qt 版本</translation>
     </message>
 </context>
 <context>
     <name>QMPlay2GUIClass</name>
     <message>
         <source>Saving cover picture</source>
-        <translation>保存封面</translation>
+        <translation>正在保存封面</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is updating, please wait</source>
+        <source>Font cache is being updated, please wait</source>
         <translation>正在更新字体缓存，请稍等</translation>
     </message>
     <message>
         <source>QMPlay2 has been updated to version</source>
-        <translation>QMPlay2 已更新至最新版本</translation>
+        <translation>QMPlay2 已更新至版本</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 未更新。您想要运行更新吗（推荐）？</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
-        <translation type="unfinished"></translation>
+        <translation>QtSvg 图标引擎插件不存在。
+QMPlay2 将不会增加图标！</translation>
     </message>
     <message>
         <source>QtSvg module doesn&apos;t exist.
 QMPlay2 will not display icons!</source>
-        <translation type="unfinished"></translation>
+        <translation>QtSvg 模块不存在。
+QMPlay2 将不会显示图标！</translation>
     </message>
 </context>
 <context>
@@ -2640,7 +2645,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Adding a new radio station</source>
-        <translation>添加一个新电台</translation>
+        <translation>正在添加一个新电台</translation>
     </message>
     <message>
         <source>Add new radio station</source>
@@ -2648,7 +2653,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>姓名</translation>
+        <translation>名称</translation>
     </message>
     <message>
         <source>Address</source>
@@ -2656,90 +2661,90 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>QMPlay2 radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 电台</translation>
     </message>
     <message>
         <source>My radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>我的电台</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑选定的电台</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>移除选定的电台</translation>
     </message>
     <message>
         <source>Radio Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio Browser</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">播放</translation>
+        <translation>播放</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">入队</translation>
+        <translation>加入队列</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
-        <translation type="unfinished"></translation>
+        <translation>加入我的电台</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <source>Open radio website</source>
-        <translation type="unfinished"></translation>
+        <translation>打开电台网站</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation type="unfinished"></translation>
+        <translation>正在编辑选定的电台</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>指定名称的电台已存在！</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation type="unfinished"></translation>
+        <translation>从文件载入电台列表</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation type="unfinished"></translation>
+        <translation>保存电台列表到文件</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>载入电台列表</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>保存电台列表</translation>
     </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">姓名</translation>
+        <translation>名称</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation type="unfinished"></translation>
+        <translation>流媒体信息</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>国家</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>标签</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>分级</translation>
     </message>
 </context>
 <context>
@@ -2754,7 +2759,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>重复当前曲目</translation>
+        <translation>重复当前项</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
@@ -2774,15 +2779,15 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>随机并重复</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>组内随机并重复</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation type="unfinished"></translation>
+        <translation>播放每个文件后停止回放</translation>
     </message>
 </context>
 <context>
@@ -2801,7 +2806,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation>入队</translation>
+        <translation>加入队列</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2809,19 +2814,19 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation>用浏览器打开</translation>
+        <translation>用浏览器打开页面</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>复制网址</translation>
+        <translation>复制页面网址</translation>
     </message>
     <message>
         <source>Audio and video</source>
-        <translation type="unfinished"></translation>
+        <translation>音频和视频</translation>
     </message>
     <message>
         <source>Audio only</source>
-        <translation type="unfinished"></translation>
+        <translation>仅音频</translation>
     </message>
 </context>
 <context>
@@ -2835,11 +2840,11 @@ QMPlay2 will not display icons!</source>
     <name>SettingsWidget</name>
     <message>
         <source>Settings</source>
-        <translation>设定</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>Playback settings</source>
-        <translation>回放设定</translation>
+        <translation>回放设置</translation>
     </message>
     <message>
         <source>Modules</source>
@@ -2855,7 +2860,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Contains</source>
-        <translation type="unfinished"></translation>
+        <translation>包含</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -2863,7 +2868,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>OSD</source>
-        <translation></translation>
+        <translation>屏幕显示</translation>
     </message>
     <message>
         <source>Colors and borders</source>
@@ -2879,15 +2884,15 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Margins and alignment</source>
-        <translation>页边距和对齐</translation>
+        <translation>边距和对齐</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation>常规设置</translation>
+        <translation>通用设置</translation>
     </message>
     <message>
         <source>OSD enabled</source>
-        <translation>OSD 已启用</translation>
+        <translation>启用屏幕显示</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -2903,7 +2908,7 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>想要清除所有设置?</translation>
+        <translation>您想要清除所有设置吗？</translation>
     </message>
     <message>
         <source>New language</source>
@@ -2911,35 +2916,35 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation>设置新语言后程序重启后生效</translation>
+        <translation>设置新语言后程序将重启！</translation>
     </message>
     <message>
         <source>Video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>视频滤镜</translation>
     </message>
     <message>
         <source>Software video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>软件视频滤镜</translation>
     </message>
     <message>
-        <source>Confirm clearing the cache covers</source>
+        <source>Confirm clearing the cached covers</source>
         <translation>确认清除封面缓存</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
-        <translation>要清除所有封面缓存?</translation>
+        <translation>您要清除所有封面缓存吗？</translation>
     </message>
     <message>
         <source>Changing icons</source>
-        <translation>更改图标</translation>
+        <translation>正在更改图标</translation>
     </message>
     <message>
-        <source>To apply the icons change program will start again!</source>
-        <translation>更改图标在程序重启后生效</translation>
+        <source>To apply the icons change, the program will start again!</source>
+        <translation>更改图标后程序将重启！</translation>
     </message>
     <message>
         <source>Default or first stream</source>
-        <translation>默认 或 依靠第一个流</translation>
+        <translation>默认或第一个流媒体</translation>
     </message>
     <message>
         <source>Video output priority</source>
@@ -2955,54 +2960,55 @@ QMPlay2 will not display icons!</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">默认</translation>
+        <translation>默认</translation>
     </message>
     <message>
         <source>Automatically check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>自动检查更新</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>确认删除 &quot;youtube-dl&quot;</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation type="unfinished"></translation>
+        <translation>您要删除 &quot;youtube-dl&quot; 软件吗？</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation type="unfinished"></translation>
+        <translation>较慢，但跳转更精确。
+半选中不影响滑块搜寻。</translation>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>硬件加速视频滤镜</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation>正在更改 OpenGL 模式</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>设置新 OpenGL 模式后程序将重启！</translation>
     </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>操作</translation>
     </message>
     <message>
         <source>Key sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>按键序列</translation>
     </message>
 </context>
 <context>
     <name>SimpleVisW</name>
     <message>
         <source>Simple visualization</source>
-        <translation>简单的可视化效果</translation>
+        <translation>简单可视化效果</translation>
     </message>
 </context>
 <context>
@@ -3021,11 +3027,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <translation>&amp;A 到 Z</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <translation>&amp;Z 到 A</translation>
     </message>
 </context>
 <context>
@@ -3060,7 +3066,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>歌词</translation>
     </message>
 </context>
 <context>
@@ -3107,11 +3113,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Load cover picture</source>
-        <translation>载入封面</translation>
+        <translation>载入封面图片</translation>
     </message>
     <message>
         <source>Save cover picture</source>
-        <translation>保存封面</translation>
+        <translation>保存封面图片</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -3119,7 +3125,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Loading cover picture</source>
-        <translation>载入封面图片</translation>
+        <translation>正在载入封面图片</translation>
     </message>
 </context>
 <context>
@@ -3130,69 +3136,69 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hz</source>
-        <translation>Hz</translation>
+        <translation>赫兹</translation>
     </message>
 </context>
 <context>
     <name>Updater</name>
     <message>
         <source>QMPlay2 updates</source>
-        <translation>更新QMPlay2</translation>
+        <translation>QMPlay2 更新</translation>
     </message>
     <message>
         <source>Application is up-to-date</source>
-        <translation type="unfinished"></translation>
+        <translation>程序版本最新</translation>
     </message>
     <message>
         <source>Download update</source>
-        <translation type="unfinished"></translation>
+        <translation>下载更新</translation>
     </message>
     <message>
         <source>Apply update</source>
-        <translation type="unfinished"></translation>
+        <translation>应用更新</translation>
     </message>
     <message>
         <source>No update available</source>
-        <translation type="unfinished"></translation>
+        <translation>无可用更新</translation>
     </message>
     <message>
         <source>Error checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>检查更新错误</translation>
     </message>
     <message>
         <source>Error downloading the update</source>
-        <translation type="unfinished"></translation>
+        <translation>下载更新错误</translation>
     </message>
     <message>
         <source>Checking for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>正在检查更新</translation>
     </message>
     <message>
         <source>The update has been downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>更新已下载</translation>
     </message>
     <message>
         <source>Error creating update file</source>
-        <translation type="unfinished"></translation>
+        <translation>创建更新文件错误</translation>
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation type="unfinished"></translation>
+        <translation>已忽略此自动更新，请按键更新</translation>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 更新可用！</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>新 QMPlay2 版本: %1</translation>
     </message>
 </context>
 <context>
     <name>VAAPI</name>
     <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>不支持的去隔行算法</translation>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation>不支持的反交错算法</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
@@ -3203,93 +3209,93 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">不支持的图像锐化滤镜</translation>
+        <translation>不支持的图像锐化滤镜</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>不支持的反交错算法</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
+        <translation>不支持的降噪滤镜</translation>
     </message>
 </context>
 <context>
     <name>VFilters</name>
     <message>
-        <source>Produces one extra frame which is average of two neighbour frames</source>
-        <translation type="unfinished"></translation>
+        <source>Produce one extra frame which is average of two neighbour frames</source>
+        <translation>在相临两帧间平均生成一个额外帧</translation>
     </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">重置</translation>
+        <translation>重置</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation type="unfinished">亮度</translation>
+        <translation>亮度</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation type="unfinished">对比度</translation>
+        <translation>对比度</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation type="unfinished">饱和度</translation>
+        <translation>饱和度</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation type="unfinished">色调</translation>
+        <translation>色调</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation type="unfinished">锐化</translation>
+        <translation>锐度</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>重置视频调节</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低亮度</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加亮度</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低对比度</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低饱和度</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加饱和度</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低色调</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加色调</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低锐度</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加锐度</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加对比度</translation>
     </message>
 </context>
 <context>
@@ -3319,15 +3325,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>旋转90度</translation>
+        <translation>旋转 90 度</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation type="unfinished"></translation>
+        <translation>球面视图</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>视频调节</translation>
     </message>
 </context>
 <context>
@@ -3338,7 +3344,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Cannot initialize the deinterlacing filter</source>
-        <translation>无法初使化去隔行滤镜</translation>
+        <translation>无法初使化反交错滤镜</translation>
     </message>
     <message>
         <source>Error initializing filter</source>
@@ -3356,7 +3362,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation type="unfinished"></translation>
+        <translation>分离声道</translation>
     </message>
 </context>
 <context>
@@ -3378,7 +3384,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>紧凑模式</translation>
+        <translation>精简视图</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -3386,89 +3392,89 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>始终在最前端</translation>
     </message>
 </context>
 <context>
     <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">搜索</translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation type="unfinished">搜索于YouTube</translation>
+        <translation>在 YouTube 搜索</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">连接错误</translation>
+        <translation>连接错误</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">播放列表</translation>
+        <translation>播放列表</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>确认</translation>
     </message>
     <message>
         <source>Relevance</source>
-        <translation type="unfinished"></translation>
+        <translation>相关</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation type="unfinished"></translation>
+        <translation>上传日期</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation type="unfinished"></translation>
+        <translation>观看数</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>分级</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索结果分类 ...</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>首选质量</translation>
     </message>
 </context>
 <context>
     <name>YouTubeDL</name>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully updated!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; 已被成功更新！</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; 已被成功下载！</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在更新 &quot;youtube-dl&quot;，请稍等...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; 更新已被取消！</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在下载 &quot;youtube-dl&quot;，请稍等...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; 下载已被取消！</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;youtube-dl&quot; 下载失败！</translation>
     </message>
 </context>
 </TS>

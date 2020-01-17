@@ -39,7 +39,7 @@ QList<VFilters::Info> VFilters::getModulesInfo(const bool) const
     modulesInfo += Info(BlendDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(DiscardDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(YadifNoSpatialDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
-    modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produces one extra frame which is average of two neighbour frames"));
+    modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produce one extra frame which is average of two neighbour frames"));
     return modulesInfo;
 }
 void *VFilters::createInstance(const QString &name)

@@ -58,7 +58,7 @@
             {
                 QDialog d(QMPlay2GUI.mainW);
                 d.setWindowTitle(QCoreApplication::applicationName());
-                QLabel l(QObject::tr("Font cache is updating, please wait"));
+                QLabel l(QObject::tr("Font cache is being updated, please wait"));
                 QProgressBar p;
                 p.setRange(0, 0);
                 QVBoxLayout la(&d);

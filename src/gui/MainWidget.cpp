@@ -1700,7 +1700,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
     (
         (QMPlay2Core.isWorking() && QMessageBox::question(this, QString(), tr("QMPlay2 is doing something in the background.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
 #ifdef UPDATER
-        || (updater.downloading() && QMessageBox::question(this, QString(), tr("The update is downloading now.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+        || (updater.downloading() && QMessageBox::question(this, QString(), tr("The update is being downloaded now.") + " " + quitMsg, QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
 #endif
     )
     {

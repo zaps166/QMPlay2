@@ -137,7 +137,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QGridLayout *layout;
 
 #ifdef USE_MPRIS2
-    MPRIS2B = new QCheckBox(tr("Using the program via MPRIS2 interface"));
+    MPRIS2B = new QCheckBox(tr("Use the program via MPRIS2 interface"));
     MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 #endif
 
@@ -146,8 +146,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     userNameB = new QCheckBox(tr("Show user name in search results"));
     userNameB->setChecked(sets().getBool("YouTube/ShowUserName"));
 
-    subtitlesB = new QCheckBox(tr("Display subtitles if available"));
-    subtitlesB->setToolTip(tr("Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language."));
+    subtitlesB = new QCheckBox(tr("Display available subtitles"));
+    subtitlesB->setToolTip(tr("Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language."));
     subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
 
     qualityPreset = new QComboBox;
@@ -166,7 +166,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #ifdef USE_LASTFM
     QGroupBox *lastFMB = new QGroupBox("LastFM");
 
-    downloadCoversGB = new QGroupBox(tr("Downloads covers"));
+    downloadCoversGB = new QGroupBox(tr("Download covers"));
     downloadCoversGB->setCheckable(true);
     downloadCoversGB->setChecked(sets().getBool("LastFM/DownloadCovers"));
 

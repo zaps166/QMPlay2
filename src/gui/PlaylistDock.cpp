@@ -654,7 +654,7 @@ void PlaylistDock::findNext()
 void PlaylistDock::visibleItemsCount(int count)
 {
     if (count < 0)
-        statusL->setText(tr("Playlist is loading now..."));
+        statusL->setText(tr("Playlist is being loaded now..."));
     else
         statusL->setText(tr("Visible entries") + ": " + QString::number(count));
 }
