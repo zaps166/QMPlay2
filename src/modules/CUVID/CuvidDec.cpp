@@ -19,39 +19,20 @@
 #include <CuvidDec.hpp>
 
 #include <DeintHWPrepareFilter.hpp>
-#include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
-#include <ImgScaler.hpp>
+#include <CuvidAPI.hpp>
+#ifdef USE_OPENGL
+#   include <CuvidOpenGL.hpp>
+#endif
 
-#include <QLibrary>
-#include <QMutex>
 #include <QDebug>
-
-#include <GL/gl.h>
 
 #ifdef Q_OS_WIN
     #include <windows.h>
 #endif
 
-#ifndef GL_R8
-    #define GL_R8 0x8229
-#endif
-#ifndef GL_RG8
-    #define GL_RG8 0x822B
-#endif
-#ifndef GL_RED
-    #define GL_RED 0x1903
-#endif
-#ifndef GL_RG
-    #define GL_RG 0x8227
-#endif
-
-#include <unordered_set>
-
 using namespace std;
-
-static QMutex g_cudaMutex(QMutex::Recursive);
 
 extern "C"
 {
@@ -61,173 +42,7 @@ extern "C"
     #include <libswscale/swscale.h>
 }
 
-namespace cu
-{
-    using  cuInitType = CUresult CUDAAPI (*)(unsigned int flags);
-    static cuInitType init;
-
-    using  cuDeviceGetType = CUresult CUDAAPI (*)(CUdevice *device, int ordinal);
-    static cuDeviceGetType deviceGet;
-
-    using  cuCtxCreateType = CUresult CUDAAPI (*)(CUcontext *pctx, unsigned int flags, CUdevice dev);
-    static cuCtxCreateType ctxCreate;
-
-    using  cuCtxPushCurrentType = CUresult CUDAAPI (*)(CUcontext ctx);
-    static cuCtxPushCurrentType ctxPushCurrent;
-
-    using  cuCtxPopCurrentType = CUresult CUDAAPI (*)(CUcontext *pctx);
-    static cuCtxPopCurrentType ctxPopCurrent;
-
-    using  cuMemcpyDtoHType = CUresult CUDAAPI (*)(void *dstHost, CUdeviceptr srcDevice, size_t byteCount);
-    static cuMemcpyDtoHType memcpyDtoH;
-
-    using  cuMemcpy2DType = CUresult CUDAAPI (*)(const CUDA_MEMCPY2D *pCopy);
-    static cuMemcpy2DType memcpy2D;
-
-    using  cuGraphicsGLRegisterImageType = CUresult CUDAAPI (*)(CUgraphicsResource *pCudaResource, quint32 image, qint32 target, unsigned int flags);
-    static cuGraphicsGLRegisterImageType graphicsGLRegisterImage;
-
-    using  cuGraphicsMapResourcesType = CUresult CUDAAPI (*)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
-    static cuGraphicsMapResourcesType graphicsMapResources;
-
-    using  cuGraphicsSubResourceGetMappedArrayType = CUresult CUDAAPI (*)(CUarray *pArray, CUgraphicsResource resource, unsigned int arrayIndex, unsigned int mipLevel);
-    static cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray;
-
-    using  cuGraphicsUnmapResourcesType = CUresult CUDAAPI (*)(unsigned int count, CUgraphicsResource *resources, CUstream hStream);
-    static cuGraphicsUnmapResourcesType graphicsUnmapResources;
-
-    using  cuGraphicsUnregisterResourceType = CUresult CUDAAPI (*)(CUgraphicsResource resource);
-    static cuGraphicsUnregisterResourceType graphicsUnregisterResource;
-
-    using  cuCtxDestroyType = CUresult CUDAAPI (*)(CUcontext ctx);
-    static cuCtxDestroyType ctxDestroy;
-
-    static bool load()
-    {
-#ifdef Q_OS_WIN
-        QLibrary lib("nvcuda");
-#else
-        QLibrary lib("cuda");
-#endif
-        if (lib.load())
-        {
-            init = (cuInitType)lib.resolve("cuInit");
-            deviceGet = (cuDeviceGetType)lib.resolve("cuDeviceGet");
-            ctxCreate = (cuCtxCreateType)lib.resolve("cuCtxCreate_v2");
-            ctxPushCurrent = (cuCtxPushCurrentType)lib.resolve("cuCtxPushCurrent_v2");
-            ctxPopCurrent = (cuCtxPopCurrentType)lib.resolve("cuCtxPopCurrent_v2");
-            memcpyDtoH = (cuMemcpyDtoHType)lib.resolve("cuMemcpyDtoH_v2");
-            memcpy2D = (cuMemcpy2DType)lib.resolve("cuMemcpy2D_v2");
-            graphicsGLRegisterImage = (cuGraphicsGLRegisterImageType)lib.resolve("cuGraphicsGLRegisterImage");
-            graphicsMapResources = (cuGraphicsMapResourcesType)lib.resolve("cuGraphicsMapResources");
-            graphicsSubResourceGetMappedArray = (cuGraphicsSubResourceGetMappedArrayType)lib.resolve("cuGraphicsSubResourceGetMappedArray");
-            graphicsUnmapResources = (cuGraphicsUnmapResourcesType)lib.resolve("cuGraphicsUnmapResources");
-            graphicsUnregisterResource = (cuGraphicsUnregisterResourceType)lib.resolve("cuGraphicsUnregisterResource");
-            ctxDestroy = (cuCtxDestroyType)lib.resolve("cuCtxDestroy_v2");
-            if (init && init(0) != CUDA_SUCCESS)
-                return false;
-            return (deviceGet && ctxCreate && ctxPushCurrent && ctxPopCurrent && memcpyDtoH && memcpy2D && graphicsGLRegisterImage && graphicsMapResources && graphicsSubResourceGetMappedArray && graphicsUnmapResources && graphicsUnregisterResource && ctxDestroy);
-        }
-        return false;
-    }
-
-    static CUcontext createContext()
-    {
-        CUcontext ctx, tmpCtx;
-        CUdevice dev = -1;
-        const int devIdx = 0;
-        if (deviceGet(&dev, devIdx) != CUDA_SUCCESS)
-            return nullptr;
-        if (ctxCreate(&ctx, CU_CTX_SCHED_BLOCKING_SYNC, dev) != CUDA_SUCCESS)
-            return nullptr;
-        ctxPopCurrent(&tmpCtx);
-        return ctx;
-    }
-
-    class ContextGuard
-    {
-        Q_DISABLE_COPY(ContextGuard)
-
-    public:
-        inline ContextGuard(CUcontext ctx) :
-            m_locked(true)
-        {
-            g_cudaMutex.lock();
-            ctxPushCurrent(ctx);
-        }
-        inline ~ContextGuard()
-        {
-            unlock();
-        }
-
-        inline void unlock()
-        {
-            if (m_locked)
-            {
-                CUcontext ctx;
-                ctxPopCurrent(&ctx);
-                g_cudaMutex.unlock();
-                m_locked = false;
-            }
-        }
-
-    private:
-        bool m_locked;
-    };
-}
-
-namespace cuvid
-{
-    using  cuvidCreateVideoParserType = CUresult CUDAAPI (*)(CUvideoparser *pObj, CUVIDPARSERPARAMS *pParams);
-    static cuvidCreateVideoParserType createVideoParser;
-
-    using  cuvidDestroyVideoParserType = CUresult CUDAAPI (*)(CUvideoparser obj);
-    static cuvidDestroyVideoParserType destroyVideoParser;
-
-    using  cuvidDecodePictureType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, CUVIDPICPARAMS *pPicParams);
-    static cuvidDecodePictureType decodePicture;
-
-    using  cuvidCreateDecoderType = CUresult CUDAAPI (*)(CUvideodecoder *phDecoder, CUVIDDECODECREATEINFO *pdci);
-    static cuvidCreateDecoderType createDecoder;
-
-    using  cuvidDestroyDecoderType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder);
-    static cuvidDestroyDecoderType destroyDecoder;
-
-    using  cuvidMapVideoFrameType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, int nPicIdx, quintptr *pDevPtr, unsigned int *pPitch, CUVIDPROCPARAMS *pVPP);
-    static cuvidMapVideoFrameType mapVideoFrame;
-
-    using  cuvidUnmapVideoFrameType = CUresult CUDAAPI (*)(CUvideodecoder hDecoder, quintptr DevPtr);
-    static cuvidUnmapVideoFrameType unmapVideoFrame;
-
-    using  cuvidParseVideoDataType = CUresult CUDAAPI (*)(CUvideoparser obj, CUVIDSOURCEDATAPACKET *pPacket);
-    static cuvidParseVideoDataType parseVideoData;
-
-    static bool load()
-    {
-        QLibrary lib("nvcuvid");
-        if (lib.load())
-        {
-            createVideoParser = (cuvidCreateVideoParserType)lib.resolve("cuvidCreateVideoParser");
-            destroyVideoParser = (cuvidDestroyVideoParserType)lib.resolve("cuvidDestroyVideoParser");
-            decodePicture = (cuvidDecodePictureType)lib.resolve("cuvidDecodePicture");
-            createDecoder = (cuvidCreateDecoderType)lib.resolve("cuvidCreateDecoder");
-            destroyDecoder = (cuvidDestroyDecoderType)lib.resolve("cuvidDestroyDecoder");
-            if (sizeof(void *) == 8)
-            {
-                mapVideoFrame = (cuvidMapVideoFrameType)lib.resolve("cuvidMapVideoFrame64");
-                unmapVideoFrame = (cuvidUnmapVideoFrameType)lib.resolve("cuvidUnmapVideoFrame64");
-            }
-            else
-            {
-                mapVideoFrame = (cuvidMapVideoFrameType)lib.resolve("cuvidMapVideoFrame");
-                unmapVideoFrame = (cuvidUnmapVideoFrameType)lib.resolve("cuvidUnmapVideoFrame");
-            }
-            parseVideoData = (cuvidParseVideoDataType)lib.resolve("cuvidParseVideoData");
-            return (createVideoParser && destroyVideoParser && decodePicture && createDecoder && destroyDecoder && mapVideoFrame && unmapVideoFrame && parseVideoData);
-        }
-        return false;
-    }
-
+namespace cuvid {
     static int CUDAAPI videoSequence(CuvidDec *cuvidDec, CUVIDEOFORMAT *format)
     {
         return cuvidDec->videoSequence(format);
@@ -242,251 +57,12 @@ namespace cuvid
     }
 }
 
-/* HWAccelInterface implementation */
-
-class CuvidHWAccel : public HWAccelInterface
-{
-public:
-    CuvidHWAccel(CUcontext cuCtx)
-        : m_cuCtx(cuCtx)
-    {}
-    ~CuvidHWAccel() final
-    {
-        if (m_canDestroyCuda)
-        {
-            cu::ContextGuard cuCtxGuard(m_cuCtx); //Is it necessary here?
-            cu::ctxDestroy(m_cuCtx);
-        }
-    }
-
-    QString name() const override
-    {
-        return "CUVID";
-    }
-
-    Format getFormat() const override
-    {
-        return NV12;
-    }
-
-    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
-    {
-        cu::ContextGuard cuCtxGuard(m_cuCtx);
-
-        bool mustRegister = false;
-        for (int p = 0; p < 2; ++p)
-        {
-            if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
-            {
-                clear();
-                for (int p = 0; p < 2; ++p)
-                {
-                    m_widths[p] = widths[p];
-                    m_heights[p] = heights[p];
-
-                    glGenTextures(1, &m_textures[p]);
-                    glBindTexture(GL_TEXTURE_2D, m_textures[p]);
-                    glTexImage2D(GL_TEXTURE_2D, 0, (p == 0) ? GL_R8 : GL_RG8, widths[p], heights[p], 0, (p == 0) ? GL_RED : GL_RG, GL_UNSIGNED_BYTE, nullptr);
-                }
-                mustRegister = true;
-                break;
-            }
-        }
-
-        for (int p = 0; p < 2; ++p)
-            setTextureParamsFn(m_textures[p]);
-
-        if (!mustRegister)
-            return true;
-
-        for (int p = 0; p < 2; ++p)
-        {
-            if (cu::graphicsGLRegisterImage(&m_res[p], m_textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) != CUDA_SUCCESS)
-                return false;
-        }
-
-        return true;
-    }
-    void clear() override
-    {
-        cu::ContextGuard cuCtxGuard(m_cuCtx);
-        for (int p = 0; p < 2; ++p)
-        {
-            if (m_res[p])
-            {
-                cu::graphicsUnregisterResource(m_res[p]);
-                m_res[p] = nullptr;
-            }
-            if (m_textures[p])
-            {
-                glDeleteTextures(1, &m_textures[p]);
-                m_textures[p] = 0;
-            }
-            m_widths[p] = 0;
-            m_heights[p] = 0;
-        }
-    }
-
-    MapResult mapFrame(Frame &videoFrame) override
-    {
-        cu::ContextGuard cuCtxGuard(m_cuCtx);
-
-        const int pictureIdx = videoFrame.customID();
-
-        if (!m_cuvidDec || !m_validPictures.contains(pictureIdx))
-            return MapNotReady;
-
-        CUVIDPROCPARAMS vidProcParams;
-        memset(&vidProcParams, 0, sizeof vidProcParams);
-
-        vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
-        if (videoFrame.isInterlaced())
-            vidProcParams.second_field = videoFrame.isSecondField();
-        else
-            vidProcParams.progressive_frame = true;
-
-        quintptr mappedFrame = 0;
-        unsigned pitch = 0;
-
-        if (cuvid::mapVideoFrame(m_cuvidDec, pictureIdx, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-            return MapError;
-
-        if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
-        {
-            bool copied = true;
-
-            CUDA_MEMCPY2D cpy;
-            memset(&cpy, 0, sizeof cpy);
-            cpy.srcMemoryType = CU_MEMORYTYPE_DEVICE;
-            cpy.dstMemoryType = CU_MEMORYTYPE_ARRAY;
-            cpy.srcDevice = mappedFrame;
-            cpy.srcPitch = pitch;
-            cpy.WidthInBytes = videoFrame.width();
-            for (int p = 0; p < 2; ++p)
-            {
-                CUarray array = nullptr;
-                if (cu::graphicsSubResourceGetMappedArray(&array, m_res[p], 0, 0) != CUDA_SUCCESS)
-                {
-                    copied = false;
-                    break;
-                }
-
-                cpy.srcY = p ? m_codedHeight : 0;
-                cpy.dstArray = array;
-                cpy.Height = videoFrame.height(p);
-
-                if (cu::memcpy2D(&cpy) != CUDA_SUCCESS)
-                {
-                    copied = false;
-                    break;
-                }
-            }
-
-            cu::graphicsUnmapResources(2, m_res, nullptr);
-
-            if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
-                return MapOk;
-        }
-
-        return MapError;
-    }
-    quint32 getTexture(int plane) override
-    {
-        return m_textures[plane];
-    }
-
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
-    {
-        cu::ContextGuard cuCtxGuard(m_cuCtx);
-
-        quintptr mappedFrame = 0;
-        unsigned pitch = 0;
-
-        CUVIDPROCPARAMS vidProcParams;
-        memset(&vidProcParams, 0, sizeof vidProcParams);
-        vidProcParams.progressive_frame = !videoFrame.isInterlaced();
-        vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
-
-        if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-            return false;
-
-        const size_t size = pitch * videoFrame.height();
-        const size_t halfSize = pitch * ((videoFrame.height() + 1) >> 1);
-
-        const qint32 linesize[2] = {
-            (qint32)pitch,
-            (qint32)pitch
-        };
-        quint8 *data[2] = {
-            new quint8[size],
-            new quint8[halfSize]
-        };
-
-        bool copied = (cu::memcpyDtoH(data[0], mappedFrame, size) == CUDA_SUCCESS);
-        if (copied)
-            copied &= (cu::memcpyDtoH(data[1], mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
-
-        cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame);
-
-        cuCtxGuard.unlock();
-
-        if (copied)
-            nv12ToRGB32->scale((const void **)data, linesize, dest);
-
-        for (int p = 0; p < 2; ++p)
-            delete[] data[p];
-
-        return copied;
-    }
-
-    /**/
-
-    inline void allowDestroyCuda()
-    {
-        m_canDestroyCuda = true;
-    }
-
-    inline CUcontext getCudaContext() const
-    {
-        return m_cuCtx;
-    }
-
-    inline void setAvailableSurface(quintptr surfaceId)
-    {
-        m_validPictures.insert(surfaceId);
-    }
-
-    void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
-    {
-        m_codedHeight = codedHeight;
-        m_cuvidDec = cuvidDec;
-        m_validPictures.clear();
-    }
-
-private:
-    bool m_canDestroyCuda = false;
-
-    int m_codedHeight = 0;
-
-    quint32 m_textures[2] = {};
-
-    int m_widths[2] = {};
-    int m_heights[2] = {};
-
-    const CUcontext m_cuCtx;
-    CUvideodecoder m_cuvidDec = nullptr;
-
-    CUgraphicsResource m_res[2] = {};
-
-    QSet<int> m_validPictures;
-};
-
 /**/
 
 constexpr quint32 g_maxSurfaces = 25;
 
-QMutex CuvidDec::loadMutex;
-int CuvidDec::loadState = -1;
+static QMutex loadMutex;
+static int loadState = -1;
 
 bool CuvidDec::canCreateInstance()
 {
@@ -608,8 +184,10 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
         return 0;
     }
 
+#ifdef USE_OPENGL
     if (m_cuvidHWAccel)
         m_cuvidHWAccel->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
+#endif
 
     return 1;
 }
@@ -744,9 +322,11 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
             };
             if (m_cuvidHWAccel)
             {
+#ifdef USE_OPENGL
                 m_cuvidHWAccel->setAvailableSurface(dispInfo.picture_index);
                 createFrame();
                 decoded.setCustomID(dispInfo.picture_index);
+#endif
             }
             else
             {
@@ -934,12 +514,14 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer)
     {
-        m_cuvidHWAccel = writer->getHWAccelInterface<CuvidHWAccel>();
+#ifdef USE_OPENGL
+        m_cuvidHWAccel = writer->getHWAccelInterface<CuvidOpenGL>();
         if (m_cuvidHWAccel)
         {
             m_cuCtx = m_cuvidHWAccel->getCudaContext();
             m_writer = writer;
         }
+#endif
     }
 
     if (!m_cuCtx && !(m_cuCtx = cu::createContext()))
@@ -947,10 +529,14 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_writer && !m_copyVideo)
     {
-        m_writer = VideoWriter::createOpenGL2(make_shared<CuvidHWAccel>(m_cuCtx));
+#ifdef USE_OPENGL
+        m_writer = VideoWriter::createOpenGL2(make_shared<CuvidOpenGL>(m_cuCtx));
         if (!m_writer)
             return false;
-        m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidHWAccel>();
+        m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidOpenGL>();
+#else
+        return false;
+#endif
     }
 
     cu::ContextGuard cuCtxGuard(m_cuCtx);
@@ -987,11 +573,13 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
         return false;
     }
 
+#ifdef USE_OPENGL
     if (m_cuvidHWAccel)
     {
         m_cuvidHWAccel->allowDestroyCuda();
         m_filter = make_shared<DeintHWPrepareFilter>();
     }
+#endif
 
     m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
     m_colorSpace = streamInfo.color_space;
@@ -1049,8 +637,10 @@ bool CuvidDec::createCuvidVideoParser()
 }
 void CuvidDec::destroyCuvid(bool all)
 {
+#ifdef USE_OPENGL
     if (m_cuvidHWAccel)
         m_cuvidHWAccel->setDecoderAndCodedHeight(nullptr, 0);
+#endif
     cuvid::destroyDecoder(m_cuvidDec);
     m_cuvidDec = nullptr;
     if (all)

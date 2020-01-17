@@ -4,16 +4,23 @@ project(CUVID)
 set(CUVID_HDR
     Cuvid.hpp
     CuvidDec.hpp
+    CuvidAPI.hpp
 )
 
 set(CUVID_SRC
     Cuvid.cpp
     CuvidDec.cpp
+    CuvidAPI.cpp
 )
 
 set(CUVID_RESOURCES
    icon.qrc
 )
+
+if (USE_OPENGL)
+    list(APPEND CUVID_HDR CuvidOpenGL.hpp)
+    list(APPEND CUVID_SRC CuvidOpenGL.cpp)
+endif()
 
 link_directories(
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -44,7 +51,7 @@ target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )
 
-if(WIN32)
+if(WIN32 AND USE_OPENGL)
     target_link_libraries(${PROJECT_NAME} opengl32)
 endif()
 

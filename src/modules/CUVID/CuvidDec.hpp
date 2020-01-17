@@ -26,7 +26,7 @@
 #include <QCoreApplication>
 #include <QQueue>
 
-class CuvidHWAccel;
+class CuvidOpenGL;
 class VideoWriter;
 
 struct AVBSFContext;
@@ -36,9 +36,6 @@ struct AVPacket;
 class CuvidDec final : public Decoder
 {
     Q_DECLARE_TR_FUNCTIONS(CuvidDec)
-
-    static QMutex loadMutex;
-    static int loadState;
 
 public:
     static bool canCreateInstance();
@@ -78,7 +75,7 @@ private:
 private:
     VideoWriter *m_writer;
     std::shared_ptr<VideoFilter> m_filter;
-    std::shared_ptr<CuvidHWAccel> m_cuvidHWAccel;
+    std::shared_ptr<CuvidOpenGL> m_cuvidHWAccel;
 
     bool m_limited;
     AVColorSpace m_colorSpace;

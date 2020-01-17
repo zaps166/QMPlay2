@@ -1,5 +1,7 @@
 /* Types from: cuviddec.h and nvcuvid.h */
 
+#pragma once
+
 enum cudaVideoCodec
 {
     cudaVideoCodec_MPEG1 = 0,
