@@ -55,6 +55,12 @@ if(WIN32)
     add_feature_info(CMD USE_CMD "Show CMD when running QMPlay2")
 endif()
 
+option(USE_OPENGL "Build with OpenGL support" ON)
+add_feature_info(OpenGL USE_OPENGL "Build with OpenGL support")
+if(USE_OPENGL)
+    add_definitions(-DUSE_OPENGL)
+endif()
+
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
@@ -97,9 +103,6 @@ add_feature_info(AudioFilters USE_AUDIOFILTERS "Build with AudioFilters module")
 
 option(USE_VIDEOFILTERS "Build with VideoFilters module" ON)
 add_feature_info(VideoFilters USE_VIDEOFILTERS "Build with VideoFilters module")
-
-option(USE_OPENGL2 "Build with OpenGL2 module" ON)
-add_feature_info(OpenGL2 USE_OPENGL2 "Build with OpenGL2 module")
 
 option(USE_PORTAUDIO "Build with PortAudio module" ${DEFAULT_PORTAUDIO})
 add_feature_info(PortAudio USE_PORTAUDIO "Build with PortAudio module")

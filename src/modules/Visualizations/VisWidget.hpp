@@ -21,7 +21,9 @@
 #include <QWidget>
 #include <QTimer>
 
-#include <QOpenGLWidget>
+#ifdef USE_OPENGL
+#   include <QOpenGLWidget>
+#endif
 
 class DockWidget;
 
@@ -56,8 +58,10 @@ private:
 
     bool eventFilter(QObject *watched, QEvent *event) override final;
 
-    QOpenGLWidget *glW;
+#ifdef USE_OPENGL
+    QOpenGLWidget *glW = nullptr;
     bool m_pendingUpdate = false;
+#endif
     const bool m_isWL;
     bool dockWidgetVisible = false;
 private slots:

@@ -49,7 +49,6 @@ void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
 VisWidget::VisWidget()
     : stopped(true)
     , dw(new DockWidget)
-    , glW(nullptr)
     , m_isWL(QGuiApplication::platformName().startsWith("wayland"))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -71,13 +70,16 @@ bool VisWidget::canStart() const
 
 void VisWidget::stop()
 {
+#ifdef USE_OPENGL
     if (glW)
         m_pendingUpdate = true;
+#endif
     updateVisualization();
 }
 
 void VisWidget::setUseOpenGL(bool b)
 {
+#ifdef USE_OPENGL
     m_pendingUpdate = false;
     if (b && !glW)
     {
@@ -95,12 +97,17 @@ void VisWidget::setUseOpenGL(bool b)
         delete glW;
         glW = nullptr;
     }
+#else
+    Q_UNUSED(b)
+#endif
 }
 
 void VisWidget::resizeEvent(QResizeEvent *e)
 {
+#ifdef USE_OPENGL
     if (glW)
         glW->setGeometry(QRect(QPoint(), size()));
+#endif
     QWidget::resizeEvent(e);
 }
 
@@ -113,8 +120,10 @@ void VisWidget::mouseDoubleClickEvent(QMouseEvent *e)
 }
 void VisWidget::paintEvent(QPaintEvent *)
 {
+#ifdef USE_OPENGL
     if (glW)
         return;
+#endif
     QPainter p(this);
     paint(p);
 }
@@ -127,6 +136,7 @@ void VisWidget::changeEvent(QEvent *event)
 
 bool VisWidget::eventFilter(QObject *watched, QEvent *event)
 {
+#ifdef USE_OPENGL
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
@@ -136,6 +146,7 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
         m_pendingUpdate = false;
         return true;
     }
+#endif
     return QWidget::eventFilter(watched, event);
 }
 
@@ -160,16 +171,20 @@ void VisWidget::visibilityChanged(bool v)
         stop();
     else if (!stopped)
         start();
+#ifdef USE_OPENGL
     else if (dockWidgetVisible && m_pendingUpdate)
         updateVisualization();
+#endif
 }
 void VisWidget::updateVisualization()
 {
+#ifdef USE_OPENGL
     if (glW)
     {
         glW->update();
         return;
     }
+#endif
     update();
 }
 void VisWidget::showSettings()

@@ -20,7 +20,9 @@
 #include <DeintHWPrepareFilter.hpp>
 #include <VideoWriter.hpp>
 #include <FFCommon.hpp>
-#include <VAAPIOpenGL.hpp>
+#ifdef USE_OPENGL
+#   include <VAAPIOpenGL.hpp>
+#endif
 
 #include <StreamInfo.hpp>
 
@@ -168,12 +170,14 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer) //Writer is already created
     {
+#ifdef USE_OPENGL
         auto vaapiOpenGL = writer->getHWAccelInterface<VAAPIOpenGL>();
         if (vaapiOpenGL)
         {
             m_vaapi = vaapiOpenGL->getVAAPI();
             m_hwAccelWriter = writer;
         }
+#endif
     }
 
     if (!m_vaapi)
@@ -197,8 +201,10 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
+#ifdef USE_OPENGL
         auto vaapiOpengGL = std::make_shared<VAAPIOpenGL>(m_vaapi);
         m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
+#endif
         if (!m_hwAccelWriter)
             return false;
         m_vaapi->vpp_deint_type = m_vppDeintType;

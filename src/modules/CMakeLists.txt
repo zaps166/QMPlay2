@@ -38,7 +38,7 @@ if(USE_VIDEOFILTERS)
     add_subdirectory(VideoFilters)
 endif()
 
-if(USE_OPENGL2)
+if(USE_OPENGL)
     add_subdirectory(OpenGL2)
 endif()
 

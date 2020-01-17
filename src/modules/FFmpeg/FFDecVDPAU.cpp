@@ -21,7 +21,10 @@
 #include <StreamInfo.hpp>
 #include <Functions.hpp>
 #include <FFCommon.hpp>
-#include <VDPAUOpenGL.hpp>
+#include <VDPAU.hpp>
+#ifdef USE_OPENGL
+#   include <VDPAUOpenGL.hpp>
+#endif
 
 extern "C"
 {
@@ -147,11 +150,13 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer) // Writer is already created
     {
+#ifdef USE_OPENGL
         if (auto vdpauOpenGL = writer->getHWAccelInterface<VDPAUOpenGL>())
         {
             m_vdpau = vdpauOpenGL->getVDPAU();
             m_hwAccelWriter = writer;
         }
+#endif
     }
 
     AVBufferRef *hwDeviceBufferRef = nullptr;
@@ -177,7 +182,9 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
+#ifdef USE_OPENGL
         m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VDPAUOpenGL>(m_vdpau));
+#endif
         if (!m_hwAccelWriter)
             return false;
         m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);

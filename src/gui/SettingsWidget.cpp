@@ -365,15 +365,18 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page1->autoUpdatesB->setText(tr("Automatically check for updates"));
 #endif
 
-        if (QMPlay2CoreClass::isGlOnWindowForced())
-        {
+        auto deleteGlOnWindowB = [this] {
             delete page1->glOnWindowB;
             page1->glOnWindowB = nullptr;
-        }
+        };
+#ifdef USE_OPENGL
+        if (QMPlay2CoreClass::isGlOnWindowForced())
+            deleteGlOnWindowB();
         else
-        {
             page1->glOnWindowB->setChecked(QMPlay2Core.isGlOnWindow());
-        }
+#else
+        deleteGlOnWindowB();
+#endif
 
         if (Notifies::hasBoth())
             page1->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));

@@ -188,11 +188,13 @@ int QMPlay2CoreClass::getCPUFlags()
     return av_get_cpu_flags();
 }
 
+#ifdef USE_OPENGL
 bool QMPlay2CoreClass::isGlOnWindowForced()
 {
     static bool forced = (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
     return forced;
 }
+#endif
 
 void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName)
 {
@@ -580,7 +582,11 @@ void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreC
 
 bool QMPlay2CoreClass::isGlOnWindow() const
 {
+#ifdef USE_OPENGL
     return (isGlOnWindowForced() || settings->getBool("UseGLOnWindow"));
+#else
+    return false;
+#endif
 }
 
 void QMPlay2CoreClass::restoreCursorSlot()

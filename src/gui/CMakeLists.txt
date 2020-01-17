@@ -125,7 +125,7 @@ if(NOT APPLE)
     add_definitions(-DQMPLAY2_ALLOW_ONLY_ONE_INSTANCE)
 endif()
 
-if(USE_FFMPEG_VAAPI)
+if(USE_FFMPEG_VAAPI AND USE_OPENGL)
     set_source_files_properties(Main.cpp PROPERTIES COMPILE_DEFINITIONS CHECK_FOR_EGL)
 endif()
 

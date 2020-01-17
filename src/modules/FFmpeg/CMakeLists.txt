@@ -57,8 +57,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
 
     if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)
-        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp VAAPIOpenGL.hpp)
-        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp VAAPIOpenGL.cpp)
+        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp)
+        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp)
+        if(USE_OPENGL)
+            list(APPEND FFmpeg_HDR VAAPIOpenGL.hpp)
+            list(APPEND FFmpeg_SRC VAAPIOpenGL.cpp)
+        endif()
         pkg_check_modules(LBVA libva libva-glx libva-drm egl REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
@@ -67,8 +71,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
 
     if(USE_FFMPEG_VDPAU) # VDPAU
         add_definitions(-DQMPlay2_VDPAU)
-        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp VDPAUOpenGL.hpp)
-        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp VDPAUOpenGL.cpp)
+        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp)
+        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp)
+        if(USE_OPENGL)
+            list(APPEND FFmpeg_HDR VDPAUOpenGL.hpp)
+            list(APPEND FFmpeg_SRC VDPAUOpenGL.cpp)
+        endif()
         pkg_check_modules(LIBVDPAU vdpau REQUIRED)
         include_directories(${LIBVDPAU_INCLUDE_DIRS})
         link_directories(${LIBVDPAU_LIBRARY_DIRS})

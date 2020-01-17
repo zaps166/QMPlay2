@@ -62,7 +62,9 @@ public:
 
     static int getCPUFlags();
 
+#ifdef USE_OPENGL
     static bool isGlOnWindowForced();
+#endif
 
     void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
     void quit();
