@@ -18,9 +18,11 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <QMetaObject>
 
-class X11BypassCompositor
+class QMPLAY2SHAREDLIB_EXPORT X11BypassCompositor
 {
     Q_DISABLE_COPY(X11BypassCompositor)
 
