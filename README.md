@@ -96,12 +96,7 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 
 ### VA-API information:
 
-VA-API + OpenGL can run it two modes:
-- *GLX* which uses GLX for OpenGL context creation - this is slower because of in-memory YUV->RGB conversion by a driver. QMPlay2 displays the "(GLX)" in Information panel, e.g. "FFmpeg/VA-API, OpenGL 3.0 VA-API (GLX)". The image on AMD drivers can be corrupted.
-- *EGL* which uses EGL for OpenGL context creation - this is faster and default for Wayland. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers.
-
-EGL only:
-- in case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
+VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
 
 ## Deinterlacing
 
@@ -169,7 +164,6 @@ For CMake build be sure that you have CMake 3.1 or higher.
 	- Qt5DBus - Linux/BSD only,
 	- Qt5Svg - for SVG icons,
 	- Qt5Qml - for MediaBrowser,
-	- Qt5X11Extras - for X11 and VA-API,
 	- Qt5WinExtras - for Windows,
 - FFmpeg >= 3.3 (>= 4.0 is recommended at compilation time for VA-API and VDPAU deinterlacing filters):
 	- libavformat - requires OpenSSL or GnuTLS for https support,
@@ -259,7 +253,6 @@ Using other Qt installation using CMake:
 - `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
 - `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
 - `Qt5Qml_DIR`: path to the Qt5Qml cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Qml`).
-- `Qt5X11Extras_DIR`: path to the Qt5X11Extras cmake directory (e.g. `~/qtbase/lib/cmake/Qt5X11Extras`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 

@@ -112,7 +112,7 @@ add_feature_info(FFmpeg USE_FFMPEG "Build with FFmpeg module")
 
 if(USE_FFMPEG)
     if(NOT DEFINED USE_FFMPEG_VAAPI)
-        pkg_check_modules(LIBS_VAAPI libva libva-x11 libva-glx libva-drm egl)
+        pkg_check_modules(LIBS_VAAPI libva libva-drm egl)
     endif()
     option(USE_FFMPEG_VAAPI "Build VAAPI acceleration into FFmpeg" ${LIBS_VAAPI_FOUND})
     add_feature_info(VAAPI USE_FFMPEG_VAAPI "Build VAAPI acceleration into FFmpeg")

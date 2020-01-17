@@ -30,12 +30,10 @@ extern "C"
 
 #include <QGuiApplication>
 #include <QFileInfo>
-#include <QX11Info>
 #include <QDebug>
 #include <QDir>
 
 #include <va/va_drm.h>
-#include <va/va_glx.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -62,67 +60,52 @@ bool VAAPI::open(bool openGL)
 {
     clearVPP();
 
-    const bool isX11 = QX11Info::isPlatformX11();
-
     int major = 0, minor = 0;
 
-    if (!isX11 || !openGL || Functions::isX11EGL())
-    {
-        QString devFilePath;
+    QString devFilePath;
 
-        const auto eglCardFilePath = qgetenv("QMPLAY2_EGL_CARD_FILE_PATH");
-        if (!eglCardFilePath.isEmpty())
+    const auto eglCardFilePath = qgetenv("QMPLAY2_EGL_CARD_FILE_PATH");
+    if (!eglCardFilePath.isEmpty())
+    {
+        const auto cards = QDir("/dev/dri/by-path").entryInfoList({"*-card"}, QDir::Files | QDir::System);
+        for (auto &&card : cards)
         {
-            const auto cards = QDir("/dev/dri/by-path").entryInfoList({"*-card"}, QDir::Files | QDir::System);
-            for (auto &&card : cards)
+            if (card.symLinkTarget() == eglCardFilePath)
             {
-                if (card.symLinkTarget() == eglCardFilePath)
-                {
-                    devFilePath = QFileInfo(card.filePath().replace("-card", "-render")).symLinkTarget();
-                    break;
-                }
+                devFilePath = QFileInfo(card.filePath().replace("-card", "-render")).symLinkTarget();
+                break;
             }
         }
+    }
 
-        const auto devs = QDir("/dev/dri").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
-        for (auto &&dev : devs)
+    const auto devs = QDir("/dev/dri").entryInfoList({"renderD*"}, QDir::Files | QDir::System, QDir::Name);
+    for (auto &&dev : devs)
+    {
+        if (!devFilePath.isEmpty() && devFilePath != dev.filePath())
+            continue;
+
+        const int  fd = ::open(dev.filePath().toLocal8Bit().constData(), O_RDWR);
+        if (fd < 0)
+            continue;
+
+        if (auto disp = vaGetDisplayDRM(fd))
         {
-            if (!devFilePath.isEmpty() && devFilePath != dev.filePath())
-                continue;
-
-            const int  fd = ::open(dev.filePath().toLocal8Bit().constData(), O_RDWR);
-            if (fd < 0)
-                continue;
-
-            if (auto disp = vaGetDisplayDRM(fd))
+            if (vaInitialize(disp, &major, &minor) == VA_STATUS_SUCCESS)
             {
-                if (vaInitialize(disp, &major, &minor) == VA_STATUS_SUCCESS)
-                {
-                    m_fd = fd;
-                    VADisp = disp;
-                    qDebug().noquote() << "VA-API :: Initialized device:" << dev.fileName();
-                    break;
-                }
-                qDebug().noquote() << "VA-API :: Unable to initialize device:" << dev.fileName();
-                vaTerminate(disp);
+                m_fd = fd;
+                VADisp = disp;
+                qDebug().noquote() << "VA-API :: Initialized device:" << dev.fileName();
+                break;
             }
-
-            ::close(fd);
+            qDebug().noquote() << "VA-API :: Unable to initialize device:" << dev.fileName();
+            vaTerminate(disp);
         }
 
-        if (!VADisp)
-            return false;
+        ::close(fd);
     }
-    else
-    {
-        Display *display = QX11Info::display();
-        if (!display)
-            return false;
 
-        VADisp = vaGetDisplayGLX(display);
-        if (!VADisp || vaInitialize(VADisp, &major, &minor) != VA_STATUS_SUCCESS)
-            return false;
-    }
+    if (!VADisp)
+        return false;
 
     m_version = (major << 8) | minor;
 

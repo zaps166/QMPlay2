@@ -56,11 +56,9 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
 
     if(USE_FFMPEG_VAAPI) # VA-API
-        find_package(Qt5X11Extras 5.6 REQUIRED)
-        set(X11Extras Qt5::X11Extras)
         add_definitions(-DQMPlay2_VAAPI)
-        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp)
-        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp)
+        list(APPEND FFmpeg_HDR FFDecVAAPI.hpp VAAPI.hpp VAAPIOpenGL.hpp)
+        list(APPEND FFmpeg_SRC FFDecVAAPI.cpp VAAPI.cpp VAAPIOpenGL.cpp)
         pkg_check_modules(LBVA libva libva-glx libva-drm egl REQUIRED)
         include_directories(${LBVA_INCLUDE_DIRS})
         link_directories(${LBVA_LIBRARY_DIRS})
@@ -114,7 +112,6 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
-    ${X11Extras}
     ${DXVA2}
     libqmplay2
 )
