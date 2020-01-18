@@ -107,10 +107,6 @@ QUrl RadioBrowserModel::getUrl(const QModelIndex &index) const
 {
     return QUrl(m_rowsToDisplay.value(index.row())->url);
 }
-QUrl RadioBrowserModel::getEditUrl(const QModelIndex &index) const
-{
-    return QUrl("http://www.radio-browser.info/gui/#/edit/" + m_rowsToDisplay.value(index.row())->id);
-}
 QUrl RadioBrowserModel::getHomePageUrl(const QModelIndex &index) const
 {
     return QUrl(m_rowsToDisplay.value(index.row())->homePageUrl);

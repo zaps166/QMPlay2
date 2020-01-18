@@ -2669,10 +2669,6 @@ QMPlay2 не відображатиме іконки!</translation>
         <translation>Додати до моїх радіостанцій</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>Редагувати</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>Відкрити веб-сайт радіо</translation>
     </message>

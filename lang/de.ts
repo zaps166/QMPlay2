@@ -2668,10 +2668,6 @@ QMPlay2 zeigt keine Icons an!</translation>
         <translation>Hinzufügen zu meinen Radiosendern</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>Bearbeiten</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>Öffne Radio Webseite</translation>
     </message>
