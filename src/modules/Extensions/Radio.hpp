@@ -78,7 +78,6 @@ private slots:
     void radioBrowserAdd();
     void radioBrowserEnqueue();
     void radioBrowserOpenHomePage();
-    void radioBrowserEdit();
 
 private:
     void firstTabItemDoubleClicked(QListWidgetItem *item);

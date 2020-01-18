@@ -92,8 +92,6 @@ Radio::Radio(Module &module) :
     m_radioBrowserMenu->addSeparator();
     connect(m_radioBrowserMenu->addAction(tr("Add to my radio stations")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserAdd()));
     m_radioBrowserMenu->addSeparator();
-    connect(m_radioBrowserMenu->addAction(tr("Edit")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserEdit()));
-    m_radioBrowserMenu->addSeparator();
     connect(m_radioBrowserMenu->addAction(tr("Open radio website")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserOpenHomePage()));
 
     connect(m_dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
@@ -372,7 +370,7 @@ void Radio::on_searchByComboBox_activated(int idx)
 }
 void Radio::on_addRadioBrowserStationButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("http://www.radio-browser.info/gui/#/add"));
+    QDesktopServices::openUrl(QUrl("http://www.radio-browser.info/gui/#!/add"));
 }
 void Radio::on_radioView_doubleClicked(const QModelIndex &index)
 {
