@@ -18,11 +18,12 @@
 
 #include <FFDecVTB.hpp>
 
-#include <HWAccelInterface.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
-#include <ImgScaler.hpp>
 #include <FFCommon.hpp>
+#ifdef USE_OPENGL
+#   include <VTBOpenGL.hpp>
+#endif
 
 #include <QDebug>
 
@@ -35,10 +36,6 @@ extern "C"
     #include <libavutil/hwcontext_videotoolbox.h>
 }
 
-#include <gl.h>
-
-/**/
-
 static AVPixelFormat vtbGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
     Q_UNUSED(codecCtx)
@@ -50,127 +47,6 @@ static AVPixelFormat vtbGetFormat(AVCodecContext *codecCtx, const AVPixelFormat 
     }
     return AV_PIX_FMT_NONE;
 }
-
-/**/
-
-class VTBOpenGL final : public HWAccelInterface
-{
-public:
-    VTBOpenGL(AVBufferRef *hwDeviceBufferRef)
-        : m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
-    {}
-    ~VTBOpenGL()
-    {
-        av_buffer_unref(&m_hwDeviceBufferRef);
-    }
-
-    QString name() const override
-    {
-        return "VideoToolBox";
-    }
-
-    Format getFormat() const override
-    {
-        return NV12;
-    }
-    bool isTextureRectangle() const override
-    {
-        return true;
-    }
-    bool isCopy() const override
-    {
-        return false;
-    }
-
-    bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override
-    {
-        for (int p = 0; p < 2; ++p)
-        {
-            if (m_widths[p] != widths[p] || m_heights[p] != heights[p])
-            {
-                clear();
-                for (int p = 0; p < 2; ++p)
-                {
-                    m_widths[p] = widths[p];
-                    m_heights[p] = heights[p];
-                }
-                glGenTextures(2, m_textures);
-                break;
-            }
-        }
-        for (int p = 0; p < 2; ++p)
-            setTextureParamsFn(m_textures[p]);
-        return true;
-    }
-    void clear() override
-    {
-        glDeleteTextures(2, m_textures);
-        memset(m_textures, 0, sizeof(m_textures));
-        memset(m_widths, 0, sizeof(m_widths));
-        memset(m_heights, 0, sizeof(m_heights));
-    }
-
-    MapResult mapFrame(Frame &videoFrame) override
-    {
-        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
-        CGLContextObj glCtx = CGLGetCurrentContext();
-
-        IOSurfaceRef surface = CVPixelBufferGetIOSurface(pixelBuffer);
-
-        const OSType pixelFormat = IOSurfaceGetPixelFormat(surface);
-        if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
-            return MapError;
-
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[0]);
-        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.width(0), videoFrame.height(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
-            return MapError;
-
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[1]);
-        if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.width(1), videoFrame.height(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
-            return MapError;
-
-        return MapOk;
-    }
-    quint32 getTexture(int plane) override
-    {
-        return m_textures[plane];
-    }
-
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override
-    {
-        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
-        if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
-        {
-            CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-            const quint8 *srcData[2] = {
-                (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0),
-                (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1)
-            };
-            const qint32 srcLinesize[2] = {
-                (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0),
-                (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
-            };
-
-            nv12ToRGB32->scale((const void **)srcData, srcLinesize, dest);
-
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-            return true;
-        }
-
-        return false;
-    }
-
-public:
-    AVBufferRef *m_hwDeviceBufferRef = nullptr;
-
-private:
-    quint32 m_textures[2] = {};
-
-    int m_widths[2] = {};
-    int m_heights[2] = {};
-};
 
 /**/
 
@@ -262,11 +138,13 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (writer)
     {
+#ifdef USE_OPENGL
         if (auto vtbOpenGL = writer->getHWAccelInterface<VTBOpenGL>())
         {
             m_hwDeviceBufferRef = av_buffer_ref(vtbOpenGL->m_hwDeviceBufferRef);
             m_hwAccelWriter = writer;
         }
+#endif
     }
 
     if (!m_hwDeviceBufferRef)
@@ -277,7 +155,9 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
 
     if (!m_hwAccelWriter && !m_copyVideo)
     {
+#ifdef USE_OPENGL
         m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VTBOpenGL>(m_hwDeviceBufferRef));
+#endif
         if (!m_hwAccelWriter)
             return false;
     }
