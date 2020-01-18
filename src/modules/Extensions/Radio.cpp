@@ -410,12 +410,6 @@ void Radio::radioBrowserOpenHomePage()
     if (index.isValid())
         QDesktopServices::openUrl(m_radioBrowserModel->getHomePageUrl(index));
 }
-void Radio::radioBrowserEdit()
-{
-    const QModelIndex index = ui->radioView->currentIndex();
-    if (index.isValid())
-        QDesktopServices::openUrl(m_radioBrowserModel->getEditUrl(index));
-}
 
 void Radio::firstTabItemDoubleClicked(QListWidgetItem *item)
 {
