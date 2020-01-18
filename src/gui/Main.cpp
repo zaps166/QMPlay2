@@ -602,8 +602,8 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#ifndef Q_OS_WIN
-    QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#ifndef USE_OPENGL
+    QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
 #endif
 
 #ifndef Q_OS_WIN
