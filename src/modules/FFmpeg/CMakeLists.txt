@@ -91,6 +91,10 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
         add_definitions(-DQMPlay2_DXVA2 -DINITGUID)
         list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
         list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
+        if(USE_OPENGL)
+            list(APPEND FFmpeg_HDR DXVA2OpenGL.hpp)
+            list(APPEND FFmpeg_SRC DXVA2OpenGL.cpp)
+        endif()
         set(DXVA2 dxva2)
     endif()
 
