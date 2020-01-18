@@ -2661,10 +2661,6 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <translation>Hozzáadás a saját állomásokhoz</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>Szerkesztés</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>Rádió weboldalának megnyitása</translation>
     </message>

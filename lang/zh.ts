@@ -2669,10 +2669,6 @@ QMPlay2 将不会显示图标！</translation>
         <translation>加入我的电台</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>编辑</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>打开电台网站</translation>
     </message>

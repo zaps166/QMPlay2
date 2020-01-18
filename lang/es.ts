@@ -2669,10 +2669,6 @@ QMPlay2 will not display icons!</source>
         <translation>Añadir a mis emisoras de radio</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>Editar</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>Abrir el sitio web de la emisora</translation>
     </message>

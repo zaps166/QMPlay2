@@ -2666,10 +2666,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Добавить мою радиостанцию</translation>
     </message>
     <message>
-        <source>Edit</source>
-        <translation>Изменить</translation>
-    </message>
-    <message>
         <source>Open radio website</source>
         <translation>Открыть веб-сайт радио</translation>
     </message>
