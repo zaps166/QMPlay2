@@ -212,7 +212,7 @@ CMake options (option - default value: description):
 	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
 	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
 	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
-	- `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-x11, libva-glx, libva-drm, and egl exist.
+	- `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
 	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
 	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
 	- `USE_INPUTS` - ON: enable/disable Inputs module.
@@ -222,7 +222,7 @@ CMake options (option - default value: description):
 	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
 	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
 	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
-	- `USE_OPENGL2` - `ON`: enable/disable OpenGL2 module.
+	- `USE_OPENGL` - `ON`: enable/disable OpenGL support.
 	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
 	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
 	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
@@ -233,11 +233,10 @@ CMake options (option - default value: description):
 	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
 	- `USE_AVRESAMPLE` - `OFF`: use libavresample instead of libswresample.
 	- `USE_CMD` - Windows only, `OFF`.
-	- `USE_ANIMEODCINKI` - `ON`: enable/disable AnimeOdcinki in Extensions module.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
 	- `USE_CUVID` - `ON`: enable/disable CUVID module.
-	- `USE_TEKSTOWO` - `ON`: enable/disable lyrics module.
+	- `USE_LYRICS` - `ON`: enable/disable lyrics module.
 	- `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
 	- `USE_ASAN` - `OFF`: enable/disable address sanitizer.
 	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
