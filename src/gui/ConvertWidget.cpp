@@ -89,12 +89,12 @@ void ConvertWidget::browseOutput()
 void ConvertWidget::convert()
 {
     // Print a pop-up window if the video path and/or output path and/or output name is empty.
-    if (videoLinePath->text().isEmpty() || outputLinePath->text().isEmpty() || outputFileName->text().isEmpty())
+    if (videoLinePath->text().isEmpty() || subsLinePath->text().isEmpty() || outputLinePath->text().isEmpty() || outputFileName->text().isEmpty())
     {
         QMessageBox::warning(
                 this,
                 tr("Convert Warning"),
-                tr("Video File Selection and/or Export File Selection are/is empty.") );
+                tr("Video File Selection and/or Subtitle File Selection and/or Export File Selection are/is empty.") );
         return;
     }
     // this code works ONLY on LINUX
@@ -107,34 +107,23 @@ void ConvertWidget::convert()
     QString outputType = outputFileType->currentText();
     QString outputFile = outputPath + "/" + outputName + outputType;
 
-    if (subsBox->isEnabled()) {
-        QString subs = subsLinePath->text();
-        std::string newSubs = subs.toUtf8().constData();
-        newSubs = newSubs.substr(0, newSubs.length()-4) + ".ass";
+    QString subs = subsLinePath->text();
+    std::string newSubs = subs.toUtf8().constData();
+    newSubs = newSubs.substr(0, newSubs.length()-4) + ".ass";
 
-        // merge the video file with the subtitle file
-        // opens a terminal window and runs the command: ffmpeg -i subtitleFile subtitle.ass && ffmpeg -i videoFile -vf ass=subtitle.ass newVideoFile && rm subtitle.ass && exit
-        // subtitleFile is the path of the subtitle file that the user has choose
-        // videoFile is the path of the video file that the user has choose
-        // newVideoFile is the path of the newVideo file that the user has choose
-        command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
-        command = command + subs.toUtf8().constData() + " ";
-        command = command + newSubs + " && ffmpeg -i ";
-        command = command + video.toUtf8().constData() + " -vf ass=";
-        command = command + newSubs + " ";
-        command = command + outputFile.toUtf8().constData() + " && rm ";
-        command = command + newSubs + " && exit\"'";
-        system(command.c_str());
-    } else {
-        // convert a video file to another video type
-        // opens a terminal window and runs the command: ffmpeg -i videoFile newVideoFile && exit
-        // videoFile is the path of the video file that the user has choose
-        // newVideoFile is the path of the newVideo file that the user has choose
-        command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
-        command = command + video.toUtf8().constData() + " ";
-        command = command + outputFile.toUtf8().constData() + " && exit\"'";
-        system(command.c_str());
-    }
+    // merge the video file with the subtitle file
+    // opens a terminal window and runs the command: ffmpeg -i subtitleFile subtitle.ass && ffmpeg -i videoFile -vf ass=subtitle.ass newVideoFile && rm subtitle.ass && exit
+    // subtitleFile is the path of the subtitle file that the user has choose
+    // videoFile is the path of the video file that the user has choose
+    // newVideoFile is the path of the newVideo file that the user has choose
+    command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
+    command = command + subs.toUtf8().constData() + " ";
+    command = command + newSubs + " && ffmpeg -i ";
+    command = command + video.toUtf8().constData() + " -vf ass=";
+    command = command + newSubs + " ";
+    command = command + outputFile.toUtf8().constData() + " && rm ";
+    command = command + newSubs + " && exit\"'";
+    system(command.c_str());
 #endif
     close();
 }
@@ -178,8 +167,7 @@ void ConvertWidget::subsArea()
     subsB->setText("Browse");
     connect(subsB, SIGNAL(clicked()), this, SLOT(browseSubs()));
 
-    subsBox = new QGroupBox(tr("Do you want to use a subtitle file?"));
-    subsBox->setCheckable(true);
+    subsBox = new QGroupBox(tr("Subtitle File Selection"));
     subsBox->setChecked(false);
     QGridLayout *subsLayout = new QGridLayout;
     subsLayout->addWidget(subsLinePath, 0, 0);
