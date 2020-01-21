@@ -134,9 +134,9 @@ void ConvertWidget::convert()
 void ConvertWidget::aboutArea()
 {
     QLabel *about = new QLabel(tr("This is a plugin that can merge a video file with \na subtitle file and "
-                                  "change the type of a video file. \nThe plugin use the ffmpeg which is under the \n"
-                                  "GNU Lesser General Public License (LGPL) version 2.1 or later and \nGNU General "
-                                  "Public License (GPL) version 2 or later. \n\nImportant: Paths and names can not "
+                                  "change the type of a video file. \n"
+                                  "This software uses libraries from the FFmpeg project under the LGPLv2.1"
+                                  " \n\nImportant: Paths and names can not "
                                   "contain spaces!\nImportant: Works only for LINUX!\n"));
     window->addWidget(about);
 }
