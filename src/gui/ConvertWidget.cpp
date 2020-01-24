@@ -116,7 +116,7 @@ void ConvertWidget::convert()
     // subtitleFile is the path of the subtitle file that the user has choose
     // videoFile is the path of the video file that the user has choose
     // newVideoFile is the path of the newVideo file that the user has choose
-    command = "gnome-terminal -e 'sh -c \"ffmpeg -i ";
+    command = "x-terminal-emulator -e 'sh -c \"ffmpeg -i ";
     command = command + subs.toUtf8().constData() + " ";
     command = command + newSubs + " && ffmpeg -i ";
     command = command + video.toUtf8().constData() + " -vf ass=";
