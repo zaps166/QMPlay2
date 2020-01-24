@@ -12,6 +12,8 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QGroupBox>
+#include <QtWidgets/QTextEdit>
+#include <QtCore/QProcess>
 
 class QPlainTextEdit;
 class QPushButton;
@@ -28,17 +30,22 @@ private:
     QLineEdit *outputFileName;
     QComboBox *outputFileType;
     QVBoxLayout *window;
-
+    QTextEdit *executionText;
     QGroupBox *subsBox;
+    QPushButton *convertB;
+
 
     void aboutArea();
     void videoArea();
     void subsArea();
     void outputArea();
     void buttonsArea();
+    void executionArea();
 private slots:
     void browseVideo();
     void browseSubs();
     void browseOutput();
     void convert();
+    void cancel();
+    void closeEvent(QCloseEvent *event);
 };

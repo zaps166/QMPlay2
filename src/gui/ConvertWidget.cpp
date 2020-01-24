@@ -24,6 +24,8 @@
 
 #ifdef linux
 #include <stdlib.h>
+#include <QCloseEvent>
+
 #endif
 
 /*
@@ -48,6 +50,7 @@ ConvertWidget::ConvertWidget()
     subsArea();
     outputArea();
     buttonsArea();
+    executionArea();
     window->setSpacing(0);
     setLayout(window);
 
@@ -99,6 +102,9 @@ void ConvertWidget::convert()
     }
     // this code works ONLY on LINUX
 #ifdef linux
+    convertB->setEnabled(false);
+    executionText->append(tr("Convert started"));
+
     std::string command;
 
     QString video = videoLinePath->text();
@@ -111,21 +117,21 @@ void ConvertWidget::convert()
     std::string newSubs = subs.toUtf8().constData();
     newSubs = newSubs.substr(0, newSubs.length()-4) + ".ass";
 
-    // merge the video file with the subtitle file
-    // opens a terminal window and runs the command: ffmpeg -i subtitleFile subtitle.ass && ffmpeg -i videoFile -vf ass=subtitle.ass newVideoFile && rm subtitle.ass && exit
-    // subtitleFile is the path of the subtitle file that the user has choose
-    // videoFile is the path of the video file that the user has choose
-    // newVideoFile is the path of the newVideo file that the user has choose
-    command = "x-terminal-emulator -e 'sh -c \"ffmpeg -i ";
+    command = "ffmpeg -i ";
     command = command + subs.toUtf8().constData() + " ";
     command = command + newSubs + " && ffmpeg -i ";
     command = command + video.toUtf8().constData() + " -vf ass=";
     command = command + newSubs + " ";
     command = command + outputFile.toUtf8().constData() + " && rm ";
-    command = command + newSubs + " && exit\"'";
-    system(command.c_str());
+    command = command + newSubs + " && pkill QMPlay2";
+
+    FILE* execute;
+
+    if (!(execute = popen(command.c_str(), "w"))) {
+        close();
+    }
+    executionText->append(tr("When the convertion will be done, the program will be close."));
 #endif
-    close();
 }
 
 /*
@@ -210,7 +216,7 @@ void ConvertWidget::buttonsArea()
 {
     QGroupBox *buttonsBox = new QGroupBox(tr("Select"));
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    QPushButton *convertB = new QPushButton;
+    convertB = new QPushButton;
     convertB->setText(tr("Convert"));
     buttonsLayout->addWidget(convertB);
     QPushButton *cancelB = new QPushButton;
@@ -221,6 +227,28 @@ void ConvertWidget::buttonsArea()
     buttonsBox->setContentsMargins(0, 20, 0, 0);
     window->addWidget(buttonsBox);
 
-    connect(cancelB, SIGNAL(clicked()), this, SLOT(close()));
+    connect(cancelB, SIGNAL(clicked()), this, SLOT(cancel()));
     connect(convertB, SIGNAL(clicked()), this, SLOT(convert()));
+}
+
+void ConvertWidget::executionArea()
+{
+    QGroupBox *executionBox = new QGroupBox(tr("Execution Output"));
+    QGridLayout *executionLayout = new QGridLayout;
+    executionText = new QTextEdit();
+    //executionText->setEnabled(false);
+    executionText->setReadOnly(true);
+    executionLayout->addWidget(executionText);
+    executionBox->setLayout(executionLayout);
+    window->addWidget(executionBox);
+}
+
+void ConvertWidget::cancel()
+{
+    exit(0);
+}
+
+void ConvertWidget::closeEvent (QCloseEvent *event)
+{
+    exit(0);
 }
