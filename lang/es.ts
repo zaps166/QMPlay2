@@ -2607,12 +2607,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>El complemento del motor de iconos QtSvg no existe.
 ¡QMPlay2 no cambiará el tamaño de los iconos!</translation>
     </message>
-    <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation>El módulo QtSvg no existe.
-¡QMPlay2 no mostrará iconos!</translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>

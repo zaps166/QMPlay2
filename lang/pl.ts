@@ -2607,12 +2607,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>Plugin QtSvg icon engine nie istnieje.
 QMPlay2 nie będzie skalować ikon!</translation>
     </message>
-    <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation>Moduł QtSvg nie istnieje.
-QMPlay2 nie będzie wyświetlać ikon!</translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>

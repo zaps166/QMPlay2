@@ -2603,11 +2603,6 @@
 QMPlay2 will not scale up icons!</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>

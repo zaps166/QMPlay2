@@ -2590,12 +2590,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation>A QtSvg modul nem létezik.
-A QMPlay2 nem fog ikonokat megjeleníteni!</translation>
-    </message>
-    <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
         <translation>A QtSvg ikon motor nem létezik.

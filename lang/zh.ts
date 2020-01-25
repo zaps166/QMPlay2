@@ -2607,12 +2607,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>QtSvg 图标引擎插件不存在。
 QMPlay2 将不会增加图标！</translation>
     </message>
-    <message>
-        <source>QtSvg module doesn&apos;t exist.
-QMPlay2 will not display icons!</source>
-        <translation>QtSvg 模块不存在。
-QMPlay2 将不会显示图标！</translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>
