@@ -113,13 +113,6 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
     endif()
 endif()
 
-include_directories(../../qmplay2/headers
-    ${LIBAVFORMAT_INCLUDE_DIRS}
-    ${LIBAVCODEC_INCLUDE_DIRS}
-    ${LIBSWSCALE_INCLUDE_DIRS}
-    ${LIBAVUTIL_INCLUDE_DIRS}
-)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${FFmpeg_HDR}
     ${FFmpeg_SRC}

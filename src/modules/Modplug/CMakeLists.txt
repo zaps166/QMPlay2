@@ -47,7 +47,7 @@ set(Modplug_RESOURCES
     icons.qrc
 )
 
-include_directories(../../qmplay2/headers libmodplug)
+include_directories(libmodplug)
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Modplug_HDR}

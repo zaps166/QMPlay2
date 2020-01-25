@@ -18,7 +18,7 @@ set(AudioCD_RESOURCES
 pkg_check_modules(LIBCD libcdio libcddb REQUIRED)
 link_directories(${LIBCD_LIBRARY_DIRS})
 
-include_directories(../../qmplay2/headers ${LIBCD_INCLUDE_DIRS})
+include_directories(${LIBCD_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${AudioCD_HDR}

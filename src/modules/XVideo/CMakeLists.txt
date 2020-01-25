@@ -20,7 +20,7 @@ set(XVideo_RESOURCES
 pkg_check_modules(LIB_X11_XV x11 xv REQUIRED)
 link_directories(${LIB_X11_XV_LIBRARY_DIRS})
 
-include_directories(../../qmplay2/headers ${LIB_X11_XV_INCLUDE_DIRS})
+include_directories(${LIB_X11_XV_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${XVideo_HDR}

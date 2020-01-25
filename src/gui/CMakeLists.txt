@@ -99,8 +99,6 @@ endif()
 qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
 set_property(SOURCE ${GUI_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
-include_directories(../qmplay2/headers)
-
 if(USE_TAGLIB)
     find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})

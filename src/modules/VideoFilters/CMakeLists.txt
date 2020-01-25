@@ -23,10 +23,6 @@ set(VideoFilters_RESOURCES
     icon.qrc
 )
 
-link_directories(${LIBAVUTIL_LIBRARY_DIRS})
-
-include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS})
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${VideoFilters_HDR}
     ${VideoFilters_SRC}
@@ -34,7 +30,6 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    ${LIBAVUTIL_LIBRARIES}
     libqmplay2
 )
 

@@ -41,8 +41,6 @@ if(USE_CHIPTUNE_SID)
     list(APPEND Chiptune_LIBS ${LIBSIDPLAYFP_LIBRARIES})
 endif()
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Chiptune_HDR}
     ${Chiptune_SRC}

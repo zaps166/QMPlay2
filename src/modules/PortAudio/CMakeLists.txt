@@ -27,7 +27,7 @@ set(PortAudio_RESOURCES
 pkg_check_modules(LIBPORTAUDIO portaudio-2.0 REQUIRED)
 link_directories(${LIBPORTAUDIO_LIBRARY_DIRS})
 
-include_directories(../../qmplay2/headers ${LIBPORTAUDIO_INCLUDE_DIRS})
+include_directories(${LIBPORTAUDIO_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${PortAudio_HDR}

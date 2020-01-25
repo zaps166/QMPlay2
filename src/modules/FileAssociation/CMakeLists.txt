@@ -13,8 +13,6 @@ set(FileAssociation_RESOURCES
     icon.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${FileAssociation_HDR}
     ${FileAssociation_SRC}

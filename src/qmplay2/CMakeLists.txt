@@ -150,38 +150,22 @@ if(USE_LIBASS)
     link_directories(${LIBASS_LIBRARY_DIRS})
 endif()
 
-link_directories(
-    ${LIBAVFORMAT_LIBRARY_DIRS}
-    ${LIBAVCODEC_LIBRARY_DIRS}
-    ${LIBSWSCALE_LIBRARY_DIRS}
-    ${LIBAVUTIL_LIBRARY_DIRS}
-)
-
-set(LIBQMPLAY2_LIBS
+set(FFMPEG_LIBS
     ${LIBAVFORMAT_LIBRARIES}
     ${LIBAVCODEC_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
-    # libass will be added later if enabled
-)
-
-include_directories(
-    headers
-    ${LIBAVFORMAT_INCLUDE_DIRS}
-    ${LIBAVCODEC_INCLUDE_DIRS}
-    ${LIBSWSCALE_INCLUDE_DIRS}
-    ${LIBAVUTIL_INCLUDE_DIRS}
 )
 
 if(USE_AVRESAMPLE)
     add_definitions(-DQMPLAY2_AVRESAMPLE)
     pkg_check_modules(LIBAVRESAMPLE libavresample>=3.5.0 REQUIRED)
-    list(APPEND LIBQMPLAY2_LIBS ${LIBAVRESAMPLE_LIBRARIES})
+    list(APPEND FFMPEG_LIBS ${LIBAVRESAMPLE_LIBRARIES})
     include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
 else()
     pkg_check_modules(LIBSWRESAMPLE libswresample>=2.7.100 REQUIRED)
-    list(APPEND LIBQMPLAY2_LIBS ${LIBSWRESAMPLE_LIBRARIES})
+    list(APPEND FFMPEG_LIBS ${LIBSWRESAMPLE_LIBRARIES})
     include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
     link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
 endif()
@@ -191,8 +175,26 @@ add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_SRC}
     ${QMPLAY2_RESOURCES}
 )
-
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    "headers"
+    ${LIBAVFORMAT_INCLUDE_DIRS}
+    ${LIBAVCODEC_INCLUDE_DIRS}
+    ${LIBSWSCALE_INCLUDE_DIRS}
+    ${LIBAVUTIL_INCLUDE_DIRS}
+)
+
+target_link_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    ${LIBAVFORMAT_LIBRARY_DIRS}
+    ${LIBAVCODEC_LIBRARY_DIRS}
+    ${LIBSWSCALE_LIBRARY_DIRS}
+    ${LIBAVUTIL_LIBRARY_DIRS}
+)
 
 if(APPLE)
     target_link_libraries(${PROJECT_NAME}
@@ -234,6 +236,8 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
+    Qt5::Svg
+    ${FFMPEG_LIBS}
     PRIVATE
     ${DBUS}
     ${QML}
@@ -244,7 +248,6 @@ if(ANDROID)
     # Android libs must be public, because androiddeployqt copies them
     target_link_libraries(${PROJECT_NAME}
         PUBLIC
-        Qt5::Svg
         Qt5::AndroidExtras
         ${QML}
     )

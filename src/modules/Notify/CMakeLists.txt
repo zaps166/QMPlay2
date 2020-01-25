@@ -15,8 +15,6 @@ set(Notify_RESOURCES
     icon.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Notify_HDR}
     ${Notify_SRC}

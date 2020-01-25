@@ -32,10 +32,6 @@ set(AudioFilters_RESOURCES
     icon.qrc
 )
 
-link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
-
-include_directories(../../qmplay2/headers ${LIBAVCODEC_INCLUDE_DIRS} ${LIBAVUTIL_INCLUDE_DIRS})
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${AudioFilters_HDR}
     ${AudioFilters_SRC}
@@ -43,8 +39,6 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    ${LIBAVCODEC_LIBRARIES}
-    ${LIBAVUTIL_LIBRARIES}
     libqmplay2
 )
 

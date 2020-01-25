@@ -303,10 +303,8 @@ if(USE_MEDIABROWSER)
     set(USE_QML ON)
 endif()
 
-if(NOT ANDROID)
-    find_package(Qt5Svg QUIET)
-else()
-    find_package(Qt5Svg REQUIRED)
+find_package(Qt5Svg REQUIRED)
+if(ANDROID)
     find_package(Qt5AndroidExtras REQUIRED)
 endif()
 
@@ -332,11 +330,6 @@ if(NOT APPLE AND NOT WIN32)
 
     add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-endif()
-
-# Show warning if QtSvg doesn't exist
-if(NOT Qt5Svg_FOUND)
-    message(WARNING "Missing QtSvg module - SVG icons will not be visible!")
 endif()
 
 feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")

@@ -17,8 +17,6 @@ set(Subtitles_RESOURCES
     icon.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Subtitles_HDR}
     ${Subtitles_SRC}

@@ -19,8 +19,6 @@ set(Inputs_RESOURCES
     icons.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Inputs_HDR}
     ${Inputs_SRC}

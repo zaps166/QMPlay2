@@ -19,10 +19,6 @@ set(Visualizations_RESOURCES
     icon.qrc
 )
 
-link_directories(${LIBAVCODEC_LIBRARY_DIRS} ${LIBAVUTIL_LIBRARY_DIRS})
-
-include_directories(../../qmplay2/headers ${LIBAVUTIL_INCLUDE_DIRS} ${LIBAVCODEC_INCLUDE_DIRS})
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${Visualizations_HDR}
     ${Visualizations_SRC}
@@ -30,8 +26,6 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    ${LIBAVUTIL_LIBRARIES}
-    ${LIBAVCODEC_LIBRARIES}
     libqmplay2
 )
 

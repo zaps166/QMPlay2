@@ -15,8 +15,6 @@ set(QPainter_RESOURCES
     icon.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${QPainter_HDR}
     ${QPainter_SRC}

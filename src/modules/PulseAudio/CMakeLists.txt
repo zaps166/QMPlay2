@@ -20,7 +20,7 @@ set(PulseAudio_RESOURCES
 pkg_check_modules(LIBPULSE libpulse-simple REQUIRED)
 link_directories(${LIBPULSE_LIBRARY_DIRS})
 
-include_directories(../../qmplay2/headers ${LIBPULSE_INCLUDE_DIRS})
+include_directories(${LIBPULSE_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${PulseAudio_HDR}

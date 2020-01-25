@@ -30,8 +30,6 @@ if(NOT WIN32)
     endif()
 endif()
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${OpenGL2_HDR}
     ${OpenGL2_SRC}

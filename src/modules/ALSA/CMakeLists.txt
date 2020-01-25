@@ -19,7 +19,7 @@ set(ALSA_RESOURCES
 
 find_package(ALSA REQUIRED)
 
-include_directories(../../qmplay2/headers ${ALSA_INCLUDE_DIR})
+include_directories(${ALSA_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${ALSA_HDR}
