@@ -168,7 +168,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 	- libavcodec - for FFmpeg module only,
 	- libswscale,
 	- libavutil,
-	- libswresample or libavresample - libswresample is default,
+	- libswresample,
 	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
@@ -231,7 +231,6 @@ CMake options (option - default value: description):
 	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
 	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
 	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
-	- `USE_AVRESAMPLE` - `OFF`: use libavresample instead of libswresample.
 	- `USE_CMD` - Windows only, `OFF`.
 	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
 	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
