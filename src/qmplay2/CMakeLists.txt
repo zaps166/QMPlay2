@@ -2,54 +2,54 @@ cmake_minimum_required(VERSION 3.1)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
-    headers/QMPlay2Lib.hpp
-    headers/QMPlay2Core.hpp
-    headers/Functions.hpp
-    headers/Settings.hpp
-    headers/Module.hpp
-    headers/ModuleParams.hpp
-    headers/ModuleCommon.hpp
-    headers/Playlist.hpp
-    headers/Reader.hpp
-    headers/Demuxer.hpp
-    headers/Decoder.hpp
-    headers/VideoFilters.hpp
-    headers/VideoFilter.hpp
-    headers/DeintHWPrepareFilter.hpp
-    headers/AudioFilter.hpp
-    headers/Writer.hpp
-    headers/QMPlay2Extensions.hpp
-    headers/LineEdit.hpp
-    headers/Slider.hpp
-    headers/QMPlay2OSD.hpp
-    headers/InDockW.hpp
-    headers/LibASS.hpp
-    headers/ColorButton.hpp
-    headers/ImgScaler.hpp
-    headers/SndResampler.hpp
-    headers/VideoWriter.hpp
-    headers/SubsDec.hpp
-    headers/ByteArray.hpp
-    headers/Packet.hpp
-    headers/Frame.hpp
-    headers/StreamInfo.hpp
-    headers/DockWidget.hpp
-    headers/IOController.hpp
-    headers/ChapterProgramInfo.hpp
-    headers/PacketBuffer.hpp
-    headers/NetworkAccess.hpp
-    headers/IPC.hpp
-    headers/CPU.hpp
-    headers/Version.hpp
-    headers/HWAccelInterface.hpp
-    headers/VideoAdjustment.hpp
-    headers/YouTubeDL.hpp
-    headers/Notifies.hpp
-    headers/NotifiesTray.hpp
-    headers/MkvMuxer.hpp
-    headers/CppUtils.hpp
-    headers/Sphere.hpp
-    headers/X11BypassCompositor.hpp
+    QMPlay2Lib.hpp
+    QMPlay2Core.hpp
+    Functions.hpp
+    Settings.hpp
+    Module.hpp
+    ModuleParams.hpp
+    ModuleCommon.hpp
+    Playlist.hpp
+    Reader.hpp
+    Demuxer.hpp
+    Decoder.hpp
+    VideoFilters.hpp
+    VideoFilter.hpp
+    DeintHWPrepareFilter.hpp
+    AudioFilter.hpp
+    Writer.hpp
+    QMPlay2Extensions.hpp
+    LineEdit.hpp
+    Slider.hpp
+    QMPlay2OSD.hpp
+    InDockW.hpp
+    LibASS.hpp
+    ColorButton.hpp
+    ImgScaler.hpp
+    SndResampler.hpp
+    VideoWriter.hpp
+    SubsDec.hpp
+    ByteArray.hpp
+    Packet.hpp
+    Frame.hpp
+    StreamInfo.hpp
+    DockWidget.hpp
+    IOController.hpp
+    ChapterProgramInfo.hpp
+    PacketBuffer.hpp
+    NetworkAccess.hpp
+    IPC.hpp
+    CPU.hpp
+    Version.hpp
+    HWAccelInterface.hpp
+    VideoAdjustment.hpp
+    YouTubeDL.hpp
+    Notifies.hpp
+    NotifiesTray.hpp
+    MkvMuxer.hpp
+    CppUtils.hpp
+    Sphere.hpp
+    X11BypassCompositor.hpp
 )
 
 set(QMPLAY2_SRC
@@ -107,13 +107,13 @@ endif()
 add_definitions(-DQMPLAY2SHAREDLIB_LIBRARY)
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
-    list(APPEND QMPLAY2_HDR headers/NotifiesFreedesktop.hpp)
+    list(APPEND QMPLAY2_HDR NotifiesFreedesktop.hpp)
     list(APPEND QMPLAY2_SRC NotifiesFreedesktop.cpp)
     qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
     add_definitions(-DNOTIFIES_FREEDESKTOP)
     set(DBUS Qt5::DBus)
 elseif(APPLE)
-    list(APPEND QMPLAY2_HDR headers/NotifiesMacOS.hpp)
+    list(APPEND QMPLAY2_HDR NotifiesMacOS.hpp)
     list(APPEND QMPLAY2_SRC NotifiesMacOS.mm)
     find_package(Qt5MacExtras REQUIRED)
     add_definitions(-DNOTIFIES_MACOS)
@@ -121,9 +121,9 @@ endif()
 
 if(USE_QML)
     list(APPEND QMPLAY2_HDR
-        headers/CommonJS.hpp
-        headers/TreeWidgetJS.hpp
-        headers/NetworkAccessJS.hpp
+        CommonJS.hpp
+        TreeWidgetJS.hpp
+        NetworkAccessJS.hpp
     )
     list(APPEND QMPLAY2_SRC
         CommonJS.cpp
@@ -169,7 +169,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
-    "headers"
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${LIBAVFORMAT_INCLUDE_DIRS}
     ${LIBAVCODEC_INCLUDE_DIRS}
     ${LIBSWSCALE_INCLUDE_DIRS}
