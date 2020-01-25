@@ -21,6 +21,7 @@
 #include <QMPlay2Lib.hpp>
 
 class QByteArray;
+struct SwrContext;
 
 class QMPLAY2SHAREDLIB_EXPORT SndResampler
 {
@@ -43,10 +44,6 @@ public:
     void destroy();
 
 private:
-#ifdef QMPLAY2_AVRESAMPLE
-    struct AVAudioResampleContext *snd_convert_ctx = nullptr;
-#else
-    struct SwrContext *snd_convert_ctx = nullptr;
-#endif
+    SwrContext *snd_convert_ctx = nullptr;
     int src_samplerate = 0, src_channels = 0, dst_samplerate = 0, dst_channels = 0;
 };

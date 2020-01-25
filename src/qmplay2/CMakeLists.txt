@@ -142,6 +142,7 @@ pkg_check_modules(LIBAVFORMAT libavformat>=57.71.100 REQUIRED)
 pkg_check_modules(LIBAVCODEC libavcodec>=57.89.100 REQUIRED)
 pkg_check_modules(LIBSWSCALE libswscale>=4.6.100 REQUIRED)
 pkg_check_modules(LIBAVUTIL libavutil>=55.58.100 REQUIRED)
+pkg_check_modules(LIBSWRESAMPLE libswresample>=2.7.100 REQUIRED)
 
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
@@ -155,20 +156,8 @@ set(FFMPEG_LIBS
     ${LIBAVCODEC_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
+    ${LIBSWRESAMPLE_LIBRARIES}
 )
-
-if(USE_AVRESAMPLE)
-    add_definitions(-DQMPLAY2_AVRESAMPLE)
-    pkg_check_modules(LIBAVRESAMPLE libavresample>=3.5.0 REQUIRED)
-    list(APPEND FFMPEG_LIBS ${LIBAVRESAMPLE_LIBRARIES})
-    include_directories(${LIBAVRESAMPLE_INCLUDE_DIRS})
-    link_directories(${LIBAVRESAMPLE_LIBRARY_DIRS})
-else()
-    pkg_check_modules(LIBSWRESAMPLE libswresample>=2.7.100 REQUIRED)
-    list(APPEND FFMPEG_LIBS ${LIBSWRESAMPLE_LIBRARIES})
-    include_directories(${LIBSWRESAMPLE_INCLUDE_DIRS})
-    link_directories(${LIBSWRESAMPLE_LIBRARY_DIRS})
-endif()
 
 add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
@@ -185,6 +174,7 @@ target_include_directories(
     ${LIBAVCODEC_INCLUDE_DIRS}
     ${LIBSWSCALE_INCLUDE_DIRS}
     ${LIBAVUTIL_INCLUDE_DIRS}
+    ${LIBSWRESAMPLE_INCLUDE_DIRS}
 )
 
 target_link_directories(
@@ -194,6 +184,7 @@ target_link_directories(
     ${LIBAVCODEC_LIBRARY_DIRS}
     ${LIBSWSCALE_LIBRARY_DIRS}
     ${LIBAVUTIL_LIBRARY_DIRS}
+    ${LIBSWRESAMPLE_LIBRARY_DIRS}
 )
 
 if(APPLE)

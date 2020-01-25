@@ -75,9 +75,6 @@ add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
 option(USE_LYRICS "Build with lyrics support" ON)
 add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
 
-option(USE_AVRESAMPLE "Use libavresample instead of libswresample" OFF)
-add_feature_info(libavresample USE_AVRESAMPLE "Use libavresample instead of libswresample")
-
 option(USE_LIBASS "Build with libass support" ON)
 add_feature_info(libass USE_LIBASS "Build with libass support")
 
