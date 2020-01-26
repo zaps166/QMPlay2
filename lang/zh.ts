@@ -1018,14 +1018,6 @@
         <source>Enlarge small covers</source>
         <translation>放大小尺寸封面</translation>
     </message>
-    <message>
-        <source>Use OpenGL on entire window</source>
-        <translation>在整个窗口使用 OpenGL</translation>
-    </message>
-    <message>
-        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>使用 QOpenGLWidget（渲染到纹理）, 并为可视化效果启用 OpenGL。请谨慎使用，这会降低视频回放性能。</translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1395,10 +1387,6 @@
         <translation>重采样方法</translation>
     </message>
     <message>
-        <source>Vertical sync</source>
-        <translation>垂直同步</translation>
-    </message>
-    <message>
         <source>Autodetect</source>
         <translation>自动检测</translation>
     </message>
@@ -1671,10 +1659,6 @@
         <translation>启用解码器</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation>复制解码视频到 CPU 存储（不推荐）</translation>
-    </message>
-    <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>仅当主 GPU 为英伟达时使用 CUVID</translation>
     </message>
@@ -1794,18 +1778,6 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>复制解码视频到 CPU 存储（缓慢）</translation>
     </message>
-    <message>
-        <source>Bypass compositor in full screen</source>
-        <translation>全屏时忽略合成器</translation>
-    </message>
-    <message>
-        <source>This can improve performance if X11 compositor supports it</source>
-        <translation>如果 X11 合成器支持则会提升性能</translation>
-    </message>
-    <message>
-        <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>这将提升性能。启用时某些视频驱动程序会崩溃。</translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1901,22 +1873,18 @@
     </message>
 </context>
 <context>
-    <name>OpenGL2Common</name>
+    <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation>著色器编译/连接错误</translation>
+        <translation type="unfinished">著色器编译/连接错误</translation>
     </message>
     <message>
-        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation>驱动程序必须支持多纹理，著色器和非二次幂纹理尺寸</translation>
-    </message>
-    <message>
-        <source>Can&apos;t init textures for</source>
-        <translation>无法初始化纹理到</translation>
+        <source>Can&apos;t init %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation>纹理贴图错误</translation>
+        <translation type="unfinished">纹理贴图错误</translation>
     </message>
 </context>
 <context>
@@ -1968,6 +1936,10 @@
     <message>
         <source>&amp;Playback settings</source>
         <translation>回放设置</translation>
+    </message>
+    <message>
+        <source>&amp;Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2910,10 +2882,6 @@ QMPlay2 将不会增加图标！</translation>
         <translation>默认或第一个流媒体</translation>
     </message>
     <message>
-        <source>Video output priority</source>
-        <translation>视频输出优先级</translation>
-    </message>
-    <message>
         <source>Audio output priority</source>
         <translation>音频输出优先级</translation>
     </message>
@@ -2958,6 +2926,70 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To apply the icons change, the program will start again!</source>
         <translation>更改图标后程序将重启！</translation>
+    </message>
+    <message>
+        <source>Legacy video output priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To set up a new renderer, the program will start again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical synchronization (V-Sync)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished">全屏时忽略合成器</translation>
+    </message>
+    <message>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation type="unfinished">在整个窗口使用 OpenGL</translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished">如果 X11 合成器支持则会提升性能</translation>
+    </message>
+    <message>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished">这将提升性能。启用时某些视频驱动程序会崩溃。</translation>
+    </message>
+    <message>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation type="unfinished">使用 QOpenGLWidget（渲染到纹理）, 并为可视化效果启用 OpenGL。请谨慎使用，这会降低视频回放性能。</translation>
+    </message>
+    <message>
+        <source>Renderer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

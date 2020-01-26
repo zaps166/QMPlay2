@@ -67,7 +67,7 @@
     </message>
     <message>
         <source>Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>Osoby wspierające</translation>
     </message>
 </context>
 <context>
@@ -1018,14 +1018,6 @@
         <source>Enlarge small covers</source>
         <translation>Powiększaj małe okładki</translation>
     </message>
-    <message>
-        <source>Use OpenGL on entire window</source>
-        <translation>Używaj OpenGL dla całego okna</translation>
-    </message>
-    <message>
-        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>Wykorzystuje QOpenGLWidget (renderowanie do tekstury), włącza także OpenGL dla wizualizacji. Używaj ostrożnie, ponieważ może to obniżyć wydajność odtwarzania wideo.</translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1395,10 +1387,6 @@
         <translation>Metoda resamplingu</translation>
     </message>
     <message>
-        <source>Vertical sync</source>
-        <translation>Synchronizacja pionowa</translation>
-    </message>
-    <message>
         <source>Autodetect</source>
         <translation>Automatycznie</translation>
     </message>
@@ -1671,10 +1659,6 @@
         <translation>Dekoder włączony</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation>Kopiuj obraz do pamięci CPU (nie zalecane)</translation>
-    </message>
-    <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>Użyj CUVID tylko jeżeli pierwszym GPU jest NVIDIA</translation>
     </message>
@@ -1794,18 +1778,6 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
     </message>
-    <message>
-        <source>Bypass compositor in full screen</source>
-        <translation>Omiń kompozytor na pełnym ekranie</translation>
-    </message>
-    <message>
-        <source>This can improve performance if X11 compositor supports it</source>
-        <translation>Może zwiększyć wydajność, jeżeli kompozytor X11 obsługuje tę funkcję</translation>
-    </message>
-    <message>
-        <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>Może zwiększyć wydajność. Niektóre sterowniki kart graficznych mogą działać niestabilnie jeżeli ta opcja jest załączona.</translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1901,18 +1873,14 @@
     </message>
 </context>
 <context>
-    <name>OpenGL2Common</name>
+    <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
         <translation>Błąd podczas kompilacji/linkowania shaderów</translation>
     </message>
     <message>
-        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation>Sterownik musi obsługiwać multiteksturowanie, shadery oraz tekstury o dowolnym rozmiarze</translation>
-    </message>
-    <message>
-        <source>Can&apos;t init textures for</source>
-        <translation>Nie udało się zainicjalizować tekstur dla</translation>
+        <source>Can&apos;t init %1</source>
+        <translation>Nie udało się zainicjalizować %1</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1968,6 +1936,10 @@
     <message>
         <source>&amp;Playback settings</source>
         <translation>Ustawienia &amp;odtwarzania</translation>
+    </message>
+    <message>
+        <source>&amp;Renderer settings</source>
+        <translation>Ustawienia &amp;renderera</translation>
     </message>
 </context>
 <context>
@@ -2910,10 +2882,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <translation>Domyślna lub pierwsza ścieżka</translation>
     </message>
     <message>
-        <source>Video output priority</source>
-        <translation>Priorytet wyjścia obrazu</translation>
-    </message>
-    <message>
         <source>Audio output priority</source>
         <translation>Priorytet wyjścia dźwięku</translation>
     </message>
@@ -2958,6 +2926,70 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>To apply the icons change, the program will start again!</source>
         <translation>Aby zastosować zmianę ikon, program zostanie uruchomiony ponownie!</translation>
+    </message>
+    <message>
+        <source>Legacy video output priority</source>
+        <translation>Priorytety wyjść obrazu starszego typu</translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation>Starszego typu</translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation>OpenGL</translation>
+    </message>
+    <message>
+        <source>active</source>
+        <translation>aktywny</translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation>nieaktywny</translation>
+    </message>
+    <message>
+        <source>Changing renderer</source>
+        <translation>Zmiana renderera</translation>
+    </message>
+    <message>
+        <source>To set up a new renderer, the program will start again!</source>
+        <translation>Aby zastosować nowo wybrany renderer, program zostanie uruchomiony ponownie!</translation>
+    </message>
+    <message>
+        <source>Vertical synchronization (V-Sync)</source>
+        <translation>Synchronizacja pionowa (V-Sync)</translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation>Omiń kompozytor na pełnym ekranie</translation>
+    </message>
+    <message>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <translation>Użyj modułów wyjścia obrazu QMPlay2. Zostaną także użyte jeżeli inne renderery nie będą dostępne.</translation>
+    </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation>Używaj OpenGL dla całego okna</translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation>Może zwiększyć wydajność, jeżeli kompozytor X11 obsługuje tę funkcję</translation>
+    </message>
+    <message>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation>Może zwiększyć wydajność. Niektóre sterowniki kart graficznych mogą działać niestabilnie jeżeli ta opcja jest załączona.</translation>
+    </message>
+    <message>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation>Wykorzystuje QOpenGLWidget (renderowanie do tekstury), włącza także OpenGL dla wizualizacji. Używaj ostrożnie, ponieważ może to obniżyć wydajność odtwarzania wideo.</translation>
+    </message>
+    <message>
+        <source>Renderer:</source>
+        <translation>Renderer:</translation>
+    </message>
+    <message>
+        <source>Renderer settings</source>
+        <translation>Ustawienia renderera</translation>
     </message>
 </context>
 <context>

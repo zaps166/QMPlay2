@@ -1018,14 +1018,6 @@
         <source>Enlarge small covers</source>
         <translation>Збільшити маленькі обкладинки</translation>
     </message>
-    <message>
-        <source>Use OpenGL on entire window</source>
-        <translation>Використовувати OpenGL для всього вікна</translation>
-    </message>
-    <message>
-        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1395,10 +1387,6 @@
         <translation>Метод ресеплювання</translation>
     </message>
     <message>
-        <source>Vertical sync</source>
-        <translation>Вертикальна синхронізація</translation>
-    </message>
-    <message>
         <source>Autodetect</source>
         <translation>Автовиявлення</translation>
     </message>
@@ -1671,10 +1659,6 @@
         <translation>Декодер увімкнений</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation>Копіювати декодоваане відео в пам&apos;ять процесора (не рекомендовано)</translation>
-    </message>
-    <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>Використовувати CUVID тільки якщо першим процесором є NVIDIA</translation>
     </message>
@@ -1794,18 +1778,6 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Копіювати декодоване відео в пам&apos;ять процесора (повільно)</translation>
     </message>
-    <message>
-        <source>Bypass compositor in full screen</source>
-        <translation>Обходити композитного менеджера вікон при повноекранному режимі</translation>
-    </message>
-    <message>
-        <source>This can improve performance if X11 compositor supports it</source>
-        <translation>Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
-    </message>
-    <message>
-        <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1901,22 +1873,18 @@
     </message>
 </context>
 <context>
-    <name>OpenGL2Common</name>
+    <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation>Помилка компіляції/лінкування шейдерів</translation>
+        <translation type="unfinished">Помилка компіляції/лінкування шейдерів</translation>
     </message>
     <message>
-        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation>Драйвер повинен підтримувати мультитекстурування, шейдери і текстуру будь-якого розміру</translation>
-    </message>
-    <message>
-        <source>Can&apos;t init textures for</source>
-        <translation>Неможливо ініціалізувати текстури для</translation>
+        <source>Can&apos;t init %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation>помилка відображення текстури</translation>
+        <translation type="unfinished">помилка відображення текстури</translation>
     </message>
 </context>
 <context>
@@ -1968,6 +1936,10 @@
     <message>
         <source>&amp;Playback settings</source>
         <translation>&amp;Параметри відтворення</translation>
+    </message>
+    <message>
+        <source>&amp;Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2910,10 +2882,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <translation>За замовчуванням або перший потік</translation>
     </message>
     <message>
-        <source>Video output priority</source>
-        <translation>Пріоритет виведення відео</translation>
-    </message>
-    <message>
         <source>Audio output priority</source>
         <translation>Пріоритет виведення аудіо</translation>
     </message>
@@ -2958,6 +2926,70 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To apply the icons change, the program will start again!</source>
         <translation>Для застосування зміни іконок програма перезапуститься!</translation>
+    </message>
+    <message>
+        <source>Legacy video output priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To set up a new renderer, the program will start again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical synchronization (V-Sync)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished">Обходити композитного менеджера вікон при повноекранному режимі</translation>
+    </message>
+    <message>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation type="unfinished">Використовувати OpenGL для всього вікна</translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished">Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
+    </message>
+    <message>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished">Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
+    </message>
+    <message>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation type="unfinished">Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
+    </message>
+    <message>
+        <source>Renderer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

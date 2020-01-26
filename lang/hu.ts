@@ -1018,14 +1018,6 @@
         <source>Enlarge small covers</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1491,10 +1483,6 @@
         <translation>Dekódoló engedélyezve</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation>Dekódolt videó másolása a CPU memóriába (nem ajánlott)</translation>
-    </message>
-    <message>
         <source>Decode MPEG4 videos</source>
         <translation>MPEG4 videók dekódolása</translation>
     </message>
@@ -1711,10 +1699,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vertical sync</source>
-        <translation>Vertikális szinkronizáció</translation>
-    </message>
-    <message>
         <source>M3U support</source>
         <translation>M3U támogatás</translation>
     </message>
@@ -1792,18 +1776,6 @@
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This can improve performance. Some video drivers can crash when enabled.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1901,17 +1873,13 @@
     </message>
 </context>
 <context>
-    <name>OpenGL2Common</name>
+    <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t init textures for</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
+        <source>Can&apos;t init %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1968,6 +1936,10 @@
     <message>
         <source>Remove</source>
         <translation>Eltávolítás</translation>
+    </message>
+    <message>
+        <source>&amp;Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2844,10 +2816,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.</translation>
     </message>
     <message>
-        <source>Video output priority</source>
-        <translation>Videokimenet prioritása</translation>
-    </message>
-    <message>
         <source>Audio output priority</source>
         <translation>Hang kimenet prioritása</translation>
     </message>
@@ -2958,6 +2926,70 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>To apply the icons change, the program will start again!</source>
         <translation>Az ikonváltoztatás alkalmazásához a program újra fog indulni!</translation>
+    </message>
+    <message>
+        <source>Legacy video output priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To set up a new renderer, the program will start again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical synchronization (V-Sync)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

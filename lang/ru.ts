@@ -1015,14 +1015,6 @@
         <source>Enlarge small covers</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1392,10 +1384,6 @@
         <translation>Метод передискретизации</translation>
     </message>
     <message>
-        <source>Vertical sync</source>
-        <translation>Вертикальная синхронизация</translation>
-    </message>
-    <message>
         <source>Autodetect</source>
         <translation>Автоопределение</translation>
     </message>
@@ -1668,10 +1656,6 @@
         <translation>Декодер включен</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (not recommended)</source>
-        <translation>Копировать декодированное видео в память ЦП (не рекомендуется)</translation>
-    </message>
-    <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
         <translation>Используйте CUVID только тогда, когда основным является NVIDIA GPU</translation>
     </message>
@@ -1791,18 +1775,6 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1898,18 +1870,14 @@
     </message>
 </context>
 <context>
-    <name>OpenGL2Common</name>
+    <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Driver must support multitexturing, shaders and Non-Power-Of-Two texture size</source>
-        <translation>Драйвер должен поддерживать мультитекстурирование, шейдеры и размер текстур, которые уже не являются степенями двух (Non-Power-Of-Two)</translation>
-    </message>
-    <message>
-        <source>Can&apos;t init textures for</source>
-        <translation>Не удается инициализировать текстуры для</translation>
+        <source>Can&apos;t init %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1965,6 +1933,10 @@
     <message>
         <source>&amp;Playback settings</source>
         <translation>&amp;Настройка воспроизведения</translation>
+    </message>
+    <message>
+        <source>&amp;Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2907,10 +2879,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>По умолчанию или первый поток</translation>
     </message>
     <message>
-        <source>Video output priority</source>
-        <translation>Приоритет вывода видео</translation>
-    </message>
-    <message>
         <source>Audio output priority</source>
         <translation>Приоритет вывода аудио</translation>
     </message>
@@ -2955,6 +2923,70 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>To apply the icons change, the program will start again!</source>
         <translation>Чтобы применить изменение значков, программа запустится снова!</translation>
+    </message>
+    <message>
+        <source>Legacy video output priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Legacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To set up a new renderer, the program will start again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical synchronization (V-Sync)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bypass compositor in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use OpenGL on entire window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance if X11 compositor supports it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This can improve performance. Some video drivers can crash when enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renderer settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
