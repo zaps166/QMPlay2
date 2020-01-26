@@ -195,7 +195,7 @@ bool CuvidOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12T
     vidProcParams.progressive_frame = !videoFrame.isInterlaced();
     vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
 
-    if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.hwSurface(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
+    if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.customID(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
         return false;
 
     const size_t size = pitch * videoFrame.height();
