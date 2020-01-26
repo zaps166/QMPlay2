@@ -110,12 +110,12 @@ bool VAAPI::open(bool openGL)
     m_version = (major << 8) | minor;
 
     const QString vendor = vaQueryVendorString(VADisp);
-    if (vendor.contains("VDPAU")) // Not supported in FFmpeg due to "vaQuerySurfaceAttributes()"
+    if (vendor.isEmpty())
         return false;
 
     int fmtCount = vaMaxNumImageFormats(VADisp);
     VAImageFormat imgFmt[fmtCount];
-    if (vaQueryImageFormats(VADisp, imgFmt, &fmtCount) == VA_STATUS_SUCCESS)
+    if (fmtCount > 0 && vaQueryImageFormats(VADisp, imgFmt, &fmtCount) == VA_STATUS_SUCCESS)
     {
         for (int i = 0; i < fmtCount; ++i)
         {
