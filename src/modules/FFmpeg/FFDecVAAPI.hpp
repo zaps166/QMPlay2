@@ -21,8 +21,6 @@
 #include <FFDecHWAccel.hpp>
 #include <VAAPI.hpp>
 
-#include <memory>
-
 struct SwsContext;
 
 class FFDecVAAPI final : public FFDecHWAccel
@@ -40,10 +38,9 @@ public:
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(Frame &decoded) override;
 
-    bool open(StreamInfo &, VideoWriter *) override;
+    bool open(StreamInfo &streamInfo) override;
 
 private:
-    bool m_copyVideo = false;
     VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
     std::shared_ptr<VAAPI> m_vaapi;
     std::shared_ptr<VideoFilter> m_filter;

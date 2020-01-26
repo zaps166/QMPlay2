@@ -18,13 +18,12 @@
 
 #include <FFDecVAAPI.hpp>
 #include <DeintHWPrepareFilter.hpp>
-#include <VideoWriter.hpp>
 #include <FFCommon.hpp>
+#include <StreamInfo.hpp>
+#include <GPUInstance.hpp>
 #ifdef USE_OPENGL
 #   include <VAAPIOpenGL.hpp>
 #endif
-
-#include <StreamInfo.hpp>
 
 #include <QDebug>
 
@@ -36,6 +35,8 @@ extern "C"
     #include <libavutil/hwcontext_vaapi.h>
     #include <libswscale/swscale.h>
 }
+
+using namespace std;
 
 static AVPixelFormat vaapiGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
@@ -64,15 +65,6 @@ FFDecVAAPI::~FFDecVAAPI()
 
 bool FFDecVAAPI::set()
 {
-    bool ret = true;
-
-    const bool copyVideo = sets().getBool("CopyVideoVAAPI");
-    if (copyVideo != m_copyVideo)
-    {
-        m_copyVideo = copyVideo;
-        ret = false;
-    }
-
     switch (sets().getInt("VAAPIDeintMethod"))
     {
         case 0:
@@ -91,8 +83,7 @@ bool FFDecVAAPI::set()
         if (reloadVpp)
             m_vaapi->clearVPP(false);
     }
-
-    return sets().getBool("DecoderVAAPIEnabled") && ret;
+    return sets().getBool("DecoderVAAPIEnabled");
 }
 
 QString FFDecVAAPI::name() const
@@ -100,7 +91,7 @@ QString FFDecVAAPI::name() const
     return "FFmpeg/" VAAPIWriterName;
 }
 
-std::shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
+shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
 {
     return m_filter;
 }
@@ -108,7 +99,7 @@ std::shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
 int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    if (m_hwAccelWriter && ret > -1)
+    if (m_hasHWDecContext && ret > -1)
     {
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
     }
@@ -158,7 +149,7 @@ void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
     }
 }
 
-bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
+bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
@@ -168,22 +159,26 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 
-    if (writer) //Writer is already created
-    {
+    const bool copyVideo = (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::Legacy);
+
 #ifdef USE_OPENGL
-        auto vaapiOpenGL = writer->getHWAccelInterface<VAAPIOpenGL>();
+    shared_ptr<VAAPIOpenGL> vaapiOpenGL;
+
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    {
+        vaapiOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIOpenGL>();
         if (vaapiOpenGL)
         {
             m_vaapi = vaapiOpenGL->getVAAPI();
-            m_hwAccelWriter = writer;
+            Q_ASSERT(m_vaapi);
         }
-#endif
     }
+#endif
 
     if (!m_vaapi)
     {
-        m_vaapi = std::make_shared<VAAPI>();
-        if (!m_vaapi->open(!m_copyVideo))
+        m_vaapi = make_shared<VAAPI>();
+        if (!m_vaapi->open(copyVideo))
             return false;
 
         m_vaapi->m_hwDeviceBufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
@@ -199,18 +194,23 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_vaapi->checkCodec(avcodec_get_name(codec_ctx->codec_id)))
         return false;
 
-    if (!m_hwAccelWriter && !m_copyVideo)
-    {
 #ifdef USE_OPENGL
-        auto vaapiOpengGL = std::make_shared<VAAPIOpenGL>(m_vaapi);
-        m_hwAccelWriter = VideoWriter::createOpenGL2(vaapiOpengGL);
-#endif
-        if (!m_hwAccelWriter)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !vaapiOpenGL)
+    {
+        vaapiOpenGL = make_shared<VAAPIOpenGL>(m_vaapi);
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vaapiOpenGL))
             return false;
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
 
-    m_vaapi->init(codec_ctx->width, codec_ctx->height, !m_copyVideo);
+    if (vaapiOpenGL)
+    {
+        m_filter = make_shared<DeintHWPrepareFilter>();
+        m_hasHWDecContext = true;
+    }
+#endif
+
+    m_vaapi->init(codec_ctx->width, codec_ctx->height, !copyVideo);
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;
@@ -220,9 +220,6 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo, VideoWriter *writer)
 #endif
     if (!openCodec(codec))
         return false;
-
-    if (m_hwAccelWriter)
-        m_filter = std::make_shared<DeintHWPrepareFilter>();
 
     m_timeBase = streamInfo.time_base;
     return true;

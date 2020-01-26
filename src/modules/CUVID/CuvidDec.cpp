@@ -19,7 +19,7 @@
 #include <CuvidDec.hpp>
 
 #include <DeintHWPrepareFilter.hpp>
-#include <VideoWriter.hpp>
+#include <GPUInstance.hpp>
 #include <StreamInfo.hpp>
 #include <CuvidAPI.hpp>
 #ifdef USE_OPENGL
@@ -71,12 +71,10 @@ bool CuvidDec::canCreateInstance()
 }
 
 CuvidDec::CuvidDec(Module &module) :
-    m_writer(nullptr),
     m_limited(false),
     m_colorSpace(AVCOL_SPC_UNSPECIFIED),
     m_lastCuvidTS(0),
     m_deintMethod(cudaVideoDeinterlaceMode_Weave),
-    m_copyVideo(false),
     m_forceFlush(false),
     m_tsWorkaround(false),
     m_bsfCtx(nullptr),
@@ -97,8 +95,7 @@ CuvidDec::~CuvidDec()
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
         destroyCuvid(true);
-        if (!m_writer)
-            cu::ctxDestroy(m_cuCtx);
+        m_cuCtx.reset();
     }
     av_bsf_free(&m_bsfCtx);
     if (m_swsCtx)
@@ -126,13 +123,6 @@ bool CuvidDec::set()
             restart = true;
         }
 
-        const bool copyVideo = (Qt::CheckState)sets().getBool("CopyVideo");
-        if (copyVideo != m_copyVideo)
-        {
-            m_copyVideo = copyVideo;
-            restart = true;
-        }
-
         if (!restart)
             return true;
     }
@@ -146,7 +136,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
     cuvidDecInfo.CodecType = format->codec;
     cuvidDecInfo.ChromaFormat = format->chroma_format;
-    cuvidDecInfo.DeinterlaceMode = (!m_writer || format->progressive_sequence) ? cudaVideoDeinterlaceMode_Weave : m_deintMethod;
+    cuvidDecInfo.DeinterlaceMode = (!m_filter || format->progressive_sequence) ? cudaVideoDeinterlaceMode_Weave : m_deintMethod;
     cuvidDecInfo.OutputFormat = cudaVideoSurfaceFormat_NV12;
 
     cuvidDecInfo.ulWidth = format->coded_width;
@@ -169,7 +159,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
     destroyCuvid(false);
 
-    if (!m_cuvidHWAccel)
+    if (!m_cuvidGLInterop)
     {
         m_swsCtx = sws_getCachedContext(m_swsCtx, m_width, m_height, AV_PIX_FMT_NV12, m_width, m_height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         if (!m_swsCtx)
@@ -185,8 +175,8 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
     }
 
 #ifdef USE_OPENGL
-    if (m_cuvidHWAccel)
-        m_cuvidHWAccel->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
+    if (m_cuvidGLInterop)
+        m_cuvidGLInterop->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
 #endif
 
     return 1;
@@ -216,9 +206,9 @@ QString CuvidDec::name() const
     return CuvidName;
 }
 
-VideoWriter *CuvidDec::HWAccel() const
+bool CuvidDec::hasHWDecContext() const
 {
-    return m_writer;
+    return static_cast<bool>(m_cuvidGLInterop);
 }
 shared_ptr<VideoFilter> CuvidDec::hwAccelFilter() const
 {
@@ -313,17 +303,17 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
                 decoded = Frame::createEmpty(
                     m_width,
                     m_height,
-                    m_cuvidHWAccel ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
+                    m_cuvidGLInterop ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
                     !dispInfo.progressive_frame,
                     dispInfo.top_field_first,
                     m_colorSpace,
                     m_limited
                 );
             };
-            if (m_cuvidHWAccel)
+            if (m_cuvidGLInterop)
             {
 #ifdef USE_OPENGL
-                m_cuvidHWAccel->setAvailableSurface(dispInfo.picture_index);
+                m_cuvidGLInterop->setAvailableSurface(dispInfo.picture_index);
                 createFrame();
                 decoded.setCustomID(dispInfo.picture_index);
 #endif
@@ -406,7 +396,7 @@ bool CuvidDec::hasCriticalError() const
     return m_hasCriticalError;
 }
 
-bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
+bool CuvidDec::open(StreamInfo &streamInfo)
 {
     if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
@@ -512,32 +502,17 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
     m_height = streamInfo.height;
     m_codedHeight = m_height;
 
-    if (writer)
-    {
 #ifdef USE_OPENGL
-        m_cuvidHWAccel = writer->getHWAccelInterface<CuvidOpenGL>();
-        if (m_cuvidHWAccel)
-        {
-            m_cuCtx = m_cuvidHWAccel->getCudaContext();
-            m_writer = writer;
-        }
-#endif
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    {
+        m_cuvidGLInterop = QMPlay2Core.gpuInstance()->getHWDecContext<CuvidOpenGL>();
+        if (m_cuvidGLInterop)
+            m_cuCtx = m_cuvidGLInterop->getCudaContext();
     }
+#endif
 
     if (!m_cuCtx && !(m_cuCtx = cu::createContext()))
         return false;
-
-    if (!m_writer && !m_copyVideo)
-    {
-#ifdef USE_OPENGL
-        m_writer = VideoWriter::createOpenGL2(make_shared<CuvidOpenGL>(m_cuCtx));
-        if (!m_writer)
-            return false;
-        m_cuvidHWAccel = m_writer->getHWAccelInterface<CuvidOpenGL>();
-#else
-        return false;
-#endif
-    }
 
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
@@ -563,26 +538,20 @@ bool CuvidDec::open(StreamInfo &streamInfo, VideoWriter *writer)
         err = true;
 
     if (err)
-    {
-        if (!writer)
-        {
-            delete m_writer;
-            m_writer = nullptr;
-            m_cuvidHWAccel = nullptr;
-        }
         return false;
-    }
-
-#ifdef USE_OPENGL
-    if (m_cuvidHWAccel)
-    {
-        m_cuvidHWAccel->allowDestroyCuda();
-        m_filter = make_shared<DeintHWPrepareFilter>();
-    }
-#endif
 
     m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
     m_colorSpace = streamInfo.color_space;
+
+#ifdef USE_OPENGL
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !m_cuvidGLInterop)
+    {
+        m_cuvidGLInterop = make_shared<CuvidOpenGL>(m_cuCtx);
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_cuvidGLInterop))
+            return false;
+        m_filter = make_shared<DeintHWPrepareFilter>();
+    }
+#endif
 
     return true;
 }
@@ -638,8 +607,8 @@ bool CuvidDec::createCuvidVideoParser()
 void CuvidDec::destroyCuvid(bool all)
 {
 #ifdef USE_OPENGL
-    if (m_cuvidHWAccel)
-        m_cuvidHWAccel->setDecoderAndCodedHeight(nullptr, 0);
+    if (m_cuvidGLInterop)
+        m_cuvidGLInterop->setDecoderAndCodedHeight(nullptr, 0);
 #endif
     cuvid::destroyDecoder(m_cuvidDec);
     m_cuvidDec = nullptr;

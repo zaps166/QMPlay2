@@ -20,14 +20,14 @@
 
 #include "CuvidAPI.hpp"
 
-#include <HWAccelInterface.hpp>
+#include <HWOpenGLInterop.hpp>
 
 #include <QSet>
 
-class CuvidOpenGL : public HWAccelInterface
+class CuvidOpenGL : public HWOpenGLInterop
 {
 public:
-    CuvidOpenGL(CUcontext cuCtx);
+    CuvidOpenGL(const std::shared_ptr<CUcontext> &cuCtx);
     ~CuvidOpenGL() final;
 
     QString name() const override;
@@ -37,19 +37,14 @@ public:
     bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override;
     void clear() override;
 
-    MapResult mapFrame(Frame &videoFrame) override;
+    bool mapFrame(Frame &videoFrame) override;
     quint32 getTexture(int plane) override;
 
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override;
+    QImage getImage(const Frame &videoFrame) override;
 
     /**/
 
-    inline void allowDestroyCuda()
-    {
-        m_canDestroyCuda = true;
-    }
-
-    inline CUcontext getCudaContext() const
+    inline std::shared_ptr<CUcontext> getCudaContext() const
     {
         return m_cuCtx;
     }
@@ -59,8 +54,6 @@ public:
     void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight);
 
 private:
-    bool m_canDestroyCuda = false;
-
     int m_codedHeight = 0;
 
     quint32 m_textures[2] = {};
@@ -68,7 +61,7 @@ private:
     int m_widths[2] = {};
     int m_heights[2] = {};
 
-    const CUcontext m_cuCtx;
+    const std::shared_ptr<CUcontext> m_cuCtx;
     CUvideodecoder m_cuvidDec = nullptr;
 
     CUgraphicsResource m_res[2] = {};

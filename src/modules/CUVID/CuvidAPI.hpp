@@ -21,6 +21,8 @@
 #include <cuda/CUDAQMPlayTypes.hpp>
 #include <cuda/CUVIDQMPlayTypes.hpp>
 
+#include <memory>
+
 namespace cu {
 
 using  cuInitType = CUresult CUDAAPI (*)(unsigned int flags);
@@ -64,20 +66,21 @@ extern cuCtxDestroyType ctxDestroy;
 
 bool load();
 
-CUcontext createContext();
+std::shared_ptr<CUcontext> createContext();
 
 class ContextGuard
 {
     Q_DISABLE_COPY(ContextGuard)
 
 public:
+    ContextGuard(const std::shared_ptr<CUcontext> &ctx);
     ContextGuard(CUcontext ctx);
     ~ContextGuard();
 
     void unlock();
 
 private:
-    bool m_locked;
+    bool m_locked = true;
 };
 
 }

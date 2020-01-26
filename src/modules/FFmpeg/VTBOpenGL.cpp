@@ -22,6 +22,7 @@
 #include <Frame.hpp>
 
 #include <QOpenGLContext>
+#include <QImage>
 
 extern "C"
 {
@@ -42,7 +43,7 @@ QString VTBOpenGL::name() const
     return "VideoToolBox";
 }
 
-HWAccelInterface::Format VTBOpenGL::getFormat() const
+HWOpenGLInterop::Format VTBOpenGL::getFormat() const
 {
     return NV12;
 }
@@ -55,7 +56,7 @@ bool VTBOpenGL::isCopy() const
     return false;
 }
 
-bool VTBOpenGL::init(const int *widths, const int *heights, const HWAccelInterface::SetTextureParamsFn &setTextureParamsFn)
+bool VTBOpenGL::init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn)
 {
     for (int p = 0; p < 2; ++p)
     {
@@ -83,7 +84,7 @@ void VTBOpenGL::clear()
     memset(m_heights, 0, sizeof(m_heights));
 }
 
-HWAccelInterface::MapResult VTBOpenGL::mapFrame(Frame &videoFrame)
+bool VTBOpenGL::mapFrame(Frame &videoFrame)
 {
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
     CGLContextObj glCtx = CGLGetCurrentContext();
@@ -92,24 +93,33 @@ HWAccelInterface::MapResult VTBOpenGL::mapFrame(Frame &videoFrame)
 
     const OSType pixelFormat = IOSurfaceGetPixelFormat(surface);
     if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[0]);
     if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.width(0), videoFrame.height(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[1]);
     if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.width(1), videoFrame.height(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
-    return MapOk;
+    return true;
 }
 quint32 VTBOpenGL::getTexture(int plane)
 {
     return m_textures[plane];
 }
 
-bool VTBOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+QImage VTBOpenGL::getImage(const Frame &videoFrame)
 {
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
     if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
@@ -125,12 +135,18 @@ bool VTBOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToR
             (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
         };
 
-        nv12ToRGB32->scale((const void **)srcData, srcLinesize, dest);
+        QImage img;
+
+        ImgScaler imgScaler;
+        if (imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        {
+            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+            imgScaler.scale((const void **)srcData, srcLinesize, img.bits());
+        }
 
         CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
 
-        return true;
+        return img;
     }
-
-    return false;
+    return QImage();
 }

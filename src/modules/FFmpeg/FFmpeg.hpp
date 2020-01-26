@@ -93,21 +93,17 @@ private:
     QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
     QGroupBox *decoderVDPAUB;
-    QCheckBox *copyVideoVDPAUB;
     QCheckBox *noisereductionVDPAUB;
     Slider *noisereductionLvlVDPAUS;
 #endif
 #ifdef QMPlay2_VAAPI
-    QGroupBox *decoderVAAPIEB;
-    QCheckBox *copyVideoVAAPIB;
+    QCheckBox *decoderVAAPIEB;
 #endif
 #ifdef QMPlay2_DXVA2
-    QGroupBox *decoderDXVA2EB;
-    QCheckBox *copyVideoDXVA2;
+    QCheckBox *decoderDXVA2EB;
 #endif
 #ifdef QMPlay2_VTB
-    QGroupBox *decoderVTBEB;
-    QCheckBox *copyVideoVTB;
+    QCheckBox *decoderVTBEB;
 #endif
     QSpinBox *threadsB;
     QComboBox *lowresB, *thrTypeB;

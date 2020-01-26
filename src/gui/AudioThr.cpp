@@ -33,8 +33,10 @@
 #include <cmath>
 
 AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
-    AVThread(playC, "audio:", nullptr, pluginsName)
+    AVThread(playC)
 {
+    writer = Writer::create("audio:", pluginsName);
+
     for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
         if (QMPlay2Ext->isVisualization())
             visualizations += QMPlay2Ext;

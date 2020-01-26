@@ -20,6 +20,7 @@
 #include <FFCommon.hpp>
 
 #include <QMPlay2Core.hpp>
+#include <ImgScaler.hpp>
 #include <Frame.hpp>
 
 #include <va/va_drmcommon.h>
@@ -44,7 +45,7 @@ QString VAAPIOpenGL::name() const
     return VAAPIWriterName;
 }
 
-HWAccelInterface::Format VAAPIOpenGL::getFormat() const
+HWOpenGLInterop::Format VAAPIOpenGL::getFormat() const
 {
     return NV12;
 }
@@ -54,7 +55,7 @@ bool VAAPIOpenGL::isCopy() const
     return false;
 }
 
-bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInterface::SetTextureParamsFn &setTextureParamsFn)
+bool VAAPIOpenGL::init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn)
 {
     for (int p = 0; p < m_numPlanes; ++p)
     {
@@ -81,6 +82,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!context)
     {
         QMPlay2Core.logError("VA-API :: Unable to get OpenGL context");
+        m_error = true;
         return false;
     }
 
@@ -88,6 +90,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!m_eglDpy)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL display");
+        m_error = true;
         return false;
     }
 
@@ -95,6 +98,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!extensionsRaw)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL extensions");
+        m_error = true;
         return false;
     }
 
@@ -102,6 +106,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!extensions.contains("EGL_EXT_image_dma_buf_import"))
     {
         QMPlay2Core.logError("VA-API :: EGL_EXT_image_dma_buf_import extension is not available");
+        m_error = true;
         return false;
     }
 
@@ -111,6 +116,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!eglCreateImageKHR || !eglDestroyImageKHR || !glEGLImageTargetTexture2DOES)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL function pointers");
+        m_error = true;
         return false;
     }
 
@@ -131,7 +137,7 @@ void VAAPIOpenGL::clear()
     clearTextures();
 }
 
-HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
+bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
 {
     VASurfaceID id;
     int vaField = videoFrame.isInterlaced()
@@ -141,7 +147,7 @@ HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
         : VA_FRAME_PICTURE
     ;
     if (!m_vaapi->filterVideo(videoFrame, id, vaField))
-        return MapNotReady;
+        return false;
 
     VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
     if (vaExportSurfaceHandle(
@@ -153,7 +159,8 @@ HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
         ) != VA_STATUS_SUCCESS)
     {
         QMPlay2Core.logError("VA-API :: Unable to export surface handle");
-        return MapError;
+        m_error = true;
+        return false;
     }
 
     auto closeFDs = [&] {
@@ -165,7 +172,8 @@ HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
     {
         QMPlay2Core.logError("VA-API :: Unable to sync surface");
         closeFDs();
-        return MapError;
+        m_error = true;
+        return false;
     }
 
     for (uint32_t p = 0; p < vaSurfaceDescr.num_layers; ++p)
@@ -203,7 +211,8 @@ HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
         {
             QMPlay2Core.logError("VA-API :: Unable to create EGL image");
             closeFDs();
-            return MapError;
+            m_error = true;
+            return false;
         }
 
         glBindTexture(GL_TEXTURE_2D, m_textures[p]);
@@ -213,7 +222,7 @@ HWAccelInterface::MapResult VAAPIOpenGL::mapFrame(Frame &videoFrame)
     }
 
     closeFDs();
-    return MapOk;
+    return true;
 }
 
 quint32 VAAPIOpenGL::getTexture(int plane)
@@ -221,9 +230,17 @@ quint32 VAAPIOpenGL::getTexture(int plane)
     return m_textures[plane];
 }
 
-bool VAAPIOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+QImage VAAPIOpenGL::getImage(const Frame &videoFrame)
 {
-    return m_vaapi->getImage(videoFrame, dest, nv12ToRGB32);
+    ImgScaler imgScaler;
+    if (!imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        return QImage();
+
+    QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+    if (m_vaapi->getImage(videoFrame, img.bits(), imgScaler))
+        return img;
+
+    return QImage();
 }
 
 void VAAPIOpenGL::clearTextures()

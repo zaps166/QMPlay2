@@ -18,27 +18,46 @@
 
 #pragma once
 
-#include <OpenGL2Common.hpp>
+#include "OpenGLCommon.hpp"
 
-#include <QSurfaceFormat>
-#include <QOpenGLWidget>
+#include <QOpenGLWindow>
+#include <QWidget>
 
-class OpenGL2Widget final : public QOpenGLWidget, public OpenGL2Common
+#if defined Q_OS_MACOS || defined Q_OS_WIN //QTBUG-50505
+    #define PASS_EVENTS_TO_PARENT
+#endif
+
+class OpenGLWindow final : private QOpenGLWindow, public OpenGLCommon
 {
     Q_OBJECT
 public:
-    OpenGL2Widget();
-    ~OpenGL2Widget();
+    OpenGLWindow();
+    ~OpenGLWindow();
+
+    void deleteMe() override;
 
     QWidget *widget() override;
+
+    bool makeContextCurrent() override;
+    void doneContextCurrent() override;
 
     void setVSync(bool enable) override;
     void updateGL(bool requestDelayed) override;
 
     void initializeGL() override;
     void paintGL() override;
+
 private slots:
+    void doUpdateGL(bool queued = false);
     void aboutToBeDestroyed();
+    void videoVisible(bool v);
 private:
+    bool eventFilter(QObject *o, QEvent *e) override;
+
+#ifdef PASS_EVENTS_TO_PARENT
     bool event(QEvent *e) override;
+#endif
+
+    QWidget *container;
+    bool visible;
 };

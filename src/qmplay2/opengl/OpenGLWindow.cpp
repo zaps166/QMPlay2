@@ -16,14 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "OpenGL2Window.hpp"
+#include "OpenGLWindow.hpp"
 
 #include <QMPlay2Core.hpp>
 
 #include <QOpenGLContext>
 #include <QDockWidget>
 
-OpenGL2Window::OpenGL2Window() :
+OpenGLWindow::OpenGLWindow() :
     visible(true)
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
@@ -39,22 +39,35 @@ OpenGL2Window::OpenGL2Window() :
 
     connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
 }
-OpenGL2Window::~OpenGL2Window()
+OpenGLWindow::~OpenGLWindow()
 {
     makeCurrent();
 }
 
-void OpenGL2Window::deleteMe()
+void OpenGLWindow::deleteMe()
 {
     delete container;
 }
 
-QWidget *OpenGL2Window::widget()
+QWidget *OpenGLWindow::widget()
 {
     return container;
 }
 
-void OpenGL2Window::setVSync(bool enable)
+bool OpenGLWindow::makeContextCurrent()
+{
+    if (!context())
+        return false;
+
+    makeCurrent();
+    return true;
+}
+void OpenGLWindow::doneContextCurrent()
+{
+    doneCurrent();
+}
+
+void OpenGLWindow::setVSync(bool enable)
 {
     QSurfaceFormat fmt = format();
     if (!handle())
@@ -73,27 +86,27 @@ void OpenGL2Window::setVSync(bool enable)
     }
     vSync = enable;
 }
-void OpenGL2Window::updateGL(bool requestDelayed)
+void OpenGLWindow::updateGL(bool requestDelayed)
 {
     if (visible && isExposed())
         QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
 }
 
-void OpenGL2Window::initializeGL()
+void OpenGLWindow::initializeGL()
 {
     connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(aboutToBeDestroyed()), Qt::DirectConnection);
-    OpenGL2Common::initializeGL();
+    OpenGLCommon::initializeGL();
 }
-void OpenGL2Window::paintGL()
+void OpenGLWindow::paintGL()
 {
     if (isExposed())
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        OpenGL2Common::paintGL();
+        OpenGLCommon::paintGL();
     }
 }
 
-void OpenGL2Window::doUpdateGL(bool queued)
+void OpenGLWindow::doUpdateGL(bool queued)
 {
     if (queued)
         QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest), Qt::LowEventPriority);
@@ -104,18 +117,18 @@ void OpenGL2Window::doUpdateGL(bool queued)
         QCoreApplication::sendEvent(this, &updateEvent);
     }
 }
-void OpenGL2Window::aboutToBeDestroyed()
+void OpenGLWindow::aboutToBeDestroyed()
 {
     makeCurrent();
     contextAboutToBeDestroyed();
     doneCurrent();
 }
-void OpenGL2Window::videoVisible(bool v)
+void OpenGLWindow::videoVisible(bool v)
 {
     visible = v && (container->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
 }
 
-bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
+bool OpenGLWindow::eventFilter(QObject *o, QEvent *e)
 {
     if (o == container)
         dispatchEvent(e, container->parent());
@@ -123,7 +136,7 @@ bool OpenGL2Window::eventFilter(QObject *o, QEvent *e)
 }
 
 #ifdef PASS_EVENTS_TO_PARENT
-bool OpenGL2Window::event(QEvent *e)
+bool OpenGLWindow::event(QEvent *e)
 {
     switch (e->type())
     {

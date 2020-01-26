@@ -19,19 +19,24 @@
 #include <VideoThr.hpp>
 
 #include <VideoAdjustmentW.hpp>
+#include <ScreenSaver.hpp>
 #include <PlayClass.hpp>
 #include <Main.hpp>
 
+#ifdef USE_OPENGL
+#   include <opengl/OpenGLWriter.hpp>
+#endif
+#include <GPUInstance.hpp>
+#include <HWDecContext.hpp>
 #include <VideoWriter.hpp>
 #include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 #include <Settings.hpp>
 #include <Decoder.hpp>
 #include <LibASS.hpp>
-
-#include <ScreenSaver.hpp>
 #include <ImgScaler.hpp>
 #include <Functions.hpp>
+
 using Functions::gettime;
 
 #include <QDebug>
@@ -40,15 +45,29 @@ using Functions::gettime;
 
 #include <cmath>
 
-VideoThr::VideoThr(PlayClass &playC, VideoWriter *hwAccelWriter, const QStringList &pluginsName) :
-    AVThread(playC, "video:", hwAccelWriter, pluginsName),
+VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
+    AVThread(playC),
+    syncVtoA(QMPlay2Core.getSettings().getBool("SyncVtoA")),
     doScreenshot(false),
     deleteOSD(false), deleteFrame(false), gotFrameOrError(false), decoderError(false),
     W(0), H(0), seq(0),
     sDec(nullptr),
-    hwAccelWriter(hwAccelWriter),
     subtitles(nullptr)
 {
+    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+    {
+        writer = QMPlay2Core.gpuInstance()->getVideoOutput();
+        if (!writer)
+        {
+            writer = QMPlay2Core.gpuInstance()->createOrGetVideoOutput();
+            videoWriter()->open();
+        }
+    }
+    else
+    {
+        writer = Writer::create("video:", pluginsName);
+    }
+
     maybeStartThread();
 }
 VideoThr::~VideoThr()
@@ -59,6 +78,28 @@ VideoThr::~VideoThr()
     playC.osd = nullptr;
     delete subtitles;
     delete sDec;
+    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+        QMPlay2Core.gpuInstance()->clearVideoOutput();
+}
+
+void VideoThr::setDec(Decoder *dec)
+{
+    AVThread::setDec(dec);
+    if (!dec->hasHWDecContext() && videoWriter()->hwDecContext())
+        videoWriter()->setHWDecContext(nullptr);
+    decoderError = false;
+}
+
+std::shared_ptr<HWDecContext> VideoThr::getHWDecContext() const
+{
+    return videoWriter()->hwDecContext();
+}
+
+bool VideoThr::videoWriterSet()
+{
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::Legacy)
+        return false; // Force restart to use possible new order of video outputs
+    return writer->set();
 }
 
 void VideoThr::stop(bool terminate)
@@ -145,7 +186,7 @@ void VideoThr::initFilters()
         const bool autoParity = QMPSettings.getBool("Deinterlace/AutoParity");
         const bool topFieldFirst = QMPSettings.getBool("Deinterlace/TFF");
         const quint8 deintFlags = autoDeint | doubleFramerate << 1 | autoParity << 2 | topFieldFirst << 3;
-        if (hwAccelWriter)
+        if (getHWDecContext())
         {
             if (auto hwFilter = dec->hwAccelFilter())
             {
@@ -221,7 +262,7 @@ void VideoThr::updateSubs()
 
 inline VideoWriter *VideoThr::videoWriter() const
 {
-    return (VideoWriter *)writer;
+    return static_cast<VideoWriter *>(writer);
 }
 
 void VideoThr::run()
@@ -450,7 +491,14 @@ void VideoThr::run()
         }
 
         // This thread will wait for "DemuxerThr" which'll detect this error and restart with new decoder.
-        decoderError = (dec->hasCriticalError() || videoWriter()->hwAccelError());
+        if (dec->hasCriticalError())
+        {
+            decoderError = true;
+        }
+        else if (auto hwDecContext = getHWDecContext())
+        {
+            decoderError = hwDecContext->hasError();
+        }
 
         const bool ptsIsValid = filters.getFrame(videoFrame);
         if (ptsIsValid)
@@ -636,40 +684,51 @@ void VideoThr::run()
 void VideoThr::write(Frame videoFrame, quint32 lastSeq)
 {
     canWrite = true;
-    if (lastSeq == seq && writer->readyWrite() && !videoWriter()->hwAccelError())
-    {
-        QMPlay2GUI.screenSaver->inhibit(0);
-        videoWriter()->writeVideo(videoFrame);
-    }
+
+    if (lastSeq != seq || !writer->readyWrite())
+        return;
+
+    auto hwDecContext = getHWDecContext();
+    if (hwDecContext && hwDecContext->hasError())
+        return;
+
+    QMPlay2GUI.screenSaver->inhibit(0);
+    videoWriter()->writeVideo(videoFrame);
 }
 void VideoThr::screenshot(Frame videoFrame)
 {
-    ImgScaler imgScaler;
-    const int aligned8W = Functions::aligned(W, 8);
-    if (imgScaler.create(videoFrame, aligned8W, H, (bool)hwAccelWriter))
+    QImage img;
+
+    if (auto hwDecContext = getHWDecContext())
     {
-        QImage img(aligned8W, H, QImage::Format_RGB32);
-        bool ok = true;
-        if (!hwAccelWriter)
-            imgScaler.scale(videoFrame, img.bits());
-        else
-            ok = videoWriter()->hwAccelGetImg(videoFrame, img.bits(), &imgScaler);
-        if (!ok)
-            QMPlay2Core.logError(tr("Cannot create screenshot"));
-        else
+        img = hwDecContext->getImage(videoFrame);
+    }
+    else
+    {
+        ImgScaler imgScaler;
+        if (imgScaler.create(videoFrame, W, H))
         {
-            const QString ext = QMPlay2Core.getSettings().getString("screenshotFormat");
-            const QString dir = QMPlay2Core.getSettings().getString("screenshotPth");
-            quint16 num = 0;
-            for (const QString &f : QDir(dir).entryList({"QMPlay2_snap_?????" + ext}, QDir::Files, QDir::Name))
-            {
-                const quint16 n = f.midRef(13, 5).toUShort();
-                if (n > num)
-                    num = n;
-            }
-            img.save(dir + "/QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext);
+            img = QImage(W, H, QImage::Format_RGB32);
+            imgScaler.scale(videoFrame, img.bits());
         }
     }
+
+    if (img.isNull())
+    {
+        QMPlay2Core.logError(tr("Cannot create screenshot"));
+        return;
+    }
+
+    const QString ext = QMPlay2Core.getSettings().getString("screenshotFormat");
+    const QString dir = QMPlay2Core.getSettings().getString("screenshotPth");
+    quint16 num = 0;
+    for (const QString &f : QDir(dir).entryList({"QMPlay2_snap_?????" + ext}, QDir::Files, QDir::Name))
+    {
+        const quint16 n = f.midRef(13, 5).toUShort();
+        if (n > num)
+            num = n;
+    }
+    img.save(dir + "/QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext);
 }
 void VideoThr::pause()
 {

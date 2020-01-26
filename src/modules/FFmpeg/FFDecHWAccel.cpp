@@ -25,17 +25,10 @@ extern "C"
     #include <libavformat/avformat.h>
 }
 
-FFDecHWAccel::FFDecHWAccel() :
-    m_hwAccelWriter(nullptr),
-    m_hasCriticalError(false)
+FFDecHWAccel::FFDecHWAccel()
 {}
 FFDecHWAccel::~FFDecHWAccel()
 {}
-
-VideoWriter *FFDecHWAccel::HWAccel() const
-{
-    return m_hwAccelWriter;
-}
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
@@ -62,6 +55,11 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 #endif
 }
 
+bool FFDecHWAccel::hasHWDecContext() const
+{
+    return m_hasHWDecContext;
+}
+
 int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
     Q_UNUSED(newPixFmt)
@@ -79,14 +77,10 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
 
     if (frameFinished && ~hurryUp)
     {
-        if (m_hwAccelWriter)
-        {
+        if (m_hasHWDecContext)
             decoded = Frame(frame);
-        }
         else
-        {
             downloadVideoFrame(decoded);
-        }
     }
 
     decodeLastStep(encodedPacket, decoded, frameFinished);

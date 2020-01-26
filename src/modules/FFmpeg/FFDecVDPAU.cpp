@@ -17,7 +17,6 @@
 */
 
 #include <FFDecVDPAU.hpp>
-#include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
 #include <Functions.hpp>
 #include <FFCommon.hpp>
@@ -25,6 +24,7 @@
 #ifdef USE_OPENGL
 #   include <VDPAUOpenGL.hpp>
 #endif
+#include <GPUInstance.hpp>
 
 extern "C"
 {
@@ -35,6 +35,8 @@ extern "C"
 }
 
 #include <QDebug>
+
+using namespace std;
 
 static inline void YUVjToYUV(AVPixelFormat &pixFmt)
 {
@@ -70,11 +72,6 @@ bool FFDecVDPAU::set()
 {
     bool ret = true;
 
-    const bool copyVideo = sets().getBool("CopyVideoVDPAU");
-    if (m_copyVideo != copyVideo)
-        ret = false;
-    m_copyVideo = copyVideo;
-
     m_deintMethod = sets().getInt("VDPAUDeintMethod");
     m_nrEnabled = sets().getBool("VDPAUNoiseReductionEnabled");
     m_nrLevel = sets().getDouble("VDPAUNoiseReductionLvl");
@@ -90,7 +87,7 @@ QString FFDecVDPAU::name() const
     return "FFmpeg/" VDPAUWriterName;
 }
 
-std::shared_ptr<VideoFilter> FFDecVDPAU::hwAccelFilter() const
+shared_ptr<VideoFilter> FFDecVDPAU::hwAccelFilter() const
 {
     return m_vdpau;
 }
@@ -104,7 +101,7 @@ int FFDecVDPAU::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
     }
 
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    if (m_hwAccelWriter && ret > -1)
+    if (m_hasHWDecContext && ret > -1)
     {
         if (!decoded.isEmpty())
             m_vdpau->maybeCreateVideoMixer(codec_ctx->coded_width, codec_ctx->coded_height, decoded);
@@ -135,9 +132,9 @@ void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
         decoded.clear();
 }
 
-bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
+bool FFDecVDPAU::open(StreamInfo &streamInfo)
 {
-    if (!m_copyVideo && Functions::isX11EGL())
+    if (Functions::isX11EGL() && QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
@@ -148,16 +145,19 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!codec || !hasHWAccel("vdpau"))
         return false;
 
-    if (writer) // Writer is already created
-    {
 #ifdef USE_OPENGL
-        if (auto vdpauOpenGL = writer->getHWAccelInterface<VDPAUOpenGL>())
+    shared_ptr<VDPAUOpenGL> vdpauOpenGL;
+
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    {
+        vdpauOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VDPAUOpenGL>();
+        if (vdpauOpenGL)
         {
             m_vdpau = vdpauOpenGL->getVDPAU();
-            m_hwAccelWriter = writer;
+            Q_ASSERT(m_vdpau);
         }
-#endif
     }
+#endif
 
     AVBufferRef *hwDeviceBufferRef = nullptr;
     if (!m_vdpau)
@@ -165,7 +165,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
         if (av_hwdevice_ctx_create(&hwDeviceBufferRef, AV_HWDEVICE_TYPE_VDPAU, nullptr, nullptr, 0) != 0)
             return false;
 
-        m_vdpau = std::make_shared<VDPAU>(hwDeviceBufferRef);
+        m_vdpau = make_shared<VDPAU>(hwDeviceBufferRef);
         if (!m_vdpau->init())
             return false;
 
@@ -180,15 +180,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!m_vdpau->checkCodec(streamInfo.codec_name.constData()))
         return false;
 
-    if (!m_hwAccelWriter && !m_copyVideo)
-    {
-#ifdef USE_OPENGL
-        m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VDPAUOpenGL>(m_vdpau));
-#endif
-        if (!m_hwAccelWriter)
-            return false;
-        m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
-    }
+    m_vdpau->setVideoMixerDeintNr(m_deintMethod, m_nrEnabled, m_nrLevel);
 
     YUVjToYUV(codec_ctx->pix_fmt);
     codec_ctx->hw_device_ctx = hwDeviceBufferRef;
@@ -199,6 +191,18 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo, VideoWriter *writer)
 #endif
     if (!openCodec(codec))
         return false;
+
+#ifdef USE_OPENGL
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !vdpauOpenGL)
+    {
+        vdpauOpenGL = make_shared<VDPAUOpenGL>(m_vdpau);
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vdpauOpenGL))
+            return false;
+    }
+
+    if (vdpauOpenGL)
+        m_hasHWDecContext = true;
+#endif
 
     m_timeBase = streamInfo.time_base;
     return true;

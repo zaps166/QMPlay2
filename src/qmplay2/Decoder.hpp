@@ -28,7 +28,6 @@
 #include <memory>
 
 class QMPlay2OSD;
-class VideoWriter;
 class VideoFilter;
 class StreamInfo;
 class LibASS;
@@ -36,11 +35,15 @@ class LibASS;
 class QMPLAY2SHAREDLIB_EXPORT Decoder : public ModuleCommon
 {
 public:
-    static Decoder *create(StreamInfo &streamInfo, VideoWriter *writer = nullptr, const QStringList &modNames = {}, QString *modNameOutput = nullptr);
+    static Decoder *create(
+        StreamInfo &streamInfo,
+        const QStringList &modNames,
+        QString *modNameOutput
+    );
 
     virtual QString name() const = 0;
 
-    virtual VideoWriter *HWAccel() const;
+    virtual bool hasHWDecContext() const;
     virtual std::shared_ptr<VideoFilter> hwAccelFilter() const;
 
     virtual void setSupportedPixelFormats(const AVPixelFormats &pixelFormats);
@@ -59,5 +62,5 @@ public:
     virtual bool hasCriticalError() const;
 
 private:
-    virtual bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) = 0;
+    virtual bool open(StreamInfo &streamInfo) = 0;
 };

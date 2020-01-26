@@ -344,7 +344,7 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
     return getFromBitmapSubsBuffer(osd, pos);
 }
 
-bool FFDecSW::open(StreamInfo &streamInfo, VideoWriter *)
+bool FFDecSW::open(StreamInfo &streamInfo)
 {
     AVCodec *codec = FFDec::init(streamInfo);
     if (!codec)

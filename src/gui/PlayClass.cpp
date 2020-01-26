@@ -25,6 +25,7 @@
 #include <LibASS.hpp>
 #include <Main.hpp>
 
+#include <GPUInstance.hpp>
 #include <Frame.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
@@ -668,11 +669,11 @@ void PlayClass::saveCover()
     if (demuxThr)
         QMPlay2GUI.saveCover(demuxThr->getCoverFromStream());
 }
-void PlayClass::settingsChanged(int page, bool page3Restart)
+void PlayClass::settingsChanged(int page, bool forceRestart)
 {
     switch (page)
     {
-        case 1:
+        case 0: // General settings
             if (demuxThr)
             {
                 if (!QMPlay2Core.getSettings().getBool("ShowCovers"))
@@ -681,14 +682,18 @@ void PlayClass::settingsChanged(int page, bool page3Restart)
                     demuxThr->loadImage();
             }
             break;
-        case 2:
-            restart();
-            break;
-        case 3:
-            if (page3Restart)
+        case 1: // Renderer settings
+            if (vThr && !vThr->videoWriterSet())
                 restart();
             break;
-        case 4: //napisy
+        case 2: // Playback settings
+            restart();
+            break;
+        case 3: // Modules
+            if (forceRestart)
+                restart();
+            break;
+        case 4: // Subtitles
             if (ass && subtitlesStream != -1)
             {
                 ass->setASSStyle();
@@ -699,7 +704,7 @@ void PlayClass::settingsChanged(int page, bool page3Restart)
                 }
             }
             break;
-        case 5: //OSD
+        case 5: // OSD
             if (ass)
             {
                 ass->setOSDStyle();
@@ -709,7 +714,7 @@ void PlayClass::settingsChanged(int page, bool page3Restart)
                 osdMutex.unlock();
             }
             break;
-        case 6: //video filters
+        case 6: // Video filters
             if (vThr)
                 vThr->initFilters();
             break;
@@ -1234,7 +1239,14 @@ void PlayClass::timTerminateFinished()
     emit QMPlay2Core.restoreCursor();
 }
 
-static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenStream, int &stream, const AVMediaType type, const QString &lang, const QSet<QString> &blacklist = QSet<QString>(), VideoWriter *writer = nullptr, QString *modNameOutput = nullptr)
+static Decoder *loadStream(
+    const QList<StreamInfo *> &streams,
+    const int chosenStream,
+    int &stream,
+    const AVMediaType type,
+    const QString &lang,
+    const QSet<QString> &blacklist = QSet<QString>(),
+    QString *modNameOutput = nullptr)
 {
     QStringList decoders = QMPlay2Core.getModules("decoders", 7);
     const bool decodersListEmpty = decoders.isEmpty();
@@ -1248,7 +1260,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenS
     if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->codec_type == type)
     {
         if (streams[chosenStream]->must_decode || !subtitles)
-            dec = Decoder::create(*streams[chosenStream], writer, decoders, modNameOutput);
+            dec = Decoder::create(*streams[chosenStream], decoders, modNameOutput);
         if (dec || subtitles)
             stream = chosenStream;
     }
@@ -1283,7 +1295,7 @@ static Decoder *loadStream(const QList<StreamInfo *> &streams, const int chosenS
             if (streamInfo.codec_type == type && (defaultStream == -1 || i == defaultStream))
             {
                 if (streamInfo.must_decode || !subtitles)
-                    dec = Decoder::create(streamInfo, writer, decoders, modNameOutput);
+                    dec = Decoder::create(streamInfo, decoders, modNameOutput);
                 if (dec || subtitles)
                 {
                     stream = i;
@@ -1304,19 +1316,26 @@ void PlayClass::load(Demuxer *demuxer)
         vPackets.clear();
         stopVDec(); //lock
         if (videoEnabled)
-            dec = loadStream(streams, chosenVideoStream, videoStream, AVMEDIA_TYPE_VIDEO, QString(), videoDecodersError, vThr ? vThr->getHWAccelWriter() : nullptr, &videoDecoderModuleName);
+        {
+            dec = loadStream(
+                streams,
+                chosenVideoStream,
+                videoStream,
+                AVMEDIA_TYPE_VIDEO,
+                QString(),
+                videoDecodersError,
+                &videoDecoderModuleName
+            );
+        }
         else
+        {
             dec = nullptr;
+        }
         if (dec)
         {
             const bool noVideo = !vThr;
-            if (vThr && (vThr->getHWAccelWriter() != dec->HWAccel()))
-                stopVThr();
             if (!vThr)
-            {
-                vThr = new VideoThr(*this, dec->HWAccel(), QMPlay2Core.getModules("videoWriters", 5));
-                vThr->setSyncVtoA(QMPlay2Core.getSettings().getBool("SyncVtoA"));
-            }
+                vThr = new VideoThr(*this, QMPlay2Core.getModules("videoWriters", 5));
             if (vThr->isRunning())
             {
                 const double aspect_ratio = getARatio();
@@ -1342,10 +1361,11 @@ void PlayClass::load(Demuxer *demuxer)
                 if (paramsForced)
                     emitSetVideoCheckState();
 
+                vThr->setDec(dec);
+
                 vThr->setFrameSize(streams[videoStream]->width, streams[videoStream]->height);
                 vThr->setARatio(aspect_ratio, getSAR());
                 vThr->setVideoAdjustment();
-                vThr->setDec(dec);
                 vThr->setZoom();
                 const bool hasSpherical = vThr->setSpherical();
                 const bool hasRotate90 = vThr->setRotate90();
@@ -1367,11 +1387,12 @@ void PlayClass::load(Demuxer *demuxer)
                     emitSetVideoCheckState();
 
                 if (!vThr->processParams())
+                {
                     dec = nullptr;
+                }
                 else
                 {
-                    if (!vThr->getHWAccelWriter())
-                        dec->setSupportedPixelFormats(vThr->getSupportedPixelFormats());
+                    dec->setSupportedPixelFormats(vThr->getSupportedPixelFormats());
 
                     fps = streams[videoStream]->getFPS();
                     ass = new LibASS(QMPlay2Core.getSettings());
@@ -1409,6 +1430,8 @@ void PlayClass::load(Demuxer *demuxer)
         if (!dec)
         {
             chosenVideoStream = videoStream = -1;
+            if (!vThr && QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+                QMPlay2Core.gpuInstance()->resetVideoOutput();
             stopVThr();
         }
     }

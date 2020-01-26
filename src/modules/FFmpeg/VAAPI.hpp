@@ -38,7 +38,7 @@ public:
     VAAPI();
     ~VAAPI();
 
-    bool open(bool openGL);
+    bool open(bool checkNV12);
 
     void init(int width, int height, bool allowFilters);
 
@@ -52,7 +52,7 @@ public:
     bool filterVideo(const Frame &frame, VASurfaceID &id, int &field);
 
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const;
+    bool getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32) const;
 
     void insertFrame(VASurfaceID id, AVFrame *frame);
 

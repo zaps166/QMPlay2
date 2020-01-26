@@ -1,0 +1,10 @@
+<RCC>
+    <qresource>
+        <file alias="opengl/Video.vert">shaders/Video.vert</file>
+        <file alias="opengl/VideoYCbCr.frag">shaders/VideoYCbCr.frag</file>
+        <file alias="opengl/VideoRGB.frag">shaders/VideoRGB.frag</file>
+
+        <file alias="opengl/OSD.vert">shaders/OSD.vert</file>
+        <file alias="opengl/OSD.frag">shaders/OSD.frag</file>
+    </qresource>
+</RCC>

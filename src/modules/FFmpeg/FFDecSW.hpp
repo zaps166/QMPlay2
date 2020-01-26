@@ -56,7 +56,7 @@ private:
     int  decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
     bool decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush) override;
 
-    bool open(StreamInfo &, VideoWriter *) override;
+    bool open(StreamInfo &) override;
 
     /**/
 

@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <HWAccelInterface.hpp>
+#include <HWOpenGLInterop.hpp>
 #include <VDPAU.hpp>
 
 #include <QOpenGLContext>
 
-class VDPAUOpenGL : public HWAccelInterface
+class VDPAUOpenGL : public HWOpenGLInterop
 {
 public:
     VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau);
@@ -36,10 +36,10 @@ public:
     bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override;
     void clear() override;
 
-    MapResult mapFrame(Frame &videoFrame) override;
+    bool mapFrame(Frame &videoFrame) override;
     quint32 getTexture(int plane) override;
 
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override;
+    QImage getImage(const Frame &videoFrame) override;
 
     void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override;
     void setVideoAdjustment(const VideoAdjustment &videoAdjustment) override;

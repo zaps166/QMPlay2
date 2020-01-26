@@ -18,25 +18,26 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
 #include <VideoWriter.hpp>
 
 #include <QCoreApplication>
+#include <QSet>
 
-class OpenGL2Common;
+class HWOpenGLInterop;
+class OpenGLCommon;
 
-class OpenGL2Writer final : public VideoWriter
+class OpenGLWriter final : public VideoWriter
 {
-    Q_DECLARE_TR_FUNCTIONS(OpenGL2Writer)
+    Q_DECLARE_TR_FUNCTIONS(OpenGLWriter)
+
 public:
-    OpenGL2Writer(Module &);
-private:
-    ~OpenGL2Writer();
+    OpenGLWriter();
+    ~OpenGLWriter();
 
     bool set() override;
 
     bool readyWrite() const override;
-
-    bool hwAccelError() const override;
 
     bool processParams(bool *paramsCorrected) override;
 
@@ -51,12 +52,18 @@ private:
 
     bool open() override;
 
-    /**/
+    bool setHWDecContext(const std::shared_ptr<HWDecContext> &hwDecContext) override;
+    std::shared_ptr<HWDecContext> hwDecContext() const override;
 
-    OpenGL2Common *drawable;
-    bool useRtt = false;
-    bool vSync;
+private:
+    void addAdditionalParam(const QString &key);
+
+    void initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop);
+
+private:
+    OpenGLCommon *m_drawable = nullptr;
+    bool m_useRtt = false;
     bool m_bypassCompositor = false;
+    QSet<QString> m_additionalParams;
 };
 
-#define OpenGL2WriterName "OpenGL 2"

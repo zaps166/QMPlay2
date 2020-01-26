@@ -26,17 +26,16 @@ protected:
     FFDecHWAccel();
     ~FFDecHWAccel();
 
-    VideoWriter *HWAccel() const override final;
-
     bool hasHWAccel(const char *hwaccelName) const;
+
+    bool hasHWDecContext() const override final;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     virtual void downloadVideoFrame(Frame &decoded);
 
     bool hasCriticalError() const override;
 
-    /**/
-
-    VideoWriter *m_hwAccelWriter;
-    bool m_hasCriticalError;
+protected:
+    bool m_hasCriticalError = false;
+    bool m_hasHWDecContext = false;
 };

@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+#include <functional>
+
 class QListWidgetItem;
 class QGridLayout;
 class QPushButton;
@@ -50,6 +52,8 @@ public:
 private:
     static void applyProxy();
 
+    void createRendererSettings();
+
     void restoreVideoEq();
 
     void restartApp();
@@ -59,13 +63,16 @@ private:
     void showEvent(QShowEvent *) override;
     void closeEvent(QCloseEvent *) override;
 
-    Ui::GeneralSettings *page1;
-    Ui::PlaybackSettings *page2;
-    Ui::ModulesList *page2ModulesList[3];
+private:
+    Ui::GeneralSettings *generalSettingsPage;
+    Ui::PlaybackSettings *playbackSettingsPage;
+    Ui::ModulesList *modulesList[3];
     Page3 *page3;
     Page4 *page4;
     Page5 *page5;
     Page6 *page6;
+
+    QWidget *m_modulesListGroupBox[3];
 
     QTabWidget *tabW;
     QString lastM[3];
@@ -74,6 +81,8 @@ private:
 
     bool wasShow;
     int moduleIndex;
+
+    std::vector<std::function<void()>> m_rendererApplyFunctions;
 private slots:
     void chStyle();
     void apply();

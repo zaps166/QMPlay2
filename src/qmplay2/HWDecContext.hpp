@@ -18,34 +18,15 @@
 
 #pragma once
 
-#include <Module.hpp>
+class QImage;
+class Frame;
 
-class OpenGL2 final : public Module
+class HWDecContext
 {
 public:
-    OpenGL2();
-private:
-    QList<Info> getModulesInfo(const bool) const override;
-    void *createInstance(const QString &) override;
+    virtual ~HWDecContext() = default;
 
-    SettingsWidget *getSettingsWidget() override;
-};
+    virtual bool hasError() const = 0;
 
-/**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-
-class ModuleSettingsWidget final : public Module::SettingsWidget
-{
-    Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
-public:
-    ModuleSettingsWidget(Module &);
-private:
-    void saveSettings() override;
-
-    QCheckBox *enabledB;
-    QCheckBox *vsyncB = nullptr;
-    QCheckBox *bypassCompositorB = nullptr;
+    virtual QImage getImage(const Frame &frame) = 0;
 };

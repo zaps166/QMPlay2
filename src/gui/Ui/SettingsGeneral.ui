@@ -75,14 +75,14 @@
          </layout>
         </widget>
        </item>
-       <item row="17" column="0">
+       <item row="16" column="0">
         <widget class="QPushButton" name="setKeyBindingsB">
          <property name="text">
           <string>Set key bindings</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
+       <item row="15" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
           <number>3</number>
@@ -264,42 +264,42 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="3" column="0">
         <widget class="QCheckBox" name="autoOpenVideoWindowB">
          <property name="text">
           <string>Automatically open video window</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="5" column="0">
         <widget class="QCheckBox" name="tabsNorths">
          <property name="text">
           <string>Show tabs at the top of the main window</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="6" column="0">
         <widget class="QCheckBox" name="allowOnlyOneInstance">
          <property name="text">
           <string>Allow only one instance</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="8" column="0">
         <widget class="QCheckBox" name="displayOnlyFileName">
          <property name="text">
           <string>Always only display file names in playlist</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="10" column="0">
         <widget class="QCheckBox" name="restoreRepeatMode">
          <property name="text">
           <string>Remember repeat mode</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="14" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -364,7 +364,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="15">
+       <item row="1" column="1" rowspan="14">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -377,7 +377,7 @@
          </property>
         </spacer>
        </item>
-       <item row="18" column="0" colspan="2">
+       <item row="17" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -390,55 +390,45 @@
          </property>
         </spacer>
        </item>
-       <item row="12" column="0">
+       <item row="11" column="0">
         <widget class="QCheckBox" name="stillImages">
          <property name="text">
           <string>Read and display still images</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="12" column="0">
         <widget class="QCheckBox" name="trayNotifiesDefault">
          <property name="text">
           <string>Use tray notifications as default</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="13" column="0">
         <widget class="QCheckBox" name="autoDelNonGroupEntries">
          <property name="text">
           <string>Automatically delete ungrouped entries</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="7" column="0">
         <widget class="QCheckBox" name="hideArtistMetadata">
          <property name="text">
           <string>Hide artist metadata</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="4" column="0">
         <widget class="QCheckBox" name="autoRestoreMainWindowOnVideoB">
          <property name="text">
           <string>Automatically restore main window when new video file is loaded</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="9" column="0">
         <widget class="QCheckBox" name="skipPlaylistsWithinFiles">
          <property name="text">
           <string>Don't load playlist files within other files</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="glOnWindowB">
-         <property name="toolTip">
-          <string>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</string>
-         </property>
-         <property name="text">
-          <string>Use OpenGL on entire window</string>
          </property>
         </widget>
        </item>
@@ -467,7 +457,6 @@
   <tabstop>showDirCoversB</tabstop>
   <tabstop>enlargeSmallCoversB</tabstop>
   <tabstop>autoUpdatesB</tabstop>
-  <tabstop>glOnWindowB</tabstop>
   <tabstop>autoOpenVideoWindowB</tabstop>
   <tabstop>autoRestoreMainWindowOnVideoB</tabstop>
   <tabstop>tabsNorths</tabstop>

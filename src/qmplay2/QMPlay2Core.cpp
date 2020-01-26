@@ -19,6 +19,7 @@
 #include <QMPlay2Core.hpp>
 
 #include <VideoFilters.hpp>
+#include <GPUInstance.hpp>
 #include <Functions.hpp>
 #include <CppUtils.hpp>
 #ifdef USE_QML
@@ -366,6 +367,11 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     connect(this, SIGNAL(restoreCursor()), this, SLOT(restoreCursorSlot()));
     connect(this, SIGNAL(waitCursor()), this, SLOT(waitCursorSlot()));
     connect(this, SIGNAL(busyCursor()), this, SLOT(busyCursorSlot()));
+
+#ifdef USE_OPENGL
+    settings->init("Renderer", "opengl");
+#endif
+    m_gpuInstance = GPUInstance::create();
 }
 void QMPlay2CoreClass::quit()
 {
@@ -387,6 +393,7 @@ void QMPlay2CoreClass::quit()
     delete qtTranslator;
     delete translator;
     delete settings;
+    m_gpuInstance.reset();
 }
 
 QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
@@ -580,10 +587,23 @@ void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreC
     }
 }
 
+QString QMPlay2CoreClass::rendererName() const
+{
+    if (m_gpuInstance)
+        return m_gpuInstance->name();
+    return "legacy";
+}
+QMPlay2CoreClass::Renderer QMPlay2CoreClass::renderer() const
+{
+    if (m_gpuInstance)
+        return m_gpuInstance->renderer();
+    return Renderer::Legacy;
+}
+
 bool QMPlay2CoreClass::isGlOnWindow() const
 {
 #ifdef USE_OPENGL
-    return (isGlOnWindowForced() || settings->getBool("UseGLOnWindow"));
+    return (isGlOnWindowForced() || settings->getBool("OpenGL/OnWindow"));
 #else
     return false;
 #endif

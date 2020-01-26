@@ -41,7 +41,7 @@ set(QMPLAY2_HDR
     IPC.hpp
     CPU.hpp
     Version.hpp
-    HWAccelInterface.hpp
+    HWOpenGLInterop.hpp
     VideoAdjustment.hpp
     YouTubeDL.hpp
     Notifies.hpp
@@ -50,6 +50,8 @@ set(QMPLAY2_HDR
     CppUtils.hpp
     Sphere.hpp
     X11BypassCompositor.hpp
+    HWDecContext.hpp
+    GPUInstance.hpp
 )
 
 set(QMPLAY2_SRC
@@ -92,6 +94,7 @@ set(QMPLAY2_SRC
     MkvMuxer.cpp
     Sphere.cpp
     X11BypassCompositor.cpp
+    GPUInstance.cpp
 )
 
 if(WIN32)
@@ -102,6 +105,30 @@ endif()
 
 if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
     set_source_files_properties(Version.cpp PROPERTIES COMPILE_DEFINITIONS QMPlay2GitHEAD="-git-${QMPLAY2_GIT_HEAD}")
+endif()
+
+if(USE_OPENGL)
+    set(QMPLAY2_OPENGL
+        opengl/OpenGLInstance.cpp
+        opengl/OpenGLInstance.hpp
+        opengl/OpenGLWriter.cpp
+        opengl/OpenGLWriter.hpp
+        opengl/OpenGLCommon.cpp
+        opengl/OpenGLCommon.hpp
+        opengl/OpenGLWindow.cpp
+        opengl/OpenGLWindow.hpp
+        opengl/OpenGLWidget.cpp
+        opengl/OpenGLWidget.hpp
+        opengl/Vertices.hpp
+        opengl/opengl.qrc
+    )
+    if(APPLE)
+        find_package(OpenGL REQUIRED)
+        list(APPEND OPENGL_LIBS ${OPENGL_LIBRARIES})
+    elseif(WIN32)
+        list(APPEND OPENGL_LIBS opengl32)
+    endif()
+
 endif()
 
 add_definitions(-DQMPLAY2SHAREDLIB_LIBRARY)
@@ -163,6 +190,7 @@ add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
     ${QMPLAY2_SRC}
     ${QMPLAY2_RESOURCES}
+    ${QMPLAY2_OPENGL}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
@@ -223,6 +251,7 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBSWSCALE_LIBRARIES}
     ${LIBAVUTIL_LIBRARIES}
     ${LIBSWRESAMPLE_LIBRARIES}
+    ${OPENGL_LIBS}
     PRIVATE
     ${DBUS}
     ${QML}

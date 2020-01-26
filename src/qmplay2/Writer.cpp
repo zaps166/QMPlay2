@@ -109,7 +109,7 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
             writer = new QMPlay2ResourceWriter;
         if (writer)
         {
-            writer->_url = url;
+            writer->m_url = url;
             if (writer->open())
                 return writer;
             delete writer;
@@ -139,7 +139,7 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
         writer = (Writer *)module->createInstance(moduleInfo.name);
         if (!writer)
             continue;
-        writer->_url = url;
+        writer->m_url = url;
         if (writer->open())
             return writer;
         delete writer;

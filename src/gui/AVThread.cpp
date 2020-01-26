@@ -24,17 +24,11 @@
 #include <Writer.hpp>
 #include <Decoder.hpp>
 
-AVThread::AVThread(PlayClass &playC, const QString &writer_type, Writer *_writer, const QStringList &pluginsName) :
-    dec(nullptr), playC(playC), br(false), br2(false), waiting(false),
+AVThread::AVThread(PlayClass &playC) :
+    playC(playC),
     mutex(QMutex::Recursive)
 {
     connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
-
-    if (_writer)
-        writer = _writer;
-    else
-        writer = Writer::create(writer_type, pluginsName);
-
     mutex.lock();
 }
 AVThread::~AVThread()
@@ -47,6 +41,11 @@ void AVThread::maybeStartThread()
 {
     if (writer)
         start();
+}
+
+void AVThread::setDec(Decoder *_dec)
+{
+    dec = _dec;
 }
 
 void AVThread::destroyDec()

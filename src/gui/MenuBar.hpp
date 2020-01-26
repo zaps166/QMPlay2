@@ -138,7 +138,7 @@ public:
         Q_DECLARE_TR_FUNCTIONS(Options)
     public:
         Options(MenuBar *parent);
-        QAction *settings, *playbackSettings, *modulesSettings, *trayVisible;
+        QAction *settings, *rendererSettings, *playbackSettings, *modulesSettings, *trayVisible;
         QMenu *removeProfileMenu;
         QActionGroup *profilesGroup;
     };

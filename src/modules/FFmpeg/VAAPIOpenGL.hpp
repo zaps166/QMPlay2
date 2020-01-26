@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <HWAccelInterface.hpp>
+#include <HWOpenGLInterop.hpp>
 #include <VAAPI.hpp>
 
 #include <memory>
@@ -29,7 +29,7 @@
 #include <EGL/eglext.h>
 #undef Status
 
-class VAAPIOpenGL : public HWAccelInterface
+class VAAPIOpenGL : public HWOpenGLInterop
 {
 public:
     VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi);
@@ -43,10 +43,10 @@ public:
     bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override;
     void clear() override;
 
-    MapResult mapFrame(Frame &videoFrame) override;
+    bool mapFrame(Frame &videoFrame) override;
     quint32 getTexture(int plane) override;
 
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override;
+    QImage getImage(const Frame &videoFrame) override;
 
     /**/
 

@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <OpenGL2Common.hpp>
+#include "OpenGLCommon.hpp"
+#include "Vertices.hpp"
 
-#include <Vertices.hpp>
 #include <Sphere.hpp>
 
-#include <HWAccelInterface.hpp>
+#include <HWOpenGLInterop.hpp>
 #include <QMPlay2Core.hpp>
 #include <Frame.hpp>
 #include <Functions.hpp>
@@ -72,63 +72,144 @@ void RotAnimation::updateCurrentValue(const QVariant &value)
 
 /* OpenGLCommon implementation */
 
-OpenGL2Common::OpenGL2Common() :
-#ifndef OPENGL_ES2
-    supportsShaders(false), canCreateNonPowerOfTwoTextures(false),
-    glActiveTexture(nullptr),
-#endif
+OpenGLCommon::OpenGLCommon() :
     vSync(true),
+    m_glInstance(std::static_pointer_cast<OpenGLInstance>(QMPlay2Core.gpuInstance())),
     shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
     texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
     numPlanes(0),
     target(0),
     hasPbo(false),
-    isPaused(false), isOK(false), hwAccelError(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
+    isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
     subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
-    glVer(0),
     aspectRatio(0.0), zoom(0.0),
     sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
     rotAnimation(*this),
     nIndices(0),
     mouseTime(0.0)
 {
+#ifndef OPENGL_ES2
+    glActiveTexture = m_glInstance->glActiveTexture;
+    glGenBuffers = m_glInstance->glGenBuffers;
+    glBindBuffer = m_glInstance->glBindBuffer;
+    glBufferData = m_glInstance->glBufferData;
+    glDeleteBuffers = m_glInstance->glDeleteBuffers;
+#endif
+    glMapBufferRange = m_glInstance->glMapBufferRange;
+    glMapBuffer = m_glInstance->glMapBuffer;
+    glUnmapBuffer = m_glInstance->glUnmapBuffer;
+
     videoAdjustment.unset();
 
     /* Initialize texCoordYCbCr array */
     texCoordYCbCr[0] = texCoordYCbCr[4] = texCoordYCbCr[5] = texCoordYCbCr[7] = 0.0f;
     texCoordYCbCr[1] = texCoordYCbCr[3] = 1.0f;
 
+#ifndef Q_OS_MACOS
+    canUseHueSharpness = (m_glInstance->glVer >= 30);
+#endif
+
     /* Set 360° view */
     rotAnimation.setEasingCurve(QEasingCurve::OutQuint);
     rotAnimation.setDuration(1000.0);
 }
-OpenGL2Common::~OpenGL2Common()
+OpenGLCommon::~OpenGLCommon()
 {
     contextAboutToBeDestroyed();
-    delete shaderProgramVideo;
-    delete shaderProgramOSD;
 }
 
-void OpenGL2Common::deleteMe()
+void OpenGLCommon::deleteMe()
 {
     delete this;
 }
 
-bool OpenGL2Common::testGL()
+void OpenGLCommon::initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop)
 {
-    QOpenGLContext glCtx;
-    if ((isOK = glCtx.create()))
+    if (isOK && m_hwInterop == hwInterop)
+        return;
+
+    isOK = true;
+
+    numPlanes = 3;
+    target = GL_TEXTURE_2D;
+
+    if (!m_hwInterop && !hwInterop)
+        return;
+
+    const bool windowContext = makeContextCurrent();
+
+    if (windowContext)
+        contextAboutToBeDestroyed();
+    m_hwInterop.reset();
+
+    videoAdjustmentKeys.clear();
+
+    if (hwInterop)
     {
-        QOffscreenSurface offscreenSurface;
-        offscreenSurface.create();
-        if ((isOK = glCtx.makeCurrent(&offscreenSurface)))
-            testGLInternal();
+        QOffscreenSurface surface;
+        QOpenGLContext context;
+        if (!windowContext)
+        {
+            surface.create();
+            if (!context.create() || !context.makeCurrent(&surface))
+            {
+                isOK = false;
+                return;
+            }
+        }
+
+        switch (hwInterop->getFormat())
+        {
+            case HWOpenGLInterop::NV12:
+                numPlanes = 2;
+                break;
+            case HWOpenGLInterop::RGB32:
+                numPlanes = 1;
+                break;
+        }
+
+        if (hwInterop->isTextureRectangle())
+        {
+            target = GL_TEXTURE_RECTANGLE_ARB;
+            if (numPlanes == 1)
+                isOK = false; // Not used and not supported
+        }
+
+        const QVector<int> sizes(numPlanes * 2, 1);
+        if (!hwInterop->init(&sizes[0], &sizes[numPlanes], [](quint32){}))
+            isOK = false;
+
+        if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
+        {
+            VideoAdjustment videoAdjustmentCap;
+            hwInterop->getVideAdjustmentCap(videoAdjustmentCap);
+            if (videoAdjustmentCap.brightness)
+                videoAdjustmentKeys += "Brightness";
+            if (videoAdjustmentCap.contrast)
+                videoAdjustmentKeys += "Contrast";
+            if (videoAdjustmentCap.saturation)
+                videoAdjustmentKeys += "Saturation";
+            if (videoAdjustmentCap.hue)
+                videoAdjustmentKeys += "Hue";
+            if (videoAdjustmentCap.sharpness)
+                videoAdjustmentKeys += "Sharpness";
+        }
+
+        hwInterop->clear();
+
+        if (isOK)
+            m_hwInterop = hwInterop;
     }
-    return isOK;
+
+    if (windowContext)
+    {
+        initializeGL();
+        doneContextCurrent();
+    }
 }
 
 #ifdef Q_OS_WIN
-void OpenGL2Common::setWindowsBypassCompositor(bool bypassCompositor)
+void OpenGLCommon::setWindowsBypassCompositor(bool bypassCompositor)
 {
     if (!bypassCompositor && QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) // Windows 7 and Vista can disable DWM composition, so check it
     {
@@ -144,7 +225,7 @@ void OpenGL2Common::setWindowsBypassCompositor(bool bypassCompositor)
 }
 #endif
 
-void OpenGL2Common::newSize(const QSize &size)
+void OpenGLCommon::newSize(const QSize &size)
 {
     const bool canUpdate = !size.isValid();
     const QSize winSize = canUpdate ? widget()->size() : size;
@@ -168,7 +249,7 @@ void OpenGL2Common::newSize(const QSize &size)
             updateTimer.start(40);
     }
 }
-void OpenGL2Common::clearImg()
+void OpenGLCommon::clearImg()
 {
     hasImage = false;
     osdImg = QImage();
@@ -176,7 +257,7 @@ void OpenGL2Common::clearImg()
     osd_ids.clear();
 }
 
-void OpenGL2Common::setSpherical(bool spherical)
+void OpenGLCommon::setSpherical(bool spherical)
 {
     const bool isSphericalView = (spherical && hasVbo);
     if (sphericalView != isSphericalView)
@@ -201,7 +282,7 @@ void OpenGL2Common::setSpherical(bool spherical)
     }
 }
 
-void OpenGL2Common::setTextureParameters(GLenum target, quint32 texture, GLint param)
+void OpenGLCommon::setTextureParameters(GLenum target, quint32 texture, GLint param)
 {
     glBindTexture(target, texture);
     glTexParameteri(target, GL_TEXTURE_MIN_FILTER, param);
@@ -211,34 +292,17 @@ void OpenGL2Common::setTextureParameters(GLenum target, quint32 texture, GLint p
     glBindTexture(target, 0);
 }
 
-void OpenGL2Common::initializeGL()
+void OpenGLCommon::initializeGL()
 {
-    if (!initGLProc())
-    {
-        isOK = false;
-        return;
-    }
-
-#ifndef OPENGL_ES2
-    if (!glActiveTexture) //Be sure that "glActiveTexture" has valid pointer (don't check "supportsShaders" here)!
-    {
-        showOpenGLMissingFeaturesMessage();
-        isOK = false;
-        return;
-    }
-#endif
-
-    delete shaderProgramVideo;
-    delete shaderProgramOSD;
-    shaderProgramVideo = new QOpenGLShaderProgram;
-    shaderProgramOSD = new QOpenGLShaderProgram;
+    shaderProgramVideo.reset(new QOpenGLShaderProgram);
+    shaderProgramOSD.reset(new QOpenGLShaderProgram);
 
     /* YCbCr shader */
-    shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/Video.vert"));
+    shaderProgramVideo->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/opengl/Video.vert"));
     QByteArray videoFrag;
     if (numPlanes == 1)
     {
-        videoFrag = readShader(":/VideoRGB.frag");
+        videoFrag = readShader(":/opengl/VideoRGB.frag");
         if (canUseHueSharpness)
         {
             //Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
@@ -247,7 +311,7 @@ void OpenGL2Common::initializeGL()
     }
     else
     {
-        videoFrag = readShader(":/VideoYCbCr.frag");
+        videoFrag = readShader(":/opengl/VideoYCbCr.frag");
         if (canUseHueSharpness)
         {
             //Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
@@ -281,8 +345,8 @@ void OpenGL2Common::initializeGL()
     }
 
     /* OSD shader */
-    shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/OSD.vert"));
-    shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/OSD.frag"));
+    shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Vertex, readShader(":/opengl/OSD.vert"));
+    shaderProgramOSD->addShaderFromSourceCode(QOpenGLShader::Fragment, readShader(":/opengl/OSD.frag"));
     if (shaderProgramOSD->bind())
     {
         texCoordOSDLoc = shaderProgramOSD->attributeLocation("aTexCoord");
@@ -306,7 +370,7 @@ void OpenGL2Common::initializeGL()
     glDisable(GL_DITHER);
 
     /* Prepare textures */
-    const int texturesToGen = hwAccellnterface ? 0 : numPlanes;
+    const int texturesToGen = m_hwInterop ? 0 : numPlanes;
     glGenTextures(texturesToGen + 1, textures);
     for (int i = 0; i < texturesToGen + 1; ++i)
     {
@@ -326,7 +390,7 @@ void OpenGL2Common::initializeGL()
     resetSphereVbo();
 }
 
-void OpenGL2Common::paintGL()
+void OpenGLCommon::paintGL()
 {
     const bool frameIsEmpty = videoFrame.isEmpty();
 
@@ -355,20 +419,18 @@ void OpenGL2Common::paintGL()
 
         if (doReset)
         {
-            if (hwAccellnterface)
+            if (m_hwInterop)
             {
                 m_textureSize = QSize(widths[0], heights[0]);
 
-                /* Initialize hw accell and prepare GL textures */
-                const bool hasHwAccelError = hwAccelError;
-                hwAccelError = !hwAccellnterface->init(widths, heights, [this](quint32 texture) {
+                const bool hwAccelInitError = !m_hwInterop->init(widths, heights, [this](quint32 texture) {
                     setTextureParameters(target, texture, GL_LINEAR);
                 });
-                if (hwAccelError && !hasHwAccelError)
-                    QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init textures for") + " " + hwAccellnterface->name());
+                if (hwAccelInitError)
+                    QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init %1") .arg(m_hwInterop->name()));
 
                 if (numPlanes == 1)
-                    hwAccellnterface->setVideoAdjustment(videoAdjustment);
+                    m_hwInterop->setVideoAdjustment(videoAdjustment);
 
                 /* Prepare texture coordinates */
                 texCoordYCbCr[2] = texCoordYCbCr[6] = 1.0f;
@@ -406,18 +468,18 @@ void OpenGL2Common::paintGL()
             hasImage = false;
         }
 
-        if (hwAccellnterface)
+        if (m_hwInterop)
         {
             bool imageReady = false;
-            if (!hwAccelError)
+            if (!m_hwInterop->hasError())
             {
-                const HWAccelInterface::MapResult res = hwAccellnterface->mapFrame(videoFrame);
-                if (res == HWAccelInterface::MapOk)
-                    imageReady = true;
-                else if (res == HWAccelInterface::MapError)
+                if (m_hwInterop->mapFrame(videoFrame))
                 {
-                    QMPlay2Core.logError("OpenGL 2 :: " + hwAccellnterface->name() + " " + tr("texture map error"));
-                    hwAccelError = true;
+                    imageReady = true;
+                }
+                else if (m_hwInterop->hasError())
+                {
+                    QMPlay2Core.logError("OpenGL 2 :: " + m_hwInterop->name() + " " + tr("texture map error"));
                 }
             }
             if (!imageReady && !hasImage)
@@ -425,7 +487,7 @@ void OpenGL2Common::paintGL()
             for (int p = 0; p < numPlanes; ++p)
             {
                 glActiveTexture(GL_TEXTURE0 + p);
-                glBindTexture(target, hwAccellnterface->getTexture(p));
+                glBindTexture(target, m_hwInterop->getTexture(p));
             }
         }
         else
@@ -474,7 +536,7 @@ void OpenGL2Common::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
         }
 
-        if (!hwAccellnterface || hwAccellnterface->isCopy())
+        if (!m_hwInterop || m_hwInterop->isCopy())
             videoFrame.clear();
         hasImage = true;
     }
@@ -507,7 +569,7 @@ void OpenGL2Common::paintGL()
         const float brightness = videoAdjustment.brightness / 100.0f;
         const float contrast   = (videoAdjustment.contrast + 100) / 100.0f;
         const float sharpness  = videoAdjustment.sharpness / 50.0f;
-        if (hwAccellnterface && numPlanes == 1)
+        if (m_hwInterop && numPlanes == 1)
         {
             const bool hasBrightness = videoAdjustmentKeys.contains("Brightness");
             const bool hasContrast   = videoAdjustmentKeys.contains("Contrast");
@@ -653,151 +715,18 @@ void OpenGL2Common::paintGL()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void OpenGL2Common::contextAboutToBeDestroyed()
+void OpenGLCommon::contextAboutToBeDestroyed()
 {
-    if (hwAccellnterface)
-        hwAccellnterface->clear();
+    if (m_hwInterop)
+        m_hwInterop->clear();
     deleteSphereVbo();
-    const int texturesToDel = hwAccellnterface ? 0 : numPlanes;
+    const int texturesToDel = m_hwInterop ? 0 : numPlanes;
     if (hasPbo)
         glDeleteBuffers(1 + texturesToDel, pbo);
     glDeleteTextures(texturesToDel + 1, textures);
 }
 
-void OpenGL2Common::testGLInternal()
-{
-    int glMajor = 0, glMinor = 0;
-#ifndef OPENGL_ES2
-    glGetIntegerv(GL_MAJOR_VERSION, &glMajor);
-    glGetIntegerv(GL_MINOR_VERSION, &glMinor);
-#endif
-#ifndef Q_OS_MACOS //On macOS I have always OpenGL 2.1...
-    if (!glMajor)
-    {
-        const QString glVersionStr = (const char *)glGetString(GL_VERSION);
-        const int dotIdx = glVersionStr.indexOf('.');
-        if (dotIdx > 0)
-        {
-            const int vIdx = glVersionStr.lastIndexOf(' ', dotIdx);
-            if (sscanf(glVersionStr.mid(vIdx < 0 ? 0 : vIdx).toLatin1().constData(), "%d.%d", &glMajor, &glMinor) != 2)
-                glMajor = glMinor = 0;
-        }
-    }
-    if (glMajor)
-        glVer = glMajor * 10 + glMinor;
-    canUseHueSharpness = (glVer >= 30);
-#endif
-
-#ifndef OPENGL_ES2
-    if (!initGLProc()) //No need to call it here for OpenGL|ES
-    {
-        isOK = false;
-    }
-    else if (!canCreateNonPowerOfTwoTextures || !supportsShaders || !glActiveTexture)
-    {
-        showOpenGLMissingFeaturesMessage();
-        isOK = false;
-    }
-    /* Reset variables */
-    supportsShaders = canCreateNonPowerOfTwoTextures = false;
-    glActiveTexture = nullptr;
-#endif
-
-    numPlanes = 3;
-    target = GL_TEXTURE_2D;
-    if (hwAccellnterface)
-    {
-        switch (hwAccellnterface->getFormat())
-        {
-            case HWAccelInterface::NV12:
-                numPlanes = 2;
-                break;
-            case HWAccelInterface::RGB32:
-                numPlanes = 1;
-                break;
-        }
-
-        if (hwAccellnterface->isTextureRectangle())
-        {
-            target = GL_TEXTURE_RECTANGLE_ARB;
-            if (numPlanes == 1)
-                isOK = false; // Not used and not supported
-        }
-
-        if (isOK)
-        {
-            const QVector<int> sizes(numPlanes * 2, 1);
-            if (!hwAccellnterface->init(&sizes[0], &sizes[numPlanes], [](quint32){}))
-                isOK = false;
-            if (numPlanes == 1) //For RGB32 format, HWAccel should be able to adjust the video
-            {
-                VideoAdjustment videoAdjustmentCap;
-                hwAccellnterface->getVideAdjustmentCap(videoAdjustmentCap);
-                if (videoAdjustmentCap.brightness)
-                    videoAdjustmentKeys += "Brightness";
-                if (videoAdjustmentCap.contrast)
-                    videoAdjustmentKeys += "Contrast";
-                if (videoAdjustmentCap.saturation)
-                    videoAdjustmentKeys += "Saturation";
-                if (videoAdjustmentCap.hue)
-                    videoAdjustmentKeys += "Hue";
-                if (videoAdjustmentCap.sharpness)
-                    videoAdjustmentKeys += "Sharpness";
-            }
-            hwAccellnterface->clear();
-        }
-    }
-
-    QWidget *w = widget();
-    w->grabGesture(Qt::PinchGesture);
-    w->setMouseTracking(true);
-}
-
-bool OpenGL2Common::initGLProc()
-{
-    const auto context = QOpenGLContext::currentContext();
-    if (!context)
-        return false;
-
-#ifndef OPENGL_ES2
-    const char *glExtensions = (const char *)glGetString(GL_EXTENSIONS);
-    if (glExtensions)
-    {
-        supportsShaders = !!strstr(glExtensions, "GL_ARB_vertex_shader") && !!strstr(glExtensions, "GL_ARB_fragment_shader") && !!strstr(glExtensions, "GL_ARB_shader_objects");
-        canCreateNonPowerOfTwoTextures = !!strstr(glExtensions, "GL_ARB_texture_non_power_of_two");
-    }
-    glActiveTexture = (GLActiveTexture)context->getProcAddress("glActiveTexture");
-    glGenBuffers = (GLGenBuffers)context->getProcAddress("glGenBuffers");
-    glBindBuffer = (GLBindBuffer)context->getProcAddress("glBindBuffer");
-    glBufferData = (GLBufferData)context->getProcAddress("glBufferData");
-    glDeleteBuffers = (GLDeleteBuffers)context->getProcAddress("glDeleteBuffers");
-    hasVbo = glGenBuffers && glBindBuffer && glBufferData && glDeleteBuffers;
-#endif
-    glMapBufferRange = (GLMapBufferRange)context->getProcAddress("glMapBufferRange");
-    glMapBuffer = (GLMapBuffer)context->getProcAddress("glMapBuffer");
-    glUnmapBuffer = (GLUnmapBuffer)context->getProcAddress("glUnmapBuffer");
-    hasPbo = hasVbo && (glMapBufferRange || glMapBuffer) && glUnmapBuffer;
-
-    return true;
-}
-#ifndef OPENGL_ES2
-void OpenGL2Common::showOpenGLMissingFeaturesMessage()
-{
-    fprintf
-    (
-        stderr,
-        "GL_ARB_texture_non_power_of_two : %s\n"
-        "Vertex & fragment shader: %s\n"
-        "glActiveTexture: %s\n",
-        canCreateNonPowerOfTwoTextures ? "yes" : "no",
-        supportsShaders ? "yes" : "no",
-        glActiveTexture ? "yes" : "no"
-    );
-    QMPlay2Core.logError("OpenGL 2 :: " + tr("Driver must support multitexturing, shaders and Non-Power-Of-Two texture size"), true, true);
-}
-#endif
-
-void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
+void OpenGLCommon::dispatchEvent(QEvent *e, QObject *p)
 {
     switch (e->type())
     {
@@ -836,12 +765,12 @@ void OpenGL2Common::dispatchEvent(QEvent *e, QObject *p)
     }
 }
 
-inline bool OpenGL2Common::isRotate90() const
+inline bool OpenGLCommon::isRotate90() const
 {
     return verticesIdx >= 4 && !sphericalView;
 }
 
-QByteArray OpenGL2Common::readShader(const QString &fileName, bool pure)
+QByteArray OpenGLCommon::readShader(const QString &fileName, bool pure)
 {
     QResource res(fileName);
     QByteArray shader;
@@ -856,7 +785,7 @@ QByteArray OpenGL2Common::readShader(const QString &fileName, bool pure)
     return shader;
 }
 
-void OpenGL2Common::mousePress(QMouseEvent *e)
+void OpenGLCommon::mousePress(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton)
     {
@@ -871,7 +800,7 @@ void OpenGL2Common::mousePress(QMouseEvent *e)
         }
     }
 }
-void OpenGL2Common::mouseMove(QMouseEvent *e)
+void OpenGLCommon::mouseMove(QMouseEvent *e)
 {
     if ((moveVideo || moveOSD) && (e->buttons() & Qt::LeftButton))
     {
@@ -892,7 +821,7 @@ void OpenGL2Common::mouseMove(QMouseEvent *e)
         updateGL(true);
     }
 }
-void OpenGL2Common::mouseRelease(QMouseEvent *e)
+void OpenGLCommon::mouseRelease(QMouseEvent *e)
 {
     if ((moveVideo || moveOSD) && e->button() == Qt::LeftButton)
     {
@@ -905,7 +834,7 @@ void OpenGL2Common::mouseRelease(QMouseEvent *e)
 
 /* 360 */
 
-void OpenGL2Common::mousePress360(QMouseEvent *e)
+void OpenGLCommon::mousePress360(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton)
     {
@@ -916,7 +845,7 @@ void OpenGL2Common::mousePress360(QMouseEvent *e)
         mousePos = e->pos();
     }
 }
-void OpenGL2Common::mouseMove360(QMouseEvent *e)
+void OpenGLCommon::mouseMove360(QMouseEvent *e)
 {
     if (mouseWrapped)
         mouseWrapped = false;
@@ -949,7 +878,7 @@ void OpenGL2Common::mouseMove360(QMouseEvent *e)
         updateGL(true);
     }
 }
-void OpenGL2Common::mouseRelease360(QMouseEvent *e)
+void OpenGLCommon::mouseRelease360(QMouseEvent *e)
 {
     if (buttonPressed && e->button() == Qt::LeftButton)
     {
@@ -964,12 +893,12 @@ void OpenGL2Common::mouseRelease360(QMouseEvent *e)
         buttonPressed = false;
     }
 }
-inline void OpenGL2Common::resetSphereVbo()
+inline void OpenGLCommon::resetSphereVbo()
 {
     memset(sphereVbo, 0, sizeof sphereVbo);
     nIndices = 0;
 }
-inline void OpenGL2Common::deleteSphereVbo()
+inline void OpenGLCommon::deleteSphereVbo()
 {
     if (nIndices > 0)
     {
@@ -977,7 +906,7 @@ inline void OpenGL2Common::deleteSphereVbo()
         resetSphereVbo();
     }
 }
-void OpenGL2Common::loadSphere()
+void OpenGLCommon::loadSphere()
 {
     const quint32 slices = 50;
     const quint32 stacks = 50;

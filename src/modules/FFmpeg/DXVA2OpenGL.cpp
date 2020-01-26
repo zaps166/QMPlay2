@@ -77,12 +77,12 @@ QString DXVA2OpenGL::name() const
     return "DXVA2";
 }
 
-HWAccelInterface::Format DXVA2OpenGL::getFormat() const
+HWOpenGLInterop::Format DXVA2OpenGL::getFormat() const
 {
     return RGB32;
 }
 
-bool DXVA2OpenGL::init(const int *widths, const int *heights, const HWAccelInterface::SetTextureParamsFn &setTextureParamsFn)
+bool DXVA2OpenGL::init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn)
 {
     if (m_width != widths[0] || m_height != heights[0])
     {
@@ -98,12 +98,18 @@ bool DXVA2OpenGL::init(const int *widths, const int *heights, const HWAccelInter
         setTextureParamsFn(m_textures[i]);
 
     if (m_glHandleD3D)
-        return ensureRenderTargets();
+    {
+        const bool ret = ensureRenderTargets();
+        if (!ret)
+            m_error = true;
+        return ret;
+    }
 
     auto context = QOpenGLContext::currentContext();
     if (!context)
     {
         QMPlay2Core.logError("DXVA2 :: Unable to get OpenGL context");
+        m_error = true;
         return false;
     }
 
@@ -117,6 +123,7 @@ bool DXVA2OpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!wglDXOpenDeviceNV || !wglDXSetResourceShareHandleNV || !wglDXRegisterObjectNV || !wglDXLockObjectsNV || !wglDXUnlockObjectsNV || !wglDXUnregisterObjectNV || !wglDXCloseDeviceNV)
     {
         QMPlay2Core.logError("DXVA2 :: Unable to get DXVA2 interop function pointers");
+        m_error = true;
         return false;
     }
 
@@ -140,11 +147,15 @@ bool DXVA2OpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!m_glHandleD3D)
     {
         QMPlay2Core.logError("DXVA2 :: Unable to initialize DXVA2 <-> GL interop");
+        m_error = true;
         return false;
     }
 
     if (!ensureRenderTargets())
+    {
+        m_error = true;
         return false;
+    }
 
     return true;
 }
@@ -158,10 +169,13 @@ void DXVA2OpenGL::clear()
     }
 }
 
-HWAccelInterface::MapResult DXVA2OpenGL::mapFrame(Frame &videoFrame)
+bool DXVA2OpenGL::mapFrame(Frame &videoFrame)
 {
     if (!unlockRenderTargets())
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     const RECT rect = {
         0,
@@ -212,15 +226,21 @@ HWAccelInterface::MapResult DXVA2OpenGL::mapFrame(Frame &videoFrame)
     ;
 
     if (FAILED(m_videoProcessor->VideoProcessBlt(m_renderTargets[m_renderTargetIdx].surface, &m_bltParams, &m_videoSample, 1, nullptr)))
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     m_renderTargetIdx = (m_renderTargetIdx + 1) % s_numRenderTargets;
 
     if (!wglDXLockObjectsNV(m_glHandleD3D, 1, &m_renderTargets[m_renderTargetIdx].glSurface))
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     m_renderTargets[m_renderTargetIdx].locked = true;
-    return MapOk;
+    return true;
 }
 quint32 DXVA2OpenGL::getTexture(int plane)
 {
@@ -228,7 +248,7 @@ quint32 DXVA2OpenGL::getTexture(int plane)
     return m_textures[m_renderTargetIdx];
 }
 
-bool DXVA2OpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+QImage DXVA2OpenGL::getImage(const Frame &videoFrame)
 {
     D3DSURFACE_DESC desc;
     D3DLOCKED_RECT lockedRect;
@@ -243,11 +263,20 @@ bool DXVA2OpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12T
             lockedRect.Pitch,
             lockedRect.Pitch
         };
-        nv12ToRGB32->scale(src, srcLinesize, dest);
+
+        QImage img;
+
+        ImgScaler imgScaler;
+        if (imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        {
+            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+            imgScaler.scale(src, srcLinesize, img.bits());
+        }
+
         surface->UnlockRect();
-        return true;
+        return img;
     }
-    return false;
+    return QImage();
 }
 
 void DXVA2OpenGL::getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)

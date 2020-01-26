@@ -49,6 +49,10 @@ protected:
     {
         paramList.insert(key, val);
     }
+    inline void removeParam(const QString &key)
+    {
+        paramList.remove(key);
+    }
 
 private:
     QHash<QString, QVariant> paramList;

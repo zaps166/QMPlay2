@@ -439,7 +439,8 @@ MenuBar::Options::Options(MenuBar *parent) :
 {
     const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
     newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false, QAction::PreferencesRole);
-    newAction(Options::tr("&Playback settings"), this, playbackSettings, true, QMPlay2Core.getIconFromTheme("configure"), false);
+    newAction(Options::tr("&Renderer settings"), this, rendererSettings, true, configureIcon, false);
+    newAction(Options::tr("&Playback settings"), this, playbackSettings, true, configureIcon, false);
     newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
     addSeparator();
 
@@ -608,6 +609,7 @@ void MenuBar::setKeyShortcuts()
 
 
     shortcuts->appendAction(options->settings, "KeyBindings/Options-settings", "Ctrl+O");
+    shortcuts->appendAction(options->rendererSettings, "KeyBindings/Options-rendererSettings", "Ctrl+Shift+R");
     shortcuts->appendAction(options->playbackSettings, "KeyBindings/Options-playbackSettings", "Ctrl+Shift+P");
     shortcuts->appendAction(options->modulesSettings, "KeyBindings/Options-modulesSettings", "Ctrl+Shift+O");
     shortcuts->appendAction(options->trayVisible, "KeyBindings/Options-trayVisible", "Ctrl+T");

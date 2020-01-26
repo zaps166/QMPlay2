@@ -28,9 +28,6 @@ Cuvid::Cuvid() :
 
     init("Enabled", true);
     init("DeintMethod", 2);
-    if (getString("CopyVideo") == "1") // Backward compatibility
-        remove("CopyVideo");
-    init("CopyVideo", false);
     init("DecodeMPEG4", true);
 #ifdef Q_OS_WIN
     init("CheckFirstGPU", true);
@@ -92,9 +89,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     m_enabledB = new QCheckBox(tr("Decoder enabled"));
     m_enabledB->setChecked(sets().getBool("Enabled"));
 
-    m_copyVideoB = new QCheckBox(tr("Copy decoded video to CPU memory (not recommended)"));
-    m_copyVideoB->setChecked(sets().getBool("CopyVideo"));
-
     m_decodeMPEG4 = new QCheckBox(tr("Decode MPEG4 videos"));
     m_decodeMPEG4->setChecked(sets().getBool("DecodeMPEG4"));
     m_decodeMPEG4->setToolTip(tr("Disable if you have problems with decoding MPEG4 (DivX5) videos"));
@@ -104,12 +98,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     m_checkFirstGPU->setChecked(sets().getBool("CheckFirstGPU"));
 #endif
 
-    connect(m_enabledB, SIGNAL(clicked(bool)), m_copyVideoB, SLOT(setEnabled(bool)));
-    m_copyVideoB->setEnabled(m_enabledB->isChecked());
-
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(m_enabledB);
-    layout->addWidget(m_copyVideoB);
     layout->addWidget(m_decodeMPEG4);
 #ifdef Q_OS_WIN
     layout->addWidget(m_checkFirstGPU);
@@ -119,7 +109,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 void ModuleSettingsWidget::saveSettings()
 {
     sets().set("Enabled", m_enabledB->isChecked());
-    sets().set("CopyVideo", m_copyVideoB->isChecked());
     sets().set("DecodeMPEG4", m_decodeMPEG4->isChecked());
 #ifdef Q_OS_WIN
     sets().set("CheckFirstGPU", m_checkFirstGPU->isChecked());

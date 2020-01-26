@@ -238,21 +238,11 @@ bool VDPAU::getRGB(uint8_t *dest, int width, int height)
 
     auto displayingOutputSurface = getDisplayingOutputSurface();
     if (!displayingOutputSurface)
-        return false;;
+        return false;
 
-    const uint32_t lineSize = Functions::aligned(m_outputSurfaceSize.width(), 8) * 4;
+    const uint32_t lineSize = m_outputSurfaceSize.width() * 4;
     if (vdp_surface_get_bits_native(displayingOutputSurface->surface, nullptr, (void **)&dest, &lineSize) == VDP_STATUS_OK)
-    {
-        // FIXME: Don't align RGB frame in VideoThr
-        for (int y = 0; y < m_outputSurfaceSize.height(); ++y)
-        {
-            for (uint32_t x = m_outputSurfaceSize.width() * 4; x < lineSize; ++x)
-            {
-                dest[y * lineSize + x] = 0;
-            }
-        }
         return true;
-    }
 
     return false;
 }

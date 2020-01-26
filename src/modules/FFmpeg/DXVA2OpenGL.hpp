@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <HWAccelInterface.hpp>
+#include <HWOpenGLInterop.hpp>
 
 #include <QOpenGLContext>
 #include <QHash>
@@ -35,7 +35,7 @@ struct AVBufferRef;
 
 using QMPlay2D3dDev9 = std::unique_ptr<IDirect3DDevice9, std::function<void(void *)>>;
 
-class DXVA2OpenGL : public HWAccelInterface
+class DXVA2OpenGL : public HWOpenGLInterop
 {
 public:
     DXVA2OpenGL(AVBufferRef *hwDeviceBufferRef);
@@ -48,10 +48,10 @@ public:
     bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) override;
     void clear() override;
 
-    MapResult mapFrame(Frame &videoFrame) override;
+    bool mapFrame(Frame &videoFrame) override;
     quint32 getTexture(int plane) override;
 
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) override;
+    QImage getImage(const Frame &videoFrame) override;
 
     void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap) override;
     void setVideoAdjustment(const VideoAdjustment &videoAdjustment) override;

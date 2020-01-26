@@ -28,13 +28,16 @@ class QMPlay2DummyDecoder : public Decoder
         return QString();
     }
 
-    bool open(StreamInfo &, VideoWriter *) override
+    bool open(StreamInfo &) override
     {
         return true;
     }
 };
 
-Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStringList &modNames, QString *modNameOutput)
+Decoder *Decoder::create(
+    StreamInfo &streamInfo,
+    const QStringList &modNames,
+    QString *modNameOutput)
 {
     if (!streamInfo.must_decode)
     {
@@ -65,7 +68,7 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
         Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);
         if (!decoder)
             continue;
-        if (decoder->open(streamInfo, writer))
+        if (decoder->open(streamInfo))
         {
             if (modNameOutput)
                 *modNameOutput = moduleInfo.name;
@@ -76,9 +79,9 @@ Decoder *Decoder::create(StreamInfo &streamInfo, VideoWriter *writer, const QStr
     return nullptr;
 }
 
-VideoWriter *Decoder::HWAccel() const
+bool Decoder::hasHWDecContext() const
 {
-    return nullptr;
+    return false;
 }
 std::shared_ptr<VideoFilter> Decoder::hwAccelFilter() const
 {

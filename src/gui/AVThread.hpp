@@ -30,12 +30,10 @@ class Writer;
 class AVThread : public QThread
 {
     Q_DECLARE_TR_FUNCTIONS(AVThread)
+
 public:
+    virtual void setDec(Decoder *_dec);
     void destroyDec();
-    inline void setDec(Decoder *_dec)
-    {
-        dec = _dec;
-    }
 
     inline bool updateTryLock()
     {
@@ -58,10 +56,10 @@ public:
 
     virtual bool hasDecoderError() const;
 
-    Decoder *dec;
-    Writer *writer;
+    Decoder *dec = nullptr;
+    Writer *writer = nullptr;
 protected:
-    AVThread(PlayClass &, const QString &, Writer *writer = nullptr, const QStringList &pluginsName = {});
+    AVThread(PlayClass &playC);
     virtual ~AVThread();
 
     void maybeStartThread();
@@ -70,7 +68,7 @@ protected:
 
     PlayClass &playC;
 
-    volatile bool br, br2;
-    bool waiting;
+    volatile bool br = false, br2 = false;
+    bool waiting = false;
     QMutex mutex, updateMutex;
 };

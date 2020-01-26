@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <HWDecContext.hpp>
 #include <VideoAdjustment.hpp>
 
 #include <QString>
@@ -27,7 +28,7 @@
 class ImgScaler;
 class Frame;
 
-class HWAccelInterface
+class HWOpenGLInterop : public HWDecContext
 {
 public:
     enum Format
@@ -35,17 +36,11 @@ public:
         NV12,
         RGB32
     };
-    enum MapResult
-    {
-        MapNotReady = -1,
-        MapOk,
-        MapError,
-    };
 
     using SetTextureParamsFn = std::function<void(quint32 texture)>;
 
 public:
-    virtual ~HWAccelInterface() = default;
+    virtual ~HWOpenGLInterop() = default;
 
     virtual QString name() const = 0;
 
@@ -59,13 +54,16 @@ public:
         return true;
     }
 
+    bool hasError() const override final
+    {
+        return m_error;
+    }
+
     virtual bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) = 0;
     virtual void clear() = 0;
 
-    virtual MapResult mapFrame(Frame &videoFrame) = 0;
+    virtual bool mapFrame(Frame &videoFrame) = 0;
     virtual quint32 getTexture(int plane) = 0;
-
-    virtual bool getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32 = nullptr) = 0;
 
     virtual void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
     {
@@ -75,4 +73,7 @@ public:
     {
         Q_UNUSED(videoAdjustment)
     }
+
+protected:
+    bool m_error = false;
 };

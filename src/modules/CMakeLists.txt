@@ -38,10 +38,6 @@ if(USE_VIDEOFILTERS)
     add_subdirectory(VideoFilters)
 endif()
 
-if(USE_OPENGL)
-    add_subdirectory(OpenGL2)
-endif()
-
 if(USE_AUDIOCD)
     add_subdirectory(AudioCD)
 endif()

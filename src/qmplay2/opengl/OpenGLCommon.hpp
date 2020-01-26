@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "OpenGLInstance.hpp"
+
 #include <Frame.hpp>
 #include <VideoAdjustment.hpp>
 #include <X11BypassCompositor.hpp>
@@ -38,48 +40,42 @@
     #define APIENTRY
 #endif
 
-class HWAccelInterface;
-class OpenGL2Common;
+class HWOpenGLInterop;
+class OpenGLCommon;
 class QMPlay2OSD;
 class QMouseEvent;
 
 class RotAnimation final : public QVariantAnimation
 {
 public:
-    inline RotAnimation(OpenGL2Common &glCommon) :
+    inline RotAnimation(OpenGLCommon &glCommon) :
         glCommon(glCommon)
     {}
 private:
     void updateCurrentValue(const QVariant &value) override;
 
-    OpenGL2Common &glCommon;
+    OpenGLCommon &glCommon;
 };
 
 /**/
 
-class OpenGL2Common : public X11BypassCompositor
+class OpenGLCommon : public X11BypassCompositor
 {
-    Q_DECLARE_TR_FUNCTIONS(OpenGL2Common)
-#ifndef OPENGL_ES2
-    using GLActiveTexture  = void  (APIENTRY *)(GLenum);
-    using GLGenBuffers     = void  (APIENTRY *)(GLsizei, GLuint *);
-    using GLBindBuffer     = void  (APIENTRY *)(GLenum, GLuint);
-    using GLBufferData     = void  (APIENTRY *)(GLenum, GLsizeiptr, const void *, GLenum);
-    using GLDeleteBuffers  = void  (APIENTRY *)(GLsizei, const GLuint *);
-    using GLGenerateMipmap = void  (APIENTRY *)(GLenum);
-#endif
-    using GLMapBufferRange = void *(APIENTRY *)(GLenum, GLintptr, GLsizeiptr, GLbitfield);
-    using GLMapBuffer      = void *(APIENTRY *)(GLenum, GLbitfield);
-    using GLUnmapBuffer    = GLboolean(APIENTRY *)(GLenum);
+    Q_DECLARE_TR_FUNCTIONS(OpenGLCommon)
+
 public:
-    OpenGL2Common();
-    virtual ~OpenGL2Common();
+    OpenGLCommon();
+    virtual ~OpenGLCommon();
 
     virtual void deleteMe();
 
     virtual QWidget *widget() = 0;
 
-    bool testGL();
+    virtual bool makeContextCurrent() = 0;
+    virtual void doneContextCurrent() = 0;
+
+    void initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop);
+
     virtual void setVSync(bool enable) = 0;
     virtual void updateGL(bool requestDelayed) = 0;
 
@@ -99,22 +95,16 @@ protected:
 
     void contextAboutToBeDestroyed();
 
-    void testGLInternal();
-
-    bool initGLProc();
 #ifndef OPENGL_ES2
-    void showOpenGLMissingFeaturesMessage();
-
-    bool supportsShaders, canCreateNonPowerOfTwoTextures;
-    GLActiveTexture glActiveTexture;
-    GLGenBuffers glGenBuffers;
-    GLBindBuffer glBindBuffer;
-    GLBufferData glBufferData;
-    GLDeleteBuffers glDeleteBuffers;
+    OpenGLInstance::GLActiveTexture glActiveTexture = nullptr;
+    OpenGLInstance::GLGenBuffers glGenBuffers = nullptr;
+    OpenGLInstance::GLBindBuffer glBindBuffer = nullptr;
+    OpenGLInstance::GLBufferData glBufferData = nullptr;
+    OpenGLInstance::GLDeleteBuffers glDeleteBuffers = nullptr;
 #endif
-    GLMapBufferRange glMapBufferRange = nullptr;
-    GLMapBuffer glMapBuffer = nullptr;
-    GLUnmapBuffer glUnmapBuffer = nullptr;
+    OpenGLInstance::GLMapBufferRange glMapBufferRange = nullptr;
+    OpenGLInstance::GLMapBuffer glMapBuffer = nullptr;
+    OpenGLInstance::GLUnmapBuffer glUnmapBuffer = nullptr;
 
     bool vSync;
 
@@ -136,14 +126,15 @@ private:
     inline void deleteSphereVbo();
     void loadSphere();
 public:
-    std::shared_ptr<HWAccelInterface> hwAccellnterface;
+    const std::shared_ptr<OpenGLInstance> m_glInstance;
+    std::shared_ptr<HWOpenGLInterop> m_hwInterop;
     QStringList videoAdjustmentKeys;
     Frame videoFrame;
 
     bool m_limited = false;
     AVColorSpace m_colorSpace = AVCOL_SPC_UNSPECIFIED;
 
-    QOpenGLShaderProgram *shaderProgramVideo, *shaderProgramOSD;
+    std::unique_ptr<QOpenGLShaderProgram> shaderProgramVideo, shaderProgramOSD;
 
     qint32 texCoordYCbCrLoc, positionYCbCrLoc, texCoordOSDLoc, positionOSDLoc;
     VideoAdjustment videoAdjustment;
@@ -156,9 +147,8 @@ public:
     quint32 pbo[4];
     bool hasPbo;
 
-    bool isPaused, isOK, hwAccelError, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
+    bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
     int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
-    int glVer;
 
     double aspectRatio, zoom;
 

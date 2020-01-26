@@ -36,11 +36,11 @@ public:
 
     void downloadVideoFrame(Frame &decoded) override;
 
-    bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
+    bool open(StreamInfo &streamInfo) override;
 
 private:
-    bool m_copyVideo = false;
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
     std::shared_ptr<VideoFilter> m_filter;
+    AVPixelFormat m_pixFmt = AV_PIX_FMT_NONE;
     SwsContext *m_swsCtx = nullptr;
 };

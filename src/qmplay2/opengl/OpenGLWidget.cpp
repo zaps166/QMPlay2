@@ -16,30 +16,43 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "OpenGL2Widget.hpp"
+#include "OpenGLWidget.hpp"
 
 #include <QOpenGLContext>
 
-OpenGL2Widget::OpenGL2Widget()
+OpenGLWidget::OpenGLWidget()
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
-OpenGL2Widget::~OpenGL2Widget()
+OpenGLWidget::~OpenGLWidget()
 {
     makeCurrent();
 }
 
-QWidget *OpenGL2Widget::widget()
+QWidget *OpenGLWidget::widget()
 {
     return this;
 }
 
-void OpenGL2Widget::setVSync(bool enable)
+bool OpenGLWidget::makeContextCurrent()
+{
+    if (!context())
+        return false;
+
+    makeCurrent();
+    return true;
+}
+void OpenGLWidget::doneContextCurrent()
+{
+    doneCurrent();
+}
+
+void OpenGLWidget::setVSync(bool enable)
 {
     Q_UNUSED(enable)
     // Not supported
 }
-void OpenGL2Widget::updateGL(bool requestDelayed)
+void OpenGLWidget::updateGL(bool requestDelayed)
 {
     if (requestDelayed)
         QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
@@ -47,24 +60,24 @@ void OpenGL2Widget::updateGL(bool requestDelayed)
         update();
 }
 
-void OpenGL2Widget::initializeGL()
+void OpenGLWidget::initializeGL()
 {
     connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(aboutToBeDestroyed()), Qt::DirectConnection);
-    OpenGL2Common::initializeGL();
+    OpenGLCommon::initializeGL();
 }
-void OpenGL2Widget::paintGL()
+void OpenGLWidget::paintGL()
 {
-    OpenGL2Common::paintGL();
+    OpenGLCommon::paintGL();
 }
 
-void OpenGL2Widget::aboutToBeDestroyed()
+void OpenGLWidget::aboutToBeDestroyed()
 {
     makeCurrent();
     contextAboutToBeDestroyed();
     doneCurrent();
 }
 
-bool OpenGL2Widget::event(QEvent *e)
+bool OpenGLWidget::event(QEvent *e)
 {
     dispatchEvent(e, parent());
     return QOpenGLWidget::event(e);

@@ -18,6 +18,7 @@
 
 #include <FFDecVTB.hpp>
 
+#include <GPUInstance.hpp>
 #include <VideoWriter.hpp>
 #include <StreamInfo.hpp>
 #include <FFCommon.hpp>
@@ -35,6 +36,8 @@ extern "C"
     #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_videotoolbox.h>
 }
+
+using namespace std;
 
 static AVPixelFormat vtbGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
@@ -63,12 +66,6 @@ FFDecVTB::~FFDecVTB()
 
 bool FFDecVTB::set()
 {
-    const bool copyVideo = sets().getBool("CopyVideoVTB");
-    if (copyVideo != m_copyVideo)
-    {
-        m_copyVideo = copyVideo;
-        return false;
-    }
     return sets().getBool("DecoderVTBEnabled");
 }
 
@@ -126,7 +123,7 @@ void FFDecVTB::downloadVideoFrame(Frame &decoded)
     }
 }
 
-bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
+bool FFDecVTB::open(StreamInfo &streamInfo)
 {
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P)
@@ -136,31 +133,31 @@ bool FFDecVTB::open(StreamInfo &streamInfo, VideoWriter *writer)
     if (!codec || !hasHWAccel("videotoolbox"))
         return false;
 
-    if (writer)
-    {
 #ifdef USE_OPENGL
-        if (auto vtbOpenGL = writer->getHWAccelInterface<VTBOpenGL>())
-        {
+    shared_ptr<VTBOpenGL> vtbOpenGL;
+
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    {
+        vtbOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VTBOpenGL>();
+        if (vtbOpenGL)
             m_hwDeviceBufferRef = av_buffer_ref(vtbOpenGL->m_hwDeviceBufferRef);
-            m_hwAccelWriter = writer;
-        }
+    }
 #endif
-    }
 
-    if (!m_hwDeviceBufferRef)
-    {
-        if (av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_VIDEOTOOLBOX, nullptr, nullptr, 0) != 0)
-            return false;
-    }
+    if (!m_hwDeviceBufferRef && av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_VIDEOTOOLBOX, nullptr, nullptr, 0) != 0)
+        return false;
 
-    if (!m_hwAccelWriter && !m_copyVideo)
-    {
 #ifdef USE_OPENGL
-        m_hwAccelWriter = VideoWriter::createOpenGL2(std::make_shared<VTBOpenGL>(m_hwDeviceBufferRef));
-#endif
-        if (!m_hwAccelWriter)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !vtbOpenGL)
+    {
+        vtbOpenGL = make_shared<VTBOpenGL>(m_hwDeviceBufferRef);
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vtbOpenGL))
             return false;
     }
+
+    if (vtbOpenGL)
+        m_hasHWDecContext = true;
+#endif
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_hwDeviceBufferRef);
     codec_ctx->get_format = vtbGetFormat;

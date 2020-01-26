@@ -51,7 +51,7 @@ Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat 
             }
             else
             {
-                // OpenGL2 writer doesn't like when linesize changes
+                // OpenGL writer doesn't like when linesize changes
                 for (int i = frame.numPlanes() - 1; i >= 0; --i)
                 {
                     frame.m_frame->linesize[i] = other->linesize[i];

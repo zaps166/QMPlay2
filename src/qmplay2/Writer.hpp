@@ -27,11 +27,11 @@
 class QMPLAY2SHAREDLIB_EXPORT Writer : public ModuleCommon, public ModuleParams, public BasicIO
 {
 public:
-    static Writer *create(const QString &, const QStringList &modNames = {});
+    static Writer *create(const QString &url, const QStringList &modNames = {});
 
     inline QString getUrl() const
     {
-        return _url;
+        return m_url;
     }
 
     virtual bool readyWrite() const = 0;
@@ -43,5 +43,6 @@ public:
 private:
     virtual bool open() = 0;
 
-    QString _url;
+private:
+    QString m_url;
 };

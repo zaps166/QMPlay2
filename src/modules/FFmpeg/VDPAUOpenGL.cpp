@@ -35,12 +35,12 @@ QString VDPAUOpenGL::name() const
     return VDPAUWriterName;
 }
 
-HWAccelInterface::Format VDPAUOpenGL::getFormat() const
+HWOpenGLInterop::Format VDPAUOpenGL::getFormat() const
 {
     return RGB32;
 }
 
-bool VDPAUOpenGL::init(const int *widths, const int *heights, const HWAccelInterface::SetTextureParamsFn &setTextureParamsFn)
+bool VDPAUOpenGL::init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn)
 {
     Q_UNUSED(widths)
     Q_UNUSED(heights)
@@ -64,12 +64,14 @@ bool VDPAUOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!context)
     {
         QMPlay2Core.logError("VDPAU :: Unable to get OpenGL context");
+        m_error = true;
         return false;
     }
 
     if (!context->extensions().contains("GL_NV_vdpau_interop"))
     {
         QMPlay2Core.logError("VDPAU :: GL_NV_vdpau_interop extension is not available");
+        m_error = true;
         return false;
     }
 
@@ -83,6 +85,7 @@ bool VDPAUOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (!VDPAUInitNV || !VDPAUFiniNV || !VDPAURegisterOutputSurfaceNV || !VDPAUUnregisterSurfaceNV || !VDPAUSurfaceAccessNV || !VDPAUMapSurfacesNV || !VDPAUUnmapSurfacesNV)
     {
         QMPlay2Core.logError("VDPAU :: Unable to get VDPAU interop function pointers");
+        m_error = true;
         return false;
     }
 
@@ -90,6 +93,7 @@ bool VDPAUOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     if (glGetError() != 0)
     {
         QMPlay2Core.logError("VDPAU :: Unable to initialize VDPAU <-> GL interop");
+        m_error = true;
         return false;
     }
 
@@ -117,7 +121,7 @@ void VDPAUOpenGL::clear()
     m_isInitialized = false;
 }
 
-HWAccelInterface::MapResult VDPAUOpenGL::mapFrame(Frame &videoFrame)
+bool VDPAUOpenGL::mapFrame(Frame &videoFrame)
 {
     QMutexLocker locker(&m_vdpau->m_outputSurfacesMutex);
 
@@ -131,7 +135,7 @@ HWAccelInterface::MapResult VDPAUOpenGL::mapFrame(Frame &videoFrame)
 
     auto it = m_vdpau->m_outputSurfacesMap.find(videoFrame.customID());
     if (it == m_vdpau->m_outputSurfacesMap.end())
-        return MapNotReady;
+        return false;
 
     auto &outputSurface = it->second;
 
@@ -148,17 +152,23 @@ HWAccelInterface::MapResult VDPAUOpenGL::mapFrame(Frame &videoFrame)
     {
         outputSurface.glSurface = VDPAURegisterOutputSurfaceNV(outputSurface.surface, GL_TEXTURE_2D, 1, &outputSurface.glTexture);
         if (outputSurface.glSurface == 0)
-            return MapError;
+        {
+            m_error = true;
+            return false;
+        }
         VDPAUSurfaceAccessNV(outputSurface.glSurface, GL_READ_ONLY);
     }
 
     Q_ASSERT(!outputSurface.displaying);
     VDPAUMapSurfacesNV(1, &outputSurface.glSurface);
     if (glGetError() != 0)
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
     outputSurface.displaying = true;
 
-    return MapOk;
+    return true;
 }
 quint32 VDPAUOpenGL::getTexture(int plane)
 {
@@ -169,10 +179,12 @@ quint32 VDPAUOpenGL::getTexture(int plane)
     return 0;
 }
 
-bool VDPAUOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+QImage VDPAUOpenGL::getImage(const Frame &videoFrame)
 {
-    Q_UNUSED(nv12ToRGB32) // FIXME: Don't use ImgScaler in VideoThr if not needed
-    return m_vdpau->getRGB((uint8_t *)dest, videoFrame.width(), videoFrame.height());
+    QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+    if (m_vdpau->getRGB(img.bits(), videoFrame.width(), videoFrame.height()))
+        return img;
+    return QImage();
 }
 
 void VDPAUOpenGL::getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)

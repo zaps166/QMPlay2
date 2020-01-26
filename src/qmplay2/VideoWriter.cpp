@@ -18,34 +18,6 @@
 
 #include <VideoWriter.hpp>
 
-#include <HWAccelInterface.hpp>
-
-VideoWriter *VideoWriter::createOpenGL2(const std::shared_ptr<HWAccelInterface> &hwAccelInterface)
-{
-    for (Module *pluginInstance : QMPlay2Core.getPluginsInstance())
-    {
-        for (const Module::Info &mod : pluginInstance->getModulesInfo())
-        {
-            if (mod.type == Module::WRITER && mod.extensions.contains("video"))
-            {
-                VideoWriter *videoWriter = (VideoWriter *)pluginInstance->createInstance("OpenGL 2");
-                if (videoWriter)
-                {
-                    if (hwAccelInterface)
-                        videoWriter->m_hwAccelInterface = hwAccelInterface;
-                    if (!videoWriter->open())
-                    {
-                        delete videoWriter;
-                        videoWriter = nullptr;
-                    }
-                    return videoWriter;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
 VideoWriter::VideoWriter()
 {}
 VideoWriter::~VideoWriter()
@@ -56,19 +28,17 @@ AVPixelFormats VideoWriter::supportedPixelFormats() const
     return {AV_PIX_FMT_YUV420P};
 }
 
-bool VideoWriter::hwAccelError() const
-{
-    return false;
-}
-
 qint64 VideoWriter::write(const QByteArray &)
 {
     return -1;
 }
 
-bool VideoWriter::hwAccelGetImg(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VideoWriter::setHWDecContext(const std::shared_ptr<HWDecContext> &hwDecContext)
 {
-    if (m_hwAccelInterface)
-        return m_hwAccelInterface->getImage(videoFrame, dest, nv12ToRGB32);
+    Q_UNUSED(hwDecContext)
     return false;
+}
+std::shared_ptr<HWDecContext> VideoWriter::hwDecContext() const
+{
+    return nullptr;
 }

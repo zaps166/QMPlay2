@@ -27,32 +27,30 @@ extern "C" {
 
 class QMPlay2OSD;
 class VideoWriter;
+class HWDecContext;
 
 class VideoThr final : public AVThread
 {
     Q_OBJECT
 public:
-    VideoThr(PlayClass &, VideoWriter *, const QStringList &pluginsName = {});
+    VideoThr(PlayClass &playC, const QStringList &pluginsName = {});
     ~VideoThr();
+
+    void setDec(Decoder *dec) override;
+
+    std::shared_ptr<HWDecContext> getHWDecContext() const;
+
+    bool videoWriterSet();
 
     void stop(bool terminate = false) override;
 
     bool hasDecoderError() const override;
-
-    inline VideoWriter *getHWAccelWriter() const
-    {
-        return hwAccelWriter;
-    }
 
     AVPixelFormats getSupportedPixelFormats() const;
 
     inline void setDoScreenshot()
     {
         doScreenshot = true;
-    }
-    inline void setSyncVtoA(bool b)
-    {
-        syncVtoA = b;
     }
     inline void setDeleteOSD()
     {
@@ -91,7 +89,6 @@ private:
     quint32 seq;
 
     Decoder *sDec;
-    VideoWriter *hwAccelWriter;
     QMPlay2OSD *subtitles;
     VideoFilters filters;
     QMutex filtersMutex;

@@ -52,14 +52,14 @@ public:
 private:
     QString name() const override;
 
-    VideoWriter *HWAccel() const override;
+    bool hasHWDecContext() const override;
     std::shared_ptr<VideoFilter> hwAccelFilter() const override;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
 
     bool hasCriticalError() const override;
 
-    bool open(StreamInfo &streamInfo, VideoWriter *writer = nullptr) override;
+    bool open(StreamInfo &streamInfo) override;
 
     /**/
 
@@ -73,9 +73,8 @@ private:
     bool loadLibrariesAndInit();
 
 private:
-    VideoWriter *m_writer;
     std::shared_ptr<VideoFilter> m_filter;
-    std::shared_ptr<CuvidOpenGL> m_cuvidHWAccel;
+    std::shared_ptr<CuvidOpenGL> m_cuvidGLInterop;
 
     bool m_limited;
     AVColorSpace m_colorSpace;
@@ -86,7 +85,6 @@ private:
     double m_lastTS[2];
 
     cudaVideoDeinterlaceMode m_deintMethod;
-    bool m_copyVideo;
     bool m_forceFlush;
     bool m_tsWorkaround;
 
@@ -96,7 +94,7 @@ private:
     SwsContext *m_swsCtx;
     AVPacket *m_pkt;
 
-    CUcontext m_cuCtx;
+    std::shared_ptr<CUcontext> m_cuCtx;
 
     CUVIDEOFORMATEX m_cuvidFmt;
     CUVIDPARSERPARAMS m_cuvidParserParams;

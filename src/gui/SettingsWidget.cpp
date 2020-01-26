@@ -26,6 +26,7 @@
 #include <Notifies.hpp>
 #include <Main.hpp>
 
+#include <QStackedWidget>
 #include <QStandardPaths>
 #include <QStyleFactory>
 #include <QRadioButton>
@@ -147,7 +148,6 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
     if (!QMPSettings.contains("AutoUpdates"))
         QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
-    QMPSettings.init("UseGLOnWindow", false);
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
@@ -165,6 +165,11 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Proxy/Login", false);
     QMPSettings.init("Proxy/User", QString());
     QMPSettings.init("Proxy/Password", QString());
+
+    QMPSettings.init("OpenGL/OnWindow", false);
+    QMPSettings.init("OpenGL/VSync", true);
+    QMPSettings.init("OpenGL/BypassCompositor", false);
+
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
     QMPSettings.init("AVBufferLocal", 100);
@@ -265,279 +270,272 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
     layout->addWidget(closeB, 1, 2, 1, 1);
     layout->setMargin(2);
 
-    /* Page 1 */
     {
-        QWidget *page1Widget = new QWidget;
-        page1 = new Ui::GeneralSettings;
-        page1->setupUi(page1Widget);
+        QWidget *generalSettingsWidget = new QWidget;
+        generalSettingsPage = new Ui::GeneralSettings;
+        generalSettingsPage->setupUi(generalSettingsWidget);
 
-        appendColon(page1->langL);
-        appendColon(page1->styleL);
-        appendColon(page1->encodingL);
-        appendColon(page1->audioLangL);
-        appendColon(page1->subsLangL);
-        appendColon(page1->screenshotL);
-        appendColon(page1->profileL);
+        appendColon(generalSettingsPage->langL);
+        appendColon(generalSettingsPage->styleL);
+        appendColon(generalSettingsPage->encodingL);
+        appendColon(generalSettingsPage->audioLangL);
+        appendColon(generalSettingsPage->subsLangL);
+        appendColon(generalSettingsPage->screenshotL);
+        appendColon(generalSettingsPage->profileL);
 
-        tabW->addTab(page1Widget, tr("General settings"));
+        tabW->addTab(generalSettingsWidget, tr("General settings"));
 
         int idx;
 
-        page1->langBox->addItem("English", "en");
-        page1->langBox->setCurrentIndex(0);
+        generalSettingsPage->langBox->addItem("English", "en");
+        generalSettingsPage->langBox->setCurrentIndex(0);
         const QStringList langs = QMPlay2Core.getLanguages();
         for (int i = 0; i < langs.count(); i++)
         {
-            page1->langBox->addItem(QMPlay2Core.getLongFromShortLanguage(langs[i]), langs[i]);
+            generalSettingsPage->langBox->addItem(QMPlay2Core.getLongFromShortLanguage(langs[i]), langs[i]);
             if (QMPlay2Core.getLanguage() == langs[i])
-                page1->langBox->setCurrentIndex(i + 1);
+                generalSettingsPage->langBox->setCurrentIndex(i + 1);
         }
 
-        page1->styleBox->addItems(QStyleFactory::keys());
-        idx = page1->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
-        if (idx > -1 && idx < page1->styleBox->count())
-            page1->styleBox->setCurrentIndex(idx);
-        connect(page1->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
+        generalSettingsPage->styleBox->addItems(QStyleFactory::keys());
+        idx = generalSettingsPage->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
+        if (idx > -1 && idx < generalSettingsPage->styleBox->count())
+            generalSettingsPage->styleBox->setCurrentIndex(idx);
+        connect(generalSettingsPage->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
 
         QStringList encodings;
         for (const QByteArray &item : QTextCodec::availableCodecs())
             encodings += QTextCodec::codecForName(item)->name();
         encodings.removeDuplicates();
-        page1->encodingB->addItems(encodings);
-        idx = page1->encodingB->findText(QMPSettings.getByteArray("FallbackSubtitlesEncoding"));
+        generalSettingsPage->encodingB->addItems(encodings);
+        idx = generalSettingsPage->encodingB->findText(QMPSettings.getByteArray("FallbackSubtitlesEncoding"));
         if (idx > -1)
-            page1->encodingB->setCurrentIndex(idx);
+            generalSettingsPage->encodingB->setCurrentIndex(idx);
 
         const QString audioLang = QMPSettings.getString("AudioLanguage");
         const QString subsLang = QMPSettings.getString("SubtitlesLanguage");
-        page1->audioLangB->addItem(tr("Default or first stream"));
-        page1->subsLangB->addItem(tr("Default or first stream"));
+        generalSettingsPage->audioLangB->addItem(tr("Default or first stream"));
+        generalSettingsPage->subsLangB->addItem(tr("Default or first stream"));
         for (const QString &lang : QMPlay2Core.getLanguagesMap())
         {
-            page1->audioLangB->addItem(lang);
-            page1->subsLangB->addItem(lang);
+            generalSettingsPage->audioLangB->addItem(lang);
+            generalSettingsPage->subsLangB->addItem(lang);
             if (lang == audioLang)
-                page1->audioLangB->setCurrentIndex(page1->audioLangB->count() - 1);
+                generalSettingsPage->audioLangB->setCurrentIndex(generalSettingsPage->audioLangB->count() - 1);
             if (lang == subsLang)
-                page1->subsLangB->setCurrentIndex(page1->subsLangB->count() - 1);
+                generalSettingsPage->subsLangB->setCurrentIndex(generalSettingsPage->subsLangB->count() - 1);
         }
         {
             const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile").toString();
-            page1->profileB->addItem(tr("Default"));
+            generalSettingsPage->profileB->addItem(tr("Default"));
             for (const QString &profile : QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
             {
-                page1->profileB->addItem(profile);
+                generalSettingsPage->profileB->addItem(profile);
                 if (profile == currentProfile)
-                    page1->profileB->setCurrentIndex(page1->profileB->count() - 1);
+                    generalSettingsPage->profileB->setCurrentIndex(generalSettingsPage->profileB->count() - 1);
             }
-            connect(page1->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
+            connect(generalSettingsPage->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
 
-            page1->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-            page1->profileRemoveB->setEnabled(page1->profileB->currentIndex() != 0);
-            connect(page1->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
+            generalSettingsPage->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+            generalSettingsPage->profileRemoveB->setEnabled(generalSettingsPage->profileB->currentIndex() != 0);
+            connect(generalSettingsPage->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
         }
 
-        page1->screenshotE->setText(QMPSettings.getString("screenshotPth"));
-        page1->screenshotFormatB->setCurrentIndex(page1->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
-        page1->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-        connect(page1->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
+        generalSettingsPage->screenshotE->setText(QMPSettings.getString("screenshotPth"));
+        generalSettingsPage->screenshotFormatB->setCurrentIndex(generalSettingsPage->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
+        generalSettingsPage->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+        connect(generalSettingsPage->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
-        connect(page1->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
-        connect(page1->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
+        connect(generalSettingsPage->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
+        connect(generalSettingsPage->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
 
 #ifdef ICONS_FROM_THEME
-        page1->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
+        generalSettingsPage->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
 #else
-        delete page1->iconsFromTheme;
-        page1->iconsFromTheme = nullptr;
+        delete generalSettingsPage->iconsFromTheme;
+        generalSettingsPage->iconsFromTheme = nullptr;
 #endif
 
-        page1->showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
-        page1->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
-        page1->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
-        page1->enlargeSmallCoversB->setChecked(QMPSettings.getBool("EnlargeCovers"));
+        generalSettingsPage->showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
+        generalSettingsPage->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
+        generalSettingsPage->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
+        generalSettingsPage->enlargeSmallCoversB->setChecked(QMPSettings.getBool("EnlargeCovers"));
 
-        page1->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
-        page1->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
+        generalSettingsPage->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
+        generalSettingsPage->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
 
-        page1->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
+        generalSettingsPage->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
 #ifndef UPDATER
-        page1->autoUpdatesB->setText(tr("Automatically check for updates"));
-#endif
-
-        auto deleteGlOnWindowB = [this] {
-            delete page1->glOnWindowB;
-            page1->glOnWindowB = nullptr;
-        };
-#ifdef USE_OPENGL
-        if (QMPlay2CoreClass::isGlOnWindowForced())
-            deleteGlOnWindowB();
-        else
-            page1->glOnWindowB->setChecked(QMPlay2Core.isGlOnWindow());
-#else
-        deleteGlOnWindowB();
+        generalSettingsPage->autoUpdatesB->setText(tr("Automatically check for updates"));
 #endif
 
         if (Notifies::hasBoth())
-            page1->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
+            generalSettingsPage->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
         else
         {
-            delete page1->trayNotifiesDefault;
-            page1->trayNotifiesDefault = nullptr;
+            delete generalSettingsPage->trayNotifiesDefault;
+            generalSettingsPage->trayNotifiesDefault = nullptr;
         }
 
-        page1->autoDelNonGroupEntries->setChecked(QMPSettings.getBool("AutoDelNonGroupEntries"));
+        generalSettingsPage->autoDelNonGroupEntries->setChecked(QMPSettings.getBool("AutoDelNonGroupEntries"));
 
-        page1->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
+        generalSettingsPage->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
 
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
-        page1->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
+        generalSettingsPage->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
 #else
-        delete page1->allowOnlyOneInstance;
-        page1->allowOnlyOneInstance = nullptr;
+        delete generalSettingsPage->allowOnlyOneInstance;
+        generalSettingsPage->allowOnlyOneInstance = nullptr;
 #endif
 
-        page1->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
-        page1->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
-        page1->skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
-        page1->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
-        page1->stillImages->setChecked(QMPSettings.getBool("StillImages"));
+        generalSettingsPage->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
+        generalSettingsPage->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
+        generalSettingsPage->skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
+        generalSettingsPage->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
+        generalSettingsPage->stillImages->setChecked(QMPSettings.getBool("StillImages"));
 
-        page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
-        page1->proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
-        page1->proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
-        page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
-        page1->proxyUserE->setText(QMPSettings.getString("Proxy/User"));
-        page1->proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
+        generalSettingsPage->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
+        generalSettingsPage->proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
+        generalSettingsPage->proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
+        generalSettingsPage->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
+        generalSettingsPage->proxyUserE->setText(QMPSettings.getString("Proxy/User"));
+        generalSettingsPage->proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
-        page1->clearCoversCache->setIcon(viewRefresh);
-        connect(page1->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
-        page1->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-        connect(page1->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
-        page1->resetSettingsB->setIcon(viewRefresh);
-        connect(page1->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
+        generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
+        connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+        connect(generalSettingsPage->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
+        generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
+        connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
     }
 
-    /* Page 2 */
     {
-        QWidget *page2Widget = new QWidget;
-        page2 = new Ui::PlaybackSettings;
-        page2->setupUi(page2Widget);
-
-        appendColon(page2->shortSeekL);
-        appendColon(page2->longSeekL);
-        appendColon(page2->bufferLocalL);
-        appendColon(page2->bufferNetworkL);
-        appendColon(page2->backwardBufferNetworkL);
-        appendColon(page2->playIfBufferedL);
-        appendColon(page2->maxVolL);
-        appendColon(page2->forceSamplerate);
-        appendColon(page2->forceChannels);
-
-        page2->shortSeekB->setSuffix(" " + page2->shortSeekB->suffix());
-        page2->longSeekB->setSuffix(" " + page2->longSeekB->suffix());
-        page2->playIfBufferedB->setSuffix(" " + page2->playIfBufferedB->suffix());
-        page2->replayGainPreamp->setPrefix(page2->replayGainPreamp->prefix() + ": ");
-
-        tabW->addTab(page2Widget, tr("Playback settings"));
-
-        page2->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
-        page2->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
-        page2->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
-        page2->bufferNetworkB->setValue(QMPSettings.getInt("AVBufferNetwork"));
-        page2->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
-        page2->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
-        page2->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
-
-        page2->forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
-        page2->samplerateB->setValue(QMPSettings.getInt("Samplerate"));
-        connect(page2->forceSamplerate, SIGNAL(toggled(bool)), page2->samplerateB, SLOT(setEnabled(bool)));
-        page2->samplerateB->setEnabled(page2->forceSamplerate->isChecked());
-
-        page2->forceChannels->setChecked(QMPSettings.getBool("ForceChannels"));
-        page2->channelsB->setValue(QMPSettings.getInt("Channels"));
-        connect(page2->forceChannels, SIGNAL(toggled(bool)), page2->channelsB, SLOT(setEnabled(bool)));
-        page2->channelsB->setEnabled(page2->forceChannels->isChecked());
-
-        page2->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
-
-        page2->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
-        page2->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
-        page2->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
-        page2->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
-
-        page2->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
-        page2->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
-        page2->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
-
-        page2->storeARatioAndZoomB->setChecked(QMPSettings.getBool("StoreARatioAndZoom"));
-        connect(page2->storeARatioAndZoomB, &QCheckBox::toggled, this, [this](bool checked) {
-            if (checked)
-            {
-                page2->keepZoom->setChecked(true);
-                page2->keepARatio->setChecked(true);
-            }
-        });
-
-        page2->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
-        connect(page2->keepZoom, &QCheckBox::toggled, this, [this](bool checked) {
-            if (!checked && !page2->keepARatio->isChecked())
-            {
-                page2->storeARatioAndZoomB->setChecked(false);
-            }
-        });
-
-        page2->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
-        connect(page2->keepARatio, &QCheckBox::toggled, this, [this](bool checked) {
-            if (!checked && !page2->keepZoom->isChecked())
-            {
-                page2->storeARatioAndZoomB->setChecked(false);
-            }
-        });
-
-        page2->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
-        page2->savePos->setChecked(QMPSettings.getBool("SavePos"));
-        page2->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
-        page2->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
-        page2->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
-        page2->keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
-        page2->syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
-        page2->silence->setChecked(QMPSettings.getBool("Silence"));
-        page2->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
-        page2->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
-        page2->leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
-        page2->middleMouseToggleFullscreen->setChecked(QMPSettings.getBool("MiddleMouseToggleFullscreen"));
-
-        page2->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
-        page2->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
-
-        page2->unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
-
-        page2->restoreAVSStateB->setChecked(QMPSettings.getBool("RestoreAVSState"));
-        page2->disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
-
         const QString modulesListTitle[3] = {
-            tr("Video output priority"),
+            tr("Legacy video output priority"),
             tr("Audio output priority"),
             tr("Decoders priority")
         };
         for (int m = 0; m < 3; ++m)
         {
-            QGroupBox *groupB = new QGroupBox(modulesListTitle[m]);
-            Ui::ModulesList *ml = new Ui::ModulesList;
+            auto groupB = new QGroupBox(modulesListTitle[m]);
+            m_modulesListGroupBox[m] = groupB;
+
+            auto ml = new Ui::ModulesList;
+            modulesList[m] = ml;
             ml->setupUi(groupB);
+
             connect(ml->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
             connect(ml->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
             connect(ml->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
             ml->moveUp->setProperty("idx", m);
             ml->moveDown->setProperty("idx", m);
-            page2->modulesListLayout->addWidget(groupB);
-            page2ModulesList[m] = ml;
         }
     }
 
-    /* Page 3 */
+    createRendererSettings();
+
+    {
+        QWidget *playbackSettingsWidget = new QWidget;
+        playbackSettingsPage = new Ui::PlaybackSettings;
+        playbackSettingsPage->setupUi(playbackSettingsWidget);
+
+        appendColon(playbackSettingsPage->shortSeekL);
+        appendColon(playbackSettingsPage->longSeekL);
+        appendColon(playbackSettingsPage->bufferLocalL);
+        appendColon(playbackSettingsPage->bufferNetworkL);
+        appendColon(playbackSettingsPage->backwardBufferNetworkL);
+        appendColon(playbackSettingsPage->playIfBufferedL);
+        appendColon(playbackSettingsPage->maxVolL);
+        appendColon(playbackSettingsPage->forceSamplerate);
+        appendColon(playbackSettingsPage->forceChannels);
+
+        playbackSettingsPage->shortSeekB->setSuffix(" " + playbackSettingsPage->shortSeekB->suffix());
+        playbackSettingsPage->longSeekB->setSuffix(" " + playbackSettingsPage->longSeekB->suffix());
+        playbackSettingsPage->playIfBufferedB->setSuffix(" " + playbackSettingsPage->playIfBufferedB->suffix());
+        playbackSettingsPage->replayGainPreamp->setPrefix(playbackSettingsPage->replayGainPreamp->prefix() + ": ");
+
+        tabW->addTab(playbackSettingsWidget, tr("Playback settings"));
+
+        playbackSettingsPage->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
+        playbackSettingsPage->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
+        playbackSettingsPage->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
+        playbackSettingsPage->bufferNetworkB->setValue(QMPSettings.getInt("AVBufferNetwork"));
+        playbackSettingsPage->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
+        playbackSettingsPage->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
+        playbackSettingsPage->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
+
+        playbackSettingsPage->forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
+        playbackSettingsPage->samplerateB->setValue(QMPSettings.getInt("Samplerate"));
+        connect(playbackSettingsPage->forceSamplerate, SIGNAL(toggled(bool)), playbackSettingsPage->samplerateB, SLOT(setEnabled(bool)));
+        playbackSettingsPage->samplerateB->setEnabled(playbackSettingsPage->forceSamplerate->isChecked());
+
+        playbackSettingsPage->forceChannels->setChecked(QMPSettings.getBool("ForceChannels"));
+        playbackSettingsPage->channelsB->setValue(QMPSettings.getInt("Channels"));
+        connect(playbackSettingsPage->forceChannels, SIGNAL(toggled(bool)), playbackSettingsPage->channelsB, SLOT(setEnabled(bool)));
+        playbackSettingsPage->channelsB->setEnabled(playbackSettingsPage->forceChannels->isChecked());
+
+        playbackSettingsPage->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
+
+        playbackSettingsPage->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
+        playbackSettingsPage->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
+        playbackSettingsPage->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
+        playbackSettingsPage->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
+
+        playbackSettingsPage->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
+        playbackSettingsPage->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
+        playbackSettingsPage->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
+
+        playbackSettingsPage->storeARatioAndZoomB->setChecked(QMPSettings.getBool("StoreARatioAndZoom"));
+        connect(playbackSettingsPage->storeARatioAndZoomB, &QCheckBox::toggled, this, [this](bool checked) {
+            if (checked)
+            {
+                playbackSettingsPage->keepZoom->setChecked(true);
+                playbackSettingsPage->keepARatio->setChecked(true);
+            }
+        });
+
+        playbackSettingsPage->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
+        connect(playbackSettingsPage->keepZoom, &QCheckBox::toggled, this, [this](bool checked) {
+            if (!checked && !playbackSettingsPage->keepARatio->isChecked())
+            {
+                playbackSettingsPage->storeARatioAndZoomB->setChecked(false);
+            }
+        });
+
+        playbackSettingsPage->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
+        connect(playbackSettingsPage->keepARatio, &QCheckBox::toggled, this, [this](bool checked) {
+            if (!checked && !playbackSettingsPage->keepZoom->isChecked())
+            {
+                playbackSettingsPage->storeARatioAndZoomB->setChecked(false);
+            }
+        });
+
+        playbackSettingsPage->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
+        playbackSettingsPage->savePos->setChecked(QMPSettings.getBool("SavePos"));
+        playbackSettingsPage->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
+        playbackSettingsPage->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
+        playbackSettingsPage->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
+        playbackSettingsPage->keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
+        playbackSettingsPage->syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
+        playbackSettingsPage->silence->setChecked(QMPSettings.getBool("Silence"));
+        playbackSettingsPage->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
+        playbackSettingsPage->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
+        playbackSettingsPage->leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
+        playbackSettingsPage->middleMouseToggleFullscreen->setChecked(QMPSettings.getBool("MiddleMouseToggleFullscreen"));
+
+        playbackSettingsPage->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
+        playbackSettingsPage->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
+
+        playbackSettingsPage->unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
+
+        playbackSettingsPage->restoreAVSStateB->setChecked(QMPSettings.getBool("RestoreAVSState"));
+        playbackSettingsPage->disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
+
+        for (int m = 1; m < 3; ++m)
+            playbackSettingsPage->modulesListLayout->addWidget(m_modulesListGroupBox[m]);
+    }
+
     {
         page3 = new Page3;
         tabW->addTab(page3, tr("Modules"));
@@ -589,7 +587,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         connect(page3->listW, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(chModule(QListWidgetItem *)));
     }
 
-    /* Page 4 */
     {
         page4 = new Page4;
         tabW->addTab(page4, tr("Subtitles"));
@@ -619,7 +616,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page4->addWidget(page4->toAssGB);
     }
 
-    /* Page 5 */
     {
         page5 = new Page5;
         tabW->addTab(page5, tr("OSD"));
@@ -629,7 +625,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page5->addWidget(page5->enabledB);
     }
 
-    /* Page 6 */
     {
         page6 = new Page6;
         tabW->addTab(page6, tr("Video filters"));
@@ -683,15 +678,15 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 SettingsWidget::~SettingsWidget()
 {
     for (int i = 0; i < 3; ++i)
-        delete page2ModulesList[i];
-    delete page2;
-    delete page1;
+        delete modulesList[i];
+    delete playbackSettingsPage;
+    delete generalSettingsPage;
 }
 
 void SettingsWidget::setAudioChannels()
 {
-    page2->forceChannels->setChecked(QMPlay2Core.getSettings().getBool("ForceChannels"));
-    page2->channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
+    playbackSettingsPage->forceChannels->setChecked(QMPlay2Core.getSettings().getBool("ForceChannels"));
+    playbackSettingsPage->channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
 }
 
 void SettingsWidget::applyProxy()
@@ -726,6 +721,158 @@ void SettingsWidget::applyProxy()
     }
 }
 
+void SettingsWidget::createRendererSettings()
+{
+    const auto currentRendererName = QMPlay2Core.rendererName();
+    auto settings = &QMPlay2Core.getSettings();
+
+    auto renderers = new QComboBox;
+    renderers->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
+    renderers->addItem(tr("Legacy"), "legacy");
+#ifdef USE_OPENGL
+    renderers->addItem(tr("OpenGL"), "opengl");
+#endif
+
+    for (int i = renderers->count() - 1; i >= 0; --i)
+    {
+        const bool active = (renderers->itemData(i).toString() == currentRendererName);
+        renderers->setItemText(i, renderers->itemText(i) + " (" + (active ? tr("active") : tr("inactive")) + ")");
+    }
+
+    auto rendererStacked = new QStackedWidget;
+
+    m_rendererApplyFunctions.push_back([=] {
+        const auto rendererName = renderers->currentData().toString();
+        settings->set("Renderer", rendererName);
+        if (currentRendererName != rendererName)
+        {
+            QMessageBox::information(this, tr("Changing renderer"), tr("To set up a new renderer, the program will start again!"));
+            restartApp();
+        }
+    });
+
+#ifdef USE_OPENGL
+    auto createVSync = [] {
+        return new QCheckBox(tr("Vertical synchronization (V-Sync)"));
+    };
+    auto createBypassCompositor = [] {
+        return new QCheckBox(tr("Bypass compositor in full screen"));
+    };
+#endif
+
+    {
+        auto legacySetttings = new QWidget;
+
+        auto layout = new QFormLayout(legacySetttings);
+        layout->setMargin(3);
+        layout->addRow(new QLabel(tr(
+            "Use QMPlay2 video output modules. "
+            "This will also be used if other renderers won't be available."
+        )));
+
+        rendererStacked->addWidget(legacySetttings);
+    }
+
+#ifdef USE_OPENGL
+    {
+        auto openglSettings = new QWidget;
+
+        auto glOnWindow = new QCheckBox(tr("Use OpenGL on entire window"));
+        auto vsync = createVSync();
+        auto bypassCompositor = createBypassCompositor();
+
+        if (QGuiApplication::platformName() == "xcb")
+        {
+            bypassCompositor->setToolTip(tr("This can improve performance if X11 compositor supports it"));
+        }
+#ifdef Q_OS_WIN
+        else if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        {
+            bypassCompositor->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
+        }
+#endif
+        else
+        {
+            bypassCompositor->setEnabled(false);
+        }
+
+        glOnWindow->setToolTip(tr(
+            "Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. "
+            "Use with caution, it can reduce performance of video playback."
+        ));
+
+        connect(glOnWindow, &QCheckBox::toggled,
+                this, [=](bool checked) {
+            vsync->setEnabled(!checked);
+#ifdef Q_OS_WIN
+            if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+            {
+                bypassCompositor->setEnabled(!checked);
+            }
+#endif
+        });
+
+        glOnWindow->setChecked(settings->getBool("OpenGL/OnWindow"));
+        vsync->setChecked(settings->getBool("OpenGL/VSync"));
+        bypassCompositor->setChecked(settings->getBool("OpenGL/BypassCompositor"));
+
+        auto layout = new QFormLayout(openglSettings);
+        layout->setMargin(3);
+        layout->addRow(glOnWindow);
+        layout->addRow(vsync);
+        layout->addRow(bypassCompositor);
+
+        if (QMPlay2CoreClass::isGlOnWindowForced())
+        {
+            glOnWindow->hide();
+            vsync->hide();
+        }
+
+        m_rendererApplyFunctions.push_back([=] {
+            auto &settings = QMPlay2Core.getSettings();
+            if (!glOnWindow->isHidden() && settings.getBool("OpenGL/OnWindow") != glOnWindow->isChecked())
+            {
+                settings.set("OpenGL/OnWindow", glOnWindow->isChecked());
+                if (!QMPlay2GUI.restartApp)
+                {
+                    QMessageBox::information(this, tr("Changing OpenGL mode"), tr("To set up a new OpenGL mode, the program will start again!"));
+                    restartApp();
+                }
+            }
+            if (!vsync->isHidden())
+                settings.set("OpenGL/VSync", vsync->isChecked());
+            if (!bypassCompositor->isHidden())
+                settings.set("OpenGL/BypassCompositor", bypassCompositor->isChecked());
+        });
+
+        rendererStacked->addWidget(openglSettings);
+    }
+#endif
+
+    connect(renderers, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+            this, [=](int idx) {
+        rendererStacked->setCurrentIndex(idx);
+    });
+
+    const int idx = renderers->findData(settings->getString("Renderer"));
+    if (idx > -1)
+        renderers->setCurrentIndex(idx);
+
+    auto widget = new QWidget;
+    auto layout = new QGridLayout(widget);
+    layout->setMargin(1);
+    layout->addWidget(new QLabel(tr("Renderer:")), 0, 0);
+    layout->addWidget(renderers, 0, 1);
+    layout->addWidget(rendererStacked, 1, 0, 1, 2);
+    layout->addWidget(m_modulesListGroupBox[0], 2, 0, 1, 2);
+
+    auto scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidget(widget);
+    tabW->addTab(scrollArea, tr("Renderer settings"));
+}
+
 void SettingsWidget::restoreVideoEq()
 {
     if (videoEq->parentWidget() != videoEqOriginalParent)
@@ -747,7 +894,7 @@ void SettingsWidget::restartApp()
 
 inline QString SettingsWidget::getSelectedProfile()
 {
-    return !page1->profileB->currentIndex() ? "/" : page1->profileB->currentText();
+    return !generalSettingsPage->profileB->currentIndex() ? "/" : generalSettingsPage->profileB->currentText();
 }
 
 void SettingsWidget::showEvent(QShowEvent *)
@@ -767,7 +914,7 @@ void SettingsWidget::closeEvent(QCloseEvent *)
 
 void SettingsWidget::chStyle()
 {
-    const QString newStyle = page1->styleBox->currentText().toLower();
+    const QString newStyle = generalSettingsPage->styleBox->currentText().toLower();
     if (QApplication::style()->objectName() != newStyle)
     {
         QMPlay2Core.getSettings().set("Style", newStyle);
@@ -778,23 +925,23 @@ void SettingsWidget::chStyle()
 void SettingsWidget::apply()
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
-    bool page3Restart = false;
-    const int page = tabW->currentIndex() + 1;
+    const int page = tabW->currentIndex();
+    bool forceRestartPlayback = false;
     switch (page)
     {
-        case 1:
+        case 0:
         {
-            if (QMPlay2Core.getLanguage() != page1->langBox->itemData(page1->langBox->currentIndex()).toString())
+            if (QMPlay2Core.getLanguage() != generalSettingsPage->langBox->itemData(generalSettingsPage->langBox->currentIndex()).toString())
             {
-                QMPSettings.set("Language", page1->langBox->itemData(page1->langBox->currentIndex()).toString());
+                QMPSettings.set("Language", generalSettingsPage->langBox->itemData(generalSettingsPage->langBox->currentIndex()).toString());
                 QMPlay2Core.setLanguage();
                 QMessageBox::information(this, tr("New language"), tr("To set up a new language, the program will start again!"));
                 restartApp();
             }
 #ifdef ICONS_FROM_THEME
-            if (page1->iconsFromTheme->isChecked() != QMPSettings.getBool("IconsFromTheme"))
+            if (generalSettingsPage->iconsFromTheme->isChecked() != QMPSettings.getBool("IconsFromTheme"))
             {
-                QMPSettings.set("IconsFromTheme", page1->iconsFromTheme->isChecked());
+                QMPSettings.set("IconsFromTheme", generalSettingsPage->iconsFromTheme->isChecked());
                 if (!QMPlay2GUI.restartApp)
                 {
                     QMessageBox::information(this, tr("Changing icons"), tr("To apply the icons change, the program will start again!"));
@@ -802,53 +949,43 @@ void SettingsWidget::apply()
                 }
             }
 #endif
-            QMPSettings.set("FallbackSubtitlesEncoding", page1->encodingB->currentText().toUtf8());
-            QMPSettings.set("AudioLanguage", page1->audioLangB->currentIndex() > 0 ? page1->audioLangB->currentText() : QString());
-            QMPSettings.set("SubtitlesLanguage", page1->subsLangB->currentIndex() > 0 ? page1->subsLangB->currentText() : QString());
-            QMPSettings.set("screenshotPth", page1->screenshotE->text());
-            QMPSettings.set("screenshotFormat", page1->screenshotFormatB->currentText());
-            QMPSettings.set("ShowCovers", page1->showCoversGB->isChecked());
-            QMPSettings.set("BlurCovers", page1->blurCoversB->isChecked());
-            QMPSettings.set("ShowDirCovers", page1->showDirCoversB->isChecked());
-            QMPSettings.set("EnlargeCovers", page1->enlargeSmallCoversB->isChecked());
-            QMPSettings.set("AutoOpenVideoWindow", page1->autoOpenVideoWindowB->isChecked());
-            QMPSettings.set("AutoRestoreMainWindowOnVideo", page1->autoRestoreMainWindowOnVideoB->isChecked());
-            QMPSettings.set("AutoUpdates", page1->autoUpdatesB->isChecked());
-            if (page1->glOnWindowB)
-            {
-                const bool glOnWindow = page1->glOnWindowB->isChecked();
-                if (QMPSettings.getBool("UseGLOnWindow") != glOnWindow)
-                {
-                    QMPSettings.set("UseGLOnWindow", glOnWindow);
-                    QMessageBox::information(this, tr("Changing OpenGL mode"), tr("To set up a new OpenGL mode, the program will start again!"));
-                    restartApp();
-                }
-            }
-            QMPSettings.set("MainWidget/TabPositionNorth", page1->tabsNorths->isChecked());
+            QMPSettings.set("FallbackSubtitlesEncoding", generalSettingsPage->encodingB->currentText().toUtf8());
+            QMPSettings.set("AudioLanguage", generalSettingsPage->audioLangB->currentIndex() > 0 ? generalSettingsPage->audioLangB->currentText() : QString());
+            QMPSettings.set("SubtitlesLanguage", generalSettingsPage->subsLangB->currentIndex() > 0 ? generalSettingsPage->subsLangB->currentText() : QString());
+            QMPSettings.set("screenshotPth", generalSettingsPage->screenshotE->text());
+            QMPSettings.set("screenshotFormat", generalSettingsPage->screenshotFormatB->currentText());
+            QMPSettings.set("ShowCovers", generalSettingsPage->showCoversGB->isChecked());
+            QMPSettings.set("BlurCovers", generalSettingsPage->blurCoversB->isChecked());
+            QMPSettings.set("ShowDirCovers", generalSettingsPage->showDirCoversB->isChecked());
+            QMPSettings.set("EnlargeCovers", generalSettingsPage->enlargeSmallCoversB->isChecked());
+            QMPSettings.set("AutoOpenVideoWindow", generalSettingsPage->autoOpenVideoWindowB->isChecked());
+            QMPSettings.set("AutoRestoreMainWindowOnVideo", generalSettingsPage->autoRestoreMainWindowOnVideoB->isChecked());
+            QMPSettings.set("AutoUpdates", generalSettingsPage->autoUpdatesB->isChecked());
+            QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
-            QMPSettings.set("AllowOnlyOneInstance", page1->allowOnlyOneInstance->isChecked());
+            QMPSettings.set("AllowOnlyOneInstance", generalSettingsPage->allowOnlyOneInstance->isChecked());
 #endif
-            QMPSettings.set("HideArtistMetadata", page1->hideArtistMetadata->isChecked());
-            QMPSettings.set("DisplayOnlyFileName", page1->displayOnlyFileName->isChecked());
-            QMPSettings.set("SkipPlaylistsWithinFiles", page1->skipPlaylistsWithinFiles->isChecked());
-            QMPSettings.set("RestoreRepeatMode", page1->restoreRepeatMode->isChecked());
-            QMPSettings.set("StillImages", page1->stillImages->isChecked());
-            if (page1->trayNotifiesDefault)
-                QMPSettings.set("TrayNotifiesDefault", page1->trayNotifiesDefault->isChecked());
-            QMPSettings.set("AutoDelNonGroupEntries", page1->autoDelNonGroupEntries->isChecked());
-            QMPSettings.set("Proxy/Use", page1->proxyB->isChecked() && !page1->proxyHostE->text().isEmpty());
-            QMPSettings.set("Proxy/Host", page1->proxyHostE->text());
-            QMPSettings.set("Proxy/Port", page1->proxyPortB->value());
-            QMPSettings.set("Proxy/Login", page1->proxyLoginB->isChecked() && !page1->proxyUserE->text().isEmpty());
-            QMPSettings.set("Proxy/User", page1->proxyUserE->text());
-            QMPSettings.set("Proxy/Password", page1->proxyPasswordE->text().toUtf8().toBase64());
-            page1->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
-            page1->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
-            qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, page1->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
+            QMPSettings.set("HideArtistMetadata", generalSettingsPage->hideArtistMetadata->isChecked());
+            QMPSettings.set("DisplayOnlyFileName", generalSettingsPage->displayOnlyFileName->isChecked());
+            QMPSettings.set("SkipPlaylistsWithinFiles", generalSettingsPage->skipPlaylistsWithinFiles->isChecked());
+            QMPSettings.set("RestoreRepeatMode", generalSettingsPage->restoreRepeatMode->isChecked());
+            QMPSettings.set("StillImages", generalSettingsPage->stillImages->isChecked());
+            if (generalSettingsPage->trayNotifiesDefault)
+                QMPSettings.set("TrayNotifiesDefault", generalSettingsPage->trayNotifiesDefault->isChecked());
+            QMPSettings.set("AutoDelNonGroupEntries", generalSettingsPage->autoDelNonGroupEntries->isChecked());
+            QMPSettings.set("Proxy/Use", generalSettingsPage->proxyB->isChecked() && !generalSettingsPage->proxyHostE->text().isEmpty());
+            QMPSettings.set("Proxy/Host", generalSettingsPage->proxyHostE->text());
+            QMPSettings.set("Proxy/Port", generalSettingsPage->proxyPortB->value());
+            QMPSettings.set("Proxy/Login", generalSettingsPage->proxyLoginB->isChecked() && !generalSettingsPage->proxyUserE->text().isEmpty());
+            QMPSettings.set("Proxy/User", generalSettingsPage->proxyUserE->text());
+            QMPSettings.set("Proxy/Password", generalSettingsPage->proxyPasswordE->text().toUtf8().toBase64());
+            generalSettingsPage->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
+            generalSettingsPage->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
+            qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, generalSettingsPage->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
             applyProxy();
 
-            if (page1->trayNotifiesDefault)
-                Notifies::setNativeFirst(!page1->trayNotifiesDefault->isChecked());
+            if (generalSettingsPage->trayNotifiesDefault)
+                Notifies::setNativeFirst(!generalSettingsPage->trayNotifiesDefault->isChecked());
 
             QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
             const QString selectedProfile = getSelectedProfile();
@@ -858,62 +995,69 @@ void SettingsWidget::apply()
                 restartApp();
             }
         } break;
+        case 1:
+        {
+            for (auto &&fn : m_rendererApplyFunctions)
+                fn();
+
+            QStringList videoWriters;
+            for (QListWidgetItem *wI : modulesList[0]->list->findItems(QString(), Qt::MatchContains))
+                videoWriters += wI->text();
+            QMPSettings.set("videoWriters", videoWriters);
+
+            break;
+        }
         case 2:
         {
-            QMPSettings.set("ShortSeek", page2->shortSeekB->value());
-            QMPSettings.set("LongSeek", page2->longSeekB->value());
-            QMPSettings.set("AVBufferLocal", page2->bufferLocalB->value());
-            QMPSettings.set("AVBufferNetwork", page2->bufferNetworkB->value());
-            QMPSettings.set("BackwardBuffer", page2->backwardBufferNetworkB->currentIndex());
-            QMPSettings.set("PlayIfBuffered", page2->playIfBufferedB->value());
-            QMPSettings.set("ForceSamplerate", page2->forceSamplerate->isChecked());
-            QMPSettings.set("Samplerate", page2->samplerateB->value());
-            QMPSettings.set("MaxVol", page2->maxVolB->value());
-            QMPSettings.set("ForceChannels", page2->forceChannels->isChecked());
-            QMPSettings.set("Channels", page2->channelsB->value());
-            QMPSettings.set("ResamplerFirst", page2->resamplerFirst->isChecked());
-            QMPSettings.set("ReplayGain/Enabled", page2->replayGain->isChecked());
-            QMPSettings.set("ReplayGain/Album", page2->replayGainAlbum->isChecked());
-            QMPSettings.set("ReplayGain/PreventClipping", page2->replayGainPreventClipping->isChecked());
-            QMPSettings.set("ReplayGain/Preamp", page2->replayGainPreamp->value());
-            QMPSettings.set("WheelAction", page2->wheelActionB->isChecked());
-            QMPSettings.set("WheelSeek", page2->wheelSeekB->isChecked());
-            QMPSettings.set("WheelVolume", page2->wheelVolumeB->isChecked());
-            QMPSettings.set("ShowBufferedTimeOnSlider", page2->showBufferedTimeOnSlider->isChecked());
-            QMPSettings.set("SavePos", page2->savePos->isChecked());
-            QMPSettings.set("KeepZoom", page2->keepZoom->isChecked());
-            QMPSettings.set("KeepARatio", page2->keepARatio->isChecked());
-            QMPSettings.set("KeepSubtitlesDelay", page2->keepSubtitlesDelay->isChecked());
-            QMPSettings.set("KeepSubtitlesScale", page2->keepSubtitlesScale->isChecked());
-            QMPSettings.set("KeepVideoDelay", page2->keepVideoDelay->isChecked());
-            QMPSettings.set("KeepSpeed", page2->keepSpeed->isChecked());
-            QMPSettings.set("SyncVtoA", page2->syncVtoA->isChecked());
-            QMPSettings.set("Silence", page2->silence->isChecked());
-            QMPSettings.set("RestoreVideoEqualizer", page2->restoreVideoEq->isChecked());
-            QMPSettings.set("IgnorePlaybackError", page2->ignorePlaybackError->isChecked());
-            QMPSettings.set("LeftMouseTogglePlay", page2->leftMouseTogglePlay->checkState());
-            QMPSettings.set("MiddleMouseToggleFullscreen", page2->middleMouseToggleFullscreen->isChecked());
-            QMPSettings.set("AccurateSeek", page2->accurateSeekB->checkState());
-            QMPSettings.set("UnpauseWhenSeeking", page2->unpauseWhenSeekingB->isChecked());
-            QMPSettings.set("RestoreAVSState", page2->restoreAVSStateB->isChecked());
-            QMPSettings.set("DisableSubtitlesAtStartup", page2->disableSubtitlesAtStartup->isChecked());
-            QMPSettings.set("StoreARatioAndZoom", page2->storeARatioAndZoomB->isChecked());
+            QMPSettings.set("ShortSeek", playbackSettingsPage->shortSeekB->value());
+            QMPSettings.set("LongSeek", playbackSettingsPage->longSeekB->value());
+            QMPSettings.set("AVBufferLocal", playbackSettingsPage->bufferLocalB->value());
+            QMPSettings.set("AVBufferNetwork", playbackSettingsPage->bufferNetworkB->value());
+            QMPSettings.set("BackwardBuffer", playbackSettingsPage->backwardBufferNetworkB->currentIndex());
+            QMPSettings.set("PlayIfBuffered", playbackSettingsPage->playIfBufferedB->value());
+            QMPSettings.set("ForceSamplerate", playbackSettingsPage->forceSamplerate->isChecked());
+            QMPSettings.set("Samplerate", playbackSettingsPage->samplerateB->value());
+            QMPSettings.set("MaxVol", playbackSettingsPage->maxVolB->value());
+            QMPSettings.set("ForceChannels", playbackSettingsPage->forceChannels->isChecked());
+            QMPSettings.set("Channels", playbackSettingsPage->channelsB->value());
+            QMPSettings.set("ResamplerFirst", playbackSettingsPage->resamplerFirst->isChecked());
+            QMPSettings.set("ReplayGain/Enabled", playbackSettingsPage->replayGain->isChecked());
+            QMPSettings.set("ReplayGain/Album", playbackSettingsPage->replayGainAlbum->isChecked());
+            QMPSettings.set("ReplayGain/PreventClipping", playbackSettingsPage->replayGainPreventClipping->isChecked());
+            QMPSettings.set("ReplayGain/Preamp", playbackSettingsPage->replayGainPreamp->value());
+            QMPSettings.set("WheelAction", playbackSettingsPage->wheelActionB->isChecked());
+            QMPSettings.set("WheelSeek", playbackSettingsPage->wheelSeekB->isChecked());
+            QMPSettings.set("WheelVolume", playbackSettingsPage->wheelVolumeB->isChecked());
+            QMPSettings.set("ShowBufferedTimeOnSlider", playbackSettingsPage->showBufferedTimeOnSlider->isChecked());
+            QMPSettings.set("SavePos", playbackSettingsPage->savePos->isChecked());
+            QMPSettings.set("KeepZoom", playbackSettingsPage->keepZoom->isChecked());
+            QMPSettings.set("KeepARatio", playbackSettingsPage->keepARatio->isChecked());
+            QMPSettings.set("KeepSubtitlesDelay", playbackSettingsPage->keepSubtitlesDelay->isChecked());
+            QMPSettings.set("KeepSubtitlesScale", playbackSettingsPage->keepSubtitlesScale->isChecked());
+            QMPSettings.set("KeepVideoDelay", playbackSettingsPage->keepVideoDelay->isChecked());
+            QMPSettings.set("KeepSpeed", playbackSettingsPage->keepSpeed->isChecked());
+            QMPSettings.set("SyncVtoA", playbackSettingsPage->syncVtoA->isChecked());
+            QMPSettings.set("Silence", playbackSettingsPage->silence->isChecked());
+            QMPSettings.set("RestoreVideoEqualizer", playbackSettingsPage->restoreVideoEq->isChecked());
+            QMPSettings.set("IgnorePlaybackError", playbackSettingsPage->ignorePlaybackError->isChecked());
+            QMPSettings.set("LeftMouseTogglePlay", playbackSettingsPage->leftMouseTogglePlay->checkState());
+            QMPSettings.set("MiddleMouseToggleFullscreen", playbackSettingsPage->middleMouseToggleFullscreen->isChecked());
+            QMPSettings.set("AccurateSeek", playbackSettingsPage->accurateSeekB->checkState());
+            QMPSettings.set("UnpauseWhenSeeking", playbackSettingsPage->unpauseWhenSeekingB->isChecked());
+            QMPSettings.set("RestoreAVSState", playbackSettingsPage->restoreAVSStateB->isChecked());
+            QMPSettings.set("DisableSubtitlesAtStartup", playbackSettingsPage->disableSubtitlesAtStartup->isChecked());
+            QMPSettings.set("StoreARatioAndZoom", playbackSettingsPage->storeARatioAndZoomB->isChecked());
 
-            QStringList videoWriters, audioWriters, decoders;
-            for (QListWidgetItem *wI : page2ModulesList[0]->list->findItems(QString(), Qt::MatchContains))
-                videoWriters += wI->text();
-            for (QListWidgetItem *wI : page2ModulesList[1]->list->findItems(QString(), Qt::MatchContains))
+            QStringList audioWriters, decoders;
+            for (QListWidgetItem *wI : modulesList[1]->list->findItems(QString(), Qt::MatchContains))
                 audioWriters += wI->text();
-            for (QListWidgetItem *wI : page2ModulesList[2]->list->findItems(QString(), Qt::MatchContains))
+            for (QListWidgetItem *wI : modulesList[2]->list->findItems(QString(), Qt::MatchContains))
                 decoders += wI->text();
-            QMPSettings.set("videoWriters", videoWriters);
             QMPSettings.set("audioWriters", audioWriters);
             QMPSettings.set("decoders", decoders);
-            tabCh(2);
-            tabCh(1);
 
-            emit setWheelStep(page2->shortSeekB->value());
-            emit setVolMax(page2->maxVolB->value());
+            emit setWheelStep(playbackSettingsPage->shortSeekB->value());
+            emit setVolMax(playbackSettingsPage->maxVolB->value());
 
             SetAudioChannelsMenu();
         } break;
@@ -923,7 +1067,7 @@ void SettingsWidget::apply()
                 Module::SettingsWidget *settingsWidget = (Module::SettingsWidget *)page3->scrollA->widget();
                 settingsWidget->saveSettings();
                 settingsWidget->flushSettings();
-                page3->module->setInstances(page3Restart);
+                page3->module->setInstances(forceRestartPlayback);
                 chModule(page3->listW->currentItem());
             }
             break;
@@ -947,7 +1091,8 @@ void SettingsWidget::apply()
     }
     if (page != 3)
         QMPSettings.flush();
-    emit settingsChanged(page, page3Restart);
+    if (!QMPlay2GUI.restartApp)
+        emit settingsChanged(page, forceRestartPlayback);
 }
 void SettingsWidget::chModule(QListWidgetItem *w)
 {
@@ -978,7 +1123,7 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 }
 void SettingsWidget::tabCh(int idx)
 {
-    if (idx == 1 && !page2ModulesList[0]->list->count() && !page2ModulesList[1]->list->count() && !page2ModulesList[2]->list->count())
+    if ((idx == 1 || idx == 2) && !modulesList[0]->list->count() && !modulesList[1]->list->count() && !modulesList[2]->list->count())
     {
         const QStringList writers[3] = {QMPlay2Core.getModules("videoWriters", 5), QMPlay2Core.getModules("audioWriters", 5), QMPlay2Core.getModules("decoders", 7)};
         QVector<QPair<Module *, Module::Info>> pluginsInstances[3];
@@ -999,27 +1144,29 @@ void SettingsWidget::tabCh(int idx)
                 QListWidgetItem *wI = new QListWidgetItem(writers[m][i]);
                 wI->setData(Qt::UserRole, pluginsInstances[m][i].first->name());
                 wI->setIcon(QMPlay2GUI.getIcon(pluginsInstances[m][i].second.icon.isNull() ? pluginsInstances[m][i].first->icon() : pluginsInstances[m][i].second.icon));
-                page2ModulesList[m]->list->addItem(wI);
+                modulesList[m]->list->addItem(wI);
                 if (writers[m][i] == lastM[m])
-                    page2ModulesList[m]->list->setCurrentItem(wI);
+                    modulesList[m]->list->setCurrentItem(wI);
             }
-            if (page2ModulesList[m]->list->currentRow() < 0)
-                page2ModulesList[m]->list->setCurrentRow(0);
+            if (modulesList[m]->list->currentRow() < 0)
+                modulesList[m]->list->setCurrentRow(0);
         }
     }
-    else if (idx == 2)
+    else if (idx == 3)
     {
         for (int m = 0; m < 3; ++m)
         {
-            QListWidgetItem *currI = page2ModulesList[m]->list->currentItem();
+            QListWidgetItem *currI = modulesList[m]->list->currentItem();
             if (currI)
                 lastM[m] = currI->text();
-            page2ModulesList[m]->list->clear();
+            modulesList[m]->list->clear();
         }
     }
 
-    if (idx != 5)
+    if (idx != 6)
+    {
         restoreVideoEq();
+    }
     else
     {
         QGridLayout *videoEqLayout = new QGridLayout(page6->videoEqContainer);
@@ -1035,7 +1182,7 @@ void SettingsWidget::openModuleSettings(QListWidgetItem *wI)
     if (!items.isEmpty())
     {
         page3->listW->setCurrentItem(items[0]);
-        tabW->setCurrentIndex(2);
+        tabW->setCurrentIndex(3);
     }
 }
 void SettingsWidget::moveModule()
@@ -1044,7 +1191,7 @@ void SettingsWidget::moveModule()
     {
         const bool moveDown = tB->arrowType() == Qt::DownArrow;
         const int idx = tB->property("idx").toInt();
-        QListWidget *mL = page2ModulesList[idx]->list;
+        QListWidget *mL = modulesList[idx]->list;
         int row = mL->currentRow();
         if (row > -1)
         {
@@ -1061,9 +1208,9 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-    const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), page1->screenshotE->text());
+    const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), generalSettingsPage->screenshotE->text());
     if (!dir.isEmpty())
-        page1->screenshotE->setText(dir);
+        generalSettingsPage->screenshotE->setText(dir);
 }
 void SettingsWidget::setAppearance()
 {
@@ -1107,7 +1254,7 @@ void SettingsWidget::resetSettings()
 }
 void SettingsWidget::profileListIndexChanged(int index)
 {
-    page1->profileRemoveB->setEnabled(index != 0);
+    generalSettingsPage->profileRemoveB->setEnabled(index != 0);
 }
 void SettingsWidget::removeProfile()
 {
@@ -1126,7 +1273,7 @@ void SettingsWidget::removeProfile()
             QFile::remove(settingsDir + fName);
         QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
 
-        page1->profileB->removeItem(page1->profileB->currentIndex());
+        generalSettingsPage->profileB->removeItem(generalSettingsPage->profileB->currentIndex());
         for (QAction *act : QMPlay2GUI.menuBar->options->profilesGroup->actions())
             if (act->text() == selectedProfileName)
             {

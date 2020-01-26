@@ -27,11 +27,14 @@
 #include <QHash>
 #include <QMap>
 
+#include <memory>
+
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
 template<typename T>
 class QPointer;
 
+class GPUInstance;
 class CommonJS;
 class QTranslator;
 class Settings;
@@ -42,6 +45,13 @@ class Module;
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2CoreClass : public QObject
 {
     Q_OBJECT
+
+public:
+    enum class Renderer
+    {
+        Legacy,
+        OpenGL,
+    };
 
 public:
     using GroupEntries = QVector<QPair<QString, QString>>;
@@ -189,6 +199,14 @@ public:
 
     void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
 
+    QString rendererName() const;
+    Renderer renderer() const;
+
+    inline std::shared_ptr<GPUInstance> gpuInstance() const
+    {
+        return m_gpuInstance;
+    }
+
     bool isGlOnWindow() const;
 
     inline CommonJS *getCommonJS() const
@@ -225,6 +243,8 @@ private:
         mutable QMutex mutex;
         QHash<QString, QPair<QByteArray, bool>> data;
     } cookies, resources, rawHeaders, namesForUrl;
+
+    std::shared_ptr<GPUInstance> m_gpuInstance;
 
     CommonJS *m_commonJS = nullptr;
 };

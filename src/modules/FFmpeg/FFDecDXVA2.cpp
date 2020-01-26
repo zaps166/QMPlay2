@@ -19,7 +19,7 @@
 #include <FFDecDXVA2.hpp>
 
 #include <DeintHWPrepareFilter.hpp>
-#include <VideoWriter.hpp>
+#include <GPUInstance.hpp>
 #include <StreamInfo.hpp>
 #ifdef USE_OPENGL
 #   include <DXVA2OpenGL.hpp>
@@ -36,6 +36,8 @@ extern "C"
     #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_dxva2.h>
 }
+
+using namespace std;
 
 static AVPixelFormat dxva2GetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
 {
@@ -64,12 +66,6 @@ FFDecDXVA2::~FFDecDXVA2()
 
 bool FFDecDXVA2::set()
 {
-    const bool copyVideo = sets().getBool("CopyVideoDXVA2");
-    if (copyVideo != m_copyVideo)
-    {
-        m_copyVideo = copyVideo;
-        return false;
-    }
     return sets().getBool("DecoderDXVA2Enabled");
 }
 
@@ -78,7 +74,7 @@ QString FFDecDXVA2::name() const
     return "FFmpeg/DXVA2";
 }
 
-std::shared_ptr<VideoFilter> FFDecDXVA2::hwAccelFilter() const
+shared_ptr<VideoFilter> FFDecDXVA2::hwAccelFilter() const
 {
     return m_filter;
 }
@@ -116,7 +112,7 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
             lockedRect.Pitch / 2
         };
 
-        m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
+        m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, m_pixFmt, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
         decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
@@ -126,62 +122,65 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
     }
 }
 
-bool FFDecDXVA2::open(StreamInfo &streamInfo, VideoWriter *writer)
+bool FFDecDXVA2::open(StreamInfo &streamInfo)
 {
-    const AVPixelFormat pixFmt = streamInfo.pixelFormat();
-    if (pixFmt != AV_PIX_FMT_YUV420P && (pixFmt != AV_PIX_FMT_YUV420P10 || m_copyVideo))
-        return false;
+    switch (streamInfo.pixelFormat())
+    {
+        case AV_PIX_FMT_YUV420P:
+            m_pixFmt = AV_PIX_FMT_NV12;
+            break;
+        case AV_PIX_FMT_YUV420P10:
+            m_pixFmt = AV_PIX_FMT_P010;
+            break;
+        default:
+            return false;
+    }
 
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("dxva2"))
         return false;
 
 #ifdef USE_OPENGL
-    std::shared_ptr<DXVA2OpenGL> dxva2OpenGL;
+    shared_ptr<DXVA2OpenGL> dxva2OpenGL;
 
-    if (writer)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
-        dxva2OpenGL = writer->getHWAccelInterface<DXVA2OpenGL>();
+        dxva2OpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<DXVA2OpenGL>();
         if (dxva2OpenGL)
-        {
             m_hwDeviceBufferRef = av_buffer_ref(dxva2OpenGL->m_hwDeviceBufferRef);
-            m_hwAccelWriter = writer;
-        }
     }
-
-    if (!dxva2OpenGL)
-    {
 #endif
-        if (av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_DXVA2, nullptr, nullptr, 0) != 0)
-            return false;
 
-#ifdef USE_OPENGL
-        dxva2OpenGL = std::make_shared<DXVA2OpenGL>(m_hwDeviceBufferRef);
-        if (!dxva2OpenGL->initVideoProcessor())
-            return false;
-    }
-
-    if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, pixFmt == AV_PIX_FMT_YUV420P10))
+    if (!m_hwDeviceBufferRef && av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_DXVA2, nullptr, nullptr, 0) != 0)
         return false;
-#endif
 
-    if (!m_hwAccelWriter && !m_copyVideo)
-    {
 #ifdef USE_OPENGL
-        m_hwAccelWriter = VideoWriter::createOpenGL2(dxva2OpenGL);
-#endif
-        if (!m_hwAccelWriter)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    {
+        if (!dxva2OpenGL)
+        {
+            dxva2OpenGL = make_shared<DXVA2OpenGL>(m_hwDeviceBufferRef);
+            if (!dxva2OpenGL->initVideoProcessor())
+                return false;
+            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(dxva2OpenGL))
+                return false;
+        }
+        if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, m_pixFmt == AV_PIX_FMT_YUV420P10))
             return false;
     }
+
+    if (dxva2OpenGL)
+    {
+        m_filter = make_shared<DeintHWPrepareFilter>();
+        m_hasHWDecContext = true;
+    }
+#endif
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_hwDeviceBufferRef);
     codec_ctx->get_format = dxva2GetFormat;
     codec_ctx->thread_count = 1;
     if (!openCodec(codec))
         return false;
-
-    if (m_hwAccelWriter)
-        m_filter = std::make_shared<DeintHWPrepareFilter>();
 
     m_timeBase = streamInfo.time_base;
     return true;

@@ -34,10 +34,9 @@ public:
 
     void downloadVideoFrame(Frame &decoded) override;
 
-    bool open(StreamInfo &streamInfo, VideoWriter *writer) override;
+    bool open(StreamInfo &streamInfo) override;
 
 private:
-    bool m_copyVideo = false;
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
     SwsContext *m_swsCtx = nullptr;
 };

@@ -21,6 +21,7 @@
 #include <Frame.hpp>
 
 #include <QOpenGLContext>
+#include <QImage>
 
 #ifndef GL_R8
     #define GL_R8 0x8229
@@ -35,16 +36,11 @@
     #define GL_RG 0x8227
 #endif
 
-CuvidOpenGL::CuvidOpenGL(CUcontext cuCtx)
+CuvidOpenGL::CuvidOpenGL(const std::shared_ptr<CUcontext> &cuCtx)
     : m_cuCtx(cuCtx)
 {}
 CuvidOpenGL::~CuvidOpenGL()
 {
-    if (m_canDestroyCuda)
-    {
-        cu::ContextGuard cuCtxGuard(m_cuCtx); //Is it necessary here?
-        cu::ctxDestroy(m_cuCtx);
-    }
 }
 
 QString CuvidOpenGL::name() const
@@ -52,12 +48,12 @@ QString CuvidOpenGL::name() const
     return "CUVID";
 }
 
-HWAccelInterface::Format CuvidOpenGL::getFormat() const
+HWOpenGLInterop::Format CuvidOpenGL::getFormat() const
 {
     return NV12;
 }
 
-bool CuvidOpenGL::init(const int *widths, const int *heights, const HWAccelInterface::SetTextureParamsFn &setTextureParamsFn)
+bool CuvidOpenGL::init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn)
 {
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
@@ -90,7 +86,10 @@ bool CuvidOpenGL::init(const int *widths, const int *heights, const HWAccelInter
     for (int p = 0; p < 2; ++p)
     {
         if (cu::graphicsGLRegisterImage(&m_res[p], m_textures[p], GL_TEXTURE_2D, CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD) != CUDA_SUCCESS)
+        {
+            m_error = true;
             return false;
+        }
     }
 
     return true;
@@ -115,14 +114,14 @@ void CuvidOpenGL::clear()
     }
 }
 
-HWAccelInterface::MapResult CuvidOpenGL::mapFrame(Frame &videoFrame)
+bool CuvidOpenGL::mapFrame(Frame &videoFrame)
 {
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
     const int pictureIdx = videoFrame.customID();
 
     if (!m_cuvidDec || !m_validPictures.contains(pictureIdx))
-        return MapNotReady;
+        return false;
 
     CUVIDPROCPARAMS vidProcParams;
     memset(&vidProcParams, 0, sizeof vidProcParams);
@@ -137,7 +136,10 @@ HWAccelInterface::MapResult CuvidOpenGL::mapFrame(Frame &videoFrame)
     unsigned pitch = 0;
 
     if (cuvid::mapVideoFrame(m_cuvidDec, pictureIdx, &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-        return MapError;
+    {
+        m_error = true;
+        return false;
+    }
 
     if (cu::graphicsMapResources(2, m_res, nullptr) == CUDA_SUCCESS)
     {
@@ -173,17 +175,18 @@ HWAccelInterface::MapResult CuvidOpenGL::mapFrame(Frame &videoFrame)
         cu::graphicsUnmapResources(2, m_res, nullptr);
 
         if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) == CUDA_SUCCESS && copied)
-            return MapOk;
+            return true;
     }
 
-    return MapError;
+    m_error = true;
+    return false;
 }
 quint32 CuvidOpenGL::getTexture(int plane)
 {
     return m_textures[plane];
 }
 
-bool CuvidOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32)
+QImage CuvidOpenGL::getImage(const Frame &videoFrame)
 {
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
@@ -196,7 +199,7 @@ bool CuvidOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12T
     vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
 
     if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.customID(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-        return false;
+        return QImage();
 
     const size_t size = pitch * videoFrame.height();
     const size_t halfSize = pitch * ((videoFrame.height() + 1) >> 1);
@@ -218,13 +221,22 @@ bool CuvidOpenGL::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12T
 
     cuCtxGuard.unlock();
 
+    QImage img;
+
     if (copied)
-        nv12ToRGB32->scale((const void **)data, linesize, dest);
+    {
+        ImgScaler imgScaler;
+        if (imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        {
+            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+            imgScaler.scale((const void **)data, linesize, img.bits());
+        }
+    }
 
     for (int p = 0; p < 2; ++p)
         delete[] data[p];
 
-    return copied;
+    return img;
 }
 
 void CuvidOpenGL::setAvailableSurface(quintptr surfaceId)

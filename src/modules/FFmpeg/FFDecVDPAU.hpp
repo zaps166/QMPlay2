@@ -39,15 +39,13 @@ public:
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
     void downloadVideoFrame(Frame &decoded) override;
 
-    bool open(StreamInfo &, VideoWriter *) override;
+    bool open(StreamInfo &streamInfo) override;
 
 private:
     static void preemptionCallback(uint32_t device, void *context);
 
 private:
     std::shared_ptr<VDPAU> m_vdpau;
-
-    bool m_copyVideo = true;
 
     int m_deintMethod = 0;
     bool m_nrEnabled = false;

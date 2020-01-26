@@ -916,6 +916,7 @@ void MainWidget::createMenuBar()
 
     connect(menuBar->options->settings, SIGNAL(triggered()), this, SLOT(showSettings()));
     connect(menuBar->options->playbackSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect(menuBar->options->rendererSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
     connect(menuBar->options->modulesSettings, SIGNAL(triggered()), this, SLOT(showSettings()));
     if (tray)
         connect(menuBar->options->trayVisible, SIGNAL(triggered(bool)), tray, SLOT(setVisible(bool)));
@@ -1254,7 +1255,19 @@ void MainWidget::showSettings(const QString &moduleName)
 {
     if (!settingsW)
     {
-        settingsW = new SettingsWidget(sender() == menuBar->options->playbackSettings ? 1 : ((sender() == menuBar->options->modulesSettings || !moduleName.isEmpty()) ? 2 : (sender() == menuBar->playback->videoFilters->more ? 5 : 0)), moduleName, QMPlay2GUI.videoAdjustment);
+        int page;
+        if (sender() == menuBar->options->rendererSettings)
+            page = 1;
+        else if (sender() == menuBar->options->playbackSettings)
+            page = 2;
+        else if (sender() == menuBar->options->modulesSettings || !moduleName.isEmpty())
+            page = 3;
+        else if (sender() == menuBar->playback->videoFilters->more)
+            page = 6;
+        else
+            page = 0;
+
+        settingsW = new SettingsWidget(page, moduleName, QMPlay2GUI.videoAdjustment);
         connect(settingsW, SIGNAL(settingsChanged(int, bool)), &playC, SLOT(settingsChanged(int, bool)));
         connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
         connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));

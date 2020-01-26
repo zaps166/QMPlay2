@@ -68,7 +68,7 @@ bool load()
     return false;
 }
 
-CUcontext createContext()
+std::shared_ptr<CUcontext> createContext()
 {
     CUcontext ctx, tmpCtx;
     CUdevice dev = -1;
@@ -78,11 +78,17 @@ CUcontext createContext()
     if (ctxCreate(&ctx, CU_CTX_SCHED_BLOCKING_SYNC, dev) != CUDA_SUCCESS)
         return nullptr;
     ctxPopCurrent(&tmpCtx);
-    return ctx;
+    return std::shared_ptr<CUcontext>(new CUcontext(ctx), [](CUcontext *ctx) {
+        cu::ContextGuard cuCtxGuard(*ctx);
+        cu::ctxDestroy(*ctx);
+        delete ctx;
+    });
 }
 
-ContextGuard::ContextGuard(CUcontext ctx) :
-    m_locked(true)
+ContextGuard::ContextGuard(const std::shared_ptr<CUcontext> &ctx)
+    : ContextGuard(*ctx)
+{}
+ContextGuard::ContextGuard(CUcontext ctx)
 {
     mutex.lock();
     ctxPushCurrent(ctx);

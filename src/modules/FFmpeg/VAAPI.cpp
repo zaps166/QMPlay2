@@ -56,7 +56,7 @@ VAAPI::~VAAPI()
     }
 }
 
-bool VAAPI::open(bool openGL)
+bool VAAPI::open(bool checkNV12)
 {
     clearVPP();
 
@@ -126,7 +126,7 @@ bool VAAPI::open(bool openGL)
             }
         }
     }
-    if (!openGL && nv12ImageFmt.fourcc != VA_FOURCC_NV12)
+    if (checkNV12 && nv12ImageFmt.fourcc != VA_FOURCC_NV12)
         return false;
 
     return true;
@@ -418,7 +418,7 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
     }
     return nullptr;
 }
-bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32) const
+bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32) const
 {
     VAImage image;
     quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwSurface());
@@ -428,7 +428,7 @@ bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler *nv12ToRGB32
             vaData + image.offsets[0],
             vaData + image.offsets[1]
         };
-        nv12ToRGB32->scale(data, (const int *)image.pitches, dest);
+        nv12ToRGB32.scale(data, (const int *)image.pitches, dest);
         vaUnmapBuffer(VADisp, image.buf);
         vaDestroyImage(VADisp, image.image_id);
         return true;
