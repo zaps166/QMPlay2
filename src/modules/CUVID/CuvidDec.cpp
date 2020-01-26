@@ -383,7 +383,7 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
                             sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_height, dstData, dstLinesize);
 
                         createFrame();
-                        decoded.setVideoData(frameBuffer, dstLinesize, true);
+                        decoded.setVideoData(frameBuffer, dstLinesize, false);
                     }
 
                     delete[] nv12Luma;
