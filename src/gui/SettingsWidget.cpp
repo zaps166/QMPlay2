@@ -767,7 +767,7 @@ void SettingsWidget::createRendererSettings()
         layout->setMargin(3);
         layout->addRow(new QLabel(tr(
             "Use QMPlay2 video output modules. "
-            "This will also be used if other renderers won't be available."
+            "This will also be used if other renderers aren't available."
         )));
 
         rendererStacked->addWidget(legacySetttings);
