@@ -24,6 +24,22 @@ if(Qt5Widgets_VERSION VERSION_LESS 5.6.3)
     message(AUTHOR_WARNING "Qt5 >= 5.6.3, >= 5.9.1 is recommended")
 endif()
 
+pkg_check_modules(LIBAVFORMAT libavformat>=57.71.100 REQUIRED)
+pkg_check_modules(LIBAVCODEC libavcodec>=57.89.100 REQUIRED)
+pkg_check_modules(LIBSWSCALE libswscale>=4.6.100 REQUIRED)
+pkg_check_modules(LIBAVUTIL libavutil>=55.58.100 REQUIRED)
+pkg_check_modules(LIBSWRESAMPLE libswresample>=2.7.100 REQUIRED)
+
+# Add FFmpeg link directories here, because it must be global.
+# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.1.
+link_directories(
+    ${LIBAVFORMAT_LIBRARY_DIRS}
+    ${LIBAVCODEC_LIBRARY_DIRS}
+    ${LIBSWSCALE_LIBRARY_DIRS}
+    ${LIBAVUTIL_LIBRARY_DIRS}
+    ${LIBSWRESAMPLE_LIBRARY_DIRS}
+)
+
 set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 14)
