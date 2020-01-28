@@ -78,7 +78,7 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
     if (frameFinished && ~hurryUp)
     {
         if (m_hasHWDecContext)
-            decoded = Frame(frame);
+            decoded = Frame(frame, Frame::convert3PlaneTo2Plane(codec_ctx->sw_pix_fmt));
         else
             downloadVideoFrame(decoded);
     }

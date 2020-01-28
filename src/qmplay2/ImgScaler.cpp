@@ -30,15 +30,19 @@ ImgScaler::ImgScaler() :
     m_srcH(0), m_dstLinesize(0)
 {}
 
-bool ImgScaler::create(const Frame &videoFrame, int newWdst, int newHdst, bool isNV12)
+bool ImgScaler::create(const Frame &videoFrame, int newWdst, int newHdst)
 {
+    if (newWdst < 0)
+        newWdst = videoFrame.width();
+    if (newHdst < 0)
+        newHdst = videoFrame.height();
     m_srcH = videoFrame.height();
     m_dstLinesize = newWdst << 2;
     m_swsCtx = sws_getCachedContext(
         m_swsCtx,
         videoFrame.width(),
         m_srcH,
-        isNV12 ? AV_PIX_FMT_NV12 : videoFrame.pixelFormat(),
+        videoFrame.pixelFormat(),
         newWdst,
         newHdst,
         AV_PIX_FMT_RGB32,

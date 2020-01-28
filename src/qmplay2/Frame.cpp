@@ -28,6 +28,34 @@ extern "C"
 
 #include <cmath>
 
+AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)
+{
+    switch (fmt)
+    {
+        case AV_PIX_FMT_YUV420P:
+        case AV_PIX_FMT_YUVJ420P:
+            return AV_PIX_FMT_NV12;
+        case AV_PIX_FMT_YUV420P10:
+            return AV_PIX_FMT_P010;
+        case AV_PIX_FMT_YUV420P16:
+            return AV_PIX_FMT_P016;
+
+        case AV_PIX_FMT_YUV422P:
+        case AV_PIX_FMT_YUVJ422P:
+            return AV_PIX_FMT_NV16;
+        case AV_PIX_FMT_YUV422P10:
+            return AV_PIX_FMT_NV20;
+
+        case AV_PIX_FMT_YUV444P:
+        case AV_PIX_FMT_YUVJ444P:
+            return AV_PIX_FMT_NV24;
+
+        default:
+            break;
+    }
+    return AV_PIX_FMT_NONE;
+}
+
 Frame Frame::createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
     Frame frame = createEmpty(other.m_frame, allocBuffers, newPixelFormat);
@@ -37,31 +65,35 @@ Frame Frame::createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat ne
 Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
     Frame frame;
-    if (other)
+
+    if (!other)
+        return frame;
+
+    frame.copyAVFrameInfo(other);
+
+    if (newPixelFormat != AV_PIX_FMT_NONE)
+        frame.m_frame->format = newPixelFormat;
+    frame.obtainPixelFormat();
+
+    if (!allocBuffers)
+        return frame;
+
+    if (newPixelFormat != AV_PIX_FMT_NONE)
     {
-        frame.copyAVFrameInfo(other);
-        if (newPixelFormat != AV_PIX_FMT_NONE)
-            frame.m_frame->format = newPixelFormat;
-        frame.obtainPixelFormat();
-        if (allocBuffers)
-        {
-            if (newPixelFormat != AV_PIX_FMT_NONE)
-            {
-                av_frame_get_buffer(frame.m_frame, 0);
-            }
-            else
-            {
-                // OpenGL writer doesn't like when linesize changes
-                for (int i = frame.numPlanes() - 1; i >= 0; --i)
-                {
-                    frame.m_frame->linesize[i] = other->linesize[i];
-                    frame.m_frame->buf[i] = av_buffer_alloc(other->buf[i] ? other->buf[i]->size : frame.m_frame->linesize[i] * frame.height(i));
-                    frame.m_frame->data[i] = frame.m_frame->buf[i]->data;
-                }
-                frame.m_frame->extended_data = frame.m_frame->data;
-            }
-        }
+        av_frame_get_buffer(frame.m_frame, 0);
     }
+    else
+    {
+        // OpenGL writer doesn't like when linesize changes
+        for (int i = frame.numPlanes() - 1; i >= 0; --i)
+        {
+            frame.m_frame->linesize[i] = other->linesize[i];
+            frame.m_frame->buf[i] = av_buffer_alloc(other->buf[i] ? other->buf[i]->size : frame.m_frame->linesize[i] * frame.height(i));
+            frame.m_frame->data[i] = frame.m_frame->buf[i]->data;
+        }
+        frame.m_frame->extended_data = frame.m_frame->data;
+    }
+
     return frame;
 }
 Frame Frame::createEmpty(
@@ -92,13 +124,16 @@ Frame::Frame()
     : m_frame(av_frame_alloc())
 {
 }
-Frame::Frame(AVFrame *avFrame)
+Frame::Frame(AVFrame *avFrame, AVPixelFormat newPixelFormat)
     : Frame()
 {
     if (!avFrame)
         return;
 
     av_frame_ref(m_frame, avFrame);
+
+    if (newPixelFormat != AV_PIX_FMT_NONE)
+        m_pixelFormat = newPixelFormat;
     obtainPixelFormat();
 }
 Frame::Frame(const Frame &other)
@@ -129,7 +164,8 @@ void Frame::clear()
     m_customID = s_invalidID;
     m_onDestroyFn.reset();
 
-    m_pixelFormat = nullptr;
+    m_pixelFormat = AV_PIX_FMT_NONE;
+    m_pixelFmtDescriptor = nullptr;
     m_isSecondField = false;
 }
 
@@ -234,9 +270,7 @@ quintptr Frame::customID() const
 
 AVPixelFormat Frame::pixelFormat() const
 {
-    if (isHW())
-        return AV_PIX_FMT_NONE;
-    return static_cast<AVPixelFormat>(m_frame->format);
+    return m_pixelFormat;
 }
 
 AVColorSpace Frame::colorSpace() const
@@ -252,15 +286,15 @@ bool Frame::isLimited() const
 
 int Frame::chromaShiftW() const
 {
-    return m_pixelFormat ? m_pixelFormat->log2_chroma_w : 0;
+    return m_pixelFmtDescriptor ? m_pixelFmtDescriptor->log2_chroma_w : 0;
 }
 int Frame::chromaShiftH() const
 {
-    return m_pixelFormat ? m_pixelFormat->log2_chroma_h : 0;
+    return m_pixelFmtDescriptor ? m_pixelFmtDescriptor->log2_chroma_h : 0;
 }
 int Frame::numPlanes() const
 {
-    return m_pixelFormat ? m_pixelFormat->nb_components : 0;
+    return m_pixelFmtDescriptor ? m_pixelFmtDescriptor->nb_components : 0;
 }
 
 int *Frame::linesize() const
@@ -352,7 +386,7 @@ void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
 
 bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const
 {
-    if (isHW() || isCustom() || (m_frame->format != AV_PIX_FMT_YUV420P && m_frame->format != AV_PIX_FMT_YUVJ420P))
+    if (isHW() || isCustom() || (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P))
         return false;
 
     const qint32 height = this->height(0);
@@ -403,6 +437,7 @@ Frame &Frame::operator =(const Frame &other)
     m_onDestroyFn = other.m_onDestroyFn;
 
     m_pixelFormat = other.m_pixelFormat;
+    m_pixelFmtDescriptor = other.m_pixelFmtDescriptor;
     m_isSecondField = other.m_isSecondField;
 
     return *this;
@@ -418,6 +453,7 @@ Frame &Frame::operator =(Frame &&other)
     m_onDestroyFn = std::move(other.m_onDestroyFn);
 
     qSwap(m_pixelFormat, other.m_pixelFormat);
+    qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);
     qSwap(m_isSecondField, other.m_isSecondField);
 
     return *this;
@@ -435,7 +471,9 @@ void Frame::copyAVFrameInfo(const AVFrame *other)
     av_frame_copy_props(m_frame, other);
 }
 
-inline void Frame::obtainPixelFormat()
+void Frame::obtainPixelFormat()
 {
-    m_pixelFormat = av_pix_fmt_desc_get(static_cast<AVPixelFormat>(m_frame->format));
+    if (m_pixelFormat == AV_PIX_FMT_NONE)
+        m_pixelFormat = static_cast<AVPixelFormat>(m_frame->format);
+    m_pixelFmtDescriptor = av_pix_fmt_desc_get(m_pixelFormat);
 }

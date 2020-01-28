@@ -226,7 +226,7 @@ QImage CuvidOpenGL::getImage(const Frame &videoFrame)
     if (copied)
     {
         ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        if (imgScaler.create(videoFrame))
         {
             img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
             imgScaler.scale((const void **)data, linesize, img.bits());

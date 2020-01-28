@@ -124,17 +124,9 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo)
 {
-    switch (streamInfo.pixelFormat())
-    {
-        case AV_PIX_FMT_YUV420P:
-            m_pixFmt = AV_PIX_FMT_NV12;
-            break;
-        case AV_PIX_FMT_YUV420P10:
-            m_pixFmt = AV_PIX_FMT_P010;
-            break;
-        default:
-            return false;
-    }
+    m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());
+    if (m_pixFmt != AV_PIX_FMT_NV12 && m_pixFmt != AV_PIX_FMT_P010)
+        return false;
 
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("dxva2"))

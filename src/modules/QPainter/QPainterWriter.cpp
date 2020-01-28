@@ -48,7 +48,7 @@ void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScre
         return;
     }
     m_scaleByQt = (imgW > videoFrame.width()) || (imgH > videoFrame.height());
-    if (imgScaler.create(videoFrame, m_scaleByQt ? videoFrame.width() : imgW, m_scaleByQt ? videoFrame.height() : imgH))
+    if (imgScaler.create(videoFrame, m_scaleByQt ? -1 : imgW, m_scaleByQt ? -1 : imgH))
     {
         if (m_scaleByQt && (img.width() != videoFrame.width() || img.height() != videoFrame.height()))
         {

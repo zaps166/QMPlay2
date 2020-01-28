@@ -233,7 +233,7 @@ quint32 VAAPIOpenGL::getTexture(int plane)
 QImage VAAPIOpenGL::getImage(const Frame &videoFrame)
 {
     ImgScaler imgScaler;
-    if (!imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+    if (!imgScaler.create(videoFrame))
         return QImage();
 
     QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);

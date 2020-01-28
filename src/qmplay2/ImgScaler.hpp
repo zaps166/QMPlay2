@@ -34,7 +34,7 @@ public:
         destroy();
     }
 
-    bool create(const Frame &videoFrame, int newWdst, int newHdst, bool isNV12 = false);
+    bool create(const Frame &videoFrame, int newWdst = -1, int newHdst = -1);
     void scale(const Frame &videoFrame, void *dst = nullptr);
     void scale(const void *src[], const int srcLinesize[], void *dst);
     void destroy();

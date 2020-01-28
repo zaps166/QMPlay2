@@ -267,7 +267,7 @@ QImage DXVA2OpenGL::getImage(const Frame &videoFrame)
         QImage img;
 
         ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame, videoFrame.width(), videoFrame.height(), true))
+        if (imgScaler.create(videoFrame))
         {
             img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
             imgScaler.scale(src, srcLinesize, img.bits());

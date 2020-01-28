@@ -43,6 +43,9 @@ public:
     using OnDestroyFn = std::function<void()>;
 
 public:
+    static AVPixelFormat convert3PlaneTo2Plane(AVPixelFormat fmt);
+
+public:
     static Frame createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     static Frame createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     static Frame createEmpty(
@@ -57,7 +60,7 @@ public:
 
 public:
     Frame();
-    explicit Frame(AVFrame *avFrame);
+    explicit Frame(AVFrame *avFrame, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
     Frame(const Frame &other);
     Frame(Frame &&other);
     ~Frame();
@@ -124,7 +127,7 @@ public: // Operators
 private:
     void copyAVFrameInfo(const AVFrame *other);
 
-    inline void obtainPixelFormat();
+    void obtainPixelFormat();
 
 private:
     AVFrame *m_frame = nullptr;
@@ -134,6 +137,7 @@ private:
     std::shared_ptr<OnDestroyFn> m_onDestroyFn;
 
     // Video only
-    const AVPixFmtDescriptor *m_pixelFormat = nullptr;
+    AVPixelFormat m_pixelFormat = AV_PIX_FMT_NONE;
+    const AVPixFmtDescriptor *m_pixelFmtDescriptor = nullptr;
     bool m_isSecondField = false;
 };
