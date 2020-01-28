@@ -2964,7 +2964,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Omiń kompozytor na pełnym ekranie</translation>
     </message>
     <message>
-        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
         <translation>Użyj modułów wyjścia obrazu QMPlay2. Zostaną także użyte jeżeli inne renderery nie będą dostępne.</translation>
     </message>
     <message>

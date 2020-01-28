@@ -2964,7 +2964,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use QMPlay2 video output modules. This will also be used if other renderers won&apos;t be available.</source>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
