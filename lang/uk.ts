@@ -1876,15 +1876,15 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished">Помилка компіляції/лінкування шейдерів</translation>
+        <translation>Помилка компіляції/лінкування шейдерів</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо ініціалізувати %1></translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished">помилка відображення текстури</translation>
+        <translation>помилка відображення текстури</translation>
     </message>
 </context>
 <context>
@@ -1939,7 +1939,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Параметри рендера></translation>
     </message>
 </context>
 <context>
@@ -2929,67 +2929,67 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Спадковий пріоритет виведення відео></translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Старішого типу></translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL></translation>
     </message>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>активний></translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>неактивний</translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Зміна рендера</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Для застосування нового рендера програма перезапуститься!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation type="unfinished"></translation>
+        <translation>Вертикальна синхронізація (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished">Обходити композитного менеджера вікон при повноекранному режимі</translation>
+        <translation>Обходити композитного менеджера вікон при повноекранному режимі</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Використовувати модулі виведення відео QMPlay2. Вони також використовуватимуться, якщо інші рендери недоступні.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished">Використовувати OpenGL для всього вікна</translation>
+        <translation>Використовувати OpenGL для всього вікна</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished">Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
+        <translation>Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished">Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
+        <translation>Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished">Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
+        <translation>Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Рендер:</translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметри рендера</translation>
     </message>
 </context>
 <context>
