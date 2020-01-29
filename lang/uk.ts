@@ -2929,7 +2929,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Спадковий пріоритет відеовиходу></translation>
+        <translation>Спадковий пріоритет виведення відео></translation>
     </message>
     <message>
         <source>Legacy</source>
@@ -2949,7 +2949,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation>Змінити рендер</translation>
+        <translation>Зміна рендера</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
@@ -2965,7 +2965,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation>Використовувати модулі виведення зображення QMPlay2. Вони також використовуватимуться, якщо інші рендери недоступні.</translation>
+        <translation>Використовувати модулі виведення відео QMPlay2. Вони також використовуватимуться, якщо інші рендери недоступні.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
