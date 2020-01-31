@@ -571,7 +571,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
             tWI->setToolTip(toolTip);
             tWI->setIcon(QMPlay2GUI.getIcon(module->icon()));
             page3->listW->addItem(tWI);
-            if (page == 2 && !moduleName.isEmpty() && module->name() == moduleName)
+            if (page == 3 && !moduleName.isEmpty() && module->name() == moduleName)
                 moduleIndex = page3->listW->count() - 1;
         }
 
