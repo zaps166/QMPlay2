@@ -118,7 +118,7 @@ bool CuvidOpenGL::mapFrame(Frame &videoFrame)
 {
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
-    const int pictureIdx = videoFrame.customID();
+    const int pictureIdx = videoFrame.customData();
 
     if (!m_cuvidDec || !m_validPictures.contains(pictureIdx))
         return false;
@@ -198,7 +198,7 @@ QImage CuvidOpenGL::getImage(const Frame &videoFrame)
     vidProcParams.progressive_frame = !videoFrame.isInterlaced();
     vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
 
-    if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.customID(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
+    if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.customData(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
         return QImage();
 
     const size_t size = pitch * videoFrame.height();

@@ -133,7 +133,7 @@ bool VDPAUOpenGL::mapFrame(Frame &videoFrame)
         displayingOutputSurface->displaying = false;
     }
 
-    auto it = m_vdpau->m_outputSurfacesMap.find(videoFrame.customID());
+    auto it = m_vdpau->m_outputSurfacesMap.find(videoFrame.customData());
     if (it == m_vdpau->m_outputSurfacesMap.end())
         return false;
 

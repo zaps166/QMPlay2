@@ -315,7 +315,7 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
 #ifdef USE_OPENGL
                 m_cuvidGLInterop->setAvailableSurface(dispInfo.picture_index);
                 createFrame();
-                decoded.setCustomID(dispInfo.picture_index);
+                decoded.setCustomData(dispInfo.picture_index);
 #endif
             }
             else

@@ -153,7 +153,7 @@ Frame::~Frame()
 
 bool Frame::isEmpty() const
 {
-    return (m_frame->data[0] == nullptr && !isHW() && !isCustom());
+    return (m_frame->data[0] == nullptr && !isHW() && !hasCustomData());
 }
 void Frame::clear()
 {
@@ -161,7 +161,7 @@ void Frame::clear()
 
     m_timeBase = {};
 
-    m_customID = s_invalidID;
+    m_customData = s_invalidID;
     m_onDestroyFn.reset();
 
     m_pixelFormat = AV_PIX_FMT_NONE;
@@ -230,6 +230,11 @@ void Frame::setIsSecondField(bool secondField)
     m_isSecondField = secondField;
 }
 
+bool Frame::hasCPUAccess() const
+{
+    return (m_frame->data[0] && !isHW());
+}
+
 bool Frame::isHW() const
 {
     switch (m_frame->format)
@@ -259,13 +264,13 @@ quintptr Frame::hwSurface() const
     return s_invalidID;
 }
 
-bool Frame::isCustom() const
+bool Frame::hasCustomData() const
 {
-    return (m_customID != s_invalidID);
+    return (m_customData != s_invalidID);
 }
-quintptr Frame::customID() const
+quintptr Frame::customData() const
 {
-    return m_customID;
+    return m_customData;
 }
 
 AVPixelFormat Frame::pixelFormat() const
@@ -359,12 +364,9 @@ bool Frame::setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref)
 
     return true;
 }
-bool Frame::setCustomID(quintptr customID)
+bool Frame::setCustomData(quintptr customData)
 {
-    if (!isCustom() && !isEmpty())
-        return false;
-
-    m_customID = customID;
+    m_customData = customData;
     return true;
 }
 
@@ -386,7 +388,7 @@ void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
 
 bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const
 {
-    if (isHW() || isCustom() || (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P))
+    if (!hasCPUAccess() || (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P))
         return false;
 
     const qint32 height = this->height(0);
@@ -433,7 +435,7 @@ Frame &Frame::operator =(const Frame &other)
 
     m_timeBase = other.m_timeBase;
 
-    m_customID = other.m_customID;
+    m_customData = other.m_customData;
     m_onDestroyFn = other.m_onDestroyFn;
 
     m_pixelFormat = other.m_pixelFormat;
@@ -449,7 +451,7 @@ Frame &Frame::operator =(Frame &&other)
 
     qSwap(m_timeBase, other.m_timeBase);
 
-    qSwap(m_customID, other.m_customID);
+    qSwap(m_customData, other.m_customData);
     m_onDestroyFn = std::move(other.m_onDestroyFn);
 
     qSwap(m_pixelFormat, other.m_pixelFormat);

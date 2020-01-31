@@ -88,11 +88,13 @@ public: // Video
     void setNoInterlaced();
     void setIsSecondField(bool secondField);
 
+    bool hasCPUAccess() const;
+
     bool isHW() const;
     quintptr hwSurface() const;
 
-    bool isCustom() const;
-    quintptr customID() const;
+    bool hasCustomData() const;
+    quintptr customData() const;
 
     AVPixelFormat pixelFormat() const;
 
@@ -114,7 +116,7 @@ public: // Video
     quint8 *data(int plane = 0);
 
     bool setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref);
-    bool setCustomID(quintptr customID);
+    bool setCustomData(quintptr customData);
 
     void setOnDestroyFn(const OnDestroyFn &onDestroyFn);
 
@@ -133,7 +135,7 @@ private:
     AVFrame *m_frame = nullptr;
     AVRational m_timeBase = {};
 
-    quintptr m_customID = s_invalidID;
+    quintptr m_customData = s_invalidID;
     std::shared_ptr<OnDestroyFn> m_onDestroyFn;
 
     // Video only
