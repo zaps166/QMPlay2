@@ -24,6 +24,7 @@ extern "C"
 {
     #include <libavutil/frame.h>
     #include <libavutil/pixdesc.h>
+    #include <libavutil/imgutils.h>
 }
 
 #include <cmath>
@@ -391,31 +392,26 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
     if (!hasCPUAccess() || (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P))
         return false;
 
-    const qint32 height = this->height(0);
-    const qint32 chromaHeight = this->height(1);
-    const qint32 wh = linesizeChroma * chromaHeight;
-    quint8 *destData = (quint8 *)dest;
-    const quint8 *srcData[3] = {
-        m_frame->data[0],
-        m_frame->data[1],
-        m_frame->data[2],
+    uint8_t *destData[3];
+    destData[0] = reinterpret_cast<uint8_t *>(dest);
+    destData[2] = destData[0] + linesizeLuma * height(0);
+    destData[1] = destData[2] + linesizeChroma * height(1);
+
+    int destLinesize[3] {
+        linesizeLuma,
+        linesizeChroma,
+        linesizeChroma,
     };
-    size_t toCopy = qMin(linesizeLuma, m_frame->linesize[0]);
-    for (qint32 i = 0; i < height; ++i)
-    {
-        memcpy(destData, srcData[0], toCopy);
-        srcData[0] += m_frame->linesize[0];
-        destData += linesizeLuma;
-    }
-    toCopy = qMin(linesizeChroma, m_frame->linesize[1]);
-    for (qint32 i = 0; i < chromaHeight; ++i)
-    {
-        memcpy(destData + wh, srcData[1], toCopy);
-        memcpy(destData, srcData[2], toCopy);
-        srcData[1] += m_frame->linesize[1];
-        srcData[2] += m_frame->linesize[2];
-        destData += linesizeChroma;
-    }
+
+    av_image_copy(
+        destData,
+        destLinesize,
+        (const uint8_t **)m_frame->data,
+        m_frame->linesize,
+        m_pixelFormat,
+        m_frame->width,
+        m_frame->height
+    );
 
     return true;
 }
