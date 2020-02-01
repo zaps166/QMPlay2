@@ -308,7 +308,7 @@ bool VDPAU::filter(QQueue<Frame> &framesQueue)
     {
         const Frame &currFrame = m_internalQueue.at((nFrames == 4) ? 2 : 0);
 
-        quintptr currID = Frame::s_invalidID;
+        quintptr currID = Frame::s_invalidCustomData;
         VDPAUOutputSurface *outputSurfacePtr = nullptr;
 
         QMutexLocker locker(&m_outputSurfacesMutex);

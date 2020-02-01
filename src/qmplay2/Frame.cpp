@@ -162,7 +162,7 @@ void Frame::clear()
 
     m_timeBase = {};
 
-    m_customData = s_invalidID;
+    m_customData = s_invalidCustomData;
     m_onDestroyFn.reset();
 
     m_pixelFormat = AV_PIX_FMT_NONE;
@@ -262,16 +262,21 @@ quintptr Frame::hwSurface() const
         case AV_PIX_FMT_VIDEOTOOLBOX:
             return reinterpret_cast<quintptr>(m_frame->data[3]);
     }
-    return s_invalidID;
+    return s_invalidCustomData;
 }
 
 bool Frame::hasCustomData() const
 {
-    return (m_customData != s_invalidID);
+    return (m_customData != s_invalidCustomData);
 }
 quintptr Frame::customData() const
 {
     return m_customData;
+}
+bool Frame::setCustomData(quintptr customData)
+{
+    m_customData = customData;
+    return true;
 }
 
 AVPixelFormat Frame::pixelFormat() const
@@ -365,11 +370,6 @@ bool Frame::setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref)
 
     return true;
 }
-bool Frame::setCustomData(quintptr customData)
-{
-    m_customData = customData;
-    return true;
-}
 
 void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
 {
@@ -389,7 +389,7 @@ void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
 
 bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const
 {
-    if (!hasCPUAccess() || (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P))
+    if (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P)
         return false;
 
     uint8_t *destData[3];
@@ -403,17 +403,7 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
         linesizeChroma,
     };
 
-    av_image_copy(
-        destData,
-        destLinesize,
-        (const uint8_t **)m_frame->data,
-        m_frame->linesize,
-        m_pixelFormat,
-        m_frame->width,
-        m_frame->height
-    );
-
-    return true;
+    return copyData(destData, destLinesize);
 }
 
 Frame &Frame::operator =(const Frame &other)
@@ -455,6 +445,24 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_isSecondField, other.m_isSecondField);
 
     return *this;
+}
+
+bool Frame::copyDataInternal(void **dest, int *linesize) const
+{
+    if (!hasCPUAccess())
+        return false;
+
+    av_image_copy(
+        reinterpret_cast<uint8_t **>(dest),
+        linesize,
+        const_cast<const uint8_t **>(m_frame->data),
+        m_frame->linesize,
+        m_pixelFormat,
+        m_frame->width,
+        m_frame->height
+    );
+
+    return true;
 }
 
 void Frame::copyAVFrameInfo(const AVFrame *other)

@@ -39,7 +39,7 @@ using AVPixelFormats = QVector<AVPixelFormat>;
 class QMPLAY2SHAREDLIB_EXPORT Frame
 {
 public:
-    static constexpr quintptr s_invalidID = ~static_cast<quintptr>(0);
+    static constexpr quintptr s_invalidCustomData = ~static_cast<quintptr>(0);
     using OnDestroyFn = std::function<void()>;
 
 public:
@@ -95,6 +95,7 @@ public: // Video
 
     bool hasCustomData() const;
     quintptr customData() const;
+    bool setCustomData(quintptr customData);
 
     AVPixelFormat pixelFormat() const;
 
@@ -116,9 +117,11 @@ public: // Video
     quint8 *data(int plane = 0);
 
     bool setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref);
-    bool setCustomData(quintptr customData);
 
     void setOnDestroyFn(const OnDestroyFn &onDestroyFn);
+
+    template<typename D, typename L>
+    inline bool copyData(D **dest, L *linesize) const;
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
@@ -127,6 +130,8 @@ public: // Operators
     Frame &operator =(Frame &&other);
 
 private:
+    bool copyDataInternal(void **dest, int *linesize) const;
+
     void copyAVFrameInfo(const AVFrame *other);
 
     void obtainPixelFormat();
@@ -135,7 +140,7 @@ private:
     AVFrame *m_frame = nullptr;
     AVRational m_timeBase = {};
 
-    quintptr m_customData = s_invalidID;
+    quintptr m_customData = s_invalidCustomData;
     std::shared_ptr<OnDestroyFn> m_onDestroyFn;
 
     // Video only
@@ -143,3 +148,12 @@ private:
     const AVPixFmtDescriptor *m_pixelFmtDescriptor = nullptr;
     bool m_isSecondField = false;
 };
+
+/* Inline implementation */
+
+template<typename D, typename L>
+bool Frame::copyData(D **dest, L *linesize) const
+{
+    static_assert(sizeof(L) == sizeof(int), "Linesize type size missmatch");
+    return copyDataInternal(reinterpret_cast<void **>(dest), reinterpret_cast<int *>(linesize));
+}
