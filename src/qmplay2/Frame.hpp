@@ -102,9 +102,15 @@ public: // Video
     AVColorSpace colorSpace() const;
     bool isLimited() const;
 
+    bool isGray() const;
+    bool isPlannar() const;
+    bool isRGB() const;
+
     int chromaShiftW() const;
     int chromaShiftH() const;
     int numPlanes() const;
+
+    int paddingBits() const;
 
     int *linesize() const;
     int linesize(int plane) const;

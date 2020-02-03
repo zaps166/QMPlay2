@@ -292,7 +292,26 @@ AVColorSpace Frame::colorSpace() const
 }
 bool Frame::isLimited() const
 {
-    return (m_frame->color_range != AVCOL_RANGE_JPEG);
+    return (m_frame->color_range != AVCOL_RANGE_JPEG && !isRGB() && !isGray());
+}
+
+bool Frame::isGray() const
+{
+    if (m_pixelFmtDescriptor)
+        return (m_pixelFmtDescriptor->nb_components == 1);
+    return false;
+}
+bool Frame::isPlannar() const
+{
+    if (m_pixelFmtDescriptor)
+        return (m_pixelFmtDescriptor->flags & AV_PIX_FMT_FLAG_PLANAR);
+    return false;
+}
+bool Frame::isRGB() const
+{
+    if (m_pixelFmtDescriptor)
+        return (m_pixelFmtDescriptor->flags & AV_PIX_FMT_FLAG_RGB);
+    return false;
 }
 
 int Frame::chromaShiftW() const
@@ -305,7 +324,14 @@ int Frame::chromaShiftH() const
 }
 int Frame::numPlanes() const
 {
-    return m_pixelFmtDescriptor ? m_pixelFmtDescriptor->nb_components : 0;
+    return m_pixelFmtDescriptor ? av_pix_fmt_count_planes(m_pixelFormat) : 0;
+}
+
+int Frame::paddingBits() const
+{
+    if (m_pixelFmtDescriptor)
+        return (m_pixelFmtDescriptor->comp[0].step << 3) - m_pixelFmtDescriptor->comp[0].depth;
+    return 0;
 }
 
 int *Frame::linesize() const
