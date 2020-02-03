@@ -108,16 +108,6 @@ namespace Functions
         }
     }
 
-    template<typename T>
-    static inline T aligned(const T val, const T alignment)
-    {
-        return (val + alignment - 1) & ~(alignment - 1);
-    }
-    static inline quint8 clip8(int val)
-    {
-        return val > 255 ? (quint8)255 : (val < 0 ? (quint8)0 : val);
-    }
-
     QMPLAY2SHAREDLIB_EXPORT void getImageSize(const double aspect_ratio, const double zoom, const int winW, const int winH, int &W, int &H, int *X = nullptr, int *Y = nullptr, QRect *dstRect = nullptr, const int *vidW = nullptr, const int *vidH = nullptr, QRect *srcRect = nullptr);
 
     QMPLAY2SHAREDLIB_EXPORT QPixmap getPixmapFromIcon(const QIcon &icon, QSize size, QWidget *w = nullptr);

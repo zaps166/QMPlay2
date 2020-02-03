@@ -25,8 +25,6 @@
 #include <QCoreApplication>
 #include <QPainter>
 
-/**/
-
 Drawable::Drawable(QPainterWriter &writer) :
     writer(writer)
 {
@@ -75,7 +73,6 @@ void Drawable::resizeEvent(QResizeEvent *e)
     const qreal dpr = devicePixelRatioF();
     Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
     Functions::getImageSize(writer.aspect_ratio, writer.zoom, width() * dpr, height() * dpr, imgW, imgH);
-    imgW = Functions::aligned(imgW, 8);
 
     imgScaler.destroy();
     img = QImage();

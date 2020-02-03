@@ -523,6 +523,9 @@ QPixmap Functions::applyBlur(const QPixmap &input, const qreal blurRadius)
 
 void Functions::ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount)
 {
+    auto clip8 = [](int val)->quint8 {
+        return val > 255 ? (quint8)255 : (val < 0 ? (quint8)0 : val);
+    };
     for (unsigned i = 0; i < bitsCount; i += 4)
     {
         imageBits[i+0] = clip8((imageBits[i+0] - 127) * Contrast / 100 + 127 + Brightness);
