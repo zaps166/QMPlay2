@@ -22,7 +22,7 @@
 #include <QMPlay2Lib.hpp>
 
 #include <QStringList>
-#include <QMatrix3x3>
+#include <QMatrix4x4>
 #include <QIcon>
 #include <QDate>
 
@@ -164,7 +164,7 @@ namespace Functions
         float cR, cG, cB;
     };
     QMPLAY2SHAREDLIB_EXPORT LumaCoefficients getLumaCoeff(AVColorSpace colorSpace);
-    QMPLAY2SHAREDLIB_EXPORT QMatrix3x3 getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited);
+    QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
 }

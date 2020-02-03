@@ -29,7 +29,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <QHeaderView>
-#include <QMatrix4x4>
 #include <QMimeData>
 #include <QPainter>
 #include <QDir>
@@ -940,23 +939,23 @@ Functions::LumaCoefficients Functions::getLumaCoeff(AVColorSpace colorSpace)
     }
     return {0.299f, 0.587f, 0.114f}; // AVCOL_SPC_BT470BG
 }
-QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limited)
+QMatrix4x4 Functions::getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited)
 {
-    const float bscale = 0.5f / (cb - 1.0f);
-    const float rscale = 0.5f / (cr - 1.0f);
+    const float bscale = 0.5f / (lumaCoeff.cB - 1.0f);
+    const float rscale = 0.5f / (lumaCoeff.cR - 1.0f);
 
     auto mat = QMatrix4x4(
-        cr,
-        cg,
-        cb,
+        lumaCoeff.cR,
+        lumaCoeff.cG,
+        lumaCoeff.cB,
         0.0f,
-        bscale * cr,
-        bscale * cg,
+        bscale * lumaCoeff.cR,
+        bscale * lumaCoeff.cG,
         0.5f,
         0.0f,
         0.5f,
-        rscale * cg,
-        rscale * cb,
+        rscale * lumaCoeff.cG,
+        rscale * lumaCoeff.cB,
         0.0f,
         0.0f,
         0.0f,
@@ -967,7 +966,7 @@ QMatrix3x3 Functions::getYUVtoRGBmatrix(float cr, float cg, float cb, bool limit
     if (limited)
         mat *= 255.0f / (235.0f - 16.0f);
 
-    return mat.toGenericMatrix<3, 3>();
+    return mat;
 }
 
 bool Functions::isX11EGL()

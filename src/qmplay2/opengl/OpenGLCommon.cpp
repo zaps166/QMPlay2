@@ -584,8 +584,7 @@ void OpenGLCommon::paintGL()
         }
         else
         {
-            const auto lumaCoeff = Functions::getLumaCoeff(m_colorSpace);
-            const auto mat = Functions::getYUVtoRGBmatrix(lumaCoeff.cR, lumaCoeff.cG, lumaCoeff.cB, m_limited);
+            const auto mat = Functions::getYUVtoRGBmatrix(Functions::getLumaCoeff(m_colorSpace), m_limited).toGenericMatrix<3, 3>();
             shaderProgramVideo->setUniformValue("uYUVtRGB", mat);
             shaderProgramVideo->setUniformValue("uBL", m_limited ? 16.0f / 255.0f : 0.0f);
 
