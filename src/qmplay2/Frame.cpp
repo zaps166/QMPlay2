@@ -473,7 +473,7 @@ Frame &Frame::operator =(Frame &&other)
     return *this;
 }
 
-bool Frame::copyDataInternal(void **dest, int *linesize) const
+bool Frame::copyDataInternal(void *dest[4], int linesize[4]) const
 {
     if (!hasCPUAccess())
         return false;

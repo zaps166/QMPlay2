@@ -127,7 +127,7 @@ public: // Video
     void setOnDestroyFn(const OnDestroyFn &onDestroyFn);
 
     template<typename D, typename L>
-    inline bool copyData(D **dest, L *linesize) const;
+    inline bool copyData(D *dest[4], L linesize[4]) const;
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
@@ -136,7 +136,7 @@ public: // Operators
     Frame &operator =(Frame &&other);
 
 private:
-    bool copyDataInternal(void **dest, int *linesize) const;
+    bool copyDataInternal(void *dest[4], int linesize[4]) const;
 
     void copyAVFrameInfo(const AVFrame *other);
 
@@ -158,7 +158,7 @@ private:
 /* Inline implementation */
 
 template<typename D, typename L>
-bool Frame::copyData(D **dest, L *linesize) const
+bool Frame::copyData(D *dest[4], L linesize[4]) const
 {
     static_assert(sizeof(L) == sizeof(int), "Linesize type size missmatch");
     return copyDataInternal(reinterpret_cast<void **>(dest), reinterpret_cast<int *>(linesize));
