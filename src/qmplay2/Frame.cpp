@@ -418,15 +418,17 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
     if (m_pixelFormat != AV_PIX_FMT_YUV420P && m_pixelFormat != AV_PIX_FMT_YUVJ420P)
         return false;
 
-    uint8_t *destData[3];
+    uint8_t *destData[4];
     destData[0] = reinterpret_cast<uint8_t *>(dest);
     destData[2] = destData[0] + linesizeLuma * height(0);
     destData[1] = destData[2] + linesizeChroma * height(1);
+    destData[3] = nullptr;
 
-    int destLinesize[3] {
+    int destLinesize[4] {
         linesizeLuma,
         linesizeChroma,
         linesizeChroma,
+        0
     };
 
     return copyData(destData, destLinesize);
