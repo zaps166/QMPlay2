@@ -30,14 +30,10 @@
 #include <QOpenGLContext>
 #include <QOpenGLShader>
 #include <QResizeEvent>
-#include <QMatrix4x4>
-#include <QMatrix3x3>
 #include <QResource>
 #include <QPainter>
 #include <QLibrary>
 #include <QWidget>
-
-#include <cmath>
 
 /* OpenGL|ES 2.0 doesn't have those definitions */
 #ifndef GL_MAP_WRITE_BIT
@@ -56,22 +52,6 @@
     #define GL_TEXTURE_RECTANGLE_ARB 0x84F5
 #endif
 
-/* RotAnimation */
-
-void RotAnimation::updateCurrentValue(const QVariant &value)
-{
-    if (!glCommon.buttonPressed)
-    {
-        const QPointF newRot = value.toPointF();
-        glCommon.rot.setX(qBound<qreal>(0.0, newRot.x(), 180.0));
-        glCommon.rot.setY(newRot.y());
-        glCommon.setMatrix = true;
-        glCommon.updateGL(true);
-    }
-}
-
-/* OpenGLCommon implementation */
-
 OpenGLCommon::OpenGLCommon() :
     vSync(true),
     m_glInstance(std::static_pointer_cast<OpenGLInstance>(QMPlay2Core.gpuInstance())),
@@ -81,12 +61,9 @@ OpenGLCommon::OpenGLCommon() :
     target(0),
     hasPbo(false),
     isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
-    subsX(-1), subsY(-1), W(-1), H(-1), subsW(-1), subsH(-1), outW(-1), outH(-1), verticesIdx(0),
-    aspectRatio(0.0), zoom(0.0),
-    sphericalView(false), buttonPressed(false), hasVbo(true), mouseWrapped(false), canWrapMouse(true),
-    rotAnimation(*this),
-    nIndices(0),
-    mouseTime(0.0)
+    outW(-1), outH(-1), verticesIdx(0),
+    hasVbo(true),
+    nIndices(0)
 {
 #ifndef OPENGL_ES2
     glActiveTexture = m_glInstance->glActiveTexture;
@@ -109,9 +86,10 @@ OpenGLCommon::OpenGLCommon() :
     canUseHueSharpness = (m_glInstance->glVer >= 30);
 #endif
 
-    /* Set 360° view */
-    rotAnimation.setEasingCurve(QEasingCurve::OutQuint);
-    rotAnimation.setDuration(1000.0);
+    m_matrixChangeFn = [this] {
+        setMatrix = true;
+        updateGL(true);
+    };
 }
 OpenGLCommon::~OpenGLCommon()
 {
@@ -228,18 +206,7 @@ void OpenGLCommon::setWindowsBypassCompositor(bool bypassCompositor)
 void OpenGLCommon::newSize(const QSize &size)
 {
     const bool canUpdate = !size.isValid();
-    const QSize winSize = canUpdate ? widget()->size() : size;
-    const qreal dpr = widget()->devicePixelRatioF();
-    if (!isRotate90())
-    {
-        Functions::getImageSize(aspectRatio, zoom, winSize.width(), winSize.height(), W, H, &subsX, &subsY);
-        Functions::getImageSize(aspectRatio, zoom, winSize.width() * dpr, winSize.height() * dpr, subsW, subsH, &subsX, &subsY);
-    }
-    else
-    {
-        Functions::getImageSize(aspectRatio, zoom, winSize.height(), winSize.width(), H, W);
-        Functions::getImageSize(aspectRatio, zoom, winSize.width() * dpr, winSize.height() * dpr, subsW, subsH, &subsX, &subsY);
-    }
+    updateSizes(canUpdate ? m_widget->size() : size, isRotate90());
     doReset = true;
     if (canUpdate)
     {
@@ -257,29 +224,10 @@ void OpenGLCommon::clearImg()
     osd_ids.clear();
 }
 
-void OpenGLCommon::setSpherical(bool spherical)
+void OpenGLCommon::setSphericalView(bool spherical)
 {
-    const bool isSphericalView = (spherical && hasVbo);
-    if (sphericalView != isSphericalView)
-    {
-        QWidget *w = widget();
-        const bool isBlankCursor = (w->cursor().shape() == Qt::BlankCursor);
-        sphericalView = isSphericalView;
-        if (sphericalView)
-        {
-            w->setProperty("customCursor", (int)Qt::OpenHandCursor);
-            if (!isBlankCursor)
-                w->setCursor(Qt::OpenHandCursor);
-            rot = QPointF(90.0, 90.0);
-        }
-        else
-        {
-            w->setProperty("customCursor", QVariant());
-            if (!isBlankCursor)
-                w->setCursor(Qt::ArrowCursor);
-            buttonPressed = false;
-        }
-    }
+    if (hasVbo)
+        VideoOutputCommon::setSphericalView(spherical);
 }
 
 void OpenGLCommon::setTextureParameters(GLenum target, quint32 texture, GLint param)
@@ -400,7 +348,7 @@ void OpenGLCommon::paintGL()
     if (frameIsEmpty && !hasImage)
         return;
 
-    const QSize winSize = widget()->size();
+    const QSize winSize = m_widget->size();
 
     bool resetDone = false;
 
@@ -442,7 +390,7 @@ void OpenGLCommon::paintGL()
                 correctLinesize =
                 (
                     (halfLinesize == videoFrame.linesize(1) && videoFrame.linesize(1) == videoFrame.linesize(2)) &&
-                    (!sphericalView ? (videoFrame.linesize(1) == halfLinesize) : (videoFrame.linesize(0) == widths[0]))
+                    (!m_sphericalView ? (videoFrame.linesize(1) == halfLinesize) : (videoFrame.linesize(0) == widths[0]))
                 );
 
                 /* Prepare textures */
@@ -541,7 +489,7 @@ void OpenGLCommon::paintGL()
         hasImage = true;
     }
 
-    if (!sphericalView)
+    if (!m_sphericalView)
     {
         deleteSphereVbo();
         shaderProgramVideo->setAttributeArray(positionYCbCrLoc, verticesYCbCr[verticesIdx], 2);
@@ -600,26 +548,14 @@ void OpenGLCommon::paintGL()
     }
     if (setMatrix)
     {
-        QMatrix4x4 matrix;
-        if (!sphericalView)
-        {
-            matrix.scale(W / (qreal)winSize.width(), H / (qreal)winSize.height());
-            if (!videoOffset.isNull())
-                matrix.translate(-videoOffset.x(), videoOffset.y());
-        }
-        else
-        {
-            const double z = qBound(-1.0, (zoom > 1.0 ? log10(zoom) : zoom - 1.0), 0.99);
-            matrix.perspective(68.0, (qreal)winSize.width() / (qreal)winSize.height(), 0.001, 2.0);
-            matrix.translate(0.0, 0.0, z);
-            matrix.rotate(rot.x(), 1.0, 0.0, 0.0);
-            matrix.rotate(rot.y(), 0.0, 0.0, 1.0);
-        }
-        shaderProgramVideo->setUniformValue("uMatrix", matrix);
+        updateMatrix();
+        shaderProgramVideo->setUniformValue("uMatrix", m_matrix);
         setMatrix = false;
     }
-    if (!sphericalView)
+    if (!m_sphericalView)
+    {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    }
     else
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereVbo[2]);
@@ -637,10 +573,12 @@ void OpenGLCommon::paintGL()
     osdMutex.lock();
     if (!osdList.isEmpty())
     {
+        const qreal dpr = m_widget->devicePixelRatioF();
+
         glBindTexture(GL_TEXTURE_2D, textures[0]);
 
         QRect bounds;
-        const qreal scaleW = (qreal)subsW / outW, scaleH = (qreal)subsH / outH;
+        const qreal scaleW = m_subsRect.width() * dpr / outW, scaleH = m_subsRect.height() * dpr / outH;
         bool mustRepaint = Functions::mustRepaintOSD(osdList, osd_ids, &scaleW, &scaleH, &bounds);
         bool hasNewSize = false;
         if (!mustRepaint)
@@ -683,11 +621,11 @@ void OpenGLCommon::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
         }
 
-        const QSizeF winSizeSubs = winSize * widget()->devicePixelRatioF();
-        const float left   = (bounds.left() + subsX) * 2.0f / winSizeSubs.width() - osdOffset.x();
-        const float right  = (bounds.right() + subsX + 1) * 2.0f / winSizeSubs.width() - osdOffset.x();
-        const float top    = (bounds.top() + subsY) * 2.0f / winSizeSubs.height() - osdOffset.y();
-        const float bottom = (bounds.bottom() + subsY + 1) * 2.0f / winSizeSubs.height() - osdOffset.y();
+        const QSizeF winSizeSubs = winSize * dpr;
+        const float left   = (bounds.left() + m_subsRect.x() * dpr) * 2.0f / winSizeSubs.width() - m_osdOffset.x();
+        const float right  = (bounds.right() + m_subsRect.x() * dpr + 1.0f) * 2.0f / winSizeSubs.width() - m_osdOffset.x();
+        const float top    = (bounds.top() + m_subsRect.y() * dpr) * 2.0f / winSizeSubs.height() - m_osdOffset.y();
+        const float bottom = (bounds.bottom() + m_subsRect.y() * dpr + 1.0f) * 2.0f / winSizeSubs.height() - m_osdOffset.y();
         const float verticesOSD[8] = {
             left  - 1.0f, -bottom + 1.0f,
             right - 1.0f, -bottom + 1.0f,
@@ -727,46 +665,14 @@ void OpenGLCommon::contextAboutToBeDestroyed()
 
 void OpenGLCommon::dispatchEvent(QEvent *e, QObject *p)
 {
-    switch (e->type())
-    {
-        case QEvent::MouseButtonPress:
-            if (sphericalView)
-                mousePress360((QMouseEvent *)e);
-            else
-                mousePress((QMouseEvent *)e);
-            break;
-        case QEvent::MouseButtonRelease:
-            if (sphericalView)
-                mouseRelease360((QMouseEvent *)e);
-            else
-                mouseRelease((QMouseEvent *)e);
-            break;
-        case QEvent::MouseMove:
-            if (sphericalView)
-                mouseMove360((QMouseEvent *)e);
-            else
-                mouseMove((QMouseEvent *)e);
-            break;
-        case QEvent::Resize:
-            newSize(((QResizeEvent *)e)->size());
-            break;
-        case QEvent::TouchBegin:
-        case QEvent::TouchUpdate:
-            canWrapMouse = false;
-            //Pass through
-        case QEvent::TouchEnd:
-        case QEvent::Gesture:
-            /* Pass gesture and touch event to the parent */
-            QCoreApplication::sendEvent(p, e);
-            break;
-        default:
-            break;
-    }
+    if (e->type() == QEvent::Resize)
+        newSize(((QResizeEvent *)e)->size());
+    VideoOutputCommon::dispatchEvent(e, p);
 }
 
 inline bool OpenGLCommon::isRotate90() const
 {
-    return verticesIdx >= 4 && !sphericalView;
+    return verticesIdx >= 4 && !m_sphericalView;
 }
 
 QByteArray OpenGLCommon::readShader(const QString &fileName, bool pure)
@@ -784,114 +690,6 @@ QByteArray OpenGLCommon::readShader(const QString &fileName, bool pure)
     return shader;
 }
 
-void OpenGLCommon::mousePress(QMouseEvent *e)
-{
-    if (e->buttons() & Qt::LeftButton)
-    {
-        moveVideo = (e->modifiers() & Qt::ShiftModifier);
-        moveOSD = (e->modifiers() & Qt::ControlModifier);
-        if (moveVideo || moveOSD)
-        {
-            QWidget *w = widget();
-            w->setProperty("customCursor", (int)Qt::ArrowCursor);
-            w->setCursor(Qt::ClosedHandCursor);
-            mousePos = e->pos();
-        }
-    }
-}
-void OpenGLCommon::mouseMove(QMouseEvent *e)
-{
-    if ((moveVideo || moveOSD) && (e->buttons() & Qt::LeftButton))
-    {
-        const QPoint newMousePos = e->pos();
-        const QPointF mouseDiff = mousePos - newMousePos;
-
-        if (moveVideo)
-            videoOffset += QPointF(mouseDiff.x() * 2.0 / W, mouseDiff.y() * 2.0 / H);
-        if (moveOSD)
-        {
-            QWidget *w = widget();
-            osdOffset += QPointF(mouseDiff.x() * 2.0 / w->width(), mouseDiff.y() * 2.0 / w->height());
-        }
-
-        mousePos = newMousePos;
-
-        setMatrix = true;
-        updateGL(true);
-    }
-}
-void OpenGLCommon::mouseRelease(QMouseEvent *e)
-{
-    if ((moveVideo || moveOSD) && e->button() == Qt::LeftButton)
-    {
-        QWidget *w = widget();
-        w->unsetCursor();
-        w->setProperty("customCursor", QVariant());
-        moveVideo = moveOSD = false;
-    }
-}
-
-/* 360 */
-
-void OpenGLCommon::mousePress360(QMouseEvent *e)
-{
-    if (e->buttons() & Qt::LeftButton)
-    {
-        widget()->setCursor(Qt::ClosedHandCursor);
-        mouseTime = Functions::gettime();
-        buttonPressed = true;
-        rotAnimation.stop();
-        mousePos = e->pos();
-    }
-}
-void OpenGLCommon::mouseMove360(QMouseEvent *e)
-{
-    if (mouseWrapped)
-        mouseWrapped = false;
-    else if (buttonPressed && (e->buttons() & Qt::LeftButton))
-    {
-        const QPoint newMousePos = e->pos();
-        const QPointF mouseDiff = QPointF(mousePos - newMousePos) / 10.0;
-
-        rot.setX(qBound<qreal>(0.0, (rot.rx() += mouseDiff.y()), 180.0));
-        rot.ry() -= mouseDiff.x();
-
-        const double currTime = Functions::gettime();
-        const double mouseTimeDiff = qMax(currTime - mouseTime, 0.001);
-        const QPointF movPerSec(mouseDiff.y() / mouseTimeDiff / 5.0, -mouseDiff.x() / mouseTimeDiff / 5.0);
-        if (rotAnimation.state() != QAbstractAnimation::Stopped)
-            rotAnimation.stop();
-        rotAnimation.setEndValue(rot + movPerSec);
-        mouseTime = currTime;
-
-        mousePos = newMousePos;
-        if (e->source() == Qt::MouseEventNotSynthesized)
-        {
-            if (canWrapMouse)
-                mouseWrapped = Functions::wrapMouse(widget(), mousePos, 1);
-            else
-                canWrapMouse = true;
-        }
-
-        setMatrix = true;
-        updateGL(true);
-    }
-}
-void OpenGLCommon::mouseRelease360(QMouseEvent *e)
-{
-    if (buttonPressed && e->button() == Qt::LeftButton)
-    {
-        if ((Functions::gettime() - mouseTime) >= 0.075)
-            rotAnimation.stop();
-        else
-        {
-            rotAnimation.setStartValue(rot);
-            rotAnimation.start();
-        }
-        widget()->setCursor(Qt::OpenHandCursor);
-        buttonPressed = false;
-    }
-}
 inline void OpenGLCommon::resetSphereVbo()
 {
     memset(sphereVbo, 0, sizeof sphereVbo);

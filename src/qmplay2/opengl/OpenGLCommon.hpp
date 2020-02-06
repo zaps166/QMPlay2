@@ -22,11 +22,10 @@
 
 #include <Frame.hpp>
 #include <VideoAdjustment.hpp>
-#include <X11BypassCompositor.hpp>
+#include <VideoOutputCommon.hpp>
 
 #include <QOpenGLShaderProgram>
 
-#include <QVariantAnimation>
 #include <QCoreApplication>
 #include <QImage>
 #include <QMutex>
@@ -41,25 +40,9 @@
 #endif
 
 class HWOpenGLInterop;
-class OpenGLCommon;
 class QMPlay2OSD;
-class QMouseEvent;
 
-class RotAnimation final : public QVariantAnimation
-{
-public:
-    inline RotAnimation(OpenGLCommon &glCommon) :
-        glCommon(glCommon)
-    {}
-private:
-    void updateCurrentValue(const QVariant &value) override;
-
-    OpenGLCommon &glCommon;
-};
-
-/**/
-
-class OpenGLCommon : public X11BypassCompositor
+class OpenGLCommon : public VideoOutputCommon
 {
     Q_DECLARE_TR_FUNCTIONS(OpenGLCommon)
 
@@ -69,10 +52,27 @@ public:
 
     virtual void deleteMe();
 
-    virtual QWidget *widget() = 0;
-
     virtual bool makeContextCurrent() = 0;
     virtual void doneContextCurrent() = 0;
+
+    inline double &zoomRef()
+    {
+        return m_zoom;
+    }
+    inline double &aRatioRef()
+    {
+        return m_aRatio;;
+    }
+
+    inline bool isSphericalView() const
+    {
+        return m_sphericalView;
+    }
+
+    inline void resetOffsets()
+    {
+        m_videoOffset = m_osdOffset = QPointF();
+    }
 
     void initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop);
 
@@ -86,7 +86,7 @@ public:
     void newSize(const QSize &size = QSize());
     void clearImg();
 
-    void setSpherical(bool spherical);
+    void setSphericalView(bool spherical) override;
 protected:
     static void setTextureParameters(GLenum target, quint32 texture, GLint param);
 
@@ -108,20 +108,12 @@ protected:
 
     bool vSync;
 
-    void dispatchEvent(QEvent *e, QObject *p);
+    void dispatchEvent(QEvent *e, QObject *p) override;
 private:
     inline bool isRotate90() const;
 
     QByteArray readShader(const QString &fileName, bool pure = false);
 
-    void mousePress(QMouseEvent *e);
-    void mouseMove(QMouseEvent *e);
-    void mouseRelease(QMouseEvent *e);
-
-    /* Spherical view */
-    void mousePress360(QMouseEvent *e);
-    void mouseMove360(QMouseEvent *e);
-    void mouseRelease360(QMouseEvent *e);
     inline void resetSphereVbo();
     inline void deleteSphereVbo();
     void loadSphere();
@@ -148,12 +140,7 @@ public:
     bool hasPbo;
 
     bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
-    int subsX, subsY, W, H, subsW, subsH, outW, outH, verticesIdx;
-
-    double aspectRatio, zoom;
-
-    bool moveVideo = false, moveOSD = false;
-    QPointF videoOffset, osdOffset;
+    int outW, outH, verticesIdx;
 
     QList<const QMPlay2OSD *> osdList;
     QMutex osdMutex;
@@ -164,11 +151,7 @@ public:
     QTimer updateTimer;
 
     /* Spherical view */
-    bool sphericalView, buttonPressed, hasVbo, mouseWrapped, canWrapMouse;
-    RotAnimation rotAnimation;
+    bool hasVbo;
     quint32 sphereVbo[3];
     quint32 nIndices;
-    double mouseTime;
-    QPoint mousePos; // also for moving video/subtitles
-    QPointF rot;
 };

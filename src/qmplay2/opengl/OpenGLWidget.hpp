@@ -30,8 +30,6 @@ public:
     OpenGLWidget();
     ~OpenGLWidget();
 
-    QWidget *widget() override;
-
     bool makeContextCurrent() override;
     void doneContextCurrent() override;
 

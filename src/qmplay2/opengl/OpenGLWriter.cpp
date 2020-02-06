@@ -122,18 +122,18 @@ bool OpenGLWriter::processParams(bool *)
     };
 
     const int verticesIdx = rotate90 * 4 + flip;
-    if (m_drawable->aspectRatio != aspectRatio || m_drawable->zoom != zoom || m_drawable->sphericalView != spherical || m_drawable->verticesIdx != verticesIdx || m_drawable->videoAdjustment != videoAdjustment)
+    if (m_drawable->aRatioRef() != aspectRatio || m_drawable->zoomRef() != zoom || m_drawable->isSphericalView() != spherical || m_drawable->verticesIdx != verticesIdx || m_drawable->videoAdjustment != videoAdjustment)
     {
-        m_drawable->zoom = zoom;
-        m_drawable->aspectRatio = aspectRatio;
+        m_drawable->zoomRef() = zoom;
+        m_drawable->aRatioRef() = aspectRatio;
         m_drawable->verticesIdx = verticesIdx;
         m_drawable->videoAdjustment = videoAdjustment;
-        m_drawable->setSpherical(spherical);
+        m_drawable->setSphericalView(spherical);
         doResizeEvent = m_drawable->widget()->isVisible();
     }
     if (getParam("ResetOther").toBool())
     {
-        m_drawable->videoOffset = m_drawable->osdOffset = QPointF();
+        m_drawable->resetOffsets();
         modParam("ResetOther", false);
         if (!doResizeEvent)
             doResizeEvent = m_drawable->widget()->isVisible();
@@ -187,7 +187,7 @@ void OpenGLWriter::writeVideo(const Frame &videoFrame)
         m_drawable->m_colorSpace = m_drawable->videoFrame.colorSpace();
         m_drawable->doReset = true;
     }
-    m_drawable->updateGL(m_drawable->sphericalView);
+    m_drawable->updateGL(m_drawable->isSphericalView());
 }
 void OpenGLWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
 {

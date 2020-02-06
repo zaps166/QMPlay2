@@ -32,10 +32,10 @@ OpenGLWindow::OpenGLWindow() :
     setFlags(Qt::WindowTransparentForInput);
 #endif
 
-    container = QWidget::createWindowContainer(this);
-    container->setAttribute(Qt::WA_NativeWindow);
-    container->installEventFilter(this);
-    container->setAcceptDrops(false);
+    m_widget = QWidget::createWindowContainer(this);
+    m_widget->setAttribute(Qt::WA_NativeWindow);
+    m_widget->installEventFilter(this);
+    m_widget->setAcceptDrops(false);
 
     connect(&QMPlay2Core, SIGNAL(videoDockVisible(bool)), this, SLOT(videoVisible(bool)));
 }
@@ -46,12 +46,7 @@ OpenGLWindow::~OpenGLWindow()
 
 void OpenGLWindow::deleteMe()
 {
-    delete container;
-}
-
-QWidget *OpenGLWindow::widget()
-{
-    return container;
+    delete m_widget;
 }
 
 bool OpenGLWindow::makeContextCurrent()
@@ -125,13 +120,13 @@ void OpenGLWindow::aboutToBeDestroyed()
 }
 void OpenGLWindow::videoVisible(bool v)
 {
-    visible = v && (container->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
+    visible = v && (m_widget->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
 }
 
 bool OpenGLWindow::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == container)
-        dispatchEvent(e, container->parent());
+    if (o == m_widget)
+        dispatchEvent(e, m_widget->parent());
     return false;
 }
 

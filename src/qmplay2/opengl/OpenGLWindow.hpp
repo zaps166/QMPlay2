@@ -21,7 +21,6 @@
 #include "OpenGLCommon.hpp"
 
 #include <QOpenGLWindow>
-#include <QWidget>
 
 #if defined Q_OS_MACOS || defined Q_OS_WIN //QTBUG-50505
     #define PASS_EVENTS_TO_PARENT
@@ -35,8 +34,6 @@ public:
     ~OpenGLWindow();
 
     void deleteMe() override;
-
-    QWidget *widget() override;
 
     bool makeContextCurrent() override;
     void doneContextCurrent() override;
@@ -58,6 +55,5 @@ private:
     bool event(QEvent *e) override;
 #endif
 
-    QWidget *container;
     bool visible;
 };

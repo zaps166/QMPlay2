@@ -22,16 +22,12 @@
 
 OpenGLWidget::OpenGLWidget()
 {
+    m_widget = this;
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 OpenGLWidget::~OpenGLWidget()
 {
     makeCurrent();
-}
-
-QWidget *OpenGLWidget::widget()
-{
-    return this;
 }
 
 bool OpenGLWidget::makeContextCurrent()

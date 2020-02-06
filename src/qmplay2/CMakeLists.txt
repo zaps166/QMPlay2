@@ -50,6 +50,7 @@ set(QMPLAY2_HDR
     CppUtils.hpp
     Sphere.hpp
     X11BypassCompositor.hpp
+    VideoOutputCommon.hpp
     HWDecContext.hpp
     GPUInstance.hpp
 )
@@ -94,6 +95,7 @@ set(QMPLAY2_SRC
     MkvMuxer.cpp
     Sphere.cpp
     X11BypassCompositor.cpp
+    VideoOutputCommon.cpp
     GPUInstance.cpp
 )
 
