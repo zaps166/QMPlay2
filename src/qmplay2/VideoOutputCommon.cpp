@@ -82,7 +82,7 @@ void VideoOutputCommon::updateSizes(const QSizeF &size, bool transpose)
         subsScaledPos.height(),
         subsScaledSize.width(),
         subsScaledSize.height()
-                );
+    );
 }
 void VideoOutputCommon::updateMatrix()
 {
