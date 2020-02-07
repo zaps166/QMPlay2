@@ -26,7 +26,7 @@ quint32 Sphere::getSizes(quint32 slices, quint32 stacks, quint32 &verticesSize, 
 {
     verticesSize  = slices * stacks * 3 * sizeof(float);
     texcoordsSize = slices * stacks * 2 * sizeof(float);
-    indicesSize   = slices * stacks * 2 * sizeof(quint16);
+    indicesSize   = slices * (stacks - 1) * 2 * sizeof(quint16);
     return indicesSize / sizeof(quint16);
 }
 void Sphere::generate(float radius, quint32 slices, quint32 stacks, float *vertices, float *texcoords, quint16 *indices)
@@ -51,8 +51,11 @@ void Sphere::generate(float radius, quint32 slices, quint32 stacks, float *verti
             *(texcoords++) = slice * iSlices;
             *(texcoords++) = (stacks - stack - 1) * iStacks;
 
-            *(indices++) = (stack + 0) * slices + slice;
-            *(indices++) = (stack + 1) * slices + slice;
+            if (stack < stacks - 1)
+            {
+                *(indices++) = (stack + 0) * slices + slice;
+                *(indices++) = (stack + 1) * slices + slice;
+            }
         }
     }
 }
