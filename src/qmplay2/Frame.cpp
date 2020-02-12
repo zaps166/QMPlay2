@@ -374,9 +374,13 @@ quint8 *Frame::data(int plane)
     return m_frame->data[plane];
 }
 
-bool Frame::setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref)
+bool Frame::setVideoData(
+    AVBufferRef *buffer[],
+    const int *linesize,
+    uint8_t *data[],
+    bool ref)
 {
-    if (isHW())
+    if (isHW() || (ref && data))
         return false;
 
     for (int i = 0; i < AV_NUM_DATA_POINTERS; ++i)
@@ -390,7 +394,7 @@ bool Frame::setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref)
     {
         m_frame->linesize[i] = linesize[i];
         m_frame->buf[i] = ref ? av_buffer_ref(buffer[i]) : buffer[i];
-        m_frame->data[i] = m_frame->buf[i]->data;
+        m_frame->data[i] = data ? data[i] : m_frame->buf[i]->data;
     }
     m_frame->extended_data = m_frame->data;
 

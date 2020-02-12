@@ -122,7 +122,12 @@ public: // Video
     const quint8 *constData(int plane = 0) const;
     quint8 *data(int plane = 0);
 
-    bool setVideoData(AVBufferRef *buffer[], const int *linesize, bool ref);
+    bool setVideoData(
+        AVBufferRef *buffer[],
+        const int *linesize,
+        uint8_t *data[] = nullptr,
+        bool ref = false
+    );
 
     void setOnDestroyFn(const OnDestroyFn &onDestroyFn);
 

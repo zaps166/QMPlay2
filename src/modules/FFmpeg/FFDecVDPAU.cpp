@@ -126,7 +126,7 @@ void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
     };
 
     decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-    decoded.setVideoData(buffer, linesize, false);
+    decoded.setVideoData(buffer, linesize);
 
     if (!m_vdpau->getYV12(decoded, (quintptr)frame->data[3]))
         decoded.clear();
