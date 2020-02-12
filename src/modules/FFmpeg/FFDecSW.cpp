@@ -260,7 +260,19 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                     decoded = Frame::createEmpty(frame, true, desiredPixFmt);
                     if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
                     {
-                        sws_ctx = sws_getCachedContext(sws_ctx, frame->width, frame->height, codec_ctx->pix_fmt, frame->width, frame->height, (AVPixelFormat)desiredPixFmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
+                        sws_ctx = sws_getCachedContext(
+                            sws_ctx,
+                            frame->width,
+                            frame->height,
+                            codec_ctx->pix_fmt,
+                            frame->width,
+                            frame->height,
+                            static_cast<AVPixelFormat>(desiredPixFmt),
+                            SWS_BILINEAR,
+                            nullptr,
+                            nullptr,
+                            nullptr
+                        );
                         lastFrameW = frame->width;
                         lastFrameH = frame->height;
                     }
@@ -269,7 +281,15 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                         decoded.data(1),
                         decoded.data(2),
                     };
-                    sws_scale(sws_ctx, frame->data, frame->linesize, 0, frame->height, decodedData, decoded.linesize());
+                    sws_scale(
+                        sws_ctx,
+                        frame->data,
+                        frame->linesize,
+                        0,
+                        frame->height,
+                        decodedData,
+                        decoded.linesize()
+                    );
                 }
             }
         }
