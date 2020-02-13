@@ -42,8 +42,6 @@ public:
 public:
     virtual ~HWOpenGLInterop() = default;
 
-    virtual QString name() const = 0;
-
     virtual Format getFormat() const = 0;
     virtual bool isTextureRectangle() const
     {

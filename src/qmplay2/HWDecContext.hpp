@@ -18,6 +18,7 @@
 
 #pragma once
 
+class QString;
 class QImage;
 class Frame;
 
@@ -25,6 +26,8 @@ class HWDecContext
 {
 public:
     virtual ~HWDecContext() = default;
+
+    virtual QString name() const = 0;
 
     virtual bool hasError() const = 0;
 
