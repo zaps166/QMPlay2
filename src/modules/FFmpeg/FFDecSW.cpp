@@ -417,7 +417,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
     for (auto i = m_subtitles.size(); i > 0; --i)
     {
         const auto &subtitle = m_subtitles[i - 1];
-        if (subtitle.pts > pos)
+        if (subtitle.time > pos)
             continue;
 
         if (subtitle.num_rects > 0)
@@ -434,7 +434,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
                 osd = new QMPlay2OSD;
             }
             osd->setDuration(subtitle.duration());
-            osd->setPTS(subtitle.pts);
+            osd->setPTS(subtitle.time);
             for (uint32_t i = 0; i < subtitle.num_rects; ++i)
             {
                 const auto avRect = subtitle.rects[i];
