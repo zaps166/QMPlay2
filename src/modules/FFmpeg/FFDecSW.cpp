@@ -31,6 +31,30 @@ extern "C"
     #include <libavutil/pixdesc.h>
 }
 
+Subtitle::Subtitle()
+{
+    memset(av(), 0, sizeof(AVSubtitle));
+}
+Subtitle::~Subtitle()
+{
+    avsubtitle_free(av());
+}
+
+inline AVSubtitle *Subtitle::av()
+{
+    return static_cast<AVSubtitle *>(this);
+}
+
+double Subtitle::duration() const
+{
+    return (end_display_time != static_cast<uint32_t>(-1))
+        ? (end_display_time - start_display_time) / 1000.0
+        : -1.0
+    ;
+}
+
+/**/
+
 FFDecSW::FFDecSW(Module &module) :
     threads(0), lowres(0),
     thread_type_slice(false),
@@ -316,50 +340,19 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
 
     decodeFirstStep(encodedPacket, false);
 
+    m_subtitles.emplace_back();
+    auto &subtitle = m_subtitles.back();
+
     int gotSubtitles = 0;
-    AVSubtitle avSubtitle;
-    if (avcodec_decode_subtitle2(codec_ctx, &avSubtitle, &gotSubtitles, packet) >= 0 && gotSubtitles && avSubtitle.format == 0)
+    if (avcodec_decode_subtitle2(codec_ctx, subtitle.av(), &gotSubtitles, packet) >= 0 && gotSubtitles && subtitle.format == 0)
     {
-        m_subtitles.emplace_back();
-        auto &subtitle = *m_subtitles.rbegin();
-
-        subtitle.pts = avSubtitle.start_display_time + encodedPacket.ts();
-        subtitle.duration = (avSubtitle.end_display_time != static_cast<uint32_t>(-1))
-            ? (avSubtitle.end_display_time - avSubtitle.start_display_time) / 1000.0
-            : -1.0;
-
-        for (unsigned i = 0; i < avSubtitle.num_rects; ++i)
-        {
-            const AVSubtitleRect *avRect = avSubtitle.rects[i];
-
-            subtitle.rects.emplace_back();
-            auto &rect = *subtitle.rects.rbegin();
-
-            rect.w = qBound(0, avRect->w, size.width());
-            rect.h = qBound(0, avRect->h, size.height());
-            rect.x = qBound(0, avRect->x, size.width()  - rect.w);
-            rect.y = qBound(0, avRect->y, size.height() - rect.h);
-
-            rect.data.resize(rect.w * rect.h * sizeof(uint32_t));
-
-            const auto source   = (uint8_t  *)avRect->data[0];
-            const auto palette  = (uint32_t *)avRect->data[1];
-            const auto linesize = avRect->linesize[0];
-            auto dest = (uint32_t *)rect.data.data();
-            const int w = rect.w, h = rect.h;
-
-            for (int y = 0; y < h; ++y)
-            {
-                for (int x = 0; x < w; ++x)
-                {
-                    const uint32_t color = palette[source[y * linesize + x]];
-                    *(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
-                }
-            }
-        }
+        subtitle.time = subtitle.start_display_time / 1000.0 + encodedPacket.ts();
+        subtitle.frameSize = size;
     }
-    if (gotSubtitles)
-        avsubtitle_free(&avSubtitle);
+    else
+    {
+        m_subtitles.pop_back();
+    }
 
     return getFromBitmapSubsBuffer(osd, pos);
 }
@@ -427,7 +420,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
         if (subtitle.pts > pos)
             continue;
 
-        if (!subtitle.rects.empty())
+        if (subtitle.num_rects > 0)
         {
             bool mustUnlock = false;
             if (osd)
@@ -440,10 +433,42 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
             {
                 osd = new QMPlay2OSD;
             }
-            osd->setDuration(subtitle.duration);
+            osd->setDuration(subtitle.duration());
             osd->setPTS(subtitle.pts);
-            for (auto &&rect : subtitle.rects)
-                osd->addImage(QRect(rect.x, rect.y, rect.w, rect.h), rect.data);
+            for (uint32_t i = 0; i < subtitle.num_rects; ++i)
+            {
+                const auto avRect = subtitle.rects[i];
+                const auto &frameSize = subtitle.frameSize;
+
+                const QSize size(
+                    qBound(0, avRect->w, frameSize.width()),
+                    qBound(0, avRect->h, frameSize.height())
+                );
+                const QPoint point(
+                    qBound(0, avRect->x, frameSize.width()  - size.width()),
+                    qBound(0, avRect->y, frameSize.height() - size.height())
+                );
+
+                QByteArray data(size.width() * size.height() * sizeof(uint32_t), Qt::Uninitialized);
+
+                const auto source   = (uint8_t  *)avRect->data[0];
+                const auto palette  = (uint32_t *)avRect->data[1];
+                const auto linesize = avRect->linesize[0];
+                auto dest = (uint32_t *)data.data();
+                const int w = size.width();
+                const int h = size.height();
+
+                for (int y = 0; y < h; ++y)
+                {
+                    for (int x = 0; x < w; ++x)
+                    {
+                        const uint32_t color = palette[source[y * linesize + x]];
+                        *(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
+                    }
+                }
+
+                osd->addImage(QRect(point, size), data);
+            }
             osd->setNeedsRescale();
             osd->genId();
             if (mustUnlock)

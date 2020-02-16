@@ -20,8 +20,24 @@
 
 #include <FFDec.hpp>
 
-#include <vector>
 #include <deque>
+
+class Subtitle : public AVSubtitle
+{
+public:
+    Subtitle();
+    ~Subtitle();
+
+    inline AVSubtitle *av();
+
+    double duration() const;
+
+public:
+    double time = 0.0;
+    QSize frameSize;
+};
+
+/**/
 
 struct SwsContext;
 
@@ -29,19 +45,6 @@ class FFDecSW final : public FFDec
 {
 public:
     FFDecSW(Module &);
-
-private:
-    struct Subtitle
-    {
-        struct Rect
-        {
-            int x, y, w, h;
-            QByteArray data;
-        };
-
-        double pts, duration;
-        std::vector<Rect> rects;
-    };
 
 private:
     ~FFDecSW();
