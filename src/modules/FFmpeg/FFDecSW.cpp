@@ -31,6 +31,8 @@ extern "C"
     #include <libavutil/pixdesc.h>
 }
 
+using namespace std;
+
 Subtitle::Subtitle()
 {
     memset(av(), 0, sizeof(AVSubtitle));
@@ -422,12 +424,11 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 
         if (subtitle.num_rects > 0)
         {
-            bool mustUnlock = false;
+            unique_lock<mutex> locker;
             if (osd)
             {
-                osd->lock();
+                locker = osd->lock();
                 osd->clear();
-                mustUnlock = true;
             }
             else
             {
@@ -471,8 +472,6 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
             }
             osd->setNeedsRescale();
             osd->genId();
-            if (mustUnlock)
-                osd->unlock();
         }
         else
         {

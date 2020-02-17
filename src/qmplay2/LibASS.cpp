@@ -26,11 +26,13 @@
 
 #include <QColor>
 
-extern "C"
-{
-    #include <ass/ass.h>
+extern "C" {
+#include <ass/ass.h>
 }
+
 #include <cstring>
+
+using namespace std;
 
 static void addImgs(ASS_Image *img, QMPlay2OSD *osd)
 {
@@ -205,21 +207,21 @@ bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
     osd_event->Text = nullptr;
     if (!img)
         return false;
-    bool old_osd = osd;
-    if (!old_osd)
+    unique_lock<mutex> locker;
+    if (!osd)
+    {
         osd = new QMPlay2OSD;
+    }
     else
     {
-        osd->lock();
+        locker = osd->lock();
         if (ch)
             osd->clear();
     }
     osd->setText(txt);
     osd->setDuration(duration);
-    if (ch || !old_osd)
+    if (ch || !locker.owns_lock())
         addImgs(img, osd);
-    if (old_osd)
-        osd->unlock();
     osd->start();
     return true;
 }
@@ -451,20 +453,22 @@ bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
 
     if (!img)
         return false;
-    bool old_osd = osd;
-    if (!old_osd)
+
+    unique_lock<mutex> locker;
+
+    if (!osd)
+    {
         osd = new QMPlay2OSD;
+    }
     else
     {
-        osd->lock();
+        locker = osd->lock();
         if (ch)
-            osd->clear(false);
+            osd->clear();
     }
     osd->setPTS(pos);
-    if (ch || !old_osd)
+    if (ch || !locker.owns_lock())
         addImgs(img, osd);
-    if (old_osd)
-        osd->unlock();
     return true;
 }
 void LibASS::closeASS()

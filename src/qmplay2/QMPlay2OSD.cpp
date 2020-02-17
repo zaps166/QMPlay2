@@ -18,22 +18,27 @@
 
 #include <QMPlay2OSD.hpp>
 
-#include <QAtomicInteger>
-static QAtomicInteger<quint64> g_id;
+#include <atomic>
 
-void QMPlay2OSD::genId()
+using namespace std;
+
+static atomic_uint64_t g_id;
+
+QMPlay2OSD::QMPlay2OSD()
 {
-    m_id = ++g_id;
+    clear();
+}
+QMPlay2OSD::~QMPlay2OSD()
+{
+    clear();
 }
 
-void QMPlay2OSD::clear(bool all)
+double QMPlay2OSD::leftDuration()
 {
-    m_images.clear();
-    m_text.clear();
-    if (all)
-        m_pts = m_duration = -1.0;
-    m_needsRescale = m_started = false;
-    m_id = 0;
+    if (!m_started || m_pts != -1.0)
+        return 0.0;
+
+    return m_duration - m_timer.elapsed() / 1000.0;
 }
 
 void QMPlay2OSD::start()
@@ -42,9 +47,18 @@ void QMPlay2OSD::start()
     if (m_pts == -1.0)
         m_timer.start();
 }
-double QMPlay2OSD::leftDuration()
+
+void QMPlay2OSD::genId()
 {
-    if (!m_started || m_pts != -1.0)
-        return 0.0;
-    return m_duration - m_timer.elapsed() / 1000.0;
+    m_id = ++g_id;
+}
+
+void QMPlay2OSD::clear()
+{
+    m_images.clear();
+    m_text.clear();
+    m_duration = m_pts = -1.0;
+    m_needsRescale = m_started = false;
+    m_timer.invalidate();
+    m_id = 0;
 }
