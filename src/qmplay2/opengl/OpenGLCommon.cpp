@@ -347,8 +347,6 @@ void OpenGLCommon::paintGL()
     if (frameIsEmpty && !hasImage)
         return;
 
-    const QSize winSize = m_widget->size();
-
     bool resetDone = false;
 
     if (!frameIsEmpty)
@@ -572,12 +570,10 @@ void OpenGLCommon::paintGL()
     osdMutex.lock();
     if (!osdList.isEmpty())
     {
-        const qreal dpr = m_widget->devicePixelRatioF();
-
         glBindTexture(GL_TEXTURE_2D, textures[0]);
 
         QRect bounds;
-        const qreal scaleW = m_subsRect.width() * dpr / outW, scaleH = m_subsRect.height() * dpr / outH;
+        const qreal scaleW = m_subsRect.width() / outW, scaleH = m_subsRect.height() / outH;
         bool mustRepaint = Functions::mustRepaintOSD(osdList, osd_ids, &scaleW, &scaleH, &bounds);
         bool hasNewSize = false;
         if (!mustRepaint)
@@ -620,11 +616,11 @@ void OpenGLCommon::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
         }
 
-        const QSizeF winSizeSubs = winSize * dpr;
-        const float left   = (bounds.left() + m_subsRect.x() * dpr) * 2.0f / winSizeSubs.width() - m_osdOffset.x();
-        const float right  = (bounds.right() + m_subsRect.x() * dpr + 1.0f) * 2.0f / winSizeSubs.width() - m_osdOffset.x();
-        const float top    = (bounds.top() + m_subsRect.y() * dpr) * 2.0f / winSizeSubs.height() - m_osdOffset.y();
-        const float bottom = (bounds.bottom() + m_subsRect.y() * dpr + 1.0f) * 2.0f / winSizeSubs.height() - m_osdOffset.y();
+        const auto realWinSize = m_widget->devicePixelRatioF() * m_widget->size();
+        const float left   = (bounds.left() + m_subsRect.x()) * 2.0f / realWinSize.width() - m_osdOffset.x();
+        const float right  = (bounds.right() + m_subsRect.x() + 1.0f) * 2.0f / realWinSize.width() - m_osdOffset.x();
+        const float top    = (bounds.top() + m_subsRect.y()) * 2.0f / realWinSize.height() - m_osdOffset.y();
+        const float bottom = (bounds.bottom() + m_subsRect.y() + 1.0f) * 2.0f / realWinSize.height() - m_osdOffset.y();
         const float verticesOSD[8] = {
             left  - 1.0f, -bottom + 1.0f,
             right - 1.0f, -bottom + 1.0f,

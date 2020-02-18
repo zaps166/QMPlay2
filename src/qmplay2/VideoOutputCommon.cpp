@@ -70,7 +70,7 @@ void VideoOutputCommon::setSphericalView(bool sphericalView)
 
 void VideoOutputCommon::updateSizes(bool transpose)
 {
-    const auto size = m_widget->size();
+    const auto size = m_widget->devicePixelRatioF() * m_widget->size();
 
     m_scaledSize = m_zoom * (transpose
         ? QSizeF(1.0, m_aRatio).scaled(size, Qt::KeepAspectRatio)
@@ -88,16 +88,17 @@ void VideoOutputCommon::updateSizes(bool transpose)
 }
 void VideoOutputCommon::updateMatrix()
 {
+    const auto widgetSize = m_widget->devicePixelRatioF() * m_widget->size();
     m_matrix.setToIdentity();
     if (!m_sphericalView)
     {
-        m_matrix.scale(m_scaledSize.width() / m_widget->width(), m_scaledSize.height() / m_widget->height());
+        m_matrix.scale(m_scaledSize.width() / widgetSize.width(), m_scaledSize.height() / widgetSize.height());
         if (!m_videoOffset.isNull())
             m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y());
     }
     else
     {
-        m_matrix.perspective(68.0, static_cast<float>(m_widget->width()) / static_cast<float>(m_widget->height()), 0.001f, 2.0f);
+        m_matrix.perspective(68.0, static_cast<float>(widgetSize.width()) / static_cast<float>(widgetSize.height()), 0.001f, 2.0f);
         m_matrix.translate(0.0f, 0.0f, qBound<float>(-1.0f, (m_zoom > 1.0f) ? log10(m_zoom) : m_zoom - 1.0f, 0.99f));
         m_matrix.rotate(m_rot.x(), 1.0f, 0.0f, 0.0f);
         m_matrix.rotate(m_rot.y(), 0.0f, 0.0f, 1.0f);
@@ -163,9 +164,10 @@ void VideoOutputCommon::mouseMove(QMouseEvent *e)
 
         if (m_moveVideo)
         {
+            const auto dpr = m_widget->devicePixelRatioF();
             m_videoOffset += QPointF(
-                mouseDiff.x() * 2.0 / m_scaledSize.width(),
-                mouseDiff.y() * 2.0 / m_scaledSize.height()
+                mouseDiff.x() * dpr * 2.0 / m_scaledSize.width(),
+                mouseDiff.y() * dpr * 2.0 / m_scaledSize.height()
             );
         }
         if (m_moveOSD)
