@@ -203,10 +203,9 @@ void OpenGLCommon::setWindowsBypassCompositor(bool bypassCompositor)
 }
 #endif
 
-void OpenGLCommon::newSize(const QSize &size)
+void OpenGLCommon::newSize(bool canUpdate)
 {
-    const bool canUpdate = !size.isValid();
-    updateSizes(canUpdate ? m_widget->size() : size, isRotate90());
+    updateSizes(isRotate90());
     doReset = true;
     if (canUpdate)
     {
@@ -666,7 +665,7 @@ void OpenGLCommon::contextAboutToBeDestroyed()
 void OpenGLCommon::dispatchEvent(QEvent *e, QObject *p)
 {
     if (e->type() == QEvent::Resize)
-        newSize(((QResizeEvent *)e)->size());
+        newSize(false);
     VideoOutputCommon::dispatchEvent(e, p);
 }
 

@@ -83,7 +83,7 @@ public:
     void setWindowsBypassCompositor(bool bypassCompositor);
 #endif
 
-    void newSize(const QSize &size = QSize());
+    void newSize(bool canUpdate);
     void clearImg();
 
     void setSphericalView(bool spherical) override;

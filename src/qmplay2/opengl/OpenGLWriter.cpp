@@ -153,7 +153,7 @@ bool OpenGLWriter::processParams(bool *)
     }
 
     if (doResizeEvent)
-        m_drawable->newSize();
+        m_drawable->newSize(true);
     else
         m_drawable->doReset = true;
 

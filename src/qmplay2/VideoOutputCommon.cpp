@@ -68,8 +68,10 @@ void VideoOutputCommon::setSphericalView(bool sphericalView)
     }
 }
 
-void VideoOutputCommon::updateSizes(const QSizeF &size, bool transpose)
+void VideoOutputCommon::updateSizes(bool transpose)
 {
+    const auto size = m_widget->size();
+
     m_scaledSize = m_zoom * (transpose
         ? QSizeF(1.0, m_aRatio).scaled(size, Qt::KeepAspectRatio)
         : QSizeF(m_aRatio, 1.0).scaled(size, Qt::KeepAspectRatio)

@@ -42,7 +42,7 @@ public:
     virtual void setSphericalView(bool sphericalView);
 
 protected:
-    void updateSizes(const QSizeF &size, bool transpose);
+    void updateSizes(bool transpose);
     void updateMatrix();
 
 protected:
