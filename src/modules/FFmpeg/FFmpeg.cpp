@@ -94,27 +94,34 @@ FFmpeg::FFmpeg() :
     init("LowresValue", 0);
     init("ThreadTypeSlice", false);
 
-    const QVariant self = QVariant::fromValue((void *)this);
+#if defined(USE_OPENGL)
 
-#ifdef QMPlay2_VDPAU
-    vdpauDeintMethodB = new QComboBox;
-    vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
-    vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
-    if (vdpauDeintMethodB->currentIndex() < 0)
-        vdpauDeintMethodB->setCurrentIndex(1);
-    vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
-    vdpauDeintMethodB->setProperty("module", self);
-    QMPlay2Core.addVideoDeintMethod(vdpauDeintMethodB);
-#endif
-#if defined(QMPlay2_VAAPI)
-    vaapiDeintMethodB = new QComboBox;
-    vaapiDeintMethodB->addItems({tr("None"), "Motion adaptive", "Motion compensated"});
-    vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
-    if (vaapiDeintMethodB->currentIndex() < 0)
-        vaapiDeintMethodB->setCurrentIndex(1);
-    vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API): "));
-    vaapiDeintMethodB->setProperty("module", self);
-    QMPlay2Core.addVideoDeintMethod(vaapiDeintMethodB);
+#   if defined(QMPlay2_VDPAU) || defined(QMPlay2_VAAPI)
+    const QVariant self = QVariant::fromValue((void *)this);
+#   endif
+
+#   if defined(QMPlay2_VDPAU)
+    m_vdpauDeintMethodB = new QComboBox;
+    m_vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
+    m_vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
+    if (m_vdpauDeintMethodB->currentIndex() < 0)
+        m_vdpauDeintMethodB->setCurrentIndex(1);
+    m_vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
+    m_vdpauDeintMethodB->setProperty("module", self);
+    QMPlay2Core.addVideoDeintMethod(m_vdpauDeintMethodB);
+#   endif
+
+#   if defined(QMPlay2_VAAPI)
+    m_vaapiDeintMethodB = new QComboBox;
+    m_vaapiDeintMethodB->addItems({tr("None"), "Motion adaptive", "Motion compensated"});
+    m_vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
+    if (m_vaapiDeintMethodB->currentIndex() < 0)
+        m_vaapiDeintMethodB->setCurrentIndex(1);
+    m_vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API): "));
+    m_vaapiDeintMethodB->setProperty("module", self);
+    QMPlay2Core.addVideoDeintMethod(m_vaapiDeintMethodB);
+#   endif
+
 #endif
 
 #ifdef QMPlay2_libavdevice
@@ -129,10 +136,10 @@ FFmpeg::FFmpeg() :
 FFmpeg::~FFmpeg()
 {
 #ifdef QMPlay2_VDPAU
-    delete vdpauDeintMethodB;
+    delete m_vdpauDeintMethodB;
 #endif
-#if defined(QMPlay2_VAAPI)
-    delete vaapiDeintMethodB;
+#ifdef QMPlay2_VAAPI
+    delete m_vaapiDeintMethodB;
 #endif
 }
 
@@ -207,12 +214,18 @@ FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 void FFmpeg::videoDeintSave()
 {
 #ifdef QMPlay2_VDPAU
-    set("VDPAUDeintMethod", vdpauDeintMethodB->currentIndex());
-    setInstance<FFDecVDPAU>();
+    if (m_vdpauDeintMethodB)
+    {
+        set("VDPAUDeintMethod", m_vdpauDeintMethodB->currentIndex());
+        setInstance<FFDecVDPAU>();
+    }
 #endif
 #if defined(QMPlay2_VAAPI)
-    set("VAAPIDeintMethod", vaapiDeintMethodB->currentIndex());
-    setInstance<FFDecVAAPI>();
+    if (m_vaapiDeintMethodB)
+    {
+        set("VAAPIDeintMethod", m_vaapiDeintMethodB->currentIndex());
+        setInstance<FFDecVAAPI>();
+    }
 #endif
 }
 

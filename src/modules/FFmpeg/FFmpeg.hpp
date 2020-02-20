@@ -43,11 +43,11 @@ private:
     QIcon demuxIcon;
 #ifdef QMPlay2_VDPAU
     QIcon vdpauIcon;
-    QComboBox *vdpauDeintMethodB;
+    QComboBox *m_vdpauDeintMethodB = nullptr;
 #endif
 #ifdef QMPlay2_VAAPI
     QIcon vaapiIcon;
-    QComboBox *vaapiDeintMethodB;
+    QComboBox *m_vaapiDeintMethodB = nullptr;
 #endif
 #ifdef QMPlay2_DXVA2
     QIcon dxva2Icon;
