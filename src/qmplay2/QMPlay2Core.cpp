@@ -276,6 +276,11 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #endif
     avformat_network_init();
 
+#ifdef USE_OPENGL
+    settings->init("Renderer", "opengl");
+#endif
+    m_gpuInstance = GPUInstance::create();
+
     if (loadModules)
     {
         QFileInfoList pluginsList;
@@ -367,11 +372,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     connect(this, SIGNAL(restoreCursor()), this, SLOT(restoreCursorSlot()));
     connect(this, SIGNAL(waitCursor()), this, SLOT(waitCursorSlot()));
     connect(this, SIGNAL(busyCursor()), this, SLOT(busyCursorSlot()));
-
-#ifdef USE_OPENGL
-    settings->init("Renderer", "opengl");
-#endif
-    m_gpuInstance = GPUInstance::create();
 }
 void QMPlay2CoreClass::quit()
 {
