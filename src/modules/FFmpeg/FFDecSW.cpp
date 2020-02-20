@@ -277,7 +277,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
             }
             if (desiredPixFmt != AV_PIX_FMT_NONE)
             {
-                if (dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
+                if (m_dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
                 {
                     decoded = Frame(frame);
                 }
@@ -393,8 +393,8 @@ void FFDecSW::setPixelFormat()
     const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
     if (!pixDesc) //Invalid pixel format
         return;
-    dontConvert = supportedPixelFormats.contains(codec_ctx->pix_fmt);
-    if (dontConvert)
+    m_dontConvert = supportedPixelFormats.contains(codec_ctx->pix_fmt);
+    if (m_dontConvert)
     {
         desiredPixFmt = codec_ctx->pix_fmt;
     }

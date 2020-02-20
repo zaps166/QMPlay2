@@ -75,7 +75,7 @@ private:
 
     AVPixelFormats supportedPixelFormats;
     AVPixelFormat desiredPixFmt = AV_PIX_FMT_NONE;
-    bool dontConvert;
+    bool m_dontConvert = false;
 
     std::deque<Subtitle> m_subtitles;
 };
