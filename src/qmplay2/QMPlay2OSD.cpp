@@ -22,7 +22,7 @@
 
 using namespace std;
 
-static atomic_uint64_t g_id;
+static atomic<uint64_t> g_id;
 
 QMPlay2OSD::QMPlay2OSD()
 {
