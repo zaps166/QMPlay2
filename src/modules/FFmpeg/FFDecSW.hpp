@@ -74,7 +74,8 @@ private:
     SwsContext *sws_ctx;
 
     AVPixelFormats supportedPixelFormats;
-    AVPixelFormat desiredPixFmt = AV_PIX_FMT_NONE;
+    const AVPixFmtDescriptor *m_origPixDesc = nullptr;
+    AVPixelFormat m_desiredPixFmt = AV_PIX_FMT_NONE;
     bool m_dontConvert = false;
 
     std::deque<Subtitle> m_subtitles;

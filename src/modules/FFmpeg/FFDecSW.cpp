@@ -275,7 +275,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                 setPixelFormat();
                 newFormat = true;
             }
-            if (desiredPixFmt != AV_PIX_FMT_NONE)
+            if (m_desiredPixFmt != AV_PIX_FMT_NONE)
             {
                 if (m_dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
                 {
@@ -283,7 +283,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                 }
                 else
                 {
-                    decoded = Frame::createEmpty(frame, true, desiredPixFmt);
+                    decoded = Frame::createEmpty(frame, true, m_desiredPixFmt);
                     if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
                     {
                         sws_ctx = sws_getCachedContext(
@@ -293,7 +293,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                             codec_ctx->pix_fmt,
                             frame->width,
                             frame->height,
-                            static_cast<AVPixelFormat>(desiredPixFmt),
+                            static_cast<AVPixelFormat>(m_desiredPixFmt),
                             SWS_BILINEAR,
                             nullptr,
                             nullptr,
@@ -390,26 +390,85 @@ bool FFDecSW::open(StreamInfo &streamInfo)
 
 void FFDecSW::setPixelFormat()
 {
-    const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
-    if (!pixDesc) //Invalid pixel format
+    m_origPixDesc = av_pix_fmt_desc_get(codec_ctx->pix_fmt);
+    if (Q_UNLIKELY(!m_origPixDesc)) // Invalid pixel format
+    {
+        m_dontConvert = false;
         return;
+    }
+
     m_dontConvert = supportedPixelFormats.contains(codec_ctx->pix_fmt);
     if (m_dontConvert)
     {
-        desiredPixFmt = codec_ctx->pix_fmt;
+        m_desiredPixFmt = codec_ctx->pix_fmt;
+        return;
     }
-    else for (int i = 0; i < supportedPixelFormats.count(); ++i)
+
+    enum ScoreFmtTypes {
+        FlagsMatch,
+        RGBMatch,
+        PlannarMatch,
+        Other,
+        OtherGray,
+        ScoreFmtTypesCount,
+    };
+
+    vector<pair<int, AVPixelFormat>> scoreFmts[ScoreFmtTypesCount];
+
+    auto srcPixDesc = (codec_ctx->pix_fmt == AV_PIX_FMT_PAL8)
+        ? av_pix_fmt_desc_get(AV_PIX_FMT_RGB32)
+        : m_origPixDesc
+    ;
+
+    for (const AVPixelFormat pixFmt : asConst(supportedPixelFormats))
     {
-        const AVPixelFormat pixFmt = supportedPixelFormats.at(i);
-        const AVPixFmtDescriptor *supportedPixDesc = av_pix_fmt_desc_get(pixFmt);
-        if (i == 0 || (supportedPixDesc->log2_chroma_w == pixDesc->log2_chroma_w && supportedPixDesc->log2_chroma_h == pixDesc->log2_chroma_h))
-        {
-            //Use first format as default (mostly AV_PIX_FMT_YUV420P) and look at next formats,
-            //otherwise break the loop if found proper format.
-            desiredPixFmt = pixFmt;
-            if (i != 0)
-                break;
-        }
+        auto pixDesc = av_pix_fmt_desc_get(pixFmt);
+        Q_ASSERT(pixDesc);
+
+        int score = 0;
+
+        if (srcPixDesc->nb_components == pixDesc->nb_components)
+            score += 3;
+        else if (srcPixDesc->nb_components < pixDesc->nb_components)
+            score += 2;
+        else if (srcPixDesc->nb_components == 4 && pixDesc->nb_components == 3)
+            score += 1;
+
+        if (srcPixDesc->log2_chroma_w == pixDesc->log2_chroma_w)
+            score += (srcPixDesc->nb_components > 1) ? 2 : -1;
+        if (srcPixDesc->log2_chroma_h == pixDesc->log2_chroma_h)
+            score += (srcPixDesc->nb_components > 1) ? 2 : -1;
+
+        if (srcPixDesc->comp[0].depth == pixDesc->comp[0].depth)
+            score += 3;
+        else if (srcPixDesc->comp[0].depth < pixDesc->comp[0].depth)
+            score += 2;
+
+        [&] {
+            if (srcPixDesc->nb_components > 1 && pixDesc->nb_components == 1 && !(srcPixDesc->nb_components == 2 && (srcPixDesc->flags & AV_PIX_FMT_FLAG_ALPHA)))
+                return &scoreFmts[OtherGray];
+
+            constexpr auto flagsMask = (AV_PIX_FMT_FLAG_PLANAR | AV_PIX_FMT_FLAG_RGB);
+            const auto flagsOrig = (srcPixDesc->flags & flagsMask);
+            const auto flags = (pixDesc->flags & flagsMask);
+            if (flagsOrig == flags)
+                return &scoreFmts[FlagsMatch];
+            else if ((flagsOrig & AV_PIX_FMT_FLAG_RGB) == (flags & AV_PIX_FMT_FLAG_RGB))
+                return &scoreFmts[RGBMatch];
+            else if ((flagsOrig & AV_PIX_FMT_FLAG_PLANAR) == (flags & AV_PIX_FMT_FLAG_PLANAR))
+                return &scoreFmts[PlannarMatch];
+            return &scoreFmts[Other];
+        }()->emplace_back(score, pixFmt);
+    }
+
+    for (auto &&scoreFmt : scoreFmts)
+    {
+        sort(scoreFmt.rbegin(), scoreFmt.rend());
+        if (scoreFmt.empty())
+            continue;
+        m_desiredPixFmt = scoreFmt[0].second;
+        qDebug() << "Fallback pixel format:" << av_pix_fmt_desc_get(m_desiredPixFmt)->name;
+        break;
     }
 }
 
