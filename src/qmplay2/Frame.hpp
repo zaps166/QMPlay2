@@ -96,7 +96,7 @@ public: // Video
 
     bool hasCustomData() const;
     quintptr customData() const;
-    bool setCustomData(quintptr customData);
+    void setCustomData(quintptr customData);
 
     AVPixelFormat pixelFormat() const;
 

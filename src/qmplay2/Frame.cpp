@@ -299,10 +299,9 @@ quintptr Frame::customData() const
 {
     return m_customData;
 }
-bool Frame::setCustomData(quintptr customData)
+void Frame::setCustomData(quintptr customData)
 {
     m_customData = customData;
-    return true;
 }
 
 AVPixelFormat Frame::pixelFormat() const
