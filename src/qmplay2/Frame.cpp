@@ -58,6 +58,30 @@ AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)
     }
     return AV_PIX_FMT_NONE;
 }
+AVPixelFormat Frame::convert2PlaneTo3Plane(AVPixelFormat fmt)
+{
+    switch (fmt)
+    {
+        case AV_PIX_FMT_NV12:
+            return AV_PIX_FMT_YUV420P;
+        case AV_PIX_FMT_P010:
+            return AV_PIX_FMT_YUV420P10;
+        case AV_PIX_FMT_P016:
+            return AV_PIX_FMT_YUV420P16;
+
+        case AV_PIX_FMT_NV16:
+            return AV_PIX_FMT_YUV422P;
+        case AV_PIX_FMT_NV20:
+            return AV_PIX_FMT_YUV422P10;
+
+        case AV_PIX_FMT_NV24:
+            return AV_PIX_FMT_YUV444P;
+
+        default:
+            break;
+    }
+    return AV_PIX_FMT_NONE;
+}
 
 Frame Frame::createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat)
 {
