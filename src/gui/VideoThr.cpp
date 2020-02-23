@@ -23,9 +23,6 @@
 #include <PlayClass.hpp>
 #include <Main.hpp>
 
-#ifdef USE_OPENGL
-#   include <opengl/OpenGLWriter.hpp>
-#endif
 #include <GPUInstance.hpp>
 #include <HWDecContext.hpp>
 #include <VideoWriter.hpp>
