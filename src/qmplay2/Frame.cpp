@@ -29,6 +29,8 @@ extern "C"
 
 #include <cmath>
 
+using namespace std;
+
 AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)
 {
     switch (fmt)
@@ -145,7 +147,7 @@ Frame::Frame(const Frame &other)
 Frame::Frame(Frame &&other)
     : Frame()
 {
-    *this = std::move(other);
+    *this = move(other);
 }
 Frame::~Frame()
 {
@@ -196,7 +198,7 @@ qint64 Frame::tsInt() const
 void Frame::setTS(double ts)
 {
     m_timeBase = {1, 10000};
-    m_frame->best_effort_timestamp = std::round(ts / av_q2d(m_timeBase));
+    m_frame->best_effort_timestamp = round(ts / av_q2d(m_timeBase));
 }
 void Frame::setTSInt(qint64 ts)
 {
@@ -405,7 +407,7 @@ void Frame::setOnDestroyFn(const Frame::OnDestroyFn &onDestroyFn)
 {
     if (onDestroyFn && !m_onDestroyFn)
     {
-        m_onDestroyFn = std::shared_ptr<OnDestroyFn>(new OnDestroyFn(onDestroyFn), [](OnDestroyFn *ptr) {
+        m_onDestroyFn = shared_ptr<OnDestroyFn>(new OnDestroyFn(onDestroyFn), [](OnDestroyFn *ptr) {
             if (*ptr)
                 (*ptr)();
             delete ptr;
@@ -470,7 +472,7 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_timeBase, other.m_timeBase);
 
     qSwap(m_customData, other.m_customData);
-    m_onDestroyFn = std::move(other.m_onDestroyFn);
+    m_onDestroyFn = move(other.m_onDestroyFn);
 
     qSwap(m_pixelFormat, other.m_pixelFormat);
     qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);
