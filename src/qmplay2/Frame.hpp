@@ -47,8 +47,16 @@ public:
     static AVPixelFormat convert2PlaneTo3Plane(AVPixelFormat fmt);
 
 public:
-    static Frame createEmpty(const Frame &other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
-    static Frame createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE);
+    static Frame createEmpty(
+        const Frame &other,
+        bool allocBuffers,
+        AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE
+    );
+    static Frame createEmpty(
+        const AVFrame *other,
+        bool allocBuffers,
+        AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE
+    );
     static Frame createEmpty(
         int width,
         int height,
