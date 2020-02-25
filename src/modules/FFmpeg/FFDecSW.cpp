@@ -420,6 +420,8 @@ void FFDecSW::setPixelFormat()
         : m_origPixDesc
     ;
 
+    const QByteArray srcPixFmtName = srcPixDesc->name;
+
     for (const AVPixelFormat pixFmt : asConst(supportedPixelFormats))
     {
         auto pixDesc = av_pix_fmt_desc_get(pixFmt);
@@ -463,11 +465,45 @@ void FFDecSW::setPixelFormat()
 
     for (auto &&scoreFmt : scoreFmts)
     {
-        sort(scoreFmt.rbegin(), scoreFmt.rend());
         if (scoreFmt.empty())
             continue;
+
+        sort(scoreFmt.rbegin(), scoreFmt.rend());
+
         m_desiredPixFmt = scoreFmt[0].second;
-        qDebug() << "Fallback pixel format:" << av_pix_fmt_desc_get(m_desiredPixFmt)->name;
+
+        QByteArray desiredPixFmtName = av_get_pix_fmt_name(m_desiredPixFmt);
+
+        if (scoreFmt.size() > 1 && srcPixFmtName.startsWith("yuv") && desiredPixFmtName.startsWith("yuv"))
+        {
+            auto isYUVJFromName = [](const QByteArray &name) {
+                return name.startsWith("yuvj");
+            };
+            auto yuvWithoutJ = [](const QByteArray &name) {
+                return QByteArray(name).replace("yuvj", "yuv");
+            };
+
+            const bool srcIsYUVj = isYUVJFromName(srcPixFmtName);
+            if (srcIsYUVj != isYUVJFromName(desiredPixFmtName))
+            {
+                for (size_t i = 1; i < scoreFmt.size(); ++i)
+                {
+                    if (scoreFmt[0].first != scoreFmt[i].first)
+                        break;
+
+                    const AVPixelFormat pixFmt = scoreFmt[i].second;
+                    const QByteArray pixFmtName = av_get_pix_fmt_name(pixFmt);
+                    if (srcIsYUVj == isYUVJFromName(pixFmtName) && yuvWithoutJ(desiredPixFmtName) == yuvWithoutJ(pixFmtName))
+                    {
+                        m_desiredPixFmt = pixFmt;
+                        desiredPixFmtName = pixFmtName;
+                        break;
+                    }
+                }
+            }
+        }
+
+        qDebug().nospace() << "Fallback pixel format:" << desiredPixFmtName;
         break;
     }
 }
