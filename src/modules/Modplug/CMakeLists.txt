@@ -58,6 +58,9 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
 if(USE_PCH)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         ${Modplug_HDR}
+        libmodplug/stdafx.hpp
+        libmodplug/libmodplug.hpp
+        libmodplug/sndfile.hpp
     )
 endif()
 

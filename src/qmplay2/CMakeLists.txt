@@ -110,18 +110,20 @@ if(USE_GIT_VERSION AND QMPLAY2_GIT_HEAD)
 endif()
 
 if(USE_OPENGL)
-    set(QMPLAY2_OPENGL
-        opengl/OpenGLInstance.cpp
+    set(QMPLAY2_OPENGL_HDR
         opengl/OpenGLInstance.hpp
-        opengl/OpenGLWriter.cpp
         opengl/OpenGLWriter.hpp
-        opengl/OpenGLCommon.cpp
         opengl/OpenGLCommon.hpp
-        opengl/OpenGLWindow.cpp
         opengl/OpenGLWindow.hpp
-        opengl/OpenGLWidget.cpp
         opengl/OpenGLWidget.hpp
         opengl/Vertices.hpp
+    )
+    set(QMPLAY2_OPENGL_SRC
+        opengl/OpenGLInstance.cpp
+        opengl/OpenGLWriter.cpp
+        opengl/OpenGLCommon.cpp
+        opengl/OpenGLWindow.cpp
+        opengl/OpenGLWidget.cpp
         opengl/opengl.qrc
     )
     if(APPLE)
@@ -178,13 +180,15 @@ add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
     ${QMPLAY2_SRC}
     ${QMPLAY2_RESOURCES}
-    ${QMPLAY2_OPENGL}
+    ${QMPLAY2_OPENGL_HDR}
+    ${QMPLAY2_OPENGL_SRC}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
 if(USE_PCH)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         ${QMPLAY2_HDR}
+        ${QMPLAY2_OPENGL_HDR}
     )
 endif()
 
