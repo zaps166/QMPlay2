@@ -46,6 +46,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.16.0)
+    option(USE_PCH "Use precompiled headers" OFF)
+    add_feature_info(PCH USE_PCH "Use precompiled headers")
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(DEFAULT_ALSA ON)
     set(DEFAULT_PORTAUDIO OFF)

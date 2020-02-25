@@ -33,4 +33,12 @@ target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
+        ${XVideo_HDR}
+    )
+    set_source_files_properties(xv.cpp PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+endif()
+
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

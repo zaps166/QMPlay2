@@ -28,6 +28,12 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${PulseAudio_RESOURCES}
 )
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${PulseAudio_HDR}
+    )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     ${LIBPULSE_LIBRARIES}
     libqmplay2

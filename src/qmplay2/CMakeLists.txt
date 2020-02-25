@@ -182,6 +182,12 @@ add_library(${PROJECT_NAME} SHARED
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${QMPLAY2_HDR}
+    )
+endif()
+
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC

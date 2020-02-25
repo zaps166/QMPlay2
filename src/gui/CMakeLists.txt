@@ -193,6 +193,14 @@ target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${GUI_HDR}
+        ${GUI_FORM_HDR}
+    )
+    set_source_files_properties(Windows/PanGestureEventFilter.cpp PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+endif()
+
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     mark_as_advanced(CUSTOM_GUI_LIBRARIES)

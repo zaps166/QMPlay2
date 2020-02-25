@@ -29,6 +29,12 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${VideoFilters_RESOURCES}
 )
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${VideoFilters_HDR}
+    )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     libqmplay2
 )

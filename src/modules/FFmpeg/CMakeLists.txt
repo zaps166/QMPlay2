@@ -119,6 +119,13 @@ add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${FFmpeg_RESOURCES}
 )
 
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
+        ${FFmpeg_HDR}
+    )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
     ${DXVA2}
