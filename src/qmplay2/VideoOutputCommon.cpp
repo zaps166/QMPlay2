@@ -231,7 +231,7 @@ void VideoOutputCommon::mouseMove360(QMouseEvent *e)
         {
             m_mouseWrapped = m_canWrapMouse
                 ? Functions::wrapMouse(m_widget, m_mousePos, 1)
-                : m_canWrapMouse = true
+                : true
             ;
         }
 
