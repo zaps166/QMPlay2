@@ -23,14 +23,10 @@
 
 #include <memory>
 
-#include <QOpenGLContext>
-
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#undef Status
-
 class VAAPIOpenGL : public HWOpenGLInterop
 {
+    struct EGL;
+
 public:
     VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi);
     ~VAAPIOpenGL() final;
@@ -67,11 +63,7 @@ private:
     int m_widths[2] = {};
     int m_heights[2] = {};
 
-    EGLDisplay m_eglDpy = EGL_NO_DISPLAY;
-
-    PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHR = nullptr;
-    PFNEGLDESTROYIMAGEKHRPROC eglDestroyImageKHR = nullptr;
-    PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES = nullptr;
+    std::unique_ptr<EGL> m_egl;
 
     bool m_hasDmaBufImportModifiers = false;
 };

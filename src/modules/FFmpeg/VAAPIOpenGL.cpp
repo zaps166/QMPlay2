@@ -23,8 +23,13 @@
 #include <ImgScaler.hpp>
 #include <Frame.hpp>
 
+#include <QOpenGLContext>
+
 #include <va/va_drmcommon.h>
 #include <unistd.h>
+
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 #ifndef EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT
 #    define EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT 0x3443
@@ -33,8 +38,17 @@
 #    define EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT 0x3444
 #endif
 
+struct VAAPIOpenGL::EGL
+{
+    EGLDisplay eglDpy = EGL_NO_DISPLAY;
+    PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHR = nullptr;
+    PFNEGLDESTROYIMAGEKHRPROC eglDestroyImageKHR = nullptr;
+    PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES = nullptr;
+};
+
 VAAPIOpenGL::VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi)
     : m_vaapi(vaapi)
+    , m_egl(std::make_unique<EGL>())
 {}
 
 VAAPIOpenGL::~VAAPIOpenGL()
@@ -75,7 +89,7 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const SetTexturePa
     for (int p = 0; p < m_numPlanes; ++p)
         setTextureParamsFn(m_textures[p]);
 
-    if (m_eglDpy != EGL_NO_DISPLAY && eglCreateImageKHR && eglDestroyImageKHR && glEGLImageTargetTexture2DOES)
+    if (m_egl->eglDpy != EGL_NO_DISPLAY && m_egl->eglCreateImageKHR && m_egl->eglDestroyImageKHR && m_egl->glEGLImageTargetTexture2DOES)
         return true;
 
     const auto context = QOpenGLContext::currentContext();
@@ -86,15 +100,15 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const SetTexturePa
         return false;
     }
 
-    m_eglDpy = eglGetCurrentDisplay();
-    if (!m_eglDpy)
+    m_egl->eglDpy = eglGetCurrentDisplay();
+    if (!m_egl->eglDpy)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL display");
         m_error = true;
         return false;
     }
 
-    const auto extensionsRaw = eglQueryString(m_eglDpy, EGL_EXTENSIONS);
+    const auto extensionsRaw = eglQueryString(m_egl->eglDpy, EGL_EXTENSIONS);
     if (!extensionsRaw)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL extensions");
@@ -110,10 +124,10 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const SetTexturePa
         return false;
     }
 
-    eglCreateImageKHR = (PFNEGLCREATEIMAGEKHRPROC)context->getProcAddress("eglCreateImageKHR");
-    eglDestroyImageKHR = (PFNEGLDESTROYIMAGEKHRPROC)context->getProcAddress("eglDestroyImageKHR");
-    glEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC)context->getProcAddress("glEGLImageTargetTexture2DOES");
-    if (!eglCreateImageKHR || !eglDestroyImageKHR || !glEGLImageTargetTexture2DOES)
+    m_egl->eglCreateImageKHR = (PFNEGLCREATEIMAGEKHRPROC)context->getProcAddress("eglCreateImageKHR");
+    m_egl->eglDestroyImageKHR = (PFNEGLDESTROYIMAGEKHRPROC)context->getProcAddress("eglDestroyImageKHR");
+    m_egl->glEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC)context->getProcAddress("glEGLImageTargetTexture2DOES");
+    if (!m_egl->eglCreateImageKHR || !m_egl->eglDestroyImageKHR || !m_egl->glEGLImageTargetTexture2DOES)
     {
         QMPlay2Core.logError("VA-API :: Unable to get EGL function pointers");
         m_error = true;
@@ -127,11 +141,11 @@ bool VAAPIOpenGL::init(const int *widths, const int *heights, const SetTexturePa
 
 void VAAPIOpenGL::clear()
 {
-    m_eglDpy = EGL_NO_DISPLAY;
+    m_egl->eglDpy = EGL_NO_DISPLAY;
 
-    eglCreateImageKHR = nullptr;
-    eglDestroyImageKHR = nullptr;
-    glEGLImageTargetTexture2DOES = nullptr;
+    m_egl->eglCreateImageKHR = nullptr;
+    m_egl->eglDestroyImageKHR = nullptr;
+    m_egl->glEGLImageTargetTexture2DOES = nullptr;
 
     m_hasDmaBufImportModifiers = false;
     clearTextures();
@@ -200,8 +214,8 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
             attribs[15] = static_cast<EGLint>(object.drm_format_modifier >> 32);
         }
 
-        const auto image = eglCreateImageKHR(
-            m_eglDpy,
+        const auto image = m_egl->eglCreateImageKHR(
+            m_egl->eglDpy,
             EGL_NO_CONTEXT,
             EGL_LINUX_DMA_BUF_EXT,
             nullptr,
@@ -218,7 +232,7 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
         glBindTexture(GL_TEXTURE_2D, m_textures[p]);
         glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
 
-        eglDestroyImageKHR(m_eglDpy, image);
+        m_egl->eglDestroyImageKHR(m_egl->eglDpy, image);
     }
 
     closeFDs();
