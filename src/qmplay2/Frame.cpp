@@ -102,9 +102,10 @@ Frame Frame::createEmpty(const AVFrame *other, bool allocBuffers, AVPixelFormat 
 
     frame.copyAVFrameInfo(other);
 
-    if (newPixelFormat != AV_PIX_FMT_NONE)
+    const bool hasNewPixelFormat = (newPixelFormat != AV_PIX_FMT_NONE);
+    if (hasNewPixelFormat)
         frame.m_frame->format = newPixelFormat;
-    frame.obtainPixelFormat();
+    frame.obtainPixelFormat(hasNewPixelFormat);
 
     if (!allocBuffers)
         return frame;
@@ -146,7 +147,7 @@ Frame Frame::createEmpty(
     frame.m_frame->colorspace = colorSpace;
     frame.m_frame->color_range = isLimited ? AVCOL_RANGE_MPEG : AVCOL_RANGE_JPEG;
 
-    frame.obtainPixelFormat();
+    frame.obtainPixelFormat(false);
 
     return frame;
 }
@@ -163,9 +164,10 @@ Frame::Frame(AVFrame *avFrame, AVPixelFormat newPixelFormat)
 
     av_frame_ref(m_frame, avFrame);
 
-    if (newPixelFormat != AV_PIX_FMT_NONE)
+    const bool hasNewPixelFormat = (newPixelFormat != AV_PIX_FMT_NONE);
+    if (hasNewPixelFormat)
         m_pixelFormat = newPixelFormat;
-    obtainPixelFormat();
+    obtainPixelFormat(hasNewPixelFormat);
 }
 Frame::Frame(const Frame &other)
     : Frame()
@@ -538,9 +540,12 @@ void Frame::copyAVFrameInfo(const AVFrame *other)
     av_frame_copy_props(m_frame, other);
 }
 
-void Frame::obtainPixelFormat()
+void Frame::obtainPixelFormat(bool checkForYUVJ)
 {
     if (m_pixelFormat == AV_PIX_FMT_NONE)
         m_pixelFormat = static_cast<AVPixelFormat>(m_frame->format);
     m_pixelFmtDescriptor = av_pix_fmt_desc_get(m_pixelFormat);
+
+    if (checkForYUVJ && (m_pixelFmtDescriptor->flags & AV_PIX_FMT_FLAG_PLANAR) && strstr(m_pixelFmtDescriptor->name, "yuvj") != nullptr)
+        m_frame->color_range = AVCOL_RANGE_JPEG;
 }

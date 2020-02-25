@@ -154,7 +154,7 @@ private:
 
     void copyAVFrameInfo(const AVFrame *other);
 
-    void obtainPixelFormat();
+    void obtainPixelFormat(bool checkForYUVJ);
 
 private:
     AVFrame *m_frame = nullptr;
