@@ -35,6 +35,9 @@ public:
     };
 
 public:
+    VideoFilter(bool fillDefaultSupportedPixelFormats);
+    ~VideoFilter();
+
     virtual void clearBuffer();
 
     bool removeLastFromInternalBuffer();
@@ -54,6 +57,8 @@ protected:
     double getMidFrameTS(double ts1, double ts2) const;
 
 protected:
+    AVPixelFormats m_supportedPixelFormats;
+
     QQueue<Frame> m_internalQueue;
 
     quint8 m_deintFlags = 0;

@@ -499,9 +499,10 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
 
 /* Yadif deint filter */
 
-YadifDeint::YadifDeint(bool doubler, bool spatialCheck) :
-    m_doubler(doubler),
-    m_spatialCheck(spatialCheck)
+YadifDeint::YadifDeint(bool doubler, bool spatialCheck)
+    : VideoFilter(true)
+    , m_doubler(doubler)
+    , m_spatialCheck(spatialCheck)
 {
     m_threadsPool.setMaxThreadCount(min(QThread::idealThreadCount(), 18));
     if (!filterLinePtr)

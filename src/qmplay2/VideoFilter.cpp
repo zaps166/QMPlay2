@@ -20,6 +20,29 @@
 
 #include <QDebug>
 
+VideoFilter::VideoFilter(bool fillDefaultSupportedPixelFormats)
+{
+    if (!fillDefaultSupportedPixelFormats)
+        return;
+
+    m_supportedPixelFormats = {
+        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUVJ420P,
+        AV_PIX_FMT_YUV422P,
+        AV_PIX_FMT_YUVJ422P,
+        AV_PIX_FMT_YUV444P,
+        AV_PIX_FMT_YUVJ444P,
+        AV_PIX_FMT_YUV410P,
+        AV_PIX_FMT_YUV411P,
+        AV_PIX_FMT_YUVJ411P,
+        AV_PIX_FMT_YUV440P,
+        AV_PIX_FMT_YUVJ440P,
+    };
+}
+VideoFilter::~VideoFilter()
+{
+}
+
 void VideoFilter::clearBuffer()
 {
     m_internalQueue.clear();
@@ -51,7 +74,7 @@ void VideoFilter::addFramesToInternalQueue(QQueue<Frame> &framesQueue)
     while (!framesQueue.isEmpty())
     {
         const Frame &videoFrame = framesQueue.constFirst();
-        if (videoFrame.isEmpty())
+        if (videoFrame.isEmpty() || !m_supportedPixelFormats.contains(videoFrame.pixelFormat()))
             break;
         m_internalQueue.enqueue(framesQueue.dequeue());
     }
@@ -61,7 +84,9 @@ void VideoFilter::addFramesToDeinterlace(QQueue<Frame> &framesQueue)
     while (!framesQueue.isEmpty())
     {
         const Frame &videoFrame = framesQueue.constFirst();
-        if (((m_deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced()) || videoFrame.isEmpty())
+        if (videoFrame.isEmpty() || !m_supportedPixelFormats.contains(videoFrame.pixelFormat()))
+            break;
+        if ((m_deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced())
             break;
         m_internalQueue.enqueue(framesQueue.dequeue());
     }

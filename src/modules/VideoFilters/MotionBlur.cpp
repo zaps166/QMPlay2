@@ -23,6 +23,7 @@
 #include <algorithm>
 
 MotionBlur::MotionBlur()
+    : VideoFilter(true)
 {
     addParam("W");
     addParam("H");

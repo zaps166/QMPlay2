@@ -21,6 +21,7 @@
 #include <QDebug>
 
 DeintHWPrepareFilter::DeintHWPrepareFilter()
+    : VideoFilter(true)
 {
     addParam("Deinterlace");
     addParam("DeinterlaceFlags");

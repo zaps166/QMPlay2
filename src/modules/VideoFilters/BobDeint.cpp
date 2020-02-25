@@ -22,6 +22,7 @@
 #include <algorithm>
 
 BobDeint::BobDeint()
+    : VideoFilter(true)
 {
     addParam("DeinterlaceFlags");
     addParam("W");

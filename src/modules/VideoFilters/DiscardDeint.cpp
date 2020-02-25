@@ -20,6 +20,7 @@
 #include <VideoFilters.hpp>
 
 DiscardDeint::DiscardDeint()
+    : VideoFilter(true)
 {
     addParam("DeinterlaceFlags");
     addParam("W");

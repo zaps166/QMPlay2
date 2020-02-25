@@ -32,8 +32,13 @@ extern "C"
 #include <QDebug>
 
 VDPAU::VDPAU(AVBufferRef *hwDeviceBufferRef)
-    : m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
+    : VideoFilter(false)
+    , m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
 {
+    m_supportedPixelFormats = {
+        AV_PIX_FMT_NV12
+    };
+
 #ifdef FIND_HWACCEL_DRIVERS_PATH
     FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
 #endif
