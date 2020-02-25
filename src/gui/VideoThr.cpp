@@ -35,6 +35,7 @@
 #include <Functions.hpp>
 
 using Functions::gettime;
+using namespace std;
 
 #include <QDebug>
 #include <QImage>
@@ -87,7 +88,7 @@ void VideoThr::setDec(Decoder *dec)
     decoderError = false;
 }
 
-std::shared_ptr<HWDecContext> VideoThr::getHWDecContext() const
+shared_ptr<HWDecContext> VideoThr::getHWDecContext() const
 {
     return videoWriter()->hwDecContext();
 }
