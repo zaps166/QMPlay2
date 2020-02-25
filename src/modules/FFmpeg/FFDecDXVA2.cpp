@@ -116,7 +116,7 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
         sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
 
         decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-        decoded.setVideoData(dstBuffer, dstLinesize, false);
+        decoded.setVideoData(dstBuffer, dstLinesize);
 
         surface->UnlockRect();
     }
