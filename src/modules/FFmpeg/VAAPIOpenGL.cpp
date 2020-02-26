@@ -230,7 +230,7 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
         }
 
         glBindTexture(GL_TEXTURE_2D, m_textures[p]);
-        glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+        m_egl->glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
 
         m_egl->eglDestroyImageKHR(m_egl->eglDpy, image);
     }
