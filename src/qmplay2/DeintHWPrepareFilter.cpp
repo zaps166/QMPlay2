@@ -21,8 +21,12 @@
 #include <QDebug>
 
 DeintHWPrepareFilter::DeintHWPrepareFilter()
-    : VideoFilter(true)
+    : VideoFilter(false)
 {
+    m_supportedPixelFormats = {
+        AV_PIX_FMT_NV12
+    };
+
     addParam("Deinterlace");
     addParam("DeinterlaceFlags");
 }
