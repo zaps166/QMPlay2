@@ -199,7 +199,7 @@ void OpenGLCommon::setWindowsBypassCompositor(bool bypassCompositor)
                 bypassCompositor = true; // Don't try to avoid compositor bypass if compositor is disabled
         }
     }
-    widget()->setProperty("bypassCompositor", bypassCompositor);
+    widget()->setProperty("bypassCompositor", bypassCompositor ? 1 : -1);
 }
 #endif
 

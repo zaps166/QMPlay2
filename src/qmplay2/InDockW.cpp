@@ -113,7 +113,8 @@ void InDockW::resizeEvent(QResizeEvent *)
         }
 
 #ifdef Q_OS_WIN
-        if ((!w->property("bypassCompositor").toBool() || (loseHeight > 0 || QApplication::activePopupWidget())) && window()->property("fullScreen").toBool())
+        const int bypassCompositor = w->property("bypassCompositor").toInt();
+        if ((bypassCompositor == -1 || (bypassCompositor == 1 && (loseHeight > 0 || QApplication::activePopupWidget()))) && window()->property("fullScreen").toBool())
         {
             X -= 1;
             W += 2;
