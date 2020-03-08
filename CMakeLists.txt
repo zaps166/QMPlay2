@@ -125,7 +125,10 @@ add_feature_info(VideoFilters USE_VIDEOFILTERS "Build with VideoFilters module")
 option(USE_PORTAUDIO "Build with PortAudio module" ${DEFAULT_PORTAUDIO})
 add_feature_info(PortAudio USE_PORTAUDIO "Build with PortAudio module")
 
-option(USE_TAGLIB "Build with tags editor" ON)
+if(NOT DEFINED USE_TAGLIB)
+    find_package(TagLib)
+endif()
+option(USE_TAGLIB "Build with tags editor" ${TAGLIB_FOUND})
 add_feature_info(TagLib USE_TAGLIB "Build with tags editor")
 
 if(NOT DEFINED USE_FFMPEG_VAAPI)
