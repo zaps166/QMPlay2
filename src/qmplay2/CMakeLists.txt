@@ -171,7 +171,7 @@ set(QMPLAY2_RESOURCES
 
 if(USE_LIBASS)
     add_definitions(-DQMPLAY2_LIBASS)
-    pkg_check_modules(LIBASS libass REQUIRED)
+    pkg_check_modules(LIBASS REQUIRED libass)
     include_directories(${LIBASS_INCLUDE_DIRS})
     link_directories(${LIBASS_LIBRARY_DIRS})
 endif()

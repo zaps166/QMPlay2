@@ -17,7 +17,7 @@ set(PulseAudio_RESOURCES
     icon.qrc
 )
 
-pkg_check_modules(LIBPULSE libpulse-simple REQUIRED)
+pkg_check_modules(LIBPULSE REQUIRED libpulse-simple)
 link_directories(${LIBPULSE_LIBRARY_DIRS})
 
 include_directories(${LIBPULSE_INCLUDE_DIRS})

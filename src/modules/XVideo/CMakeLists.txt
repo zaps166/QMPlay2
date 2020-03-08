@@ -17,7 +17,7 @@ set(XVideo_RESOURCES
     icon.qrc
 )
 
-pkg_check_modules(LIB_X11_XV x11 xv REQUIRED)
+pkg_check_modules(LIB_X11_XV REQUIRED x11 xv)
 link_directories(${LIB_X11_XV_LIBRARY_DIRS})
 
 include_directories(${LIB_X11_XV_INCLUDE_DIRS})

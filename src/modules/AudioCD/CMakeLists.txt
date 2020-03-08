@@ -15,7 +15,7 @@ set(AudioCD_RESOURCES
     icons.qrc
 )
 
-pkg_check_modules(LIBCD libcdio libcddb REQUIRED)
+pkg_check_modules(LIBCD REQUIRED libcdio libcddb)
 link_directories(${LIBCD_LIBRARY_DIRS})
 
 include_directories(${LIBCD_INCLUDE_DIRS})
