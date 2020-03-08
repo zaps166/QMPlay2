@@ -40,6 +40,8 @@ class QMPlay2Extensions;
 
 #ifdef Q_OS_WIN
     class QWinTaskbarProgress;
+    class QWinTaskbarButton;
+    class QWinThumbnailToolBar;
 #endif
 
 class MainWidget final : public QMainWindow
@@ -189,5 +191,7 @@ private:
 
 #ifdef Q_OS_WIN
     QWinTaskbarProgress *m_taskBarProgress = nullptr;
+    QWinTaskbarButton *m_taskbarButton = nullptr;
+    QWinThumbnailToolBar *m_thumbnailToolBar = nullptr;
 #endif
 };

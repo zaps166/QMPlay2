@@ -1549,44 +1549,44 @@ void MainWidget::setWindowsTaskBarFeatures()
         return;
 
 
-    QWinTaskbarButton *button = new QWinTaskbarButton(this);
-    button->setWindow(windowHandle());
+    m_taskbarButton = new QWinTaskbarButton(this);
+    m_taskbarButton->setWindow(windowHandle());
 
-    m_taskBarProgress = button->progress();
+    m_taskBarProgress = m_taskbarButton->progress();
 
 
-    QWinThumbnailToolBar *thumbnailToolBar = new QWinThumbnailToolBar(this);
-    thumbnailToolBar->setWindow(windowHandle());
+    m_thumbnailToolBar = new QWinThumbnailToolBar(this);
+    m_thumbnailToolBar->setWindow(windowHandle());
 
-    QWinThumbnailToolButton *togglePlay = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto togglePlay = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(togglePlay, &QWinThumbnailToolButton::clicked, menuBar->player->togglePlay, &QAction::trigger);
     connect(menuBar->player->togglePlay, &QAction::changed, togglePlay, [=] {
         togglePlay->setToolTip(menuBar->player->togglePlay->toolTip());
         togglePlay->setIcon(menuBar->player->togglePlay->icon());
     });
 
-    QWinThumbnailToolButton *stop = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto stop = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(stop, &QWinThumbnailToolButton::clicked, menuBar->player->stop, &QAction::trigger);
     stop->setToolTip(menuBar->player->stop->toolTip());
     stop->setIcon(menuBar->player->stop->icon());
 
-    QWinThumbnailToolButton *prev = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto prev = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(prev, &QWinThumbnailToolButton::clicked, menuBar->player->prev, &QAction::trigger);
     prev->setToolTip(menuBar->player->prev->toolTip());
     prev->setIcon(menuBar->player->prev->icon());
 
-    QWinThumbnailToolButton *next = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto next = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(next, &QWinThumbnailToolButton::clicked, menuBar->player->next, &QAction::trigger);
     next->setToolTip(menuBar->player->next->toolTip());
     next->setIcon(menuBar->player->next->icon());
 
-    QWinThumbnailToolButton *toggleFullScreen = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto toggleFullScreen = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(toggleFullScreen, &QWinThumbnailToolButton::clicked, menuBar->window->toggleFullScreen, &QAction::trigger);
     toggleFullScreen->setToolTip(menuBar->window->toggleFullScreen->toolTip());
     toggleFullScreen->setIcon(menuBar->window->toggleFullScreen->icon());
     toggleFullScreen->setDismissOnClick(true);
 
-    QWinThumbnailToolButton *toggleMute = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto toggleMute = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(toggleMute, &QWinThumbnailToolButton::clicked, menuBar->player->toggleMute, &QAction::trigger);
     connect(menuBar->player->toggleMute, &QAction::changed, toggleMute, [=] {
         toggleMute->setIcon(menuBar->player->toggleMute->icon());
@@ -1594,19 +1594,19 @@ void MainWidget::setWindowsTaskBarFeatures()
     toggleMute->setToolTip(menuBar->player->toggleMute->toolTip());
     toggleMute->setIcon(menuBar->player->toggleMute->icon());
 
-    QWinThumbnailToolButton *settings = new QWinThumbnailToolButton(thumbnailToolBar);
+    auto settings = new QWinThumbnailToolButton(m_thumbnailToolBar);
     connect(settings, &QWinThumbnailToolButton::clicked, menuBar->options->settings, &QAction::trigger);
     settings->setToolTip(menuBar->options->settings->toolTip());
     settings->setIcon(menuBar->options->settings->icon());
     settings->setDismissOnClick(true);
 
-    thumbnailToolBar->addButton(togglePlay);
-    thumbnailToolBar->addButton(stop);
-    thumbnailToolBar->addButton(prev);
-    thumbnailToolBar->addButton(next);
-    thumbnailToolBar->addButton(toggleFullScreen);
-    thumbnailToolBar->addButton(toggleMute);
-    thumbnailToolBar->addButton(settings);
+    m_thumbnailToolBar->addButton(togglePlay);
+    m_thumbnailToolBar->addButton(stop);
+    m_thumbnailToolBar->addButton(prev);
+    m_thumbnailToolBar->addButton(next);
+    m_thumbnailToolBar->addButton(toggleFullScreen);
+    m_thumbnailToolBar->addButton(toggleMute);
+    m_thumbnailToolBar->addButton(settings);
 }
 #endif
 
@@ -1771,6 +1771,12 @@ void MainWidget::closeEvent(QCloseEvent *e)
     playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
     playC.stop(true);
+
+#ifdef Q_OS_WIN
+    m_taskBarProgress = nullptr;
+    delete m_taskbarButton;
+    delete m_thumbnailToolBar;
+#endif
 }
 void MainWidget::moveEvent(QMoveEvent *e)
 {
