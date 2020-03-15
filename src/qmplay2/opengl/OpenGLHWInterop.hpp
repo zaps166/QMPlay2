@@ -21,12 +21,9 @@
 #include <HWDecContext.hpp>
 #include <VideoAdjustment.hpp>
 
-#include <QString>
-
 #include <functional>
 
 class ImgScaler;
-class Frame;
 
 class OpenGLHWInterop : public HWDecContext
 {
@@ -40,8 +37,6 @@ public:
     using SetTextureParamsFn = std::function<void(quint32 texture)>;
 
 public:
-    virtual ~OpenGLHWInterop() = default;
-
     virtual Format getFormat() const = 0;
     virtual bool isTextureRectangle() const
     {
