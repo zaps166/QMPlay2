@@ -312,7 +312,7 @@ bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
     if (use_vpp && !doDeint)
         clearVPPFrames();
 
-    const VASurfaceID currId = frame.hwSurface();
+    const VASurfaceID currId = frame.hwData();
 
     if (!use_vpp || !doDeint)
     {
@@ -421,7 +421,7 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
 bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32) const
 {
     VAImage image;
-    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwSurface());
+    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwData());
     if (vaData)
     {
         const void *data[2] = {

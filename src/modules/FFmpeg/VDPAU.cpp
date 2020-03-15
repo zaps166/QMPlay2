@@ -383,13 +383,13 @@ bool VDPAU::filter(QQueue<Frame> &framesQueue)
         }
 
         VdpVideoSurface surfaces[4];
-        surfaces[1] = currFrame.hwSurface();
+        surfaces[1] = currFrame.hwData();
         if (nFrames == 4)
         {
             // 2 past, 1 current, 1 future
-            surfaces[3] = m_internalQueue.at(0).hwSurface();
-            surfaces[2] = m_internalQueue.at(1).hwSurface();
-            surfaces[0] = m_internalQueue.at(3).hwSurface();
+            surfaces[3] = m_internalQueue.at(0).hwData();
+            surfaces[2] = m_internalQueue.at(1).hwData();
+            surfaces[0] = m_internalQueue.at(3).hwData();
         }
         else
         {

@@ -214,7 +214,7 @@ bool DXVA2OpenGL::mapFrame(Frame &videoFrame)
             m_videoSample.SampleFormat.VideoTransferMatrix = DXVA2_VideoTransferMatrix_BT601;
             break;
     }
-    m_videoSample.SrcSurface = reinterpret_cast<IDirect3DSurface9 *>(videoFrame.hwSurface());
+    m_videoSample.SrcSurface = reinterpret_cast<IDirect3DSurface9 *>(videoFrame.hwData());
     m_videoSample.SrcRect = rect;
     m_videoSample.DstRect = rect;
 
@@ -252,7 +252,7 @@ QImage DXVA2OpenGL::getImage(const Frame &videoFrame)
 {
     D3DSURFACE_DESC desc;
     D3DLOCKED_RECT lockedRect;
-    IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.hwSurface();
+    IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.hwData();
     if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
     {
         const void *src[2] = {

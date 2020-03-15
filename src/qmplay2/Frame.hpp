@@ -100,7 +100,7 @@ public: // Video
     bool hasCPUAccess() const;
 
     bool isHW() const;
-    quintptr hwSurface() const;
+    quintptr hwData(int idx = 3) const;
 
     bool hasCustomData() const;
     quintptr customData() const;

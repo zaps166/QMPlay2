@@ -276,15 +276,15 @@ bool Frame::isHW() const
         case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
-        case AV_PIX_FMT_CUDA:
+//        case AV_PIX_FMT_CUDA:
         case AV_PIX_FMT_D3D11:
-        case AV_PIX_FMT_DRM_PRIME:
+//        case AV_PIX_FMT_DRM_PRIME:
 //        case AV_PIX_FMT_OPENCL:
             return true;
     }
     return false;
 }
-quintptr Frame::hwSurface() const
+quintptr Frame::hwData(int idx) const
 {
     switch (m_frame->format)
     {
@@ -292,7 +292,8 @@ quintptr Frame::hwSurface() const
         case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
-            return reinterpret_cast<quintptr>(m_frame->data[3]);
+        case AV_PIX_FMT_D3D11:
+            return reinterpret_cast<quintptr>(m_frame->data[idx]);
     }
     return s_invalidCustomData;
 }

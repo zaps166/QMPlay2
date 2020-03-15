@@ -86,7 +86,7 @@ void VTBOpenGL::clear()
 
 bool VTBOpenGL::mapFrame(Frame &videoFrame)
 {
-    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
+    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwData();
     CGLContextObj glCtx = CGLGetCurrentContext();
 
     IOSurfaceRef surface = CVPixelBufferGetIOSurface(pixelBuffer);
@@ -121,7 +121,7 @@ quint32 VTBOpenGL::getTexture(int plane)
 
 QImage VTBOpenGL::getImage(const Frame &videoFrame)
 {
-    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwSurface();
+    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwData();
     if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
     {
         CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
