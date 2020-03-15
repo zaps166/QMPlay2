@@ -116,7 +116,7 @@ if(USE_OPENGL)
         opengl/OpenGLCommon.hpp
         opengl/OpenGLWindow.hpp
         opengl/OpenGLWidget.hpp
-        opengl/Vertices.hpp
+        opengl/OpenGLVertices.hpp
     )
     set(QMPLAY2_OPENGL_SRC
         opengl/OpenGLInstance.cpp
