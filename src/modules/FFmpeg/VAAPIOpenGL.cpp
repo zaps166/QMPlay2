@@ -59,7 +59,7 @@ QString VAAPIOpenGL::name() const
     return VAAPIWriterName;
 }
 
-HWOpenGLInterop::Format VAAPIOpenGL::getFormat() const
+VAAPIOpenGL::Format VAAPIOpenGL::getFormat() const
 {
     return NV12;
 }

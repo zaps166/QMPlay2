@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <HWOpenGLInterop.hpp>
+#include <opengl/OpenGLHWInterop.hpp>
 
 #include <QOpenGLContext>
 #include <QHash>
@@ -35,7 +35,7 @@ struct AVBufferRef;
 
 using QMPlay2D3dDev9 = std::unique_ptr<IDirect3DDevice9, std::function<void(void *)>>;
 
-class DXVA2OpenGL : public HWOpenGLInterop
+class DXVA2OpenGL : public OpenGLHWInterop
 {
 public:
     DXVA2OpenGL(AVBufferRef *hwDeviceBufferRef);

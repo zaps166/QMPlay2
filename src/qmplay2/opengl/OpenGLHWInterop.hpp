@@ -28,7 +28,7 @@
 class ImgScaler;
 class Frame;
 
-class HWOpenGLInterop : public HWDecContext
+class OpenGLHWInterop : public HWDecContext
 {
 public:
     enum Format
@@ -40,7 +40,7 @@ public:
     using SetTextureParamsFn = std::function<void(quint32 texture)>;
 
 public:
-    virtual ~HWOpenGLInterop() = default;
+    virtual ~OpenGLHWInterop() = default;
 
     virtual Format getFormat() const = 0;
     virtual bool isTextureRectangle() const

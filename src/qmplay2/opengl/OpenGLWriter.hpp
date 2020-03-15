@@ -24,7 +24,7 @@
 #include <QCoreApplication>
 #include <QSet>
 
-class HWOpenGLInterop;
+class OpenGLHWInterop;
 class OpenGLCommon;
 
 class OpenGLWriter final : public VideoWriter
@@ -58,7 +58,7 @@ public:
 private:
     void addAdditionalParam(const QString &key);
 
-    void initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop);
+    void initialize(const std::shared_ptr<OpenGLHWInterop> &hwInterop);
 
 private:
     OpenGLCommon *m_drawable = nullptr;

@@ -17,11 +17,11 @@
 */
 
 #include "OpenGLCommon.hpp"
-#include "Vertices.hpp"
+#include "OpenGLVertices.hpp"
+#include "OpenGLHWInterop.hpp"
 
 #include <Sphere.hpp>
 
-#include <HWOpenGLInterop.hpp>
 #include <QMPlay2Core.hpp>
 #include <Frame.hpp>
 #include <Functions.hpp>
@@ -101,7 +101,7 @@ void OpenGLCommon::deleteMe()
     delete this;
 }
 
-void OpenGLCommon::initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop)
+void OpenGLCommon::initialize(const std::shared_ptr<OpenGLHWInterop> &hwInterop)
 {
     if (isOK && m_hwInterop == hwInterop)
         return;
@@ -138,10 +138,10 @@ void OpenGLCommon::initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop)
 
         switch (hwInterop->getFormat())
         {
-            case HWOpenGLInterop::NV12:
+            case OpenGLHWInterop::NV12:
                 numPlanes = 2;
                 break;
-            case HWOpenGLInterop::RGB32:
+            case OpenGLHWInterop::RGB32:
                 numPlanes = 1;
                 break;
         }

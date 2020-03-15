@@ -20,11 +20,11 @@
 
 #include "CuvidAPI.hpp"
 
-#include <HWOpenGLInterop.hpp>
+#include <opengl/OpenGLHWInterop.hpp>
 
 #include <QSet>
 
-class CuvidOpenGL : public HWOpenGLInterop
+class CuvidOpenGL : public OpenGLHWInterop
 {
 public:
     CuvidOpenGL(const std::shared_ptr<CUcontext> &cuCtx);

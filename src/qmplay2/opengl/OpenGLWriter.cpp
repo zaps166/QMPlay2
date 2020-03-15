@@ -20,8 +20,8 @@
 
 #include "OpenGLWindow.hpp"
 #include "OpenGLWidget.hpp"
+#include "OpenGLHWInterop.hpp"
 
-#include <HWOpenGLInterop.hpp>
 #include <Frame.hpp>
 
 #include <QGuiApplication>
@@ -223,7 +223,7 @@ bool OpenGLWriter::open()
 
 bool OpenGLWriter::setHWDecContext(const shared_ptr<HWDecContext> &hwDecContext)
 {
-    auto hwInterop = dynamic_pointer_cast<HWOpenGLInterop>(hwDecContext);
+    auto hwInterop = dynamic_pointer_cast<OpenGLHWInterop>(hwDecContext);
     if (hwDecContext && !hwInterop)
         return false;
 
@@ -241,7 +241,7 @@ void OpenGLWriter::addAdditionalParam(const QString &key)
     addParam(key);
 }
 
-void OpenGLWriter::initialize(const shared_ptr<HWOpenGLInterop> &hwInterop)
+void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
 {
     for (auto &&additionalParam : asConst(m_additionalParams))
         removeParam(additionalParam);

@@ -18,11 +18,11 @@
 
 #pragma once
 
-#include <HWOpenGLInterop.hpp>
+#include <opengl/OpenGLHWInterop.hpp>
 
 struct AVBufferRef;
 
-class VTBOpenGL final : public HWOpenGLInterop
+class VTBOpenGL final : public OpenGLHWInterop
 {
 public:
     VTBOpenGL(AVBufferRef *hwDeviceBufferRef);

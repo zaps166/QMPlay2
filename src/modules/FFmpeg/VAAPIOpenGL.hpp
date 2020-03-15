@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <HWOpenGLInterop.hpp>
+#include <opengl/OpenGLHWInterop.hpp>
 #include <VAAPI.hpp>
 
 #include <memory>
 
-class VAAPIOpenGL : public HWOpenGLInterop
+class VAAPIOpenGL : public OpenGLHWInterop
 {
     struct EGL;
 

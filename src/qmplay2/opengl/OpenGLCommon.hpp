@@ -39,7 +39,7 @@
     #define APIENTRY
 #endif
 
-class HWOpenGLInterop;
+class OpenGLHWInterop;
 class QMPlay2OSD;
 
 class OpenGLCommon : public VideoOutputCommon
@@ -74,7 +74,7 @@ public:
         m_videoOffset = m_osdOffset = QPointF();
     }
 
-    void initialize(const std::shared_ptr<HWOpenGLInterop> &hwInterop);
+    void initialize(const std::shared_ptr<OpenGLHWInterop> &hwInterop);
 
     virtual void setVSync(bool enable) = 0;
     virtual void updateGL(bool requestDelayed) = 0;
@@ -119,7 +119,7 @@ private:
     void loadSphere();
 public:
     const std::shared_ptr<OpenGLInstance> m_glInstance;
-    std::shared_ptr<HWOpenGLInterop> m_hwInterop;
+    std::shared_ptr<OpenGLHWInterop> m_hwInterop;
     QStringList videoAdjustmentKeys;
     Frame videoFrame;
 

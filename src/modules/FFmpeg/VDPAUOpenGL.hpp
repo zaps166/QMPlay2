@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include <HWOpenGLInterop.hpp>
+#include <opengl/OpenGLHWInterop.hpp>
 #include <VDPAU.hpp>
 
 #include <QOpenGLContext>
 
-class VDPAUOpenGL : public HWOpenGLInterop
+class VDPAUOpenGL : public OpenGLHWInterop
 {
 public:
     VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau);

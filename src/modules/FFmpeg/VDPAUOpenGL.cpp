@@ -35,7 +35,7 @@ QString VDPAUOpenGL::name() const
     return VDPAUWriterName;
 }
 
-HWOpenGLInterop::Format VDPAUOpenGL::getFormat() const
+OpenGLHWInterop::Format VDPAUOpenGL::getFormat() const
 {
     return RGB32;
 }

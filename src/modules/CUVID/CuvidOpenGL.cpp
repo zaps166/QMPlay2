@@ -48,7 +48,7 @@ QString CuvidOpenGL::name() const
     return "CUVID";
 }
 
-HWOpenGLInterop::Format CuvidOpenGL::getFormat() const
+CuvidOpenGL::Format CuvidOpenGL::getFormat() const
 {
     return NV12;
 }

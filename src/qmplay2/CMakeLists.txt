@@ -41,7 +41,6 @@ set(QMPLAY2_HDR
     IPC.hpp
     CPU.hpp
     Version.hpp
-    HWOpenGLInterop.hpp
     VideoAdjustment.hpp
     YouTubeDL.hpp
     Notifies.hpp
@@ -117,6 +116,7 @@ if(USE_OPENGL)
         opengl/OpenGLWindow.hpp
         opengl/OpenGLWidget.hpp
         opengl/OpenGLVertices.hpp
+        opengl/OpenGLHWInterop.hpp
     )
     set(QMPLAY2_OPENGL_SRC
         opengl/OpenGLInstance.cpp
