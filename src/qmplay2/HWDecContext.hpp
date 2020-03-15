@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <atomic>
+
 class QString;
 class QImage;
 class Frame;
@@ -29,7 +31,13 @@ public:
 
     virtual QString name() const = 0;
 
-    virtual bool hasError() const = 0;
+    inline bool hasError() const
+    {
+        return m_error;
+    }
 
     virtual QImage getImage(const Frame &frame) = 0;
+
+protected:
+    std::atomic_bool m_error {false};
 };

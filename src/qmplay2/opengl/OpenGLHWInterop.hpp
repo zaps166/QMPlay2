@@ -47,11 +47,6 @@ public:
         return true;
     }
 
-    bool hasError() const override final
-    {
-        return m_error;
-    }
-
     virtual bool init(const int *widths, const int *heights, const SetTextureParamsFn &setTextureParamsFn) = 0;
     virtual void clear() = 0;
 
@@ -66,7 +61,4 @@ public:
     {
         Q_UNUSED(videoAdjustment)
     }
-
-protected:
-    bool m_error = false;
 };
