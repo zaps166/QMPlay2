@@ -77,7 +77,7 @@ QString DXVA2OpenGL::name() const
     return "DXVA2";
 }
 
-HWOpenGLInterop::Format DXVA2OpenGL::getFormat() const
+DXVA2OpenGL::Format DXVA2OpenGL::getFormat() const
 {
     return RGB32;
 }
