@@ -60,7 +60,6 @@ FFDecVAAPI::~FFDecVAAPI()
 {
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
-    destroyDecoder(); // Destroy before deleting "m_vaapi"
 }
 
 bool FFDecVAAPI::set()
@@ -101,9 +100,10 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hasHWDecContext && ret > -1)
     {
+        decoded.setOnDestroyFn([vaapi = m_vaapi] {
+        });
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
     }
-
     return ret;
 }
 void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
