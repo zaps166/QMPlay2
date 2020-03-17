@@ -130,6 +130,7 @@ if(USE_OPENGL)
     if(NOT WIN32)
         if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
             add_definitions(-DOPENGL_ES2)
+            list(APPEND OPENGL_LIBS GLESv2)
         elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
             message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
         endif()
@@ -272,14 +273,4 @@ if(ANDROID)
         Qt5::AndroidExtras
         ${QML}
     )
-
-    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-        set(ANDROID_EXTRA_LIBS_DIR "${CMAKE_SYSROOT}/usr/lib/arm-linux-androideabi")
-    endif()
-    set(ANDROID_EXTRA_LIBS
-        "${ANDROID_EXTRA_LIBS_DIR}/libavcodec.so,${ANDROID_EXTRA_LIBS_DIR}/libavformat.so,${ANDROID_EXTRA_LIBS_DIR}/libavutil.so,${ANDROID_EXTRA_LIBS_DIR}/libswresample.so,${ANDROID_EXTRA_LIBS_DIR}/libswscale.so"
-        CACHE INTERNAL ""
-    )
-
-    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui/Android/manifest" CACHE INTERNAL "")
 endif()
