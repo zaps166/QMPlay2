@@ -126,6 +126,15 @@ if(USE_OPENGL)
         opengl/OpenGLWidget.cpp
         opengl/opengl.qrc
     )
+
+    if(NOT WIN32)
+        if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+            add_definitions(-DOPENGL_ES2)
+        elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+            message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+        endif()
+    endif()
+
     if(APPLE)
         find_package(OpenGL REQUIRED)
         list(APPEND OPENGL_LIBS ${OPENGL_LIBRARIES})

@@ -35,10 +35,6 @@
     #include <GL/glext.h>
 #endif
 
-#if defined OPENGL_ES2 && !defined APIENTRY
-    #define APIENTRY
-#endif
-
 class OpenGLHWInterop;
 class QMPlay2OSD;
 

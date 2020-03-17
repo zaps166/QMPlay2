@@ -22,6 +22,10 @@
 
 #include <QOpenGLContext>
 
+#if defined OPENGL_ES2 && !defined APIENTRY
+    #define APIENTRY
+#endif
+
 class OpenGLInstance final : public GPUInstance
 {
 public:
