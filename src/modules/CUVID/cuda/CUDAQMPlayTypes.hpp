@@ -58,6 +58,12 @@ enum CUgraphicsRegisterFlags
     CU_GRAPHICS_REGISTER_FLAGS_SURFACE_LDST   = 0x04,
     CU_GRAPHICS_REGISTER_FLAGS_TEXTURE_GATHER = 0x08
 };
+enum CUexternalMemoryHandleType
+{
+    CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD        = 0x01,
+    CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32     = 0x02,
+    CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT = 0x03
+};
 
 typedef int CUdevice;
 typedef void *CUcontext;
@@ -65,6 +71,7 @@ typedef quintptr CUdeviceptr;
 typedef void *CUarray;
 typedef void *CUgraphicsResource;
 typedef void *CUstream;
+typedef void *CUexternalMemory;
 
 struct CUDA_MEMCPY2D
 {
@@ -85,4 +92,29 @@ struct CUDA_MEMCPY2D
     size_t dstPitch;
 
     size_t WidthInBytes, Height;
+};
+
+struct CUDA_EXTERNAL_MEMORY_HANDLE_DESC
+{
+    CUexternalMemoryHandleType type;
+    union
+    {
+        int fd;
+        struct
+        {
+            void *handle;
+            const void *name;
+        } win32;
+    } handle;
+    unsigned long long size;
+    unsigned int flags;
+    unsigned int reserved[16];
+};
+
+struct CUDA_EXTERNAL_MEMORY_BUFFER_DESC
+{
+    unsigned long long offset;
+    unsigned long long size;
+    unsigned int flags;
+    unsigned int reserved[16];
 };

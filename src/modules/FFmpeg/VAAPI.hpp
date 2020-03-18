@@ -26,8 +26,8 @@
 #include <va/va_vpp.h>
 
 struct AVBufferRef;
-class ImgScaler;
 struct AVFrame;
+class QImage;
 class Frame;
 
 class VAAPI
@@ -52,7 +52,7 @@ public:
     bool filterVideo(const Frame &frame, VASurfaceID &id, int &field);
 
     quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
-    bool getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32) const;
+    QImage getImage(const Frame &videoFrame) const;
 
     void insertFrame(VASurfaceID id, AVFrame *frame);
 
@@ -63,6 +63,8 @@ private:
 
 public:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
+
+    QString m_vendor;
 
     bool ok = false;
 

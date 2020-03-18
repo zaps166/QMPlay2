@@ -23,6 +23,15 @@
 
 #include <QQueue>
 
+#ifdef USE_VULKAN
+namespace QmVk {
+class Device;
+class Image;
+class ImagePool;
+class HWInterop;
+}
+#endif
+
 class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleParams
 {
 public:
@@ -56,6 +65,15 @@ protected:
 
     double getMidFrameTS(double ts1, double ts2) const;
 
+    Frame getNewFrame(const Frame &other);
+
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::Image> vulkanImageFromFrame(
+        Frame &frame,
+        const std::shared_ptr<QmVk::Device> &device = nullptr
+    );
+#endif
+
 protected:
     AVPixelFormats m_supportedPixelFormats;
 
@@ -66,4 +84,9 @@ protected:
     // For doubler
     bool m_secondFrame = false;
     double m_lastTS = qQNaN();
+
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::HWInterop> m_vkHwInterop;
+    std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
+#endif
 };

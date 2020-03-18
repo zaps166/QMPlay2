@@ -276,7 +276,9 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #endif
     avformat_network_init();
 
-#ifdef USE_OPENGL
+#if defined(USE_VULKAN)
+    settings->init("Renderer", "vulkan");
+#elif defined(USE_OPENGL)
     settings->init("Renderer", "opengl");
 #endif
     m_gpuInstance = GPUInstance::create();

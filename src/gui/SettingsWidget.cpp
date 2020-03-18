@@ -25,6 +25,11 @@
 #include <YouTubeDL.hpp>
 #include <Notifies.hpp>
 #include <Main.hpp>
+#ifdef USE_VULKAN
+#   include "../qmvk/PhysicalDevice.hpp"
+
+#   include <vulkan/VulkanInstance.hpp>
+#endif
 
 #include <QStackedWidget>
 #include <QStandardPaths>
@@ -169,6 +174,18 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("OpenGL/OnWindow", false);
     QMPSettings.init("OpenGL/VSync", true);
     QMPSettings.init("OpenGL/BypassCompositor", false);
+
+    QMPSettings.init("Vulkan/Device", QByteArray());
+#ifdef Q_OS_WIN
+    // Use V-Sync by default, because Mailbox present mode behaves weirdly on NVIDIA on Windows
+    QMPSettings.init("Vulkan/VSync", Qt::Checked);
+#else
+    QMPSettings.init("Vulkan/VSync", Qt::PartiallyChecked);
+#endif
+    QMPSettings.init("Vulkan/AlwaysGPUDeint", true);
+    QMPSettings.init("Vulkan/HQScaleDown", true);
+    QMPSettings.init("Vulkan/HQScaleUp", false);
+    QMPSettings.init("Vulkan/BypassCompositor", false);
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
@@ -732,6 +749,9 @@ void SettingsWidget::createRendererSettings()
 #ifdef USE_OPENGL
     renderers->addItem(tr("OpenGL"), "opengl");
 #endif
+#ifdef USE_VULKAN
+    renderers->addItem(tr("Vulkan"), "vulkan");
+#endif
 
     for (int i = renderers->count() - 1; i >= 0; --i)
     {
@@ -741,7 +761,8 @@ void SettingsWidget::createRendererSettings()
 
     auto rendererStacked = new QStackedWidget;
 
-    m_rendererApplyFunctions.push_back([=] {
+    m_rendererApplyFunctions.push_back([=](bool &initFilters) {
+        Q_UNUSED(initFilters)
         const auto rendererName = renderers->currentData().toString();
         settings->set("Renderer", rendererName);
         if (currentRendererName != rendererName)
@@ -751,12 +772,17 @@ void SettingsWidget::createRendererSettings()
         }
     });
 
-#ifdef USE_OPENGL
+#if defined(USE_OPENGL) || defined(USE_VULKAN)
     auto createVSync = [] {
         return new QCheckBox(tr("Vertical synchronization (V-Sync)"));
     };
     auto createBypassCompositor = [] {
-        return new QCheckBox(tr("Bypass compositor in full screen"));
+        auto bypassCompositor = new QCheckBox(tr("Bypass compositor in full screen"));
+        if (QGuiApplication::platformName() == "xcb")
+        {
+            bypassCompositor->setToolTip(tr("This can improve performance if X11 compositor supports it"));
+        }
+        return bypassCompositor;
     };
 #endif
 
@@ -781,17 +807,14 @@ void SettingsWidget::createRendererSettings()
         auto vsync = createVSync();
         auto bypassCompositor = createBypassCompositor();
 
-        if (QGuiApplication::platformName() == "xcb")
-        {
-            bypassCompositor->setToolTip(tr("This can improve performance if X11 compositor supports it"));
-        }
 #ifdef Q_OS_WIN
-        else if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
         {
             bypassCompositor->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
         }
-#endif
         else
+#endif
+        if (QGuiApplication::platformName() != "xcb")
         {
             bypassCompositor->setEnabled(false);
         }
@@ -828,7 +851,8 @@ void SettingsWidget::createRendererSettings()
             vsync->hide();
         }
 
-        m_rendererApplyFunctions.push_back([=] {
+        m_rendererApplyFunctions.push_back([=](bool &initFilters) {
+            Q_UNUSED(initFilters)
             auto &settings = QMPlay2Core.getSettings();
             if (!glOnWindow->isHidden() && settings.getBool("OpenGL/OnWindow") != glOnWindow->isChecked())
             {
@@ -846,6 +870,108 @@ void SettingsWidget::createRendererSettings()
         });
 
         rendererStacked->addWidget(openglSettings);
+    }
+#endif
+
+#ifdef USE_VULKAN
+    {
+        auto vulkanSetttings = new QWidget;
+
+        auto devices = new QComboBox;
+        auto vsync = createVSync();
+        auto gpuDeint = new QCheckBox(tr("Use GPU deinterlacing for CPU-decoded video"));
+        auto hqDownscale = new QCheckBox(tr("High quality image scaling down"));
+        auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
+        auto bypassCompositor = createBypassCompositor();
+
+        connect(rendererStacked, &QStackedWidget::currentChanged,
+                this, [=](int idx) {
+            if (devices->count() > 0 || idx != renderers->findData("vulkan"))
+                return;
+
+            const auto storedID = settings->getByteArray("Vulkan/Device");
+            int idIdx = 0;
+
+            for (auto &&physicalDevice : QmVk::Instance::enumerateSupportedPhysicalDevices())
+            {
+                const auto &properties = physicalDevice->properties();
+                const auto id = QmVk::Instance::getPhysicalDeviceID(properties);
+                devices->addItem(properties.deviceName, id);
+                if (idIdx == 0 && !storedID.isEmpty() && storedID == id)
+                    idIdx = devices->count();
+            }
+
+            if (devices->count() > 0)
+            {
+                devices->insertItem(0, tr("First avilable device"));
+                devices->setCurrentIndex(idIdx);
+            }
+            else
+            {
+                devices->addItem(tr("No supported devices found"));
+                vulkanSetttings->setEnabled(false);
+            }
+        });
+
+        vsync->setTristate(true);
+        vsync->setToolTip(tr(
+            "Partially checked (default):\n"
+            "  - MAILBOX (tear-free) is the preferred present mode\n"
+            "  - FIFO (V-Sync) should not be used in windowed mode"
+        ));
+
+#ifdef Q_OS_WIN
+        if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        {
+            bypassCompositor->setToolTip(tr("Allow for exclusive fullscreen. This can improve performance."));
+        }
+        else
+#endif
+        if (QGuiApplication::platformName() != "xcb")
+        {
+            bypassCompositor->setEnabled(false);
+        }
+
+        vsync->setCheckState(settings->getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked));
+        gpuDeint->setChecked(settings->getBool("Vulkan/AlwaysGPUDeint"));
+        hqDownscale->setChecked(settings->getBool("Vulkan/HQScaleDown"));
+        hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
+        bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
+
+        hqUpscale->setToolTip(tr("Very slow if used with sharpness"));
+
+        auto layout = new QFormLayout(vulkanSetttings);
+        layout->setMargin(3);
+        layout->addRow(tr("Device:"), devices);
+        layout->addRow(vsync);
+        layout->addRow(gpuDeint);
+        layout->addRow(hqDownscale);
+        layout->addRow(hqUpscale);
+        layout->addRow(bypassCompositor);
+
+        m_rendererApplyFunctions.push_back([=](bool &initFilters) {
+            const bool alwaysGPUDeint = gpuDeint->isChecked();
+            if (QMPlay2Core.isVulkanRenderer() && settings->getBool("Vulkan/AlwaysGPUDeint") != alwaysGPUDeint)
+                initFilters = true;
+
+            if (devices->isEnabled() && devices->count() > 0)
+            {
+                const auto vulkanDeviceID = devices->currentData().toByteArray();
+                if (vulkanDeviceID != settings->getByteArray("Vulkan/Device"))
+                {
+                    settings->set("Vulkan/Device", vulkanDeviceID.constData());
+                    if (QMPlay2Core.isVulkanRenderer())
+                        std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->obtainPhysicalDevice();
+                }
+            }
+            settings->set("Vulkan/VSync", vsync->checkState());
+            settings->set("Vulkan/AlwaysGPUDeint", alwaysGPUDeint);
+            settings->set("Vulkan/HQScaleDown", hqDownscale->isChecked());
+            settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
+            settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());
+        });
+
+        rendererStacked->addWidget(vulkanSetttings);
     }
 #endif
 
@@ -927,6 +1053,7 @@ void SettingsWidget::apply()
     Settings &QMPSettings = QMPlay2Core.getSettings();
     const int page = tabW->currentIndex();
     bool forceRestartPlayback = false;
+    bool initFilters = false;
     switch (page)
     {
         case 0:
@@ -998,12 +1125,15 @@ void SettingsWidget::apply()
         case 1:
         {
             for (auto &&fn : m_rendererApplyFunctions)
-                fn();
+                fn(initFilters);
 
             QStringList videoWriters;
             for (QListWidgetItem *wI : modulesList[0]->list->findItems(QString(), Qt::MatchContains))
                 videoWriters += wI->text();
             QMPSettings.set("videoWriters", videoWriters);
+
+            if (initFilters)
+                page6->deintSettingsW->setSoftwareDeintEnabledDisabled();
 
             break;
         }
@@ -1087,12 +1217,13 @@ void SettingsWidget::apply()
             page6->deintSettingsW->writeSettings();
             if (page6->otherVFiltersW)
                 page6->otherVFiltersW->writeSettings();
+            initFilters = true;
             break;
     }
     if (page != 3)
         QMPSettings.flush();
     if (!QMPlay2GUI.restartApp)
-        emit settingsChanged(page, forceRestartPlayback);
+        emit settingsChanged(page, forceRestartPlayback, initFilters);
 }
 void SettingsWidget::chModule(QListWidgetItem *w)
 {

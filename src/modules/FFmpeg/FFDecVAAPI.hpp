@@ -21,6 +21,9 @@
 #include <FFDecHWAccel.hpp>
 #include <VAAPI.hpp>
 
+#ifdef USE_VULKAN
+class VAAPIVulkan;
+#endif
 struct SwsContext;
 
 class FFDecVAAPI final : public FFDecHWAccel
@@ -44,5 +47,8 @@ private:
     VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
     std::shared_ptr<VAAPI> m_vaapi;
     std::shared_ptr<VideoFilter> m_filter;
+#ifdef USE_VULKAN
+    std::shared_ptr<VAAPIVulkan> m_vaapiVulkan;
+#endif
     SwsContext *m_swsCtx = nullptr;
 };

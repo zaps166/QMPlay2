@@ -24,13 +24,48 @@
 #include <QByteArray>
 #include <QRect>
 
+#include <functional>
 #include <vector>
 #include <mutex>
+
+#ifdef USE_VULKAN
+#   include <QVector4D>
+
+#   include <memory>
+
+namespace QmVk {
+
+class Buffer;
+class BufferView;
+class BufferPool;
+
+}
+#endif
 
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2OSD
 {
 public:
-    using Image = std::pair<QRect, QByteArray>;
+    struct Image
+    {
+        // Common
+        QRect rect;
+
+        // CPU only
+        QByteArray rgba;
+
+#ifdef USE_VULKAN // Vulkan only
+        std::shared_ptr<QmVk::BufferView> dataBufferView;
+        int linesize;
+
+        // AV subtitles
+        std::shared_ptr<QmVk::BufferView> paletteBufferView;
+
+        // ASS subtitles
+        QVector4D color;
+#endif
+    };
+
+    using IterateCallback = std::function<void(const Image &)>;
 
 public:
     QMPlay2OSD();
@@ -88,18 +123,12 @@ public:
         return m_started;
     }
 
-    inline const Image &getImage(int idx) const
+    inline Image &add()
     {
-        return m_images[idx];
+        m_images.emplace_back();
+        return m_images.back();
     }
-    inline int imageCount() const
-    {
-        return m_images.size();
-    }
-    inline void addImage(const QRect &rect, const QByteArray &data)
-    {
-        m_images.emplace_back(rect, data);
-    }
+    void iterate(const IterateCallback &fn) const;
 
     inline auto lock() const
     {
@@ -114,6 +143,13 @@ public:
 
     void clear();
 
+#ifdef USE_VULKAN // Vulkan only
+    void setReturnVkBufferFn(
+        const std::weak_ptr<QmVk::BufferPool> &bufferPoolWeak,
+        std::shared_ptr<QmVk::Buffer> &&buffer
+    );
+#endif
+
 private:
     std::vector<Image> m_images;
     QByteArray m_text;
@@ -124,4 +160,7 @@ private:
     quint64 m_id;
     QElapsedTimer m_timer;
     mutable std::mutex m_mutex;
+#ifdef USE_VULKAN
+    std::function<void()> m_returnVkBufferFn;
+#endif
 };

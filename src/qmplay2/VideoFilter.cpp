@@ -20,8 +20,23 @@
 
 #include <QDebug>
 
+#ifdef USE_VULKAN
+#   include <QMPlay2Core.hpp>
+
+#   include "../qmvk/Image.hpp"
+
+#   include <vulkan/VulkanInstance.hpp>
+#   include <vulkan/VulkanImagePool.hpp>
+#   include <vulkan/VulkanHWInterop.hpp>
+#endif
+
 VideoFilter::VideoFilter(bool fillDefaultSupportedPixelFormats)
 {
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer())
+        m_vkImagePool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createImagePool();
+#endif
+
     if (!fillDefaultSupportedPixelFormats)
         return;
 
@@ -121,3 +136,51 @@ double VideoFilter::getMidFrameTS(double ts1, double ts2) const
 {
     return ts1 + qAbs(ts1 - ts2) / 2.0;
 }
+
+Frame VideoFilter::getNewFrame(const Frame &other)
+{
+#ifdef USE_VULKAN
+    if (m_vkImagePool)
+    {
+        auto frame = m_vkImagePool->takeToFrame(other);
+        if (!frame.isEmpty())
+            return frame;
+    }
+#endif
+    return Frame::createEmpty(other, true);
+}
+
+#ifdef USE_VULKAN
+std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
+    Frame &frame,
+    const std::shared_ptr<QmVk::Device> &device)
+{
+    if (m_vkHwInterop && !frame.vulkanImage() && device)
+    {
+        m_vkHwInterop->map(frame);
+        if (m_vkHwInterop->hasError() || !frame.vulkanImage())
+            return nullptr;
+    }
+
+    auto image = frame.vulkanImage();
+    if (!image)
+    {
+        auto oldFrame = std::move(frame);
+        frame = m_vkImagePool->takeToFrame(oldFrame);
+        if (frame.isEmpty())
+        {
+            frame = std::move(oldFrame);
+            return nullptr;
+        }
+
+        image = frame.vulkanImage();
+        oldFrame.copyToVulkanImage(image);
+    }
+    else if (device && image->device() != device)
+    {
+        return nullptr;
+    }
+
+    return image;
+}
+#endif

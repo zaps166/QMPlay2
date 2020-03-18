@@ -167,7 +167,7 @@ private slots:
     void repeatEntry(bool b);
 
     void saveCover();
-    void settingsChanged(int page, bool forceRestart);
+    void settingsChanged(int page, bool forceRestart, bool initFilters);
     void videoResized(int, int);
 
     void videoAdjustmentChanged(const QString &osdText);

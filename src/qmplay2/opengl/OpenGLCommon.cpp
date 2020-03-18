@@ -53,6 +53,7 @@
 #endif
 
 OpenGLCommon::OpenGLCommon() :
+    VideoOutputCommon(false),
     vSync(true),
     m_glInstance(std::static_pointer_cast<OpenGLInstance>(QMPlay2Core.gpuInstance())),
     shaderProgramVideo(nullptr), shaderProgramOSD(nullptr),
@@ -223,10 +224,11 @@ void OpenGLCommon::clearImg()
     osd_ids.clear();
 }
 
-void OpenGLCommon::setSphericalView(bool spherical)
+bool OpenGLCommon::setSphericalView(bool spherical)
 {
     if (hasVbo)
-        VideoOutputCommon::setSphericalView(spherical);
+        return VideoOutputCommon::setSphericalView(spherical);
+    return false;
 }
 
 void OpenGLCommon::setTextureParameters(GLenum target, quint32 texture, GLint param)

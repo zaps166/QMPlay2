@@ -23,6 +23,12 @@
 #include <QString>
 #include <QList>
 
+#ifdef USE_VULKAN
+namespace QmVk {
+class ImagePool;
+}
+#endif
+
 struct AVCodecContext;
 struct AVPacket;
 struct AVCodec;
@@ -57,4 +63,8 @@ protected:
     QList<AVFrame *> m_frames;
     AVRational m_timeBase;
     bool codecIsOpen;
+
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
+#endif
 };

@@ -427,6 +427,13 @@ void DemuxerThr::run()
     updateCoverAndPlaying(false);
     connect(&QMPlay2Core, SIGNAL(updateCover(QString, QString, QString, QByteArray)), this, SLOT(updateCover(QString, QString, QString, QByteArray)));
 
+    QObject o;
+    connect(&QMPlay2Core, &QMPlay2CoreClass::updateInformationPanel,
+            &o, [this] {
+        Q_ASSERT(QThread::currentThread() != thread());
+        emitInfo();
+    });
+
     if (forwardPackets == 1 || localStream || unknownLength)
         PacketBuffer::setBackwardPackets((backwardPackets = 0));
     else

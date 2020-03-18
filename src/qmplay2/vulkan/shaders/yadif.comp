@@ -1,0 +1,135 @@
+layout(local_size_x_id = 0,
+       local_size_y_id = 1,
+       local_size_z_id = 2) in;
+
+layout(constant_id = 3) const bool spatialCheck = false;
+layout(constant_id = 4) const int  srcPlaneCount = 3;
+layout(constant_id = 5) const int  srcPlane = 0;
+layout(constant_id = 6) const int  srcColorComponent = 0;
+layout(constant_id = 7) const int  dstPlane = 0;
+
+layout(push_constant) uniform PushConstants
+{
+    int parity;
+    int filterParity;
+};
+
+layout(binding = 0) uniform sampler2D prev[srcPlaneCount];
+layout(binding = 1) uniform sampler2D curr[srcPlaneCount];
+layout(binding = 2) uniform sampler2D next[srcPlaneCount];
+layout(binding = 3) uniform writeonly image2D dest[3];
+
+ivec2 globalPos = ivec2(gl_GlobalInvocationID.xy);
+int mrefs = -1;
+int prefs = 1;
+
+float fetch(in sampler2D frame, in int yOff, in int xOff)
+{
+    return texelFetch(frame, globalPos + ivec2(xOff, yOff), 0)[srcColorComponent];
+}
+
+bool check(
+    in int j,
+    in sampler2D curr,
+    inout float spatialScore,
+    inout float spatialPred)
+{
+    float score =
+        abs(fetch(curr, mrefs, -1 + j) - fetch(curr, prefs, -1 - j)) +
+        abs(fetch(curr, mrefs,    + j) - fetch(curr, prefs,    - j)) +
+        abs(fetch(curr, mrefs,  1 + j) - fetch(curr, prefs,  1 - j))
+    ;
+    if (score < spatialScore)
+    {
+        spatialScore = score;
+        spatialPred = (fetch(curr, mrefs, +j) + fetch(curr, prefs, -j)) / 2.0;
+        return true;
+    }
+    return false;
+}
+
+float filterCurr(
+    in sampler2D prev,
+    in sampler2D prev2,
+    in sampler2D curr,
+    in sampler2D next,
+    in sampler2D next2)
+{
+    float c = fetch(curr, mrefs, 0);
+    float d = (fetch(prev2, 0, 0) + fetch(next2, 0, 0)) / 2.0;
+    float e = fetch(curr, prefs, 0);
+    float temporalDiff0 = abs(fetch(prev2, 0, 0) - fetch(next2, 0, 0));
+    float temporalDiff1 = (abs(fetch(prev, mrefs, 0) - c) + abs(fetch(prev, prefs, 0) - e)) / 2.0;
+    float temporalDiff2 = (abs(fetch(next, mrefs, 0) - c) + abs(fetch(next, prefs, 0) - e)) / 2.0;
+
+    float diff = max(temporalDiff0 / 2.0, max(temporalDiff1, temporalDiff2));
+    float spatialPred = (c + e) / 2.0;
+
+    /* Reads 3 pixels to the left/right */
+    {
+        float spatialScore =
+            abs(fetch(curr, mrefs, -1) - fetch(curr, prefs, -1)) +
+            abs(c - e) +
+            abs(fetch(curr, mrefs, +1) - fetch(curr, prefs, +1)) -
+            1.0 / 255.0
+        ;
+        if (check(-1, curr, spatialScore, spatialPred))
+            check(-2, curr, spatialScore, spatialPred);
+        if (check(+1, curr, spatialScore, spatialPred))
+            check(+2, curr, spatialScore, spatialPred);
+    }
+
+    /* Spatial interlacing check */
+    if (spatialCheck)
+    {
+        float b = (fetch(prev2, 2 * mrefs, 0) + fetch(next2, 2 * mrefs, 0)) / 2.0;
+        float f = (fetch(prev2, 2 * prefs, 0) + fetch(next2, 2 * prefs, 0)) / 2.0;
+        float maxVal = max(max(d - e, d - c), min(b - c, f - e));
+        float minVal = min(min(d - e, d - c), max(b - c, f - e));
+        diff = max(diff, max(minVal, -maxVal));
+    }
+
+    return clamp(spatialPred, d - diff, d + diff);
+}
+
+void main()
+{
+    float pixel;
+    if ((globalPos.y ^ parity) % 2 != 0)
+    {
+        if (globalPos.y == 0)
+        {
+            mrefs = prefs;
+        }
+        else if (globalPos.y == textureSize(curr[srcPlane], 0).y - 1)
+        {
+            prefs = mrefs;
+        }
+
+        if (filterParity != 0)
+        {
+            pixel = filterCurr(
+                prev[srcPlane],
+                prev[srcPlane],
+                curr[srcPlane],
+                next[srcPlane],
+                curr[srcPlane]
+            );
+        }
+        else
+        {
+            pixel = filterCurr(
+                prev[srcPlane],
+                curr[srcPlane],
+                curr[srcPlane],
+                next[srcPlane],
+                next[srcPlane]
+            );
+        }
+    }
+    else
+    {
+        pixel = fetch(curr[srcPlane], 0, 0);
+    }
+    imageStore(dest[dstPlane], globalPos, vec4(pixel));
+}

@@ -33,13 +33,15 @@ class QWidget;
 class VideoOutputCommon : public X11BypassCompositor
 {
 protected:
-    VideoOutputCommon();
+    VideoOutputCommon(bool yInverted);
     ~VideoOutputCommon();
 
 public:
     QWidget *widget() const;
 
-    virtual void setSphericalView(bool sphericalView);
+    void resetOffsets();
+
+    virtual bool setSphericalView(bool sphericalView);
 
 protected:
     void updateSizes(bool transpose);
@@ -60,6 +62,8 @@ private:
     void rotValueUpdated(const QVariant &value);
 
 protected:
+    const float m_yMultiplier;
+
     QWidget *m_widget = nullptr;
     std::function<void()> m_matrixChangeFn;
 

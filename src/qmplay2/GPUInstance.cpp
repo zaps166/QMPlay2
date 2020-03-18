@@ -22,6 +22,9 @@
 #ifdef USE_OPENGL
 #   include <opengl/OpenGLInstance.hpp>
 #endif
+#ifdef USE_VULKAN
+#   include <vulkan/VulkanInstance.hpp>
+#endif
 #include <VideoWriter.hpp>
 
 #include <QDebug>
@@ -30,7 +33,29 @@ using namespace std;
 
 shared_ptr<GPUInstance> GPUInstance::create()
 {
-    const auto renderer = QMPlay2Core.getSettings().getString("Renderer");
+    auto &sets = QMPlay2Core.getSettings();
+    auto renderer = sets.getString("Renderer");
+
+#if defined(USE_VULKAN)
+    if (renderer == "vulkan") try
+    {
+        return QmVk::Instance::create();
+    }
+    catch (const vk::SystemError &e)
+    {
+        qWarning() << "Vulkan is unable to work with QMPlay2 on this platform:" << e.what();
+#   ifdef USE_OPENGL
+        // Fallback to OpenGL
+        renderer = "opengl";
+#   endif
+    }
+#elif defined (USE_OPENGL)
+    if (renderer == "vulkan")
+    {
+        // Use OpenGL if Vulkan is not available
+        renderer = "opengl";
+    }
+#endif
 
 #ifdef USE_OPENGL
     if (renderer == "opengl")

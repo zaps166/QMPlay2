@@ -24,6 +24,18 @@
 #include <StreamInfo.hpp>
 #include <Functions.hpp>
 
+#ifdef USE_VULKAN
+#   include "../qmvk/Device.hpp"
+#   include "../qmvk/PhysicalDevice.hpp"
+#   include "../qmvk/Image.hpp"
+#   include "../qmvk/Buffer.hpp"
+#   include "../qmvk/BufferView.hpp"
+
+#   include <vulkan/VulkanInstance.hpp>
+#   include <vulkan/VulkanImagePool.hpp>
+#   include <vulkan/VulkanBufferPool.hpp>
+#endif
+
 extern "C"
 {
     #include <libavformat/avformat.h>
@@ -277,13 +289,16 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
             }
             if (m_desiredPixFmt != AV_PIX_FMT_NONE)
             {
-                if (m_dontConvert && frame->buf[0] && frame->buf[1] && frame->buf[2])
+                if (m_dontConvert && frame->buf[0])
                 {
                     decoded = Frame(frame);
+#ifdef USE_VULKAN
+                    if (frame->opaque)
+                        decoded.setVulkanImage(reinterpret_cast<QmVk::Image *>(frame->opaque)->shared_from_this());
+#endif
                 }
                 else
                 {
-                    decoded = Frame::createEmpty(frame, true, m_desiredPixFmt);
                     if (frame->width != lastFrameW || frame->height != lastFrameH || newFormat)
                     {
                         sws_ctx = sws_getCachedContext(
@@ -302,6 +317,20 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
                         lastFrameW = frame->width;
                         lastFrameH = frame->height;
                     }
+
+#ifdef USE_VULKAN
+                    if (m_vkImagePool)
+                    {
+                        decoded = m_vkImagePool->takeToFrame(
+                            vk::Extent2D(frame->width, frame->height),
+                            frame,
+                            m_desiredPixFmt
+                        );
+                    }
+#endif
+                    if (decoded.isEmpty())
+                        decoded = Frame::createEmpty(frame, true, m_desiredPixFmt);
+
                     quint8 *decodedData[] = {
                         decoded.data(0),
                         decoded.data(1),
@@ -375,6 +404,19 @@ bool FFDecSW::open(StreamInfo &streamInfo)
         }
         codec_ctx->lowres = qMin<int>(codec->max_lowres, lowres);
         lastPixFmt = codec_ctx->pix_fmt;
+#ifdef USE_VULKAN
+        if ((codec->capabilities & AV_CODEC_CAP_DR1) && QMPlay2Core.isVulkanRenderer())
+        {
+            codec_ctx->opaque = this;
+            codec_ctx->get_buffer2 = vulkanGetVideoBufferStatic;
+            codec_ctx->thread_safe_callbacks = 1;
+        }
+    }
+    else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
+    {
+        if (QMPlay2Core.isVulkanRenderer())
+            m_vkBufferPool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
+#endif
     }
     if (!FFDec::openCodec(codec))
         return false;
@@ -531,11 +573,8 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
             }
             osd->setDuration(subtitle.duration());
             osd->setPTS(subtitle.time);
-            for (uint32_t i = 0; i < subtitle.num_rects; ++i)
-            {
-                const auto avRect = subtitle.rects[i];
-                const auto &frameSize = subtitle.frameSize;
 
+            auto getRect = [](AVSubtitleRect *avRect, const QSize &frameSize) {
                 const QSize size(
                     qBound(0, avRect->w, frameSize.width()),
                     qBound(0, avRect->h, frameSize.height())
@@ -544,27 +583,98 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
                     qBound(0, avRect->x, frameSize.width()  - size.width()),
                     qBound(0, avRect->y, frameSize.height() - size.height())
                 );
+                return QRect(point, size);
+            };
 
-                QByteArray data(size.width() * size.height() * sizeof(uint32_t), Qt::Uninitialized);
+#ifdef USE_VULKAN
+            if (m_vkBufferPool)
+            {
+                using namespace QmVk;
 
-                const auto source   = (uint8_t  *)avRect->data[0];
-                const auto palette  = (uint32_t *)avRect->data[1];
-                const auto linesize = avRect->linesize[0];
-                auto dest = (uint32_t *)data.data();
-                const int w = size.width();
-                const int h = size.height();
+                auto device = m_vkBufferPool->instance()->device();
+                if (!device)
+                    break;
 
-                for (int y = 0; y < h; ++y)
+                const auto alignment = device->physicalDevice()->limits().minTexelBufferOffsetAlignment;
+
+                constexpr vk::DeviceSize palSize = 256 * sizeof(uint32_t);
+                const auto palBuffSize = FFALIGN(palSize, alignment);
+
+                auto getRectBuffSize = [&](AVSubtitleRect *rect) {
+                    return FFALIGN(rect->linesize[0] * rect->h, alignment);
+                };
+
+                vk::DeviceSize buffSize = 0;
+                vk::DeviceSize buffOffset = 0;
+
+                for (uint32_t i = 0; i < subtitle.num_rects; ++i)
+                    buffSize += getRectBuffSize(subtitle.rects[i]) + palBuffSize;
+
+                auto buffer = m_vkBufferPool->take(buffSize);
+                if (!buffer)
+                    break;
+
+                auto data = buffer->map<uint8_t>();
+
+                for (uint32_t i = 0; i < subtitle.num_rects; ++i) try
                 {
-                    for (int x = 0; x < w; ++x)
+                    const auto avRect = subtitle.rects[i];
+                    const auto rectBuffSize = getRectBuffSize(avRect);
+                    const auto rectSize = avRect->linesize[0] * avRect->h;
+
+                    auto &osdImg = osd->add();
+
+                    osdImg.rect = getRect(avRect, subtitle.frameSize);
+
+                    memcpy(data + buffOffset, avRect->data[0], rectSize);
+                    osdImg.dataBufferView = BufferView::create(buffer, vk::Format::eR8Uint, buffOffset, rectSize);
+                    buffOffset += rectBuffSize;
+
+                    osdImg.linesize = avRect->linesize[0];
+
+                    memcpy(data + buffOffset, avRect->data[1], palSize);
+                    osdImg.paletteBufferView = BufferView::create(buffer, vk::Format::eB8G8R8A8Unorm, buffOffset, palSize);
+                    buffOffset += palBuffSize;
+                }
+                catch (const vk::SystemError &e)
+                {
+                    Q_UNUSED(e)
+                    osd->clear();
+                    break;
+                }
+
+                osd->setReturnVkBufferFn(m_vkBufferPool, move(buffer));
+            }
+            else
+#endif
+            {
+                for (uint32_t i = 0; i < subtitle.num_rects; ++i)
+                {
+                    const auto avRect = subtitle.rects[i];
+
+                    auto &osdImg = osd->add();
+                    osdImg.rect = getRect(avRect, subtitle.frameSize);
+                    osdImg.rgba = QByteArray(osdImg.rect.width() * osdImg.rect.height() * sizeof(uint32_t), Qt::Uninitialized);
+
+                    const auto source   = (uint8_t  *)avRect->data[0];
+                    const auto palette  = (uint32_t *)avRect->data[1];
+                    const auto linesize = avRect->linesize[0];
+                    auto dest = (uint32_t *)osdImg.rgba.data();
+                    const int w = osdImg.rect.width();
+                    const int h = osdImg.rect.height();
+
+                    for (int y = 0; y < h; ++y)
                     {
-                        const uint32_t color = palette[source[y * linesize + x]];
-                        *(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
+                        for (int x = 0; x < w; ++x)
+                        {
+                            const uint32_t color = palette[source[y * linesize + x]];
+                            *(dest++) = (color & 0xFF00FF00) | ((color << 16) & 0x00FF0000) | ((color >> 16) & 0x000000FF);
+                        }
                     }
                 }
 
-                osd->addImage(QRect(point, size), data);
             }
+
             osd->setNeedsRescale();
             osd->genId();
         }
@@ -578,3 +688,36 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
     }
     return ret;
 }
+
+#ifdef USE_VULKAN
+int FFDecSW::vulkanGetVideoBufferStatic(AVCodecContext *codecCtx, AVFrame *frame, int flags)
+{
+    return reinterpret_cast<FFDecSW *>(codecCtx->opaque)->vulkanGetVideoBuffer(frame, flags);
+}
+int FFDecSW::vulkanGetVideoBuffer(AVFrame *frame, int flags)
+{
+    if (m_dontConvert)
+    {
+        int w = frame->width;
+        int h = frame->height;
+        int linesizeAligns[AV_NUM_DATA_POINTERS] = {};
+        avcodec_align_dimensions2(codec_ctx, &w, &h, linesizeAligns);
+
+        const int lineSizeAlign = (linesizeAligns[0] << m_origPixDesc->log2_chroma_w);
+        w = FFALIGN(w, lineSizeAlign);
+
+        // Increase padding height of 1 to prevent buffer overflow in some FFmpeg codecs ("avcodec_align_dimensions2" should do this...)
+        uint32_t paddingHeight = h - codec_ctx->height + 1;
+
+        if (codec_ctx->codec_id == AV_CODEC_ID_H264 && w == 4096)
+        {
+            // H.264 decoder can be slower with linesize of 4096 for unknown reason...
+            w += lineSizeAlign;
+        }
+
+        if (m_vkImagePool->takeToAVFrame(vk::Extent2D(w, codec_ctx->height), frame, paddingHeight))
+            return 0;
+    }
+    return avcodec_default_get_buffer2(codec_ctx, frame, flags);
+}
+#endif

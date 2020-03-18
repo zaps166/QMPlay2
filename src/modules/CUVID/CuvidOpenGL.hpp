@@ -18,17 +18,14 @@
 
 #pragma once
 
-#include "CuvidAPI.hpp"
-
+#include <CuvidHWInterop.hpp>
 #include <opengl/OpenGLHWInterop.hpp>
 
-#include <QSet>
-
-class CuvidOpenGL : public OpenGLHWInterop
+class CuvidOpenGL final : public CuvidHWInterop, public OpenGLHWInterop
 {
 public:
     CuvidOpenGL(const std::shared_ptr<CUcontext> &cuCtx);
-    ~CuvidOpenGL() final;
+    ~CuvidOpenGL();
 
     QString name() const override;
 
@@ -42,29 +39,11 @@ public:
 
     QImage getImage(const Frame &videoFrame) override;
 
-    /**/
-
-    inline std::shared_ptr<CUcontext> getCudaContext() const
-    {
-        return m_cuCtx;
-    }
-
-    void setAvailableSurface(quintptr surfaceId);
-
-    void setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight);
-
 private:
-    int m_codedHeight = 0;
-
     quint32 m_textures[2] = {};
 
     int m_widths[2] = {};
     int m_heights[2] = {};
 
-    const std::shared_ptr<CUcontext> m_cuCtx;
-    CUvideodecoder m_cuvidDec = nullptr;
-
     CUgraphicsResource m_res[2] = {};
-
-    QSet<int> m_validPictures;
 };

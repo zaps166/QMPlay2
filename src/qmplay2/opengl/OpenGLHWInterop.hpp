@@ -53,6 +53,8 @@ public:
     virtual bool mapFrame(Frame &videoFrame) = 0;
     virtual quint32 getTexture(int plane) = 0;
 
+    virtual QImage getImage(const Frame &frame) = 0;
+
     virtual void getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)
     {
         videoAdjustmentCap.zero();

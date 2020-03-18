@@ -22,6 +22,10 @@
 
 #include <deque>
 
+#ifdef USE_VULKAN
+#   include <vulkan/VulkanBufferPool.hpp>
+#endif
+
 class Subtitle : public AVSubtitle
 {
 public:
@@ -67,6 +71,12 @@ private:
 
     bool getFromBitmapSubsBuffer(QMPlay2OSD *&, double pts);
 
+#ifdef USE_VULKAN
+private:
+    static int vulkanGetVideoBufferStatic(AVCodecContext *codecCtx, AVFrame *frame, int flags);
+    int vulkanGetVideoBuffer(AVFrame *frame, int flags);
+#endif
+
 private:
     int threads, lowres;
     bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;
@@ -79,4 +89,8 @@ private:
     bool m_dontConvert = false;
 
     std::deque<Subtitle> m_subtitles;
+
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;
+#endif
 };

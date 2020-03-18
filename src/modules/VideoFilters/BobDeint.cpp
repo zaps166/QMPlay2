@@ -36,7 +36,7 @@ bool BobDeint::filter(QQueue<Frame> &framesQueue)
     {
         const Frame &sourceFrame = m_internalQueue.at(0);
 
-        Frame destFrame = Frame::createEmpty(sourceFrame, true);
+        Frame destFrame = getNewFrame(sourceFrame);
         destFrame.setNoInterlaced();
 
         const bool parity = (isTopFieldFirst(sourceFrame) == m_secondFrame);

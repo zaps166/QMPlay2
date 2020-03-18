@@ -35,7 +35,7 @@ bool MotionBlur::filter(QQueue<Frame> &framesQueue)
     if (m_internalQueue.count() >= 2)
     {
         const Frame videoFrame1 = m_internalQueue.dequeue();
-        Frame videoFrame2 = Frame::createEmpty(videoFrame1, true);
+        Frame videoFrame2 = getNewFrame(videoFrame1);
         const Frame &videoFrame3 = m_internalQueue.at(0);
 
         for (int p = 0; p < 3; ++p)

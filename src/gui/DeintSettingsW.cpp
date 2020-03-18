@@ -92,6 +92,14 @@ DeintSettingsW::~DeintSettingsW()
     }
 }
 
+void DeintSettingsW::setSoftwareDeintEnabledDisabled()
+{
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer())
+        softwareMethodsCB->setEnabled(!QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint"));
+#endif
+}
+
 void DeintSettingsW::writeSettings()
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
@@ -119,6 +127,7 @@ void DeintSettingsW::softwareMethods(bool doubler)
                 softwareMethodsCB->addItem(mod.name, mod.description);
     const int idx = softwareMethodsCB->findText(QMPlay2Core.getSettings().getString("Deinterlace/SoftwareMethod"));
     softwareMethodsCB->setCurrentIndex(idx < 0 ? 0 : idx);
+    setSoftwareDeintEnabledDisabled();
 }
 void DeintSettingsW::setSoftwareMethodsToolTip(int idx)
 {

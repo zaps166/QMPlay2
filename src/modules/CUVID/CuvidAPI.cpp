@@ -37,9 +37,13 @@ cuGraphicsMapResourcesType graphicsMapResources = nullptr;
 cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray = nullptr;
 cuGraphicsUnmapResourcesType graphicsUnmapResources = nullptr;
 cuGraphicsUnregisterResourceType graphicsUnregisterResource = nullptr;
+cuImportExternalMemory importExternalMemory = nullptr;
+cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
+cuDestroyExternalMemory destroyExternalMemory = nullptr;
+cuMemFree memFree = nullptr;
 cuCtxDestroyType ctxDestroy = nullptr;
 
-bool load()
+bool load(bool doInit, bool gl, bool vk)
 {
 #ifdef Q_OS_WIN
     QLibrary lib("nvcuda");
@@ -55,15 +59,55 @@ bool load()
         ctxPopCurrent = (cuCtxPopCurrentType)lib.resolve("cuCtxPopCurrent_v2");
         memcpyDtoH = (cuMemcpyDtoHType)lib.resolve("cuMemcpyDtoH_v2");
         memcpy2D = (cuMemcpy2DType)lib.resolve("cuMemcpy2D_v2");
-        graphicsGLRegisterImage = (cuGraphicsGLRegisterImageType)lib.resolve("cuGraphicsGLRegisterImage");
-        graphicsMapResources = (cuGraphicsMapResourcesType)lib.resolve("cuGraphicsMapResources");
-        graphicsSubResourceGetMappedArray = (cuGraphicsSubResourceGetMappedArrayType)lib.resolve("cuGraphicsSubResourceGetMappedArray");
-        graphicsUnmapResources = (cuGraphicsUnmapResourcesType)lib.resolve("cuGraphicsUnmapResources");
-        graphicsUnregisterResource = (cuGraphicsUnregisterResourceType)lib.resolve("cuGraphicsUnregisterResource");
         ctxDestroy = (cuCtxDestroyType)lib.resolve("cuCtxDestroy_v2");
-        if (init && init(0) != CUDA_SUCCESS)
+
+        bool hasPointers =
+            init &&
+            deviceGet &&
+            ctxCreate &&
+            ctxPushCurrent &&
+            ctxPopCurrent &&
+            memcpyDtoH &&
+            memcpy2D &&
+            ctxDestroy
+        ;
+
+        if (gl)
+        {
+            graphicsGLRegisterImage = (cuGraphicsGLRegisterImageType)lib.resolve("cuGraphicsGLRegisterImage");
+            graphicsMapResources = (cuGraphicsMapResourcesType)lib.resolve("cuGraphicsMapResources");
+            graphicsSubResourceGetMappedArray = (cuGraphicsSubResourceGetMappedArrayType)lib.resolve("cuGraphicsSubResourceGetMappedArray");
+            graphicsUnmapResources = (cuGraphicsUnmapResourcesType)lib.resolve("cuGraphicsUnmapResources");
+            graphicsUnregisterResource = (cuGraphicsUnregisterResourceType)lib.resolve("cuGraphicsUnregisterResource");
+
+            hasPointers &=
+                graphicsGLRegisterImage &&
+                graphicsMapResources &&
+                graphicsSubResourceGetMappedArray &&
+                graphicsUnmapResources &&
+                graphicsUnregisterResource
+            ;
+        }
+
+        if (vk)
+        {
+            importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
+            externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
+            destroyExternalMemory = (cuDestroyExternalMemory)lib.resolve("cuDestroyExternalMemory");
+            memFree = (cuMemFree)lib.resolve("cuMemFree_v2");
+
+            hasPointers &=
+                importExternalMemory &&
+                externalMemoryGetMappedBuffer &&
+                destroyExternalMemory &&
+                memFree
+            ;
+        }
+
+        if (!hasPointers)
             return false;
-        return (deviceGet && ctxCreate && ctxPushCurrent && ctxPopCurrent && memcpyDtoH && memcpy2D && graphicsGLRegisterImage && graphicsMapResources && graphicsSubResourceGetMappedArray && graphicsUnmapResources && graphicsUnregisterResource && ctxDestroy);
+
+        return (!doInit || init(0) == CUDA_SUCCESS);
     }
     return false;
 }

@@ -20,6 +20,10 @@
 
 #include <QDebug>
 
+#ifdef USE_VULKAN
+#   include "../qmvk/Image.hpp"
+#endif
+
 extern "C"
 {
     #include <libavutil/frame.h>
@@ -186,7 +190,15 @@ Frame::~Frame()
 
 bool Frame::isEmpty() const
 {
-    return (m_frame->data[0] == nullptr && !isHW() && !hasCustomData());
+    if (m_frame->data[0] == nullptr && !isHW() && !hasCustomData())
+    {
+#ifdef USE_VULKAN
+        if (m_vkImage)
+            return false;
+#endif
+        return true;
+    }
+    return false;
 }
 void Frame::clear()
 {
@@ -200,6 +212,9 @@ void Frame::clear()
     m_pixelFormat = AV_PIX_FMT_NONE;
     m_pixelFmtDescriptor = nullptr;
     m_isSecondField = false;
+#ifdef USE_VULKAN
+    m_vkImage.reset();
+#endif
 }
 
 void Frame::setTimeBase(const AVRational &timeBase)
@@ -470,6 +485,29 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
     return copyData(destData, destLinesize);
 }
 
+#ifdef USE_VULKAN
+bool Frame::copyToVulkanImage(const shared_ptr<QmVk::Image> &image) const
+{
+    if (!image->isLinear() || !image->isHostVisible())
+        return false;
+
+    const int vkNumPlanes = image->numPlanes();
+    if (numPlanes() != vkNumPlanes)
+        return false;
+
+    uint8_t *dstData[4] = {};
+    int dstLinesize[4] = {};
+    for (int i = 0; i < vkNumPlanes; ++i)
+    {
+        dstData[i] = image->map<uint8_t>(i);
+        dstLinesize[i] = image->linesize(i);
+    }
+    copyData(dstData, dstLinesize);
+
+    return true;
+}
+#endif
+
 Frame &Frame::operator =(const Frame &other)
 {
     av_frame_unref(m_frame);
@@ -491,6 +529,9 @@ Frame &Frame::operator =(const Frame &other)
     m_pixelFormat = other.m_pixelFormat;
     m_pixelFmtDescriptor = other.m_pixelFmtDescriptor;
     m_isSecondField = other.m_isSecondField;
+#ifdef USE_VULKAN
+    m_vkImage = other.m_vkImage;
+#endif
 
     return *this;
 }
@@ -507,6 +548,9 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_pixelFormat, other.m_pixelFormat);
     qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);
     qSwap(m_isSecondField, other.m_isSecondField);
+#ifdef USE_VULKAN
+    qSwap(m_vkImage, other.m_vkImage);
+#endif
 
     return *this;
 }

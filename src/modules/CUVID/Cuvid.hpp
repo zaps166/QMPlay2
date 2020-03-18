@@ -42,7 +42,7 @@ private:
 
     /**/
 
-    QComboBox *m_deintMethodB;
+    QComboBox *m_deintMethodB = nullptr;
 };
 
 /**/

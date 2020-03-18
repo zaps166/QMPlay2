@@ -20,6 +20,10 @@
 
 #include <Frame.hpp>
 
+#ifdef USE_VULKAN
+#   include "../qmvk/Image.hpp"
+#endif
+
 extern "C"
 {
     #include <libswscale/swscale.h>
@@ -53,14 +57,48 @@ bool ImgScaler::create(const Frame &videoFrame, int newWdst, int newHdst)
     );
     return (bool)m_swsCtx;
 }
-void ImgScaler::scale(const Frame &src, void *dst)
+bool ImgScaler::scale(const Frame &src, void *dst)
 {
-    const quint8 *srcData[3] = {
-        src.constData(0),
-        src.constData(1),
-        src.constData(2), // Ignored for NV12
+    const int numPlanes = src.numPlanes();
+    const uint8_t *srcData[3] = {};
+
+    auto swsScale = [&](int *srcLinesize) {
+        sws_scale(m_swsCtx, srcData, srcLinesize, 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
     };
-    sws_scale(m_swsCtx, srcData, src.linesize(), 0, m_srcH, (uint8_t **)&dst, &m_dstLinesize);
+
+    if (src.hasCPUAccess())
+    {
+        for (int i = 0; i < numPlanes; ++i)
+            srcData[i] = src.constData(i);
+
+        swsScale(src.linesize());
+        return true;
+    }
+#ifdef USE_VULKAN
+    else if (auto vkImage = src.vulkanImage()) try
+    {
+        auto hostVkImage = QmVk::Image::createLinear(
+            vkImage->device(),
+            vk::Extent2D(src.width(), src.height()),
+            vkImage->format()
+        );
+        vkImage->copyTo(hostVkImage);
+        for (int i = 0; i < numPlanes; ++i)
+            srcData[i] = hostVkImage->map<uint8_t>(i);
+
+        int srcLinesize[3] = {};
+        for (int i = 0; i < numPlanes; ++i)
+            srcLinesize[i] = hostVkImage->linesize(i);
+
+        swsScale(srcLinesize);
+        return true;
+    }
+    catch (const vk::SystemError &e)
+    {
+        Q_UNUSED(e)
+    }
+#endif
+    return false;
 }
 void ImgScaler::scale(const void *src[], const int srcLinesize[], void *dst)
 {

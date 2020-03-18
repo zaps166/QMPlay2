@@ -21,6 +21,10 @@
 
 #include <StreamInfo.hpp>
 
+#ifdef USE_VULKAN
+#   include <vulkan/VulkanInstance.hpp>
+#endif
+
 extern "C"
 {
     #include <libavformat/avformat.h>
@@ -83,6 +87,11 @@ bool FFDec::openCodec(AVCodec *codec)
     switch (codec_ctx->codec_type)
     {
         case AVMEDIA_TYPE_VIDEO:
+#ifdef USE_VULKAN
+            if (QMPlay2Core.isVulkanRenderer())
+                m_vkImagePool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createImagePool();
+#endif
+            // fallthrough
         case AVMEDIA_TYPE_AUDIO:
             frame = av_frame_alloc();
             break;

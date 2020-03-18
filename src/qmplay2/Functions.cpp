@@ -365,20 +365,21 @@ bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const 
             mustRepaint = !osd_ids.contains(osd->id());
         if (scaleW && scaleH && bounds)
         {
-            for (int j = 0; j < osd->imageCount(); j++)
-            {
-                const QMPlay2OSD::Image &img = osd->getImage(j);
-                if (!osd->needsRescale())
+            osd->iterate([&](const QMPlay2OSD::Image &img) {
+                if (osd->needsRescale())
                 {
-                    *bounds |= img.first;
+                    *bounds |= QRect(
+                        img.rect.x() * *scaleW,
+                        img.rect.y() * *scaleH,
+                        img.rect.width() * *scaleW,
+                        img.rect.height() * *scaleH
+                    );
                 }
                 else
                 {
-                    const qreal scaledW = *scaleW;
-                    const qreal scaledH = *scaleH;
-                    *bounds |= QRect(img.first.x() * scaledW, img.first.y() * scaledH, img.first.width() * scaledW, img.first.height() * scaledH);
+                    *bounds |= img.rect;
                 }
-            }
+            });
         }
     }
     return mustRepaint;
@@ -398,12 +399,15 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
             painter.setRenderHint(QPainter::SmoothPixmapTransform);
             painter.scale(scaleW, scaleH);
         }
-        for (int j = 0; j < osd->imageCount(); j++)
-        {
-            const QMPlay2OSD::Image &img = osd->getImage(j);
-            const QImage qImg = QImage((const uchar *)img.second.constData(), img.first.width(), img.first.height(), rgbSwapped ? QImage::Format_RGBA8888 : QImage::Format_ARGB32);
-            painter.drawImage(img.first.topLeft(), qImg);
-        }
+        osd->iterate([&](const QMPlay2OSD::Image &img) {
+            const QImage qImg = QImage(
+                (const uchar *)img.rgba.constData(),
+                img.rect.width(),
+                img.rect.height(),
+                rgbSwapped ? QImage::Format_RGBA8888 : QImage::Format_ARGB32
+            );
+            painter.drawImage(img.rect.topLeft(), qImg);
+        });
         if (osd->needsRescale())
             painter.restore();
     }

@@ -669,8 +669,9 @@ void PlayClass::saveCover()
     if (demuxThr)
         QMPlay2GUI.saveCover(demuxThr->getCoverFromStream());
 }
-void PlayClass::settingsChanged(int page, bool forceRestart)
+void PlayClass::settingsChanged(int page, bool forceRestart, bool initFilters)
 {
+    bool restarted = false;
     switch (page)
     {
         case 0: // General settings
@@ -684,14 +685,21 @@ void PlayClass::settingsChanged(int page, bool forceRestart)
             break;
         case 1: // Renderer settings
             if (vThr && !vThr->videoWriterSet())
+            {
                 restart();
+                restarted = true;
+            }
             break;
         case 2: // Playback settings
             restart();
+            restarted = true;
             break;
         case 3: // Modules
             if (forceRestart)
+            {
                 restart();
+                restarted = true;
+            }
             break;
         case 4: // Subtitles
             if (ass && subtitlesStream != -1)
@@ -714,11 +722,9 @@ void PlayClass::settingsChanged(int page, bool forceRestart)
                 osdMutex.unlock();
             }
             break;
-        case 6: // Video filters
-            if (vThr)
-                vThr->initFilters();
-            break;
     }
+    if (initFilters && vThr && !restarted)
+        vThr->initFilters();
 }
 void PlayClass::videoResized(int w, int h)
 {

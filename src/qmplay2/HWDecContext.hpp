@@ -36,8 +36,6 @@ public:
         return m_error;
     }
 
-    virtual QImage getImage(const Frame &frame) = 0;
-
 protected:
     std::atomic_bool m_error {false};
 };

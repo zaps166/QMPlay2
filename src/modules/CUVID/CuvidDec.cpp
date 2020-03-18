@@ -19,11 +19,16 @@
 #include <CuvidDec.hpp>
 
 #include <DeintHWPrepareFilter.hpp>
+#include <CuvidHWInterop.hpp>
+#include <HWDecContext.hpp>
 #include <GPUInstance.hpp>
 #include <StreamInfo.hpp>
 #include <CuvidAPI.hpp>
 #ifdef USE_OPENGL
 #   include <CuvidOpenGL.hpp>
+#endif
+#ifdef USE_VULKAN
+#   include <CuvidVulkan.hpp>
 #endif
 
 #include <QDebug>
@@ -61,13 +66,15 @@ namespace cuvid {
 
 constexpr quint32 g_maxSurfaces = 25;
 
-static QMutex loadMutex;
-static int loadState = -1;
+static QMutex g_loadMutex;
+static int g_loadState = -1;
+static bool g_initGL = false;
+static bool g_initVK = false;
 
 bool CuvidDec::canCreateInstance()
 {
-    QMutexLocker locker(&loadMutex);
-    return (loadState != 0);
+    QMutexLocker locker(&g_loadMutex);
+    return (g_loadState != 0);
 }
 
 CuvidDec::CuvidDec(Module &module) :
@@ -159,7 +166,7 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
 
     destroyCuvid(false);
 
-    if (!m_cuvidGLInterop)
+    if (!m_cuvidHwInterop)
     {
         m_swsCtx = sws_getCachedContext(m_swsCtx, m_width, m_height, AV_PIX_FMT_NV12, m_width, m_height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
         if (!m_swsCtx)
@@ -174,10 +181,8 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
         return 0;
     }
 
-#ifdef USE_OPENGL
-    if (m_cuvidGLInterop)
-        m_cuvidGLInterop->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
-#endif
+    if (m_cuvidHwInterop)
+        m_cuvidHwInterop->setDecoderAndCodedHeight(m_cuvidDec, m_codedHeight);
 
     return 1;
 }
@@ -208,7 +213,7 @@ QString CuvidDec::name() const
 
 bool CuvidDec::hasHWDecContext() const
 {
-    return static_cast<bool>(m_cuvidGLInterop);
+    return static_cast<bool>(m_cuvidHwInterop);
 }
 shared_ptr<VideoFilter> CuvidDec::hwAccelFilter() const
 {
@@ -303,20 +308,18 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
                 decoded = Frame::createEmpty(
                     m_width,
                     m_height,
-                    m_cuvidGLInterop ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
+                    m_cuvidHwInterop ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
                     !dispInfo.progressive_frame,
                     dispInfo.top_field_first,
                     m_colorSpace,
                     m_limited
                 );
             };
-            if (m_cuvidGLInterop)
+            if (m_cuvidHwInterop)
             {
-#ifdef USE_OPENGL
-                m_cuvidGLInterop->setAvailableSurface(dispInfo.picture_index);
                 createFrame();
                 decoded.setCustomData(dispInfo.picture_index);
-#endif
+                m_cuvidHwInterop->setAvailableSurface(dispInfo.picture_index);
             }
             else
             {
@@ -502,12 +505,12 @@ bool CuvidDec::open(StreamInfo &streamInfo)
     m_height = streamInfo.height;
     m_codedHeight = m_height;
 
-#ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+#if defined(USE_OPENGL) || defined(USE_VULKAN)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL || QMPlay2Core.isVulkanRenderer())
     {
-        m_cuvidGLInterop = QMPlay2Core.gpuInstance()->getHWDecContext<CuvidOpenGL>();
-        if (m_cuvidGLInterop)
-            m_cuCtx = m_cuvidGLInterop->getCudaContext();
+        m_cuvidHwInterop = QMPlay2Core.gpuInstance()->getHWDecContext<CuvidHWInterop>();
+        if (m_cuvidHwInterop)
+            m_cuCtx = m_cuvidHwInterop->getCudaContext();
     }
 #endif
 
@@ -543,15 +546,34 @@ bool CuvidDec::open(StreamInfo &streamInfo)
     m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
     m_colorSpace = streamInfo.color_space;
 
-#ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !m_cuvidGLInterop)
+    if (!m_cuvidHwInterop)
     {
-        m_cuvidGLInterop = make_shared<CuvidOpenGL>(m_cuCtx);
-        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_cuvidGLInterop))
-            return false;
-        m_filter = make_shared<DeintHWPrepareFilter>();
-    }
+        shared_ptr<HWDecContext> cuvidHwInterop;
+        if (QMPlay2Core.isVulkanRenderer())
+        {
+#ifdef USE_VULKAN
+            auto cuvidVulkan = make_shared<CuvidVulkan>(m_cuCtx);
+            if (cuvidVulkan->hasError())
+                return false;
+            cuvidHwInterop = move(cuvidVulkan);
 #endif
+        }
+        else if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+        {
+#ifdef USE_OPENGL
+            cuvidHwInterop = make_shared<CuvidOpenGL>(m_cuCtx);
+#endif
+        }
+        if (cuvidHwInterop)
+        {
+            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(cuvidHwInterop))
+                return false;
+            m_cuvidHwInterop = dynamic_pointer_cast<CuvidHWInterop>(cuvidHwInterop);
+        }
+    }
+
+    if (m_cuvidHwInterop)
+        m_filter = make_shared<DeintHWPrepareFilter>();
 
     return true;
 }
@@ -606,10 +628,8 @@ bool CuvidDec::createCuvidVideoParser()
 }
 void CuvidDec::destroyCuvid(bool all)
 {
-#ifdef USE_OPENGL
-    if (m_cuvidGLInterop)
-        m_cuvidGLInterop->setDecoderAndCodedHeight(nullptr, 0);
-#endif
+    if (m_cuvidHwInterop)
+        m_cuvidHwInterop->setDecoderAndCodedHeight(nullptr, 0);
     cuvid::destroyDecoder(m_cuvidDec);
     m_cuvidDec = nullptr;
     if (all)
@@ -629,8 +649,32 @@ inline void CuvidDec::resetTimeStampHelpers()
 
 bool CuvidDec::loadLibrariesAndInit()
 {
-    QMutexLocker locker(&loadMutex);
-    if (loadState == -1)
+    QMutexLocker locker(&g_loadMutex);
+
+    bool doInit = true;
+
+    bool initGL = false;
+    bool initVK = false;
+#ifdef USE_OPENGL
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+        initGL = true;
+#endif
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer())
+        initVK = true;
+#endif
+    if ((initGL != g_initGL || initVK != g_initVK) && g_loadState != 0)
+    {
+        g_initGL = initGL;
+        g_initVK = initVK;
+        if (g_loadState == 1)
+        {
+            g_loadState = -1;
+            doInit = false;
+        }
+    }
+
+    if (g_loadState == -1)
     {
 #ifdef Q_OS_WIN
         if (sets().getBool("CheckFirstGPU"))
@@ -643,13 +687,14 @@ bool CuvidDec::loadLibrariesAndInit()
                 const bool isNvidia = QByteArray::fromRawData(displayDev.DeviceString, sizeof displayDev.DeviceString).toLower().contains("nvidia");
                 if (!isNvidia)
                 {
-                    loadState = 0;
+                    g_loadState = 0;
                     return false;
                 }
             }
         }
 #endif
-        loadState = (cuvid::load() && cu::load());
+        g_loadState = (cuvid::load() && cu::load(doInit, initGL, initVK));
     }
-    return (loadState == 1);
+
+    return (g_loadState == 1);
 }

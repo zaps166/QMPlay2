@@ -18,6 +18,10 @@
 
 #include <QMPlay2OSD.hpp>
 
+#if USE_VULKAN
+#   include <vulkan/VulkanBufferPool.hpp>
+#endif
+
 #include <atomic>
 
 using namespace std;
@@ -48,6 +52,12 @@ void QMPlay2OSD::start()
         m_timer.start();
 }
 
+void QMPlay2OSD::iterate(const IterateCallback &fn) const
+{
+    for (auto &&image : m_images)
+        fn(image);
+}
+
 void QMPlay2OSD::genId()
 {
     m_id = ++g_id;
@@ -61,4 +71,25 @@ void QMPlay2OSD::clear()
     m_needsRescale = m_started = false;
     m_timer.invalidate();
     m_id = 0;
+#ifdef USE_VULKAN
+    if (m_returnVkBufferFn)
+    {
+        m_returnVkBufferFn();
+        m_returnVkBufferFn = nullptr;
+    }
+#endif
 }
+
+#ifdef USE_VULKAN
+void QMPlay2OSD::setReturnVkBufferFn(
+    const std::weak_ptr<QmVk::BufferPool> &bufferPoolWeak,
+    std::shared_ptr<QmVk::Buffer> &&buffer)
+{
+    m_returnVkBufferFn = [=]() mutable {
+        if (auto vkBufferPool = bufferPoolWeak.lock())
+            vkBufferPool->put(move(buffer));
+        else
+            buffer.reset();
+    };
+}
+#endif

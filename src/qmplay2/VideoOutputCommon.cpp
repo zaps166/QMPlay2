@@ -28,7 +28,8 @@
 using namespace std;
 using namespace placeholders;
 
-VideoOutputCommon::VideoOutputCommon()
+VideoOutputCommon::VideoOutputCommon(bool yInverted)
+    : m_yMultiplier(yInverted ? -1.0f : 1.0f)
 {
     m_rotAnimation.setEasingCurve(QEasingCurve::OutQuint);
     m_rotAnimation.setDuration(1000.0);
@@ -45,10 +46,15 @@ QWidget *VideoOutputCommon::widget() const
     return m_widget;
 }
 
-void VideoOutputCommon::setSphericalView(bool sphericalView)
+void VideoOutputCommon::resetOffsets()
+{
+    m_videoOffset = m_osdOffset = QPointF();
+}
+
+bool VideoOutputCommon::setSphericalView(bool sphericalView)
 {
     if (m_sphericalView == sphericalView)
-        return;
+        return false;
 
     const bool isBlankCursor = (m_widget->cursor().shape() == Qt::BlankCursor);
     m_sphericalView = sphericalView;
@@ -66,6 +72,8 @@ void VideoOutputCommon::setSphericalView(bool sphericalView)
             m_widget->setCursor(Qt::ArrowCursor);
         m_buttonPressed = false;
     }
+
+    return true;
 }
 
 void VideoOutputCommon::updateSizes(bool transpose)
@@ -94,10 +102,11 @@ void VideoOutputCommon::updateMatrix()
     {
         m_matrix.scale(m_scaledSize.width() / widgetSize.width(), m_scaledSize.height() / widgetSize.height());
         if (!m_videoOffset.isNull())
-            m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y());
+            m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y() * m_yMultiplier);
     }
     else
     {
+        m_matrix.scale(1.0f, m_yMultiplier, 1.0f);
         m_matrix.perspective(68.0, static_cast<float>(widgetSize.width()) / static_cast<float>(widgetSize.height()), 0.001f, 2.0f);
         m_matrix.translate(0.0f, 0.0f, qBound<float>(-1.0f, (m_zoom > 1.0f) ? log10(m_zoom) : m_zoom - 1.0f, 0.99f));
         m_matrix.rotate(m_rot.x(), 1.0f, 0.0f, 0.0f);

@@ -30,6 +30,12 @@ extern "C" {
     #include <libavutil/rational.h>
 }
 
+#ifdef USE_VULKAN
+namespace QmVk {
+class Image;
+}
+#endif
+
 struct AVPixFmtDescriptor;
 struct AVBufferRef;
 struct AVFrame;
@@ -145,6 +151,13 @@ public: // Video
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
+#ifdef USE_VULKAN
+    inline std::shared_ptr<QmVk::Image> vulkanImage() const;
+    inline void setVulkanImage(const std::shared_ptr<QmVk::Image> &image);
+
+    bool copyToVulkanImage(const std::shared_ptr<QmVk::Image> &image) const;
+#endif
+
 public: // Operators
     Frame &operator =(const Frame &other);
     Frame &operator =(Frame &&other);
@@ -167,6 +180,9 @@ private:
     AVPixelFormat m_pixelFormat = AV_PIX_FMT_NONE;
     const AVPixFmtDescriptor *m_pixelFmtDescriptor = nullptr;
     bool m_isSecondField = false;
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::Image> m_vkImage;
+#endif
 };
 
 /* Inline implementation */
@@ -177,3 +193,14 @@ bool Frame::copyData(D *dest[4], L linesize[4]) const
     static_assert(sizeof(L) == sizeof(int), "Linesize type size missmatch");
     return copyDataInternal(reinterpret_cast<void **>(dest), reinterpret_cast<int *>(linesize));
 }
+
+#ifdef USE_VULKAN
+std::shared_ptr<QmVk::Image> Frame::vulkanImage() const
+{
+    return m_vkImage;
+}
+void Frame::setVulkanImage(const std::shared_ptr<QmVk::Image> &image)
+{
+    m_vkImage = image;
+}
+#endif

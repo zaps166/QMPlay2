@@ -71,7 +71,7 @@ YouTube videos don't work without external "youtube-dl" software, so QMPlay2 wil
 
 ## Spherical view
 
-QMPlay2 supports spherical view on OpenGL video output. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
+QMPlay2 supports spherical view on OpenGL and Vulkan video outputs. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
 ## ALSA
 
@@ -86,13 +86,16 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 - apply settings.
 
 ### Hardware acceleration important information:
-- CUVID, DXVA2, VDPAU and VA-API uses OpenGL2 video output, so OpenGL features are available, but CPU filters won't work.
+- CUVID, DXVA2, VDPAU and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
+- CUVID and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension.
+- DXVA2 and VDPAU don't work with Vulkan.
 - VDPAU, VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
+- VA-API on Vulkan uses its own deinterlacing filter only on Intel drivers.
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 - VideoToolBox doesn't support deinterlacing.
 
-### VA-API information:
+### VA-API + OpenGL information:
 
 VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
 
@@ -106,6 +109,8 @@ but remember to revert this settings on any other video! Otherwise the video qua
 
 Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
+
+Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior it in Vulkan renderer settings. Moreover Yadif Vulkan filter is used for hardware decoded videos.
 
 Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
 
@@ -151,6 +156,8 @@ In Linux/BSD you must associate keys with commands:
 
 ## Installation from sources
 
+Don't forget to update submodules: `git submodule update --init`.
+
 ### CMake requirements
 
 For CMake build be sure that you have CMake 3.1 or higher.
@@ -158,7 +165,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 ### You need devel packages:
 
 #### Necessary:
-- Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended):
+- Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended; >= 5.10 for Vulkan):
 	- Qt5DBus - Linux/BSD only,
 	- Qt5Svg - for SVG icons,
 	- Qt5Qml - for MediaBrowser,
@@ -223,6 +230,8 @@ CMake options (option - default value: description):
 	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
 	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
 	- `USE_OPENGL` - `ON`: enable/disable OpenGL support.
+	- `USE_VULKAN` - autodetect: enable/disable Vulkan support.
+	- `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
 	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
 	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
 	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.

@@ -65,11 +65,6 @@ public:
         return m_sphericalView;
     }
 
-    inline void resetOffsets()
-    {
-        m_videoOffset = m_osdOffset = QPointF();
-    }
-
     void initialize(const std::shared_ptr<OpenGLHWInterop> &hwInterop);
 
     virtual void setVSync(bool enable) = 0;
@@ -82,7 +77,7 @@ public:
     void newSize(bool canUpdate);
     void clearImg();
 
-    void setSphericalView(bool spherical) override;
+    bool setSphericalView(bool spherical) override;
 protected:
     static void setTextureParameters(GLenum target, quint32 texture, GLint param);
 

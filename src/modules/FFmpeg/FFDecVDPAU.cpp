@@ -134,7 +134,7 @@ void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo)
 {
-    if (Functions::isX11EGL() && QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+    if (Functions::isX11EGL() && QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();

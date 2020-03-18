@@ -34,6 +34,14 @@
 #include <ImgScaler.hpp>
 #include <Functions.hpp>
 
+#ifdef USE_OPENGL
+#   include <opengl/OpenGLHWInterop.hpp>
+#endif
+#ifdef USE_VULKAN
+#   include <vulkan/VulkanHWInterop.hpp>
+#   include <vulkan/VulkanYadifDeint.hpp>
+#endif
+
 using Functions::gettime;
 using namespace std;
 
@@ -184,6 +192,29 @@ void VideoThr::initFilters()
         const bool autoParity = QMPSettings.getBool("Deinterlace/AutoParity");
         const bool topFieldFirst = QMPSettings.getBool("Deinterlace/TFF");
         const quint8 deintFlags = autoDeint | doubleFramerate << 1 | autoParity << 2 | topFieldFirst << 3;
+
+#ifdef USE_VULKAN
+        auto enableVulkanDeint = [&] {
+            if (!QMPlay2Core.isVulkanRenderer())
+                return false;
+
+            shared_ptr<VideoFilter> deintFilter = make_shared<QmVk::YadifDeint>(
+                static_pointer_cast<QmVk::HWInterop>(getHWDecContext())
+            );
+            if (deintFilter->modParam("DeinterlaceFlags", deintFlags))
+            {
+                deintFilter->modParam("W", W);
+                deintFilter->modParam("H", H);
+                if (deintFilter->processParams())
+                {
+                    filters.on(deintFilter);
+                }
+            }
+
+            return true;
+        };
+#endif
+
         if (getHWDecContext())
         {
             if (auto hwFilter = dec->hwAccelFilter())
@@ -195,10 +226,25 @@ void VideoThr::initFilters()
                 if (hwFilter->processParams())
                     filters.on(hwFilter);
             }
+#ifdef USE_VULKAN
+            else if (deint)
+            {
+                enableVulkanDeint();
+            }
+#endif
         }
         else
         {
-            if (deint) // Deinterlacing filters as first
+            // Deinterlacing filter as first
+            bool enableSoftwareDeint = deint;
+#ifdef USE_VULKAN
+            if (deint && QMPSettings.getBool("Vulkan/AlwaysGPUDeint"))
+            {
+                if (enableVulkanDeint())
+                    enableSoftwareDeint = false;
+            }
+#endif
+            if (enableSoftwareDeint)
             {
                 const QString deintFilterName = QMPSettings.getString("Deinterlace/SoftwareMethod");
                 if (auto deintFilter = filters.on(deintFilterName))
@@ -218,6 +264,7 @@ void VideoThr::initFilters()
                     }
                 }
             }
+
             for (QString filterName : QMPSettings.getStringList("VideoFilters"))
             {
                 if (filterName.leftRef(1).toInt()) //if filter is enabled
@@ -695,20 +742,21 @@ void VideoThr::write(Frame videoFrame, quint32 lastSeq)
 }
 void VideoThr::screenshot(Frame videoFrame)
 {
+    ImgScaler imgScaler;
     QImage img;
 
-    if (auto hwDecContext = getHWDecContext())
+#ifdef USE_OPENGL
+    if (auto hwGLInterop = dynamic_pointer_cast<OpenGLHWInterop>(getHWDecContext()))
     {
-        img = hwDecContext->getImage(videoFrame);
+        img = hwGLInterop->getImage(videoFrame);
     }
     else
+#endif
+    if (imgScaler.create(videoFrame, W, H))
     {
-        ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame, W, H))
-        {
-            img = QImage(W, H, QImage::Format_RGB32);
-            imgScaler.scale(videoFrame, img.bits());
-        }
+        img = QImage(W, H, QImage::Format_RGB32);
+        if (!imgScaler.scale(videoFrame, img.bits()))
+            img = QImage();
     }
 
     if (img.isNull())

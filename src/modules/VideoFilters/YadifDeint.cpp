@@ -539,7 +539,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         const Frame &currFrame = m_internalQueue.at(1);
         const Frame &nextFrame = m_internalQueue.at(2);
 
-        Frame destFrame = Frame::createEmpty(currFrame, true);
+        Frame destFrame = getNewFrame(currFrame);
         destFrame.setNoInterlaced();
 
         auto doFilter = [&](const int jobId, const int jobsCount) {

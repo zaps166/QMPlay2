@@ -24,6 +24,9 @@
 #ifdef USE_OPENGL
 #   include <VAAPIOpenGL.hpp>
 #endif
+#ifdef USE_VULKAN
+#   include <VAAPIVulkan.hpp>
+#endif
 
 #include <QDebug>
 
@@ -80,7 +83,13 @@ bool FFDecVAAPI::set()
         const bool reloadVpp = m_vaapi->ok && m_vaapi->use_vpp && (m_vaapi->vpp_deint_type != m_vppDeintType);
         m_vaapi->vpp_deint_type = m_vppDeintType;
         if (reloadVpp)
+        {
             m_vaapi->clearVPP(false);
+#ifdef USE_VULKAN
+            if (m_vaapiVulkan)
+                m_vaapiVulkan->clear();
+#endif
+        }
     }
     return sets().getBool("DecoderVAAPIEnabled");
 }
@@ -97,12 +106,20 @@ shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
 
 int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
+#ifdef USE_VULKAN
+    if (flush && m_vaapiVulkan)
+        m_vaapiVulkan->clear();
+#endif
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (m_hasHWDecContext && ret > -1)
     {
         decoded.setOnDestroyFn([vaapi = m_vaapi] {
         });
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
+#ifdef USE_VULKAN
+        if (m_vaapiVulkan)
+            m_vaapiVulkan->insertAvailableSurface(decoded.hwData());
+#endif
     }
     return ret;
 }
@@ -159,18 +176,23 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 
-    const bool copyVideo = (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::Legacy);
-
 #ifdef USE_OPENGL
     shared_ptr<VAAPIOpenGL> vaapiOpenGL;
-
     if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
         vaapiOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIOpenGL>();
         if (vaapiOpenGL)
-        {
             m_vaapi = vaapiOpenGL->getVAAPI();
-            Q_ASSERT(m_vaapi);
+    }
+#endif
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer())
+    {
+        m_vaapiVulkan = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIVulkan>();
+        if (m_vaapiVulkan)
+        {
+            m_vaapi = m_vaapiVulkan->getVAAPI();
+            m_vaapiVulkan->clear();
         }
     }
 #endif
@@ -178,7 +200,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!m_vaapi)
     {
         m_vaapi = make_shared<VAAPI>();
-        if (!m_vaapi->open(copyVideo))
+        if (!m_vaapi->open(QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::Legacy))
             return false;
 
         m_vaapi->m_hwDeviceBufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);
@@ -202,15 +224,29 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
             return false;
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
-
     if (vaapiOpenGL)
     {
         m_filter = make_shared<DeintHWPrepareFilter>();
         m_hasHWDecContext = true;
     }
 #endif
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer() && !m_vaapiVulkan)
+    {
+        m_vaapiVulkan = make_shared<VAAPIVulkan>(m_vaapi);
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_vaapiVulkan))
+            return false;
+        m_vaapi->vpp_deint_type = m_vppDeintType;
+    }
+    if (m_vaapiVulkan)
+    {
+        if (m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive))
+            m_filter = make_shared<DeintHWPrepareFilter>();
+        m_hasHWDecContext = true;
+    }
+#endif
 
-    m_vaapi->init(codec_ctx->width, codec_ctx->height, !copyVideo);
+    m_vaapi->init(codec_ctx->width, codec_ctx->height, static_cast<bool>(m_filter));
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;

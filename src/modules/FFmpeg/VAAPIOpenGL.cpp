@@ -20,7 +20,6 @@
 #include <FFCommon.hpp>
 
 #include <QMPlay2Core.hpp>
-#include <ImgScaler.hpp>
 #include <Frame.hpp>
 
 #include <QOpenGLContext>
@@ -245,15 +244,7 @@ quint32 VAAPIOpenGL::getTexture(int plane)
 
 QImage VAAPIOpenGL::getImage(const Frame &videoFrame)
 {
-    ImgScaler imgScaler;
-    if (!imgScaler.create(videoFrame))
-        return QImage();
-
-    QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-    if (m_vaapi->getImage(videoFrame, img.bits(), imgScaler))
-        return img;
-
-    return QImage();
+    return m_vaapi->getImage(videoFrame);
 }
 
 void VAAPIOpenGL::clearTextures()

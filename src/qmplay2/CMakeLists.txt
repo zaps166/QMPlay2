@@ -142,10 +142,90 @@ if(USE_OPENGL)
     elseif(WIN32)
         list(APPEND OPENGL_LIBS opengl32)
     endif()
+endif()
 
+if(USE_VULKAN)
+    set(QMVK QmVk)
+
+    set(QMPLAY2_VULKAN_HDR
+        vulkan/VulkanBufferPool.hpp
+        vulkan/VulkanHWInterop.hpp
+        vulkan/VulkanImagePool.hpp
+        vulkan/VulkanInstance.hpp
+        vulkan/VulkanWindow.hpp
+        vulkan/VulkanWriter.hpp
+        vulkan/VulkanYadifDeint.hpp
+    )
+    set(QMPLAY2_VULKAN_SRC
+        vulkan/VulkanBufferPool.cpp
+        vulkan/VulkanImagePool.cpp
+        vulkan/VulkanInstance.cpp
+        vulkan/VulkanWindow.cpp
+        vulkan/VulkanWriter.cpp
+        vulkan/VulkanYadifDeint.cpp
+    )
+    set(VULKAN_SHADERS
+        vulkan/shaders/clear.frag
+        vulkan/shaders/clear.vert
+        vulkan/shaders/osd.vert
+        vulkan/shaders/osd_ass.frag
+        vulkan/shaders/osd_av.frag
+        vulkan/shaders/video.frag
+        vulkan/shaders/video.vert
+        vulkan/shaders/yadif.comp
+    )
+
+    if(USE_GLSLC) # Shaders compilation
+        foreach(VULKAN_SHADER ${VULKAN_SHADERS})
+            qmvk_add_shader(${CMAKE_CURRENT_SOURCE_DIR}/${VULKAN_SHADER})
+        endforeach()
+
+        add_custom_target( # Needed to display GLSL files in QtCreator
+            VulkanShaders
+            SOURCES ${QMVK_SHADER_SOURCE_FILES}
+            DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+        )
+    else()
+        file(GLOB QMVK_SHADER_COMPILED_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/vulkan/shaders/spv/*.spv"
+        )
+    endif()
+
+    # Compiled shaders QRC generation
+
+    set(VULKAN_SHADER_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/vulkan_shaders.qrc")
+    list(APPEND QMPLAY2_VULKAN_SRC
+        ${VULKAN_SHADER_QRC_FILE}
+    )
+
+    set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
+
+    foreach(SHADER_COMPILED_FILE ${QMVK_SHADER_COMPILED_FILES})
+        get_filename_component(SHADER_COMPILED_FILE_NAME ${SHADER_COMPILED_FILE} NAME)
+        string(APPEND SHADER_QRC_CONTENT
+            "  <file\ alias=\"${SHADER_COMPILED_FILE_NAME}\">${SHADER_COMPILED_FILE}</file>\n"
+        )
+    endforeach()
+    file(WRITE ${VULKAN_SHADER_QRC_FILE_TMP}
+        "<RCC>\n <qresource\ prefix=\"/vulkan\">\n"
+        ${SHADER_QRC_CONTENT}
+        " </qresource>\n</RCC>\n"
+    )
+
+    add_custom_command(
+        OUTPUT ${VULKAN_SHADER_QRC_FILE}
+        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+        COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
+    )
+
+    # No need to add VulkanShaders target dependency to libqmplay2,
+    # because generated QRC file is added into source file list.
 endif()
 
 add_definitions(-DQMPLAY2SHAREDLIB_LIBRARY)
+if(USE_VULKAN)
+    add_definitions(-DQMVK_LIBRARY)
+endif()
 
 if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_HDR NotifiesFreedesktop.hpp)
@@ -192,6 +272,8 @@ add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_RESOURCES}
     ${QMPLAY2_OPENGL_HDR}
     ${QMPLAY2_OPENGL_SRC}
+    ${QMPLAY2_VULKAN_HDR}
+    ${QMPLAY2_VULKAN_SRC}
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
@@ -199,6 +281,7 @@ if(USE_PCH)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         ${QMPLAY2_HDR}
         ${QMPLAY2_OPENGL_HDR}
+        ${QMPLAY2_VULKAN_HDR}
     )
 endif()
 
@@ -260,6 +343,7 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBAVUTIL_LIBRARIES}
     ${LIBSWRESAMPLE_LIBRARIES}
     ${OPENGL_LIBS}
+    ${QMVK}
     PRIVATE
     ${DBUS}
     ${QML}

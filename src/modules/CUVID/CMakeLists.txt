@@ -5,6 +5,7 @@ set(CUVID_HDR
     Cuvid.hpp
     CuvidDec.hpp
     CuvidAPI.hpp
+    CuvidHWInterop.hpp
 )
 
 set(CUVID_SRC
@@ -20,6 +21,10 @@ set(CUVID_RESOURCES
 if (USE_OPENGL)
     list(APPEND CUVID_HDR CuvidOpenGL.hpp)
     list(APPEND CUVID_SRC CuvidOpenGL.cpp)
+endif()
+if (USE_VULKAN)
+    list(APPEND CUVID_HDR CuvidVulkan.hpp)
+    list(APPEND CUVID_SRC CuvidVulkan.cpp)
 endif()
 
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}

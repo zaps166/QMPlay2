@@ -37,7 +37,7 @@
 #endif
 
 CuvidOpenGL::CuvidOpenGL(const std::shared_ptr<CUcontext> &cuCtx)
-    : m_cuCtx(cuCtx)
+    : CuvidHWInterop(cuCtx)
 {}
 CuvidOpenGL::~CuvidOpenGL()
 {
@@ -120,7 +120,7 @@ bool CuvidOpenGL::mapFrame(Frame &videoFrame)
 
     const int pictureIdx = videoFrame.customData();
 
-    if (!m_cuvidDec || !m_validPictures.contains(pictureIdx))
+    if (!m_cuvidDec || m_validPictures.count(pictureIdx) == 0)
         return false;
 
     CUVIDPROCPARAMS vidProcParams;
@@ -237,16 +237,4 @@ QImage CuvidOpenGL::getImage(const Frame &videoFrame)
         delete[] data[p];
 
     return img;
-}
-
-void CuvidOpenGL::setAvailableSurface(quintptr surfaceId)
-{
-    m_validPictures.insert(surfaceId);
-}
-
-void CuvidOpenGL::setDecoderAndCodedHeight(CUvideodecoder cuvidDec, int codedHeight)
-{
-    m_codedHeight = codedHeight;
-    m_cuvidDec = cuvidDec;
-    m_validPictures.clear();
 }

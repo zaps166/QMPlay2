@@ -61,10 +61,22 @@ extern cuGraphicsUnmapResourcesType graphicsUnmapResources;
 using  cuGraphicsUnregisterResourceType = CUresult CUDAAPI (*)(CUgraphicsResource resource);
 extern cuGraphicsUnregisterResourceType graphicsUnregisterResource;
 
+using cuImportExternalMemory = CUresult CUDAAPI (*)(CUexternalMemory *extMemOut, const CUDA_EXTERNAL_MEMORY_HANDLE_DESC *memHandleDesc);
+extern cuImportExternalMemory importExternalMemory;
+
+using cuExternalMemoryGetMappedBuffer = CUresult CUDAAPI (*)(CUdeviceptr *devPtrOut, CUexternalMemory extMem, const CUDA_EXTERNAL_MEMORY_BUFFER_DESC *bufferDesc);
+extern cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer;
+
+using cuDestroyExternalMemory = CUresult CUDAAPI (*)(CUexternalMemory extMem);
+extern cuDestroyExternalMemory destroyExternalMemory;
+
+using cuMemFree = CUresult CUDAAPI (*)(CUdeviceptr dptr);
+extern cuMemFree memFree;
+
 using  cuCtxDestroyType = CUresult CUDAAPI (*)(CUcontext ctx);
 extern cuCtxDestroyType ctxDestroy;
 
-bool load();
+bool load(bool doInit, bool gl, bool vk);
 
 std::shared_ptr<CUcontext> createContext();
 

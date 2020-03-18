@@ -82,7 +82,7 @@ private:
     bool wasShow;
     int moduleIndex;
 
-    std::vector<std::function<void()>> m_rendererApplyFunctions;
+    std::vector<std::function<void(bool &initFilters)>> m_rendererApplyFunctions;
 private slots:
     void chStyle();
     void apply();
@@ -99,7 +99,7 @@ private slots:
     void profileListIndexChanged(int index);
     void removeProfile();
 signals:
-    void settingsChanged(int, bool);
+    void settingsChanged(int, bool, bool initFilters);
     void setWheelStep(int);
     void setVolMax(int);
 };

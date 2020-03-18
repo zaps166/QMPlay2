@@ -34,34 +34,16 @@ extern "C" {
 
 using namespace std;
 
-static void addImgs(ASS_Image *img, QMPlay2OSD *osd)
-{
-    while (img)
-    {
-        QByteArray bitmap;
-        bitmap.resize((img->w * img->h) << 2);
+#ifdef USE_VULKAN
+#   include "../qmvk/PhysicalDevice.hpp"
+#   include "../qmvk/Device.hpp"
+#   include "../qmvk/Buffer.hpp"
+#   include "../qmvk/BufferView.hpp"
 
-        quint32 *bitmap_ptr = (quint32 *)bitmap.data();
+#   include <vulkan/VulkanInstance.hpp>
+#   include <vulkan/VulkanBufferPool.hpp>
+#endif
 
-        const quint8 r = img->color >> 24;
-        const quint8 g = img->color >> 16;
-        const quint8 b = img->color >>  8;
-        const quint8 a = ~img->color & 0xFF;
-
-        for (int y = 0; y < img->h; y++)
-        {
-            const int offsetI = y * img->stride;
-            const int offsetB = y * img->w;
-            for (int x = 0; x < img->w; x++)
-                bitmap_ptr[offsetB + x] = (a * img->bitmap[offsetI + x] / 0xFF) << 24 | b << 16 | g << 8 | r;
-        }
-
-        osd->addImage(QRect(img->dst_x, img->dst_y, img->w, img->h), bitmap);
-
-        img = img->next;
-    }
-    osd->genId();
-}
 static inline quint32 assColorFromQColor(const QColor &color, bool invert = false)
 {
     if (!invert)
@@ -122,6 +104,11 @@ LibASS::LibASS(Settings &settings) :
     osd_style = nullptr;
     osd_event = nullptr;
     osd_renderer = ass_sub_renderer = nullptr;
+
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer())
+        m_vkBufferPool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
+#endif
 }
 LibASS::~LibASS()
 {
@@ -129,6 +116,107 @@ LibASS::~LibASS()
     closeOSD();
     clearFonts();
     ass_library_done(ass);
+}
+
+void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
+{
+#ifdef USE_VULKAN
+    if (m_vkBufferPool)
+    {
+        using namespace QmVk;
+
+        auto device = m_vkBufferPool->instance()->device();
+        if (!device)
+            return;
+
+        const auto alignment = device->physicalDevice()->limits().minTexelBufferOffsetAlignment;
+
+        auto getImgBuffSize = [&](ASS_Image *img) {
+            return FFALIGN(img->stride * img->h, alignment);
+        };
+
+        auto imgBegin = img;
+
+        vk::DeviceSize buffSize = 0;
+        vk::DeviceSize buffOffset = 0;
+
+        img = imgBegin;
+        while (img)
+        {
+            buffSize += getImgBuffSize(img);
+            img = img->next;
+        }
+
+        auto buffer = m_vkBufferPool->take(buffSize);
+        if (!buffer)
+            return;
+
+        auto data = buffer->map<uint8_t>();
+
+        img = imgBegin;
+        while (img) try
+        {
+            if (img->w <= 0 || img->h <= 0)
+            {
+                img = img->next;
+                continue;
+            }
+
+            const vk::DeviceSize viewSize = getImgBuffSize(img);
+            const uint32_t imgSize = img->stride * (img->h - 1) + img->w;
+            memcpy(data + buffOffset, img->bitmap, imgSize);
+
+            auto &osdImg = osd->add();
+            osdImg.rect = QRect(img->dst_x, img->dst_y, img->w, img->h);
+            osdImg.dataBufferView = BufferView::create(buffer, vk::Format::eR8Unorm, buffOffset, imgSize);
+            osdImg.linesize = img->stride;
+            osdImg.color.setX(((img->color >> 24) & 0xff) / 255.0f);
+            osdImg.color.setY(((img->color >> 16) & 0xff) / 255.0f);
+            osdImg.color.setZ(((img->color >>  8) & 0xff) / 255.0f);
+            osdImg.color.setW(((~img->color)      & 0xff) / 255.0f);
+
+            buffOffset += viewSize;
+
+            img = img->next;
+        }
+        catch (const vk::SystemError &e)
+        {
+            Q_UNUSED(e)
+            osd->clear();
+            return;
+        }
+
+        osd->genId();
+        osd->setReturnVkBufferFn(m_vkBufferPool, move(buffer));
+
+        return;
+    }
+#endif
+
+    while (img)
+    {
+        auto &osdImg = osd->add();
+        osdImg.rect = QRect(img->dst_x, img->dst_y, img->w, img->h);
+        osdImg.rgba = QByteArray(img->w * img->h * sizeof(uint32_t), Qt::Uninitialized);
+
+        const quint8 r = img->color >> 24;
+        const quint8 g = img->color >> 16;
+        const quint8 b = img->color >>  8;
+        const quint8 a = ~img->color & 0xFF;
+
+        auto data = reinterpret_cast<uint32_t *>(osdImg.rgba.data());
+        for (int y = 0; y < img->h; y++)
+        {
+            const int offsetI = y * img->stride;
+            const int offsetB = y * img->w;
+            for (int x = 0; x < img->w; x++)
+                data[offsetB + x] = (a * img->bitmap[offsetI + x] / 0xFF) << 24 | b << 16 | g << 8 | r;
+        }
+
+        img = img->next;
+    }
+
+    osd->genId();
 }
 
 void LibASS::setWindowSize(int _winW, int _winH)
@@ -529,6 +617,9 @@ LibASS::LibASS(Settings &settings) :
     settings(settings)
 {}
 LibASS::~LibASS()
+{}
+
+void LibASS::addImgs(ass_image *, QMPlay2OSD *)
 {}
 
 void LibASS::setWindowSize(int, int)

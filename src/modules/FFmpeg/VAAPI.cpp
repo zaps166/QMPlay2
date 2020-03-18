@@ -23,6 +23,12 @@
 #include <Frame.hpp>
 #include <QMPlay2Core.hpp>
 
+#ifdef USE_VULKAN
+#   include "../../qmvk/PhysicalDevice.hpp"
+
+#   include <vulkan/VulkanInstance.hpp>
+#endif
+
 extern "C"
 {
     #include <libavutil/buffer.h>
@@ -65,7 +71,28 @@ bool VAAPI::open(bool checkNV12)
     QString devFilePath;
 
     const auto eglCardFilePath = qgetenv("QMPLAY2_EGL_CARD_FILE_PATH");
-    if (!eglCardFilePath.isEmpty())
+    if (QMPlay2Core.isVulkanRenderer())
+    {
+#ifdef USE_VULKAN
+        using namespace QmVk;
+        const auto linuxPCIPath = QString::fromStdString(
+            static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())->physicalDevice()->linuxPCIPath()
+        );
+        if (!linuxPCIPath.isEmpty())
+        {
+            const auto renders = QDir("/dev/dri/by-path").entryInfoList({"*-render"}, QDir::Files | QDir::System);
+            for (auto &&render : renders)
+            {
+                if (render.fileName().contains(linuxPCIPath))
+                {
+                    devFilePath = render.symLinkTarget();
+                    break;
+                }
+            }
+        }
+#endif
+    }
+    else if (!eglCardFilePath.isEmpty())
     {
         const auto cards = QDir("/dev/dri/by-path").entryInfoList({"*-card"}, QDir::Files | QDir::System);
         for (auto &&card : cards)
@@ -109,8 +136,8 @@ bool VAAPI::open(bool checkNV12)
 
     m_version = (major << 8) | minor;
 
-    const QString vendor = vaQueryVendorString(VADisp);
-    if (vendor.isEmpty())
+    m_vendor = vaQueryVendorString(VADisp);
+    if (m_vendor.isEmpty())
         return false;
 
     int fmtCount = vaMaxNumImageFormats(VADisp);
@@ -418,8 +445,12 @@ quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
     }
     return nullptr;
 }
-bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32) const
+QImage VAAPI::getImage(const Frame &videoFrame) const
 {
+    ImgScaler imgScaler;
+    if (!imgScaler.create(videoFrame))
+        return QImage();
+
     VAImage image;
     quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwData());
     if (vaData)
@@ -428,12 +459,13 @@ bool VAAPI::getImage(const Frame &videoFrame, void *dest, ImgScaler &nv12ToRGB32
             vaData + image.offsets[0],
             vaData + image.offsets[1]
         };
-        nv12ToRGB32.scale(data, (const int *)image.pitches, dest);
+        QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+        imgScaler.scale(data, (const int *)image.pitches, img.bits());
         vaUnmapBuffer(VADisp, image.buf);
         vaDestroyImage(VADisp, image.image_id);
-        return true;
+        return img;
     }
-    return false;
+    return QImage();
 }
 
 bool VAAPI::checkCodec(const char *codecName) const

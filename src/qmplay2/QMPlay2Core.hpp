@@ -51,6 +51,7 @@ public:
     {
         Legacy,
         OpenGL,
+        Vulkan,
     };
 
 public:
@@ -133,6 +134,7 @@ public:
     Q_SIGNAL void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
     Q_SIGNAL void coverDataFromMediaFile(const QByteArray &cover);
     Q_SIGNAL void coverFile(const QString &filePath);
+    Q_SIGNAL void updateInformationPanel();
 
     Q_SIGNAL void playStateChanged(const QString &playState);
     Q_SIGNAL void fullScreenChanged(bool fs);
@@ -201,6 +203,10 @@ public:
 
     QString rendererName() const;
     Renderer renderer() const;
+    inline bool isVulkanRenderer() const
+    {
+        return (renderer() == Renderer::Vulkan);
+    }
 
     inline std::shared_ptr<GPUInstance> gpuInstance() const
     {

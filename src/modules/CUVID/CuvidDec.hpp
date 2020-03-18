@@ -26,7 +26,7 @@
 #include <QCoreApplication>
 #include <QQueue>
 
-class CuvidOpenGL;
+class CuvidHWInterop;
 class VideoWriter;
 
 struct AVBSFContext;
@@ -74,7 +74,7 @@ private:
 
 private:
     std::shared_ptr<VideoFilter> m_filter;
-    std::shared_ptr<CuvidOpenGL> m_cuvidGLInterop;
+    std::shared_ptr<CuvidHWInterop> m_cuvidHwInterop;
 
     bool m_limited;
     AVColorSpace m_colorSpace;

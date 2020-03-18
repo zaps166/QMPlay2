@@ -30,6 +30,14 @@ struct ass_library;
 struct ass_track;
 struct ass_event;
 struct ass_renderer;
+struct ass_image;
+
+#ifdef USE_VULKAN
+#include <memory>
+namespace QmVk {
+class BufferPool;
+}
+#endif
 
 class QMPLAY2SHAREDLIB_EXPORT LibASS
 {
@@ -42,6 +50,8 @@ public:
 
     LibASS(Settings &);
     ~LibASS();
+
+    void addImgs(ass_image *img, QMPlay2OSD *osd);
 
     void setWindowSize(int, int);
     void setARatio(double);
@@ -64,10 +74,12 @@ public:
     void flushASSEvents();
     bool getASS(QMPlay2OSD *&, double);
     void closeASS();
+
 private:
     void readStyle(const QString &, ass_style *);
     inline void calcSize();
 
+private:
     Settings &settings;
 
     ass_library *ass;
@@ -85,4 +97,8 @@ private:
     ass_renderer *ass_sub_renderer;
     QList<ass_style *> ass_sub_styles_copy;
     bool hasASSData, overridePlayRes;
+
+#ifdef USE_VULKAN
+    std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;
+#endif
 };

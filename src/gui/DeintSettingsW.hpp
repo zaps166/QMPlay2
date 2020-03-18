@@ -33,6 +33,8 @@ public:
     DeintSettingsW();
     ~DeintSettingsW();
 
+    void setSoftwareDeintEnabledDisabled();
+
     void writeSettings();
 private slots:
     void softwareMethods(bool doubler);

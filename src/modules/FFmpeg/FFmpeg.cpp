@@ -58,7 +58,8 @@ FFmpeg::FFmpeg() :
 #endif
 #ifdef QMPlay2_DXVA2
     dxva2Icon = QIcon(":/DXVA2.svgz");
-    dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
+    if (!QMPlay2Core.isVulkanRenderer())
+        dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
 #endif
 #ifdef QMPlay2_VTB
     vtbIcon = QIcon(":/VAAPI.svgz");
@@ -101,14 +102,17 @@ FFmpeg::FFmpeg() :
 #   endif
 
 #   if defined(QMPlay2_VDPAU)
-    m_vdpauDeintMethodB = new QComboBox;
-    m_vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
-    m_vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
-    if (m_vdpauDeintMethodB->currentIndex() < 0)
-        m_vdpauDeintMethodB->setCurrentIndex(1);
-    m_vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
-    m_vdpauDeintMethodB->setProperty("module", self);
-    QMPlay2Core.addVideoDeintMethod(m_vdpauDeintMethodB);
+    if (!QMPlay2Core.isVulkanRenderer())
+    {
+        m_vdpauDeintMethodB = new QComboBox;
+        m_vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
+        m_vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
+        if (m_vdpauDeintMethodB->currentIndex() < 0)
+            m_vdpauDeintMethodB->setCurrentIndex(1);
+        m_vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
+        m_vdpauDeintMethodB->setProperty("module", self);
+        QMPlay2Core.addVideoDeintMethod(m_vdpauDeintMethodB);
+    }
 #   endif
 
 #   if defined(QMPlay2_VAAPI)
@@ -117,7 +121,10 @@ FFmpeg::FFmpeg() :
     m_vaapiDeintMethodB->setCurrentIndex(getInt("VAAPIDeintMethod"));
     if (m_vaapiDeintMethodB->currentIndex() < 0)
         m_vaapiDeintMethodB->setCurrentIndex(1);
-    m_vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API): "));
+    if (QMPlay2Core.isVulkanRenderer())
+        m_vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API, Intel only): "));
+    else
+        m_vaapiDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VA-API): "));
     m_vaapiDeintMethodB->setProperty("module", self);
     QMPlay2Core.addVideoDeintMethod(m_vaapiDeintMethodB);
 #   endif
@@ -151,7 +158,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
     if (showDisabled || getBool("DecoderEnabled"))
         modulesInfo += Info(DecoderName, DECODER, m_icon);
 #ifdef QMPlay2_VDPAU
-    if (showDisabled || getBool("DecoderVDPAUEnabled"))
+    if (showDisabled || (getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer()))
     {
         modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
         modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
@@ -182,7 +189,7 @@ void *FFmpeg::createInstance(const QString &name)
     else if (name == DecoderName && getBool("DecoderEnabled"))
         return new FFDecSW(*this);
 #ifdef QMPlay2_VDPAU
-    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled"))
+    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer())
         return new FFDecVDPAU(*this);
 #endif
 #ifdef QMPlay2_VAAPI
