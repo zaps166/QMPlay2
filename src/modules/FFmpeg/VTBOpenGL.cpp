@@ -43,7 +43,7 @@ QString VTBOpenGL::name() const
     return "VideoToolBox";
 }
 
-HWOpenGLInterop::Format VTBOpenGL::getFormat() const
+VTBOpenGL::Format VTBOpenGL::getFormat() const
 {
     return NV12;
 }
