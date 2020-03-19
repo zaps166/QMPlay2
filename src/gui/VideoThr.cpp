@@ -754,6 +754,14 @@ void VideoThr::screenshot(Frame videoFrame)
 #endif
     if (imgScaler.create(videoFrame, W, H))
     {
+#ifdef USE_VULKAN
+        if (auto vkHwInterop = static_pointer_cast<QmVk::HWInterop>(getHWDecContext()))
+        {
+            vkHwInterop->map(videoFrame);
+            if (vkHwInterop->hasError())
+                videoFrame = Frame();
+        }
+#endif
         img = QImage(W, H, QImage::Format_RGB32);
         if (!imgScaler.scale(videoFrame, img.bits()))
             img = QImage();
