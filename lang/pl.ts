@@ -3008,7 +3008,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Wysoka jakość skalowania obrazu w górę</translation>
     </message>
     <message>
-        <source>First avilable device</source>
+        <source>First available device</source>
         <translation>Pierwsze dostępne urządzenie</translation>
     </message>
     <message>

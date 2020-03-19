@@ -3007,7 +3007,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>First avilable device</source>
+        <source>First available device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

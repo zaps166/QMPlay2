@@ -903,7 +903,7 @@ void SettingsWidget::createRendererSettings()
 
             if (devices->count() > 0)
             {
-                devices->insertItem(0, tr("First avilable device"));
+                devices->insertItem(0, tr("First available device"));
                 devices->setCurrentIndex(idIdx);
             }
             else

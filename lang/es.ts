@@ -3008,7 +3008,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>First avilable device</source>
+        <source>First available device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
