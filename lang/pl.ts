@@ -2991,6 +2991,50 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>Renderer settings</source>
         <translation>Ustawienia renderera</translation>
     </message>
+    <message>
+        <source>Vulkan</source>
+        <translation>Vulkan</translation>
+    </message>
+    <message>
+        <source>Use GPU deinterlacing for CPU-decoded video</source>
+        <translation>Użyj usuwania przeplotu wykorzystując GPU dla wideo dekodowanego przez procesor</translation>
+    </message>
+    <message>
+        <source>High quality image scaling down</source>
+        <translation>Wysoka jakość skalowania obrazu w dół</translation>
+    </message>
+    <message>
+        <source>High quality image scaling up</source>
+        <translation>Wysoka jakość skalowania obrazu w górę</translation>
+    </message>
+    <message>
+        <source>First avilable device</source>
+        <translation>Pierwsze dostępne urządzenie</translation>
+    </message>
+    <message>
+        <source>No supported devices found</source>
+        <translation>Nie znaleziono obsługiwanych urządzeń</translation>
+    </message>
+    <message>
+        <source>Partially checked (default):
+  - MAILBOX (tear-free) is the preferred present mode
+  - FIFO (V-Sync) should not be used in windowed mode</source>
+        <translation>Częściowo zaznaczone (domyślne):
+  - MAILBOX (tear-free) jest to preferowany tryb prezentacji
+  - FIFO (V-Sync) nie powinien być używany w trybie okienkowym</translation>
+    </message>
+    <message>
+        <source>Allow for exclusive fullscreen. This can improve performance.</source>
+        <translation>Zezwalaj na pełny ekran na wyłączność. Może poprawić wydajność.</translation>
+    </message>
+    <message>
+        <source>Very slow if used with sharpness</source>
+        <translation>Bardzo wolne jeżeli używane z ostrością obrazu</translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation>Urządzenie:</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutHandler</name>

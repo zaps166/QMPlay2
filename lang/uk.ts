@@ -1880,7 +1880,7 @@
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>Неможливо ініціалізувати %1></translation>
+        <translation>Неможливо ініціалізувати %1&gt;</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1939,7 +1939,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Параметри рендера></translation>
+        <translation>&amp;Параметри рендера&gt;</translation>
     </message>
 </context>
 <context>
@@ -2929,19 +2929,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Спадковий пріоритет виведення відео></translation>
+        <translation>Спадковий пріоритет виведення відео&gt;</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation>Старішого типу></translation>
+        <translation>Старішого типу&gt;</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation>OpenGL></translation>
+        <translation>OpenGL&gt;</translation>
     </message>
     <message>
         <source>active</source>
-        <translation>активний></translation>
+        <translation>активний&gt;</translation>
     </message>
     <message>
         <source>inactive</source>
@@ -2990,6 +2990,48 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Renderer settings</source>
         <translation>Параметри рендера</translation>
+    </message>
+    <message>
+        <source>Vulkan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use GPU deinterlacing for CPU-decoded video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High quality image scaling down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High quality image scaling up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First avilable device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No supported devices found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked (default):
+  - MAILBOX (tear-free) is the preferred present mode
+  - FIFO (V-Sync) should not be used in windowed mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow for exclusive fullscreen. This can improve performance.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very slow if used with sharpness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
