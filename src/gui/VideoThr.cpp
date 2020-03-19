@@ -755,7 +755,7 @@ void VideoThr::screenshot(Frame videoFrame)
     if (imgScaler.create(videoFrame, W, H))
     {
 #ifdef USE_VULKAN
-        if (auto vkHwInterop = static_pointer_cast<QmVk::HWInterop>(getHWDecContext()))
+        if (auto vkHwInterop = dynamic_pointer_cast<QmVk::HWInterop>(getHWDecContext()))
         {
             vkHwInterop->map(videoFrame);
             if (vkHwInterop->hasError())
