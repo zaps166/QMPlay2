@@ -3008,7 +3008,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>First avilable device</source>
+        <source>First available device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

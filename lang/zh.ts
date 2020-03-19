@@ -2993,45 +2993,47 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU 解码视频使用 GPU 反交错</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>缩小高质量图像</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>放大高质量图像</translation>
     </message>
     <message>
-        <source>First avilable device</source>
-        <translation type="unfinished"></translation>
+        <source>First available device</source>
+        <translation>首个可用设备</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>未发现支持的设备</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>半选中（默认）：
+  - MAILBOX (tear-free) 为首选当前模式
+  - FIFO (V-Sync) 不应当在窗口模式中使用</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>允许独占全屏。这会提升性能。</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>如果与锐度同用会非常缓慢</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>设备：</translation>
     </message>
 </context>
 <context>

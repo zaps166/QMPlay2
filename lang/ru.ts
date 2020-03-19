@@ -3005,7 +3005,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>First avilable device</source>
+        <source>First available device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
