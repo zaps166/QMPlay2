@@ -1,6 +1,6 @@
 [submodule "src/qmvk"]
 	path = src/qmvk
-	url = https://github.com/zaps166/QmVk
+	url = https://github.com/zaps166/QmVk.git
 [submodule "src/qmplay2/vulkan/headers"]
 	path = src/qmplay2/vulkan/headers
-	url = https://github.com/KhronosGroup/Vulkan-Headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers.git
