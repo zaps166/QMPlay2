@@ -262,6 +262,9 @@ AVPixelFormats Window::supportedPixelFormats() const
     AVPixelFormats pixelFormats {
         AV_PIX_FMT_GRAY8,
 
+        AV_PIX_FMT_NV12,
+        AV_PIX_FMT_NV16,
+
         AV_PIX_FMT_YUV420P,
         AV_PIX_FMT_YUVJ420P,
 
@@ -282,6 +285,10 @@ AVPixelFormats Window::supportedPixelFormats() const
             AV_PIX_FMT_GRAY12,
             AV_PIX_FMT_GRAY14,
             AV_PIX_FMT_GRAY16,
+
+            AV_PIX_FMT_P010,
+            AV_PIX_FMT_P016,
+            AV_PIX_FMT_NV20,
 
             AV_PIX_FMT_YUV420P9,
             AV_PIX_FMT_YUV420P10,
