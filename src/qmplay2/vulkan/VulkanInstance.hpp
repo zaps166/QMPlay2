@@ -20,6 +20,7 @@
 
 #include <GPUInstance.hpp>
 #include <QMPlay2Lib.hpp>
+#include <Frame.hpp>
 
 #include "../../qmvk/AbstractInstance.hpp"
 
@@ -69,6 +70,8 @@ public:
     void obtainPhysicalDevice();
 
     inline shared_ptr<PhysicalDevice> physicalDevice() const;
+
+    AVPixelFormats supportedPixelFormats() const;
 
     shared_ptr<Device> createDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
 

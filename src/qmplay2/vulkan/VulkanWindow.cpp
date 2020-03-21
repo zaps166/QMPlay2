@@ -250,73 +250,7 @@ void Window::setParams(
 
 AVPixelFormats Window::supportedPixelFormats() const
 {
-    auto checkImageFormat = [this](vk::Format format) {
-        auto fmtProps = m_physicalDevice->getFormatProperties(format);
-        if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
-            return false;
-        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
-            return false;
-        return true;
-    };
-
-    AVPixelFormats pixelFormats {
-        AV_PIX_FMT_GRAY8,
-
-        AV_PIX_FMT_NV12,
-        AV_PIX_FMT_NV16,
-
-        AV_PIX_FMT_YUV420P,
-        AV_PIX_FMT_YUVJ420P,
-
-        AV_PIX_FMT_YUV422P,
-        AV_PIX_FMT_YUVJ422P,
-
-        AV_PIX_FMT_YUV444P,
-        AV_PIX_FMT_YUVJ444P,
-
-        AV_PIX_FMT_GBRP,
-    };
-
-    if (checkImageFormat(vk::Format::eR16Unorm) && checkImageFormat(vk::Format::eR16G16Unorm))
-    {
-        pixelFormats += {
-            AV_PIX_FMT_GRAY9,
-            AV_PIX_FMT_GRAY10,
-            AV_PIX_FMT_GRAY12,
-            AV_PIX_FMT_GRAY14,
-            AV_PIX_FMT_GRAY16,
-
-            AV_PIX_FMT_P010,
-            AV_PIX_FMT_P016,
-            AV_PIX_FMT_NV20,
-
-            AV_PIX_FMT_YUV420P9,
-            AV_PIX_FMT_YUV420P10,
-            AV_PIX_FMT_YUV420P12,
-            AV_PIX_FMT_YUV420P14,
-            AV_PIX_FMT_YUV420P16,
-
-            AV_PIX_FMT_YUV422P9,
-            AV_PIX_FMT_YUV422P10,
-            AV_PIX_FMT_YUV422P12,
-            AV_PIX_FMT_YUV422P14,
-            AV_PIX_FMT_YUV422P16,
-
-            AV_PIX_FMT_YUV444P9,
-            AV_PIX_FMT_YUV444P10,
-            AV_PIX_FMT_YUV444P12,
-            AV_PIX_FMT_YUV444P14,
-            AV_PIX_FMT_YUV444P16,
-        };
-    }
-
-    if (checkImageFormat(vk::Format::eR8G8B8A8Unorm))
-        pixelFormats += AV_PIX_FMT_RGBA;
-
-    if (checkImageFormat(vk::Format::eB8G8R8A8Unorm))
-        pixelFormats += AV_PIX_FMT_BGRA;
-
-    return pixelFormats;
+    return m_instance->supportedPixelFormats();
 }
 
 void Window::setFrame(const Frame &frame)
