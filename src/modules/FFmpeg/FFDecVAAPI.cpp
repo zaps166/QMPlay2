@@ -25,6 +25,7 @@
 #   include <VAAPIOpenGL.hpp>
 #endif
 #ifdef USE_VULKAN
+#   include <vulkan/VulkanInstance.hpp>
 #   include <VAAPIVulkan.hpp>
 #endif
 
@@ -169,8 +170,16 @@ void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
 bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
-    if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
+    if (pix_fmt == AV_PIX_FMT_YUV420P10 && QMPlay2Core.isVulkanRenderer())
+    {
+        auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
+        if (!vkInstance->supportedPixelFormats().contains(pix_fmt))
+            return false;
+    }
+    else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
+    {
         return false;
+    }
 
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("vaapi"))

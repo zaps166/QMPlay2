@@ -32,10 +32,19 @@ void VAAPIVulkan::map(Frame &frame)
 {
     lock_guard<mutex> locker(m_mutex);
 
+    const auto format = (frame.pixelFormat() == AV_PIX_FMT_P016)
+        ? vk::Format::eG16B16R162Plane420Unorm
+        : vk::Format::eG8B8R82Plane420Unorm
+    ;
+
     auto device = m_vkInstance->device();
 
-    if (!m_images.empty() && m_images.begin()->second->device() != device)
-        m_images.clear();
+    if (!m_images.empty())
+    {
+        auto image = m_images.begin()->second.get();
+        if (image->device() != device || image->format() != format)
+            m_images.clear();
+    }
 
     if (!device || !frame.isHW())
         return;
@@ -92,7 +101,7 @@ void VAAPIVulkan::map(Frame &frame)
                 vkImage = Image::createExternalImport(
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
-                    vk::Format::eG8B8R82Plane420Unorm,
+                    format,
                     isLinear
                 );
                 vkImage->importFD(
