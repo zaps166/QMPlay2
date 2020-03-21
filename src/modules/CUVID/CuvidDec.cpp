@@ -144,7 +144,10 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
     cuvidDecInfo.CodecType = format->codec;
     cuvidDecInfo.ChromaFormat = format->chroma_format;
     cuvidDecInfo.DeinterlaceMode = (!m_filter || format->progressive_sequence) ? cudaVideoDeinterlaceMode_Weave : m_deintMethod;
-    cuvidDecInfo.OutputFormat = cudaVideoSurfaceFormat_NV12;
+    cuvidDecInfo.OutputFormat = (m_depth > 8 && m_cuvidHwInterop && m_hasP016)
+        ? cudaVideoSurfaceFormat_P016
+        : cudaVideoSurfaceFormat_NV12
+    ;
 
     cuvidDecInfo.ulWidth = format->coded_width;
     cuvidDecInfo.ulHeight = format->coded_height;
@@ -218,6 +221,11 @@ bool CuvidDec::hasHWDecContext() const
 shared_ptr<VideoFilter> CuvidDec::hwAccelFilter() const
 {
     return m_filter;
+}
+
+void CuvidDec::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
+{
+    m_hasP016 = pixelFormats.contains(AV_PIX_FMT_P016);
 }
 
 int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up)
@@ -305,10 +313,17 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
         if (~hurry_up)
         {
             auto createFrame = [&] {
+
                 decoded = Frame::createEmpty(
                     m_width,
                     m_height,
-                    m_cuvidHwInterop ? AV_PIX_FMT_NV12 : (m_limited ? AV_PIX_FMT_YUV420P : AV_PIX_FMT_YUVJ420P),
+                    m_cuvidHwInterop
+                        ? (m_depth > 8 && m_hasP016
+                           ? AV_PIX_FMT_P016
+                           : AV_PIX_FMT_NV12)
+                        : (m_limited
+                           ? AV_PIX_FMT_YUV420P
+                           : AV_PIX_FMT_YUVJ420P),
                     !dispInfo.progressive_frame,
                     dispInfo.top_field_first,
                     m_colorSpace,
@@ -412,10 +427,10 @@ bool CuvidDec::open(StreamInfo &streamInfo)
     if (!(pixFmt == AV_PIX_FMT_YUV420P || pixFmt == AV_PIX_FMT_YUV420P10 || pixFmt == AV_PIX_FMT_YUVJ420P || avCodec->id == AV_CODEC_ID_MJPEG))
         return false;
 
-    int depth = 8;
+    m_depth = 8;
     if (const AVPixFmtDescriptor *pixDesc = av_pix_fmt_desc_get(pixFmt))
     {
-        depth = pixDesc->comp[0].depth;
+        m_depth = pixDesc->comp[0].depth;
     }
 
     cudaVideoCodec codec;
@@ -436,7 +451,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
             codec = cudaVideoCodec_MPEG4;
             break;
         case AV_CODEC_ID_H264:
-            if (depth > 8)
+            if (m_depth > 8)
                 return false;
             codec = cudaVideoCodec_H264;
             break;
@@ -447,8 +462,6 @@ bool CuvidDec::open(StreamInfo &streamInfo)
             codec = cudaVideoCodec_VP8;
             break;
         case AV_CODEC_ID_VP9:
-            if (depth > 8)
-                return false;
             codec = cudaVideoCodec_VP9;
             break;
         case AV_CODEC_ID_HEVC:
@@ -535,7 +548,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
 
     bool err = false;
 
-    if (!testDecoder(depth))
+    if (!testDecoder(m_depth))
         err = true;
     else if (!createCuvidVideoParser())
         err = true;

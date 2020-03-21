@@ -55,6 +55,8 @@ private:
     bool hasHWDecContext() const override;
     std::shared_ptr<VideoFilter> hwAccelFilter() const override;
 
+    void setSupportedPixelFormats(const AVPixelFormats &pixelFormats) override;
+
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override;
 
     bool hasCriticalError() const override;
@@ -78,6 +80,9 @@ private:
 
     bool m_limited;
     AVColorSpace m_colorSpace;
+    int m_depth = 0;
+
+    bool m_hasP016 = false;
 
     int m_width, m_height, m_codedHeight;
     CUvideotimestamp m_lastCuvidTS;

@@ -181,6 +181,8 @@ void CuvidVulkan::map(Frame &frame)
     cpy.srcDevice = mappedFrame;
     cpy.srcPitch = pitch;
     cpy.WidthInBytes = frame.width();
+    if (frame.pixelFormat() == AV_PIX_FMT_P016)
+        cpy.WidthInBytes *= 2;
     for (int p = 0; p < 2; ++p)
     {
         cpy.srcY = p ? m_codedHeight : 0;

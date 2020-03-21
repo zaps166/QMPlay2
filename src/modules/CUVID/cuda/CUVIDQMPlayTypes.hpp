@@ -34,7 +34,9 @@ enum cudaVideoDeinterlaceMode
 
 enum cudaVideoSurfaceFormat
 {
-    cudaVideoSurfaceFormat_NV12=0
+    cudaVideoSurfaceFormat_NV12 = 0,
+    cudaVideoSurfaceFormat_P016 = 1
+
 };
 
 enum cudaVideoCreateFlags
