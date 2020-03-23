@@ -759,7 +759,7 @@ void VideoThr::screenshot(Frame videoFrame)
         {
             vkHwInterop->map(videoFrame);
             if (vkHwInterop->hasError())
-                videoFrame = Frame();
+                videoFrame.clear();
         }
 #endif
         img = QImage(W, H, QImage::Format_RGB32);
