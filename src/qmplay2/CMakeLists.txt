@@ -193,16 +193,25 @@ if(USE_VULKAN)
 
     # Compiled shaders QRC generation
 
+    if(${CMAKE_VERSION} VERSION_GREATER "3.9.0" OR ${CMAKE_VERSION} VERSION_EQUAL "3.9.0")
+        set(USE_TMP_FILE ON)
+    endif()
+
     set(VULKAN_SHADER_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/vulkan_shaders.qrc")
     list(APPEND QMPLAY2_VULKAN_SRC
         ${VULKAN_SHADER_QRC_FILE}
     )
 
-    set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
+    if(USE_TMP_FILE)
+        set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
+    else()
+        set(VULKAN_SHADER_QRC_FILE_TMP ${VULKAN_SHADER_QRC_FILE})
+    endif()
 
     foreach(SHADER_COMPILED_FILE ${QMVK_SHADER_COMPILED_FILES})
         get_filename_component(SHADER_COMPILED_FILE_NAME ${SHADER_COMPILED_FILE} NAME)
-        string(APPEND SHADER_QRC_CONTENT
+        set(SHADER_QRC_CONTENT
+            ${SHADER_QRC_CONTENT}
             "  <file\ alias=\"${SHADER_COMPILED_FILE_NAME}\">${SHADER_COMPILED_FILE}</file>\n"
         )
     endforeach()
@@ -212,11 +221,13 @@ if(USE_VULKAN)
         " </qresource>\n</RCC>\n"
     )
 
-    add_custom_command(
-        OUTPUT ${VULKAN_SHADER_QRC_FILE}
-        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
-        COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
-    )
+    if(USE_TMP_FILE)
+        add_custom_command(
+            OUTPUT ${VULKAN_SHADER_QRC_FILE}
+            DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+            COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
+        )
+    endif()
 
     # No need to add VulkanShaders target dependency to libqmplay2,
     # because generated QRC file is added into source file list.
