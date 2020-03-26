@@ -361,6 +361,7 @@ endif()
 
 if(USE_VULKAN)
     set(Vulkan_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src/qmplay2/vulkan/headers/include")
+    set(QMVK_LIBRARY_TYPE STATIC)
     set(QMVK_USE_PCH ${USE_PCH})
     add_subdirectory(src/qmvk)
 endif()
