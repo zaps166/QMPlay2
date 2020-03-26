@@ -172,9 +172,11 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt == AV_PIX_FMT_YUV420P10 && QMPlay2Core.isVulkanRenderer())
     {
+#ifdef USE_VULKAN
         auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
         if (!vkInstance->supportedPixelFormats().contains(pix_fmt))
             return false;
+#endif
     }
     else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
     {
