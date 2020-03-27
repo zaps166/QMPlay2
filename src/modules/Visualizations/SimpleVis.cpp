@@ -20,6 +20,7 @@
 #include <Functions.hpp>
 
 #include <QPainter>
+#include <QPainterPath>
 
 #include <cmath>
 
