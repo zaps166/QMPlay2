@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QSlider>
 #include <QPainter>
+#include <QPainterPath>
 #include <QCheckBox>
 #include <QScrollArea>
 #include <QGridLayout>
