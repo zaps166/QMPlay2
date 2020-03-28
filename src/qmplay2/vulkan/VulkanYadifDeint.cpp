@@ -128,10 +128,12 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 {nextImage, m.sampler},
                 {destImage, MemoryObjectDescr::Access::Write},
             });
-            m.computes[p]->setSize(destImage->size(p));
             m.computes[p]->prepare();
 
-            m.computes[p]->recordCommands(m.commandBuffer, false);
+            m.computes[p]->recordCommands(
+                m.commandBuffer,
+                m.computes[p]->groupCount(destImage->size(p))
+            );
         }
         m.commandBuffer->endSubmitAndWait();
 
