@@ -126,7 +126,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 {prevImage, m.sampler},
                 {currImage, m.sampler},
                 {nextImage, m.sampler},
-                {destImage, MemoryObjectDescr::ImageAccess::Write},
+                {destImage, MemoryObjectDescr::Access::Write},
             });
             m.computes[p]->setSize(destImage->size(p));
             m.computes[p]->prepare();
