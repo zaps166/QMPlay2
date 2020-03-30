@@ -689,7 +689,7 @@ bool Window::ensureSurfaceAndRenderPass()
     if (!m_canCreateSurface)
         return false;
 
-    if (!vulkanInstance()->supportsPresent(*m.device->physicalDevice(), m.queue->queueFamilyIndex(), this))
+    if (!vulkanInstance()->supportsPresent(*m_physicalDevice, m.queue->queueFamilyIndex(), this))
     {
         QMPlay2Core.logError("Vulkan :: Present is not supported");
         m_error = true;
@@ -700,26 +700,17 @@ bool Window::ensureSurfaceAndRenderPass()
     if (!m.surface)
         return false;
 
-    const auto surfaceFormats = m.device->physicalDevice()->getSurfaceFormatsKHR(m.surface);
-    if (surfaceFormats.empty())
+    auto surfaceFormat = SwapChain::getSurfaceFormat(
+        m_physicalDevice->getSurfaceFormatsKHR(m.surface),
+        {
+            vk::Format::eA2B10G10R10UnormPack32,
+            vk::Format::eA2R10G10B10UnormPack32,
+            vk::Format::eB8G8R8A8Unorm,
+            vk::Format::eR8G8B8A8Unorm,
+        }
+    );
+    if (surfaceFormat == vk::Format::eUndefined)
         return false;
-
-    auto surfaceFormat = surfaceFormats[0].format;
-
-    auto isFormatSupported = [&](vk::Format format) {
-        return find_if(surfaceFormats.begin(), surfaceFormats.end(), [&](const vk::SurfaceFormatKHR &surfaceFormat) {
-            return (surfaceFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear && surfaceFormat.format == format);
-        }) != surfaceFormats.end();
-    };
-
-    if (isFormatSupported(vk::Format::eA2B10G10R10UnormPack32))
-        surfaceFormat = vk::Format::eA2B10G10R10UnormPack32;
-    else if (isFormatSupported(vk::Format::eA2R10G10B10UnormPack32))
-        surfaceFormat = vk::Format::eA2R10G10B10UnormPack32;
-    else if (isFormatSupported(vk::Format::eB8G8R8A8Unorm))
-        surfaceFormat = vk::Format::eB8G8R8A8Unorm;
-    else if (isFormatSupported(vk::Format::eR8G8B8A8Unorm))
-        surfaceFormat = vk::Format::eR8G8B8A8Unorm;
 
     m.renderPass = RenderPass::create(
         m.device,
@@ -758,7 +749,7 @@ void Window::ensureSwapChain()
         }
         case Qt::PartiallyChecked:
         {
-            const auto availPresentModes = m.device->physicalDevice()->getSurfacePresentModesKHR(m.surface);
+            const auto availPresentModes = m_physicalDevice->getSurfacePresentModesKHR(m.surface);
             if (find(availPresentModes.begin(), availPresentModes.end(), vk::PresentModeKHR::eMailbox) != availPresentModes.end())
             {
                 presentModes.push_back(vk::PresentModeKHR::eMailbox);
