@@ -112,7 +112,7 @@ private:
         else
         {
             AVDictionary *options = nullptr;
-            const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
+            const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, true, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
             av_dict_set(&options, "seekable", "0", 0);
             if (!m_postData.isNull())
             {

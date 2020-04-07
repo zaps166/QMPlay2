@@ -26,5 +26,6 @@ namespace Version
 {
     QMPLAY2SHAREDLIB_EXPORT QByteArray get();
     QMPLAY2SHAREDLIB_EXPORT QByteArray userAgent();
+    QMPLAY2SHAREDLIB_EXPORT QByteArray userAgentWithMozilla();
     QMPLAY2SHAREDLIB_EXPORT bool isPortable();
 }

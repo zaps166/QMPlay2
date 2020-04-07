@@ -34,7 +34,12 @@ QByteArray Version::get()
 }
 QByteArray Version::userAgent()
 {
-    static const QByteArray agent = "Mozilla/5.0 QMPlay2/" + get();
+    static const QByteArray agent = "QMPlay2/" + get();
+    return agent;
+}
+QByteArray Version::userAgentWithMozilla()
+{
+    static const QByteArray agent = "Mozilla/5.0 " + userAgent();
     return agent;
 }
 bool Version::isPortable()

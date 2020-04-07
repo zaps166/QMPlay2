@@ -696,7 +696,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     AVDictionary *options = nullptr;
     if (!inputFmt)
     {
-        url = Functions::prepareFFmpegUrl(_url, options);
+        url = Functions::prepareFFmpegUrl(_url, options, false);
         if (!isLocal && reconnectStreamed)
             av_dict_set(&options, "reconnect_streamed", "1", 0);
     }
