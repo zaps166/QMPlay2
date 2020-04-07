@@ -182,7 +182,7 @@ if(USE_VULKAN)
 
         add_custom_target( # Needed to display GLSL files in QtCreator
             VulkanShaders
-            SOURCES ${QMVK_SHADER_SOURCE_FILES}
+            SOURCES ${VULKAN_SHADERS}
             DEPENDS ${QMVK_SHADER_COMPILED_FILES}
         )
     else()
