@@ -64,6 +64,11 @@ enum CUexternalMemoryHandleType
     CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32     = 0x02,
     CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT = 0x03
 };
+enum CUstreamFlags
+{
+    CU_STREAM_DEFAULT = 0x0,
+    CU_STREAM_NON_BLOCKING = 0x1
+};
 
 typedef int CUdevice;
 typedef void *CUcontext;

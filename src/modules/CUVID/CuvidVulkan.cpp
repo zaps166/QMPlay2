@@ -75,7 +75,7 @@ CuvidVulkan::CuvidVulkan(const std::shared_ptr<CUcontext> &cuCtx)
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
 #endif
     });
-    if (!m_error && cu::streamCreate(&m_cuStream, 0) != CUDA_SUCCESS)
+    if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_NON_BLOCKING) != CUDA_SUCCESS)
         m_error = true;
 }
 CuvidVulkan::~CuvidVulkan()
