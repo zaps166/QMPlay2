@@ -61,6 +61,18 @@ extern cuGraphicsUnmapResourcesType graphicsUnmapResources;
 using  cuGraphicsUnregisterResourceType = CUresult CUDAAPI (*)(CUgraphicsResource resource);
 extern cuGraphicsUnregisterResourceType graphicsUnregisterResource;
 
+using  cuMemcpy2DAsyncType = CUresult CUDAAPI (*)(const CUDA_MEMCPY2D *pCopy, CUstream hStream);
+extern cuMemcpy2DAsyncType memcpy2DAsync;
+
+using cuStreamCreateType = CUresult CUDAAPI (*)(CUstream *phStream, unsigned int flags);
+extern cuStreamCreateType streamCreate;
+
+using cuStreamSynchronizeType = CUresult CUDAAPI (*)(CUstream hStream);
+extern cuStreamSynchronizeType streamSynchronize;
+
+using cuStreamDestroyType = CUresult CUDAAPI (*)(CUstream hStream);
+extern cuStreamDestroyType streamDestroy;
+
 using cuImportExternalMemory = CUresult CUDAAPI (*)(CUexternalMemory *extMemOut, const CUDA_EXTERNAL_MEMORY_HANDLE_DESC *memHandleDesc);
 extern cuImportExternalMemory importExternalMemory;
 

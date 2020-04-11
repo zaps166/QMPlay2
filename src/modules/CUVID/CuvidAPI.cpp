@@ -37,6 +37,10 @@ cuGraphicsMapResourcesType graphicsMapResources = nullptr;
 cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray = nullptr;
 cuGraphicsUnmapResourcesType graphicsUnmapResources = nullptr;
 cuGraphicsUnregisterResourceType graphicsUnregisterResource = nullptr;
+cuMemcpy2DAsyncType memcpy2DAsync = nullptr;
+cuStreamCreateType streamCreate = nullptr;
+cuStreamSynchronizeType streamSynchronize = nullptr;
+cuStreamDestroyType streamDestroy = nullptr;
 cuImportExternalMemory importExternalMemory = nullptr;
 cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
 cuDestroyExternalMemory destroyExternalMemory = nullptr;
@@ -91,12 +95,20 @@ bool load(bool doInit, bool gl, bool vk)
 
         if (vk)
         {
+            memcpy2DAsync = (cuMemcpy2DAsyncType)lib.resolve("cuMemcpy2DAsync_v2");
+            streamCreate = (cuStreamCreateType)lib.resolve("cuStreamCreate");
+            streamSynchronize = (cuStreamSynchronizeType)lib.resolve("cuStreamSynchronize");
+            streamDestroy = (cuStreamDestroyType)lib.resolve("cuStreamDestroy_v2");
             importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
             externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
             destroyExternalMemory = (cuDestroyExternalMemory)lib.resolve("cuDestroyExternalMemory");
             memFree = (cuMemFree)lib.resolve("cuMemFree_v2");
 
             hasPointers &=
+                memcpy2DAsync &&
+                streamCreate &&
+                streamSynchronize &&
+                streamDestroy &&
                 importExternalMemory &&
                 externalMemoryGetMappedBuffer &&
                 destroyExternalMemory &&

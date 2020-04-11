@@ -75,9 +75,13 @@ CuvidVulkan::CuvidVulkan(const std::shared_ptr<CUcontext> &cuCtx)
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
 #endif
     });
+    if (!m_error && cu::streamCreate(&m_cuStream, 0) != CUDA_SUCCESS)
+        m_error = true;
 }
 CuvidVulkan::~CuvidVulkan()
-{}
+{
+    cu::streamDestroy(m_cuStream);
+}
 
 QString CuvidVulkan::name() const
 {
@@ -191,7 +195,7 @@ void CuvidVulkan::map(Frame &frame)
         cpy.Height = frame.height(p);
         cpy.dstY = p ? img->size().height : 0;
 
-        if (cu::memcpy2D(&cpy) != CUDA_SUCCESS)
+        if (cu::memcpy2DAsync(&cpy, m_cuStream) != CUDA_SUCCESS)
         {
             copied = false;
             break;
@@ -201,6 +205,10 @@ void CuvidVulkan::map(Frame &frame)
     if (cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame) != CUDA_SUCCESS || !copied)
     {
         m_error = true;
+    }
+    else
+    {
+        cu::streamSynchronize(m_cuStream);
     }
 }
 void CuvidVulkan::clear()

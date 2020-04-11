@@ -41,4 +41,5 @@ public:
 
 private:
     const std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
+    CUstream m_cuStream = nullptr;
 };
