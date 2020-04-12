@@ -143,8 +143,7 @@ Instance::~Instance()
 void Instance::init()
 {
 #ifdef QT_DEBUG
-    if (m_qVulkanInstance->supportedLayers().contains("VK_LAYER_LUNARG_standard_validation"))
-        m_qVulkanInstance->setLayers({"VK_LAYER_LUNARG_standard_validation"});
+    m_qVulkanInstance->setLayers({"VK_LAYER_KHRONOS_validation"});
 #endif
 
     m_qVulkanInstance->setExtensions({
@@ -155,6 +154,11 @@ void Instance::init()
 
     if (!m_qVulkanInstance->create())
         throw vk::InitializationFailedError(QString("Can't create Vulkan instance (0x%1)").arg(m_qVulkanInstance->errorCode(), 0, 16).toStdString());
+
+#ifdef QT_DEBUG
+    if (!m_qVulkanInstance->layers().contains("VK_LAYER_KHRONOS_validation"))
+        qWarning() << "Vulkan validation layer not found!";
+#endif
 
     for (auto &&extension : m_qVulkanInstance->extensions())
         m_extensions.insert(extension.constData());
