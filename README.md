@@ -55,6 +55,30 @@ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSU
 sudo zypper in QMPlay2
 </pre></details>
 
+#### Easy installation on Fedora
+- Run the following commands:<br><details><summary>Fedora 32</summary><pre>
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-32.noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-32.noarch.rpm
+sudo dnf groupupdate core
+sudo dnf update
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+sudo dnf groupupdate sound-and-video
+sudo dnf install qmplay2
+</pre></details><details><summary>Fedora 31</summary><pre>
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-31.noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-31.noarch.rpm
+sudo dnf groupupdate core
+sudo dnf update
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+sudo dnf groupupdate sound-and-video
+sudo dnf install qmplay2
+</pre></details><details><summary>Fedora Rawhide</summary><pre>
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm
+sudo dnf groupupdate core
+sudo dnf update
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+sudo dnf groupupdate sound-and-video
+sudo dnf install qmplay2
+</pre></details>
+
 #### Easy installation on Gentoo Linux
 
 - Run the following command: `emerge --ask media-video/qmplay2`
