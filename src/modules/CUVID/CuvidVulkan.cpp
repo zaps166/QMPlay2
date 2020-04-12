@@ -63,7 +63,7 @@ public:
 
 /**/
 
-CuvidVulkan::CuvidVulkan(const std::shared_ptr<CUcontext> &cuCtx)
+CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
     : CuvidHWInterop(cuCtx)
     , m_vkImagePool(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())->createImagePool())
 {
