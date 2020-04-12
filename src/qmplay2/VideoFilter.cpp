@@ -155,7 +155,7 @@ std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     Frame &frame,
     const std::shared_ptr<QmVk::Device> &device)
 {
-    if (m_vkHwInterop && !frame.vulkanImage() && device)
+    if (m_vkHwInterop && device)
     {
         m_vkHwInterop->map(frame);
         if (m_vkHwInterop->hasError() || !frame.vulkanImage())

@@ -30,6 +30,9 @@ QString VAAPIVulkan::name() const
 
 void VAAPIVulkan::map(Frame &frame)
 {
+    if (frame.vulkanImage())
+        return;
+
     lock_guard<mutex> locker(m_mutex);
 
     const auto format = (frame.pixelFormat() == AV_PIX_FMT_P016)

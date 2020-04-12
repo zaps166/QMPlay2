@@ -989,7 +989,7 @@ void Window::fillVerticesBuffer()
 
 bool Window::ensureHWImageMapped()
 {
-    if (m_vkHwInterop && !m_frame.vulkanImage())
+    if (m_vkHwInterop)
     {
         m_vkHwInterop->map(m_frame);
         if (m_vkHwInterop->hasError())

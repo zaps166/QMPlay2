@@ -90,6 +90,9 @@ QString CuvidVulkan::name() const
 
 void CuvidVulkan::map(Frame &frame)
 {
+    if (frame.vulkanImage())
+        return;
+
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
