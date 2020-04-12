@@ -36,11 +36,20 @@ Table of Contents
 - run the following command: `yay -S qmplay2`
 
 #### Easy installation on openSUSE
+##### For openSUSE Leap 15.2:
+- Run the following commands:
+```
+$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.2 Packman
+$ sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.2
+$ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+$ sudo zypper in QMPlay2
+```
 ##### For openSUSE Leap 15.1:
 - Run the following commands:
 ```
 $ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
-$ suod zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
+$ sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
 $ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.1
 $ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
 $ sudo zypper in QMPlay2
