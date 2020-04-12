@@ -37,42 +37,23 @@ Table of Contents
 
 #### Easy installation on openSUSE
 - Don't mix FFmpeg from different repositories!
-##### For openSUSE Leap 15.2:
-<details>
-<summary>Run the following commands:</summary>
-
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.2 Packman
-$ sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
-$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.2
-$ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
-$ sudo zypper in QMPlay2
-```
-</details>
-
-##### For openSUSE Leap 15.1:
-<details>
-<summary>Run the following commands:</summary>
-
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
-$ sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
-$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.1
-$ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
-$ sudo zypper in QMPlay2
-```
-</details>
-
-##### For openSUSE Tumbleweed:
-<details>
-<summary>Run the following commands:</summary>
-
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Tumbleweed Packman
-$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Tumbleweed
-$ sudo zypper in QMPlay2
-```
-</details>
+- Run the following commands:<br><details><summary>openSUSE Leap 15.2</summary><pre>
+sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.2 Packman
+sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.2
+sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+sudo zypper in QMPlay2
+</pre></details><details><summary>openSUSE Leap 15.1</summary><pre>
+sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
+sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
+sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.1
+sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
+sudo zypper in QMPlay2
+</pre></details><details><summary>openSUSE Tumbleweed</summary><pre>
+sudo zypper ar http://packman.inode.at/suse/openSUSE_Tumbleweed Packman
+sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Tumbleweed
+sudo zypper in QMPlay2
+</pre></details>
 
 #### Easy installation on Gentoo Linux
 
