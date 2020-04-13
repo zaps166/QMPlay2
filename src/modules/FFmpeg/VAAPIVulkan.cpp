@@ -95,7 +95,7 @@ void VAAPIVulkan::map(Frame &frame)
                 ;
             }
 
-            vector<ptrdiff_t> offsets(vaSurfaceDescr.num_layers);
+            vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_layers; ++i)
                 offsets[i] = vaSurfaceDescr.layers[i].offset[0];
 
