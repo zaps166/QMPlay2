@@ -224,7 +224,7 @@ void CuvidVulkan::map(Frame &frame) try
         m_picturesToSync.insert(pictureIndex);
     }
 } catch (const vk::SystemError &e) {
-    Q_UNUSED(e)
+    QMPlay2Core.logError(QString("CUVID :: %1").arg(e.what()));
     m_error = true;
 }
 void CuvidVulkan::clear()
