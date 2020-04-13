@@ -21,7 +21,9 @@
 #include <Frame.hpp>
 
 #include "../qmvk/PhysicalDevice.hpp"
+#include "../qmvk/Device.hpp"
 #include "../qmvk/Image.hpp"
+#include "../qmvk/Semaphore.hpp"
 
 #include <vulkan/VulkanInstance.hpp>
 #include <vulkan/VulkanImagePool.hpp>
@@ -61,6 +63,15 @@ public:
 #endif
 };
 
+class CudaSyncData : public HWInterop::SyncData
+{
+public:
+    shared_ptr<Semaphore> semaphore;
+
+    vector<vk::Semaphore> waitSemaphores;
+    vector<vk::PipelineStageFlags> waitDstStageMask;
+};
+
 /**/
 
 CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
@@ -70,16 +81,19 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
     m_error = !m_vkImagePool->instance()->physicalDevice()->checkExtensions({
         VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-        VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME
+        VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME,
 #else
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
 #endif
     });
-    if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_NON_BLOCKING) != CUDA_SUCCESS)
+    if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_DEFAULT) != CUDA_SUCCESS)
         m_error = true;
 }
 CuvidVulkan::~CuvidVulkan()
 {
+    destroySemaphore();
     cu::streamDestroy(m_cuStream);
 }
 
@@ -88,7 +102,7 @@ QString CuvidVulkan::name() const
     return "CUVID";
 }
 
-void CuvidVulkan::map(Frame &frame)
+void CuvidVulkan::map(Frame &frame) try
 {
     if (frame.vulkanImage())
         return;
@@ -118,6 +132,8 @@ void CuvidVulkan::map(Frame &frame)
         return;
     }
 
+    ensureSemaphore();
+
     auto cudaCustomData = img->customData<CudaCustomData>();
     if (!cudaCustomData)
     {
@@ -125,23 +141,16 @@ void CuvidVulkan::map(Frame &frame)
 
         CUDA_EXTERNAL_MEMORY_HANDLE_DESC externalMemHandleDesc = {};
         externalMemHandleDesc.type = cuMemType;
-        try
-        {
+
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-            // Ownership is not transferred to the CUDA driver
-            cudaCustomDataUnique->handle = img->exportMemoryWin32(vkMemType);
-            externalMemHandleDesc.handle.win32.handle = cudaCustomDataUnique->handle;
+        // Ownership is not transferred to the CUDA driver
+        cudaCustomDataUnique->handle = img->exportMemoryWin32(vkMemType);
+        externalMemHandleDesc.handle.win32.handle = cudaCustomDataUnique->handle;
 #else
-            // Ownership is transferred to the CUDA driver
-            externalMemHandleDesc.handle.fd = img->exportMemoryFd(vkMemType);
+        // Ownership is transferred to the CUDA driver
+        externalMemHandleDesc.handle.fd = img->exportMemoryFd(vkMemType);
 #endif
-        }
-        catch (const vk::SystemError &e)
-        {
-            Q_UNUSED(e)
-            m_error = true;
-            return;
-        }
+
         externalMemHandleDesc.size = img->memorySize();
         if (cu::importExternalMemory(&cudaCustomDataUnique->memory, &externalMemHandleDesc) != CUDA_SUCCESS)
         {
@@ -211,9 +220,137 @@ void CuvidVulkan::map(Frame &frame)
     }
     else
     {
-        cu::streamSynchronize(m_cuStream);
+        lock_guard<mutex> locker(m_picturesToSyncMutex);
+        m_picturesToSync.insert(pictureIndex);
     }
+} catch (const vk::SystemError &e) {
+    Q_UNUSED(e)
+    m_error = true;
 }
 void CuvidVulkan::clear()
 {
+    lock_guard<mutex> locker(m_picturesToSyncMutex);
+    m_picturesToSync.clear();
+}
+
+HWInterop::SyncDataPtr CuvidVulkan::sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo)
+{
+    unique_lock<mutex> locker(m_picturesToSyncMutex);
+    bool needSync = false;
+    for (auto &&frame : frames)
+    {
+        if (m_picturesToSync.erase(frame.customData()) > 0)
+            needSync = true;
+    }
+    if (!needSync)
+    {
+        return nullptr;
+    }
+    locker.unlock();
+
+    CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS signalParams = {};
+    if (cu::signalExternalSemaphoresAsync(&m_cuSemaphore, &signalParams, 1, m_cuStream) != CUDA_SUCCESS)
+    {
+        m_error = true;
+        return nullptr;
+    }
+
+    unique_ptr<vk::SubmitInfo> submitInfoPtr;
+    if (!submitInfo)
+    {
+        submitInfoPtr = make_unique<vk::SubmitInfo>();
+        submitInfo = submitInfoPtr.get();
+    }
+
+    auto syncData = make_unique<CudaSyncData>();
+
+    syncData->semaphore = m_semaphore;
+
+    for (uint32_t i = 0; i < submitInfo->waitSemaphoreCount; ++i)
+        syncData->waitSemaphores.push_back(submitInfo->pWaitSemaphores[i]);
+    syncData->waitSemaphores.push_back(*m_semaphore);
+
+    for (uint32_t i = 0; i < submitInfo->waitSemaphoreCount; ++i)
+        syncData->waitDstStageMask.push_back(submitInfo->pWaitDstStageMask[i]);
+    syncData->waitDstStageMask.push_back(vk::PipelineStageFlagBits::eAllCommands);
+
+    submitInfo->waitSemaphoreCount = syncData->waitSemaphores.size();
+    submitInfo->pWaitSemaphores = syncData->waitSemaphores.data();
+    submitInfo->pWaitDstStageMask = syncData->waitDstStageMask.data();
+
+    if (!submitInfoPtr)
+        return syncData;
+
+    if (!syncNow(*submitInfo))
+        m_error = true;
+
+    return nullptr;
+}
+
+void CuvidVulkan::ensureSemaphore()
+{
+    auto device = m_vkImagePool->instance()->device();
+    if (m_semaphore && m_semaphore->device() == device)
+        return;
+
+    Q_ASSERT(device);
+
+    destroySemaphore();
+
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    constexpr auto vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueWin32;
+    constexpr auto cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32;
+#else
+    constexpr auto vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueFd;
+    constexpr auto cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD;
+#endif
+
+    m_semaphore = Semaphore::createExport(device, vkSemHandleType);
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    m_semaphoreHandle = m_semaphore->exportWin32Handle();
+#else
+    m_semaphoreHandle = m_semaphore->exportFD();
+#endif
+
+    CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC cuExternalSemaphoreHandleDesc = {};
+    cuExternalSemaphoreHandleDesc.type = cuSemHandleType;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    // Ownership is not transferred to the CUDA driver
+    cuExternalSemaphoreHandleDesc.handle.win32.handle = m_semaphoreHandle;
+#else
+    // Ownership is transferred to the CUDA driver
+    cuExternalSemaphoreHandleDesc.handle.fd = m_semaphoreHandle;
+#endif
+    if (cu::importExternalSemaphore(&m_cuSemaphore, &cuExternalSemaphoreHandleDesc) != CUDA_SUCCESS)
+    {
+        destroySemaphore();
+        throw vk::InitializationFailedError("Can't import Vulkan semaphore");
+    }
+#ifndef VK_USE_PLATFORM_WIN32_KHR
+    else
+    {
+        m_semaphoreHandle = -1;
+    }
+#endif
+}
+void CuvidVulkan::destroySemaphore()
+{
+    cu::destroyExternalSemaphore(m_cuSemaphore);
+    m_cuSemaphore = nullptr;
+
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    if (m_semaphoreHandle)
+    {
+        CloseHandle(m_semaphoreHandle);
+        m_semaphoreHandle = nullptr;
+    }
+#else
+    if (m_semaphoreHandle != -1)
+    {
+        ::close(m_semaphoreHandle);
+        m_semaphoreHandle = -1;
+    }
+#endif
+
+    m_semaphore.reset();
 }

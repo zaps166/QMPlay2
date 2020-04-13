@@ -38,8 +38,11 @@ cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray = null
 cuGraphicsUnmapResourcesType graphicsUnmapResources = nullptr;
 cuGraphicsUnregisterResourceType graphicsUnregisterResource = nullptr;
 cuMemcpy2DAsyncType memcpy2DAsync = nullptr;
+cuImportExternalSemaphoreType importExternalSemaphore = nullptr;
+cuSignalExternalSemaphoresAsyncType signalExternalSemaphoresAsync = nullptr;
+cuWaitExternalSemaphoresAsyncType waitExternalSemaphoresAsync = nullptr;
+cuDestroyExternalSemaphoreType destroyExternalSemaphore = nullptr;
 cuStreamCreateType streamCreate = nullptr;
-cuStreamSynchronizeType streamSynchronize = nullptr;
 cuStreamDestroyType streamDestroy = nullptr;
 cuImportExternalMemory importExternalMemory = nullptr;
 cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
@@ -96,8 +99,11 @@ bool load(bool doInit, bool gl, bool vk)
         if (vk)
         {
             memcpy2DAsync = (cuMemcpy2DAsyncType)lib.resolve("cuMemcpy2DAsync_v2");
+            importExternalSemaphore = (cuImportExternalSemaphoreType)lib.resolve("cuImportExternalSemaphore");
+            signalExternalSemaphoresAsync = (cuSignalExternalSemaphoresAsyncType)lib.resolve("cuSignalExternalSemaphoresAsync");
+            waitExternalSemaphoresAsync = (cuWaitExternalSemaphoresAsyncType)lib.resolve("cuWaitExternalSemaphoresAsync");
+            destroyExternalSemaphore = (cuDestroyExternalSemaphoreType)lib.resolve("cuDestroyExternalSemaphore");
             streamCreate = (cuStreamCreateType)lib.resolve("cuStreamCreate");
-            streamSynchronize = (cuStreamSynchronizeType)lib.resolve("cuStreamSynchronize");
             streamDestroy = (cuStreamDestroyType)lib.resolve("cuStreamDestroy_v2");
             importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
             externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
@@ -106,8 +112,11 @@ bool load(bool doInit, bool gl, bool vk)
 
             hasPointers &=
                 memcpy2DAsync &&
+                importExternalSemaphore &&
+                signalExternalSemaphoresAsync &&
+                waitExternalSemaphoresAsync &&
+                destroyExternalSemaphore &&
                 streamCreate &&
-                streamSynchronize &&
                 streamDestroy &&
                 importExternalMemory &&
                 externalMemoryGetMappedBuffer &&

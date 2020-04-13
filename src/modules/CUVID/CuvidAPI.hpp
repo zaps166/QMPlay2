@@ -64,11 +64,20 @@ extern cuGraphicsUnregisterResourceType graphicsUnregisterResource;
 using  cuMemcpy2DAsyncType = CUresult CUDAAPI (*)(const CUDA_MEMCPY2D *pCopy, CUstream hStream);
 extern cuMemcpy2DAsyncType memcpy2DAsync;
 
+using  cuImportExternalSemaphoreType = CUresult CUDAAPI (*)(CUexternalSemaphore *extSem_out, const CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC *semHandleDesc);
+extern cuImportExternalSemaphoreType importExternalSemaphore;
+
+using  cuSignalExternalSemaphoresAsyncType = CUresult CUDAAPI (*)(const CUexternalSemaphore *extSemArray, const CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS *paramsArray, unsigned int numExtSems, CUstream stream);
+extern cuSignalExternalSemaphoresAsyncType signalExternalSemaphoresAsync;
+
+using  cuWaitExternalSemaphoresAsyncType = CUresult CUDAAPI (*)(const CUexternalSemaphore *extSemArray, const CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS *paramsArray, unsigned int  numExtSems, CUstream stream);
+extern cuWaitExternalSemaphoresAsyncType waitExternalSemaphoresAsync;
+
+using  cuDestroyExternalSemaphoreType = CUresult CUDAAPI (*)(CUexternalSemaphore extSem);
+extern cuDestroyExternalSemaphoreType destroyExternalSemaphore;
+
 using cuStreamCreateType = CUresult CUDAAPI (*)(CUstream *phStream, unsigned int flags);
 extern cuStreamCreateType streamCreate;
-
-using cuStreamSynchronizeType = CUresult CUDAAPI (*)(CUstream hStream);
-extern cuStreamSynchronizeType streamSynchronize;
 
 using cuStreamDestroyType = CUresult CUDAAPI (*)(CUstream hStream);
 extern cuStreamDestroyType streamDestroy;

@@ -64,6 +64,12 @@ enum CUexternalMemoryHandleType
     CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32     = 0x02,
     CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT = 0x03
 };
+enum CUexternalSemaphoreHandleType {
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD        = 1,
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32     = 2,
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT = 3,
+    CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE      = 4
+};
 enum CUstreamFlags
 {
     CU_STREAM_DEFAULT = 0x0,
@@ -77,6 +83,7 @@ typedef void *CUarray;
 typedef void *CUgraphicsResource;
 typedef void *CUstream;
 typedef void *CUexternalMemory;
+typedef void *CUexternalSemaphore;
 
 struct CUDA_MEMCPY2D
 {
@@ -123,3 +130,30 @@ struct CUDA_EXTERNAL_MEMORY_BUFFER_DESC
     unsigned int flags;
     unsigned int reserved[16];
 };
+
+struct CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC
+{
+    CUexternalSemaphoreHandleType type;
+    union {
+        int fd;
+        struct {
+            void *handle;
+            const void *name;
+        } win32;
+    } handle;
+    unsigned int flags;
+    unsigned int reserved[16];
+};
+
+struct CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS
+{
+    struct {
+        struct {
+            unsigned long long value;
+        } fence;
+        unsigned int reserved[16];
+    } params;
+    unsigned int flags;
+    unsigned int reserved[16];
+};
+using CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS = CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS;
