@@ -16,41 +16,36 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "../../qmvk/CommandBuffer.hpp"
+#include "../../qmvk/Device.hpp"
+#include "../../qmvk/Queue.hpp"
 
-#include <QMPlay2Lib.hpp>
-
-#include <HWDecContext.hpp>
-
-#include <vulkan/vulkan.hpp>
+#include <vulkan/VulkanInstance.hpp>
+#include <vulkan/VulkanHWInterop.hpp>
 
 namespace QmVk {
 
-using namespace std;
-
-class CommandBuffer;
-
-class QMPLAY2SHAREDLIB_EXPORT HWInterop : public HWDecContext
+HWInterop::SyncDataPtr HWInterop::sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo)
 {
-public:
-    class SyncData
+    Q_UNUSED(frames)
+    Q_UNUSED(submitInfo)
+    return nullptr;
+}
+
+bool HWInterop::syncNow(vk::SubmitInfo &submitInfo)
+{
+    if (!m_commandBuffer)
     {
-    public:
-        virtual ~SyncData() = default;
-    };
-    using SyncDataPtr = std::unique_ptr<SyncData>;
+        auto device = static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())->device();
+        if (!device)
+            return false;
 
-public:
-    virtual void map(Frame &frame) = 0;
-    virtual void clear() = 0;
+        m_commandBuffer = CommandBuffer::create(device->queue());
+    }
 
-    virtual SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr);
-
-protected:
-    bool syncNow(vk::SubmitInfo &submitInfo);
-
-private:
-    shared_ptr<CommandBuffer> m_commandBuffer;
-};
+    m_commandBuffer->resetAndBegin();
+    m_commandBuffer->endSubmitAndWait(move(submitInfo));
+    return true;
+}
 
 }

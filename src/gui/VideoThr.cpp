@@ -758,6 +758,7 @@ void VideoThr::screenshot(Frame videoFrame)
         if (auto vkHwInterop = dynamic_pointer_cast<QmVk::HWInterop>(getHWDecContext()))
         {
             vkHwInterop->map(videoFrame);
+            vkHwInterop->sync({videoFrame});
             if (vkHwInterop->hasError())
                 videoFrame.clear();
         }

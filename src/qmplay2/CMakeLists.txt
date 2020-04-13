@@ -158,6 +158,7 @@ if(USE_VULKAN)
     )
     set(QMPLAY2_VULKAN_SRC
         vulkan/VulkanBufferPool.cpp
+        vulkan/VulkanHWInterop.cpp
         vulkan/VulkanImagePool.cpp
         vulkan/VulkanInstance.cpp
         vulkan/VulkanWindow.cpp

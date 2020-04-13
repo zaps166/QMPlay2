@@ -448,11 +448,16 @@ void Window::render()
 
         m.commandBuffer->endRenderPass();
 
+        auto submitInfo = m.swapChain->getSubmitInfo();
+        HWInterop::SyncDataPtr syncData;
+        if (m_vkHwInterop)
+            syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
+
         m.queueLocker = m.queue->lock();
         m.commandBuffer->endSubmitAndWait(false, [&] {
             m.swapChain->present(imageIdx, &suboptimal);
             vulkanInstance()->presentQueued(this);
-        }, m.swapChain->getSubmitInfo());
+        }, move(submitInfo));
         m.queueLocker.unlock(); // It is not unlocked in case of exception
     }
     catch (const vk::OutOfDateKHRError &e)

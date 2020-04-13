@@ -108,6 +108,11 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         const uint32_t srcNumPlanes = currImage->numPlanes();
         const bool tff = isTopFieldFirst(currFrame);
 
+        vk::SubmitInfo submitInfo;
+        HWInterop::SyncDataPtr syncData;
+        if (m_vkHwInterop)
+            syncData = m_vkHwInterop->sync({prevFrame, currFrame, nextFrame}, &submitInfo);
+
         m.commandBuffer->resetAndBegin();
         for (uint32_t p = 0; p < 3; ++p)
         {
@@ -135,7 +140,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 m.computes[p]->groupCount(destImage->size(p))
             );
         }
-        m.commandBuffer->endSubmitAndWait();
+        m.commandBuffer->endSubmitAndWait(move(submitInfo));
 
         if (m_deintFlags & DoubleFramerate)
             deinterlaceDoublerCommon(destFrame);
