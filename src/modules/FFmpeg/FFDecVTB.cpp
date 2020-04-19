@@ -125,6 +125,9 @@ void FFDecVTB::downloadVideoFrame(Frame &decoded)
 
 bool FFDecVTB::open(StreamInfo &streamInfo)
 {
+    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+        return false;
+
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt != AV_PIX_FMT_YUV420P)
         return false;
