@@ -92,6 +92,7 @@ FFmpeg::FFmpeg() :
 #endif
 #ifdef QMPlay2_D3D11VA
     init("DecoderD3D11VAEnabled", true);
+    init("DecoderD3D11VAZeroCopy", false);
 #endif
 #ifdef QMPlay2_VTB
     init("DecoderVTBEnabled", true);
