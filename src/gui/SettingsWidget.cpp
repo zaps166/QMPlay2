@@ -183,7 +183,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/VSync", Qt::PartiallyChecked);
 #endif
     QMPSettings.init("Vulkan/AlwaysGPUDeint", true);
-    QMPSettings.init("Vulkan/HQScaleDown", true);
+    QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", false);
 
