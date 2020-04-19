@@ -25,13 +25,6 @@
 
 namespace QmVk {
 
-HWInterop::SyncDataPtr HWInterop::sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo)
-{
-    Q_UNUSED(frames)
-    Q_UNUSED(submitInfo)
-    return nullptr;
-}
-
 bool HWInterop::syncNow(vk::SubmitInfo &submitInfo)
 {
     if (!m_commandBuffer)

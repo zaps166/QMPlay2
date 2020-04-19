@@ -44,7 +44,7 @@ public:
     virtual void map(Frame &frame) = 0;
     virtual void clear() = 0;
 
-    virtual SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr);
+    virtual SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) = 0;
 
 protected:
     bool syncNow(vk::SubmitInfo &submitInfo);
