@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <Settings.hpp>
+
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
 #include "../../qmvk/ComputePipeline.hpp"
@@ -41,6 +43,7 @@ struct alignas(16) YadifPushConstants
 
 YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
     : VideoFilter(true)
+    , m_spatialCheck(QMPlay2Core.getSettings().getBool("Vulkan/YadifSpatialCheck"))
     , m_instance(m_vkImagePool->instance())
 {
     m_supportedPixelFormats += {

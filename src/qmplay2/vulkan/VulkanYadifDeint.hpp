@@ -47,7 +47,7 @@ private:
     bool ensureResources();
 
 private:
-    const bool m_spatialCheck = true;
+    const bool m_spatialCheck;
 
     bool m_error = false;
 

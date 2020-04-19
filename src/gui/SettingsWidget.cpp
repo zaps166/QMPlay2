@@ -184,6 +184,7 @@ void SettingsWidget::InitSettings()
 #endif
     QMPSettings.init("Vulkan/AlwaysGPUDeint", true);
     QMPSettings.init("Vulkan/ForceVulkanYadif", false);
+    QMPSettings.init("Vulkan/YadifSpatialCheck", true);
     QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", false);

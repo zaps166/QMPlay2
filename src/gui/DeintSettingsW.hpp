@@ -41,5 +41,6 @@ private slots:
     void setSoftwareMethodsToolTip(int idx);
 private:
     QCheckBox *autoDeintB, *doublerB, *autoParityB;
+    QCheckBox *m_vkYadifSpatialCheck = nullptr;
     QComboBox *softwareMethodsCB, *parityCB;
 };
