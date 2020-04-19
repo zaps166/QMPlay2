@@ -49,9 +49,10 @@ private:
     QIcon vaapiIcon;
     QComboBox *m_vaapiDeintMethodB = nullptr;
 #endif
-#ifdef QMPlay2_DXVA2
-    QIcon dxva2Icon;
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
+    QIcon dxIcon;
     bool dxva2Supported = false;
+    bool d3d11vaSupported = false;
 #endif
 #ifdef QMPlay2_VTB
     QIcon vtbIcon;
@@ -73,8 +74,8 @@ class ModuleSettingsWidget final : public Module::SettingsWidget
     Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 #endif
 public:
-#ifdef QMPlay2_DXVA2
-    ModuleSettingsWidget(Module &module, bool dxva2Loaded);
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
+    ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va);
 #else
     ModuleSettingsWidget(Module &module);
 #endif
@@ -100,7 +101,11 @@ private:
     QCheckBox *decoderVAAPIEB;
 #endif
 #ifdef QMPlay2_DXVA2
-    QCheckBox *decoderDXVA2EB;
+    QCheckBox *decoderDXVA2EB = nullptr;
+#endif
+#ifdef QMPlay2_D3D11VA
+    QGroupBox *decoderD3D11VA = nullptr;
+    QCheckBox *d3d11vaZeroCopy = nullptr;
 #endif
 #ifdef QMPlay2_VTB
     QCheckBox *decoderVTBEB;

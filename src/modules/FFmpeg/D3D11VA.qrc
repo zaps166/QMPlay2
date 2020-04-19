@@ -1,0 +1,6 @@
+<RCC>
+    <qresource>
+        <file>D3D11VABuffer.dxcs</file>
+        <file>D3D11VATexture.dxcs</file>
+    </qresource>
+</RCC>

@@ -18,26 +18,37 @@
 
 #pragma once
 
-#define DecoderName "FFmpeg Decoder"
-#define DecoderVAAPIName "FFmpeg VA-API Decoder"
-#define DecoderVDPAUName "FFmpeg VDPAU Decoder"
-#define DecoderVDPAU_NWName DecoderVDPAUName " (no output)"
-#define DecoderDXVA2Name "FFmpeg DXVA2 Decoder"
-#define DecoderD3D11VAName "FFmpeg D3D11VA Decoder"
-#define DecoderVTBName "FFmpeg VideoToolbox Decoder"
-#define DemuxerName "FFmpeg"
-#define VAAPIWriterName "VA-API"
-#define VDPAUWriterName "VDPAU"
-#define FFReaderName "FFmpeg Reader"
+#include <FFDecHWAccel.hpp>
 
-#ifdef FIND_HWACCEL_DRIVERS_PATH
-    class QByteArray;
-    class QString;
-#endif
+#include <d3d11.h>
 
-namespace FFCommon
+#include <deque>
+
+class D3D11VAVulkan;
+struct SwsContext;
+
+class FFDecD3D11VA final : public FFDecHWAccel
 {
-#ifdef FIND_HWACCEL_DRIVERS_PATH
-    void setDriversPath(const QString &dirName, const QByteArray &envVar);
-#endif
-}
+public:
+    FFDecD3D11VA(Module &module);
+    ~FFDecD3D11VA();
+
+    bool set() override;
+
+    QString name() const override;
+
+    int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
+
+    bool open(StreamInfo &streamInfo) override;
+
+private:
+    bool comparePrimaryDevice() const;
+
+private:
+    AVBufferRef *m_hwDeviceBufferRef = nullptr;
+
+    std::shared_ptr<D3D11VAVulkan> m_d3d11vaVulkan;
+    bool m_zeroCopyAllowed = false;
+
+    std::deque<Frame> m_frames;
+};
