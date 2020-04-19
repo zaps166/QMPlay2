@@ -427,7 +427,7 @@
     </message>
     <message>
         <source>Vulkan Yadif spatial check</source>
-        <translation type="unfinished"></translation>
+        <translation>Просторова перевірка Yadif через Vulkan</translation>
     </message>
 </context>
 <context>
@@ -1664,7 +1664,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Використовувати CUVID тільки якщо першим процесором є NVIDIA</translation>
+        <translation>Задіяти CUVID лише якщо першим графічним процесором є NVIDIA</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1784,11 +1784,11 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Декодувати без копіювання для чіпів Intel (експериментально)</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
-        <translation type="unfinished"></translation>
+        <translation>Краща продуктивність, але може спричинити проблеми з зображенням або взагалі не працювати.</translation>
     </message>
 </context>
 <context>
@@ -3005,49 +3005,51 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>Усунення черезрядковості графічним процесором для відео, декодованого центральним процесором</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>Високоякісне зменшення зображення</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>Високоякісне збільшення зображення</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation>Перший доступний пристрій</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Не знайдено підтримуваних пристроїв</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Частково вибрано (за замовчуванням):
+  - MAILBOX (tear-free) є найкращим сучасним режимом
+  - FIFO (V-Sync) не слід використовувати у віконному режимі</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити для ексклюзивного повноекранного режиму. Може підвищити продуктивність.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Дуже повільно при використанні з різкістю зображення</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрій:</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation>Примусово задіяти Yadif через Vulkan для всіх апаратних декодерів</translation>
     </message>
 </context>
 <context>
