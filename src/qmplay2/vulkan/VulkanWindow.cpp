@@ -124,7 +124,14 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_WIN)
+    switch (m_physicalDevice->properties().vendorID)
+    {
+        case 0x8086: // Intel
+            m_useRenderPassClear = true;
+            break;
+    }
+#elif defined(Q_OS_ANDROID)
     m_useRenderPassClear = true;
 #endif
 
