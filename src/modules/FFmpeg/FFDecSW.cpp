@@ -545,7 +545,7 @@ void FFDecSW::setPixelFormat()
             }
         }
 
-        qDebug().nospace() << "Fallback pixel format:" << desiredPixFmtName;
+        qDebug() << "Fallback pixel format:" << desiredPixFmtName;
         break;
     }
 }
