@@ -80,14 +80,14 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
 
 ### Hardware acceleration important information:
 - CUVID, DXVA2, VDPAU and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
-- CUVID and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
+- CUVID. D3D11VA and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension.
 - DXVA2 and VDPAU don't work with Vulkan.
 - VDPAU, VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
