@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>Software Decodierung</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -1777,6 +1781,14 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiere dekodiertes Video in den CPU-Speicher (langsam)</translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3030,6 +3042,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

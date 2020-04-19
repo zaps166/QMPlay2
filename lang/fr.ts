@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>Décodage logiciel</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -1775,6 +1779,14 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3026,6 +3038,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

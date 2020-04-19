@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>dekodowanie programowe</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -1778,6 +1782,14 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation>Dekodowanie bez kopii dla układów Intel (eksperymentalne)</translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation>Lepsza wydajność, ale może powodowac problemy z obrazem albo nie działać wcale.</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3034,6 +3046,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Device:</source>
         <translation>Urządzenie:</translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation>Wymuś Yadif poprzez Vulkan dla wszystkich dekoderów sprzętowych</translation>
     </message>
 </context>
 <context>
