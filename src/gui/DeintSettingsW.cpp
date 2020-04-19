@@ -94,10 +94,8 @@ DeintSettingsW::~DeintSettingsW()
 
 void DeintSettingsW::setSoftwareDeintEnabledDisabled()
 {
-#ifdef USE_VULKAN
     if (QMPlay2Core.isVulkanRenderer())
         softwareMethodsCB->setEnabled(!QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint"));
-#endif
 }
 
 void DeintSettingsW::writeSettings()
