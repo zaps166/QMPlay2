@@ -61,6 +61,14 @@ bool Writer::set()
         mustRestart = true;
     }
 
+    const auto forceVulkanYadif = sets.getBool("Vulkan/ForceVulkanYadif");
+    if (m_forceVulkanYadif != forceVulkanYadif)
+    {
+        m_forceVulkanYadif = forceVulkanYadif;
+        if (m_vkHwInterop)
+            mustRestart = true;
+    }
+
     m_window->setConfig(
         sets.getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked),
         sets.getBool("Vulkan/HQScaleDown"),

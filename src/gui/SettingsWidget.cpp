@@ -183,6 +183,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/VSync", Qt::PartiallyChecked);
 #endif
     QMPSettings.init("Vulkan/AlwaysGPUDeint", true);
+    QMPSettings.init("Vulkan/ForceVulkanYadif", false);
     QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", false);
@@ -880,6 +881,7 @@ void SettingsWidget::createRendererSettings()
         auto devices = new QComboBox;
         auto vsync = createVSync();
         auto gpuDeint = new QCheckBox(tr("Use GPU deinterlacing for CPU-decoded video"));
+        auto forceYadif = new QCheckBox(tr("Force Vulkan Yadif deinterlacing for all hardware decoders"));
         auto hqDownscale = new QCheckBox(tr("High quality image scaling down"));
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
@@ -934,6 +936,7 @@ void SettingsWidget::createRendererSettings()
 
         vsync->setCheckState(settings->getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked));
         gpuDeint->setChecked(settings->getBool("Vulkan/AlwaysGPUDeint"));
+        forceYadif->setChecked(settings->getBool("Vulkan/ForceVulkanYadif"));
         hqDownscale->setChecked(settings->getBool("Vulkan/HQScaleDown"));
         hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
         bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
@@ -945,6 +948,7 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(tr("Device:"), devices);
         layout->addRow(vsync);
         layout->addRow(gpuDeint);
+        layout->addRow(forceYadif);
         layout->addRow(hqDownscale);
         layout->addRow(hqUpscale);
         layout->addRow(bypassCompositor);
@@ -966,6 +970,7 @@ void SettingsWidget::createRendererSettings()
             }
             settings->set("Vulkan/VSync", vsync->checkState());
             settings->set("Vulkan/AlwaysGPUDeint", alwaysGPUDeint);
+            settings->set("Vulkan/ForceVulkanYadif", forceYadif->isChecked());
             settings->set("Vulkan/HQScaleDown", hqDownscale->isChecked());
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());

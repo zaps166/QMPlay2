@@ -60,6 +60,7 @@ public:
 private:
     Window *const m_window;
     QByteArray m_lastDeviceID;
+    bool m_forceVulkanYadif = false;
     shared_ptr<HWInterop> m_vkHwInterop;
 };
 

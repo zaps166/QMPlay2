@@ -254,7 +254,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
     if (m_vaapiVulkan)
     {
-        if (m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive))
+        if (m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive) && !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif"))
             m_filter = make_shared<DeintHWPrepareFilter>();
         m_hasHWDecContext = true;
     }
