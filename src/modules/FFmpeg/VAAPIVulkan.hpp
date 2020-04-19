@@ -30,6 +30,8 @@ public:
     void map(Frame &frame) override;
     void clear() override;
 
+    SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) override;
+
 public:
     void insertAvailableSurface(uintptr_t id);
 

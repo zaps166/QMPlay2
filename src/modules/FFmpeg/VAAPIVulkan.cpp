@@ -126,13 +126,6 @@ void VAAPIVulkan::map(Frame &frame)
             m_error = true;
     }
 
-    if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
-    {
-        QMPlay2Core.logError("VA-API :: Unable to sync surface");
-        m_error = true;
-        vkImage.reset();
-    }
-
     if (vkImage)
     {
         frame.setVulkanImage(vkImage);
@@ -149,6 +142,35 @@ void VAAPIVulkan::clear()
     lock_guard<mutex> locker(m_mutex);
     m_availableSurfaces.clear();
     m_images.clear();
+}
+
+HWInterop::SyncDataPtr VAAPIVulkan::sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo)
+{
+    Q_UNUSED(submitInfo)
+
+    unique_lock<mutex> locker;
+
+    for (auto &&frame : frames)
+    {
+        if (!frame.isHW() || !frame.vulkanImage())
+            continue;
+
+        if (!locker.owns_lock())
+            locker = unique_lock<mutex>(m_mutex);
+
+        VASurfaceID id = frame.hwData();
+        if (m_availableSurfaces.count(id) == 0)
+            continue;
+
+        if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to sync surface");
+            m_error = true;
+            break;
+        }
+    }
+
+    return nullptr;
 }
 
 void VAAPIVulkan::insertAvailableSurface(uintptr_t id)
