@@ -36,23 +36,32 @@ Table of Contents
 - run the following command: `yay -S qmplay2`
 
 #### Easy installation on openSUSE
-##### For openSUSE Leap 15.1:
-- Run the following commands:
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.1 Packman
-$ suod zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
-$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.1
-$ sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.1
-$ sudo zypper in QMPlay2
-```
-##### For openSUSE Tumbleweed:
-- Run the following commands:
-```
-$ sudo zypper ar http://packman.inode.at/suse/openSUSE_Tumbleweed Packman
-$ sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Tumbleweed
-$ sudo zypper in QMPlay2
-```
 - Don't mix FFmpeg from different repositories!
+- Run the following commands:
+##### openSUSE Leap 15.2
+```
+sudo zypper ar http://packman.inode.at/suse/openSUSE_Leap_15.2 Packman
+sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Leap_15.2
+sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.2
+sudo zypper in QMPlay2
+```
+##### openSUSE Tumbleweed
+```
+sudo zypper ar http://packman.inode.at/suse/openSUSE_Tumbleweed Packman
+sudo zypper dup --allow-vendor-change --from http://packman.inode.at/suse/openSUSE_Tumbleweed
+sudo zypper in QMPlay2
+```
+#### Easy installation on Fedora
+- Run the following commands:
+```
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf groupupdate core
+sudo dnf update
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+sudo dnf groupupdate sound-and-video
+sudo dnf install qmplay2
+```
 
 #### Easy installation on Gentoo Linux
 
