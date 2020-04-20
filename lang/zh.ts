@@ -427,7 +427,7 @@
     </message>
     <message>
         <source>Vulkan Yadif spatial check</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan Yadif 空间检查</translation>
     </message>
 </context>
 <context>
@@ -1784,11 +1784,11 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>在英特尔硬件上使用零复制解码（实验）</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
-        <translation type="unfinished"></translation>
+        <translation>性能更佳，但会产生垃圾或可能完全不起作用。</translation>
     </message>
 </context>
 <context>
@@ -3049,7 +3049,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation>对于所有硬件解码器强制 Vulkan Yadif 反交错</translation>
     </message>
 </context>
 <context>
