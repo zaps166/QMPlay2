@@ -755,6 +755,8 @@ void SettingsWidget::createRendererSettings()
     renderers->addItem(tr("Vulkan"), "vulkan");
 #endif
 
+    const auto chosenRenderer = settings->getString("Renderer");
+
     for (int i = renderers->count() - 1; i >= 0; --i)
     {
         const bool active = (renderers->itemData(i).toString() == currentRendererName);
@@ -767,7 +769,7 @@ void SettingsWidget::createRendererSettings()
         Q_UNUSED(initFilters)
         const auto rendererName = renderers->currentData().toString();
         settings->set("Renderer", rendererName);
-        if (currentRendererName != rendererName)
+        if (currentRendererName != rendererName && chosenRenderer != rendererName)
         {
             QMessageBox::information(this, tr("Changing renderer"), tr("To set up a new renderer, the program will start again!"));
             restartApp();
@@ -986,7 +988,7 @@ void SettingsWidget::createRendererSettings()
         rendererStacked->setCurrentIndex(idx);
     });
 
-    const int idx = renderers->findData(settings->getString("Renderer"));
+    const int idx = renderers->findData(chosenRenderer);
     if (idx > -1)
         renderers->setCurrentIndex(idx);
 
