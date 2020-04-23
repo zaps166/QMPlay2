@@ -308,7 +308,7 @@ BOOL CSoundFile::ReadJ2B(const BYTE *lpStream, DWORD dwMemLength)
 			return false;
 
 		QByteArray compressed(sizeof(uncompressed_size), Qt::Uninitialized);
-		qToBigEndian(uncompressed_size, (uchar *)compressed.data());
+		qToBigEndian<uint32_t>(uncompressed_size, (uchar *)compressed.data());
 		compressed.append(data, data.remaining());
 
 		uncompressed_qbytearray = qUncompress(compressed);
