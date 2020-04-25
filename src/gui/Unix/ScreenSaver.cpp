@@ -29,7 +29,7 @@ public:
     inline ScreenSaverPriv() :
         m_disp(nullptr)
     {}
-    inline ~ScreenSaverPriv() final
+    inline ~ScreenSaverPriv()
     {
         if (m_disp)
             XCloseDisplayFunc(m_disp);

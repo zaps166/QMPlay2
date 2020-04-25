@@ -74,7 +74,7 @@ public:
         m_aborted(false),
         m_afterOpen(false)
     {}
-    ~NetworkReplyPriv() final = default;
+    ~NetworkReplyPriv() = default;
 
     NetworkReply *m_networkReply;
 

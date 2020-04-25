@@ -72,7 +72,7 @@ class QMPlay2FileWriter : public IODeviceWriter
 
 class QMPlay2ResourceWriter : public IODeviceWriter
 {
-    ~QMPlay2ResourceWriter() final
+    ~QMPlay2ResourceWriter()
     {
         if (m_io)
             m_io->close();
