@@ -266,7 +266,7 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
-#ifdef QMPlay2_DXVA2
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va) :
 #else
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
